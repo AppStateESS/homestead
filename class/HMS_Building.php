@@ -140,120 +140,164 @@ class HMS_Building
         }
     }
 
-/*
-    function decrease_number_floors_static($amount, $id = NULL)
-    {
-        if($id == NULL) {
-            $this->number_floors = $this->number_floors - $amount;
-        } else {
-            $number_floors = HMS_Building::get_number_floors($id);
-            $hall_db = &new PHPWS_DB('hms_residence_hall');
-            $hall_db->addWhere('id', $id);
-            $hall_db->addValue('number_floors', $number_floors - $amount);
-            $success = $hall_db->update();
-            if(PEAR::isError($success)) {
-                PHPWS_Error::log($success, 'hms', 'HMS_Building::decrease_number_floors_static');
-            }
-            return $success;
-        }
-    }
-*/
-
+    /**
+     * Sets the pricing tier for this hall
+     */
     function set_pricing_tier($tier)
     {
         $this->pricing_tier = $tier;
     }
 
+    /**
+     * Sets how many rooms on each floor (template)
+     */
     function set_rooms_per_floor($rooms)
     {
         $this->rooms_per_floor = $rooms;
     }
 
+    /**
+     * Returns the number of rooms on a template floor
+     */
     function get_rooms_per_floor()
     {
         return $this->rooms_per_floor;
     }
 
+    /**
+     * Sets the gender type for the building
+     * Should be either 0 (female), 1 (male) or 2 (co-ed)
+     */
     function set_gender_type($gender)
     {
         $this->gender_type = $gender;
     }
 
+    /**
+     * Sets whether this hall is air conditioned
+     */
     function set_air_conditioned($air)
     {
         $this->air_conditioned = $air;
     }
-    
+   
+    /**
+     * Sets whether this hall is available for room assignments
+     */
     function set_is_online($online)
     {
         $this->is_online = $online;
     }
 
+    /**
+     * Returns whether this building is new
+     * False indicates this is an edit
+     */
     function get_is_new_building()
     {
         return $this->is_new_building;
     }
 
+    /**
+     * Sets the user ID of the user that added the hall
+     */
     function set_added_by()
     {
         $this->added_by = Current_User::getId();
     }
 
+    /**
+     * Gets the user id of the hall creator
+     */
     function get_added_by()
     {
         return $this->added_by;
     }
 
+    /**
+     * Sets the timestamp when the hall was added
+     */
     function set_added_on()
     {
         $this->added_on = time();
     }
 
+    /**
+     * Returns the timestamp from when the hall was added
+     */
     function get_added_on()
     {
         return $this->added_on;
     }
 
+    /**
+     * Sets the user ID of the user that deleted the hall
+     */
     function set_deleted_by()
     {
         $this->deleted_by = Current_User::getId();
     }
 
+    /**
+     * Returns the user ID of the user that deleted the hall
+     */
     function get_deleted_by()
     {
         return $this->deleted_by;
     }
 
+    /**
+     * Sets the timestamp when the hall was deleted
+     */
     function set_deleted_on()
     {
         $this->deleted_on = time();
     }
 
+    /**
+     * Returns the timestamp from when the hall was deleted
+     */
     function get_deleted_on()
     {
         return $this->deleted_on;
     }
 
+    /**
+     * Sets the user ID of the last user to edit the hall
+     */
     function set_updated_by()
     {
         $this->updated_by = Current_User::getId();
     }
 
+    /**
+     * Returns the user ID of the last user to edit the hall
+     */
     function get_updated_by()
     {
         return $this->updated_by;
     }
 
+    /**
+     * Sets the timestamp of the last hall edit
+     */
     function set_updated_on()
     {
         $this->updated_on = time();
     }
 
+    /**
+     * Returns the timestamp of the last hall edit
+     */
     function get_updated_on()
     {
         return $this->updated_on;
     }
 
+    /**
+     * Sets the values for each class variable based on the value passed from the form
+     * Type and other sanity checks need to be implemented
+     */
     function set_variables()
     {
         if($_REQUEST['id']) $this->set_id($_REQUEST['id']);
@@ -268,6 +312,9 @@ class HMS_Building
         if($_REQUEST['is_new_building']) $this->set_is_new_building($_REQUEST['is_new_building']);
     }
 
+    /**
+     * Given a hall name, checks the database to see if a hall exists with that name
+     */
     function check_building_exists($name)
     {
         $db = &new PHPWS_DB('hms_residence_hall');
@@ -278,6 +325,11 @@ class HMS_Building
         return $dupe;
     }
 
+    /**
+     * Returns an error message stating that the hall already exists
+     * If passed an object, the edit form is populated with that object's values
+     * If not passed anything, the edit form is displayed with the defaults selected
+     */
     function building_exists_msg($object = NULL)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
@@ -294,12 +346,21 @@ class HMS_Building
         return $final;
     }
 
+    /**
+     * Calls the set_updated_by and set_updated_on methods
+     * Saves the developer an extra function call when a building is added,
+     *   edited or deleted
+     */
     function set_updated_by_on($object)
     {
         $object->set_updated_by();
         $object->set_updated_on();
     }
 
+    /**
+     * Returns that there was an error saving the hall
+     * Needs to email hms-devs@tux.appstate.edu with a basic error report
+     */
     function error_saving_hall()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
@@ -311,6 +372,11 @@ class HMS_Building
         return $final;
     }
 
+    /**
+     * Saves a residence hall
+     * Class method that can not be called statically
+     * Will add/remove floors and rooms as necessary to reflect modifications in the hall template
+     */
     function save_residence_hall()
     {
         if($this->get_is_new_building() == TRUE) {
@@ -418,6 +484,9 @@ class HMS_Building
         return $final;
     }
 
+    /**
+     * 
+     */
     function make_floor_object($bid = NULL, $src, $fnumber)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
