@@ -121,6 +121,27 @@ class HMS_Form
         return $final;
     }
 
+    function get_usernames_for_new_grouping($error)
+    {
+        PHPWS_Core::initCoreClass('Form.php');
+        $form = &new PHPWS_Form;
+
+        $form->addText('first_roommate');
+        $form->addText('second_roommate');
+        $form->addText('third_roommate');
+        $form->addText('fourth_roommate');
+
+        $form->addHidden('module', 'hms');
+        $form->addHidden('type', 'roommate');
+        $form->addHidden('op', 'save_grouping');
+        $form->addSubmit('submit', _('Submit usernames'));
+
+        $tpl = $form->getTemplate();
+        $tpl['ERROR'] = $error;
+        $final = PHPWS_Template::process($tpl, 'hms', 'admin/get_roommate_usernames.tpl');
+        return $final;
+    }
+
     function select_residence_hall_for_add_floor()
     {
         $content = "";

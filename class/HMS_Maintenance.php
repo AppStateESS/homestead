@@ -107,6 +107,12 @@ class HMS_Maintenance
         if(Current_User::allow('hms', 'create_assignment'))
             $tpl['CREATE_ASSIGNMENT'] = PHPWS_Text::secureLink(_('Create Assignment'), 'hms', array('type'=>'assignment', 'op'=>'begin_create_assignment')) . " &nbsp;*work in progress*";
 
+        if(Current_User::allow('hms', 'roommate_maintenance'))
+            $tpl['ROOMMATE_LABEL'] = "Roommate Maintenance";
+
+        if(Current_User::allow('hms', 'create_rommate_group'))
+            $tpl['CREATE_ROOMMATE_GROUP'] = PHPWS_Text::secureLink(_('Create new roommate group'), 'hms', array('type'=>'roommate', 'op'=>'get_usernames_for_new_grouping'));
+
         if(Current_User::deityAllow()) 
             $tpl['PURGE_DATA'] = PHPWS_Text::secureLink(_('Purge data'), 'hms', array('type'=>'maintenance', 'op'=>'purge'));
 

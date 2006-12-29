@@ -85,6 +85,10 @@ class HMS_Admin
                 PHPWS_Core::initModClass('hms','HMS_XML.php');
                 $final = HMS_XML::main();
                 break;
+            case 'roommate':
+                PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
+                $final = HMS_Roommate::main();
+                break;
             default:
                 PHPWS_Core::initModClass('hms', 'HMS_Display.php');
                 $final = HMS_Display::main();
