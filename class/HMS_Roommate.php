@@ -9,56 +9,91 @@ class HMS_Roommate
     var $roommate_two;
     var $roommate_three;
 
+    /**
+     * Sets the id of the grouping
+     */
     function set_id($id)
     {
         $this->id = $id;
     }
 
+    /**
+     * Returns the grouping's id
+     */
     function get_id()
     {
         return $this->id;
     }
 
+    /**
+     * Sets the username for the first roommate
+     */
     function set_roommate_zero($rz)
     {
         $this->roommate_zero = $rz;
     }
 
+    /**
+     * Gets the username for the first roommate
+     */
     function get_roommate_zero()
     {
         return $this->roommate_zero;
     }
 
+    /**
+     * Sets the username for the second roommate
+     */
     function set_roommate_one($ro)
     {
         $this->roommate_one = $ro;
     }
 
+    /**
+     * Returns the username for the second roommate
+     */
     function get_roommate_one()
     {
         return $this->roommate_one;
     }
 
+    /**
+     * Sets the username for the third roommate
+     */
     function set_roommate_two($rt)
     {
         $this->roommate_two = $rt;
     }
 
+    /**
+     * Returns the username for the third roommate
+     */
     function get_roommate_two() 
     {
         return $this->roommate_two;
     }
 
+    /**
+     * Sets the username for the fourth roommate
+     */
     function set_roommate_three($rt)
     {
         $this->roommate_three = $rt;
     }
 
+    /**
+     * Returns the username for the fourth roommate
+     */ 
     function get_roommate_three()
     {
         return $this->roommate_three;
     }
 
+    /**
+     * Constructor for the Roommate class
+     * Can be passed the id of a grouping already in the database to
+     *   create a new instance of that roommate grouping
+     */
     function HMS_Roommate($id = NULL)
     {
         if($id == NULL) {
@@ -70,6 +105,9 @@ class HMS_Roommate
         return $this;
     }
 
+    /**
+     * Sets all member variables to NULL
+     */ 
     function set_values_null()
     {
         $this->set_id(NULL);
@@ -79,6 +117,9 @@ class HMS_Roommate
         $this->set_roommate_three(NULL);
     }
 
+    /**
+     * Sets the usernames for each roommate
+     */
     function set_values()
     {
         $this->set_roommate_zero($_REQUEST['first_roommate']);
@@ -97,12 +138,20 @@ class HMS_Roommate
         }
     }
 
+    /**
+     * Calls a method in the Forms class of the same name
+     * Displays a form with four text boxes
+     */
     function get_usernames_for_new_grouping($error = NULL)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
         return HMS_Form::get_usernames_for_new_grouping($error);
     }
 
+    /**
+     * Creates a new Roommate object, sets the values pulled from the username input form
+     *   and saves the object.
+     */
     function save_grouping()
     {
         require_once(PHPWS_SOURCE_DIR . 'mod/hms/inc/defines.php');
@@ -127,6 +176,29 @@ class HMS_Roommate
 
     }
 
+    /**
+     * 
+     */
+    function get_username_for_edit_grouping($error = NULL)
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
+        return HMS_Form::get_username_for_edit_grouping($error);
+    }
+
+    /**
+     * Allows for editing of the members in a roommate grouping
+     */
+    function edit_grouping()
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
+        return HMS_Form::edit_grouping();
+    }
+
+
+    /**
+     * "main" function for the Roommate class
+     * Checks the desired operation and calls the necessary functions
+     */
     function main()
     {
         $op = $_REQUEST['op'];
@@ -138,6 +210,12 @@ class HMS_Roommate
                 break;
             case 'save_grouping':
                 $final = HMS_Roommate::save_grouping();
+                break;
+            case 'get_username_for_edit_grouping':
+                $final = HMS_Roommate::get_username_for_edit_grouping();
+                break;
+            case 'edit_grouping':
+                $final = HMS_Roommate::edit_grouping();
                 break;
             default:
                 $final =  "Op is: " . $op;

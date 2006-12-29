@@ -30,6 +30,10 @@
         <h2><i>{ASSIGNMENT_LABEL}</i></h2>
         &nbsp;&nbsp;&nbsp;{CREATE_ASSIGNMENT}<br />
         <br />
+        <h2><i>{ROOMMATE_LABEL}</i></h2>
+        &nbsp;&nbsp;&nbsp;{CREATE_ROOMMATE_GROUP}<br />
+        &nbsp;&nbsp;&nbsp;{EDIT_ROOMMATE_GROUP}<br />
+        <br />
         <h2><i>{PURGE_DATA}</i></h2>
     </div>
   </div>

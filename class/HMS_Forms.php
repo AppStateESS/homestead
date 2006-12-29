@@ -142,6 +142,62 @@ class HMS_Form
         return $final;
     }
 
+    function get_username_for_edit_grouping($error)
+    {
+        PHPWS_Core::initCoreClass('Form.php');
+        $form = &new PHPWS_Form;
+
+        $form->addText('username');
+
+        $form->addHidden('module', 'hms');
+        $form->addHidden('type', 'roommate');
+        $form->addHidden('op', 'edit_grouping');
+        $form->addSubmit('submit', _('Search for Grouping'));
+
+        $tpl = $form->getTemplate();
+        $tpl['ERROR']   = $error;
+        $tpl['MESSAGE'] = "Please enter one of the ASU usernames in the roommate grouping you wish to edit:";
+        $final = PHPWS_Template::process($tpl, 'hms', 'admin/get_single_username.tpl');
+        return $final;
+    }
+
+    function edit_grouping()
+    {
+
+        $db = &new PHPWS_DB('hms_roommates');
+        $db->addWhere('roommate_zero', $_REQUEST['username'], 'ILIKE');
+        $db->addWhere('roommate_one', $_REQUEST['username'], 'ILIKE', 'OR');
+        $db->addWhere('roommate_two', $_REQUEST['username'], 'ILIKE', 'OR');
+        $db->addWhere('roommate_three', $_REQUEST['username'], 'ILIKE', 'OR');
+        $result = $db->select('row');
+        unset($db);
+
+        if(PEAR::isError($result)) {
+            PHPWS_Core::log($result);
+            return "An error occurred. Please contact Electronic Student Services.";
+        } else if ($result == null || $result == false) {
+            $error = "No results found by that ASU username. Please try a different username.";
+            return HMS_Roommate::get_username_for_edit_grouping($error);
+        }
+
+        PHPWS_Core::initCoreClass('Forms.php');
+        $form = new PHPWS_Form;
+        $form->addText('first_roommate', $result['roommate_zero']);
+        $form->addText('second_roommate', $result['roommate_one']);
+        $form->addText('third_roommate', $result['roommate_two']);
+        $form->addText('fourth_roommate', $result['roommate_three']);
+
+        $tpl = $form->getTemplate();
+
+        $tpl['FIRST_ROOMMATE_NAME']     = "Kevin Michael Wilcox";
+        $tpl['FIRST_ROOMMATE_YEAR']     = "Sophomore";
+        $tpl['SECOND_ROOMMATE_NAME']    = "Joe Dirt";
+        $tpl['SECOND_ROOMMATE_YEAR']    = "Junior";
+        
+        $final = PHPWS_Template::process($tpl, 'hms', 'admin/display_roommates.tpl');
+        return $final;
+    }
+
     function select_residence_hall_for_add_floor()
     {
         $content = "";
