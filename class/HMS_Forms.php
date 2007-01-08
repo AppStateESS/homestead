@@ -151,7 +151,7 @@ class HMS_Form
 
         $form->addHidden('module', 'hms');
         $form->addHidden('type', 'roommate');
-        $form->addHidden('op', 'edit_grouping');
+        $form->addHidden('op', 'select_username_for_edit_grouping');
         $form->addSubmit('submit', _('Search for Grouping'));
 
         $tpl = $form->getTemplate();
@@ -161,40 +161,98 @@ class HMS_Form
         return $final;
     }
 
+    function select_username_for_edit_grouping()
+    {
+        PHPWS_Core::initCoreClass('DBPager.php');
+        $pager = &new DBPager('hms_roommates', 'HMS_Roommate');
+        $pager->setModule('hms');
+        $pager->setTemplate('admin/roommate_search_results.tpl');
+        
+        $pager->db->addWhere('roommate_zero', '%' . $_REQUEST['username'] . '%', 'ILIKE', 'OR');
+        $pager->db->addWhere('roommate_one', '%' . $_REQUEST['username'] . '%', 'ILIKE', 'OR');
+        $pager->db->addWhere('roommate_two', '%' . $_REQUEST['username'] . '%', 'ILIKE', 'OR');
+        $pager->db->addWhere('roommate_three', '%' . $_REQUEST['username'] . '%', 'ILIKE', 'OR');
+
+        $pager->addRowTags('get_row_pager_tags');
+        return $pager->get();
+    }
+
     function edit_grouping()
     {
+        if(isset($_REQUEST['id'])) {
+            $db = new PHPWS_DB('hms_roommates');
+            $db->addWhere('id', $_REQUEST['id']);
+           
+            PHPWS_Core::initModClass('hms', 'HMS_Roommate');
 
-        $db = &new PHPWS_DB('hms_roommates');
-        $db->addWhere('roommate_zero', $_REQUEST['username'], 'ILIKE');
-        $db->addWhere('roommate_one', $_REQUEST['username'], 'ILIKE', 'OR');
-        $db->addWhere('roommate_two', $_REQUEST['username'], 'ILIKE', 'OR');
-        $db->addWhere('roommate_three', $_REQUEST['username'], 'ILIKE', 'OR');
-        $result = $db->select('row');
-        unset($db);
+            $grouping = new HMS_Roommate;
+            $grouping_id = $db->loadObject($grouping);
 
-        if(PEAR::isError($result)) {
-            PHPWS_Core::log($result);
-            return "An error occurred. Please contact Electronic Student Services.";
-        } else if ($result == null || $result == false) {
-            $error = "No results found by that ASU username. Please try a different username.";
-            return HMS_Roommate::get_username_for_edit_grouping($error);
+            PHPWS_Core::initCoreClass('Forms.php');
+            $form = new PHPWS_Form;
+            $form->addText('first_roommate', $grouping->get_roommate_zero());
+            $form->addText('second_roommate', $grouping->get_roommate_one());
+            $form->addText('third_roommate', $grouping->get_roommate_two());
+            $form->addText('fourth_roommate', $grouping->get_roommate_three());
+
+            $form->addHidden('module', 'hms');
+            $form->addHidden('type', 'roommate');
+            $form->addHidden('op', 'save_grouping');
+            $form->addHidden('id', $grouping->get_id());
+            $form->addSubmit('submit', _('Save Group'));
+
+            $tpl = $form->getTemplate();
+
+            $tpl['FIRST_ROOMMATE_NAME']     = "Kevin Michael Wilcox";
+            $tpl['FIRST_ROOMMATE_YEAR']     = "Sophomore";
+            $tpl['SECOND_ROOMMATE_NAME']    = "Joe Dirt";
+            $tpl['SECOND_ROOMMATE_YEAR']    = "Junior";
+        
+            $final = PHPWS_Template::process($tpl, 'hms', 'admin/display_roommates.tpl');
+            return $final;
         }
+
+        return HMS_Forms::get_username_for_edit_grouping();
+    }
+
+    function verify_break_grouping()
+    {
+        $db = new PHPWS_DB('hms_roommates');
+        $db->addWhere('id', $_REQUEST['id']);
+
+        PHPWS_Core::initModClass('hms', 'HMS_Roommate');
+
+        $grouping   = new HMS_Roommate;
+        $success    = $db->loadObject($grouping);
 
         PHPWS_Core::initCoreClass('Forms.php');
         $form = new PHPWS_Form;
-        $form->addText('first_roommate', $result['roommate_zero']);
-        $form->addText('second_roommate', $result['roommate_one']);
-        $form->addText('third_roommate', $result['roommate_two']);
-        $form->addText('fourth_roommate', $result['roommate_three']);
+
+        $form->addCheckbox('email_first_roommate');
+        $form->addCheckbox('email_second_roommate');
+        
+        if($grouping->get_roommate_two() != NULL) {
+            $form->addCheckbox('email_third_roommate');
+        }
+       
+       if($grouping->get_roommate_three() != NULL) {
+            $form->addCheckbox('email_fourth_roommate');
+        }
+
+        $form->addHidden('module', 'hms');
+        $form->addHidden('type', 'roommate');
+        $form->addHidden('op', 'break_grouping');
+        $form->addHidden('id', $_REQUEST['id']);
+        $form->addSubmit('submit', _('Break Group'));
 
         $tpl = $form->getTemplate();
 
-        $tpl['FIRST_ROOMMATE_NAME']     = "Kevin Michael Wilcox";
-        $tpl['FIRST_ROOMMATE_YEAR']     = "Sophomore";
-        $tpl['SECOND_ROOMMATE_NAME']    = "Joe Dirt";
-        $tpl['SECOND_ROOMMATE_YEAR']    = "Junior";
-        
-        $final = PHPWS_Template::process($tpl, 'hms', 'admin/display_roommates.tpl');
+        $tpl['FIRST_ROOMMATE']  = $grouping->get_roommate_zero();
+        $tpl['SECOND_ROOMMATE'] = $grouping->get_roommate_one();
+        $tpl['THIRD_ROOMMATE']  = $grouping->get_roommate_two();
+        $tpl['FOURTH_ROOMMATE'] = $grouping->get_roommate_three();
+
+        $final = PHPWS_Template::process($tpl, 'hms', 'admin/verify_break_roommates.tpl');
         return $final;
     }
 

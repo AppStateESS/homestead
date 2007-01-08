@@ -294,10 +294,14 @@ class HMS_Student {
                     $message .= PHPWS_Text::secureLink(_('View My Questionnaire'), 'hms', array('type'=>'student', 'op'=>'review_questionnaire'));
                     $message .= "<br /><br />";
                     $message .= PHPWS_Text::secureLink(_('Submit New Questionnaire'), 'hms', array('type'=>'student', 'op'=>'begin_questionnaire'));
+                    $message .= "<br /><br />";
+                    $message .= PHPWS_Text::secureLink(_('Logout'), 'users', array('action'=>'user', 'command'=>'logout'));
                 } else {
                     $message .= "You have not completed a Housing Questionnaire.<br /><br />";
                     $message .= "Click below to fill out a new questionnaire. <br /><br />";
                     $message .= PHPWS_Text::secureLink(_('Submit new Questionnaire'), 'hms', array('type'=>'student', 'op'=>'begin_questionnaire'));
+                    $message .= "<br /><br />";
+                    $message .= PHPWS_Text::secureLink(_('Logout'), 'users', array('action'=>'user', 'command'=>'logout'));
                 }       
                 return $message;
             default:

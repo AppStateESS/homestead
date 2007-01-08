@@ -5,11 +5,12 @@
     <div class="box-content">
         <font color="red"><i>{ERROR}</i><br /></font>
         {MESSAGE}<br /><br />
-        <table>
+        <table align="center">
             <tr>
                 <th>ASU Username:</th><td>{USERNAME}</td>
             </tr>
         </table>
+        <br /><br />
         {SUBMIT}
     </div>
   </div>

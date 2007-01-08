@@ -122,6 +122,10 @@ class HMS_Roommate
      */
     function set_values()
     {
+        if(isset($_REQUEST['id']) && $_REQUEST['id'] != NULL) {
+            $this->set_id($_REQUEST['id']);
+        }
+
         $this->set_roommate_zero($_REQUEST['first_roommate']);
         $this->set_roommate_one($_REQUEST['second_roommate']);
 
@@ -154,8 +158,6 @@ class HMS_Roommate
      */
     function save_grouping()
     {
-        require_once(PHPWS_SOURCE_DIR . 'mod/hms/inc/defines.php');
-
         if($_REQUEST['first_roommate'] == NULL || $_REQUEST['second_roommate'] == NULL) {
             $error = "You must provide a first and second roommate to save this group.";
             return HMS_Roommate::get_usernames_for_new_grouping($error);
@@ -171,13 +173,43 @@ class HMS_Roommate
             PHPWS_Core::log($result);
             return "There was an error. Please check the logs.";
         } else {
-            return "This group was successfully saved.";
+            $msg = "This group was successfully saved. <br /><br />";
+            $msg .= PHPWS_Text::secureLink(_('Create new roommate group'), 'hms', array('type'=>'roommate', 'op'=>'get_usernames_for_new_grouping')) . "<br /><br />";
+            $msg .= PHPWS_Text::secureLink(_('Edit roommate group'), 'hms', array('type'=>'roommate', 'op'=>'get_username_for_edit_grouping'));
+            return $msg;
         }
-
     }
 
     /**
-     * 
+     * Breaks up the selected roommate group.
+     * Selected roommates will be emailed about the disbanding.
+     */
+    function break_grouping()
+    {
+        $grouping = new HMS_Roommate();
+        $grouping->set_values();
+        $grouping->set_deleted(1);
+        $grouping->set_deleted_by(Current_User::getID());
+        $grouping->set_deleted_on(mktime());
+
+        $db = new PHPWS_DB('hms_roommates');
+        $result = $db->saveObject($grouping);
+
+        if(PEAR::isError($result)) {
+            PHPWS_Core::log($result);
+            return "There was an error. Please check the logs.";
+        } else {
+            $msg = "This group was successfully saved. <br /><br />";
+            $msg .= PHPWS_Text::secureLink(_('Create new roommate group'), 'hms', array('type'=>'roommate', 'op'=>'get_usernames_for_new_grouping')) . "<br /><br />";
+            $msg .= PHPWS_Text::secureLink(_('Edit roommate group'), 'hms', array('type'=>'roommate', 'op'=>'get_username_for_edit_grouping'));
+            return $msg;
+        }
+    }
+
+    /**
+     * Calls HMS_Form method that allows the user to input an
+     *   ASU username. This searches the hms_roommate table to see
+     *   if that username is in a grouping.
      */
     function get_username_for_edit_grouping($error = NULL)
     {
@@ -194,6 +226,45 @@ class HMS_Roommate
         return HMS_Form::edit_grouping();
     }
 
+
+    /**
+     * DB Pager screen displayed after an username is entered.
+     */
+    function select_username_for_edit_grouping()
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
+        return HMS_Form::select_username_for_edit_grouping();
+    }
+
+    function get_row_pager_tags()
+    {
+        $row['ACTIONS'] = HMS_Roommate::get_row_actions();
+        return $row;
+    }
+
+    function get_row_actions()
+    {
+        $link['type']   = 'roommate';
+        $link['id']     = $this->get_id();
+        
+        $link['op']     = 'edit_grouping';
+        $list[]         = PHPWS_Text::secureLink(_('Edit'), 'hms', $link);
+        
+        $link['op']     = 'verify_break_grouping';
+        $list[]         = PHPWS_Text::secureLink(_('Break'), 'hms', $link);
+
+        return implode(' | ', $list);
+    }
+
+    /**
+     * Calls HMS_Form function to display a verification screen with an
+     *   option to email the group members they've been disbanded
+     */
+    function verify_break_grouping()
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
+        return HMS_Form::verify_break_grouping();
+    }
 
     /**
      * "main" function for the Roommate class
@@ -214,8 +285,17 @@ class HMS_Roommate
             case 'get_username_for_edit_grouping':
                 $final = HMS_Roommate::get_username_for_edit_grouping();
                 break;
+            case 'select_username_for_edit_grouping':
+                $final = HMS_Roommate::select_username_for_edit_grouping();
+                break;
             case 'edit_grouping':
                 $final = HMS_Roommate::edit_grouping();
+                break;
+            case 'verify_break_grouping':
+                $final = HMS_Roommate::verify_break_grouping();
+                break;
+            case 'break_grouping':
+                $final = HMS_Roommate::break_grouping();
                 break;
             default:
                 $final =  "Op is: " . $op;
