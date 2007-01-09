@@ -170,7 +170,7 @@ class HMS_Roommate
         $result = $db->saveObject($grouping);
 
         if(PEAR::isError($result)) {
-            PHPWS_Core::log($result);
+            PHPWS_Error::log($result);
             return "There was an error. Please check the logs.";
         } else {
             $msg = "This group was successfully saved. <br /><br />";
@@ -186,20 +186,15 @@ class HMS_Roommate
      */
     function break_grouping()
     {
-        $grouping = new HMS_Roommate();
-        $grouping->set_values();
-        $grouping->set_deleted(1);
-        $grouping->set_deleted_by(Current_User::getID());
-        $grouping->set_deleted_on(mktime());
-
         $db = new PHPWS_DB('hms_roommates');
-        $result = $db->saveObject($grouping);
+        $db->addWhere('id', $_REQUEST['id']);
+        $result = $db->delete();
 
         if(PEAR::isError($result)) {
-            PHPWS_Core::log($result);
+            PHPWS_Error::log($result);
             return "There was an error. Please check the logs.";
         } else {
-            $msg = "This group was successfully saved. <br /><br />";
+            $msg = "This group was successfully broken. <br /><br />";
             $msg .= PHPWS_Text::secureLink(_('Create new roommate group'), 'hms', array('type'=>'roommate', 'op'=>'get_usernames_for_new_grouping')) . "<br /><br />";
             $msg .= PHPWS_Text::secureLink(_('Edit roommate group'), 'hms', array('type'=>'roommate', 'op'=>'get_username_for_edit_grouping'));
             return $msg;
