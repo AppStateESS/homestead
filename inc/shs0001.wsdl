@@ -65,6 +65,77 @@
         <s:attribute name="type_code" type="s:NMTOKEN" />
         <s:attribute name="desc" type="s:token" />
       </s:complexType>
+      <s:element name="CreateRoomAssignment">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="StudentID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TermCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="BldgCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="RoomCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="PlanCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="MealCode" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreateRoomAssignmentResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="CreateRoomAssignmentResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RemoveRoomAssignment">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="StudentID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TermCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="BldgCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="RoomCode" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RemoveRoomAssignmentResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="RemoveRoomAssignmentResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="MoveRoomAssignment">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="StudentID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TermCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CurBldgCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CurRoomCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="NewBldgCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="NewRoomCode" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="MoveRoomAssignmentResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="MoveRoomAssignmentResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RemoveMealAssignment">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="StudentID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TermCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="MealCode" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RemoveMealAssignmentResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="RemoveMealAssignmentResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
     </s:schema>
   </wsdl:types>
   <wsdl:message name="GetStudentProfileSoapIn">
@@ -73,16 +144,92 @@
   <wsdl:message name="GetStudentProfileSoapOut">
     <wsdl:part name="parameters" element="tns:GetStudentProfileResponse" />
   </wsdl:message>
+  <wsdl:message name="CreateRoomAssignmentSoapIn">
+    <wsdl:part name="parameters" element="tns:CreateRoomAssignment" />
+  </wsdl:message>
+  <wsdl:message name="CreateRoomAssignmentSoapOut">
+    <wsdl:part name="parameters" element="tns:CreateRoomAssignmentResponse" />
+  </wsdl:message>
+  <wsdl:message name="RemoveRoomAssignmentSoapIn">
+    <wsdl:part name="parameters" element="tns:RemoveRoomAssignment" />
+  </wsdl:message>
+  <wsdl:message name="RemoveRoomAssignmentSoapOut">
+    <wsdl:part name="parameters" element="tns:RemoveRoomAssignmentResponse" />
+  </wsdl:message>
+  <wsdl:message name="MoveRoomAssignmentSoapIn">
+    <wsdl:part name="parameters" element="tns:MoveRoomAssignment" />
+  </wsdl:message>
+  <wsdl:message name="MoveRoomAssignmentSoapOut">
+    <wsdl:part name="parameters" element="tns:MoveRoomAssignmentResponse" />
+  </wsdl:message>
+  <wsdl:message name="RemoveMealAssignmentSoapIn">
+    <wsdl:part name="parameters" element="tns:RemoveMealAssignment" />
+  </wsdl:message>
+  <wsdl:message name="RemoveMealAssignmentSoapOut">
+    <wsdl:part name="parameters" element="tns:RemoveMealAssignmentResponse" />
+  </wsdl:message>
   <wsdl:portType name="ws_shs0001Soap">
     <wsdl:operation name="GetStudentProfile">
       <wsdl:input message="tns:GetStudentProfileSoapIn" />
       <wsdl:output message="tns:GetStudentProfileSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CreateRoomAssignment">
+      <wsdl:input message="tns:CreateRoomAssignmentSoapIn" />
+      <wsdl:output message="tns:CreateRoomAssignmentSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RemoveRoomAssignment">
+      <wsdl:input message="tns:RemoveRoomAssignmentSoapIn" />
+      <wsdl:output message="tns:RemoveRoomAssignmentSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="MoveRoomAssignment">
+      <wsdl:input message="tns:MoveRoomAssignmentSoapIn" />
+      <wsdl:output message="tns:MoveRoomAssignmentSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RemoveMealAssignment">
+      <wsdl:input message="tns:RemoveMealAssignmentSoapIn" />
+      <wsdl:output message="tns:RemoveMealAssignmentSoapOut" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="ws_shs0001Soap" type="tns:ws_shs0001Soap">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
     <wsdl:operation name="GetStudentProfile">
       <soap:operation soapAction="http://its.appstate.edu/xml/ess/shs/GetStudentProfile" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateRoomAssignment">
+      <soap:operation soapAction="http://its.appstate.edu/xml/ess/shs/CreateRoomAssignment" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RemoveRoomAssignment">
+      <soap:operation soapAction="http://its.appstate.edu/xml/ess/shs/RemoveRoomAssignment" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MoveRoomAssignment">
+      <soap:operation soapAction="http://its.appstate.edu/xml/ess/shs/MoveRoomAssignment" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RemoveMealAssignment">
+      <soap:operation soapAction="http://its.appstate.edu/xml/ess/shs/RemoveMealAssignment" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -102,14 +249,50 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="CreateRoomAssignment">
+      <soap12:operation soapAction="http://its.appstate.edu/xml/ess/shs/CreateRoomAssignment" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RemoveRoomAssignment">
+      <soap12:operation soapAction="http://its.appstate.edu/xml/ess/shs/RemoveRoomAssignment" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MoveRoomAssignment">
+      <soap12:operation soapAction="http://its.appstate.edu/xml/ess/shs/MoveRoomAssignment" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RemoveMealAssignment">
+      <soap12:operation soapAction="http://its.appstate.edu/xml/ess/shs/RemoveMealAssignment" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="ws_shs0001">
     <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Electronic Student (Web) Services for Student Housing - Registration</wsdl:documentation>
     <wsdl:port name="ws_shs0001Soap" binding="tns:ws_shs0001Soap">
-      <soap:address location="http://152.10.137.28/wsvcs/ess/shs/shs0001.asmx" />
+      <soap:address location="http://152.10.136.9/wsvcs/ess/shs/shs0001.asmx" />
     </wsdl:port>
     <wsdl:port name="ws_shs0001Soap12" binding="tns:ws_shs0001Soap12">
-      <soap12:address location="http://152.10.137.28/wsvcs/ess/shs/shs0001.asmx" />
+      <soap12:address location="http://152.10.136.9/wsvcs/ess/shs/shs0001.asmx" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>
