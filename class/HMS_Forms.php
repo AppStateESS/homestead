@@ -1413,9 +1413,11 @@ class HMS_Form
             
             if($_REQUEST['relationship'] == 0) $tpl['RELATIONSHIP'] = "No"; 
             else if($_REQUEST['relationship'] == 1) $tpl['RELATIONSHIP'] = "Yes"; 
+            else if($_REQUEST['relationship'] == 2) $tpl['RELATIONSHIP'] = "Not Disclosed"; 
             
             if($_REQUEST['employed'] == 0) $tpl['EMPLOYED'] = "No";
             else if($_REQUEST['employed'] == 1) $tpl['EMPLOYED'] = "Yes";
+            else if($_REQUEST['employed'] == 2) $tpl['EMPLOYED'] = "Not Disclosed";
              
             if($_REQUEST['rlc_interest'] == 0) $tpl['RLC_INTEREST_1'] = "No";
             else if($_REQUEST['rlc_interest'] == 1) $tpl['RLC_INTEREST_1'] = "Yes";
@@ -1461,9 +1463,11 @@ class HMS_Form
             
             if($questionnaire->getRelationship() == 0) $tpl['RELATIONSHIP'] = "No"; 
             else if($questionnaire->getRelationship() == 1) $tpl['RELATIONSHIP'] = "Yes"; 
+            else if($questionnaire->getRelationship() == 2) $tpl['RELATIONSHIP'] = "Not Disclosed"; 
             
             if($questionnaire->getEmployed() == 0) $tpl['EMPLOYED'] = "No";
             else if($questionnaire->getEmployed() == 1) $tpl['EMPLOYED'] = "Yes";
+            else if($questionnaire->getEmployed() == 2) $tpl['EMPLOYED'] = "Not Disclosed";
              
             if($questionnaire->getRlcInterest() == 0) $tpl['RLC_INTEREST_1'] = "No";
             else if($questionnaire->getRlcInterest() == 1) $tpl['RLC_INTEREST_1'] = "Yes";
