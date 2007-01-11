@@ -1383,7 +1383,6 @@ class HMS_Form
             $redo_tpl = $redo_form->getTemplate();
 
             $tpl['MESSAGE'] = $message;
-            //$tpl['REDO']    = PHPWS_Text::secureLink("Modify Application", 'hms', array('type'=>'student', 'op'=>'begin_questionnaire'));
             $tpl['NEWLINES']= "<br /><br />";
             
             if($_REQUEST['student_status'] == 1) $tpl['STUDENT_STATUS'] = "New Freshman";

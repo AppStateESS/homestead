@@ -45,9 +45,9 @@ class HMS_Login
             return TOOLATE;
         }
 
-        //the 200640 needs to be gathered by a function call
+        /*
         PHPWS_Core::initModClass('hms', 'HMS_Student.php');
-        $student = HMS_Student::get_banner_profile($_REQUEST['asu_username'], '200640');
+        $student = HMS_Student::get_banner_profile($_REQUEST['asu_username'], '200740');
         $dob = explode('-', $student->dob);
         
         if($student->student_type != 'F') {
@@ -55,6 +55,7 @@ class HMS_Login
         } else if ($dob[0] < date('Y') - 25) {
             return TOOOLD;
         }
+        */
 
         require_once(PHPWS_SOURCE_DIR . '/mod/hms/inc/accounts.php');
         Current_User::loginUser(HMS_STUDENT_USER, HMS_STUDENT_PASS);
