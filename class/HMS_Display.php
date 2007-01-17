@@ -52,7 +52,7 @@ class HMS_Display
 
     function main()
     {
-        switch($_REQUEST['op'])
+        switch(isset($_REQUEST['op'])?$_REQUEST['op']:'')
         {
             case 'display_system_statistics':
                 return HMS_Display::get_system_statistics();
@@ -61,7 +61,6 @@ class HMS_Display
                 return HMS_Display::display_greeting();
                 break;
         }
-
     }
 }
 ?>
