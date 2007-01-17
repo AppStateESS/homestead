@@ -1590,7 +1590,7 @@ class HMS_Form
                         7 => "July", 8 => "Aug", 9 => "Sep", 10 => "Oct", 11 => "Nov", 12 => "Dec");
 
         $days = array();
-        for($i=1; $i <= 30; $i++){
+        for($i=1; $i <= 31; $i++){
             $days[$i] = $i;
         }
 
