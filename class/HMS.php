@@ -37,8 +37,8 @@
                         $content = "wtf?";
                         break;
                 }
+                Layout::add($content);
             }
-            Layout::add($content);
         }
 
         # Returns the current "housing year". Need to implement according to Housing's specs. Hard coded for now...
