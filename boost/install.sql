@@ -142,7 +142,7 @@ ALTER TABLE hms_suite ADD CONSTRAINT room_id_one_key UNIQUE (room_id_one);
 ALTER TABLE hms_suite ADD CONSTRAINT room_id_two_key UNIQUE (room_id_two);
 ALTER TABLE hms_suite ADD CONSTRAINT room_id_three_key UNIQUE (room_id_three);
 
-CREATE TABLE hms_roommate (
+CREATE TABLE hms_roommates (
     id integer not null,
     roommate_zero character varying(16) not null,
     roommate_one character varying(16) not null,
@@ -162,4 +162,4 @@ CREATE SEQUENCE hms_pricing_tiers_seq;
 CREATE SEQUENCE hms_residence_hall_seq;
 CREATE SEQUENCE hms_room_seq;
 CREATE SEQUENCE hms_student_seq;
-CREATE SEQUENCE hms_roommate_seq;
+CREATE SEQUENCE hms_roommates_seq;

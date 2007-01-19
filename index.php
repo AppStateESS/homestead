@@ -25,6 +25,10 @@ if(Current_User::isLogged()) {
    } else if($type == BADTUPLE) {
         $error = "<i><h2>You have not entered a valid username/password combination!</h2></i>";
         HMS_Login::display_login_screen($error);
+    } else if ($type == TOOOLD) {
+        $error = "<i><h2>You must be under 23 to live in a Residence Hall.<br />";
+        $error .= "Please contact Housing and Residence Life.</h2></i>";
+        HMS_Login::display_login_screen($error);
     } else {
         PHPWS_Core::initModClass('hms', 'HMS.php');
         HMS::main($type);
