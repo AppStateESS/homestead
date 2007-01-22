@@ -210,6 +210,23 @@ class HMS_Questionnaire {
         }
     }
 
+    /**
+     * Uses the forms class to display the questionnaire.
+     */
+    function display_questionnaire_search()
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
+        return HMS_Form::questionnaire_search_form();
+    }
+
+    /**
+     * Does the actual searching of questionnaire.
+     */
+    function questionnaire_search()
+    {
+
+    }
+
 
     /****************************
      * Accessor & Mutator Methods

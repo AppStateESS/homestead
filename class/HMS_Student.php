@@ -284,6 +284,14 @@ class HMS_Student {
                 PHPWS_Core::initModClass('hms','HMS_Questionnaire.php');
                 return HMS_Questionnaire::save_questionnaire();
                 break;
+            case 'show_questionnaire_search':
+                PHPWS_Core::initModClass('hms','HMS_Questionnaire.php');
+                return HMS_Questionnaire::display_questionnaire_search();
+                break;
+            case 'questionnaire_search':
+                PHPWS_Core::initModClass('hms','HMS_Questionnaire.php');
+                return HMS_Questionnaire::questionnaire_search();
+                break;
             case 'main':
                 $message  = "Welcome to the Housing Management System!<br /><br />";
                 
@@ -294,6 +302,8 @@ class HMS_Student {
                     $message .= PHPWS_Text::secureLink(_('View My Questionnaire'), 'hms', array('type'=>'student', 'op'=>'review_questionnaire'));
                     $message .= "<br /><br />";
                     $message .= PHPWS_Text::secureLink(_('Submit New Questionnaire'), 'hms', array('type'=>'student', 'op'=>'begin_questionnaire'));
+                    $message .= "<br /><br />";
+                    $message .= PHPWS_Text::secureLink(_('Search for a roomate'), 'hms', array('type'=>'student','op'=>'show_questionnaire_search'));
                     $message .= "<br /><br />";
                     $message .= PHPWS_Text::secureLink(_('Logout'), 'users', array('action'=>'user', 'command'=>'logout'));
                 } else {

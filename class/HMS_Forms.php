@@ -1491,6 +1491,22 @@ class HMS_Form
                 is_numeric($_REQUEST['rlc_interest']));
     }
 
+    function questionnaire_search_form()
+    {
+        $form = &new PHPWS_Form();
+
+        $form->addText('asu_username');
+        $form->setLabel('asu_username','ASU Username: ');
+
+        $form->addSubmit('Search');
+
+        $tags = array();
+        $form->mergeTemplate($tags);
+        $tags = $form->getTemplate();
+
+        return PHPWS_Template::process($tags,'hms','student/questionnaire_search.tpl');
+    }
+
     function edit_suite($error)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Room.php');
