@@ -224,8 +224,48 @@ class HMS_Questionnaire {
      */
     function questionnaire_search()
     {
+        $tags = array();
 
+        $tags['RESULTS'] = HMS_Questionnaire::questionnaire_search_pager();
+
+        return PHPWS_Template::process($tags, 'hms', 'student/questionnaire_search_results.tpl');
     }
+
+    function questionnaire_search_pager()
+    {
+        PHPWS_Core::initCoreClass('DBPager.php');
+
+        $pageTags['USERNAME']   = _('Username');
+        $pageTags['FIRST_NAME'] = _('First Name');
+        $pageTags['LAST_NAME']  = _('Last Name');
+        $PageTags['ACTIONS']    = _('Action');
+
+        $pager = &new DBPager('hms_questionnaire','HMS_Questionnaire');
+
+        $pager->addWhere('hms_questionnaire.hms_student_id',$_REQUEST['asu_username'],'ILIKE');
+        $pager->db->addOrder('hms_student_id','ASC');
+
+        $pager->setModule('hms');
+        $pager->setTemplate('student/questionnaire_search_pager.tpl');
+        $pager->setLink('index.php?module=hms');
+        $pager->setEmptyMessage("No matches found.");
+        $pager->addToggle('class="toggle1"');
+        $pager->addToggle('class="toggle2"');
+        $pager->addRowTags('getPagerTags');
+        $pager->addPageTags($pageTags);
+
+        return $pager->get();
+     }
+
+     function getPagerTags()
+     {
+       $tags['STUDENT_ID'] = $this->getStudentID();
+       $tags['FIRST_NAME'] = "The first name goes here";
+       $tags['LAST_NAME'] = "The last name goes here";
+       $tags['ACTIONS'] = "[View] [Select as Roomate]";
+
+       return $tags;
+     }
 
 
     /****************************

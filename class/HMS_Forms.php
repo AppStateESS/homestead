@@ -1494,6 +1494,7 @@ class HMS_Form
     function questionnaire_search_form()
     {
         $form = &new PHPWS_Form();
+        $form->setAction('index.php?module=hms&type=student&op=questionnaire_search');
 
         $form->addText('asu_username');
         $form->setLabel('asu_username','ASU Username: ');
