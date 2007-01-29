@@ -196,6 +196,65 @@ class HMS_Questionnaire {
             return FALSE;
         }
     }
+
+    
+    /*
+     * Displays the given user's questionnaire.
+     * If no user specified, defaults to current user.
+     */
+    function display_questionnaire($asu_username = $_SESSION['asu_username']){
+
+        PHPWS_Core::initModClass('hms', 'HMS_Questionnaire.php');
+        $questionnaire = new HMS_Questionnaire($asu_username);
+        
+
+        $tpl['TITLE']   = 'Residence Hall Application';
+        if(isset($message)){
+            $tpl['MESSAGE'] = $message;
+        }
+        $tpl['REDO']    = PHPWS_Text::secureLink("Return to Menu", 'hms', array('type'=>'hms', 'op'=>'main'));
+        $tpl['NEWLINES']= "<br /><br />";
+          
+        if($questionnaire->getStudentStatus() == 1) $tpl['STUDENT_STATUS'] = "New Freshman";
+        else if ($questionnaire->getStudentStatus() == 2) $tpl['STUDENT_STATUS'] = "Transfer";
+
+        if($questionnaire->getTermClassification() == 1) $tpl['CLASSIFICATION_FOR_TERM'] = "Freshman";
+        else if($questionnaire->getTermClassification() == 2) $tpl['CLASSIFICATION_FOR_TERM'] = "Sophomore";
+        else if($questionnaire->getTermClassification() == 3) $tpl['CLASSIFICATION_FOR_TERM'] = "Junior";
+        else if($questionnaire->getTermClassification() == 4) $tpl['CLASSIFICATION_FOR_TERM'] = "Senior";
+          
+        if($questionnaire->getGender() == 0) $tpl['GENDER_TYPE'] = "Female";
+        else if($questionnaire->getGender() == 1) $tpl['GENDER_TYPE'] = "Male";
+            
+        if($questionnaire->getMealOption() == 1) $tpl['MEAL_OPTION'] = "Low";
+        else if($questionnaire->getMealOption() == 2) $tpl['MEAL_OPTION'] = "Medium";
+        else if($questionnaire->getMealOption() == 3) $tpl['MEAL_OPTION'] = "High";
+        else if($questionnaire->getMealOption() == 4) $tpl['MEAL_OPTION'] = "Super";
+           
+        if($questionnaire->getLifestyle() == 1) $tpl['LIFESTYLE_OPTION'] = "Single Gender";
+        else if($questionnaire->getLifestyle() == 2) $tpl['LIFESTYLE_OPTION'] = "Co-Ed";
+            
+        if($questionnaire->getPreferredBedtime() == 1) $tpl['PREFERRED_BEDTIME'] = "Early";
+        else if($questionnaire->getPreferredBedtime() == 2) $tpl['PREFERRED_BEDTIME'] = "Late";
+
+        if($questionnaire->getRoomCondition() == 1) $tpl['ROOM_CONDITION'] = "Clean";
+        else if($questionnaire->getRoomCondition() == 2) $tpl['ROOM_CONDITION'] = "Dirty";
+            
+        if($questionnaire->getRelationship() == 0) $tpl['RELATIONSHIP'] = "No"; 
+        else if($questionnaire->getRelationship() == 1) $tpl['RELATIONSHIP'] = "Yes"; 
+        else if($questionnaire->getRelationship() == 2) $tpl['RELATIONSHIP'] = "Not Disclosed"; 
+            
+        if($questionnaire->getEmployed() == 0) $tpl['EMPLOYED'] = "No";
+        else if($questionnaire->getEmployed() == 1) $tpl['EMPLOYED'] = "Yes";
+        else if($questionnaire->getEmployed() == 2) $tpl['EMPLOYED'] = "Not Disclosed";
+             
+        if($questionnaire->getRlcInterest() == 0) $tpl['RLC_INTEREST_1'] = "No";
+        else if($questionnaire->getRlcInterest() == 1) $tpl['RLC_INTEREST_1'] = "Yes";
+       
+        $master['QUESTIONNAIRE']  = PHPWS_Template::process($tpl, 'hms', 'student/student_questionnaire.tpl');
+        return PHPWS_Template::process($master,'hms','student/student_questionnaire_combined.tpl');
+        
+    }
    
     /**
      * Uses the forms class to display the questionnaire form or
