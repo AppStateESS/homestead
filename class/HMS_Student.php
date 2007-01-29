@@ -274,11 +274,11 @@ class HMS_Student {
                 break;
             case 'begin_questionnaire':
                 PHPWS_Core::initModClass('hms','HMS_Questionnaire.php');
-                return HMS_Questionnaire::display_questionnaire();
+                return HMS_Questionnaire::display_questionnaire_form();
                 break;
             case 'review_questionnaire':
                 PHPWS_Core::initModClass('hms','HMS_Questionnaire.php');
-                return HMS_Questionnaire::display_questionnaire(TRUE);
+                return HMS_Questionnaire::display_questionnaire_form(TRUE);
                 break;
             case 'save_questionnaire':
                 PHPWS_Core::initModClass('hms','HMS_Questionnaire.php');

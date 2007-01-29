@@ -198,9 +198,10 @@ class HMS_Questionnaire {
     }
    
     /**
-     * Uses the forms class to display the questionnaire.
+     * Uses the forms class to display the questionnaire form or
+     * a confirmation page.
      */
-    function display_questionnaire($view = NULL)
+    function display_questionnaire_form($view = NULL)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
         if($view != NULL) {
@@ -211,7 +212,7 @@ class HMS_Questionnaire {
     }
 
     /**
-     * Uses the forms class to display the questionnaire.
+     * Uses the forms class to display the questionnaire search page.
      */
     function display_questionnaire_search()
     {
@@ -220,7 +221,7 @@ class HMS_Questionnaire {
     }
 
     /**
-     * Does the actual searching of questionnaire.
+     * Does the actual searching of questionnaires.
      */
     function questionnaire_search()
     {
@@ -231,6 +232,9 @@ class HMS_Questionnaire {
         return PHPWS_Template::process($tags, 'hms', 'student/questionnaire_search_results.tpl');
     }
 
+    /**
+     * Sets up the pager object for searching questionnairs.
+     */
     function questionnaire_search_pager()
     {
         PHPWS_Core::initCoreClass('DBPager.php');
@@ -255,17 +259,20 @@ class HMS_Questionnaire {
         $pager->addPageTags($pageTags);
 
         return $pager->get();
-     }
+    }
 
-     function getPagerTags()
-     {
-       $tags['STUDENT_ID'] = $this->getStudentID();
-       $tags['FIRST_NAME'] = "The first name goes here";
-       $tags['LAST_NAME'] = "The last name goes here";
-       $tags['ACTIONS'] = "[View] [Select as Roomate]";
+    /* 
+     *Sets up the row tags for the pager
+     */
+    function getPagerTags()
+    {
+        $tags['STUDENT_ID'] = $this->getStudentID();
+        $tags['FIRST_NAME'] = "The first name goes here";
+        $tags['LAST_NAME'] = "The last name goes here";
+        $tags['ACTIONS'] = "[View] [Select as Roomate]";
 
-       return $tags;
-     }
+        return $tags;
+    }
 
 
     /****************************
