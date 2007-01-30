@@ -161,6 +161,96 @@ class HMS_Form
         return $final;
     }
 
+    function get_username_for_assignment($error)
+    {
+        PHPWS_Core::initCoreClass('Form.php');
+        $form = &new PHPWS_Form;
+
+        $form->addText('username');
+
+        $form->addHidden('module', 'hms');
+        $form->addHidden('type', 'assignment');
+        $form->addHidden('op', 'get_hall_floor_room');
+        $form->addSubmit('submit', _('Submit User'));
+
+        $tpl = $form->getTemplate();
+        $tpl['ERROR']   = $error;
+        $tpl['MESSAGE'] = "Please enter an ASU username to assign:";
+        $final = PHPWS_Template::process($tpl, 'hms', 'admin/get_single_username.tpl');
+        return $final;
+    }
+
+    function get_hall_floor_room()
+    {
+        $db = new PHPWS_DB('hms_residence_hall');
+        $db->addColumn('id');
+        $db->addColumn('hall_name');
+        $db->addWhere('deleted', '1', '!=');
+        $halls_raw = $db->select();
+
+        foreach($halls_raw as $hall) {
+            $halls[$hall['id']] = $hall['hall_name'];
+        }
+
+        for($i = 1; $i <= 15; $i++) {
+            $floors[$i] = $i;
+        }
+
+        for ($i = 1; $i <= 30; $i++) {
+            $rooms[$i] = $i;
+        }
+
+        PHPWS_Core::initCoreClass('Form.php');
+        $form = &new PHPWS_Form;
+
+        $form->addDropBox('halls', $halls);
+        $form->addDropBox('floors', $floors);
+        $form->addDropBox('rooms', $rooms);
+        
+        $form->addHidden('module', 'hms');
+        $form->addHidden('type', 'assignment');
+        $form->addHidden('op', 'verify_assignment');
+        $form->addHidden('username', $_REQUEST['username']);
+        $form->addSubmit('submit', _('Assign Room'));
+
+        $tpl = $form->getTemplate();
+        $tpl['MESSAGE'] =  "<h2>Assigning Student: " . $_REQUEST['username'] . "</h2>";
+        $tpl['MESSAGE'] .= "Please select a Hall, Floor and Room.";
+        $final = PHPWS_Template::process($tpl, 'hms', 'admin/get_hall_floor_room.tpl');
+
+        return $final;
+    }
+
+    function verify_assignment()
+    {
+        $db = new PHPWS_DB('hms_residence_hall');
+        $db->addColumn('hall_name');
+        $db->addWhere('id', $_REQUEST['halls']);
+        $hall_name = $db->select('one');
+        unset($db);
+
+        PHPWS_Core::initCoreClass('Form.php');
+        $form = &new PHPWS_Form;
+
+        $form->addHidden('module', 'hms');
+        $form->addHidden('type', 'assignment');
+        $form->addHidden('op', 'create_assignment');
+        $form->addHidden('username', $_REQUEST['username']);
+        $form->addHidden('hall', $_REQUEST['halls']);
+        $form->addHidden('floor', $_REQUEST['floors']);
+        $form->addHidden('room', $_REQUEST['rooms']);
+        $form->addSubmit('submit', _('Assign Student'));
+
+        $tpl = $form->getTemplate();
+        $tpl['MESSAGE'] = "<h2>You are assigning user: " . $_REQUEST['username'] . "</h2>";
+        $tpl['HALLS']   = $hall_name; 
+        $tpl['FLOORS']  = $_REQUEST['floors'];
+        $tpl['ROOMS']   = $_REQUEST['rooms'];
+
+        $final = PHPWS_Template::process($tpl, 'hms', 'admin/get_hall_floor_room.tpl');
+        return $final;
+    }
+
     function select_username_for_edit_grouping()
     {
         PHPWS_Core::initCoreClass('DBPager.php');
