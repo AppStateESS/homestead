@@ -5,9 +5,9 @@
     <div class="box-content">
         <font color="red"><i>{ERROR}</i><br /></font>
         {MESSAGE}<br /><br />
-        <table align="center">
+        <table>
             <tr>
-                <th>ASU Username:</th><td>{USERNAME}</td>
+                <th align="left">ASU Username:</th><td>{USERNAME}</td>
             </tr>
         </table>
         <br /><br />
