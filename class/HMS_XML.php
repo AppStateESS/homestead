@@ -26,7 +26,7 @@ class HMS_XML{
                 
             case 'get_rooms':
             
-                if(!isset($_REQUEST['floor_id')){
+                if(!isset($_REQUEST['floor_id'])){
                     # TODO: Find a way to throw an error here
                 }else{
                     HMS_XML::getRooms($_REQUEST['floor_id']);
@@ -49,6 +49,7 @@ class HMS_XML{
 
         $db->addColumn('id');
         $db->addColumn('hall_name',NULL,'name');
+        $db->addWhere('deleted', '1', '!=');
         $result = $db->select();
 
         #test($result,1);
@@ -86,6 +87,7 @@ class HMS_XML{
         $db->addColumn('floor_number',NULL,'floorNum');
 
         $db->addWhere('building',$building_id,'=');
+        $db->addWhere('deleted', '1', '!=');
         $result = $db->select();
 
         #test($result,1);
@@ -123,6 +125,7 @@ class HMS_XML{
         $db->addColumn('room_number',NULL,'roomNum');
 
         $db->addWhere('floor_id',$floor_id,'=');
+        $db->addWhere('deleted', '1', '!=');
         $result = $db->select();
 
         #test($result,1);
