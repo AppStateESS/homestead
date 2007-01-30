@@ -112,16 +112,27 @@ class HMS_Assignment
     }
 
     /**
-     * Creates the actual assignment object from an ASU username, building id, floor id and room id
+     * Creates the actual assignment object
      */
-    function create_assignment($sid, $bid, $fid, $rid)
+    function &create_assignment()
     {
+
+        $db = new PHPWS_DB('hms_room');
+        $db->addColumn('id');
+        $db->addColumn('floor_id');
+        $db->addWhere('building_id', $_REQUEST['hall']);
+        $db->addWhere('floor_number', $_REQUEST['floor']);
+        $db->addWhere('room_number', $_REQUEST['floor'] . str_pad($_REQUEST['room'], 2, "0", STR_PAD_LEFT));
+        $db->addWhere('deleted', '1', '!=');
+        $results = $db->select('row');
+
         $assignment = new HMS_Assignment;
-        $assignment->set_asu_username($sid);
-        $assignment->set_building_id($bid);
-        $assignment->set_floor_id($fid);
-        $assignment->set_room_id($rid);
-        test($assignment, 1);
+        $assignment->set_asu_username($_REQUEST['username']);
+        $assignment->set_building_id($_REQUEST['hall']);
+        $assignment->set_floor_id($results['floor_id']);
+        $assignment->set_room_id($results['id']);
+
+        return $assignment;
     }
 
     /**
@@ -129,7 +140,44 @@ class HMS_Assignment
      */
     function save_assignment()
     {
+        if($this->id == NULL) {
+            $db = new PHPWS_DB('hms_assignment');
+            $result = $db->saveObject($this);
+            $msg = $this->get_asu_username() . " has been successfully assigned.<br />";
+            return HMS_Assignment::get_username_for_assignment($msg);
+        }
+    }
 
+    /**
+     * Returns a HMS_Form that has the user input an ASU username to assign to a room
+     */
+    function get_username_for_assignment($error = NULL)
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
+        return HMS_Form::get_username_for_assignment($error); 
+    }
+
+    /**
+     * Returns a HMS_Form that uses HMS_XML to populate a halls, floor and room list
+     */
+    function get_hall_floor_room()
+    {
+        /*
+        PHPWS_Core::initModClass('hms', 'HMS_XML.php');
+        $_REQUEST['op'] = 'get_halls';
+        HMS_XML::main();
+        */
+        PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
+        return HMS_Form::get_hall_floor_room();
+    }
+
+    /**
+     * Returns a HMS_Form that gives the user the choice to confirm a housing assignment
+     */
+    function verify_assignment()
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
+        return HMS_Form::verify_assignment();
     }
 
     function main()
@@ -138,13 +186,21 @@ class HMS_Assignment
         switch($op)
         {
             case 'create_assignment':
-                return "create assignment";
+                $assignment = HMS_Assignment::create_assignment();
+                return $assignment->save_assignment();
                 break;
             case 'begin_create_assignment':
-                return "Time to start";
+                return HMS_Assignment::get_username_for_assignment();
+                break;
+            case 'get_hall_floor_room':
+                return HMS_Assignment::get_hall_floor_room();
+                break;
+            case 'verify_assignment':
+                return HMS_Assignment::verify_assignment();
                 break;
             default:
-                return $op;
+                test($op);
+                test($_REQUEST, 1);
                 break;
         }
     }
