@@ -202,7 +202,11 @@ class HMS_Questionnaire {
      * Displays the given user's questionnaire.
      * If no user specified, defaults to current user.
      */
-    function display_questionnaire($asu_username = $_SESSION['asu_username']){
+    function show_questionnaire($asu_username = null){
+
+        if(!isset($asu_username)){
+            $asu_username = $_SESSION['asu_username'];
+        }
 
         PHPWS_Core::initModClass('hms', 'HMS_Questionnaire.php');
         $questionnaire = new HMS_Questionnaire($asu_username);
@@ -328,7 +332,7 @@ class HMS_Questionnaire {
         $tags['STUDENT_ID'] = $this->getStudentID();
         $tags['FIRST_NAME'] = "The first name goes here";
         $tags['LAST_NAME'] = "The last name goes here";
-        $tags['ACTIONS'] = "[View] [Select as Roomate]";
+        $tags['ACTIONS'] = PHPWS_Text::secureLink('[View]', 'hms',array('type'=>'student','op'=>'show_questionnaire','user'=>$this->getStudentID())) . " [Select as Roomate]";
 
         return $tags;
     }

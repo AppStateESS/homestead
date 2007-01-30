@@ -292,6 +292,10 @@ class HMS_Student {
                 PHPWS_Core::initModClass('hms','HMS_Questionnaire.php');
                 return HMS_Questionnaire::questionnaire_search();
                 break;
+            case 'show_questionnaire':
+                PHPWS_Core::initModClass('hms','HMS_Questionnaire.php');
+                return HMS_Questionnaire::show_questionnaire($_REQUEST['user']);
+                break;
             case 'main':
                 $message  = "Welcome to the Housing Management System!<br /><br />";
                 
