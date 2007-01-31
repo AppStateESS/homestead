@@ -105,7 +105,10 @@ class HMS_Maintenance
             $tpl['ASSIGNMENT_LABEL'] = "Assignment Maintenance";
 
         if(Current_User::allow('hms', 'create_assignment'))
-            $tpl['CREATE_ASSIGNMENT'] = PHPWS_Text::secureLink(_('Create Assignment'), 'hms', array('type'=>'assignment', 'op'=>'begin_create_assignment')) . " &nbsp;*work in progress*";
+            $tpl['CREATE_ASSIGNMENT'] = PHPWS_Text::secureLink(_('Assign Student'), 'hms', array('type'=>'assignment', 'op'=>'begin_create_assignment'));
+
+        if(Current_User::allow('hms', 'delete_assignment'))
+            $tpl['DELETE_ASSIGNMENT'] = PHPWS_Text::secureLink(_('Delete Room Assignment'), 'hms', array('type'=>'assignment', 'op'=>'begin_delete_assignment'));
 
         if(Current_User::allow('hms', 'roommate_maintenance'))
             $tpl['ROOMMATE_LABEL'] = "Roommate Maintenance";
