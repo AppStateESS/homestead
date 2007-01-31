@@ -149,6 +149,30 @@ class HMS_Assignment
     }
 
     /**
+     * Delete the room assignment, not just mark it deleted.
+     * Calls delete_assignment and prompts the user for another student to unassign
+     */
+    function perform_delete_assignment()
+    {
+        $success = HMS_Assignment::delete_assignment();
+        $msg =  "You have removed " . $_REQUEST['asu_username'];
+        $msg .= " from " . $_REQUEST['hall_name'];
+        $msg .= ", room " . $_REQUEST['room_number'] . ".";
+        return HMS_Assignment::get_username_for_deletion($msg);
+    }
+
+    /**
+     * Allows static deletion of room assignments
+     */
+    function delete_assignment()
+    {
+        $db = new PHPWS_DB('hms_assignment');
+        $db->addWhere('id', $_REQUEST['assignment_id']);
+        $result = $db->delete();
+        return $result;
+    }
+
+    /**
      * Returns a HMS_Form that has the user input an ASU username to assign to a room
      */
     function get_username_for_assignment($error = NULL)
@@ -180,6 +204,24 @@ class HMS_Assignment
         return HMS_Form::verify_assignment();
     }
 
+    /**
+     * Returns a HMS_Form that gives the user the choice to confirm a room assignment deletion
+     */
+    function verify_deletion()
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
+        return HMS_Form::verify_deletion();
+    }
+
+    /**
+     * Returns a HMS_Form that has the user input an ASU username to delete a room assignment
+     */
+    function get_username_for_deletion($error = NULL)
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
+        return HMS_Form::get_username_for_deletion($error);
+    }
+
     function main()
     {
         $op = $_REQUEST['op'];
@@ -192,11 +234,20 @@ class HMS_Assignment
             case 'begin_create_assignment':
                 return HMS_Assignment::get_username_for_assignment();
                 break;
+            case 'begin_delete_assignment':
+                return HMS_Assignment::get_username_for_deletion();
+                break;
+            case 'delete_assignment':
+                return HMS_Assignment::delete_assignment();
+                break;
             case 'get_hall_floor_room':
                 return HMS_Assignment::get_hall_floor_room();
                 break;
             case 'verify_assignment':
                 return HMS_Assignment::verify_assignment();
+                break;
+            case 'verify_deletion':
+                return HMS_Assignment::verify_deletion();
                 break;
             default:
                 test($op);
