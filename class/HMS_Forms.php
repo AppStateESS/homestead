@@ -1999,5 +1999,17 @@ class HMS_Form
 
         return PHPWS_Template::process($template,'hms','admin/main_admin_panel.tpl');
     }
+
+    display_rlc_student_signup_form()
+    {
+        $template = array();
+        
+        $rlc_form = & new PHPWS_Form();
+    
+        $rls_form->mergeTemplate($template);
+        $template = $rlc_form->getTemplate();
+
+        return PHPWS_Template::process($template,'hms','student/rlc_signup_form.tpl');
+    }
 };
 ?>
