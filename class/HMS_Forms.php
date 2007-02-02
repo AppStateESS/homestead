@@ -246,7 +246,12 @@ class HMS_Form
         $db->addColumn('hall_name');
         $db->addWhere('id', $_REQUEST['halls']);
         $hall_name = $db->select('one');
-        unset($db);
+
+        $db = new PHPWS_DB('hms_assignment');
+        $db->addColumn('id');
+        $db->addWhere('asu_username', $_REQUEST['username'], 'ILIKE');
+        $assignment = $db->select('one');
+        test($assignment, 1);
 
         PHPWS_Core::initCoreClass('Form.php');
         $form = &new PHPWS_Form;
@@ -2000,7 +2005,7 @@ class HMS_Form
         return PHPWS_Template::process($template,'hms','admin/main_admin_panel.tpl');
     }
 
-    display_rlc_student_signup_form()
+    function display_rlc_student_signup_form()
     {
         $template = array();
         
