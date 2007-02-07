@@ -81,5 +81,14 @@ class HMS_Learning_Community
 
         return $final;
     }
+    
+    /*
+     * Uses the HMS_Forms class to display the student rlc signup form/application
+     */
+    function show_rlc_application_form()
+    {
+        PHPWS_Core::initModClass('hms','HMS_Forms.php');
+        return HMS_Form::show_rlc_application_form();
+    }
 };
 ?>

@@ -296,6 +296,9 @@ class HMS_Student {
                 PHPWS_Core::initModClass('hms','HMS_Questionnaire.php');
                 return HMS_Questionnaire::show_questionnaire($_REQUEST['user']);
                 break;
+            case 'show_rlc_application_form':
+                PHPWS_Core::initModClass('hms','HMS_Learning_Community.php');
+                return HMS_Learning_Community::show_rlc_application_form();
             case 'main':
                 $message  = "Welcome to the Housing Management System!<br /><br />";
                 
@@ -310,6 +313,8 @@ class HMS_Student {
                     $message .= PHPWS_Text::secureLink(_('Search for a roomate'), 'hms', array('type'=>'student','op'=>'show_questionnaire_search'));
                     $message .= "<br /><br />";
                     $message .= PHPWS_Text::secureLink(_('Logout'), 'users', array('action'=>'user', 'command'=>'logout'));
+                    $message .= "<br /><br />";
+                    $message .= PHPWS_Text::secureLink(_('RLC Application Form'), 'hms', array('type'=>'student', 'op'=>'show_rlc_application_form'));
                 } else {
                     $message .= "You have not completed a Housing Questionnaire.<br /><br />";
                     $message .= "Click below to fill out a new questionnaire. <br /><br />";
