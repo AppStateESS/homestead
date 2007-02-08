@@ -35,7 +35,45 @@
         <td>{RLC_THIRD_CHOICE_LABEL}</td>
         <td>{RLC_THIRD_CHOICE}</td>
     </tr>
-
+    <tr>
+        <th colspan="2">3. About Your Choices</th>
+    </tr>
+    <tr>
+        <td>{WHY_SPECIFIC_COMMUNITIES_LABEL}</td>
+        <td>{WHY_SPECIFIC_COMMUNITIES}</td>
+    </tr>
+    <tr>
+        <td>{STRENGTHS_WEAKNESSES_LABEL}</td>
+        <td>{STRENGTHS_WEAKNESSES}</td>
+    </tr>
+    <tr>
+        <th colspan="2">4. Answer up to 3 of the Following 6 questions.</th>
+    </tr>
+    <tr>
+        <td>{LEADERSHIP_SERVICE_LABEL}</td>
+        <td>{LEADERSHIP_SERICE}</td>
+    </tr>
+    <tr>
+        <td>{OUTDOOR_COMMUNITY_LABEL}</td>
+        <td>{OUTDOOR_COMMUNITY}</td>
+    </tr>
+    <tr>
+        <td>{WELLNESS_COMMUNITY_LABEL}</td>
+        <td>{WELLNESS_COMMUNITY}</td>
+    </tr>
+    <tr>
+        <td>{SCIENTIFIC_INTEREST_LABEL}</td>
+        <td>{SCIENTIFIC_INTEREST}</td>
+    </tr>
+    <tr>
+        <td>{LANGUAGE_CULTURE_LABEL}</td>
+        <td>{LANGUAGE_CULTURE}</td>
+    </td>
+    <tr>
+        <td>{BLACK_GOLD_LABEL}</td>
+        <td>{BLACK_GOLD}</td>
+    </tr>
+</tr> 
 </table>
 
 
