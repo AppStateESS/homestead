@@ -2094,7 +2094,8 @@ class HMS_Form
         $rlc_form->setLabel('black_gold',
                             'How do you plan to be an active member of the ASU community?');
         $rlc_form->setMaxSize('black_gold',500);
-        
+
+        $rlc_form->addSubmit('submit', 'Submit Application');        
     
         $rlc_form->mergeTemplate($template);
         $template = $rlc_form->getTemplate();
