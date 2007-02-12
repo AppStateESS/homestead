@@ -199,8 +199,41 @@ class HMS_Form
         return $final;
     }
 
-    function get_hall_floor_room()
+    function get_hall_floor_room($error = NULL)
     {
+        $db = new PHPWS_DB('hms_assignment');
+        $db->addWhere('asu_username', $_REQUEST['username'], 'ILIKE');
+        $assignment = $db->select('row');
+        $msg = '';
+        if(!is_null($assignment)) {
+            $db = new PHPWS_DB('hms_residence_hall');
+            $db->addColumn('hall_name');
+            $db->addWhere('id', $assignment['building_id']);
+            $hall = $db->select('one');
+
+            $db = new PHPWS_DB('hms_room');
+            $db->addColumn('room_number');
+            $db->addWhere('id', $assignment['room_id']);
+            $room_number = $db->select('one');
+
+            $msg .= "<font color=\"red\"><b>";
+            $msg .= $_REQUEST['username'] . " is already assigned to " . $hall . " room " . $room_number . "<br />";
+            $msg .= "Warning! This will overwrite the current assignment!<br /><br />";
+           
+            $db = new PHPWS_DB('hms_assignment');
+            $db->addColumn('asu_username');
+            $db->addWhere('room_id', $assignment['room_id']);
+            $db->addWhere('asu_username', $_REQUEST['username'], '!=');
+            $db_assignments = $db->select();
+            if(!is_null($db_assignments)) {
+                $msg .= $_REQUEST['username'] . " has roommates. These roommates are: <br />";
+                foreach($db_assignments as $roommates) {
+                    $msg .= $roommates['asu_username'] . "<br />";
+                }
+            }
+            $msg .= "<br /></font></b>";
+        }
+
         $db = new PHPWS_DB('hms_residence_hall');
         $db->addColumn('id');
         $db->addColumn('hall_name');
@@ -233,7 +266,9 @@ class HMS_Form
         $form->addSubmit('submit', _('Assign Room'));
 
         $tpl = $form->getTemplate();
-        $tpl['MESSAGE'] =  "<h2>Assigning Student: " . $_REQUEST['username'] . "</h2>";
+        $tpl['MESSAGE'] = $error;
+        $tpl['MESSAGE'] .=  "<h2>Assigning Student: " . $_REQUEST['username'] . "</h2><br />";
+        $tpl['MESSAGE'] .= $msg;
         $tpl['MESSAGE'] .= "Please select a Hall, Floor and Room.";
         $final = PHPWS_Template::process($tpl, 'hms', 'admin/get_hall_floor_room.tpl');
 
@@ -246,12 +281,6 @@ class HMS_Form
         $db->addColumn('hall_name');
         $db->addWhere('id', $_REQUEST['halls']);
         $hall_name = $db->select('one');
-
-        $db = new PHPWS_DB('hms_assignment');
-        $db->addColumn('id');
-        $db->addWhere('asu_username', $_REQUEST['username'], 'ILIKE');
-        $assignment = $db->select('one');
-        test($assignment, 1);
 
         PHPWS_Core::initCoreClass('Form.php');
         $form = &new PHPWS_Form;
@@ -286,15 +315,13 @@ class HMS_Form
         $db->addWhere('id', $assignment['building_id']);
         $hall_name = $db->select('one');
 
-        $db = new PHPWS_DB('hms_floor');
-        $db->addColumn('floor_number');
-        $db->addWhere('id', $assignment['floor_id']);
-        $floor_number = $db->select('one');
-
         $db = new PHPWS_DB('hms_room');
         $db->addColumn('room_number');
+        $db->addColumn('floor_number');
         $db->addWhere('id', $assignment['room_id']);
-        $room_number = $db->select('one');
+        $hms_room_info = $db->select('row');
+        $room_number = $hms_room_info['room_number'];
+        $floor_number = $hms_room_info['floor_number'];
 
         PHPWS_Core::initCoreClass('Form.php');
         $form = &new PHPWS_Form;
