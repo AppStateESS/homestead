@@ -1,3 +1,12 @@
+CREATE TABLE hms_assignment (
+    id integer NOT NULL,
+    asu_username character varying(16) NOT NULL,
+    building_id integer NOT NULL,
+    floor_id integer NOT NULL,
+    room_id integer NOT NULL,
+    primary key(id)
+);
+
 CREATE TABLE hms_deadlines (
     student_login_begin_timestamp integer NOT NULL,
     student_login_end_timestamp integer NOT NULL,
@@ -12,39 +21,41 @@ CREATE TABLE hms_deadlines (
 );
 
 CREATE TABLE hms_floor (
-    id integer DEFAULT 0 NOT NULL,
-    floor_number smallint DEFAULT 0::smallint NOT NULL,
-    number_rooms smallint DEFAULT 0::smallint NOT NULL,
+    id integer NOT NULL,
+    floor_number smallint DEFAULT (0)::smallint NOT NULL,
+    number_rooms smallint DEFAULT (0)::smallint NOT NULL,
     capacity_per_room smallint NOT NULL,
-    building smallint DEFAULT 0::smallint NOT NULL,
-    is_online smallint DEFAULT 0::smallint NOT NULL,
-    gender_type smallint DEFAULT 0::smallint NOT NULL,
-    deleted smallint DEFAULT 0::smallint,
-    deleted_by smallint NULL,
-    deleted_on integer NULL,
+    building smallint DEFAULT (0)::smallint NOT NULL,
+    is_online smallint DEFAULT (0)::smallint NOT NULL,
+    gender_type smallint DEFAULT (0)::smallint NOT NULL,
+    deleted smallint DEFAULT (0)::smallint,
+    deleted_by smallint,
+    deleted_on integer,
     added_by smallint NOT NULL,
     added_on integer NOT NULL,
-    updated_by smallint not null,
-    updated_on integer not null,
-    PRIMARY KEY (id)
+    updated_by smallint NOT NULL,
+    updated_on integer NOT NULL,
+    primary key(id)
 );
+
 
 CREATE TABLE hms_hall_communities (
     id integer DEFAULT 0 NOT NULL,
-    community_name character varying(32) NOT NULL
+    community_name character varying(32) NOT NULL,
+    primary key(id)
 );
 
 CREATE TABLE hms_learning_communities (
     id integer DEFAULT 0 NOT NULL,
-    community_name character varying(32) NOT NULL
+    community_name character varying(32) NOT NULL,
+    primary key(id)
 );
 
 CREATE TABLE hms_pricing_tiers (
     id integer DEFAULT 0 NOT NULL,
-    tier_value numeric NOT NULL
+    tier_value numeric NOT NULL,
+    primary key(id)
 );
-
-INSERT INTO hms_pricing_tiers (id, tier_value) VALUES ('1', '1500.00');
 
 CREATE TABLE hms_questionnaire (
     id integer DEFAULT 0 NOT NULL,
@@ -60,12 +71,13 @@ CREATE TABLE hms_questionnaire (
     currently_employed smallint NOT NULL,
     rlc_interest smallint NOT NULL,
     deleted smallint DEFAULT 0 NOT NULL,
-    deleted_by smallint NULL,
-    deleted_on integer NULL,
+    deleted_by smallint,
+    deleted_on integer,
     created_on integer NOT NULL,
     created_by character varying(10) NOT NULL,
-    PRIMARY KEY(id)
+    primary key(id)
 );
+
 
 CREATE TABLE hms_residence_hall (
     id integer DEFAULT 0 NOT NULL,
@@ -83,8 +95,8 @@ CREATE TABLE hms_residence_hall (
     deleted_on integer,
     updated_by smallint,
     updated_on integer,
-    deleted smallint DEFAULT 0::smallint NOT NULL,
-    PRIMARY KEY (id)
+    deleted smallint DEFAULT (0)::smallint NOT NULL,
+    primary key(id)
 );
 
 CREATE TABLE hms_room (
@@ -95,26 +107,46 @@ CREATE TABLE hms_room (
     floor_id integer NOT NULL,
     gender_type smallint NOT NULL,
     capacity_per_room smallint NOT NULL,
-    learning_community smallint DEFAULT 0::smallint,
+    learning_community smallint DEFAULT (0)::smallint,
     phone_number integer DEFAULT 0,
-    is_medical smallint DEFAULT 0::smallint,
-    is_reserved smallint DEFAULT 0::smallint,
-    is_online smallint DEFAULT 0::smallint NOT NULL,
+    is_medical smallint DEFAULT (0)::smallint,
+    is_reserved smallint DEFAULT (0)::smallint,
+    is_online smallint DEFAULT (0)::smallint NOT NULL,
     added_by smallint NOT NULL,
     added_on integer NOT NULL,
     deleted_by smallint,
     deleted_on integer,
     updated_by smallint,
     updated_on integer,
-    deleted smallint DEFAULT 0::smallint NOT NULL,
-    PRIMARY KEY (id)
+    deleted smallint DEFAULT (0)::smallint NOT NULL,
+    primary key(id)
+);
+
+CREATE TABLE hms_roommates (
+    id integer NOT NULL,
+    roommate_zero character varying(16) NOT NULL,
+    roommate_one character varying(16) NOT NULL,
+    roommate_two character varying(16),
+    roommate_three character varying(16),
+    primary key(id)
+);
+
+CREATE TABLE hms_roommate_hashes (
+    id integer NOT NULL,
+    roommate_zero character varying(16) NOT NULL,
+    roommate_one character varying(16) NOT NULL,
+    roommate_two character varying(16),
+    roommate_three character varying(16),
+    approval_hash character varying(),
+    approved smallint default 0,
+    primary key(id)
 );
 
 CREATE TABLE hms_student (
     id integer DEFAULT 0 NOT NULL,
     asu_username character varying(10) NOT NULL,
     first_name character varying(32) NOT NULL,
-    middle_name character varying(32) NULL,
+    middle_name character varying(32),
     last_name character varying(32) NOT NULL,
     gender smallint NOT NULL,
     application_received smallint DEFAULT 0,
@@ -124,42 +156,15 @@ CREATE TABLE hms_student (
     deleted_on integer,
     updated_by smallint,
     updated_on integer,
-    deleted smallint default 0,
-    PRIMARY KEY (id)
+    deleted smallint DEFAULT 0,
+    primary key(id)
 );
 
 CREATE TABLE hms_suite (
-    id integer not null,
-    room_id_zero integer not null,
-    room_id_one integer not null,
+    id integer NOT NULL,
+    room_id_zero integer NOT NULL,
+    room_id_one integer NOT NULL,
     room_id_two integer,
     room_id_three integer,
-    PRIMARY KEY(id)
+    primary key(id)
 );
-
-ALTER TABLE hms_suite ADD CONSTRAINT room_id_zero_key UNIQUE (room_id_zero);
-ALTER TABLE hms_suite ADD CONSTRAINT room_id_one_key UNIQUE (room_id_one);
-ALTER TABLE hms_suite ADD CONSTRAINT room_id_two_key UNIQUE (room_id_two);
-ALTER TABLE hms_suite ADD CONSTRAINT room_id_three_key UNIQUE (room_id_three);
-
-CREATE TABLE hms_roommates (
-    id integer not null,
-    roommate_zero character varying(16) not null,
-    roommate_one character varying(16) not null,
-    roommate_two character varying(16),
-    roommate_three character varying(16),
-    deleted smallint default 0,
-    deleted_by smallint,
-    deleted_on integer,
-    PRIMARY KEY(id)
-);
-    
-CREATE SEQUENCE hms_questionnaire_seq;
-CREATE SEQUENCE hms_floor_seq;
-CREATE SEQUENCE hms_hall_communities_seq;
-CREATE SEQUENCE hms_learning_communities_seq;
-CREATE SEQUENCE hms_pricing_tiers_seq;
-CREATE SEQUENCE hms_residence_hall_seq;
-CREATE SEQUENCE hms_room_seq;
-CREATE SEQUENCE hms_student_seq;
-CREATE SEQUENCE hms_roommates_seq;
