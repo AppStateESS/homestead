@@ -137,7 +137,7 @@ CREATE TABLE hms_roommate_hashes (
     roommate_one character varying(16) NOT NULL,
     roommate_two character varying(16),
     roommate_three character varying(16),
-    approval_hash character varying(),
+    approval_hash character varying(40),
     approved smallint default 0,
     primary key(id)
 );
