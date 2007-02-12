@@ -1,5 +1,7 @@
 <?php
 
+error_reporting(E_ALL);
+
 /**
  * Provides functionality to actually assign students to a room
  *
@@ -11,7 +13,6 @@ class HMS_Assignment
     var $id;
     var $asu_username;
     var $building_id;
-    var $floor_id;
     var $room_id;
     var $bed;
 
@@ -64,22 +65,6 @@ class HMS_Assignment
     }
 
     /**
-     * Returns the floor id for the current assignment
-     */
-    function get_floor_id()
-    {
-        return $this->floor_id;
-    }
-
-    /**
-     * Sets the floor id for the current assignment
-     */
-    function set_floor_id($fid)
-    {
-        $this->floor_id = $fid;
-    }
-
-    /**
      * Returns the room id of the current assignment
      */
     function get_room_id()
@@ -119,7 +104,6 @@ class HMS_Assignment
 
         $db = new PHPWS_DB('hms_room');
         $db->addColumn('id');
-        $db->addColumn('floor_id');
         $db->addWhere('building_id', $_REQUEST['hall']);
         $db->addWhere('floor_number', $_REQUEST['floor']);
         $db->addWhere('room_number', $_REQUEST['floor'] . str_pad($_REQUEST['room'], 2, "0", STR_PAD_LEFT));
@@ -129,7 +113,6 @@ class HMS_Assignment
         $assignment = new HMS_Assignment;
         $assignment->set_asu_username($_REQUEST['username']);
         $assignment->set_building_id($_REQUEST['hall']);
-        $assignment->set_floor_id($results['floor_id']);
         $assignment->set_room_id($results['id']);
 
         return $assignment;
@@ -141,6 +124,9 @@ class HMS_Assignment
     function save_assignment()
     {
         if($this->id == NULL) {
+            
+            $delete_first = HMS_Assignment::delete_assignment($this->asu_username);
+
             $db = new PHPWS_DB('hms_assignment');
             $result = $db->saveObject($this);
             $msg = $this->get_asu_username() . " has been successfully assigned.<br />";
@@ -164,10 +150,14 @@ class HMS_Assignment
     /**
      * Allows static deletion of room assignments
      */
-    function delete_assignment()
+    function delete_assignment($username = NULL)
     {
         $db = new PHPWS_DB('hms_assignment');
-        $db->addWhere('id', $_REQUEST['assignment_id']);
+        if($username == NULL) {
+            $db->addWhere('id', $_REQUEST['assignment_id']);
+        } else {
+            $db->addWhere('asu_username', $username, 'ILIKE');
+        }
         $result = $db->delete();
         return $result;
     }
@@ -191,8 +181,27 @@ class HMS_Assignment
         $_REQUEST['op'] = 'get_halls';
         HMS_XML::main();
         */
+        
+        $msg = "";
+
+        PHPWS_Core::initModClass('hms', 'HMS_Questionnaire.php');
+        $completed_application = HMS_Questionnaire::check_for_questionnaire($_REQUEST['username']);
+        if(!$completed_application) {
+            $msg .= '<font color="red"><b>';
+            $msg .= $_REQUEST['username'] . " did not fill out an Housing Application.<br /><br />";
+            $msg .= '</b></font>';
+            
+            PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+            $valid_student = HMS_SOAP::is_valid_student($_REQUEST['username']);
+            if(!$valid_student){
+                $msg .= $_REQUEST['username'] . " is not listed as a valid student. Please contact Electronic Student Services with this error.<br /><br />";
+                $msg .= '</b></font>';
+                return HMS_Assignment::get_username_for_assignment($msg);
+            }
+        }
+        
         PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
-        return HMS_Form::get_hall_floor_room();
+        return HMS_Form::get_hall_floor_room($msg);
     }
 
     /**
@@ -238,7 +247,7 @@ class HMS_Assignment
                 return HMS_Assignment::get_username_for_deletion();
                 break;
             case 'delete_assignment':
-                return HMS_Assignment::delete_assignment();
+                return HMS_Assignment::perform_delete_assignment();
                 break;
             case 'get_hall_floor_room':
                 return HMS_Assignment::get_hall_floor_room();
