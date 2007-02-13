@@ -2085,43 +2085,6 @@ class HMS_Form
                             'What are you strengths and in what areas would you like to improve?');
         $rlc_form->setMaxSize('strengths_weaknesses',500);
 
-        # 4. Answer up to 3 of the following 6 questions
-
-        $rlc_form->addTextarea('leadership_service');
-        $rlc_form->setLabel('leadership_service',
-                            'Describe your current leadership and community service experience
-                             and the opportunities you are looking for.');
-        $rlc_form->setMaxSize('leadership_service',500);
-        
-        $rlc_form->addTextarea('outdoor_community');
-        $rlc_form->setLabel('outdoor_community',
-                            'Describe your current outdoor experience and the opportunities you
-                             would like to be involved in.');
-        $rlc_form->setMaxSize('outdoor_community',500);
-        
-        $rlc_form->addTextarea('wellness_community');
-        $rlc_form->setLabel('wellness_community',
-                            'What are your personal experiences with wellness and in what aras
-                             of wellness are you most interested?');
-        $rlc_form->setMaxSize('wellness_community',500);
-        
-        $rlc_form->addTextarea('scientific_interest');
-        $rlc_form->setLabel('scientific_interest',
-                            'What knowledge, skills, or talent could you offer other students
-                             in the Community of Scientific Interests?');
-        $rlc_form->setMaxSize('scientific_interest',500);
-        
-        $rlc_form->addTextarea('language_culture');
-        $rlc_form->setLabel('language_culture',
-                            'In what languages are you proficient, learning to speak, or
-                             interested in learning?');
-        $rlc_form->setMaxSize('language_culture',500);
-        
-        $rlc_form->addTextarea('black_gold');
-        $rlc_form->setLabel('black_gold',
-                            'How do you plan to be an active member of the ASU community?');
-        $rlc_form->setMaxSize('black_gold',500);
-
         $rlc_form->addSubmit('submit', 'Submit Application');        
     
         $rlc_form->mergeTemplate($template);
