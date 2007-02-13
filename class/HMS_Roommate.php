@@ -153,13 +153,90 @@ class HMS_Roommate
     }
 
     /**
+     * Checks all listed users are valid students
+     */
+    function check_valid_students()
+    {
+        $error = '';
+
+        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+        if($_REQUEST['first_roommate'] != NULL && !HMS_SOAP::is_valid_student($_REQUEST['first_roommate'])) {
+            $error .= $_REQUEST['first_roommate'] . " is not a valid student for this Housing term.<br />";
+        }
+
+        if($_REQUEST['second_roommate'] != NULL && !HMS_SOAP::is_valid_student($_REQUEST['second_roommate'])) {
+            $error .= $_REQUEST['second_roommate'] . " is not a valid student for this Housing term.<br />";
+        }
+
+        if($_REQUEST['third_roommate'] != NULL && !HMS_SOAP::is_valid_student($_REQUEST['third_roommate'])) {
+            $error .= $_REQUEST['third_roommate'] . " is not a valid student for this Housing term.<br />";
+        }
+
+        if($_REQUEST['fourth_roommate'] != NULL && !HMS_SOAP::is_valid_student($_REQUEST['fourth_roommate'])) {
+            $error .= $_REQUEST['fourth_roommate'] . " is not a valid student for this Housing term.<br />";
+        }
+    
+        return $error;
+    }
+
+    /**
+     * Returns an error if the user didn't specify at least two roommates
+     */
+    function check_two_roommates()
+    {
+        $error = '';
+        if($_REQUEST['first_roommate'] == NULL || $_REQUEST['second_roommate'] == NULL) {
+            $error .= "You must provide a first and second roommate to save this group.<br />";
+        }
+        return $error;
+    }
+
+    /**
+     * Returns an error if the genders of the specified users are different
+     */
+    function check_consistent_genders()
+    {
+        $error = '';
+        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+
+        $g1 = HMS_SOAP::get_gender($_REQUEST['first_roommate']);
+        $g2 = HMS_SOAP::get_gender($_REQUEST['second_roommate']);
+       
+        if($g1 != $g2) $error = $_REQUEST['first_roommate'] . " and " . $_REQUEST['second_roommate'] . " must have the same gender.<br />";
+
+        if($_REQUEST['third_roommate'] != NULL) {
+            $g3 = HMS_SOAP::get_gender($_REQUEST['third_roommate']);
+            if($g1 != $g3) $error = $_REQUEST['first_roommate'] . " and " . $_REQUEST['third_roommate'] . " must have the same gender.<br />";
+            else if($g2 != $g3) $error = $_REQUEST['second_roommate'] . " and " . $_REQUEST['third_roommate'] . " must have the same gender.<br />";
+        }
+
+        if($_REQUEST['fourth_roommate'] != NULL) {
+            $g4 = HMS_SOAP::get_gender($_REQUEST['fourth_roommate']);
+            if($g1 != $g4) $error = $_REQUEST['first_roommate'] . " and " . $_REQUEST['fourth_roommate'] . " must have the same gender.<br />";
+            else if($g2 != $g4) $error = $_REQUEST['second_roommate'] . " and " . $_REQUEST['fourth_roommate'] . " must have the same gender.<br />";
+            else if($g3 != $g4) $error = $_REQUEST['third_roommate'] . " and " . $_REQUEST['fourth_roommate'] . " must have the same gender.<br />";
+        }
+        return $error;
+    }
+
+    /**
      * Creates a new Roommate object, sets the values pulled from the username input form
      *   and saves the object.
      */
     function save_grouping()
     {
-        if($_REQUEST['first_roommate'] == NULL || $_REQUEST['second_roommate'] == NULL) {
-            $error = "You must provide a first and second roommate to save this group.";
+        $error = HMS_Roommate::check_two_roommates();
+        if($error != '') {
+            return HMS_Roommate::get_usernames_for_new_grouping($error);
+        }
+
+        $error = HMS_Roommate::check_valid_students();
+        if($error != '') {
+            return HMS_Roommate::get_usernames_for_new_grouping($error);
+        }
+
+        $error = HMS_Roommate::check_consistent_genders();
+        if($error != '') {
             return HMS_Roommate::get_usernames_for_new_grouping($error);
         }
 
