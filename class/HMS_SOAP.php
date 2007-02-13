@@ -35,6 +35,12 @@ class HMS_SOAP{
         return $student->gender;
     }
 
+    function get_address($username)
+    {
+        $student = HMS_SOAP::get_student_info($username);
+        return $student->address;
+    }
+
     function get_student_info($username)
     {
         include_once('SOAP/Client.php');
