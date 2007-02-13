@@ -12,7 +12,7 @@ function hms_update(&$content, $currentVersion)
             $result = PHPWS_DB::dropTable('hms_student');
             
             $db = & new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/update011.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/update_0_1_1.sql');
             if (PEAR::isError($result)) {
                 return $result;
             }
