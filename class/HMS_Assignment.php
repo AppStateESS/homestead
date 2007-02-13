@@ -101,21 +101,36 @@ class HMS_Assignment
      */
     function &create_assignment()
     {
-
         $db = new PHPWS_DB('hms_room');
         $db->addColumn('id');
         $db->addWhere('building_id', $_REQUEST['hall']);
         $db->addWhere('floor_number', $_REQUEST['floor']);
         $db->addWhere('room_number', $_REQUEST['floor'] . str_pad($_REQUEST['room'], 2, "0", STR_PAD_LEFT));
         $db->addWhere('deleted', '1', '!=');
-        $results = $db->select('row');
+        $id = $db->select('one');
 
         $assignment = new HMS_Assignment;
         $assignment->set_asu_username($_REQUEST['username']);
         $assignment->set_building_id($_REQUEST['hall']);
-        $assignment->set_room_id($results['id']);
+        $assignment->set_room_id($id);
 
         return $assignment;
+    }
+
+    /**
+     * Returns the id of the room for this assignment.
+     * Doesn't belong here (should be in HMS_Room).
+     */
+    function get_room_gender()
+    {
+        $db = new PHPWS_DB('hms_room');
+        $db->addColumn('gender_type');
+        $db->addWhere('building_id', $_REQUEST['halls']);
+        $db->addWhere('floor_number', $_REQUEST['floors']);
+        $db->addWhere('room_number', $_REQUEST['floors'] . str_pad($_REQUEST['rooms'], 2, "0", STR_PAD_LEFT));
+        $db->addWhere('deleted', '1', '!=');
+        $results = $db->select('one');
+        return $results;
     }
 
     /**
@@ -209,6 +224,23 @@ class HMS_Assignment
      */
     function verify_assignment()
     {
+        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+        $user_gender = HMS_SOAP::get_gender($_REQUEST['username']);
+        if($user_gender == "F") $user_gender = 0;
+        else if($user_gender == "M") $user_gender = 1;
+
+        $room_gender = HMS_Assignment::get_room_gender();
+
+        if($room_gender != $user_gender) {
+            if($room_gender == 0) {
+                $msg = "<b>You are trying to assign a male to a female room. Please assign someone else or change the gender of the room.</b><br /><br />";
+            } else {
+                $msg = "<b>You are trying to assign a female to a male room. Please assign someone else or change the gender of the room.</b><br /><br />";
+            }
+
+            return HMS_Assignment::get_username_for_assignment($msg);
+        }
+
         PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
         return HMS_Form::verify_assignment();
     }
