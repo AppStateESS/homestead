@@ -266,8 +266,8 @@ class HMS_Form
         $form->addSubmit('submit', _('Assign Room'));
 
         $tpl = $form->getTemplate();
-        $tpl['MESSAGE'] = $error;
-        $tpl['MESSAGE'] .=  "<h2>Assigning Student: " . $_REQUEST['username'] . "</h2><br />";
+        $tpl['MESSAGE'] =  "<h2>Assigning Student: " . $_REQUEST['username'] . "</h2><br />";
+        $tpl['MESSAGE'] .= $error;
         $tpl['MESSAGE'] .= $msg;
         $tpl['MESSAGE'] .= "Please select a Hall, Floor and Room.";
         $final = PHPWS_Template::process($tpl, 'hms', 'admin/get_hall_floor_room.tpl');
