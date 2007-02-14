@@ -90,5 +90,22 @@ class HMS_Learning_Community
         PHPWS_Core::initModClass('hms','HMS_Forms.php');
         return HMS_Form::show_rlc_application_form_page1();
     }
+
+    /*
+     * Validates submission of the first page of the rlc application form.
+     * If ok, shows the second page of the application form.
+     * Otherwise, displays page one again with an error message.
+     */
+    function rlc_application_page1_submit()
+    {
+        PHPWS_Core::initModClass('hms','HMS_Forms.php');
+        
+        # Check for invalid input on page 1
+        if(!HMS_Forms::validate_rlc_application_page1()){
+            # Show page one again with error message
+            $message = "There was a problem with your submission. Please complete all fields.";
+            return HMS_Forms::show_rlc_application_form_page1($message);
+        }
+    }
 };
 ?>

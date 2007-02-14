@@ -2049,36 +2049,54 @@ class HMS_Form
         $template['APPLENET_USERNAME']       = $_SESSION['asu_username'];
         $template['APPLENET_USERNAME_LABEL'] = 'Applenet User Name: ';
 
-        $template['FIRST_NAME']        = 'First'; # HMS_SOAP::get_first_name($_SESSION['asu_username']);
+        $student = HMS_SOAP::get_student_info($_SESSION['asu_username']);
+
+        #test($student);
+
+        $template['FIRST_NAME']        = $student->first_name;
         $template['FIRST_NAME_LABEL']  = 'First Name: ';
         
-        $template['MIDDLE_NAME']       = 'Middle'; # HMS_SOAP::get_middle_name($_SESSION['asu_username']);
+        $template['MIDDLE_NAME']       = $student->middle_name;
         $template['MIDDLE_NAME_LABEL'] = 'Middle Name: ';
         
-        $template['LAST_NAME']         = 'Last'; # HMS_SOAP::get_last_name($_SESSION['asu_username']);
+        $template['LAST_NAME']         = $student->last_name;
         $template['LAST_NAME_LABEL']   = 'Last Name: ';
+
+        $rlc_form->addHidden('first_name', $student->first_name);
+        $rlc_form->addHidden('middle_name', $student->middle_name);
+        $rlc_form->addHidden('last_name', $student->last_name);
 
         # 2. Rank Your RLC Choices
 
+        # Get the list of RLCs from the database
         $db = &new PHPWS_DB('hms_learning_communities');
         $rlc_choices = $db->select('assoc');
+        
+        # Add an inital element to the list.
+        $rlc_choices[-1] = "Select";
 
         $rlc_form->addDropBox('rlc_first_choice', $rlc_choices);
         $rlc_form->setLabel('rlc_first_choice','First Choice: ');
         if(isset($_REQUEST['rlc_first_choice'])){
-            $rlc_form->setMatch('rlc_first_choice', $_REQUEST['rlc_first_choice']);
+            $rlc_form->setMatch('rlc_first_choice', $_REQUEST['rlc_first_choice']); # Select previous choice
+        }else{
+            $rlc_form->setMatch('rlc_first_choice', -1); # Select the default
         }
         
         $rlc_form->addDropBox('rlc_second_choice', $rlc_choices);
         $rlc_form->setLabel('rlc_second_choice','Second Choice: ');
         if(isset($_REQUEST['rlc_second_choice'])){
-            $rlc_form->setMatch('rlc_second_choice', $_REQUEST['rlc_second_choice']);
+            $rlc_form->setMatch('rlc_second_choice', $_REQUEST['rlc_second_choice']); # Select previous choice
+        }else{
+            $rlc_form->setMatch('rlc_second_choice', -1); # Select the default
         }
         
         $rlc_form->addDropBox('rlc_third_choice', $rlc_choices);
         $rlc_form->setLabel('rlc_third_choice','Third Choice: ');
         if(isset($_REQUEST['rlc_third_choice'])){
             $rlc_form->setMatch('rlc_third_choice', $_REQUEST['rlc_third_choice']);
+        }else{
+            $rlc_form->setMatch('rlc_third_choice', -1); # Select the default
         }
 
         # 3. About Your Choices
@@ -2111,24 +2129,58 @@ class HMS_Form
 
     /*
      * Validates the first page of the rlc application form
+     * Returns true upon successful validation, or an error
+               message otherwise.
      * Requires:    first, middle and last name are set
      *              rlc choices are set and are numeric
      *              text fields are set
      */               
     function validate_rlc_application_page1(){
-        return  (isset($_REQUEST['applenet_username']) &&
-                isset($_REQUEST['first_name']) &&
-                isset($_REQUEST['middle_name']) &&
-                isset($_REQUEST['last_name']) &&
-                isset($_REQUEST['rlc_first_choice']) &&
-                isset($_REQUEST['rlc_second_choice']) &&
-                isset($_REQUEST['rlc_third_choice']) &&
-                is_numeric($_REQUEST['rlc_first_choice']) &&
-                is_numeric($_REQUEST['rlc_second_choice']) &&
-                is_numeric($_REQUEST['rlc_third_choice']) &&
-                isset($_REQUEST['why_specific_communities']) &&
-                isset($_REQUEST['strengths_weaknesses'])
-                );
+
+        # Make sure username and first, middle, last name was submitted
+        if(!(isset($_REQUEST['first_name'])        &&
+             isset($_REQUEST['middle_name'])       &&
+             isset($_REQUEST['last_name'])
+          )){
+            return "Error: Missing a name or username field.";
+        }
+        
+        # Make sure rlc choices were selected.
+        if(!(isset($_REQUEST['rlc_first_choice'])  &&
+             isset($_REQUEST['rlc_second_choice']) &&
+             isset($_REQUEST['rlc_third_choice'])
+           )){
+            return "Error: No RLCs submitted.";
+        }
+
+        # Make sure rlc choices are numeric
+        if(!(is_numeric($_REQUEST['rlc_first_choice'])  &&
+             is_numeric($_REQUEST['rlc_second_choice']) &&
+             is_numeric($_REQUEST['rlc_third_choice'])
+           )){
+            return "Error: Invalid RLC choices.";
+        }
+
+        # Make sure rlc choice indicies are > 0 (i.e. not default value)
+        if($_REQUEST['rlc_first_choice']  < 0 || 
+           $_REQUEST['rlc_second_choice'] < 0 ||
+           $_REQUEST['rlc_third_choice']  < 0){
+               return "Error: Please rank your RLC choices.";
+        }
+
+        # Make sure none of the rlc choices match
+        if(($_REQUEST['rlc_first_choice']  == $_REQUEST['rlc_second_choice']) ||
+           ($_REQUEST['rlc_second_choice'] == $_REQUEST['rlc_third_choice'])  ||
+           ($_REQUEST['rlc_first_choice']  == $_REQUEST['rlc_third_choice'])){
+            return "Error: Please choose three distinct Learning Communities.";
+        }
+
+        if(isset($_REQUEST['why_specific_communities']) &&
+           isset($_REQUEST['strengths_weaknesses'])){
+            return "Error: Please complete the questions in section 3.";
+        }
+
+        return TRUE;
     }
 };
 ?>
