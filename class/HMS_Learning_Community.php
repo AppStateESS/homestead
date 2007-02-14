@@ -88,7 +88,7 @@ class HMS_Learning_Community
     function show_rlc_application_form()
     {
         PHPWS_Core::initModClass('hms','HMS_Forms.php');
-        return HMS_Form::show_rlc_application_form();
+        return HMS_Form::show_rlc_application_form_page1();
     }
 };
 ?>

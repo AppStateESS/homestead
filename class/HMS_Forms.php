@@ -2033,28 +2033,28 @@ class HMS_Form
     }
 
     # Displays the RLC application form
-    function show_rlc_application_form()
+    function show_rlc_application_form_page1($message = NULL)
     {
         $template = array();
         
         $rlc_form = & new PHPWS_Form();
 
         # 1. About You Section
-        $rlc_form->addText('applenet_username', $_SESSION['asu_username']);
-        $rlc_form->setLabel('applenet_username', 'Applenet User Name: ');
-        $rlc_form->setExtra('applenet_username', 'disabled');
+        PHPWS_Core::initModClass('hms','HMS_SOAP.php');
 
-        $rlc_form->addText('first_name', 'First Name'); #TODO: lookup first name through SOAP
-        $rlc_form->setLabel('first_name', 'First Name: ');
-        $rlc_form->setExtra('first_name', 'disabled');
+        $template['MESSAGE'] = $message;
         
-        $rlc_form->addText('middle_name', 'Middle Name'); #TODO: lookup middle name through SOAP
-        $rlc_form->setLabel('middle_name', 'Middle Name: ');
-        $rlc_form->setExtra('middle_name', 'disabled');
+        $template['APPLENET_USERNAME']       = $_SESSION['asu_username'];
+        $template['APPLENET_USERNAME_LABEL'] = 'Applenet User Name: ';
+
+        $template['FIRST_NAME']        = 'First'; # HMS_SOAP::get_first_name($_SESSION['asu_username']);
+        $template['FIRST_NAME_LABEL']  = 'First Name: ';
         
-        $rlc_form->addText('last_name', 'Last Name'); #TODO: lookup last name through SOAP
-        $rlc_form->setLabel('last_name',' Last Name: ');
-        $rlc_form->setExtra('last_name', 'disabled');
+        $template['MIDDLE_NAME']       = 'Middle'; # HMS_SOAP::get_middle_name($_SESSION['asu_username']);
+        $template['MIDDLE_NAME_LABEL'] = 'Middle Name: ';
+        
+        $template['LAST_NAME']         = 'Last'; # HMS_SOAP::get_last_name($_SESSION['asu_username']);
+        $template['LAST_NAME_LABEL']   = 'Last Name: ';
 
         $rlc_form->addText('pref_roommate'); #TODO: possibly lookup pre-selected roomate here
         $rlc_form->setLabel('pref_roomate', 'Preferred roommate: ');
@@ -2066,31 +2066,53 @@ class HMS_Form
 
         $rlc_form->addDropBox('rlc_first_choice', $rlc_choices);
         $rlc_form->setLabel('rlc_first_choice','First Choice: ');
+        if(isset($_REQUEST['rlc_first_choice'])){
+            $rlc_form->setMatch('rlc_first_choice', $_REQUEST['rlc_first_choice']);
+        }
         
         $rlc_form->addDropBox('rlc_second_choice', $rlc_choices);
         $rlc_form->setLabel('rlc_second_choice','Second Choice: ');
+        if(isset($_REQUEST['rlc_second_choice'])){
+            $rlc_form->setMatch('rlc_second_choice', $_REQUEST['rlc_second_choice']);
+        }
         
         $rlc_form->addDropBox('rlc_third_choice', $rlc_choices);
         $rlc_form->setLabel('rlc_third_choice','Third Choice: ');
+        if(isset($_REQUEST['rlc_third_choice'])){
+            $rlc_form->setMatch('rlc_third_choice', $_REQUEST['rlc_third_choice']);
+        }
 
         # 3. About Your Choices
 
-        $rlc_form->addTextarea('why_specific_communities');
+        if(isset($_REQUEST['why_specific_communities'])){
+            $rlc_form->addTextarea('why_specific_communities',$_REQUEST['why_specific_communities']);
+        }else{
+            $rlc_form->addTextarea('why_specific_communities');
+        }
         $rlc_form->setLabel('why_specific_communities',
                             'Why are you interested in the specific communities you have chosen?');
         $rlc_form->setMaxSize('why_specific_communities',500);
 
-        $rlc_form->addTextarea('strengths_weaknesses');
-        $rlc_form->setLabel('strenghts_weaknesses',
-                            'What are you strengths and in what areas would you like to improve?');
+        if(isset($_REQUEST['strengths_weaknesses'])){
+            $rlc_form->addTextarea('strengths_weaknesses', $_REQUEST['strengths_weaknesses']);
+        }else{
+            $rlc_form->addTextarea('strengths_weaknesses');
+        }
+        $rlc_form->setLabel('strengths_weaknesses',
+                            'What are your strengths and in what areas would you like to improve?');
         $rlc_form->setMaxSize('strengths_weaknesses',500);
 
-        $rlc_form->addSubmit('submit', 'Submit Application');        
+        $rlc_form->addSubmit('submit', 'Continue'); 
     
         $rlc_form->mergeTemplate($template);
         $template = $rlc_form->getTemplate();
 
-        return PHPWS_Template::process($template,'hms','student/rlc_signup_form.tpl');
+        return PHPWS_Template::process($template,'hms','student/rlc_signup_form_page1.tpl');
+    }
+
+    #
+    function valid_rlc_application_page1(){
+        
     }
 };
 ?>
