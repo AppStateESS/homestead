@@ -2,6 +2,7 @@
   <div class="box">
     <div class="box-title"> <h1>Residential Learning Community (RLC) Application</h1> </div>
     <div class="box-content">
+        <font color="red"><i>{MESSAGE}</i></font><br>
         <table>
             <tr>
                 <th colspan="2">1. About You</th>
@@ -49,33 +50,6 @@
                 <td>{STRENGTHS_WEAKNESSES}</td>
             </tr>
             <tr>
-                <th colspan="2">4. Answer up to 3 of the Following 6 questions.</th>
-            </tr>
-            <tr>
-                <td>{LEADERSHIP_SERVICE_LABEL}</td>
-                <td>{LEADERSHIP_SERICE}</td>
-            </tr>
-            <tr>
-                <td>{OUTDOOR_COMMUNITY_LABEL}</td>
-                <td>{OUTDOOR_COMMUNITY}</td>
-            </tr>
-            <tr>
-                <td>{WELLNESS_COMMUNITY_LABEL}</td>
-                <td>{WELLNESS_COMMUNITY}</td>
-            </tr>
-            <tr>
-                <td>{SCIENTIFIC_INTEREST_LABEL}</td>
-                <td>{SCIENTIFIC_INTEREST}</td>
-            </tr>
-            <tr>
-                <td>{LANGUAGE_CULTURE_LABEL}</td>
-                <td>{LANGUAGE_CULTURE}</td>
-            </td>
-            <tr>
-                <td>{BLACK_GOLD_LABEL}</td>
-                <td>{BLACK_GOLD}</td>
-            </tr>
-        </tr>
         <tr>
             <td colspan="2" align="right">{SUBMIT}</td>
         </tr> 
