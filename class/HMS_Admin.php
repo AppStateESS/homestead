@@ -69,6 +69,10 @@ class HMS_Admin
                 PHPWS_Core::initModClass('hms', 'HMS_Suite.php');
                 $final = HMS_Suite::main();
                 break;
+            case 'rlc':
+                PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
+                $final = HMS_Learning_Community::main();
+                break;
             case 'admin':
                 switch($_REQUEST['op'])
                 {
