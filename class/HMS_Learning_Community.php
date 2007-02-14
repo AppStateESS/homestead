@@ -92,6 +92,19 @@ class HMS_Learning_Community
     }
 
     /*
+     * Main function for RLC maintenance
+     */
+    function main()
+    {
+        switch($_REQUEST['op'])
+        {
+            default:
+               return "{$_REQUEST['op']} <br />";
+               break;
+        }
+    }
+
+    /*
      * Validates submission of the first page of the rlc application form.
      * If ok, shows the second page of the application form.
      * Otherwise, displays page one again with an error message.
