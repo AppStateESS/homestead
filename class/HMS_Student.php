@@ -299,6 +299,11 @@ class HMS_Student {
             case 'show_rlc_application_form':
                 PHPWS_Core::initModClass('hms','HMS_Learning_Community.php');
                 return HMS_Learning_Community::show_rlc_application_form();
+                break;
+            case 'rlc_application_page1_submit':
+                PHPWS_Core::initModClass('hms','HMS_Learning_community.php');
+                return HMS_Learning_Community::rlc_application_page1_submit();
+                break;
             case 'main':
                 $message  = "Welcome to the Housing Management System!<br /><br />";
                 

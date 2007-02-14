@@ -2038,6 +2038,8 @@ class HMS_Form
         $template = array();
         
         $rlc_form = & new PHPWS_Form();
+        $rlc_form->addHidden('type', 'student');
+        $rlc_form->addHidden('op','rlc_application_page1_submit');
 
         # 1. About You Section
         PHPWS_Core::initModClass('hms','HMS_SOAP.php');
@@ -2055,9 +2057,6 @@ class HMS_Form
         
         $template['LAST_NAME']         = 'Last'; # HMS_SOAP::get_last_name($_SESSION['asu_username']);
         $template['LAST_NAME_LABEL']   = 'Last Name: ';
-
-        $rlc_form->addText('pref_roommate'); #TODO: possibly lookup pre-selected roomate here
-        $rlc_form->setLabel('pref_roomate', 'Preferred roommate: ');
 
         # 2. Rank Your RLC Choices
 
@@ -2110,9 +2109,26 @@ class HMS_Form
         return PHPWS_Template::process($template,'hms','student/rlc_signup_form_page1.tpl');
     }
 
-    #
-    function valid_rlc_application_page1(){
-        
+    /*
+     * Validates the first page of the rlc application form
+     * Requires:    first, middle and last name are set
+     *              rlc choices are set and are numeric
+     *              text fields are set
+     */               
+    function validate_rlc_application_page1(){
+        return  (isset($_REQUEST['applenet_username']) &&
+                isset($_REQUEST['first_name']) &&
+                isset($_REQUEST['middle_name']) &&
+                isset($_REQUEST['last_name']) &&
+                isset($_REQUEST['rlc_first_choice']) &&
+                isset($_REQUEST['rlc_second_choice']) &&
+                isset($_REQUEST['rlc_third_choice']) &&
+                is_numeric($_REQUEST['rlc_first_choice']) &&
+                is_numeric($_REQUEST['rlc_second_choice']) &&
+                is_numeric($_REQUEST['rlc_third_choice']) &&
+                isset($_REQUEST['why_specific_communities']) &&
+                isset($_REQUEST['strengths_weaknesses'])
+                );
     }
 };
 ?>
