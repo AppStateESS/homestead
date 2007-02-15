@@ -12,7 +12,7 @@ class HMS_Learning_Community
     var $community_name;
     var $error;
 
-    function HMS_Floor()
+    function HMS_Learning_Community()
     {
         $this->id = NULL;
         $this->community_name = NULL;
@@ -44,40 +44,39 @@ class HMS_Learning_Community
         $this->community_name = $name;
     }
 
-    function get_community_name($name)
+    function get_community_name()
     {
         return $this->community_name;
     }
 
     function set_variables()
     {
-        if($_REQUEST['id']) $this->set_id($_REQUEST['id']);
+        if($_REQUEST['id'] != NULL) $this->set_id($_REQUEST['id']);
         $this->set_community_name($_REQUEST['community_name']);
     }
 
     function save_learning_community()
     {
+        $rlc = new HMS_Learning_Community();
+        $rlc->set_variables();
+
         $db = & new PHPWS_DB('hms_learning_communities');
         
-        if($this->id) {
-            $db->addWhere('id', $this->id);
+        if($rlc->get_id() != NULL) {
+            $db->addWhere('id', $rlc->get_id());
+            $success = $db->saveObject($rlc);
+        } else {
+            $db->addValue('community_name', $rlc->get_community_name());
+            $success = $db->insert();
         }
         
-        $success = $db->saveObject($this);
-        unset($db);
-
         if(PEAR::isError($success)) {
-            test($success);
-            PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
-            $this->error .= "There was a problem saving this Learning Community!<br />";
-            $tpl = HMS_Form::fill_learning_community_data_display($this, 'save_learning_community');
-            $tpl['TITLE'] = "Error Saving Learning Community";
-            $final = PHPWS_Template::process($tpl, 'hms', 'admin/display_learning_community_data.tpl');
+            $msg = '<font color="red"><b>There was a problem saving the ' . $rlc->get_community_name() . ' Learning Community</b></font>';
         } else {
-            $tpl['TITLE'] = "Successful Save!";
-            $tpl['CONTENT'] = "Learning Community was saved successfully!";
-            $final = PHPWS_Template::process($tpl, 'hms', 'admin/title_and_message.tpl');
+            $msg    = "The Residential Learning Community " . $rlc->get_community_name() . " was saved successfully!";
         }
+        
+        $final  = HMS_Learning_Community::add_learning_community($msg);
 
         return $final;
     }
@@ -92,12 +91,27 @@ class HMS_Learning_Community
     }
 
     /*
+     * Returns a HMS_Form that prompts the user for the name of the RLC to add
+     */
+    function add_learning_community($msg = NULL)
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
+        return HMS_Form::add_learning_community($msg);
+    }
+    
+    /*
      * Main function for RLC maintenance
      */
     function main()
     {
         switch($_REQUEST['op'])
         {
+            case 'add_learning_community':
+                return HMS_Learning_Community::add_learning_community();
+                break;
+            case 'save_learning_community':
+                return HMS_Learning_Community::save_learning_community();
+                break;
             default:
                return "{$_REQUEST['op']} <br />";
                break;
