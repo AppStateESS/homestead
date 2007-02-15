@@ -4,12 +4,13 @@
     <div class="box-title"> <h1>{TITLE}</h1> </div>
     <div class="box-content">
         {MESSAGE}
-        <br /><br />
+        <br />
         <table>
             <tr>
                 <th>Name of the Learning Community: &nbsp;&nbsp;</th><td>{COMMUNITY_NAME}</td>
             </tr>
         </table>
+        <br />
         {SUBMIT}
     </div>
   </div>
