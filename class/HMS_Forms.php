@@ -1009,14 +1009,14 @@ class HMS_Form
         return $final;
     }
 
-    function add_learning_community()
+    function add_learning_community($msg)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
         $lc = &new HMS_Learning_Community;
         $lc->set_variables();
-        $tpl = $this->fill_learning_community_data_display($lc, 'save_learning_community');
-        $tpl['ERROR'] = $this->error;
+        $tpl = HMS_Form::fill_learning_community_data_display($lc, 'save_learning_community');
         $tpl['TITLE'] = "Add a Learning Community";
+        $tpl['MESSAGE'] = $msg;
         $final = PHPWS_Template::process($tpl, 'hms', 'admin/display_learning_community_data.tpl');
         return $final;
     }
@@ -1033,6 +1033,7 @@ class HMS_Form
         }
     
         $form->addHidden('module', 'hms');
+        $form->addHidden('type', 'rlc');
         $form->addHidden('op', $op);
         if(isset($object->id)) {
             $form->addHidden('id', $object->id);
