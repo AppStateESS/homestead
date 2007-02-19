@@ -98,6 +98,71 @@ class HMS_Learning_Community
         PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
         return HMS_Form::add_learning_community($msg);
     }
+   
+    /*
+     * Returns a HMS_Form that allows the user to select a RLC to delete
+     */
+    function select_learning_community_for_delete()
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
+        return HMS_Form::select_learning_community_for_delete();
+    }
+
+    /*
+     * Returns a HMS_Form that allows the user to confirm deletion of a RLC
+     */
+    function confirm_delete_learning_community()
+    {
+        $db = new PHPWS_DB('hms_learning_communities');
+        $db->addColumn('community_name');
+        $db->addWhere('id', $_REQUEST['lcs']);
+        $result = $db->select('one');
+      
+        PHPWS_Core::initCoreClass('Form.php');
+        $form = &new PHPWS_Form;
+
+        $form->addHidden('module', 'hms');
+        $form->addHidden('type', 'rlc');
+        $form->addHidden('op', 'delete_learning_community');
+        $form->addHidden('community_name', $result);
+        $form->addHidden('id', $_REQUEST['lcs']);
+        $form->addSubmit('delete', _('Delete Community'));
+        $form->addSubmit('save', _('Keep this Community'));
+        
+        $tpl = $form->getTemplate();
+
+        $tpl['RLC']     = $result;
+        $tpl['TITLE']   = "Confirm Deletion";
+        $final = PHPWS_Template::process($tpl, 'hms', 'admin/confirm_learning_community_delete.tpl');
+
+        return $final;
+    }
+
+    /*
+     * Actually deletes a learning community
+     */
+    function delete_learning_community()
+    {
+        if(!isset($_REQUEST['delete']) || $_REQUEST['delete'] != "Delete Community") {
+            return HMS_Learning_Community::select_learning_community_for_delete();
+        }
+
+        $db = new PHPWS_DB('hms_learning_communities');
+        $db->addWhere('id', $_REQUEST['id']);
+        $db->addWhere('community_name', $_REQUEST['community_name']);
+        $result = $db->delete();
+
+        $db = new PHPWS_DB('hms_learning_communities');
+        $db->addColumn('id');
+        $count = $db->select('count');
+       
+        if($count == NULL) {
+            $msg = "You have deleted the last residential learning community.";
+            return HMS_Learning_Community::add_learning_community($msg);
+        }
+
+        return HMS_Learning_Community::select_learning_community_for_delete();
+    }
     
     /*
      * Main function for RLC maintenance
@@ -111,6 +176,15 @@ class HMS_Learning_Community
                 break;
             case 'save_learning_community':
                 return HMS_Learning_Community::save_learning_community();
+                break;
+            case 'select_learning_community_for_delete':
+                return HMS_Learning_Community::select_learning_community_for_delete();
+                break;
+            case 'delete_learning_community':
+                return HMS_Learning_Community::delete_learning_community();
+                break;
+            case 'confirm_delete_learning_community':
+                return HMS_Learning_Community::confirm_delete_learning_community();
                 break;
             default:
                return "{$_REQUEST['op']} <br />";

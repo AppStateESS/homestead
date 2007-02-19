@@ -810,7 +810,8 @@ class HMS_Form
 
         $form->addDropBox('lcs', $lcs);
         $form->addHidden('module', 'hms');
-        $form->addHidden('op', 'delete_learning_community');
+        $form->addHidden('type', 'rlc');
+        $form->addHidden('op', 'confirm_delete_learning_community');
         $form->addSubmit('submit', _('Delete Community'));
         $tpl = $form->getTemplate();
         $tpl['TITLE'] = "Select a Community to Delete";
@@ -1012,16 +1013,14 @@ class HMS_Form
     function add_learning_community($msg)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
-        $lc = &new HMS_Learning_Community;
-        $lc->set_variables();
-        $tpl = HMS_Form::fill_learning_community_data_display($lc, 'save_learning_community');
+        $tpl = HMS_Form::fill_learning_community_data_display();
         $tpl['TITLE'] = "Add a Learning Community";
         $tpl['MESSAGE'] = $msg;
         $final = PHPWS_Template::process($tpl, 'hms', 'admin/display_learning_community_data.tpl');
         return $final;
     }
     
-    function fill_learning_community_data_display($object = NULL, $op = NULL)
+    function fill_learning_community_data_display($object = NULL)
     {        
         PHPWS_Core::initCoreClass('Form.php');
         $form = &new PHPWS_Form;
@@ -1031,16 +1030,29 @@ class HMS_Form
         } else {
             $form->addText('community_name');
         }
-    
+
+        $db = new PHPWS_DB('hms_learning_communities');
+        $db->addColumn('community_name');
+        $names = $db->select();
+
+        $community = '';
+        if($names != NULL) {
+            $community .= "The following Learning Communities exist:<br /><br />";
+            foreach($names as $name) {
+                $community .= $name['community_name'] . "<br />";
+            }
+        }
+
         $form->addHidden('module', 'hms');
         $form->addHidden('type', 'rlc');
-        $form->addHidden('op', $op);
+        $form->addHidden('op', 'save_learning_community');
         if(isset($object->id)) {
             $form->addHidden('id', $object->id);
         }
         $form->addSubmit('submit', _('Save Learning Community'));
 
         $tpl = $form->getTemplate();
+        $tpl['COMMUNITY'] = $community;
         return $tpl;
     }
 
