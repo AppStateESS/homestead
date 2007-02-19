@@ -275,7 +275,7 @@ class HMS_Form
         return $final;
     }
 
-    function verify_assignment()
+    function verify_assignment($msg = NULL)
     {
         $db = new PHPWS_DB('hms_residence_hall');
         $db->addColumn('hall_name');
@@ -296,9 +296,10 @@ class HMS_Form
 
         $tpl = $form->getTemplate();
         $tpl['MESSAGE'] = "<h2>You are assigning user: " . $_REQUEST['username'] . "</h2>";
+        $tpl['MESSAGE'] .= $msg;
         $tpl['HALLS']   = $hall_name; 
         $tpl['FLOORS']  = $_REQUEST['floors'];
-        $tpl['ROOMS']   = $_REQUEST['rooms'];
+        $tpl['ROOMS']   = $_REQUEST['floors'] . str_pad($_REQUEST['rooms'], 2, '0', STR_PAD_LEFT);
 
         $final = PHPWS_Template::process($tpl, 'hms', 'admin/get_hall_floor_room.tpl');
         return $final;
