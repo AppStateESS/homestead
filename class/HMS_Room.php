@@ -136,9 +136,17 @@ class HMS_Room
         }
     }
 
-    function get_gender_type()
+    function get_gender_type($id = NULL)
     {
-        return $this->gender_type;
+        if($id != NULL) {
+            $db = new PHPWS_DB('hms_room');
+            $db->addColumn('gender_type');
+            $db->addWhere('id', $id);
+            $result = $db->select('one');
+            return $result;
+        } else {
+            return $this->gender_type;
+        }
     }
 
     function set_is_online($online, $id = NULL, $building = NULL)
@@ -168,9 +176,17 @@ class HMS_Room
         $this->capacity_per_room = $capacity;
     }
 
-    function get_capacity_per_room()
+    function get_capacity_per_room($id = NULL)
     {
-        return $this->capacity_per_room;
+        if($id != NULL) {
+            $db = new PHPWS_DB('hms_room');
+            $db->addColumn('capacity_per_room');
+            $db->addWhere('id', $id);
+            $capacity = $db->select('one');
+            return $capacity;
+        } else {
+            return $this->capacity_per_room;
+        }
     }
 
     function set_phone_number($phone)
@@ -188,9 +204,17 @@ class HMS_Room
         $this->is_medical = $medical;
     }
 
-    function get_is_medical()
+    function get_is_medical($id = NULL)
     {
-        return $this->is_medical;
+        if($id != NULL) {
+            $db = new PHPWS_DB('hms_room');
+            $db->addColumn('is_medical');
+            $db->addWhere('id', $id);
+            $medical = $db->select('one');
+            return $medical;
+        } else {
+            return $this->is_medical;
+        }
     }
 
     function set_is_reserved($reserved)
@@ -198,9 +222,17 @@ class HMS_Room
         $this->is_reserved = $reserved;
     }
 
-    function get_is_reserved()
+    function get_is_reserved($id = NULL)
     {
-        return $this->is_reserved;
+        if($id != NULL) {
+            $db = new PHPWS_DB('hms_room');
+            $db->addColumn('is_reserved');
+            $db->addWhere('id', $id);
+            $reserved = $db->select('one');
+            return $reserved;
+        } else {
+            return $this->is_reserved;
+        }
     }
 
     function set_added_by_on()
