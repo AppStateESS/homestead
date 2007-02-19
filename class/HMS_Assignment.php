@@ -118,13 +118,13 @@ class HMS_Assignment
     }
 
     /**
-     * Returns the id of the room for this assignment.
-     * Doesn't belong here (should be in HMS_Room).
+     * Returns the id of the room based on the building id, floor number and room number
+     * Belongs in HMS_Room
      */
-    function get_room_gender()
+    function get_room_id_by_request()
     {
         $db = new PHPWS_DB('hms_room');
-        $db->addColumn('gender_type');
+        $db->addColumn('id');
         $db->addWhere('building_id', $_REQUEST['halls']);
         $db->addWhere('floor_number', $_REQUEST['floors']);
         $db->addWhere('room_number', $_REQUEST['floors'] . str_pad($_REQUEST['rooms'], 2, "0", STR_PAD_LEFT));
@@ -224,25 +224,72 @@ class HMS_Assignment
      */
     function verify_assignment()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
-        $user_gender = HMS_SOAP::get_gender($_REQUEST['username']);
-        if($user_gender == "F") $user_gender = 0;
-        else if($user_gender == "M") $user_gender = 1;
+        $id = HMS_Assignment::get_room_id_by_request();
 
-        $room_gender = HMS_Assignment::get_room_gender();
-
-        if($room_gender != $user_gender) {
-            if($room_gender == 0) {
-                $msg = "<b>You are trying to assign a male to a female room. Please assign someone else or change the gender of the room.</b><br /><br />";
-            } else {
-                $msg = "<b>You are trying to assign a female to a male room. Please assign someone else or change the gender of the room.</b><br /><br />";
-            }
-
+        if(!HMS_Assignment::room_user_gender_compatible($id)) {
+            $msg = '<font color="red"><b>The gender of the student and the room gender are incompatible.</b></font>';
             return HMS_Assignment::get_username_for_assignment($msg);
         }
 
+        PHPWS_Core::initModClass('hms', 'HMS_Room.php');
+
+        $assigned = HMS_Assignment::number_assigned_to_room($id);
+        $assignable = HMS_Room::get_capacity_per_room($id);
+
+        if($assigned == $assignable) {
+            $msg = '<font color="red"><b>This room is full. Please assign to another room or remove a student from this room.<b></font>';
+            return HMS_Assignment::get_username_for_assignment($msg);
+        }
+
+        $msg = '<br />';
+
+        if(HMS_Room::get_is_reserved($id)) {
+            $msg .= '<font color="red"><b>WARNING!! This room is marked as reserved.</b></font><br />';
+        }
+
+        if(HMS_Room::get_is_medical($id)) {
+            $msg .= '<font color="red"><b>WARNING!! This room is marked as medical.</b></font><br />';
+        }
+
+        if($suite = HMS_Room::is_in_suite($id)) {
+            $msg .= '<font color="red"><b>WARNING!! The following rooms make up this suite: <br />';
+            $msg .= "&nbsp;&nbsp;&nbsp;&nbsp;" . HMS_Room::get_room_number($suite['room_id_zero']) . "<br />";
+            $msg .= "&nbsp;&nbsp;&nbsp;&nbsp;" . HMS_Room::get_room_number($suite['room_id_one']) . "<br />";
+            if($suite['room_id_two']) {
+                $msg .= "&nbsp;&nbsp;&nbsp;&nbsp;" . HMS_Room::get_room_number($suite['room_id_two']) . "<br />";
+            }
+            if($suite['room_id_three']) {
+                $msg .= "&nbsp;&nbsp;&nbsp;&nbsp;" . HMS_Room::get_room_number($suite['room_id_three']) . "<br />";
+            }
+            $msg .= "</b></font>";
+        }
+
         PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
-        return HMS_Form::verify_assignment();
+        return HMS_Form::verify_assignment($msg);
+    }
+
+    /**
+     * Checks room gender matches user gender
+     */
+    function room_user_gender_compatible($id)
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Room.php');
+        $room_gender = HMS_Room::get_gender_type($id);
+
+        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+        $user_gender = HMS_SOAP::get_gender($_REQUEST['username']);
+        
+        if($user_gender == "F") {
+            $user_gender = 0;
+        } else if($user_gender == "M") {
+            $user_gender = 1;
+        }
+        
+        if($room_gender != $user_gender) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     /**
