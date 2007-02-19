@@ -209,7 +209,7 @@ class HMS_Student {
         $list[]         = PHPWS_Text::secureLink(_('Edit'), 'hms', $link);
         
         $link['op']     = 'delete_student';
-        $confirm_vars['QUESTION'] = _('Are you sure you ant to delete this student?');
+        $confirm_vars['QUESTION'] = _('Are you sure you want to delete this student?');
         $confirm_vars['ADDRESS']  = PHPWS_Text::linkAddress('hms', $link, true);
         $confirm_vars['LINK'] = _('Delete');
         $list[] = Layout::getJavascript('confirm', $confirm_vars);
