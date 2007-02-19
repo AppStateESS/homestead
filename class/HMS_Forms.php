@@ -2195,5 +2195,25 @@ class HMS_Form
 
         return TRUE;
     }
+
+    /*
+     * Displays page 2 of the rlc application form.
+     */
+    function show_rlc_application_form_page2(){
+        
+        $rlc_form2 = new PHPWS_Form();
+
+        # Add hidden fields for fields from page 1
+        $rlc_form2->addHidden('first_name',);
+        $rlc_form2->addHidden('middle_name',);
+        $rlc_form2->addHidden('last_name',);
+        $rlc_form2->addHidden('rlc_first_choice',);
+        $rlc_form2->addHidden('rlc_second_choice',);
+        $rlc_form2->addHidden('rlc_third_choice',);
+        $rlc_form2->addHidden('why_specific_communities',);
+        $rlc_form2->addHidden('strengths_weaknesses',);
+        
+        
+    }
 };
 ?>

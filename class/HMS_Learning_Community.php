@@ -202,10 +202,12 @@ class HMS_Learning_Community
         PHPWS_Core::initModClass('hms','HMS_Forms.php');
         
         # Check for invalid input on page 1
-        if(!HMS_Forms::validate_rlc_application_page1()){
+        $message = HMS_Forms::validate_rlc_application_page1();
+        if($message !== TRUE){
             # Show page one again with error message
-            $message = "There was a problem with your submission. Please complete all fields.";
-            return HMS_Forms::show_rlc_application_form_page1($message);
+            return HMS_Form::show_rlc_application_form_page1($message);
+        }else{
+            return HMS_Form::show_rlc_application_form_page2();
         }
     }
 };
