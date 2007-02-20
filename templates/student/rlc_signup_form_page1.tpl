@@ -3,6 +3,8 @@
     <div class="box-title"> <h1>Residential Learning Community (RLC) Application</h1> </div>
     <div class="box-content">
         <font color="red"><i>{MESSAGE}</i></font><br>
+        <!-- BEGIN rlc_form -->
+        {START_FORM}
         <table>
             <tr>
                 <th colspan="2">1. About You</th>
@@ -54,6 +56,8 @@
             <td colspan="2" align="right">{SUBMIT}</td>
         </tr> 
         </table>
+        {END_FORM}
+        <!-- END rlc_form -->
       </div>
    </div>
 </div>

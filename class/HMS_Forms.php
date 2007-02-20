@@ -2189,8 +2189,8 @@ class HMS_Form
             return "Error: Please choose three distinct Learning Communities.";
         }
 
-        if(isset($_REQUEST['why_specific_communities']) &&
-           isset($_REQUEST['strengths_weaknesses'])){
+        if(!(isset($_REQUEST['why_specific_communities']) &&
+           isset($_REQUEST['strengths_weaknesses']))){
             return "Error: Please complete the questions in section 3.";
         }
 
@@ -2205,14 +2205,14 @@ class HMS_Form
         $rlc_form2 = new PHPWS_Form();
 
         # Add hidden fields for fields from page 1
-        $rlc_form2->addHidden('first_name',);
-        $rlc_form2->addHidden('middle_name',);
-        $rlc_form2->addHidden('last_name',);
-        $rlc_form2->addHidden('rlc_first_choice',);
-        $rlc_form2->addHidden('rlc_second_choice',);
-        $rlc_form2->addHidden('rlc_third_choice',);
-        $rlc_form2->addHidden('why_specific_communities',);
-        $rlc_form2->addHidden('strengths_weaknesses',);
+        $rlc_form2->addHidden('first_name', $_REQUEST['first_name']);
+        $rlc_form2->addHidden('middle_name',$_REQUEST['middle_name']);
+        $rlc_form2->addHidden('last_name',  $_REQUEST['last_name']);
+        $rlc_form2->addHidden('rlc_first_choice',  $_REQUEST['rlc_first_choice']);
+        $rlc_form2->addHidden('rlc_second_choice', $_REQUEST['rlc_second_choice']);
+        $rlc_form2->addHidden('rlc_third_choice',  $_REQUEST['rlc_third_choice']);
+        $rlc_form2->addHidden('why_specific_communities', $_REQUEST['why_specific_communities']);
+        $rlc_form2->addHidden('strengths_weaknesses', $_REQUEST['strengths_weaknesses']);
         
         
     }
