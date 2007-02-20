@@ -51,6 +51,13 @@ CREATE TABLE hms_learning_communities (
     primary key(id)
 );
 
+CREATE TABLE hms_learning_community_questions (
+    id integer DEFAULT 0 NOT NULL,
+    learning_community_id integer DEFAULT 0 NOT NULL REFERENCES hms_learning_communities(id),
+    question_text text NOT NULL,
+    primary key(id)
+);
+
 CREATE TABLE hms_pricing_tiers (
     id integer DEFAULT 0 NOT NULL,
     tier_value numeric NOT NULL,
