@@ -15,7 +15,7 @@
                 <th>Room Number: </th><td align="left">{ROOM_ID_ZERO}</td>
             </tr>
             <tr>
-                <th>Rooms in Suite:</th><td align="left">{ROOM_ID_ONE}</td>
+                <th>Other Rooms in Suite:</th><td align="left">{ROOM_ID_ONE}</td>
             </tr>
             <tr>
                 <td></td><td align="left">{ROOM_ID_TWO}</td>
@@ -24,7 +24,7 @@
                 <td></td><td align="left">{ROOM_ID_THREE}</td>
             </tr>
         </table>
-        {SUBMIT}
+        {SUBMIT} &nbsp;&nbsp; {CANCEL}
     </div>
   </div>
 </div>
