@@ -86,6 +86,15 @@ class HMS_Maintenance
         if(Current_User::allow('hms', 'delete_learning_communities'))
             $tpl['DELETE_LEARNING_COMMUNITY']   = PHPWS_Text::secureLink(_('Delete Learning Community'), 'hms', array('type'=>'rlc', 'op'=>'select_learning_community_for_delete')) . " &nbsp;*not implemented*";
 
+        if(Current_User::allow('hms', 'rlc_applicant_options')) 
+            $tpl['RLC_APPLICATIONS']    = "RLC Applicant Options";
+
+        if(Current_User::allow('hms', 'assign_rlc_applicants')) 
+            $tpl['ASSIGN_RLC_APPLICANTS']    = PHPWS_Text::secureLink(_('Assign RLC Applicants'), 'hms', array('type'=>'rlc', 'op'=>'assign_applicants'));
+
+        if(Current_User::allow('hms', 'view_rlc_assignments')) 
+            $tpl['VIEW_RLC_ASSIGNMENTS']    = PHPWS_Text::secureLink(_('View RLC Assignments'), 'hms', array('type'=>'rlc', 'op'=>'view_assignments'));
+
         if(Current_User::allow('hms', 'student_maintenance'))
             $tpl['STUDENT_LABEL'] = "Student Maintenance";
 

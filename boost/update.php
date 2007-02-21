@@ -7,6 +7,14 @@
 function hms_update(&$content, $currentVersion)
 {
     switch ($currentVersion) {
+        case version_compare($currentVersion, '0.1.3', '<'):
+            $files = array();
+            $files[] = 'templates/admin/maintenance.tpl';
+            PHPWS_Boost::updateFiles($files, 'hms');
+
+            $content[] = _('+ Label and Option on Comp. Maintenance screen to assign RLC applicants');
+            $content[] = _('+ Label and Option on Comp. Maintenance screen to view RLC assignments');
+
         case version_compare($currentVersion, '0.1.1', '<'):
             $result = PHPWS_DB::dropTable('hms_roommate');
             $result = PHPWS_DB::dropTable('hms_student');
