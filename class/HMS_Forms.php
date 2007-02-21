@@ -1710,7 +1710,7 @@ class HMS_Form
     {
         PHPWS_Core::initModClass('hms', 'HMS_Room.php');
 
-        if($_REQUEST['op'] == "save_new_suite") {
+        if($_REQUEST['op'] == "save_suite") {
             $suite_id = HMS_Room::get_suite_number($_REQUEST['room_id_zero']);
         } else if(!is_null($_REQUEST['suite'])) {
             $suite_id = $_REQUEST['suite'];
@@ -1748,15 +1748,18 @@ class HMS_Form
             
             $form->addHidden('room_id_zero', $suite->get_room_id_zero());
             $form->addHidden('type', 'suite');
-            $form->addHidden('op', 'save_suite');
+            $form->addHidden('op', 'verify_save_suite');
+            $form->addHidden('new', 'false');
             $form->addHidden('floor', $floor);
             $form->addHidden('suite', $suite_id);
+            $form->addHidden('hall', $hall_name);
             $form->addSubmit('submit', _('Save Suite'));
 
             $tpl = $form->getTemplate();
             $tpl['ROOM_ID_ZERO']    = HMS_Room::get_room_number($suite->get_room_id_zero());
 
         } else {
+
             if(isset($_REQUEST['room_id_zero'])) $_REQUEST['room'] = $_REQUEST['room_id_zero'];
 
             $room_list = HMS_Room::get_rooms_on_floor($_REQUEST['room']);
@@ -1769,15 +1772,31 @@ class HMS_Form
             $form->addDropBox('room_id_one', $room_list);
             $form->addDropBox('room_id_two', $room_list);
             $form->addDropBox('room_id_three', $room_list);
-            
-            $form->setMatch('room_id_one', '0');
-            $form->setMatch('room_id_two', '0');
-            $form->setMatch('room_id_three', '0');
+           
+            if(isset($_REQUEST['room_id_one'])) {
+                $form->setMatch('room_id_one', $_REQUEST['room_id_one']);
+            } else {
+                $form->setMatch('room_id_one', '0');
+            }
+
+            if(isset($_REQUEST['room_id_two'])) {
+                $form->setMatch('room_id_two', $_REQUEST['room_id_two']);
+            } else {
+                $form->setMatch('room_id_two', '0');
+            }
+
+            if(isset($_REQUEST['room_id_three'])) {
+                $form->setMatch('room_id_three', $_REQUEST['room_id_three']);
+            } else {
+                $form->setMatch('room_id_three', '0');
+            }
             
             $form->addHidden('room_id_zero', $_REQUEST['room']);
             $form->addHidden('type', 'suite');
-            $form->addHidden('op', 'save_new_suite');
+            $form->addHidden('op', 'verify_save_suite');
+            $form->addHidden('new', 'true');
             $form->addHidden('floor', $floor);
+            $form->addHidden('hall', $hall_name);
             $form->addSubmit('submit', _('Save Suite'));
 
             $tpl = $form->getTemplate();
@@ -1788,6 +1807,84 @@ class HMS_Form
         $tpl['HALL_NAME']       = $hall_name;
         $tpl['ERROR']           = $error;
 
+        $content = PHPWS_Template::process($tpl, 'hms', 'admin/display_suite_data.tpl');
+        return $content;
+    }
+
+    function verify_save_suite()
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Suite.php');
+
+        if(HMS_Suite::room_listed_twice()) {
+            $msg = "You tried to put a room in this suite twice.";
+            return HMS_Form::edit_suite($msg);
+        }
+
+        if(!HMS_Suite::check_room_ids_numeric() || !HMS_Suite::check_valid_room_ids()) {
+            $msg = "There was an error with those room ID's.";
+            return HMS_Form::edit_suite($msg);
+        }
+        
+        if($_REQUEST['new'] == 'true' && HMS_Suite::rooms_in_suite()) {
+            $msg = "One or more of the rooms you chose are already in a suite!"; 
+            return HMS_Form::edit_suite($msg);
+        } else if ($_REQUEST['new'] == false) {
+            $suite = &new HMS_Suite($_REQUEST['suite']);
+            if(!$suite->rooms_not_in_another_suite()) {
+                $msg = "One of the rooms you selected is not eligible for this suite.";
+                return HMS_Form::edit_suite($msg);
+            }
+            unset($suite);
+        }
+  
+        if(!HMS_Suite::rooms_same_gender()) {
+            $msg = "You tried to mix rooms of separate genders. Please try different rooms.";
+            return HMS_Form::edit_suite($msg);
+        }
+
+        $msg = '';
+
+        if($rooms = HMS_Suite::check_if_rooms_are_reserved()) {
+            foreach($rooms as $room) {
+                $msg .= "Room $room is reserved.<br />";
+            }
+        }
+
+        if($rooms = HMS_Suite::check_if_rooms_are_medical()) {
+            foreach($rooms as $room) {
+                $msg .= "Room $room is marked medical.<br />";
+            }
+        }
+
+        $form = new PHPWS_Form();
+
+        $form->addHidden('room_id_zero', $_REQUEST['room_id_zero']);
+        $form->addHidden('room_id_one', $_REQUEST['room_id_one']);
+        $form->addHidden('room_id_two', $_REQUEST['room_id_two']);
+        $form->addHidden('room_id_three', $_REQUEST['room_id_three']);
+
+        if(isset($_REQUEST['suite'])) $form->addHidden('suite', $_REQUEST['suite']);
+        $form->addHidden('floor', $_REQUEST['floor']);
+        $form->addHidden('module', 'hms');
+        $form->addHidden('type', 'suite');
+        $form->addHidden('op', 'save_suite');
+        $form->addHidden('new', $_REQUEST['new']);
+        $form->addSubmit('submit', _('Save Suite'));
+        $form->addSubmit('cancel', _('Cancel'));
+
+        $tpl = $form->getTemplate();
+
+        PHPWS_Core::initModClass('hms', 'HMS_Room.php');
+
+        $tpl['ROOM_ID_ZERO']    = HMS_Room::get_room_number($_REQUEST['room_id_zero']);
+        $tpl['ROOM_ID_ONE']     = HMS_Room::get_room_number($_REQUEST['room_id_one']);
+        $tpl['ROOM_ID_TWO']     = HMS_Room::get_room_number($_REQUEST['room_id_two']);
+        $tpl['ROOM_ID_THREE']   = HMS_Room::get_room_number($_REQUEST['room_id_three']);
+        $tpl['FLOOR_NUMBER']    = $_REQUEST['floor'];
+        $tpl['HALL_NAME']       = $_REQUEST['hall'];
+        $tpl['TITLE']           = "Verify Saving Suite";
+        $tpl['ERROR']           = $msg;
+        
         $content = PHPWS_Template::process($tpl, 'hms', 'admin/display_suite_data.tpl');
         return $content;
     }
