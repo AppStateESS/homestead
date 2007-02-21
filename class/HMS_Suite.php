@@ -119,6 +119,21 @@ class HMS_Suite
         }
     }
 
+    function room_listed_twice()
+    {
+        $r0 = $_REQUEST['room_id_zero'];
+        $r1 = $_REQUEST['room_id_one'];
+        $r2 = $_REQUEST['room_id_two'];
+        $r3 = $_REQUEST['room_id_three'];
+
+        if($r0 == $r1 || $r0 == $r2 || $r0 == $r3 ||
+           $r1 == $r2 || $r1 == $r3 || $r2 == $r3) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     function set_room_ids()
     {
         $this->set_room_id_zero($_REQUEST['room_id_zero']);
@@ -135,46 +150,119 @@ class HMS_Suite
 
     function save_suite($new = NULL)
     {
-        $msg = NULL;
-
-        if(!HMS_Suite::check_room_ids_numeric()) {
-            PHPWS_Core::log('ROOM IDS NOT NUMERIC!', 'hms');
-            return "You are a BAD PERSON and your Mischief has been logged!";
-        }
-
-        if(!HMS_Suite::check_valid_room_ids()) {
-            PHPWS_Core::log('BAD ROOM IDS!', 'hms');
-            return "Those are not valid room IDs!";
-        }
-
-        // are the rooms already in a suite?
-        if($new && HMS_Suite::rooms_in_suite()) {
-            $msg = "One or more of the rooms you chose are already in a suite!"; 
-        } else if ($new == NULL) {
-            $suite = &new HMS_Suite($_REQUEST['suite']);
-            if(!$suite->rooms_eligible_for_this_suite()) {
-                $msg = "One of the rooms you selected is not eligible for this suite.";
-            }
-        }
-   
-        if($msg == NULL) {
-            $suite = new HMS_Suite($_REQUEST['suite']);
-            $suite->set_room_ids();
-            $db = &new PHPWS_DB('hms_suite');
-            $success = $db->saveObject($suite);
-           
-            if(PEAR::isError($success)) {
-                PHPWS_Error::log($success, 'hms', 'HMS_Suite::save_new_suite');
-                $msg = "There was an error saving this suite. Please contact Electronic Student Services.";
-            } else {
-                $msg = "Suite was successfully saved!";
-            }
-        }
         
+        $suite = new HMS_Suite($_REQUEST['suite']);
+        $suite->set_room_ids();
+        $db = &new PHPWS_DB('hms_suite');
+        
+        if($suite->get_id()) {
+            $db->addWhere('id', $suite->get_id());
+            $db->addValue('room_id_zero', $_REQUEST['room_id_zero']);
+            $db->addValue('room_id_one', $_REQUEST['room_id_one']);
+            $db->addValue('room_id_two', $_REQUEST['room_id_two']);
+            $db->addValue('room_id_three', $_REQUEST['room_id_three']);
+            $success = $db->update();
+        } else {
+            $success = $db->saveObject($suite);
+        }
+       
+        if(PEAR::isError($success)) {
+            PHPWS_Error::log($success, 'hms', 'HMS_Suite::save_new_suite');
+            $msg = "There was an error saving this suite. Please contact Electronic Student Services.";
+        } else {
+            $msg = "Suite was successfully saved!";
+        }
+       
+        $_REQUEST['new'] = 'false';
+        $_REQUEST['suite'] = $success;
         return HMS_Suite::edit_suite($msg);
     }
 
-    function rooms_eligible_for_this_suite()
+    function rooms_same_gender()
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Room.php');
+        $g0 = HMS_Room::get_gender_type($_REQUEST['room_id_zero']);
+        $g1 = HMS_Room::get_gender_type($_REQUEST['room_id_one']);
+        
+        if($_REQUEST['room_id_two'] != 0) {
+            $g2 = HMS_Room::get_gender_type($_REQUEST['room_id_two']);
+        } else {
+            $g2 = $g0;
+        }
+        
+        if($_REQUEST['room_id_three'] != 0) {
+            $g3 = HMS_Room::get_gender_type($_REQUEST['room_id_three']);
+        } else {
+            $g3 = $g0;
+        }
+
+        if ($g0 == $g1 && $g0 == $g2 && $g0 == $g3) return true;
+        else return false;
+    }
+
+    function check_if_rooms_are_medical()
+    {
+        $med = false;
+        $rooms = array();
+
+        PHPWS_Core::initModClass('hms', 'HMS_Room.php');
+        
+        if(HMS_Room::get_is_medical($_REQUEST['room_id_zero'])) {
+            $med = true;
+            $rooms[] = HMS_Room::get_room_number($_REQUEST['room_id_zero']);
+        }
+
+        if(HMS_Room::get_is_medical($_REQUEST['room_id_one'])) {
+            $med = true;
+            $rooms[] = HMS_Room::get_room_number($_REQUEST['room_id_one']);
+        }
+
+        if(HMS_Room::get_is_medical($_REQUEST['room_id_two'])) {
+            $med = true;
+            $rooms[] = HMS_Room::get_room_number($_REQUEST['room_id_two']);
+        }
+
+        if(HMS_Room::get_is_medical($_REQUEST['room_id_three'])) {
+            $med = true;
+            $rooms[] = HMS_Room::get_room_number($_REQUEST['room_id_three']);
+        }
+
+        if($med == true) return $rooms;
+        else return false;
+    }
+
+    function check_if_rooms_are_reserved()
+    {
+        $res = false;
+        $rooms = array();
+
+        PHPWS_Core::initModClass('hms', 'HMS_Room.php');
+        
+        if(HMS_Room::get_is_reserved($_REQUEST['room_id_zero'])) {
+            $res = true;
+            $rooms[] = HMS_Room::get_room_number($_REQUEST['room_id_zero']);
+        }
+
+        if(HMS_Room::get_is_reserved($_REQUEST['room_id_one'])) {
+            $res = true;
+            $rooms[] = HMS_Room::get_room_number($_REQUEST['room_id_one']);
+        }
+
+        if(HMS_Room::get_is_reserved($_REQUEST['room_id_two'])) {
+            $res = true;
+            $rooms[] = HMS_Room::get_room_number($_REQUEST['room_id_two']);
+        }
+
+        if(HMS_Room::get_is_reserved($_REQUEST['room_id_three'])) {
+            $res = true;
+            $rooms[] = HMS_Room::get_room_number($_REQUEST['room_id_three']);
+        }
+
+        if($res == true) return $rooms;
+        else return false;
+    }
+
+    function rooms_not_in_another_suite()
     {
         $db = &new PHPWS_DB('hms_suite');
         $db->addColumn('id');
@@ -217,6 +305,12 @@ class HMS_Suite
         }
     }
 
+    function verify_save_suite()
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
+        return HMS_Form::verify_save_suite();
+    }
+
     function main()
     {
         switch($_REQUEST['op'])
@@ -229,6 +323,9 @@ class HMS_Suite
                 break;
             case 'save_new_suite':
                 $final = HMS_Suite::save_suite(true);
+                break;
+            case 'verify_save_suite':
+                $final = HMS_Suite::verify_save_suite();
                 break;
             default:
                 $final = "Operation is: " . $_REQUEST['op'];
