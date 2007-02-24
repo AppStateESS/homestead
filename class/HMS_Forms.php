@@ -2241,7 +2241,7 @@ class HMS_Form
     /*
      * Validates the first page of the rlc application form
      * Returns true upon successful validation, or an error
-               message otherwise.
+     *         message otherwise.
      * Requires:    first, middle and last name are set
      *              rlc choices are set and are numeric
      *              text fields are set
@@ -2297,9 +2297,13 @@ class HMS_Form
     /*
      * Displays page 2 of the rlc application form.
      */
-    function show_rlc_application_form_page2(){
+    function show_rlc_application_form_page2($message = NULL){
+        
+        $template = array();
         
         $rlc_form2 = new PHPWS_Form();
+        $rlc_form2->addHidden('type','student');
+        $rlc_form2->addHidden('op','rlc_application_page2_submit');
 
         # Add hidden fields for fields from page 1
         $rlc_form2->addHidden('first_name', $_REQUEST['first_name']);
@@ -2310,8 +2314,59 @@ class HMS_Form
         $rlc_form2->addHidden('rlc_third_choice',  $_REQUEST['rlc_third_choice']);
         $rlc_form2->addHidden('why_specific_communities', $_REQUEST['why_specific_communities']);
         $rlc_form2->addHidden('strengths_weaknesses', $_REQUEST['strengths_weaknesses']);
+
+        $choices = array($_REQUEST['rlc_first_choice'], $_REQUEST['rlc_second_choice'], $_REQUEST['rlc_third_choice']);
+
+        $db = &new PHPWS_DB('hms_learning_community_questions');
         
+        for($i = 0; $i < 3; $i++){
+            $db->reset();
+            $db->addWhere('learning_community_id',$choices[$i]);
+            $result = $db->select('row');
+
+            
+            if(PEAR::isError($result)){
+                $template['MESSAGE'] = "There was an error looking up the RLC questions.";
+                return PHPWS_Template::process($template,'hms','student/rlc_signup_form_page2.tpl');
+            }
+
+            $rlc_form2->addTextArea("rlc_question_$i");
+            $rlc_form2->setLabel("rlc_question_$i", $result['question_text']);
+            $rlc_form2->setMaxSize("rlc_question_$i", 500);
+        }
         
+        $rlc_form2->addSubmit('submit','Submit Application');
+
+        $rlc_form2->mergeTemplate($template);
+        $template = $rlc_form2->getTemplate();
+        
+        return PHPWS_Template::process($template,'hms','student/rlc_signup_form_page2.tpl');
+        
+    }
+    
+    /*
+     * Validates the second page of the rlc application form
+     * Returns true upon successful validation, or an error
+     *         message otherwise.
+     * Requires:    Verification from page 1
+     *              All three text areas to have some content
+     */               
+    function validate_rlc_application_page2(){
+
+        # Verify that all information from page 1 is still in the request
+        $message = HMS_Form::validate_rlc_application_page1();
+        if($message !== TRUE){
+            return "Error on page 1!";
+        }
+
+        # Verify that all three text areas have content
+        if(!(isset($_REQUEST['rlc_question_0']) &&
+             isset($_REQUEST['rlc_question_1']) &&
+             isset($_REQUEST['rlc_question_2']))){
+            return "Error: Please answer all of the questions below.";
+        }
+
+        return TRUE;
     }
 };
 ?>

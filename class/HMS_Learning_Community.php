@@ -210,5 +210,24 @@ class HMS_Learning_Community
             return HMS_Form::show_rlc_application_form_page2();
         }
     }
+
+    function rlc_application_page2_submit()
+    {
+        PHPWS_Core::initModClass('hms','HMS_Forms.php');
+
+        # Check for invalid input on page 2
+        $message = HMS_Form::valid_rlc_application_page2();
+        if($message !== TRUE){
+            # Show page two again with error message
+            return HMS_Form::show_rlc_application_form_page2($message);
+        }else{
+
+            # Save the data to the database
+            $db = &new PHPWS_DB(''); #TODO
+            
+            return "Submission Successful"; #TODO: add a pretty confirmation page
+        }
+
+    }
 };
 ?>
