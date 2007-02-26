@@ -216,14 +216,34 @@ class HMS_Learning_Community
         PHPWS_Core::initModClass('hms','HMS_Forms.php');
 
         # Check for invalid input on page 2
-        $message = HMS_Form::valid_rlc_application_page2();
+        $message = HMS_Form::validate_rlc_application_page2();
         if($message !== TRUE){
             # Show page two again with error message
             return HMS_Form::show_rlc_application_form_page2($message);
         }else{
 
             # Save the data to the database
-            $db = &new PHPWS_DB(''); #TODO
+            $db = &new PHPWS_DB('hms_learning_community_applications');
+
+            $db->addValue('user_id',                    $_SESSION['asu_username']);
+            $db->addValue('date_submitted',             mktime());
+            $db->addValue('rlc_first_choice_id',        $_REQUEST['rlc_first_choice']);
+            $db->addValue('rlc_second_choice_id',       $_REQUEST['rlc_second_choice']);
+            $db->addValue('rlc_third_choice_id',        $_REQUEST['rlc_third_choice']);
+            $db->addValue('why_specific_communities',   $_REQUEST['why_specific_communities']);
+            $db->addValue('strengths_weaknesses',       $_REQUEST['strengths_weaknesses']);
+            $db->addValue('rlc_question_0',             $_REQUEST['rlc_question_0']);
+            $db->addValue('rlc_question_1',             $_REQUEST['rlc_question_1']);
+            $db->addValue('rlc_question_2',             $_REQUEST['rlc_question_2']);
+
+            $result = $db->insert();
+
+            test($result);
+
+            # Check for an error
+            if(PEAR::isError($result)){
+                return "Sorry, there was an error working with the database. Your application could not be saved.";
+            }
             
             return "Submission Successful"; #TODO: add a pretty confirmation page
         }
