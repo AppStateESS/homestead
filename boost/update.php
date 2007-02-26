@@ -7,10 +7,21 @@
 function hms_update(&$content, $currentVersion)
 {
     switch ($currentVersion) {
-        case version_compate($currentVersion, '0.1.3', '<');
+        case version_compare($currentVersion, '0.1.4', '<'):
+            $files = array();
+            $files[] = 'templates/admin/display_final_rlc_assignments.tpl';
+            $files[] = 'templates/admin/display_rlc_student_detail_form_questions.tpl';
+            $files[] = 'templates/admin/make_new_rlc_assignments.tpl';
+            $files[] = 'templates/admin/make_new_rlc_assignments_summary.tpl';
+            $files[] = 'templates/admin/display_rlc_student_detail.tpl';
+            PHPWS_Boost::updateFiles($files, 'hms');
+
+            $content[] = _('+ RLC administration templates');
+        
+        case version_compate($currentVersion, '0.1.3', '<'):
             $files = array();
             $files[] = 'templates/student/rlc_signup_confirmation.tpl';
-            PHPWS_Bootst::updateFiles($fiels, 'hms');
+            PHPWS_Boost::updateFiles($files, 'hms');
 
             $content[] = _('+ Complete system for RLC applications');
 
