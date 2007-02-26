@@ -7,6 +7,13 @@
 function hms_update(&$content, $currentVersion)
 {
     switch ($currentVersion) {
+        case version_compate($currentVersion, '0.1.3', '<');
+            $files = array();
+            $files[] = 'templates/student/rlc_signup_confirmation.tpl';
+            PHPWS_Bootst::updateFiles($fiels, 'hms');
+
+            $content[] = _('+ Complete system for RLC applications');
+
         case version_compare($currentVersion, '0.1.2', '<'):
             $db = & new PHPWS_DB;
             $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0.1.2.sql');

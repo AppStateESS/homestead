@@ -214,6 +214,9 @@ class HMS_Learning_Community
     function rlc_application_page2_submit()
     {
         PHPWS_Core::initModClass('hms','HMS_Forms.php');
+        
+        $template = array();
+        $template['PAGE_TITLE'] = "Residential Learning Community Application";
 
         # Check for invalid input on page 2
         $message = HMS_Form::validate_rlc_application_page2();
@@ -242,10 +245,12 @@ class HMS_Learning_Community
 
             # Check for an error
             if(PEAR::isError($result)){
-                return "Sorry, there was an error working with the database. Your application could not be saved.";
+                $template['MESSAGE'] = "Sorry, there was an error working with the database. Your application could not be saved.";
+            }else{
+                $template['SUCCESS'] = "Your application was submitted successfully.";
             }
             
-            return "Submission Successful"; #TODO: add a pretty confirmation page
+            return PHPWS_Template::process($template, 'hms', 'student/rlc_signup_confirmation.tpl');
         }
 
     }
