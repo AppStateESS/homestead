@@ -19,10 +19,10 @@
                 <th>&nbsp;</th><td>&nbsp;</td>
             </tr>
             <tr>
-                <th>Submit Application Begin Date:</th><td>{SUBMIT_QUESTIONNAIRE_BEGIN_MONTH}</td><td>{SUBMIT_QUESTIONNAIRE_BEGIN_DAY}</td><td>{SUBMIT_QUESTIONNAIRE_BEGIN_YEAR}</td>
+                <th>Submit Application Begin Date:</th><td>{SUBMIT_APPLICATION_BEGIN_MONTH}</td><td>{SUBMIT_APPLICATION_BEGIN_DAY}</td><td>{SUBMIT_APPLICATION_BEGIN_YEAR}</td>
             </tr>
             <tr>
-                <th>Submit Application End Date:</th><td>{SUBMIT_QUESTIONNAIRE_END_MONTH}</td><td>{SUBMIT_QUESTIONNAIRE_END_DAY}</td><td>{SUBMIT_QUESTIONNAIRE_END_YEAR}</td>
+                <th>Submit Application End Date:</th><td>{SUBMIT_APPLICATION_END_MONTH}</td><td>{SUBMIT_APPLICATION_END_DAY}</td><td>{SUBMIT_APPLICATION_END_YEAR}</td>
             </tr>
             <tr>
                 <th>&nbsp;</th><td>&nbsp;</td>
