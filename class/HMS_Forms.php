@@ -1352,26 +1352,34 @@ class HMS_Form
         $form->addDropBox('student_login_end_day', $days);
         $form->addDropBox('student_login_end_year', $years);
     
-        $form->addDropBox('submit_questionnaire_begin_month', $months);
-        $form->addDropBox('submit_questionnaire_begin_day', $days);
-        $form->addDropBox('submit_questionnaire_begin_year', $years);
+        $form->addDropBox('submit_application_begin_month', $months);
+        $form->addDropBox('submit_application_begin_day', $days);
+        $form->addDropBox('submit_application_begin_year', $years);
     
-        $form->addDropBox('submit_questionnaire_end_month', $months);
-        $form->addDropBox('submit_questionnaire_end_day', $days);
-        $form->addDropBox('submit_questionnaire_end_year', $years);
+        $form->addDropBox('submit_application_end_month', $months);
+        $form->addDropBox('submit_application_end_day', $days);
+        $form->addDropBox('submit_application_end_year', $years);
+
+        $form->addDropBox('edit_application_end_month', $months);
+        $form->addDropBox('edit_application_end_day', $days);
+        $form->addDropBox('edit_application_end_year', $years);
+
+        $form->addDropBox('search_profiles_begin_month', $months);
+        $form->addDropBox('search_profiles_begin_day', $days);
+        $form->addDropBox('search_profiles_begin_year', $years);
     
-        $form->addDropBox('search_questionnaires_begin_month', $months);
-        $form->addDropBox('search_questionnaires_begin_day', $days);
-        $form->addDropBox('search_questionnaires_begin_year', $years);
-    
-        $form->addDropBox('search_questionnaires_end_month', $months);
-        $form->addDropBox('search_questionnaires_end_day', $days);
-        $form->addDropBox('search_questionnaires_end_year', $years);
-    
+        $form->addDropBox('search_profiles_end_month', $months);
+        $form->addDropBox('search_profiles_end_day', $days);
+        $form->addDropBox('search_profiles_end_year', $years);
+   
+        $form->addDropBox('submit_rlc_application_end_month', $months);
+        $form->addDropBox('submit_rlc_application_end_day', $days);
+        $form->addDropBox('submit_rlc_application_end_year', $years);
+
         $form->addDropBox('view_assignment_begin_month', $months);
         $form->addDropBox('view_assignment_begin_day', $days);
         $form->addDropBox('view_assignment_begin_year', $years);
-    
+       
         $form->addDropBox('view_assignment_end_month', $months);
         $form->addDropBox('view_assignment_end_day', $days);
         $form->addDropBox('view_assignment_end_year', $years);
@@ -1386,18 +1394,29 @@ class HMS_Form
             $form->setMatch('student_login_end_day', date('j',$result['student_login_end_timestamp']));
             $form->setMatch('student_login_end_month', date('n',$result['student_login_end_timestamp']));
             $form->setMatch('student_login_end_year', date('Y',$result['student_login_end_timestamp']));
-            $form->setMatch('submit_questionnaire_begin_day', date('j', $result['submit_questionnaire_begin_timestamp']));
-            $form->setMatch('submit_questionnaire_begin_month', date('n', $result['submit_questionnaire_begin_timestamp']));
-            $form->setMatch('submit_questionnaire_begin_year', date('Y', $result['submit_questionnaire_begin_timestamp']));
-            $form->setMatch('submit_questionnaire_end_day', date('j', $result['submit_questionnaire_end_timestamp']));
-            $form->setMatch('submit_questionnaire_end_month', date('n', $result['submit_questionnaire_end_timestamp']));
-            $form->setMatch('submit_questionnaire_end_year', date('Y', $result['submit_questionnaire_end_timestamp']));
-            $form->setMatch('search_questionnaires_begin_day', date('j', $result['search_questionnaires_begin_timestamp']));
-            $form->setMatch('search_questionnaires_begin_month', date('n', $result['search_questionnaires_begin_timestamp']));
-            $form->setMatch('search_questionnaires_begin_year', date('Y', $result['search_questionnaires_begin_timestamp']));
-            $form->setMatch('search_questionnaires_end_day', date('j', $result['search_questionnaires_end_timestamp']));
-            $form->setMatch('search_questionnaires_end_month', date('n', $result['search_questionnaires_end_timestamp']));
-            $form->setMatch('search_questionnaires_end_year', date('Y', $result['search_questionnaires_end_timestamp']));
+            
+            $form->setMatch('submit_application_begin_day', date('j', $result['submit_application_begin_timestamp']));
+            $form->setMatch('submit_application_begin_month', date('n', $result['submit_application_begin_timestamp']));
+            $form->setMatch('submit_application_begin_year', date('Y', $result['submit_application_begin_timestamp']));
+            $form->setMatch('submit_application_end_day', date('j', $result['submit_application_end_timestamp']));
+            $form->setMatch('submit_application_end_month', date('n', $result['submit_application_end_timestamp']));
+            $form->setMatch('submit_application_end_year', date('Y', $result['submit_application_end_timestamp']));
+           
+            $form->setMatch('edit_application_end_day', date('j', $result['edit_application_end_timestamp']));
+            $form->setMatch('edit_application_end_month', date('n', $result['edit_application_end_timestamp']));
+            $form->setMatch('edit_application_end_year', date('Y', $result['edit_application_end_timestamp']));
+            
+            $form->setMatch('search_profiles_begin_day', date('j', $result['search_profiles_begin_timestamp']));
+            $form->setMatch('search_profiles_begin_month', date('n', $result['search_profiles_begin_timestamp']));
+            $form->setMatch('search_profiles_begin_year', date('Y', $result['search_profiles_begin_timestamp']));
+            $form->setMatch('search_profiles_end_day', date('j', $result['search_profiles_end_timestamp']));
+            $form->setMatch('search_profiles_end_month', date('n', $result['search_profiles_end_timestamp']));
+            $form->setMatch('search_profiles_end_year', date('Y', $result['search_profiles_end_timestamp']));
+            
+            $form->setMatch('submit_rlc_application_end_day', date('j', $result['submit_rlc_application_end_timestamp']));
+            $form->setMatch('submit_rlc_application_end_month', date('n', $result['submit_rlc_application_end_timestamp']));
+            $form->setMatch('submit_rlc_application_end_year', date('Y', $result['submit_rlc_application_end_timestamp']));
+            
             $form->setMatch('view_assignment_begin_day', date('j', $result['view_assignment_begin_timestamp']));
             $form->setMatch('view_assignment_begin_month', date('n', $result['view_assignment_begin_timestamp']));
             $form->setMatch('view_assignment_begin_year', date('Y', $result['view_assignment_begin_timestamp']));

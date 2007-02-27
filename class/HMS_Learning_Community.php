@@ -186,6 +186,7 @@ class HMS_Learning_Community
             case 'confirm_delete_learning_community':
                 return HMS_Learning_Community::confirm_delete_learning_community();
                 break;
+ 
             default:
                return "{$_REQUEST['op']} <br />";
                break;

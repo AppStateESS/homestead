@@ -19,10 +19,19 @@
                 <th>&nbsp;</th><td>&nbsp;</td>
             </tr>
             <tr>
-                <th>Submit Questionnaire Begin Date:</th><td>{SUBMIT_QUESTIONNAIRE_BEGIN_MONTH}</td><td>{SUBMIT_QUESTIONNAIRE_BEGIN_DAY}</td><td>{SUBMIT_QUESTIONNAIRE_BEGIN_YEAR}</td>
+                <th>Submit Application Begin Date:</th><td>{SUBMIT_QUESTIONNAIRE_BEGIN_MONTH}</td><td>{SUBMIT_QUESTIONNAIRE_BEGIN_DAY}</td><td>{SUBMIT_QUESTIONNAIRE_BEGIN_YEAR}</td>
             </tr>
             <tr>
-                <th>Submit Questionnaire End Date:</th><td>{SUBMIT_QUESTIONNAIRE_END_MONTH}</td><td>{SUBMIT_QUESTIONNAIRE_END_DAY}</td><td>{SUBMIT_QUESTIONNAIRE_END_YEAR}</td>
+                <th>Submit Application End Date:</th><td>{SUBMIT_QUESTIONNAIRE_END_MONTH}</td><td>{SUBMIT_QUESTIONNAIRE_END_DAY}</td><td>{SUBMIT_QUESTIONNAIRE_END_YEAR}</td>
+            </tr>
+            <tr>
+                <th>&nbsp;</th><td>&nbsp;</td>
+            </tr>
+            <tr>
+                <th>&nbsp;</th><td>&nbsp;</td>
+            </tr>
+            <tr>
+                <th>Edit Application End Date:</th><td>{EDIT_APPLICATION_END_MONTH}</td><td>{EDIT_APPLICATION_END_DAY}</td><td>{EDIT_APPLICATION_END_YEAR}</td>
             </tr>
             <tr>
                 <th>&nbsp;</th><td>&nbsp;</td>
@@ -31,11 +40,19 @@
                 <th>&nbsp;</th><td>&nbsp;</td>
             </tr>
             <tr>
-                <th>Search Questionnaires Begin Date:</th><td>{SEARCH_QUESTIONNAIRES_BEGIN_MONTH}</td><td>{SEARCH_QUESTIONNAIRES_BEGIN_DAY}</td><td>{SEARCH_QUESTIONNAIRES_BEGIN_YEAR}</td>
+                <th>Search Profiles Begin Date:</th><td>{SEARCH_PROFILES_BEGIN_MONTH}</td><td>{SEARCH_PROFILES_BEGIN_DAY}</td><td>{SEARCH_PROFILES_BEGIN_YEAR}</td>
             </tr>
             <tr>
-                <th>Search Questionnaires End Date:</th><td>{SEARCH_QUESTIONNAIRES_END_MONTH}</td><td>{SEARCH_QUESTIONNAIRES_END_DAY}</td><td>{SEARCH_QUESTIONNAIRES_END_YEAR}</td>
+                <th>Search Profiles End Date:</th><td>{SEARCH_PROFILES_END_MONTH}</td><td>{SEARCH_PROFILES_END_DAY}</td><td>{SEARCH_PROFILES_END_YEAR}</td>
             </tr>
+            <tr>
+                <th>&nbsp;</th><td>&nbsp;</td>
+            </tr>
+            <tr>
+                <th>&nbsp;</th><td>&nbsp;</td>
+            </tr>
+            <tr>
+                <th>Submit RLC Application End Date:</th><td>{SUBMIT_RLC_APPLICATION_END_MONTH}</td><td>{SUBMIT_RLC_APPLICATION_END_DAY}</td><td>{SUBMIT_APPLICATION_END_YEAR}</td>
             <tr>
                 <th>&nbsp;</th><td>&nbsp;</td>
             </tr>
