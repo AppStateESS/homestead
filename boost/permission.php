@@ -31,4 +31,5 @@
     $permissions['add_learning_communities']        = _('Add Learning Communities');
     $permissions['edit_learning_communities']       = _('Edit Learning Communities');
     $permissions['delete_learning_communities']     = _('Delete Learning Communities');
+
 ?>
