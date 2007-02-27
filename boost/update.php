@@ -18,7 +18,7 @@ function hms_update(&$content, $currentVersion)
 
             $content[] = _('+ RLC administration templates');
         
-        case version_compate($currentVersion, '0.1.3', '<'):
+        case version_compare($currentVersion, '0.1.3', '<'):
             $files = array();
             $files[] = 'templates/student/rlc_signup_confirmation.tpl';
             PHPWS_Boost::updateFiles($files, 'hms');
