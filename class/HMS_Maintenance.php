@@ -155,25 +155,35 @@ class HMS_Maintenance
         $sley   = $_REQUEST['student_login_end_year'];
         $slet   = mktime(0,0,0,$slem,$sled,$sley);
 
-        $sqbd    = $_REQUEST['submit_questionnaire_begin_day'];
-        $sqbm    = $_REQUEST['submit_questionnaire_begin_month'];
-        $sqby    = $_REQUEST['submit_questionnaire_begin_year'];
-        $sqbt    = mktime(0,0,0,$sqbm,$sqbd,$sqby);
+        $sabd    = $_REQUEST['submit_application_begin_day'];
+        $sabm    = $_REQUEST['submit_application_begin_month'];
+        $saby    = $_REQUEST['submit_application_begin_year'];
+        $sabt    = mktime(0,0,0,$sabm,$sabd,$saby);
 
-        $sqed    = $_REQUEST['submit_questionnaire_end_day'];
-        $sqem    = $_REQUEST['submit_questionnaire_end_month'];
-        $sqey    = $_REQUEST['submit_questionnaire_end_year'];
-        $sqet    = mktime(0,0,0,$sqem,$sqed,$sqey);
+        $saed    = $_REQUEST['submit_application_end_day'];
+        $saem    = $_REQUEST['submit_application_end_month'];
+        $saey    = $_REQUEST['submit_application_end_year'];
+        $saet    = mktime(0,0,0,$saem,$saed,$saey);
 
-        $sebd   = $_REQUEST['search_questionnaires_begin_day'];
-        $sebm   = $_REQUEST['search_questionnaires_begin_month'];
-        $seby   = $_REQUEST['search_questionnaires_begin_year'];
-        $sebt   = mktime(0,0,0,$sebm,$sebd,$seby);
+        $eaed   = $_REQUEST['edit_application_end_day'];
+        $eaem   = $_REQUEST['edit_application_end_month'];
+        $eaey   = $_REQUEST['edit_application_end_year'];
+        $eaet   = mktime(0,0,0,$eaem,$eaed,$eaey);
+        
+        $spbd   = $_REQUEST['search_profiles_begin_day'];
+        $spbm   = $_REQUEST['search_profiles_begin_month'];
+        $spby   = $_REQUEST['search_profiles_begin_year'];
+        $spbt   = mktime(0,0,0,$spbm,$spbd,$spby);
 
-        $seed   = $_REQUEST['search_questionnaires_end_day'];
-        $seem   = $_REQUEST['search_questionnaires_end_month'];
-        $seey   = $_REQUEST['search_questionnaires_end_year'];
-        $seet   = mktime(0,0,0,$seem,$seed,$seey);
+        $sped   = $_REQUEST['search_profiles_end_day'];
+        $spem   = $_REQUEST['search_profiles_end_month'];
+        $spey   = $_REQUEST['search_profiles_end_year'];
+        $spet   = mktime(0,0,0,$spem,$sped,$spey);
+
+        $sred   = $_REQUEST['submit_rlc_application_end_day'];
+        $srem   = $_REQUEST['submit_rlc_application_end_month'];
+        $srey   = $_REQUEST['submit_rlc_application_end_year'];
+        $sret   = mktime(0,0,0,$srem,$sred,$srey);
 
         $vabd   = $_REQUEST['view_assignment_begin_day'];
         $vabm   = $_REQUEST['view_assignment_begin_month'];
@@ -193,10 +203,12 @@ class HMS_Maintenance
         $db = &new PHPWS_DB('hms_deadlines');
         $db->addValue('student_login_begin_timestamp', $slbt);
         $db->addValue('student_login_end_timestamp', $slet);
-        $db->addValue('submit_questionnaire_begin_timestamp', $sqbt);
-        $db->addValue('submit_questionnaire_end_timestamp', $sqet);
-        $db->addValue('search_questionnaires_begin_timestamp', $sebt);
-        $db->addValue('search_questionnaires_end_timestamp', $seet);
+        $db->addValue('submit_application_begin_timestamp', $sqbt);
+        $db->addValue('submit_application_end_timestamp', $sqet);
+        $db->addValue('edit_application_end_timestamp', $eaet);
+        $db->addValue('search_profiles_begin_timestamp', $sebt);
+        $db->addValue('search_profiles_end_timestamp', $seet);
+        $db->addValue('submit_rlc_application_end_timestamp', $sret);
         $db->addValue('view_assignment_begin_timestamp', $vabt);
         $db->addValue('view_assignment_end_timestamp', $vaet);
         $db->addValue('updated_on',mktime());
