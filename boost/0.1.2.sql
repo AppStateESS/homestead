@@ -10,8 +10,7 @@ CREATE TABLE hms_learning_community_applications (
     rlc_question_0                  character varying(500),
     rlc_question_1                  character varying(500),
     rlc_question_2                  character varying(500),
-
+    UNIQUE(user_id),
     PRIMARY KEY(id)
 );
-
 
