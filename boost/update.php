@@ -50,6 +50,24 @@ function hms_update(&$content, $currentVersion)
             $content[] = _('+ Deadline added for editing applications');
             $content[] = _('+ Deadline added for submitting RLC applications'); 
 
+        case version_compare($currentVersion, '0.1.5', '<'):
+            $db = &new PHPWS_DB;
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_1_5.sql');
+            if(PEAR::isError($result)) {
+                return $result;
+            }
+
+            $files      = array();
+            $files[]    = 'templates/admin/deadlines.tpl';
+            $files[]    = 'templates/admin/statistics.tpl';
+
+            PHPWS_Boost::updateFiles($files, 'hms');
+
+            $content[] = _('+ Fixed RLC deadline bug in deadlines.tpl');
+            $content[] = _('+ Added Number of People Assigned');
+            $content[] = _('+ Added Number of Applications Received');
+            $content[] = _('+ Added Number of Learning Community Applications Received');
+
     }
 
     return TRUE;
