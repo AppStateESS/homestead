@@ -203,11 +203,11 @@ class HMS_Maintenance
         $db = &new PHPWS_DB('hms_deadlines');
         $db->addValue('student_login_begin_timestamp', $slbt);
         $db->addValue('student_login_end_timestamp', $slet);
-        $db->addValue('submit_application_begin_timestamp', $sqbt);
-        $db->addValue('submit_application_end_timestamp', $sqet);
+        $db->addValue('submit_application_begin_timestamp', $sabt);
+        $db->addValue('submit_application_end_timestamp', $saet);
         $db->addValue('edit_application_end_timestamp', $eaet);
-        $db->addValue('search_profiles_begin_timestamp', $sebt);
-        $db->addValue('search_profiles_end_timestamp', $seet);
+        $db->addValue('search_profiles_begin_timestamp', $spbt);
+        $db->addValue('search_profiles_end_timestamp', $spet);
         $db->addValue('submit_rlc_application_end_timestamp', $sret);
         $db->addValue('view_assignment_begin_timestamp', $vabt);
         $db->addValue('view_assignment_end_timestamp', $vaet);
