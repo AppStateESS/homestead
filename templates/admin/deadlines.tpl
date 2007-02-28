@@ -52,7 +52,7 @@
                 <th>&nbsp;</th><td>&nbsp;</td>
             </tr>
             <tr>
-                <th>Submit RLC Application End Date:</th><td>{SUBMIT_RLC_APPLICATION_END_MONTH}</td><td>{SUBMIT_RLC_APPLICATION_END_DAY}</td><td>{SUBMIT_APPLICATION_END_YEAR}</td>
+                <th>Submit RLC Application End Date:</th><td>{SUBMIT_RLC_APPLICATION_END_MONTH}</td><td>{SUBMIT_RLC_APPLICATION_END_DAY}</td><td>{SUBMIT_RLC_APPLICATION_END_YEAR}</td>
             <tr>
                 <th>&nbsp;</th><td>&nbsp;</td>
             </tr>
