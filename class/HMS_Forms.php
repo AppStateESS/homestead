@@ -2172,29 +2172,35 @@ class HMS_Form
         $rlc_form->addHidden('op','rlc_application_page1_submit');
 
         # 1. About You Section
-        #PHPWS_Core::initModClass('hms','HMS_SOAP.php');
+        PHPWS_Core::initModClass('hms','HMS_SOAP.php');
+
+        test(HMS_SOAP::get_student_info($username));
 
         $template['MESSAGE'] = $message;
+
+        $username = $_SESSION['asu_username'];
         
-        $template['APPLENET_USERNAME']       = $_SESSION['asu_username'];
+        $first_name  = HMS_SOAP::get_first_name($username);
+        $middle_name = HMS_SOAP::get_middle_name($username);
+        $last_name   = HMS_SOAP::get_last_name($username);
+
+        test($first_name);
+        
+        $template['APPLENET_USERNAME']       = $username;
         $template['APPLENET_USERNAME_LABEL'] = 'Applenet User Name: ';
 
-        #$student = HMS_SOAP::get_student_info($_SESSION['asu_username']);
-
-        #test($student, 1);
-
-        $template['FIRST_NAME']        = 'Jeremy';
+        $template['FIRST_NAME']        = $first_name;
         $template['FIRST_NAME_LABEL']  = 'First Name: ';
         
-        $template['MIDDLE_NAME']       = 'Lee';
+        $template['MIDDLE_NAME']       = $middle_name;
         $template['MIDDLE_NAME_LABEL'] = 'Middle Name: ';
         
-        $template['LAST_NAME']         = 'Booker';
+        $template['LAST_NAME']         = $last_name;
         $template['LAST_NAME_LABEL']   = 'Last Name: ';
 
-        $rlc_form->addHidden('first_name', 'Jeremy');
-        $rlc_form->addHidden('middle_name', 'Lee');
-        $rlc_form->addHidden('last_name', 'Booker');
+        $rlc_form->addHidden('first_name',  $first_name);
+        $rlc_form->addHidden('middle_name', $middle_name);
+        $rlc_form->addHidden('last_name',   $last_name);
 
         # 2. Rank Your RLC Choices
 
