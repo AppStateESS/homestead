@@ -77,6 +77,28 @@ class HMS_SOAP{
         }
     }
 
+    function get_student_type($username)
+    {
+        $student = HMS_SOAP::get_student_info($username);
+        if(PEAR::isError($student)) {
+            PHPWS_Error::log($student, 'hms', 'get_student_type', $username);
+            return $student;
+        } else {
+            return $student->student_type;
+        }
+    }
+
+    function get_dob($username)
+    {
+        $student = HMS_SOAP::get_student_info($username);
+        if(PEAR::isError($student)) {
+            PHPWS_Error::log($student, 'hms', 'get_student_type', $username);
+            return $student;
+        } else {
+            return $student->dob;
+        }
+    }
+
     function get_student_info($username)
     {
         include_once('SOAP/Client.php');
