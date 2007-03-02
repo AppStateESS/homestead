@@ -199,8 +199,8 @@ class HMS_Assignment
         
         $msg = "";
 
-        PHPWS_Core::initModClass('hms', 'HMS_Questionnaire.php');
-        $completed_application = HMS_Questionnaire::check_for_questionnaire($_REQUEST['username']);
+        PHPWS_Core::initModClass('hms', 'HMS_Application.php');
+        $completed_application = HMS_Application::check_for_application($_REQUEST['username']);
         if(!$completed_application) {
             $msg .= '<font color="red"><b>';
             $msg .= $_REQUEST['username'] . " did not fill out an Housing Application.<br /><br />";

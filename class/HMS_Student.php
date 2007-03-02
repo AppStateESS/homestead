@@ -272,29 +272,33 @@ class HMS_Student {
             case 'delete_student':
                 return HMS_Student::delete_student();
                 break;
-            case 'begin_questionnaire':
-                PHPWS_Core::initModClass('hms','HMS_Questionnaire.php');
-                return HMS_Questionnaire::display_questionnaire_form();
+            case 'begin_application':
+                if(isset($_REQUEST['quit'])) {
+                    PHPWS_Core::killAllSessions();
+                    PHPWS_Core::home();
+                }
+                PHPWS_Core::initModClass('hms','HMS_Application.php');
+                return HMS_Application::display_application_form();
                 break;
-            case 'review_questionnaire':
-                PHPWS_Core::initModClass('hms','HMS_Questionnaire.php');
-                return HMS_Questionnaire::display_questionnaire_form(TRUE);
+            case 'review_application':
+                PHPWS_Core::initModClass('hms','HMS_Application.php');
+                return HMS_Application::display_application_form(TRUE);
                 break;
-            case 'save_questionnaire':
-                PHPWS_Core::initModClass('hms','HMS_Questionnaire.php');
-                return HMS_Questionnaire::save_questionnaire();
+            case 'save_application':
+                PHPWS_Core::initModClass('hms','HMS_Application.php');
+                return HMS_Application::save_application();
                 break;
-            case 'show_questionnaire_search':
-                PHPWS_Core::initModClass('hms','HMS_Questionnaire.php');
-                return HMS_Questionnaire::display_questionnaire_search();
+            case 'show_application_search':
+                PHPWS_Core::initModClass('hms','HMS_Application.php');
+                return HMS_Application::display_application_search();
                 break;
-            case 'questionnaire_search':
-                PHPWS_Core::initModClass('hms','HMS_Questionnaire.php');
-                return HMS_Questionnaire::questionnaire_search();
+            case 'application_search':
+                PHPWS_Core::initModClass('hms','HMS_Application.php');
+                return HMS_Application::application_search();
                 break;
-            case 'show_questionnaire':
-                PHPWS_Core::initModClass('hms','HMS_Questionnaire.php');
-                return HMS_Questionnaire::show_questionnaire($_REQUEST['user']);
+            case 'show_application':
+                PHPWS_Core::initModClass('hms','HMS_Application.php');
+                return HMS_Application::show_application($_REQUEST['user']);
                 break;
             case 'show_rlc_application_form':
                 PHPWS_Core::initModClass('hms','HMS_Learning_Community.php');
@@ -309,27 +313,37 @@ class HMS_Student {
                 return HMS_Learning_Community::rlc_application_page2_submit();
                 break;
             case 'main':
-                $message  = "Welcome to the Housing Management System!<br /><br />";
-                
-                PHPWS_Core::initModClass('hms', 'HMS_Questionnaire.php');
-                if(HMS_Questionnaire::check_for_questionnaire($_SESSION['asu_username'])) {
-                    $message .= "You have already completed a Housing Questionnaire. You may click below to review it.<br /><br />";
-                    $message .= "You may also submit a new questionnaire. This will replace the one you already have saved.<br /><br />";
-                    $message .= PHPWS_Text::secureLink(_('View My Questionnaire'), 'hms', array('type'=>'student', 'op'=>'review_questionnaire'));
+                PHPWS_Core::initModClass('hms', 'HMS_Application.php');
+                if(HMS_Application::check_for_application($_SESSION['asu_username'])) {
+                    $message  = "Welcome to the Housing Management System!<br /><br />";
+                    $message .= "You have already completed a Housing Application. You may click below to review it.<br /><br />";
+                    $message .= "You may also submit a new application. This will replace the one you already have saved.<br /><br />";
+                    $message .= PHPWS_Text::secureLink(_('View My Application'), 'hms', array('type'=>'student', 'op'=>'review_application'));
                     $message .= "<br /><br />";
-                    $message .= PHPWS_Text::secureLink(_('Submit New Questionnaire'), 'hms', array('type'=>'student', 'op'=>'begin_questionnaire'));
+                    $message .= PHPWS_Text::secureLink(_('Submit New Application'), 'hms', array('type'=>'student', 'op'=>'begin_application'));
                     $message .= "<br /><br />";
-                    $message .= PHPWS_Text::secureLink(_('Search for a roomate'), 'hms', array('type'=>'student','op'=>'show_questionnaire_search'));
+                    $message .= PHPWS_Text::secureLink(_('Search for a roomate'), 'hms', array('type'=>'student','op'=>'show_application_search'));
                     $message .= "<br /><br />";
                     $message .= PHPWS_Text::secureLink(_('Logout'), 'users', array('action'=>'user', 'command'=>'logout'));
                     $message .= "<br /><br />";
                     $message .= PHPWS_Text::secureLink(_('RLC Application Form'), 'hms', array('type'=>'student', 'op'=>'show_rlc_application_form'));
                 } else {
-                    $message .= "You have not completed a Housing Questionnaire.<br /><br />";
-                    $message .= "Click below to fill out a new questionnaire. <br /><br />";
-                    $message .= PHPWS_Text::secureLink(_('Submit new Questionnaire'), 'hms', array('type'=>'student', 'op'=>'begin_questionnaire'));
-                    $message .= "<br /><br />";
-                    $message .= PHPWS_Text::secureLink(_('Logout'), 'users', array('action'=>'user', 'command'=>'logout'));
+                   
+                    $form = new PHPWS_Form;
+                    $form->addHidden('module', 'hms');
+                    $form->addHidden('type', 'student');
+                    $form->addHidden('op', 'begin_application');
+                    $form->addSubmit('begin', _('I AGREE'));
+                    $form->addSubmit('quit', _('I DISAGREE'));
+                    
+                    $tpl = $form->getTemplate();
+                    $message  = "<b>Please read the following License Agreement and click either 'I AGREE' or 'I DISAGREE'<br />";
+                    $message .= 'Please note that if you click disagree you will be logged out of HMS.</b><br /><br />';
+                    $message .= 'If you wish to read this Agreement as a printable PDF please ';
+                    $message .= '<a href="./mod/hms/inc/contract.pdf">click here.</a><br /><br />';
+                    $tpl['MESSAGE'] = $message;
+                    $tpl['CONTRACT'] = str_replace("\n", "<br />", file_get_contents('mod/hms/inc/contract.txt'));
+                    $message = PHPWS_Template::process($tpl, 'hms', 'student/contract.tpl');
                 }       
                 return $message;
             default:

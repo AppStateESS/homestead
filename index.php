@@ -22,12 +22,12 @@ if(Current_User::isLogged()) {
     } else if ($type == TOOLATE) {
         $error = "<i><h2>It is too late for students to login.<br />Please contact Housing and Residence Life at http://housing.appstate.edu.</h2></i>";
         HMS_Login::display_login_screen($error);
-   } else if($type == BADTUPLE) {
+    } else if($type == BADTUPLE) {
         $error = "<i><h2>You have not entered a valid username/password combination!</h2></i>";
         HMS_Login::display_login_screen($error);
     } else if ($type == TOOOLD) {
         $error = "<i><h2>You must be under 23 to live in a Residence Hall.<br />";
-        $error .= "Please contact Housing and Residence Life.</h2></i>";
+        $error .= "Please contact Housing and Residence Life about living in Mountaineer Apartments.</h2></i>";
         HMS_Login::display_login_screen($error);
     } else {
         PHPWS_Core::initModClass('hms', 'HMS.php');

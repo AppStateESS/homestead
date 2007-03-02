@@ -60,6 +60,13 @@ function hms_update(&$content, $currentVersion)
             $files      = array();
             $files[]    = 'templates/admin/deadlines.tpl';
             $files[]    = 'templates/admin/statistics.tpl';
+            $files[]    = 'templates/student/application_search.tpl';
+            $files[]    = 'templates/student/application_search_pager.tpl';
+            $files[]    = 'templates/student/application_search_results.tpl';
+            $files[]    = 'templates/student/contract.tpl';
+            $files[]    = 'templates/student/student_application.tpl';
+            $files[]    = 'templates/student/student_application_combined.tpl';
+            $files[]    = 'templates/student/student_application_redo.tpl';
 
             PHPWS_Boost::updateFiles($files, 'hms');
 
@@ -67,6 +74,11 @@ function hms_update(&$content, $currentVersion)
             $content[] = _('+ Added Number of People Assigned');
             $content[] = _('+ Added Number of Applications Received');
             $content[] = _('+ Added Number of Learning Community Applications Received');
+            $content[] = _('+ Refactored questionnaire references to application');
+            $content[] = _('+ Added the contract verbage for when a student first logs in');
+            $content[] = _('+ Completed Housing applications now go straight into the RLC application if the student said they were interested');
+            $content[] = _('+ Added link to allow students to go to the RLC application on first login as soon as they complete an application');
+            $content[] = _('+ Added link to the pdf of the contract for students that want to print it out');
 
     }
 

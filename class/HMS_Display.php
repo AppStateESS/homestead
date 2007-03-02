@@ -15,30 +15,39 @@ class HMS_Display
         $db = &new PHPWS_DB('hms_residence_hall');
         $db->addWhere('is_online', '1');
         $db->addWhere('deleted', '0');
-        $all = $db->select();
-        $num_online = sizeof($all);
+        $num_online = $db->select('count');
         unset($db);
-        unset($all);
 
         $db = &new PHPWS_DB('hms_residence_hall');
         $db->addWhere('is_online', '0');
         $db->addWhere('deleted', '0');
-        $all = $db->select();
-        $num_offline = sizeof($all);
+        $num_offline = $db->select('count');
         unset($db);
-        unset($all);
 
         $db = &new PHPWS_DB('hms_learning_communities');
-        $all = $db->select();
-        $db->addWhere('deleted', '0');
-        $num_lcs = sizeof($all);
+        $num_lcs = $db->select('count');
         unset($db);
-        unset($all);
 
-        $tpl['TITLE']   = "HMS Overview";
-        $tpl['NUM_ONLINE']  = $num_online;
-        $tpl['NUM_OFFLINE'] = $num_offline;
-        $tpl['NUM_LCS']     = $num_lcs;
+        $db = &new PHPWS_DB('hms_assignment');
+        $num_assigned = $db->select('count');
+        unset($db);
+
+        $db = &new PHPWS_DB('hms_application');
+        $num_applications = $db->select('count');
+        unset($db);
+
+        $db = &new PHPWS_DB('hms_learning_community_applications');
+        $num_rlc_applications = $db->select('count');
+        unset($db);
+
+        $tpl['TITLE']                   = "HMS Overview";
+        $tpl['NUM_LCS']                 = $num_lcs;
+        $tpl['NUM_ONLINE']              = $num_online;
+        $tpl['NUM_OFFLINE']             = $num_offline;
+        $tpl['NUM_ASSIGNED']            = $num_assigned;
+        $tpl['NUM_APPLICATIONS']        = $num_applications;
+        $tpl['NUM_RLC_APPLICATIONS']    = $num_rlc_applications;
+
         $final = PHPWS_Template::process($tpl, 'hms', 'admin/statistics.tpl');
         return $final;
     }

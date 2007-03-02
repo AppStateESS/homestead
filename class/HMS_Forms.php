@@ -1136,6 +1136,9 @@ class HMS_Form
         $form->addSubmit('submit', _('Login'));
 
         $tpl = $form->getTemplate();
+        $welcome  = "Welcome to the Housing Management System.<br /><br />";
+        $welcome .= "";
+        
         $tpl['ERROR'] = $this->get_error_msg();
         $final = PHPWS_Template::process($tpl, 'hms', 'misc/login.tpl');
         return $final;
@@ -1199,6 +1202,7 @@ class HMS_Form
 
         $db = &new PHPWS_DB('hms_pricing_tiers');
         $prices = $db->select();
+
         foreach($prices as $price) {
             $pricing[$price['id']] = "$" . $price['tier_value'];
         }
@@ -1439,7 +1443,7 @@ class HMS_Form
         return $final;
     }
 
-    function begin_questionnaire($message = NULL)
+    function begin_application($message = NULL)
     {
         PHPWS_Core::initCoreClass('Form.php');
         $form = &new PHPWS_Form;
@@ -1514,45 +1518,29 @@ class HMS_Form
             $form->setMatch('rlc_interest', '0');
         }
 
-        $form->addDropBox('employed', array(0=>_('No'), 1=>_('Yes'), 2=>_('Prefer not to say')));
-        $form->setMatch('employed', 0);
-        if(isset($_REQUEST['employed'])){
-            $form->setMatch('employed',$_REQUEST['employed']);
-        }else{
-            $form->setMatch('employed', '0');
-        }
-
-        $form->addDropBox('relationship', array(0=>_('No'), 1=>_('Yes'), 2=>_('Prefer not to say')));
-        $form->setMatch('relationship', 0);
-        if(isset($_REQUEST['relationship'])){
-            $form->setMatch('relationship',$_REQUEST['relationship']);
-        }else{
-            $form->setMatch('relationship', '0');
-        }
-
         $form->addSubmit('submit', _('Submit Application'));
         $form->addHidden('module', 'hms');
         $form->addHidden('type', 'student');
-        $form->addHidden('op', 'review_questionnaire');
+        $form->addHidden('op', 'review_application');
 
         $tpl = $form->getTemplate();
         $tpl['TITLE']   = 'Residence Hall Application';
         $tpl['MESSAGE'] = $message;
 
         $master['TITLE']   = 'Residence Hall Application';
-        $master['QUESTIONNAIRE']  = PHPWS_Template::process($tpl, 'hms', 'student/student_questionnaire.tpl');
-        return PHPWS_Template::process($master,'hms','student/student_questionnaire_combined.tpl');
+        $master['APPLICATION']  = PHPWS_Template::process($tpl, 'hms', 'student/student_application.tpl');
+        return PHPWS_Template::process($master,'hms','student/student_application_combined.tpl');
     }
 
-    function display_questionnaire_results()
+    function display_application_results()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Questionnaire.php');
-        $questionnaire = new HMS_Questionnaire($_SESSION['asu_username']);
+        PHPWS_Core::initModClass('hms', 'HMS_Application.php');
+        $application = new HMS_Application($_SESSION['asu_username']);
 
-        if(!$questionnaire->getID() && !HMS_Form::check_valid_questionnaire_values()) {
-            $message = "You have supplied incorrect values for your questionnaire.<br />";
-            $message .= "Please fill out the questionnaire again.";
-            return HMS_Form::begin_questionnaire($message);
+        if(!$application->getID() && !HMS_Form::check_valid_application_values()) {
+            $message = "You have supplied incorrect values for your application.<br />";
+            $message .= "Please fill out the application again.";
+            return HMS_Form::begin_application($message);
         }
 
         PHPWS_Core::initCoreClass('Form.php');
@@ -1571,12 +1559,10 @@ class HMS_Form
             $form->addHidden('lifestyle_option',$_REQUEST['lifestyle_option']);
             $form->addHidden('preferred_bedtime',$_REQUEST['preferred_bedtime']);
             $form->addHidden('room_condition',$_REQUEST['room_condition']);
-            $form->addHidden('relationship',$_REQUEST['relationship']);
-            $form->addHidden('employed',$_REQUEST['employed']);
             $form->addHidden('rlc_interest',$_REQUEST['rlc_interest']);
             $form->addHidden('module', 'hms');
             $form->addHidden('type', 'student');
-            $form->addHidden('op', 'save_questionnaire');
+            $form->addHidden('op', 'save_application');
 
             $form->addSubmit('submit', _('Submit Application'));
 
@@ -1585,7 +1571,7 @@ class HMS_Form
             $redo_form = & new PHPWS_Form('redo_form');
             $redo_form->addSubmit('submit','Modify Application');
             $redo_form->addHidden('type','student');
-            $redo_form->addHidden('op','begin_questionnaire');
+            $redo_form->addHidden('op','begin_application');
             $redo_form->addHidden('classification_for_term', $_REQUEST['classification_for_term']);
             $redo_form->addHidden('student_status',$_REQUEST['student_status']);
             $redo_form->addHidden('gender_type',$_REQUEST['gender_type']);
@@ -1593,8 +1579,6 @@ class HMS_Form
             $redo_form->addHidden('lifestyle_option',$_REQUEST['lifestyle_option']);
             $redo_form->addHidden('preferred_bedtime',$_REQUEST['preferred_bedtime']);
             $redo_form->addHidden('room_condition',$_REQUEST['room_condition']);
-            $redo_form->addHidden('relationship',$_REQUEST['relationship']);
-            $redo_form->addHidden('employed',$_REQUEST['employed']);
             $redo_form->addHidden('rlc_interest',$_REQUEST['rlc_interest']);
             
             $redo_tpl = $redo_form->getTemplate();
@@ -1627,21 +1611,13 @@ class HMS_Form
             if($_REQUEST['room_condition'] == 1) $tpl['ROOM_CONDITION'] = "Clean";
             else if($_REQUEST['room_condition'] == 2) $tpl['ROOM_CONDITION'] = "Dirty";
             
-            if($_REQUEST['relationship'] == 0) $tpl['RELATIONSHIP'] = "No"; 
-            else if($_REQUEST['relationship'] == 1) $tpl['RELATIONSHIP'] = "Yes"; 
-            else if($_REQUEST['relationship'] == 2) $tpl['RELATIONSHIP'] = "Not Disclosed"; 
-            
-            if($_REQUEST['employed'] == 0) $tpl['EMPLOYED'] = "No";
-            else if($_REQUEST['employed'] == 1) $tpl['EMPLOYED'] = "Yes";
-            else if($_REQUEST['employed'] == 2) $tpl['EMPLOYED'] = "Not Disclosed";
-             
             if($_REQUEST['rlc_interest'] == 0) $tpl['RLC_INTEREST_1'] = "No";
             else if($_REQUEST['rlc_interest'] == 1) $tpl['RLC_INTEREST_1'] = "Yes";
        
-            $master['QUESTIONNAIRE']  = PHPWS_Template::process($tpl, 'hms', 'student/student_questionnaire.tpl');
-            $master['REDO'] = PHPWS_Template::process($redo_tpl,'hms','student/student_questionnaire_redo.tpl');
+            $master['APPLICATION']  = PHPWS_Template::process($tpl, 'hms', 'student/student_application.tpl');
+            $master['REDO'] = PHPWS_Template::process($redo_tpl,'hms','student/student_application_redo.tpl');
         
-            return PHPWS_Template::process($master,'hms','student/student_questionnaire_combined.tpl');
+            return PHPWS_Template::process($master,'hms','student/student_application_combined.tpl');
        
         } else {
             
@@ -1652,49 +1628,41 @@ class HMS_Form
             $tpl['REDO']    = PHPWS_Text::secureLink("Return to Menu", 'hms', array('type'=>'hms', 'op'=>'main'));
             $tpl['NEWLINES']= "<br /><br />";
             
-            if($questionnaire->getStudentStatus() == 1) $tpl['STUDENT_STATUS'] = "New Freshman";
-            else if ($questionnaire->getStudentStatus() == 2) $tpl['STUDENT_STATUS'] = "Transfer";
+            if($application->getStudentStatus() == 1) $tpl['STUDENT_STATUS'] = "New Freshman";
+            else if ($application->getStudentStatus() == 2) $tpl['STUDENT_STATUS'] = "Transfer";
 
-            if($questionnaire->getTermClassification() == 1) $tpl['CLASSIFICATION_FOR_TERM'] = "Freshman";
-            else if($questionnaire->getTermClassification() == 2) $tpl['CLASSIFICATION_FOR_TERM'] = "Sophomore";
-            else if($questionnaire->getTermClassification() == 3) $tpl['CLASSIFICATION_FOR_TERM'] = "Junior";
-            else if($questionnaire->getTermClassification() == 4) $tpl['CLASSIFICATION_FOR_TERM'] = "Senior";
+            if($application->getTermClassification() == 1) $tpl['CLASSIFICATION_FOR_TERM'] = "Freshman";
+            else if($application->getTermClassification() == 2) $tpl['CLASSIFICATION_FOR_TERM'] = "Sophomore";
+            else if($application->getTermClassification() == 3) $tpl['CLASSIFICATION_FOR_TERM'] = "Junior";
+            else if($application->getTermClassification() == 4) $tpl['CLASSIFICATION_FOR_TERM'] = "Senior";
             
-            if($questionnaire->getGender() == 0) $tpl['GENDER_TYPE'] = "Female";
-            else if($questionnaire->getGender() == 1) $tpl['GENDER_TYPE'] = "Male";
+            if($application->getGender() == 0) $tpl['GENDER_TYPE'] = "Female";
+            else if($application->getGender() == 1) $tpl['GENDER_TYPE'] = "Male";
             
-            if($questionnaire->getMealOption() == 1) $tpl['MEAL_OPTION'] = "Low";
-            else if($questionnaire->getMealOption() == 2) $tpl['MEAL_OPTION'] = "Medium";
-            else if($questionnaire->getMealOption() == 3) $tpl['MEAL_OPTION'] = "High";
-            else if($questionnaire->getMealOption() == 4) $tpl['MEAL_OPTION'] = "Super";
+            if($application->getMealOption() == 1) $tpl['MEAL_OPTION'] = "Low";
+            else if($application->getMealOption() == 2) $tpl['MEAL_OPTION'] = "Medium";
+            else if($application->getMealOption() == 3) $tpl['MEAL_OPTION'] = "High";
+            else if($application->getMealOption() == 4) $tpl['MEAL_OPTION'] = "Super";
            
-            if($questionnaire->getLifestyle() == 1) $tpl['LIFESTYLE_OPTION'] = "Single Gender";
-            else if($questionnaire->getLifestyle() == 2) $tpl['LIFESTYLE_OPTION'] = "Co-Ed";
+            if($application->getLifestyle() == 1) $tpl['LIFESTYLE_OPTION'] = "Single Gender";
+            else if($application->getLifestyle() == 2) $tpl['LIFESTYLE_OPTION'] = "Co-Ed";
             
-            if($questionnaire->getPreferredBedtime() == 1) $tpl['PREFERRED_BEDTIME'] = "Early";
-            else if($questionnaire->getPreferredBedtime() == 2) $tpl['PREFERRED_BEDTIME'] = "Late";
+            if($application->getPreferredBedtime() == 1) $tpl['PREFERRED_BEDTIME'] = "Early";
+            else if($application->getPreferredBedtime() == 2) $tpl['PREFERRED_BEDTIME'] = "Late";
 
-            if($questionnaire->getRoomCondition() == 1) $tpl['ROOM_CONDITION'] = "Clean";
-            else if($questionnaire->getRoomCondition() == 2) $tpl['ROOM_CONDITION'] = "Dirty";
+            if($application->getRoomCondition() == 1) $tpl['ROOM_CONDITION'] = "Clean";
+            else if($application->getRoomCondition() == 2) $tpl['ROOM_CONDITION'] = "Dirty";
             
-            if($questionnaire->getRelationship() == 0) $tpl['RELATIONSHIP'] = "No"; 
-            else if($questionnaire->getRelationship() == 1) $tpl['RELATIONSHIP'] = "Yes"; 
-            else if($questionnaire->getRelationship() == 2) $tpl['RELATIONSHIP'] = "Not Disclosed"; 
-            
-            if($questionnaire->getEmployed() == 0) $tpl['EMPLOYED'] = "No";
-            else if($questionnaire->getEmployed() == 1) $tpl['EMPLOYED'] = "Yes";
-            else if($questionnaire->getEmployed() == 2) $tpl['EMPLOYED'] = "Not Disclosed";
-             
-            if($questionnaire->getRlcInterest() == 0) $tpl['RLC_INTEREST_1'] = "No";
-            else if($questionnaire->getRlcInterest() == 1) $tpl['RLC_INTEREST_1'] = "Yes";
+            if($application->getRlcInterest() == 0) $tpl['RLC_INTEREST_1'] = "No";
+            else if($application->getRlcInterest() == 1) $tpl['RLC_INTEREST_1'] = "Yes";
        
-            $master['QUESTIONNAIRE']  = PHPWS_Template::process($tpl, 'hms', 'student/student_questionnaire.tpl');
-            return PHPWS_Template::process($master,'hms','student/student_questionnaire_combined.tpl');
+            $master['APPLICATION']  = PHPWS_Template::process($tpl, 'hms', 'student/student_application.tpl');
+            return PHPWS_Template::process($master,'hms','student/student_application_combined.tpl');
         }
         
     }
 
-    function check_valid_questionnaire_values()
+    function check_valid_application_values()
     {
         return (is_numeric($_REQUEST['student_status']) &&
                 is_numeric($_REQUEST['classification_for_term']) &&
@@ -1703,15 +1671,13 @@ class HMS_Form
                 is_numeric($_REQUEST['lifestyle_option']) &&
                 is_numeric($_REQUEST['preferred_bedtime']) &&
                 is_numeric($_REQUEST['room_condition']) &&
-                is_numeric($_REQUEST['relationship']) &&
-                is_numeric($_REQUEST['employed']) &&
                 is_numeric($_REQUEST['rlc_interest']));
     }
 
-    function questionnaire_search_form()
+    function application_search_form()
     {
         $form = &new PHPWS_Form();
-        $form->setAction('index.php?module=hms&type=student&op=questionnaire_search');
+        $form->setAction('index.php?module=hms&type=student&op=application_search');
 
         $form->addText('asu_username');
         $form->setLabel('asu_username','ASU Username: ');
@@ -1722,7 +1688,7 @@ class HMS_Form
         $form->mergeTemplate($tags);
         $tags = $form->getTemplate();
 
-        return PHPWS_Template::process($tags,'hms','student/questionnaire_search.tpl');
+        return PHPWS_Template::process($tags,'hms','student/application_search.tpl');
     }
 
     function edit_suite($error)

@@ -26,6 +26,22 @@ class HMS_Maintenance
     
     function purge_data()
     {
+        $content = "Purging Housing Assignments...<br />";
+        $db = &new PHPWS_DB('hms_assignment');
+        $db->delete();
+
+        $content = "Purging Deadlines...<br />";
+        $db = &new PHPWS_DB('hms_deadlines');
+        $db->delete();
+
+        $content = "Purging Learning Communities...<br />";
+        $db = &new PHPWS_DB('hms_learning_communities');
+        $db->delete();
+
+        $content = "Purging Learning Community Applications...<br />";
+        $db = &new PHPWS_DB('hms_learning_community_applications');
+        $db->delete();
+
         $content = "Purging residence hall data...<br />";
         $db = &new PHPWS_DB('hms_residence_hall');
         $db->delete();
@@ -36,6 +52,10 @@ class HMS_Maintenance
 
         $content .= "Purging room data...<br />";
         $db = &new PHPWS_DB('hms_room');
+        $db->delete();
+
+        $content .= "Purging suite data...<br />";
+        $db = &new PHPWS_DB('hms_suite');
         $db->delete();
 
         $content .= "Done!<br />";

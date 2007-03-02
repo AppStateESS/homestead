@@ -36,14 +36,6 @@
             </tr>
             <tr><th> </th><td> </td></tr>
             <tr>
-                <th>In a relationship: </th><td align="left">{RELATIONSHIP}</td>
-            </tr>
-            <tr><th> </th><td> </td></tr>
-            <tr>
-                <th>Currently employed: </th><td align="left">{EMPLOYED}</td>
-            </tr>
-            <tr><th> </th><td> </td></tr>
-            <tr>
                 <th>Are you interested in joining</th><td></td>
             </tr>
             <tr>

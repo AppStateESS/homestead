@@ -1,14 +1,14 @@
 <?php
 
 /**
- * The HMS_Questionnaire class
- * Implements the Questionnaire object and methods to load/save
- * questionnaires from the database.
+ * The HMS_Application class
+ * Implements the Application object and methods to load/save
+ * applications from the database.
  * 
  * @author Jeremy Booker <jbooker at tux dot appstate dot edu>
  */
 
-class HMS_Questionnaire {
+class HMS_Application {
 
     var $id;
 
@@ -20,8 +20,6 @@ class HMS_Questionnaire {
     var $lifestyle_option;
     var $preferred_bedtime;
     var $room_condition;
-    var $in_relationship;
-    var $currently_employed;
     var $rlc_interest;
 
     var $created_on;
@@ -35,10 +33,10 @@ class HMS_Questionnaire {
     /**
     * Constructor
     * Set $hms_student_id equal to the ASU email of the student you want
-    * to create/load a questionnaire for. Otherwise, the student currently
+    * to create/load a application for. Otherwise, the student currently
     * logged in (session) is used.
     */
-    function HMS_Questionnaire($hms_student_id = NULL)
+    function HMS_Application($hms_student_id = NULL)
     {
 
         if(isset($hms_student_id)){
@@ -49,23 +47,23 @@ class HMS_Questionnaire {
         
         $result = $this->init();
         if(PEAR::isError($result)){
-            PHPWS_Error::log($result,'hms','HMS_Questionnaire()','Caught error from init');
+            PHPWS_Error::log($result,'hms','HMS_Application()','Caught error from init');
             return $result;
         }
     }
 
     function init()
     {
-        # Check if a questionnaire for this user and semester already exists.
-        $result = HMS_Questionnaire::check_for_questionnaire();
+        # Check if a application for this user and semester already exists.
+        $result = HMS_Application::check_for_application();
 
         if(PEAR::isError($result)){
-            PHPWS_Error::log($result,'hms','init',"Caught error from check_for_questionnaire.");
-            #return "<i>ERROR!</i><br />Could not check for existing questionnaire!<br />";
+            PHPWS_Error::log($result,'hms','init',"Caught error from check_for_application.");
+            #return "<i>ERROR!</i><br />Could not check for existing application!<br />";
             return $result;
         }
         
-        # If a questionnaire exists, then load it's data into this object. 
+        # If a application exists, then load it's data into this object. 
         if($result == FALSE || $result == NULL) return;
         
         $this->setID($result['id']);
@@ -77,8 +75,6 @@ class HMS_Questionnaire {
         $this->setLifestyle($result['lifestyle_option']);
         $this->setPreferredBedtime($result['preferred_bedtime']);
         $this->setRoomCondition($result['room_condition']);
-        $this->setRelationship($result['in_relationship']);
-        $this->setEmployed($result['currently_employed']);
         $this->setRlcInterest($result['rlc_interest']);
         $this->setCreatedOn($result['created_on']);
         $this->setDeleted($result['deleted']);
@@ -89,11 +85,11 @@ class HMS_Questionnaire {
     }
     
     /**
-     * Crates a new questionnaire object from $_REQUEST data and save it to the database.
+     * Crates a new application object from $_REQUEST data and save it to the database.
      */
-    function save_questionnaire()
+    function save_application()
     {
-        $question = &new HMS_Questionnaire();
+        $question = &new HMS_Application();
         
         $question->setStudentStatus($_REQUEST['student_status']);
         $question->setTermClassification($_REQUEST['classification_for_term']);
@@ -102,33 +98,38 @@ class HMS_Questionnaire {
         $question->setLifestyle($_REQUEST['lifestyle_option']);
         $question->setPreferredBedtime($_REQUEST['preferred_bedtime']);
         $question->setRoomCondition($_REQUEST['room_condition']);
-        $question->setRelationship($_REQUEST['relationship']);
-        $question->setEmployed($_REQUEST['employed']);
         $question->setRlcInterest($_REQUEST['rlc_interest']);
 
         $result = $question->save();
         
         if(PEAR::isError($result)){
-            PHPWS_Error::log($result,'hms','Caught error from Questionnaire::save()');
-            $error = "<i>Error!</i><br />Could not create/update your questionnaire!<br />";
+            PHPWS_Error::log($result,'hms','Caught error from Application::save()');
+            $error = "<i>Error!</i><br />Could not create/update your application!<br />";
             return $error;
         }else{
-            $success  = "Your questionnaire was successfully saved.<br /><br />";
-            $success .= "You may logout or view your questionnaire responses.<br /><br />";
-            $success .= PHPWS_Text::secureLink(_('View My Questionnaire'), 'hms', array('type'=>'student', 'op'=>'review_questionnaire'));
-            $success .= "<br /><br />";
-            $success .= PHPWS_Text::moduleLink(_('Logout'), 'users', array('action'=>'user', 'command'=>'logout'));
-            return $success;
+            if($question->getRlcInterest() == 1) {
+                PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
+                return HMS_Learning_Community::show_rlc_application_form();
+            } else {
+                $success  = "Your application was successfully saved.<br /><br />";
+                $success .= "You may logout or view your application responses.<br /><br />";
+                $success .= PHPWS_Text::secureLink(_('View My Application'), 'hms', array('type'=>'student', 'op'=>'review_application'));
+                $success .= "<br /><br />";
+                $success .= PHPWS_Text::secureLink(_('Apply for a RLC'), 'hms', array('type'=>'student', 'op'=>'show_rlc_application_form'));
+                $success .= "<br /><br />";
+                $success .= PHPWS_Text::moduleLink(_('Logout'), 'users', array('action'=>'user', 'command'=>'logout'));
+                return $success;
+            }
         }
     }
 
     /**
-     * Saves the current Questionnaire object to the database.
+     * Saves the current Application object to the database.
      */
     function save()
     {
 
-        $db = &new PHPWS_DB('hms_questionnaire');
+        $db = &new PHPWS_DB('hms_application');
         $db->addValue('student_status',$this->getStudentStatus());
         $db->addValue('term_classification',$this->getTermClassification());
         $db->addValue('gender',$this->getGender());
@@ -136,8 +137,6 @@ class HMS_Questionnaire {
         $db->addValue('lifestyle_option',$this->getLifestyle());
         $db->addValue('preferred_bedtime',$this->getPreferredBedtime());
         $db->addValue('room_condition',$this->getRoomCondition());
-        $db->addValue('in_relationship',$this->getRelationship());
-        $db->addValue('currently_employed',$this->getEmployed());
         $db->addValue('rlc_interest',$this->getRlcInterest());
         $db->addValue('deleted',$this->getDeleted());
         $db->addValue('deleted_by',$this->getDeletedBy());
@@ -161,7 +160,7 @@ class HMS_Questionnaire {
         }
 
         if(PEAR::isError($result)){
-            PHPWS_Error::log($result,'hms','save_questionnaire',"Could not insert/update questionnaire for user: {$_SESSION['asu_username']}");
+            PHPWS_Error::log($result,'hms','save_application',"Could not insert/update application for user: {$_SESSION['asu_username']}");
             return $result;
         }else{
             return TRUE;
@@ -169,12 +168,12 @@ class HMS_Questionnaire {
     }
 
     /**
-     * Checks to see if a questionnaire already exists for the objects current $hms_user_id.
-     * If so, it returns the ID of that questionnaire record, otherwise it returns false.
+     * Checks to see if a application already exists for the objects current $hms_user_id.
+     * If so, it returns the ID of that application record, otherwise it returns false.
      */
-    function check_for_questionnaire($asu_username = NULL)
+    function check_for_application($asu_username = NULL)
     {
-        $db = &new PHPWS_DB('hms_questionnaire');
+        $db = &new PHPWS_DB('hms_application');
         if(isset($asu_username)) {
             $db->addWhere('hms_student_id',$asu_username,'ILIKE');
         } else {
@@ -186,7 +185,7 @@ class HMS_Questionnaire {
         $result = $db->select('row');
         
         if(PEAR::isError($result)){
-            PHPWS_Error::log($result,'hms','check_for_questionnare',"asu_username:{$_SESSION['asu_username']}");
+            PHPWS_Error::log($result,'hms','check_for_application',"asu_username:{$_SESSION['asu_username']}");
             return $result;
         }
         
@@ -199,17 +198,17 @@ class HMS_Questionnaire {
 
     
     /*
-     * Displays the given user's questionnaire.
+     * Displays the given user's application.
      * If no user specified, defaults to current user.
      */
-    function show_questionnaire($asu_username = null){
+    function show_application($asu_username = null){
 
         if(!isset($asu_username)){
             $asu_username = $_SESSION['asu_username'];
         }
 
-        PHPWS_Core::initModClass('hms', 'HMS_Questionnaire.php');
-        $questionnaire = new HMS_Questionnaire($asu_username);
+        PHPWS_Core::initModClass('hms', 'HMS_Application.php');
+        $application = new HMS_Application($asu_username);
         
 
         $tpl['TITLE']   = 'Residence Hall Application';
@@ -219,86 +218,86 @@ class HMS_Questionnaire {
         $tpl['REDO']    = PHPWS_Text::secureLink("Return to Menu", 'hms', array('type'=>'hms', 'op'=>'main'));
         $tpl['NEWLINES']= "<br /><br />";
           
-        if($questionnaire->getStudentStatus() == 1) $tpl['STUDENT_STATUS'] = "New Freshman";
-        else if ($questionnaire->getStudentStatus() == 2) $tpl['STUDENT_STATUS'] = "Transfer";
+        if($application->getStudentStatus() == 1) $tpl['STUDENT_STATUS'] = "New Freshman";
+        else if ($application->getStudentStatus() == 2) $tpl['STUDENT_STATUS'] = "Transfer";
 
-        if($questionnaire->getTermClassification() == 1) $tpl['CLASSIFICATION_FOR_TERM'] = "Freshman";
-        else if($questionnaire->getTermClassification() == 2) $tpl['CLASSIFICATION_FOR_TERM'] = "Sophomore";
-        else if($questionnaire->getTermClassification() == 3) $tpl['CLASSIFICATION_FOR_TERM'] = "Junior";
-        else if($questionnaire->getTermClassification() == 4) $tpl['CLASSIFICATION_FOR_TERM'] = "Senior";
+        if($application->getTermClassification() == 1) $tpl['CLASSIFICATION_FOR_TERM'] = "Freshman";
+        else if($application->getTermClassification() == 2) $tpl['CLASSIFICATION_FOR_TERM'] = "Sophomore";
+        else if($application->getTermClassification() == 3) $tpl['CLASSIFICATION_FOR_TERM'] = "Junior";
+        else if($application->getTermClassification() == 4) $tpl['CLASSIFICATION_FOR_TERM'] = "Senior";
           
-        if($questionnaire->getGender() == 0) $tpl['GENDER_TYPE'] = "Female";
-        else if($questionnaire->getGender() == 1) $tpl['GENDER_TYPE'] = "Male";
+        if($application->getGender() == 0) $tpl['GENDER_TYPE'] = "Female";
+        else if($application->getGender() == 1) $tpl['GENDER_TYPE'] = "Male";
             
-        if($questionnaire->getMealOption() == 1) $tpl['MEAL_OPTION'] = "Low";
-        else if($questionnaire->getMealOption() == 2) $tpl['MEAL_OPTION'] = "Medium";
-        else if($questionnaire->getMealOption() == 3) $tpl['MEAL_OPTION'] = "High";
-        else if($questionnaire->getMealOption() == 4) $tpl['MEAL_OPTION'] = "Super";
+        if($application->getMealOption() == 1) $tpl['MEAL_OPTION'] = "Low";
+        else if($application->getMealOption() == 2) $tpl['MEAL_OPTION'] = "Medium";
+        else if($application->getMealOption() == 3) $tpl['MEAL_OPTION'] = "High";
+        else if($application->getMealOption() == 4) $tpl['MEAL_OPTION'] = "Super";
            
-        if($questionnaire->getLifestyle() == 1) $tpl['LIFESTYLE_OPTION'] = "Single Gender";
-        else if($questionnaire->getLifestyle() == 2) $tpl['LIFESTYLE_OPTION'] = "Co-Ed";
+        if($application->getLifestyle() == 1) $tpl['LIFESTYLE_OPTION'] = "Single Gender";
+        else if($application->getLifestyle() == 2) $tpl['LIFESTYLE_OPTION'] = "Co-Ed";
             
-        if($questionnaire->getPreferredBedtime() == 1) $tpl['PREFERRED_BEDTIME'] = "Early";
-        else if($questionnaire->getPreferredBedtime() == 2) $tpl['PREFERRED_BEDTIME'] = "Late";
+        if($application->getPreferredBedtime() == 1) $tpl['PREFERRED_BEDTIME'] = "Early";
+        else if($application->getPreferredBedtime() == 2) $tpl['PREFERRED_BEDTIME'] = "Late";
 
-        if($questionnaire->getRoomCondition() == 1) $tpl['ROOM_CONDITION'] = "Clean";
-        else if($questionnaire->getRoomCondition() == 2) $tpl['ROOM_CONDITION'] = "Dirty";
+        if($application->getRoomCondition() == 1) $tpl['ROOM_CONDITION'] = "Clean";
+        else if($application->getRoomCondition() == 2) $tpl['ROOM_CONDITION'] = "Dirty";
             
-        if($questionnaire->getRelationship() == 0) $tpl['RELATIONSHIP'] = "No"; 
-        else if($questionnaire->getRelationship() == 1) $tpl['RELATIONSHIP'] = "Yes"; 
-        else if($questionnaire->getRelationship() == 2) $tpl['RELATIONSHIP'] = "Not Disclosed"; 
+        if($application->getRelationship() == 0) $tpl['RELATIONSHIP'] = "No"; 
+        else if($application->getRelationship() == 1) $tpl['RELATIONSHIP'] = "Yes"; 
+        else if($application->getRelationship() == 2) $tpl['RELATIONSHIP'] = "Not Disclosed"; 
             
-        if($questionnaire->getEmployed() == 0) $tpl['EMPLOYED'] = "No";
-        else if($questionnaire->getEmployed() == 1) $tpl['EMPLOYED'] = "Yes";
-        else if($questionnaire->getEmployed() == 2) $tpl['EMPLOYED'] = "Not Disclosed";
+        if($application->getEmployed() == 0) $tpl['EMPLOYED'] = "No";
+        else if($application->getEmployed() == 1) $tpl['EMPLOYED'] = "Yes";
+        else if($application->getEmployed() == 2) $tpl['EMPLOYED'] = "Not Disclosed";
              
-        if($questionnaire->getRlcInterest() == 0) $tpl['RLC_INTEREST_1'] = "No";
-        else if($questionnaire->getRlcInterest() == 1) $tpl['RLC_INTEREST_1'] = "Yes";
+        if($application->getRlcInterest() == 0) $tpl['RLC_INTEREST_1'] = "No";
+        else if($application->getRlcInterest() == 1) $tpl['RLC_INTEREST_1'] = "Yes";
        
-        $master['QUESTIONNAIRE']  = PHPWS_Template::process($tpl, 'hms', 'student/student_questionnaire.tpl');
-        return PHPWS_Template::process($master,'hms','student/student_questionnaire_combined.tpl');
+        $master['APPLICATION']  = PHPWS_Template::process($tpl, 'hms', 'student/student_application.tpl');
+        return PHPWS_Template::process($master,'hms','student/student_application_combined.tpl');
         
     }
    
     /**
-     * Uses the forms class to display the questionnaire form or
+     * Uses the forms class to display the application form or
      * a confirmation page.
      */
-    function display_questionnaire_form($view = NULL)
+    function display_application_form($view = NULL)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
         if($view != NULL) {
-            return HMS_Form::display_questionnaire_results();
+            return HMS_Form::display_application_results();
         } else {
-            return HMS_Form::begin_questionnaire();
+            return HMS_Form::begin_application();
         }
     }
 
     /**
-     * Uses the forms class to display the questionnaire search page.
+     * Uses the forms class to display the application search page.
      */
-    function display_questionnaire_search()
+    function display_application_search()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
-        return HMS_Form::questionnaire_search_form();
+        return HMS_Form::application_search_form();
     }
 
     /**
-     * Does the actual searching of questionnaires.
+     * Does the actual searching of applications.
      */
-    function questionnaire_search()
+    function application_search()
     {
         $tags = array();
 
-        $tags['RESULTS'] = HMS_Questionnaire::questionnaire_search_pager();
+        $tags['RESULTS'] = HMS_Application::application_search_pager();
 
-        return PHPWS_Template::process($tags, 'hms', 'student/questionnaire_search_results.tpl');
+        return PHPWS_Template::process($tags, 'hms', 'student/application_search_results.tpl');
     }
 
     /**
      * Sets up the pager object for searching questionnairs.
      */
-    function questionnaire_search_pager()
+    function application_search_pager()
     {
         PHPWS_Core::initCoreClass('DBPager.php');
 
@@ -307,13 +306,13 @@ class HMS_Questionnaire {
         $pageTags['LAST_NAME']  = _('Last Name');
         $PageTags['ACTIONS']    = _('Action');
 
-        $pager = &new DBPager('hms_questionnaire','HMS_Questionnaire');
+        $pager = &new DBPager('hms_application','HMS_Application');
 
-        $pager->addWhere('hms_questionnaire.hms_student_id',$_REQUEST['asu_username'],'ILIKE');
+        $pager->addWhere('hms_application.hms_student_id',$_REQUEST['asu_username'],'ILIKE');
         $pager->db->addOrder('hms_student_id','ASC');
 
         $pager->setModule('hms');
-        $pager->setTemplate('student/questionnaire_search_pager.tpl');
+        $pager->setTemplate('student/application_search_pager.tpl');
         $pager->setLink('index.php?module=hms');
         $pager->setEmptyMessage("No matches found.");
         $pager->addToggle('class="toggle1"');
@@ -332,7 +331,7 @@ class HMS_Questionnaire {
         $tags['STUDENT_ID'] = $this->getStudentID();
         $tags['FIRST_NAME'] = "The first name goes here";
         $tags['LAST_NAME'] = "The last name goes here";
-        $tags['ACTIONS'] = PHPWS_Text::secureLink('[View]', 'hms',array('type'=>'student','op'=>'show_questionnaire','user'=>$this->getStudentID())) . " [Select as Roomate]";
+        $tags['ACTIONS'] = PHPWS_Text::secureLink('[View]', 'hms',array('type'=>'student','op'=>'show_application','user'=>$this->getStudentID())) . " [Select as Roomate]";
 
         return $tags;
     }
@@ -412,22 +411,6 @@ class HMS_Questionnaire {
 
     function getRoomCondition(){
         return $this->room_condition;
-    }
-
-    function setRelationship($relation){
-        $this->in_relationship = $relation;
-    }
-
-    function getRelationship(){
-        return $this->in_relationship;
-    }
-
-    function setEmployed($employed){
-        $this->currently_employed = $employed;
-    }
-
-    function getEmployed(){
-        return $this->currently_employed;
     }
 
     function setRlcInterest($interest){

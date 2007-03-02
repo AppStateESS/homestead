@@ -81,7 +81,7 @@ CREATE TABLE hms_pricing_tiers (
     primary key(id)
 );
 
-CREATE TABLE hms_questionnaire (
+CREATE TABLE hms_application (
     id integer DEFAULT 0 NOT NULL,
     hms_student_id character varying(10) NOT NULL,
     student_status smallint NOT NULL,
