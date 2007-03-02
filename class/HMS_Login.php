@@ -45,19 +45,19 @@ class HMS_Login
             return TOOLATE;
         }
 
-        /*
-        PHPWS_Core::initModClass('hms', 'HMS_Student.php');
-        $student = HMS_Student::get_banner_profile($_REQUEST['asu_username'], '200740');
-        $dob = explode('-', $student->dob);
+        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+        $student_type = HMS_SOAP::get_student_type($_REQUEST['asu_username']);
+        $dob = explode('-', HMS_SOAP::get_dob($_REQUEST['asu_username']));
         
-        if($student->student_type != 'F') {
+        /* 
+        if($student_type != 'F') {
             return BADCLASS;
         } else if ($dob[0] < date('Y') - 25) {
             return TOOOLD;
         }
         */
-
-        require_once(PHPWS_SOURCE_DIR . '/mod/hms/inc/accounts.php');
+       
+       require_once(PHPWS_SOURCE_DIR . '/mod/hms/inc/accounts.php');
         Current_User::loginUser(HMS_STUDENT_USER, HMS_STUDENT_PASS);
         Current_User::getLogin();
         $_SESSION['asu_username'] = $_REQUEST['asu_username'];
