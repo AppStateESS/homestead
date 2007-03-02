@@ -1,19 +1,3 @@
---
--- PostgreSQL database dump
---
-
-SET client_encoding = 'UNICODE';
-SET check_function_bodies = false;
-
-SET SESSION AUTHORIZATION 'jbooker';
-
-SET search_path = public, pg_catalog;
-
---
--- Data for TOC entry 2 (OID 20807)
--- Name: hms_learning_communities; Type: TABLE DATA; Schema: public; Owner: jbooker
---
-
 INSERT INTO hms_learning_communities (id, community_name) VALUES (0, 'Leadership & Service Community');
 INSERT INTO hms_learning_communities (id, community_name) VALUES (1, 'Outdoor Community');
 INSERT INTO hms_learning_communities (id, community_name) VALUES (2, 'Wellness Community');
@@ -21,4 +5,5 @@ INSERT INTO hms_learning_communities (id, community_name) VALUES (3, 'Community 
 INSERT INTO hms_learning_communities (id, community_name) VALUES (4, 'Language & Culture Community');
 INSERT INTO hms_learning_communities (id, community_name) VALUES (5, 'Black & Gold Community');
 
-
+CREATE SEQUENCE hms_learning_communities_seq;
+SELECT setval('hms_learning_communities_seq', max('hms_learning_communities.id'));

@@ -23,13 +23,26 @@
     $permissions['delete_floors']       = _('Delete Floors');
 
     $permissions['room_maintenance']    = _('Add, Edit or Delete Rooms');
-    $permissions['add_rooms']           = _('Add Rooms');
     $permissions['edit_rooms']          = _('Edit Rooms');
-    $permissions['delete_rooms']        = _('Delete Rooms');
 
     $permissions['learning_community_maintenance']  = _('Add, Edit or Delete Learning Communities');
     $permissions['add_learning_communities']        = _('Add Learning Communities');
     $permissions['edit_learning_communities']       = _('Edit Learning Communities');
     $permissions['delete_learning_communities']     = _('Delete Learning Communities');
+
+    $permissions['rlc_applicant_options']   = _('RLC-specific Tasks');
+    $permissions['assign_to_rlcs']          = _('Assign to RLCs');
+    $permissions['rlc_room_assignments']    = _('Assign RLC members to rooms');
+
+    $permissions['deadline_maintenance']    = _('Deadline Maintenance');
+    $permissions['edit_deadlines']          = _('Edit Deadlines');
+
+    $permissions['assignment_maintenance']  = _('Assignment Maintenance');
+    $permissions['create_assignment']       = _('Create Assignment');
+    $permissions['delete_assignment']       = _('Delete Assignment');
+
+    $permissions['roommate_maintenance']    = _('Roommate Maintenance');
+    $permissions['create_roommate_group']   = _('Group Roommates');
+    $permissions['edit_roommate_group']     = _('Edit Roommates');
 
 ?>

@@ -21,8 +21,8 @@
         &nbsp;&nbsp;&nbsp;{DELETE_LEARNING_COMMUNITY}<br />
         <br />
         <h2><i>{RLC_APPLICATIONS}</i></h2>
-        &nbsp;&nbsp;&nbsp;{ASSIGN_RLC_APPLICANTS}<br />
-        &nbsp;&nbsp;&nbsp;{VIEW_RLC_ASSIGNMENTS}<br />
+        &nbsp;&nbsp;&nbsp;{ASSIGN_TO_RLCS}<br />
+        &nbsp;&nbsp;&nbsp;{RLC_ROOM_ASSIGNMENTS}<br />
         <br />
         <h2><i>{STUDENT_LABEL}</i></h2>
         &nbsp;&nbsp;&nbsp;{ADD_STUDENT}<br />

@@ -80,6 +80,14 @@ function hms_update(&$content, $currentVersion)
             $content[] = _('+ Added link to allow students to go to the RLC application on first login as soon as they complete an application');
             $content[] = _('+ Added link to the pdf of the contract for students that want to print it out');
 
+        case version_compare($currentVersion, '0.1.6', '<'):
+            $files      = array();
+            $files[]    = 'templates/admin/maintenance.tpl';
+
+            PHPWS_Boost::updateFiles($files, 'hms');
+
+            $content[] = _('+ Modifying permissions for RLC admins to approve members and assign to rooms');
+
     }
 
     return TRUE;
