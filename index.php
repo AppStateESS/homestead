@@ -29,6 +29,11 @@ if(Current_User::isLogged()) {
         $error = "<i><h2>You must be under 23 to live in a Residence Hall.<br />";
         $error .= "Please contact Housing and Residence Life about living in Mountaineer Apartments.</h2></i>";
         HMS_Login::display_login_screen($error);
+    } else if ($type == BADCLASS) {
+        $error = "<i><h2>You are not a Freshman.<br />";
+        $error .= "We are currently restricting access to HMS to freshman.<br />";
+        $error .= "If you need to contact Housing and Residence Life please visit http://housing.appstate.edu</h2></i>";
+        HMS_Login::display_login_screen($error);
     } else {
         PHPWS_Core::initModClass('hms', 'HMS.php');
         HMS::main($type);
