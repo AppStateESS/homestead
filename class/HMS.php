@@ -43,7 +43,7 @@
 
         # Returns the current "housing year". Need to implement according to Housing's specs. Hard coded for now...
         function get_current_year(){
-            return 2006;
+            return 200710;
         }
 
     }
