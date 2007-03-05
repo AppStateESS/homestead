@@ -336,7 +336,6 @@ class HMS_Student {
                     $form->addSubmit('begin', _('I AGREE'));
                     $form->addSubmit('quit', _('I DISAGREE'));
                     
-                    $tpl = $form->getTemplate();
                     $message  = "<b>Please read the following License Agreement and click either 'I AGREE' or 'I DISAGREE'<br />";
                     $message .= 'Please note that if you click disagree you will be logged out of HMS.</b><br /><br />';
                     $message .= 'If you wish to read this Agreement as a printable PDF please ';
@@ -354,7 +353,14 @@ class HMS_Student {
                         $message .= 'Housing and Residence Life. Your application cannot be fully processed until a Housing Contract ';
                         $message .= 'singed by a parent or gaurdian is on file. Please <a href="./mod/hms/inc/contract.pdf">click here </a>';
                         $message .= 'to open a printer-friendly version of the Housing Contract.</font><br /><br />';
+
+                        # Set the 'agreed_to_terms' flag to false
+                        $form->addHidden('agreed_to_terms',0);
+                    }else{
+                        $form->addHidden('agreed_to_terms',1);
                     }
+                    
+                    $tpl = $form->getTemplate();
 
                     $tpl['MESSAGE'] = $message;
                     $tpl['CONTRACT'] = str_replace("\n", "<br />", file_get_contents('mod/hms/inc/contract.txt'));
