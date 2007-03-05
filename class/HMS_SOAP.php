@@ -10,7 +10,7 @@ class HMS_SOAP{
             return $student;
         }
         
-        if($student->last_name == '') {
+        if($student->last_name == NULL) {
             return false;
         } else {
             return true;
@@ -24,6 +24,8 @@ class HMS_SOAP{
         if(PEAR::isError($student)){
             PHPWS_Error::log($student,'hms','get_first_name',$username);
             return $student;
+        }else if($student->first_name == NULL){
+            return NULL;
         }else{
             return $student->first_name;
         }
@@ -36,6 +38,8 @@ class HMS_SOAP{
         if(PEAR::isError($student)){
             PHPWS_Error::log($student,'hms','get_middle_name',$username);
             return $student;
+        }else if($student->middle_name == NULL){
+            return NULL;
         }else{
             return $student->middle_name;
         }
@@ -48,6 +52,8 @@ class HMS_SOAP{
         if(PEAR::isError($student)){
             PHPWS_Error::log($student,'hms','get_last_lame',$username);
             return $student;
+        }else if($student->last_name == NULL){
+            return NULL;
         }else{
             return $student->last_name;
         }
@@ -60,6 +66,8 @@ class HMS_SOAP{
         if(PEAR::isError($student)){
             PHPWS_Error::log($student,'hms','get_gender',$username);
             return $student;
+        }else if($student->gender == NULL){
+            return NULL;
         }else{
             return $student->gender;
         }
@@ -72,6 +80,8 @@ class HMS_SOAP{
         if(PEAR::isError($student)){
             PHPWS_Error::log($student,'hms','get_address',$username);
             return $student;
+        }else if($student->address == NULL){
+            return NULL;
         }else{
             return $student->address;
         }
@@ -83,7 +93,9 @@ class HMS_SOAP{
         if(PEAR::isError($student)) {
             PHPWS_Error::log($student, 'hms', 'get_student_type', $username);
             return $student;
-        } else {
+        }else if($student->student_type == NULL){
+            return NULL;
+        }else{
             return $student->student_type;
         }
     }
@@ -94,7 +106,9 @@ class HMS_SOAP{
         if(PEAR::isError($student)) {
             PHPWS_Error::log($student, 'hms', 'get_student_type', $username);
             return $student;
-        } else {
+        }else if($student->dob == NULL){
+            return NULL;
+        }else{
             return $student->dob;
         }
     }
