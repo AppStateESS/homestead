@@ -12,4 +12,4 @@ CREATE TABLE hms_learning_community_floor (
     learning_communities_id integer NOT NULL REFERENCES hms_learning_communities(id),
     floor_id                integer NOT NULL REFERENCES hms_floor(id),
     PRIMARY KEY (learning_communities_id)
-)
+);

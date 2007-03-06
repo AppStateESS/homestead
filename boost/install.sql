@@ -81,7 +81,7 @@ CREATE TABLE hms_learning_community_hall (
     learning_communities_id integer NOT NULL REFERENCES hms_learning_communities(id),
     floor_id                integer NOT NULL REFERENCES hms_floor(id),
     PRIMARY KEY (learning_communities_id)
-)
+);
 
 CREATE TABLE hms_pricing_tiers (
     id integer DEFAULT 0 NOT NULL,
