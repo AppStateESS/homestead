@@ -186,10 +186,17 @@ class HMS_Learning_Community
             case 'confirm_delete_learning_community':
                 return HMS_Learning_Community::confirm_delete_learning_community();
                 break;
+
+            case 'assign_applicants_to_rlcs':
+                return HMS_Learning_Community::assign_applicants_to_rlcs();
+                break;
+            case 'view_rlc_assignments':
+                return HMS_Learning_Community::view_rlc_assignments();
+                break;
  
             default:
-               return "{$_REQUEST['op']} <br />";
-               break;
+                return "{$_REQUEST['op']} <br />";
+                break;
         }
     }
 
@@ -254,6 +261,25 @@ class HMS_Learning_Community
             return PHPWS_Template::process($template, 'hms', 'student/rlc_signup_confirmation.tpl');
         }
 
+    }
+
+    function assign_applicants_to_rlcs()
+    {
+        PHPWS_Core::initModClass('hms','HMS_Forms.php');
+
+        return HMS_Form::show_make_new_rlc_assignments();
+    }
+
+    function assign_rlc_members_to_rooms()
+    {
+        PHPWS_Core::initModClass('hms','HMS_Forms.php');
+
+        return HMS_Form::show_assign_rlc_members_to_rooms();
+    }
+
+    function view_rlc_assignments()
+    {
+        return "";
     }
 };
 ?>

@@ -33,6 +33,7 @@
     $permissions['rlc_applicant_options']   = _('RLC-specific Tasks');
     $permissions['assign_to_rlcs']          = _('Assign to RLCs');
     $permissions['rlc_room_assignments']    = _('Assign RLC members to rooms');
+    $permissions['view_rlc_assignments']    = _('View RLC Assignments');
 
     $permissions['deadline_maintenance']    = _('Deadline Maintenance');
     $permissions['edit_deadlines']          = _('Edit Deadlines');

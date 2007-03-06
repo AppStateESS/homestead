@@ -115,6 +115,9 @@ class HMS_Maintenance
         if(Current_User::allow('hms', 'rlc_room_assignments')) 
             $tpl['RLC_ROOM_ASSIGNMENTS']    = PHPWS_Text::secureLink(_('Assign RLC Members to Rooms'), 'hms', array('type'=>'assignment', 'op'=>'assign_rlc_members_to_rooms'));
 
+        if(Current_User::allow('hms', 'view_rlc_assignments'))
+            $tpl['VIEW_RLC_ASSIGNMENTS'] = PHPWS_Text::secureLink(_('View RLC Assignments'), 'hms', array('type'=>'rlc', 'op'=>'view_rlc_assignments'));
+
         if(Current_User::allow('hms', 'student_maintenance'))
             $tpl['STUDENT_LABEL'] = "Student Maintenance";
 

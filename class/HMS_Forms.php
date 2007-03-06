@@ -2379,5 +2379,10 @@ class HMS_Form
 
         return TRUE;
     }
+
+    function show_make_new_rlc_assignments(){
+        return "";    
+    }
+
 };
 ?>
