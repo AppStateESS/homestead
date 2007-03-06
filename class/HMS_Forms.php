@@ -1137,9 +1137,16 @@ class HMS_Form
 
         $tpl = $form->getTemplate();
         $welcome  = "Welcome to the Housing Management System.<br /><br />";
-        $welcome .= "";
-        
-        $tpl['ERROR'] = $this->get_error_msg();
+        $welcome .= "There are multiple parts to this process. These are:<br />";
+        $welcome .= " - Logging in<br />";
+        $welcome .= " - Agreeing to the Housing License Contract<br />";
+        $welcome .= " - Completing a Housing Application<br />";
+        $welcome .= " - Completing the Residential Learning Community Application if you wish to participate in a RLC<br />";
+        $welcome .= " - Completing the *OPTIONAL* student profile<br /><br />";
+        $welcome .= "Please note that once you complete the Housing Application you do not have to fill out anything else.<br /><br />";
+       
+        $tpl['WELCOME'] = $welcome;
+        $tpl['ERROR']   = $this->get_error_msg();
         $final = PHPWS_Template::process($tpl, 'hms', 'misc/login.tpl');
         return $final;
     }
@@ -1182,7 +1189,7 @@ class HMS_Form
             $form->setMatch('number_floors', $object->number_floors);
         }
        
-        for($i = 1; $i < 20; $i++) {
+        for($i = 1; $i < 30; $i++) {
             $rooms[$i] = $i;
         }
        
