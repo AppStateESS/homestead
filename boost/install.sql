@@ -74,8 +74,8 @@ CREATE TABLE hms_learning_community_applications (
     rlc_question_2                  character varying(500),
     required_course                 smallint NOT NULL default 0,
     approved                        smallint NOT NULL default 0,
-    assigned_by_user                integer;
-    assigned_by_initials            character varying(8);
+    assigned_by_user                integer,
+    assigned_by_initials            character varying(8),
     PRIMARY KEY(id)
 );
 
