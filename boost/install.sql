@@ -72,8 +72,16 @@ CREATE TABLE hms_learning_community_applications (
     rlc_question_0                  character varying(500),
     rlc_question_1                  character varying(500),
     rlc_question_2                  character varying(500),
+    required_course                 smallint NOT NULL default 0,
+    approved                        smallint NOT NULL default 0,
     PRIMARY KEY(id)
 );
+
+CREATE TABLE hms_learning_community_hall (
+    learning_communities_id integer NOT NULL REFERENCES hms_learning_communities(id),
+    floor_id                integer NOT NULL REFERENCES hms_floor(id),
+    PRIMARY KEY (learning_communities_id)
+)
 
 CREATE TABLE hms_pricing_tiers (
     id integer DEFAULT 0 NOT NULL,
