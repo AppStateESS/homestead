@@ -81,12 +81,20 @@ function hms_update(&$content, $currentVersion)
             $content[] = _('+ Added link to the pdf of the contract for students that want to print it out');
 
         case version_compare($currentVersion, '0.1.6', '<'):
+            $db = &new PHPWS_DB;
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_1_6.sql');
+            if(PEAR::isError($result)) {
+                return $result;
+            }
+            
             $files      = array();
             $files[]    = 'templates/admin/maintenance.tpl';
+            $files[]    = 'templates/misc/login.tpl';
 
             PHPWS_Boost::updateFiles($files, 'hms');
 
             $content[] = _('+ Modifying permissions for RLC admins to approve members and assign to rooms');
+            $content[] = _('+ Added verbage for students to see before they login');
 
     }
 

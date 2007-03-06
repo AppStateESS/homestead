@@ -106,6 +106,7 @@ CREATE TABLE hms_application (
 
 CREATE TABLE hms_residence_hall (
     id integer DEFAULT 0 NOT NULL,
+    banner_building_code character varying(6) NULL,
     hall_name character varying(64) NOT NULL,
     number_floors smallint NOT NULL,
     rooms_per_floor smallint NOT NULL,
