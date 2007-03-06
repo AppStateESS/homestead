@@ -57,7 +57,7 @@ class HMS_Login
         }
         */
        
-       require_once(PHPWS_SOURCE_DIR . '/mod/hms/inc/accounts.php');
+        require_once(PHPWS_SOURCE_DIR . '/mod/hms/inc/accounts.php');
         Current_User::loginUser(HMS_STUDENT_USER, HMS_STUDENT_PASS);
         Current_User::getLogin();
         $_SESSION['asu_username'] = $_REQUEST['asu_username'];
