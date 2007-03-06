@@ -126,6 +126,26 @@ class HMS_SOAP{
         }
         return $student;
     }
+
+    function report_application_received($username, $term, $plan_code, $meal_code = NULL)
+    {
+        include_once('SOAP/Client.php');
+        $wsdl = new SOAP_WSDL(PHPWS_SOURCE_DIR . 'mod/hms/inc/shs0001.wsdl', 'true');
+        $proxy = $wsdl->getProxy();
+        $assignment = $proxy->CreateHousingApp($username, $term, $plan_code, $meal_code);
+
+        return $assignment;
+    }
+
+    function report_room_assignment($username, $term, $building_code, $room_code, $plan_code, $meal_code)
+    {
+        include_once('SOAP/Client.php');
+        $wsdl = new SOAP_WSDL(PHPWS_SOURCE_DIR . 'mod/hms/inc/shs0001.wsdl', 'true');
+        $proxy = $wsdl->getProxy();
+        $assignment = $proxy->CreateRoomAssignment($username, $term, $building_code, $room_code, $plan_code, $meal_code);
+
+        return $assignment;
+    }
 }
 
 ?>
