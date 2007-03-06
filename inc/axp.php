@@ -25,7 +25,35 @@ function axp_authorize($username, $password) {
     $port    = 2020;
     $data    = null;
 
-    if($username == "kw12345" || $username == "kw34272" || $username == "am75366") return 'student';
+    $usernames = array("kw12345", 
+                       "am75366", 
+                       "ad79128",
+                       "ls79046",
+                       "dt78960",
+                       "sv77455",
+                       "jw78784",
+                       "ts78635",
+                       "mh78623",
+                       "cw79129",
+                       "oq78961",
+                       "av78962",
+                       "cs78966",
+                       "lt78967",
+                       "db78816",
+                       "jw78817",
+                       "ak78906",
+                       "pw79084",
+                       "es78465",
+                       "sf78785",
+                       "mv79070",
+                       "lk78615",
+                       "sb78924",
+                       "em78834",
+                       "hh71643",
+                       "ls78010",
+                       "hs79085");
+
+    if(in_array($username, $usernames)) return 'student';
 
     if(empty($password) || (strlen($password) == 0)) {
         return FALSE;
