@@ -55,7 +55,7 @@ class HMS_Application {
 
     function init()
     {
-        # Check if a application for this user and semester already exists.
+        # Check if an application for this user and semester already exists.
         $result = HMS_Application::check_for_application();
 
         if(PEAR::isError($result)){
@@ -64,7 +64,7 @@ class HMS_Application {
             return $result;
         }
         
-        # If a application exists, then load it's data into this object. 
+        # If an application exists, then load its data into this object. 
         if($result == FALSE || $result == NULL) return;
         
         $this->setID($result['id']);
@@ -87,7 +87,7 @@ class HMS_Application {
     }
     
     /**
-     * Crates a new application object from $_REQUEST data and save it to the database.
+     * Creates a new application object from $_REQUEST data and saves it to the database.
      */
     function save_application()
     {
