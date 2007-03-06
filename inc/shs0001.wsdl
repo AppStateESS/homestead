@@ -65,6 +65,80 @@
         <s:attribute name="type_code" type="s:NMTOKEN" />
         <s:attribute name="desc" type="s:token" />
       </s:complexType>
+      <s:element name="CreateHousingApp">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="StudentID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TermCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="PlanCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="MealCode" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreateHousingAppResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="CreateHousingAppResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetHousMealRegister">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="StudentID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TermCode" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="Option" type="tns:HousMealLookupOpt" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:simpleType name="HousMealLookupOpt">
+        <s:restriction base="s:string">
+          <s:enumeration value="All" />
+          <s:enumeration value="HousingApp" />
+          <s:enumeration value="RoomAssign" />
+          <s:enumeration value="MealAssign" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="GetHousMealRegisterResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="housmeal_register" type="tns:HousMealRegister" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="HousMealRegister">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="housing_app" nillable="true" type="tns:HousingApp" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="room_assign" nillable="true" type="tns:RoomAssign" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="meal_assign" nillable="true" type="tns:MealAssign" />
+        </s:sequence>
+        <s:attribute name="student_id" type="s:NMTOKEN" />
+        <s:attribute name="term_code" type="s:NMTOKEN" />
+        <s:attribute name="error_num" type="s:int" use="required" />
+        <s:attribute name="option" type="tns:HousMealLookupOpt" use="required" />
+      </s:complexType>
+      <s:complexType name="HousingApp">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="plan_code" type="s:NMTOKEN" />
+          <s:element minOccurs="1" maxOccurs="1" name="status_code" nillable="true" type="s:NMTOKEN" />
+          <s:element minOccurs="1" maxOccurs="1" name="status_date" nillable="true" type="s:date" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="RoomAssign">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="bldg_code" type="s:NMTOKEN" />
+          <s:element minOccurs="0" maxOccurs="1" name="room_code" type="s:NMTOKEN" />
+          <s:element minOccurs="1" maxOccurs="1" name="status_code" nillable="true" type="s:NMTOKEN" />
+          <s:element minOccurs="1" maxOccurs="1" name="status_date" nillable="true" type="s:date" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="MealAssign">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="plan_code" type="s:NMTOKEN" />
+          <s:element minOccurs="1" maxOccurs="1" name="status_code" nillable="true" type="s:NMTOKEN" />
+          <s:element minOccurs="1" maxOccurs="1" name="status_date" nillable="true" type="s:date" />
+        </s:sequence>
+      </s:complexType>
       <s:element name="CreateRoomAssignment">
         <s:complexType>
           <s:sequence>
@@ -144,6 +218,18 @@
   <wsdl:message name="GetStudentProfileSoapOut">
     <wsdl:part name="parameters" element="tns:GetStudentProfileResponse" />
   </wsdl:message>
+  <wsdl:message name="CreateHousingAppSoapIn">
+    <wsdl:part name="parameters" element="tns:CreateHousingApp" />
+  </wsdl:message>
+  <wsdl:message name="CreateHousingAppSoapOut">
+    <wsdl:part name="parameters" element="tns:CreateHousingAppResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetHousMealRegisterSoapIn">
+    <wsdl:part name="parameters" element="tns:GetHousMealRegister" />
+  </wsdl:message>
+  <wsdl:message name="GetHousMealRegisterSoapOut">
+    <wsdl:part name="parameters" element="tns:GetHousMealRegisterResponse" />
+  </wsdl:message>
   <wsdl:message name="CreateRoomAssignmentSoapIn">
     <wsdl:part name="parameters" element="tns:CreateRoomAssignment" />
   </wsdl:message>
@@ -173,6 +259,14 @@
       <wsdl:input message="tns:GetStudentProfileSoapIn" />
       <wsdl:output message="tns:GetStudentProfileSoapOut" />
     </wsdl:operation>
+    <wsdl:operation name="CreateHousingApp">
+      <wsdl:input message="tns:CreateHousingAppSoapIn" />
+      <wsdl:output message="tns:CreateHousingAppSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetHousMealRegister">
+      <wsdl:input message="tns:GetHousMealRegisterSoapIn" />
+      <wsdl:output message="tns:GetHousMealRegisterSoapOut" />
+    </wsdl:operation>
     <wsdl:operation name="CreateRoomAssignment">
       <wsdl:input message="tns:CreateRoomAssignmentSoapIn" />
       <wsdl:output message="tns:CreateRoomAssignmentSoapOut" />
@@ -194,6 +288,24 @@
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
     <wsdl:operation name="GetStudentProfile">
       <soap:operation soapAction="http://its.appstate.edu/xml/ess/shs/GetStudentProfile" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateHousingApp">
+      <soap:operation soapAction="http://its.appstate.edu/xml/ess/shs/CreateHousingApp" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetHousMealRegister">
+      <soap:operation soapAction="http://its.appstate.edu/xml/ess/shs/GetHousMealRegister" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -242,6 +354,24 @@
     <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
     <wsdl:operation name="GetStudentProfile">
       <soap12:operation soapAction="http://its.appstate.edu/xml/ess/shs/GetStudentProfile" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateHousingApp">
+      <soap12:operation soapAction="http://its.appstate.edu/xml/ess/shs/CreateHousingApp" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetHousMealRegister">
+      <soap12:operation soapAction="http://its.appstate.edu/xml/ess/shs/GetHousMealRegister" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
