@@ -1447,6 +1447,8 @@ class HMS_Form
     {
         PHPWS_Core::initCoreClass('Form.php');
         $form = &new PHPWS_Form;
+        
+        $form->addHidden('agreed_to_terms',$_REQUEST['agreed_to_terms']); # From contract page
 
         $form->addDropBox('student_status', array('1'=>_('New Freshman'),
                                                   '2'=>_('Transfer')));
@@ -1552,6 +1554,7 @@ class HMS_Form
 
             $form = &new PHPWS_Form;
 
+            $form->addHidden('agreed_to_terms',$_REQUEST['agreed_to_terms']);
             $form->addHidden('classification_for_term', $_REQUEST['classification_for_term']);
             $form->addHidden('student_status',$_REQUEST['student_status']);
             $form->addHidden('gender_type',$_REQUEST['gender_type']);
@@ -1572,6 +1575,7 @@ class HMS_Form
             $redo_form->addSubmit('submit','Modify Application');
             $redo_form->addHidden('type','student');
             $redo_form->addHidden('op','begin_application');
+            $redo_form->addHidden('agreed_to_terms',$_REQUEST['agreed_to_terms']);
             $redo_form->addHidden('classification_for_term', $_REQUEST['classification_for_term']);
             $redo_form->addHidden('student_status',$_REQUEST['student_status']);
             $redo_form->addHidden('gender_type',$_REQUEST['gender_type']);

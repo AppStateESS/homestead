@@ -21,6 +21,7 @@ class HMS_Application {
     var $preferred_bedtime;
     var $room_condition;
     var $rlc_interest;
+    var $agreed_to_terms;
 
     var $created_on;
     var $created_by;
@@ -80,6 +81,7 @@ class HMS_Application {
         $this->setDeleted($result['deleted']);
         $this->setDeletedBy($result['deleted_by']);
         $this->setDeletedOn($result['deleted_on']);
+        $this->setAgreedToTerms($result['agreed_to_terms']);
 
         return $result;
     }
@@ -99,6 +101,7 @@ class HMS_Application {
         $question->setPreferredBedtime($_REQUEST['preferred_bedtime']);
         $question->setRoomCondition($_REQUEST['room_condition']);
         $question->setRlcInterest($_REQUEST['rlc_interest']);
+        $question->setAgreedToTerms($_REQUEST['agreed_to_terms']);
 
         $result = $question->save();
         
@@ -141,6 +144,7 @@ class HMS_Application {
         $db->addValue('deleted',$this->getDeleted());
         $db->addValue('deleted_by',$this->getDeletedBy());
         $db->addValue('deleted_on',$this->getDeletedOn());
+        $db->addValue('agreed_to_terms',$this->getAgreedToTerms());
         
         # If this object has an ID, then do an update. Otherwise, do an insert.
         if(!$this->getID() || $this->getID() == NULL){
@@ -471,5 +475,21 @@ class HMS_Application {
 
     function getDeletedOn(){
         return $this->deleted_on;
+    }
+
+    function setAgreedToTerms($agreed){
+        if($agreed == 0){
+            $this->agreed_to_terms = FALSE;
+        }else{
+            $this->agreed_to_terms = TRUE;
+        }
+    }
+
+    function getAgreedToTerms(){
+        if($this->agreed_to_terms){
+            return 1;
+        }else{
+            return 0;
+        }
     }
 }
