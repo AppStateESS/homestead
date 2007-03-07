@@ -60,6 +60,15 @@ CREATE TABLE hms_learning_community_questions (
     primary key(id)
 );
 
+CREATE TABLE hms_learning_community_assignment (
+    id                   integer NOT NULL,
+    asu_username         character varying(11) UNIQUE NOT NULL,
+    rlc_id               integer NOT NULL REFERENCES hms_learning_communities(id),
+    assigned_by_user     integer NOT NULL,
+    assigned_by_initials character varying(8),
+    PRIMARY KEY (id)
+);
+
 CREATE TABLE hms_learning_community_applications (
     id                              integer NOT NULL,
     user_id                         character varying(16) UNIQUE NOT NULL,
@@ -81,15 +90,6 @@ CREATE TABLE hms_learning_community_floors (
     learning_communities_id integer NOT NULL REFERENCES hms_learning_communities(id),
     floor_id                integer NOT NULL REFERENCES hms_floor(id),
     PRIMARY KEY (learning_communities_id)
-);
-
-CREATE TABLE hms_learning_community_assignment (
-    id                   integer NOT NULL,
-    asu_username         character varying(11) UNIQUE NOT NULL,
-    rlc_id               integer NOT NULL REFERENCES hms_learning_communities(id),
-    assigned_by_user     integer NOT NULL,
-    assigned_by_initials character varying(8),
-    PRIMARY KEY (id)
 );
 
 CREATE TABLE hms_pricing_tiers (

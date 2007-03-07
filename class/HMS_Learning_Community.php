@@ -281,9 +281,11 @@ class HMS_Learning_Community
 
     function display_rlc_assignment_summary()
     {
-        $db = &new PHPWS_DB('');
+        $db = &new PHPWS_DB('hms_learning_community_applications');
         $tags = array();
 
+        $db->addColumn('');
+        return '';
     }
 
     function assign_rlc_members_to_rooms()
