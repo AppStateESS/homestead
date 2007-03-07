@@ -267,11 +267,7 @@ class HMS_RLC_Application{
     }
 
     function getRequiredCourse(){
-        if($this->required_course == 0){
-            return FALSE;
-        }else{
-            return TRUE;
-        }
+        return $this->required_course;
     }
 
     function setApproved($approved){
@@ -279,11 +275,7 @@ class HMS_RLC_Application{
     }
 
     function getApproved(){
-        if($this->approved == 0){
-            return FALSE;
-        }else{
-            return TRUE;
-        }
+        return $this->approved;
     }
 
     function setAssignedByUser($user){
