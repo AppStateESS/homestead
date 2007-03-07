@@ -27,9 +27,7 @@ class HMS_RLC_Application{
     var $rlc_question_2;
 
     var $required_course = 0;
-    var $approved = 0;
-    var $assigned_by_user = NULL;
-    var $assigned_by_initials = NULL;
+    var $hms_assignment_id = NULL;
 
     /**
      * Constructor
@@ -77,9 +75,7 @@ class HMS_RLC_Application{
         $this->setRLCQuestion1($result['rlc_question_1']);
         $this->setRLCQuestion2($result['rlc_question_2']);
         $this->setRequiredCourse($result['required_course']);
-        $this->setApproved($result['approved']);
-        $this->setAssignedByUser($result['assigned_by_user']);
-        $this->setAssignedByInitials($result['assigned_by_initials']);
+        $this->setAssignmentID($result['hms_assignment_id']);
 
         return $result;
     }
@@ -128,9 +124,7 @@ class HMS_RLC_Application{
         $db->addValue('rlc_question_1',          $this->getRLCQuestion1());
         $db->addValue('rlc_question_2',          $this->getRLCQuestion2());
         $db->addValue('required_course',         $this->getRequiredCourse());
-        $db->addValue('approved',                $this->getApproved());
-        $db->addValue('assigned_by_user',        $this->getAssignedByUser());
-        $db->addValue('assigned_by_initials',    $this->getAssignedByInitials());
+        $db->addValue('hms_assignment_id',       $this->getAssignmentID());
 
         # If this object has an ID, then do an update. Otherwise, do an insert.
         if(!$this->getID() || $this->getID() == NULL){
@@ -217,7 +211,6 @@ class HMS_RLC_Application{
         $tags['GENDER'] = ;
         $tags['APPLY_DATE'] = ;
         $tags['COURSE_OK'] = ;
-        $tags['FINAL_ASSIGN_BY'] = ;
 
         return $tags;
     }
@@ -326,28 +319,12 @@ class HMS_RLC_Application{
         return $this->required_course;
     }
 
-    function setApproved($approved){
-        $this->approved = $approved;
+    function setAssignmentID($id){
+        $this->hms_assignment_id = $id;
     }
 
-    function getApproved(){
-        return $this->approved;
-    }
-
-    function setAssignedByUser($user){
-        $this->assigned_by_user = $user;
-    }
-
-    function getAssignedByUser(){
-        return $this->assigned_by_user;
-    }
-
-    function setAssignedByInitials($init){
-        $this->assigned_by_initials = $init;
-    }
-
-    function getAssignedByInitials(){
-        return $this->assigned_by_initials;
+    function getAssignmentID(){
+        return $this->hms_assignment_id;
     }
 }
 
