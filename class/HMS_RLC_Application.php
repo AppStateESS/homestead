@@ -26,8 +26,8 @@ class HMS_RLC_Application{
     var $rlc_question_1;
     var $rlc_question_2;
 
-    var $required_course;
-    var $approved;
+    var $required_course = 0;
+    var $approved = 0;
     var $assigned_by_user = NULL;
     var $assigned_by_initials = NULL;
 
@@ -37,7 +37,7 @@ class HMS_RLC_Application{
      * to create/load a application for. Otherwise, the student currently
      * logged in (session) is used.
      */
-    function HMS_RLC_Application($user_id)
+    function HMS_RLC_Application($user_id = NULL)
     {
 
         if(isset($user_id)){
@@ -68,9 +68,9 @@ class HMS_RLC_Application{
 
         $this->setID($result['id']);
         $this->setDateSubmitted($result['date_submitted']);
-        $this->setFirstChoice($result['rlc_first_choice_id');
-        $this->setSecondChoice($result['rlc_second_choice_id');
-        $this->setThirdChoice($result['rlc_second_choice_id');
+        $this->setFirstChoice($result['rlc_first_choice_id']);
+        $this->setSecondChoice($result['rlc_second_choice_id']);
+        $this->setThirdChoice($result['rlc_second_choice_id']);
         $this->setWhySpecificCommunities($result['why_specific_communities']);
         $this->setStrengthsWeaknesses($result['strengths_weaknesses']);
         $this->setRLCQuestion0($result['rlc_question_0']);
@@ -92,9 +92,9 @@ class HMS_RLC_Application{
         $application = &new HMS_RLC_Application();
 
         
-        $application->setFirstChoice($_REQUEST['rlc_first_choice_id');
-        $application->setSecondChoice($_REQUEST['rlc_second_choice_id');
-        $application->setThirdChoice($_REQUEST['rlc_second_choice_id');
+        $application->setFirstChoice($_REQUEST['rlc_first_choice']);
+        $application->setSecondChoice($_REQUEST['rlc_second_choice']);
+        $application->setThirdChoice($_REQUEST['rlc_third_choice']);
         $application->setWhySpecificCommunities($_REQUEST['why_specific_communities']);
         $application->setStrengthsWeaknesses($_REQUEST['strengths_weaknesses']);
         $application->setRLCQuestion0($_REQUEST['rlc_question_0']);
@@ -136,7 +136,7 @@ class HMS_RLC_Application{
         if(!$this->getID() || $this->getID() == NULL){
             # do an insert
             $this->setDateSubmitted();
-            $db->addValue('date_submitted',          $this->getDateSubmitted());
+            $db->addValue('date_submitted', $this->getDateSubmitted());
 
             $result = $db->insert();
         }else{
@@ -149,7 +149,7 @@ class HMS_RLC_Application{
             PHPWS_Error::log($result,'hms','save_rlc_application',"Could not insert/update rlc application for user: {$_SESSION['asu_username']}");
             return $result;
         }else{
-            return TRUE:
+            return TRUE;
         }
     }
 
@@ -190,8 +190,20 @@ class HMS_RLC_Application{
         return $this->id;
     }
 
-    function setDateSubmitted($date){
-         $this->date_submitted = $date;
+    function setUserID($user_id){
+        $this->user_id = $user_id;
+    }
+
+    function getUserID(){
+        return $this->user_id;
+    }
+
+    function setDateSubmitted($date = NULL){
+        if(!isset($date)){
+            $this->date_submitted = mktime();
+        }else{
+            $this->date_submitted = $date;
+        }
     }
     
     function getDateSubmitted(){
@@ -214,12 +226,12 @@ class HMS_RLC_Application{
         return $this->rlc_second_choice_id;
     }
 
-    function setThirdChoice($chocie){
+    function setThirdChoice($choice){
         $this->rlc_third_choice_id = $choice;
     }
 
     function getThirdChoice(){
-        return $this->rlc_thrird_choice_id;
+        return $this->rlc_third_choice_id;
     }
 
     function setWhySpecificCommunities($why){
@@ -235,7 +247,7 @@ class HMS_RLC_Application{
     }
 
     function getStrengthsWeaknesses(){
-        return $this->stenghts_weaknesses;
+        return $this->strengths_weaknesses;
     }
 
     function setRLCQuestion0($question){
@@ -243,7 +255,7 @@ class HMS_RLC_Application{
     }
 
     function getRLCQuestion0(){
-        return $this0>rlc_question_0;
+        return $this->rlc_question_0;
     }
 
     function setRLCQuestion1($question){
@@ -254,7 +266,7 @@ class HMS_RLC_Application{
         return $this->rlc_question_1;
     }
 
-    function setRLCQuestion2($questions){
+    function setRLCQuestion2($question){
         $this->rlc_question_2 = $question;
     }
 

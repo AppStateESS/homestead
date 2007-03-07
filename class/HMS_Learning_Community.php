@@ -234,20 +234,8 @@ class HMS_Learning_Community
         }else{
 
             # Save the data to the database
-            $db = &new PHPWS_DB('hms_learning_community_applications');
-
-            $db->addValue('user_id',                    $_SESSION['asu_username']);
-            $db->addValue('date_submitted',             mktime());
-            $db->addValue('rlc_first_choice_id',        $_REQUEST['rlc_first_choice']);
-            $db->addValue('rlc_second_choice_id',       $_REQUEST['rlc_second_choice']);
-            $db->addValue('rlc_third_choice_id',        $_REQUEST['rlc_third_choice']);
-            $db->addValue('why_specific_communities',   $_REQUEST['why_specific_communities']);
-            $db->addValue('strengths_weaknesses',       $_REQUEST['strengths_weaknesses']);
-            $db->addValue('rlc_question_0',             $_REQUEST['rlc_question_0']);
-            $db->addValue('rlc_question_1',             $_REQUEST['rlc_question_1']);
-            $db->addValue('rlc_question_2',             $_REQUEST['rlc_question_2']);
-
-            $result = $db->insert();
+            PHPWS_Core::initModClass('hms','HMS_RLC_Application.php');
+            $result = HMS_RLC_Application::save_application();
 
             test($result);
 
