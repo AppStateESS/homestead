@@ -14,3 +14,9 @@ CREATE TABLE hms_learning_community_assignment (
 ALTER TABLE hms_learning_community_applications ADD COLUMN hms_assignment_id integer;
 ALTER TABLE hms_learning_community_applications ADD CONSTRAINT rlcapp_assignment_id
     FOREIGN KEY (hms_assignment_id) REFERENCES hms_learning_community_assignment (id);
+
+ALTER TABLE hms_learning_communities ADD COLUMN abbreviation character varying(16);
+ALTER TABLE hms_learning_communities ALTER COLUMN abbreviation SET NOT NULL;
+
+ALTER TABLE hms_learning_communities ADD COLUMN capacity integer;
+ALTER TABLE hms_learning_communities ALTER COLUMN capacity SET NOT NULL;

@@ -260,7 +260,7 @@ class HMS_Learning_Community
     function assign_applicants_to_rlcs()
     {
         $tags = array();
-        $tags['SUMMARY'] = display_rlc_assignment_summary();
+        $tags['SUMMARY'] = HMS_Learning_Community::display_rlc_assignment_summary();
 
         $tags['headings'][0]['HEADING'] = "Heading1";
         $tags['headings'][1]['HEADING'] = "HEading2";
@@ -281,11 +281,28 @@ class HMS_Learning_Community
 
     function display_rlc_assignment_summary()
     {
-        $db = &new PHPWS_DB('hms_learning_community_applications');
-        $tags = array();
+        $template = array();
 
-        $db->addColumn('');
-        return '';
+        $db = &new PHPWS_DB('hms_learning_communities');
+        $db->addColumn('community_name');
+        $db->addColumn('capacity');
+        $communities = $db->select();
+
+        $count = 0;
+        $total_assignments = 0;
+        $total_available = 0;
+        $total_remaining = 0;
+        foreach($communities as $community) {
+            $template['headings'][$count]['HEADING']       = $community['community_name'];
+            
+            $template['assignments'][$count]['ASSIGNMENT'] = 0;
+            
+            $template['available'][$count]['AVAILABLE']    = $community['capacity'];
+            $total_available = $community['capacity'];
+            
+            $template['remaining'][$count]['REMAINING']    = 0;
+            $count++;
+        }
     }
 
     function assign_rlc_members_to_rooms()

@@ -201,7 +201,7 @@ class HMS_RLC_Application{
         $tags = array();
 
         $tags['NAME'] = HMS_SOAP::get_full_name_inverted($this->getUserID());
-        $tags['1ST_CHOICE'] = ;
+/*        $tags['1ST_CHOICE'] = ;
         $tags['2ND_CHOICE'] = ;
         $tags['3RD_CHOICE'] = ;
         $tags['FINAL_RLC'] = ;
@@ -210,7 +210,7 @@ class HMS_RLC_Application{
         $tags['HS_GPA'] = ;
         $tags['GENDER'] = ;
         $tags['APPLY_DATE'] = ;
-        $tags['COURSE_OK'] = ;
+        $tags['COURSE_OK'] = ;*/
 
         return $tags;
     }

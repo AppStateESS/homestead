@@ -8,15 +8,27 @@
                     <th>{HEADING}</th>
 <!-- END headings -->
                 </tr>
-<!-- BEGIN listrows -->
-                <tr {TOGGLE}>
-                    <td>{STATISTIC}</td>
-                    <td>{TOTAL}</td>
-<!-- BEGIN columns -->
-                    <td>{COLUMN}</td>
-<!-- END columns -->
+                <tr>
+                    <th>Assignments (male/female)</th>
+                    <td>{TOTAL_ASSIGNMENTS}</td>
+<!-- BEGIN assignments -->
+                    <td>{ASSIGNMENT}</td>
+<!-- END assignments -->
                 </tr>
-<!-- END listrows -->
+                <tr>
+                    <th>Seats Available</th>
+                    <td>{TOTAL_AVAILABLE}</td>
+<!-- BEGIN available -->
+                    <td>{AVAILABLE}</td>
+<!-- END available -->
+                </tr>
+                <tr>
+                    <th>Seats Remaining</th>
+                    <td>{TOTAL_REMAINING}</td>
+<!-- BEGIN remaining -->
+                    <td>{REMAINING}</td>
+<!-- END remaining -->
+                </tr>   
             </table>
             {EMPTY_MESSAGE}
             <div class="align-center">
