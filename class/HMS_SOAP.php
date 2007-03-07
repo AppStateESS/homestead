@@ -59,6 +59,38 @@ class HMS_SOAP{
         }
     }
 
+    function get_full_name($username)
+    {
+        $student = HMS_SOAP::get_student_info($username);
+
+        if(PEAR::isError($student)){
+            PHPWS_Error::log($student,'hms','get_full_name',$username);
+            return $student;
+        }else if($student->last_name == NULL){
+            return NULL;
+        }else{
+            return ($student->first_name  . " " .
+                    $student->middle_name . " " .
+                    $student->last_name);
+        }
+    }
+
+    function get_full_name_inverted($username)
+    {
+        $student = HMS_SOAP::get_student_info($username);
+
+        if(PEAR::isError($student)){
+            PHPWS_Error::log($student,'hms','get_full_name_inverted',$username);
+            return $student;
+        }else if($student->last_name == NULL){
+            return NULL;
+        }else{
+            return ($student->last_name  . ", " . 
+                    $student->first_name . " "  .
+                    $student->middle_name);
+        }
+    }
+
     function get_gender($username)
     {
         $student = HMS_SOAP::get_student_info($username);
