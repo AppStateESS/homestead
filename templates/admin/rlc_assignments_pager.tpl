@@ -14,7 +14,6 @@
         <th>Major</th>
         <th>HS GPA</th>
         <th>Gender</th>
-        <th>Roommate</th>
         <th>Apply Date</th>
         <th>Course OK?</th>
         <th>Final Assign. by</th>
@@ -30,7 +29,6 @@
         <td>{MAJOR}</td>
         <td>{HS_GPA}</td>
         <td>{GENDER}</td>
-        <td>{ROOMMATE}</td>
         <td>{APPLY_DATE}</td>
         <td>{COURSE_OK}</td>
         <td>{FINAL_ASSIGN_BY}</td>
