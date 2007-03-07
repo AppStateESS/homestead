@@ -96,6 +96,12 @@ function hms_update(&$content, $currentVersion)
             $content[] = _('+ Modifying permissions for RLC admins to approve members and assign to rooms');
             $content[] = _('+ Added verbage for students to see before they login');
 
+        case version_compate($currentVersion, '0.1.7', '<'):
+            $db = &new PHPWS_DB;
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_1_7.sql');
+            if(PEAR::isError($result)) {
+                return $result;
+            }
     }
 
     return TRUE;

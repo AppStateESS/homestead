@@ -1,0 +1,5 @@
+ALTER TABLE hms_learning_community_applications ALTER COLUMN assigned_by_user SET NULL;
+ALTER TABLE hms_learning_community_applications ALTER COLUMN assigned_by_user DROP DEFAULT;
+
+ALTER TABLE hms_learning_community_applications ALTER COLUMN assigned_by_initials SET NULL;
+ALTER TABLE hms_learning_community_applications ALTER COLUMN assigned_by_initials DROP DEFAULT;
