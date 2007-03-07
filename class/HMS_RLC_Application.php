@@ -176,7 +176,51 @@ class HMS_RLC_Application{
             return FALSE;
         }
     }
+    
+    function rlc_application_admin_pager(){
+        PHPWS_Core::initCoreClass('DBPager.php');
 
+        $form = new PHPWS_Form;
+        $form->addHidden('type','admin');
+        $form->addHidden('op','rlc_assignments_submit');
+        $form->addSubmit('Submit Changes');
+
+        $tags = $form->getTemplate();
+
+        $pager = &new DBPager('hms_learning_community_applications','HMS_RLC_Application');
+        $pager->db->addOrder('date_submitted','ASC');
+
+        $pager->setModule('hms');
+        $pager->setTemplate('admin/rlc_assignments_pager.tpl');
+        $pager->setLink('index.php?module=hms');
+        $pager->setEmptyMessage("No pending RLC applications.");
+        $pager->addToggle('class="toggle1"');
+        $pager->addToggle('class="toggle1"');
+        $pager->addPageTags($tags);
+        $pager->addRowTags('getAdminPagerTags');
+
+        return $pager->get();
+    }
+
+    function getAdminPagerTags(){
+
+        $tags = array();
+
+        $tags['NAME'] = HMS_SOAP::get_full_name_inverted($this->getUserID());
+        $tags['1ST_CHOICE'] = ;
+        $tags['2ND_CHOICE'] = ;
+        $tags['3RD_CHOICE'] = ;
+        $tags['FINAL_RLC'] = ;
+        $tags['SPECIAL_POP'] = ;
+        $tags['MAJOR'] = ;
+        $tags['HS_GPA'] = ;
+        $tags['GENDER'] = ;
+        $tags['APPLY_DATE'] = ;
+        $tags['COURSE_OK'] = ;
+        $tags['FINAL_ASSIGN_BY'] = ;
+
+        return $tags;
+    }
 
     /****************************
      * Accessor & Mutator Methods
