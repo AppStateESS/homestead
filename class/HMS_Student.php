@@ -322,11 +322,17 @@ class HMS_Student {
                     $message .= "<br /><br />";
                     $message .= PHPWS_Text::secureLink(_('Submit New Application'), 'hms', array('type'=>'student', 'op'=>'begin_application'));
                     $message .= "<br /><br />";
+                    
+                    PHPWS_Core::initModClass('hms','HMS_RLC_Application.php');
+                    if(HMS_RLC_Application::check_for_application() === FALSE){
+                        $message .= PHPWS_Text::secureLink(_('RLC Application Form'), 'hms', array('type'=>'student', 'op'=>'show_rlc_application_form'));
+                        $message .="<br /><br />";
+                    }
+
                     $message .= PHPWS_Text::secureLink(_('Search for a roomate'), 'hms', array('type'=>'student','op'=>'show_application_search'));
                     $message .= "<br /><br />";
                     $message .= PHPWS_Text::secureLink(_('Logout'), 'users', array('action'=>'user', 'command'=>'logout'));
                     $message .= "<br /><br />";
-                    $message .= PHPWS_Text::secureLink(_('RLC Application Form'), 'hms', array('type'=>'student', 'op'=>'show_rlc_application_form'));
                 } else {
                    
                     $form = new PHPWS_Form;
