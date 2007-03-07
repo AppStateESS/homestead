@@ -16,7 +16,6 @@
         <th>Gender</th>
         <th>Apply Date</th>
         <th>Course OK?</th>
-        <th>Final Assign. by</th>
     </tr>
 <!-- BEGIN listrows -->
     <tr {TOGGLE}>
@@ -31,7 +30,6 @@
         <td>{GENDER}</td>
         <td>{APPLY_DATE}</td>
         <td>{COURSE_OK}</td>
-        <td>{FINAL_ASSIGN_BY}</td>
     </tr>
 <!-- END listrows -->
 </table>
