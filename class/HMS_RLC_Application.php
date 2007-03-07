@@ -160,7 +160,7 @@ class HMS_RLC_Application{
         if(isset($asu_user)){
             $db->addWhere('user_id',$asu_username,'ILIKE');
         }else{
-            $db->addWhere('user_id',$this->getUserID(),'ILIKE');
+            $db->addWhere('user_id',$_SESSION['asu_username'],'ILIKE');
         }
 
         $result = $db->select('row');
