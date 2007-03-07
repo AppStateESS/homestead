@@ -102,6 +102,10 @@ function hms_update(&$content, $currentVersion)
             if(PEAR::isError($result)) {
                 return $result;
             }
+            
+            $files   = array();
+            $files[] = 'templates/admin/make_new_rlc_assignments_summary.tpl';
+            PHPWS_Boost::updateFiles($files, 'hms');
     }
 
     return TRUE;

@@ -259,9 +259,31 @@ class HMS_Learning_Community
 
     function assign_applicants_to_rlcs()
     {
-        PHPWS_Core::initModClass('hms','HMS_Forms.php');
+        $tags = array();
+        $tags['SUMMARY'] = display_rlc_assignment_summary();
 
-        return HMS_Form::show_make_new_rlc_assignments();
+        $tags['headings'][0]['HEADING'] = "Heading1";
+        $tags['headings'][1]['HEADING'] = "HEading2";
+
+        $tags['listrows'][0]['STATISTIC'] = "Statistic";
+        $tags['listrows'][1]['STATISTIC'] = "Something Else";
+        $tags['listrows'][2]['STATISTIC'] = "Yo Momma";
+        
+        $tags['listrows'][0]['columns'][0]['COLUMN'] = "0,0";
+        $tags['listrows'][0]['columns'][1]['COLUMN'] = "0,1";
+        $tags['listrows'][1]['columns'][0]['COLUMN'] = "1,0";
+        $tags['listrows'][1]['columns'][1]['COLUMN'] = "1,1";
+        $tags['listrows'][2]['columns'][0]['COLUMN'] = "2,0";
+        $tags['listrows'][2]['columns'][1]['COLUMN'] = "2,1";
+
+        return PHPWS_Template::process($tags, 'hms', 'admin/make_new_rlc_assignments_summary.tpl');
+    }
+
+    function display_rlc_assignment_summary()
+    {
+        $db = &new PHPWS_DB('');
+        $tags = array();
+
     }
 
     function assign_rlc_members_to_rooms()

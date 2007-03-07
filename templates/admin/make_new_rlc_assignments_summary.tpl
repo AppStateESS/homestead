@@ -4,13 +4,17 @@
                 <tr>
                     <th>&nbsp;</th>
                     <th>Total</th>
-                    {HEADINGS}
+<!-- BEGIN headings -->
+                    <th>{HEADING}</th>
+<!-- END headings -->
                 </tr>
 <!-- BEGIN listrows -->
                 <tr {TOGGLE}>
                     <td>{STATISTIC}</td>
                     <td>{TOTAL}</td>
-                    {COLUMNS}
+<!-- BEGIN columns -->
+                    <td>{COLUMN}</td>
+<!-- END columns -->
                 </tr>
 <!-- END listrows -->
             </table>
