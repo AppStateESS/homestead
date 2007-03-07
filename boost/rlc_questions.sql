@@ -6,4 +6,4 @@ INSERT INTO hms_learning_community_questions (id, learning_community_id, questio
 INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (5, 5, 'How do you plan to be an active member of the ASU community?');
 
 CREATE SEQUENCE hms_learning_community_questions_seq;
-SELECT setval('hms_learning_community_questions_seq', max('hms_learning_community.id'));
+SELECT setval('hms_learning_community_questions_seq', max(hms_learning_community_questions.id));

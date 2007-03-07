@@ -6,4 +6,4 @@ INSERT INTO hms_learning_communities (id, community_name) VALUES (4, 'Language &
 INSERT INTO hms_learning_communities (id, community_name) VALUES (5, 'Black & Gold Community');
 
 CREATE SEQUENCE hms_learning_communities_seq;
-SELECT setval('hms_learning_communities_seq', max('hms_learning_communities.id'));
+SELECT setval('hms_learning_communities_seq', max(hms_learning_communities.id));
