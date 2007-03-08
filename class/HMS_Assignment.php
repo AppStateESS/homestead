@@ -12,9 +12,7 @@ class HMS_Assignment
 {
     var $id;
     var $asu_username;
-    var $building_id;
-    var $room_id;
-    var $bed;
+    var $bed_id;
 
     /**
      * Return the id for the current assignment object
@@ -49,51 +47,19 @@ class HMS_Assignment
     }
 
     /**
-     * Returns the building ID for the current assignment
-     */
-    function get_building_id()
-    {
-        return $this->building_id;
-    }
-
-    /**
-     * Sets the building ID for the current assignment
-     */
-    function set_building_id($bid)
-    {
-        $this->building_id = $bid;
-    }
-
-    /**
-     * Returns the room id of the current assignment
-     */
-    function get_room_id()
-    {
-        return $this->room_id;
-    }
-
-    /**
-     * Sets the room id of the current assignment
-     */
-    function set_room_id($rid)
-    {
-        $this->room_id = $rid;
-    }
-
-    /**
      * Returns the bed associated with the current assignment
      */
-    function get_bed()
+    function get_bed_id()
     {
-        return $this->bed;
+        return $this->bed_id;
     }
 
     /**
      * Sets the bed associated with the current assignment
      */
-    function set_bed($bnumber)
+    function set_bed_id($bnumber)
     {
-        $this->bed = $bnumber;
+        $this->bed_id = $bnumber;
     }
 
     /**
@@ -107,12 +73,23 @@ class HMS_Assignment
         $db->addWhere('floor_number', $_REQUEST['floor']);
         $db->addWhere('room_number', $_REQUEST['floor'] . str_pad($_REQUEST['room'], 2, "0", STR_PAD_LEFT));
         $db->addWhere('deleted', '1', '!=');
-        $id = $db->select('one');
+        $rid = $db->select('one');
+
+        $db = new PHPWS_DB('hms_bedrooms');
+        $db->addColumn('id');
+        $db->addWhere('room_id', $rid);
+        $db->addWhere('bedroom_letter', $_REQUEST['bedroom_letter']);
+        $br_id = $db->select('one');
+
+        $db = new PHPWS_DB('hms_beds');
+        $db->addColumn('id');
+        $db->addWhere('bedroom_id', $br_id);
+        $db->addWhere('bed_letter', $_REQUEST['bed_letter']);
+        $bed_id = $db->select('one');
 
         $assignment = new HMS_Assignment;
         $assignment->set_asu_username($_REQUEST['username']);
-        $assignment->set_building_id($_REQUEST['hall']);
-        $assignment->set_room_id($id);
+        $assignment->set_bed_id($bed_id);
 
         return $assignment;
     }
@@ -224,19 +201,23 @@ class HMS_Assignment
      */
     function verify_assignment()
     {
-        $id = HMS_Assignment::get_room_id_by_request();
+        $room_id = HMS_Assignment::get_room_id_by_request();
+        $bed_id = HMS_Assignment::get_bed_id_by_request_and_room_id($room_id);
 
-        if(!HMS_Assignment::room_user_gender_compatible($id)) {
+        if(!HMS_Assignment::room_user_gender_compatible($room_id)) {
             $msg = '<font color="red"><b>The gender of the student and the room gender are incompatible.</b></font>';
             return HMS_Assignment::get_username_for_assignment($msg);
         }
 
         PHPWS_Core::initModClass('hms', 'HMS_Room.php');
 
-        $assigned = HMS_Assignment::number_assigned_to_room($id);
-        $assignable = HMS_Room::get_bedrooms_per_room($id);
+        //$assigned = HMS_Assignment::number_assigned_to_room($id);
+        //$assignable = HMS_Room::get_bedrooms_per_room($id);
+      
+        $assigned = HMS_Assignment::is_bed_assigned($bed_id);
 
-        if($assigned == $assignable) {
+        //if($assigned == $assignable) {
+        if($assigned) {
             $msg = '<font color="red"><b>This room is full. Please assign to another room or remove a student from this room.<b></font>';
             return HMS_Assignment::get_username_for_assignment($msg);
         }
@@ -266,6 +247,39 @@ class HMS_Assignment
 
         PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
         return HMS_Form::verify_assignment($msg);
+    }
+
+    /**
+     * Returns the bed_id based on $_REQUEST values
+     */
+    function get_bed_id_by_request_and_room_id($room_id)
+    {
+        $db = new PHPWS_DB('hms_bedrooms');
+        $db->addColumn('id');
+        $db->addWhere('room_id', $room_id);
+        $db->addWhere('bedroom_letter', $_REQUEST['bedroom_letter']);
+        $br_id = $db->select('one');
+
+        $db = new PHPWS_DB('hms_beds');
+        $db->addColumn('id');
+        $db->addWhere('bedroom_id', $br_id);
+        $db->addWhere('bed_letter', $_REQUEST['bed_letter']);
+        $bed_id = $db->select('one');
+
+        return $bed_id;
+    }
+
+    /**
+     * Checks the bed indicated has not been assigned
+     */
+    function is_bed_assigned($id)
+    {
+        $db = new PHPWS_DB('hms_assignment');
+        $db->addColumn('id');
+        $db->addWhere('bed_id', $id);
+        $assigned = $db->select('one');
+        if($assigned == NULL || $assigned == FALSE) return false;
+        else return true;
     }
 
     /**
