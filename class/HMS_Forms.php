@@ -252,12 +252,16 @@ class HMS_Form
             $rooms[$i] = $i;
         }
 
+        $letters = array('a'=>"a", 'b'=>"b", 'c'=>"c", 'd'=>"d");
+
         PHPWS_Core::initCoreClass('Form.php');
         $form = &new PHPWS_Form;
 
         $form->addDropBox('halls', $halls);
         $form->addDropBox('floors', $floors);
         $form->addDropBox('rooms', $rooms);
+        $form->addDropBox('bedroom_letter', $letters);
+        $form->addDropBox('bed_letter', $letters);
         
         $form->addHidden('module', 'hms');
         $form->addHidden('type', 'assignment');
@@ -292,6 +296,8 @@ class HMS_Form
         $form->addHidden('hall', $_REQUEST['halls']);
         $form->addHidden('floor', $_REQUEST['floors']);
         $form->addHidden('room', $_REQUEST['rooms']);
+        $form->addHidden('bedroom_letter', $_REQUEST['bedroom_letter']);
+        $form->addHidden('bed_letter', $_REQUEST['bed_letter']);
         $form->addSubmit('submit', _('Assign Student'));
 
         $tpl = $form->getTemplate();
@@ -300,6 +306,8 @@ class HMS_Form
         $tpl['HALLS']   = $hall_name; 
         $tpl['FLOORS']  = $_REQUEST['floors'];
         $tpl['ROOMS']   = $_REQUEST['floors'] . str_pad($_REQUEST['rooms'], 2, '0', STR_PAD_LEFT);
+        $tpl['BEDROOM_LETTER']  = $_REQUEST['bedroom_letter'];
+        $tpl['BED_LETTER']  = $_REQUEST['bed_letter'];
 
         $final = PHPWS_Template::process($tpl, 'hms', 'admin/get_hall_floor_room.tpl');
         return $final;
@@ -1116,6 +1124,18 @@ class HMS_Form
         $hall = &new HMS_Building;
         $hall->set_is_new_building(TRUE);
         $tpl = $this->fill_hall_data_display($hall, 'save_residence_hall');
+    
+        $halls = '<b>The following halls already exist: <br /><br />';
+        $db = new PHPWS_DB('hms_residence_hall');
+        $db->addColumn('hall_name');
+        $db->addWhere('deleted', '1', '!=');
+        $halls_raw = $db->select();
+        foreach($halls_raw as $hall_raw) {
+            $halls .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" . $hall_raw['hall_name'] . "<br />";
+        }
+        $halls .= "</b>";
+
+        $tpl['HALLS']   = $halls;
         $tpl['ERROR'] = $this->error;
         $tpl['TITLE'] = "Add a Residence Hall";
         $final = PHPWS_Template::process($tpl, 'hms', 'admin/display_hall_data.tpl');
@@ -1155,13 +1175,13 @@ class HMS_Form
     {   
         PHPWS_Core::initCoreClass('Form.php');
         $form = &new PHPWS_Form;
-        
+       
         if(isset($object->hall_name)) {
             $form->addText('hall_name', $object->hall_name);
         } else {
             $form->addText('hall_name');
         }
-   
+  
         /*
         $db = &new PHPWS_DB('hms_hall_communities');
         $comms = $db->select();
