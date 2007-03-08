@@ -24,7 +24,7 @@
                 <th></th><td align="left">{GENDER_TYPE_3} {GENDER_TYPE_3_LABEL}</td>
             </tr>
             <tr>
-                <th>Select the number occupants: &nbsp;&nbsp;</th><td align="left">{CAPACITY_PER_ROOM}</td>
+                <th>Select the number of bedrooms per room: &nbsp;&nbsp;</th><td align="left">{BEDROOMS_PER_ROOM}</td>
             </tr>
             <tr>
                 <th>Phone Number: </th><td align="left">{PHONE_NUMBER}</td>

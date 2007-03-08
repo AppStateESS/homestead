@@ -26,7 +26,7 @@ CREATE TABLE hms_floor (
     id integer NOT NULL,
     floor_number smallint DEFAULT (0)::smallint NOT NULL,
     number_rooms smallint DEFAULT (0)::smallint NOT NULL,
-    capacity_per_room smallint NOT NULL,
+    bedrooms_per_room smallint NOT NULL,
     building smallint DEFAULT (0)::smallint NOT NULL,
     is_online smallint DEFAULT (0)::smallint NOT NULL,
     gender_type smallint DEFAULT (0)::smallint NOT NULL,
@@ -129,7 +129,7 @@ CREATE TABLE hms_residence_hall (
     hall_name character varying(64) NOT NULL,
     number_floors smallint NOT NULL,
     rooms_per_floor smallint NOT NULL,
-    capacity_per_room smallint NOT NULL,
+    bedrooms_per_room smallint NOT NULL,
     pricing_tier smallint NOT NULL,
     gender_type smallint NOT NULL,
     air_conditioned smallint NOT NULL,
@@ -151,7 +151,7 @@ CREATE TABLE hms_room (
     floor_number smallint NOT NULL,
     floor_id integer NOT NULL,
     gender_type smallint NOT NULL,
-    capacity_per_room smallint NOT NULL,
+    bedrooms_per_room smallint NOT NULL,
     learning_community smallint DEFAULT (0)::smallint,
     phone_number integer DEFAULT 0,
     is_medical smallint DEFAULT (0)::smallint,
@@ -212,4 +212,30 @@ CREATE TABLE hms_suite (
     room_id_two integer,
     room_id_three integer,
     primary key(id)
+);
+
+CREATE TABLE hms_bedrooms (
+    id INTEGER NOT NULL,
+    room_id INTEGER NOT NULL REFERENCES hms_room(id),
+    is_online SMALLINT NOT NULL,
+    gender_type SMALLINT NOT NULL,
+    number_beds SMALLINT NOT NULL,
+    is_reserved SMALLINT NOT NULL,
+    is_medical SMALLINT NOT NULL,
+    added_by INTEGER NOT NULL,
+    added_on INTEGER NOT NULL,
+    updated_by INTEGER NOT NULL,
+    updated_on INTEGER NOT NULL,
+    deleted_by INTEGER,
+    deleted_on INTEGER,
+    bedroom_letter character(1) NOT NULL,
+    phone_number INTEGER,
+    PRIMARY KEY(id)
+);
+
+CREATE TABLE hms_beds (
+    id INTEGER NOT NULL,
+    bedroom_id INTEGER NOT NULL REFERENCE hms_bedrooms(id),
+    bed_letter character(1) NOT NULL,
+    PRIMARY KEY(id)
 );

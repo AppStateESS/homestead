@@ -13,7 +13,8 @@ class HMS_Floor
     var $building;
     var $is_online;
     var $number_rooms;
-    var $capacity_per_room;
+    var $bedrooms_per_room;
+    var $beds_per_bedroom;
     var $gender_type;
     var $deleted;
     var $error;
@@ -97,28 +98,28 @@ class HMS_Floor
         return $this->number_rooms;
     }
 
-    function set_capacity_per_room($capacity, $bid = NULL)
+    function set_bedrooms_per_room($beds, $bid = NULL)
     {
         if($bid != NULL) {
             $floor_db = &new PHPWS_DB('hms_floor');
             $floor_db->addWhere('building', $bid);
-            $floor_db->addValue('capacity_per_room', $capacity);
+            $floor_db->addValue('bedrooms_per_room', $beds);
             $floor_db->addWhere('deleted', 0);
             $success = $floor_db->update();
 
             if(PEAR::isError($success)) {
-                PHPWS_Error::log($success, 'hms', 'HMS_Floor::set_capacity_per_room');
+                PHPWS_Error::log($success, 'hms', 'HMS_Floor::set_bedrooms_per_room');
             }
 
             return $success;
         } else {
-            $this->capacity_per_room = $capacity;
+            $this->bedrooms_per_room = $beds;
         }
     }
 
-    function get_capacity_per_room()
+    function get_bedrooms_per_room()
     {
-        return $this->capacity_per_room;
+        return $this->bedrooms_per_room;
     }
 
     function set_gender_type($gender, $id = NULL, $building = NULL)
@@ -246,12 +247,12 @@ class HMS_Floor
             $this->set_floor_number($_REQUEST['floor_number']);
         }
 
-        $this->set_capacity_per_room($_REQUEST['capacity_per_room']);
         $this->set_is_online($_REQUEST['is_online']);
         $this->set_building($_REQUEST['building']);
         $this->set_number_rooms($_REQUEST['number_rooms']);
         $this->set_gender_type($_REQUEST['gender_type']);
-        $this->set_capacity_per_room($_REQUEST['capacity_per_room']);
+        $this->set_bedrooms_per_room($_REQUEST['bedrooms_per_room']);
+        $this->set_beds_per_bedroom($_REQUEST['beds_per_bedroom']);
         $this->set_deleted('0');
     }
 
@@ -277,7 +278,8 @@ class HMS_Floor
                 $room->set_building_id($object->get_building());
                 $room->set_floor_number($object->get_floor_number());
                 $room->set_floor_id($floor_id);
-                $room->set_capacity_per_room($object->get_capacity_per_room());
+                $room->set_bedrooms_per_room($object->get_bedrooms_per_room());
+                $room->set_beds_per_bedroom($object->get_beds_per_bedroom());
                 $room->set_gender_type($object->get_gender_type());
                 $room->set_is_online($object->get_is_online());
                 $room->set_is_reserved('0');

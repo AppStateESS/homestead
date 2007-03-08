@@ -96,17 +96,24 @@ function hms_update(&$content, $currentVersion)
             $content[] = _('+ Modifying permissions for RLC admins to approve members and assign to rooms');
             $content[] = _('+ Added verbage for students to see before they login');
 
-        case version_compate($currentVersion, '0.1.7', '<'):
+        case version_compare($currentVersion, '0.1.7', '<'):
             $db = &new PHPWS_DB;
             $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_1_7.sql');
             if(PEAR::isError($result)) {
                 return $result;
             }
-            
+
             $files   = array();
             $files[] = 'templates/admin/make_new_rlc_assignments_summary.tpl';
             $files[] = 'templates/admin/rlc_assignments_page.tpl';
+            $files[] = 'templates/admin/add_floor.tpl';
+            $files[] = 'templates/admin/display_room_data.tpl';
+            $files[] = 'templates/admin/display_hall_data.tpl';
             PHPWS_Boost::updateFiles($files, 'hms');
+
+            $content[] = '+ Removed capacity_per_room');
+            $content[] = '+ Added bedrooms_per_room');
+            $content[] = '+ Added beds_per_bedroom');
     }
 
     return TRUE;

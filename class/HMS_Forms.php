@@ -889,7 +889,7 @@ class HMS_Form
         $room_number        = $room['room_number'];
         $floor_number       = $room['floor_number'];
         $gender_type        = $room['gender_type'];
-        $capacity_per_room  = $room['capacity_per_room'];
+        $bedrooms_per_room  = $room['bedrooms_per_room'];
         $phone_number       = $room['phone_number'];
         $is_medical         = $room['is_medical'];
         $is_reserved        = $room['is_reserved'];
@@ -921,8 +921,8 @@ class HMS_Form
                              '2'=>"2",
                              '3'=>"3",
                              '4'=>"4");
-        $form->addDropBox('capacity_per_room', $capacity);
-        $form->setMatch('capacity_per_room', $capacity_per_room);
+        $form->addDropBox('bedrooms_per_room', $capacity);
+        $form->setMatch('bedrooms_per_room', $bedrooms_per_room);
 
         $form->addHidden('module', 'hms');
         $form->addHidden('type', 'room');
@@ -989,7 +989,7 @@ class HMS_Form
         $form->addHidden('building', $hall['id']);
         $form->addHidden('floor_number', $hall['number_floors'] + 1);
         $form->addHidden('number_rooms', $hall['rooms_per_floor']);
-        $form->addHidden('capacity_per_room', $hall['capacity_per_room']);
+        $form->addHidden('bedrooms_per_room', $hall['bedrooms_per_room']);
         
         $form->addHidden('module', 'hms');
         $form->addHidden('type', 'hall');
@@ -1005,7 +1005,7 @@ class HMS_Form
         $tpl['NUMBER_FLOORS']       = $hall['number_floors'];
         $tpl['FLOOR_NUMBER']        = $hall['number_floors'] + 1;
         $tpl['ROOMS_PER_FLOOR']     = $hall['rooms_per_floor'];
-        $tpl['CAPACITY_PER_ROOM']   = $hall['capacity_per_room'];
+        $tpl['BEDROOMS_PER_ROOM']   = $hall['bedrooms_per_room'];
 
         $final = PHPWS_Template::process($tpl, 'hms', 'admin/add_floor.tpl');
         return $final;
@@ -1101,7 +1101,7 @@ class HMS_Form
             $form->addHidden('floor_number', $object->floor_number);
             $form->addHidden('building', $object->building);
             $form->addHidden('number_rooms', $object->number_rooms);
-            $form->addHidden('capacity_per_room', $object->capacity_per_room);
+            $form->addHidden('bedrooms_per_room', $object->bedrooms_per_room);
             $form->addHidden('deleted', '0');
         }
         $form->addSubmit('submit', _('Save Floor'));
@@ -1183,7 +1183,12 @@ class HMS_Form
                         '7'=>"7",
                         '8'=>"8",
                         '9'=>"9",
-                        '10'=>"10");
+                        '10'=>"10",
+                        '11'=>"11",
+                        '12'=>"12",
+                        '13'=>"13",
+                        '14'=>"14",
+                        '15'=>"15");
         $form->addDropBox('number_floors', $floors);
         if(isset($object->number_floors)) {
             $form->setMatch('number_floors', $object->number_floors);
@@ -1200,11 +1205,18 @@ class HMS_Form
             $form->setMatch('rooms_per_floor', '15');
         }
 
-        $form->addDropBox('capacity_per_room', array(0=>'0', 1=>'1', 2=>'2', 3=>'3', 4=>'4'));
-        if(isset($object->capacity_per_room)) {
-            $form->setMatch('capacity_per_room', $object->capacity_per_room);
+        $form->addDropBox('bedrooms_per_room', array(0=>'0', 1=>'1', 2=>'2', 3=>'3', 4=>'4'));
+        if(isset($object->bedrooms_per_room)) {
+            $form->setMatch('bedrooms_per_room', $object->bedrooms_per_room);
         } else {
-            $form->setMatch('capacity_per_room', 2);
+            $form->setMatch('bedrooms_per_room', 2);
+        }
+
+        $form->addDropBox('beds_per_bedroom', array(0=>'0', 1=>'1', 2=>'2', 3=>'3', 4=>'4'));
+        if(isset($object->beds_per_bedroom)) {
+            $form->setMatch('beds_per_bedroom', $object->beds_per_bedroom);
+        } else {
+            $form->setMatch('beds_per_bedroom', 2);
         }
 
         $db = &new PHPWS_DB('hms_pricing_tiers');

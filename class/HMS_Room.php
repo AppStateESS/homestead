@@ -15,7 +15,8 @@ class HMS_Room
     var $floor_id;
     var $is_online;
     var $gender_type;
-    var $capacity_per_room;
+    var $bedrooms_per_room;
+    var $beds_per_bedroom;
     var $phone_number;
     var $is_medical;
     var $is_reserved;
@@ -171,22 +172,32 @@ class HMS_Room
         return $this->is_online;
     }
 
-    function set_capacity_per_room($capacity)
+    function set_bedrooms_per_room($capacity)
     {
-        $this->capacity_per_room = $capacity;
+        $this->bedrooms_per_room = $capacity;
     }
 
-    function get_capacity_per_room($id = NULL)
+    function get_bedrooms_per_room($id = NULL)
     {
         if($id != NULL) {
             $db = new PHPWS_DB('hms_room');
-            $db->addColumn('capacity_per_room');
+            $db->addColumn('bedrooms_per_room');
             $db->addWhere('id', $id);
             $capacity = $db->select('one');
             return $capacity;
         } else {
-            return $this->capacity_per_room;
+            return $this->bedrooms_per_room;
         }
+    }
+
+    function set_beds_per_bedroom($beds)
+    {
+        $this->beds_per_bedroom = $beds;
+    }
+
+    function get_beds_per_bedroom()
+    {
+        return $this->beds_per_bedroom;
     }
 
     function set_phone_number($phone)
@@ -275,7 +286,8 @@ class HMS_Room
         $this->set_floor_number($_REQUEST['floor_number']);
         $this->set_floor_id($_REQUEST['floor_id']);
         $this->set_gender_type($_REQUEST['gender_type']);
-        $this->set_capacity_per_room($_REQUEST['capacity_per_room']);
+        $this->set_bedrooms_per_room($_REQUEST['bedrooms_per_room']);
+        $this->set_beds_per_bedroom($_REQUEST['beds_per_bedroom']);
         $this->set_phone_number($_REQUEST['phone_number']);
         $this->set_is_medical($_REQUEST['is_medical']);
         $this->set_is_reserved($_REQUEST['is_reserved']);
@@ -287,7 +299,8 @@ class HMS_Room
         $db = &new PHPWS_DB('hms_room');
         $db->addWhere('id', $_REQUEST['id']);
         $db->addValue('gender_type', $_REQUEST['gender_type']);
-        $db->addValue('capacity_per_room', $_REQUEST['capacity_per_room']);
+        $db->addValue('bedrooms_per_room', $_REQUEST['bedrooms_per_room']);
+        $db->addValue('beds_per_bedroom', $_REQUEST['beds_per_bedroom']);
         if($_REQUEST['phone_number'] != NULL) {
             $db->addValue('phone_number', $_REQUEST['phone_number']);
         }
@@ -357,7 +370,7 @@ class HMS_Room
         return $success;
     }
 
-    function change_rooms_per_floor($bid, $number_floors, $old_rooms_per_floor, $new_rooms_per_floor, $is_online = NULL, $gender_type = NULL, $capacity_per_room = NULL)
+    function change_rooms_per_floor($bid, $number_floors, $old_rooms_per_floor, $new_rooms_per_floor, $is_online = NULL, $gender_type = NULL, $bedrooms_per_room = NULL, $beds_per_bedroom = NULL)
     {
         if($old_rooms_per_floor > $new_rooms_per_floor) {
             // rooms per floor has decreased
@@ -381,7 +394,8 @@ class HMS_Room
                     $room_obj->set_is_reserved('0');
                     $room_obj->set_is_medical('0');
                     $room_obj->set_floor_id($fid);
-                    $room_obj->set_capacity_per_room($capacity_per_room);
+                    $room_obj->set_bedrooms_per_room($bedrooms_per_room);
+                    $room_obj->set_beds_per_bedroom($beds_per_bedroom);
                     $room_obj->set_added_by_on();
                     $room_obj->set_updated_by_on();
                     $db = &new PHPWS_DB('hms_room');
@@ -391,17 +405,17 @@ class HMS_Room
         } // end else if
     } // end function
 
-    function change_capacity_per_room($capacity, $bid)
+    function change_bedrooms_per_room($capacity, $bid)
     {
         $db = &new PHPWS_DB('hms_room');
         $db->addWhere('building_id', $bid);
-        $db->addValue('capacity_per_room', $capacity);
+        $db->addValue('bedrooms_per_room', $capacity);
         $db->addWhere('deleted', 0);
         $db->addValue('updated_by', Current_User::getId());
         $db->addValue('updated_on', time());
         $result = $db->update();
         if(PEAR::isError($result)) {
-            PHPWS_Core::log($result, 'hms', 'HMS_Room::change_capacity_per_room');
+            PHPWS_Core::log($result, 'hms', 'HMS_Room::change_bedrooms_per_room');
         }
         return $result;
     }

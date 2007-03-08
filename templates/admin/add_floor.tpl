@@ -18,7 +18,7 @@
                 <th>Rooms per floor: </th><td>{ROOMS_PER_FLOOR}</td>
             </tr>
             <tr>
-                <th>Capacity per room:</th><td>{CAPACITY_PER_ROOM}</td>
+                <th>Number bedrooms per room:</th><td>{BEDROOMS_PER_ROOM}</td>
             </tr>
             <tr>
                 <th>Select a gender type: </th><td>{GENDER_TYPE_1} {GENDER_TYPE_1_LABEL}</td>

@@ -13,7 +13,8 @@ class HMS_Building
     var $hall_name;
     var $number_floors;
     var $rooms_per_floor;
-    var $capacity_per_room;
+    var $bedrooms_per_room;
+    var $beds_per_bedroom;
     var $pricing_tier;
     var $gender_type;
     var $air_conditioned;
@@ -37,7 +38,8 @@ class HMS_Building
         $this->hall_name = NULL;
         $this->number_floors = NULL;
         $this->rooms_per_floor = NULL;
-        $this->capacity_per_room = NULL;
+        $this->bedrooms_per_room = NULL;
+        $this->beds_per_bedroom = NULL;
         $this->pricing_tier = NULL;
         $this->gender_type = NULL;
         $this->air_conditioned = NULL;
@@ -119,11 +121,16 @@ class HMS_Building
     /**
      * Sets the number of people to be assigned per room (template)
      */
-    function set_capacity_per_room($capacity)
+    function set_bedrooms_per_room($capacity)
     {
-        $this->capacity_per_room = $capacity;
+        $this->bedrooms_per_room = $capacity;
     }
-    
+   
+    function set_beds_per_bedroom($beds)
+    {
+        $this->beds_per_bedroom = $beds;
+    }
+
     /**
      * Returns the number of floors for the hall
      */
@@ -308,7 +315,8 @@ class HMS_Building
         $this->set_gender_type($_REQUEST['gender_type']);
         $this->set_air_conditioned($_REQUEST['air_conditioned']);
         $this->set_is_online($_REQUEST['is_online']);
-        $this->set_capacity_per_room($_REQUEST['capacity_per_room']);
+        $this->set_bedrooms_per_room($_REQUEST['bedrooms_per_room']);
+        $this->set_beds_per_bedroom($_REQUEST['beds_per_bedroom']);
         if($_REQUEST['is_new_building']) $this->set_is_new_building($_REQUEST['is_new_building']);
     }
 
@@ -426,15 +434,15 @@ class HMS_Building
                     PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
                     PHPWS_Core::initModClass('hms', 'HMS_Room.php');
                     $changed_rooms_floor = HMS_Floor::set_number_rooms($this->rooms_per_floor, $this->id);
-                    $changed_rooms_room = HMS_Room::change_rooms_per_floor($this->id, $this->number_floors, $current->rooms_per_floor, $this->rooms_per_floor, $this->is_online, $this->gender_type, $this->capacity_per_room);
+                    $changed_rooms_room = HMS_Room::change_rooms_per_floor($this->id, $this->number_floors, $current->rooms_per_floor, $this->rooms_per_floor, $this->is_online, $this->gender_type, $this->bedrooms_per_room, $this->beds_per_bedroom);
                 }
 
                 // capacity per room changes
-                if($current->capacity_per_room != $this->capacity_per_room) {
+                if($current->bedrooms_per_room != $this->bedrooms_per_room) {
                     PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
                     PHPWS_Core::initModClass('hms', 'HMS_Room.php');
-                    $changed_capacity_floor = HMS_Floor::set_capacity_per_room($this->capacity_per_room, $this->id);
-                    $changed_capacity_room  = HMS_Room::change_capacity_per_room($this->capacity_per_room, $this->id);
+                    $changed_bedrooms_floor = HMS_Floor::set_bedrooms_per_room($this->bedrooms_per_room, $this->id);
+                    $changed_bedrooms_room  = HMS_Room::change_bedrooms_per_room($this->bedrooms_per_room, $this->id);
                 }
 
                 // is_online changes
@@ -500,7 +508,8 @@ class HMS_Building
         $floor->set_is_online($src->is_online);
         $floor->set_number_rooms($src->rooms_per_floor);
         $floor->set_floor_number($fnumber);
-        $floor->set_capacity_per_room($src->capacity_per_room);
+        $floor->set_bedrooms_per_room($src->bedrooms_per_room);
+        $floor->set_beds_per_bedroom($src->beds_per_bedroom);
         $floor->set_deleted('0');
         return $floor;
     }

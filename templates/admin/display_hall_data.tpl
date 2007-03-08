@@ -15,7 +15,10 @@
                 <th>How many rooms per floor? </th><td align="left">{ROOMS_PER_FLOOR}</td>
             </tr>
             <tr>
-                <th>How many occupants per room? </th><td align="left">{CAPACITY_PER_ROOM}</td>
+                <th>How many bedrooms per room? </th><td align="left">{BEDROOMS_PER_ROOM}</td>
+            </tr>
+            <tr>
+                <th>How many beds per bedroom? </th><td align="left">{BEDS_PER_BEDROOM}</td>
             </tr>
             <tr>
                 <th>Select a pricing tier: </th><td align="left">{PRICING_TIER}</td>

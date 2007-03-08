@@ -234,7 +234,7 @@ class HMS_Assignment
         PHPWS_Core::initModClass('hms', 'HMS_Room.php');
 
         $assigned = HMS_Assignment::number_assigned_to_room($id);
-        $assignable = HMS_Room::get_capacity_per_room($id);
+        $assignable = HMS_Room::get_bedrooms_per_room($id);
 
         if($assigned == $assignable) {
             $msg = '<font color="red"><b>This room is full. Please assign to another room or remove a student from this room.<b></font>';
