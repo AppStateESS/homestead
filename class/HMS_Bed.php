@@ -59,7 +59,19 @@ class HMS_Bed
         $this->banner_id = $banner_id;
     }
 
-    
+    function save_bed($object = NULL)
+    {
+        $db = &new PHPWS_DB('hms_beds');
+        if($object == NULL) {
+
+        } else {
+            $success = $db->saveObject($object);
+            if(PEAR::isError($success)) {
+                test($success);
+            }
+            return $success;
+        }
+    }
 
 };
 ?>
