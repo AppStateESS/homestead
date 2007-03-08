@@ -1040,6 +1040,20 @@ class HMS_Form
             $form->addText('community_name');
         }
 
+        if(isset($object->abbreviation)) {
+            $form->addText('abbreviation', $object->abbreviation);
+        } else {
+            $form->addText('abbreviation');
+        }
+        $form->setSize('abbreviation', 5);
+
+        if(isset($object->capacity)) {
+            $form->addText('capacity', $object->capacity);
+        } else {
+            $form->addText('capacity');
+        }
+        $form->setSize('capacity', 5);
+
         $db = new PHPWS_DB('hms_learning_communities');
         $db->addColumn('community_name');
         $names = $db->select();
