@@ -332,8 +332,8 @@ class HMS_Room
         if(PEAR::isError($success)) {
             test($success);
             PHPWS_Error::log($success);
-            return $success;
         }
+        return $success;
     }
 
     function delete_rooms_by_floor($bid, $floor = NULL, $one = FALSE)
