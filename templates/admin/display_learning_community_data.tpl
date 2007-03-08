@@ -11,6 +11,12 @@
             <tr>
                 <th>Learning Community to add: &nbsp;&nbsp;</th><td>{COMMUNITY_NAME}</td>
             </tr>
+            <tr>
+                <th>Abbreviation: </th><td>{ABBREVIATION}</td>
+            </tr>
+            <tr>
+                <th>Capacity: </th><td>{CAPACITY}</td>
+            </tr>
         </table>
         <br />
         {SUBMIT}

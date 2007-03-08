@@ -119,6 +119,13 @@ function hms_update(&$content, $currentVersion)
             $content[] = '+ Added list of existing halls when adding new halls');
             $content[] = '+ Room assignments working - assignments now by bed instead of room');
 
+        case version_compare($currentVersion, '0.1.8', '<'):
+            $files = array();
+            $files[] = 'templates/admin/display_learning_community_data.tpl';
+
+            PHPWS_Boost::updateFiles($files, 'hms');
+
+            $content[] = '+ Added abbreviation and capacity changes to Add RLC template. They now properly save and delete.';
     }
 
     return TRUE;
