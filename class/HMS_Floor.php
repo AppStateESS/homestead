@@ -122,6 +122,16 @@ class HMS_Floor
         return $this->bedrooms_per_room;
     }
 
+    function set_beds_per_bedroom($beds)
+    {
+        $this->beds_per_bedroom = $beds;
+    }
+
+    function get_beds_per_bedroom()
+    {
+        return $this->beds_per_bedroom;
+    }
+
     function set_gender_type($gender, $id = NULL, $building = NULL)
     {
         if($building != NULL) {
@@ -272,6 +282,8 @@ class HMS_Floor
 
         if($create_rooms == TRUE) {
             PHPWS_Core::initModClass('hms', 'HMS_Room.php');
+            PHPWS_Core::initModClass('hms', 'HMS_Bedroom.php');
+            PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
             for($i = 1; $i <= $object->get_number_rooms(); $i++) {
                 $room = &new HMS_Room;
                 $room->set_room_number($object->get_floor_number() . str_pad($i, 2, "0",STR_PAD_LEFT));
@@ -290,7 +302,50 @@ class HMS_Floor
                     test($success);
                     return $success;
                 }
-            }
+            
+                $br_letter = 'a';
+                for($j = 1; $j <= $object->get_bedrooms_per_room(); $j++) {
+                    $bedroom = new HMS_Bedroom;
+                    $bedroom->set_room_id($success);
+                    $bedroom->set_is_online($object->get_is_online());
+                    $bedroom->set_gender_type($object->get_gender_type());
+                    $bedroom->set_number_beds($object->get_beds_per_bedroom());
+                    $bedroom->set_is_reserved(0);
+                    $bedroom->set_is_medical(0);
+                    $bedroom->set_added_by();
+                    $bedroom->set_added_on();
+                    $bedroom->set_updated_by();
+                    $bedroom->set_updated_on();
+                    $bedroom->set_bedroom_letter($br_letter);
+                    $saved_br = HMS_Bedroom::save_bedroom($bedroom);
+                   
+                    if($br_letter == 'a') $br_letter = 'b';
+                    else if($br_letter == 'b') $br_letter = 'c';
+                    else if($br_letter == 'c') $br_letter = 'd';
+                    
+                    if(PEAR::isError($saved_br)) {
+                        test($saved_br);
+                        return $saved_br;
+                    }
+                    
+                    $bed_letter = 'a';
+                    for($k = 1; $k <= $object->get_beds_per_bedroom(); $k++) {
+                        $bed = new HMS_Bed;
+                        $bed->set_bedroom_id($saved_br);
+                        $bed->set_bed_letter($bed_letter);
+                        $saved_bed = HMS_Bed::save_bed($bed);
+
+                        if($bed_letter == 'a') $bed_letter = 'b';
+                        else if($bed_letter == 'b') $bed_letter = 'c';
+                        else if($bed_letter == 'c') $bed_letter = 'd';
+
+                        if(PEAR::isError($saved_bed)) {
+                            test($saved_bed);
+                            return $saved_bed;
+                        }
+                    } // end bed creation
+                } // end bedroom creation
+            } // end room creation
         } else {
             $db = &new PHPWS_DB('hms_room');
             $db->addValue('gender_type', $object->get_gender_type());
