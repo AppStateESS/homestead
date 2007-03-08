@@ -98,13 +98,13 @@ class HMS_Maintenance
             $tpl['LC_LABEL']    = "Learning Community Options";
 
         if(Current_User::allow('hms', 'add_learning_communities'))
-            $tpl['ADD_LEARNING_COMMUNITY']      = PHPWS_Text::secureLink(_('Add Learning Community'), 'hms', array('type'=>'rlc', 'op'=>'add_learning_community')) . " &nbsp;*not implemented*";
+            $tpl['ADD_LEARNING_COMMUNITY']      = PHPWS_Text::secureLink(_('Add Learning Community'), 'hms', array('type'=>'rlc', 'op'=>'add_learning_community'));
 
         if(Current_User::allow('hms', 'edit_learning_communities'))
             $tpl['EDIT_LEARNING_COMMUNITY']     = PHPWS_Text::secureLink(_('Edit Learning Community'), 'hms', array('type'=>'rlc', 'op'=>'edit_learning_community')) . " &nbsp;*not implemented*";
 
         if(Current_User::allow('hms', 'delete_learning_communities'))
-            $tpl['DELETE_LEARNING_COMMUNITY']   = PHPWS_Text::secureLink(_('Delete Learning Community'), 'hms', array('type'=>'rlc', 'op'=>'select_learning_community_for_delete')) . " &nbsp;*not implemented*";
+            $tpl['DELETE_LEARNING_COMMUNITY']   = PHPWS_Text::secureLink(_('Delete Learning Community'), 'hms', array('type'=>'rlc', 'op'=>'select_learning_community_for_delete'));
 
         if(Current_User::allow('hms', 'rlc_applicant_options')) 
             $tpl['RLC_APPLICATIONS']    = "RLC Applicant Options";
