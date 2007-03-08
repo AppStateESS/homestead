@@ -10,6 +10,8 @@ class HMS_Learning_Community
 {
     var $id;
     var $community_name;
+    var $abbreviation;
+    var $capacity;
     var $error;
 
     function HMS_Learning_Community()
@@ -49,10 +51,32 @@ class HMS_Learning_Community
         return $this->community_name;
     }
 
+    function set_abbreviation($abb)
+    {
+        $this->abbreviation = $abb;
+    }
+
+    function get_abbreviation()
+    {
+        return $this->abbreviation;
+    }
+
+    function set_capacity($cap)
+    {
+        $this->capacity = $cap;
+    }
+
+    function get_capacity()
+    {
+        return $this->capacity;
+    }
+
     function set_variables()
     {
-        if($_REQUEST['id'] != NULL) $this->set_id($_REQUEST['id']);
+        if(isset($_REQUEST['id']) && $_REQUEST['id'] != NULL) $this->set_id($_REQUEST['id']);
         $this->set_community_name($_REQUEST['community_name']);
+        $this->set_abbreviation($_REQUEST['abbreviation']);
+        $this->set_capacity($_REQUEST['capacity']);
     }
 
     function save_learning_community()
@@ -67,6 +91,8 @@ class HMS_Learning_Community
             $success = $db->saveObject($rlc);
         } else {
             $db->addValue('community_name', $rlc->get_community_name());
+            $db->addValue('abbreviation', $rlc->get_abbreviation());
+            $db->addValue('capacity', $rlc->get_capacity());
             $success = $db->insert();
         }
         
