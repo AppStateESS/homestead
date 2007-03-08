@@ -307,7 +307,7 @@ class HMS_Building
      */
     function set_variables()
     {
-        if($_REQUEST['id']) $this->set_id($_REQUEST['id']);
+        if(isset($_REQUEST['id'])) $this->set_id($_REQUEST['id']);
         $this->set_hall_name($_REQUEST['hall_name']);
         $this->set_number_floors($_REQUEST['number_floors']);
         $this->set_rooms_per_floor($_REQUEST['rooms_per_floor']);
