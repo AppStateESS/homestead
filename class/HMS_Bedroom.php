@@ -176,7 +176,7 @@ class HMS_Bedroom
 
     function save_bedroom($object = NULL)
     {
-        $db = &new PHPWS_DB('hms_bedroom');
+        $db = &new PHPWS_DB('hms_bedrooms');
         if($object == NULL) {
             $db->addWhere('id', $_REQUEST['id']);
             $db->addValue('is_online', $_REQUEST['is_online']);
@@ -196,7 +196,11 @@ class HMS_Bedroom
             $db->addValue('updated_by', Current_User::getId());
             $db->addValue('updated_on', time());
         } else {
-
+            $success = $db->saveObject($object);
+            if(PEAR::isError($success)) {
+                test($success);
+            }
+            return $success;
         }
         $success = $db->update();
         if(PEAR::isError($success)) {
