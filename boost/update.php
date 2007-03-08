@@ -109,11 +109,16 @@ function hms_update(&$content, $currentVersion)
             $files[] = 'templates/admin/add_floor.tpl';
             $files[] = 'templates/admin/display_room_data.tpl';
             $files[] = 'templates/admin/display_hall_data.tpl';
+            $files[] = 'templates/admin/get_hall_floor_room.tpl';
+
             PHPWS_Boost::updateFiles($files, 'hms');
 
             $content[] = '+ Removed capacity_per_room');
             $content[] = '+ Added bedrooms_per_room');
             $content[] = '+ Added beds_per_bedroom');
+            $content[] = '+ Added list of existing halls when adding new halls');
+            $content[] = '+ Room assignments working - assignments now by bed instead of room');
+
     }
 
     return TRUE;

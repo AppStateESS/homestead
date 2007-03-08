@@ -7,13 +7,19 @@
         {MESSAGE}<br />
         <table>
             <tr>
-                <th>Building:</th><td>{HALLS}</td>
+                <th align="left">Building:&nbsp;&nbsp;&nbsp;&nbsp;</th><td>{HALLS}</td>
             </tr>
             <tr>
-                <th>Floor:</th><td>{FLOORS}</td>
+                <th align="left">Floor:</th><td>{FLOORS}</td>
             </tr>
             <tr>
-                <th>Room:</th><td>{ROOMS}</td>
+                <th align="left">Room:</th><td>{ROOMS}</td>
+            </tr>
+            <tr>
+                <th align="left">Bedroom:</th><td>{BEDROOM_LETTER}</td>
+            </tr>
+            <tr>
+                <th align="left">Bed: </th><td>{BED_LETTER}</td>
             </tr>
         </table>
         <br />

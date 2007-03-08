@@ -64,3 +64,9 @@ CREATE TABLE hms_beds (
     bed_letter character(1) NOT NULL,
     PRIMARY KEY(id)
 );
+
+ALTER TABLE hms_assignment DROP COLUMN building_id;
+ALTER TABLE hms_assignment DROP COLUMN floor_id;
+ALTER TABLE hms_assignment DROP COLUMN room_id;
+ALTER TABLE hms_assignment ADD COLUMN bed_id INTEGER REFERENCES hms_beds(id);
+ALTER TABLE hms_assignment ALTER COLUMN bed_id SET NOT NULL;

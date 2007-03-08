@@ -4,6 +4,7 @@
     <div class="box-title"> <h1>{TITLE}</h1> </div>
     <div class="box-content">
         <font color="red"><i>{ERROR}</i></font>
+        {HALLS}<br /><br />
         <table>
             <tr>
                 <th>Name of the Hall: </th><td align="left">{HALL_NAME}</td>
