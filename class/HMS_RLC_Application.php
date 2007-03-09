@@ -171,7 +171,8 @@ class HMS_RLC_Application{
         }
     }
     
-    function rlc_application_admin_pager(){
+    function rlc_application_admin_pager()
+    {
         PHPWS_Core::initCoreClass('DBPager.php');
 
         $form = new PHPWS_Form;
@@ -196,23 +197,48 @@ class HMS_RLC_Application{
         return $pager->get();
     }
 
-    function getAdminPagerTags(){
+    function getAdminPagerTags()
+    {
+
+        $rlc_list = HMS_RLC_Application::getRLCList();
 
         $tags = array();
 
         $tags['NAME'] = HMS_SOAP::get_full_name_inverted($this->getUserID());
-/*        $tags['1ST_CHOICE'] = ;
-        $tags['2ND_CHOICE'] = ;
-        $tags['3RD_CHOICE'] = ;
-        $tags['FINAL_RLC'] = ;
-        $tags['SPECIAL_POP'] = ;
-        $tags['MAJOR'] = ;
-        $tags['HS_GPA'] = ;
-        $tags['GENDER'] = ;
-        $tags['APPLY_DATE'] = ;
-        $tags['COURSE_OK'] = ;*/
+        $tags['1ST_CHOICE']  = $rlc_list[$this->getFirstChoice()];
+        $tags['2ND_CHOICE']  = $rlc_list[$this->getSecondChoice()];
+        $tags['3RD_CHOICE']  = $rlc_list[$this->getThirdChoice()];
+        $tags['FINAL_RLC']   = HMS_RLC_Application::generateRLCDropDown($rlc_list,$this->getID());
+//        $tags['SPECIAL_POP'] = ;
+//        $tags['MAJOR']       = ;
+//        $tags['HS_GPA']      = ;
+        $tags['GENDER']      = HMS_SOAP::get_gender($this->getUserID()); # TODO: see how gender is returned from SOAP, may need post-processing
+        $tags['APPLY_DATE']  = date('d-M-y',$this->getDateSubmitted());
+//        $tags['COURSE_OK']   = ;
 
         return $tags;
+    }
+
+    function getRLCList()
+    {
+        $db = &new PHPWS_DB('hms_learning_communities');
+
+        $db->addColumn('id');
+        $db->addColumn('abbreviation');
+        $result = $db->select('assoc');
+        test($result);
+        return $result;
+    }
+
+    function generateRLCDropDown($rlc_list,$application_id){
+        
+        $output = "<select name=\"final_rlc[$application_id]\">";
+
+        foreach ($rlc_list as $id => $rlc_name){
+            $output .= "<option value=\"$id\">$rlc_name</option>";
+        }
+
+        $output .= '</select>';
     }
 
     /****************************
