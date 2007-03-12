@@ -20,6 +20,7 @@ class HMS_Building
     var $air_conditioned;
     var $is_online;
     var $is_new_building;
+    var $numbering_scheme;
     var $added_by;
     var $added_on;
     var $deleted_by;
@@ -44,6 +45,7 @@ class HMS_Building
         $this->gender_type = NULL;
         $this->air_conditioned = NULL;
         $this->is_online = NULL;
+        $this->numbering_scheme = NULL;
         unset($this->added_by);
         unset($this->added_on);
         unset($this->deleted_by);
@@ -196,6 +198,16 @@ class HMS_Building
         $this->is_online = $online;
     }
 
+    function get_numbering_scheme()
+    {
+        return $this->numbering_scheme;
+    }
+
+    function set_numbering_scheme($scheme)
+    {
+        $this->numbering_scheme = $scheme;
+    }
+
     /**
      * Returns whether this building is new
      * False indicates this is an edit
@@ -317,6 +329,7 @@ class HMS_Building
         $this->set_is_online($_REQUEST['is_online']);
         $this->set_bedrooms_per_room($_REQUEST['bedrooms_per_room']);
         $this->set_beds_per_bedroom($_REQUEST['beds_per_bedroom']);
+        $this->set_numbering_scheme($_REQUEST['numbering_scheme']);
         if($_REQUEST['is_new_building']) $this->set_is_new_building($_REQUEST['is_new_building']);
     }
 
@@ -437,14 +450,6 @@ class HMS_Building
                     $changed_rooms_room = HMS_Room::change_rooms_per_floor($this->id, $this->number_floors, $current->rooms_per_floor, $this->rooms_per_floor, $this->is_online, $this->gender_type, $this->bedrooms_per_room, $this->beds_per_bedroom);
                 }
 
-                // capacity per room changes
-                if($current->bedrooms_per_room != $this->bedrooms_per_room) {
-                    PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
-                    PHPWS_Core::initModClass('hms', 'HMS_Room.php');
-                    $changed_bedrooms_floor = HMS_Floor::set_bedrooms_per_room($this->bedrooms_per_room, $this->id);
-                    $changed_bedrooms_room  = HMS_Room::change_bedrooms_per_room($this->bedrooms_per_room, $this->id);
-                }
-
                 // is_online changes
                 if($current->is_online != $this->is_online) {
                     PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
@@ -478,13 +483,18 @@ class HMS_Building
 
         if($this->get_is_new_building() == TRUE) {
             PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
-            for($i = 1; $i <= $this->number_floors; $i++) {
-                $floor = HMS_Building::make_floor_object($saved_id, $this, $i);
+            $ctr = 0;
+            for($i = 1; $i <= $this->number_floors; $i++, $ctr++) {
+                // case where it's 1, 2, etc
+                if($this->get_numbering_scheme() == 2 && $ctr == 0) $ctr = 1;
+
+                $floor = HMS_Building::make_floor_object($saved_id, $this, $ctr);
                 $result = HMS_Floor::save_floor_object($floor, TRUE);
                 if(PEAR::isError($result)) {
                     $final = HMS_Building::error_saving_floor($i);
                     return $final;
                 }
+                if($this->get_numbering_scheme() == 1 && $ctr == 0) $ctr = 1;
             }
         }
 
@@ -565,14 +575,18 @@ class HMS_Building
             PHPWS_Core::initModClass('hms', 'HMS_Building.php');
             PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
             PHPWS_Core::initModClass('hms', 'HMS_Room.php');
+            PHPWS_Core::initModClass('hms', 'HMS_Bedroom.php');
+            PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
 
-            $deleted_hall = HMS_Building::delete_hall($_REQUEST['halls']);
-            $deleted_floors = HMS_Floor::delete_floors($_REQUEST['halls']);
+            $deleted_beds = HMS_Bed::delete_beds_by_building($_REQUEST['halls']);
+            $deleted_bedrooms = HMS_Bedroom::delete_bedrooms_by_building($_REQUEST['halls']);
             $deleted_rooms = HMS_Room::delete_rooms_by_floor($_REQUEST['halls']);
+            $deleted_floors = HMS_Floor::delete_floors($_REQUEST['halls']);
+            $deleted_hall = HMS_Building::delete_hall($_REQUEST['halls']);
 
             if($deleted_hall == TRUE && $deleted_floors == TRUE && $deleted_rooms == TRUE) {
                 $tpl['TITLE'] = "Successful Deletion";
-                $tpl['CONTENT'] = "Hall, floors and rooms were succcessfully deleted.";
+                $tpl['CONTENT'] = "Hall, floors, rooms, bedrooms and beds were succcessfully deleted.";
                 $content = PHPWS_Template::process($tpl, 'hms', 'admin/title_and_message.tpl');
             } else {
                 $tpl['TITLE'] = "Error";
