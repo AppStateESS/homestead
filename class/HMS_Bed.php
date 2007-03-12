@@ -8,6 +8,13 @@ class HMS_Bed
     var $occupant;
     var $bed_letter;
     var $banner_id;
+    /*
+    var $added_by;
+    var $added_on;
+    var $deleted_by;
+    var $deleted_on;
+    */
+    var $deleted;
 
     function get_id()
     {
@@ -58,6 +65,37 @@ class HMS_Bed
     {
         $this->banner_id = $banner_id;
     }
+/*   
+    function set_added_by()
+    {
+        $this->added_by = Current_User::getId();
+    }
+
+    function set_added_on()
+    {
+        $this->added_on = time();
+    }
+
+    function set_deleted_by()
+    {
+        $this->deleted_by = Current_User::getId();
+    }
+
+    function set_deleted_on()
+    {
+        $this->deleted_on = time();
+    }
+*/
+
+    function set_deleted()
+    {
+        $this->deleted = 1;
+    }
+
+    function get_deleted()
+    {
+        return $this->deleted;
+    }
 
     function save_bed($object = NULL)
     {
@@ -73,5 +111,17 @@ class HMS_Bed
         }
     }
 
-};
+    function delete_beds_by_building($building_id)
+    {
+        $sql = "UPDATE hms_beds ";
+        $sql .= "SET deleted = 1 ";
+        $sql .= "WHERE bedroom_id = hms_bedrooms.id ";
+        $sql .= "AND hms_bedrooms.room_id = hms_room.id ";
+        $sql .= "AND hms_room.building_id = $building_id;";
+
+        $db = new PHPWS_DB;
+        $result = $db->query($sql);
+        return $result;
+    }
+}
 ?>
