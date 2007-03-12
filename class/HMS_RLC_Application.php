@@ -147,6 +147,11 @@ class HMS_RLC_Application{
         }
     }
 
+    /**
+    * Check to see if an application already exists for the specified user. Returns FALSE if no application exists.
+    * If an application does exist, a db object containing that row is returned. In the case of a db error, a PEAR
+    * error object is returned. 
+    */
     function check_for_application($asu_username = NULL)
     {
         $db = &new PHPWS_DB('hms_learning_community_applications');
@@ -171,6 +176,9 @@ class HMS_RLC_Application{
         }
     }
     
+    /**
+     * RLC Application pager for the RLC admin panel
+     */
     function rlc_application_admin_pager()
     {
         PHPWS_Core::initCoreClass('DBPager.php');
@@ -203,6 +211,7 @@ class HMS_RLC_Application{
         $rlc_list = HMS_RLC_Application::getRLCList();
 
         $tags = array();
+        
 
         $tags['NAME'] = HMS_SOAP::get_full_name_inverted($this->getUserID());
         $tags['1ST_CHOICE']  = $rlc_list[$this->getFirstChoice()];
@@ -212,13 +221,16 @@ class HMS_RLC_Application{
 //        $tags['SPECIAL_POP'] = ;
 //        $tags['MAJOR']       = ;
 //        $tags['HS_GPA']      = ;
-        $tags['GENDER']      = HMS_SOAP::get_gender($this->getUserID()); # TODO: see how gender is returned from SOAP, may need post-processing
+        $tags['GENDER']      = HMS_SOAP::get_gender($this->getUserID());
         $tags['APPLY_DATE']  = date('d-M-y',$this->getDateSubmitted());
-//        $tags['COURSE_OK']   = ;
+        $tags['COURSE_OK']   = HMS_RLC_Application::generateCourseOK($this->getID());
 
         return $tags;
     }
 
+    /**
+     * Returns an associative array containing the list of RLC abbreviations keyed by their id.
+     */
     function getRLCList()
     {
         $db = &new PHPWS_DB('hms_learning_communities');
@@ -230,15 +242,30 @@ class HMS_RLC_Application{
         return $result;
     }
 
+    /**
+     * Generates a drop down menu using the RLC abbreviations
+     */
     function generateRLCDropDown($rlc_list,$application_id){
         
         $output = "<select name=\"final_rlc[$application_id]\">";
+
+        $output . = '<option value="-1">None</option>';
 
         foreach ($rlc_list as $id => $rlc_name){
             $output .= "<option value=\"$id\">$rlc_name</option>";
         }
 
         $output .= '</select>';
+
+        return $output;
+    }
+
+    function generateCourseOK($application_id){
+        
+        $output  = "<label><input type=\"radio\" name=\"course_ok[$application_id]\" value=\"Y\">Y</label>";
+        $output .= "<label><input type=\"radio\" name=\"course_ok[$application_id]\" value=\"N\">N</label>";
+        
+        return $output;
     }
 
     /****************************
