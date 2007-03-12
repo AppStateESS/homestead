@@ -249,7 +249,7 @@ class HMS_RLC_Application{
         
         $output = "<select name=\"final_rlc[$application_id]\">";
 
-        $output . = '<option value="-1">None</option>';
+        $output .= '<option value="-1">None</option>';
 
         foreach ($rlc_list as $id => $rlc_name){
             $output .= "<option value=\"$id\">$rlc_name</option>";
