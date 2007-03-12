@@ -2207,19 +2207,18 @@ class HMS_Form
         $first_name  = HMS_SOAP::get_first_name($username);
         $middle_name = HMS_SOAP::get_middle_name($username);
         $last_name   = HMS_SOAP::get_last_name($username);
-
-        //test($first_name);
-        //test($middle_name);
-        //test($last_name);
+        
+        /*
+        test($first_name);
+        test($middle_name);
+        test($last_name);
+        */
 
         # Check for error in SOAP communication. isset doesn't work to check these, for some reason
-        /* 
-        * Commented out until SOAP works!
-        if(!(isset($first_name) && isset($middle_name) && isset($last_name))){
+        if(!(isset($first_name) && isset($last_name))){
             $template['MESSAGE'] = "Error: There was a problem communicating with the student information server. Please try again later.";
             return PHPWS_Template::process($template,'hms','student/rlc_signup_form_page1.tpl');
         }
-        */
 
         $template['APPLENET_USERNAME']       = $username;
         $template['APPLENET_USERNAME_LABEL'] = 'Applenet User Name: ';
