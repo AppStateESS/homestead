@@ -54,6 +54,14 @@ class HMS_Maintenance
         $db = &new PHPWS_DB('hms_room');
         $db->delete();
 
+        $content .= "Purging bedroom data...<br />";
+        $db = &new PHPWS_DB('hms_bedrooms');
+        $db->delete();
+
+        $content .= "Purging bed data...<br />";
+        $db = &new PHPWS_DB('hms_beds');
+        $db->delete();
+
         $content .= "Purging suite data...<br />";
         $db = &new PHPWS_DB('hms_suite');
         $db->delete();
@@ -70,8 +78,8 @@ class HMS_Maintenance
         if(Current_User::allow('hms', 'add_halls')) 
             $tpl['ADD_HALL']    = PHPWS_Text::secureLink(_('Add Residence Hall'), 'hms', array('type'=>'hall', 'op'=>'add_hall'));
 
-        if(Current_User::allow('hms', 'edit_halls')) 
-            $tpl['EDIT_HALL']   = PHPWS_Text::secureLink(_('Edit Residence Hall'), 'hms', array('type'=>'hall', 'op'=>'select_residence_hall_for_edit'));
+        //if(Current_User::allow('hms', 'edit_halls')) 
+        //    $tpl['EDIT_HALL']   = PHPWS_Text::secureLink(_('Edit Residence Hall'), 'hms', array('type'=>'hall', 'op'=>'select_residence_hall_for_edit'));
 
         if(Current_User::allow('hms', 'delete_halls'))
             $tpl['DELETE_HALL'] = PHPWS_Text::secureLink(_('Delete Residence Hall'), 'hms', array('type'=>'hall', 'op'=>'select_residence_hall_for_delete'));
