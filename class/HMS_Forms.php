@@ -841,6 +841,24 @@ class HMS_Form
         $tpl = $this->fill_hall_data_display($hall, 'save_residence_hall') ;
         $tpl['TITLE'] = "Edit Residence Hall";
         $tpl['ERROR'] = $this->error;
+        $tpl['BEDROOMS_PER_ROOM'] = $hall->bedrooms_per_room;
+        $tpl['BEDS_PER_BEDROOM'] = $hall->beds_per_bedroom;
+        switch($hall->numbering_scheme)
+        {
+            case '0':
+                $tpl['NUMBERING_SCHEME'] = "Ground + First";
+                break;
+            case '1':
+                $tpl['NUMBERING_SCHEME'] = "Ground + Second";
+                break;
+            case '2':
+                $tpl['NUMBERING_SCHEME'] = "First + Second";
+                break;
+            default:
+                test($hall, 1);
+                break;
+        }
+
         $final = PHPWS_Template::process($tpl, 'hms', 'admin/display_hall_data.tpl');
         return $final;
     }
@@ -1227,7 +1245,12 @@ class HMS_Form
         if(isset($object->number_floors)) {
             $form->setMatch('number_floors', $object->number_floors);
         }
-       
+      
+        $form->addDropBox('numbering_scheme', array('0'=>'Ground + First', '1'=>'Ground + Second', '2'=>'First + Second'));
+        if(isset($object->numbering_scheme)) {
+            $form->setMatch('numbering_scheme', $object->numbering_scheme);
+        }
+
         for($i = 1; $i < 30; $i++) {
             $rooms[$i] = $i;
         }
