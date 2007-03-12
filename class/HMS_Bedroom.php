@@ -225,6 +225,18 @@ class HMS_Bedroom
         return $success;
     }
 
+    function delete_bedrooms_by_building($building_id)
+    {
+        $sql = "UPDATE hms_bedrooms ";
+        $sql .= "SET deleted = 1 ";
+        $sql .= "WHERE room_id = hms_room.id ";
+        $sql .= "AND hms_room.building_id = $building_id;";
+
+        $db = new PHPWS_DB;
+        $result = $db->query($sql);
+        return $result;
+    }
+
     function edit_room()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
