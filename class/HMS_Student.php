@@ -352,8 +352,7 @@ class HMS_Student {
                     $dob = explode('-', HMS_SOAP::get_dob($_REQUEST['asu_username']));
                     $dob_timestamp = mktime(0,0,0,$dob[1],$dob[2],$dob[0]);
                     $current_timestamp = mktime(0,0,0);
-                    #if(($current_timestamp - $dob_timestamp) < (3600 * 24 * 365 * 18)){
-                    if(TRUE){
+                    if(($current_timestamp - $dob_timestamp) < (3600 * 24 * 365 * 18)){
                         $message .= '<br /><font color="red">Because you are under age 18, you MUST print a copy of the Housing Contract Agreement, ';
                         $message .= 'have a parent or legal gaurdian sign it, and return it to the Department of ';
                         $message .= 'Housing and Residence Life. Your application cannot be fully processed until a Housing Contract ';
