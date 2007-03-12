@@ -13,6 +13,9 @@
                 <th>Select the number of floors: </th><td align="left">{NUMBER_FLOORS}</td>
             </tr>
             <tr>
+                <th>What is the floor numbering scheme? </th><td align="left">{NUMBERING_SCHEME}</td>
+            </tr>
+            <tr>
                 <th>How many rooms per floor? </th><td align="left">{ROOMS_PER_FLOOR}</td>
             </tr>
             <tr>
