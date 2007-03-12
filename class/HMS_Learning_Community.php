@@ -269,7 +269,7 @@ class HMS_Learning_Community
             PHPWS_Core::initModClass('hms','HMS_RLC_Application.php');
             $result = HMS_RLC_Application::save_application();
 
-            test($result);
+            //test($result);
 
             # Check for an error
             if(PEAR::isError($result)){
