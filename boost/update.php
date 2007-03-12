@@ -120,6 +120,12 @@ function hms_update(&$content, $currentVersion)
             $content[] = '+ Room assignments working - assignments now by bed instead of room');
 
         case version_compare($currentVersion, '0.1.8', '<'):
+            $db = &new PHPWS_DB;
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_1_8.sql');
+            if(PEAR::isError($result)) {
+                return $result;
+            }
+
             $files = array();
             $files[] = 'templates/admin/display_learning_community_data.tpl';
 
