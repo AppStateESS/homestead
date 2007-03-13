@@ -59,6 +59,10 @@ class HMS_SOAP{
         }
     }
 
+    /**
+     * Given a username, returns the full name of the student in
+     * the natural order (first middle last).
+     */
     function get_full_name($username)
     {
         $student = HMS_SOAP::get_student_info($username);
@@ -75,6 +79,10 @@ class HMS_SOAP{
         }
     }
 
+    /**
+     * Given a username, returns the full name of the student in the 
+     * (last, first middle) format.
+     */
     function get_full_name_inverted($username)
     {
         $student = HMS_SOAP::get_student_info($username);
@@ -118,6 +126,12 @@ class HMS_SOAP{
         }
     }
 
+    /**
+     * Returns an associate array with keys:
+     * line1, line2, line3, city, county, state, zip
+     * 'county' is a county code 
+     * 'state' is a two character abbrev.
+     */
     function get_address($username)
     {
         $student = HMS_SOAP::get_student_info($username);
