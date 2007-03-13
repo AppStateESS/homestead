@@ -43,14 +43,14 @@ CREATE TABLE hms_floor (
 CREATE TABLE hms_hall_communities (
     id integer DEFAULT 0 NOT NULL,
     community_name character varying(32) NOT NULL,
-    abbreviation character varying(16) NOT NULL,
-    capacity integer NOT NULL,
     primary key(id)
 );
 
 CREATE TABLE hms_learning_communities (
     id integer DEFAULT 0 NOT NULL,
     community_name character varying(32) NOT NULL,
+    abbreviation character varying(16) NOT NULL,
+    capacity integer NOT NULL,
     primary key(id)
 );
 

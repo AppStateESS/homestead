@@ -19,9 +19,9 @@ function hms_uninstall(&$content)
     $result[] = PHPWS_DB::dropTable('hms_learning_community_floors');
     $result[] = PHPWS_DB::dropTable('hms_floor');
     $result[] = PHPWS_DB::dropTable('hms_hall_communities');
-    $resuit[] = PHPWS_DB::dropTable('hms_learning_community_assignment');
     $result[] = PHPWS_DB::dropTable('hms_learning_community_applications');
     $result[] = PHPWS_DB::dropTable('hms_learning_community_questions');
+    $resuit[] = PHPWS_DB::dropTable('hms_learning_community_assignment');
     $result[] = PHPWS_DB::dropTable('hms_learning_communities'); # must drop this after learning_community_applications and learning_community_questions becase of foreign keys
     $result[] = PHPWS_DB::dropTable('hms_application');
 
