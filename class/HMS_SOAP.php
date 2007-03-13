@@ -145,6 +145,19 @@ class HMS_SOAP{
         }
     }
 
+    function get_student_class($username)
+    {
+        $student = HMS_SOAP::get_student_info($username);
+        if(PEAR::isError($student)) {
+            PHPWS_Error::log($student, 'hms' , 'get_student_class', $username);
+            return $student;
+        } else if($student->projected_class == NULL) {
+            return NULL;
+        } else {
+            return $student->projected_class;
+        }
+    }
+
     function get_dob($username)
     {
         $student = HMS_SOAP::get_student_info($username);
