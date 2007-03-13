@@ -113,11 +113,11 @@ function hms_update(&$content, $currentVersion)
 
             PHPWS_Boost::updateFiles($files, 'hms');
 
-            $content[] = '+ Removed capacity_per_room');
-            $content[] = '+ Added bedrooms_per_room');
-            $content[] = '+ Added beds_per_bedroom');
-            $content[] = '+ Added list of existing halls when adding new halls');
-            $content[] = '+ Room assignments working - assignments now by bed instead of room');
+            $content[] = '+ Removed capacity_per_room';
+            $content[] = '+ Added bedrooms_per_room';
+            $content[] = '+ Added beds_per_bedroom';
+            $content[] = '+ Added list of existing halls when adding new halls';
+            $content[] = '+ Room assignments working - assignments now by bed instead of room';
 
         case version_compare($currentVersion, '0.1.8', '<'):
             $db = &new PHPWS_DB;
