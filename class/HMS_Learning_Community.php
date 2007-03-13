@@ -285,8 +285,10 @@ class HMS_Learning_Community
 
     function assign_applicants_to_rlcs()
     {
+        PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
         $tags = array();
-        $tags['SUMMARY'] = HMS_Learning_Community::display_rlc_assignment_summary();
+        $tags['SUMMARY']           = HMS_Learning_Community::display_rlc_assignment_summary();
+        $tags['ASSIGNMENTS_PAGER'] = HMS_RLC_Application::rlc_application_admin_pager();
 
         return PHPWS_Template::process($tags, 'hms', 'admin/make_new_rlc_assignments.tpl');
     }
