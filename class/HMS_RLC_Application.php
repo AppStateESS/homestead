@@ -182,6 +182,7 @@ class HMS_RLC_Application{
     function rlc_application_admin_pager()
     {
         PHPWS_Core::initCoreClass('DBPager.php');
+        PHPWS_Core::initModClass('hms','HMS_SOAP.php');
 
         $form = new PHPWS_Form;
         $form->addHidden('type','admin');
