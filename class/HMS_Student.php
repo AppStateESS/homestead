@@ -297,24 +297,40 @@ class HMS_Student {
                 return HMS_Application::application_search();
                 break;
             case 'show_application':
+                PHPWS_Core::initModClass('hms', 'HMS_Side_Thingie.php');
+                HMS_Side_Thingie::show(HMS_SIDE_STUDENT_APPLY);
                 PHPWS_Core::initModClass('hms','HMS_Application.php');
                 return HMS_Application::show_application($_REQUEST['user']);
                 break;
             case 'show_rlc_application_form':
+                PHPWS_Core::initModClass('hms', 'HMS_Side_Thingie.php');
+                HMS_Side_Thingie::show(HMS_SIDE_STUDENT_RLC);
                 PHPWS_Core::initModClass('hms','HMS_Learning_Community.php');
                 return HMS_Learning_Community::show_rlc_application_form();
                 break;
             case 'rlc_application_page1_submit':
+                PHPWS_Core::initModClass('hms', 'HMS_Side_Thingie.php');
+                HMS_Side_Thingie::show(HMS_SIDE_STUDENT_RLC);
                 PHPWS_Core::initModClass('hms','HMS_Learning_Community.php');
                 return HMS_Learning_Community::rlc_application_page1_submit();
                 break;
             case 'rlc_application_page2_submit':
+                PHPWS_Core::initModClass('hms', 'HMS_Side_Thingie.php');
+                HMS_Side_Thingie::show(HMS_SIDE_STUDENT_RLC);
                 PHPWS_Core::initModClass('hms','HMS_Learning_Community.php');
                 return HMS_Learning_Community::rlc_application_page2_submit();
                 break;
             case 'main':
                 PHPWS_Core::initModClass('hms', 'HMS_Application.php');
                 if(HMS_Application::check_for_application($_SESSION['asu_username'])) {
+                    PHPWS_Core::initModClass('hms', 'HMS_Side_Thingie.php');
+                    // TODO: This will have to check whether a profile has been made
+                    // or not, and then whether a roommate has been selected or not:
+                    // if not profile, then HMS_SIDE_STUDENT_PROFILE
+                    // if not roommate, then HMS_SIDE_STUDENT_ROOMMATE
+                    // else, HMS_SIDE_STUDENT_VERIFY
+                    HMS_Side_Thingie::show(HMS_SIDE_STUDENT_PROFILE);
+
                     $message  = "Welcome to the Housing Management System!<br /><br />";
                     $message .= "You have already completed a Housing Application. You may click below to review it.<br /><br />";
                     $message .= "You may also submit a new application. This will replace the one you already have saved.<br /><br />";
@@ -334,6 +350,8 @@ class HMS_Student {
                     $message .= PHPWS_Text::secureLink(_('Logout'), 'users', array('action'=>'user', 'command'=>'logout'));
                     $message .= "<br /><br />";
                 } else {
+                    PHPWS_Core::initModClass('hms', 'HMS_Side_Thingie.php');
+                    HMS_Side_Thingie::show(HMS_SIDE_STUDENT_AGREE);
                    
                     $form = new PHPWS_Form;
                     $form->addHidden('module', 'hms');
