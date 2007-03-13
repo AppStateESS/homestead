@@ -91,7 +91,12 @@ class HMS_SOAP{
         }
     }
 
-    function get_gender($username)
+    /**
+     * Returns the gender of the given username as 'M' or 'F' by default.
+     * If $numeric is set to true, returns the gender as an int where 0 => Female
+     * and 1 => Male. (For database operations).
+     */
+    function get_gender($username, $numeric = FALSE)
     {
         $student = HMS_SOAP::get_student_info($username);
 
@@ -101,7 +106,15 @@ class HMS_SOAP{
         }else if($student->gender == NULL){
             return NULL;
         }else{
-            return $student->gender;
+            if($numeric){
+                if($student->gender == 'F'){
+                    return 0;
+                }else if($student->gender == 'M'){
+                    return 1;
+                }
+            }else{
+                return $student->gender;
+            }
         }
     }
 
