@@ -41,7 +41,7 @@ class HMS_RLC_Application{
         if(isset($user_id)){
             $this->setUserID($user_id);
         }else{
-            $this->setUserID($_SESSION['asu_username']);
+            return;
         }
 
         $result = $this->init();
