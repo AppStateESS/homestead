@@ -235,7 +235,7 @@ CREATE TABLE hms_bedrooms (
 
 CREATE TABLE hms_beds (
     id INTEGER NOT NULL,
-    bedroom_id INTEGER NOT NULL REFERENCE hms_bedrooms(id),
+    bedroom_id INTEGER NOT NULL REFERENCES hms_bedrooms(id),
     bed_letter character(1) NOT NULL,
     PRIMARY KEY(id)
 );
