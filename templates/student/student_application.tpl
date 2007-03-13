@@ -16,10 +16,6 @@
             </tr>
             <tr><th></th><td></td></tr>
             <tr>
-                <th>Gender: </th><td align="left">{GENDER_TYPE}</td>
-            </tr>
-            <tr><th></th><td></td></tr>
-            <tr>
                 <th>Meal Option: </th><td align="left">{MEAL_OPTION}</td>
             </tr>
             <tr><th></th><td></td></tr>

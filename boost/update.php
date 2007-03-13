@@ -132,6 +132,7 @@ function hms_update(&$content, $currentVersion)
             $files[] = 'templates/admin/display_hall_data.tpl';
             $files[] = 'templates/admin/add_floor.tpl';
             $files[] = 'templates/admin/display_floor_data.tpl';
+            $files[] = 'templates/student/student_application.tpl';
 
             PHPWS_Boost::updateFiles($files, 'hms');
 
@@ -139,6 +140,7 @@ function hms_update(&$content, $currentVersion)
             $content[] = '+ Deleting a building now deletes the bedrooms and beds in that building.';
             $content[] = '+ Hid Edit Building temporarily. Bedroom/bed maintenance needs to be finished first.';
             $content[] = '+ Editing a floor works again. Can not delete/add rooms from floor maintenance, must go through room menu.';
+            $content[] = '+ Removed gender option from student_application.tpl';
 
     }
 

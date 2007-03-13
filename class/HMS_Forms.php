@@ -1547,6 +1547,8 @@ class HMS_Form
 
     function begin_application($message = NULL)
     {
+        PHPWS_Core::initModClass('hms','HMS_SOAP.php');
+        
         PHPWS_Core::initCoreClass('Form.php');
         $form = &new PHPWS_Form;
         
@@ -1561,28 +1563,38 @@ class HMS_Form
             $form->setMatch('student_status', 1);
         }
       
+        /**
+        * Commented out to hard code for freshmen
+        *
         $form->addDropBox('classification_for_term', array('1'=>_('Freshman'),
                                                            '2'=>_('Sophomore'),
                                                            '3'=>_('Junior'),
                                                            '4'=>_('Senior')));
+        */
+
+        $form->addDropBox('classification_for_term', array('1'=>_('Freshman')));
+
         if(isset($_REQUEST['classification_for_term'])){
             $form->setMatch('classification_for_term',$_REQUEST['classification_for_term']);
         }else{
             $form->setMatch('classification_for_term', '1');
         }
 
-        $form->addDropBox('gender_type', array('0'=>_('Female'),
-                                               '1'=>_('Male')));
-        if(isset($_REQUEST['gender_type'])){
-            $form->setMatch('gender_type',$_REQUEST['gender_type']);
-        }else{
-            $form->setMatch('gender_type', '0');
-        }
+        # Use a hidden field for gender, pull from banner
+        $form->addHidden('gender_type', HMS_SOAP::get_gender($_SESSION['asu_username'], TRUE));
 
-        $form->addDropBox('meal_option', array('1'=>_('Low'),
-                                               '2'=>_('Standard'),
-                                               '3'=>_('High'),
-                                               '4'=>_('Super')));
+        # Don't show *low* meal option to freshmen
+        if(HMS_SOAP::get_student_class($_SESSION['asu_username']) == "FR"){
+            $form->addDropBox('meal_option', array('1'=>_('Low'),
+                                                   '2'=>_('Standard'),
+                                                   '3'=>_('High'),
+                                                   '4'=>_('Super')));
+        }else{
+            $form->addDropBox('meal_option', array('2'=>_('Standard'),
+                                                   '3'=>_('High'),
+                                                   '4'=>_('Super')));
+        }
+            
         if(isset($_REQUEST['meal_option'])){
             $form->setMatch('meal_option',$_REQUEST['meal_option']);
         }else{
