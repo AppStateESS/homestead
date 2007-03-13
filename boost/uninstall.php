@@ -9,6 +9,8 @@ function hms_uninstall(&$content)
     $result[] = PHPWS_DB::dropTable('hms_pricing_tiers');
     $result[] = PHPWS_DB::dropTable('hms_questionnaire');
     $result[] = PHPWS_DB::dropTable('hms_residence_hall');
+    $result[] = PHPWS_DB::dropTable('hms_beds');
+    $result[] = PHPWS_DB::dropTable('hms_bedrooms');
     $result[] = PHPWS_DB::dropTable('hms_room');
     $result[] = PHPWS_DB::dropTable('hms_roommates');
     $result[] = PHPWS_DB::dropTable('hms_roommate_hashes');
