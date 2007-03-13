@@ -601,9 +601,20 @@ class HMS_Form
         $hall = $building['hall_name'];
         $num_floors = $building['number_floors'];
         unset($building);
-      
-        for($i = 1; $i <= $num_floors; $i++) {
+     
+        $db = new PHPWS_DB('hms_floor');
+        $db->addColumn('floor_number');
+        $db->addWhere('building', $_REQUEST['halls']);
+        $db->addWhere('deleted', '1', '!=');
+        $floors = $db->select();
+
+        /*
+        for($i = 0; $i <= $num_floors; $i++) {
             $floor[$i] = "$i";
+        }
+        */
+        foreach($floors as $afloor) {
+            $floor[$afloor['floor_number']] = $afloor['floor_number'];
         }
 
         PHPWS_Core::initCoreClass('Form.php');
@@ -885,6 +896,8 @@ class HMS_Form
             $tpl['ERROR'] = $this->error;
             $tpl['FLOOR'] = $floor->get_floor_number();
             $tpl['ROOMS'] = $floor->get_number_rooms();
+            $tpl['BEDROOMS_PER_ROOM'] = $floor->get_bedrooms_per_room();
+            $tpl['BEDS_PER_BEDROOM'] = $floor->get_beds_per_bedroom();
             $db = &new PHPWS_DB('hms_residence_hall');
             $db->addColumn('hall_name');
             $db->addWhere('id', $_REQUEST['hall']);
@@ -992,6 +1005,7 @@ class HMS_Form
     {
         $db = &new PHPWS_DB('hms_residence_hall');
         $db->addWhere('deleted', '0');
+        $db->addWhere('id', $_REQUEST['halls']);
         $hall = $db->select('row');
         if($hall == NULL) {
             $tpl['TITLE']   = "Error!";
@@ -1013,9 +1027,19 @@ class HMS_Form
         $form->setMatch('gender_type', $hall['gender_type']);
       
         $form->addHidden('building', $hall['id']);
-        $form->addHidden('floor_number', $hall['number_floors'] + 1);
+        $db = new PHPWS_DB('hms_floor');
+        $db->addColumn('floor_number');
+        $db->addWhere('building', $hall['id']);
+        $db->addWhere('deleted', '1', '!=');
+        $results = $db->select();
+        $floor_number = 1;
+        foreach($results as $result) {
+            if($result['floor_number'] > $floor_number) $floor_number = $result['floor_number'];
+        }
+        $form->addHidden('floor_number', $floor_number + 1);
         $form->addHidden('number_rooms', $hall['rooms_per_floor']);
         $form->addHidden('bedrooms_per_room', $hall['bedrooms_per_room']);
+        $form->addHidden('beds_per_bedroom', $hall['beds_per_bedroom']);
         
         $form->addHidden('module', 'hms');
         $form->addHidden('type', 'hall');
@@ -1032,6 +1056,7 @@ class HMS_Form
         $tpl['FLOOR_NUMBER']        = $hall['number_floors'] + 1;
         $tpl['ROOMS_PER_FLOOR']     = $hall['rooms_per_floor'];
         $tpl['BEDROOMS_PER_ROOM']   = $hall['bedrooms_per_room'];
+        $tpl['BEDS_PER_BEDROOM']    = $hall['beds_per_bedroom'];
 
         $final = PHPWS_Template::process($tpl, 'hms', 'admin/add_floor.tpl');
         return $final;
@@ -1142,6 +1167,7 @@ class HMS_Form
             $form->addHidden('building', $object->building);
             $form->addHidden('number_rooms', $object->number_rooms);
             $form->addHidden('bedrooms_per_room', $object->bedrooms_per_room);
+            $form->addHidden('beds_per_bedroom', $object->beds_per_bedroom);
             $form->addHidden('deleted', '0');
         }
         $form->addSubmit('submit', _('Save Floor'));
