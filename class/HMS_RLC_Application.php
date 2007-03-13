@@ -239,7 +239,7 @@ class HMS_RLC_Application{
         $db->addColumn('id');
         $db->addColumn('abbreviation');
         $result = $db->select('assoc');
-        test($result);
+        //test($result);
         return $result;
     }
 
