@@ -15,6 +15,12 @@
                 <th>Number of Rooms: </th><td>{ROOMS}</td>
             </tr>
             <tr>
+                <th>Number of Bedrooms per room: </th><td>{BEDROOMS_PER_ROOM}</td>
+            </tr>
+            <tr>
+                <th>Number of Beds per bedroom: </th><td>{BEDS_PER_BEDROOM}</td>
+            </tr>
+            <tr>
                 <th>Select a gender type: </th><td>{GENDER_TYPE_1} {GENDER_TYPE_1_LABEL}</td>
             </tr>
             <tr>
