@@ -17,7 +17,7 @@
 <!-- END assignments -->
                 </tr>
                 <tr>
-                    <th>Seats Available</th>
+                    <th>Total Seats</th>
                     <td>{TOTAL_AVAILABLE}</td>
 <!-- BEGIN available -->
                     <td>{AVAILABLE}</td>
