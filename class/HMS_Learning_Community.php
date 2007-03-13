@@ -288,21 +288,7 @@ class HMS_Learning_Community
         $tags = array();
         $tags['SUMMARY'] = HMS_Learning_Community::display_rlc_assignment_summary();
 
-        $tags['headings'][0]['HEADING'] = "Heading1";
-        $tags['headings'][1]['HEADING'] = "HEading2";
-
-        $tags['listrows'][0]['STATISTIC'] = "Statistic";
-        $tags['listrows'][1]['STATISTIC'] = "Something Else";
-        $tags['listrows'][2]['STATISTIC'] = "Yo Momma";
-        
-        $tags['listrows'][0]['columns'][0]['COLUMN'] = "0,0";
-        $tags['listrows'][0]['columns'][1]['COLUMN'] = "0,1";
-        $tags['listrows'][1]['columns'][0]['COLUMN'] = "1,0";
-        $tags['listrows'][1]['columns'][1]['COLUMN'] = "1,1";
-        $tags['listrows'][2]['columns'][0]['COLUMN'] = "2,0";
-        $tags['listrows'][2]['columns'][1]['COLUMN'] = "2,1";
-
-        return PHPWS_Template::process($tags, 'hms', 'admin/make_new_rlc_assignments_summary.tpl');
+        return PHPWS_Template::process($tags, 'hms', 'admin/make_new_rlc_assignments.tpl');
     }
 
     function display_rlc_assignment_summary()
@@ -313,6 +299,14 @@ class HMS_Learning_Community
         $db->addColumn('community_name');
         $db->addColumn('capacity');
         $communities = $db->select();
+
+        if(!$communities) {
+            $template['no_communities'] = _('No communities have been enterred.');
+            return PHPWS_Template::process($template, 'hms',
+                    'admin/make_new_rlc_assignments_summary.tpl');
+        }
+
+        
 
         $count = 0;
         $total_assignments = 0;
@@ -329,6 +323,9 @@ class HMS_Learning_Community
             $template['remaining'][$count]['REMAINING']    = 0;
             $count++;
         }
+
+        return PHPWS_Template::process($template, 'hms',
+                'admin/make_new_rlc_assignments_summary.tpl');
     }
 
     function assign_rlc_members_to_rooms()
