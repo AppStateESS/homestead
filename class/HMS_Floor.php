@@ -247,7 +247,7 @@ class HMS_Floor
         else 
             $this->set_is_new_floor(FALSE);
 
-        if($_REQUEST['floor_number'] == 0) {
+        if($_REQUEST['floor_number'] == 0 && !$_REQUEST['id']) {
             $db = &new PHPWS_DB('hms_residence_hall');
             $db->addWhere('id', $_REQUEST['building']);
             $db->addValue('number_floors');
