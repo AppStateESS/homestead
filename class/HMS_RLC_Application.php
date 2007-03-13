@@ -87,7 +87,7 @@ class HMS_RLC_Application{
     {
         $application = &new HMS_RLC_Application();
 
-        
+        $application->setUserID($_SESSION['asu_username']);
         $application->setFirstChoice($_REQUEST['rlc_first_choice']);
         $application->setSecondChoice($_REQUEST['rlc_second_choice']);
         $application->setThirdChoice($_REQUEST['rlc_third_choice']);
