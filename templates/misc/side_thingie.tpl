@@ -1,6 +1,11 @@
 <!-- BEGIN CONTENT -->
 <div class="quick">
     <h2>{TITLE}</h2>
+
+<!-- BEGIN error -->
+    <font style="color: #F00;">{ERROR}</font>
+<!-- END error -->
+
     <ul>
     
 <!-- BEGIN progress -->
@@ -20,6 +25,9 @@
 <!-- BEGIN MISSED -->
         <li style="color: #F00;">{STEP_MISSED}</li>
 <!-- END MISSED -->
+<!-- BEGIN OPT_MISSED -->
+        <li style="color: #00F;">{STEP_OPT_MISSED}</li>
+<!-- END OPT_MISSED -->
 
 <!-- END progress -->
 
