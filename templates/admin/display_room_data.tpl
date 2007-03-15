@@ -27,6 +27,9 @@
                 <th>Select the number of bedrooms per room: &nbsp;&nbsp;</th><td align="left">{BEDROOMS_PER_ROOM}</td>
             </tr>
             <tr>
+                <th>Number of beds per bedroom: </th><td>{BEDS_PER_BEDROOM}</td>
+            </tr>
+            <tr>
                 <th>Phone Number: </th><td align="left">{PHONE_NUMBER}</td>
             </tr>
             <tr>

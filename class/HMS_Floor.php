@@ -276,7 +276,6 @@ class HMS_Floor
         $floor_id = $db->saveObject($object);
         if (PEAR::isError($floor_id)) {
             PHPWS_Error::log($floor_id);
-            test($floor_id);
             return $floor_id;
         }
 
@@ -413,13 +412,46 @@ class HMS_Floor
             $floor_db->addWhere('floor_number', $floor);
         }
         $floor_db->addValue('deleted', 1);
-        $result = $floor_db->update();
+        
+        $floor_result = $floor_db->update();
         
         if(PEAR::isError($result)) {
             PHPWS_Error::log($result, 'hms', 'HMS_Floor::delete_floors');
         }
+        
+        $db = &new PHPWS_DB;
+        $sql  = "UPDATE hms_bedrooms ";
+        $sql .= "SET deleted = 1 ";
+        $sql .= "WHERE room_id = hms_room.id ";
+        if($floor != NULL) {
+            $sql .= "AND hms_room.floor_id = hms_floor.id ";
+            $sql .= "AND hms_floor.floor_number = $floor ";
+        }
+        $sql .= "AND hms_room.building_id = $bid ";
+        $result = $db->query($sql);
 
-        return $result;
+        if(PEAR::isError($result)) {
+            PHPWS_Error::log($result, 'hms', 'HMS_Floor::delete_floors');
+        }
+       
+        $db = &new PHPWS_DB;
+        $sql  = "UPDATE hms_beds ";
+        $sql .= "SET deleted = 1 ";
+        $sql .= "WHERE bedroom_id = hms_bedrooms.id ";
+        $sql .= "AND hms_bedrooms.room_id = hms_room.id ";
+        if($floor != NULL) {
+            $sql .= "AND hms_room.floor_id = hms_floor.id ";
+            $sql .= "AND hms_floor.floor_number = $floor ";
+        }
+        $sql .= "AND hms_room.building_id = $bid;";
+        $result = $db->query($sql);
+
+        if(PEAR::isError($result)) {
+            PHPWS_Error::log($result, 'hms', 'HMS_Floor::delete_floors');
+        }
+        
+        return $floor_result;
+        
     }
 
     function select_floor_for_edit()

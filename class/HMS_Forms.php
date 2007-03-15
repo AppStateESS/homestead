@@ -606,16 +606,17 @@ class HMS_Form
         $db->addColumn('floor_number');
         $db->addWhere('building', $_REQUEST['halls']);
         $db->addWhere('deleted', '1', '!=');
+        $db->addOrder('floor_number', 'ASC');
         $floors = $db->select();
 
+        foreach($floors as $afloor) {
+            $floor[$afloor['floor_number']] = $afloor['floor_number'];
+        }
         /*
         for($i = 0; $i <= $num_floors; $i++) {
             $floor[$i] = "$i";
         }
         */
-        foreach($floors as $afloor) {
-            $floor[$afloor['floor_number']] = $afloor['floor_number'];
-        }
 
         PHPWS_Core::initCoreClass('Form.php');
         $form = &new PHPWS_Form;
@@ -682,8 +683,15 @@ class HMS_Form
         $num_floors = $building['number_floors'];
         unset($building);
       
-        for($i = 1; $i <= $num_floors; $i++) {
-            $floor[$i] = "$i";
+        $db = new PHPWS_DB('hms_floor');
+        $db->addColumn('floor_number');
+        $db->addWhere('building', $_REQUEST['halls']);
+        $db->addWhere('deleted', '1', '!=');
+        $db->addOrder('floor_number', 'ASC');
+        $floors = $db->select();
+
+        foreach($floors as $afloor) {
+            $floor[$afloor['floor_number']] = $afloor['floor_number'];
         }
 
         PHPWS_Core::initCoreClass('Form.php');
@@ -745,6 +753,154 @@ class HMS_Form
         return $final;
     }
 
+    function select_residence_hall_for_delete_room()
+    {
+        PHPWS_Core::initCoreClass('Form.php');
+        $form = &new PHPWS_Form;
+
+        $db = &new PHPWS_DB('hms_residence_hall');
+        $db->addWhere('deleted', '0');
+        $db->addColumn('id');
+        $db->addColumn('hall_name');
+        $allhalls = $db->select();
+        
+        if($allhalls == NULL) {
+            $tpl['TITLE'] = "Error!";
+            $tpl['CONTENT'] = "You must add a Residence Hall before you can delete a room!!<br />";
+            $final = PHPWS_Template::process($tpl, 'hms', 'admin/title_and_message.tpl');
+            return $final;
+        }
+
+        foreach($allhalls as $ahall) {
+            $halls[$ahall['id']] = $ahall['hall_name'];
+        }
+
+        $form->addDropBox('halls', $halls);
+        $form->addHidden('module', 'hms');
+        $form->addHidden('type', 'room');
+        $form->addHidden('op', 'select_floor_for_delete_room');
+        $form->addSubmit('submit', _('Submit'));
+        $tpl = $form->getTemplate();
+        $tpl['TITLE'] = "Which Hall has the room to delete?";
+        $final = PHPWS_Template::process($tpl, 'hms', 'admin/select_residence_hall.tpl');
+        return $final;
+
+    }
+
+    function select_floor_for_delete_room()
+    {
+        $db = &new PHPWS_DB('hms_residence_hall');
+        $db->addWhere('id', $_REQUEST['halls']);
+        $db->addColumn('number_floors');
+        $db->addColumn('hall_name');
+        $building = $db->select('row');
+        unset($db);
+        
+        $hall = $building['hall_name'];
+        $num_floors = $building['number_floors'];
+        unset($building);
+     
+        $db = new PHPWS_DB('hms_floor');
+        $db->addColumn('floor_number');
+        $db->addWhere('building', $_REQUEST['halls']);
+        $db->addWhere('deleted', '1', '!=');
+        $db->addOrder('floor_number', 'ASC');
+        $floors = $db->select();
+
+        foreach($floors as $afloor) {
+            $floor[$afloor['floor_number']] = $afloor['floor_number'];
+        }
+
+        PHPWS_Core::initCoreClass('Form.php');
+        $form = &new PHPWS_Form;
+        $form->addDropBox('floor', $floor);
+        $form->addHidden('module', 'hms');
+        $form->addHidden('type', 'room');
+        $form->addHidden('op', 'select_room_for_delete');
+        $form->addHidden('hall', $_REQUEST['halls']);
+        $form->addSubmit('submit', 'Select Floor');
+
+        $tpl = $form->getTemplate();
+        
+        $tpl['TITLE']       = "Select a Floor";
+        $tpl['HALL']        = "$hall";
+        $tpl['NUM_FLOORS']  = "$num_floors";
+       
+        $final = PHPWS_Template::process($tpl, 'hms', 'admin/select_floor_for_delete_room.tpl');
+        return $final;
+
+    }
+
+    function select_room_for_delete($msg)
+    {
+        $db = &new PHPWS_DB('hms_room');
+        $db->addColumn('room_number');
+        $db->addWhere('building_id', $_REQUEST['hall']);
+        $db->addWhere('floor_number', $_REQUEST['floor']);
+        $db->addWhere('deleted', '0');
+        $db->addOrder('room_number', 'ASC');
+        $rooms = $db->select('column');
+        
+        $db = &new PHPWS_DB('hms_residence_hall');
+        $db->addWhere('id', $_REQUEST['hall']);
+        $db->addColumn('hall_name');
+        $hall_name = $db->select('one');
+
+        foreach($rooms as $room) {
+            $room_numbers[$room['room_number']] = $room['room_number'];
+        }
+
+        PHPWS_Core::initCoreClass('Form.php');
+        $form = &new PHPWS_Form;
+
+        $form->addDropBox('room', $room_numbers);
+        $form->addHidden('module', 'hms');
+        $form->addHidden('type', 'room');
+        $form->addHidden('floor', $_REQUEST['floor']);
+        $form->addHidden('op', 'verify_delete_room');
+        $form->addHidden('hall', $_REQUEST['hall']);
+        $form->addSubmit('submit', _('Delete Room'));
+        
+        $tpl = $form->getTemplate();
+
+        $tpl['TITLE']       = "Select Room to Delete";
+        $tpl['MESSAGE']     = $msg;
+        $tpl['HALL']        = $hall_name;
+        $tpl['FLOOR']       = $_REQUEST['floor'];
+        $tpl['NUM_ROOMS']   = count($room_numbers);
+
+        $final = PHPWS_Template::process($tpl, 'hms', 'admin/select_room_for_delete.tpl');
+        return $final;
+    }
+
+    function verify_delete_room()
+    {
+        $db = &new PHPWS_DB('hms_residence_hall');
+        $db->addColumn('hall_name');
+        $db->addWhere('id', $_REQUEST['hall']);
+        $hall_name = $db->select('one');
+
+        PHPWS_Core::initCoreClass('Form.php');
+        $form = &new PHPWS_Form;
+
+        $form->addHidden('module', 'hms');
+        $form->addHidden('type', 'room');
+        $form->addHidden('op', 'delete_room');
+        $form->addHidden('hall', $_REQUEST['hall']);
+        $form->addHidden('room', $_REQUEST['room']);
+        $form->addHidden('floor', $_REQUEST['floor']);
+        $form->addSubmit('submit', _('Delete Room'));
+        
+        $tpl = $form->getTemplate();
+
+        $tpl['TITLE']       = "Select Room to Delete";
+        $tpl['HALL']        = $hall_name;
+        $tpl['ROOM']        = $_REQUEST['room'];
+
+        $final = PHPWS_Template::process($tpl, 'hms', 'admin/verify_delete_room.tpl');
+        return $final;
+    }
+
     function select_residence_hall_for_delete()
     {
         PHPWS_Core::initCoreClass('Form.php');
@@ -780,7 +936,6 @@ class HMS_Form
     
     function confirm_delete_floor()
     {
-        test($_REQUEST);
         $db = &new PHPWS_DB('hms_residence_hall');
         $db->addColumn('number_floors');
         $db->addColumn('hall_name');
@@ -929,6 +1084,7 @@ class HMS_Form
         $floor_number       = $room['floor_number'];
         $gender_type        = $room['gender_type'];
         $bedrooms_per_room  = $room['bedrooms_per_room'];
+        $beds_per_bedroom   = $room['beds_per_bedroom'];
         $phone_number       = $room['phone_number'];
         $is_medical         = $room['is_medical'];
         $is_reserved        = $room['is_reserved'];
@@ -955,13 +1111,15 @@ class HMS_Form
 
         $form->setSize('phone_number', 8);
 
-        $capacity   =  array('0'=>"0",
-                             '1'=>"1",
+        $capacity   =  array('1'=>"1",
                              '2'=>"2",
                              '3'=>"3",
                              '4'=>"4");
         $form->addDropBox('bedrooms_per_room', $capacity);
         $form->setMatch('bedrooms_per_room', $bedrooms_per_room);
+
+        $form->addDropBox('beds_per_bedroom', $capacity);
+        $form->setMatch('beds_per_bedroom', $beds_per_bedroom);
 
         $form->addHidden('module', 'hms');
         $form->addHidden('type', 'room');

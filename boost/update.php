@@ -133,6 +133,10 @@ function hms_update(&$content, $currentVersion)
             $files[] = 'templates/admin/add_floor.tpl';
             $files[] = 'templates/admin/display_floor_data.tpl';
             $files[] = 'templates/student/student_application.tpl';
+            $files[] = 'templates/admin/select_room_for_delete.tpl';
+            $files[] = 'templates/admin/display_room_data.tpl';
+            $files[] = 'templates/admin/verify_delete_room.tpl';
+            $files[] = 'templates/admin/select_floor_for_delete_room.tpl';
             $files[] = 'templates/misc/side_thingie.tpl';
 
             PHPWS_Boost::updateFiles($files, 'hms');

@@ -291,13 +291,7 @@ class HMS_Assignment
         $room_gender = HMS_Room::get_gender_type($id);
 
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
-        $user_gender = HMS_SOAP::get_gender($_REQUEST['username']);
-        
-        if($user_gender == "F") {
-            $user_gender = 0;
-        } else if($user_gender == "M") {
-            $user_gender = 1;
-        }
+        $user_gender = HMS_SOAP::get_gender($_REQUEST['username'], true);
         
         if($room_gender != $user_gender) {
             return false;

@@ -669,7 +669,6 @@ class HMS_Building
 
     function delete_floor()
     {
-        test($_REQUEST);
         if(isset($_REQUEST['cancel'])) {
             PHPWS_Core::initModClass('hms', 'HMS_Maintenance.php');
             return HMS_Maintenance::show_options();
@@ -690,7 +689,6 @@ class HMS_Building
         // delete the floor
         PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
         $success = HMS_Floor::delete_floors($_REQUEST['hall'], $_REQUEST['floor'], TRUE);
-
         // delete the rooms
         PHPWS_Core::initModClass('hms', 'HMS_Room.php');
         $success = HMS_Room::delete_rooms_by_floor($_REQUEST['hall'], $_REQUEST['floor'], TRUE);

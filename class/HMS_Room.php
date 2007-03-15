@@ -297,6 +297,75 @@ class HMS_Room
     function save_room()
     {
         $db = &new PHPWS_DB('hms_room');
+        $db->addColumn('bedrooms_per_room');
+        $db->addColumn('beds_per_bedroom');
+        $db->addWhere('id', $_REQUEST['id']);
+        $db_results = $db->select('row');
+     
+        if($db_results['bedrooms_per_room'] != $_REQUEST['bedrooms_per_room'] ||
+           $db_results['beds_per_bedroom'] != $_REQUEST['beds_per_bedroom']) {
+
+            // delete all bedrooms and beds associated with the room
+            $del_db = &new PHPWS_DB;
+            $sql  = "UPDATE hms_beds ";
+            $sql .= "SET deleted = 1 ";
+            $sql .= "WHERE bedroom_id = hms_bedrooms.id ";
+            $sql .= "AND hms_bedrooms.room_id = " . $_REQUEST['id'] . ";";
+            $bed_delete = $del_db->query($sql);
+        
+            $sql  = "UPDATE hms_bedrooms ";
+            $sql .= "SET deleted = 1 ";
+            $sql .= "WHERE hms_bedrooms.room_id = " . $_REQUEST['id'] . ";";
+            $br_delete = $del_db->query($sql);
+
+            // recreate the appropriate number of bedrooms/beds
+            $br_letter = 'a';
+            PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
+            PHPWS_Core::initModClass('hms', 'HMS_Bedroom.php');
+            for($j = 1; $j <= $_REQUEST['bedrooms_per_room']; $j++) {
+                $bedroom = new HMS_Bedroom;
+                $bedroom->set_room_id($_REQUEST['id']);
+                $bedroom->set_is_online($_REQUEST['is_online']);
+                $bedroom->set_gender_type($_REQUEST['gender_type']);
+                $bedroom->set_number_beds($_REQUEST['beds_per_bedroom']);
+                $bedroom->set_is_reserved(0);
+                $bedroom->set_is_medical(0);
+                $bedroom->set_added_by();
+                $bedroom->set_added_on();
+                $bedroom->set_updated_by();
+                $bedroom->set_updated_on();
+                $bedroom->set_bedroom_letter($br_letter);
+                $saved_br = HMS_Bedroom::save_bedroom($bedroom);
+               
+                if($br_letter == 'a') $br_letter = 'b';
+                else if($br_letter == 'b') $br_letter = 'c';
+                else if($br_letter == 'c') $br_letter = 'd';
+                
+                if(PEAR::isError($saved_br)) {
+                    test($saved_br);
+                    return $saved_br;
+                }
+                
+                $bed_letter = 'a';
+                for($k = 1; $k <= $_REQUEST['beds_per_bedroom']; $k++) {
+                    $bed = new HMS_Bed;
+                    $bed->set_bedroom_id($saved_br);
+                    $bed->set_bed_letter($bed_letter);
+                    $saved_bed = HMS_Bed::save_bed($bed);
+
+                    if($bed_letter == 'a') $bed_letter = 'b';
+                    else if($bed_letter == 'b') $bed_letter = 'c';
+                    else if($bed_letter == 'c') $bed_letter = 'd';
+
+                    if(PEAR::isError($saved_bed)) {
+                        test($saved_bed);
+                        return $saved_bed;
+                    }
+                } // end bed creation
+            } // end bedroom creation
+        }
+
+        $db = &new PHPWS_DB('hms_room');
         $db->addWhere('id', $_REQUEST['id']);
         $db->addValue('gender_type', $_REQUEST['gender_type']);
         $db->addValue('bedrooms_per_room', $_REQUEST['bedrooms_per_room']);
@@ -348,26 +417,84 @@ class HMS_Room
         $room_db->addValue('deleted', 1);
         $room_db->addValue('deleted_by', Current_User::getId());
         $room_db->addValue('deleted_on', time());
-        $result = $room_db->update();
+        $room_result = $room_db->update();
         
         if(PEAR::isError($result)) {
-            PHPWS_Error::log($result, 'hms', 'HMS_Room::delete_rooms_by_floor');
-            return $result;
+            PHPWS_Error::log($room_result, 'hms', 'HMS_Room::delete_rooms_by_floor');
+            return $room_result;
         }
 
-        return $result;
+        $db = &new PHPWS_DB;
+        $sql  = "UPDATE hms_bedrooms ";
+        $sql .= "SET deleted = 1 ";
+        $sql .= "WHERE room_id = hms_room.id ";
+        if($floor != NULL) {
+            $sql .= "AND hms_room.floor_id = hms_floor.id ";
+            $sql .= "AND hms_floor.floor_number = $floor ";
+        }
+        $sql .= "AND hms_room.building_id = $bid ";
+        $result = $db->query($sql);
+
+        if(PEAR::isError($result)) {
+            PHPWS_Error::log($result, 'hms', 'HMS_Floor::delete_floors');
+        }
+       
+        $db = &new PHPWS_DB;
+        $sql  = "UPDATE hms_beds ";
+        $sql .= "SET deleted = 1 ";
+        $sql .= "WHERE bedroom_id = hms_bedrooms.id ";
+        $sql .= "AND hms_bedrooms.room_id = hms_room.id ";
+        if($floor != NULL) {
+            $sql .= "AND hms_room.floor_id = hms_floor.id ";
+            $sql .= "AND hms_floor.floor_number = $floor ";
+        }
+        $sql .= "AND hms_room.building_id = $bid;";
+        $result = $db->query($sql);
+
+        if(PEAR::isError($result)) {
+            PHPWS_Error::log($result, 'hms', 'HMS_Floor::delete_floors');
+        }
+        return $room_result;
     }
 
     function delete_room($bid, $room_number)
     {
+
+        $sql  = "UPDATE hms_floor ";
+        $sql .= "SET number_rooms = number_rooms - 1 ";
+        $sql .= "WHERE building = $bid ";
+        $sql .= "AND deleted != '1' ";
+        $sql .= "AND id = hms_room.floor_id ";
+        $sql .= "AND hms_room.room_number = $room_number;";
+
+        $db = &new PHPWS_DB;
+        $floor_success = $db->query($sql);
+
         $room_db = &new PHPWS_DB('hms_room');
         $room_db->addValue('deleted', '1');
         $room_db->addWhere('building_id', $bid);
         $room_db->addWhere('room_number', $room_number);
         $room_db->addValue('deleted_by', Current_User::getId());
         $room_db->addValue('deleted_on', time());
-        $success = $room_db->update();
-        return $success;
+        $room_success = $room_db->update();
+
+        $sql  = "UPDATE hms_bedrooms ";
+        $sql .= "SET deleted = '1' ";
+        $sql .= "WHERE room_id = hms_room.id ";
+        $sql .= "AND hms_room.room_number = '$room_number' ";
+        $sql .= "AND hms_room.building_id = '$bid';";
+        $db = &new PHPWS_DB;
+        $br_success = $db->query($sql);
+
+        $bed_db = &new PHPWS_DB('hms_beds');
+        $bed_db->addValue('deleted', 1);
+        $bed_db->addWhere('bedroom_id', 'hms_bedrooms.id');
+        $bed_db->addWhere('hms_bedrooms.room_id', 'hms_room.id');
+        $bed_db->addWhere('hms_room.room_number', $room_number);
+        $bed_db->addWhere('hms_room.building_id', $bid);
+        $bed_success = $bed_db->update();
+
+        return HMS_Room::select_room_for_delete("Room successfully deleted");
     }
 
     function change_rooms_per_floor($bid, $number_floors, $old_rooms_per_floor, $new_rooms_per_floor, $is_online = NULL, $gender_type = NULL, $bedrooms_per_room = NULL, $beds_per_bedroom = NULL)
@@ -439,6 +566,34 @@ class HMS_Room
         PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
         $form = &new HMS_Form;
         return $form->select_room_for_edit();
+    }
+
+    function select_residence_hall_for_delete_room()
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
+        $form = &new HMS_Form;
+        return $form->select_residence_hall_for_delete_room();
+    }
+
+    function select_floor_for_delete_room()
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
+        $form = &new HMS_Form;
+        return $form->select_floor_for_delete_room();
+    }
+
+    function select_room_for_delete($msg = NULL)
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
+        $form = &new HMS_Form;
+        return $form->select_room_for_delete($msg);
+    }
+
+    function verify_delete_room()
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
+        $form = &new HMS_Form;
+        return $form->verify_delete_room();
     }
 
     function edit_room()
@@ -575,11 +730,26 @@ class HMS_Room
             case 'select_room_for_edit':
                 return HMS_Room::select_room_for_edit();
                 break;
+            case 'select_room_for_delete':
+                return HMS_Room::select_room_for_delete();
+                break;
+            case 'select_residence_hall_for_delete_room':
+                return HMS_Room::select_residence_hall_for_delete_room();
+                break;
+            case 'select_floor_for_delete_room':
+                return HMS_Room::select_floor_for_delete_room();
+                break;
             case 'edit_room':
                 return HMS_Room::edit_room();
                 break;
             case 'save_room':
                 return HMS_Room::save_room();
+                break;
+            case 'verify_delete_room':
+                return HMS_Room::verify_delete_room();
+                break;
+            case 'delete_room':
+                return HMS_Room::delete_room($_REQUEST['hall'], $_REQUEST['room']);
                 break;
             default:
                 return $_REQUEST['op'] . " is the operation<br />";

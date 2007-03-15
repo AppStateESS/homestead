@@ -99,6 +99,9 @@ class HMS_Maintenance
         if(Current_User::allow('hms', 'room_maintenance'))
             $tpl['ROOM_LABEL'] = "Room Options";
 
+        if(Current_User::allow('hms', 'delete_rooms')) 
+            $tpl['DELETE_ROOM'] = PHPWS_Text::secureLink(_('Delete a Room'), 'hms', array('type'=>'room', 'op'=>'select_residence_hall_for_delete_room'));
+
         if(Current_User::allow('hms', 'edit_rooms'))
             $tpl['EDIT_ROOM'] = PHPWS_Text::secureLink(_('Edit a Room'), 'hms', array('type'=>'room', 'op'=>'select_hall_for_edit_room'));
         
