@@ -131,7 +131,6 @@ class HMS_Application {
      */
     function save()
     {
-
         $db = &new PHPWS_DB('hms_application');
         $db->addValue('student_status',$this->getStudentStatus());
         $db->addValue('term_classification',$this->getTermClassification());
