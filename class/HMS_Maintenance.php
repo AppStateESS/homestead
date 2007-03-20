@@ -171,6 +171,9 @@ class HMS_Maintenance
 
     function show_deadlines($message = NULL)
     {
+        if(!(Current_User::allow('hms', 'edit_deadlines') || Current_User::allow('hms', 'admin'))) {
+            exit('you are a bad person that can not edit deadlines.');
+        }
         PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
         $form = &new HMS_Form;
         $content = $form->show_deadlines($message);
@@ -179,6 +182,10 @@ class HMS_Maintenance
         
     function save_deadlines()
     {
+        if(!(Current_User::authorized('hms', 'edit_deadlines') || Current_User::authorized('hms', 'admin'))) {
+            exit('you are a bad person that can not edit deadlines.');
+        }
+        
         $slbd   = $_REQUEST['student_login_begin_day'];
         $slbm   = $_REQUEST['student_login_begin_month'];
         $slby   = $_REQUEST['student_login_begin_year'];
