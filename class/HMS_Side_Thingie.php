@@ -72,7 +72,7 @@ class HMS_Side_Thingie {
         # Always show as available.
         $this->set_verify();
         
-        test($this);
+        //test($this);
                 
         for($i = HMS_SIDE_STUDENT_MIN;$i <= HMS_SIDE_STUDENT_MAX; $i++) {
             $template['progress'][$i - HMS_SIDE_STUDENT_MIN][$this->steps_styles[$i]] = $this->steps_text[$i];
