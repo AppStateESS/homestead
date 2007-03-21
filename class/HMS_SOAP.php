@@ -1,12 +1,13 @@
 <?php
 
 class HMS_SOAP{
+
     function is_valid_student($username)
     {
         $student = HMS_SOAP::get_student_info($username);
 
         if(PEAR::isError($student)){
-            PHPWS_Error::log($student,'hms','is_valid_student',$username);
+            HMS_SOAP::log_soap_error($student,'is_valid_student',$username);
             return $student;
         }
         
@@ -22,7 +23,7 @@ class HMS_SOAP{
         $student = HMS_SOAP::get_student_info($username);
         
         if(PEAR::isError($student)){
-            PHPWS_Error::log($student,'hms','get_first_name',$username);
+            HMS_SOAP::log_soap_error($student,'get_first_name',$username);
             return $student;
         }else if($student->first_name == NULL){
             return NULL;
@@ -36,7 +37,7 @@ class HMS_SOAP{
         $student = HMS_SOAP::get_student_info($username);
 
         if(PEAR::isError($student)){
-            PHPWS_Error::log($student,'hms','get_middle_name',$username);
+            HMS_SOAP::log_soap_error($student,'get_middle_name',$username);
             return $student;
         }else if($student->middle_name == NULL){
             return NULL;
@@ -50,7 +51,7 @@ class HMS_SOAP{
         $student = HMS_SOAP::get_student_info($username);
 
         if(PEAR::isError($student)){
-            PHPWS_Error::log($student,'hms','get_last_lame',$username);
+            HMS_SOAP::log_soap_error($student,'get_last_lame',$username);
             return $student;
         }else if($student->last_name == NULL){
             return NULL;
@@ -68,7 +69,7 @@ class HMS_SOAP{
         $student = HMS_SOAP::get_student_info($username);
 
         if(PEAR::isError($student)){
-            PHPWS_Error::log($student,'hms','get_full_name',$username);
+            HMS_SOAP::log_soap_error($student,'get_full_name',$username);
             return $student;
         }else if($student->last_name == NULL){
             return NULL;
@@ -88,7 +89,7 @@ class HMS_SOAP{
         $student = HMS_SOAP::get_student_info($username);
 
         if(PEAR::isError($student)){
-            PHPWS_Error::log($student,'hms','get_full_name_inverted',$username);
+            HMS_SOAP::log_soap_error($student,'get_full_name_inverted',$username);
             return $student;
         }else if($student->last_name == NULL){
             return NULL;
@@ -109,7 +110,7 @@ class HMS_SOAP{
         $student = HMS_SOAP::get_student_info($username);
 
         if(PEAR::isError($student)){
-            PHPWS_Error::log($student,'hms','get_gender',$username);
+            HMS_SOAP::log_soap_error($student,'get_gender',$username);
             return $student;
         }else if($student->gender == NULL){
             return NULL;
@@ -137,7 +138,7 @@ class HMS_SOAP{
         $student = HMS_SOAP::get_student_info($username);
 
         if(PEAR::isError($student)){
-            PHPWS_Error::log($student,'hms','get_address',$username);
+            HMS_SOAP::log_soap_error($student,'get_address',$username);
             return $student;
         }else if($student->address == NULL){
             return NULL;
@@ -150,7 +151,7 @@ class HMS_SOAP{
     {
         $student = HMS_SOAP::get_student_info($username);
         if(PEAR::isError($student)) {
-            PHPWS_Error::log($student, 'hms', 'get_student_type', $username);
+            HMS_SOAP::log_soap_error($student, 'get_student_type', $username);
             return $student;
         }else if($student->student_type == NULL){
             return NULL;
@@ -163,7 +164,7 @@ class HMS_SOAP{
     {
         $student = HMS_SOAP::get_student_info($username);
         if(PEAR::isError($student)) {
-            PHPWS_Error::log($student, 'hms' , 'get_student_class', $username);
+            HMS_SOAP::log_soap_error($student, 'get_student_class', $username);
             return $student;
         } else if($student->projected_class == NULL) {
             return NULL;
@@ -176,7 +177,7 @@ class HMS_SOAP{
     {
         $student = HMS_SOAP::get_student_info($username);
         if(PEAR::isError($student)) {
-            PHPWS_Error::log($student, 'hms', 'get_student_type', $username);
+            HMS_SOAP::log_soap_error($student, 'get_student_type', $username);
             return $student;
         }else if($student->dob == NULL){
             return NULL;
@@ -193,9 +194,10 @@ class HMS_SOAP{
         $student = $proxy->GetStudentProfile($username, '200740');
         
         # Check for an error and log it
-        if(PEAR::isError($student)){
-            PHPWS_Error::log($student,'hms','get_student_info',$username); 
+        if(HMS_SOAP::is_soap_fault($student)){
+            HMS_SOAP::log_soap_error($student,'get_student_info',$username);
         }
+
         return $student;
     }
 
@@ -217,6 +219,27 @@ class HMS_SOAP{
         $assignment = $proxy->CreateRoomAssignment($username, $term, $building_code, $room_code, $plan_code, $meal_code);
 
         return $assignment;
+    }
+
+    /**
+     * Returns TRUE if an error object is of class 'soap_fault'
+     */
+    function is_soap_fault($object)
+    {
+        if(is_a($object, 'soap_fault')){
+            return TRUE;
+        }else{
+            return FALSE;
+        }
+    }
+
+    /** 
+     * Uses the PHPWS_Core log function to 'manually' log soap errors to soap_error.log.
+     */
+    function log_soap_error($soap_fault, $function, $extra_info)
+    {
+        $error_msg = $soap_fault['message'] . "in function: " . $function . " Extra info: " . $extra_info;    
+        PHPWS_Core::log($error_msg, 'soap_error.log', _('Error'));
     }
 }
 
