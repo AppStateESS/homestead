@@ -26,6 +26,7 @@ CREATE TABLE hms_floor (
     floor_number smallint DEFAULT (0)::smallint NOT NULL,
     number_rooms smallint DEFAULT (0)::smallint NOT NULL,
     bedrooms_per_room smallint NOT NULL,
+    beds_per_bedroom smallint NOT NULL,
     building smallint DEFAULT (0)::smallint NOT NULL,
     is_online smallint DEFAULT (0)::smallint NOT NULL,
     gender_type smallint DEFAULT (0)::smallint NOT NULL,
@@ -261,3 +262,12 @@ INSERT INTO hms_learning_community_questions (id, learning_community_id, questio
 
 CREATE SEQUENCE hms_learning_community_questions_seq;
 SELECT setval('hms_learning_community_questions_seq', max(hms_learning_community_questions.id));
+
+INSERT INTO hms_pricing_tiers VALUES (1, 3250.00);
+INSERT INTO hms_pricing_tiers VALUES (2, 3550.00);
+INSERT INTO hms_pricing_tiers VALUES (3, 3650.00);
+INSERT INTO hms_pricing_tiers VALUES (4, 4150.00);
+INSERT INTO hms_pricing_tiers VALUES (5, 4800.00);
+
+CREATE SEQUENCE hms_pricing_tiers_seq;
+SELECT setval('hms_pricing_tiers_seq', max(hms_pricing_tiers.id));
