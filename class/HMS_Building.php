@@ -400,106 +400,110 @@ class HMS_Building
      */
     function save_residence_hall()
     {
-        if($this->get_is_new_building() == TRUE) {
-            $dupe = HMS_Building::check_building_exists($this->get_hall_name());
-            if($dupe == TRUE) {
-                $final = HMS_Building::building_exists_msg($this);
-                return $final;
-            }
-        }
-        
-        $db = & new PHPWS_DB('hms_residence_hall');
-        if($this->id) {
-            HMS_Building::set_updated_by_on($this);
-            $db->addWhere('id', $this->id);
-            $current = &new HMS_Building;
-            $current->set_id($this->id);
-            $current_id = $db->loadObject($current);
-            $saved_id = $db->saveObject($this);
-        
-            if(PEAR::isError($saved_id)) {
-                $final = $this->error_saving_hall();
-                return $final;
-            }
-           
-            if($current_id) {
-                // number of floors changing
-                if($current->number_floors > $this->number_floors) {
-                    echo "current greater than the new<br />";
-                    PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
-                    PHPWS_Core::initModClass('hms', 'HMS_Room.php');
-                    $floors_deleted = HMS_Floor::delete_floors($this->id, $this->number_floors);
-                    $rooms_deleted = HMS_Room::delete_rooms_by_floor($this->id, $this->number_floors);
-                    // check for errors ^,^^
-                } else if ($current->number_floors < $this->number_floors) {
-                    PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
-                    for($i = $current->number_floors + 1; $i <= $this->number_floors; $i++) {
-                        $floor = HMS_Building::make_floor_object(NULL, $this, $i);
-                        $result = HMS_Floor::save_floor_object($floor, TRUE);
-                        if(PEAR::isError($result)) {
-                            return $result;
-                        }
-                    }
-                }
-
-                // number rooms per floor changes
-                if($current->rooms_per_floor != $this->rooms_per_floor) {
-                    PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
-                    PHPWS_Core::initModClass('hms', 'HMS_Room.php');
-                    $changed_rooms_floor = HMS_Floor::set_number_rooms($this->rooms_per_floor, $this->id);
-                    $changed_rooms_room = HMS_Room::change_rooms_per_floor($this->id, $this->number_floors, $current->rooms_per_floor, $this->rooms_per_floor, $this->is_online, $this->gender_type, $this->bedrooms_per_room, $this->beds_per_bedroom);
-                }
-
-                // is_online changes
-                if($current->is_online != $this->is_online) {
-                    PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
-                    $online_updated = HMS_Floor::set_is_online($this->is_online, NULL, $this->id);
-                    if(PEAR::isError($online_updated)) {
-                        $final = $this->error_saving_hall();
-                        return $final;
-                    }
-                }
-                // gender changes
-                if($current->gender_type != $this->gender_type) {
-                    PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
-                    $floors_updated = HMS_Floor::set_gender_type($this->gender_type, NULL, $this->id);
-                    if(PEAR::isError($floors_update)) {
-                        $final = $this->error_saving_hall();
-                        return $final;
-                    }
-                }
-
-            }
-        } else {
-            HMS_Building::set_added_by_on($this);
-            $saved_id = $db->saveObject($this);
-            if(PEAR::isError($saved_id)) {
-                $final = $this->error_saving_hall();
-                return $final;
-            }
-        }
-        
-        unset($db);
-
-        if($this->get_is_new_building() == TRUE) {
-            PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
-            $ctr = 0;
-            for($i = 1; $i <= $this->number_floors; $i++, $ctr++) {
-                // case where it's 1, 2, etc
-                if($this->get_numbering_scheme() == 2 && $ctr == 0) $ctr = 1;
-
-                $floor = HMS_Building::make_floor_object($saved_id, $this, $ctr);
-                $result = HMS_Floor::save_floor_object($floor, TRUE);
-                if(PEAR::isError($result)) {
-                    $final = HMS_Building::error_saving_floor($i);
+        if(Current_User::authorized('hms', 'add_halls') || Current_User::authorized('hms', 'admin')) {
+            if($this->get_is_new_building() == TRUE) {
+                $dupe = HMS_Building::check_building_exists($this->get_hall_name());
+                if($dupe == TRUE) {
+                    $final = HMS_Building::building_exists_msg($this);
                     return $final;
                 }
-                if($this->get_numbering_scheme() == 1 && $ctr == 0) $ctr = 1;
             }
-        }
+            
+            $db = & new PHPWS_DB('hms_residence_hall');
+            if($this->id) {
+                HMS_Building::set_updated_by_on($this);
+                $db->addWhere('id', $this->id);
+                $current = &new HMS_Building;
+                $current->set_id($this->id);
+                $current_id = $db->loadObject($current);
+                $saved_id = $db->saveObject($this);
+            
+                if(PEAR::isError($saved_id)) {
+                    $final = $this->error_saving_hall();
+                    return $final;
+                }
+               
+                if($current_id) {
+                    // number of floors changing
+                    if($current->number_floors > $this->number_floors) {
+                        echo "current greater than the new<br />";
+                        PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
+                        PHPWS_Core::initModClass('hms', 'HMS_Room.php');
+                        $floors_deleted = HMS_Floor::delete_floors($this->id, $this->number_floors);
+                        $rooms_deleted = HMS_Room::delete_rooms_by_floor($this->id, $this->number_floors);
+                        // check for errors ^,^^
+                    } else if ($current->number_floors < $this->number_floors) {
+                        PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
+                        for($i = $current->number_floors + 1; $i <= $this->number_floors; $i++) {
+                            $floor = HMS_Building::make_floor_object(NULL, $this, $i);
+                            $result = HMS_Floor::save_floor_object($floor, TRUE);
+                            if(PEAR::isError($result)) {
+                                return $result;
+                            }
+                        }
+                    }
 
-        $final = HMS_Building::successful_save_msg();
-        return $final;
+                    // number rooms per floor changes
+                    if($current->rooms_per_floor != $this->rooms_per_floor) {
+                        PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
+                        PHPWS_Core::initModClass('hms', 'HMS_Room.php');
+                        $changed_rooms_floor = HMS_Floor::set_number_rooms($this->rooms_per_floor, $this->id);
+                        $changed_rooms_room = HMS_Room::change_rooms_per_floor($this->id, $this->number_floors, $current->rooms_per_floor, $this->rooms_per_floor, $this->is_online, $this->gender_type, $this->bedrooms_per_room, $this->beds_per_bedroom);
+                    }
+
+                    // is_online changes
+                    if($current->is_online != $this->is_online) {
+                        PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
+                        $online_updated = HMS_Floor::set_is_online($this->is_online, NULL, $this->id);
+                        if(PEAR::isError($online_updated)) {
+                            $final = $this->error_saving_hall();
+                            return $final;
+                        }
+                    }
+                    // gender changes
+                    if($current->gender_type != $this->gender_type) {
+                        PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
+                        $floors_updated = HMS_Floor::set_gender_type($this->gender_type, NULL, $this->id);
+                        if(PEAR::isError($floors_update)) {
+                            $final = $this->error_saving_hall();
+                            return $final;
+                        }
+                    }
+
+                }
+            } else {
+                HMS_Building::set_added_by_on($this);
+                $saved_id = $db->saveObject($this);
+                if(PEAR::isError($saved_id)) {
+                    $final = $this->error_saving_hall();
+                    return $final;
+                }
+            }
+            
+            unset($db);
+
+            if($this->get_is_new_building() == TRUE) {
+                PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
+                $ctr = 0;
+                for($i = 1; $i <= $this->number_floors; $i++, $ctr++) {
+                    // case where it's 1, 2, etc
+                    if($this->get_numbering_scheme() == 2 && $ctr == 0) $ctr = 1;
+
+                    $floor = HMS_Building::make_floor_object($saved_id, $this, $ctr);
+                    $result = HMS_Floor::save_floor_object($floor, TRUE);
+                    if(PEAR::isError($result)) {
+                        $final = HMS_Building::error_saving_floor($i);
+                        return $final;
+                    }
+                    if($this->get_numbering_scheme() == 1 && $ctr == 0) $ctr = 1;
+                }
+            }
+
+            $final = HMS_Building::successful_save_msg();
+            return $final;
+        } else {
+            exit('you can not save residence halls.');
+        }
     }
 
     /**
@@ -563,15 +567,19 @@ class HMS_Building
 
     function add_residence_hall()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
-        $hall = &new HMS_Form;
-        $content = $hall->add_residence_hall();
-        return $content;
+        if(Current_User::allow('hms', 'add_halls') || Current_User::allow('hms', 'admin')) {
+            PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
+            $hall = &new HMS_Form;
+            $content = $hall->add_residence_hall();
+            return $content;
+        } else {
+            exit('you are a bad person that can not add residence halls.');
+        }
     }
 
     function delete_residence_hall()
     {
-        if(Current_User::authorized('delete_halls')) {
+        if(Current_User::authorized('delete_halls') || Current_User::authorized('hms', 'admin')) {
             PHPWS_Core::initModClass('hms', 'HMS_Building.php');
             PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
             PHPWS_Core::initModClass('hms', 'HMS_Room.php');
@@ -674,30 +682,34 @@ class HMS_Building
             return HMS_Maintenance::show_options();
         }
 
-        $db = &new PHPWS_DB('hms_residence_hall');
-        $db->addWhere('id', $_REQUEST['hall']);
-        
-        // set the number of floors in the hall object
-        // delete the hall if deleting the last floor
-        if($_REQUEST['floor'] == 1) {
-            $db->addValue('deleted', 1);
+        if(Current_User::authorized('hms', 'delete_floors') || Current_User::authorized('hms', 'admin')) {
+            $db = &new PHPWS_DB('hms_residence_hall');
+            $db->addWhere('id', $_REQUEST['hall']);
+            
+            // set the number of floors in the hall object
+            // delete the hall if deleting the last floor
+            if($_REQUEST['floor'] == 1) {
+                $db->addValue('deleted', 1);
+            } else {
+                $db->addValue('number_floors', $_REQUEST['floor'] - 1);
+            }
+            $success = $db->update();
+
+            // delete the floor
+            PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
+            $success = HMS_Floor::delete_floors($_REQUEST['hall'], $_REQUEST['floor'], TRUE);
+            // delete the rooms
+            PHPWS_Core::initModClass('hms', 'HMS_Room.php');
+            $success = HMS_Room::delete_rooms_by_floor($_REQUEST['hall'], $_REQUEST['floor'], TRUE);
+
+            if($success) {
+                PHPWS_Core::initModClass('hms', 'HMS_Maintenance.php');
+                $content = "Floor " . $_REQUEST['floor'] . " has been deleted.<br /><br />";
+                $content .= PHPWS_Text::secureLink('Return to Maintenance Screen', 'hms', array('type'=>'maintenance', 'op'=>'show_maintenance_options'));
+                return $content;
+            }
         } else {
-            $db->addValue('number_floors', $_REQUEST['floor'] - 1);
-        }
-        $success = $db->update();
-
-        // delete the floor
-        PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
-        $success = HMS_Floor::delete_floors($_REQUEST['hall'], $_REQUEST['floor'], TRUE);
-        // delete the rooms
-        PHPWS_Core::initModClass('hms', 'HMS_Room.php');
-        $success = HMS_Room::delete_rooms_by_floor($_REQUEST['hall'], $_REQUEST['floor'], TRUE);
-
-        if($success) {
-            PHPWS_Core::initModClass('hms', 'HMS_Maintenance.php');
-            $content = "Floor " . $_REQUEST['floor'] . " has been deleted.<br /><br />";
-            $content .= PHPWS_Text::secureLink('Return to Maintenance Screen', 'hms', array('type'=>'maintenance', 'op'=>'show_maintenance_options'));
-            return $content;
+            exit('you can not delete floors.');
         }
     }
 

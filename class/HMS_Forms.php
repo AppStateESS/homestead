@@ -244,7 +244,7 @@ class HMS_Form
             $halls[$hall['id']] = $hall['hall_name'];
         }
 
-        for($i = 1; $i <= 15; $i++) {
+        for($i = 0; $i <= 15; $i++) {
             $floors[$i] = $i;
         }
 
@@ -279,6 +279,106 @@ class HMS_Form
         return $final;
     }
 
+    function get_hall_floor($error)
+    {
+        PHPWS_Core::initCoreClass('Form.php');
+        $form = &new PHPWS_Form;
+
+        $db = &new PHPWS_DB('hms_residence_hall');
+        $db->addColumn('id');
+        $db->addColumn('hall_name');
+        $db->addWhere('deleted', '1', '!=');
+        $halls_raw = $db->select();
+        foreach($halls_raw as $ahall) {
+            $halls[$ahall['id']] = $ahall['hall_name'];
+        }
+
+        for($ctr = 0; $ctr <= 15; $ctr++) {
+            $floors[$ctr] = $ctr;
+        }
+
+        $form->addDropBox('halls', $halls);
+        $form->addDropBox('floors', $floors);
+        $form->addHidden('module', 'hms');
+        $form->addHidden('type', 'assignment');
+        $form->addHidden('op', 'show_assignments_by_floor');
+        $form->addSubmit('submit', _('Show rooms'));
+        $tpl = $form->getTemplate();
+       
+        $tpl['MESSAGE']  = "<h2>Assignment By Floor</h2><br />";
+        $tpl['MESSAGE'] .= "Please select a Hall and Floor to assign.<br />";
+        $tpl['ERROR']    = $error;
+        $final = PHPWS_Template::process($tpl, 'hms', 'admin/get_hall_floor.tpl');
+        
+        return $final;
+    }
+
+    function show_assignments_by_floor()
+    {
+        $db = &new PHPWS_DB('hms_residence_hall');
+        $db->addColumn('hall_name');
+        $db->addWhere('id', $_REQUEST['halls']);
+        $hall = $db->select('one');
+
+        $db = &new PHPWS_DB('hms_floor');
+        $db->addValue('id');
+        $db->addWhere('building', $_REQUEST['halls']);
+        $db->addWhere('floor_number', $_REQUEST['floors']);
+        $id = $db->select('one');
+        if(!is_numeric($id)) {
+            $error = "That is not a valid Hall/Floor combination.<br />";
+            PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
+            return HMS_Assignment::get_hall_floor($error);
+        }
+        
+        $db = &new PHPWS_DB('hms_room');
+        $db->addColumn('room_number');
+        $db->addWhere('floor_id', 'hms_floor.id');
+        $db->addWhere('hms_floor.floor_number', $_REQUEST['floors']);
+        $db->addWhere('hms_floor.building', $_REQUEST['halls']);
+        $rooms_raw = $db->select();
+        PHPWS_Core::initCoreClass('Form.php');
+        $body = '';
+        foreach($rooms_raw as $aroom) {
+            // iterate through the rooms, building the form as necessary
+            
+            $db = &new PHPWS_DB('hms_beds');
+            $db->addColumn('id');
+            $db->addWhere('bedroom_id', 'hms_bedrooms.id');
+            $db->addWhere('hms_bedrooms.room_id', 'hms_room.id');
+            $db->addWhere('hms_room.floor_number', $_REQUEST['floors']);
+            $db->addWhere('hms_floor.building', $_REQUEST['halls']);
+            $db->addWhere('hms_room.deleted', '1', '!=');
+            $db->addWhere('hms_bedrooms.deleted', '1', '!=');
+            $db->addWhere('hms_beds.deleted', '1', '!=');
+            $db->setTestMode();
+            $beds = $db->select();
+            test($beds, 1);
+
+            $tags['BED_NAME'] = "Alpha";
+            $tags['BED_ID'] = "<input type=\"text\" name=\"bed_alpha\" id=\"bed_id\" value=\"\" />";
+            $body .= PHPWS_Template::processTemplate($tags, 'hms', 'admin/bed_and_id.tpl');
+            
+            $tags['BED_NAME'] = "Bravo";
+            $tags['BED_ID'] = "<input type=\"text\" name=\"bed_bravo\" id=\"bed_id\" value=\"\" />";
+            $body .= PHPWS_Template::processTemplate($tags, 'hms', 'admin/bed_and_id.tpl');
+        }
+
+        PHPWS_Core::initCoreClass('Forms.php');
+        $form = &new PHPWS_Form;
+        $form->addHidden('module', 'hms');
+        $form->addHidden('type', 'assignment');
+        $form->addHidden('op', 'assign_floor');
+        $form->addSubmit('submit', _('Submit Floor'));
+
+        $tags = $form->getTemplate();
+        $tags['HALL']   = $hall;
+        $tags['FLOOR']  = $_REQUEST['floors'];
+        $tags['BODY']   = $body;
+        $final = PHPWS_Template::processTemplate($tags, 'hms', 'admin/assign_floor.tpl');
+        return $final; 
+    }
+    
     function verify_assignment($msg = NULL)
     {
         $db = new PHPWS_DB('hms_residence_hall');
@@ -584,7 +684,8 @@ class HMS_Form
         $form->addHidden('op', 'select_floor_for_edit');
         $form->addSubmit('submit', _('Submit'));
         $tpl = $form->getTemplate();
-        $tpl['TITLE'] = "Which Hall has the Floor to Edit";
+        $tpl['TITLE']   = "Select a Hall";
+        $tpl['CONTENT'] = "Which residence hall has the floor to edit?";
         $final = PHPWS_Template::process($tpl, 'hms', 'admin/select_residence_hall.tpl');
         return $final;
     }
@@ -630,8 +731,7 @@ class HMS_Form
         $tpl = $form->getTemplate();
         
         $tpl['TITLE']       = "Select a Floor";
-        $tpl['HALL']        = "$hall";
-        $tpl['NUM_FLOORS']  = "$num_floors";
+        $tpl['MESSAGE']     = "$hall has $num_floors floors. Please select the floor to edit.<br /><br />";
        
         $final = PHPWS_Template::process($tpl, 'hms', 'admin/select_floor_for_edit.tpl');
         return $final;
@@ -664,7 +764,8 @@ class HMS_Form
         $form->addHidden('op', 'select_floor_for_edit_room');
         $form->addSubmit('submit', _('Submit'));
         $tpl = $form->getTemplate();
-        $tpl['TITLE'] = "Which Hall has the Floor to Edit";
+        $tpl['TITLE']   = "Select a Hall";
+        $tpl['CONTENT'] = "Which residence hall has the room to edit?";
         $final = PHPWS_Template::process($tpl, 'hms', 'admin/select_residence_hall.tpl');
         return $final;
     }
@@ -705,7 +806,8 @@ class HMS_Form
 
         $tpl = $form->getTemplate();
         
-        $tpl['TITLE']       = "Which Floor has the Room To Edit?";
+        $tpl['TITLE']       = "Select a floor";
+        $tpl['MESSAGE']     = "Which floor has the room to edit?";
         $tpl['HALL']        = "$hall";
         $tpl['NUM_FLOORS']  = "$num_floors";
        
@@ -744,7 +846,7 @@ class HMS_Form
         
         $tpl = $form->getTemplate();
 
-        $tpl['TITLE']       = "Select Room to Edit";
+        $tpl['TITLE']       = "Select Room";
         $tpl['HALL']        = $hall_name;
         $tpl['FLOOR']       = $_REQUEST['floor'];
         $tpl['NUM_ROOMS']   = count($room_numbers);
@@ -781,7 +883,8 @@ class HMS_Form
         $form->addHidden('op', 'select_floor_for_delete_room');
         $form->addSubmit('submit', _('Submit'));
         $tpl = $form->getTemplate();
-        $tpl['TITLE'] = "Which Hall has the room to delete?";
+        $tpl['TITLE']   = "Select a Hall";
+        $tpl['CONTENT'] = "Which Hall has the room to delete?";
         $final = PHPWS_Template::process($tpl, 'hms', 'admin/select_residence_hall.tpl');
         return $final;
 

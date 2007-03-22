@@ -87,9 +87,9 @@ class HMS_Bed
     }
 */
 
-    function set_deleted()
+    function set_deleted($deleted = 0)
     {
-        $this->deleted = 1;
+        $this->deleted = $deleted;
     }
 
     function get_deleted()

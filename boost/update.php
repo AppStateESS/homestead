@@ -160,7 +160,22 @@ function hms_update(&$content, $currentVersion)
             PHPWS_Boost::updateFiles($files, 'hms');
 
             $content[] = '+ Sync\'d with the current live release.';
-
+       
+        case version_compare($currentVersion, '0.1.10', '<'):
+            $files = array();
+            $files[] = 'templates/admin/assign_floor.tpl';
+            $files[] = 'templates/admin/bed_and_id.tpl';
+            $files[] = 'templates/admin/get_hall_floor.tpl';
+            $files[] = 'templates/admin/maintenance.tpl';
+            $files[] = 'templates/admin/select_floor_for_edit.tpl';
+            $files[] = 'templates/admin/select_residence_hall.tpl';
+            $files[] = 'templates/admin/select_room_for_edit.tpl';
+            
+            PHPWS_Boost::updateFiles($files, 'hms');
+            
+            $content[] = '+ Changed templates regarding editing/deleting rooms and floors to be more user friendly';
+            $content[] = '+ Changed to version 0.1.10 to get all dev sites and production site in sync';
+            $content[] = '+ Changed HMS_Room so beds are deleted manually instead of through a db object';
             
     }
 

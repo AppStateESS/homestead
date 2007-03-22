@@ -318,6 +318,21 @@ class HMS_Assignment
         return HMS_Form::get_username_for_deletion($error);
     }
 
+    /**
+     * Returns a HMS_Form that allows the user to select a Hall and Floor for mass floor assignments
+     */
+    function get_hall_floor($error = NULL)
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
+        return HMS_Form::get_hall_floor($error);
+    }
+
+    function show_assignments_by_floor()
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
+        return HMS_Form::show_assignments_by_floor();
+    }
+
     function main()
     {
         $op = $_REQUEST['op'];
@@ -339,11 +354,17 @@ class HMS_Assignment
             case 'get_hall_floor_room':
                 return HMS_Assignment::get_hall_floor_room();
                 break;
+            case 'show_assignments_by_floor':
+                return HMS_Assignment::show_assignments_by_floor();
+                break;
             case 'verify_assignment':
                 return HMS_Assignment::verify_assignment();
                 break;
             case 'verify_deletion':
                 return HMS_Assignment::verify_deletion();
+                break;
+            case 'begin_by_floor':
+                return HMS_Assignment::get_hall_floor();
                 break;
             default:
                 test($op);
