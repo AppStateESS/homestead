@@ -111,12 +111,12 @@ class HMS_Maintenance
         if(Current_User::allow('hms', 'add_learning_communities') || Current_User::allow('hms', 'admin'))
             $tpl['ADD_LEARNING_COMMUNITY']      = PHPWS_Text::secureLink(_('Add Learning Community'), 'hms', array('type'=>'rlc', 'op'=>'add_learning_community'));
 
-        if(Current_User::allow('hms', 'edit_learning_communities') || Current_User::allow('hms', 'admin'))
-            $tpl['EDIT_LEARNING_COMMUNITY']     = PHPWS_Text::secureLink(_('Edit Learning Community'), 'hms', array('type'=>'rlc', 'op'=>'edit_learning_community')) . " &nbsp;*not implemented*";
+//        if(Current_User::allow('hms', 'edit_learning_communities') || Current_User::allow('hms', 'admin'))
+//            $tpl['EDIT_LEARNING_COMMUNITY']     = PHPWS_Text::secureLink(_('Edit Learning Community'), 'hms', array('type'=>'rlc', 'op'=>'edit_learning_community')) . " &nbsp;*not implemented*";
 
         if(Current_User::allow('hms', 'delete_learning_communities') || Current_User::allow('hms', 'admin'))
             $tpl['DELETE_LEARNING_COMMUNITY']   = PHPWS_Text::secureLink(_('Delete Learning Community'), 'hms', array('type'=>'rlc', 'op'=>'select_learning_community_for_delete'));
-
+/*
         if(Current_User::allow('hms', 'rlc_applicant_options') || Current_User::allow('hms', 'admin')) 
             $tpl['RLC_APPLICATIONS']    = "RLC Applicant Options";
 
@@ -137,7 +137,7 @@ class HMS_Maintenance
 
         if(Current_User::allow('hms', 'edit_student') || Current_User::allow('hms', 'admin'))
             $tpl['EDIT_STUDENT']    = PHPWS_Text::secureLink(_('Edit Student'), 'hms', array('type'=>'student', 'op'=>'enter_student_search_data'));
-
+*/
         if(Current_User::allow('hms', 'deadline_maintenance') || Current_User::allow('hms', 'admin'))
             $tpl['DEADLINE_LABEL']  = "Deadline Maintenance";
 
@@ -146,7 +146,7 @@ class HMS_Maintenance
 
         if(Current_User::allow('hms', 'assignment_maintenance') || Current_User::allow('hms', 'admin'))
             $tpl['ASSIGNMENT_LABEL'] = "Assignment Maintenance";
-
+/*
         if(Current_User::allow('hms', 'create_assignment') || Current_User::allow('hms', 'admin'))
             $tpl['CREATE_ASSIGNMENT'] = PHPWS_Text::secureLink(_('Assign Student'), 'hms', array('type'=>'assignment', 'op'=>'begin_create_assignment'));
 
@@ -161,10 +161,7 @@ class HMS_Maintenance
 
         if(Current_User::allow('hms', 'edit_roommate_group') || Current_User::allow('hms', 'admin'))
             $tpl['EDIT_ROOMMATE_GROUP'] = PHPWS_Text::secureLink(_('Edit roommate group'), 'hms', array('type'=>'roommate', 'op'=>'get_username_for_edit_grouping'));
-        
-        if(Current_User::deityAllow()) 
-            $tpl['PURGE_DATA'] = PHPWS_Text::secureLink(_('Purge data'), 'hms', array('type'=>'maintenance', 'op'=>'purge'));
-
+*/        
        $content = PHPWS_Template::process($tpl, 'hms', 'admin/maintenance.tpl');
         return $content;
     }
