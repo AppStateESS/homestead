@@ -1345,6 +1345,7 @@ class HMS_Form
         $db = new PHPWS_DB('hms_residence_hall');
         $db->addColumn('hall_name');
         $db->addWhere('deleted', '1', '!=');
+        $db->addOrder('hall_name', 'ASC');
         $halls_raw = $db->select();
         foreach($halls_raw as $hall_raw) {
             $halls .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" . $hall_raw['hall_name'] . "<br />";
