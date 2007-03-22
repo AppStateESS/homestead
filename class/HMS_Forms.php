@@ -248,7 +248,7 @@ class HMS_Form
             $floors[$i] = $i;
         }
 
-        for ($i = 1; $i <= 30; $i++) {
+        for ($i = 1; $i <= 85; $i++) {
             $rooms[$i] = $i;
         }
 
@@ -1435,7 +1435,7 @@ class HMS_Form
             $form->setMatch('numbering_scheme', $object->numbering_scheme);
         }
 
-        for($i = 1; $i < 30; $i++) {
+        for($i = 1; $i < 85; $i++) {
             $rooms[$i] = $i;
         }
        
