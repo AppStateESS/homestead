@@ -147,6 +147,21 @@ function hms_update(&$content, $currentVersion)
             $content[] = '+ Editing a floor works again. Can not delete/add rooms from floor maintenance, must go through room menu.';
             $content[] = '+ Removed gender option from student_application.tpl';
 
+        case version_compare($currentVersion, '0.1.9', '<'):
+            $db = &new PHPWS_DB;
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_1_9.sql');
+            if(PEAR::isError($result)) {
+                return $result;
+            }
+
+            $files = array();
+            $files[] = 'templates/admin/maintenance.tpl';
+
+            PHPWS_Boost::updateFiles($files, 'hms');
+
+            $content[] = '+ Sync\'d with the current live release.';
+
+            
     }
 
     return TRUE;

@@ -256,7 +256,6 @@ INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity
 CREATE SEQUENCE hms_learning_communities_seq;
 SELECT setval('hms_learning_communities_seq', max(hms_learning_communities.id));
 
-
 INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (0, 0, 'Describe your current leadership and community service experience and the opportunities you are looking for.');
 INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (1, 1, 'What outdoor opportunities would you like to be involved in and describe your current experience.');
 INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (2, 2, 'What are your personal experienes with wellness and in what areas of wellness are you most interested?');
