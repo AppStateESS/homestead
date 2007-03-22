@@ -486,13 +486,14 @@ class HMS_Room
         $db = &new PHPWS_DB;
         $br_success = $db->query($sql);
 
-        $bed_db = &new PHPWS_DB('hms_beds');
-        $bed_db->addValue('deleted', 1);
-        $bed_db->addWhere('bedroom_id', 'hms_bedrooms.id');
-        $bed_db->addWhere('hms_bedrooms.room_id', 'hms_room.id');
-        $bed_db->addWhere('hms_room.room_number', $room_number);
-        $bed_db->addWhere('hms_room.building_id', $bid);
-        $bed_success = $bed_db->update();
+        $sql  = "UPDATE hms_beds ";
+        $sql .= "SET deleted = '1' ";
+        $sql .= "WHERE bedroom_id = hms_bedrooms.id ";
+        $sql .= "AND hms_bedrooms.room_id = hms_room.id ";
+        $sql .= "AND hms_room.room_number = '$room_number' ";
+        $sql .= "AND hms_room.building_id = '$bid';";
+        $db = &new PHPWS_DB;
+        $bed_success = $db->query($sql);
 
         return HMS_Room::select_room_for_delete("Room successfully deleted");
     }
