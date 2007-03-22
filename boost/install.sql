@@ -233,6 +233,7 @@ CREATE TABLE hms_bedrooms (
     deleted_on INTEGER,
     bedroom_letter character(1) NOT NULL,
     phone_number INTEGER,
+    deleted smallint default 0,
     PRIMARY KEY(id)
 );
 
@@ -240,6 +241,7 @@ CREATE TABLE hms_beds (
     id INTEGER NOT NULL,
     bedroom_id INTEGER NOT NULL REFERENCES hms_bedrooms(id),
     bed_letter character(1) NOT NULL,
+    deleted smallint default 0,
     PRIMARY KEY(id)
 );
 
