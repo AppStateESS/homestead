@@ -1844,7 +1844,7 @@ class HMS_Form
 
         # Use a hidden field for gender, pull from banner
         $form->addHidden('gender_type', HMS_SOAP::get_gender($_SESSION['asu_username'], TRUE));
-
+        
         # Don't show *low* meal option to freshmen
         if(HMS_SOAP::get_student_class($_SESSION['asu_username']) == "FR"){
             $form->addDropBox('meal_option', array('1'=>_('Low'),

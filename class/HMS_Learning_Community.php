@@ -117,6 +117,27 @@ class HMS_Learning_Community
             $template['MESSAGE'] = "Sorry, you can only submit one RLC application.";
             return PHPWS_Template::process($template,'hms','student/rlc_signup_form_page1.tpl');
         }
+
+        # Check deadlines
+        $db = &new PHPWS_DB('hms_deadlines');
+        $deadlines = $db->select('row');
+
+        if(PEAR::isError($deadlines)){
+            PHPWS_Error::log($deadlines);
+            $template['MESSAGE'] = "Sorry, there was an error communicating with the database.";
+            return PHPWS_Template::process($template,'hms','student/rlc_signup_form_page1.tpl');
+        }
+
+        $curr_timestamp = mktime();
+
+        if($curr_timestamp < $deadlines['student_application_begin_timestamp']){
+            $template['MESSAGE'] = "Sorry, it is too early to fill out an RLC application.";
+            return PHPWS_Template::process($template,'hms','student/rlc_signup_form_page1.tpl');
+        }else if($curr_timestamp > $deadlines['submit_rlc_application_end_timestamp']){
+            $template['MESSAGE'] = "Sorry, it is too late to fill out an RLC application.";
+            return PHPWS_Template::process($template,'hms','student/rlc_signup_form_page1.tpl');
+        }
+            
         
         PHPWS_Core::initModClass('hms','HMS_Forms.php');
         return HMS_Form::show_rlc_application_form_page1();
