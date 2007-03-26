@@ -25,6 +25,9 @@ class HMS_Room
     var $updated_by;
     var $updated_on;
     var $error;
+    var $deleted;
+    var $deleted_by;
+    var $deleted_on;
 
     function HMS_Room()
     {
@@ -278,6 +281,11 @@ class HMS_Room
         $this->updated_on = time();
     }
 
+    function set_deleted($deleted = "0")
+    {
+        $this->deleted = $deleted;
+    }
+
     function set_variables()
     {
         if($_REQUEST['id']) $this->set_id($_REQUEST['id']);
@@ -292,6 +300,7 @@ class HMS_Room
         $this->set_is_medical($_REQUEST['is_medical']);
         $this->set_is_reserved($_REQUEST['is_reserved']);
         $this->set_is_online($_REQUEST['is_online']);
+        $this->set_deleted();
     }
 
     function save_room()
@@ -334,6 +343,7 @@ class HMS_Room
                 $bedroom->set_added_on();
                 $bedroom->set_updated_by();
                 $bedroom->set_updated_on();
+                $bedroom->set_deleted();
                 $bedroom->set_bedroom_letter($br_letter);
                 $saved_br = HMS_Bedroom::save_bedroom($bedroom);
                
@@ -351,6 +361,7 @@ class HMS_Room
                     $bed = new HMS_Bed;
                     $bed->set_bedroom_id($saved_br);
                     $bed->set_bed_letter($bed_letter);
+                    $bed->set_deleted();
                     $saved_bed = HMS_Bed::save_bed($bed);
 
                     if($bed_letter == 'a') $bed_letter = 'b';
@@ -378,6 +389,7 @@ class HMS_Room
         $db->addValue('is_online', $_REQUEST['is_online']);
         $db->addValue('updated_by', Current_User::getId());
         $db->addValue('updated_on', time());
+        $db->addValue('deleted', '0');
 
         $success = $db->update();
         if(PEAR::isError($success)) {
@@ -526,6 +538,7 @@ class HMS_Room
                     $room_obj->set_beds_per_bedroom($beds_per_bedroom);
                     $room_obj->set_added_by_on();
                     $room_obj->set_updated_by_on();
+                    $room_obj->set_deleted();
                     $db = &new PHPWS_DB('hms_room');
                     $success = $db->saveObject($room_obj);
                 }
