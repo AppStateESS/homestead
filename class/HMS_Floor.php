@@ -332,6 +332,7 @@ class HMS_Floor
                         $bed = new HMS_Bed;
                         $bed->set_bedroom_id($saved_br);
                         $bed->set_bed_letter($bed_letter);
+                        $bed->set_deleted();
                         $saved_bed = HMS_Bed::save_bed($bed);
 
                         if($bed_letter == 'a') $bed_letter = 'b';
