@@ -65,30 +65,37 @@ class HMS_Assignment
     /**
      * Creates the actual assignment object
      */
-    function &create_assignment()
+    function &create_assignment($bid = NULL, $un = NULL)
     {
-        $db = new PHPWS_DB('hms_room');
-        $db->addColumn('id');
-        $db->addWhere('building_id', $_REQUEST['hall']);
-        $db->addWhere('floor_number', $_REQUEST['floor']);
-        $db->addWhere('room_number', $_REQUEST['floor'] . str_pad($_REQUEST['room'], 2, "0", STR_PAD_LEFT));
-        $db->addWhere('deleted', '1', '!=');
-        $rid = $db->select('one');
-
-        $db = new PHPWS_DB('hms_bedrooms');
-        $db->addColumn('id');
-        $db->addWhere('room_id', $rid);
-        $db->addWhere('bedroom_letter', $_REQUEST['bedroom_letter']);
-        $br_id = $db->select('one');
-
-        $db = new PHPWS_DB('hms_beds');
-        $db->addColumn('id');
-        $db->addWhere('bedroom_id', $br_id);
-        $db->addWhere('bed_letter', $_REQUEST['bed_letter']);
-        $bed_id = $db->select('one');
-
         $assignment = new HMS_Assignment;
-        $assignment->set_asu_username($_REQUEST['username']);
+        
+        if($bid == NULL) {
+            $db = new PHPWS_DB('hms_room');
+            $db->addColumn('id');
+            $db->addWhere('building_id', $_REQUEST['hall']);
+            $db->addWhere('floor_number', $_REQUEST['floor']);
+            $db->addWhere('room_number', $_REQUEST['floor'] . str_pad($_REQUEST['room'], 2, "0", STR_PAD_LEFT));
+            $db->addWhere('deleted', '1', '!=');
+            $rid = $db->select('one');
+
+            $db = new PHPWS_DB('hms_bedrooms');
+            $db->addColumn('id');
+            $db->addWhere('room_id', $rid);
+            $db->addWhere('bedroom_letter', $_REQUEST['bedroom_letter']);
+            $br_id = $db->select('one');
+
+            $db = new PHPWS_DB('hms_beds');
+            $db->addColumn('id');
+            $db->addWhere('bedroom_id', $br_id);
+            $db->addWhere('bed_letter', $_REQUEST['bed_letter']);
+            $bed_id = $db->select('one');
+
+            $assignment->set_asu_username($_REQUEST['username']);
+        } else {
+            $bed_id = $bid;
+            $assignment->set_asu_username($un);
+        }
+
         $assignment->set_bed_id($bed_id);
 
         return $assignment;
