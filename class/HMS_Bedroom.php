@@ -21,6 +21,7 @@ class HMS_Bedroom
     var $added_on;
     var $updated_by;
     var $updated_on;
+    var $deleted;
     var $error;
 
     function HMS_Bedroom()
@@ -162,6 +163,11 @@ class HMS_Bedroom
         return $this->error;
     }
 
+    function set_deleted($deleted = "0")
+    {
+        $this->deleted = $deleted;
+    }
+
     function set_variables()
     {
         if($_REQUEST['id']) $this->set_id($_REQUEST['id']);
@@ -172,6 +178,7 @@ class HMS_Bedroom
         $this->set_is_medical($_REQUEST['is_medical']);
         $this->set_bedroom_letter($_REQUEST['bedroom_letter']);
         $this->set_phone_number($_REQUEST['phone_number']);
+        $this->set_deleted();
     }
 
     function save_bedroom($object = NULL)
@@ -195,6 +202,7 @@ class HMS_Bedroom
             $db->addValue('is_online', $_REQUEST['is_online']);
             $db->addValue('updated_by', Current_User::getId());
             $db->addValue('updated_on', time());
+            $db->addValue('deleted', '0');
         } else {
             $success = $db->saveObject($object);
             if(PEAR::isError($success)) {
