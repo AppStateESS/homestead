@@ -14,7 +14,12 @@ class HMS_Side_Thingie {
 
     var $step;
     var $curr_timestamp;
-    var $steps_text;
+    var $steps_text = array(HMS_SIDE_STUDENT_AGREE    => "Terms & Conditions",
+                            HMS_SIDE_STUDENT_APPLY    => "Application",
+                            HMS_SIDE_STUDENT_RLC      => "Learning Community Application (optional)",
+                            HMS_SIDE_STUDENT_PROFILE  => "Roomate Profile (optional)",
+                            HMS_SIDE_STUDENT_ROOMMATE => "Choose a Roomate (optional)",
+                            HMS_SIDE_STUDENT_VERIFY   => "Verify Status");
     var $steps_styles;
     var $db;
     var $deadlines;
@@ -27,6 +32,7 @@ class HMS_Side_Thingie {
         PHPWS_Core::initModClass('hms','HMS_Application.php');
         PHPWS_Core::initModClass('hms','HMS_RLC_Application.php');
         
+        # Get the deadlines for future use
         $this->db = &new PHPWS_DB('hms_deadlines');
         $this->deadlines = $this->db->select('row');
 
@@ -46,16 +52,8 @@ class HMS_Side_Thingie {
         
         $this->curr_timestamp = mktime();
 
-        $this->steps_text = array(HMS_SIDE_STUDENT_AGREE    => "Terms & Conditions",
-                                  HMS_SIDE_STUDENT_APPLY    => "Application",
-                                  HMS_SIDE_STUDENT_RLC      => "Learning Community Application (optional)",
-                                  HMS_SIDE_STUDENT_PROFILE  => "Roomate Profile (optional)",
-                                  HMS_SIDE_STUDENT_ROOMMATE => "Choose a Roomate (optional)",
-                                  HMS_SIDE_STUDENT_VERIFY   => "Verify Status");
-        
         $template = array();
         $template['TITLE'] = _('Application Progress');
-
 
         # Check for an application on file, set dates/styles if an application is not found
         $this->set_apply_agree();
@@ -72,8 +70,6 @@ class HMS_Side_Thingie {
         # Always show as available.
         $this->set_verify();
         
-        //test($this);
-                
         for($i = HMS_SIDE_STUDENT_MIN;$i <= HMS_SIDE_STUDENT_MAX; $i++) {
             $template['progress'][$i - HMS_SIDE_STUDENT_MIN][$this->steps_styles[$i]] = $this->steps_text[$i];
         }
@@ -89,17 +85,19 @@ class HMS_Side_Thingie {
         if($this->step == HMS_SIDE_STUDENT_AGREE){
             $this->steps_styles[HMS_SIDE_STUDENT_AGREE] = 'STEP_CURRENT';
             $this->steps_styles[HMS_SIDE_STUDENT_APPLY] = 'STEP_TOGO';
+            return;
         }
 
         if($this->step == HMS_SIDE_STUDENT_APPLY){
             $this->steps_styles[HMS_SIDE_STUDENT_AGREE] = 'STEP_COMPLETED';
             $this->steps_styles[HMS_SIDE_STUDENT_APPLY] = 'STEP_CURRENT';
+            return;
         }
 
         # Check if the student has an application on file already. If so, set agreed/applied steps to completed and we're done here.
         if(HMS_Application::check_for_application($_SESSION['asu_username']) !== FALSE){
-            $this->steps_styes[HMS_SIDE_STUDENT_AGREE] = 'STEP_COMPLETED';
-            $this->steps_styes[HMS_SIDE_STUDENT_APPLY] = 'STEP_COMPLETED';
+            $this->steps_styles[HMS_SIDE_STUDENT_AGREE] = 'STEP_COMPLETED';
+            $this->steps_styles[HMS_SIDE_STUDENT_APPLY] = 'STEP_COMPLETED';
             return;
         }
             
@@ -120,6 +118,7 @@ class HMS_Side_Thingie {
             return;
         }
 
+        return;
     }
 
     function set_rlc()

@@ -2618,6 +2618,10 @@ class HMS_Form
     
         $rlc_form->mergeTemplate($template);
         $template = $rlc_form->getTemplate();
+                
+        PHPWS_Core::initModClass('hms', 'HMS_Side_Thingie.php');
+        $side_thingie = new HMS_Side_Thingie(HMS_SIDE_STUDENT_RLC);
+        $side_thingie->show();
 
         return PHPWS_Template::process($template,'hms','student/rlc_signup_form_page1.tpl');
     }
@@ -2723,6 +2727,10 @@ class HMS_Form
 
         $rlc_form2->mergeTemplate($template);
         $template = $rlc_form2->getTemplate();
+                
+        PHPWS_Core::initModClass('hms', 'HMS_Side_Thingie.php');
+        $side_thingie = new HMS_Side_Thingie(HMS_SIDE_STUDENT_RLC);
+        $side_thingie->show();
         
         return PHPWS_Template::process($template,'hms','student/rlc_signup_form_page2.tpl');
         
