@@ -130,14 +130,13 @@ class HMS_Learning_Community
 
         $curr_timestamp = mktime();
 
-        if($curr_timestamp < $deadlines['student_application_begin_timestamp']){
+        if($curr_timestamp < $deadlines['submit_application_begin_timestamp']){
             $template['MESSAGE'] = "Sorry, it is too early to fill out an RLC application.";
             return PHPWS_Template::process($template,'hms','student/rlc_signup_form_page1.tpl');
         }else if($curr_timestamp > $deadlines['submit_rlc_application_end_timestamp']){
             $template['MESSAGE'] = "Sorry, it is too late to fill out an RLC application.";
             return PHPWS_Template::process($template,'hms','student/rlc_signup_form_page1.tpl');
-        }
-            
+        }    
         
         PHPWS_Core::initModClass('hms','HMS_Forms.php');
         return HMS_Form::show_rlc_application_form_page1();
