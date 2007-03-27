@@ -50,54 +50,110 @@ class HMS_Deadlines {
         }
     }
 
+    /*********************************
+     * Get Deadline Functions
+     * Each function returns the timestamp corresponding
+     * to the function name, or a PEAR error objects on DB error.
+     *********************************/
+
     function get_student_login_begin_timestamp()
     {
-    
+        $deadlines = HMS_Deadlines::get_deadlines();
+        if(PEAR::isError($deadlines)){
+            return $deadlines;
+        }
+
+        return $deadlines['student_login_begin_timestamp'];
     }
 
     function get_student_login_end_timestamp()
     {
+        $deadlines = HMS_Deadlines::get_deadlines();
+        if(PEAR::isError($deadlines)){
+            return $deadlines;
+        }
 
+        return $deadlines['student_login_end_timestamp'];
     }
 
     function get_submit_application_begin_timestamp()
     {
+        $deadlines = HMS_Deadlines::get_deadlines();
+        if(PEAR::isError($deadlines)){
+            return $deadlines;
+        }
 
+        return $deadlines['submit_application_begin_timestamp'];
     }
 
     function get_subumit_application_end_timestamp()
     {
+        $deadlines = HMS_Deadlines::get_deadlines();
+        if(PEAR::isError($deadlines)){
+            return $deadlines;
+        }
         
+        return $deadlines['submit_application_end_timestamp'];
     }
 
     function get_edit_application_end_timestamp()
     {
-        
+        $deadlines = HMS_Deadlines::get_deadlines();
+        if(PEAR::isError($deadlines)){
+            return $deadlines;
+        }
+
+        return $deadlines['edit_application_end_timestamp'];
     }
 
     function get_search_profiles_begin_timestamp()
     {
+        $deadlines = HMS_Deadlines::get_deadlines();
+        if(PEAR::isError($deadlines)){
+            return $deadlines;
+        }
 
+        return $deadlines['search_profiles_begin_timestamp'];
     }
 
     function get_search_profiles_end_timestamp()
     {
+        $deadlines = HMS_Deadlines::get_deadlines();
+        if(PEAR::isError($deadlines)){
+            return $deadlines;
+        }
 
+        return $deadlines['search_profiles_end_timestamp'];
     }
 
     function get_submit_rlc_application_end_timestamp()
     {
+        $deadlines = HMS_Deadlines::get_deadlines();
+        if(PEAR::isError($deadlines)){
+            return $deadlines;
+        }
 
+        return $deadlines['submit_rlc_application_end_timestamp'];
     }
 
-    function view_assignment_begin_timestamp()
+    function get_view_assignment_begin_timestamp()
     {
+        $deadlines = HMS_Deadlines::get_deadlines();
+        if(PEAR::isError($deadlines)){
+            return $deadlines;
+        }
 
+        return $deadlines['view_assignment_begin_timestamp'];
     }
 
-    function view_assignment_end_timestamp()
+    function get_view_assignment_end_timestamp()
     {
+        $deadlines = HMS_Deadlines::get_deadlines();
+        if(PEAR::isError($deadlines)){
+            return $deadlines;
+        }
 
+        return $deadlines['view_assignment_end_timestamp'];
     }
 }
 
