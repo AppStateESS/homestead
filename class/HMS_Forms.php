@@ -1815,7 +1815,7 @@ class HMS_Form
         $form = &new PHPWS_Form;
         
         $form->addHidden('agreed_to_terms',$_REQUEST['agreed_to_terms']); # From contract page
-
+       
         $form->addDropBox('student_status', array('1'=>_('New Freshman'),
                                                   '2'=>_('Transfer')));
         
@@ -1904,6 +1904,8 @@ class HMS_Form
         $tpl = $form->getTemplate();
         $tpl['TITLE']   = 'Residence Hall Application';
         $tpl['MESSAGE'] = $message;
+        $tpl['STUDENT_NAME'] = HMS_SOAP::get_full_name($_SESSION['asu_username']);
+        $tpl['GENDER'] = (HMS_SOAP::get_gender($_SESSION['asu_username'],TRUE) == '0') ? 'Female' : 'Male';
 
         $master['TITLE']   = 'Residence Hall Application';
         $master['APPLICATION']  = PHPWS_Template::process($tpl, 'hms', 'student/student_application.tpl');

@@ -4,6 +4,12 @@
         {START_FORM}
         <table>
             <tr>
+                <th>Name: </th><td align="left">{STUDENT_NAME}</td>
+            </tr>
+            <tr>
+                <th>Gender: </th><td align="left">{GENDER}</td>
+            </tr>
+            <tr>
                 <th>Student Status: </th><td align="left">{STUDENT_STATUS}</td>
             </tr>
             <tr><th></th><td></td></tr>
