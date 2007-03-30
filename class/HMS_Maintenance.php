@@ -26,23 +26,35 @@ class HMS_Maintenance
     
     function purge_data()
     {
-        $content = "Purging Housing Assignments...<br />";
+        $content .= "Purging housing applications...<br />";
+        $db = &new PHPWS_DB('hms_application');
+        $db->delete();
+        
+        $content .= "Purging Housing Assignments...<br />";
         $db = &new PHPWS_DB('hms_assignment');
         $db->delete();
 
-        $content = "Purging Deadlines...<br />";
+        $content .= "Purging Deadlines...<br />";
         $db = &new PHPWS_DB('hms_deadlines');
         $db->delete();
 
-        $content = "Purging Learning Communities...<br />";
+        $content .= "Purging Learning Communities...<br />";
         $db = &new PHPWS_DB('hms_learning_communities');
         $db->delete();
 
-        $content = "Purging Learning Community Applications...<br />";
+        $content .= "Purging Learning Community Applications...<br />";
         $db = &new PHPWS_DB('hms_learning_community_applications');
         $db->delete();
 
-        $content = "Purging residence hall data...<br />";
+        $content .= "Purging Learning Community Assignments...<br />";
+        $db = &new PHPWS_DB('hms_learning_community_assignment');
+        $db->delete();
+
+        $content .= "Purging Learning Community Questions...<br />";
+        $db = &new PHPWS_DB('hms_learning_community_questions');
+        $db->delete();
+
+        $content .= "Purging residence hall data...<br />";
         $db = &new PHPWS_DB('hms_residence_hall');
         $db->delete();
 
@@ -183,84 +195,64 @@ class HMS_Maintenance
     function save_deadlines()
     {
         if(!(Current_User::authorized('hms', 'edit_deadlines') || Current_User::authorized('hms', 'admin'))) {
-            exit('you are a bad person that can not edit deadlines.');
+            exit('You are a bad person that can not edit deadlines.');
         }
+        
+        PHPWS_Core::initModClass('hms','HMS_Deadlines.php');
+        $deadlines = new HMS_Deadlines();
         
         $slbd   = $_REQUEST['student_login_begin_day'];
         $slbm   = $_REQUEST['student_login_begin_month'];
         $slby   = $_REQUEST['student_login_begin_year'];
-        $slbt   = mktime(0,0,0,$slbm,$slbd,$slby);
+        $deadlines->set_student_login_begin_mdy($slbm,$slbd,$slby);
 
         $sled   = $_REQUEST['student_login_end_day'];
         $slem   = $_REQUEST['student_login_end_month'];
         $sley   = $_REQUEST['student_login_end_year'];
-        $slet   = mktime(0,0,0,$slem,$sled,$sley);
+        $deadlines->set_student_login_end_mdy($slem,$sled,$sley);
 
         $sabd    = $_REQUEST['submit_application_begin_day'];
         $sabm    = $_REQUEST['submit_application_begin_month'];
         $saby    = $_REQUEST['submit_application_begin_year'];
-        $sabt    = mktime(0,0,0,$sabm,$sabd,$saby);
+        $deadlines->set_submit_application_begin_mdy($sabm,$sabd,$saby);
 
         $saed    = $_REQUEST['submit_application_end_day'];
         $saem    = $_REQUEST['submit_application_end_month'];
         $saey    = $_REQUEST['submit_application_end_year'];
-        $saet    = mktime(0,0,0,$saem,$saed,$saey);
+        $deadlines->set_submit_application_end_mdy($saem,$saed,$saey);
 
         $eaed   = $_REQUEST['edit_application_end_day'];
         $eaem   = $_REQUEST['edit_application_end_month'];
         $eaey   = $_REQUEST['edit_application_end_year'];
-        $eaet   = mktime(0,0,0,$eaem,$eaed,$eaey);
+        $deadlines->set_edit_application_mdy($eaem,$eaed,$eaey);
         
         $spbd   = $_REQUEST['search_profiles_begin_day'];
         $spbm   = $_REQUEST['search_profiles_begin_month'];
         $spby   = $_REQUEST['search_profiles_begin_year'];
-        $spbt   = mktime(0,0,0,$spbm,$spbd,$spby);
+        $deadlines->set_search_profiles_begin_mdy($spbm,$spbd,$spby);
 
         $sped   = $_REQUEST['search_profiles_end_day'];
         $spem   = $_REQUEST['search_profiles_end_month'];
         $spey   = $_REQUEST['search_profiles_end_year'];
-        $spet   = mktime(0,0,0,$spem,$sped,$spey);
+        $deadlines->set_search_profiles_end_mdy($spem,$sped,$spey);
 
         $sred   = $_REQUEST['submit_rlc_application_end_day'];
         $srem   = $_REQUEST['submit_rlc_application_end_month'];
         $srey   = $_REQUEST['submit_rlc_application_end_year'];
-        $sret   = mktime(0,0,0,$srem,$sred,$srey);
+        $deadlines->set_submit_rlc_application_end_mdy($srem,$sred,$srey);
 
         $vabd   = $_REQUEST['view_assignment_begin_day'];
         $vabm   = $_REQUEST['view_assignment_begin_month'];
         $vaby   = $_REQUEST['view_assignment_begin_year'];
-        $vabt   = mktime(0,0,0,$vabm,$vabd,$vaby);
+        $deadlines->set_view_assignment_begin_mdy($vabm,$vabd,$vaby);
 
         $vaed   = $_REQUEST['view_assignment_end_day'];
         $vaem   = $_REQUEST['view_assignment_end_month'];
         $vaey   = $_REQUEST['view_assignment_end_year'];
-        $vaet   = mktime(0,0,0,$vaem,$vaed,$vaey);
+        $deadlines->set_view_assignment_end_mdy($vaem,$vaed,$vaey);
 
-        $db = &new PHPWS_DB('hms_deadlines');
-        $db->addColumn('student_login_begin_timestamp');
-        $results = $db->select();
-        unset($db);
-
-        $db = &new PHPWS_DB('hms_deadlines');
-        $db->addValue('student_login_begin_timestamp', $slbt);
-        $db->addValue('student_login_end_timestamp', $slet);
-        $db->addValue('submit_application_begin_timestamp', $sabt);
-        $db->addValue('submit_application_end_timestamp', $saet);
-        $db->addValue('edit_application_end_timestamp', $eaet);
-        $db->addValue('search_profiles_begin_timestamp', $spbt);
-        $db->addValue('search_profiles_end_timestamp', $spet);
-        $db->addValue('submit_rlc_application_end_timestamp', $sret);
-        $db->addValue('view_assignment_begin_timestamp', $vabt);
-        $db->addValue('view_assignment_end_timestamp', $vaet);
-        $db->addValue('updated_on',mktime());
-        $db->addValue('updated_by', Current_User::getId());
-
-        if($results == NULL) {
-            $result = $db->insert();
-        } else {
-            $result = $db->update();
-        }
-
+        $result = $deadlines->save_deadlines();
+        
         if(PEAR::isError($result)) {
             PHPWS_Error::log($result);
             $message = "Error saving deadlines. Please check the error logs!<br />";
