@@ -16,27 +16,41 @@ ALTER TABLE hms_learning_community_applications ADD CONSTRAINT rlcapp_assignment
     FOREIGN KEY (hms_assignment_id) REFERENCES hms_learning_community_assignment (id);
 
 ALTER TABLE hms_learning_communities ADD COLUMN abbreviation character varying(16);
+UPDATE hms_learning_communities set abbreviation = ' ';
 ALTER TABLE hms_learning_communities ALTER COLUMN abbreviation SET NOT NULL;
 
 ALTER TABLE hms_learning_communities ADD COLUMN capacity integer;
+UPDATE hms_learning_communities set capacity = 1;
 ALTER TABLE hms_learning_communities ALTER COLUMN capacity SET NOT NULL;
 
 ALTER TABLE hms_residence_hall ADD COLUMN bedrooms_per_room smallint;
+UPDATE hms_residence_hall set bedrooms_per_room = 1;
 ALTER TABLE hms_residence_hall ALTER COLUMN bedrooms_per_room SET NOT NULL;
+
 ALTER TABLE hms_residence_hall ADD COLUMN beds_per_bedroom smallint;
+UPDATE hms_residence_hall set bedroom_per_room = 1;
 ALTER TABLE hms_residence_hall ALTER COLUMN beds_per_bedroom SET NOT NULL;
+
 ALTER TABLE hms_residence_hall DROP COLUMN capacity_per_room;
 
 ALTER TABLE hms_floor ADD COLUMN bedrooms_per_room smallint;
+UPDATE hms_floor set bedrooms_per_room = 1;
 ALTER TABLE hms_floor ALTER COLUMN bedrooms_per_room SET NOT NULL;
+
 ALTER TABLE hms_floor ADD COLUMN beds_per_bedroom smallint;
+UPDATE hms_floor set beds_per_bedroom = 1;
 ALTER TABLE hms_floor ALTER COLUMN beds_per_bedroom SET NOT NULL;
+
 ALTER TABLE hms_floor DROP COLUMN capacity_per_room;
 
 ALTER TABLE hms_room ADD COLUMN bedrooms_per_room smallint;
+UPDATE hms_room set bedrooms_per_room = 1;
 ALTER TABLE hms_room ALTER COLUMN bedrooms_per_room SET NOT NULL;
+
 ALTER TABLE hms_room ADD COLUMN beds_per_bedroom smallint;
+UPDATE hms_room set beds_per_bedroom = 1;
 ALTER TABLE hms_room ALTER COLUMN beds_per_bedroom SET NOT NULL;
+
 ALTER TABLE hms_room DROP COLUMN capacity_per_room;
 
 CREATE TABLE hms_bedrooms (
@@ -68,5 +82,6 @@ CREATE TABLE hms_beds (
 ALTER TABLE hms_assignment DROP COLUMN building_id;
 ALTER TABLE hms_assignment DROP COLUMN floor_id;
 ALTER TABLE hms_assignment DROP COLUMN room_id;
+DELETE FROM hms_assignments;
 ALTER TABLE hms_assignment ADD COLUMN bed_id INTEGER REFERENCES hms_beds(id);
 ALTER TABLE hms_assignment ALTER COLUMN bed_id SET NOT NULL;
