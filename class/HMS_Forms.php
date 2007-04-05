@@ -297,8 +297,13 @@ class HMS_Form
             $floors[$ctr] = $ctr;
         }
 
+        $room_range = array("0125" =>"1 - 25", 
+                            "2650" => "26 - 50",
+                            "5175" => "51 - 75");
+
         $form->addDropBox('halls', $halls);
         $form->addDropBox('floors', $floors);
+        $form->addDropBox('room_range', $room_range);
         $form->addHidden('module', 'hms');
         $form->addHidden('type', 'assignment');
         $form->addHidden('op', 'show_assignments_by_floor');
@@ -313,72 +318,253 @@ class HMS_Form
         return $final;
     }
 
-    function show_assignments_by_floor()
+    function show_assignments_by_floor($msg = NULL)
     {
+        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
+
+        // check the hall/floor combo is good
+        $db = &new PHPWS_DB('hms_floor');
+        $db->addValue('id');
+        $db->addWhere('building', $_REQUEST['halls']);
+        $db->addWhere('floor_number', $_REQUEST['floors']);
+        $db->addWhere('deleted', '1', '!=');
+        $id = $db->select('one');
+        if(!is_numeric($id)) {
+            $error = "That is not a valid Hall/Floor combination.<br />";
+            return HMS_Assignment::get_hall_floor($error);
+        }
+        
+        // get the hall name
         $db = &new PHPWS_DB('hms_residence_hall');
         $db->addColumn('hall_name');
         $db->addWhere('id', $_REQUEST['halls']);
         $hall = $db->select('one');
 
-        $db = &new PHPWS_DB('hms_floor');
-        $db->addValue('id');
-        $db->addWhere('building', $_REQUEST['halls']);
-        $db->addWhere('floor_number', $_REQUEST['floors']);
-        $id = $db->select('one');
-        if(!is_numeric($id)) {
-            $error = "That is not a valid Hall/Floor combination.<br />";
-            PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-            return HMS_Assignment::get_hall_floor($error);
-        }
+        // get the room number
+        $rooms_sql  = "SELECT hms_room.room_number, hms_room.id ";
+        $rooms_sql .= "FROM hms_room, hms_floor ";
+        $rooms_sql .= "WHERE hms_room.floor_id = hms_floor.id ";
+        $rooms_sql .= "AND hms_floor.floor_number = " . $_REQUEST['floors'] . " ";
+        $rooms_sql .= "AND hms_floor.building = " . $_REQUEST['halls'] . " ";
         
-        $db = &new PHPWS_DB('hms_room');
-        $db->addColumn('room_number');
-        $db->addWhere('floor_id', 'hms_floor.id');
-        $db->addWhere('hms_floor.floor_number', $_REQUEST['floors']);
-        $db->addWhere('hms_floor.building', $_REQUEST['halls']);
+        if($_REQUEST['room_range'] == '0125') {
+            $rooms_sql .= "AND int4(hms_room.room_number) <= 25 ";
+        } else if ($_REQUEST['room_range'] == '2650') {
+            $rooms_sql .= "AND int4(hms_room.room_number) > 25 ";
+            $rooms_sql .= "AND int4(hms_room.room_number) <= 50 ";
+        } else if ($_REQUEST['room_range'] == '5175') {
+            $rooms_sql .= "AND int4(hms_room.room_number) > 51 ";
+            $rooms_sql .= "AND int4(hms_room.room_number) <= 75 ";
+        }
+
+        $rooms_sql .= "AND hms_room.deleted = 0 ";
+        $rooms_sql .= "ORDER BY hms_room.room_number ASC;";
+
+        $db = &new PHPWS_DB();
+        $db->setSQLQuery($rooms_sql);
         $rooms_raw = $db->select();
-        PHPWS_Core::initCoreClass('Form.php');
+
+        if(PEAR::isError($rooms_raw)) {
+            return HMS_Form::get_hall_floor("There was an error selecting that room range. Please try again or contact ESS.<br />");
+        }
+
+        if(sizeof($rooms_raw) < 1) {
+            return HMS_Form::get_hall_floor("That room range does not exist for that Hall/Floor combination.<br />");
+        }
+
         $body = '';
+        
         foreach($rooms_raw as $aroom) {
             // iterate through the rooms, building the form as necessary
-            
+
             $db = &new PHPWS_DB('hms_beds');
             $db->addColumn('id');
+            $db->addColumn('bed_letter');
+            $db->addColumn('hms_bedrooms.bedroom_letter');
             $db->addWhere('bedroom_id', 'hms_bedrooms.id');
             $db->addWhere('hms_bedrooms.room_id', 'hms_room.id');
-            $db->addWhere('hms_room.floor_number', $_REQUEST['floors']);
-            $db->addWhere('hms_floor.building', $_REQUEST['halls']);
-            $db->addWhere('hms_room.deleted', '1', '!=');
-            $db->addWhere('hms_bedrooms.deleted', '1', '!=');
-            $db->addWhere('hms_beds.deleted', '1', '!=');
-            $db->setTestMode();
+            $db->addWhere('hms_room.id', $aroom['id']);
+            $db->addWhere('hms_beds.deleted', '0');
             $beds = $db->select();
-            test($beds, 1);
 
-            $tags['BED_NAME'] = "Alpha";
-            $tags['BED_ID'] = "<input type=\"text\" name=\"bed_alpha\" id=\"bed_id\" value=\"\" />";
-            $body .= PHPWS_Template::processTemplate($tags, 'hms', 'admin/bed_and_id.tpl');
-            
-            $tags['BED_NAME'] = "Bravo";
-            $tags['BED_ID'] = "<input type=\"text\" name=\"bed_bravo\" id=\"bed_id\" value=\"\" />";
-            $body .= PHPWS_Template::processTemplate($tags, 'hms', 'admin/bed_and_id.tpl');
+            if($beds != NULL && $beds != FALSE) {
+                $body .= "<tr><th>Room Number: &nbsp;&nbsp;" . $aroom['room_number'] . "&nbsp;&nbsp;</th><td></td></tr>";
+
+                foreach($beds as $abed) {
+                    $tags['BED_NAME'] = $abed['bed_letter'];
+                    $tags['BEDROOM_ID'] = $abed['bedroom_letter'];
+                    $bed_id = "bed__" . $abed['id']; 
+                    $edit_bed_id = "bed_" . $abed['id'];
+                    $username = HMS_Assignment::get_asu_username($abed['id']);
+
+                    if(isset($_REQUEST[$bed_id]) && $_REQUEST[$bed_id] != NULL) {
+                        $tags['BED_ID'] = "<input type=\"text\" name=\"bed_ " . $abed['id']  . "\" id=\"bed_id\" value=\"" . $_REQUEST[$bed_id] . "\" />";
+                    } else if(isset($_REQUEST[$edit_bed_id])) {
+                        $tags['BED_ID'] = "<input type=\"text\" name=\"bed_ " . $abed['id']  . "\" id=\"bed_id\" value=\"" . $_REQUEST[$edit_bed_id] . "\" />";
+                    } else {
+                        $tags['BED_ID'] = "<input type=\"text\" name=\"bed_ " . $abed['id']  . "\" id=\"bed_id\" value=\"" . $username . "\" />";
+                    }
+                    $body .= PHPWS_Template::processTemplate($tags, 'hms', 'admin/bed_and_id.tpl');
+                }
+            }
         }
-
-        PHPWS_Core::initCoreClass('Forms.php');
+        
+        PHPWS_Core::initCoreClass('Form.php');
         $form = &new PHPWS_Form;
         $form->addHidden('module', 'hms');
         $form->addHidden('type', 'assignment');
-        $form->addHidden('op', 'assign_floor');
+        $form->addHidden('halls', $_REQUEST['halls']);
+        $form->addHidden('floors', $_REQUEST['floors']);
+        $form->addHidden('op', 'verify_assign_floor');
         $form->addSubmit('submit', _('Submit Floor'));
 
         $tags = $form->getTemplate();
-        $tags['HALL']   = $hall;
-        $tags['FLOOR']  = $_REQUEST['floors'];
-        $tags['BODY']   = $body;
+        $tags['TITLE']      = "Assign Students";
+        $tags['HALL']       = $hall;
+        $tags['FLOOR']      = $_REQUEST['floors'];
+        $tags['BODY']       = $body;
+        $tags['MESSAGE']    = $msg;
         $final = PHPWS_Template::processTemplate($tags, 'hms', 'admin/assign_floor.tpl');
         return $final; 
     }
-    
+
+    function verify_assign_floor()
+    {
+        PHPWS_Core::initCoreClass('Form.php');
+        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Building.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
+
+        $body = '';
+        reset($_REQUEST);
+        while(list($key, $uid) = each($_REQUEST))
+        {
+            if(substr($key,0,4) == "bed_") {
+                if(substr($key, 4, 1) == "_") {
+                    $bid = substr($key, 5);
+                } else {
+                    $bid = substr($key, 4);
+                }
+                if($uid == NULL) continue;
+       
+                /**
+                 * check for valid username
+                 */
+                $valid_username = HMS_SOAP::is_valid_student($uid);
+                if(!$valid_username) {
+                    $error = "$uid is not a valid student. Please remove them from the list.<br /><br />";
+                    return HMS_Form::show_assignments_by_floor($error);
+                }
+            
+                /**
+                 * check to see if the room's already assigned
+                 */
+                $assigned = HMS_Assignment::is_bed_assigned($bid);
+                if($assigned) {
+                    $curr_occupant = HMS_Assignment::get_asu_username($bid);
+                    
+                    // check to see if the person being assigned is the current occupant
+                    if(strcasecmp($curr_occupant, $uid) != 0) {
+                        $error = "$uid can not be assigned because $curr_occupant is already in that room. Please remove them.<br /><br />";
+                        return HMS_Form::show_assignments_by_floor($error);
+                    }
+
+                }
+
+                /**
+                 * check to see if the current user is currently assigned
+                 */
+                $assigned = HMS_Assignment::is_user_assigned($uid);
+                if($assigned) {
+                    $curr_bed_id = HMS_Assignment::get_bed_id('asu_username', $uid);
+                    if($curr_bed_id != $bid) {
+                        $error = "$uid can not be assigned because they are assigned elsewhere. Please remove their room assignment first.<br /><br />";
+                        return HMS_Form::show_assignments_by_floor($error);
+                    }
+                }
+
+                /**
+                 * check room/person compatibility
+                 */
+                $db = &new PHPWS_DB('hms_room');
+                $db->addColumn('gender_type');
+                $db->addWhere('hms_beds.id', $bid);
+                $db->addWhere('hms_beds.bedroom_id', 'hms_bedrooms.id');
+                $db->addWhere('hms_bedrooms.room_id', 'hms_room.id');
+                $db->addWhere('hms_beds.deleted', '0');
+                $db->addWhere('hms_bedrooms.deleted', '0');
+                $db->addWhere('hms_room.deleted', '0');
+                $room_gender = $db->select('one');
+
+                $user_gender = HMS_SOAP::get_gender($uid, TRUE);
+            
+                if($room_gender != $user_gender) {
+                    $error = "$uid can not be assigned because their gender is not compatible with the room gender. Please change the room gender.<br /><br />";
+                    return HMS_Form::show_assignments_by_floor($error);
+                }
+
+                /**
+                 * see if the person has a roommate
+                 * if a roommate exists, make sure they are going into the same room
+                 */
+                PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
+                if(HMS_Roommate::has_roommates($uid)) {
+                    /* from here we have to do some additional parsing.
+                       we need to check the db to get all the bed ids associated with a room,
+                         make sure they're included in $_REQUEST and that it's only their roommates
+                         that are placed in those beds.
+                       on the same note we need to ascertain that each of their roommates is included and that
+                         no roommate is not in a bed in the room */
+                    $error = "$uid has roommates. Please write code to handle that.<br /><br />";
+                    return HMS_Form::show_assignments_by_floor($error);
+                }
+            
+                // if we get here we know we're pretty safe to go ahead and let them assign the student 
+                $db = &new PHPWS_DB('hms_room');
+                $db->addColumn('room_number');
+                $db->addColumn('hms_bedrooms.bedroom_letter');
+                $db->addColumn('hms_beds.bed_letter');
+                $db->addColumn('hms_residence_hall.hall_name');
+                $db->addWhere('hms_beds.id', $bid);
+                $db->addWhere('hms_beds.bedroom_id', 'hms_bedrooms.id');
+                $db->addWhere('hms_bedrooms.room_id', 'hms_room.id');
+                $db->addWhere('hms_room.floor_id', 'hms_floor.id');
+                $db->addWhere('hms_floor.floor_number', $_REQUEST['floors']);
+                $db->addWhere('hms_floor.building', 'hms_residence_hall.id');
+                $db->addWhere('hms_residence_hall.id', $_REQUEST['halls']);
+                $response = $db->select('row');
+
+                $tags['BED_NAME'] = $response['bed_letter'];
+                $tags['ROOM_LABEL'] = "Room ";
+                $tags['ROOM_NUM']   = "234 &nbsp;&nbsp;&nbsp;&nbsp;";
+                $tags['BEDROOM_ID'] = $response['bedroom_letter'] . "&nbsp;&nbsp;&nbsp";
+                $bed_id = "bed__" . $bid; 
+                $tags['BED_ID'] = "<input type=\"text\" readonly name=\"bed_$bid\" id=\"phpws_form_bed_id\" value=\"$uid\" />";
+                $body .= PHPWS_Template::processTemplate($tags, 'hms', 'admin/bed_and_id.tpl');
+            }
+        }
+        
+        $hall_name = HMS_Building::get_hall_name('id', $_REQUEST['halls']);
+        
+        $form = &new PHPWS_Form;
+        $form->addHidden('module', 'hms');
+        $form->addHidden('type', 'assignment');
+        $form->addHidden('halls', $_REQUEST['halls']);
+        $form->addHidden('floors', $_REQUEST['floors']);
+        $form->addHidden('op', 'assign_floor');
+        $form->addSubmit('submit', _('Submit Assignments'));
+        $form->addSubmit('cancel', _('Cancel Assignments'));
+        $form->addSubmit('edit', _('Edit Assignments'));
+
+        $tags = $form->getTemplate();
+        $tags['TITLE']      = "Assignment Verification";
+        $tags['HALL']       = $hall_name;
+        $tags['FLOOR']      = $_REQUEST['floors'];
+        $tags['BODY']       = $body;
+        $final = PHPWS_Template::processTemplate($tags, 'hms', 'admin/assign_floor.tpl');
+        return $final; 
+    }
+
     function verify_assignment($msg = NULL)
     {
         $db = new PHPWS_DB('hms_residence_hall');
