@@ -12,6 +12,9 @@
             <tr>
                 <th align="left">Floor:</th><td>{FLOORS}</td>
             </tr>
+            <tr>
+                <th align="left">Room Range: </th><td>{ROOM_RANGE}</td>
+            </tr>
         </table>
         <br />
         {SUBMIT}
