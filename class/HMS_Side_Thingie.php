@@ -21,7 +21,6 @@ class HMS_Side_Thingie {
                             HMS_SIDE_STUDENT_ROOMMATE => "Choose a Roomate (optional)",
                             HMS_SIDE_STUDENT_VERIFY   => "Verify Status");
     var $steps_styles;
-    var $db;
     var $deadlines;
 
     function HMS_Side_Thingie($step)
@@ -31,16 +30,16 @@ class HMS_Side_Thingie {
 
         PHPWS_Core::initModClass('hms','HMS_Application.php');
         PHPWS_Core::initModClass('hms','HMS_RLC_Application.php');
+        PHPWS_Core::initModClass('hms','HMS_Deadlines.php');
         
         # Get the deadlines for future use
-        $this->db = &new PHPWS_DB('hms_deadlines');
-        $this->deadlines = $this->db->select('row');
+        $this->deadlines = &new HMS_Deadlines();
 
         if(PEAR::isError($this->deadlines)){
             PHPWS_Error::log($this->deadlines,'hms','HMS_Side_Thingie::show()','DB error while looking up deadlines.');
             
             $template = array();
-            $template['ERROR'] = "Database error!";
+            $template['ERROR'] = "Database error in getting deadlines!";
             $page = PHPWS_Template::process($template, 'hms', 'misc/side_thingie.tpl');
             Layout::add($page, 'hms', 'default');
             return;
@@ -70,6 +69,7 @@ class HMS_Side_Thingie {
         # Always show as available.
         $this->set_verify();
         
+        test($this);
         for($i = HMS_SIDE_STUDENT_MIN;$i <= HMS_SIDE_STUDENT_MAX; $i++) {
             $template['progress'][$i - HMS_SIDE_STUDENT_MIN][$this->steps_styles[$i]] = $this->steps_text[$i];
         }
@@ -102,17 +102,17 @@ class HMS_Side_Thingie {
         }
             
         # If the student does not have an application on file... check apply dates, set dates/styles accordingly
-        if($this->curr_timestamp < $this->deadlines['submit_application_begin_timestamp']){
+        if($this->curr_timestamp < $this->deadlines->get_submit_application_begin_timestamp()){
             $this->steps_text[HMS_SIDE_STUDENT_AGREE] .= " (available ". date('n/j/y',$this->deadlines['submit_application_begin_timestamp']) .")";
             $this->steps_text[HMS_SIDE_STUDENT_APPLY] .= " (available ". date('n/j/y',$this->deadlines['submit_application_begin_timestamp']) .")";
             $this->steps_styles[HMS_SIDE_STUDENT_AGREE] = 'STEP_NOTYET';
             $this->steps_styles[HMS_SIDE_STUDENT_APPLY] = 'STEP_NOTYET';
             return;
-        }else if($this->curr_timestamp > $this->deadlines['submit_application_begin_timestamp'] && $this->curr_timestamp < $this->deadlines['submit_application_end_timestamp']){
+        }else if($this->curr_timestamp > $this->deadlines->get_submit_application_begin_timestamp() && $this->curr_timestamp < $this->deadlines->get_submit_application_end_timestamp()){
             $this->steps_text[HMS_SIDE_STUDENT_AGREE] .= " (complete by ". date('n/j/y',$this->deadlines['submit_application_begin_timestamp']) .")";
             $this->steps_text[HMS_SIDE_STUDENT_APPLY] .= " (complete by ". date('n/j/y',$this->deadlines['submit_application_begin_timestamp']) .")";
             return;
-        }else if($this->curr_timestamp > $this->deadlines['submit_application_end_timestamp']){
+        }else if($this->curr_timestamp > $this->deadlines->get_submit_application_end_timestamp()){
             $this->steps_styles[HMS_SIDE_STUDENT_AGREE] = 'STEP_MISSED';
             $this->steps_styles[HMS_SIDE_STUDENT_APPLY] = 'STEP_MISSED';
             return;
@@ -135,16 +135,16 @@ class HMS_Side_Thingie {
         }
 
         # If the student does not have an application on file... check apply dates, set dates/styles accordingly
-        if($this->curr_timestamp < $this->deadlines['submit_application_begin_timestamp']){
+        if($this->curr_timestamp < $this->deadlines->get_submit_application_begin_timestamp()){
             $this->steps_text[HMS_SIDE_STUDENT_RLC] .= " (available ". date('n/j/y',$this->deadlines['submit_application_begin_timestamp']) .")";
             $this->steps_styles[HMS_SIDE_STUDENT_RLC] = 'STEP_NOTYET';
             return;
-        }else if($this->curr_timestamp > $this->deadlines['submit_application_begin_timestamp'] && $this->curr_timestamp < $this->deadlines['submit_rlc_application_end_timestamp']){
+        }else if($this->curr_timestamp > $this->deadlines->get_submit_application_begin_timestamp() && $this->curr_timestamp < $this->deadlines->get_submit_rlc_application_end_timestamp()){
             $this->steps_text[HMS_SIDE_STUDENT_RLC] .= " (complete by ". date('n/j/y',$this->deadlines['submit_rlc_application_end_timestamp']) . ")";
             $this->steps_styles[HMS_SIDE_STUDENT_RLC] = 'STEP_TOGO';
             return;
-        }else if($this->curr_timestamp > $this->deadlines['submit_rlc_application_end_tiemstamp']){
-            $steps_styes[HMS_SIDE_STUDENT_RLC] = 'STEP_OPT_MISSED';
+        }else if($this->curr_timestamp > $this->deadlines->get_submit_rlc_application_end_timestamp()){
+            $this->steps_styles[HMS_SIDE_STUDENT_RLC] = 'STEP_OPT_MISSED';
             return;
         }
     }
