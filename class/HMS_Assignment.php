@@ -1,6 +1,6 @@
 <?php
 
-error_reporting(E_ALL);
+#error_reporting(E_ALL);
 
 /**
  * Provides functionality to actually assign students to a room
@@ -17,9 +17,17 @@ class HMS_Assignment
     /**
      * Return the id for the current assignment object
      */
-    function get_id()
+    function get_id($type = NULL, $value = NULL)
     {
-        return $this->id;
+        if($type == NULL) {
+            return $this->id;
+        } else {
+            $db = &new PHPWS_DB('hms_assignment');
+            $db->addColumn('id');
+            $db->addWhere($type, $value);
+            $id = $db->select('one');
+            return $id;
+        }
     }
 
     /**
@@ -33,9 +41,17 @@ class HMS_Assignment
     /**
      * Returns the ASU username associated with the current assignment
      */
-    function get_asu_username()
+    function get_asu_username($bid = NULL)
     {
-        return $this->asu_username;
+        if($bid != NULL) {
+            $db = &new PHPWS_DB('hms_assignment');
+            $db->addColumn('asu_username');
+            $db->addWhere('bed_id', $bid);
+            $username = $db->select('one');
+            return $username;
+        } else {
+            return $this->asu_username;
+        }
     }
 
     /**
@@ -49,9 +65,17 @@ class HMS_Assignment
     /**
      * Returns the bed associated with the current assignment
      */
-    function get_bed_id()
+    function get_bed_id($type = NULL, $value = NULL)
     {
-        return $this->bed_id;
+        if($type == NULL) {
+            return $this->bed_id;
+        } else {
+            $db = &new PHPWS_DB('hms_assignment');
+            $db->addColumn('bed_id');
+            $db->addWhere($type, $value);
+            $bed_id = $db->select('one');
+            return $bed_id;
+        }
     }
 
     /**
@@ -118,19 +142,19 @@ class HMS_Assignment
     }
 
     /**
-     * Saves the assignment object to the database.
+     * Saves the current assignment object to the database.
      */
     function save_assignment()
     {
-        if($this->id == NULL) {
-            
-            $delete_first = HMS_Assignment::delete_assignment($this->asu_username);
-
-            $db = new PHPWS_DB('hms_assignment');
-            $result = $db->saveObject($this);
-            $msg = $this->get_asu_username() . " has been successfully assigned.<br />";
-            return HMS_Assignment::get_username_for_assignment($msg);
-        }
+        // Delete the assignment first (for Banner room charge reasons)
+        $delete_first = HMS_Assignment::delete_assignment('asu_username', $this->get_asu_username());
+       
+        if(PEAR::isError($delete_first)) 
+            test("Error is: $delete_first", 1);
+       
+        $db = new PHPWS_DB('hms_assignment');
+        $result = $db->saveObject($this);
+        return $result;
     }
 
     /**
@@ -139,7 +163,7 @@ class HMS_Assignment
      */
     function perform_delete_assignment()
     {
-        $success = HMS_Assignment::delete_assignment();
+        $success = HMS_Assignment::delete_assignment('asu_username', $_REQUEST['asu_username']);
         $msg =  "You have removed " . $_REQUEST['asu_username'];
         $msg .= " from " . $_REQUEST['hall_name'];
         $msg .= ", room " . $_REQUEST['room_number'] . ".";
@@ -149,14 +173,10 @@ class HMS_Assignment
     /**
      * Allows static deletion of room assignments
      */
-    function delete_assignment($username = NULL)
+    function delete_assignment($type = NULL, $arg = NULL )
     {
         $db = new PHPWS_DB('hms_assignment');
-        if($username == NULL) {
-            $db->addWhere('id', $_REQUEST['assignment_id']);
-        } else {
-            $db->addWhere('asu_username', $username, 'ILIKE');
-        }
+        $db->addWhere($type, $arg);
         $result = $db->delete();
         return $result;
     }
@@ -290,15 +310,32 @@ class HMS_Assignment
     }
 
     /**
+     * Checks the specified user to see if they're already assigned
+     */
+    function is_user_assigned($uid)
+    {
+        $db = &new PHPWS_DB('hms_assignment');
+        $db->addColumn('id');
+        $db->addWhere('asu_username', $uid);
+        $assigned = $db->select('one');
+        if($assigned == NULL || $assigned == FALSE) return false;
+        else return true;
+    }
+
+    /**
      * Checks room gender matches user gender
      */
-    function room_user_gender_compatible($id)
+    function room_user_gender_compatible($id, $user_id = NULL)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Room.php');
         $room_gender = HMS_Room::get_gender_type($id);
 
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
-        $user_gender = HMS_SOAP::get_gender($_REQUEST['username'], true);
+        if($user_id == NULL) {
+            $user_gender = HMS_SOAP::get_gender($_REQUEST['username'], true);
+        } else {
+            $user_gender = HMS_SOAP::get_gender($user_id, true);
+        }
         
         if($room_gender != $user_gender) {
             return false;
@@ -334,10 +371,44 @@ class HMS_Assignment
         return HMS_Form::get_hall_floor($error);
     }
 
-    function show_assignments_by_floor()
+    function show_assignments_by_floor($msg = NULL)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
-        return HMS_Form::show_assignments_by_floor();
+        return HMS_Form::show_assignments_by_floor($msg);
+    }
+
+    function verify_assign_floor($msg = NULL)
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
+        return HMS_Form::verify_assign_floor($msg);
+    }
+
+    function assign_floor()
+    {
+        if(isset($_REQUEST['cancel'])) {
+            return HMS_Assignment::get_hall_floor();
+        } else if (isset($_REQUEST['edit'])) {
+            return HMS_Assignment::show_assignments_by_floor();
+        } else if (isset($_REQUEST['submit'])) {
+            reset($_REQUEST);
+            while(list($key, $uid) = each($_REQUEST))
+            {
+                if(substr($key, 0, 4) == "bed_") {
+                    if(substr($key, 4, 1) == "_") {
+                        $bed = substr($key, 5);
+                    } else {
+                        $bed = substr($key, 4);
+                    }
+                    $assignment = HMS_Assignment::create_assignment($bed, $uid);
+                    $saved = $assignment->save_assignment();
+                    if(PEAR::isError($saved)) {
+                        return "There was an error placing $uid in their bed.";
+                    }
+                }
+            }
+            $success = "<font color='green'>All assignments completed successfully!</font><br />";
+            return HMS_Assignment::show_assignments_by_floor($success);
+        }
     }
 
     function main()
@@ -372,6 +443,12 @@ class HMS_Assignment
                 break;
             case 'begin_by_floor':
                 return HMS_Assignment::get_hall_floor();
+                break;
+            case 'assign_floor':
+                return HMS_Assignment::assign_floor();
+                break;
+            case 'verify_assign_floor':
+                return HMS_Assignment::verify_assign_floor();
                 break;
             default:
                 test($op);
