@@ -339,6 +339,26 @@ class HMS_Roommate
     }
 
     /**
+     * checks to see if the username specified has a roommate
+     * returns true or false
+     */
+    function has_roommates($username)
+    {
+        $db = &new PHPWS_DB('hms_roommates');
+        $db->addColumn('id');
+        $db->addWhere('roommate_id_zero', $username, 'ILIKE');
+        $db->addWhere('roommate_id_one', $username, 'ILIKE', 'OR');
+        $db->addWhere('roommate_id_two', $username, 'ILIKE', 'OR');
+        $db->addWhere('roommate_id_three', $username, 'ILIKE', 'OR');
+        $id = $db->select('one');
+        if($id == NULL || $id == FALSE) {
+            return false;
+        } else if (is_numeric($id)) {
+            return true;
+        }
+    }
+     
+    /**
      * "main" function for the Roommate class
      * Checks the desired operation and calls the necessary functions
      */
