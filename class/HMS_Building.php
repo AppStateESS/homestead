@@ -107,9 +107,18 @@ class HMS_Building
     /**
      * Returns the hall name
      */
-    function get_hall_name()
+    function get_hall_name($col = NULL, $val = NULL)
     {
-        return $this->hall_name;
+        if($col == NULL) {
+            return $this->hall_name;
+        } else {
+            $db = &new PHPWS_DB('hms_residence_hall');
+            $db->addColumn('hall_name');
+            $db->addWhere($col, $val);
+            $db->addWhere('deleted', '0');
+            $hall_name = $db->select('one');
+            return $hall_name;
+        }
     }
 
     /**
