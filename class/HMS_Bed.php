@@ -123,5 +123,17 @@ class HMS_Bed
         $result = $db->query($sql);
         return $result;
     }
+
+    function get_room_id($id)
+    {
+        $db = &new PHPWS_DB('hms_room');
+        $db->addColumn('id');
+        $db->addWhere('hms_beds.id', $id);
+        $db->addWhere('hms_beds.bedroom_id', 'hms_bedrooms.id');
+        $db->addWhere('hms_bedrooms.room_id', 'hms_room.id');
+        $room_id = $db->select('one');
+        return $room_id;
+    }
+
 }
 ?>
