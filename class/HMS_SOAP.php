@@ -1,10 +1,22 @@
 <?php
 
+/**
+ * Testing Flag
+ * Set to true to use canned data (no SOAP connection
+ * will ever be made).
+ */
+define('TEST_FLAG', true);
+
 class HMS_SOAP{
 
     function is_valid_student($username)
     {
-        $student = HMS_SOAP::get_student_info($username);
+        if(TEST_FLAG){
+            # return canned data
+            return true;
+        }else{
+            $student = HMS_SOAP::get_student_info($username);
+        }
 
         if(PEAR::isError($student)){
             HMS_SOAP::log_soap_error($student,'is_valid_student',$username);
@@ -20,7 +32,12 @@ class HMS_SOAP{
 
     function get_first_name($username)
     {
-        $student = HMS_SOAP::get_student_info($username);
+        if(TEST_FLAG){
+            # return canned data
+            return "Jeremy";
+        }else{
+            $student = HMS_SOAP::get_student_info($username);
+        }
         
         if(PEAR::isError($student)){
             HMS_SOAP::log_soap_error($student,'get_first_name',$username);
@@ -34,7 +51,12 @@ class HMS_SOAP{
 
     function get_middle_name($username)
     {
-        $student = HMS_SOAP::get_student_info($username);
+        if(TEST_FLAG){
+            # return canned data
+            return "Lee";
+        }else{
+            $student = HMS_SOAP::get_student_info($username);
+        }
 
         if(PEAR::isError($student)){
             HMS_SOAP::log_soap_error($student,'get_middle_name',$username);
@@ -48,7 +70,12 @@ class HMS_SOAP{
 
     function get_last_name($username)
     {
-        $student = HMS_SOAP::get_student_info($username);
+        if(TEST_FLAG){
+            # return canned data
+            return "Booker";
+        }else{
+            $student = HMS_SOAP::get_student_info($username);
+        }
 
         if(PEAR::isError($student)){
             HMS_SOAP::log_soap_error($student,'get_last_lame',$username);
@@ -66,7 +93,12 @@ class HMS_SOAP{
      */
     function get_full_name($username)
     {
-        $student = HMS_SOAP::get_student_info($username);
+        if(TEST_FLAG){
+            # return canned data
+            return "Jeremy Lee Booker";
+        }else{
+            $student = HMS_SOAP::get_student_info($username);
+        }
 
         if(PEAR::isError($student)){
             HMS_SOAP::log_soap_error($student,'get_full_name',$username);
@@ -86,7 +118,12 @@ class HMS_SOAP{
      */
     function get_full_name_inverted($username)
     {
-        $student = HMS_SOAP::get_student_info($username);
+        if(TEST_FLAG){
+            # return canned data
+            return "Booker, Jeremy Lee";
+        }else{
+            $student = HMS_SOAP::get_student_info($username);
+        }
 
         if(PEAR::isError($student)){
             HMS_SOAP::log_soap_error($student,'get_full_name_inverted',$username);
@@ -107,7 +144,16 @@ class HMS_SOAP{
      */
     function get_gender($username, $numeric = FALSE)
     {
-        $student = HMS_SOAP::get_student_info($username);
+        if(TEST_FLAG){
+            # return canned data
+            if($numeric){
+                return 1;
+            }else{
+                return 'M';
+            }
+        }else{
+            $student = HMS_SOAP::get_student_info($username);
+        }
 
         if(PEAR::isError($student)){
             HMS_SOAP::log_soap_error($student,'get_gender',$username);
@@ -135,8 +181,19 @@ class HMS_SOAP{
      */
     function get_address($username)
     {
-        $student = HMS_SOAP::get_student_info($username);
-
+        if(TEST_FLAG){
+            # return canned data
+            return array('line1'  => '123 Rivers St.',
+                         'line2'  => 'Apt 12',
+                         'line3'  => 'who has a line 3??',
+                         'city'   => 'Boone',
+                         'county' => '123',
+                         'state'  => 'NC',
+                         'zip'    => '27591');
+        }else{
+            $student = HMS_SOAP::get_student_info($username);
+        }
+        
         if(PEAR::isError($student)){
             HMS_SOAP::log_soap_error($student,'get_address',$username);
             return $student;
@@ -147,9 +204,20 @@ class HMS_SOAP{
         }
     }
 
+    /**
+     * Returns the student type:
+     * C => continuing
+     * T => transfer
+     */
     function get_student_type($username)
     {
-        $student = HMS_SOAP::get_student_info($username);
+        if(TEST_FLAG){
+            # return canned data
+            return "T";
+        }else{
+            $student = HMS_SOAP::get_student_info($username);
+        }
+        
         if(PEAR::isError($student)) {
             HMS_SOAP::log_soap_error($student, 'get_student_type', $username);
             return $student;
@@ -160,9 +228,22 @@ class HMS_SOAP{
         }
     }
 
+    /**
+     * Returns the student's class. Possible values:
+     * FR => Freshmen
+     * SO => Sophomore
+     * JR => Junior
+     * SR => Senior
+     */
     function get_student_class($username)
     {
-        $student = HMS_SOAP::get_student_info($username);
+        if(TEST_FLAG){
+            # return canned data
+            return "SR";
+        }else{
+            $student = HMS_SOAP::get_student_info($username);
+        }
+        
         if(PEAR::isError($student)) {
             HMS_SOAP::log_soap_error($student, 'get_student_class', $username);
             return $student;
@@ -173,9 +254,19 @@ class HMS_SOAP{
         }
     }
 
+    /**
+     * Returns the student's date of birth
+     * Format: yyyy-mm-dd
+     */
     function get_dob($username)
     {
-        $student = HMS_SOAP::get_student_info($username);
+        if(TEST_FLAG){
+            # return canned data
+            return "1986-09-05";
+        }else{
+            $student = HMS_SOAP::get_student_info($username);
+        }
+        
         if(PEAR::isError($student)) {
             HMS_SOAP::log_soap_error($student, 'get_student_type', $username);
             return $student;
@@ -186,6 +277,10 @@ class HMS_SOAP{
         }
     }
 
+    /**
+     * Main function for getting student info.
+     * Used by the rest of the "get" functions
+     */
     function get_student_info($username)
     {
         include_once('SOAP/Client.php');
@@ -203,6 +298,10 @@ class HMS_SOAP{
 
     function report_application_received($username, $term, $plan_code, $meal_code = NULL)
     {
+        if(TEST_FLAG){
+            return;
+        }
+        
         include_once('SOAP/Client.php');
         $wsdl = new SOAP_WSDL(PHPWS_SOURCE_DIR . 'mod/hms/inc/shs0001.wsdl', 'true');
         $proxy = $wsdl->getProxy();
@@ -213,6 +312,10 @@ class HMS_SOAP{
 
     function report_room_assignment($username, $term, $building_code, $room_code, $plan_code, $meal_code)
     {
+        if(TEST_FLAG){
+            return;
+        }
+
         include_once('SOAP/Client.php');
         $wsdl = new SOAP_WSDL(PHPWS_SOURCE_DIR . 'mod/hms/inc/shs0001.wsdl', 'true');
         $proxy = $wsdl->getProxy();
