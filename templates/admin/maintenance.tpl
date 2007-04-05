@@ -33,9 +33,9 @@
         <h2><i>{DEADLINE_LABEL}</i></h2>
         &nbsp;&nbsp;&nbsp;{EDIT_DEADLINES}<br />
         <br />
-<!--        <h2><i>{ASSIGNMENT_LABEL}</i></h2>
+        <h2><i>{ASSIGNMENT_LABEL}</i></h2>
         &nbsp;&nbsp;&nbsp;{ASSIGN_BY_FLOOR}<br />
-        &nbsp;&nbsp;&nbsp;{CREATE_ASSIGNMENT}<br />
+<!--        &nbsp;&nbsp;&nbsp;{CREATE_ASSIGNMENT}<br />
         &nbsp;&nbsp;&nbsp;{DELETE_ASSIGNMENT}<br />
         <br />
         <h2><i>{ROOMMATE_LABEL}</i></h2>

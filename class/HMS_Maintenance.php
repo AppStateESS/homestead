@@ -158,10 +158,10 @@ class HMS_Maintenance
 
         if(Current_User::allow('hms', 'assignment_maintenance') || Current_User::allow('hms', 'admin'))
             $tpl['ASSIGNMENT_LABEL'] = "Assignment Maintenance";
-/*
+
         if(Current_User::allow('hms', 'assign_by_floor') || Current_User::allow('hms', 'admin'))
             $tpl['ASSIGN_BY_FLOOR'] = PHPWS_Text::secureLink(_('Assign Entire Floor'), 'hms', array('type'=>'assignment', 'op'=>'begin_by_floor'));
-
+/*
         if(Current_User::allow('hms', 'create_assignment') || Current_User::allow('hms', 'admin'))
             $tpl['CREATE_ASSIGNMENT'] = PHPWS_Text::secureLink(_('Assign Student'), 'hms', array('type'=>'assignment', 'op'=>'begin_create_assignment'));
 
