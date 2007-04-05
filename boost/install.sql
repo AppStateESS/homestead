@@ -1,6 +1,6 @@
 CREATE TABLE hms_assignment (
     id integer NOT NULL,
-    asu_username character varying(16) NOT NULL,
+    asu_username character varying(32) NOT NULL,
     building_id integer NOT NULL,
     bed_id integer NOT NULL,
     primary key(id)
@@ -64,7 +64,7 @@ CREATE TABLE hms_learning_community_questions (
 
 CREATE TABLE hms_learning_community_assignment (
     id                   integer NOT NULL,
-    asu_username         character varying(11) UNIQUE NOT NULL,
+    asu_username         character varying(32) UNIQUE NOT NULL,
     rlc_id               integer NOT NULL REFERENCES hms_learning_communities(id),
     assigned_by_user     integer NOT NULL,
     assigned_by_initials character varying(8),
@@ -73,16 +73,16 @@ CREATE TABLE hms_learning_community_assignment (
 
 CREATE TABLE hms_learning_community_applications (
     id                              integer NOT NULL,
-    user_id                         character varying(16) UNIQUE NOT NULL,
+    user_id                         character varying(32) UNIQUE NOT NULL,
     date_submitted                  integer NOT NULL,
     rlc_first_choice_id             integer NOT NULL REFERENCES hms_learning_communities(id),
     rlc_second_choice_id            integer NOT NULL REFERENCES hms_learning_communities(id),
     rlc_third_choice_id             integer NOT NULL REFERENCES hms_learning_communities(id),
-    why_specific_communities        character varying(500) NOT NULL,
-    strengths_weaknesses            character varying(500) NOT NULL,
-    rlc_question_0                  character varying(500),
-    rlc_question_1                  character varying(500),
-    rlc_question_2                  character varying(500),
+    why_specific_communities        character varying(2048) NOT NULL,
+    strengths_weaknesses            character varying(2048) NOT NULL,
+    rlc_question_0                  character varying(2048),
+    rlc_question_1                  character varying(2048),
+    rlc_question_2                  character varying(2048),
     required_course                 smallint NOT NULL default 0,
     hms_assignment_id               integer REFERENCES hms_learning_community_assignment(id),
     PRIMARY KEY(id)
@@ -102,7 +102,7 @@ CREATE TABLE hms_pricing_tiers (
 
 CREATE TABLE hms_application (
     id integer DEFAULT 0 NOT NULL,
-    hms_student_id character varying(10) NOT NULL,
+    hms_student_id character varying(32) NOT NULL,
     student_status smallint NOT NULL,
     term_classification smallint NOT NULL,
     gender smallint NOT NULL,
@@ -118,7 +118,7 @@ CREATE TABLE hms_application (
     deleted_by smallint,
     deleted_on integer,
     created_on integer NOT NULL,
-    created_by character varying(10) NOT NULL,
+    created_by character varying(32) NOT NULL,
     primary key(id)
 );
 
@@ -172,19 +172,19 @@ CREATE TABLE hms_room (
 
 CREATE TABLE hms_roommates (
     id integer NOT NULL,
-    roommate_zero character varying(16) NOT NULL,
-    roommate_one character varying(16) NOT NULL,
-    roommate_two character varying(16),
-    roommate_three character varying(16),
+    roommate_zero character varying(32) NOT NULL,
+    roommate_one character varying(32) NOT NULL,
+    roommate_two character varying(32),
+    roommate_three character varying(32),
     primary key(id)
 );
 
 CREATE TABLE hms_roommate_hashes (
     id integer NOT NULL,
-    roommate_zero character varying(16) NOT NULL,
-    roommate_one character varying(16) NOT NULL,
-    roommate_two character varying(16),
-    roommate_three character varying(16),
+    roommate_zero character varying(32) NOT NULL,
+    roommate_one character varying(32) NOT NULL,
+    roommate_two character varying(32),
+    roommate_three character varying(32),
     approval_hash character varying(40),
     approved smallint default 0,
     primary key(id)
