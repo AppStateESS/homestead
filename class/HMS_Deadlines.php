@@ -20,15 +20,41 @@ class HMS_Deadlines {
     var $vabt = NULL; # view assignment begin timestamp
     var $vaet = NULL; # view assignment end timestamp
 
+    function HMS_Deadlines(){
+        
+        $deadlines = HMS_Deadlines::get_deadlines();
+        
+        if(PEAR::isError($deadlines)){
+            PHPWS_Error::log($deadlines);
+            return $deadlines;
+        }
+
+        $this->slbt = $deadlines['student_login_begin_timestamp'];
+        $this->slet = $deadlines['student_login_end_timestamp'];
+        $this->sabt = $deadlines['submit_application_begin_timestamp'];
+        $this->saet = $deadlines['submit_application_end_timestamp'];
+        $this->eaet = $deadlines['edit_application_end_timestamp'];
+        $this->spbt = $deadlines['search_profiles_begin_timestamp'];
+        $this->spet = $deadlines['search_profiles_end_timestamp'];
+        $this->sret = $deadlines['submit_rlc_application_end_timestamp'];
+        $this->vabt = $deadlines['view_assignment_begin_timestamp'];
+        $this->vaet = $deadlines['view_assignment_end_timestamp'];
+
+        return TRUE;
+    }
+
     /**
      * Function to be called statically
      * Returns an associative array with each deadline name
      * (column name) as a key.
+     * Can be called statically.
      */
     function get_deadlines()
     {
         $db = &new PHPWS_DB('hms_deadlines');
         $deadlines = $db->select('row');
+
+        #test($deadlines);
 
         if(PEAR::isError($deadlines)){
             PHPWS_Error::log($deadlines);
@@ -42,6 +68,7 @@ class HMS_Deadlines {
      * Expects a deadline name as defined by the deadline table.
      * Returns TRUE if the deadline has passed, false otherwise.
      * Returns a PEAR error object in case of a DB error.
+     * Can be called statically.
      */
     function check_deadline_past($deadline_name)
     {
@@ -110,112 +137,64 @@ class HMS_Deadlines {
      * Get Deadline Functions
      * Each function returns the timestamp corresponding
      * to the function name, or a PEAR error objects on DB error.
+     * Can *not* be called statically.
      *********************************/
 
     function get_student_login_begin_timestamp()
     {
-        $deadlines = HMS_Deadlines::get_deadlines();
-        if(PEAR::isError($deadlines)){
-            return $deadlines;
-        }
-
-        return $deadlines['student_login_begin_timestamp'];
+        return $this->slbt;
     }
 
     function get_student_login_end_timestamp()
     {
-        $deadlines = HMS_Deadlines::get_deadlines();
-        if(PEAR::isError($deadlines)){
-            return $deadlines;
-        }
-
-        return $deadlines['student_login_end_timestamp'];
+        return $this->slet;
     }
 
     function get_submit_application_begin_timestamp()
     {
-        $deadlines = HMS_Deadlines::get_deadlines();
-        if(PEAR::isError($deadlines)){
-            return $deadlines;
-        }
-
-        return $deadlines['submit_application_begin_timestamp'];
+        return $this->sabt;
     }
 
     function get_subumit_application_end_timestamp()
     {
-        $deadlines = HMS_Deadlines::get_deadlines();
-        if(PEAR::isError($deadlines)){
-            return $deadlines;
-        }
-        
-        return $deadlines['submit_application_end_timestamp'];
+        return $this->saet;
     }
 
     function get_edit_application_end_timestamp()
     {
-        $deadlines = HMS_Deadlines::get_deadlines();
-        if(PEAR::isError($deadlines)){
-            return $deadlines;
-        }
-
-        return $deadlines['edit_application_end_timestamp'];
+        return $this->eaet;
     }
 
     function get_search_profiles_begin_timestamp()
     {
-        $deadlines = HMS_Deadlines::get_deadlines();
-        if(PEAR::isError($deadlines)){
-            return $deadlines;
-        }
-
-        return $deadlines['search_profiles_begin_timestamp'];
+        return $this->spbt;
     }
 
     function get_search_profiles_end_timestamp()
     {
-        $deadlines = HMS_Deadlines::get_deadlines();
-        if(PEAR::isError($deadlines)){
-            return $deadlines;
-        }
-
-        return $deadlines['search_profiles_end_timestamp'];
+        return $this->spet;
     }
 
     function get_submit_rlc_application_end_timestamp()
     {
-        $deadlines = HMS_Deadlines::get_deadlines();
-        if(PEAR::isError($deadlines)){
-            return $deadlines;
-        }
-
-        return $deadlines['submit_rlc_application_end_timestamp'];
+        return $this->sret;
     }
 
     function get_view_assignment_begin_timestamp()
     {
-        $deadlines = HMS_Deadlines::get_deadlines();
-        if(PEAR::isError($deadlines)){
-            return $deadlines;
-        }
-
-        return $deadlines['view_assignment_begin_timestamp'];
+        return $this->vabt;
     }
 
     function get_view_assignment_end_timestamp()
     {
-        $deadlines = HMS_Deadlines::get_deadlines();
-        if(PEAR::isError($deadlines)){
-            return $deadlines;
-        }
-
-        return $deadlines['view_assignment_end_timestamp'];
+        return $this->vaet;
     }
 
     /**
      * Functions to set deadlines.
      * Take a month, day, year and places the resulting
      * timestamp in the corresponding member variable.
+     * Can not be called statically.
      */
 
     function set_student_login_begin_mdy($month, $day, $year){
