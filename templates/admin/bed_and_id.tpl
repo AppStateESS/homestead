@@ -1,3 +1,3 @@
 <tr>
-    <th>Bed {BED_NAME} </th><td>{BED_ID}</td>
+    <td>{ROOM_LABEL} {ROOM_NUM} </td><td>Bedroom {BEDROOM_ID} </td><td>Bed {BED_NAME} &nbsp;&nbsp;&nbsp;&nbsp;</td><td>Username: {BED_ID}</td>
 </tr>
