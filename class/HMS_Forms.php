@@ -1668,7 +1668,7 @@ class HMS_Form
         $welcome .= " - Agreeing to the Housing License Contract<br />";
         $welcome .= " - Completing a Housing Application<br />";
         $welcome .= " - Completing the Residential Learning Community Application if you wish to participate in a RLC<br />";
-        $welcome .= " - Completing the *OPTIONAL* student profile<br /><br />";
+        //$welcome .= " - Completing the *OPTIONAL* student profile<br /><br />";
         $welcome .= "Please note that once you complete the Housing Application you do not have to fill out anything else.<br /><br />";
        
         $tpl['WELCOME'] = $welcome;
