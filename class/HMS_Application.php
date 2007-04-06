@@ -158,7 +158,7 @@ class HMS_Application {
             $result = $db->insert();
             if(!PEAR::isError($result)) {
                 PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
-                $result = HMS_SOAP::report_application_received($_SESSION['asu_username'], '200710', 'HOUS');
+                $result = HMS_SOAP::report_application_received($_SESSION['asu_username'], '200740', 'HOUS');
             }
         }else{
             # do an update
