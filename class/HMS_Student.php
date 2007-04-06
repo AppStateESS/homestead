@@ -369,7 +369,7 @@ class HMS_Student {
                     $message  = "<b>Please read the following License Agreement and click either 'I AGREE' or 'I DISAGREE'<br />";
                     $message .= 'Please note that if you click disagree you will be logged out of HMS.</b><br /><br />';
                     $message .= 'If you wish to read this Agreement as a printable PDF please ';
-                    $message .= '<a href="./mod/hms/inc/contract.pdf">click here.</a><br /><br />';
+                    $message .= '<a href="http://hms.appstate.edu/files/contract.pdf">click here.</a><br /><br />';
 
                     # Check for under 18, display link to print message
                     PHPWS_Core::initModClass('hms','HMS_SOAP.php');
@@ -380,7 +380,7 @@ class HMS_Student {
                         $message .= '<br /><font color="red">Because you are under age 18, you MUST print a copy of the Housing Contract Agreement, ';
                         $message .= 'have a parent or legal gaurdian sign it, and return it to the Department of ';
                         $message .= 'Housing and Residence Life. Your application cannot be fully processed until a Housing Contract ';
-                        $message .= 'singed by a parent or gaurdian is on file. Please <a href="./mod/hms/inc/contract.pdf">click here </a>';
+                        $message .= 'singed by a parent or gaurdian is on file. Please <a href="http://hms.appstate.edu/files/contract.pdf">click here </a>';
                         $message .= 'to open a printer-friendly version of the Housing Contract.</font><br /><br />';
 
                         # Set the 'agreed_to_terms' flag to false
