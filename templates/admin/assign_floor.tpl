@@ -3,12 +3,12 @@
   <div class="box">
     <div class="box-title"> <h1>{TITLE}</h1> </div>
     <div class="box-content">
-        <font color="red"><i>{ERROR}</i></font>
-        You are assigning {HALL}, floor {FLOOR}.<br />
+        <i>{MESSAGE}</i><br />
+        <b>You are assigning {HALL}, floor {FLOOR}.</b><br />
         <table>
             {BODY}
         </table>
-        {SUBMIT}
+        {SUBMIT} {CANCEL} {EDIT}
     </div>
   </div>
 </div>
