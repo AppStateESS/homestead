@@ -183,6 +183,9 @@ function hms_update(&$content, $currentVersion)
             $content[] = '+ All RLC question response lengths have been extended to 2048 characters';
             $content[] = '+ WSDL modified to reflect change in Web Services server location';
 
+        case version_compare($currentVersion, '0.1.11', '<'):
+            $content[] = '+ Fixed minor glitch where assignment by room range was pulling rooms incorrectly (did not take floor number into account)';
+
     }
 
     return TRUE;
