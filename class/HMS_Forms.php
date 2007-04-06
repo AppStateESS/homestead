@@ -348,13 +348,13 @@ class HMS_Form
         $rooms_sql .= "AND hms_floor.building = " . $_REQUEST['halls'] . " ";
         
         if($_REQUEST['room_range'] == '0125') {
-            $rooms_sql .= "AND int4(hms_room.room_number) <= 25 ";
+            $rooms_sql .= "AND int4(hms_room.room_number) <=  " . $_REQUEST['floors'] . "25 ";
         } else if ($_REQUEST['room_range'] == '2650') {
-            $rooms_sql .= "AND int4(hms_room.room_number) > 25 ";
-            $rooms_sql .= "AND int4(hms_room.room_number) <= 50 ";
+            $rooms_sql .= "AND int4(hms_room.room_number) > " . $_REQUEST['floors'] . "25 ";
+            $rooms_sql .= "AND int4(hms_room.room_number) <= " . $_REQUEST['floors'] . "50 ";
         } else if ($_REQUEST['room_range'] == '5175') {
-            $rooms_sql .= "AND int4(hms_room.room_number) > 51 ";
-            $rooms_sql .= "AND int4(hms_room.room_number) <= 75 ";
+            $rooms_sql .= "AND int4(hms_room.room_number) > " . $_REQUEST['floors'] . "51 ";
+            $rooms_sql .= "AND int4(hms_room.room_number) <= " . $_REQUEST['floors'] . "75 ";
         }
 
         $rooms_sql .= "AND hms_room.deleted = 0 ";
