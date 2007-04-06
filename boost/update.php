@@ -177,8 +177,12 @@ function hms_update(&$content, $currentVersion)
             $content[] = '+ Changed templates regarding editing/deleting rooms and floors to be more user friendly';
             $content[] = '+ Changed to version 0.1.10 to get all dev sites and production site in sync';
             $content[] = '+ Changed HMS_Room so beds are deleted manually instead of through a db object';
+            $content[] = '+ Added mechanism to handle mass assignment of an entire floor';
             $content[] = '+ Added student\'s name and gender to student application template';
-            
+            $content[] = '+ All locations where usernames are saved have been extended to size 32';
+            $content[] = '+ All RLC question response lengths have been extended to 2048 characters';
+            $content[] = '+ WSDL modified to reflect change in Web Services server location';
+
     }
 
     return TRUE;
