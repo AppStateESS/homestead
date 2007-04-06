@@ -2791,7 +2791,7 @@ class HMS_Form
         }
         $rlc_form->setLabel('why_specific_communities',
                             'Why are you interested in the specific communities you have chosen?');
-        $rlc_form->setMaxSize('why_specific_communities',500);
+        $rlc_form->setMaxSize('why_specific_communities',2048);
 
         if(isset($_REQUEST['strengths_weaknesses'])){
             $rlc_form->addTextarea('strengths_weaknesses', $_REQUEST['strengths_weaknesses']);
@@ -2800,7 +2800,7 @@ class HMS_Form
         }
         $rlc_form->setLabel('strengths_weaknesses',
                             'What are your strengths and in what areas would you like to improve?');
-        $rlc_form->setMaxSize('strengths_weaknesses',500);
+        $rlc_form->setMaxSize('strengths_weaknesses',2048);
 
         $rlc_form->addSubmit('submit', 'Continue'); 
     
@@ -2908,7 +2908,7 @@ class HMS_Form
 
             $rlc_form2->addTextArea("rlc_question_$i");
             $rlc_form2->setLabel("rlc_question_$i", $result['question_text']);
-            $rlc_form2->setMaxSize("rlc_question_$i", 500);
+            $rlc_form2->setMaxSize("rlc_question_$i", 2048);
         }
         
         $rlc_form2->addSubmit('submit','Submit Application');
