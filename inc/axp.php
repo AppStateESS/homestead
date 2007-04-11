@@ -47,9 +47,7 @@ function axp_authorize($username, $password) {
   
     if ($data == "INVALID") {
         return FALSE;
-    } else if ( preg_match("/ok faculty/i", $data)) {
-        return FALSE;
-    } elseif (preg_match("/ok student/i", $data)) {
+    } else {
         return 'student';
     }
 
