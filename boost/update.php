@@ -186,6 +186,17 @@ function hms_update(&$content, $currentVersion)
         case version_compare($currentVersion, '0.1.11', '<'):
             $content[] = '+ Fixed minor glitch where assignment by room range was pulling rooms incorrectly (did not take floor number into account)';
 
+        case version_compate($currentVersion, '0.1.12', '<'):
+            $files = array();
+            $files[] = 'templates/student/contract.tpl'
+
+            PHPWS_Boost::updateFiles($files, 'hms');
+
+            $content[] = '+ Contract text now shows in a scrollable iframe';
+            $content[] = '+ PDF of the contract now opens in a new tab/window';
+            $content[] = '+ Link to Acrobat download, opens in new tab/window';
+            $content[] = '+ Added link to a FAQ page. We need to make sure there *is* a FAQ page.';
+
     }
 
     return TRUE;
