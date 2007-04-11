@@ -54,8 +54,6 @@ class HMS_Deadlines {
         $db = &new PHPWS_DB('hms_deadlines');
         $deadlines = $db->select('row');
 
-        #test($deadlines);
-
         if(PEAR::isError($deadlines)){
             PHPWS_Error::log($deadlines);
         }

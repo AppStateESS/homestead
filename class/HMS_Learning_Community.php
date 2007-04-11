@@ -289,8 +289,6 @@ class HMS_Learning_Community
             PHPWS_Core::initModClass('hms','HMS_RLC_Application.php');
             $result = HMS_RLC_Application::save_application();
 
-            //test($result);
-
             # Check for an error
             if(PEAR::isError($result)){
                 $template['MESSAGE'] = "Sorry, there was an error working with the database. Your application could not be saved.";

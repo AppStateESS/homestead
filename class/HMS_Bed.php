@@ -65,27 +65,6 @@ class HMS_Bed
     {
         $this->banner_id = $banner_id;
     }
-/*   
-    function set_added_by()
-    {
-        $this->added_by = Current_User::getId();
-    }
-
-    function set_added_on()
-    {
-        $this->added_on = time();
-    }
-
-    function set_deleted_by()
-    {
-        $this->deleted_by = Current_User::getId();
-    }
-
-    function set_deleted_on()
-    {
-        $this->deleted_on = time();
-    }
-*/
 
     function set_deleted($deleted = 0)
     {
