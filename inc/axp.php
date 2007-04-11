@@ -19,7 +19,13 @@
  * user is not in the local system.
  */
 
+require_once(PHPWS_SOURCE_DIR . 'mod/hms/inc/defines.php');
+
 function axp_authorize($username, $password) {
+
+    if(AXP_TEST_FLAG){
+        return true;
+    }
 
     $address = 'axp.appstate.edu';
     $port    = 2020;

@@ -1,17 +1,12 @@
 <?php
 
-/**
- * Testing Flag
- * Set to true to use canned data (no SOAP connection
- * will ever be made).
- */
-define('TEST_FLAG', true);
+require_once(PHPWS_SOURCE_DIR . 'mod/hms/inc/defines.php');
 
 class HMS_SOAP{
 
     function is_valid_student($username)
     {
-        if(TEST_FLAG){
+        if(SOAP_TEST_FLAG){
             # return canned data
             return true;
         }else{
@@ -32,7 +27,7 @@ class HMS_SOAP{
 
     function get_first_name($username)
     {
-        if(TEST_FLAG){
+        if(SOAP_TEST_FLAG){
             # return canned data
             return "Jeremy";
         }else{
@@ -51,7 +46,7 @@ class HMS_SOAP{
 
     function get_middle_name($username)
     {
-        if(TEST_FLAG){
+        if(SOAP_TEST_FLAG){
             # return canned data
             return "Lee";
         }else{
@@ -70,7 +65,7 @@ class HMS_SOAP{
 
     function get_last_name($username)
     {
-        if(TEST_FLAG){
+        if(SOAP_TEST_FLAG){
             # return canned data
             return "Booker";
         }else{
@@ -93,7 +88,7 @@ class HMS_SOAP{
      */
     function get_full_name($username)
     {
-        if(TEST_FLAG){
+        if(SOAP_TEST_FLAG){
             # return canned data
             return "Jeremy Lee Booker";
         }else{
@@ -118,7 +113,7 @@ class HMS_SOAP{
      */
     function get_full_name_inverted($username)
     {
-        if(TEST_FLAG){
+        if(SOAP_TEST_FLAG){
             # return canned data
             return "Booker, Jeremy Lee";
         }else{
@@ -144,7 +139,7 @@ class HMS_SOAP{
      */
     function get_gender($username, $numeric = FALSE)
     {
-        if(TEST_FLAG){
+        if(SOAP_TEST_FLAG){
             # return canned data
             if($numeric){
                 return 1;
@@ -181,7 +176,7 @@ class HMS_SOAP{
      */
     function get_address($username)
     {
-        if(TEST_FLAG){
+        if(SOAP_TEST_FLAG){
             # return canned data
             return array('line1'  => '123 Rivers St.',
                          'line2'  => 'Apt 12',
@@ -211,7 +206,7 @@ class HMS_SOAP{
      */
     function get_student_type($username)
     {
-        if(TEST_FLAG){
+        if(SOAP_TEST_FLAG){
             # return canned data
             return "T";
         }else{
@@ -237,7 +232,7 @@ class HMS_SOAP{
      */
     function get_student_class($username)
     {
-        if(TEST_FLAG){
+        if(SOAP_TEST_FLAG){
             # return canned data
             return "SR";
         }else{
@@ -260,7 +255,7 @@ class HMS_SOAP{
      */
     function get_dob($username)
     {
-        if(TEST_FLAG){
+        if(SOAP_TEST_FLAG){
             # return canned data
             return "1986-09-05";
         }else{
@@ -298,7 +293,7 @@ class HMS_SOAP{
 
     function report_application_received($username, $term, $plan_code, $meal_code = NULL)
     {
-        if(TEST_FLAG){
+        if(SOAP_TEST_FLAG){
             return;
         }
         
@@ -312,7 +307,7 @@ class HMS_SOAP{
 
     function report_room_assignment($username, $term, $building_code, $room_code, $plan_code, $meal_code)
     {
-        if(TEST_FLAG){
+        if(SOAP_TEST_FLAG){
             return;
         }
 
