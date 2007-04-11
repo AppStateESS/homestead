@@ -188,7 +188,7 @@ function hms_update(&$content, $currentVersion)
 
         case version_compate($currentVersion, '0.1.12', '<'):
             $files = array();
-            $files[] = 'templates/student/contract.tpl'
+            $files[] = 'templates/student/contract.tpl';
 
             PHPWS_Boost::updateFiles($files, 'hms');
 
