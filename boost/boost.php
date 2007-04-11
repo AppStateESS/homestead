@@ -5,6 +5,6 @@
     $image_dir    = TRUE;
     $file_dir     = FALSE;
     $about        = TRUE;
-    $priority     = 50;
+    $priority     = 99;
     $dependency   = FALSE;
 ?>
