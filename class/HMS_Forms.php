@@ -1670,7 +1670,11 @@ class HMS_Form
         $welcome .= " - Completing the Residential Learning Community Application if you wish to participate in a RLC<br />";
         //$welcome .= " - Completing the *OPTIONAL* student profile<br /><br />";
         $welcome .= "Please note that once you complete the Housing Application you do not have to fill out anything else.<br /><br />";
-       
+      
+        $welcome .= "<br /><br />";
+        $welcome .= "<b>If you are experiencing problems please read <a href=\"./index.php?module=webpage&id=1\" target=\"_blank\">this page</a>.";
+        $welcome .= "<br /><br />";
+
         $tpl['WELCOME'] = $welcome;
         $tpl['ERROR']   = $this->get_error_msg();
         $final = PHPWS_Template::process($tpl, 'hms', 'misc/login.tpl');
