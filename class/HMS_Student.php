@@ -369,7 +369,7 @@ class HMS_Student {
                     $message  = "<b>Please read the following License Agreement and click either 'I AGREE' or 'I DISAGREE'<br />";
                     $message .= 'Please note that if you click disagree you will be logged out of HMS.</b><br /><br />';
                     $message .= 'If you wish to read this Agreement as a printable PDF please ';
-                    $message .= '<a href="http://hms.appstate.edu/files/contract.pdf">click here.</a><br /><br />';
+                    $message .= '<a href="http://hms.appstate.edu/files/contract.pdf" target="_blank">click here.</a><br /><br />';
 
                     # Check for under 18, display link to print message
                     PHPWS_Core::initModClass('hms','HMS_SOAP.php');
