@@ -24,7 +24,7 @@ require_once(PHPWS_SOURCE_DIR . 'mod/hms/inc/defines.php');
 function axp_authorize($username, $password) {
 
     if(AXP_TEST_FLAG){
-        return true;
+        return 'student';
     }
 
     $address = 'axp.appstate.edu';
