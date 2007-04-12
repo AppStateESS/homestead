@@ -1,6 +1,6 @@
 <?php
 
-define('HMS_SIDE_STUDNET_NOT_STARTED', -1);
+define('HMS_SIDE_STUDENT_NOT_STARTED', -1);
 define('HMS_SIDE_STUDENT_MIN',          1);
 define('HMS_SIDE_STUDENT_AGREE',        1);
 define('HMS_SIDE_STUDENT_APPLY',        2);
