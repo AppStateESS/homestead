@@ -102,14 +102,14 @@ class HMS_Side_Thingie {
             
         # If the student does not have an application on file... check apply dates, set dates/styles accordingly
         if($this->curr_timestamp < $this->deadlines->get_submit_application_begin_timestamp()){
-            $this->steps_text[HMS_SIDE_STUDENT_AGREE] .= " (available ". date('n/j/y',$this->deadlines['submit_application_begin_timestamp']) .")";
-            $this->steps_text[HMS_SIDE_STUDENT_APPLY] .= " (available ". date('n/j/y',$this->deadlines['submit_application_begin_timestamp']) .")";
+            $this->steps_text[HMS_SIDE_STUDENT_AGREE] .= " (available ". date('n/j/y',$this->deadlines->get_submit_application_begin_timestamp()) .")";
+            $this->steps_text[HMS_SIDE_STUDENT_APPLY] .= " (available ". date('n/j/y',$this->deadlines->get_submit_application_begin_timestamp()) .")";
             $this->steps_styles[HMS_SIDE_STUDENT_AGREE] = 'STEP_NOTYET';
             $this->steps_styles[HMS_SIDE_STUDENT_APPLY] = 'STEP_NOTYET';
             return;
         }else if($this->curr_timestamp > $this->deadlines->get_submit_application_begin_timestamp() && $this->curr_timestamp < $this->deadlines->get_submit_application_end_timestamp()){
-            $this->steps_text[HMS_SIDE_STUDENT_AGREE] .= " (complete by ". date('n/j/y',$this->deadlines['submit_application_begin_timestamp']) .")";
-            $this->steps_text[HMS_SIDE_STUDENT_APPLY] .= " (complete by ". date('n/j/y',$this->deadlines['submit_application_begin_timestamp']) .")";
+            $this->steps_text[HMS_SIDE_STUDENT_AGREE] .= " (complete by ". date('n/j/y',$this->deadlines->get_submit_application_begin_timestamp()) .")";
+            $this->steps_text[HMS_SIDE_STUDENT_APPLY] .= " (complete by ". date('n/j/y',$this->deadlines->get_submit_application_begin_timestamp()) .")";
             return;
         }else if($this->curr_timestamp > $this->deadlines->get_submit_application_end_timestamp()){
             $this->steps_styles[HMS_SIDE_STUDENT_AGREE] = 'STEP_MISSED';
@@ -135,11 +135,11 @@ class HMS_Side_Thingie {
 
         # If the student does not have an application on file... check apply dates, set dates/styles accordingly
         if($this->curr_timestamp < $this->deadlines->get_submit_application_begin_timestamp()){
-            $this->steps_text[HMS_SIDE_STUDENT_RLC] .= " (available ". date('n/j/y',$this->deadlines['submit_application_begin_timestamp']) .")";
+            $this->steps_text[HMS_SIDE_STUDENT_RLC] .= " (available ". date('n/j/y',$this->deadlines->get_submit_application_begin_timestamp()) .")";
             $this->steps_styles[HMS_SIDE_STUDENT_RLC] = 'STEP_NOTYET';
             return;
         }else if($this->curr_timestamp > $this->deadlines->get_submit_application_begin_timestamp() && $this->curr_timestamp < $this->deadlines->get_submit_rlc_application_end_timestamp()){
-            $this->steps_text[HMS_SIDE_STUDENT_RLC] .= " (complete by ". date('n/j/y',$this->deadlines['submit_rlc_application_end_timestamp']) . ")";
+            $this->steps_text[HMS_SIDE_STUDENT_RLC] .= " (complete by ". date('n/j/y',$this->deadlines->get_submit_rlc_application_end_timestamp()) . ")";
             $this->steps_styles[HMS_SIDE_STUDENT_RLC] = 'STEP_TOGO';
             return;
         }else if($this->curr_timestamp > $this->deadlines->get_submit_rlc_application_end_timestamp()){
