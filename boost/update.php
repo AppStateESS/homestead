@@ -186,7 +186,7 @@ function hms_update(&$content, $currentVersion)
         case version_compare($currentVersion, '0.1.11', '<'):
             $content[] = '+ Fixed minor glitch where assignment by room range was pulling rooms incorrectly (did not take floor number into account)';
 
-        case version_compate($currentVersion, '0.1.12', '<'):
+        case version_compare($currentVersion, '0.1.12', '<'):
             $files = array();
             $files[] = 'templates/student/contract.tpl';
 
