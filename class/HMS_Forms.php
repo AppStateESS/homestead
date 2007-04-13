@@ -2945,8 +2945,50 @@ class HMS_Form
         return TRUE;
     }
 
-    function show_make_new_rlc_assignments(){
-        return "";    
+    function show_profile_form()
+    {
+
+        require_once(PHPWS_SOURCE_DIR . 'mod/hms/inc/profile_options.php');
+
+        $template = array();
+       
+        $profile_form = &new PHPWS_Form('profile_form');
+        $profile_form->addHidden('type', 'student');
+        $profile_form->addHidden('op','student_profile_submit');
+
+        /***** About Me *****/
+        $profile_form->addCheck('hobbies_checkbox',$hobbies);
+        $profile_form->addLabel('hobbies_checkbox',$hobbies_labels);
+
+        $profile_form->addCheck('music_checkbox',$music);
+        $profile_form->addLabel('music_checkbox',$music_labels);
+
+        $profile_form->addDropBox('political_views_dropbox',$political_views);
+
+        /***** College Life *****/
+        $profile_form->addDropBox('intended_major',$majors);
+
+        $profile_form->addDropBox('important_experience',$experiences);
+
+        /***** My Daily Life *****/
+        $profile_form->addDropBox('sleep_time',$sleep_times);
+
+        $profile_form->addDropBox('wakeup_time',$wakeup_times);
+
+        $profile_form->addDropBox('overnight_guests',$overnight_guests);
+
+        $profile_form->addDropBox('loudness',$loudness);
+        
+        $profile_form->addDropBox('cleanliness',$cleanliness);
+        
+        $profile_form->addDropBox('study_time',$study_times);
+        
+        $profile_form->addDropBox('free_time',$free_time);
+
+        $profile_form->mergeTemplate($template);
+        $template = $profile_form->getTemplate();
+
+        return PHPWS_Template::process($template,'hms','student/profile_form.tpl');
     }
 
 };

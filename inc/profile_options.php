@@ -1,0 +1,242 @@
+<?php
+/**
+ * Definition of large arrays for the Student Profile form
+ * @author Jeremy Booker <jbooker AT tux DOT appstate DOT edu>
+ */
+
+$hobbies = array(
+            'arts_and_crafts',
+            'books_and_reading',
+            'cars',
+            'church_activities',
+            'collecting',
+            'computers_and_technology',
+            'dancing',
+            'fashion',
+            'fine_arts',
+            'gardening',
+            'games',
+            'humor',
+            'investing_personal_finance',
+            'movies',
+            'music',
+            'outdoor_activities',
+            'pets_and_animals',
+            'photography',
+            'politics',
+            'sports',
+            'travel',
+            'tv_shows',
+            'volunteering',
+            'writing');
+$hobbies_labels = array(
+            'Arts and Crafts',
+            'Books and Reading',
+            'Cars',
+            'Church Activities',
+            'Collecting',
+            'Computers and Technology',
+            'Dancing',
+            'Fashion',
+            'Fine Arts',
+            'Gardening',
+            'Games',
+            'Humor',
+            'Investing/Personal Finance',
+            'Movies',
+            'Music',
+            'Outdoor Activities',
+            'Pets and Animals',
+            'Photography',
+            'Politics',
+            'Sports',
+            'Travel',
+            'TV Shows',
+            'Volunteering',
+            'Writing');
+
+$music = array(
+            'alternative',
+            'ambient',
+            'beach',
+            'bluegrass',
+            'blues',
+            'classical',
+            'classic_rock',
+            'country',
+            'electronic',
+            'folk',
+            'heavy_metal',
+            'hip_hop',
+            'house',
+            'industrial',
+            'jazz',
+            'popular_music',
+            'progressive',
+            'punk',
+            'r_and_b',
+            'rap',
+            'reggae',
+            'rock',
+            'world_music');
+$music_labels = array(
+            'Alternative',
+            'Ambient',
+            'Beach',
+            'Bluegrass',
+            'Blues',
+            'Classical',
+            'Classic Rock',
+            'Country',
+            'Electronic',
+            'Folk',
+            'Heavy metal',
+            'Hip hop',
+            'House',
+            'Industrial',
+            'Jazz',
+            'Popular music',
+            'Progressive',
+            'Punk',
+            'R&B',
+            'Rap',
+            'Reggae',
+            'Rock',
+            'World music');
+
+$political_views = array(
+                        0 => 'Very liberal',
+                        1 => 'Somewhat liberal',
+                        2 => 'Moderate',
+                        3 => 'Somewhat conservative',
+                        4 => 'Very conservative');
+
+$majors = array(
+                0  => 'Accounting',
+				1  => 'Anthropology',
+				2  => 'Apparel and Textiles',
+				3  => 'Appropriate Technology',
+				4  => 'Art',
+				5  => 'Athletic Training',
+				6  => 'Biology',
+				7  => 'Building Sciences',
+				8  => 'Business Education',
+				9  => 'Chemistry',
+				10 => 'Chemistry, Secondary Education',
+				11 => 'Child Development',
+				12 => 'Clinical Laboratory Sciences',
+				13 => 'Communication',
+				14 => 'Communication Disorders',
+				15 => 'Community and Regional Planning',
+				16 => 'Computer Information Systems',
+				17 => 'Computer Science',
+				18 => 'Criminal Justice',
+				19 => 'Dance Studies',
+				20 => 'Economics',
+				21 => 'Elementary Education',
+				22 => 'English',
+				23 => 'English, Secondary Education',
+				24 => 'Exercise Science',
+				25 => 'Family and Consumer Sciences, Secondary Education',
+				26 => 'Finance and Banking',
+				27 => 'Foods and Nutrition',
+				28 => 'French',
+				29 => 'French, Education',
+				30 => 'Geography',
+				31 => 'Geology',
+				32 => 'Geology, Secondary Education',
+				33 => 'Graphic Design',
+				34 => 'Graphics Arts and Imaging Technology',
+				35 => 'Health Care Management',
+				36 => 'Health Education',
+				37 => 'Health Education, Secondary Education',
+				38 => 'Health Promotion',
+				39 => 'History',
+				40 => 'History, Secondary Education',
+				41 => 'Hospitality and Tourism Management',
+				42 => 'Industrial Design',
+				43 => 'Interdisciplinary Studies',
+				44 => 'Interior Design',
+				45 => 'International Business',
+				46 => 'Management',
+				47 => 'Marketing',
+				48 => 'Mathematics',
+				49 => 'Mathematics, Secondary Education',
+				50 => 'Middle Grades Education',
+				51 => 'Music Education',
+				52 => 'Music Industry Studies',
+				53 => 'Music Performance',
+				54 => 'Music Therapy',
+				55 => 'Philosophy and Religion',
+				56 => 'Physical Education',
+				57 => 'Physics',
+				58 => 'Political Science',
+				59 => 'Psychology',
+				60 => 'Recreation Management',
+				61 => 'Risk & Insurance',
+				62 => 'Social Work',
+				63 => 'Sociology',
+				64 => 'Spanish',
+				65 => 'Spanish, Education',
+				66 => 'Social Sciences, Education',
+				67 => 'Special Education',
+				68 => 'Studio Art',
+				69 => 'Teaching Theater Arts, K-12',
+				70 => 'Technical Photography',
+				71 => 'Technology Education',
+				72 => 'Theater Arts',
+				73 => 'Undecided');
+
+$experiences = array(
+				0 => 'My academic studies and intellectual growth',
+				1 => 'The friends and relationships I will form while at college',
+				2 => 'I feel both my academic studies and relationships are equally important.');
+
+$sleep_times = array(
+				0 => '8:00PM or earlier',
+				1 => 'Between 9:00PM and 10:00PM',
+				2 => 'Between 10:00PM and 11:00PM',
+				3 => 'Between 11:00PM and Midnight',
+				4 => 'Between Midnight and 1:00AM',
+				5 => '1:00AM or later');
+
+$wakeup_times = array(
+				0 => '6:00AM or earlier',
+				1 => 'Between 7:00AM and 8:00AM',
+				2 => 'Between 8:00AM and 9:00AM',
+				3 => 'Between 9:00AM and 10:00AM',
+				4 => 'Between 10:00AM and 11:00AM',
+				5 => '11:00AM or later');
+
+$overnight_guests = array(
+				0 => 'Occasionally',
+				1 => 'Rarely',
+				2 => 'Never');
+
+$loudness = array(
+				0 => 'I am very loud',
+				1 => 'I am loud',
+				2 => 'I make an average amount of noise',
+				3 => 'I am more quiet than most people',
+				4 => 'I am extremely quiet');
+
+$cleanliness = array(
+				0 => 'Very clean and tidy',
+				1 => 'Moderately clean and tidy',
+				2 => 'About average in terms of cleanliness and organization',
+				3 => 'Somewhat messy and occasionally disorganized',
+				4 => 'Very messy and disorganized');
+
+$study_times = array(
+				0 => 'Early in the morning',
+				1 => 'In the morning and early afternoon',
+				2 => 'In the afternoon and early evening',
+				3 => 'In the evening',
+				4 => 'Late at night');
+
+$free_time = array(
+				0 => 'Go out with a large group of friends.',
+				1 => 'Have a small group of close friends over.',
+				2 => 'Spend time alone.');
+
+?>

@@ -201,10 +201,12 @@ function hms_update(&$content, $currentVersion)
         case version_compare($currentVersion, '0.1.14', '<'):
             $files = array();
             $files[] = 'templates/misc/side_thingie.tpl';
+            $files[] = 'templates/student/profile_form.tpl';
 
             PHPWS_Boost::updateFiles($files, 'hms');
 
             $content[] = '+ Adjusted color of "optionally skipped" items in side thingie';
+            $content[] = '+ Added a template for the profile form';
     }
 
     return TRUE;
