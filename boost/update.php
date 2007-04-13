@@ -197,6 +197,14 @@ function hms_update(&$content, $currentVersion)
             $content[] = '+ Link to Acrobat download, opens in new tab/window';
             $content[] = '+ Added link to a FAQ page. We need to make sure there *is* a FAQ page.';
 
+        # skipped 0.1.13??
+        case version_compare($currentVersion, '0.1.14', '<'):
+            $files = array();
+            $files[] = 'templates/misc/side_thingie.tpl';
+
+            PHPWS_Boost::updateFiles($files, 'hms');
+
+            $content[] = '+ Adjusted color of "optionally skipped" items in side thingie';
     }
 
     return TRUE;

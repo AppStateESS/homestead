@@ -26,7 +26,7 @@
         <li style="color: #F00;">{STEP_MISSED}</li>
 <!-- END MISSED -->
 <!-- BEGIN OPT_MISSED -->
-        <li style="color: #00F;">{STEP_OPT_MISSED}</li>
+        <li style="color: #CCC;">{STEP_OPT_MISSED}</li>
 <!-- END OPT_MISSED -->
 
 <!-- END progress -->

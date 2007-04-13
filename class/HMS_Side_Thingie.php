@@ -143,6 +143,7 @@ class HMS_Side_Thingie {
             $this->steps_styles[HMS_SIDE_STUDENT_RLC] = 'STEP_TOGO';
             return;
         }else if($this->curr_timestamp > $this->deadlines->get_submit_rlc_application_end_timestamp()){
+            $this->steps_text[HMS_SIDE_STUDENT_RLC] .= "(skipped)";
             $this->steps_styles[HMS_SIDE_STUDENT_RLC] = 'STEP_OPT_MISSED';
             return;
         }
