@@ -15,7 +15,55 @@ class HMS_Student_Profile{
     var $user_id;
     var $date_submitted;
 
-    # check boxes
+    # Music choices 
+    var $arts_and_crafts = null;
+    var $books_and_reading = null;
+    var $cars = null;
+    var $church_activities = null;
+    var $collecting = null;
+    var $computers_and_technology = null;
+    var $dancing = null;
+    var $fashion = null;
+    var $fine_arts = null;
+    var $gardening = null;
+    var $games = null;
+    var $humor = null;
+    var $investing_personal_finance = null;
+    var $movies = null;
+    var $music = null;
+    var $outdoor_activities = null;
+    var $pets_and_animals = null;
+    var $photography = null;
+    var $politics = null;
+    var $sports = null;
+    var $travel = null;
+    var $tv_shows = null;
+    var $volunteering = null;
+
+    # Hobby choices
+    var $alternative = null;
+    var $ambient = null;
+    var $beach = null;
+    var $bluegrass = null;
+    var $blues = null;
+    var $classical = null;
+    var $classic_rock = null;
+    var $country = null;
+    var $electronic = null;
+    var $folk = null;
+    var $heavy_metal = null;
+    var $hip_hop = null;
+    var $house = null;
+    var $industrial = null;
+    var $jazz = null;
+    var $popular_music = null;
+    var $progressive = null;
+    var $punk = null;
+    var $r_and_b = null;
+    var $rap = null;
+    var $reggae = null;
+    var $rock = null;
+    var $world_music = null;
 
     # drop downs
     var $political_view;
@@ -46,7 +94,27 @@ class HMS_Student_Profile{
 
     function init()
     {
+        
+    }
 
+    function save()
+    {
+        
+    }
+
+    function check_for_profile()
+    {
+        
+    }
+
+    function profile_pager()
+    {
+        
+    }
+
+    function get_pager_tags()
+    {
+        
     }
 
     /**
