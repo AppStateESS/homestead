@@ -165,7 +165,7 @@ class HMS_Side_Thingie {
         */
         
         # For now, always set to NOT YET    
-        $this->steps_text[HMS_SIDE_STUDENT_PROFILE] .= " (available 4/15/07)";
+        $this->steps_text[HMS_SIDE_STUDENT_PROFILE] .= " (available 4/23/07)";
         $this->steps_styles[HMS_SIDE_STUDENT_PROFILE] = 'STEP_NOTYET';
         return;
 
@@ -180,7 +180,7 @@ class HMS_Side_Thingie {
         }
         
         # For now, always set to NOT YET    
-        $this->steps_text[HMS_SIDE_STUDENT_ROOMMATE] .= " (available 4/15/07)";
+        $this->steps_text[HMS_SIDE_STUDENT_ROOMMATE] .= " (available 4/23/07)";
         $this->steps_styles[HMS_SIDE_STUDENT_ROOMMATE] = 'STEP_NOTYET';
         return;
 
@@ -194,7 +194,7 @@ class HMS_Side_Thingie {
         }
 
         # For now, always set to NOT YET    
-        $this->steps_text[HMS_SIDE_STUDENT_VERIFY] .= " (available 4/15/07)";
+        $this->steps_text[HMS_SIDE_STUDENT_VERIFY] .= " (available 7/15/07)";
         $this->steps_styles[HMS_SIDE_STUDENT_VERIFY] = 'STEP_NOTYET';
         return;
     }
