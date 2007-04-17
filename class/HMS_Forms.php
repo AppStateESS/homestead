@@ -2991,8 +2991,9 @@ class HMS_Form
         $profile_form->addDropBox('cleanliness',$cleanliness);
         $profile_form->addLabel('cleanliness','I would describe myself as: ');
         
-        
-        $profile_form->addDropBox('study_time',$study_times);
+        $profile_form->addCheck('study_times',$study_times);
+        $profile_form->addLabel('study_times',$study_times_labels);
+        $template['STUDY_TIMES_LABEL'] = 'I prefer to study (check all that apply:)');
         
         $profile_form->addDropBox('free_time',$free_time);
         $profile_form->addLabel('free_time','If I have free time I would rather: ');

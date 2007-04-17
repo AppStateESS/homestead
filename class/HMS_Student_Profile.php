@@ -64,6 +64,13 @@ class HMS_Student_Profile{
     var $reggae = null;
     var $rock = null;
     var $world_music = null;
+    
+    # Study times
+    var $study_early_morning = null;
+    var $study_morning_afternoon = null;
+    var $study_afternoon_evening = null;
+    var $study_evening = null;
+    var $study_late_night = null;
 
     # drop downs
     var $political_view;
@@ -74,7 +81,6 @@ class HMS_Student_Profile{
     var $overnight_guests;
     var $loudness;
     var $cleanliness;
-    var $study_time;
     var $free_time;
 
     
@@ -271,14 +277,6 @@ class HMS_Student_Profile{
         return $this->cleanliness;
     }
     
-    function set_study_time($time){
-        $this->study_time = $time;
-    }
-
-    function get_study_time(){
-        return $this->study_time;
-    }
-
     function set_free_time($time){
         $this->free_time = $time;
     }
@@ -869,6 +867,69 @@ class HMS_Student_Profile{
         }else{
             return FALSE;
         }
-    } 
+    }
+    
+    /**
+     * Study times check boxes
+     */
+    function set_study_early_morning($value = 1){
+        $this->study_early_morning = $value;
+    }
+
+    function get_study_early_morning(){
+        if($this->study_early_morning == 1){
+            return TRUE;
+        }else{
+            return FALSE;
+        }
+    }
+
+    function set_study_morning_afternoon($value = 1){
+        $this->study_morning_afternoon = $value;
+    }
+
+    function get_study_morning_afternoon(){
+        if($this->study_morning_afternoon == 1){
+            return TRUE;
+        }else{
+            return FALSE;
+        }
+    }
+
+    function set_study_afternoon_evening($value = 1){
+        $this->study_afternoon_evening = $value;
+    }
+
+    function get_study_afternoon_evening(){
+        if($this->study_afternoon_evening == 1){
+            return TRUE;
+        }else{
+            return FALSE;
+        }
+    }
+
+    function set_study_evening($value = 1){
+        $this->study_evening = $value;
+    }
+
+    function get_study_evening(){
+        if($this->study_evening == 1){
+            return TRUE;
+        }else{
+            return FALSE;
+        }
+    }
+
+    function set_study_late_night($value = 1){
+        $this->study_late_night = $value;
+    }
+
+    function get_study_late_night(){
+        if($this->study_late_night == 1){
+            return TRUE;
+        }else{
+            return FALSE;
+        }
+    }
 };
 ?>

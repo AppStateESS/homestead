@@ -104,13 +104,26 @@ $music_labels = array(
             'Rock',
             'World music');
 
+$study_times = array(
+            'study_early_morning',
+            'study_morning_afternoon',
+            'study_afternoon_evening',
+            'study_evening',
+            'study_late_night');
+$study_times_labels = array(
+            'Early in the morning',
+            'In the morning and early afternoon',
+            'In the afternoon and early evening',
+            'In the evening',
+            'Late at night');
+            
 $political_views = array(
-                        0 => 'Prefer not to say',
-                        1 => 'Very liberal',
-                        2 => 'Somewhat liberal',
-                        3 => 'Moderate',
-                        4 => 'Somewhat conservative',
-                        5 => 'Very conservative');
+            0 => 'Prefer not to say',
+            1 => 'Very liberal',
+            2 => 'Somewhat liberal',
+            3 => 'Moderate',
+            4 => 'Somewhat conservative',
+            5 => 'Very conservative');
 
 $majors = array(
                 0  => 'Prefer not to say',
@@ -235,7 +248,6 @@ $cleanliness = array(
 				5 => 'Very messy and disorganized');
 
 $study_times = array(
-                0 => 'Prefer not to say',
 				1 => 'Early in the morning',
 				2 => 'In the morning and early afternoon',
 				3 => 'In the afternoon and early evening',
