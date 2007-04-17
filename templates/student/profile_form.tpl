@@ -11,11 +11,15 @@
             </tr>
             <tr>
                 <td>{HOBBIES_CHECKBOX_LABEL}</td>
-                <td>{HOBBIES_CHECKBOX}</td>
+                <td>
+                  {HOBBIES_CHECKBOX}{HOBBIES_CHECKBOX_ARTS_AND_CRAFTS_LABEL}
+                </td>
             </tr>
             <tr>
+                <!-- BEGIN music_repeat -->
                 <td>{MUSIC_CHECKBOX_LABEL}</td>
                 <td>{MUSIC_CHECKBOX}</td>
+                <!-- END music_repeat -->
             </tr>
             <tr>
                 <td>{POLITICAL_VIEWS_DROPBOX_LABEL}</td>
@@ -45,7 +49,7 @@
             </tr>
             <tr>
                 <td>{OVERNIGHT_GUESTS_LABEL}</td>
-                <td>{OVERNIGHT_GUESES}</td>
+                <td>{OVERNIGHT_GUESTS}</td>
             </tr>
             <tr>
                 <td>{LOUDNESS_LABEL}</td>
@@ -61,7 +65,7 @@
             </tr>
             <tr>
                 <td>{FREE_TIME_LABEL}</td>
-                <td>{FIREE_TIME}</td>
+                <td>{FREE_TIME}</td>
             </tr>
         </table>
         {END_FORM}
