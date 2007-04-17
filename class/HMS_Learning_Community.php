@@ -130,11 +130,12 @@ class HMS_Learning_Community
 
         $curr_timestamp = mktime();
 
+        // TODO: change this block so it uses the deadlines class.
         if($curr_timestamp < $deadlines['submit_application_begin_timestamp']){
-            $template['MESSAGE'] = "Sorry, it is too early to fill out an RLC application.";
+            $template['MESSAGE'] = "Sorry, it is too soon to fill out an RLC application.";
             return PHPWS_Template::process($template,'hms','student/rlc_signup_form_page1.tpl');
         }else if($curr_timestamp > $deadlines['submit_rlc_application_end_timestamp']){
-            $template['MESSAGE'] = "Sorry, it is too late to fill out an RLC application.";
+            $template['MESSAGE'] = "Sorry, the RLC application deadline has already passed. Please contact Housing & Residence life if you are interested in applying for a RLC.";
             return PHPWS_Template::process($template,'hms','student/rlc_signup_form_page1.tpl');
         }    
         
@@ -294,6 +295,8 @@ class HMS_Learning_Community
                 $template['MESSAGE'] = "Sorry, there was an error working with the database. Your application could not be saved.";
             }else{
                 $template['SUCCESS'] = "Your application was submitted successfully.";
+                $template['SUCCESS'] .= "<br /><br />";
+                $template['SUCCESS'] .= PHPWS_Text::secureLink(_('Back to Main Menu'), 'hms', array('type'=>'student','op'=>'main'));
             }
             
             return PHPWS_Template::process($template, 'hms', 'student/rlc_signup_confirmation.tpl');
