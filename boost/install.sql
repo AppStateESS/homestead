@@ -294,7 +294,7 @@ CREATE TABLE hms_student_profiles (
     rap smallint default 0,
     reggae smallint default 0,
     rock smallint default 0,
-    world_music
+    world_music smallint default 0,
     political_view smallint default 0,
     major smallint default 0,
     experience smallint default 0,
