@@ -199,6 +199,12 @@ function hms_update(&$content, $currentVersion)
 
         # skipped 0.1.13??
         case version_compare($currentVersion, '0.1.14', '<'):
+            $db = &new PHPWS_DB;
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_1_14.sql');
+            if(PEAR::isError($result)) {
+                return $result;
+            }
+            
             $files = array();
             $files[] = 'templates/misc/side_thingie.tpl';
             $files[] = 'templates/student/profile_form.tpl';
