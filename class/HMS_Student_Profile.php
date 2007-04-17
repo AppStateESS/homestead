@@ -164,6 +164,18 @@ class HMS_Student_Profile{
     }
 
     /**
+     * Static methods
+     */
+
+    /**
+     * Uses HMS_Forms to display the profile form.
+     */
+    function showProfileForm(){
+        PHPWS_Core::initModClass('hms','HMS_Forms.php');
+        return HMS_Form::show_profile_form();
+    }
+
+    /**
      * Accessor / Mutator Methods
      */
 
