@@ -2955,48 +2955,50 @@ class HMS_Form
         $profile_form = &new PHPWS_Form('profile_form');
         $profile_form->addHidden('type', 'student');
         $profile_form->addHidden('op','student_profile_submit');
+        $profile_form->useRowRepeat();
 
         /***** About Me *****/
         $profile_form->addCheck('hobbies_checkbox',$hobbies);
-        $profile_form->addLabel('hobbies_checkbox',$hobbies_labels);
-        $template['HOBBIES_LABEL'] = 'My Hobbies and Interests (check all that apply)';
+        $profile_form->setLabel('hobbies_checkbox',$hobbies_labels);
+        test($profile_form,1);
+        $template['HOBBIES_CHECKBOX_LABEL'] = 'My Hobbies and Interests (check all that apply)';
 
         $profile_form->addCheck('music_checkbox',$music);
-        $profile_form->addLabel('music_checkbox',$music_labels);
-        $template['MUSIC_LABEL'] = 'My Music Preferences (check all that apply)';
+        $profile_form->setLabel('music_checkbox',$music_labels);
+        $template['MUSIC_CHECKBOX_LABEL'] = 'My Music Preferences (check all that apply)';
 
         $profile_form->addDropBox('political_views_dropbox',$political_views);
-        $profile_form->addLabel('political_view_dropbox_label','I consider myself: ');
+        $profile_form->setLabel('political_views_dropbox','I consider myself: ');
 
         /***** College Life *****/
         $profile_form->addDropBox('intended_major',$majors);
-        $profile_form->addLabel('intended_major','My intended academic major: ');
+        $profile_form->setLabel('intended_major','My intended academic major: ');
 
         $profile_form->addDropBox('important_experience',$experiences);
-        $profile_form->addLabel('important_experience','I feel the following is the most important part of my college experience: ');
+        $profile_form->setLabel('important_experience','I feel the following is the most important part of my college experience: ');
 
         /***** My Daily Life *****/
         $profile_form->addDropBox('sleep_time',$sleep_times);
-        $profile_form->addLabel('sleep_time','I generally go to sleep: ');
+        $profile_form->setLabel('sleep_time','I generally go to sleep: ');
 
         $profile_form->addDropBox('wakeup_time',$wakeup_times);
-        $profile_form->addLabel('wakeup_time','I generally wake up: ');
+        $profile_form->setLabel('wakeup_time','I generally wake up: ');
 
         $profile_form->addDropBox('overnight_guests',$overnight_guests);
-        $profile_form->addLabel('overnight_guests','I plan on hosting overnight guests: ');
+        $profile_form->setLabel('overnight_guests','I plan on hosting overnight guests: ');
 
         $profile_form->addDropBox('loudness',$loudness);
-        $profile_form->addLabel('loudness','In my daily activities (music, conversations, etc.): ');
+        $profile_form->setLabel('loudness','In my daily activities (music, conversations, etc.): ');
         
         $profile_form->addDropBox('cleanliness',$cleanliness);
-        $profile_form->addLabel('cleanliness','I would describe myself as: ');
+        $profile_form->setLabel('cleanliness','I would describe myself as: ');
         
         $profile_form->addCheck('study_times',$study_times);
-        $profile_form->addLabel('study_times',$study_times_labels);
-        $template['STUDY_TIMES_LABEL'] = 'I prefer to study (check all that apply:)');
+        $profile_form->setLabel('study_times',$study_times_labels);
+        $template['STUDY_TIMES_LABEL'] = 'I prefer to study (check all that apply:)';
         
         $profile_form->addDropBox('free_time',$free_time);
-        $profile_form->addLabel('free_time','If I have free time I would rather: ');
+        $profile_form->setLabel('free_time','If I have free time I would rather: ');
 
         $profile_form->mergeTemplate($template);
         $template = $profile_form->getTemplate();
