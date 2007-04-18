@@ -13,6 +13,7 @@ class HMS_Assignment
     var $id;
     var $asu_username;
     var $bed_id;
+    var $meal_plan;
 
     /**
      * Return the id for the current assignment object
@@ -86,10 +87,15 @@ class HMS_Assignment
         $this->bed_id = $bnumber;
     }
 
+    function set_meal_plan($meal_plan)
+    {
+        $this->meal_plan = $meal_plan;
+    }
+
     /**
      * Creates the actual assignment object
      */
-    function &create_assignment($bid = NULL, $un = NULL)
+    function &create_assignment($bid = NULL, $un = NULL, $meal = NULL)
     {
         $assignment = new HMS_Assignment;
         
@@ -113,14 +119,16 @@ class HMS_Assignment
             $db->addWhere('bedroom_id', $br_id);
             $db->addWhere('bed_letter', $_REQUEST['bed_letter']);
             $bed_id = $db->select('one');
-
             $assignment->set_asu_username($_REQUEST['username']);
+            $meal_plan = '1';
         } else {
             $bed_id = $bid;
+            $meal_plan = $meal;
             $assignment->set_asu_username($un);
         }
 
         $assignment->set_bed_id($bed_id);
+        $assignment->set_meal_plan($meal_plan);
 
         return $assignment;
     }
@@ -399,7 +407,10 @@ class HMS_Assignment
                     } else {
                         $bed = substr($key, 4);
                     }
-                    $assignment = HMS_Assignment::create_assignment($bed, $uid);
+           
+                    $meal_option = $_REQUEST['meal_option_' . $bed];
+
+                    $assignment = HMS_Assignment::create_assignment($bed, $uid, $meal_option);
                     $saved = $assignment->save_assignment();
                     if(PEAR::isError($saved)) {
                         return "There was an error placing $uid in their bed.";
