@@ -401,30 +401,61 @@ class HMS_Form
                     $meal_option_id = "meal_option_" . $abed['id'];
 
                     $username = HMS_Assignment::get_asu_username($abed['id']);
+                    $meal_option = HMS_Assignment::get_meal_option('bed_id', $abed['id']);
 
                     if(isset($_REQUEST[$bed_id]) && $_REQUEST[$bed_id] != NULL) {
                         $tags['BED_ID'] = "<input type=\"text\" name=\"bed_ " . $abed['id']  . "\" id=\"bed_id\" value=\"" . $_REQUEST[$bed_id] . "\" />";
+                        $tags['MEAL_PLAN'] = "<select name=\"meal_option_" . $abed['id'] ."\">";
+                       
+                        if(isset($_REQUEST[$meal_option_id]) && $_REQUEST[$meal_option_id] == 0) $tags['MEAL_PLAN'] .= "<option selected value=\"0\">Low</option>";
+                        else $tags['MEAL_PLAN'] .= "<option value=\"0\">Low</option>";
+                        
+                        if(isset($_REQUEST[$meal_option_id]) && $_REQUEST[$meal_option_id] == 1) $tags['MEAL_PLAN'] .= "<option selected value=\"1\">Standard</option>";
+                        else $tags['MEAL_PLAN'] .= "<option value=\"1\">Standard</option>";
+                        
+                        if(isset($_REQUEST[$meal_option_id]) && $_REQUEST[$meal_option_id] == 2) $tags['MEAL_PLAN'] .= "<option selected value=\"2\">High</option>";
+                        else $tags['MEAL_PLAN'] .= "<option value=\"2\">High</option>";
+                        
+                        if(isset($_REQUEST[$meal_option_id]) && $_REQUEST[$meal_option_id] == 3) $tags['MEAL_PLAN'] .= "<option selected value=\"2\">Super</option>";
+                        else $tags['MEAL_PLAN'] .= "<option value=\"3\">Super</option>";
+                        
+                        $tags['MEAL_PLAN'] .= "</select>";
                     } else if(isset($_REQUEST[$edit_bed_id])) {
                         $tags['BED_ID'] = "<input type=\"text\" name=\"bed_ " . $abed['id']  . "\" id=\"bed_id\" value=\"" . $_REQUEST[$edit_bed_id] . "\" />";
+                        $tags['MEAL_PLAN'] = "<select name=\"meal_option_" . $abed['id'] ."\">";
+                       
+                        if(isset($_REQUEST[$meal_option_id]) && $_REQUEST[$meal_option_id] == 0) $tags['MEAL_PLAN'] .= "<option selected value=\"0\">Low</option>";
+                        else $tags['MEAL_PLAN'] .= "<option value=\"0\">Low</option>";
+                        
+                        if(isset($_REQUEST[$meal_option_id]) && $_REQUEST[$meal_option_id] == 1) $tags['MEAL_PLAN'] .= "<option selected value=\"1\">Standard</option>";
+                        else $tags['MEAL_PLAN'] .= "<option value=\"1\">Standard</option>";
+                        
+                        if(isset($_REQUEST[$meal_option_id]) && $_REQUEST[$meal_option_id] == 2) $tags['MEAL_PLAN'] .= "<option selected value=\"2\">High</option>";
+                        else $tags['MEAL_PLAN'] .= "<option value=\"2\">High</option>";
+                        
+                        if(isset($_REQUEST[$meal_option_id]) && $_REQUEST[$meal_option_id] == 3) $tags['MEAL_PLAN'] .= "<option selected value=\"2\">Super</option>";
+                        else $tags['MEAL_PLAN'] .= "<option value=\"3\">Super</option>";
+                        
+                        $tags['MEAL_PLAN'] .= "</select>";
                     } else {
                         $tags['BED_ID'] = "<input type=\"text\" name=\"bed_ " . $abed['id']  . "\" id=\"bed_id\" value=\"" . $username . "\" />";
+                        $tags['MEAL_PLAN'] = "<select name=\"meal_option_" . $abed['id'] ."\">";
+                       
+                        if($meal_option == 0) $tags['MEAL_PLAN'] .= "<option selected value=\"0\">Low</option>";
+                        else $tags['MEAL_PLAN'] .= "<option value=\"0\">Low</option>";
+                        
+                        if($meal_option == 1) $tags['MEAL_PLAN'] .= "<option selected value=\"1\">Standard</option>";
+                        else $tags['MEAL_PLAN'] .= "<option value=\"1\">Standard</option>";
+                        
+                        if($meal_option == 2) $tags['MEAL_PLAN'] .= "<option selected value=\"2\">High</option>";
+                        else $tags['MEAL_PLAN'] .= "<option value=\"2\">High</option>";
+                        
+                        if($meal_option == 3) $tags['MEAL_PLAN'] .= "<option selected value=\"2\">Super</option>";
+                        else $tags['MEAL_PLAN'] .= "<option value=\"3\">Super</option>";
+                        
+                        $tags['MEAL_PLAN'] .= "</select>";
                     }
                     
-                    $tags['MEAL_PLAN'] = "<select name=\"meal_option_" . $abed['id'] ."\">";
-                   
-                    if(isset($_REQUEST[$meal_option_id]) && $_REQUEST[$meal_option_id] == 0) $tags['MEAL_PLAN'] .= "<option selected value=\"0\">Low</option>";
-                    else $tags['MEAL_PLAN'] .= "<option value=\"0\">Low</option>";
-                    
-                    if(isset($_REQUEST[$meal_option_id]) && $_REQUEST[$meal_option_id] == 1) $tags['MEAL_PLAN'] .= "<option selected value=\"1\">Standard</option>";
-                    else $tags['MEAL_PLAN'] .= "<option value=\"1\">Standard</option>";
-                    
-                    if(isset($_REQUEST[$meal_option_id]) && $_REQUEST[$meal_option_id] == 2) $tags['MEAL_PLAN'] .= "<option selected value=\"2\">High</option>";
-                    else $tags['MEAL_PLAN'] .= "<option value=\"2\">High</option>";
-                    
-                    if(isset($_REQUEST[$meal_option_id]) && $_REQUEST[$meal_option_id] == 3) $tags['MEAL_PLAN'] .= "<option selected value=\"2\">Super</option>";
-                    else $tags['MEAL_PLAN'] .= "<option value=\"3\">Super</option>";
-                    
-                    $tags['MEAL_PLAN'] .= "</select>";
                     
                     $body .= PHPWS_Template::processTemplate($tags, 'hms', 'admin/bed_and_id.tpl');
                 }
