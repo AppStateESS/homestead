@@ -83,6 +83,7 @@ class HMS_Form
         $db->addColumn('id');
         $db->addColumn('hall_name');
         $db->addWhere('is_online', '1');
+        $db->addOrder('hall_name ASC');
         $results = $db->select();
         
         if($results != NULL && $results != FALSE) {
@@ -238,6 +239,7 @@ class HMS_Form
         $db->addColumn('id');
         $db->addColumn('hall_name');
         $db->addWhere('deleted', '1', '!=');
+        $db->addOrder('hall_name ASC');
         $halls_raw = $db->select();
 
         foreach($halls_raw as $hall) {
@@ -288,6 +290,7 @@ class HMS_Form
         $db->addColumn('id');
         $db->addColumn('hall_name');
         $db->addWhere('deleted', '1', '!=');
+        $db->addOrder('hall_name ASC');
         $halls_raw = $db->select();
         foreach($halls_raw as $ahall) {
             $halls[$ahall['id']] = $ahall['hall_name'];
@@ -395,6 +398,8 @@ class HMS_Form
                     $tags['BEDROOM_ID'] = $abed['bedroom_letter'];
                     $bed_id = "bed__" . $abed['id']; 
                     $edit_bed_id = "bed_" . $abed['id'];
+                    $meal_option_id = "meal_option_" . $abed['id'];
+
                     $username = HMS_Assignment::get_asu_username($abed['id']);
 
                     if(isset($_REQUEST[$bed_id]) && $_REQUEST[$bed_id] != NULL) {
@@ -404,6 +409,23 @@ class HMS_Form
                     } else {
                         $tags['BED_ID'] = "<input type=\"text\" name=\"bed_ " . $abed['id']  . "\" id=\"bed_id\" value=\"" . $username . "\" />";
                     }
+                    
+                    $tags['MEAL_PLAN'] = "<select name=\"meal_option_" . $abed['id'] ."\">";
+                   
+                    if(isset($_REQUEST[$meal_option_id]) && $_REQUEST[$meal_option_id] == 0) $tags['MEAL_PLAN'] .= "<option selected value=\"0\">Low</option>";
+                    else $tags['MEAL_PLAN'] .= "<option value=\"0\">Low</option>";
+                    
+                    if(isset($_REQUEST[$meal_option_id]) && $_REQUEST[$meal_option_id] == 1) $tags['MEAL_PLAN'] .= "<option selected value=\"1\">Standard</option>";
+                    else $tags['MEAL_PLAN'] .= "<option value=\"1\">Standard</option>";
+                    
+                    if(isset($_REQUEST[$meal_option_id]) && $_REQUEST[$meal_option_id] == 2) $tags['MEAL_PLAN'] .= "<option selected value=\"2\">High</option>";
+                    else $tags['MEAL_PLAN'] .= "<option value=\"2\">High</option>";
+                    
+                    if(isset($_REQUEST[$meal_option_id]) && $_REQUEST[$meal_option_id] == 3) $tags['MEAL_PLAN'] .= "<option selected value=\"2\">Super</option>";
+                    else $tags['MEAL_PLAN'] .= "<option value=\"3\">Super</option>";
+                    
+                    $tags['MEAL_PLAN'] .= "</select>";
+                    
                     $body .= PHPWS_Template::processTemplate($tags, 'hms', 'admin/bed_and_id.tpl');
                 }
             }
@@ -536,10 +558,29 @@ class HMS_Form
 
                 $tags['BED_NAME'] = $response['bed_letter'];
                 $tags['ROOM_LABEL'] = "Room ";
-                $tags['ROOM_NUM']   = "234 &nbsp;&nbsp;&nbsp;&nbsp;";
+                $tags['ROOM_NUM']   = $response['room_number'] . " &nbsp;&nbsp;&nbsp;&nbsp;";
                 $tags['BEDROOM_ID'] = $response['bedroom_letter'] . "&nbsp;&nbsp;&nbsp";
                 $bed_id = "bed__" . $bid; 
                 $tags['BED_ID'] = "<input type=\"text\" readonly name=\"bed_$bid\" id=\"phpws_form_bed_id\" value=\"$uid\" />";
+                
+                $tags['MEAL_PLAN'] = "<select name=\"meal_option_" . $bid ."\">";
+              
+                $meal_option_id = "meal_option_" . $bid;
+
+                if(isset($_REQUEST[$meal_option_id]) && $_REQUEST[$meal_option_id] == 0) $tags['MEAL_PLAN'] .= "<option selected value=\"0\">Low</option>";
+                else $tags['MEAL_PLAN'] .= "<option value=\"0\">Low</option>";
+                
+                if(isset($_REQUEST[$meal_option_id]) && $_REQUEST[$meal_option_id] == 1) $tags['MEAL_PLAN'] .= "<option selected value=\"1\">Standard</option>";
+                else $tags['MEAL_PLAN'] .= "<option value=\"1\">Standard</option>";
+                
+                if(isset($_REQUEST[$meal_option_id]) && $_REQUEST[$meal_option_id] == 2) $tags['MEAL_PLAN'] .= "<option selected value=\"2\">High</option>";
+                else $tags['MEAL_PLAN'] .= "<option value=\"2\">High</option>";
+                
+                if(isset($_REQUEST[$meal_option_id]) && $_REQUEST[$meal_option_id] == 3) $tags['MEAL_PLAN'] .= "<option selected value=\"2\">Super</option>";
+                else $tags['MEAL_PLAN'] .= "<option value=\"3\">Super</option>";
+                
+                $tags['MEAL_PLAN'] .= "</select>";
+                    
                 $body .= PHPWS_Template::processTemplate($tags, 'hms', 'admin/bed_and_id.tpl');
             }
         }
@@ -839,6 +880,39 @@ class HMS_Form
         $form->addSubmit('submit', _('Edit Hall'));
         $tpl = $form->getTemplate();
         $tpl['TITLE'] = "Select a Hall to Edit";
+        $final = PHPWS_Template::process($tpl, 'hms', 'admin/select_residence_hall.tpl');
+        return $final;
+    }
+
+    function select_residence_hall_for_overview()
+    {
+        $db = &new PHPWS_DB('hms_residence_hall');
+        $db->addWhere('deleted', '0');
+        $db->addColumn('id');
+        $db->addColumn('hall_name');
+        $db->addOrder('hall_name ASC');
+        $allhalls = $db->select();
+        
+        if($allhalls == NULL) {
+            $tpl['TITLE'] = "Error!";
+            $tpl['CONTENT'] = "You must add a Residence Hall before you can view it!<br />";
+            $final = PHPWS_Template::process($tpl, 'hms', 'admin/title_and_message.tpl');
+            return $final;
+        }
+
+        foreach($allhalls as $ahall) {
+            $halls[$ahall['id']] = $ahall['hall_name'];
+        }
+
+        PHPWS_Core::initCoreClass('Form.php');
+        $form = &new PHPWS_Form;
+        $form->addDropBox('halls', $halls);
+        $form->addHidden('module', 'hms');
+        $form->addHidden('type', 'hall');
+        $form->addHidden('op', 'view_residence_hall');
+        $form->addSubmit('submit', _('View Hall'));
+        $tpl = $form->getTemplate();
+        $tpl['TITLE'] = "Select a Hall to View";
         $final = PHPWS_Template::process($tpl, 'hms', 'admin/select_residence_hall.tpl');
         return $final;
     }
