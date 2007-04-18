@@ -295,6 +295,7 @@ class HMS_Floor
                 $room->set_is_online($object->get_is_online());
                 $room->set_is_reserved('0');
                 $room->set_is_medical('0');
+                $room->set_deleted();
                 //$room->set_number_occupants('0');
                 $success = HMS_Room::save_room_object($room);
                 if(PEAR::isError($success)) {
@@ -315,6 +316,7 @@ class HMS_Floor
                     $bedroom->set_added_on();
                     $bedroom->set_updated_by();
                     $bedroom->set_updated_on();
+                    $bedroom->set_deleted(0);
                     $bedroom->set_bedroom_letter($br_letter);
                     $saved_br = HMS_Bedroom::save_bedroom($bedroom);
                    
