@@ -438,7 +438,6 @@ class HMS_Assignment
         switch($op)
         {
             case 'create_assignment':
-            test($_REQUEST, 1);
                 $assignment = HMS_Assignment::create_assignment();
                 return $assignment->save_assignment();
                 break;
