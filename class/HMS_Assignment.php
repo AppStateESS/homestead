@@ -13,7 +13,7 @@ class HMS_Assignment
     var $id;
     var $asu_username;
     var $bed_id;
-    var $meal_plan;
+    var $meal_option;
 
     /**
      * Return the id for the current assignment object
@@ -87,9 +87,18 @@ class HMS_Assignment
         $this->bed_id = $bnumber;
     }
 
-    function set_meal_plan($meal_plan)
+    function set_meal_option($meal_option)
     {
-        $this->meal_plan = $meal_plan;
+        $this->meal_option = $meal_option;
+    }
+
+    function get_meal_option($type = NULL, $value = NULL)
+    {
+        $db = &new PHPWS_DB('hms_assignment');
+        $db->addColumn('meal_option');
+        $db->addWhere($type, $value);
+        $meal_option = $db->select('one');
+        return $meal_option;
     }
 
     /**
@@ -120,15 +129,15 @@ class HMS_Assignment
             $db->addWhere('bed_letter', $_REQUEST['bed_letter']);
             $bed_id = $db->select('one');
             $assignment->set_asu_username($_REQUEST['username']);
-            $meal_plan = '1';
+            $meal_option = '1';
         } else {
             $bed_id = $bid;
-            $meal_plan = $meal;
+            $meal_option = $meal;
             $assignment->set_asu_username($un);
         }
 
         $assignment->set_bed_id($bed_id);
-        $assignment->set_meal_plan($meal_plan);
+        $assignment->set_meal_option($meal_option);
 
         return $assignment;
     }
@@ -413,6 +422,7 @@ class HMS_Assignment
                     $assignment = HMS_Assignment::create_assignment($bed, $uid, $meal_option);
                     $saved = $assignment->save_assignment();
                     if(PEAR::isError($saved)) {
+                        test($saved);
                         return "There was an error placing $uid in their bed.";
                     }
                 }
@@ -428,6 +438,7 @@ class HMS_Assignment
         switch($op)
         {
             case 'create_assignment':
+            test($_REQUEST, 1);
                 $assignment = HMS_Assignment::create_assignment();
                 return $assignment->save_assignment();
                 break;
