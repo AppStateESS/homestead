@@ -58,7 +58,7 @@ CREATE TABLE hms_student_profiles (
     cleanliness smallint default 0,
     study_time smallint default 0,
     free_time smallint default 0,
-    primay key(id)
+    primary key(id)
 );
 
 ALTER TABLE hms_assignment ADD COLUMN meal_option smallint;
