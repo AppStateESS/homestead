@@ -25,6 +25,7 @@ class HMS_Building
     var $added_on;
     var $deleted_by;
     var $deleted_on;
+    var $deleted;
     var $updated_by;
     var $updated_on;
     var $error;
@@ -46,6 +47,7 @@ class HMS_Building
         $this->air_conditioned = NULL;
         $this->is_online = NULL;
         $this->numbering_scheme = NULL;
+        $this->deleted = 0;
         unset($this->added_by);
         unset($this->added_on);
         unset($this->deleted_by);
@@ -322,6 +324,11 @@ class HMS_Building
         return $this->updated_on;
     }
 
+    function set_deleted($deleted)
+    {
+        $this->deleted = $deleted;
+    }
+
     /**
      * Sets the values for each class variable based on the value passed from the form
      * Type and other sanity checks need to be implemented
@@ -339,6 +346,7 @@ class HMS_Building
         $this->set_bedrooms_per_room($_REQUEST['bedrooms_per_room']);
         $this->set_beds_per_bedroom($_REQUEST['beds_per_bedroom']);
         $this->set_numbering_scheme($_REQUEST['numbering_scheme']);
+        $this->set_deleted(0);
         if($_REQUEST['is_new_building']) $this->set_is_new_building($_REQUEST['is_new_building']);
     }
 
@@ -655,6 +663,87 @@ class HMS_Building
         return $content;
     }
 
+    function select_residence_hall_for_overview()
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
+        $hall = &new HMS_Form;
+        $content = $hall->select_residence_hall_for_overview();
+        return $content;
+    }
+
+    function view_residence_hall()
+    {
+        $hall_db = &new PHPWS_DB('hms_residence_hall');
+        $hall_db->addColumn('hall_name');
+        $hall_db->addWhere('id', $_REQUEST['halls']);
+        $building_name = $hall_db->select('one');
+
+        $content = "<h2>Building overview for " . $building_name . "</h2><br /><br />";
+
+        $floors_db = &new PHPWS_DB('hms_floor');
+        $floors_db->addColumn('id');
+        $floors_db->addColumn('floor_number');
+        $floors_db->addWhere('building', $_REQUEST['halls']);
+        $floors_db->addWhere('deleted', '0');
+        $floors_db->addOrder('floor_number ASC');
+        $floors = $floors_db->select(); 
+
+        foreach($floors as $afloor) {
+            
+            $rooms_db = &new PHPWS_DB('hms_room');
+            $rooms_db->addColumn('id');
+            $rooms_db->addColumn('room_number');
+            $rooms_db->addWhere('floor_id', $afloor['id']);
+            $rooms_db->addWhere('deleted', '0');
+            $rooms_db->addOrder('room_number ASC');
+            $rooms = $rooms_db->select();
+           
+            if($rooms == NULL || $rooms == FALSE) continue;
+
+            $content .= "<h3><b>Floor " . $afloor['floor_number'] . "</b></h3><br />";
+
+            foreach($rooms as $aroom) {
+
+                $bedrooms_db = &new PHPWS_DB('hms_bedrooms');
+                $bedrooms_db->addColumn('id');
+                $bedrooms_db->addColumn('bedroom_letter');
+                $bedrooms_db->addWhere('room_id', $aroom['id']);
+                $bedrooms_db->addWhere('deleted', '0');
+                $bedrooms = $bedrooms_db->select();
+
+                if($bedrooms == FALSE || $bedrooms == NULL) continue;
+
+                $content .= "&nbsp;&nbsp;&nbsp;&nbsp;<b>Room " . $aroom['room_number'] . "</b><br />";
+
+                foreach($bedrooms as $abedroom) {
+                    $beds_db = &new PHPWS_DB('hms_beds');
+                    $beds_db->addColumn('id');
+                    $beds_db->addColumn('bed_letter');
+                    $beds_db->addWhere('bedroom_id', $abedroom['id']);
+                    $beds_db->addWhere('deleted', '0');
+                    $beds = $beds_db->select();
+
+                    if($beds == FALSE || $beds == NULL) continue;
+
+                    foreach($beds as $abed) {
+                        $assignments_db = &new PHPWS_DB('hms_assignment');
+                        $assignments_db->addColumn('asu_username');
+                        $assignments_db->addWhere('bed_id', $abed['id']);
+                        $assignments = $assignments_db->select();
+
+                        if($assignments['asu_username']) {
+                            $content .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bedroom: " . $abedroom['bedroom_letter'] . "&nbsp;&nbsp;&nbsp;&nbsp;Bed: " . $abed['bed_letter'] . "&nbsp;&nbsp;&nbsp;&nbsp;" . $assignments['asu_username'] . "<br />";
+                        } else {
+                            $content .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bedroom: " . $abedroom['bedroom_letter'] . "&nbsp;&nbsp;&nbsp;&nbsp;Bed: " . $abed['bed_letter'] . "&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"gray\">&lt;unassigned&gt;</font><br />";
+                        }
+                    } // end foreach($beds)
+                    $content .= "<br />";
+                } // end foreach($bedrooms)
+            } // end foreach($rooms)
+        } // end foreach($floors)
+        return $content;
+    }
+
     function add_floor()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
@@ -763,6 +852,12 @@ class HMS_Building
                 break;
             case 'save_new_floor':
                 return HMS_Building::save_new_floor();
+                break;
+            case 'select_residence_hall_for_overview':
+                return HMS_Building::select_residence_hall_for_overview();
+                break;
+            case 'view_residence_hall':
+                return HMS_Building::view_residence_hall();
                 break;
             default:
                 return "you are using a building function";
