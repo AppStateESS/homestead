@@ -197,8 +197,16 @@ function hms_update(&$content, $currentVersion)
             $content[] = '+ Link to Acrobat download, opens in new tab/window';
             $content[] = '+ Added link to a FAQ page. We need to make sure there *is* a FAQ page.';
 
-        # skipped 0.1.13??
+        case version_compare($currentVersion, '0.1.13', '<'):
+            $files = array();
+            $files[] = 'templates/misc/side_thingie.tpl';
+
+            PHPWS_Boost::updateFiles($files, 'hms');
+
+            $content[] = '+ Jeremy\'s updates to the side bar and various debugging options';
+
         case version_compare($currentVersion, '0.1.14', '<'):
+            
             $db = &new PHPWS_DB;
             $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_1_14.sql');
             if(PEAR::isError($result)) {
@@ -206,11 +214,20 @@ function hms_update(&$content, $currentVersion)
             }
             
             $files = array();
+            $files[] = 'templates/admin/maintenance.tpl';
+            $files[] = 'templates/admin/bed_and_id.tpl';
             $files[] = 'templates/misc/side_thingie.tpl';
             $files[] = 'templates/student/profile_form.tpl';
 
             PHPWS_Boost::updateFiles($files, 'hms');
 
+            $content[] = '+ Alphabetization of hall drop-downs';
+            $content[] = '+ Assign by floor should always show ascending room numbers';
+            $content[] = '+ Fixed bug in assign by floor that kept *all* assignments from going through';
+            $content[] = '+ At building creation, all deleteds should be set to 0 instead of NULL';
+            $content[] = '+ Added mechanism to allow viewing of all available and assigned rooms/beds in a hall';
+            $content[] = '+ Various bug and syntax fixes by Jeremy';
+            $content[] = '+ Added meal plan option when assigning by an entire floor';
             $content[] = '+ Adjusted color of "optionally skipped" items in side thingie';
             $content[] = '+ Added a template for the profile form';
     }

@@ -1,7 +1,6 @@
 CREATE TABLE hms_assignment (
     id integer NOT NULL,
     asu_username character varying(32) NOT NULL,
-    building_id integer NOT NULL,
     bed_id integer NOT NULL,
     primary key(id)
 );
