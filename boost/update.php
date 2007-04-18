@@ -198,17 +198,8 @@ function hms_update(&$content, $currentVersion)
             $content[] = '+ Added link to a FAQ page. We need to make sure there *is* a FAQ page.';
 
         case version_compare($currentVersion, '0.1.13', '<'):
-            $files = array();
-            $files[] = 'templates/misc/side_thingie.tpl';
-
-            PHPWS_Boost::updateFiles($files, 'hms');
-
-            $content[] = '+ Jeremy\'s updates to the side bar and various debugging options';
-
-        case version_compare($currentVersion, '0.1.14', '<'):
-            
             $db = &new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_1_14.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_1_13.sql');
             if(PEAR::isError($result)) {
                 return $result;
             }
@@ -220,7 +211,8 @@ function hms_update(&$content, $currentVersion)
             $files[] = 'templates/student/profile_form.tpl';
 
             PHPWS_Boost::updateFiles($files, 'hms');
-
+            
+            $content[] = '+ Jeremy\'s updates to the side bar and various debugging options';
             $content[] = '+ Alphabetization of hall drop-downs';
             $content[] = '+ Assign by floor should always show ascending room numbers';
             $content[] = '+ Fixed bug in assign by floor that kept *all* assignments from going through';
