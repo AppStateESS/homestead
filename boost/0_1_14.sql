@@ -60,3 +60,8 @@ CREATE TABLE hms_student_profiles (
     free_time smallint default 0,
     primay key(id)
 );
+
+ALTER TABLE hms_assignment ADD COLUMN meal_option smallint;
+ALTER TABLE hms_assignment ALTER COLUMN meal_option SET NOT NULL;
+
+ALTER TABLE hms_assignment DROP COLUMN building_id;
