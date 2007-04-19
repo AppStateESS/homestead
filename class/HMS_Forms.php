@@ -482,7 +482,7 @@ class HMS_Form
 
         $tags = $form->getTemplate();
         $tags['TITLE']      = "Assign Students";
-        $tags['HALL']       = '<b><a href="./index.php?module=hms&type=hall&op=view_residence_hall&halls=' . $_REQUEST['halls'] . '">' . $hall . '</a></b>';
+        $tags['HALL']       = '<a href="./index.php?module=hms&type=hall&op=view_residence_hall&halls=' . $_REQUEST['halls'] . '">' . $hall . '</a>';
         $tags['FLOOR']      = $_REQUEST['floors'];
         $tags['BODY']       = $body;
         $tags['MESSAGE']    = $msg;
