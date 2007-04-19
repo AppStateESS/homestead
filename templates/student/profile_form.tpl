@@ -5,67 +5,77 @@
         <font color="red"><i>{MESSAGE}</i></font><br>
         <!-- BEGIN rlc_form -->
         {START_FORM}
-        <table>
+        <table cellspacing="2" cellpadding="3">
             <tr>
                 <th colspan="2">1. About Me</th>
             </tr>
             <tr>
-                <td>{HOBBIES_CHECKBOX_LABEL}</td>
-                <td>
-                  {HOBBIES_CHECKBOX}{HOBBIES_CHECKBOX_ARTS_AND_CRAFTS_LABEL}
+                <td>{HOBBIES_CHECKBOX_QUESTION}<br />
+                <!-- BEGIN hobbies_checkbox_repeat -->
+                  {HOBBIES_CHECKBOX}{HOBBIES_CHECKBOX_LABEL}<br>
+                <!-- END hobbies_checkbox_repeat -->
+                <br />
+                </td>
+                <td>{MUSIC_CHECKBOX_QUESTION}<br />
+                <!-- BEGIN music_checkbox_repeat -->
+                  {MUSIC_CHECKBOX}{MUSIC_CHECKBOX_LABEL}<br>
+                <!-- END music_checkbox_repeat -->
+                <br />
                 </td>
             </tr>
             <tr>
-                <!-- BEGIN music_repeat -->
-                <td>{MUSIC_CHECKBOX_LABEL}</td>
-                <td>{MUSIC_CHECKBOX}</td>
-                <!-- END music_repeat -->
-            </tr>
-            <tr>
                 <td>{POLITICAL_VIEWS_DROPBOX_LABEL}</td>
-                <td>{POLITICAL_VIEWS_DROPBOX}</td>
+                <td>{POLITICAL_VIEWS_DROPBOX}<br />&nbsp;</td>
             </tr>
             <tr>
                 <th colspan="2">2. College Life</th>
             </tr>
             <tr>
                 <td>{INTENDED_MAJOR_LABEL}</td>
-                <td>{INTENDED_MAJOR}</td>
+                <td>{INTENDED_MAJOR}<br />&nbsp;</td>
             </tr>
             <tr>
                 <td>{IMPORTANT_EXPERIENCE_LABEL}</td>
-                <td>{IMPORTANT_EXPERIENCE}</td>
+                <td>{IMPORTANT_EXPERIENCE}<br />&nbsp;</td>
             </tr>
             <tr>
-                <th>3. My Daily Life</th>
+                <th colspan="2">3. My Daily Life</th>
             </tr>
             <tr>
                 <td>{SLEEP_TIME_LABEL}</td>
-                <td>{SLEEP_TIME}</td>
+                <td>{SLEEP_TIME}<br />&nbsp;</td>
             </tr>
             <tr>
                 <td>{WAKEUP_TIME_LABEL}</td>
-                <td>{WAKEUP_TIME}</td>
+                <td>{WAKEUP_TIME}<br />&nbsp;</td>
             </tr>
             <tr>
                 <td>{OVERNIGHT_GUESTS_LABEL}</td>
-                <td>{OVERNIGHT_GUESTS}</td>
+                <td>{OVERNIGHT_GUESTS}<br />&nbsp;</td>
             </tr>
             <tr>
                 <td>{LOUDNESS_LABEL}</td>
-                <td>{LOUDNESS}</td>
+                <td>{LOUDNESS}<br />&nbsp;</td>
             </tr>
             <tr>
                 <td>{CLEANLINESS_LABEL}</td>
-                <td>{CLEANLINESS}</td>
+                <td>{CLEANLINESS}<br />&nbsp;</td>
             </tr>
             <tr>
-                <td>{STUDY_TIME_LABEL}</td>
-                <td>{STUDY_TIME}</td>
+                <td>{STUDY_TIMES_QUESTION}</td>
+                <td>
+                <!-- BEGIN study_times_repeat -->
+                  {STUDY_TIMES}{STUDY_TIMES_LABEL}<br />
+                <!-- END study_times_repeat -->
+                &nbsp;
+                </td>
             </tr>
             <tr>
                 <td>{FREE_TIME_LABEL}</td>
-                <td>{FREE_TIME}</td>
+                <td>{FREE_TIME}<br />&nbsp;</td>
+            </tr>
+            <tr>
+                <td colspan="2">{SUBMIT}</td>
             </tr>
         </table>
         {END_FORM}
