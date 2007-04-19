@@ -247,13 +247,6 @@ $cleanliness = array(
 				4 => 'Somewhat messy and occasionally disorganized',
 				5 => 'Very messy and disorganized');
 
-$study_times = array(
-				1 => 'Early in the morning',
-				2 => 'In the morning and early afternoon',
-				3 => 'In the afternoon and early evening',
-				4 => 'In the evening',
-				5 => 'Late at night');
-
 $free_time = array(
                 0 => 'Prefer not to say',
 				1 => 'Go out with a large group of friends.',
