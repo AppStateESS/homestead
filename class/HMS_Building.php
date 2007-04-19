@@ -700,7 +700,7 @@ class HMS_Building
            
             if($rooms == NULL || $rooms == FALSE) continue;
 
-            $content .= "<h3><b>Floor " . $afloor['floor_number'] . "</b></h3><br />";
+            $content .= '<u><a href="./index.php?module=hms&type=assignment&op=show_assignments_by_floor&halls=' . $_REQUEST['halls'] . '&floors=' . $afloor['floor_number'] . '&room_range=9999"><h3><b></u>Floor ' . $afloor['floor_number'] . '</b></h3></a><br />';
 
             foreach($rooms as $aroom) {
                 $bedrooms_db = &new PHPWS_DB('hms_bedrooms');
