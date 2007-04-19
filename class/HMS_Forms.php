@@ -3068,12 +3068,12 @@ class HMS_Form
         /***** About Me *****/
         $profile_form->addCheck('hobbies_checkbox',$hobbies);
         $profile_form->setLabel('hobbies_checkbox',$hobbies_labels);
-        test($profile_form,1);
-        $template['HOBBIES_CHECKBOX_LABEL'] = 'My Hobbies and Interests (check all that apply)';
+        //test($profile_form,1);
+        $template['HOBBIES_CHECKBOX_QUESTION'] = 'My Hobbies and Interests (check all that apply):';
 
         $profile_form->addCheck('music_checkbox',$music);
         $profile_form->setLabel('music_checkbox',$music_labels);
-        $template['MUSIC_CHECKBOX_LABEL'] = 'My Music Preferences (check all that apply)';
+        $template['MUSIC_CHECKBOX_QUESTION'] = 'My Music Preferences (check all that apply):';
 
         $profile_form->addDropBox('political_views_dropbox',$political_views);
         $profile_form->setLabel('political_views_dropbox','I consider myself: ');
@@ -3103,10 +3103,12 @@ class HMS_Form
         
         $profile_form->addCheck('study_times',$study_times);
         $profile_form->setLabel('study_times',$study_times_labels);
-        $template['STUDY_TIMES_LABEL'] = 'I prefer to study (check all that apply:)';
+        $template['STUDY_TIMES_QUESTION'] = 'I prefer to study (check all that apply):';
         
         $profile_form->addDropBox('free_time',$free_time);
         $profile_form->setLabel('free_time','If I have free time I would rather: ');
+
+        $profile_form->addSubmit('Submit');
 
         $profile_form->mergeTemplate($template);
         $template = $profile_form->getTemplate();

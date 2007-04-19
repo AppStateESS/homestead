@@ -152,7 +152,7 @@ class HMS_Student_Profile{
             return $result;
         }
 
-        if(sizeof($result > 0){
+        if(sizeof($result > 0)){
             return $result['id'];
         }else{
             return FALSE;
@@ -169,16 +169,27 @@ class HMS_Student_Profile{
         
     }
 
-    /**
+    /****************
      * Static methods
-     */
+     ****************/
 
     /**
      * Uses HMS_Forms to display the profile form.
      */
-    function showProfileForm(){
+    function show_profile_form()
+    {
         PHPWS_Core::initModClass('hms','HMS_Forms.php');
         return HMS_Form::show_profile_form();
+    }
+
+    /**
+     * Saves a submitted profile
+     */
+    function submit_profile()
+    {
+        $profile = new HMS_Student_Profile();
+
+        test($_REQUEST,1);
     }
 
     /**
@@ -391,18 +402,6 @@ class HMS_Student_Profile{
 
     function get_fine_arts(){
         if($this->fine_arts == 1){
-            return TRUE;
-        }else{
-            return FALSE;
-        }
-    }
-    
-    function set_gardening($value = 1){
-        $this->gardening = $value;
-    }
-
-    function get_gardening(){
-        if($this->gardening == 1){
             return TRUE;
         }else{
             return FALSE;
