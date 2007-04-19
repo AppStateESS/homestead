@@ -610,8 +610,8 @@ class HMS_Form
                 if(isset($_REQUEST[$meal_option_id]) && $_REQUEST[$meal_option_id] == 3) $tags['MEAL_PLAN'] .= "<option selected value=\"3\">Super</option>";
                 else $tags['MEAL_PLAN'] .= "<option value=\"3\">Super</option>";
                 
-                if(isset($_REQUEST[$meal_option_id]) && $_REQUEST[$meal_option_id] == 4) $tags['MEAL_PLAN'] .= "<option selected value=\"4\">Super</option>";
-                else $tags['MEAL_PLAN'] .= "<option value=\"4\">Super</option>";
+                if(isset($_REQUEST[$meal_option_id]) && $_REQUEST[$meal_option_id] == 4) $tags['MEAL_PLAN'] .= "<option selected value=\"4\">None</option>";
+                else $tags['MEAL_PLAN'] .= "<option value=\"4\">None</option>";
                 
                 $tags['MEAL_PLAN'] .= "</select>";
                     
