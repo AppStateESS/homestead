@@ -419,6 +419,9 @@ class HMS_Form
                         if(isset($_REQUEST[$meal_option_id]) && $_REQUEST[$meal_option_id] == 3) $tags['MEAL_PLAN'] .= "<option selected value=\"2\">Super</option>";
                         else $tags['MEAL_PLAN'] .= "<option value=\"3\">Super</option>";
                         
+                        if(isset($_REQUEST[$meal_option_id]) && $_REQUEST[$meal_option_id] == 4) $tags['MEAL_PLAN'] .= "<option selected value=\"4\">None</option>";
+                        else $tags['MEAL_PLAN'] .= "<option value=\"4\">None</option>";
+                
                         $tags['MEAL_PLAN'] .= "</select>";
                     } else if(isset($_REQUEST[$edit_bed_id])) {
                         $tags['BED_ID'] = "<input type=\"text\" name=\"bed_ " . $abed['id']  . "\" id=\"bed_id\" value=\"" . $_REQUEST[$edit_bed_id] . "\" />";
@@ -435,7 +438,10 @@ class HMS_Form
                         
                         if(isset($_REQUEST[$meal_option_id]) && $_REQUEST[$meal_option_id] == 3) $tags['MEAL_PLAN'] .= "<option selected value=\"2\">Super</option>";
                         else $tags['MEAL_PLAN'] .= "<option value=\"3\">Super</option>";
-                        
+                
+                        if(isset($_REQUEST[$meal_option_id]) && $_REQUEST[$meal_option_id] == 4) $tags['MEAL_PLAN'] .= "<option selected value=\"4\">None</option>";
+                        else $tags['MEAL_PLAN'] .= "<option value=\"4\">None</option>";
+                
                         $tags['MEAL_PLAN'] .= "</select>";
                     } else {
                         $tags['BED_ID'] = "<input type=\"text\" name=\"bed_ " . $abed['id']  . "\" id=\"bed_id\" value=\"" . $username . "\" />";
@@ -450,9 +456,12 @@ class HMS_Form
                         if($meal_option == 2) $tags['MEAL_PLAN'] .= "<option selected value=\"2\">High</option>";
                         else $tags['MEAL_PLAN'] .= "<option value=\"2\">High</option>";
                         
-                        if($meal_option == 3) $tags['MEAL_PLAN'] .= "<option selected value=\"2\">Super</option>";
+                        if($meal_option == 3) $tags['MEAL_PLAN'] .= "<option selected value=\"3\">Super</option>";
                         else $tags['MEAL_PLAN'] .= "<option value=\"3\">Super</option>";
                         
+                        if($meal_option == 4) $tags['MEAL_PLAN'] .= "<option selected value=\"4\">None</option>";
+                        else $tags['MEAL_PLAN'] .= "<option value=\"4\">None</option>";
+                
                         $tags['MEAL_PLAN'] .= "</select>";
                     }
                     
