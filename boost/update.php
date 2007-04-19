@@ -222,6 +222,21 @@ function hms_update(&$content, $currentVersion)
             $content[] = '+ Added meal plan option when assigning by an entire floor';
             $content[] = '+ Adjusted color of "optionally skipped" items in side thingie';
             $content[] = '+ Added a template for the profile form';
+
+        case version_compare($currentVersion, '0.1.14', '<'):
+            $db = &new PHPWS_DB;
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_1_13.sql');
+            if(PEAR::isError($result)) {
+                return $result;
+            }
+            
+            $files = array();
+            $files[] = 'templates/student/profile_form.tpl';
+
+            PHPWS_Boost::updateFiles($files, 'hms');
+
+            $content[] = '+ Updated profile_form template';
+            
     }
 
     return TRUE;

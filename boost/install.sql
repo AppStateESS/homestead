@@ -294,6 +294,11 @@ CREATE TABLE hms_student_profiles (
     reggae smallint default 0,
     rock smallint default 0,
     world_music smallint default 0,
+    study_early_morning smallint default 0,
+    study_morning_afternoon smallint default 0,
+    study_afternoon_evening smallint default 0,
+    study_evening smallint default 0,
+    study_late_night smallint default 0,
     political_view smallint default 0,
     major smallint default 0,
     experience smallint default 0,
@@ -302,7 +307,6 @@ CREATE TABLE hms_student_profiles (
     overnight_guests smallint default 0,
     loudness smallint default 0,
     cleanliness smallint default 0,
-    study_time smallint default 0,
     free_time smallint default 0,
     primay key(id)
 );
