@@ -703,7 +703,6 @@ class HMS_Building
             $content .= "<h3><b>Floor " . $afloor['floor_number'] . "</b></h3><br />";
 
             foreach($rooms as $aroom) {
-
                 $bedrooms_db = &new PHPWS_DB('hms_bedrooms');
                 $bedrooms_db->addColumn('id');
                 $bedrooms_db->addColumn('bedroom_letter');
@@ -729,10 +728,10 @@ class HMS_Building
                         $assignments_db = &new PHPWS_DB('hms_assignment');
                         $assignments_db->addColumn('asu_username');
                         $assignments_db->addWhere('bed_id', $abed['id']);
-                        $assignments = $assignments_db->select();
+                        $asu_username = $assignments_db->select('one');
 
-                        if($assignments['asu_username']) {
-                            $content .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bedroom: " . $abedroom['bedroom_letter'] . "&nbsp;&nbsp;&nbsp;&nbsp;Bed: " . $abed['bed_letter'] . "&nbsp;&nbsp;&nbsp;&nbsp;" . $assignments['asu_username'] . "<br />";
+                        if($asu_username) {
+                            $content .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bedroom: " . $abedroom['bedroom_letter'] . "&nbsp;&nbsp;&nbsp;&nbsp;Bed: " . $abed['bed_letter'] . "&nbsp;&nbsp;&nbsp;&nbsp;" . $asu_username . "<br />";
                         } else {
                             $content .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bedroom: " . $abedroom['bedroom_letter'] . "&nbsp;&nbsp;&nbsp;&nbsp;Bed: " . $abed['bed_letter'] . "&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"gray\">&lt;unassigned&gt;</font><br />";
                         }
