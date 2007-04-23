@@ -408,7 +408,7 @@ class HMS_Learning_Community
                 $ass->addValue('asu_username',         $application['user_id']);
                 $ass->addValue('rlc_id',               $_REQUEST['final_rlc'][$id]);
                 $ass->addValue('assigned_by_user',     0); //TODO: Current_User?
-                $ass->addValue('assigned_by_initials', "asd"); //TODO: No Idea
+                $ass->addValue('assigned_by_initials', "asd"); //TODO: This may be entirely unnecessary.
                 test($ass_id = $ass->insert());
 
                 $app->addValue('hms_assignment_id', $ass_id);
