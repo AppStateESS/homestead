@@ -2141,7 +2141,14 @@ class HMS_Form
                                                            '4'=>_('Senior')));
         */
 
-        $form->addDropBox('classification_for_term', array('1'=>_('Freshman')));
+        if(HMS_SOAP::get_student_type($_SESSION['asu_username'] == 'T')) {
+            $form->addDropBox('classification_for_term', array('1'=>_('Freshman'),
+                                                               '2'=>_('Sophomore'),
+                                                               '3'=>_('Junior'),
+                                                               '4'=>_('Senior')));
+        } else {
+            $form->addDropBox('classification_for_term', array('1'=>_('Freshman')));
+        }
 
         if(isset($_REQUEST['classification_for_term'])){
             $form->setMatch('classification_for_term',$_REQUEST['classification_for_term']);
@@ -2153,7 +2160,7 @@ class HMS_Form
         $form->addHidden('gender_type', HMS_SOAP::get_gender($_SESSION['asu_username'], TRUE));
         
         # Don't show *low* meal option to freshmen
-        if(HMS_SOAP::get_student_class($_SESSION['asu_username']) == "FR"){
+        if(HMS_SOAP::get_student_class($_SESSION['asu_username']) != "FR"){
             $form->addDropBox('meal_option', array('1'=>_('Low'),
                                                    '2'=>_('Standard'),
                                                    '3'=>_('High'),
