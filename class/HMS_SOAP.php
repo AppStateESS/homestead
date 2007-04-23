@@ -339,6 +339,32 @@ class HMS_SOAP{
         $error_msg = $soap_fault['message'] . "in function: " . $function . " Extra info: " . $extra_info;    
         PHPWS_Core::log($error_msg, 'soap_error.log', _('Error'));
     }
+
+    /**
+     * Returns the student's phone number in either xxx.xxx.xxxx or (xxx)xxx-xxxx fashion
+     */
+    function get_phone_number($username, $alt = NULL)
+    {
+        if(SOAP_TEST_FLAG) {
+            return '123.456.7890';
+        }
+       
+        $student = HMS_SOAP::get_student_info($username);
+        
+        if(PEAR::isError($student)) {
+            HMS_SOAP::log_soap_error($student, 'get_phone_number', $username);
+            return $student;
+        }else if($student->phone == NULL){
+            return NULL;
+        }else if ($alt == NULL) {
+            $phone = $student->phone->zip_code;
+            $phone .= ".";
+            $phone .= substr($student->phone->number, 0, 3);
+            $phone .= ".";
+            $phone .= substr($student->phone->number, 3);
+            return $phone;
+        }
+    }
 }
 
 ?>
