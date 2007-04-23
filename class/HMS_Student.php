@@ -324,6 +324,15 @@ class HMS_Student {
                 PHPWS_Core::initModClass('hms','HMS_Learning_Community.php');
                 return HMS_Learning_Community::rlc_application_page2_submit();
                 break;
+            case 'show_profile_form':
+                PHPWS_Core::initModClass('hms', 'HMS_Side_Thingie.php');
+                $side_thingie = new HMS_Side_Thingie(HMS_SIDE_STUDENT_PROFILE);
+                $side_thingie->show();
+                PHPWS_Core::initModClass('hms','HMS_Student_Profile.php');
+                return HMS_Student_Profile::show_profile_form();
+            case 'student_profile_submit':
+                PHPWS_Core::initModClass('hms','HMS_Student_Profile.php');
+                return HMS_Student_Profile::submit_profile();
             case 'main':
                 PHPWS_Core::initModClass('hms', 'HMS_Application.php');
                 if(HMS_Application::check_for_application($_SESSION['asu_username'])) {
@@ -350,6 +359,8 @@ class HMS_Student {
                         $message .="<br /><br />";
                     }
 
+                    $message .= PHPWS_Text::secureLink(_('Create your Profile'), 'hms', array('type'=>'student', 'op' =>'show_profile_form'));
+                    $message .= "<br /><br />";
                     $message .= PHPWS_Text::secureLink(_('Search for a roomate'), 'hms', array('type'=>'student','op'=>'show_application_search'));
                     $message .= "<br /><br />";
                     $message .= PHPWS_Text::secureLink(_('Logout'), 'users', array('action'=>'user', 'command'=>'logout'));

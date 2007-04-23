@@ -30,6 +30,7 @@ class HMS_Side_Thingie {
 
         PHPWS_Core::initModClass('hms','HMS_Application.php');
         PHPWS_Core::initModClass('hms','HMS_RLC_Application.php');
+        PHPWS_Core::initModClass('hms','HMS_Student_Profile.php');
         PHPWS_Core::initModClass('hms','HMS_Deadlines.php');
         
         # Get the deadlines for future use
@@ -156,20 +157,28 @@ class HMS_Side_Thingie {
             $this->steps_styles[HMS_SIDE_STUDENT_PROFILE] = 'STEP_CURRENT';
         }
         
-        #TODO: Check to see if the student has a profile in the database already. If so, show this step as completed and return.
-        /*
-        if(HMS_Profile::check_for_profile($_SESSION['asu_username']){
+        #Check to see if the student has a profile in the database already. If so, show this step as completed and return.
+        
+        if(HMS_Student_Profile::check_for_profile($_SESSION['asu_username'])){
             $this->steps_styles[HMS_SIDE_STUDENT_PROFILE] = 'STEP_COMPLETED';
             return;
         }
-        */
         
-        # For now, always set to NOT YET    
-        $this->steps_text[HMS_SIDE_STUDENT_PROFILE] .= " (available 4/23/07)";
-        $this->steps_styles[HMS_SIDE_STUDENT_PROFILE] = 'STEP_NOTYET';
-        return;
-
-
+        # If the student does not have a proflie on file... check dates, set dates/styles accordingly
+        if($this->curr_timestamp < $this->deadlines->get_edit_profile_begin_timestamp()){
+            $this->steps_text[HMS_SIDE_STUDENT_PROFILE] .= " (available ". date('n/j/y',$this->deadlines->get_submit_profile_begin_timestamp()) .")";
+            $this->steps_styles[HMS_SIDE_STUDENT_PROFILE] = 'STEP_NOTYET';
+            return;
+        }else if($this->curr_timestamp > $this->deadlines->get_edit_profile_begin_timestamp() && $this->curr_timestamp < $this->deadlines->get_edit_profile_end_timestamp()){
+            $this->steps_text[HMS_SIDE_STUDENT_PROFILE] .= " (complete by ". date('n/j/y',$this->deadlines->get_edit_profile_end_timestamp()) . ")";
+            $this->steps_styles[HMS_SIDE_STUDENT_PROFILE] = 'STEP_TOGO';
+            return;
+        }else if($this->curr_timestamp > $this->deadlines->get_edit_profile_end_timestamp()){
+            $this->steps_text[HMS_SIDE_STUDENT_PROFILE] .= "(skipped)";
+            $this->steps_styles[HMS_SIDE_STUDENT_PROFILE] = 'STEP_OPT_MISSED';
+            return;
+        }
+        
     }
 
     function set_roomate()

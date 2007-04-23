@@ -16,72 +16,72 @@ class HMS_Student_Profile{
     var $date_submitted;
 
     # Music choices 
-    var $arts_and_crafts = null;
-    var $books_and_reading = null;
-    var $cars = null;
-    var $church_activities = null;
-    var $collecting = null;
-    var $computers_and_technology = null;
-    var $dancing = null;
-    var $fashion = null;
-    var $fine_arts = null;
-    var $gardening = null;
-    var $games = null;
-    var $humor = null;
-    var $investing_personal_finance = null;
-    var $movies = null;
-    var $music = null;
-    var $outdoor_activities = null;
-    var $pets_and_animals = null;
-    var $photography = null;
-    var $politics = null;
-    var $sports = null;
-    var $travel = null;
-    var $tv_shows = null;
-    var $volunteering = null;
+    var $arts_and_crafts = 0;
+    var $books_and_reading = 0;
+    var $cars = 0;
+    var $church_activities = 0;
+    var $collecting = 0;
+    var $computers_and_technology = 0;
+    var $dancing = 0;
+    var $fashion = 0;
+    var $fine_arts = 0;
+    var $gardening = 0;
+    var $games = 0;
+    var $humor = 0;
+    var $investing_personal_finance = 0;
+    var $movies = 0;
+    var $music = 0;
+    var $outdoor_activities = 0;
+    var $pets_and_animals = 0;
+    var $photography = 0;
+    var $politics = 0;
+    var $sports = 0;
+    var $travel = 0;
+    var $tv_shows = 0;
+    var $volunteering = 0;
 
     # Hobby choices
-    var $alternative = null;
-    var $ambient = null;
-    var $beach = null;
-    var $bluegrass = null;
-    var $blues = null;
-    var $classical = null;
-    var $classic_rock = null;
-    var $country = null;
-    var $electronic = null;
-    var $folk = null;
-    var $heavy_metal = null;
-    var $hip_hop = null;
-    var $house = null;
-    var $industrial = null;
-    var $jazz = null;
-    var $popular_music = null;
-    var $progressive = null;
-    var $punk = null;
-    var $r_and_b = null;
-    var $rap = null;
-    var $reggae = null;
-    var $rock = null;
-    var $world_music = null;
+    var $alternative = 0;
+    var $ambient = 0;
+    var $beach = 0;
+    var $bluegrass = 0;
+    var $blues = 0;
+    var $classical = 0;
+    var $classic_rock = 0;
+    var $country = 0;
+    var $electronic = 0;
+    var $folk = 0;
+    var $heavy_metal = 0;
+    var $hip_hop = 0;
+    var $house = 0;
+    var $industrial = 0;
+    var $jazz = 0;
+    var $popular_music = 0;
+    var $progressive = 0;
+    var $punk = 0;
+    var $r_and_b = 0;
+    var $rap = 0;
+    var $reggae = 0;
+    var $rock = 0;
+    var $world_music = 0;
     
     # Study times
-    var $study_early_morning = null;
-    var $study_morning_afternoon = null;
-    var $study_afternoon_evening = null;
-    var $study_evening = null;
-    var $study_late_night = null;
+    var $study_early_morning = 0;
+    var $study_morning_afternoon = 0;
+    var $study_afternoon_evening = 0;
+    var $study_evening = 0;
+    var $study_late_night = 0;
 
     # drop downs
-    var $political_view;
-    var $major;
-    var $experience;
-    var $sleep_time;
-    var $wakeup_time;
-    var $overnight_guests;
-    var $loudness;
-    var $cleanliness;
-    var $free_time;
+    var $political_view = 0;
+    var $major = 0;
+    var $experience = 0;
+    var $sleep_time = 0;
+    var $wakeup_time = 0;
+    var $overnight_guests = 0;
+    var $loudness = 0;
+    var $cleanliness = 0;
+    var $free_time = 0;
 
     
     /**
@@ -125,6 +125,10 @@ class HMS_Student_Profile{
     {
         $db = &new PHPWS_DB('hms_student_profiles');
 
+        if($this->get_date_submitted() == NULL){
+            $this->set_date_submitted();
+        }
+
         $result = $db->saveObject($this);
 
         if(PEAR::isError($result)){
@@ -140,8 +144,13 @@ class HMS_Student_Profile{
      * exists for the given user name.
      * Returns FALSE if no profile is found.
      */
-    function check_for_profile($user_id)
+    function check_for_profile($user_id = NULL)
     {
+
+        if(!isset($user_id)){
+            $user_id = $_SESSION['asu_username'];
+        }
+        
         $db = &new PHPWS_DB('hms_student_profiles');
        
         $db->addWhere('user_id',$user_id,'=');
@@ -178,8 +187,27 @@ class HMS_Student_Profile{
      */
     function show_profile_form()
     {
-        PHPWS_Core::initModClass('hms','HMS_Forms.php');
-        return HMS_Form::show_profile_form();
+
+        # Check to make sure they don't have a profile already
+        if(HMS_Student_Profile::check_for_profile()){
+            $template['MESSAGE'] = "Our records show you already have a profile. The ability to edit profiles has been temporarily disabled. We anticipate it will be re-enabled by April 27th. We apologize for the inconvenience.";
+            return PHPWS_Template::process($template, 'hms', 'student/student_success_failure_message.tpl');
+        }
+        
+        PHPWS_Core::initModClass('hms','HMS_Deadlines.php');
+        if(HMS_Deadlines::check_deadline_past('edit_profile_end_timestamp')){
+            # too late
+            $template['MESSAGE'] = "Sorry, it's too late to submit a profile.";
+            return PHPWS_Template::process($template, 'hms', 'student/student_success_failure_message.tpl');
+        }else if(!HMS_Deadlines::check_deadline_past('edit_profile_begin_timestamp')){
+            # too early
+            $tempate['MESSAGE'] = "Sorry, it's too early to submit a profile.";
+            return PHPWS_Template::process($template, 'hms', 'student/student_success_failure_message.tpl');
+        }else{
+            PHPWS_Core::initModClass('hms','HMS_Forms.php');
+            return HMS_Form::show_profile_form();
+        }
+        
     }
 
     /**
@@ -187,9 +215,288 @@ class HMS_Student_Profile{
      */
     function submit_profile()
     {
-        $profile = new HMS_Student_Profile();
 
-        test($_REQUEST,1);
+        # Check to see if a student already has a profile on file.
+        # If so, pass the profile's id to the Student_Profile constructor
+        # so it will load the current profile, and then update it.
+        # Otherwise, create a new profile.
+        $id = HMS_Student_Profile::check_for_profile($_SESSION['asu_username']);
+
+        if(PEAR::isError($id)){
+            PHPWS_Error::log($id);
+            $template['MESSAGE'] = "Sorry, there was an error working with the database. Please contact Housing and Residence Life if you need assistance.";
+            return PHPWS_Template::process($template, 'hms', 'student/student_success_failure_message.tpl');
+        }elseif($id !== FALSE){
+            $profile = new HMS_Student_Profile($id);
+        }else{
+            $profile = new HMS_Student_Profile();
+        }
+
+        $profile->set_user_id($_SESSION['asu_username']);
+        $profile->set_date_submitted();
+
+        #test($_REQUEST);
+        
+        # Hobbies check boxes
+        if(isset($_REQUEST['hobbies_checkbox']['arts_and_crafts'])){
+            $profile->set_arts_and_crafts();
+        }
+        
+        if(isset($_REQUEST['hobbies_checkbox']['books_and_reading'])){
+            $profile->set_books_and_reading();
+        }
+        
+        if(isset($_REQUEST['hobbies_checkbox']['cars'])){
+            $profile->set_cars();
+        }
+        
+        if(isset($_REQUEST['hobbies_checkbox']['church_activities'])){
+            $profile->set_church_activities();
+        }
+        
+        if(isset($_REQUEST['hobbies_checkbox']['collecting'])){
+            $profile->set_collecting();
+        }
+        
+        if(isset($_REQUEST['hobbies_checkbox']['computers_and_technology'])){
+            $profile->set_computers_and_technology();
+        }
+        
+        if(isset($_REQUEST['hobbies_checkbox']['dancing'])){
+            $profile->set_dancing();
+        }
+        
+        if(isset($_REQUEST['hobbies_checkbox']['fashion'])){
+            $profile->set_fashion();
+        }
+        
+        if(isset($_REQUEST['hobbies_checkbox']['fine_arts'])){
+            $profile->set_fine_arts();
+        }
+        
+        if(isset($_REQUEST['hobbies_checkbox']['gardening'])){
+            $profile->set_gardening();
+        }
+        
+        if(isset($_REQUEST['hobbies_checkbox']['games'])){
+            $profile->set_games();
+        }
+        
+        if(isset($_REQUEST['hobbies_checkbox']['humor'])){
+            $profile->set_humor();
+        }
+        
+        if(isset($_REQUEST['hobbies_checkbox']['investing_personal_finance'])){
+            $profile->set_investing_personal_finance();
+        }
+        
+        if(isset($_REQUEST['hobbies_checkbox']['movies'])){
+            $profile->set_movies();
+        }
+        
+        if(isset($_REQUEST['hobbies_checkbox']['music'])){
+            $profile->set_music();
+        }
+        
+        if(isset($_REQUEST['hobbies_checkbox']['outdoor_activities'])){
+            $profile->set_outdoor_activities();
+        }
+        
+        if(isset($_REQUEST['hobbies_checkbox']['pets_and_animals'])){
+            $profile->set_pets_and_animals();
+        }
+        
+        if(isset($_REQUEST['hobbies_checkbox']['photography'])){
+            $profile->set_photography();
+        }
+        
+        if(isset($_REQUEST['hobbies_checkbox']['politics'])){
+            $profile->set_politics();
+        }
+        
+        if(isset($_REQUEST['hobbies_checkbox']['sports'])){
+            $profile->set_sports();
+        }
+        
+        if(isset($_REQUEST['hobbies_checkbox']['travel'])){
+            $profile->set_travel();
+        }
+        
+        if(isset($_REQUEST['hobbies_checkbox']['tv_shows'])){
+            $profile->set_tv_shows();
+        }
+        
+        if(isset($_REQUEST['hobbies_checkbox']['volunteering'])){
+            $profile->set_volunteering();
+        }
+        
+        if(isset($_REQUEST['hobbies_checkbox']['writing'])){
+            $profile->set_writing();
+        }
+        
+        # Music check boxes
+        if(isset($_REQUEST['music_checkbox']['alternative'])){
+            $profile->set_alternative();
+        }
+        
+        if(isset($_REQUEST['music_checkbox']['ambient'])){
+            $profile->set_ambient();
+        }
+        
+        if(isset($_REQUEST['music_checkbox']['beach'])){
+            $profile->set_beach();
+        }
+        
+        if(isset($_REQUEST['music_checkbox']['bluegrass'])){
+            $profile->set_bluegrass();
+        }
+        
+        if(isset($_REQUEST['music_checkbox']['blues'])){
+            $profile->set_blues();
+        }
+        
+        if(isset($_REQUEST['music_checkbox']['classical'])){
+            $profile->set_classical();
+        }
+        
+        if(isset($_REQUEST['music_checkbox']['classic_rock'])){
+            $profile->set_classic_rock();
+        }
+        
+        if(isset($_REQUEST['music_checkbox']['country'])){
+            $profile->set_country();
+        }
+        
+        if(isset($_REQUEST['music_checkbox']['electronic'])){
+            $profile->set_electronic();
+        }
+        
+        if(isset($_REQUEST['music_checkbox']['folk'])){
+            $profile->set_folk();
+        }
+        
+        if(isset($_REQUEST['music_checkbox']['heavy_metal'])){
+            $profile->set_heavy_metal();
+        }
+        
+        if(isset($_REQUEST['music_checkbox']['hip_hop'])){
+            $profile->set_hip_hop();
+        }
+        
+        if(isset($_REQUEST['music_checkbox']['house'])){
+            $profile->set_house();
+        }
+        
+        if(isset($_REQUEST['music_checkbox']['industrial'])){
+            $profile->set_industrial();
+        }
+        
+        if(isset($_REQUEST['music_checkbox']['jazz'])){
+            $profile->set_jazz();
+        }
+        
+        if(isset($_REQUEST['music_checkbox']['popular_music'])){
+            $profile->set_popular_music();
+        }
+        
+        if(isset($_REQUEST['music_checkbox']['progressive'])){
+            $profile->set_progressive();
+        }
+        
+        if(isset($_REQUEST['music_checkbox']['punk'])){
+            $profile->set_punk();
+        }
+        
+        if(isset($_REQUEST['music_checkbox']['r_and_b'])){
+            $profile->set_r_and_b();
+        }
+        
+        if(isset($_REQUEST['music_checkbox']['rap'])){
+            $profile->set_rap();
+        }
+        
+        if(isset($_REQUEST['music_checkbox']['reggae'])){
+            $profile->set_reggae();
+        }
+        
+        if(isset($_REQUEST['music_checkbox']['alternative'])){
+            $profile->set_rock();
+        }
+        
+        if(isset($_REQUEST['music_checkbox']['world_music'])){
+            $profile->set_world_music();
+        }
+
+        # Study times
+        if(isset($_REQUEST['study_times']['study_early_morning'])){
+            $profile->set_study_early_morning();
+        }
+
+        if(isset($_REQUEST['study_times']['study_morning_afternoon'])){
+            $profile->set_study_early_morning();
+        }
+
+        if(isset($_REQUEST['study_times']['study_afternoon_evening'])){
+            $profile->set_study_early_morning();
+        }
+
+        if(isset($_REQUEST['study_times']['study_evening'])){
+            $profile->set_study_early_morning();
+        }
+
+        if(isset($_REQUEST['study_times']['study_late_night'])){
+            $profile->set_study_early_morning();
+        }
+
+        # Drop downs
+        if(isset($_REQUEST['political_views_dropbox']) && $_REQUEST['political_views_dropbox'] != 0){
+            $profile->set_political_view($_REQUEST['political_views_dropbox']);
+        }
+        
+        if(isset($_REQUEST['intended_major']) && $_REQUEST['intended_major'] != 0){
+            $profile->set_major($_REQUEST['intended_major']);
+        }
+        
+        if(isset($_REQUEST['important_experience']) && $_REQUEST['important_experience'] != 0){
+            $profile->set_experience($_REQUEST['important_experience']);
+        }
+
+        if(isset($_REQUEST['sleep_time']) && $_REQUEST['sleep_time'] != 0){
+            $profile->set_sleep_time($_REQUEST['sleep_time']);
+        }
+
+        if(isset($_REQUEST['wakeup_time']) && $_REQUEST['wakeup_time'] != 0){
+            $profile->set_wakeup_time($_REQUEST['wakeup_time']);
+        }
+        
+        if(isset($_REQUEST['overnight_guests']) && $_REQUEST['overnight_guests'] != 0){
+            $profile->set_overnight_guests($_REQUEST['overnight_guests']);
+        }
+        
+        if(isset($_REQUEST['loudness']) && $_REQUEST['loudness'] != 0){
+            $profile->set_loudness($_REQUEST['loudness']);
+        }
+        
+        if(isset($_REQUEST['cleanliness']) && $_REQUEST['cleanliness'] != 0){
+            $profile->set_cleanliness($_REQUEST['cleanliness']);
+        }
+        
+        if(isset($_REQUEST['free_time']) && $_REQUEST['free_time'] != 0){
+            $profile->set_free_time($_REQUEST['free_time']);
+        }
+
+        //test($profile->save());
+        $result = $profile->save();
+        if(PEAR::isError($result)){
+            PHPWS_Error::log($result);
+            $template['MESSAGE'] = "Sorry, there was an error working with the database. Please contact Housing and Residence Life if you need assistance.";
+            return PHPWS_Template::process($template, 'hms', 'student/student_success_failure_message.tpl');
+        }
+
+        $template['SUCCESS'] = "Your profile was successfully created.";
+        $template['SUCCESS'] .= "<br /><br />";
+        $template['SUCCESS'] .= PHPWS_Text::secureLink(_('Back to Main Menu'), 'hms', array('type'=>'student','op'=>'main'));
+        return PHPWS_Template::process($template, 'hms', 'student/student_success_failure_message.tpl');
     }
 
     /**
@@ -231,7 +538,7 @@ class HMS_Student_Profile{
     function get_political_view(){
         return $this->political_view;
     }
-
+ 
     function set_major($major){
         $this->major = $major;
     }

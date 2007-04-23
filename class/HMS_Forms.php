@@ -2039,6 +2039,14 @@ class HMS_Form
         $form->addDropBox('edit_application_end_day', $days);
         $form->addDropBox('edit_application_end_year', $years);
 
+        $form->addDropBox('edit_profile_begin_month', $months);
+        $form->addDropBox('edit_profile_begin_day', $days);
+        $form->addDropBox('edit_profile_begin_year', $years);
+
+        $form->addDropBox('edit_profile_end_month', $months);
+        $form->addDropBox('edit_profile_end_day', $days);
+        $form->addDropBox('edit_profile_end_year', $years);
+
         $form->addDropBox('search_profiles_begin_month', $months);
         $form->addDropBox('search_profiles_begin_day', $days);
         $form->addDropBox('search_profiles_begin_year', $years);
@@ -2080,6 +2088,13 @@ class HMS_Form
             $form->setMatch('edit_application_end_day', date('j', $result['edit_application_end_timestamp']));
             $form->setMatch('edit_application_end_month', date('n', $result['edit_application_end_timestamp']));
             $form->setMatch('edit_application_end_year', date('Y', $result['edit_application_end_timestamp']));
+            
+            $form->setMatch('edit_profile_begin_day', date('j', $result['edit_profile_begin_timestamp']));
+            $form->setMatch('edit_profile_begin_month', date('n', $result['edit_profile_begin_timestamp']));
+            $form->setMatch('edit_profile_begin_year', date('Y', $result['edit_profile_begin_timestamp']));
+            $form->setMatch('edit_profile_end_day', date('j', $result['edit_profile_end_timestamp']));
+            $form->setMatch('edit_profile_end_month', date('n', $result['edit_profile_end_timestamp']));
+            $form->setMatch('edit_profile_end_year', date('Y', $result['edit_profile_end_timestamp']));
             
             $form->setMatch('search_profiles_begin_day', date('j', $result['search_profiles_begin_timestamp']));
             $form->setMatch('search_profiles_begin_month', date('n', $result['search_profiles_begin_timestamp']));
@@ -3069,6 +3084,11 @@ class HMS_Form
         return TRUE;
     }
 
+    /**
+     * Print the student profile form.
+     * TODO: Make this check for an existing profile, and set defaults in the form accordingly.
+     * (to allow for editing of profiles).
+     */
     function show_profile_form()
     {
 
