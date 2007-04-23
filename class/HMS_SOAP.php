@@ -357,11 +357,10 @@ class HMS_SOAP{
         }else if($student->phone == NULL){
             return NULL;
         }else if ($alt == NULL) {
-            $phone = $student->phone->zip_code;
-            $phone .= ".";
-            $phone .= substr($student->phone->number, 0, 3);
-            $phone .= ".";
-            $phone .= substr($student->phone->number, 3);
+            $phone = $student->phone->zip_code . "." . substr($student->phone->number, 0, 3) . "." . substr($student->phone->number, 3);
+            return $phone;
+        } else {
+            $phone = "(" . $student->phone->zip_code . ")"  . substr($student->phone->number, 0, 3) . "-" . substr($student->phone->number, 3);
             return $phone;
         }
     }
