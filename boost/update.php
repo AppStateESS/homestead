@@ -236,6 +236,22 @@ function hms_update(&$content, $currentVersion)
             PHPWS_Boost::updateFiles($files, 'hms');
 
             $content[] = '+ Updated profile_form template';
+        
+        case version_compare($currentVersion, '0.1.15', '<'):
+            $db = &new PHPWS_DB;
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_1_15.sql');
+            if(PEAR::isError($result)) {
+                return $result;
+            }
+            
+            $files = array();
+            $files[] = 'templates/student/student_success_failure_message.tpl';
+
+            PHPWS_Boost::updateFiles($files, 'hms');
+
+            $content[] = '+ Added success/failure message template';
+            $content[] = '+ Added unique constraint to user_id column in student profiles.';
+
             
     }
 
