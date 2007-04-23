@@ -14,6 +14,8 @@ class HMS_Deadlines {
     var $sabt = NULL; # submit application begin timestamp
     var $saet = NULL; # submit application end timestamp
     var $eaet = NULL; # edit application end timestamp
+    var $epbt = NULL; # edit profile begin timestamp
+    var $epet = NULL; # edit profile end timestamp
     var $spbt = NULL; # search profiles begin timestamp
     var $spet = NULL; # search profiles end timestamp
     var $sret = NULL; # submit rlc application end timestamp
@@ -34,6 +36,8 @@ class HMS_Deadlines {
         $this->sabt = $deadlines['submit_application_begin_timestamp'];
         $this->saet = $deadlines['submit_application_end_timestamp'];
         $this->eaet = $deadlines['edit_application_end_timestamp'];
+        $this->epbt = $deadlines['edit_profile_begin_timestamp'];
+        $this->epet = $deadlines['edit_profile_end_timestamp'];
         $this->spbt = $deadlines['search_profiles_begin_timestamp'];
         $this->spet = $deadlines['search_profiles_end_timestamp'];
         $this->sret = $deadlines['submit_rlc_application_end_timestamp'];
@@ -79,7 +83,7 @@ class HMS_Deadlines {
 
         # Check if $deadline_name is valid here??
 
-        if($deadlines[$deadline_name] >= mktime()){
+        if($deadlines[$deadline_name] <= mktime()){
             return TRUE;
         }else{
             return FALSE;
@@ -109,6 +113,8 @@ class HMS_Deadlines {
         $db->addValue('submit_application_begin_timestamp', $this->sabt);
         $db->addValue('submit_application_end_timestamp', $this->saet);
         $db->addValue('edit_application_end_timestamp', $this->eaet);
+        $db->addValue('edit_profile_begin_timestamp', $this->epbt);
+        $db->addValue('edit_profile_end_timestamp', $this->epet);
         $db->addValue('search_profiles_begin_timestamp', $this->spbt);
         $db->addValue('search_profiles_end_timestamp', $this->spet);
         $db->addValue('submit_rlc_application_end_timestamp', $this->sret);
@@ -163,6 +169,14 @@ class HMS_Deadlines {
         return $this->eaet;
     }
 
+    function get_edit_profile_begin_timestamp(){
+        return $this->epbt;
+    }
+
+    function get_edit_profile_end_timestamp(){
+        return $this->epet;
+    }
+
     function get_search_profiles_begin_timestamp()
     {
         return $this->spbt;
@@ -214,6 +228,14 @@ class HMS_Deadlines {
     function set_edit_application_mdy($month, $day, $year){
         $this->eaet = mktime(0, 0, 0, $month, $day, $year);
     }
+
+    function set_edit_profile_begin_mdy($month, $day, $year){
+        $this->epbt = mktime(0, 0, 0, $month, $day, $year);
+    }
+
+    function set_edit_profile_end_mdy($month, $day, $year){
+        $this->epet = mktime(0, 0, 0, $month, $day, $year);
+    }
     
     function set_search_profiles_begin_mdy($month, $day, $year){
         $this->spbt = mktime(0, 0, 0, $month, $day, $year);
@@ -257,6 +279,14 @@ class HMS_Deadlines {
     
     function set_edit_application_end_timestamp($timestamp){
         $this->eaet = $timestamp;
+    }
+
+    function set_edit_profile_begin_timestamp($timestamp){
+        $this->epbt = $timestamp;
+    }
+
+    function set_edit_profile_end_timestamp($timestamp){
+        $this->epet = $timestamp;
     }
     
     function set_search_profiles_begin_timestamp($timestamp){
