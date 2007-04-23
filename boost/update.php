@@ -246,11 +246,13 @@ function hms_update(&$content, $currentVersion)
             
             $files = array();
             $files[] = 'templates/student/student_success_failure_message.tpl';
+            $files[] = 'templates/admin/deadlines.tpl';
 
             PHPWS_Boost::updateFiles($files, 'hms');
 
             $content[] = '+ Added success/failure message template';
             $content[] = '+ Added unique constraint to user_id column in student profiles.';
+            $content[] = '+ Added new deadlines (for profiles) to the deadlines page.';
 
             
     }

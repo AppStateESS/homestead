@@ -40,6 +40,18 @@
                 <th>&nbsp;</th><td>&nbsp;</td>
             </tr>
             <tr>
+                <th>Edit Profile Begin Date:</th><td>{EDIT_PROFILE_BEGIN_MONTH}</td><td>{EDIT_PROFILE_BEGIN_DAY}</td><td>{EDIT_PROFILE_BEGIN_YEAR}</td>
+            </tr>
+            <tr>
+                <th>Edit Profile End Date:</th><td>{EDIT_PROFILE_END_MONTH}</td><td>{EDIT_PROFILE_END_DAY}</td><td>{EDIT_PROFILE_END_YEAR}</td>
+            </tr>
+            <tr>
+                <th>&nbsp;</th><td>&nbsp;</td>
+            </tr>
+            <tr>
+                <th>&nbsp;</th><td>&nbsp;</td>
+            </tr>
+            <tr>
                 <th>Search Profiles Begin Date:</th><td>{SEARCH_PROFILES_BEGIN_MONTH}</td><td>{SEARCH_PROFILES_BEGIN_DAY}</td><td>{SEARCH_PROFILES_BEGIN_YEAR}</td>
             </tr>
             <tr>

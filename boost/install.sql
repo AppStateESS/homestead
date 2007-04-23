@@ -11,6 +11,8 @@ CREATE TABLE hms_deadlines (
     submit_application_begin_timestamp integer NOT NULL,
     submit_application_end_timestamp integer NOT NULL,
     edit_application_end_timestamp integer NOT NULL,
+    edit_profile_begin_timestamp integer NOT NULL,
+    edit_profile_end_timestamp integer NOT NULL,
     search_profiles_begin_timestamp integer NOT NULL,
     search_profiles_end_timestamp integer NOT NULL,
     submit_rlc_application_end_timestamp integer NOT NULL,
@@ -251,7 +253,7 @@ CREATE TABLE hms_beds (
 
 CREATE TABLE hms_student_profiles (
     id INTEGER NOT NULL,
-    user_id character varying(32) NOT NULL,
+    user_id character varying(32) UNIQUE NOT NULL,
     date_submitted INTEGER NOT NULL,
     arts_and_crafts smallint default 0,
     books_and_reading smallint default 0,
@@ -315,7 +317,6 @@ CREATE TABLE hms_student_profiles (
     free_time smallint default 0,
     primay key(id)
 );
-
 
 INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity) VALUES (0, 'Leadership & Service Community', 'LSC', 50);
 INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity) VALUES (1, 'Outdoor Community', 'OC', 50);
