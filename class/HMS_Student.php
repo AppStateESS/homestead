@@ -379,9 +379,9 @@ class HMS_Student {
                     $current_timestamp = mktime(0,0,0);
                     if(($current_timestamp - $dob_timestamp) < (3600 * 24 * 365 * 18)){
                         $message .= '<br /><font color="red">Because you are under age 18, you MUST print a copy of the Housing Contract Agreement, ';
-                        $message .= 'have a parent or legal gaurdian sign it, and return it to the Department of ';
+                        $message .= 'have a parent or legal guardian sign it, and return it to the Department of ';
                         $message .= 'Housing and Residence Life. Your application cannot be fully processed until a Housing Contract ';
-                        $message .= 'singed by a parent or gaurdian is on file. Please <a href="http://hms.appstate.edu/files/contract.pdf">click here </a>';
+                        $message .= 'signed by a parent or gaurdian is on file. Please <a href="http://hms.appstate.edu/files/contract.pdf">click here </a>';
                         $message .= 'to open a printer-friendly version of the Housing Contract.</font><br /><br />';
 
                         # Set the 'agreed_to_terms' flag to false
