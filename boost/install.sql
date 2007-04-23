@@ -178,16 +178,21 @@ CREATE TABLE hms_roommates (
     primary key(id)
 );
 
-CREATE TABLE hms_roommate_hashes (
-    id integer NOT NULL,
-    roommate_zero character varying(32) NOT NULL,
-    roommate_one character varying(32) NOT NULL,
-    roommate_two character varying(32),
-    roommate_three character varying(32),
-    approval_hash character varying(40),
-    approved smallint default 0,
-    primary key(id)
-);
+CREATE TABLE hms_roommate_approval (
+    id INTEGER NOT NULL,
+    room_id INTEGER NOT NULL,
+    number_roommates SMALLINT NOT NULL,
+    approval_hash CHARACTER VARYING(64) NOT NULL,
+    roommate_zero CHARACTER VARYING(32) NOT NULL,
+    roommate_zero_approved SMALLINT NOT NULL,
+    roommate_one CHARACTER VARYING(32) NOT NULL,
+    roommate_one_approved SMALLINT NOT NULL,
+    roommate_two CHARACTER VARYING(32),
+    roommate_two_approved SMALLINT,
+    roommate_three CHARACTER VARYING(32),
+    roommate_three_approved SMALLINT,
+    PRIMARY KEY (id)
+)
 
 CREATE TABLE hms_student (
     id integer DEFAULT 0 NOT NULL,
