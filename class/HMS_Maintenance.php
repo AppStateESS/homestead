@@ -228,6 +228,16 @@ class HMS_Maintenance
         $eaem   = $_REQUEST['edit_application_end_month'];
         $eaey   = $_REQUEST['edit_application_end_year'];
         $deadlines->set_edit_application_mdy($eaem,$eaed,$eaey);
+
+        $epbd   = $_REQUEST['edit_profile_begin_day'];
+        $epbm   = $_REQUEST['edit_profile_begin_month'];
+        $epby   = $_REQUEST['edit_profile_begin_year'];
+        $deadlines->set_edit_profile_begin_mdy($epbm,$epbd,$epby);
+
+        $eped   = $_REQUEST['edit_profile_end_day'];
+        $epem   = $_REQUEST['edit_profile_end_month'];
+        $epey   = $_REQUEST['edit_profile_end_year'];
+        $deadlines->set_edit_profile_end_mdy($epem,$eped,$epey);
         
         $spbd   = $_REQUEST['search_profiles_begin_day'];
         $spbm   = $_REQUEST['search_profiles_begin_month'];
