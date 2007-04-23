@@ -335,9 +335,11 @@ class HMS_Application {
      */
     function getPagerTags()
     {
+        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+        
         $tags['STUDENT_ID'] = $this->getStudentID();
-        $tags['FIRST_NAME'] = "The first name goes here";
-        $tags['LAST_NAME'] = "The last name goes here";
+        $tags['FIRST_NAME'] = HMS_SOAP::get_first_name($this->getStudentID());
+        $tags['LAST_NAME'] = HMS_SOAP::get_last_name($this->getStudentID());
         $tags['ACTIONS'] = PHPWS_Text::secureLink('[View]', 'hms',array('type'=>'student','op'=>'show_application','user'=>$this->getStudentID())) . " [Select as Roomate]";
 
         return $tags;
