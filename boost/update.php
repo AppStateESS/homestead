@@ -247,12 +247,19 @@ function hms_update(&$content, $currentVersion)
             $files = array();
             $files[] = 'templates/student/student_success_failure_message.tpl';
             $files[] = 'templates/admin/deadlines.tpl';
+            $files[] = 'templates/admin/maintenance.tpl';
+            $files[] = 'templates/admin/display_final_rlc_assignments.tpl';
+            $files[] = 'templates/admin/rlc_assignments_pager.tpl';
+            $files[] = 'templates/admin/make_new_rlc_assignments_summary.tpl';
 
-            PHPWS_Boost::updateFiles($files, 'hms');
+            PHPWS_Boos::updateFiles($files, 'hms');
 
             $content[] = '+ Added success/failure message template';
             $content[] = '+ Added unique constraint to user_id column in student profiles.';
             $content[] = '+ Added new deadlines (for profiles) to the deadlines page.';
+            $content[] = '+ Allowed access to RLC assignments on the maintenance page.';
+            $content[] = '+ Finalized Final RLC Assignments page.';
+            $content[] = '+ Fixed formatting in the RLC Applicatition assignments pager and the corresponding summary.';
 
             
     }

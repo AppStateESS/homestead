@@ -1,9 +1,9 @@
-<table cellpadding="4" cellspacing="1" width="99%">
+{START_FORM}
 <!-- BEGIN empty_table -->
-    <tr>
-        <td colspan="13">{EMPTY_MESSAGE}</td>
-    </tr>
+        <p>{EMPTY_MESSAGE}</p>
 <!-- END empty_table -->
+<!-- BEGIN table -->
+<table cellpadding="4" cellspacing="1" width="99%">
     <tr>
         <th>Name</th>
         <th>1st Choice</th>
@@ -38,3 +38,6 @@
     {PAGE_LABEL} {PAGES}<br />
     {LIMIT_LABEL} {LIMITS}
 </div>
+<!-- END table -->
+{SUBMIT}
+{END_FORM}

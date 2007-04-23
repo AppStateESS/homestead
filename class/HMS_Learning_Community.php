@@ -246,6 +246,9 @@ class HMS_Learning_Community
             case 'view_rlc_assignments':
                 return HMS_Learning_Community::view_rlc_assignments();
                 break;
+            case 'rlc_assignments_submit':
+                return HMS_Learning_Community::rlc_assignments_submit();
+                break;
  
             default:
                 return "{$_REQUEST['op']} <br />";
@@ -335,17 +338,23 @@ class HMS_Learning_Community
         $total_assignments = 0;
         $total_available = 0;
         $total_remaining = 0;
+
+        // TODO: Sane values in place of the zeroes below:
         foreach($communities as $community) {
             $template['headings'][$count]['HEADING']       = $community['community_name'];
             
-            $template['assignments'][$count]['ASSIGNMENT'] = 0;
+            $template['assignments'][$count]['ASSIGNMENT'] = 0; // HERE
             
-            $template['available'][$count]['AVAILABLE']    = $community['capacity'];
-            $total_available = $community['capacity'];
+            $template['available'][$count]['AVAILABLE']    = $community['capacity'];    // THIS is correct.
+            $total_available += $community['capacity'];
             
-            $template['remaining'][$count]['REMAINING']    = 0;
+            $template['remaining'][$count]['REMAINING']    = 0; // and HERE
             $count++;
         }
+
+        $template['TOTAL_ASSIGNMENTS'] = $total_assignments;
+        $template['TOTAL_AVAILABLE'] = $total_available;
+        $template['TOTAL_REMAINING'] = $total_remaining;
 
         return PHPWS_Template::process($template, 'hms',
                 'admin/make_new_rlc_assignments_summary.tpl');
@@ -360,7 +369,58 @@ class HMS_Learning_Community
 
     function view_rlc_assignments()
     {
-        return "";
+        PHPWS_Core::initModClass('hms','HMS_RLC_Assignment.php');
+
+        return HMS_RLC_Assignment::rlc_assignment_admin_pager();
     }
-};
+
+    function rlc_assignments_submit()
+    {
+        $errors = array();
+
+        PHPWS_Core::initModClass('hms','HMS_RLC_Application');
+        $app = &new PHPWS_DB('hms_learning_community_applications');
+        $app->addColumn('id');
+        $app->addColumn('user_id');
+        $app->addColumn('required_course');
+        $app->addWhere('id',array_keys($_REQUEST['course_ok']));
+        $applications = $app->select('assoc');
+        
+        $ass = &new PHPWS_DB('hms_learning_community_assignment');
+        $app = &new PHPWS_DB('hms_learning_community_applications');
+
+        foreach($applications as $id => $application) {
+            $update = false;
+            $app->reset();
+            $ass->reset();
+
+            $app->addWhere('id', $id);
+            
+            if(isset($_REQUEST['course_ok'][$id])) {
+                $okay = ($_REQUEST['course_ok'][$id] == "Y" ? 1 : 0);
+                if($application['required_course'] != $okay) {
+                    $app->addValue('required_course', $okay);
+                    $update = true;
+                }
+            }
+
+            if(isset($_REQUEST['final_rlc'][$id]) && $_REQUEST['final_rlc'][$id] > -1) {
+                $ass->addValue('asu_username',         $application['user_id']);
+                $ass->addValue('rlc_id',               $_REQUEST['final_rlc'][$id]);
+                $ass->addValue('assigned_by_user',     0); //TODO: Current_User?
+                $ass->addValue('assigned_by_initials', "asd"); //TODO: No Idea
+                test($ass_id = $ass->insert());
+
+                $app->addValue('hms_assignment_id', $ass_id);
+                $update = true;
+            }
+
+            if($update) {
+                $app->update();
+            }
+        }
+        
+        return HMS_Learning_Community::assign_applicants_to_rlcs();
+    }
+}
 ?>

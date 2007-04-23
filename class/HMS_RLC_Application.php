@@ -156,7 +156,7 @@ class HMS_RLC_Application{
     {
         $db = &new PHPWS_DB('hms_learning_community_applications');
 
-        if(isset($asu_user)){
+        if(isset($asu_username)){
             $db->addWhere('user_id',$asu_username,'ILIKE');
         }else{
             $db->addWhere('user_id',$_SESSION['asu_username'],'ILIKE');
@@ -185,7 +185,7 @@ class HMS_RLC_Application{
         PHPWS_Core::initModClass('hms','HMS_SOAP.php');
 
         $form = new PHPWS_Form;
-        $form->addHidden('type','admin');
+        $form->addHidden('type','rlc');
         $form->addHidden('op','rlc_assignments_submit');
         $form->addSubmit('Submit Changes');
 
@@ -193,6 +193,7 @@ class HMS_RLC_Application{
 
         $pager = &new DBPager('hms_learning_community_applications','HMS_RLC_Application');
         $pager->db->addOrder('date_submitted','ASC');
+        $pager->db->addWhere('hms_assignment_id',NULL,'is');
 
         $pager->setModule('hms');
         $pager->setTemplate('admin/rlc_assignments_pager.tpl');
@@ -262,8 +263,8 @@ class HMS_RLC_Application{
 
     function generateCourseOK($application_id){
         
-        $output  = "<label><input type=\"radio\" name=\"course_ok[$application_id]\" value=\"Y\">Y</label>";
-        $output .= "<label><input type=\"radio\" name=\"course_ok[$application_id]\" value=\"N\">N</label>";
+        $output  = '<label><input type="radio" name="course_ok['.$application_id.']" value="Y"' . ($this->required_course?' checked="checked"':'') . '>Y</label>';
+        $output .= '<label><input type="radio" name="course_ok['.$application_id.']" value="N"' . ($this->required_course?'':' checked="checked"') . '>N</label>';
         
         return $output;
     }

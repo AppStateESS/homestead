@@ -200,6 +200,29 @@ class HMS_SOAP{
     }
 
     /**
+     * Returns an address formatted as one line, like so:
+     * "line1, (line 2, )(line 3, )city, state, zip"
+     * Uses data returned from get_data.
+     */
+    function get_address_line($username)
+    {
+        $addr = HMS_SOAP::get_address($username);
+        if(PEAR::isError($addr)) {
+            return $addr;
+        } else if($addr == NULL) {
+            return '';
+        }
+
+        $line2 = ($addr['line2'] != NULL && $addr['line2'] != '') ? 
+                 ($addr['line2'] . ', ') : '';
+        $line3 = ($addr['line3'] != NULL && $addr['line3'] != '') ?
+                 ($addr['line3'] . ', ') : '';
+
+        return "{$addr['line1']}, $line2$line3{$addr['city']}, " .
+               "{$addr['state']} {$addr['zip']}";
+    }
+
+    /**
      * Returns the student type:
      * C => continuing
      * T => transfer

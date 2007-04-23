@@ -4,31 +4,31 @@
             <table cellpadding="4" cellspacing="1" width="99%">
                 <tr>
                     <th>&nbsp;</th>
-                    <th>Total</th>
 <!-- BEGIN headings -->
                     <th>{HEADING}</th>
 <!-- END headings -->
+                    <th>Total</th>
                 </tr>
                 <tr>
                     <th>Assignments (male/female)</th>
-                    <td>{TOTAL_ASSIGNMENTS}</td>
 <!-- BEGIN assignments -->
                     <td>{ASSIGNMENT}</td>
 <!-- END assignments -->
+                    <td>{TOTAL_ASSIGNMENTS}</td>
                 </tr>
                 <tr>
                     <th>Total Seats</th>
-                    <td>{TOTAL_AVAILABLE}</td>
 <!-- BEGIN available -->
                     <td>{AVAILABLE}</td>
 <!-- END available -->
+                    <td>{TOTAL_AVAILABLE}</td>
                 </tr>
                 <tr>
                     <th>Seats Remaining</th>
-                    <td>{TOTAL_REMAINING}</td>
 <!-- BEGIN remaining -->
                     <td>{REMAINING}</td>
 <!-- END remaining -->
+                    <td>{TOTAL_REMAINING}</td>
                 </tr>   
             </table>
             {EMPTY_MESSAGE}
