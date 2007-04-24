@@ -317,6 +317,7 @@ class HMS_Application {
 
         $pager->addWhere('hms_application.hms_student_id',$_REQUEST['asu_username'],'ILIKE');
         $pager->db->addOrder('hms_student_id','ASC');
+        # TODO: CHECK GENDER HERE!!!!
 
         $pager->setModule('hms');
         $pager->setTemplate('student/application_search_pager.tpl');
