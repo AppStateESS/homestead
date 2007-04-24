@@ -309,6 +309,13 @@ class HMS_Student {
                 PHPWS_Core::initModClass('hms','HMS_Application.php');
                 return HMS_Application::show_application($_REQUEST['user']);
                 break;
+            case 'show_profile':
+                PHPWS_Core::initModClass('hms', 'HMS_Side_Thingie.php');
+                $side_thingie = new HMS_Side_Thingie(HMS_SIDE_STUDENT_PROFILE);
+                $side_thingie->show();
+                PHPWS_Core::initModClass('hms', 'HMS_Student_Profile.php');
+                return HMS_Student_Profile::show_profile($_REQUEST['user']);
+                break;
             case 'show_rlc_application_form':
                 PHPWS_Core::initModClass('hms','HMS_Learning_Community.php');
                 return HMS_Learning_Community::show_rlc_application_form();
