@@ -3114,6 +3114,18 @@ class HMS_Form
         $profile_form->addDropBox('political_views_dropbox',$political_views);
         $profile_form->setLabel('political_views_dropbox','I consider myself: ');
 
+        $profile_form->addText('alternate_email');
+        $profile_form->setLabel('alternate_email','Alternate email: ');
+
+        $profile_form->addText('aim_sn');
+        $profile_form->setLabel('aim_sn','AIM screen name:');
+
+        $profile_form->addText('yahoo_sn');
+        $profile_form->setLabel('yahoo_sn','Yahoo! screen name: ');
+        
+        $profile_form->addText('msn_sn');
+        $profile_form->setLabel('msn_sn','MSN Screen name:');
+
         /***** College Life *****/
         $profile_form->addDropBox('intended_major',$majors);
         $profile_form->setLabel('intended_major','My intended academic major: ');

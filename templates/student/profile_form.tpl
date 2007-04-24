@@ -39,6 +39,22 @@
                 <td>{IMPORTANT_EXPERIENCE}<br />&nbsp;</td>
             </tr>
             <tr>
+                <td>{ALTERNATE_EMAIL_LABEL}</td>
+                <td>{ALTERNATE_EMAIL}<br />&nbsp;</td>
+            </tr>
+            <tr>
+                <td>{AIM_SN_LABEL}</td>
+                <td>{AIM_SN}<br />&nbsp;</td>
+            </tr>
+            <tr>
+                <td>{YAHOO_SN_LABEL}</td>
+                <td>{YAHOO_SN}<br />&nbsp;</td>
+            </tr>
+            <tr>
+                <td>{MSN_SN_LABEL}</td>
+                <td>{MSN_SN}<br />&nbsp;</td>
+            </tr>
+            <tr>
                 <th colspan="2">3. My Daily Life</th>
             </tr>
             <tr>

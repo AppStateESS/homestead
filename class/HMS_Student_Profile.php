@@ -15,6 +15,12 @@ class HMS_Student_Profile{
     var $user_id;
     var $date_submitted;
 
+    # Alternate contact info
+    var $alternate_email = NULL;
+    var $aim_sn = NULL;
+    var $yahoo_sn = NULL;
+    var $msn_sn = NULL;
+
     # Music choices 
     var $arts_and_crafts = 0;
     var $books_and_reading = 0;
@@ -236,6 +242,24 @@ class HMS_Student_Profile{
         $profile->set_date_submitted();
 
         #test($_REQUEST);
+
+
+        # Alternate contact info
+        if(isset($_REQUEST['alternate_email']) && $_REQUEST['alternate_email'] != ''){
+            $profile->set_alternate_email($_REQUEST['alternate_email']);
+        }
+
+        if(isset($_REQUEST['aim_sn']) && $_REQUEST['aim_sn'] != ''){
+            $profile->set_aim_sn($_REQUEST['alternate_email']);
+        }
+        
+        if(isset($_REQUEST['yahoo_sn']) && $_REQUEST['alternate_email'] != ''){
+            $profile->set_yahoo_sn($_REQUEST['alternate_email']);
+        }
+        
+        if(isset($_REQUEST['msn_sn']) && $_REQUEST['alternate_email'] != ''){
+            $profile->set_msn_sn($_REQUEST['alternate_email']);
+        }
         
         # Hobbies check boxes
         if(isset($_REQUEST['hobbies_checkbox']['arts_and_crafts'])){
@@ -529,6 +553,38 @@ class HMS_Student_Profile{
     
     function get_date_submitted(){
         return $this->date_submitted;
+    }
+
+    function set_alternate_email($mail){
+        $this->alternate_email = $mail;
+    }
+
+    function get_alternate_email(){
+        return $this->alternate_email;
+    }
+
+    function set_aim_sn($sn){
+        $this->aim_sn = $sn;
+    }
+
+    function get_aim_sn(){
+        return $this->aim_sn;
+    }
+
+    function set_yahoo_sn($sn){
+        $this->yahoo_sn = $sn;
+    }
+
+    function get_yahoo_sn(){
+        return $this->yahoo_sn;
+    }
+    
+    function set_msn_sn($sn){
+        $this->msn_sn = $sn;
+    }
+
+    function get_msn_sn($sn){
+        return $this->msn_sn;
     }
     
     function set_political_view($view){
