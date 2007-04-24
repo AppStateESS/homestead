@@ -338,10 +338,10 @@ class HMS_Application {
     {
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
         
-        $tags['STUDENT_ID'] = $this->getStudentID();
+        $tags['STUDENT_ID'] = $this->getStudentID() . "@appstate.edu";
         $tags['FIRST_NAME'] = HMS_SOAP::get_first_name($this->getStudentID());
         $tags['LAST_NAME'] = HMS_SOAP::get_last_name($this->getStudentID());
-        $tags['ACTIONS'] = PHPWS_Text::secureLink('[View]', 'hms',array('type'=>'student','op'=>'show_application','user'=>$this->getStudentID())) . " [Select as Roomate]";
+        $tags['ACTIONS'] = PHPWS_Text::secureLink('[View Profile]', 'hms',array('type'=>'student','op'=>'show_profile','user'=>$this->getStudentID()));
 
         return $tags;
     }
