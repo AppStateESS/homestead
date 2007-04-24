@@ -308,7 +308,7 @@ class HMS_Application {
     {
         PHPWS_Core::initCoreClass('DBPager.php');
 
-        $pageTags['USERNAME']   = _('Username');
+        $pageTags['USERNAME']   = _('Email');
         $pageTags['FIRST_NAME'] = _('First Name');
         $pageTags['LAST_NAME']  = _('Last Name');
         $PageTags['ACTIONS']    = _('Action');
