@@ -1,8 +1,8 @@
 <table cellpadding="4" cellspacing="1" width="100%">
     <tr>
-        <th>{USERNAME}</th>
         <th>{FIRST_NAME}</th>
         <th>{LAST_NAME}</th>
+        <th>{USERNAME}</th>
         <th>{ACTIONS}</th>
     </tr>
 
@@ -13,9 +13,9 @@
     <!-- END empty_table -->
     <!-- BEGIN listrows -->
     <tr {TOGGLE}>
-        <td>{STUDENT_ID}</td>
         <td>{FIRST_NAME}</td>
         <td>{LAST_NAME}</td>
+        <td>{STUDENT_ID}</td>
         <td>{ACTIONS}</td>
     </tr>
     <!-- END listrows -->
