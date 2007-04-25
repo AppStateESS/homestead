@@ -263,7 +263,7 @@ class HMS_RLC_Application{
 
     function generateCourseOK($application_id){
         
-        $output  = '<label><input type="radio" name="course_ok['.$application_id.']" value="Y"' . ($this->required_course?' checked="checked"':'') . '>Y</label>';
+        $output  = '<label><input type="radio" name="course_ok['.$application_id.']" value="Y"' . ($this->required_course?' checked="checked"':'') . '>Y</label><br />';
         $output .= '<label><input type="radio" name="course_ok['.$application_id.']" value="N"' . ($this->required_course?'':' checked="checked"') . '>N</label>';
         
         return $output;
