@@ -252,7 +252,7 @@ function hms_update(&$content, $currentVersion)
             $files[] = 'templates/admin/rlc_assignments_pager.tpl';
             $files[] = 'templates/admin/make_new_rlc_assignments_summary.tpl';
 
-            PHPWS_Boos::updateFiles($files, 'hms');
+            PHPWS_Boost::updateFiles($files, 'hms');
 
             $content[] = '+ Added success/failure message template';
             $content[] = '+ Added unique constraint to user_id column in student profiles.';
