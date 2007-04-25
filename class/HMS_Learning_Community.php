@@ -324,6 +324,7 @@ class HMS_Learning_Community
         $db = &new PHPWS_DB('hms_learning_communities');
         $db->addColumn('community_name');
         $db->addColumn('capacity');
+        $db->addColumn('id');
         $communities = $db->select();
 
         if(!$communities) {
@@ -337,24 +338,28 @@ class HMS_Learning_Community
         $count = 0;
         $total_assignments = 0;
         $total_available = 0;
-        $total_remaining = 0;
 
-        // TODO: Sane values in place of the zeroes below:
         foreach($communities as $community) {
+            $db = &new PHPWS_DB('hms_learning_community_assignment');
+            $db->addWhere('rlc_id', $community['id']);
+            $assigned = $db->select('count');
+            if($assigned == NULL) $assigned = 0;
+            
             $template['headings'][$count]['HEADING']       = $community['community_name'];
+           
+            $template['assignments'][$count]['ASSIGNMENT'] = $assigned;
+            $total_assignments += $assigned;
             
-            $template['assignments'][$count]['ASSIGNMENT'] = 0; // HERE
-            
-            $template['available'][$count]['AVAILABLE']    = $community['capacity'];    // THIS is correct.
+            $template['available'][$count]['AVAILABLE']    = $community['capacity'];
             $total_available += $community['capacity'];
             
-            $template['remaining'][$count]['REMAINING']    = 0; // and HERE
+            $template['remaining'][$count]['REMAINING']    = $community['capacity'] - $assigned;
             $count++;
         }
 
         $template['TOTAL_ASSIGNMENTS'] = $total_assignments;
         $template['TOTAL_AVAILABLE'] = $total_available;
-        $template['TOTAL_REMAINING'] = $total_remaining;
+        $template['TOTAL_REMAINING'] = $total_available - $total_assignments;
 
         return PHPWS_Template::process($template, 'hms',
                 'admin/make_new_rlc_assignments_summary.tpl');
