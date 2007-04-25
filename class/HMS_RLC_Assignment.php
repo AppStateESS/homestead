@@ -55,7 +55,6 @@ class HMS_RLC_Assignment{
 
         $this->setAsuUsername($result['asu_username']);
         $this->setRlcId($result['rlc_id']);
-        echo "LOOK AT ME IM HERE :-D";
         $this->setCourseOk($result['course_ok'] == 1 ? 'Y' : 'N');
         $this->setAssignedByUser($result['assigned_by_user']);
         $this->setAssignedByInitials($result['assigned_by_initials']);
