@@ -148,52 +148,51 @@ class HMS_Learning_Community
      * If no options passed, shows for the currently logged student
      * If an username is provided, shows the RLC application for that student
      */
-    function show_rlc_application($username = NULL)
+    function view_rlc_application($username = NULL)
     {
         if($username == NULL) {
             $username = $_SESSION['asu_username'];
-
             $tags['MENU_LINK'] = PHPWS_Text::secureLink(_('Return to Menu'), 'hms', array('type'=>'student', 'op'=>'main'));
-         
-            PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
-            $tags['FULL_NAME'] = HMS_SOAP::get_first_name($username) . " " . HMS_SOAP::get_last_name($username);
+       } else {
+            $tags['MENU_LINK'] = PHPWS_Text::secureLink(_('Return to RLC Applications'), 'hms', array('type'=>'rlc', 'op'=>'assign_applicants_to_rlcs'));
+       }
 
-            $tags['FIRST_CHOICE_LABEL'] = "Your first choice RLC is: ";
-            $tags['SECOND_CHOICE_LABEL'] = "Your second choice is: ";
-            $tags['THIRD_CHOICE_LABEL'] =  "Your third choice is: ";
-            
-            $tags['WHY_SPECIFIC_LABEL'] = "You chose your specific communities because: ";
-            $tags['STRENGTHS_AND_WEAKNESSES_LABEL'] = "Your strengths and weaknesses: ";
-            $tags['WHY_FIRST_CHOICE_LABEL'] = "You selected your first choice because: ";
-            $tags['WHY_SECOND_CHOICE_LABEL'] = "You selected your second choice because: ";
-            $tags['WHY_THIRD_CHOICE_LABEL'] = "You selected your third choice because: ";
+        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+        $tags['FULL_NAME'] = HMS_SOAP::get_first_name($username) . " " . HMS_SOAP::get_last_name($username);
 
-            PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
-            $rlc_app = &new HMS_RLC_Application($username);
-            $db = &new PHPWS_DB('hms_learning_communities');
-            $db->addColumn('id');
-            $db->addColumn('community_name');
-            $rlcs_raw = $db->select();
-            
-            foreach($rlcs_raw as $rlc) {
-                $rlcs[$rlc['id']] = $rlc['community_name'];
-            }
+        $tags['FIRST_CHOICE_LABEL'] = "First choice RLC is: ";
+        $tags['SECOND_CHOICE_LABEL'] = "Second choice is: ";
+        $tags['THIRD_CHOICE_LABEL'] =  "Third choice is: ";
+        
+        $tags['WHY_SPECIFIC_LABEL'] = "Specific communities chosen because: ";
+        $tags['STRENGTHS_AND_WEAKNESSES_LABEL'] = "Strengths and weaknesses: ";
+        $tags['WHY_FIRST_CHOICE_LABEL'] = "First choice selected because: ";
+        $tags['WHY_SECOND_CHOICE_LABEL'] = "Second choice selected because: ";
+        $tags['WHY_THIRD_CHOICE_LABEL'] = "Third choice selected because: ";
 
-            $tags['FIRST_CHOICE'] = $rlcs[$rlc_app->rlc_first_choice_id];
-            $tags['SECOND_CHOICE'] = $rlcs[$rlc_app->rlc_second_choice_id];
-            $tags['THIRD_CHOICE'] = $rlcs[$rlc_app->rlc_third_choice_id];
-            $tags['WHY_SPECIFIC'] = $rlc_app->why_specific_communities;
-            $tags['STRENGTHS_AND_WEAKNESSES'] = $rlc_app->strengths_weaknesses;
-            $tags['WHY_FIRST_CHOICE'] = $rlc_app->rlc_question_0;
-            $tags['WHY_SECOND_CHOICE'] = $rlc_app->rlc_question_1;
-            $tags['WHY_THIRD_CHOICE'] = $rlc_app->rlc_question_2;
-
-            $final =  PHPWS_Template::process($tags, 'hms', 'student/rlc_application.tpl');
-
-            return $final;
-        } else {
-            return 'yi';
+        PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
+        $rlc_app = &new HMS_RLC_Application($username);
+        $db = &new PHPWS_DB('hms_learning_communities');
+        $db->addColumn('id');
+        $db->addColumn('community_name');
+        $rlcs_raw = $db->select();
+        
+        foreach($rlcs_raw as $rlc) {
+            $rlcs[$rlc['id']] = $rlc['community_name'];
         }
+
+        $tags['FIRST_CHOICE'] = $rlcs[$rlc_app->rlc_first_choice_id];
+        $tags['SECOND_CHOICE'] = $rlcs[$rlc_app->rlc_second_choice_id];
+        $tags['THIRD_CHOICE'] = $rlcs[$rlc_app->rlc_third_choice_id];
+        $tags['WHY_SPECIFIC'] = $rlc_app->why_specific_communities;
+        $tags['STRENGTHS_AND_WEAKNESSES'] = $rlc_app->strengths_weaknesses;
+        $tags['WHY_FIRST_CHOICE'] = $rlc_app->rlc_question_0;
+        $tags['WHY_SECOND_CHOICE'] = $rlc_app->rlc_question_1;
+        $tags['WHY_THIRD_CHOICE'] = $rlc_app->rlc_question_2;
+
+        $final =  PHPWS_Template::process($tags, 'hms', 'student/rlc_application.tpl');
+
+        return $final;
     }
 
     /*
@@ -292,17 +291,18 @@ class HMS_Learning_Community
             case 'confirm_delete_learning_community':
                 return HMS_Learning_Community::confirm_delete_learning_community();
                 break;
-
             case 'assign_applicants_to_rlcs':
                 return HMS_Learning_Community::assign_applicants_to_rlcs();
                 break;
             case 'view_rlc_assignments':
                 return HMS_Learning_Community::view_rlc_assignments();
                 break;
+            case 'view_rlc_application':
+                return HMS_Learning_Community::view_rlc_application($_REQUEST['username']);
+                break;
             case 'rlc_assignments_submit':
                 return HMS_Learning_Community::rlc_assignments_submit();
                 break;
- 
             default:
                 return "{$_REQUEST['op']} <br />";
                 break;
