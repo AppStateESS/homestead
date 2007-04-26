@@ -251,6 +251,7 @@ function hms_update(&$content, $currentVersion)
             $files[] = 'templates/admin/display_final_rlc_assignments.tpl';
             $files[] = 'templates/admin/rlc_assignments_pager.tpl';
             $files[] = 'templates/admin/make_new_rlc_assignments_summary.tpl';
+            $files[] = 'templates/student/rlc_application.tpl';
 
             PHPWS_Boost::updateFiles($files, 'hms');
 
@@ -260,8 +261,7 @@ function hms_update(&$content, $currentVersion)
             $content[] = '+ Allowed access to RLC assignments on the maintenance page.';
             $content[] = '+ Finalized Final RLC Assignments page.';
             $content[] = '+ Fixed formatting in the RLC Applicatition assignments pager and the corresponding summary.';
-
-            
+            $content[] = '+ Added student viewing of their RLC applications.';
     }
 
     return TRUE;

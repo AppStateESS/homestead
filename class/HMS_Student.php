@@ -246,6 +246,20 @@ class HMS_Student {
         return $testing->GetStudentProfile($username, $term);
     }
 
+    function get_roommate_username()
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
+        $content = HMS_Form::get_roommate_username();
+        return $content;
+    }
+
+    function verify_roommate_username()
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
+        $content = HMS_Form::verify_roommate_username($_SESSION['asu_username'], $_REQUEST['username']);
+        return $content;
+    }
+
     function main()
     {
         if($_REQUEST['op'] == 'login') {
@@ -344,9 +358,17 @@ class HMS_Student {
                 $side_thingie->show();
                 PHPWS_Core::initModClass('hms','HMS_Student_Profile.php');
                 return HMS_Student_Profile::show_profile_form();
+                break;
             case 'student_profile_submit':
                 PHPWS_Core::initModClass('hms','HMS_Student_Profile.php');
                 return HMS_Student_Profile::submit_profile();
+                break;
+            case 'get_roommate_username':
+                return HMS_Student::get_roommate_username();
+                break;
+            case 'verify_roommate_username':
+                return HMS_Student::verify_roommate_username();
+                break;
             case 'main':
                 PHPWS_Core::initModClass('hms', 'HMS_Application.php');
                 if(HMS_Application::check_for_application($_SESSION['asu_username'])) {
@@ -378,7 +400,10 @@ class HMS_Student {
 
                     $message .= PHPWS_Text::secureLink(_('Create your Profile'), 'hms', array('type'=>'student', 'op' =>'show_profile_form'));
                     $message .= "<br /><br />";
-                    $message .= PHPWS_Text::secureLink(_('Search for a roomate'), 'hms', array('type'=>'student','op'=>'show_application_search'));
+                    $message .= PHPWS_Text::secureLink(_('Select your roommate'), 'hms', array('type'=>'student','op'=>'get_roommate_username'));
+                    $message .= "<br /><br />";
+                    $message .= "If you do not know who you want to room with, please use our ";
+                    $message .= PHPWS_Text::secureLink('roommate search tool.', 'hms', array('type'=>'student','op'=>'show_application_search'));
                     $message .= "<br /><br />";
                     $message .= PHPWS_Text::secureLink(_('Logout'), 'users', array('action'=>'user', 'command'=>'logout'));
                     $message .= "<br /><br />";

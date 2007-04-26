@@ -143,6 +143,23 @@ class HMS_Form
         return $final;
     }
 
+    function get_roommate_username()
+    {
+        PHPWS_Core::initCoreClass('Form.php');
+        $form = &new PHPWS_Form;
+
+        $form->addText('username');
+        $form->addHidden('module', 'hms');
+        $form->addHidden('type', 'roommate');
+        $form->addHidden('op', 'verify_roommate_username');
+        $form->addSubmit('submit', _('Submit Username'));
+
+        $tpl = $form->getTemplate();
+        $tpl['ERROR'] = $error;
+        $final = PHPWS_Template::process($tpl, 'hms', 'admin/get_single_username.tpl');
+        return $final;
+    }
+
     function get_username_for_edit_grouping($error)
     {
         PHPWS_Core::initCoreClass('Form.php');
