@@ -44,17 +44,17 @@ class HMS_RLC_Application{
             return;
         }
 
-        $result = $this->init();
+        $result = $this->init($user_id);
         if(PEAR::isError($result)){
             PHPWS_Error::log($result,'hms','HMS_RLC_Application()','Caught error from init');
             return $result;
         }
     }
 
-    function init()
+    function init($user_id = NULL)
     {
         # Check if an application for this user already exits.
-        $result = HMS_RLC_Application::check_for_application();
+        $result = HMS_RLC_Application::check_for_application($user_id);
 
         if(PEAR::isError($result)){
             PHPWS_Error::log($result,'hms','init',"Caught error from check_for_application");
@@ -68,7 +68,7 @@ class HMS_RLC_Application{
         $this->setDateSubmitted($result['date_submitted']);
         $this->setFirstChoice($result['rlc_first_choice_id']);
         $this->setSecondChoice($result['rlc_second_choice_id']);
-        $this->setThirdChoice($result['rlc_second_choice_id']);
+        $this->setThirdChoice($result['rlc_third_choice_id']);
         $this->setWhySpecificCommunities($result['why_specific_communities']);
         $this->setStrengthsWeaknesses($result['strengths_weaknesses']);
         $this->setRLCQuestion0($result['rlc_question_0']);
@@ -213,10 +213,9 @@ class HMS_RLC_Application{
         $rlc_list = HMS_RLC_Application::getRLCList();
 
         $tags = array();
-        
 
         $tags['NAME'] = HMS_SOAP::get_full_name_inverted($this->getUserID());
-        $tags['1ST_CHOICE']  = $rlc_list[$this->getFirstChoice()];
+        $tags['1ST_CHOICE']  = PHPWS_Text::secureLink($rlc_list[$this->getFirstChoice()], 'hms', array('type'=>'rlc', 'op'=>'view_rlc_application', 'username'=>$this->getUserID()));
         $tags['2ND_CHOICE']  = $rlc_list[$this->getSecondChoice()];
         $tags['3RD_CHOICE']  = $rlc_list[$this->getThirdChoice()];
         $tags['FINAL_RLC']   = HMS_RLC_Application::generateRLCDropDown($rlc_list,$this->getID());
