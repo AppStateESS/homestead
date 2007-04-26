@@ -320,12 +320,12 @@ class HMS_Student {
                 PHPWS_Core::initModClass('hms','HMS_Learning_Community.php');
                 return HMS_Learning_Community::show_rlc_application_form();
                 break;
-            case 'show_rlc_application':
+            case 'view_rlc_application':
                 PHPWS_Core::initModClass('hms', 'HMS_Side_Thingie.php');
                 $side_thingie = new HMS_Side_Thingie(HMS_SIDE_STUDENT_RLC);
                 $side_thingie->show();
                 PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
-                return HMS_Learning_Community::show_rlc_application();
+                return HMS_Learning_Community::view_rlc_application();
                 break;
             case 'rlc_application_page1_submit':
                 PHPWS_Core::initModClass('hms','HMS_Learning_Community.php');
@@ -372,7 +372,7 @@ class HMS_Student {
                         $message .= PHPWS_Text::secureLink(_('RLC Application Form'), 'hms', array('type'=>'student', 'op'=>'show_rlc_application_form'));
                         $message .="<br /><br />";
                     } else {
-                        $message .= PHPWS_Text::secureLink(_('View My RLC Application'), 'hms', array('type'=>'student', 'op'=>'show_rlc_application'));
+                        $message .= PHPWS_Text::secureLink(_('View My RLC Application'), 'hms', array('type'=>'student', 'op'=>'view_rlc_application'));
                         $message .= "<br /><br />";
                     }
 
