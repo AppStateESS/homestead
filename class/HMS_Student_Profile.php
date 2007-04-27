@@ -156,18 +156,18 @@ class HMS_Student_Profile{
         if(!isset($user_id)){
             $user_id = $_SESSION['asu_username'];
         }
-        
+       
         $db = &new PHPWS_DB('hms_student_profiles');
        
         $db->addWhere('user_id',$user_id,'=');
         $result = $db->select('row');
-         
+
         if(PEAR::isError($result)){
             PHPWS_Error::log($result);
             return $result;
         }
 
-        if(sizeof($result > 0)){
+        if($result != NULL && sizeof($result > 0)){
             return $result['id'];
         }else{
             return FALSE;
@@ -216,6 +216,8 @@ class HMS_Student_Profile{
         
     }
 
+   // TODO: viewing profiles here 
+
     /**
      * Saves a submitted profile
      */
@@ -236,10 +238,9 @@ class HMS_Student_Profile{
             $profile = new HMS_Student_Profile($id);
         }else{
             $profile = new HMS_Student_Profile();
+            $profile->set_user_id($_SESSION['asu_username']);
+            $profile->set_date_submitted();
         }
-
-        $profile->set_user_id($_SESSION['asu_username']);
-        $profile->set_date_submitted();
 
         #test($_REQUEST);
 
@@ -517,7 +518,7 @@ class HMS_Student_Profile{
             return PHPWS_Template::process($template, 'hms', 'student/student_success_failure_message.tpl');
         }
 
-        $template['SUCCESS'] = "Your profile was successfully created.";
+        $template['SUCCESS'] = "Your profile was successfully created/updated.";
         $template['SUCCESS'] .= "<br /><br />";
         $template['SUCCESS'] .= PHPWS_Text::secureLink(_('Back to Main Menu'), 'hms', array('type'=>'student','op'=>'main'));
         return PHPWS_Template::process($template, 'hms', 'student/student_success_failure_message.tpl');
