@@ -120,6 +120,8 @@ class HMS_Application {
                 $success .= "<br /><br />";
                 $success .= PHPWS_Text::secureLink(_('Apply for a RLC'), 'hms', array('type'=>'student', 'op'=>'show_rlc_application_form'));
                 $success .= "<br /><br />";
+                $success .= PHPWS_Text::secureLink(_('Back to Main Menu'), 'hms', array('type'=>'student','op'=>'main'));
+                $success .= "<br /><br />";
                 $success .= PHPWS_Text::moduleLink(_('Logout'), 'users', array('action'=>'user', 'command'=>'logout'));
                 return $success;
             }
