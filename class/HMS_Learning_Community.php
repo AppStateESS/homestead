@@ -386,8 +386,6 @@ class HMS_Learning_Community
                     'admin/make_new_rlc_assignments_summary.tpl');
         }
 
-        
-
         $count = 0;
         $total_assignments = 0;
         $total_available = 0;
@@ -395,12 +393,21 @@ class HMS_Learning_Community
         foreach($communities as $community) {
             $db = &new PHPWS_DB('hms_learning_community_assignment');
             $db->addWhere('rlc_id', $community['id']);
-            $assigned = $db->select('count');
-            if($assigned == NULL) $assigned = 0;
+            $db->addWhere('gender', 'M');
+            $male = $db->select('count');
+            
+            $db->resetWhere();
+            $db->addWhere('rlc_id', $community['id']);
+            $db->addWhere('gender', 'F');
+            $female = $db->select('count');
+
+            if($male   == NULL) $male   = 0;
+            if($female == NULL) $female = 0;
+            $assigned = $male + $female;
             
             $template['headings'][$count]['HEADING']       = $community['community_name'];
            
-            $template['assignments'][$count]['ASSIGNMENT'] = $assigned;
+            $template['assignments'][$count]['ASSIGNMENT'] = "$assigned ($male/$female)";
             $total_assignments += $assigned;
             
             $template['available'][$count]['AVAILABLE']    = $community['capacity'];
@@ -436,6 +443,8 @@ class HMS_Learning_Community
     {
         $errors = array();
 
+        PHPWS_Core::initModClass('hms','HMS_SOAP.php');
+
         PHPWS_Core::initModClass('hms','HMS_RLC_Application');
         $app = &new PHPWS_DB('hms_learning_community_applications');
         $app->addColumn('id');
@@ -463,11 +472,11 @@ class HMS_Learning_Community
             }
 
             if(isset($_REQUEST['final_rlc'][$id]) && $_REQUEST['final_rlc'][$id] > -1) {
-                $ass->addValue('asu_username',         $application['user_id']);
-                $ass->addValue('rlc_id',               $_REQUEST['final_rlc'][$id]);
-                $ass->addValue('assigned_by_user',     0); //TODO: Current_User?
-                $ass->addValue('assigned_by_initials', "asd"); //TODO: This may be entirely unnecessary.
-                test($ass_id = $ass->insert());
+                $ass->addValue('asu_username',      $application['user_id']);
+                $ass->addValue('rlc_id',            $_REQUEST['final_rlc'][$id]);
+                $ass->addValue('assigned_by',  Current_User::getUsername());
+                $ass->addValue('gender',            HMS_SOAP::get_gender($application['user_id']));
+                $ass_id = $ass->insert();
 
                 $app->addValue('hms_assignment_id', $ass_id);
                 $update = true;

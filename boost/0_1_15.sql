@@ -19,6 +19,16 @@ ALTER TABLE hms_student_profiles ALTER COLUMN aim_sn SET NULL;
 ALTER TABLE hms_student_profiles ALTER COLUMN yahoo_sn SET NULL;
 ALTER TABLE hms_student_profiles ALTER COLUMN msn_sn SET NULL;
 
+ALTER TABLE hms_learning_community_assignment ADD COLUMN gender character varying(32);
+ALTER TABLE hms_learning_community_assignment ALTER COLUMN gender SET NOT NULL;
+
+ALTER TABLE hms_learning_community_assignment DROP COLUMN assigned_by_user;
+ALTER TABLE hms_learning_community_assignment DROP COLUMN assigned_by_initials;
+
+ALTER TABLE hms_learning_community_assignment ADD COLUMN assigned_by character varying(32);
+UPDATE hms_learning_community_assignment SET assigned_by = 'unknown';
+ALTER TABLE hms_learning_community_assignment ALTER COLUMN assigned_by SET NOT NULL;
+
 DROP TABLE hms_roommate_hashes;
 CREATE TABLE hms_roommate_approval (
     id INTEGER NOT NULL,

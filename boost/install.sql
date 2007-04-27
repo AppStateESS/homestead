@@ -67,8 +67,8 @@ CREATE TABLE hms_learning_community_assignment (
     id                   integer NOT NULL,
     asu_username         character varying(32) UNIQUE NOT NULL,
     rlc_id               integer NOT NULL REFERENCES hms_learning_communities(id),
-    assigned_by_user     integer NOT NULL,
-    assigned_by_initials character varying(8),
+    gender               character varying(2) NOT NULL,
+    assigned_by          character varying(32) NOT NULL,
     PRIMARY KEY (id)
 );
 
