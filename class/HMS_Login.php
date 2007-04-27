@@ -17,7 +17,7 @@ class HMS_Login
 
     function login_user()
     {
-        require_once(PHPWS_SOURCE_DIR . 'mod/hms/inc/axp.php');
+        require_once(PHPWS_SOURCE_DIR . 'inc/axp.php');
 
         if($type = axp_authorize($_REQUEST['asu_username'], $_REQUEST['password'])) {
             return HMS_Login::student_login();
