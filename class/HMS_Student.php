@@ -291,7 +291,9 @@ class HMS_Student {
     
             PHPWS_Core::initModClass('hms', 'HMS_Student_Profile.php');
             if(HMS_Student_Profile::check_for_profile() === FALSE) {
-                $message .= PHPWS_Text::secureLink(_('Create your Profile'), 'hms', array('type'=>'student', 'op' =>'show_profile_form'));
+                $message .= "The HMS Student Profile is optional and can be used to help you find a roommate who shares your interests. ";
+                $message .= "You can currently only create a new profile. We are scheduled to have profile searching and editing available on Monday, 7 May, 2007. ";
+                $message .= PHPWS_Text::secureLink(_('Create your optional Student Profile'), 'hms', array('type'=>'student', 'op' =>'show_profile_form'));
             } else {
                 $message .= "You have created a profile. You should be able to edit and view this profile by Monday, 7 May, 2007.";
             }
@@ -305,7 +307,6 @@ class HMS_Student {
             }
 
             $message .= "<br /><br />";
-            $message .= "If you do not know who you want to room with, our roommate search tool should be available by Monday, 7 May, 2007.";
             //$message .= PHPWS_Text::secureLink('roommate search tool.', 'hms', array('type'=>'student','op'=>'show_application_search'));
             $message .= "<br /><br />";
             $message .= PHPWS_Text::secureLink(_('Logout'), 'users', array('action'=>'user', 'command'=>'logout'));
