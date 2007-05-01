@@ -143,7 +143,7 @@ class HMS_Form
         return $final;
     }
 
-    function get_roommate_username()
+    function get_roommate_username($error = NULL)
     {
         PHPWS_Core::initCoreClass('Form.php');
         $form = &new PHPWS_Form;
@@ -156,7 +156,58 @@ class HMS_Form
 
         $tpl = $form->getTemplate();
         $tpl['ERROR'] = $error;
+        $tpl['MENU_LINK'] = PHPWS_Text::secureLink(_('Return to Menu'), 'hms', array('type'=>'student', 'op'=>'main'));
         $final = PHPWS_Template::process($tpl, 'hms', 'admin/get_single_username.tpl');
+        return $final;
+    }
+
+    function verify_roommate_username()
+    {
+        $error = '';
+
+        if(!PHPWS_Text::isValidInput($_REQUEST['username'])) {
+            $error = "That is bad input. Please use letters and numbers *only*.";
+            return HMS_Form::get_roommate_username($error);
+        }
+
+        PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
+        
+        if(HMS_Roommate::check_valid_students() != '') {
+            $error = "That is not a valid username.";
+            return HMS_Form::get_roommate_username($error);
+        }
+
+        PHPWS_Core::initModClass('hms', 'HMS_Roommate_Approval.php');
+        if(HMS_Roommate_Approval::has_requested_someone()) {
+            return HMS_Student::show_main_menu();
+        }
+
+        $_REQUEST['first_roommate'] = $_SESSION['asu_username'];
+        $_REQUEST['second_roommate'] = $_REQUEST['username'];
+
+        if(HMS_Roommate::check_consistent_genders() != '') {
+            $error = "That is not an allowed roommate. You can only select roommates whose gender matches your own.";
+            return HMS_Form::get_roommate_username($error);
+        }
+
+        PHPWS_Core::initCoreClass('Form.php');
+        $form = &new PHPWS_Form;
+
+        $form->addHidden('module', 'hms');
+        $form->addHidden('type', 'roommate_approval');
+        $form->addHidden('first_roommate', $_SESSION['asu_username']);
+        $form->addHidden('second_roommate', $_REQUEST['username']);
+        $form->addHidden('op', 'save_roommate_username');
+        $form->addSubmit('submit', 'Yes, I want that roommate!');
+        $form->addSubmit('cancel', 'No, that is wrong!');
+
+        $tpl = $form->getTemplate();
+        $tpl['ERROR'] = $error;
+        $tpl['FIRST_NAME']  = "Kevin";
+        $tpl['LAST_NAME']   = "Wilcox";
+        $tpl['USERNAME']    = $_REQUEST['username'];
+        
+        $final = PHPWS_Template::process($tpl, 'hms', 'student/verify_single_roommate.tpl');
         return $final;
     }
 
