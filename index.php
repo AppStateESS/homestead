@@ -43,8 +43,9 @@ if(Current_User::isLogged()) {
     if($_REQUEST['op'] == 'student_approval') {
         $success = HMS_Roommate_Approval::student_approve_roommates($_REQUEST['user'], $_REQUEST['hash']);
     } else if ($_REQUEST['op'] == 'student_denial') {
-        test($_REQUEST, 1);
+        $success = HMS_Roommate_Approval::student_deny_roommates($_REQUEST['user'], $_REQUEST['hash']);
     }
+    Layout::add($success);
 } else {
     PHPWS_Core::initModClass('hms', 'HMS_Login.php');
     HMS_Login::display_login_screen();
