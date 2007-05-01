@@ -4,17 +4,19 @@ class HMS_Roommate_Approval
 {
 
     var $id;
-    var $approval_hash;
     var $number_roommates;
-    var $room_id;
     var $roommate_zero;
     var $roommate_zero_approved;
+    var $roommate_zero_personal_hash;
     var $roommate_one;
     var $roommate_one_approved;
+    var $roommate_one_personal_hash;
     var $roommate_two;
     var $roommate_two_approved;
+    var $roommate_two_personal_hash;
     var $roommate_three;
     var $roommate_three_approved;
+    var $roommate_three_personal_hash;
 
     /**
      * Sets the id of the group approval
@@ -161,6 +163,14 @@ class HMS_Roommate_Approval
     }
 
     /**
+     * Sets the number of roommates to expect for this object
+     */
+    function set_number_roommates($number_roommates)
+    {
+        $this->number_roommates = $number_roommates;
+    }
+
+    /**
      * Constructor for the Roommate_Approval class
      * Can be passed the id of a grouping already in the database to
      *   create a new instance of that grouping
@@ -180,9 +190,7 @@ class HMS_Roommate_Approval
     function set_values_null()
     {
         $this->set_id(NULL);
-        $this->set_approval_hash(NULL);
         $this->set_number_roommates(NULL);
-        $this->set_room_id(NULL);
         $this->set_roommate_zero(NULL);
         $this->set_roommate_zero_approved(NULL);
         $this->set_roommate_one(NULL);
@@ -233,6 +241,22 @@ class HMS_Roommate_Approval
     }
 
     /**
+     * 
+     */
+    function has_requested_someone()
+    {
+        $db = &new PHPWS_DB('hms_roommate_approval');
+        $db->addColumn('id');
+        $db->addWhere('roommate_zero', $_SESSION['asu_username']);
+        $exists = $db->select('one');
+        if($exists != FALSE || $exists != NULL) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * Returns an error if the genders of the specified users are different
      */
     function check_consistent_genders($rz, $ro, $rt = NULL, $rh = NULL)
@@ -258,6 +282,243 @@ class HMS_Roommate_Approval
             else if($g3 != $g4) $error = $rt . " and " . $rh . " must have the same gender.<br />";
         }
         return $error;
+    }
+
+    function set_roommate_zero_personal_hash($hash)
+    {
+        $this->roommate_zero_personal_hash = $hash;
+    }
+
+    function set_roommate_one_personal_hash($hash)
+    {
+        $this->roommate_one_personal_hash = $hash;
+    }
+
+    function set_roommate_two_personal_hash($hash)
+    {
+        $this->roommate_two_personal_hash = $hash;
+    }
+
+    function set_roommate_three_personal_hash($hash)
+    {
+        $this->roommate_three_personal_hash = $hash;
+    }
+
+    function get_roommate_zero_personal_hash()
+    {
+        return $this->roommate_zero_personal_hash;
+    }
+
+    function get_roommate_one_personal_hash()
+    {
+        return $this->roommate_one_personal_hash;
+    }
+
+    function get_roommate_two_personal_hash()
+    {
+        return $this->roommate_two_personal_hash;
+    }
+
+    function get_roommate_three_personal_hash()
+    {
+        return $this->roommate_three_personal_hash;
+    }
+
+    /**
+     * Sets values for each member variable
+     */
+    function set_values()
+    {
+        if(isset($_REQUEST['id']) && $_REQUEST['id'] != NULL && is_numeric($_REQUEST['id'])) {
+            $this->set_id($_REQUEST['id']);
+        }
+
+        $this->set_number_roommates('2');
+        $this->set_roommate_zero($_REQUEST['first_roommate']);
+        $this->set_roommate_one($_REQUEST['second_roommate']);
+        $this->set_roommate_two(NULL);
+        $this->set_roommate_three(NULL);
+        $this->set_roommate_zero_approved('0');
+        $this->set_roommate_one_approved('0');
+        $this->set_roommate_two_approved(NULL);
+        $this->set_roommate_three_approved(NULL);
+        $this->set_roommate_zero_personal_hash(md5('Who wants to go to ASU?' . $_REQUEST['first_roommate'] . ' does.'));
+        $this->set_roommate_one_personal_hash(md5('Who wants to go to ASU?' . $_REQUEST['second_roommate'] . ' does.'));
+        $this->set_roommate_two_personal_hash(NULL);
+        $this->set_roommate_three_personal_hash(NULL);
+    }
+
+    /** 
+     * Create a new two person grouping
+     * This is the student-specified group
+     */
+    function save_roommate_username()
+    {   
+        // Create the roommate group
+        $grouping = new HMS_Roommate_Approval();
+        $grouping->set_values();
+        $grouping->set_roommate_one_approved('1');
+  
+        // save it
+        $db = &new PHPWS_DB('hms_roommate_approval');
+        $result = $db->saveObject($grouping);
+
+        if($result == FALSE || $result == NULL) {
+            $msg = "There was an error saving your roommate preference. Please contact Housing and Residence Life.";
+        } else {
+            // email the students
+            HMS_Roommate_Approval::email_students($grouping->get_roommate_zero(), $grouping->get_roommate_zero_personal_hash(), 
+                                                  $grouping->get_roommate_one(),  $grouping->get_roommate_one_personal_hash());
+
+            // return a success message
+            $msg = "Congratulations! " . $grouping->get_roommate_one() . " has been sent an email to confirm your request of that person as your roommate.<br /><br />";
+        } 
+        $msg .= PHPWS_Text::secureLink(_('Return to Menu'), 'hms', array('type'=>'student', 'op'=>'main'));
+        return $msg;
+    }   
+
+    /**
+     * Emails the up-to four roommates about the roommate request 
+     */ 
+    function email_students($rz, $rz_hash, $ro, $ro_hash, $rt = NULL, $rh = NULL) 
+    {
+        PHPWS_Core::initCoreClass('Mail.php');
+        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+
+        // set tags for the email to the person doing the requesting
+        $message = "To:     " . HMS_SOAP::get_first_name($rz) . " " . HMS_SOAP::get_last_name($rz) . "\n"; 
+        $message .= "\n";
+        $message .= "From:   Housing Management System\n";
+        $message .= "\n";
+        $message .= "This is a follow-up email to let you know you have requested " . HMS_SOAP::get_first_name($ro) . " " . HMS_SOAP::get_last_name($ro) . " as your roommate.\n";
+        $message .= "\n";
+        $message .= "We have sent that person an email asking them to accept or reject the invitation. You will be notified\n";
+        $message .= "via email when this occurs.\n";
+        $message .= "\n";
+        $message .= "Please note that you can not reply to this email.";
+
+        // create the Mail object and send it
+        $rz_mail = &new PHPWS_Mail;
+        $rz_mail->addSendTo($rz . "appstate.edu");
+        $rz_mail->setFrom('hms@tux.appstate.edu');
+        $rz_mail->setSubject('HMS Roommate Request');
+        $rz_mail->setMessageBody($message);
+        $success = $rz_mail->send();
+       
+        if($success != TRUE) {
+            return "There was an error emailing your requested roommate. Please contact Housing and Residence Life.";
+        }
+
+        // create the Mail object and send it
+        $message = "To:     " . HMS_SOAP::get_first_name($ro) . " " . HMS_SOAP::get_last_name($ro) . "\n";
+        $message .= "\n";
+        $message .= "From:  Housing Management System\n" ;
+        $message .= "\n";
+        $message .= "This email is to let you know " . HMS_SOAP::get_first_name($rz) . " " . HMS_SOAP::get_last_name($rz) . " has requested you as a roommate.\n";
+        $message .= "\n";
+        $message .= "You can *ACCEPT* this invitation by clicking on the following link:\n";
+        $message .= "\n";
+        $message .= "http://hms.appstate.edu/index.php?module=hms&type=roommate_approval&op=student_approval&hash=" . $ro_hash . "&user=" . $ro;
+        $message .= "\n\n";
+        $message .= "You can also *REJECT* this invitation by clicking on the following link:\n";
+        $message .= "http://hms.appstate.edu/index.php?module=hms&type=roommate_approval&op=student_denial&hash=" . $ro_hash . "&user=" . $ro;
+        $message .= "\n\n";
+        $message .= "Please note that you can not reply to this email.";
+
+        $ro_mail = &new PHPWS_Mail;
+        $ro_mail->addSendTo($ro . '@appstate.edu');
+        $ro_mail->setFrom('hms@tux.appstate.edu');
+        $ro_mail->setSubject('HMS Roommate Request');
+        $ro_mail->setMessageBody($message);
+        $success = $ro_mail->send();
+    }
+
+    function student_approve_roommates($username, $hash)
+    {
+        $db = &new PHPWS_DB('hms_roommate_approval');
+        $db->addWhere('roommate_one', $username);
+        $db->addWhere('roommate_one_personal_hash', $hash);
+        $results = $db->select();
+
+        foreach($results as $result) {
+            $rz = $result['roommate_zero'];
+            $ro = $result['roommate_one'];
+        }
+
+        if($results != NULL && $results != FALSE) {
+            $success = HMS_Roommate_Approval::make_roommate_group($rz, $ro);
+            HMS_Roommate_Approval::email_students_approved($rz, $ro);
+            $db = &new PHPWS_DB('hms_roommate_approval');
+            $db->addWhere('roommate_one', $username);
+            $db->addWhere('roommate_one_personal_hash', $hash);
+            $db->delete();
+        }
+
+        return "Congratulations! Your roommate has been sent an email saying that you have accepted their invitation!";
+    }
+
+    function student_deny_roommates($username, $hash)
+    {
+        $db = &new PHPWS_DB('hms_roommate_approval');
+        $db->addWhere('roommate_one', $username);
+        $db->addWhere('roommate_one_personal_hash', $hash);
+        $db->delete();
+
+        return "You have rejected that application.";
+    }
+
+    function email_students_approved($rz, $ro)
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+        $message =  "To:      " . HMS_SOAP::get_first_name($rz) . " " . HMS_SOAP::get_last_name($rz) . "\n";
+        $message .= "         " . HMS_SOAP::get_first_name($ro) . " " . HMS_SOAP::get_last_name($ro) . "\n";
+        $message .= "\n";
+        $message .= "From:    Housing Management System\n";
+        $message .= "\n";
+        $message .= "\n";
+        $message .= "Congratulations! The following roommate pairing has been successfully entered into the Housing System.\n";
+        $message .= "\n";
+        $message .= HMS_SOAP::get_first_name($rz) . " " . HMS_SOAP::get_last_name($rz) . "\n";
+        $message .= HMS_SOAP::get_first_name($ro) . " " . HMS_SOAP::get_last_name($ro) . "\n";
+        $message .= "\n";
+        $message .= "You will be notified at a later date regarding your assignment.\n";
+        $message .= "Thank you for using the Housing Management System!\n\n";
+        $message .= "If this is incorrect please email corrections to hms@tux.appstate.edu.\n";
+
+        PHPWS_Core::initCoreClass('Mail.php');
+        $mail = &new PHPWS_Mail;
+        $mail->addSendTo($rz . '@appstate.edu');
+        $mail->addSendTo($ro . '@appstate.edu');
+        $mail->setFrom('hms@tux.appstate.edu');
+        $mail->setSubject('HMS Roommate Approval');
+        $mail->setMessageBody($message);
+        $success = $mail->send();
+    }
+
+    function make_roommate_group($rz, $ro)
+    {
+        $db = &new PHPWS_DB('hms_roommates');
+        $db->addValue('roommate_zero', $rz);
+        $db->addValue('roommate_one', $ro);
+        $success = $db->insert();
+    }
+
+    function student_reject_roommate($username, $hash)
+    {
+        $db = &new PHPWS_DB('hms_roommate_approval');
+        $db->addWhere('roommate_one', $username);
+        $db->addWhere('roommate_one_personal_hash', $hash);
+        $results = $db->select();
+
+        foreach($results as $result) {
+            $rz = $result['roommate_zero'];
+            $ro = $result['roommate_one'];
+        }
+
+        HMS_Roommate_Approval::email_students_rejected($rz, $ro);
+        HMS_Roommate_Approval::drop_roommate_approval($rz, $ro);
+
+        return "An email has been sent to " . HMS_SOAP::get_first_name($rz) . " " . HMS_SOAP::get_last_name($rz) . " notifying them of your rejection of their invitation.";
     }
 
     /**
