@@ -129,13 +129,13 @@ class HMS_Roommate
         $this->set_roommate_zero($_REQUEST['first_roommate']);
         $this->set_roommate_one($_REQUEST['second_roommate']);
 
-        if($_REQUEST['third_roommate'] != NULL) {
+        if(isset($_REQUEST['third_roommate']) && $_REQUEST['third_roommate'] != NULL) {
             $this->set_roommate_two($_REQUEST['third_roommate']);
         } else {
             $this->set_roommate_two(NULL);
         }
 
-        if($_REQUEST['fourth_roommate'] != NULL) {
+        if(isset($_REQUEST['fourth_roommate']) && $_REQUEST['fourth_roommate'] != NULL) {
             $this->set_roommate_three($_REQUEST['fourth_roommate']);
         } else {
             $this->set_roommate_three(NULL);
@@ -160,19 +160,19 @@ class HMS_Roommate
         $error = '';
 
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
-        if($_REQUEST['first_roommate'] != NULL && !HMS_SOAP::is_valid_student($_REQUEST['first_roommate'])) {
+        if(isset($_REQUEST['first_roommate']) && $_REQUEST['first_roommate'] != NULL && !HMS_SOAP::is_valid_student($_REQUEST['first_roommate'])) {
             $error .= $_REQUEST['first_roommate'] . " is not a valid student for this Housing term.<br />";
         }
 
-        if($_REQUEST['second_roommate'] != NULL && !HMS_SOAP::is_valid_student($_REQUEST['second_roommate'])) {
+        if(isset($_REQUEST['second_roommate']) && $_REQUEST['second_roommate'] != NULL && !HMS_SOAP::is_valid_student($_REQUEST['second_roommate'])) {
             $error .= $_REQUEST['second_roommate'] . " is not a valid student for this Housing term.<br />";
         }
 
-        if($_REQUEST['third_roommate'] != NULL && !HMS_SOAP::is_valid_student($_REQUEST['third_roommate'])) {
+        if(isset($_REQUEST['third_roommate']) && $_REQUEST['third_roommate'] != NULL && !HMS_SOAP::is_valid_student($_REQUEST['third_roommate'])) {
             $error .= $_REQUEST['third_roommate'] . " is not a valid student for this Housing term.<br />";
         }
 
-        if($_REQUEST['fourth_roommate'] != NULL && !HMS_SOAP::is_valid_student($_REQUEST['fourth_roommate'])) {
+        if(isset($_REQUEST['fourth_roommate']) && $_REQUEST['fourth_roommate'] != NULL && !HMS_SOAP::is_valid_student($_REQUEST['fourth_roommate'])) {
             $error .= $_REQUEST['fourth_roommate'] . " is not a valid student for this Housing term.<br />";
         }
     
@@ -197,6 +197,12 @@ class HMS_Roommate
     function check_consistent_genders()
     {
         $error = '';
+
+        if(!isset($_REQUEST['first_roommate']) || !isset($_REQUEST['second_roommate'])) {
+            $error = "At least two usernames must be set.<br />";
+            return $error;
+        }
+
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
 
         $g1 = HMS_SOAP::get_gender($_REQUEST['first_roommate']);
@@ -204,13 +210,13 @@ class HMS_Roommate
        
         if($g1 != $g2) $error = $_REQUEST['first_roommate'] . " and " . $_REQUEST['second_roommate'] . " must have the same gender.<br />";
 
-        if($_REQUEST['third_roommate'] != NULL) {
+        if(isset($_REQUEST['third_roommate']) && $_REQUEST['third_roommate'] != NULL) {
             $g3 = HMS_SOAP::get_gender($_REQUEST['third_roommate']);
             if($g1 != $g3) $error = $_REQUEST['first_roommate'] . " and " . $_REQUEST['third_roommate'] . " must have the same gender.<br />";
             else if($g2 != $g3) $error = $_REQUEST['second_roommate'] . " and " . $_REQUEST['third_roommate'] . " must have the same gender.<br />";
         }
 
-        if($_REQUEST['fourth_roommate'] != NULL) {
+        if(isset($_REQUEST['fourth_roommate']) && $_REQUEST['fourth_roommate'] != NULL) {
             $g4 = HMS_SOAP::get_gender($_REQUEST['fourth_roommate']);
             if($g1 != $g4) $error = $_REQUEST['first_roommate'] . " and " . $_REQUEST['fourth_roommate'] . " must have the same gender.<br />";
             else if($g2 != $g4) $error = $_REQUEST['second_roommate'] . " and " . $_REQUEST['fourth_roommate'] . " must have the same gender.<br />";
