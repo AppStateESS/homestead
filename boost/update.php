@@ -253,6 +253,8 @@ function hms_update(&$content, $currentVersion)
             $files[] = 'templates/admin/make_new_rlc_assignments_summary.tpl';
             $files[] = 'templates/student/rlc_application.tpl';
             $files[] = 'templates/student/profile_form.tpl';
+            $files[] = 'templates/student/verify_single_student.tpl';
+            $files[] = 'templates/admin/get_single_username.tpl';
 
             PHPWS_Boost::updateFiles($files, 'hms');
 
