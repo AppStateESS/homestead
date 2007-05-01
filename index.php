@@ -4,12 +4,9 @@ if (!defined('PHPWS_SOURCE_DIR')) {
     include '../../config/core/404.html';
     exit();
 }
-
 if(Current_User::isLogged()) {
-
     PHPWS_Core::initModClass('hms', 'HMS.php');
     HMS::main();
-
 } else if(isset($_REQUEST['type']) && $_REQUEST['type'] == 'hms' && $_REQUEST['op'] == 'login') {
     require_once(PHPWS_SOURCE_DIR . 'mod/hms/inc/defines.php');
     PHPWS_Core::initModClass('hms', 'HMS_Login.php');
@@ -38,12 +35,19 @@ if(Current_User::isLogged()) {
         PHPWS_Core::initModClass('hms', 'HMS.php');
         HMS::main($type);
     }
-
+} else if (isset($_REQUEST['type']) && $_REQUEST['type'] == 'roommate_approval' && 
+           isset($_REQUEST['op']) && PHPWS_Text::isValidInput($_REQUEST['op']) &&
+           isset($_REQUEST['hash']) && PHPWS_Text::isValidInput($_REQUEST['hash']) &&
+           isset($_REQUEST['user']) && PHPWS_Text::isValidInput($_REQUEST['user'])) {
+    PHPWS_Core::initModClass('hms', 'HMS_Roommate_Approval.php');
+    if($_REQUEST['op'] == 'student_approval') {
+        $success = HMS_Roommate_Approval::student_approve_roommates($_REQUEST['user'], $_REQUEST['hash']);
+    } else if ($_REQUEST['op'] == 'student_denial') {
+        test($_REQUEST, 1);
+    }
 } else {
-
     PHPWS_Core::initModClass('hms', 'HMS_Login.php');
     HMS_Login::display_login_screen();
-
 }
 
 ?>
