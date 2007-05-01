@@ -156,6 +156,10 @@ class HMS_Form
 
         $tpl = $form->getTemplate();
         $tpl['ERROR'] = $error;
+        $tpl['MESSAGE'] =  "In order to select your roommate please provide their Appalachian email address below.<br /><br />";
+        $tpl['MESSAGE'] .= "You will receive a follow-up email verifying the status of your invitation.<br /><br />";
+        $tpl['MESSAGE'] .= "You will also receive an email once the individual Accepts or Rejects your invitation.<br /><br />";
+        $tpl['MESSAGE'] .= "It is <b>NOT</b> necessary for the person you are inviting to also invite you. They only need to accept your invitation and you will be paired with this individual.<br /><br />";
         $tpl['MENU_LINK'] = PHPWS_Text::secureLink(_('Return to Menu'), 'hms', array('type'=>'student', 'op'=>'main'));
         $final = PHPWS_Template::process($tpl, 'hms', 'admin/get_single_username.tpl');
         return $final;
