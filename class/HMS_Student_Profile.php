@@ -12,7 +12,7 @@
  * Includes the defines file used for the values of the fields
  * throughout this class.
  */
-require_once(PHPWS_SOURCE_DIR . 'mod/hms/inc/profile_options.php');
+//require_once(PHPWS_SOURCE_DIR . 'mod/hms/inc/profile_options.php');
 
 class HMS_Student_Profile{
 
@@ -254,7 +254,7 @@ class HMS_Student_Profile{
         
         $template['ALTERNATE_EMAIL_LABEL'] = 'Alternate email: ';
         $alt_email = $profile->get_alternate_email();
-        if(isset($alt_email){
+        if(isset($alt_email)){
             $template['ALTERNATE_EMAIL'] = "<a href=\"mailto:$alt_email\">$alt_email</a>";
         }else{
             $template['ALTERNATE_EMAIL'] = $none_given;
@@ -842,12 +842,12 @@ class HMS_Student_Profile{
         }
     }
     
-    function set_computer_and_technology($value = 1){
-        $this->computer_and_technology = $value;
+    function set_computers_and_technology($value = 1){
+        $this->computers_and_technology = $value;
     }
 
-    function get_computer_and_technology(){
-        if($this->computer_and_technology == 1){
+    function get_computers_and_technology(){
+        if($this->computers_and_technology == 1){
             return TRUE;
         }else{
             return FALSE;
