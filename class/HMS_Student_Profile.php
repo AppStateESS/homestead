@@ -8,6 +8,12 @@
  * @author Jeremy Booker <jbooker at tux dot appstate dot edu>
  */
 
+/**
+ * Includes the defines file used for the values of the fields
+ * throughout this class.
+ */
+require_once(PHPWS_SOURCE_DIR . 'mod/hms/inc/profile_options.php');
+
 class HMS_Student_Profile{
 
     var $id;
@@ -216,7 +222,119 @@ class HMS_Student_Profile{
         
     }
 
-   // TODO: viewing profiles here 
+    /**
+     * Shows the profile for the given username
+     */
+    function show_profile($username)
+    {
+        $id = HMS_Student_Profile::check_for_profile($username);
+        
+        if(PEAR::isError($id)){
+            # db error
+            PHPWS_Error::log($id);
+            $template['MESSAGE'] = "Sorry, there was an error working with the database. Please contact Housing and Residence Life if you need assistance.";
+            return PHPWS_Template::process($template, 'hms', 'student/student_success_failure_message.tpl');
+        }elseif($id !== FALSE){
+            # profile found
+            $profile = new HMS_Student_Profile($id);
+        }else{
+            # No profile found
+            $template['MESSAGE'] = "No profile found for $username.";
+            return PHPWS_Template::process($template, 'hms', 'student/student_success_failure_message.tpl');
+        }
+
+        $template = array();
+        $profile_form = &new PHPWS_Form('profile_form');
+        $profile_form->useRowRepeat();
+
+        $none_given = '<span style="color:#CCC;">none given</span>';
+        
+        /***** Contact Info *****/
+        $template['EMAIL_ADDRESS'] = "<a href=\"mailto:$username@appstate.edu\">$username@appstate.edu</a>";
+        
+        $template['ALTERNATE_EMAIL_LABEL'] = 'Alternate email: ';
+        $alt_email = $profile->get_alternate_email();
+        if(isset($alt_email){
+            $template['ALTERNATE_EMAIL'] = "<a href=\"mailto:$alt_email\">$alt_email</a>";
+        }else{
+            $template['ALTERNATE_EMAIL'] = $none_given;
+        }
+
+        $template['AIM_SN_LABEL'] = 'AIM screen name: ';
+        $aim_sn = $profile->get_aim_sn();
+        if(isset($aim_sn)){
+            $template['AIM_SN'] = $aim_sn;
+        }else{
+            $template['AIM_SN'] = $none_given;
+        }
+
+        $template['YAHOO_SN_LABEL'] = 'Yahoo! screen name: ';
+        $yahoo_sn = $profile->get_yahoo_sn();
+        if(isset($yahoo_sn)){
+            $template['YAHOO_SN'] = $yahoo_sn;
+        }else{
+            $template['YAHOO_SN'] = $none_given;
+        }
+
+        $template['MSN_SN_LABEL'] = 'MSN screen name: ';
+        $msn_sn = $profile->get_msn_sn();
+        if(isset($msn_sn)){
+            $template['MSN_SN'] = $msn_sn;
+        }else{
+            $template['MSN_SN'] = $none_given;
+        }
+
+        /***** About Me *****/
+        $profile_form->addCheck('hobbies_checkbox',$hobbies);
+        $profile_form->setLabel('hobbies_checkbox',$hobbies_labels);
+        $template['HOBBIES_CHECKBOX_QUESTION'] = 'My Hobbies and Interests: ';
+
+        # Set all of these to disabled because we're only displaying the info
+        foreach ($hobbies as $hobbies_checkbox_name){
+            $profile_form->setDisabled($hobbies_checkbox_name);
+        }
+
+        # TODO: set check boxes here! 
+
+        $profile_form->addCheck('music_checkbox',$music);
+        $profile_form->setLabel('music_checkbox',$music_labels);
+        $template['MUSIC_CHECKBOX_QUESTION'] = 'My Music Preferences: ';
+        # TODO: set matches on check boxes here, set disabled
+
+        # Set all of these to disabled because we're only displaying the info
+        foreach ($music as $music_checkbox_name){
+            $profile_form->setDisabled($music_checkbox_name);
+        }
+        
+        $template['POLITICAL_VIEWS_DROPBOX_LABEL'] = 'Political views: ';
+        $template['POLITICAL_VIEWS_DROPBOX'] = $political_views[$profile->get_political_view()];
+
+        /***** College Life *****/
+        $template['INTENDED_MAJOR_DROPBOX_LABEL'] = 'Intended major: ';
+        $template['INTENDED_MAJOR_DROPBOX'] = $majors[$profile->get_major()];
+
+        $template['IMPORTANT_EXPERIENCE_LABEL'] = 'I fee the most important part of my college experience is: ';
+        $template['IMPORTANT_EXPERIENCE'] = $experiences[$profile->get_experience()];
+        
+        /***** Daily Life *****/
+        $template['SLEEP_TIME_LABEL']       = 'I generally go to sleep: '; 
+        $template['SLEEP_TIME']             = $sleep_times[$profile->get_sleep_time()];
+        $template['WAKEUP_TIME_LABEL']      = 'I generally wake up: '; 
+        $template['WAKEUP_TIME']            = $wakeup_times[$profile->get_wakeup_time()];
+        $template['OVERNIGHT_FUESTS_LABEL'] = 'I plan on hosting overnight guests: '; 
+        $template['OVERNIGHT_GUESTS']       = $overnight_guests[$profile->get_overnight_guests()];
+        $template['LOUDNESS_LABEL']         = 'In my daily activities: '; 
+        $template['LOUDNESS']               = $loundess[$profile->get_loudness()];
+        $template['CLEANLINESS_LABEL']      = 'I would describe myself as: '; 
+        $template['CLEANLINESS']            = $cleanliness[$profile->get_cleanliness()];
+        $template['FREE_TIME_LABEL']        = 'If I have free time I would rather: '; 
+        $template['FREE_TIME']              = $free_time[$profile->get_free_time()];
+
+        $profile_form->addCheck('study_times',$study_times);
+        $profile_form->setLabel('study_times',$study_times_labels);
+        $template['STUDY_TIMES_QUESTION'] = 'I prefer to study: ';
+        # TODO: set matches on check boxes here, set disabled
+    }
 
     /**
      * Saves a submitted profile
@@ -229,7 +347,7 @@ class HMS_Student_Profile{
         # so it will load the current profile, and then update it.
         # Otherwise, create a new profile.
         $id = HMS_Student_Profile::check_for_profile($_SESSION['asu_username']);
-
+        
         if(PEAR::isError($id)){
             PHPWS_Error::log($id);
             $template['MESSAGE'] = "Sorry, there was an error working with the database. Please contact Housing and Residence Life if you need assistance.";
@@ -251,15 +369,15 @@ class HMS_Student_Profile{
         }
 
         if(isset($_REQUEST['aim_sn']) && $_REQUEST['aim_sn'] != ''){
-            $profile->set_aim_sn($_REQUEST['alternate_email']);
+            $profile->set_aim_sn($_REQUEST['aim_sn']);
         }
         
-        if(isset($_REQUEST['yahoo_sn']) && $_REQUEST['alternate_email'] != ''){
-            $profile->set_yahoo_sn($_REQUEST['alternate_email']);
+        if(isset($_REQUEST['yahoo_sn']) && $_REQUEST['yahoo_sn'] != ''){
+            $profile->set_yahoo_sn($_REQUEST['yahoo_sn']);
         }
         
-        if(isset($_REQUEST['msn_sn']) && $_REQUEST['alternate_email'] != ''){
-            $profile->set_msn_sn($_REQUEST['alternate_email']);
+        if(isset($_REQUEST['msn_sn']) && $_REQUEST['msn_sn'] != ''){
+            $profile->set_msn_sn($_REQUEST['msn_sn']);
         }
         
         # Hobbies check boxes
@@ -458,19 +576,19 @@ class HMS_Student_Profile{
         }
 
         if(isset($_REQUEST['study_times']['study_morning_afternoon'])){
-            $profile->set_study_early_morning();
+            $profile->set_study_morning_afternoon();
         }
 
         if(isset($_REQUEST['study_times']['study_afternoon_evening'])){
-            $profile->set_study_early_morning();
+            $profile->set_study_afternoon_evening();
         }
 
         if(isset($_REQUEST['study_times']['study_evening'])){
-            $profile->set_study_early_morning();
+            $profile->set_study_evening();
         }
 
         if(isset($_REQUEST['study_times']['study_late_night'])){
-            $profile->set_study_early_morning();
+            $profile->set_study_late_night();
         }
 
         # Drop downs
