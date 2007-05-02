@@ -166,7 +166,7 @@ class HMS_Side_Thingie {
         
         # If the student does not have a proflie on file... check dates, set dates/styles accordingly
         if($this->curr_timestamp < $this->deadlines->get_edit_profile_begin_timestamp()){
-            $this->steps_text[HMS_SIDE_STUDENT_PROFILE] .= " (available ". date('n/j/y',$this->deadlines->get_submit_profile_begin_timestamp()) .")";
+            $this->steps_text[HMS_SIDE_STUDENT_PROFILE] .= " (available ". date('n/j/y',$this->deadlines->get_edit_profile_begin_timestamp()) .")";
             $this->steps_styles[HMS_SIDE_STUDENT_PROFILE] = 'STEP_NOTYET';
             return;
         }else if($this->curr_timestamp > $this->deadlines->get_edit_profile_begin_timestamp() && $this->curr_timestamp < $this->deadlines->get_edit_profile_end_timestamp()){

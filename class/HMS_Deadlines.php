@@ -192,11 +192,6 @@ class HMS_Deadlines {
         return $this->sret;
     }
 
-    function get_submit_profile_begin_timestamp()
-    {
-        return $this->spbt;
-    }
-
     function get_view_assignment_begin_timestamp()
     {
         return $this->vabt;
