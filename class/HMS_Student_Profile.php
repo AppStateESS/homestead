@@ -196,7 +196,7 @@ class HMS_Student_Profile{
 
         # Check to make sure they don't have a profile already
         if(HMS_Student_Profile::check_for_profile()){
-            $template['MESSAGE'] = "Our records show you already have a profile. The ability to edit profiles has been temporarily disabled. We anticipate it will be re-enabled by April 27th. We apologize for the inconvenience.";
+            $template['MESSAGE'] = "Our records show you already have a profile. The ability to edit profiles has been temporarily disabled. We anticipate it will be re-enabled by May 7th. We apologize for the inconvenience.";
             return PHPWS_Template::process($template, 'hms', 'student/student_success_failure_message.tpl');
         }
         
@@ -207,7 +207,7 @@ class HMS_Student_Profile{
             return PHPWS_Template::process($template, 'hms', 'student/student_success_failure_message.tpl');
         }else if(!HMS_Deadlines::check_deadline_past('edit_profile_begin_timestamp')){
             # too early
-            $tempate['MESSAGE'] = "Sorry, it's too early to submit a profile.";
+            $template['MESSAGE'] = "Sorry, it's too early to submit a profile.";
             return PHPWS_Template::process($template, 'hms', 'student/student_success_failure_message.tpl');
         }else{
             PHPWS_Core::initModClass('hms','HMS_Forms.php');

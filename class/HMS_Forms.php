@@ -205,10 +205,12 @@ class HMS_Form
         $form->addSubmit('submit', 'Yes, I want that roommate!');
         $form->addSubmit('cancel', 'No, that is wrong!');
 
+        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+
         $tpl = $form->getTemplate();
         $tpl['ERROR'] = $error;
-        $tpl['FIRST_NAME']  = "Kevin";
-        $tpl['LAST_NAME']   = "Wilcox";
+        $tpl['FIRST_NAME']  = HMS_SOAP::get_first_name($_REQUEST['username']);
+        $tpl['LAST_NAME']   = HMS_SOAP::get_last_name($_REQUEST['username']);
         $tpl['USERNAME']    = $_REQUEST['username'];
         
         $final = PHPWS_Template::process($tpl, 'hms', 'student/verify_single_roommate.tpl');
