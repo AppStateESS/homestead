@@ -192,7 +192,7 @@ class HMS_RLC_Application{
         $tags = $form->getTemplate();
 
         $pager = &new DBPager('hms_learning_community_applications','HMS_RLC_Application');
-        $pager->db->addOrder('date_submitted','ASC');
+        $pager->db->addOrder('user_id','ASC');
         $pager->db->addWhere('hms_assignment_id',NULL,'is');
 
         $pager->setModule('hms');
