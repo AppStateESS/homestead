@@ -3169,6 +3169,8 @@ class HMS_Form
         require_once(PHPWS_SOURCE_DIR . 'mod/hms/inc/profile_options.php');
 
         $template = array();
+
+        $template['TITLE'] = 'My Profile';
        
         $profile_form = &new PHPWS_Form('profile_form');
         $profile_form->addHidden('type', 'student');

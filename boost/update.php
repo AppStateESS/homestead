@@ -273,7 +273,11 @@ function hms_update(&$content, $currentVersion)
                 return $result;
             }
 
+            $files = array();
+            $files[] = 'templates/student/profile_form.tpl';
+
             $content[] = '+ Added "writing" column to student_profiles table';
+            $content[] = '+ Adjusted student profile template for reuse in viewing profiles';
     }
 
     return TRUE;
