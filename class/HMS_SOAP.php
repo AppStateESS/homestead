@@ -25,6 +25,25 @@ class HMS_SOAP{
         }
     }
 
+    function get_name($username){
+        if(SOAP_TEST_FLAG){
+            # return canned data
+            return "Jeremy Booker";
+        }else{
+            $student = HMS_SOAP::get_student_info($username);
+        }
+
+        if(PEAR::isError($student)){
+            HMS_SOAP::log_soap_error($student,'get_first_name',$username);
+            return $student;
+        }else if($student->first_name == NULL){
+            return NULL;
+        }else{
+            return $student->first_name . " " . $student->last_name;
+        }
+        
+    }
+
     function get_first_name($username)
     {
         if(SOAP_TEST_FLAG){
