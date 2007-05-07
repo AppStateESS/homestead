@@ -1,1 +1,1 @@
-ALTER TABLE hms_student_profiels ADD COLUMN writing smallint;
+ALTER TABLE hms_student_profiles ADD COLUMN writing smallint;
