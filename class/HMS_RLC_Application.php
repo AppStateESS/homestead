@@ -192,7 +192,12 @@ class HMS_RLC_Application{
         $tags = $form->getTemplate();
 
         $pager = &new DBPager('hms_learning_community_applications','HMS_RLC_Application');
+        $pager->db->addColumn('hms_learning_community_applications.*');
+        $pager->db->addColumn('hms_learning_communities.abbreviation');
+        $pager->db->addOrder('hms_learning_communities.abbreviation','ASC');
         $pager->db->addOrder('user_id','ASC');
+        $pager->db->addWhere('hms_learning_community_applications.rlc_first_choice_id',
+                             'hms_learning_communities.id','=');
         $pager->db->addWhere('hms_assignment_id',NULL,'is');
 
         $pager->setModule('hms');
