@@ -284,6 +284,7 @@ CREATE TABLE hms_student_profiles (
     travel smallint,
     tv_shows smallint,
     volunteering smallint,
+    writing smallint,
     alternative smallint,
     ambient smallint,
     beach smallint,

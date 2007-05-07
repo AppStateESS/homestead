@@ -265,6 +265,15 @@ function hms_update(&$content, $currentVersion)
             $content[] = '+ Finalized Final RLC Assignments page.';
             $content[] = '+ Fixed formatting in the RLC Applicatition assignments pager and the corresponding summary.';
             $content[] = '+ Added student viewing of their RLC applications.';
+        
+        case version_compare($currentVersion, '0.1.16', '<'):
+            $db = &new PHPWS_DB;
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_1_16.sql');
+            if(PEAR::isError($result)) {
+                return $result;
+            }
+
+            $content[] = '+ Added "writing" column to student_profiles table';
     }
 
     return TRUE;
