@@ -199,13 +199,6 @@ class HMS_Student_Profile{
      */
     function show_profile_form()
     {
-
-        # Check to make sure they don't have a profile already
-        if(HMS_Student_Profile::check_for_profile()){
-            $template['MESSAGE'] = "Our records show you already have a profile. The ability to edit profiles has been temporarily disabled. We anticipate it will be re-enabled by May 7th. We apologize for the inconvenience.";
-            return PHPWS_Template::process($template, 'hms', 'student/student_success_failure_message.tpl');
-        }
-        
         PHPWS_Core::initModClass('hms','HMS_Deadlines.php');
         if(HMS_Deadlines::check_deadline_past('edit_profile_end_timestamp')){
             # too late
@@ -294,208 +287,17 @@ class HMS_Student_Profile{
         $profile_form->setDisabled('hobbies_checkbox');
         $template['HOBBIES_CHECKBOX_QUESTION'] = 'My Hobbies and Interests: ';
 
-        # Set all of these to disabled because we're only displaying the info
-
         # set matches on hobby check boxes
-        $hobbies_matches = array();
-
-        if($profile->get_arts_and_crafts()){
-            $hobbies_matches[] = 'arts_and_crafts';
-        }
-
-        if($profile->get_books_and_reading()){
-            $hobbies_matches[] = 'books_and_reading';
-        }
-
-        if($profile->get_cars()){
-            $hobbies_matches[] = 'cars';
-        }
-
-        if($profile->get_church_activities()){
-            $hobbies_matches[] = 'church_activities';
-        }
-
-        if($profile->get_collecting()){
-            $hobbies_matches[] = 'collecting';
-        }
-
-        if($profile->get_computers_and_technology()){
-            $hobbies_matches[] = 'computers_and_technology';
-        }
-
-        if($profile->get_dancing()){
-            $hobbies_matches[] = 'dancing';
-        }
-
-        if($profile->get_fashion()){
-            $hobbies_matches[] = 'fashion';
-        }
-
-        if($profile->get_fine_arts()){
-            $hobbies_matches[] = 'fine_arts';
-        }
-
-        if($profile->get_gardening()){
-            $hobbies_matches[] = 'gardening';
-        }
-
-        if($profile->get_games()){
-            $hobbies_matches[] = 'games';
-        }
-
-        if($profile->get_humor()){
-            $hobbies_matches[] = 'humor';
-        }
-
-        if($profile->get_investing_personal_finance()){
-            $hobbies_matches[] = 'investing_personal_finance';
-        }
-
-        if($profile->get_movies()){
-            $hobbies_matches[] = 'movies';
-        }
-
-        if($profile->get_music()){
-            $hobbies_matches[] = 'music';
-        }
-
-        if($profile->get_outdoor_activities()){
-            $hobbies_matches[] = 'outdoor_activities';
-        }
-
-        if($profile->get_pets_and_animals()){
-            $hobbies_matches[] = 'pets_and_animals';
-        }
-
-        if($profile->get_photography()){
-            $hobbies_matches[] = 'photography';
-        }
-
-        if($profile->get_politics()){
-            $hobbies_matches[] = 'politics';
-        }
-
-        if($profile->get_sports()){
-            $hobbies_matches[] = 'sports';
-        }
-
-        if($profile->get_travel()){
-            $hobbies_matches[] = 'travel';
-        }
-
-        if($profile->get_tv_shows()){
-            $hobbies_matches[] = 'tv_shows';
-        }
-
-        if($profile->get_volunteering()){
-            $hobbies_matches[] = 'volunteering';
-        }
-
-        if($profile->get_writing()){
-            $hobbies_matches[] = 'writing';
-        }
-        
+        $hobbies_matches = HMS_Student_Profile::get_hobbies_matches($profile);
         $profile_form->setMatch('hobbies_checkbox',$hobbies_matches);
         
         $profile_form->addCheck('music_checkbox',$music);
         $profile_form->setLabel('music_checkbox',$music_labels);
-        $template['MUSIC_CHECKBOX_QUESTION'] = 'My Music Preferences: ';
         $profile_form->setDisabled('music_checkbox');
+        $template['MUSIC_CHECKBOX_QUESTION'] = 'My Music Preferences: ';
 
-        # set matches on music checkboxes here
-        $music_matches = array();
-        if($profile->get_alternative()){
-            $music_matches[] = 'alternative';
-        }
-
-        if($profile->get_ambient()){
-            $music_matches[] = 'ambient';
-        }
-
-        if($profile->get_beach()){
-            $music_matches[] = 'beach';
-        }
-
-        if($profile->get_bluegrass()){
-            $music_matches[] = 'bluegrass';
-        }
-
-        if($profile->get_blues()){
-            $music_matches[] = 'blues';
-        }
-
-        if($profile->get_classical()){
-            $music_matches[] = 'classical';
-        }
-
-        if($profile->get_classic_rock()){
-            $music_matches[] = 'classic_rock';
-        }
-
-        if($profile->get_country()){
-            $music_matches[] = 'country';
-        }
-
-        if($profile->get_electronic()){
-            $music_matches[] = 'electronic';
-        }
-
-        if($profile->get_folk()){
-            $music_matches[] = 'folk';
-        }
-
-        if($profile->get_heavy_metal()){
-            $music_matches[] = 'heavy_metal';
-        }
-
-        if($profile->get_hip_hop()){
-            $music_matches[] = 'hip_hop';
-        }
-
-        if($profile->get_house()){
-            $music_matches[] = 'house';
-        }
-
-        if($profile->get_industrial()){
-            $music_matches[] = 'industrial';
-        }
-
-        if($profile->get_jazz()){
-            $music_matches[] = 'jazz';
-        }
-
-        if($profile->get_popular_music()){
-            $music_matches[] = 'popular_music';
-        }
-
-        if($profile->get_progressive()){
-            $music_matches[] = 'progressive';
-        }
-
-        if($profile->get_punk()){
-            $music_matches[] = 'punk';
-        }
-        
-        if($profile->get_r_and_b()){
-            $music_matches[] = 'r_and_b';
-        }
-
-        if($profile->get_rap()){
-            $music_matches[] = 'rap';
-        }
-
-        if($profile->get_reggae()){
-            $music_matches[] = 'reggae';
-        }
-
-        if($profile->get_rock()){
-            $music_matches[] = 'rock';
-        }
-
-        if($profile->get_world_music()){
-            $music_matches[] = 'world_music';
-        }
-
+        # set matches on music check boxes
+        $music_matches = HMS_Student_Profile::get_music_matches($profile);
         $profile_form->setMatch('music_checkbox',$music_matches);
 
         $template['POLITICAL_VIEWS_DROPBOX_LABEL'] = 'Political views: ';
@@ -527,28 +329,7 @@ class HMS_Student_Profile{
         $profile_form->setDisabled('study_times');
         $template['STUDY_TIMES_QUESTION'] = 'I prefer to study: ';
         # set matches on study times check boxes here, set disabled
-        $study_matches = array();
-
-        if($profile->get_study_early_morning()){
-            $study_matches[] = 'study_early_morning';
-        }
-        
-        if($profile->get_study_morning_afternoon()){
-            $study_matches[] = 'study_morning_afternoon';
-        }
-        
-        if($profile->get_study_afternoon_evening()){
-            $study_matches[] = 'study_afternoon_evening';
-        }
-
-        if($profile->get_study_evening()){
-            $study_matches[] = 'study_evening';
-        }
-
-        if($profile->get_study_late_night()){
-            $study_matches[] = 'study_late_night';
-        }
-
+        $study_matches = HMS_Student_Profile::get_study_matches($profile);
         $profile_form->setMatch('study_times',$study_matches);
 
         $profile_form->mergeTemplate($template);
@@ -862,6 +643,246 @@ class HMS_Student_Profile{
         $template['SUCCESS'] .= PHPWS_Text::secureLink(_('Back to Main Menu'), 'hms', array('type'=>'student','op'=>'main'));
         return PHPWS_Template::process($template, 'hms', 'student/student_success_failure_message.tpl');
     }
+    
+    /**
+     * Function to determine which hobbies check boxes need to be checked
+     * Takes a Student_Profile object and returns an array of the checkbox names
+     * which should be checked. (Used as input to the setMatch function).
+     */
+    function get_hobbies_matches($profile)
+    {
+        $hobbies_matches = array();
+        
+        if($profile->get_arts_and_crafts()){
+            $hobbies_matches[] = 'arts_and_crafts';
+        }
+
+        if($profile->get_books_and_reading()){
+            $hobbies_matches[] = 'books_and_reading';
+        }
+
+        if($profile->get_cars()){
+            $hobbies_matches[] = 'cars';
+        }
+
+        if($profile->get_church_activities()){
+            $hobbies_matches[] = 'church_activities';
+        }
+
+        if($profile->get_collecting()){
+            $hobbies_matches[] = 'collecting';
+        }
+
+        if($profile->get_computers_and_technology()){
+            $hobbies_matches[] = 'computers_and_technology';
+        }
+
+        if($profile->get_dancing()){
+            $hobbies_matches[] = 'dancing';
+        }
+
+        if($profile->get_fashion()){
+            $hobbies_matches[] = 'fashion';
+        }
+
+        if($profile->get_fine_arts()){
+            $hobbies_matches[] = 'fine_arts';
+        }
+
+        if($profile->get_gardening()){
+            $hobbies_matches[] = 'gardening';
+        }
+
+        if($profile->get_games()){
+            $hobbies_matches[] = 'games';
+        }
+
+        if($profile->get_humor()){
+            $hobbies_matches[] = 'humor';
+        }
+
+        if($profile->get_investing_personal_finance()){
+            $hobbies_matches[] = 'investing_personal_finance';
+        }
+
+        if($profile->get_movies()){
+            $hobbies_matches[] = 'movies';
+        }
+
+        if($profile->get_music()){
+            $hobbies_matches[] = 'music';
+        }
+
+        if($profile->get_outdoor_activities()){
+            $hobbies_matches[] = 'outdoor_activities';
+        }
+
+        if($profile->get_pets_and_animals()){
+            $hobbies_matches[] = 'pets_and_animals';
+        }
+
+        if($profile->get_photography()){
+            $hobbies_matches[] = 'photography';
+        }
+
+        if($profile->get_politics()){
+            $hobbies_matches[] = 'politics';
+        }
+
+        if($profile->get_sports()){
+            $hobbies_matches[] = 'sports';
+        }
+
+        if($profile->get_travel()){
+            $hobbies_matches[] = 'travel';
+        }
+
+        if($profile->get_tv_shows()){
+            $hobbies_matches[] = 'tv_shows';
+        }
+
+        if($profile->get_volunteering()){
+            $hobbies_matches[] = 'volunteering';
+        }
+
+        if($profile->get_writing()){
+            $hobbies_matches[] = 'writing';
+        }
+
+        return $hobbies_matches;
+    }
+
+    /**
+     * Function to determine which music check boxes need to be checked
+     * Takes a Student_Profile object and returns an array of the checkbox names
+     * which should be checked. (Used as input to the setMatch function).
+     */
+    function get_music_matches($profile)
+    {
+        $music_matches = array();
+        
+        if($profile->get_alternative()){
+            $music_matches[] = 'alternative';
+        }
+
+        if($profile->get_ambient()){
+            $music_matches[] = 'ambient';
+        }
+
+        if($profile->get_beach()){
+            $music_matches[] = 'beach';
+        }
+
+        if($profile->get_bluegrass()){
+            $music_matches[] = 'bluegrass';
+        }
+
+        if($profile->get_blues()){
+            $music_matches[] = 'blues';
+        }
+
+        if($profile->get_classical()){
+            $music_matches[] = 'classical';
+        }
+
+        if($profile->get_classic_rock()){
+            $music_matches[] = 'classic_rock';
+        }
+
+        if($profile->get_country()){
+            $music_matches[] = 'country';
+        }
+
+        if($profile->get_electronic()){
+            $music_matches[] = 'electronic';
+        }
+
+        if($profile->get_folk()){
+            $music_matches[] = 'folk';
+        }
+
+        if($profile->get_heavy_metal()){
+            $music_matches[] = 'heavy_metal';
+        }
+
+        if($profile->get_hip_hop()){
+            $music_matches[] = 'hip_hop';
+        }
+
+        if($profile->get_house()){
+            $music_matches[] = 'house';
+        }
+
+        if($profile->get_industrial()){
+            $music_matches[] = 'industrial';
+        }
+
+        if($profile->get_jazz()){
+            $music_matches[] = 'jazz';
+        }
+
+        if($profile->get_popular_music()){
+            $music_matches[] = 'popular_music';
+        }
+
+        if($profile->get_progressive()){
+            $music_matches[] = 'progressive';
+        }
+
+        if($profile->get_punk()){
+            $music_matches[] = 'punk';
+        }
+        
+        if($profile->get_r_and_b()){
+            $music_matches[] = 'r_and_b';
+        }
+
+        if($profile->get_rap()){
+            $music_matches[] = 'rap';
+        }
+
+        if($profile->get_reggae()){
+            $music_matches[] = 'reggae';
+        }
+
+        if($profile->get_rock()){
+            $music_matches[] = 'rock';
+        }
+
+        if($profile->get_world_music()){
+            $music_matches[] = 'world_music';
+        }
+
+        return $music_matches;
+    }
+
+    function get_study_matches($profile)
+    {
+        $study_matches = array();
+
+        if($profile->get_study_early_morning()){
+            $study_matches[] = 'study_early_morning';
+        }
+        
+        if($profile->get_study_morning_afternoon()){
+            $study_matches[] = 'study_morning_afternoon';
+        }
+        
+        if($profile->get_study_afternoon_evening()){
+            $study_matches[] = 'study_afternoon_evening';
+        }
+
+        if($profile->get_study_evening()){
+            $study_matches[] = 'study_evening';
+        }
+
+        if($profile->get_study_late_night()){
+            $study_matches[] = 'study_late_night';
+        }
+        
+        return $study_matches;
+    }
+
 
     /**
      * Accessor / Mutator Methods
