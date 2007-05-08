@@ -279,6 +279,9 @@ function hms_update(&$content, $currentVersion)
             $content[] = '+ Added "writing" column to student_profiles table';
             $content[] = '+ Adjusted student profile template for reuse in viewing profiles';
             $content[] = '+ jtickle\'s additions for ordering RLC applications';
+
+        case version_compare($currentVersion, '0.1.17', '<'):
+            $content[] = '+ Added profile editing!';
     }
 
     return TRUE;
