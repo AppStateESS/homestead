@@ -180,16 +180,6 @@ class HMS_Student_Profile{
         }
     }
 
-    function profile_pager()
-    {
-        
-    }
-
-    function get_pager_tags()
-    {
-        
-    }
-
     /****************
      * Static methods
      ****************/
@@ -642,6 +632,73 @@ class HMS_Student_Profile{
         $template['SUCCESS'] .= "<br /><br />";
         $template['SUCCESS'] .= PHPWS_Text::secureLink(_('Back to Main Menu'), 'hms', array('type'=>'student','op'=>'main'));
         return PHPWS_Template::process($template, 'hms', 'student/student_success_failure_message.tpl');
+    }
+
+
+    /**
+     * Uses the forms class to display the profile search page.
+     */
+    function display_profile_search()
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
+        return HMS_Form::profile_search_form();
+    }
+
+    /**
+     * Does the actual searching of profiles.
+     */
+    function profile_search()
+    {
+        $tags = array();
+
+        $tags['RESULTS'] = HMS_Student_Profile::profile_search_pager();
+
+        return PHPWS_Template::process($tags, 'hms', 'student/profile_search_results.tpl');
+    }
+    
+    /**
+     * Sets up the pager object for searching questionnairs.
+     */
+    function profile_search_pager()
+    {
+        PHPWS_Core::initCoreClass('DBPager.php');
+
+        $pageTags['USERNAME']   = _('Email');
+        $pageTags['FIRST_NAME'] = _('First Name');
+        $pageTags['LAST_NAME']  = _('Last Name');
+        $PageTags['ACTIONS']    = _('Action');
+
+        $pager = &new DBPager('hms_student_profiles','HMS_Student_Profile');
+
+        $pager->addWhere('hms_student_profiles.user_id',$_REQUEST['asu_username'],'ILIKE');
+        $pager->db->addOrder('user_id','ASC');
+        # TODO: CHECK GENDER HERE!!!!
+
+        $pager->setModule('hms');
+        $pager->setTemplate('student/profile_search_pager.tpl');
+        $pager->setLink('index.php?module=hms');
+        $pager->setEmptyMessage("No matches found.");
+        $pager->addToggle('class="toggle1"');
+        $pager->addToggle('class="toggle2"');
+        $pager->addRowTags('getPagerTags');
+        $pager->addPageTags($pageTags);
+
+        return $pager->get();
+    }
+
+    /* 
+     *Sets up the row tags for the pager
+     */
+    function getPagerTags()
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+        
+        $tags['STUDENT_ID'] = $this->get_user_id() . "@appstate.edu";
+        $tags['FIRST_NAME'] = HMS_SOAP::get_first_name($this->get_user_id());
+        $tags['LAST_NAME'] = HMS_SOAP::get_last_name($this->get_user_id());
+        $tags['ACTIONS'] = PHPWS_Text::secureLink('[View Profile]', 'hms',array('type'=>'student','op'=>'show_profile','user'=>$this->get_user_id()));
+
+        return $tags;
     }
     
     /**

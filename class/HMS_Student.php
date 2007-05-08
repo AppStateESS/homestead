@@ -308,7 +308,7 @@ class HMS_Student {
             }
 
             $message .= "<br /><br />";
-            $message .= PHPWS_Text::secureLink('roommate search tool.', 'hms', array('type'=>'student','op'=>'show_application_search'));
+            $message .= PHPWS_Text::secureLink('roommate search tool.', 'hms', array('type'=>'student','op'=>'show_profile_search'));
             $message .= "<br /><br />";
             $message .= PHPWS_Text::secureLink(_('Logout'), 'users', array('action'=>'user', 'command'=>'logout'));
             $message .= "<br /><br />";
@@ -405,13 +405,13 @@ class HMS_Student {
                 PHPWS_Core::initModClass('hms','HMS_Application.php');
                 return HMS_Application::save_application();
                 break;
-            case 'show_application_search':
-                PHPWS_Core::initModClass('hms','HMS_Application.php');
-                return HMS_Application::display_application_search();
+            case 'show_profile_search':
+                PHPWS_Core::initModClass('hms','HMS_Student_Profile.php');
+                return HMS_Student_Profile::display_profile_search();
                 break;
-            case 'application_search':
-                PHPWS_Core::initModClass('hms','HMS_Application.php');
-                return HMS_Application::application_search();
+            case 'profile_search':
+                PHPWS_Core::initModClass('hms','HMS_Student_Profile.php');
+                return HMS_Student_Profile::profile_search();
                 break;
             case 'show_application':
                 PHPWS_Core::initModClass('hms', 'HMS_Side_Thingie.php');

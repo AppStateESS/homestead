@@ -2459,10 +2459,10 @@ class HMS_Form
                 is_numeric($_REQUEST['rlc_interest']));
     }
 
-    function application_search_form()
+    function profile_search_form()
     {
         $form = &new PHPWS_Form();
-        $form->setAction('index.php?module=hms&type=student&op=application_search');
+        $form->setAction('index.php?module=hms&type=student&op=profile_search');
 
         $form->addText('asu_username');
         $form->setLabel('asu_username','ASU Username: ');
@@ -2473,7 +2473,7 @@ class HMS_Form
         $form->mergeTemplate($tags);
         $tags = $form->getTemplate();
 
-        return PHPWS_Template::process($tags,'hms','student/application_search.tpl');
+        return PHPWS_Template::process($tags,'hms','student/profile_search.tpl');
     }
 
     function edit_suite($error)
