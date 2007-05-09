@@ -282,6 +282,14 @@ function hms_update(&$content, $currentVersion)
 
         case version_compare($currentVersion, '0.1.17', '<'):
             $content[] = '+ Added profile editing!';
+
+        case version_compare($currentVersion, '0.1.18', '<'):
+            $files = array();
+            $files[] = 'templates/admin/maintenance.tpl';
+
+            PHPWS_Boost::updateFiles($files, 'hms');
+
+            $content[] = '+ Yay for searching by student';
     }
 
     return TRUE;
