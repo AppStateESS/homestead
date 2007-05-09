@@ -286,6 +286,10 @@ function hms_update(&$content, $currentVersion)
         case version_compare($currentVersion, '0.1.18', '<'):
             $files = array();
             $files[] = 'templates/admin/maintenance.tpl';
+            $files[] = 'templates/student/profile_form.tpl';
+            $files[] = 'templates/profile_search.tpl';
+            $files[] = 'templates/profile_search_pager.tpl';
+            $files[] = 'templates/profile_search_results.tpl';
 
             PHPWS_Boost::updateFiles($files, 'hms');
 
