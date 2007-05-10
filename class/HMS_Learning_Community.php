@@ -344,6 +344,15 @@ class HMS_Learning_Community
 
             # Save the data to the database
             PHPWS_Core::initModClass('hms','HMS_RLC_Application.php');
+        
+            $result = HMS_RLC_Application::check_for_application($_SESSION['asu_username']);
+
+            # Check to make sure an RLC application doesn't already exist
+            if(!(PEAR::isError($result)) && $result !== FALSE){
+                $template['MESSAGE'] = "Sorry, you have already submitted an RLC Application.";
+                return PHPWS_Template::process($template, 'hms','student/student_success_failure_message.tpl');
+            }
+            
             $result = HMS_RLC_Application::save_application();
 
             # Check for an error
