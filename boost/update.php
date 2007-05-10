@@ -296,6 +296,7 @@ function hms_update(&$content, $currentVersion)
             $content[] = '+ Yay for searching by student';
             $content[] = '+ Added profile searching!';
             $content[] = '+ Added code to prevent duplicate RLC Applications';
+            $content[] = '+ Improved "Side Thingie" to show roomate status/deadlines';
     }
 
     return TRUE;
