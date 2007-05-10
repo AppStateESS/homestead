@@ -243,11 +243,14 @@ class HMS_Roommate_Approval
     /**
      * 
      */
-    function has_requested_someone()
+    function has_requested_someone($username = NULL)
     {
         $db = &new PHPWS_DB('hms_roommate_approval');
         $db->addColumn('id');
-        $db->addWhere('roommate_zero', $_SESSION['asu_username']);
+        if($username == NULL) 
+            $db->addWhere('roommate_zero', $_SESSION['asu_username']);
+        else 
+            $db->addWhere('roommate_zero', $username);
         $exists = $db->select('one');
         if($exists != FALSE || $exists != NULL) {
             return true;
