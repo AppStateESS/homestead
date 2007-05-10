@@ -187,12 +187,28 @@ class HMS_Side_Thingie {
         if($this->step == HMS_SIDE_STUDENT_ROOMMATE){
             $this->steps_styles[HMS_SIDE_STUDENT_ROOMMATE] = 'STEP_CURRENT';
         }
-        
-        # For now, always set to NOT YET    
-        $this->steps_text[HMS_SIDE_STUDENT_ROOMMATE] .= " (available 5/07/07)";
-        $this->steps_styles[HMS_SIDE_STUDENT_ROOMMATE] = 'STEP_NOTYET';
-        return;
 
+        PHPWS_Core::initModClass('hms','HMS_Roommate.php');
+        PHPWS_Core::initModClass('hms','HMS_Roommate_Approval.php');
+
+        if(HMS_Roommate::has_roommates($_SESSION['asu_username']) || HMS_Roommate_Approval::has_requested_someone($_SESSION['asu_username'])){
+            $this->steps_styles[HMS_SIDE_STUDENT_ROOMMATE] = 'STEP_COMPLETED';
+            return;
+        }
+        
+        if($this->curr_timestamp < $this->deadlines->get_submit_application_begin_timestamp()){
+            $this->steps_text[HMS_SIDE_STUDENT_ROOMMATE] .= " (complete by ". date('n/j/y',$this->deadlines->get_submit_application_begin_timestamp()) .")";
+            $this->steps_styles[HMS_SIDE_STUDENT_ROOMMATE] .= 'STEP_NOTYET';
+            return;
+        }else if($this->curr_timestamp > $this->deadlines->get_submit_application_begin_timestamp() && $this->curr_timestamp < $this->deadlines->get_search_profiles_end_timestamp()){
+            $this->steps_text[HMS_SIDE_STUDENT_ROOMMATE] .= " (complete by ". date('n/j/y',$this->deadlines->get_search_profiles_end_timestamp()) . ")";
+            $this->steps_styles[HMS_SIDE_STUDENT_ROOMMATE] = 'STEP_TOGO';
+            return;
+        }else if($this->curr_timestamp > $this->deadlines->get_search_profiles_end_timestamp()){
+            $this->steps_text[HMS_SIDE_STUDENT_ROOMMATE] .= "(skipped)";
+            $this->steps_styles[HMS_SIDE_STUDENT_ROOMMATE] = 'STEP_OPT_MISSED';
+            return;
+        }
     }
 
     function set_verify()
