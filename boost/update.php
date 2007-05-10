@@ -294,6 +294,7 @@ function hms_update(&$content, $currentVersion)
             PHPWS_Boost::updateFiles($files, 'hms');
 
             $content[] = '+ Yay for searching by student';
+            $content[] = '+ Added profile searching!';
             $content[] = '+ Added code to prevent duplicate RLC Applications';
     }
 
