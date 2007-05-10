@@ -661,6 +661,10 @@ class HMS_Student_Profile{
      */
     function profile_search_pager()
     {
+        # get the current student's gender
+        PHPWS_Core::initModClass('hms','HMS_SOAP.php');
+        $gender = HMS_SOAP::get_gender($_SESSION['asu_username'], TRUE); # use the numeric form
+        
         PHPWS_Core::initCoreClass('DBPager.php');
 
         $pageTags['USERNAME']   = _('Email');
@@ -670,9 +674,267 @@ class HMS_Student_Profile{
 
         $pager = &new DBPager('hms_student_profiles','HMS_Student_Profile');
 
-        $pager->addWhere('hms_student_profiles.user_id',$_REQUEST['asu_username'],'ILIKE');
+        # If an ASU username was entered, just use that. Otherwise, use the rest of the fields.
+        if(isset($_REQUEST['asu_username']) && $_REQUEST['asu_username'] != ''){
+            $pager->addWhere('hms_student_profiles.user_id',$_REQUEST['asu_username'],'ILIKE');
+        }else{
+            
+            if(isset($_REQUEST['hobbies_checkbox']['arts_and_crafts'])){
+                $pager->addWhere('hms_student_profiles.arts_and_crafts',1,'=');
+            }
+            
+            if(isset($_REQUEST['hobbies_checkbox']['books_and_reading'])){
+                $pager->addWhere('hms_student_profiles.books_and_reading',1,'=');
+            }
+            
+            if(isset($_REQUEST['hobbies_checkbox']['cars'])){
+                $pager->addWhere('hms_student_profiles.cars',1,'=');
+            }
+            
+            if(isset($_REQUEST['hobbies_checkbox']['church_activities'])){
+                $pager->addWhere('hms_student_profiles.church_activities',1,'=');
+            }
+            
+            if(isset($_REQUEST['hobbies_checkbox']['collecting'])){
+                $pager->addWhere('hms_student_profiles.collecting',1,'=');
+            }
+            
+            if(isset($_REQUEST['hobbies_checkbox']['computers_and_technology'])){
+                $pager->addWhere('hms_student_profiles.computers_and_technology',1,'=');
+            }
+            
+            if(isset($_REQUEST['hobbies_checkbox']['dancing'])){
+                $pager->addWhere('hms_student_profiles.dancing',1,'=');
+            }
+            
+            if(isset($_REQUEST['hobbies_checkbox']['fashion'])){
+                $pager->addWhere('hms_student_profiles.fashion',1,'=');
+            }
+            
+            if(isset($_REQUEST['hobbies_checkbox']['fine_arts'])){
+                $pager->addWhere('hms_student_profiles.fine_arts',1,'=');
+            }
+            
+            if(isset($_REQUEST['hobbies_checkbox']['gardening'])){
+                $pager->addWhere('hms_student_profiles.gardening',1,'=');
+            }
+            
+            if(isset($_REQUEST['hobbies_checkbox']['games'])){
+                $pager->addWhere('hms_student_profiles.games',1,'=');
+            }
+            
+            if(isset($_REQUEST['hobbies_checkbox']['humor'])){
+                $pager->addWhere('hms_student_profiles.humor',1,'=');
+            }
+            
+            if(isset($_REQUEST['hobbies_checkbox']['investing_personal_finance'])){
+                $pager->addWhere('hms_student_profiles.investing_personal_finance',1,'=');
+            }
+            
+            if(isset($_REQUEST['hobbies_checkbox']['movies'])){
+                $pager->addWhere('hms_student_profiles.movies',1,'=');
+            }
+            
+            if(isset($_REQUEST['hobbies_checkbox']['music'])){
+                $pager->addWhere('hms_student_profiles.music',1,'=');
+            }
+            
+            if(isset($_REQUEST['hobbies_checkbox']['outdoor_activities'])){
+                $pager->addWhere('hms_student_profiles.outdoor_activities',1,'=');
+            }
+            
+            if(isset($_REQUEST['hobbies_checkbox']['pets_and_animals'])){
+                $pager->addWhere('hms_student_profiles.pets_and_animals',1,'=');
+            }
+            
+            if(isset($_REQUEST['hobbies_checkbox']['photography'])){
+                $pager->addWhere('hms_student_profiles.photography',1,'=');
+            }
+            
+            if(isset($_REQUEST['hobbies_checkbox']['politics'])){
+                $pager->addWhere('hms_student_profiles.politics',1,'=');
+            }
+            
+            if(isset($_REQUEST['hobbies_checkbox']['sports'])){
+                $pager->addWhere('hms_student_profiles.sports',1,'=');
+            }
+            
+            if(isset($_REQUEST['hobbies_checkbox']['travel'])){
+                $pager->addWhere('hms_student_profiles.travel',1,'=');
+            }
+            
+            if(isset($_REQUEST['hobbies_checkbox']['tv_shows'])){
+                $pager->addWhere('hms_student_profiles.tv_shows',1,'=');
+            }
+            
+            if(isset($_REQUEST['hobbies_checkbox']['volunteering'])){
+                $pager->addWhere('hms_student_profiles.volunteering',1,'=');
+            }
+            
+            if(isset($_REQUEST['hobbies_checkbox']['writing'])){
+                $pager->addWhere('hms_student_profiles.writing',1,'=');
+            }
+            
+            # Music check boxes
+            if(isset($_REQUEST['music_checkbox']['alternative'])){
+                $pager->addWhere('hms_student_profiles.alternative',1,'=');
+            }
+            
+            if(isset($_REQUEST['music_checkbox']['ambient'])){
+                $pager->addWhere('hms_student_profiles.ambient',1,'=');
+            }
+            
+            if(isset($_REQUEST['music_checkbox']['beach'])){
+                $pager->addWhere('hms_student_profiles.beach',1,'=');
+            }
+            
+            if(isset($_REQUEST['music_checkbox']['bluegrass'])){
+                $pager->addWhere('hms_student_profiles.bluegrass',1,'=');
+            }
+            
+            if(isset($_REQUEST['music_checkbox']['blues'])){
+                $pager->addWhere('hms_student_profiles.blues',1,'=');
+            }
+            
+            if(isset($_REQUEST['music_checkbox']['classical'])){
+                $pager->addWhere('hms_student_profiles.classical',1,'=');
+            }
+            
+            if(isset($_REQUEST['music_checkbox']['classic_rock'])){
+                $pager->addWhere('hms_student_profiles.classic_rock',1,'=');
+            }
+            
+            if(isset($_REQUEST['music_checkbox']['country'])){
+                $pager->addWhere('hms_student_profiles.country',1,'=');
+            }
+            
+            if(isset($_REQUEST['music_checkbox']['electronic'])){
+                $pager->addWhere('hms_student_profiles.electronic',1,'=');
+            }
+            
+            if(isset($_REQUEST['music_checkbox']['folk'])){
+                $pager->addWhere('hms_student_profiles.folk',1,'=');
+            }
+            
+            if(isset($_REQUEST['music_checkbox']['heavy_metal'])){
+                $pager->addWhere('hms_student_profiles.heavy_metal',1,'=');
+            }
+            
+            if(isset($_REQUEST['music_checkbox']['hip_hop'])){
+                $pager->addWhere('hms_student_profiles.hip_hop',1,'=');
+            }
+            
+            if(isset($_REQUEST['music_checkbox']['house'])){
+                $pager->addWhere('hms_student_profiles.house',1,'=');
+            }
+            
+            if(isset($_REQUEST['music_checkbox']['industrial'])){
+                $pager->addWhere('hms_student_profiles.industrial',1,'=');
+            }
+            
+            if(isset($_REQUEST['music_checkbox']['jazz'])){
+                $pager->addWhere('hms_student_profiles.jazz',1,'=');
+            }
+            
+            if(isset($_REQUEST['music_checkbox']['popular_music'])){
+                $pager->addWhere('hms_student_profiles.popular_music',1,'=');
+            }
+            
+            if(isset($_REQUEST['music_checkbox']['progressive'])){
+                $pager->addWhere('hms_student_profiles.progressive',1,'=');
+            }
+            
+            if(isset($_REQUEST['music_checkbox']['punk'])){
+                $pager->addWhere('hms_student_profiles.punk',1,'=');
+            }
+            
+            if(isset($_REQUEST['music_checkbox']['r_and_b'])){
+                $pager->addWhere('hms_student_profiles.r_and_b',1,'=');
+            }
+            
+            if(isset($_REQUEST['music_checkbox']['rap'])){
+                $pager->addWhere('hms_student_profiles.rap',1,'=');
+            }
+            
+            if(isset($_REQUEST['music_checkbox']['reggae'])){
+                $pager->addWhere('hms_student_profiles.reggae',1,'=');
+            }
+            
+            if(isset($_REQUEST['music_checkbox']['alternative'])){
+                $pager->addWhere('hms_student_profiles.rock',1,'=');
+            }
+            
+            if(isset($_REQUEST['music_checkbox']['world_music'])){
+                $pager->addWhere('hms_student_profiles.world_music',1,'=');
+            }
+
+            # Study times
+            if(isset($_REQUEST['study_times']['study_early_morning'])){
+                $pager->addWhere('hms_student_profiles.study_early_morning',1,'=');
+            }
+
+            if(isset($_REQUEST['study_times']['study_morning_afternoon'])){
+                $pager->addWhere('hms_student_profiles.study_morning_afternoon',1,'=');
+            }
+
+            if(isset($_REQUEST['study_times']['study_afternoon_evening'])){
+                $pager->addWhere('hms_student_profiles.study_afternoon_evening',1,'=');
+            }
+
+            if(isset($_REQUEST['study_times']['study_evening'])){
+                $pager->addWhere('hms_student_profiles.study_evening',1,'=');
+            }
+
+            if(isset($_REQUEST['study_times']['study_late_night'])){
+                $pager->addWhere('hms_student_profiles.study_late_night',1,'=');
+            }
+
+            # Drop downs
+            if(isset($_REQUEST['political_views_dropbox']) && $_REQUEST['political_views_dropbox'] != 0){
+                $pager->addWhere('hms_student_profiles.political_view',$_REQUEST['political_views_dropbox'],'=');
+            }
+            
+            if(isset($_REQUEST['intended_major']) && $_REQUEST['intended_major'] != 0){
+                $pager->addWhere('hms_student_profiles.major',$_REQUEST['intended_major'],'=');
+            }
+            
+            if(isset($_REQUEST['important_experience']) && $_REQUEST['important_experience'] != 0){
+                $pager->addWhere('hms_student_profiles.experience',$_REQUEST['important_experience'],'=');
+            }
+
+            if(isset($_REQUEST['sleep_time']) && $_REQUEST['sleep_time'] != 0){
+                $pager->addWhere('hms_student_profiles.sleep_time',$_REQUEST['sleep_time'],'=');
+            }
+
+            if(isset($_REQUEST['wakeup_time']) && $_REQUEST['wakeup_time'] != 0){
+                $pager->addWhere('hms_student_profiles.wakeup_time',$_REQUEST['wakeup_time'],'=');
+            }
+            
+            if(isset($_REQUEST['overnight_guests']) && $_REQUEST['overnight_guests'] != 0){
+                $pager->addWhere('hms_student_profiles.overnight_guests',$_REQUEST['overnight_guests'],'=');
+            }
+            
+            if(isset($_REQUEST['loudness']) && $_REQUEST['loudness'] != 0){
+                $pager->addWhere('hms_student_profiles.loudness',$_REQUEST['loudness'],'=');
+            }
+            
+            if(isset($_REQUEST['cleanliness']) && $_REQUEST['cleanliness'] != 0){
+                $pager->addWhere('hms_student_profiles.cleanliness',$_REQUEST['cleanliness'],'=');
+            }
+            
+            if(isset($_REQUEST['free_time']) && $_REQUEST['free_time'] != 0){
+                $pager->addWhere('hms_student_profiles.free_time',$_REQUEST['free_time'],'=');
+            }
+        }
+        
+        # Join with hms_application table on user_id to make sure genders match.
+        $pager->addWhere('hms_student_profiles.user_id','hms_application.hms_student_id','=');
+        $pager->addWhere('hms_application.gender',$gender,'=');
+
+        # Don't list the current user as a match
+        $pager->addWhere('hms_student_profiles.user_id',$_SESSION['asu_username'],'!=');
+        
         $pager->db->addOrder('user_id','ASC');
-        # TODO: CHECK GENDER HERE!!!!
 
         $pager->setModule('hms');
         $pager->setTemplate('student/profile_search_pager.tpl');
