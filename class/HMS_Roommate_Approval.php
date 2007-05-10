@@ -402,7 +402,7 @@ class HMS_Roommate_Approval
 
         // create the Mail object and send it
         $rz_mail = &new PHPWS_Mail;
-        $rz_mail->addSendTo($rz . "appstate.edu");
+        $rz_mail->addSendTo($rz . "@appstate.edu");
         $rz_mail->setFrom('hms@tux.appstate.edu');
         $rz_mail->setSubject('HMS Roommate Request');
         $rz_mail->setMessageBody($message);
