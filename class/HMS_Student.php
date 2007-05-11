@@ -188,12 +188,111 @@ class HMS_Student {
 
     function get_matching_students()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
-        $student = &new HMS_Form;
-        $content = $student->get_matching_students();
-        return $content;
+        if(!isset($_REQUEST['username'])) {
+            PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
+            $error = "You did not provide an ASU username.<br />";
+            return HMS_Form::enter_student_search_data($error);
+        } else if (!PHPWS_Text::isValidInput($_REQUEST['username'])) {
+            PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
+            $error = "ASU usernames can only be alphanumeric.<br />";
+            return HMS_Form::enter_student_search_data($error);
+        } 
+
+        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+        $student_info = HMS_SOAP::get_student_info($_REQUEST['username']);
+       
+        $tpl['MENU_LINK'] = PHPWS_Text::secureLink(_('Return to Search'), 'hms', array('type'=>'student', 'op'=>'enter_student_search_data'));
+        $tpl['FIRST_NAME'] = $student_info->first_name;
+        $tpl['MIDDLE_NAME'] = $student_info->middle_name;
+        $tpl['LAST_NAME'] = $student_info->last_name;
+        
+        if($student_info->gender == 'F') {
+            $tpl['GENDER'] = "Female";
+        } else if ($student_info->gender == 'M') {
+            $tpl['GENDER'] = "Male";
+        } else {
+            $tpl['GENDER'] = "Unknown";
+        }
+
+        $tpl['DOB'] = $student_info->dob;
+
+        if($student_info->projected_class == 'FR') {
+            $tpl['CLASS'] = "Freshman";
+        } else if ($student_info->projected_class == 'SO') {
+            $tpl['CLASS'] = "Sophomore";
+        } else if ($student_info->projected_class == 'JR') {
+            $tpl['CLASS'] = "Junior";
+        } else if ($student_info->projected_class == 'SR') {
+            $tpl['CLASS'] = "Senior";
+        } else {
+            $tpl['CLASS'] = "Unknown";
+        }
+
+        $tpl['ADDRESS_L1'] = $student_info->address['line1'];
+        $tpl['ADDRESS_L2'] = $student_info->address['line2'];
+        $tpl['ADDRESS_L3'] = $student_info->address['line3'];
+        $tpl['ADDRESS_CITY'] = $student_info->address['city'];
+        $tpl['ADDRESS_STATE'] = $student_info->address['state'];
+        $tpl['ADDRESS_ZIP'] = $student_info->address['zip'];
+        $tpl['PHONE_AC'] = $student_info->phone['zip_code'];
+        $tpl['PHONE_NUMBER'] = $student_info->phone['number'];
+        $tpl['USERNAME'] = $_REQUEST['username'];
+
+        $tpl['TITLE'] = "Search Results";
+
+        $sql  = "SELECT";
+        $sql .= " hms_residence_hall.hall_name, ";
+        $sql .= " hms_room.room_number ";
+        $sql .= "FROM";
+        $sql .= " hms_residence_hall, ";
+        $sql .= " hms_floor, ";
+        $sql .= " hms_room, ";
+        $sql .= " hms_bedrooms, ";
+        $sql .= " hms_beds, ";
+        $sql .= " hms_assignment ";
+        $sql .= "WHERE";
+        $sql .= " hms_assignment.bed_id = hms_beds.id ";
+        $sql .= " AND hms_beds.bedroom_id = hms_bedrooms.id ";
+        $sql .= " AND hms_bedrooms.room_id = hms_room.id ";
+        $sql .= " AND hms_room.floor_id = hms_floor.id ";
+        $sql .= " AND hms_floor.building = hms_residence_hall.id ";
+        $sql .= " AND hms_assignment.asu_username ilike '" . $_REQUEST['username'] . "';";
+
+        $db = &new PHPWS_DB();
+        $db->setSQLQuery($sql);
+        $results = $db->select();
+
+        if($results != FALSE && $results != NULL) {
+            $tpl['ROOM_ASSIGNMENT'] = $results[0]['room_number'] . " " . $results[0]['hall_name'];
+        } else {
+            $tpl['ROOM_ASSIGNMENT'] = "This student does not live on campus.";
+        }
+
+        $db = &new PHPWS_DB('hms_learning_community_assignment');
+        $db->addColumn('hms_learning_communities.community_name');
+        $db->addWhere('hms_learning_community_assignment.rlc_id', 'hms_learning_communities.id');
+        $db->addWhere('hms_learning_community_assignment.asu_username', $_REQUEST['username']);
+        $results = $db->select();
+        
+        if($results != NULL && $results != FALSE) {
+            $tpl['RLC_STATUS'] = $results['community_name'];
+        } else {
+            $db = &new PHPWS_DB('hms_learning_community_applications');
+            $db->addColumn('id');
+            $db->addWhere('user_id', $_REQUEST['username']);
+            $results = $db->select('one');
+            if($result != FALSE && $results != NULL) {
+                $tpl['RLC_STATUS'] = "This student is currently awaiting RLC approval. You can view their application " . PHPWS_Text::secureLink(_('here'), 'hms', array('type'=>'rlc', 'op'=>'view_rlc_application', 'username'=>$_REQUEST['username']));
+            } else {
+                $tpl['RLC_STATUS'] = "This student is not in a Learning Community and has no pending approval.";
+            }
+        }
+
+        $final = PHPWS_Template::process($tpl, 'hms', 'student/show_student_info.tpl');
+        return $final;
     }
 
+/*
     function get_row_pager_tags()
     {
         $row['ACTIONS'] = HMS_Student::get_row_actions();
@@ -216,6 +315,7 @@ class HMS_Student {
 
         return implode(' | ', $list);
     }
+*/
 
     function edit_student($error = NULL)
     {
@@ -290,14 +390,9 @@ class HMS_Student {
             $message .= "<br /><br />";
     
             PHPWS_Core::initModClass('hms', 'HMS_Student_Profile.php');
-            //if(HMS_Student_Profile::check_for_profile() === FALSE) {
-                $message .= "The HMS Student Profile is optional and can be used to help you find a roommate who shares your interests. ";
-                //$message .= "You can currently only create a new profile. We are scheduled to have profile searching and editing available on Monday, 7 May, 2007. ";
-                $message .= "<br />";
-                $message .= PHPWS_Text::secureLink(_('Create/Edit your optional Student Profile'), 'hms', array('type'=>'student', 'op' =>'show_profile_form'));
-            //} else {
-            //    $message .= "You have created a profile. You should be able to edit and view this profile by Monday, 7 May, 2007.";
-            //}
+            $message .= "The HMS Student Profile is optional and can be used to help you find a roommate who shares your interests. ";
+            $message .= "<br />";
+            $message .= PHPWS_Text::secureLink(_('Create/Edit your optional Student Profile'), 'hms', array('type'=>'student', 'op' =>'show_profile_form'));
             $message .= "<br /><br />";
 
             PHPWS_Core::initModClass('hms', 'HMS_Roommate_Approval.php');
