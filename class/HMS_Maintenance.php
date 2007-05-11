@@ -144,10 +144,14 @@ class HMS_Maintenance
         if(Current_User::allow('hms', 'view_rlc_assignments') || Current_User::allow('hms', 'admin'))
             $tpl['VIEW_RLC_ASSIGNMENTS'] = PHPWS_Text::secureLink(_('View RLC Assignments'), 'hms', array('type'=>'rlc', 'op'=>'view_rlc_assignments'));
 
-/*
+
         if(Current_User::allow('hms', 'student_maintenance') || Current_User::allow('hms', 'admin'))
             $tpl['STUDENT_LABEL'] = "Student Maintenance";
 
+        if(Current_User::allow('hms', 'search_for_students') || Current_User::allow('hms', 'admin'))
+            $tpl['SEARCH_FOR_STUDENT'] = PHPWS_Text::secureLink(_('Search for a Student'), 'hms', array('type'=>'student', 'op'=>'enter_student_search_data'));
+
+/*
         if(Current_User::allow('hms', 'add_student') || Current_User::allow('hms', 'admin'))
             $tpl['ADD_STUDENT']     = PHPWS_Text::secureLink(_('Add Student'), 'hms', array('type'=>'student', 'op'=>'add_student'));
 
@@ -180,7 +184,8 @@ class HMS_Maintenance
 
         if(Current_User::allow('hms', 'edit_roommate_group') || Current_User::allow('hms', 'admin'))
             $tpl['EDIT_ROOMMATE_GROUP'] = PHPWS_Text::secureLink(_('Edit roommate group'), 'hms', array('type'=>'roommate', 'op'=>'get_username_for_edit_grouping'));
-*/        
+*/
+
        $content = PHPWS_Template::process($tpl, 'hms', 'admin/maintenance.tpl');
         return $content;
     }
