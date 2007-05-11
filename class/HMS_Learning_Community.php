@@ -373,9 +373,20 @@ class HMS_Learning_Community
     {
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
         $tags = array();
+        $tags['TITLE']             = 'RLC Applications';
         $tags['SUMMARY']           = HMS_Learning_Community::display_rlc_assignment_summary();
         $tags['ASSIGNMENTS_PAGER'] = HMS_RLC_Application::rlc_application_admin_pager();
 
+        $export_form = &new PHPWS_Form('export_form');
+        $export_form->addHidden('type','admin');
+        $export_form->addHIdden('op','rlc_application_export');
+        
+        $export_form->addDropBox('rlc_list',HMS_RLC_Application::getRLCList());
+        $export_form->addSubmit('submit');
+        
+        $export_form->mergeTemplate($tags);
+        $tags = $export_form->getTemplate();
+        
         return PHPWS_Template::process($tags, 'hms', 'admin/make_new_rlc_assignments.tpl');
     }
 

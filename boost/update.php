@@ -303,6 +303,7 @@ function hms_update(&$content, $currentVersion)
         case version_compare($currentVersion, '0.1.19', '<'):
             $files = array();
             $files[] = 'templates/admin/rlc_assignments_pager.tpl';
+            $files[] = 'templates/admin/make_new_rlc_assignments.tpl';
             
             PHPWS_Boost::updateFiles($files, 'hms');
 
