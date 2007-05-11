@@ -27,10 +27,11 @@
         &nbsp;&nbsp;&nbsp;{RLC_ROOM_ASSIGNMENTS}<br />
         &nbsp;&nbsp;&nbsp;{VIEW_RLC_ASSIGNMENTS}<br />
         <br />
-<!--        <h2><i>{STUDENT_LABEL}</i></h2>
-        &nbsp;&nbsp;&nbsp;{ADD_STUDENT}<br />
-        &nbsp;&nbsp;&nbsp;{EDIT_STUDENT}<br />
-        <br /> -->
+        <h2><i>{STUDENT_LABEL}</i></h2>
+        &nbsp;&nbsp;&nbsp;{SEARCH_FOR_STUDENT}<br />
+<!--        &nbsp;&nbsp;&nbsp;{ADD_STUDENT}<br />
+        &nbsp;&nbsp;&nbsp;{EDIT_STUDENT}<br />-->
+        <br /> 
         <h2><i>{DEADLINE_LABEL}</i></h2>
         &nbsp;&nbsp;&nbsp;{EDIT_DEADLINES}<br />
         <br />
