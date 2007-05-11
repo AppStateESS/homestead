@@ -320,6 +320,25 @@ class HMS_SOAP{
      */
     function get_student_info($username)
     {
+        if(SOAP_TEST_FLAG) {
+            $student->first_name = "kevin";
+            $student->last_name = "wilcox";
+            $student->gender = "M";
+            $student->dob = "1980-03-31";
+            $student->student_type = 'C';
+            $student->projected_class = 'SR';
+            $student->address['line1'] = '275 Honey Hill Drive';
+            $student->address['line2'] = '';
+            $student->address['line3'] = '';
+            $student->address['city'] = 'Blowing Rock';
+            $student->address['county'] = '99';
+            $student->address['state'] = 'NC';
+            $student->address['zip'] = '28605';
+            $student->phone['zip_code'] = '828';
+            $student->phone['number'] = '2780579';
+            return $student;
+        }
+
         include_once('SOAP/Client.php');
         $wsdl = new SOAP_WSDL(PHPWS_SOURCE_DIR . 'mod/hms/inc/shs0001.wsdl', 'true');
         $proxy = $wsdl->getProxy();
