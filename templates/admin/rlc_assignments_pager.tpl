@@ -1,7 +1,4 @@
 {START_FORM}
-<!-- BEGIN empty_table -->
-        <p>{EMPTY_MESSAGE}</p>
-<!-- END empty_table -->
 <!-- BEGIN table -->
 <table cellpadding="4" cellspacing="1" width="99%">
     <tr>
@@ -17,6 +14,13 @@
         <th>Apply Date</th>
         <th>Course OK?</th>
     </tr>
+<!-- BEGIN empty_table -->
+    <tr>
+        <td colspan="11">
+            <p>{EMPTY_MESSAGE}</p>
+        </td>
+    </tr>
+<!-- END empty_table -->
 <!-- BEGIN listrows -->
     <tr {TOGGLE}>
         <td>{NAME}</td>
