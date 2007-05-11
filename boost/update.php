@@ -275,6 +275,8 @@ function hms_update(&$content, $currentVersion)
 
             $files = array();
             $files[] = 'templates/student/profile_form.tpl';
+            
+            PHPWS_Boost::updateFiles($files, 'hms');
 
             $content[] = '+ Added "writing" column to student_profiles table';
             $content[] = '+ Adjusted student profile template for reuse in viewing profiles';
@@ -297,6 +299,14 @@ function hms_update(&$content, $currentVersion)
             $content[] = '+ Added profile searching!';
             $content[] = '+ Added code to prevent duplicate RLC Applications';
             $content[] = '+ Improved "Side Thingie" to show roomate status/deadlines';
+        
+        case version_compare($currentVersion, '0.1.19', '<'):
+            $files = array();
+            $files[] = 'templates/admin/rlc_assignments_pager.tpl';
+            
+            PHPWS_Boost::updateFiles($files, 'hms');
+
+            $content[] = '+ Minor improvement to RLC Assignments pager';
     }
 
     return TRUE;
