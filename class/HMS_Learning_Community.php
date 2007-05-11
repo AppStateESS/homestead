@@ -305,6 +305,9 @@ class HMS_Learning_Community
             case 'rlc_assignments_submit':
                 return HMS_Learning_Community::rlc_assignments_submit();
                 break;
+            case 'rlc_application_export':
+                return HMS_Learning_Community::rlc_application_export();
+                break;
             default:
                 return "{$_REQUEST['op']} <br />";
                 break;
@@ -382,7 +385,7 @@ class HMS_Learning_Community
         $tags['ASSIGNMENTS_PAGER'] = HMS_RLC_Application::rlc_application_admin_pager();
 
         $export_form = &new PHPWS_Form('export_form');
-        $export_form->addHidden('type','admin');
+        $export_form->addHidden('type','rlc');
         $export_form->addHIdden('op','rlc_application_export');
         
         $export_form->addDropBox('rlc_list',HMS_RLC_Application::getRLCList());
@@ -512,6 +515,16 @@ class HMS_Learning_Community
         }
         
         return HMS_Learning_Community::assign_applicants_to_rlcs();
+    }
+
+    
+    /**
+     * Exports the pending RLC applications into a CSV file.
+     * Looks in $_REQUEST for which RLC to export.
+     */
+    function rlc_application_export()
+    {
+        
     }
 }
 ?>
