@@ -27,46 +27,6 @@ class HMS_Form
         return $this->error;
     }
 
-    function valid_search_request() {
-        if($_REQUEST['first_name'] ||
-           $_REQUEST['last_name'] ||
-           $_REQUEST['asu_username'])
-            return TRUE;
-        else 
-            return FALSE;
-    }
-
-    function get_matching_students()
-    {
-        if(HMS_Form::valid_search_request() == FALSE) {
-            $error = "You did not provide any search criteria.<br />";
-            $error .= "Please enter something to search by.<br />";
-            return HMS_Form::enter_student_search_data($error);
-        }
-
-        PHPWS_Core::initCoreClass('DBPager.php');
-        $pager = &new DBPager('hms_student', 'HMS_Student');
-        $pager->setModule('hms');
-        $pager->setTemplate('admin/studentList.tpl');
-        
-        if($_REQUEST['last_name']) {
-            $pager->db->addWhere('last_name', '%' . $_REQUEST['last_name'] . '%', 'ILIKE');
-        }
-        
-        if($_REQUEST['first_name']) {
-            $pager->db->addWhere('first_name', '%' . $_REQUEST['first_name'] . '%', 'ILIKE');
-        }
-
-        if($_REQUEST['asu_username']) {
-            $pager->db->addWhere('asu_username', '%' . $_REQUEST['asu_username'] . '%', 'ILIKE');
-        }
-
-        $pager->addRowTags('get_row_pager_tags');
-        $pager->db->addOrder('last_name');
-        $pager->db->addOrder('first_name');
-        return $pager->get();
-    }
-
     function search_residence_halls()
     {
         PHPWS_Core::initCoreClass('Form.php');
@@ -2002,6 +1962,7 @@ class HMS_Form
         return $tpl;
     }
 
+/*
     function fill_student_data($error = NULL)
     {
         if(isset($_REQUEST['id'])) {
@@ -2047,16 +2008,12 @@ class HMS_Form
         $final = PHPWS_Template::process($tpl, 'hms', 'admin/student_data.tpl');
         return $final;
     }
+*/
 
     function enter_student_search_data($error = NULL)
     {
         $form = &new PHPWS_Form;
-        $form->addText('last_name');
-        $form->addText('first_name');
-        $form->addText('asu_username');
-        $form->setSize('last_name', 15);
-        $form->setSize('first_name', 15);
-        $form->setSize('asu_username', 7);
+        $form->addText('username');
         $form->addSubmit('submit', _('Submit'));
 
         $form->addHidden('module', 'hms');
@@ -2064,10 +2021,12 @@ class HMS_Form
         $form->addHidden('op', 'get_matching_students');
 
         $tpl = $form->getTemplate();
+        $tpl['TITLE'] = "Student Search";
+        $tpl['MESSAGE'] = "What ASU username would you like to look for?<br />";
         if(isset($error)) {
             $tpl['ERROR'] = $error;
         }
-        $final = PHPWS_Template::process($tpl, 'hms', 'admin/student_search.tpl');
+        $final = PHPWS_Template::process($tpl, 'hms', 'admin/get_single_username.tpl');
         return $final;
     }
 
