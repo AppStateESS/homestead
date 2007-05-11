@@ -296,6 +296,10 @@ function hms_update(&$content, $currentVersion)
             PHPWS_Boost::updateFiles($files, 'hms');
 
             $content[] = '+ Yay for searching by student';
+        
+
+            PHPWS_Boost::updateFiles($files, 'hms');
+
             $content[] = '+ Added profile searching!';
             $content[] = '+ Added code to prevent duplicate RLC Applications';
             $content[] = '+ Improved "Side Thingie" to show roomate status/deadlines';
@@ -304,10 +308,13 @@ function hms_update(&$content, $currentVersion)
             $files = array();
             $files[] = 'templates/admin/rlc_assignments_pager.tpl';
             $files[] = 'templates/admin/make_new_rlc_assignments.tpl';
+            $files[] = 'templates/student/show_student_info.tpl';
+            $files[] = 'templates/admin/maintenance.tpl';
             
             PHPWS_Boost::updateFiles($files, 'hms');
 
             $content[] = '+ Minor improvement to RLC Assignments pager';
+            $content[] = '+ Yay for searching by student actually working';
     }
 
     return TRUE;
