@@ -110,6 +110,7 @@ class HMS_Learning_Community
     /*
      * Uses the HMS_Forms class to display the student rlc signup form/application
      */
+    //TODO: MOVE THIS TO HMS_RLC_Application
     function show_rlc_application_form()
     {
         PHPWS_Core::initModClass('hms','HMS_RLC_Application.php');
@@ -148,6 +149,7 @@ class HMS_Learning_Community
      * If no options passed, shows for the currently logged student
      * If an username is provided, shows the RLC application for that student
      */
+     //TODO: MOVE THIS TO HMS_RLC_Application
     function view_rlc_application($username = NULL)
     {
         if($username == NULL) {
@@ -314,6 +316,7 @@ class HMS_Learning_Community
      * If ok, shows the second page of the application form.
      * Otherwise, displays page one again with an error message.
      */
+     //TODO: move this to HMS_RLC_Application
     function rlc_application_page1_submit()
     {
         PHPWS_Core::initModClass('hms','HMS_Forms.php');
@@ -328,6 +331,7 @@ class HMS_Learning_Community
         }
     }
 
+    //TODO: add comments and move this to HMS_RLC_Application
     function rlc_application_page2_submit()
     {
         PHPWS_Core::initModClass('hms','HMS_Forms.php');
