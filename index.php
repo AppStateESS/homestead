@@ -1,6 +1,6 @@
 <?php
 ini_set('ERROR_REPORTING', E_ALL);
-ini_set('display_errors', 1);
+ini_set('display_errors', 0);
 
 if (!defined('PHPWS_SOURCE_DIR')) {
     include '../../config/core/404.html';
