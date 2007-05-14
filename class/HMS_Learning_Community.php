@@ -522,7 +522,36 @@ class HMS_Learning_Community
      * Exports the pending RLC applications into a CSV file.
      * Looks in $_REQUEST for which RLC to export.
      */
+     /*
     function rlc_application_export()
+    {
+        $db = &new PHPWS_DB('hms_learning_community_applications');
+        $db->addColumn('hms_learning_communities.abbreviation');
+        $db->addWhere('hms_learning_communities.id','hms_learning_community_applications.rlc_first_choice_id','=');
+
+        HERES THE QUERY:
+
+        select hms_learning_community_applications.user_id, date_submitted, rlc_first_choice.abbreviation as first_choice, rlc_second_choice.abbreviation as second_choice, rlc_third_choice.abbreviation as third_choice FROM (SELECT hms_learning_community_applications.user_id, hms_learning_communities.abbreviation FROM hms_learning_communities,hms_learning_community_applications WHERE hms_learning_communities.id = hms_learning_community_applications.rlc_first_choice_id) as rlc_first_choice, (SELECT hms_learning_community_applications.user_id, hms_learning_communities.abbreviation FROM hms_learning_communities,hms_learning_community_applications WHERE hms_learning_communities.id = hms_learning_community_applications.rlc_second_choice_id) as rlc_second_choice, (SELECT hms_learning_community_applications.user_id, hms_learning_communities.abbreviation FROM hms_learning_communities,hms_learning_community_applications WHERE hms_learning_communities.id = hms_learning_community_applications.rlc_third_choice_id) as rlc_third_choice, hms_learning_community_applications WHERE rlc_first_choice.user_id = hms_learning_community_applications.user_id AND rlc_second_choice.user_id = hms_learning_community_applications.user_id AND rlc_third_choice.user_id = hms_learning_community_applications.user_id;
+        
+        //Download file
+        if(ob_get_contents())
+            print('Some data has already been output, can\'t send file');
+        if(isset($_SERVER['HTTP_USER_AGENT']) && strpos($_SERVER['HTTP_USER_AGENT'],'MSIE'))
+            header('Content-Type: application/force-download');
+        else
+            header('Content-Type: application/octet-stream');
+        if(headers_sent())
+            print('Some data has already been output to browser, can\'t send file');
+        header('Content-Length: '.strlen($buffer));
+        header('Content-disposition: attachment; filename="'.$name.'"');
+        echo $buffer;
+    }
+    */
+
+    /**
+     * Exports the completed RLC assignments.
+     */
+    function rlc_assignment_export()
     {
         
     }
