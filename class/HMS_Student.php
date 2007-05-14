@@ -228,14 +228,14 @@ class HMS_Student {
             $tpl['CLASS'] = "Unknown";
         }
 
-        $tpl['ADDRESS_L1'] = $student_info->address['line1'];
-        $tpl['ADDRESS_L2'] = $student_info->address['line2'];
-        $tpl['ADDRESS_L3'] = $student_info->address['line3'];
-        $tpl['ADDRESS_CITY'] = $student_info->address['city'];
-        $tpl['ADDRESS_STATE'] = $student_info->address['state'];
-        $tpl['ADDRESS_ZIP'] = $student_info->address['zip'];
-        $tpl['PHONE_AC'] = $student_info->phone['zip_code'];
-        $tpl['PHONE_NUMBER'] = $student_info->phone['number'];
+        $tpl['ADDRESS_L1'] = $student_info->address->line1;
+        $tpl['ADDRESS_L2'] = $student_info->address->line2;
+        $tpl['ADDRESS_L3'] = $student_info->address->line3;
+        $tpl['ADDRESS_CITY'] = $student_info->address->city;
+        $tpl['ADDRESS_STATE'] = $student_info->address->state;
+        $tpl['ADDRESS_ZIP'] = $student_info->address->zip;
+        $tpl['PHONE_AC'] = $student_info->phone->area_code;
+        $tpl['PHONE_NUMBER'] = $student_info->phone->number;
         $tpl['USERNAME'] = $_REQUEST['username'];
 
         $tpl['TITLE'] = "Search Results";
