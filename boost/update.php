@@ -310,11 +310,16 @@ function hms_update(&$content, $currentVersion)
             $files[] = 'templates/admin/make_new_rlc_assignments.tpl';
             $files[] = 'templates/student/show_student_info.tpl';
             $files[] = 'templates/admin/maintenance.tpl';
+            $files[] = 'templates/admin/rlc_roster.tpl';
+            $files[] = 'templates/admin/rlc_roster_table.tpl';
+            $files[] = 'templates/admin/search_by_rlc.tpl';
+            $files[] = 'templates/admin/full_name_gender_email.tpl';
             
             PHPWS_Boost::updateFiles($files, 'hms');
 
             $content[] = '+ Minor improvement to RLC Assignments pager';
             $content[] = '+ Yay for searching by student actually working';
+            $content[] = '+ Yay for searching by RLC =)';
     }
 
     return TRUE;
