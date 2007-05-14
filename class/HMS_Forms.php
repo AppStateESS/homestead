@@ -524,6 +524,33 @@ class HMS_Form
         return $final; 
     }
 
+    function search_by_rlc()
+    {
+        $db = &new PHPWS_DB('hms_learning_communities');
+        $db->addColumn('id');
+        $db->addColumn('community_name');
+        $rlc_raw = $db->select();
+
+        foreach($rlc_raw as $a_rlc) {
+            $rlc[$a_rlc['id']] = $a_rlc['community_name'];
+        }
+
+    
+        PHPWS_Core::initCoreClass('Form.php');
+        $form = &new PHPWS_Form;
+        $form->addDropBox('rlc', $rlc);
+        $form->addHidden('module', 'hms');
+        $form->addHidden('type', 'rlc');
+        $form->addHidden('op', 'view_by_rlc');
+        $form->addSubmit('submit', _('Search!'));
+
+        $tags = $form->getTemplate();
+        $tags['TITLE'] = "RLC Search";
+        
+        $final = PHPWS_Template::processTemplate($tags, 'hms', 'admin/search_by_rlc.tpl');
+        return $final;
+    }
+
     function verify_assign_floor()
     {
         PHPWS_Core::initCoreClass('Form.php');
