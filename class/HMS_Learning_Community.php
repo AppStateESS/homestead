@@ -270,7 +270,55 @@ class HMS_Learning_Community
 
         return HMS_Learning_Community::select_learning_community_for_delete();
     }
-    
+  
+    /*
+     * Let admins get a roster for a particular learning community
+     */
+    function search_by_rlc()
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
+        return HMS_Form::search_by_rlc();
+    } 
+
+    /*
+     * Actually display the roster for the rlc specified in search_by_rlc
+     */
+    function view_by_rlc()
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+
+        $db = &new PHPWS_DB('hms_learning_communities');
+        $db->addWhere('id', $_REQUEST['rlc']);
+        $db->addColumn('community_name');
+        $tpl['TITLE'] = $db->select('one');
+
+        $db = &new PHPWS_DB('hms_learning_community_assignment');
+        $db->addWhere('rlc_id', $_REQUEST['rlc']);
+        $db->addColumn('asu_username');
+        $usernames = $db->select();
+
+        if($usernames != NULL && $usernames != FALSE) {
+            foreach($usernames as $user) {
+                $tags['FIRST_NAME']     = HMS_SOAP::get_first_name($user['asu_username']);
+                $tags['MIDDLE_NAME']    = HMS_SOAP::get_middle_name($user['asu_username']);
+                $tags['LAST_NAME']      = HMS_SOAP::get_last_name($user['asu_username']);
+                $tags['GENDER']         = HMS_SOAP::get_gender($user['asu_username']);
+
+                $tags['USERNAME']       = $user['asu_username'];
+                $tags['EMAIL']          = $user['asu_username'] . '@appstate.edu';
+
+                $new_tpl['ROWS'] .= PHPWS_Template::processTemplate($tags, 'hms', 'admin/full_name_gender_email.tpl');
+            }
+            $content = PHPWS_Template::processTemplate($new_tpl, 'hms', 'admin/rlc_roster_table.tpl');
+        } else {
+            $content = 'There are no students assigned to this Learning Community';
+        }
+
+        $tpl['MESSAGE'] = $content;
+        $tpl['MENU_LINK'] = PHPWS_Text::secureLink(_('Return to Maintenance'), 'hms', array('type'=>'maintenance', 'op'=>'show_maintenance_options'));
+        return PHPWS_Template::processTemplate($tpl, 'hms', 'admin/rlc_roster.tpl');
+    }
+
     /*
      * Main function for RLC maintenance
      */
@@ -307,6 +355,12 @@ class HMS_Learning_Community
                 break;
             case 'rlc_application_export':
                 return HMS_Learning_Community::rlc_application_export();
+                break;
+            case 'search_by_rlc':
+                return HMS_Learning_Community::search_by_rlc();
+                break;
+            case 'view_by_rlc':
+                return HMS_Learning_Community::view_by_rlc();
                 break;
             default:
                 return "{$_REQUEST['op']} <br />";
