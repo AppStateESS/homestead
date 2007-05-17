@@ -576,17 +576,39 @@ class HMS_Learning_Community
      * Exports the pending RLC applications into a CSV file.
      * Looks in $_REQUEST for which RLC to export.
      */
-     /*
     function rlc_application_export()
     {
+        $db = &new PHPWS_DB('hms_learning_communities');
+        $db->addColumn('community_name');
+        $db->addWhere('id',$_REQUEST['rlc_list']);
+        $title = $db->select('one');
+
+        $filename = $title . ".csv";
+
+        // setup the title and headings
+        $buffer = $title . "\n";
+        $buffer .= '"last_name","first_name","middle_name","gender","email"' . "\n";
+
+        // get the userlist
         $db = &new PHPWS_DB('hms_learning_community_applications');
-        $db->addColumn('hms_learning_communities.abbreviation');
-        $db->addWhere('hms_learning_communities.id','hms_learning_community_applications.rlc_first_choice_id','=');
+        $db->addColumn('user_id');
+        $db->addWhere('rlc_first_choice_id', $_REQUEST['rlc_list']);
+        $users = $db->select();
 
-        HERES THE QUERY:
+        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
 
-        select hms_learning_community_applications.user_id, date_submitted, rlc_first_choice.abbreviation as first_choice, rlc_second_choice.abbreviation as second_choice, rlc_third_choice.abbreviation as third_choice FROM (SELECT hms_learning_community_applications.user_id, hms_learning_communities.abbreviation FROM hms_learning_communities,hms_learning_community_applications WHERE hms_learning_communities.id = hms_learning_community_applications.rlc_first_choice_id) as rlc_first_choice, (SELECT hms_learning_community_applications.user_id, hms_learning_communities.abbreviation FROM hms_learning_communities,hms_learning_community_applications WHERE hms_learning_communities.id = hms_learning_community_applications.rlc_second_choice_id) as rlc_second_choice, (SELECT hms_learning_community_applications.user_id, hms_learning_communities.abbreviation FROM hms_learning_communities,hms_learning_community_applications WHERE hms_learning_communities.id = hms_learning_community_applications.rlc_third_choice_id) as rlc_third_choice, hms_learning_community_applications WHERE rlc_first_choice.user_id = hms_learning_community_applications.user_id AND rlc_second_choice.user_id = hms_learning_community_applications.user_id AND rlc_third_choice.user_id = hms_learning_community_applications.user_id;
-        
+        foreach($users as $user) {
+            $sinfo = HMS_SOAP::get_student_info($user['user_id']);
+            $buffer .= '"' . $sinfo->last_name . '",';
+            $buffer .= '"' . $sinfo->first_name . '",';
+            $buffer .= '"' . $sinfo->middle_name . '",';
+            $buffer .= '"' . $sinfo->gender . '",';
+            $buffer .= '"' . $user['user_id'] . '@appstate.edu' . '"' . "\n";
+        }
+
+        //HERES THE QUERY:
+        //select hms_learning_community_applications.user_id, date_submitted, rlc_first_choice.abbreviation as first_choice, rlc_second_choice.abbreviation as second_choice, rlc_third_choice.abbreviation as third_choice FROM (SELECT hms_learning_community_applications.user_id, hms_learning_communities.abbreviation FROM hms_learning_communities,hms_learning_community_applications WHERE hms_learning_communities.id = hms_learning_community_applications.rlc_first_choice_id) as rlc_first_choice, (SELECT hms_learning_community_applications.user_id, hms_learning_communities.abbreviation FROM hms_learning_communities,hms_learning_community_applications WHERE hms_learning_communities.id = hms_learning_community_applications.rlc_second_choice_id) as rlc_second_choice, (SELECT hms_learning_community_applications.user_id, hms_learning_communities.abbreviation FROM hms_learning_communities,hms_learning_community_applications WHERE hms_learning_communities.id = hms_learning_community_applications.rlc_third_choice_id) as rlc_third_choice, hms_learning_community_applications WHERE rlc_first_choice.user_id = hms_learning_community_applications.user_id AND rlc_second_choice.user_id = hms_learning_community_applications.user_id AND rlc_third_choice.user_id = hms_learning_community_applications.user_id;
+       
         //Download file
         if(ob_get_contents())
             print('Some data has already been output, can\'t send file');
@@ -597,10 +619,10 @@ class HMS_Learning_Community
         if(headers_sent())
             print('Some data has already been output to browser, can\'t send file');
         header('Content-Length: '.strlen($buffer));
-        header('Content-disposition: attachment; filename="'.$name.'"');
+        header('Content-disposition: attachment; filename="'.$filename.'"');
         echo $buffer;
+        die();
     }
-    */
 
     /**
      * Exports the completed RLC assignments.
