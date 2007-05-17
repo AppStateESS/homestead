@@ -322,6 +322,7 @@ class HMS_SOAP{
     {
         if(SOAP_TEST_FLAG) {
             $student->first_name = "kevin";
+            $student->middle_name = "michael";
             $student->last_name = "wilcox";
             $student->gender = "M";
             $student->dob = "1980-03-31";
