@@ -629,7 +629,47 @@ class HMS_Learning_Community
      */
     function rlc_assignment_export()
     {
+        $db = &new PHPWS_DB('hms_learning_communities');
+        $db->addColumn('community_name');
+        $db->addWhere('id',$_REQUEST['rlc_list']);
+        $title = $db->select('one');
+
+        $filename = $title . '-assignments-' . date('Ymd') . ".csv";
+
+        // setup the title and headings
+        $buffer = $title . "\n";
+        $buffer .= '"last_name","first_name","middle_name","gender","email"' . "\n";
         
+        // get the list of assignments
+        $db = &new PHPWS_DB('hms_learning_community_assignment');
+        $db->addColumn('user_id');
+        $db->addWhere('hms_learning_community_assignment.rlc_id',$_REQUEST['rlc_list']); # select assignments only for the given RLC
+        $users = $db->select();
+
+        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+
+        foreach($users as $user){
+            $sinfo = HMS_SOAP::get_student_info($user['user_id']);
+            $buffer .= '"' . $sinfo->last_name . '",';
+            $buffer .= '"' . $sinfo->first_name . '",';
+            $buffer .= '"' . $sinfo->middle_name . '",';
+            $buffer .= '"' . $sinfo->gender . '",';
+            $buffer .= '"' . $user['user_id'] . '@appstate.edu' . '"' . "\n";
+        }
+        
+        //Download file
+        if(ob_get_contents())
+            print('Some data has already been output, can\'t send file');
+        if(isset($_SERVER['HTTP_USER_AGENT']) && strpos($_SERVER['HTTP_USER_AGENT'],'MSIE'))
+            header('Content-Type: application/force-download');
+        else
+            header('Content-Type: application/octet-stream');
+        if(headers_sent())
+            print('Some data has already been output to browser, can\'t send file');
+        header('Content-Length: '.strlen($buffer));
+        header('Content-disposition: attachment; filename="'.$filename.'"');
+        echo $buffer;
+        die();
     }
 }
 ?>
