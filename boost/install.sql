@@ -115,6 +115,7 @@ CREATE TABLE hms_application (
     currently_employed smallint NOT NULL,
     rlc_interest smallint NOT NULL,
     agreed_to_terms smallint NOT NULL default 0,
+    aggregate smallint default 0,
     deleted smallint DEFAULT 0 NOT NULL,
     deleted_by smallint,
     deleted_on integer,
