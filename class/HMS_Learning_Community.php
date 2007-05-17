@@ -583,7 +583,7 @@ class HMS_Learning_Community
         $db->addWhere('id',$_REQUEST['rlc_list']);
         $title = $db->select('one');
 
-        $filename = $title . ".csv";
+        $filename = $title . '-applications-' . date('Ymd') . ".csv";
 
         // setup the title and headings
         $buffer = $title . "\n";
