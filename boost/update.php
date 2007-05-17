@@ -320,6 +320,66 @@ function hms_update(&$content, $currentVersion)
             $content[] = '+ Minor improvement to RLC Assignments pager';
             $content[] = '+ Yay for searching by student actually working';
             $content[] = '+ Yay for searching by RLC =)';
+
+        case version_compare($currentVersion, '0.1.20', '<'):
+            $db = &new PHPWS_DB;
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_1_20.sql');
+            if(PEAR::isError($result)) {
+                return $result;
+            }
+
+            $content[] = '+ Added support for an aggregate value in the application';
+            
+            $content[] = 'Calculating Aggregates...';
+            
+            $db = &new PHPWS_DB('hms_application');
+            $db->addColumn('id');
+            $db->addColumn('term_classification');
+            $db->addColumn('student_status');
+            $db->addColumn('preferred_bedtime');
+            $db->addColumn('room_condition');
+            $result = $db->select();
+            if(PEAR::isError($result)) {
+                return $result;
+            }
+
+            /*
+             * The following is weird, and I just wanted to take a few minutes
+             * to explain exactly what the hell is going on here.  Any students
+             * in the database at this point have filled out an application but
+             * do not have the aggregate number that is used to autoassign
+             * roommates.  What follows generates the appropriate aggregate
+             * number for each student.  The aggregate number is a bitmask that
+             * will end up looking like this:
+             *
+             * Bits Meaning
+             * 43   term_classification
+             * 2    student_status
+             * 1    preferred_bedtime
+             * 0    room_condition
+             *
+             * Unfortunately, this code is duplicated in HMS_Application.
+             * Fortunately, this code should only be needed once.
+             */
+            $i = 0;
+            foreach($result as $row) {
+                $aggregate = 0;
+                $aggregate |= ($row['term_classification'] - 1) << 3;
+                $aggregate |= ($row['student_status']      - 1) << 2;
+                $aggregate |= ($row['preferred_bedtime']   - 1) << 1;
+                $aggregate |= ($row['room_condition']      - 1);
+
+                $db->reset();
+                $db->addWhere('id', $row['id']);
+                $db->addValue('aggregate', $aggregate);
+                $result = $db->update();
+                if(PEAR::isError($result)) {
+                    return $result;
+                }
+                $i++;
+            }
+            
+            $content[] = "+ Calculated $i aggregates.";
     }
 
     return TRUE;

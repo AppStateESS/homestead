@@ -22,6 +22,7 @@ class HMS_Application {
     var $room_condition;
     var $rlc_interest;
     var $agreed_to_terms;
+    var $aggregate;
 
     var $created_on;
     var $created_by;
@@ -82,6 +83,7 @@ class HMS_Application {
         $this->setDeletedBy($result['deleted_by']);
         $this->setDeletedOn($result['deleted_on']);
         $this->setAgreedToTerms($result['agreed_to_terms']);
+        $this->setAggregate($result['aggregate']);
 
         return $result;
     }
@@ -146,6 +148,7 @@ class HMS_Application {
         $db->addValue('deleted_by',$this->getDeletedBy());
         $db->addValue('deleted_on',$this->getDeletedOn());
         $db->addValue('agreed_to_terms',$this->getAgreedToTerms());
+        $db->addValue('aggregate',$this->calculateAggregate());
         
         # If this object has an ID, then do an update. Otherwise, do an insert.
         if(!$this->getID() || $this->getID() == NULL){
@@ -282,6 +285,30 @@ class HMS_Application {
         }
     }
 
+    /**
+     * Calculates a new aggregate number that is used to autoassign students.
+     *
+     * The aggregate number is a bitmask that will end up looking like this:
+     *
+     * Bits Meaning             Options
+     * 43   term_classification (freshman, sophomore, junior, senior)
+     * 2    student_status      (transfer, new)
+     * 1    preferred_bedtime   (early, late)
+     * 0    room_condition      (clean, messy)
+     *
+     * This code was duplicated for a one-time use in update.php.
+     *
+     * @author Jeff Tickle <jeff at tux dot appstate dot edu>
+     */
+    function calculateAggregate(){
+        $aggregate = 0;
+        $aggregate |= ($this->getTermClassification() - 1) << 3;
+        $aggregate |= ($this->getStudentStatus()      - 1) << 2;
+        $aggregate |= ($this->getPreferredBedtime()   - 1) << 1;
+        $aggregate |= ($this->getRoomCondition()      - 1);
+        return $aggregate;
+    }
+
     /****************************
      * Accessor & Mutator Methods
      ****************************/
@@ -364,6 +391,15 @@ class HMS_Application {
 
     function getRlcInterest(){
         return $this->rlc_interest;
+    }
+
+    function setAggregate($aggregate){
+        $this->aggregate = $aggregate;
+    }
+
+    // Use setAggregate(calculateAggregate()) to generate a new one
+    function getAggregate() {
+        return $this->aggregate;
     }
 
     function setCreatedOn($time = null){
