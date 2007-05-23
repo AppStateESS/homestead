@@ -321,7 +321,7 @@ function hms_update(&$content, $currentVersion)
             $content[] = '+ Yay for searching by student actually working';
             $content[] = '+ Yay for searching by RLC =)';
 
-        case version_compare($currentVersion, '0.1.20', '<'):
+        case version_compare($currentVersion, '0.1.21', '<'):
             $db = &new PHPWS_DB;
             $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_1_20.sql');
             if(PEAR::isError($result)) {
