@@ -587,13 +587,39 @@ class HMS_Learning_Community
 
         // setup the title and headings
         $buffer = $title . "\n";
-        $buffer .= '"last_name","first_name","middle_name","gender","email"' . "\n";
+        $buffer .= '"last_name","first_name","middle_name","gender","roommate","email"' . "\n";
 
         // get the userlist
         $db = &new PHPWS_DB('hms_learning_community_applications');
         $db->addColumn('user_id');
         $db->addWhere('rlc_first_choice_id', $_REQUEST['rlc_list']);
         $users = $db->select();
+
+        $roomie = NULL;
+
+        $db = &new PHPWS_DB('hms_roommates');
+        $db->addColumn('roommate_zero');
+        $db->addColumn('roommate_one');
+        $db->addWhere('roommate_zero', $user['user_id'], 'ILIKE');
+        $db->addWhere('roommate_one', $user['user_id'], 'ILIKE', 'OR');
+        $roommates = $db->select();
+        foreach($roommates as $pair) {
+            if(strtolower($pair['roommate_zero']) == strtolower($user['user_id'])) $roomie = $pair['roommate_one'];
+            else $roomie = $pair['roommate_zero'];
+        }
+
+        if($roomie == NULL) {
+            $db = &new PHPWS_DB('hms_roommate_approval');
+            $db->addColumn('roommate_zero');
+            $db->addColumn('roommate_one');
+            $db->addWhere('roommate_zero', $user['user_id'], 'ILIKE');
+            $db->addWhere('roommate_one', $user['user_id'], 'ILIKE', 'OR');
+            $hopeful_roommates = $db->select();
+            foreach($hopeful_roommates as $pair) {
+                if(strtolower($pair['roommate_zero']) == strtolower($user['user_id'])) $roomie = $pair['roommate_one'];
+                else $roomie = $pair['roommate_zero'] . " *pending* ";
+            }
+        }
 
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
 
@@ -603,6 +629,7 @@ class HMS_Learning_Community
             $buffer .= '"' . $sinfo->first_name . '",';
             $buffer .= '"' . $sinfo->middle_name . '",';
             $buffer .= '"' . $sinfo->gender . '",';
+            $buffer .= '"' . $roomie . '",';
             $buffer .= '"' . $user['user_id'] . '@appstate.edu' . '"' . "\n";
         }
 
