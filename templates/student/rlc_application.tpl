@@ -2,7 +2,7 @@
 <br />
 <table>
     <tr>
-        <td>Residential Learning Community Application for: &nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td>RLC Application for: &nbsp;&nbsp;&nbsp;&nbsp;</td>
         <td>{FULL_NAME}</td>
     </tr>
     <tr>
