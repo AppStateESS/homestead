@@ -595,41 +595,44 @@ class HMS_Learning_Community
         $db->addWhere('rlc_first_choice_id', $_REQUEST['rlc_list']);
         $users = $db->select();
 
-        $roomie = NULL;
+        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
 
-        $db = &new PHPWS_DB('hms_roommates');
-        $db->addColumn('roommate_zero');
-        $db->addColumn('roommate_one');
-        $db->addWhere('roommate_zero', $user['user_id'], 'ILIKE');
-        $db->addWhere('roommate_one', $user['user_id'], 'ILIKE', 'OR');
-        $roommates = $db->select();
-        foreach($roommates as $pair) {
-            if(strtolower($pair['roommate_zero']) == strtolower($user['user_id'])) $roomie = $pair['roommate_one'];
-            else $roomie = $pair['roommate_zero'];
-        }
-
-        if($roomie == NULL) {
-            $db = &new PHPWS_DB('hms_roommate_approval');
+        foreach($users as $user) {
+            $roomie = NULL;
+            $db = &new PHPWS_DB('hms_roommates');
             $db->addColumn('roommate_zero');
             $db->addColumn('roommate_one');
             $db->addWhere('roommate_zero', $user['user_id'], 'ILIKE');
             $db->addWhere('roommate_one', $user['user_id'], 'ILIKE', 'OR');
-            $hopeful_roommates = $db->select();
-            foreach($hopeful_roommates as $pair) {
+            $roommates = $db->select();
+            foreach($roommates as $pair) {
                 if(strtolower($pair['roommate_zero']) == strtolower($user['user_id'])) $roomie = $pair['roommate_one'];
-                else $roomie = $pair['roommate_zero'] . " *pending* ";
+                else $roomie = $pair['roommate_zero'];
             }
-        }
 
-        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+            if($roomie == NULL) {
+                $db = &new PHPWS_DB('hms_roommate_approval');
+                $db->addColumn('roommate_zero');
+                $db->addColumn('roommate_one');
+                $db->addWhere('roommate_zero', $user['user_id'], 'ILIKE');
+                $db->addWhere('roommate_one', $user['user_id'], 'ILIKE', 'OR');
+                $hopeful_roommates = $db->select();
+                foreach($hopeful_roommates as $pair) {
+                    if(strtolower($pair['roommate_zero']) == strtolower($user['user_id'])) $roomie = $pair['roommate_one'];
+                    else $roomie = $pair['roommate_zero'] . " *pending* ";
+                }
+            }
 
-        foreach($users as $user) {
             $sinfo = HMS_SOAP::get_student_info($user['user_id']);
             $buffer .= '"' . $sinfo->last_name . '",';
             $buffer .= '"' . $sinfo->first_name . '",';
             $buffer .= '"' . $sinfo->middle_name . '",';
             $buffer .= '"' . $sinfo->gender . '",';
-            $buffer .= '"' . $roomie . '",';
+            if($roomie != NULL) {
+                $buffer .= '"' . HMS_SOAP::get_full_name($roomie) . '",';
+            } else {
+                $buffer .= '"",';
+            }
             $buffer .= '"' . $user['user_id'] . '@appstate.edu' . '"' . "\n";
         }
 
