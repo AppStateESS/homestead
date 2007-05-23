@@ -327,7 +327,13 @@ function hms_update(&$content, $currentVersion)
             if(PEAR::isError($result)) {
                 return $result;
             }
+           
+            $files = array();
+            $files[] = 'templates/student/rlc_application.tpl';
+            PHPWS_Boost::updateFiles($files, 'hms');
 
+            $content[] = '* Modified some text when viewing a RLC app for less clutter';
+            $content[] = 'Roommate preference (or assigned roommate) listed in the RLC application export';
             $content[] = '+ Added support for an aggregate value in the application';
             
             $content[] = 'Calculating Aggregates...';
