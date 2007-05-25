@@ -286,6 +286,7 @@ class HMS_Floor
             for($i = 1; $i <= $object->get_number_rooms(); $i++) {
                 $room = &new HMS_Room;
                 $room->set_room_number($object->get_floor_number() . str_pad($i, 2, "0",STR_PAD_LEFT));
+                $room->set_displayed_room_number($object->get_floor_number() . str_pad($i, 2, "0",STR_PAD_LEFT));
                 $room->set_building_id($object->get_building());
                 $room->set_floor_number($object->get_floor_number());
                 $room->set_floor_id($floor_id);

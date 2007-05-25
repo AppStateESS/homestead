@@ -1548,6 +1548,7 @@ class HMS_Form
 
         $id                 = $room['id'];
         $room_number        = $room['room_number'];
+        $disp_room_number   = $room['displayed_room_number'];
         $floor_number       = $room['floor_number'];
         $gender_type        = $room['gender_type'];
         $bedrooms_per_room  = $room['bedrooms_per_room'];
@@ -1573,9 +1574,13 @@ class HMS_Form
         $form->setLabel('is_reserved', array(_('No'), _('Yes')));
         $form->setMatch('is_reserved', $is_reserved);
        
-        $form->addText('phone_number', $phone_number);
+        $form->addText('phone_number');
         $form->setValue('phone_number', $phone_number);
 
+        $form->addText('displayed_room_number');
+        $form->setSize('displayed_room_number', 10);
+        $form->setValue('displayed_room_number', $disp_room_number);
+        
         $form->setSize('phone_number', 8);
 
         $capacity   =  array('1'=>"1",

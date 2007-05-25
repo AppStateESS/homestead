@@ -15,6 +15,9 @@
                 <th>Room Number: </th><td align="left">{ROOM_NUMBER}</td>
             </tr>
             <tr>
+                <th>Displayed Room Number: </th><td align = "left">{DISPLAYED_ROOM_NUMBER}</td>
+            </tr>
+            <tr>
                 <th>Select a gender type: </th><td align="left">{GENDER_TYPE_1} {GENDER_TYPE_1_LABEL}</td>
             </tr>
             <tr>

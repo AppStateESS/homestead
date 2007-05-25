@@ -10,6 +10,7 @@ class HMS_Room
 {
     var $id;
     var $room_number;
+    var $displayed_number;
     var $building_id;
     var $floor_number;
     var $floor_id;
@@ -71,6 +72,24 @@ class HMS_Room
             return $room_number;
         } else {
             return $this->room_number;
+        }
+    }
+
+    function set_displayed_room_number($number)
+    {
+        $this->displayed_room_number = $number;
+    }
+
+    function get_displayed_room_number($id = NULL)
+    {
+        if($id != NULL) {
+            $db = &new PHPWS_DB('hms_room');
+            $db->addColumn('displayed_room_number');
+            $db->addWhere('id', $id);
+            $displayed_room_number = $db->select('one');
+            return $displayed_room_number;
+        } else {
+            return $this->displayed_room_number;
         }
     }
 
@@ -290,6 +309,7 @@ class HMS_Room
     {
         if($_REQUEST['id']) $this->set_id($_REQUEST['id']);
         $this->set_room_number($_REQUEST['room_number']);
+        $this->set_displayed_room_number($_REQUEST['displayed_room_number']);
         $this->set_building_id($_REQUEST['building_id']);
         $this->set_floor_number($_REQUEST['floor_number']);
         $this->set_floor_id($_REQUEST['floor_id']);
@@ -381,6 +401,7 @@ class HMS_Room
         $db->addValue('gender_type', $_REQUEST['gender_type']);
         $db->addValue('bedrooms_per_room', $_REQUEST['bedrooms_per_room']);
         $db->addValue('beds_per_bedroom', $_REQUEST['beds_per_bedroom']);
+        $db->addValue('displayed_room_number', $_REQUEST['displayed_room_number']);
         if($_REQUEST['phone_number'] != NULL) {
             $db->addValue('phone_number', $_REQUEST['phone_number']);
         }
@@ -527,6 +548,7 @@ class HMS_Room
                 for($room = $old_rooms_per_floor + 1; $room <= $new_rooms_per_floor; $room++) {
                     $room_obj = &new HMS_Room;
                     $room_obj->set_room_number($floor . str_pad($room, 2, '0', STR_PAD_LEFT));
+                    $room_obj->set_displayed_room_number($floor . str_pad($room, 2, '0', STR_PAD_LEFT));
                     $room_obj->set_building_id($bid);
                     $room_obj->set_floor_number($floor);
                     $room_obj->set_gender_type($gender_type);

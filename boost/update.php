@@ -386,6 +386,12 @@ function hms_update(&$content, $currentVersion)
             }
             
             $content[] = "+ Calculated $i aggregates.";
+
+        case version_compare($currentVersion, '0.1.22', '<'):
+            $files = array();
+            $files[] = 'templates/admin/display_room_data.tpl';
+            PHPWS_Boost::updateFiles($files, 'hms');
+
     }
 
     return TRUE;

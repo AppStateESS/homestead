@@ -151,6 +151,7 @@ CREATE TABLE hms_residence_hall (
 CREATE TABLE hms_room (
     id integer DEFAULT 0 NOT NULL,
     room_number character varying(6) NOT NULL,
+    displayed_room_number character varying(8) NOT NULL,
     building_id smallint NOT NULL,
     floor_number smallint NOT NULL,
     floor_id integer NOT NULL,
