@@ -693,6 +693,7 @@ class HMS_Building
             $rooms_db = &new PHPWS_DB('hms_room');
             $rooms_db->addColumn('id');
             $rooms_db->addColumn('room_number');
+            $rooms_db->addColumn('displayed_room_number');
             $rooms_db->addWhere('floor_id', $afloor['id']);
             $rooms_db->addWhere('deleted', '0');
             $rooms_db->addOrder('room_number ASC');
@@ -712,7 +713,7 @@ class HMS_Building
 
                 if($bedrooms == FALSE || $bedrooms == NULL) continue;
 
-                $content .= "&nbsp;&nbsp;&nbsp;&nbsp;<b>Room " . $aroom['room_number'] . "</b><br />";
+                $content .= "&nbsp;&nbsp;&nbsp;&nbsp;<b>Room " . $aroom['room_number'] . ", Displayed " . $aroom['displayed_room_number'] . "</b><br />";
 
                 foreach($bedrooms as $abedroom) {
                     $beds_db = &new PHPWS_DB('hms_beds');
