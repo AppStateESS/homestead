@@ -670,7 +670,7 @@ class HMS_Student_Profile{
         $pageTags['USERNAME']   = _('Email');
         $pageTags['FIRST_NAME'] = _('First Name');
         $pageTags['LAST_NAME']  = _('Last Name');
-        $PageTags['ACTIONS']    = _('Action');
+        $pageTags['ACTIONS']    = _('Action');
 
         $pager = &new DBPager('hms_student_profiles','HMS_Student_Profile');
 
