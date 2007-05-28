@@ -402,10 +402,11 @@ class HMS_Student {
                 $message .= "If you know who you want to room with, you can go ahead and " . PHPWS_Text::secureLink(_('select your roommate.'), 'hms', array('type'=>'student','op'=>'get_roommate_username'));
             }
 
+            $message .= "<br /><br />";
             $message .= 'If you need to download and print the License Agreement please ';
             $message .= '<a href="http://hms.appstate.edu/files/contract.pdf" target="_blank">click here.</a>';
             $message .= "<br /><br />";
-            $message .= PHPWS_Text::secureLink('roommate search tool.', 'hms', array('type'=>'student','op'=>'show_profile_search'));
+            $message .= PHPWS_Text::secureLink('Roommate Search Tool.', 'hms', array('type'=>'student','op'=>'show_profile_search'));
             $message .= "<br /><br />";
             $message .= PHPWS_Text::secureLink(_('Logout'), 'users', array('action'=>'user', 'command'=>'logout'));
             $message .= "<br /><br />";
