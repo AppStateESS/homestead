@@ -390,7 +390,12 @@ function hms_update(&$content, $currentVersion)
         case version_compare($currentVersion, '0.1.22', '<'):
             $files = array();
             $files[] = 'templates/admin/display_room_data.tpl';
+            $files[] = 'templates/student/profile_search_pager.tpl';
             PHPWS_Boost::updateFiles($files, 'hms');
+
+            $content[] = "* Fixed bug in pagination of student profile results";
+            $content[] = "+ Added 'displayed room number' to room editing";
+            $content[] = "+ Added 'displayed room number' to the assign by floor/mass assignment page";
 
     }
 
