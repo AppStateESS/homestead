@@ -29,7 +29,7 @@
 
 <!-- BEGIN pages -->
 <div align="center">
-    {PAGE_LABEL: {PAGERS}
+    {PAGE_LABEL}: {PAGES}
 </div>
 <!-- END pages -->
 
