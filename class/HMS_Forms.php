@@ -378,7 +378,7 @@ class HMS_Form
         $hall = $db->select('one');
 
         // get the room number
-        $rooms_sql  = "SELECT hms_room.room_number, hms_room.id ";
+        $rooms_sql  = "SELECT hms_room.room_number, hms_room.displayed_room_number, hms_room.id ";
         $rooms_sql .= "FROM hms_room, hms_floor ";
         $rooms_sql .= "WHERE hms_room.floor_id = hms_floor.id ";
         $rooms_sql .= "AND hms_floor.floor_number = " . $_REQUEST['floors'] . " ";
@@ -425,7 +425,7 @@ class HMS_Form
             $beds = $db->select();
 
             if($beds != NULL && $beds != FALSE) {
-                $body .= "<tr><th>Room Number: &nbsp;&nbsp;" . $aroom['room_number'] . "&nbsp;&nbsp;</th><td></td></tr>";
+                $body .= "<tr><th>Room Number: &nbsp;&nbsp;" . $aroom['room_number'] . "&nbsp;&nbsp;</th><th>Displayed: " . $aroom['displayed_room_number'] . "</th></tr>";
 
                 foreach($beds as $abed) {
                     $tags['BED_NAME'] = $abed['bed_letter'];
