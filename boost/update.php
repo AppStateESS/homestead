@@ -388,6 +388,12 @@ function hms_update(&$content, $currentVersion)
             $content[] = "+ Calculated $i aggregates.";
 
         case version_compare($currentVersion, '0.1.22', '<'):
+            $db = &new PHPWS_DB;
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_1_22.sql');
+            if(PEAR::isError($result)) {
+                return $result;
+            }
+           
             $files = array();
             $files[] = 'templates/admin/display_room_data.tpl';
             $files[] = 'templates/student/profile_search_pager.tpl';
