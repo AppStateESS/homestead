@@ -232,13 +232,13 @@ class HMS_SOAP{
             return '';
         }
 
-        $line2 = ($addr['line2'] != NULL && $addr['line2'] != '') ? 
-                 ($addr['line2'] . ', ') : '';
-        $line3 = ($addr['line3'] != NULL && $addr['line3'] != '') ?
-                 ($addr['line3'] . ', ') : '';
+        $line2 = ($addr->line2 != NULL && $addr->line2 != '') ? 
+                 ($addr->line2 . ', ') : '';
+        $line3 = ($addr->line3 != NULL && $addr->line3 != '') ?
+                 ($addr->line3 . ', ') : '';
 
-        return "{$addr['line1']}, $line2$line3{$addr['city']}, " .
-               "{$addr['state']} {$addr['zip']}";
+        return "{$addr->line1}, $line2$line3{$addr->city}, " .
+               "{$addr->state} {$addr->zip}";
     }
 
     /**
@@ -335,7 +335,7 @@ class HMS_SOAP{
             $student->address['county'] = '99';
             $student->address['state'] = 'NC';
             $student->address['zip'] = '28605';
-            $student->phone['zip_code'] = '828';
+            $student->phone['area_code'] = '828';
             $student->phone['number'] = '2780579';
             return $student;
         }
@@ -419,10 +419,10 @@ class HMS_SOAP{
         }else if($student->phone == NULL){
             return NULL;
         }else if ($alt == NULL) {
-            $phone = $student->phone->zip_code . "." . substr($student->phone->number, 0, 3) . "." . substr($student->phone->number, 3);
+            $phone = $student->phone->area_code . "." . substr($student->phone->number, 0, 3) . "." . substr($student->phone->number, 3);
             return $phone;
         } else {
-            $phone = "(" . $student->phone->zip_code . ")"  . substr($student->phone->number, 0, 3) . "-" . substr($student->phone->number, 3);
+            $phone = "(" . $student->phone->area_code . ")"  . substr($student->phone->number, 0, 3) . "-" . substr($student->phone->number, 3);
             return $phone;
         }
     }
