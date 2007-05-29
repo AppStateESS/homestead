@@ -394,6 +394,7 @@ function hms_update(&$content, $currentVersion)
             PHPWS_Boost::updateFiles($files, 'hms');
 
             $content[] = "* Fixed bug in pagination of student profile results";
+            $content[] = '** Bug still exists where search values need to be set in $_SESSION';
             $content[] = "+ Added 'displayed room number' to room editing";
             $content[] = "+ Added 'displayed room number' to the assign by floor/mass assignment page";
 
