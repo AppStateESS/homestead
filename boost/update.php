@@ -397,6 +397,7 @@ function hms_update(&$content, $currentVersion)
             $content[] = '** Bug still exists where search values need to be set in $_SESSION';
             $content[] = "+ Added 'displayed room number' to room editing";
             $content[] = "+ Added 'displayed room number' to the assign by floor/mass assignment page";
+            $content[] = "+ Fixed bug in assigned RLC members page where address/telephone number were displaying incorrectly or not at all";
 
     }
 
