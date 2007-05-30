@@ -188,8 +188,8 @@ class HMS_RLC_Application{
         $form->addHidden('type','rlc');
         $form->addHidden('op','rlc_assignments_submit');
         $form->addSubmit('Submit Changes');
-
         $tags = $form->getTemplate();
+
 
         $pager = &new DBPager('hms_learning_community_applications','HMS_RLC_Application');
         $pager->db->addColumn('hms_learning_community_applications.*');
@@ -202,7 +202,7 @@ class HMS_RLC_Application{
 
         $pager->setModule('hms');
         $pager->setTemplate('admin/rlc_assignments_pager.tpl');
-        $pager->setLink('index.php?module=hms');
+        #$pager->setLink('index.php?module=hms');
         $pager->setEmptyMessage("No pending RLC applications.");
         $pager->addToggle('class="toggle1"');
         $pager->addToggle('class="toggle1"');

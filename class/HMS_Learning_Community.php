@@ -438,6 +438,9 @@ class HMS_Learning_Community
         $tags['SUMMARY']           = HMS_Learning_Community::display_rlc_assignment_summary();
         $tags['ASSIGNMENTS_PAGER'] = HMS_RLC_Application::rlc_application_admin_pager();
 
+        # Set a bookmark so we can come back after submitting the assignments_pager
+        PHPWS_Core::bookmark();
+        
         $export_form = &new PHPWS_Form('export_form');
         $export_form->addHidden('type','rlc');
         $export_form->addHIdden('op','rlc_application_export');
@@ -568,7 +571,9 @@ class HMS_Learning_Community
             }
         }
         
-        return HMS_Learning_Community::assign_applicants_to_rlcs();
+        #return HMS_Learning_Community::assign_applicants_to_rlcs();
+        PHPWS_Core::returnToBookmark();
+        return;
     }
 
     
