@@ -105,7 +105,7 @@ class HMS_RLC_Assignment{
         $pager->db->addOrder('asu_username','ASC');
         $pager->db->addColumn('hms_learning_community_assignment.*');
         $pager->db->addColumn('hms_learning_community_applications.required_course', NULL, 'course_ok');
-        $pager->db->addWhere('hms_learning_community_applications.hms_assignment_id','hms_learning_community_assignment','=');
+        $pager->db->addWhere('hms_learning_community_applications.hms_assignment_id','hms_learning_community_assignment.id','=');
 
         $pager->setModule('hms');
         $pager->setTemplate('admin/display_final_rlc_assignments.tpl');
