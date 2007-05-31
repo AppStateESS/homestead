@@ -114,15 +114,6 @@ class HMS_RLC_Assignment{
         $pager->addPageTags($tags);
         $pager->addRowTags('getAdminPagerTags');
 
-        /*
-        $pager->init();
-
-        # Do our own query for the count, since DBPager will pull an incorrect count
-        $db = &new PHPWS_DB('hms_learning_community_assignment');
-        $db->addColumn('hms_learning_community_assignment.*');
-        $db->addColumn('hms_learning_community_applications.required_course');
-        */
-
         return $pager->get();
     }
 
