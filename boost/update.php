@@ -405,6 +405,16 @@ function hms_update(&$content, $currentVersion)
             $content[] = "+ Added 'displayed room number' to the assign by floor/mass assignment page";
             $content[] = "+ Fixed bug in assigned RLC members page where address/telephone number were displaying incorrectly or not at all";
 
+        case version_compare($currentVersion, '0.1.23', '<'):
+            $db = &new PHPWS_DB;
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_1_23.sql');
+            if(PEAR::isError($result)) {
+                return $result;
+            }
+      
+            $content[] = '+ Increased length of the asu_username field for RLC assignments';
+            $content[] = '+ Added stateful pagination when assigning people to RLCs';
+
     }
 
     return TRUE;
