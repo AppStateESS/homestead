@@ -414,6 +414,7 @@ function hms_update(&$content, $currentVersion)
       
             $content[] = '+ Increased length of the asu_username field for RLC assignments';
             $content[] = '+ Added stateful pagination when assigning people to RLCs';
+            $content[] = '+ Corrected count when viewing the Learning Community Assignments';
 
     }
 
