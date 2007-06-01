@@ -14,6 +14,8 @@ class HMS_Assignment
     var $asu_username;
     var $bed_id;
     var $meal_option;
+    var $deleted = 0;
+    var $timestamp;
 
     /**
      * Return the id for the current assignment object
@@ -101,6 +103,26 @@ class HMS_Assignment
         return $meal_option;
     }
 
+    function set_deleted($deleted)
+    {
+        $this->deleted = $deleted;
+    }
+
+    function get_deleted()
+    {
+        return $this->deleted;
+    }
+
+    function set_timestamp($ts)
+    {
+        $this->timestamp = $ts;
+    }
+
+    function get_timestamp()
+    {
+        return $this->timestamp;
+    }
+
     /**
      * Creates the actual assignment object
      */
@@ -136,6 +158,8 @@ class HMS_Assignment
             $assignment->set_asu_username($un);
         }
 
+        $assignment->set_timestamp(mktime());
+        $assignment->set_deleted('0');
         $assignment->set_bed_id($bed_id);
         $assignment->set_meal_option($meal_option);
 
@@ -193,8 +217,36 @@ class HMS_Assignment
     function delete_assignment($type = NULL, $arg = NULL )
     {
         $db = new PHPWS_DB('hms_assignment');
+        $db->addValue('deleted', 1);
         $db->addWhere($type, $arg);
-        $result = $db->delete();
+        $result = $db->update();
+
+        // needs call to HMS_SOAP to delete a student's room assignment
+
+        return $result;
+    }
+
+    /**
+     * Moves the student from one room to another
+     */
+    function move_student($username, $old_bed_id, $new_bed_id, $meal_option)
+    {
+        $db = &new PHPWS_DB('hms_assignment');
+        $db->addValue('deleted', 1);
+        $db->addWhere('asu_username', $username);
+        $db->addWhere('bed_id', $old_bed_id);
+        $results = $db->update();
+
+        $db = &new PHPWS_DB('hms_assignment');
+        $db->addValue('asu_username', $username);
+        $db->addValue('bed_id', $new_bed_id);
+        $db->addValue('deleted', 0);
+        $db->addValue('timestamp', mktime());
+        $db->addValue('meal_option', $meal_option);
+        $results = $db->insert();
+
+        // needs call to HMS_SOAP to move student
+        
         return $result;
     }
 
