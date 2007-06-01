@@ -416,6 +416,16 @@ function hms_update(&$content, $currentVersion)
             $content[] = '+ Added stateful pagination when assigning people to RLCs';
             $content[] = '+ Corrected count when viewing the Learning Community Assignments';
 
+        case version_compare($currentVersion, '0.1.24', '<'):
+            $db = &new PHPWS_DB;
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_1_24.sql');
+            if(PEAR::isError($result)) {
+                return $result;
+            }
+
+            $content[] = '+ Added a _deleted_ flag to hms_assignment';
+            $content[] = '+ Added a timestamp field to hms_assignment';
+            $content[] = '+ Added a move_student method to move a single student between rooms';
     }
 
     return TRUE;
