@@ -2,6 +2,8 @@ CREATE TABLE hms_assignment (
     id integer NOT NULL,
     asu_username character varying(32) NOT NULL,
     bed_id integer NOT NULL,
+    timestamp integer NOT NULL,
+    deleted smallint NOT NULL,
     primary key(id)
 );
 

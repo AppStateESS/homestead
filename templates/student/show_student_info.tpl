@@ -57,6 +57,12 @@
                 <td>&nbsp;</td><td></td>
             </tr>
             <tr>
+                <td>Housing Application:</td><td>{APPLICATION_LINK}</td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td><td></td>
+            </tr>
+            <tr>
                 <td>Assigned To: </td><td>{ROOM_ASSIGNMENT}</td>
             </tr>
             <tr>

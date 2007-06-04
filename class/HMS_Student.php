@@ -268,6 +268,16 @@ class HMS_Student {
             $tpl['ROOM_ASSIGNMENT'] = "This student does not live on campus.";
         }
 
+        // get roommate or pending roommate
+
+        // get student application
+        PHPWS_Core::initModClass('hms', 'HMS_Application.php');
+        if(HMS_Application::check_for_application($_REQUEST['username'])) {
+            $tpl['APPLICATION_LINK'] = PHPWS_Text::secureLink(_('Housing Application'), 'hms', array('type'=>'student', 'op'=>'view_housing_application', 'student'=>$_REQUEST['username']));
+        } else {
+            $tpl['APPLICATION_LINK'] = "No Housing Application exists for this user.";
+        }
+
         $db = &new PHPWS_DB('hms_learning_community_assignment');
         $db->addColumn('hms_learning_communities.community_name');
         $db->addWhere('hms_learning_community_assignment.rlc_id', 'hms_learning_communities.id');
@@ -498,6 +508,10 @@ class HMS_Student {
                 $side_thingie->show();
                 PHPWS_Core::initModClass('hms','HMS_Application.php');
                 return HMS_Application::display_application_form(TRUE);
+                break;
+            case 'view_housing_application':
+                PHPWS_Core::initModClass('hms', 'HMS_Application.php');
+                return HMS_Application::view_housing_application($_REQUEST['student']);
                 break;
             case 'save_application':
                 PHPWS_Core::initModClass('hms','HMS_Application.php');

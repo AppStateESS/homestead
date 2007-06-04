@@ -221,7 +221,6 @@ class HMS_Application {
 
         PHPWS_Core::initModClass('hms', 'HMS_Application.php');
         $application = new HMS_Application($asu_username);
-        
 
         $tpl['TITLE']   = 'Residence Hall Application';
         if(isset($message)){
@@ -283,6 +282,51 @@ class HMS_Application {
         } else {
             return HMS_Form::begin_application();
         }
+    }
+
+    /**
+     * Allows an admin to view a student application
+     */
+    function view_housing_application($username)
+    {
+        $tpl['TITLE']   = 'Residence Hall Application';
+        $tpl['MESSAGE'] = $message;
+
+        $tpl['REDO']    = PHPWS_Text::secureLink("Return to Student", 'hms', array('type'=>'student', 'op'=>'get_matching_students', 'username'=>$_REQUEST['student']));
+        $tpl['NEWLINES']= "<br /><br />";
+       
+        $application = &new HMS_Application($username);
+
+        if($application->getStudentStatus() == 1) $tpl['STUDENT_STATUS'] = "New Freshman";
+        else if ($application->getStudentStatus() == 2) $tpl['STUDENT_STATUS'] = "Transfer";
+
+        if($application->getTermClassification() == 1) $tpl['CLASSIFICATION_FOR_TERM'] = "Freshman";
+        else if($application->getTermClassification() == 2) $tpl['CLASSIFICATION_FOR_TERM'] = "Sophomore";
+        else if($application->getTermClassification() == 3) $tpl['CLASSIFICATION_FOR_TERM'] = "Junior";
+        else if($application->getTermClassification() == 4) $tpl['CLASSIFICATION_FOR_TERM'] = "Senior";
+        
+        if($application->getGender() == 0) $tpl['GENDER_TYPE'] = "Female";
+        else if($application->getGender() == 1) $tpl['GENDER_TYPE'] = "Male";
+        
+        if($application->getMealOption() == 1) $tpl['MEAL_OPTION'] = "Low";
+        else if($application->getMealOption() == 2) $tpl['MEAL_OPTION'] = "Medium";
+        else if($application->getMealOption() == 3) $tpl['MEAL_OPTION'] = "High";
+        else if($application->getMealOption() == 4) $tpl['MEAL_OPTION'] = "Super";
+       
+        if($application->getLifestyle() == 1) $tpl['LIFESTYLE_OPTION'] = "Single Gender";
+        else if($application->getLifestyle() == 2) $tpl['LIFESTYLE_OPTION'] = "Co-Ed";
+        
+        if($application->getPreferredBedtime() == 1) $tpl['PREFERRED_BEDTIME'] = "Early";
+        else if($application->getPreferredBedtime() == 2) $tpl['PREFERRED_BEDTIME'] = "Late";
+
+        if($application->getRoomCondition() == 1) $tpl['ROOM_CONDITION'] = "Clean";
+        else if($application->getRoomCondition() == 2) $tpl['ROOM_CONDITION'] = "Dirty";
+        
+        if($application->getRlcInterest() == 0) $tpl['RLC_INTEREST_1'] = "No";
+        else if($application->getRlcInterest() == 1) $tpl['RLC_INTEREST_1'] = "Yes";
+   
+        $master['APPLICATION']  = PHPWS_Template::process($tpl, 'hms', 'student/student_application.tpl');
+        return PHPWS_Template::process($master,'hms','student/student_application_combined.tpl');
     }
 
     /**

@@ -423,9 +423,15 @@ function hms_update(&$content, $currentVersion)
                 return $result;
             }
 
+            $files = array();
+            $files[] = 'templates/student/show_student_info.tpl';
+            PHPWS_Boost::updateFiles($files, 'hms');
+
             $content[] = '+ Added a _deleted_ flag to hms_assignment';
             $content[] = '+ Added a timestamp field to hms_assignment';
             $content[] = '+ Added a move_student method to move a single student between rooms';
+            $content[] = '+ Student Housing Application now a link when displaying other student information';
+
     }
 
     return TRUE;
