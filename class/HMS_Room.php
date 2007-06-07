@@ -21,6 +21,10 @@ class HMS_Room
     var $phone_number;
     var $is_medical;
     var $is_reserved;
+    var $freshman_reserved;
+    var $ra_room;
+    var $is_lobby;
+    var $private_room;
     var $added_by;
     var $added_on;
     var $updated_by;
@@ -268,6 +272,46 @@ class HMS_Room
         }
     }
 
+    function set_freshman_reserved($freshman_reserved)
+    {
+        $this->freshman_reserved = $freshman_reserved;
+    }
+
+    function get_freshman_reserved()
+    {
+        return $this->freshman_reserved;
+    }
+
+    function set_ra_room($ra_room)
+    {
+        $this->ra_room = $ra_room;
+    }
+
+    function get_ra_room()
+    {
+        return $this->ra_room;
+    }
+
+    function set_is_lobby($is_lobby)
+    {
+        $this->is_lobby = $is_lobby;
+    }
+
+    function get_is_lobby()
+    {
+        return $this->is_lobby;
+    }
+
+    function set_private_room($private_room)
+    {
+        $this->private_room = $private_room;
+    }
+
+    function get_private_room()
+    {
+        return $this->private_room;
+    }
+
     function set_added_by_on()
     {
         $this->set_added_by();
@@ -320,6 +364,10 @@ class HMS_Room
         $this->set_is_medical($_REQUEST['is_medical']);
         $this->set_is_reserved($_REQUEST['is_reserved']);
         $this->set_is_online($_REQUEST['is_online']);
+        $this->set_freshman_reserved($_REQUEST['freshman_reserved']);
+        $this->set_ra_room($_REQUEST['ra_room']);
+        $this->set_is_lobby($_REQUEST['is_lobby']);
+        $this->set_private_room($_REQUEST['private_room']);
         $this->set_deleted();
     }
 
@@ -410,6 +458,10 @@ class HMS_Room
         $db->addValue('is_online', $_REQUEST['is_online']);
         $db->addValue('updated_by', Current_User::getId());
         $db->addValue('updated_on', time());
+        $db->addValue('freshman_reserved', $_REQUEST['freshman_reserved']);
+        $db->addValue('ra_room', $_REQUEST['ra_room']);
+        $db->addValue('is_lobby', $_REQUEST['is_lobby']);
+        $db->addValue('private_room', $_REQUEST['private_room']);
         $db->addValue('deleted', '0');
 
         $success = $db->update();
@@ -555,6 +607,10 @@ class HMS_Room
                     $room_obj->set_is_online($is_online);
                     $room_obj->set_is_reserved('0');
                     $room_obj->set_is_medical('0');
+                    $room_obj->set_freshman_reserved('0');
+                    $room_obj->set_ra_room('0');
+                    $room_obj->set_is_lobby('0');
+                    $room_obj->set_private_room('0');
                     $room_obj->set_floor_id($fid);
                     $room_obj->set_bedrooms_per_room($bedrooms_per_room);
                     $room_obj->set_beds_per_bedroom($beds_per_bedroom);

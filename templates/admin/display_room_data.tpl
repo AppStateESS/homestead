@@ -18,6 +18,15 @@
                 <th>Displayed Room Number: </th><td align = "left">{DISPLAYED_ROOM_NUMBER}</td>
             </tr>
             <tr>
+                <th>Select the number of bedrooms per room: &nbsp;&nbsp;</th><td align="left">{BEDROOMS_PER_ROOM}</td>
+            </tr>
+            <tr>
+                <th>Number of beds per bedroom: </th><td>{BEDS_PER_BEDROOM}</td>
+            </tr>
+            <tr>
+                <th>Phone Number: </th><td align="left">{PHONE_NUMBER}</td>
+            </tr>
+            <tr>
                 <th>Select a gender type: </th><td align="left">{GENDER_TYPE_1} {GENDER_TYPE_1_LABEL}</td>
             </tr>
             <tr>
@@ -27,14 +36,29 @@
                 <th></th><td align="left">{GENDER_TYPE_3} {GENDER_TYPE_3_LABEL}</td>
             </tr>
             <tr>
-                <th>Select the number of bedrooms per room: &nbsp;&nbsp;</th><td align="left">{BEDROOMS_PER_ROOM}</td>
+                <th>Reserved for Freshmen:</th><td>{FRESHMAN_RESERVED_1} {FRESHMAN_RESERVED_1_LABEL}</td>
             </tr>
             <tr>
-                <th>Number of beds per bedroom: </th><td>{BEDS_PER_BEDROOM}</td>
+                <td></td><td>{FRESHMAN_RESERVED_2} {FRESHMAN_RESERVED_2_LABEL}</td>
             </tr>
             <tr>
-                <th>Phone Number: </th><td align="left">{PHONE_NUMBER}</td>
+                <th>Reserved for RA: </th><td>{RA_ROOM_1} {RA_ROOM_1_LABEL}</td>
             </tr>
+            <tr>
+                <td></td><td>{RA_ROOM_2} {RA_ROOM_2_LABEL}</td>
+            </tr>
+            <tr>
+                <th>Private Room:</th><td>{PRIVATE_ROOM_1} {PRIVATE_ROOM_1_LABEL}</td>
+            </tr>
+            <tr>
+                <td></td><td>{PRIVATE_ROOM_2} {PRIVATE_ROOM_2_LABEL}</td>
+            </tr>
+            <tr>
+                <th>Is a Lobby:</th><td>{IS_LOBBY_1} {IS_LOBBY_1_LABEL}</td>
+            </tr>
+            <tr>
+                <td></td><td>{IS_LOBBY_2} {IS_LOBBY_2_LABEL}</td>
+            </tr>           
             <tr>
                 <th>Is medical: </th><td align="left">{IS_MEDICAL_1} {IS_MEDICAL_1_LABEL}</td>
             </tr>

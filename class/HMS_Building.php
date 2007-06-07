@@ -542,6 +542,7 @@ class HMS_Building
         $floor->set_bedrooms_per_room($src->bedrooms_per_room);
         $floor->set_beds_per_bedroom($src->beds_per_bedroom);
         $floor->set_deleted('0');
+        $floor->set_freshman_reserved('0');
         return $floor;
     }
 
@@ -673,6 +674,8 @@ class HMS_Building
 
     function view_residence_hall()
     {
+        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+
         $hall_db = &new PHPWS_DB('hms_residence_hall');
         $hall_db->addColumn('hall_name');
         $hall_db->addWhere('id', $_REQUEST['halls']);
@@ -730,6 +733,7 @@ class HMS_Building
                         $assignments_db->addColumn('asu_username');
                         $assignments_db->addWhere('bed_id', $abed['id']);
                         $asu_username = $assignments_db->select('one');
+                        $asu_username .= " " . HMS_SOAP::get_full_name($asu_username);
 
                         if($asu_username) {
                             $content .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bedroom: " . $abedroom['bedroom_letter'] . "&nbsp;&nbsp;&nbsp;&nbsp;Bed: " . $abed['bed_letter'] . "&nbsp;&nbsp;&nbsp;&nbsp;" . $asu_username . "<br />";

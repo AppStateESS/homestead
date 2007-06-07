@@ -33,6 +33,12 @@
                 <th></th><td>{GENDER_TYPE_3} {GENDER_TYPE_3_LABEL}</td>
             </tr>
             <tr>
+                <th>Reserved for freshmen: </th><td>{FRESHMAN_RESERVED_1} {FRESHMAN_RESERVED_1_LABEL}</td>
+            </tr>
+            <tr>
+                <td></td><td>{FRESHMAN_RESERVED_2} {FRESHMAN_RESERVED_2_LABEL}</td>
+            </tr>
+            <tr>
                 <th>Is this floor online: </th><td>{IS_ONLINE_1} {IS_ONLINE_1_LABEL}</td>
             </tr>
             <tr>

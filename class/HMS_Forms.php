@@ -1551,6 +1551,10 @@ class HMS_Form
         $disp_room_number   = $room['displayed_room_number'];
         $floor_number       = $room['floor_number'];
         $gender_type        = $room['gender_type'];
+        $freshman_reserved  = $room['freshman_reserved'];
+        $ra_room            = $room['ra_room'];
+        $private_room       = $room['private_room'];
+        $is_lobby           = $room['is_lobby'];
         $bedrooms_per_room  = $room['bedrooms_per_room'];
         $beds_per_bedroom   = $room['beds_per_bedroom'];
         $phone_number       = $room['phone_number'];
@@ -1576,6 +1580,22 @@ class HMS_Form
        
         $form->addText('phone_number');
         $form->setValue('phone_number', $phone_number);
+
+        $form->addRadio('freshman_reserved', array(0, 1));
+        $form->setLabel('freshman_reserved', array(_('No'), _('Yes')));
+        $form->setMatch('freshman_reserved', $freshman_reserved);
+
+        $form->addRadio('ra_room', array(0, 1));
+        $form->setLabel('ra_room', array(_('No'), _('Yes')));
+        $form->setMatch('ra_room', $ra_room);
+
+        $form->addRadio('is_lobby', array(0, 1));
+        $form->setLabel('is_lobby', array(_('No'), _('Yes')));
+        $form->setMatch('is_lobby', $is_lobby);
+
+        $form->addRadio('private_room', array(0, 1));
+        $form->setLabel('private_room', array(_('No'), _('Yes')));
+        $form->setMatch('private_room', $private_room);
 
         $form->addText('displayed_room_number');
         $form->setSize('displayed_room_number', 10);
@@ -1655,6 +1675,10 @@ class HMS_Form
         $form->addRadio('gender_type', array(0, 1, 2));
         $form->setLabel('gender_type', array(_("Female"), _("Male"), _("Coed")));
         $form->setMatch('gender_type', $hall['gender_type']);
+      
+        $form->addRadio('freshman_reserved', array(0, 1));
+        $form->setLabel('freshman_reserved', array(_("No"), _("Yes")));
+        $form->setMatch('freshman_reserved', '0');
       
         $form->addHidden('building', $hall['id']);
         $db = new PHPWS_DB('hms_floor');
@@ -1784,6 +1808,14 @@ class HMS_Form
             $form->setMatch('gender_type', $object->get_gender_type());
         } else {
             $form->setMatch('gender_type', '3');
+        }
+
+        $form->addRadio('freshman_reserved', array(0, 1));
+        $form->setLabel('freshman_reserved', array(_("No"), _("Yes")));
+        if(isset($object->freshman_reserved)) {
+            $form->setMatch('freshman_reserved', $object->get_freshman_reserved());
+        } else {
+            $form->setMatch('freshman_reserved', '0');
         }
 
         $form->addHidden('module', 'hms');
@@ -1993,54 +2025,6 @@ class HMS_Form
         $tpl = $form->getTemplate();
         return $tpl;
     }
-
-/*
-    function fill_student_data($error = NULL)
-    {
-        if(isset($_REQUEST['id'])) {
-            $db = &new PHPWS_DB('hms_student');
-            $db->addWhere('id', $_REQUEST['id']);
-            $student = &new HMS_Student;
-            $student_id = $db->loadObject($student);
-            if($student_id == NULL || $student_id == FALSE) {
-                return "Error: Student could not be loaded from the database.";
-            }
-        }
-
-        $form = &new PHPWS_Form;
-
-        $form->addText('first_name');
-        $form->setSize('first_name', 20);
-        $form->addText('middle_name');
-        $form->setSize('middle_name', 20);
-        $form->addText('last_name');
-        $form->setSize('last_name', 20);
-
-        $form->addText('asu_username');
-        $form->setSize('asu_username', 6);
-
-        $form->addDropBox('gender', array('0'=>'Female', '1'=>'Male'));
-       
-        if($student) {
-            $form->setValue('first_name', $student->get_first_name());
-            $form->setValue('middle_name', $student->get_middle_name());
-            $form->setValue('last_name', $student->get_last_name());
-            $form->setValue('asu_username', $student->get_asu_username());
-            $form->setMatch('gender', $student->get_gender());
-            $form->addHidden('id', $student->get_id());
-        }
-       
-        $form->addHidden('module', 'hms');
-        $form->addHidden('type', 'student');
-        $form->addHidden('op', 'save_student');
-        $form->addSubmit('submit', _('Save Student'));
-
-        $tpl = $form->getTemplate();
-        if($error) $tpl['ERROR'] = $error;
-        $final = PHPWS_Template::process($tpl, 'hms', 'admin/student_data.tpl');
-        return $final;
-    }
-*/
 
     function enter_student_search_data($error = NULL)
     {

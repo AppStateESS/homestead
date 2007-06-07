@@ -16,6 +16,7 @@ class HMS_Floor
     var $bedrooms_per_room;
     var $beds_per_bedroom;
     var $gender_type;
+    var $freshman_reserved;
     var $deleted;
     var $error;
     var $is_new_floor;
@@ -157,6 +158,16 @@ class HMS_Floor
         return $this->gender_type;
     }
 
+    function set_freshman_reserved($reserved)
+    {
+        $this->freshman_reserved = $reserved;
+    }
+
+    function get_freshman_reserved()
+    {
+        return $this->freshman_reserved;
+    }
+
     function set_is_online($online, $id = NULL, $building = NULL)
     {
         if($building != NULL) {
@@ -240,9 +251,9 @@ class HMS_Floor
             die($content);
         }
 
-        if($_REQUEST['id']) $this->set_id($_REQUEST['id']);
+        if(isset($_REQUEST['id'])) $this->set_id($_REQUEST['id']);
         
-        if($_REQUEST['is_new_floor'])
+        if(isset($_REQUEST['is_new_floor']))
             $this->set_is_new_floor($_REQUEST['is_new_floor']);
         else 
             $this->set_is_new_floor(FALSE);
@@ -263,6 +274,7 @@ class HMS_Floor
         $this->set_gender_type($_REQUEST['gender_type']);
         $this->set_bedrooms_per_room($_REQUEST['bedrooms_per_room']);
         $this->set_beds_per_bedroom($_REQUEST['beds_per_bedroom']);
+        $this->set_freshman_reserved($_REQUEST['freshman_reserved']);
         $this->set_deleted('0');
     }
 
@@ -294,6 +306,9 @@ class HMS_Floor
                 $room->set_beds_per_bedroom($object->get_beds_per_bedroom());
                 $room->set_gender_type($object->get_gender_type());
                 $room->set_is_online($object->get_is_online());
+                $room->set_freshman_reserved($object->get_freshman_reserved());
+                $room->set_is_lobby('0');
+                $room->set_private_room('0');
                 $room->set_is_reserved('0');
                 $room->set_is_medical('0');
                 $room->set_deleted();
@@ -353,6 +368,7 @@ class HMS_Floor
             $db = &new PHPWS_DB('hms_room');
             $db->addValue('gender_type', $object->get_gender_type());
             $db->addValue('is_online', $object->get_is_online());
+            $db->addValue('freshman_reserved', $object->get_freshman_reserved());
             $db->addWhere('building_id', $object->get_building());
             $db->addWhere('floor_number', $object->get_floor_number());
             $db->addWhere('deleted', 0);
@@ -361,6 +377,7 @@ class HMS_Floor
                 test($result);
                 return $result;
             }
+
         }
 
         $final = "Floor saved successfully!<br />";

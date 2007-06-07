@@ -425,12 +425,19 @@ function hms_update(&$content, $currentVersion)
 
             $files = array();
             $files[] = 'templates/student/show_student_info.tpl';
+            $files[] = 'templates/admin/add_floor.tpl';
+            $files[] = 'templates/admin/display_floor_data.tpl';
+            $files[] = 'templates/admin/display_room_data.tpl';
             PHPWS_Boost::updateFiles($files, 'hms');
 
             $content[] = '+ Added a _deleted_ flag to hms_assignment';
             $content[] = '+ Added a timestamp field to hms_assignment';
             $content[] = '+ Added a move_student method to move a single student between rooms';
-            $content[] = '+ Student Housing Application now a link when displaying other student information';
+            $content[] = '+ Student Housing Application now a link when displaying other student information (results from a search)';
+            $content[] = '+ Added a flag to hms_room for private rooms';
+            $content[] = '+ Added a flag to hms_room for ra rooms';
+            $content[] = '+ Added a flag to hms_room for freshman reserved rooms';
+            $content[] = '+ Student\'s first, middle and last names now show beside the username at the building overview page of assigned rooms/students';
 
     }
 
