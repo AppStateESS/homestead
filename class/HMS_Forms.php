@@ -3338,5 +3338,19 @@ class HMS_Form
         return PHPWS_Template::process($template,'hms','student/profile_form.tpl');
     }
 
+    function display_reports()
+    {
+        $form = &new PHPWS_Form;
+        $reports = array('housing_apps'=>'Housing Applications Received',
+                         'housing_asss'=>'Housing Assignments Made');
+        $form->addDropBox('reports', $reports);
+        $form->addSubmit('submit', _('Run Report'));
+        $form->addHidden('module', 'hms');
+        $form->addHidden('type', 'reports');
+        $form->addHidden('op', 'run_report');
+        $tpl = $form->getTemplate();
+        $final = PHPWS_Template::process($tpl, 'hms', 'admin/display_reports.tpl');
+        return $final;
+    }
 };
 ?>

@@ -97,6 +97,10 @@ class HMS_Admin
                 PHPWS_Core::initModClass('hms', 'HMS_Roommate_Approval.php');
                 $final = HMS_Roommate_Approval::main();
                 break;
+            case 'reports':
+                PHPWS_Core::initModClass('hms', 'HMS_Reports.php');
+                $final = HMS_Reports::main();
+                break;
             default:
                 PHPWS_Core::initModClass('hms', 'HMS_Display.php');
                 $final = HMS_Display::main();
@@ -106,6 +110,7 @@ class HMS_Admin
         Layout::add($final);
 
         $links[] = PHPWS_Text::secureLink(_('HMS Statistics'), 'hms', array('type'=>'display', 'op'=>'display_system_statistics'));
+        $links[] = PHPWS_Text::secureLink(_('HMS Reports'), 'hms', array('type'=>'reports', 'op'=>'display_reports'));
         //$links[] = PHPWS_Text::secureLink(_('Search Halls'), 'hms', array('type'=>'hall', 'op'=>'search_residence_halls'));
         $links[] = PHPWS_Text::secureLink(_('Search Students'), 'hms', array('type'=>'student', 'op'=>'enter_student_search_data'));
         if(Current_User::allow('hms', 'maintenance') || Current_User::allow('hms', 'admin')) 
