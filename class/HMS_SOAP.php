@@ -25,6 +25,24 @@ class HMS_SOAP{
         }
     }
 
+    function get_gender_class($username)
+    {
+        if(SOAP_TEST_FLAG) {
+            $person['gender'] = "M";
+            $person['class']  = "NFR";
+            return $person;
+        }
+
+        $student = HMS_SOAP::get_student_info($username);
+
+        $person['gender'] = $student->gender;
+        $person['class'] = $student->projected_class;
+        if($student->student_type == 'F')
+            $person['class'] = "NFR";
+
+        return $person;
+    }
+
     function get_name($username){
         if(SOAP_TEST_FLAG){
             # return canned data
