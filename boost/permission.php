@@ -40,6 +40,7 @@
 
     $permissions['assignment_maintenance']  = _('Assignment Maintenance');
     $permissions['create_assignment']       = _('Create Assignment');
+    $permissions['move_assignment']         = _('Change Assignment');
     $permissions['delete_assignment']       = _('Delete Assignment');
 
     $permissions['roommate_maintenance']    = _('Roommate Maintenance');

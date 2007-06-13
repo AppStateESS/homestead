@@ -38,9 +38,10 @@
         <br />
         <h2><i>{ASSIGNMENT_LABEL}</i></h2>
         &nbsp;&nbsp;&nbsp;{ASSIGN_BY_FLOOR}<br />
-<!--        &nbsp;&nbsp;&nbsp;{CREATE_ASSIGNMENT}<br />
+        &nbsp;&nbsp;&nbsp;{CREATE_ASSIGNMENT}<br />
+        &nbsp;&nbsp;&nbsp;{MOVE_ASSIGNMENT}<br />
         &nbsp;&nbsp;&nbsp;{DELETE_ASSIGNMENT}<br />
-        <br />
+<!--        <br />
         <h2><i>{ROOMMATE_LABEL}</i></h2>
         &nbsp;&nbsp;&nbsp;{CREATE_ROOMMATE_GROUP}<br />
         &nbsp;&nbsp;&nbsp;{EDIT_ROOMMATE_GROUP}<br />

@@ -234,12 +234,33 @@ class HMS_Form
         return $final;
     }
 
+    function get_username_for_move($error)
+    {
+        PHPWS_Core::initCoreClass('Form.php');
+        $form = &new PHPWS_Form;
+
+        $form->addText('username');
+
+        $form->addHidden('module', 'hms');
+        $form->addHidden('type', 'assignment');
+        $form->addHidden('op', 'get_move_hall_floor_room');
+        $form->addSubmit('submit', _('Submit User'));
+
+        $tpl = $form->getTemplate();
+        $tpl['ERROR']   = $error;
+        $tpl['MESSAGE'] = "Please provide the ASU username of the student that is to be moved.";
+        $final = PHPWS_Template::process($tpl, 'hms', 'admin/get_single_username.tpl');
+        return $final;
+    }
+
     function get_hall_floor_room($error = NULL)
     {
         $db = new PHPWS_DB('hms_assignment');
         $db->addWhere('asu_username', $_REQUEST['username'], 'ILIKE');
         $assignment = $db->select('row');
         $msg = '';
+
+        //TODO: Revisit this entire block of code and add support for roommates
         if(!is_null($assignment)) {
             $db = new PHPWS_DB('hms_residence_hall');
             $db->addColumn('hall_name');
@@ -725,8 +746,10 @@ class HMS_Form
         $form->addHidden('op', 'create_assignment');
         $form->addHidden('username', $_REQUEST['username']);
         $form->addHidden('hall', $_REQUEST['halls']);
+        $form->addHidden('hall_name', $hall_name);
         $form->addHidden('floor', $_REQUEST['floors']);
         $form->addHidden('room', $_REQUEST['rooms']);
+        $form->addHidden('room_number', $_REQUEST['floors'] . str_pad($_REQUEST['rooms'], 2, '0', STR_PAD_LEFT));
         $form->addHidden('bedroom_letter', $_REQUEST['bedroom_letter']);
         $form->addHidden('bed_letter', $_REQUEST['bed_letter']);
         $form->addSubmit('submit', _('Assign Student'));
@@ -747,21 +770,29 @@ class HMS_Form
     function verify_deletion()
     {
         $db = new PHPWS_DB('hms_assignment');
-        $db->addWhere('asu_username', $_REQUEST['username'], 'ILIKE');
+        $db->addWhere('asu_username',          $_REQUEST['username'], 'ILIKE');
+        $db->addWhere('hms_assignment.bed_id', 'hms_beds.id');
+        $db->addWhere('hms_beds.bedroom_id',   'hms_bedrooms.id');
+        $db->addWhere('hms_bedrooms.room_id',  'hms_room.id');
+        $db->addWhere('hms_room.floor_id',     'hms_floor.id');
+        $db->addWhere('hms_floor.building',    'hms_residence_hall.id');
+        $db->addColumn('hms_assignment.asu_username');
+        $db->addColumn('hms_beds.bed_letter');
+        $db->addColumn('hms_bedrooms.bedroom_letter');
+        $db->addColumn('hms_room.displayed_room_number');
+        $db->addColumn('hms_floor.floor_number');
+        $db->addColumn('hms_residence_hall.hall_name');
         $assignment = $db->select('row');
 
-        $db = new PHPWS_DB('hms_residence_hall');
-        $db->addColumn('hall_name');
-        $db->addWhere('id', $assignment['building_id']);
-        $hall_name = $db->select('one');
+        if(is_null($assignment)) {
+            return false;
+        }
 
-        $db = new PHPWS_DB('hms_room');
-        $db->addColumn('room_number');
-        $db->addColumn('floor_number');
-        $db->addWhere('id', $assignment['room_id']);
-        $hms_room_info = $db->select('row');
-        $room_number = $hms_room_info['room_number'];
-        $floor_number = $hms_room_info['floor_number'];
+        $hall_name      = $assignment['hall_name'];
+        $floor_number   = $assignment['floor_number'];
+        $room_number    = $assignment['displayed_room_number'];
+        $bedroom_letter = $assignment['bedroom_letter'];
+        $bed_letter     = $assignment['bed_letter'];
 
         PHPWS_Core::initCoreClass('Form.php');
         $form = &new PHPWS_Form;
@@ -776,10 +807,13 @@ class HMS_Form
         $form->addSubmit('submit', _('Delete Assignment'));
 
         $tpl = $form->getTemplate();
-        $tpl['MESSAGE'] = "<h2>You are deleting the room assignment for: " . $assignment['asu_username'] . "</h2>";
-        $tpl['HALLS']   = $hall_name; 
-        $tpl['FLOORS']  = $floor_number;
-        $tpl['ROOMS']   = $room_number;
+        $tpl['MESSAGE'] = "<h2>You are deleting the room assignment for: " .
+                          $assignment['asu_username'] . "</h2>";
+        $tpl['HALLS']          = $hall_name; 
+        $tpl['FLOORS']         = $floor_number;
+        $tpl['ROOMS']          = $room_number;
+        $tpl['BEDROOM_LETTER'] = $bedroom_letter;
+        $tpl['BED_LETTER']     = $bed_letter;
 
         $final = PHPWS_Template::process($tpl, 'hms', 'admin/get_hall_floor_room.tpl');
         return $final;

@@ -26,6 +26,8 @@ class HMS_Maintenance
     
     function purge_data()
     {
+        Layout::addPageTitle("Purging Data");
+
         $content .= "Purging housing applications...<br />";
         $db = &new PHPWS_DB('hms_application');
         $db->delete();
@@ -84,6 +86,8 @@ class HMS_Maintenance
 
     function show_options()
     {
+        Layout::addPageTitle("Comprehensive Maintenance");
+        
         if(Current_User::allow('hms', 'hall_maintenance') || Current_User::allow('hms', 'admin'))
             $tpl['HALL_LABEL']  = "Residence Hall Options";
 
@@ -172,13 +176,16 @@ class HMS_Maintenance
 
         if(Current_User::allow('hms', 'assign_by_floor') || Current_User::allow('hms', 'admin'))
             $tpl['ASSIGN_BY_FLOOR'] = PHPWS_Text::secureLink(_('Assign Entire Floor'), 'hms', array('type'=>'assignment', 'op'=>'begin_by_floor'));
-/*
+
         if(Current_User::allow('hms', 'create_assignment') || Current_User::allow('hms', 'admin'))
             $tpl['CREATE_ASSIGNMENT'] = PHPWS_Text::secureLink(_('Assign Student'), 'hms', array('type'=>'assignment', 'op'=>'begin_create_assignment'));
 
+        if(Current_User::allow('hms', 'move_assignment') || Current_User::allow('hms', 'admin'))
+            $tpl['MOVE_ASSIGNMENT'] = PHPWS_Text::secureLink(_('Change Assignment'), 'hms', array('type'=>'assignment', 'op'=>'begin_move_assignment'));
+
         if(Current_User::allow('hms', 'delete_assignment') || Current_User::allow('hms', 'admin'))
             $tpl['DELETE_ASSIGNMENT'] = PHPWS_Text::secureLink(_('Delete Room Assignment'), 'hms', array('type'=>'assignment', 'op'=>'begin_delete_assignment'));
-
+/*
         if(Current_User::allow('hms', 'roommate_maintenance') || Current_User::allow('hms', 'admin'))
             $tpl['ROOMMATE_LABEL'] = "Roommate Maintenance";
 
@@ -195,6 +202,8 @@ class HMS_Maintenance
 
     function show_deadlines($message = NULL)
     {
+        Layout::addPageTitle("Edit Deadlines");
+        
         if(!(Current_User::allow('hms', 'edit_deadlines') || Current_User::allow('hms', 'admin'))) {
             exit('you are a bad person that can not edit deadlines.');
         }

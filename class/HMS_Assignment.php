@@ -183,23 +183,37 @@ class HMS_Assignment
     }
 
     /**
+     * Save the created assignment.
+     * Calls save_assignment, reports the created assignment information, and
+     * prompts the user for another student to assign.
+     */
+    function perform_save_assignment()
+    {
+        $success = $this->save_assignment();
+        if($success) {
+            $msg  = "You have placed " . $_REQUEST['username'];
+            $msg .= " into " . $_REQUEST['hall_name'];
+            $msg .= ", room " . $_REQUEST['room_number'];
+            $msg .= ", bedroom " . $_REQUEST['bedroom_letter'];
+            $msg .= ", bed " . $_REQUEST['bed_letter'];
+            return HMS_Assignment::get_username_for_assignment($msg);
+        } else {
+            return "Assignment failed -- unknown error.";
+        }
+    }
+
+    /**
      * Saves the current assignment object to the database.
      */
     function save_assignment()
     {
-        // Delete the assignment first (for Banner room charge reasons)
-        $delete_first = HMS_Assignment::delete_assignment('asu_username', $this->get_asu_username());
-       
-        if(PEAR::isError($delete_first)) 
-            test("Error is: $delete_first", 1);
-       
         $db = new PHPWS_DB('hms_assignment');
         $result = $db->saveObject($this);
         return $result;
     }
 
     /**
-     * Delete the room assignment, not just mark it deleted.
+     * Delete the room assignment.
      * Calls delete_assignment and prompts the user for another student to unassign
      */
     function perform_delete_assignment()
@@ -269,7 +283,11 @@ class HMS_Assignment
         $_REQUEST['op'] = 'get_halls';
         HMS_XML::main();
         */
-        
+
+        if(HMS_Assignment::check_for_assignment($_REQUEST['username'])) {
+            return HMS_Assignment::get_username_for_assignment($_REQUEST['username'] . " is already assigned.");
+        }
+       
         $msg = "";
 
         PHPWS_Core::initModClass('hms', 'HMS_Application.php');
@@ -290,6 +308,20 @@ class HMS_Assignment
         
         PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
         return HMS_Form::get_hall_floor_room($msg);
+    }
+
+    /**
+     * Returns TRUE if the username exists in hms_assignment and is not deleted,
+     * FALSE if the username either is not in hms_assignment or is deleted.
+     */
+
+    function check_for_assignment($asu_username)
+    {
+        $db = new PHPWS_DB('hms_assignment');
+        $db->addWhere('deleted', 0);
+        $db->addWhere('asu_username', $asu_username, 'ILIKE');
+
+        return !is_null($db->select('row'));
     }
 
     /**
@@ -343,6 +375,15 @@ class HMS_Assignment
 
         PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
         return HMS_Form::verify_assignment($msg);
+    }
+
+    /**
+     * Returns a HMS_Form that has the user input an ASU username to assign to a room
+     */
+    function get_username_for_move($error = NULL)
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
+        return HMS_Form::get_username_for_move($error); 
     }
 
     /**
@@ -419,7 +460,11 @@ class HMS_Assignment
     function verify_deletion()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
-        return HMS_Form::verify_deletion();
+        $content = HMS_Form::verify_deletion();
+        if($content === false) {
+            return HMS_Assignment::get_username_for_deletion("The username you enterred is not currently assigned.");
+        }
+        return $content;
     }
 
     /**
@@ -490,37 +535,56 @@ class HMS_Assignment
         switch($op)
         {
             case 'create_assignment':
+                Layout::addPageTitle("Assignment Created");
                 $assignment = HMS_Assignment::create_assignment();
-                return $assignment->save_assignment();
+                return $assignment->perform_save_assignment();
                 break;
             case 'begin_create_assignment':
+                Layout::addPageTitle("Select Student - Create Assignment");
                 return HMS_Assignment::get_username_for_assignment();
                 break;
             case 'begin_delete_assignment':
+                Layout::addPageTitle("Select Student - Delete Assignment");
                 return HMS_Assignment::get_username_for_deletion();
                 break;
+            case 'begin_move_assignment':
+                Layout::addPageTitle("Select Student - Change Assignment");
+                return HMS_Assignment::get_username_for_move();
+                break;
+            case 'get_move_hall_floor_room':
+                Layout::addPageTitle("Select Room - Change Assignment");
+                return HMS_Assignment::get_move_hall_floor_room();
+                break;
             case 'delete_assignment':
+                Layout::addPageTitle("Assignment Deleted");
                 return HMS_Assignment::perform_delete_assignment();
                 break;
             case 'get_hall_floor_room':
+                Layout::addPageTitle("Select Room - Create Assignment");
                 return HMS_Assignment::get_hall_floor_room();
                 break;
             case 'show_assignments_by_floor':
+                Layout::addPageTitle("Show Assignments By Floor");
                 return HMS_Assignment::show_assignments_by_floor();
                 break;
             case 'verify_assignment':
+                Layout::addPageTitle("Verify - Create Assignment");
                 return HMS_Assignment::verify_assignment();
                 break;
             case 'verify_deletion':
+                Layout::addPageTitle("Verify - Delete Assignment");
                 return HMS_Assignment::verify_deletion();
                 break;
             case 'begin_by_floor':
+                Layout::addPageTitle("Select Floor - Create Assignments");
                 return HMS_Assignment::get_hall_floor();
                 break;
             case 'assign_floor':
+                Layout::addPageTitle("Floor Assigned - Create Assignments");
                 return HMS_Assignment::assign_floor();
                 break;
             case 'verify_assign_floor':
+                Layout::addPageTitle("Verify Floor - Create Assignments");
                 return HMS_Assignment::verify_assign_floor();
                 break;
             default:
