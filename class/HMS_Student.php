@@ -1,4 +1,5 @@
 <?php
+
 class HMS_Student {
     var $id;
     var $first_name;
@@ -301,6 +302,7 @@ class HMS_Student {
                     if(isset($roomie['roommate_three']) && $roomie['roommate_three'] != $_REQUEST['username']) {
                         $tpl['ROOMMATE'] = "Awaiting approval from " . HMS_SOAP::get_full_name($roomie['roommate_three']) . ".<br />";
                     }
+                }
             }
         } else {
             $db = &new PHPWS_DB('hms_roommates');

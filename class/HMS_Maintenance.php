@@ -184,8 +184,8 @@ class HMS_Maintenance
         if(Current_User::allow('hms', 'create_assignment') || Current_User::allow('hms', 'admin'))
             $tpl['CREATE_ASSIGNMENT'] = PHPWS_Text::secureLink(_('Assign Student'), 'hms', array('type'=>'assignment', 'op'=>'begin_create_assignment'));
 
-        if(Current_User::allow('hms', 'move_assignment') || Current_User::allow('hms', 'admin'))
-            $tpl['MOVE_ASSIGNMENT'] = PHPWS_Text::secureLink(_('Change Assignment'), 'hms', array('type'=>'assignment', 'op'=>'begin_move_assignment'));
+/*        if(Current_User::allow('hms', 'move_assignment') || Current_User::allow('hms', 'admin'))
+            $tpl['MOVE_ASSIGNMENT'] = PHPWS_Text::secureLink(_('Change Assignment'), 'hms', array('type'=>'assignment', 'op'=>'begin_move_assignment'));*/
 
         if(Current_User::allow('hms', 'delete_assignment') || Current_User::allow('hms', 'admin'))
             $tpl['DELETE_ASSIGNMENT'] = PHPWS_Text::secureLink(_('Delete Room Assignment'), 'hms', array('type'=>'assignment', 'op'=>'begin_delete_assignment'));

@@ -1,6 +1,5 @@
 <?php
 
-ini_set('display_errors', '1');
 /**
  * Form objects for HMS
  *

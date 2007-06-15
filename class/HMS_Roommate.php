@@ -352,10 +352,10 @@ class HMS_Roommate
     {
         $db = &new PHPWS_DB('hms_roommates');
         $db->addColumn('id');
-        $db->addWhere('roommate_id_zero', $username, 'ILIKE');
-        $db->addWhere('roommate_id_one', $username, 'ILIKE', 'OR');
-        $db->addWhere('roommate_id_two', $username, 'ILIKE', 'OR');
-        $db->addWhere('roommate_id_three', $username, 'ILIKE', 'OR');
+        $db->addWhere('roommate_zero', $username, 'ILIKE');
+        $db->addWhere('roommate_one', $username, 'ILIKE', 'OR');
+        $db->addWhere('roommate_two', $username, 'ILIKE', 'OR');
+        $db->addWhere('roommate_three', $username, 'ILIKE', 'OR');
         $id = $db->select('one');
         if($id == NULL || $id == FALSE) {
             return false;
