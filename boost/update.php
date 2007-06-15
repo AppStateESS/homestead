@@ -443,6 +443,7 @@ function hms_update(&$content, $currentVersion)
             $content[] = '+ Student\'s first, middle and last names now show beside the username at the building overview page of assigned rooms/students';
             $content[] = '+ Added method to add a room to a floor';
             $content[] = '+ Added pricing tier to the room. Always.';
+            $content[] = '+ Added roommate status to the student search results.';
     }
 
     return TRUE;

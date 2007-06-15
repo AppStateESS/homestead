@@ -60,6 +60,9 @@
                 <td>Housing Application:</td><td>{APPLICATION_LINK}</td>
             </tr>
             <tr>
+                <td>Roommate Status:</td><td>{ROOMMATE}</td>
+            </tr>
+            <tr>
                 <td>&nbsp;</td><td></td>
             </tr>
             <tr>
