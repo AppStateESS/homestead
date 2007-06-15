@@ -428,6 +428,7 @@ function hms_update(&$content, $currentVersion)
             $files[] = 'templates/admin/add_floor.tpl';
             $files[] = 'templates/admin/display_floor_data.tpl';
             $files[] = 'templates/admin/display_room_data.tpl';
+            $files[] = 'templates/admin/add_room.tpl';
             $files[] = 'templates/admin/maintenance.tpl';
             PHPWS_Boost::updateFiles($files, 'hms');
 
@@ -439,7 +440,8 @@ function hms_update(&$content, $currentVersion)
             $content[] = '+ Added a flag to hms_room for ra rooms';
             $content[] = '+ Added a flag to hms_room for freshman reserved rooms';
             $content[] = '+ Student\'s first, middle and last names now show beside the username at the building overview page of assigned rooms/students';
-
+            $content[] = '+ Added method to add a room to a floor';
+            $content[] = '+ Added pricing tier to the room. Always.';
     }
 
     return TRUE;

@@ -167,6 +167,7 @@ CREATE TABLE hms_room (
     beds_per_bedroom smallint NOT NULL,
     learning_community smallint DEFAULT (0)::smallint,
     phone_number integer DEFAULT 0,
+    pricing_tier smallint DEFAULT 0,
     is_medical smallint DEFAULT (0)::smallint,
     is_reserved smallint DEFAULT (0)::smallint,
     is_online smallint DEFAULT (0)::smallint NOT NULL,

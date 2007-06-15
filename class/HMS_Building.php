@@ -1,5 +1,5 @@
 <?php
-
+ini_set('display_errors', '1');
 /**
  * Building objects for HMS
  *
@@ -15,7 +15,6 @@ class HMS_Building
     var $rooms_per_floor;
     var $bedrooms_per_room;
     var $beds_per_bedroom;
-    var $pricing_tier;
     var $gender_type;
     var $air_conditioned;
     var $is_online;
@@ -42,7 +41,6 @@ class HMS_Building
         $this->rooms_per_floor = NULL;
         $this->bedrooms_per_room = NULL;
         $this->beds_per_bedroom = NULL;
-        $this->pricing_tier = NULL;
         $this->gender_type = NULL;
         $this->air_conditioned = NULL;
         $this->is_online = NULL;
@@ -158,14 +156,6 @@ class HMS_Building
             $number_floors = $hall_db->select('one');
             return $number_floors;
         }
-    }
-
-    /**
-     * Sets the pricing tier for this hall
-     */
-    function set_pricing_tier($tier)
-    {
-        $this->pricing_tier = $tier;
     }
 
     /**
@@ -339,7 +329,6 @@ class HMS_Building
         $this->set_hall_name($_REQUEST['hall_name']);
         $this->set_number_floors($_REQUEST['number_floors']);
         $this->set_rooms_per_floor($_REQUEST['rooms_per_floor']);
-        $this->set_pricing_tier($_REQUEST['pricing_tier']);
         $this->set_gender_type($_REQUEST['gender_type']);
         $this->set_air_conditioned($_REQUEST['air_conditioned']);
         $this->set_is_online($_REQUEST['is_online']);
@@ -458,6 +447,14 @@ class HMS_Building
                                 return $result;
                             }
                         }
+
+                        /* 
+                        $db = &new PHPWS_DB('hms_room');
+                        $db->addValue('pricing_tier', $_REQUEST['pricing_tier']);
+                        $db->addWhere('building_id', $current_id);
+                        $db->addWhere('deleted', '0');
+                        $result = $db->update();
+                        */
                     }
 
                     // number rooms per floor changes
@@ -487,6 +484,13 @@ class HMS_Building
                         }
                     }
 
+                }
+                if(isset($_REQUEST['use_pricing_tier'])) {
+                    $db = &new PHPWS_DB('hms_room');
+                    $db->addValue('pricing_tier', $_REQUEST['pricing_tier']);
+                    $db->addWhere('building_id', $current_id);
+                    $db->addWhere('deleted', '0');
+                    $good_tiers = $db->update();
                 }
             } else {
                 HMS_Building::set_added_by_on($this);

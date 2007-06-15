@@ -22,3 +22,8 @@ ALTER TABLE hms_room ALTER COLUMN private_room SET NOT NULL;
 ALTER TABLE hms_room ADD COLUMN is_lobby SMALLINT;
 UPDATE hms_room SET is_lobby = 0;
 ALTER TABLE hms_room ALTER COLUMN is_lobby SET NOT NULL;
+
+ALTER TABLE hms_room ADD COLUMN pricing_tier SMALLINT;
+UPDATE hms_room SET pricing_tier = hms_residence_hall.pricing_tier WHERE hms_room.building_id = hms_residence_hall.id;
+
+ALTER TABLE hms_residence_hall DROP COLUMN pricing_tier;

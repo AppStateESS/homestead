@@ -24,6 +24,7 @@ class HMS_Room
     var $freshman_reserved;
     var $ra_room;
     var $is_lobby;
+    var $pricing_tier;
     var $private_room;
     var $added_by;
     var $added_on;
@@ -302,6 +303,17 @@ class HMS_Room
         return $this->is_lobby;
     }
 
+
+    function set_pricing_tier($pricing_tier)
+    {
+        $this->pricing_tier = $pricing_tier;
+    }
+
+    function get_pricing_tier()
+    {
+        return $this->pricing_tier;
+    }
+
     function set_private_room($private_room)
     {
         $this->private_room = $private_room;
@@ -366,6 +378,7 @@ class HMS_Room
         $this->set_is_online($_REQUEST['is_online']);
         $this->set_freshman_reserved($_REQUEST['freshman_reserved']);
         $this->set_ra_room($_REQUEST['ra_room']);
+        $this->set_pricing_tier($_REQUEST['pricing_tier']);
         $this->set_is_lobby($_REQUEST['is_lobby']);
         $this->set_private_room($_REQUEST['private_room']);
         $this->set_deleted();
@@ -461,6 +474,7 @@ class HMS_Room
         $db->addValue('freshman_reserved', $_REQUEST['freshman_reserved']);
         $db->addValue('ra_room', $_REQUEST['ra_room']);
         $db->addValue('is_lobby', $_REQUEST['is_lobby']);
+        $db->addValue('pricing_tier', $_REQUEST['pricing_tier']);
         $db->addValue('private_room', $_REQUEST['private_room']);
         $db->addValue('deleted', '0');
 
@@ -488,6 +502,96 @@ class HMS_Room
             PHPWS_Error::log($success);
         }
         return $success;
+    }
+
+    function add_room()
+    {
+        $db = &new PHPWS_DB('hms_room');
+        $db->addValue('gender_type', $_REQUEST['gender_type']);
+        $db->addValue('bedrooms_per_room', $_REQUEST['bedrooms_per_room']);
+        $db->addValue('beds_per_bedroom', $_REQUEST['beds_per_bedroom']);
+        $db->addValue('displayed_room_number', $_REQUEST['room_number']);
+        if($_REQUEST['phone_number'] != NULL) {
+            $db->addValue('phone_number', $_REQUEST['phone_number']);
+        }
+        $db->addValue('is_medical', $_REQUEST['is_medical']);
+        $db->addValue('is_reserved', $_REQUEST['is_reserved']);
+        $db->addValue('is_online', $_REQUEST['is_online']);
+        $db->addValue('updated_by', Current_User::getId());
+        $db->addValue('updated_on', time());
+        $db->addValue('freshman_reserved', $_REQUEST['freshman_reserved']);
+        $db->addValue('ra_room', $_REQUEST['ra_room']);
+        $db->addValue('is_lobby', $_REQUEST['is_lobby']);
+        $db->addValue('pricing_tier', $_REQUEST['pricing_tier']);
+        $db->addValue('private_room', $_REQUEST['private_room']);
+        $db->addValue('deleted', '0');
+        $db->addValue('room_number', $_REQUEST['room_number']);
+        $db->addValue('floor_id', $_REQUEST['floor_id']);
+        $db->addValue('added_on', time());
+        $db->addValue('updated_on', time());
+        $db->addValue('added_by', Current_User::getID());
+        $db->addValue('updated_by', Current_User::getID());
+        $db->addValue('phone_number', NULL);
+        $db->addValue('building_id', $_REQUEST['building_id']);
+        $db->addValue('floor_number', $_REQUEST['floor_number']);
+        $room_id = $db->insert();
+
+        $br_letter = 'a';
+        PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Bedroom.php');
+        for($j = 1; $j <= $_REQUEST['bedrooms_per_room']; $j++) {
+            $bedroom = new HMS_Bedroom;
+            $bedroom->set_room_id($room_id);
+            $bedroom->set_is_online($_REQUEST['is_online']);
+            $bedroom->set_gender_type($_REQUEST['gender_type']);
+            $bedroom->set_number_beds($_REQUEST['beds_per_bedroom']);
+            $bedroom->set_is_reserved(0);
+            $bedroom->set_is_medical(0);
+            $bedroom->set_added_by();
+            $bedroom->set_added_on();
+            $bedroom->set_updated_by();
+            $bedroom->set_updated_on();
+            $bedroom->set_deleted();
+            $bedroom->set_bedroom_letter($br_letter);
+            $saved_br = HMS_Bedroom::save_bedroom($bedroom);
+           
+            if($br_letter == 'a') $br_letter = 'b';
+            else if($br_letter == 'b') $br_letter = 'c';
+            else if($br_letter == 'c') $br_letter = 'd';
+            
+            if(PEAR::isError($saved_br)) {
+                test($saved_br);
+                return $saved_br;
+            }
+            
+            $bed_letter = 'a';
+            for($k = 1; $k <= $_REQUEST['beds_per_bedroom']; $k++) {
+                $bed = new HMS_Bed;
+                $bed->set_bedroom_id($saved_br);
+                $bed->set_bed_letter($bed_letter);
+                $bed->set_deleted();
+                $saved_bed = HMS_Bed::save_bed($bed);
+
+                if($bed_letter == 'a') $bed_letter = 'b';
+                else if($bed_letter == 'b') $bed_letter = 'c';
+                else if($bed_letter == 'c') $bed_letter = 'd';
+
+                if(PEAR::isError($saved_bed)) {
+                    test($saved_bed);
+                    return $saved_bed;
+                }
+            } // end bed creation
+        } // end bedroom creation
+
+        if(PEAR::isError($success)) {
+            PHPWS_Error::log($success, 'hms', 'HMS_Room::add_room');
+            $final = "Error saving Room. Please consult Electronic Student Services.<br />";
+            $final .= "Error: $success";
+        } else {
+            $final = "Room successfully added!";
+        }
+        return $final;
+ 
     }
 
     function delete_rooms_by_floor($bid, $floor = NULL, $one = FALSE)
@@ -637,6 +741,27 @@ class HMS_Room
             PHPWS_Core::log($result, 'hms', 'HMS_Room::change_bedrooms_per_room');
         }
         return $result;
+    }
+
+    function select_residence_hall_for_add_room()
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
+        $form = &new HMS_Form;
+        return $form->select_residence_hall_for_add_room();
+    }
+
+    function select_floor_for_add_room()
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
+        $form = &new HMS_Form;
+        return $form->select_floor_for_add_room();
+    }
+
+    function display_room_for_add()
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
+        $form = &new HMS_Form;
+        return $form->display_room_for_add();
     }
 
     function select_residence_hall_for_edit_room()
@@ -813,6 +938,18 @@ class HMS_Room
     {
         switch($_REQUEST['op'])
         {
+            case 'select_residence_hall_for_add_room':
+                return HMS_Room::select_residence_hall_for_add_room();
+                break;
+            case 'select_floor_for_add_room':
+                return HMS_Room::select_floor_for_add_room();
+                break;
+            case 'display_room_for_add':
+                return HMS_Room::display_room_for_add();
+                break;
+            case 'add_room':
+                return HMS_Room::add_room();
+                break;
             case 'select_hall_for_edit_room':
                 return HMS_Room::select_residence_hall_for_edit_room();
                 break;

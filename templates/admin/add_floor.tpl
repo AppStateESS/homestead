@@ -24,6 +24,12 @@
                 <th>Number beds per bedroom:</th><td>{BEDS_PER_BEDROOM}</td>
             </tr>
             <tr>
+                <th>Pricing Tier:</th><td>{PRICING_TIER}</td>
+            </tr>
+            <tr>
+                <th>Use pricing tier:</th><td>{USE_PRICING_TIER}</td>
+            </tr>
+            <tr>
                 <th>Select a gender type: </th><td>{GENDER_TYPE_1} {GENDER_TYPE_1_LABEL}</td>
             </tr>
             <tr>

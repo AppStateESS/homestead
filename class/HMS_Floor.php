@@ -307,12 +307,13 @@ class HMS_Floor
                 $room->set_gender_type($object->get_gender_type());
                 $room->set_is_online($object->get_is_online());
                 $room->set_freshman_reserved($object->get_freshman_reserved());
+                $room->set_pricing_tier($_REQUEST['pricing_tier']);
                 $room->set_is_lobby('0');
                 $room->set_private_room('0');
                 $room->set_is_reserved('0');
                 $room->set_is_medical('0');
+                $room->set_ra_room('0');
                 $room->set_deleted();
-                //$room->set_number_occupants('0');
                 $success = HMS_Room::save_room_object($room);
                 if(PEAR::isError($success)) {
                     test($success);
@@ -372,12 +373,14 @@ class HMS_Floor
             $db->addWhere('building_id', $object->get_building());
             $db->addWhere('floor_number', $object->get_floor_number());
             $db->addWhere('deleted', 0);
+            if(isset($_REQUEST['use_pricing_tier'])) {
+                $db->addValue('pricing_tier', $_REQUEST['pricing_tier']);
+            }
             $result = $db->update();
             if(PEAR::isError($result)) {
                 test($result);
                 return $result;
             }
-
         }
 
         $final = "Floor saved successfully!<br />";

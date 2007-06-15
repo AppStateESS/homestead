@@ -118,6 +118,10 @@ class HMS_Maintenance
         if(Current_User::allow('hms', 'room_maintenance') || Current_User::allow('hms', 'admin'))
             $tpl['ROOM_LABEL'] = "Room Options";
 
+
+        if(Current_User::allow('hms', 'add_rooms') || Current_User::allow('hms', 'admin'))
+            $tpl['ADD_ROOM'] = PHPWS_Text::secureLink(_('Add a Room'), 'hms', array('type'=>'room', 'op'=>'select_residence_hall_for_add_room'));
+
         if(Current_User::allow('hms', 'delete_rooms') || Current_User::allow('hms', 'admin')) 
             $tpl['DELETE_ROOM'] = PHPWS_Text::secureLink(_('Delete a Room'), 'hms', array('type'=>'room', 'op'=>'select_residence_hall_for_delete_room'));
 

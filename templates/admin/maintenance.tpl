@@ -14,6 +14,7 @@
         &nbsp;&nbsp;&nbsp;{DELETE_FLOOR}<br />
         <br />
         <h2><i>{ROOM_LABEL}</i></h2>
+        &nbsp;&nbsp;&nbsp;{ADD_ROOM}<br />
         &nbsp;&nbsp;&nbsp;{DELETE_ROOM}<br />
         &nbsp;&nbsp;&nbsp;{EDIT_ROOM}<br />
         <br />

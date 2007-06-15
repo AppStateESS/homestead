@@ -1,5 +1,6 @@
 <?php
 
+ini_set('display_errors', '1');
 /**
  * Form objects for HMS
  *
@@ -914,6 +915,43 @@ class HMS_Form
         return $final;
     }
 
+    function select_residence_hall_for_add_room()
+    {
+        $content = "";
+ 
+        $db = &new PHPWS_DB('hms_residence_hall');
+        $db->addWhere('deleted', '0');
+        $db->addColumn('id');
+        $db->addColumn('hall_name');
+        $allhalls = $db->select();
+
+        if($allhalls == NULL) {
+            $tpl['TITLE'] = "Error!";
+            $tpl['CONTENT'] = "You must add a Residence Hall before you can add rooms to one!<br />";
+            $final = PHPWS_Template::process($tpl, 'hms', 'admin/title_and_message.tpl');
+            return $final;
+        }
+
+        foreach($allhalls as $ahall) {
+            $halls[$ahall['id']] = $ahall['hall_name'];
+        }
+
+        $content = "Please select the residence hall that needs more rooms from the list below.<br />";
+        PHPWS_Core::initCoreClass('Form.php');
+        $form = &new PHPWS_Form;
+        $form->addDropBox('halls', $halls);
+        $form->addHidden('module', 'hms');
+        $form->addHidden('type', 'room');
+        $form->addHidden('op', 'select_floor_for_add_room');
+        $form->addSubmit('submit', _('Submit'));
+       
+        $tpl = $form->getTemplate();
+        $tpl['TITLE'] = "Select a Residence Hall";
+        $tpl['CONTENT'] = $content;
+        $final = PHPWS_Template::process($tpl, 'hms', 'admin/select_residence_hall.tpl');
+        return $final;
+    }
+
     function select_residence_hall_for_add_floor()
     {
         $content = "";
@@ -1085,6 +1123,146 @@ class HMS_Form
         $tpl['TITLE']   = "Select a Hall";
         $tpl['CONTENT'] = "Which residence hall has the floor to edit?";
         $final = PHPWS_Template::process($tpl, 'hms', 'admin/select_residence_hall.tpl');
+        return $final;
+    }
+
+    function select_floor_for_add_room()
+    {
+        $db = &new PHPWS_DB('hms_residence_hall');
+        $db->addWhere('id', $_REQUEST['halls']);
+        $db->addColumn('number_floors');
+        $db->addColumn('hall_name');
+        $building = $db->select('row');
+        unset($db);
+        
+        $hall = $building['hall_name'];
+        $num_floors = $building['number_floors'];
+        unset($building);
+     
+        $db = new PHPWS_DB('hms_floor');
+        $db->addColumn('floor_number');
+        $db->addColumn('number_rooms');
+        $db->addWhere('building', $_REQUEST['halls']);
+        $db->addWhere('deleted', '1', '!=');
+        $db->addOrder('floor_number', 'ASC');
+        $floors = $db->select();
+
+        foreach($floors as $afloor) {
+            $floor[$afloor['floor_number']] = $afloor['floor_number'];
+        }
+
+        PHPWS_Core::initCoreClass('Form.php');
+        $form = &new PHPWS_Form;
+        $form->addDropBox('floor', $floor);
+        $form->addHidden('module', 'hms');
+        $form->addHidden('type', 'room');
+        $form->addHidden('op', 'display_room_for_add');
+        $form->addHidden('hall', $_REQUEST['halls']);
+        $form->addSubmit('submit', 'Select Floor');
+
+        $tpl = $form->getTemplate();
+        
+        $tpl['TITLE']       = "Select a Floor";
+        $tpl['MESSAGE']     = "$hall has $num_floors floors. Which floor needs another room?<br />";
+       
+        $final = PHPWS_Template::process($tpl, 'hms', 'admin/select_floor_for_edit.tpl');
+        return $final;
+    }
+
+    function display_room_for_add()
+    {
+        $db = &new PHPWS_DB('hms_residence_hall');
+        $db->addColumn('hall_name');
+        $db->addWhere('id', $_REQUEST['hall']);
+        $hall_name = $db->select('one');
+
+        $floor_number = $_REQUEST['floor'];
+   
+        $db = &new PHPWS_DB('hms_room');
+        $sql = "select max(room_number) from hms_room where building_id = " . $_REQUEST['hall'] . " AND floor_number = " . $_REQUEST['floor'] . " AND deleted = 0 ";
+        $db->setSQLQuery($sql);
+        $room_number = $db->select('one');
+        $room_number++;
+       
+        $db = &new PHPWS_DB('hms_floor');
+        $db->addColumn('id');
+        $db->addWhere('building', $_REQUEST['hall']);
+        $db->addWhere('floor_number', $floor_number);
+        $db->addWhere('deleted', '0');
+        $floor_id = $db->select('one');
+
+        PHPWS_Core::initCoreClass('Form.php');
+        $form = &new PHPWS_Form;
+
+        $form->addRadio('is_online', array(0, 1));
+        $form->setLabel('is_online', array(_("No"), _("Yes") ));
+        $form->setMatch('is_online', '1');
+
+        $form->addRadio('gender_type', array(0, 1));
+        $form->setLabel('gender_type', array(_("Female"), _("Male")));
+        $form->setMatch('gender_type', '0');
+      
+        $form->addRadio('freshman_reserved', array(0, 1));
+        $form->setLabel('freshman_reserved', array(_("No"), _("Yes")));
+        $form->setMatch('freshman_reserved', '0');
+
+        $bedrooms = array('1'=>'1',
+                          '2'=>'2',
+                          '3'=>'3',
+                          '4'=>'4');
+        $form->addDropBox('bedrooms_per_room', $bedrooms);
+        $form->setMatch('bedrooms_per_room', '1');
+
+        $form->addDropBox('beds_per_bedroom', $bedrooms);
+        $form->setMatch('beds_per_bedroom', '2');
+
+        $db = &new PHPWS_DB('hms_pricing_tiers');
+        $prices = $db->select();
+
+        foreach($prices as $price) {
+            $pricing[$price['id']] = "$" . $price['tier_value'];
+        }
+        
+        $form->addDropBox('pricing_tier', $pricing);
+        $form->setMatch('pricing_tier', '1');
+ 
+        $form->addRadio('is_medical', array(0, 1));
+        $form->setLabel('is_medical', array(_("No"), _("Yes")));
+        $form->setMatch('is_medical', '0');
+
+        $form->addRadio('is_reserved', array(0, 1));
+        $form->setLabel('is_reserved', array(_("No"), _("Yes")));
+        $form->setMatch('is_reserved', '0');
+
+        $form->addRadio('ra_room', array(0, 1));
+        $form->setLabel('ra_room', array(_("No"), _("Yes")));
+        $form->setMatch('ra_room', '0');
+
+        $form->addRadio('private_room', array(0, 1));
+        $form->setLabel('private_room', array(_("No"), _("Yes")));
+        $form->setMatch('private_room', '0');
+
+        $form->addRadio('is_lobby', array(0, 1));
+        $form->setLabel('is_lobby', array(_("No"), _("Yes")));
+        $form->setMatch('is_lobby', '0');
+
+        $form->addHidden('module', 'hms');
+        $form->addHidden('type', 'room');
+        $form->addHidden('op', 'add_room');
+        $form->addHidden('building_id', $_REQUEST['hall']);
+        $form->addHidden('floor_id', $floor_id);
+        $form->addHidden('floor_number', $floor_number);
+        $form->addHidden('room_number', $room_number);
+
+        $form->addSubmit('submit', _('Add Room'));
+
+        $tpl                        = $form->getTemplate();
+        $tpl['TITLE']               = "Add a Room";
+        $tpl['HALL_NAME']           = $hall_name;
+        $tpl['FLOOR_NUMBER']        = $floor_number;
+        $tpl['ROOM_NUMBER']         = $room_number;
+
+        $final = PHPWS_Template::process($tpl, 'hms', 'admin/add_room.tpl');
         return $final;
     }
 
@@ -1589,6 +1767,7 @@ class HMS_Form
         $ra_room            = $room['ra_room'];
         $private_room       = $room['private_room'];
         $is_lobby           = $room['is_lobby'];
+        $pricing_tier       = $room['pricing_tier'];
         $bedrooms_per_room  = $room['bedrooms_per_room'];
         $beds_per_bedroom   = $room['beds_per_bedroom'];
         $phone_number       = $room['phone_number'];
@@ -1646,6 +1825,17 @@ class HMS_Form
 
         $form->addDropBox('beds_per_bedroom', $capacity);
         $form->setMatch('beds_per_bedroom', $beds_per_bedroom);
+
+        $db = &new PHPWS_DB('hms_pricing_tiers');
+        $db->addColumn('id');
+        $db->addColumn('tier_value');
+        $results = $db->select();
+        foreach($results as $result) {
+            $tiers[$result['id']] = $result['tier_value'];
+        }
+
+        $form->addDropBox('pricing_tier', $tiers);
+        $form->setMatch('pricing_tier', $pricing_tier);
 
         $form->addHidden('module', 'hms');
         $form->addHidden('type', 'room');
@@ -1714,6 +1904,17 @@ class HMS_Form
         $form->setLabel('freshman_reserved', array(_("No"), _("Yes")));
         $form->setMatch('freshman_reserved', '0');
       
+        $db = &new PHPWS_DB('hms_pricing_tiers');
+        $prices = $db->select();
+
+        foreach($prices as $price) {
+            $pricing[$price['id']] = "$" . $price['tier_value'];
+        }
+        
+        $form->addDropBox('pricing_tier', $pricing);
+        $form->setMatch('pricing_tier', '1');
+        $form->addCheckBox('use_pricing_tier');
+
         $form->addHidden('building', $hall['id']);
         $db = new PHPWS_DB('hms_floor');
         $db->addColumn('floor_number');
@@ -1851,6 +2052,17 @@ class HMS_Form
         } else {
             $form->setMatch('freshman_reserved', '0');
         }
+
+        $db = &new PHPWS_DB('hms_pricing_tiers');
+        $prices = $db->select();
+
+        foreach($prices as $price) {
+            $pricing[$price['id']] = "$" . $price['tier_value'];
+        }
+        
+        $form->addDropBox('pricing_tier', $pricing);
+        $form->setMatch('pricing_tier', '1');
+        $form->addCheckBox('use_pricing_tier');
 
         $form->addHidden('module', 'hms');
         $form->addHidden('type', 'floor');
@@ -2011,12 +2223,8 @@ class HMS_Form
         }
         
         $form->addDropBox('pricing_tier', $pricing);
-        if(isset($object->pricing_tier)) {
-            $form->setMatch('pricing_tier', $object->pricing_tier);
-        } else {
-            $form->setMatch('pricing_tier', '3');
-        }
-       
+        $form->setMatch('pricing_tier', '1');
+        $form->addCheckBox('use_pricing_tier');
 
         $form->addRadio('gender_type', array(0, 1, 2));
         $form->setLabel('gender_type', array(_("Female"), _("Male"), _("Coed")));

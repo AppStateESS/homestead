@@ -18,6 +18,9 @@
                 <th>Displayed Room Number: </th><td align = "left">{DISPLAYED_ROOM_NUMBER}</td>
             </tr>
             <tr>
+                <th>Pricing Tier: </th><td>{PRICING_TIER}</td>
+            </tr>
+            <tr>
                 <th>Select the number of bedrooms per room: &nbsp;&nbsp;</th><td align="left">{BEDROOMS_PER_ROOM}</td>
             </tr>
             <tr>

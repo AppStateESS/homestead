@@ -28,6 +28,9 @@
                 <th>Select a pricing tier: </th><td align="left">{PRICING_TIER}</td>
             </tr>
             <tr>
+                <th>Apply this tier to all rooms: </th><td align="left">{USE_PRICING_TIER}</td>
+            </tr>
+            <tr>
                 <th>Select a gender type: </th><td align="left">{GENDER_TYPE_1} {GENDER_TYPE_1_LABEL}</td>
             </tr>
             <tr>
