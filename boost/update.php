@@ -428,6 +428,7 @@ function hms_update(&$content, $currentVersion)
             $files[] = 'templates/admin/add_floor.tpl';
             $files[] = 'templates/admin/display_floor_data.tpl';
             $files[] = 'templates/admin/display_room_data.tpl';
+            $files[] = 'templates/admin/display_hall_data.tpl';
             $files[] = 'templates/admin/add_room.tpl';
             $files[] = 'templates/admin/maintenance.tpl';
             PHPWS_Boost::updateFiles($files, 'hms');
