@@ -257,6 +257,7 @@ class HMS_Form
     {
         $db = new PHPWS_DB('hms_assignment');
         $db->addWhere('asu_username', $_REQUEST['username'], 'ILIKE');
+        $db->addWhere('deleted', '0');
         $assignment = $db->select('row');
         $msg = '';
 

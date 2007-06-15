@@ -1,5 +1,5 @@
 <?php
-ini_set('display_errors', '1');
+
 /**
  * Building objects for HMS
  *
@@ -736,6 +736,7 @@ class HMS_Building
                         $assignments_db = &new PHPWS_DB('hms_assignment');
                         $assignments_db->addColumn('asu_username');
                         $assignments_db->addWhere('bed_id', $abed['id']);
+                        $assignments_db->addWhere('deleted', '0');
                         $asu_username = $assignments_db->select('one');
                         $asu_username .= " " . HMS_SOAP::get_full_name($asu_username);
 

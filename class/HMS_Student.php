@@ -252,7 +252,8 @@ class HMS_Student {
         $sql .= " hms_beds, ";
         $sql .= " hms_assignment ";
         $sql .= "WHERE";
-        $sql .= " hms_assignment.bed_id = hms_beds.id ";
+        $sql .= " hms_assignment.deleted = '0' ";
+        $sql .= " AND hms_assignment.bed_id = hms_beds.id ";
         $sql .= " AND hms_beds.bedroom_id = hms_bedrooms.id ";
         $sql .= " AND hms_bedrooms.room_id = hms_room.id ";
         $sql .= " AND hms_room.floor_id = hms_floor.id ";
