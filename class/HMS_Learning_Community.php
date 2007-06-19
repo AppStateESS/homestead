@@ -307,6 +307,8 @@ class HMS_Learning_Community
                 $tags['USERNAME']       = $user['asu_username'];
                 $tags['EMAIL']          = $user['asu_username'] . '@appstate.edu';
 
+                $tags['VIEW_APP']       = './index.php?module=hms&type=rlc&op=view_rlc_application&username='.$user['asu_username'];
+
                 $new_tpl['ROWS'] .= PHPWS_Template::processTemplate($tags, 'hms', 'admin/full_name_gender_email.tpl');
             }
             $content = PHPWS_Template::processTemplate($new_tpl, 'hms', 'admin/rlc_roster_table.tpl');

@@ -444,6 +444,15 @@ function hms_update(&$content, $currentVersion)
             $content[] = '+ Added method to add a room to a floor';
             $content[] = '+ Added pricing tier to the room. Always.';
             $content[] = '+ Added roommate status to the student search results.';
+
+        case version_compare($currentVersion, '0.1.25', '<'):
+            $files = array();
+            $files[] = 'templates/admin/full_name_gender_email.tpl';
+            $files[] = 'templates/admin/rlc_roster_table.tpl';
+            PHPWS_Boost::updateFiles($files, 'hms');
+
+            $content[] = '+ Fixed numerous bugs that arrived with the _deleted_ flag';
+            $content[] = '+ Added the ability to review RLC Applications after assignment';
     }
 
     return TRUE;

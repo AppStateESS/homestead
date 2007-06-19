@@ -127,7 +127,7 @@ class HMS_RLC_Assignment{
         $tags = array();
         $asuid = $this->getAsuUsername();
         
-        $tags['NAME']      = HMS_SOAP::get_full_name_inverted($asuid);
+        $tags['NAME']      = '<a href="./index.php?module=hms&type=rlc&op=view_rlc_application&username='.$asuid.'" target="_blank">' . HMS_SOAP::get_full_name_inverted($asuid) . '</a>';
         $tags['FINAL_RLC'] = $rlc_list[$this->getRlcId()];
         $tags['COURSE_OK'] = $this->getCourseOk() == 1 ? 'Y' : 'N';
 //        $tags['ROOMMATE']  = TODO: Roommate Stuff
