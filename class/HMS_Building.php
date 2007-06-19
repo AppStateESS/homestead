@@ -738,13 +738,13 @@ class HMS_Building
                         $assignments_db->addWhere('bed_id', $abed['id']);
                         $assignments_db->addWhere('deleted', '0');
                         $asu_username = $assignments_db->select('one');
-                        $asu_username .= " " . HMS_SOAP::get_full_name($asu_username);
-
                         if($asu_username) {
+                            $asu_username .= " " . HMS_SOAP::get_full_name($asu_username);
                             $content .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bedroom: " . $abedroom['bedroom_letter'] . "&nbsp;&nbsp;&nbsp;&nbsp;Bed: " . $abed['bed_letter'] . "&nbsp;&nbsp;&nbsp;&nbsp;" . $asu_username . "<br />";
                         } else {
                             $content .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bedroom: " . $abedroom['bedroom_letter'] . "&nbsp;&nbsp;&nbsp;&nbsp;Bed: " . $abed['bed_letter'] . "&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"gray\">&lt;unassigned&gt;</font><br />";
                         }
+//                        $content .= "[floor_id:".$afloor['id'].", room_id:".$aroom['id'].", bedroom_id:".$abedroom['id'].", bed_id:".$abed['id']."<br />";
                     } // end foreach($beds)
                     $content .= "<br />";
                 } // end foreach($bedrooms)

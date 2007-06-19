@@ -136,19 +136,21 @@ class HMS_Assignment
             $db->addWhere('building_id', $_REQUEST['hall']);
             $db->addWhere('floor_number', $_REQUEST['floor']);
             $db->addWhere('room_number', $_REQUEST['floor'] . str_pad($_REQUEST['room'], 2, "0", STR_PAD_LEFT));
-            $db->addWhere('deleted', '1', '!=');
+            $db->addWhere('deleted', '0');
             $rid = $db->select('one');
 
             $db = new PHPWS_DB('hms_bedrooms');
             $db->addColumn('id');
             $db->addWhere('room_id', $rid);
             $db->addWhere('bedroom_letter', $_REQUEST['bedroom_letter']);
+            $db->addWhere('deleted', '0');
             $br_id = $db->select('one');
 
             $db = new PHPWS_DB('hms_beds');
             $db->addColumn('id');
             $db->addWhere('bedroom_id', $br_id);
             $db->addWhere('bed_letter', $_REQUEST['bed_letter']);
+            $db->addWhere('deleted', '0');
             $bed_id = $db->select('one');
             $assignment->set_asu_username($_REQUEST['username']);
             $meal_option = '1';
@@ -207,6 +209,14 @@ class HMS_Assignment
      */
     function save_assignment()
     {
+        // If we get here and they're already assigned, someone had to click
+        // "that's okay; do it anyway".  So delete the old assignment.
+        // NOTE: THIS SHOULD CHANGE BECAUSE IT IS AN INCREDIBLY DIRTY HIPPIE OF A HACK
+        $delete_first = HMS_Assignment::delete_assignment('asu_username', $this->get_asu_username());
+
+        if(PEAR::isError($delete_first))
+            PHPWS_Error::log($delete_first, 'hms', 'HMS_Assignment::save_assignment');
+
         $db = new PHPWS_DB('hms_assignment');
         $result = $db->saveObject($this);
         return $result;
@@ -283,26 +293,28 @@ class HMS_Assignment
         $_REQUEST['op'] = 'get_halls';
         HMS_XML::main();
         */
-
-        if(HMS_Assignment::check_for_assignment($_REQUEST['username'])) {
-            return HMS_Assignment::get_username_for_assignment($_REQUEST['username'] . " is already assigned.");
-        }
-       
+        
         $msg = "";
 
-        PHPWS_Core::initModClass('hms', 'HMS_Application.php');
-        $completed_application = HMS_Application::check_for_application($_REQUEST['username']);
-        if(!$completed_application) {
-            $msg .= '<font color="red"><b>';
-            $msg .= $_REQUEST['username'] . " did not fill out an Housing Application.<br /><br />";
-            $msg .= '</b></font>';
-            
-            PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
-            $valid_student = HMS_SOAP::is_valid_student($_REQUEST['username']);
-            if(!$valid_student){
-                $msg .= $_REQUEST['username'] . " is not listed as a valid student. Please contact Electronic Student Services with this error.<br /><br />";
+        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+
+        if(HMS_Assignment::check_for_assignment($_REQUEST['username'])) {
+//            return HMS_Assignment::get_username_for_assignment($_REQUEST['username'] . " is already assigned.");
+            $msg .= '<font color="red">Warning: <b>' . HMS_SOAP::get_name($_REQUEST['username']) . " (" . $_REQUEST['username'] . ")</b> is already assigned.  Continuing will cause this student's assignment to be moved.</font><br /><br />";
+        } else {
+            PHPWS_Core::initModClass('hms', 'HMS_Application.php');
+            $completed_application = HMS_Application::check_for_application($_REQUEST['username']);
+            if(!$completed_application) {
+                $msg .= '<font color="red"><b>';
+                $msg .= $_REQUEST['username'] . " did not fill out an Housing Application.<br /><br />";
                 $msg .= '</b></font>';
-                return HMS_Assignment::get_username_for_assignment($msg);
+                
+                $valid_student = HMS_SOAP::is_valid_student($_REQUEST['username']);
+                if(!$valid_student){
+                    $msg .= $_REQUEST['username'] . " is not listed as a valid student. Please contact Electronic Student Services with this error.<br /><br />";
+                    $msg .= '</b></font>';
+                    return HMS_Assignment::get_username_for_assignment($msg);
+                }
             }
         }
         
@@ -395,12 +407,14 @@ class HMS_Assignment
         $db->addColumn('id');
         $db->addWhere('room_id', $room_id);
         $db->addWhere('bedroom_letter', $_REQUEST['bedroom_letter']);
+        $db->addWhere('deleted', 0);
         $br_id = $db->select('one');
 
         $db = new PHPWS_DB('hms_beds');
         $db->addColumn('id');
         $db->addWhere('bedroom_id', $br_id);
         $db->addWhere('bed_letter', $_REQUEST['bed_letter']);
+        $db->addWhere('deleted', 0);
         $bed_id = $db->select('one');
 
         return $bed_id;
@@ -414,6 +428,7 @@ class HMS_Assignment
         $db = new PHPWS_DB('hms_assignment');
         $db->addColumn('id');
         $db->addWhere('bed_id', $id);
+        $db->addWhere('deleted', 0);
         $assigned = $db->select('one');
         if($assigned == NULL || $assigned == FALSE) return false;
         else return true;
@@ -427,6 +442,7 @@ class HMS_Assignment
         $db = &new PHPWS_DB('hms_assignment');
         $db->addColumn('id');
         $db->addWhere('asu_username', $uid);
+        $db->addWhere('deleted', 0);
         $assigned = $db->select('one');
         if($assigned == NULL || $assigned == FALSE) return false;
         else return true;
