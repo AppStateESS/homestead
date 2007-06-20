@@ -152,6 +152,7 @@ class HMS_Assignment
             $db->addWhere('bed_letter', $_REQUEST['bed_letter']);
             $db->addWhere('deleted', '0');
             $bed_id = $db->select('one');
+
             $assignment->set_asu_username($_REQUEST['username']);
             $meal_option = '1';
         } else {
@@ -344,6 +345,11 @@ class HMS_Assignment
         $room_id = HMS_Assignment::get_room_id_by_request();
         $bed_id = HMS_Assignment::get_bed_id_by_request_and_room_id($room_id);
 
+        if(!$room_id || !$bed_id) {
+            PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
+            return HMS_Form::get_hall_floor_room('<font color="red"><b>The selected floor, room, bedroom, or bed does not exist in this building.</b></font><br /><br />');
+        }
+
         if(!HMS_Assignment::room_user_gender_compatible($room_id)) {
             $msg = '<font color="red"><b>The gender of the student and the room gender are incompatible.</b></font>';
             return HMS_Assignment::get_username_for_assignment($msg);
@@ -358,8 +364,9 @@ class HMS_Assignment
 
         //if($assigned == $assignable) {
         if($assigned) {
-            $msg = '<font color="red"><b>This room is full. Please assign to another room or remove a student from this room.<b></font>';
-            return HMS_Assignment::get_username_for_assignment($msg);
+            PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
+            $msg = '<font color="red"><b>This bed has already been assigned to another student. Please assign to another bed.<b></font><br /><br />';
+            return HMS_Form::get_hall_floor_room($msg);
         }
 
         $msg = '<br />';

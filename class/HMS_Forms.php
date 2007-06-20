@@ -285,6 +285,12 @@ class HMS_Form
         $form->addDropBox('rooms', $rooms);
         $form->addDropBox('bedroom_letter', $letters);
         $form->addDropBox('bed_letter', $letters);
+
+        $form->setMatch('halls', $_REQUEST['halls']);
+        $form->setMatch('floors', $_REQUEST['floors']);
+        $form->setMatch('rooms', $_REQUEST['rooms']);
+        $form->setMatch('bedroom_letter', $_REQUEST['bedroom_letter']);
+        $form->setMatch('bed_letter', $_REQUEST['bed_letter']);
         
         $form->addHidden('module', 'hms');
         $form->addHidden('type', 'assignment');
