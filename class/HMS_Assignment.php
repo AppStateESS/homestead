@@ -28,6 +28,7 @@ class HMS_Assignment
             $db = &new PHPWS_DB('hms_assignment');
             $db->addColumn('id');
             $db->addWhere($type, $value);
+            $db->addWhere('deleted', 0);
             $id = $db->select('one');
             return $id;
         }
@@ -50,6 +51,7 @@ class HMS_Assignment
             $db = &new PHPWS_DB('hms_assignment');
             $db->addColumn('asu_username');
             $db->addWhere('bed_id', $bid);
+            $db->addWhere('deleted', 0);
             $username = $db->select('one');
             return $username;
         } else {
@@ -76,6 +78,7 @@ class HMS_Assignment
             $db = &new PHPWS_DB('hms_assignment');
             $db->addColumn('bed_id');
             $db->addWhere($type, $value);
+            $db->addWhere('deleted', 0);
             $bed_id = $db->select('one');
             return $bed_id;
         }
@@ -99,6 +102,7 @@ class HMS_Assignment
         $db = &new PHPWS_DB('hms_assignment');
         $db->addColumn('meal_option');
         $db->addWhere($type, $value);
+        $db->addWhere('deleted', 0);
         $meal_option = $db->select('one');
         return $meal_option;
     }
@@ -478,6 +482,13 @@ class HMS_Assignment
     }
 
     /**
+     * Handles issues with requested roommates, if any
+     */
+    function create_assignment_handle_roommates()
+    {
+    }
+
+    /**
      * Returns a HMS_Form that gives the user the choice to confirm a room assignment deletion
      */
     function verify_deletion()
@@ -609,6 +620,10 @@ class HMS_Assignment
             case 'verify_assign_floor':
                 Layout::addPageTitle("Verify Floor - Create Assignments");
                 return HMS_Assignment::verify_assign_floor();
+                break;
+            case 'create_assignment_handle_roommates':
+                Layour::addPageTitle("Handle Roommates - Create Assignments");
+                return HMS_Assignment::create_assignment_handle_roommates();
                 break;
             default:
                 test($op);

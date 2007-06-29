@@ -29,6 +29,7 @@ class HMS_Display
         unset($db);
 
         $db = &new PHPWS_DB('hms_assignment');
+        $db->addWhere('deleted', '0');
         $num_assigned = $db->select('count');
         unset($db);
 

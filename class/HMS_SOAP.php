@@ -36,8 +36,9 @@ class HMS_SOAP{
         $student = HMS_SOAP::get_student_info($username);
 
         $person['gender'] = $student->gender;
-        $person['class'] = $student->projected_class;
-        if($student->student_type == 'F')
+        $person['class']  = $student->projected_class;
+        $person['type']   = $student->student_type;
+        if($student->student_type == 'F' && $student->credhrs_completed == 0)
             $person['class'] = "NFR";
 
         return $person;

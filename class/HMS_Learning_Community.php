@@ -309,6 +309,8 @@ class HMS_Learning_Community
 
                 $tags['VIEW_APP']       = './index.php?module=hms&type=rlc&op=view_rlc_application&username='.$user['asu_username'];
 
+                $tags['ACTIONS']        = '<a href="./index.php?module=hms&type=rlc&op=confirm_remove_from_rlc&username='.$user['asu_username'].'">Remove</a>';
+
                 $new_tpl['ROWS'] .= PHPWS_Template::processTemplate($tags, 'hms', 'admin/full_name_gender_email.tpl');
             }
             $content = PHPWS_Template::processTemplate($new_tpl, 'hms', 'admin/rlc_roster_table.tpl');
@@ -319,6 +321,63 @@ class HMS_Learning_Community
         $tpl['MESSAGE'] = $content;
         $tpl['MENU_LINK'] = PHPWS_Text::secureLink(_('Return to Maintenance'), 'hms', array('type'=>'maintenance', 'op'=>'show_maintenance_options'));
         return PHPWS_Template::processTemplate($tpl, 'hms', 'admin/rlc_roster.tpl');
+    }
+
+    /*
+     * Verify that the user actually wants to remove this student from an RLC
+     */
+    function confirm_remove_from_rlc()
+    {
+        $db = &new PHPWS_DB('hms_learning_communities');
+        $db->addColumn('hms_learning_communities.community_name');
+        $db->addColumn('hms_learning_communities.id', NULL, 'rlc_id');
+        $db->addColumn('hms_learning_community_assignment.id', NULL, 'ass_id');
+        $db->addWhere('hms_learning_communities.id', 'hms_learning_community_assignment.rlc_id');
+        $db->addWhere('hms_learning_community_assignment.asu_username', $_REQUEST['username']);
+        $result = $db->select('row');
+
+        PHPWS_Core::initCoreClass('Form.php');
+        $form = &new PHPWS_Form;
+
+        $form->addHidden('module', 'hms');
+        $form->addHidden('type', 'rlc');
+        $form->addHidden('op', 'perform_remove_from_rlc');
+        $form->addHidden('username', $_REQUEST['username']);
+        $form->addHidden('assignment', $result['ass_id']);
+        $form->addHidden('rlc', $result['rlc_id']);
+        $form->addSubmit('remove', _('Remove from RLC and Re-Activate Application'));
+        $form->addSubmit('cancel', _('Do Nothing'));
+
+        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+        $tpl = $form->getTemplate();
+        $tpl['NAME'] = HMS_SOAP::get_name($_REQUEST['username']);
+        $tpl['RLC'] = $result['community_name'];
+
+        return PHPWS_Template::process($tpl, 'hms', 'admin/confirm_remove_from_rlc.tpl');
+    }
+
+    /*
+     * Actually remove a user from an RLC
+     */
+    function perform_remove_from_rlc()
+    {
+        if(!isset($_REQUEST['remove']) || $_REQUEST['remove'] != "Remove from RLC and Re-Activate Application" || !isset($_REQUEST['assignment'])) {
+            return HMS_Learning_Community::view_by_rlc();
+        }
+
+        PHPWS_Core::initModClass('hms', 'HMS_RLC_Application');
+        PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment');
+
+        $db = &new PHPWS_DB('hms_learning_community_applications');
+        $db->addWhere('hms_assignment_id', $_REQUEST['assignment']);
+        $db->addValue('hms_assignment_id', null);
+        $db->update();
+
+        $db = &new PHPWS_DB('hms_learning_community_assignment');
+        $db->addWhere('id', $_REQUEST['assignment']);
+        $db->delete();
+
+        return "Deleted.";
     }
 
     /*
@@ -363,6 +422,12 @@ class HMS_Learning_Community
                 break;
             case 'view_by_rlc':
                 return HMS_Learning_Community::view_by_rlc();
+                break;
+            case 'confirm_remove_from_rlc':
+                return HMS_Learning_Community::confirm_remove_from_rlc();
+                break;
+            case 'perform_remove_from_rlc':
+                return HMS_Learning_Community::perform_remove_from_rlc();
                 break;
             default:
                 return "{$_REQUEST['op']} <br />";

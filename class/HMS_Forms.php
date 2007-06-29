@@ -255,7 +255,6 @@ class HMS_Form
 
     function get_hall_floor_room($error = NULL)
     {
-        //TODO: Add support for roommates
         $db = new PHPWS_DB('hms_residence_hall');
         $db->addColumn('id');
         $db->addColumn('hall_name');
@@ -544,6 +543,50 @@ class HMS_Form
         return $final;
     }
 
+/*    function verify_assign_floor($msg = NULL)
+    {
+        $db = &new PHPWS_DB('hms_beds');
+
+/*        $sql = "SELECT hms_beds.id AS bed_id, 
+                       hms_assignment.asu_username AS asu_username,
+                       hms_assignment.meal_option AS meal_option,
+
+        $db->addWhere('hms_beds.bedroom_id',         'hms_bedrooms.id');
+        $db->addWhere('hms_bedrooms.room_id',        'hms_room.id');
+        $db->addWhere('hms_room.floor_id',           'hms_floor.id');
+        $db->addWhere('hms_floor.building',          'hms_residence_hall.id');
+        $db->addWhere('hms_beds.deleted',             0);
+        $db->addWhere('hms_bedrooms.deleted',         0);
+        $db->addWhere('hms_room.deleted',             0);
+        $db->addWhere('hms_floor.deleted',            0);
+        $db->addWhere('hms_residence_hall.deleted',   0);
+        $db->addWhere('hms_bedrooms.is_online',       1);
+        $db->addWhere('hms_room.is_online',           1);
+        $db->addWhere('hms_floor.is_online',          1);
+        $db->addWhere('hms_residence_hall.is_online', 1);
+        
+        $db->addColumn('hms_beds.id', NULL, 'bed_id');
+
+        $db->addWhere('hms_residence_hall.id',  $_REQUEST['halls']);
+        $db->addWhere('hms_floor.floor_number', $_REQUEST['floors']);
+
+        $result = $db->select();
+
+        foreach($result as $row) {
+            // If the bed is in the request, then it needs to be assigned or updated.
+            // Otherwise we just ignore it.
+            if(isset($_REQUEST["bed__{$row['bed_id']}"]) && 
+               isset($_REQUEST["meal_option_{$row['bed_id']}"])) {
+                $bed  = $_REQUEST["bed__{$row['bed_id']}"];
+                $meal = $_REQUEST["meal_option_{$row['bed_id']}"];
+                $content .= "Bed: $bed, Meal: $meal<br />";
+
+            }
+        }
+
+        return $content;
+    }*/
+
     function verify_assign_floor()
     {
         PHPWS_Core::initCoreClass('Form.php');
@@ -563,18 +606,14 @@ class HMS_Form
                 }
                 if($uid == NULL) continue;
        
-                /**
-                 * check for valid username
-                 */
+                // check for valid username
                 $valid_username = HMS_SOAP::is_valid_student($uid);
                 if(!$valid_username) {
                     $error = "$uid is not a valid student. Please remove them from the list.<br /><br />";
                     return HMS_Form::show_assignments_by_floor($error);
                 }
             
-                /**
-                 * check to see if the room's already assigned
-                 */
+                // check to see if the room's already assigned
                 $assigned = HMS_Assignment::is_bed_assigned($bid);
                 if($assigned) {
                     $curr_occupant = HMS_Assignment::get_asu_username($bid);
@@ -587,9 +626,7 @@ class HMS_Form
 
                 }
 
-                /**
-                 * check to see if the current user is currently assigned
-                 */
+                // check to see if the current user is currently assigned
                 $assigned = HMS_Assignment::is_user_assigned($uid);
                 if($assigned) {
                     $curr_bed_id = HMS_Assignment::get_bed_id('asu_username', $uid);
@@ -599,9 +636,7 @@ class HMS_Form
                     }
                 }
 
-                /**
-                 * check room/person compatibility
-                 */
+                // check room/person compatibility
                 $db = &new PHPWS_DB('hms_room');
                 $db->addColumn('gender_type');
                 $db->addWhere('hms_beds.id', $bid);
@@ -619,10 +654,8 @@ class HMS_Form
                     return HMS_Form::show_assignments_by_floor($error);
                 }
 
-                /**
-                 * see if the person has a roommate
-                 * if a roommate exists, make sure they are going into the same room
-                 */
+                // see if the person has a roommate
+                // if a roommate exists, make sure they are going into the same room
                 PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
                 if(HMS_Roommate::has_roommates($uid)) {
                     /* from here we have to do some additional parsing.
@@ -630,7 +663,7 @@ class HMS_Form
                          make sure they're included in $_REQUEST and that it's only their roommates
                          that are placed in those beds.
                        on the same note we need to ascertain that each of their roommates is included and that
-                         no roommate is not in a bed in the room */
+                         no roommate is not in a bed in the room*/
                     $error = "$uid has roommates. Please write code to handle that.<br /><br />";
                     return HMS_Form::show_assignments_by_floor($error);
                 }
@@ -748,6 +781,12 @@ class HMS_Form
         $db->addWhere('hms_bedrooms.room_id',  'hms_room.id');
         $db->addWhere('hms_room.floor_id',     'hms_floor.id');
         $db->addWhere('hms_floor.building',    'hms_residence_hall.id');
+        $db->addWhere('hms_assignment.deleted', 0);
+        $db->addWhere('hms_beds.deleted', 0);
+        $db->addWhere('hms_bedrooms.deleted', 0);
+        $db->addWhere('hms_room.deleted', 0);
+        $db->addWhere('hms_floor.deleted', 0);
+        $db->addWhere('hms_residence_hall.deleted', 0);
         $db->addColumn('hms_assignment.asu_username');
         $db->addColumn('hms_beds.bed_letter');
         $db->addColumn('hms_bedrooms.bedroom_letter');
@@ -3555,7 +3594,10 @@ class HMS_Form
     {
         $form = &new PHPWS_Form;
         $reports = array('housing_apps'=>'Housing Applications Received',
-                         'housing_asss'=>'Housing Assignments Made');
+                         'housing_asss'=>'Housing Assignments Made',
+                         'unassd_rooms'=>'Currently Unassigned Rooms',
+                         'unassd_beds' =>'Currently Unassigned Beds',
+                         'special'     =>'Special Circumstances');
         $form->addDropBox('reports', $reports);
         $form->addSubmit('submit', _('Run Report'));
         $form->addHidden('module', 'hms');

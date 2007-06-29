@@ -464,7 +464,7 @@ class HMS_Student {
             }
             $message .= "<br /><br />";
     
-            PHPWS_Core::initModClass('hms', 'HMS_Student_Profile.php');
+/*            PHPWS_Core::initModClass('hms', 'HMS_Student_Profile.php');
             $message .= "The HMS Student Profile is optional and can be used to help you find a roommate who shares your interests. ";
             $message .= "<br />";
             $message .= PHPWS_Text::secureLink(_('Create/Edit your optional Student Profile'), 'hms', array('type'=>'student', 'op' =>'show_profile_form'));
@@ -477,12 +477,12 @@ class HMS_Student {
                 $message .= "If you know who you want to room with, you can go ahead and " . PHPWS_Text::secureLink(_('select your roommate.'), 'hms', array('type'=>'student','op'=>'get_roommate_username'));
             }
 
-            $message .= "<br /><br />";
+            $message .= "<br /><br />";*/
             $message .= 'If you need to download and print the License Agreement please ';
             $message .= '<a href="http://hms.appstate.edu/files/contract.pdf" target="_blank">click here.</a>';
             $message .= "<br /><br />";
-            $message .= PHPWS_Text::secureLink('Roommate Search Tool.', 'hms', array('type'=>'student','op'=>'show_profile_search'));
-            $message .= "<br /><br />";
+//            $message .= PHPWS_Text::secureLink('Roommate Search Tool.', 'hms', array('type'=>'student','op'=>'show_profile_search'));
+//            $message .= "<br /><br />";
             $message .= PHPWS_Text::secureLink(_('Logout'), 'users', array('action'=>'user', 'command'=>'logout'));
             $message .= "<br /><br />";
         } else {
