@@ -252,6 +252,59 @@ class HMS_Bedroom
         return $form->edit_room();
     }
 
+    function is_bedroom_empty($id)
+    {
+        $db = &new PHPWS_DB('hms_assignment');
+        $db->addColumn('id');
+        $db->addWhere('hms_assignment.bed_id', 'hms_beds.id');
+        $db->addWhere('hms_beds.bedroom_id', 'hms_bedrooms.id');
+        $db->addWhere('hms_bedrooms.id', $id);
+        $db->addWhere('hms_assignment.deleted', 0);
+        $db->addWhere('hms_beds.deleted', 0);
+        $db->addWhere('hms_bedrooms.deleted', 0);
+        $db->addWhere('hms_bedrooms.is_online', 1);
+        $result = $db->select('one');
+        return empty($result);
+    }
+
+    function static_get_number_beds($id)
+    {
+        $db = &new PHPWS_DB('hms_bedrooms');
+        $db->addColumn('number_beds');
+        $db->addWhere('id', $id);
+        return $db->select('one');
+    }
+
+    function get_other_bed($bedroom, $bed)
+    {
+        $db = &new PHPWS_DB('hms_beds');
+        $db->addColumn('id');
+        $db->addWhere('hms_beds.bedroom_id', $bedroom);
+        $db->addWhere('hms_beds.id', $bed, '!=');
+        $db->addWhere('hms_beds.deleted', 0);
+        return $db->select('one');
+    }
+
+    function determine_lifestyle_type($bedroom)
+    {
+        $db = new PHPWS_DB('hms_bedrooms');
+        $db->addColumn('hms_residence_hall.gender_type');
+        $db->addWhere('hms_bedrooms.id',$bedroom);
+        $db->addWhere('hms_bedrooms.room_id','hms_room.id');
+        $db->addWhere('hms_room.floor_id','hms_floor.id');
+        $db->addWhere('hms_floor.building','hms_residence_hall.id');
+        return $db->select('one') < 2 ? 1 : 2;
+    }
+
+    function determine_gender($bedroom)
+    {
+        $db = new PHPWS_DB('hms_bedrooms');
+        $db->addColumn('hms_room.gender_type');
+        $db->addWhere('hms_bedrooms.id',$bedroom);
+        $db->addWhere('hms_bedrooms.room_id','hms_room.id');
+        return $db->select('one');
+    }
+
     function main()
     {
         switch($_REQUEST['op'])
