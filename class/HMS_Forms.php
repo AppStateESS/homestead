@@ -570,6 +570,10 @@ class HMS_Form
         $db->addWhere('hms_residence_hall.id',  $_REQUEST['halls']);
         $db->addWhere('hms_floor.floor_number', $_REQUEST['floors']);
 
+        $db->addOrder('hms_room.displayed_room_number');
+        $db->addOrder('hms_bedrooms.bedroom_letter');
+        $db->addOrder('hms_bed.bed_letter');
+
         $result = $db->select();
 
         foreach($result as $row) {
@@ -577,9 +581,13 @@ class HMS_Form
             // Otherwise we just ignore it.
             if(isset($_REQUEST["bed__{$row['bed_id']}"]) && 
                isset($_REQUEST["meal_option_{$row['bed_id']}"])) {
-                $bed  = $_REQUEST["bed__{$row['bed_id']}"];
+                $uid  = $_REQUEST["bed__{$row['bed_id']}"];
                 $meal = $_REQUEST["meal_option_{$row['bed_id']}"];
                 $content .= "Bed: $bed, Meal: $meal<br />";
+
+                // Check for valid username
+/*                if(!HMS_SOAP::is_valid_student($uid)) {
+                    echo "
 
             }
         }
@@ -916,10 +924,16 @@ class HMS_Form
 
         $tpl = $form->getTemplate();
 
-        $tpl['FIRST_ROOMMATE']  = $grouping->get_roommate_zero();
-        $tpl['SECOND_ROOMMATE'] = $grouping->get_roommate_one();
-        $tpl['THIRD_ROOMMATE']  = $grouping->get_roommate_two();
-        $tpl['FOURTH_ROOMMATE'] = $grouping->get_roommate_three();
+        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+
+        $tpl['FIRST_ROOMMATE']   = $grouping->get_roommate_zero();
+        $tpl['FIRST_ROOMMATE']  .= ' - ' . HMS_SOAP::get_name($tpl['FIRST_ROOMMATE']);
+        $tpl['SECOND_ROOMMATE']  = $grouping->get_roommate_one();
+        $tpl['SECOND_ROOMMATE'] .= ' - ' . HMS_SOAP::get_name($tpl['SECOND_ROOMMATE']);
+        $tpl['THIRD_ROOMMATE']   = $grouping->get_roommate_two();
+        $tpl['THIRD_ROOMMATE']  .= ' - ' . HMS_SOAP::get_name($tpl['THIRD_ROOMMATE']);
+        $tpl['FOURTH_ROOMMATE']  = $grouping->get_roommate_three();
+        $tpl['FOURTH_ROOMMATE'] .= ' - ' . HMS_SOAP::get_name($tpl['FOURTH_ROOMMATE']);
 
         $final = PHPWS_Template::process($tpl, 'hms', 'admin/verify_break_roommates.tpl');
         return $final;
@@ -3593,11 +3607,14 @@ class HMS_Form
     function display_reports()
     {
         $form = &new PHPWS_Form;
-        $reports = array('housing_apps'=>'Housing Applications Received',
-                         'housing_asss'=>'Housing Assignments Made',
-                         'unassd_rooms'=>'Currently Unassigned Rooms',
-                         'unassd_beds' =>'Currently Unassigned Beds',
-                         'special'     =>'Special Circumstances');
+        $reports = array('housing_apps' =>'Housing Applications Received',
+                         'housing_asss' =>'Housing Assignments Made',
+                         'unassd_rooms' =>'Currently Unassigned Rooms',
+                         'unassd_beds'  =>'Currently Unassigned Beds',
+                         'reqd_roommate'=>'Unconfirmed Roommates',
+                         'assd_alpha'   =>'Assigned Students',
+                         'special'      =>'Special Circumstances',
+                         'hall_structs' =>'Hall Structures');
         $form->addDropBox('reports', $reports);
         $form->addSubmit('submit', _('Run Report'));
         $form->addHidden('module', 'hms');

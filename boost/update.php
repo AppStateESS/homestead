@@ -449,10 +449,16 @@ function hms_update(&$content, $currentVersion)
             $files = array();
             $files[] = 'templates/admin/full_name_gender_email.tpl';
             $files[] = 'templates/admin/rlc_roster_table.tpl';
+            $files[] = 'templates/admin/maintenance.tpl';
+            $files[] = 'templates/admin/verify_break_roommates.tpl';
+            $files[] = 'templates/admin/confirm_remove_from_rlc.tpl';
             PHPWS_Boost::updateFiles($files, 'hms');
 
             $content[] = '+ Fixed numerous bugs that arrived with the _deleted_ flag';
             $content[] = '+ Added the ability to review RLC Applications after assignment';
+            $content[] = '+ Fixed error reporting for assigning students to nonexistent rooms';
+            $content[] = '+ Re-instated the ability to create and break roommates';
+            $content[] = '+ Auto Assignment';
     }
 
     return TRUE;
