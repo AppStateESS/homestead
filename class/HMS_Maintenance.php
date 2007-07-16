@@ -189,7 +189,7 @@ class HMS_Maintenance
 
         if(Current_User::allow('hms', 'delete_assignment') || Current_User::allow('hms', 'admin'))
             $tpl['DELETE_ASSIGNMENT'] = PHPWS_Text::secureLink(_('Delete Room Assignment'), 'hms', array('type'=>'assignment', 'op'=>'begin_delete_assignment'));
-/*
+
         if(Current_User::allow('hms', 'roommate_maintenance') || Current_User::allow('hms', 'admin'))
             $tpl['ROOMMATE_LABEL'] = "Roommate Maintenance";
 
@@ -198,7 +198,29 @@ class HMS_Maintenance
 
         if(Current_User::allow('hms', 'edit_roommate_group') || Current_User::allow('hms', 'admin'))
             $tpl['EDIT_ROOMMATE_GROUP'] = PHPWS_Text::secureLink(_('Edit roommate group'), 'hms', array('type'=>'roommate', 'op'=>'get_username_for_edit_grouping'));
-*/
+
+        if(Current_User::allow('hms', 'assignment_maintenance') || Current_User::allow('hms', 'admin'))
+            $tpl['AUTOASSIGN_LABEL'] = "Auto-Assignment";
+
+        if(Current_User::allow('hms', 'assignment_maintenance') || Current_User::allow('hms', 'admin'))
+            $tpl['FILL_QUEUE'] = PHPWS_Text::secureLink(
+                _('Fill Assignment Queue'), 'hms',
+                array('type'=>'autoassign', 'op'=>'fill'));
+
+        if(Current_User::allow('hms', 'assignment_maintenance') || Current_User::allow('hms', 'admin'))
+            $tpl['VIEW_QUEUE'] = PHPWS_Text::secureLink(
+                _('View Assignment Queue'), 'hms',
+                array('type'=>'autoassign', 'op'=>'view'));
+
+        if(Current_User::allow('hms', 'assignment_maintenance') || Current_User::allow('hms', 'admin'))
+            $tpl['CLEAR_QUEUE'] = PHPWS_Text::secureLink(
+                _('Clear Assignment Queue'), 'hms',
+                array('type'=>'autoassign', 'op'=>'clear'));
+
+        if(Current_User::allow('hms', 'assignment_maintenance') || Current_User::allow('hms', 'admin'))
+            $tpl['ASSIGN'] = PHPWS_Text::secureLink(
+                _('Auto-Assign'), 'hms',
+                array('type'=>'autoassign', 'op'=>'assign'));
 
        $content = PHPWS_Template::process($tpl, 'hms', 'admin/maintenance.tpl');
         return $content;
