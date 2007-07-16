@@ -446,6 +446,12 @@ function hms_update(&$content, $currentVersion)
             $content[] = '+ Added roommate status to the student search results.';
 
         case version_compare($currentVersion, '0.1.25', '<'):
+            $db = &new PHPWS_DB;
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_1_25.sql');
+            if(PEAR::isError($result)) {
+                return $result;
+            }
+
             $files = array();
             $files[] = 'templates/admin/full_name_gender_email.tpl';
             $files[] = 'templates/admin/rlc_roster_table.tpl';
