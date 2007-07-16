@@ -201,7 +201,7 @@ class HMS_Student {
 
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
         $student_info = HMS_SOAP::get_student_info($_REQUEST['username']);
-       
+
         $tpl['MENU_LINK'] = PHPWS_Text::secureLink(_('Return to Search'), 'hms', array('type'=>'student', 'op'=>'enter_student_search_data'));
         $tpl['FIRST_NAME'] = $student_info->first_name;
         $tpl['MIDDLE_NAME'] = $student_info->middle_name;
@@ -212,7 +212,7 @@ class HMS_Student {
         } else if ($student_info->gender == 'M') {
             $tpl['GENDER'] = "Male";
         } else {
-            $tpl['GENDER'] = "Unknown";
+            $tpl['GENDER'] = "Unknown ({$student_info->gender})";
         }
 
         $tpl['DOB'] = $student_info->dob;
@@ -226,7 +226,7 @@ class HMS_Student {
         } else if ($student_info->projected_class == 'SR') {
             $tpl['CLASS'] = "Senior";
         } else {
-            $tpl['CLASS'] = "Unknown";
+            $tpl['CLASS'] = "Unknown ({$student_info->projected_class})";
         }
 
         $tpl['ADDRESS_L1'] = $student_info->address->line1;
