@@ -3613,8 +3613,10 @@ class HMS_Form
                          'unassd_beds'  =>'Currently Unassigned Beds',
                          'reqd_roommate'=>'Unconfirmed Roommates',
                          'assd_alpha'   =>'Assigned Students',
-                         'special'      =>'Special Circumstances',
-                         'hall_structs' =>'Hall Structures');
+/*                         'special'      =>'Special Circumstances',
+                         'hall_structs' =>'Hall Structures');*/
+                         'unassd_apps'  =>'Unassigned Applicants',
+                         'no_ban_data'  =>'Students Without Banner Data');
         $form->addDropBox('reports', $reports);
         $form->addSubmit('submit', _('Run Report'));
         $form->addHidden('module', 'hms');

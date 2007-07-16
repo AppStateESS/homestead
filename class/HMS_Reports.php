@@ -36,6 +36,12 @@ class HMS_Reports{
             case 'hall_structs':
                 return HMS_Reports::display_hall_structures();
                 break;
+            case 'unassd_apps':
+                return HMS_Reports::run_unassigned_applicants_report();
+                break;
+            case 'no_ban_data':
+                return HMS_Reports::run_no_banner_data_report();
+                break;
             default:
                 return "ugh";
                 break;
@@ -851,7 +857,67 @@ class HMS_Reports{
         return $content;
     }
 
-    function main(){
+    function run_unassigned_applicants_report()
+    {
+        $sql = "
+            SELECT hms_student_id AS user,
+                   student_status AS status,
+                   gender         AS gender
+            FROM hms_application
+            LEFT OUTER JOIN hms_assignment
+            ON hms_assignment.asu_username = hms_application.hms_student_id
+            WHERE hms_assignment.asu_username IS NULL
+            ORDER BY hms_student_id
+        ";
+        $results = PHPWS_DB::getAll($sql);
+        if(PHPWS_Error::isError($results)) {
+            test($results,1);
+        }
+
+        $content = "<h2>Unassigned Applicants</h2><br />";
+
+        PHPWS_Core::initModClass('hms','HMS_SOAP.php');
+        foreach($results as $row) {
+            $student = HMS_SOAP::get_student_info($row['user']);
+            $app = PHPWS_Text::secureLink($row['user'], 'hms',
+                array('type'    => 'student',
+                      'op'      => 'view_housing_application',
+                      'student' => $row['user']));
+            $content .= "($app) " . $student->last_name . ", " .
+                        $student->first_name . " " .
+                        $student->middle_name . " [" .
+                        ($row['gender'] == 0 ? "Female, " : "Male, ") .
+                        ($row['status'] == 1 ? "Freshman" : "Transfer") .
+                        "]<br />";
+        }
+
+        return $content;
+    }
+
+    function run_no_banner_data_report()
+    {
+        $db = new PHPWS_DB('hms_application');
+        $db->addColumn('hms_student_id');
+        $db->addOrder('hms_student_id');
+        $results = $db->select();
+        if(PHPWS_Error::isError($results)) {
+            test($results,1);
+        }
+
+        $content = "<h2>Students With No Banner Data</h2><br />";
+
+        PHPWS_Core::initModClass('hms','HMS_SOAP.php');
+        foreach($results as $row) {
+            if(!HMS_SOAP::is_valid_student($row['hms_student_id'])) {
+                $content .= $row['hms_student_id'] . '<br />';
+            }
+        }
+
+        return $content;
+    }
+
+    function main()
+    {
         $op = $_REQUEST['op'];
         switch($op){
             case 'display_reports':
