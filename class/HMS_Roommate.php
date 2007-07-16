@@ -256,7 +256,25 @@ class HMS_Roommate
             PHPWS_Error::log($result);
             return "There was an error. Please check the logs.";
         } else {
-            $msg = "This group was successfully saved. <br /><br />";
+            $msg = "The following students are now grouped as roommates:<br /><br />";
+            
+            $msg .= $_REQUEST['first_roommate'] . " - ";
+            $msg .= HMS_SOAP::get_name($_REQUEST['first_roommate']) . "<br />";
+
+            $msg .= $_REQUEST['second_roommate'] . " - ";
+            $msg .= HMS_SOAP::get_name($_REQUEST['second_roommate']) . "<br />";
+
+            if(isset($_REQUEST['third_roommate']) && $_REQUEST['third_roommate'] != NULL) {
+                $msg .= $_REQUEST['third_roommate'] . " - ";
+                $msg .= HMS_SOAP::get_name($_REQUEST['third_roommate']) . "<br />";
+            }
+
+            if(isset($_REQUEST['fourth_roommate']) && $_REQUEST['fourth_roommate'] != NULL) {
+                $msg .= $_REQUEST['fourth_roommate'] . " - ";
+                $msg .= HMS_SOAP::get_name($_REQUEST['fourth_roommate']) . "<br />";
+            }
+
+            $msg .= "<br />";
             $msg .= PHPWS_Text::secureLink(_('Create new roommate group'), 'hms', array('type'=>'roommate', 'op'=>'get_usernames_for_new_grouping')) . "<br /><br />";
             $msg .= PHPWS_Text::secureLink(_('Edit roommate group'), 'hms', array('type'=>'roommate', 'op'=>'get_username_for_edit_grouping'));
             return $msg;
@@ -363,7 +381,7 @@ class HMS_Roommate
             return true;
         }
     }
-     
+
     /**
      * "main" function for the Roommate class
      * Checks the desired operation and calls the necessary functions
