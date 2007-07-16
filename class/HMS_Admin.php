@@ -101,6 +101,10 @@ class HMS_Admin
                 PHPWS_Core::initModClass('hms', 'HMS_Reports.php');
                 $final = HMS_Reports::main();
                 break;
+            case 'autoassign':
+                PHPWS_Core::initModClass('hms', 'HMS_Pending_Assignment.php');
+                $final = HMS_Pending_Assignment::main();
+                break;
             default:
                 PHPWS_Core::initModClass('hms', 'HMS_Display.php');
                 $final = HMS_Display::main();
