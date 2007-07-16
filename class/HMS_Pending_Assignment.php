@@ -69,10 +69,15 @@ class HMS_Pending_Assignment
     function eligible_for_queue($ass)
     {
         if(empty($ass) || is_null($ass) || !isset($ass)) return FALSE;
-        return !(
-            HMS_Assignment::check_for_assignment($ass)
-            ||
-            HMS_Pending_Assignment::is_pending($ass));
+
+        if(HMS_Assignment::check_for_assignment($ass)) return FALSE;
+
+        if(HMS_Pending_Assignment::is_pending($ass)) return FALSE;
+
+        PHPWS_Core::initModClass('hms','HMS_SOAP.php');
+        if(!HMS_SOAP::is_valid_student($ass)) return FALSE;
+
+        return TRUE;
     }
 
     function is_pending($ass)
@@ -106,6 +111,7 @@ class HMS_Pending_Assignment
     function auto_pair()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
+        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
 
         $gender_no_roommate[0] = 0;
         $gender_no_roommate[1] = 0;
@@ -124,7 +130,9 @@ class HMS_Pending_Assignment
                    zero.lifestyle_option AS zero_lifestyle_option,
                    one.lifestyle_option  AS one_lifestyle_option,
                    zero.meal_option      AS zero_meal_option,
-                   one.meal_option       AS one_meal_option
+                   one.meal_option       AS one_meal_option,
+                   zero.student_status   AS zero_student_status,
+                   one.student_status    AS one_student_status
             FROM hms_roommates,
                  hms_application AS zero,
                  hms_application AS one
@@ -142,10 +150,12 @@ class HMS_Pending_Assignment
             $zero['gender']           = $result['zero_gender'];
             $zero['lifestyle_option'] = $result['zero_lifestyle_option'];
             $zero['meal_option']      = $result['zero_meal_option'];
+            $zero['student_status']   = $result['zero_student_status'];
             $one['hms_student_id']    = $result['roommate_one'];
             $one['gender']            = $result['one_gender'];
             $one['lifestyle_option']  = $result['one_lifestyle_option'];
             $one['meal_option']       = $result['one_meal_option'];
+            $one['student_status']    = $result['one_student_status'];
 
             if(!HMS_Pending_Assignment::eligible_for_queue($zero['hms_student_id'])) {
                 continue;
@@ -155,8 +165,27 @@ class HMS_Pending_Assignment
                 continue;
             }
 
+            if($zero['student_status'] != 1 && $one['student_status'] != 1) {
+                continue;
+            }
+
+            if($zero['student_status'] != 1 || $one['student_status'] != 1) {
+                $issues[] = '(' . $zero['hms_student_id'] . ') ' .
+                            HMS_SOAP::get_name($zero['hms_student_id']) .
+                            ' and ' .
+                            '(' . $one['hms_student_id'] . ') ' .
+                            HMS_SOAP::get_name($one['hms_student_id']) .
+                            ' are requested roommates, but one is a transfer student.  Skipping assignment.';
+                continue;
+            }
+
             if($zero['gender'] != $one['gender']) {
-                $issues[] = $zero['hms_student_id'] . ' and ' . $one['hms_student_id'] . ' are listed as requested roommates, although their genders are different.  Skipping assignment.';
+                $issues[] = '(' . $zero['hms_student_id'] . ') ' .
+                            HMS_SOAP::get_name($zero['hms_student_id']) .
+                            ' and ' .
+                            '(' . $one['hms_student_id'] . ') ' .
+                            HMS_SOAP::get_name($one['hms_student_id']) .
+                            ' are requested roommates, but their genders are different.  Skipping assignment.';
                 continue;
             }
 
@@ -172,6 +201,7 @@ class HMS_Pending_Assignment
         $db->addColumn('room_condition');
         $db->addColumn('hms_student_id');
         $db->addColumn('meal_option');
+        $db->addWhere('student_status',1);
         $db->addOrder('gender');
         $db->addOrder('lifestyle_option');
         $db->addOrder('preferred_bedtime');
@@ -212,9 +242,18 @@ class HMS_Pending_Assignment
                     }
                     $one = $results[$j];
                 } while(!HMS_Pending_Assignment::eligible_for_queue($one['hms_student_id']));
-                HMS_Pending_Assignment::add($zero,$one,FALSE);
-                $i = $j + 1;
-                $j = $i + 1;
+                if($zero['gender'] != $one['gender']) {
+                    HMS_Pending_Assignment::add($zero,NULL,FALSE);
+                    $gender_no_roommate[$zero['gender']]++;
+                    $issues[] = $zero['hms_student_id'] . ' has no roommate';
+
+                    $i = $j;
+                    $j = $i + 1;
+                } else {
+                    HMS_Pending_Assignment::add($zero,$one,FALSE);
+                    $i = $j + 1;
+                    $j = $i + 1;
+                }
                 continue;
             }
 
@@ -314,13 +353,13 @@ class HMS_Pending_Assignment
             $content .= '(' . $result['roommate_zero'] . ') ' .
                 HMS_SOAP::get_name($result['roommate_zero']) .
                 '</td>';
-
+            $content .= '<td>';
             if(!empty($result['roommate_one'])) {
                 $content .=
-                    '<td>(' . $result['roommate_one'] . ') ' .
-                    HMS_SOAP::get_name($result['roommate_one']) .
-                    '</td>';
+                    '(' . $result['roommate_one'] . ') ' .
+                    HMS_SOAP::get_name($result['roommate_one']);
             }
+            $content .= '</td>';
             $content .= '<td>' .
                 ($result['gender'] == 0 ? 'Female' : 'Male') .
                 '</td>';
@@ -354,6 +393,7 @@ class HMS_Pending_Assignment
         $db = new PHPWS_DB('hms_pending_assignment');
         $db->addWhere('gender',$FEMALE);
         $db->addWhere('lifestyle_option',$SINGLE);
+        $db->addOrder('chosen desc');
         $db->addOrder('random');
         $pending_sg_f = $db->select();
         if(PHPWS_Error::isError($pending_sg_f)) {
@@ -364,6 +404,7 @@ class HMS_Pending_Assignment
         $db = new PHPWS_DB('hms_pending_assignment');
         $db->addWhere('gender', $FEMALE);
         $db->addWhere('lifestyle_option',$COED);
+        $db->addOrder('chosen desc');
         $db->addOrder('random');
         $pending_ce_f = $db->select();
         if(PHPWS_Error::isError($pending_ce_f)) {
@@ -374,6 +415,7 @@ class HMS_Pending_Assignment
         $db = new PHPWS_DB('hms_pending_assignment');
         $db->addWhere('gender', $MALE);
         $db->addWhere('lifestyle_option',$SINGLE);
+        $db->addOrder('chosen desc');
         $db->addOrder('random');
         $pending_sg_m = $db->select();
         if(PHPWS_Error::isError($pending_sg_m)) {
@@ -384,6 +426,7 @@ class HMS_Pending_Assignment
         $db = new PHPWS_DB('hms_pending_assignment');
         $db->addWhere('gender',$MALE);
         $db->addWhere('lifestyle_option',$COED);
+        $db->addWhere('chosen desc');
         $db->addOrder('random');
         $pending_ce_m = $db->select();
         if(PHPWS_Error::isError($pending_ce_m)) {
@@ -401,8 +444,12 @@ class HMS_Pending_Assignment
         $db->addWhere('hms_beds.deleted',0);
         $db->addWhere('hms_bedrooms.deleted',0);
         $db->addWhere('hms_bedrooms.is_online',1);
+        $db->addWhere('hms_bedrooms.is_medical',0);
+        $db->addWhere('hms_bedrooms.is_reserved',0);
         $db->addWhere('hms_room.deleted',0);
         $db->addWhere('hms_room.is_online',1);
+        $db->addWhere('hms_room.is_medical',0);
+        $db->addWhere('hms_room.is_reserved',0);
         $db->addWhere('hms_floor.deleted',0);
         $db->addWhere('hms_floor.is_online',1);
         $db->addWhere('hms_residence_hall.deleted',0);
@@ -417,7 +464,7 @@ class HMS_Pending_Assignment
         $index_sg_m = 0;
         $index_ce_m = 0;
 
-        $badbeds[] = array();
+        $badbeds = array();
 
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
         PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
