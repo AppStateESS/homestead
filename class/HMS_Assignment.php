@@ -563,6 +563,128 @@ class HMS_Assignment
         }
     }
 
+    function generate_student_assignment_data()
+    {
+        $sql = "
+SELECT hms_assignment.asu_username,
+       hms_room.displayed_room_number,
+       hms_residence_hall.hall_name
+
+FROM hms_room,
+     hms_residence_hall,
+     hms_beds,
+     hms_bedrooms,
+     hms_floor,
+     hms_assignment
+
+WHERE hms_assignment.bed_id = hms_beds.id           AND
+      hms_beds.bedroom_id   = hms_bedrooms.id       AND
+      hms_bedrooms.room_id  = hms_room.id           AND
+      hms_room.floor_id     = hms_floor.id          AND
+      hms_floor.building    = hms_residence_hall.id AND
+
+      hms_assignment.deleted     = 0 AND
+      hms_beds.deleted           = 0 AND
+      hms_bedrooms.deleted       = 0 AND
+      hms_room.deleted           = 0 AND
+      hms_floor.deleted          = 0 AND
+      hms_residence_hall.deleted = 0 AND
+
+      hms_bedrooms.is_online       = 1 AND
+      hms_room.is_online           = 1 AND
+      hms_floor.is_online          = 1 AND
+      hms_residence_hall.is_online = 1";
+
+        $results = PHPWS_DB::getAll($sql);
+
+        if(PHPWS_Error::isError($results)) {
+            test($results, 1);
+        }
+
+        $db = &new PHPWS_DB('hms_cached_student_info');
+        $err = $db->delete();
+
+        if(PHPWS_Error::isError($err)) {
+            test($err, 1);
+        }
+
+        echo "Crude Progress Bar:<br />";
+
+        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+        $total = count($results);
+        $count = 0;
+        $whole = 1;
+        foreach($results as $row) {
+            $db = &new PHPWS_DB('hms_cached_student_info');
+            $db->addValue('asu_username', $row['asu_username']);
+            $db->addValue('room_number', $row['displayed_room_number']);
+            $db->addValue('hall_name', $row['hall_name']);
+            
+            $student = HMS_SOAP::get_student_info($row['asu_username']);
+            $db->addValue('first_name', $student->first_name);
+            $db->addValue('middle_name', $student->middle_name);
+            $db->addValue('last_name', $student->last_name);
+            $db->addValue('address1', $student->address->line1);
+            $db->addValue('address2', $student->address->line2);
+            $db->addValue('address3', $student->address->line3);
+            $db->addValue('city', $student->address->city);
+            $db->addValue('state', $student->address->state);
+            $db->addValue('zip', $student->address->zip);
+            if(isset($student->phone) && !empty($student->phone)) {
+                $number = $student->phone->area_code;
+                $number .= '-';
+                $number .= $student->phone->number;
+                if(!empty($student->phone->ext)) {
+                    $number .= ' x'.$student->phone->ext;
+                }
+                $db->addValue('phone_number', $number);
+            }
+
+            // TODO: Make this work
+/*            if(strtolower($row['roommate_zero']) ==
+               strtolower($row['asu_username'])) {
+                $mate = HMS_SOAP::get_student_info($row['roommate_one']);
+            } else if(strtolower($row['roommate_one']) ==
+                      strtolower($row['asu_username'])) {
+                $mate = HMS_SOAP::get_student_info($row['roommate_zero']);
+            }
+            if(isset($mate)) {
+                $db->addValue('roommate_name', 
+                    $mate->first_name . ' ' .
+                    $mate->middle_name . ' ' .
+                    $mate->last_name);
+                $db->addValue('roommate_number',
+                    $mate->phone['area_code'] . '-' .
+                    substr($mate->phone['number'],0,3) . '-'.
+                    substr($mate->phone['number'],3,4) .
+                    $mate->phone['ext'] ? ' x'.$mate->phone['ext']:'');
+            }*/
+
+            // TODO: Room Phone Number
+            $db->addValue('room_phone', '');
+
+            // Banner Crap
+            $db->addValue('gender', $student->gender);
+            $db->addValue('student_type', $student->student_type);
+            $db->addValue('class', $student->projected_class);
+            $db->addValue('credit_hours', $student->credhrs_completed);
+            $db->addValue('deposit_date', $student->deposit_date);
+            $db->addValue('deposit_waived', $student->deposit_waived);
+
+            $err = $db->insert();
+            if(PHPWS_Error::isError($err)) {
+                test($err, 1);
+            }
+
+            $percent = ((++$count / $total) * 100);
+            if($percent >= $whole) {
+                echo $whole++ . '%... ';
+                ob_flush();
+                flush();
+            }
+        }
+    }
+
     function main()
     {
         $op = $_REQUEST['op'];
