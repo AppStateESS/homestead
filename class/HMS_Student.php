@@ -202,6 +202,8 @@ class HMS_Student {
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
         $student_info = HMS_SOAP::get_student_info($_REQUEST['username']);
 
+//        test($student_info);
+
         $tpl['MENU_LINK'] = PHPWS_Text::secureLink(_('Return to Search'), 'hms', array('type'=>'student', 'op'=>'enter_student_search_data'));
         $tpl['FIRST_NAME'] = $student_info->first_name;
         $tpl['MIDDLE_NAME'] = $student_info->middle_name;

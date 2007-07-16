@@ -42,6 +42,9 @@ class HMS_Reports{
             case 'no_ban_data':
                 return HMS_Reports::run_no_banner_data_report();
                 break;
+            case 'no_deposit':
+                return HMS_Reports::run_no_deposit_report();
+                break;
             default:
                 return "ugh";
                 break;
@@ -912,6 +915,39 @@ class HMS_Reports{
                 $content .= $row['hms_student_id'] . '<br />';
             }
         }
+
+        return $content;
+    }
+
+    function run_no_deposit_report()
+    {
+        $db = new PHPWS_DB('hms_assignment');
+        $db->addColumn('asu_username');
+        $db->addOrder('asu_username');
+        $results = $db->select();
+        if(PHPWS_Error::isError($results)) {
+            test($results,1);
+        }
+
+        $content = "<h2>Assigned Students with No Deposit</h2><br />";
+
+        PHPWS_Core::initModClass('hms','HMS_SOAP.php');
+        $count = 0;
+        foreach($results as $row) {
+            $student = HMS_SOAP::get_student_info($row['asu_username']);
+/*            if($student->deposit_waived)
+                continue;*/
+
+            if(isset($student->deposit_date))
+                continue;
+
+            $content .= "(" . $row['asu_username'] . ") " .
+                        $student->last_name        . ", " .
+                        $student->first_name       . " "  .
+                        $student->middle_name      . "<br />";
+            $count++;
+        }
+        $content .= '<br />Total Count: ' . $count;
 
         return $content;
     }
