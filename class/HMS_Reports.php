@@ -910,9 +910,18 @@ class HMS_Reports{
         $content = "<h2>Students With No Banner Data</h2><br />";
 
         PHPWS_Core::initModClass('hms','HMS_SOAP.php');
+        $count = 0;
+        $whole = 0;
         foreach($results as $row) {
             if(!HMS_SOAP::is_valid_student($row['hms_student_id'])) {
                 $content .= $row['hms_student_id'] . '<br />';
+            }
+
+            $percent = ((++$count / $total) * 100);
+            if($percent >= $whole) {
+                echo $whole++ . '%... ';
+                ob_flush();
+                flush();
             }
         }
 
@@ -932,22 +941,59 @@ class HMS_Reports{
         $content = "<h2>Assigned Students with No Deposit</h2><br />";
 
         PHPWS_Core::initModClass('hms','HMS_SOAP.php');
+
+        $waivers = array();
+        $no_date = array();
+        $not_both = array();
+
         $count = 0;
         foreach($results as $row) {
             $student = HMS_SOAP::get_student_info($row['asu_username']);
-/*            if($student->deposit_waived)
-                continue;*/
+            if($student->deposit_waived)
+                $waivers[] = "(" . $row['asu_username']  . ") " .
+                                   $student->last_name   . ", " .
+                                   $student->first_name  . " "  .
+                                   $student->middle_name . "<br />";
+               continue;
 
             if(isset($student->deposit_date))
                 continue;
+            else
+                $no_date[] = "(" . $row['asu_username']  . ") " .
+                                   $student->last_name   . ", " .
+                                   $student->first_name  . " "  .
+                                   $student->middle_name . "<br />";
 
-            $content .= "(" . $row['asu_username'] . ") " .
-                        $student->last_name        . ", " .
-                        $student->first_name       . " "  .
-                        $student->middle_name      . "<br />";
-            $count++;
+            $not_both[] = "(" . $row['asu_username']  . ") " .
+                                $student->last_name   . ", " .
+                                $student->first_name  . " "  .
+                                $student->middle_name . "<br />";
+
+            $percent = ((++$count / $total) * 100);
+            if($percent >= $whole) {
+                echo $whole++ . '%... ';
+                ob_flush();
+                flush();
+            }
         }
-        $content .= '<br />Total Count: ' . $count;
+        $content .= "<h3>Deposit Waived</h3>";
+        foreach($waivers as $waiver) {
+            $content .= $waiver . '<br />';
+        }
+
+        $content .= "<br /><h3>No Deposit Date</h3>";
+        foreach($no_date as $blah) {
+            $content .= $blah . '<br />';
+        }
+
+        $content .= "<br /><h3>Really Have No Deposit</h3>";
+        foreach($not_both as $blah) {
+            $content .= $blah . '<br />';
+        }
+
+        $content .= '<br />Waived Count: ' . count($waivers);
+        $content .= '<br />No Date Count: ' . count($no_date);
+        $content .= '<br />No Deposit Count: ' . count($not_both);
 
         return $content;
     }
