@@ -465,6 +465,16 @@ function hms_update(&$content, $currentVersion)
             $content[] = '+ Fixed error reporting for assigning students to nonexistent rooms';
             $content[] = '+ Re-instated the ability to create and break roommates';
             $content[] = '+ Auto Assignment';
+
+        case version_compare($currentVersion, '0.1.26', '<'):
+            $db = &new PHPWS_DB;
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_1_26.sql');
+            if(PEAR::isError($result)) {
+                return $result;
+            }
+            
+            $content[] = '+ Letters are ready!';
+
     }
 
     return TRUE;

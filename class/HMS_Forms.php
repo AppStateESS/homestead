@@ -3617,7 +3617,8 @@ class HMS_Form
                          'hall_structs' =>'Hall Structures');*/
                          'unassd_apps'  =>'Unassigned Applicants',
                          'no_ban_data'  =>'Students Without Banner Data',
-                         'no_deposit'   =>'Assigned Students with No Deposit');
+                         'no_deposit'   =>'Assigned Students with No Deposit',
+                         'bad_type'     =>'Assigned Students Withdrawn or with Bad Type');
         $form->addDropBox('reports', $reports);
         $form->addSubmit('submit', _('Run Report'));
         $form->addHidden('module', 'hms');

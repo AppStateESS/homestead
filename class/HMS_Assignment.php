@@ -567,7 +567,11 @@ class HMS_Assignment
     {
         $sql = "
 SELECT hms_assignment.asu_username,
+       hms_beds.phone_number,
        hms_room.displayed_room_number,
+       hms_room.id as room_id,
+       hms_floor.ft_movein,
+       hms_floor.c_movein,
        hms_residence_hall.hall_name
 
 FROM hms_room,
@@ -621,15 +625,18 @@ WHERE hms_assignment.bed_id = hms_beds.id           AND
             $db->addValue('hall_name', $row['hall_name']);
             
             $student = HMS_SOAP::get_student_info($row['asu_username']);
+
+            $address = HMS_SOAP::get_for_realz_address($student);
+            
             $db->addValue('first_name', $student->first_name);
             $db->addValue('middle_name', $student->middle_name);
             $db->addValue('last_name', $student->last_name);
-            $db->addValue('address1', $student->address->line1);
-            $db->addValue('address2', $student->address->line2);
-            $db->addValue('address3', $student->address->line3);
-            $db->addValue('city', $student->address->city);
-            $db->addValue('state', $student->address->state);
-            $db->addValue('zip', $student->address->zip);
+            $db->addValue('address1', $address->line1);
+            $db->addValue('address2', $address->line2);
+            $db->addValue('address3', $address->line3);
+            $db->addValue('city', $address->city);
+            $db->addValue('state', $address->state);
+            $db->addValue('zip', $address->zip);
             if(isset($student->phone) && !empty($student->phone)) {
                 $number = $student->phone->area_code;
                 $number .= '-';
@@ -640,28 +647,40 @@ WHERE hms_assignment.bed_id = hms_beds.id           AND
                 $db->addValue('phone_number', $number);
             }
 
-            // TODO: Make this work
-/*            if(strtolower($row['roommate_zero']) ==
-               strtolower($row['asu_username'])) {
-                $mate = HMS_SOAP::get_student_info($row['roommate_one']);
-            } else if(strtolower($row['roommate_one']) ==
-                      strtolower($row['asu_username'])) {
-                $mate = HMS_SOAP::get_student_info($row['roommate_zero']);
+            // Roommates
+            $sql = "
+                SELECT asu_username
+                FROM hms_bedrooms,
+                     hms_beds
+                LEFT OUTER JOIN hms_assignment
+                ON hms_assignment.bed_id = hms_beds.id
+                WHERE hms_beds.bedroom_id  = hms_bedrooms.id AND
+                      hms_bedrooms.room_id = {$row['room_id']}
+            ";
+            $mates = PHPWS_DB::getAll($sql);
+            if(PHPWS_Error::isError($mates)) {
+                test($mates,1);
             }
-            if(isset($mate)) {
-                $db->addValue('roommate_name', 
-                    $mate->first_name . ' ' .
-                    $mate->middle_name . ' ' .
-                    $mate->last_name);
-                $db->addValue('roommate_number',
-                    $mate->phone['area_code'] . '-' .
-                    substr($mate->phone['number'],0,3) . '-'.
-                    substr($mate->phone['number'],3,4) .
-                    $mate->phone['ext'] ? ' x'.$mate->phone['ext']:'');
-            }*/
 
-            // TODO: Room Phone Number
-            $db->addValue('room_phone', '');
+            foreach($mates as $mate) {
+                if(empty($mate['asu_username']))
+                    continue;
+                if(strtolower($mate['asu_username']) ==
+                   strtolower($row['asu_username']))
+                    continue;
+
+                $roommate = HMS_SOAP::get_student_info($mate['asu_username']);
+                $db->addValue('roommate_name',
+                    $roommate->last_name . ', ' .
+                    $roommate->first_name . ' ' .
+                    $roommate->middle_name);
+                $db->addValue('roommate_user',
+                    $mate['asu_username']);
+                break;
+            }
+
+            // Room Phone Number
+            $db->addValue('room_phone', '828-262-' . $row['phone_number']);
 
             // Banner Crap
             $db->addValue('gender', $student->gender);
@@ -670,6 +689,14 @@ WHERE hms_assignment.bed_id = hms_beds.id           AND
             $db->addValue('credit_hours', $student->credhrs_completed);
             $db->addValue('deposit_date', $student->deposit_date);
             $db->addValue('deposit_waived', $student->deposit_waived);
+
+            if($student->student_type == 'T' || ($student->student_type == 'F' && $student->credhrs_completed == 0)) {
+                $db->addValue('movein_time',
+                    $row['ft_movein'] . '   Freshmen and Transfer ONLY');
+            } else {
+                $db->addValue('movein_time',
+                    $row['c_movein'] . '   Upperclassmen ONLY');
+            }
 
             $err = $db->insert();
             if(PHPWS_Error::isError($err)) {

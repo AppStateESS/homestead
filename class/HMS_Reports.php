@@ -45,6 +45,9 @@ class HMS_Reports{
             case 'no_deposit':
                 return HMS_Reports::run_no_deposit_report();
                 break;
+            case 'bad_type':
+                return HMS_Reports::run_bad_type_report();
+                break;
             default:
                 return "ugh";
                 break;
@@ -692,9 +695,14 @@ class HMS_Reports{
             $content .= '<b>Type:</b> ' . $row['student_type'] . '<br />';
             $content .= '<b>Class:</b> ' . $row['class'] . '<br />';
             $content .= '<b>Credits:</b> ' . $row['credit_hours'] . '<br />';
+            $content .= '<b>Deposit:</b> ' . ($row['deposit_waived'] == 'true' ? "WAIVED" : $row['deposit_date']);
             
             $content .= '</td><td>';
-            $content .= $row['hall_name'] . ' ' . $row['room_number'];
+            $content .= $row['hall_name'] . ' ' . $row['room_number'] . '<br />';
+            $content .= $row['room_phone'] . '<br />';
+            $content .= $row['movein_time'] . '<br /><br />';
+            $content .= $row['roommate_name'] . '<br />';
+            $content .= $row['roommate_user'] . '@appstate.edu';
             $content .= '</td></tr>';
         }
         $content .= '</table>';
@@ -703,8 +711,7 @@ class HMS_Reports{
 
     function create_pdf_letters()
     {
-        // TODO: Implement This
-        return "Not Implemented";
+
     }
 
     function list_generated_student_assignment_data()
@@ -911,6 +918,7 @@ class HMS_Reports{
 
         PHPWS_Core::initModClass('hms','HMS_SOAP.php');
         $count = 0;
+        $total = count($results);
         $whole = 0;
         foreach($results as $row) {
             if(!HMS_SOAP::is_valid_student($row['hms_student_id'])) {
@@ -932,6 +940,7 @@ class HMS_Reports{
     {
         $db = new PHPWS_DB('hms_assignment');
         $db->addColumn('asu_username');
+        $db->addWhere('deleted',0);
         $db->addOrder('asu_username');
         $results = $db->select();
         if(PHPWS_Error::isError($results)) {
@@ -947,9 +956,11 @@ class HMS_Reports{
         $not_both = array();
 
         $count = 0;
+        $total = count($results);
+        $whole = 0;
         foreach($results as $row) {
             $student = HMS_SOAP::get_student_info($row['asu_username']);
-            if($student->deposit_waived)
+            if($student->deposit_waived != 'false')
                 $waivers[] = "(" . $row['asu_username']  . ") " .
                                    $student->last_name   . ", " .
                                    $student->first_name  . " "  .
@@ -994,6 +1005,63 @@ class HMS_Reports{
         $content .= '<br />Waived Count: ' . count($waivers);
         $content .= '<br />No Date Count: ' . count($no_date);
         $content .= '<br />No Deposit Count: ' . count($not_both);
+
+        return $content;
+    }
+
+    function run_bad_type_report()
+    {
+        $db = new PHPWS_DB('hms_assignment');
+        $db->addColumn('hms_assignment.asu_username');
+        $db->addColumn('hms_room.room_number');
+        $db->addColumn('hms_residence_hall.hall_name');
+        $db->addWhere('hms_assignment.bed_id', 'hms_beds.id');
+        $db->addWhere('hms_beds.bedroom_id', 'hms_bedrooms.id');
+        $db->addWhere('hms_bedrooms.room_id', 'hms_room.id');
+        $db->addWhere('hms_room.floor_id', 'hms_floor.id');
+        $db->addWhere('hms_floor.building', 'hms_residence_hall.id');
+        $db->addWhere('hms_assignment.deleted', 0);
+        $db->addWhere('hms_beds.deleted', 0);
+        $db->addWhere('hms_bedrooms.deleted', 0);
+        $db->addWhere('hms_room.deleted', 0);
+        $db->addWhere('hms_floor.deleted', 0);
+        $db->addWhere('hms_residence_hall.deleted', 0);
+        $db->addOrder('hms_residence_hall.hall_name');
+        $db->addOrder('hms_room.room_number');
+
+        $results = $db->select();
+        if(PHPWS_Error::isError($results)) {
+            test($results,1);
+        }
+
+        $content = "<h2>Assigned Students Withdrawn or Bad Type</h2><br />";
+
+        PHPWS_Core::initModClass('hms','HMS_SOAP.php');
+
+        $content .= "<table><tr>" .
+                    "<th>Hall</th>" .
+                    "<th>Room</th>" .
+                    "<th>Username</th>" .
+                    "<th>Name</th>" .
+                    "<th>Type</th>" .
+                    "</tr>";
+        foreach($results as $row) {
+            $student = HMS_SOAP::get_student_info($row['asu_username']);
+            $type = $student->student_type;
+            if($type == 'F' || $type == 'C' || $type == 'T')
+                continue;
+                
+            $content .= "<tr>";
+            $content .= "<td>{$row['hall_name']}</td>";
+            $content .= "<td>{$row['room_number']}</td>";
+            $content .= "<td>{$row['asu_username']}</td>";
+            $content .= "<td>{$student->last_name}, " .
+                        "{$student->first_name} " .
+                        "{$student->middle_name}</td>";
+            $content .= "<td>$type</td>";
+            $content .= "</tr>";
+        }
+        $content .= "</table>";
 
         return $content;
     }

@@ -230,11 +230,36 @@ class HMS_SOAP{
         if(PEAR::isError($student)){
             HMS_SOAP::log_soap_error($student,'get_address',$username);
             return $student;
-        }else if($student->address == NULL){
-            return NULL;
         }else{
-            return $student->address;
+            return PHPWS_SOAP::get_for_realz_address($student);
         }
+    }
+
+    /**
+     * This is a HACK and should be treated as such.
+     */
+    function get_for_realz_address($student)
+    {
+       if(is_object($student->address)) {
+           return $student->address;
+       }
+
+
+       $ps_address = NULL;
+       foreach($student->address as $address) {
+           if($address->atyp_code == 'PS') {
+               $ps_address = $address;
+           }
+           if($address->atyp_code == 'PR') {
+               return $address;
+           }
+       }
+
+       if(!is_null($ps_address)) {
+           return $ps_address;
+       }
+
+       test($student);
     }
 
     /**

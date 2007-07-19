@@ -260,6 +260,8 @@ CREATE TABLE hms_beds (
     bedroom_id INTEGER NOT NULL REFERENCES hms_bedrooms(id),
     bed_letter character(1) NOT NULL,
     deleted smallint default 0,
+    banner_id character varying(15),
+    phone_number character(4),
     PRIMARY KEY(id)
 );
 
@@ -350,7 +352,7 @@ CREATE TABLE hms_cached_student_info (
     state           CHARACTER VARYING(5),
     zip             CHARACtER VARYING(11),
     roommate_name   CHARACTER VARYING(172),
-    roommate_email  CHARACTER VARYING(128),
+    roommate_user   CHARACTER VARYING(32),
     room_phone      CHARACTER VARYING(20),
     phone_number    CHARACTER VARYING(20),
     gender          CHARACTER(1),
@@ -359,6 +361,7 @@ CREATE TABLE hms_cached_student_info (
     credit_hours    INTEGER,
     deposit_date    CHARACTER(10),
     deposit_waived  CHARACTER(5),
+    movein_time     CHARACTER VARYING(64),
     PRIMARY KEY (id)
 );
 
