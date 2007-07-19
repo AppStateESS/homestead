@@ -597,7 +597,7 @@ WHERE hms_assignment.bed_id = hms_beds.id           AND
       hms_bedrooms.is_online       = 1 AND
       hms_room.is_online           = 1 AND
       hms_floor.is_online          = 1 AND
-      hms_residence_hall.is_online = 1";
+      hms_residence_hall.is_online = 1 LIMIT 10";
 
         $results = PHPWS_DB::getAll($sql);
 
