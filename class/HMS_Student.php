@@ -245,7 +245,9 @@ class HMS_Student {
 
         $sql  = "SELECT";
         $sql .= " hms_residence_hall.hall_name, ";
-        $sql .= " hms_room.room_number ";
+        $sql .= " hms_room.room_number, ";
+        $sql .= " hms_assignment.id, ";
+        $sql .= " hms_assignment.meal_option ";
         $sql .= "FROM";
         $sql .= " hms_residence_hall, ";
         $sql .= " hms_floor, ";
@@ -268,6 +270,27 @@ class HMS_Student {
 
         if($results != FALSE && $results != NULL) {
             $tpl['ROOM_ASSIGNMENT'] = $results[0]['room_number'] . " " . $results[0]['hall_name'];
+            $tpl['MEAL_PLAN'] = '
+    <form action="index.php" method="post">
+        <input type="hidden" name="module" value="hms" />
+        <input type="hidden" name="type" value="student" />
+        <input type="hidden" name="op" value="set_meal_plan" />
+        <input type="hidden" name="username" value="'.$_REQUEST['username'].'" />
+        <input type="hidden" name="assignment_id" value="'.$results[0]['id'].'" />
+        <select name="meal_option">';
+
+            $selected[$results[0]['meal_option']] = ' selected="selected"';
+
+            $tpl['MEAL_PLAN'] .= '<option value="0"'.$selected[0].'>Low</option>';
+            $tpl['MEAL_PLAN'] .= '<option value="1"'.$selected[1].'>Standard</option>';
+            $tpl['MEAL_PLAN'] .= '<option value="2"'.$selected[2].'>High</option>';
+            $tpl['MEAL_PLAN'] .= '<option value="3"'.$selected[3].'>Super</option>';
+            $tpl['MEAL_PLAN'] .= '<option value="4"'.$selected[4].'>None</option>';
+        
+            $tpl['MEAL_PLAN'] .= '
+        </select>
+        <input type="submit" value="Save" />
+    </form>';
         } else {
             $tpl['ROOM_ASSIGNMENT'] = "This student does not live on campus.";
         }
@@ -367,6 +390,17 @@ class HMS_Student {
 
         $final = PHPWS_Template::process($tpl, 'hms', 'student/show_student_info.tpl');
         return $final;
+    }
+
+    function set_meal_plan()
+    {
+        $db = new PHPWS_DB('hms_assignment');
+        $db->addWhere('id',$_REQUEST['assignment_id']);
+        $db->addValue('meal_option',$_REQUEST['meal_option']);
+        $db->update();
+
+        $msg = '<font color="#0000FF">Meal option updated.</font><br /><br />';
+        return $msg . HMS_Student::get_matching_students();
     }
 
 /*
@@ -652,6 +686,9 @@ class HMS_Student {
                     PHPWS_Core::initModClass('hms', 'HMS_Roommate_Approval.php');
                     return HMS_Roommate_Approval::save_roommate_username();
                 }
+                break;
+            case 'set_meal_plan':
+                return HMS_Student::set_meal_plan();
                 break;
             case 'main':
                 return HMS_Student::show_main_menu();

@@ -69,6 +69,9 @@
                 <td>Assigned To: </td><td>{ROOM_ASSIGNMENT}</td>
             </tr>
             <tr>
+                <td>Meal Option: </td><td>{MEAL_PLAN}</td>
+            </tr>
+            <tr>
                 <td>&nbsp;</td><td></td>
             </tr>
             <tr>

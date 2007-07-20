@@ -475,6 +475,13 @@ function hms_update(&$content, $currentVersion)
             
             $content[] = '+ Letters are ready!';
 
+        case version_compare($currentVersion, '0.1.27', '<'):
+            $files = array();
+            $files[] = 'templates/student/show_student_info.tpl';
+            PHPWS_Boost::updateFiles($files, 'hms');
+
+            $content[] = '+ Added ability to change meal plans to student search screen';
+
     }
 
     return TRUE;
