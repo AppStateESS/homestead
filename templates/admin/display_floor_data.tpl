@@ -47,6 +47,14 @@
             <tr>
                 <th></th><td>{IS_ONLINE_2} {IS_ONLINE_2_LABEL}</td>
             </tr>
+            <tr>
+                <th>Freshman/Transfer Move-in Time: </th>
+                <td>{FT_MOVEIN}</td>
+            </tr>
+            <tr>
+                <th>Continuing Student Move-in Time: </th>
+                <td>{C_MOVEIN}</td>
+            </tr>
         </table>
         {SUBMIT}
     </div>

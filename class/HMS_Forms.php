@@ -1121,6 +1121,7 @@ class HMS_Form
     {
         $db = &new PHPWS_DB('hms_residence_hall');
         $db->addWhere('deleted', '0');
+        $db->addOrder('hall_name');
         $db->addColumn('id');
         $db->addColumn('hall_name');
         $allhalls = $db->select();
@@ -2076,6 +2077,9 @@ class HMS_Form
         } else {
             $form->setMatch('freshman_reserved', '0');
         }
+
+        $form->addText('ft_movein', $object->get_ft_movein());
+        $form->addText('c_movein', $object->get_c_movein());
 
         $db = &new PHPWS_DB('hms_pricing_tiers');
         $prices = $db->select();

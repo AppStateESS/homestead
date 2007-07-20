@@ -17,6 +17,8 @@ class HMS_Floor
     var $beds_per_bedroom;
     var $gender_type;
     var $freshman_reserved;
+    var $ft_movein;
+    var $c_movein;
     var $deleted;
     var $error;
     var $is_new_floor;
@@ -168,6 +170,26 @@ class HMS_Floor
         return $this->freshman_reserved;
     }
 
+    function set_ft_movein($time)
+    {
+        $this->ft_movein = $time;
+    }
+
+    function get_ft_movein()
+    {
+        return $this->ft_movein;
+    }
+
+    function set_c_movein($time)
+    {
+        $this->c_movein = $time;
+    }
+
+    function get_c_movein()
+    {
+        return $this->c_movein;
+    }
+
     function set_is_online($online, $id = NULL, $building = NULL)
     {
         if($building != NULL) {
@@ -275,6 +297,8 @@ class HMS_Floor
         $this->set_bedrooms_per_room($_REQUEST['bedrooms_per_room']);
         $this->set_beds_per_bedroom($_REQUEST['beds_per_bedroom']);
         $this->set_freshman_reserved($_REQUEST['freshman_reserved']);
+        $this->set_ft_movein($_REQUEST['ft_movein']);
+        $this->set_c_movein($_REQUEST['c_movein']);
         $this->set_deleted('0');
     }
 

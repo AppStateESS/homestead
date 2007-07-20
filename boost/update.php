@@ -482,6 +482,13 @@ function hms_update(&$content, $currentVersion)
 
             $content[] = '+ Added ability to change meal plans to student search screen';
 
+        case version_compare($currentVersion, '0.1.28', '<'):
+            $files = array();
+            $files[] = 'templates/admin/display_floor_Data.tpl';
+            PHPWS_Boost::updateFiles($files, 'hms');
+
+            $content[] = '+ Added ability to change movein times per floor';
+
     }
 
     return TRUE;
