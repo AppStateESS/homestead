@@ -655,6 +655,9 @@ WHERE hms_assignment.bed_id = hms_beds.id           AND
                 LEFT OUTER JOIN hms_assignment
                 ON hms_assignment.bed_id = hms_beds.id
                 WHERE hms_beds.bedroom_id  = hms_bedrooms.id AND
+                      hms_beds.deleted = 0 AND
+                      hms_bedrooms.deleted = 0 AND
+                      hms_assignment.deleted = 0 AND
                       hms_bedrooms.room_id = {$row['room_id']}
             ";
             $mates = PHPWS_DB::getAll($sql);
