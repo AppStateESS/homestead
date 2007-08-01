@@ -105,6 +105,10 @@ class HMS_Admin
                 PHPWS_Core::initModClass('hms', 'HMS_Pending_Assignment.php');
                 $final = HMS_Pending_Assignment::main();
                 break;
+            case 'letter':
+                PHPWS_Core::initModClass('hms', 'HMS_Letter.php');
+                $final = HMS_Letter::main();
+                break;
             default:
                 PHPWS_Core::initModClass('hms', 'HMS_Display.php');
                 $final = HMS_Display::main();

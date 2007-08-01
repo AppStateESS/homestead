@@ -55,6 +55,12 @@
             &nbsp;&nbsp;&nbsp;{VIEW_QUEUE}<br />
             &nbsp;&nbsp;&nbsp;{CLEAR_QUEUE}<br />
             &nbsp;&nbsp;&nbsp;{ASSIGN}<br />
+            <br />
+            <h2><i>{LETTERS_LABEL}</i></h2>
+            &nbsp;&nbsp;&nbsp;{GENERATE_UPDATED_LETTERS}<br />
+            &nbsp;&nbsp;&nbsp;{DOWNLOAD_PDF}<br />
+            &nbsp;&nbsp;&nbsp;{DOWNLOAD_CSV}<br />
+            &nbsp;&nbsp;&nbsp;{LIST_LETTERS}<br />
         </td></tr></table>
     </div>
   </div>

@@ -489,6 +489,13 @@ function hms_update(&$content, $currentVersion)
 
             $content[] = '+ Added ability to change movein times per floor';
 
+        case version_compare($currentVersion, '0.1.29', '<'):
+            $files[] = 'templates/admin/maintenance.tpl';
+            $files[] = 'templates/admin/get_hall_floor_room.tpl';
+            PHPWS_Boost::updatefiles($files, 'hms');
+
+            $content[] = '+ OMG BANNER WORKS hopefully';
+
     }
 
     return TRUE;

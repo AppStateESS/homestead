@@ -397,6 +397,33 @@ class HMS_SOAP{
         return $student;
     }
 
+    /**
+     * Returns a student's current assignment information
+     * $opt is one of:
+     *  'All'
+     *  'HousingApp'
+     *  'RoomAssign'
+     *  'MealAssign'
+     */
+    function get_hous_meal_register($username, $termcode, $opt)
+    {
+        if(SOAP_TEST_FLAG) {
+            # return canned data
+            return array();
+        }
+        include_once('SOAP/Client.php');
+        $wsdl = new SOAP_WSDL(PHPWS_SOURCE_DIR . 'mod/hms/inc/shs0001.wsdl', 'true');
+        $proxy = $wsdl->getProxy();
+        $student = $proxy->GetHousMealRegister($username, $termcode, $opt);
+
+        # Check for an error and log it
+        if(HMS_SOAP::is_soap_fault($student)) {
+            HMS_SOAP::log_soap_error($student, 'get_hous_meal_register', $username);
+        }
+
+        return $student;
+    }
+
     function report_application_received($username, $term, $plan_code, $meal_code = NULL)
     {
         if(SOAP_TEST_FLAG){
@@ -411,6 +438,12 @@ class HMS_SOAP{
         return $assignment;
     }
 
+    function this_term()
+    {
+        // TODO: make this not static
+        return '200740';
+    }
+
     function report_room_assignment($username, $term, $building_code, $room_code, $plan_code, $meal_code)
     {
         if(SOAP_TEST_FLAG){
@@ -423,6 +456,40 @@ class HMS_SOAP{
         $assignment = $proxy->CreateRoomAssignment($username, $term, $building_code, $room_code, $plan_code, $meal_code);
 
         return $assignment;
+/*        test(array($username,$term,$building_code,$room_code,$plan_code,$meal_code));
+        return 1001;*/
+    }
+
+    function move_room_assignment($username, $term, $cur_bldg, $cur_room, $new_bldg, $new_room)
+    {
+/*        if(SOAP_TEST_FLAG){
+            return;
+        }
+
+        include_once('SOAP/Client.php');
+        $wsdl = new SOAP_WSDL(PHPWS_SOURCE_DIR . 'mod/hms/inc/shs0001.wsdl', 'true');
+        $proxy = $wsdl->getProxy();
+        $movement = $proxy->MoveRoomAssignment($username, $term, $cur_bldg, $cur_room, $new_bldg, $new_room);
+
+        return $movement;*/
+        test(array($username,$term,$cur_bldg,$cur_room,$new_bldg,$new_room));
+        return 0;
+    }
+
+    function remove_room_assignment($username, $term, $building, $room)
+    {
+        if(SOAP_TEST_FLAG) {
+            return;
+        }
+
+        include_once('SOAP/Client.php');
+        $wsdl = new SOAP_WSDL(PHPWS_SOURCE_DIR . 'mod/hms/inc/shs0001.wsdl', 'true');
+        $proxy = $wsdl->getProxy();
+        $removal = $proxy->RemoveRoomAssignment($username, $term, $building, $room);
+
+        return $removal;
+/*        test(array($username,$term,$building,$room));
+        return 0;*/
     }
 
     /**
@@ -469,6 +536,56 @@ class HMS_SOAP{
             $phone = "(" . $student->phone->area_code . ")"  . substr($student->phone->number, 0, 3) . "-" . substr($student->phone->number, 3);
             return $phone;
         }
+    }
+
+    /**
+     * This thing takes a bunch of information you give it:
+     * 
+     * @param $username      The ASU username you are assigning
+     * @param $building      The building they are going into
+     * @param $hms_meal_code The HMS meal code
+     * 
+     * and gives you 
+     * 
+     * @returns an array: 'plan' => PLAN_CODE, 'meal' => MEAL_CODE
+     *
+     * Note that we no longer do HOUS, only HOME.  So 'plan' will
+     * always be 'HOME'.
+     *
+     * TODO: It is a HACK that needs to be implemented more betterly.
+     */
+    function get_plan_meal_codes($username, $building, $hms_meal_code)
+    {
+        $type = HMS_SOAP::get_student_type($username);
+
+        $retval['plan'] = 'HOME';
+
+        switch($hms_meal_code) {
+            case 0:
+                if($type == 'NFR')
+                    $retval['meal'] = '1';
+                else
+                    $retval['meal'] = '2';
+                break;
+            case 1:
+                $retval['meal'] = '1';
+                break;
+            case 2:
+                $retval['meal'] = '2';
+                break;
+            case 3:
+                $retval['meal'] = '8';
+                break;
+            case 4:
+                if(($building == 'MAR' || $building == 'AHR') &&
+                        $type != 'NFR') {
+                    // HOUS, if we ever do that craziness again
+                } else {
+                    $retval['meal'] = '1';
+                }
+        }
+
+        return $retval;
     }
 }
 

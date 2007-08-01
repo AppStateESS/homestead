@@ -1,7 +1,5 @@
 <?php
 
-#error_reporting(E_ALL);
-
 /**
  * Provides functionality to actually assign students to a room
  *
@@ -196,6 +194,34 @@ class HMS_Assignment
      */
     function perform_save_assignment()
     {
+        $ban_success = -1;
+        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+        $banmeal = HMS_SOAP::get_plan_meal_codes($_REQUEST['username'],
+            $_REQUEST['building_bid'], $_REQUEST['meal_option']);
+        if(isset($_REQUEST['new'])) {
+            $ban_success = HMS_SOAP::report_room_assignment(
+                $_REQUEST['username'], HMS_SOAP::this_term(),
+                $_REQUEST['building_bid'], $_REQUEST['room_bid'],
+                $banmeal['plan'], $banmeal['meal']);
+        } else if(isset($_REQUEST['move'])) {
+            $ban_success = HMS_SOAP::remove_room_assignment(
+                $_REQUEST['username'], HMS_SOAP::this_term(),
+                $_REQUEST['old_bldg_bid'], $_REQUEST['old_room_bid']);
+            if($ban_success == 0) {
+                $ban_success = HMS_SOAP::report_room_assignment(
+                    $_REQUEST['username'], HMS_SOAP::this_term(),
+                    $_REQUEST['new_bldg_bid'], $_REQUEST['new_room_bid'],
+                    $banmeal['plan'], $banmeal['meal']);
+            }
+        }
+
+        if($ban_success != 0) {
+            return '<font color="red"><b>Banner Failure: Code ' .
+                    $ban_success . '</b></font><br /><br />' .
+                   'Please contact ESS with this code immediately.<br /><br />' .
+                   $_REQUEST['username'] . ' was not assigned.<br />';
+        }
+
         $success = $this->save_assignment();
         if($success) {
             $msg  = "You have placed " . $_REQUEST['username'];
@@ -217,6 +243,7 @@ class HMS_Assignment
         // If we get here and they're already assigned, someone had to click
         // "that's okay; do it anyway".  So delete the old assignment.
         // NOTE: THIS SHOULD CHANGE BECAUSE IT IS AN INCREDIBLY DIRTY HIPPIE OF A HACK
+        // TODO: this
         $delete_first = HMS_Assignment::delete_assignment('asu_username', $this->get_asu_username());
 
         if(PEAR::isError($delete_first))
@@ -233,6 +260,18 @@ class HMS_Assignment
      */
     function perform_delete_assignment()
     {
+        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+        $ban_success = HMS_SOAP::remove_room_assignment(
+            $_REQUEST['asu_username'], HMS_SOAP::this_term(),
+            $_REQUEST['building_bid'], $_REQUEST['room_bid']);
+
+        if($ban_success != 0) {
+            return '<font color="red"><b>Banner Failure: Code ' .
+                    $ban_success . '</b></font><br /><br />' .
+                   'Please contact ESS with this code immediately.<br /><br />' .
+                   $_REQUEST['asu_username'] . ' was not removed.<br />';
+        }
+
         $success = HMS_Assignment::delete_assignment('asu_username', $_REQUEST['asu_username']);
         $msg =  "You have removed " . $_REQUEST['asu_username'];
         $msg .= " from " . $_REQUEST['hall_name'];
@@ -249,8 +288,6 @@ class HMS_Assignment
         $db->addValue('deleted', 1);
         $db->addWhere($type, $arg);
         $result = $db->update();
-
-        // needs call to HMS_SOAP to delete a student's room assignment
 
         return $result;
     }
@@ -549,6 +586,21 @@ class HMS_Assignment
                     }
            
                     $meal_option = $_REQUEST['meal_option_' . $bed];
+                    $bed_bid = $_REQUEST['bed_bid_' . $bed];
+
+                    PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+                    $banmeal = HMS_SOAP::get_plan_meal_codes($uid,
+                        $_REQUEST['building_bid'], $meal_option);
+                    $ban_success = HMS_SOAP::report_room_assignment($uid,
+                        HMS_SOAP::this_term(), $_REQUEST['building_bid'],
+                        $bed_bid, $banmeal['plan'], $banmeal['meal']);
+
+                    if($ban_success != 0) {
+                        return '<font color="red"><b>Banner Failure: Code ' .
+                                $ban_success . '</b></font><br /><br />' .
+                               'Please contact ESS with this code immediately.<br /><br />' .
+                               $_REQUEST['asu_username'] . ' was not assigned.<br />';
+                    }
 
                     $assignment = HMS_Assignment::create_assignment($bed, $uid, $meal_option);
                     $saved = $assignment->save_assignment();

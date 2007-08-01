@@ -275,6 +275,18 @@ class HMS_Form
         }
 
         $letters = array('a'=>"a", 'b'=>"b", 'c'=>"c", 'd'=>"d");
+        $meal = array('0'=>"Low", '1'=>"Standard", '2'=>"High",
+            '3'=>"Super", '4'=>"None");
+
+        $meal_option = $_REQUEST['meal_option'];
+
+        if(!isset($_REQUEST['meal_option'])) {
+            $db = new PHPWS_DB('hms_assignment');
+            $db->addColumn('meal_option');
+            $db->addWhere('deleted', '0');
+            $db->addWhere('asu_username', $_REQUEST['username']);
+            $meal_option = $db->select('one');
+        }
 
         PHPWS_Core::initCoreClass('Form.php');
         $form = &new PHPWS_Form;
@@ -284,12 +296,14 @@ class HMS_Form
         $form->addDropBox('rooms', $rooms);
         $form->addDropBox('bedroom_letter', $letters);
         $form->addDropBox('bed_letter', $letters);
+        $form->addDropBox('meal_option', $meal);
 
         $form->setMatch('halls', $_REQUEST['halls']);
         $form->setMatch('floors', $_REQUEST['floors']);
         $form->setMatch('rooms', $_REQUEST['rooms']);
         $form->setMatch('bedroom_letter', $_REQUEST['bedroom_letter']);
         $form->setMatch('bed_letter', $_REQUEST['bed_letter']);
+        $form->setMatch('meal_option', $meal_option);
         
         $form->addHidden('module', 'hms');
         $form->addHidden('type', 'assignment');
@@ -746,11 +760,82 @@ class HMS_Form
 
     function verify_assignment($msg = NULL)
     {
-        $db = new PHPWS_DB('hms_residence_hall');
-        $db->addColumn('hall_name');
-        $db->addWhere('id', $_REQUEST['halls']);
-        $hall_name = $db->select('one');
+        $sql = "
+            SELECT
+                hms_residence_hall.hall_name,
+                hms_residence_hall.banner_building_code,
+                hms_beds.banner_id,
+                hms_assignment.asu_username
+            FROM hms_residence_hall
+            JOIN hms_floor ON 
+                hms_floor.building = hms_residence_hall.id
+            JOIN hms_room ON
+                hms_room.floor_id = hms_floor.id
+            JOIN hms_bedrooms ON
+                hms_bedrooms.room_id = hms_room.id
+            JOIN hms_beds ON
+                hms_beds.bedroom_id = hms_bedrooms.id
+            WHERE
+                hms_residence_hall.deleted = 0 AND
+                hms_floor.deleted = 0 AND
+                hms_room.deleted = 0 AND
+                hms_bedrooms.deleted = 0 AND
+                hms_beds.deleted = 0 AND
+                hms_residence_hall.id = {$_REQUEST['halls']} AND
+                hms_floor.floor_number = {$_REQUEST['floors']} AND
+                hms_room.room_number = '" .
+                    $_REQUEST['floors'] .
+                    str_pad($_REQUEST['rooms'], 2, '0', STR_PAD_LEFT) . "' AND
+                hms_bedrooms.bedroom_letter = '{$_REQUEST['bedroom_letter']}' AND
+                hms_beds.bed_letter = '{$_REQUEST['bed_letter']}'
+        ";
+        $results = PHPWS_DB::getRow($sql);
+        if(PHPWS_Error::isError($results)) {
+            test($results,1);
+        }
 
+        $hall_name    = $results['hall_name'];
+        $new_bldg_bid = $results['banner_building_code'];
+        $new_room_bid = $results['banner_id'];
+
+        $sql = "
+            SELECT
+                hms_residence_hall.banner_building_code,
+                hms_beds.banner_id
+            FROM hms_residence_hall
+            JOIN hms_floor ON 
+                hms_floor.building = hms_residence_hall.id
+            JOIN hms_room ON
+                hms_room.floor_id = hms_floor.id
+            JOIN hms_bedrooms ON
+                hms_bedrooms.room_id = hms_room.id
+            JOIN hms_beds ON
+                hms_beds.bedroom_id = hms_bedrooms.id
+            JOIN hms_assignment ON
+                hms_assignment.bed_id = hms_beds.id
+            WHERE
+                hms_residence_hall.deleted = 0 AND
+                hms_floor.deleted = 0 AND
+                hms_room.deleted = 0 AND
+                hms_bedrooms.deleted = 0 AND
+                hms_beds.deleted = 0 AND
+                hms_assignment.deleted = 0 AND
+                hms_assignment.asu_username = '{$_REQUEST['username']}'
+        ";
+        $results = PHPWS_DB::getRow($sql);
+        if(PHPWS_Error::isError($results)) {
+            test($results,1);
+        }
+
+        $moved = false;
+
+        if(!empty($results)) {
+            $old_bldg_bid = $results['banner_building_code'];
+            $old_room_bid = $results['banner_id'];
+            $moved = true;
+        }
+
+        PHPWS_Core::initModClass('hms','HMS_SOAP.php');
         PHPWS_Core::initCoreClass('Form.php');
         $form = &new PHPWS_Form;
 
@@ -765,7 +850,20 @@ class HMS_Form
         $form->addHidden('room_number', $_REQUEST['floors'] . str_pad($_REQUEST['rooms'], 2, '0', STR_PAD_LEFT));
         $form->addHidden('bedroom_letter', $_REQUEST['bedroom_letter']);
         $form->addHidden('bed_letter', $_REQUEST['bed_letter']);
+        $form->addHidden('meal_option', $_REQUEST['meal_option']);
         $form->addSubmit('submit', _('Assign Student'));
+
+        if($moved) {
+            $form->addHidden('old_bldg_bid', $old_bldg_bid);
+            $form->addHidden('new_bldg_bid', $new_bldg_bid);
+            $form->addHidden('old_room_bid', $old_room_bid);
+            $form->addHidden('new_room_bid', $new_room_bid);
+            $form->addHidden('move', 1);
+        } else {
+            $form->addHidden('building_bid', $new_bldg_bid);
+            $form->addHidden('room_bid',     $new_room_bid);
+            $form->addHidden('new', 1);
+        }
 
         $tpl = $form->getTemplate();
         $tpl['MESSAGE'] = "<h2>You are assigning user: " . $_REQUEST['username'] . "</h2>";
@@ -801,6 +899,8 @@ class HMS_Form
         $db->addColumn('hms_room.displayed_room_number');
         $db->addColumn('hms_floor.floor_number');
         $db->addColumn('hms_residence_hall.hall_name');
+        $db->addColumn('hms_beds.banner_id');
+        $db->addColumn('hms_residence_hall.banner_building_code');
         $assignment = $db->select('row');
 
         if(is_null($assignment)) {
@@ -823,6 +923,8 @@ class HMS_Form
         $form->addHidden('asu_username', $assignment['asu_username']);
         $form->addHidden('hall_name', $hall_name);
         $form->addHidden('room_number', $room_number);
+        $form->addHidden('room_bid', $assignment['banner_id']);
+        $form->addHidden('building_bid', $assignment['banner_building_code']);
         $form->addSubmit('submit', _('Delete Assignment'));
 
         $tpl = $form->getTemplate();

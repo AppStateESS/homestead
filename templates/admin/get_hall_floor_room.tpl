@@ -21,6 +21,11 @@
             <tr>
                 <th align="left">Bed: </th><td>{BED_LETTER}</td>
             </tr>
+<!-- BEGIN meals -->
+            <tr>
+                <th align="left">Meal Plan: </th><td>{MEAL_OPTION}</td>
+            </tr>
+<!-- END meals -->
         </table>
         <br />
         {SUBMIT}

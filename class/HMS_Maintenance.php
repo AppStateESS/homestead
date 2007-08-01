@@ -221,6 +221,29 @@ class HMS_Maintenance
             $tpl['ASSIGN'] = PHPWS_Text::secureLink(
                 _('Auto-Assign'), 'hms',
                 array('type'=>'autoassign', 'op'=>'assign'));
+        
+        if(Current_User::allow('hms', 'assignment_maintenance') || Current_User::allow('hms', 'admin'))
+            $tpl['LETTERS_LABEL'] = _('Letters');
+            
+        if(Current_User::allow('hms', 'assignment_maintenance') || Current_User::allow('hms', 'admin'))
+            $tpl['GENERATE_UPDATED_LETTERS'] = PHPWS_Text::secureLink(
+                _('Generate Updated Letters'), 'hms',
+                array('type'=>'letter', 'op'=>'generate'));
+            
+        if(Current_User::allow('hms', 'assignment_maintenance') || Current_User::allow('hms', 'admin'))
+            $tpl['LIST_LETTERS'] = PHPWS_Text::secureLink(
+                _('List Generated Letters'), 'hms',
+                array('type'=>'letter', 'op'=>'list'));
+            
+        if(Current_User::allow('hms', 'assignment_maintenance') || Current_User::allow('hms', 'admin'))
+            $tpl['DOWNLOAD_PDF'] = PHPWS_Text::secureLink(
+                _('Download Most Recent PDF'), 'hms',
+                array('type'=>'letter', 'op'=>'pdf'));
+            
+        if(Current_User::allow('hms', 'assignment_maintenance') || Current_User::allow('hms', 'admin'))
+            $tpl['DOWNLOAD_CSV'] = PHPWS_Text::secureLink(
+                _('Download Most Recent CSV'), 'hms',
+                array('type'=>'letter', 'op'=>'csv'));
 
        $content = PHPWS_Template::process($tpl, 'hms', 'admin/maintenance.tpl');
         return $content;
