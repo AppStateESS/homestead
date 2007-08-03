@@ -1101,8 +1101,8 @@ class HMS_Reports{
         }
 
         $genders = array(
-            0 => 'Male',
-            1 => 'Female',
+            0 => 'Female',
+            1 => 'Male',
             2 => 'Coed');
 
         $issues = array();
