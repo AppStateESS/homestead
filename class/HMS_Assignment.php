@@ -286,7 +286,7 @@ class HMS_Assignment
     {
         $db = new PHPWS_DB('hms_assignment');
         $db->addValue('deleted', 1);
-        $db->addWhere($type, $arg);
+        $db->addWhere($type, $arg, 'ilike');
         $result = $db->update();
 
         return $result;

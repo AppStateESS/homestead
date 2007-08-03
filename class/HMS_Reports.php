@@ -48,6 +48,9 @@ class HMS_Reports{
             case 'bad_type':
                 return HMS_Reports::run_bad_type_report();
                 break;
+            case 'gender':
+                return HMS_Reports::run_gender_report();
+                break;
             default:
                 return "ugh";
                 break;
@@ -1062,6 +1065,123 @@ class HMS_Reports{
             $content .= "</tr>";
         }
         $content .= "</table>";
+
+        return $content;
+    }
+    
+    function run_gender_report()
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+
+        $sql = "
+            SELECT
+                hms_room.gender_type           AS room_gender,
+                hms_floor.gender_type          AS floor_gender,
+                hms_residence_hall.gender_type AS hall_gender,
+                hms_residence_hall.banner_building_code AS bldg_id,
+                hms_room.id as room_id,
+                hms_room.room_number
+            FROM hms_room
+            JOIN hms_floor ON
+                hms_room.floor_id = hms_floor.id
+            JOIN hms_residence_hall ON
+                hms_floor.building = hms_residence_hall.id
+            WHERE
+                hms_room.deleted = 0 AND
+                hms_floor.deleted = 0 AND
+                hms_residence_hall.deleted = 0
+            ORDER BY
+                hms_residence_hall.hall_name,
+                hms_room.room_number
+        ";
+
+        $results = PHPWS_DB::getAll($sql);
+        if(PHPWS_Error::isError($results)) {
+            test($results,1);
+        }
+
+        $genders = array(
+            0 => 'Male',
+            1 => 'Female',
+            2 => 'Coed');
+
+        $issues = array();
+        $count = 0;
+        $total = count($results);
+        $whole = 0;
+        foreach($results as $row) {
+            $bid = $row['bldg_id'].' '.$row['room_number'];
+            
+            $percent = ((++$count / $total) * 100);
+            if($percent >= $whole) {
+                echo $whole++ . '%... ';
+                ob_flush();
+                flush();
+            }
+
+            // Get Roommates
+            $sql = "
+                SELECT asu_username
+                FROM hms_assignment
+                JOIN hms_beds ON hms_assignment.bed_id = hms_beds.id
+                JOIN hms_bedrooms ON hms_beds.bedroom_id = hms_bedrooms.id
+                WHERE
+                    hms_bedrooms.room_id = {$row['room_id']} AND
+                    hms_assignment.deleted = 0
+            ";
+
+            $mates = PHPWS_DB::getAll($sql);
+            if(PHPWS_Error::isError($mates)) {
+                test($mates,1);
+            }
+
+            // Make sure the roommates are the same gender
+            $roomgender = 2;
+            foreach($mates as $mate) {
+                $gender = HMS_SOAP::get_gender($mate['asu_username'], TRUE);
+                if($roomgender == 2) {
+                    $roomgender = $gender;
+                    continue;
+                }
+
+                if($gender != $roomgender) {
+                    $issues[] = "<font color=\"red\">($bid) ".$mate['asu_username'].
+                                " and $lastuser are roomed together but are of different gender!</font>";
+                    $roomgender = -1;
+                    break;
+                }
+            }
+
+            if($roomgender == -1) continue;
+
+            // If no one is in the room, we don't know what to do with it, so skip
+            if($roomgender == 2) {
+                $issues[] = "($bid) No occupants, skipping...";
+                continue;
+            }
+
+            // Warn us if the roommates are not the same gender as the room
+            if($roomgender != $row['room_gender']) {
+                $issues[] = "($bid) Changing gender from ".
+                            $genders[$row['room_gender']].' to '.
+                            $genders[$roomgender];
+            }
+
+            // Set the gender of the room to that of its occupants
+            $db = new PHPWS_DB('hms_room');
+            $db->addWhere('id',$row['room_id']);
+            $db->addValue('gender_type', $roomgender);
+            $result = $db->update();
+
+            if(PHPWS_Error::isError($result)) {
+                test($result,1);
+            }
+        }
+
+        $content = "<h2>Gender Mismatches</h2><br /><br />\n";
+        foreach($issues as $issue) {
+            $content .= "$issue<br />\n";
+        }
 
         return $content;
     }
