@@ -230,10 +230,10 @@ class HMS_Maintenance
                 _('Generate Updated Letters'), 'hms',
                 array('type'=>'letter', 'op'=>'generate'));
             
-        if(Current_User::allow('hms', 'assignment_maintenance') || Current_User::allow('hms', 'admin'))
+/*        if(Current_User::allow('hms', 'assignment_maintenance') || Current_User::allow('hms', 'admin'))
             $tpl['LIST_LETTERS'] = PHPWS_Text::secureLink(
                 _('List Generated Letters'), 'hms',
-                array('type'=>'letter', 'op'=>'list'));
+                array('type'=>'letter', 'op'=>'list'));*/
             
         if(Current_User::allow('hms', 'assignment_maintenance') || Current_User::allow('hms', 'admin'))
             $tpl['DOWNLOAD_PDF'] = PHPWS_Text::secureLink(

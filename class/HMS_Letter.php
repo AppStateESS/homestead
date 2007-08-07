@@ -189,10 +189,73 @@ class HMS_Letter
             case 'list':
                 HMS_Letter::list_generated();
             case 'pdf':
-                HMS_Letter::pdf();
+                return HMS_Letter::pdf();
             case 'csv':
-                HMS_Letter::csv();
+                return HMS_Letter::csv();
         }
+    }
+
+    function pdf()
+    {
+        if($_REQUEST['authkey'] != Current_User::getAuthKey()) {
+            return "Access Denied";
+        }
+        
+        if(isset($_REQUEST['file'])) {
+            return HMS_Letter::print_file('pdf', $_REQUEST['file']);
+        }
+
+        return HMS_Letter::print_file('pdf');
+    }
+
+    function csv()
+    {
+        if($_REQUEST['authkey'] != Current_User::getAuthKey()) {
+            return "Access Denied";
+        }
+        
+        if(isset($_REQUEST['file'])) {
+            return HMS_Letter::print_file('csv', $_REQUEST['file']);
+        }
+
+        return HMS_Letter::print_file('csv');
+    }
+
+    function print_file($ext, $name=null)
+    {
+        if(!isset($name)) {
+            $files = scandir('/var/generated_docs');
+            if(count($files) < 3) {
+                return "No letters have been generated.";
+            }
+            if($ext == 'pdf') {
+                $name = $files[count($files) - 1];
+            } else if($ext == 'csv') {
+                $name = $files[count($files) - 2];
+            }
+        } else {
+            $name = $name . '.' . $ext;
+        }
+
+        $filename = "/var/generated_docs/$name";
+
+        if(!file_exists($filename)) {
+            return "'$name' does not exist.  Please contact ESS.";
+        }
+
+        if($ext == 'pdf') {
+            header('Content-type: application/pdf');
+        } else if($ext == 'csv') {
+            header('Content-type: text/csv');
+        } else {
+            return "Bad type '$ext'.  Please contact ESS.";
+        }
+
+        header('Content-Disposition: attachment; filename="'.$name.'"');
+
+        readfile($filename);
+        
+        exit;
     }
 
     function generate_updated()
@@ -265,24 +328,23 @@ class HMS_Letter
 
         // Unique filename for the generated files
         $now = strftime("%Y%m%d%H%M%S");
+        $filename = "housing_letters_$now";
         
         // Write the PDF
-        $pdf_filename = "housing_letters_$now.pdf";
-        $pdf->Output("/var/generated_docs/$pdf_filename");
+        $pdf->Output("/var/generated_docs/$filename.pdf");
 
         // Write the CSV
-        $csv_filename = "housing_letters_$now.csv";
-        $fp = fopen("/var/generated_docs/$csv_filename", 'w');
+        $fp = fopen("/var/generated_docs/$filename.csv", 'w');
         fwrite($fp,$csv);
         fclose($fp);
         
         // Report back to the user a job well done
         $content = "Generated letters for $freshcount freshmen and $uppercount upperclassmen.<br /><br />";
         $content .= PHPWS_Text::secureLink(_('Download PDF'), 'hms',
-            array('type'=>'letter', 'op'=>'pdf', 'file'=>$pdf_filename));
+            array('type'=>'letter', 'op'=>'pdf', 'file'=>$filename));
         $content .= "<br /><br />";
         $content .= PHPWS_Text::secureLink(_('Download CSV'), 'hms',
-            array('type'=>'letter', 'op'=>'csv', 'file'=>$csv_filename));
+            array('type'=>'letter', 'op'=>'csv', 'file'=>$filename));
 
         return $content;
     }
