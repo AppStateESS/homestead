@@ -187,12 +187,69 @@ class HMS_Letter
             case 'generate':
                 return HMS_Letter::generate_updated();
             case 'list':
-                HMS_Letter::list_generated();
+                return HMS_Letter::list_generated();
             case 'pdf':
                 return HMS_Letter::pdf();
             case 'csv':
                 return HMS_Letter::csv();
         }
+    }
+
+    function list_generated()
+    {
+        $files = scandir('/var/generated_docs');
+        if(count($files) < 3) {
+            return "No letters have been generated.";
+        }
+
+        $content = '<h2>Past Generated Letters</h2>' .
+                   '<table cellpadding="5" width="99%"><tr>' .
+                   '<th>Date Generated</th>' .
+                   '<th>Type</th>' .
+                   '<th>Filename</th>' .
+                   '<th>Actions</th>' .
+                   "</tr>\n";
+
+        for($i = 0; $i < count($files); $i++) {
+            $filename = $files[$i];
+
+            if(substr($filename, 0, 16) != 'housing_letters_')
+                continue;
+
+            $namepart = substr($filename, 0, 30);
+
+            $date = substr($filename, 16, 4) . '/' .
+                    substr($filename, 20, 2) . '/' .
+                    substr($filename, 22, 2) . ' ' .
+                    substr($filename, 24, 2) . ':' .
+                    substr($filename, 26, 2) . ':' .
+                    substr($filename, 28, 2);
+
+            $type = substr($filename, 31, 3);
+
+            if($type != 'pdf' && $type != 'csv')
+                continue;
+
+            $link = PHPWS_Text::secureLink(_('Download'), 'hms',
+                array('type'=>'letter', 'op'=>$type, 'file'=>$namepart));
+
+            if($i % 4 > 1) {
+                $bgcolor = ' bgcolor="#DDDDDD"';
+            } else {
+                $bgcolor = '';
+            }
+
+            $content .= "<tr>" .
+                        "<td$bgcolor>$date</td>" .
+                        "<td$bgcolor>$type</td>" .
+                        "<td$bgcolor>$filename</td>" .
+                        "<td$bgcolor>$link</td>" .
+                        "</tr>\n";
+        }
+
+        $content .= '</table>';
+
+        return $content;
     }
 
     function pdf()
@@ -275,6 +332,10 @@ class HMS_Letter
                 hall_name != 'Mountaineer Apartments' AND
                 hms_assignment.deleted = 0 AND
                 hms_assignment.letter_printed = 0
+            ORDER BY
+                last_name,
+                first_name,
+                middle_name
         ";
 
         $results = PHPWS_DB::getAll($sql);
@@ -302,6 +363,10 @@ class HMS_Letter
         foreach($needs_letter as $student) {
             HMS_Letter::put_into_pile($f_letters, $u_letters, $student);
         }
+
+        // Sort
+        HMS_Letter::letterSort($f_letters);
+        HMS_Letter::letterSort($u_letters);
 
         // Total counts of letters created
         $freshcount = count($f_letters);
@@ -357,6 +422,25 @@ class HMS_Letter
         $pdf->Open();
 
         return $pdf;
+    }
+
+    // Insertion Sort, because we sort by name when we pull
+    // it out of the DB, so it's sort of sorted.
+    function letterSort(&$letters)
+    {
+        $count = count($letters);
+        for($i = 0; $i < $count; $i++) {
+            $temp = $letters[$i];
+            $k = $i - 1;
+
+            while($k >= 0 && 
+                strcmp($temp->address1, $letters[$k]->address1) < 0) {
+                $letters[$k+1] = $letters[$k];
+                $k--;
+            }
+            
+            $letters[$k+1] = $temp;
+        }
     }
 }
 
