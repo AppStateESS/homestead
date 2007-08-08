@@ -35,7 +35,7 @@ class HMS_Letter
     function render(&$pdf)
     {
         $pdf->AddPage();
-        $pdf->SetFont('Times');
+        $pdf->SetFont('Times', '', 12);
 
         // Address
         if(is_null($this->address4) && is_null($this->address5))
@@ -111,24 +111,31 @@ class HMS_Letter
         $pdf->Write(HEIGHT, "Stacy R. Sears\nAssistant Director\nHousing & Residence Life");
     }
 
-    function put_into_pile(&$freshmen, &$upperclassmen, $student)
+    function put_into_pile(&$freshmen_new, &$freshmen_changed, &$upperclassmen_new, &$upperclassmen_changed, $student)
     {
         $sql = "
             SELECT
                 hms_cached_student_info.*,
-                hms_assignment.id as a_id
+                hms_assignment.id as a_id,
+                hms_assignment.deleted
             FROM hms_cached_student_info
             JOIN hms_assignment ON
                 hms_cached_student_info.asu_username = hms_assignment.asu_username
             WHERE
-                hms_cached_student_info.asu_username = '$student' AND
-                hms_assignment.deleted = 0
+                hms_cached_student_info.asu_username = '$student'
+            ORDER BY
+                deleted ASC
         ";
 
-        $row = PHPWS_DB::getRow($sql);
-        if(PHPWS_Error::isError($row)) {
-            test($row,1);
+        $rows = PHPWS_DB::getAll($sql);
+        if(PHPWS_Error::isError($rows)) {
+            test($rows,1);
         }
+        
+        $count = count($rows);
+        $row = $rows[0];
+
+        if($row['deleted'] == 1 || $count < 1) return;
 
         $sql = "
             UPDATE hms_assignment
@@ -175,9 +182,17 @@ class HMS_Letter
         $letter->message = "Freshmen and transfer check-in is August 17 from 9am to 6pm.  Returning student check-in starts on August 18.  See above for your scheduled time.  If you have a conflict, you can check-in anytime after your scheduled time, until 6pm on August 21.  Failure to check-in by August 21 by 6pm will result in assignment cancellation.  (See pages 15-16 of the Residence Hall License Contract booklet).";
 
         if($row['student_type'] == 'F' && $row['credit_hours'] == 0) {
-            $freshmen[] = $letter;
+            if($count > 1) {
+                $freshmen_changed[] = $letter;
+            } else {
+                $freshmen_new[] = $letter;
+            }
         } else {
-            $upperclassmen[] = $letter;
+            if($count > 1) {
+                $upperclassmen_changed[] = $letter;
+            } else {
+                $upperclassmen_new[] = $letter;
+            }
         }
     }
 
@@ -356,21 +371,27 @@ class HMS_Letter
                 $needs_letter[] = $result['roommate_user'];
         }
 
-        // Separate into freshmen and upperclassmen
+        // Separate into freshmen and upperclassmen, new and changed
         // Also initialize HMS_Letter objects for them
-        $f_letters = array();
-        $u_letters = array();
+        $fn_letters = array();
+        $fc_letters = array();
+        $un_letters = array();
+        $uc_letters = array();
         foreach($needs_letter as $student) {
-            HMS_Letter::put_into_pile($f_letters, $u_letters, $student);
+            HMS_Letter::put_into_pile($fn_letters, $fc_letters, $un_letters, $uc_letters, $student);
         }
 
         // Sort
-        HMS_Letter::letterSort($f_letters);
-        HMS_Letter::letterSort($u_letters);
+        HMS_Letter::letterSort($fn_letters);
+        HMS_Letter::letterSort($fc_letters);
+        HMS_Letter::letterSort($un_letters);
+        HMS_Letter::letterSort($uc_letters);
 
         // Total counts of letters created
-        $freshcount = count($f_letters);
-        $uppercount = count($u_letters);
+        $nfreshcount = count($fn_letters);
+        $cfreshcount = count($fc_letters);
+        $nuppercount = count($un_letters);
+        $cuppercount = count($uc_letters);
         
         // Initialize PDF and CSV files
         $pdf = HMS_Letter::pdf_factory();
@@ -378,13 +399,43 @@ class HMS_Letter
 
         // Render the letters and CSVs
         $q = '"';
-        foreach($f_letters as $letter) {
+        $pdf->AddPage();
+        $pdf->SetFont('Times','',50);
+        $pdf->Write(1, "NEWLY");
+        $pdf->Write(1, "ASSIGNED");
+        $pdf->Write(1, "FRESHMEN");
+        foreach($fn_letters as $letter) {
             $letter->render($pdf);
             $csv .= "$q{$letter->address1}$q,$q{$letter->address2}$q," .
                     "$q{$letter->address3}$q,$q{$letter->address4}$q," .
                     "$q{$letter->address5}$q\n";
         }
-        foreach($u_letters as $letter) {
+        $pdf->AddPage();
+        $pdf->SetFont('Times','',50);
+        $pdf->Write(1, "REASSIGNED");
+        $pdf->Write(1, "FRESHMEN");
+        foreach($fc_letters as $letter) {
+            $letter->render($pdf);
+            $csv .= "$q{$letter->address1}$q,$q{$letter->address2}$q," .
+                    "$q{$letter->address3}$q,$q{$letter->address4}$q," .
+                    "$q{$letter->address5}$q\n";
+        }
+        $pdf->AddPage();
+        $pdf->SetFont('Times','',50);
+        $pdf->Write(1, "NEWLY");
+        $pdf->Write(1, "ASSIGNED");
+        $pdf->Write(1, "UPPERCLASSMEN");
+        foreach($un_letters as $letter) {
+            $letter->render($pdf);
+            $csv .= "$q{$letter->address1}$q,$q{$letter->address2}$q," .
+                    "$q{$letter->address3}$q,$q{$letter->address4}$q," .
+                    "$q{$letter->address5}$q\n";
+        }
+        $pdf->AddPage();
+        $pdf->SetFont('Times','',50);
+        $pdf->Write(1, "REASSIGNED");
+        $pdf->Write(1, "UPPERCLASSMEN");
+        foreach($uc_letters as $letter) {
             $letter->render($pdf);
             $csv .= "$q{$letter->address1}$q,$q{$letter->address2}$q," .
                     "$q{$letter->address3}$q,$q{$letter->address4}$q," .
@@ -404,7 +455,7 @@ class HMS_Letter
         fclose($fp);
         
         // Report back to the user a job well done
-        $content = "Generated letters for $freshcount freshmen and $uppercount upperclassmen.<br /><br />";
+        $content = "Generated letters for $nfreshcount new freshmen, $cfreshcount changed freshmen, $nuppercount new upperclassmen, and $cuppercount changed upperclassmen.<br /><br />";
         $content .= PHPWS_Text::secureLink(_('Download PDF'), 'hms',
             array('type'=>'letter', 'op'=>'pdf', 'file'=>$filename));
         $content .= "<br /><br />";
