@@ -615,6 +615,75 @@ class HMS_Assignment
         }
     }
 
+    function update_local_student_assignment_data($usernames)
+    {
+        foreach($usernames as $user) {
+            $sql = "
+SELECT
+    hms_cached_student_info.student_type,
+    hms_cached_student_info.credit_hours,
+    hms_room.displayed_room_number,
+    hms_floor.ft_movein,
+    hms_floor.c_movein,
+    hms_residence_hall.hall_name
+
+FROM 
+    hms_cached_student_info,
+    hms_room,
+    hms_residence_hall,
+    hms_beds,
+    hms_bedrooms,
+    hms_floor,
+    hms_assignment
+
+WHERE
+    hms_cached_student_info.asu_username = '$user' AND
+    hms_assignment.asu_username = '$user'         AND
+    hms_assignment.bed_id = hms_beds.id           AND
+    hms_beds.bedroom_id   = hms_bedrooms.id       AND
+    hms_bedrooms.room_id  = hms_room.id           AND
+    hms_room.floor_id     = hms_floor.id          AND
+    hms_floor.building    = hms_residence_hall.id AND
+
+    hms_assignment.deleted     = 0 AND
+    hms_beds.deleted           = 0 AND
+    hms_bedrooms.deleted       = 0 AND
+    hms_room.deleted           = 0 AND
+    hms_floor.deleted          = 0 AND
+    hms_residence_hall.deleted = 0 AND
+
+    hms_bedrooms.is_online       = 1 AND
+    hms_room.is_online           = 1 AND
+    hms_floor.is_online          = 1 AND
+    hms_residence_hall.is_online = 1
+            ";
+
+            $results = PHPWS_DB::getRow($sql);
+            if(PHPWS_Error::isError($results)) {
+                test($results,1);
+            }
+
+            $db = new PHPWS_DB('hms_cached_student_info');
+            $db->addValue('room_number', $results['displayed_room_number']);
+            
+            if($results['student_type'] == 'T' || ($results['student_type'] == 'F' && $results['credit_hours'] == 0)) {
+                $db->addValue('movein_time',
+                    $results['ft_movein'] . '   Freshmen and Transfer ONLY');
+            } else {
+                $db->addValue('movein_time',
+                    $results['c_movein'] . '   Upperclassmen ONLY');
+            }
+            
+            $db->addValue('hall_name', $results['hall_name']);
+            $db->addWhere('asu_username', $user);
+            
+            $result = $db->update();
+            if(PHPWS_Error::isError($result)) {
+                test($result,1);
+            }
+        }
+    }
+
     function generate_student_assignment_data()
     {
         $sql = "

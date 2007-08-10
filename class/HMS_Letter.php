@@ -371,6 +371,9 @@ class HMS_Letter
                 $needs_letter[] = $result['roommate_user'];
         }
 
+        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
+        HMS_Assignment::update_local_student_assignment_data($needs_letter);
+
         // Separate into freshmen and upperclassmen, new and changed
         // Also initialize HMS_Letter objects for them
         $fn_letters = array();
@@ -399,47 +402,55 @@ class HMS_Letter
 
         // Render the letters and CSVs
         $q = '"';
-        $pdf->AddPage();
-        $pdf->SetFont('Times','',50);
-        $pdf->Write(1, "NEWLY");
-        $pdf->Write(1, "ASSIGNED");
-        $pdf->Write(1, "FRESHMEN");
-        foreach($fn_letters as $letter) {
-            $letter->render($pdf);
-            $csv .= "$q{$letter->address1}$q,$q{$letter->address2}$q," .
-                    "$q{$letter->address3}$q,$q{$letter->address4}$q," .
-                    "$q{$letter->address5}$q\n";
+        if(count($fn_letters) > 0) {
+            $pdf->AddPage();
+            $pdf->SetFont('Times','',50);
+            $pdf->Write(1, "NEWLY");
+            $pdf->Write(1, "ASSIGNED");
+            $pdf->Write(1, "FRESHMEN");
+            foreach($fn_letters as $letter) {
+                $letter->render($pdf);
+                $csv .= "$q{$letter->address1}$q,$q{$letter->address2}$q," .
+                        "$q{$letter->address3}$q,$q{$letter->address4}$q," .
+                        "$q{$letter->address5}$q\n";
+            }
         }
-        $pdf->AddPage();
-        $pdf->SetFont('Times','',50);
-        $pdf->Write(1, "REASSIGNED");
-        $pdf->Write(1, "FRESHMEN");
-        foreach($fc_letters as $letter) {
-            $letter->render($pdf);
-            $csv .= "$q{$letter->address1}$q,$q{$letter->address2}$q," .
-                    "$q{$letter->address3}$q,$q{$letter->address4}$q," .
-                    "$q{$letter->address5}$q\n";
+        if(count($fc_letters) > 0) {
+            $pdf->AddPage();
+            $pdf->SetFont('Times','',50);
+            $pdf->Write(1, "REASSIGNED");
+            $pdf->Write(1, "FRESHMEN");
+            foreach($fc_letters as $letter) {
+                $letter->render($pdf);
+                $csv .= "$q{$letter->address1}$q,$q{$letter->address2}$q," .
+                        "$q{$letter->address3}$q,$q{$letter->address4}$q," .
+                        "$q{$letter->address5}$q\n";
+            }
         }
-        $pdf->AddPage();
-        $pdf->SetFont('Times','',50);
-        $pdf->Write(1, "NEWLY");
-        $pdf->Write(1, "ASSIGNED");
-        $pdf->Write(1, "UPPERCLASSMEN");
-        foreach($un_letters as $letter) {
-            $letter->render($pdf);
-            $csv .= "$q{$letter->address1}$q,$q{$letter->address2}$q," .
-                    "$q{$letter->address3}$q,$q{$letter->address4}$q," .
-                    "$q{$letter->address5}$q\n";
+        if(count($un_letters) > 0) {
+            $pdf->AddPage();
+            $pdf->SetFont('Times','',50);
+            $pdf->Write(1, "NEWLY");
+            $pdf->Write(1, "ASSIGNED");
+            $pdf->Write(1, "UPPERCLASSMEN");
+            foreach($un_letters as $letter) {
+                $letter->render($pdf);
+                $csv .= "$q{$letter->address1}$q,$q{$letter->address2}$q," .
+                        "$q{$letter->address3}$q,$q{$letter->address4}$q," .
+                        "$q{$letter->address5}$q\n";
+            }
         }
-        $pdf->AddPage();
-        $pdf->SetFont('Times','',50);
-        $pdf->Write(1, "REASSIGNED");
-        $pdf->Write(1, "UPPERCLASSMEN");
-        foreach($uc_letters as $letter) {
-            $letter->render($pdf);
-            $csv .= "$q{$letter->address1}$q,$q{$letter->address2}$q," .
-                    "$q{$letter->address3}$q,$q{$letter->address4}$q," .
-                    "$q{$letter->address5}$q\n";
+        if(count($uc_letters) > 0) {
+            $pdf->AddPage();
+            $pdf->SetFont('Times','',50);
+            $pdf->Write(1, "REASSIGNED");
+            $pdf->Write(1, "UPPERCLASSMEN");
+            foreach($uc_letters as $letter) {
+                $letter->render($pdf);
+                $csv .= "$q{$letter->address1}$q,$q{$letter->address2}$q," .
+                        "$q{$letter->address3}$q,$q{$letter->address4}$q," .
+                        "$q{$letter->address5}$q\n";
+            }
         }
 
         // Unique filename for the generated files
