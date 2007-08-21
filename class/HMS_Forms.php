@@ -141,6 +141,11 @@ class HMS_Form
             return HMS_Form::get_roommate_username($error);
         }
 
+        if($_REQUEST['username'] == $_SESSION['asu_username']){
+            $error = "You cannot select yourself as your roommate.";
+            return HMS_FORM::get_roommate_username($error);
+        }
+
         PHPWS_Core::initModClass('hms', 'HMS_Roommate_Approval.php');
         if(HMS_Roommate_Approval::has_requested_someone()) {
             return HMS_Student::show_main_menu();
