@@ -141,6 +141,14 @@ class HMS_Form
             return HMS_Form::get_roommate_username($error);
         }
 
+        # Make sure the roommate that is requested has also completed a housing application
+        PHPWS_Core::initModClass('hms', 'HMS_Application.php');
+        if(HMS_Application::check_for_application($_REQUEST['username']) == FALSE){
+            $error = "The roommate you requested has not completed a housing application. Please ask your preferred roommate to log in and complete a housing application. Once your preferred roommate has submitted an application, you can return to this page to request that person as your roommate.";
+            return HMS_Form::get_roommate_username($error);
+        }
+
+        # Make sure the roommate that is requested is not the same person who is logged in
         if($_REQUEST['username'] == $_SESSION['asu_username']){
             $error = "You cannot select yourself as your roommate.";
             return HMS_FORM::get_roommate_username($error);
