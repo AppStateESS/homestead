@@ -25,6 +25,9 @@ class HMS_SOAP{
         }
     }
 
+    /* TODO: This is duplicated code. 'get_gender' and 'get_student_class' exist below.
+     * This function, if it is actually necessary, should be revised to use those functions
+     */
     function get_gender_class($username)
     {
         if(SOAP_TEST_FLAG) {
@@ -561,22 +564,22 @@ class HMS_SOAP{
         $retval['plan'] = 'HOME';
 
         switch($hms_meal_code) {
-            case 0:
+            case 0: // low
                 if($type == 'NFR')
                     $retval['meal'] = '1';
                 else
                     $retval['meal'] = '2';
                 break;
-            case 1:
+            case 1: // med
                 $retval['meal'] = '1';
                 break;
-            case 2:
+            case 2: // high
                 $retval['meal'] = '2';
                 break;
-            case 3:
+            case 3: // super
                 $retval['meal'] = '8';
                 break;
-            case 4:
+            case 4: // none
                 if(($building == 'MAR' || $building == 'AHR') &&
                         $type != 'NFR') {
                     // HOUS, if we ever do that craziness again
