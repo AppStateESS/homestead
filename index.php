@@ -1,6 +1,6 @@
 <?php
 ini_set('ERROR_REPORTING', E_ALL);
-ini_set('display_errors', 0);
+ini_set('display_errors', 1);
 
 if (!defined('PHPWS_SOURCE_DIR')) {
     include '../../config/core/404.html';
@@ -25,7 +25,7 @@ if(Current_User::isLogged()) {
         $error = "<i><h2>You have not entered a valid username/password combination!</h2></i>";
         HMS_Login::display_login_screen($error);
     } else if ($type == TOOOLD) {
-        $error = "<i><h2>You must be under 23 to live in a Residence Hall.<br />";
+        $error = "<i><h2>You must be under 25 to live in a Residence Hall.<br />";
         $error .= "Please contact Housing and Residence Life about living in Mountaineer Apartments.</h2></i>";
         HMS_Login::display_login_screen($error);
     } else if ($type == BADCLASS) {
