@@ -474,13 +474,10 @@ class HMS_Student {
     function show_main_menu()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Application.php');
+
+        # Check to see if an application exists
         if(HMS_Application::check_for_application($_SESSION['asu_username'])) {
             PHPWS_Core::initModClass('hms', 'HMS_Side_Thingie.php');
-            // TODO: This will have to check whether a profile has been made
-            // or not, and then whether a roommate has been selected or not:
-            // if not profile, then HMS_SIDE_STUDENT_PROFILE
-            // if not roommate, then HMS_SIDE_STUDENT_ROOMMATE
-            // else, HMS_SIDE_STUDENT_VERIFY
             $side_thingie = new HMS_Side_Thingie(HMS_SIDE_STUDENT_PROFILE);
             $side_thingie->show();
 
@@ -522,50 +519,67 @@ class HMS_Student {
             $message .= PHPWS_Text::secureLink(_('Logout'), 'users', array('action'=>'user', 'command'=>'logout'));
             $message .= "<br /><br />";
         } else {
-            PHPWS_Core::initModClass('hms', 'HMS_Side_Thingie.php');
-            $side_thingie = new HMS_Side_Thingie(HMS_SIDE_STUDENT_AGREE);
-            $side_thingie->show();
-           
-            $form = new PHPWS_Form;
-            $form->addHidden('module', 'hms');
-            $form->addHidden('type', 'student');
-            $form->addHidden('op', 'begin_application');
-            $form->addSubmit('begin', _('I AGREE'));
-            $form->addSubmit('quit', _('I DISAGREE'));
-            
-            $message  = "<b>Please read the following License Agreement and click either 'I AGREE' or 'I DISAGREE'<br />";
-            $message .= 'Please note that if you click disagree you will be logged out of HMS.</b><br /><br />';
-            $message .= 'If you wish to read this Agreement as a printable PDF please ';
-            $message .= '<a href="http://hms.appstate.edu/files/contract.pdf" target="_blank">click here.</a><br /><br />';
-            $message .= 'If you need to update or download a PDF viewer you can <a href="http://www.adobe.com/products/acrobat/readstep2.html" target="_blank">get one here</a><br /><br />';
-
-            # Check for under 18, display link to print message
-            PHPWS_Core::initModClass('hms','HMS_SOAP.php');
-            $dob = explode('-', HMS_SOAP::get_dob($_REQUEST['asu_username']));
-            $dob_timestamp = mktime(0,0,0,$dob[1],$dob[2],$dob[0]);
-            $current_timestamp = mktime(0,0,0);
-            if(($current_timestamp - $dob_timestamp) < (3600 * 24 * 365 * 18)){
-                $message .= '<br /><font color="red">Because you are under age 18, you MUST print a copy of the Housing Contract Agreement, ';
-                $message .= 'have a parent or legal guardian sign it, and return it to the Department of ';
-                $message .= 'Housing and Residence Life. Your application cannot be fully processed until a Housing Contract ';
-                $message .= 'signed by a parent or gaurdian is on file. Please <a href="http://hms.appstate.edu/files/contract.pdf">click here </a>';
-                $message .= 'to open a printer-friendly version of the Housing Contract.</font><br /><br />';
-
-                # Set the 'agreed_to_terms' flag to false
-                $form->addHidden('agreed_to_terms',0);
+            # No application exists, check deadlines to see if the user can still apply
+            PHPWS_Core::initModClass('hms','HMS_Deadlines.php');
+            if(!HMS_Deadlines::check_deadline_past('submit_application_end_timestamp')){
+                # Application deadline has not passed, so show terms and agreement page
+                $message = HMS_Student::show_terms_and_agreement();
             }else{
-                $form->addHidden('agreed_to_terms',1);
+                # Application deadline has passed, show an error message;
+                $message = "Sorry, it is too late to apply for housing. If you need assistance please contact the Department of Housing and Residence Life by phone.";
             }
-            
-            $tpl = $form->getTemplate();
-
-            $tpl['MESSAGE'] = $message;
-            $tpl['CONTRACT'] = str_replace("\n", "<br />", file_get_contents('mod/hms/inc/contract.txt'));
-            
-            $message = PHPWS_Template::process($tpl, 'hms', 'student/contract.tpl');
-        }       
+        }
+        
         return $message;
     }
+
+    function show_terms_and_agreement(){
+        PHPWS_Core::initModClass('hms', 'HMS_Side_Thingie.php');
+        $side_thingie = new HMS_Side_Thingie(HMS_SIDE_STUDENT_AGREE);
+        $side_thingie->show();
+       
+        $form = new PHPWS_Form;
+        $form->addHidden('module', 'hms');
+        $form->addHidden('type', 'student');
+        $form->addHidden('op', 'begin_application');
+        $form->addSubmit('begin', _('I AGREE'));
+        $form->addSubmit('quit', _('I DISAGREE'));
+        
+        $message  = "<b>Please read the following License Agreement and click either 'I AGREE' or 'I DISAGREE'<br />";
+        $message .= 'Please note that if you click disagree you will be logged out of HMS.</b><br /><br />';
+        $message .= 'If you wish to read this Agreement as a printable PDF please ';
+        $message .= '<a href="http://hms.appstate.edu/files/contract.pdf" target="_blank">click here.</a><br /><br />';
+        $message .= 'If you need to update or download a PDF viewer you can <a href="http://www.adobe.com/products/acrobat/readstep2.html" target="_blank">get one here</a><br /><br />';
+
+        # Check for under 18, display link to print message
+        PHPWS_Core::initModClass('hms','HMS_SOAP.php');
+        $dob = explode('-', HMS_SOAP::get_dob($_REQUEST['asu_username']));
+        $dob_timestamp = mktime(0,0,0,$dob[1],$dob[2],$dob[0]);
+        $current_timestamp = mktime(0,0,0);
+        if(($current_timestamp - $dob_timestamp) < (3600 * 24 * 365 * 18)){
+            $message .= '<br /><font color="red">Because you are under age 18, you MUST print a copy of the Housing Contract Agreement, ';
+            $message .= 'have a parent or legal guardian sign it, and return it to the Department of ';
+            $message .= 'Housing and Residence Life. Your application cannot be fully processed until a Housing Contract ';
+            $message .= 'signed by a parent or gaurdian is on file. Please <a href="http://hms.appstate.edu/files/contract.pdf">click here </a>';
+            $message .= 'to open a printer-friendly version of the Housing Contract.</font><br /><br />';
+
+            # Set the 'agreed_to_terms' flag to false
+            $form->addHidden('agreed_to_terms',0);
+        }else{
+            $form->addHidden('agreed_to_terms',1);
+        }
+        
+        $tpl = $form->getTemplate();
+
+        $tpl['MESSAGE'] = $message;
+        $tpl['CONTRACT'] = str_replace("\n", "<br />", file_get_contents('mod/hms/inc/contract.txt'));
+        
+        $message = PHPWS_Template::process($tpl, 'hms', 'student/contract.tpl');
+        
+        return $message;
+    }
+
+    
     function main()
     {
         if($_REQUEST['op'] == 'login') {
