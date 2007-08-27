@@ -2728,6 +2728,9 @@ class HMS_Form
             
             $redo_tpl = $redo_form->getTemplate();
 
+            PHPWS_Core::initModClass('hms','HMS_SOAP.php');
+            $tpl['STUDENT_NAME'] = HMS_SOAP::get_full_name($_SESSION['asu_username']);
+
             $tpl['MESSAGE'] = $message;
             $tpl['NEWLINES']= "<br /><br />";
             
@@ -2739,8 +2742,8 @@ class HMS_Form
             else if($_REQUEST['classification_for_term'] == 3) $tpl['CLASSIFICATION_FOR_TERM'] = "Junior";
             else if($_REQUEST['classification_for_term'] == 4) $tpl['CLASSIFICATION_FOR_TERM'] = "Senior";
             
-            if($_REQUEST['gender_type'] == 0) $tpl['GENDER_TYPE'] = "Female";
-            else if($_REQUEST['gender_type'] == 1) $tpl['GENDER_TYPE'] = "Male";
+            if($_REQUEST['gender_type'] == 0) $tpl['GENDER'] = "Female";
+            else if($_REQUEST['gender_type'] == 1) $tpl['GENDER'] = "Male";
             
             if($_REQUEST['meal_option'] == 1) $tpl['MEAL_OPTION'] = "Low";
             else if($_REQUEST['meal_option'] == 2) $tpl['MEAL_OPTION'] = "Medium";
