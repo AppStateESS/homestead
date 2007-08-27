@@ -126,6 +126,7 @@ class HMS_Side_Thingie {
         # If this is the step we're on, then set style accordingly
         if($this->step == HMS_SIDE_STUDENT_RLC){
             $this->steps_styles[HMS_SIDE_STUDENT_RLC] = 'STEP_CURRENT';
+            return;
         }
         
         # Check to see if the student has a RLC application on file already. If so, set styles to completed and we're done.
@@ -155,6 +156,7 @@ class HMS_Side_Thingie {
         # If this is the step we're on, then set style accordingly
         if($this->step == HMS_SIDE_STUDENT_PROFILE){
             $this->steps_styles[HMS_SIDE_STUDENT_PROFILE] = 'STEP_CURRENT';
+            return;
         }
         
         #Check to see if the student has a profile in the database already. If so, show this step as completed and return.
@@ -186,6 +188,7 @@ class HMS_Side_Thingie {
         # If this is the step we're on, then set style accordingly
         if($this->step == HMS_SIDE_STUDENT_ROOMMATE){
             $this->steps_styles[HMS_SIDE_STUDENT_ROOMMATE] = 'STEP_CURRENT';
+            return;
         }
 
         PHPWS_Core::initModClass('hms','HMS_Roommate.php');
@@ -217,6 +220,7 @@ class HMS_Side_Thingie {
         # If this is the step we're on, then set style accordingly
         if($this->step == HMS_SIDE_STUDENT_ROOMMATE){
             $this->steps_styles[HMS_SIDE_STUDENT_ROOMMATE] = 'STEP_CURRENT';
+            return;
         }
 
         # Check deadlines and set accordingly
