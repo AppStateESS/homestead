@@ -459,6 +459,10 @@ class HMS_Student {
 
     function get_roommate_username()
     {
+        PHPWS_Core::initModClass('hms', 'HMS_Side_Thingie.php');
+        $side_thingie = new HMS_Side_Thingie(HMS_SIDE_STUDENT_ROOMMATE);
+        $side_thingie->show();
+
         PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
         $content = HMS_Form::get_roommate_username();
         return $content;
@@ -466,6 +470,10 @@ class HMS_Student {
 
     function verify_roommate_username()
     {
+        PHPWS_Core::initModClass('hms', 'HMS_Side_Thingie.php');
+        $side_thingie = new HMS_Side_Thingie(HMS_SIDE_STUDENT_ROOMMATE);
+        $side_thingie->show();
+        
         PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
         $content = HMS_Form::verify_roommate_username($_SESSION['asu_username'], $_REQUEST['username']);
         return $content;
@@ -697,6 +705,9 @@ class HMS_Student {
                 if(isset($_REQUEST['cancel'])) {
                     return HMS_Student::get_roommate_username();
                 } else {
+                    PHPWS_Core::initModClass('hms', 'HMS_Side_Thingie.php');
+                    $side_thingie = new HMS_Side_Thingie(HMS_SIDE_STUDENT_ROOMMATE);
+                    $side_thingie->show();
                     PHPWS_Core::initModClass('hms', 'HMS_Roommate_Approval.php');
                     return HMS_Roommate_Approval::save_roommate_username();
                 }
