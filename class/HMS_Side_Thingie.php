@@ -140,7 +140,7 @@ class HMS_Side_Thingie {
             $this->steps_styles[HMS_SIDE_STUDENT_RLC] = 'STEP_NOTYET';
             return;
         }else if($this->curr_timestamp > $this->deadlines->get_submit_application_begin_timestamp() && $this->curr_timestamp < $this->deadlines->get_submit_rlc_application_end_timestamp()){
-            $this->steps_text[HMS_SIDE_STUDENT_RLC] .= " (complete by ". date('n/j/y',$this->deadlines->get_submit_rlc_application_end_timestamp()) . ")";
+            $this->steps_text[HMS_SIDE_STUDENT_RLC] = PHPWS_Text::secureLink($this->steps_text[HMS_SIDE_STUDENT_RLC] . " (complete by ". date('n/j/y',$this->deadlines->get_submit_rlc_application_end_timestamp()) . ")", 'hms', array('type'=>'student', 'op'=>'show_rlc_application_form'));
             $this->steps_styles[HMS_SIDE_STUDENT_RLC] = 'STEP_TOGO';
             return;
         }else if($this->curr_timestamp > $this->deadlines->get_submit_rlc_application_end_timestamp()){
@@ -170,7 +170,7 @@ class HMS_Side_Thingie {
             $this->steps_styles[HMS_SIDE_STUDENT_PROFILE] = 'STEP_NOTYET';
             return;
         }else if($this->curr_timestamp > $this->deadlines->get_edit_profile_begin_timestamp() && $this->curr_timestamp < $this->deadlines->get_edit_profile_end_timestamp()){
-            $this->steps_text[HMS_SIDE_STUDENT_PROFILE] .= " (complete by ". date('n/j/y',$this->deadlines->get_edit_profile_end_timestamp()) . ")";
+            $this->steps_text[HMS_SIDE_STUDENT_PROFILE] = PHPWS_Text::secureLink($this->steps_text[HMS_SIDE_STUDENT_PROFILE] . " (complete by ". date('n/j/y',$this->deadlines->get_edit_profile_end_timestamp()) . ")", 'hms', array('type'=>'student', 'op'=>'show_profile_form'));
             $this->steps_styles[HMS_SIDE_STUDENT_PROFILE] = 'STEP_TOGO';
             return;
         }else if($this->curr_timestamp > $this->deadlines->get_edit_profile_end_timestamp()){
@@ -191,6 +191,7 @@ class HMS_Side_Thingie {
         PHPWS_Core::initModClass('hms','HMS_Roommate.php');
         PHPWS_Core::initModClass('hms','HMS_Roommate_Approval.php');
 
+        # If the user has roommates confirmed or has request pending approval, then call this step completed
         if(HMS_Roommate::has_roommates($_SESSION['asu_username']) || HMS_Roommate_Approval::has_requested_someone($_SESSION['asu_username'])){
             $this->steps_styles[HMS_SIDE_STUDENT_ROOMMATE] = 'STEP_COMPLETED';
             return;
@@ -201,7 +202,7 @@ class HMS_Side_Thingie {
             $this->steps_styles[HMS_SIDE_STUDENT_ROOMMATE] .= 'STEP_NOTYET';
             return;
         }else if($this->curr_timestamp > $this->deadlines->get_submit_application_begin_timestamp() && $this->curr_timestamp < $this->deadlines->get_search_profiles_end_timestamp()){
-            $this->steps_text[HMS_SIDE_STUDENT_ROOMMATE] .= " (complete by ". date('n/j/y',$this->deadlines->get_search_profiles_end_timestamp()) . ")";
+            $this->steps_text[HMS_SIDE_STUDENT_ROOMMATE] = PHPWS_Text::secureLink($this->steps_text[HMS_SIDE_STUDENT_ROOMMATE] . " (complete by ". date('n/j/y',$this->deadlines->get_search_profiles_end_timestamp()) . ")", 'hms', array('type'=>'student', 'op'=>'get_roommate_username'));
             $this->steps_styles[HMS_SIDE_STUDENT_ROOMMATE] = 'STEP_TOGO';
             return;
         }else if($this->curr_timestamp > $this->deadlines->get_search_profiles_end_timestamp()){
@@ -218,9 +219,15 @@ class HMS_Side_Thingie {
             $this->steps_styles[HMS_SIDE_STUDENT_ROOMMATE] = 'STEP_CURRENT';
         }
 
-        # For now, always set to NOT YET    
-        $this->steps_text[HMS_SIDE_STUDENT_VERIFY] .= " (available 7/15/07)";
-        $this->steps_styles[HMS_SIDE_STUDENT_VERIFY] = 'STEP_NOTYET';
-        return;
+        # Check deadlines and set accordingly
+        if($this->curr_timestamp < $this->deadlines->get_view_assignment_begin_timestamp()){
+            $this->steps_text[HMS_SIDE_STUDENT_VERIFY] .= " (available " . date('n/j/y',$this->deadlines->get_view_assignment_begin_timestamp()) . ")";
+            $this->steps_styles[HMS_SIDE_STUDENT_VERIFY] = 'STEP_NOTYET';
+            return;
+        }else{
+            $this->steps_text[HMS_SIDE_STUDENT_VERIFY] = PHPWS_Text::secureLink($this->steps_text[HMS_SIDE_STUDENT_VERIFY], 'hms', array('type'=>'student', 'op'=>'show_verify_assignment'));
+            $this->steps_styles[HMS_SIDE_STUDENT_VERIFY] = 'STEP_TOGO';
+            return;
+        }
     }
 }
