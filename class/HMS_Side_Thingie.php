@@ -123,8 +123,10 @@ class HMS_Side_Thingie {
     function set_rlc()
     {
         # If this is the step we're on, then set style accordingly
+        $on_this_step = FALSE;
         if($this->step == HMS_SIDE_STUDENT_RLC){
             $this->steps_styles[HMS_SIDE_STUDENT_RLC] = 'STEP_CURRENT';
+            $on_this_step = TRUE;
         }
         
         # Check to see if the student has a RLC application on file already. If so, set styles to completed and we're done.
@@ -139,8 +141,14 @@ class HMS_Side_Thingie {
             $this->steps_styles[HMS_SIDE_STUDENT_RLC] = 'STEP_NOTYET';
             return;
         }else if($this->curr_timestamp > $this->deadlines->get_submit_application_begin_timestamp() && $this->curr_timestamp < $this->deadlines->get_submit_rlc_application_end_timestamp()){
-            $this->steps_text[HMS_SIDE_STUDENT_RLC] = PHPWS_Text::secureLink($this->steps_text[HMS_SIDE_STUDENT_RLC] . " (complete by ". date('n/j/y',$this->deadlines->get_submit_rlc_application_end_timestamp()) . ")", 'hms', array('type'=>'student', 'op'=>'show_rlc_application_form'));
-            $this->steps_styles[HMS_SIDE_STUDENT_RLC] = 'STEP_TOGO';
+            # We are within deadlines, check to see if we're actually on this step
+            if($on_this_step){
+                # We're on this step currently, so don't add a link, just add the text
+                $this->steps_text[HMS_SIDE_STUDENT_RLC] .= " (complete by ". date('n/j/y',$this->deadlines->get_submit_rlc_application_end_timestamp()) . ")";
+            }else{
+                $this->steps_text[HMS_SIDE_STUDENT_RLC] = PHPWS_Text::secureLink($this->steps_text[HMS_SIDE_STUDENT_RLC] . " (complete by ". date('n/j/y',$this->deadlines->get_submit_rlc_application_end_timestamp()) . ")", 'hms', array('type'=>'student', 'op'=>'show_rlc_application_form'));
+                $this->steps_styles[HMS_SIDE_STUDENT_RLC] = 'STEP_TOGO';
+            }
             return;
         }else if($this->curr_timestamp > $this->deadlines->get_submit_rlc_application_end_timestamp()){
             $this->steps_text[HMS_SIDE_STUDENT_RLC] .= "(skipped)";
@@ -152,8 +160,10 @@ class HMS_Side_Thingie {
     function set_profile()
     {
         # If this is the step we're on, then set style accordingly
+        $on_this_step = FALSE;
         if($this->step == HMS_SIDE_STUDENT_PROFILE){
             $this->steps_styles[HMS_SIDE_STUDENT_PROFILE] = 'STEP_CURRENT';
+            $on_this_step = TRUE;
         }
         
         #Check to see if the student has a profile in the database already. If so, show this step as completed and return.
@@ -169,8 +179,15 @@ class HMS_Side_Thingie {
             $this->steps_styles[HMS_SIDE_STUDENT_PROFILE] = 'STEP_NOTYET';
             return;
         }else if($this->curr_timestamp > $this->deadlines->get_edit_profile_begin_timestamp() && $this->curr_timestamp < $this->deadlines->get_edit_profile_end_timestamp()){
-            $this->steps_text[HMS_SIDE_STUDENT_PROFILE] = PHPWS_Text::secureLink($this->steps_text[HMS_SIDE_STUDENT_PROFILE] . " (complete by ". date('n/j/y',$this->deadlines->get_edit_profile_end_timestamp()) . ")", 'hms', array('type'=>'student', 'op'=>'show_profile_form'));
-            $this->steps_styles[HMS_SIDE_STUDENT_PROFILE] = 'STEP_TOGO';
+            # We are within deadlines, check to see if we're actually on this step
+            if($on_this_step){
+                # We're on this step currently, so don't add a link, just add the text
+                $this->steps_text[HMS_SIDE_STUDENT_PROFILE] .=  " (complete by ". date('n/j/y',$this->deadlines->get_edit_profile_end_timestamp()) . ")";
+            }else{
+                # We're not on this step, so add the link and text
+                $this->steps_text[HMS_SIDE_STUDENT_PROFILE] = PHPWS_Text::secureLink($this->steps_text[HMS_SIDE_STUDENT_PROFILE] . " (complete by ". date('n/j/y',$this->deadlines->get_edit_profile_end_timestamp()) . ")", 'hms', array('type'=>'student', 'op'=>'show_profile_form'));
+                $this->steps_styles[HMS_SIDE_STUDENT_PROFILE] = 'STEP_TOGO';
+            }
             return;
         }else if($this->curr_timestamp > $this->deadlines->get_edit_profile_end_timestamp()){
             $this->steps_text[HMS_SIDE_STUDENT_PROFILE] .= "(skipped)";
@@ -183,8 +200,10 @@ class HMS_Side_Thingie {
     function set_roomate()
     {
         # If this is the step we're on, then set style accordingly
+        $on_this_step = FALSE;
         if($this->step == HMS_SIDE_STUDENT_ROOMMATE){
             $this->steps_styles[HMS_SIDE_STUDENT_ROOMMATE] = 'STEP_CURRENT';
+            $on_this_step = TRUE;
         }
 
         PHPWS_Core::initModClass('hms','HMS_Roommate.php');
@@ -201,8 +220,15 @@ class HMS_Side_Thingie {
             $this->steps_styles[HMS_SIDE_STUDENT_ROOMMATE] .= 'STEP_NOTYET';
             return;
         }else if($this->curr_timestamp > $this->deadlines->get_submit_application_begin_timestamp() && $this->curr_timestamp < $this->deadlines->get_search_profiles_end_timestamp()){
-            $this->steps_text[HMS_SIDE_STUDENT_ROOMMATE] = PHPWS_Text::secureLink($this->steps_text[HMS_SIDE_STUDENT_ROOMMATE] . " (complete by ". date('n/j/y',$this->deadlines->get_search_profiles_end_timestamp()) . ")", 'hms', array('type'=>'student', 'op'=>'get_roommate_username'));
-            $this->steps_styles[HMS_SIDE_STUDENT_ROOMMATE] = 'STEP_TOGO';
+            # We are within deadlines, check to see if we're actually on this step
+            if($on_this_step){
+                # We're on this step currently, so don't add a link, just add the text
+                $this->steps_text[HMS_SIDE_STUDENT_ROOMMATE] .= " (complete by ". date('n/j/y',$this->deadlines->get_search_profiles_end_timestamp()) . ")";
+            }else{
+                # We're not on this step, so add the link and text
+                $this->steps_text[HMS_SIDE_STUDENT_ROOMMATE] = PHPWS_Text::secureLink($this->steps_text[HMS_SIDE_STUDENT_ROOMMATE] . " (complete by ". date('n/j/y',$this->deadlines->get_search_profiles_end_timestamp()) . ")", 'hms', array('type'=>'student', 'op'=>'get_roommate_username'));
+                $this->steps_styles[HMS_SIDE_STUDENT_ROOMMATE] = 'STEP_TOGO';
+            }
             return;
         }else if($this->curr_timestamp > $this->deadlines->get_search_profiles_end_timestamp()){
             $this->steps_text[HMS_SIDE_STUDENT_ROOMMATE] .= "(skipped)";
@@ -214,8 +240,10 @@ class HMS_Side_Thingie {
     function set_verify()
     {
         # If this is the step we're on, then set style accordingly
+        $on_this_step = FALSE;
         if($this->step == HMS_SIDE_STUDENT_ROOMMATE){
             $this->steps_styles[HMS_SIDE_STUDENT_ROOMMATE] = 'STEP_CURRENT';
+            $on_this_step = TRUE;
         }
 
         # Check deadlines and set accordingly
@@ -224,7 +252,14 @@ class HMS_Side_Thingie {
             $this->steps_styles[HMS_SIDE_STUDENT_VERIFY] = 'STEP_NOTYET';
             return;
         }else{
-            $this->steps_text[HMS_SIDE_STUDENT_VERIFY] = PHPWS_Text::secureLink($this->steps_text[HMS_SIDE_STUDENT_VERIFY], 'hms', array('type'=>'student', 'op'=>'show_verify_assignment'));
+            # We are past the starting deadline, check to see if we're actually on this step
+            if($on_this_step){
+                # We're on this step, so don't add a link, just the text
+                $this->steps_text[HMS_SIDE_STUDENT_VERIFY] .= $this->steps_text[HMS_SIDE_STUDENT_VERIFY];
+            }else{
+                # We're not on this step, so add the link and text
+                $this->steps_text[HMS_SIDE_STUDENT_VERIFY] = PHPWS_Text::secureLink($this->steps_text[HMS_SIDE_STUDENT_VERIFY], 'hms', array('type'=>'student', 'op'=>'show_verify_assignment'));
+            }
             $this->steps_styles[HMS_SIDE_STUDENT_VERIFY] = 'STEP_TOGO';
             return;
         }

@@ -485,8 +485,9 @@ class HMS_Student {
 
         # Check to see if an application exists
         if(HMS_Application::check_for_application($_SESSION['asu_username'])) {
+            # Application exists, so just show the main menu
             PHPWS_Core::initModClass('hms', 'HMS_Side_Thingie.php');
-            $side_thingie = new HMS_Side_Thingie(HMS_SIDE_STUDENT_PROFILE);
+            $side_thingie = new HMS_Side_Thingie(HMS_SIDE_STUDENT_NOT_STARTED);
             $side_thingie->show();
 
             $message  = "Welcome to the Housing Management System!<br /><br />";
