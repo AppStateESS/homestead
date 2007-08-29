@@ -491,40 +491,61 @@ class HMS_Student {
             $side_thingie->show();
 
             $message  = "Welcome to the Housing Management System!<br /><br />";
-            $message .= "You have already completed a Housing Application. You may click below to review it.<br /><br />";
-            $message .= "You may also submit a new application. This will replace the one you already have saved.<br /><br />";
+            $message .= "You have already completed a Housing Application. You may click the link below to review your current application.<br /><br />";
             $message .= PHPWS_Text::secureLink(_('View My Application'), 'hms', array('type'=>'student', 'op'=>'review_application'));
             $message .= "<br /><br />";
+            
+            # Check deadlines for editing applications here
+            # TODO
+            $message .= "You may also submit a new application. This will replace the one you already have saved.<br /><br />";
             $message .= PHPWS_Text::secureLink(_('Submit New Application'), 'hms', array('type'=>'student', 'op'=>'begin_application'));
             $message .= "<br /><br />";
             
+            
             PHPWS_Core::initModClass('hms','HMS_RLC_Application.php');
             if(HMS_RLC_Application::check_for_application() === FALSE){
+                # Check deadlines for RLC applications here
+                # TODO
+                $message .= "You may apply for a Residential Learning Community. For more infomration about Appalachian's Residential Learning Communities please see: blah. To apply click on the link below.<br />";
                 $message .= PHPWS_Text::secureLink(_('RLC Application Form'), 'hms', array('type'=>'student', 'op'=>'show_rlc_application_form'));
             } else {
+                $message .= "You have already completed a Residential Learning Community application. You can click the link below to review your application. If you need to change your application, please contact Housing and Residence Life via phone. <br />";
                 $message .= PHPWS_Text::secureLink(_('View My RLC Application'), 'hms', array('type'=>'student', 'op'=>'view_rlc_application'));
             }
             $message .= "<br /><br />";
     
-/*            PHPWS_Core::initModClass('hms', 'HMS_Student_Profile.php');
-            $message .= "The HMS Student Profile is optional and can be used to help you find a roommate who shares your interests. ";
-            $message .= "<br />";
+            # Check deadlines here
+            $message .= "The HMS Student Profile is optional and can be used to help you find a roommate who shares your interests. Once you complete your profile, you will be able to search for other students who share your interests based on their profiles. Click the link below to setup your profile. Once you create a profile, you can modify it as much as you like until the profile editing time period is over.<br />";
             $message .= PHPWS_Text::secureLink(_('Create/Edit your optional Student Profile'), 'hms', array('type'=>'student', 'op' =>'show_profile_form'));
             $message .= "<br /><br />";
 
+            PHPWS_Core::initModClass('hms', 'HMS_Student_Profile.php');
+            # Check deadlines here
+            # TODO
+            if(HMS_Student_Profile::check_for_profile() === TRUE){
+                # Show the search profiles link
+                $message .= "Click the link below to use the Roommate Search Tool to look for potential roommate based on their profiles.<br />";
+                $message .= PHPWS_Text::secureLink('Roommate Search Tool', 'hms', array('type'=>'student','op'=>'show_profile_search'));
+                $message .= "<br /><br />";
+            }
+                
             PHPWS_Core::initModClass('hms', 'HMS_Roommate_Approval.php');
             if(HMS_Roommate_Approval::has_requested_someone($_SESSION['asu_username'])) {
-                $message .= "You have selected a roommate and are awaiting their approval.";
+                $message .= "You have selected a roommate and are awaiting their approval.<br />";
+            # TODO
+            #}elseif(has_roommate()){
+            #   $message .= "<roommate_name> has confirmed your roommate request. You are now roommates.<br />";
             } else {
-                $message .= "If you know who you want to room with, you can go ahead and " . PHPWS_Text::secureLink(_('select your roommate.'), 'hms', array('type'=>'student','op'=>'get_roommate_username'));
+                $message .= "If you know who you want your roommate to be, you can go ahead and select your roommate. You will need to know your roommate's ASU user name (their e-mail address). Click the link below to select your roommate.<br />";
+                $message .= PHPWS_Text::secureLink(_('Select Your Roommate'), 'hms', array('type'=>'student','op'=>'get_roommate_username'));
             }
+            $message .= "<br /><br />";
 
-            $message .= "<br /><br />";*/
+            
             $message .= 'If you need to download and print the License Agreement please ';
             $message .= '<a href="http://hms.appstate.edu/files/contract.pdf" target="_blank">click here.</a>';
             $message .= "<br /><br />";
-//            $message .= PHPWS_Text::secureLink('Roommate Search Tool.', 'hms', array('type'=>'student','op'=>'show_profile_search'));
-//            $message .= "<br /><br />";
+
             $message .= PHPWS_Text::secureLink(_('Logout'), 'users', array('action'=>'user', 'command'=>'logout'));
             $message .= "<br /><br />";
         } else {
