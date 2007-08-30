@@ -2431,7 +2431,7 @@ class HMS_Form
         return $final;
     }
 
-    function show_deadlines($message)
+    function show_deadlines($success_message = NULL,$error_message = NULL)
     {
         $months = array('1'=>'January',
                         '2'=>'February',
@@ -2555,9 +2555,14 @@ class HMS_Form
         $form->addSubmit('submit', _('Save Deadlines'));
         $tpl = $form->getTemplate();
         
-        if(isset($message)) {
-            $tpl['ERROR'] = $message;
+        if(isset($error_message)) {
+            $tpl['ERROR'] = $error_message;
         }
+
+        if(isset($success_message)){
+            $tpl['SUCCESS'] = $success_message;
+        }
+
         
         $final = PHPWS_Template::process($tpl, 'hms', 'admin/deadlines.tpl');
         return $final;

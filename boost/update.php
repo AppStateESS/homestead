@@ -497,9 +497,12 @@ function hms_update(&$content, $currentVersion)
             $content[] = '+ OMG BANNER WORKS hopefully';
 
         case version_compare($currentVersion, '0.2.0', '<'):
+            $files[] = 'templates/admin/deadlines.tpl';
 
             $content[] = '+ Added check to prevent students selecting themselves as roommates';
             $content[] = '+ Added check to make sure a requested roommate has a housing application';
+            $content[] = '+ Cleaned up main menu, added checks for deadlines for menu options';
+            $content[] = '+ Fixed colors for messages returned when setting deadlines (UI)';
 
     }
 

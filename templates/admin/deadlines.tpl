@@ -4,6 +4,7 @@
     <div class="box-title"> <h1>{TITLE}</h1> </div>
     <div class="box-content">
         <font color="red"><i>{ERROR}</i></font>
+        <font color="green"><i>{SUCCESS}</i></font>
         Here you may set time windows for various HMS functions.<br /><br />
         <table>
             <tr>

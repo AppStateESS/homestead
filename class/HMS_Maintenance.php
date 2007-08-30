@@ -336,7 +336,7 @@ class HMS_Maintenance
         if(PEAR::isError($result)) {
             PHPWS_Error::log($result);
             $message = "Error saving deadlines. Please check the error logs!<br />";
-            return HMS_Maintenance::show_deadlines($message);
+            return HMS_Maintenance::show_deadlines(NULL,$message);
         } else {
             $message = "Deadlines updated successfully!<br />";
             return HMS_Maintenance::show_deadlines($message);
