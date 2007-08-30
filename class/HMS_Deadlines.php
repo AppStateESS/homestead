@@ -9,6 +9,8 @@
 
 class HMS_Deadlines {
 
+    # TODO: make this use an array with intellegent names
+
     var $slbt = NULL; # student login begin timestamp
     var $slet = NULL; # student login end timestamp
     var $sabt = NULL; # submit application begin timestamp
@@ -81,9 +83,45 @@ class HMS_Deadlines {
             return $deadlines;
         }
 
-        # Check if $deadline_name is valid here??
+        # TODO: Check if $deadline_name is valid here??
 
         if($deadlines[$deadline_name] <= mktime()){
+            return TRUE;
+        }else{
+            return FALSE;
+        }
+    }
+    
+    /**
+     * Checks if the current time is within two deadlines.
+     * Expects two deadline names as defined by the deadline table.
+     * 
+     * Optionally takes a deadlines array (like that returned from 'get_deadlines()' to use
+     * so you can call get deadlines once and then pass the result to this function for repeated checks.
+     * (avoids repetative database queries).
+     * 
+     * Returns TRUE if the current time is within the start and end deadlines, FALSE otherwise.
+     * Returns a PEAR error object in case of a DB error.
+     *
+     * Can be called statically.
+     */
+    function check_within_deadlines($deadline_name_start, $deadline_name_end, $deadlines = NULL)
+    {
+        # If we weren't passed in the deadlines, then get them now
+        if(!isset($deadlines)){
+            $deadlines = HMS_Deadlines::get_deadlines();
+        }
+
+        if(PEAR::isError($deadlines)){
+            return $deadlines;
+        }
+
+        # TODO: Check if deadline names are valid here??
+        # use 'array_key_exists'
+
+        $curr_time = mktime();
+
+        if($deadlines[$deadline_name_start] <= $curr_time && $deadlines[$deadline_name_end] >= $curr_time){
             return TRUE;
         }else{
             return FALSE;
