@@ -482,51 +482,63 @@ class HMS_Student {
     function show_main_menu()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Application.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Deadlines.php');
 
         # Check to see if an application exists
         if(HMS_Application::check_for_application($_SESSION['asu_username'])) {
             # Application exists, so just show the main menu
+
+            # Show the side thingie
             PHPWS_Core::initModClass('hms', 'HMS_Side_Thingie.php');
             $side_thingie = new HMS_Side_Thingie(HMS_SIDE_STUDENT_NOT_STARTED);
             $side_thingie->show();
 
+            # Get deadlines for future use
+            $deadlines = HMS_Deadlines::get_deadlines();
+
+            # Welcome and view application link (always shown)
             $message  = "Welcome to the Housing Management System!<br /><br />";
-            $message .= "You have already completed a Housing Application. You may click the link below to review your current application.<br /><br />";
+            $message .= "You have already completed a Housing Application. You may click the link below to review your current application.<br />";
             $message .= PHPWS_Text::secureLink(_('View My Application'), 'hms', array('type'=>'student', 'op'=>'review_application'));
             $message .= "<br /><br />";
             
-            # Check deadlines for editing applications here
-            # TODO
-            $message .= "You may also submit a new application. This will replace the one you already have saved.<br /><br />";
-            $message .= PHPWS_Text::secureLink(_('Submit New Application'), 'hms', array('type'=>'student', 'op'=>'begin_application'));
-            $message .= "<br /><br />";
-            
+            # Check deadlines for editing applications
+            if(HMS_Deadlines::check_within_deadlines('submit_application_begin_timestamp','edit_application_end_timestamp',$deadlines)){
+                $message .= "You may also submit a new application. This will replace the one you already have saved.<br />";
+                $message .= PHPWS_Text::secureLink(_('Submit New Application'), 'hms', array('type'=>'student', 'op'=>'begin_application'));
+                $message .= "<br /><br />";
+            }
             
             PHPWS_Core::initModClass('hms','HMS_RLC_Application.php');
             if(HMS_RLC_Application::check_for_application() === FALSE){
-                # Check deadlines for RLC applications here
-                # TODO
-                $message .= "You may apply for a Residential Learning Community. For more infomration about Appalachian's Residential Learning Communities please see: blah. To apply click on the link below.<br />";
-                $message .= PHPWS_Text::secureLink(_('RLC Application Form'), 'hms', array('type'=>'student', 'op'=>'show_rlc_application_form'));
+                # Check deadlines for RLC applications
+                if(HMS_Deadlines::check_within_deadlines('submit_application_begin_timestamp','submit_rlc_application_end_timestamp',$deadlines)){
+                    $message .= "You may apply for a Residential Learning Community. For more infomration about Appalachian's Residential Learning Communities please visit the <a href=\"http://www.reslife.appstate.edu/index.php?module=pagemaster&PAGE_user_op=view_page&PAGE_id=134\">Housing & Residence Life Website</a>. To apply click on the link below.<br />";
+                    $message .= PHPWS_Text::secureLink(_('Learning Community Application Form'), 'hms', array('type'=>'student', 'op'=>'show_rlc_application_form'));
+                    $message .= "<br /><br />";
+                }
             } else {
-                $message .= "You have already completed a Residential Learning Community application. You can click the link below to review your application. If you need to change your application, please contact Housing and Residence Life via phone. <br />";
-                $message .= PHPWS_Text::secureLink(_('View My RLC Application'), 'hms', array('type'=>'student', 'op'=>'view_rlc_application'));
+                $message .= "You have completed a Residential Learning Community application. You can click the link below to review your application. If you need to change your application, please contact Housing and Residence Life via phone. <br />";
+                $message .= PHPWS_Text::secureLink(_('View My Learning Community Application'), 'hms', array('type'=>'student', 'op'=>'view_rlc_application'));
+                $message .= "<br /><br />";
             }
-            $message .= "<br /><br />";
     
-            # Check deadlines here
-            $message .= "The HMS Student Profile is optional and can be used to help you find a roommate who shares your interests. Once you complete your profile, you will be able to search for other students who share your interests based on their profiles. Click the link below to setup your profile. Once you create a profile, you can modify it as much as you like until the profile editing time period is over.<br />";
-            $message .= PHPWS_Text::secureLink(_('Create/Edit your optional Student Profile'), 'hms', array('type'=>'student', 'op' =>'show_profile_form'));
-            $message .= "<br /><br />";
+            # Check deadlines for editing profiles
+            if(HMS_Deadlines::check_within_deadlines('edit_profile_begin_timestamp','edit_profile_end_timestamp',$deadlines)){
+                $message .= "The HMS Student Profile is optional and can be used to help you find a roommate who shares your interests. Once you complete your profile, you will be able to search for other students who share your interests based on their profiles. Click the link below to setup your profile. Once you create a profile, you can modify it as much as you like until the profile editing time period is over.<br />";
+                $message .= PHPWS_Text::secureLink(_('Create/Edit your optional Student Profile'), 'hms', array('type'=>'student', 'op' =>'show_profile_form'));
+                $message .= "<br /><br />";
+            }
 
             PHPWS_Core::initModClass('hms', 'HMS_Student_Profile.php');
-            # Check deadlines here
-            # TODO
-            if(HMS_Student_Profile::check_for_profile() === TRUE){
-                # Show the search profiles link
-                $message .= "Click the link below to use the Roommate Search Tool to look for potential roommate based on their profiles.<br />";
-                $message .= PHPWS_Text::secureLink('Roommate Search Tool', 'hms', array('type'=>'student','op'=>'show_profile_search'));
-                $message .= "<br /><br />";
+            # Check deadlines for searching student profiles
+            if(HMS_Deadlines::check_within_deadlines('search_profiles_begin_timestamp','search_profiles_end_timestamp',$deadlines)){
+                if(HMS_Student_Profile::check_for_profile() === TRUE){
+                    # Show the search profiles link
+                    $message .= "Click the link below to use the Roommate Search Tool to look for potential roommate based on their profiles.<br />";
+                    $message .= PHPWS_Text::secureLink('Roommate Search Tool', 'hms', array('type'=>'student','op'=>'show_profile_search'));
+                    $message .= "<br /><br />";
+                }
             }
                 
             PHPWS_Core::initModClass('hms', 'HMS_Roommate_Approval.php');
@@ -550,7 +562,6 @@ class HMS_Student {
             $message .= "<br /><br />";
         } else {
             # No application exists, check deadlines to see if the user can still apply
-            PHPWS_Core::initModClass('hms','HMS_Deadlines.php');
             if(!HMS_Deadlines::check_deadline_past('submit_application_end_timestamp')){
                 # Application deadline has not passed, so show terms and agreement page
                 $message = HMS_Student::show_terms_and_agreement();
