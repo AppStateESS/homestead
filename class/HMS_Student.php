@@ -202,7 +202,7 @@ class HMS_Student {
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
         $student_info = HMS_SOAP::get_student_info($_REQUEST['username']);
 
-//        test($student_info);
+        test($student_info);
 
         $tpl['MENU_LINK'] = PHPWS_Text::secureLink(_('Return to Search'), 'hms', array('type'=>'student', 'op'=>'enter_student_search_data'));
         $tpl['FIRST_NAME'] = $student_info->first_name;
@@ -246,8 +246,7 @@ class HMS_Student {
         $sql  = "SELECT";
         $sql .= " hms_residence_hall.hall_name, ";
         $sql .= " hms_room.room_number, ";
-        $sql .= " hms_assignment.id, ";
-        $sql .= " hms_assignment.meal_option ";
+        $sql .= " hms_assignment.id ";
         $sql .= "FROM";
         $sql .= " hms_residence_hall, ";
         $sql .= " hms_floor, ";
@@ -267,6 +266,8 @@ class HMS_Student {
         $db = &new PHPWS_DB();
         $db->setSQLQuery($sql);
         $results = $db->select();
+
+        #test($results);
 
         if($results != FALSE && $results != NULL) {
             $tpl['ROOM_ASSIGNMENT'] = $results[0]['room_number'] . " " . $results[0]['hall_name'];
@@ -544,14 +545,18 @@ class HMS_Student {
             PHPWS_Core::initModClass('hms', 'HMS_Roommate_Approval.php');
             if(HMS_Roommate_Approval::has_requested_someone($_SESSION['asu_username'])) {
                 $message .= "You have selected a roommate and are awaiting their approval.<br />";
+                $message .= "<br /><br />";
             # TODO
             #}elseif(has_roommate()){
             #   $message .= "<roommate_name> has confirmed your roommate request. You are now roommates.<br />";
+            #   $message .= "<br /><br />";
             } else {
-                $message .= "If you know who you want your roommate to be, you can go ahead and select your roommate. You will need to know your roommate's ASU user name (their e-mail address). Click the link below to select your roommate.<br />";
-                $message .= PHPWS_Text::secureLink(_('Select Your Roommate'), 'hms', array('type'=>'student','op'=>'get_roommate_username'));
+                if(HMS_Deadlines::check_within_deadlines('submit_application_begin_timestamp','search_profiles_end_timestamp',$deadlines)){
+                    $message .= "If you know who you want your roommate to be, you can go ahead and select your roommate. You will need to know your roommate's ASU user name (their e-mail address). Click the link below to select your roommate.<br />";
+                    $message .= PHPWS_Text::secureLink(_('Select Your Roommate'), 'hms', array('type'=>'student','op'=>'get_roommate_username'));
+                    $message .= "<br /><br />";
+                }
             }
-            $message .= "<br /><br />";
 
             
             $message .= 'If you need to download and print the License Agreement please ';
