@@ -5,14 +5,14 @@
  * Set to true to use canned data (no SOAP connection
  * will ever be made).
  */
-define('SOAP_TEST_FLAG', true);
+define('SOAP_TEST_FLAG', false);
 
 /**
  * AXP Testing Flag
  * Set to true to allow fake users to login
  * (No actual authentication to AXP)
  */
-define('AXP_TEST_FLAG', true);
+define('AXP_TEST_FLAG', false);
 
 /**
  * Gender defines
