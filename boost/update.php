@@ -498,6 +498,7 @@ function hms_update(&$content, $currentVersion)
 
         case version_compare($currentVersion, '0.2.0', '<'):
             $files[] = 'templates/admin/deadlines.tpl';
+            $files[] = 'templates/student/main_menu.tpl';
 
             $content[] = '+ Added check to prevent students selecting themselves as roommates';
             $content[] = '+ Added check to make sure a requested roommate has a housing application';
