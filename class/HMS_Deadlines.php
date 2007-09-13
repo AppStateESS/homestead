@@ -70,14 +70,21 @@ class HMS_Deadlines {
     /**
      * Checks if a given deadlines has passed yet.
      * Expects a deadline name as defined by the deadline table.
+     * 
+     * Optionally takes a deadlines array (like that returned from 'get_deadlines()' to use
+     * so you can call 'get_deadlines()' once and then pass the result to this function for repeated checks.
+     * (avoids repetative database queries).
+     * 
      * Returns TRUE if the deadline has passed, false otherwise.
      * Returns a PEAR error object in case of a DB error.
      * Can be called statically.
      */
-    function check_deadline_past($deadline_name)
+    function check_deadline_past($deadline_name, $deadlines = NULL)
     {
 
-        $deadlines = HMS_Deadlines::get_deadlines();
+        if(!isset($deadlines)){
+            $deadlines = HMS_Deadlines::get_deadlines();
+        }
 
         if (PEAR::isError($deadlines)){
             return $deadlines;
@@ -97,7 +104,7 @@ class HMS_Deadlines {
      * Expects two deadline names as defined by the deadline table.
      * 
      * Optionally takes a deadlines array (like that returned from 'get_deadlines()' to use
-     * so you can call get deadlines once and then pass the result to this function for repeated checks.
+     * so you can call 'get_deadlines()' once and then pass the result to this function for repeated checks.
      * (avoids repetative database queries).
      * 
      * Returns TRUE if the current time is within the start and end deadlines, FALSE otherwise.
@@ -125,6 +132,36 @@ class HMS_Deadlines {
             return TRUE;
         }else{
             return FALSE;
+        }
+    }
+
+    /**
+     * Returns a deadline as text (i.e. 'Wednesday, September 12th, 2007').
+     * 
+     * Optionally takes a deadlines array (like that returned from 'get_deadlines()' to use
+     * so you can call 'get_deadlines()' once and then pass the result to this function for repeated checks.
+     * (avoids repetative database queries).
+     *
+     * Also optionally takes a date format, so you can get the date back in any format you'd like.
+     * 
+     */
+    function get_deadline_as_date($deadline_name, $deadlines = NULL, $date_format = NULL)
+    {
+        # If we weren't passed in the deadlines, then get them now
+        if(!isset($deadlines)){
+            $deadlines = HMS_Deadlines::get_deadlines();
+        }
+
+        if(PEAR::isError($deadlines)){
+            return $deadlines;
+        }
+
+        # TODO: check if deadline names are valid here??
+
+        if(isset($date_format)){
+            return date($date_format, $deadlines[$deadline_name]);
+        }else{
+            return date('l, F jS, Y', $deadlines[$deadline_name]);
         }
     }
 
