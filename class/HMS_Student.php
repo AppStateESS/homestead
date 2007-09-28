@@ -487,6 +487,9 @@ class HMS_Student {
 
         $tags = array();
 
+        # Get deadlines for future use
+        $deadlines = HMS_Deadlines::get_deadlines();
+
         # Check to see if an application exists
         if(HMS_Application::check_for_application($_SESSION['asu_username'])) {
             # Application exists, so just show the main menu
@@ -496,8 +499,6 @@ class HMS_Student {
             $side_thingie = new HMS_Side_Thingie(HMS_SIDE_STUDENT_NOT_STARTED);
             $side_thingie->show();
 
-            # Get deadlines for future use
-            $deadlines = HMS_Deadlines::get_deadlines();
 
 
             /****************************************************
@@ -635,6 +636,8 @@ class HMS_Student {
                 # Application deadline has passed, show an error message;
                 $tags = array();
                 $tags['ERROR_MSG'] = "Sorry, it is too late to apply for housing. If you need assistance please contact the Department of Housing and Residence Life by phone.";
+                
+                #TODO: Try to find a way to log the user out here
                 return PHPWS_Template::process($tags, 'hms', 'student/error_page.tpl');
             }
         }
@@ -691,6 +694,13 @@ class HMS_Student {
     
     function main()
     {
+
+        # Check to make sure the 'op' variable is set, if not bail out here
+        if(!isset($_REQUEST['op'])){
+            PHPWS_Core::killAllSessions();
+            PHPWS_Core::home();
+        }
+        
         if($_REQUEST['op'] == 'login') {
             $_REQUEST['op'] = 'main';
         }
