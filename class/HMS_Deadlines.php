@@ -234,7 +234,7 @@ class HMS_Deadlines {
         return $this->sabt;
     }
 
-    function get_subumit_application_end_timestamp()
+    function get_submit_application_end_timestamp()
     {
         return $this->saet;
     }
