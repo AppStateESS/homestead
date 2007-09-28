@@ -34,14 +34,13 @@ class HMS_Login
 
     function student_login()
     {
-        $db = &new PHPWS_DB('hms_deadlines');
-        $db->addColumn('student_login_begin_timestamp');
-        $db->addColumn('student_login_end_timestamp');
-        $result = $db->select('row');
 
-        if(time() < $result['student_login_begin_timestamp']) {
+        PHPWS_Core::initModClass('hms','HMS_Deadlines.php');
+        $deadlines = HMS_Deadlines::get_deadlines();
+        
+        if(!HMS_Deadlines::check_deadline_past('student_login_begin_timestamp', $deadlines)) {
             return TOOEARLY;
-        } else if (time() > $result['student_login_end_timestamp']) {
+        } else if (HMS_Deadlines::check_deadline_past('student_login_end_timestamp', $deadlines)) {
             return TOOLATE;
         }
 
