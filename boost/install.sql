@@ -77,7 +77,8 @@ CREATE TABLE hms_learning_community_assignment (
 
 CREATE TABLE hms_learning_community_applications (
     id                              integer NOT NULL,
-    user_id                         character varying(32) UNIQUE NOT NULL,
+    user_id                         character varying(32) NOT NULL,
+    entry_term                      integer NOT NULL,
     date_submitted                  integer NOT NULL,
     rlc_first_choice_id             integer NOT NULL REFERENCES hms_learning_communities(id),
     rlc_second_choice_id            integer NOT NULL REFERENCES hms_learning_communities(id),
@@ -91,6 +92,8 @@ CREATE TABLE hms_learning_community_applications (
     hms_assignment_id               integer REFERENCES hms_learning_community_assignment(id),
     PRIMARY KEY(id)
 );
+
+ALTER TABLE hms_learning_community_applications ADD CONSTRAINT rlc_application_key UNIQUE (user_id, entry_term); 
 
 CREATE TABLE hms_learning_community_floors (
     learning_communities_id integer NOT NULL REFERENCES hms_learning_communities(id),
@@ -107,6 +110,7 @@ CREATE TABLE hms_pricing_tiers (
 CREATE TABLE hms_application (
     id integer DEFAULT 0 NOT NULL,
     hms_student_id character varying(32) NOT NULL,
+    entry_term integer NOT NULL,
     student_status smallint NOT NULL,
     term_classification smallint NOT NULL,
     gender smallint NOT NULL,
@@ -127,6 +131,7 @@ CREATE TABLE hms_application (
     primary key(id)
 );
 
+ALTER TABLE hms_application ADD CONSTRAINT application_key UNIQUE (hms_student_id, entry_term); 
 
 CREATE TABLE hms_residence_hall (
     id integer DEFAULT 0 NOT NULL,

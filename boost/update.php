@@ -496,7 +496,13 @@ function hms_update(&$content, $currentVersion)
 
             $content[] = '+ OMG BANNER WORKS hopefully';
 
-        case version_compare($currentVersion, '0.2.0', '<'):
+        case version_compare($currentVersion, '0.1.30', '<'):
+            $db = &new PHPWS_DB;
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_1_30.sql');
+            if(PEAR::isError($rresult)) {
+                return $result;
+            }
+            
             $files[] = 'templates/admin/deadlines.tpl';
             $files[] = 'templates/student/main_menu.tpl';
 
@@ -504,6 +510,7 @@ function hms_update(&$content, $currentVersion)
             $content[] = '+ Added check to make sure a requested roommate has a housing application';
             $content[] = '+ Cleaned up main menu, added checks for deadlines for menu options';
             $content[] = '+ Fixed colors for messages returned when setting deadlines (UI)';
+            $content[] = '+ Added entry term to hms_application and rlc application tables';
 
     }
 
