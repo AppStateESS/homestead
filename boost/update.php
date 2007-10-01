@@ -504,7 +504,8 @@ function hms_update(&$content, $currentVersion)
             }
             
             $files[] = 'templates/admin/deadlines.tpl';
-            $files[] = 'templates/student/main_menu.tpl';
+            $files[] = 'templates/student/main_menu_spring.tpl';
+            $files[] = 'templates/student/main_menu_fall.tpl';
 
             $content[] = '+ Added check to prevent students selecting themselves as roommates';
             $content[] = '+ Added check to make sure a requested roommate has a housing application';
