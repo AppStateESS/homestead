@@ -14,6 +14,10 @@
             </tr>
             <tr><th></th><td></td></tr>
             <tr>
+                <th>Application Term: </th><td alighn="left">{ENTRY_TERM}</td>
+            </tr>
+            <tr><th></th><td></td></tr>
+            <tr>
                 <th>Classification for </th><td></td>
             </tr>
             <tr><th></th><td></td></tr>

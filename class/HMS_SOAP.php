@@ -372,6 +372,7 @@ class HMS_SOAP{
      * 40 => Fall
      */
     function get_entry_term($username){
+        /*
         if(SOAP_TEST_FLAG){
             # return canned data
             return "200810";
@@ -387,6 +388,10 @@ class HMS_SOAP{
         }else{
             return $student->entry_term;
         }
+        */
+
+        # Hard coded to always return "spring 2008"
+        return "200810";
     }
 
     /**

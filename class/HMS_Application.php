@@ -13,6 +13,7 @@ class HMS_Application {
     var $id;
 
     var $hms_student_id;
+    var $entry_term;
     var $student_status;
     var $term_classification;
     var $gender;
@@ -70,6 +71,7 @@ class HMS_Application {
         
         $this->setID($result['id']);
         $this->setStudentID($result['hms_student_id']);
+        $this->setEntryTerm($result['entry_term']);
         $this->setStudentStatus($result['student_status']);
         $this->setTermClassification($result['term_classification']);
         $this->setGender($result['gender']);
@@ -96,6 +98,7 @@ class HMS_Application {
         $question = &new HMS_Application();
         
         $question->setStudentStatus($_REQUEST['student_status']);
+        $question->setEntryTerm($_REQUEST['entry_term']);
         $question->setTermClassification($_REQUEST['classification_for_term']);
         $question->setGender($_REQUEST['gender_type']);
         $question->setMealOption($_REQUEST['meal_option']);
@@ -137,6 +140,7 @@ class HMS_Application {
     {
         $db = &new PHPWS_DB('hms_application');
         $db->addValue('student_status',$this->getStudentStatus());
+        $db->addvalue('entry_term',$this->getEntryTerm());
         $db->addValue('term_classification',$this->getTermClassification());
         $db->addValue('gender',$this->getGender());
         $db->addValue('meal_option',$this->getMealOption());
@@ -182,6 +186,7 @@ class HMS_Application {
     /**
      * Checks to see if a application already exists for the objects current $hms_user_id.
      * If so, it returns the ID of that application record, otherwise it returns false.
+     * TODO: Adjust this to use only the current 'entry_term'
      */
     function check_for_application($asu_username = NULL)
     {
@@ -278,14 +283,16 @@ class HMS_Application {
     {
         PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
         if($view != NULL) {
-            return HMS_Form::display_application_results();
+            return HMS_Application::display_application_results();
         } else {
-            return HMS_Form::begin_application();
+            return HMS_Application::begin_application();
         }
     }
 
     /**
      * Allows an admin to view a student application
+     * TODO: This is duplicated code from the show_application function above.
+     *       Consider removing this, and changing whatever uses it to use 'show_application' instead.
      */
     function view_housing_application($username)
     {
@@ -353,6 +360,269 @@ class HMS_Application {
         return $aggregate;
     }
 
+    function begin_application($message = NULL)
+    {
+        PHPWS_Core::initModClass('hms','HMS_SOAP.php');
+        PHPWS_Core::initMOdClass('hms','HMS_Entry_Term.php');
+        
+        PHPWS_Core::initCoreClass('Form.php');
+        $form = &new PHPWS_Form;
+        
+        $form->addHidden('agreed_to_terms',$_REQUEST['agreed_to_terms']); # From contract page
+       
+        $form->addDropBox('student_status', array('1'=>_('New Freshman'),
+                                                  '2'=>_('Transfer')));
+        
+        if(isset($_REQUEST['student_status'])) {
+            $form->setMatch('student_status', $_REQUEST['student_status']);
+        } else {
+            $form->setMatch('student_status', 1);
+        }
+      
+        /**
+        * Commented out to hard code for freshmen
+        *
+        $form->addDropBox('classification_for_term', array('1'=>_('Freshman'),
+                                                           '2'=>_('Sophomore'),
+                                                           '3'=>_('Junior'),
+                                                           '4'=>_('Senior')));
+        */
+
+        if(HMS_SOAP::get_student_type($_SESSION['asu_username'] == 'T')) {
+            $form->addDropBox('classification_for_term', array('1'=>_('Freshman'),
+                                                               '2'=>_('Sophomore'),
+                                                               '3'=>_('Junior'),
+                                                               '4'=>_('Senior')));
+        } else {
+            $form->addDropBox('classification_for_term', array('1'=>_('Freshman')));
+        }
+
+        if(isset($_REQUEST['classification_for_term'])){
+            $form->setMatch('classification_for_term',$_REQUEST['classification_for_term']);
+        }else{
+            $form->setMatch('classification_for_term', '1');
+        }
+
+        # Use a hidden field for the entry term, pull from banner
+        $form->addHidden('entry_term', HMS_SOAP::get_entry_term($_SESSION['asu_username']));
+
+        # Use a hidden field for gender, pull from banner
+        $form->addHidden('gender_type', HMS_SOAP::get_gender($_SESSION['asu_username'], TRUE));
+        
+        # Don't show *low* meal option to freshmen
+        if(HMS_SOAP::get_student_class($_SESSION['asu_username']) != "FR"){
+            $form->addDropBox('meal_option', array('1'=>_('Low'),
+                                                   '2'=>_('Standard'),
+                                                   '3'=>_('High'),
+                                                   '4'=>_('Super')));
+        }else{
+            $form->addDropBox('meal_option', array('2'=>_('Standard'),
+                                                   '3'=>_('High'),
+                                                   '4'=>_('Super')));
+        }
+            
+        if(isset($_REQUEST['meal_option'])){
+            $form->setMatch('meal_option',$_REQUEST['meal_option']);
+        }else{
+            $form->setMatch('meal_option', '1');
+        }
+
+        $form->addDropBox('lifestyle_option', array('1'=>_('Single Gender Building'),
+                                                    '2'=>_('Co-Ed Building')));
+        if(isset($_REQUEST['lifestyle_option'])){
+            $form->setMatch('lifestyle_option',$_REQUEST['lifestyle_option']);
+        }else{
+            $form->setMatch('lifestyle_option', '1');
+        }
+
+        $form->addDropBox('preferred_bedtime', array('1'=>_('Early'),
+                                                     '2'=>_('Late')));
+        if(isset($_REQUEST['preferred_bedtime'])){
+            $form->setMatch('preferred_bedtime',$_REQUEST['preferred_bedtime']);
+        }else{
+            $form->setMatch('preferred_bedtime', '1');
+        }
+
+        $form->addDropBox('room_condition', array('1'=>_('Neat'),
+                                                  '2'=>_('Cluttered')));
+        if(isset($_REQUEST['room_condition'])){
+            $form->setMatch('room_condition',$_REQUEST['room_condition']);
+        }else{
+            $form->setMatch('room_condition', '1');
+        }
+
+        
+        $form->addRadio('rlc_interest', array(0, 1));
+        $form->setLabel('rlc_interest', array(_("No"), _("Yes")));
+        if(isset($_REQUEST['rlc_interest'])){
+            $form->setMatch('rlc_interest',$_REQUEST['rlc_interest']);
+        }else{
+            $form->setMatch('rlc_interest', '0');
+        }
+
+        $form->addSubmit('submit', _('Submit Application'));
+        $form->addHidden('module', 'hms');
+        $form->addHidden('type', 'student');
+        $form->addHidden('op', 'review_application');
+
+        $tpl = $form->getTemplate();
+        $tpl['TITLE']   = 'Residence Hall Application';
+        $tpl['MESSAGE'] = $message;
+        $tpl['STUDENT_NAME'] = HMS_SOAP::get_full_name($_SESSION['asu_username']);
+        $tpl['GENDER'] = (HMS_SOAP::get_gender($_SESSION['asu_username'],TRUE) == '0') ? 'Female' : 'Male';
+        $tpl['ENTRY_TERM'] = HMS_Entry_Term::entry_term_to_text(HMS_SOAP::get_entry_term($_SESSION['asu_username']), TRUE);
+
+        $master['TITLE']   = 'Residence Hall Application';
+        $master['APPLICATION']  = PHPWS_Template::process($tpl, 'hms', 'student/student_application.tpl');
+        return PHPWS_Template::process($master,'hms','student/student_application_combined.tpl');
+    }
+
+    function display_application_results()
+    {
+        $application = new HMS_Application($_SESSION['asu_username']);
+
+        if(!$application->getID() && !HMS_Application::check_valid_application_values()) {
+            $message = "You have supplied incorrect values for your application.<br />";
+            $message .= "Please fill out the application again.";
+            return HMS_Form::begin_application($message);
+        }
+
+        $master['TITLE']   = 'Residence Hall Application';
+        if(isset($_REQUEST['student_status'])){
+            $message  = "You have supplied the following values.<br />";
+            $message .= "Click Submit to continue or Modify to change your selections.<br /><br />";
+
+            $form = &new PHPWS_Form;
+
+            $form->addHidden('agreed_to_terms',$_REQUEST['agreed_to_terms']);
+            $form->addHidden('entry_term',$_REQUEST['entry_term']);
+            $form->addHidden('classification_for_term', $_REQUEST['classification_for_term']);
+            $form->addHidden('student_status',$_REQUEST['student_status']);
+            $form->addHidden('gender_type',$_REQUEST['gender_type']);
+            $form->addHidden('meal_option',$_REQUEST['meal_option']);
+            $form->addHidden('lifestyle_option',$_REQUEST['lifestyle_option']);
+            $form->addHidden('preferred_bedtime',$_REQUEST['preferred_bedtime']);
+            $form->addHidden('room_condition',$_REQUEST['room_condition']);
+            $form->addHidden('rlc_interest',$_REQUEST['rlc_interest']);
+            $form->addHidden('module', 'hms');
+            $form->addHidden('type', 'student');
+            $form->addHidden('op', 'save_application');
+
+            $form->addSubmit('submit', _('Submit Application'));
+
+            $tpl = $form->getTemplate();
+
+            $redo_form = & new PHPWS_Form('redo_form');
+            $redo_form->addSubmit('submit','Modify Application');
+            $redo_form->addHidden('type','student');
+            $redo_form->addHidden('op','begin_application');
+            $redo_form->addHidden('agreed_to_terms',$_REQUEST['agreed_to_terms']);
+            $redo_form->addHidden('entry_term',$_REQUEST['entry_term']);
+            $redo_form->addHidden('classification_for_term', $_REQUEST['classification_for_term']);
+            $redo_form->addHidden('student_status',$_REQUEST['student_status']);
+            $redo_form->addHidden('gender_type',$_REQUEST['gender_type']);
+            $redo_form->addHidden('meal_option',$_REQUEST['meal_option']);
+            $redo_form->addHidden('lifestyle_option',$_REQUEST['lifestyle_option']);
+            $redo_form->addHidden('preferred_bedtime',$_REQUEST['preferred_bedtime']);
+            $redo_form->addHidden('room_condition',$_REQUEST['room_condition']);
+            $redo_form->addHidden('rlc_interest',$_REQUEST['rlc_interest']);
+            
+            $redo_tpl = $redo_form->getTemplate();
+
+            PHPWS_Core::initModClass('hms','HMS_SOAP.php');
+            $tpl['STUDENT_NAME'] = HMS_SOAP::get_full_name($_SESSION['asu_username']);
+
+            $tpl['MESSAGE'] = $message;
+            $tpl['NEWLINES']= "<br /><br />";
+            
+            if($_REQUEST['student_status'] == 1) $tpl['STUDENT_STATUS'] = "New Freshman";
+            else if ($_REQUEST['student_status'] == 2) $tpl['STUDENT_STATUS'] = "Transfer";
+
+            if($_REQUEST['classification_for_term'] == 1) $tpl['CLASSIFICATION_FOR_TERM'] = "Freshman";
+            else if($_REQUEST['classification_for_term'] == 2) $tpl['CLASSIFICATION_FOR_TERM'] = "Sophomore";
+            else if($_REQUEST['classification_for_term'] == 3) $tpl['CLASSIFICATION_FOR_TERM'] = "Junior";
+            else if($_REQUEST['classification_for_term'] == 4) $tpl['CLASSIFICATION_FOR_TERM'] = "Senior";
+            
+            if($_REQUEST['gender_type'] == 0) $tpl['GENDER'] = "Female";
+            else if($_REQUEST['gender_type'] == 1) $tpl['GENDER'] = "Male";
+            
+            if($_REQUEST['meal_option'] == 1) $tpl['MEAL_OPTION'] = "Low";
+            else if($_REQUEST['meal_option'] == 2) $tpl['MEAL_OPTION'] = "Medium";
+            else if($_REQUEST['meal_option'] == 3) $tpl['MEAL_OPTION'] = "High";
+            else if($_REQUEST['meal_option'] == 4) $tpl['MEAL_OPTION'] = "Super";
+           
+            if($_REQUEST['lifestyle_option'] == 1) $tpl['LIFESTYLE_OPTION'] = "Single Gender";
+            else if($_REQUEST['lifestyle_option'] == 2) $tpl['LIFESTYLE_OPTION'] = "Co-Ed";
+            
+            if($_REQUEST['preferred_bedtime'] == 1) $tpl['PREFERRED_BEDTIME'] = "Early";
+            else if($_REQUEST['preferred_bedtime'] == 2) $tpl['PREFERRED_BEDTIME'] = "Late";
+
+            if($_REQUEST['room_condition'] == 1) $tpl['ROOM_CONDITION'] = "Clean";
+            else if($_REQUEST['room_condition'] == 2) $tpl['ROOM_CONDITION'] = "Dirty";
+            
+            if($_REQUEST['rlc_interest'] == 0) $tpl['RLC_INTEREST_1'] = "No";
+            else if($_REQUEST['rlc_interest'] == 1) $tpl['RLC_INTEREST_1'] = "Yes";
+       
+            $master['APPLICATION']  = PHPWS_Template::process($tpl, 'hms', 'student/student_application.tpl');
+            $master['REDO'] = PHPWS_Template::process($redo_tpl,'hms','student/student_application_redo.tpl');
+        
+            return PHPWS_Template::process($master,'hms','student/student_application_combined.tpl');
+       
+        } else {
+            
+            $tpl['TITLE']   = 'Residence Hall Application';
+            if(isset($message)){
+                $tpl['MESSAGE'] = $message;
+            }
+            $tpl['REDO']    = PHPWS_Text::secureLink("Return to Menu", 'hms', array('type'=>'hms', 'op'=>'main'));
+            $tpl['NEWLINES']= "<br /><br />";
+            
+            if($application->getStudentStatus() == 1) $tpl['STUDENT_STATUS'] = "New Freshman";
+            else if ($application->getStudentStatus() == 2) $tpl['STUDENT_STATUS'] = "Transfer";
+
+            if($application->getTermClassification() == 1) $tpl['CLASSIFICATION_FOR_TERM'] = "Freshman";
+            else if($application->getTermClassification() == 2) $tpl['CLASSIFICATION_FOR_TERM'] = "Sophomore";
+            else if($application->getTermClassification() == 3) $tpl['CLASSIFICATION_FOR_TERM'] = "Junior";
+            else if($application->getTermClassification() == 4) $tpl['CLASSIFICATION_FOR_TERM'] = "Senior";
+            
+            if($application->getGender() == 0) $tpl['GENDER_TYPE'] = "Female";
+            else if($application->getGender() == 1) $tpl['GENDER_TYPE'] = "Male";
+            
+            if($application->getMealOption() == 1) $tpl['MEAL_OPTION'] = "Low";
+            else if($application->getMealOption() == 2) $tpl['MEAL_OPTION'] = "Medium";
+            else if($application->getMealOption() == 3) $tpl['MEAL_OPTION'] = "High";
+            else if($application->getMealOption() == 4) $tpl['MEAL_OPTION'] = "Super";
+           
+            if($application->getLifestyle() == 1) $tpl['LIFESTYLE_OPTION'] = "Single Gender";
+            else if($application->getLifestyle() == 2) $tpl['LIFESTYLE_OPTION'] = "Co-Ed";
+            
+            if($application->getPreferredBedtime() == 1) $tpl['PREFERRED_BEDTIME'] = "Early";
+            else if($application->getPreferredBedtime() == 2) $tpl['PREFERRED_BEDTIME'] = "Late";
+
+            if($application->getRoomCondition() == 1) $tpl['ROOM_CONDITION'] = "Clean";
+            else if($application->getRoomCondition() == 2) $tpl['ROOM_CONDITION'] = "Dirty";
+            
+            if($application->getRlcInterest() == 0) $tpl['RLC_INTEREST_1'] = "No";
+            else if($application->getRlcInterest() == 1) $tpl['RLC_INTEREST_1'] = "Yes";
+       
+            $master['APPLICATION']  = PHPWS_Template::process($tpl, 'hms', 'student/student_application.tpl');
+            return PHPWS_Template::process($master,'hms','student/student_application_combined.tpl');
+        }
+        
+    }
+
+    function check_valid_application_values()
+    {
+        return (is_numeric($_REQUEST['student_status']) &&
+                is_numeric($_REQUEST['classification_for_term']) &&
+                is_numeric($_REQUEST['gender_type']) &&
+                is_numeric($_REQUEST['meal_option']) &&
+                is_numeric($_REQUEST['lifestyle_option']) &&
+                is_numeric($_REQUEST['preferred_bedtime']) &&
+                is_numeric($_REQUEST['room_condition']) &&
+                is_numeric($_REQUEST['rlc_interest']));
+    }
+
     /****************************
      * Accessor & Mutator Methods
      ****************************/
@@ -371,6 +641,14 @@ class HMS_Application {
 
     function getStudentID(){
         return $this->hms_student_id;
+    }
+
+    function setEntryTerm($term){
+        $this->entry_term = $term;
+    }
+
+    function getEntryTerm(){
+        return $this->entry_term;
     }
 
     function setStudentStatus($status){

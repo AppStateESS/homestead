@@ -497,8 +497,13 @@ class HMS_Student {
             $side_thingie = new HMS_Side_Thingie(HMS_SIDE_STUDENT_NOT_STARTED);
             $side_thingie->show();
             
-            #TODO: This is hard coded now, but should eventually be based on the 'entry_term' field from SOAP.
-            return HMS_Student::show_spring_main_menu($deadlines);
+            $entry_term = HMS_Entry_Term::get_entry_term($_SESSION['asu_username']);
+            
+            if($entry_term == TERM_SPRING){
+                return HMS_Student::show_spring_main_menu($deadlines);
+            }else if($entry_term == TERM_FALL){
+                return HMS_Student::show_fall_main_menu($deadlines);
+            }
             
         } else {
             # No application exists, check deadlines to see if the user can still apply
