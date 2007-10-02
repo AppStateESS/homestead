@@ -361,6 +361,34 @@ class HMS_SOAP{
         }
     }
 
+
+    /**
+     * Returns the student's 'entry term'
+     * Format: yyyytt
+     * Where 'tt' is a two digit term identifier,
+     * 10 => Spring
+     * 20 => Summer 1
+     * 30 => Summer 2
+     * 40 => Fall
+     */
+    function get_entry_term($username){
+        if(SOAP_TEST_FLAG){
+            # return canned data
+            return "200810";
+        }else{
+            $student = HMS_SOAP::get_student_info($username);
+        }
+
+        if(PEARr::isError($student)){
+            HMS_SOAP::log_soap_error($student, 'get_entry_term', $username);
+            return $student;
+        }else if($student->entry_term == NULL){
+            return NULL;
+        }else{
+            return $student->entry_term;
+        }
+    }
+
     /**
      * Main function for getting student info.
      * Used by the rest of the "get" functions
