@@ -506,12 +506,14 @@ function hms_update(&$content, $currentVersion)
             $files[] = 'templates/admin/deadlines.tpl';
             $files[] = 'templates/student/main_menu_spring.tpl';
             $files[] = 'templates/student/main_menu_fall.tpl';
+            $files[] = 'templates/student/student_application.tpl'; 
 
             $content[] = '+ Added check to prevent students selecting themselves as roommates';
             $content[] = '+ Added check to make sure a requested roommate has a housing application';
             $content[] = '+ Cleaned up main menu, added checks for deadlines for menu options';
             $content[] = '+ Fixed colors for messages returned when setting deadlines (UI)';
             $content[] = '+ Added entry term to hms_application and rlc application tables';
+            $content[] = '+ Added entry term to student application';
 
     }
 

@@ -122,7 +122,7 @@ class HMS_RLC_Assignment{
         PHPWS_Core::initModClass('hms','HMS_RLC_Application.php');
         PHPWS_Core::initModClass('hms','HMS_SOAP.php');
 
-        $rlc_list = HMS_RLC_Application::getRLCList();
+        $rlc_list = HMS_RLC_Application::getRLCListAbbr();
 
         $tags = array();
         $asuid = $this->getAsuUsername();

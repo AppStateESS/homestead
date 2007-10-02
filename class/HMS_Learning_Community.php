@@ -140,8 +140,8 @@ class HMS_Learning_Community
             return PHPWS_Template::process($template,'hms','student/rlc_signup_form_page1.tpl');
         }    
         
-        PHPWS_Core::initModClass('hms','HMS_Forms.php');
-        return HMS_Form::show_rlc_application_form_page1();
+        PHPWS_Core::initModClass('hms','HMS_RLC_Application.php');
+        return HMS_RLC_Application::show_rlc_application_form_page1();
     }
 
     /* 
@@ -379,6 +379,36 @@ class HMS_Learning_Community
 
         return "Deleted.";
     }
+    
+    /**
+     * Returns an associative array containing the list of RLC abbreviations keyed by their id.
+     */
+    function getRLCListAbbr()
+    {
+        $db = &new PHPWS_DB('hms_learning_communities');
+
+        $db->addColumn('id');
+        $db->addColumn('abbreviation');
+        $result = $db->select('assoc');
+        return $result;
+    }
+
+    /**
+     * Returns an associative array containing the list of RLCs using their full names, keyed by their id.
+     */
+    function getRLCList()
+    {
+        $db = &new PHPWS_DB('hms_learning_communities');
+        $db->addColumn('id');
+        $db->addColumn('community_name');
+        $rlc_choices = $db->select('assoc');
+
+        if(PEAR::isError($rlc_choices)){
+            #PHPWS_Error::log();
+        }
+
+        return $rlc_choices;
+    }
 
     /*
      * Main function for RLC maintenance
@@ -443,36 +473,34 @@ class HMS_Learning_Community
      //TODO: move this to HMS_RLC_Application
     function rlc_application_page1_submit()
     {
-        PHPWS_Core::initModClass('hms','HMS_Forms.php');
-        
+        PHPWS_Core::initModClass('hms','HMS_RLC_Application.php');
+
         # Check for invalid input on page 1
-        $message = HMS_Form::validate_rlc_application_page1();
+        $message = HMS_RLC_Application::validate_rlc_application_page1();
         if($message !== TRUE){
             # Show page one again with error message
-            return HMS_Form::show_rlc_application_form_page1($message);
+            return HMS_RLC_Application::show_rlc_application_form_page1($message);
         }else{
-            return HMS_Form::show_rlc_application_form_page2();
+            return HMS_RLC_Application::show_rlc_application_form_page2();
         }
     }
 
     //TODO: add comments and move this to HMS_RLC_Application
     function rlc_application_page2_submit()
     {
-        PHPWS_Core::initModClass('hms','HMS_Forms.php');
+        PHPWS_Core::initModClass('hms','HMS_RLC_Application.php');
         
         $template = array();
         $template['PAGE_TITLE'] = "Residential Learning Community Application";
 
         # Check for invalid input on page 2
-        $message = HMS_Form::validate_rlc_application_page2();
+        $message = HMS_RLC_Application::validate_rlc_application_page2();
         if($message !== TRUE){
             # Show page two again with error message
-            return HMS_Form::show_rlc_application_form_page2($message);
+            return HMS_RLC_Application::show_rlc_application_form_page2($message);
         }else{
 
             # Save the data to the database
-            PHPWS_Core::initModClass('hms','HMS_RLC_Application.php');
-        
             $result = HMS_RLC_Application::check_for_application($_SESSION['asu_username']);
 
             # Check to make sure an RLC application doesn't already exist
@@ -512,7 +540,7 @@ class HMS_Learning_Community
         $export_form->addHidden('type','rlc');
         $export_form->addHIdden('op','rlc_application_export');
         
-        $export_form->addDropBox('rlc_list',HMS_RLC_Application::getRLCList());
+        $export_form->addDropBox('rlc_list',HMS_Learning_Community::getRLCListAbbr());
         $export_form->addSubmit('submit');
         
         $export_form->mergeTemplate($tags);
