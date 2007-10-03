@@ -40,6 +40,7 @@
             <tr>
                 <th>Room Condition: </th><td align="left">{ROOM_CONDITION}</td>
             </tr>
+            <!-- BEGIN rlc_interest_1 -->
             <tr><th> </th><td> </td></tr>
             <tr>
                 <th>Are you interested in joining</th><td></td>
@@ -50,6 +51,7 @@
             <tr>
                 <th></th><td align="left">{RLC_INTEREST_2} {RLC_INTEREST_2_LABEL}</td>
             </tr>
+            <!-- END rlc_interest_1 -->
         </table>
         <br /><br />
         {SUBMIT}

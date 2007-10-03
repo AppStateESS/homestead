@@ -452,12 +452,16 @@ class HMS_Application {
         }
 
         
-        $form->addRadio('rlc_interest', array(0, 1));
-        $form->setLabel('rlc_interest', array(_("No"), _("Yes")));
-        if(isset($_REQUEST['rlc_interest'])){
-            $form->setMatch('rlc_interest',$_REQUEST['rlc_interest']);
+        if(HMS_Entry_Term::get_entry_term($_SESSION['asu_username']) != TERM_FALL){
+            $form->addHidden('rlc_interest', 0);
         }else{
-            $form->setMatch('rlc_interest', '0');
+            $form->addRadio('rlc_interest', array(0, 1));
+            $form->setLabel('rlc_interest', array(_("No"), _("Yes")));
+            if(isset($_REQUEST['rlc_interest'])){
+                $form->setMatch('rlc_interest',$_REQUEST['rlc_interest']);
+            }else{
+                $form->setMatch('rlc_interest', '0');
+            }
         }
 
         $form->addSubmit('submit', _('Submit Application'));
