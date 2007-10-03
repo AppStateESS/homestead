@@ -111,17 +111,14 @@ class HMS_Side_Thingie {
             $this->steps_text[HMS_SIDE_STUDENT_APPLY] .= " (available ". date('n/j/y',$this->deadlines->get_submit_application_begin_timestamp()) .")";
             $this->steps_styles[HMS_SIDE_STUDENT_AGREE] = 'STEP_NOTYET';
             $this->steps_styles[HMS_SIDE_STUDENT_APPLY] = 'STEP_NOTYET';
-            test($this->steps_text);
             return;
         }else if($this->curr_timestamp > $this->deadlines->get_submit_application_begin_timestamp() && $this->curr_timestamp < $this->deadlines->get_submit_application_end_timestamp()){
             $this->steps_text[HMS_SIDE_STUDENT_AGREE] .= " (complete by ". date('n/j/y',$this->deadlines->get_submit_application_begin_timestamp()) .")";
             $this->steps_text[HMS_SIDE_STUDENT_APPLY] .= " (complete by ". date('n/j/y',$this->deadlines->get_submit_application_begin_timestamp()) .")";
-            test($this->steps_text);
             return;
         }else if($this->curr_timestamp > $this->deadlines->get_submit_application_end_timestamp()){
             $this->steps_styles[HMS_SIDE_STUDENT_AGREE] = 'STEP_MISSED';
             $this->steps_styles[HMS_SIDE_STUDENT_APPLY] = 'STEP_MISSED';
-            test($this->steps_text);
             return;
         }
 
