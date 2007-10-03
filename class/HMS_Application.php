@@ -123,8 +123,11 @@ class HMS_Application {
                 $success .= "You may logout or view your application responses.<br /><br />";
                 $success .= PHPWS_Text::secureLink(_('View My Application'), 'hms', array('type'=>'student', 'op'=>'review_application'));
                 $success .= "<br /><br />";
-                $success .= PHPWS_Text::secureLink(_('Apply for a RLC'), 'hms', array('type'=>'student', 'op'=>'show_rlc_application_form'));
-                $success .= "<br /><br />";
+                PHPWS_Core::initModClass('hms','HMS_Entry_Term.php');
+                if(HMS_Entry_Term::get_entry_term($_SESSION['asu_username']) == TERM_FALL){
+                    $success .= PHPWS_Text::secureLink(_('Apply for a RLC'), 'hms', array('type'=>'student', 'op'=>'show_rlc_application_form'));
+                    $success .= "<br /><br />";
+                }
                 $success .= PHPWS_Text::secureLink(_('Back to Main Menu'), 'hms', array('type'=>'student','op'=>'main'));
                 $success .= "<br /><br />";
                 $success .= PHPWS_Text::moduleLink(_('Logout'), 'users', array('action'=>'user', 'command'=>'logout'));
