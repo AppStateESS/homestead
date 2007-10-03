@@ -11,6 +11,7 @@ class HMS_Entry_Term{
 
     function get_entry_term($username)
     {
+        PHPWS_Core::initModClass('hms','HMS_SOAP.php');
         $entry_term = HMS_SOAP::get_entry_term($username);
 
         return substr($entry_term, 4, 2);
@@ -18,6 +19,7 @@ class HMS_Entry_Term{
 
     function get_entry_year($username)
     {
+        PHPWS_Core::initModClass('hms','HMS_SOAP.php');
         $entry_term = HMS_SOAP::get_entry_term($username);
 
         return substr($entryr_term, 0, 4);
