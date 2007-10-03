@@ -13,7 +13,7 @@ class HMS_Entry_Term{
     {
         $entry_term = HMS_SOAP::get_entry_term($username);
 
-        return substr($entryr_term, 4, 2);
+        return substr($entry_term, 4, 2);
     }
 
     function get_entry_year($username)
