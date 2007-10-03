@@ -22,6 +22,7 @@ class HMS_Side_Thingie {
                             HMS_SIDE_STUDENT_VERIFY   => "Verify Status");
     var $steps_styles;
     var $deadlines;
+    var $entry_term;
 
     function HMS_Side_Thingie($step)
     {
@@ -45,6 +46,9 @@ class HMS_Side_Thingie {
             Layout::add($page, 'hms', 'default');
             return;
         }
+
+        PHPWS_Core::initModClass('hms','HMS_Entry_Term.php');
+        $entry_term = HMS_Entry_Term::get_entry_term($_SESSION['asu_username']);
     }
 
     function show()
@@ -71,7 +75,9 @@ class HMS_Side_Thingie {
         $this->set_verify();
         
         for($i = HMS_SIDE_STUDENT_MIN;$i <= HMS_SIDE_STUDENT_MAX; $i++) {
-            $template['progress'][$i - HMS_SIDE_STUDENT_MIN][$this->steps_styles[$i]] = $this->steps_text[$i];
+            if(isset($this->steps_text[$i])){
+                $template['progress'][$i - HMS_SIDE_STUDENT_MIN][$this->steps_styles[$i]] = $this->steps_text[$i];
+            }
         }
 
         $page = PHPWS_Template::process($template, 'hms', 'misc/side_thingie.tpl');
@@ -90,7 +96,6 @@ class HMS_Side_Thingie {
         if($this->step == HMS_SIDE_STUDENT_APPLY){
             $this->steps_styles[HMS_SIDE_STUDENT_AGREE] = 'STEP_COMPLETED';
             $this->steps_styles[HMS_SIDE_STUDENT_APPLY] = 'STEP_CURRENT';
-            return;
         }
 
         # Check if the student has an application on file already. If so, set agreed/applied steps to completed and we're done here.
@@ -106,14 +111,17 @@ class HMS_Side_Thingie {
             $this->steps_text[HMS_SIDE_STUDENT_APPLY] .= " (available ". date('n/j/y',$this->deadlines->get_submit_application_begin_timestamp()) .")";
             $this->steps_styles[HMS_SIDE_STUDENT_AGREE] = 'STEP_NOTYET';
             $this->steps_styles[HMS_SIDE_STUDENT_APPLY] = 'STEP_NOTYET';
+            test($this->steps_text);
             return;
         }else if($this->curr_timestamp > $this->deadlines->get_submit_application_begin_timestamp() && $this->curr_timestamp < $this->deadlines->get_submit_application_end_timestamp()){
             $this->steps_text[HMS_SIDE_STUDENT_AGREE] .= " (complete by ". date('n/j/y',$this->deadlines->get_submit_application_begin_timestamp()) .")";
             $this->steps_text[HMS_SIDE_STUDENT_APPLY] .= " (complete by ". date('n/j/y',$this->deadlines->get_submit_application_begin_timestamp()) .")";
+            test($this->steps_text);
             return;
         }else if($this->curr_timestamp > $this->deadlines->get_submit_application_end_timestamp()){
             $this->steps_styles[HMS_SIDE_STUDENT_AGREE] = 'STEP_MISSED';
             $this->steps_styles[HMS_SIDE_STUDENT_APPLY] = 'STEP_MISSED';
+            test($this->steps_text);
             return;
         }
 
@@ -122,6 +130,11 @@ class HMS_Side_Thingie {
 
     function set_rlc()
     {
+        if($this->entry_term != TERM_FALL){
+            unset($this->steps_text[HMS_SIDE_STUDENT_RLC]);
+            return;
+        }
+        
         # If this is the step we're on, then set style accordingly
         $on_this_step = FALSE;
         if($this->step == HMS_SIDE_STUDENT_RLC){
@@ -159,6 +172,11 @@ class HMS_Side_Thingie {
 
     function set_profile()
     {
+        if($this->entry_term != TERM_FALL){
+            unset($this->steps_text[HMS_SIDE_STUDENT_PROFILE]);
+            return;
+        }
+        
         # If this is the step we're on, then set style accordingly
         $on_this_step = FALSE;
         if($this->step == HMS_SIDE_STUDENT_PROFILE){
@@ -199,6 +217,11 @@ class HMS_Side_Thingie {
 
     function set_roomate()
     {
+        if($this->entry_term != TERM_FALL){
+            unset($this->steps_text[HMS_SIDE_STUDENT_ROOMMATE]);
+            return;
+        }
+        
         # If this is the step we're on, then set style accordingly
         $on_this_step = FALSE;
         if($this->step == HMS_SIDE_STUDENT_ROOMMATE){
