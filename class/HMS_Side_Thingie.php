@@ -48,7 +48,7 @@ class HMS_Side_Thingie {
         }
 
         PHPWS_Core::initModClass('hms','HMS_Entry_Term.php');
-        $entry_term = HMS_Entry_Term::get_entry_term($_SESSION['asu_username']);
+        $this->entry_term = HMS_Entry_Term::get_entry_term($_SESSION['asu_username']);
     }
 
     function show()
