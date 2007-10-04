@@ -507,6 +507,7 @@ function hms_update(&$content, $currentVersion)
             $files[] = 'templates/student/main_menu_spring.tpl';
             $files[] = 'templates/student/main_menu_fall.tpl';
             $files[] = 'templates/student/student_application.tpl'; 
+            PHPWS_Boost::updatefiles($files, 'hms');
 
             $content[] = '+ Added check to prevent students selecting themselves as roommates';
             $content[] = '+ Added check to make sure a requested roommate has a housing application';
@@ -514,6 +515,13 @@ function hms_update(&$content, $currentVersion)
             $content[] = '+ Fixed colors for messages returned when setting deadlines (UI)';
             $content[] = '+ Added entry term to hms_application and rlc application tables';
             $content[] = '+ Added entry term to student application';
+
+        case version_compate($currentVersion, '0.1.31', '<'):
+            
+            $files[] = 'templates/student/rlc_signup_form_page1.tpl'
+            PHPWS_Boost::updatefiles($files, 'hms');
+
+            $content[] = '+ Added some verbage and a link to the top of the RLC signup form.';
 
     }
 
