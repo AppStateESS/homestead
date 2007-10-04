@@ -139,8 +139,18 @@ class HMS_RLC_Application{
         $application->setWhySpecificCommunities($_REQUEST['why_specific_communities']);
         $application->setStrengthsWeaknesses($_REQUEST['strengths_weaknesses']);
         $application->setRLCQuestion0($_REQUEST['rlc_question_0']);
-        $application->setRLCQuestion1($_REQUEST['rlc_question_1']);
-        $application->setRLCQuestion2($_REQUEST['rlc_question_2']);
+        
+        if(isset($_REQUEST['rlc_question_1'])){
+            $application->setRLCQuestion1($_REQUEST['rlc_question_1']);
+        }else{
+            $application->setRLCQuestion1(NULL);
+        }
+
+        if(isset($_REQUEST['rlc_question_2'])){
+            $application->setRLCQuestion2($_REQUEST['rlc_question_2']);
+        }else{
+            $application->setRLCQuestion2(NULL);
+        }
 
         $result = $application->save();
         
@@ -314,6 +324,11 @@ class HMS_RLC_Application{
        
         # Add an inital element to the list.
         $rlc_choices[-1] = "Select";
+        
+        # Make a copy of the RLC choices list, replacing "Select" with "None".
+        # To be used with the second and third RLC choices
+        $rlc_choices_none = $rlc_choices;
+        $rlc_choices_none[-1] = "None";
 
         $rlc_form->addDropBox('rlc_first_choice', $rlc_choices);
         $rlc_form->setLabel('rlc_first_choice','First Choice: ');
@@ -323,7 +338,7 @@ class HMS_RLC_Application{
             $rlc_form->setMatch('rlc_first_choice', -1); # Select the default
         }
         
-        $rlc_form->addDropBox('rlc_second_choice', $rlc_choices);
+        $rlc_form->addDropBox('rlc_second_choice', $rlc_choices_none);
         $rlc_form->setLabel('rlc_second_choice','Second Choice: ');
         if(isset($_REQUEST['rlc_second_choice'])){
             $rlc_form->setMatch('rlc_second_choice', $_REQUEST['rlc_second_choice']); # Select previous choice
@@ -331,7 +346,7 @@ class HMS_RLC_Application{
             $rlc_form->setMatch('rlc_second_choice', -1); # Select the default
         }
         
-        $rlc_form->addDropBox('rlc_third_choice', $rlc_choices);
+        $rlc_form->addDropBox('rlc_third_choice', $rlc_choices_none);
         $rlc_form->setLabel('rlc_third_choice','Third Choice: ');
         if(isset($_REQUEST['rlc_third_choice'])){
             $rlc_form->setMatch('rlc_third_choice', $_REQUEST['rlc_third_choice']);
@@ -406,22 +421,26 @@ class HMS_RLC_Application{
         }
 
         # Make sure rlc choice indicies are > 0 (i.e. not default value)
-        if($_REQUEST['rlc_first_choice']  < 0 || 
-           $_REQUEST['rlc_second_choice'] < 0 ||
-           $_REQUEST['rlc_third_choice']  < 0){
+        # Only check first choice, allowing second and third choices to be "none".
+        if($_REQUEST['rlc_first_choice']  < 0 ){
                return "Error: Please rank your RLC choices.";
         }
 
-        # Make sure none of the rlc choices match
+        # Make sure that if 2nd choice is "none", that there isn't a third choice
+        if($_REQUEST['rlc_second_choice'] == -1 && $_REQUEST['rlc_third_choice'] > -1){
+            return "Error: You cannot choose a third RLC without also choosing a second.";
+        }
+        
+        # Make sure none of the rlc choices match, but allow for second and third choices to match as long as they're both "none".
         if(($_REQUEST['rlc_first_choice']  == $_REQUEST['rlc_second_choice']) ||
-           ($_REQUEST['rlc_second_choice'] == $_REQUEST['rlc_third_choice'])  ||
+           ($_REQUEST['rlc_second_choice'] == $_REQUEST['rlc_third_choice'] && ($_REQUEST['rlc_second_choice'] > -1 && $_REQUEST['rlc_third_choice'] > -1))  ||
            ($_REQUEST['rlc_first_choice']  == $_REQUEST['rlc_third_choice'])){
-            return "Error: Please choose three distinct Learning Communities.";
+            return "Error: While ranking your RLC choices, you cannot select a RLC more than once.";
         }
 
         if(!(isset($_REQUEST['why_specific_communities']) &&
            isset($_REQUEST['strengths_weaknesses']))){
-            return "Error: Please complete the questions in section 3.";
+            return "Error: Please complete both of the questions in section 3.";
         }
 
         return TRUE;
@@ -453,6 +472,11 @@ class HMS_RLC_Application{
         $db = &new PHPWS_DB('hms_learning_community_questions');
         
         for($i = 0; $i < 3; $i++){
+            # Skip the question lookup if "none" was selected
+            if($choices[$i] == -1){
+                continue;
+            }
+
             $db->reset();
             $db->addWhere('learning_community_id',$choices[$i]);
             $result = $db->select('row');
@@ -497,9 +521,10 @@ class HMS_RLC_Application{
         }
 
         # Verify that all three text areas have content
-        if(!(isset($_REQUEST['rlc_question_0']) &&
-             isset($_REQUEST['rlc_question_1']) &&
-             isset($_REQUEST['rlc_question_2']))){
+        if(($_REQUEST['rlc_first_choice'] > -1  && !isset($_REQUEST['rlc_question_0'])) &&
+           ($_REQUEST['rlc_second_choice'] > -1 && !isset($_REQUEST['rlc_question_1'])) &&
+           ($_REQUEST['rlc_third_choice'] > -1  && !isset($_REQUEST['rlc_question_2']))
+          ){
             return "Error: Please answer all of the questions below.";
         }
 
