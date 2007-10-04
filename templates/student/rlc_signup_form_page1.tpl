@@ -2,6 +2,10 @@
   <div class="box">
     <div class="box-title"> <h1>Residential Learning Community (RLC) Application</h1> </div>
     <div class="box-content">
+        <div>
+        By completeing this application, you may be placed into a Residential Learning Community. To learn more about Residential Learning Communities please
+        visit the <a href="http://www.reslife.appstate.edu/index.php?module=pagemaster&PAGE_user_op=view_page&PAGE_id=134&MMN_position=107:107">Residential Learning Community website</a>.
+        </div>
         <font color="red"><i>{MESSAGE}</i></font><br>
         <!-- BEGIN rlc_form -->
         {START_FORM}
