@@ -382,6 +382,15 @@ CREATE TABLE hms_pending_assignment (
     PRIMARY KEY (id)
 );
 
+CREATE TABLE hms_activity_log (
+    user_id     CHARACTER VARYING(32)   NOT NULL,
+    timestamp   INTEGER                 NOT NULL,
+    activity    INTEGER                 NOT NULL,
+    actor       CHARACTER VARYING(32)   NOT NULL,
+    notes       CHARACTER VARYING(512)  NOT NULL,
+    PRIMARY KEY (id)
+);
+
 INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity) VALUES (0, 'Leadership & Service Community', 'LSC', 50);
 INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity) VALUES (1, 'Outdoor Community', 'OC', 50);
 INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity) VALUES (2, 'Wellness Community', 'WC', 50);

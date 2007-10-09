@@ -517,6 +517,11 @@ function hms_update(&$content, $currentVersion)
             $content[] = '+ Added entry term to student application';
 
         case version_compate($currentVersion, '0.1.31', '<'):
+            $db = &new PHPWS_DB;
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_1_31.sql');
+            if(PEAR::isError($result)){
+                return $result;
+            }
             
             $files[] = 'templates/student/rlc_signup_form_page1.tpl'
             PHPWS_Boost::updatefiles($files, 'hms');
