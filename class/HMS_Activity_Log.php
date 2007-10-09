@@ -113,7 +113,7 @@ class HMS_Activity_Log{
     }
 
     function get_timestamp(){
-        return $this->user_id;
+        return $this->timestamp;
     }
 
     function set_timestamp($time){
