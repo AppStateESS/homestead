@@ -202,7 +202,7 @@ class HMS_Student {
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
         $student_info = HMS_SOAP::get_student_info($_REQUEST['username']);
 
-        test($student_info);
+        #test($student_info);
 
         $tpl['MENU_LINK'] = PHPWS_Text::secureLink(_('Return to Search'), 'hms', array('type'=>'student', 'op'=>'enter_student_search_data'));
         $tpl['FIRST_NAME'] = $student_info->first_name;
@@ -805,6 +805,10 @@ class HMS_Student {
                     PHPWS_Core::killAllSessions();
                     PHPWS_Core::home();
                 }
+                # Log the fact that the user agreed to the terms and agreemnts
+                PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
+                HMS_Activity_Log::log_activity($_SESSION['asu_username'], ACTIVITY_AGREED_TO_TERMS, $_SESSION['asu_username'], NULL);
+                # Show the side thingie
                 PHPWS_Core::initModClass('hms', 'HMS_Side_Thingie.php');
                 $side_thingie = new HMS_Side_Thingie(HMS_SIDE_STUDENT_APPLY);
                 $side_thingie->show();
