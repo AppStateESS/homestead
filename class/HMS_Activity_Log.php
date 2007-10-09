@@ -9,11 +9,11 @@
 
 class HMS_Activity_Log{
 
-    var $user_id
-    var $timestamp
-    var $activity
-    var $actor
-    var $notes
+    var $user_id;
+    var $timestamp;
+    var $activity;
+    var $actor;
+    var $notes;
 
     var $activity_text = array( ACTIVITY_LOGIN                      => "Logged in",
                                 ACTIVITY_AGREED_TO_TERMS            => "Agreed to terms & agreement",
@@ -58,9 +58,9 @@ class HMS_Activity_Log{
        $db->addValue('timestamp',   $this->get_timestamp());
        $db->addValue('activity',    $this->get_activity());
        $db->addValue('actor',       $this->get_actor());
-       $db->addValue('notes',       $this->get_note());
+       $db->addValue('notes',       $this->get_notes());
 
-       $result = db->insert();
+       $result = $db->insert();
 
        if(PEAR::isError($result)){
            PHPWS_Error::log($result,'hms','save_activity_log',"Could not save activity log");
@@ -79,7 +79,7 @@ class HMS_Activity_Log{
      * Takes a username whos log the record should go in, the activity, the actor, and the notes
      * and creates a new Activity_Log object and saves it to the db.
      */
-    function log_activity($userid = $_SESSION['asu_username'], $activity, $actor, $notes)
+    function log_activity($userid, $activity, $actor, $notes)
     {
         $activity_log = new HMS_Activity_Log($userid, mktime(), $activity, $actor, $notes);
         $result = $activity_log->save();
