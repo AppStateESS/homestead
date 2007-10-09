@@ -61,6 +61,12 @@ class HMS_Login
         require_once(PHPWS_SOURCE_DIR . '/mod/hms/inc/accounts.php');
         Current_User::loginUser(HMS_STUDENT_USER, HMS_STUDENT_PASS);
         Current_User::getLogin();
+
+        # Log the student's login in their activity log
+        PHPWS_Core::initModClass('hms','HMS_Activity_Log.php');
+        HMS_Activity_Log::log_activity($_REQUEST['asu_username'],ACTIVITY_LOGIN, $_REQUEST['asu_username'], NULL); 
+
+        # Setup the session variable
         $_SESSION['asu_username'] = $_REQUEST['asu_username'];
         return STUDENT;
     }
