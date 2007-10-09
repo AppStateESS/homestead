@@ -115,6 +115,11 @@ class HMS_Application {
             $error = "<i>Error!</i><br />Could not create/update your application!<br />";
             return $error;
         }else{
+
+            # Log the successful submission of an application.
+            PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
+            HMS_Activity_Log::log_activity($_SESSION['asu_username'], ACTIVITY_SUBMITTED_APPLICATION, $_SESSION['asu_username'], NULL);
+            
             if($question->getRlcInterest() == 1) {
                 PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
                 return HMS_Learning_Community::show_rlc_application_form();
