@@ -387,7 +387,7 @@ CREATE TABLE hms_activity_log (
     timestamp   INTEGER                 NOT NULL,
     activity    INTEGER                 NOT NULL,
     actor       CHARACTER VARYING(32)   NOT NULL,
-    notes       CHARACTER VARYING(512),
+    notes       CHARACTER VARYING(512)
 );
 
 INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity) VALUES (0, 'Leadership & Service Community', 'LSC', 50);
