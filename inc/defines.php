@@ -19,6 +19,7 @@ define('AXP_TEST_FLAG', false);
  */
 define("FEMALE",    0);
 define("MALE",      1);
+define("COED",      2);
 
 /**
  * Terms
