@@ -30,55 +30,51 @@
                 <th>Phone Number: </th><td align="left">{PHONE_NUMBER}</td>
             </tr>
             <tr>
-                <th>Select a gender type: </th><td align="left">{GENDER_TYPE_1} {GENDER_TYPE_1_LABEL}</td>
+                <th>Select a gender type: </th>
+                <!-- BEGIN gender_message -->
+                <td>{GENDER_MESSAGE}</td>
+                <td>Remove occupants to change room gender.</td>
+                <!-- END gender_message -->
+                <!-- BEGIN gender_radio_buttons -->
+                <td align="left">{GENDER_TYPE_1} {GENDER_TYPE_1_LABEL}</td>
+                <td align="left">{GENDER_TYPE_2} {GENDER_TYPE_2_LABEL}</td>
+                <td align="left">{GENDER_TYPE_3} {GENDER_TYPE_3_LABEL}</td>
+                <!-- END gender_radio_button -->
             </tr>
             <tr>
-                <th></th><td align="left">{GENDER_TYPE_2} {GENDER_TYPE_2_LABEL}</td>
+                <th>Reserved for Freshmen:</th>
+                <td>{FRESHMAN_RESERVED_1} {FRESHMAN_RESERVED_1_LABEL}</td>
+                <td>{FRESHMAN_RESERVED_2} {FRESHMAN_RESERVED_2_LABEL}</td>
             </tr>
             <tr>
-                <th></th><td align="left">{GENDER_TYPE_3} {GENDER_TYPE_3_LABEL}</td>
+                <th>Reserved for RA: </th>
+                <td>{RA_ROOM_1} {RA_ROOM_1_LABEL}</td>
+                <td>{RA_ROOM_2} {RA_ROOM_2_LABEL}</td>
             </tr>
             <tr>
-                <th>Reserved for Freshmen:</th><td>{FRESHMAN_RESERVED_1} {FRESHMAN_RESERVED_1_LABEL}</td>
+                <th>Private Room:</th>
+                <td>{PRIVATE_ROOM_1} {PRIVATE_ROOM_1_LABEL}</td>
+                <td>{PRIVATE_ROOM_2} {PRIVATE_ROOM_2_LABEL}</td>
             </tr>
             <tr>
-                <td></td><td>{FRESHMAN_RESERVED_2} {FRESHMAN_RESERVED_2_LABEL}</td>
-            </tr>
-            <tr>
-                <th>Reserved for RA: </th><td>{RA_ROOM_1} {RA_ROOM_1_LABEL}</td>
-            </tr>
-            <tr>
-                <td></td><td>{RA_ROOM_2} {RA_ROOM_2_LABEL}</td>
-            </tr>
-            <tr>
-                <th>Private Room:</th><td>{PRIVATE_ROOM_1} {PRIVATE_ROOM_1_LABEL}</td>
-            </tr>
-            <tr>
-                <td></td><td>{PRIVATE_ROOM_2} {PRIVATE_ROOM_2_LABEL}</td>
-            </tr>
-            <tr>
-                <th>Is a Lobby:</th><td>{IS_LOBBY_1} {IS_LOBBY_1_LABEL}</td>
-            </tr>
-            <tr>
-                <td></td><td>{IS_LOBBY_2} {IS_LOBBY_2_LABEL}</td>
+                <th>Is a Lobby:</th>
+                <td>{IS_LOBBY_1} {IS_LOBBY_1_LABEL}</td>
+                <td>{IS_LOBBY_2} {IS_LOBBY_2_LABEL}</td>
             </tr>           
             <tr>
-                <th>Is medical: </th><td align="left">{IS_MEDICAL_1} {IS_MEDICAL_1_LABEL}</td>
+                <th>Is medical: </th>
+                <td align="left">{IS_MEDICAL_1} {IS_MEDICAL_1_LABEL}</td>
+                <td align="left">{IS_MEDICAL_2} {IS_MEDICAL_2_LABEL} </td>
             </tr>
             <tr>
-                <td></td><td align="left">{IS_MEDICAL_2} {IS_MEDICAL_2_LABEL} </td>
+                <th>Is reserved: </th>
+                <td align="left">{IS_RESERVED_1} {IS_RESERVED_1_LABEL}</td>
+                <td align="left">{IS_RESERVED_2} {IS_RESERVED_2_LABEL} </td>
             </tr>
             <tr>
-                <th>Is reserved: </th><td align="left">{IS_RESERVED_1} {IS_RESERVED_1_LABEL}</td>
-            </tr>
-            <tr>
-                <td></td><td align="left">{IS_RESERVED_2} {IS_RESERVED_2_LABEL} </td>
-            </tr>
-            <tr>
-                <th>Is online: </th><td align="left">{IS_ONLINE_1} {IS_ONLINE_1_LABEL}</td>
-            </tr>
-            <tr>
-                <th></th><td align="left">{IS_ONLINE_2} {IS_ONLINE_2_LABEL}</td>
+                <th>Is online: </th>
+                <td align="left">{IS_ONLINE_1} {IS_ONLINE_1_LABEL}</td>
+                <td align="left">{IS_ONLINE_2} {IS_ONLINE_2_LABEL}</td>
             </tr>
             <tr>
                 <th>Rooms in Suite:</th><td align="left">{ROOM_ID_ZERO}</td>

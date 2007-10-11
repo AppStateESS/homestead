@@ -1887,6 +1887,8 @@ class HMS_Form
         PHPWS_Core::initCoreClass('Form.php');
         $form = &new PHPWS_Form;
 
+        $tpl = array();
+
         $db = &new PHPWS_DB('hms_room');
         $db->addWhere('deleted', '0');
         $db->addWhere('room_number', $_REQUEST['room']);
@@ -1915,13 +1917,46 @@ class HMS_Form
         $is_reserved        = $room['is_reserved'];
         $is_online          = $room['is_online'];
 
+        # Check for anyone assigned to this room
+        $db = &new PHPWS_DB('hms_bedrooms');
+        $db->addWhere('hms_bedrooms.deleted', '0');
+        $db->addWhere('hms_bedrooms.room_id', $id);
+        $db->addWhere('hms_bedrooms.id', 'hms_beds.bedroom_id');
+        $db->addWhere('hms_beds.deleted', '0');
+        $db->addWhere('hms_beds.id', 'hms_assignment.bed_id');
+        $db->addWhere('hms_assignment.deleted', '0');
+        
+        $result = $db->select();
+
+        #test($result);
+
+        if(sizeof($result) > 0){
+            $room_occupied = TRUE;
+        }else{
+            $room_occupied = FALSE;
+        }
+        
         $form->addRadio('is_online', array(0, 1));
         $form->setLabel('is_online', array(_('No'), _('Yes') ));
         $form->setMatch('is_online', $is_online);
 
-        $form->addRadio('gender_type', array(0, 1, 2));
-        $form->setLabel('gender_type', array(_('Female'), _('Male'), _('Coed')));
-        $form->setMatch('gender_type', $gender_type);
+        if($room_occupied){
+            if($gender_type = FEMALE){
+                $tpl['GENDER_MESSAGE'] = "Female";
+            }else if($gender_type = MALE){
+                $tpl['GENDER_MESSAGE'] = "Male";
+            }else if($gender_type = COED){
+                $tpl['GENDER_MESSAGE'] = "Coed";
+            }else{
+                $tpl['GENDER_MESSAGE'] = "Error: Undefined gender";
+            }
+
+            $form->addHidden('gender_type', $gender_type);
+        }else{
+            $form->addRadio('gender_type', array(0, 1, 2));
+            $form->setLabel('gender_type', array(_('Female'), _('Male'), _('Coed')));
+            $form->setMatch('gender_type', $gender_type);
+        }
 
         $form->addRadio('is_medical', array(0,1));
         $form->setLabel('is_medical', array(_('No'), _('Yes')));
@@ -1983,6 +2018,7 @@ class HMS_Form
         $form->addHidden('id', $id);
         $form->addSubmit('submit', _('Submit'));
 
+        $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
         
         PHPWS_Core::initModClass('hms', 'HMS_Room.php');
