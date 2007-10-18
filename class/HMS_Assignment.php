@@ -805,7 +805,7 @@ WHERE hms_assignment.bed_id = hms_beds.id           AND
 
             // Room Phone Number
             if(!empty($row['phone_number'])) {
-                $db->addValue('room_phone', '828-262-' . $row['phone_number']);
+                $db->addValue('room_phone', '828-266-' . $row['phone_number']);
             }
 
             // Banner Crap
