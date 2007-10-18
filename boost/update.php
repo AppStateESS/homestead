@@ -529,12 +529,17 @@ function hms_update(&$content, $currentVersion)
             $content[] = '+ Added some verbage and a link to the top of the RLC signup form.';
             $content[] = '+ Added activity log table';
 
-        case version_compate($currentVersion, '0.1.32', '<'):
+        case version_compare($currentVersion, '0.1.32', '<'):
             
             $files[] = 'templates/admin/display_room_data.tpl';
             PHPWS_Boost::updatefiles($files, 'hms');
 
             $content[] = '+ Updated edit room template to disallow room gender changes is someone is assigned.';
+        case version_compare($currentVersion, '0.1.33', '<'):
+
+            $files[] = 'templates/admin/display_room_data.tpl';
+            $files[] = 'templates/admin/maintenance.tpl';
+            PHPWS_Boost::updatefiles($files, 'hms');
     }
 
     return TRUE;
