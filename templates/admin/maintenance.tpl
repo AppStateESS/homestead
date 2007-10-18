@@ -34,10 +34,10 @@
             &nbsp;&nbsp;&nbsp;{SEARCH_FOR_STUDENT}<br />
     <!--        &nbsp;&nbsp;&nbsp;{ADD_STUDENT}<br />
             &nbsp;&nbsp;&nbsp;{EDIT_STUDENT}<br />-->
-            <br /> 
+        </td><td style="vertical-align: top; padding-left: 20px;">
             <h2><i>{DEADLINE_LABEL}</i></h2>
             &nbsp;&nbsp;&nbsp;{EDIT_DEADLINES}<br />
-            <br />
+            <br /> 
             <h2><i>{ASSIGNMENT_LABEL}</i></h2>
             &nbsp;&nbsp;&nbsp;{ASSIGN_BY_FLOOR}<br />
             &nbsp;&nbsp;&nbsp;{CREATE_ASSIGNMENT}<br />
@@ -49,7 +49,7 @@
             &nbsp;&nbsp;&nbsp;{EDIT_ROOMMATE_GROUP}<br />
             <br />
             <h2><i>{PURGE_DATA}</i></h2>
-        </td><td style="vertical-align: top; padding-left: 20px;">
+            <br />
             <h2><i>{AUTOASSIGN_LABEL}</i></h2>
             &nbsp;&nbsp;&nbsp;{FILL_QUEUE}<br />
             &nbsp;&nbsp;&nbsp;{VIEW_QUEUE}<br />
