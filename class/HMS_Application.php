@@ -205,6 +205,7 @@ class HMS_Application {
             $db->addWhere('hms_student_id',$this->getStudentID(),'ILIKE');
         }
         $db->addWhere('created_on',HMS::get_current_year(),'>=');
+        $db->addWhere('entry_term', 200810); // TODO: HACKED, for now anyways... needs to use an actual term
         $db->addWhere('deleted',0,'=');
 
         $result = $db->select('row');
