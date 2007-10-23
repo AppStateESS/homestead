@@ -2469,24 +2469,10 @@ class HMS_Form
 
     function show_deadlines($success_message = NULL,$error_message = NULL)
     {
-        $months = array('1'=>'January',
-                        '2'=>'February',
-                        '3'=>'March',
-                        '4'=>'April',
-                        '5'=>'May',
-                        '6'=>'June',
-                        '7'=>'July',
-                        '8'=>'August',
-                        '9'=>'September',
-                        '10'=>'October',
-                        '11'=>'November',
-                        '12'=>'December');
-        
-        for($d = 1; $d <= 31; $d++) {
-            $days[$d] = $d;
-        }
-
-        $years = array(date('Y')=>date('Y'), date('Y') + 1=>date('Y') + 1);
+        PHPWS_Core::initModClass('hms','HMS_Util.php');
+        $months = HMS_Util::get_months(); 
+        $days   = HMS_Util::get_days();
+        $years  = HMS_Util::get_years_2yr();
         
         $form = &new PHPWS_Form;
         $form->addDropBox('student_login_begin_month', $months);
