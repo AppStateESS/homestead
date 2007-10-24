@@ -372,6 +372,7 @@ class HMS_Application {
     function begin_application($message = NULL)
     {
         PHPWS_Core::initModClass('hms','HMS_SOAP.php');
+        PHPWS_Core::initMOdClass('hms','HMS_Term.php');
         PHPWS_Core::initMOdClass('hms','HMS_Entry_Term.php');
         
         PHPWS_Core::initCoreClass('Form.php');
@@ -483,7 +484,7 @@ class HMS_Application {
         $tpl['MESSAGE'] = $message;
         $tpl['STUDENT_NAME'] = HMS_SOAP::get_full_name($_SESSION['asu_username']);
         $tpl['GENDER'] = (HMS_SOAP::get_gender($_SESSION['asu_username'],TRUE) == '0') ? 'Female' : 'Male';
-        $tpl['ENTRY_TERM'] = HMS_Entry_Term::entry_term_to_text(HMS_SOAP::get_entry_term($_SESSION['asu_username']), TRUE);
+        $tpl['ENTRY_TERM'] = HMS_Term::term_to_text(HMS_SOAP::get_entry_term($_SESSION['asu_username']), TRUE);
 
         $master['TITLE']   = 'Residence Hall Application';
         $master['APPLICATION']  = PHPWS_Template::process($tpl, 'hms', 'student/student_application.tpl');
