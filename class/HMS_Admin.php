@@ -37,6 +37,10 @@ class HMS_Admin
        
         switch($type)
         {
+            case 'term':
+                PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+                $final = HMS_Term::main();
+                break;
             case 'hall':
                 PHPWS_Core::initModClass('hms', 'HMS_Building.php');
                 $final = HMS_Building::main();

@@ -3,6 +3,13 @@
     <div class="box-title"> <h1>HMS General Maintenance</h1> </div>
     <div class="box-content">
         <table><tr><td style="vertical-align: top;">
+            
+            <!-- BEGIN term -->
+            <h2><i>{TERM_LABEL}</i></h2>
+            &nbsp;&nbsp;&nbsp;{EDIT_TERM}<br />
+            <br />
+            <!-- END term -->
+            
             <h2><i>{HALL_LABEL}</i></h2>
             &nbsp;&nbsp;&nbsp;{ADD_HALL}<br />
             <!--&nbsp;&nbsp;&nbsp;{EDIT_HALL}<br />-->

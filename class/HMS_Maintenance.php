@@ -88,6 +88,10 @@ class HMS_Maintenance
     {
         Layout::addPageTitle("Comprehensive Maintenance");
         
+        $tpl['TERM_LABEL'] = "Term Maintenance";
+        if(Current_User::allow('hms', 'term_maintenance') || Current_User::allow('hms', 'admin'))
+            $tpl['EDIT_TERM']   = PHPWS_Text::secureLink(_('Edit Terms'), 'hms', array('type'=>'term', 'op'=>'show_edit_terms'));
+        
         if(Current_User::allow('hms', 'hall_maintenance') || Current_User::allow('hms', 'admin'))
             $tpl['HALL_LABEL']  = "Residence Hall Options";
 

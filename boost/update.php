@@ -540,6 +540,20 @@ function hms_update(&$content, $currentVersion)
             $files[] = 'templates/admin/display_room_data.tpl';
             $files[] = 'templates/admin/maintenance.tpl';
             PHPWS_Boost::updatefiles($files, 'hms');
+
+        case version_compare($currentVersion, '0.2.0', '<'):
+            $db = &new PHPWS_DB;
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_0.sql');
+            if(PEAR::isError($result)){
+                return $result;
+            }
+
+            $files[] = 'templates/admin/maintenance.tpl';
+            $files[] = 'templates/admin/edit_terms.tpl';
+            $files[] = 'templates/admin/term_pager.tpl';
+            PHPWS_Boost::updatefiles($files, 'hms');
+
+            $content[] = '+ Added term database and term admin to maintenance panel';
     }
 
     return TRUE;

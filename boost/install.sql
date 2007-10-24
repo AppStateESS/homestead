@@ -8,21 +8,28 @@ CREATE TABLE hms_assignment (
 );
 
 CREATE TABLE hms_deadlines (
-    student_login_begin_timestamp integer NOT NULL,
-    student_login_end_timestamp integer NOT NULL,
-    submit_application_begin_timestamp integer NOT NULL,
-    submit_application_end_timestamp integer NOT NULL,
-    edit_application_end_timestamp integer NOT NULL,
-    edit_profile_begin_timestamp integer NOT NULL,
-    edit_profile_end_timestamp integer NOT NULL,
-    search_profiles_begin_timestamp integer NOT NULL,
-    search_profiles_end_timestamp integer NOT NULL,
-    submit_rlc_application_end_timestamp integer NOT NULL,
-    view_assignment_begin_timestamp integer NOT NULL,
-    view_assignment_end_timestamp integer NOT NULL,
-    updated_by smallint NOT NULL,
-    updated_on integer NOT NULL
+    student_login_begin_timestamp           integer NOT NULL,
+    student_login_end_timestamp             integer NOT NULL,
+    submit_application_begin_timestamp      integer NOT NULL,
+    submit_application_end_timestamp        integer NOT NULL,
+    edit_application_end_timestamp          integer NOT NULL,
+    edit_profile_begin_timestamp            integer NOT NULL,
+    edit_profile_end_timestamp              integer NOT NULL,
+    search_profiles_begin_timestamp         integer NOT NULL,
+    search_profiles_end_timestamp           integer NOT NULL,
+    submit_rlc_application_end_timestamp    integer NOT NULL,
+    view_assignment_begin_timestamp         integer NOT NULL,
+    view_assignment_end_timestamp           integer NOT NULL,
+    updated_by                              smallint NOT NULL,
+    updated_on                              integer NOT NULL
 );
+
+CREATE TABLE hms_term (
+    id      integer NOT NULL,
+    term    integer NOT NULL,
+    primary key(id)
+);
+ALTER TABLE hms_term ADD CONSTRAINT hms_term_unique_key UNIQUE (term);
 
 CREATE TABLE hms_floor (
     id integer NOT NULL,
