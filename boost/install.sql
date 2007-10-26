@@ -25,11 +25,9 @@ CREATE TABLE hms_deadlines (
 );
 
 CREATE TABLE hms_term (
-    id      integer NOT NULL,
     term    integer NOT NULL,
-    primary key(id)
+    primary key(term)
 );
-ALTER TABLE hms_term ADD CONSTRAINT hms_term_unique_key UNIQUE (term);
 
 CREATE TABLE hms_floor (
     id integer NOT NULL,
@@ -117,7 +115,7 @@ CREATE TABLE hms_pricing_tiers (
 CREATE TABLE hms_application (
     id integer DEFAULT 0 NOT NULL,
     hms_student_id character varying(32) NOT NULL,
-    entry_term integer NOT NULL,
+    term integer NOT NULL REFERENCES hms_term(term),
     student_status smallint NOT NULL,
     term_classification smallint NOT NULL,
     gender smallint NOT NULL,
@@ -138,7 +136,7 @@ CREATE TABLE hms_application (
     primary key(id)
 );
 
-ALTER TABLE hms_application ADD CONSTRAINT application_key UNIQUE (hms_student_id, entry_term); 
+ALTER TABLE hms_application ADD CONSTRAINT application_key UNIQUE (hms_student_id, term); 
 
 CREATE TABLE hms_residence_hall (
     id integer DEFAULT 0 NOT NULL,
