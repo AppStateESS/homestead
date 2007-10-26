@@ -238,6 +238,7 @@ class HMS_RLC_Application{
         $tags['2ND_CHOICE']  = $rlc_list[$this->getSecondChoice()];
         $tags['3RD_CHOICE']  = $rlc_list[$this->getThirdChoice()];
         $tags['FINAL_RLC']   = HMS_RLC_Application::generateRLCDropDown($rlc_list,$this->getID());
+        $tags['CLASS']       = HMS_SOAP::get_student_class($this->getUserID());
 //        $tags['SPECIAL_POP'] = ;
 //        $tags['MAJOR']       = ;
 //        $tags['HS_GPA']      = ;
