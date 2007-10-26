@@ -7,33 +7,37 @@
 
 class HMS_Term{
 
-    var $id;
     var $term;
 
-    function HMS_Term($id = NULL)
+    function HMS_Term($term = NULL)
     {
-        if(!isset($id)){
+        if(!isset($term)){
             return;
         }
 
-        $this->set_id($id);
+        $this->set_term($term);
 
         # Initalize
+        # This code (initialization stuff) commented out due to the removal of the 'id' field.
+        /*
         $result = $this->init();
         if(PEAR::isError($result)){
             PHPWS_Error::log($result);
             return $result;
         }
+        */
     }
 
+    /*
     function init()
     {
-        if(!isset($this->id)){
+        if(!isset($this->term)){
             return FALSE;
         }
 
         $db = &new PHPWS_DB('hms_term');
-        $result = $db->loadObject($this);
+        $db->addWhere('term',$this->get_term());
+        $result = $db->select('row');
 
         if(PEAR::isError($result)){
             PHPWS_Error::log($result);
@@ -41,6 +45,7 @@ class HMS_Term{
 
         return $result;
     }
+    */
 
     function save()
     {
@@ -79,7 +84,7 @@ class HMS_Term{
      *****************/
 
     /**
-     * Returns an array where the keys are the 'id' column of the
+     * Returns an array where the keys are the 'term' column of the
      * hms_term table and the values are a text description of the term
      * 
      * Useful for generating a drop down box of terms.
@@ -88,6 +93,7 @@ class HMS_Term{
     {
         
         $db = &new PHPWS_DB('hms_term');
+        $db->addOrder('DESC');
         $results = $db->select();
 
         if(PEAR::isError($results)){
@@ -95,10 +101,10 @@ class HMS_Term{
             return $results;
         }
 
-        # Replaces the 'term' element of each result with a text description, keeping the same 'id'
+        # Creates a final result array using the 'term' column to generate a text description of the term as the value.
         $final = array();
         foreach ($results as $result){
-            $final[$result['id']] = HMS_Term::term_to_text($result['term'], TRUE);
+            $final[$result['term']] = HMS_Term::term_to_text($result['term'], TRUE);
         }
 
         return $final;
@@ -267,14 +273,6 @@ class HMS_Term{
     /******************************
      * Accessor & Mutator Methods *
      *****************************/
-
-    function get_id(){
-        return $this->id;
-    }
-
-    function set_id($id){
-        $this->id = $id;
-    }
 
     function get_term(){
         return $this->term;

@@ -13,7 +13,7 @@ class HMS_Application {
     var $id;
 
     var $hms_student_id;
-    var $entry_term;
+    var $term;
     var $student_status;
     var $term_classification;
     var $gender;
@@ -71,7 +71,7 @@ class HMS_Application {
         
         $this->setID($result['id']);
         $this->setStudentID($result['hms_student_id']);
-        $this->setEntryTerm($result['entry_term']);
+        $this->setTerm($result['term']);
         $this->setStudentStatus($result['student_status']);
         $this->setTermClassification($result['term_classification']);
         $this->setGender($result['gender']);
@@ -98,7 +98,7 @@ class HMS_Application {
         $question = &new HMS_Application();
         
         $question->setStudentStatus($_REQUEST['student_status']);
-        $question->setEntryTerm($_REQUEST['entry_term']);
+        $question->setTerm($_REQUEST['term']);
         $question->setTermClassification($_REQUEST['classification_for_term']);
         $question->setGender($_REQUEST['gender_type']);
         $question->setMealOption($_REQUEST['meal_option']);
@@ -148,7 +148,7 @@ class HMS_Application {
     {
         $db = &new PHPWS_DB('hms_application');
         $db->addValue('student_status',$this->getStudentStatus());
-        $db->addvalue('entry_term',$this->getEntryTerm());
+        $db->addvalue('term',$this->getTerm());
         $db->addValue('term_classification',$this->getTermClassification());
         $db->addValue('gender',$this->getGender());
         $db->addValue('meal_option',$this->getMealOption());
@@ -194,7 +194,7 @@ class HMS_Application {
     /**
      * Checks to see if a application already exists for the objects current $hms_user_id.
      * If so, it returns the ID of that application record, otherwise it returns false.
-     * TODO: Adjust this to use only the current 'entry_term'
+     * TODO: Adjust this to use only the current 'term'
      */
     function check_for_application($asu_username = NULL)
     {
@@ -205,7 +205,7 @@ class HMS_Application {
             $db->addWhere('hms_student_id',$this->getStudentID(),'ILIKE');
         }
         $db->addWhere('created_on',HMS::get_current_year(),'>=');
-        $db->addWhere('entry_term', 200810); // TODO: HACKED, for now anyways... needs to use an actual term
+        $db->addWhere('term', 200810); // TODO: HACKED, for now anyways... needs to use an actual term
         $db->addWhere('deleted',0,'=');
 
         $result = $db->select('row');
@@ -414,7 +414,7 @@ class HMS_Application {
         }
 
         # Use a hidden field for the entry term, pull from banner
-        $form->addHidden('entry_term', HMS_SOAP::get_entry_term($_SESSION['asu_username']));
+        $form->addHidden('term', HMS_SOAP::get_entry_term($_SESSION['asu_username']));
 
         # Use a hidden field for gender, pull from banner
         $form->addHidden('gender_type', HMS_SOAP::get_gender($_SESSION['asu_username'], TRUE));
@@ -493,6 +493,8 @@ class HMS_Application {
 
     function display_application_results()
     {
+        PHPWS_Core::initModClass('hms','HMS_Term.php');
+
         $application = new HMS_Application($_SESSION['asu_username']);
 
         if(!$application->getID() && !HMS_Application::check_valid_application_values()) {
@@ -509,7 +511,7 @@ class HMS_Application {
             $form = &new PHPWS_Form;
 
             $form->addHidden('agreed_to_terms',$_REQUEST['agreed_to_terms']);
-            $form->addHidden('entry_term',$_REQUEST['entry_term']);
+            $form->addHidden('term',$_REQUEST['term']);
             $form->addHidden('classification_for_term', $_REQUEST['classification_for_term']);
             $form->addHidden('student_status',$_REQUEST['student_status']);
             $form->addHidden('gender_type',$_REQUEST['gender_type']);
@@ -531,7 +533,7 @@ class HMS_Application {
             $redo_form->addHidden('type','student');
             $redo_form->addHidden('op','begin_application');
             $redo_form->addHidden('agreed_to_terms',$_REQUEST['agreed_to_terms']);
-            $redo_form->addHidden('entry_term',$_REQUEST['entry_term']);
+            $redo_form->addHidden('term',$_REQUEST['term']);
             $redo_form->addHidden('classification_for_term', $_REQUEST['classification_for_term']);
             $redo_form->addHidden('student_status',$_REQUEST['student_status']);
             $redo_form->addHidden('gender_type',$_REQUEST['gender_type']);
@@ -548,6 +550,8 @@ class HMS_Application {
 
             $tpl['MESSAGE'] = $message;
             $tpl['NEWLINES']= "<br /><br />";
+
+            $tpl['ENTRY_TERM'] = HMS_Term::term_to_text($_REQUEST['term'], TRUE);
             
             if($_REQUEST['student_status'] == 1) $tpl['STUDENT_STATUS'] = "New Freshman";
             else if ($_REQUEST['student_status'] == 2) $tpl['STUDENT_STATUS'] = "Transfer";
@@ -591,6 +595,9 @@ class HMS_Application {
             $tpl['REDO']    = PHPWS_Text::secureLink("Return to Menu", 'hms', array('type'=>'hms', 'op'=>'main'));
             $tpl['NEWLINES']= "<br /><br />";
             
+            $tpl['ENTRY_TERM'] = HMS_Term::term_to_text($application->getTerm(), TRUE);
+            $tpl['STUDENT_NAME'] = HMS_SOAP::get_full_name($_SESSION['asu_username']);
+            
             if($application->getStudentStatus() == 1) $tpl['STUDENT_STATUS'] = "New Freshman";
             else if ($application->getStudentStatus() == 2) $tpl['STUDENT_STATUS'] = "Transfer";
 
@@ -599,9 +606,9 @@ class HMS_Application {
             else if($application->getTermClassification() == 3) $tpl['CLASSIFICATION_FOR_TERM'] = "Junior";
             else if($application->getTermClassification() == 4) $tpl['CLASSIFICATION_FOR_TERM'] = "Senior";
             
-            if($application->getGender() == 0) $tpl['GENDER_TYPE'] = "Female";
-            else if($application->getGender() == 1) $tpl['GENDER_TYPE'] = "Male";
-            
+            if($application->getGender() == 0) $tpl['GENDER'] = "Female";
+            else if($application->getGender() == 1) $tpl['GENDER'] = "Male";
+
             if($application->getMealOption() == 1) $tpl['MEAL_OPTION'] = "Low";
             else if($application->getMealOption() == 2) $tpl['MEAL_OPTION'] = "Medium";
             else if($application->getMealOption() == 3) $tpl['MEAL_OPTION'] = "High";
@@ -657,12 +664,12 @@ class HMS_Application {
         return $this->hms_student_id;
     }
 
-    function setEntryTerm($term){
-        $this->entry_term = $term;
+    function setTerm($term){
+        $this->term = $term;
     }
 
-    function getEntryTerm(){
-        return $this->entry_term;
+    function getTerm(){
+        return $this->term;
     }
 
     function setStudentStatus($status){
