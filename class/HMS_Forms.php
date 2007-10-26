@@ -1941,11 +1941,11 @@ class HMS_Form
         $form->setMatch('is_online', $is_online);
 
         if($room_occupied){
-            if($gender_type = FEMALE){
+            if($gender_type == FEMALE){
                 $tpl['GENDER_MESSAGE'] = "Female";
-            }else if($gender_type = MALE){
+            }else if($gender_type == MALE){
                 $tpl['GENDER_MESSAGE'] = "Male";
-            }else if($gender_type = COED){
+            }else if($gender_type == COED){
                 $tpl['GENDER_MESSAGE'] = "Coed";
             }else{
                 $tpl['GENDER_MESSAGE'] = "Error: Undefined gender";
