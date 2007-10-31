@@ -83,6 +83,21 @@ class HMS_Term{
      * Static Methods *
      *****************/
 
+
+    /**
+     * Returns the current term
+     */
+    function get_current_term(){
+        return PHPWS_Settings::get('hms','current_term');
+    }
+
+    /**
+     * Sets the current term
+     */
+    function set_current_term($term){
+        PHPWS_Settings::set('hms','current_term',$term);
+    }
+
     /**
      * Returns an array where the keys are the 'term' column of the
      * hms_term table and the values are a text description of the term
