@@ -21,6 +21,19 @@ define("FEMALE",    0);
 define("MALE",      1);
 define("COED",      2);
 
+define("FEMALE_DESC",   'Female');
+define("MALE_DESC",     'Male');
+define("COED_DESC",     'Coed');
+
+/**
+ * Online/Offline Defines
+ */
+define("ONLINE",    0);
+define("OFFLINE",   1);
+
+define("ONLINE_DESC",   'Online');
+define("OFFLINE_DESC",  'Offline');
+
 /**
  * Terms
  */
