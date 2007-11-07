@@ -50,5 +50,41 @@ class HMS_Util{
     function get_years_2yr(){
         return array(date('Y')=>date('Y'), date('Y') + 1=>date('Y') + 1);
     }
+
+    /**
+     * Return a date in the format dd-mm-yy given a timestamp
+     *
+     * @param int $timestamp
+     */
+    function get_short_date($timestamp) {
+        if(!isset($timestamp))
+            $timestamp = mktime();
+     
+        return date("j-n-y");
+    }
+
+    /**
+     * Return a date in long format dd-mm-yyyy given a timestamp
+     *
+     * @param int $timestamp
+     */
+    function get_long_date($timestamp) {
+        if(!isset($timestamp))
+            $timestamp = mktime();
+
+        return date("j-n-Y");
+    }
+
+    /**
+     * Return a date in super long format eg. 7th-November-2007
+     *
+     * @param int $timestamp
+     */
+    function get_super_long_date($timestamp) {
+        if(!isset($timestamp))
+            $timestamp = mktime();
+
+        return date("jS-M-Y");
+    }
 }
 ?>
