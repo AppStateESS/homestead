@@ -7,7 +7,6 @@ class HMS_Student {
     var $last_name;
     var $asu_username;
     var $gender;
-    var $deleted;
     var $application_received;
     var $added_by;
     var $added_on;
@@ -743,6 +742,12 @@ class HMS_Student {
         }else{
             $tags['NEW_APP_MSG']  = "The deadline for editing your housing application passed on " . HMS_Deadlines::get_deadline_as_date('edit_application_end_timestamp', $deadlines) . ".";
         }
+
+        /*************************************
+         * 200810 Roommates Hack - TEMPORARY *
+         *************************************/
+         $tags['ROOMMATE_MSG'] = 'If you would like to request a roommate, follow the link below.  Please note that this step is optional, and due to limited housing availability, we can NOT guarantee that your roommate request will be honored for the Spring semester.';
+         $tags['ROOMMATE_LINK'] = PHPWS_Text::secureLink(_('Request A Roommate'), 'hms', array('type'=>'student', 'op'=>'spring_roommate_hack'));
         
         /*********************
          * Verify Assignment *
@@ -765,6 +770,66 @@ class HMS_Student {
         
         return PHPWS_Template::process($tags, 'hms', 'student/main_menu_spring.tpl');
 
+    }
+
+    /* 200810 Spring Roommate HACK.  This must be REMOVED and replaced
+     * by something SANE before 200910.
+     */
+    function spring_roommate_hack()
+    {
+        $db = new PHPWS_DB('hms_roommate_hack');
+        $db->addWhere('requestor', $_SESSION['asu_username']);
+        $results = $db->select('row');
+
+        if(PHPWS_Error::isError($results)) {
+            test($results,1);
+        }
+
+        $form = new PHPWS_Form;
+        $form->addHidden('module', 'hms');
+        $form->addHidden('type', 'student');
+        $form->addHidden('op', 'save_spring_roommate_hack');
+
+        $form->addText('name');
+        $form->setLabel('name', "Requested Roommate's Full Name");
+        if(isset($results['requestee']))
+            $form->setValue('name', $results['requestee']);
+
+        $form->addText('username');
+        $form->setLabel('username', "@appstate.edu  Requested Roommate's Email Address");
+        $form->setSize('username',8);
+        if(isset($results['requestee_username']))
+            $form->setValue('username', $results['requestee_username']);
+
+        $form->addSubmit('save', _('Save'));
+        $form->addSubmit('cancel', _('Cancel Changes'));
+
+        $tags = $form->getTemplate();
+        $tags['WALL_OF_TEXT'] = _("Please specify your requested roommate's full name and ASU username below.  Note that we can NOT guarantee that your roommate request will be honored for the Spring semester.");
+
+        return PHPWS_Template::process($tags, 'hms', 'student/roommate_hack.tpl');
+    }
+
+    /* Save data from the 200810 Spring Roommate HACK.  This must be
+     * REMOVED and replaced by something SANE before 200910.
+     */
+    function save_spring_roommate_hack()
+    {
+        $db = new PHPWS_DB('hms_roommate_hack');
+        $db->addWhere('requestor', $_SESSION['asu_username']);
+        $db->delete();
+
+        $db = new PHPWS_DB('hms_roommate_hack');
+        $db->addValue('requestor', $_SESSION['asu_username']);
+        $db->addValue('requestee', $_REQUEST['name']);
+        $db->addValue('requestee_username', $_REQUEST['username']);
+        $result = $db->insert();
+
+        if(PHPWS_Error::isError($result)) {
+            test($result, 1);
+        }
+
+        return "You have requested {$_REQUEST['name']} for your roommate.<br /><br />" . PHPWS_Text::secureLink(_('Return to Main Menu'), 'hms', array('type'=>'student', 'op'=>'main'));
     }
     
     function main()
@@ -902,6 +967,12 @@ class HMS_Student {
                     return HMS_Roommate_Approval::save_roommate_username();
                 }
                 break;
+            case 'spring_roommate_hack':
+                return HMS_Student::spring_roommate_hack();
+            case 'save_spring_roommate_hack':
+                if(isset($_REQUEST['cancel']))
+                    return HMS_Student::show_main_menu();
+                return HMS_Student::save_spring_roommate_hack();
             case 'set_meal_plan':
                 return HMS_Student::set_meal_plan();
                 break;

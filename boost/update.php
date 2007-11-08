@@ -554,6 +554,7 @@ function hms_update(&$content, $currentVersion)
             PHPWS_Boost::updatefiles($files, 'hms');
 
             $content[] = '+ Added term database and term admin to maintenance panel';
+
         case version_compare($currentVersion, '0.2.1', '<'):
             $db = &new PHPWS_DB;
             $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_1.sql');
@@ -562,6 +563,13 @@ function hms_update(&$content, $currentVersion)
             }
 
             $content[] = '+ Renamed entry_term column in hms_application to term';
+
+        case version_compare($currentVersion, '0.2.2', '<'):
+            $db = &new PHPWS_DB;
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_2.sql');
+            if(PEAR::isError($result)) {
+                return $result;
+            }
     }
 
     return TRUE;

@@ -32,6 +32,15 @@
         {NEW_APP_LINK}
       </li>
     </ul>
+
+    <h2>2b. Request a Roommate (optional)</h2>
+    {ROOMMATE_INTRO}
+    <ul>
+      <li>
+        {ROOMMATE_MSG}<br />
+        {ROOMMATE_LINK}
+      </li>
+    </ul>
     
     <h2>3. Check Your Housing Status</h2>
     {VERIFY_INTRO}
