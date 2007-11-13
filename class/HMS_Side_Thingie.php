@@ -17,8 +17,8 @@ class HMS_Side_Thingie {
     var $steps_text = array(HMS_SIDE_STUDENT_AGREE    => "Terms & Conditions",
                             HMS_SIDE_STUDENT_APPLY    => "Application",
                             HMS_SIDE_STUDENT_RLC      => "Learning Community Application (optional)",
-                            HMS_SIDE_STUDENT_PROFILE  => "Roomate Profile (optional)",
-                            HMS_SIDE_STUDENT_ROOMMATE => "Choose a Roomate (optional)",
+                            HMS_SIDE_STUDENT_PROFILE  => "Roommate Profile (optional)",
+                            HMS_SIDE_STUDENT_ROOMMATE => "Choose a Roommate (optional)",
                             HMS_SIDE_STUDENT_VERIFY   => "Verify Status");
     var $steps_styles;
     var $deadlines;
@@ -73,6 +73,9 @@ class HMS_Side_Thingie {
 
         # Always show as available.
         $this->set_verify();
+
+        # This is hard coded for spring 2007!
+        $this->steps_styles['HMS_SIDE_STUDENT_ROOMMATE'] = 'STEP_TOGO';
         
         for($i = HMS_SIDE_STUDENT_MIN;$i <= HMS_SIDE_STUDENT_MAX; $i++) {
             if(isset($this->steps_text[$i])){
