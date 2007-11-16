@@ -687,11 +687,14 @@ class HMS_Learning_Community
 
         // setup the title and headings
         $buffer = $title . "\n";
-        $buffer .= '"last_name","first_name","middle_name","gender","roommate","email"' . "\n";
+        $buffer .= '"last_name","first_name","middle_name","gender","roommate","email","second_choice","third_choice","major","application_date"' . "\n";
 
         // get the userlist
         $db = &new PHPWS_DB('hms_learning_community_applications');
         $db->addColumn('user_id');
+        $db->addColumn('rlc_second_choice_id');
+        $db->addColumn('rlc_third_choice_id');
+        $db->addColumn('date_submitted');
         $db->addWhere('rlc_first_choice_id', $_REQUEST['rlc_list']);
         $users = $db->select();
 
@@ -733,7 +736,43 @@ class HMS_Learning_Community
             } else {
                 $buffer .= '"",';
             }
-            $buffer .= '"' . $user['user_id'] . '@appstate.edu' . '"' . "\n";
+            $buffer .= '"' . $user['user_id'] . '@appstate.edu' . '",';
+            
+            if(isset($user['rlc_second_choice_id'])) {
+                $db = new PHPWS_DB('hms_learning_communities');
+                $db->addColumn('community_name');
+                $db->addWhere('id', $user['rlc_second_choice_id']);
+                $result = $db->select('one');
+                if(!PHPWS_Error::logIfError($result)) {
+                    $buffer .= '"' . $result . '",';
+                }
+            } else {
+                $buffer .= '"",';
+            }
+            
+            if(isset($user['rlc_third_choice_id'])) {
+                $db = new PHPWS_DB('hms_learning_communities');
+                $db->addColumn('community_name');
+                $db->addWhere('id', $user['rlc_third_choice_id']);
+                $result = $db->select();
+                if(!PHPWS_Error::logIfError($result)) {
+                    $buffer .= '"' . $result . '",';
+                }
+            } else {
+                $buffer .= '"",';
+            }
+
+            //Major for this user, N/A for now
+            $buffer .= '"N/A",';
+
+            //Application Date
+            if(isset($user['date_submitted'])){
+                PHPWS_Core::initModClass('hms', 'HMS_Util.php');
+                $buffer .= '"' . HMS_Util::get_long_date($user['date_submitted']) . '"';
+            } else {
+                $buffer .= '"Error with the submission Date"';
+            }
+            $buffer .= "\n";
         }
 
         //HERES THE QUERY:

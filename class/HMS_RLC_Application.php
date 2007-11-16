@@ -28,6 +28,7 @@ class HMS_RLC_Application{
 
     var $required_course = 0;
     var $hms_assignment_id = NULL;
+    var $entry_term = NULL;
 
     /**
      * Constructor
@@ -76,6 +77,7 @@ class HMS_RLC_Application{
         $this->setRLCQuestion2($result['rlc_question_2']);
         $this->setRequiredCourse($result['required_course']);
         $this->setAssignmentID($result['hms_assignment_id']);
+        $this->setEntryTerm($result['entry_term']);
 
         return $result;
     }
@@ -99,6 +101,7 @@ class HMS_RLC_Application{
         $db->addValue('rlc_question_2',          $this->getRLCQuestion2());
         $db->addValue('required_course',         $this->getRequiredCourse());
         $db->addValue('hms_assignment_id',       $this->getAssignmentID());
+        $db->addValue('entry_term',              $this->getEntryTerm());
 
         # If this object has an ID, then do an update. Otherwise, do an insert.
         if(!$this->getID() || $this->getID() == NULL){
@@ -134,11 +137,16 @@ class HMS_RLC_Application{
 
         $application->setUserID($_SESSION['asu_username']);
         $application->setFirstChoice($_REQUEST['rlc_first_choice']);
-        $application->setSecondChoice($_REQUEST['rlc_second_choice']);
-        $application->setThirdChoice($_REQUEST['rlc_third_choice']);
+        if($_REQUEST['rlc_second_choice'] > -1){
+            $application->setSecondChoice($_REQUEST['rlc_second_choice']);
+        }
+        if($_REQUEST['rlc_third_choice'] > -1){
+            $application->setThirdChoice($_REQUEST['rlc_third_choice']);
+        }
         $application->setWhySpecificCommunities($_REQUEST['why_specific_communities']);
         $application->setStrengthsWeaknesses($_REQUEST['strengths_weaknesses']);
         $application->setRLCQuestion0($_REQUEST['rlc_question_0']);
+        $application->setEntryTerm(HMS_SOAP::get_entry_term($_SESSION['asu_username']));
         
         if(isset($_REQUEST['rlc_question_1'])){
             $application->setRLCQuestion1($_REQUEST['rlc_question_1']);
@@ -166,7 +174,7 @@ class HMS_RLC_Application{
     * If an application does exist, a db object containing that row is returned. In the case of a db error, a PEAR
     * error object is returned. 
     */
-    function check_for_application($asu_username = NULL)
+    function check_for_application($asu_username = NULL, $entry_term = NULL)
     {
         $db = &new PHPWS_DB('hms_learning_community_applications');
 
@@ -174,6 +182,13 @@ class HMS_RLC_Application{
             $db->addWhere('user_id',$asu_username,'ILIKE');
         }else{
             $db->addWhere('user_id',$_SESSION['asu_username'],'ILIKE');
+        }
+
+        if(isset($entry_term)){
+            $db->addWhere('entry_term', $entry_term);
+        } else {
+            PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+            $db->addWhere('entry_term', HMS_Term::get_current_term());
         }
 
         $result = $db->select('row');
@@ -195,6 +210,7 @@ class HMS_RLC_Application{
      */
     function rlc_application_admin_pager()
     {
+        #TODO add entry term
         PHPWS_Core::initCoreClass('DBPager.php');
         PHPWS_Core::initModClass('hms','HMS_SOAP.php');
 
@@ -208,8 +224,8 @@ class HMS_RLC_Application{
         $pager = &new DBPager('hms_learning_community_applications','HMS_RLC_Application');
         $pager->db->addColumn('hms_learning_community_applications.*');
         $pager->db->addColumn('hms_learning_communities.abbreviation');
-        $pager->db->addOrder('hms_learning_communities.abbreviation','ASC');
-        $pager->db->addOrder('user_id','ASC');
+        //$pager->db->addOrder('hms_learning_communities.abbreviation','ASC');
+        //$pager->db->addOrder('user_id','ASC');
         $pager->db->addWhere('hms_learning_community_applications.rlc_first_choice_id',
                              'hms_learning_communities.id','=');
         $pager->db->addWhere('hms_assignment_id',NULL,'is');
@@ -220,6 +236,7 @@ class HMS_RLC_Application{
         $pager->setEmptyMessage("No pending RLC applications.");
         $pager->addToggle('class="toggle1"');
         $pager->addToggle('class="toggle1"');
+        $tags += $pager->getSortButtons();
         $pager->addPageTags($tags);
         $pager->addRowTags('getAdminPagerTags');
 
@@ -642,6 +659,14 @@ class HMS_RLC_Application{
 
     function getAssignmentID(){
         return $this->hms_assignment_id;
+    }
+
+    function getEntryTerm(){
+        return $this->entry_term;
+    }
+
+    function setEntryTerm($term){
+        $this->entry_term = $term;
     }
 }
 
