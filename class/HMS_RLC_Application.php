@@ -236,7 +236,6 @@ class HMS_RLC_Application{
         $pager->setEmptyMessage("No pending RLC applications.");
         $pager->addToggle('class="toggle1"');
         $pager->addToggle('class="toggle1"');
-        $tags += $pager->getSortButtons();
         $pager->addPageTags($tags);
         $pager->addRowTags('getAdminPagerTags');
 
@@ -252,8 +251,10 @@ class HMS_RLC_Application{
 
         $tags['NAME'] = HMS_SOAP::get_full_name_inverted($this->getUserID());
         $tags['1ST_CHOICE']  = '<a href="./index.php?module=hms&type=rlc&op=view_rlc_application&username=' . $this->getUserID() . '" target="_blank">' . $rlc_list[$this->getFirstChoice()] . '</a>';
-        $tags['2ND_CHOICE']  = $rlc_list[$this->getSecondChoice()];
-        $tags['3RD_CHOICE']  = $rlc_list[$this->getThirdChoice()];
+        if(isset($rlc_list[$this->getSecondChoice()]))
+            $tags['2ND_CHOICE']  = $rlc_list[$this->getSecondChoice()];
+        if(isset($rlc_list[$this->getThirdChoice()]))
+            $tags['3RD_CHOICE']  = $rlc_list[$this->getThirdChoice()];
         $tags['FINAL_RLC']   = HMS_RLC_Application::generateRLCDropDown($rlc_list,$this->getID());
         $tags['CLASS']       = HMS_SOAP::get_student_class($this->getUserID());
 //        $tags['SPECIAL_POP'] = ;
