@@ -600,6 +600,12 @@ function hms_update(&$content, $currentVersion)
         case version_compare($currentVersion, '0.2.6', '<'):
             $files[] = 'templates/admin/assign_student_move_confirm.tpl';
             PHPWS_Boost::updatefiles($files, 'hms');
+
+        case version_compare($currentVersion, '0.2.7', '<'):
+            $files[] = 'templates/admin/maintenance.tpl';
+            PHPWS_Boost::updatefiles($files, 'hms');
+
+            $content[] = '+ Maintenance template was phoned in, now properly updated';
     }
 
     return TRUE;
