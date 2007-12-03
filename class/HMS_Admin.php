@@ -115,6 +115,7 @@ class HMS_Admin
                 break;
             default:
                 PHPWS_Core::initModClass('hms', 'HMS_Maintenance.php');
+                $_REQUEST['op'] = 'show_maintenance_options';
                 $final = HMS_Maintenance::main();
                 break;
         }
