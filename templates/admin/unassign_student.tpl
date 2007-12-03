@@ -1,3 +1,4 @@
+{START_FORM}
 <div class="hms">
   <div class="box">
     <div class="{TITLE_CLASS}"> <h1>{TITLE}</h1> </div>
@@ -9,10 +10,16 @@
         <!-- BEGIN success_msg -->
         <font color="green">{SUCCESS_MSG}<br /></font>
         <!-- END success_msg -->
+        
         {MESSAGE}<br /><br />
-        {START_FORM}
-        {HALL_ID} &nbsp;&nbsp; {SUBMIT}
-        {END_FORM}
+        <table>
+            <tr>
+                <th align="left">ASU Email:</th><td>{USERNAME}@appstate.edu</td>
+            </tr>
+        </table>
+        <br />
+        {SUBMIT}
     </div>
   </div>
 </div>
+{END_FORM}

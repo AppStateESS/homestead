@@ -242,57 +242,18 @@ class HMS_Student {
 
         $tpl['TITLE'] = "Search Results";
 
-        $sql  = "SELECT";
-        $sql .= " hms_residence_hall.hall_name, ";
-        $sql .= " hms_room.room_number, ";
-        $sql .= " hms_assignment.id ";
-        $sql .= "FROM";
-        $sql .= " hms_residence_hall, ";
-        $sql .= " hms_floor, ";
-        $sql .= " hms_room, ";
-        $sql .= " hms_bedrooms, ";
-        $sql .= " hms_beds, ";
-        $sql .= " hms_assignment ";
-        $sql .= "WHERE";
-        $sql .= " hms_assignment.deleted = '0' ";
-        $sql .= " AND hms_assignment.bed_id = hms_beds.id ";
-        $sql .= " AND hms_beds.bedroom_id = hms_bedrooms.id ";
-        $sql .= " AND hms_bedrooms.room_id = hms_room.id ";
-        $sql .= " AND hms_room.floor_id = hms_floor.id ";
-        $sql .= " AND hms_floor.building = hms_residence_hall.id ";
-        $sql .= " AND hms_assignment.asu_username ilike '" . $_REQUEST['username'] . "';";
+        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
 
-        $db = &new PHPWS_DB();
-        $db->setSQLQuery($sql);
-        $results = $db->select();
+        $assignment = HMS_Assignment::get_assignment($_REQUEST['username']);
 
-        #test($results);
-
-        if($results != FALSE && $results != NULL) {
-            $tpl['ROOM_ASSIGNMENT'] = $results[0]['room_number'] . " " . $results[0]['hall_name'];
-            $tpl['MEAL_PLAN'] = '
-    <form action="index.php" method="post">
-        <input type="hidden" name="module" value="hms" />
-        <input type="hidden" name="type" value="student" />
-        <input type="hidden" name="op" value="set_meal_plan" />
-        <input type="hidden" name="username" value="'.$_REQUEST['username'].'" />
-        <input type="hidden" name="assignment_id" value="'.$results[0]['id'].'" />
-        <select name="meal_option">';
-
-            $selected[$results[0]['meal_option']] = ' selected="selected"';
-
-            $tpl['MEAL_PLAN'] .= '<option value="0"'.$selected[0].'>Low</option>';
-            $tpl['MEAL_PLAN'] .= '<option value="1"'.$selected[1].'>Standard</option>';
-            $tpl['MEAL_PLAN'] .= '<option value="2"'.$selected[2].'>High</option>';
-            $tpl['MEAL_PLAN'] .= '<option value="3"'.$selected[3].'>Super</option>';
-            $tpl['MEAL_PLAN'] .= '<option value="4"'.$selected[4].'>None</option>';
-        
-            $tpl['MEAL_PLAN'] .= '
-        </select>
-        <input type="submit" value="Save" />
-    </form>';
-        } else {
-            $tpl['ROOM_ASSIGNMENT'] = "This student does not live on campus.";
+        if(isset($assignment) && $assignment != FALSE){
+            $unassign = PHPWS_Text::secureLink('Unassign', 'hms', array('type'=>'assignment', 'op'=>'show_unassign_student', 'username'=>$_REQUEST['username']));
+            $reassign = PHPWS_Text::secureLink('Reassign', 'hms', array('type'=>'assignment', 'op'=>'show_assign_student', 'username'=>$_REQUEST['username']));
+            $tpl['ROOM_ASSIGNMENT'] = $assignment->where_am_i() . " | $reassign | $unassign";
+        }else if($assignment == FALSE){
+            $tpl['ROOM_ASSIGNMENT'] = 'Student is not assigned for the current term. ' . PHPWS_Text::secureLink('Assign student now.', 'hms', array('type'=>'assignment', 'op'=>'show_assign_student', 'username'=>$_REQUEST['username']));
+        }else{
+            $tpl['ROOM_ASSIGNMENT'] = "Error: Could not look up the current assignment. Please contact ESS.";
         }
 
         // get roommate or pending roommate

@@ -1,3 +1,4 @@
+
 <?php
 
 /**
@@ -1813,6 +1814,10 @@ class HMS_Form
         return $final;
     }
 
+    /**
+     * Moved to HMS_Residence_Hall::edit_residence_hall()
+     */
+    /**
     function edit_residence_hall()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Building.php');
@@ -1847,6 +1852,7 @@ class HMS_Form
         $final = PHPWS_Template::process($tpl, 'hms', 'admin/display_hall_data.tpl');
         return $final;
     }
+    **/
 
     function edit_floor()
     {
@@ -2263,6 +2269,10 @@ class HMS_Form
         return $tpl;
     }
 
+    /**
+     * Moved to HMS_Residence_Hall::edit_residence_hall
+     */
+    /*
     function add_residence_hall()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Building.php');
@@ -2287,7 +2297,7 @@ class HMS_Form
         $final = PHPWS_Template::process($tpl, 'hms', 'admin/display_hall_data.tpl');
         return $final;
     }
-    
+    */
     function display_login_screen()
     {
         PHPWS_Core::initCoreClass('Form.php');
@@ -2321,6 +2331,7 @@ class HMS_Form
         return $final;
     }
 
+    /*
     function fill_hall_data_display($object = NULL, $op = NULL)
     {   
         PHPWS_Core::initCoreClass('Form.php');
@@ -2332,17 +2343,17 @@ class HMS_Form
             $form->addText('hall_name');
         }
   
-        /*
-        $db = &new PHPWS_DB('hms_hall_communities');
-        $comms = $db->select();
-        foreach($comms as $comm) {
-            $communities[$comm['id']] = $comm['community_name'];
-        }
-        $form->addDropBox('community', $communities);
-        if(isset($object->community)) {
-            $form->setMatch('community', $object->community);
-        }
-        */
+        
+        //$db = &new PHPWS_DB('hms_hall_communities');
+        //$comms = $db->select();
+        //foreach($comms as $comm) {
+        //    $communities[$comm['id']] = $comm['community_name'];
+        //}
+        //$form->addDropBox('community', $communities);
+        //if(isset($object->community)) {
+        //    $form->setMatch('community', $object->community);
+        //}
+        
 
         $floors = array('1'=>"1",
                         '2'=>"2",
@@ -2446,7 +2457,7 @@ class HMS_Form
         $tpl = $form->getTemplate();
         return $tpl;
     }
-
+    */
     function enter_student_search_data($error = NULL)
     {
         $form = &new PHPWS_Form;

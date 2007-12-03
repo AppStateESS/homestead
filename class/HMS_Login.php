@@ -17,7 +17,11 @@ class HMS_Login
 
     function login_user()
     {
-        require_once(PHPWS_SOURCE_DIR . 'inc/axp.php');
+        if(!file_exists(AXP_LOCATION)) {
+            return "A critical error has occurred in the Housing Management System.  Please tell Electronic Student Services that their AXP driver is missing.";
+        }
+
+        require_once(PHPWS_SOURCE_DIR . AXP_LOCATION);
 
         if($type = axp_authorize($_REQUEST['asu_username'], $_REQUEST['password'])) {
             return HMS_Login::student_login();

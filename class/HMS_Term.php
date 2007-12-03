@@ -60,6 +60,21 @@ class HMS_Term{
         return $result;
     }
     
+    /**
+     * Boolean test for the current term
+     */
+    function is_current_term(){
+        return $this->get_term() == HMS_Term::get_current_term();
+    }
+    
+    /**
+     * Boolean test for if this term is currently being used by the user.
+     */
+    function is_selected_term()
+    {
+        return $this->get_term() == HMS_Term::get_selected_term();
+    }
+    
     /*************
      * Main menu *
      ************/
@@ -68,11 +83,24 @@ class HMS_Term{
     {
         switch($_REQUEST['op'])
         {
+            case 'show_create_term':
+                return HMS_Term::show_create_term();
+                break;
             case 'show_edit_terms':
                 return HMS_Term::show_edit_terms();
                 break;
             case 'create_new_term':
                 return HMS_Term::create_new_term();
+                break;
+            case 'term_select':
+                return HMS_Term::term_select();
+                break;
+            case 'term_activate':
+                return HMS_Term::term_activate();
+                break;
+            case 'term_delete':
+                return HMS_Term::term_delete();
+                break;
             default:
                 return "Undefined term op";
                 break;
@@ -96,7 +124,31 @@ class HMS_Term{
      */
     function set_current_term($term){
         PHPWS_Settings::set('hms','current_term',$term);
+        PHPWS_Settings::save('hms');
     }
+
+
+    /**
+     * Returns the current term the user has selected. If no term has been selected
+     * yet then the 'current' term is returned.
+     */
+    function get_selected_term()
+    {
+        if(isset($_SESSION['selected_term'])) {
+            return $_SESSION['selected_term'];
+        } else {
+            return HMS_Term::get_current_term();
+        }
+    }
+
+    /**
+     * Sets the 'activate' term by saving the given term in the session variable.
+     */
+    function set_selected_term($term)
+    {
+        $_SESSION['selected_term'] = $term;
+        return;
+    } 
 
     /**
      * Returns an array where the keys are the 'term' column of the
@@ -152,17 +204,49 @@ class HMS_Term{
      */
     function getRowTags()
     {
-        $tags['TERM']   = HMS_Term::term_to_text($this->get_term(), TRUE);
-        $tags['ACTION'] = "Make current  Delete"; // TODO
+        $tags['TERM'] = HMS_Term::term_to_text($this->get_term(), TRUE);
+        $actions = array();
+        
+        // 'Select' selects the term the user works in
+        if($this->is_selected_term()) {
+            $actions[] = '<strong>Selected</strong>';
+        } else {
+            $actions[] = PHPWS_Text::secureLink(_('Select'), 'hms',
+                array('type'=>'term',
+                      'op'  =>'term_select',
+                      'term'=> $this->get_term()));
+        }
+        
+        // 'Activate' makes the term globally active
+        if(Current_User::allow('hms', 'activate_term')) {
+            if($this->is_current_term()) {
+                $actions[] = '<strong>Active</strong>';
+            } else {
+                $actions[] = PHPWS_Text::secureLink(_('Activate'), 'hms',
+                    array('type'=>'term',
+                          'op'  =>'term_activate',
+                          'term'=> $this->get_term()));
+            }
+        }
 
+        // 'Delete' does exactly that
+        if(Current_User::allow('hms', 'delete_term')) {
+            $actions[] = PHPWS_Text::secureLink(_('Delete'), 'hms',
+                array('type'=>'term',
+                      'op'  =>'term_delete',
+                      'term'=> $this->get_term()));
+        }
+        
+        $tags['ACTION'] = implode(' | ', $actions);
         return $tags;
     }
 
     /**
      * Creates a new term based on $_REQUEST data and saves it. Called by main() in response to a 'create_new_term' op.
      */
+     //TODO: Add functionality here to call copy depending on what was selected in the 'copy_drop'
     function create_new_term(){
-        
+
         if(!isset($_REQUEST['year_drop'])){
             return HMS_Term::show_edit_terms(NULL,'Error: Year not defined!');
         }
@@ -171,25 +255,93 @@ class HMS_Term{
             return HMS_Term::show_edit_terms(NULL,'Error: Term not defined!');
         }
 
+        $db = new PHPWS_DB();
+        
+        //echo "beginning transaction<br>";
+        $db->query('BEGIN');
+
         $term = &new HMS_Term(NULL);
         $term->set_term(HMS_Term::text_to_term($_REQUEST['year_drop'],$_REQUEST['term_drop']));
+        //echo "saving new term<br>";
         $result = $term->save();
 
         if(PEAR::isError($result)){
             return HMS_Term::show_edit_terms(NULL,'Error: There was a problem working with the database. The new term could not be created.');
-        }else{
-            return HMS_Term::show_edit_terms('Term created successfully!');
         }
+
+        if($_REQUEST['copy_drop'] == 1){
+            # Copy the hall structure & assignments
+            $assignments = TRUE;
+        }else{
+            $assignments = FALSE;
+        }
+
+        PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
+
+        //echo "gettings halls<br>";
+        # Get the halls from the current term
+        $halls = HMS_Residence_Hall::get_halls();
+        
+        //echo "copying halls<br>";
+        foreach ($halls as $hall){
+            //echo "copying hall with id: $hall->id <br>";
+            $result = $hall->copy($term->get_term(), $assignments);
+            if(!$result){
+                //echo "error returned from copying hall with id: $hall->id <br>";
+                //test($result);
+                //echo "rolling back<br>";
+                $db->query('ROLLBACK');
+                return HMS_Term::show_edit_terms(NULL, 'There was an error copying data. Please contact ESS.');
+            }
+        }
+
+        //echo "done copying halls<br>";
+        $db->query('COMMIT');
+        
+        return HMS_Term::show_edit_terms('Term created successfully!');
+    }
+
+    /**
+     * Called in response to the 'term_select' action. Saves the selected term in the session variable for use in other editing.
+     */
+    function term_select(){
+        HMS_Term::set_selected_term($_REQUEST['term']);
+        return HMS_Term::show_edit_terms('Term ' . HMS_Term::term_to_text($_REQUEST['term'], true) . ' selected.');
+    }
+
+    /**
+     * Called in response to the 'term_activate' action. Saves the selected term in the PHPWS_Settings class.
+     */
+    function term_activate()
+    {
+        HMS_Term::set_current_term($_REQUEST['term']);
+        return HMS_Term::show_edit_terms('Term ' . HMS_Term::term_to_text($_REQUEST['term'], true) . ' activated.');
+    }
+
+    /**
+     * Called in response to the 'term_delete action. Not yet impletemented.
+     */
+    function term_delete()
+    {
+        return HMS_Term::show_edit_terms(NULL, 'Sorry, term deletion is not yet implemented.');
     }
 
     /****************
      * UI Functions *
      ***************/
 
-    function show_edit_terms($success = NULL, $error = NULL)
+    function show_create_term($success = NULL, $error = NULL)
     {
         PHPWS_Core::initCoreClass('Form.php');
         PHPWS_Core::initModClass('hms','HMS_Util.php');
+
+        $tpl['TITLE'] = 'Add a New Term';
+
+        if(isset($success)){
+            $tpl['SUCCESS_MSG'] = $success;
+        }else if(isset($error)){
+            $tpl['ERROR_MSG'] = $error;
+        }
         
         $form = &new PHPWS_Form('new_term_form');
 
@@ -202,8 +354,21 @@ class HMS_Term{
         
         $form->addDropBox('term_drop',HMS_Term::get_term_list());
         $form->setLabel('term_drop','Semester: ');
+
+        $form->addDropBox('copy_drop', array(0 => 'Hall structure only', 1 => 'Hall structure & assignments'));
+        $form->setLabel('copy_drop', 'What to copy: ');
         
         $form->addSubmit('submit','Add Term');
+        
+        $form->mergeTemplate($tpl);
+        $tpl = $form->getTemplate();
+
+        return PHPWS_Template::process($tpl, 'hms', 'admin/add_term.tpl');
+    }
+
+    function show_edit_terms($success = NULL, $error = NULL)
+    {
+        
 
         $tpl['TITLE'] = 'Edit Terms';
         $tpl['PAGER'] = HMS_Term::get_available_terms_pager();
@@ -212,10 +377,7 @@ class HMS_Term{
             $tpl['SUCCESS_MSG'] = $success;
         }else if(isset($error)){
             $tpl['ERROR_MSG'] = $error;
-        }
-
-        $form->mergeTemplate($tpl);
-        $tpl = $form->getTemplate();
+        }       
         
         return PHPWS_Template::process($tpl, 'hms', 'admin/edit_terms.tpl');
     }

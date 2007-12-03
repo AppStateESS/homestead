@@ -86,5 +86,26 @@ class HMS_Util{
 
         return date("jS-M-Y");
     }
+    
+    /**
+     * Determines which color the title bar should be based on
+     * the selected and current terms.
+     */
+    function get_title_class(){
+        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+
+        $selected_term = HMS_Term::get_selected_term();
+        $current_term = HMS_Term::get_current_term();
+        
+        if($selected_term < $current_term){
+            return "box-title-red";
+        }else if($selected_term == $current_term){
+            return "box-title-green";
+        }else if($selected_term > $current_term){
+            return "box-title-blue";
+        }else{
+            return "box-title";
+        }
+    }
 }
 ?>

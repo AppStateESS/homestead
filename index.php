@@ -1,6 +1,6 @@
 <?php
 ini_set('ERROR_REPORTING', E_ALL);
-ini_set('display_errors', 0);
+ini_set('display_errors', 1);
 
 if (!defined('PHPWS_SOURCE_DIR')) {
     include '../../config/core/404.html';
@@ -33,6 +33,8 @@ if(Current_User::isLogged()) {
         $error .= "We are currently restricting access to HMS to freshman.<br />";
         $error .= "If you need to contact Housing and Residence Life please visit http://housing.appstate.edu</h2></i>";
         HMS_Login::display_login_screen($error);
+    } else if (isset($type) && is_string($type)) {
+        Layout::add($type);
     } else {
         PHPWS_Core::initModClass('hms', 'HMS.php');
         HMS::main($type);

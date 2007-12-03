@@ -563,13 +563,43 @@ function hms_update(&$content, $currentVersion)
             }
 
             $content[] = '+ Renamed entry_term column in hms_application to term';
-
+            
         case version_compare($currentVersion, '0.2.2', '<'):
             $db = &new PHPWS_DB;
             $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_2.sql');
             if(PEAR::isError($result)) {
                 return $result;
             }
+            
+        case version_compare($currentVersion, '0.2.3', '<'):
+            $db = &new PHPWS_DB;
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_3.sql');
+            if(PEAR::isError($result)){
+                return $result;
+            }
+            
+            $files[] = 'templates/admin/edit_terms.tpl';
+            $files[] = 'templates/admin/add_term.tpl';
+            $fiels[] = 'maintenance.tpl';
+            PHPWS_Boost::updatefiles($files, 'hms');
+
+            $content[] = '+ Redesigned hall structure';
+            $content[] = '+ Massive db update for hall structure changes';
+            $content[] = '+ Seperated add term and edit term pages';
+
+        case version_compare($currentVersion, '0.2.4', '<'):
+            $files[] = 'templates/admin/assign_student.tpl';
+            $files[] = 'templates/admin/unassign_student.tpl';
+            $files[] = 'templates/admin/maintenance.tpl';
+            PHPWS_Boost::updatefiles($files, 'hms');
+
+        case version_compare($currentVersion, '0.2.5', '<'):
+            $files[] = 'templates/admin/select_residence_hall.tpl';
+            PHPWS_Boost::updatefiles($files, 'hms');
+            
+        case version_compare($currentVersion, '0.2.6', '<'):
+            $files[] = 'templates/admin/assign_student_move_confirm.tpl';
+            PHPWS_Boost::updatefiles($files, 'hms');
     }
 
     return TRUE;

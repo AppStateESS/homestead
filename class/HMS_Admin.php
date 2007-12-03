@@ -42,8 +42,8 @@ class HMS_Admin
                 $final = HMS_Term::main();
                 break;
             case 'hall':
-                PHPWS_Core::initModClass('hms', 'HMS_Building.php');
-                $final = HMS_Building::main();
+                PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
+                $final = HMS_Residence_Hall::main();
                 break;
             case 'floor':
                 PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
@@ -114,8 +114,8 @@ class HMS_Admin
                 $final = HMS_Letter::main();
                 break;
             default:
-                PHPWS_Core::initModClass('hms', 'HMS_Display.php');
-                $final = HMS_Display::main();
+                PHPWS_Core::initModClass('hms', 'HMS_Maintenance.php');
+                $final = HMS_Maintenance::main();
                 break;
         }
 

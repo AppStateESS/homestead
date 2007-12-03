@@ -175,7 +175,8 @@ class HMS_Application {
             $result = $db->insert();
             if(!PEAR::isError($result)) {
                 PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
-                $result = HMS_SOAP::report_application_received($_SESSION['asu_username'], '200740', 'HOUS');
+                $plancode = get_plan_meal_codes($_SESSION['asu_username'], 'lawl', $this->getMealOption());
+                $result = HMS_SOAP::report_application_received($_SESSION['asu_username'], '200740', $plancode['plan'], $plancode['meal']);
             }
         }else{
             # do an update
@@ -194,18 +195,26 @@ class HMS_Application {
     /**
      * Checks to see if a application already exists for the objects current $hms_user_id.
      * If so, it returns the ID of that application record, otherwise it returns false.
-     * TODO: Adjust this to use only the current 'term'
+     * If no term is given, then the "current term" is used.
      */
-    function check_for_application($asu_username = NULL)
+    function check_for_application($asu_username = NULL, $term = NULL)
     {
+        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+        
         $db = &new PHPWS_DB('hms_application');
         if(isset($asu_username)) {
             $db->addWhere('hms_student_id',$asu_username,'ILIKE');
         } else {
             $db->addWhere('hms_student_id',$this->getStudentID(),'ILIKE');
         }
-        $db->addWhere('created_on',HMS::get_current_year(),'>=');
-        $db->addWhere('term', 200810); // TODO: HACKED, for now anyways... needs to use an actual term
+        
+        #$db->addWhere('term', 200810);
+        if(isset($term)){
+            $db->addWhere('term', $term);
+        } else {
+            $db->addWhere('term', HMS_Term::get_current_term());
+        }
+        
         $db->addWhere('deleted',0,'=');
 
         $result = $db->select('row');

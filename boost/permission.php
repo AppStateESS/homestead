@@ -47,4 +47,8 @@
     $permissions['create_roommate_group']   = _('Group Roommates');
     $permissions['edit_roommate_group']     = _('Edit Roommates');
 
+    $permissions['activate_term']           = _('Set Active Term');
+    $permissions['create_term']             = _('Create Terms');
+    $permissions['delete_term']             = _('Delete Terms');
+
 ?>

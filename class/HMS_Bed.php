@@ -1,155 +1,159 @@
 <?php
 
-class HMS_Bed
-{
+/**
+ * @author Matthew McNaney <mcnaney at gmail dot com>
+ */
 
-    var $id;
-    var $bedroom_id;
-    var $occupant;
-    var $bed_letter;
-    var $banner_id;
-    /*
-    var $added_by;
-    var $added_on;
-    var $deleted_by;
-    var $deleted_on;
-    */
-    var $deleted;
+PHPWS_Core::initModClass('hms', 'HMS_Item.php');
 
-    function get_id()
+class HMS_Bed extends HMS_Item {
+    var $bedroom_id       = 0;
+    var $bed_letter       = 0;
+    var $banner_id        = null;
+    var $phone_number     = null;
+    var $_curr_assignment = null;
+    /**
+     * Previous assignments (ie deleted) will be here after loading
+     * the current assignment
+     * @var array
+     */
+    var $_prev_assignment = array();
+
+    /**
+     * Holds the parent bedroom object of this bed.
+     */
+    var $_bedroom;
+
+    function HMS_Bed($id = 0)
     {
-        return $this->id;
+        $this->construct($id, 'hms_bed');
     }
 
-    function set_id($id)
+    function copy($to_term, $bedroom_id, $assignments)
     {
-        $this->id = $id;
-    }
+        if (!$this->id) {
+            return false;
+        }
 
-    function get_bedroom_id()
-    {
-        return $this->bedroom_id;
-    }
+        //echo "in hms_beds, making a copy of this bed<br>";
+        
+        $new_bed = clone($this);
+        $new_bed->reset();
+        $new_bed->term    = $to_term;
+        $new_bed->bedroom_id = $bedroom_id;
+        if (!$new_bed->save()) {
+            // There was an error saving the new room
+            // Error will be logged.
+            //echo "error saving a copy of this bed<br>";
+            return false;
+        }
 
-    function set_bedroom_id($bedroom_id)
-    {
-        $this->bedroom_id = $bedroom_id;
-    }
-
-    function get_occupant()
-    {
-        return $this->occupant;
-    }
-
-    function set_occupant($occupant)
-    {
-        $this->occupant = $occupant;
-    }
-
-    function get_bed_letter()
-    {
-        return $this->bed_letter;
-    }
-
-    function set_bed_letter($bed_letter)
-    {
-        $this->bed_letter = $bed_letter;
-    }
-
-    function get_banner_id()
-    {
-        return $this->banner_id;
-    }
-
-    function set_banner_id($banner_id)
-    {
-        $this->banner_id = $banner_id;
-    }
-
-    function set_deleted($deleted = 0)
-    {
-        $this->deleted = $deleted;
-    }
-
-    function get_deleted()
-    {
-        return $this->deleted;
-    }
-
-    function save_bed($object = NULL)
-    {
-        $db = &new PHPWS_DB('hms_beds');
-        if($object == NULL) {
-
-        } else {
-            $success = $db->saveObject($object);
-            if(PEAR::isError($success)) {
-                test($success);
+        if ($assignments) {
+            //echo "loading assignments for this bed<br>";
+            $result = $this->loadAssignment();
+            if(PEAR::isError($result)){
+                //echo "error loading assignments<br>";
+                test($result);
+                return false;
             }
-            return $success;
+            
+            test($this->_curr_assignment);
+            if (isset($this->_curr_assignment)) {
+                return $this->_curr_assignment->copy($to_term, $new_bed->id);
+            }
+        }
+    
+        //echo "bed copied<br>";
+        
+        return true;
+    }
+
+    function get_row_tags()
+    {
+        $tpl = $this->item_tags();
+
+        $tpl['BED_LETTER']   = $this->bed_letter;
+        $tpl['BANNER_ID']    = $this->banner_id;
+        $tpl['PHONE_NUMBER'] = $this->phone_number;
+
+        return $tpl;
+    }
+
+
+    function loadAssignment()
+    {
+        $assignment_found = false;
+        $db = new PHPWS_DB('hms_assignment');
+        $db->addWhere('bed_id', $this->id);
+        $db->loadClass('hms', 'HMS_Assignment.php');
+        $result = $db->getObjects('HMS_Assignment');
+
+        if (!$result || PHPWS_Error::logIfError($result)) {
+            return false;
+        } else {
+            foreach ($result as $ass) {
+                if (!$ass->deleted) {
+                    if ($assignment_found) {
+                        PHPWS_Error::log(HMS_MULTIPLE_ASSIGNMENTS, 'hms', 'HMS_Bed::loadAssignment', 
+                                         sprintf('A=%s,B=%s', $ass->id, $this->id));
+                    } else {
+                        $this->_curr_assignment = & $ass;
+                        $assignment_found = true;
+                    }
+                } else {
+                    $this->_prev_assignment[] = & $ass;
+                }
+            }
         }
     }
 
-    function delete_beds_by_building($building_id)
+    function loadBedroom()
     {
-        $sql = "UPDATE hms_beds ";
-        $sql .= "SET deleted = 1 ";
-        $sql .= "WHERE bedroom_id = hms_bedrooms.id ";
-        $sql .= "AND hms_bedrooms.room_id = hms_room.id ";
-        $sql .= "AND hms_room.building_id = $building_id;";
+        PHPWS_Core::initModClass('hms', 'HMS_Bedroom.php');
+        $result = new HMS_Bedroom($this->bedroom_id);
+        if(PHPWS_Error::logIfError($result)){
+            return false;
+        }
 
-        $db = new PHPWS_DB;
-        $result = $db->query($sql);
-        return $result;
+        $this->_bedroom = & $result;
+        return true;
     }
 
-    function get_room_id($id)
+    function get_parent()
     {
-        $db = &new PHPWS_DB('hms_room');
-        $db->addColumn('id');
-        $db->addWhere('hms_beds.id', $id);
-        $db->addWhere('hms_beds.bedroom_id', 'hms_bedrooms.id');
-        $db->addWhere('hms_bedrooms.room_id', 'hms_room.id');
-        $room_id = $db->select('one');
-        return $room_id;
+        if(!$this->loadBedroom()){
+            return false;
+        }
+
+        return $this->_bedroom;
     }
 
-
-    function associated_objects_deleted($id)
+    function get_number_of_assignees()
     {
-        $db = &new PHPWS_DB('hms_beds');
-        $db->addColumn('id');
-        $db->addWhere('hms_beds.bed_id', 'hms_bedrooms.id');
-        $db->addWhere('hms_bedrooms.room_id', 'hms_room.id');
-        $db->addWhere('hms_room.floor_id', 'hms_floor.id');
-        $db->addWhere('hms_floor.building', 'hms_residence_hall.id');
-        $db->addWhere('hms_beds.deleted', 0);
-        $db->addWhere('hms_bedrooms.deleted', 0);
-        $db->addWhere('hms_room.deleted', 0);
-        $db->addWhere('hms_floor.deleted', 0);
-        $db->addWhere('hms_residence_hall.deleted', 0);
-
-        $result = $db->select('one');
-        return empty($result);
+        $this->loadAssignment();
+        return (bool)$this->_curr_assignment ? 1 : 0;
     }
 
-    function associated_objects_online($id)
+    function save()
     {
-        $db = &new PHPWS_DB('hms_beds');
-        $db->addColumn('id');
-        $db->addWhere('hms_beds.bed_id', 'hms_bedrooms.id');
-        $db->addWhere('hms_bedrooms.room_id', 'hms_room.id');
-        $db->addWhere('hms_room.floor_id', 'hms_floor.id');
-        $db->addWhere('hms_floor.building', 'hms_residence_hall.id');
-        $db->addWhere('hms_beds.is_online', 1);
-        $db->addWhere('hms_bedrooms.is_online', 1);
-        $db->addWhere('hms_room.is_online', 1);
-        $db->addWhere('hms_floor.is_online', 1);
-        $db->addWhere('hms_residence_hall.is_online', 1);
+        $this->stamp();
 
-        $result = $db->select('one');
-        return !empty($result);
+        $db = new PHPWS_DB('hms_bed');
+        $result = $db->saveObject($this);
+        if (!$result || PHPWS_Error::logIfError($result)) {
+            return false;
+        }
+        return true;
     }
 
+    function has_vacancy()
+    {
+        if($this->get_number_of_assignees() == 0){
+            return TRUE;
+        }
+
+        return FALSE;
+    }
 }
+
 ?>

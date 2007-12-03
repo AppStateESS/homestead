@@ -1,550 +1,709 @@
 <?php
 
 /**
- * Floor objects for HMS
+ * HMS Floor class
  *
+ * @author Jeremy Booker <jbooker at tux dot appstate dot edu>
+ * Some code copied from:
  * @author Kevin Wilcox <kevin at tux dot appstate dot edu>
  */
 
-class HMS_Floor
-{
-    var $id;
-    var $floor_number;
-    var $building;
-    var $is_online;
-    var $number_rooms;
-    var $bedrooms_per_room;
-    var $beds_per_bedroom;
-    var $gender_type;
-    var $freshman_reserved;
-    var $ft_movein;
-    var $c_movein;
-    var $deleted;
-    var $error;
-    var $is_new_floor;
-    var $added_by;
-    var $added_on;
-    var $updated_by;
-    var $updated_on;
-    var $deleted_by;
-    var $deleted_on;
+PHPWS_Core::initModClass('hms', 'HMS_Item.php');
 
-    function HMS_Floor()
+class HMS_Floor extends HMS_Item
+{
+    var $floor_number;
+    var $residence_hall_id;
+    var $is_online;
+    var $gender_type;
+
+    /**
+     * List of rooms associated with this floor
+     * @vary array
+     */
+    var $_rooms     = null;
+
+    /**
+     * List of suites associated with this floor
+     * @var array
+     */
+    var $_suites    = null;
+
+    /**
+     * Holds the parent residence hall object of this floor
+     */
+    var $_hall      = null;
+    
+    /**
+     * Constructor
+     */
+    function HMS_Floor($id = 0)
     {
-        $this->id = NULL;
-        $this->is_online = NULL;
-        $this->is_new_floor = FALSE;
-        $this->error = "";
+        $this->construct($id, 'hms_floor');
+    }
+
+    /********************
+     * Instance Methods *
+     *******************/
+
+    /*
+     * Saves a new or updated floor hall object
+     */
+    function save()
+    {
+        $db = new PHPWS_DB('hms_floor');
+
+        $result = $db->saveObject($this);
+        if (!$result || PHPWS_Error::logIfError($result)) {
+            return false;
+        }
+        return true;
+    }
+
+    /*
+     * Copies this floor object to a new term, then calls copy on all
+     * 'this' floor's rooms/suites
+     *
+     * Setting $assignments to 'TRUE' causes the copy function to copy
+     * the assignments as well as the hall structure.
+     *
+     * @return bool False if unsuccessful.
+     */
+    function copy($to_term, $hall_id, $assignments = FALSE)
+    {
+        if (!$this->id) {
+            return false;
+        }
+
+        //echo "in hms_floor, copying this floor id: $this->id <br>";
+
+        // Create a clone of the current floor object
+        // Set id to 0, set term, and save
+        $new_floor = clone($this);
+        $new_floor->reset();
+        $new_floor->term = $to_term;
+        $new_floor->residence_hall_id = $hall_id;
+
+        if(!$new_floor->save()) {
+            // There was an error saving the new floor
+            echo "error saving a copy of this floor";
+            return false;
+        }
+
+        // Save successful, create suites
+
+        //echo "loading suites<br>";
+
+        // Load all the suites for this floor
+        if(empty($this->_suites)) {
+            if($this->loadSuites() === FALSE) {
+                // There was an error loading the suites
+                echo "error loading suites";
+                test($this);
+                return false;
+            }
+        }
+
+        /**
+         * Suites exist. Start making copies.
+         * Note: No further copying is needed at the suite level!
+         */
+
+        if(!empty($this->_suites)) {
+            foreach ($this->_suites as $suite) {
+                $result = $suite->copy($to_term, $new_floor->id, $assignments);
+                // What if bad result?
+                test($result);
+                test($suite);
+                if(!$result){
+                    return false;
+                    echo "error copying suite";
+                }
+            }
+        }else{
+            //echo "No suites to copy<br>";
+        }
+
+        // Load all the rooms for this floor which are not in suites
+        if(empty($this->_rooms)) {
+            $result = $this->loadRooms(0, 0);
+            if(!$result) {
+                // There was an error loading the rooms
+                echo "There was an error loading the rooms";
+                test($this);
+                return false;
+            }else{
+                //echo "rooms loaded successfully<br>";
+            }
+        }
+
+        /**
+         * Rooms exist. Start making copies.
+         * Further copying is needed at the room level.
+         */
+        
+        if(!empty($this->_rooms)) {
+            foreach ($this->_rooms as $room) {
+                $result = $room->copy($to_term, $new_floor->id, NULL, $assignments);
+                // What if bed result?
+                if(!$result){
+                    echo "error copying room id: $room->id <br>";
+                    test($result);
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
     
-    function set_error_msg($msg)
+    /**
+     * Loads the parent hall object of this floor
+     */
+    function loadHall()
     {
-        $this->error .= $msg;
+        PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
+        $result = new HMS_Residence_Hall($this->residence_hall_id);
+        if (PHPWS_Error::logIfError($result)) {
+            return false;
+        }
+        $this->_hall = & $result;
+        return true;
     }
 
-    function get_error_msg()
+    /**
+     * Pulls all the suites associated with this floor and stores
+     * them in the _suites variable.
+     * @param int deleted -1 deleted only, 0 not deleted only, 1 all
+     *
+     */
+    function loadSuites($deleted=0)
     {
-        return $this->error;
+        $db = new PHPWS_DB('hms_suite');
+        $db->addWhere('floor_id', $this->id);
+
+        switch ($deleted) {
+            case -1:
+                $db->addWhere('deleted', 1);
+                break;
+            case 0:
+                $db->addWhere('deleted', 0);
+                break;
+        }
+
+        $db->loadClass('hms', 'HMS_Suite.php');
+        $result = $db->getObjects('HMS_Suite');
+        if (PHPWS_Error::logIfError($result)) {
+            return false;
+        } else {
+            $this->_suites = & $result;
+            return true;
+        }
     }
 
-    function set_id($id)
+    /**
+     * Pulls all the rooms associated with this floor and stores
+     * them in the _room variable.
+     * @param int deleted -1 deleted only, 0 not deleted only, 1 all
+     * @param int suites  -1 suites only, 0 no suites only, 1 all rooms
+     */
+    function loadRooms($deleted = 0, $suites=1)
     {
+
+        $db = new PHPWS_DB('hms_room');
+        $db->addWhere('floor_id', $this->id);
+        switch ($deleted) {
+            case -1:
+                $db->addWhere('deleted', 1);
+                break;
+            case 0:
+                $db->addWhere('deleted', 0);
+                break;
+        }
+
+        switch ($suites) {
+            case -1:
+                $db->addWhere('suite_id', 0, '>');
+                break;
+            case 0:
+                $db->addWhere('suite_id', NULL, 'IS NULL');
+                break;
+        }
+
+        $db->loadClass('hms', 'HMS_Room.php');
+        $result = $db->getObjects('HMS_Room');
+        //test($result);
+        if (PHPWS_Error::logIfError($result)) {
+            return false;
+        } else {
+            $this->_rooms = & $result;
+            return true;
+        }
+    }
+
+    /*
+     * Creates the rooms, bedrooms, and beds for a new floor
+     */
+    function create_child_objects($rooms_per_floor, $bedrooms_per_room, $beds_per_bedroom)
+    {
+        for ($i = 0; $i < $rooms_per_floor; $i++) {
+            $room = new HMS_Room;
+
+            $room->floor_id     = $this->id;
+            $room->term         = $this->term;
+            $room->gender_type  = $this->gender_type;
+
+            if($room->save()) {
+                $room->create_child_objects($bedrooms_per_room, $beds_per_bedroom);
+            } else {
+                // Decide on bad Result.
+            }
+        }
+    }
+
+    /*
+     * Returns TRUE or FALSE. The gender of a floor can only be changed to the
+     * target gender if all rooms can be changed to the target gender.
+     *
+     * Additionally, the floor's gender can only be changed if the target
+     * gender will be consistent with the gender of the hall of which
+     * this floor is a part.
+     *
+     * This function checks to make sure all rooms can be changed,
+     * those rooms in tern check all thier bedrooms, and so on.
+     *
+     * In the case that we're attempting to change the gender of just
+     * 'this' floor, set $ignore_upper to TRUE to avoid checking the
+     * parent hall's gender.
+     */
+    #TODO: Implement the $ignore_upper flag.
+    function can_change_gender($target_gender, $ignore_upper = FALSE)
+    {
+        if ($target_gender != COED) {
+            $this->loadRooms();
+            if ($this->_rooms) {
+                foreach ($this->_rooms as $room) {
+                    // If the bedroom gender type is not coed and the bedroom gt
+                    // does not equal the target gender, we return false
+                    if ($room->gender_type != COED && $room->gender_type != $target_gender) {
+                        return false;
+                    }
+                }
+            }
+        }
+
+        if (!$ignore_upper) {
+            if (!$this->loadHall()) {
+                // an error occurred loading the hall, check logs
+                return false;
+            }
+            // If the floor is not coed and the gt is not the target, return false
+            if ($this->_hall->gender_type != COED && $this->_hall->gender_type != $target_gender) {
+                return false;
+            }
+        }
+    }
+
+    /*
+     * Returns the number of rooms on the current floor
+     */
+    function get_number_of_rooms()
+    {
+        $db = &new PHPWS_DB('hms_room');
+
+        $db->addJoin('LEFT OUTER', 'hms_room', 'hms_floor', 'floor_id', 'id');
+
+        $db->addWhere('hms_room.deleted', 0);
+        $db->addWhere('hms_floor.deleted', 0);
+
+        $db->addWhere('hms_floor.id', $this->id);
+
+        $result = $db->select('count');
+
+        if(!$result || PHPWS_Error::logIfError($result)){
+            return false;
+        }
+
+        return $result;
+    }
+
+    /*
+     * Returns the number of suites on the current floor
+     */
+    function get_number_of_suites()
+    {
+        $db = &new PHPWS_DB('hms_suite');
+
+        $db->addJoin('LEFT OUTER', 'hms_suite', 'hms_floor', 'floor_id', 'id');
+
+        $db->addWhere('hms_suite.deleted', 0);
+        $db->addWhere('hms_floor.deleted', 0);
+
+        $db->addWhere('hms_floor.id', $this->id);
+        
+        $result = $db->select('count');
+
+        if(!$result || PHPWS_Error::logIfError($result)){
+            return false;
+        }
+
+        return $result;
+    }
+
+    /*
+     * Returns the number of bedrooms on the current floor
+     */
+    function get_number_of_bedrooms()
+    {
+        $db = &new PHPWS_DB('hms_bedroom');
+        
+        $db->addJoin('LEFT OUTER', 'hms_bedroom', 'hms_room',           'room_id',           'id');
+        $db->addJoin('LEFT OUTER', 'hms_room',    'hms_floor',          'floor_id',          'id');
+        
+        $db->addWhere('hms_bedroom.deleted',        0);
+        $db->addWhere('hms_room.deleted',           0);
+        $db->addWhere('hms_floor.deleted',          0);
+        
+        $db->addWhere('hms_floor.id', $this->id);
+
+        $result = $db->select('count');
+        
+        if(!$result || PHPWS_Error::logIfError($result)){
+            return false;
+        }
+
+        return $result;
+
+    }
+
+    /*
+     * Returns the number of beds on the current floor
+     */
+    function get_number_of_beds()
+    {
+        $db = &new PHPWS_DB('hms_bed');
+        
+        $db->addJoin('LEFT OUTER', 'hms_bed',     'hms_bedroom',        'bedroom_id',        'id');
+        $db->addJoin('LEFT OUTER', 'hms_bedroom', 'hms_room',           'room_id',           'id');
+        $db->addJoin('LEFT OUTER', 'hms_room',    'hms_floor',          'floor_id',          'id');
+        
+        $db->addWhere('hms_bed.deleted',            0);
+        $db->addWhere('hms_bedroom.deleted',        0);
+        $db->addWhere('hms_room.deleted',           0);
+        $db->addWhere('hms_floor.deleted',          0);
+        
+        $db->addWhere('hms_floor.id', $this->id);
+
+        $result = $db->select('count');
+        
+        if(!$result || PHPWS_Error::logIfError($result)){
+            return false;
+        }
+
+        return $result;
+    }
+
+    /*
+     * Returns the number of assignees on the current floor
+     */
+    function get_number_of_assignees()
+    {
+        $db = &new PHPWS_DB('hms_assignment');
+        
+        $db->addJoin('LEFT OUTER', 'hms_assignment', 'hms_bed',            'bed_id',            'id');
+        $db->addJoin('LEFT OUTER', 'hms_bed',     'hms_bedroom',        'bedroom_id',        'id');
+        $db->addJoin('LEFT OUTER', 'hms_bedroom', 'hms_room',           'room_id',           'id');
+        $db->addJoin('LEFT OUTER', 'hms_room',    'hms_floor',          'floor_id',          'id');
+        
+        $db->addWhere('hms_assignment.deleted',     0);
+        $db->addWhere('hms_bed.deleted',            0);
+        $db->addWhere('hms_bedroom.deleted',        0);
+        $db->addWhere('hms_room.deleted',           0);
+        $db->addWhere('hms_floor.deleted',          0);
+        
+        $db->addWhere('hms_floor.id', $this->id);
+
+        $result = $db->select('count');
+        
+        if(!$result || PHPWS_Error::logIfError($result)){
+            return false;
+        }
+
+        return $result;
+    }
+
+    /*
+     * Returns the parent hall object of this floor
+     */
+    function get_parent()
+    {
+        $this->loadHall();
+        return $this->_hall;
+    }
+
+    /*
+     * Returns an array of the rooms on the current floor
+     */
+    function get_rooms()
+    {
+        if (!$this->loadRooms()) {
+            return false;
+        }
+
+        return $this->_rooms;
+    }
+
+    /**
+     * Returns an array of the suites on the current floor
+     */
+    function get_suites()
+    {
+        if(!$this->loadSuites()) {
+            return false;
+        }
+
+        return $this->_suites;
+    }
+
+    /**
+     * Returns an array of the bedrooms on the current floor
+     */
+    function get_bedrooms()
+    {
+        $bedrooms = array();
+        
+        if (!$this->loadRooms()){
+            return false;
+        }
+
+        foreach($this->_rooms as $room){
+            $room_bedrooms = $room->get_bedrooms();
+            $bedrooms = array_merge($bedrooms, $room_bedrooms);
+        }
+        return $bedrooms;
+    }
+
+    /**
+     * Returns an array of the beds on the current floor
+     */
+    function get_beds()
+    {
+        $beds = array();
+
+        if (!$this->loadRooms()){
+            return false;
+        }
+
+        foreach($this->_rooms as $room){
+            $room_beds = $room->get_beds();
+            $beds = array_merge($beds, $room_beds);
+        }
+        return $beds;
+    }
+
+    /**
+     * Returns an array of student objects which are currently assigned to this floor
+     */
+    function get_assignees()
+    {
+        if (!$this->loadRooms()) {
+            return false;
+        }
+
+        $assignees = array();
+
+        foreach($this->_rooms as $room){
+            $room_assignees = $room->get_assignees();
+            $assignees = array_merge($assignees, $room_assignees);
+        }
+
+        return $assignees;
+    }
+
+    /**
+     * Returns TRUE if this floor has vancancies, FALSE otherwise
+     */
+    function has_vacancy()
+    {
+        if($this->get_number_of_assignees() < $this->get_number_of_beds()){
+            return TRUE;
+        }
+
+        return FALSE;
+    }
+
+    /**
+     * Returns an array of room objects on this floor that have vacancies
+     */
+    function get_rooms_with_vacancies()
+    {
+        if(!$this->loadRooms()) {
+            return FALSE;
+        }
+
+        $vacant_room = array();
+
+        foreach($this->_rooms as $room){
+            if($room->has_vacancy()){
+                $vacant_rooms[] = $room;
+            }
+        }
+
+        return $vacant_rooms;
+    }
+
+    /**
+     * Main Method
+     */
+    function main()
+    {
+
+    }
+
+    /******************
+     * Static Methods *
+     *****************/
+
+    function floor_pager()
+    {
+
+    }
+
+    function get_row_tags()
+    {
+
+    }
+
+    /*******************
+     * Mutator Methods *
+     ******************/
+
+    function set_id($id){
         $this->id = $id;
     }
 
-    function get_id()
-    {
+    function get_id(){
         return $this->id;
     }
 
-    function set_floor_number($number)
-    {
-        $this->floor_number = $number;
+    function set_term($term){
+        $this->term = $term;
     }
 
-    function get_floor_number()
-    {
+    function get_term(){
+        return $this->term;
+    }
+
+    function set_floor_number($num){
+        $this->floor_number = $num;
+    }
+
+    function get_floor_number(){
         return $this->floor_number;
     }
 
-    function set_building($building)
-    {
-        $this->building = $building;
+    function set_residence_hall_id($id){
+        $this->residence_hall_id = $id;
     }
 
-    function get_building()
-    {
-        return $this->building;
+    function get_residence_hall_id(){
+        return $this->residence_hall_id;
     }
 
-    function set_number_rooms($number_rooms, $bid = NULL)
-    {
-        if($bid != NULL) {
-            $floor_db = &new PHPWS_DB('hms_floor');
-            $floor_db->addWhere('building', $bid);
-            $floor_db->addValue('number_rooms', $number_rooms);
-            $floor_db->addWhere('deleted', '0');
-            $success = $floor_db->update();
-
-            if(PEAR::isError($success)) {
-                PHPWS_Error::log($success, 'hms', 'HMS_Floor::set_number_rooms');
-            }
-        
-            return $success;
-        } else {
-            $this->number_rooms = $number_rooms;
-        }
+    function set_is_online($status){
+        $this->is_online = $status;
     }
 
-    function get_number_rooms()
-    {
-        return $this->number_rooms;
-    }
-
-    function set_bedrooms_per_room($beds, $bid = NULL)
-    {
-        if($bid != NULL) {
-            $floor_db = &new PHPWS_DB('hms_floor');
-            $floor_db->addWhere('building', $bid);
-            $floor_db->addValue('bedrooms_per_room', $beds);
-            $floor_db->addWhere('deleted', 0);
-            $success = $floor_db->update();
-
-            if(PEAR::isError($success)) {
-                PHPWS_Error::log($success, 'hms', 'HMS_Floor::set_bedrooms_per_room');
-            }
-
-            return $success;
-        } else {
-            $this->bedrooms_per_room = $beds;
-        }
-    }
-
-    function get_bedrooms_per_room()
-    {
-        return $this->bedrooms_per_room;
-    }
-
-    function set_beds_per_bedroom($beds)
-    {
-        $this->beds_per_bedroom = $beds;
-    }
-
-    function get_beds_per_bedroom()
-    {
-        return $this->beds_per_bedroom;
-    }
-
-    function set_gender_type($gender, $id = NULL, $building = NULL)
-    {
-        if($building != NULL) {
-            $db = &new PHPWS_DB('hms_floor');
-            $db->addWhere('building', $building);
-            $db->addWhere('deleted', '0');
-            $db->addValue('gender_type', $gender);
-            $success = $db->update();
-            if(PEAR::isError($success)) {
-                PHPWS_Error::log($success, 'hms', 'HMS_Floor::set_gender');
-            } else {
-                PHPWS_Core::initModClass('hms', 'HMS_Room.php');
-                $success = HMS_Room::set_gender_type($gender, $id, $building);
-            }
-            return $success;
-        } else {
-            $this->gender_type = $gender;
-        }
-    }
-
-    function get_gender_type()
-    {
-        return $this->gender_type;
-    }
-
-    function set_freshman_reserved($reserved)
-    {
-        $this->freshman_reserved = $reserved;
-    }
-
-    function get_freshman_reserved()
-    {
-        return $this->freshman_reserved;
-    }
-
-    function set_ft_movein($time)
-    {
-        $this->ft_movein = $time;
-    }
-
-    function get_ft_movein()
-    {
-        return $this->ft_movein;
-    }
-
-    function set_c_movein($time)
-    {
-        $this->c_movein = $time;
-    }
-
-    function get_c_movein()
-    {
-        return $this->c_movein;
-    }
-
-    function set_is_online($online, $id = NULL, $building = NULL)
-    {
-        if($building != NULL) {
-            $db = &new PHPWS_DB('hms_floor');
-            $db->addWhere('building', $building);
-            $db->addWhere('deleted', '0');
-            $db->addValue('is_online', $online);
-            $success = $db->update();
-            if(PEAR::isError($success)) {
-                PHPWS_Error::log($success, 'hms', 'HMS_Floor::set_is_online');
-            } else {
-                PHPWS_Core::initModClass('hms', 'HMS_Room.php');
-                $success = HMS_Room::set_is_online($online, $id, $building);
-            }
-            return $success;
-        } else {
-            $this->is_online = $online;
-        }
-    }
-
-    function get_is_online()
-    {
+    function get_is_online(){
         return $this->is_online;
     }
 
-    function set_is_new_floor($new_floor)
-    {
-        $this->is_new_floor = $new_floor;
+    function set_gender_type($gender){
+        $this->gender_type = $gender;
     }
 
-    function get_is_new_floor()
-    {
-        return $this->is_new_floor;
+    function get_gender_type(){
+        return $this->gender_type;
     }
-
-    function set_deleted($deleted)
-    {
-        $this->deleted = $deleted;
-    }
-
-    function set_added_by_on()
-    {
-        $this->set_added_by();
-        $this->set_added_on();
-    }
-
-    function set_added_by()
-    {
-        $this->added_by = Current_User::getId();
-    }
-
-    function set_added_on()
-    {
-        $this->added_on = time();
-    }
-
-    function set_updated_by_on()
-    {
-        $this->set_updated_by();
-        $this->set_updated_on();
-    }
-
-    function set_updated_by()
-    {
-        $this->updated_by = Current_User::getId();
-    }
-
-    function set_updated_on()
-    {
-        $this->updated_on = time();
-    }
-
-    function set_variables()
-    {
-        if(!Current_User::authorized('hms', 'add_floors') ||
-           !Current_User::authorized('hms', 'edit_floors') ||
-           !Current_User::authorized('hms', 'delete_floors')) {
-            $content = "You are an unauthorized user!<br />";
-            $content .= "Your IP address has been logged and an email has been sent<br />";
-            $content .= "to the System Administrator notifying that individual of a crack attempt!<br />";
-            die($content);
-        }
-
-        if(isset($_REQUEST['id'])) $this->set_id($_REQUEST['id']);
-        
-        if(isset($_REQUEST['is_new_floor']))
-            $this->set_is_new_floor($_REQUEST['is_new_floor']);
-        else 
-            $this->set_is_new_floor(FALSE);
-
-        if($_REQUEST['floor_number'] == 0 && !$_REQUEST['id']) {
-            $db = &new PHPWS_DB('hms_residence_hall');
-            $db->addWhere('id', $_REQUEST['building']);
-            $db->addValue('number_floors');
-            $num_floors  = $db->select('one');
-            $this->set_floor_number($num_floors);
-        } else {
-            $this->set_floor_number($_REQUEST['floor_number']);
-        }
-
-        $this->set_is_online($_REQUEST['is_online']);
-        $this->set_building($_REQUEST['building']);
-        $this->set_number_rooms($_REQUEST['number_rooms']);
-        $this->set_gender_type($_REQUEST['gender_type']);
-        $this->set_bedrooms_per_room($_REQUEST['bedrooms_per_room']);
-        $this->set_beds_per_bedroom($_REQUEST['beds_per_bedroom']);
-        $this->set_freshman_reserved($_REQUEST['freshman_reserved']);
-        $this->set_ft_movein($_REQUEST['ft_movein']);
-        $this->set_c_movein($_REQUEST['c_movein']);
-        $this->set_deleted('0');
-    }
-
-    function save_floor_object($object, $create_rooms = FALSE)
-    {
-        $db = &new PHPWS_DB('hms_floor');
-        if(!isset($object['id'])) {
-            $object->set_added_by_on();
-        }
-        $object->set_updated_by_on();
-        $floor_id = $db->saveObject($object);
-        if (PEAR::isError($floor_id)) {
-            PHPWS_Error::log($floor_id);
-            return $floor_id;
-        }
-
-        if($create_rooms == TRUE) {
-            PHPWS_Core::initModClass('hms', 'HMS_Room.php');
-            PHPWS_Core::initModClass('hms', 'HMS_Bedroom.php');
-            PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
-            for($i = 1; $i <= $object->get_number_rooms(); $i++) {
-                $room = &new HMS_Room;
-                $room->set_room_number($object->get_floor_number() . str_pad($i, 2, "0",STR_PAD_LEFT));
-                $room->set_displayed_room_number($object->get_floor_number() . str_pad($i, 2, "0",STR_PAD_LEFT));
-                $room->set_building_id($object->get_building());
-                $room->set_floor_number($object->get_floor_number());
-                $room->set_floor_id($floor_id);
-                $room->set_bedrooms_per_room($object->get_bedrooms_per_room());
-                $room->set_beds_per_bedroom($object->get_beds_per_bedroom());
-                $room->set_gender_type($object->get_gender_type());
-                $room->set_is_online($object->get_is_online());
-                $room->set_freshman_reserved($object->get_freshman_reserved());
-                $room->set_pricing_tier($_REQUEST['pricing_tier']);
-                $room->set_is_lobby('0');
-                $room->set_private_room('0');
-                $room->set_is_reserved('0');
-                $room->set_is_medical('0');
-                $room->set_ra_room('0');
-                $room->set_deleted();
-                $success = HMS_Room::save_room_object($room);
-                if(PEAR::isError($success)) {
-                    test($success);
-                    return $success;
-                }
-            
-                $br_letter = 'a';
-                for($j = 1; $j <= $object->get_bedrooms_per_room(); $j++) {
-                    $bedroom = new HMS_Bedroom;
-                    $bedroom->set_room_id($success);
-                    $bedroom->set_is_online($object->get_is_online());
-                    $bedroom->set_gender_type($object->get_gender_type());
-                    $bedroom->set_number_beds($object->get_beds_per_bedroom());
-                    $bedroom->set_is_reserved(0);
-                    $bedroom->set_is_medical(0);
-                    $bedroom->set_added_by();
-                    $bedroom->set_added_on();
-                    $bedroom->set_updated_by();
-                    $bedroom->set_updated_on();
-                    $bedroom->set_deleted(0);
-                    $bedroom->set_bedroom_letter($br_letter);
-                    $saved_br = HMS_Bedroom::save_bedroom($bedroom);
-                   
-                    if($br_letter == 'a') $br_letter = 'b';
-                    else if($br_letter == 'b') $br_letter = 'c';
-                    else if($br_letter == 'c') $br_letter = 'd';
-                    
-                    if(PEAR::isError($saved_br)) {
-                        test($saved_br);
-                        return $saved_br;
-                    }
-                    
-                    $bed_letter = 'a';
-                    for($k = 1; $k <= $object->get_beds_per_bedroom(); $k++) {
-                        $bed = new HMS_Bed;
-                        $bed->set_bedroom_id($saved_br);
-                        $bed->set_bed_letter($bed_letter);
-                        $bed->set_deleted();
-                        $saved_bed = HMS_Bed::save_bed($bed);
-
-                        if($bed_letter == 'a') $bed_letter = 'b';
-                        else if($bed_letter == 'b') $bed_letter = 'c';
-                        else if($bed_letter == 'c') $bed_letter = 'd';
-
-                        if(PEAR::isError($saved_bed)) {
-                            test($saved_bed);
-                            return $saved_bed;
-                        }
-                    } // end bed creation
-                } // end bedroom creation
-            } // end room creation
-        } else {
-            $db = &new PHPWS_DB('hms_room');
-            $db->addValue('gender_type', $object->get_gender_type());
-            $db->addValue('is_online', $object->get_is_online());
-            $db->addValue('freshman_reserved', $object->get_freshman_reserved());
-            $db->addWhere('building_id', $object->get_building());
-            $db->addWhere('floor_number', $object->get_floor_number());
-            $db->addWhere('deleted', 0);
-            if(isset($_REQUEST['use_pricing_tier'])) {
-                $db->addValue('pricing_tier', $_REQUEST['pricing_tier']);
-            }
-            $result = $db->update();
-            if(PEAR::isError($result)) {
-                test($result);
-                return $result;
-            }
-        }
-
-        $final = "Floor saved successfully!<br />";
-        return $final;
-    }
-
-    function save_floor()
-    {
-        if(!Current_User::authorized('hms', 'add_floor') ||
-           !Current_User::authorized('hms', 'edit_floor') ||
-           !Current_User::authorized('hms', 'delete_floor')) {
-            $final = "You are a <b><font color=\"red\">BAD BAD PERSON!<font></b><br />";
-            $final .= "This event and your IP address has been logged with an email sent to the System Administrator.<br />";
-            return $final;
-        }
-
-        $db = &new PHPWS_DB('hms_floor');
-        $db->addWhere('building', $this->building);
-        $db->addWhere('floor_number', $this->floor_number);
-        $db->addWhere('deleted', '0');
-        $exists = $db->select();
-        unset($db);
-
-        if($this->is_new_floor == TRUE && ($exists == FALSE || $exists == NULL)) {
-            $db = &new PHPWS_DB('hms_floor');
-            $this->set_added_by_on();
-            $this->set_updated_by_on();
-            $floor_id = $db->saveObject($this);
-            if($floor_id) $final = "Floor saved successfully!<br />";
-            else $final = "Problem saving the floor.<br />";
-            // here I need to add logic to add the appropriate number of rooms for this floor
-        } else if($this->is_new_floor == TRUE && $exists == TRUE) {
-            $tpl['TITLE'] = "Problem saving Floor";
-            $tpl['CONTENT'] = "You tried to add a floor that already exists!";
-            $final = PHPWS_Template::process($tpl, 'hms', 'admin/title_and_message.tpl');
-        } else {
-            // save $this 
-            $db = &new PHPWS_DB('hms_floor');
-            $this->set_updated_by_on();
-            $floor_id = $db->saveObject($this);
-            $final = "Floor was saved successfully.<br />";
-        }
-        return $final;
-    }
-
-    function delete_floors($bid, $floor = NULL, $one = FALSE)
-    {
-        $floor_db = &new PHPWS_DB('hms_floor');
-        $floor_db->addWhere('building', $bid);
-        if($floor != NULL && $one == FALSE) {
-            $floor_db->addWhere('floor_number', $floor, '>');
-        } else if ($floor != NULL && $one == TRUE) {
-            $floor_db->addWhere('floor_number', $floor);
-        }
-        $floor_db->addValue('deleted', 1);
-        
-        $floor_result = $floor_db->update();
-        
-        if(PEAR::isError($result)) {
-            PHPWS_Error::log($result, 'hms', 'HMS_Floor::delete_floors');
-        }
-        
-        $db = &new PHPWS_DB;
-        $sql  = "UPDATE hms_bedrooms ";
-        $sql .= "SET deleted = 1 ";
-        $sql .= "WHERE room_id = hms_room.id ";
-        if($floor != NULL) {
-            $sql .= "AND hms_room.floor_id = hms_floor.id ";
-            $sql .= "AND hms_floor.floor_number = $floor ";
-        }
-        $sql .= "AND hms_room.building_id = $bid ";
-        $result = $db->query($sql);
-
-        if(PEAR::isError($result)) {
-            PHPWS_Error::log($result, 'hms', 'HMS_Floor::delete_floors');
-        }
-       
-        $db = &new PHPWS_DB;
-        $sql  = "UPDATE hms_beds ";
-        $sql .= "SET deleted = 1 ";
-        $sql .= "WHERE bedroom_id = hms_bedrooms.id ";
-        $sql .= "AND hms_bedrooms.room_id = hms_room.id ";
-        if($floor != NULL) {
-            $sql .= "AND hms_room.floor_id = hms_floor.id ";
-            $sql .= "AND hms_floor.floor_number = $floor ";
-        }
-        $sql .= "AND hms_room.building_id = $bid;";
-        $result = $db->query($sql);
-
-        if(PEAR::isError($result)) {
-            PHPWS_Error::log($result, 'hms', 'HMS_Floor::delete_floors');
-        }
-        
-        return $floor_result;
-        
-    }
-
-    function select_floor_for_edit()
-    {
-        PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
-        $form = &new HMS_Form;
-        return $form->select_floor_for_edit();
-    }
-
-    function select_residence_hall_for_edit_floor()
-    {
-        PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
-        $form = &new HMS_Form;
-        return $form->select_residence_hall_for_edit_floor();
-    }
-
-    function edit_floor()
-    {
-        PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
-        $form = &new HMS_Form;
-        return $form->edit_floor();
-    }
-
-    function main()
-    {
-        switch($_REQUEST['op'])
-        {
-            case 'edit_floor':
-                return HMS_Floor::edit_floor();
-                break;
-            case 'save_floor':
-                $floor = &new HMS_Floor;
-                $floor->set_variables();
-                return HMS_Floor::save_floor_object($floor);
-                break;
-            case 'select_hall_for_edit_floor':
-                return HMS_Floor::select_residence_hall_for_edit_floor();
-                break;
-            case 'select_floor_for_edit':
-                return HMS_Floor::select_floor_for_edit();
-                break;
-            default:
-                return "you're using a floor function.";
-                break;
+    
+    function set_added_by($user_id = NULL){
+        if(isset($user_id)){
+            $this->added_by = $user_id;
+        }else{
+            $this->added_by = Current_User::getId();
         }
     }
-};
+
+    function get_added_by(){
+        return $this->added_by;
+    }
+
+    function set_added_on($timestamp = NULL){
+        if(isset($timestamp)){
+            $this->added_on = $timestamp;
+        }else{
+            $this->added_on = mktime();
+        }
+    }
+
+    function get_added_on(){
+        return $this->added_on;
+    }
+
+    function set_updated_by($user_id = NULL){
+        if(isset($user_id)){
+            $this->updated_by = $user_id;
+        }else{
+            $this->updated_by = Current_User::getId();
+        }
+    }
+
+    function get_updated_by(){
+        return $this->updated_by;
+    }
+
+    function set_updated_on($timestamp = NULL){
+        if(isset($timestamp)){
+            $this->updated_on = $timestamp;
+        }else{
+            $this->updated_on = mktime();
+        }
+    }
+
+    function get_updated_on(){
+        return $this->updated_on;
+    }
+
+    function set_deleted_by($user_id = NULL){
+        if(isset($user_id)){
+            $this->deleted_by = $user_id;
+        }else{
+            $this->deleted_by = Current_User::getId();
+        }
+    }
+
+    function get_deleted_by(){
+        return $this->deleted_by;
+    }
+
+    function set_deleted_on($timestamp = NULL){
+        if(isset($timestamp)){
+            $this->deleted_on = $timestamp;
+        }else{
+            $this->deleted_on = mktime();
+        }
+    }
+
+    function get_deleted_on(){
+        return $this->deleted_on;
+    }
+
+    function set_deleted($del = 1){
+        $this->deleted = $del;
+    }
+
+    function get_deleted(){
+        return $this->deleted;
+    }
+}
 ?>

@@ -1,337 +1,115 @@
 <?php
 
-class HMS_Suite
-{
+class HMS_Suite extends HMS_Item {
+    var $floor_id = 0;
+    var $_rooms   = array();
+    var $_floor   = null;
 
-    var $id;
-    var $room_id_zero;
-    var $room_id_one;
-    var $room_id_two;
-    var $room_id_three;
-
-    function HMS_Suite($id = NULL)
+    function HMS_Suite($id = 0)
     {
-        if($id == NULL) {
-            $this->set_rooms_null();
-            $this->set_id(NULL);
-        } else {
-            $this->set_id($id);
-            $db = &new PHPWS_DB('hms_suite');
-            $db->loadObject($this);
-            return $this;
+        $this->construct($id, 'hms_suite');
+    }
+
+    function save()
+    {
+        $db = new PHPWS_DB('hms_suite');
+
+        $result = $db->saveObject($this);
+        if (!$result || PHPWS_Error::logIfError($result)) {
+            return false;
         }
+        return true;
     }
 
-    function set_id($id)
+    function copy($to_term, $floor_id, $assignments=false)
     {
-        $this->id = $id;
+        if (!$this->id) {
+            return false;
+        }
+
+        //echo "in hms_suite, copying suite id $this->id <br>";
+
+        // Create a clone of the current suite object
+        // Set id to 0, set term, and save
+        $new_suite = clone($this);
+        $new_suite->reset();
+        $new_suite->term = $to_term;
+        $new_suite->floor_id = $floor_id;
+
+        if(!$new_suite->save()) {
+            // There was an error saving the new suite
+            echo "error saving the new suite<br>";
+            test($new_suite->save(),1);
+            return false;
+        }
+
+        if(empty($this->_rooms)) {
+            if(!$this->loadRooms()) {
+                // There was an error loading the rooms
+                echo "Error loading the rooms<br>";
+                return false;
+            }
+        }
+
+        if(!empty($this->_rooms)) {
+            foreach ($this->_rooms as $room) {
+                //echo "copying room id: $room->id<br>";
+                $result = $room->copy($to_term, $floor_id, $new_suite->id, $assignments);
+                if(!$result){
+                    echo "error copying rooms inside suites<br>";
+                    return false;
+                }
+            }
+        }else{
+            //echo "rooms empty!<br>";
+        }
+
+        return true;
     }
 
-    function get_id()
+    /**
+     * Pulls all the rooms associated with this floor and stores
+     * them in the _room variable.
+     * @param int deleted -1 deleted only, 0 not deleted only, 1 all
+     */
+    function loadRooms($deleted = 0)
     {
-        return $this->id;
-    }
+        $db = new PHPWS_DB('hms_room');
+        $db->addWhere('floor_id', $this->floor_id);
+        $db->addWhere('suite_id', $this->id);
 
-    function set_room_id_zero($id)
-    {
-        $this->room_id_zero = $id;
-    }
+        switch ($deleted) {
+            case -1:
+                $db->addWhere('deleted', 1);
+                break;
+            case 0:
+                $db->addWhere('deleted', 0);
+                break;
+        }
 
-    function get_room_id_zero()
-    {
-        return $this->room_id_zero;
-    }
-
-    function set_room_id_one($id)
-    {
-        $this->room_id_one = $id;
-    }
-
-    function get_room_id_one()
-    {
-        return $this->room_id_one;
-    }
-
-    function set_room_id_two($id)
-    {
-        $this->room_id_two = $id;
-    }
-
-    function get_room_id_two()
-    {
-        return $this->room_id_two;
-    }
-
-    function set_room_id_three($id)
-    {
-        $this->room_id_three = $id;
-    }
-
-    function get_room_id_three()
-    {
-        return $this->room_id_three;
-    }
-
-    function set_rooms_null()
-    {
-        $this->set_room_id_zero(NULL);
-        $this->set_room_id_one(NULL);
-        $this->set_room_id_two(NULL);
-        $this->set_room_id_three(NULL);
-    }
-
-    function edit_suite($error = NULL)
-    {
-        PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
-        $final = HMS_Form::edit_suite($error);
-        return $final;
-    }
-
-    function check_room_ids_numeric()
-    {
-        if(!is_numeric($_REQUEST['room_id_zero']) || !is_numeric($_REQUEST['room_id_one']) ||
-           !is_numeric($_REQUEST['room_id_two']) || !is_numeric($_REQUEST['room_id_three'])) {
+        $db->loadClass('hms', 'HMS_Room.php');
+        $result = $db->getObjects('HMS_Room');
+        if (PHPWS_Error::logIfError($result)) {
             return false;
         } else {
+            $this->_rooms = & $result;
             return true;
         }
     }
 
-    function check_valid_room_ids()
+    /**
+     * Loads the parent floor object of this room
+     */
+    function loadFloor()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Room.php');
-        return (HMS_Room::is_valid_room($_REQUEST['room_id_zero']) &&
-                HMS_Room::is_valid_room($_REQUEST['room_id_one']) &&
-                HMS_Room::is_valid_room($_REQUEST['room_id_two']) &&
-                HMS_Room::is_valid_room($_REQUEST['room_id_three']));
-    }
-    
-    function rooms_in_suite()
-    {
-        PHPWS_Core::initModClass('hms', 'HMS_Room.php');
-        if(HMS_Room::is_in_suite($_REQUEST['room_id_zero']) ||
-           HMS_Room::is_in_suite($_REQUEST['room_id_one']) ||
-           HMS_Room::is_in_suite($_REQUEST['room_id_two']) ||
-           HMS_Room::is_in_suite($_REQUEST['room_id_three'])) {
-            return true;
-        } else {
+        PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
+        $result = new HMS_Floor($this->floor_id);
+        if (PHPWS_Error::logIfError($result)) {
             return false;
         }
+        $this->_floor = & $result;
+        return true;
     }
+}
 
-    function room_listed_twice()
-    {
-        $r0 = $_REQUEST['room_id_zero'];
-        $r1 = $_REQUEST['room_id_one'];
-        $r2 = $_REQUEST['room_id_two'];
-        $r3 = $_REQUEST['room_id_three'];
-
-        if($r0 == $r1 || $r0 == $r2 || $r0 == $r3 ||
-           $r1 == $r2 || $r1 == $r3 || $r2 == $r3) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    function set_room_ids()
-    {
-        $this->set_room_id_zero($_REQUEST['room_id_zero']);
-        $this->set_room_id_one($_REQUEST['room_id_one']);
-        
-        if($_REQUEST['room_id_two'] != NULL) {
-            $this->set_room_id_two($_REQUEST['room_id_two']);
-        }
-        
-        if($_REQUEST['room_id_three'] != NULL) {
-            $this->set_room_id_three($_REQUEST['room_id_three']);
-        }
-    }
-
-    function save_suite($new = NULL)
-    {
-        
-        $suite = new HMS_Suite($_REQUEST['suite']);
-        $suite->set_room_ids();
-        $db = &new PHPWS_DB('hms_suite');
-        
-        if($suite->get_id()) {
-            $db->addWhere('id', $suite->get_id());
-            $db->addValue('room_id_zero', $_REQUEST['room_id_zero']);
-            $db->addValue('room_id_one', $_REQUEST['room_id_one']);
-            $db->addValue('room_id_two', $_REQUEST['room_id_two']);
-            $db->addValue('room_id_three', $_REQUEST['room_id_three']);
-            $success = $db->update();
-        } else {
-            $success = $db->saveObject($suite);
-        }
-       
-        if(PEAR::isError($success)) {
-            PHPWS_Error::log($success, 'hms', 'HMS_Suite::save_new_suite');
-            $msg = "There was an error saving this suite. Please contact Electronic Student Services.";
-        } else {
-            $msg = "Suite was successfully saved!";
-        }
-       
-        $_REQUEST['new'] = 'false';
-        $_REQUEST['suite'] = $success;
-        return HMS_Suite::edit_suite($msg);
-    }
-
-    function rooms_same_gender()
-    {
-        PHPWS_Core::initModClass('hms', 'HMS_Room.php');
-        $g0 = HMS_Room::get_gender_type($_REQUEST['room_id_zero']);
-        $g1 = HMS_Room::get_gender_type($_REQUEST['room_id_one']);
-        
-        if($_REQUEST['room_id_two'] != 0) {
-            $g2 = HMS_Room::get_gender_type($_REQUEST['room_id_two']);
-        } else {
-            $g2 = $g0;
-        }
-        
-        if($_REQUEST['room_id_three'] != 0) {
-            $g3 = HMS_Room::get_gender_type($_REQUEST['room_id_three']);
-        } else {
-            $g3 = $g0;
-        }
-
-        if ($g0 == $g1 && $g0 == $g2 && $g0 == $g3) return true;
-        else return false;
-    }
-
-    function check_if_rooms_are_medical()
-    {
-        $med = false;
-        $rooms = array();
-
-        PHPWS_Core::initModClass('hms', 'HMS_Room.php');
-        
-        if(HMS_Room::get_is_medical($_REQUEST['room_id_zero'])) {
-            $med = true;
-            $rooms[] = HMS_Room::get_room_number($_REQUEST['room_id_zero']);
-        }
-
-        if(HMS_Room::get_is_medical($_REQUEST['room_id_one'])) {
-            $med = true;
-            $rooms[] = HMS_Room::get_room_number($_REQUEST['room_id_one']);
-        }
-
-        if(HMS_Room::get_is_medical($_REQUEST['room_id_two'])) {
-            $med = true;
-            $rooms[] = HMS_Room::get_room_number($_REQUEST['room_id_two']);
-        }
-
-        if(HMS_Room::get_is_medical($_REQUEST['room_id_three'])) {
-            $med = true;
-            $rooms[] = HMS_Room::get_room_number($_REQUEST['room_id_three']);
-        }
-
-        if($med == true) return $rooms;
-        else return false;
-    }
-
-    function check_if_rooms_are_reserved()
-    {
-        $res = false;
-        $rooms = array();
-
-        PHPWS_Core::initModClass('hms', 'HMS_Room.php');
-        
-        if(HMS_Room::get_is_reserved($_REQUEST['room_id_zero'])) {
-            $res = true;
-            $rooms[] = HMS_Room::get_room_number($_REQUEST['room_id_zero']);
-        }
-
-        if(HMS_Room::get_is_reserved($_REQUEST['room_id_one'])) {
-            $res = true;
-            $rooms[] = HMS_Room::get_room_number($_REQUEST['room_id_one']);
-        }
-
-        if(HMS_Room::get_is_reserved($_REQUEST['room_id_two'])) {
-            $res = true;
-            $rooms[] = HMS_Room::get_room_number($_REQUEST['room_id_two']);
-        }
-
-        if(HMS_Room::get_is_reserved($_REQUEST['room_id_three'])) {
-            $res = true;
-            $rooms[] = HMS_Room::get_room_number($_REQUEST['room_id_three']);
-        }
-
-        if($res == true) return $rooms;
-        else return false;
-    }
-
-    function rooms_not_in_another_suite()
-    {
-        $db = &new PHPWS_DB('hms_suite');
-        $db->addColumn('id');
-        $db->addWhere('room_id_zero', $this->get_room_id_zero(), '=');
-        $db->addWhere('room_id_one', $this->get_room_id_zero(), '=', 'OR');
-        $db->addWhere('room_id_two', $this->get_room_id_zero(), '=', 'OR');
-        $db->addWhere('room_id_three', $this->get_room_id_zero(), '=', 'OR');
-      
-        if($this->get_room_id_one() != NULL) {  
-            $db->addWhere('room_id_zero', $this->get_room_id_one(), '=', 'OR');
-            $db->addWhere('room_id_one', $this->get_room_id_one(), '=', 'OR');
-            $db->addWhere('room_id_two', $this->get_room_id_one(), '=', 'OR');
-            $db->addWhere('room_id_three', $this->get_room_id_one(), '=', 'OR');
-        }
-
-        if($this->get_room_id_two() != NULL) {
-            $db->addWhere('room_id_zero', $this->get_room_id_two(), '=', 'OR');
-            $db->addWhere('room_id_one', $this->get_room_id_two(), '=', 'OR');
-            $db->addWhere('room_id_two', $this->get_room_id_two(), '=', 'OR');
-            $db->addWhere('room_id_three', $this->get_room_id_two(), '=', 'OR');
-        }
-        
-        if($this->get_room_id_three() != NULL) {
-            $db->addWhere('room_id_zero', $this->get_room_id_three(), '=', 'OR');
-            $db->addWhere('room_id_one', $this->get_room_id_three(), '=', 'OR');
-            $db->addWhere('room_id_two', $this->get_room_id_three(), '=', 'OR');
-            $db->addWhere('room_id_three', $this->get_room_id_three(), '=', 'OR');
-        }
-       
-        $results = $db->select();
-        if(PEAR::isError($results)) {
-            PHPWS_Error::log($results, 'hms', 'HMS_Suite::rooms_eligible_for_this_suite');
-            return "-1";
-        }
-
-        if(sizeof($results) == 1 && $results[0]['id'] == $this->id) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    function verify_save_suite()
-    {
-        PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
-        return HMS_Form::verify_save_suite();
-    }
-
-    function main()
-    {
-        switch($_REQUEST['op'])
-        {
-            case 'edit_suite':
-                $final = HMS_Suite::edit_suite();
-                break;
-            case 'save_suite':
-                $final = HMS_Suite::save_suite();
-                break;
-            case 'save_new_suite':
-                $final = HMS_Suite::save_suite(true);
-                break;
-            case 'verify_save_suite':
-                $final = HMS_Suite::verify_save_suite();
-                break;
-            default:
-                $final = "Operation is: " . $_REQUEST['op'];
-                break;
-        }
-        return $final;
-    }
-};
 ?>

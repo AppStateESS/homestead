@@ -474,16 +474,20 @@ class HMS_SOAP{
         return $assignment;
     }
 
+    /**
+     * Depricated, use HMS_Term::get_current_term()
+     *
     function this_term()
     {
         // TODO: make this not static
         return '200740';
     }
+    */
 
     function report_room_assignment($username, $term, $building_code, $room_code, $plan_code, $meal_code)
     {
         if(SOAP_TEST_FLAG){
-            return;
+            return 0;
         }
 
         include_once('SOAP/Client.php');
@@ -515,7 +519,8 @@ class HMS_SOAP{
     function remove_room_assignment($username, $term, $building, $room)
     {
         if(SOAP_TEST_FLAG) {
-            return;
+            #test(array($username,$term,$building,$room));
+            return 0;
         }
 
         include_once('SOAP/Client.php');
@@ -596,6 +601,11 @@ class HMS_SOAP{
 
         $retval['plan'] = 'HOME';
 
+        if(is_null($hms_meal_code)) {
+            $retval['meal'] = NULL;
+            return $retval;
+        }
+
         switch($hms_meal_code) {
             case 0: // low
                 if($type == 'NFR')
@@ -607,7 +617,7 @@ class HMS_SOAP{
                 $retval['meal'] = '1';
                 break;
             case 2: // high
-                $retval['meal'] = '2';
+                $retval['meal'] = '0';
                 break;
             case 3: // super
                 $retval['meal'] = '8';
@@ -615,7 +625,7 @@ class HMS_SOAP{
             case 4: // none
                 if(($building == 'MAR' || $building == 'AHR') &&
                         $type != 'NFR') {
-                    // HOUS, if we ever do that craziness again
+                    $retval['meal'] = NULL;
                 } else {
                     $retval['meal'] = '1';
                 }

@@ -4,11 +4,10 @@
     <div class="box-content">
         <table><tr><td style="vertical-align: top;">
             
-            <!-- BEGIN term -->
-            <h2><i>{TERM_LABEL}</i></h2>
-            &nbsp;&nbsp;&nbsp;{EDIT_TERM}<br />
-            <br />
-            <!-- END term -->
+            <h2><i>{STUDENT_LABEL}</i></h2>
+            &nbsp;&nbsp;&nbsp;{SEARCH_FOR_STUDENT}<br />
+    <!--        &nbsp;&nbsp;&nbsp;{ADD_STUDENT}<br />
+            &nbsp;&nbsp;&nbsp;{EDIT_STUDENT}<br />--><br />
             
             <h2><i>{HALL_LABEL}</i></h2>
             &nbsp;&nbsp;&nbsp;{ADD_HALL}<br />
@@ -37,19 +36,21 @@
             &nbsp;&nbsp;&nbsp;{VIEW_RLC_ASSIGNMENTS}<br />
             &nbsp;&nbsp;&nbsp;{SEARCH_BY_RLC}<br />
             <br />
-            <h2><i>{STUDENT_LABEL}</i></h2>
-            &nbsp;&nbsp;&nbsp;{SEARCH_FOR_STUDENT}<br />
-    <!--        &nbsp;&nbsp;&nbsp;{ADD_STUDENT}<br />
-            &nbsp;&nbsp;&nbsp;{EDIT_STUDENT}<br />-->
+            <!-- BEGIN term -->
+            <h2><i>{TERM_LABEL}</i></h2>
+            &nbsp;&nbsp;&nbsp;{CREATE_TERM}<br />
+            &nbsp;&nbsp;&nbsp;{EDIT_TERM}<br />
+            <br />
+            <!-- END term -->
         </td><td style="vertical-align: top; padding-left: 20px;">
             <h2><i>{DEADLINE_LABEL}</i></h2>
             &nbsp;&nbsp;&nbsp;{EDIT_DEADLINES}<br />
             <br /> 
             <h2><i>{ASSIGNMENT_LABEL}</i></h2>
-            &nbsp;&nbsp;&nbsp;{ASSIGN_BY_FLOOR}<br />
             &nbsp;&nbsp;&nbsp;{CREATE_ASSIGNMENT}<br />
             &nbsp;&nbsp;&nbsp;{MOVE_ASSIGNMENT}<br />
             &nbsp;&nbsp;&nbsp;{DELETE_ASSIGNMENT}<br />
+            &nbsp;&nbsp;&nbsp;{ASSIGN_BY_FLOOR}<br />
             <br />
             <h2><i>{ROOMMATE_LABEL}</i></h2>
             &nbsp;&nbsp;&nbsp;{CREATE_ROOMMATE_GROUP}<br />
