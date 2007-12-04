@@ -442,7 +442,15 @@ class HMS_Room extends HMS_Item
 
     function main()
     {
-
+        switch($_REQUEST['op'])
+        {
+            case 'select_room_to_edit':
+                return HMS_Room::show_select_room('Edit Room', 'room', 'show_edit_room');
+                break;
+            default:
+                echo "undefied room op: {$_REQUEST['op']}";
+                break;
+        }
     }
 
     function room_pager()
@@ -467,6 +475,78 @@ class HMS_Room extends HMS_Item
         return $tpl;
     }
 
+    /*********************
+     * Static UI Methods *
+     ********************/
+
+    function show_select_room($title, $type, $op, $success = NULL, $error = NULL)
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
+        PHPWS_Core::initCoreClass('Form.php');
+
+        javascript('/modules/hms/select_room');
+        
+        $tpl = array();
+
+        # Setup the title and color of the title bar
+        $tpl['TITLE'] = $title;
+        $tpl['TITLE_CLASS'] = HMS_Util::get_title_class();
+
+        # Get the halls for the selected term
+        $halls = HMS_Residence_Hall::get_halls_array(HMS_Term::get_selected_term());
+
+        # Show an error if there are no halls for the current term
+        if($halls == NULL){
+            $tpl['ERROR_MSG'] = 'Error: No halls exist for the selected term. Please create a hall first.';
+            return PHPWS_Template::process($tpl, 'hms', 'admin_select_floor.tpl');
+        }
+
+        $halls[0] = 'Select...';
+
+        $tpl['MESSAGE'] = 'Please select a room: ';
+
+        # Setup the form
+        $form = &new PHPWS_Form;
+        $form->addDropBox('residence_hall', $halls);
+        $form->setLabel('residence_hall', 'Residence hall: ');
+        $form->setMatch('residence_hall', 0);
+        $form->setExtra('residence_hall', 'onChange="handle_hall_change()"');
+
+        $form->addDropBox('floor', array(0 => ''));
+        $form->setLabel('floor', 'Floor: ');
+        $form->setExtra('floor', 'disabled onChange="handle_floor_change()"');
+
+        $form->addDropBox('room', array(0 => ''));
+        $form->setLabel('room', 'Room: ');
+        $form->setExtra('room', 'disabled onChange="handle_room_change()"');
+
+        $form->addSubmit('submit', 'Select');
+        $form->setExtra('submit', 'disabled');
+
+        # Use the type and op that was passed in
+        $form->addHidden('module', 'hms');
+        $form->addHidden('type', $type);
+        $form->addHidden('op', $op);
+
+        $form->mergeTemplate($tpl);
+        $tpl = $form->getTemplate();
+
+        if(isset($error)){
+            $tpl['ERROR_MSG'] = $error;
+        }
+
+        if(isset($success)){
+            $tpl['SUCCESS_MSG'] = $success;
+        }
+        
+        return PHPWS_Template::process($tpl, 'hms', 'admin/select_room.tpl');
+    }
+
+    function show_edit_room()
+    {
+        
+    }
 
 }
 

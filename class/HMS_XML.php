@@ -210,8 +210,22 @@ class HMS_XML{
 
     function getRooms($floor_id){
        
-        #TODO  
+        PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
         
+        $floor = &new HMS_Floor($floor_id);
+
+        $rooms = $floor->get_rooms();
+
+        if(!$rooms){
+            // throw an error
+        }
+
+        $xml_rooms = array();
+
+        foreach($rooms as $room){
+            $xml_rooms[] = array('id' => $room->id, 'room_num' => $room->room_number);
+        }
+
         $serializer_options = array (
             'addDecl' => TRUE,
             'encoding' => 'ISO-8859-1',
@@ -221,7 +235,7 @@ class HMS_XML{
 
         $serializer = &new XML_Serializer($serializer_options);
 
-        $status = $serializer->serialize($result);
+        $status = $serializer->serialize($xml_rooms);
 
         if(PEAR::isError($status)){
             die($status->getMessage());

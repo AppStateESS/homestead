@@ -133,7 +133,7 @@ class HMS_Maintenance
             $tpl['DELETE_ROOM'] = PHPWS_Text::secureLink(_('Delete a Room'), 'hms', array('type'=>'room', 'op'=>'select_residence_hall_for_delete_room'));
 
         if(Current_User::allow('hms', 'edit_rooms') || Current_User::allow('hms', 'admin'))
-            $tpl['EDIT_ROOM'] = PHPWS_Text::secureLink(_('Edit a Room'), 'hms', array('type'=>'room', 'op'=>'select_hall_for_edit_room'));
+            $tpl['EDIT_ROOM'] = PHPWS_Text::secureLink(_('Edit a Room'), 'hms', array('type'=>'room', 'op'=>'select_room_to_edit'));
         
         if(Current_User::allow('hms', 'learning_community_maintenance') || Current_User::allow('hms', 'admin'))
             $tpl['LC_LABEL']    = "Learning Community Options";
