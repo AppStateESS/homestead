@@ -606,6 +606,11 @@ function hms_update(&$content, $currentVersion)
             PHPWS_Boost::updatefiles($files, 'hms');
 
             $content[] = '+ Maintenance template was phoned in, now properly updated';
+        case version_compare($currentVersion, '0.2.8', '<'):
+            $files[] = 'templates/admin/select_room.tpl';
+            PHPWS_Boost::updatefiles($files, 'hms');
+
+            $content[] = '+ Room selection for editing rooms now works';
     }
 
     return TRUE;
