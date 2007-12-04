@@ -433,14 +433,6 @@ class HMS_Assignment extends HMS_Item
         $form->setLabel('room', 'Room: ');
         $form->setExtra('room', 'disabled onChange="handle_room_change()"');
 
-        $form->addDropBox('bedroom', array(0 => ''));
-        $form->setLabel('bedroom', 'Bedroom: ');
-        $form->setExtra('bedroom', 'disabled onChange="handle_bedroom_change()"');
-
-        $form->addDropBox('bed', array(0 => ''));
-        $form->setLabel('bed', 'Bed: ');
-        $form->setExtra('bed', 'disabled onChange="handle_bed_change()"');
-
         $form->addSubmit('submit', 'Assign Student');
         $form->setExtra('submit', 'disabled');
         

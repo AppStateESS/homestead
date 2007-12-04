@@ -332,7 +332,7 @@ class HMS_Room extends HMS_Item
         
         $result = $db->select('count');
         
-        if(!$result || PHPWS_Error::logIfError($result)){
+        if(PHPWS_Error::logIfError($result)){
             return false;
         }
 
@@ -436,6 +436,18 @@ class HMS_Room extends HMS_Item
         return $vacant_bedrooms;
     }
 
+    /**
+     * Returns TRUE if this room is part of a suite.
+     */
+    function is_in_suite()
+    {
+        if(isset($this->suite_id)){
+            return TRUE;
+        }else{
+            return FALSE;
+        }
+    }
+
     /******************
      * Static Methods *
      *****************/
@@ -446,6 +458,9 @@ class HMS_Room extends HMS_Item
         {
             case 'select_room_to_edit':
                 return HMS_Room::show_select_room('Edit Room', 'room', 'show_edit_room');
+                break;
+            case 'show_edit_room':
+                return HMS_Room::show_edit_room();
                 break;
             default:
                 echo "undefied room op: {$_REQUEST['op']}";
@@ -543,9 +558,110 @@ class HMS_Room extends HMS_Item
         return PHPWS_Template::process($tpl, 'hms', 'admin/select_room.tpl');
     }
 
-    function show_edit_room()
+    function show_edit_room($success = null, $error = null)
     {
+        #require(PHPWS_SOURCE_DIR . 'mod/hms/inc/defines.php');
         
+        PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Pricing_Tier.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
+        
+        # Setup the title and color of the title bar
+        $tpl['TITLE'] = 'Edit Room';
+        $tpl['TITLE_CLASS'] = HMS_Util::get_title_class();
+
+        # Create the room object given the room_id
+        $room = new HMS_Room($_REQUEST['room']);
+        if(!$room){
+            return show_select_room('Edit Room', 'room', 'show_edit_room', NULL, 'Error: The selected room does not exist!'); 
+        }
+
+        # Create the floor object
+        $floor = $room->get_parent();
+        if(!$floor){
+            $tpl['ERROR_MSG'] = 'There was an error getting the floor object. Please contact ESS.';
+            return PHPWS_Template::process($tpl, 'hms', 'admin/edit_room.tpl');
+        }
+
+        $hall = $floor->get_parent();
+        if(!$hall){
+            $tpl['ERROR_MSG'] = 'There was an error getting the hall object. Please contact ESS.';
+            return PHPWS_Template::process($tpl, 'hms', 'admin/edit_room.tpl');
+        }
+
+        $tpl['HALL_NAME']           = $hall->hall_name;
+        $tpl['FLOOR_NUMBER']        = $floor->floor_number;
+        $tpl['NUMBER_OF_BEDROOMS']  = $room->get_number_of_bedrooms();
+        $tpl['NUMBER_OF_BEDS']      = $room->get_number_of_beds();
+        $tpl['NUMBER_OF_ASSIGNEES'] = $room->get_number_of_assignees();
+
+        $form = &new PHPWS_Form;
+        
+        $form->addText('room_number', $room->room_number);
+        
+        $form->addDropBox('pricing_tier', HMS_Pricing_Tier::get_pricing_tiers_array());
+        $form->setMatch('pricing_tier', $room->pricing_tier);
+
+        if($room->get_number_of_assignees() == 0){
+            $form->addDropBox('gender_type', array(FEMALE => FEMALE_DESC, MALE => MALE_DESC, COED => COED_DESC));
+            $form->setMatch('gender_type', $room->gender_type);
+        }else{
+            if($gender_type == FEMALE){
+                $tpl['GENDER_MESSAGE'] = "Female";
+            }else if($gender_type == MALE){
+                $tpl['GENDER_MESSAGE'] = "Male";
+            }else if($gender_type == COED){
+                $tpl['GENDER_MESSAGE'] = "Coed";
+            }else{
+                $tpl['GENDER_MESSAGE'] = "Error: Undefined gender";
+            }
+        }
+        
+        $form->addRadio('is_online', array(0, 1));
+        $form->setLabel('is_online', array(_('No'), _('Yes') ));
+        $form->setMatch('is_online', $room->is_online);
+
+        $form->addRadio('is_reserved', array(0, 1));
+        $form->setLabel('is_reserved', array(_('No'), _('Yes')));
+        $form->setMatch('is_reserved', $room->is_reserved);
+        
+        $form->addRadio('ra_room', array(0, 1));
+        $form->setLabel('ra_room', array(_('No'), _('Yes')));
+        $form->setMatch('ra_room', $room->ra_room);
+        
+        $form->addRadio('private_room', array(0, 1));
+        $form->setLabel('private_room', array(_('No'), _('Yes')));
+        $form->setMatch('private_room', $room->private_room);
+        
+        $form->addRadio('is_medical', array(0,1));
+        $form->setLabel('is_medical', array(_('No'), _('Yes')));
+        $form->setMatch('is_medical', $room->is_medical);
+
+        $form->addRadio('is_lobby', array(0, 1));
+        $form->setLabel('is_lobby', array(_('No'), _('Yes')));
+        $form->setMatch('is_lobby', $room->is_lobby);
+
+        if($room->is_in_suite()){
+            $tpl['IS_IN_SUITE'] = 'Yes';
+            /*TODO: Populate this template variable with a list
+                    with a list of the other rooms in this suite.
+
+                    Consider using the 'row repeat' template stuff
+                    to make this more clean.
+            */
+            
+            #$tpl['SUITE_ROOM_LIST'] = ????
+        }else{
+            $tpl['IS_IN_SUITE'] = 'No';
+        }
+
+        # TODO: add an assignment pager here
+
+        $form->mergeTemplate($tpl);
+        $tpl = $form->getTemplate();
+        
+        return PHPWS_Template::process($tpl, 'hms', 'admin/edit_room.tpl');   
     }
 
 }
