@@ -76,26 +76,23 @@
                 <th>Is part of a suite: </th>
                 <td align="left">{IS_IN_SUITE}</td>
             </tr>
-            <!-- BEGIN suite_room_list --> 
+            <!-- BEGIN suite -->
             <tr>
-                <th>Rooms in Suite:</th>
-                <td align="left">{SUITE_ROOM_LIST}</td>
+                <th>Other rooms in suite:</th>
+                <td align="left">
+                    <ul>
+                <!-- BEGIN SUITE_ROOM_LIST -->
+                    <li>{SUITE_ROOM}</li>
+                <!-- END SUITE_ROOM_LIST -->
+                    </ul>
+                </td>
             </tr>
-            <!-- END suite_room_list -->
-            <tr>
-                <td></td><td align="left">{EDIT_SUITE_LINK}</td>
-            </tr>
-            <tr>
-                <td></td><td align="left">{ROOM_ID_ONE}</td>
-            </tr>
-            <tr>
-                <td></td><td align="left">{ROOM_ID_TWO}</td>
-            </tr>
-            <tr>
-                <td></td><td align="left">{ROOM_ID_THREE}</td>
-            </tr>
+            <!-- END suite -->
         </table>
+        <br />
         {SUBMIT}
+        <br /><br />
+        {ASSIGNMENT_PAGER}
     </div>
   </div>
 </div>

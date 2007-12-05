@@ -230,35 +230,44 @@ class HMS_Room extends HMS_Item
      * @return bool
      */
     function can_change_gender($target_gender, $ignore_upper = FALSE)
-    {
-        // If the target gender is coed, the gender of the bedrooms
-        // is irrelevant so we skip the check in that case
-        if ($target_gender != COED) {
-            $this->loadBedrooms();
-            if ($this->_bedrooms) {
-                foreach ($this->_bedrooms as $br) {
-                    // If the bedroom gender type is not coed and the bedroom gt
-                    // does not equal the target gender, we return false
-                    if ($br->gender_type != COED && $br->gender_type != $target_gender) {
-                        return false;
-                    }
-                }
-            }
-        }
+    {   
 
-        // If we aren't ignoring the floor, load it and compare
-        if (!$ignore_upper) {
+        # Ignore upper is true, we're trying to change a hall/floor
+        if($ignore_upper){
+            # If ignore upper is true and the target gender coed, then we
+            # can always return true.
+            if($target_gender == COED){
+                return true;
+            }
+
+            # If the target gender is not the same, and someone is assigned
+            # here, then the gender can't be changed (i.e. return false)
+            if(($target_gender != $this->gender_type) && ($this->get_number_of_assignees() != 0)){
+                return false;
+            }
+             
+            return true;
+        }else{
+            # Ignore upper is FALSE, load the floor and compare
+
+            # Since we can't have coed rooms, we can never change to a
+            # target of COED.
+            if($target_gender == COED){
+                return false;
+            }
+            
             if (!$this->loadFloor()) {
                 // an error occurred loading the floor, check logs
                 return false;
             }
+            
             // If the floor is not coed and the gt is not the target, return false
             if ($this->_floor->gender_type != COED && $this->_floor->gender_type != $target_gender) {
                 return false;
             }
-        }
 
-        return true;
+            return true;
+        }
     }
 
     /**
@@ -462,6 +471,8 @@ class HMS_Room extends HMS_Item
             case 'show_edit_room':
                 return HMS_Room::show_edit_room();
                 break;
+            case 'edit_room':
+                return HMS_Room::edit_room();
             default:
                 echo "undefied room op: {$_REQUEST['op']}";
                 break;
@@ -489,7 +500,43 @@ class HMS_Room extends HMS_Item
 
         return $tpl;
     }
+    
+    function edit_room(){
 
+        # Create the room object given the room_id
+        $room = new HMS_Room($_REQUEST['room_id']);
+        if(!$room){
+            return show_select_room('Edit Room', 'room', 'show_edit_room', NULL, 'Error: The selected room does not exist!'); 
+        }
+
+        # Compare the room's gender and the gender the user selected
+        # If they're not equal, call 'can_change_gender' function
+        if($room->gender_type != $_REQUEST['gender_type']){
+            if(!$room->can_change_gender($_REQUEST['gender_type'])){
+                return show_edit_room($room->id,NULL, 'Error: incompatible genders detected. No changes were made.');
+           }
+        }
+
+       # Grab all the input from the form and save the room
+       $room->room_number   = $_REQUEST['room_number'];
+       $room->pricing_tier  = $_REQUEST['pricing_tier']; 
+       $room->gender_type   = $_REQUEST['gender_type'];
+       $room->is_online     = $_REQUEST['is_online'];
+       $room->is_reserved   = $_REQUEST['is_reserved'];
+       $room->ra_room       = $_REQUEST['ra_room'];
+       $room->private_room  = $_REQUEST['private_room'];
+       $room->is_medical    = $_REQUEST['is_medical'];
+       $room->is_lobby      = $_REQUEST['is_lobby'];
+
+       $result = $room->save();
+
+       if(!$result || PHPWS_Error::logIfError($result)){
+           return show_edit_room($room->id, NULL, 'Error: There was a problem saving the room. No changes were made. Please contact ESS.');
+       }
+
+       return HMS_Room::show_edit_room($room->id, 'Room updated successfully.');
+    }
+    
     /*********************
      * Static UI Methods *
      ********************/
@@ -558,21 +605,27 @@ class HMS_Room extends HMS_Item
         return PHPWS_Template::process($tpl, 'hms', 'admin/select_room.tpl');
     }
 
-    function show_edit_room($success = null, $error = null)
+    function show_edit_room($room_id = NULL, $success = null, $error = null)
     {
         #require(PHPWS_SOURCE_DIR . 'mod/hms/inc/defines.php');
         
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
         PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Suite.php');
         PHPWS_Core::initModClass('hms', 'HMS_Pricing_Tier.php');
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
+
+        # Determine the room id. If the passed in variable is NULL, use $_REQUEST
+        if(!isset($room_id)){
+            $room_id = $_REQUEST['room'];
+        }
         
         # Setup the title and color of the title bar
         $tpl['TITLE'] = 'Edit Room';
         $tpl['TITLE_CLASS'] = HMS_Util::get_title_class();
 
         # Create the room object given the room_id
-        $room = new HMS_Room($_REQUEST['room']);
+        $room = new HMS_Room($room_id);
         if(!$room){
             return show_select_room('Edit Room', 'room', 'show_edit_room', NULL, 'Error: The selected room does not exist!'); 
         }
@@ -604,18 +657,22 @@ class HMS_Room extends HMS_Item
         $form->setMatch('pricing_tier', $room->pricing_tier);
 
         if($room->get_number_of_assignees() == 0){
-            $form->addDropBox('gender_type', array(FEMALE => FEMALE_DESC, MALE => MALE_DESC, COED => COED_DESC));
+            # Room is empty, show the drop down so the user can change the gender
+            $form->addDropBox('gender_type', array(FEMALE => FEMALE_DESC, MALE => MALE_DESC));
             $form->setMatch('gender_type', $room->gender_type);
         }else{
-            if($gender_type == FEMALE){
+            # Room is not empty, so just show the gender (no drop down)
+            if($room->gender_type == FEMALE){
                 $tpl['GENDER_MESSAGE'] = "Female";
-            }else if($gender_type == MALE){
+            }else if($room->gender_type == MALE){
                 $tpl['GENDER_MESSAGE'] = "Male";
-            }else if($gender_type == COED){
+            }else if($room->gender_type == COED){
                 $tpl['GENDER_MESSAGE'] = "Coed";
             }else{
                 $tpl['GENDER_MESSAGE'] = "Error: Undefined gender";
             }
+            # Add a hidden variable for 'gender_type' so it will be defined upon submission
+            $form->addHidden('gender_type', $room->gender_type);
         }
         
         $form->addRadio('is_online', array(0, 1));
@@ -643,20 +700,45 @@ class HMS_Room extends HMS_Item
         $form->setMatch('is_lobby', $room->is_lobby);
 
         if($room->is_in_suite()){
+            # Room is in a suite
             $tpl['IS_IN_SUITE'] = 'Yes';
-            /*TODO: Populate this template variable with a list
-                    with a list of the other rooms in this suite.
-
-                    Consider using the 'row repeat' template stuff
-                    to make this more clean.
-            */
             
-            #$tpl['SUITE_ROOM_LIST'] = ????
+            # Create the suite and get the rooms in it
+            $suite = new HMS_Suite($room->suite_id);
+            $suite_rooms = $suite->get_rooms();
+
+            # Generate the list of other rooms in this suite
+            foreach ($suite_rooms as $suite_room){
+                # Remove this room from the list
+                if($room->id == $suite_room->id){
+                    #continue;
+                }else{
+                    $tpl['SUITE_ROOM_LIST'][] = array('SUITE_ROOM' => PHPWS_Text::secureLink($suite_room->room_number, 'hms', array('type'=>'room', 'op'=>'show_edit_room', 'room'=>$suite_room->id)));
+                }
+            }
+
         }else{
+            # Room is not in a suite
             $tpl['IS_IN_SUITE'] = 'No';
         }
 
+        $form->addHidden('room_id', $room->id);
+        $form->addHidden('module', 'hms');
+        $form->addHidden('type', 'room');
+        $form->addHidden('op', 'edit_room');
+
+        $form->addSubmit('submit', 'Submit');
+
         # TODO: add an assignment pager here
+        #$tpl['ASSIGNMENT_PAGER'] = HMS_Assignment::assignment_page_by_room($room->id);
+
+        if(isset($success)){
+            $tpl['SUCCESS_MSG'] = $success;
+        }
+
+        if(isset($error)){
+            $tpl['ERROR_MSG'] = $error;
+        }
 
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
@@ -664,6 +746,7 @@ class HMS_Room extends HMS_Item
         return PHPWS_Template::process($tpl, 'hms', 'admin/edit_room.tpl');   
     }
 
+    
 }
 
 ?>

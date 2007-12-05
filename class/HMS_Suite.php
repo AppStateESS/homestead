@@ -110,6 +110,15 @@ class HMS_Suite extends HMS_Item {
         $this->_floor = & $result;
         return true;
     }
+
+    function get_rooms()
+    {
+        if(!$this->loadRooms()){
+            return false;
+        }
+
+        return $this->_rooms;
+    }
 }
 
 ?>
