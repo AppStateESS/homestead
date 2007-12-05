@@ -229,8 +229,22 @@ class HMS_Room extends HMS_Item
      *                          to TRUE to avoid checking the parent hall's gender.
      * @return bool
      */
+    #function can_change_gender($target_gender, $ignore_upper = FALSE, $ignore_suites = FALSE)
     function can_change_gender($target_gender, $ignore_upper = FALSE)
     {   
+        /*
+        # If this room is in a suite, we need to make sure we can the other rooms in the suite also
+        if(!$ignore_suites && $this->is_in_suite()){
+            $suite = new HMS_Suite($room->suite_id);
+            $suite_rooms = $suite->get_rooms();
+
+            foreach($suite_rooms as $suite_room){
+                if(!$suite_room->can_change_gender($target_gender, $ignore_upper, TRUE)){
+                    return false;
+                }
+            }
+        }
+        */
 
         # Ignore upper is true, we're trying to change a hall/floor
         if($ignore_upper){
@@ -513,7 +527,7 @@ class HMS_Room extends HMS_Item
         # If they're not equal, call 'can_change_gender' function
         if($room->gender_type != $_REQUEST['gender_type']){
             if(!$room->can_change_gender($_REQUEST['gender_type'])){
-                return show_edit_room($room->id,NULL, 'Error: incompatible genders detected. No changes were made.');
+                return HMS_Room::show_edit_room($room->id,NULL, 'Error: incompatible genders detected. No changes were made.');
            }
         }
 
@@ -642,12 +656,15 @@ class HMS_Room extends HMS_Item
             $tpl['ERROR_MSG'] = 'There was an error getting the hall object. Please contact ESS.';
             return PHPWS_Template::process($tpl, 'hms', 'admin/edit_room.tpl');
         }
+        
+        $number_of_assignees    = $room->get_number_of_assignees();
+        $is_in_suite            = $room->is_in_suite();
 
         $tpl['HALL_NAME']           = $hall->hall_name;
         $tpl['FLOOR_NUMBER']        = $floor->floor_number;
         $tpl['NUMBER_OF_BEDROOMS']  = $room->get_number_of_bedrooms();
         $tpl['NUMBER_OF_BEDS']      = $room->get_number_of_beds();
-        $tpl['NUMBER_OF_ASSIGNEES'] = $room->get_number_of_assignees();
+        $tpl['NUMBER_OF_ASSIGNEES'] = $number_of_assignees;
 
         $form = &new PHPWS_Form;
         
@@ -656,12 +673,12 @@ class HMS_Room extends HMS_Item
         $form->addDropBox('pricing_tier', HMS_Pricing_Tier::get_pricing_tiers_array());
         $form->setMatch('pricing_tier', $room->pricing_tier);
 
-        if($room->get_number_of_assignees() == 0){
-            # Room is empty, show the drop down so the user can change the gender
+        if(($number_of_assignees == 0) && !$is_in_suite){
+            # Room is empty and not in a suite, show the drop down so the user can change the gender
             $form->addDropBox('gender_type', array(FEMALE => FEMALE_DESC, MALE => MALE_DESC));
             $form->setMatch('gender_type', $room->gender_type);
         }else{
-            # Room is not empty, so just show the gender (no drop down)
+            # Room is not empty or in a suite so just show the gender (no drop down)
             if($room->gender_type == FEMALE){
                 $tpl['GENDER_MESSAGE'] = "Female";
             }else if($room->gender_type == MALE){
@@ -673,6 +690,12 @@ class HMS_Room extends HMS_Item
             }
             # Add a hidden variable for 'gender_type' so it will be defined upon submission
             $form->addHidden('gender_type', $room->gender_type);
+            # Show the reason the gender could not be changed.
+            if($number_of_assignees != 0){
+                $tpl['GENDER_REASON'] = 'Remove occupants to change room gender.';
+            }else if($is_in_suite){
+                $tpl['GENDER_REASON'] = 'Use the suite inteface to change room gender.';
+            }
         }
         
         $form->addRadio('is_online', array(0, 1));
@@ -699,7 +722,7 @@ class HMS_Room extends HMS_Item
         $form->setLabel('is_lobby', array(_('No'), _('Yes')));
         $form->setMatch('is_lobby', $room->is_lobby);
 
-        if($room->is_in_suite()){
+        if($is_in_suite){
             # Room is in a suite
             $tpl['IS_IN_SUITE'] = 'Yes';
             

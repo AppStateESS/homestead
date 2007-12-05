@@ -36,7 +36,7 @@
                 <th>Gender type: </th>
                 <!-- BEGIN gender_message -->
                 <td>{GENDER_MESSAGE}</td>
-                <td>Remove occupants to change room gender.</td>
+                <td>{GENDER_REASON}</td>
                 <!-- END gender_message -->
                 <!-- BEGIN gender_radio_buttons -->
                 <td align="left">{GENDER_TYPE}</td>
