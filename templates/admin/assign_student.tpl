@@ -26,12 +26,6 @@
                 <th align="left">{ROOM_LABEL}</th>
                 <td>{ROOM}</td>
             </tr>
-                <th align="left">{BEDROOM_LABEL}</th>
-                <td>{BEDROOM}</td>
-            <tr>
-                <th align="left">{BED_LABEL}</td>
-                <td>{BED}</td>
-            </tr>
         </table>
         <br />
         {SUBMIT}
