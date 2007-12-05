@@ -6,5 +6,7 @@
  */
 
 $settings['current_term'] = '200740';
+$settings['assign_queue_enabled'] = FALSE;
+$settings['remove_queue_enabled'] = FALSE;
 
 ?>

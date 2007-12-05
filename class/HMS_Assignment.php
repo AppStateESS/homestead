@@ -291,7 +291,7 @@ class HMS_Assignment extends HMS_Item
             $assignment = HMS_Assignment::get_assignment($_REQUEST['username'], HMS_Term::get_selected_term());
             
             # Attempt to unassign the student in Banner though SOAP
-            $banner_result = HMS_SOAP::remove_room_assignment(
+            $banner_result = HMS_Process_Remove_Unit::queue_remove_assignment(
                 $_REQUEST['username'],
                 HMS_Term::get_selected_term(),
                 $assignment->get_banner_building_code(),
@@ -316,9 +316,9 @@ class HMS_Assignment extends HMS_Item
             
         # Get the necessary meal plan code from the application
         $meal_plan = HMS_SOAP::get_plan_meal_codes($_REQUEST['username'], $hall->banner_building_code, $application->getMealOption());
-        
-        # Attempt to make the assignment in banner
-        $banner_success = HMS_SOAP::report_room_assignment(
+
+        # Send this off to the queue for assignment in banner
+        $banner_success = HMS_Assignment_Queue::queue_assignment(
             $_REQUEST['username'],
             HMS_Term::get_selected_term(),
             $hall->banner_building_code,
@@ -326,7 +326,7 @@ class HMS_Assignment extends HMS_Item
             $meal_plan['plan'],
             $meal_plan['meal']
             );
-
+        
         if($banner_success){
             return HMS_Assignment::show_assign_student(NULL, 'Banner Error: ' . $banner_success . ' The student was not assigned.');
         }
@@ -345,7 +345,7 @@ class HMS_Assignment extends HMS_Item
         }
         
         # Log the assignment
-        HMS_Activity_Log::log_activity($_REQUEST['username'], ACTIVITY_ASSIGNED, Current_User::getUsername(), $hall->hall_name . ' ' . $room->room_number);
+        HMS_Activity_Log::log_activity($_REQUEST['username'], ACTIVITY_ASSIGNED, Current_User::getUsername(), HMS_Term::get_selected_term() . ' ' . $hall->hall_name . ' ' . $room->room_number);
 
         # Show a success message
         return HMS_Assignment::show_assign_student('Successfully assigned ' . $_REQUEST['username'] . ' to ' . $hall->hall_name . ' room ' . $room->room_number . $more);
@@ -365,15 +365,14 @@ class HMS_Assignment extends HMS_Item
         }
 
         $assignment = HMS_Assignment::get_assignment($username, HMS_Term::get_selected_term());
-        
+            
         # Attempt to unassign the student in Banner though SOAP
-        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
-        $banner_result = HMS_SOAP::remove_room_assignment(
-            $username,
+        $banner_result = HMS_Process_Remove_Unit::queue_remove_assignment(
+            $_REQUEST['username'],
             HMS_Term::get_selected_term(),
             $assignment->get_banner_building_code(),
             $assignment->get_banner_bed_id());
-
+        
         # Show an error and return if there was an error
         if($banner_result != 0) {
             $error_msg = "Error: Banner returned error code: $banner_result. Please contact ESS immediately. $username was not removed.";

@@ -607,11 +607,18 @@ function hms_update(&$content, $currentVersion)
 
             $content[] = '+ Maintenance template was phoned in, now properly updated';
         case version_compare($currentVersion, '0.2.8', '<'):
+            $db = &new PHPWS_DB;
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_8.sql');
+            if(PEAR::isError($result)) {
+                return $result;
+            }
+
             $files[] = 'templates/admin/select_room.tpl';
             $files[] = 'template/admin/edit_room.tpl';
             PHPWS_Boost::updatefiles($files, 'hms');
 
             $content[] = '+ Room selection for editing rooms now works';
+            $content[] = '+ Added Queue system for "offline" editing of assignments';
             $content[] = '+ Room editing also works now';
     }
 

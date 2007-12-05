@@ -137,6 +137,19 @@ CREATE TABLE hms_assignment (
     primary key(id)
 );
 
+CREATE TABLE hms_assignment_queue (
+    id              integer NOT NULL,
+    action          integer NOT NULL,
+    asu_username    character varying(32) NOT NULL,
+    building_code   character varying(6) NOT NULL,
+    bed_code        character varying(15) NOT NULL,
+    meal_option     smallint default 0,
+    term            integer NOT NULL REFERENCES hms_term(term),
+    queued_on       integer NOT NULL,
+    queued_by       integer NOT NULL,
+    primary key(id)
+);
+
 CREATE TABLE hms_deadlines (
     student_login_begin_timestamp           integer NOT NULL,
     student_login_end_timestamp             integer NOT NULL,
