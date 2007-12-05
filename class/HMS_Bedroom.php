@@ -220,6 +220,18 @@ class HMS_Bedroom extends HMS_Item {
     }
 
     /**
+     * Returns an array of bed objects
+     */
+    function get_beds()
+    {
+        if(!$this->loadBeds()) {
+            return false;
+        }
+
+        return $this->_beds;
+    }
+
+    /**
      * Returns an array of bed objects in this bedroom that have vacancies
      */
     function get_beds_with_vacancies()

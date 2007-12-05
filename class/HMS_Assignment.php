@@ -244,11 +244,22 @@ class HMS_Assignment extends HMS_Item
         if(!$room) {
             return HMS_Assignment::show_assign_student(NULL, 'Error: There was a problem creating the room object. Please contact ESS.');
         }
-        
-        # Create the bed object
-        $bed = new HMS_Bed($_REQUEST['bed']);
-        if(!$bed){
-            return HMS_Assignment::show_assign_student(NULL, 'Error: There was a problem creating the bed object. Please contact ESS.');
+
+        # Make sure the room has a vacancy
+        if(!$room->has_vacancy()){
+            return HMS_Assignment::show_assign_student(NULL, 'Error: The room is full.');
+        }
+
+        # Find a vacant bed
+        $bedrooms = $room->get_bedrooms();
+        foreach($bedrooms as $bedroom){
+            $beds = $bedroom->get_beds();
+            foreach($beds as $bed){
+                if($bed->has_vacancy()){
+                    $vacant_bed = $bed;
+                    break;
+                }
+            }
         }
 
         # Create application object
@@ -257,11 +268,6 @@ class HMS_Assignment extends HMS_Item
             return HMS_Assignment::show_assign_student(NULL, 'There was an error loading the student\'s application. Please contact ESS.');
         }
         
-        # Make sure that bed is empty
-        if(!$bed->has_vacancy()){
-            return HMS_Assignment::show_assign_student(NULL, 'Error: The selected bed is not vacant.');
-        }
-
         # Check to make sure the student has an application on file
         $application_status = HMS_Application::check_for_application($_REQUEST['username'], HMS_Term::get_selected_term());
 
@@ -322,7 +328,7 @@ class HMS_Assignment extends HMS_Item
             $_REQUEST['username'],
             HMS_Term::get_selected_term(),
             $hall->banner_building_code,
-            $bed->banner_id,
+            $vacant_bed->banner_id,
             $meal_plan['plan'],
             $meal_plan['meal']
             );
@@ -335,7 +341,7 @@ class HMS_Assignment extends HMS_Item
         $assignment = new HMS_Assignment();
 
         $assignment->asu_username   = $_REQUEST['username'];
-        $assignment->bed_id         = $_REQUEST['bed'];
+        $assignment->bed_id         = $vacant_bed->id;
         $assignment->term           = HMS_Term::get_selected_term();
 
         $result = $assignment->save();
