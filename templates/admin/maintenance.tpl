@@ -48,7 +48,6 @@
             <br /> 
             <h2><i>{ASSIGNMENT_LABEL}</i></h2>
             &nbsp;&nbsp;&nbsp;{CREATE_ASSIGNMENT}<br />
-            &nbsp;&nbsp;&nbsp;{MOVE_ASSIGNMENT}<br />
             &nbsp;&nbsp;&nbsp;{DELETE_ASSIGNMENT}<br />
             &nbsp;&nbsp;&nbsp;{ASSIGN_BY_FLOOR}<br />
             <br />

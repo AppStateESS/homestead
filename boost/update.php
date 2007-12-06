@@ -614,6 +614,7 @@ function hms_update(&$content, $currentVersion)
             }
 
             $files[] = 'templates/admin/select_room.tpl';
+            $files[] = 'template/admin/maintenance.tpl';
             $files[] = 'templates/admin/edit_room.tpl';
             PHPWS_Boost::updatefiles($files, 'hms');
 
@@ -622,10 +623,15 @@ function hms_update(&$content, $currentVersion)
             $content[] = '+ Room editing also works now';
 
         case version_compare($currentVersion, '0.2.9', '<'):
+            $files[] = 'templates/admin/select_room.tpl';
+            $files[] = 'templates/admin/edit_room.tpl';
             $files[] = 'templates/admin/maintenance.tpl';
+            $files[] = 'template/admin/assignment_pager_by_room.tpl';
             PHPWS_Boost::updatefiles($files, 'hms');
 
             $content[] = '+ Added queue items to Maintenance panel';
+            $content[] = '+ Removed "move student" link';
+            $content[] = '+ Added assignment pager to room edit page';
     }
 
     return TRUE;

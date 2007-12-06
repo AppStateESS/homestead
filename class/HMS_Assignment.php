@@ -535,6 +535,45 @@ class HMS_Assignment extends HMS_Item
         $tpl['MESSAGE'] = 'Please enter an ASU username to unassign:';
         return PHPWS_Template::process($tpl, 'hms', 'admin/unassign_student.tpl');
     }
+
+    function assignment_pager_by_room($room_id){
+        PHPWS_Core::initCoreClass('DBPager.php');
+
+        $pager = & new DBPager('hms_assignment', 'HMS_Assignment');
+
+        $pager->db->addJoin('LEFT OUTER', 'hms_assignment', 'hms_bed', 'bed_id', 'id');
+        $pager->db->addJoin('LEFT OUTER', 'hms_bed', 'hms_bedroom', 'bedroom_id', 'id');
+        $pager->db->addJoin('LEFT OUTER', 'hms_bedroom', 'hms_room', 'room_id', 'id');
+
+        $pager->addWhere('hms_room.id', $room_id);
+
+        $page_tags['NAME_LABEL']    = "Name";
+        $page_tags['ACTION_LABEL']  = "Action";
+        $page_tags['TABLE_TITLE']   = "Current Assignments";
+
+        $pager->setModule('hms');
+        $pager->setTemplate('admin/assignment_pager_by_room.tpl');
+        $pager->setLink('index.php?module=hms');
+        $pager->setEmptyMessage("No assignments found.");
+        $pager->addToggle('class="toggle1"');
+        $pager->addToggle('class="toggle2"');
+        $pager->addRowTags('getPagerByRoomTags');
+        $pager->addPageTags($page_tags);
+       
+        return $pager->get();
+    }
+
+    function getPagerByRoomTags(){
+        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+        
+        $tags['NAME']       = HMS_SOAP::get_full_name($this->asu_username);
+
+        $reassign_link = PHPWS_Text::secureLink('Re-Assign','hms', array('module'=>'hms', 'type'=>'assignment', 'op'=>'show_assign_student', 'username'=>$this->asu_username)); 
+        $unassign_link = PHPWS_Text::secureLink('Unassign', 'hms', array('module'=>'hms', 'type'=>'assignment', 'op'=>'show_unassign_student', 'username'=>$this->asu_username));
+        $tags['ACTION']     = $reassign_link . ' | ' . $unassign_link;
+
+        return $tags;
+    }
      
     /**************************
      * Static Utility Methods *

@@ -584,6 +584,7 @@ class HMS_Room extends HMS_Item
 
         # Setup the form
         $form = &new PHPWS_Form;
+        $form->setMethod('get');
         $form->addDropBox('residence_hall', $halls);
         $form->setLabel('residence_hall', 'Residence hall: ');
         $form->setMatch('residence_hall', 0);
@@ -626,6 +627,7 @@ class HMS_Room extends HMS_Item
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
         PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
         PHPWS_Core::initModClass('hms', 'HMS_Suite.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
         PHPWS_Core::initModClass('hms', 'HMS_Pricing_Tier.php');
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
@@ -753,7 +755,7 @@ class HMS_Room extends HMS_Item
         $form->addSubmit('submit', 'Submit');
 
         # TODO: add an assignment pager here
-        #$tpl['ASSIGNMENT_PAGER'] = HMS_Assignment::assignment_page_by_room($room->id);
+        $tpl['ASSIGNMENT_PAGER'] = HMS_Assignment::assignment_pager_by_room($room->id);
 
         if(isset($success)){
             $tpl['SUCCESS_MSG'] = $success;
