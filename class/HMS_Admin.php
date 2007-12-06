@@ -157,7 +157,6 @@ class HMS_Admin
                 } else {
                     return "Unrecognized Op $op";
                 }
-                break;
         } else {
                 return "Unrecognized Queue {$_REQUEST['queue']}";
         }
