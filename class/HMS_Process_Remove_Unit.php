@@ -61,7 +61,8 @@ class HMS_Process_Remove_Unit extends HMS_Process_Unit {
             return $entry->process();
         }
 
-        $entry->save();
+        if(!$entry->save())
+            return "DB Error";
 
         return 0;
     }
