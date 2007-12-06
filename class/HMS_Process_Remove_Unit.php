@@ -51,7 +51,7 @@ class HMS_Process_Remove_Unit extends HMS_Process_Unit {
 
     function queue_remove_assignment($username, $term, $bldg, $bed)
     {
-        $entry                = new HMS_Process_Assign_Unit();
+        $entry                = new HMS_Process_Remove_Unit();
         $entry->asu_username  = $username;
         $entry->building_code = $bldg;
         $entry->bed_code      = $bed;
