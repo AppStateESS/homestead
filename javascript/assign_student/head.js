@@ -5,8 +5,6 @@ var res_hall_drop   = 'phpws_form_residence_hall';
 var floor_drop      = 'phpws_form_floor';
 var room_drop       = 'phpws_form_room';
 
-var baseURL = "http://blackfoot.appstate.edu/~jbooker/fallout/";
-
 var xmlHttp;
 
 function handle_hall_change()
@@ -31,7 +29,7 @@ function handle_hall_change()
     setSingleOption(floor_drop, "Loading...");
     
     // Assemble the necessary URL
-    var requestURL = baseURL + '?mod=hms&type=xml&op=get_floors_with_vacancies&hall_id=' + hallId;
+    var requestURL = document.location + '?mod=hms&type=xml&op=get_floors_with_vacancies&hall_id=' + hallId;
 
     //alert('request URL: ' + requestURL);
 
@@ -106,7 +104,7 @@ function handle_floor_change()
     setSingleOption(room_drop, "Loading...");
     
     // Assemble the necessary URL
-    var requestURL = baseURL + '?mod=hms&type=xml&op=get_rooms_with_vacancies&floor_id=' + floorId;
+    var requestURL = document.location + '?mod=hms&type=xml&op=get_rooms_with_vacancies&floor_id=' + floorId;
     
     //alert('request URL: ' + requestURL);
     

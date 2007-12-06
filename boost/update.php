@@ -627,6 +627,8 @@ function hms_update(&$content, $currentVersion)
             $files[] = 'templates/admin/edit_room.tpl';
             $files[] = 'templates/admin/maintenance.tpl';
             $files[] = 'template/admin/assignment_pager_by_room.tpl';
+            $files[] = 'javascript/assign_student/head.js';
+            $fiels[] = 'javascript/select_room/head.js';
             PHPWS_Boost::updatefiles($files, 'hms');
 
             $content[] = '+ Added queue items to Maintenance panel';
