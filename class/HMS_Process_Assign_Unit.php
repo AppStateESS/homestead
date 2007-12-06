@@ -34,24 +34,6 @@ class HMS_Process_Assign_Unit extends HMS_Process_Unit {
         return true;
     }
 
-    function queue_enabled()
-    {
-        return PHPWS_Settings::get('hms', 'assign_queue_enabled');
-    }
-
-    function enable_queue()
-    {
-        PHPWS_Settings::set('hms', 'assign_queue_enabled', TRUE);
-        PHPWS_Settings::save('hms');
-    }
-
-    function disable_queue()
-    {
-        // TODO: If not empty, error
-        PHPWS_Settings::set('hms', 'assign_queue_enabled', FALSE);
-        PHPWS_Settings::save('hms');
-    }
-
     function queue_create_assignment($username, $term, $bldg, $bed, $mealplan, $mealcode)
     {
         $entry                = new HMS_Process_Assign_Unit();
@@ -62,7 +44,7 @@ class HMS_Process_Assign_Unit extends HMS_Process_Unit {
         $entry->meal_code     = $mealcode;
         $entry->term          = $term;
 
-        if(!HMS_Process_Assign_Unit::queue_enabled()) {
+        if(!HMS_Process_Unit::assign_queue_enabled()) {
             return $entry->process();
         }
 

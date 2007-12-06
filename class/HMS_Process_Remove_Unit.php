@@ -31,24 +31,6 @@ class HMS_Process_Remove_Unit extends HMS_Process_Unit {
         return true;
     }
 
-    function queue_enabled()
-    {
-        return PHPWS_Settings::get('hms', 'remove_queue_enabled');
-    }
-
-    function enable_queue()
-    {
-        PHPWS_Settings::set('hms', 'remove_queue_enabled', TRUE);
-        PHPWS_Settings::save('hms');
-    }
-
-    function disable_queue()
-    {
-        // TODO: If not empty, error
-        PHPWS_Settings::set('hms', 'remove_queue_enabled', FALSE);
-        PHPWS_Settings::save('hms');
-    }
-
     function queue_remove_assignment($username, $term, $bldg, $bed)
     {
         $entry                = new HMS_Process_Remove_Unit();
@@ -57,7 +39,7 @@ class HMS_Process_Remove_Unit extends HMS_Process_Unit {
         $entry->bed_code      = $bed;
         $entry->term          = $term;
 
-        if(!HMS_Process_Remove_Unit::queue_enabled()) {
+        if(!HMS_Process_Unit::assign_queue_enabled()) {
             return $entry->process();
         }
 

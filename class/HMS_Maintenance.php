@@ -264,15 +264,6 @@ class HMS_Maintenance
                     _('Enable Assignment Queue'), 'hms',
                     array('type'=>'queue', 'queue'=>'assign', 'op'=>'enable'));
             }
-            if(HMS_Process_Remove_Unit::queue_enabled()) {
-                $tpl['REMOVE_QUEUE'] = PHPWS_Text::secureLink(
-                    _('Disable Removal Queue'), 'hms',
-                    array('type'=>'queue', 'queue'=>'remove', 'op'=>'disable'));
-            } else {
-                $tpl['REMOVE_QUEUE'] = PHPWS_Text::secureLink(
-                    _('Enable Removal Queue'), 'hms',
-                    array('type'=>'queue', 'queue'=>'remove', 'op'=>'enable'));
-            }
             //TODO: Process Queues
         }
 

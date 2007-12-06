@@ -148,28 +148,17 @@ class HMS_Admin
     function handle_queues()
     {
         $op = $_REQUEST['op'];
-        switch($_REQUEST['queue']) {
-            case 'assign':
+        if($_REQUEST['queue'] == 'assign') {
                 PHPWS_Core::initModClass('hms', 'HMS_Process_Assign_Unit.php');
                 if($op == 'enable') {
-                    HMS_Process_Assign_Unit::enable_queue();
+                    HMS_Process_Unit::enable_assign_queue();
                 } else if($op == 'disable') {
-                    HMS_Process_Assign_Unit::disable_queue();
+                    HMS_Process_Unit::disable_assign_queue();
                 } else {
                     return "Unrecognized Op $op";
                 }
                 break;
-            case 'remove':
-                PHPWS_Core::initModClass('hms', 'HMS_Process_Remove_Unit.php');
-                if($op == 'enable') {
-                    HMS_Process_Remove_Unit::enable_queue();
-                } else if($op == 'disable') {
-                    HMS_Process_Remove_Unit::disable_queue();
-                } else {
-                    return "Unrecognized Op $op";
-                }
-                break;
-            default:
+        } else {
                 return "Unrecognized Queue {$_REQUEST['queue']}";
         }
 

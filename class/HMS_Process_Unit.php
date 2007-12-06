@@ -57,6 +57,24 @@ class HMS_Process_Unit {
         return $this->id;
     }
 
+    function assign_queue_enabled()
+    {
+        return PHPWS_Settings::get('hms', 'assign_queue_enabled');
+    }
+
+    function enable_assign_queue()
+    {
+        PHPWS_Settings::set('hms', 'assign_queue_enabled', TRUE);
+        PHPWS_Settings::save('hms');
+    }
+
+    function disable_assign_queue()
+    {
+        // TODO: If not empty, error
+        PHPWS_Settings::set('hms', 'assign_queue_enabled', FALSE);
+        PHPWS_Settings::save('hms');
+    }
+
 }
 
 ?>

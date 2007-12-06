@@ -53,7 +53,6 @@
             <br />
             <h2><i>{BANNER_LABEL}</i></h2>
             &nbsp;&nbsp;&nbsp;{ASSIGN_QUEUE}<br />
-            &nbsp;&nbsp;&nbsp;{REMOVE_QUEUE}<br />
             <br />
             <h2><i>{ROOMMATE_LABEL}</i></h2>
             &nbsp;&nbsp;&nbsp;{CREATE_ROOMMATE_GROUP}<br />
