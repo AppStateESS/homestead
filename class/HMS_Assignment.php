@@ -297,6 +297,7 @@ class HMS_Assignment extends HMS_Item
             $assignment = HMS_Assignment::get_assignment($_REQUEST['username'], HMS_Term::get_selected_term());
             
             # Attempt to unassign the student in Banner though SOAP
+            PHPWS_Core::initModClass('hms', 'HMS_Process_Remove_Unit.php');
             $banner_result = HMS_Process_Remove_Unit::queue_remove_assignment(
                 $_REQUEST['username'],
                 HMS_Term::get_selected_term(),
@@ -324,7 +325,8 @@ class HMS_Assignment extends HMS_Item
         $meal_plan = HMS_SOAP::get_plan_meal_codes($_REQUEST['username'], $hall->banner_building_code, $application->getMealOption());
 
         # Send this off to the queue for assignment in banner
-        $banner_success = HMS_Assignment_Queue::queue_assignment(
+        PHPWS_Core::initModClass('hms', 'HMS_Process_Assign_Unit.php');
+        $banner_success = HMS_Process_Assign_Unit::queue_create_assignment(
             $_REQUEST['username'],
             HMS_Term::get_selected_term(),
             $hall->banner_building_code,
