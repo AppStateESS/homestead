@@ -547,6 +547,10 @@ class HMS_Assignment extends HMS_Item
         $pager->db->addJoin('LEFT OUTER', 'hms_bedroom', 'hms_room', 'room_id', 'id');
 
         $pager->addWhere('hms_room.id', $room_id);
+        $pager->addWhere('hms_assignment.deleted', 0);
+        $pager->addWhere('hms_bed.deleted', 0);
+        $pager->addWhere('hms_bedroom.deleted', 0);
+        $pager->addWhere('hms_room.deleted', 0);
 
         $page_tags['NAME_LABEL']    = "Name";
         $page_tags['ACTION_LABEL']  = "Action";
