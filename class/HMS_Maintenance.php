@@ -252,6 +252,33 @@ class HMS_Maintenance
                 _('Download Most Recent CSV'), 'hms',
                 array('type'=>'letter', 'op'=>'csv'));
 
+        if(Current_User::allow('hms', 'admin'))
+            $tpl['BANNER_LABEL'] = 'Banner Connection';
+
+        PHPWS_Core::initModClass('hms', 'HMS_Process_Assign_Unit.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Process_Remove_Unit.php');
+        if(Current_User::allow('hms', 'admin')) {
+            if(HMS_Process_Assign_Unit::queue_enabled()) {
+                $tpl['ASSIGN_QUEUE'] = PHPWS_Text::secureLink(
+                    _('Disable Assignment Queue'), 'hms',
+                    array('type'=>'queue', 'queue'=>'assign', 'op'=>'disable'));
+            } else {
+                $tpl['ASSIGN_QUEUE'] = PHPWS_Text::secureLink(
+                    _('Enable Assignment Queue'), 'hms',
+                    array('type'=>'queue', 'queue'=>'assign', 'op'=>'enable'));
+            }
+            if(HMS_Process_Remove_Unit::queue_enabled()) {
+                $tpl['REMOVE_QUEUE'] = PHPWS_Text::secureLink(
+                    _('Disable Removal Queue'), 'hms',
+                    array('type'=>'queue', 'queue'=>'remove', 'op'=>'disable'));
+            } else {
+                $tpl['REMOVE_QUEUE'] = PHPWS_Text::secureLink(
+                    _('Enable Removal Queue'), 'hms',
+                    array('type'=>'queue', 'queue'=>'remove', 'op'=>'enable'));
+            }
+            //TODO: Process Queues
+        }
+
        $content = PHPWS_Template::process($tpl, 'hms', 'admin/maintenance.tpl');
         return $content;
     }

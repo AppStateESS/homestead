@@ -614,12 +614,18 @@ function hms_update(&$content, $currentVersion)
             }
 
             $files[] = 'templates/admin/select_room.tpl';
-            $files[] = 'template/admin/edit_room.tpl';
+            $files[] = 'templates/admin/edit_room.tpl';
             PHPWS_Boost::updatefiles($files, 'hms');
 
             $content[] = '+ Room selection for editing rooms now works';
             $content[] = '+ Added Queue system for "offline" editing of assignments';
             $content[] = '+ Room editing also works now';
+
+        case version_compare($currentVersion, '0.2.9', '<'):
+            $files[] = 'templates/admin/maintenance.tpl';
+            PHPWS_Boost::updatefiles($files, 'hms');
+
+            $content[] = '+ Added queue items to Maintenance panel';
     }
 
     return TRUE;

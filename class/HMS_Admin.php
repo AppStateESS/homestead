@@ -113,6 +113,16 @@ class HMS_Admin
                 PHPWS_Core::initModClass('hms', 'HMS_Letter.php');
                 $final = HMS_Letter::main();
                 break;
+            case 'queue':
+                $result = HMS_Admin::handle_queue();
+                if($result !== TRUE) {
+                    $final = $result;
+                    break;
+                }
+                PHPWS_Core::initModClass('hms', 'HMS_Maintenance.php');
+                $_REQUEST['op'] = 'show_maintenance_options';
+                $final = HMS_Maintenance::main();
+                break;
             default:
                 PHPWS_Core::initModClass('hms', 'HMS_Maintenance.php');
                 $_REQUEST['op'] = 'show_maintenance_options';
@@ -133,6 +143,37 @@ class HMS_Admin
         $links[] = PHPWS_Text::secureLink(_('Logout'), 'users', array('action'=>'user', 'command'=>'logout'));
 
         MiniAdmin::add('hms', $links);
+    }
+
+    function handle_queues()
+    {
+        $op = $_REQUEST['op'];
+        switch($_REQUEST['queue']) {
+            case 'assign':
+                PHPWS_Core::initModClass('hms', 'HMS_Process_Assign_Unit.php');
+                if($op == 'enable') {
+                    HMS_Process_Assign_Unit::enable_queue();
+                } else if($op == 'disable') {
+                    HMS_Process_Assign_Unit::disable_queue();
+                } else {
+                    return "Unrecognized Op $op";
+                }
+                break;
+            case 'remove':
+                PHPWS_Core::initModClass('hms', 'HMS_Process_Remove_Unit.php');
+                if($op == 'enable') {
+                    HMS_Process_Remove_Unit::enable_queue();
+                } else if($op == 'disable') {
+                    HMS_Process_Remove_Unit::disable_queue();
+                } else {
+                    return "Unrecognized Op $op";
+                }
+                break;
+            default:
+                return "Unrecognized Queue {$_REQUEST['queue']}";
+        }
+
+        return TRUE;
     }
 
     /**

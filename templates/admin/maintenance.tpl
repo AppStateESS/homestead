@@ -52,6 +52,10 @@
             &nbsp;&nbsp;&nbsp;{DELETE_ASSIGNMENT}<br />
             &nbsp;&nbsp;&nbsp;{ASSIGN_BY_FLOOR}<br />
             <br />
+            <h2><i>{BANNER_LABEL}</i></h2>
+            &nbsp;&nbsp;&nbsp;{ASSIGN_QUEUE}<br />
+            &nbsp;&nbsp;&nbsp;{REMOVE_QUEUE}<br />
+            <br />
             <h2><i>{ROOMMATE_LABEL}</i></h2>
             &nbsp;&nbsp;&nbsp;{CREATE_ROOMMATE_GROUP}<br />
             &nbsp;&nbsp;&nbsp;{EDIT_ROOMMATE_GROUP}<br />
