@@ -114,7 +114,7 @@ class HMS_Admin
                 $final = HMS_Letter::main();
                 break;
             case 'queue':
-                $result = HMS_Admin::handle_queue();
+                $result = HMS_Admin::handle_queues();
                 if($result !== TRUE) {
                     $final = $result;
                     break;
