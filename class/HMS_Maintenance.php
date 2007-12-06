@@ -255,7 +255,7 @@ class HMS_Maintenance
         PHPWS_Core::initModClass('hms', 'HMS_Process_Assign_Unit.php');
         PHPWS_Core::initModClass('hms', 'HMS_Process_Remove_Unit.php');
         if(Current_User::allow('hms', 'admin')) {
-            if(HMS_Process_Assign_Unit::queue_enabled()) {
+            if(HMS_Process_Unit::assign_queue_enabled()) {
                 $tpl['ASSIGN_QUEUE'] = PHPWS_Text::secureLink(
                     _('Disable Assignment Queue'), 'hms',
                     array('type'=>'queue', 'queue'=>'assign', 'op'=>'disable'));
