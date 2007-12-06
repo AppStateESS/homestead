@@ -575,7 +575,7 @@ class HMS_Room extends HMS_Item
         # Show an error if there are no halls for the current term
         if($halls == NULL){
             $tpl['ERROR_MSG'] = 'Error: No halls exist for the selected term. Please create a hall first.';
-            return PHPWS_Template::process($tpl, 'hms', 'admin_select_floor.tpl');
+            return PHPWS_Template::process($tpl, 'hms', 'admin/select_room.tpl');
         }
 
         $halls[0] = 'Select...';
