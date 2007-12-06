@@ -634,6 +634,15 @@ function hms_update(&$content, $currentVersion)
             $content[] = '+ Added queue items to Maintenance panel';
             $content[] = '+ Removed "move student" link';
             $content[] = '+ Added assignment pager to room edit page';
+
+        case version_compare($currentVersion, '0.2.10', '<'):
+            $db = &new PHPWS_DB;
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_10.sql');
+            if(PEAR::isError($result)) {
+                return $result;
+            }
+
+            $content[] = '+ Fixed "DB Error" in queued assignments';
     }
 
     return TRUE;
