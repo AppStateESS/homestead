@@ -57,7 +57,7 @@ class HMS_Process_Remove_Unit extends HMS_Process_Unit {
         $entry->bed_code      = $bed;
         $entry->term          = $term;
 
-        if(!HMS_Process_Remove_Unit.php::queue_enabled()) {
+        if(!HMS_Process_Remove_Unit::queue_enabled()) {
             return $entry->process();
         }
 
