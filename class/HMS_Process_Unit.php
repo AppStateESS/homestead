@@ -57,4 +57,6 @@ class HMS_Process_Unit {
         return $this->id;
     }
 
+}
+
 ?>
