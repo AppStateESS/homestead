@@ -5,6 +5,8 @@
  * @author Jeff Tickle <jtickle at tux dot appstate dot edu>
  */
 
+PHPWS_Core::initModClass('hms', 'HMS_Process_Unit.php');
+
 class HMS_Process_Remove_Unit extends HMS_Process_Unit {
     var $asu_username = null;
     var $building_code = null;

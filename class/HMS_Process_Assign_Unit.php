@@ -6,6 +6,8 @@
  * @author Jeff Tickle <jtickle at tux dot appstate dot edu>
  */
 
+PHPWS_Core::initModClass('hms', 'HMS_Process_Unit.php');
+
 class HMS_Process_Assign_Unit extends HMS_Process_Unit {
     var $asu_username = null;
     var $building_code = null;
@@ -60,8 +62,8 @@ class HMS_Process_Assign_Unit extends HMS_Process_Unit {
         $entry->meal_code     = $mealcode;
         $entry->term          = $term;
 
-        if(!queue_enabled()) {
-            return $entry->process()
+        if(!HMS_Process_Assign_Unit::queue_enabled()) {
+            return $entry->process();
         }
 
         $entry->save();
