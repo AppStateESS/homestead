@@ -375,6 +375,7 @@ class HMS_Assignment extends HMS_Item
         $assignment = HMS_Assignment::get_assignment($username, HMS_Term::get_selected_term());
             
         # Attempt to unassign the student in Banner though SOAP
+        PHPWS_Core::initModClass('hms', 'HMS_Process_Remove_Unit.php');
         $banner_result = HMS_Process_Remove_Unit::queue_remove_assignment(
             $_REQUEST['username'],
             HMS_Term::get_selected_term(),
