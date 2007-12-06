@@ -366,7 +366,14 @@ class HMS_Maintenance
 
     function main()
     {
-        switch($_REQUEST['op'])
+
+        if(!isset($_REQUEST['op'])){
+            $op = $_REQUEST['op'];
+        }else{
+            return HMS_Maintenance::show_options();
+        }
+
+        switch($op)
         {
             case 'show_maintenance_options':
                 return HMS_Maintenance::show_options();
