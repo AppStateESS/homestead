@@ -759,7 +759,7 @@ class HMS_Room extends HMS_Item
 
         if($is_in_suite){
             # Room is in a suite
-            $tpl['IS_IN_SUITE'] = 'Yes';
+            $tpl['IS_IN_SUITE'] = PHPWS_Text::secureLink('Yes', 'hms', array('type'=>'suite', 'op'=>'show_edit_suite', 'suite'=>$room->suite_id));
             
             # Create the suite and get the rooms in it
             $suite = new HMS_Suite($room->suite_id);
