@@ -1,6 +1,6 @@
 <div class="hms">
   <div class="box">
-    <div class="box-title"> <h1>{TITLE}</h1> </div>
+    <div class="{TITLE_CLASS}"> <h1>{TITLE}</h1> </div>
     <div class="box-content">
         <!-- BEGIN error_msg -->
         <font color="red">{ERROR_MSG}<br /></font>
@@ -90,7 +90,6 @@
             </tr>
             <!-- END suite -->
         </table>
-        <br />
         {SUBMIT}
         <br /><br />
         {ASSIGNMENT_PAGER}

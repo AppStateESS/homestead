@@ -266,6 +266,14 @@ class HMS_Maintenance
             //TODO: Process Queues
         }
 
+        # Suite editing
+        $tpl['SUITE_LABEL'] = 'Suite Options';
+        if(Current_User::allow('hms', 'admin')){
+            $tpl['EDIT_SUITE'] = PHPWS_Text::secureLink(
+                _('Edit Suite'), 'hms',
+                array('type'=>'suite', 'op'=>'show_select_suite'));
+        }
+
        $content = PHPWS_Template::process($tpl, 'hms', 'admin/maintenance.tpl');
         return $content;
     }

@@ -25,6 +25,9 @@
             &nbsp;&nbsp;&nbsp;{DELETE_ROOM}<br />
             &nbsp;&nbsp;&nbsp;{EDIT_ROOM}<br />
             <br />
+            <h2><i>{SUITE_LABEL}</i></h2>
+            &nbsp;&nbsp;&nbsp;{EDIT_SUITE}<br />
+            <br />
             <h2><i>{LC_LABEL}</i></h2>
             &nbsp;&nbsp;&nbsp;{ADD_LEARNING_COMMUNITY}<br />
     <!--        &nbsp;&nbsp;&nbsp;{EDIT_LEARNING_COMMUNITY}<br />-->

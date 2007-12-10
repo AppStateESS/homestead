@@ -212,6 +212,7 @@ class HMS_Floor extends HMS_Item
 
         $db = new PHPWS_DB('hms_room');
         $db->addWhere('floor_id', $this->id);
+        $db->addOrder('room_number', 'ASC');
         switch ($deleted) {
             case -1:
                 $db->addWhere('deleted', 1);

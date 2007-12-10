@@ -44,6 +44,9 @@ class HMS_XML{
             case 'get_beds_with_vacancies':
                 HMS_XML::getBedsWithVacancies($_REQUEST['bedroom_id']);
                 break;
+            case 'get_suites':
+                HMS_XML::getSuites($_REQUEST['floor_id']);
+                break;
             default:
                 # No such 'op', or no 'op' specified
                 # TODO: Find a way to throw an error here
@@ -368,6 +371,54 @@ class HMS_XML{
 
     }
 
+    function getSuites($floor_id)
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
+        
+        $floor = &new HMS_Floor($floor_id);
+
+        $suites = $floor->get_suites();
+
+        if(!$suites){
+            // throw an error
+        }
+
+        $xml_rooms = array();
+
+        foreach($suites as $suite){
+            $rooms = $suite->get_rooms();
+            
+            unset($room_nums);
+            foreach ($rooms as $room){
+                $room_nums[] =  $room->room_number;
+            }
+            sort($room_nums);
+            $room_list = implode(', ', $room_nums);
+            
+            $xml_suites[] = array('id' => $suite->id, 'room_list' => $room_list);
+        }
+
+        asort($xml_suites);
+
+        $serializer_options = array (
+            'addDecl' => TRUE,
+            'encoding' => 'ISO-8859-1',
+            'indent' => '  ',
+            'rootName' => 'suites',
+            'defaultTagName' => 'suite',);
+
+        $serializer = &new XML_Serializer($serializer_options);
+
+        $status = $serializer->serialize($xml_suites);
+
+        if(PEAR::isError($status)){
+            die($status->getMessage());
+        }
+
+        header('Content-type: text/xml');
+        echo $serializer->getSerializedData();
+        exit;
+    }
 }
 
 ?>

@@ -470,6 +470,14 @@ class HMS_Room extends HMS_Item
             return FALSE;
         }
     }
+    
+    function getRoomPagerBySuiteTags()
+    {
+        $tpl['ROOM_NUMBER'] = PHPWS_Text::secureLink($this->room_number, 'hms', array('type'=>'room', 'op'=>'show_edit_room', 'room'=>$this->id));
+        $tpl['ACTION']      = "Remove";
+
+        return $tpl;
+    }
 
     /******************
      * Static Methods *
@@ -527,7 +535,7 @@ class HMS_Room extends HMS_Item
         # If they're not equal, call 'can_change_gender' function
         if($room->gender_type != $_REQUEST['gender_type']){
             if(!$room->can_change_gender($_REQUEST['gender_type'])){
-                return HMS_Room::show_edit_room($room->id,NULL, 'Error: incompatible genders detected. No changes were made.');
+                return HMS_Room::show_edit_room($room->id,NULL, 'Error: Incompatible genders detected. No changes were made.');
            }
         }
 
@@ -549,6 +557,33 @@ class HMS_Room extends HMS_Item
        }
 
        return HMS_Room::show_edit_room($room->id, 'Room updated successfully.');
+    }
+    
+    function get_room_pager_by_suite($suite_id)
+    {
+        PHPWS_Core::initCoreClass('DBPager.php');
+
+        $pager = & new DBPager('hms_room', 'HMS_Room');
+
+        $pager->addWhere('hms_room.suite_id', $suite_id);
+        $pager->addWhere('hms_room.deleted', 0);
+
+        $page_tags['ROOM_NUMBER_LABEL'] = "Room Number";
+        $page_tags['ACTION_LABEL']      = "Action";
+        $page_tags['TABLE_TITLE']       = "Rooms In Suite";
+
+        $pager->setModule('hms');
+        $pager->setTemplate('admin/room_pager_by_suite.tpl');
+        $pager->setLink('index.php?module=hms');
+        $pager->setEmptyMessage("No rooms found.");
+        $pager->addToggle('class="toggle1"');
+        $pager->addToggle('class="toggle2"');
+        $pager->addRowTags('getRoomPagerBySuiteTags');
+        $pager->addPageTags($page_tags);
+
+        $pager->initialize();
+
+        return $pager->get();
     }
     
     /*********************
@@ -622,8 +657,6 @@ class HMS_Room extends HMS_Item
 
     function show_edit_room($room_id = NULL, $success = null, $error = null)
     {
-        #require(PHPWS_SOURCE_DIR . 'mod/hms/inc/defines.php');
-        
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
         PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
         PHPWS_Core::initModClass('hms', 'HMS_Suite.php');
@@ -696,7 +729,7 @@ class HMS_Room extends HMS_Item
             if($number_of_assignees != 0){
                 $tpl['GENDER_REASON'] = 'Remove occupants to change room gender.';
             }else if($is_in_suite){
-                $tpl['GENDER_REASON'] = 'Use the suite inteface to change room gender.';
+                $tpl['GENDER_REASON'] = PHPWS_Text::secureLink('Edit the suite', 'hms', array('type'=>'suite', 'op'=>'show_edit_suite', 'suite'=>$room->suite_id)) . ' to change room gender.';
             }
         }
         
