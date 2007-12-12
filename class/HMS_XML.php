@@ -47,6 +47,9 @@ class HMS_XML{
             case 'get_suites':
                 HMS_XML::getSuites($_REQUEST['floor_id']);
                 break;
+            case 'get_username_suggestions':
+                HMS_XML::get_username_suggestions($_REQUEST['username']);
+                break;
             default:
                 # No such 'op', or no 'op' specified
                 # TODO: Find a way to throw an error here
@@ -418,6 +421,39 @@ class HMS_XML{
         header('Content-type: text/xml');
         echo $serializer->getSerializedData();
         exit;
+    }
+
+    function get_username_suggestions($username)
+    {
+        $db = new PHPWS_DB('hms_application');
+
+        $db->addColumn('hms_student_id');
+
+        $db->addWhere('hms_student_id', $username . '%', 'ILIKE');
+        $db->addOrder('hms_student_id', 'ASC');
+        $db->setLimit(5);
+
+        $results = $db->select('col');
+
+        $serializer_options = array (
+            'addDecl' => TRUE,
+            'encoding' => 'ISO-8859-1',
+            'indent' => '  ',
+            'rootName' => 'suggestions',
+            'defaultTagName' => 'suggestion',);
+
+        $serializer = &new XML_Serializer($serializer_options);
+
+        $status = $serializer->serialize($results);
+
+        if(PEAR::isError($status)){
+            die($status->getMessage());
+        }
+
+        header('Content-type: text/xml');
+        echo $serializer->getSerializedData();
+        exit;
+        
     }
 }
 

@@ -647,6 +647,11 @@ function hms_update(&$content, $currentVersion)
             PHPWS_Boost::updatefiles($files, 'hms');
             $content[] = '+ Added ability to edit suites.';
             $content[] = '+ Fixed "DB Error" in queued assignments';
+       case version_compare($currentVersion, '0.2.11', '<'):
+            $files[] = 'templates/css/autosuggest.css';
+            $files[] = 'javascript/autosuggest/autosuggest.js';
+            $files[] = 'javascript/autosuggest/head.js';
+            $files[] = 'javascript/autosuggest/zxml.js';
     }
 
     return TRUE;
