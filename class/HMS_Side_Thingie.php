@@ -266,6 +266,9 @@ class HMS_Side_Thingie {
 
     function set_verify()
     {
+        # Great feature... unfortunately, it's totally unimplemented, and I just don't have the time.
+        return;
+
         # If this is the step we're on, then set style accordingly
         $on_this_step = FALSE;
         if($this->step == HMS_SIDE_STUDENT_ROOMMATE){
