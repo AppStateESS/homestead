@@ -92,17 +92,18 @@ class HMS_Bed extends HMS_Item {
             return false;
         } else {
             foreach ($result as $ass) {
-                if (!$ass->deleted) {
+                if ($ass->deleted == 1) {
+                    $this->_prev_assignment[] = $ass;
+                } else {
                     if ($assignment_found) {
                         PHPWS_Error::log(HMS_MULTIPLE_ASSIGNMENTS, 'hms', 'HMS_Bed::loadAssignment', 
                                          sprintf('A=%s,B=%s', $ass->id, $this->id));
                     } else {
-                        $this->_curr_assignment = & $ass;
+                        $this->_curr_assignment = $ass;
                         $assignment_found = true;
                     }
-                } else {
-                    $this->_prev_assignment[] = & $ass;
                 }
+                if($this->id == 912) { test($ass, FALSE, TRUE); test($this, FALSE, TRUE); }
             }
         }
     }
