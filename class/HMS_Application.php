@@ -176,7 +176,7 @@ class HMS_Application {
             if(!PEAR::isError($result)) {
                 PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
                 PHPWS_Core::initModClass('hms', 'HMS_Term.php');
-                $plancode = get_plan_meal_codes($_SESSION['asu_username'], 'lawl', $this->getMealOption());
+                $plancode = HMS_SOAP::get_plan_meal_codes($_SESSION['asu_username'], 'lawl', $this->getMealOption());
                 $result = HMS_SOAP::report_application_received($_SESSION['asu_username'], HMS_Term::get_current_term(), $plancode['plan'], $plancode['meal']);
             }
         }else{
