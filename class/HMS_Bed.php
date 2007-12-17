@@ -103,7 +103,6 @@ class HMS_Bed extends HMS_Item {
                         $assignment_found = true;
                     }
                 }
-                if($this->id == 912) { test($ass, FALSE, TRUE); test($this, FALSE, TRUE); }
             }
         }
     }
