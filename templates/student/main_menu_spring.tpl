@@ -41,7 +41,8 @@
         {ROOMMATE_LINK}
       </li>
     </ul>
-    
+
+<!-- BEGIN STUDENT_VERIFY -->
     <h2>3. Check Your Housing Status</h2>
     {VERIFY_INTRO}
     <ul>
@@ -50,6 +51,7 @@
         {VERIFY_LINK}
       </li>
     </ul>
+<!-- END STUDENT_VERIFY -->
 
     <br /><br />
 

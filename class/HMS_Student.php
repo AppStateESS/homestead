@@ -711,9 +711,10 @@ class HMS_Student {
          $tags['ROOMMATE_MSG'] = 'If you would like to request a roommate, follow the link below.  Please note that this step is optional, and due to limited housing availability, we can NOT guarantee that your roommate request will be honored for the Spring semester.';
          $tags['ROOMMATE_LINK'] = PHPWS_Text::secureLink(_('Request A Roommate'), 'hms', array('type'=>'student', 'op'=>'spring_roommate_hack'));
         
+        # The following is entirely unimplemented and I don't have time to do it and Housing doesn't seem to want it anyway... we're going to do it eventually, but probably not for 200810
         /*********************
          * Verify Assignment *
-         ********************/
+         ********************
          $tags['VERIFY_INTRO'] = 'Once the assignment process is complete, you can verify your assignment and roommate selection.';
 
         # Check deadlines for verify assignment
@@ -724,7 +725,7 @@ class HMS_Student {
             $tags['VERIFY_MSG'] = 'It is too early to view your assignment. You will be able to view your assignment on ' . HMS_Deadlines::get_deadline_as_date('view_assignment_begin_timestamp', $deadlines) . '.';
         }else{
             $tags['VERIFY_MSG'] = 'It is too late to view your assignment. The deadline past on ' . HMS_Deadlines::get_deadline_as_date('view_assignment_end_timestamp', $deadlines) . '.';
-        }
+        }*/
 
 
         # Logout link
