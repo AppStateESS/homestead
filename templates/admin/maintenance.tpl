@@ -64,9 +64,9 @@
             <h2><i>{PURGE_DATA}</i></h2>
             <br />
             <h2><i>{AUTOASSIGN_LABEL}</i></h2>
-            &nbsp;&nbsp;&nbsp;{FILL_QUEUE}<br />
+<!--            &nbsp;&nbsp;&nbsp;{FILL_QUEUE}<br />
             &nbsp;&nbsp;&nbsp;{VIEW_QUEUE}<br />
-            &nbsp;&nbsp;&nbsp;{CLEAR_QUEUE}<br />
+            &nbsp;&nbsp;&nbsp;{CLEAR_QUEUE}<br />-->
             &nbsp;&nbsp;&nbsp;{ASSIGN}<br />
             <br />
             <h2><i>{LETTERS_LABEL}</i></h2>

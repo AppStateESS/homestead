@@ -154,6 +154,84 @@ class HMS_Bed extends HMS_Item {
 
         return FALSE;
     }
+
+    function get_all_empty_beds($init = FALSE)
+    {
+        /*$db = new PHPWS_DB('hms_bed');
+        $db->addJoin('left', 'hms_bed', 'hms_bedroom', 'bedroom_id', 'id');
+        $db->addJoin('left', 'hms_bedroom', 'hms_room', 'room_id', 'id');
+        $db->addJoin('left', 'hms_room', 'hms_floor', 'floor_id', 'id');
+        $db->addJoin('left', 'hms_floor', 'hms_residence_hall', 'residence_hall_id', 'id');
+        $db->addJoin('left outer', 'hms_bed', 'hms_assignment', 'id', 'bed_id');
+        $db->addWhere('hms_bed.deleted', 0);
+        $db->addWhere('hms_bedroom.deleted', 0);
+        $db->addWhere('hms_room.deleted', 0);
+        $db->addWhere('hms_room.is_online', 1);
+        $db->addWhere('hms_room.is_reserved', 0);
+        $db->addWhere('hms_room.is_medical', 0);
+        $db->addWhere('hms_room.ra_room', 0);
+        $db->addWhere('hms_room.private_room', 0);
+        $db->addWhere('hms_floor.deleted', 0);
+        $db->addWhere('hms_floor.is_online', 1);
+        $db->addWhere('hms_residence_hall.deleted', 0);
+        $db->addWhere('hms_residence_hall.is_online', 1);
+        $db->addWhere('hms_assignment.asu_username', null);
+        $db->addColumn('hms_bed.*');
+        $db->addColumn('hms_room.gender_type');
+        $results = $db->select();*/
+
+        $sql = "
+            SELECT
+                hms_bed.*,
+                hms_room.gender_type,
+                hms_residence_hall.banner_building_code
+            FROM 
+                hms_bed
+                JOIN hms_bedroom        ON hms_bed.bedroom_id          = hms_bedroom.id
+                JOIN hms_room           ON hms_bedroom.room_id         = hms_room.id
+                JOIN hms_floor          ON hms_room.floor_id           = hms_floor.id
+                JOIN hms_residence_hall ON hms_floor.residence_hall_id = hms_residence_hall.id
+                LEFT OUTER JOIN (
+                    SELECT * FROM hms_assignment WHERE deleted = 0
+                ) AS a_prime ON hms_bed.id = a_prime.bed_id
+            WHERE
+                hms_bed.deleted              = 0 AND
+                hms_bedroom.deleted          = 0 AND
+                hms_room.deleted             = 0 AND
+                hms_room.is_online           = 1 AND
+                hms_room.is_reserved         = 0 AND
+                hms_room.is_medical          = 0 AND
+                hms_room.ra_room             = 0 AND
+                hms_room.private_room        = 0 AND
+                hms_floor.deleted            = 0 AND
+                hms_floor.is_online          = 1 AND
+                hms_residence_hall.deleted   = 0 AND
+                hms_residence_hall.is_online = 1 AND
+                a_prime.asu_username IS NULL
+            ";
+
+        $results = PHPWS_DB::getAll($sql);
+
+        $beds = array();
+        $beds['0'] = array();
+        $beds['1'] = array();
+        foreach($results as $result) {
+            $bed = new HMS_Bed();
+            $bed->id = $result['id'];
+            $bed->banner_id = $result['banner_id'];
+
+            // Is there a better way to do this?  Hell yes.  Unfortunately the only
+            // one I can think of is WAY THE HELL less efficient.  We MUST work on
+            // our object-relational mapping sometime.  TODO!!!
+            $hack['bed'] = $bed;
+            $hack['hall'] = $result['banner_building_code'];
+
+            $beds[$result['gender_type']][] = $hack;
+        }
+
+        return $beds;
+    }
+        
 }
 
 ?>

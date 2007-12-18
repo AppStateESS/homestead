@@ -44,8 +44,10 @@ class HMS_Application {
 
         if(isset($hms_student_id)){
             $this->setStudentID($hms_student_id);
-        }else{
+        }else if(isset($_SESSION['asu_username'])){
             $this->setStudentID($_SESSION['asu_username']);
+        }else{
+            return;
         }
         
         $result = $this->init();
@@ -652,6 +654,21 @@ class HMS_Application {
                 is_numeric($_REQUEST['preferred_bedtime']) &&
                 is_numeric($_REQUEST['room_condition']) &&
                 is_numeric($_REQUEST['rlc_interest']));
+    }
+
+    function get_unassigned_applicants()
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+        
+        $db = new PHPWS_DB('hms_application');
+        $db->addJoin('left outer', 'hms_application', 'hms_assignment', 'hms_student_id', 'asu_username');
+        $db->addWhere('hms_application.term', HMS_Term::get_current_term());
+        $db->addWhere('hms_assignment.asu_username', null);
+        for($i = 0; $i < func_num_args(); $i++) {
+            $db->addOrder(func_get_arg($i));
+        }
+        
+        return $db->getObjects('HMS_Application');
     }
 
     /****************************

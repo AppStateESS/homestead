@@ -99,7 +99,9 @@ class HMS_Pending_Assignment
             case 'clear':
                 return HMS_Pending_Assignment::clear();
             case 'assign':
-                return HMS_Pending_Assignment::doIt();
+                PHPWS_Core::initModClass('hms', 'HMS_Autoassigner.php');
+                return HMS_Autoassigner::auto_assign();
+                #return HMS_Pending_Assignment::doIt();
             default:
                 return $_REQUEST['op'];
         }
@@ -110,6 +112,14 @@ class HMS_Pending_Assignment
      */
     function auto_pair()
     {
+        PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
+        $beds = HMS_Bed::get_all_empty_beds();
+        test(count($beds[0]));
+        test(count($beds[1]));
+        test(count($beds[2]));
+        test($beds,1);
+        exit();
+
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
 
@@ -122,6 +132,7 @@ class HMS_Pending_Assignment
         $issues = array();
 
         // Requested Roommates
+        /*
         $sql = "
             SELECT roommate_zero,
                    roommate_one,
@@ -190,7 +201,59 @@ class HMS_Pending_Assignment
             }
 
             HMS_Pending_Assignment::add($zero,$one,TRUE);
+        }*/
+
+        // We were going to disallow roommate selection for spring... and of course,
+        // software requirements are about as static as Wikipedia's page on George W.
+        // Bush... so here's a hack.  Delete all this shit ASAP.
+        PHPWS_Core::initCoreClass("Database.php");
+        $db = new PHPWS_DB('hms_roommate_hack');
+        $db->addTable('hms_application', 'zero');
+        $db->addTable('hms_application', 'one');
+        $db->addColumn('hms_roommate_hack.requestor');
+        $db->addColumn('hms_roommate_hack.requestee_username');
+        $db->addColumn('zero.gender',           NULL, 'zero_gender');
+        $db->addColumn('one.gender',            NULL, 'one_gender');
+        $db->addColumn('zero.lifestyle_option', NULL, 'zero_lifestyle');
+        $db->addColumn('one.lifestyle_option',  NULL, 'one_lifestyle');
+        $db->addColumn('zero.meal_option',      NULL, 'zero_meal');
+        $db->addColumn('one.meal_option',       NULL, 'one_meal');
+        $db->addColumn('zero.student_status',   NULL, 'zero_status');
+        $db->addColumn('one.student_status',    NULL, 'one_status');
+        $db->addJoin('left', 'hms_roommate_hack', 'zero', 'requestor', 'hms_student_id');
+        $db->addJoin('left', 'hms_roommate_hack', 'one',  'requestor', 'hms_student_id');
+        $results = $db->select('all');
+
+        // Error checking; TODO: this should be done better
+        if(PHPWS_Error::isError($row)) {
+            test($row, 1);
         }
+
+        foreach($results as $result)
+        {
+            $zero['hms_student_id']   = $result['roommate_zero'];
+            $zero['gender']           = $result['zero_gender'];
+            $zero['lifestyle_option'] = $result['zero_lifestyle_option'];
+            $zero['meal_option']      = $result['zero_meal_option'];
+            $zero['student_status']   = $result['zero_student_status'];
+            $one['hms_student_id']    = $result['roommate_one'];
+            $one['gender']            = $result['one_gender'];
+            $one['lifestyle_option']  = $result['one_lifestyle_option'];
+            $one['meal_option']       = $result['one_meal_option'];
+            $one['student_status']    = $result['one_student_status'];
+
+            if(!HMS_Pending_Assignment::eligible_for_queue($zero['hms_student_id'])) {
+                continue;
+            }
+
+            if(!HMS_Pending_Assignment::eligible_for_queue($one['hms_student_id'])) {
+                continue;
+            }
+
+            HMS_Pending_Assignment::add($zero,$one,TRUE);
+        }
+
+        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
 
         // Singletons
         $db = new PHPWS_DB('hms_application');
@@ -202,6 +265,7 @@ class HMS_Pending_Assignment
         $db->addColumn('hms_student_id');
         $db->addColumn('meal_option');
         $db->addWhere('student_status',1);
+        $db->addWhere('term', HMS_Term::get_current_term());
         $db->addOrder('gender');
         $db->addOrder('lifestyle_option');
         $db->addOrder('preferred_bedtime');

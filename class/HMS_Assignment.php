@@ -185,6 +185,20 @@ class HMS_Assignment extends HMS_Item
         return !is_null($db->select('row'));
     }
 
+    /**
+     * Creates a new HMS_Assignment object, and appropriately assigns the student.  Also takes care
+     * of any fussy SOAP business.
+     *
+     * Returns the HMS_Assignment object, or FALSE if there was any error (like someone was
+     * already assigned)
+     *
+    function create_assignment($asu_username, $term, $bed_id, $meal)
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+
+        $meal_plan = HMS_SOAP::get_plan_meal_codes($asu_username, 
+    }*/
+
     function get_assignment($asu_username, $term = NULL)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
