@@ -635,7 +635,7 @@ function hms_update(&$content, $currentVersion)
             $content[] = '+ Removed "move student" link';
             $content[] = '+ Added assignment pager to room edit page';
             
-       case version_compare($currentVersion, '0.2.10', '<'):
+        case version_compare($currentVersion, '0.2.10', '<'):
             $files[] = 'templates/admin/maintenance.tpl';
             $files[] = 'templates/admin/edit_room.tpl';
             $files[] = 'templates/admin/select_suite.tpl';
@@ -647,11 +647,17 @@ function hms_update(&$content, $currentVersion)
             PHPWS_Boost::updatefiles($files, 'hms');
             $content[] = '+ Added ability to edit suites.';
             $content[] = '+ Fixed "DB Error" in queued assignments';
-       case version_compare($currentVersion, '0.2.11', '<'):
-            $files[] = 'templates/css/autosuggest.css';
+            
+        case version_compare($currentVersion, '0.2.12', '<'):
             $files[] = 'javascript/autosuggest/autosuggest.js';
             $files[] = 'javascript/autosuggest/head.js';
             $files[] = 'javascript/autosuggest/zxml.js';
+            $files[] = 'templates/css/autosuggest.css';
+            $files[] = '/templates/admin/maintenance.tpl';
+
+            PHPWS_Boost::updatefiles($files, 'hms');
+            $content[] = 'Autoassigner baby!';
+            $content[] = 'Autocompletion for usernames';
     }
 
     return TRUE;
