@@ -935,7 +935,7 @@ class HMS_Residence_Hall extends HMS_Item
                             # There is an assignment, so print it
                             $username = $bed->_curr_assignment->asu_username;
                             $name = HMS_SOAP::get_full_name($username);
-                            $link = PHPWS_Text::secureLink($name, 'hms', array('type'=>'student', 'op'=>'get_matching_students', 'username'=>$username));
+                            $link = PHPWS_Text::secureLink($name, 'hms', array('type'=>'student', 'op'=>'get_matching_students', 'username'=>$username)) . " (<em>$username</em>)";
                             $content .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bedroom: ' . $bedroom->bedroom_letter . '&nbsp;&nbsp;&nbsp;&nbsp;Bed: ' . $bed->bed_letter . '&nbsp;&nbsp;&nbsp;&nbsp;' . $link . '<br />';
                         }else{
                             # No one is assigned here
