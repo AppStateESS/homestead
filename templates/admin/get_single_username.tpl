@@ -12,7 +12,7 @@
             </tr>
         </table>
         <br /><br />
-        {SUBMIT}
+        {SUBMIT_BUTTON}
     </div>
   </div>
 </div>

@@ -198,6 +198,10 @@ AutoSuggestControl.prototype.handleKeyDown = function (oEvent /*:Event*/) {
             if (oEvent.preventDefault) {
                 oEvent.preventDefault();
             }
+            //alert(document.getElementById('student_search_form'));
+            var form = document.getElementById('student_search_form');
+            alert(form.id );
+            form.submit();
             break;
     }
 

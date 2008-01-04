@@ -2463,11 +2463,11 @@ class HMS_Form
         javascript('/modules/hms/autosuggest');
         Layout::addStyle('hms', 'css/autosuggest.css');
         
-        $form = &new PHPWS_Form;
+        $form = &new PHPWS_Form('student_search_form');
         $form->addText('username');
         $form->setExtra('username', 'autocomplete="off" ');
         
-        $form->addSubmit('submit', _('Submit'));
+        $form->addSubmit('submit_button', _('Submit'));
 
         $form->addHidden('module', 'hms');
         $form->addHidden('type', 'student');

@@ -4,7 +4,7 @@
 //<![CDATA[
 
 window.onload = function () {
-                var oTextbox = new AutoSuggestControl(document.getElementById("phpws_form_username"), new SuggestionProvider());        
+                var oTextbox = new AutoSuggestControl(document.getElementById('student_search_form_username'), new SuggestionProvider());
             }
 
 
