@@ -419,7 +419,7 @@ SuggestionProvider.prototype.requestSuggestions = function (oAutoSuggestControl 
     };
 
     //send the request
-    oXHR.send();
+    oXHR.send("");
 
 };
 
