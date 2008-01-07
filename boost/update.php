@@ -679,7 +679,23 @@ function hms_update(&$content, $currentVersion)
             
         case version_compare($currentVersion, '0.2.14', '<'):
             $db = &new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_14.sql');
+            
+            $result = $db->query('ALTER TABLE hms_floor DROP COLUMN ft_movein;');
+            if(PEAR::isError($result)) {
+                return $result;
+            }
+            
+            $result = $db->query('ALTER TABLE hms_floor DROP COLUMN c_movein;');
+            if(PEAR::isError($result)) {
+                return $result;
+            }
+
+            $result = $db->query('ALTER TABLE hms_floor ADD COLUMN ft_movein_time_id smallint REFERENCES hms_movein_time(id);');
+            if(PEAR::isError($result)) {
+                return $result;
+            }
+            
+            $result = $db->query('ALTER TABLE hms_floor ADD COLUMN rt_movein_time_id smallint REFERENCES hms_movein_time(id);');
             if(PEAR::isError($result)) {
                 return $result;
             }
