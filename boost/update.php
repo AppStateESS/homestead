@@ -677,7 +677,7 @@ function hms_update(&$content, $currentVersion)
 
             PHPWS_Boost::updatefiles($files, 'hms');
             
-        case $version_compare($currentVersion, '0.2.14', '<'):
+        case version_compare($currentVersion, '0.2.14', '<'):
             $db = &new PHPWS_DB;
             $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_14.sql');
             if(PEAR::isError($result)) {
