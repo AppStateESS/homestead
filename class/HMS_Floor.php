@@ -666,8 +666,18 @@ class HMS_Floor extends HMS_Item
        # Grab all the input from the form and save the floor
        $floor->gender_type = $_REQUEST['gender_type'];
        if(isset($_REQUEST['is_online'])) $floor->is_online = 1;
-       $floor->ft_movein_time_id = $_REQUEST['ft_movein_time'];
-       $floor->rt_movein_time_id = $_REQUEST['rt_movein_time'];
+
+       if($_REQUEST['ft_movein_time'] == 0){
+           $floor->ft_movein_time_id = NULL;
+       }else{
+           $floor->ft_movein_time_id = $_REQUEST['ft_movein_time'];
+       }
+
+       if($_REQUEST['rt_movein_time'] == 0){
+           $floor->rt_movein_time_id = NULL;
+       }else{
+           $floor->rt_movein_time_id = $_REQUEST['rt_movein_time'];
+       }
 
        $result = $floor->save();
 
@@ -787,11 +797,21 @@ class HMS_Floor extends HMS_Item
         //$form->setLabel('is_online', array(_('No'), _('Yes') ));
         $form->setMatch('is_online', $floor->is_online);
 
-        $form->addDropBox('ft_movein_time', HMS_Movein_Time::get_movein_times_array());
-        $form->setMatch('ft_movein_time', $floor->ft_movein_time_id);
+        $movein_times = HMS_Movein_Time::get_movein_times_array();
 
-        $form->addDropBox('rt_movein_time', HMS_Movein_time::get_movein_times_array());
-        $form->setMatch('rt_movein_ime', $floor->rt_movein_time_id);
+        $form->addDropBox('ft_movein_time', $movein_times);
+        if(!isset($floor->ft_movein_time_id)){
+            $form->setMatch('ft_movein_time', 0);
+        }else{
+            $form->setMatch('ft_movein_time', $floor->ft_movein_time_id);
+        }
+        
+        $form->addDropBox('rt_movein_time', $movein_times);
+        if(!isset($floor->rt_movein_time_id)){
+            $form->setMatch('rt_movein_time', 0);
+        }else{
+            $form->setMatch('rt_movein_time', $floor->rt_movein_time_id);
+        }
 
         $form->addHidden('type', 'floor');
         $form->addHidden('op', 'edit_floor');
