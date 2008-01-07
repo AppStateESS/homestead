@@ -69,6 +69,9 @@
             &nbsp;&nbsp;&nbsp;{CLEAR_QUEUE}<br />-->
             &nbsp;&nbsp;&nbsp;{ASSIGN}<br />
             <br />
+            <h2><i>{MOVEIN_TIMES_LABEL}</i></h2>
+            &nbsp;&nbsp;&nbsp;{EDIT_MOVEIN_TIMES}<br />
+            <br />
             <h2><i>{LETTERS_LABEL}</i></h2>
             &nbsp;&nbsp;&nbsp;{GENERATE_UPDATED_LETTERS}<br />
             &nbsp;&nbsp;&nbsp;{DOWNLOAD_PDF}<br />

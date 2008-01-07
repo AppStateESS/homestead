@@ -21,10 +21,6 @@
                 <th align="left">{FLOOR_LABEL}</th>
                 <td>{FLOOR}</td>
             </tr>
-            <tr>
-                <th align="left">{ROOM_LABEL}</th>
-                <td>{ROOM}</td>
-            </tr>
         </table>
         <br />
         {SUBMIT}

@@ -16,6 +16,8 @@ class HMS_Floor extends HMS_Item
     var $residence_hall_id;
     var $is_online;
     var $gender_type;
+    var $ft_movein_time_id;
+    var $rt_movein_time_id;
 
     /**
      * List of rooms associated with this floor
@@ -276,32 +278,40 @@ class HMS_Floor extends HMS_Item
      * In the case that we're attempting to change the gender of just
      * 'this' floor, set $ignore_upper to TRUE to avoid checking the
      * parent hall's gender.
+     * TODO: rewrite this because the behavior changed
      */
-    #TODO: Implement the $ignore_upper flag.
     function can_change_gender($target_gender, $ignore_upper = FALSE)
     {
-        if ($target_gender != COED) {
-            $this->loadRooms();
-            if ($this->_rooms) {
-                foreach ($this->_rooms as $room) {
-                    // If the bedroom gender type is not coed and the bedroom gt
-                    // does not equal the target gender, we return false
-                    if ($room->gender_type != COED && $room->gender_type != $target_gender) {
-                        return false;
-                    }
-                }
+        # Ignore upper is true, we're trying to change a hall/floor
+        if($ignore_upper){
+            # If ignore upper is true and the target gender is coed, then
+            # we can always return true.
+            if($target_gender == COED){
+                return true;
             }
-        }
 
-        if (!$ignore_upper) {
-            if (!$this->loadHall()) {
-                // an error occurred loading the hall, check logs
+            # If the target gender is not the same, and someone is assigned
+            # here, then the gender can't be changed
+            # TODO: make this check for males/females on the floor
+            #       and allow for gender changes if everyone assigned
+            #       is of the target gender.
+            if(($target_gener != $this->gender_type) && ($this->get_number_of_assignees() != 0)){
                 return false;
             }
-            // If the floor is not coed and the gt is not the target, return false
-            if ($this->_hall->gender_type != COED && $this->_hall->gender_type != $target_gender) {
+        }else{
+            # Ignore upper is FALSE, load the hall and compare
+
+            if(!$this->loadHall()){
+                // an error occured loading the hall
                 return false;
             }
+
+            # If the hall is not coed and the gt is not the target, then return false
+            if($this->_hall->gender_type != COED && $this->_hall->gender_type != $target_gender) {
+                return false;
+            }
+
+            return true;
         }
     }
 
@@ -425,6 +435,10 @@ class HMS_Floor extends HMS_Item
         $db->addWhere('hms_floor.id', $this->id);
 
         $result = $db->select('count');
+
+        if($result == 0){
+            return $result;
+        }
         
         if(!$result || PHPWS_Error::logIfError($result)){
             return false;
@@ -558,7 +572,20 @@ class HMS_Floor extends HMS_Item
      */
     function main()
     {
-
+        switch($_REQUEST['op'])
+        {
+            case 'show_select_floor':
+                return HMS_Floor::show_select_floor('Edit Floor', 'floor', 'show_edit_floor');
+                break;
+            case 'show_edit_floor':
+                return HMS_Floor::show_edit_floor();
+                break;
+            case 'edit_floor':
+                return HMS_Floor::edit_floor();
+            default:
+                echo "Undefined room op: {$_REQUEST['op']}";
+                break;
+        }
     }
 
     /******************
@@ -575,136 +602,172 @@ class HMS_Floor extends HMS_Item
 
     }
 
-    /*******************
-     * Mutator Methods *
-     ******************/
+    function edit_floor()
+    {
+       # Create the floor object gien the floor id
+       $floor = new HMS_Floor($_REQUEST['floor_id']);
+       if(!$floor){
+           return show_select_floor('Edit Floor', 'floor', 'show_edit_floor', NULL, 'Error: The selected floor does not exist.');
+       }
 
-    function set_id($id){
-        $this->id = $id;
+       # Compare the floor's gender and the gender the user selected
+       # If they're not equal, call 'can_change_gender' function
+       if($floor->gender_type != $_REQUEST['gender_type']){
+           if(!$floor->can_change_gender($_REQUEST['gender_type'])){
+               return HMS_Floor::show_edit_floor($floor->id, NULL, 'Error: Incompatible genders detected. No changes were made.');
+           }
+       }
+
+       # Grab all the input from the form and save the floor
+       $floor->gender_type = $_REQUEST['gender_type'];
+       if(isset($_REQUEST['is_online'])) $floor->is_online = 1;
+       $floor->ft_movein_time_id = $_REQUEST['ft_movein_time'];
+       $floor->rt_movein_time_id = $_REQUEST['rt_movein_time'];
+
+       $result = $floor->save();
+
+       if(!$result || PHPWS_Error::logIfError($result)){
+           return HMS_Floor::show_edit_floor($floor->id, NULL, 'Error: There was a problem saving the floor. No changes were made. Please contact ESS.');
+       }
+
+       return HMS_Floor::show_edit_floor($floor->id, 'Floor Update successfully.');
     }
 
-    function get_id(){
-        return $this->id;
-    }
+    /**************
+     * UI Methods *
+     *************/
+    function show_select_floor($title, $type, $op, $success = NULL, $error = NULL)
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
+        PHPWS_Core::initCoreClass('Form.php');
 
-    function set_term($term){
-        $this->term = $term;
-    }
+        javascript('/modules/hms/select_floor');
+        
+        $tpl = array();
 
-    function get_term(){
-        return $this->term;
-    }
+        # Setup the title and color of the title bar
+        $tpl['TITLE'] = $title;
+        $tpl['TITLE_CLASS'] = HMS_Util::get_title_class();
 
-    function set_floor_number($num){
-        $this->floor_number = $num;
-    }
+        # Get the halls for the selected term
+        $halls = HMS_Residence_Hall::get_halls_array(HMS_Term::get_selected_term());
 
-    function get_floor_number(){
-        return $this->floor_number;
-    }
-
-    function set_residence_hall_id($id){
-        $this->residence_hall_id = $id;
-    }
-
-    function get_residence_hall_id(){
-        return $this->residence_hall_id;
-    }
-
-    function set_is_online($status){
-        $this->is_online = $status;
-    }
-
-    function get_is_online(){
-        return $this->is_online;
-    }
-
-    function set_gender_type($gender){
-        $this->gender_type = $gender;
-    }
-
-    function get_gender_type(){
-        return $this->gender_type;
-    }
-    
-    function set_added_by($user_id = NULL){
-        if(isset($user_id)){
-            $this->added_by = $user_id;
-        }else{
-            $this->added_by = Current_User::getId();
+        # Show an error if there are no halls for the current term
+        if($halls == NULL){
+            $tpl['ERROR_MSG'] = 'Error: No halls exist for the selected term. Please create a hall first.';
+            return PHPWS_Template::process($tpl, 'hms', 'admin/select_room.tpl');
         }
-    }
 
-    function get_added_by(){
-        return $this->added_by;
-    }
+        $halls[0] = 'Select...';
 
-    function set_added_on($timestamp = NULL){
-        if(isset($timestamp)){
-            $this->added_on = $timestamp;
-        }else{
-            $this->added_on = mktime();
+        $tpl['MESSAGE'] = 'Please select a floor: ';
+
+        # Setup the form
+        $form = &new PHPWS_Form;
+        $form->setMethod('get');
+        $form->addDropBox('residence_hall', $halls);
+        $form->setLabel('residence_hall', 'Residence hall: ');
+        $form->setMatch('residence_hall', 0);
+        $form->setExtra('residence_hall', 'onChange="handle_hall_change()"');
+
+        $form->addDropBox('floor', array(0 => ''));
+        $form->setLabel('floor', 'Floor: ');
+        $form->setExtra('floor', 'onChange="handle_floor_change()" disabled');
+
+        $form->addSubmit('submit', 'Select');
+        $form->setExtra('submit', 'disabled');
+
+        # Use the type and op that was passed in
+        $form->addHidden('module', 'hms');
+        $form->addHidden('type', $type);
+        $form->addHidden('op', $op);
+
+        $form->mergeTemplate($tpl);
+        $tpl = $form->getTemplate();
+
+        if(isset($error)){
+            $tpl['ERROR_MSG'] = $error;
         }
-    }
 
-    function get_added_on(){
-        return $this->added_on;
-    }
-
-    function set_updated_by($user_id = NULL){
-        if(isset($user_id)){
-            $this->updated_by = $user_id;
-        }else{
-            $this->updated_by = Current_User::getId();
+        if(isset($success)){
+            $tpl['SUCCESS_MSG'] = $success;
         }
+        
+        return PHPWS_Template::process($tpl, 'hms', 'admin/select_floor.tpl');
     }
 
-    function get_updated_by(){
-        return $this->updated_by;
-    }
-
-    function set_updated_on($timestamp = NULL){
-        if(isset($timestamp)){
-            $this->updated_on = $timestamp;
-        }else{
-            $this->updated_on = mktime();
+    function show_edit_floor($floor_id = NULL, $success = null, $error = null)
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Room.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Movein_Time.php');
+        
+        # Determine the floor id. If the passed in variable is NULL,
+        # then use the $_REQUEST
+        if(!isset($floor_id)){
+            $floor_id = $_REQUEST['floor'];
         }
-    }
 
-    function get_updated_on(){
-        return $this->updated_on;
-    }
+        # Setup the title and color of the title bar
+        $tpl['TITLE'] = 'Edit Floor';
+        $tpl['TITLE_CLASS'] = HMS_Util::get_title_class();
 
-    function set_deleted_by($user_id = NULL){
-        if(isset($user_id)){
-            $this->deleted_by = $user_id;
-        }else{
-            $this->deleted_by = Current_User::getId();
+        # Create the floor object given the floor_id
+        $floor = new HMS_Floor($floor_id);
+        if(!$floor){
+            return HMS_Floor::show_select_floor('Edit Floor', 'floor', 'show_select_floor', NULL, 'Error: The select floor does not exist!');
         }
-    }
 
-    function get_deleted_by(){
-        return $this->deleted_by;
-    }
-
-    function set_deleted_on($timestamp = NULL){
-        if(isset($timestamp)){
-            $this->deleted_on = $timestamp;
-        }else{
-            $this->deleted_on = mktime();
+        # Create the parent object
+        $hall = $floor->get_parent();
+        if(!$hall){
+            $tpl['ERROR_MSG'] = 'There was an error getting the hall object. Please contact ESS.';
+            return PHPWS_Template::process($tpl, 'hms', 'admin/edit_floor.tpl');
         }
-    }
 
-    function get_deleted_on(){
-        return $this->deleted_on;
-    }
+        $form = &new PHPWS_Form;
+        
+        $tpl['HALL_NAME']           = $hall->hall_name;
+        $tpl['FLOOR_NUMBER']        = $floor->floor_number;
+        $tpl['NUMBER_OF_ROOMS']     = $floor->get_number_of_rooms();
+        $tpl['NUMBER_OF_BEDS']      = $floor->get_number_of_beds();
+        $tpl['NUMBER_OF_ASSIGNEES'] = $floor->get_number_of_assignees();
 
-    function set_deleted($del = 1){
-        $this->deleted = $del;
-    }
+        $form->addDropBox('gender_type', array(FEMALE => FEMALE_DESC, MALE => MALE_DESC));
+        $form->setMatch('gender_type', $floor->gender_type);
+        
+        $form->addCheck('is_online', 1);
+        //$form->setLabel('is_online', array(_('No'), _('Yes') ));
+        $form->setMatch('is_online', $floor->is_online);
 
-    function get_deleted(){
-        return $this->deleted;
+        $form->addDropBox('ft_movein_time', HMS_Movein_Time::get_movein_times_array());
+        $form->setMatch('ft_movein_time', $floor->ft_movein_time_id);
+
+        $form->addDropBox('rt_movein_time', HMS_Movein_time::get_movein_times_array());
+        $form->setMatch('rt_movein_ime', $floor->rt_movein_time_id);
+
+        $form->addHidden('type', 'floor');
+        $form->addHidden('op', 'edit_floor');
+        $form->addHidden('floor_id', $floor->id);
+
+        $form->addSubmit('submit_form', 'Submit');
+
+        $tpl['ROOM_PAGER'] = HMS_Room::room_pager_by_floor($floor->id);
+        
+        if(isset($success)){
+            $tpl['SUCCESS_MSG'] = $success;
+        }
+
+        if(isset($error)){
+            $tpl['ERROR_MSG'] = $error;
+        }
+
+        $form->mergeTemplate($tpl);
+        $tpl = $form->getTemplate();
+        
+        return PHPWS_Template::process($tpl, 'hms', 'admin/edit_floor.tpl');
     }
 }
 ?>

@@ -1,4 +1,3 @@
-
 /**
  * An autosuggest textbox control.
  * @class
@@ -198,7 +197,6 @@ AutoSuggestControl.prototype.handleKeyDown = function (oEvent /*:Event*/) {
             if (oEvent.preventDefault) {
                 oEvent.preventDefault();
             }
-            var form = document.getElementById('student_search_form').submit();
             break;
     }
 
@@ -420,7 +418,7 @@ SuggestionProvider.prototype.requestSuggestions = function (oAutoSuggestControl 
     };
 
     //send the request
-    oXHR.send("");
+    oXHR.send();
 
 };
 

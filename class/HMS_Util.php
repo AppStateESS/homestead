@@ -52,6 +52,32 @@ class HMS_Util{
     }
 
     /**
+     * Returns an array of hours 12 hour format, indexed in 24 hour
+     */
+    function get_hours(){
+        $hours = array();
+
+        $hours[0] = '12 AM';
+
+        for($i=1; $i < 24; $i++){            
+            $hours[$i] = $i;
+
+            if($i == 12){
+                $hours[12] = "12 PM";
+                continue;
+            }
+
+            if($i >= 12){
+                $hours[$i] = $i-12 . ' PM';
+            }else{
+                $hours[$i] = "$i AM";
+            }
+        }
+
+        return $hours;
+    }
+
+    /**
      * Return a date in the format dd-mm-yy given a timestamp
      *
      * @param int $timestamp
@@ -60,7 +86,7 @@ class HMS_Util{
         if(!isset($timestamp))
             $timestamp = mktime();
      
-        return date("j-n-y");
+        return date('j-n-y', $timestamp);
     }
 
     /**
@@ -72,7 +98,7 @@ class HMS_Util{
         if(!isset($timestamp))
             $timestamp = mktime();
 
-        return date("j-n-Y");
+        return date('j-n-Y', $timestamp);
     }
 
     /**
@@ -84,7 +110,21 @@ class HMS_Util{
         if(!isset($timestamp))
             $timestamp = mktime();
 
-        return date("jS-M-Y");
+        return date('jS-M-Y', $timestamp);
+    }
+
+    /**
+     * Returns a date and time in the long format eg. November 7th, 2007 3:00 PM
+     *
+     * @param int $timestamp
+     */
+    function get_long_date_time($timestamp)
+    {
+        if(!isset($timestamp)){
+            $timestamp = mktime();
+        }
+
+        return date('M jS, Y g:i A', $timestamp);
     }
     
     /**

@@ -117,7 +117,7 @@ class HMS_Maintenance
             $tpl['ADD_FLOOR']   = PHPWS_Text::secureLink(_('Add a Floor to a Hall'), 'hms', array('type'=>'hall', 'op'=>'select_residence_hall_for_add_floor'));
 
         if(Current_User::allow('hms', 'edit_floors') || Current_User::allow('hms', 'admin'))
-            $tpl['EDIT_FLOOR']   = PHPWS_Text::secureLink(_('Edit a Floor'), 'hms', array('type'=>'floor', 'op'=>'select_hall_for_edit_floor'));
+            $tpl['EDIT_FLOOR']   = PHPWS_Text::secureLink(_('Edit a Floor'), 'hms', array('type'=>'floor', 'op'=>'show_select_floor'));
         
         if(Current_User::allow('hms', 'delete_floors') || Current_User::allow('hms', 'admin'))
             $tpl['DELETE_FLOOR']   = PHPWS_Text::secureLink(_('Delete a Floor From a Hall'), 'hms', array('type'=>'hall', 'op'=>'select_residence_hall_for_delete_floor'));
@@ -267,14 +267,21 @@ class HMS_Maintenance
         }
 
         # Suite editing
-        $tpl['SUITE_LABEL'] = 'Suite Options';
         if(Current_User::allow('hms', 'admin')){
+            $tpl['SUITE_LABEL'] = 'Suite Options';
             $tpl['EDIT_SUITE'] = PHPWS_Text::secureLink(
                 _('Edit Suite'), 'hms',
                 array('type'=>'suite', 'op'=>'show_select_suite'));
         }
 
-       $content = PHPWS_Template::process($tpl, 'hms', 'admin/maintenance.tpl');
+        if(Current_User::allow('hms', 'admin')){
+            $tpl['MOVEIN_TIMES_LABEL'] = 'Move-in Times';
+            $tpl['EDIT_MOVEIN_TIMES'] = PHPWS_Text::secureLink(
+                _('Edit Move-in Times'), 'hms',
+                array('type'=>'movein', 'op'=>'show_edit_movein_times'));
+        }
+
+        $content = PHPWS_Template::process($tpl, 'hms', 'admin/maintenance.tpl');
         return $content;
     }
 

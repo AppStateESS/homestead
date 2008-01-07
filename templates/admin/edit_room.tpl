@@ -91,9 +91,9 @@
             <!-- END suite -->
         </table>
         {SUBMIT}
+        {END_FORM}
         <br /><br />
         {ASSIGNMENT_PAGER}
     </div>
   </div>
 </div>
-{END_FORM}

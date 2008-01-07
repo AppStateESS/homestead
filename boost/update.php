@@ -658,6 +658,35 @@ function hms_update(&$content, $currentVersion)
             PHPWS_Boost::updatefiles($files, 'hms');
             $content[] = 'Autoassigner baby!';
             $content[] = 'Autocompletion for usernames';
+            
+        case $version_compare($currentVersion, '0.2.13', '<'):
+            $db = &new PHPWS_DB;
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_13.sql');
+            if(PEAR::isError($result)) {
+                return $result;
+            }
+
+            $files[] = 'templates/admin/movein_time_pager.tpl';
+            $files[] = 'templates/admin/edit_movein_time.tpl';
+            $files[] = 'templates/admin/maintenance.tpl';
+            $files[] = 'javascript/select_floor/head.js';
+            $files[] = 'templates/admin/select_floor.js';
+            $files[] = 'templates/admin/display_floor_data.tpl';
+            $files[] = 'templates/admin/edit_room.tpl';
+            $files[] = 'templates/admin/select_room.tpl';
+
+            PHPWS_Boost::updatefiles($files, 'hms');
+            
+        case $version_compare($currentVersion, '0.2.14', '<'):
+            $db = &new PHPWS_DB;
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_14.sql');
+            if(PEAR::isError($result)) {
+                return $result;
+            }
+
+            $files[] = 'templates/admin/room_pager_by_floor.tpl';
+            $files[] = 'templates/admin/edit_floor.tpl';
+            PHPWS_Boost::updatefiles($files, 'hms');
     }
 
     return TRUE;

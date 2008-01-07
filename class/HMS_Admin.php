@@ -123,6 +123,10 @@ class HMS_Admin
                 $_REQUEST['op'] = 'show_maintenance_options';
                 $final = HMS_Maintenance::main();
                 break;
+            case 'movein':
+                PHPWS_Core::initModClass('hms', 'HMS_Movein_Time.php');
+                $final = HMS_Movein_Time::main();
+                break;
             default:
                 PHPWS_Core::initModClass('hms', 'HMS_Maintenance.php');
                 $_REQUEST['op'] = 'show_maintenance_options';

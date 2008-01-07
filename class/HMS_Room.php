@@ -209,19 +209,8 @@ class HMS_Room extends HMS_Item
     }
 
     /*
-     * Returns TRUE or FALSE. The gender of a room can only be changed
-     * to the target gender if all bedrooms can be changed to the
-     * target gender.
-     * 
-     * Addditionally, the room's gender can only be changed if the
-     * gender will be consistent with the gender of the floor of which
-     * this room is a part.
-     * 
-     * This function checks to make sure all bedrooms can be changed,
-     * those bedrooms in tern check all their beds, and so on.
-     * 
-     *
-     * Also assuming a coed change will ALWAYS be true regardless
+     * Returns TRUE or FALSE.
+     * TODO: write this documentation
      *
      * @param int  target_gender
      * @param bool ignore_upper In the case that we're attempting to change 
@@ -229,23 +218,8 @@ class HMS_Room extends HMS_Item
      *                          to TRUE to avoid checking the parent hall's gender.
      * @return bool
      */
-    #function can_change_gender($target_gender, $ignore_upper = FALSE, $ignore_suites = FALSE)
     function can_change_gender($target_gender, $ignore_upper = FALSE)
     {   
-        /*
-        # If this room is in a suite, we need to make sure we can the other rooms in the suite also
-        if(!$ignore_suites && $this->is_in_suite()){
-            $suite = new HMS_Suite($room->suite_id);
-            $suite_rooms = $suite->get_rooms();
-
-            foreach($suite_rooms as $suite_room){
-                if(!$suite_room->can_change_gender($target_gender, $ignore_upper, TRUE)){
-                    return false;
-                }
-            }
-        }
-        */
-
         # Ignore upper is true, we're trying to change a hall/floor
         if($ignore_upper){
             # If ignore upper is true and the target gender coed, then we
@@ -256,6 +230,9 @@ class HMS_Room extends HMS_Item
 
             # If the target gender is not the same, and someone is assigned
             # here, then the gender can't be changed (i.e. return false)
+            # TODO: make this check for males/females on the floor
+            #       and allow for gender changes if everyone assigned
+            #       is of the target gender.
             if(($target_gender != $this->gender_type) && ($this->get_number_of_assignees() != 0)){
                 return false;
             }
@@ -501,17 +478,43 @@ class HMS_Room extends HMS_Item
         }
     }
 
-    function room_pager()
+    function room_pager_by_floor($floor_id)
     {
+       PHPWS_Core::initCoreClass('DBPager.php');
+       
+       $pager = & new DBPager('hms_room', 'HMS_Room');
+       
+       $pager->addWhere('hms_room.floor_id', $floor_id);
+       $pager->addWhere('hms_room.deleted', 0);
 
+       $page_tags['TABLE_TITLE']       = 'Rooms on this floor'; 
+       $page_tags['ROOM_NUM_LABEL']     = 'Room Number';
+       $page_tags['GENDER_TYPE_LABEL']  = 'Gender';
+       $page_tags['RA_LABEL']           = 'RA';
+       $page_tags['PRIVATE_LABEL']      = 'Private';
+       $page_tags['LOBBY_LABEL']        = 'Lobby';
+       $page_tags['MEDICAL_LABEL']      = 'Medical';
+       $page_tags['RESERVED_LABEL']     = 'Reserved';
+       $page_tags['ONLINE_LABEL']       = 'Online';
+
+       $pager->setModule('hms');
+       $pager->setTemplate('admin/room_pager_by_floor.tpl');
+       $pager->setLink('index.php?module=hms');
+       $pager->setEmptyMessage("No rooms fount.");
+
+       $pager->addToggle('class="toggle1"');
+       $pager->addToggle('class="toggle2"');
+       $pager->addRowTags('get_row_tags');
+       $pager->addPageTags($page_tags);
+
+       return $pager->get();
     }
 
     function get_row_tags()
     {
-        $tpl = $this->item_tags();
+        //$tpl = $this->item_tags();
 
-        $tpl['TERM']         = HMS_Term::term_to_text($this->term, true);
-        $tpl['ROOM_NUMBER']  = $this->room_number;
+        $tpl['ROOM_NUMBER']  = PHPWS_Text::secureLink($this->room_number, 'hms', array('type'=>'room', 'op'=>'show_edit_room', 'room'=>$this->id));
         $tpl['GENDER_TYPE']  = HMS::formatGender($this->gender_type);
         $tpl['RA_ROOM']      = $this->ra_room      ? 'Yes' : 'No';
         $tpl['PRIVATE_ROOM'] = $this->private_room ? 'Yes' : 'No';
@@ -676,7 +679,7 @@ class HMS_Room extends HMS_Item
         # Create the room object given the room_id
         $room = new HMS_Room($room_id);
         if(!$room){
-            return show_select_room('Edit Room', 'room', 'show_edit_room', NULL, 'Error: The selected room does not exist!'); 
+            return HMS_Room::show_select_room('Edit Room', 'room', 'show_edit_room', NULL, 'Error: The selected room does not exist!'); 
         }
 
         # Create the floor object
@@ -696,7 +699,7 @@ class HMS_Room extends HMS_Item
         $is_in_suite            = $room->is_in_suite();
 
         $tpl['HALL_NAME']           = $hall->hall_name;
-        $tpl['FLOOR_NUMBER']        = $floor->floor_number;
+        $tpl['FLOOR_NUMBER']        = PHPWS_Text::secureLink($floor->floor_number, 'hms', array('type'=>'floor', 'op'=>'show_edit_floor', 'floor'=>$floor->id));
         $tpl['NUMBER_OF_BEDROOMS']  = $room->get_number_of_bedrooms();
         $tpl['NUMBER_OF_BEDS']      = $room->get_number_of_beds();
         $tpl['NUMBER_OF_ASSIGNEES'] = $number_of_assignees;
