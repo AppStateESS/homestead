@@ -282,7 +282,7 @@ class HMS_Floor extends HMS_Item
      */
     function can_change_gender($target_gender, $ignore_upper = FALSE)
     {
-        # Ignore upper is true, we're trying to change a hall/floor
+        # Ignore upper is true, we're trying to change a hall's gender
         if($ignore_upper){
             # If ignore upper is true and the target gender is coed, then
             # we can always return true.
@@ -290,14 +290,19 @@ class HMS_Floor extends HMS_Item
                 return true;
             }
 
-            # If the target gender is not the same, and someone is assigned
-            # here, then the gender can't be changed
-            # TODO: make this check for males/females on the floor
-            #       and allow for gender changes if everyone assigned
-            #       is of the target gender.
-            if(($target_gener != $this->gender_type) && ($this->get_number_of_assignees() != 0)){
+            # Can only change to male/female if there are no rooms of the opposite sex on this hall
+            # TODO: This should check for rooms that are of the opposite sex AND not empty
+            if($target_gender == MALE){
+                $check_for_gender = FEMALE;
+            }else{
+                $check_for_gender = MALE;
+            }
+
+            # If a check for rooms of the opposite gender returns true, then return false
+            if($this->check_for_rooms_of_gender($check_for_gender)){
                 return false;
             }
+
         }else{
             # Ignore upper is FALSE, load the hall and compare
 
@@ -306,11 +311,51 @@ class HMS_Floor extends HMS_Item
                 return false;
             }
 
-            # If the hall is not coed and the gt is not the target, then return false
-            if($this->_hall->gender_type != COED && $this->_hall->gender_type != $target_gender) {
+            # The target gender must match the hall's gender, unless the hall is COED
+            if($this->_hall->gender_type != COED && $this->_hall->gender_type != $target_gender){
                 return false;
             }
+            
+            # Additionally, we need to check for rooms of the oppsite sex, unless the target gender is COED
+            if($target_gender != COED){
+                if($target_gender == MALE){
+                    $check_for_gender = FEMALE;
+                }else{
+                    $check_for_gender = MALE;
+                }
 
+                # If a check for rooms of the opposite gender returns true, then return false
+                if($this->check_for_rooms_of_gender($check_for_gender)){
+                    return false;
+                }   
+            }
+        }
+        
+        return true;
+    }
+
+    function check_for_rooms_of_gender($gender_type){
+        $db = &new PHPWS_DB('hms_room');
+
+        $db->addJoin('LEFT OUTER', 'hms_room', 'hms_floor', 'floor_id', 'id');
+        
+        $db->addWhere('hms_room.gender_type', $gender_type);
+        
+        $db->addWhere('hms_room.deleted', 0);
+        $db->addWhere('hms_floor.deleted', 0);
+
+        $db->addWhere('hms_floor.id', $this->id);
+
+        $result = $db->select('count');
+
+        if(PEAR::isError($result)){
+            PHPWS_Error::logIfError($result);
+            return null;
+        }
+
+        if($result == 0){
+            return false;
+        }else{
             return true;
         }
     }
