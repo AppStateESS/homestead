@@ -659,7 +659,7 @@ function hms_update(&$content, $currentVersion)
             $content[] = 'Autoassigner baby!';
             $content[] = 'Autocompletion for usernames';
             
-        case $version_compare($currentVersion, '0.2.13', '<'):
+        case version_compare($currentVersion, '0.2.13', '<'):
             $db = &new PHPWS_DB;
             $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_13.sql');
             if(PEAR::isError($result)) {
