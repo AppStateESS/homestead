@@ -735,7 +735,7 @@ class HMS_Floor extends HMS_Item
         $tpl['NUMBER_OF_BEDS']      = $floor->get_number_of_beds();
         $tpl['NUMBER_OF_ASSIGNEES'] = $floor->get_number_of_assignees();
 
-        $form->addDropBox('gender_type', array(FEMALE => FEMALE_DESC, MALE => MALE_DESC));
+        $form->addDropBox('gender_type', array(FEMALE => FEMALE_DESC, MALE => MALE_DESC, COED => COED_DESC));
         $form->setMatch('gender_type', $floor->gender_type);
         
         $form->addCheck('is_online', 1);
