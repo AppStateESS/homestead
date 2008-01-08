@@ -180,6 +180,9 @@ AutoSuggestControl.prototype.goToSuggestion = function (iDiff /*:int*/) {
  */
 AutoSuggestControl.prototype.handleKeyDown = function (oEvent /*:Event*/) {
 
+    this.provider.cancelRequest();
+    clearTimeout(this.timeoutId);
+
     switch(oEvent.keyCode) {
         case 38: //up arrow
             this.goToSuggestion(-1);
@@ -194,9 +197,9 @@ AutoSuggestControl.prototype.handleKeyDown = function (oEvent /*:Event*/) {
         case 13: //enter
             this.hideSuggestions();
             oEvent.returnValue = false;
-            if (oEvent.preventDefault) {
-                oEvent.preventDefault();
-            }
+            //if (oEvent.preventDefault) {
+            //    oEvent.preventDefault();
+            //}
             break;
     }
 
@@ -215,23 +218,28 @@ AutoSuggestControl.prototype.handleKeyUp = function (oEvent /*:Event*/) {
     //get the currently entered text
     this.userText = this.textbox.value;
     
+    oThis.provider.cancelRequest();
     clearTimeout(this.timeoutId);
 
     //for backspace (8) and delete (46), shows suggestions without typeahead
     if (iKeyCode == 8 || iKeyCode == 46) {
         
-        this.timeoutId = setTimeout( function () {
-            oThis.provider.requestSuggestions(oThis, false);
-        }, 250);
+        if(document.getElementById('student_search_form').enable_autocomplete.checked){
+            this.timeoutId = setTimeout( function () {
+                oThis.provider.requestSuggestions(oThis, false);
+            }, 200);
+        }
         
     //make sure not to interfere with non-character keys
     } else if ((iKeyCode != 16 && iKeyCode < 32) || (iKeyCode >= 33 && iKeyCode < 46) || (iKeyCode >= 112 && iKeyCode <= 123)) {
         //ignore
     } else {
-        //request suggestions from the suggestion provider with typeahead
-        this.timeoutId = setTimeout( function () {
-            oThis.provider.requestSuggestions(oThis, true);
-        }, 250);
+        if(document.getElementById('student_search_form').enable_autocomplete.checked){
+            //request suggestions from the suggestion provider with typeahead
+            this.timeoutId = setTimeout( function () {
+                oThis.provider.requestSuggestions(oThis, true);
+            }, 200);
+        }
     }
 };
 
@@ -360,20 +368,26 @@ AutoSuggestControl.prototype.typeAhead = function (sSuggestion /*:String*/) {
 
     //check for support of typeahead functionality
     if (this.textbox.createTextRange || this.textbox.setSelectionRange){
-        var iLen = this.textbox.value.length; 
-        this.textbox.value = sSuggestion; 
-        this.selectRange(iLen, sSuggestion.length);
+        if(this.provider.xhr.readyState == 4){
+            var iLen = this.textbox.value.length; 
+            this.textbox.value = sSuggestion; 
+            this.selectRange(iLen, sSuggestion.length);
+        }
     }
 };
 
 /**
- * Provides suggestions for state/province names.
+ * Provides suggestions.
  * @class
  * @scope public
  */
 function SuggestionProvider() {
     this.xhr = zXmlHttp.createRequest();
 }
+
+SuggestionProvider.prototype.cancelRequest = function() {
+    this.xhr.abort();
+};
 
 /**
  * Request suggestions for the given autosuggest control. 
@@ -382,7 +396,6 @@ function SuggestionProvider() {
  */
 SuggestionProvider.prototype.requestSuggestions = function (oAutoSuggestControl /*:AutoSuggestControl*/,
                                                             bTypeAhead /*:boolean*/) {
-
     var oXHR = this.xhr;
                                    
     //cancel any active requests                          
@@ -418,7 +431,7 @@ SuggestionProvider.prototype.requestSuggestions = function (oAutoSuggestControl 
     };
 
     //send the request
-    oXHR.send();
+    oXHR.send('');
 
 };
 

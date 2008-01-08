@@ -10,6 +10,9 @@
             <tr>
                 <th align="left">ASU Email:</th><td>{USERNAME}@appstate.edu</td>
             </tr>
+            <tr>
+                <td align="left">{ENABLE_AUTOCOMPLETE_LABEL}</td><td>{ENABLE_AUTOCOMPLETE}</td>
+            </tr>
         </table>
         <br /><br />
         {SUBMIT_BUTTON}
