@@ -665,7 +665,12 @@ class HMS_Floor extends HMS_Item
 
        # Grab all the input from the form and save the floor
        $floor->gender_type = $_REQUEST['gender_type'];
-       if(isset($_REQUEST['is_online'])) $floor->is_online = 1;
+       
+       if(isset($_REQUEST['is_online'])){
+           $floor->is_online = 1;
+       }else{
+           $floor->is_online = 0;
+       }
 
        if($_REQUEST['ft_movein_time'] == 0){
            $floor->ft_movein_time_id = NULL;
@@ -794,7 +799,6 @@ class HMS_Floor extends HMS_Item
         $form->setMatch('gender_type', $floor->gender_type);
         
         $form->addCheck('is_online', 1);
-        //$form->setLabel('is_online', array(_('No'), _('Yes') ));
         $form->setMatch('is_online', $floor->is_online);
 
         $movein_times = HMS_Movein_Time::get_movein_times_array();
