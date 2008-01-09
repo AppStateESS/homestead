@@ -574,18 +574,9 @@ class HMS_Residence_Hall extends HMS_Item
         case 'show_edit_hall':
             return HMS_Residence_Hall::show_edit_residence_hall();
             break;
-<<<<<<< .working
-        case 'select_hall_to_edit':
-            return HMS_Residence_Hall::show_select_residence_hall('Edit Residence Hall', 'hall', 'show_edit_hall');
-            break;
-        case 'show_edit_hall':
-            return HMS_Residence_Hall::show_edit_residence_hall();
-            break;
-=======
         case 'edit_hall':
             return HMS_Residence_Hall::edit_residence_hall();
             break;
->>>>>>> .merge-right.r825
         case 'select_residence_hall_for_overview':
             return HMS_Residence_Hall::show_select_residence_hall('Hall Overview', 'hall', 'show_residence_hall_overview');
             break;
