@@ -371,6 +371,10 @@ class HMS_Residence_Hall extends HMS_Item
         $db->addWhere('hms_residence_hall.id', $this->id);
 
         $result = $db->select('count');
+
+        if($result == 0){
+            return $result;
+        }
         
         if(!$result || PHPWS_Error::logIfError($result)){
             return false;
@@ -513,6 +517,10 @@ class HMS_Residence_Hall extends HMS_Item
         return $vacant_floors;
     }
 
+    /******************
+     * Static Methods *
+     *****************/
+
     /**
      * Main Method
      */
@@ -525,6 +533,12 @@ class HMS_Residence_Hall extends HMS_Item
         case 'post_residence_hall':
 
             break;
+        case 'select_hall_to_edit':
+            return HMS_Residence_Hall::show_select_residence_hall('Edit Residence Hall', 'hall', 'show_edit_hall');
+            break;
+        case 'show_edit_hall':
+            return HMS_Residence_Hall::show_edit_residence_hall();
+            break;
         case 'select_residence_hall_for_overview':
             return HMS_Residence_Hall::show_select_residence_hall('Hall Overview', 'hall', 'show_residence_hall_overview');
             break;
@@ -536,154 +550,8 @@ class HMS_Residence_Hall extends HMS_Item
         }
     }
 
-    /**
-     * Uses code from HMS_Forms add_residence_hall, fill_hall_data_display 
-     */
-    function edit_residence_hall()
-    {
-        $form = new PHPWS_Form;
+    
 
-        if (!empty($_REQUEST['halls'])) {
-            $hall = new HMS_Residence_Hall($_REQUEST['halls']);
-            $form->addHidden('halls', $hall->id);
-        } else {
-            $hall = new HMS_Residence_Hall;
-        }
-
-        $form->addText('hall_name', $hall->hall_name);
-  
-        /*
-        $db = &new PHPWS_DB('hms_hall_communities');
-        $comms = $db->select();
-        foreach($comms as $comm) {
-            $communities[$comm['id']] = $comm['community_name'];
-        }
-        $form->addDropBox('community', $communities);
-        if(isset($hall->community)) {
-            $form->setMatch('community', $hall->community);
-        }
-        */
-
-        $floors = array(1=>1,
-                        2=>2,
-                        3=>3,
-                        4=>4,
-                        5=>5,
-                        6=>6,
-                        7=>7,
-                        8=>8,
-                        9=>9,
-                        10=>10,
-                        11=>11,
-                        12=>12,
-                        13=>13,
-                        14=>14,
-                        15=>15);
-        $form->addDropBox('number_floors', $floors);
-        $form->setMatch('number_floors', $hall->_number_of_floors);
-      
-        for($i = 1; $i < 85; $i++) {
-            $rooms[$i] = $i;
-        }
-       
-        $form->addDropBox('rooms_per_floor', $rooms);
-        $form->setMatch('rooms_per_floor', $hall->_number_of_rooms);
-
-        $form->addDropBox('bedrooms_per_room', array(0=>'0', 1=>'1', 2=>'2', 3=>'3', 4=>'4'));
-        $form->setMatch('bedrooms_per_room', $hall->_bedrooms_per_room);
-
-        $form->addDropBox('beds_per_bedroom', array(0=>'0', 1=>'1', 2=>'2', 3=>'3', 4=>'4'));
-        $form->setMatch('beds_per_bedroom', $hall->_beds_per_bedroom);
-
-        $db = new PHPWS_DB('hms_pricing_tiers');
-        $prices = $db->select();
-
-        foreach($prices as $price) {
-            $pricing[$price['id']] = '$' . $price['tier_value'];
-        }
-        
-        $form->addDropBox('pricing_tier', $pricing);
-        $form->setMatch('pricing_tier', '1');
-        $form->addCheckBox('use_pricing_tier');
-
-        $form->addRadio('gender_type', array(FEMALE, MALE, COED));
-        $form->setLabel('gender_type', array(FEMALE_DESC, MALE_DESC, COED_DESC));
-        $form->setMatch('gender_type', $hall->gender_type);
-
-        $form->addRadio('air_conditioned', array(0,1));
-        $form->setLabel('air_conditioned', array('No', 'Yes'));
-        $form->setMatch('air_conditioned', $hall->air_conditioned);
-
-      
-        $form->addRadio('is_online', array(0, 1));
-        $form->setLabel('is_online', array(_("No"), _("Yes")));
-        $form->setMatch('is_online', $hall->is_online);
-
-        $form->addHidden('module', 'hms');
-        $form->addHidden('type', 'hall');
-        $form->addHidden('op', 'save_residence_hall');
-
-
-        $form->addSelect('numbering_scheme', array(0=>'Ground & First', 
-                                                   1=>'Ground & Second', 
-                                                   2=>'First & Second'));
-
-        if(!$hall->id) {
-            $form->addHidden('is_new_building', TRUE);
-        }
-
-        $form->addSubmit('submit', _('Save Hall'));
-
-        $tpl = $form->getTemplate();
-
-        if ($hall->id) {
-            $tpl['TITLE'] = 'Edit Residence Hall';
-        } else {
-            $tpl['TITLE'] = 'Create Residence Hall';
-        }
-        //        $tpl['ERROR'] = $this->error;
-        $tpl['BEDROOMS_PER_ROOM'] = $hall->_bedrooms_per_room;
-        $tpl['BEDS_PER_BEDROOM'] = $hall->_beds_per_bedroom;
-
-
-        /*
-        switch($hall->_numbering_scheme)
-        {
-            case '0':
-                $tpl['NUMBERING_SCHEME'] = "Ground + First";
-                break;
-            case '1':
-                $tpl['NUMBERING_SCHEME'] = "Ground + Second";
-                break;
-            case '2':
-                $tpl['NUMBERING_SCHEME'] = "First + Second";
-                break;
-            default:
-                break;
-        }
-        */
-
-        $halls = '<b>The following halls already exist: <br /><br />';
-        $db = new PHPWS_DB('hms_residence_hall');
-        $db->addColumn('hall_name');
-        $db->addWhere('deleted', '1', '!=');
-        $db->addOrder('hall_name', 'ASC');
-        $halls_raw = $db->select();
-        foreach($halls_raw as $hall_raw) {
-            $halls .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" . $hall_raw['hall_name'] . "<br />";
-        }
-        $halls .= "</b>";
-
-        $tpl['HALLS']   = $halls;
-
-
-        $final = PHPWS_Template::process($tpl, 'hms', 'admin/display_hall_data.tpl');
-        return $final;
-    }
-
-    /******************
-     * Static Methods *
-     *****************/
 
     /**
      * Returns an array of hall objects for the given term. If no
@@ -703,7 +571,7 @@ class HMS_Residence_Hall extends HMS_Item
         if(isset($term)){
             $db->addWhere('term', $term);
         }else{
-            $db->addWhere('term', HMS_Term::get_current_term());
+            $db->addWhere('term', HMS_Term::get_selected_term());
         }
 
         $results = $db->select();
@@ -863,7 +731,8 @@ class HMS_Residence_Hall extends HMS_Item
 
         PHPWS_Core::initCoreClass('Form.php');
         $form = &new PHPWS_Form;
-        $form->addDropBox('hall_id', $halls);
+        $form->setMethod('get');
+        $form->addDropBox('hall', $halls);
         $form->addHidden('module', 'hms');
         $form->addHidden('type', $type);
         $form->addHidden('op', $op);
@@ -882,7 +751,88 @@ class HMS_Residence_Hall extends HMS_Item
 
         return PHPWS_Template::process($tpl, 'hms', 'admin/select_residence_hall.tpl');
     }
+    
+    /**
+     * Uses code from HMS_Forms add_residence_hall, fill_hall_data_display 
+     */
+    function show_edit_residence_hall($hall_id = null, $success = null, $error = null)
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
+        # Determine the hall id. If the passed in variable is null,
+        # use the request.
+        if(!isset($hall_id)){
+            $hall_id = $_REQUEST['hall'];
+        }
+
+        # Setup the title and color of the title bar
+        $tpl['TITLE'] = 'Edit Room';
+        $tpl['TITLE_CLASS'] = HMS_Util::get_title_class();
+
+        # Create the hall given the hall id
+        $hall = new HMS_Residence_Hall($hall_id);
+        if(!$hall){
+            return HMS_Hall::show_select_hall('Edit Residence Hall', 'hall', 'show_edit_hall', null, 'Error: The select hall does not exist.'); 
+        }
+        
+        $form = new PHPWS_Form;
+
+        $form->addText('hall_name', $hall->hall_name);
+        $form->setLabel('hall_name', 'Hall name: ');
+  
+        /*
+        $db = &new PHPWS_DB('hms_hall_communities');
+        $comms = $db->select();
+        foreach($comms as $comm) {
+            $communities[$comm['id']] = $comm['community_name'];
+        }
+        $form->addDropBox('community', $communities);
+        if(isset($hall->community)) {
+            $form->setMatch('community', $hall->community);
+        }
+        */
+
+        $tpl['NUMBER_OF_FLOORS']    = $hall->get_number_of_floors();
+        $tpl['NUMBER_OF_ROOMS']     = $hall->get_number_of_rooms();
+        $tpl['NUMBER_OF_BEDS']      = $hall->get_number_of_beds();
+        $tpl['NUMBER_OF_ASSIGNEES'] = $hall->get_number_of_assignees();
+
+        $form->addDropBox('gender_type', array(FEMALE => FEMALE_DESC, MALE => MALE_DESC, COED => COED_DESC));
+        $form->setMatch('gender_type', $hall->gender_type);
+
+        $form->addCheckBox('air_conditioned', 1);
+        $form->setMatch('air_conditioned', $hall->air_conditioned);
+      
+        $form->addCheckBox('is_online', 1);
+        $form->setMatch('is_online', $hall->is_online);
+
+        $form->addHidden('module', 'hms');
+        $form->addHidden('type', 'hall');
+        $form->addHidden('op', 'edit_residence_hall');
+
+        $form->addSubmit('submit', _('Save Hall'));
+
+        $form->addHidden('type', 'hall');
+        $form->addHidden('op', 'edit_hall');
+        $form->addHidden('hall_id', $hall->id);
+        
+        $form->mergeTemplate($tpl);
+        $tpl = $form->getTemplate();
+
+        $tpl['FLOOR_PAGER'] = HMS_Floor::get_pager_by_hall($hall->id);
+
+        if(isset($success)){
+            $tpl['SUCCESS_MSG'] = $success;
+        }
+
+        if(isset($error)){
+            $tpl['ERROR_MSG'] = $error;
+        }
+
+        $final = PHPWS_Template::process($tpl, 'hms', 'admin/edit_residence_hall.tpl');
+        return $final;
+    }
 
     /**
      * Shows a hall overview, listing the floors, rooms,
@@ -949,104 +899,6 @@ class HMS_Residence_Hall extends HMS_Item
         }// end foreach floors
 
         return $content; 
-    }
-
-    /*******************
-     * Mutator Methods *
-     ******************/
-     
-    function set_id($id){
-        $this->id = $id;
-    }
-
-    function get_id(){
-        return $this->id;
-    }
-
-    function set_term($term){
-        $this->term = $term;
-    }
-
-    function set_hall_name($name){
-        $this->hall_name = $name;
-    }
-
-    function set_banner_building_code($code){
-        $this->banner_building_code = $code;
-    }
-    
-    function set_gender_type($gender){
-        $this->gender_type = $gender;
-    }
-
-    function set_air_conditioned($ac){
-        $this->air_conditioned = $ac;
-    }
-
-    function set_is_online($online){
-        $this->is_online = $online;
-    }
-
-
-    function set_per_freshmen_rsvd($percent){
-        $this->per_freshmen_rsvd = $precent;
-    }
-
-
-    function set_per_sophomore_rsvd($percent){
-        $this->per_sophomore_rsvd = $percent;
-    }
-
-
-    function set_per_junior_rsvd($percent){
-        $this->per_junior_rsvd = $percent;
-    }
-
-
-    function set_per_senior_rsvd($percent){
-        $this->per_senior_rsvd = $percent;
-    }
-
-
-    function set_added_by($user_id = NULL){
-        if(isset($user_id)){
-            $this->added_by = $user_id;
-        }else{
-            $this->added_by = Current_User::getId();
-        }
-    }
-
-    function get_added_by(){
-        return $this->added_by;
-    }
-
-
-    function get_added_on(){
-        return $this->added_on;
-    }
-
-    function get_updated_by(){
-        return $this->updated_by;
-    }
-
-    function get_updated_on(){
-        return $this->updated_on;
-    }
-
-    function get_deleted_by(){
-        return $this->deleted_by;
-    }
-
-    function get_deleted_on(){
-        return $this->deleted_on;
-    }
-
-    function set_deleted($del = 1){
-        $this->deleted = $del;
-    }
-
-    function get_deleted(){
-        return $this->deleted;
     }
 }
 ?>

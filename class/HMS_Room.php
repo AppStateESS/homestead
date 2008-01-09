@@ -487,7 +487,7 @@ class HMS_Room extends HMS_Item
        $pager->addWhere('hms_room.floor_id', $floor_id);
        $pager->addWhere('hms_room.deleted', 0);
 
-       $page_tags['TABLE_TITLE']       = 'Rooms on this floor'; 
+       $page_tags['TABLE_TITLE']        = 'Rooms on this floor'; 
        $page_tags['ROOM_NUM_LABEL']     = 'Room Number';
        $page_tags['GENDER_TYPE_LABEL']  = 'Gender';
        $page_tags['RA_LABEL']           = 'RA';
@@ -500,7 +500,7 @@ class HMS_Room extends HMS_Item
        $pager->setModule('hms');
        $pager->setTemplate('admin/room_pager_by_floor.tpl');
        $pager->setLink('index.php?module=hms');
-       $pager->setEmptyMessage("No rooms fount.");
+       $pager->setEmptyMessage('No rooms found.');
 
        $pager->addToggle('class="toggle1"');
        $pager->addToggle('class="toggle2"');
@@ -698,7 +698,7 @@ class HMS_Room extends HMS_Item
         $number_of_assignees    = $room->get_number_of_assignees();
         $is_in_suite            = $room->is_in_suite();
 
-        $tpl['HALL_NAME']           = $hall->hall_name;
+        $tpl['HALL_NAME']           = PHPWS_Text::secureLink($hall->hall_name, 'hms', array('type'=>'hall', 'op'=>'show_edit_hall', 'hall'=>$hall->id));
         $tpl['FLOOR_NUMBER']        = PHPWS_Text::secureLink($floor->floor_number, 'hms', array('type'=>'floor', 'op'=>'show_edit_floor', 'floor'=>$floor->id));
         $tpl['NUMBER_OF_BEDROOMS']  = $room->get_number_of_bedrooms();
         $tpl['NUMBER_OF_BEDS']      = $room->get_number_of_beds();

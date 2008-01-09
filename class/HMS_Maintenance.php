@@ -101,8 +101,8 @@ class HMS_Maintenance
         if(Current_User::allow('hms', 'add_halls') || Current_User::allow('hms', 'admin')) 
             $tpl['ADD_HALL']    = PHPWS_Text::secureLink(_('Add Residence Hall'), 'hms', array('type'=>'hall', 'op'=>'add_hall'));
 
-        //if(Current_User::allow('hms', 'edit_halls')) 
-        //    $tpl['EDIT_HALL']   = PHPWS_Text::secureLink(_('Edit Residence Hall'), 'hms', array('type'=>'hall', 'op'=>'select_residence_hall_for_edit'));
+        if(Current_User::allow('hms', 'edit_halls') || Current_user::allow('hms', 'admin'))
+            $tpl['EDIT_HALL']   = PHPWS_Text::secureLink(_('Edit Residence Hall'), 'hms', array('type'=>'hall', 'op'=>'select_hall_to_edit'));
 
         if(Current_User::allow('hms', 'delete_halls') || Current_User::allow('hms', 'admin'))
             $tpl['DELETE_HALL'] = PHPWS_Text::secureLink(_('Delete Residence Hall'), 'hms', array('type'=>'hall', 'op'=>'select_residence_hall_for_delete'));

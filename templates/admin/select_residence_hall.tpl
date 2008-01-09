@@ -11,7 +11,7 @@
         <!-- END success_msg -->
         {MESSAGE}<br /><br />
         {START_FORM}
-        {HALL_ID} &nbsp;&nbsp; {SUBMIT}
+        {HALL} &nbsp;&nbsp; {SUBMIT}
         {END_FORM}
     </div>
   </div>

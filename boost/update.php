@@ -703,6 +703,13 @@ function hms_update(&$content, $currentVersion)
             $files[] = 'templates/admin/room_pager_by_floor.tpl';
             $files[] = 'templates/admin/edit_floor.tpl';
             PHPWS_Boost::updatefiles($files, 'hms');
+        case version_compare($currentVersion, '0.2.15', '<'):
+            
+            $files[] = 'templates/admin/floor_pager_by_hall.tpl';
+            $files[] = 'templates/admin/edit_residence_hall.tpl';
+            $files[] = 'templates/admin/select_residence_hall.tpl';
+            $files[] = 'templates/admin/maintenance.tpl';
+            PHPWS_Boost::updatefiles($files, 'hms');
     }
 
     return TRUE;

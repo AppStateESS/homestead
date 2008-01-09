@@ -11,7 +11,7 @@
             
             <h2><i>{HALL_LABEL}</i></h2>
             &nbsp;&nbsp;&nbsp;{ADD_HALL}<br />
-            <!--&nbsp;&nbsp;&nbsp;{EDIT_HALL}<br />-->
+            &nbsp;&nbsp;&nbsp;{EDIT_HALL}<br />
             &nbsp;&nbsp;&nbsp;{DELETE_HALL}<br />
             &nbsp;&nbsp;&nbsp;{HALL_OVERVIEW}<br />
             <br />

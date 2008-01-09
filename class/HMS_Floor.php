@@ -637,14 +637,39 @@ class HMS_Floor extends HMS_Item
      * Static Methods *
      *****************/
 
-    function floor_pager()
+    function get_pager_by_hall($hall_id)
     {
+        PHPWS_Core::initCoreClass('DBPager.php');
+        
+        $pager = & new DBPager('hms_floor', 'HMS_Floor');
+        
+        $pager->addWhere('hms_floor.residence_hall_id', $hall_id);
+        $pager->addWhere('hms_floor.deleted', 0);
 
+        $page_tags['TABLE_TITLE']       = 'Floors in this hall';
+        $page_tags['FLOOR_NUM_LABEL']   = 'Floor #';
+        $page_tags['GENDER_LABEL']      = 'Gender';
+        $page_tags['ONLINE_LABEL']      = 'Online';
+
+        $pager->setModule('hms');
+        $pager->setTemplate('admin/floor_pager_by_hall.tpl');
+        $pager->setLink('index.php?module=hms');
+        $pager->setEmptyMessage("No floors found.");
+        $pager->addToggle('class="toggle1"');
+        $pager->addToggle('class="toggle2"');
+        $pager->addRowTags('get_pager_by_hall_tags');
+        $pager->addPageTags($page_tags);
+
+        return $pager->get();
     }
 
-    function get_row_tags()
+    function get_pager_by_hall_tags()
     {
+        $tpl['FLOOR_NUMBER']   = PHPWS_Text::secureLink($this->floor_number, 'hms', array('type'=>'floor', 'op'=>'show_edit_floor', 'floor'=>$this->id));
+        $tpl['GENDER_TYPE'] = HMS::formatGender($this->gender_type);
+        $tpl['IS_ONLINE']   = $this->is_online ? 'Yes' : 'No';
 
+        return $tpl;
     }
 
     function edit_floor()
@@ -789,7 +814,7 @@ class HMS_Floor extends HMS_Item
 
         $form = &new PHPWS_Form;
         
-        $tpl['HALL_NAME']           = $hall->hall_name;
+        $tpl['HALL_NAME']           = PHPWS_Text::secureLink($hall->hall_name, 'hms', array('type'=>'hall', 'op'=>'show_edit_hall', 'hall'=>$hall->id));
         $tpl['FLOOR_NUMBER']        = $floor->floor_number;
         $tpl['NUMBER_OF_ROOMS']     = $floor->get_number_of_rooms();
         $tpl['NUMBER_OF_BEDS']      = $floor->get_number_of_beds();
