@@ -200,22 +200,63 @@ class HMS_Residence_Hall extends HMS_Item
      * This function checks to make sure all floors can be changed,
      * those floors in tern check all thier rooms, and so on.
      */
-    #TODO: Implement the $ignore_upper flag.
+    #TODO: rewrite this becase the behavior changed
     function can_change_gender($target_gender)
     {
-        if ($target_gender != COED) {
-            $this->loadFloors();
-            if ($this->_floors) {
-                foreach ($this->_floors as $floor){
-                    if(!$floor->can_change_gender_down($target_gender)){
-                        return false;
-                    }
-                }
-            }
+        # You can always change to a COED gender.
+        if($target_gender == COED){
+            return true;
+
+        }
+
+        # We must be changing to either male or female if we make it here
+
+        # If there are any COED floors, then return false
+        if($this->check_for_floors_of_gender(COED)){
+            return false;
+        }
+
+        # Can only change gender if there are no floors of the opposite sex
+        if($target_gender == MALE){
+            $check_for_gender = FEMALE;
+        }else{
+            $check_for_gender = MALE;
+        }
+
+        # If a check for rooms of the opposite gender returns true, then return false
+        if($this->check_for_floors_of_gender($check_for_gender)){
+            return false;
         }
 
         return true;
     }
+
+    function check_for_floors_of_gender($gender_type)
+    {
+        $db = &new PHPWS_DB('hms_floor');
+
+        $db->addJoin('LEFT OUTER', 'hms_floor', 'hms_residence_hall', 'residence_hall_id', 'id');
+
+        $db->addWhere('hms_floor.gender_type', $gender_type);
+
+        $db->addWhere('hms_floor.deleted', 0);
+        $db->addWhere('hms_residence_hall.deleted', 0);
+
+        $db->addWhere('hms_residence_hall.id', $this->id);
+
+        $result = $db->select('count');
+
+        if(PEAR::isError($result)){
+            PHPWS_Error::logIfError($result);
+            return null;
+        }
+
+        if($result == 0){
+            return false;
+        }else{
+        return true;
+    }
+}
     
     /*
      * Returns the number of floors in the current hall
@@ -527,18 +568,24 @@ class HMS_Residence_Hall extends HMS_Item
     function main()
     {
         switch ($_REQUEST['op']) {
-        case 'add_hall':
-            return HMS_Residence_Hall::edit_residence_hall();
-            break;
-        case 'post_residence_hall':
-
-            break;
         case 'select_hall_to_edit':
             return HMS_Residence_Hall::show_select_residence_hall('Edit Residence Hall', 'hall', 'show_edit_hall');
             break;
         case 'show_edit_hall':
             return HMS_Residence_Hall::show_edit_residence_hall();
             break;
+<<<<<<< .working
+        case 'select_hall_to_edit':
+            return HMS_Residence_Hall::show_select_residence_hall('Edit Residence Hall', 'hall', 'show_edit_hall');
+            break;
+        case 'show_edit_hall':
+            return HMS_Residence_Hall::show_edit_residence_hall();
+            break;
+=======
+        case 'edit_hall':
+            return HMS_Residence_Hall::edit_residence_hall();
+            break;
+>>>>>>> .merge-right.r825
         case 'select_residence_hall_for_overview':
             return HMS_Residence_Hall::show_select_residence_hall('Hall Overview', 'hall', 'show_residence_hall_overview');
             break;
@@ -700,6 +747,37 @@ class HMS_Residence_Hall extends HMS_Item
         return $tags; 
     }
 
+    function edit_residence_hall()
+    {
+        # Create the hall object given the hall id
+        $hall = new HMS_Residence_Hall($_REQUEST['hall_id']);
+        if(!$hall){
+            return show_select_residence_hall('Edit Hall', 'hall', 'show_edit__hall', null, 'Error: The select hall does not exist!');
+        }
+
+        # Compare the hall's gender and the gender the user selected
+        # If they're not equal, call 'can_change_gender' function
+        if($hall->gender_type != $_REQUEST['gender_type']){
+            if(!$hall->can_change_gender($_REQUEST['gender_type'])){
+                return HMS_Residence_Hall::show_edit_residence_hall($hall->id, NULL, 'Error: Incompatible gender detected. No changes were made.');
+            }
+        }
+
+        # Grab all the input from the form and save the hall
+        $hall->hall_name        = $_REQUEST['hall_name'];
+        $hall->gender_type      = $_REQUEST['gender_type'];
+        $hall->air_conditioned  = isset($_REQUEST['air_conditioned'])   ? 1: 0;
+        $hall->is_online        = isset($_REQUEST['is_online'])         ? 1 : 0;
+
+        $result = $hall->save();
+
+        if(!$result || PHPWS_Error::logIfError($result)){
+            return HMS_Residence_Hall::show_edit_residence_hall($hall->id, NULL, 'Error: There was a problem saving the hall data. No changes were made. Please contact ESS.');
+        }
+
+        return HMS_Residence_Hall::show_edit_residence_hall($hall->id, 'Residence hall updated successfully.');
+    }
+
     /*********************
      * Static UI Methods *
      ********************/
@@ -807,12 +885,9 @@ class HMS_Residence_Hall extends HMS_Item
         $form->addCheckBox('is_online', 1);
         $form->setMatch('is_online', $hall->is_online);
 
-        $form->addHidden('module', 'hms');
-        $form->addHidden('type', 'hall');
-        $form->addHidden('op', 'edit_residence_hall');
-
         $form->addSubmit('submit', _('Save Hall'));
 
+        $form->addHidden('module', 'hms');
         $form->addHidden('type', 'hall');
         $form->addHidden('op', 'edit_hall');
         $form->addHidden('hall_id', $hall->id);
@@ -834,6 +909,7 @@ class HMS_Residence_Hall extends HMS_Item
         return $final;
     }
 
+>>>>>>> .merge-right.r825
     /**
      * Shows a hall overview, listing the floors, rooms,
      * and assignments for those rooms

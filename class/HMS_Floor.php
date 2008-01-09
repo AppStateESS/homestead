@@ -334,7 +334,8 @@ class HMS_Floor extends HMS_Item
         return true;
     }
 
-    function check_for_rooms_of_gender($gender_type){
+    function check_for_rooms_of_gender($gender_type)
+    {
         $db = &new PHPWS_DB('hms_room');
 
         $db->addJoin('LEFT OUTER', 'hms_room', 'hms_floor', 'floor_id', 'id');
@@ -690,12 +691,9 @@ class HMS_Floor extends HMS_Item
 
        # Grab all the input from the form and save the floor
        $floor->gender_type = $_REQUEST['gender_type'];
-       
-       if(isset($_REQUEST['is_online'])){
-           $floor->is_online = 1;
-       }else{
-           $floor->is_online = 0;
-       }
+       $floor->is_online = isset($_REQUEST['is_online']) ? 1 : 0;
+       $floor->ft_movein_time_id = $_REQUEST['ft_movein_time'];
+       $floor->rt_movein_time_id = $_REQUEST['rt_movein_time'];
 
        if($_REQUEST['ft_movein_time'] == 0){
            $floor->ft_movein_time_id = NULL;
@@ -715,7 +713,7 @@ class HMS_Floor extends HMS_Item
            return HMS_Floor::show_edit_floor($floor->id, NULL, 'Error: There was a problem saving the floor. No changes were made. Please contact ESS.');
        }
 
-       return HMS_Floor::show_edit_floor($floor->id, 'Floor Update successfully.');
+       return HMS_Floor::show_edit_floor($floor->id, 'Floor update successfully.');
     }
 
     /**************
