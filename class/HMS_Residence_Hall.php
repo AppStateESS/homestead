@@ -900,7 +900,6 @@ class HMS_Residence_Hall extends HMS_Item
         return $final;
     }
 
->>>>>>> .merge-right.r825
     /**
      * Shows a hall overview, listing the floors, rooms,
      * and assignments for those rooms
