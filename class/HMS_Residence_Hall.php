@@ -581,7 +581,7 @@ class HMS_Residence_Hall extends HMS_Item
             return HMS_Residence_Hall::show_select_residence_hall('Hall Overview', 'hall', 'show_residence_hall_overview');
             break;
         case 'show_residence_hall_overview':
-            return HMS_Residence_Hall::show_hall_overview($_REQUEST['hall_id']);
+            return HMS_Residence_Hall::show_hall_overview($_REQUEST['hall']);
             break;
         default:
             return "Error: undefined hall op";
