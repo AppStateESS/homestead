@@ -97,27 +97,13 @@ CREATE TABLE hms_room (
     primary key(id)
 );
 
-CREATE TABLE hms_bedroom (
-    id              integer NOT NULL,
-    term            integer NOT NULL REFERENCES hms_term(term),
-    room_id         integer NOT NULL REFERENCES hms_room(id),
-    is_online       smallint NOT NULL,
-    added_by        integer NOT NULL,
-    added_on        integer NOT NULL,
-    updated_by      integer NOT NULL,
-    updated_on      integer NOT NULL,
-    deleted_by      integer,
-    deleted_on      integer,
-    bedroom_letter  character(1) NOT NULL,
-    deleted         smallint default 0,
-    PRIMARY KEY(id)
-);
-
 CREATE TABLE hms_bed (
     id              integer NOT NULL,
     term            integer NOT NULL REFERENCES hms_term(term),
-    bedroom_id      integer NOT NULL REFERENCES hms_bedroom(id),
+    room_id         integer NOT NULL REFERENCES hms_room(id),
     bed_letter      character(1) NOT NULL,
+    bedroom_label   character varying(255),
+    ra_bed          smallint NOT NULL DEFAULT (0)::smallint,
     added_by        integer NOT NULL,
     added_on        integer NOT NULL,
     updated_by      integer NOT NULL,

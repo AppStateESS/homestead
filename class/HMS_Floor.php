@@ -245,9 +245,9 @@ class HMS_Floor extends HMS_Item
     }
 
     /*
-     * Creates the rooms, bedrooms, and beds for a new floor
+     * Creates the rooms and beds for a new floor
      */
-    function create_child_objects($rooms_per_floor, $bedrooms_per_room, $beds_per_bedroom)
+    function create_child_objects($rooms_per_floor, $beds_per_room)
     {
         for ($i = 0; $i < $rooms_per_floor; $i++) {
             $room = new HMS_Room;
@@ -257,7 +257,7 @@ class HMS_Floor extends HMS_Item
             $room->gender_type  = $this->gender_type;
 
             if($room->save()) {
-                $room->create_child_objects($bedrooms_per_room, $beds_per_bedroom);
+                $room->create_child_objects($beds_per_room);
             } else {
                 // Decide on bad Result.
             }
@@ -273,7 +273,7 @@ class HMS_Floor extends HMS_Item
      * this floor is a part.
      *
      * This function checks to make sure all rooms can be changed,
-     * those rooms in tern check all thier bedrooms, and so on.
+     * those rooms in tern check all thier beds, and so on.
      *
      * In the case that we're attempting to change the gender of just
      * 'this' floor, set $ignore_upper to TRUE to avoid checking the
@@ -408,44 +408,16 @@ class HMS_Floor extends HMS_Item
     }
 
     /*
-     * Returns the number of bedrooms on the current floor
-     */
-    function get_number_of_bedrooms()
-    {
-        $db = &new PHPWS_DB('hms_bedroom');
-        
-        $db->addJoin('LEFT OUTER', 'hms_bedroom', 'hms_room',           'room_id',           'id');
-        $db->addJoin('LEFT OUTER', 'hms_room',    'hms_floor',          'floor_id',          'id');
-        
-        $db->addWhere('hms_bedroom.deleted',        0);
-        $db->addWhere('hms_room.deleted',           0);
-        $db->addWhere('hms_floor.deleted',          0);
-        
-        $db->addWhere('hms_floor.id', $this->id);
-
-        $result = $db->select('count');
-        
-        if(!$result || PHPWS_Error::logIfError($result)){
-            return false;
-        }
-
-        return $result;
-
-    }
-
-    /*
      * Returns the number of beds on the current floor
      */
     function get_number_of_beds()
     {
         $db = &new PHPWS_DB('hms_bed');
         
-        $db->addJoin('LEFT OUTER', 'hms_bed',     'hms_bedroom',        'bedroom_id',        'id');
-        $db->addJoin('LEFT OUTER', 'hms_bedroom', 'hms_room',           'room_id',           'id');
+        $db->addJoin('LEFT OUTER', 'hms_bed',     'hms_room',           'room_id',           'id');
         $db->addJoin('LEFT OUTER', 'hms_room',    'hms_floor',          'floor_id',          'id');
         
         $db->addWhere('hms_bed.deleted',            0);
-        $db->addWhere('hms_bedroom.deleted',        0);
         $db->addWhere('hms_room.deleted',           0);
         $db->addWhere('hms_floor.deleted',          0);
         
@@ -467,14 +439,12 @@ class HMS_Floor extends HMS_Item
     {
         $db = &new PHPWS_DB('hms_assignment');
         
-        $db->addJoin('LEFT OUTER', 'hms_assignment', 'hms_bed',            'bed_id',            'id');
-        $db->addJoin('LEFT OUTER', 'hms_bed',     'hms_bedroom',        'bedroom_id',        'id');
-        $db->addJoin('LEFT OUTER', 'hms_bedroom', 'hms_room',           'room_id',           'id');
-        $db->addJoin('LEFT OUTER', 'hms_room',    'hms_floor',          'floor_id',          'id');
+        $db->addJoin('LEFT OUTER', 'hms_assignment','hms_bed',            'bed_id',             'id');
+        $db->addJoin('LEFT OUTER', 'hms_bed',       'hms_room',           'room_id',            'id');
+        $db->addJoin('LEFT OUTER', 'hms_room',      'hms_floor',          'floor_id',           'id');
         
         $db->addWhere('hms_assignment.deleted',     0);
         $db->addWhere('hms_bed.deleted',            0);
-        $db->addWhere('hms_bedroom.deleted',        0);
         $db->addWhere('hms_room.deleted',           0);
         $db->addWhere('hms_floor.deleted',          0);
         
@@ -524,24 +494,6 @@ class HMS_Floor extends HMS_Item
         }
 
         return $this->_suites;
-    }
-
-    /**
-     * Returns an array of the bedrooms on the current floor
-     */
-    function get_bedrooms()
-    {
-        $bedrooms = array();
-        
-        if (!$this->loadRooms()){
-            return false;
-        }
-
-        foreach($this->_rooms as $room){
-            $room_bedrooms = $room->get_bedrooms();
-            $bedrooms = array_merge($bedrooms, $room_bedrooms);
-        }
-        return $bedrooms;
     }
 
     /**

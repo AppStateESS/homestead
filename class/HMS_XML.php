@@ -38,11 +38,8 @@ class HMS_XML{
             case 'get_rooms_with_vacancies':
                 HMS_XML::getRoomsWithVacancies($_REQUEST['floor_id']);
                 break; 
-            case 'get_bedrooms_with_vacancies':
-                HMS_XML::getBedroomsWithVacancies($_REQUEST['room_id']);
-                break;
             case 'get_beds_with_vacancies':
-                HMS_XML::getBedsWithVacancies($_REQUEST['bedroom_id']);
+                HMS_XML::getBedsWithVacancies($_REQUEST['room_id']);
                 break;
             case 'get_suites':
                 HMS_XML::getSuites($_REQUEST['floor_id']);
@@ -292,55 +289,14 @@ class HMS_XML{
 
     }
 
-    function getBedroomsWithVacancies($room_id){
+    function getBedsWithVacancies($room_id){
         PHPWS_Core::initModClass('hms', 'HMS_Room.php');
 
         $room = &new HMS_Room($room_id);
         
-        $bedrooms = $room->get_bedrooms_with_vacancies();
+        $beds = $room->get_beds_with_vacancies();
 
-        #test($bedrooms, 1);
-
-        if(!$bedrooms){
-            // throw an error
-            die("Could not load bedrooms");
-        }
-       
-        $xml_bedrooms = array();
-        
-        foreach ($bedrooms as $bedroom){
-            $xml_bedrooms[] = array('id' => $bedroom->id, 'bedroom_letter' => $bedroom->bedroom_letter);
-        }
-        
-        $serializer_options = array (
-            'addDecl' => TRUE,
-            'encoding' => 'UTF-8',
-            'indent' => '',
-            'rootName' => 'bedrooms',
-            'defaultTagName' => 'bedroom');
-
-        $serializer = new XML_Serializer($serializer_options);
-
-        $status = $serializer->serialize($xml_bedrooms);
-
-        if(PEAR::isError($status)){
-            die($status->getMessage());
-        }
-
-        header('Content-type: text/xml');
-        echo $serializer->getSerializedData();
-        exit;
-
-    }
-
-    function getBedsWithVacancies($bedroom_id){
-        PHPWS_Core::initModClass('hms', 'HMS_Bedroom.php');
-
-        $bedroom = &new HMS_Bedroom($bedroom_id);
-        
-        $beds = $bedroom->get_beds_with_vacancies();
-
-        #test($bedrooms, 1);
+        #test($beds, 1);
 
         if(!$beds){
             // throw an error

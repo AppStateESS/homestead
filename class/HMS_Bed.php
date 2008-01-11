@@ -7,11 +7,15 @@
 PHPWS_Core::initModClass('hms', 'HMS_Item.php');
 
 class HMS_Bed extends HMS_Item {
-    var $bedroom_id       = 0;
-    var $bed_letter       = 0;
-    var $banner_id        = null;
-    var $phone_number     = null;
-    var $_curr_assignment = null;
+    
+    var $room_id            = 0;
+    var $bed_letter         = null;
+    var $banner_id          = null;
+    var $phone_number       = null;
+    var $bedroom_label      = null;
+    var $ra_bed             = null;
+    var $_curr_assignment   = null;
+
     /**
      * Previous assignments (ie deleted) will be here after loading
      * the current assignment
@@ -20,16 +24,16 @@ class HMS_Bed extends HMS_Item {
     var $_prev_assignment = array();
 
     /**
-     * Holds the parent bedroom object of this bed.
+     * Holds the parent room object of this bed.
      */
-    var $_bedroom;
+    var $_room;
 
     function HMS_Bed($id = 0)
     {
         $this->construct($id, 'hms_bed');
     }
 
-    function copy($to_term, $bedroom_id, $assignments)
+    function copy($to_term, $room_id, $assignments)
     {
         if (!$this->id) {
             return false;
@@ -40,7 +44,7 @@ class HMS_Bed extends HMS_Item {
         $new_bed = clone($this);
         $new_bed->reset();
         $new_bed->term    = $to_term;
-        $new_bed->bedroom_id = $bedroom_id;
+        $new_bed->room_id = $room_id;
         if (!$new_bed->save()) {
             // There was an error saving the new room
             // Error will be logged.
@@ -107,25 +111,25 @@ class HMS_Bed extends HMS_Item {
         }
     }
 
-    function loadBedroom()
+    function loadRoom()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Bedroom.php');
-        $result = new HMS_Bedroom($this->bedroom_id);
+        PHPWS_Core::initModClass('hms', 'HMS_Room.php');
+        $result = new HMS_Room($this->Room_id);
         if(PHPWS_Error::logIfError($result)){
             return false;
         }
 
-        $this->_bedroom = & $result;
+        $this->_room = & $result;
         return true;
     }
 
     function get_parent()
     {
-        if(!$this->loadBedroom()){
+        if(!$this->loadRoom()){
             return false;
         }
 
-        return $this->_bedroom;
+        return $this->_room;
     }
 
     function get_number_of_assignees()
@@ -134,6 +138,15 @@ class HMS_Bed extends HMS_Item {
         return (bool)$this->_curr_assignment ? 1 : 0;
     }
 
+    function get_assignee()
+    {
+        if(!$this->loadAssignment()){
+            return false;
+        }
+
+        return new HMS_Student($this->_curr_assignment->asu_username);
+    }
+    
     function save()
     {
         $this->stamp();
@@ -155,31 +168,12 @@ class HMS_Bed extends HMS_Item {
         return FALSE;
     }
 
+    /******************
+     * Static Methods *
+     ******************/
+     
     function get_all_empty_beds($init = FALSE)
     {
-        /*$db = new PHPWS_DB('hms_bed');
-        $db->addJoin('left', 'hms_bed', 'hms_bedroom', 'bedroom_id', 'id');
-        $db->addJoin('left', 'hms_bedroom', 'hms_room', 'room_id', 'id');
-        $db->addJoin('left', 'hms_room', 'hms_floor', 'floor_id', 'id');
-        $db->addJoin('left', 'hms_floor', 'hms_residence_hall', 'residence_hall_id', 'id');
-        $db->addJoin('left outer', 'hms_bed', 'hms_assignment', 'id', 'bed_id');
-        $db->addWhere('hms_bed.deleted', 0);
-        $db->addWhere('hms_bedroom.deleted', 0);
-        $db->addWhere('hms_room.deleted', 0);
-        $db->addWhere('hms_room.is_online', 1);
-        $db->addWhere('hms_room.is_reserved', 0);
-        $db->addWhere('hms_room.is_medical', 0);
-        $db->addWhere('hms_room.ra_room', 0);
-        $db->addWhere('hms_room.private_room', 0);
-        $db->addWhere('hms_floor.deleted', 0);
-        $db->addWhere('hms_floor.is_online', 1);
-        $db->addWhere('hms_residence_hall.deleted', 0);
-        $db->addWhere('hms_residence_hall.is_online', 1);
-        $db->addWhere('hms_assignment.asu_username', null);
-        $db->addColumn('hms_bed.*');
-        $db->addColumn('hms_room.gender_type');
-        $results = $db->select();*/
-
         $sql = "
             SELECT
                 hms_bed.*,
@@ -187,8 +181,7 @@ class HMS_Bed extends HMS_Item {
                 hms_residence_hall.banner_building_code
             FROM 
                 hms_bed
-                JOIN hms_bedroom        ON hms_bed.bedroom_id          = hms_bedroom.id
-                JOIN hms_room           ON hms_bedroom.room_id         = hms_room.id
+                JOIN hms_room           ON hms_bed.room_id         = hms_room.id
                 JOIN hms_floor          ON hms_room.floor_id           = hms_floor.id
                 JOIN hms_residence_hall ON hms_floor.residence_hall_id = hms_residence_hall.id
                 LEFT OUTER JOIN (
@@ -196,7 +189,6 @@ class HMS_Bed extends HMS_Item {
                 ) AS a_prime ON hms_bed.id = a_prime.bed_id
             WHERE
                 hms_bed.deleted              = 0 AND
-                hms_bedroom.deleted          = 0 AND
                 hms_room.deleted             = 0 AND
                 hms_room.is_online           = 1 AND
                 hms_room.is_reserved         = 0 AND

@@ -34,9 +34,8 @@ class HMS_Residence_Hall extends HMS_Item
      * Temporary values for rh creation
      */
     var $_number_of_floors      = 0;
-    var $_bedrooms_per_room     = 0;
-    var $_number_of_rooms       = 0;
-    var $_beds_per_bedroom      = 0;
+    var $_rooms_per_floor       = 0;
+    var $_beds_per_room         = 0;
     var $_numbering_scheme      = 0;
 
     /**
@@ -168,9 +167,9 @@ class HMS_Residence_Hall extends HMS_Item
     }
     
     /*
-     * Creates the floors, rooms, bedrooms, and beds for a new hall
+     * Creates the floors, rooms, and beds for a new hall
      */
-    function create_child_objects($num_floors, $rooms_per_floor, $bedrooms_per_room, $beds_per_bedroom)
+    function create_child_objects($num_floors, $rooms_per_floor, $beds_per_room)
     {
         if (!$this->id) {
             return false;
@@ -184,7 +183,7 @@ class HMS_Residence_Hall extends HMS_Item
             $floor->gender_type         = $this->gender_type;
 
             if($floor->save()){
-                $floor->create_child_objects($rooms_per_floor, $bedrooms_per_room, $beds_per_bedroom);
+                $floor->create_child_objects($rooms_per_floor, $beds_per_room);
             } else {
                 // Decide on bed result.
             }   
@@ -333,46 +332,17 @@ class HMS_Residence_Hall extends HMS_Item
 
 
     /*
-     * Returns the number of bedrooms in the current hall
-     */
-    function get_number_of_bedrooms()
-    {
-        $db = &new PHPWS_DB('hms_bedroom');
-        
-        $db->addJoin('LEFT OUTER', 'hms_bedroom', 'hms_room',           'room_id',           'id');
-        $db->addJoin('LEFT OUTER', 'hms_room',    'hms_floor',          'floor_id',          'id');
-        $db->addJoin('LEFT OUTER', 'hms_floor',   'hms_residence_hall', 'residence_hall_id', 'id');
-        
-        $db->addWhere('hms_bedroom.deleted',        0);
-        $db->addWhere('hms_room.deleted',           0);
-        $db->addWhere('hms_floor.deleted',          0);
-        $db->addWhere('hms_residence_hall.deleted', 0);
-        
-        $db->addWhere('hms_residence_hall.id', $this->id);
-
-        $result = $db->select('count');
-        
-        if(!$result || PHPWS_Error::logIfError($result)){
-            return false;
-        }
-
-        return $result;
-    }
-
-    /*
      * Returns the number of beds in the current hall
      */
     function get_number_of_beds()
     {
         $db = &new PHPWS_DB('hms_bed');
         
-        $db->addJoin('LEFT OUTER', 'hms_bed',     'hms_bedroom',        'bedroom_id',        'id');
-        $db->addJoin('LEFT OUTER', 'hms_bedroom', 'hms_room',           'room_id',           'id');
+        $db->addJoin('LEFT OUTER', 'hms_bed',     'hms_room',           'room_id',        'id');
         $db->addJoin('LEFT OUTER', 'hms_room',    'hms_floor',          'floor_id',          'id');
         $db->addJoin('LEFT OUTER', 'hms_floor',   'hms_residence_hall', 'residence_hall_id', 'id');
         
         $db->addWhere('hms_bed.deleted',            0);
-        $db->addWhere('hms_bedroom.deleted',        0);
         $db->addWhere('hms_room.deleted',           0);
         $db->addWhere('hms_floor.deleted',          0);
         $db->addWhere('hms_residence_hall.deleted', 0);
@@ -396,15 +366,13 @@ class HMS_Residence_Hall extends HMS_Item
     {
         $db = &new PHPWS_DB('hms_assignment');
         
-        $db->addJoin('LEFT OUTER', 'hms_assignment', 'hms_bed',            'bed_id',            'id');
-        $db->addJoin('LEFT OUTER', 'hms_bed',        'hms_bedroom',        'bedroom_id',        'id');
-        $db->addJoin('LEFT OUTER', 'hms_bedroom',    'hms_room',           'room_id',           'id');
-        $db->addJoin('LEFT OUTER', 'hms_room',       'hms_floor',          'floor_id',          'id');
-        $db->addJoin('LEFT OUTER', 'hms_floor',      'hms_residence_hall', 'residence_hall_id', 'id');
+        $db->addJoin('LEFT OUTER', 'hms_assignment', 'hms_bed',             'bed_id',           'id');
+        $db->addJoin('LEFT OUTER', 'hms_bed',        'hms_room',            'room_id',          'id');
+        $db->addJoin('LEFT OUTER', 'hms_room',       'hms_floor',           'floor_id',         'id');
+        $db->addJoin('LEFT OUTER', 'hms_floor',      'hms_residence_hall',  'residence_hall_id','id');
         
         $db->addWhere('hms_assignment.deleted',     0);
         $db->addWhere('hms_bed.deleted',            0);
-        $db->addWhere('hms_bedroom.deleted',        0);
         $db->addWhere('hms_room.deleted',           0);
         $db->addWhere('hms_floor.deleted',          0);
         $db->addWhere('hms_residence_hall.deleted', 0);
@@ -470,24 +438,6 @@ class HMS_Residence_Hall extends HMS_Item
             $rooms = array_merge($rooms, $floor_rooms);
         }
         return $rooms;
-    }
-
-    /*
-     * Returns an array of the bedroom objects which are in the current hall
-     */
-    function &get_bedrooms()
-    {
-        if (!$this->loadFloors()) {
-            return false;
-        }
-
-        $bedrooms = array();
-        
-        foreach($this->_floors as $floor){
-            $floor_bedrooms = $floor->get_bedrooms();
-            $bedrooms = array_merge($rooms, $floor_bedrooms);
-        }
-        return $bedrooms;
     }
 
     /*
@@ -730,7 +680,6 @@ class HMS_Residence_Hall extends HMS_Item
         
         #$tags['NUM_FLOORS']     = $this->get_number_of_floors();
         #$tags['NUM_ROOMS']      = $this->get_number_of_rooms();
-        #$tags['NUM_BEDROOMS']   = $this->get_number_of_bedrooms();
         #$tags['NUM_BEDS']       = $num_beds;
         #$tags['NUM_ASSIGNEES']  = $num_assignees();
         #$tags['NUM_BEDS_FREE']  = $num_beds_free();
@@ -928,39 +877,33 @@ class HMS_Residence_Hall extends HMS_Item
                 continue;
             }
 
-            # for each room, print the bedrooms, beds, and assignments
+            # for each room, print the beds, and assignments
             foreach($floor->_rooms as $room)
             {
                 $content .= '&nbsp;&nbsp;&nbsp;&nbsp;<b>Room ' . $room->room_number . '</b><br />';
                
-                # Load the bedrooms
-                $room->loadBedrooms();
+                # Load the beds
+                $room->loadBeds();
                
-                # For each bedroom, print the beds (and assignments)
-                foreach($room->_bedrooms as $bedroom)
+                # For each bed, print the bed (and assignment)
+                foreach($room->_beds as $bed)
                 {          
-                    # Load the beds
-                    $bedroom->loadBeds();
+                    # Attempt to load the bed's assignment
+                    $bed->loadAssignment();
 
-                    foreach($bedroom->_beds as $bed)
-                    {
-                        # Attempt to load the bed's assignment
-                        $bed->loadAssignment();
-
-                        if(isset($bed->_curr_assignment)){
-                            # There is an assignment, so print it
-                            $username = $bed->_curr_assignment->asu_username;
-                            $name = HMS_SOAP::get_full_name($username);
-                            $link = PHPWS_Text::secureLink($name, 'hms', array('type'=>'student', 'op'=>'get_matching_students', 'username'=>$username)) . " (<em>$username</em>)";
-                            $content .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bedroom: ' . $bedroom->bedroom_letter . '&nbsp;&nbsp;&nbsp;&nbsp;Bed: ' . $bed->bed_letter . '&nbsp;&nbsp;&nbsp;&nbsp;' . $link . '<br />';
-                        }else{
-                            # No one is assigned here
-                            #TODO: Link this to Assignment
-                            $content .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bedroom: ' . $bedroom->bedroom_letter . '&nbsp;&nbsp;&nbsp;&nbsp;Bed: ' . $bed->bed_letter . '&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"gray\">&lt;unassigned&gt;</font><br />';
-                        }
-                    }// end foreach beds
+                    if(isset($bed->_curr_assignment)){
+                        # There is an assignment, so print it
+                        $username = $bed->_curr_assignment->asu_username;
+                        $name = HMS_SOAP::get_full_name($username);
+                        $link = PHPWS_Text::secureLink($name, 'hms', array('type'=>'student', 'op'=>'get_matching_students', 'username'=>$username)) . " (<em>$username</em>)";
+                        $content .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bedroom: ' . $bed->bedroom_label . '&nbsp;&nbsp;&nbsp;&nbsp;Bed: ' . $bed->bed_letter . '&nbsp;&nbsp;&nbsp;&nbsp;' . $link . '<br />';
+                    }else{
+                        # No one is assigned here
+                        #TODO: Link this to Assignment
+                        $content .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bedroom: ' . $bed->bedroom_label . '&nbsp;&nbsp;&nbsp;&nbsp;Bed: ' . $bed->bed_letter . '&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"gray\">&lt;unassigned&gt;</font><br />';
+                    }
                     $content .= "<br />";
-                }//end foreach bedrooms
+                }//end foreach beds
             }//end foreach rooms
         }// end foreach floors
 

@@ -93,8 +93,7 @@ class HMS_Assignment extends HMS_Item
         }
 
         $bed = $this->get_parent();
-        $bedroom = $bed->get_parent();
-        $room = $bedroom->get_parent();
+        $room = $bed->get_parent();
         $floor = $room->get_parent();
         $building = $floor->get_parent();
 
@@ -122,8 +121,7 @@ class HMS_Assignment extends HMS_Item
         }
 
         $bed = $this->get_parent();
-        $bedroom = $bed->get_parent();
-        $room = $bedroom->get_parent();
+        $room = $bed->get_parent();
         $floor = $room->get_parent();
         $building = $floor->get_parent();
 
@@ -232,7 +230,6 @@ class HMS_Assignment extends HMS_Item
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
         PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
         PHPWS_Core::initModClass('hms', 'HMS_Room.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Bedroom.php');
         PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
         PHPWS_Core::initModClass('hms', 'HMS_Application.php');
@@ -265,16 +262,11 @@ class HMS_Assignment extends HMS_Item
         }
 
         # Find a vacant bed
-        $bedrooms = $room->get_bedrooms();
-        foreach($bedrooms as $bedroom){
-            $beds = $bedroom->get_beds();
-            foreach($beds as $bed){
-                if($bed->has_vacancy()){
-                    $vacant_bed = $bed;
-                    break;
-                }
-            }
-        }
+        # TODO, revist this so that they can specificy the bed
+        $beds = $room->get_beds_with_vacancies();
+        $vacant_bed = $beds[0];
+
+        # TODO: double check that the bed is really empty.
 
         # Create application object
         $application = new HMS_Application($_REQUEST['username']);
@@ -557,13 +549,11 @@ class HMS_Assignment extends HMS_Item
         $pager = & new DBPager('hms_assignment', 'HMS_Assignment');
 
         $pager->db->addJoin('LEFT OUTER', 'hms_assignment', 'hms_bed', 'bed_id', 'id');
-        $pager->db->addJoin('LEFT OUTER', 'hms_bed', 'hms_bedroom', 'bedroom_id', 'id');
-        $pager->db->addJoin('LEFT OUTER', 'hms_bedroom', 'hms_room', 'room_id', 'id');
+        $pager->db->addJoin('LEFT OUTER', 'hms_bed', 'hms_room', 'room_id', 'id');
 
         $pager->addWhere('hms_room.id', $room_id);
         $pager->addWhere('hms_assignment.deleted', 0);
         $pager->addWhere('hms_bed.deleted', 0);
-        $pager->addWhere('hms_bedroom.deleted', 0);
         $pager->addWhere('hms_room.deleted', 0);
 
         $page_tags['NAME_LABEL']    = "Name";
@@ -601,13 +591,11 @@ class HMS_Assignment extends HMS_Item
         $pager = & new DBPager('hms_assignment', 'HMS_Assignment');
 
         $pager->db->addJoin('LEFT OUTER', 'hms_assignment', 'hms_bed', 'bed_id', 'id');
-        $pager->db->addJoin('LEFT OUTER', 'hms_bed', 'hms_bedroom', 'bedroom_id', 'id');
-        $pager->db->addJoin('LEFT OUTER', 'hms_bedroom', 'hms_room', 'room_id', 'id');
+        $pager->db->addJoin('LEFT OUTER', 'hms_bed', 'hms_room', 'room_id', 'id');
 
         $pager->addWhere('hms_room.suite_id', $suite_id);
         $pager->addWhere('hms_assignment.deleted', 0);
         $pager->addWhere('hms_bed.deleted', 0);
-        $pager->addWhere('hms_bedroom.deleted', 0);
         $pager->addWhere('hms_room.deleted', 0);
 
         $page_tags['NAME_LABEL']    = "Name";

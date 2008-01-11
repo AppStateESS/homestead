@@ -25,9 +25,6 @@
                 <th>Pricing Tier: </th><td>{PRICING_TIER}</td>
             </tr>
             <tr>
-                <th>Number of bedrooms: &nbsp;&nbsp;</th><td align="left">{NUMBER_OF_BEDROOMS}</td>
-            </tr>
-            <tr>
                 <th>Number of beds: </th><td>{NUMBER_OF_BEDS}</td>
             </tr>
             <tr>
