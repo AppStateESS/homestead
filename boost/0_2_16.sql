@@ -7,5 +7,5 @@ ALTER TABLE hms_bed ADD COLUMN bedroom_label character varying(255);
 UPDATE hms_bed SET bedroom_label = hms_bedroom.bedroom_letter WHERE hms_bed.bedroom_id = hms_bedroom.id;
 
 ALTER TABLE hms_bed DROP COLUMN bedroom_id;
-DROP TABLE hms_bedrooms;
+DROP TABLE hms_bedroom;
 COMMIT;
