@@ -31,6 +31,7 @@ class HMS_Bed extends HMS_Item {
     function HMS_Bed($id = 0)
     {
         $this->construct($id, 'hms_bed');
+        //test($this);
     }
 
     function copy($to_term, $room_id, $assignments)

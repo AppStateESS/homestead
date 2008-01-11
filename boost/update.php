@@ -710,7 +710,7 @@ function hms_update(&$content, $currentVersion)
             $files[] = 'templates/admin/select_residence_hall.tpl';
             $files[] = 'templates/admin/maintenance.tpl';
             PHPWS_Boost::updatefiles($files, 'hms');
-        case version_compare($currentVersion, '0.2.6', '<'):
+        case version_compare($currentVersion, '0.2.16', '<'):
             $db = &new PHPWS_DB;
             $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_16.sql');
             if(PEAR::isError($result)) {
