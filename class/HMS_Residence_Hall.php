@@ -785,7 +785,7 @@ class HMS_Residence_Hall extends HMS_Item
         }
 
         # Setup the title and color of the title bar
-        $tpl['TITLE'] = 'Edit Room';
+        $tpl['TITLE'] = 'Edit Residence Hall';
         $tpl['TITLE_CLASS'] = HMS_Util::get_title_class();
 
         # Create the hall given the hall id

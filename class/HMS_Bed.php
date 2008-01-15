@@ -93,8 +93,12 @@ class HMS_Bed extends HMS_Item {
         $db->loadClass('hms', 'HMS_Assignment.php');
         $result = $db->getObjects('HMS_Assignment');
 
-        if (!$result || PHPWS_Error::logIfError($result)) {
+        //if (!$result || PHPWS_Error::logIfError($result)) {
+        if(PEAR::isError($result)){
+            PHPWS_Error::logIfError($result);
             return false;
+        } else if($result == null){
+            return true;
         } else {
             foreach ($result as $ass) {
                 if ($ass->deleted == 1) {
@@ -115,7 +119,7 @@ class HMS_Bed extends HMS_Item {
     function loadRoom()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Room.php');
-        $result = new HMS_Room($this->Room_id);
+        $result = new HMS_Room($this->room_id);
         if(PHPWS_Error::logIfError($result)){
             return false;
         }
@@ -172,6 +176,25 @@ class HMS_Bed extends HMS_Item {
     /******************
      * Static Methods *
      ******************/
+
+    function main()
+    {
+        switch($_REQUEST['op'])
+        {
+            case 'select_bed_to_edit':
+                return HMS_Bed::show_select_bed('Edit Bed', 'bed', 'show_edit_bed');
+                break;
+            case 'show_edit_bed':
+                return HMS_Bed::show_edit_bed();
+                break;
+            case 'edit_bed':
+                return HMS_Bed::edit_bed();
+                break;
+            default:
+                echo "undefined bed op: {$_REQUEST['op']}";
+                break;
+        }
+    }
      
     function get_all_empty_beds($init = FALSE)
     {
@@ -224,7 +247,214 @@ class HMS_Bed extends HMS_Item {
 
         return $beds;
     }
+    
+
+    function edit_bed()
+    {
+        # Create the bed object given the bed_id
+        $bed = new HMS_Bed($_REQUEST['bed_id']);
+        if(!$bed){
+            return show_select_bed('Edit Bed', 'bed', 'show_edit_bed', null, 'Error: The selected bed does not exist!');
+        }
+
+        $bed->bedroom_label = $_REQUEST['bedroom_label'];
+        $bed->phone_number  = $_REQUEST['phone_number'];
+        $bed->banner_id     = $_REQUEST['banner_id'];
         
+        if(isset($_REQUEST['ra_bed'])){
+            $bed->ra_bed = 1;
+        }else{
+            $bed->ra_bed = 0;
+        }
+
+        $result = $bed->save();
+
+        if(!$result || PHPWS_Error::logIfError($result)){
+            return HMS_Bed::show_edit_bed($bed->id, NULL, 'Error: There was a problem while saving the bed. No changes were made');
+        }
+
+        return HMS_Bed::show_edit_bed($bed->id, 'Bed updated successfully.');
+    }
+
+    
+    /*********************
+     * Static UI Methods *
+     *********************/
+     
+    function show_select_bed($title, $type, $op, $success = NULL, $error = NULL)
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
+        PHPWS_Core::initCoreClass('Form.php');
+
+        javascript('/modules/hms/select_bed');
+
+        $tpl = array();
+
+        # Setup the title and color of the title bar
+        $tpl['TITLE'] = $title;
+        $tpl['TITLE_CLASS'] = HMS_Util::get_title_class();
+
+        # Get the halls for the selected term
+        $halls = HMS_Residence_Hall::get_halls_array(HMS_Term::get_selected_term());
+
+        # Show an error if there are no halls for the current term
+        if($halls == NULL){
+            $tpl['ERROR_MSG'] = 'Error: No halls exist for the selected term. Please create a hall first.';
+            return PHPWS_Template::process($tpl, 'hms', 'admin/select_bed.tpl');
+        }
+
+        $halls[0] = 'Select...';
+
+        $tpl['MESSAGE'] = 'Please select a bed: ';
+
+        # Setup the form
+        $form = &new PHPWS_Form;
+        $form->setMethod('get');
+        $form->addDropBox('residence_hall', $halls);
+        $form->setLabel('residence_hall', 'Residence hall: ');
+        $form->setMatch('residence_hall', 0);
+        $form->setExtra('residence_hall', 'onChange="handle_hall_change()"');
+
+        $form->addDropBox('floor', array(0 => ''));
+        $form->setLabel('floor', 'Floor: ');
+        $form->setExtra('floor', 'disabled onChange="handle_floor_change()"');
+
+        $form->addDropBox('room', array(0 => ''));
+        $form->setLabel('room', 'Room: ');
+        $form->setExtra('room', 'disabled onChange="handle_room_change()"');
+
+        $form->addDropBox('bed', array(0 => ''));
+        $form->setLabel('bed', 'Bed: ');
+        $form->setExtra('bed', 'disabled onChange="handle_bed_change()"');
+
+        $form->addSubmit('submit', 'Select');
+        $form->setExtra('submit', 'disabled');
+
+        # Use the type and op that was passed in
+        $form->addHidden('module', 'hms');
+        $form->addHidden('type', $type);
+        $form->addHidden('op', $op);
+
+        $form->mergeTemplate($tpl);
+        $tpl = $form->getTemplate();
+
+        if(isset($error)){
+            $tpl['ERROR_MSG'] = $error;
+        }
+
+        if(isset($success)){
+            $tpl['SUCCESS_MSG'] = $success;
+        }
+        
+        return PHPWS_Template::process($tpl, 'hms', 'admin/select_bed.tpl');
+    }
+
+    function show_edit_bed($bed_id = NULL, $success = null, $error = null)
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Room.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
+        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
+        
+        # Determine the bed id. If the passed in variable is NULL,
+        # use the request.
+        if(!isset($bed_id)){
+            $bed_id = $_REQUEST['bed'];
+        }
+
+        # Setup the title and color of the title bar
+        $tpl['TITLE'] = 'Edit Bed';
+        $tpl['TITLE_CLASS'] = HMS_Util::get_title_class();
+
+        # Create the room object given the room_id
+        $bed = new HMS_Bed($bed_id);
+        if(!$bed){
+            return HMS_Bed::show_select_bed('Edit B', 'bed', 'show_edit_bed', NULL, 'Error: The selected bed does not exist!'); 
+        }
+
+        # Create the room object
+        $room = $bed->get_parent();
+        if(!$room){
+            $tpl['ERROR_MSG'] = 'There was an error getting the room object. Please contact ESS.';
+            return PHPWS_Template::process($tpl, 'hms', 'admin/edit_bed.tpl');
+        }
+
+        # Create the floor object
+        $floor = $room->get_parent();
+        if(!$floor){
+            $tpl['ERROR_MSG'] = 'There was an error getting the floor object. Please contact ESS.';
+            return PHPWS_Template::process($tpl, 'hms', 'admin/edit_bed.tpl');
+        }
+
+        $hall = $floor->get_parent();
+        if(!$hall){
+            $tpl['ERROR_MSG'] = 'There was an error getting the hall object. Please contact ESS.';
+            return PHPWS_Template::process($tpl, 'hms', 'admin/edit_bed.tpl');
+        }
+
+        $tpl['HALL_NAME']           = PHPWS_Text::secureLink($hall->hall_name, 'hms', array('type'=>'hall', 'op'=>'show_edit_hall', 'hall'=>$hall->id));
+        $tpl['FLOOR_NUMBER']        = PHPWS_Text::secureLink($floor->floor_number, 'hms', array('type'=>'floor', 'op'=>'show_edit_floor', 'floor'=>$floor->id));
+        $tpl['ROOM_NUMBER']         = PHPWS_Text::secureLink($room->room_number, 'hms', array('type'=>'room', 'op'=>'show_edit_room', 'room'=>$room->id));
+        $tpl['BED_LETTER']          = $bed->bed_letter;
+
+        if($bed->loadAssignment() === false){
+            test($bed->loadAssignment());
+            //test($bed->_curr_assignment);
+            $tpl['ERROR_MSG'] = 'There was an error loading the assignmnet. Please contact ESS.';
+            return PHPWS_Template::process($tpl, 'hms', 'admin/edit_bed.tpl');
+        }
+
+        
+        if(isset($bed->_curr_assignment)){
+            $tpl['ASSIGNED_TO'] = PHPWS_Text::secureLink(HMS_SOAP::get_full_name($bed->_curr_assignment->asu_username),'hms', array('type'=>'student', 'op'=>'get_matching_students', 'username'=>$bed->_curr_assignment->asu_username))
+                                    . ' '
+                                    . PHPWS_Text::secureLink('(re-assign)', 'hms', array('type'=>'assignment', 'op'=>'show_assign_student', 'username'=>$bed->_curr_assignment->asu_username));
+        }else{
+            # TODO: make this a link to assign a student to this
+            # particular bed
+            $tpl['ASSIGNED_TO'] = PHPWS_Text::secureLink('&lt;unassigned&gt;', 'hms', array('type'=>'assignment', 'op'=>'show_assign_student'));
+        }
+        
+        $form = new PHPWS_Form();
+
+        $form->addText('bedroom_label', $bed->bedroom_label);
+        
+        $form->addText('phone_number', $bed->phone_number);
+        $form->setMaxSize('phone_number', 4);
+        $form->setSize('phone_number', 5);
+        
+        $form->addText('banner_id', $bed->banner_id);
+
+        $form->addCheckBox('ra_bed', 1);
+
+        if($bed->ra_bed == 1){
+            $form->setExtra('ra_bed', 'checked');
+        }
+        //$form->setMatch('ra_bed', $bed->ra_bed);
+
+        $form->addSubmit('submit', 'Submit');
+        
+        $form->addHidden('module', 'hms');        
+        $form->addHidden('type', 'bed');
+        $form->addHidden('op', 'edit_bed');
+        $form->addHidden('bed_id', $bed->id);
+
+        $form->mergeTemplate($tpl);
+        $tpl = $form->getTemplate();
+
+        if(isset($success)){
+            $tpl['SUCCESS_MSG'] = $success;
+        }
+
+        if(isset($error)){
+            $tpl['ERROR_MSG'] = $error;
+        }
+
+        return PHPWS_Template::process($tpl, 'hms', 'admin/edit_bed.tpl');
+    }
 }
 
 ?>

@@ -134,6 +134,12 @@ class HMS_Maintenance
 
         if(Current_User::allow('hms', 'edit_rooms') || Current_User::allow('hms', 'admin'))
             $tpl['EDIT_ROOM'] = PHPWS_Text::secureLink(_('Edit a Room'), 'hms', array('type'=>'room', 'op'=>'select_room_to_edit'));
+
+        if(Current_user::allow('hms', 'edit_rooms') || Current_User::allow('hms', 'admin'))
+            $tpl['BED_LABEL'] = 'Bed Options';
+
+        if(Current_user::allow('hms', 'edit_rooms') || Current_User::allow('hms', 'admin'))
+            $tpl['EDIT_BED'] = PHPWS_Text::secureLink(_('Edit a Bed'), 'hms', array('type'=>'bed', 'op'=>'select_bed_to_edit'));
         
         if(Current_User::allow('hms', 'learning_community_maintenance') || Current_User::allow('hms', 'admin'))
             $tpl['LC_LABEL']    = "Learning Community Options";

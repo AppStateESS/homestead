@@ -38,11 +38,14 @@ class HMS_XML{
             case 'get_rooms_with_vacancies':
                 HMS_XML::getRoomsWithVacancies($_REQUEST['floor_id']);
                 break; 
-            case 'get_beds_with_vacancies':
-                HMS_XML::getBedsWithVacancies($_REQUEST['room_id']);
-                break;
             case 'get_suites':
                 HMS_XML::getSuites($_REQUEST['floor_id']);
+                break;
+            case 'get_beds':
+                HMS_XML::getBeds($_REQUEST['room_id']);
+                break;
+            case 'get_beds_with_vacancies':
+                HMS_XML::getBedsWithVacancies($_REQUEST['room_id']);
                 break;
             case 'get_username_suggestions':
                 HMS_XML::get_username_suggestions($_REQUEST['username']);
@@ -295,6 +298,47 @@ class HMS_XML{
         $room = &new HMS_Room($room_id);
         
         $beds = $room->get_beds_with_vacancies();
+
+        #test($beds, 1);
+
+        if(!$beds){
+            // throw an error
+            die("Could not load beds");
+        }
+       
+        $xml_beds = array();
+        
+        foreach ($beds as $bed){
+            $xml_beds[] = array('id' => $bed->id, 'bed_letter' => $bed->bed_letter);
+        }
+        
+        $serializer_options = array (
+            'addDecl' => TRUE,
+            'encoding' => 'UTF-8',
+            'indent' => '',
+            'rootName' => 'beds',
+            'defaultTagName' => 'bed');
+
+        $serializer = new XML_Serializer($serializer_options);
+
+        $status = $serializer->serialize($xml_beds);
+
+        if(PEAR::isError($status)){
+            die($status->getMessage());
+        }
+
+        header('Content-type: text/xml');
+        echo $serializer->getSerializedData();
+        exit;
+
+    }
+
+     function getBeds($room_id){
+        PHPWS_Core::initModClass('hms', 'HMS_Room.php');
+
+        $room = &new HMS_Room($room_id);
+        
+        $beds = $room->get_beds();
 
         #test($beds, 1);
 

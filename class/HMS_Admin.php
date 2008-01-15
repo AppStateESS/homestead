@@ -53,6 +53,14 @@ class HMS_Admin
                 PHPWS_Core::initModClass('hms', 'HMS_Room.php');
                 $final = HMS_Room::main();
                 break;
+            case 'suite':
+                PHPWS_Core::initModClass('hms', 'HMS_Suite.php');
+                $final = HMS_Suite::main();
+                break;
+            case 'bed':
+                PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
+                $final = HMS_Bed::main();
+                break;
             case 'student':
                 PHPWS_Core::initModClass('hms', 'HMS_Student.php');
                 $final = HMS_Student::main();
@@ -68,10 +76,6 @@ class HMS_Admin
             case 'assignment':
                 PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
                 $final = HMS_Assignment::main();
-                break;
-            case 'suite':
-                PHPWS_Core::initModClass('hms', 'HMS_Suite.php');
-                $final = HMS_Suite::main();
                 break;
             case 'rlc':
                 PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
