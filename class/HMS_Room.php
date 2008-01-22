@@ -204,7 +204,19 @@ class HMS_Room extends HMS_Item
 
     /*
      * Returns TRUE or FALSE.
-     * TODO: write this documentation
+     *
+     * This function uses the following logic:
+     * 
+     * When ignore_upper = TRUE (a floor is trying to see if this room could be changed to a target gender):
+     *      If the target gender is COED: then we can always return true (even though a room can never be COED).
+     *      If the target gender is MALE: then return false if the room is female AND not empty
+     *      If the target gender is FEMALE: then return false if the room is male AND not empty
+     *      If all those checks pass, then return true
+     *
+     * When ignore_upper = FALSE (we're trying to change *this* room to a target gender):
+     *      If the target gender is COED: always return false (rooms can't be COED)
+     *      If the target gender is MALE: return false if the floor is female
+     *      If the target gender is FEMALE: return false if the floor is male
      *
      * @param int  target_gender
      * @param bool ignore_upper In the case that we're attempting to change 

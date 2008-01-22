@@ -265,20 +265,24 @@ class HMS_Floor extends HMS_Item
     }
 
     /*
-     * Returns TRUE or FALSE. The gender of a floor can only be changed to the
-     * target gender if all rooms can be changed to the target gender.
+     * Returns TRUE or FALSE. 
+     * 
+     * This function uses the following logic:
+     * 
+     * When ignore_upper = TRUE (a hall is trying to see if this floor can be changed to a target gender):
+     *      If the target gender is COED: always return true, since it doesn't matter what the rooms are (or what the hall is)
+     *      If the target gender is MALE: return false if any room is female and non-empty
+     *      If the target gender is FEMALE: return false if any room is male and non-empty
+     *      If all thsoe checks pass, then return true
      *
-     * Additionally, the floor's gender can only be changed if the target
-     * gender will be consistent with the gender of the hall of which
-     * this floor is a part.
-     *
-     * This function checks to make sure all rooms can be changed,
-     * those rooms in tern check all thier beds, and so on.
-     *
-     * In the case that we're attempting to change the gender of just
-     * 'this' floor, set $ignore_upper to TRUE to avoid checking the
-     * parent hall's gender.
-     * TODO: rewrite this because the behavior changed
+     *      When ignore_upper = FALSE (we're trying to change *this* floor to a target gender):
+     *      If the target gender is COED: return true only if the hall is COED (but it doesn't matter what the rooms are)
+     *      If the target gender is MALE: return false if the hall is female, or if there are any female rooms on the floor
+     *      If the target gender is FEMALE: return false if the hall is male, or if there are any male rooms on the floor
+     *      
+     * @param int   target_gender
+     * @param bool  ignore_upper
+     * @return bool            
      */
     function can_change_gender($target_gender, $ignore_upper = FALSE)
     {
