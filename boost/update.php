@@ -730,7 +730,11 @@ function hms_update(&$content, $currentVersion)
             $files[] = 'templates/admin/select_bed.tpl';
             $files[] = 'templates/admin/edit_bed.tpl';
             $files[] = 'templates/admin/maintenance.tpl';
-            $files[] = 'templates/javascript/select_bed/head.js';
+            $files[] = 'javascript/select_bed/head.js';
+            $files[] = 'templates/admin/bed_pager_by_room.tpl';
+            $files[] = 'templates/admin/edit_room.tpl';
+            $files[] = 'javascript/assign_student/head.js';
+            $files[] = 'templates/admin/assign_student.tpl';
             PHPWS_Boost::updatefiles($files, 'hms');
 
     }

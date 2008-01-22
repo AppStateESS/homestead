@@ -618,8 +618,10 @@ class HMS_Floor extends HMS_Item
 
     function get_pager_by_hall_tags()
     {
+        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
+        
         $tpl['FLOOR_NUMBER']   = PHPWS_Text::secureLink($this->floor_number, 'hms', array('type'=>'floor', 'op'=>'show_edit_floor', 'floor'=>$this->id));
-        $tpl['GENDER_TYPE'] = HMS::formatGender($this->gender_type);
+        $tpl['GENDER_TYPE'] = HMS_Util::formatGender($this->gender_type);
         $tpl['IS_ONLINE']   = $this->is_online ? 'Yes' : 'No';
 
         return $tpl;

@@ -88,23 +88,6 @@ class HMS
         return (int)"$year$term";
     }
 
-    function formatGender($gender)
-    {
-        switch ($gender) {
-        case FEMALE:
-            return FEMALE_DESC;
-           
-        case MALE:
-            return MALE_DESC;
-
-        case COED:
-            return COED_DESC;
-
-        default:
-            return 'Error: Unknown gender';
-        }
-    }
-
 }
     
 

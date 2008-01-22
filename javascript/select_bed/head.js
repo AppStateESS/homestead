@@ -13,9 +13,11 @@ function handle_hall_change()
     // Reset and disable all the lower-order drop downs
     resetDrop(floor_drop);
     resetDrop(room_drop);
+    resetDrop(bed_drop);
 
     disableDrop(floor_drop);
     disableDrop(room_drop);
+    disableDrop(bed_drop);
 
     // Get the selected value
     var hallId = document.getElementById(res_hall_drop).options[document.getElementById(res_hall_drop).selectedIndex].value
@@ -90,8 +92,10 @@ function handle_floor_change()
 {
     // Reset and disable all the lower-order drop downs
     resetDrop(room_drop);
+    resetDrop(bed_drop);
 
     disableDrop(room_drop);
+    disableDrop(bed_drop);
 
     // Get the selected value
     var floorId = document.getElementById(floor_drop).options[document.getElementById(floor_drop).selectedIndex].value

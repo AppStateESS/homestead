@@ -238,9 +238,9 @@ class HMS_Assignment extends HMS_Item
 
 
         $more = '';
-        
+
         # Make sure a username was entered
-        if(!isset($_REQUEST['username'])){
+        if(!isset($_REQUEST['username']) || $_REQUEST['username'] == ''){
             return HMS_Assignment::show_assign_student(NULL, 'Error: You must enter a user name.');
         }
         
@@ -261,10 +261,17 @@ class HMS_Assignment extends HMS_Item
             return HMS_Assignment::show_assign_student(NULL, 'Error: The room is full.');
         }
 
-        # Find a vacant bed
-        # TODO, revist this so that they can specificy the bed
-        $beds = $room->get_beds_with_vacancies();
-        $vacant_bed = $beds[0];
+        if($_REQUEST['use_bed'] == 'true'){
+           $vacant_bed = new HMS_Bed($_REQUEST['bed']);
+           if(!$vacant_bed){
+               return HMS_Assignment::show_assign_student(NULL, 'Error: Could not create the bed object');
+           }
+        }else{
+            # Find a vacant bed
+            # TODO, revist this so that they can specificy the bed
+            $beds = $room->get_beds_with_vacancies();
+            $vacant_bed = $beds[0];
+        }
 
         # TODO: double check that the bed is really empty.
 
@@ -447,9 +454,14 @@ class HMS_Assignment extends HMS_Item
         $form->setLabel('room', 'Room: ');
         $form->setExtra('room', 'disabled onChange="handle_room_change()"');
 
+        $form->addDropBox('bed', array(0 => ''));
+        $form->setLabel('bed', 'Bed: ');
+        $form->setExtra('bed', 'disabled onChange="handle_bed_change()"');
+
         $form->addSubmit('submit', 'Assign Student');
         $form->setExtra('submit', 'disabled');
         
+        $form->addHidden('use_bed', 'false');
         $form->addHidden('module', 'hms');
         $form->addHidden('type', 'assignment');
         $form->addHidden('op', 'assign_student');
@@ -543,7 +555,8 @@ class HMS_Assignment extends HMS_Item
         return PHPWS_Template::process($tpl, 'hms', 'admin/unassign_student.tpl');
     }
 
-    function assignment_pager_by_room($room_id){
+    function assignment_pager_by_room($room_id)
+    {
         PHPWS_Core::initCoreClass('DBPager.php');
 
         $pager = & new DBPager('hms_assignment', 'HMS_Assignment');
@@ -556,9 +569,9 @@ class HMS_Assignment extends HMS_Item
         $pager->addWhere('hms_bed.deleted', 0);
         $pager->addWhere('hms_room.deleted', 0);
 
-        $page_tags['NAME_LABEL']    = "Name";
-        $page_tags['ACTION_LABEL']  = "Action";
-        $page_tags['TABLE_TITLE']   = "Current Assignments";
+        $page_tags['NAME_LABEL']    = 'Name';
+        $page_tags['ACTION_LABEL']  = 'Action';
+        $page_tags['TABLE_TITLE']   = 'Current Assignments';
 
         $pager->setModule('hms');
         $pager->setTemplate('admin/assignment_pager_by_room.tpl');

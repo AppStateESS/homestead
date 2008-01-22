@@ -658,6 +658,8 @@ class HMS_Residence_Hall extends HMS_Item
      */
     function get_row_tags()
     {
+        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
+        
         $tags = $this->item_tags();
         $tags['HALL_NAME'] = $this->hall_name;
         $tags['BANNER_BUILDING_CODE'] = $this->banner_building_code;
@@ -672,7 +674,7 @@ class HMS_Residence_Hall extends HMS_Item
         }
 
         $gender_type = $this->get_gender_type();
-        $tags['GENDER_TYPE'] = HMS::formatGender($this->gender_type);
+        $tags['GENDER_TYPE'] = HMS_Util::formatGender($this->gender_type);
 
         #$num_beds = $this->get_number_of_beds();
         #$num_assignees = $this->get_number_of_assignees();

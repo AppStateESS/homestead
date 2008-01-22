@@ -4,8 +4,21 @@
 var res_hall_drop   = 'phpws_form_residence_hall';
 var floor_drop      = 'phpws_form_floor';
 var room_drop       = 'phpws_form_room';
+var bed_drop        = 'phpws_form_bed';
 
 var xmlHttp;
+
+var bedDropShown = false;
+
+function showBedDrop()
+{
+    bedDropShown = true;
+
+    document.getElementById('link_row').style.display = "none";
+    document.getElementById('bed_row').style.display  = "table-row";
+
+    document.getElementById('phpws_form_use_bed').value = "true";
+}
 
 function handle_hall_change()
 {
@@ -165,15 +178,110 @@ function handle_room_change()
 {
     // Get the selected value
     var roomId = document.getElementById(room_drop).options[document.getElementById(room_drop).selectedIndex].value
+
+    resetDrop(bed_drop);
+    disableDrop(bed_drop);
+
+    if(roomId != 0){
+        sendBedRequest();
     
+        if(bedDropShown){
+            // the default value is selected
+            document.getElementById('phpws_form_submit').disabled = true;
+        }
+    }
+}
+
+function handle_bed_change()
+{
+    // Get the selected value
+    var bedId = document.getElementById(bed_drop).options[document.getElementById(bed_drop).selectedIndex].value
+
     // the default value is selected
-    if(roomId == 0){
+    if(bedId == 0){
         //alert('default selected');
         document.getElementById('phpws_form_submit').disabled = true;
         return;
     }
-    
+
     document.getElementById('phpws_form_submit').disabled = false;
+}
+
+function sendBedRequest()
+{
+    // Reset and disable all the lower-order drop downs
+    resetDrop(bed_drop);
+    disableDrop(bed_drop);
+    
+    // Get the selected value
+    var roomId = document.getElementById(room_drop).options[document.getElementById(room_drop).selectedIndex].value
+    
+    // the default value is selected
+    if(roomId == 0){
+        //alert('default selected');
+        return;
+    }
+    
+    // Set the floor drop down to "loading"
+    setSingleOption(bed_drop, "Loading...");
+    
+    // Assemble the necessary URL
+    var requestURL = document.location+ '?mod=hms&type=xml&op=get_beds_with_vacancies&room_id=' + roomId;
+    
+    //alert('request URL: ' + requestURL);
+    
+    xmlHttp = createXMLHttp();
+    xmlHttp.open("GET", requestURL, true);
+    xmlHttp.onreadystatechange = function () {
+        if(xmlHttp.readyState == 4){
+            handle_bed_response();
+        }
+    };
+    xmlHttp.send(null);
+    //alert('Query sent');
+
+}
+
+function handle_bed_response()
+{
+    if(xmlHttp.status != 200){
+        alert('An error occurred.. HTTP status code: ' + xmlHttp.status);
+    }else{
+        //alert('Received response!');
+    }
+
+    setSingleOption(bed_drop, 'Select...');
+
+    var response = xmlHttp.responseXML;
+
+    //alert(response);
+
+    var rooms = response.firstChild;
+
+    for(var i = 0; i < rooms.childNodes.length; i++){
+        var room = rooms.childNodes[i];
+        if(room.nodeType == 3){
+            continue;
+        }
+        for (j = 0; j < room.childNodes.length; j++){
+            sub = room.childNodes[j];
+            if(sub.nodeType == 3){
+                continue;
+            }
+            if(sub.nodeName == 'id'){
+                id = sub.firstChild.nodeValue;
+                //alert('id is ' + id);
+            }
+            if(sub.nodeName == 'bed_letter') {
+                room_num = sub.firstChild.nodeValue;
+                //alert('room_num is ' + room_num);
+                var drop = document.getElementById(bed_drop);
+                drop.options[drop.options.length] = new Option(room_num, id, false, false);
+            }
+        }
+    }
+
+    enableDrop(bed_drop);
 }
 
 // Clears a drop down's options

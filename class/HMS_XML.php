@@ -1,6 +1,7 @@
 <?php
 
 require_once('XML/Serializer.php');
+PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
 class HMS_XML{
 
@@ -191,7 +192,15 @@ class HMS_XML{
         $xml_floors = array();
         
         foreach ($floors as $floor){
-            $xml_floors[] = array('id' => $floor->id, 'floor_num' => $floor->floor_number);
+            unset($text);
+
+            $text = $floor->floor_number;
+
+            if($hall->gender_type == COED && $floor->gender_type != COED){
+                $text .= (' (' . HMS_Util::formatGender($floor->gender_type) . ')');
+            }
+
+            $xml_floors[] = array('id' => $floor->id, 'floor_num' => $text);
         }
         
         $serializer_options = array (
@@ -268,7 +277,19 @@ class HMS_XML{
         $xml_rooms = array();
         
         foreach ($rooms as $room){
-            $xml_rooms[] = array('id' => $room->id, 'room_num' => $room->room_number);
+            unset($text);
+
+            $text = $room->room_number;
+
+            if($floor->gender_type == COED){
+                $text .= (' (' . HMS_Util::formatGender($room->gender_type) . ')');
+            }
+
+            if($room->ra_room == 1){
+                $text .= (' (RA)');
+            }
+            
+            $xml_rooms[] = array('id' => $room->id, 'room_num' => $text);
         }
         
         $serializer_options = array (
@@ -309,7 +330,15 @@ class HMS_XML{
         $xml_beds = array();
         
         foreach ($beds as $bed){
-            $xml_beds[] = array('id' => $bed->id, 'bed_letter' => $bed->bed_letter);
+            unset($text);
+
+            $text = $bed->bed_letter;
+
+            if($bed->ra_bed == 1){
+                $text .= ' (RA)';
+            }
+            
+            $xml_beds[] = array('id' => $bed->id, 'bed_letter' => $text);
         }
         
         $serializer_options = array (

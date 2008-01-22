@@ -457,9 +457,10 @@ class HMS_Room extends HMS_Item
     function get_row_tags()
     {
         //$tpl = $this->item_tags();
+        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
         $tpl['ROOM_NUMBER']  = PHPWS_Text::secureLink($this->room_number, 'hms', array('type'=>'room', 'op'=>'show_edit_room', 'room'=>$this->id));
-        $tpl['GENDER_TYPE']  = HMS::formatGender($this->gender_type);
+        $tpl['GENDER_TYPE']  = HMS_Util::formatGender($this->gender_type);
         $tpl['RA_ROOM']      = $this->ra_room      ? 'Yes' : 'No';
         $tpl['PRIVATE_ROOM'] = $this->private_room ? 'Yes' : 'No';
         $tpl['IS_LOBBY']     = $this->is_lobby     ? 'Yes' : 'No';
@@ -607,6 +608,7 @@ class HMS_Room extends HMS_Item
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
         PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
         PHPWS_Core::initModClass('hms', 'HMS_Suite.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
         PHPWS_Core::initModClass('hms', 'HMS_Pricing_Tier.php');
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
@@ -735,7 +737,7 @@ class HMS_Room extends HMS_Item
         $form->addSubmit('submit', 'Submit');
 
         # TODO: add an assignment pager here
-        $tpl['ASSIGNMENT_PAGER'] = HMS_Assignment::assignment_pager_by_room($room->id);
+        $tpl['BED_PAGER'] = HMS_Bed::bed_pager_by_room($room->id);
 
         if(isset($success)){
             $tpl['SUCCESS_MSG'] = $success;

@@ -173,6 +173,42 @@ class HMS_Bed extends HMS_Item {
         return FALSE;
     }
 
+    /**
+     * Returns a link. If the bed is assigned, the link is to the
+     * student info screen. Otherwise, the link the link is to the
+     * assign student screen.
+     */
+    function get_assigned_to_link()
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+        
+        if($this->loadAssignment() === false){
+            $tpl['ERROR_MSG'] = 'There was an error loading the assignmnet. Please contact ESS.';
+            return PHPWS_Template::process($tpl, 'hms', 'admin/edit_bed.tpl');
+        }
+        
+        if(isset($this->_curr_assignment)){
+            return PHPWS_Text::secureLink(HMS_SOAP::get_full_name($this->_curr_assignment->asu_username),'hms', array('type'=>'student', 'op'=>'get_matching_students', 'username'=>$this->_curr_assignment->asu_username))
+                                    . ' '
+                                    . PHPWS_Text::secureLink('(re-assign)', 'hms', array('type'=>'assignment', 'op'=>'show_assign_student', 'username'=>$this->_curr_assignment->asu_username));
+        }else{
+            # TODO: make this a link to assign a student to this
+            # particular bed
+            return PHPWS_Text::secureLink('&lt;unassigned&gt;', 'hms', array('type'=>'assignment', 'op'=>'show_assign_student'));
+        }
+
+    }
+
+    function getPagerByRoomTags()
+    {
+        $tags['BEDROOM']        = $this->bedroom_label;
+        $tags['BED_LETTER']     = PHPWS_Text::secureLink($this->bed_letter, 'hms', array('type'=>'bed', 'op'=>'show_edit_bed', 'bed'=>$this->id));
+        $tags['ASSIGNED_TO']    = $this->get_assigned_to_link();
+        $tags['RA']             = $this->ra_bed ? 'Yes' : 'No';
+
+        return $tags;
+    }
+
     /******************
      * Static Methods *
      ******************/
@@ -356,7 +392,6 @@ class HMS_Bed extends HMS_Item {
         PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
         PHPWS_Core::initModClass('hms', 'HMS_Room.php');
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
         
         # Determine the bed id. If the passed in variable is NULL,
@@ -400,23 +435,7 @@ class HMS_Bed extends HMS_Item {
         $tpl['ROOM_NUMBER']         = PHPWS_Text::secureLink($room->room_number, 'hms', array('type'=>'room', 'op'=>'show_edit_room', 'room'=>$room->id));
         $tpl['BED_LETTER']          = $bed->bed_letter;
 
-        if($bed->loadAssignment() === false){
-            test($bed->loadAssignment());
-            //test($bed->_curr_assignment);
-            $tpl['ERROR_MSG'] = 'There was an error loading the assignmnet. Please contact ESS.';
-            return PHPWS_Template::process($tpl, 'hms', 'admin/edit_bed.tpl');
-        }
-
-        
-        if(isset($bed->_curr_assignment)){
-            $tpl['ASSIGNED_TO'] = PHPWS_Text::secureLink(HMS_SOAP::get_full_name($bed->_curr_assignment->asu_username),'hms', array('type'=>'student', 'op'=>'get_matching_students', 'username'=>$bed->_curr_assignment->asu_username))
-                                    . ' '
-                                    . PHPWS_Text::secureLink('(re-assign)', 'hms', array('type'=>'assignment', 'op'=>'show_assign_student', 'username'=>$bed->_curr_assignment->asu_username));
-        }else{
-            # TODO: make this a link to assign a student to this
-            # particular bed
-            $tpl['ASSIGNED_TO'] = PHPWS_Text::secureLink('&lt;unassigned&gt;', 'hms', array('type'=>'assignment', 'op'=>'show_assign_student'));
-        }
+        $tpl['ASSIGNED_TO'] = $bed->get_assigned_to_link();
         
         $form = new PHPWS_Form();
 
@@ -454,6 +473,35 @@ class HMS_Bed extends HMS_Item {
         }
 
         return PHPWS_Template::process($tpl, 'hms', 'admin/edit_bed.tpl');
+    }
+
+    function bed_pager_by_room($room_id)
+    {
+        PHPWS_Core::initCoreClass('DBPager.php');
+
+        $pager = & new DBPager('hms_bed', 'HMS_Bed');
+        $pager->db->addJoin('LEFT OUTER', 'hms_bed', 'hms_room', 'room_id', 'id');
+        
+        $pager->addWhere('hms_room.id', $room_id);
+        $pager->addWhere('hms_bed.deleted', 0);
+        $pager->addWhere('hms_room.deleted', 0);
+
+        $page_tags['TABLE_TITLE']       = 'Beds in this room:';
+        $page_tags['BEDROOM_LABEL']     = 'Bedroom';
+        $page_tags['BED_LETTER_LABEL']  = 'Bed';
+        $page_tags['ASSIGNED_TO_LABEL'] = 'Assigned to';
+        $page_tags['RA_LABEL']          = 'RA bed';
+
+        $pager->setModule('hms');
+        $pager->setTemplate('admin/bed_pager_by_room.tpl');
+        $pager->setLink('index.php?module=hms');
+        $pager->setEmptyMessage("No beds found.");
+        $pager->addToggle('class="toggle1"');
+        $pager->addToggle('class="toggle2"');
+        $pager->addRowTags('getPagerByRoomTags');
+        $pager->addPageTags($page_tags);
+       
+        return $pager->get();
     }
 }
 

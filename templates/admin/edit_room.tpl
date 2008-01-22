@@ -90,7 +90,7 @@
         {SUBMIT}
         {END_FORM}
         <br /><br />
-        {ASSIGNMENT_PAGER}
+        {BED_PAGER}
     </div>
   </div>
 </div>

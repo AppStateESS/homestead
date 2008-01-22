@@ -26,6 +26,14 @@
                 <th align="left">{ROOM_LABEL}</th>
                 <td>{ROOM}</td>
             </tr>
+            <tr id="bed_row" style="display: none">
+                <th align="left">{BED_LABEL}</th>
+                <td>{BED}</td>
+            </tr>
+            <tr id="link_row">
+                <td>&nbsp;</td>
+                <td><a href="javascript:showBedDrop();">Show bed</a></td>
+            </tr>
         </table>
         <br />
         {SUBMIT}
