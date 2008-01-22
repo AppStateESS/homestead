@@ -506,7 +506,9 @@ class HMS_Assignment extends HMS_Item
         }
 
         $form->addSubmit('submit', 'Assign Student');
-        $form->setExtra('submit', 'disabled');
+        if(!$show_bed_drop){
+            $form->setExtra('submit', 'disabled');
+        }
        
         if($pre_populate){
             $form->addHidden('use_bed', 'true');
