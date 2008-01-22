@@ -494,6 +494,7 @@ class HMS_Assignment extends HMS_Item
         }else{
             $form->addDropBox('bed', array(0 => ''));
             $form->setExtra('bed', 'disabled onChange="handle_bed_change()"');
+            $show_bed_drop = false;
         }
         $form->setLabel('bed', 'Bed: ');
 
