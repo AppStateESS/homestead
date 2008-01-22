@@ -484,6 +484,26 @@ class HMS_Floor extends HMS_Item
         return $this->_rooms;
     }
 
+    /*
+     * Returns an associative array where the keys are room ID's
+     * and the values are the room numbers.
+     */
+    function get_rooms_array()
+    {
+        if(!$this->loadRooms()) {
+            return FALSE;
+        }
+
+        $rooms = array();
+
+        foreach($this->_rooms as $room){
+            $rooms[$room->id] = $room->room_number;
+        }
+
+        return $rooms;
+
+    }
+
     /**
      * Returns an array of the suites on the current floor
      */

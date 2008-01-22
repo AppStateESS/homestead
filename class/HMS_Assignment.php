@@ -424,6 +424,7 @@ class HMS_Assignment extends HMS_Item
     {
         PHPWS_Core::initCoreClass('Form.php');
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
 
         javascript('/modules/hms/assign_student');
@@ -435,6 +436,21 @@ class HMS_Assignment extends HMS_Item
         if(isset($_REQUEST['username'])){
             $form->setValue('username', $_REQUEST['username']);
         }
+
+        # Check to see if a bed_id was passed in, this means
+        # the user clicked an 'unassigned' link. We need to pre-populate
+        # the drop downs.
+        unset($pre_populate);
+        if(isset($_REQUEST['bed_id'])){
+            $pre_populate = true;
+            
+            $bed = new HMS_Bed($_REQUEST['bed_id']);
+            $room = $bed->get_parent();
+            $floor = $room->get_parent();
+            $hall = $floor->get_parent();
+        }else{
+            $pre_populate = false;
+        }
        
         #TODO: Write a nice foreach loop to merge these arrays keeping the keys the same
         # so that the 'select' option shows up at the top of the list. 
@@ -443,29 +459,65 @@ class HMS_Assignment extends HMS_Item
 
         $form->addDropBox('residence_hall', $halls_array);
         $form->setLabel('residence_hall', 'Residence hall: ');
-        $form->setMatch('residence_hall', 0);
+        if($pre_populate){
+            $form->setMatch('residence_hall', $hall->id);
+        }else{
+            $form->setMatch('residence_hall', 0);
+        }
         $form->setExtra('residence_hall', 'onChange="handle_hall_change()"');
 
-        $form->addDropBox('floor', array(0 => ''));
+        if($pre_populate){
+            $form->addDropBox('floor', $hall->get_floors_array());
+            $form->setMatch('floor', $floor->id);
+            $form->setExtra('floor', 'onChange="handle_floor_change()"');
+        }else{
+            $form->addDropBox('floor', array(0 => ''));
+            $form->setExtra('floor', 'disabled onChange="handle_floor_change()"');
+        }
         $form->setLabel('floor', 'Floor: ');
-        $form->setExtra('floor', 'disabled onChange="handle_floor_change()"');
 
-        $form->addDropBox('room', array(0 => ''));
+        if($pre_populate){
+            $form->addDropBox('room', $floor->get_rooms_array());
+            $form->setMatch('room', $room->id);
+            $form->setExtra('room', 'onChange="handle_room_change()"');
+        }else{
+            $form->addDropBox('room', array(0 => ''));
+            $form->setExtra('room', 'disabled onChange="handle_room_change()"');
+        }
         $form->setLabel('room', 'Room: ');
-        $form->setExtra('room', 'disabled onChange="handle_room_change()"');
 
-        $form->addDropBox('bed', array(0 => ''));
+        if($pre_populate){
+            $form->addDropBox('bed', $room->get_beds_array());
+            $form->setMatch('bed', $bed->id);
+            $form->setExtra('bed', 'onChange="handle_bed_change()"');
+            $show_bed_drop = true;
+        }else{
+            $form->addDropBox('bed', array(0 => ''));
+            $form->setExtra('bed', 'disabled onChange="handle_bed_change()"');
+        }
         $form->setLabel('bed', 'Bed: ');
-        $form->setExtra('bed', 'disabled onChange="handle_bed_change()"');
+
+        if($show_bed_drop){
+            $tpl['BED_STYLE'] = '';
+            $tpl['LINK_STYLE'] = 'display: none';
+        }else{
+            $tpl['BED_STYLE'] = 'display: none';
+            $tpl['LINK_STYLE'] = '';
+        }
 
         $form->addSubmit('submit', 'Assign Student');
         $form->setExtra('submit', 'disabled');
-        
-        $form->addHidden('use_bed', 'false');
+       
+        if($pre_populate){
+            $form->addHidden('use_bed', 'true');
+        }else{
+            $form->addHidden('use_bed', 'false');
+        }
         $form->addHidden('module', 'hms');
         $form->addHidden('type', 'assignment');
         $form->addHidden('op', 'assign_student');
 
+        $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
         if(isset($error)){

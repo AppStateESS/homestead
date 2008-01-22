@@ -26,11 +26,11 @@
                 <th align="left">{ROOM_LABEL}</th>
                 <td>{ROOM}</td>
             </tr>
-            <tr id="bed_row" style="display: none">
+            <tr id="bed_row" style="{BED_STYLE}">
                 <th align="left">{BED_LABEL}</th>
                 <td>{BED}</td>
             </tr>
-            <tr id="link_row">
+            <tr id="link_row" style="{LINK_STYLE}">
                 <td>&nbsp;</td>
                 <td><a href="javascript:showBedDrop();">Show bed</a></td>
             </tr>

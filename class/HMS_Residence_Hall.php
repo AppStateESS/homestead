@@ -404,6 +404,26 @@ class HMS_Residence_Hall extends HMS_Item
         return $this->_floors;
     }
 
+
+    /*
+     * Returns an array with the keys being floor ID's and the value being the floor number
+     */
+    function get_floors_array()
+    {
+        if(!$this->loadFloors()) {
+            return false;
+        }
+
+        $floors = array();
+
+        foreach($this->_floors as $floor){
+            $floors[$floor->id] = $floor->floor_number;
+        }
+
+        return $floors;
+    }
+     
+
     /*
      * Returns an array of the suite objects which are within the current hall.
      */

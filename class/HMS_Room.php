@@ -327,6 +327,25 @@ class HMS_Room extends HMS_Item
         return $this->_beds;
     }
 
+    /**
+     * Returns an associative array where the keys are bed ID's
+     * and the values are the bed letter.
+     */
+    function get_beds_array()
+    {
+        if(!$this->loadBeds()) {
+            return FALSE;
+        }
+
+        $beds = array();
+
+        foreach($this->_beds as $bed){
+            $beds[$bed->id] = $bed->bed_letter;
+        }
+
+        return $beds;
+    }
+
     /*
      * Returns an array of HMS_Student objects which are currently
      * assigned to 'this' room.

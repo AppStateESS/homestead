@@ -25,6 +25,9 @@
                 <th>Bedroom Label: </th><td>{BEDROOM_LABEL}</td>
             </tr>
             <tr>
+                <th>Bed Letter: </th><td>{BED_LETTER}</td>
+            </tr>
+            <tr>
                 <th>Phone Number: </th><td>828-262-{PHONE_NUMBER}</td>
             </tr>
             <tr>
