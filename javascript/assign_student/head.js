@@ -186,8 +186,9 @@ function handle_room_change()
         sendBedRequest();
     
         if(bedDropShown){
-            // the default value is selected
             document.getElementById('phpws_form_submit').disabled = true;
+        }else{
+            document.getElementById('phpws_form_submit').disabled = false;
         }
     }
 }
