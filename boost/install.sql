@@ -146,6 +146,8 @@ CREATE TABLE hms_assignment_queue (
 );
 
 CREATE TABLE hms_deadlines (
+    id                                      integer NOT NULL,
+    term                                    integer NOT NULL REFERENCES hms_term(term),
     student_login_begin_timestamp           integer NOT NULL,
     student_login_end_timestamp             integer NOT NULL,
     submit_application_begin_timestamp      integer NOT NULL,
@@ -159,7 +161,8 @@ CREATE TABLE hms_deadlines (
     view_assignment_begin_timestamp         integer NOT NULL,
     view_assignment_end_timestamp           integer NOT NULL,
     updated_by                              smallint NOT NULL,
-    updated_on                              integer NOT NULL
+    updated_on                              integer NOT NULL,
+    primary key(id)
 );
 
 CREATE TABLE hms_hall_communities (

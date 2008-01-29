@@ -186,7 +186,7 @@ class HMS_Maintenance
             $tpl['DEADLINE_LABEL']  = "Deadline Maintenance";
 
         if(Current_User::allow('hms', 'edit_deadlines') || Current_User::allow('hms', 'admin')) 
-            $tpl['EDIT_DEADLINES']  = PHPWS_Text::secureLink(_('Edit Deadlines'), 'hms', array('type'=>'maintenance', 'op'=>'show_deadlines'));
+            $tpl['EDIT_DEADLINES']  = PHPWS_Text::secureLink(_('Edit Deadlines'), 'hms', array('type'=>'deadlines', 'op'=>'show_edit_deadlines'));
 
         if(Current_User::allow('hms', 'assignment_maintenance') || Current_User::allow('hms', 'admin'))
             $tpl['ASSIGNMENT_LABEL'] = "Assignment Maintenance";
@@ -291,100 +291,6 @@ class HMS_Maintenance
         return $content;
     }
 
-    function show_deadlines($message = NULL)
-    {
-        Layout::addPageTitle("Edit Deadlines");
-        
-        if(!(Current_User::allow('hms', 'edit_deadlines') || Current_User::allow('hms', 'admin'))) {
-            exit('you are a bad person that can not edit deadlines.');
-        }
-        PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
-        $form = &new HMS_Form;
-        $content = $form->show_deadlines($message);
-        return $content;
-    }
-        
-    function save_deadlines()
-    {
-        if(!(Current_User::authorized('hms', 'edit_deadlines') || Current_User::authorized('hms', 'admin'))) {
-            exit('You are a bad person that can not edit deadlines.');
-        }
-        
-        PHPWS_Core::initModClass('hms','HMS_Deadlines.php');
-        $deadlines = new HMS_Deadlines();
-        
-        $slbd   = $_REQUEST['student_login_begin_day'];
-        $slbm   = $_REQUEST['student_login_begin_month'];
-        $slby   = $_REQUEST['student_login_begin_year'];
-        $deadlines->set_student_login_begin_mdy($slbm,$slbd,$slby);
-
-        $sled   = $_REQUEST['student_login_end_day'];
-        $slem   = $_REQUEST['student_login_end_month'];
-        $sley   = $_REQUEST['student_login_end_year'];
-        $deadlines->set_student_login_end_mdy($slem,$sled,$sley);
-
-        $sabd    = $_REQUEST['submit_application_begin_day'];
-        $sabm    = $_REQUEST['submit_application_begin_month'];
-        $saby    = $_REQUEST['submit_application_begin_year'];
-        $deadlines->set_submit_application_begin_mdy($sabm,$sabd,$saby);
-
-        $saed    = $_REQUEST['submit_application_end_day'];
-        $saem    = $_REQUEST['submit_application_end_month'];
-        $saey    = $_REQUEST['submit_application_end_year'];
-        $deadlines->set_submit_application_end_mdy($saem,$saed,$saey);
-
-        $eaed   = $_REQUEST['edit_application_end_day'];
-        $eaem   = $_REQUEST['edit_application_end_month'];
-        $eaey   = $_REQUEST['edit_application_end_year'];
-        $deadlines->set_edit_application_mdy($eaem,$eaed,$eaey);
-
-        $epbd   = $_REQUEST['edit_profile_begin_day'];
-        $epbm   = $_REQUEST['edit_profile_begin_month'];
-        $epby   = $_REQUEST['edit_profile_begin_year'];
-        $deadlines->set_edit_profile_begin_mdy($epbm,$epbd,$epby);
-
-        $eped   = $_REQUEST['edit_profile_end_day'];
-        $epem   = $_REQUEST['edit_profile_end_month'];
-        $epey   = $_REQUEST['edit_profile_end_year'];
-        $deadlines->set_edit_profile_end_mdy($epem,$eped,$epey);
-        
-        $spbd   = $_REQUEST['search_profiles_begin_day'];
-        $spbm   = $_REQUEST['search_profiles_begin_month'];
-        $spby   = $_REQUEST['search_profiles_begin_year'];
-        $deadlines->set_search_profiles_begin_mdy($spbm,$spbd,$spby);
-
-        $sped   = $_REQUEST['search_profiles_end_day'];
-        $spem   = $_REQUEST['search_profiles_end_month'];
-        $spey   = $_REQUEST['search_profiles_end_year'];
-        $deadlines->set_search_profiles_end_mdy($spem,$sped,$spey);
-
-        $sred   = $_REQUEST['submit_rlc_application_end_day'];
-        $srem   = $_REQUEST['submit_rlc_application_end_month'];
-        $srey   = $_REQUEST['submit_rlc_application_end_year'];
-        $deadlines->set_submit_rlc_application_end_mdy($srem,$sred,$srey);
-
-        $vabd   = $_REQUEST['view_assignment_begin_day'];
-        $vabm   = $_REQUEST['view_assignment_begin_month'];
-        $vaby   = $_REQUEST['view_assignment_begin_year'];
-        $deadlines->set_view_assignment_begin_mdy($vabm,$vabd,$vaby);
-
-        $vaed   = $_REQUEST['view_assignment_end_day'];
-        $vaem   = $_REQUEST['view_assignment_end_month'];
-        $vaey   = $_REQUEST['view_assignment_end_year'];
-        $deadlines->set_view_assignment_end_mdy($vaem,$vaed,$vaey);
-
-        $result = $deadlines->save_deadlines();
-        
-        if(PEAR::isError($result)) {
-            PHPWS_Error::log($result);
-            $message = "Error saving deadlines. Please check the error logs!<br />";
-            return HMS_Maintenance::show_deadlines(NULL,$message);
-        } else {
-            $message = "Deadlines updated successfully!<br />";
-            return HMS_Maintenance::show_deadlines($message);
-        }
-    }
-
     function main()
     {
 
@@ -401,12 +307,6 @@ class HMS_Maintenance
                 break;
             case 'purge':
                 return HMS_Maintenance::purge_data();
-                break;
-            case 'show_deadlines':
-                return HMS_Maintenance::show_deadlines();
-                break;
-            case 'save_deadlines':
-                return HMS_Maintenance::save_deadlines();
                 break;
             default:
                 return HMS_Maintenance::show_options();

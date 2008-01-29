@@ -1,11 +1,16 @@
-{START_FORM}
 <div class="hms">
   <div class="box">
-    <div class="box-title"> <h1>{TITLE}</h1> </div>
+    <div class="{TITLE_CLASS}"> <h1>{TITLE}</h1> </div>
     <div class="box-content">
-        <font color="red"><i>{ERROR}</i></font>
-        <font color="green"><i>{SUCCESS}</i></font>
+        <!-- BEGIN error_msg -->
+        <font color="red">{ERROR_MSG}<br /></font>
+        <!-- END error_msg -->
+        
+        <!-- BEGIN success_msg -->
+        <font color="green">{SUCCESS_MSG}<br /></font>
+        <!-- END success_msg -->
         Here you may set time windows for various HMS functions.<br /><br />
+        {START_FORM}
         <table>
             <tr>
                 <th>Student Login Begin Date:</th><td>{STUDENT_LOGIN_BEGIN_MONTH}</td><td>{STUDENT_LOGIN_BEGIN_DAY}</td><td>{STUDENT_LOGIN_BEGIN_YEAR}</td>
@@ -86,7 +91,7 @@
             </tr>
         </table>
         {SUBMIT}
+        {END_FORM}
     </div>
   </div>
 </div>
-{END_FORM}
