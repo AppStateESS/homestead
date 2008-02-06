@@ -6,6 +6,7 @@
  *
  * @author Kevin Wilcox <kevin at tux dot appstate dot edu>
  * @modified Matthew McNaney
+ * @modified Jeremy Booker <jbooker at tux dot appstate dot edu>
  */
 
 class HMS 
@@ -41,53 +42,6 @@ class HMS
             Layout::add($content);
         }
     }
-
-    /**
-     * Returns the current "housing year".
-     *
-     * 10 spring jan - may
-     * 20 summer 1 may - june 15
-     * 30 summer 2 june 15 - aug
-     * 40 fall aug - dec
-     * 
-     * @author Matthew McNaney
-     * @return int Term year
-     */
-    function get_current_year()
-    {
-        $today = mktime();
-        $year = (int)date('Y');
-
-        $spring_start      = mktime(0,0,0, 1,  1, $year);
-        $summer_one_start  = mktime(0,0,0, 5, 15, $year);
-        $summer_two_start  = mktime(0,0,0, 7, 1, $year);
-        $fall_start        = mktime(0,0,0, 8, 15, $year);
-        $next_spring_start = mktime(0,0,0, 1,  1, $year + 1);
-
-        switch (1) {
-        case ($today >= $spring_start && $today < $summer_one_start):
-            $term = '10';
-            break;
-
-        case ($today >= $summer_one_start && $today < $summer_two_start):
-            $term = '20';
-            break;
-
-        case ($today >= $summer_two_start && $today < $fall_start):
-            $term = '30';
-            break;
-
-        case ($today >= $fall_start && $today < $next_spring_start):
-            $term =  '40';
-            break;
-
-        default:
-            return false;
-        }
-
-        return (int)"$year$term";
-    }
-
 }
     
 

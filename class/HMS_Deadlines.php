@@ -24,6 +24,8 @@ class HMS_Deadlines {
     var $submit_rlc_application_end_timestamp;
     var $view_assignment_begin_timestamp;
     var $view_assignment_end_timestamp;
+    var $lottery_signup_begin_timestamp;
+    var $lottery_signup_end_timestamp;
 
     var $updated_by;
     var $updated_on;
@@ -55,7 +57,7 @@ class HMS_Deadlines {
 
         if(!isset($term)){
             PHPWS_Core::initModClass('hms', 'HMS_Term.php');
-            $term = HMS_Ter::get_current_term();
+            $term = HMS_Term::get_current_term();
         }
 
         $db = &new PHPWS_DB('hms_deadlines');
@@ -74,6 +76,8 @@ class HMS_Deadlines {
         $db->addColumn('submit_rlc_application_end_timestamp');
         $db->addColumn('view_assignment_begin_timestamp');
         $db->addColumn('view_assignment_end_timestamp');
+        $db->addColumn('lottery_signup_begin_timestamp');
+        $db->addColumn('lottery_signup_end_timestamp');
         
         $db->addWhere('term', $term);
         $deadlines = $db->select('row');
@@ -320,6 +324,14 @@ class HMS_Deadlines {
         $form->addDropBox('view_assignment_end_month', $months);
         $form->addDropBox('view_assignment_end_day', $days);
         $form->addDropBox('view_assignment_end_year', $years);
+
+        $form->addDropBox('lottery_signup_begin_month', $months);
+        $form->addDropBox('lottery_signup_begin_day', $days);
+        $form->addDropBox('lottery_signup_begin_year', $years);
+    
+        $form->addDropBox('lottery_signup_end_month', $months);
+        $form->addDropBox('lottery_signup_end_day', $days);
+        $form->addDropBox('lottery_signup_end_year', $years);
     
         $form->setMatch('student_login_begin_day', date('j',$deadlines->student_login_begin_timestamp));
         $form->setMatch('student_login_begin_month', date('n',$deadlines->student_login_begin_timestamp));
@@ -365,6 +377,14 @@ class HMS_Deadlines {
         $form->setMatch('view_assignment_end_day', date('j', $deadlines->view_assignment_end_timestamp));
         $form->setMatch('view_assignment_end_month', date('n', $deadlines->view_assignment_end_timestamp));
         $form->setMatch('view_assignment_end_year', date('Y', $deadlines->view_assignment_end_timestamp));
+
+        $form->setMatch('lottery_signup_begin_day', date('j', $deadlines->lottery_signup_begin_timestamp));
+        $form->setMatch('lottery_signup_begin_month', date('n', $deadlines->lottery_signup_begin_timestamp));
+        $form->setMatch('lottery_signup_begin_year', date('Y', $deadlines->lottery_signup_begin_timestamp));
+        $form->setMatch('lottery_signup_end_day', date('j', $deadlines->lottery_signup_end_timestamp));
+        $form->setMatch('lottery_signup_end_month', date('n', $deadlines->lottery_signup_end_timestamp));
+        $form->setMatch('lottery_signup_end_year', date('Y', $deadlines->lottery_signup_end_timestamp));
+        
         
         $form->addHidden('module', 'hms');
         $form->addHidden('type', 'deadlines');
@@ -459,6 +479,16 @@ class HMS_Deadlines {
             $_REQUEST['view_assignment_end_month'],
             $_REQUEST['view_assignment_end_day'],
             $_REQUEST['view_assignment_end_year']);
+
+        $deadlines->lottery_signup_begin_timestamp = mktime(0, 0, 0,
+            $_REQUEST['lottery_signup_begin_month'],
+            $_REQUEST['lottery_signup_begin_day'],
+            $_REQUEST['lottery_signup_begin_year']);
+
+        $deadlines->lottery_signup_end_timestamp = mktime(0, 0, 0,
+            $_REQUEST['lottery_signup_end_month'],
+            $_REQUEST['lottery_signup_end_day'],
+            $_REQUEST['lottery_signup_end_year']);
 
         $result = $deadlines->save();
 

@@ -89,6 +89,18 @@
             <tr>
                 <th>&nbsp;</th><td>&nbsp;</td>
             </tr>
+            <tr>
+                <th>Lottery Sign-up Begin:</th><td>{LOTTERY_SIGNUP_BEGIN_MONTH}</td><td>{LOTTERY_SIGNUP_BEGIN_DAY}</td><td>{LOTTERY_SIGNUP_BEGIN_YEAR}</td>
+            </tr>
+            <tr>
+                <th>Lottery Sign-up End:</th><td>{LOTTERY_SIGNUP_END_MONTH}</td><td>{LOTTERY_SIGNUP_END_DAY}</td><td>{LOTTERY_SIGNUP_END_YEAR}</td>
+            </tr>
+            <tr>
+                <th>&nbsp;</th><td>&nbsp;</td>
+            </tr>
+            <tr>
+                <th>&nbsp;</th><td>&nbsp;</td>
+            </tr>
         </table>
         {SUBMIT}
         {END_FORM}

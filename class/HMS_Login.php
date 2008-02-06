@@ -41,7 +41,7 @@ class HMS_Login
 
         PHPWS_Core::initModClass('hms','HMS_Deadlines.php');
         $deadlines = HMS_Deadlines::get_deadlines();
-        
+
         if(!HMS_Deadlines::check_deadline_past('student_login_begin_timestamp', $deadlines)) {
             return TOOEARLY;
         } else if (HMS_Deadlines::check_deadline_past('student_login_end_timestamp', $deadlines)) {

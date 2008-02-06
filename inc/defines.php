@@ -52,6 +52,22 @@ define('SUMMER1',   'Summer 1');
 define('SUMMER2',   'Summer 2');
 define('FALL',      'Fall');
 
+
+/**
+ * Student Classes
+ */
+define('CLASS_FESHMEN',     'FR');
+define('CLASS_SOPHOMORE',   'SO');
+define('CLASS_JUNIOR',      'JR');
+define('CLASS_SENIOR',      'SR');
+
+/**
+ * Student Types
+ */
+define('TYPE_FRESHMEN',     'F');
+define('TYPE_TRANSFER',     'T');
+define('TYPE_CONTINUING',   'C');
+
 /**
  * Errors
  */
@@ -68,7 +84,7 @@ define('ADMIN',     2);
 define('BADCLASS',  3);
 
 /**
- * Activities
+ * Activities (used for logging)
  */
 define('ACTIVITY_LOGIN',                        0);
 

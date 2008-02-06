@@ -744,12 +744,22 @@ function hms_update(&$content, $currentVersion)
                 return $result;
             }
 
-            $files = 'templates/admin/deadlines.tpl';
+            $files[] = 'templates/admin/deadlines.tpl';
             PHPWS_Boost::updatefiles($files, 'hms');
+        
+        case version_compare($currentVersion, '0.2.19', '<'):
+            $db = &new PHPWS_DB;
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_19.sql');
+            if(PEAR::isError($result)) {
+                return $result;
+            }
 
+            $files[] = 'templates/admin/deadlines.tpl';
+            $files[] = 'templates/student/freshmen_welcome_screen.tpl';
+            $files[] = 'templates/student/freshmen_welcome_screen.tpl';
+            PHPWS_Boost::updatefiles($files, 'hms');
     }
 
     return TRUE;
 }
-
 ?>

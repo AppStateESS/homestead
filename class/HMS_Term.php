@@ -390,7 +390,8 @@ class HMS_Term{
     * Returns an array of the list of terms. Useful for constructing 
     * drop down menus. Array is keyed using the TERM_* defines.
     */
-    function get_term_list(){
+    function get_term_list()
+    {
         $terms = array();
 
         $terms[TERM_SPRING]  = SPRING;
@@ -399,6 +400,27 @@ class HMS_Term{
         $terms[TERM_FALL]    = FALL;
 
         return $terms;
+    }
+
+    /**
+     * Returns TRUE if the given term has been create, FALSE otherwise
+     */
+    function check_term_exists($term)
+    {
+        $db = &new PHPWS_DB('hms_term');
+        $db->addWhere('term', $term, '=');
+        $result = $db->count();
+
+        if(PEAR::isError($result)){
+            PHPWS_Error::log($result);
+            return FALSE;
+        }
+
+        if($result == 1){
+            return TRUE;
+        }else{
+            return FALSE;
+        }
     }
     
     /**

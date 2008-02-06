@@ -342,7 +342,7 @@ class HMS_Student {
             $db->addColumn('id');
             $db->addWhere('user_id', $_REQUEST['username']);
             $results = $db->select('one');
-            if($result != FALSE && $results != NULL) {
+            if($results != FALSE && $results != NULL) {
                 $tpl['RLC_STATUS'] = "This student is currently awaiting RLC approval. You can view their application " . PHPWS_Text::secureLink(_('here'), 'hms', array('type'=>'rlc', 'op'=>'view_rlc_application', 'username'=>$_REQUEST['username']));
             } else {
                 $tpl['RLC_STATUS'] = "This student is not in a Learning Community and has no pending approval.";
@@ -438,6 +438,98 @@ class HMS_Student {
         PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
         $content = HMS_Form::verify_roommate_username($_SESSION['asu_username'], $_REQUEST['username']);
         return $content;
+    }
+
+
+    /*********************
+     * Static UI Methods *
+     *********************/
+
+    function show_welcome_screen()
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+
+        # Grab the current term for use late
+        $current_term = HMS_Term::get_current_term();
+        
+        # Try initial lookups of the student's application_term, type, and class
+        $application_term   = HMS_SOAP::get_application_term($_SESSION['asu_username']);
+        $student_type       = HMS_SOAP::get_student_type($_SESSION['asu_username']);
+        $student_class      = HMS_SOAP::get_student_class($_SESSION['asu_username']);
+
+        # Check for banner errors in any of these calls
+        if($application_term === FALSE ||
+            $student_type === FALSE ||
+            $student_class === FALSE)
+            {
+                # TODO: HMS_Mail here
+                PHPWS_Error::log('Initial banner lookup failed', 'hms', 'show_welcome_screen', "username: {$_SESSION['asu_username']}");
+                $tpl['ERROR_MSG'] = 'An error occured while talking to the student information server. An administrator has been notified of the problem, please check back later.';
+                PHPWS_Template::processs($tpl, 'hms', 'student/welcome_screen.tpl');
+            }
+        
+        /******************************************
+         * Sort returning students (lottery) from *
+         * freshmen (first-time application)      *
+         ******************************************/
+
+        # Check application term for past or future
+        if($application_term <= $current_term){
+            /**************
+             * Continuing *
+             **************/
+            # Application term is in the past
+            
+            # Check the deadlines to see if users can sign up for the lottery yet
+            # If so, show term->lottery entry,  or the "you're already entered" screen,
+            # if not, show a "welcome back, but sorry we're not ready" screen
+            # TODO
+            # NOTE: This is a temporary redirect for now. The above still needs to be implemented. See Trac ticket #55.
+            header('Location: http://www.housing.appstate.edu/index.php?module=pagemaster&PAGE_user_op=view_page&PAGE_id=253');
+            exit;
+
+        }else if($application_term > $current_term){
+            /*********************
+             * Incoming Freshmen *
+             *********************/
+            # Application term is in the future
+
+            # Check the student type, must be freshmen or transfer
+            if($student_type != TYPE_FRESHMEN && $student_type != TYPE_TRANSFER){
+                # No idea what's going on here, send to a contact page
+                # TODO
+            }
+            
+            $tpl = array();
+            
+            # Temporarly redirect to info screens until applications are actually online
+            if($student_type == TYPE_FRESHMEN){
+                return PHPWS_Template::process($tpl, 'hms', 'student/freshmen_welcome_screen.tpl');
+            }else{
+                return PHPWS_Template::process($tpl, 'hms','student/transfer_welcome_screen.tpl');
+            }
+            
+            # Make sure the student doesn't already have an assignment on file for the current term
+            if(HMS_Assignment::check_for_assignment($_SESSION['asu_username'])){
+                # No idea what's going on here, send to a contact page
+                # TODO
+            }
+
+            # TODO
+            # Make sure the user's application term exists in hms_term,
+            # otherwise give a "too early" message
+            
+            # Check to see if the user has an application on file already
+            # If so, forward to main menu, if not, send to
+            # terms and agreement->application->main menu
+            # Check deadlines along the way
+            # TODO
+
+        }else{
+            # No idea what's going on here, send to a contact page
+            # TODO
+        }   
     }
 
     function show_main_menu()
@@ -940,9 +1032,9 @@ class HMS_Student {
                 return HMS_Student::set_meal_plan();
                 break;
             case 'main':
-                return HMS_Student::show_main_menu();
+                //return HMS_Student::show_main_menu();
+                return HMS_Student::show_welcome_screen();
                 break;
-               return $message;
             default:
                 return "{$_REQUEST['op']} <br />";
                 break;
