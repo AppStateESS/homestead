@@ -407,7 +407,7 @@ class HMS_SOAP{
     function get_application_term($username){
         if(SOAP_TEST_FLAG){
             # return canned data
-            return "200810";
+            return "200840";
         }else{
             $student = HMS_SOAP::get_student_info($username);
         }
