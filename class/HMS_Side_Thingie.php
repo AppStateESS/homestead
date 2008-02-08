@@ -109,17 +109,17 @@ class HMS_Side_Thingie {
         }
             
         # If the student does not have an application on file... check apply dates, set dates/styles accordingly
-        if($this->curr_timestamp < $this->deadlines->get_submit_application_begin_timestamp()){
-            $this->steps_text[HMS_SIDE_STUDENT_AGREE] .= " (available ". date('n/j/y',$this->deadlines->get_submit_application_begin_timestamp()) .")";
-            $this->steps_text[HMS_SIDE_STUDENT_APPLY] .= " (available ". date('n/j/y',$this->deadlines->get_submit_application_begin_timestamp()) .")";
+        if($this->curr_timestamp < $this->deadlines->submit_application_begin_timestamp){
+            $this->steps_text[HMS_SIDE_STUDENT_AGREE] .= " (available ". date('n/j/y',$this->deadlines->submit_application_begin_timestamp) .")";
+            $this->steps_text[HMS_SIDE_STUDENT_APPLY] .= " (available ". date('n/j/y',$this->deadlines->submit_application_begin_timestamp) .")";
             $this->steps_styles[HMS_SIDE_STUDENT_AGREE] = 'STEP_NOTYET';
             $this->steps_styles[HMS_SIDE_STUDENT_APPLY] = 'STEP_NOTYET';
             return;
-        }else if($this->curr_timestamp > $this->deadlines->get_submit_application_begin_timestamp() && $this->curr_timestamp < $this->deadlines->get_submit_application_end_timestamp()){
-            $this->steps_text[HMS_SIDE_STUDENT_AGREE] .= " (complete by ". date('n/j/y',$this->deadlines->get_submit_application_end_timestamp()) .")";
-            $this->steps_text[HMS_SIDE_STUDENT_APPLY] .= " (complete by ". date('n/j/y',$this->deadlines->get_submit_application_end_timestamp()) .")";
+        }else if($this->curr_timestamp > $this->deadlines->submit_application_begin_timestamp && $this->curr_timestamp < $this->deadlines->submit_application_end_timestamp){
+            $this->steps_text[HMS_SIDE_STUDENT_AGREE] .= " (complete by ". date('n/j/y',$this->deadlines->submit_application_end_timestamp) .")";
+            $this->steps_text[HMS_SIDE_STUDENT_APPLY] .= " (complete by ". date('n/j/y',$this->deadlines->submit_application_end_timestamp) .")";
             return;
-        }else if($this->curr_timestamp > $this->deadlines->get_submit_application_end_timestamp()){
+        }else if($this->curr_timestamp > $this->deadlines->submit_application_end_timestamp){
             $this->steps_styles[HMS_SIDE_STUDENT_AGREE] = 'STEP_MISSED';
             $this->steps_styles[HMS_SIDE_STUDENT_APPLY] = 'STEP_MISSED';
             return;
@@ -149,21 +149,21 @@ class HMS_Side_Thingie {
         }
 
         # If the student does not have an application on file... check apply dates, set dates/styles accordingly
-        if($this->curr_timestamp < $this->deadlines->get_submit_application_begin_timestamp()){
-            $this->steps_text[HMS_SIDE_STUDENT_RLC] .= " (available ". date('n/j/y',$this->deadlines->get_submit_application_begin_timestamp()) .")";
+        if($this->curr_timestamp < $this->deadlines->submit_application_begin_timestamp){
+            $this->steps_text[HMS_SIDE_STUDENT_RLC] .= " (available ". date('n/j/y',$this->deadlines->submit_application_begin_timestamp) .")";
             $this->steps_styles[HMS_SIDE_STUDENT_RLC] = 'STEP_NOTYET';
             return;
-        }else if($this->curr_timestamp > $this->deadlines->get_submit_application_begin_timestamp() && $this->curr_timestamp < $this->deadlines->get_submit_rlc_application_end_timestamp()){
+        }else if($this->curr_timestamp > $this->deadlines->submit_application_begin_timestamp && $this->curr_timestamp < $this->deadlines->submit_rlc_application_end_timestamp){
             # We are within deadlines, check to see if we're actually on this step
             if($on_this_step){
                 # We're on this step currently, so don't add a link, just add the text
-                $this->steps_text[HMS_SIDE_STUDENT_RLC] .= " (complete by ". date('n/j/y',$this->deadlines->get_submit_rlc_application_end_timestamp()) . ")";
+                $this->steps_text[HMS_SIDE_STUDENT_RLC] .= " (complete by ". date('n/j/y',$this->deadlines->submit_rlc_application_end_timestamp) . ")";
             }else{
-                $this->steps_text[HMS_SIDE_STUDENT_RLC] = PHPWS_Text::secureLink($this->steps_text[HMS_SIDE_STUDENT_RLC] . " (complete by ". date('n/j/y',$this->deadlines->get_submit_rlc_application_end_timestamp()) . ")", 'hms', array('type'=>'student', 'op'=>'show_rlc_application_form'));
+                $this->steps_text[HMS_SIDE_STUDENT_RLC] = PHPWS_Text::secureLink($this->steps_text[HMS_SIDE_STUDENT_RLC] . " (complete by ". date('n/j/y',$this->deadlines->submit_rlc_application_end_timestamp) . ")", 'hms', array('type'=>'student', 'op'=>'show_rlc_application_form'));
                 $this->steps_styles[HMS_SIDE_STUDENT_RLC] = 'STEP_TOGO';
             }
             return;
-        }else if($this->curr_timestamp > $this->deadlines->get_submit_rlc_application_end_timestamp()){
+        }else if($this->curr_timestamp > $this->deadlines->submit_rlc_application_end_timestamp){
             $this->steps_text[HMS_SIDE_STUDENT_RLC] .= "(skipped)";
             $this->steps_styles[HMS_SIDE_STUDENT_RLC] = 'STEP_OPT_MISSED';
             return;
@@ -192,22 +192,22 @@ class HMS_Side_Thingie {
         }
         
         # If the student does not have a proflie on file... check dates, set dates/styles accordingly
-        if($this->curr_timestamp < $this->deadlines->get_edit_profile_begin_timestamp()){
-            $this->steps_text[HMS_SIDE_STUDENT_PROFILE] .= " (available ". date('n/j/y',$this->deadlines->get_edit_profile_begin_timestamp()) .")";
+        if($this->curr_timestamp < $this->deadlines->edit_profile_begin_timestamp){
+            $this->steps_text[HMS_SIDE_STUDENT_PROFILE] .= " (available ". date('n/j/y',$this->deadlines->edit_profile_begin_timestamp) .")";
             $this->steps_styles[HMS_SIDE_STUDENT_PROFILE] = 'STEP_NOTYET';
             return;
-        }else if($this->curr_timestamp > $this->deadlines->get_edit_profile_begin_timestamp() && $this->curr_timestamp < $this->deadlines->get_edit_profile_end_timestamp()){
+        }else if($this->curr_timestamp > $this->deadlines->edit_profile_begin_timestamp && $this->curr_timestamp < $this->deadlines->edit_profile_end_timestamp){
             # We are within deadlines, check to see if we're actually on this step
             if($on_this_step){
                 # We're on this step currently, so don't add a link, just add the text
-                $this->steps_text[HMS_SIDE_STUDENT_PROFILE] .=  " (complete by ". date('n/j/y',$this->deadlines->get_edit_profile_end_timestamp()) . ")";
+                $this->steps_text[HMS_SIDE_STUDENT_PROFILE] .=  " (complete by ". date('n/j/y',$this->deadlines->edit_profile_end_timestamp) . ")";
             }else{
                 # We're not on this step, so add the link and text
-                $this->steps_text[HMS_SIDE_STUDENT_PROFILE] = PHPWS_Text::secureLink($this->steps_text[HMS_SIDE_STUDENT_PROFILE] . " (complete by ". date('n/j/y',$this->deadlines->get_edit_profile_end_timestamp()) . ")", 'hms', array('type'=>'student', 'op'=>'show_profile_form'));
+                $this->steps_text[HMS_SIDE_STUDENT_PROFILE] = PHPWS_Text::secureLink($this->steps_text[HMS_SIDE_STUDENT_PROFILE] . " (complete by ". date('n/j/y',$this->deadlines->edit_profile_end_timestamp) . ")", 'hms', array('type'=>'student', 'op'=>'show_profile_form'));
                 $this->steps_styles[HMS_SIDE_STUDENT_PROFILE] = 'STEP_TOGO';
             }
             return;
-        }else if($this->curr_timestamp > $this->deadlines->get_edit_profile_end_timestamp()){
+        }else if($this->curr_timestamp > $this->deadlines->edit_profile_end_timestamp){
             $this->steps_text[HMS_SIDE_STUDENT_PROFILE] .= "(skipped)";
             $this->steps_styles[HMS_SIDE_STUDENT_PROFILE] = 'STEP_OPT_MISSED';
             return;
@@ -242,22 +242,22 @@ class HMS_Side_Thingie {
             return;
         }
         
-        if($this->curr_timestamp < $this->deadlines->get_submit_application_begin_timestamp()){
-            $this->steps_text[HMS_SIDE_STUDENT_ROOMMATE] .= " (complete by ". date('n/j/y',$this->deadlines->get_submit_application_begin_timestamp()) .")";
+        if($this->curr_timestamp < $this->deadlines->submit_application_begin_timestamp){
+            $this->steps_text[HMS_SIDE_STUDENT_ROOMMATE] .= " (complete by ". date('n/j/y',$this->deadlines->submit_application_begin_timestamp) .")";
             $this->steps_styles[HMS_SIDE_STUDENT_ROOMMATE] .= 'STEP_NOTYET';
             return;
-        }else if($this->curr_timestamp > $this->deadlines->get_submit_application_begin_timestamp() && $this->curr_timestamp < $this->deadlines->get_search_profiles_end_timestamp()){
+        }else if($this->curr_timestamp > $this->deadlines->submit_application_begin_timestamp && $this->curr_timestamp < $this->deadlines->search_profiles_end_timestamp){
             # We are within deadlines, check to see if we're actually on this step
             if($on_this_step){
                 # We're on this step currently, so don't add a link, just add the text
-                $this->steps_text[HMS_SIDE_STUDENT_ROOMMATE] .= " (complete by ". date('n/j/y',$this->deadlines->get_search_profiles_end_timestamp()) . ")";
+                $this->steps_text[HMS_SIDE_STUDENT_ROOMMATE] .= " (complete by ". date('n/j/y',$this->deadlines->search_profiles_end_timestamp) . ")";
             }else{
                 # We're not on this step, so add the link and text
-                $this->steps_text[HMS_SIDE_STUDENT_ROOMMATE] = PHPWS_Text::secureLink($this->steps_text[HMS_SIDE_STUDENT_ROOMMATE] . " (complete by ". date('n/j/y',$this->deadlines->get_search_profiles_end_timestamp()) . ")", 'hms', array('type'=>'student', 'op'=>'get_roommate_username'));
+                $this->steps_text[HMS_SIDE_STUDENT_ROOMMATE] = PHPWS_Text::secureLink($this->steps_text[HMS_SIDE_STUDENT_ROOMMATE] . " (complete by ". date('n/j/y',$this->deadlines->search_profiles_end_timestamp) . ")", 'hms', array('type'=>'student', 'op'=>'get_roommate_username'));
                 $this->steps_styles[HMS_SIDE_STUDENT_ROOMMATE] = 'STEP_TOGO';
             }
             return;
-        }else if($this->curr_timestamp > $this->deadlines->get_search_profiles_end_timestamp()){
+        }else if($this->curr_timestamp > $this->deadlines->search_profiles_end_timestamp){
             $this->steps_text[HMS_SIDE_STUDENT_ROOMMATE] .= "(skipped)";
             $this->steps_styles[HMS_SIDE_STUDENT_ROOMMATE] = 'STEP_OPT_MISSED';
             return;
@@ -277,8 +277,8 @@ class HMS_Side_Thingie {
         }
 
         # Check deadlines and set accordingly
-        if($this->curr_timestamp < $this->deadlines->get_view_assignment_begin_timestamp()){
-            $this->steps_text[HMS_SIDE_STUDENT_VERIFY] .= " (available " . date('n/j/y',$this->deadlines->get_view_assignment_begin_timestamp()) . ")";
+        if($this->curr_timestamp < $this->deadlines->view_assignment_begin_timestamp){
+            $this->steps_text[HMS_SIDE_STUDENT_VERIFY] .= " (available " . date('n/j/y',$this->deadlines->view_assignment_begin_timestamp) . ")";
             $this->steps_styles[HMS_SIDE_STUDENT_VERIFY] = 'STEP_NOTYET';
             return;
         }else{
