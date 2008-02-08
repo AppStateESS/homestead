@@ -426,7 +426,7 @@ class HMS_Application {
         }
 
         # Use a hidden field for the entry term, pull from banner
-        $form->addHidden('term', HMS_SOAP::get_entry_term($_SESSION['asu_username']));
+        $form->addHidden('term', HMS_SOAP::get_application_term($_SESSION['asu_username']));
 
         # Use a hidden field for gender, pull from banner
         $form->addHidden('gender_type', HMS_SOAP::get_gender($_SESSION['asu_username'], TRUE));
@@ -496,7 +496,7 @@ class HMS_Application {
         $tpl['MESSAGE'] = $message;
         $tpl['STUDENT_NAME'] = HMS_SOAP::get_full_name($_SESSION['asu_username']);
         $tpl['GENDER'] = (HMS_SOAP::get_gender($_SESSION['asu_username'],TRUE) == '0') ? 'Female' : 'Male';
-        $tpl['ENTRY_TERM'] = HMS_Term::term_to_text(HMS_SOAP::get_entry_term($_SESSION['asu_username']), TRUE);
+        $tpl['ENTRY_TERM'] = HMS_Term::term_to_text(HMS_SOAP::get_application_term($_SESSION['asu_username']), TRUE);
 
         $master['TITLE']   = 'Residence Hall Application';
         $master['APPLICATION']  = PHPWS_Template::process($tpl, 'hms', 'student/student_application.tpl');
