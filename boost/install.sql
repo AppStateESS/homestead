@@ -198,7 +198,7 @@ CREATE TABLE hms_learning_community_assignment (
 CREATE TABLE hms_learning_community_applications (
     id                              integer NOT NULL,
     user_id                         character varying(32) NOT NULL,
-    entry_term                      integer NOT NULL,
+    term                            integer NOT NULL REFERENCES hms_term(term),
     date_submitted                  integer NOT NULL,
     rlc_first_choice_id             integer NOT NULL REFERENCES hms_learning_communities(id),
     rlc_second_choice_id            integer NOT NULL REFERENCES hms_learning_communities(id),
@@ -213,7 +213,7 @@ CREATE TABLE hms_learning_community_applications (
     PRIMARY KEY(id)
 );
 
-ALTER TABLE hms_learning_community_applications ADD CONSTRAINT rlc_application_key UNIQUE (user_id, entry_term); 
+ALTER TABLE hms_learning_community_applications ADD CONSTRAINT rlc_application_key UNIQUE (user_id, term);
 
 CREATE TABLE hms_learning_community_floors (
     learning_communities_id integer NOT NULL REFERENCES hms_learning_communities(id),

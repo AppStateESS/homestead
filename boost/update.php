@@ -758,6 +758,14 @@ function hms_update(&$content, $currentVersion)
             $files[] = 'templates/student/freshmen_welcome_screen.tpl';
             $files[] = 'templates/student/freshmen_welcome_screen.tpl';
             PHPWS_Boost::updatefiles($files, 'hms');
+
+        case version_compare($currentVersion, '0.2.20', '<'):
+            $db = &new PHPWS_DB;
+            $result = $db->importFIle(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_20.sql');
+            if(PEAR::isError($result)) {
+                return $result;
+            }
+
         case version_compare($currentVerrsion, '0.2.21', '<'):
             
             $files[] = 'templates/student/welcome_screen_freshmen.tpl';

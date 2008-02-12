@@ -28,7 +28,7 @@ class HMS_RLC_Application{
 
     var $required_course = 0;
     var $hms_assignment_id = NULL;
-    var $entry_term = NULL;
+    var $term = NULL;
 
     /**
      * Constructor
@@ -77,7 +77,7 @@ class HMS_RLC_Application{
         $this->setRLCQuestion2($result['rlc_question_2']);
         $this->setRequiredCourse($result['required_course']);
         $this->setAssignmentID($result['hms_assignment_id']);
-        $this->setEntryTerm($result['entry_term']);
+        $this->setEntryTerm($result['term']);
 
         return $result;
     }
@@ -101,7 +101,7 @@ class HMS_RLC_Application{
         $db->addValue('rlc_question_2',          $this->getRLCQuestion2());
         $db->addValue('required_course',         $this->getRequiredCourse());
         $db->addValue('hms_assignment_id',       $this->getAssignmentID());
-        $db->addValue('entry_term',              $this->getEntryTerm());
+        $db->addValue('term',              $this->getEntryTerm());
 
         # If this object has an ID, then do an update. Otherwise, do an insert.
         if(!$this->getID() || $this->getID() == NULL){
@@ -185,10 +185,10 @@ class HMS_RLC_Application{
         }
 
         if(isset($entry_term)){
-            $db->addWhere('entry_term', $entry_term);
+            $db->addWhere('term', $entry_term);
         } else {
             PHPWS_Core::initModClass('hms', 'HMS_Term.php');
-            $db->addWhere('entry_term', HMS_Term::get_current_term());
+            $db->addWhere('term', HMS_Term::get_current_term());
         }
 
         $result = $db->select('row');
@@ -664,7 +664,7 @@ class HMS_RLC_Application{
     }
 
     function getEntryTerm(){
-        return $this->entry_term;
+        return $this->term;
     }
 
     function setEntryTerm($term){
