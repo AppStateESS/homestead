@@ -378,7 +378,7 @@ class HMS_SOAP{
     {
         if(SOAP_TEST_FLAG){
             # return canned data
-            return "1970-09-05";
+            return "1986-09-05";
         }else{
             $student = HMS_SOAP::get_student_info($username);
         }
