@@ -469,6 +469,24 @@ class HMS_Term{
         return $year . $term;
     }
 
+    /**
+     * Returns the 'next term' based on the term passed in
+     */
+    function get_next_term($term)
+    {
+        # Grab the year
+        $year = substr($term, 0, 4);
+
+        # Grab the term
+        $sem = substr($term, 4, 2);
+
+        if($sem == TERM_FALL){
+            return ($year + 1) . "10";
+        }else{
+            return "$year" . ($sem + 10);
+        }
+    }
+
     /******************************
      * Accessor & Mutator Methods *
      *****************************/
