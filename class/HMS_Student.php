@@ -452,22 +452,32 @@ class HMS_Student {
 
         # Grab the current term for use late
         $current_term = HMS_Term::get_current_term();
-        
+
         # Try initial lookups of the student's application_term, type, and class
         $application_term   = HMS_SOAP::get_application_term($_SESSION['asu_username']);
         $student_type       = HMS_SOAP::get_student_type($_SESSION['asu_username']);
         $student_class      = HMS_SOAP::get_student_class($_SESSION['asu_username']);
+        $dob                = HMS_SOAP::get_dob($_SESSION['asu_username']);
 
         # Check for banner errors in any of these calls
         if($application_term === FALSE ||
             $student_type === FALSE ||
-            $student_class === FALSE)
+            $student_class === FALSE ||
+            $dob === FALSE)
             {
                 # TODO: HMS_Mail here
                 PHPWS_Error::log('Initial banner lookup failed', 'hms', 'show_welcome_screen', "username: {$_SESSION['asu_username']}");
                 $tpl['ERROR_MSG'] = 'An error occured while talking to the student information server. An administrator has been notified of the problem, please check back later.';
-                PHPWS_Template::processs($tpl, 'hms', 'student/welcome_screen.tpl');
+                return PHPWS_Template::process($tpl, 'hms', 'student/error_page.tpl');
             }
+
+        # Calculate the student's age and check for >= 25 years old
+        $dob = explode('-', $dob);
+        if($dob[0] < date('Y') - 25) {
+            $tpl = array();
+           Layout::metaRoute('http://www.housing.appstate.edu/index.php?module=pagemaster&PAGE_user_op=view_page&PAGE_id=33&MMN_position=164:116&MMN_position=190:190',10);
+           return PHPWS_Template::process($tpl, 'hms', 'student/welcome_screen_non_traditional.tpl');
+        }
         
         /******************************************
          * Sort returning students (lottery) from *

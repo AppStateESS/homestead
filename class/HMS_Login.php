@@ -50,20 +50,24 @@ class HMS_Login
         }
         */
 
+        /*
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
         $student_type = HMS_SOAP::get_student_type($_REQUEST['asu_username']);
         $dob = explode('-', HMS_SOAP::get_dob($_REQUEST['asu_username']));
+        */
         
         /* Only allow freshmen to sign in
         if($student_type != 'F') {
             return BADCLASS;
         */
 
+        /*
         # Return an error if the user is 25 years or older
         if($dob[0] < date('Y') - 25) {
             return TOOOLD;
         }
-       
+        */
+        
         require_once(PHPWS_SOURCE_DIR . '/mod/hms/inc/accounts.php');
         Current_User::loginUser(HMS_STUDENT_USER, HMS_STUDENT_PASS);
         Current_User::getLogin();
