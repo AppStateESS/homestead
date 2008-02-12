@@ -187,7 +187,7 @@ class HMS_Deadlines {
         
         # If we weren't passed in the deadlines, then get them now
         if(!isset($deadlines)){
-            $deadlines = HMS_Deadlines::get_deadlines();
+            $deadlines = HMS_Deadlines::get_deadlines($term);
         }
 
         if(PEAR::isError($deadlines)){
