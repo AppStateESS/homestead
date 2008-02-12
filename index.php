@@ -15,10 +15,7 @@ if(Current_User::isLogged()) {
     $type = NULL;
     $type = HMS_Login::login_user();
     
-    if ($type == TOOEARLY) {
-        $error = "<i><h2>It is too early for students to login.</h2></i>";
-        HMS_Login::display_login_screen($error);
-    } else if($type == BADTUPLE) {
+    if($type == BADTUPLE) {
         $error = "<i><h2>You have not entered a valid username/password combination!</h2></i>";
         HMS_Login::display_login_screen($error);
     } else if (isset($type) && is_string($type)) {
