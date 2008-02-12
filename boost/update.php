@@ -758,6 +758,12 @@ function hms_update(&$content, $currentVersion)
             $files[] = 'templates/student/freshmen_welcome_screen.tpl';
             $files[] = 'templates/student/freshmen_welcome_screen.tpl';
             PHPWS_Boost::updatefiles($files, 'hms');
+        case version_compare($currentVerrsion, '0.2.21', '<'):
+            
+            $files[] = 'templates/student/welcome_screen_freshmen.tpl';
+            $files[] = 'templates/student/welcome_screen_transfer.tpl';
+            $files[] = 'templates/student/welcome_screen_no_entry_term.tpl';
+            $files[] = 'templates/student/welcome_screen_deadline_past.tpl';
     }
 
     return TRUE;

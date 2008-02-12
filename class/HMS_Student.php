@@ -489,11 +489,34 @@ class HMS_Student {
             header('Location: http://www.housing.appstate.edu/index.php?module=pagemaster&PAGE_user_op=view_page&PAGE_id=253');
             exit;
 
+            # Check if the user is already entered for the lottery
+            # if so, display the appropriate message
+            # TODO
+
+            # Get deadlines for the current term for future use
+            $deadlines = HMS_Deadlines::get_deadlines();
+
+            # Check that we're within deadlines for lottery signup in the current term
+            if(HMS_Deadlines::check_within_deadlines('lottery_signup_begin_timestamp','lattery_signup_end_timestamp', $deadlines)){
+                # We're within deadlines, so show the "we see you're a returning student, click continue to enter the lottery" message
+                # TODO
+            }else if(!HMS_Deadlines::check_deadline_past('lottery_signup_begin_timestamp', $deadlines)){
+                # Show a too early to signup message.
+                # TODO
+            }else if(HMS_Deadlines::check_deadline_past('lottery_signup_end_timestamp', $deadlines)){
+                # Show a too late message.
+                # TODO
+            }else{
+                # Show a general error message.
+                # TODO
+            }
+
         }else if($application_term > $current_term){
             /*********************
              * Incoming Freshmen *
              *********************/
             # Application term is in the future
+            $tpl = array();
 
             # Check the student type, must be freshmen or transfer
             if($student_type != TYPE_FRESHMEN && $student_type != TYPE_TRANSFER){
@@ -501,13 +524,12 @@ class HMS_Student {
                 # TODO
             }
             
-            $tpl = array();
-            
-            # Temporarly redirect to info screens until applications are actually online
-            if($student_type == TYPE_FRESHMEN){
-                return PHPWS_Template::process($tpl, 'hms', 'student/freshmen_welcome_screen.tpl');
-            }else{
-                return PHPWS_Template::process($tpl, 'hms','student/transfer_welcome_screen.tpl');
+            # TODO
+            # Make sure the user's application term exists in hms_term,
+            # otherwise give a "too early" message
+            if(!HMS_Term::check_term_exists($application_term)){
+                $tpl['ENTRY_TERM'] = HMS_Term::term_to_text($application_term, TRUE);
+                return PHPWS_Template::process($tpl, 'hms', 'student/welcome_screen_no_entry_term.tpl');
             }
             
             # Make sure the student doesn't already have an assignment on file for the current term
@@ -516,15 +538,28 @@ class HMS_Student {
                 # TODO
             }
 
-            # TODO
-            # Make sure the user's application term exists in hms_term,
-            # otherwise give a "too early" message
             
             # Check to see if the user has an application on file already
-            # If so, forward to main menu, if not, send to
-            # terms and agreement->application->main menu
-            # Check deadlines along the way
-            # TODO
+            # If so, forward to main menu
+            if(HMS_Application::check_for_application($_SESSION['asu_username'], $application_term)){
+                return HMS_Student::show_main_menu();
+            }
+            
+            # Get deadlines for the user's application_term for future use
+            $deadlines = HMS_Deadlines::get_deadlines($application_term);
+            
+            # No application exists, check deadlines to see if the user can still apply
+            if(!HMS_Deadlines::check_deadline_past('submit_application_end_timestamp', $deadlines)){
+                # Application deadline has not passed, so show terms and agreement page
+                return HMS_Student::show_terms_and_agreement();
+            }else{
+                # Application deadline has passed, show an error message;
+                $tpl['ENTRY_TERM'] = HMS_Term::term_to_text($application_term, TRUE);
+                $tpl['DEADLINE'] = HMS_Deadlines::get_deadline_as_date('submit_application_end_timestamp', $deadlines);
+                
+                #TODO: Try to find a way to log the user out here
+                return PHPWS_Template::process($tpl, 'hms', 'student/welcome_screen_deadline_past.tpl');
+            }
 
         }else{
             # No idea what's going on here, send to a contact page
@@ -537,41 +572,19 @@ class HMS_Student {
         PHPWS_Core::initModClass('hms', 'HMS_Application.php');
         PHPWS_Core::initModClass('hms', 'HMS_Deadlines.php');
 
-        # Get deadlines for future use
-        $deadlines = HMS_Deadlines::get_deadlines();
-
-        # Check to see if an application exists
-        if(HMS_Application::check_for_application($_SESSION['asu_username'])) {
-            # Application exists, so just show the main menu
-
-            # Show the side thingie
-            PHPWS_Core::initModClass('hms', 'HMS_Side_Thingie.php');
-            $side_thingie = new HMS_Side_Thingie(HMS_SIDE_STUDENT_NOT_STARTED);
-            $side_thingie->show();
-            
-            $entry_term = HMS_Entry_Term::get_entry_term($_SESSION['asu_username']);
-            
-            if($entry_term == TERM_SPRING){
-                return HMS_Student::show_spring_main_menu($deadlines);
-            }else if($entry_term == TERM_FALL){
-                return HMS_Student::show_fall_main_menu($deadlines);
-            }
-            
-        } else {
-            # No application exists, check deadlines to see if the user can still apply
-            if(!HMS_Deadlines::check_deadline_past('submit_application_end_timestamp', $deadlines)){
-                # Application deadline has not passed, so show terms and agreement page
-                return HMS_Student::show_terms_and_agreement();
-            }else{
-                # Application deadline has passed, show an error message;
-                $tags = array();
-                $tags['ERROR_MSG'] = "Sorry, it is too late to apply for housing. If you need assistance please contact the Department of Housing and Residence Life by phone.";
-                
-                #TODO: Try to find a way to log the user out here
-                return PHPWS_Template::process($tags, 'hms', 'student/error_page.tpl');
-            }
-        }
+        # Show the side thingie
+        PHPWS_Core::initModClass('hms', 'HMS_Side_Thingie.php');
+        $side_thingie = new HMS_Side_Thingie(HMS_SIDE_STUDENT_NOT_STARTED);
+        $side_thingie->show();
         
+        # Decide which menu to show based on the entry term
+        $entry_term = HMS_Entry_Term::get_entry_term($_SESSION['asu_username']);
+        
+        if($entry_term == TERM_SPRING){
+            return HMS_Student::show_spring_main_menu($deadlines);
+        }else if($entry_term == TERM_FALL){
+            return HMS_Student::show_fall_main_menu($deadlines);
+        }
     }
 
     function show_terms_and_agreement()
