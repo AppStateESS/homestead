@@ -18,20 +18,8 @@ if(Current_User::isLogged()) {
     if ($type == TOOEARLY) {
         $error = "<i><h2>It is too early for students to login.</h2></i>";
         HMS_Login::display_login_screen($error);
-    } else if ($type == TOOLATE) {
-        $error = "<i><h2>It is too late for students to login.<br />Please contact Housing and Residence Life at http://housing.appstate.edu.</h2></i>";
-        HMS_Login::display_login_screen($error);
     } else if($type == BADTUPLE) {
         $error = "<i><h2>You have not entered a valid username/password combination!</h2></i>";
-        HMS_Login::display_login_screen($error);
-    } else if ($type == TOOOLD) {
-        $error = "<i><h2>You must be under 25 to live in a Residence Hall.<br />";
-        $error .= "Please contact Housing and Residence Life about living in Mountaineer Apartments.</h2></i>";
-        HMS_Login::display_login_screen($error);
-    } else if ($type == BADCLASS) {
-        $error = "<i><h2>You are not a Freshman.<br />";
-        $error .= "We are currently restricting access to HMS to freshman.<br />";
-        $error .= "If you need to contact Housing and Residence Life please visit http://housing.appstate.edu</h2></i>";
         HMS_Login::display_login_screen($error);
     } else if (isset($type) && is_string($type)) {
         Layout::add($type);
