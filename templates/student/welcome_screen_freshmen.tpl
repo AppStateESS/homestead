@@ -3,9 +3,10 @@
         <div class="box-title"><h2>Welcome to the Housing Management System</h2></div>
         <div class="box-content">
         Welcome to Appalachian State University Housing and Residence Life. The Department of Housing and Residence Life 
-        is pleased you have chosen Appalachian and look forward to meeting your housing needs. The housing application will be
-        available at this website on or before <b>March 1, 2008</b>. 
-        Please note that you may select your roommate, but you cannot request a residence hall.
+        is pleased you have chosen Appalachian and look forward to meeting your housing needs. We see that you are a new freshmen
+        admitted for {ENTRY_TERM} semester and will be living on-campus for the first time. To begin your housing application for the 
+        <b>{ENTRY_TERM}</b> school year please click the 'Continue' button below. If the above information in incorrect, if you are not a new freshmen,
+        or if this will not be your first time living on campus, then please {CONTACT_LINK} to contact us.
         </div>
     </div>
 </div>
