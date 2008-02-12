@@ -131,7 +131,7 @@ class HMS_Application {
                 $success .= PHPWS_Text::secureLink(_('View My Application'), 'hms', array('type'=>'student', 'op'=>'review_application'));
                 $success .= "<br /><br />";
                 PHPWS_Core::initModClass('hms','HMS_Entry_Term.php');
-                if(HMS_Entry_Term::get_entry_term($_SESSION['asu_username']) == TERM_FALL){
+                if(HMS_Entry_Term::get_entry_semester($_SESSION['asu_username']) == TERM_FALL){
                     $success .= PHPWS_Text::secureLink(_('Apply for a RLC'), 'hms', array('type'=>'student', 'op'=>'show_rlc_application_form'));
                     $success .= "<br /><br />";
                 }
@@ -302,7 +302,6 @@ class HMS_Application {
      */
     function display_application_form($view = NULL)
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
         if($view != NULL) {
             return HMS_Application::display_application_results();
         } else {
@@ -474,7 +473,7 @@ class HMS_Application {
         }
 
         
-        if(HMS_Entry_Term::get_entry_term($_SESSION['asu_username']) != TERM_FALL){
+        if(HMS_Entry_Term::get_entry_semester($_SESSION['asu_username']) != TERM_FALL){
             $form->addHidden('rlc_interest', 0);
         }else{
             $form->addRadio('rlc_interest', array(0, 1));
