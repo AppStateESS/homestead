@@ -774,6 +774,8 @@ function hms_update(&$content, $currentVersion)
             $files[] = 'templates/student/welcome_screen_deadline_past.tpl';
             $files[] = 'templates/student/welcome_screen_non_traditional.tpl';
             $files[] = 'templates/student/welcome_screen_too_soon.tpl';
+            $files[] = 'templates/student/contact_page.tpl';
+            $files[] = 'templates/student/contact_form_thankyou.tpl';
     }
 
     return TRUE;

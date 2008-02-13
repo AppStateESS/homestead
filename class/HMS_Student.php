@@ -542,6 +542,8 @@ class HMS_Student {
                 $tpl['ENTRY_TERM'] = HMS_Term::term_to_text($application_term, TRUE);
             }
 
+            $tpl['CONTACT_LINK'] = PHPWS_Text::secureLink('click here', 'hms', array('type'=>'student', 'op'=>'show_contact_form'));
+
             # Check the student type, must be freshmen or transfer
             if($student_type != TYPE_FRESHMEN && $student_type != TYPE_TRANSFER){
                 # No idea what's going on here, send to a contact page
@@ -1074,12 +1076,20 @@ class HMS_Student {
             case 'set_meal_plan':
                 return HMS_Student::set_meal_plan();
                 break;
+            case 'show_contact_form':
+                PHPWS_Core::initModClass('hms', 'HMS_Contact_Form.php');
+                return HMS_Contact_Form::show_contact_form();
+                break;
+            case 'submit_contact_form':
+                PHPWS_Core::initModClass('hms', 'HMS_Contact_Form.php');
+                return HMS_Contact_Form::submit_contact_form();
+                break;
             case 'main':
                 //return HMS_Student::show_main_menu();
                 return HMS_Student::show_welcome_screen();
                 break;
             default:
-                return "{$_REQUEST['op']} <br />";
+                return "unknown student op: {$_REQUEST['op']} <br />";
                 break;
         }
     }
