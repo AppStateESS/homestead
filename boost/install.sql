@@ -160,6 +160,8 @@ CREATE TABLE hms_deadlines (
     submit_rlc_application_end_timestamp    integer NOT NULL,
     view_assignment_begin_timestamp         integer NOT NULL,
     view_assignment_end_timestamp           integer NOT NULL,
+    lottery_signup_begin_timestamp          integer NOT NULL,
+    lottery_signup_end_timestamp            integer NOT NULL,
     updated_by                              smallint NOT NULL,
     updated_on                              integer NOT NULL,
     primary key(id)
