@@ -451,6 +451,9 @@ class HMS_Student {
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
         PHPWS_Core::initModClass('hms', 'HMS_Deadlines.php');
         PHPWS_Core::initModClass('hms', 'HMS_Entry_Term.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Contact_Form.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Application.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
 
         # Grab the current term for use late
         $current_term = HMS_Term::get_current_term();
@@ -547,10 +550,9 @@ class HMS_Student {
             # Check the student type, must be freshmen or transfer
             if($student_type != TYPE_FRESHMEN && $student_type != TYPE_TRANSFER){
                 # No idea what's going on here, send to a contact page
-                # TODO
+                return HMS_Contact_Form::show_contact_form();
             }
             
-            # TODO
             # Make sure the user's application term exists in hms_term,
             # otherwise give a "too early" message
             if(!HMS_Term::check_term_exists($application_term)){
@@ -566,7 +568,7 @@ class HMS_Student {
             # Make sure the student doesn't already have an assignment on file for the current term
             if(HMS_Assignment::check_for_assignment($_SESSION['asu_username'])){
                 # No idea what's going on here, send to a contact page
-                # TODO
+                return HMS_Contact_Form::show_contact_form();
             }
             
             # Get deadlines for the user's application_term for future use
@@ -579,6 +581,16 @@ class HMS_Student {
             
             # No application exists, check deadlines to see if the user can still apply
             if(!HMS_Deadlines::check_deadline_past('submit_application_end_timestamp', $deadlines)){
+                
+                # Setup the form for the 'continue' button.
+                $form = &new PHPWS_Form;
+                $form->addSubmit('submit', 'Continue');
+                $form->addHidden('type', 'student');
+                $form->addHidden('op','show_terms_and_agreement');
+
+                $form->mergeTemplate($tpl);
+                $tpl = $form->getTemplate();
+                
                 # Application deadline has not passed, so show welcome page
                 if($student_type == TYPE_FRESHMEN){
                     return PHPWS_Template::processs($tpl, 'hms', 'student/welcome_screen_freshmen.tpl');
@@ -594,7 +606,7 @@ class HMS_Student {
 
         }else{
             # No idea what's going on here, send to a contact page
-            # TODO
+            return HMS_Contact_Form::show_contact_form();
         }   
     }
 
@@ -639,7 +651,7 @@ class HMS_Student {
 
         # Check for under 18, display link to print message
         PHPWS_Core::initModClass('hms','HMS_SOAP.php');
-        $dob = explode('-', HMS_SOAP::get_dob($_REQUEST['asu_username']));
+        $dob = explode('-', HMS_SOAP::get_dob($_SESSION['asu_username']));
         $dob_timestamp = mktime(0,0,0,$dob[1],$dob[2],$dob[0]);
         $current_timestamp = mktime(0,0,0);
         if(($current_timestamp - $dob_timestamp) < (3600 * 24 * 365 * 18)){
@@ -964,6 +976,8 @@ class HMS_Student {
             case 'delete_student':
                 return HMS_Student::delete_student();
                 break;
+            case 'show_terms_and_agreement':
+               return HMS_Student::show_terms_and_agreement();
             case 'begin_application':
                 # Check to see if the user hit 'do not agree' on the terms/agreement page
                 if(isset($_REQUEST['quit'])) {

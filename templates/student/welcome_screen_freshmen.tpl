@@ -7,6 +7,10 @@
         admitted for {ENTRY_TERM} semester and will be living on-campus for the first time. To begin your housing application for the 
         <b>{ENTRY_TERM}</b> school year please click the 'Continue' button below. If the above information in incorrect, if you are not a new freshmen,
         or if this will not be your first time living on campus, then please {CONTACT_LINK} to contact us.
+        <br /><br />
+        {START_FORM}
+        {SUBMIT}
+        {END_FORM}
         </div>
     </div>
 </div>
