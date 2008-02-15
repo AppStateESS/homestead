@@ -46,7 +46,7 @@
                 <th>
                 Do you have any special needs?<br />
                 <div style="font-size: 9px">
-                A member of the Housing & Residence Life staff<br />
+                If so, a member of the Housing & Residence Life staff<br />
                 will contact for further information.
                 <div>
                 </th>
@@ -66,10 +66,8 @@
             </tr>
             <tr><th> </th><td> </td></tr>
             <tr>
-                <th>Are you interested in joining</th><td></td>
-            </tr>
-            <tr>
-                <th>a Residential Learning Community? &nbsp;&nbsp;&nbsp;&nbsp;</th><td align="left">{RLC_INTEREST_1} {RLC_INTEREST_1_LABEL}</td>
+                <th>Are you interested in a <a href="http://housing.appstate.edu/index.php?module=pagemaster&PAGE_user_op=view_page&PAGE_id=134" target="_blank">unique housing option</a>?</th>
+                <td align="left">{RLC_INTEREST_1} {RLC_INTEREST_1_LABEL}</td>
             </tr>
             <tr>
                 <th></th><td align="left">{RLC_INTEREST_2} {RLC_INTEREST_2_LABEL}</td>
