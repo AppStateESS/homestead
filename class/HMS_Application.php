@@ -132,7 +132,6 @@ class HMS_Application {
         }
 
         $result = $question->save();
-        test($result);
         
         if(PEAR::isError($result)){
             PHPWS_Error::log($result,'hms','Caught error from Application::save()');
