@@ -35,7 +35,7 @@ class HMS_Side_Thingie {
         PHPWS_Core::initModClass('hms','HMS_Deadlines.php');
         
         # Get the deadlines for future use
-        $this->deadlines = &new HMS_Deadlines();
+        $this->deadlines = &new HMS_Deadlines($_SESSION['application_term']);
 
         if(PEAR::isError($this->deadlines)){
             PHPWS_Error::log($this->deadlines,'hms','HMS_Side_Thingie::show()','DB error while looking up deadlines.');
