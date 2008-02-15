@@ -40,6 +40,7 @@ class HMS_Login
     {
 
         PHPWS_Core::initModClass('hms','HMS_Deadlines.php');
+        PHPWS_Core::initModClass('hms','HMS_SOAP.php');
         $deadlines = HMS_Deadlines::get_deadlines();
 
         /*
@@ -78,6 +79,7 @@ class HMS_Login
 
         # Setup the session variable
         $_SESSION['asu_username'] = $_REQUEST['asu_username'];
+        $_SESSION['application_term'] = HMS_SOAP::get_application_term($_REQUEST['asu_username']);
         return STUDENT;
     }
 
