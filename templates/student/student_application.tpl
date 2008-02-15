@@ -43,6 +43,29 @@
             <!-- BEGIN rlc_interest_1 -->
             <tr><th> </th><td> </td></tr>
             <tr>
+                <th>
+                Do you have any special needs?<br />
+                <div style="font-size: 9px">
+                A member of the Housing & Residence Life staff<br />
+                will contact for further information.
+                <div>
+                </th>
+                <!-- BEGIN special_needs_1 -->
+                <td>
+                {SPECIAL_NEEDS_1}{SPECIAL_NEEDS_1_LABEL}<br />
+                {SPECIAL_NEEDS_2}{SPECIAL_NEEDS_2_LABEL}<br />
+                {SPECIAL_NEEDS_3}{SPECIAL_NEEDS_3_LABEL}<br />
+                {SPECIAL_NEEDS_4}{SPECIAL_NEEDS_4_LABEL}<br />
+                </td>
+                <!-- END special_needs_1 -->
+                <!-- BEGIN special_needs_result -->
+                <td>
+                {SPECIAL_NEEDS_RESULT}
+                </td>
+                <!-- END special_needs_result -->
+            </tr>
+            <tr><th> </th><td> </td></tr>
+            <tr>
                 <th>Are you interested in joining</th><td></td>
             </tr>
             <tr>

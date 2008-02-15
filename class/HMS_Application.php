@@ -25,6 +25,11 @@ class HMS_Application {
     var $agreed_to_terms;
     var $aggregate;
 
+    var $physical_disability    = 0;
+    var $psych_disability       = 0;
+    var $medical_need           = 0;
+    var $gender_need            = 0;
+
     var $created_on;
     var $created_by;
 
@@ -110,7 +115,24 @@ class HMS_Application {
         $question->setRlcInterest($_REQUEST['rlc_interest']);
         $question->setAgreedToTerms($_REQUEST['agreed_to_terms']);
 
+        if(isset($_REQUEST['special_needs']['physical_disability'])){
+            $question->physical_disability = 1;
+        }
+
+        if(isset($_REQUEST['special_needs']['psych_disability'])){
+            $question->psych_disability = 1;
+        }
+
+        if(isset($_REQUEST['special_needs']['medical_need'])){
+            $question->medical_need = 1;
+        }
+
+        if(isset($_REQUEST['special_needs']['gender_need'])){
+            $question->gender_need = 1;
+        }
+
         $result = $question->save();
+        test($result);
         
         if(PEAR::isError($result)){
             PHPWS_Error::log($result,'hms','Caught error from Application::save()');
@@ -163,6 +185,11 @@ class HMS_Application {
         $db->addValue('deleted_on',$this->getDeletedOn());
         $db->addValue('agreed_to_terms',$this->getAgreedToTerms());
         $db->addValue('aggregate',$this->calculateAggregate());
+
+        $db->addValue('physical_disability',$this->physical_disability);
+        $db->addValue('psych_disability',   $this->psych_disability);
+        $db->addValue('medical_need',       $this->medical_need);
+        $db->addValue('gender_need',        $this->gender_need);
         
         # If this object has an ID, then do an update. Otherwise, do an insert.
         if(!$this->getID() || $this->getID() == NULL){
@@ -472,6 +499,12 @@ class HMS_Application {
             $form->setMatch('room_condition', '1');
         }
 
+        $form->addCheck('special_needs', array('physical_disability','psych_disability','medical_need','gender_need'));
+        $form->setLabel('special_needs', array('Physical disability', 'Psychological disability', 'Medical', 'Gender'));
+
+        if(isset($_REQUEST['special_needs'])){
+            $form->setMatch('special_needs', $_REQUEST['special_needs']);
+        }
         
         if(HMS_Entry_Term::get_entry_semester($_SESSION['asu_username']) != TERM_FALL){
             $form->addHidden('rlc_interest', 0);
@@ -530,6 +563,7 @@ class HMS_Application {
             $form->addHidden('lifestyle_option',$_REQUEST['lifestyle_option']);
             $form->addHidden('preferred_bedtime',$_REQUEST['preferred_bedtime']);
             $form->addHidden('room_condition',$_REQUEST['room_condition']);
+            $form->addHidden('special_needs',$_REQUEST['special_needs']);
             $form->addHidden('rlc_interest',$_REQUEST['rlc_interest']);
             $form->addHidden('module', 'hms');
             $form->addHidden('type', 'student');
@@ -552,6 +586,7 @@ class HMS_Application {
             $redo_form->addHidden('lifestyle_option',$_REQUEST['lifestyle_option']);
             $redo_form->addHidden('preferred_bedtime',$_REQUEST['preferred_bedtime']);
             $redo_form->addHidden('room_condition',$_REQUEST['room_condition']);
+            $redo_form->addHidden('special_needs',$_REQUEST['special_needs']);
             $redo_form->addHidden('rlc_interest',$_REQUEST['rlc_interest']);
             
             $redo_tpl = $redo_form->getTemplate();
@@ -588,7 +623,27 @@ class HMS_Application {
 
             if($_REQUEST['room_condition'] == 1) $tpl['ROOM_CONDITION'] = "Clean";
             else if($_REQUEST['room_condition'] == 2) $tpl['ROOM_CONDITION'] = "Dirty";
-            
+
+            $special_needs = "";
+            if(isset($_REQUEST['special_needs']['physical_disability'])){
+                $special_needs = "Physical disability<br />";
+            }
+            if(isset($_REQUEST['special_needs']['psych_disability'])){
+                $special_needs .= "Psychological disability<br />";
+            }
+            if(isset($_REQUEST['special_needs']['medical_need'])){
+                $special_needs .= "Medical need<br />";
+            }
+            if(isset($_REQUEST['special_needs']['gender_need'])){
+                $special_needs .= "Gender need<br />";
+            }
+
+            if($special_needs == ""){
+                $special_needs = "None";
+            }
+
+            $tpl['SPECIAL_NEEDS_RESULT'] = $special_needs;
+
             if($_REQUEST['rlc_interest'] == 0) $tpl['RLC_INTEREST_1'] = "No";
             else if($_REQUEST['rlc_interest'] == 1) $tpl['RLC_INTEREST_1'] = "Yes";
        
