@@ -114,10 +114,10 @@ class HMS_Floor extends HMS_Item
         if(!empty($this->_suites)) {
             foreach ($this->_suites as $suite) {
                 $result = $suite->copy($to_term, $new_floor->id, $assignments);
-                // What if bad result?
-                test($result);
-                test($suite);
                 if(!$result){
+                    // What if bad result?
+                    test($result);
+                    test($suite);
                     return false;
                     echo "error copying suite";
                 }
