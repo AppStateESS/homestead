@@ -491,7 +491,6 @@ class HMS_Learning_Community
         PHPWS_Core::initModClass('hms','HMS_RLC_Application.php');
         
         $template = array();
-        $template['PAGE_TITLE'] = "Residential Learning Community Application";
 
         # Check for invalid input on page 2
         $message = HMS_RLC_Application::validate_rlc_application_page2();

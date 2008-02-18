@@ -432,7 +432,7 @@ class HMS_RLC_Application{
              isset($_REQUEST['rlc_second_choice']) &&
              isset($_REQUEST['rlc_third_choice'])
            )){
-            return "Error: No RLCs submitted.";
+            return "Error: No communitiess submitted.";
         }
 
         # Make sure rlc choices are numeric
@@ -440,25 +440,25 @@ class HMS_RLC_Application{
              is_numeric($_REQUEST['rlc_second_choice']) &&
              is_numeric($_REQUEST['rlc_third_choice'])
            )){
-            return "Error: Invalid RLC choices.";
+            return "Error: Invalid community choices.";
         }
 
         # Make sure rlc choice indicies are > 0 (i.e. not default value)
         # Only check first choice, allowing second and third choices to be "none".
         if($_REQUEST['rlc_first_choice']  < 0 ){
-               return "Error: Please rank your RLC choices.";
+               return "Error: Please rank your community choices.";
         }
 
         # Make sure that if 2nd choice is "none", that there isn't a third choice
         if($_REQUEST['rlc_second_choice'] == -1 && $_REQUEST['rlc_third_choice'] > -1){
-            return "Error: You cannot choose a third RLC without also choosing a second.";
+            return "Error: You cannot choose a third community without also choosing a second.";
         }
         
         # Make sure none of the rlc choices match, but allow for second and third choices to match as long as they're both "none".
         if(($_REQUEST['rlc_first_choice']  == $_REQUEST['rlc_second_choice']) ||
            ($_REQUEST['rlc_second_choice'] == $_REQUEST['rlc_third_choice'] && ($_REQUEST['rlc_second_choice'] > -1 && $_REQUEST['rlc_third_choice'] > -1))  ||
            ($_REQUEST['rlc_first_choice']  == $_REQUEST['rlc_third_choice'])){
-            return "Error: While ranking your RLC choices, you cannot select a RLC more than once.";
+            return "Error: While ranking your community choices, you cannot select a community more than once.";
         }
 
         if(!(isset($_REQUEST['why_specific_communities']) &&
@@ -506,7 +506,7 @@ class HMS_RLC_Application{
 
             
             if(PEAR::isError($result)){
-                $template['MESSAGE'] = "There was an error looking up the RLC questions.";
+                $template['MESSAGE'] = "There was an error looking up the community questions.";
                 return PHPWS_Template::process($template,'hms','student/rlc_signup_form_page2.tpl');
             }
 

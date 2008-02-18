@@ -153,7 +153,7 @@ class HMS_Application {
                 $success .= "<br /><br />";
                 PHPWS_Core::initModClass('hms','HMS_Entry_Term.php');
                 if(HMS_Entry_Term::get_entry_semester($_SESSION['asu_username']) == TERM_FALL){
-                    $success .= PHPWS_Text::secureLink(_('Apply for a RLC'), 'hms', array('type'=>'student', 'op'=>'show_rlc_application_form'));
+                    $success .= PHPWS_Text::secureLink(_('Unique Housing Options Application'), 'hms', array('type'=>'student', 'op'=>'show_rlc_application_form'));
                     $success .= "<br /><br />";
                 }
                 $success .= PHPWS_Text::secureLink(_('Back to Main Menu'), 'hms', array('type'=>'student','op'=>'main'));
