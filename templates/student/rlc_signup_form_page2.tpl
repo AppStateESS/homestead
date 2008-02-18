@@ -19,7 +19,7 @@
                 <td>{RLC_QUESTION_2}</td>
             </tr>
             <tr>
-               <td colspan="2" align="right">{SUBMIT}</td>
+               <td colspan="2" align="left">{SUBMIT} {CANCEL}</td>
            </tr> 
         </table>
         {END_FORM}

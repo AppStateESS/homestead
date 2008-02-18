@@ -1,10 +1,18 @@
 <div class="hms">
   <div class="box">
-    <div class="box-title"> <h1>Residential Learning Community (RLC) Application</h1> </div>
+    <div class="box-title"> <h1>Unique Housing Options Application</h1> </div>
     <div class="box-content">
         <div>
-        By completeing this application, you may be placed into a Residential Learning Community. To learn more about Residential Learning Communities please
-        visit the <a href="http://www.reslife.appstate.edu/index.php?module=pagemaster&PAGE_user_op=view_page&PAGE_id=134&MMN_position=107:107">Residential Learning Community website</a>.
+        This is an additional application for <a href="http://housing.appstate.edu/index.php?module=pagemaster&PAGE_user_op=view_page&PAGE_id=134">Unique Housing Options</a>.
+        To learn more about the unqiue housing options avaiable to you please vist the <a href="http://housing.appstate.edu/index.php?module=pagemaster&PAGE_user_op=view_page&PAGE_id=134">Unique Housing Options website</a>.
+
+        <br /><br />
+
+        <b>Note:</b> When you apply for a Residential Learning Community or Common Interest
+        Housing, please note that you are limiting your roommate options!  You
+        cannot be accepted into a community with a pre-chosen roommate who does
+        not apply to the same community, and once you apply, you can no longer
+        choose roommates who have not applied to the same community.
         </div>
         <font color="red"><i>{MESSAGE}</i></font><br>
         <!-- BEGIN rlc_form -->
@@ -30,7 +38,7 @@
                 <td>{LAST_NAME}</td>
             </tr>
             <tr>
-                <th colspan="2">2. Rank Your RLC Choices</th>
+                <th colspan="2">2. Rank Your Community Choices</th>
             </tr>
             <tr>
                 <td>{RLC_FIRST_CHOICE_LABEL}</td>
@@ -57,7 +65,7 @@
             </tr>
             <tr>
         <tr>
-            <td colspan="2" align="right">{SUBMIT}</td>
+            <td colspan="2" align="left">{SUBMIT} {CANCEL}</td>
         </tr> 
         </table>
         {END_FORM}

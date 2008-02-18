@@ -1004,6 +1004,9 @@ class HMS_Student {
                 PHPWS_Core::initModClass('hms','HMS_Application.php');
                 return HMS_Application::display_application_form(TRUE);
                 break;
+            case 'show_main_menu':
+                return HMS_Student::show_main_menu();
+                break;
             case 'view_housing_application':
                 PHPWS_Core::initModClass('hms', 'HMS_Application.php');
                 return HMS_Application::view_housing_application($_REQUEST['student']);

@@ -146,7 +146,7 @@ class HMS_RLC_Application{
         $application->setWhySpecificCommunities($_REQUEST['why_specific_communities']);
         $application->setStrengthsWeaknesses($_REQUEST['strengths_weaknesses']);
         $application->setRLCQuestion0($_REQUEST['rlc_question_0']);
-        $application->setEntryTerm(HMS_SOAP::get_entry_term($_SESSION['asu_username']));
+        $application->setEntryTerm(HMS_SOAP::get_application_term($_SESSION['asu_username']));
         
         if(isset($_REQUEST['rlc_question_1'])){
             $application->setRLCQuestion1($_REQUEST['rlc_question_1']);
@@ -394,6 +394,9 @@ class HMS_RLC_Application{
                             'What are your strengths and in what areas would you like to improve?');
         $rlc_form->setMaxSize('strengths_weaknesses',2048);
 
+        $rlc_form->addButton('cancel','Cancel');
+        $rlc_form->setExtra('cancel','onClick="document.location=\'index.php?module=hms&type=student&op=show_main_menu\'"');
+
         $rlc_form->addSubmit('submit', 'Continue'); 
     
         $rlc_form->mergeTemplate($template);
@@ -513,6 +516,9 @@ class HMS_RLC_Application{
         }
         
         $rlc_form2->addSubmit('submit','Submit Application');
+
+        $rlc_form2->addButton('cancel','Cancel');
+        $rlc_form2->setExtra('cancel','onClick="document.location=\'index.php?module=hms&type=student&op=show_main_menu\'"');
 
         $rlc_form2->mergeTemplate($template);
         $template = $rlc_form2->getTemplate();
