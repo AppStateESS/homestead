@@ -3,8 +3,8 @@
     <div class="box-title"> <h1>Unique Housing Options Application</h1> </div>
     <div class="box-content">
         <div>
-        This is an additional application for <a href="http://housing.appstate.edu/index.php?module=pagemaster&PAGE_user_op=view_page&PAGE_id=134">Unique Housing Options</a>.
-        To learn more about the unqiue housing options avaiable to you please vist the <a href="http://housing.appstate.edu/index.php?module=pagemaster&PAGE_user_op=view_page&PAGE_id=134">Unique Housing Options website</a>.
+        This is an additional application for <a href="http://housing.appstate.edu/index.php?module=pagemaster&PAGE_user_op=view_page&PAGE_id=134" target="_blank">Unique Housing Options</a>.
+        To learn more about the unqiue housing options avaiable to you please vist the <a href="http://housing.appstate.edu/index.php?module=pagemaster&PAGE_user_op=view_page&PAGE_id=134" target="_blank">Unique Housing Options website</a>.
 
         <br /><br />
 
