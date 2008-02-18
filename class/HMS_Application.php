@@ -44,7 +44,7 @@ class HMS_Application {
     * to create/load a application for. Otherwise, the student currently
     * logged in (session) is used.
     */
-    function HMS_Application($hms_student_id = NULL)
+    function HMS_Application($hms_student_id = NULL, $term = NULL)
     {
 
         if(isset($hms_student_id)){
@@ -55,17 +55,17 @@ class HMS_Application {
             return;
         }
         
-        $result = $this->init();
+        $result = $this->init($term);
         if(PEAR::isError($result)){
             PHPWS_Error::log($result,'hms','HMS_Application()','Caught error from init');
             return $result;
         }
     }
 
-    function init()
+    function init($term = NULL)
     {
         # Check if an application for this user and semester already exists.
-        $result = HMS_Application::check_for_application();
+        $result = HMS_Application::check_for_application($_SESSION['asu_username'], $term);
 
         if(PEAR::isError($result)){
             PHPWS_Error::log($result,'hms','init',"Caught error from check_for_application.");
@@ -537,14 +537,18 @@ class HMS_Application {
     function display_application_results()
     {
         PHPWS_Core::initModClass('hms','HMS_Term.php');
+        PHPWS_Core::initModClass('hms','HMS_SOAP.php');
 
-        $application = new HMS_Application($_SESSION['asu_username']);
 
-        if(!$application->getID() && !HMS_Application::check_valid_application_values()) {
+
+        if(!HMS_Application::check_for_application($_SESSION['asu_username'], $_SESSION['application_term']) 
+            && !HMS_Application::check_valid_application_values()) {
             $message = "You have supplied incorrect values for your application.<br />";
             $message .= "Please fill out the application again.";
             return HMS_Form::begin_application($message);
         }
+
+        $application = new HMS_Application($_SESSION['asu_username'], $_SESSION['application_term']);
 
         $master['TITLE']   = 'Residence Hall Application';
         if(isset($_REQUEST['student_status'])){
@@ -562,7 +566,9 @@ class HMS_Application {
             $form->addHidden('lifestyle_option',$_REQUEST['lifestyle_option']);
             $form->addHidden('preferred_bedtime',$_REQUEST['preferred_bedtime']);
             $form->addHidden('room_condition',$_REQUEST['room_condition']);
-            $form->addHidden('special_needs',$_REQUEST['special_needs']);
+            if(isset($_REQUEST['special_needs'])){
+                $form->addHidden('special_needs',$_REQUEST['special_needs']);
+            }
             $form->addHidden('rlc_interest',$_REQUEST['rlc_interest']);
             $form->addHidden('module', 'hms');
             $form->addHidden('type', 'student');
@@ -585,7 +591,9 @@ class HMS_Application {
             $redo_form->addHidden('lifestyle_option',$_REQUEST['lifestyle_option']);
             $redo_form->addHidden('preferred_bedtime',$_REQUEST['preferred_bedtime']);
             $redo_form->addHidden('room_condition',$_REQUEST['room_condition']);
-            $redo_form->addHidden('special_needs',$_REQUEST['special_needs']);
+            if(isset($_REQEUST['special_needs'])){
+                $redo_form->addHidden('special_needs',$_REQUEST['special_needs']);
+            }
             $redo_form->addHidden('rlc_interest',$_REQUEST['rlc_interest']);
             
             $redo_tpl = $redo_form->getTemplate();
@@ -687,6 +695,17 @@ class HMS_Application {
 
             if($application->getRoomCondition() == 1) $tpl['ROOM_CONDITION'] = "Clean";
             else if($application->getRoomCondition() == 2) $tpl['ROOM_CONDITION'] = "Dirty";
+
+            $special_needs = "";
+            if($application->physical_disability == 1) $special_needs .= "Physical disability<br />";
+            if($application->psych_disability == 1) $special_needs .= "Psychological disability<br />";
+            if($application->medical_need == 1) $special_needs .= "Medical need<br />";
+            if($application->gender_need == 1) $special_needs .= "Gender need<br />";
+
+            if($special_needs == "") $special_needs = "None";
+
+            $tpl['SPECIAL_NEEDS_RESULT'] = $special_needs;
+            
             
             if($application->getRlcInterest() == 0) $tpl['RLC_INTEREST_1'] = "No";
             else if($application->getRlcInterest() == 1) $tpl['RLC_INTEREST_1'] = "Yes";
