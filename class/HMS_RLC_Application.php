@@ -101,7 +101,7 @@ class HMS_RLC_Application{
         $db->addValue('rlc_question_2',          $this->getRLCQuestion2());
         $db->addValue('required_course',         $this->getRequiredCourse());
         $db->addValue('hms_assignment_id',       $this->getAssignmentID());
-        $db->addValue('term',              $this->getEntryTerm());
+        $db->addValue('term',              $_SESSION['application_term']);
 
         # If this object has an ID, then do an update. Otherwise, do an insert.
         if(!$this->getID() || $this->getID() == NULL){
@@ -674,7 +674,7 @@ class HMS_RLC_Application{
     }
 
     function setEntryTerm($term){
-        $this->entry_term = $term;
+        $this->term = $term;
     }
 }
 
