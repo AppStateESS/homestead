@@ -622,6 +622,9 @@ class HMS_Student {
         
         # Decide which menu to show based on the entry term
         $entry_term = HMS_Entry_Term::get_entry_semester($_SESSION['asu_username']);
+
+        # Lookup the deadline for that entry term
+        $deadlines = HMS_Deadlines::get_deadlines($entry_term);
         
         if($entry_term == TERM_SPRING){
             return HMS_Student::show_spring_main_menu($deadlines);
