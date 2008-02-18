@@ -725,7 +725,7 @@ class HMS_Reports{
     function run_special_circumstances_report()
     {
         $db = &new PHPWS_DB('hms_assignment');
-        $db->addWhere('hms_assignment.asu_username', 'hms_application.hms_student_id');
+        $db->addWhere('hms_assignment.asu_username', 'hms_application.hms_student_id', 'ILIKE');
         $db->addWhere('hms_assignment.deleted', 0);
 
         $db->addColumn('hms_assignment.asu_username');

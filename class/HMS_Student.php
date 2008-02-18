@@ -332,7 +332,7 @@ class HMS_Student {
         $db = &new PHPWS_DB('hms_learning_community_assignment');
         $db->addColumn('hms_learning_communities.community_name');
         $db->addWhere('hms_learning_community_assignment.rlc_id', 'hms_learning_communities.id');
-        $db->addWhere('hms_learning_community_assignment.asu_username', $_REQUEST['username']);
+        $db->addWhere('hms_learning_community_assignment.asu_username', $_REQUEST['username'], 'ILIKE');
         $results = $db->select();
         
         if($results != NULL && $results != FALSE) {
@@ -340,7 +340,7 @@ class HMS_Student {
         } else {
             $db = &new PHPWS_DB('hms_learning_community_applications');
             $db->addColumn('id');
-            $db->addWhere('user_id', $_REQUEST['username']);
+            $db->addWhere('user_id', $_REQUEST['username'], 'ILIKE');
             $results = $db->select('one');
             if($results != FALSE && $results != NULL) {
                 $tpl['RLC_STATUS'] = "This student is currently awaiting RLC approval. You can view their application " . PHPWS_Text::secureLink(_('here'), 'hms', array('type'=>'rlc', 'op'=>'view_rlc_application', 'username'=>$_REQUEST['username']));
@@ -892,7 +892,7 @@ class HMS_Student {
     function spring_roommate_hack()
     {
         $db = new PHPWS_DB('hms_roommate_hack');
-        $db->addWhere('requestor', $_SESSION['asu_username']);
+        $db->addWhere('requestor', $_SESSION['asu_username'], 'ILIKE');
         $results = $db->select('row');
 
         if(PHPWS_Error::isError($results)) {
@@ -930,7 +930,7 @@ class HMS_Student {
     function save_spring_roommate_hack()
     {
         $db = new PHPWS_DB('hms_roommate_hack');
-        $db->addWhere('requestor', $_SESSION['asu_username']);
+        $db->addWhere('requestor', $_SESSION['asu_username'], 'ILIKE');
         $db->delete();
 
         $db = new PHPWS_DB('hms_roommate_hack');

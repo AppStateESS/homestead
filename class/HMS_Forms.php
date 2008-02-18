@@ -298,7 +298,7 @@ class HMS_Form
             $db = new PHPWS_DB('hms_assignment');
             $db->addColumn('meal_option');
             $db->addWhere('deleted', '0');
-            $db->addWhere('asu_username', $_REQUEST['username']);
+            $db->addWhere('asu_username', $_REQUEST['username'], 'ILIKE');
             $meal_option = $db->select('one');
         }
 

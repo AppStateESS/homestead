@@ -165,7 +165,7 @@ class HMS_Student_Profile{
        
         $db = &new PHPWS_DB('hms_student_profiles');
        
-        $db->addWhere('user_id',$user_id,'=');
+        $db->addWhere('user_id',$user_id,'ILIKE');
         $result = $db->select('row');
 
         if(PEAR::isError($result)){
@@ -1251,11 +1251,11 @@ class HMS_Student_Profile{
         }
         
         # Join with hms_application table on user_id to make sure genders match.
-        $pager->addWhere('hms_student_profiles.user_id','hms_application.hms_student_id','=');
+        $pager->addWhere('hms_student_profiles.user_id','hms_application.hms_student_id','ILIKE');
         $pager->addWhere('hms_application.gender',$gender,'=');
 
         # Don't list the current user as a match
-        $pager->addWhere('hms_student_profiles.user_id',$_SESSION['asu_username'],'!=');
+        $pager->addWhere('hms_student_profiles.user_id',$_SESSION['asu_username'],'NOT ILIKE');
         
         $pager->db->addOrder('user_id','ASC');
 

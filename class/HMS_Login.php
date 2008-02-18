@@ -78,7 +78,7 @@ class HMS_Login
         HMS_Activity_Log::log_activity($_REQUEST['asu_username'],ACTIVITY_LOGIN, $_REQUEST['asu_username'], NULL); 
 
         # Setup the session variable
-        $_SESSION['asu_username'] = $_REQUEST['asu_username'];
+        $_SESSION['asu_username'] = strtolower($_REQUEST['asu_username']);
         $_SESSION['application_term'] = HMS_SOAP::get_application_term($_REQUEST['asu_username']);
         return STUDENT;
     }

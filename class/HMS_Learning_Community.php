@@ -333,7 +333,7 @@ class HMS_Learning_Community
         $db->addColumn('hms_learning_communities.id', NULL, 'rlc_id');
         $db->addColumn('hms_learning_community_assignment.id', NULL, 'ass_id');
         $db->addWhere('hms_learning_communities.id', 'hms_learning_community_assignment.rlc_id');
-        $db->addWhere('hms_learning_community_assignment.asu_username', $_REQUEST['username']);
+        $db->addWhere('hms_learning_community_assignment.asu_username', $_REQUEST['username'], 'ILIKE');
         $result = $db->select('row');
 
         PHPWS_Core::initCoreClass('Form.php');

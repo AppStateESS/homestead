@@ -248,7 +248,7 @@ class HMS_Roommate_Approval
         $db = &new PHPWS_DB('hms_roommate_approval');
         $db->addColumn('id');
         if($username == NULL) 
-            $db->addWhere('roommate_zero', $_SESSION['asu_username']);
+            $db->addWhere('roommate_zero', $_SESSION['asu_username'], 'ILIKE');
         else 
             $db->addWhere('roommate_zero', $username);
         $exists = $db->select('one');
