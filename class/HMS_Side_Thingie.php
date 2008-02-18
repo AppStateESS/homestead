@@ -8,7 +8,7 @@ define('HMS_SIDE_STUDENT_RLC',          3);
 define('HMS_SIDE_STUDENT_PROFILE',      4);
 define('HMS_SIDE_STUDENT_ROOMMATE',     5);
 define('HMS_SIDE_STUDENT_VERIFY',       6);
-define('HMS_SIDE_STUDENT_MAX',          6);
+define('HMS_SIDE_STUDENT_MAX',          5);
 
 class HMS_Side_Thingie {
 
@@ -74,9 +74,6 @@ class HMS_Side_Thingie {
         # Always show as available.
         $this->set_verify();
 
-        # This is hard coded for spring 2007!
-        $this->steps_styles['HMS_SIDE_STUDENT_ROOMMATE'] = 'STEP_TOGO';
-        
         for($i = HMS_SIDE_STUDENT_MIN;$i <= HMS_SIDE_STUDENT_MAX; $i++) {
             if(isset($this->steps_text[$i])){
                 $template['progress'][$i - HMS_SIDE_STUDENT_MIN][$this->steps_styles[$i]] = $this->steps_text[$i];
@@ -102,7 +99,7 @@ class HMS_Side_Thingie {
         }
 
         # Check if the student has an application on file already. If so, set agreed/applied steps to completed and we're done here.
-        if(HMS_Application::check_for_application($_SESSION['asu_username']) !== FALSE){
+        if(HMS_Application::check_for_application($_SESSION['asu_username'],$_SESSION['application_term']) !== FALSE){
             $this->steps_styles[HMS_SIDE_STUDENT_AGREE] = 'STEP_COMPLETED';
             $this->steps_styles[HMS_SIDE_STUDENT_APPLY] = 'STEP_COMPLETED';
             return;
