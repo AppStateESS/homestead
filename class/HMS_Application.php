@@ -617,10 +617,10 @@ class HMS_Application {
             if($_REQUEST['gender_type'] == 0) $tpl['GENDER'] = "Female";
             else if($_REQUEST['gender_type'] == 1) $tpl['GENDER'] = "Male";
             
-            if($_REQUEST['meal_option'] == 1) $tpl['MEAL_OPTION'] = "Low";
-            else if($_REQUEST['meal_option'] == 2) $tpl['MEAL_OPTION'] = "Medium";
-            else if($_REQUEST['meal_option'] == 3) $tpl['MEAL_OPTION'] = "High";
-            else if($_REQUEST['meal_option'] == 4) $tpl['MEAL_OPTION'] = "Super";
+            if($_REQUEST['meal_option'] == HMS_MEAL_LOW) $tpl['MEAL_OPTION'] = "Low";
+            else if($_REQUEST['meal_option'] == HMS_MEAL_STD) $tpl['MEAL_OPTION'] = "Standard";
+            else if($_REQUEST['meal_option'] == HMS_MEAL_HIGH) $tpl['MEAL_OPTION'] = "High";
+            else if($_REQUEST['meal_option'] == HMS_MEAL_SUPER) $tpl['MEAL_OPTION'] = "Super";
            
             if($_REQUEST['lifestyle_option'] == 1) $tpl['LIFESTYLE_OPTION'] = "Single Gender";
             else if($_REQUEST['lifestyle_option'] == 2) $tpl['LIFESTYLE_OPTION'] = "Co-Ed";
