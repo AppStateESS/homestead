@@ -33,7 +33,7 @@
       </li>
     </ul>
     
-    <h2>3. Residential Learning Community Application</h2>
+    <h2>3. Unique Housing Options Application</h2>
     {RLC_INTRO}
     <ul>
       <li>

@@ -16,7 +16,7 @@ class HMS_Side_Thingie {
     var $curr_timestamp;
     var $steps_text = array(HMS_SIDE_STUDENT_AGREE    => "Terms & Conditions",
                             HMS_SIDE_STUDENT_APPLY    => "Application",
-                            HMS_SIDE_STUDENT_RLC      => "Learning Community Application (optional)",
+                            HMS_SIDE_STUDENT_RLC      => "Unique Housing Options Application (optional)",
                             HMS_SIDE_STUDENT_PROFILE  => "Roommate Profile (optional)",
                             HMS_SIDE_STUDENT_ROOMMATE => "Choose a Roommate (optional)",
                             HMS_SIDE_STUDENT_VERIFY   => "Verify Status");
