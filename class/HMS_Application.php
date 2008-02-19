@@ -206,6 +206,27 @@ class HMS_Application {
                 PHPWS_Core::initModClass('hms', 'HMS_Term.php');
                 $plancode = HMS_SOAP::get_plan_meal_codes($_SESSION['asu_username'], 'lawl', $this->getMealOption());
                 $result = HMS_SOAP::report_application_received($_SESSION['asu_username'], HMS_Term::get_current_term(), $plancode['plan'], $plancode['meal']);
+                
+                # If there was an error it will have already been logged
+                # but send out a notification anyway
+                # TODO: Improve the notification system
+                if(!$result){
+                    PHPWS_Core::initCoreClass('Mail.php');
+                    $send_to = array();
+                    $send_to[] = 'jbooker@tux.appstate.edu';
+                    $send_to[] = 'jtickle@tux.appstate.edu';
+                    
+                    $mail = &new PHPWS_Mail;
+
+                    $mail->addSendTo($send_to);
+                    $mail->setFrom('hms@tux.appstate.edu');
+                    $mail->setSubject('HMS Application Error!');
+
+                    $body = "Username: {$this->hms_student_id}\n";
+                    $mail->setMessageBody($body);
+                    $result = $mail->send();
+                }
+
             }
         }else{
             # do an update

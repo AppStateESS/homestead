@@ -514,7 +514,7 @@ class HMS_SOAP{
     function report_application_received($username, $term, $plan_code, $meal_code = NULL)
     {
         if(SOAP_TEST_FLAG){
-            return;
+            return true;
         }
         
         include_once('SOAP/Client.php');
@@ -538,7 +538,7 @@ class HMS_SOAP{
         
         HMS_SOAP::log_soap('report_application_received: ' . $username . ' result: success');
         
-        return $assignment;
+        return true;
     }
 
     function report_room_assignment($username, $term, $building_code, $room_code, $plan_code, $meal_code)
