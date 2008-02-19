@@ -700,22 +700,22 @@ class HMS_SOAP{
         }
 
         switch($hms_meal_code) {
-            case 0: // low
+            case HMS_MEAL_LOW: // low
                 if($type == 'NFR')
-                    $retval['meal'] = '1';
+                    $retval['meal'] = BANNER_MEAL_STD;
                 else
-                    $retval['meal'] = '2';
+                    $retval['meal'] = BANNER_MEAL_LOW;
                 break;
-            case 1: // med
-                $retval['meal'] = '1';
+            case HMS_MEAL_STD: // standard
+                $retval['meal'] = BANNER_MEAL_STD;
                 break;
-            case 2: // high
-                $retval['meal'] = '0';
+            case HMS_MEAL_HIGH: // high
+                $retval['meal'] = BANNER_MEAL_HIGH;
                 break;
-            case 3: // super
-                $retval['meal'] = '8';
+            case HMS_MEAL_SUPER: // super
+                $retval['meal'] = BANNER_MEAL_SUPER;
                 break;
-            case 4: // none
+            case HMS_MEAL_NONE: // none
                 if(($building == 'MAR' || $building == 'AHR') &&
                         $type != 'NFR') {
                     $retval['meal'] = NULL;

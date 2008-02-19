@@ -69,6 +69,21 @@ define('TYPE_TRANSFER',     'T');
 define('TYPE_CONTINUING',   'C');
 
 /**
+ * Meal Plans
+ */
+define('HMS_MEAL_LOW',      0);
+define('HMS_MEAL_STD',      1);
+define('HMS_MEAL_HIGH',     2);
+define('HMS_MEAL_SUPER',    3);
+define('HMS_MEAL_NONE',     4);
+
+// WTF??!? Banner sucks!
+define('BANNER_MEAL_LOW',   2);
+define('BANNER_MEAL_STD',   1);
+define('BANNER_MEAL_HIGH',  0);
+define('BANNER_MEAL_SUPER', 8);
+
+/**
  * Errors
  */
 define('TOOLATE',  -4);

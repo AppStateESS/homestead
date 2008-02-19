@@ -34,6 +34,10 @@
                 <td>&nbsp;</td>
                 <td><a href="javascript:showBedDrop();">Show bed</a></td>
             </tr>
+            <tr>
+                <th align="left">{MEAL_PLAN_LABEL}</th>
+                <td>{MEAL_PLAN}</td>
+            </tr>
         </table>
         <br />
         {SUBMIT}

@@ -65,7 +65,7 @@ class HMS_Application {
     function init($term = NULL)
     {
         # Check if an application for this user and semester already exists.
-        $result = HMS_Application::check_for_application($_SESSION['asu_username'], $term);
+        $result = HMS_Application::check_for_application($this->hms_student_id, $term);
 
         if(PEAR::isError($result)){
             PHPWS_Error::log($result,'hms','init',"Caught error from check_for_application.");
@@ -458,20 +458,20 @@ class HMS_Application {
         
         # Don't show *low* meal option to freshmen
         if(HMS_SOAP::get_student_class($_SESSION['asu_username']) != "FR"){
-            $form->addDropBox('meal_option', array('1'=>_('Low'),
-                                                   '2'=>_('Standard'),
-                                                   '3'=>_('High'),
-                                                   '4'=>_('Super')));
+            $form->addDropBox('meal_option', array(HMS_MEAL_LOW=>_('Low'),
+                                                   HMS_MEAL_STD=>_('Standard'),
+                                                   HMS_MEAL_HIGH=>_('High'),
+                                                   HMS_MEAL_SUPER=>_('Super')));
         }else{
-            $form->addDropBox('meal_option', array('2'=>_('Standard'),
-                                                   '3'=>_('High'),
-                                                   '4'=>_('Super')));
+            $form->addDropBox('meal_option', array(HMS_MEAL_STD=>_('Standard'),
+                                                   HMS_MEAL_HIGH=>_('High'),
+                                                   HMS_MEAL_SUPER=>_('Super')));
         }
             
         if(isset($_REQUEST['meal_option'])){
             $form->setMatch('meal_option',$_REQUEST['meal_option']);
         }else{
-            $form->setMatch('meal_option', '1');
+            $form->setMatch('meal_option', HMS_MEAL_STD);
         }
 
         $form->addDropBox('lifestyle_option', array('1'=>_('Single Gender Building'),

@@ -334,8 +334,14 @@ class HMS_Assignment extends HMS_Item
             HMS_Activity_Log::log_activity($_REQUEST['username'], ACTIVITY_REMOVED, Current_User::getUsername(), '');   
         }
             
+        /*
         # Get the necessary meal plan code from the application
         $meal_plan = HMS_SOAP::get_plan_meal_codes($_REQUEST['username'], $hall->banner_building_code, $application->getMealOption());
+        */
+
+        # Hard code for plan: HOME, and use the meal plan selected in the drop down by the user
+        $meal_plan['plan'] = 'HOME';
+        $meal_plan['meal'] = $_REQUEST['meal_plan'];
 
         # Send this off to the queue for assignment in banner
         PHPWS_Core::initModClass('hms', 'HMS_Process_Assign_Unit.php');
@@ -505,6 +511,14 @@ class HMS_Assignment extends HMS_Item
             $tpl['BED_STYLE'] = 'display: none';
             $tpl['LINK_STYLE'] = '';
         }
+
+        $form->addDropBox('meal_plan', array(HMS_MEAL_LOW=>'Low',
+                                             HMS_MEAL_STD=>'Standard',
+                                             HMS_MEAL_HIGH=>'High',
+                                             HMS_MEAL_SUPER=>'Super',
+                                             HMS_MEAL_NONE=>'None'));
+        $form->setMatch('meal_plan', HMS_MEAL_STD);
+        $form->setLabel('meal_plan', 'Meal plan: ');
 
         $form->addSubmit('submit', 'Assign Student');
         if(!$show_bed_drop){

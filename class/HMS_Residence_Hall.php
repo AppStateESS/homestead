@@ -643,6 +643,10 @@ class HMS_Residence_Hall extends HMS_Item
 
         $halls = HMS_Residence_Hall::get_halls_with_vacancies($term);
 
+        if(!$halls){
+            return FALSE;
+        }
+
         foreach ($halls as $hall){
             $hall_array[$hall->id] = $hall->hall_name;
         }
