@@ -53,6 +53,22 @@ class HMS_SOAP{
         return $person;
     }
 
+    function get_credit_hours($username)
+    {
+        if(SOAP_TEST_FLAG) {
+            return 150;
+        }
+
+        $student = HMS_SOAP::get_student_info($username);
+
+        if(PEAR::isError($student)){
+            HMS_SOAP::log_soap_error($student,'get_gender_class',$username);
+            return $student;
+        }
+
+        return $student->credhrs_completed;
+    }
+
     function get_name($username){
         if(SOAP_TEST_FLAG){
             # return canned data

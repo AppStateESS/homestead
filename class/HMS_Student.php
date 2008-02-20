@@ -723,14 +723,20 @@ class HMS_Student {
          * RLC Application *
          ******************/
         PHPWS_Core::initModClass('hms','HMS_RLC_Application.php');
-        $tags['RLC_INTRO'] = 'For more infomration about Appalachian\'s Unique Housing Options please visit the <a href=\"http://housing.appstate.edu/index.php?module=pagemaster&PAGE_user_op=view_page&PAGE_id=134\">Housing & Residence Life Website</a>.';
+        $tags['RLC_INTRO'] = 'For more infomration about Appalachian\'s Unique Housing Options please visit the <a href="http://housing.appstate.edu/index.php?module=pagemaster&PAGE_user_op=view_page&PAGE_id=134" target="_blank">Housing & Residence Life Website</a>.';
         
         # Check deadlines for RLC application
         if(HMS_RLC_Application::check_for_application() === FALSE){
             # Check deadlines for RLC applications
             if(HMS_Deadlines::check_within_deadlines('submit_application_begin_timestamp','submit_rlc_application_end_timestamp', $deadlines)){
-                $tags['RLC_MSG']  = 'You may apply for a Unique Housing Option until ' . HMS_Deadlines::get_deadline_as_date('submit_rlc_application_end_timestamp', $deadlines) . '.  To apply click on the link below.';
-                $tags['RLC_LINK'] = PHPWS_Text::secureLink(_('Unique Housing Options Application Form'), 'hms', array('type'=>'student', 'op'=>'show_rlc_application_form'));
+                if(HMS_SOAP::get_credit_hours($_SESSION['asu_username']) <= 15){
+                    $tags['RLC_MSG']  = 'You may apply for a Unique Housing Option until ' . HMS_Deadlines::get_deadline_as_date('submit_rlc_application_end_timestamp', $deadlines) . '.  To apply click on the link below.';
+                    $tags['RLC_LINK'] = PHPWS_Text::secureLink(_('Unique Housing Options Application Form'), 'hms', array('type'=>'student', 'op'=>'show_rlc_application_form'));
+                }else{
+                    $contact_form_link = PHPWS_Text::secureLink('contact form', 'hms', array('type'=>'student','op'=>'show_contact_form'));
+                    $tags['RLC_MSG']  = 'You are not eligible to apply for a Unique Housing Option for Underclassmen because this will not be your first semester of college. If this is inaccurate and you are going be in your first semester of college,  please complete the ' . $contact_form_link . ' to let us know. Otherwise, please use the link below to view information about and apply for Unique Housing Options for Upperclassmen.';
+                    $tags['RLC_LINK'] = '<a href="http://housing.appstate.edu/index.php?module=pagemaster&PAGE_user_op=view_page&PAGE_id=293" target="_blank">Unique Housing Options for Upperclassmen</a>';
+                }
             }else if(!HMS_Deadlines::check_deadline_past('submit_application_begin_timestamp', $deadlines)){
                 $tags['RLC_MSG']  = "It is too soon to apply for Unique Housing Options. You will be able to submit an application on " . HMS_Deadlines::get_deadline_as_date('submit_application_begin_timestamp', $deadlines) . ".";
             }else{

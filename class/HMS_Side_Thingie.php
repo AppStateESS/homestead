@@ -145,18 +145,25 @@ class HMS_Side_Thingie {
             return;
         }
 
+        # Make sure the student is actually a new freshmen and eligilbe for an RLC
+        if(HMS_SOAP::get_credit_hours($_SESSION['asu_username']) > 15){
+            $this->steps_text[HMS_SIDE_STUDENT_RLC] .= ' (ineligible)';
+            $this->steps_styles[HMS_SIDE_STUDENT_RLC] = 'STEP_NOTYET';
+            return;
+        }
+
         # If the student does not have an application on file... check apply dates, set dates/styles accordingly
         if($this->curr_timestamp < $this->deadlines->submit_application_begin_timestamp){
-            $this->steps_text[HMS_SIDE_STUDENT_RLC] .= " (available ". date('n/j/y',$this->deadlines->submit_application_begin_timestamp) .")";
+            $this->steps_text[HMS_SIDE_STUDENT_RLC] .= ' (available '. date('n/j/y',$this->deadlines->submit_application_begin_timestamp) .')';
             $this->steps_styles[HMS_SIDE_STUDENT_RLC] = 'STEP_NOTYET';
             return;
         }else if($this->curr_timestamp > $this->deadlines->submit_application_begin_timestamp && $this->curr_timestamp < $this->deadlines->submit_rlc_application_end_timestamp){
             # We are within deadlines, check to see if we're actually on this step
             if($on_this_step){
                 # We're on this step currently, so don't add a link, just add the text
-                $this->steps_text[HMS_SIDE_STUDENT_RLC] .= " (complete by ". date('n/j/y',$this->deadlines->submit_rlc_application_end_timestamp) . ")";
+                $this->steps_text[HMS_SIDE_STUDENT_RLC] .= ' (complete by '. date('n/j/y',$this->deadlines->submit_rlc_application_end_timestamp) . ')';
             }else{
-                $this->steps_text[HMS_SIDE_STUDENT_RLC] = PHPWS_Text::secureLink($this->steps_text[HMS_SIDE_STUDENT_RLC] . " (complete by ". date('n/j/y',$this->deadlines->submit_rlc_application_end_timestamp) . ")", 'hms', array('type'=>'student', 'op'=>'show_rlc_application_form'));
+                $this->steps_text[HMS_SIDE_STUDENT_RLC] = PHPWS_Text::secureLink($this->steps_text[HMS_SIDE_STUDENT_RLC] . ' (complete by '. date('n/j/y',$this->deadlines->submit_rlc_application_end_timestamp) . ')', 'hms', array('type'=>'student', 'op'=>'show_rlc_application_form'));
                 $this->steps_styles[HMS_SIDE_STUDENT_RLC] = 'STEP_TOGO';
             }
             return;

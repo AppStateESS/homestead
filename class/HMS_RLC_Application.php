@@ -297,11 +297,20 @@ class HMS_RLC_Application{
     # Displays the RLC application form
     function show_rlc_application_form_page1($message = NULL)
     {
+        PHPWS_Core::initModClass('hms','HMS_SOAP.php');
+
         $template = array();
         
         $rlc_form = & new PHPWS_Form();
         $rlc_form->addHidden('type', 'student');
         $rlc_form->addHidden('op','rlc_application_page1_submit');
+
+
+        # Make sure the user is eligible for an RLC
+        if(HMS_SOAP::get_credit_hours($_SESSION['asu_username']) > 15){
+            $template['MESSAGE'] = 'Sorry, you are not eligible for a Unique Housing Option for Underclassmen. Please visit the <a href="http://housing.appstate.edu/index.php?module=pagemaster&PAGE_user_op=view_page&PAGE_id=293" target="_blank">Unique Housing Options for Upperclassmen website</a> for information on applying for Unique Housing Options for Upperclassmen.';
+            return PHPWS_Template::process($template,'hms','student/rlc_signup_form_page1.tpl');
+        }
 
         # 1. About You Section
         PHPWS_Core::initModClass('hms','HMS_SOAP.php');

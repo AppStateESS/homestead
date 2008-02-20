@@ -14,7 +14,11 @@
         not apply to the same community, and once you apply, you can no longer
         choose roommates who have not applied to the same community.
         </div>
+        <!-- BEGIN message -->
+        <br /><br />
         <font color="red"><i>{MESSAGE}</i></font><br>
+        <!-- END message -->
+
         <!-- BEGIN rlc_form -->
         {START_FORM}
         <table>
