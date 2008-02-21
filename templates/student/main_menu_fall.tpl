@@ -67,7 +67,7 @@
       </li>
 
     </ul>
-    
+<!-- 
     <h2>6. Check Your Housing Status</h2>
     {VERIFY_INTRO}
     <ul>
@@ -76,7 +76,7 @@
         {VERIFY_LINK}
       </li>
     </ul>
-
+-->
     <br /><br />
 
     {LOGOUT_LINK}
