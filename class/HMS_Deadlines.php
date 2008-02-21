@@ -12,8 +12,6 @@ class HMS_Deadlines {
     var $id; // This is only here to make loadObject and saveObject work as expected
     var $term;
 
-    var $student_login_begin_timestamp;
-    var $student_login_end_timestamp;
     var $submit_application_begin_timestamp;
     var $submit_application_end_timestamp;
     var $edit_application_end_timestamp;
@@ -64,8 +62,6 @@ class HMS_Deadlines {
 
         # These are necessary to avoid pulling the 
         # id, term, etc as deadlines
-        $db->addColumn('student_login_begin_timestamp');
-        $db->addColumn('student_login_end_timestamp');
         $db->addColumn('submit_application_begin_timestamp');
         $db->addColumn('submit_application_end_timestamp');
         $db->addColumn('edit_application_end_timestamp');
@@ -277,14 +273,6 @@ class HMS_Deadlines {
         }
         
         $form = &new PHPWS_Form;
-        $form->addDropBox('student_login_begin_month', $months);
-        $form->addDropBox('student_login_begin_day', $days);
-        $form->addDropBox('student_login_begin_year', $years);
-        
-        $form->addDropBox('student_login_end_month', $months);
-        $form->addDropBox('student_login_end_day', $days);
-        $form->addDropBox('student_login_end_year', $years);
-    
         $form->addDropBox('submit_application_begin_month', $months);
         $form->addDropBox('submit_application_begin_day', $days);
         $form->addDropBox('submit_application_begin_year', $years);
@@ -333,14 +321,6 @@ class HMS_Deadlines {
         $form->addDropBox('lottery_signup_end_day', $days);
         $form->addDropBox('lottery_signup_end_year', $years);
     
-        $form->setMatch('student_login_begin_day', date('j',$deadlines->student_login_begin_timestamp));
-        $form->setMatch('student_login_begin_month', date('n',$deadlines->student_login_begin_timestamp));
-        $form->setMatch('student_login_begin_year', date('Y',$deadlines->student_login_begin_timestamp));
-        
-        $form->setMatch('student_login_end_day', date('j',$deadlines->student_login_end_timestamp));
-        $form->setMatch('student_login_end_month', date('n',$deadlines->student_login_end_timestamp));
-        $form->setMatch('student_login_end_year', date('Y',$deadlines->student_login_end_timestamp));
-        
         $form->setMatch('submit_application_begin_day', date('j', $deadlines->submit_application_begin_timestamp));
         $form->setMatch('submit_application_begin_month', date('n', $deadlines->submit_application_begin_timestamp));
         $form->setMatch('submit_application_begin_year', date('Y', $deadlines->submit_application_begin_timestamp));
@@ -420,16 +400,6 @@ class HMS_Deadlines {
 
         $deadlines = new HMS_Deadlines($_REQUEST['term']);
 
-        $deadlines->student_login_begin_timestamp = mktime(0, 0, 0,
-            $_REQUEST['student_login_begin_month'],
-            $_REQUEST['student_login_begin_day'],
-            $_REQUEST['student_login_begin_year']);
-        
-        $deadlines->student_login_end_timestamp = mktime(0, 0, 0,
-            $_REQUEST['student_login_end_month'],
-            $_REQUEST['student_login_end_day'],
-            $_REQUEST['student_login_end_year']);
-        
         $deadlines->submit_application_begin_timestamp = mktime(0, 0, 0,
             $_REQUEST['submit_application_begin_month'],
             $_REQUEST['submit_application_begin_day'],

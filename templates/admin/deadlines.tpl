@@ -13,18 +13,6 @@
         {START_FORM}
         <table>
             <tr>
-                <th>Student Login Begin Date:</th><td>{STUDENT_LOGIN_BEGIN_MONTH}</td><td>{STUDENT_LOGIN_BEGIN_DAY}</td><td>{STUDENT_LOGIN_BEGIN_YEAR}</td>
-            </tr>
-            <tr>
-                <th>Student Login End Date:</th><td>{STUDENT_LOGIN_END_MONTH}</td><td>{STUDENT_LOGIN_END_DAY}</td><td>{STUDENT_LOGIN_END_YEAR}</td>
-            </tr>
-            <tr>
-                <th>&nbsp;</th><td>&nbsp;</td>
-            </tr>
-            <tr>
-                <th>&nbsp;</th><td>&nbsp;</td>
-            </tr>
-            <tr>
                 <th>Submit Application Begin Date:</th><td>{SUBMIT_APPLICATION_BEGIN_MONTH}</td><td>{SUBMIT_APPLICATION_BEGIN_DAY}</td><td>{SUBMIT_APPLICATION_BEGIN_YEAR}</td>
             </tr>
             <tr>
