@@ -56,7 +56,7 @@ class HMS_SOAP{
     function get_credit_hours($username)
     {
         if(SOAP_TEST_FLAG) {
-            return 150;
+            return 6;
         }
 
         $student = HMS_SOAP::get_student_info($username);
