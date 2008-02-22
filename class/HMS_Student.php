@@ -230,6 +230,7 @@ class HMS_Student {
             $tpl['CLASS'] = "Unknown ({$student_info->projected_class})";
         }
 
+        $tpl['APPLICATION_TERM'] = $student_info->application_term;
         $tpl['ADDRESS_L1'] = $student_info->address->line1;
         $tpl['ADDRESS_L2'] = $student_info->address->line2;
         $tpl['ADDRESS_L3'] = $student_info->address->line3;
@@ -593,7 +594,7 @@ class HMS_Student {
                 
                 # Application deadline has not passed, so show welcome page
                 if($student_type == TYPE_FRESHMEN){
-                    return PHPWS_Template::processs($tpl, 'hms', 'student/welcome_screen_freshmen.tpl');
+                    return PHPWS_Template::process($tpl, 'hms', 'student/welcome_screen_freshmen.tpl');
                 }else{
                     return PHPWS_Template::process($tpl, 'hms', 'student/welcome_screen_transfer.tpl');
                 }

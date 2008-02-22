@@ -345,7 +345,7 @@ class HMS_SOAP{
     {
         if(SOAP_TEST_FLAG){
             # return canned data
-            return "T";
+            return "F";
         }else{
             $student = HMS_SOAP::get_student_info($username);
         }
@@ -461,7 +461,7 @@ class HMS_SOAP{
             $student->address['zip'] = '28605';
             $student->phone['area_code'] = '828';
             $student->phone['number'] = '2780579';
-            $student->application_term = '200810';
+            $student->application_term = '200840';
             return $student;
         }
 
