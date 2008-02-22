@@ -102,7 +102,7 @@ class HMS_Application {
      */
     function save_application()
     {
-        $question = &new HMS_Application();
+        $question = &new HMS_Application($_SESSION['asu_username'], $_SESSION['application_term']);
         
         $question->setStudentStatus($_REQUEST['student_status']);
         $question->setTerm($_REQUEST['term']);
