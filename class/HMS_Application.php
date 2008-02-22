@@ -22,7 +22,7 @@ class HMS_Application {
     var $preferred_bedtime;
     var $room_condition;
     var $rlc_interest;
-    var $agreed_to_terms;
+    var $agreed_to_termsi = NULL;
     var $aggregate;
 
     var $physical_disability    = 0;
@@ -435,9 +435,20 @@ class HMS_Application {
         
         PHPWS_Core::initCoreClass('Form.php');
         $form = &new PHPWS_Form;
+
+        # Try to load the user's application, in case it already exists
+        $application = new HMS_Application($_SESSION['asu_username'], $_SESSION['application_term']);
+
+        # If the 'agreed_to_terms' flag was passed in the request, then use it.
+        # Otherwise look for it from an existing application.
+        if(isset($_REQUEST['agreed_to_terms'])){
+            $form->addHidden('agreed_to_terms', $_REQUEST['agreed_to_terms']);
+        }else if(isset($application->agreed_to_terms)){
+            $form->addHidden('agreed_to_terms',$application->agreed_to_terms);
+        }else{
+            $form->addHidden('agreed_to_terms', 0);
+        }
         
-        $form->addHidden('agreed_to_terms',$_REQUEST['agreed_to_terms']); # From contract page
-       
         $form->addDropBox('student_status', array('1'=>_('New Freshman'),
                                                   '2'=>_('Transfer')));
         
