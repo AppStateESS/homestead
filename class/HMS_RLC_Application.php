@@ -262,7 +262,7 @@ class HMS_RLC_Application{
 //        $tags['MAJOR']       = ;
 //        $tags['HS_GPA']      = ;
         $tags['GENDER']      = HMS_SOAP::get_gender($this->getUserID());
-        $tags['APPLY_DATE']  = date('d-M-y',$this->getDateSubmitted());
+        $tags['DATE_SUBMITTED']  = date('d-M-y',$this->getDateSubmitted());
         $tags['COURSE_OK']   = HMS_RLC_Application::generateCourseOK($this->getID());
 
         return $tags;

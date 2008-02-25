@@ -12,7 +12,7 @@
         <th>Major</th>
         <th>HS GPA</th>  -->
         <th>Gender</th>
-        <th>Apply Date</th>
+        <th>Apply Date {DATE_SUBMITTED_SORT}</th>
         <th>Course OK?</th>
     </tr>
 <!-- BEGIN empty_table -->
@@ -33,7 +33,7 @@
         <td>{MAJOR}</td>
         <td>{HS_GPA}</td> -->
         <td>{GENDER}</td>
-        <td>{APPLY_DATE}</td>
+        <td>{DATE_SUBMITTED}</td>
         <td>{COURSE_OK}</td>
     </tr>
 <!-- END listrows -->

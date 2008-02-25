@@ -783,6 +783,7 @@ function hms_update(&$content, $currentVersion)
             $files[] = 'templates/student/main_menu_fall.tpl';
             $files[] = 'templates/admin/assign_student.tpl';
             $files[] = 'templates/admin/deadlines.tpl';
+            $files[] = 'templates/admin/rlc_assignments_pager.tpl';
     }
 
     return TRUE;
