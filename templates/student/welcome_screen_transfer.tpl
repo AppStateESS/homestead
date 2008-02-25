@@ -12,12 +12,14 @@
         are received.  Housing on campus is very limited; therefore you are encouraged to explore off-campus housing options. We recommend visiting University Highlands at their web site:  <a href="http://www.universityhighlands.com/">www.universityhighlands.com</a>, 
         as an off-campus option.  If you have any questions please visit our web site at: <a href="http://housing.appstate.edu/">www.housing.appstate.edu</a>.
         <br /><br />
-        To begin your housing application for the <b>{ENTRY_TERM}</b> school year please click the 'Continue' button below. If the above information in incorrect, if you are not a new freshmen,
-        or if this will not be your first time living on campus, then please {CONTACT_LINK} to contact us.
+        To begin your housing application for the <b>{ENTRY_TERM}</b> school year please click the 'Continue' button below. 
         <br /><br />
         {START_FORM}
         {SUBMIT}
         {END_FORM}
+        <br /><br />
+        If the above information in incorrect, if you are not a new transfer student,
+        or if this will not be your first time living on campus, then please {CONTACT_LINK} to contact us.
         </div>
     </div>
 </div>
