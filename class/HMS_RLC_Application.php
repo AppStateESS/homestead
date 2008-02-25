@@ -26,7 +26,6 @@ class HMS_RLC_Application{
     var $rlc_question_1;
     var $rlc_question_2;
 
-    var $required_course = 0;
     var $hms_assignment_id = NULL;
     var $term = NULL;
 
@@ -75,7 +74,6 @@ class HMS_RLC_Application{
         $this->setRLCQuestion0($result['rlc_question_0']);
         $this->setRLCQuestion1($result['rlc_question_1']);
         $this->setRLCQuestion2($result['rlc_question_2']);
-        $this->setRequiredCourse($result['required_course']);
         $this->setAssignmentID($result['hms_assignment_id']);
         $this->setEntryTerm($result['term']);
 
@@ -99,7 +97,6 @@ class HMS_RLC_Application{
         $db->addValue('rlc_question_0',          $this->getRLCQuestion0());
         $db->addValue('rlc_question_1',          $this->getRLCQuestion1());
         $db->addValue('rlc_question_2',          $this->getRLCQuestion2());
-        $db->addValue('required_course',         $this->getRequiredCourse());
         $db->addValue('hms_assignment_id',       $this->getAssignmentID());
         $db->addValue('term',              $_SESSION['application_term']);
 
@@ -263,7 +260,6 @@ class HMS_RLC_Application{
 //        $tags['HS_GPA']      = ;
         $tags['GENDER']      = HMS_SOAP::get_gender($this->getUserID());
         $tags['DATE_SUBMITTED']  = date('d-M-y',$this->getDateSubmitted());
-        $tags['COURSE_OK']   = HMS_RLC_Application::generateCourseOK($this->getID());
 
         return $tags;
     }
@@ -283,14 +279,6 @@ class HMS_RLC_Application{
 
         $output .= '</select>';
 
-        return $output;
-    }
-
-    function generateCourseOK($application_id){
-        
-        $output  = '<label><input type="radio" name="course_ok['.$application_id.']" value="Y"' . ($this->required_course?' checked="checked"':'') . '>Y</label><br />';
-        $output .= '<label><input type="radio" name="course_ok['.$application_id.']" value="N"' . ($this->required_course?'':' checked="checked"') . '>N</label>';
-        
         return $output;
     }
 
@@ -660,14 +648,6 @@ class HMS_RLC_Application{
 
     function getRLCQuestion2(){
         return $this->rlc_question_2;
-    }
-
-    function setRequiredCourse($required){
-        $this->required_course = $required;
-    }
-
-    function getRequiredCourse(){
-        return $this->required_course;
     }
 
     function setAssignmentID($id){
