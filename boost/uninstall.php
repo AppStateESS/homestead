@@ -6,6 +6,7 @@
 
 function hms_uninstall(&$content)
 {
+    /* Replaced by uninstall.sql
 #    PHPWS_DB::begin();
     $result[] = PHPWS_DB::dropTable('hms_pricing_tiers');
     $result[] = PHPWS_DB::dropTable('hms_hall_communities');
@@ -45,6 +46,7 @@ function hms_uninstall(&$content)
     
     $content[] = _('HMS tables removed.');
 #    PHPWS_DB::commit();
+    */
     return TRUE;
 }
 

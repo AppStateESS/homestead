@@ -1,4 +1,4 @@
---BEGIN;
+BEGIN;
 CREATE TABLE hms_term (
     term    integer NOT NULL,
     primary key(term)
@@ -459,4 +459,4 @@ INSERT INTO hms_pricing_tiers VALUES (5, 4800.00);
 
 CREATE SEQUENCE hms_pricing_tiers_seq;
 SELECT setval('hms_pricing_tiers_seq', max(hms_pricing_tiers.id));
---COMMIT;
+COMMIT;

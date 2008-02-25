@@ -1,4 +1,4 @@
--- Transactions don't and I got tired of re-running this from the command line...
+begin;
 drop table hms_activity_log cascade; 
 drop table hms_application cascade; 
 drop table hms_assignment cascade; 
@@ -27,3 +27,4 @@ drop table hms_student cascade;
 drop table hms_student_profiles cascade; 
 drop table hms_suite cascade; 
 drop table hms_term cascade;
+commit;
