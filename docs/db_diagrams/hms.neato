@@ -1,0 +1,221 @@
+digraph g {
+node [ fontsize = "10", shape = record ];
+edge [];
+
+"block" [shape = record, label = "{<col0> \N| id:  integer\lkey_id:  integer\ltitle:  character varying(255)\lcontent:  text\l}" ];
+
+"block_permissions" [shape = record, label = "{<col0> \N| group_id:  integer\lpermission_level:  smallint\ledit_block:  smallint\ldelete_block:  smallint\l}" ];
+
+"block_pinned" [shape = record, label = "{<col0> \N| block_id:  integer\lkey_id:  integer\l}" ];
+
+"boost_permissions" [shape = record, label = "{<col0> \N| group_id:  integer\lpermission_level:  smallint\l}" ];
+
+"calendar_notice" [shape = record, label = "{<col0> \N| id:  integer\luser_id:  integer\lemail:  character varying(255)\l}" ];
+
+"calendar_permissions" [shape = record, label = "{<col0> \N| group_id:  integer\lpermission_level:  smallint\lsettings:  smallint\ledit_public:  smallint\ledit_private:  smallint\ldelete_schedule:  smallint\l}" ];
+
+"calendar_schedule" [shape = record, label = "{<col0> \N| id:  integer\lkey_id:  integer\luser_id:  integer\ltitle:  character varying(60)\lshow_upcoming:  smallint\lsummary:  text\lpublic:  smallint\l}" ];
+
+"calendar_suggestions" [shape = record, label = "{<col0> \N| id:  integer\lschedule_id:  integer\lsummary:  character varying(60)\llocation:  character varying(60)\lloc_link:  character varying(255)\ldescription:  text\lall_day:  smallint\lstart_time:  integer\lend_time:  integer\lsubmitted:  integer\l}" ];
+
+"categories" [shape = record, label = "{<col0> \N| id:  integer\ltitle:  character varying(255)\ldescription:  text\lparent:  integer\licon:  character varying(255)\l}" ];
+
+"categories_permissions" [shape = record, label = "{<col0> \N| group_id:  integer\lpermission_level:  smallint\ldelete_categories:  smallint\l}" ];
+
+"category_items" [shape = record, label = "{<col0> \N| cat_id:  integer\lkey_id:  integer\lmodule:  character(40)\l}" ];
+
+"comments_items" [shape = record, label = "{<col0> \N| id:  integer\lthread_id:  integer\lparent:  integer\lauthor_ip:  character varying(15)\lauthor_id:  integer\lsubject:  character varying(100)\lentry:  text\ledit_author:  character varying(50)\lcreate_time:  integer\ledit_time:  integer\ledit_reason:  character varying(255)\l}" ];
+
+"comments_permissions" [shape = record, label = "{<col0> \N| group_id:  integer\lpermission_level:  smallint\ledit_comments:  smallint\ldelete_comments:  smallint\lsettings:  smallint\l}" ];
+
+"comments_threads" [shape = record, label = "{<col0> \N| id:  integer\lkey_id:  integer\ltotal_comments:  integer\llast_poster:  character varying(40)\lallow_anon:  smallint\l}" ];
+
+"comments_users" [shape = record, label = "{<col0> \N| user_id:  integer\ldisplay_name:  character varying(50)\lcomments_made:  integer\ljoined_date:  integer\llocked:  smallint\l}" ];
+
+"controlpanel_link" [shape = record, label = "{<col0> \N| id:  integer\ltab:  character(255)\lactive:  smallint\llabel:  character(50)\litemname:  character(50)\lrestricted:  smallint\lurl:  text\ldescription:  text\limage:  character(255)\llink_order:  smallint\l}" ];
+
+"controlpanel_permissions" [shape = record, label = "{<col0> \N| group_id:  integer\lpermission_level:  smallint\lremove_tab:  smallint\ladd_tab:  smallint\lmove_link:  smallint\l}" ];
+
+"controlpanel_tab" [shape = record, label = "{<col0> \N| id:  character(255)\ltitle:  character(255)\llink:  character(255)\ltab_order:  smallint\litemname:  character(255)\l}" ];
+
+"converted" [shape = record, label = "{<col0> \N| convert_name:  character varying(30)\l}" ];
+
+"core_version" [shape = record, label = "{<col0> \N| version:  character varying(10)\l}" ];
+
+"demographics" [shape = record, label = "{<col0> \N| user_id:  integer\lavatar:  character varying(255)\lsignature:  character varying(255)\lcontact_email:  character varying(30)\lwebsite:  character varying(60)\l}" ];
+
+"dependencies" [shape = record, label = "{<col0> \N| source_mod:  character varying(40)\ldepended_on:  character varying(40)\lversion:  character varying(20)\l}" ];
+
+"documents" [shape = record, label = "{<col0> \N| id:  integer\lfile_name:  character varying(50)\lfile_directory:  character varying(255)\lfolder_id:  integer\lfile_type:  character varying(30)\ltitle:  character varying(255)\ldescription:  text\lsize:  integer\ldownloaded:  integer\l}" ];
+
+"filecabinet_permissions" [shape = record, label = "{<col0> \N| group_id:  integer\lpermission_level:  smallint\ledit_folders:  smallint\ldelete_folders:  smallint\lsettings:  smallint\lclassify:  smallint\l}" ];
+
+"filecabinet_pins" [shape = record, label = "{<col0> \N| key_id:  integer\lfolder_id:  integer\l}" ];
+
+"folders" [shape = record, label = "{<col0> \N| id:  integer\lkey_id:  integer\ltitle:  character varying(60)\ldescription:  text\lftype:  smallint\lpublic_folder:  smallint\licon:  character varying(255)\lmodule_created:  character varying(40)\l}" ];
+
+"hms_activity_log" [shape = record, label = "{<col0> \N| user_id:  character varying(32)\ltimestamp:  integer\lactivity:  integer\lactor:  character varying(32)\lnotes:  character varying(512)\l}" ];
+
+"hms_application" [shape = record, label = "{<col0> \N| id:  integer\lhms_student_id:  character varying(32)\lstudent_status:  smallint\lterm_classification:  smallint\lgender:  smallint\lmeal_option:  smallint\llifestyle_option:  smallint\lpreferred_bedtime:  smallint\lroom_condition:  smallint\lin_relationship:  smallint\lcurrently_employed:  smallint\lrlc_interest:  smallint\lagreed_to_terms:  smallint\laggregate:  smallint\ldeleted:  smallint\ldeleted_by:  smallint\ldeleted_on:  integer\lcreated_on:  integer\lcreated_by:  character varying(32)\lterm:  integer\lphysical_disability:  smallint\lpsych_disability:  smallint\lmedical_need:  smallint\lgender_need:  smallint\l}" ];
+
+"hms_assignment" [shape = record, label = "{<col0> \N| id:  integer\lasu_username:  character varying(32)\lbed_id:  integer\ldeleted:  smallint\lterm:  integer\ldeleted_on:  integer\ldeleted_by:  smallint\lupdated_on:  integer\lupdated_by:  smallint\ladded_on:  integer\ladded_by:  smallint\l}" ];
+
+"hms_bed" [shape = record, label = "{<col0> \N| id:  integer\lbed_letter:  character(1)\ldeleted:  smallint\lbanner_id:  character varying(15)\lphone_number:  character(4)\lterm:  integer\lroom_id:  integer\lbedroom_label:  character varying(255)\lra_bed:  smallint\l}" ];
+
+"hms_bedroom" [shape = record, label = "{<col0> \N| id:  integer\lroom_id:  integer\ladded_by:  integer\ladded_on:  integer\lupdated_by:  integer\lupdated_on:  integer\ldeleted_by:  integer\ldeleted_on:  integer\lbedroom_letter:  character(1)\ldeleted:  smallint\lterm:  integer\l}" ];
+
+"hms_cached_student_info" [shape = record, label = "{<col0> \N| id:  integer\lasu_username:  character varying(32)\lroom_number:  character varying(10)\lhall_name:  character varying(64)\lfirst_name:  character varying(64)\lmiddle_name:  character varying(64)\llast_name:  character varying(64)\laddress1:  character varying(128)\laddress2:  character varying(128)\laddress3:  character varying(128)\lcity:  character varying(64)\lstate:  character varying(5)\lzip:  character varying(11)\lroommate_name:  character varying(172)\lroommate_user:  character varying(32)\lroom_phone:  character varying(20)\lphone_number:  character varying(20)\lgender:  character(1)\lstudent_type:  character(5)\lclass:  character(5)\lcredit_hours:  integer\ldeposit_date:  character(10)\ldeposit_waived:  character(5)\lmovein_time:  character varying(64)\l}" ];
+
+"hms_deadlines" [shape = record, label = "{<col0> \N| id:  integer\lterm:  integer\lsubmit_application_begin_timestamp:  integer\lsubmit_application_end_timestamp:  integer\ledit_application_end_timestamp:  integer\ledit_profile_begin_timestamp:  integer\ledit_profile_end_timestamp:  integer\lsearch_profiles_begin_timestamp:  integer\lsearch_profiles_end_timestamp:  integer\lsubmit_rlc_application_end_timestamp:  integer\lview_assignment_begin_timestamp:  integer\lview_assignment_end_timestamp:  integer\lupdated_by:  smallint\lupdated_on:  integer\llottery_signup_begin_timestamp:  integer\llottery_signup_end_timestamp:  integer\l}" ];
+
+"hms_floor" [shape = record, label = "{<col0> \N| id:  integer\lfloor_number:  smallint\lresidence_hall_id:  smallint\lis_online:  smallint\lgender_type:  smallint\ldeleted:  smallint\ldeleted_by:  smallint\ldeleted_on:  integer\ladded_by:  smallint\ladded_on:  integer\lupdated_by:  smallint\lupdated_on:  integer\lterm:  integer\lft_movein_time_id:  smallint\lrt_movein_time_id:  smallint\l}" ];
+
+"hms_hall_communities" [shape = record, label = "{<col0> \N| id:  integer\lcommunity_name:  character varying(32)\l}" ];
+
+"hms_learning_communities" [shape = record, label = "{<col0> \N| id:  integer\lcommunity_name:  character varying(32)\labbreviation:  character varying(16)\lcapacity:  integer\l}" ];
+
+"hms_learning_community_applications" [shape = record, label = "{<col0> \N| id:  integer\luser_id:  character varying(32)\ldate_submitted:  integer\lrlc_first_choice_id:  integer\lrlc_second_choice_id:  integer\lrlc_third_choice_id:  integer\lwhy_specific_communities:  character varying(2048)\lstrengths_weaknesses:  character varying(2048)\lrlc_question_0:  character varying(2048)\lrlc_question_1:  character varying(2048)\lrlc_question_2:  character varying(2048)\lrequired_course:  smallint\lhms_assignment_id:  integer\lterm:  integer\l}" ];
+
+"hms_learning_community_assignment" [shape = record, label = "{<col0> \N| id:  integer\lasu_username:  character varying(32)\lrlc_id:  integer\lgender:  character varying(2)\lassigned_by:  character varying(32)\l}" ];
+
+"hms_learning_community_floors" [shape = record, label = "{<col0> \N| learning_communities_id:  integer\lfloor_id:  integer\l}" ];
+
+"hms_learning_community_questions" [shape = record, label = "{<col0> \N| id:  integer\llearning_community_id:  integer\lquestion_text:  text\l}" ];
+
+"hms_movein_time" [shape = record, label = "{<col0> \N| id:  integer\lbegin_timestamp:  integer\lend_timestamp:  integer\lterm:  integer\l}" ];
+
+"hms_pending_assignment" [shape = record, label = "{<col0> \N| id:  integer\lgender:  smallint\llifestyle_option:  smallint\lchosen:  smallint\lroommate_zero:  character varying(32)\lmeal_zero:  smallint\lroommate_one:  character varying(32)\lmeal_one:  smallint\l}" ];
+
+"hms_pricing_tiers" [shape = record, label = "{<col0> \N| id:  integer\ltier_value:  numeric\l}" ];
+
+"hms_residence_hall" [shape = record, label = "{<col0> \N| id:  integer\lbanner_building_code:  character varying(6)\lhall_name:  character varying(64)\lgender_type:  smallint\lair_conditioned:  smallint\lis_online:  smallint\ladded_by:  smallint\ladded_on:  integer\ldeleted_by:  smallint\ldeleted_on:  integer\lupdated_by:  smallint\lupdated_on:  integer\ldeleted:  smallint\lterm:  integer\lper_freshmen_rsvd:  integer\lper_sophomore_rsvd:  integer\lper_junior_rsvd:  integer\lper_senior_rsvd:  integer\l}" ];
+
+"hms_room" [shape = record, label = "{<col0> \N| id:  integer\lfloor_id:  integer\lgender_type:  smallint\llearning_community_id:  smallint\lis_medical:  smallint\lis_reserved:  smallint\lis_online:  smallint\ladded_by:  smallint\ladded_on:  integer\ldeleted_by:  smallint\ldeleted_on:  integer\lupdated_by:  smallint\lupdated_on:  integer\ldeleted:  smallint\lroom_number:  character varying(8)\lra_room:  smallint\lprivate_room:  smallint\lis_lobby:  smallint\lpricing_tier:  smallint\lterm:  integer\lsuite_id:  integer\l}" ];
+
+"hms_roommate_approval" [shape = record, label = "{<col0> \N| id:  integer\lnumber_roommates:  smallint\lroommate_zero:  character varying(32)\lroommate_zero_approved:  smallint\lroommate_zero_personal_hash:  character varying(32)\lroommate_one:  character varying(32)\lroommate_one_approved:  smallint\lroommate_one_personal_hash:  character varying(32)\lroommate_two:  character varying(32)\lroommate_two_approved:  smallint\lroommate_two_personal_hash:  character varying(32)\lroommate_three:  character varying(32)\lroommate_three_approved:  smallint\lroommate_three_personal_hash:  character varying(32)\l}" ];
+
+"hms_roommates" [shape = record, label = "{<col0> \N| id:  integer\lroommate_zero:  character varying(32)\lroommate_one:  character varying(32)\lroommate_two:  character varying(32)\lroommate_three:  character varying(32)\l}" ];
+
+"hms_student" [shape = record, label = "{<col0> \N| id:  integer\lasu_username:  character varying(10)\lfirst_name:  character varying(32)\lmiddle_name:  character varying(32)\llast_name:  character varying(32)\lgender:  smallint\lapplication_received:  smallint\ladded_by:  smallint\ladded_on:  integer\ldeleted_by:  smallint\ldeleted_on:  integer\lupdated_by:  smallint\lupdated_on:  integer\ldeleted:  smallint\l}" ];
+
+"hms_student_profiles" [shape = record, label = "{<col0> \N| id:  integer\luser_id:  character varying(32)\ldate_submitted:  integer\lalternate_email:  character varying(64)\laim_sn:  character varying(32)\lyahoo_sn:  character varying(32)\lmsn_sn:  character varying(32)\larts_and_crafts:  smallint\lbooks_and_reading:  smallint\lcars:  smallint\lchurch_activities:  smallint\lcollecting:  smallint\lcomputers_and_technology:  smallint\ldancing:  smallint\lfashion:  smallint\lfine_arts:  smallint\lgardening:  smallint\lgames:  smallint\lhumor:  smallint\linvesting_personal_finance:  smallint\lmovies:  smallint\lmusic:  smallint\loutdoor_activities:  smallint\lpets_and_animals:  smallint\lphotography:  smallint\lpolitics:  smallint\lsports:  smallint\ltravel:  smallint\ltv_shows:  smallint\lvolunteering:  smallint\lwriting:  smallint\lalternative:  smallint\lambient:  smallint\lbeach:  smallint\lbluegrass:  smallint\lblues:  smallint\lclassical:  smallint\lclassic_rock:  smallint\lcountry:  smallint\lelectronic:  smallint\lfolk:  smallint\lheavy_metal:  smallint\lhip_hop:  smallint\lhouse:  smallint\lindustrial:  smallint\ljazz:  smallint\lpopular_music:  smallint\lprogressive:  smallint\lpunk:  smallint\lr_and_b:  smallint\lrap:  smallint\lreggae:  smallint\lrock:  smallint\lworld_music:  smallint\lstudy_early_morning:  smallint\lstudy_morning_afternoon:  smallint\lstudy_afternoon_evening:  smallint\lstudy_evening:  smallint\lstudy_late_night:  smallint\lpolitical_view:  smallint\lmajor:  smallint\lexperience:  smallint\lsleep_time:  smallint\lwakeup_time:  smallint\lovernight_guests:  smallint\lloudness:  smallint\lcleanliness:  smallint\lfree_time:  smallint\l}" ];
+
+"hms_suite" [shape = record, label = "{<col0> \N| id:  integer\lfloor_id:  integer\lterm:  integer\ldeleted:  smallint\ladded_by:  smallint\ladded_on:  integer\lupdated_by:  smallint\lupdated_on:  integer\ldeleted_by:  smallint\ldeleted_on:  integer\l}" ];
+
+"hms_term" [shape = record, label = "{<col0> \N| term:  integer\l}" ];
+
+"images" [shape = record, label = "{<col0> \N| id:  integer\lfile_name:  character varying(50)\lfile_directory:  character varying(255)\lfolder_id:  integer\lfile_type:  character varying(30)\ltitle:  character varying(255)\ldescription:  text\lsize:  integer\lwidth:  smallint\lheight:  smallint\lparent_id:  integer\lurl:  character varying(255)\lalt:  character varying(255)\l}" ];
+
+"layout_box" [shape = record, label = "{<col0> \N| id:  integer\ltheme:  character varying(40)\lcontent_var:  character varying(40)\lmodule:  character varying(40)\ltheme_var:  character varying(40)\lbox_order:  smallint\lactive:  smallint\l}" ];
+
+"layout_config" [shape = record, label = "{<col0> \N| default_theme:  character varying(50)\luserallow:  smallint\lpage_title:  character varying(255)\lmeta_keywords:  text\lmeta_description:  character varying(180)\lmeta_robots:  character(2)\lmeta_owner:  character varying(40)\lmeta_author:  character varying(40)\lmeta_content:  character varying(40)\lheader:  text\lfooter:  text\lcache:  smallint\l}" ];
+
+"layout_metatags" [shape = record, label = "{<col0> \N| key_id:  integer\lpage_title:  character varying(255)\lmeta_description:  text\lmeta_keywords:  text\lmeta_robots:  character(2)\l}" ];
+
+"layout_permissions" [shape = record, label = "{<col0> \N| group_id:  integer\lpermission_level:  smallint\l}" ];
+
+"layout_styles" [shape = record, label = "{<col0> \N| key_id:  integer\lstyle:  character varying(40)\l}" ];
+
+"menu_assoc" [shape = record, label = "{<col0> \N| menu_id:  integer\lkey_id:  integer\l}" ];
+
+"menu_links" [shape = record, label = "{<col0> \N| id:  integer\lmenu_id:  integer\lkey_id:  integer\ltitle:  character varying(50)\lurl:  character varying(255)\lparent:  integer\llink_order:  smallint\l}" ];
+
+"menu_permissions" [shape = record, label = "{<col0> \N| group_id:  integer\lpermission_level:  smallint\lcreate_new_menu:  smallint\ldelete_menu:  smallint\l}" ];
+
+"menus" [shape = record, label = "{<col0> \N| id:  integer\ltitle:  character varying(30)\ltemplate:  character varying(50)\lrestricted:  smallint\lpin_all:  smallint\l}" ];
+
+"mod_settings" [shape = record, label = "{<col0> \N| module:  character varying(40)\lsetting_name:  character varying(30)\lsetting_type:  smallint\lsmall_num:  smallint\llarge_num:  integer\lsmall_char:  character varying(100)\llarge_char:  text\l}" ];
+
+"modules" [shape = record, label = "{<col0> \N| title:  character(40)\lproper_name:  character(40)\lpriority:  smallint\lactive:  smallint\lversion:  character(20)\lregister:  smallint\lunregister:  smallint\l}" ];
+
+"multimedia" [shape = record, label = "{<col0> \N| id:  integer\lfile_name:  character varying(50)\lfile_directory:  character varying(255)\lfolder_id:  integer\lfile_type:  character varying(30)\ltitle:  character varying(255)\ldescription:  text\lsize:  integer\lwidth:  smallint\lheight:  smallint\lthumbnail:  character varying(255)\l}" ];
+
+"notes" [shape = record, label = "{<col0> \N| id:  integer\luser_id:  integer\lsender_id:  integer\ltitle:  character varying(60)\lcontent:  text\lread_once:  smallint\lencrypted:  smallint\ldate_sent:  integer\lkey_id:  integer\l}" ];
+
+"notes_permissions" [shape = record, label = "{<col0> \N| group_id:  integer\lpermission_level:  smallint\lsearch_usernames:  smallint\l}" ];
+
+"phpws_key" [shape = record, label = "{<col0> \N| id:  integer\lmodule:  character varying(40)\litem_name:  character varying(40)\litem_id:  integer\ltitle:  character varying(255)\lsummary:  character varying(255)\lurl:  character varying(255)\lactive:  smallint\lrestricted:  smallint\lcreate_date:  integer\lupdate_date:  integer\lcreator:  character varying(60)\lcreator_id:  integer\lupdater:  character varying(60)\lupdater_id:  integer\ltimes_viewed:  integer\ledit_permission:  character varying(30)\l}" ];
+
+"phpws_key_edit" [shape = record, label = "{<col0> \N| key_id:  integer\lgroup_id:  integer\l}" ];
+
+"phpws_key_register" [shape = record, label = "{<col0> \N| module:  character varying(40)\l}" ];
+
+"phpws_key_view" [shape = record, label = "{<col0> \N| key_id:  integer\lgroup_id:  integer\l}" ];
+
+"registered" [shape = record, label = "{<col0> \N| module:  character(40)\lregistered_to:  character(40)\l}" ];
+
+"rss_channel" [shape = record, label = "{<col0> \N| id:  integer\lmodule:  character varying(40)\ltitle:  character varying(100)\ldescription:  text\lpub_date:  integer\lttl:  smallint\limage_id:  integer\lactive:  smallint\l}" ];
+
+"rss_feeds" [shape = record, label = "{<col0> \N| id:  integer\ltitle:  character varying(100)\laddress:  character varying(255)\ldisplay:  smallint\lrefresh_time:  smallint\litem_limit:  smallint\l}" ];
+
+"rss_permissions" [shape = record, label = "{<col0> \N| group_id:  integer\lpermission_level:  smallint\l}" ];
+
+"search" [shape = record, label = "{<col0> \N| key_id:  integer\lmodule:  character(40)\lcreated:  integer\lkeywords:  text\l}" ];
+
+"search_permissions" [shape = record, label = "{<col0> \N| group_id:  integer\lpermission_level:  smallint\l}" ];
+
+"search_stats" [shape = record, label = "{<col0> \N| keyword:  character varying(50)\lquery_success:  integer\lquery_failure:  integer\lmixed_query:  integer\ltotal_query:  integer\lhighest_result:  smallint\llast_called:  integer\lmultiple_word:  integer\lexact_success:  integer\lignored:  smallint\l}" ];
+
+"user_authorization" [shape = record, label = "{<col0> \N| username:  character varying(30)\lpassword:  character(32)\l}" ];
+
+"users" [shape = record, label = "{<col0> \N| id:  integer\llast_logged:  integer\llog_count:  integer\lauthorize:  smallint\lcreated:  integer\lupdated:  integer\lactive:  smallint\lapproved:  smallint\lusername:  character varying(30)\ldisplay_name:  character varying(30)\lemail:  character varying(100)\ldeity:  smallint\l}" ];
+
+"users_auth_scripts" [shape = record, label = "{<col0> \N| id:  smallint\ldisplay_name:  character varying(40)\lfilename:  character varying(40)\l}" ];
+
+"users_banned" [shape = record, label = "{<col0> \N| banned_ip:  character(15)\l}" ];
+
+"users_groups" [shape = record, label = "{<col0> \N| id:  integer\lactive:  smallint\lname:  character(50)\luser_id:  integer\l}" ];
+
+"users_members" [shape = record, label = "{<col0> \N| group_id:  integer\lmember_id:  integer\l}" ];
+
+"users_my_page_mods" [shape = record, label = "{<col0> \N| mod_title:  character varying(40)\l}" ];
+
+"users_permissions" [shape = record, label = "{<col0> \N| group_id:  integer\lpermission_level:  smallint\ledit_users:  smallint\ldelete_users:  smallint\ladd_edit_groups:  smallint\ldelete_groups:  smallint\ledit_permissions:  smallint\lsettings:  smallint\l}" ];
+
+"users_pw_reset" [shape = record, label = "{<col0> \N| user_id:  integer\lauthhash:  character(32)\ltimeout:  integer\l}" ];
+
+"users_signup" [shape = record, label = "{<col0> \N| authkey:  character(32)\luser_id:  integer\ldeadline:  integer\l}" ];
+
+"version_permissions" [shape = record, label = "{<col0> \N| group_id:  integer\lpermission_level:  smallint\l}" ];
+
+"webpage_featured" [shape = record, label = "{<col0> \N| id:  integer\lvol_order:  integer\l}" ];
+
+"webpage_page" [shape = record, label = "{<col0> \N| id:  integer\lvolume_id:  integer\ltitle:  character varying(255)\lcontent:  text\lpage_number:  smallint\ltemplate:  character varying(40)\lapproved:  smallint\limage_id:  integer\l}" ];
+
+"webpage_permissions" [shape = record, label = "{<col0> \N| group_id:  integer\lpermission_level:  smallint\ledit_page:  smallint\ldelete_page:  smallint\lfeatured:  smallint\l}" ];
+
+"webpage_volume" [shape = record, label = "{<col0> \N| id:  integer\lkey_id:  integer\ltitle:  character varying(255)\lsummary:  text\ldate_created:  integer\ldate_updated:  integer\lcreate_user_id:  integer\lcreated_user:  character varying(40)\lupdate_user_id:  integer\lupdated_user:  character varying(40)\lfrontpage:  smallint\lapproved:  smallint\lactive:  smallint\l}" ];
+
+"webpage_volume_version" [shape = record, label = "{<col0> \N| id:  integer\lsource_id:  integer\lkey_id:  integer\ltitle:  character varying(255)\lsummary:  text\ldate_created:  integer\ldate_updated:  integer\lcreate_user_id:  integer\lcreated_user:  character varying(255)\lupdate_user_id:  integer\lupdated_user:  character varying(255)\lfrontpage:  smallint\lapproved:  smallint\lactive:  smallint\lvr_creator:  integer\lvr_editor:  integer\lvr_create_date:  integer\lvr_edit_date:  integer\lvr_number:  smallint\lvr_current:  smallint\lvr_approved:  smallint\lvr_locked:  smallint\l}" ];
+
+
+"hms_application" -> "hms_term" [label="term_fkey"];
+"hms_assignment" -> "hms_bed" [label=""];
+"hms_assignment" -> "hms_term" [label=""];
+"hms_bed" -> "hms_term" [label=""];
+"hms_bed" -> "hms_room" [label=""];
+"hms_bedroom" -> "hms_room" [label=""];
+"hms_bedroom" -> "hms_term" [label=""];
+"hms_deadlines" -> "hms_term" [label=""];
+"hms_floor" -> "hms_residence_hall" [label=""];
+"hms_floor" -> "hms_term" [label=""];
+"hms_floor" -> "hms_movein_time" [label=""];
+"hms_floor" -> "hms_movein_time" [label=""];
+"hms_learning_community_applications" -> "hms_learning_communities" [label=""];
+"hms_learning_community_applications" -> "hms_learning_communities" [label=""];
+"hms_learning_community_applications" -> "hms_learning_communities" [label=""];
+"hms_learning_community_applications" -> "hms_learning_community_assignment" [label=""];
+"hms_learning_community_applications" -> "hms_term" [label="rlc_app_fkey"];
+"hms_learning_community_assignment" -> "hms_learning_communities" [label=""];
+"hms_learning_community_floors" -> "hms_learning_communities" [label=""];
+"hms_learning_community_questions" -> "hms_learning_communities" [label=""];
+"hms_movein_time" -> "hms_term" [label=""];
+"hms_residence_hall" -> "hms_term" [label=""];
+"hms_room" -> "hms_floor" [label=""];
+"hms_room" -> "hms_term" [label=""];
+"hms_room" -> "hms_suite" [label=""];
+"hms_suite" -> "hms_floor" [label=""];
+"hms_suite" -> "hms_term" [label=""];
+}
+
+
