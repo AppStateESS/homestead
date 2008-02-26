@@ -1,3 +1,6 @@
+BEGIN;
+
+DELETE FROM hms_learning_community_assignment;
 DELETE FROM hms_learning_community_applications;
 DELETE FROM hms_learning_community_questions;
 DELETE FROM hms_learning_communities;
@@ -27,3 +30,5 @@ INSERT INTO hms_learning_community_questions (id, learning_community_id, questio
 INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (9, 9, 'The man floor question here!');
 
 SELECT setval('hms_learning_community_questions_seq', max(hms_learning_community_questions.id));
+
+COMMIT;
