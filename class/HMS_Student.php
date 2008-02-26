@@ -774,6 +774,8 @@ class HMS_Student {
         PHPWS_Core::initModClass('hms', 'HMS_Student_Profile.php');
         $tags['PROFILE_INTRO'] = "The HMS Student Profile is optional and can be used to help you find a roommate who shares your hobbies and interests. Once you complete your profile, you will be able to search for other students who share your interests based on their profiles.";
         
+        $tags['PROFILE_ICON'] = $arrow_img;
+
         # Check deadlines for editing profiles
         if(HMS_Deadlines::check_within_deadlines('edit_profile_begin_timestamp','edit_profile_end_timestamp', $deadlines)){
             $tags['PROFILE_MSG']  = '<b>You may create or edit your profile</b> until ' . HMS_Deadlines::get_deadline_as_date('edit_profile_end_timestamp', $deadlines) . '. Click the link below to create or edit your profile.';
@@ -781,29 +783,24 @@ class HMS_Student {
             $tags['PROFILE_ICON'] = $arrow_img;
         }else if(!HMS_Deadlines::check_deadline_past('edit_profile_begin_timestamp', $deadlines)){
             $tags['PROFILE_MSG']  = '<b>It is too early to create your profile.</b> You can create a profile on ' . HMS_Deadlines::get_deadline_as_date('edit_profile_begin_timestamp') . '.';
-            $tags['PROFILE_ICON'] = $lock_img;
         }else{
             $tags['PROFILE_MSG']  = '<b>It is too late to create your profile.</b> The deadline passed on ' . HMS_Deadlines::get_deadline_as_date('edit_profile_end_timestamp', $deadlines)  . '.';
-            $tags['PROFILE_ICON'] = $lock_img;
         }
 
         # Check deadlines for searching student profiles
         if(HMS_Deadlines::check_within_deadlines('search_profiles_begin_timestamp','search_profiles_end_timestamp', $deadlines)){
+            $tags['PROFILE_ICON'] = $arrow_img;
             if(HMS_Student_Profile::check_for_profile() === TRUE){
                 # Show the search profiles link
                 $tags['ROOMMATE_SEARCH_MSG']  = "<b>Click the link below to use the Roommate Search Tool</b> to look for potential roommate based on their profiles. You may use the Profile Search Tool until " . HMS_Deadlines::get_deadline_as_date('search_profiles_end_timestamp', $deadlines) . ".";
                 $tags['ROOMMATE_SEARCH_LINK'] = PHPWS_Text::secureLink('Roommate Search Tool', 'hms', array('type'=>'student','op'=>'show_profile_search'));
-                $tags['PROFILE_ICON'] = $arrow_img;
             }else{
                 $tags['ROOMMATE_SEARCH_MSG'] = 'To use the search feature, please create your profile first by clicking the above link.';
-                $tags['PROFILE_ICON'] = $arrow_img;
             }
         }else if(!HMS_Deadlines::check_deadline_past('search_profiles_begin_timestamp', $deadlines)){
             $tags['ROOMMATE_SEARCH_MSG'] = '<b>It is too early to search for a roommate.</b> You will be able to search roommate profiles on ' . HMS_Deadlines::get_deadline_as_date('search_profiles_begin_timestamp', $deadlines) . '.';
-            $tags['PROFILE_ICON'] = $lock_img;
         }else{
             $tags['ROOMMATE_SEARCH_MSG'] = '<b>It is too late to search for a roommate.</b> The deadline passed on ' . HMS_Deadlines::get_deadline_as_date('search_profiles_end_timestamp', $deadlines) . '.';
-            $tags['PROFILE_ICON'] = $lock_img;
         }
 
 
