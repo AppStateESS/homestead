@@ -9,8 +9,7 @@
     <div class="box-content">
     {WELCOME_MSG}
 
-
-    <h2>1. Terms & Agreements</h2>
+    <h2>{TERMS_ICON} 1. Terms & Agreements</h2>
     {TERMS_INTRO}
     <ul>
       <li>
@@ -19,7 +18,7 @@
       </li>
     </ul>
     
-    <h2>2. Housing Application</h2>
+    <h2>{APPLICATION_ICON} 2. Housing Application</h2>
     {APPLICATION_INTRO}
     <ul>
       <li>
@@ -33,7 +32,7 @@
       </li>
     </ul>
     
-    <h2>3. Unique Housing Options Application</h2>
+    <h2>{RLC_ICON} &nbsp;3. Unique Housing Options Application</h2>
     {RLC_INTRO}
     <ul>
       <li>
@@ -42,7 +41,7 @@
       </li>
     </ul>
 
-    <h2>4. Roommate Profile</h2>
+    <h2>{PROFILE_ICON} 4. Roommate Profile</h2>
     {PROFILE_INTRO}
     <ul>
       <li>
@@ -58,7 +57,7 @@
       <!-- END roommate_search -->
     </ul>
     
-    <h2>5. Select a Roommate</h2>
+    <h2>{ROOMMATE_ICON} 5. Select a Roommate</h2>
     {ROOMMATE_INTRO}
     <ul>
       <li>
@@ -68,7 +67,7 @@
 
     </ul>
 <!-- 
-    <h2>6. Check Your Housing Status</h2>
+    <h2>{VERIFY_ICON}6. Check Your Housing Status</h2>
     {VERIFY_INTRO}
     <ul>
       <li>
