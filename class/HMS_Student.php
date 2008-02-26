@@ -771,10 +771,11 @@ class HMS_Student {
         /***************************************
          * Student Profile & Profile Searching *
          **************************************/
+
         PHPWS_Core::initModClass('hms', 'HMS_Student_Profile.php');
         $tags['PROFILE_INTRO'] = "The HMS Student Profile is optional and can be used to help you find a roommate who shares your hobbies and interests. Once you complete your profile, you will be able to search for other students who share your interests based on their profiles.";
         
-        $tags['PROFILE_ICON'] = $arrow_img;
+        $tags['PROFILE_ICON'] = $lock_img;
 
         # Check deadlines for editing profiles
         if(HMS_Deadlines::check_within_deadlines('edit_profile_begin_timestamp','edit_profile_end_timestamp', $deadlines)){
@@ -782,7 +783,7 @@ class HMS_Student {
             $tags['PROFILE_LINK'] = PHPWS_Text::secureLink(_('Create/Edit your optional Student Profile'), 'hms', array('type'=>'student', 'op' =>'show_profile_form'));
             $tags['PROFILE_ICON'] = $arrow_img;
         }else if(!HMS_Deadlines::check_deadline_past('edit_profile_begin_timestamp', $deadlines)){
-            $tags['PROFILE_MSG']  = '<b>It is too early to create your profile.</b> You can create a profile on ' . HMS_Deadlines::get_deadline_as_date('edit_profile_begin_timestamp') . '.';
+            $tags['PROFILE_MSG']  = '<b>It is too early to create your profile.</b> You can create a profile on ' . HMS_Deadlines::get_deadline_as_date('edit_profile_begin_timestamp', $deadlines) . '.';
         }else{
             $tags['PROFILE_MSG']  = '<b>It is too late to create your profile.</b> The deadline passed on ' . HMS_Deadlines::get_deadline_as_date('edit_profile_end_timestamp', $deadlines)  . '.';
         }
