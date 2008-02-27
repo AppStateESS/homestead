@@ -27,7 +27,7 @@ INSERT INTO hms_learning_community_questions (id, learning_community_id, questio
 INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (6, 6, 'What are your study goals and how will this community help you to reach them?');
 INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (7, 7, 'What lifestyle choices have you made that will help you contribute to this community?');
 INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (8, 8, 'What are your goals for joining this community and how do you plan to be an active member in this community?');
-INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (9, 9, 'The man floor question here!');
+INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (9, 9, 'What goals do you hope to reach by living on the Man Floor?');
 
 SELECT setval('hms_learning_community_questions_seq', max(hms_learning_community_questions.id));
 
