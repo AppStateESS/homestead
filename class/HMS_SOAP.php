@@ -431,7 +431,7 @@ class HMS_SOAP{
             $student = HMS_SOAP::get_student_info($username);
         }
 
-        if(PEARr::isError($student)){
+        if(PEAR::isError($student)){
             HMS_SOAP::log_soap_error($student, 'get_application_term', $username);
             return FALSE;
         }else if($student->application_term == NULL){
