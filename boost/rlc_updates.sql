@@ -25,11 +25,11 @@ INSERT INTO hms_learning_community_questions (id, learning_community_id, questio
 INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (1, 1, 'What outdoor opportunities would you like to be involved in and describe your current experience.');
 INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (2, 2, 'What knowledge, skills, or talent could you offer other students in the Community of Scientific Interests?');
 INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (3, 3, 'In what languages are you proficient, learning to speak, or interested in learning?');
-INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (4, 4, 'How do you plan to be an active member of the ASU community?');
+INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (4, 4, 'How do you plan to be an active member of the ASU community and the Black and Gold Community?');
 INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (5, 5, 'What are your future education goals and how will this community be of benefit to you?');
-INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (6, 6, 'What are your study goals and how will this community help you to reach them?');
-INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (7, 7, 'What lifestyle choices have you made that will help you contribute to this community?');
-INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (8, 8, 'What are your goals for joining this community and how do you plan to be an active member in this community?');
+INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (6, 6, 'What are your study goals and how will the quiet study community help you to reach them?');
+INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (7, 7, 'What lifestyle choices have you made that will help you contribute to the Living Free Community?');
+INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (8, 8, 'What are your goals for joining the Appalachian Entrepreneurs Community and how do you plan to be an active member in this community?');
 INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (9, 9, 'What goals do you hope to reach by living on the Man Floor?');
 
 SELECT setval('hms_learning_community_questions_seq', max(hms_learning_community_questions.id));
