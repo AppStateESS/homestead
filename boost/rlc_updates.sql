@@ -1,7 +1,10 @@
 BEGIN;
 
 DELETE FROM hms_learning_community_assignment;
+
 DELETE FROM hms_learning_community_applications;
+SELECT setval('hms_learning_communities_applications_seq', max(hms_learning_community_applications.id));
+
 DELETE FROM hms_learning_community_questions;
 DELETE FROM hms_learning_communities;
 
