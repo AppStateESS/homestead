@@ -345,6 +345,7 @@ class HMS_SOAP{
     {
         if(SOAP_TEST_FLAG){
             # return canned data
+            #return "T";
             return "F";
         }else{
             $student = HMS_SOAP::get_student_info($username);
@@ -394,7 +395,8 @@ class HMS_SOAP{
     {
         if(SOAP_TEST_FLAG){
             # return canned data
-            return "1986-09-05";
+            #return "1991-09-05"; // under 18
+            return "1986-09-05"; // over 18
         }else{
             $student = HMS_SOAP::get_student_info($username);
         }
@@ -423,7 +425,8 @@ class HMS_SOAP{
     function get_application_term($username){
         if(SOAP_TEST_FLAG){
             # return canned data
-            return "200840";
+            #return "200810"; // returning student
+            return "200840"; // new student
         }else{
             $student = HMS_SOAP::get_student_info($username);
         }
