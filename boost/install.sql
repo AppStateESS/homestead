@@ -149,8 +149,6 @@ CREATE TABLE hms_assignment_queue (
 CREATE TABLE hms_deadlines (
     id                                      integer NOT NULL,
     term                                    integer NOT NULL REFERENCES hms_term(term),
-    student_login_begin_timestamp           integer NOT NULL,
-    student_login_end_timestamp             integer NOT NULL,
     submit_application_begin_timestamp      integer NOT NULL,
     submit_application_end_timestamp        integer NOT NULL,
     edit_application_end_timestamp          integer NOT NULL,
@@ -245,6 +243,7 @@ CREATE TABLE hms_application (
     deleted_on integer,
     created_on integer NOT NULL,
     created_by character varying(32) NOT NULL,
+    physical_disability integer NOT NULL,
     primary key(id)
 );
 

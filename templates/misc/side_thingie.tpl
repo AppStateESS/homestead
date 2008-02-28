@@ -11,7 +11,7 @@
 <!-- BEGIN progress -->
 
 <!-- BEGIN COMPLETED -->
-        <li style="color: #0F0;">{STEP_COMPLETED}</li>
+        <li style="color: #417C2C;">{STEP_COMPLETED}</li>
 <!-- END COMPLETED -->
 <!-- BEGIN CURRENT -->
         <li style="font-weight: bold;">{STEP_CURRENT}</li>
