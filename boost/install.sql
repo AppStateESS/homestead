@@ -209,7 +209,6 @@ CREATE TABLE hms_learning_community_applications (
     rlc_question_0                  character varying(2048),
     rlc_question_1                  character varying(2048),
     rlc_question_2                  character varying(2048),
-    required_course                 smallint NOT NULL default 0,
     hms_assignment_id               integer REFERENCES hms_learning_community_assignment(id),
     PRIMARY KEY(id)
 );
@@ -242,7 +241,10 @@ CREATE TABLE hms_application (
     deleted_on integer,
     created_on integer NOT NULL,
     created_by character varying(32) NOT NULL,
-    physical_disability integer NOT NULL,
+    physical_disability smallint,
+    psych_disability smallint,
+    medical_need smallint,
+    gender_need smallint,
     primary key(id)
 );
 
