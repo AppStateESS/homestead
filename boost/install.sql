@@ -233,7 +233,6 @@ CREATE TABLE hms_application (
     lifestyle_option smallint NOT NULL,
     preferred_bedtime smallint NOT NULL,
     room_condition smallint NOT NULL,
-    in_relationship smallint NOT NULL,
     currently_employed smallint NOT NULL,
     rlc_interest smallint NOT NULL,
     agreed_to_terms smallint NOT NULL default 0,
