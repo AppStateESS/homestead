@@ -464,12 +464,19 @@ class HMS_Student {
         $student_type       = HMS_SOAP::get_student_type($_SESSION['asu_username']);
         $student_class      = HMS_SOAP::get_student_class($_SESSION['asu_username']);
         $dob                = HMS_SOAP::get_dob($_SESSION['asu_username']);
+        $gender             = HMS_SOAP::get_gender($_SESSION['asu_username']);
 
         # Check for banner errors in any of these calls
         if($application_term === FALSE ||
             $student_type === FALSE ||
             $student_class === FALSE ||
-            $dob === FALSE)
+            $dob === FALSE ||
+            $gender === FALSE ||
+            is_null($application_term) ||
+            is_null($student_type) ||
+            is_null($student_class) ||
+            is_null($dob)
+            is_null($gender))
             {
                 # TODO: HMS_Mail here
                 PHPWS_Error::log('Initial banner lookup failed', 'hms', 'show_welcome_screen', "username: {$_SESSION['asu_username']}");
