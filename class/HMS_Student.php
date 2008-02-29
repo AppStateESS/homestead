@@ -475,7 +475,7 @@ class HMS_Student {
             is_null($application_term) ||
             is_null($student_type) ||
             is_null($student_class) ||
-            is_null($dob)
+            is_null($dob) ||
             is_null($gender))
             {
                 # TODO: HMS_Mail here
