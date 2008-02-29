@@ -37,6 +37,7 @@ class HMS_Deadlines {
 
         $this->term = $term;
         $db = new PHPWS_DB('hms_deadlines');
+        $db->setIndex('id');
         $db->addWhere('term', $this->term);
         $result = $db->loadObject($this);
         if(!$result  || PHPWS_Error::logIfError($result)){
@@ -215,6 +216,7 @@ class HMS_Deadlines {
         $this->updated_by = Current_User::getId();
         
         $db = new PHPWS_DB('hms_deadlines');
+        $db->setIndex('id');
         $result = $db->saveObject($this);
         if(!$result || PHPWS_Error::logIfError($result)){
             return false;
