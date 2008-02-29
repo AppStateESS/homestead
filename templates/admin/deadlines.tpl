@@ -58,6 +58,18 @@
                 <th>&nbsp;</th><td>&nbsp;</td>
             </tr>
             <tr>
+                <th>Select Roommate Begin Date:</th><td>{SELECT_ROOMMATE_BEGIN_MONTH}</td><td>{SELECT_ROOMMATE_BEGIN_DAY}</td><td>{SELECT_ROOMMATE_BEGIN_YEAR}</td>
+            </tr>
+            <tr>
+                <th>Select Roommate End Date:</th><td>{SELECT_ROOMMATE_END_MONTH}</td><td>{SELECT_ROOMMATE_END_DAY}</td><td>{SELECT_ROOMMATE_END_YEAR}</td>
+            </tr>
+            <tr>
+                <th>&nbsp;</th><td>&nbsp;</td>
+            </tr>
+            <tr>
+                <th>&nbsp;</th><td>&nbsp;</td>
+            </tr>
+            <tr>
                 <th>Submit RLC Application End Date:</th><td>{SUBMIT_RLC_APPLICATION_END_MONTH}</td><td>{SUBMIT_RLC_APPLICATION_END_DAY}</td><td>{SUBMIT_RLC_APPLICATION_END_YEAR}</td>
             <tr>
                 <th>&nbsp;</th><td>&nbsp;</td>

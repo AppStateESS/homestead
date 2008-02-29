@@ -157,6 +157,8 @@ CREATE TABLE hms_deadlines (
     search_profiles_begin_timestamp         integer NOT NULL,
     search_profiles_end_timestamp           integer NOT NULL,
     submit_rlc_application_end_timestamp    integer NOT NULL,
+    select_roommate_begin_timestamp         integer NOT NULL,
+    select_roommate_end_timestamp           integer NOT NULL,
     view_assignment_begin_timestamp         integer NOT NULL,
     view_assignment_end_timestamp           integer NOT NULL,
     lottery_signup_begin_timestamp          integer NOT NULL,

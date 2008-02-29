@@ -246,22 +246,22 @@ class HMS_Side_Thingie {
             return;
         }
         
-        if($this->curr_timestamp < $this->deadlines->submit_application_begin_timestamp){
-            $this->steps_text[HMS_SIDE_STUDENT_ROOMMATE] .= " (complete by ". date('n/j/y',$this->deadlines->submit_application_begin_timestamp) .")";
-            $this->steps_styles[HMS_SIDE_STUDENT_ROOMMATE] .= 'STEP_NOTYET';
+        if($this->curr_timestamp < $this->deadlines->select_roommate_begin_timestamp){
+            $this->steps_text[HMS_SIDE_STUDENT_ROOMMATE] .= " (available on ". date('n/j/y',$this->deadlines->select_roommate_begin_timestamp) .")";
+            $this->steps_styles[HMS_SIDE_STUDENT_ROOMMATE] = 'STEP_NOTYET';
             return;
-        }else if($this->curr_timestamp > $this->deadlines->submit_application_begin_timestamp && $this->curr_timestamp < $this->deadlines->search_profiles_end_timestamp){
+        }else if($this->curr_timestamp > $this->deadlines->select_roommate_begin_timestamp && $this->curr_timestamp < $this->deadlines->select_roommate_end_timestamp){
             # We are within deadlines, check to see if we're actually on this step
             if($on_this_step){
                 # We're on this step currently, so don't add a link, just add the text
-                $this->steps_text[HMS_SIDE_STUDENT_ROOMMATE] .= " (complete by ". date('n/j/y',$this->deadlines->search_profiles_end_timestamp) . ")";
+                $this->steps_text[HMS_SIDE_STUDENT_ROOMMATE] .= " (complete by ". date('n/j/y',$this->deadlines->select_roommate_end_timestamp) . ")";
             }else{
                 # We're not on this step, so add the link and text
-                $this->steps_text[HMS_SIDE_STUDENT_ROOMMATE] = PHPWS_Text::secureLink($this->steps_text[HMS_SIDE_STUDENT_ROOMMATE] . " (complete by ". date('n/j/y',$this->deadlines->search_profiles_end_timestamp) . ")", 'hms', array('type'=>'student', 'op'=>'get_roommate_username'));
+                $this->steps_text[HMS_SIDE_STUDENT_ROOMMATE] = PHPWS_Text::secureLink($this->steps_text[HMS_SIDE_STUDENT_ROOMMATE] . " (complete by ". date('n/j/y',$this->deadlines->select_roommate_end_timestamp) . ")", 'hms', array('type'=>'student', 'op'=>'get_roommate_username'));
                 $this->steps_styles[HMS_SIDE_STUDENT_ROOMMATE] = 'STEP_TOGO';
             }
             return;
-        }else if($this->curr_timestamp > $this->deadlines->search_profiles_end_timestamp){
+        }else if($this->curr_timestamp > $this->deadlines->select_roommate_end_timestamp){
             $this->steps_text[HMS_SIDE_STUDENT_ROOMMATE] .= "(skipped)";
             $this->steps_styles[HMS_SIDE_STUDENT_ROOMMATE] = 'STEP_OPT_MISSED';
             return;

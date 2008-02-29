@@ -19,6 +19,8 @@ class HMS_Deadlines {
     var $edit_profile_end_timestamp;
     var $search_profiles_begin_timestamp;
     var $search_profiles_end_timestamp;
+    var $select_roommate_begin_timestamp;
+    var $select_roommate_end_timestamp;
     var $submit_rlc_application_end_timestamp;
     var $view_assignment_begin_timestamp;
     var $view_assignment_end_timestamp;
@@ -70,6 +72,8 @@ class HMS_Deadlines {
         $db->addColumn('edit_profile_end_timestamp');
         $db->addColumn('search_profiles_begin_timestamp');
         $db->addColumn('search_profiles_end_timestamp');
+        $db->addColumn('select_roommate_begin_timestamp');
+        $db->addColumn('select_roommate_end_timestamp');
         $db->addColumn('submit_rlc_application_end_timestamp');
         $db->addColumn('view_assignment_begin_timestamp');
         $db->addColumn('view_assignment_end_timestamp');
@@ -303,6 +307,14 @@ class HMS_Deadlines {
         $form->addDropBox('search_profiles_end_day', $days);
         $form->addDropBox('search_profiles_end_year', $years);
    
+        $form->addDropBox('select_roommate_begin_month', $months);
+        $form->addDropBox('select_roommate_begin_day', $days);
+        $form->addDropBox('select_roommate_begin_year', $years);
+   
+        $form->addDropBox('select_roommate_end_month', $months);
+        $form->addDropBox('select_roommate_end_day', $days);
+        $form->addDropBox('select_roommate_end_year', $years);
+   
         $form->addDropBox('submit_rlc_application_end_month', $months);
         $form->addDropBox('submit_rlc_application_end_day', $days);
         $form->addDropBox('submit_rlc_application_end_year', $years);
@@ -348,6 +360,13 @@ class HMS_Deadlines {
         $form->setMatch('search_profiles_end_day', date('j', $deadlines->search_profiles_end_timestamp));
         $form->setMatch('search_profiles_end_month', date('n', $deadlines->search_profiles_end_timestamp));
         $form->setMatch('search_profiles_end_year', date('Y', $deadlines->search_profiles_end_timestamp));
+        
+        $form->setMatch('select_roommate_begin_day', date('j', $deadlines->select_roommate_begin_timestamp));
+        $form->setMatch('select_roommate_begin_month', date('n', $deadlines->select_roommate_begin_timestamp));
+        $form->setMatch('select_roommate_begin_year', date('Y', $deadlines->select_roommate_begin_timestamp));
+        $form->setMatch('select_roommate_end_day', date('j', $deadlines->select_roommate_end_timestamp));
+        $form->setMatch('select_roommate_end_month', date('n', $deadlines->select_roommate_end_timestamp));
+        $form->setMatch('select_roommate_end_year', date('Y', $deadlines->select_roommate_end_timestamp));
         
         $form->setMatch('submit_rlc_application_end_day', date('j', $deadlines->submit_rlc_application_end_timestamp));
         $form->setMatch('submit_rlc_application_end_month', date('n', $deadlines->submit_rlc_application_end_timestamp));
@@ -437,6 +456,16 @@ class HMS_Deadlines {
             $_REQUEST['search_profiles_end_month'],
             $_REQUEST['search_profiles_end_day'],
             $_REQUEST['search_profiles_end_year']);
+        
+        $deadlines->select_roommate_begin_timestamp = mktime(0, 0, 0,
+            $_REQUEST['select_roommate_begin_month'],
+            $_REQUEST['select_roommate_begin_day'],
+            $_REQUEST['select_roommate_begin_year']);
+        
+        $deadlines->select_roommate_end_timestamp = mktime(0, 0, 0,
+            $_REQUEST['select_roommate_end_month'],
+            $_REQUEST['select_roommate_end_day'],
+            $_REQUEST['select_roommate_end_year']);
         
         $deadlines->submit_rlc_application_end_timestamp = mktime(0, 0, 0,
             $_REQUEST['submit_rlc_application_end_month'],
