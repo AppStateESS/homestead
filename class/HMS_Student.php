@@ -480,8 +480,7 @@ class HMS_Student {
             {
                 # TODO: HMS_Mail here
                 PHPWS_Error::log('Initial banner lookup failed', 'hms', 'show_welcome_screen', "username: {$_SESSION['asu_username']}");
-                $tpl['ERROR_MSG'] = 'An error occured while talking to the student information server. An administrator has been notified of the problem, please check back later.';
-                return PHPWS_Template::process($tpl, 'hms', 'student/error_page.tpl');
+                return HMS_Contact_Form::show_contact_form();
             }
 
         # Calculate the student's age and check for >= 25 years old
