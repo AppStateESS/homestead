@@ -10,7 +10,7 @@
                 <th>Gender: </th><td align="left">{GENDER}</td>
             </tr>
             <tr>
-                <th>Student Status: </th><td align="left">{STUDENT_STATUS}</td>
+                <th>Student Status: </th><td align="left">{STUDENT_STATUS_LBL}</td>
             </tr>
             <tr><th></th><td></td></tr>
             <tr>
@@ -18,11 +18,7 @@
             </tr>
             <tr><th></th><td></td></tr>
             <tr>
-                <th>Classification for </th><td></td>
-            </tr>
-            <tr><th></th><td></td></tr>
-            <tr>
-                <th>Application Term: </th><td align="left">{CLASSIFICATION_FOR_TERM}</td>
+                <th>Classification: </th><td align="left">{CLASSIFICATION_FOR_TERM_LBL}</td>
             </tr>
             <tr><th></th><td></td></tr>
             <tr>
@@ -46,16 +42,15 @@
                 <th>
                 Do you have any special needs?<br />
                 <div style="font-size: 9px">
-                If so, a member of the Housing & Residence Life staff<br />
-                will contact for further information.
+                <a href="spec_needs.html">(More information)</a>
                 <div>
                 </th>
                 <!-- BEGIN special_needs_1 -->
                 <td>
-                {SPECIAL_NEEDS_1}{SPECIAL_NEEDS_1_LABEL}<br />
-                {SPECIAL_NEEDS_2}{SPECIAL_NEEDS_2_LABEL}<br />
-                {SPECIAL_NEEDS_3}{SPECIAL_NEEDS_3_LABEL}<br />
-                {SPECIAL_NEEDS_4}{SPECIAL_NEEDS_4_LABEL}<br />
+                {SPECIAL_NEEDS_1}{SPECIAL_NEEDS_1_LABEL} <a href="spec_needs.html#physical" target="_blank">(more info)</a><br />
+                {SPECIAL_NEEDS_2}{SPECIAL_NEEDS_2_LABEL} <a href="spec_needs.html#psych" target="_blank">(more info)</a><br />
+                {SPECIAL_NEEDS_3}{SPECIAL_NEEDS_3_LABEL} <a href="spec_needs.html#medical" target="_blank">(more info)</a><br />
+                {SPECIAL_NEEDS_4}{SPECIAL_NEEDS_4_LABEL} <a href="spec_needs.html#gender" target="_blank">(more info)</a><br />
                 </td>
                 <!-- END special_needs_1 -->
                 <!-- BEGIN special_needs_result -->

@@ -449,14 +449,15 @@ class HMS_Application {
             $form->addHidden('agreed_to_terms', 0);
         }
         
+        /*
         $form->addDropBox('student_status', array('1'=>_('New Freshman'),
                                                   '2'=>_('Transfer')));
-        
         if(isset($_REQUEST['student_status'])) {
             $form->setMatch('student_status', $_REQUEST['student_status']);
         } else {
             $form->setMatch('student_status', 1);
         }
+        */
       
         /**
         * Commented out to hard code for freshmen
@@ -467,6 +468,7 @@ class HMS_Application {
                                                            '4'=>_('Senior')));
         */
 
+        /*
         if(HMS_SOAP::get_student_type($_SESSION['asu_username'] == 'T')) {
             $form->addDropBox('classification_for_term', array('1'=>_('Freshman'),
                                                                '2'=>_('Sophomore'),
@@ -481,6 +483,8 @@ class HMS_Application {
         }else{
             $form->setMatch('classification_for_term', '1');
         }
+        */
+        
 
         # Use a hidden field for the entry term, pull from banner
         $form->addHidden('term', HMS_SOAP::get_application_term($_SESSION['asu_username']));
@@ -531,7 +535,7 @@ class HMS_Application {
         }
 
         $form->addCheck('special_needs', array('physical_disability','psych_disability','medical_need','gender_need'));
-        $form->setLabel('special_needs', array('Physical disability', 'Psychological disability', 'Medical', 'Gender'));
+        $form->setLabel('special_needs', array('Physical disability', 'Psychological disability', 'Medical', 'Transgender'));
 
         if(isset($_REQUEST['special_needs'])){
             $form->setMatch('special_needs', $_REQUEST['special_needs']);
@@ -554,12 +558,42 @@ class HMS_Application {
         $form->addHidden('type', 'student');
         $form->addHidden('op', 'review_application');
 
+        $tpl['TITLE']           = 'Residence Hall Application';
+        $tpl['MESSAGE']         = $message;
+        $tpl['STUDENT_NAME']    = HMS_SOAP::get_full_name($_SESSION['asu_username']);
+        $tpl['GENDER']          = (HMS_SOAP::get_gender($_SESSION['asu_username'],TRUE) == '0') ? 'Female' : 'Male';
+        $tpl['ENTRY_TERM']      = HMS_Term::term_to_text(HMS_SOAP::get_application_term($_SESSION['asu_username']), TRUE);
+
+        $class = HMS_SOAP::get_student_class($_SESSION['asu_username']);
+        if($class == 'FR'){
+            $tpl['CLASSIFICATION_FOR_TERM_LBL'] = 'Freshmen';
+            $form->addHidden('classification_for_term', 1);
+        }else if($class == 'SO'){
+            $tpl['CLASSIFICATION_FOR_TERM_LBL'] = 'Sophomore';
+            $form->addHidden('classification_for_term', 2);
+        }else if($class == 'JR'){
+            $tpl['CLASSIFICATION_FOR_TERM_LBL'] = 'Junior';
+            $form->addHidden('classification_for_term', 3);
+        }else if($class == 'SR'){
+            $tpl['CLASSIFICATION_FOR_TERM_LBL'] = 'Senior';
+            $form->addHidden('classification_for_term', 4);
+        }else{
+            $tpl['CLASSIFICATION_FOR_TERM_LBL'] = 'Unknown';
+        }
+
+        $type = HMS_SOAP::get_student_type($_SESSION['asu_username']);
+        if($type == 'F'){
+            $tpl['STUDENT_STATUS_LBL'] = 'New freshmen';
+            $form->addHidden('student_status', 1);
+        }else if($type == 'T'){
+            $tpl['STUDENT_STATUS_LBL'] = 'Transfer';
+            $form->addHidden('student_status', 2);
+        }else{
+            $tpl['STUDENT_STATUS_LBL'] = 'Unknown';
+        }
+        
+        $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
-        $tpl['TITLE']   = 'Residence Hall Application';
-        $tpl['MESSAGE'] = $message;
-        $tpl['STUDENT_NAME'] = HMS_SOAP::get_full_name($_SESSION['asu_username']);
-        $tpl['GENDER'] = (HMS_SOAP::get_gender($_SESSION['asu_username'],TRUE) == '0') ? 'Female' : 'Male';
-        $tpl['ENTRY_TERM'] = HMS_Term::term_to_text(HMS_SOAP::get_application_term($_SESSION['asu_username']), TRUE);
 
         $master['TITLE']   = 'Residence Hall Application';
         $master['APPLICATION']  = PHPWS_Template::process($tpl, 'hms', 'student/student_application.tpl');
@@ -577,7 +611,7 @@ class HMS_Application {
             && !HMS_Application::check_valid_application_values()) {
             $message = "You have supplied incorrect values for your application.<br />";
             $message .= "Please fill out the application again.";
-            return HMS_Form::begin_application($message);
+            return HMS_Application::begin_application($message);
         }
 
         $application = new HMS_Application($_SESSION['asu_username'], $_SESSION['application_term']);
@@ -638,13 +672,13 @@ class HMS_Application {
 
             $tpl['ENTRY_TERM'] = HMS_Term::term_to_text($_REQUEST['term'], TRUE);
             
-            if($_REQUEST['student_status'] == 1) $tpl['STUDENT_STATUS'] = "New Freshman";
-            else if ($_REQUEST['student_status'] == 2) $tpl['STUDENT_STATUS'] = "Transfer";
+            if($_REQUEST['student_status'] == 1) $tpl['STUDENT_STATUS_LBL'] = "New Freshman";
+            else if ($_REQUEST['student_status'] == 2) $tpl['STUDENT_STATUS_LBL'] = "Transfer";
 
-            if($_REQUEST['classification_for_term'] == 1) $tpl['CLASSIFICATION_FOR_TERM'] = "Freshman";
-            else if($_REQUEST['classification_for_term'] == 2) $tpl['CLASSIFICATION_FOR_TERM'] = "Sophomore";
-            else if($_REQUEST['classification_for_term'] == 3) $tpl['CLASSIFICATION_FOR_TERM'] = "Junior";
-            else if($_REQUEST['classification_for_term'] == 4) $tpl['CLASSIFICATION_FOR_TERM'] = "Senior";
+            if($_REQUEST['classification_for_term'] == 1) $tpl['CLASSIFICATION_FOR_TERM_LBL'] = "Freshman";
+            else if($_REQUEST['classification_for_term'] == 2) $tpl['CLASSIFICATION_FOR_TERM_LBL'] = "Sophomore";
+            else if($_REQUEST['classification_for_term'] == 3) $tpl['CLASSIFICATION_FOR_TERM_LBL'] = "Junior";
+            else if($_REQUEST['classification_for_term'] == 4) $tpl['CLASSIFICATION_FOR_TERM_LBL'] = "Senior";
             
             if($_REQUEST['gender_type'] == 0) $tpl['GENDER'] = "Female";
             else if($_REQUEST['gender_type'] == 1) $tpl['GENDER'] = "Male";
@@ -703,13 +737,13 @@ class HMS_Application {
             $tpl['ENTRY_TERM'] = HMS_Term::term_to_text($application->getTerm(), TRUE);
             $tpl['STUDENT_NAME'] = HMS_SOAP::get_full_name($_SESSION['asu_username']);
             
-            if($application->getStudentStatus() == 1) $tpl['STUDENT_STATUS'] = "New Freshman";
-            else if ($application->getStudentStatus() == 2) $tpl['STUDENT_STATUS'] = "Transfer";
+            if($application->getStudentStatus() == 1) $tpl['STUDENT_STATUS_LBL'] = "New Freshman";
+            else if ($application->getStudentStatus() == 2) $tpl['STUDENT_STATUS_LBL'] = "Transfer";
 
-            if($application->getTermClassification() == 1) $tpl['CLASSIFICATION_FOR_TERM'] = "Freshman";
-            else if($application->getTermClassification() == 2) $tpl['CLASSIFICATION_FOR_TERM'] = "Sophomore";
-            else if($application->getTermClassification() == 3) $tpl['CLASSIFICATION_FOR_TERM'] = "Junior";
-            else if($application->getTermClassification() == 4) $tpl['CLASSIFICATION_FOR_TERM'] = "Senior";
+            if($application->getTermClassification() == 1) $tpl['CLASSIFICATION_FOR_TERM_LBL'] = "Freshman";
+            else if($application->getTermClassification() == 2) $tpl['CLASSIFICATION_FOR_TERM_LBL'] = "Sophomore";
+            else if($application->getTermClassification() == 3) $tpl['CLASSIFICATION_FOR_TERM_LBL'] = "Junior";
+            else if($application->getTermClassification() == 4) $tpl['CLASSIFICATION_FOR_TERM_LBL'] = "Senior";
             
             if($application->getGender() == 0) $tpl['GENDER'] = "Female";
             else if($application->getGender() == 1) $tpl['GENDER'] = "Male";
@@ -750,10 +784,7 @@ class HMS_Application {
 
     function check_valid_application_values()
     {
-        return (is_numeric($_REQUEST['student_status']) &&
-                is_numeric($_REQUEST['classification_for_term']) &&
-                is_numeric($_REQUEST['gender_type']) &&
-                is_numeric($_REQUEST['meal_option']) &&
+        return (is_numeric($_REQUEST['meal_option']) &&
                 is_numeric($_REQUEST['lifestyle_option']) &&
                 is_numeric($_REQUEST['preferred_bedtime']) &&
                 is_numeric($_REQUEST['room_condition']) &&
