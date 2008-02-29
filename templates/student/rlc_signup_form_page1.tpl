@@ -8,7 +8,8 @@
 
         <br /><br />
 
-        <b>Note:</b> When you apply for a Residential Learning Community or Common Interest
+        <div style="color:#F00; font-weight:bold; font-size:16px">Note:</div>
+        When you apply for a Residential Learning Community or Common Interest
         Housing, please note that you are limiting your roommate options!  You
         cannot be accepted into a community with a pre-chosen roommate who does
         not apply to the same community, and once you apply, you can no longer
