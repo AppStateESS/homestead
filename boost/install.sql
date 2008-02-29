@@ -166,6 +166,8 @@ CREATE TABLE hms_deadlines (
     primary key(id)
 );
 
+ALTER TABLE hms_deadlines ADD UNIQUE(term);
+
 CREATE TABLE hms_hall_communities (
     id integer DEFAULT 0 NOT NULL,
     community_name character varying(32) NOT NULL,
