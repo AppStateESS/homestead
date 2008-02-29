@@ -42,7 +42,7 @@
                 <th>
                 Do you have any special needs?<br />
                 <div style="font-size: 9px">
-                <a href="spec_needs.html">(More information)</a>
+                <a href="spec_needs.html" target="_blank">(More information)</a>
                 <div>
                 </th>
                 <!-- BEGIN special_needs_1 -->
