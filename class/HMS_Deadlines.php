@@ -375,8 +375,9 @@ class HMS_Deadlines {
         $form->addSubmit('submit', _('Save Deadlines'));
         $tpl = $form->getTemplate();
 
+        # Setup the title and color of the title bar
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
-        $tpl['TITLE'] = 'Edit Deadlines';
+        $tpl['TITLE'] = 'Edit Deadlines - ' . HMS_Term::term_to_text(HMS_Term::get_selected_term(), TRUE);
         $tpl['TITLE_CLASS'] = HMS_Util::get_title_class();
         
         if(isset($error_message)) {

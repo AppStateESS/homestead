@@ -760,7 +760,9 @@ class HMS_Residence_Hall extends HMS_Item
 
         $tpl = array();
         
-        $tpl['TITLE'] = $title;
+        # Setup the title and color of the title bar
+        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
+        $tpl['TITLE']       = $title . ' - ' . HMS_Term::term_to_text(HMS_Term::get_selected_term(), TRUE);
         $tpl['TITLE_CLASS'] = HMS_Util::get_title_class();
 
         # Get the halls for the selected term        
@@ -811,7 +813,9 @@ class HMS_Residence_Hall extends HMS_Item
         }
 
         # Setup the title and color of the title bar
-        $tpl['TITLE'] = 'Edit Residence Hall';
+        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+        $tpl['TITLE'] = 'Edit Residence Hall - ' . HMS_Term::term_to_text(HMS_Term::get_selected_term(), TRUE);
         $tpl['TITLE_CLASS'] = HMS_Util::get_title_class();
 
         # Create the hall given the hall id

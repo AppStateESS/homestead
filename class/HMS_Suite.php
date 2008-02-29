@@ -249,7 +249,9 @@ class HMS_Suite extends HMS_Item {
         $tpl = array();
 
         # Setup the title and color of the title bar
-        $tpl['TITLE']       = $title;
+        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+        $tpl['TITLE']       = $title . ' - ' . HMS_Term::term_to_text(HMS_Term::get_selected_term(), TRUE);
         $tpl['TITLE_CLASS'] = HMS_Util::get_title_class();
         $tpl['MESSAGE']     = 'Please select a suite: ';
 
@@ -315,8 +317,11 @@ class HMS_Suite extends HMS_Item {
             $suite_id = $_REQUEST['suite'];
         }
 
+
         # Setup the title and color of the title bar
-        $tpl['TITLE']       = 'Edit Suite';
+        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+        $tpl['TITLE'] = 'Edit Suite - ' . HMS_Term::term_to_text(HMS_Term::get_selected_term(), TRUE);
         $tpl['TITLE_CLASS'] = HMS_Util::get_title_class();
 
         # Create the suite object
