@@ -493,7 +493,7 @@ class HMS_Student {
         }
         
         # Get deadlines for the current term for future use
-        $deadlines = HMS_Deadlines::get_deadlines();
+        $deadlines = HMS_Deadlines::get_deadlines($_SESSION['application_term']);
         
         /******************************************
          * Sort returning students (lottery) from *
