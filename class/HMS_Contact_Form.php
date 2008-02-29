@@ -73,7 +73,11 @@ class HMS_Contact_Form{
         PHPWS_Core::initCoreClass('Mail.php');
 
         $send_to = array();
+        $send_to[] = 'brian@tux.appstate.edu';
+        $send_to[] = 'jtickle@tux.appstate.edu';
         $send_to[] = 'jbooker@tux.appstate.edu';
+        $send_to[] = 'searssr@appstate.edu';
+        $send_to[] = 'braswelldl@appstate.edu';
         
         $mail = &new PHPWS_Mail;
 
