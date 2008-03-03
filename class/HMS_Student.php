@@ -568,6 +568,12 @@ class HMS_Student {
             if(!HMS_Term::check_term_exists($application_term)){
                 return PHPWS_Template::process($tpl, 'hms', 'student/welcome_screen_no_entry_term.tpl');
             }
+                        
+            # Make sure the student doesn't already have an assignment on file for the current term
+            if(HMS_Assignment::check_for_assignment($_SESSION['asu_username'])){
+                # No idea what's going on here, send to a contact page
+                return HMS_Contact_Form::show_contact_form();
+            }
             
             # Check to see if the user has an application on file already
             # If so, forward to main menu
@@ -575,17 +581,11 @@ class HMS_Student {
                 return HMS_Student::show_main_menu();
             }
             
-            # Make sure the student doesn't already have an assignment on file for the current term
-            if(HMS_Assignment::check_for_assignment($_SESSION['asu_username'])){
-                # No idea what's going on here, send to a contact page
-                return HMS_Contact_Form::show_contact_form();
-            }
-            
             # Get deadlines for the user's application_term for future use
             $deadlines = HMS_Deadlines::get_deadlines($application_term);
 
             # Check to see if the user can apply yet
-            if(!HMS_Deadlines::check_deadline_past('submit_application_begin_timestamp')){
+            if(!HMS_Deadlines::check_deadline_past('submit_application_begin_timestamp', $deadlines)){
                 return PHPWS_Template::process($tpl, 'hms', 'student/welcome_screen_too_soon.tpl');
             }
             
