@@ -791,7 +791,7 @@ function hms_update(&$content, $currentVersion)
             $files[] = 'templates/admin/deadlines.tpl';
             $files[] = 'templates/admin/rlc_assignments_pager.tpl';
 
-        case version_compare($currentVerrsion, '0.2.22', '<'):
+        case version_compare($currentVersion, '0.2.22', '<'):
             
             $db = &new PHPWS_DB;
             $result = $db->importFIle(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_22.sql');
