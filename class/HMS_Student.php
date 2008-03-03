@@ -456,12 +456,14 @@ class HMS_Student {
         PHPWS_Core::initModClass('hms', 'HMS_Application.php');
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
 
+        #test(HMS_SOAP::get_student_info($_SESSION['asu_username']), 1);
+
         # Grab the current term for use late
         $current_term = HMS_Term::get_current_term();
 
         # Try initial lookups of the student's application_term, type, and class
         $application_term   = HMS_SOAP::get_application_term($_SESSION['asu_username']);
-        $student_type       = HMS_SOAP::get_student_type($_SESSION['asu_username']);
+        $student_type       = HMS_SOAP::get_student_type($_SESSION['asu_username'], $application_term);
         $student_class      = HMS_SOAP::get_student_class($_SESSION['asu_username']);
         $dob                = HMS_SOAP::get_dob($_SESSION['asu_username']);
         $gender             = HMS_SOAP::get_gender($_SESSION['asu_username']);
@@ -535,6 +537,7 @@ class HMS_Student {
             }
 
         }else if($application_term > $current_term){
+
             /*********************
              * Incoming Freshmen *
              *********************/

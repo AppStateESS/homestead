@@ -341,14 +341,14 @@ class HMS_SOAP{
      * C => continuing
      * T => transfer
      */
-    function get_student_type($username)
+    function get_student_type($username, $term = NULL)
     {
         if(SOAP_TEST_FLAG){
             # return canned data
             #return "T";
             return "F";
         }else{
-            $student = HMS_SOAP::get_student_info($username);
+            $student = HMS_SOAP::get_student_info($username, $term);
         }
         
         if(PEAR::isError($student)) {
@@ -445,33 +445,39 @@ class HMS_SOAP{
      * Main function for getting student info.
      * Used by the rest of the "get" functions
      */
-    function get_student_info($username)
+    function get_student_info($username, $term = NULL)
     {
         if(SOAP_TEST_FLAG) {
-            $student->first_name = "kevin";
-            $student->middle_name = "michael";
-            $student->last_name = "wilcox";
-            $student->gender = "M";
-            $student->dob = "1980-03-31";
-            $student->student_type = 'C';
-            $student->projected_class = 'SR';
-            $student->address['line1'] = '275 Honey Hill Drive';
-            $student->address['line2'] = '';
-            $student->address['line3'] = '';
-            $student->address['city'] = 'Blowing Rock';
-            $student->address['county'] = '99';
-            $student->address['state'] = 'NC';
-            $student->address['zip'] = '28605';
-            $student->phone['area_code'] = '828';
-            $student->phone['number'] = '2780579';
-            $student->application_term = '200840';
+            $student->first_name            = "kevin";
+            $student->middle_name           = "michael";
+            $student->last_name             = "wilcox";
+            $student->gender                = "M";
+            $student->dob                   = "1980-03-31";
+            $student->student_type          = 'C';
+            $student->projected_class       = 'SR';
+            $student->address['line1']      = '275 Honey Hill Drive';
+            $student->address['line2']      = '';
+            $student->address['line3']      = '';
+            $student->address['city']       = 'Blowing Rock';
+            $student->address['county']     = '99';
+            $student->address['state']      = 'NC';
+            $student->address['zip']        = '28605';
+            $student->phone['area_code']    = '828';
+            $student->phone['number']       = '2780579';
+            $student->application_term      = '200840';
             return $student;
+        }
+
+        # If no term was passed, then use the current term
+        if(!isset($term)){     
+            PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+            $term = HMS_Term::get_current_term();
         }
 
         include_once('SOAP/Client.php');
         $wsdl = new SOAP_WSDL(PHPWS_SOURCE_DIR . 'mod/hms/inc/shs0001.wsdl', 'true');
         $proxy = $wsdl->getProxy();
-        $student = $proxy->GetStudentProfile($username, '200740');
+        $student = $proxy->GetStudentProfile($username, $term);
         
         # Check for an PEAR error and log it
         if(HMS_SOAP::is_soap_fault($student)){
