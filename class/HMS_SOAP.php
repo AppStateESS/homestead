@@ -368,13 +368,13 @@ class HMS_SOAP{
      * JR => Junior
      * SR => Senior
      */
-    function get_student_class($username)
+    function get_student_class($username, $term = NULL)
     {
         if(SOAP_TEST_FLAG){
             # return canned data
             return "SR";
         }else{
-            $student = HMS_SOAP::get_student_info($username);
+            $student = HMS_SOAP::get_student_info($username, $term);
         }
         
         if(PEAR::isError($student)) {
@@ -715,7 +715,7 @@ class HMS_SOAP{
      */
     function get_plan_meal_codes($username, $building, $hms_meal_code)
     {
-        $type = HMS_SOAP::get_student_type($username);
+        $type = HMS_SOAP::get_student_type($username, HMS_SOAP::get_application_term($username));
 
         $retval['plan'] = 'HOME';
 

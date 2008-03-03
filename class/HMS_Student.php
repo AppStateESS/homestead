@@ -464,7 +464,7 @@ class HMS_Student {
         # Try initial lookups of the student's application_term, type, and class
         $application_term   = HMS_SOAP::get_application_term($_SESSION['asu_username']);
         $student_type       = HMS_SOAP::get_student_type($_SESSION['asu_username'], $application_term);
-        $student_class      = HMS_SOAP::get_student_class($_SESSION['asu_username']);
+        $student_class      = HMS_SOAP::get_student_class($_SESSION['asu_username'], $application_term);
         $dob                = HMS_SOAP::get_dob($_SESSION['asu_username']);
         $gender             = HMS_SOAP::get_gender($_SESSION['asu_username']);
 
@@ -562,7 +562,7 @@ class HMS_Student {
                 # No idea what's going on here, send to a contact page
                 return HMS_Contact_Form::show_contact_form();
             }
-            
+
             # Make sure the user's application term exists in hms_term,
             # otherwise give a "too early" message
             if(!HMS_Term::check_term_exists($application_term)){

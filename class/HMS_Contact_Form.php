@@ -39,7 +39,7 @@ class HMS_Contact_Form{
 
         $form->addHidden('asu_username', $_SESSION['asu_username']);
         $form->addHidden('application_term', HMS_SOAP::get_application_term($_SESSION['asu_username']));
-        $form->addHidden('student_type', HMS_SOAP::get_student_type($_SESSION['asu_username']));
+        $form->addHidden('student_type', HMS_SOAP::get_student_type($_SESSION['asu_username'], $_SESSION['application_term']));
 
         $form->addText('name');
         $form->setLabel('name', 'Name');

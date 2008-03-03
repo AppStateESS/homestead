@@ -493,7 +493,7 @@ class HMS_Application {
         $form->addHidden('gender_type', HMS_SOAP::get_gender($_SESSION['asu_username'], TRUE));
         
         # Don't show *low* meal option to freshmen
-        if(HMS_SOAP::get_student_type($_SESSION['asu_username']) != 'F'){
+        if(HMS_SOAP::get_student_type($_SESSION['asu_username'], $_SESSION['application_term']) != 'F'){
             $form->addDropBox('meal_option', array(HMS_MEAL_LOW=>_('Low'),
                                                    HMS_MEAL_STD=>_('Standard'),
                                                    HMS_MEAL_HIGH=>_('High'),
@@ -561,10 +561,10 @@ class HMS_Application {
         $tpl['TITLE']           = 'Residence Hall Application';
         $tpl['MESSAGE']         = $message;
         $tpl['STUDENT_NAME']    = HMS_SOAP::get_full_name($_SESSION['asu_username']);
-        $tpl['GENDER']          = (HMS_SOAP::get_gender($_SESSION['asu_username'],TRUE) == '0') ? 'Female' : 'Male';
+        $tpl['GENDER']          = (HMS_SOAP::get_gender($_SESSION['asu_username'],TRUE) == FEMALE) ? FEMALE_DESC : MALE_DESC;
         $tpl['ENTRY_TERM']      = HMS_Term::term_to_text(HMS_SOAP::get_application_term($_SESSION['asu_username']), TRUE);
 
-        $class = HMS_SOAP::get_student_class($_SESSION['asu_username']);
+        $class = HMS_SOAP::get_student_class($_SESSION['asu_username'], $_SESSION['application_term']);
         if($class == 'FR'){
             $tpl['CLASSIFICATION_FOR_TERM_LBL'] = 'Freshmen';
             $form->addHidden('classification_for_term', 1);
@@ -581,7 +581,7 @@ class HMS_Application {
             $tpl['CLASSIFICATION_FOR_TERM_LBL'] = 'Unknown';
         }
 
-        $type = HMS_SOAP::get_student_type($_SESSION['asu_username']);
+        $type = HMS_SOAP::get_student_type($_SESSION['asu_username'], $_SESSION['application_term']);
         if($type == 'F'){
             $tpl['STUDENT_STATUS_LBL'] = 'New freshmen';
             $form->addHidden('student_status', 1);
@@ -680,8 +680,8 @@ class HMS_Application {
             else if($_REQUEST['classification_for_term'] == 3) $tpl['CLASSIFICATION_FOR_TERM_LBL'] = "Junior";
             else if($_REQUEST['classification_for_term'] == 4) $tpl['CLASSIFICATION_FOR_TERM_LBL'] = "Senior";
             
-            if($_REQUEST['gender_type'] == 0) $tpl['GENDER'] = "Female";
-            else if($_REQUEST['gender_type'] == 1) $tpl['GENDER'] = "Male";
+            if($_REQUEST['gender_type'] == FEMALE) $tpl['GENDER'] = FEMALE_DESC;
+            else if($_REQUEST['gender_type'] == MALE) $tpl['GENDER'] = MALE_DESC;
             
             if($_REQUEST['meal_option'] == HMS_MEAL_LOW) $tpl['MEAL_OPTION'] = "Low";
             else if($_REQUEST['meal_option'] == HMS_MEAL_STD) $tpl['MEAL_OPTION'] = "Standard";
