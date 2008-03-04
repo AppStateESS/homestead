@@ -751,7 +751,7 @@ class HMS_Student {
         $tags['RLC_INTRO'] = 'For more infomration about Appalachian\'s Unique Housing Options please visit the <a href="http://housing.appstate.edu/index.php?module=pagemaster&PAGE_user_op=view_page&PAGE_id=134" target="_blank">Housing & Residence Life Website</a>.';
         
         # Check deadlines for RLC application
-        if(HMS_RLC_Application::check_for_application() === FALSE){
+        if(HMS_RLC_Application::check_for_application($_SESSION['asu_username'], $_SESSION['application_term']) === FALSE){
             # Check deadlines for RLC applications
             if(HMS_Deadlines::check_within_deadlines('submit_application_begin_timestamp','submit_rlc_application_end_timestamp', $deadlines)){
                 if(HMS_SOAP::get_credit_hours($_SESSION['asu_username']) <= 15){

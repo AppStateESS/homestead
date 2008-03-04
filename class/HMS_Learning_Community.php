@@ -114,7 +114,7 @@ class HMS_Learning_Community
     function show_rlc_application_form()
     {
         PHPWS_Core::initModClass('hms','HMS_RLC_Application.php');
-        if(HMS_RLC_Application::check_for_application() !== FALSE){
+        if(HMS_RLC_Application::check_for_application($_SESSION['asu_username'], $_SESSION['application_term']) !== FALSE){
             $template['MESSAGE'] = "Sorry, you can only submit one RLC application.";
             return PHPWS_Template::process($template,'hms','student/rlc_signup_form_page1.tpl');
         }
