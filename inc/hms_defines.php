@@ -18,6 +18,4 @@ define('AXP_TEST_FLAG', true);
 ini_set('ERROR_REPORTING', E_ALL);
 ini_set('display_errors', 0);
 
-// Jeremy Booker is No Fun.
-
 ?>
