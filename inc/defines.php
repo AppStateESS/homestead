@@ -4,7 +4,7 @@
 // due to the obvious issue of what to do every time prod is exported.  This file
 // is in subversion is inc/kcuf.php, and should live in phpWebSite's root as
 // /inc/kcuf.php.
-require_once('../../../inc/kcuf.php');
+require_once(PHPWS_SOURCE_DIR . 'inc/kcuf.php');
 
 /**
  * Required Files
