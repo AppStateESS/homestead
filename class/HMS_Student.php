@@ -1090,8 +1090,8 @@ class HMS_Student {
                 PHPWS_Core::initModClass('hms', 'HMS_Side_Thingie.php');
                 $side_thingie = new HMS_Side_Thingie(HMS_SIDE_STUDENT_RLC);
                 $side_thingie->show();
-                PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
-                return HMS_Learning_Community::view_rlc_application();
+                PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
+                return HMS_RLC_Application::view_rlc_application();
                 break;
             case 'rlc_application_page1_submit':
                 PHPWS_Core::initModClass('hms','HMS_Learning_Community.php');
