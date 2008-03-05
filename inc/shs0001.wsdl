@@ -26,7 +26,9 @@
           <s:element minOccurs="1" maxOccurs="1" name="dob" nillable="true" type="s:date" />
           <s:element minOccurs="1" maxOccurs="1" name="gender" nillable="true" type="s:NMTOKEN" />
           <s:element minOccurs="1" maxOccurs="1" name="deposit_date" nillable="true" type="s:date" />
+          <s:element minOccurs="1" maxOccurs="1" name="deposit_waived" type="s:boolean" />
           <s:element minOccurs="1" maxOccurs="1" name="student_type" nillable="true" type="s:NMTOKEN" />
+          <s:element minOccurs="1" maxOccurs="1" name="application_term" nillable="true" type="s:NMTOKEN" />
           <s:element minOccurs="1" maxOccurs="1" name="projected_class" nillable="true" type="s:NMTOKEN" />
           <s:element minOccurs="1" maxOccurs="1" name="credhrs_completed" type="s:short" />
           <s:element minOccurs="1" maxOccurs="1" name="credhrs_for_term" type="s:short" />
@@ -41,6 +43,7 @@
       </s:complexType>
       <s:complexType name="Address">
         <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="atyp_code" type="s:token" />
           <s:element minOccurs="1" maxOccurs="1" name="line1" nillable="true" type="s:token" />
           <s:element minOccurs="1" maxOccurs="1" name="line2" nillable="true" type="s:token" />
           <s:element minOccurs="1" maxOccurs="1" name="line3" nillable="true" type="s:token" />

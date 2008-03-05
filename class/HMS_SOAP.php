@@ -545,22 +545,22 @@ class HMS_SOAP{
         include_once('SOAP/Client.php');
         $wsdl = new SOAP_WSDL(PHPWS_SOURCE_DIR . 'mod/hms/inc/shs0001.wsdl', 'true');
         $proxy = $wsdl->getProxy();
-        $assignment = $proxy->CreateHousingApp($username, $term, $plan_code, $meal_code);
+        $result = $proxy->CreateHousingApp($username, $term, $plan_code, $meal_code);
 
         # Check for an error and log it
-        if(HMS_SOAP::is_soap_fault($assignment)){
+        if(HMS_SOAP::is_soap_fault($result)){
             HMS_SOAP::log_soap('report_application_received: ' . $username . ' result: PEAR Error');
-            HMS_SOAP::log_soap_error($assignment, 'report_application_received', $username . ' ' . $term);
+            HMS_SOAP::log_soap_error($result, 'report_application_received', $username . ' ' . $term);
             return false;
         }
 
         # Check for a banner error
-        if(is_int($assignment) && $assignment > 0){
-            HMS_SOAP::log_soap('report_application_received: ' . $username . ' result: Banner error: ' . $assignment);
+        if(is_int($result) && $result > 0){
+            HMS_SOAP::log_soap('report_application_received: ' . $username . ' result: Banner error: ' . $result);
             HMS_SOAP::log_soap_error('Banner error: ' . $assignment, 'report_application_received', $username);
             return false;
-        } else if(!is_int($assignment)) {
-            HMS_SOAP::log_soap('report_application_received: ' . $username . ' result: Weird Error (result not an int): ' . $assignment);
+        } else if(!is_int($result)) {
+            HMS_SOAP::log_soap('report_application_received: ' . $username . ' result: Weird Error (result not an int): ' . $result);
             HMS_SOAP::log_soap_error('Weird Error: ', 'report_application_received', $username);
             return false;
         }
@@ -652,7 +652,7 @@ class HMS_SOAP{
      */
     function is_soap_fault($object)
     {
-        if(is_a($object, 'soap_fault')){
+        if(is_object($object) && is_a($object, 'soap_fault')){
             return TRUE;
         }else{
             return FALSE;
