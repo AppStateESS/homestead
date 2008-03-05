@@ -560,8 +560,8 @@ class HMS_SOAP{
             HMS_SOAP::log_soap_error('Banner error: ' . $assignment, 'report_application_received', $username);
             return false;
         } else if(!is_int($assignment)) {
-            HMS_SOAP::log_soap('report_application_received: ' . $username . ' result: Weird Error, result was not an int');
-            HMS_SOAP::log_soap_error('Weird Error', 'report_application_received', $username);
+            HMS_SOAP::log_soap('report_application_received: ' . $username . ' result: Weird Error (result not an int): ' . $assignment);
+            HMS_SOAP::log_soap_error('Weird Error: ', 'report_application_received', $username);
             return false;
         }
         
