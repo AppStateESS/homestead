@@ -246,8 +246,9 @@ class HMS_RLC_Application{
         $rlc_list = HMS_Learning_Community::getRLCList();
 
         $tags = array();
-
-        $tags['NAME'] = HMS_SOAP::get_full_name_inverted($this->getUserID());
+        
+        $tags['NAME']       = PHPWS_Text::secureLink(HMS_SOAP::get_full_name($this->asu_username), 'hms', array('type'=>'student', 'op'=>'get_matching_students', 'username'=>$this->user_id));
+        /*$tags['NAME'] = HMS_SOAP::get_full_name_inverted($this->getUserID());*/
         $tags['1ST_CHOICE']  = '<a href="./index.php?module=hms&type=rlc&op=view_rlc_application&username=' . $this->getUserID() . '" target="_blank">' . $rlc_list[$this->getFirstChoice()] . '</a>';
         if(isset($rlc_list[$this->getSecondChoice()]))
             $tags['2ND_CHOICE']  = $rlc_list[$this->getSecondChoice()];
