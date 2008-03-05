@@ -1,7 +1,5 @@
 <?php
 
-// Solves the problem
-
 /**
  * Testing Flag
  * Set to true to use canned data (no SOAP connection
@@ -19,5 +17,7 @@ define('AXP_TEST_FLAG', true);
 /* Errors */
 ini_set('ERROR_REPORTING', E_ALL);
 ini_set('display_errors', 0);
+
+// Jeremy Booker is No Fun.
 
 ?>
