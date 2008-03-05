@@ -310,13 +310,13 @@ class HMS_Application {
         else if($application->getTermClassification() == 3) $tpl['CLASSIFICATION_FOR_TERM'] = "Junior";
         else if($application->getTermClassification() == 4) $tpl['CLASSIFICATION_FOR_TERM'] = "Senior";
           
-        if($application->getGender() == 0) $tpl['GENDER_TYPE'] = "Female";
-        else if($application->getGender() == 1) $tpl['GENDER_TYPE'] = "Male";
+        if($application->getGender() == FEMALE) $tpl['GENDER_TYPE'] = "Female";
+        else if($application->getGender() == MALE) $tpl['GENDER_TYPE'] = "Male";
             
-        if($application->getMealOption() == 1) $tpl['MEAL_OPTION'] = "Low";
-        else if($application->getMealOption() == 2) $tpl['MEAL_OPTION'] = "Medium";
-        else if($application->getMealOption() == 3) $tpl['MEAL_OPTION'] = "High";
-        else if($application->getMealOption() == 4) $tpl['MEAL_OPTION'] = "Super";
+        if($application->getMealOption() == HMS_MEAL_LOW) $tpl['MEAL_OPTION'] = "Low";
+        else if($application->getMealOption() == HMS_MEAL_STD) $tpl['MEAL_OPTION'] = "Standard";
+        else if($application->getMealOption() == HMS_MEAL_HIGH) $tpl['MEAL_OPTION'] = "High";
+        else if($application->getMealOption() == HMS_MEAL_SUPER) $tpl['MEAL_OPTION'] = "Super";
            
         if($application->getLifestyle() == 1) $tpl['LIFESTYLE_OPTION'] = "Single Gender";
         else if($application->getLifestyle() == 2) $tpl['LIFESTYLE_OPTION'] = "Co-Ed";
