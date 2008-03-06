@@ -554,16 +554,19 @@ class HMS_SOAP{
             return false;
         }
 
+        # It's not a SOAP Fault, so hopefully it's an int.
+        $result = (int)$result;
+
         # Check for a banner error
-        if(is_int($result) && $result > 0){
+        if($result > 0){
             HMS_SOAP::log_soap('report_application_received: ' . $username . ' result: Banner error: ' . $result);
             HMS_SOAP::log_soap_error('Banner error: ' . $assignment, 'report_application_received', $username);
             return false;
-        } else if(!is_int($result)) {
+        }/* else if(!is_int($result)) {
             HMS_SOAP::log_soap('report_application_received: ' . $username . ' result: Weird Error (result not an int): ' . $result);
             HMS_SOAP::log_soap_error('Weird Error: ', 'report_application_received', $username);
             return false;
-        }
+        }*/
         
         HMS_SOAP::log_soap('report_application_received: ' . $username . ' result: success');
         
