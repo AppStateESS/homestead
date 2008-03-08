@@ -60,6 +60,12 @@
     <h2>{ROOMMATE_ICON} 5. Select a Roommate</h2>
     {ROOMMATE_INTRO}
     <ul>
+<!-- BEGIN request_list -->
+      <li>
+        {ROOMMATE_REQUESTS_MSG}<br />
+        {ROOMMATE_REQUESTS}
+      </li>
+<!-- END request_list -->
       <li>
         {ROOMMATE_MSG}<br />
         {ROOMMATE_LINK}

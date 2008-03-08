@@ -22,11 +22,11 @@ if(Current_User::isLogged()) {
         PHPWS_Core::initModClass('hms', 'HMS.php');
         HMS::main($type);
     }
-} else if (isset($_REQUEST['type']) && $_REQUEST['type'] == 'roommate_approval' && 
+} else if (isset($_REQUEST['type']) && $_REQUEST['type'] == 'roommate_confirmation' && 
            isset($_REQUEST['op']) && PHPWS_Text::isValidInput($_REQUEST['op']) &&
            isset($_REQUEST['hash']) && PHPWS_Text::isValidInput($_REQUEST['hash']) &&
            isset($_REQUEST['user']) && PHPWS_Text::isValidInput($_REQUEST['user'])) {
-    PHPWS_Core::initModClass('hms', 'HMS_Roommate_Approval.php');
+    PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
     if($_REQUEST['op'] == 'student_approval') {
         $success = HMS_Roommate_Approval::student_approve_roommates($_REQUEST['user'], $_REQUEST['hash']);
     } else if ($_REQUEST['op'] == 'student_denial') {

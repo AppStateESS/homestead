@@ -794,10 +794,29 @@ function hms_update(&$content, $currentVersion)
         case version_compare($currentVersion, '0.2.22', '<'):
             
             $db = &new PHPWS_DB;
-            $result = $db->importFIle(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_22.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_22.sql');
             if(PEAR::isError($result)) {
                 return $result;
             }
+
+        case version_compare($currentVersion, '0.2.23', '<'):
+
+            $db = &new PHPWS_DB;
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_23.sql');
+            if(PEAR::isError(4result)) {
+                return $result;
+            }
+
+            $files[] = 'templates/student/roommate_accept_reject_form.tpl';
+            $files[] = 'templates/student/select_roommate.tpl';
+            $files[] = 'templates/student/requestor_handle_rlc_application.tpl';
+            $files[] = 'templates/student/select_roommate_confirmation.tpl';
+            $files[] = 'templates/student/roommate_accept_reject_screen.tpl';
+            $files[] = 'templates/student/main_menu_fall.tpl';
+            $files[] = 'templates/student/roommate_accept_done.tpl';
+            $files[] = 'templates/student/roommate_reject_done.tpl';
+            $files[] = 'templates/student/requested_roommate_list.tpl';
+            $files[] = 'templates/student/roommate_accept_confirm.tpl';
  
     }
 
