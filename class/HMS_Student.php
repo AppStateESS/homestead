@@ -1,5 +1,7 @@
 <?php
 
+PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
+
 class HMS_Student {
     var $id;
     var $first_name;
@@ -430,18 +432,6 @@ class HMS_Student {
         return $content;
     }
 
-    function verify_roommate_username()
-    {
-        PHPWS_Core::initModClass('hms', 'HMS_Side_Thingie.php');
-        $side_thingie = new HMS_Side_Thingie(HMS_SIDE_STUDENT_ROOMMATE);
-        $side_thingie->show();
-        
-        PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
-        $content = HMS_Form::verify_roommate_username($_SESSION['asu_username'], $_REQUEST['username']);
-        return $content;
-    }
-
-
     /*********************
      * Static UI Methods *
      *********************/
@@ -488,6 +478,12 @@ class HMS_Student {
         # Calculate the student's age and check for >= 25 years old
         $dob = explode('-', $dob);
         if($dob[0] < date('Y') - 25) {
+            # Log that it happened
+            HMS_Activity_Log::log_activity($_SESSION['asu_username'],
+                                           ACTIVITY_TOO_OLD_REDIRECTED,
+                                           $_SESSION['asu_username'],
+                                           'DOB: ' . HMS_SOAP::get_dob($_SESSION['asu_username']));
+
             # Set a rediret and return the appropriate template
             $tpl = array();
             Layout::metaRoute('http://www.housing.appstate.edu/index.php?module=pagemaster&PAGE_user_op=view_page&PAGE_id=33&MMN_position=164:116&MMN_position=190:190',10);
@@ -817,26 +813,40 @@ class HMS_Student {
         /**********************
          * Roommate Selection *
          *********************/
-        PHPWS_Core::initModClass('hms', 'HMS_Roommate_Approval.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
         $tags['ROOMMATE_INTRO'] = 'Once you\'ve had a chance to communicate with your desired roommate and you have both agreed that you would like to room together, either of you can use the menu below to initiate an electronic handshake to confirm your desire to be roommates.';
+
+        $roommate = HMS_Roommate::get_confirmed_roommate($_SESSION['asu_username']);
             
-        if(HMS_Roommate_Approval::has_requested_someone($_SESSION['asu_username'])) {
-            $tags['ROOMMATE_MSG'] = "<b>You have selected a roommate</b> and are awaiting their approval.";
+        if(!is_null($roommate)){
+            $name = HMS_SOAP::get_full_name($roommate);
+            $tags['ROOMMATE_MSG'] = "<b>$name</b> has confirmed your roommate request and will be your roommate.";
             $tags['ROOMMATE_ICON'] = $check_img;
-        # TODO
-        #}elseif(has_roommate()){
-        #   $tags['ROOMMATE_MSG'] = "<roommate_name> has confirmed your roommate request. You are now roommates.";
-        } else {
-            if(HMS_Deadlines::check_within_deadlines('select_roommate_begin_timestamp','select_roommate_end_timestamp',$deadlines)){
-                $tags['ROOMMATE_MSG']  = 'If you know who you want your roommate to be, <b>you may select your roommate now</b>. You will need to know your roommate\'s ASU user name (their e-mail address). You have until ' . HMS_Deadlines::get_deadline_as_date('search_profiles_end_timestamp', $deadlines) . ' to choose a roommate. Click the link below to select your roommate.';
-                $tags['ROOMMATE_LINK'] = PHPWS_Text::secureLink(_('Select Your Roommate'), 'hms', array('type'=>'student','op'=>'get_roommate_username'));
-                $tags['ROOMMATE_ICON'] = $arrow_img;
-            }else if(!HMS_Deadlines::check_deadline_past('select_roommate_begin_timestamp', $deadlines)){
-                $tags['ROOMMATE_MSG'] = '<b>It is too early to choose a roommate.</b> You can choose a roommate on ' . HMS_Deadlines::get_deadline_as_date('select_roommate_begin_timestamp', $deadlines) . '.';
-                $tags['ROOMMATE_ICON'] = $lock_img;
-            }else{
-                $tags['ROOMMATE_MSG'] = '<b>It is too late to choose a roommate.</b> The deadline passed on ' . HMS_Deadlines::get_deadline_as_date('select_roommate_end_timestamp') . '.';
-                $tags['ROOMMATE_ICON'] = $lock_img;
+        }else{
+            $requests = HMS_Roommate::count_pending_requests($_SESSION['asu_username']);
+            if($requests > 0) {
+                $tags['ROOMMATE_REQUESTS'] = HMS_Roommate::display_requests($_SESSION['asu_username']);
+                if($requests == 1) {
+                    $tags['ROOMMATE_REQUESTS_MSG'] = "<b style='color: #F00'>You have a roommate request.</b> Please click the name below to confirm or reject the request.";
+                } else {
+                    $tags['ROOMMATE_REQUESTS_MSG'] = "<b style='color: #F00'>You have roommate requests.</b> Please click a name below to confirm or reject a request.";
+                }
+            }
+            if(HMS_Roommate::has_roommate_request($_SESSION['asu_username'])) {
+                $tags['ROOMMATE_MSG'] = "<b>You have selected a roommate</b> and are awaiting their approval.";
+                $tags['ROOMMATE_ICON'] = $check_img;
+            } else {
+                if(HMS_Deadlines::check_within_deadlines('select_roommate_begin_timestamp','select_roommate_end_timestamp',$deadlines)){
+                    $tags['ROOMMATE_MSG']  = 'If you know who you want your roommate to be, <b>you may select your roommate now</b>. You will need to know your roommate\'s ASU user name (their e-mail address). You have until ' . HMS_Deadlines::get_deadline_as_date('search_profiles_end_timestamp', $deadlines) . ' to choose a roommate. Click the link below to select your roommate.';
+                    $tags['ROOMMATE_LINK'] = PHPWS_Text::secureLink(_('Select Your Roommate'), 'hms', array('type'=>'student','op'=>'show_request_roommate'));
+                    $tags['ROOMMATE_ICON'] = $arrow_img;
+                }else if(!HMS_Deadlines::check_deadline_past('select_roommate_begin_timestamp', $deadlines)){
+                    $tags['ROOMMATE_MSG'] = '<b>It is too early to choose a roommate.</b> You can choose a roommate on ' . HMS_Deadlines::get_deadline_as_date('select_roommate_begin_timestamp', $deadlines) . '.';
+                    $tags['ROOMMATE_ICON'] = $lock_img;
+                }else{
+                    $tags['ROOMMATE_MSG'] = '<b>It is too late to choose a roommate.</b> The deadline passed on ' . HMS_Deadlines::get_deadline_as_date('select_roommate_end_timestamp') . '.';
+                    $tags['ROOMMATE_ICON'] = $lock_img;
+                }
             }
         }
 
@@ -1115,11 +1125,17 @@ class HMS_Student {
                 PHPWS_Core::initModClass('hms','HMS_Student_Profile.php');
                 return HMS_Student_Profile::submit_profile();
                 break;
-            case 'get_roommate_username':
-                return HMS_Student::get_roommate_username();
+            case 'show_request_roommate':
+                PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
+                return HMS_Roommate::show_request_roommate();
                 break;
-            case 'verify_roommate_username':
-                return HMS_Student::verify_roommate_username();
+            case 'request_roommate':
+                PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
+                return HMS_Roommate::create_roommate_request();
+                break;
+            case 'roommate_confirm_rlc_removal':
+                PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
+                return HMS_Roommate::create_roommate_request(TRUE);
                 break;
             case 'save_roommate_username':
                 if(isset($_REQUEST['cancel'])) {
@@ -1132,12 +1148,6 @@ class HMS_Student {
                     return HMS_Roommate_Approval::save_roommate_username();
                 }
                 break;
-            case 'spring_roommate_hack':
-                return HMS_Student::spring_roommate_hack();
-            case 'save_spring_roommate_hack':
-                if(isset($_REQUEST['cancel']))
-                    return HMS_Student::show_main_menu();
-                return HMS_Student::save_spring_roommate_hack();
             case 'set_meal_plan':
                 return HMS_Student::set_meal_plan();
                 break;
@@ -1148,6 +1158,26 @@ class HMS_Student {
             case 'submit_contact_form':
                 PHPWS_Core::initModClass('hms', 'HMS_Contact_Form.php');
                 return HMS_Contact_Form::submit_contact_form();
+                break;
+            case 'show_roommate_confirmation':
+                PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
+                $mate = &new HMS_Roommate($_REQUEST['id']);
+                return HMS_Roommate::show_approve_reject($mate);
+                break;
+            case 'confirm_accept_roommate':
+                PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
+                $mate = &new HMS_Roommate($_REQUEST['id']);
+                return HMS_Roommate::confirm_accept($mate);
+                break;
+            case 'for_realz_accept_roommate':
+                PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
+                $mate = &new HMS_Roommate($_REQUEST['id']);
+                return HMS_Roommate::accept_for_realz($mate);
+                break;
+            case 'confirm_reject_roommate':
+                PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
+                $mate = &new HMS_Roommate($_REQUEST['id']);
+                return HMS_Roommate::reject_for_realz($mate);
                 break;
             case 'main':
                 //return HMS_Student::show_main_menu();

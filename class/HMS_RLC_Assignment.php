@@ -42,7 +42,7 @@ class HMS_RLC_Assignment{
 
         $result = $db->select('row');
 
-        if(PEAR::isErrpr($result)) {
+        if(PEAR::isError($result)) {
             PHPWS_Error::log($result,'hms','init',"id:{$id}");
             return $result;
         }
@@ -60,6 +60,41 @@ class HMS_RLC_Assignment{
         $this->setAssignedByInitials($result['assigned_by_initials']);
 
         return $result;
+    }
+
+    /**
+     * Check to see if an assignment already exists for the specified user.  Returns FALSE if no assignment
+     * exists.  If an assignment does exist, a db object containing that row is returned.  In the case of a db
+     * error, a PEAR error object is returned.
+     */
+    function check_for_assignment($asu_username = NULL, $application_term = NULL)
+    {
+        $db = &new PHPWS_DB('hms_learning_community_assignment');
+
+        if(isset($asu_username)) {
+            $db->addWhere('asu_username',$asu_username,'ILIKE');
+        } else {
+            $db->addWhere('asu_username',$_SESSION['asu_username'],'ILIKE');
+        }
+
+        if(isset($application_term)) {
+            $db->addWhere('term', $application_term);
+        } else {
+            PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+            $db->addWhere('term', HMS_Term::get_current_term());
+        }
+
+        $result = $db->select('row');
+
+        if(PHPWS_Error::logIfError($result)) {
+            return $result;
+        }
+
+        if(sizeof($result) > 1) {
+            return $result;
+        } else {
+            return FALSE;
+        }
     }
 
     /**

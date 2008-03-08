@@ -51,14 +51,34 @@ class HMS_RLC_Application{
         }
     }
 
+    function delete()
+    {
+        if(!isset($this->id)) {
+            return FALSE;
+        }
+
+        $db = &new PHPWS_DB('hms_learning_community_applications');
+        $db->addWhere('id',$this->id);
+        $result = $db->delete();
+
+        if(PHPWS_Error::logIfError($result)) {
+            return FALSE;
+        }
+
+        $this->id = 0;
+
+        return TRUE;
+    }
+
     function init($user_id = NULL, $term = NULL)
     {
+        PHPWS_Core::initModClass('hms','HMS_SOAP.php');
+        $student = HMS_SOAP::get_student_info($user_id);
         # Check if an application for this user already exits.
         $result = HMS_RLC_Application::check_for_application($user_id, $term);
 
         if(PEAR::isError($result)){
             PHPWS_Error::log($result,'hms','init',"Caught error from check_for_application");
-            return $result;
         }
 
         # If an application exists, then load its data into this object.

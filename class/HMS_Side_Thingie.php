@@ -241,7 +241,7 @@ class HMS_Side_Thingie {
         PHPWS_Core::initModClass('hms','HMS_Roommate_Approval.php');
 
         # If the user has roommates confirmed or has request pending approval, then call this step completed
-        if(HMS_Roommate::has_roommates($_SESSION['asu_username']) || HMS_Roommate_Approval::has_requested_someone($_SESSION['asu_username'])){
+        if(HMS_Roommate::has_confirmed_roommate($_SESSION['asu_username']) || HMS_Roommate::has_roommate_request($_SESSION['asu_username'])){
             $this->steps_styles[HMS_SIDE_STUDENT_ROOMMATE] = 'STEP_COMPLETED';
             return;
         }
@@ -257,7 +257,7 @@ class HMS_Side_Thingie {
                 $this->steps_text[HMS_SIDE_STUDENT_ROOMMATE] .= " (complete by ". date('n/j/y',$this->deadlines->select_roommate_end_timestamp) . ")";
             }else{
                 # We're not on this step, so add the link and text
-                $this->steps_text[HMS_SIDE_STUDENT_ROOMMATE] = PHPWS_Text::secureLink($this->steps_text[HMS_SIDE_STUDENT_ROOMMATE] . " (complete by ". date('n/j/y',$this->deadlines->select_roommate_end_timestamp) . ")", 'hms', array('type'=>'student', 'op'=>'get_roommate_username'));
+                $this->steps_text[HMS_SIDE_STUDENT_ROOMMATE] = PHPWS_Text::secureLink($this->steps_text[HMS_SIDE_STUDENT_ROOMMATE] . " (complete by ". date('n/j/y',$this->deadlines->select_roommate_end_timestamp) . ")", 'hms', array('type'=>'student', 'op'=>'show_request_roommate'));
                 $this->steps_styles[HMS_SIDE_STUDENT_ROOMMATE] = 'STEP_TOGO';
             }
             return;

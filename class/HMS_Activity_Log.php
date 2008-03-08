@@ -79,7 +79,7 @@ class HMS_Activity_Log{
      * Takes a username whos log the record should go in, the activity, the actor, and the notes
      * and creates a new Activity_Log object and saves it to the db.
      */
-    function log_activity($userid, $activity, $actor, $notes)
+    function log_activity($userid, $activity, $actor, $notes = '')
     {
         $activity_log = new HMS_Activity_Log($userid, mktime(), $activity, $actor, $notes);
         $result = $activity_log->save();
