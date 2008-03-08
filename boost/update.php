@@ -803,7 +803,7 @@ function hms_update(&$content, $currentVersion)
 
             $db = &new PHPWS_DB;
             $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_23.sql');
-            if(PEAR::isError(4result)) {
+            if(PEAR::isError($result)) {
                 return $result;
             }
 
