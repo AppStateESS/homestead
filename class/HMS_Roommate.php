@@ -407,8 +407,8 @@ class HMS_Roommate
 
         // Use SOAP for the rest of the checks
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
-        $requestor_info = HMS_SOAP::get_student_info($requestor);
-        $requestee_info = HMS_SOAP::get_student_info($requestee);
+        $requestor_info = HMS_SOAP::get_student_info($requestor, $_SESSION['application_term']);
+        $requestee_info = HMS_SOAP::get_student_info($requestee, $_SESSION['application_term']);
 
         // Make sure the requestee is actually a user
         if(empty($requestee_info->last_name)) {
@@ -494,8 +494,7 @@ class HMS_Roommate
         $requestor_mail->setFrom('hms@tux.appstate.edu');
         $requestor_mail->setSubject('HMS Roommate Request');
         $requestor_mail->setMessageBody($message);
-        test($requestor_mail);
-//        $success = $requestor_mail->send();
+        $success = $requestor_mail->send();
         $success = true;
        
         if($success != TRUE) {
@@ -519,8 +518,7 @@ class HMS_Roommate
         $requestee_mail->setFrom('hms@tux.appstate.edu');
         $requestee_mail->setSubject('HMS Roommate Request');
         $requestee_mail->setMessageBody($message);
-        test($requestee_mail);
-//        $success = $requestee_mail->send();
+        $success = $requestee_mail->send();
         $success = true;
 
         if($success != TRUE) {
