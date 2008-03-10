@@ -8,7 +8,6 @@
  */
 
 define('ROOMMATE_REQ_TIMEOUT', 72); // The number of hours before a roommate request expires
-define('ROOMMATE_HASH_SALT', 'I hate mY rooMMate');
 
 class HMS_Roommate
 {
@@ -17,7 +16,6 @@ class HMS_Roommate
     var $term              = null;
     var $requestor         = null;
     var $requestee         = null;
-    var $confirmation_hash = null;
     var $confirmed         = 0;
     var $requested_on      = 0;
     var $confirmed_on      = null;
@@ -49,7 +47,6 @@ class HMS_Roommate
         $this->term         = $_SESSION['application_term'];
         $this->requestor    = $requestor;
         $this->requestee    = $requestee;
-        $this->generate_hash();
         $this->confirmed    = 0;
         $this->requested_on = mktime();
 
@@ -221,7 +218,6 @@ class HMS_Roommate
 
     /**
      * Returns an array of requests in which the given user is requestee
-     * The reason for whole objects instead of just usernames is so we can get at dem hashes.
      */
     function get_pending_requests($asu_username)
     {
@@ -448,19 +444,6 @@ class HMS_Roommate
     /*******************
      * Utility Methods *
      *******************/
-
-    /*
-     * Returns an md5 hash of the requestor and requestee usernames
-     */
-    function generate_hash($requestor_username = null, $requestee_username = null)
-    {
-        // Non-Static Function
-        if(is_null($requestor_username) && is_null($requestee_username))
-            return $this->confirmation_hash = md5(ROOMMATE_HASH_SALT . $this->requestor . $this->requestee);
-
-        // Static Function
-        return md5(ROOMMATE_HASH_SALT . $requestor_username . $requestee_username);
-    }
 
     /**
      * Calculates the date (in seconds since epoch) when a request made *now* will expire

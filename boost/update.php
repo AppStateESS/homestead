@@ -817,6 +817,14 @@ function hms_update(&$content, $currentVersion)
             $files[] = 'templates/student/roommate_reject_done.tpl';
             $files[] = 'templates/student/requested_roommate_list.tpl';
             $files[] = 'templates/student/roommate_accept_confirm.tpl';
+
+        case version_compare($currentVersion, '0.2.24', '<'):
+
+            $db = &new PHPWS_DB;
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_24.sql');
+            if(PEAR::isError($result)) {
+                return $result;
+            }
  
     }
 
