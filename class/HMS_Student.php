@@ -261,65 +261,29 @@ class HMS_Student {
 
         // get roommate or pending roommate
         PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
-        if(!HMS_Roommate::has_roommates($_REQUEST['username'])) {
-            $tpl['ROOMMATE'] = "This person does not have a current roommate.<br />";
-            $db = &new PHPWS_DB('hms_roommate_approval');
-            $db->addColumn('roommate_zero');
-            $db->addColumn('roommate_one');
-            $db->addColumn('roommate_two');
-            $db->addColumn('roommate_three');
-            $db->addWhere('roommate_zero', $_REQUEST['username'], 'ILIKE');
-            $db->addWhere('roommate_one', $_REQUEST['username'], 'ILIKE', 'OR');
-            $db->addWhere('roommate_two', $_REQUEST['username'], 'ILIKE', 'OR');
-            $db->addWhere('roommate_three', $_REQUEST['username'], 'ILIKE', 'OR');
-            $roomies = $db->select();
-            if($roomies == NULL) {
-                $tpl['ROOMMATE'] .= "This person has no pending roommate requests.";
-            } else {
-                foreach($roomies as $roomie) {
-                    if($roomie['roommate_zero'] != $_REQUEST['username']) {
-                        $tpl['ROOMMATE'] = "Awaiting approval from " . HMS_SOAP::get_full_name($roomie['roommate_zero']) . ".<br />";
-                    }
-
-                    if($roomie['roommate_one'] != $_REQUEST['username']) {
-                        $tpl['ROOMMATE'] = "Awaiting approval from " . HMS_SOAP::get_full_name($roomie['roommate_one']) . ".<br />";
-                    }
-
-                    if(isset($roomie['roommate_two']) && $roomie['roommate_two'] != $_REQUEST['username']) {
-                        $tpl['ROOMMATE'] = "Awaiting approval from " . HMS_SOAP::get_full_name($roomie['roommate_two']) . ".<br />";
-                    }
-
-                    if(isset($roomie['roommate_three']) && $roomie['roommate_three'] != $_REQUEST['username']) {
-                        $tpl['ROOMMATE'] = "Awaiting approval from " . HMS_SOAP::get_full_name($roomie['roommate_three']) . ".<br />";
-                    }
-                }
-            }
+        $roommates = HMS_Roommate::get_all_roommates($_REQUEST['username'], HMS_Term::get_selected_term());
+        if(empty($roommates)) {
+            $tpl['ROOMMATE'] = "This person has no roommates or roommate requests.<br />";
         } else {
-            $db = &new PHPWS_DB('hms_roommates');
-            $db->addColumn('roommate_zero');
-            $db->addColumn('roommate_one');
-            $db->addColumn('roommate_two');
-            $db->addColumn('roommate_three');
-            $db->addWhere('roommate_zero', $_REQUEST['username'], 'ILIKE');
-            $db->addWhere('roommate_one', $_REQUEST['username'], 'ILIKE', 'OR');
-            $db->addWhere('roommate_two', $_REQUEST['username'], 'ILIKE', 'OR');
-            $db->addWhere('roommate_three', $_REQUEST['username'], 'ILIKE', 'OR');
-            $roomies = $db->select();
-            foreach($roomies as $roomie) {
-                if($roomie['roommate_zero'] != $_REQUEST['username']) {
-                    $tpl['ROOMMATE'] = "Grouped with " . HMS_SOAP::get_full_name($roomie['roommate_zero']) . ".<br />";
-                }
-
-                if($roomie['roommate_one'] != $_REQUEST['username']) {
-                    $tpl['ROOMMATE'] = "Grouped with " . HMS_SOAP::get_full_name($roomie['roommate_one']) . ".<br />";
-                }
-
-                if(isset($roomie['roommate_two']) && $roomie['roommate_two'] != $_REQUEST['username']) {
-                    $tpl['ROOMMATE'] = "Grouped with " . HMS_SOAP::get_full_name($roomie['roommate_two']) . ".<br />";
-                }
-
-                if(isset($roomie['roommate_three']) && $roomie['roommate_three'] != $_REQUEST['username']) {
-                    $tpl['ROOMMATE'] = "Grouped with " . HMS_SOAP::get_full_name($roomie['roommate_three']) . ".<br />";
+            foreach($roommates as $roommate) {
+                if($roommate->confirmed) {
+                    $mate = $roommate->get_other_guy($_REQUEST['username']);
+                    $user_link = PHPWS_Text::secureLink(HMS_SOAP::get_full_name($mate), 'hms',
+                        array('type'=>'student',
+                              'op'=>'get_matching_students',
+                              'username'=>$mate));
+                    $tpl['ROOMMATE'] .= "Confirmed roommates with $user_link<br />";
+                } else {
+                    $mate = $roommate->get_other_guy($_REQUEST['username']);
+                    $user_link = PHPWS_Text::secureLink(HMS_SOAP::get_full_name($mate), 'hms',
+                        array('type'=>'student',
+                              'op'=>'get_matching_students',
+                              'username'=>$mate));
+                    if($roommate->requestor == $_REQUEST['username']) {
+                        $tpl['ROOMMATE'] .= "Awaiting approval from $user_link<br />";
+                    } else {
+                        $tpl['ROOMMATE'] .= "Request Pending from $user_link<br />";
+                    }
                 }
             }
         }

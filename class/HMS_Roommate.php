@@ -89,6 +89,14 @@ class HMS_Roommate
         return TRUE;
     }
 
+    function get_other_guy($username)
+    {
+        if($this->requestor == $this->username) {
+            return $this->requestee;
+        }
+        return $this->requestor;
+    }
+
     /******************
      * Static Methods *
      ******************/
@@ -239,6 +247,24 @@ class HMS_Roommate
         $db->addWhere('requestee', $asu_username, 'ILIKE');
         $db->addWhere('confirmed', 0);
         $result = $db->count();
+
+        return $result;
+    }
+
+    /**
+     * Gets all Roommate objects in which this user is involved
+     */
+    function get_all_roommates($asu_username, $term)
+    {
+        $db = new PHPWS_DB('hms_roommate');
+        $db->addWhere('requestor', $asu_username, 'ILIKE', 'OR', 'grp');
+        $db->addWhere('requestee', $asu_username, 'ILIKE', 'OR', 'grp');
+        $db->setGroupConj('grp', 'AND');
+        $db->addWhere('term', $term);
+        $result = $db->getObjects('HMS_Roommate');
+
+        if(PHPWS_Error::logIfError($result))
+            return FALSE;
 
         return $result;
     }
