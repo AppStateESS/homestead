@@ -453,7 +453,7 @@ class HMS_SOAP{
             $student->last_name             = "wilcox";
             $student->gender                = "M";
             $student->dob                   = "1980-03-31";
-            $student->student_type          = 'C';
+            $student->student_type          = 'F';
             $student->projected_class       = 'SR';
             $student->address['line1']      = '275 Honey Hill Drive';
             $student->address['line2']      = '';

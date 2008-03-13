@@ -414,7 +414,7 @@ class HMS_Roommate
 
         // Check if the requestee has a confirmed roommate
         if(HMS_Roommate::has_confirmed_roommate($requestee)){
-            return E_ROOMMATE_ALREADY_CONFIRMED;
+            return E_ROOMMATE_REQUESTED_CONFIRMED;
         }
 
         // Make sure requestor and requestee are not requesting each other
@@ -634,6 +634,9 @@ class HMS_Roommate
                     break;
                 case E_ROOMMATE_ALREADY_CONFIRMED:
                     $msg = "You already have a confirmed roommate.";
+                    break;
+                case E_ROOMMATE_REQUESTED_CONFIRMED:
+                    $msg = "The roommate you requested already has a confirmed roommate.";
                     break;
                 case E_ROOMMATE_ALREADY_REQUESTED:
                     $msg = "You already have a pending request with $requestee.  Please <a href='index.php?module=hms&type=student&op=show_main_menu'>return to the main menu</a> and look under Step 5: Select A Roommate in order to confirm this request.";

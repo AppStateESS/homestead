@@ -124,16 +124,17 @@ define('HMS_MULTIPLE_ASSIGNMENTS',              17);
  */
 define('E_SUCCESS', 0); // Everything is fine, nothing is broken.
 
-define('E_ROOMMATE_MALFORMED_USERNAME', 1); // Bad characters, null, etc
-define('E_ROOMMATE_REQUESTED_SELF',     3); // You can't request yourself as a roommate
-define('E_ROOMMATE_ALREADY_CONFIRMED',  4); // Requestor already has a confirmed roommate (shouldn't get here)
-define('E_ROOMMATE_ALREADY_REQUESTED',  5); // This probably means that they are trying to request each other
-define('E_ROOMMATE_PENDING_REQUEST',    6); // Requestor already has an unconfirmed roommate request
-define('E_ROOMMATE_USER_NOINFO',        7); // Requestee does not seem to be in Banner
-define('E_ROOMMATE_GENDER_MISMATCH',    8); // We don't room cats with dogs unless surgery is involved
-define('E_ROOMMATE_NO_APPLICATION',     9); // Requestee has no application on file
-define('E_ROOMMATE_TYPE_MISMATCH',     10); // In the fall, type F/T and C cannot live together
-define('E_ROOMMATE_RLC_ASSIGNMENT',    11); // If requestor is assigned to a different RLC, STOP
-define('E_ROOMMATE_RLC_APPLICATION',   12); // If requestor applied for a different RLC, remove their application
+define('E_ROOMMATE_MALFORMED_USERNAME',  1); // Bad characters, null, etc
+define('E_ROOMMATE_REQUESTED_SELF',      3); // You can't request yourself as a roommate
+define('E_ROOMMATE_ALREADY_CONFIRMED',   4); // Requestor already has a confirmed roommate (shouldn't get here)
+define('E_ROOMMATE_ALREADY_REQUESTED',   5); // This probably means that they are trying to request each other
+define('E_ROOMMATE_PENDING_REQUEST',     6); // Requestor already has an unconfirmed roommate request
+define('E_ROOMMATE_USER_NOINFO',         7); // Requestee does not seem to be in Banner
+define('E_ROOMMATE_GENDER_MISMATCH',     8); // We don't room cats with dogs unless surgery is involved
+define('E_ROOMMATE_NO_APPLICATION',      9); // Requestee has no application on file
+define('E_ROOMMATE_TYPE_MISMATCH',      10); // In the fall, type F/T and C cannot live together
+define('E_ROOMMATE_RLC_ASSIGNMENT',     11); // If requestor is assigned to a different RLC, STOP
+define('E_ROOMMATE_RLC_APPLICATION',    12); // If requestor applied for a different RLC, remove their application
+define('E_ROOMMATE_REQUESTED_CONFIRMED',13); // If requestee has a confirmed roommate
 
 ?>
