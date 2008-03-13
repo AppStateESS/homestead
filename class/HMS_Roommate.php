@@ -91,7 +91,7 @@ class HMS_Roommate
 
     function get_other_guy($username)
     {
-        if($this->requestor == $this->username) {
+        if($this->requestor == $username) {
             return $this->requestee;
         }
         return $this->requestor;
