@@ -519,15 +519,18 @@ class HMS_Room extends HMS_Item
         }
 
        # Grab all the input from the form and save the room
+       //Changed from radio buttons to checkboxes, ternary 
+       //prevents null since only 1 is defined as a return value
+       test($_REQUEST['room_number']);
        $room->room_number   = $_REQUEST['room_number'];
-       $room->pricing_tier  = $_REQUEST['pricing_tier']; 
+       $room->pricing_tier  = $_REQUEST['pricing_tier'];
        $room->gender_type   = $_REQUEST['gender_type'];
-       $room->is_online     = $_REQUEST['is_online'];
-       $room->is_reserved   = $_REQUEST['is_reserved'];
-       $room->ra_room       = $_REQUEST['ra_room'];
-       $room->private_room  = $_REQUEST['private_room'];
-       $room->is_medical    = $_REQUEST['is_medical'];
-       $room->is_lobby      = $_REQUEST['is_lobby'];
+       $room->is_online     = $_REQUEST['is_online'] == 1 ? 1 : 0;
+       $room->is_reserved   = $_REQUEST['is_reserved'] == 1 ? 1 : 0;
+       $room->ra_room       = $_REQUEST['ra_room'] == 1 ? 1 : 0;
+       $room->private_room  = $_REQUEST['private_room'] == 1 ? 1 : 0;
+       $room->is_medical    = $_REQUEST['is_medical'] == 1 ? 1 : 0;
+       $room->is_lobby      = $_REQUEST['is_lobby'] == 1 ? 1 : 0;
 
        $result = $room->save();
 
@@ -718,28 +721,28 @@ class HMS_Room extends HMS_Item
             }
         }
         
-        $form->addRadio('is_online', array(0, 1));
-        $form->setLabel('is_online', array(_('No'), _('Yes') ));
+        $form->addCheck('is_online', 1);
+        //$form->setLabel('is_online', array(_('No'), _('Yes') ));
         $form->setMatch('is_online', $room->is_online);
 
-        $form->addRadio('is_reserved', array(0, 1));
-        $form->setLabel('is_reserved', array(_('No'), _('Yes')));
+        $form->addCheck('is_reserved', 1);
+        //$form->setLabel('is_reserved', array(_('No'), _('Yes')));
         $form->setMatch('is_reserved', $room->is_reserved);
         
-        $form->addRadio('ra_room', array(0, 1));
-        $form->setLabel('ra_room', array(_('No'), _('Yes')));
+        $form->addCheck('ra_room', 1);
+        //$form->setLabel('ra_room', array(_('No'), _('Yes')));
         $form->setMatch('ra_room', $room->ra_room);
         
-        $form->addRadio('private_room', array(0, 1));
-        $form->setLabel('private_room', array(_('No'), _('Yes')));
+        $form->addCheck('private_room', 1);
+        //$form->setLabel('private_room', array(_('No'), _('Yes')));
         $form->setMatch('private_room', $room->private_room);
         
-        $form->addRadio('is_medical', array(0,1));
-        $form->setLabel('is_medical', array(_('No'), _('Yes')));
+        $form->addCheck('is_medical', 1);
+        //$form->setLabel('is_medical', array(_('No'), _('Yes')));
         $form->setMatch('is_medical', $room->is_medical);
 
-        $form->addRadio('is_lobby', array(0, 1));
-        $form->setLabel('is_lobby', array(_('No'), _('Yes')));
+        $form->addCheck('is_lobby', 1);
+        //$form->setLabel('is_lobby', array(_('No'), _('Yes')));
         $form->setMatch('is_lobby', $room->is_lobby);
 
         if($is_in_suite){

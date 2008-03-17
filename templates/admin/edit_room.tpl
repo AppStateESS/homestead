@@ -42,33 +42,27 @@
             </tr>
             <tr>
                 <th>Is online: </th>
-                <td align="left">{IS_ONLINE_1} {IS_ONLINE_1_LABEL}</td>
-                <td align="left">{IS_ONLINE_2} {IS_ONLINE_2_LABEL}</td>
+                <td align="left">{IS_ONLINE}</td> 
             </tr>
             <tr>
                 <th>Is reserved: </th>
-                <td align="left">{IS_RESERVED_1} {IS_RESERVED_1_LABEL}</td>
-                <td align="left">{IS_RESERVED_2} {IS_RESERVED_2_LABEL} </td>
+                <td align="left">{IS_RESERVED} {IS_RESERVED_LABEL}</td>
             </tr>
             <tr>
                 <th>Reserved for RA: </th>
-                <td>{RA_ROOM_1} {RA_ROOM_1_LABEL}</td>
-                <td>{RA_ROOM_2} {RA_ROOM_2_LABEL}</td>
+                <td>{RA_ROOM} {RA_ROOM_LABEL}</td>
             </tr>
             <tr>
                 <th>Private Room:</th>
-                <td>{PRIVATE_ROOM_1} {PRIVATE_ROOM_1_LABEL}</td>
-                <td>{PRIVATE_ROOM_2} {PRIVATE_ROOM_2_LABEL}</td>
+                <td>{PRIVATE_ROOM} {PRIVATE_ROOM_LABEL}</td>
             </tr>
             <tr>
                 <th>Is medical: </th>
-                <td align="left">{IS_MEDICAL_1} {IS_MEDICAL_1_LABEL}</td>
-                <td align="left">{IS_MEDICAL_2} {IS_MEDICAL_2_LABEL} </td>
+                <td align="left">{IS_MEDICAL} {IS_MEDICAL_LABEL}</td>
             </tr>
             <tr>
                 <th>Is a Lobby:</th>
-                <td>{IS_LOBBY_1} {IS_LOBBY_1_LABEL}</td>
-                <td>{IS_LOBBY_2} {IS_LOBBY_2_LABEL}</td>
+                <td>{IS_LOBBY} {IS_LOBBY_LABEL}</td>
             </tr>
             <tr>
                 <th>Is part of a suite: </th>
