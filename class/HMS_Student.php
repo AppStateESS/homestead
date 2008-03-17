@@ -428,11 +428,11 @@ class HMS_Student {
             $student_class === FALSE ||
             $dob === FALSE ||
             $gender === FALSE ||
-            is_null($application_term) ||
-            is_null($student_type) ||
-            is_null($student_class) ||
-            is_null($dob) ||
-            is_null($gender))
+            empty($application_term) ||
+            empty($student_type) ||
+            empty($student_class) ||
+            empty($dob) ||
+            empty($gender))
             {
                 # TODO: HMS_Mail here
                 PHPWS_Error::log('Initial banner lookup failed', 'hms', 'show_welcome_screen', "username: {$_SESSION['asu_username']}");
