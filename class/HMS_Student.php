@@ -458,6 +458,7 @@ class HMS_Student {
         # THIS IS A HACK
         if($_SESSION['application_term'] == 200820 || $_SESSION['application_term'] == 200830){
             $_SESSION['application_term'] = 200840;
+            $application_term = 200840;
         }
         
         # Get deadlines for the current term for future use
