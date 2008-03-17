@@ -453,6 +453,12 @@ class HMS_Student {
             Layout::metaRoute('http://www.housing.appstate.edu/index.php?module=pagemaster&PAGE_user_op=view_page&PAGE_id=33&MMN_position=164:116&MMN_position=190:190',10);
             return PHPWS_Template::process($tpl, 'hms', 'student/welcome_screen_non_traditional.tpl');
         }
+
+        # If the student is applying for a summer term, then change their application term to the fall
+        # THIS IS A HACK
+        if($_SESSION['application_term'] == 200820 || $_SESSION['application_term'] == 200830){
+            $_SESSION['application_term'] = 200840;
+        }
         
         # Get deadlines for the current term for future use
         $deadlines = HMS_Deadlines::get_deadlines($_SESSION['application_term']);
