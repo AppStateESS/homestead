@@ -459,6 +459,9 @@ class HMS_Student {
         if($_SESSION['application_term'] == 200820 || $_SESSION['application_term'] == 200830){
             $_SESSION['application_term'] = 200840;
             $application_term = 200840;
+            $show_summer_hack_msg = TRUE;
+        }else{
+            $show_summer_hack_msg = FALSE;
         }
         
         # Get deadlines for the current term for future use
@@ -567,6 +570,11 @@ class HMS_Student {
 
                 $form->mergeTemplate($tpl);
                 $tpl = $form->getTemplate();
+
+                # THIS IS PART OF THE SUMMER HACK
+                if($show_summer_hack_msg){
+                    $tpl['HACK_MSG'] = '<b>Note:</b> This is the <b>Fall 2008 & Spring 2009</b> housing application. As a freshmen student attending Appalachian for a summer semester, <b>you must also apply for summer housing on paper</b>. The Department of Housing & Residence Life will be mailing summer housing information packets on April 1st.';
+                }
                 
                 # Application deadline has not passed, so show welcome page
                 if($student_type == TYPE_FRESHMEN){
