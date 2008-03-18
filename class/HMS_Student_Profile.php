@@ -190,11 +190,12 @@ class HMS_Student_Profile{
     function show_profile_form()
     {
         PHPWS_Core::initModClass('hms','HMS_Deadlines.php');
-        if(HMS_Deadlines::check_deadline_past('edit_profile_end_timestamp')){
+        $deadlines = HMS_Deadlines::get_deadlines($_SESSION['application_term']);
+        if(HMS_Deadlines::check_deadline_past('edit_profile_end_timestamp', $deadlines)){
             # too late
             $template['MESSAGE'] = "Sorry, it's too late to submit a profile.";
             return PHPWS_Template::process($template, 'hms', 'student/student_success_failure_message.tpl');
-        }else if(!HMS_Deadlines::check_deadline_past('edit_profile_begin_timestamp')){
+        }else if(!HMS_Deadlines::check_deadline_past('edit_profile_begin_timestamp', $deadlines)){
             # too early
             $template['MESSAGE'] = "Sorry, it's too early to submit a profile.";
             return PHPWS_Template::process($template, 'hms', 'student/student_success_failure_message.tpl');
