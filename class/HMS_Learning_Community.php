@@ -108,43 +108,6 @@ class HMS_Learning_Community
     }
     
     /*
-     * Uses the HMS_Forms class to display the student rlc signup form/application
-     */
-    //TODO: MOVE THIS TO HMS_RLC_Application
-    function show_rlc_application_form()
-    {
-        PHPWS_Core::initModClass('hms','HMS_RLC_Application.php');
-        if(HMS_RLC_Application::check_for_application($_SESSION['asu_username'], $_SESSION['application_term']) !== FALSE){
-            $template['MESSAGE'] = "Sorry, you can only submit one RLC application.";
-            return PHPWS_Template::process($template,'hms','student/rlc_signup_form_page1.tpl');
-        }
-
-        # Check deadlines
-        $db = &new PHPWS_DB('hms_deadlines');
-        $deadlines = $db->select('row');
-
-        if(PEAR::isError($deadlines)){
-            PHPWS_Error::log($deadlines);
-            $template['MESSAGE'] = "Sorry, there was an error communicating with the database.";
-            return PHPWS_Template::process($template,'hms','student/rlc_signup_form_page1.tpl');
-        }
-
-        $curr_timestamp = mktime();
-
-        // TODO: change this block so it uses the deadlines class.
-        if($curr_timestamp < $deadlines['submit_application_begin_timestamp']){
-            $template['MESSAGE'] = "Sorry, it is too soon to fill out an RLC application.";
-            return PHPWS_Template::process($template,'hms','student/rlc_signup_form_page1.tpl');
-        }else if($curr_timestamp > $deadlines['submit_rlc_application_end_timestamp']){
-            $template['MESSAGE'] = "Sorry, the RLC application deadline has already passed. Please contact Housing & Residence Life if you are interested in applying for a RLC.";
-            return PHPWS_Template::process($template,'hms','student/rlc_signup_form_page1.tpl');
-        }    
-        
-        PHPWS_Core::initModClass('hms','HMS_RLC_Application.php');
-        return HMS_RLC_Application::show_rlc_application_form_page1();
-    }
-
-    /*
      * Returns a HMS_Form that prompts the user for the name of the RLC to add
      */
     function add_learning_community($msg = NULL)

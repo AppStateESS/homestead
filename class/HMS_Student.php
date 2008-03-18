@@ -1072,8 +1072,8 @@ class HMS_Student {
                 return HMS_Student_Profile::show_profile($_REQUEST['user']);
                 break;
             case 'show_rlc_application_form':
-                PHPWS_Core::initModClass('hms','HMS_Learning_Community.php');
-                return HMS_Learning_Community::show_rlc_application_form();
+                PHPWS_Core::initModClass('hms','HMS_RLC_Application.php');
+                return HMS_RLC_Application::show_rlc_application_form();
                 break;
             case 'view_rlc_application':
                 PHPWS_Core::initModClass('hms', 'HMS_Side_Thingie.php');

@@ -302,6 +302,31 @@ class HMS_RLC_Application{
 
         return $output;
     }
+    
+    /*
+     * Does the checks required before showing the rlc application, and then shows it
+     */
+    function show_rlc_application_form()
+    {
+        if(HMS_RLC_Application::check_for_application($_SESSION['asu_username'], $_SESSION['application_term']) !== FALSE){
+            $template['MESSAGE'] = "Sorry, you can only submit one RLC application.";
+            return PHPWS_Template::process($template,'hms','student/rlc_signup_form_page1.tpl');
+        }
+
+        # Check deadlines
+        PHPWS_Core::initModClass('hms', 'HMS_Deadlines.php');
+        $deadlines = HMS_Deadlines::get_deadlines($_SESSION['application_term']);
+
+        if(!HMS_Deadlines::check_deadline_past('submit_application_begin_timestamp',$deadlines)){
+            $template['MESSAGE'] = "Sorry, it is too soon to fill out an RLC application.";
+            return PHPWS_Template::process($template,'hms','student/rlc_signup_form_page1.tpl');
+        }else if(HMS_Deadlines::check_deadline_past('submit_rlc_application_end_timestamp', $deadlines)){
+            $template['MESSAGE'] = "Sorry, the RLC application deadline has already passed. Please contact Housing & Residence Life if you are interested in applying for a RLC.";
+            return PHPWS_Template::process($template,'hms','student/rlc_signup_form_page1.tpl');
+        }else{
+            return HMS_RLC_Application::show_rlc_application_form_page1();
+        }
+    }
 
     # Displays the RLC application form
     function show_rlc_application_form_page1($message = NULL)
