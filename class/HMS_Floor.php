@@ -18,6 +18,7 @@ class HMS_Floor extends HMS_Item
     var $gender_type;
     var $ft_movein_time_id;
     var $rt_movein_time_id;
+    var $rlc_id;
 
     /**
      * List of rooms associated with this floor
@@ -685,6 +686,12 @@ class HMS_Floor extends HMS_Item
            $floor->rt_movein_time_id = $_REQUEST['rt_movein_time'];
        }
 
+       if($_REQUEST['floor_rlc_id'] == 0){
+           $floor->rlc_id = NULL;
+       }else{
+           $floor->rlc_id = $_REQUEST['floor_rlc_id'];
+       }
+
        $result = $floor->save();
 
        if(!$result || PHPWS_Error::logIfError($result)){
@@ -820,6 +827,18 @@ class HMS_Floor extends HMS_Item
             $form->setMatch('rt_movein_time', 0);
         }else{
             $form->setMatch('rt_movein_time', $floor->rt_movein_time_id);
+        }
+
+        # Get a list of the RLCs indexed by id
+        PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
+        $learning_communities = HMS_Learning_Community::getRLCList();
+        $learning_communities[0] = 'None';
+
+        $form->addDropBox('floor_rlc_id', $learning_communities);
+        if(isset($floor->rlc_id)){
+            $form->setMatch('floor_rlc_id', $floor->rlc_id);
+        }else{
+            $form->setMatch('floor_rlc_id', 0);
         }
 
         $form->addHidden('type', 'floor');

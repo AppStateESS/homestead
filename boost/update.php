@@ -790,6 +790,7 @@ function hms_update(&$content, $currentVersion)
             $files[] = 'templates/admin/assign_student.tpl';
             $files[] = 'templates/admin/deadlines.tpl';
             $files[] = 'templates/admin/rlc_assignments_pager.tpl';
+            PHPWS_Boost::updatefiles($files, 'hms');
 
         case version_compare($currentVersion, '0.2.22', '<'):
             
@@ -817,6 +818,7 @@ function hms_update(&$content, $currentVersion)
             $files[] = 'templates/student/roommate_reject_done.tpl';
             $files[] = 'templates/student/requested_roommate_list.tpl';
             $files[] = 'templates/student/roommate_accept_confirm.tpl';
+            PHPWS_Boost::updatefiles($files, 'hms');
 
         case version_compare($currentVersion, '0.2.24', '<'):
 
@@ -825,6 +827,17 @@ function hms_update(&$content, $currentVersion)
             if(PEAR::isError($result)) {
                 return $result;
             }
+        
+        case version_compare($currentVersion, '0.2.25', '<'):
+
+            $db = &new PHPWS_DB;
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_25.sql');
+            if(PEAR::isError($result)) {
+                return $result;
+            }
+
+           $files[] = 'templates/admin/edit_floor.tpl';
+           PHPWS_Boost::updatefiles($files, 'hms');
  
     }
 

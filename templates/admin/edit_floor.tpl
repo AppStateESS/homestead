@@ -43,7 +43,11 @@
             <tr>
                 <th>Returning Move-in Time: </th><td>{RT_MOVEIN_TIME}</td>
             </tr>
+            <tr>
+                <th>Reserved for RLC: </th><td>{FLOOR_RLC_ID}</td>
+            </tr>
         </table>
+        <br />
         {SUBMIT_FORM}
         {END_FORM}
         <br /><br />
