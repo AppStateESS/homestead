@@ -135,7 +135,7 @@ class HMS_Application {
 
         
         if(PEAR::isError($result)){
-            PHPWS_Error::log($result,'hms','Caught error from Application::save()');
+            PHPWS_Error::log($result);
             $error = "<i>Error!</i><br />Could not create/update your application!<br />";
             return $error;
         }else{
@@ -484,8 +484,8 @@ class HMS_Application {
         */
         
 
-        # Use a hidden field for the entry term, pull from banner
-        $form->addHidden('term', HMS_SOAP::get_application_term($_SESSION['asu_username']));
+        # Use a hidden field for the entry term, pull from session
+        $form->addHidden('term', $_SESSION['application_term']);
 
         # Use a hidden field for gender, pull from banner
         $form->addHidden('gender_type', HMS_SOAP::get_gender($_SESSION['asu_username'], TRUE));
@@ -560,7 +560,7 @@ class HMS_Application {
         $tpl['MESSAGE']         = $message;
         $tpl['STUDENT_NAME']    = HMS_SOAP::get_full_name($_SESSION['asu_username']);
         $tpl['GENDER']          = (HMS_SOAP::get_gender($_SESSION['asu_username'],TRUE) == FEMALE) ? FEMALE_DESC : MALE_DESC;
-        $tpl['ENTRY_TERM']      = HMS_Term::term_to_text(HMS_SOAP::get_application_term($_SESSION['asu_username']), TRUE);
+        $tpl['ENTRY_TERM']      = HMS_Term::term_to_text($_SESSION['application_term']);
 
         $class = HMS_SOAP::get_student_class($_SESSION['asu_username'], $_SESSION['application_term']);
         if($class == 'FR'){
