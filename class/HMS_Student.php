@@ -1117,6 +1117,8 @@ class HMS_Student {
                 return HMS_Roommate::create_roommate_request(TRUE);
                 break;
             case 'save_roommate_username':
+                /*
+                 * This is broken since we updated Roommates
                 if(isset($_REQUEST['cancel'])) {
                     return HMS_Student::get_roommate_username();
                 } else {
@@ -1126,6 +1128,7 @@ class HMS_Student {
                     PHPWS_Core::initModClass('hms', 'HMS_Roommate_Approval.php');
                     return HMS_Roommate_Approval::save_roommate_username();
                 }
+                */
                 break;
             case 'set_meal_plan':
                 return HMS_Student::set_meal_plan();

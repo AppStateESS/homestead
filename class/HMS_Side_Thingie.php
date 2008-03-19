@@ -238,7 +238,6 @@ class HMS_Side_Thingie {
         }
 
         PHPWS_Core::initModClass('hms','HMS_Roommate.php');
-        PHPWS_Core::initModClass('hms','HMS_Roommate_Approval.php');
 
         # If the user has roommates confirmed or has request pending approval, then call this step completed
         if(HMS_Roommate::has_confirmed_roommate($_SESSION['asu_username']) || HMS_Roommate::has_roommate_request($_SESSION['asu_username'])){

@@ -126,6 +126,7 @@ class HMS_Form
         return $final;
     }
 
+    /*
     function verify_roommate_username()
     {
         $error = '';
@@ -190,6 +191,8 @@ class HMS_Form
         $final = PHPWS_Template::process($tpl, 'hms', 'student/verify_single_roommate.tpl');
         return $final;
     }
+    */
+
 
     function get_username_for_edit_grouping($error)
     {
