@@ -267,7 +267,7 @@ class HMS_RLC_Application{
 
         $tags = array();
         
-        $tags['NAME']       = PHPWS_Text::secureLink(HMS_SOAP::get_full_name($this->asu_username), 'hms', array('type'=>'student', 'op'=>'get_matching_students', 'username'=>$this->user_id));
+        $tags['NAME']       = PHPWS_Text::secureLink(HMS_SOAP::get_full_name($this->getUserID()), 'hms', array('type'=>'student', 'op'=>'get_matching_students', 'username'=>$this->user_id));
         /*$tags['NAME'] = HMS_SOAP::get_full_name_inverted($this->getUserID());*/
         $tags['1ST_CHOICE']  = '<a href="./index.php?module=hms&type=rlc&op=view_rlc_application&username=' . $this->getUserID() . '" target="_blank">' . $rlc_list[$this->getFirstChoice()] . '</a>';
         if(isset($rlc_list[$this->getSecondChoice()]))
@@ -275,7 +275,7 @@ class HMS_RLC_Application{
         if(isset($rlc_list[$this->getThirdChoice()]))
             $tags['3RD_CHOICE']  = $rlc_list[$this->getThirdChoice()];
         $tags['FINAL_RLC']   = HMS_RLC_Application::generateRLCDropDown($rlc_list,$this->getID());
-        $tags['CLASS']       = HMS_SOAP::get_student_class($this->getUserID(), $_SESSION['application_term']);
+        $tags['CLASS']       = HMS_SOAP::get_student_class($this->getUserID(), HMS_SOAP::get_application_term($this->getUserID()));
 //        $tags['SPECIAL_POP'] = ;
 //        $tags['MAJOR']       = ;
 //        $tags['HS_GPA']      = ;
