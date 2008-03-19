@@ -55,6 +55,7 @@ CREATE TABLE hms_floor (
     added_on            integer NOT NULL,
     updated_by          smallint NOT NULL,
     updated_on          integer NOT NULL,
+    rlc_id              smallint REFERENCES hms_learning_communities(id),
     primary key(id)
 );
 
