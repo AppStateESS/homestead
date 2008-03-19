@@ -349,7 +349,8 @@ class HMS_Learning_Community
                 return HMS_Learning_Community::view_rlc_assignments();
                 break;
             case 'view_rlc_application':
-                return HMS_Learning_Community::view_rlc_application($_REQUEST['username']);
+                PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
+                return HMS_RLC_Application::view_rlc_application($_REQUEST['username']);
                 break;
             case 'rlc_assignments_submit':
                 return HMS_Learning_Community::rlc_assignments_submit();

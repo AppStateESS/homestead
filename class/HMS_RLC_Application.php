@@ -626,7 +626,11 @@ class HMS_RLC_Application{
         $tags['WHY_THIRD_CHOICE_LABEL'] = "Third choice selected because: ";
 
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
-        $rlc_app = &new HMS_RLC_Application($username, $_SESSION['application_term']);
+        if(isset($_SESSION['application_term'])){
+            $rlc_app = &new HMS_RLC_Application($username, $_SESSION['application_term']);
+        }else{
+            $rlc_app = &new HMS_RLC_Application($username, HMS_SOAP::get_application_term($username));
+        }
         
         $db = &new PHPWS_DB('hms_learning_communities');
         $db->addColumn('id');
@@ -638,13 +642,34 @@ class HMS_RLC_Application{
         }
 
         $tags['FIRST_CHOICE'] = $rlcs[$rlc_app->rlc_first_choice_id];
-        $tags['SECOND_CHOICE'] = $rlcs[$rlc_app->rlc_second_choice_id];
-        $tags['THIRD_CHOICE'] = $rlcs[$rlc_app->rlc_third_choice_id];
+        
+        if(isset($rlc_app->rlc_second_choice_id)){
+            $tags['SECOND_CHOICE'] = $rlcs[$rlc_app->rlc_second_choice_id];
+        }else{
+            $tags['SECOND_CHOICE'] = 'None';
+        }
+
+        if(isset($rlc_app->rlc_third_choice_id)){
+            $tags['THIRD_CHOICE'] = $rlcs[$rlc_app->rlc_third_choice_id];
+        }else{
+            $tags['THIRD_CHOICE'] = 'None';
+        }
+
         $tags['WHY_SPECIFIC'] = $rlc_app->why_specific_communities;
         $tags['STRENGTHS_AND_WEAKNESSES'] = $rlc_app->strengths_weaknesses;
         $tags['WHY_FIRST_CHOICE'] = $rlc_app->rlc_question_0;
-        $tags['WHY_SECOND_CHOICE'] = $rlc_app->rlc_question_1;
-        $tags['WHY_THIRD_CHOICE'] = $rlc_app->rlc_question_2;
+
+        if(isset($rlc_app->rlc_second_choice_id)){
+            $tags['WHY_SECOND_CHOICE'] = $rlc_app->rlc_question_1;
+        }else{
+            $tags['WHY_SECOND_CHOICE'] = 'n/a';
+        }
+        
+        if(isset($rlc_app->rlc_second_choice_id)){
+            $tags['WHY_THIRD_CHOICE'] = $rlc_app->rlc_question_2;
+        }else{
+            $tags['WHY_THIRD_CHOICE'] = 'n/a';
+        }
 
         return PHPWS_Template::process($tags, 'hms', 'student/rlc_application.tpl');
 
