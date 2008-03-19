@@ -428,7 +428,7 @@ CREATE TABLE hms_activity_log (
     notes       CHARACTER VARYING(512)
 );
 
-INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity) VALUES (0, 'Community of Servant Leaders', 'LSC', 50);
+INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity) VALUES (10, 'Community of Servant Leaders', 'LSC', 50);
 INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity) VALUES (1, 'Outdoor Community', 'OC', 50);
 INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity) VALUES (2, 'Community of Scientific Interest', 'CSI', 50);
 INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity) VALUES (3, 'Language & Culture Community', 'LCC', 50);
@@ -442,7 +442,7 @@ INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity
 CREATE SEQUENCE hms_learning_communities_seq;
 SELECT setval('hms_learning_communities_seq', max(hms_learning_communities.id));
 
-INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (0, 0, 'Describe your current leadership and community service experience and the opportunities you are looking for.');
+INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (10, 10, 'Describe your current leadership and community service experience and the opportunities you are looking for.');
 INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (1, 1, 'What outdoor opportunities would you like to be involved in and describe your current experience.');
 INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (2, 2, 'What knowledge, skills, or talent could you offer other students in the Community of Scientific Interests?');
 INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (3, 3, 'In what languages are you proficient, learning to speak, or interested in learning?');
