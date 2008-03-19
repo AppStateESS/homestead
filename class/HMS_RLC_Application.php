@@ -332,6 +332,7 @@ class HMS_RLC_Application{
     function show_rlc_application_form_page1($message = NULL)
     {
         PHPWS_Core::initModClass('hms','HMS_SOAP.php');
+        PHPWS_Core::initModClass('hms','HMS_Learning_Community.php');
 
         $template = array();
         
@@ -347,9 +348,6 @@ class HMS_RLC_Application{
         }
 
         # 1. About You Section
-        PHPWS_Core::initModClass('hms','HMS_SOAP.php');
-
-
         $template['MESSAGE'] = $message;
 
         $username = $_SESSION['asu_username'];
