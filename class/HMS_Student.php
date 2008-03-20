@@ -454,11 +454,10 @@ class HMS_Student {
             return PHPWS_Template::process($tpl, 'hms', 'student/welcome_screen_non_traditional.tpl');
         }
 
-        # If the student is applying for a summer term, then change their application term to the fall
         # THIS IS A HACK
-        if($_SESSION['application_term'] == 200820 || $_SESSION['application_term'] == 200830){
-            $_SESSION['application_term'] = 200840;
-            $application_term = 200840;
+        $student = HMS_SOAP::get_student_info($_SESSION['asu_username']);
+        
+        if($student->application_term == 200820 || $student->application_term == 200830){
             $show_summer_hack_msg = TRUE;
         }else{
             $show_summer_hack_msg = FALSE;
@@ -775,7 +774,8 @@ class HMS_Student {
         # Check deadlines for searching student profiles
         if(HMS_Deadlines::check_within_deadlines('search_profiles_begin_timestamp','search_profiles_end_timestamp', $deadlines)){
             $tags['PROFILE_ICON'] = $arrow_img;
-            if(HMS_Student_Profile::check_for_profile() === TRUE){
+            $profile = HMS_Student_Profile::check_for_profile();
+            if($profile != FALSE && $profile > 0){
                 # Show the search profiles link
                 $tags['ROOMMATE_SEARCH_MSG']  = "<b>Click the link below to use the Roommate Search Tool</b> to look for potential roommate based on their profiles. You may use the Profile Search Tool until " . HMS_Deadlines::get_deadline_as_date('search_profiles_end_timestamp', $deadlines) . ".";
                 $tags['ROOMMATE_SEARCH_LINK'] = PHPWS_Text::secureLink('Roommate Search Tool', 'hms', array('type'=>'student','op'=>'show_profile_search'));

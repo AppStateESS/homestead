@@ -437,7 +437,12 @@ class HMS_SOAP{
         }else if($student->application_term == NULL){
             return NULL;
         }else{
-            return $student->application_term;
+            #   THIS IS THE NEW SUMMER HACK!!
+            if($student->application_term == 200820 || $student->application_term == 200830){
+                return 200840;
+            }else{
+                return $student->application_term;
+            }
         }
     }
 
@@ -464,7 +469,7 @@ class HMS_SOAP{
             $student->address['zip']        = '28605';
             $student->phone['area_code']    = '828';
             $student->phone['number']       = '2780579';
-            $student->application_term      = '200840';
+            $student->application_term      = '200830';
             return $student;
         }
 
