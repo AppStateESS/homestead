@@ -1256,7 +1256,7 @@ class HMS_Student_Profile{
         $pager->addWhere('hms_application.gender',$gender,'=');
 
         # Don't list the current user as a match
-        $pager->addWhere('hms_student_profiles.user_id',$_SESSION['asu_username'],'NOT ILIKE');
+        $pager->addWhere('hms_student_profiles.user_id',$_SESSION['asu_username'],'NOT LIKE');
         
         $pager->db->addOrder('user_id','ASC');
 
@@ -1268,6 +1268,8 @@ class HMS_Student_Profile{
         $pager->addToggle('class="toggle2"');
         $pager->addRowTags('getPagerTags');
         $pager->addPageTags($pageTags);
+
+        test($pager);
 
         return $pager->get();
     }
