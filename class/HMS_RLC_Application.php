@@ -163,7 +163,7 @@ class HMS_RLC_Application{
         $application->setWhySpecificCommunities($_REQUEST['why_specific_communities']);
         $application->setStrengthsWeaknesses($_REQUEST['strengths_weaknesses']);
         $application->setRLCQuestion0($_REQUEST['rlc_question_0']);
-        $application->setEntryTerm(HMS_SOAP::get_application_term($_SESSION['asu_username']));
+        $application->setEntryTerm($_SESSION['application_term']);
         
         if(isset($_REQUEST['rlc_question_1'])){
             $application->setRLCQuestion1($_REQUEST['rlc_question_1']);

@@ -275,8 +275,8 @@ class HMS_Learning_Community
             return HMS_Learning_Community::view_by_rlc();
         }
 
-        PHPWS_Core::initModClass('hms', 'HMS_RLC_Application');
-        PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment');
+        PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
+        PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
 
         $db = &new PHPWS_DB('hms_learning_community_applications');
         $db->addWhere('hms_assignment_id', $_REQUEST['assignment']);
@@ -534,7 +534,7 @@ class HMS_Learning_Community
 
         PHPWS_Core::initModClass('hms','HMS_SOAP.php');
 
-        PHPWS_Core::initModClass('hms','HMS_RLC_Application');
+        PHPWS_Core::initModClass('hms','HMS_RLC_Application.php');
         $app = &new PHPWS_DB('hms_learning_community_applications');
         $app->addColumn('id');
         $app->addColumn('user_id');
