@@ -639,9 +639,11 @@ class HMS_Student {
         # Check for under 18, display link to print message
         PHPWS_Core::initModClass('hms','HMS_SOAP.php');
         $dob = explode('-', HMS_SOAP::get_dob($_SESSION['asu_username']));
+        #test($dob);
         $dob_timestamp = mktime(0,0,0,$dob[1],$dob[2],$dob[0]);
         $current_timestamp = mktime(0,0,0);
         if(($current_timestamp - $dob_timestamp) < (3600 * 24 * 365 * 18)){
+            #echo "under 18!!<br>\n";
             $message .= '<br /><font color="red">Because you are under age 18, you MUST print a copy of the Housing Contract Agreement, ';
             $message .= 'have a parent or legal guardian sign it, and return it to the Department of ';
             $message .= 'Housing and Residence Life. Your application cannot be fully processed until a Housing Contract ';
@@ -651,6 +653,7 @@ class HMS_Student {
             # Set the 'agreed_to_terms' flag to false
             $form->addHidden('agreed_to_terms',0);
         }else{
+            #echo "over 18!!<br>\n";
             $form->addHidden('agreed_to_terms',1);
         }
         
@@ -775,7 +778,7 @@ class HMS_Student {
         if(HMS_Deadlines::check_within_deadlines('search_profiles_begin_timestamp','search_profiles_end_timestamp', $deadlines)){
             $tags['PROFILE_ICON'] = $arrow_img;
             $profile = HMS_Student_Profile::check_for_profile();
-            if($profile != FALSE && $profile > 0){
+            if($profile > 0 && $profile !== FALSE){
                 # Show the search profiles link
                 $tags['ROOMMATE_SEARCH_MSG']  = "<b>Click the link below to use the Roommate Search Tool</b> to look for potential roommate based on their profiles. You may use the Profile Search Tool until " . HMS_Deadlines::get_deadline_as_date('search_profiles_end_timestamp', $deadlines) . ".";
                 $tags['ROOMMATE_SEARCH_LINK'] = PHPWS_Text::secureLink('Roommate Search Tool', 'hms', array('type'=>'student','op'=>'show_profile_search'));
