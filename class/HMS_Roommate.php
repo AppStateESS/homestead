@@ -91,7 +91,7 @@ class HMS_Roommate
 
     function get_other_guy($username)
     {
-        if($this->requestor == $username) {
+        if(trim($this->requestor) == trim($username)) {
             return $this->requestee;
         }
         return $this->requestor;
@@ -170,8 +170,9 @@ class HMS_Roommate
         $db->addWhere('requestee', $asu_username, 'ILIKE', 'OR', 'grp');
         $db->setGroupConj('grp', 'AND');
         $db->addWhere('confirmed', 1);
+        $db->addColumn('requestor');
         $db->addColumn('requestee');
-        $result = $db->select('col');
+        $result = $db->select('row');
 
         if(count($result) > 1) {
             // TODO: Log Weird Situation
@@ -180,7 +181,11 @@ class HMS_Roommate
         if(count($result) == 0)
             return null;
 
-        return $result[0];
+        if(trim($result['requestor']) == trim($asu_username)) {
+            return $result['requestee'];
+        }
+
+        return $result['requestor'];
     }
 
     /**
