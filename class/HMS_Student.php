@@ -396,6 +396,23 @@ class HMS_Student {
         return $content;
     }
 
+    # Used to set 'agreed_to_terms' true after a user has already applied
+    function agreed_to_terms()
+    {
+        $db = &new PHPWS_DB('hms_application');
+        $db->addwhere('hms_student_id', $_SESSION['asu_username'], 'ILIKE');
+        $db->addValue('agreed_to_terms', 1);
+        $result = $db->update();
+
+        PHPWS_Error::logIfError($result);
+        
+        # Log the fact that the user agreed to the terms and agreemnts
+        PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
+        HMS_Activity_Log::log_activity($_SESSION['asu_username'], ACTIVITY_AGREED_TO_TERMS, $_SESSION['asu_username'], NULL);
+
+        return;
+    }
+
     /*********************
      * Static UI Methods *
      *********************/
@@ -617,7 +634,7 @@ class HMS_Student {
         }
     }
 
-    function show_terms_and_agreement()
+    function show_terms_and_agreement($terms_and_agreement_only = FALSE)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Side_Thingie.php');
         $side_thingie = new HMS_Side_Thingie(HMS_SIDE_STUDENT_AGREE);
@@ -626,9 +643,15 @@ class HMS_Student {
         $form = new PHPWS_Form;
         $form->addHidden('module', 'hms');
         $form->addHidden('type', 'student');
-        $form->addHidden('op', 'begin_application');
         $form->addSubmit('begin', _('I AGREE'));
         $form->addSubmit('quit', _('I DISAGREE'));
+
+        if($terms_and_agreement_only){
+            $form->addHidden('forward_to_main_menu', 1);
+            $form->addHidden('op', 'agreed_to_terms');
+        }else{
+            $form->addHidden('op', 'begin_application');
+        }
         
         $message  = "<b>Please read the following License Agreement and click either 'I AGREE' or 'I DISAGREE'<br />";
         $message .= 'Please note that if you click disagree you will be logged out of HMS.</b><br /><br />';
@@ -700,9 +723,14 @@ class HMS_Student {
             $tags['TERMS_MSG']   = '<b>You have agreed to the Residence Hall Contract.</b> You may click the link above to review the Residence Hall Contract at any time.';
         }else{
             $tags['TERMS_ICON']  = $alert_img;
-            $tags['TERMS_MSG']   = '<b>You have not agreed to the Residence Hall Contract.</b> You were under 18 at the time you completed your application. You must print the last page of the Residence Hall Contract, complete it (including a parent/guardian signature), and return it to the Department of Housing & Residnce Life. (Note: If you have already mailed your completed Housing Contract Agreemnt, please allow 3-4 weeks for delivery and processing.)';
+            $dob = explode('-', HMS_SOAP::get_dob($_SESSION['asu_username']));
+            if($dob[0] < date('Y') - 18) {
+                $tags['TERMS_MSG']   = '<b>You have not agreed to the Residence Hall Contract.</b> You may click the link below to view and agree to the Residence Hall Contract.';
+                $tags['TERMS_LINK']  = PHPWS_Text::secureLink('View & Agree to the Residence Hall Contract', 'hms', array('type'=>'student', 'op'=>'show_terms_and_agreement_only'));
+            }else{
+                $tags['TERMS_MSG']   = '<b>You have not agreed to the Residence Hall Contract.</b> You were under 18 at the time you completed your application. You must print the last page of the Residence Hall Contract, complete it (including a parent/guardian signature), and return it to the Department of Housing & Residnce Life. (Note: If you have already mailed your completed Housing Contract Agreemnt, please allow 3-4 weeks for delivery and processing.)';
+            }
         }
-        #$tags['TERMS_LINK']  = '<a href="http://hms.appstate.edu/files/contract.pdf">View the Residence Hall Contract Agreement</a>';
        
         /***************
          * Application *
@@ -1016,17 +1044,28 @@ class HMS_Student {
             case 'delete_student':
                 return HMS_Student::delete_student();
                 break;
+            case 'show_terms_and_agreement_only':
+                # This is used to just show the terms & agreement, and then go back to the main menu (not part of application process)
+                return HMS_Student::show_terms_and_agreement(TRUE);
+                break;
+            case 'agreed_to_terms':
+                HMS_Student::agreed_to_terms();
+                return HMS_Student::show_main_menu();
+                break;
             case 'show_terms_and_agreement':
                return HMS_Student::show_terms_and_agreement();
+               break;
             case 'begin_application':
                 # Check to see if the user hit 'do not agree' on the terms/agreement page
                 if(isset($_REQUEST['quit'])) {
                     PHPWS_Core::killAllSessions();
                     PHPWS_Core::home();
                 }
+
                 # Log the fact that the user agreed to the terms and agreemnts
                 PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
                 HMS_Activity_Log::log_activity($_SESSION['asu_username'], ACTIVITY_AGREED_TO_TERMS, $_SESSION['asu_username'], NULL);
+                
                 # Show the side thingie
                 PHPWS_Core::initModClass('hms', 'HMS_Side_Thingie.php');
                 $side_thingie = new HMS_Side_Thingie(HMS_SIDE_STUDENT_APPLY);
