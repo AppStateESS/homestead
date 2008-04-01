@@ -153,9 +153,6 @@ class HMS_Maintenance
         if(Current_User::allow('hms', 'delete_learning_communities') || Current_User::allow('hms', 'admin'))
             $tpl['DELETE_LEARNING_COMMUNITY']   = PHPWS_Text::secureLink(_('Delete Learning Community'), 'hms', array('type'=>'rlc', 'op'=>'select_learning_community_for_delete'));
 
-        if(Current_User::allow('hms', 'rlc_applicant_options') || Current_User::allow('hms', 'admin')) 
-            $tpl['RLC_APPLICATIONS']    = "RLC Applicant Options";
-
         if(Current_User::allow('hms', 'assign_rlc_applicants') || Current_User::allow('hms', 'admin')) 
             $tpl['ASSIGN_TO_RLCS']    = PHPWS_Text::secureLink(_('Assign Applicants to RLCs'), 'hms', array('type'=>'rlc', 'op'=>'assign_applicants_to_rlcs'));
 
