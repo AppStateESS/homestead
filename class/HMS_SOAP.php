@@ -221,9 +221,9 @@ class HMS_SOAP{
         }else{
             if($numeric){
                 if($student->gender == 'F'){
-                    return 0;
+                    return FEMALE;
                 }else if($student->gender == 'M'){
-                    return 1;
+                    return MALE;
                 }
             }else{
                 return $student->gender;
