@@ -229,6 +229,7 @@ class HMS_RLC_Application{
     {
         #TODO add entry term
         PHPWS_Core::initCoreClass('DBPager.php');
+        PHPWS_Core::initModClass('hms','HMS_Term.php');
         PHPWS_Core::initModClass('hms','HMS_SOAP.php');
 
         $form = new PHPWS_Form;
@@ -241,12 +242,14 @@ class HMS_RLC_Application{
         $pager = &new DBPager('hms_learning_community_applications','HMS_RLC_Application');
         $pager->db->addColumn('hms_learning_community_applications.*');
         $pager->db->addColumn('hms_learning_communities.abbreviation');
-        $pager->db->addOrder('hms_learning_communities.abbreviation','ASC');
-        $pager->db->addOrder('hms_learning_community_applications.date_submitted', 'ASC');        
+        // The 'addOrder' calls must not be used in order for the sort order buttons on the pager to work
+        #$pager->db->addOrder('hms_learning_communities.abbreviation','ASC');
+        #$pager->db->addOrder('hms_learning_community_applications.date_submitted', 'ASC');        
         //$pager->db->addOrder('user_id','ASC');
         $pager->db->addWhere('hms_learning_community_applications.rlc_first_choice_id',
                              'hms_learning_communities.id','=');
         $pager->db->addWhere('hms_assignment_id',NULL,'is');
+        $pager->db->addWhere('term', HMS_Term::get_selected_term());
 
         $pager->setModule('hms');
         $pager->setTemplate('admin/rlc_assignments_pager.tpl');
@@ -268,7 +271,6 @@ class HMS_RLC_Application{
         $tags = array();
         
         $tags['NAME']       = PHPWS_Text::secureLink(HMS_SOAP::get_full_name($this->getUserID()), 'hms', array('type'=>'student', 'op'=>'get_matching_students', 'username'=>$this->user_id));
-        /*$tags['NAME'] = HMS_SOAP::get_full_name_inverted($this->getUserID());*/
         $tags['1ST_CHOICE']  = '<a href="./index.php?module=hms&type=rlc&op=view_rlc_application&username=' . $this->getUserID() . '" target="_blank">' . $rlc_list[$this->getFirstChoice()] . '</a>';
         if(isset($rlc_list[$this->getSecondChoice()]))
             $tags['2ND_CHOICE']  = $rlc_list[$this->getSecondChoice()];

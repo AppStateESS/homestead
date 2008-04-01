@@ -438,14 +438,13 @@ class HMS_Learning_Community
     function assign_applicants_to_rlcs()
     {
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+
         $tags = array();
-        $tags['TITLE']             = 'RLC Applications';
+        $tags['TITLE'] = 'RLC Assignments - ' . HMS_Term::term_to_text(HMS_Term::get_selected_term(), TRUE);
         $tags['SUMMARY']           = HMS_Learning_Community::display_rlc_assignment_summary();
         $tags['ASSIGNMENTS_PAGER'] = HMS_RLC_Application::rlc_application_admin_pager();
 
-        # Set a bookmark so we can come back after submitting the assignments_pager
-        PHPWS_Core::bookmark();
-        
         $export_form = &new PHPWS_Form('export_form');
         $export_form->addHidden('type','rlc');
         $export_form->addHIdden('op','rlc_application_export');
@@ -461,6 +460,8 @@ class HMS_Learning_Community
 
     function display_rlc_assignment_summary()
     {
+        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+
         $template = array();
 
         $db = &new PHPWS_DB('hms_learning_communities');
@@ -481,13 +482,16 @@ class HMS_Learning_Community
 
         foreach($communities as $community) {
             $db = &new PHPWS_DB('hms_learning_community_assignment');
+            $db->addJoin('LEFT OUTER', 'hms_learning_community_assignment', 'hms_learning_community_applications', 'id', 'hms_assignment_id');
             $db->addWhere('rlc_id', $community['id']);
-            $db->addWhere('gender', 'M');
+            $db->addWhere('gender', MALE);
+            $db->addWhere('hms_learning_community_applications.term', HMS_Term::get_selected_term());
             $male = $db->select('count');
             
             $db->resetWhere();
             $db->addWhere('rlc_id', $community['id']);
-            $db->addWhere('gender', 'F');
+            $db->addWhere('gender', FEMALE);
+            $db->addWhere('hms_learning_community_applications.term', HMS_Term::get_selected_term());
             $female = $db->select('count');
 
             if($male   == NULL) $male   = 0;
@@ -533,51 +537,37 @@ class HMS_Learning_Community
         $errors = array();
 
         PHPWS_Core::initModClass('hms','HMS_SOAP.php');
-
         PHPWS_Core::initModClass('hms','HMS_RLC_Application.php');
-        $app = &new PHPWS_DB('hms_learning_community_applications');
-        $app->addColumn('id');
-        $app->addColumn('user_id');
-        $app->addColumn('required_course');
-        $app->addWhere('id',array_keys($_REQUEST['course_ok']));
-        $applications = $app->select('assoc');
-        
-        $ass = &new PHPWS_DB('hms_learning_community_assignment');
-        $app = &new PHPWS_DB('hms_learning_community_applications');
 
-        foreach($applications as $id => $application) {
-            $update = false;
+        $app = &new PHPWS_DB('hms_learning_community_applications');
+        $ass = &new PHPWS_DB('hms_learning_community_assignment');
+
+        # Foreach rlc assignment made
+        # $app_id is the 'id' column in the 'learning_community_applications' table, tells which student we're assigning
+        # $rlc_id is the 'id' column in the 'learning_communitites' table, and refers to the RLC selected for the student
+        foreach($_REQUEST['final_rlc'] as $app_id => $rlc_id){
+            
             $app->reset();
             $ass->reset();
-
-            $app->addWhere('id', $id);
             
-            if(isset($_REQUEST['course_ok'][$id])) {
-                $okay = ($_REQUEST['course_ok'][$id] == "Y" ? 1 : 0);
-                if($application['required_course'] != $okay) {
-                    $app->addValue('required_course', $okay);
-                    $update = true;
-                }
-            }
+            # Lookup the student's RLC application (so we can have their username)
+            $app->addWhere('id', $app_id);
+            $application = $app->select('row');
+           
+            # Insert a new assignment in the 'learning_community_assignment' table
+            $ass->addValue('rlc_id',            $rlc_id);
+            $ass->addValue('gender',            HMS_SOAP::get_gender($application['user_id'], TRUE));
+            $ass->addValue('assigned_by',  Current_User::getUsername());
+            $ass_id = $ass->insert();
 
-            if(isset($_REQUEST['final_rlc'][$id]) && $_REQUEST['final_rlc'][$id] > -1) {
-                $ass->addValue('asu_username',      $application['user_id']);
-                $ass->addValue('rlc_id',            $_REQUEST['final_rlc'][$id]);
-                $ass->addValue('assigned_by',  Current_User::getUsername());
-                $ass->addValue('gender',            HMS_SOAP::get_gender($application['user_id']));
-                $ass_id = $ass->insert();
-
-                $app->addValue('hms_assignment_id', $ass_id);
-                $update = true;
-            }
-
-            if($update) {
-                $app->update();
-            }
+            # Update the RLC application with the assignment id
+            $app->reset();
+            $app->addValue('hms_assignment_id', $ass_id);
+            $app->addWhere('id', $app_id);
+            $app->update();
         }
-        
-        #return HMS_Learning_Community::assign_applicants_to_rlcs();
-        PHPWS_Core::returnToBookmark();
+
+        PHPWS_Core::goBack();
         return;
     }
 

@@ -838,7 +838,17 @@ function hms_update(&$content, $currentVersion)
 
            $files[] = 'templates/admin/edit_floor.tpl';
            PHPWS_Boost::updatefiles($files, 'hms');
- 
+        case version_compare($currentVersion, '0.2.26', '<'):
+
+            $db = &new PHPWS_DB;
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_26.sql');
+            if(PEAR::isError($result)) {
+                return $result;
+            }
+
+           $files[] = 'templates/admin/display_final_rlc_assignments.tpl';
+           PHPWS_Boost::updatefiles($files, 'hms');
+
     }
 
     return TRUE;

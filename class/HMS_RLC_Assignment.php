@@ -9,11 +9,12 @@ class HMS_RLC_Assignment{
 
     var $id;
 
-    var $asu_username;
     var $rlc_id;
     var $course_ok;
     var $assigned_by_user;
     var $assigned_by_initals;
+
+    var $user_id; # For the DBPager join stuff to work right
 
     /**
      * Constructor
@@ -137,10 +138,10 @@ class HMS_RLC_Assignment{
         $tags['EXPORT'] = "// TODO: Export Records";*/
 
         $pager = &new DBPager('hms_learning_community_assignment','HMS_RLC_Assignment');
-        $pager->db->addOrder('asu_username','ASC');
-        $pager->db->addColumn('hms_learning_community_assignment.*');
         $pager->db->addWhere('hms_learning_community_applications.hms_assignment_id','hms_learning_community_assignment.id','=');
+        $pager->db->addJoin('LEFT OUTER', 'hms_learning_community_assignment', 'hms_learning_community_applications', 'id', 'hms_assignment_id');
 
+        $pager->joinResult('id','hms_learning_community_applications','hms_assignment_id','user_id');
         $pager->setModule('hms');
         $pager->setTemplate('admin/display_final_rlc_assignments.tpl');
         $pager->setLink('index.php?module=hms');
@@ -153,21 +154,19 @@ class HMS_RLC_Assignment{
 
     function getAdminPagerTags()
     {
-        PHPWS_Core::initModClass('hms','HMS_RLC_Application.php');
+        PHPWS_Core::initModClass('hms','HMS_Learning_Community.php');
         PHPWS_Core::initModClass('hms','HMS_SOAP.php');
 
-        $rlc_list = HMS_RLC_Application::getRLCListAbbr();
+        $rlc_list = HMS_Learning_Community::getRLCListAbbr();
 
         $tags = array();
-        $asuid = $this->getAsuUsername();
         
-        $tags['NAME']      = '<a href="./index.php?module=hms&type=rlc&op=view_rlc_application&username='.$asuid.'" target="_blank">' . HMS_SOAP::get_full_name_inverted($asuid) . '</a>';
+        $tags['NAME']      = '<a href="./index.php?module=hms&type=rlc&op=view_rlc_application&username='.$this->user_id.'" target="_blank">' . HMS_SOAP::get_full_name_inverted($this->user_id) . '</a>';
         $tags['FINAL_RLC'] = $rlc_list[$this->getRlcId()];
-        $tags['COURSE_OK'] = $this->getCourseOk() == 1 ? 'Y' : 'N';
 //        $tags['ROOMMATE']  = TODO: Roommate Stuff
-        $tags['ADDRESS']   = HMS_SOAP::get_address_line($asuid);
-        $tags['PHONE']     = HMS_SOAP::get_phone_number($asuid);
-        $tags['EMAIL']     = "$asuid@appstate.edu";
+        $tags['ADDRESS']   = HMS_SOAP::get_address_line($this->user_id);
+        $tags['PHONE']     = HMS_SOAP::get_phone_number($this->user_id);
+        $tags['EMAIL']     = "{$this->user_id}@appstate.edu";
 
         return $tags;
     }
@@ -178,14 +177,6 @@ class HMS_RLC_Assignment{
 
     function getId($id) {
         return $this->id;
-    }
-
-    function setAsuUsername($asu_username) {
-        $this->asu_username = $asu_username;
-    }
-
-    function getAsuUsername() {
-        return $this->asu_username;
     }
 
     function setRlcId($rlc_id) {

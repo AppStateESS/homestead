@@ -18,7 +18,6 @@
                 <tr>
                     <th>Name</th>
                     <th>Final RLC</th>
-                    <th>Course OK?</th>
                     <th>Roommate</th>
                     <th>Address</th>
                     <th>Phone/Email</th>
@@ -27,7 +26,6 @@
                 <tr {TOGGLE}>
                     <td>{NAME}</td>
                     <td>{FINAL_RLC}</td>
-                    <td>{COURSE_OK}</td>
                     <td>{ROOMMATE}</td>
                     <td>{ADDRESS}</td>
                     <td>{PHONE}<br />{EMAIL}</td>
