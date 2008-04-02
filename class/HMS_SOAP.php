@@ -25,6 +25,23 @@ class HMS_SOAP{
         }
     }
 
+    function get_banner_id($username)
+    {
+        if(SOAP_TEST_FLAG){
+            # return canned data
+            return 900325006;
+        }else{
+            $student = HMS_SOAP::get_student_info($username);
+        }
+        
+        if(PEAR::isError($student)){
+            HMS_SOAP::log_soap_error($student,'is_valid_student',$username);
+            return $student;
+        }
+
+        return $student->banner_id;
+    }
+
     /* TODO: This is duplicated code. 'get_gender' and 'get_student_class' exist below.
      * This function, if it is actually necessary, should be revised to use those functions
      */
@@ -453,6 +470,7 @@ class HMS_SOAP{
     function get_student_info($username, $term = NULL)
     {
         if(SOAP_TEST_FLAG) {
+            $student->banner_id             = 900325006;
             $student->first_name            = "kevin";
             $student->middle_name           = "michael";
             $student->last_name             = "wilcox";
