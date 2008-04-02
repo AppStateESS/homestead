@@ -262,6 +262,7 @@ class HMS_Student {
         // get roommate or pending roommate
         PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
         $roommates = HMS_Roommate::get_all_roommates($_REQUEST['username'], HMS_Term::get_selected_term());
+        $tpl['ROOMMATE'] = "";
         if(empty($roommates)) {
             $tpl['ROOMMATE'] = "This person has no roommates or roommate requests.<br />";
         } else {
