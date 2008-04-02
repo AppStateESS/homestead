@@ -847,6 +847,7 @@ function hms_update(&$content, $currentVersion)
             }
 
            $files[] = 'templates/admin/display_final_rlc_assignments.tpl';
+           $files[] = 'templates/student/show_student_info.tpl';
            PHPWS_Boost::updatefiles($files, 'hms');
 
     }
