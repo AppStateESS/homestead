@@ -205,10 +205,12 @@ class HMS_Student {
 
         #test($student_info);
 
-        $tpl['MENU_LINK'] = PHPWS_Text::secureLink(_('Return to Search'), 'hms', array('type'=>'student', 'op'=>'enter_student_search_data'));
-        $tpl['FIRST_NAME'] = $student_info->first_name;
+        $tpl['MENU_LINK']   = PHPWS_Text::secureLink(_('Return to Search'), 'hms', array('type'=>'student', 'op'=>'enter_student_search_data'));
+        
+        $tpl['BANNER_ID']   = $student_info->banner_id;
+        $tpl['FIRST_NAME']  = $student_info->first_name;
         $tpl['MIDDLE_NAME'] = $student_info->middle_name;
-        $tpl['LAST_NAME'] = $student_info->last_name;
+        $tpl['LAST_NAME']   = $student_info->last_name;
         
         if($student_info->gender == 'F') {
             $tpl['GENDER'] = "Female";
