@@ -18,6 +18,12 @@
                 <td>&nbsp;</td><td></td>
             </tr>
             <tr>
+                <td>Banner id: &nbsp;&nbsp;&nbsp;&nbsp;</td><td>{BANNER_ID}</td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td><td></td>
+            </tr>
+            <tr>
                 <td>Gender: </td><td>{GENDER}</td>
             </tr>
             <tr>
