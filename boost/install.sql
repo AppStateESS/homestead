@@ -41,6 +41,16 @@ CREATE TABLE hms_residence_hall (
     primary key(id)
 );
 
+-- Referenced by hms_floor, needs to be created first
+CREATE TABLE hms_learning_communities (
+    id integer DEFAULT 0 NOT NULL,
+    community_name character varying(32) NOT NULL,
+    abbreviation character varying(16) NOT NULL,
+    capacity integer NOT NULL,
+    primary key(id)
+);
+
+
 CREATE TABLE hms_floor (
     id                  integer NOT NULL,
     term                integer NOT NULL REFERENCES hms_term(term),
@@ -174,14 +184,6 @@ ALTER TABLE hms_deadlines ADD UNIQUE(term);
 CREATE TABLE hms_hall_communities (
     id integer DEFAULT 0 NOT NULL,
     community_name character varying(32) NOT NULL,
-    primary key(id)
-);
-
-CREATE TABLE hms_learning_communities (
-    id integer DEFAULT 0 NOT NULL,
-    community_name character varying(32) NOT NULL,
-    abbreviation character varying(16) NOT NULL,
-    capacity integer NOT NULL,
     primary key(id)
 );
 

@@ -130,16 +130,19 @@ class HMS_RLC_Assignment{
     function rlc_assignment_admin_pager()
     {
         PHPWS_Core::initCoreClass('DBPager.php');
+        PHPWS_Core::initModClass('hms','HMS_Term.php');
 
         $tags = array();
 
-        $tags['TITLE'] = "View Final RLC Assignments";
+        $tags['TITLE'] = "View Final RLC Assignments " . HMS_Term::term_to_text(HMS_Term::get_selected_term(), TRUE);
+
 /*        $tags['PRINT_RECORDS'] = "// TODO: Print Records";
         $tags['EXPORT'] = "// TODO: Export Records";*/
 
         $pager = &new DBPager('hms_learning_community_assignment','HMS_RLC_Assignment');
         $pager->db->addWhere('hms_learning_community_applications.hms_assignment_id','hms_learning_community_assignment.id','=');
         $pager->db->addJoin('LEFT OUTER', 'hms_learning_community_assignment', 'hms_learning_community_applications', 'id', 'hms_assignment_id');
+        $pager->db->addWhere('term', HMS_Term::get_selected_term());
 
         $pager->joinResult('id','hms_learning_community_applications','hms_assignment_id','user_id');
         $pager->setModule('hms');
