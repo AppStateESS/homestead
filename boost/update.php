@@ -836,8 +836,8 @@ function hms_update(&$content, $currentVersion)
                 return $result;
             }
 
-           $files[] = 'templates/admin/edit_floor.tpl';
-           PHPWS_Boost::updatefiles($files, 'hms');
+            $files[] = 'templates/admin/edit_floor.tpl';
+            PHPWS_Boost::updatefiles($files, 'hms');
         case version_compare($currentVersion, '0.2.26', '<'):
 
             $db = &new PHPWS_DB;
@@ -846,10 +846,13 @@ function hms_update(&$content, $currentVersion)
                 return $result;
             }
 
-           $files[] = 'templates/admin/display_final_rlc_assignments.tpl';
-           $files[] = 'templates/student/show_student_info.tpl';
-           PHPWS_Boost::updatefiles($files, 'hms');
+            $files[] = 'templates/admin/display_final_rlc_assignments.tpl';
+            $files[] = 'templates/student/show_student_info.tpl';
+            PHPWS_Boost::updatefiles($files, 'hms');
 
+        case version_compare($currentVersion, '0.2.27', '<'):
+            PHPWS_Boost::registerMyModule('hms', 'users', $content);
+        
     }
 
     return TRUE;

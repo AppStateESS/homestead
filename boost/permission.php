@@ -3,52 +3,76 @@
    * Permissions file for users
    *
    * @author Kevin Wilcox <kevin at tux dot appstate dot edu>
+   * @author Jeremy Booker <jbooker at tux dot appstate dot edu>
    */
 
     $use_permissions = TRUE;
     $item_permissions = TRUE;
-
-    $permissions['admin']               = _('Full Administrative access');
-
-    $permissions['maintenance']         = _('Perform general maintenance tasks');
     
-    $permissions['hall_maintenance']    = _('Add, Edit or Delete Halls');
-    $permissions['add_halls']           = _('Add Residence Halls');
-    $permissions['edit_halls']          = _('Edit Residence Halls');
-    $permissions['delete_halls']        = _('Delete Residence Halls');
+    /***********************
+     * General Permissions *
+     ***********************/
 
-    $permissions['floor_maintenance']   = _('Add, Edit or Delete Floors');
-    $permissions['add_floors']          = _('Add Floors');
-    $permissions['edit_floors']         = _('Edit Floors');
-    $permissions['delete_floors']       = _('Delete Floors');
+    $permissions['search']              = _('Search for students');
 
-    $permissions['room_maintenance']    = _('Add, Edit or Delete Rooms');
-    $permissions['edit_rooms']          = _('Edit Rooms');
+    /*********
+     * Terms *
+     *********/
+    $permissions['select_term']             = _('Select past/future terms');
+    $permissions['activate_term']           = _('Set active term');
+    $permissions['edit_terms']              = _('Create and delete terms');
 
-    $permissions['learning_community_maintenance']  = _('Add, Edit or Delete Learning Communities');
-    $permissions['add_learning_communities']        = _('Add Learning Communities');
-    $permissions['edit_learning_communities']       = _('Edit Learning Communities');
-    $permissions['delete_learning_communities']     = _('Delete Learning Communities');
-
-    $permissions['rlc_applicant_options']   = _('RLC-specific Tasks');
-    $permissions['assign_to_rlcs']          = _('Assign to RLCs');
-    $permissions['rlc_room_assignments']    = _('Assign RLC members to rooms');
-    $permissions['view_rlc_assignments']    = _('View RLC Assignments');
-
+    /*************
+     * Deadlines *
+     *************/
     $permissions['deadline_maintenance']    = _('Deadline Maintenance');
     $permissions['edit_deadlines']          = _('Edit Deadlines');
 
-    $permissions['assignment_maintenance']  = _('Assignment Maintenance');
-    $permissions['create_assignment']       = _('Create Assignment');
-    $permissions['move_assignment']         = _('Change Assignment');
-    $permissions['delete_assignment']       = _('Delete Assignment');
+    /******************
+     * Hall Structure *
+     ******************/
+    # Residence hall tasks
+    $permissions['hall_structure']      = _('Add and delete halls');
+    $permissions['hall_attributes']     = _('Edit hall attributes');
 
-    $permissions['roommate_maintenance']    = _('Roommate Maintenance');
-    $permissions['create_roommate_group']   = _('Group Roommates');
-    $permissions['edit_roommate_group']     = _('Edit Roommates');
+    # Floor tasks
+    $permissions['floor_structure']     = _('Add and delete floors');
+    $permissions['floor_attributes']    = _('Edit floor attributes');
 
-    $permissions['activate_term']           = _('Set Active Term');
-    $permissions['create_term']             = _('Create Terms');
-    $permissions['delete_term']             = _('Delete Terms');
+    # Suite tasks
+    $permissions['suite_structure']     = _('Add and delete suites');
+    $permissions['suite_attributes']    = _('Edit suite attributes');
 
+    # Room tasks
+    $permissions['room_structure']      = _('Add and delete rooms');
+    $permissions['room_attributes']     = _('Edit room attributes');
+
+    # Bed tasks
+    $permissions['bed_structure']       = _('Add and delete beds');
+    $permissions['bed_attributes']      = _('Edit bed attributes');
+
+
+    /*************
+     * Roommates *
+     *************/
+    $permissions['roommate_maintenance']     = _('Create and crush roommate groups');
+    
+    /***************
+     * Assignments *
+     ***************/
+    $permissions['assignment_maintenance']  = _('Create, move, and delete assignments');
+
+    /*************
+     * RLC tasks *
+     *************/
+    # Learning community tasks
+    $permissions['learning_community_maintenance']  = _('Add, edit, and delete learning communities');
+
+    # RLC application tasks
+    $permissions['view_rlc_applications']           = _('View RLC applications');
+    $permissions['approve_rlc_applications']        = _('Approve/Deny RLC applications');
+
+    # RLC assignment tasks
+    $permissions['view_rlc_room_assignments']       = _('View RLC room assignments');
+    $permissions['rlc_room_assignments']            = _('Create RLC room assignments');
 ?>
