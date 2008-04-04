@@ -1269,8 +1269,6 @@ class HMS_Student_Profile{
         $pager->addRowTags('getPagerTags');
         $pager->addPageTags($pageTags);
 
-        test($pager);
-
         return $pager->get();
     }
 
