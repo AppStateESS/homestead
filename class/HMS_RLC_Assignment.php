@@ -15,6 +15,8 @@ class HMS_RLC_Assignment{
     var $assigned_by_initals;
 
     var $user_id; # For the DBPager join stuff to work right
+    var $hms_assignment_id;
+    var $lc_application_term;
 
     /**
      * Constructor
@@ -140,18 +142,18 @@ class HMS_RLC_Assignment{
         $tags['EXPORT'] = "// TODO: Export Records";*/
 
         $pager = &new DBPager('hms_learning_community_assignment','HMS_RLC_Assignment');
+      
         $pager->db->addWhere('hms_learning_community_applications.hms_assignment_id','hms_learning_community_assignment.id','=');
         $pager->db->addJoin('LEFT OUTER', 'hms_learning_community_assignment', 'hms_learning_community_applications', 'id', 'hms_assignment_id');
-        $pager->db->addWhere('hms_learning_community_applications.term', HMS_Term::get_selected_term());
+        $pager->db->addWhere('hms_learning_community_applications.term', HMS_Term::get_selected_term()); 
 
-        $pager->joinResult('id','hms_learning_community_applications','hms_assignment_id','user_id');
+        $pager->joinResult('id','hms_learning_community_applications','hms_assignment_id','user_id', 'user_id');
         $pager->setModule('hms');
         $pager->setTemplate('admin/display_final_rlc_assignments.tpl');
         $pager->setLink('index.php?module=hms');
         $pager->setEmptyMessage('No RLC assignments have been made.');
         $pager->addPageTags($tags);
         $pager->addRowTags('getAdminPagerTags');
-
         return $pager->get();
     }
 

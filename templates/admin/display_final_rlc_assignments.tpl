@@ -16,10 +16,10 @@
 
             <table cellpadding="4" cellspacing="1" width="99%">
                 <tr>
-                    <th>Name {NAME_SORT}</th>
-                    <th>Final RLC {FINAL_RLC_SORT}</th>
-                    <th>Roommate {ROOMMATE_SORT}</th>
-                    <th>Address {ADDRESS_SORT}</th>
+                    <th>Name {USER_ID_SORT}</th>
+                    <th>Final RLC {RLC_ID_SORT}</th>
+                    <th>Roommate</th>
+                    <th>Address</th>
                     <th>Phone/Email</th>
                 </tr>
 <!-- BEGIN listrows -->
