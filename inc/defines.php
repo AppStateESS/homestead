@@ -93,8 +93,8 @@ define('BADCLASS',  3);
 /**
  * Queue Types
  */
-define('HMS_QUEUE_ASSIGNMENT', 1);
-define('HMS_QUEUE_REMOVAL',    2);
+define('BANNER_QUEUE_ASSIGNMENT', 1);
+define('BANNER_QUEUE_REMOVAL',    2);
 
 /**
  * Activities (used for logging)
