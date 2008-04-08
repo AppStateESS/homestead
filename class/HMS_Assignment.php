@@ -331,7 +331,7 @@ class HMS_Assignment extends HMS_Item
             }
 
             # Log in the activity log
-            HMS_Activity_Log::log_activity($_REQUEST['username'], ACTIVITY_REMOVED, Current_User::getUsername(), '');   
+            HMS_Activity_Log::log_activity($_REQUEST['username'], ACTIVITY_REMOVED, Current_User::getUsername(), HMS_Term::get_selected_term() . ' ' . $assignment->get_banner_building_code() . ' ' . $assignment->get_banner_bed_id());
         }
             
         /*
@@ -415,7 +415,7 @@ class HMS_Assignment extends HMS_Item
         }
 
         # Log in the activity log
-        HMS_Activity_Log::log_activity($username, ACTIVITY_REMOVED, Current_User::getUsername(), '');
+        HMS_Activity_Log::log_activity($username, ACTIVITY_REMOVED, Current_User::getUsername(), HMS_Term::get_selected_term() . ' ' . $assignment->get_banner_building_code() . ' ' . $assignment->get_banner_bed_id());
         
         # Show a success message
         $success_msg = "Success: $username was removed from HMS and Banner.";
