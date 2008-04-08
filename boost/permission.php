@@ -21,11 +21,12 @@
     $permissions['select_term']             = _('Select past/future terms');
     $permissions['activate_term']           = _('Set active term');
     $permissions['edit_terms']              = _('Create and delete terms');
+    $permissions['banner_queue']            = _('Enable/disable banner queue');
 
     /*************
      * Deadlines *
      *************/
-    $permissions['deadline_maintenance']    = _('Deadline Maintenance');
+    $permissions['view_deadlines']          = _('Deadline Maintenance');
     $permissions['edit_deadlines']          = _('Edit Deadlines');
 
     /******************
@@ -61,6 +62,7 @@
      * Assignments *
      ***************/
     $permissions['assignment_maintenance']  = _('Create, move, and delete assignments');
+    $permissions['autoassign']              = _('Run the auto-assigner');
 
     /*************
      * RLC tasks *
@@ -71,8 +73,18 @@
     # RLC application tasks
     $permissions['view_rlc_applications']           = _('View RLC applications');
     $permissions['approve_rlc_applications']        = _('Approve/Deny RLC applications');
+    
+    $permissions['view_rlc_members']                = _('View list of RLC members');
 
     # RLC assignment tasks
     $permissions['view_rlc_room_assignments']       = _('View RLC room assignments');
     $permissions['rlc_room_assignments']            = _('Create RLC room assignments');
+
+    /********
+     * Misc *
+     ********/
+    $permissions['edit_movein_times']               = _('Create/delete move-in times');
+
+    $permissions['stats']                           =_('View statistics');
+    $permissions['reports']                         =_('Execute and view reports');
 ?>

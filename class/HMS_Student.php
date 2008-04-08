@@ -183,13 +183,24 @@ class HMS_Student {
     function enter_student_search_data()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
+
+        if(!Current_User::allow('hms', 'assignment_maintenance')){
+            $tpl = array();
+            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
+        }
+        
         $student = &new HMS_Form;
         $content = $student->enter_student_search_data();
         return $content;
     }
 
     function get_matching_students()
-    {
+    {   
+        if(!Current_User::allow('hms', 'search')){
+            $tpl = array();
+            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
+        }
+        
         if(!isset($_REQUEST['username'])) {
             PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
             $error = "You did not provide an ASU username.<br />";

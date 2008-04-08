@@ -87,181 +87,176 @@ class HMS_Maintenance
     function show_options()
     {
         Layout::addPageTitle("Comprehensive Maintenance");
+
+        $tpl = array();
         
-        $tpl['TERM_LABEL'] = "Term Maintenance";
-        if(Current_User::allow('hms', 'create_term') || Current_User::allow('hms', 'admin'))
+        /********************
+         * Term Maintenance *
+         ********************/ 
+        if(Current_User::allow('hms', 'edit_terms'))
             $tpl['CREATE_TERM'] = PHPWS_Text::secureLink(_('Create a New Term'), 'hms', array('type'=>'term', 'op'=>'show_create_term'));
         
-        if(Current_User::allow('hms', 'term_maintenance') || Current_User::allow('hms', 'admin'))
+        if(Current_User::allow('hms', 'select_term'))
             $tpl['EDIT_TERM']   = PHPWS_Text::secureLink(_('Edit Terms'), 'hms', array('type'=>'term', 'op'=>'show_edit_terms'));
         
-        if(Current_User::allow('hms', 'hall_maintenance') || Current_User::allow('hms', 'admin'))
-            $tpl['HALL_LABEL']  = "Residence Hall Options";
 
-        if(Current_User::allow('hms', 'add_halls') || Current_User::allow('hms', 'admin')) 
+        /**************************
+         * Residence Hall Options *
+         **************************/
+        if(Current_User::allow('hms', 'hall_structure')) 
             $tpl['ADD_HALL']    = PHPWS_Text::secureLink(_('Add Residence Hall'), 'hms', array('type'=>'hall', 'op'=>'add_hall'));
 
-        if(Current_User::allow('hms', 'edit_halls') || Current_user::allow('hms', 'admin'))
-            $tpl['EDIT_HALL']   = PHPWS_Text::secureLink(_('Edit Residence Hall'), 'hms', array('type'=>'hall', 'op'=>'select_hall_to_edit'));
-
-        if(Current_User::allow('hms', 'delete_halls') || Current_User::allow('hms', 'admin'))
+        if(Current_User::allow('hms', 'hall_structure'))
             $tpl['DELETE_HALL'] = PHPWS_Text::secureLink(_('Delete Residence Hall'), 'hms', array('type'=>'hall', 'op'=>'select_residence_hall_for_delete'));
 
-        if(Current_User::allow('hms', 'hall_overview') || Current_User::allow('hms', 'admin'))
+        if(Current_User::allow('hms', 'hall_attributes'))
+            $tpl['EDIT_HALL']   = PHPWS_Text::secureLink(_('Edit Residence Hall'), 'hms', array('type'=>'hall', 'op'=>'select_hall_to_edit'));
+
+        # TODO: re-evaluate this permissions
+        if(Current_User::allow('hms', 'hall_attributes'))
             $tpl['HALL_OVERVIEW'] = PHPWS_Text::secureLink(_('Get Hall Overview'), 'hms', array('type'=>'hall', 'op'=>'select_residence_hall_for_overview'));
 
-        if(Current_User::allow('hms', 'floor_maintenance') || Current_User::allow('hms', 'admin'))
-            $tpl['FLOOR_LABEL'] = "Floor Options";
-
-        if(Current_User::allow('hms', 'add_floors') || Current_User::allow('hms', 'admin'))
+        /*****************
+         * Floor Options *
+         *****************/
+        if(Current_User::allow('hms', 'floor_structure'))
             $tpl['ADD_FLOOR']   = PHPWS_Text::secureLink(_('Add a Floor to a Hall'), 'hms', array('type'=>'hall', 'op'=>'select_residence_hall_for_add_floor'));
 
-        if(Current_User::allow('hms', 'edit_floors') || Current_User::allow('hms', 'admin'))
+        if(Current_User::allow('hms', 'floor_structure'))
+            $tpl['DELETE_FLOOR']   = PHPWS_Text::secureLink(_('Delete a Floor From a Hall'), 'hms', array('type'=>'hall', 'op'=>'select_residence_hall_for_delete_floor'));
+
+        if(Current_User::allow('hms', 'floor_attributes'))
             $tpl['EDIT_FLOOR']   = PHPWS_Text::secureLink(_('Edit a Floor'), 'hms', array('type'=>'floor', 'op'=>'show_select_floor'));
         
-        if(Current_User::allow('hms', 'delete_floors') || Current_User::allow('hms', 'admin'))
-            $tpl['DELETE_FLOOR']   = PHPWS_Text::secureLink(_('Delete a Floor From a Hall'), 'hms', array('type'=>'hall', 'op'=>'select_residence_hall_for_delete_floor'));
-       
-        if(Current_User::allow('hms', 'room_maintenance') || Current_User::allow('hms', 'admin'))
-            $tpl['ROOM_LABEL'] = "Room Options";
-
-
-        if(Current_User::allow('hms', 'add_rooms') || Current_User::allow('hms', 'admin'))
+        
+        /****************
+         * Room Options *
+         ***************/
+        if(Current_User::allow('hms', 'room_structure'))
             $tpl['ADD_ROOM'] = PHPWS_Text::secureLink(_('Add a Room'), 'hms', array('type'=>'room', 'op'=>'select_residence_hall_for_add_room'));
 
-        if(Current_User::allow('hms', 'delete_rooms') || Current_User::allow('hms', 'admin')) 
+        if(Current_User::allow('hms', 'room_structure')) 
             $tpl['DELETE_ROOM'] = PHPWS_Text::secureLink(_('Delete a Room'), 'hms', array('type'=>'room', 'op'=>'select_residence_hall_for_delete_room'));
 
-        if(Current_User::allow('hms', 'edit_rooms') || Current_User::allow('hms', 'admin'))
+        if(Current_User::allow('hms', 'room_attributes'))
             $tpl['EDIT_ROOM'] = PHPWS_Text::secureLink(_('Edit a Room'), 'hms', array('type'=>'room', 'op'=>'select_room_to_edit'));
 
-        if(Current_user::allow('hms', 'edit_rooms') || Current_User::allow('hms', 'admin'))
-            $tpl['BED_LABEL'] = 'Bed Options';
-
-        if(Current_user::allow('hms', 'edit_rooms') || Current_User::allow('hms', 'admin'))
+        /***************
+         * Bed Options *
+         **************/
+        if(Current_user::allow('hms', 'bed_attributes'))
             $tpl['EDIT_BED'] = PHPWS_Text::secureLink(_('Edit a Bed'), 'hms', array('type'=>'bed', 'op'=>'select_bed_to_edit'));
-        
-        if(Current_User::allow('hms', 'learning_community_maintenance') || Current_User::allow('hms', 'admin'))
-            $tpl['LC_LABEL']    = "Learning Community Options";
 
-        if(Current_User::allow('hms', 'add_learning_communities') || Current_User::allow('hms', 'admin'))
+        /***************
+         * RLC Options *
+         ***************/
+        if(Current_User::allow('hms', 'learning_community_maintenance'))
             $tpl['ADD_LEARNING_COMMUNITY']      = PHPWS_Text::secureLink(_('Add Learning Community'), 'hms', array('type'=>'rlc', 'op'=>'add_learning_community'));
 
-//        if(Current_User::allow('hms', 'edit_learning_communities') || Current_User::allow('hms', 'admin'))
-//            $tpl['EDIT_LEARNING_COMMUNITY']     = PHPWS_Text::secureLink(_('Edit Learning Community'), 'hms', array('type'=>'rlc', 'op'=>'edit_learning_community')) . " &nbsp;*not implemented*";
-
-        if(Current_User::allow('hms', 'delete_learning_communities') || Current_User::allow('hms', 'admin'))
+        if(Current_User::allow('hms', 'learning_community_maintenance'))
             $tpl['DELETE_LEARNING_COMMUNITY']   = PHPWS_Text::secureLink(_('Delete Learning Community'), 'hms', array('type'=>'rlc', 'op'=>'select_learning_community_for_delete'));
 
-        if(Current_User::allow('hms', 'assign_rlc_applicants') || Current_User::allow('hms', 'admin')) 
+//        if(Current_User::allow('hms', 'learning_community_maintenance'))
+//            $tpl['EDIT_LEARNING_COMMUNITY']     = PHPWS_Text::secureLink(_('Edit Learning Community'), 'hms', array('type'=>'rlc', 'op'=>'edit_learning_community')) . " &nbsp;*not implemented*";
+
+        if(Current_User::allow('hms', 'view_rlc_applications')) 
             $tpl['ASSIGN_TO_RLCS']    = PHPWS_Text::secureLink(_('Assign Applicants to RLCs'), 'hms', array('type'=>'rlc', 'op'=>'assign_applicants_to_rlcs'));
 
-/*        if(Current_User::allow('hms', 'rlc_room_assignments') || Current_User::allow('hms', 'admin')) 
+/*        if(Current_User::allow('hms', 'rlc_room_assignments')) 
             $tpl['RLC_ROOM_ASSIGNMENTS']    = PHPWS_Text::secureLink(_('Assign RLC Members to Rooms'), 'hms', array('type'=>'assignment', 'op'=>'assign_rlc_members_to_rooms'));*/
 
-        if(Current_User::allow('hms', 'search_by_rlc') || Current_User::allow('hms', 'admin'))
-            $tpl['SEARCH_BY_RLC'] = PHPWS_Text::secureLink(_('Search by RLC'), 'hms', array('type'=>'rlc', 'op'=>'search_by_rlc'));
+        if(Current_User::allow('hms', 'view_rlc_members'))
+            $tpl['SEARCH_BY_RLC'] = PHPWS_Text::secureLink(_('View RLC Members by RLC'), 'hms', array('type'=>'rlc', 'op'=>'search_by_rlc'));
 
-        if(Current_User::allow('hms', 'view_rlc_assignments') || Current_User::allow('hms', 'admin'))
-            $tpl['VIEW_RLC_ASSIGNMENTS'] = PHPWS_Text::secureLink(_('View RLC Assignments'), 'hms', array('type'=>'rlc', 'op'=>'view_rlc_assignments'));
+        if(Current_User::allow('hms', 'view_rlc_room_assignments'))
+            $tpl['VIEW_RLC_ASSIGNMENTS'] = PHPWS_Text::secureLink(_('View RLC Room Assignments'), 'hms', array('type'=>'rlc', 'op'=>'view_rlc_assignments'));
 
-
-        if(Current_User::allow('hms', 'student_maintenance') || Current_User::allow('hms', 'admin'))
-            $tpl['STUDENT_LABEL'] = "Student Maintenance";
-
-        if(Current_User::allow('hms', 'search_for_students') || Current_User::allow('hms', 'admin'))
+        /***********************
+         * Student Maintenance *
+         ***********************/
+        if(Current_User::allow('hms', 'search'))
             $tpl['SEARCH_FOR_STUDENT'] = PHPWS_Text::secureLink(_('Search for a Student'), 'hms', array('type'=>'student', 'op'=>'enter_student_search_data'));
 
 /*
-        if(Current_User::allow('hms', 'add_student') || Current_User::allow('hms', 'admin'))
+        if(Current_User::allow('hms', 'add_student'))
             $tpl['ADD_STUDENT']     = PHPWS_Text::secureLink(_('Add Student'), 'hms', array('type'=>'student', 'op'=>'add_student'));
 
-        if(Current_User::allow('hms', 'edit_student') || Current_User::allow('hms', 'admin'))
+        if(Current_User::allow('hms', 'edit_student'))
             $tpl['EDIT_STUDENT']    = PHPWS_Text::secureLink(_('Edit Student'), 'hms', array('type'=>'student', 'op'=>'enter_student_search_data'));
 */
-        if(Current_User::allow('hms', 'deadline_maintenance') || Current_User::allow('hms', 'admin'))
-            $tpl['DEADLINE_LABEL']  = "Deadline Maintenance";
 
-        if(Current_User::allow('hms', 'edit_deadlines') || Current_User::allow('hms', 'admin')) 
-            $tpl['EDIT_DEADLINES']  = PHPWS_Text::secureLink(_('Edit Deadlines'), 'hms', array('type'=>'deadlines', 'op'=>'show_edit_deadlines'));
-
-        if(Current_User::allow('hms', 'assignment_maintenance') || Current_User::allow('hms', 'admin'))
-            $tpl['ASSIGNMENT_LABEL'] = "Assignment Maintenance";
-
-/*        if(Current_User::allow('hms', 'assign_by_floor') || Current_User::allow('hms', 'admin'))
+        /************************
+         * Deadline Maintenance *
+         ************************/
+        if(Current_User::allow('hms', 'view_deadlines')) 
+            $tpl['EDIT_DEADLINES']  = PHPWS_Text::secureLink(_('View/Edit Deadlines'), 'hms', array('type'=>'deadlines', 'op'=>'show_edit_deadlines'));
+            
+        /***************
+         * Assignments *
+         ***************/
+/*        if(Current_User::allow('hms', 'assign_by_floor'))
             $tpl['ASSIGN_BY_FLOOR'] = PHPWS_Text::secureLink(_('Assign Entire Floor'), 'hms', array('type'=>'assignment', 'op'=>'begin_by_floor'));*/
 
-        if(Current_User::allow('hms', 'create_assignment') || Current_User::allow('hms', 'admin'))
+        if(Current_User::allow('hms', 'assignment_maintenance'))
             $tpl['CREATE_ASSIGNMENT'] = PHPWS_Text::secureLink(_('Assign/Re-assign Student'), 'hms', array('type'=>'assignment', 'op'=>'show_assign_student'));
 
-        if(Current_User::allow('hms', 'delete_assignment') || Current_User::allow('hms', 'admin'))
+        if(Current_User::allow('hms', 'assignment_maintenance'))
             $tpl['DELETE_ASSIGNMENT'] = PHPWS_Text::secureLink(_('Unassign Student'), 'hms', array('type'=>'assignment', 'op'=>'show_unassign_student'));
-
-        if(Current_User::allow('hms', 'roommate_maintenance') || Current_User::allow('hms', 'admin'))
-            $tpl['ROOMMATE_LABEL'] = "Roommate Maintenance";
-
-        if(Current_User::allow('hms', 'create_roommate_group') || Current_User::allow('hms', 'admin'))
+        
+        /*************
+         * Roommates *
+         ************/
+        if(Current_User::allow('hms', 'create_roommate_group'))
             $tpl['CREATE_ROOMMATE_GROUP'] = PHPWS_Text::secureLink(_('Create new roommate group'), 'hms', array('type'=>'roommate', 'op'=>'get_usernames_for_new_grouping'));
 
-        if(Current_User::allow('hms', 'edit_roommate_group') || Current_User::allow('hms', 'admin'))
+        if(Current_User::allow('hms', 'edit_roommate_group'))
             $tpl['EDIT_ROOMMATE_GROUP'] = PHPWS_Text::secureLink(_('Edit roommate group'), 'hms', array('type'=>'roommate', 'op'=>'get_username_for_edit_grouping'));
 
-        if(Current_User::allow('hms', 'assignment_maintenance') || Current_User::allow('hms', 'admin'))
-            $tpl['AUTOASSIGN_LABEL'] = "Auto-Assignment";
-
-        if(Current_User::allow('hms', 'assignment_maintenance') || Current_User::allow('hms', 'admin'))
-            $tpl['FILL_QUEUE'] = PHPWS_Text::secureLink(
-                _('Fill Assignment Queue'), 'hms',
-                array('type'=>'autoassign', 'op'=>'fill'));
-
-        if(Current_User::allow('hms', 'assignment_maintenance') || Current_User::allow('hms', 'admin'))
-            $tpl['VIEW_QUEUE'] = PHPWS_Text::secureLink(
-                _('View Assignment Queue'), 'hms',
-                array('type'=>'autoassign', 'op'=>'view'));
-
-        if(Current_User::allow('hms', 'assignment_maintenance') || Current_User::allow('hms', 'admin'))
-            $tpl['CLEAR_QUEUE'] = PHPWS_Text::secureLink(
-                _('Clear Assignment Queue'), 'hms',
-                array('type'=>'autoassign', 'op'=>'clear'));
-
-        if(Current_User::allow('hms', 'assignment_maintenance') || Current_User::allow('hms', 'admin'))
+        /*******************
+         * Auto-assignment *
+         *******************/
+        if(Current_User::allow('hms', 'assignment_maintenance'))
             $tpl['ASSIGN'] = PHPWS_Text::secureLink(
                 _('Auto-Assign'), 'hms',
                 array('type'=>'autoassign', 'op'=>'assign'));
         
-        if(Current_User::allow('hms', 'assignment_maintenance') || Current_User::allow('hms', 'admin'))
-            $tpl['LETTERS_LABEL'] = _('Letters');
-            
-        if(Current_User::allow('hms', 'assignment_maintenance') || Current_User::allow('hms', 'admin'))
+        /***********
+         * Letters *
+         ***********/
+        if(Current_User::allow('hms', 'assignment_maintenance'))
             $tpl['GENERATE_UPDATED_LETTERS'] = PHPWS_Text::secureLink(
                 _('Generate Updated Letters'), 'hms',
                 array('type'=>'letter', 'op'=>'generate'));
             
-        if(Current_User::allow('hms', 'assignment_maintenance') || Current_User::allow('hms', 'admin'))
+        if(Current_User::allow('hms', 'assignment_maintenance'))
             $tpl['LIST_LETTERS'] = PHPWS_Text::secureLink(
                 _('List Generated Letters'), 'hms',
                 array('type'=>'letter', 'op'=>'list'));
             
-        if(Current_User::allow('hms', 'assignment_maintenance') || Current_User::allow('hms', 'admin'))
+        if(Current_User::allow('hms', 'assignment_maintenance'))
             $tpl['DOWNLOAD_PDF'] = PHPWS_Text::secureLink(
                 _('Download Most Recent PDF'), 'hms',
                 array('type'=>'letter', 'op'=>'pdf'));
             
-        if(Current_User::allow('hms', 'assignment_maintenance') || Current_User::allow('hms', 'admin'))
+        if(Current_User::allow('hms', 'assignment_maintenance'))
             $tpl['DOWNLOAD_CSV'] = PHPWS_Text::secureLink(
                 _('Download Most Recent CSV'), 'hms',
                 array('type'=>'letter', 'op'=>'csv'));
-
-        # Suite editing
-        if(Current_User::allow('hms', 'admin')){
-            $tpl['SUITE_LABEL'] = 'Suite Options';
+            
+        /*****************
+         * Suite Options *
+         *****************/
+        if(Current_User::allow('hms', 'suite_attributes')){
             $tpl['EDIT_SUITE'] = PHPWS_Text::secureLink(
                 _('Edit Suite'), 'hms',
                 array('type'=>'suite', 'op'=>'show_select_suite'));
         }
+        
+        /****************
+         * Movein times *
+         ****************/
 
-        if(Current_User::allow('hms', 'admin')){
-            $tpl['MOVEIN_TIMES_LABEL'] = 'Move-in Times';
+        if(Current_user::allow('hms', 'edit_movein_times')){
             $tpl['EDIT_MOVEIN_TIMES'] = PHPWS_Text::secureLink(
                 _('Edit Move-in Times'), 'hms',
                 array('type'=>'movein', 'op'=>'show_edit_movein_times'));

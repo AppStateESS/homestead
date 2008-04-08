@@ -140,14 +140,17 @@ class HMS_Admin
 
         Layout::add($final);
 
-        $links[] = PHPWS_Text::secureLink(_('HMS Statistics'), 'hms', array('type'=>'display', 'op'=>'display_system_statistics'));
-        $links[] = PHPWS_Text::secureLink(_('HMS Reports'), 'hms', array('type'=>'reports', 'op'=>'display_reports'));
-        //$links[] = PHPWS_Text::secureLink(_('Search Halls'), 'hms', array('type'=>'hall', 'op'=>'search_residence_halls'));
-        $links[] = PHPWS_Text::secureLink(_('Search Students'), 'hms', array('type'=>'student', 'op'=>'enter_student_search_data'));
-        if(Current_User::allow('hms', 'maintenance') || Current_User::allow('hms', 'admin')) 
-            $links[] = PHPWS_Text::secureLink(_('Comprehensive Maintenance'), 'hms', array('type'=>'maintenance', 'op'=>'show_maintenance_options'));
-        if(Current_User::allow('hms', 'primary_admin_panel') || Current_User::allow('hms', 'admin')) 
-            $links[] = PHPWS_Text::secureLink(_('Main Panel'), 'hms', array('type'=>'admin', 'op'=>'show_primary_admin_panel'));
+        if(Current_user::allow('hms', 'stats'))
+            $links[] = PHPWS_Text::secureLink(_('HMS Statistics'), 'hms', array('type'=>'display', 'op'=>'display_system_statistics'));
+
+        if(Current_User::allow('hms', 'reports'))
+            $links[] = PHPWS_Text::secureLink(_('HMS Reports'), 'hms', array('type'=>'reports', 'op'=>'display_reports'));
+
+        if(Current_User::allow('hms', 'search'))
+            $links[] = PHPWS_Text::secureLink(_('Search Students'), 'hms', array('type'=>'student', 'op'=>'enter_student_search_data'));
+        
+        $links[] = PHPWS_Text::secureLink(_('Comprehensive Maintenance'), 'hms', array('type'=>'maintenance', 'op'=>'show_maintenance_options'));
+            
         $links[] = PHPWS_Text::secureLink(_('Logout'), 'users', array('action'=>'user', 'command'=>'logout'));
 
         MiniAdmin::add('hms', $links);

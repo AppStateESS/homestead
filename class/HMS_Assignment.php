@@ -236,6 +236,10 @@ class HMS_Assignment extends HMS_Item
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
 
+        if(!Current_User::allow('hms', 'assignment_maintenance')){
+            $tpl = array();
+            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
+        }
 
         $more = '';
 
@@ -383,6 +387,11 @@ class HMS_Assignment extends HMS_Item
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
 
+        if(!Current_User::allow('hms', 'assignment_maintenance')){
+            $tpl = array();
+            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
+        }
+        
         $username = $_REQUEST['username'];
         
         # Make sure the requested username is actually assigned
@@ -432,6 +441,11 @@ class HMS_Assignment extends HMS_Item
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
         PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+
+        if(!Current_User::allow('hms', 'assignment_maintenance')){
+            $tpl = array();
+            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
+        }
 
         javascript('/modules/hms/assign_student');
 
@@ -592,6 +606,11 @@ class HMS_Assignment extends HMS_Item
     function show_unassign_student($success = NULL, $error = NULL)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+
+        if(!Current_User::allow('hms', 'assignment_maintenance')){
+            $tpl = array();
+            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
+        }
 
         PHPWS_Core::initCoreClass('Form.php');
         $form = &new PHPWS_Form;
