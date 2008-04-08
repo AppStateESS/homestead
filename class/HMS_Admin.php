@@ -153,25 +153,6 @@ class HMS_Admin
         MiniAdmin::add('hms', $links);
     }
 
-    function handle_queues()
-    {
-        $op = $_REQUEST['op'];
-        if($_REQUEST['queue'] == 'assign') {
-                PHPWS_Core::initModClass('hms', 'HMS_Process_Assign_Unit.php');
-                if($op == 'enable') {
-                    HMS_Process_Unit::enable_assign_queue();
-                } else if($op == 'disable') {
-                    HMS_Process_Unit::disable_assign_queue();
-                } else {
-                    return "Unrecognized Op $op";
-                }
-        } else {
-                return "Unrecognized Queue {$_REQUEST['queue']}";
-        }
-
-        return TRUE;
-    }
-
     /**
      * Display the admin panel requested by Housing 
      */

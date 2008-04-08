@@ -252,23 +252,6 @@ class HMS_Maintenance
                 _('Download Most Recent CSV'), 'hms',
                 array('type'=>'letter', 'op'=>'csv'));
 
-        PHPWS_Core::initModClass('hms', 'HMS_Process_Assign_Unit.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Process_Remove_Unit.php');
-        if(Current_User::allow('hms', 'admin')) {
-            $tpl['BANNER_LABEL'] = 'Banner Commits ' . (HMS_Process_Unit::assign_queue_enabled() ? 'DISABLED' : 'ENABLED');
-
-            if(HMS_Process_Unit::assign_queue_enabled()) {
-                $tpl['ASSIGN_QUEUE'] = PHPWS_Text::secureLink(
-                    _('Disable Assignment Queue'), 'hms',
-                    array('type'=>'queue', 'queue'=>'assign', 'op'=>'disable'));
-            } else {
-                $tpl['ASSIGN_QUEUE'] = PHPWS_Text::secureLink(
-                    _('Enable Assignment Queue'), 'hms',
-                    array('type'=>'queue', 'queue'=>'assign', 'op'=>'enable'));
-            }
-            //TODO: Process Queues
-        }
-
         # Suite editing
         if(Current_User::allow('hms', 'admin')){
             $tpl['SUITE_LABEL'] = 'Suite Options';

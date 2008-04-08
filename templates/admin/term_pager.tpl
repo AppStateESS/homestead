@@ -2,6 +2,7 @@
 <table cellpadding="4" cellspacing="1" width="99%">
     <tr>
         <th>Term</th>
+        <th>Banner Queue</th>
         <th>Action</th>
     </tr>
 <!-- BEGIN empty_table -->
@@ -14,6 +15,7 @@
 <!-- BEGIN listrows -->
     <tr {TOGGLE}>
         <td>{TERM}</td>
+        <td>{BANNER_QUEUE}</td>
         <td>{ACTION}</td>
     </tr>
 <!-- END listrows -->

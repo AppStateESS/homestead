@@ -852,6 +852,18 @@ function hms_update(&$content, $currentVersion)
 
         case version_compare($currentVersion, '0.2.27', '<'):
             PHPWS_Boost::registerMyModule('hms', 'users', $content);
+
+        case version_compare($currentVersion, '0.2.28', '<'):
+            
+            $db = &new PHPWS_DB;
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_28.sql');
+            if(PEAR::isError($result)) {
+                return $result;
+            }
+
+            $files[] = 'templates/admin/term_pager.tpl';
+            $files[] = 'templates/admin/maintenance.tpl';
+            PHPWS_Boost::updateFiles($files, 'hms');
         
     }
 

@@ -8,6 +8,7 @@
 class HMS_Term{
 
     var $term;
+    var $banner_queue;
 
     function HMS_Term($term = NULL)
     {
@@ -17,18 +18,12 @@ class HMS_Term{
 
         $this->set_term($term);
 
-        # Initalize
-        # This code (initialization stuff) commented out due to the removal of the 'id' field.
-        /*
         $result = $this->init();
-        if(PEAR::isError($result)){
-            PHPWS_Error::log($result);
-            return $result;
+        if($result === FALSE) {
+            return FALSE;
         }
-        */
     }
 
-    /*
     function init()
     {
         if(!isset($this->term)){
@@ -39,19 +34,21 @@ class HMS_Term{
         $db->addWhere('term',$this->get_term());
         $result = $db->select('row');
 
-        if(PEAR::isError($result)){
-            PHPWS_Error::log($result);
+        if(PHPWS_Error::logIfError($result)) {
+            $this->term = NULL;
+            return FALSE;
         }
+
+        $this->banner_queue = $result['banner_queue'];
 
         return $result;
     }
-    */
 
     function save()
     {
         $db = &new PHPWS_DB('hms_term');
-
-        $result = $db->saveObject($this);
+        $db->addWhere('term', $this->get_term());
+        $result = $db->saveObject($this, FALSE, FALSE);
 
         if(PEAR::isError($result)){
             PHPWS_Error::log($result);
@@ -101,6 +98,9 @@ class HMS_Term{
             case 'term_delete':
                 return HMS_Term::term_delete();
                 break;
+            case 'term_banner_queue_toggle':
+                return HMS_Term::term_banner_queue_toggle();
+                break;
             default:
                 return "Undefined term op";
                 break;
@@ -149,6 +149,14 @@ class HMS_Term{
         $_SESSION['selected_term'] = $term;
         return;
     } 
+
+    /**
+     */
+    function is_banner_queue_enabled($term)
+    {
+        $term = &new HMS_Term($term);
+        return $term->get_banner_queue();
+    }
 
     /**
      * Returns an array where the keys are the 'term' column of the
@@ -235,6 +243,15 @@ class HMS_Term{
                 array('type'=>'term',
                       'op'  =>'term_delete',
                       'term'=> $this->get_term()));
+        }
+
+        // 'Banner Queue' toggles whether it's enabled or not
+        if(Current_User::allow('hms', 'activate_term')) {
+            $text = $this->get_banner_queue() == 0 ? 'Disabled' : 'Enabled';
+            $tags['BANNER_QUEUE'] = PHPWS_Text::secureLink($text,
+                'hms', array('type'=>'term',
+                             'op'  =>'term_banner_queue_toggle',
+                             'term'=>$this->get_term()));
         }
         
         $tags['ACTION'] = implode(' | ', $actions);
@@ -324,6 +341,19 @@ class HMS_Term{
     function term_delete()
     {
         return HMS_Term::show_edit_terms(NULL, 'Sorry, term deletion is not yet implemented.');
+    }
+
+    /**
+     * Called in response to the 'term_banner_queue_toggle' action, and toggles whether or not we're queuing.
+     */
+    function term_banner_queue_toggle()
+    {
+        $term = &new HMS_Term($_REQUEST['term']);
+        $enabled = $term->toggle_banner_queue();
+        $term->save();
+
+        $enabled_text = $enabled ? 'enabled' : 'disabled';
+        return HMS_Term::show_edit_terms("Banner queue $enabled_text for term " . HMS_Term::term_to_text($_REQUEST['term'], true));
     }
 
     /****************
@@ -497,6 +527,24 @@ class HMS_Term{
 
     function set_term($term){
         $this->term = $term;
+    }
+
+    function get_banner_queue() {
+        return $this->banner_queue;
+    }
+
+    function set_banner_queue($bq) {
+        $this->banner_queue = $bq;
+    }
+
+    function toggle_banner_queue() {
+        if($this->banner_queue == 0) {
+            $this->banner_queue = 1;
+        } else {
+            $this->banner_queue = 0;
+        }
+
+        return $this->banner_queue;
     }
 }
 

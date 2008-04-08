@@ -13,7 +13,6 @@ class HMS_Autoassigner
         PHPWS_Core::initModClass('hms', 'HMS_Application.php');
         if(!$test) {
             PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-            PHPWS_Core::initModClass('hms', 'HMS_Process_Assign_Unit.php');
             PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
             PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
         }
@@ -38,7 +37,7 @@ class HMS_Autoassigner
                 // Get Meal Plan
                 $meal_plan = HMS_SOAP::get_plan_meal_codes($applicant->hms_student_id, $bed['hall'], $applicant->meal_option);
 
-                $banner_success = HMS_Process_Assign_Unit::queue_create_assignment(
+                $banner_success = HMS_Banner_Queue::queue_create_assignment(
                     $applicant->hms_student_id,
                     HMS_Term::get_selected_term(),
                     $bed['hall'],
