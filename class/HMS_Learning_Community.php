@@ -204,22 +204,24 @@ class HMS_Learning_Community
 
         $db = &new PHPWS_DB('hms_learning_community_assignment');
         $db->addWhere('rlc_id', $_REQUEST['rlc']);
-        $db->addColumn('asu_username');
+        $db->addJoin('LEFT OUTER', 'hms_learning_community_assignment', 'hms_learning_community_applications', 'id', 'hms_assignment_id');
+        $db->addColumn('hms_learning_community_applications.user_id');
         $usernames = $db->select();
 
         if($usernames != NULL && $usernames != FALSE) {
+            $new_tpl['ROWS'] = "";
             foreach($usernames as $user) {
-                $tags['FIRST_NAME']     = HMS_SOAP::get_first_name($user['asu_username']);
-                $tags['MIDDLE_NAME']    = HMS_SOAP::get_middle_name($user['asu_username']);
-                $tags['LAST_NAME']      = HMS_SOAP::get_last_name($user['asu_username']);
-                $tags['GENDER']         = HMS_SOAP::get_gender($user['asu_username']);
+                $tags['FIRST_NAME']     = HMS_SOAP::get_first_name($user['user_id']);
+                $tags['MIDDLE_NAME']    = HMS_SOAP::get_middle_name($user['user_id']);
+                $tags['LAST_NAME']      = HMS_SOAP::get_last_name($user['user_id']);
+                $tags['GENDER']         = HMS_SOAP::get_gender($user['user_id']);
 
-                $tags['USERNAME']       = $user['asu_username'];
-                $tags['EMAIL']          = $user['asu_username'] . '@appstate.edu';
+                $tags['USERNAME']       = $user['user_id'];
+                $tags['EMAIL']          = $user['user_id'] . '@appstate.edu';
 
-                $tags['VIEW_APP']       = './index.php?module=hms&type=rlc&op=view_rlc_application&username='.$user['asu_username'];
+                $tags['VIEW_APP']       = './index.php?module=hms&type=rlc&op=view_rlc_application&username='.$user['user_id'];
 
-                $tags['ACTIONS']        = '<a href="./index.php?module=hms&type=rlc&op=confirm_remove_from_rlc&username='.$user['asu_username'].'">Remove</a>';
+                $tags['ACTIONS']        = '<a href="./index.php?module=hms&type=rlc&op=confirm_remove_from_rlc&username='.$user['user_id'].'">Remove</a>';
 
                 $new_tpl['ROWS'] .= PHPWS_Template::processTemplate($tags, 'hms', 'admin/full_name_gender_email.tpl');
             }
@@ -243,7 +245,7 @@ class HMS_Learning_Community
         $db->addColumn('hms_learning_communities.id', NULL, 'rlc_id');
         $db->addColumn('hms_learning_community_assignment.id', NULL, 'ass_id');
         $db->addWhere('hms_learning_communities.id', 'hms_learning_community_assignment.rlc_id');
-        $db->addWhere('hms_learning_community_assignment.asu_username', $_REQUEST['username'], 'ILIKE');
+        $db->addWhere('hms_learning_community_assignment.user_id', $_REQUEST['username'], 'ILIKE');
         $result = $db->select('row');
 
         PHPWS_Core::initCoreClass('Form.php');
