@@ -247,16 +247,18 @@ class HMS_Student {
 
         $tpl['TITLE'] = "Search Results";
 
-        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+        $this_term = HMS_Term::get_selected_term();
 
-        $assignment = HMS_Assignment::get_assignment($_REQUEST['username']);
+        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
+        $assignment = HMS_Assignment::get_assignment($_REQUEST['username'], $this_term);
 
         if(isset($assignment) && $assignment != FALSE){
             $unassign = PHPWS_Text::secureLink('Unassign', 'hms', array('type'=>'assignment', 'op'=>'show_unassign_student', 'username'=>$_REQUEST['username']));
             $reassign = PHPWS_Text::secureLink('Reassign', 'hms', array('type'=>'assignment', 'op'=>'show_assign_student', 'username'=>$_REQUEST['username']));
             $tpl['ROOM_ASSIGNMENT'] = $assignment->where_am_i() . " | $reassign | $unassign";
         }else if($assignment == FALSE){
-            $tpl['ROOM_ASSIGNMENT'] = 'Student is not assigned for the current term. ' . PHPWS_Text::secureLink('Assign student now.', 'hms', array('type'=>'assignment', 'op'=>'show_assign_student', 'username'=>$_REQUEST['username']));
+            $tpl['ROOM_ASSIGNMENT'] = 'Student is not assigned for ' . HMS_Term::term_to_text($this_term, TRUE) . '. ' . PHPWS_Text::secureLink('Assign student now.', 'hms', array('type'=>'assignment', 'op'=>'show_assign_student', 'username'=>$_REQUEST['username']));
         }else{
             $tpl['ROOM_ASSIGNMENT'] = "Error: Could not look up the current assignment. Please contact ESS.";
         }
