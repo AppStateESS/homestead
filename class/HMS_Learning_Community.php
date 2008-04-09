@@ -536,6 +536,11 @@ class HMS_Learning_Community
 
     function rlc_assignments_submit()
     {
+        if(!Current_User::allow('hms', 'approve_rlc_applications')){
+            $tpl = array();
+            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
+        }
+        
         $errors = array();
 
         PHPWS_Core::initModClass('hms','HMS_SOAP.php');

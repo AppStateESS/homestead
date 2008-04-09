@@ -219,26 +219,28 @@ class HMS_Term{
         if($this->is_selected_term()) {
             $actions[] = '<strong>Selected</strong>';
         } else {
-            $actions[] = PHPWS_Text::secureLink(_('Select'), 'hms',
-                array('type'=>'term',
-                      'op'  =>'term_select',
-                      'term'=> $this->get_term()));
+            if(Current_User::allow('hms','select_term')){
+                $actions[] = PHPWS_Text::secureLink(_('Select'), 'hms',
+                    array('type'=>'term',
+                          'op'  =>'term_select',
+                          'term'=> $this->get_term()));
+            }
         }
         
         // 'Activate' makes the term globally active
-        if(Current_User::allow('hms', 'activate_term')) {
-            if($this->is_current_term()) {
-                $actions[] = '<strong>Active</strong>';
-            } else {
+        if($this->is_current_term()){
+            $actions[] = '<strong>Active</strong>';
+        }else{
+             if(Current_User::allow('hms', 'activate_term')) {
                 $actions[] = PHPWS_Text::secureLink(_('Activate'), 'hms',
                     array('type'=>'term',
                           'op'  =>'term_activate',
                           'term'=> $this->get_term()));
-            }
+            } 
         }
 
         // 'Delete' does exactly that
-        if(Current_User::allow('hms', 'delete_term')) {
+        if(Current_User::allow('hms', 'edit_terms')) {
             $actions[] = PHPWS_Text::secureLink(_('Delete'), 'hms',
                 array('type'=>'term',
                       'op'  =>'term_delete',
@@ -246,12 +248,14 @@ class HMS_Term{
         }
 
         // 'Banner Queue' toggles whether it's enabled or not
-        if(Current_User::allow('hms', 'activate_term')) {
-            $text = $this->get_banner_queue() == 0 ? 'Disabled' : 'Enabled';
+        $text = $this->get_banner_queue() == 0 ? 'Disabled' : 'Enabled';
+        if(Current_User::allow('hms', 'banner_queue')) {
             $tags['BANNER_QUEUE'] = PHPWS_Text::secureLink($text,
                 'hms', array('type'=>'term',
                              'op'  =>'term_banner_queue_toggle',
                              'term'=>$this->get_term()));
+        }else{
+            $tags['BANNER_QUEUE'] = $text;
         }
         
         $tags['ACTION'] = implode(' | ', $actions);
@@ -321,7 +325,13 @@ class HMS_Term{
     /**
      * Called in response to the 'term_select' action. Saves the selected term in the session variable for use in other editing.
      */
-    function term_select(){
+    function term_select()
+    {
+        if(!Current_User::allow('hms', 'select_term')){
+            $tpl = array();
+            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
+        }
+        
         HMS_Term::set_selected_term($_REQUEST['term']);
         return HMS_Term::show_edit_terms('Term ' . HMS_Term::term_to_text($_REQUEST['term'], true) . ' selected.');
     }
@@ -331,6 +341,11 @@ class HMS_Term{
      */
     function term_activate()
     {
+        if(!Current_User::allow('hms', 'activate_term')){
+            $tpl = array();
+            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
+        }
+
         HMS_Term::set_current_term($_REQUEST['term']);
         return HMS_Term::show_edit_terms('Term ' . HMS_Term::term_to_text($_REQUEST['term'], true) . ' activated.');
     }
