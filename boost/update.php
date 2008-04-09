@@ -865,6 +865,7 @@ function hms_update(&$content, $currentVersion)
         case version_compare($currentVersion, '0.2.29', '<'):
             PHPWS_Boost::registerMyModule('hms', 'users', $content);
             $files[] = 'templates/admin/permission_denied.tpl';
+            $files[] = 'templates/admin/maintenance.tpl';
             PHPWS_Boost::updatefiles($files, 'hms');
 
     }

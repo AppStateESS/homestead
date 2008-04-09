@@ -317,6 +317,7 @@ class HMS_Roommate
             return FALSE;
 
         // I'm sure we'll get phone calls about THIS cut corner...
+        // TODO: Do ANY of a's RLCs match up with ANY of b's?
         return $result['rlc_first_choice_id'] == $resultb['rlc_first_choice_id'];
     }
 

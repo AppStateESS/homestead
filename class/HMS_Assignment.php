@@ -579,7 +579,7 @@ class HMS_Assignment extends HMS_Item
         $tpl['TITLE_CLASS'] = HMS_Util::get_title_class();
 
         $fullname = HMS_SOAP::get_full_name($_REQUEST['username']);
-        $assignment = HMS_Assignment::get_assignment($_REQUEST['username']);         
+        $assignment = HMS_Assignment::get_assignment($_REQUEST['username'], HMS_Term::get_selected_term());
         $location = $assignment->where_am_i();
 
         $tpl['MESSAGE'] = "Warnring: $fullname is already assigned to $location. Click the 'Confirm' button below to move the student, or 'Cancel' to keep the current assignment.";
