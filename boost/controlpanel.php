@@ -4,6 +4,6 @@ $link[] = array('label'       => _('Housing Manager'),
                 'url'         => 'index.php?module=hms&amp;op=main',
                 'description' => _('Track resident students.'),
                 'image'       => 'hms.png',
-                'tab'         => 'ASU Software'
+                'tab'         => 'admin'
                 );
 ?>
