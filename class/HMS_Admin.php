@@ -150,6 +150,9 @@ class HMS_Admin
             $links[] = PHPWS_Text::secureLink(_('Search Students'), 'hms', array('type'=>'student', 'op'=>'enter_student_search_data'));
         
         $links[] = PHPWS_Text::secureLink(_('Comprehensive Maintenance'), 'hms', array('type'=>'maintenance', 'op'=>'show_maintenance_options'));
+
+        if(Current_User::isUnrestricted('users') || Current_User::isRestricted('users'))
+            $links[] = PHPWS_Text::secureLink(_('Control Panel'), 'controlpanel');
             
         $links[] = PHPWS_Text::secureLink(_('Logout'), 'users', array('action'=>'user', 'command'=>'logout'));
 
