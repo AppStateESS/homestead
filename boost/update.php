@@ -850,11 +850,6 @@ function hms_update(&$content, $currentVersion)
             $files[] = 'templates/student/show_student_info.tpl';
             PHPWS_Boost::updatefiles($files, 'hms');
 
-        case version_compare($currentVersion, '0.2.27', '<'):
-            PHPWS_Boost::registerMyModule('hms', 'users', $content);
-            $files[] = 'templates/admin/permission_denied.tpl';
-            PHPWS_Boost::updatefiles($files, 'hms');
-
         case version_compare($currentVersion, '0.2.28', '<'):
             
             $db = &new PHPWS_DB;
@@ -866,6 +861,12 @@ function hms_update(&$content, $currentVersion)
             $files[] = 'templates/admin/term_pager.tpl';
             $files[] = 'templates/admin/maintenance.tpl';
             PHPWS_Boost::updateFiles($files, 'hms');
+
+        case version_compare($currentVersion, '0.2.29', '<'):
+            PHPWS_Boost::registerMyModule('hms', 'users', $content);
+            $files[] = 'templates/admin/permission_denied.tpl';
+            PHPWS_Boost::updatefiles($files, 'hms');
+
     }
 
     return TRUE;
