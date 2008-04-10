@@ -74,17 +74,19 @@ class HMS_RLC_Assignment{
     {
         $db = &new PHPWS_DB('hms_learning_community_assignment');
 
+        $db->addJoin('LEFT OUTER', 'hms_learning_community_assignment', 'hms_learning_community_applications', 'id', 'hms_assignment_id');
+
         if(isset($asu_username)) {
-            $db->addWhere('asu_username',$asu_username,'ILIKE');
+            $db->addWhere('hms_learning_community_applications.user_id',$asu_username,'ILIKE');
         } else {
-            $db->addWhere('asu_username',$_SESSION['asu_username'],'ILIKE');
+            $db->addWhere('hms_learning_community_applications.user_id',$_SESSION['asu_username'],'ILIKE');
         }
 
         if(isset($application_term)) {
-            $db->addWhere('term', $application_term);
+            $db->addWhere('hms_learning_community_applications.term', $application_term);
         } else {
             PHPWS_Core::initModClass('hms', 'HMS_Term.php');
-            $db->addWhere('term', HMS_Term::get_current_term());
+            $db->addWhere('hms_learning_community_applications.term', HMS_Term::get_current_term());
         }
 
         $result = $db->select('row');

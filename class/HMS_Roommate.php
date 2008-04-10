@@ -310,15 +310,26 @@ class HMS_Roommate
 
         if($result == FALSE || $result == NULL)
             return TRUE;
+        
 
         $resultb = HMS_RLC_Application::check_for_application($b, $term);
 
         if($result == FALSE || $result == NULL)
-            return FALSE;
+            echo "roommate has not applied for an RLC";
 
-        // I'm sure we'll get phone calls about THIS cut corner...
-        // TODO: Do ANY of a's RLCs match up with ANY of b's?
-        return $result['rlc_first_choice_id'] == $resultb['rlc_first_choice_id'];
+        // Check to see if any of a's choices match any of b's choices
+        if($result['rlc_first_choice_id']  == $resultb['rlc_first_choice_id'] ||
+           $result['rlc_first_choice_id']  == $resultb['rlc_second_choice_id'] ||
+           $result['rlc_first_choice_id']  == $resultb['rlc_third_choice_id'] ||
+           $result['rlc_second_choice_id'] == $resultb['rlc_first_choice_id'] ||
+           $result['rlc_second_choice_id'] == $resultb['rlc_second_choice_id'] ||
+           $result['rlc_second_choice_id'] == $resultb['rlc_third_choice_id'] ||
+           $result['rlc_third_choice_id']  == $resultb['rlc_first_choice_id'] ||
+           $result['rlc_third_choice_id']  == $resultb['rlc_second_choice_id'] ||
+           $result['rlc_third_choice_id']  == $resultb['rrlc_third_choice_id']){
+            echo "applications match";
+            return TRUE;
+        }
     }
 
     function check_rlc_assignments($a, $b, $term)
@@ -461,9 +472,9 @@ class HMS_Roommate
         }
 
         // If requestor is assigned to a different RLC, STOP and call HRL
-/*        if(!HMS_Roommate::check_rlc_assignments($requestor, $requestee, $requestor_info->application_term)) {
+        if(!HMS_Roommate::check_rlc_assignments($requestor, $requestee, $requestor_info->application_term)) {
             return E_ROOMMATE_RLC_ASSIGNMENT;
-        }*/  // RLC Assignments are currently BROKEN!
+        }
 
         // If requestor applied to a different RLC, ask to remove application
         if(!HMS_Roommate::check_rlc_applications($requestor, $requestee, $requestor_info->application_term)) {
