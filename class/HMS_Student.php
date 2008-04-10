@@ -744,7 +744,7 @@ class HMS_Student {
                 $tags['TERMS_MSG']   = '<b>You have not agreed to the Residence Hall Contract.</b> You may click the link below to view and agree to the Residence Hall Contract.';
                 $tags['TERMS_LINK']  = PHPWS_Text::secureLink('View & Agree to the Residence Hall Contract', 'hms', array('type'=>'student', 'op'=>'show_terms_and_agreement_only'));
             }else{
-                $tags['TERMS_MSG']   = '<b>You have not agreed to the Residence Hall Contract.</b> You were under 18 at the time you completed your application. You must print the last page of the Residence Hall Contract, complete it (including a parent/guardian signature), and return it to the Department of Housing & Residnce Life. (Note: If you have already mailed your completed Housing Contract Agreemnt, please allow 3-4 weeks for delivery and processing.)';
+                $tags['TERMS_MSG']   = '<b>You have not agreed to the Residence Hall Contract.</b> You were under 18 at the time you completed your application. You must print the last page of the Residence Hall Contract, complete it (including a parent/guardian signature), and return it to the Department of Housing & Residnce Life. (Note: If you have already mailed your completed Housing Contract Agreemnt, please allow 3-4 weeks for delivery and processing.)<br /><br /><b>Signed Residence Hall Contracts may be mailed to:</b><br />Housing Assignments<br />P.O. Box 32111<br />Boone, NC 28608-2111';
             }
         }
        
