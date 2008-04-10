@@ -487,7 +487,7 @@ class HMS_SOAP{
             $student->address['zip']        = '28605';
             $student->phone['area_code']    = '828';
             $student->phone['number']       = '2780579';
-            $student->application_term      = '200830';
+            $student->application_term      = '200840';
             return $student;
         }
 
