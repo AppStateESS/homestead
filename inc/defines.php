@@ -59,6 +59,8 @@ define('CLASS_SENIOR',      'SR');
 define('TYPE_FRESHMEN',     'F');
 define('TYPE_TRANSFER',     'T');
 define('TYPE_CONTINUING',   'C');
+define('TYPE_RETURNING',    'R');
+define('TYPE_READMIT',      'Z');
 
 /**
  * Meal Plans

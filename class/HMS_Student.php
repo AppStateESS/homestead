@@ -519,6 +519,8 @@ class HMS_Student {
             header('Location: http://www.housing.appstate.edu/index.php?module=pagemaster&PAGE_user_op=view_page&PAGE_id=253');
             exit;
 
+            #TODO: check for student type of 'C' or 'R'
+
             # Check if the user is already entered for the lottery
             # if so, display the appropriate message
             # TODO
@@ -560,7 +562,7 @@ class HMS_Student {
             $tpl['CONTACT_LINK'] = PHPWS_Text::secureLink('click here', 'hms', array('type'=>'student', 'op'=>'show_contact_form'));
 
             # Check the student type, must be freshmen or transfer
-            if($student_type != TYPE_FRESHMEN && $student_type != TYPE_TRANSFER){
+            if($student_type != TYPE_FRESHMEN && $student_type != TYPE_TRANSFER && $student_type != TYPE_RETURNING){
                 # No idea what's going on here, send to a contact page
                 return HMS_Contact_Form::show_contact_form();
             }
