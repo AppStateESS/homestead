@@ -415,7 +415,8 @@ class HMS_XML{
             // throw an error
         }
 
-        $xml_rooms = array();
+        $xml_suites = array();
+        $sorted_suites = array();
 
         foreach($suites as $suite){
             $rooms = $suite->get_rooms();
@@ -427,10 +428,17 @@ class HMS_XML{
             sort($room_nums);
             $room_list = implode(', ', $room_nums);
             
-            $xml_suites[] = array('id' => $suite->id, 'room_list' => $room_list);
+            $sorted_suites[$suite->id] = $room_list;
         }
 
-        asort($xml_suites);
+        // sort the array of suites where the keys are suite ids, the values are the room numbers
+        asort($sorted_suites);
+
+        // place the sorted list of suites into the final array for XML serialization
+
+        foreach($sorted_suites as $s_id=>$room_nums){
+            $xml_suites[] = array('id' => $s_id, 'room_list' => $room_nums);
+        }
 
         $serializer_options = array (
             'addDecl' => TRUE,
