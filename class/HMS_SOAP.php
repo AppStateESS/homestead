@@ -599,7 +599,8 @@ class HMS_SOAP{
     function report_room_assignment($username, $term, $building_code, $room_code, $plan_code, $meal_code)
     {
         if(SOAP_TEST_FLAG){
-            return 1337;
+            //return 1337;
+            return 0;
         }
 
         include_once('SOAP/Client.php');
@@ -646,7 +647,8 @@ class HMS_SOAP{
     {
         if(SOAP_TEST_FLAG) {
             #test(array($username,$term,$building,$room));
-            return 1337;
+            //return 1337;
+            return 0;
         }
 
         include_once('SOAP/Client.php');
