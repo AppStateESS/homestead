@@ -521,7 +521,7 @@ class HMS_Room extends HMS_Item
        # Grab all the input from the form and save the room
        //Changed from radio buttons to checkboxes, ternary 
        //prevents null since only 1 is defined as a return value
-       test($_REQUEST['room_number']);
+       //test($_REQUEST['room_number']);
        $room->room_number   = $_REQUEST['room_number'];
        $room->pricing_tier  = $_REQUEST['pricing_tier'];
        $room->gender_type   = $_REQUEST['gender_type'];
