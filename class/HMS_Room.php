@@ -236,9 +236,6 @@ class HMS_Room extends HMS_Item
 
             # If the target gender is not the same, and someone is assigned
             # here, then the gender can't be changed (i.e. return false)
-            # TODO: make this check for males/females on the floor
-            #       and allow for gender changes if everyone assigned
-            #       is of the target gender.
             if(($target_gender != $this->gender_type) && ($this->get_number_of_assignees() != 0)){
                 return false;
             }
@@ -253,6 +250,12 @@ class HMS_Room extends HMS_Item
                 return false;
             }
             
+            # If the target gender is not the same, and someone is assigned
+            # here, then the gender can't be changed (i.e. return false)
+            if(($target_gender != $this->gender_type) && ($this->get_number_of_assignees() != 0)){
+                return false;
+            }
+
             if (!$this->loadFloor()) {
                 // an error occurred loading the floor, check logs
                 return false;

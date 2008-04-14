@@ -303,9 +303,19 @@ class HMS_Assignment extends HMS_Item
             }
         }
 
+        // Get the student's gender
+        $student_gender = HMS_SOAP::get_gender($_REQUEST['username'], TRUE);
+
         # Make sure the student's gender matches the gender of the room.
-        if($room->gender_type != HMS_SOAP::get_gender($_REQUEST['username'], TRUE)){
-            return HMS_Assignment::show_assign_student(NULL, 'Error: The student\'s gender and the room\'s gender do not match.');
+        if($room->gender_type != $student_gender){
+            // Room gender does not match student's gender, so check if we can change it
+            if($room->can_change_gender($student_gender) && Current_User::allow('hms', 'room_attributes')){
+                $room->gender_type = $student_gender;
+                $room->save();
+                $more .= ' (Warning: Changing room gender)';
+            }else{
+                return HMS_Assignment::show_assign_student(NULL, 'Error: The student\'s gender and the room\'s gender do not match and the room could not be changed.');
+            }
         }
 
         # This code is only run if the move was flagged as confirmed above
