@@ -198,6 +198,10 @@ class HMS_Banner_Queue {
 
         $result = -1;
 
+        $meal_plan = HMS_SOAP::get_plan_meal_codes($this->asu_username,
+                                                   $this->building_code,
+                                                   $this->meal_code);
+
         switch($this->type) {
             case BANNER_QUEUE_ASSIGNMENT:
                 $result = HMS_SOAP::report_room_assignment(
@@ -205,8 +209,8 @@ class HMS_Banner_Queue {
                     $this->term,
                     $this->building_code,
                     $this->bed_code,
-                    $this->meal_plan,
-                    $this->meal_code);
+                    $meal_plan['plan'],
+                    $meal_plan['meal']);
                 if($result == 0) {
                     HMS_Activity_Log::log_activity(
                         $this->asu_username,
@@ -215,8 +219,8 @@ class HMS_Banner_Queue {
                         $this->term . ' ' . 
                         $this->building_code . ' ' .
                         $this->bed_code . ' ' .
-                        $this->meal_plan . ' ' .
-                        $this->meal_code);
+                        $meal_plan['plan'] . ' ' .
+                        $meal_plan['meal']);
                 }
                 break;
             case BANNER_QUEUE_REMOVAL:

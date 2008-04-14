@@ -594,6 +594,7 @@ class HMS_Assignment extends HMS_Item
         $form->addHidden('residence_hall', $_REQUEST['residence_hall']);
         $form->addHidden('room', $_REQUEST['room']);
         $form->addHidden('bed', $_REQUEST['bed']);
+        $form->addHidden('meal_plan', $_REQUEST['meal_plan']);
         $form->addHidden('type', 'assignment');
         $form->addHidden('op', 'assign_student');
 
