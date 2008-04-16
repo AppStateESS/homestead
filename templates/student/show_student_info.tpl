@@ -83,6 +83,7 @@
             <tr>
                 <td>RLC Status: </td><td>{RLC_STATUS}</td>
             </tr>
+            {LOGIN_AS_STUDENT}
         </table>
     </div>
   </div>

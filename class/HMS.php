@@ -22,6 +22,11 @@ class HMS
             if( ($type == ADMIN || Current_User::getUsername() != 'hms_student') && isset($_REQUEST['login_as_student']) ) {
                 $_SESSION['login_as_student'] = true;
                 $_SESSION['asu_username']     = $_REQUEST['login_as_student'];
+            } else if( $_SESSION['login_as_student'] ) {
+                unset($_SESSION['login_as_student']);
+                unset($_SESSION['asu_username']);
+                header('Location: index.php?module=hms&type=maintenance&op=show_maintenance_options');
+                exit;
             }
             if($type == NULL) {
                 $username = Current_User::getUsername();
