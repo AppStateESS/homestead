@@ -505,6 +505,7 @@ class HMS_Student {
          ******************************************/
 
         # Check application term for past or future
+        $application_term = '200850'; #TODO: remove this before pushing to svn
         if($application_term <= $current_term){
             /**************
              * Continuing *

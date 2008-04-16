@@ -19,9 +19,13 @@ class HMS
             HMS_Login::display_login_screen($error);
         } else {
             require_once(PHPWS_SOURCE_DIR . 'mod/hms/inc/defines.php');
+            if( ($type == ADMIN || Current_User::getUsername() != 'hms_student') && isset($_REQUEST['login_as_student']) ) {
+                $_SESSION['login_as_student'] = true;
+                $_SESSION['asu_username']     = $_REQUEST['login_as_student'];
+            }
             if($type == NULL) {
                 $username = Current_User::getUsername();
-                if($username == 'hms_student') $type = STUDENT;
+                if( $username == 'hms_student' || ($username == 'dwest' && isset($_SESSION['login_as_student'])) ) $type = STUDENT;
                 else $type = ADMIN;
             }
 
