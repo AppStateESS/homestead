@@ -18,19 +18,35 @@ class HMS
             PHPWS_Core::initModClass('hms', 'HMS_Login.php');
             HMS_Login::display_login_screen($error);
         } else {
+            $username = Current_User::getUsername();
             require_once(PHPWS_SOURCE_DIR . 'mod/hms/inc/defines.php');
-            if( ($type == ADMIN || Current_User::getUsername() != 'hms_student') && isset($_REQUEST['login_as_student']) ) {
-                $_SESSION['login_as_student'] = true;
-                $_SESSION['asu_username']     = $_REQUEST['login_as_student'];
-            } else if( $_SESSION['login_as_student'] ) {
-                unset($_SESSION['login_as_student']);
-                unset($_SESSION['asu_username']);
-                header('Location: index.php?module=hms&type=maintenance&op=show_maintenance_options');
-                exit;
+            if( isset($_REQUEST['login_as_student']) || isset($_SESSION['login_as_student']) ) {
+                if( $type == ADMIN || Current_User::allow('hms', 'login_as_student') ) {
+                    if( isset($_REQUEST['login_as_student']) ) {
+                        PHPWS_Core::initModClass('hms', 'HMS_Student.php');
+                        $_SESSION['login_as_student'] = true;
+                        $_REQUEST['asu_username']     = $_REQUEST['login_as_student'];
+                        HMS_Login::student_login();
+                    } else if( isset($_REQUEST['end_student_session']) ) { 
+                        unset($_SESSION['login_as_student']);
+                        unset($_SESSION['asu_username']);
+                        unset($_SESSION['application_term']);
+                        header('Location: index.php?module=hms&type=maintenance&op=show_maintenance_options');
+                        exit;
+                    }
+                    Layout::add('<table width=100%><tr><td bgcolor=#fa1515><center><h1><a href=index.php?module=hms&end_student_session=true>Logout of student Session</a></h1></center></td></tr></table>');
+                } else {
+                    # Someone is being naughty...
+                    echo "Your session was eaten by a grue.";
+                    //exit();
+                    unset($_SESSION);
+                    header('Location: index.php');
+                    exit;
+                }
             }
+                
             if($type == NULL) {
-                $username = Current_User::getUsername();
-                if( $username == 'hms_student' || ($username == 'dwest' && isset($_SESSION['login_as_student'])) ) $type = STUDENT;
+                if( $username == 'hms_student' || (Current_User::allow('hms', 'login_as_student') && isset($_SESSION['login_as_student'])) ) $type = STUDENT;
                 else $type = ADMIN;
             }
 

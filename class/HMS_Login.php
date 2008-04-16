@@ -38,7 +38,6 @@ class HMS_Login
 
     function student_login()
     {
-
         PHPWS_Core::initModClass('hms','HMS_Deadlines.php');
         PHPWS_Core::initModClass('hms','HMS_SOAP.php');
         $deadlines = HMS_Deadlines::get_deadlines();
@@ -68,10 +67,13 @@ class HMS_Login
             return TOOOLD;
         }
         */
-        
-        require_once(PHPWS_SOURCE_DIR . '/mod/hms/inc/accounts.php');
-        Current_User::loginUser(HMS_STUDENT_USER, HMS_STUDENT_PASS);
-        Current_User::getLogin();
+
+        /* Don't destroy our admin session if an admin is logging in as a user */
+        if( !Current_User::isLogged() ) {
+            require_once(PHPWS_SOURCE_DIR . '/mod/hms/inc/accounts.php');
+            Current_User::loginUser(HMS_STUDENT_USER, HMS_STUDENT_PASS);
+            Current_User::getLogin();
+        }
 
         # Log the student's login in their activity log
         PHPWS_Core::initModClass('hms','HMS_Activity_Log.php');

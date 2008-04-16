@@ -332,7 +332,7 @@ class HMS_Student {
             }
         }
 
-        if( true ) { #TODO: Check the users permissions before displaing this option
+        if( Current_User::allow('hms', 'login_as_student') ) { 
             $tpl['LOGIN_AS_STUDENT'] = '<tr><td>Login as this student: </td><td><a href=index.php?module=hms&op=main&login_as_student=' . $_REQUEST['username'] . '> '. $_REQUEST['username'] . '</a></td></tr>';
         }
 
@@ -507,7 +507,6 @@ class HMS_Student {
          * Sort returning students (lottery) from *
          * freshmen (first-time application)      *
          ******************************************/
-        $application_term = $_SESSION['application_term'];
         # Check application term for past or future
         if($application_term <= $current_term){
             /**************
@@ -521,7 +520,7 @@ class HMS_Student {
             # TODO
             # NOTE: This is a temporary redirect for now. The above still needs to be implemented. See Trac ticket #55.
             # TODO(workaround): if the admin is logged in as a student don't kill their session
-            if(Current_User::getUsername() != 'hms_student') {                 
+            if( Current_User::getUsername() != 'hms_student' && Current_User::allow('hms', 'login_as_student') ) {
                 Layout::add('<p>  The student would have been logged out at this point, if you would like to view the page that the student would be redirected to please go here: </p>');
                 Layout::add('<a href=http://www.housing.appstate.edu/index.php?module=pagemaster&PAGE_user_op=view_page&PAGE_id=253> http://www.housing.appstate.edu/index.php?module=pagemaster&PAGE_user_op=view_page&PAGE_id=253</a> <br>');
                 Layout::add('<p>Otherwise click <a href=index.php?module=hms&op=end_student_session>here</a> to logout of the student session.</p>');

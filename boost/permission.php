@@ -87,4 +87,6 @@
 
     $permissions['stats']                           =_('View statistics');
     $permissions['reports']                         =_('Execute and view reports');
+
+    $permissions['login_as_student']                =_('Login as a student');
 ?>
