@@ -89,4 +89,6 @@
     $permissions['reports']                         =_('Execute and view reports');
 
     $permissions['login_as_student']                =_('Login as a student');
+
+    $permissions['view_activity_log']               =_('Can view the global Activity Log');
 ?>

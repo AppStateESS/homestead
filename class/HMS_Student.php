@@ -317,6 +317,10 @@ class HMS_Student {
         $db->addWhere('hms_learning_community_assignment.rlc_id', 'hms_learning_communities.id');
         $db->addWhere('hms_learning_community_assignment.asu_username', $_REQUEST['username'], 'ILIKE');
         $results = $db->select();
+
+        // FIXME: This is a hack because someone broke assignments.
+        if(PHPWS_Error::logIfError($results))
+            unset($results);
         
         if($results != NULL && $results != FALSE) {
             $tpl['RLC_STATUS'] = $results['community_name'];
@@ -1037,6 +1041,23 @@ class HMS_Student {
         }
 
         return "You have requested {$_REQUEST['name']} for your roommate.<br /><br />" . PHPWS_Text::secureLink(_('Return to Main Menu'), 'hms', array('type'=>'student', 'op'=>'main'));
+    }
+
+    function get_link($username, $show_user = FALSE)
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+        $name = HMS_SOAP::get_full_name($username);
+
+        $vars = array('type'     => 'student',
+                      'op'       => 'get_matching_students',
+                      'username' => $username);
+        $link = PHPWS_Text::secureLink($name, 'hms', $vars);
+
+        if($show_user) {
+            return $link . " (<em>$username</em>)";
+        }
+
+        return $link;
     }
     
     function main()

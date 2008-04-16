@@ -73,6 +73,11 @@
             <br />
             <!-- END term -->
         </td><td style="vertical-align: top; padding-left: 20px;">
+
+            <!-- BEGIN activity_log -->
+            <h2><i>Activity Log</i></h2>
+            &nbsp;&nbsp;&nbsp;{VIEW_ACTIVITY_LOG}<br />
+            <br />
             
             <!-- BEGIN deadlines -->
             <h2><i>Deadline Maintenance</i></h2>

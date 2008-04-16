@@ -256,10 +256,20 @@ class HMS_Maintenance
          * Movein times *
          ****************/
 
-        if(Current_user::allow('hms', 'edit_movein_times')){
+        if(Current_User::allow('hms', 'edit_movein_times')){
             $tpl['EDIT_MOVEIN_TIMES'] = PHPWS_Text::secureLink(
                 _('Edit Move-in Times'), 'hms',
                 array('type'=>'movein', 'op'=>'show_edit_movein_times'));
+        }
+
+        /****************
+         * Activity Log *
+         ****************/
+
+        if(Current_User::allow('hms', 'view_activity_log')) {
+            $tpl['VIEW_ACTIVITY_LOG'] = PHPWS_Text::secureLink(
+                _('View Activity Log'), 'hms',
+                array('type'=>'activity_log', 'op'=>'view'));
         }
 
         $content = PHPWS_Template::process($tpl, 'hms', 'admin/maintenance.tpl');

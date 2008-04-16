@@ -131,6 +131,10 @@ class HMS_Admin
                 PHPWS_Core::initModClass('hms', 'HMS_Deadlines.php');
                 $final = HMS_Deadlines::main();
                 break;
+            case 'activity_log':
+                PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
+                $final = HMS_Activity_Log::main();
+                break;
             default:
                 PHPWS_Core::initModClass('hms', 'HMS_Maintenance.php');
                 $_REQUEST['op'] = 'show_maintenance_options';
