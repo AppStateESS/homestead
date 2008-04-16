@@ -880,7 +880,9 @@ function hms_update(&$content, $currentVersion)
             $files[] = 'templates/admin/rlc_assignments_pager.tpl';
             PHPWS_Boost::updatefiles($files, 'hms');
 
+        case version_compare($currentVersion, '0.2.31', '<'):
 
+            PHPWS_Boost::registerMyModule('hms', 'users', $content);    #just need to update the permissions
     }
 
     return TRUE;
