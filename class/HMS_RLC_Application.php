@@ -29,6 +29,8 @@ class HMS_RLC_Application{
     var $hms_assignment_id = NULL;
     var $term = NULL;
 
+    var $denied = 0;
+
     /**
      * Constructor
      * Set $user_id equal to the ASU email of the student you want
@@ -108,17 +110,18 @@ class HMS_RLC_Application{
         
         $db = &new PHPWS_DB('hms_learning_community_applications');
 
-        $db->addValue('user_id',                 $this->getUserID());
-        $db->addValue('rlc_first_choice_id',     $this->getFirstChoice());
-        $db->addValue('rlc_second_choice_id',    $this->getSecondChoice());
-        $db->addValue('rlc_third_choice_id',     $this->getThirdChoice());
-        $db->addValue('why_specific_communities',$this->getWhySpecificCommunities());
-        $db->addValue('strengths_weaknesses',    $this->getStrengthsWeaknesses());
-        $db->addValue('rlc_question_0',          $this->getRLCQuestion0());
-        $db->addValue('rlc_question_1',          $this->getRLCQuestion1());
-        $db->addValue('rlc_question_2',          $this->getRLCQuestion2());
-        $db->addValue('hms_assignment_id',       $this->getAssignmentID());
-        $db->addValue('term',              $_SESSION['application_term']);
+        $db->addValue('user_id',                    $this->getUserID());
+        $db->addValue('rlc_first_choice_id',        $this->getFirstChoice());
+        $db->addValue('rlc_second_choice_id',       $this->getSecondChoice());
+        $db->addValue('rlc_third_choice_id',        $this->getThirdChoice());
+        $db->addValue('why_specific_communities',   $this->getWhySpecificCommunities());
+        $db->addValue('strengths_weaknesses',       $this->getStrengthsWeaknesses());
+        $db->addValue('rlc_question_0',             $this->getRLCQuestion0());
+        $db->addValue('rlc_question_1',             $this->getRLCQuestion1());
+        $db->addValue('rlc_question_2',             $this->getRLCQuestion2());
+        $db->addValue('hms_assignment_id',          $this->getAssignmentID());
+        $db->addValue('term',                       $_SESSION['application_term']);
+        $db->addValue('denied',                     $this->denied);
 
         # If this object has an ID, then do an update. Otherwise, do an insert.
         if(!$this->getID() || $this->getID() == NULL){
@@ -190,8 +193,9 @@ class HMS_RLC_Application{
     * Check to see if an application already exists for the specified user. Returns FALSE if no application exists.
     * If an application does exist, a db object containing that row is returned. In the case of a db error, a PEAR
     * error object is returned. 
+    * @param include_denied Controls whether or not denied applications are returned
     */
-    function check_for_application($asu_username = NULL, $entry_term = NULL)
+    function check_for_application($asu_username = NULL, $entry_term = NULL, $include_denied = TRUE)
     {
         $db = &new PHPWS_DB('hms_learning_community_applications');
 
@@ -206,6 +210,10 @@ class HMS_RLC_Application{
         } else {
             PHPWS_Core::initModClass('hms', 'HMS_Term.php');
             $db->addWhere('term', HMS_Term::get_current_term());
+        }
+
+        if(!$include_denied){
+            $db->addWhere('denied', 0);
         }
 
         $result = $db->select('row');
@@ -250,6 +258,7 @@ class HMS_RLC_Application{
                              'hms_learning_communities.id','=');
         $pager->db->addWhere('hms_assignment_id',NULL,'is');
         $pager->db->addWhere('term', HMS_Term::get_selected_term());
+        $pager->db->addWhere('denied', 0); // Only show non-denied applications in this pager
 
         $pager->setModule('hms');
         $pager->setTemplate('admin/rlc_assignments_pager.tpl');
@@ -270,21 +279,47 @@ class HMS_RLC_Application{
 
         $tags = array();
         
-        $tags['NAME']       = PHPWS_Text::secureLink(HMS_SOAP::get_full_name($this->getUserID()), 'hms', array('type'=>'student', 'op'=>'get_matching_students', 'username'=>$this->user_id));
-        $tags['1ST_CHOICE']  = '<a href="./index.php?module=hms&type=rlc&op=view_rlc_application&username=' . $this->getUserID() . '" target="_blank">' . $rlc_list[$this->getFirstChoice()] . '</a>';
+        $tags['NAME']           = PHPWS_Text::secureLink(HMS_SOAP::get_full_name($this->getUserID()), 'hms', array('type'=>'student', 'op'=>'get_matching_students', 'username'=>$this->user_id));
+        $tags['1ST_CHOICE']     = '<a href="./index.php?module=hms&type=rlc&op=view_rlc_application&username=' . $this->getUserID() . '" target="_blank">' . $rlc_list[$this->getFirstChoice()] . '</a>';
         if(isset($rlc_list[$this->getSecondChoice()]))
-            $tags['2ND_CHOICE']  = $rlc_list[$this->getSecondChoice()];
+            $tags['2ND_CHOICE'] = $rlc_list[$this->getSecondChoice()];
         if(isset($rlc_list[$this->getThirdChoice()]))
-            $tags['3RD_CHOICE']  = $rlc_list[$this->getThirdChoice()];
-        $tags['FINAL_RLC']   = HMS_RLC_Application::generateRLCDropDown($rlc_list,$this->getID());
-        $tags['CLASS']       = HMS_SOAP::get_student_class($this->getUserID(), HMS_SOAP::get_application_term($this->getUserID()));
-//        $tags['SPECIAL_POP'] = ;
-//        $tags['MAJOR']       = ;
-//        $tags['HS_GPA']      = ;
-        $tags['GENDER']      = HMS_SOAP::get_gender($this->getUserID());
-        $tags['DATE_SUBMITTED']  = date('d-M-y',$this->getDateSubmitted());
+            $tags['3RD_CHOICE'] = $rlc_list[$this->getThirdChoice()];
+        $tags['FINAL_RLC']      = HMS_RLC_Application::generateRLCDropDown($rlc_list,$this->getID());
+        $tags['CLASS']          = HMS_SOAP::get_student_class($this->getUserID(), HMS_SOAP::get_application_term($this->getUserID()));
+//        $tags['SPECIAL_POP']    = ;
+//        $tags['MAJOR']          = ;
+//        $tags['HS_GPA']         = ;
+        $tags['GENDER']         = HMS_SOAP::get_gender($this->getUserID());
+        $tags['DATE_SUBMITTED'] = date('d-M-y',$this->getDateSubmitted());
+        $tags['DENY']           = PHPWS_Text::secureLink('Deny', 'hms', array('type'=>'rlc', 'op'=>'deny_rlc_application', 'id'=>$this->id));
 
         return $tags;
+    }
+
+
+    /**
+     * Marks an RLC application as denied
+     */
+    function deny_rlc_application()
+    {
+        if(!Current_User::allow('hms', 'approve_rlc_applications')){
+            $tpl = array();
+            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
+        }
+
+        $db = new PHPWS_DB('hms_learning_community_applications');
+        $db->addWhere('id', $_REQUEST['id']);
+        $db->addValue('denied', 1);
+
+        $result = $db->update();
+
+        if(PEAR::isError($result)){
+            PHPWS_Error::log($result);
+            return HMS_Learning_Community::assign_applicants_to_rlcs(null, 'There was an error working with the database. The application was not modified.');
+        }else{
+            return HMS_Learning_Community::assign_applicants_to_rlcs('Application denied.');
+        }
     }
 
     /**

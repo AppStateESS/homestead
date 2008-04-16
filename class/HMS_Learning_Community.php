@@ -372,6 +372,10 @@ class HMS_Learning_Community
             case 'perform_remove_from_rlc':
                 return HMS_Learning_Community::perform_remove_from_rlc();
                 break;
+            case 'deny_rlc_application':
+                PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
+                return HMS_RLC_Application::deny_rlc_application();
+                break;
             default:
                 return "{$_REQUEST['op']} <br />";
                 break;
@@ -437,7 +441,7 @@ class HMS_Learning_Community
 
     }
 
-    function assign_applicants_to_rlcs()
+    function assign_applicants_to_rlcs($success_msg = NULL, $error_msg = NULL)
     {
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
@@ -447,9 +451,17 @@ class HMS_Learning_Community
         $tags['SUMMARY']           = HMS_Learning_Community::display_rlc_assignment_summary();
         $tags['ASSIGNMENTS_PAGER'] = HMS_RLC_Application::rlc_application_admin_pager();
 
+        if(isset($success_msg)){
+            $tags['SUCCESS_MSG'] = $success_msg;
+        }
+
+        if(isset($error_msg)){
+            $tags['ERROR_MSG'] = $error_msg;
+        }
+
         $export_form = &new PHPWS_Form('export_form');
         $export_form->addHidden('type','rlc');
-        $export_form->addHIdden('op','rlc_application_export');
+        $export_form->addHidden('op','rlc_application_export');
         
         $export_form->addDropBox('rlc_list',HMS_Learning_Community::getRLCListAbbr());
         $export_form->addSubmit('submit');

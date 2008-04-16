@@ -302,7 +302,7 @@ class HMS_Roommate
     function check_rlc_applications($a, $b, $term)
     {
         PHPWS_Core::initModClass('hms','HMS_RLC_Application.php');
-        $result = HMS_RLC_Application::check_for_application($a, $term);
+        $result = HMS_RLC_Application::check_for_application($a, $term, FALSE);
 
         if(PHPWS_Error::isError($result)) {
             test($result,1);    // TODO: Break Cleanly
@@ -312,7 +312,7 @@ class HMS_Roommate
             return TRUE;
         
 
-        $resultb = HMS_RLC_Application::check_for_application($b, $term);
+        $resultb = HMS_RLC_Application::check_for_application($b, $term, FALSE);
 
         if($result == FALSE || $result == NULL)
             echo "roommate has not applied for an RLC";

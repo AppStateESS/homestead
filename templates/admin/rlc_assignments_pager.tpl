@@ -13,6 +13,7 @@
         <th>HS GPA</th>  -->
         <th>Gender</th>
         <th>Apply Date {DATE_SUBMITTED_SORT}</th>
+        <th>Action</th>
     </tr>
 <!-- BEGIN empty_table -->
     <tr>
@@ -33,6 +34,7 @@
         <td>{HS_GPA}</td> -->
         <td>{GENDER}</td>
         <td>{DATE_SUBMITTED}</td>
+        <td>{DENY}</td>
     </tr>
 <!-- END listrows -->
 </table>
