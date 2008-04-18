@@ -10,13 +10,10 @@ class HMS_RLC_Assignment{
     var $id;
 
     var $rlc_id;
-    var $course_ok;
     var $assigned_by_user;
-    var $assigned_by_initals;
 
     var $user_id; # For the DBPager join stuff to work right
     var $hms_assignment_id;
-    var $lc_application_term;
 
     /**
      * Constructor
@@ -145,7 +142,7 @@ class HMS_RLC_Assignment{
 
         $pager = &new DBPager('hms_learning_community_assignment','HMS_RLC_Assignment');
       
-        $pager->db->addWhere('hms_learning_community_applications.hms_assignment_id','hms_learning_community_assignment.id','=');
+        //$pager->db->addWhere('hms_learning_community_applications.hms_assignment_id','hms_learning_community_assignment.id','=');
         $pager->db->addJoin('LEFT OUTER', 'hms_learning_community_assignment', 'hms_learning_community_applications', 'id', 'hms_assignment_id');
         $pager->db->addWhere('hms_learning_community_applications.term', HMS_Term::get_selected_term()); 
 
@@ -168,7 +165,7 @@ class HMS_RLC_Assignment{
 
         $tags = array();
         
-        $tags['NAME']      = '<a href="./index.php?module=hms&type=rlc&op=view_rlc_application&username='.$this->user_id.'" target="_blank">' . HMS_SOAP::get_full_name_inverted($this->user_id) . '</a>';
+        $tags['NAME']      = PHPWS_Text::secureLink(HMS_SOAP::get_full_name_inverted($this->user_id), 'hms', array('type'=>'rlc', 'op'=>'view_rlc_application', 'username'=>$this->user_id), 'blank');
         $tags['FINAL_RLC'] = $rlc_list[$this->getRlcId()];
 //        $tags['ROOMMATE']  = TODO: Roommate Stuff
         $tags['ADDRESS']   = HMS_SOAP::get_address_line($this->user_id);
@@ -177,6 +174,50 @@ class HMS_RLC_Assignment{
 
         return $tags;
     }
+
+    function view_by_rlc_pager($rlc_id)
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+        
+        // Get the community name for the title
+        $db = &new PHPWS_DB('hms_learning_communities');
+        $db->addWhere('id', $_REQUEST['rlc']);
+        $db->addColumn('community_name');
+        $tags['TITLE'] = $db->select('one') . 'Assignments ' . HMS_Term::term_to_text(HMS_Term::get_selected_term(), TRUE);
+       
+        PHPWS_Core::initCoreClass('DBPager.php');
+        
+        $pager = &new DBPager('hms_learning_community_assignment', 'HMS_RLC_Assignment');
+        $pager->db->addJoin('LEFT OUTER', 'hms_learning_community_assignment', 'hms_learning_community_applications', 'id', 'hms_assignment_id');
+        $pager->db->addWhere('hms_learning_community_applications.term', HMS_Term::get_selected_term()); 
+        $pager->db->addWhere('rlc_id', $rlc_id);
+        
+        $pager->joinResult('id','hms_learning_community_applications','hms_assignment_id','user_id', 'user_id');
+        $pager->setModule('hms');
+        $pager->setTemplate('admin/view_by_rlc_pager.tpl');
+        $pager->setLink('index.php?module=hms');
+        $pager->setEmptyMessage('There are no students assigned to this learning community.');
+        $pager->addPageTags($tags);
+        $pager->addRowTags('viewByRLCPagerTags');
+
+        return $pager->get();
+    }
+
+    function viewByRLCPagerTags()
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+
+        $tags['NAME'] = PHPWS_Text::secureLink(HMS_SOAP::get_full_name($this->user_id), 'hms', array('type'=>'student', 'op'=>'get_matching_students', 'username'=>$this->user_id));
+        $tags['GENDER'] = HMS_SOAP::get_gender($this->user_id);
+        $tags['USERNAME'] = $this->user_id;
+
+        $actions[] = PHPWS_Text::secureLink('View Application', 'hms', array('type'=>'rlc', 'op'=>'view_rlc_application', 'username'=>$this->user_id));
+        $actions[] = PHPWS_Text::secureLink('Remove', 'hms', array('type'=>'rlc', 'op'=>'confirm_remove_from_rlc', 'id'=>$this->id));
+
+        $tags['ACTION'] = implode(' | ', $actions);
+        return $tags;
+    }
+
 
     function setId($id) {
         $this->id = $id;

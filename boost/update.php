@@ -878,6 +878,8 @@ function hms_update(&$content, $currentVersion)
             
             $files[] = 'templates/admin/make_new_rlc_assignments.tpl';
             $files[] = 'templates/admin/rlc_assignments_pager.tpl';
+            $files[] = 'templates/admin/view_by_rlc_pager.tpl';
+            $files[] = 'templates/admin/rlc_roster.tpl';
             $files[] = 'templates/admin/maintenance.tpl';
             $files[] = 'templates/admin/log_pager.tpl';
             PHPWS_Boost::updatefiles($files, 'hms');

@@ -186,8 +186,19 @@ class HMS_Learning_Community
      */
     function search_by_rlc()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
-        return HMS_Form::search_by_rlc();
+        PHPWS_Core::initCoreClass('Form.php');
+        $form = &new PHPWS_Form;
+        $form->addDropBox('rlc', HMS_Learning_Community::getRLCList());
+        $form->addHidden('module', 'hms');
+        $form->addHidden('type', 'rlc');
+        $form->addHidden('op', 'view_by_rlc');
+        $form->addSubmit('submit', _('Search!'));
+
+        $tags = $form->getTemplate();
+        $tags['TITLE'] = "RLC Search";
+        
+        $final = PHPWS_Template::processTemplate($tags, 'hms', 'admin/search_by_rlc.tpl');
+        return $final;
     } 
 
     /*
@@ -196,42 +207,11 @@ class HMS_Learning_Community
     function view_by_rlc()
     {
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+        PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php'); 
 
-        $db = &new PHPWS_DB('hms_learning_communities');
-        $db->addWhere('id', $_REQUEST['rlc']);
-        $db->addColumn('community_name');
-        $tpl['TITLE'] = $db->select('one');
-
-        $db = &new PHPWS_DB('hms_learning_community_assignment');
-        $db->addWhere('rlc_id', $_REQUEST['rlc']);
-        $db->addJoin('LEFT OUTER', 'hms_learning_community_assignment', 'hms_learning_community_applications', 'id', 'hms_assignment_id');
-        $db->addColumn('hms_learning_community_applications.user_id');
-        $usernames = $db->select();
-
-        if($usernames != NULL && $usernames != FALSE) {
-            $new_tpl['ROWS'] = "";
-            foreach($usernames as $user) {
-                $tags['FIRST_NAME']     = HMS_SOAP::get_first_name($user['user_id']);
-                $tags['MIDDLE_NAME']    = HMS_SOAP::get_middle_name($user['user_id']);
-                $tags['LAST_NAME']      = HMS_SOAP::get_last_name($user['user_id']);
-                $tags['GENDER']         = HMS_SOAP::get_gender($user['user_id']);
-
-                $tags['USERNAME']       = $user['user_id'];
-                $tags['EMAIL']          = $user['user_id'] . '@appstate.edu';
-
-                $tags['VIEW_APP']       = './index.php?module=hms&type=rlc&op=view_rlc_application&username='.$user['user_id'];
-
-                $tags['ACTIONS']        = '<a href="./index.php?module=hms&type=rlc&op=confirm_remove_from_rlc&username='.$user['user_id'].'">Remove</a>';
-
-                $new_tpl['ROWS'] .= PHPWS_Template::processTemplate($tags, 'hms', 'admin/full_name_gender_email.tpl');
-            }
-            $content = PHPWS_Template::processTemplate($new_tpl, 'hms', 'admin/rlc_roster_table.tpl');
-        } else {
-            $content = 'There are no students assigned to this Learning Community';
-        }
-
-        $tpl['MESSAGE'] = $content;
+        $tpl['RLC_PAGER'] = HMS_RLC_Assignment::view_by_rlc_pager($_REQUEST['rlc']);
         $tpl['MENU_LINK'] = PHPWS_Text::secureLink(_('Return to Maintenance'), 'hms', array('type'=>'maintenance', 'op'=>'show_maintenance_options'));
+
         return PHPWS_Template::processTemplate($tpl, 'hms', 'admin/rlc_roster.tpl');
     }
 
@@ -240,29 +220,33 @@ class HMS_Learning_Community
      */
     function confirm_remove_from_rlc()
     {
-        $db = &new PHPWS_DB('hms_learning_communities');
+        $db = &new PHPWS_DB('hms_learning_community_applications');
+        $db->addJoin('LEFT OUTER', 'hms_learning_community_applications', 'hms_learning_community_assignment', 'hms_assignment_id', 'id');
+        $db->addJoin('LEFT OUTER', 'hms_learning_community_assignment', 'hms_learning_communities', 'rlc_id', 'id');
         $db->addColumn('hms_learning_communities.community_name');
-        $db->addColumn('hms_learning_communities.id', NULL, 'rlc_id');
-        $db->addColumn('hms_learning_community_assignment.id', NULL, 'ass_id');
-        $db->addWhere('hms_learning_communities.id', 'hms_learning_community_assignment.rlc_id');
-        $db->addWhere('hms_learning_community_assignment.user_id', $_REQUEST['username'], 'ILIKE');
+        $db->addColumn('hms_learning_communities.id', NULL, 'community_id');
+        $db->addColumn('hms_learning_community_applications.user_id');
+        $db->addWhere('hms_learning_community_assignment.id', $_REQUEST['id']);
         $result = $db->select('row');
 
+        if(PEAR::isError($result)){
+            PHPWS_Error::log($result);
+            return "There was an error working with the database.";
+        }
+        
         PHPWS_Core::initCoreClass('Form.php');
         $form = &new PHPWS_Form;
 
         $form->addHidden('module', 'hms');
         $form->addHidden('type', 'rlc');
         $form->addHidden('op', 'perform_remove_from_rlc');
-        $form->addHidden('username', $_REQUEST['username']);
-        $form->addHidden('assignment', $result['ass_id']);
-        $form->addHidden('rlc', $result['rlc_id']);
+        $form->addHidden('id', $_REQUEST['id']);
         $form->addSubmit('remove', _('Remove from RLC and Re-Activate Application'));
         $form->addSubmit('cancel', _('Do Nothing'));
 
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
         $tpl = $form->getTemplate();
-        $tpl['NAME'] = HMS_SOAP::get_name($_REQUEST['username']);
+        $tpl['NAME'] = HMS_SOAP::get_name($result['user_id']);
         $tpl['RLC'] = $result['community_name'];
 
         return PHPWS_Template::process($tpl, 'hms', 'admin/confirm_remove_from_rlc.tpl');
@@ -273,20 +257,22 @@ class HMS_Learning_Community
      */
     function perform_remove_from_rlc()
     {
-        if(!isset($_REQUEST['remove']) || $_REQUEST['remove'] != "Remove from RLC and Re-Activate Application" || !isset($_REQUEST['assignment'])) {
+        test($_REQUEST);
+        if(!isset($_REQUEST['remove']) || $_REQUEST['remove'] != "Remove from RLC and Re-Activate Application" || !isset($_REQUEST['id'])) {
             return HMS_Learning_Community::view_by_rlc();
         }
+
 
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
 
         $db = &new PHPWS_DB('hms_learning_community_applications');
-        $db->addWhere('hms_assignment_id', $_REQUEST['assignment']);
+        $db->addWhere('hms_assignment_id', $_REQUEST['id']);
         $db->addValue('hms_assignment_id', null);
         $db->update();
 
         $db = &new PHPWS_DB('hms_learning_community_assignment');
-        $db->addWhere('id', $_REQUEST['assignment']);
+        $db->addWhere('id', $_REQUEST['id']);
         $db->delete();
 
         return "Deleted.";

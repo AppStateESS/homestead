@@ -5,7 +5,7 @@
         <font color="red"><i>{ERROR}</i></font>
         {MENU_LINK}<br />
         <br />
-        {MESSAGE}
+        {RLC_PAGER}
    </div>
   </div>
 </div>
