@@ -6,6 +6,15 @@ if (!defined('PHPWS_SOURCE_DIR')) {
 }
 if(Current_User::isLogged()) {
     PHPWS_Core::initModClass('hms', 'HMS.php');
+
+    if(isset($_REQUEST['type']) && $_REQUEST['type'] == 'top_level'){
+        switch($_REQUEST['op']){
+            case 'go_back':
+                PHPWS_Core::goBack();
+                break;
+        }
+    }
+    
     HMS::main();
 } else if(isset($_REQUEST['type']) && $_REQUEST['type'] == 'hms' && $_REQUEST['op'] == 'login') {
     require_once(PHPWS_SOURCE_DIR . 'mod/hms/inc/defines.php');

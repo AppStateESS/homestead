@@ -223,7 +223,7 @@ class HMS_Learning_Community
         }
 
         $tpl['RLC_PAGER'] = HMS_RLC_Assignment::view_by_rlc_pager($rlc_id);
-        $tpl['MENU_LINK'] = PHPWS_Text::secureLink(_('Return to Maintenance'), 'hms', array('type'=>'maintenance', 'op'=>'show_maintenance_options'));
+        $tpl['MENU_LINK'] = PHPWS_Text::secureLink(_('Return to previous'), 'hms', array('type'=>'top_level', 'op'=>'go_back'));
 
         return PHPWS_Template::processTemplate($tpl, 'hms', 'admin/rlc_roster.tpl');
     }
@@ -244,7 +244,7 @@ class HMS_Learning_Community
 
         if(PEAR::isError($result)){
             PHPWS_Error::log($result);
-            return "There was an error working with the database.";
+            return HMS_Learning_Community::view_by_rlc($_REQUEST['rlc'], null, 'Database error.');
         }
         
         PHPWS_Core::initCoreClass('Form.php');
@@ -275,19 +275,28 @@ class HMS_Learning_Community
             return HMS_Learning_Community::view_by_rlc();
         }
 
-
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
 
         $db = &new PHPWS_DB('hms_learning_community_applications');
         $db->addWhere('hms_assignment_id', $_REQUEST['id']);
         $db->addValue('hms_assignment_id', null);
-        $db->update();
+        $result = $db->update();
+
+        if(PEAR::isError($result)){
+            PHPWS_Error::log($result);
+            return HMS_Learning_Community::view_by_rlc($_REQUEST['rlc'], null, 'Database error.');
+        }
 
         $db = &new PHPWS_DB('hms_learning_community_assignment');
         $db->addWhere('id', $_REQUEST['id']);
         $db->delete();
 
+        if(PEAR::isError($result)){
+            PHPWS_Error::log($result);
+            return HMS_Learning_Community::view_by_rlc($_REQUEST['rlc'], null, 'Database error.');
+        }
+        
         return HMS_Learning_Community::view_by_rlc($_REQUEST['rlc'], 'Deleted.');
     }
     
