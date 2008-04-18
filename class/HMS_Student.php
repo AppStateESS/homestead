@@ -306,7 +306,7 @@ class HMS_Student {
 
         // get student application
         PHPWS_Core::initModClass('hms', 'HMS_Application.php');
-        if(HMS_Application::check_for_application($_REQUEST['username'])) {
+        if(HMS_Application::check_for_application($_REQUEST['username'], HMS_Term::get_selected_term())) {
             $tpl['APPLICATION_LINK'] = PHPWS_Text::secureLink(_('Housing Application'), 'hms', array('type'=>'student', 'op'=>'view_housing_application', 'student'=>$_REQUEST['username']));
         } else {
             $tpl['APPLICATION_LINK'] = "No Housing Application exists for this user.";
