@@ -9,7 +9,7 @@
         <!-- BEGIN success_msg -->
         <font color="green">{SUCCESS_MSG}<br /></font>
         <!-- END success_msg -->
-        <h2>Properties</h2>
+        <h2>Bed Properties</h2>
         {START_FORM}
         <table>
             <tr>

@@ -204,12 +204,25 @@ class HMS_Learning_Community
     /*
      * Actually display the roster for the rlc specified in search_by_rlc
      */
-    function view_by_rlc()
+    function view_by_rlc($rlc_id = NULL, $success_msg = NULL, $error_msg = NULL)
     {
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php'); 
 
-        $tpl['RLC_PAGER'] = HMS_RLC_Assignment::view_by_rlc_pager($_REQUEST['rlc']);
+        // If the rlc_id wasn't passed in, get it from the request
+        if(!isset($rlc_id)){
+            $rlc_id = $_REQUEST['rlc'];
+        }
+
+        if(isset($success_msg)){
+            $tpl['SUCCESS_MSG'] = $success_msg;
+        }
+
+        if(isset($error_msg)){
+            $tpl['ERROR_MSG'] = $error_msg;
+        }
+
+        $tpl['RLC_PAGER'] = HMS_RLC_Assignment::view_by_rlc_pager($rlc_id);
         $tpl['MENU_LINK'] = PHPWS_Text::secureLink(_('Return to Maintenance'), 'hms', array('type'=>'maintenance', 'op'=>'show_maintenance_options'));
 
         return PHPWS_Template::processTemplate($tpl, 'hms', 'admin/rlc_roster.tpl');
@@ -241,6 +254,7 @@ class HMS_Learning_Community
         $form->addHidden('type', 'rlc');
         $form->addHidden('op', 'perform_remove_from_rlc');
         $form->addHidden('id', $_REQUEST['id']);
+        $form->addHidden('rlc', $_REQUEST['rlc']);
         $form->addSubmit('remove', _('Remove from RLC and Re-Activate Application'));
         $form->addSubmit('cancel', _('Do Nothing'));
 
@@ -257,7 +271,6 @@ class HMS_Learning_Community
      */
     function perform_remove_from_rlc()
     {
-        test($_REQUEST);
         if(!isset($_REQUEST['remove']) || $_REQUEST['remove'] != "Remove from RLC and Re-Activate Application" || !isset($_REQUEST['id'])) {
             return HMS_Learning_Community::view_by_rlc();
         }
@@ -275,7 +288,7 @@ class HMS_Learning_Community
         $db->addWhere('id', $_REQUEST['id']);
         $db->delete();
 
-        return "Deleted.";
+        return HMS_Learning_Community::view_by_rlc($_REQUEST['rlc'], 'Deleted.');
     }
     
     /**

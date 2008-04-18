@@ -212,7 +212,7 @@ class HMS_RLC_Assignment{
         $tags['USERNAME'] = $this->user_id;
 
         $actions[] = PHPWS_Text::secureLink('View Application', 'hms', array('type'=>'rlc', 'op'=>'view_rlc_application', 'username'=>$this->user_id));
-        $actions[] = PHPWS_Text::secureLink('Remove', 'hms', array('type'=>'rlc', 'op'=>'confirm_remove_from_rlc', 'id'=>$this->id));
+        $actions[] = PHPWS_Text::secureLink('Remove', 'hms', array('type'=>'rlc', 'op'=>'confirm_remove_from_rlc', 'id'=>$this->id, 'rlc'=>$_REQUEST['rlc']));
 
         $tags['ACTION'] = implode(' | ', $actions);
         return $tags;
