@@ -312,30 +312,29 @@ class HMS_Student {
             $tpl['APPLICATION_LINK'] = "No Housing Application exists for this user.";
         }
 
-        $db = &new PHPWS_DB('hms_learning_community_assignment');
-        $db->addColumn('hms_learning_communities.community_name');
-        $db->addWhere('hms_learning_community_assignment.rlc_id', 'hms_learning_communities.id');
-        $db->addWhere('hms_learning_community_assignment.asu_username', $_REQUEST['username'], 'ILIKE');
-        $results = $db->select();
+        /**************
+         * RLC Status *
+         **************/
+        PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
+        PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
+        PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
 
-        // FIXME: This is a hack because someone broke assignments.
-        if(PHPWS_Error::logIfError($results))
-            unset($results);
+        $rlc_names = HMS_Learning_Community::getRLCList();
+
+        $rlc_assignment     = HMS_RLC_Assignment::check_for_assignment($_REQUEST['username'], HMS_Term::get_selected_term());
+        $rlc_application    = HMS_RLC_Application::check_for_application($_REQUEST['username'], HMS_Term::get_selected_term(), FALSE);
         
-        if($results != NULL && $results != FALSE) {
-            $tpl['RLC_STATUS'] = $results['community_name'];
-        } else {
-            $db = &new PHPWS_DB('hms_learning_community_applications');
-            $db->addColumn('id');
-            $db->addWhere('user_id', $_REQUEST['username'], 'ILIKE');
-            $results = $db->select('one');
-            if($results != FALSE && $results != NULL) {
-                $tpl['RLC_STATUS'] = "This student is currently awaiting RLC approval. You can view their application " . PHPWS_Text::secureLink(_('here'), 'hms', array('type'=>'rlc', 'op'=>'view_rlc_application', 'username'=>$_REQUEST['username']));
-            } else {
-                $tpl['RLC_STATUS'] = "This student is not in a Learning Community and has no pending approval.";
-            }
+        if($rlc_assignment != FALSE){
+            $tpl['RLC_STATUS'] = "This student is assigned to: " . $rlc_names[$rlc_assignment['rlc_id']];
+        }else if ($rlc_application != FALSE){
+            $tpl['RLC_STATUS'] = "This student is currently awaiting RLC approval. You can view their application " . PHPWS_Text::secureLink(_('here'), 'hms', array('type'=>'rlc', 'op'=>'view_rlc_application', 'username'=>$_REQUEST['username']));
+        }else{
+            $tpl['RLC_STATUS'] = "This student is not in a Learning Community and has no pending approval.";
         }
-
+        
+        /********************
+         * Login as Student *
+         ********************/
         if( Current_User::allow('hms', 'login_as_student') ) { 
             $tpl['LOGIN_AS_STUDENT'] = '<tr><td>Login as this student: </td><td><a href=index.php?module=hms&op=main&login_as_student=' . $_REQUEST['username'] . '> '. $_REQUEST['username'] . '</a></td></tr>';
         }
