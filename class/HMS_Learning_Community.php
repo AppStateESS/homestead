@@ -623,6 +623,7 @@ class HMS_Learning_Community
         $db->addColumn('rlc_third_choice_id');
         $db->addColumn('date_submitted');
         $db->addWhere('rlc_first_choice_id', $_REQUEST['rlc_list']);
+        $db->addWhere('denied', 0); // Only show non-denied applications
         $users = $db->select();
 
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
