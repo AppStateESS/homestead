@@ -215,6 +215,7 @@ CREATE TABLE hms_learning_community_applications (
     rlc_question_0                  character varying(2048),
     rlc_question_1                  character varying(2048),
     rlc_question_2                  character varying(2048),
+    denied                          integer DEFAULT 0 NOT NULL;
     hms_assignment_id               integer REFERENCES hms_learning_community_assignment(id),
     PRIMARY KEY(id)
 );
