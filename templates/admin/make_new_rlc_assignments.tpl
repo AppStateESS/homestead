@@ -15,6 +15,7 @@
             {ASSIGNMENTS_PAGER}
             <br />
             <h2>Application Export</h2>
+            <h3>Sort: {DROPDOWN}</h3>
             <br />
             {START_FORM}
             {RLC_LIST}{SUBMIT}

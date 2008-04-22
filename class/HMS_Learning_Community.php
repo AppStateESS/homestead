@@ -457,6 +457,7 @@ class HMS_Learning_Community
         $tags = array();
         $tags['TITLE'] = 'RLC Assignments - ' . HMS_Term::term_to_text(HMS_Term::get_selected_term(), TRUE);
         $tags['SUMMARY']           = HMS_Learning_Community::display_rlc_assignment_summary();
+        $tags['DROPDOWN']          = PHPWS_Template::process(HMS_RLC_Application::getDropDown(), 'hms', 'admin/dropdown_template.tpl');
         $tags['ASSIGNMENTS_PAGER'] = HMS_RLC_Application::rlc_application_admin_pager();
 
         if(isset($success_msg)){

@@ -259,6 +259,9 @@ class HMS_RLC_Application{
         $pager->db->addWhere('hms_assignment_id',NULL,'is');
         $pager->db->addWhere('term', HMS_Term::get_selected_term());
         $pager->db->addWhere('denied', 0); // Only show non-denied applications in this pager
+        if( isset($_REQUEST['rlc']) ) {
+            $pager->db->addWhere('hms_learning_communities.id', $_REQUEST['rlc'], '=');
+        }
 
         $pager->setModule('hms');
         $pager->setTemplate('admin/rlc_assignments_pager.tpl');
@@ -270,6 +273,38 @@ class HMS_RLC_Application{
         $pager->addRowTags('getAdminPagerTags');
 
         return $pager->get();
+    }
+
+    /****************************************************************/
+    /* Generates a processed template for the rlc sort dropdown box */
+    /****************************************************************/
+    function getDropDown()
+    {
+        $db = &new PHPWS_DB('hms_learning_communities');
+        $result = $db->select();
+
+        if( PHPWS_Error::logIfError($result) ) {
+            return $result;
+        }
+
+        $communities = array();
+        foreach( $result as $community ) {
+            $communities[$community['id']] = $community['community_name'];
+        }
+
+        javascript('/modules/hms/page_refresh');
+
+        $form = &new PHPWS_Form('dropdown_selector');
+        $form->addSelect('rlc', $communities);
+        if( isset($_REQUEST['rlc']) ) {
+            $form->setMatch('rlc', $_REQUEST['rlc']);
+        }
+        $form->setExtra('rlc', 'onChange="refresh_page(form)"');
+
+        $form->addHidden('type', 'rlc');
+        $form->addHidden('op', 'assign_applicants_to_rlcs');
+
+        return $form->getTemplate();
     }
 
     function getAdminPagerTags()

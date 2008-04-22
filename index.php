@@ -4,6 +4,7 @@ if (!defined('PHPWS_SOURCE_DIR')) {
     include '../../config/core/404.html';
     exit();
 }
+
 if(Current_User::isLogged()) {
     PHPWS_Core::initModClass('hms', 'HMS.php');
 

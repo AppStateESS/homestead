@@ -153,6 +153,7 @@ class HMS_RLC_Assignment{
         $pager->setEmptyMessage('No RLC assignments have been made.');
         $pager->addPageTags($tags);
         $pager->addRowTags('getAdminPagerTags');
+
         return $pager->get();
     }
 
