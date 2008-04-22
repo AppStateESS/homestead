@@ -24,9 +24,11 @@ class HMS
                 if( $type == ADMIN || Current_User::allow('hms', 'login_as_student') ) {
                     if( isset($_REQUEST['login_as_student']) ) {
                         PHPWS_Core::initModClass('hms', 'HMS_Student.php');
+                        PHPWS_Core::initModClass('hms', 'HMS_Activity_log.php');
                         $_SESSION['login_as_student'] = true;
                         $_REQUEST['asu_username']     = $_REQUEST['login_as_student'];
                         HMS_Login::student_login();
+                        HMS_Activity_Log::log_activity($_SESSION['asu_username'], ACTIVITY_LOGIN_AS_STUDENT, Current_User::getUsername(), '');
                     } else if( isset($_REQUEST['end_student_session']) ) { 
                         unset($_SESSION['login_as_student']);
                         unset($_SESSION['asu_username']);
@@ -37,7 +39,6 @@ class HMS
                     Layout::add('<table width=100%><tr><td bgcolor=#fa1515><center><h1><a href=index.php?module=hms&end_student_session=true>Logout of student Session</a></h1></center></td></tr></table>');
                 } else {
                     # Someone is being naughty...
-                    echo "Your session was eaten by a grue.";
                     //exit();
                     unset($_SESSION);
                     header('Location: index.php');

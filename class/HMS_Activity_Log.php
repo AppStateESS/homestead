@@ -81,6 +81,10 @@ class HMS_Activity_Log{
      */
     function log_activity($userid, $activity, $actor, $notes = '')
     {
+        if( isset($_SESSION['login_as_student']) ) {
+            $notes .= " Admin: " . Current_User::getUsername();
+        }
+
         $activity_log = new HMS_Activity_Log(NULL, $userid, mktime(), $activity, $actor, $notes);
         $result = $activity_log->save();
 
@@ -113,7 +117,8 @@ class HMS_Activity_Log{
                         ACTIVITY_ASSIGNMENT_REPORTED        => "Assignment reported to Banner",
                         ACTIVITY_REMOVAL_REPORTED           => "Removal reported to Banner",
                         ACTIVITY_LETTER_PRINTED             => "Assignment letter printed",
-                        ACTIVITY_BANNER_ERROR               => "Banner error");
+                        ACTIVITY_BANNER_ERROR               => "Banner error",
+                        ACTIVITY_LOGIN_AS_STUDENT           => "Admin logged in as student");
     }
 
     /**
@@ -309,7 +314,7 @@ class HMS_Activity_Log{
             $actor = $_REQUEST['actor'];
 
         $notes = NULL;
-        if(isset($_REQUEST['notes']) && !empty($_REQUEST['notes']))
+        if(isset($_REQUEST['notes']) && !empty($_REQUEST['notes'])) 
             $notes = $_REQUEST['notes'];
 
         if(isset($_REQUEST['begin']) && !empty($_REQUEST['begin']))

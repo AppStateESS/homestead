@@ -125,6 +125,8 @@ define('ACTIVITY_BANNER_ERROR',                 16);
 
 define('HMS_MULTIPLE_ASSIGNMENTS',              17);
 
+define('ACTIVITY_LOGIN_AS_STUDENT',             18);
+
 /** 
  * Errors 
  */
