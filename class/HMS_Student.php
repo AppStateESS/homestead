@@ -223,9 +223,10 @@ class HMS_Student {
         $tpl['MIDDLE_NAME'] = $student_info->middle_name;
         $tpl['LAST_NAME']   = $student_info->last_name;
         
-        if($student_info->gender == FEMALE) {
+        test($student_info);
+        if($student_info->gender == 'F') {
             $tpl['GENDER'] = "Female";
-        } else if ($student_info->gender == MALE) {
+        } else if ($student_info->gender == 'M') {
             $tpl['GENDER'] = "Male";
         } else {
             $tpl['GENDER'] = "Unknown gender: ({$student_info->gender})";
