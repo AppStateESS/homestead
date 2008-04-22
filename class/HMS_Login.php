@@ -42,32 +42,6 @@ class HMS_Login
         PHPWS_Core::initModClass('hms','HMS_SOAP.php');
         $deadlines = HMS_Deadlines::get_deadlines();
 
-        /*
-        if(!HMS_Deadlines::check_deadline_past('student_login_begin_timestamp', $deadlines)) {
-            return TOOEARLY;
-        } else if (HMS_Deadlines::check_deadline_past('student_login_end_timestamp', $deadlines)) {
-            return TOOLATE;
-        }
-        */
-
-        /*
-        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
-        $student_type = HMS_SOAP::get_student_type($_REQUEST['asu_username']);
-        $dob = explode('-', HMS_SOAP::get_dob($_REQUEST['asu_username']));
-        */
-        
-        /* Only allow freshmen to sign in
-        if($student_type != 'F') {
-            return BADCLASS;
-        */
-
-        /*
-        # Return an error if the user is 25 years or older
-        if($dob[0] < date('Y') - 25) {
-            return TOOOLD;
-        }
-        */
-
         /* Don't destroy our admin session if an admin is logging in as a user */
         if( !Current_User::isLogged() ) {
             require_once(PHPWS_SOURCE_DIR . '/mod/hms/inc/accounts.php');
@@ -75,13 +49,15 @@ class HMS_Login
             Current_User::getLogin();
         }
 
+        $username = strtolower(trim($_REQUEST['asu_username']));
+
         # Log the student's login in their activity log
         PHPWS_Core::initModClass('hms','HMS_Activity_Log.php');
-        HMS_Activity_Log::log_activity($_REQUEST['asu_username'],ACTIVITY_LOGIN, $_REQUEST['asu_username'], NULL); 
+        HMS_Activity_Log::log_activity($username,ACTIVITY_LOGIN, $username, NULL); 
 
         # Setup the session variable
-        $_SESSION['asu_username'] = strtolower($_REQUEST['asu_username']);
-        $_SESSION['application_term'] = HMS_SOAP::get_application_term($_REQUEST['asu_username']);
+        $_SESSION['asu_username'] = $username;
+        $_SESSION['application_term'] = HMS_SOAP::get_application_term($username);
         return STUDENT;
     }
 
