@@ -1,11 +1,22 @@
 <?php
 
-/**
- * Testing Flag
- * Set to true to use canned data (no SOAP connection
+/**********************
+ * SOAP Testing Flags *
+ **********************/
+
+ /**
+ * SOAP Info test flag
+ * Set to true to use canned student info (no SOAP connection
  * will ever be made).
  */
-define('SOAP_TEST_FLAG', true);
+define('SOAP_INFO_TEST_FLAG', true);
+
+/**
+ * SOAP Reporting test flag
+ * Set to true to prevent applications, assignments, etc.
+ * from being reported back to banner.
+ */
+define('SOAP_REPORT_TEST_FLAG', true);
 
 /**
  * AXP Testing Flag

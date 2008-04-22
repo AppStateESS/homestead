@@ -223,35 +223,55 @@ class HMS_Student {
         $tpl['MIDDLE_NAME'] = $student_info->middle_name;
         $tpl['LAST_NAME']   = $student_info->last_name;
         
-        if($student_info->gender == 'F') {
+        if($student_info->gender == FEMALE) {
             $tpl['GENDER'] = "Female";
-        } else if ($student_info->gender == 'M') {
+        } else if ($student_info->gender == MALE) {
             $tpl['GENDER'] = "Male";
         } else {
-            $tpl['GENDER'] = "Unknown ({$student_info->gender})";
+            $tpl['GENDER'] = "Unknown gender: ({$student_info->gender})";
         }
 
         $tpl['DOB'] = $student_info->dob;
 
-        if($student_info->projected_class == 'FR') {
+        if($student_info->projected_class == CLASS_FRESHMEN) {
             $tpl['CLASS'] = "Freshman";
-        } else if ($student_info->projected_class == 'SO') {
+        } else if ($student_info->projected_class == CLASS_SOPHOMORE) {
             $tpl['CLASS'] = "Sophomore";
-        } else if ($student_info->projected_class == 'JR') {
+        } else if ($student_info->projected_class == CLASS_JUNIOR) {
             $tpl['CLASS'] = "Junior";
-        } else if ($student_info->projected_class == 'SR') {
+        } else if ($student_info->projected_class == CLASS_SENIOR) {
             $tpl['CLASS'] = "Senior";
         } else {
-            $tpl['CLASS'] = "Unknown ({$student_info->projected_class})";
+            $tpl['CLASS'] = "Unknown class: ({$student_info->projected_class})";
         }
 
         $tpl['APPLICATION_TERM'] = $student_info->application_term;
-        $tpl['ADDRESS_L1'] = $student_info->address->line1;
-        $tpl['ADDRESS_L2'] = $student_info->address->line2;
-        $tpl['ADDRESS_L3'] = $student_info->address->line3;
-        $tpl['ADDRESS_CITY'] = $student_info->address->city;
-        $tpl['ADDRESS_STATE'] = $student_info->address->state;
-        $tpl['ADDRESS_ZIP'] = $student_info->address->zip;
+        
+        /*************
+         * Addresses *
+         *************/
+        $pr_address = HMS_SOAP::get_address($_REQUEST['username'], ADDRESS_PRMT_RESIDENCE);
+
+        $tpl['PR_ADDRESS_L1']       = $pr_address->line1;
+        $tpl['PR_ADDRESS_L2']       = $pr_address->line2;
+        $tpl['PR_ADDRESS_L3']       = $pr_address->line3;
+        $tpl['PR_ADDRESS_CITY']     = $pr_address->city;
+        $tpl['PR_ADDRESS_STATE']    = $pr_address->state;
+        $tpl['PR_ADDRESS_ZIP']      = $pr_address->zip;
+
+        $ps_address = HMS_SOAP::get_address($_REQUEST['username'], ADDRESS_PRMT_STUDENT);
+        
+        $tpl['PS_ADDRESS_L1']       = $ps_address->line1;
+        $tpl['PS_ADDRESS_L2']       = $ps_address->line2;
+        $tpl['PS_ADDRESS_L3']       = $ps_address->line3;
+        $tpl['PS_ADDRESS_CITY']     = $ps_address->city;
+        $tpl['PS_ADDRESS_STATE']    = $ps_address->state;
+        $tpl['PS_ADDRESS_ZIP']      = $ps_address->zip;
+        
+        /****************
+         * Phone number *
+         ****************/
+        
         $tpl['PHONE_AC'] = $student_info->phone->area_code;
         $tpl['PHONE_NUMBER'] = $student_info->phone->number;
         $tpl['USERNAME'] = $_REQUEST['username'];

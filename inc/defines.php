@@ -48,7 +48,7 @@ define('FALL',      'Fall');
 /**
  * Student Classes
  */
-define('CLASS_FESHMEN',     'FR');
+define('CLASS_FRESHMEN',     'FR');
 define('CLASS_SOPHOMORE',   'SO');
 define('CLASS_JUNIOR',      'JR');
 define('CLASS_SENIOR',      'SR');
@@ -78,12 +78,10 @@ define('BANNER_MEAL_HIGH',  0);
 define('BANNER_MEAL_SUPER', 8);
 
 /**
- * Errors
+ * Address types
  */
-define('TOOLATE',  -4);
-define('TOOOLD',   -3);
-define('BADTUPLE', -2);
-define('TOOEARLY', -1);
+define('ADDRESS_PRMT_STUDENT',      'PS'); // Permanent student address
+define('ADDRESS_PRMT_RESIDENCE',    'PR'); // permenent student residence
 
 /**
  * User classes
@@ -131,6 +129,11 @@ define('HMS_MULTIPLE_ASSIGNMENTS',              17);
  * Errors 
  */
 define('E_SUCCESS', 0); // Everything is fine, nothing is broken.
+
+define('TOOLATE',  -4);
+define('TOOOLD',   -3);
+define('BADTUPLE', -2);
+define('TOOEARLY', -1);
 
 define('E_ROOMMATE_MALFORMED_USERNAME',  1); // Bad characters, null, etc
 define('E_ROOMMATE_REQUESTED_SELF',      3); // You can't request yourself as a roommate

@@ -4,14 +4,225 @@ require_once(PHPWS_SOURCE_DIR . 'mod/hms/inc/defines.php');
 
 class HMS_SOAP{
 
+    /**
+     * Main function for getting student info.
+     * Used by the rest of the "get" functions
+     */
+    function get_student_info($username, $term = NULL)
+    {
+        /**
+         * This variable is a hash table that stores student
+         * data, so we only have to ask for it from banner once
+         * per seesion.
+         */
+        static $student_info_table;
+
+        # If no term was passed, then use the current term
+        if(!isset($term)){     
+            PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+            $term = HMS_Term::get_current_term();
+        }
+
+        // Check the hash table 
+        $hash_key = $username . $term;
+        if(isset($student_info_table) && array_key_exists($hash_key, $student_info_table)){
+            return $student_info_table[$hash_key];
+        }
+
+        // Return canned data
+        if(SOAP_INFO_TEST_FLAG) {
+            $student = HMS_SOAP::get_test_info(); 
+            // insert canned data into hash table
+            $student_info_table[$hash_key] = $student;
+            return $student;
+        }        
+
+        include_once('SOAP/Client.php');
+        $wsdl = new SOAP_WSDL(PHPWS_SOURCE_DIR . 'mod/hms/inc/shs0001.wsdl', 'true');
+        $proxy = $wsdl->getProxy();
+        $student = $proxy->GetStudentProfile($username, $term);
+        
+        # Check for an PEAR error and log it
+        if(HMS_SOAP::is_soap_fault($student)){
+            HMS_SOAP::log_soap('get_student_info: ' . $username . ' result: PEAR Error');
+            HMS_SOAP::log_soap_error($student,'get_student_info',$username);
+            return false;
+        }
+
+        # Check for a banner error
+        if(is_int($student) && $student > 0){
+            HMS_SOAP::log_soap('get_student_info: ' . $username . ' result: Banner error: ' . $student);
+            HMS_SOAP::log_soap_error('Banner error: ' . $student, 'get_student_info', $username);
+            return false;
+        }
+
+        HMS_SOAP::log_soap('get_student_info: ' . $username . ' result: success');
+        
+        // insert into hash table
+        $student_info_table[$hash_key] = $student;
+        
+        return $student;
+    }
+
+    /**
+     * Report that a housing application has been received.
+     * Makes First Connections stop bugging the students.
+     */
+    function report_application_received($username, $term, $plan_code, $meal_code = NULL)
+    {
+        if(SOAP_REPORT_TEST_FLAG){
+            return HMS_SOAP::get_test_report();
+        }
+        
+        include_once('SOAP/Client.php');
+        $wsdl = new SOAP_WSDL(PHPWS_SOURCE_DIR . 'mod/hms/inc/shs0001.wsdl', 'true');
+        $proxy = $wsdl->getProxy();
+        $result = $proxy->CreateHousingApp($username, $term, $plan_code, $meal_code);
+
+        # Check for an error and log it
+        if(HMS_SOAP::is_soap_fault($result)){
+            HMS_SOAP::log_soap('report_application_received: ' . $username . ' result: PEAR Error');
+            HMS_SOAP::log_soap_error($result, 'report_application_received', $username . ' ' . $term);
+            return false;
+        }
+
+        # It's not a SOAP Fault, so hopefully it's an int.
+        $result = (int)$result;
+
+        # Check for a banner error
+        if($result > 0){
+            HMS_SOAP::log_soap('report_application_received: ' . $username . ' result: Banner error: ' . $result);
+            HMS_SOAP::log_soap_error('Banner error: ' . $assignment, 'report_application_received', $username);
+            return false;
+        }/* else if(!is_int($result)) {
+            HMS_SOAP::log_soap('report_application_received: ' . $username . ' result: Weird Error (result not an int): ' . $result);
+            HMS_SOAP::log_soap_error('Weird Error: ', 'report_application_received', $username);
+            return false;
+        }*/
+        
+        HMS_SOAP::log_soap('report_application_received: ' . $username . ' result: success');
+        
+        return true;
+    }
+
+    /**
+     * Sends a room assignment to banner. Will cause students to be billed, etc.
+     */
+    function report_room_assignment($username, $term, $building_code, $room_code, $plan_code, $meal_code)
+    {
+        if(SOAP_REPORT_TEST_FLAG){
+            return HMS_SOAP::get_test_report();
+        }
+
+        include_once('SOAP/Client.php');
+        $wsdl = new SOAP_WSDL(PHPWS_SOURCE_DIR . 'mod/hms/inc/shs0001.wsdl', 'true');
+        $proxy = $wsdl->getProxy();
+        $assignment = $proxy->CreateRoomAssignment($username, $term, $building_code, $room_code, $plan_code, $meal_code);
+        
+        # Check for an error and log it
+        if(HMS_SOAP::is_soap_fault($assignment)){
+            HMS_SOAP::log_soap('report_room_assignment: ' . $username . ' result: Banner error' . $assignment);
+            HMS_SOAP::log_soap_error($assignment, 'report_room_assignment', $username . ' ' . $term);
+            return false;
+        }
+        
+        # Check for a banner error
+        if(is_int($assignment) && $assignment > 0){
+            HMS_SOAP::log_soap('report_room_assignment: ' . $username . ' result: Banner error: ' . $assignment);
+            HMS_SOAP::log_soap_error('Banner error: ' . $assignment, 'report_room_assignment', $username);
+            return false;
+        }
+        
+        HMS_SOAP::log_soap('report_room_assignment' . $username . ' result: success');
+        
+        return $assignment;
+    }
+
+    /**
+     * Remove the deletion of a room assignment to Banner.
+     * Will cause students to be credited, etc.
+     */
+    function remove_room_assignment($username, $term, $building, $room)
+    {
+        if(SOAP_REPORT_TEST_FLAG) {
+            return HMS_SOAP::get_test_report();
+        }
+
+        include_once('SOAP/Client.php');
+        $wsdl = new SOAP_WSDL(PHPWS_SOURCE_DIR . 'mod/hms/inc/shs0001.wsdl', 'true');
+        $proxy = $wsdl->getProxy();
+        $removal = $proxy->RemoveRoomAssignment($username, $term, $building, $room);
+
+        # Check for an error and log it
+        if(HMS_SOAP::is_soap_fault($removal)){
+            HMS_SOAP::log_soap('remove_room_assignment: ' . $username . ' result: PEAR error');
+            HMS_SOAP::log_soap_error($removal, 'remove_room_assignment', $username . ' ' . $term);
+            return false;
+        }
+        
+        # Check for a banner error
+        if(is_int($removal) && $removal > 0){
+            HMS_SOAP::log_soap('remove_room_assignment: ' . $username . ' result: Banner error: ' . $removal);
+            HMS_SOAP::log_soap_error('Banner error: ' . $removal, 'remove_room_assignment', $username);
+            return false;
+        }
+        
+        HMS_SOAP::log_soap('remove_room_assignment: ' . $username . ' result: success');
+        
+        return $removal;
+    }
+    
+    /**
+     * Returns a student's current assignment information
+     * $opt is one of:
+     *  'All'
+     *  'HousingApp'
+     *  'RoomAssign'
+     *  'MealAssign'
+     */
+    function get_hous_meal_register($username, $termcode, $opt)
+    {
+        if(SOAP_INFO_TEST_FLAG) {
+            return HMS_SOAP::get_test_hous_meal();
+        }
+        
+        include_once('SOAP/Client.php');
+        $wsdl = new SOAP_WSDL(PHPWS_SOURCE_DIR . 'mod/hms/inc/shs0001.wsdl', 'true');
+        $proxy = $wsdl->getProxy();
+        $student = $proxy->GetHousMealRegister($username, $termcode, $opt);
+
+        # Check for an error and log it
+        if(HMS_SOAP::is_soap_fault($student)) {
+            HMS_SOAP::log_soap('get_hous_meal_register: ' . $username . ' result: PEAR Error');
+            HMS_SOAP::log_soap_error($student, 'get_hous_meal_register', $username);
+            return false;
+        }
+        
+        # Check for a banner error
+        if(is_int($student) && $student > 0){
+            HMS_SOAP::log_soap('get_hous_meal_register: ' . $username . ' result: Banner error: ' . $student);
+            HMS_SOAP::log_soap_error('Banner error: ' . $student, 'get_hous_meal_register', $username);
+            return false;
+        }
+        
+        HMS_SOAP::log_soap('get_hous_meal_register: ' . $username . ' result: success');
+
+        return $student;
+    }
+
+
+    /*******************************
+     * Individual 'get' functions' *
+     *******************************
+     *
+     * The functions below pull various pieces from the 
+     * student info object returned by 'get_student_info()'
+     */
+    
+    
     function is_valid_student($username)
     {
-        if(SOAP_TEST_FLAG){
-            # return canned data
-            return true;
-        }else{
-            $student = HMS_SOAP::get_student_info($username);
-        }
+        $student = HMS_SOAP::get_student_info($username);
 
         if(PEAR::isError($student)){
             HMS_SOAP::log_soap_error($student,'is_valid_student',$username);
@@ -27,12 +238,7 @@ class HMS_SOAP{
 
     function get_banner_id($username)
     {
-        if(SOAP_TEST_FLAG){
-            # return canned data
-            return 900325006;
-        }else{
-            $student = HMS_SOAP::get_student_info($username);
-        }
+        $student = HMS_SOAP::get_student_info($username);
         
         if(PEAR::isError($student)){
             HMS_SOAP::log_soap_error($student,'is_valid_student',$username);
@@ -42,40 +248,8 @@ class HMS_SOAP{
         return $student->banner_id;
     }
 
-    /* TODO: This is duplicated code. 'get_gender' and 'get_student_class' exist below.
-     * This function, if it is actually necessary, should be revised to use those functions
-     */
-    function get_gender_class($username)
-    {
-        if(SOAP_TEST_FLAG) {
-            $person['gender'] = "M";
-            $person['class']  = "NFR";
-            return $person;
-        }
-
-        $student = HMS_SOAP::get_student_info($username);
-        
-        if(PEAR::isError($student)){
-            HMS_SOAP::log_soap_error($student,'get_gender_class',$username);
-            return $student;
-        }
-        
-        $person['gender'] = $student->gender;
-        $person['class']  = $student->projected_class;
-        $person['type']   = $student->student_type;
-        
-        if($student->student_type == 'F' && $student->credhrs_completed == 0)
-            $person['class'] = "NFR";
-
-        return $person;
-    }
-
     function get_credit_hours($username)
     {
-        if(SOAP_TEST_FLAG) {
-            return 6;
-        }
-
         $student = HMS_SOAP::get_student_info($username);
 
         if(PEAR::isError($student)){
@@ -87,12 +261,7 @@ class HMS_SOAP{
     }
 
     function get_name($username){
-        if(SOAP_TEST_FLAG){
-            # return canned data
-            return "Jeremy Booker";
-        }else{
-            $student = HMS_SOAP::get_student_info($username);
-        }
+        $student = HMS_SOAP::get_student_info($username);
 
         if(PEAR::isError($student)){
             HMS_SOAP::log_soap_error($student,'get_name',$username);
@@ -107,12 +276,7 @@ class HMS_SOAP{
 
     function get_first_name($username)
     {
-        if(SOAP_TEST_FLAG){
-            # return canned data
-            return "Jeremy";
-        }else{
-            $student = HMS_SOAP::get_student_info($username);
-        }
+        $student = HMS_SOAP::get_student_info($username);
         
         if(PEAR::isError($student)){
             HMS_SOAP::log_soap_error($student,'get_first_name',$username);
@@ -126,12 +290,7 @@ class HMS_SOAP{
 
     function get_middle_name($username)
     {
-        if(SOAP_TEST_FLAG){
-            # return canned data
-            return "Lee";
-        }else{
-            $student = HMS_SOAP::get_student_info($username);
-        }
+        $student = HMS_SOAP::get_student_info($username);
 
         if(PEAR::isError($student)){
             HMS_SOAP::log_soap_error($student,'get_middle_name',$username);
@@ -145,12 +304,7 @@ class HMS_SOAP{
 
     function get_last_name($username)
     {
-        if(SOAP_TEST_FLAG){
-            # return canned data
-            return "Booker";
-        }else{
-            $student = HMS_SOAP::get_student_info($username);
-        }
+        $student = HMS_SOAP::get_student_info($username);
 
         if(PEAR::isError($student)){
             HMS_SOAP::log_soap_error($student,'get_last_name',$username);
@@ -168,12 +322,7 @@ class HMS_SOAP{
      */
     function get_full_name($username)
     {
-        if(SOAP_TEST_FLAG){
-            # return canned data
-            return "Jeremy Lee Booker";
-        }else{
-            $student = HMS_SOAP::get_student_info($username);
-        }
+        $student = HMS_SOAP::get_student_info($username);
 
         if(PEAR::isError($student)){
             HMS_SOAP::log_soap_error($student,'get_full_name',$username);
@@ -193,12 +342,7 @@ class HMS_SOAP{
      */
     function get_full_name_inverted($username)
     {
-        if(SOAP_TEST_FLAG){
-            # return canned data
-            return "Booker, Jeremy Lee";
-        }else{
-            $student = HMS_SOAP::get_student_info($username);
-        }
+        $student = HMS_SOAP::get_student_info($username);
 
         if(PEAR::isError($student)){
             HMS_SOAP::log_soap_error($student,'get_full_name_inverted',$username);
@@ -219,16 +363,7 @@ class HMS_SOAP{
      */
     function get_gender($username, $numeric = FALSE)
     {
-        if(SOAP_TEST_FLAG){
-            # return canned data
-            if($numeric){
-                return 1;
-            }else{
-                return 'M';
-            }
-        }else{
-            $student = HMS_SOAP::get_student_info($username);
-        }
+        $student = HMS_SOAP::get_student_info($username);
 
         if(PEAR::isError($student)){
             HMS_SOAP::log_soap_error($student,'get_gender',$username);
@@ -249,6 +384,21 @@ class HMS_SOAP{
     }
 
     /**
+     * Returns an array of all the address objects
+     * associated with a student.
+     */
+    function get_addresses($username)
+    {
+        $student = HMS_SOAP::get_student_info($username);
+
+        if(PEAR::isError($student)){
+            return $student;
+        }
+
+        return $student->address;
+    }
+
+    /**
      * Returns an associate array with keys:
      * line1, line2, line3, city, county, state, zip
      * 'county' is a county code 
@@ -257,36 +407,14 @@ class HMS_SOAP{
      * Passing a type of 'null' will cause a 'PR' address to
      * be returned, or a 'PS' addresses if no PR exists.
      * 
-     * Valid options for 'type' are:
+     * Valid options for 'type' are the address types defined in inc/defines.php:
      * null (default, returns 'PR' if exists, otherwise 'PS')
-     * 'PR' (permanent residence)
-     * 'PS' (permanent student)
+     * ADDRESS_PRMT_RESIDENCE ('PR' - permanent residence)
+     * ADDRESS_PRMT_STUDENT   ('PS' - permanent student)
      */
-    function get_address($username, $type = 'PR')
+    function get_address($username, $type = ADDRESS_PRMT_RESIDENCE)
     {
-        if(SOAP_TEST_FLAG){
-            # return canned data
-            return array('line1'  => '123 Rivers St.',
-                         'line2'  => 'Apt 12',
-                         'line3'  => 'who has a line 3??',
-                         'city'   => 'Boone',
-                         'county' => '123',
-                         'state'  => 'NC',
-                         'zip'    => '27591');
-            $address->atyp_code = 'PS';
-            $address->line1     = '123 Rivers St.';
-            $address->line2     = 'c/o Electronic Student Services';
-            $address->line3     = 'Room 267';
-            $address->city      = 'Boone';
-            $address->county    = '095';
-            $address->state     = 'NC';
-            $address->zip       = '28608';
-            
-            return $address;
-            
-        }else{
-            $student = HMS_SOAP::get_student_info($username);
-        }
+        $student = HMS_SOAP::get_student_info($username);
         
         if(PEAR::isError($student)){
             HMS_SOAP::log_soap_error($student,'get_address',$username);
@@ -296,15 +424,16 @@ class HMS_SOAP{
         $pr_address = null;
         $ps_address = null;
 
-        # Look for the address type requested ('PR' by default)
+        # Look for the various address types
         foreach($student->address as $address){
-            if($address->atyp_code == 'PR') {
+            if($address->atyp_code == ADDRESS_PRMT_RESIDENCE) {
                 $pr_address = $address;
-            }else if($address->atyp_code = 'PS'){
+            }else if($address->atyp_code = ADDRESS_PRMT_STUDENT){
                 $ps_address = $address;
             }
         }
 
+        # Decide which address type to return, based a $type parameter
         if(is_null($type)){
             # Return the pr address, if it exists
             if(!is_null($pr_address)){
@@ -316,9 +445,9 @@ class HMS_SOAP{
                 # No address found, return false
                 return false;
             }
-        }else if($type == 'PR' && !is_null($pr_address)){
+        }else if($type == ADDRESS_PRMT_RESIDENCE && !is_null($pr_address)){
             return $pr_address;
-        }else if($type == 'PS' && !is_null($ps_address)){
+        }else if($type == ADDRESS_PRMT_STUDENT && !is_null($ps_address)){
             return $ps_address;
         }else{
             # Either a bad type was specified (i.e. not null and not PS or PR)
@@ -360,13 +489,7 @@ class HMS_SOAP{
      */
     function get_student_type($username, $term = NULL)
     {
-        if(SOAP_TEST_FLAG){
-            # return canned data
-            #return "T";
-            return "F";
-        }else{
-            $student = HMS_SOAP::get_student_info($username, $term);
-        }
+        $student = HMS_SOAP::get_student_info($username, $term);
         
         if(PEAR::isError($student)) {
             HMS_SOAP::log_soap_error($student, 'get_student_type', $username);
@@ -387,12 +510,7 @@ class HMS_SOAP{
      */
     function get_student_class($username, $term = NULL)
     {
-        if(SOAP_TEST_FLAG){
-            # return canned data
-            return "SR";
-        }else{
-            $student = HMS_SOAP::get_student_info($username, $term);
-        }
+        $student = HMS_SOAP::get_student_info($username, $term);
         
         if(PEAR::isError($student)) {
             HMS_SOAP::log_soap_error($student, 'get_student_class', $username);
@@ -410,13 +528,7 @@ class HMS_SOAP{
      */
     function get_dob($username)
     {
-        if(SOAP_TEST_FLAG){
-            # return canned data
-            #return "1991-09-05"; // under 18
-            return "1986-09-05"; // over 18
-        }else{
-            $student = HMS_SOAP::get_student_info($username);
-        }
+        $student = HMS_SOAP::get_student_info($username);
         
         if(PEAR::isError($student)) {
             HMS_SOAP::log_soap_error($student, 'get_dob', $username);
@@ -440,13 +552,7 @@ class HMS_SOAP{
      * 40 => Fall
      */
     function get_application_term($username){
-        if(SOAP_TEST_FLAG){
-            # return canned data
-            #return "200810"; // returning student
-            return "200840"; // new student
-        }else{
-            $student = HMS_SOAP::get_student_info($username);
-        }
+        $student = HMS_SOAP::get_student_info($username);
 
         if(PEAR::isError($student)){
             HMS_SOAP::log_soap_error($student, 'get_application_term', $username);
@@ -464,216 +570,29 @@ class HMS_SOAP{
     }
 
     /**
-     * Main function for getting student info.
-     * Used by the rest of the "get" functions
+     * Returns the student's phone number in either xxx.xxx.xxxx or (xxx)xxx-xxxx fashion
      */
-    function get_student_info($username, $term = NULL)
+    function get_phone_number($username, $alt = NULL)
     {
-        if(SOAP_TEST_FLAG) {
-            $student->banner_id             = 900325006;
-            $student->first_name            = "kevin";
-            $student->middle_name           = "michael";
-            $student->last_name             = "wilcox";
-            $student->gender                = "M";
-            $student->dob                   = "1980-03-31";
-            $student->student_type          = 'F';
-            $student->projected_class       = 'SR';
-            $student->address['line1']      = '275 Honey Hill Drive';
-            $student->address['line2']      = '';
-            $student->address['line3']      = '';
-            $student->address['city']       = 'Blowing Rock';
-            $student->address['county']     = '99';
-            $student->address['state']      = 'NC';
-            $student->address['zip']        = '28605';
-            $student->phone['area_code']    = '828';
-            $student->phone['number']       = '2780579';
-            $student->application_term      = '200840';
+        $student = HMS_SOAP::get_student_info($username);
+        
+        if(PEAR::isError($student)) {
+            HMS_SOAP::log_soap_error($student, 'get_phone_number', $username);
             return $student;
+        }else if($student->phone == NULL){
+            return NULL;
+        }else if ($alt == NULL) {
+            $phone = $student->phone->area_code . "." . substr($student->phone->number, 0, 3) . "." . substr($student->phone->number, 3);
+            return $phone;
+        } else {
+            $phone = "(" . $student->phone->area_code . ")"  . substr($student->phone->number, 0, 3) . "-" . substr($student->phone->number, 3);
+            return $phone;
         }
-
-        # If no term was passed, then use the current term
-        if(!isset($term)){     
-            PHPWS_Core::initModClass('hms', 'HMS_Term.php');
-            $term = HMS_Term::get_current_term();
-        }
-
-        include_once('SOAP/Client.php');
-        $wsdl = new SOAP_WSDL(PHPWS_SOURCE_DIR . 'mod/hms/inc/shs0001.wsdl', 'true');
-        $proxy = $wsdl->getProxy();
-        $student = $proxy->GetStudentProfile($username, $term);
-        
-        # Check for an PEAR error and log it
-        if(HMS_SOAP::is_soap_fault($student)){
-            HMS_SOAP::log_soap('get_student_info: ' . $username . ' result: PEAR Error');
-            HMS_SOAP::log_soap_error($student,'get_student_info',$username);
-            return false;
-        }
-
-        # Check for a banner error
-        if(is_int($student) && $student > 0){
-            HMS_SOAP::log_soap('get_student_info: ' . $username . ' result: Banner error: ' . $student);
-            HMS_SOAP::log_soap_error('Banner error: ' . $student, 'get_student_info', $username);
-            return false;
-        }
-
-        HMS_SOAP::log_soap('get_student_info: ' . $username . ' result: success');
-
-        return $student;
     }
-
-    /**
-     * Returns a student's current assignment information
-     * $opt is one of:
-     *  'All'
-     *  'HousingApp'
-     *  'RoomAssign'
-     *  'MealAssign'
-     */
-    function get_hous_meal_register($username, $termcode, $opt)
-    {
-        if(SOAP_TEST_FLAG) {
-            # return canned data
-            return array();
-        }
-        include_once('SOAP/Client.php');
-        $wsdl = new SOAP_WSDL(PHPWS_SOURCE_DIR . 'mod/hms/inc/shs0001.wsdl', 'true');
-        $proxy = $wsdl->getProxy();
-        $student = $proxy->GetHousMealRegister($username, $termcode, $opt);
-
-        # Check for an error and log it
-        if(HMS_SOAP::is_soap_fault($student)) {
-            HMS_SOAP::log_soap('get_hous_meal_register: ' . $username . ' result: PEAR Error');
-            HMS_SOAP::log_soap_error($student, 'get_hous_meal_register', $username);
-            return false;
-        }
-        
-        # Check for a banner error
-        if(is_int($student) && $student > 0){
-            HMS_SOAP::log_soap('get_hous_meal_register: ' . $username . ' result: Banner error: ' . $student);
-            HMS_SOAP::log_soap_error('Banner error: ' . $student, 'get_hous_meal_register', $username);
-            return false;
-        }
-        
-        HMS_SOAP::log_soap('get_hous_meal_register: ' . $username . ' result: success');
-
-        return $student;
-    }
-
-    function report_application_received($username, $term, $plan_code, $meal_code = NULL)
-    {
-        if(SOAP_TEST_FLAG){
-            return true;
-        }
-        
-        include_once('SOAP/Client.php');
-        $wsdl = new SOAP_WSDL(PHPWS_SOURCE_DIR . 'mod/hms/inc/shs0001.wsdl', 'true');
-        $proxy = $wsdl->getProxy();
-        $result = $proxy->CreateHousingApp($username, $term, $plan_code, $meal_code);
-
-        # Check for an error and log it
-        if(HMS_SOAP::is_soap_fault($result)){
-            HMS_SOAP::log_soap('report_application_received: ' . $username . ' result: PEAR Error');
-            HMS_SOAP::log_soap_error($result, 'report_application_received', $username . ' ' . $term);
-            return false;
-        }
-
-        # It's not a SOAP Fault, so hopefully it's an int.
-        $result = (int)$result;
-
-        # Check for a banner error
-        if($result > 0){
-            HMS_SOAP::log_soap('report_application_received: ' . $username . ' result: Banner error: ' . $result);
-            HMS_SOAP::log_soap_error('Banner error: ' . $assignment, 'report_application_received', $username);
-            return false;
-        }/* else if(!is_int($result)) {
-            HMS_SOAP::log_soap('report_application_received: ' . $username . ' result: Weird Error (result not an int): ' . $result);
-            HMS_SOAP::log_soap_error('Weird Error: ', 'report_application_received', $username);
-            return false;
-        }*/
-        
-        HMS_SOAP::log_soap('report_application_received: ' . $username . ' result: success');
-        
-        return true;
-    }
-
-    function report_room_assignment($username, $term, $building_code, $room_code, $plan_code, $meal_code)
-    {
-        if(SOAP_TEST_FLAG){
-            //return 1337;
-            return 0;
-        }
-
-        include_once('SOAP/Client.php');
-        $wsdl = new SOAP_WSDL(PHPWS_SOURCE_DIR . 'mod/hms/inc/shs0001.wsdl', 'true');
-        $proxy = $wsdl->getProxy();
-        $assignment = $proxy->CreateRoomAssignment($username, $term, $building_code, $room_code, $plan_code, $meal_code);
-        
-        # Check for an error and log it
-        if(HMS_SOAP::is_soap_fault($assignment)){
-            HMS_SOAP::log_soap('report_room_assignment: ' . $username . ' result: Banner error' . $assignment);
-            HMS_SOAP::log_soap_error($assignment, 'report_room_assignment', $username . ' ' . $term);
-            return false;
-        }
-        
-        # Check for a banner error
-        if(is_int($assignment) && $assignment > 0){
-            HMS_SOAP::log_soap('report_room_assignment: ' . $username . ' result: Banner error: ' . $assignment);
-            HMS_SOAP::log_soap_error('Banner error: ' . $assignment, 'report_room_assignment', $username);
-            return false;
-        }
-        
-        HMS_SOAP::log_soap('report_room_assignment' . $username . ' result: success');
-        
-        return $assignment;
-    }
-
-    function move_room_assignment($username, $term, $cur_bldg, $cur_room, $new_bldg, $new_room)
-    {
-/*        if(SOAP_TEST_FLAG){
-            return;
-        }
-
-        include_once('SOAP/Client.php');
-        $wsdl = new SOAP_WSDL(PHPWS_SOURCE_DIR . 'mod/hms/inc/shs0001.wsdl', 'true');
-        $proxy = $wsdl->getProxy();
-        $movement = $proxy->MoveRoomAssignment($username, $term, $cur_bldg, $cur_room, $new_bldg, $new_room);
-
-        return $movement;*/
-        test(array($username,$term,$cur_bldg,$cur_room,$new_bldg,$new_room));
-        return 0;
-    }
-
-    function remove_room_assignment($username, $term, $building, $room)
-    {
-        if(SOAP_TEST_FLAG) {
-            #test(array($username,$term,$building,$room));
-            //return 1337;
-            return 0;
-        }
-
-        include_once('SOAP/Client.php');
-        $wsdl = new SOAP_WSDL(PHPWS_SOURCE_DIR . 'mod/hms/inc/shs0001.wsdl', 'true');
-        $proxy = $wsdl->getProxy();
-        $removal = $proxy->RemoveRoomAssignment($username, $term, $building, $room);
-
-        # Check for an error and log it
-        if(HMS_SOAP::is_soap_fault($removal)){
-            HMS_SOAP::log_soap('remove_room_assignment: ' . $username . ' result: PEAR error');
-            HMS_SOAP::log_soap_error($removal, 'remove_room_assignment', $username . ' ' . $term);
-            return false;
-        }
-        
-        # Check for a banner error
-        if(is_int($removal) && $removal > 0){
-            HMS_SOAP::log_soap('remove_room_assignment: ' . $username . ' result: Banner error: ' . $removal);
-            HMS_SOAP::log_soap_error('Banner error: ' . $removal, 'remove_room_assignment', $username);
-            return false;
-        }
-        
-        HMS_SOAP::log_soap('remove_room_assignment: ' . $username . ' result: success');
-        
-        return $removal;
-    }
+    
+    /*********************
+     * Utility Functions *
+     *********************/
 
     /**
      * Returns TRUE if an error object is of class 'soap_fault'
@@ -702,32 +621,7 @@ class HMS_SOAP{
     function log_soap($msg)
     {
         PHPWS_Core::log($msg, 'soap.log', 'SOAP');
-    }
-
-    /**
-     * Returns the student's phone number in either xxx.xxx.xxxx or (xxx)xxx-xxxx fashion
-     */
-    function get_phone_number($username, $alt = NULL)
-    {
-        if(SOAP_TEST_FLAG) {
-            return '123.456.7890';
-        }
-       
-        $student = HMS_SOAP::get_student_info($username);
-        
-        if(PEAR::isError($student)) {
-            HMS_SOAP::log_soap_error($student, 'get_phone_number', $username);
-            return $student;
-        }else if($student->phone == NULL){
-            return NULL;
-        }else if ($alt == NULL) {
-            $phone = $student->phone->area_code . "." . substr($student->phone->number, 0, 3) . "." . substr($student->phone->number, 3);
-            return $phone;
-        } else {
-            $phone = "(" . $student->phone->area_code . ")"  . substr($student->phone->number, 0, 3) . "-" . substr($student->phone->number, 3);
-            return $phone;
-        }
-    }
+    }    
 
     /**
      * This thing takes a bunch of information you give it:
@@ -782,6 +676,93 @@ class HMS_SOAP{
         }
 
         return $retval;
+    }
+
+    /*************************
+     * Canned data functions *
+     *************************/
+
+    function get_test_info(){
+        $student->banner_id             = 900325006;
+        $student->last_name             = 'Booker';
+        $student->first_name            = 'Jeremy';
+        $student->middle_name           = 'Lee';
+        $student->dob                   = '1986-09-05';
+        $student->gender                = 'M';
+        $student->deposit_date          = '';
+        $student->deposit_waved         = 'false';
+        $student->student_type          = 'F';
+        $student->application_term      = '200840';
+        $student->projected_class       = 'SR';
+        $student->credhrs_completed     = 105;
+        $student->credhrs_for_term      = 15;
+        $student->on_campus             = 'false';
+        
+        // Setup the address object
+        $address->atyp_code = 'PS';
+        $address->line1     = '123 Rivers St.';
+        $address->line2     = 'c/o Electronic Student Services';
+        $address->line3     = 'Room 267';
+        $address->city      = 'Boone';
+        $address->county    = '095';
+        $address->state     = 'NC';
+        $address->zip       = '28608';
+
+        $student->address[0] = $address;
+
+        // Setup a second address object
+        $address->atyp_code = 'PR';
+        $address->line1     = '123 Blowing Rock Road';
+        $address->line2     = 'c/o Electronic Student Services';
+        $address->line3     = 'Room 267';
+        $address->city      = 'Boone';
+        $address->county    = '095';
+        $address->state     = 'NC';
+        $address->zip       = '28608';
+
+        $student->address[1] = $address;
+        
+        // Setup the phone number object
+        $phone->area_code   = '123';
+        $phone->number      = '4567890';
+        $phone->ext         = '1337';
+
+        $student->phone = $phone;
+
+        return $student;
+    }
+
+    function get_test_report()
+    {
+        //return 1337 //error
+        return 0; //true
+    }
+
+
+    function get_test_hous_meal()
+    {
+        // Assemble the housing_app object
+        $housing_app->plan_code     = 'HOME';
+        $housing_app->status_code   = 'AC';
+        $housing_app->status_date   = '2007-02-20';
+
+        // Assemble the room_assign object
+        $room_assign->bldg_code     = 'JTR';
+        $room_assign->room_code     = 02322;
+        $room_assign->status_code   = 'AC';
+        $room_assign->status_date   = '2008-01-14';
+
+        // Asseble the meal_assign object
+        $meal_assign->plan_code     = 1;
+        $meal_assign->status_code   = 'AC';
+        $meal_assign->status_date   = '2007-11-20';
+
+        // Assemble the final object to be returned
+        $hous_meal->housing_app     = $housing_app;
+        $hous_meal->room_assign     = $room_assign;
+        $hous_meal->meal_assign     = $meal_assign;
+
+        return $hous_meal;
     }
 }
 

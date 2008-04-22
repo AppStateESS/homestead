@@ -4,64 +4,64 @@
     <div class="box-content">
         <font color="red"><i>{ERROR}</i></font>
         {MENU_LINK}<br /><br />
-        <table>
+        <table cellspacing="8" cellpadding="1">
             <tr>
                 <td>Full Name: </td><td>{FIRST_NAME} {MIDDLE_NAME} {LAST_NAME}</td>
-            </tr>
-            <tr>
-                <td>&nbsp;</td><td></td>
             </tr>
             <tr>
                 <td>ASU email address: &nbsp;&nbsp;&nbsp;&nbsp;</td><td>{USERNAME}@appstate.edu</td>
             </tr>
             <tr>
-                <td>&nbsp;</td><td></td>
-            </tr>
-            <tr>
                 <td>Banner id: &nbsp;&nbsp;&nbsp;&nbsp;</td><td>{BANNER_ID}</td>
-            </tr>
-            <tr>
-                <td>&nbsp;</td><td></td>
             </tr>
             <tr>
                 <td>Gender: </td><td>{GENDER}</td>
             </tr>
             <tr>
-                <td>&nbsp;</td><td></td>
-            </tr>
-            <tr>
                 <td>Date of Birth: </td><td>{DOB}</td>
-            </tr>
-            <tr>
-                <td>&nbsp;</td><td></td>
             </tr>
             <tr>
                 <td>Class: </td><td>{CLASS}</td>
             </tr>
             <tr>
-                <td>&nbsp;</td><td></td>
-            </tr>
-            <tr>
                 <td>Phone Number: </td><td>({PHONE_AC}) {PHONE_NUMBER}</td>
             </tr>
+            <!-- BEGIN pr_address -->
             <tr>
-                <td>&nbsp;</td><td></td>
+                <td>Permanent address: </td><td>{PR_ADDRESS_L1}</td>
             </tr>
+            <!-- BEGIN pr_address_2 -->
             <tr>
-                <td>Address Line 1: </td><td>{ADDRESS_L1}</td>
+                <td></td><td>{PR_ADDRESS_L2}</td>
             </tr>
+            <!-- END pr_address_2 -->
+            <!-- BEGIN pr_address_3 -->
             <tr>
-                <td></td><td>{ADDRESS_L2}</td>
+                <td></td><td>{PR_ADDRESS_L3}</td>
             </tr>
+            <!-- END pr_address_3 -->
             <tr>
-                <td></td><td>{ADDRESS_L3}</td>
+                <td></td><td>{PR_ADDRESS_CITY}, {PR_ADDRESS_STATE} {PR_ADDRESS_ZIP}</td>
             </tr>
+            <!-- END pr_address -->
+            <!-- BEGIN ps_address -->
             <tr>
-                <td>City, State, Zip: </td><td>{ADDRESS_CITY}, {ADDRESS_STATE} {ADDRESS_ZIP}</td>
+                <td>Student address: </td><td>{PS_ADDRESS_L1}</td>
             </tr>
+            <!-- BEGIN ps_address_2 -->
             <tr>
-                <td>&nbsp;</td><td></td>
+                <td></td><td>{PS_ADDRESS_L2}</td>
             </tr>
+            <!-- END ps_address_2 -->
+            <!-- BEGIN ps_address_3 -->
+            <tr>
+                <td></td><td>{PS_ADDRESS_L3}</td>
+            </tr>
+            <!-- END ps_address_3 -->
+            <tr>
+                <td></td><td>{PS_ADDRESS_CITY}, {PS_ADDRESS_STATE} {PS_ADDRESS_ZIP}</td>
+            </tr>
+            <!-- END ps_address -->
             <tr>
                 <td>Housing Application:</td><td>{APPLICATION_LINK}</td>
             </tr>
@@ -69,16 +69,10 @@
                 <td>Roommate Status:</td><td>{ROOMMATE}</td>
             </tr>
             <tr>
-                <td>&nbsp;</td><td></td>
-            </tr>
-            <tr>
                 <td>Assigned To: </td><td>{ROOM_ASSIGNMENT}</td>
             </tr>
             <tr>
                 <td>Meal Option: </td><td>{MEAL_PLAN}</td>
-            </tr>
-            <tr>
-                <td>&nbsp;</td><td></td>
             </tr>
             <tr>
                 <td>RLC Status: </td><td>{RLC_STATUS}</td>
