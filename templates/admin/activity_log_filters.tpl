@@ -8,7 +8,7 @@
         </td>
         <td>
             <strong>{BEGIN_LABEL}</strong><br />
-            {BEGIN}
+            {BEGIN_DAY} {BEGIN_MONTH} {BEGIN_YEAR}
         </td>
     </tr>
     <tr>
@@ -18,7 +18,7 @@
         </td>
         <td>
             <strong>{END_LABEL}</strong><br />
-            {END}
+            {END_DAY} {END_MONTH} {END_YEAR}
         </td>
     </tr>
     <tr>

@@ -233,10 +233,14 @@ class HMS_Activity_Log{
         if(!is_null($notes))
             $pager->db->addWhere('notes', "%$notes%", 'ILIKE');
 
-        // TODO: Begin
+        if($begin != $end && $begin < $end) {
+            if(!is_null($begin))
+                $pager->db->addWhere('timestamp', $begin, '>');
 
-        // TODO: End
-
+            if(!is_null($end))
+                $pager->db->addWhere('timestamp', $end, '<');
+        }
+            
         if(!is_null($activities) && !empty($activities))
             $pager->db->addWhere('activity', $activities, 'IN');
 
@@ -280,7 +284,16 @@ class HMS_Activity_Log{
         if(isset($selection['actee']))
             $form->setValue('actee', $selection['actee']);
 
-        // TODO: Date Handling
+        $begindate = null;
+        $enddate = null;
+
+        if(PHPWS_Form::testDate('begin'))
+            $begindate = PHPWS_Form::getPostedDate('begin');
+        $form->dateSelect('begin', $begindate, '%b', 10, 10);
+
+        if(PHPWS_Form::testDate('end'))
+            $enddate = PHPWS_Form::getPostedDate('end');
+        $form->dateSelect('end', $enddate, '%b', 10, 10);
         
         $form->addText('notes');
         $form->setLabel('notes', 'Note:');
@@ -296,10 +309,10 @@ class HMS_Activity_Log{
         }
 
         $form->addSubmit('Refresh');
-
         
         $tpl = $form->getTemplate();
-        $tpl['BEGIN'] = 'Time Constraints will be available soon.';
+        $tpl['BEGIN_LABEL'] = 'After:';
+        $tpl['END_LABEL'] = 'Before:';
         return PHPWS_Template::process($tpl, 'hms', 'admin/activity_log_filters.tpl');
     }
 
@@ -317,15 +330,27 @@ class HMS_Activity_Log{
         if(isset($_REQUEST['notes']) && !empty($_REQUEST['notes'])) 
             $notes = $_REQUEST['notes'];
 
-        if(isset($_REQUEST['begin']) && !empty($_REQUEST['begin']))
-            $begin = null; // TODO: This
+        if(PHPWS_Form::testDate('begin'))
+            $begin = PHPWS_Form::getPostedDate('begin');
         else
-            $begin = 0;
+            $begin = null;
 
-        if(isset($_REQUEST['end']) && !empty($_REQIEST['end']))
-            $end = null; // TODO: This
+        if(PHPWS_Form::testDate('end'))
+            $end = PHPWS_Form::getPostedDate('end');
         else
-            $end = PHP_INT_MAX;
+            $end = null;
+
+        // Sanity Checking
+        if($end <= $begin) {
+            unset($_REQUEST['begin_year'],
+                  $_REQUEST['begin_month'],
+                  $_REQUEST['begin_day'],
+                  $_REQUEST['end_year'],
+                  $_REQUEST['end_month'],
+                  $_REQUEST['end_day']);
+            $begin = null;
+            $end = null;
+        }
 
         $activity_map = HMS_Activity_Log::get_activity_mapping();
 
