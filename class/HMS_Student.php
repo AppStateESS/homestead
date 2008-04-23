@@ -689,7 +689,7 @@ class HMS_Student {
     {
         PHPWS_Core::initModClass('hms', 'HMS_Side_Thingie.php');
         $side_thingie = new HMS_Side_Thingie(HMS_SIDE_STUDENT_AGREE);
-        $side_thingie->show();
+        $side_thingie->show(FALSE);
        
         $form = new PHPWS_Form;
         $form->addHidden('module', 'hms');
@@ -1137,14 +1137,14 @@ class HMS_Student {
                 # Show the side thingie
                 PHPWS_Core::initModClass('hms', 'HMS_Side_Thingie.php');
                 $side_thingie = new HMS_Side_Thingie(HMS_SIDE_STUDENT_APPLY);
-                $side_thingie->show();
+                $side_thingie->show(FALSE);
                 PHPWS_Core::initModClass('hms','HMS_Application.php');
                 return HMS_Application::display_application_form();
                 break;
             case 'review_application':
                 PHPWS_Core::initModClass('hms', 'HMS_Side_Thingie.php');
                 $side_thingie = new HMS_Side_Thingie(HMS_SIDE_STUDENT_APPLY);
-                $side_thingie->show();
+                $side_thingie->show(FALSE);
                 PHPWS_Core::initModClass('hms','HMS_Application.php');
                 return HMS_Application::display_application_form(TRUE);
                 break;

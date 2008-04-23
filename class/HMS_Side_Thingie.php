@@ -51,7 +51,7 @@ class HMS_Side_Thingie {
         $this->entry_term = HMS_Entry_Term::get_entry_semester($_SESSION['asu_username']);
     }
 
-    function show()
+    function show($links = TRUE)
     {
         
         $this->curr_timestamp = mktime();
@@ -60,19 +60,19 @@ class HMS_Side_Thingie {
         $template['TITLE'] = _('Application Progress');
 
         # Check for an application on file, set dates/styles if an application is not found
-        $this->set_apply_agree();
+        $this->set_apply_agree($links);
 
         # Check for an RLC application on file, set dates/styles if a RLC application is not found
-        $this->set_rlc();
+        $this->set_rlc($links);
 
         # Check for a profile, show dates accordingly
-        $this->set_profile();
+        $this->set_profile($links);
 
         # Check for a roomate, show dates accordingly
-        $this->set_roomate();
+        $this->set_roomate($links);
 
         # Always show as available.
-        $this->set_verify();
+        $this->set_verify($links);
 
         for($i = HMS_SIDE_STUDENT_MIN;$i <= HMS_SIDE_STUDENT_MAX; $i++) {
             if(isset($this->steps_text[$i])){
@@ -84,7 +84,7 @@ class HMS_Side_Thingie {
         Layout::add($page, 'hms', 'default');
     }
 
-    function set_apply_agree()
+    function set_apply_agree($links)
     {
 
         # If this is the step we're on, then set style accordingly
@@ -125,7 +125,7 @@ class HMS_Side_Thingie {
         return;
     }
 
-    function set_rlc()
+    function set_rlc($links)
     {
         if($this->entry_term != TERM_FALL){
             unset($this->steps_text[HMS_SIDE_STUDENT_RLC]);
@@ -163,7 +163,11 @@ class HMS_Side_Thingie {
                 # We're on this step currently, so don't add a link, just add the text
                 $this->steps_text[HMS_SIDE_STUDENT_RLC] .= ' (complete by '. date('n/j/y',$this->deadlines->submit_rlc_application_end_timestamp) . ')';
             }else{
-                $this->steps_text[HMS_SIDE_STUDENT_RLC] = PHPWS_Text::secureLink($this->steps_text[HMS_SIDE_STUDENT_RLC] . ' (complete by '. date('n/j/y',$this->deadlines->submit_rlc_application_end_timestamp) . ')', 'hms', array('type'=>'student', 'op'=>'show_rlc_application_form'));
+                if($links){
+                    $this->steps_text[HMS_SIDE_STUDENT_RLC] = PHPWS_Text::secureLink($this->steps_text[HMS_SIDE_STUDENT_RLC] . ' (complete by '. date('n/j/y',$this->deadlines->submit_rlc_application_end_timestamp) . ')', 'hms', array('type'=>'student', 'op'=>'show_rlc_application_form'));
+                }else{
+                    $this->steps_text[HMS_SIDE_STUDENT_RLC] = $this->steps_text[HMS_SIDE_STUDENT_RLC] . ' (complete by '. date('n/j/y',$this->deadlines->submit_rlc_application_end_timestamp) . ')';
+                }
                 $this->steps_styles[HMS_SIDE_STUDENT_RLC] = 'STEP_TOGO';
             }
             return;
@@ -174,7 +178,7 @@ class HMS_Side_Thingie {
         }
     }
 
-    function set_profile()
+    function set_profile($links)
     {
         if($this->entry_term != TERM_FALL){
             unset($this->steps_text[HMS_SIDE_STUDENT_PROFILE]);
@@ -207,7 +211,11 @@ class HMS_Side_Thingie {
                 $this->steps_text[HMS_SIDE_STUDENT_PROFILE] .=  " (complete by ". date('n/j/y',$this->deadlines->edit_profile_end_timestamp) . ")";
             }else{
                 # We're not on this step, so add the link and text
-                $this->steps_text[HMS_SIDE_STUDENT_PROFILE] = PHPWS_Text::secureLink($this->steps_text[HMS_SIDE_STUDENT_PROFILE] . " (complete by ". date('n/j/y',$this->deadlines->edit_profile_end_timestamp) . ")", 'hms', array('type'=>'student', 'op'=>'show_profile_form'));
+                if($links){
+                    $this->steps_text[HMS_SIDE_STUDENT_PROFILE] = PHPWS_Text::secureLink($this->steps_text[HMS_SIDE_STUDENT_PROFILE] . " (complete by ". date('n/j/y',$this->deadlines->edit_profile_end_timestamp) . ")", 'hms', array('type'=>'student', 'op'=>'show_profile_form'));
+                }else{
+                    $this->steps_text[HMS_SIDE_STUDENT_PROFILE] = $this->steps_text[HMS_SIDE_STUDENT_PROFILE] . " (complete by ". date('n/j/y',$this->deadlines->edit_profile_end_timestamp) . ")";
+                }
                 $this->steps_styles[HMS_SIDE_STUDENT_PROFILE] = 'STEP_TOGO';
             }
             return;
@@ -219,7 +227,7 @@ class HMS_Side_Thingie {
         
     }
 
-    function set_roomate()
+    function set_roomate($links)
     {
         /**
          * Commented this out to turn the roommate deadline back on for the spring semester
@@ -256,7 +264,11 @@ class HMS_Side_Thingie {
                 $this->steps_text[HMS_SIDE_STUDENT_ROOMMATE] .= " (complete by ". date('n/j/y',$this->deadlines->select_roommate_end_timestamp) . ")";
             }else{
                 # We're not on this step, so add the link and text
-                $this->steps_text[HMS_SIDE_STUDENT_ROOMMATE] = PHPWS_Text::secureLink($this->steps_text[HMS_SIDE_STUDENT_ROOMMATE] . " (complete by ". date('n/j/y',$this->deadlines->select_roommate_end_timestamp) . ")", 'hms', array('type'=>'student', 'op'=>'show_request_roommate'));
+                if($links){
+                    $this->steps_text[HMS_SIDE_STUDENT_ROOMMATE] = PHPWS_Text::secureLink($this->steps_text[HMS_SIDE_STUDENT_ROOMMATE] . " (complete by ". date('n/j/y',$this->deadlines->select_roommate_end_timestamp) . ")", 'hms', array('type'=>'student', 'op'=>'show_request_roommate'));
+                }else{
+                    $this->steps_text[HMS_SIDE_STUDENT_ROOMMATE] = $this->steps_text[HMS_SIDE_STUDENT_ROOMMATE] . " (complete by ". date('n/j/y',$this->deadlines->select_roommate_end_timestamp) . ")";
+                }
                 $this->steps_styles[HMS_SIDE_STUDENT_ROOMMATE] = 'STEP_TOGO';
             }
             return;
@@ -267,7 +279,7 @@ class HMS_Side_Thingie {
         }
     }
 
-    function set_verify()
+    function set_verify($links)
     {
         # Great feature... unfortunately, it's totally unimplemented, and I just don't have the time.
         return;
@@ -291,7 +303,11 @@ class HMS_Side_Thingie {
                 $this->steps_text[HMS_SIDE_STUDENT_VERIFY] .= $this->steps_text[HMS_SIDE_STUDENT_VERIFY];
             }else{
                 # We're not on this step, so add the link and text
-                $this->steps_text[HMS_SIDE_STUDENT_VERIFY] = PHPWS_Text::secureLink($this->steps_text[HMS_SIDE_STUDENT_VERIFY], 'hms', array('type'=>'student', 'op'=>'show_verify_assignment'));
+                if($links){
+                    $this->steps_text[HMS_SIDE_STUDENT_VERIFY] = PHPWS_Text::secureLink($this->steps_text[HMS_SIDE_STUDENT_VERIFY], 'hms', array('type'=>'student', 'op'=>'show_verify_assignment'));
+                }else{
+                    $this->steps_text[HMS_SIDE_STUDENT_VERIFY] = $this->steps_text[HMS_SIDE_STUDENT_VERIFY];
+                }
             }
             $this->steps_styles[HMS_SIDE_STUDENT_VERIFY] = 'STEP_TOGO';
             return;
