@@ -286,14 +286,14 @@ class HMS_Activity_Log{
 
         $begindate = null;
         $enddate = null;
-
+/*
         if(PHPWS_Form::testDate('begin'))
             $begindate = PHPWS_Form::getPostedDate('begin');
         $form->dateSelect('begin', $begindate, '%b', 10, 10);
 
         if(PHPWS_Form::testDate('end'))
             $enddate = PHPWS_Form::getPostedDate('end');
-        $form->dateSelect('end', $enddate, '%b', 10, 10);
+        $form->dateSelect('end', $enddate, '%b', 10, 10);*/
         
         $form->addText('notes');
         $form->setLabel('notes', 'Note:');
