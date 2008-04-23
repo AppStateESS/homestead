@@ -78,6 +78,7 @@
             <h2><i>Activity Log</i></h2>
             &nbsp;&nbsp;&nbsp;{VIEW_ACTIVITY_LOG}<br />
             <br />
+            <!-- END activity_log -->
             
             <!-- BEGIN deadlines -->
             <h2><i>Deadline Maintenance</i></h2>
