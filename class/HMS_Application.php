@@ -217,7 +217,7 @@ class HMS_Application {
             # If there was an error it will have already been logged
             # but send out a notification anyway
             # TODO: Improve the notification system
-            if(!$result){
+            if($result != 0){
                 PHPWS_Core::initCoreClass('Mail.php');
                 $send_to = array();
                 $send_to[] = 'jbooker@tux.appstate.edu';
