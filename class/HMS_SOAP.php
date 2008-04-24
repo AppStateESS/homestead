@@ -45,14 +45,14 @@ class HMS_SOAP{
         # Check for an PEAR error and log it
         if(HMS_SOAP::is_soap_fault($student)){
             HMS_SOAP::log_soap('get_student_info: ' . $username . ' result: PEAR Error');
-            HMS_SOAP::log_soap_error($student,'get_student_info',$username);
+            HMS_SOAP::log_soap_fault($student,'get_student_info',$username);
             return false;
         }
 
         # Check for a banner error
         if(is_int($student) && $student > 0){
             HMS_SOAP::log_soap('get_student_info: ' . $username . ' result: Banner error: ' . $student);
-            HMS_SOAP::log_soap_error('Banner error: ' . $student, 'get_student_info', $username);
+            HMS_SOAP::log_soap_error('error code: ' . $student, 'get_student_info', $username);
             return false;
         }
 
@@ -82,7 +82,7 @@ class HMS_SOAP{
         # Check for an error and log it
         if(HMS_SOAP::is_soap_fault($result)){
             HMS_SOAP::log_soap('report_application_received: ' . $username . ' result: PEAR Error');
-            HMS_SOAP::log_soap_error($result, 'report_application_received', $username . ' ' . $term);
+            HMS_SOAP::log_soap_fault($result, 'report_application_received', $username . ' ' . $term);
             return false;
         }
 
@@ -92,7 +92,7 @@ class HMS_SOAP{
         # Check for a banner error
         if($result > 0){
             HMS_SOAP::log_soap('report_application_received: ' . $username . ' result: Banner error: ' . $result);
-            HMS_SOAP::log_soap_error('Banner error: ' . $assignment, 'report_application_received', $username);
+            HMS_SOAP::log_soap_error('Banner error: ' . $result, 'report_application_received', $username);
             return false;
         }/* else if(!is_int($result)) {
             HMS_SOAP::log_soap('report_application_received: ' . $username . ' result: Weird Error (result not an int): ' . $result);
@@ -122,7 +122,7 @@ class HMS_SOAP{
         # Check for an error and log it
         if(HMS_SOAP::is_soap_fault($assignment)){
             HMS_SOAP::log_soap('report_room_assignment: ' . $username . ' result: Banner error' . $assignment);
-            HMS_SOAP::log_soap_error($assignment, 'report_room_assignment', $username . ' ' . $term);
+            HMS_SOAP::log_soap_fault($assignment, 'report_room_assignment', $username . ' ' . $term);
             return false;
         }
         
@@ -156,7 +156,7 @@ class HMS_SOAP{
         # Check for an error and log it
         if(HMS_SOAP::is_soap_fault($removal)){
             HMS_SOAP::log_soap('remove_room_assignment: ' . $username . ' result: PEAR error');
-            HMS_SOAP::log_soap_error($removal, 'remove_room_assignment', $username . ' ' . $term);
+            HMS_SOAP::log_soap_fault($removal, 'remove_room_assignment', $username . ' ' . $term);
             return false;
         }
         
@@ -194,7 +194,7 @@ class HMS_SOAP{
         # Check for an error and log it
         if(HMS_SOAP::is_soap_fault($student)) {
             HMS_SOAP::log_soap('get_hous_meal_register: ' . $username . ' result: PEAR Error');
-            HMS_SOAP::log_soap_error($student, 'get_hous_meal_register', $username);
+            HMS_SOAP::log_soap_fault($student, 'get_hous_meal_register', $username);
             return false;
         }
         
@@ -241,7 +241,7 @@ class HMS_SOAP{
         $student = HMS_SOAP::get_student_info($username);
         
         if(PEAR::isError($student)){
-            HMS_SOAP::log_soap_error($student,'is_valid_student',$username);
+            HMS_SOAP::log_soap_error($student,'get_banner_id',$username);
             return $student;
         }
 
@@ -609,9 +609,9 @@ class HMS_SOAP{
     /** 
      * Uses the PHPWS_Core log function to 'manually' log soap errors to soap_error.log.
      */
-    function log_soap_error($soap_fault, $function, $extra_info)
+    function log_soap_fault($soap_fault, $function, $extra_info)
     {
-        $error_msg = $soap_fault['message'] . "in function: " . $function . " Extra info: " . $extra_info;    
+        $error_msg = $soap_fault['message'] . 'in function: ' . $function . " Extra: " . $extra_info;    
         PHPWS_Core::log($error_msg, 'soap_error.log', _('Error'));
     }
 
@@ -622,6 +622,14 @@ class HMS_SOAP{
     {
         PHPWS_Core::log($msg, 'soap.log', 'SOAP');
     }    
+
+    /**
+     * Uses the PHPWS_Core log function to 'manually' log soap erros to soap_error.log.
+     */
+    function log_soap_error($message, $function, $extra)
+    {
+        PHPWS_Core::log('Banner error: ' . $message . ' in function: ' . $function . ' Extra: ' . $extra, 'soap_error.log', 'Error');
+    }
 
     /**
      * This thing takes a bunch of information you give it:
@@ -735,7 +743,7 @@ class HMS_SOAP{
     function get_test_report()
     {
         //return 1337 //error
-        return 0; //true
+        return TRUE;
     }
 
 

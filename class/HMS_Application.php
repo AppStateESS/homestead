@@ -217,7 +217,7 @@ class HMS_Application {
             # If there was an error it will have already been logged
             # but send out a notification anyway
             # TODO: Improve the notification system
-            if($result != 0){
+            if(!$result){
                 PHPWS_Core::initCoreClass('Mail.php');
                 $send_to = array();
                 $send_to[] = 'jbooker@tux.appstate.edu';
@@ -230,6 +230,7 @@ class HMS_Application {
                 $mail->setSubject('HMS Application Error!');
 
                 $body = "Username: {$this->hms_student_id}\n";
+                $body .= "Error: {$result}\n";
                 $mail->setMessageBody($body);
                 $result = $mail->send();
             }
