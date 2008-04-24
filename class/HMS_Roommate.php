@@ -630,7 +630,7 @@ class HMS_Roommate
         $requestee = strtolower(trim($_REQUEST['username']));
 
         if(!PHPWS_Text::isValidInput($requestee)) {
-            return HMS_Roommate::show_request_roommate('Malformed Username.')
+            return HMS_Roommate::show_request_roommate('Malformed Username.');
         }
 
         // Did they say go ahead and trash the RLC application?
