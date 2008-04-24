@@ -230,7 +230,6 @@ class HMS_Application {
                 $mail->setSubject('HMS Application Error!');
 
                 $body = "Username: {$this->hms_student_id}\n";
-                $body .= "Error: {$result}\n";
                 $mail->setMessageBody($body);
                 $result = $mail->send();
             }
@@ -240,6 +239,7 @@ class HMS_Application {
             return $result;
         }
     }
+
 
     /**
      * Checks to see if a application already exists for the objects current $hms_user_id.

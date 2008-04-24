@@ -70,14 +70,14 @@ class HMS_SOAP{
      */
     function report_application_received($username, $term, $plan_code, $meal_code = NULL)
     {
-        if(SOAP_REPORT_TEST_FLAG){
-            return HMS_SOAP::get_test_report();
+        if(SOAP_REPORT_TEST_FLAG) {
+            $result = HMS_SOAP::get_test_report();
+        } else {
+            include_once('SOAP/Client.php');
+            $wsdl = new SOAP_WSDL(PHPWS_SOURCE_DIR . 'mod/hms/inc/shs0001.wsdl', 'true');
+            $proxy = $wsdl->getProxy();
+            $result = $proxy->CreateHousingApp($username, $term, $plan_code, $meal_code);
         }
-        
-        include_once('SOAP/Client.php');
-        $wsdl = new SOAP_WSDL(PHPWS_SOURCE_DIR . 'mod/hms/inc/shs0001.wsdl', 'true');
-        $proxy = $wsdl->getProxy();
-        $result = $proxy->CreateHousingApp($username, $term, $plan_code, $meal_code);
 
         # Check for an error and log it
         if(HMS_SOAP::is_soap_fault($result)){
@@ -92,7 +92,7 @@ class HMS_SOAP{
         # Check for a banner error
         if($result > 0){
             HMS_SOAP::log_soap('report_application_received: ' . $username . ' result: Banner error: ' . $result);
-            HMS_SOAP::log_soap_error('Banner error: ' . $result, 'report_application_received', $username);
+            HMS_SOAP::log_soap_error($result, 'report_application_received', $username);
             return false;
         }/* else if(!is_int($result)) {
             HMS_SOAP::log_soap('report_application_received: ' . $username . ' result: Weird Error (result not an int): ' . $result);
@@ -742,7 +742,7 @@ class HMS_SOAP{
 
     function get_test_report()
     {
-        //return 1337 //error
+//        return 1337; //error
         return TRUE;
     }
 
