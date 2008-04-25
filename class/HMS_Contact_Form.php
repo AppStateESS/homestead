@@ -78,7 +78,6 @@ class HMS_Contact_Form{
         $send_to[] = 'jbooker@tux.appstate.edu';
         $send_to[] = 'searssr@appstate.edu';
         $send_to[] = 'braswelldl@appstate.edu';
-        $send_to[] = 'winebargerab@appstate.edu';
         
         $mail = &new PHPWS_Mail;
 
