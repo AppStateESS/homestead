@@ -143,33 +143,36 @@ class HMS_Admin
         }
 
         //Layout::add($final);
-        $link = "index.php?module=hms&type=maintenance&op=show_maintenance_options";
-        switch( $_GET['tab'] ){
-            case "maintenance_main":
-            $content = $final;
-            break;
+        $link    = "index.php?module=hms&type=maintenance&op=show_maintenance_options";
+        $content = $final;
+        if( isset($_GET['tab'] ) ){
+            switch( $_GET['tab'] ){
+                case "maintenance_main":
+                $content = $final;
+                break;
 
-            case "logs":
-            PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-            $content = HMS_Activity_log::main();
-            break;
+                case "logs":
+                PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
+                $content = HMS_Activity_log::main();
+                break;
 
-            default:
-            $content = $final;
-            break;
+                default:
+                $content = $final;
+                break;
+            }
         }
 
         $tabs['maintenance_main'] = array("title" => "Main Menu", "link" => $link,
                                           "link_title" => "View Maintenance Options");
-        $tabs['logs']           = array("title" => "Activity Logs", "link" => $link,
+        $tabs['logs']             = array("title" => "Activity Logs", "link" => $link,
                                           "link_title" => "Activity Logs");
         
         PHPWS_Core::initModClass("controlpanel", "Panel.php");
 
         $panel = &new PHPWS_Panel("hmsMaintenance");
         $panel->quickSetTabs($tabs);
-        $panel->setPanel("panel.tpl");
-        Layout::add($panel->display($content, 'HMS Maintenance', ''));
+        Layout::add($panel->display($content));
+        Layout::addStyle('controlpanel');
 
         if(Current_user::allow('hms', 'stats'))
             $links[] = PHPWS_Text::secureLink(_('HMS Statistics'), 'hms', array('type'=>'display', 'op'=>'display_system_statistics'));

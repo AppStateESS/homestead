@@ -358,9 +358,45 @@ class HMS_Student {
         if( Current_User::allow('hms', 'login_as_student') ) { 
             $tpl['LOGIN_AS_STUDENT'] = '<tr><td>Login as this student: </td><td><a href=index.php?module=hms&op=main&login_as_student=' . $_REQUEST['username'] . '> '. $_REQUEST['username'] . '</a></td></tr>';
         }
-
         $final = PHPWS_Template::process($tpl, 'hms', 'student/show_student_info.tpl');
-        return $final;
+
+        /***********************/
+        /* Tabify Student Info */
+        /***********************/
+        $link    = "index.php?module=hms&type=student&op=get_matching_students&username=" . $_REQUEST['username'];
+        $content = $final;
+        if( isset($_GET['tab']) ){
+            switch( $_GET['tab'] ){
+                case "student_info":
+                $content = $final;
+                break;
+
+                case "student_logs":
+                PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
+                $_REQUEST['actee'] = $_REQUEST['username'];
+                $content           = HMS_Activity_log::main();
+                break;
+
+                default:
+                $content = $final;
+                break;
+            }
+        } 
+
+        $tags['student_info'] = array("title" => "Student Info Page", "link" => $link,
+                                      "link_title" => "Student Info Page");
+        $tags['student_logs'] = array("title" => "Student Logs", "link" => $link,
+                                      "link_title" => "Student Logs");
+
+        PHPWS_Core::initModClass("controlpanel", "Panel.php");
+
+        $panel = &new PHPWS_Panel("studentInfo");
+        $panel->quickSetTabs($tags);
+        if( !isset($_GET['tab']) ){
+            $panel->setCurrentTab('student_info');
+        }
+
+        return $panel->display($content);
     }
 
     function set_meal_plan()
