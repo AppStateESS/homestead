@@ -56,6 +56,14 @@ class HMS_SOAP{
             return false;
         }
 
+        // This is a hack because ITS is incompetent
+        if($username == 'dickeyr') {
+            $student->application_term = '200840';
+        }
+        if($username == 'byrdsm') {
+            $student->projected_class = 'FR';
+        }
+
         HMS_SOAP::log_soap('get_student_info: ' . $username . ' result: success');
         
         // insert into hash table
