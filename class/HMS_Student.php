@@ -184,7 +184,7 @@ class HMS_Student {
     {
         PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
 
-        if(!Current_User::allow('hms', 'assignment_maintenance')){
+        if(!Current_User::allow('hms', 'search')){
             $tpl = array();
             return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
         }
