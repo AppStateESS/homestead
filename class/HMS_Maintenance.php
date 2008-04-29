@@ -207,10 +207,10 @@ class HMS_Maintenance
          * Roommates *
          ************/
         if(Current_User::allow('hms', 'create_roommate_group'))
-            $tpl['CREATE_ROOMMATE_GROUP'] = PHPWS_Text::secureLink(_('Create new roommate group'), 'hms', array('type'=>'roommate', 'op'=>'get_usernames_for_new_grouping'));
+            $tpl['CREATE_ROOMMATE_GROUP'] = PHPWS_Text::secureLink(_('Create new roommate group'), 'hms', array('type'=>'roommate', 'op'=>'show_admin_create_roommate_group'));
 
         if(Current_User::allow('hms', 'edit_roommate_group'))
-            $tpl['EDIT_ROOMMATE_GROUP'] = PHPWS_Text::secureLink(_('Edit roommate group'), 'hms', array('type'=>'roommate', 'op'=>'get_username_for_edit_grouping'));
+            $tpl['EDIT_ROOMMATE_GROUP'] = PHPWS_Text::secureLink(_('Edit roommate group'), 'hms', array('type'=>'roommate', 'op'=>'show_confirmed_roommates'));
 
         /*******************
          * Auto-assignment *
