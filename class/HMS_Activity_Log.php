@@ -28,6 +28,7 @@ class HMS_Activity_Log{
         $this->activity_text = HMS_Activity_Log::get_activity_mapping();
 
         if(is_null($id) || $id == 0) {
+            $this->id = 0;
             $this->set_user_id($user_id);
             $this->set_timestamp($timestamp);
             $this->set_activity($activity);
@@ -50,7 +51,7 @@ class HMS_Activity_Log{
      */
     function save()
     {
-        if(!is_null($this->id) || $id != 0) {
+        if($this->id != 0) {
             return FALSE;
         }
 
@@ -84,11 +85,11 @@ class HMS_Activity_Log{
         if( isset($_SESSION['login_as_student']) ) {
             $notes .= " Admin: " . Current_User::getUsername();
         }
-
+        
         $activity_log = new HMS_Activity_Log(NULL, $userid, mktime(), $activity, $actor, $notes);
         $result = $activity_log->save();
 
-        if(PEAR::isError($result)){
+        if($result == FALSE || PEAR::isError($result)){
             return $result;
         }else{
             return TRUE;
@@ -118,7 +119,9 @@ class HMS_Activity_Log{
                         ACTIVITY_REMOVAL_REPORTED           => "Removal reported to Banner",
                         ACTIVITY_LETTER_PRINTED             => "Assignment letter printed",
                         ACTIVITY_BANNER_ERROR               => "Banner error",
-                        ACTIVITY_LOGIN_AS_STUDENT           => "Admin logged in as student");
+                        ACTIVITY_LOGIN_AS_STUDENT           => "Admin logged in as student",
+                        ACTIVITY_ADMIN_ASSIGNED_ROOMMATE    => "Admin assigned roommate",
+                        ACTIVITY_ADMIN_REMOVED_ROOMMATE     => "Admin removed roommate");
     }
 
     /**

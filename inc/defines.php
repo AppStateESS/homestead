@@ -127,6 +127,9 @@ define('HMS_MULTIPLE_ASSIGNMENTS',              17);
 
 define('ACTIVITY_LOGIN_AS_STUDENT',             18);
 
+define('ACTIVITY_ADMIN_ASSIGNED_ROOMMATE',      19);
+define('ACTIVITY_ADMIN_REMOVED_ROOMMATE',       20);
+
 /** 
  * Errors 
  */

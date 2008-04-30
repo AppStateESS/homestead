@@ -1081,6 +1081,9 @@ class HMS_Roommate
         if(!$result){
             return HMS_Roommate::show_admin_create_roommate_group(NULL, 'Error save roommate group. The group was not created.' . $more);
         }else{
+            PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
+            HMS_Activity_Log::log_activity($roommate_1, ACTIVITY_ADMIN_ASSIGNED_ROOMMATE, Current_User::getUsername(), $roommate_2);
+            HMS_Activity_Log::log_activity($roommate_2, ACTIVITY_ADMIN_ASSIGNED_ROOMMATE, Current_User::getUsername(), $roommate_1);
             return HMS_Roommate::show_admin_create_roommate_group('Roommate group created.' . $more);
         }
     }
@@ -1093,11 +1096,20 @@ class HMS_Roommate
         }
 
         $roommate_group = &new HMS_Roommate($_REQUEST['id']);
+
+        # Save the user names for logging if all goes well
+        $requestor = $roommate_group->requestor;
+        $requestee = $roommate_group->requestee;
+
+        # Attempt to actually delete the group
         $result = $roommate_group->delete();
 
         if(!$result){
             return HMS_Roommate::show_confirmed_roommates(NULL,'Error deleting group.');
         }else{
+            PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
+            HMS_Activity_Log::log_activity($requestor, ACTIVITY_ADMIN_REMOVED_ROOMMATE, Current_User::getUsername(), $requestee);
+            HMS_Activity_Log::log_activity($requestee, ACTIVITY_ADMIN_REMOVED_ROOMMATE, Current_User::getUsername(), $requestor);
             return HMS_Roommate::show_confirmed_roommates('Roommate group deleted.');
         }
     }
