@@ -147,13 +147,11 @@ class HMS_Admin
 
         $link        = "index.php?module=hms&type=maintenance&op=show_maintenance_options";
         $content     = $final;
-        $tab         = null;
+        $tab         = (isset($_GET['tab']) ? $_GET['tab'] : null);
 
         //check to see if a user has a default tab set, otherwise just show them the main tab
-        if( !isset($_GET['tab']) ){
+        if( !isset($_SESSION['Panel_Current_Tab']['hmsMaintenance']) ){
             $tab = PHPWS_Cookie::read('default_tab');
-        } else {
-            $tab = $_GET['tab']; //and if they have selected a tab then obviously they want to view it
         }
 
         if( $tab != null ){
