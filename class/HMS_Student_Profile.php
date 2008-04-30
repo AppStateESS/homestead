@@ -143,7 +143,7 @@ class HMS_Student_Profile{
 
         $result = $db->saveObject($this);
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-        HMS_Activity_Log::log_activity(Current_User::getUsername(), ACTIVITY_PROFILE_CREATED, Current_User::getUsername(), '');
+        HMS_Activity_Log::log_activity($_SESSION['asu_username'], ACTIVITY_PROFILE_CREATED, $_SESSION['asu_username'], '');
 
         if(PEAR::isError($result)){
             PHPWS_Error::log($result);
