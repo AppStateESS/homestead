@@ -97,6 +97,15 @@ define('BANNER_QUEUE_ASSIGNMENT', 1);
 define('BANNER_QUEUE_REMOVAL',    2);
 
 /**
+ * Menu Types
+ */
+define('MENU_TYPE_ALL',         0);
+define('MENU_TYPE_STRUCTURE',   1);
+define('MENU_TYPE_RLC',         2);
+define('MENU_TYPE_ASSIGNMENT',  3);
+define('MENU_TYPE_STATISTICS',  4);
+
+/**
  * Activities (used for logging)
  */
 define('ACTIVITY_LOGIN',                        0);

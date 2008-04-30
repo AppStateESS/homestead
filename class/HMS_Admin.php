@@ -146,6 +146,8 @@ class HMS_Admin
         $link    = "index.php?module=hms&type=maintenance&op=show_maintenance_options";
         $content = $final;
         if( isset($_GET['tab'] ) ){
+            PHPWS_Core::initModClass('hms', 'HMS_Maintenance.php');
+
             switch( $_GET['tab'] ){
                 case "maintenance_main":
                 $content = $final;
@@ -156,6 +158,23 @@ class HMS_Admin
                 $content = HMS_Activity_log::main();
                 break;
 
+                case "structure":
+                $content = HMS_Maintenance::show_options(MENU_TYPE_STRUCTURE);
+                break;
+
+                case "rlc":
+                $content = HMS_Maintenance::show_options(MENU_TYPE_RLC);
+                break;
+
+                case "assignment":
+                $content = HMS_Maintenance::show_options(MENU_TYPE_ASSIGNMENT);
+                break;
+
+                case "statistics":
+                PHPWS_Core::initModClass('hms', 'HMS_Display.php');
+                $content = HMS_Display::get_system_statistics();
+                break;
+
                 default:
                 $content = $final;
                 break;
@@ -164,6 +183,14 @@ class HMS_Admin
 
         $tabs['maintenance_main'] = array("title" => "Main Menu", "link" => $link,
                                           "link_title" => "View Maintenance Options");
+        $tabs['structure']        = array("title" => "Hall Structure", "link" => $link,
+                                          "link_title" => "Structure Options");
+        $tabs['rlc']              = array("title" => "RLC Maintenance", "link" => $link,
+                                          "link_title" => "View RLC Maintenance Options");
+        $tabs['assignment']       = array("title" => "Assignment", "link" => $link,
+                                          "link_title" => "Assignment Options");
+        $tabs['statistics']       = array("title" => "Statistics", "link" => $link,
+                                          "link_title" => "View Statistics");
         $tabs['logs']             = array("title" => "Activity Logs", "link" => $link,
                                           "link_title" => "Activity Logs");
         
