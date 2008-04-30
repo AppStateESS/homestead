@@ -145,10 +145,20 @@ class HMS_Admin
         //Layout::add($final);
         $link    = "index.php?module=hms&type=maintenance&op=show_maintenance_options";
         $content = $final;
-        if( isset($_GET['tab'] ) ){
+        $tab     = null;
+
+        //check to see if a user has a default tab set, otherwise just show them the main tab
+        if( !isset($_GET['tab']) ){
+            PHPWS_Core::initCoreClass('Cookie.php');
+            $tab = PHPWS_Cookie::read('default_tab');
+        } else {
+            $tab = $_GET['tab']; //and if they have selected a tab then obviously they want to view it
+        }
+
+        if( $tab != null ){
             PHPWS_Core::initModClass('hms', 'HMS_Maintenance.php');
 
-            switch( $_GET['tab'] ){
+            switch( $tab ){
                 case "maintenance_main":
                 $content = $final;
                 break;
@@ -194,10 +204,23 @@ class HMS_Admin
         $tabs['logs']             = array("title" => "Activity Logs", "link" => $link,
                                           "link_title" => "Activity Logs");
         
-        PHPWS_Core::initModClass("controlpanel", "Panel.php");
+        //Allow a user to set their default tab
+        $content = "<a href='index.php?module=hms&type=maintenance&op=" . $_REQUEST['op'] . 
+                   ($tab != null ? "&tab=" . $tab : "&tab=maintenance_main")
+                   . "&make_default_tab=true'>Make Default Tab</a>" . $content;
 
+        if( isset($_REQUEST['make_default_tab']) ){
+            PHPWS_Core::initCoreClass('Cookie.php');
+            PHPWS_Cookie::write('default_tab', $tab);
+        }
+
+        PHPWS_Core::initModClass("controlpanel", "Panel.php");
         $panel = &new PHPWS_Panel("hmsMaintenance");
         $panel->quickSetTabs($tabs);
+        if( $tab != null ){
+            $panel->setCurrentTab($tab);
+        }
+
         Layout::add($panel->display($content));
         Layout::addStyle('controlpanel');
 
