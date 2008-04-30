@@ -874,7 +874,7 @@ class HMS_Student {
          **************************************/
 
         PHPWS_Core::initModClass('hms', 'HMS_Student_Profile.php');
-        $tags['PROFILE_INTRO'] = "The HMS Student Profile is optional and can be used to help you find a roommate who shares your hobbies and interests. Once you complete your profile, you will be able to search for other students who share your interests based on their profiles.";
+        $tags['PROFILE_INTRO'] = "The HMS Student Profile is optional and can be used to help you find a roommate who shares your hobbies and interests. Once you complete your profile, you will be able to search for other students who share your interests based on their profiles.  Please note that this is ONLY a tool for finding roommates; your housing assignment will NOT be affected by this profile.";
         
         $tags['PROFILE_ICON'] = $lock_img;
 
