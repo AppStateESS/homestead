@@ -143,13 +143,14 @@ class HMS_Admin
         }
 
         //Layout::add($final);
-        $link    = "index.php?module=hms&type=maintenance&op=show_maintenance_options";
-        $content = $final;
-        $tab     = null;
+        PHPWS_Core::initCoreClass('Cookie.php');
+
+        $link        = "index.php?module=hms&type=maintenance&op=show_maintenance_options";
+        $content     = $final;
+        $tab         = null;
 
         //check to see if a user has a default tab set, otherwise just show them the main tab
         if( !isset($_GET['tab']) ){
-            PHPWS_Core::initCoreClass('Cookie.php');
             $tab = PHPWS_Cookie::read('default_tab');
         } else {
             $tab = $_GET['tab']; //and if they have selected a tab then obviously they want to view it
@@ -205,9 +206,11 @@ class HMS_Admin
                                           "link_title" => "Activity Logs");
         
         //Allow a user to set their default tab
-        $content = "<a href='index.php?module=hms&type=maintenance&op=" . $_REQUEST['op'] . 
-                   ($tab != null ? "&tab=" . $tab : "&tab=maintenance_main")
-                   . "&make_default_tab=true'>Make Default Tab</a>" . $content;
+        if( $tab != PHPWS_Cookie::read('default_tab') && !isset($_REQUEST['make_default_tab']) ){
+            $content = "<a href='index.php?module=hms&type=maintenance&op=" . $_REQUEST['op'] . 
+                       ($tab != null ? "&tab=" . $tab : "&tab=maintenance_main")
+                       . "&make_default_tab=true'>Make Default Tab</a>" . $content;
+        }
 
         if( isset($_REQUEST['make_default_tab']) ){
             PHPWS_Core::initCoreClass('Cookie.php');
