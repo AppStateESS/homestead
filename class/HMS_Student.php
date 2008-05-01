@@ -668,6 +668,7 @@ class HMS_Student {
                 # Setup the form for the 'continue' button.
                 $form = &new PHPWS_Form;
                 $form->addSubmit('submit', 'Continue');
+                $form->addhidden('module', 'hms');
                 $form->addHidden('type', 'student');
                 $form->addHidden('op','show_terms_and_agreement');
 
