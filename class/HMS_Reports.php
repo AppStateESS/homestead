@@ -8,8 +8,8 @@ class HMS_Reports{
     function get_reports()
     {
         $reports = array(
-                        'housing_asss' => 'Assignment Demographics',
-                        'housing_apps' =>'Housing Applications Received'
+                        'housing_apps' =>'Housing Applications Received',
+                        'housing_asss' => 'Assignment Demographics'
                         );
 /*                        'housing_asss' =>'Housing Assignments Made',*/
 /*                        'unassd_rooms' =>'Currently Unassigned Rooms',*/
@@ -110,7 +110,7 @@ class HMS_Reports{
 	    PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
 
         # Start the timer
-
+        $start_time = microtime();
 
         $building = array(); // Define an array to hold each building's summary
 	   
@@ -318,7 +318,6 @@ class HMS_Reports{
         $content .= '<th colspan="4">Continuing (C)</th>';
         $content .= '<th colspan="4">Transfer (T)</th>';
         $content .= '</tr><tr>';
-        //$content .= '<th>0 HRS</th><th>1+ HRS</th>';
         $content .= '<th>FR</th>';
         $content .= '<th>FR</th><th>SO</th><th>JR</th><th>SR</th>';
         $content .= '<th>FR</th><th>SO</th><th>JR</th><th>SR</th>';
@@ -353,6 +352,11 @@ class HMS_Reports{
         }
         $content .=  "<br /><br /> ";
 
+        # Stop the timer and compute elapsed time
+        $elapsed_time = microtime() - $start_time;
+
+        $content .= "Elapsed time: $elapsed_time seconds<br /><br />";
+
         return $content;
     }
 
@@ -372,32 +376,35 @@ class HMS_Reports{
             PHPWS_Error::log($results);
             return '<font color="red"><b>A database error occurred running this report.  Please contact Electronic Student Services immediately.</b></font>';
         }
+
+        # Initalize the array for totals
+        foreach(array(TYPE_FRESHMEN, TYPE_TRANSFER, TYPE_CONTINUING) as $init_type){
+            foreach(array(CLASS_FRESHMEN, CLASS_SOPHOMORE, CLASS_JUNIOR, CLASS_SENIOR) as $init_class){
+                foreach(array(MALE, FEMALE) as $init_gender){
+                    $application_totals[$init_type][$init_class][$init_gender] = 0;
+                }
+            }
+        }
+
+        $application_totals['bad_data'] = 0;
         
         $content = '';
 
         foreach($results as $line) {
-            $gender = HMS_SOAP::get_gender($line['hms_student_id']);
+            $gender = HMS_SOAP::get_gender($line['hms_student_id'], TRUE);
             $class  = HMS_SOAP::get_student_class($line['hms_student_id'], HMS_Term::get_selected_term());
             $type   = HMS_SOAP::get_student_type($line['hms_student_id'], HMS_Term::get_selected_term());
 
             if(!isset($gender) || !isset($class) || !isset($type) ||
                 $gender == FALSE || $class == FALSE || $type == FALSE ) {
-                if(isset($application['null'])) {
-                    $application['null']++;
-                } else {
-                    $application['null'] = 1;
-                }
-                continue;
+                    $application_totals['bad_data']++;
+                    continue;
             }
 
-            if(isset($application[$type][$class][$gender])) {
-                $application[$type][$class][$gender]++;
-            } else {
-                $application[$type][$class][$gender] = 1;
-            }
+            $application_totals[$type][$class][$gender]++;
         }
 
-        $content .= "Housing Applications received by class and gender:<br /><br />";
+        /*$content .= "Housing Applications received by class and gender:<br /><br />";
         $content .= "Freshmen <br />";
         $content .= "Male: " . $application["FR"]["M"] . "<br />";
         $content .= "Female: " . $application["FR"]["M"] . "<br />";
@@ -416,6 +423,48 @@ class HMS_Reports{
         $content .= "<br />";
         $content .= "No Class or Gender Data Available<br />";
         $content .= "Total: " . $application["null"] . "<br />";
+        $content .= "<br />";
+        $content .= "<br />";
+        */
+
+        $content .= '<table border="1">';
+        $content .= '<tr><th colspan="11" style="text-align: center"><h2>TOTALS</h2></th></tr>';
+        $content .= '<tr>';
+        $content .= '<td rowspan="2"></td>';
+        $content .= '<th colspan="1">Freshmen (F)</th>';
+        $content .= '<th colspan="4">Continuing (C)</th>';
+        $content .= '<th colspan="4">Transfer (T)</th>';
+        $content .= '</tr><tr>';
+        $content .= '<th>FR</th>';
+        $content .= '<th>FR</th><th>SO</th><th>JR</th><th>SR</th>';
+        $content .= '<th>FR</th><th>SO</th><th>JR</th><th>SR</th>';
+        $content .= '</tr><tr>';
+        $content .= '<th>Male</th>';
+        $content .= '<td>' . $application_totals['F']['FR'][MALE]   . '</td>';
+        $content .= '<td>' . $application_totals['C']['FR'][MALE]   . '</td>';
+        $content .= '<td>' . $application_totals['C']['SO'][MALE]   . '</td>';
+        $content .= '<td>' . $application_totals['C']['JR'][MALE]   . '</td>';
+        $content .= '<td>' . $application_totals['C']['SR'][MALE]   . '</td>';
+        $content .= '<td>' . $application_totals['T']['FR'][MALE]   . '</td>';
+        $content .= '<td>' . $application_totals['T']['SO'][MALE]   . '</td>';
+        $content .= '<td>' . $application_totals['T']['JR'][MALE]   . '</td>';
+        $content .= '<td>' . $application_totals['T']['SR'][MALE]   . '</td>';
+        $content .= '</tr><tr>';
+        $content .= '<th>Female</th>';
+        $content .= '<td>' . $application_totals['F']['FR'][FEMALE]   . '</td>';
+        $content .= '<td>' . $application_totals['C']['FR'][FEMALE]   . '</td>';
+        $content .= '<td>' . $application_totals['C']['SO'][FEMALE]   . '</td>';
+        $content .= '<td>' . $application_totals['C']['JR'][FEMALE]   . '</td>';
+        $content .= '<td>' . $application_totals['C']['SR'][FEMALE]   . '</td>';
+        $content .= '<td>' . $application_totals['T']['FR'][FEMALE]   . '</td>';
+        $content .= '<td>' . $application_totals['T']['SO'][FEMALE]   . '</td>';
+        $content .= '<td>' . $application_totals['T']['JR'][FEMALE]   . '</td>';
+        $content .= '<td>' . $application_totals['T']['SR'][FEMALE]   . '</td>';
+        $content .= '</tr></table><br /><br />';
+        $content .=  "<br /> ";
+ 
+        $content .= "No Class or Gender Data Available<br />";
+        $content .= "Total: " . $application_totals['bad_data'] . "<br />";
         $content .= "<br />";
         $content .= "<br />";
     
