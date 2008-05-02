@@ -399,14 +399,12 @@ class HMS_Reports{
         $application_totals['bad_data'] = 0;
         
         $content = '';
-
         foreach($results as $line) {
             $gender = HMS_SOAP::get_gender($line['hms_student_id'], TRUE);
             $class  = HMS_SOAP::get_student_class($line['hms_student_id'], HMS_Term::get_selected_term());
             $type   = HMS_SOAP::get_student_type($line['hms_student_id'], HMS_Term::get_selected_term());
 
-            if(!isset($gender) || !isset($class) || !isset($type) ||
-                $gender == FALSE || $class == FALSE || $type == FALSE ) {
+            if($gender === NULL || $class === NULL || $type === NULL) {
                     $application_totals['bad_data']++;
                     continue;
             }
