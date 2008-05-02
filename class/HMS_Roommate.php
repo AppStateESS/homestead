@@ -1179,10 +1179,12 @@ class HMS_Roommate
     }
 
     function get_roommate_pager_tags(){
+        PHPWS_Core::initModClass('hms', 'HMS_Student.php');
+        
         $tags = array();
         
-        $tags['REQUESTOR']      = PHPWS_Text::secureLink($this->requestor, 'hms', array('type'=>'student', 'op'=>'get_matching_students', 'username'=>$this->requestor));
-        $tags['REQUESTEE']      = PHPWS_Text::secureLink($this->requestee, 'hms', array('type'=>'student', 'op'=>'get_matching_students', 'username'=>$this->requestee));
+        $tags['REQUESTOR']      = HMS_Student::get_link($this->requestor, TRUE);
+        $tags['REQUESTEE']      = HMS_Student::get_link($this->requestee, TRUE);
         $tags['REQUESTED_ON']   = HMS_Util::get_long_date_time($this->requested_on);
         $tags['CONFIRMED_ON']   = HMS_Util::get_long_date_time($this->confirmed_on);
         $tags['ACTION']         = PHPWS_Text::secureLink('Delete', 'hms', array('type'=>'roommate', 'op'=>'delete_roommate_group', 'id'=>$this->id));
