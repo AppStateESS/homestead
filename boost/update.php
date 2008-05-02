@@ -889,9 +889,9 @@ function hms_update(&$content, $currentVersion)
             PHPWS_Boost::registerMyModule('hms', 'users', $content);    #just need to update the permissions
             
         case version_compare($currentVersion, '0.2.32', '<'):
-            $files[] = 'templates/admin/show_confirmed_roommates.tpl'
-            $files[] = 'templates/admin/roommate_pager.tpl'
-            $files[] = 'templates/admin/create_roommate_group.tpl'
+            $files[] = 'templates/admin/show_confirmed_roommates.tpl';
+            $files[] = 'templates/admin/roommate_pager.tpl';
+            $files[] = 'templates/admin/create_roommate_group.tpl';
             PHPWS_Boost::updatefiles($files, 'hms');
     }
 
