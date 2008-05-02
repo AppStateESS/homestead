@@ -8,9 +8,9 @@ class HMS_Reports{
     function get_reports()
     {
         $reports = array(
-                        'housing_asss' => 'Assignment Demographics'
+                        'housing_asss' => 'Assignment Demographics',
+                        'housing_apps' =>'Housing Applications Received'
                         );
-/*                        'housing_apps' =>'Housing Applications Received',*/
 /*                        'housing_asss' =>'Housing Assignments Made',*/
 /*                        'unassd_rooms' =>'Currently Unassigned Rooms',*/
 /*                        'unassd_beds'  =>'Currently Unassigned Beds',*/
@@ -109,6 +109,9 @@ class HMS_Reports{
 	{
 	    PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
 
+        # Start the timer
+
+
         $building = array(); // Define an array to hold each building's summary
 	   
         # Get a list of hall ID's and names 
@@ -173,7 +176,7 @@ class HMS_Reports{
                 $gender = HMS_SOAP::get_gender($assignment['asu_username'], TRUE);
                 
                 # Check the gender for bad data
-                if(!isset($gender) || $gender == NULL || ($gender != MALE && $gender != FEMALE)) {
+                if(!isset($gender) || $gender === NULL || ($gender != MALE && $gender != FEMALE)) {
                     $problems[] = $assignment['asu_username'] .': Gender is unrecognized ('. $gender .')';
                 }
                     
@@ -181,7 +184,7 @@ class HMS_Reports{
                 $class = HMS_SOAP::get_student_class($assignment['asu_username'], HMS_Term::get_selected_term());
 
                 # Check the class for bad data
-                if(!isset($class) || $class == NULL ||
+                if(!isset($class) || $class === NULL ||
                     ($class != CLASS_FRESHMEN && $class != CLASS_SOPHOMORE && 
                      $class != CLASS_JUNIOR && $class != CLASS_SENIOR)) {
                     $problems[] = $assignment['asu_username'] . ': Class is unrecognized ('. $class .')';
@@ -191,16 +194,23 @@ class HMS_Reports{
                 $type = HMS_SOAP::get_student_type($assignment['asu_username'], HMS_Term::get_selected_term());
 
                 # Check the type for bad data
-                if(!isset($type) || $type == NULL ||
+                if(!isset($type) || $type === NULL ||
                    ($type != TYPE_FRESHMEN && $type != TYPE_TRANSFER && $type != TYPE_CONTINUING)) {
                     $problems[] = $assignment['asu_username'] . ': Type is unrecognized ('. $type .')';
                 }
 
-                if(    ($type == TYPE_FRESHMEN && $class != CLASS_FRESHMEN) ||
-                       ($type != TYPE_FRESHMEN && $class == CLASS_FRESHMEN)) {
+                # Check for a freshmen type, but a mis-matched class
+                if(($type == TYPE_FRESHMEN && $class != CLASS_FRESHMEN)){
                     $problems[] = $assignment['asu_username'] . ': Type is ' . $type.' but Class is ' . $class;
                 }
-                
+
+                $credit_hours = HMS_SOAP::get_credit_hours($assignment['asu_username']);
+
+                # Check for a mis-matched type/class/hours situation
+                if( $type == TYPE_CONTINUING && $class == CLASS_FRESHMEN && $credit_hours == 0){
+                    $problems[] = $assignment['asu_username'] . ": Type is $type, class is $class, credit hours is $credit_hours";
+                }
+
                 $t = $type;
                 $g = $gender;
                 $c = $class;
@@ -349,10 +359,12 @@ class HMS_Reports{
     function run_applicant_demographics_report()
     {
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
 
         $db = &new PHPWS_DB('hms_application');
         $db->addColumn('hms_student_id');
         $db->addWhere('deleted', '0');
+        $db->addWhere('term', HMS_Term::get_selected_term());
         $db->addOrder('hms_student_id', 'ASC');
         $results = $db->select();
 
@@ -364,9 +376,12 @@ class HMS_Reports{
         $content = '';
 
         foreach($results as $line) {
-            $person = HMS_SOAP::get_gender_class($line['hms_student_id']);
+            $gender = HMS_SOAP::get_gender($line['hms_student_id']);
+            $class  = HMS_SOAP::get_student_class($line['hms_student_id'], HMS_Term::get_selected_term());
+            $type   = HMS_SOAP::get_student_type($line['hms_student_id'], HMS_Term::get_selected_term());
 
-            if(!$person['gender'] && !$person['class']) {
+            if(!isset($gender) || !isset($class) || !isset($type) ||
+                $gender == FALSE || $class == FALSE || $type == FALSE ) {
                 if(isset($application['null'])) {
                     $application['null']++;
                 } else {
@@ -375,22 +390,14 @@ class HMS_Reports{
                 continue;
             }
 
-            $g = $person['gender'];
-            $c = $person['class'];
-
-            if(isset($application[$c][$g])) {
-                $application[$c][$g]++;
+            if(isset($application[$type][$class][$gender])) {
+                $application[$type][$class][$gender]++;
             } else {
-                $application[$c][$g] = 1;
+                $application[$type][$class][$gender] = 1;
             }
         }
 
         $content .= "Housing Applications received by class and gender:<br /><br />";
-        $content .= "New Freshman <br />";
-        $content .= "Male: " . $application["NFR"]["M"] . "<br />";
-        $content .= "Female: " . $application["NFR"]["F"] . "<br />";
-        $content .= "<br />**Note: New Freshmen are classified as any freshman with 0 completed credit hours at Appalachian State University**<br />\n";
-        $content .= "<br />";
         $content .= "Freshmen <br />";
         $content .= "Male: " . $application["FR"]["M"] . "<br />";
         $content .= "Female: " . $application["FR"]["M"] . "<br />";
