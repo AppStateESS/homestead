@@ -239,8 +239,15 @@ class HMS_Reports{
         $total['T']['JR']['F']  = 0;
         $total['T']['SR']['F']  = 0;
 
-        # Show any problems that occured
         $content = '';
+
+        # Print out the header
+        $term = HMS_Term::term_to_text(HMS_Term::get_selected_term(), TRUE);
+        $content .= '<br /><br />';
+        $content .= "$term - Housing assignments by building, student type, class, and gender";
+        $content .= '<br /><br />';
+        
+        # Show any problems that occured
         if(isset($problems) && count($problems) > 0) {
             $content .= '<font color="red"><b>Some problems were found while retrieving data from Banner:</b></font><br />';
             foreach($problems as $problem) {
@@ -365,6 +372,9 @@ class HMS_Reports{
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
 
+        # Note the start time
+        $start_time = microtime();
+
         $db = &new PHPWS_DB('hms_application');
         $db->addColumn('hms_student_id');
         $db->addWhere('deleted', '0');
@@ -404,29 +414,10 @@ class HMS_Reports{
             $application_totals[$type][$class][$gender]++;
         }
 
-        /*$content .= "Housing Applications received by class and gender:<br /><br />";
-        $content .= "Freshmen <br />";
-        $content .= "Male: " . $application["FR"]["M"] . "<br />";
-        $content .= "Female: " . $application["FR"]["M"] . "<br />";
-        $content .= "<br />";
-        $content .= "Sophomore <br />";
-        $content .= "Male: " . $application["SO"]["M"] . "<br />";
-        $content .= "Female: " . $application["SO"]["F"] . "<br />";
-        $content .= "<br />";
-        $content .= "Junior <br />";
-        $content .= "Male: " . $application["JR"]["M"] . "<br />";
-        $content .= "Female: " . $application["JR"]["F"] . "<br />";
-        $content .= "<br />";
-        $content .= "Senior <br />";
-        $content .= "Male: " . $application["SR"]["M"] . "<br />";
-        $content .= "Female: " . $application["SR"]["F"] . "<br />";
-        $content .= "<br />";
-        $content .= "No Class or Gender Data Available<br />";
-        $content .= "Total: " . $application["null"] . "<br />";
-        $content .= "<br />";
-        $content .= "<br />";
-        */
+        $term = HMS_Term::term_to_text(HMS_Term::get_selected_term(), TRUE);
 
+        $content .= '<br /><br />';
+        $content .= "$term - Housing Applications received by class and gender:<br /><br />";
         $content .= '<table border="1">';
         $content .= '<tr><th colspan="11" style="text-align: center"><h2>TOTALS</h2></th></tr>';
         $content .= '<tr>';
@@ -467,6 +458,10 @@ class HMS_Reports{
         $content .= "Total: " . $application_totals['bad_data'] . "<br />";
         $content .= "<br />";
         $content .= "<br />";
+
+        $elapsed_time = microtime() - $start_time;
+
+        $content .= "Elapsed time: $elapsed_time seconds <br /><br />";
     
         return $content;
     }
