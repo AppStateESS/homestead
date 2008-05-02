@@ -1164,6 +1164,7 @@ class HMS_Roommate
         $pager = new DBPager('hms_roommate', 'HMS_Roommate');
         
         $pager->db->addWhere('confirmed', 1);
+        $pager->db->addWhere('term', HMS_Term::get_selected_term());
         
         $pager->setModule('hms');
         $pager->setTemplate('admin/roommate_pager.tpl');
