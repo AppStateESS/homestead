@@ -228,9 +228,6 @@ class HMS_Admin
         if(Current_user::allow('hms', 'stats'))
             $links[] = PHPWS_Text::secureLink(_('HMS Statistics'), 'hms', array('type'=>'display', 'op'=>'display_system_statistics'));
 
-        if(Current_User::allow('hms', 'reports'))
-            $links[] = PHPWS_Text::secureLink(_('HMS Reports'), 'hms', array('type'=>'reports', 'op'=>'display_reports'));
-
         if(Current_User::allow('hms', 'search'))
             $links[] = PHPWS_Text::secureLink(_('Search Students'), 'hms', array('type'=>'student', 'op'=>'enter_student_search_data'));
         
