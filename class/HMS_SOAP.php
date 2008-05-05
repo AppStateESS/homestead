@@ -261,7 +261,7 @@ class HMS_SOAP{
         $student = HMS_SOAP::get_student_info($username);
 
         if(PEAR::isError($student)){
-            HMS_SOAP::log_soap_error($student,'get_gender_class',$username);
+            HMS_SOAP::log_soap_error($student,'get_credit_hours',$username);
             return $student;
         }
 
@@ -668,7 +668,7 @@ class HMS_SOAP{
 
         switch($hms_meal_code) {
             case HMS_MEAL_LOW: // low
-                if($type == 'NFR')
+                if($type == TYPE_FRESHMEN)
                     $retval['meal'] = BANNER_MEAL_STD;
                 else
                     $retval['meal'] = BANNER_MEAL_LOW;
@@ -684,7 +684,7 @@ class HMS_SOAP{
                 break;
             case HMS_MEAL_NONE: // none
                 if(($building == 'MAR' || $building == 'AHR') &&
-                        $type != 'NFR') {
+                        $type != TYPE_FRESHMEN) {
                     $retval['meal'] = NULL;
                 } else {
                     $retval['meal'] = '1';
@@ -710,7 +710,7 @@ class HMS_SOAP{
         $student->student_type          = 'F';
         $student->application_term      = '200840';
         $student->projected_class       = 'SR';
-        $student->credhrs_completed     = 105;
+        $student->credhrs_completed     = 0;
         $student->credhrs_for_term      = 15;
         $student->on_campus             = 'false';
         
