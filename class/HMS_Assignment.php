@@ -128,6 +128,42 @@ class HMS_Assignment extends HMS_Item
         return ($building->hall_name . ' Room ' . $room->room_number);
     }
 
+    /**
+     * Returns the phone number of the bed for this assignment.
+     * Useful when called from outside classes....
+     */
+    function get_phone_number()
+    {
+        if(!$this->loadBed()){
+            return null;
+        }
+
+        return $this->_bed->phone_number;
+    }
+
+    function get_ft_movein_time_id()
+    {
+        if(!$this->loadBed()){
+            return null;
+        }
+
+        $room   = $this->_bed->get_parent();
+        $floor  = $room->get_parent();
+
+        return $floor->ft_movein_time_id;
+    }
+
+    function get_rt_movein_time_id()
+    {
+        if(!$this->loadBed()){
+            return null;
+        }
+
+        $room   = $this->_bed->get_parent();
+        $floor  = $room->get_parent();
+
+        return $floor->rt_movein_time_id;
+    }
 
     /******************
      * Static Methods *
@@ -367,8 +403,8 @@ class HMS_Assignment extends HMS_Item
             $meal_plan['plan'],
             $meal_plan['meal']
             );
-        
-        if($banner_success){
+
+        if(!$banner_success){
             return HMS_Assignment::show_assign_student(NULL, 'Banner Error: ' . $banner_success . ' The student was not assigned.');
         }
 
