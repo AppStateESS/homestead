@@ -85,7 +85,7 @@ class HMS_Movein_Time
         $timestamps[0] = 'None';
 
         foreach ($result as $row){
-            $timestamps[$row['id']] = HMS_Util::get_long_date_time($row['begin_timestamp']);
+            $timestamps[$row['id']] = HMS_Util::get_long_date_time($row['begin_timestamp']) . ' - ' . date('gA',$row['end_timestamp']);
         }
 
         return $timestamps;
