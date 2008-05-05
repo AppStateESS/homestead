@@ -842,7 +842,7 @@ class HMS_Student {
          ******************/
         PHPWS_Core::initModClass('hms','HMS_RLC_Application.php');
         $tags['RLC_INTRO'] = 'For more infomration about Appalachian\'s Unique Housing Options please visit the <a href="http://housing.appstate.edu/index.php?module=pagemaster&PAGE_user_op=view_page&PAGE_id=134" target="_blank">Housing & Residence Life Website</a>.';
-        
+
         # Check deadlines for RLC application
         if(HMS_RLC_Application::check_for_application($_SESSION['asu_username'], $_SESSION['application_term']) === FALSE){
             # Check deadlines for RLC applications
@@ -948,21 +948,23 @@ class HMS_Student {
             }
         }
 
-        # The following is entirely unimplemented and I don't have time to do it and Housing doesn't seem to want it anyway... we're going to do it eventually, but probably not for 200810
         /*********************
          * Verify Assignment *
-         ********************
-         $tags['VERIFY_INTRO'] = 'Once the assignment process is complete, you can verify your assignment and roommate selection.';
+         ********************/
+         $tags['VERIFY_INTRO'] = 'Once the assignment process is complete, you can view your up-to-the-minute application, assignment, roommate, and Learning Community status. <b><font color="red">Please note that this status is not final and is subject to change.</font></b>';
 
         # Check deadlines for verify assignment
         if(HMS_Deadlines::check_within_deadlines('view_assignment_begin_timestamp','view_assignment_end_timestamp',$deadlines)){
             $tags['VERIFY_MSG'] = '<b>You may verify your housing status</b> until ' . HMS_Deadlines::get_deadline_as_date('view_assignment_begin_timestamp', $deadlines) . '. Click the link below to verify your assignment.';
             $tags['VERIFY_LINK'] = PHPWS_Text::secureLink(_('Verify Your Assignment'), 'hms', array('type'=>'student','op'=>'show_verify_assignment'));
+            $tags['VERIFY_ICON'] = $arrow_img;
         }else if(!HMS_Deadlines::check_deadline_past('view_assignment_begin_timestamp', $deadlines)){
             $tags['VERIFY_MSG'] = '<b>It is too early to view your housing status</b>. You will be able to view your assignment on ' . HMS_Deadlines::get_deadline_as_date('view_assignment_begin_timestamp', $deadlines) . '.';
+            $tags['VERIFY_ICON'] = $lock_img;
         }else{
             $tags['VERIFY_MSG'] = '<b>It is too late to view your housing status</b>. The deadline past on ' . HMS_Deadlines::get_deadline_as_date('view_assignment_end_timestamp', $deadlines) . '.';
-        }*/
+            $tags['VERIFY_ICON'] = $lock_img;
+        }
 
 
         # Logout link
@@ -1037,6 +1039,61 @@ class HMS_Student {
         
         return PHPWS_Template::process($tags, 'hms', 'student/main_menu_spring.tpl');
 
+    }
+
+    function show_verify_assignment()
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
+        PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Movein_Time.php');
+
+        $tpl = array();
+
+        $assignment = HMS_Assignment::get_assignment($_SESSION['asu_username'], $_SESSION['application_term']);
+        if($assignment === NULL || $assignment == FALSE){
+            $tpl['NO_ASSIGNMENT'] = "You do not currently have a housing assignment.";
+        }else{
+            $tpl['ASSIGNMENT'] = $assignment->where_am_i() . '<br />';
+            $tpl['ROOM_PHONE'] = $assignment->get_phone_number();
+
+            # Determine the student's type and figure out their movein time
+            $type = HMS_SOAP::get_student_type($_SESSION['asu_username'], $_SESSION['application_term']);
+
+            if($type == TYPE_CONTINUING){
+                $movein_time_id = $assignment->get_rt_movein_time_id();
+            }else{
+                $movein_time_id = $assignment->get_ft_movein_time_id();
+            }
+            
+            if($movein_time_id == NULL){
+                $tpl['MOVE_IN_TIME'] = 'To be determined<br />';
+            }else{
+                $movein_times = HMS_Movein_Time::get_movein_times_array($_SESSION['application_term']);        
+                $tpl['MOVE_IN_TIME'] = $movein_times[$movein_time_id];
+            }
+        }
+
+        $roommate = HMS_Roommate::get_confirmed_roommate($_SESSION['asu_username']);
+        if($roommate == NULL){
+            $tpl['ROOMMATE'] = 'You do not have a confirmed roommate.';
+        }else{
+            $tpl['ROOMMATE'] = 'Your confirmed roommate is: ' . HMS_SOAP::get_name($roommate) . ' (<a href="mailto:' . $roommate . '@appstate.edu">'. $roommate . '@appstate.edu</a>)';
+        }
+
+        $rlc_assignment = HMS_RLC_Assignment::check_for_assignment($_SESSION['asu_username'], $_SESSION['application_term']);
+        if($rlc_assignment == NULL || $rlc_assignment === FALSE){
+            $tpl['RLC'] = "You have not been accepted to an RLC.";
+        }else{
+            $rlc_list = HMS_Learning_Community::getRLCList();
+            $tpl['RLC'] = 'You have been assigned to the ' . $rlc_list[$rlc_assignment['rlc_id']];
+        }
+
+        $tpl['MENU_LINK'] = PHPWS_Text::secureLink('Back to Main Menu', 'hms', array('type'=>'student', 'op'=>'show_main_menu'));
+        
+        return PHPWS_Template::process($tpl, 'hms', 'student/verify_assignment.tpl');
     }
 
     /* 200810 Spring Roommate HACK.  This must be REMOVED and replaced
@@ -1263,20 +1320,6 @@ class HMS_Student {
                 PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
                 return HMS_Roommate::create_roommate_request(TRUE);
                 break;
-            case 'save_roommate_username':
-                /*
-                 * This is broken since we updated Roommates
-                if(isset($_REQUEST['cancel'])) {
-                    return HMS_Student::get_roommate_username();
-                } else {
-                    PHPWS_Core::initModClass('hms', 'HMS_Side_Thingie.php');
-                    $side_thingie = new HMS_Side_Thingie(HMS_SIDE_STUDENT_ROOMMATE);
-                    $side_thingie->show();
-                    PHPWS_Core::initModClass('hms', 'HMS_Roommate_Approval.php');
-                    return HMS_Roommate_Approval::save_roommate_username();
-                }
-                */
-                break;
             case 'set_meal_plan':
                 return HMS_Student::set_meal_plan();
                 break;
@@ -1307,6 +1350,12 @@ class HMS_Student {
                 PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
                 $mate = &new HMS_Roommate($_REQUEST['id']);
                 return HMS_Roommate::reject_for_realz($mate);
+                break;
+            case 'show_verify_assignment':
+                PHPWS_Core::initModClass('hms', 'HMS_Side_Thingie.php');
+                $side_thingie = new HMS_Side_Thingie(HMS_SIDE_STUDENT_VERIFY);
+                $side_thingie->show();
+                return HMS_Student::show_verify_assignment();                
                 break;
             case 'main':
                 //return HMS_Student::show_main_menu();

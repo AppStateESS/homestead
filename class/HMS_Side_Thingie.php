@@ -8,7 +8,7 @@ define('HMS_SIDE_STUDENT_RLC',          3);
 define('HMS_SIDE_STUDENT_PROFILE',      4);
 define('HMS_SIDE_STUDENT_ROOMMATE',     5);
 define('HMS_SIDE_STUDENT_VERIFY',       6);
-define('HMS_SIDE_STUDENT_MAX',          5);
+define('HMS_SIDE_STUDENT_MAX',          6);
 
 class HMS_Side_Thingie {
 
@@ -140,7 +140,7 @@ class HMS_Side_Thingie {
         }
         
         # Check to see if the student has a RLC application on file already. If so, set styles to completed and we're done.
-        if(HMS_RLC_Application::check_for_application($_SESSION['asu_username']) !== FALSE){
+        if(HMS_RLC_Application::check_for_application($_SESSION['asu_username'], $_SESSION['application_term']) !== FALSE){
             $this->steps_styles[HMS_SIDE_STUDENT_RLC] = 'STEP_COMPLETED';
             return;
         }
@@ -281,13 +281,10 @@ class HMS_Side_Thingie {
 
     function set_verify($links)
     {
-        # Great feature... unfortunately, it's totally unimplemented, and I just don't have the time.
-        return;
-
         # If this is the step we're on, then set style accordingly
         $on_this_step = FALSE;
-        if($this->step == HMS_SIDE_STUDENT_ROOMMATE){
-            $this->steps_styles[HMS_SIDE_STUDENT_ROOMMATE] = 'STEP_CURRENT';
+        if($this->step == HMS_SIDE_STUDENT_VERIFY){
+            $this->steps_styles[HMS_SIDE_STUDENT_VERIFY] = 'STEP_CURRENT';
             $on_this_step = TRUE;
         }
 
@@ -300,7 +297,7 @@ class HMS_Side_Thingie {
             # We are past the starting deadline, check to see if we're actually on this step
             if($on_this_step){
                 # We're on this step, so don't add a link, just the text
-                $this->steps_text[HMS_SIDE_STUDENT_VERIFY] .= $this->steps_text[HMS_SIDE_STUDENT_VERIFY];
+                $this->steps_text[HMS_SIDE_STUDENT_VERIFY] = $this->steps_text[HMS_SIDE_STUDENT_VERIFY];
             }else{
                 # We're not on this step, so add the link and text
                 if($links){
