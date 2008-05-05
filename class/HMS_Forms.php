@@ -3046,31 +3046,5 @@ class HMS_Form
 
         return PHPWS_Template::process($template,'hms','student/profile_form.tpl');
     }
-
-    function display_reports()
-    {
-        $form = &new PHPWS_Form;
-        $reports = array('housing_apps' =>'Housing Applications Received',
-                         'housing_asss' =>'Housing Assignments Made',
-                         'unassd_rooms' =>'Currently Unassigned Rooms',
-                         'unassd_beds'  =>'Currently Unassigned Beds',
-                         'reqd_roommate'=>'Unconfirmed Roommates',
-                         'assd_alpha'   =>'Assigned Students',
-/*                         'special'      =>'Special Circumstances',
-                         'hall_structs' =>'Hall Structures');*/
-                         'unassd_apps'  =>'Unassigned Applicants',
-                         'no_ban_data'  =>'Students Without Banner Data',
-                         'no_deposit'   =>'Assigned Students with No Deposit',
-                         'bad_type'     =>'Assigned Students Withdrawn or with Bad Type',
-                         'gender'       =>'Gender Mismatches');
-        $form->addDropBox('reports', $reports);
-        $form->addSubmit('submit', _('Run Report'));
-        $form->addHidden('module', 'hms');
-        $form->addHidden('type', 'reports');
-        $form->addHidden('op', 'run_report');
-        $tpl = $form->getTemplate();
-        $final = PHPWS_Template::process($tpl, 'hms', 'admin/display_reports.tpl');
-        return $final;
-    }
 };
 ?>
