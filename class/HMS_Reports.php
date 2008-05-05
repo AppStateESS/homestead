@@ -486,10 +486,38 @@ class HMS_Reports{
             return "Database error!\n";
         }
 
+        $content = '';
+
+        $content = '<table>
+                     <tr>
+                        <th>User name</th>
+                        <th>Banner ID</th>
+                        <th>Entry Term</th>
+                        <th>Class</th>
+                        <th>Type</th>
+                        <th>Credit Hours</th>
+                        <th>DOB</th>
+                     </tr>
+                    ';
+        
         foreach($result as $assignment){
-            echo $assignment['asu_username'] . "<br />";
+            $user = $assignment['asu_username'];
+            if(HMS_SOAP::get_student_type($user, HMS_Term::get_selected_term()) == TYPE_FRESHMEN){
+                $content .= '<tr>';
+                $content .= '<td>' . $user . '</td>';
+                $content .= '<td>' . HMS_SOAP::get_banner_id($user) . '</td>';
+                $content .= '<td>' . HMS_SOAP::get_application_term($user) . '</td>';
+                $content .= '<td>' . HMS_SOAP::get_student_class($user, HMS_Term::get_selected_term()) . '</td>';
+                $content .= '<td>' . HMS_SOAP::get_student_type($user, HMS_Term::get_selected_term()) . '</td>';
+                $content .= '<td>' . HMS_SOAP::get_credit_hours($user) . '</td>';
+                $content .= '<td>' . HMS_SOAP::get_dob($user) . '</td>';
+                $content .= '</tr>';
+            }
         }
 
+        $content .= '</table';
+
+        return $content;
     }
 
     function run_unassigned_rooms_report()
