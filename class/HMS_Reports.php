@@ -8,8 +8,9 @@ class HMS_Reports{
     function get_reports()
     {
         $reports = array(
-                        'housing_apps' =>'Housing Applications Received',
-                        'housing_asss' => 'Assignment Demographics'
+                        'housing_apps'  => 'Housing Applications Received',
+                        'housing_asss'  => 'Assignment Demographics',
+                        'assigned_f'    => 'Assigned Type F Students'
                         );
 /*                        'housing_asss' =>'Housing Assignments Made',*/
 /*                        'unassd_rooms' =>'Currently Unassigned Rooms',*/
@@ -57,6 +58,7 @@ class HMS_Reports{
         
         // Go ahead an initalize the Term class, since it's going to be needed by all reports
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
         
 	    switch($_REQUEST['reports'])
 	    {
@@ -66,6 +68,10 @@ class HMS_Reports{
             case 'housing_asss':
                 return HMS_Reports::run_assignment_demographics_report();
                 break;
+            case 'assigned_f':
+                return HMS_Reports::run_assigned_type_f();
+                break;
+            /*
             case 'unassd_rooms':
                 return HMS_Reports::run_unassigned_rooms_report();
                 break;
@@ -99,6 +105,7 @@ class HMS_Reports{
             case 'gender':
                 return HMS_Reports::run_gender_report();
                 break;
+                */
             default:
                 return "ugh";
                 break;
@@ -462,6 +469,27 @@ class HMS_Reports{
         $content .= "Elapsed time: $elapsed_time seconds <br /><br />";
     
         return $content;
+    }
+
+    /**
+     * Finds and lists all currently assigned students who have a banner type of F
+     */
+    function run_assigned_type_f(){
+
+        $db = &new PHPWS_DB('hms_assignment');
+        $db->addWhere('deleted', 0);
+        $db->addWhere('term', HMS_Term::get_selected_term());
+
+        $result = $db->select();
+
+        if(PHPWS_Error::logIfError($result)){
+            return "Database error!\n";
+        }
+
+        foreach($result as $assignment){
+            echo $assignment['asu_username'] . "<br />";
+        }
+
     }
 
     function run_unassigned_rooms_report()
