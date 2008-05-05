@@ -368,7 +368,8 @@ class HMS_Application {
         $tpl['REDO']    = PHPWS_Text::secureLink("Return to Student", 'hms', array('type'=>'student', 'op'=>'get_matching_students', 'username'=>$_REQUEST['student']));
         $tpl['NEWLINES']= "<br /><br />";
        
-        $application = &new HMS_Application($username);
+        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+        $application = &new HMS_Application($username, HMS_Term::get_selected_term());
 
         if($application->getStudentStatus() == 1) $tpl['STUDENT_STATUS'] = "New Freshman";
         else if ($application->getStudentStatus() == 2) $tpl['STUDENT_STATUS'] = "Transfer";
