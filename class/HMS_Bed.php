@@ -209,6 +209,82 @@ class HMS_Bed extends HMS_Item {
         return $tags;
     }
 
+    /**
+     * Returns TRUE if the room can be administratively assigned, FALSE otherwise
+     */
+    function canAssignHere()
+    {
+        # Make sure this bed isn't already assigned
+        $this->loadAssignment();
+        if($this->_curr_assignment != NULL && $this->_curr_assignment > 0)
+            return FALSE;
+        
+        # Get all of the parent objects
+        $room       = $this->get_parent();
+        $floor      = $room->get_parent();
+        $building   = $floor->get_parent();
+                
+        # Check if everything is online
+        if($room->is_online == 1)
+            return FALSE;
+
+        if($floor->is_online == 1)
+            return FALSE;
+
+        if($building->is_online == 1)
+            return FALSE;
+        
+        return TRUE;
+    }
+
+    /**
+     * Returns TRUE if the room can be auto-assigned
+     */
+    function canAutoAssignHere()
+    {  
+        # Make sure this bed isn't already assigned
+        $this->loadAssignment();
+        if($this->_curr_assignment != NULL && $this->_curr_assignment > 0)
+            return FALSE;
+
+        # Get all of the parent objects
+        $room       = $this->get_parent();
+        $floor      = $room->get_parent();
+        $building   = $floor->get_parent();
+
+        # Check if everything is online
+        if($room->is_online == 1)
+            return FALSE;
+
+        if($floor->is_online == 1)
+            return FALSE;
+
+        if($building->is_online == 1)
+            return FALSE;
+
+        # Make sure nothing is reserved
+        if($room->is_reserved == 1)
+            return FALSE;
+
+        # Make sure the room isn't medical reserved
+        if($room->is_medical == 1)
+            return FALSE;
+
+        # Make sure the room isn't a lobby
+        if($room->is_lobby == 1)
+            return FALSE;
+
+        # Make sure the room isn't private
+        if($room->private_room == 1)
+            return FALSE;
+
+        # Check if this bed is part of an RLC
+        if($room->rlc_id != NULL && $room->rlc_id > 0)
+            return FALSE;
+
+        return TRUE;
+    }
+
     /******************
      * Static Methods *
      ******************/
