@@ -213,11 +213,11 @@ class HMS_Application {
             PHPWS_Core::initModClass('hms', 'HMS_Term.php');
             $plancode = HMS_SOAP::get_plan_meal_codes($_SESSION['asu_username'], 'lawl', $this->getMealOption());
             $result = HMS_SOAP::report_application_received($_SESSION['asu_username'], $_SESSION['application_term'], $plancode['plan'], $plancode['meal']);
-            
+
             # If there was an error it will have already been logged
             # but send out a notification anyway
             # TODO: Improve the notification system
-            if(!$result){
+            if($result > 0){
                 PHPWS_Core::initCoreClass('Mail.php');
                 $send_to = array();
                 $send_to[] = 'jbooker@tux.appstate.edu';
@@ -265,7 +265,6 @@ class HMS_Application {
         }
         
         $db->addWhere('deleted',0,'=');
-
         $result = $db->select('row');
         
         if(PEAR::isError($result)){
@@ -280,68 +279,6 @@ class HMS_Application {
         }
     }
 
-    
-    /*
-     * Displays the given user's application.
-     * If no user specified, defaults to current user.
-     */
-    function show_application($asu_username = null){
-
-        if(!isset($asu_username)){
-            $asu_username = $_SESSION['asu_username'];
-        }
-
-        PHPWS_Core::initModClass('hms', 'HMS_Application.php');
-        $application = new HMS_Application($asu_username);
-
-        $tpl['TITLE']   = 'Residence Hall Application';
-        if(isset($message)){
-            $tpl['MESSAGE'] = $message;
-        }
-        $tpl['REDO']    = PHPWS_Text::secureLink("Return to Menu", 'hms', array('type'=>'hms', 'op'=>'main'));
-        $tpl['NEWLINES']= "<br /><br />";
-          
-        if($application->getStudentStatus() == 1) $tpl['STUDENT_STATUS'] = "New Freshman";
-        else if ($application->getStudentStatus() == 2) $tpl['STUDENT_STATUS'] = "Transfer";
-
-        if($application->getTermClassification() == 1) $tpl['CLASSIFICATION_FOR_TERM'] = "Freshman";
-        else if($application->getTermClassification() == 2) $tpl['CLASSIFICATION_FOR_TERM'] = "Sophomore";
-        else if($application->getTermClassification() == 3) $tpl['CLASSIFICATION_FOR_TERM'] = "Junior";
-        else if($application->getTermClassification() == 4) $tpl['CLASSIFICATION_FOR_TERM'] = "Senior";
-          
-        if($application->getGender() == FEMALE) $tpl['GENDER_TYPE'] = "Female";
-        else if($application->getGender() == MALE) $tpl['GENDER_TYPE'] = "Male";
-            
-        if($application->getMealOption() == HMS_MEAL_LOW) $tpl['MEAL_OPTION'] = "Low";
-        else if($application->getMealOption() == HMS_MEAL_STD) $tpl['MEAL_OPTION'] = "Standard";
-        else if($application->getMealOption() == HMS_MEAL_HIGH) $tpl['MEAL_OPTION'] = "High";
-        else if($application->getMealOption() == HMS_MEAL_SUPER) $tpl['MEAL_OPTION'] = "Super";
-           
-        if($application->getLifestyle() == 1) $tpl['LIFESTYLE_OPTION'] = "Single Gender";
-        else if($application->getLifestyle() == 2) $tpl['LIFESTYLE_OPTION'] = "Co-Ed";
-            
-        if($application->getPreferredBedtime() == 1) $tpl['PREFERRED_BEDTIME'] = "Early";
-        else if($application->getPreferredBedtime() == 2) $tpl['PREFERRED_BEDTIME'] = "Late";
-
-        if($application->getRoomCondition() == 1) $tpl['ROOM_CONDITION'] = "Clean";
-        else if($application->getRoomCondition() == 2) $tpl['ROOM_CONDITION'] = "Dirty";
-            
-        if($application->getRelationship() == 0) $tpl['RELATIONSHIP'] = "No"; 
-        else if($application->getRelationship() == 1) $tpl['RELATIONSHIP'] = "Yes"; 
-        else if($application->getRelationship() == 2) $tpl['RELATIONSHIP'] = "Not Disclosed"; 
-            
-        if($application->getEmployed() == 0) $tpl['EMPLOYED'] = "No";
-        else if($application->getEmployed() == 1) $tpl['EMPLOYED'] = "Yes";
-        else if($application->getEmployed() == 2) $tpl['EMPLOYED'] = "Not Disclosed";
-             
-        if($application->getRlcInterest() == 0) $tpl['RLC_INTEREST_1'] = "No";
-        else if($application->getRlcInterest() == 1) $tpl['RLC_INTEREST_1'] = "Yes";
-       
-        $master['APPLICATION']  = PHPWS_Template::process($tpl, 'hms', 'student/student_application.tpl');
-        return PHPWS_Template::process($master,'hms','student/student_application_combined.tpl');
-        
-    }
-   
     /**
      * Uses the forms class to display the application form or
      * a confirmation page.
@@ -362,25 +299,38 @@ class HMS_Application {
      */
     function view_housing_application($username)
     {
-        $tpl['TITLE']   = 'Residence Hall Application';
-        $tpl['MESSAGE'] = $message;
+        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
 
-        $tpl['REDO']    = PHPWS_Text::secureLink("Return to Student", 'hms', array('type'=>'student', 'op'=>'get_matching_students', 'username'=>$_REQUEST['student']));
+        $tpl['TITLE']   = 'Residence Hall Application';
+
+        $tpl['REDO']    = PHPWS_Text::secureLink("Return to Student", 'hms', array('type'=>'student', 'op'=>'get_matching_students', 'username'=>$username));
         $tpl['NEWLINES']= "<br /><br />";
        
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
         $application = &new HMS_Application($username, HMS_Term::get_selected_term());
 
-        if($application->getStudentStatus() == 1) $tpl['STUDENT_STATUS'] = "New Freshman";
-        else if ($application->getStudentStatus() == 2) $tpl['STUDENT_STATUS'] = "Transfer";
+        if($application->id == NULL){
+            return "No application exists for the specified term.";
+        }
 
-        if($application->getTermClassification() == 1) $tpl['CLASSIFICATION_FOR_TERM'] = "Freshman";
-        else if($application->getTermClassification() == 2) $tpl['CLASSIFICATION_FOR_TERM'] = "Sophomore";
-        else if($application->getTermClassification() == 3) $tpl['CLASSIFICATION_FOR_TERM'] = "Junior";
-        else if($application->getTermClassification() == 4) $tpl['CLASSIFICATION_FOR_TERM'] = "Senior";
+        test($application->student_status);
+        test(TYPE_FRESHMEN);
+
+        if($application->student_status == 1) $tpl['STUDENT_STATUS_LBL'] = "New Freshman";
+        else if ($application->student_status == 2) $tpl['STUDENT_STATUS_LBL'] = "Transfer";
+        else $tpl['STUDENT_STATUS_LBL'] = 'Unknown';
+
+        if($application->term_classification      == 1) $tpl['CLASSIFICATION_FOR_TERM_LBL'] = "Freshman";
+        else if($application->term_classification == 2) $tpl['CLASSIFICATION_FOR_TERM_LBL'] = "Sophomore";
+        else if($application->term_classification == 3) $tpl['CLASSIFICATION_FOR_TERM_LBL'] = "Junior";
+        else if($application->term_classification == 4) $tpl['CLASSIFICATION_FOR_TERM_LBL'] = "Senior";
+        else $tpl['CLASSIFICATION_FOR_TERM_LBL'] = 'Unknown';
+
+        $tpl['ENTRY_TERM']      = HMS_Term::term_to_text(HMS_SOAP::get_application_term($username), 1);
+        $tpl['STUDENT_NAME']    = HMS_SOAP::get_full_name($username);
         
-        if($application->getGender() == 0) $tpl['GENDER_TYPE'] = "Female";
-        else if($application->getGender() == 1) $tpl['GENDER_TYPE'] = "Male";
+        if($application->getGender() == FEMALE) $tpl['GENDER'] = "Female";
+        else if($application->getGender() == MALE) $tpl['GENDER'] = "Male";
         
         if($application->getMealOption() == HMS_MEAL_LOW) $tpl['MEAL_OPTION'] = "Low";
         else if($application->getMealOption() == HMS_MEAL_STD) $tpl['MEAL_OPTION'] = "Standard";
@@ -398,9 +348,18 @@ class HMS_Application {
         
         if($application->getRlcInterest() == 0) $tpl['RLC_INTEREST_1'] = "No";
         else if($application->getRlcInterest() == 1) $tpl['RLC_INTEREST_1'] = "Yes";
-   
-        $master['APPLICATION']  = PHPWS_Template::process($tpl, 'hms', 'student/student_application.tpl');
-        return PHPWS_Template::process($master,'hms','student/student_application_combined.tpl');
+        
+        $special_needs = "";
+        if($application->physical_disability == 1) $special_needs .= "Physical disability<br />";
+        if($application->psych_disability == 1) $special_needs .= "Psychological disability<br />";
+        if($application->medical_need == 1) $special_needs .= "Medical need<br />";
+        if($application->gender_need == 1) $special_needs .= "Gender need<br />";
+
+        if($special_needs == "") $special_needs = "None";
+
+        $tpl['SPECIAL_NEEDS_RESULT'] = $special_needs;
+
+        return PHPWS_Template::process($tpl, 'hms', 'student/student_application.tpl');
     }
 
     /**
@@ -562,7 +521,7 @@ class HMS_Application {
         $tpl['MESSAGE']         = $message;
         $tpl['STUDENT_NAME']    = HMS_SOAP::get_full_name($_SESSION['asu_username']);
         $tpl['GENDER']          = (HMS_SOAP::get_gender($_SESSION['asu_username'],TRUE) == FEMALE) ? FEMALE_DESC : MALE_DESC;
-        $tpl['ENTRY_TERM']      = HMS_Term::term_to_text($_SESSION['application_term']);
+        $tpl['ENTRY_TERM']      = HMS_Term::term_to_text($_SESSION['application_term'], TRUE);
 
         $class = HMS_SOAP::get_student_class($_SESSION['asu_username'], $_SESSION['application_term']);
         if($class == 'FR'){

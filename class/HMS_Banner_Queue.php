@@ -211,7 +211,7 @@ class HMS_Banner_Queue {
                     $this->bed_code,
                     $meal_plan['plan'],
                     $meal_plan['meal']);
-                if($result) {
+                if($result == 0) {
                     HMS_Activity_Log::log_activity(
                         $this->asu_username,
                         ACTIVITY_ASSIGNMENT_REPORTED,

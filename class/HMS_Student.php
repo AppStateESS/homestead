@@ -276,7 +276,9 @@ class HMS_Student {
         $tpl['PHONE_NUMBER'] = $student_info->phone->number;
         $tpl['USERNAME'] = $_REQUEST['username'];
 
-        $tpl['TITLE'] = "Search Results";
+        $tpl['TITLE'] = "Search Results - " . HMS_Term::term_to_text(HMS_Term::get_selected_term(),TRUE);
+
+        $tpl['APPLICATION_TERM'] = HMS_SOAP::get_application_term($_REQUEST['username']);
 
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
         $this_term = HMS_Term::get_selected_term();
@@ -324,14 +326,6 @@ class HMS_Student {
             }
         }
 
-        // get student application
-        PHPWS_Core::initModClass('hms', 'HMS_Application.php');
-        if(HMS_Application::check_for_application($_REQUEST['username'], HMS_Term::get_selected_term())) {
-            $tpl['APPLICATION_LINK'] = PHPWS_Text::secureLink(_('Housing Application'), 'hms', array('type'=>'student', 'op'=>'view_housing_application', 'student'=>$_REQUEST['username']));
-        } else {
-            $tpl['APPLICATION_LINK'] = "No Housing Application exists for this user.";
-        }
-
         /**************
          * RLC Status *
          **************/
@@ -365,34 +359,37 @@ class HMS_Student {
         /***********************/
         $link    = "index.php?module=hms&type=student&op=get_matching_students&username=" . $_REQUEST['username'];
         $content = $final;
-        if( isset($_GET['tab']) ){
-            switch( $_GET['tab'] ){
-                case "student_info":
-                $content = $final;
-                break;
-
-                case "student_logs":
-                PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-                $_REQUEST['actee'] = $_REQUEST['username'];
-                $content           = HMS_Activity_log::main();
-                break;
-
+        if( isset($_REQUEST['tab']) ){
+            switch( $_REQUEST['tab'] ){
+                case 'student_info':
+                    $content = $final;
+                    break;
+                case 'housing_app':
+                    $content = HMS_Application::view_housing_application($_REQUEST['username']);
+                    break;
+                case 'student_logs':
+                    PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
+                    $_REQUEST['actee'] = $_REQUEST['username'];
+                    $content           = HMS_Activity_Log::main();
+                    break;
                 default:
-                $content = $final;
-                break;
+                    $content = $final;
+                    break;
             }
         } 
 
-        $tags['student_info'] = array("title" => "Student Info Page", "link" => $link,
-                                      "link_title" => "Student Info Page");
-        $tags['student_logs'] = array("title" => "Student Logs", "link" => $link,
-                                      "link_title" => "Student Logs");
+        $tags['student_info']   = array('title' => 'Student Info Page', 'link' => $link,
+                                        'link_title' => 'Student Info Page');
+        $tags['housing_app']    = array('title' => 'Housing Application', 'link' => $link,
+                                        'link_title' => 'Housing Application');
+        $tags['student_logs']   = array('title' => 'Student Logs', 'link' => $link,
+                                        'link_title' => 'Student Logs');
 
-        PHPWS_Core::initModClass("controlpanel", "Panel.php");
+        PHPWS_Core::initModClass('controlpanel', 'Panel.php');
 
-        $panel = &new PHPWS_Panel("studentInfo");
+        $panel = &new PHPWS_Panel('studentInfo');
         $panel->quickSetTabs($tags);
-        if( !isset($_GET['tab']) ){
+        if( !isset($_REQUEST['tab']) ){
             $panel->setCurrentTab('student_info');
         }
 
@@ -450,7 +447,7 @@ class HMS_Student {
         $db->addWhere('id', $_REQUEST['id']);
         $success = $db->update();
         if($success == FALSE || $success == NULL) {
-            return "<i>ERROR! ERROR!</i><br />Student " . $_REQUEST['id'] . " could not be marked deleted.<br />";
+            return '<i>ERROR! ERROR!</i><br />Student ' . $_REQUEST['id'] . ' could not be marked deleted.<br />';
         } else {
             return "Student has successfully been marked deleted.<br />";
         }
@@ -1266,7 +1263,7 @@ class HMS_Student {
                 $side_thingie = new HMS_Side_Thingie(HMS_SIDE_STUDENT_APPLY);
                 $side_thingie->show();
                 PHPWS_Core::initModClass('hms','HMS_Application.php');
-                return HMS_Application::show_application($_REQUEST['user']);
+                return HMS_Application::view_housing_application($_REQUEST['user']);
                 break;
             case 'show_profile':
                 PHPWS_Core::initModClass('hms', 'HMS_Side_Thingie.php');

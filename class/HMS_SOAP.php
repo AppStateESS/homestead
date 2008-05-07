@@ -101,7 +101,7 @@ class HMS_SOAP{
         if($result > 0){
             HMS_SOAP::log_soap('report_application_received: ' . $username . ' result: Banner error: ' . $result);
             HMS_SOAP::log_soap_error($result, 'report_application_received', $username);
-            return false;
+            return $result;
         }/* else if(!is_int($result)) {
             HMS_SOAP::log_soap('report_application_received: ' . $username . ' result: Weird Error (result not an int): ' . $result);
             HMS_SOAP::log_soap_error('Weird Error: ', 'report_application_received', $username);
@@ -110,7 +110,7 @@ class HMS_SOAP{
         
         HMS_SOAP::log_soap('report_application_received: ' . $username . ' result: success');
         
-        return true;
+        return $result;
     }
 
     /**
@@ -751,7 +751,7 @@ class HMS_SOAP{
     function get_test_report()
     {
 //        return 1337; //error
-        return TRUE;
+        return 0;
     }
 
 
