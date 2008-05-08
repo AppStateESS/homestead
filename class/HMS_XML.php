@@ -12,7 +12,6 @@ class HMS_XML{
 
         switch($op){
             case 'get_halls':
-            
                 HMS_XML::getHalls();
                 break;
             case 'get_halls_with_vacancies':
@@ -103,7 +102,7 @@ class HMS_XML{
         
         PHPWS_Core::initModClass('hms','HMS_Residence_Hall.php');
         
-        $halls = HMS_Residence_Hall::get_halls_with_vacancies();
+        $halls = HMS_Residence_Hall::get_halls_with_vacancies($_REQUEST['term']);
 
         if(!$halls){
             // throw an error
@@ -112,11 +111,9 @@ class HMS_XML{
         $xml_halls = array();
 
         foreach($halls as $hall){
-            $xml_halls[] = array('id' => $hall->id, 'name' => $hall->hall_name);
+            $xml_halls[] = array('id' => $hall->id, 'hall_name' => $hall->hall_name);
         }
         
-        #test($xml_halls,1);
-
         $serializer_options = array (
             'addDecl' => TRUE,
             'encoding' => 'ISO-8859-1',

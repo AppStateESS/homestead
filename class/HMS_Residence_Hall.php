@@ -583,7 +583,7 @@ class HMS_Residence_Hall extends HMS_Item
         }
 
         $results = $db->select();
-
+        
         if(!$results || PHPWS_Error::logIfError($results)){
             return false;
         }

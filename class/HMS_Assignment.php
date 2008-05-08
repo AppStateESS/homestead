@@ -494,6 +494,7 @@ class HMS_Assignment extends HMS_Item
         }
 
         javascript('/modules/hms/assign_student');
+//        javascript('onload', array('function'=>"load_halls()"));
 
         $form = &new PHPWS_Form;
 
@@ -502,6 +503,8 @@ class HMS_Assignment extends HMS_Item
         if(isset($_REQUEST['username'])){
             $form->setValue('username', $_REQUEST['username']);
         }
+
+        $form->addHidden('term', HMS_Term::get_selected_term());
 
         # Check to see if a bed_id was passed in, this means
         # the user clicked an 'unassigned' link. We need to pre-populate
@@ -518,19 +521,17 @@ class HMS_Assignment extends HMS_Item
             $pre_populate = false;
         }
        
-        #TODO: Write a nice foreach loop to merge these arrays keeping the keys the same
-        # so that the 'select' option shows up at the top of the list. 
-        $halls_array = HMS_Residence_Hall::get_halls_with_vacancies_array(HMS_Term::get_selected_term());
-        $halls_array[0] = 'Select...';
-
-        $form->addDropBox('residence_hall', $halls_array);
-        $form->setLabel('residence_hall', 'Residence hall: ');
         if($pre_populate){
+            $halls_array = array();
+            $halls_array[$hall->id] = $hall->hall_name;
+            $form->addDropBox('residence_hall', $halls_array);
             $form->setMatch('residence_hall', $hall->id);
         }else{
+            $form->addDropBox('residence_hall', array(0 => ''));
             $form->setMatch('residence_hall', 0);
         }
-        $form->setExtra('residence_hall', 'onChange="handle_hall_change()"');
+        $form->setLabel('residence_hall', 'Residence hall: ');
+        $form->setExtra('residence_hall', 'disabled onChange="handle_hall_change()"');
 
         if($pre_populate){
             $form->addDropBox('floor', $hall->get_floors_array());
