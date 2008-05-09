@@ -279,7 +279,7 @@ class HMS_Bed extends HMS_Item {
             return FALSE;
 
         # Check if this bed is part of an RLC
-        if($room->rlc_id != NULL && $room->rlc_id > 0)
+        if($floor->rlc_id != NULL)
             return FALSE;
 
         return TRUE;
