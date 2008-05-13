@@ -402,7 +402,7 @@ class HMS_Assignment extends HMS_Item
             $meal_plan['meal']
             );
 
-        if(!$banner_success){
+        if($banner_success != E_SUCCESS){
             return HMS_Assignment::show_assign_student(NULL, 'Banner Error: ' . $banner_success . ' The student was not assigned.');
         }
 
