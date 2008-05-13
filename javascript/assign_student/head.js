@@ -24,14 +24,11 @@ function showBedDrop()
 
 function load_halls()
 {
-    alert('hello, world!');
     var term = document.getElementById('phpws_form_term').value;
-    alert(term);
 
     setSingleOption(res_hall_drop, "Loading...");
 
     var requestURL = document.location + '?mod=hms&type=xml&op=get_halls_with_vacancies&term=' + term;
-    alert(requestURL);
 
     xmlHttp = createXMLHttp();
     xmlHttp.open("GET", requestURL, true);
