@@ -124,14 +124,12 @@ class HMS_Reports{
         $db = &new PHPWS_DB('hms_residence_hall');
         $db->addWhere('is_online', '1');
         $db->addWhere('term', $term);
-        $db->addWhere('deleted', '0');
         $num_online = $db->select('count');
         unset($db);
 
         $db = &new PHPWS_DB('hms_residence_hall');
         $db->addWhere('is_online', '0');
         $db->addWhere('term', $term);
-        $db->addWhere('deleted', '0');
         $num_offline = $db->select('count');
         unset($db);
 
@@ -141,7 +139,6 @@ class HMS_Reports{
 
         $db = &new PHPWS_DB('hms_assignment');
         $db->addWhere('term', $term);
-        $db->addWhere('deleted', '0');
         $num_assigned = $db->select('count');
         unset($db);
 
@@ -180,7 +177,6 @@ class HMS_Reports{
         $db = &new PHPWS_DB('hms_residence_hall');
         $db->addColumn('id');
         $db->addColumn('hall_name');
-        $db->addWhere('deleted', '0');
         $db->addWhere('term', HMS_Term::get_selected_term());
         $db->addOrder('hall_name', 'asc');
         $result = $db->select();
@@ -204,13 +200,6 @@ class HMS_Reports{
             $db->addJoin('LEFT OUTER', 'hms_room',          'hms_floor',            'floor_id',             'id');
             $db->addJoin('LEFT OUTER', 'hms_floor',         'hms_residence_hall',   'residence_hall_id',    'id');
 
-            # Make sure we don't get anything that's been deleted
-            $db->addWhere('hms_assignment.deleted',     0);
-            $db->addWhere('hms_bed.deleted',            0);
-            $db->addWhere('hms_room.deleted',           0);
-            $db->addWhere('hms_floor.deleted',          0);
-            $db->addWhere('hms_residence_hall.deleted', 0);
-           
             # Don't report on anything that's not online 
             $db->addWhere('hms_room.is_online',             1);
             $db->addWhere('hms_floor.is_online',            1);
@@ -532,7 +521,6 @@ class HMS_Reports{
     function run_assigned_type_f(){
 
         $db = &new PHPWS_DB('hms_assignment');
-        $db->addWhere('deleted', 0);
         $db->addWhere('term', HMS_Term::get_selected_term());
 
         $result = $db->select();
@@ -587,12 +575,6 @@ class HMS_Reports{
         $db->addWhere('hms_bedrooms.room_id',       'hms_room.id');
         $db->addWhere('hms_room.floor_id',          'hms_floor.id');
         $db->addWhere('hms_floor.building',         'hms_residence_hall.id');
-        $db->addWhere('hms_assignment.deleted',     0);
-        $db->addWhere('hms_beds.deleted',           0);
-        $db->addWhere('hms_bedrooms.deleted',       0);
-        $db->addWhere('hms_room.deleted',           0);
-        $db->addWhere('hms_floor.deleted',          0);
-        $db->addWhere('hms_residence_hall.deleted', 0);
         $db->addOrder('hms_residence_hall.hall_name');
         $db->addOrder('hms_floor.floor_number');
         $db->addOrder('hms_room.id');
@@ -615,9 +597,6 @@ class HMS_Reports{
         $db->addColumn('hms_room.id','count');
         $db->addWhere('hms_room.floor_id',            'hms_floor.id');
         $db->addWhere('hms_floor.building',           'hms_residence_hall.id');
-        $db->addWhere('hms_room.deleted',             0);
-        $db->addWhere('hms_floor.deleted',            0);
-        $db->addWhere('hms_residence_hall.deleted',   0);
         $db->addWhere('hms_room.is_online',           1);
         $db->addWhere('hms_floor.is_online',          1);
         $db->addWhere('hms_residence_hall.is_online', 1);
@@ -710,12 +689,6 @@ class HMS_Reports{
                br.room_id = room.id     AND
                room.floor_id = floor.id AND
                floor.building = hall.id AND
-
-               beds.deleted = 0         AND
-               br.deleted = 0           AND
-               room.deleted = 0         AND
-               floor.deleted = 0        AND
-               hall.deleted  = 0        AND
 
                br.is_online = 1         AND
                room.is_online = 1       AND

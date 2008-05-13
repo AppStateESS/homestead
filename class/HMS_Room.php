@@ -157,23 +157,12 @@ class HMS_Room extends HMS_Item
     /**
      * Pulls all beds associated with this room and stores them in 
      * the _beds variable.
-     * @param int deleted -1 deleted only, 0 not deleted only, 1 all
      *
      */
-    function loadBeds($deleted=0)
+    function loadBeds()
     {
         $db = new PHPWS_DB('hms_bed');
         $db->addWhere('room_id', $this->id);
-
-        switch ($deleted) {
-        case -1:
-            $db->addWhere('deleted', 1);
-            break;
-
-        case 0:
-            $db->addWhere('deleted', 0);
-            break;
-        }
 
         $db->loadClass('hms', 'HMS_Bed.php');
         $result = $db->getObjects('HMS_Bed');
@@ -279,9 +268,6 @@ class HMS_Room extends HMS_Item
 
         $db->addJoin('LEFT OUTER', 'hms_bed', 'hms_room', 'room_id', 'id');
  
-        $db->addWhere('hms_bed.deleted',     0);
-        $db->addWhere('hms_room.deleted',    0);
-
         $db->addWhere('hms_room.id', $this->id);
         
         $result = $db->select('count');
@@ -304,10 +290,6 @@ class HMS_Room extends HMS_Item
         $db->addJoin('LEFT OUTER', 'hms_assignment', 'hms_bed', 'bed_id', 'id'  );
         $db->addJoin('LEFT OUTER', 'hms_bed', 'hms_room', 'room_id', 'id' );
  
-        $db->addWhere('hms_assignment.deleted', 0);
-        $db->addWhere('hms_bed.deleted',        0);
-        $db->addWhere('hms_room.deleted',       0);
-
         $db->addWhere('hms_room.id', $this->id);
 
         
@@ -463,7 +445,6 @@ class HMS_Room extends HMS_Item
        $pager = & new DBPager('hms_room', 'HMS_Room');
        
        $pager->addWhere('hms_room.floor_id', $floor_id);
-       $pager->addWhere('hms_room.deleted', 0);
 
        $page_tags['TABLE_TITLE']        = 'Rooms on this floor'; 
        $page_tags['ROOM_NUM_LABEL']     = 'Room Number';
@@ -551,7 +532,6 @@ class HMS_Room extends HMS_Item
         $pager = & new DBPager('hms_room', 'HMS_Room');
 
         $pager->addWhere('hms_room.suite_id', $suite_id);
-        $pager->addWhere('hms_room.deleted', 0);
 
         $page_tags['ROOM_NUMBER_LABEL'] = "Room Number";
         $page_tags['ACTION_LABEL']      = "Action";

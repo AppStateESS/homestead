@@ -1,24 +1,23 @@
 <?php
 
 class HMS_Item {
-    var $id          = 0;
-    var $term        = null;
+    var $id         = 0;
+    var $term       = null;
 
-    var $added_on    = 0;
-    var $added_by    = 0;
+    var $added_on   = 0;
+    var $added_by   = 0;
 
-    var $updated_on  = 0;
-    var $updated_by  = 0;
+    var $updated_on = 0;
+    var $updated_by = 0;
+    var $_table     = null;
     
-    var $deleted     = false;
-    var $deleted_by  = 0;
-    var $deleted_on  = 0;
-
     function construct($id=0, $table)
     {
         if (!$id) {
             return;
         }
+
+        $this->_table = $table;
 
         $this->id = $id;
         $db = new PHPWS_DB($table);
@@ -32,9 +31,6 @@ class HMS_Item {
     function reset()
     {
         $this->id         = 0;
-        $this->deleted    = false;
-        $this->deleted_by = 0;
-        $this->deleted_on = 0;
     }
 
     function stamp()
@@ -51,37 +47,26 @@ class HMS_Item {
 
     function delete()
     {
-        $this->deleted = 1;
-        $this->deleted_by = Current_User::getId();
-        $this->deleted_on = mktime();
-        return $this->save();
+        $db = new PHPWS_DB($this->_table);
+        $db->addWhere('id', $this->id);
+        $result = $db->delete();
+        if(!$result || PHPWS_Error::logIfError($result)){
+            return $result;
+        }
+        return TRUE;
     }
 
     function item_tags()
     {
-        $tpl['DELETED']      = $this->deleted      ? 'Yes' : 'No';
         $tpl['ADDED_ON']     = strftime('%c', $this->added_on);
         $tpl['UPDATED_ON']   = strftime('%c', $this->updated_on);
 
         
-        if ($this->deleted_on) {
-            $tpl['DELETED_ON']   = strftime('%c', $this->deleted_on);
-        } else {
-            $tpl['DELETED_ON']   = 'N/A';
-        }
-
         $adder = new PHPWS_User($this->added_by);
         $tpl['ADDED_BY']     = $adder->username;
 
         $updater = new PHPWS_User($this->updated_by);
         $tpl['UPDATED_BY']     = $updater->username;
-
-        if ($this->deleted_by) {
-            $deleter = new PHPWS_User($this->deleted_by);
-            $tpl['DELETED_BY']     = $deleter->username;
-        } else {
-            $tpl['DELECTED_BY']    = 'N/A';
-        }
 
         $tpl['TERM']         = HMS_Term::term_to_text($this->term, true);
 

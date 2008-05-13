@@ -17,13 +17,6 @@ class HMS_Bed extends HMS_Item {
     var $_curr_assignment   = null;
 
     /**
-     * Previous assignments (ie deleted) will be here after loading
-     * the current assignment
-     * @var array
-     */
-    var $_prev_assignment = array();
-
-    /**
      * Holds the parent room object of this bed.
      */
     var $_room;
@@ -90,29 +83,19 @@ class HMS_Bed extends HMS_Item {
         $assignment_found = false;
         $db = new PHPWS_DB('hms_assignment');
         $db->addWhere('bed_id', $this->id);
+        $db->addWhere('term', $this->term);
         $db->loadClass('hms', 'HMS_Assignment.php');
         $result = $db->getObjects('HMS_Assignment');
 
-        //if (!$result || PHPWS_Error::logIfError($result)) {
         if(PEAR::isError($result)){
             PHPWS_Error::logIfError($result);
             return false;
-        } else if($result == null){
+        }else if($result == null){
             return true;
-        } else {
-            foreach ($result as $ass) {
-                if ($ass->deleted == 1) {
-                    $this->_prev_assignment[] = $ass;
-                } else {
-                    if ($assignment_found) {
-                        PHPWS_Error::log(HMS_MULTIPLE_ASSIGNMENTS, 'hms', 'HMS_Bed::loadAssignment', 
-                                         sprintf('A=%s,B=%s', $ass->id, $this->id));
-                    } else {
-                        $this->_curr_assignment = $ass;
-                        $assignment_found = true;
-                    }
-                }
-            }
+        }elseif(sizeof($result) > 1){
+            PHPWS_Error::log(HMS_MULTIPLE_ASSIGNMENTS, 'hms', 'HMS_Bed::loadAssignment',sprintf('A=%s,B=%s', $ass->id, $this->id));
+        }else{
+            $this->_curr_assignment = $result[0];
         }
     }
 
@@ -320,22 +303,16 @@ class HMS_Bed extends HMS_Item {
                 JOIN hms_room           ON hms_bed.room_id         = hms_room.id
                 JOIN hms_floor          ON hms_room.floor_id           = hms_floor.id
                 JOIN hms_residence_hall ON hms_floor.residence_hall_id = hms_residence_hall.id
-                LEFT OUTER JOIN (
-                    SELECT * FROM hms_assignment WHERE deleted = 0
-                ) AS a_prime ON hms_bed.id = a_prime.bed_id
+                LEFT OUTER JOIN hms_assignment ON hms_bed.id = hms_assignment.bed_id
             WHERE
-                hms_bed.deleted              = 0 AND
-                hms_room.deleted             = 0 AND
                 hms_room.is_online           = 1 AND
                 hms_room.is_reserved         = 0 AND
                 hms_room.is_medical          = 0 AND
                 hms_room.ra_room             = 0 AND
                 hms_room.private_room        = 0 AND
-                hms_floor.deleted            = 0 AND
                 hms_floor.is_online          = 1 AND
-                hms_residence_hall.deleted   = 0 AND
                 hms_residence_hall.is_online = 1 AND
-                a_prime.asu_username IS NULL
+                hms_assignment.asu_username IS NULL
             ";
 
         $results = PHPWS_DB::getAll($sql);
@@ -563,8 +540,6 @@ class HMS_Bed extends HMS_Item {
         $pager->db->addJoin('LEFT OUTER', 'hms_bed', 'hms_room', 'room_id', 'id');
         
         $pager->addWhere('hms_room.id', $room_id);
-        $pager->addWhere('hms_bed.deleted', 0);
-        $pager->addWhere('hms_room.deleted', 0);
 
         $page_tags['TABLE_TITLE']       = 'Beds in this room:';
         $page_tags['BEDROOM_LABEL']     = 'Bedroom';

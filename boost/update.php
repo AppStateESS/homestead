@@ -893,6 +893,14 @@ function hms_update(&$content, $currentVersion)
             $files[] = 'templates/admin/roommate_pager.tpl';
             $files[] = 'templates/admin/create_roommate_group.tpl';
             PHPWS_Boost::updatefiles($files, 'hms');
+
+        case version_compare($currentVersion, '0.2.33', '<'):
+            $db = &new PHPWS_DB;
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_33.sql');
+            if(PEAR::isError($result)) {
+                return $result;
+            }
+            
     }
 
     return TRUE;

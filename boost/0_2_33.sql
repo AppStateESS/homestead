@@ -1,0 +1,16 @@
+ALTER TABLE hms_residence_hall DROP COLUMN deleted;
+ALTER TABLE hms_residence_hall DROP COLUMN deleted_on;
+ALTER TABLE hms_residence_hall DROP COLUMN deleted_by;
+ALTER TABLE hms_floor DROP COLUMN deleted;
+ALTER TABLE hms_floor DROP COLUMN deleted_on;
+ALTER TABLE hms_floor DROP COLUMN deleted_by;
+ALTER TABLE hms_room DROP COLUMN deleted;
+ALTER TABLE hms_room DROP COLUMN deleted_on;
+ALTER TABLE hms_room DROP COLUMN deleted_by;
+ALTER TABLE hms_bed DROP COLUMN deleted;
+ALTER TABLE hms_assignment DROP COLUMN deleted;
+ALTER TABLE hms_assignment DROP COLUMN deleted_by;
+ALTER TABLE hms_assignment DROP COLUMN deleted_on;
+ALTER TABLE hms_suite DROP COLUMN deleted;
+ALTER TABLE hms_suite DROP COLUMN deleted_on;
+ALTER TABLE hms_suite DROP COLUMN deleted_by;

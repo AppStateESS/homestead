@@ -33,11 +33,8 @@ CREATE TABLE hms_residence_hall (
     per_senior_rsvd         integer NOT NULL,
     added_by                smallint NOT NULL,
     added_on                integer NOT NULL,
-    deleted_by              smallint,
-    deleted_on              integer,
     updated_by              smallint,
     updated_on              integer,
-    deleted                 smallint DEFAULT (0)::smallint NOT NULL,
     primary key(id)
 );
 
@@ -58,9 +55,6 @@ CREATE TABLE hms_floor (
     residence_hall_id   smallint NOT NULL REFERENCES hms_residence_hall(id),
     is_online           smallint DEFAULT (0)::smallint NOT NULL,
     gender_type         smallint DEFAULT (0)::smallint NOT NULL,
-    deleted             smallint DEFAULT (0)::smallint,
-    deleted_by          smallint,
-    deleted_on          integer,
     added_by            smallint NOT NULL,
     added_on            integer NOT NULL,
     updated_by          smallint NOT NULL,
@@ -73,9 +67,6 @@ CREATE TABLE hms_suite (
     id          integer NOT NULL,
     term        integer NOT NULL REFERENCES hms_term(term),
     floor_id    integer NOT NULL REFERENCES hms_floor(id),
-    deleted     smallint DEFAULT (0)::smallint,
-    deleted_on  integer,
-    deleted_by  smallint,
     updated_on  integer,
     updated_by  smallint,
     added_on    integer,
@@ -101,11 +92,8 @@ CREATE TABLE hms_room (
     is_online               smallint DEFAULT (0)::smallint NOT NULL,
     added_by                smallint NOT NULL,
     added_on                integer NOT NULL,
-    deleted_by              smallint,
-    deleted_on              integer,
     updated_by              smallint,
     updated_on              integer,
-    deleted                 smallint DEFAULT (0)::smallint NOT NULL,
     primary key(id)
 );
 
@@ -120,9 +108,6 @@ CREATE TABLE hms_bed (
     added_on        integer NOT NULL,
     updated_by      integer NOT NULL,
     updated_on      integer NOT NULL,
-    deleted_by      integer,
-    deleted_on      integer,
-    deleted         smallint default 0,
     banner_id       character varying(15),
     phone_number    character(4),
     PRIMARY KEY(id)
@@ -138,9 +123,6 @@ CREATE TABLE hms_assignment (
     added_on        integer NOT NULL,
     updated_by      integer NOT NULL,
     updated_on      integer NOT NULL,
-    deleted_by      integer,
-    deleted_on      integer,
-    deleted         smallint NOT NULL,
     primary key(id)
 );
 
@@ -303,12 +285,6 @@ CREATE TABLE hms_student (
     deleted smallint DEFAULT 0,
     primary key(id)
 );
-
-
-
-
-
-
 
 CREATE TABLE hms_student_profiles (
     id INTEGER NOT NULL,

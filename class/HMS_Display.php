@@ -14,13 +14,11 @@ class HMS_Display
     {
         $db = &new PHPWS_DB('hms_residence_hall');
         $db->addWhere('is_online', '1');
-        $db->addWhere('deleted', '0');
         $num_online = $db->select('count');
         unset($db);
 
         $db = &new PHPWS_DB('hms_residence_hall');
         $db->addWhere('is_online', '0');
-        $db->addWhere('deleted', '0');
         $num_offline = $db->select('count');
         unset($db);
 
@@ -29,7 +27,6 @@ class HMS_Display
         unset($db);
 
         $db = &new PHPWS_DB('hms_assignment');
-        $db->addWhere('deleted', '0');
         $num_assigned = $db->select('count');
         unset($db);
 

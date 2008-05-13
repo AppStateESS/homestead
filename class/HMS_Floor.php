@@ -129,7 +129,7 @@ class HMS_Floor extends HMS_Item
 
         // Load all the rooms for this floor which are not in suites
         if(empty($this->_rooms)) {
-            $result = $this->loadRooms(0, 0);
+            $result = $this->loadRooms(0);
             if(!$result) {
                 // There was an error loading the rooms
                 echo "There was an error loading the rooms";
@@ -177,22 +177,12 @@ class HMS_Floor extends HMS_Item
     /**
      * Pulls all the suites associated with this floor and stores
      * them in the _suites variable.
-     * @param int deleted -1 deleted only, 0 not deleted only, 1 all
      *
      */
-    function loadSuites($deleted=0)
+    function loadSuites()
     {
         $db = new PHPWS_DB('hms_suite');
         $db->addWhere('floor_id', $this->id);
-
-        switch ($deleted) {
-            case -1:
-                $db->addWhere('deleted', 1);
-                break;
-            case 0:
-                $db->addWhere('deleted', 0);
-                break;
-        }
 
         $db->loadClass('hms', 'HMS_Suite.php');
         $result = $db->getObjects('HMS_Suite');
@@ -207,23 +197,14 @@ class HMS_Floor extends HMS_Item
     /**
      * Pulls all the rooms associated with this floor and stores
      * them in the _room variable.
-     * @param int deleted -1 deleted only, 0 not deleted only, 1 all
      * @param int suites  -1 suites only, 0 no suites only, 1 all rooms
      */
-    function loadRooms($deleted = 0, $suites=1)
+    function loadRooms($suites=1)
     {
 
         $db = new PHPWS_DB('hms_room');
         $db->addWhere('floor_id', $this->id);
         $db->addOrder('room_number', 'ASC');
-        switch ($deleted) {
-            case -1:
-                $db->addWhere('deleted', 1);
-                break;
-            case 0:
-                $db->addWhere('deleted', 0);
-                break;
-        }
 
         switch ($suites) {
             case -1:
@@ -347,9 +328,6 @@ class HMS_Floor extends HMS_Item
         
         $db->addWhere('hms_room.gender_type', $gender_type);
         
-        $db->addWhere('hms_room.deleted', 0);
-        $db->addWhere('hms_floor.deleted', 0);
-
         $db->addWhere('hms_floor.id', $this->id);
 
         $result = $db->select('count');
@@ -375,9 +353,6 @@ class HMS_Floor extends HMS_Item
 
         $db->addJoin('LEFT OUTER', 'hms_room', 'hms_floor', 'floor_id', 'id');
 
-        $db->addWhere('hms_room.deleted', 0);
-        $db->addWhere('hms_floor.deleted', 0);
-
         $db->addWhere('hms_floor.id', $this->id);
 
         $result = $db->select('count');
@@ -397,9 +372,6 @@ class HMS_Floor extends HMS_Item
         $db = &new PHPWS_DB('hms_suite');
 
         $db->addJoin('LEFT OUTER', 'hms_suite', 'hms_floor', 'floor_id', 'id');
-
-        $db->addWhere('hms_suite.deleted', 0);
-        $db->addWhere('hms_floor.deleted', 0);
 
         $db->addWhere('hms_floor.id', $this->id);
         
@@ -422,10 +394,6 @@ class HMS_Floor extends HMS_Item
         $db->addJoin('LEFT OUTER', 'hms_bed',     'hms_room',           'room_id',           'id');
         $db->addJoin('LEFT OUTER', 'hms_room',    'hms_floor',          'floor_id',          'id');
         
-        $db->addWhere('hms_bed.deleted',            0);
-        $db->addWhere('hms_room.deleted',           0);
-        $db->addWhere('hms_floor.deleted',          0);
-        
         $db->addWhere('hms_floor.id', $this->id);
 
         $result = $db->select('count');
@@ -447,11 +415,6 @@ class HMS_Floor extends HMS_Item
         $db->addJoin('LEFT OUTER', 'hms_assignment','hms_bed',            'bed_id',             'id');
         $db->addJoin('LEFT OUTER', 'hms_bed',       'hms_room',           'room_id',            'id');
         $db->addJoin('LEFT OUTER', 'hms_room',      'hms_floor',          'floor_id',           'id');
-        
-        $db->addWhere('hms_assignment.deleted',     0);
-        $db->addWhere('hms_bed.deleted',            0);
-        $db->addWhere('hms_room.deleted',           0);
-        $db->addWhere('hms_floor.deleted',          0);
         
         $db->addWhere('hms_floor.id', $this->id);
 
@@ -622,7 +585,6 @@ class HMS_Floor extends HMS_Item
         $pager = & new DBPager('hms_floor', 'HMS_Floor');
         
         $pager->addWhere('hms_floor.residence_hall_id', $hall_id);
-        $pager->addWhere('hms_floor.deleted', 0);
 
         $page_tags['TABLE_TITLE']       = 'Floors in this hall';
         $page_tags['FLOOR_NUM_LABEL']   = 'Floor #';

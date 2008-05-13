@@ -196,8 +196,8 @@ class HMS_Assignment extends HMS_Item
     }
 
     /**
-     * Returns TRUE if the username exists in hms_assignment and is not deleted,
-     * FALSE if the username either is not in hms_assignment or is deleted.
+     * Returns TRUE if the username exists in hms_assignment,
+     * FALSE if the username either is not in hms_assignment.
      * 
      * Uses the current term if none is supplied
      */
@@ -205,7 +205,6 @@ class HMS_Assignment extends HMS_Item
     function check_for_assignment($asu_username, $term = NULL)
     {
         $db = new PHPWS_DB('hms_assignment');
-        $db->addWhere('deleted', 0);
         $db->addWhere('asu_username', $asu_username, 'ILIKE');
 
         if(isset($term)){
@@ -239,7 +238,6 @@ class HMS_Assignment extends HMS_Item
 
         $db = new PHPWS_DB('hms_assignment');
         $db->addColumn('id');
-        $db->addWhere('deleted', 0);
         $db->addWhere('asu_username', $asu_username, 'ILIKE');
 
         if(isset($term)){
@@ -701,9 +699,6 @@ class HMS_Assignment extends HMS_Item
         $pager->db->addJoin('LEFT OUTER', 'hms_bed', 'hms_room', 'room_id', 'id');
 
         $pager->addWhere('hms_room.id', $room_id);
-        $pager->addWhere('hms_assignment.deleted', 0);
-        $pager->addWhere('hms_bed.deleted', 0);
-        $pager->addWhere('hms_room.deleted', 0);
 
         $page_tags['NAME_LABEL']    = 'Name';
         $page_tags['ACTION_LABEL']  = 'Action';
@@ -743,9 +738,6 @@ class HMS_Assignment extends HMS_Item
         $pager->db->addJoin('LEFT OUTER', 'hms_bed', 'hms_room', 'room_id', 'id');
 
         $pager->addWhere('hms_room.suite_id', $suite_id);
-        $pager->addWhere('hms_assignment.deleted', 0);
-        $pager->addWhere('hms_bed.deleted', 0);
-        $pager->addWhere('hms_room.deleted', 0);
 
         $page_tags['NAME_LABEL']    = "Name";
         $page_tags['ACTION_LABEL']  = "Action";

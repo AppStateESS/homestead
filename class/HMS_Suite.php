@@ -87,24 +87,14 @@ class HMS_Suite extends HMS_Item {
     }
 
     /**
-     * Pulls all the rooms associated with this floor and stores
+     * Pulls all the rooms associated with this suite and stores
      * them in the _room variable.
-     * @param int deleted -1 deleted only, 0 not deleted only, 1 all
      */
-    function loadRooms($deleted = 0)
+    function loadRooms()
     {
         $db = new PHPWS_DB('hms_room');
         $db->addWhere('floor_id', $this->floor_id);
         $db->addWhere('suite_id', $this->id);
-
-        switch ($deleted) {
-            case -1:
-                $db->addWhere('deleted', 1);
-                break;
-            case 0:
-                $db->addWhere('deleted', 0);
-                break;
-        }
 
         $db->loadClass('hms', 'HMS_Room.php');
         $result = $db->getObjects('HMS_Room');
@@ -143,15 +133,8 @@ class HMS_Suite extends HMS_Item {
     {
         $db = &new PHPWS_DB('hms_assignment');
         $db->addJoin('LEFT OUTER', 'hms_assignment', 'hms_bed', 'bed_id', 'id'  );
-        $db->addJoin('LEFT OUTER', 'hms_bed', 'hms_bedroom', 'bedroom_id', 'id' );
-        $db->addJoin('LEFT OUTER', 'hms_bedroom', 'hms_room', 'room_id', 'id'   );
+        $db->addJoin('LEFT OUTER', 'hms_bed', 'hms_room', 'room_id', 'id' );
         $db->addJoin('LEFT OUTER', 'hms_room', 'hms_suite', 'suite_id', 'id');
-
-        $db->addWhere('hms_assignment.deleted', 0);
-        $db->addWhere('hms_bed.deleted',        0);
-        $db->addWhere('hms_bedroom.deleted',    0);
-        $db->addWhere('hms_room.deleted',       0);
-        $db->addWhere('hms_suite.deleted',      0);
 
         $db->addWhere('hms_suite.id', $this->id);
 
