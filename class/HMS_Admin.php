@@ -158,50 +158,50 @@ class HMS_Admin
             PHPWS_Core::initModClass('hms', 'HMS_Maintenance.php');
 
             switch( $tab ){
-                case "maintenance_main":
-                $content = $final;
-                break;
-
-                case "logs":
-                PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-                $content = HMS_Activity_log::main();
-                break;
-
-                case "structure":
-                $content = HMS_Maintenance::show_options(MENU_TYPE_STRUCTURE);
-                break;
-
-                case "rlc":
-                $content = HMS_Maintenance::show_options(MENU_TYPE_RLC);
-                break;
-
-                case "assignment":
-                $content = HMS_Maintenance::show_options(MENU_TYPE_ASSIGNMENT);
-                break;
-
-                case "statistics":
-                PHPWS_Core::initModClass('hms', 'HMS_Display.php');
-                $content = HMS_Display::get_system_statistics();
-                break;
-
+                case 'maintenance_main':
+                    $content = $final;
+                    break;
+                case 'logs':
+                    PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
+                    $content = HMS_Activity_log::main();
+                    break;
+                case 'structure':
+                    $content = HMS_Maintenance::show_options(MENU_TYPE_STRUCTURE);
+                    break;
+                case 'rlc':
+                    $content = HMS_Maintenance::show_options(MENU_TYPE_RLC);
+                    break;
+                case 'assignment':
+                    $content = HMS_Maintenance::show_options(MENU_TYPE_ASSIGNMENT);
+                    break;
+                case 'statistics':
+                    PHPWS_Core::initModClass('hms', 'HMS_Display.php');
+                    $content = HMS_Display::get_system_statistics();
+                    break;
+                case 'reports':
+                    PHPWS_Core::initModClass('hms', 'HMS_Reports.php');
+                    $content = HMS_Reports::display_reports();
+                    break;
                 default:
-                $content = $final;
-                break;
+                    $content = $final;
+                    break;
             }
         }
 
-        $tabs['maintenance_main'] = array("title" => "Main Menu", "link" => $link,
-                                          "link_title" => "View Maintenance Options");
-        $tabs['structure']        = array("title" => "Hall Structure", "link" => $link,
-                                          "link_title" => "Structure Options");
-        $tabs['rlc']              = array("title" => "RLC Maintenance", "link" => $link,
-                                          "link_title" => "View RLC Maintenance Options");
-        $tabs['assignment']       = array("title" => "Assignment", "link" => $link,
-                                          "link_title" => "Assignment Options");
-        $tabs['statistics']       = array("title" => "Statistics", "link" => $link,
-                                          "link_title" => "View Statistics");
-        $tabs['logs']             = array("title" => "Activity Logs", "link" => $link,
-                                          "link_title" => "Activity Logs");
+        $tabs['maintenance_main']   = array("title" => "Main Menu", "link" => $link,
+                                        "link_title" => "View Maintenance Options");
+        $tabs['structure']          = array("title" => "Hall Structure", "link" => $link,
+                                        "link_title" => "Structure Options");
+        $tabs['rlc']                = array("title" => "RLC Maintenance", "link" => $link,
+                                        "link_title" => "View RLC Maintenance Options");
+        $tabs['assignment']         = array("title" => "Assignment", "link" => $link,
+                                        "link_title" => "Assignment Options");
+        $tabs['statistics']         = array("title" => "Statistics", "link" => $link,
+                                        "link_title" => "View Statistics");
+        $tabs['logs']               = array("title" => "Activity Logs", "link" => $link,
+                                        "link_title" => "Activity Logs");
+        $tabs['reports']            = array('title' => 'Reports', 'link' => $link,
+                                        'link_title'=>'Reports');
         
         //Allow a user to set their default tab
         if( $tab != PHPWS_Cookie::read('default_tab') && !isset($_REQUEST['make_default_tab']) ){
@@ -225,8 +225,8 @@ class HMS_Admin
         Layout::add($panel->display($content));
         Layout::addStyle('controlpanel');
 
-        if(Current_user::allow('hms', 'stats'))
-            $links[] = PHPWS_Text::secureLink(_('HMS Statistics'), 'hms', array('type'=>'display', 'op'=>'display_system_statistics'));
+        if(Current_User::allow('hms', 'reports')) 
+            $links[] = PHPWS_Text::secureLink(_('HMS Reports'), 'hms', array('type'=>'reports', 'op'=>'display_reports')); 
 
         if(Current_User::allow('hms', 'search'))
             $links[] = PHPWS_Text::secureLink(_('Search Students'), 'hms', array('type'=>'student', 'op'=>'enter_student_search_data'));
