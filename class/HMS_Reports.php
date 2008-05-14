@@ -164,6 +164,12 @@ class HMS_Reports{
         return $final;
     }
 
+    /**
+     * Assignment demographics report
+     * 
+     * A report which breaks down current assignments by student type, class, gender, and the hall to which they're assigned.
+     * Also gives a totals by student type, class, and gender for all halls.
+     */
     function run_assignment_demographics_report()
 	{
 	    PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
@@ -178,6 +184,7 @@ class HMS_Reports{
         $db->addColumn('id');
         $db->addColumn('hall_name');
         $db->addWhere('term', HMS_Term::get_selected_term());
+        $db->addWhere('is_online', 1); // only get halls that are online
         $db->addOrder('hall_name', 'asc');
         $result = $db->select();
 
@@ -213,7 +220,7 @@ class HMS_Reports{
             }
 
             # Initalize this hall's summary
-            foreach(array(TYPE_FRESHMEN, TYPE_TRANSFER, TYPE_CONTINUING) as $init_type){
+            foreach(array(TYPE_FRESHMEN, TYPE_TRANSFER, TYPE_CONTINUING, TYPE_READMIT) as $init_type){
                 foreach(array(CLASS_FRESHMEN, CLASS_SOPHOMORE, CLASS_JUNIOR, CLASS_SENIOR) as $init_class){
                     foreach(array(MALE, FEMALE) as $init_gender){
                         $building[$hall_row['hall_name']][$init_type][$init_class][$init_gender] = 0;
@@ -246,16 +253,16 @@ class HMS_Reports{
 
                 # Check the type for bad data
                 if(!isset($type) || $type === NULL ||
-                   ($type != TYPE_FRESHMEN && $type != TYPE_TRANSFER && $type != TYPE_CONTINUING)) {
+                   ($type != TYPE_FRESHMEN && $type != TYPE_TRANSFER && $type != TYPE_CONTINUING && $type != TYPE_READMIT)) {
                     $problems[] = $assignment['asu_username'] . ': Type is unrecognized ('. $type .')';
                 }
 
+                $credit_hours = HMS_SOAP::get_credit_hours($assignment['asu_username']);
+                
                 # Check for a freshmen type, but a mis-matched class
                 if(($type == TYPE_FRESHMEN && $class != CLASS_FRESHMEN)){
-                    $problems[] = $assignment['asu_username'] . ': Type is ' . $type.' but Class is ' . $class;
+                    $problems[] = $assignment['asu_username'] . ": Type is $type, class is $class, credit hours is $credit_hours";
                 }
-
-                $credit_hours = HMS_SOAP::get_credit_hours($assignment['asu_username']);
 
                 # Check for a mis-matched type/class/hours situation
                 if( $type == TYPE_CONTINUING && $class == CLASS_FRESHMEN && $credit_hours == 0){
@@ -271,24 +278,13 @@ class HMS_Reports{
         }
 
         # Initalize a 3 dimensional table for summing up the totals
-        $total['F']['FR']['M']  = 0;
-        $total['C']['FR']['M']  = 0;
-        $total['C']['SO']['M']  = 0;
-        $total['C']['JR']['M']  = 0;
-        $total['C']['SR']['M']  = 0;
-        $total['T']['FR']['M']  = 0;
-        $total['T']['SO']['M']  = 0;
-        $total['T']['JR']['M']  = 0;
-        $total['T']['SR']['M']  = 0;
-        $total['F']['FR']['F']  = 0;
-        $total['C']['FR']['F']  = 0;
-        $total['C']['SO']['F']  = 0;
-        $total['C']['JR']['F']  = 0;
-        $total['C']['SR']['F']  = 0;
-        $total['T']['FR']['F']  = 0;
-        $total['T']['SO']['F']  = 0;
-        $total['T']['JR']['F']  = 0;
-        $total['T']['SR']['F']  = 0;
+        foreach(array(TYPE_FRESHMEN, TYPE_TRANSFER, TYPE_CONTINUING, TYPE_READMIT) as $init_type){
+            foreach(array(CLASS_FRESHMEN, CLASS_SOPHOMORE, CLASS_JUNIOR, CLASS_SENIOR) as $init_class){
+                foreach(array(MALE, FEMALE) as $init_gender){
+                    $total[$init_type][$init_class][$init_gender] = 0;
+                }
+            }
+        }
 
         $content = '';
 
@@ -314,16 +310,21 @@ class HMS_Reports{
             $content .= '<tr><th colspan="11"><h2 style="text-align: center">' . $name . '</h2></th></tr>';
             $content .= '<tr>';
             $content .= '<td rowspan="2"></td>';
-            $content .= '<th colspan="1">Freshmen (F)</th>';
+            $content .= '<th colspan="4">Freshmen (F)</th>';
             $content .= '<th colspan="4">Continuing (C)</th>';
             $content .= '<th colspan="4">Transfer (T)</th>';
+            $content .= '<th colspan="4">Readmit (Z)</th>';
             $content .= '</tr><tr>';
-            $content .= '<th>FR</th>';
+            $content .= '<th>FR</th><th>SO</th><th>JR</th><th>SR</th>';
+            $content .= '<th>FR</th><th>SO</th><th>JR</th><th>SR</th>';
             $content .= '<th>FR</th><th>SO</th><th>JR</th><th>SR</th>';
             $content .= '<th>FR</th><th>SO</th><th>JR</th><th>SR</th>';
             $content .= '</tr><tr>';
             $content .= '<th>Male</th>';
             $content .= '<td>' . $building[$name]['F']['FR'][MALE]   . '</td>';
+            $content .= '<td>' . $building[$name]['F']['SO'][MALE]   . '</td>';
+            $content .= '<td>' . $building[$name]['F']['JR'][MALE]   . '</td>';
+            $content .= '<td>' . $building[$name]['F']['SR'][MALE]   . '</td>';
             $content .= '<td>' . $building[$name]['C']['FR'][MALE]   . '</td>';
             $content .= '<td>' . $building[$name]['C']['SO'][MALE]   . '</td>';
             $content .= '<td>' . $building[$name]['C']['JR'][MALE]   . '</td>';
@@ -332,9 +333,16 @@ class HMS_Reports{
             $content .= '<td>' . $building[$name]['T']['SO'][MALE]   . '</td>';
             $content .= '<td>' . $building[$name]['T']['JR'][MALE]   . '</td>';
             $content .= '<td>' . $building[$name]['T']['SR'][MALE]   . '</td>';
+            $content .= '<td>' . $building[$name]['Z']['FR'][MALE]   . '</td>';
+            $content .= '<td>' . $building[$name]['Z']['SO'][MALE]   . '</td>';
+            $content .= '<td>' . $building[$name]['Z']['JR'][MALE]   . '</td>';
+            $content .= '<td>' . $building[$name]['Z']['SR'][MALE]   . '</td>';
             $content .= '</tr><tr>';
             $content .= '<th>Female</th>';
             $content .= '<td>' . $building[$name]['F']['FR'][FEMALE]   . '</td>';
+            $content .= '<td>' . $building[$name]['F']['SO'][FEMALE]   . '</td>';
+            $content .= '<td>' . $building[$name]['F']['JR'][FEMALE]   . '</td>';
+            $content .= '<td>' . $building[$name]['F']['SR'][FEMALE]   . '</td>';
             $content .= '<td>' . $building[$name]['C']['FR'][FEMALE]   . '</td>';
             $content .= '<td>' . $building[$name]['C']['SO'][FEMALE]   . '</td>';
             $content .= '<td>' . $building[$name]['C']['JR'][FEMALE]   . '</td>';
@@ -343,9 +351,16 @@ class HMS_Reports{
             $content .= '<td>' . $building[$name]['T']['SO'][FEMALE]   . '</td>';
             $content .= '<td>' . $building[$name]['T']['JR'][FEMALE]   . '</td>';
             $content .= '<td>' . $building[$name]['T']['SR'][FEMALE]   . '</td>';
+            $content .= '<td>' . $building[$name]['z']['FR'][FEMALE]   . '</td>';
+            $content .= '<td>' . $building[$name]['z']['SO'][FEMALE]   . '</td>';
+            $content .= '<td>' . $building[$name]['z']['JR'][FEMALE]   . '</td>';
+            $content .= '<td>' . $building[$name]['z']['SR'][FEMALE]   . '</td>';
             $content .= '</tr></table><br /><br />';
 
             $total['F']['FR']['M']  += $building[$name]['F']['FR'][MALE];
+            $total['F']['FR']['M']  += $building[$name]['F']['SO'][MALE];
+            $total['F']['FR']['M']  += $building[$name]['F']['JR'][MALE];
+            $total['F']['FR']['M']  += $building[$name]['F']['SR'][MALE];
             $total['C']['FR']['M']  += $building[$name]['C']['FR'][MALE];
             $total['C']['SO']['M']  += $building[$name]['C']['SO'][MALE];
             $total['C']['JR']['M']  += $building[$name]['C']['JR'][MALE];
@@ -354,7 +369,15 @@ class HMS_Reports{
             $total['T']['SO']['M']  += $building[$name]['T']['SO'][MALE];
             $total['T']['JR']['M']  += $building[$name]['T']['JR'][MALE];
             $total['T']['SR']['M']  += $building[$name]['T']['SR'][MALE];
+            $total['F']['FR']['M']  += $building[$name]['Z']['FR'][MALE];
+            $total['F']['FR']['M']  += $building[$name]['Z']['SO'][MALE];
+            $total['F']['FR']['M']  += $building[$name]['Z']['JR'][MALE];
+            $total['F']['FR']['M']  += $building[$name]['Z']['SR'][MALE];
+            
             $total['F']['FR']['F']  += $building[$name]['F']['FR'][FEMALE];
+            $total['F']['FR']['F']  += $building[$name]['F']['SO'][FEMALE];
+            $total['F']['FR']['F']  += $building[$name]['F']['JR'][FEMALE];
+            $total['F']['FR']['F']  += $building[$name]['F']['SR'][FEMALE];
             $total['C']['FR']['F']  += $building[$name]['C']['FR'][FEMALE];
             $total['C']['SO']['F']  += $building[$name]['C']['SO'][FEMALE];
             $total['C']['JR']['F']  += $building[$name]['C']['JR'][FEMALE];
@@ -363,6 +386,10 @@ class HMS_Reports{
             $total['T']['SO']['F']  += $building[$name]['T']['SO'][FEMALE];
             $total['T']['JR']['F']  += $building[$name]['T']['JR'][FEMALE];
             $total['T']['SR']['F']  += $building[$name]['T']['SR'][FEMALE];
+            $total['F']['FR']['F']  += $building[$name]['Z']['FR'][FEMALE];
+            $total['F']['FR']['F']  += $building[$name]['Z']['SO'][FEMALE];
+            $total['F']['FR']['F']  += $building[$name]['Z']['JR'][FEMALE];
+            $total['F']['FR']['F']  += $building[$name]['Z']['SR'][FEMALE];
             
             next($building);
         }
@@ -372,16 +399,21 @@ class HMS_Reports{
         $content .= '<tr><th colspan="11" style="text-align: center"><h2>TOTALS</h2></th></tr>';
         $content .= '<tr>';
         $content .= '<td rowspan="2"></td>';
-        $content .= '<th colspan="1">Freshmen (F)</th>';
+        $content .= '<th colspan="4">Freshmen (F)</th>';
         $content .= '<th colspan="4">Continuing (C)</th>';
         $content .= '<th colspan="4">Transfer (T)</th>';
+        $content .= '<th colspan="4">Readmit (Z)</th>';
         $content .= '</tr><tr>';
-        $content .= '<th>FR</th>';
+        $content .= '<th>FR</th><th>SO</th><th>JR</th><th>SR</th>';
+        $content .= '<th>FR</th><th>SO</th><th>JR</th><th>SR</th>';
         $content .= '<th>FR</th><th>SO</th><th>JR</th><th>SR</th>';
         $content .= '<th>FR</th><th>SO</th><th>JR</th><th>SR</th>';
         $content .= '</tr><tr>';
         $content .= '<th>Male</th>';
         $content .= '<td>' . $total['F']['FR']['M']   . '</td>';
+        $content .= '<td>' . $total['F']['SO']['M']   . '</td>';
+        $content .= '<td>' . $total['F']['JR']['M']   . '</td>';
+        $content .= '<td>' . $total['F']['SR']['M']   . '</td>';
         $content .= '<td>' . $total['C']['FR']['M']   . '</td>';
         $content .= '<td>' . $total['C']['SO']['M']   . '</td>';
         $content .= '<td>' . $total['C']['JR']['M']   . '</td>';
@@ -390,9 +422,16 @@ class HMS_Reports{
         $content .= '<td>' . $total['T']['SO']['M']   . '</td>';
         $content .= '<td>' . $total['T']['JR']['M']   . '</td>';
         $content .= '<td>' . $total['T']['SR']['M']   . '</td>';
+        $content .= '<td>' . $total['Z']['FR']['M']   . '</td>';
+        $content .= '<td>' . $total['Z']['SO']['M']   . '</td>';
+        $content .= '<td>' . $total['Z']['JR']['M']   . '</td>';
+        $content .= '<td>' . $total['Z']['SR']['M']   . '</td>';
         $content .= '</tr><tr>';
         $content .= '<th>Female</th>';
         $content .= '<td>' . $total['F']['FR']['F']   . '</td>';
+        $content .= '<td>' . $total['F']['SO']['F']   . '</td>';
+        $content .= '<td>' . $total['F']['JR']['F']   . '</td>';
+        $content .= '<td>' . $total['F']['SR']['F']   . '</td>';
         $content .= '<td>' . $total['C']['FR']['F']   . '</td>';
         $content .= '<td>' . $total['C']['SO']['F']   . '</td>';
         $content .= '<td>' . $total['C']['JR']['F']   . '</td>';
@@ -401,6 +440,10 @@ class HMS_Reports{
         $content .= '<td>' . $total['T']['SO']['F']   . '</td>';
         $content .= '<td>' . $total['T']['JR']['F']   . '</td>';
         $content .= '<td>' . $total['T']['SR']['F']   . '</td>';
+        $content .= '<td>' . $total['Z']['FR']['F']   . '</td>';
+        $content .= '<td>' . $total['Z']['SO']['F']   . '</td>';
+        $content .= '<td>' . $total['Z']['JR']['F']   . '</td>';
+        $content .= '<td>' . $total['Z']['SR']['F']   . '</td>';
         $content .= '</tr></table><br /><br />';
         $content .=  "<br /> ";
 
