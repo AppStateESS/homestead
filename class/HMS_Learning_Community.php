@@ -355,6 +355,9 @@ class HMS_Learning_Community
             case 'assign_applicants_to_rlcs':
                 return HMS_Learning_Community::assign_applicants_to_rlcs();
                 break;
+            case 'show_view_denied':
+                return HMS_Learning_Community::show_view_denied();
+                break;
             case 'view_rlc_assignments':
                 return HMS_Learning_Community::view_rlc_assignments();
                 break;
@@ -384,8 +387,12 @@ class HMS_Learning_Community
                 PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
                 return HMS_RLC_Application::deny_rlc_application();
                 break;
+            case 'un_deny_rlc_application':
+                PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
+                return HMS_RLC_Application::un_deny_rlc_application();
+                break;
             default:
-                return "{$_REQUEST['op']} <br />";
+                return "unknown RLC op: {$_REQUEST['op']} <br />";
                 break;
         }
     }
@@ -751,6 +758,30 @@ class HMS_Learning_Community
         header('Content-disposition: attachment; filename="'.$filename.'"');
         echo $buffer;
         die();
+    }
+
+    /**
+     * Shows an interface listing the denied RLC applications
+     */
+    function show_view_denied($success_msg = NULL, $error_msg = NULL)
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+        PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
+
+        $tpl = array();
+
+        $tpl['TITLE'] = "Denied RLC Applications - " . HMS_Term::term_to_text(HMS_Term::get_selected_term(), TRUE);
+        $tpl['DENIED_PAGER'] = HMS_RLC_Application::denied_pager();
+
+        if(isset($success_msg)){
+            $tpl['SUCCESS_MSG'] = $success_msg;
+        }
+
+        if(isset($error_msg)){
+            $tpl['ERROR_MSG'] = $error_msg;
+        }
+
+        return PHPWS_Template::process($tpl, 'hms', 'admin/view_denied_rlc_applications.tpl');
     }
 }
 ?>

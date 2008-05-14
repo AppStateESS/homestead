@@ -60,6 +60,7 @@
            <!-- BEGIN rlc_apps -->
             <h2><i>Learning Community Applications</i></h2>
             &nbsp;&nbsp;&nbsp;{ASSIGN_TO_RLCS}<br />
+            &nbsp;&nbsp;&nbsp;{VIEW_DENIED_RLC_APPS}<br />
             &nbsp;&nbsp;&nbsp;{RLC_ROOM_ASSIGNMENTS}<br />
             &nbsp;&nbsp;&nbsp;{VIEW_RLC_ASSIGNMENTS}<br />
             &nbsp;&nbsp;&nbsp;{SEARCH_BY_RLC}<br />
