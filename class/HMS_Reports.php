@@ -307,7 +307,7 @@ class HMS_Reports{
             ksort($hall);
             $name = key($building);
             $content .= '<table border="1">';
-            $content .= '<tr><th colspan="11"><h2 style="text-align: center">' . $name . '</h2></th></tr>';
+            $content .= '<tr><th colspan="17"><h2 style="text-align: center">' . $name . '</h2></th></tr>';
             $content .= '<tr>';
             $content .= '<td rowspan="2"></td>';
             $content .= '<th colspan="4">Freshmen (F)</th>';
@@ -351,16 +351,16 @@ class HMS_Reports{
             $content .= '<td>' . $building[$name]['T']['SO'][FEMALE]   . '</td>';
             $content .= '<td>' . $building[$name]['T']['JR'][FEMALE]   . '</td>';
             $content .= '<td>' . $building[$name]['T']['SR'][FEMALE]   . '</td>';
-            $content .= '<td>' . $building[$name]['z']['FR'][FEMALE]   . '</td>';
-            $content .= '<td>' . $building[$name]['z']['SO'][FEMALE]   . '</td>';
-            $content .= '<td>' . $building[$name]['z']['JR'][FEMALE]   . '</td>';
-            $content .= '<td>' . $building[$name]['z']['SR'][FEMALE]   . '</td>';
+            $content .= '<td>' . $building[$name]['Z']['FR'][FEMALE]   . '</td>';
+            $content .= '<td>' . $building[$name]['Z']['SO'][FEMALE]   . '</td>';
+            $content .= '<td>' . $building[$name]['Z']['JR'][FEMALE]   . '</td>';
+            $content .= '<td>' . $building[$name]['Z']['SR'][FEMALE]   . '</td>';
             $content .= '</tr></table><br /><br />';
 
             $total['F']['FR']['M']  += $building[$name]['F']['FR'][MALE];
-            $total['F']['FR']['M']  += $building[$name]['F']['SO'][MALE];
-            $total['F']['FR']['M']  += $building[$name]['F']['JR'][MALE];
-            $total['F']['FR']['M']  += $building[$name]['F']['SR'][MALE];
+            $total['F']['SO']['M']  += $building[$name]['F']['SO'][MALE];
+            $total['F']['JR']['M']  += $building[$name]['F']['JR'][MALE];
+            $total['F']['SR']['M']  += $building[$name]['F']['SR'][MALE];
             $total['C']['FR']['M']  += $building[$name]['C']['FR'][MALE];
             $total['C']['SO']['M']  += $building[$name]['C']['SO'][MALE];
             $total['C']['JR']['M']  += $building[$name]['C']['JR'][MALE];
@@ -369,15 +369,15 @@ class HMS_Reports{
             $total['T']['SO']['M']  += $building[$name]['T']['SO'][MALE];
             $total['T']['JR']['M']  += $building[$name]['T']['JR'][MALE];
             $total['T']['SR']['M']  += $building[$name]['T']['SR'][MALE];
-            $total['F']['FR']['M']  += $building[$name]['Z']['FR'][MALE];
-            $total['F']['FR']['M']  += $building[$name]['Z']['SO'][MALE];
-            $total['F']['FR']['M']  += $building[$name]['Z']['JR'][MALE];
-            $total['F']['FR']['M']  += $building[$name]['Z']['SR'][MALE];
+            $total['Z']['FR']['M']  += $building[$name]['Z']['FR'][MALE];
+            $total['Z']['SO']['M']  += $building[$name]['Z']['SO'][MALE];
+            $total['Z']['JR']['M']  += $building[$name]['Z']['JR'][MALE];
+            $total['Z']['SR']['M']  += $building[$name]['Z']['SR'][MALE];
             
             $total['F']['FR']['F']  += $building[$name]['F']['FR'][FEMALE];
-            $total['F']['FR']['F']  += $building[$name]['F']['SO'][FEMALE];
-            $total['F']['FR']['F']  += $building[$name]['F']['JR'][FEMALE];
-            $total['F']['FR']['F']  += $building[$name]['F']['SR'][FEMALE];
+            $total['F']['SO']['F']  += $building[$name]['F']['SO'][FEMALE];
+            $total['F']['JR']['F']  += $building[$name]['F']['JR'][FEMALE];
+            $total['F']['SR']['F']  += $building[$name]['F']['SR'][FEMALE];
             $total['C']['FR']['F']  += $building[$name]['C']['FR'][FEMALE];
             $total['C']['SO']['F']  += $building[$name]['C']['SO'][FEMALE];
             $total['C']['JR']['F']  += $building[$name]['C']['JR'][FEMALE];
@@ -386,17 +386,17 @@ class HMS_Reports{
             $total['T']['SO']['F']  += $building[$name]['T']['SO'][FEMALE];
             $total['T']['JR']['F']  += $building[$name]['T']['JR'][FEMALE];
             $total['T']['SR']['F']  += $building[$name]['T']['SR'][FEMALE];
-            $total['F']['FR']['F']  += $building[$name]['Z']['FR'][FEMALE];
-            $total['F']['FR']['F']  += $building[$name]['Z']['SO'][FEMALE];
-            $total['F']['FR']['F']  += $building[$name]['Z']['JR'][FEMALE];
-            $total['F']['FR']['F']  += $building[$name]['Z']['SR'][FEMALE];
+            $total['Z']['FR']['F']  += $building[$name]['Z']['FR'][FEMALE];
+            $total['Z']['SO']['F']  += $building[$name]['Z']['SO'][FEMALE];
+            $total['Z']['JR']['F']  += $building[$name]['Z']['JR'][FEMALE];
+            $total['Z']['SR']['F']  += $building[$name]['Z']['SR'][FEMALE];
             
             next($building);
         }
         $content .= '======================================================';
 
         $content .= '<table border="1">';
-        $content .= '<tr><th colspan="11" style="text-align: center"><h2>TOTALS</h2></th></tr>';
+        $content .= '<tr><th colspan="17" style="text-align: center"><h2>TOTALS</h2></th></tr>';
         $content .= '<tr>';
         $content .= '<td rowspan="2"></td>';
         $content .= '<th colspan="4">Freshmen (F)</th>';
