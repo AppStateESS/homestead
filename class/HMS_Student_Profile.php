@@ -792,6 +792,7 @@ class HMS_Student_Profile{
         $free_time[0]        = $no_pref;
 
         $tags = array();
+        $tags['MENU_LINK'] = PHPWS_Text::secureLink('Back to Main Menu', 'hms', array('module'=>'hms', 'op'=>'show_main_menu'));
 
         $form = &new PHPWS_Form();
         $form->setAction('index.php?module=hms&type=student&op=profile_search');
