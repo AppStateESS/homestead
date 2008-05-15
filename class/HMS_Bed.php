@@ -290,7 +290,10 @@ class HMS_Bed extends HMS_Item {
                 break;
         }
     }
-     
+    
+    /**
+     * This function is depricated, see get_all_free_beds() below
+     * 
     function get_all_empty_beds($init = FALSE)
     {
         $sql = "
@@ -336,7 +339,96 @@ class HMS_Bed extends HMS_Item {
 
         return $beds;
     }
+    */
+
+    /**
+     * Returns an array of IDs of free beds (which can be auto_assigned)
+     * Returns FALSE if there are no more free beds
+     */
+    function get_all_free_beds($term, $gender)
+    {
+        $db = &new PHPWS_DB('hms_bed');
+
+        $db->addColumn('id');
+
+        // Only get free beds
+        $db->addJoin('LEFT OUTER', 'hms_bed', 'hms_assignment', 'id', 'bed_id');
+        $db->addWhere('hms_assignment.asu_username', NULL);
+
+        // Join other tables so we can do the other 'assignable' checks
+        $db->addJoin('LEFT OUTER', 'hms_bed', 'hms_room', 'room_id', 'id');
+        $db->addJoin('LEFT OUTER', 'hms_room', 'hms_floor', 'floor_id', 'id');
+        $db->addJoin('LEFT OUTER', 'hms_floor', 'hms_residence_hall', 'residence_hall_id', 'id');
+
+        // Term
+        $db->addWhere('hms_bed.term', $term);
+
+        // Gender
+        $db->addWhere('hms_room.gender_type', $gender);
+
+        // Make sure everything is online
+        $db->addWhere('hms_room.is_online', 1);
+        $db->addWhere('hms_floor.is_online', 1);
+        $db->addWhere('hms_residence_hall.is_online', 1);
+
+        // Make sure nothing is reserved
+        $db->addWhere('hms_room.is_reserved', 0);
+        $db->addWhere('hms_room.is_medical', 0);
+
+        // Don't get RA beds
+        $db->addWhere('hms_room.ra_room', 0);
+
+        // Don't get lobbies
+        $db->addWhere('hms_room.is_lobby', 0);
+
+        // Don't get private rooms
+        $db->addWhere('hms_room.private_room', 0);
+
+        // Don't get rooms on floors reserved for an RLC
+        $db->addWhere('hms_floor.rlc_id', NULL);
+
+        $result = $db->select('col');
+
+        // In case of an error, log it and return it
+        if(PHPWS_Error::logIfError($result)){
+            return $result;
+        }
+
+        // Return FALSE if there were no results
+        if(sizeof($result) <= 0){
+            return FALSE;
+        }
+
+        return $result;
+    }
     
+     /**
+     * Returns the ID of a free bed (which can be auto-assigned)
+     * Returns FALSE if there are no more free beds
+     */
+    function get_free_bed($term, $gender, $randomize = FALSE)
+    {
+        // Get the list of all free beds
+        $beds = HMS_Bed::get_all_free_beds($term, $gender);
+        
+        // Check for db errors
+        if(PEAR::isError($beds)){
+            return $beds;
+        }
+        
+        // Check for no results (i.e. no empty beds), return false
+        if($beds == FALSE){
+            return FALSE;
+        }
+
+        if($randomize){
+            // Get a random index between 0 and the max array index (size - 1)
+            $random_index = mt_rand(0, sizeof($beds)-1);
+            return $beds[$random_index];
+        }else{
+            return $beds[0];
+        }
+    }   
 
     function edit_bed()
     {
