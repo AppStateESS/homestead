@@ -70,22 +70,6 @@ class HMS_Autoassigner
         return '<h2>Problems:' . count($problems) . "</h2>\n" . implode("<br />\n", $problems) . '<br /><br />' .
                '<h2>Successes: ' . count($successes) . "</h2>\n" . implode("<br />\n", $successes);
     }
-
-    /**
-     * Returns the ID of an empty room (which can be auto-assigned)
-     * Returns FALSE if there are no more free rooms
-     */
-    function get_free_room($term, $gender, $randomize = FALSE)
-    {
-        $db = &new PHPWS_DB('hms_room');
-
-        // Only get free rooms
-        $db->addJoin('LEFT OUTER', 'hms_room', 'hms_bed', 'id', 'room_id');
-        $db->addJOIN('LEFT OUTER', 'hms_bed', 'hms_assignment', 'id', 'bed_id');
-
-    }
-
-
 }
 
 ?>

@@ -550,6 +550,22 @@ class HMS_Room extends HMS_Item
 
         return $pager->get();
     }
+
+    /**
+     * Returns the ID of an empty room (which can be auto-assigned)
+     * Returns FALSE if there are no more free rooms
+     */
+# TODO: finish this, see Trac #156
+    function get_free_room($term, $gender, $randomize = FALSE)
+    {
+        $db = &new PHPWS_DB('hms_room');
+
+        // Only get free rooms
+        $db->addJoin('LEFT OUTER', 'hms_room', 'hms_bed', 'id', 'room_id');
+        $db->addJOIN('LEFT OUTER', 'hms_bed', 'hms_assignment', 'id', 'bed_id');
+
+    }
+
     
     /*********************
      * Static UI Methods *
