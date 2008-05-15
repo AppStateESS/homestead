@@ -313,9 +313,6 @@ class HMS_Application {
             return "No application exists for the specified term.";
         }
 
-        test($application->student_status);
-        test(TYPE_FRESHMEN);
-
         if($application->student_status == 1) $tpl['STUDENT_STATUS_LBL'] = "New Freshman";
         else if ($application->student_status == 2) $tpl['STUDENT_STATUS_LBL'] = "Transfer";
         else $tpl['STUDENT_STATUS_LBL'] = 'Unknown';

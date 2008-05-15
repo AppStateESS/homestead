@@ -330,6 +330,7 @@ class HMS_Student {
          * RLC Status *
          **************/
         PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Application.php');
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
 
