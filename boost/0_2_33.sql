@@ -7,6 +7,7 @@ UPDATE hms_assignment SET deleted = 1 WHERE hms_bed.deleted = 1 AND hms_bed.id =
 DELETE FROM hms_assignment WHERE deleted = 1;
 DELETE from hms_bed where deleted = 1;
 DELETE from hms_room where deleted = 1;
+DELETE FROM hms_suite WHERE deleted = 1;
 DELETE from hms_floor where deleted = 1;
 DELETE from hms_residence_hall where deleted = 1;
 
