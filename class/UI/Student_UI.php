@@ -1,7 +1,7 @@
 <?php
 
 /**
- * HMS_Student_Interface.php
+ * Student_UI.php
  * A class for consolidating the the methods for student UI/Interface handling.
  */
 class HMS_Student_UI{
@@ -159,7 +159,7 @@ class HMS_Student_UI{
             # Check to see if the user has an application on file already
             # If so, forward to main menu
             if(HMS_Application::check_for_application($_SESSION['asu_username'], $application_term)){
-                return HMS_Student_Interface::show_main_menu();
+                return HMS_Student_UI::show_main_menu();
             }
             
             # Get deadlines for the user's application_term for future use
@@ -280,9 +280,9 @@ class HMS_Student_UI{
         $deadlines = HMS_Deadlines::get_deadlines($_SESSION['application_term']);
         
         if($entry_term == TERM_SPRING){
-            return HMS_Student_Interface::show_spring_main_menu($deadlines);
+            return HMS_Student_UI::show_spring_main_menu($deadlines);
         }else if($entry_term == TERM_FALL){
-            return HMS_Student_Interface::show_fall_main_menu($deadlines);
+            return HMS_Student_UI::show_fall_main_menu($deadlines);
         }
     }
 
