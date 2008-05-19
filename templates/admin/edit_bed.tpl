@@ -28,7 +28,7 @@
                 <th>Bed Letter: </th><td>{BED_LETTER}</td>
             </tr>
             <tr>
-                <th>Phone Number: </th><td>828-262-{PHONE_NUMBER}</td>
+                <th>Phone Number: </th><td>828-266-{PHONE_NUMBER}</td>
             </tr>
             <tr>
                 <th>Banner ID:</th><td>{BANNER_ID}</td>
