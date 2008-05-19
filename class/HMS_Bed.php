@@ -632,6 +632,8 @@ class HMS_Bed extends HMS_Item {
         $pager->db->addJoin('LEFT OUTER', 'hms_bed', 'hms_room', 'room_id', 'id');
         
         $pager->addWhere('hms_room.id', $room_id);
+        $pager->db->addOrder('hms_bed.bedroom_label');
+        $pager->db->addOrder('hms_bed.bed_letter');
 
         $page_tags['TABLE_TITLE']       = 'Beds in this room:';
         $page_tags['BEDROOM_LABEL']     = 'Bedroom';

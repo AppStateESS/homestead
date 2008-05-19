@@ -585,6 +585,7 @@ class HMS_Floor extends HMS_Item
         $pager = & new DBPager('hms_floor', 'HMS_Floor');
         
         $pager->addWhere('hms_floor.residence_hall_id', $hall_id);
+        $pager->db->addOrder('hms_floor.floor_number');
 
         $page_tags['TABLE_TITLE']       = 'Floors in this hall';
         $page_tags['FLOOR_NUM_LABEL']   = 'Floor #';
