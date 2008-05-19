@@ -63,6 +63,10 @@ class HMS_SOAP{
         if($username == 'byrdsm') {
             $student->projected_class = 'FR';
         }
+        if($username == 'poundspa') {
+            $student->student_type = 'F';
+            $student->application_term = '200840';
+        }
 
         HMS_SOAP::log_soap('get_student_info: ' . $username . ' result: success');
         
