@@ -63,6 +63,9 @@
             </tr>
             <!-- END ps_address -->
             <tr>
+                <td>Application Status:</td><td>{APPLICATION}</td>
+            </tr>
+            <tr>
                 <td>Roommate Status:</td><td>{ROOMMATE}</td>
             </tr>
             <tr>
