@@ -257,7 +257,6 @@ class HMS_Application {
             $db->addWhere('hms_student_id',$this->getStudentID(),'ILIKE');
         }
         
-        #$db->addWhere('term', 200810);
         if(isset($term)){
             $db->addWhere('term', $term);
         } else {
@@ -269,7 +268,7 @@ class HMS_Application {
         
         if(PEAR::isError($result)){
             PHPWS_Error::log($result,'hms','check_for_application',"asu_username:{$_SESSION['asu_username']}");
-            return $result;
+            return FALSE;
         }
         
         if(sizeof($result) > 1){

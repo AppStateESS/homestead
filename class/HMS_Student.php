@@ -454,6 +454,16 @@ class HMS_Student {
         }else{
             $tpl['RLC_STATUS'] = "This student is not in a Learning Community and has no pending approval.";
         }
+
+        /****************************
+         * Quick Application Status *
+         ****************************/
+        if(HMS_Application::check_for_application($_REQUEST['username'], HMS_Term::get_selected_term())) {
+            $tpl['APPLICATION'] = 'This student has filled out an application.  <a href="index.php?module=hms&type=student&op=get_matching_students&username='.$_REQUEST['username'].'&tab=housing_app>View Application</a>';
+        } else {
+            $tpl['APPLICATION'] = 'This student has not filled out an application.';
+        }
+
         
         /********************
          * Login as Student *
