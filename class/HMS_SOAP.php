@@ -80,7 +80,7 @@ class HMS_SOAP{
      * Report that a housing application has been received.
      * Makes First Connections stop bugging the students.
      */
-    function report_application_received($username, $term, $plan_code, $meal_code = NULL)
+    function report_application_received($username, $term, $plan_code = 'HOME', $meal_code = NULL)
     {
         if(SOAP_REPORT_TEST_FLAG) {
             $result = HMS_SOAP::get_test_report();

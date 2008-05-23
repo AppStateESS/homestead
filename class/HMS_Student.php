@@ -68,6 +68,24 @@ class HMS_Student {
             case 'enter_student_search_data':
                 return HMS_Student::enter_student_search_data();
                 break;
+            case 'admin_report_application':
+                PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+                PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+                // TODO: Permission For This
+                $result = NULL;
+                $error  = NULL;
+                if(isset($_REQUEST['username'])) {
+                    $result = HMS_SOAP::report_application_received($_REQUEST['username'], HMS_Term::get_selected_term());
+                } else {
+                    $error = 'No username provided for application.';
+                }
+                if(!is_null($result) && $result != 0) {
+                    $error = 'Reporting Application: Banner Error: ' . $result;
+                } else {
+                    $error = 'Reporting Application: Successful';
+                }
+                return HMS_Student::get_matching_students($error);
+                break;
             case 'get_matching_students':
                 return HMS_Student::get_matching_students();
                 break;
@@ -265,7 +283,7 @@ class HMS_Student {
         return $link;
     }
 
-    function enter_student_search_data()
+    function enter_student_search_data($error = null)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
 
@@ -273,7 +291,7 @@ class HMS_Student {
             $tpl = array();
             return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
         }
-        
+
         javascript('/modules/hms/autosuggest');
         Layout::addStyle('hms', 'css/autosuggest.css');
         
@@ -302,7 +320,7 @@ class HMS_Student {
         return PHPWS_Template::process($tpl, 'hms', 'admin/get_single_username.tpl');
     }
 
-    function get_matching_students()
+    function get_matching_students($error = NULL)
     {   
         if(!Current_User::allow('hms', 'search')){
             $tpl = array();
@@ -312,17 +330,21 @@ class HMS_Student {
         if(!isset($_REQUEST['username'])) {
             PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
             $error = "You did not provide an ASU username.<br />";
-            return HMS_Form::enter_student_search_data($error);
+            return HMS_Student::enter_student_search_data($error);
         } else if (!PHPWS_Text::isValidInput($_REQUEST['username'])) {
             PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
             $error = "ASU usernames can only be alphanumeric.<br />";
-            return HMS_Form::enter_student_search_data($error);
+            return HMS_Student::enter_student_search_data($error);
         } 
 
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
         $student_info = HMS_SOAP::get_student_info($_REQUEST['username']);
 
         #test($student_info);
+
+        if(!is_null($error)) {
+            $tpl['ERROR'] = $error;
+        }
 
         $tpl['MENU_LINK']   = PHPWS_Text::secureLink(_('Return to Search'), 'hms', array('type'=>'student', 'op'=>'enter_student_search_data'));
         
@@ -455,13 +477,14 @@ class HMS_Student {
             $tpl['RLC_STATUS'] = "This student is not in a Learning Community and has no pending approval.";
         }
 
-        /****************************
-         * Quick Application Status *
-         ****************************/
+        /**********************
+         * Application Status *
+         **********************/
+        $report_app = '[<a href="index.php?module=hms&type=student&op=admin_report_application&username='.$_REQUEST['username'].'&tab=student_info">Report Application Received</a>]';
         if(HMS_Application::check_for_application($_REQUEST['username'], HMS_Term::get_selected_term())) {
-            $tpl['APPLICATION'] = 'This student has filled out an application.  <a href="index.php?module=hms&type=student&op=get_matching_students&username='.$_REQUEST['username'].'&tab=housing_app">View Application</a>';
+            $tpl['APPLICATION'] = 'This student has filled out an application.  [<a href="index.php?module=hms&type=student&op=get_matching_students&username='.$_REQUEST['username'].'&tab=housing_app">View Application</a>] '.$report_app;
         } else {
-            $tpl['APPLICATION'] = 'This student has not filled out an application.';
+            $tpl['APPLICATION'] = 'This student has not filled out an application.  '.$report_app;
         }
 
         
