@@ -72,7 +72,8 @@
       </li>
 
     </ul>
-
+    
+<!-- BEGIN housing_status -->
     <h2>{VERIFY_ICON}6. Check Your Housing Status</h2>
     {VERIFY_INTRO}
     <ul>
@@ -81,6 +82,7 @@
         {VERIFY_LINK}
       </li>
     </ul>
+<!-- END housing_status -->
 
     <br /><br />
 
