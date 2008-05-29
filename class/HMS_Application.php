@@ -133,7 +133,6 @@ class HMS_Application {
 
         $result = $question->save();
 
-        
         if(PEAR::isError($result)){
             PHPWS_Error::log($result);
             $error = "<i>Error!</i><br />Could not create/update your application!<br />";

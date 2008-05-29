@@ -736,13 +736,15 @@ class HMS_Form
         $welcome .= " - Agreeing to the Housing License Contract<br />";
         $welcome .= " - Completing a Housing Application<br />";
         $welcome .= " - Completing the Residential Learning Community Application if you wish to participate in a RLC<br />";
-        //$welcome .= " - Completing the *OPTIONAL* student profile<br /><br />";
-        $welcome .= "Please note that once you complete the Housing Application you do not have to fill out anything else.<br /><br />";
+        $welcome .= " - Completing the *OPTIONAL* student profile<br /><br />";
+        $welcome .= "Please note that once you complete the Housing Application you do not have to fill out anything else provided at this website.<br /><br />";
       
         $welcome .= "<br /><br />";
         $welcome .= "<b>If you are experiencing problems please read <a href=\"./index.php?module=webpage&id=1\" target=\"_blank\">this page</a>.";
         $welcome .= "<br /><br />";
 
+        $values = array('ADDITIONAL'=>'The Housing Management System will <strong>not</strong> work without cookies.  Please read about <a href="http://www.google.com/cookies.html" target="_blank">how to enable cookies</a>.');
+        $tpl['COOKIE_WARNING'] = Layout::getJavascript('cookietest', $values);
         $tpl['WELCOME'] = $welcome;
         $tpl['ERROR']   = $this->get_error_msg();
         $final = PHPWS_Template::process($tpl, 'hms', 'misc/login.tpl');
