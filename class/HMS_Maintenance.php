@@ -254,7 +254,7 @@ class HMS_Maintenance
 
         # TODO: re-evaluate this permissions
         if(Current_User::allow('hms', 'hall_attributes'))
-            $tpl['HALL_OVERVIEW'] = PHPWS_Text::secureLink(_('Get Hall Overview'), 'hms', array('type'=>'hall', 'op'=>'select_residence_hall_for_overview'));
+            $tpl['HALL_OVERVIEW'] = PHPWS_Text::secureLink(_('Get Hall Overview'), 'hms', array('type'=>'hall', 'op'=>'select_residence_hall_for_overview')) . ' [' . PHPWS_Text::secureLink(_('Printable'), 'hms', array('type'=>'hall', 'op'=>'select_residence_hall_for_overview', 'print'=>'1')) . ']';
 
         /*****************
          * Floor Options *

@@ -514,7 +514,7 @@ class HMS_Residence_Hall extends HMS_Item
             return HMS_Residence_Hall::show_select_residence_hall('Hall Overview', 'hall', 'show_residence_hall_overview');
             break;
         case 'show_residence_hall_overview':
-            return HMS_Residence_Hall::show_hall_overview($_REQUEST['hall']);
+            return HMS_Residence_Hall::show_hall_overview($_REQUEST['hall'], isset($_REQUEST['print']) && $_REQUEST['print'] == 1);
             break;
         default:
             return "Error: undefined hall op";
@@ -745,6 +745,10 @@ class HMS_Residence_Hall extends HMS_Item
         $form->addHidden('op', $op);
         $form->addSubmit('submit', _('Select Hall'));
 
+        // TODO: REMOVE THIS HACK
+        if(isset($_REQUEST['print']) && $_REQUEST['print'] == 1)
+            $form->addhidden('print', 1);
+
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
@@ -844,13 +848,17 @@ class HMS_Residence_Hall extends HMS_Item
      * Shows a hall overview, listing the floors, rooms,
      * and assignments for those rooms
      */
-    function show_hall_overview($hall_id)
+    function show_hall_overview($hall_id, $naked = FALSE)
     {
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
 
         $hall = new HMS_Residence_Hall($hall_id);
         
-        $content = "<h2>Building overview for " . $hall->hall_name . "</h2><br /><br />";
+        $content = '<h2 style="font-size: 1.5em">Building overview for ' . $hall->hall_name . '</h2>';
+
+        if($naked) {
+            $content .= '<p><a href="index.php">Back to Maintenance</a></p>';
+        }
 
         # Load the halls
         $hall->loadFloors();
@@ -858,7 +866,7 @@ class HMS_Residence_Hall extends HMS_Item
         # for each hall, print the floors
         foreach ($hall->_floors as $floor)
         {
-            $content .= '<h3><b></u>Floor ' . $floor->floor_number . '</b></h3></a><br />';
+            $content .= '<div style="margin: 1em;"><h3 style="font-size: 1.5em; margin: 0;">Floor ' . $floor->floor_number . '</h3>';
 
             # load the rooms
             $floor->loadRooms();
@@ -871,7 +879,7 @@ class HMS_Residence_Hall extends HMS_Item
             # for each room, print the beds, and assignments
             foreach($floor->_rooms as $room)
             {
-                $content .= '&nbsp;&nbsp;&nbsp;&nbsp;<b>Room ' . $room->room_number . '</b><br />';
+                $content .= '<div style="margin: 1em;"><strong>Room ' . $room->room_number . '</strong><br /><div style="margin: 0 0 0 1em;">';
                
                 # Load the beds
                 $room->loadBeds();
@@ -887,16 +895,21 @@ class HMS_Residence_Hall extends HMS_Item
                         $username = $bed->_curr_assignment->asu_username;
                         $name = HMS_SOAP::get_full_name($username);
                         $link = PHPWS_Text::secureLink($name, 'hms', array('type'=>'student', 'op'=>'get_matching_students', 'username'=>$username)) . " (<em>$username</em>)";
-                        $content .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bedroom: ' . $bed->bedroom_label . '&nbsp;&nbsp;&nbsp;&nbsp;Bed: ' . $bed->bed_letter . '&nbsp;&nbsp;&nbsp;&nbsp;' . $link . '<br />';
+                        $content .= 'Bedroom: ' . $bed->bedroom_label . '&nbsp;&nbsp;&nbsp;&nbsp;Bed: ' . $bed->bed_letter . '&nbsp;&nbsp;&nbsp;&nbsp;' . $link . '<br />';
                     }else{
                         # No one is assigned here
                         #TODO: Link this to Assignment
-                        $content .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bedroom: ' . $bed->bedroom_label . '&nbsp;&nbsp;&nbsp;&nbsp;Bed: ' . $bed->bed_letter . '&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"gray\">&lt;unassigned&gt;</font><br />';
+                        $content .= 'Bedroom: ' . $bed->bedroom_label . '&nbsp;&nbsp;&nbsp;&nbsp;Bed: ' . $bed->bed_letter . '&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"gray\">&lt;unassigned&gt;</font><br />';
                     }
-                    $content .= "<br />";
                 }//end foreach beds
+                $content .= '</div></div>';
             }//end foreach rooms
+            $content .= '</div>';
         }// end foreach floors
+
+        if($naked) {
+            Layout::nakedDisplay($content, 'Building overview for ' . $hall->hall_name, TRUE);
+        }
 
         return $content; 
     }
