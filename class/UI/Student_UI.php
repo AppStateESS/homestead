@@ -4,7 +4,10 @@
  * Student_UI.php
  * A class for consolidating the the methods for student UI/Interface handling.
  */
+define('TWENTY_FIVE_YEARS', 788400000);
+
 class HMS_Student_UI{
+    
     
     function show_welcome_screen()
     {
@@ -42,10 +45,12 @@ class HMS_Student_UI{
                 PHPWS_Error::log('Initial banner lookup failed', 'hms', 'show_welcome_screen', "username: {$_SESSION['asu_username']}");
                 return HMS_Contact_Form::show_contact_form();
             }
-
+            
         # Calculate the student's age and check for >= 25 years old
-        $dob = explode('-', $dob);
-        if($dob[0] < date('Y') - 25) {
+        $dob = explode('-', $dob); // in order: year, month, day
+        // Calculate a unix timestamp for the student's birthday
+        $dob_timestamp = mktime(0, 0, 0, $dob[1], $dob[2], $dob[0]); // hour, min, sec, month, day, year
+        if($dob_timestamp < (mktime() - TWENTY_FIVE_YEARS)) {
             # Log that it happened
             HMS_Activity_Log::log_activity($_SESSION['asu_username'],
                                            ACTIVITY_TOO_OLD_REDIRECTED,
