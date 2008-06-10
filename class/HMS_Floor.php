@@ -558,6 +558,11 @@ class HMS_Floor extends HMS_Item
      */
     function main()
     {
+        if( !Current_User::allow('hms', 'floor_structure') && !Current_User::allow('hms', 'floor_attributes') ){
+            $tpl = array();
+            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
+        }
+
         switch($_REQUEST['op'])
         {
             case 'show_select_floor':
@@ -617,6 +622,11 @@ class HMS_Floor extends HMS_Item
 
     function edit_floor()
     {
+       if( !Current_User::allow('hms', 'floor_attributes') ){
+            $tpl = array();
+            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
+       }
+
        # Create the floor object gien the floor id
        $floor = new HMS_Floor($_REQUEST['floor_id']);
        if(!$floor){

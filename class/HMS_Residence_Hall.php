@@ -500,6 +500,11 @@ class HMS_Residence_Hall extends HMS_Item
      */
     function main()
     {
+        if( !Current_User::allow('hms', 'hall_structure') && !Current_User::allow('hms', 'hall_attributes') ){
+            $tpl = array();
+            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
+        }
+
         switch ($_REQUEST['op']) {
         case 'select_hall_to_edit':
             return HMS_Residence_Hall::show_select_residence_hall('Edit Residence Hall', 'hall', 'show_edit_hall');
@@ -716,6 +721,11 @@ class HMS_Residence_Hall extends HMS_Item
      */
     function show_select_residence_hall($title, $type, $op, $success = NULL, $error = NULL)
     {
+        if( !Current_User::allow('hms', 'hall_attributes') ){
+            $tpl = array();
+            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
+        }
+
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
@@ -768,6 +778,11 @@ class HMS_Residence_Hall extends HMS_Item
      */
     function show_edit_residence_hall($hall_id = null, $success = null, $error = null)
     {
+        if( !Current_User::allow('hms', 'hall_attributes') ){
+            $tpl = array();
+            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
+        }
+
         PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 

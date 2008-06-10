@@ -422,6 +422,11 @@ class HMS_Room extends HMS_Item
 
     function main()
     {
+        if( !Current_User::allow('hms', 'room_structure') && !Current_User::allow('hms', 'room_attributes') ){
+            $tpl = array();
+            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
+        }
+
         switch($_REQUEST['op'])
         {
             case 'select_room_to_edit':
@@ -488,6 +493,10 @@ class HMS_Room extends HMS_Item
     }
     
     function edit_room(){
+        if( !Current_User::allow('hms', 'room_attributes') ){
+            $tpl = array();
+            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
+        }
 
         # Create the room object given the room_id
         $room = new HMS_Room($_REQUEST['room_id']);

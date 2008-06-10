@@ -81,6 +81,11 @@ class HMS_Learning_Community
 
     function save_learning_community()
     {
+        if( !Current_User::allow('hms', 'learning_community_maintenance') ){
+            $tpl = array();
+            return PHPWS_Template::process($tpl, 'hms', 'admin/premission_denied.tpl');
+        }
+
         $rlc = new HMS_Learning_Community();
         $rlc->set_variables();
 
@@ -112,6 +117,11 @@ class HMS_Learning_Community
      */
     function add_learning_community($msg = NULL)
     {
+        if( !Current_User::allow('hms', 'learning_community_maintenance') ){
+            $tpl = array();
+            return PHPWS_Template::process($tpl, 'hms', 'admin/premission_denied.tpl');
+        }
+
         PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
         return HMS_Form::add_learning_community($msg);
     }
@@ -160,6 +170,11 @@ class HMS_Learning_Community
      */
     function delete_learning_community()
     {
+        if( !Current_User::allow('hms', 'learning_community_maintenance') ){
+            $tpl = array();
+            return PHPWS_Template::process($tpl, 'hms', 'admin/premission_denied.tpl');
+        }
+
         if(!isset($_REQUEST['delete']) || $_REQUEST['delete'] != "Delete Community") {
             return HMS_Learning_Community::select_learning_community_for_delete();
         }
@@ -335,6 +350,15 @@ class HMS_Learning_Community
      */
     function main()
     {
+        if( !Current_User::allow('hms', 'learning_community_maintenance') 
+            && !Current_User::allow('hms', 'view_rlc_applications')
+            && !Current_User::allow('hms', 'approve_rlc_applications')
+            && !Current_User::allow('hms', 'view_rlc_members') )
+        {
+            $tpl = array();
+            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
+        }
+
         switch($_REQUEST['op'])
         {
             case 'add_learning_community':
@@ -458,6 +482,11 @@ class HMS_Learning_Community
 
     function assign_applicants_to_rlcs($success_msg = NULL, $error_msg = NULL)
     {
+        if( !Current_User::allow('hms', 'approve_rlc_applications') ){
+            $tpl = array();
+            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
+        }
+
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
 
@@ -557,6 +586,11 @@ class HMS_Learning_Community
 
     function view_rlc_assignments()
     {
+        if( !Current_User::allow('hms', 'view_rlc_members') ){
+            $tpl = array();
+            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
+        }
+
         PHPWS_Core::initModClass('hms','HMS_RLC_Assignment.php');
 
         return HMS_RLC_Assignment::rlc_assignment_admin_pager();
@@ -613,6 +647,11 @@ class HMS_Learning_Community
      */
     function rlc_application_export()
     {
+        if( !Current_User::allow('hms', 'view_rlc_applications') ){
+            $tpl = array();
+            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
+        }
+
         $db = &new PHPWS_DB('hms_learning_communities');
         $db->addColumn('community_name');
         $db->addWhere('id',$_REQUEST['rlc_list']);
@@ -717,6 +756,11 @@ class HMS_Learning_Community
      */
     function rlc_assignment_export()
     {
+        if( !Current_User::allow('hms', 'view_rlc_applications') ){
+            $tpl = array();
+            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
+        }
+
         $db = &new PHPWS_DB('hms_learning_communities');
         $db->addColumn('community_name');
         $db->addWhere('id',$_REQUEST['rlc_list']);

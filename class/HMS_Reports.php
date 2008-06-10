@@ -1421,6 +1421,11 @@ class HMS_Reports{
 
     function main()
     {
+        if( !Current_User::allow('hms', 'reports') ){
+            $tpl = array();
+            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
+        }
+
         $op = $_REQUEST['op'];
         switch($op){
             case 'display_reports':

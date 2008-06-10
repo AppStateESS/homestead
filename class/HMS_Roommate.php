@@ -103,6 +103,11 @@ class HMS_Roommate
      
     function main()
     {
+        if( !Current_User::allow('hms', 'roommate_maintenance') ){
+            $tpl = array();
+            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
+        }
+
         switch($_REQUEST['op'])
         {
             case 'show_admin_create_roommate_group':

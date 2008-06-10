@@ -274,6 +274,11 @@ class HMS_Bed extends HMS_Item {
 
     function main()
     {
+        if( !Current_User::allow('hms', 'bed_structure') && !Current_User::allow('hms', 'bed_attributes') ){
+            $tpl = array();
+            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
+        }
+
         switch($_REQUEST['op'])
         {
             case 'select_bed_to_edit':
@@ -432,6 +437,11 @@ class HMS_Bed extends HMS_Item {
 
     function edit_bed()
     {
+        if( !Current_User::allow('hms', 'bed_attributes') ){
+            $tpl = array();
+            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
+        }
+
         # Create the bed object given the bed_id
         $bed = new HMS_Bed($_REQUEST['bed_id']);
         if(!$bed){

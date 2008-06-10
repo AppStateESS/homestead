@@ -78,6 +78,11 @@ class HMS_Term{
     
     function main()
     {
+        if( !Current_User::allow('hms', 'edit_terms') && !Current_User::allow('hms', 'select_term') ){
+            $tpl = array();
+            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
+        }
+
         switch($_REQUEST['op'])
         {
             case 'show_create_term':
@@ -267,6 +272,10 @@ class HMS_Term{
      */
      //TODO: Add functionality here to call copy depending on what was selected in the 'copy_drop'
     function create_new_term(){
+        if( !Current_User::allow('hms', 'edit_terms') ){
+            $tpl = array();
+            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
+        }
 
         if(!isset($_REQUEST['year_drop'])){
             return HMS_Term::show_edit_terms(NULL,'Error: Year not defined!');
@@ -355,6 +364,11 @@ class HMS_Term{
      */
     function term_delete()
     {
+        if( !Current_User::allow('hms', 'edit_terms') ){
+            $tpl = array();
+            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
+        }
+
         return HMS_Term::show_edit_terms(NULL, 'Sorry, term deletion is not yet implemented.');
     }
 
@@ -363,6 +377,10 @@ class HMS_Term{
      */
     function term_banner_queue_toggle()
     {
+        if( !Current_User::allow('hms', 'banner_queue') ){
+            $tpl = array();
+            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
+        }
         $term = &new HMS_Term($_REQUEST['term']);
         $enabled = $term->toggle_banner_queue();
         $term->save();
@@ -377,6 +395,11 @@ class HMS_Term{
 
     function show_create_term($success = NULL, $error = NULL)
     {
+        if( !Current_User::allow('hms', 'edit_terms') ){
+            $tpl = array();
+            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
+        }
+
         PHPWS_Core::initCoreClass('Form.php');
         PHPWS_Core::initModClass('hms','HMS_Util.php');
 
@@ -413,7 +436,10 @@ class HMS_Term{
 
     function show_edit_terms($success = NULL, $error = NULL)
     {
-        
+        if( !Current_User::allow('hms', 'edit_terms') ){
+            $tpl = array();
+            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
+        }
 
         $tpl['TITLE'] = 'Edit Terms';
         $tpl['PAGER'] = HMS_Term::get_available_terms_pager();

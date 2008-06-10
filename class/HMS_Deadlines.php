@@ -230,6 +230,10 @@ class HMS_Deadlines {
     }
 
     function main(){
+        if( !Current_User::allow('hms', 'view_deadlines') && !Current_User::allow('hms', 'edit_deadlines') ){
+            $tpl = array();
+            return PHPWS_Template($tpl, 'hms', 'admin/permission_denied.tpl');
+        }
         
         switch($_REQUEST['op']){
             case 'show_edit_deadlines':

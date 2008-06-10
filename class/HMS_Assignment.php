@@ -174,6 +174,10 @@ class HMS_Assignment extends HMS_Item
      **************/
     function main()
     {
+        if( !Current_User::allow('hms', 'assignment_maintenance') && !Current_User::allow('hms', 'autoassign') ){
+            $tpl = array();
+            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
+        }
         switch($_REQUEST['op'])
         {
             case 'show_assign_student':
@@ -261,6 +265,11 @@ class HMS_Assignment extends HMS_Item
 
     function assign_student()
     {
+        if( !Current_User::allow('hms', 'assignment_maintenance') ){
+            $tpl = array();
+            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
+        }
+
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
         PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
         PHPWS_Core::initModClass('hms', 'HMS_Room.php');
@@ -428,6 +437,11 @@ class HMS_Assignment extends HMS_Item
 
     function unassign_student()
     {
+        if( !Current_User::allow('hms', 'assignment_maintenance') ){
+            $tpl = array();
+            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
+        }
+
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
 

@@ -153,6 +153,11 @@ class HMS_Suite extends HMS_Item {
     
     function main()
     {
+        if( !Current_User::allow('hms', 'suite_structure') && !Current_User::allow('hms', 'suite_attributes') ){
+            $tpl = array();
+            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
+        }
+
         switch($_REQUEST['op']){
             case 'show_select_suite':
                 return HMS_Suite::show_select_suite('Edit Suite', 'suite', 'show_edit_suite');
@@ -172,6 +177,11 @@ class HMS_Suite extends HMS_Item {
 
     function edit_suite_submit()
     {
+        if( !Current_User::allow('hms', 'suite_attributes') ){
+            $tpl = array();
+            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
+        }
+
         # Create the suite object
         $suite = &new HMS_Suite($_REQUEST['suite_id']);
         if(!$suite){

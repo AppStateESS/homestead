@@ -55,6 +55,11 @@ class HMS_RLC_Application{
 
     function delete()
     {
+        if( !Current_User::allow('hms', 'learning_community_maintenance') ){
+            $tpl = array();
+            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
+        }
+
         if(!isset($this->id)) {
             return FALSE;
         }
@@ -185,6 +190,9 @@ class HMS_RLC_Application{
         if(PEAR::isError($result)){
             PHPWS_Error::log($result,'hms','Caught error from Application::save()');
         }
+
+        PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
+        HMS_Activity_Log::log_activity();
         
         return $result;
     }
@@ -745,7 +753,12 @@ class HMS_RLC_Application{
      */
     function view_rlc_application($username = NULL)
     {
-        if($username == NULL) {
+       if( !Current_User::allow('hms', 'view_rlc_applications') ){
+           $tpl = array();
+           return PHPWS_Template::process($tpl, 'hms', 'admin/premission_denied.tpl');
+       }
+
+       if($username == NULL) {
             $username = $_SESSION['asu_username'];
             $tags['MENU_LINK'] = PHPWS_Text::secureLink(_('Return to Menu'), 'hms', array('type'=>'student', 'op'=>'main'));
        } else {

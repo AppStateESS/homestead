@@ -46,7 +46,6 @@ class HMS_Student {
      
     function main()
     {
-
         # Check to make sure the 'op' variable is set, if not bail out here
         if(!isset($_REQUEST['op'])){
             PHPWS_Core::killAllSessions();
