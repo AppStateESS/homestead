@@ -11,7 +11,8 @@ class HMS_Reports{
                         'housing_apps'  => 'Housing Applications Received',
                         'housing_asss'  => 'Assignment Demographics',
                         'assigned_f'    => 'Assigned Type F Students',
-                        'system_stats'  => 'Get System Statistics'
+                        'system_stats'  => 'Get System Statistics',
+                        'special_needs' => 'Special Needs Applicants'
                         );
 /*                        'housing_asss' =>'Housing Assignments Made',*/
 /*                        'unassd_rooms' =>'Currently Unassigned Rooms',*/
@@ -34,18 +35,30 @@ class HMS_Reports{
      */
     function display_reports()
     {
+        $tpl = array();
         if(!Current_User::allow('hms', 'reports')){
-            $tpl = array();
             return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
         }
-        
-        $form = &new PHPWS_Form;
-        $form->addDropBox('reports', HMS_Reports::get_reports());
-        $form->addSubmit('submit', _('Run Report'));
-        $form->addHidden('module', 'hms');
-        $form->addHidden('type', 'reports');
-        $form->addHidden('op', 'run_report');
-        $tpl = $form->getTemplate();
+
+        $vars['type'] = 'reports';
+        $vars['op']   = 'run_report';
+
+        $reports = HMS_Reports::get_reports();
+        $tpl['REPORTS'] = array();
+        foreach($reports as $code=>$name) {
+            $vars['report'] = $code;
+            
+            $js = array();
+            $js['width']       = 800;
+            $js['height']      = 600;
+            $js['label']       = $name;
+            $js['title']       = "Run '$name' Report";
+            $js['address']     = PHPWS_Text::linkAddress('hms', $vars, true);
+            $js['window_name'] = 'hms_report';
+            
+            $tpl['REPORTS'][]['REPORT_LINK'] =  javascript('open_window', $js);
+        }
+
         $final = PHPWS_Template::process($tpl, 'hms', 'admin/display_reports.tpl');
         return $final;
     }
@@ -54,26 +67,30 @@ class HMS_Reports{
 	{
         if(!Current_User::allow('hms', 'reports')){
             $tpl = array();
-            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
+            PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
         }
+        $content = '<p><a href="javascript:window.print()">Print Report</a></p>';
         
         // Go ahead an initalize the Term class, since it's going to be needed by all reports
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
         
-	    switch($_REQUEST['reports'])
+	    switch($_REQUEST['report'])
 	    {
             case 'housing_apps':
-                return HMS_Reports::run_applicant_demographics_report();
+                $content .= HMS_Reports::run_applicant_demographics_report();
                 break;
             case 'housing_asss':
-                return HMS_Reports::run_assignment_demographics_report();
+                $content .= HMS_Reports::run_assignment_demographics_report();
                 break;
             case 'assigned_f':
-                return HMS_Reports::run_assigned_type_f();
+                $content .= HMS_Reports::run_assigned_type_f();
                 break;
             case 'system_stats':
-                return HMS_Reports::get_system_statistics();
+                $content .= HMS_Reports::get_system_statistics();
+                break;
+            case 'special_needs':
+                $content .= HMS_Reports::special_needs();
                 break;
             /*
             case 'unassd_rooms':
@@ -111,9 +128,11 @@ class HMS_Reports{
                 break;
                 */
             default:
-                return "ugh";
+                $content .= "ugh";
                 break;
         }
+
+        return $content;
     }
     
     function get_system_statistics()
@@ -1419,6 +1438,77 @@ class HMS_Reports{
         return $content;
     }
 
+    function special_needs()
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+        
+        $content = "<h2>Special Needs</h2>\n";
+        
+        $db = new PHPWS_DB('hms_application');
+        $db->addColumn('hms_student_id');
+        $db->addWhere('term', HMS_Term::get_selected_term());
+        $db->addWhere('physical_disability', 1);
+        $results = $db->select();
+        $count = count($results);
+
+        $content .= "<h3>Physical: $count</h3>\n<ul>\n";
+        foreach($results as $row) {
+            $content .= HMS_Reports::show_student($row['hms_student_id']);
+        }
+        $content .= "</ul>\n";
+
+        $db->resetWhere();
+        $db->addWhere('term', HMS_Term::get_selected_term());
+        $db->addWhere('psych_disability', 1);
+        $results = $db->select();
+        $count = count($results);
+
+        $content .= "<h3>Psychological: $count</h3>\n<ul>\n";
+        foreach($results as $row) {
+            $content .= HMS_Reports::show_student($row['hms_student_id']);
+        }
+        $content .= "</ul>\n";
+
+        $db->resetWhere();
+        $db->addWhere('term', HMS_Term::get_selected_term());
+        $db->addWhere('medical_need', 1);
+        $results = $db->select();
+        $count = count($results);
+
+        $content .= "<h3>Medical: $count</h3>\n<ul>\n";
+        foreach($results as $row) {
+            $content .= HMS_Reports::show_student($row['hms_student_id']);
+        }
+        $content .= "</ul>\n";
+
+        $db->resetWhere();
+        $db->addWhere('term', HMS_Term::get_selected_term());
+        $db->addWhere('gender_need', 1);
+        $results = $db->select();
+        $count = count($results);
+
+        $content .= "<h3>Gender: $count</h3>\n<ul>\n";
+        foreach($results as $row) {
+            $content .= HMS_Reports::show_student($row['hms_student_id']);
+        }
+        $content .= "</ul>\n";
+
+        return $content;
+    }
+
+    function show_student($username) {
+        $student = HMS_SOAP::get_student_info($username);
+        $name = $student->last_name . ', ' . $student->first_name . ' ' .
+            $student->middle_name;
+        $bid = $student->banner_id;
+        $phone = $student->phone->area_code . '-' .
+            substr($student->phone->number,0,3) . '-' .
+            substr($student->phone->number,-4,4);
+        
+        return "<li>$bid: $name [$phone]</li>";
+    }
+
     function main()
     {
         if( !Current_User::allow('hms', 'reports') ){
@@ -1432,7 +1522,7 @@ class HMS_Reports{
                 return HMS_Reports::display_reports();
                 break;
             case 'run_report':
-                return HMS_Reports::run_report();
+                Layout::nakedDisplay(HMS_Reports::run_report());
                 break;
             default:
                 # No such 'op', or no 'op' specified

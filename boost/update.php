@@ -900,6 +900,13 @@ function hms_update(&$content, $currentVersion)
             if(PEAR::isError($result)) {
                 return $result;
             }
+
+        case version_compare($currentVersion, '0.2.34', '<'):
+            $files[] = 'templates/admin/display_reports.tpl';
+            PHPWS_Boost::updateFiles($files, 'hms');
+
+            $content[] = 'Added Special Needs report.';
+            $content[] = 'Reports now better suited for printing.';
             
     }
 

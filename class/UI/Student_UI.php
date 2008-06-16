@@ -50,7 +50,7 @@ class HMS_Student_UI{
         $dob = explode('-', $dob); // in order: year, month, day
         // Calculate a unix timestamp for the student's birthday
         $dob_timestamp = mktime(0, 0, 0, $dob[1], $dob[2], $dob[0]); // hour, min, sec, month, day, year
-        if($dob_timestamp < (mktime() - TWENTY_FIVE_YEARS)) {
+        if($dob_timestamp < (mktime(null,null,null,8,1) - TWENTY_FIVE_YEARS)) {   // Twenty five years from August 1
             # Log that it happened
             HMS_Activity_Log::log_activity($_SESSION['asu_username'],
                                            ACTIVITY_TOO_OLD_REDIRECTED,
