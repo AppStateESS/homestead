@@ -238,7 +238,7 @@ class HMS_Learning_Community
         }
 
         $tpl['RLC_PAGER'] = HMS_RLC_Assignment::view_by_rlc_pager($rlc_id);
-        $tpl['MENU_LINK'] = PHPWS_Text::secureLink(_('Return to previous'), 'hms', array('type'=>'top_level', 'op'=>'go_back'));
+        $tpl['MENU_LINK'] = PHPWS_Text::secureLink(_('Return to previous'), 'hms', array('type'=>'rlc', 'op'=>'search_by_rlc'));
 
         return PHPWS_Template::processTemplate($tpl, 'hms', 'admin/rlc_roster.tpl');
     }

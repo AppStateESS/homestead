@@ -184,7 +184,7 @@ class HMS_RLC_Assignment{
         $db = &new PHPWS_DB('hms_learning_communities');
         $db->addWhere('id', $rlc_id);
         $db->addColumn('community_name');
-        $tags['TITLE'] = $db->select('one') . 'Assignments ' . HMS_Term::term_to_text(HMS_Term::get_selected_term(), TRUE);
+        $tags['TITLE'] = $db->select('one') . ' Assignments ' . HMS_Term::term_to_text(HMS_Term::get_selected_term(), TRUE);
        
         PHPWS_Core::initCoreClass('DBPager.php');
         
