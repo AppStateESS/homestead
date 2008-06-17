@@ -182,7 +182,7 @@ class HMS_RLC_Assignment{
         
         // Get the community name for the title
         $db = &new PHPWS_DB('hms_learning_communities');
-        $db->addWhere('id', $_REQUEST['rlc']);
+        $db->addWhere('id', $rlc_id);
         $db->addColumn('community_name');
         $tags['TITLE'] = $db->select('one') . 'Assignments ' . HMS_Term::term_to_text(HMS_Term::get_selected_term(), TRUE);
        
@@ -196,7 +196,7 @@ class HMS_RLC_Assignment{
         $pager->joinResult('id','hms_learning_community_applications','hms_assignment_id','user_id', 'user_id');
         $pager->setModule('hms');
         $pager->setTemplate('admin/view_by_rlc_pager.tpl');
-        $pager->setLink('index.php?module=hms');
+        $pager->setLink('index.php?module=hms&type=rlc&op=view_by_rlc&rlc='.$rlc_id);
         $pager->setEmptyMessage('There are no students assigned to this learning community.');
         $pager->addPageTags($tags);
         $pager->addRowTags('viewByRLCPagerTags');
