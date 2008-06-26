@@ -1,6 +1,7 @@
 BEGIN;
 CREATE TABLE hms_term (
     term    integer NOT NULL,
+    new_applications smallint NOT NULL DEFAULT 0,
     primary key(term)
 );
 

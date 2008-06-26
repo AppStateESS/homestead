@@ -9,6 +9,7 @@ class HMS_Term{
 
     var $term;
     var $banner_queue;
+    var $new_applications;
 
     function HMS_Term($term = NULL)
     {
