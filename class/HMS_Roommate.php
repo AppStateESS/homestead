@@ -100,6 +100,30 @@ class HMS_Roommate
     /******************
      * Static Methods *
      ******************/
+
+    function get_all_confirmed_roommates($term = NULL, $random = FALSE)
+    {
+        if(is_null($term)) {
+            PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+            $term = HMS_Term::getSelectedTerm();
+        }
+
+        $db = &new PHPWS_DB('hms_roommate');
+        $db->addWhere('term', $term);
+        $db->addWhere('confirmed', 1);
+        if($random) {
+            $db->addOrder('random');
+        }
+        $db->addColumn('requestor');
+        $db->addColumn('requestee');
+        $result = $db->select();
+
+        if(PHPWS_Error::logIfError($result)) {
+            return FALSE;
+        }
+
+        return $result;
+    }
      
     function main()
     {
@@ -180,13 +204,16 @@ class HMS_Roommate
     /*
      * Returns the given user's confirmed roommate or FALSE if the roommate is unconfirmed
      */
-    function get_confirmed_roommate($asu_username)
+    function get_confirmed_roommate($asu_username, $term = NULL)
     {
+        if(is_null($term)) PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+        
         $db = new PHPWS_DB('hms_roommate');
         $db->addWhere('requestor', $asu_username, 'ILIKE', 'OR', 'grp');
         $db->addWhere('requestee', $asu_username, 'ILIKE', 'OR', 'grp');
         $db->setGroupConj('grp', 'AND');
         $db->addWhere('confirmed', 1);
+        $db->addWhere('term', (is_null($term) ? HMS_Term::get_selected_term() : $term));
         $db->addColumn('requestor');
         $db->addColumn('requestee');
         $result = $db->select('row');

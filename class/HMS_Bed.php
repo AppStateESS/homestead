@@ -66,6 +66,15 @@ class HMS_Bed extends HMS_Item {
         return true;
     }
 
+    function get_banner_building_code()
+    {
+        $room = $this->get_parent();
+        $floor = $room->get_parent();
+        $building = $floor->get_parent();
+
+        return $building->banner_building_code;
+    }
+
     function get_row_tags()
     {
         $tpl = $this->item_tags();
@@ -350,10 +359,14 @@ class HMS_Bed extends HMS_Item {
      * Returns an array of IDs of free beds (which can be auto_assigned)
      * Returns FALSE if there are no more free beds
      */
-    function get_all_free_beds($term, $gender)
+    function get_all_free_beds($term, $gender, $randomize = FALSE, $banner = FALSE)
     {
         $db = &new PHPWS_DB('hms_bed');
 
+        if($banner) {
+            $db->addColumn('hms_bed.banner_id');
+            $db->addColumn('hms_residence_hall.banner_building_code');
+        }
         $db->addColumn('id');
 
         // Only get free beds
@@ -392,6 +405,22 @@ class HMS_Bed extends HMS_Item {
         // Don't get rooms on floors reserved for an RLC
         $db->addWhere('hms_floor.rlc_id', NULL);
 
+        // Randomize if necessary
+        if($randomize) {
+            $db->addOrder('random');
+        }
+
+        $db->setTestMode();
+
+        if($banner) {
+            $result = $db->select();
+            if(PHPWS_Error::logIfError($result)) {
+                return $result;
+            }
+
+            return $result;
+        }   
+        
         $result = $db->select('col');
 
         // In case of an error, log it and return it

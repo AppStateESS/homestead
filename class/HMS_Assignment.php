@@ -252,7 +252,7 @@ class HMS_Assignment extends HMS_Item
 
         $result = $db->select('row');
 
-        if (!$result || PHPWS_Error::logIfError($result)) {
+        if (PHPWS_Error::logIfError($result)) {
             return false;
         }
 

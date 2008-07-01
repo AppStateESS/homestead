@@ -22,7 +22,7 @@ class HMS_Application {
     var $preferred_bedtime;
     var $room_condition;
     var $rlc_interest;
-    var $agreed_to_termsi = NULL;
+    var $agreed_to_terms = NULL;
     var $aggregate;
 
     var $physical_disability    = 0;
@@ -751,12 +751,26 @@ class HMS_Application {
         
         $db = new PHPWS_DB('hms_application');
         $db->addJoin('left outer', 'hms_application', 'hms_assignment', 'hms_student_id', 'asu_username');
-        $db->addWhere('hms_application.term', HMS_Term::get_current_term());
+        $db->addWhere('hms_application.term', HMS_Term::get_selected_term());
         $db->addWhere('hms_assignment.asu_username', null);
         for($i = 0; $i < func_num_args(); $i++) {
             $db->addOrder(func_get_arg($i));
         }
         
+        return $db->getObjects('HMS_Application');
+    }
+
+    function get_all_applicants()
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+
+        $db = new PHPWS_DB('hms_application');
+        $db->addWhere('hms_application.term', HMS_Term::get_selected_term());
+        $db->addWhere('hms_application.student_status', 1); // We don't care about Transfers
+        for($i = 0; $i < func_num_args(); $i++) {
+            $db->addOrder(func_get_arg($i));
+        }
+
         return $db->getObjects('HMS_Application');
     }
 

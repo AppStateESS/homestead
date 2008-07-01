@@ -16,7 +16,10 @@
                 <th>Number of Learning Communities: </th><td>{NUM_LCS}</td>
             </tr>
             <tr>
-                <th>Number of Applications Received: </th><td>{NUM_APPLICATIONS}</td>
+                <th>Number of Freshman Applications Received: </th><td>{NUM_F_APPLICATIONS}</td>
+            </tr>
+            <tr>
+                <th>Number of Transfer Applications Received: </th><td>{NUM_T_APPLICATIONS}</td>
             </tr>
             <tr>
                 <th>Number of Learning Community Applications Received: &nbsp;&nbsp;&nbsp;</th><td>{NUM_RLC_APPLICATIONS}</td>

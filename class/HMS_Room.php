@@ -576,6 +576,87 @@ class HMS_Room extends HMS_Item
 
     }
 
+    function get_all_free_rooms($term, $gender, $randomize = FALSE)
+    {
+        $db = &new PHPWS_DB('hms_room');
+
+        $db->addColumn('distinct id');
+
+        // Join other tables so we can do the other 'assignable' checks
+        $db->addJoin('LEFT', 'hms_room', 'hms_bed', 'id', 'room_id');
+        $db->addJoin('LEFT', 'hms_room', 'hms_floor', 'floor_id', 'id');
+        $db->addJoin('LEFT', 'hms_floor', 'hms_residence_hall', 'residence_hall_id', 'id');
+
+        // Term
+        $db->addWhere('hms_room.term', $term);
+
+        // Only get rooms with free beds
+        $db->addJoin('LEFT OUTER', 'hms_bed', 'hms_assignment', 'id', 'bed_id');
+        $db->addWhere('hms_assignment.asu_username', NULL);
+
+        // Gender
+        $db->addWhere('gender_type', $gender);
+
+        // Make sure everything is online
+        $db->addWhere('hms_room.is_online', 1);
+        $db->addWhere('hms_floor.is_online', 1);
+        $db->addWhere('hms_residence_hall.is_online', 1);
+
+        // Make sure nothing is reserved
+        $db->addWhere('hms_room.is_reserved', 0);
+        $db->addWhere('hms_room.is_medical', 0);
+
+        // Don't get RA beds
+        $db->addWhere('hms_room.ra_room', 0);
+
+        // Don't get lobbies
+        $db->addWhere('hms_room.is_lobby', 0);
+
+        // Don't get private rooms
+        $db->addWhere('hms_room.private_room', 0);
+        
+        // Don't get rooms on floors reserved for an RLC
+        $db->addWhere('hms_floor.rlc_id', NULL);
+
+        // Randomize if necessary
+        if($randomize) {
+            $db->addOrder('random');
+        }
+
+        $result = $db->select('col');
+
+        // In case of an error, log it and return FALSE
+        if(PHPWS_Error::logIfError($result)) {
+            return FALSE;
+        }
+
+        // Make sure each room is empty and has only two beds
+        return array_values(array_filter($result,
+            array('HMS_Room', 'check_two_bed_and_empty_by_id')));
+    }
+
+    function check_two_bed_and_empty_by_id($room)
+    {
+        $db = &new PHPWS_DB('hms_bed');
+        $db->addJoin('LEFT OUTER', 'hms_bed', 'hms_assignment', 'id', 'bed_id');
+        $db->addColumn('hms_assignment.id', NULL, 'ass_id');
+        $db->addWhere('room_id', $room);
+        $db->addWhere('hms_bed.term', HMS_Term::get_selected_term());
+        $result = $db->select('col');
+
+        // If not two-bedroom, toss it out
+        if(count($result) != 2) { return FALSE; }
+
+        foreach($result as $r) {
+            // If anyone is assigned, toss it out
+            if($r != NULL) { return FALSE; }
+        }
+
+        
+        // Looks like we're good.
+        return TRUE;
+    }
+
     
     /*********************
      * Static UI Methods *

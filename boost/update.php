@@ -908,6 +908,18 @@ function hms_update(&$content, $currentVersion)
             $content[] = 'Added Special Needs report.';
             $content[] = 'Reports now better suited for printing.';
             
+        case version_compare($currentVersion, '0.2.35', '<'):
+            $files[] = 'templates/admin/statistics.tpl';
+            PHPWS_Boost::updateFiles($files, 'hms');
+
+            $db = &new PHPWS_Db;
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_35.sql');
+            if(PEAR::isError($result)) {
+                return $result;
+            }
+
+            $content[] = 'Updated Statistics Template';
+            $content[] = 'Updated Term Information';
     }
 
     return TRUE;
