@@ -227,11 +227,23 @@ class HMS_Activity_Log{
 
         $pager = &new DBPager('hms_activity_log','HMS_Activity_Log');
 
-        if(!is_null($actor))
+        if(!is_null($actor) && !is_null($actee)){
+            $pager->db->addWhere('actor', "%$actor%", 'ILIKE', NULL, 'actor_actee_group');
+            $pager->db->addWhere('user_id', "%$actee%", 'ILIKE', NULL, 'actor_actee_group');
+            if($actee == $actor){
+                // Both actor and actee were specified, and they match so use an 'OR'
+                // to effectively show all entries for the username specified
+                $pager->db->setGroupConj('actor_actee_group', 'OR');
+            }else{
+                // Both actor and actee were specified, but they don't match so use an 'AND'
+                // to get just the specific situation we're looking for
+                $pager->db->setGroupConj('actor_actee_group', 'AND');
+            }
+        }else if(!is_null($actor)){
             $pager->db->addWhere('actor', "%$actor%", 'ILIKE');
-
-        if(!is_null($actee))
+        }else if(!is_null($actee)){
             $pager->db->addWhere('user_id', "%$actee%", 'ILIKE');
+        }
 
         if(!is_null($notes))
             $pager->db->addWhere('notes', "%$notes%", 'ILIKE');

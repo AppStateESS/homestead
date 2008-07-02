@@ -519,6 +519,7 @@ class HMS_Student {
                 case 'student_logs':
                     PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
                     $_REQUEST['actee'] = $_REQUEST['username'];
+                    $_REQUEST['actor'] = $_REQUEST['username'];
                     $content           = HMS_Activity_Log::main();
                     break;
                 default:
