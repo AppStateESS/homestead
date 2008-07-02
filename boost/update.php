@@ -920,6 +920,12 @@ function hms_update(&$content, $currentVersion)
 
             $content[] = 'Updated Statistics Template';
             $content[] = 'Updated Term Information';
+        case version_compare($currentVersion, '0.2.36', '<'):
+            $db = &new PHPWS_Db;
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_36.sql');
+            if(PEAR::isError($result)) {
+                return $result;
+            }
     }
 
     return TRUE;

@@ -155,6 +155,7 @@ CREATE TABLE hms_deadlines (
     select_roommate_end_timestamp           integer NOT NULL,
     view_assignment_begin_timestamp         integer NOT NULL,
     view_assignment_end_timestamp           integer NOT NULL,
+    move_in_timestamp                       integer NOT NULL,
     lottery_signup_begin_timestamp          integer NOT NULL,
     lottery_signup_end_timestamp            integer NOT NULL,
     updated_by                              smallint NOT NULL,

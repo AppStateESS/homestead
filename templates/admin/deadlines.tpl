@@ -78,6 +78,15 @@
                 <th>&nbsp;</th><td>&nbsp;</td>
             </tr>
             <tr>
+                <th>Move-in Day:</th><td>{MOVE_IN_TIMESTAMP_MONTH}</td><td>{MOVE_IN_TIMESTAMP_DAY}</td><td>{MOVE_IN_TIMESTAMP_YEAR}</td>
+            <tr>
+                <th>&nbsp;</th><td>&nbsp;</td>
+            </tr>
+            <tr>
+                <th>&nbsp;</th><td>&nbsp;</td>
+            </tr>
+
+            <tr>
                 <th>View Assignment Begin Date:</th><td>{VIEW_ASSIGNMENT_BEGIN_MONTH}</td><td>{VIEW_ASSIGNMENT_BEGIN_DAY}</td><td>{VIEW_ASSIGNMENT_BEGIN_YEAR}</td>
             </tr>
             <tr>

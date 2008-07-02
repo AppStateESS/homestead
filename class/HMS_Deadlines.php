@@ -24,6 +24,7 @@ class HMS_Deadlines {
     var $submit_rlc_application_end_timestamp;
     var $view_assignment_begin_timestamp;
     var $view_assignment_end_timestamp;
+    var $move_in_timestamp;
     var $lottery_signup_begin_timestamp;
     var $lottery_signup_end_timestamp;
 
@@ -77,6 +78,7 @@ class HMS_Deadlines {
         $db->addColumn('submit_rlc_application_end_timestamp');
         $db->addColumn('view_assignment_begin_timestamp');
         $db->addColumn('view_assignment_end_timestamp');
+        $db->addColumn('move_in_timestamp');
         $db->addColumn('lottery_signup_begin_timestamp');
         $db->addColumn('lottery_signup_end_timestamp');
         
@@ -323,6 +325,10 @@ class HMS_Deadlines {
         $form->addDropBox('submit_rlc_application_end_day', $days);
         $form->addDropBox('submit_rlc_application_end_year', $years);
 
+        $form->addDropBox('move_in_timestamp_month', $months);
+        $form->addDropBox('move_in_timestamp_day', $days);
+        $form->addDropBox('move_in_timestamp_year', $years);
+
         $form->addDropBox('view_assignment_begin_month', $months);
         $form->addDropBox('view_assignment_begin_day', $days);
         $form->addDropBox('view_assignment_begin_year', $years);
@@ -375,6 +381,10 @@ class HMS_Deadlines {
         $form->setMatch('submit_rlc_application_end_day', date('j', $deadlines->submit_rlc_application_end_timestamp));
         $form->setMatch('submit_rlc_application_end_month', date('n', $deadlines->submit_rlc_application_end_timestamp));
         $form->setMatch('submit_rlc_application_end_year', date('Y', $deadlines->submit_rlc_application_end_timestamp));
+
+        $form->setMatch('move_in_timestamp_day', date('j', $deadlines->move_in_timestamp));
+        $form->setMatch('move_in_timestamp_month', date('n', $deadlines->move_in_timestamp));
+        $form->setMatch('move_in_timestamp_year', date('Y', $deadlines->move_in_timestamp));
         
         $form->setMatch('view_assignment_begin_day', date('j', $deadlines->view_assignment_begin_timestamp));
         $form->setMatch('view_assignment_begin_month', date('n', $deadlines->view_assignment_begin_timestamp));
@@ -475,6 +485,11 @@ class HMS_Deadlines {
             $_REQUEST['submit_rlc_application_end_month'],
             $_REQUEST['submit_rlc_application_end_day'],
             $_REQUEST['submit_rlc_application_end_year']);
+
+        $deadlines->move_in_timestamp = mktime(0, 0, 0,
+            $_REQUEST['move_in_timestamp_month'],
+            $_REQUEST['move_in_timestamp_day'],
+            $_REQUEST['move_in_timestamp_year']);
 
         $deadlines->view_assignment_begin_timestamp = mktime(0, 0, 0,
             $_REQUEST['view_assignment_begin_month'],

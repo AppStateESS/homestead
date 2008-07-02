@@ -46,22 +46,7 @@ class HMS_Student_UI{
                 return HMS_Contact_Form::show_contact_form();
             }
             
-        # Calculate the student's age and check for >= 25 years old
-        $dob = explode('-', $dob); // in order: year, month, day
-        // Calculate a unix timestamp for the student's birthday
-        $dob_timestamp = mktime(0, 0, 0, $dob[1], $dob[2], $dob[0]); // hour, min, sec, month, day, year
-        if($dob_timestamp < (mktime(null,null,null,8,1) - TWENTY_FIVE_YEARS)) {   // Twenty five years from August 1
-            # Log that it happened
-            HMS_Activity_Log::log_activity($_SESSION['asu_username'],
-                                           ACTIVITY_TOO_OLD_REDIRECTED,
-                                           $_SESSION['asu_username'],
-                                           'DOB: ' . HMS_SOAP::get_dob($_SESSION['asu_username']));
-
-            # Set a rediret and return the appropriate template
-            $tpl = array();
-            Layout::metaRoute('http://www.housing.appstate.edu/index.php?module=pagemaster&PAGE_user_op=view_page&PAGE_id=33&MMN_position=164:116&MMN_position=190:190',10);
-            return PHPWS_Template::process($tpl, 'hms', 'student/welcome_screen_non_traditional.tpl');
-        }
+        
 
         # THIS IS A HACK
         $student = HMS_SOAP::get_student_info($_SESSION['asu_username']);
@@ -74,6 +59,23 @@ class HMS_Student_UI{
         
         # Get deadlines for the current term for future use
         $deadlines = HMS_Deadlines::get_deadlines($_SESSION['application_term']);
+
+        # Calculate the student's age and check for >= 25 years old based on move-in day deadline
+        $dob = explode('-', $dob); // in order: year, month, day
+        // Calculate a unix timestamp for the student's birthday
+        $dob_timestamp = mktime(0, 0, 0, $dob[1], $dob[2], $dob[0]); // hour, min, sec, month, day, year
+        if($dob_timestamp < ($deadlines->move_in_timestamp - TWENTY_FIVE_YEARS)) {   // Twenty five years from move_in_timestamp
+            # Log that it happened
+            HMS_Activity_Log::log_activity($_SESSION['asu_username'],
+                                           ACTIVITY_TOO_OLD_REDIRECTED,
+                                           $_SESSION['asu_username'],
+                                           'DOB: ' . HMS_SOAP::get_dob($_SESSION['asu_username']));
+
+            # Set a rediret and return the appropriate template
+            $tpl = array();
+            Layout::metaRoute('http://www.housing.appstate.edu/index.php?module=pagemaster&PAGE_user_op=view_page&PAGE_id=33&MMN_position=164:116&MMN_position=190:190',10);
+            return PHPWS_Template::process($tpl, 'hms', 'student/welcome_screen_non_traditional.tpl');
+        }
         
         /******************************************
          * Sort returning students (lottery) from *
