@@ -80,7 +80,7 @@ class HMS_Activity_Log{
      * Takes a username whos log the record should go in, the activity, the actor, and the notes
      * and creates a new Activity_Log object and saves it to the db.
      */
-    function log_activity($userid, $activity, $actor, $notes = '')
+    function log_activity($userid, $activity, $actor, $notes = NULL)
     {
         if( isset($_SESSION['login_as_student']) ) {
             $notes .= " Admin: " . Current_User::getUsername();
