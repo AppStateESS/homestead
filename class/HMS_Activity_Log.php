@@ -121,7 +121,8 @@ class HMS_Activity_Log{
                         ACTIVITY_BANNER_ERROR               => "Banner error",
                         ACTIVITY_LOGIN_AS_STUDENT           => "Admin logged in as student",
                         ACTIVITY_ADMIN_ASSIGNED_ROOMMATE    => "Admin assigned roommate",
-                        ACTIVITY_ADMIN_REMOVED_ROOMMATE     => "Admin removed roommate");
+                        ACTIVITY_ADMIN_REMOVED_ROOMMATE     => "Admin removed roommate",
+                        ACTIVITY_AUTO_CANCEL_ROOMMATE_REQ   => "Automatically canceled roommate request");
     }
 
     /**

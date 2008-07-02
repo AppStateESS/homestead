@@ -6,8 +6,9 @@
  * @author Jeremy Booker <jbooker at tux dot appstate dot edu>
  * @author Jeff Tickle <jtickle at tux dot appstate dot edu>
  */
-
-define('ROOMMATE_REQ_TIMEOUT', 72); // The number of hours before a roommate request expires
+ 
+// The number of seconds before a roommate request expires, (hrs * 60 * 60) 
+define('ROOMMATE_REQ_TIMEOUT', 259200); // 259200 = 72 hours
 
 class HMS_Roommate
 {
@@ -244,7 +245,7 @@ class HMS_Roommate
         $db = new PHPWS_DB('hms_roommate');
         $db->addWhere('requestor', $username, 'ILIKE');
         $db->addWhere('confirmed', 0);
-        $db->addWhere('requested_on', mktime() - (ROOMMATE_REQ_TIMEOUT * 60 * 60), '>=');
+        $db->addWhere('requested_on', mktime() - ROOMMATE_REQ_TIMEOUT, '>=');
         $result = $db->count();
 
         if(PHPWS_Error::logIfError($result))
@@ -262,7 +263,7 @@ class HMS_Roommate
         $db = new PHPWS_DB('hms_roommate');
         $db->addWhere('requestor', $asu_username, 'ILIKE');
         $db->addWhere('confirmed', 0);
-        $db->addWhere('requested_on', mktime() - (ROOMMATE_REQ_TIMEOUT * 60 * 60), '>=');
+        $db->addWhere('requested_on', mktime() - ROOMMATE_REQ_TIMEOUT, '>=');
         $db->addColumn('requestee');
         $result = $db->select('col');
 
@@ -281,7 +282,7 @@ class HMS_Roommate
         $db = new PHPWS_DB('hms_roommate');
         $db->addWhere('requestee', $asu_username, 'ILIKE');
         $db->addWhere('confirmed', 0);
-        $db->addWhere('requested_on', mktime() - (ROOMMATE_REQ_TIMEOUT * 60 * 60), '>=');
+        $db->addWhere('requested_on', mktime() - ROOMMATE_REQ_TIMEOUT, '>=');
         $result = $db->getObjects('HMS_Roommate');
 
         return $result;
@@ -295,6 +296,7 @@ class HMS_Roommate
         $db = new PHPWS_DB('hms_roommate');
         $db->addWhere('requestee', $asu_username, 'ILIKE');
         $db->addWhere('confirmed', 0);
+        $db->addWhere('requested_on', mktime() - ROOMMATE_REQ_TIMEOUT, '>=');
         $result = $db->count();
 
         return $result;
@@ -325,7 +327,10 @@ class HMS_Roommate
     function remove_outstanding_requests($asu_username)
     {
         $db = new PHPWS_DB('hms_roommate');
-        $db->addWhere('requestee', $asu_username, 'ILIKE');
+        $db->addWhere('requestee', $asu_username, 'ILIKE', NULL, 'username_group');
+        $db->addWhere('requestor', $asu_username, 'ILIKE', 'OR', 'username_group');
+        $db->setGroupConj('username_group', 'AND');
+        
         $db->addWhere('confirmed', 0);
         $requests = $db->getObjects('HMS_Roommate');
 
@@ -336,7 +341,10 @@ class HMS_Roommate
         if($requests == null)
             return TRUE;
 
+        PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
         foreach($requests as $request) {
+            HMS_Activity_Log::log_activity($request->requestor, ACTIVITY_AUTO_CANCEL_ROOMMATE_REQ, $_SESSION['asu_username'], "$request->requestee: Due to confirmed roommate");
+            HMS_Activity_Log::log_activity($request->requestee, ACTIVITY_AUTO_CANCEL_ROOMMATE_REQ, $_SESSION['asu_username'], "$request->requestor: Due to confirmed roommate");
             $request->delete();
         }
 
@@ -593,7 +601,7 @@ class HMS_Roommate
      */
     function calc_req_expiration_date()
     {
-        return ($this->requested_on + (ROOMMATE_REQ_TIMEOUT * 60 * 60));
+        return ($this->requested_on + ROOMMATE_REQ_TIMEOUT);
     }
     
     /*****************

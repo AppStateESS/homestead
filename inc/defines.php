@@ -138,6 +138,7 @@ define('ACTIVITY_LOGIN_AS_STUDENT',             18);
 
 define('ACTIVITY_ADMIN_ASSIGNED_ROOMMATE',      19);
 define('ACTIVITY_ADMIN_REMOVED_ROOMMATE',       20);
+define('ACTIVITY_AUTO_CANCEL_ROOMMATE_REQ',     21);
 
 /** 
  * Errors 

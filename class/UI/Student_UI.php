@@ -426,7 +426,7 @@ class HMS_Student_UI{
         PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
         $tags['ROOMMATE_INTRO'] = 'Once you\'ve had a chance to communicate with your desired roommate and you have both agreed that you would like to room together, either of you can use the menu below to initiate an electronic handshake to confirm your desire to be roommates.';
 
-        $roommate = HMS_Roommate::get_confirmed_roommate($_SESSION['asu_username']);
+        $roommate = HMS_Roommate::get_confirmed_roommate($_SESSION['asu_username'], $_SESSION['application_term']);
             
         if(!is_null($roommate)){
             $name = HMS_SOAP::get_full_name($roommate);
