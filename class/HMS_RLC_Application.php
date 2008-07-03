@@ -63,8 +63,8 @@ class HMS_RLC_Application{
         if(!isset($this->id)) {
             return FALSE;
         }
-
-        $db = &new PHPWS_DB('hms_learning_community_applications');
+        
+        $db = $this->getDB('hms_learning_community_applications');
         $db->addWhere('id',$this->id);
         $result = $db->delete();
 
@@ -113,7 +113,7 @@ class HMS_RLC_Application{
     function save()
     {
         
-        $db = &new PHPWS_DB('hms_learning_community_applications');
+        $db = $this->getDB('hms_learning_community_applications');
 
         $db->addValue('user_id',                    $this->getUserID());
         $db->addValue('rlc_first_choice_id',        $this->getFirstChoice());
@@ -156,10 +156,10 @@ class HMS_RLC_Application{
     /**
     * Creates a new application object from $_REQUEST data and saves it the database.
     */
-    function save_application()
+    function save_application($test=false)
     {
         $application = &new HMS_RLC_Application($_SESSION['asu_username']);
-
+        
         $application->setUserID($_SESSION['asu_username']);
         $application->setFirstChoice($_REQUEST['rlc_first_choice']);
         if($_REQUEST['rlc_second_choice'] > -1){
@@ -192,8 +192,11 @@ class HMS_RLC_Application{
         }
 
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-        HMS_Activity_Log::log_activity();
-        
+        HMS_Activity_Log::log_activity($_SESSION['asu_username'], 'RLC Application', null);
+        if($test){
+            return $application;
+        }
+
         return $result;
     }
     
@@ -205,7 +208,7 @@ class HMS_RLC_Application{
     */
     function check_for_application($asu_username = NULL, $entry_term = NULL, $include_denied = TRUE)
     {
-        $db = &new PHPWS_DB('hms_learning_community_applications');
+        $db = $this->getDB('hms_learning_community_applications');
 
         if(isset($asu_username)){
             $db->addWhere('user_id',$asu_username,'ILIKE');
@@ -358,7 +361,7 @@ class HMS_RLC_Application{
     /****************************************************************/
     function getDropDown()
     {
-        $db = &new PHPWS_DB('hms_learning_communities');
+        $db = $this->getDB('hms_learning_communities');
         $result = $db->select();
 
         if( PHPWS_Error::logIfError($result) ) {
@@ -388,19 +391,22 @@ class HMS_RLC_Application{
     /**
      * Marks an RLC application as denied
      */
-    function deny_rlc_application()
+    function deny_rlc_application($db=null)
     {
         if(!Current_User::allow('hms', 'approve_rlc_applications')){
             $tpl = array();
             return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
         }
 
-        $db = new PHPWS_DB('hms_learning_community_applications');
+        if($db == null){ //allow db injection for unit testing
+            $db = $this->getDB('hms_learning_community_applications');
+        }
         $db->addWhere('id', $_REQUEST['id']);
         $db->addValue('denied', 1);
 
         $result = $db->update();
 
+        PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
         if(PEAR::isError($result)){
             PHPWS_Error::log($result);
             return HMS_Learning_Community::assign_applicants_to_rlcs(null, 'There was an error working with the database. The application was not modified.');
@@ -419,7 +425,7 @@ class HMS_RLC_Application{
             return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
         }
 
-        $db = new PHPWS_DB('hms_learning_community_applications');
+        $db = $this->getDB('hms_learning_community_applications');
         $db->addWhere('id', $_REQUEST['id']);
         $db->addValue('denied', 0);
 
@@ -681,7 +687,7 @@ class HMS_RLC_Application{
 
         $choices = array($_REQUEST['rlc_first_choice'], $_REQUEST['rlc_second_choice'], $_REQUEST['rlc_third_choice']);
 
-        $db = &new PHPWS_DB('hms_learning_community_questions');
+        $db = $this->getDB('hms_learning_community_questions');
         
         for($i = 0; $i < 3; $i++){
             # Skip the question lookup if "none" was selected
@@ -785,7 +791,7 @@ class HMS_RLC_Application{
             $rlc_app = &new HMS_RLC_Application($username, HMS_SOAP::get_application_term($username));
         }
         
-        $db = &new PHPWS_DB('hms_learning_communities');
+        $db = $this->getDB('hms_learning_communities');
         $db->addColumn('id');
         $db->addColumn('community_name');
         $rlcs_raw = $db->select();
@@ -938,6 +944,12 @@ class HMS_RLC_Application{
     function setEntryTerm($term){
         $this->term = $term;
     }
-}
 
+    /************************************************************/
+    /* Used for unit testing, allows us to create mock objects. */
+    /************************************************************/
+    function getDB($param){
+        return new PHPWS_DB($param);
+    }
+}
 ?>

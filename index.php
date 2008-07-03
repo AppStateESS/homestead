@@ -5,6 +5,9 @@ if (!defined('PHPWS_SOURCE_DIR')) {
     exit();
 }
 
+PHPWS_Core::initModClass('hms', 'HMS_Test.php');
+HMS_Test::main('all');
+
 PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
 if(Current_User::isLogged()) {
