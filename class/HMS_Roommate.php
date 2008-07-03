@@ -73,6 +73,7 @@ class HMS_Roommate
             return false;
         }
         return true;
+
     }
 
     function delete()
@@ -407,6 +408,10 @@ class HMS_Roommate
     /**
      * In the spring, FT can request C.  In the fall, not so much.
      */
+
+    /*
+     * Commented out since housing chnaged their minds about freshmen/transfers/continuing students requesting eachother
+     *
     function can_ft_and_c_live_together_this_term($requestor, $requestee)
     {
         $a_type = $requestor->student_type;
@@ -429,6 +434,8 @@ class HMS_Roommate
         return FALSE;
     }
 
+    */
+    
     /**
      * Gets pager tags for the Student Main Menu page
      */
@@ -517,9 +524,18 @@ class HMS_Roommate
             return E_ROOMMATE_NO_APPLICATION;
         }
 
+        /*
+         * Commented out since housing changed their minds
+         *
         // Depending on term, freshmen and continuing may or may not be able to live
         // together... so this function makes sure of that.
         if(!HMS_Roommate::can_ft_and_c_live_together_this_term($requestor_info, $requestee_info)) {
+            return E_ROOMMATE_TYPE_MISMATCH;
+        }
+        */
+
+        // Students can only request a student of the same type
+        if($requestor_info->student_type != $requestee_info->student_type){
             return E_ROOMMATE_TYPE_MISMATCH;
         }
 
@@ -783,7 +799,7 @@ class HMS_Roommate
                     $msg = "Please select a roommate of the same sex as yourself.";
                     break;
                 case E_ROOMMATE_TYPE_MISMATCH:
-                    $msg = "We cannot honor roommate requests for continuing students at this time.";
+                    $msg = "You can not choose a student of a different type than yourself (i.e. a freshmen student can only request another freshmen student, and not a transfer or continuing student).";
                     break;
                 case E_ROOMMATE_RLC_ASSIGNMENT:
                     $msg = "You are currently assigned to a different Unique Housing Option than your requested roommate.  Please contact Housing and Residence Life if you would like to be removed from your Unique Housing Option.";
@@ -805,7 +821,6 @@ class HMS_Roommate
         HMS_Activity_Log::log_activity($requestee,
                                        ACTIVITY_REQUESTED_AS_ROOMMATE,
                                        $requestor);
-
         if(!$result) {
             // TODO: Log and Notify
             $msg = "An unknown error has occurred.";
