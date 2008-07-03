@@ -17,6 +17,7 @@ class HMS_Autoassigner
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Banner_Queue.php');
 
         $term = HMS_Term::get_selected_term();
 
@@ -40,9 +41,6 @@ class HMS_Autoassigner
 
         $i_f_count = count($f_rooms);
         $i_m_count = count($m_rooms);
-
-        // TODO: IMMEDIATELY Add check for RLCs
-        // TODO: IMMEDIATELY clean up the output
 
         // Assign Roommates
         reset($roommates);
@@ -122,9 +120,29 @@ class HMS_Autoassigner
 
             $bed_a_text = $room->_beds[0]->get_banner_building_code() . ' ' . $room->_beds[0]->banner_id;
             $bed_b_text = $room->_beds[1]->get_banner_building_code() . ' ' . $room->_beds[1]->banner_id;
-
-            $successes[] = HMS_Autoassigner::record_success('Requested', $a, $b, $bed_a_text);
-            $successes[] = HMS_Autoassigner::record_success('Requested', $b, $a, $bed_b_text);
+            
+            if($test) {
+                $successes[] = HMS_Autoassigner::record_success('TEST Requested', $a, $b, $bed_a_text);
+                $successes[] = HMS_Autoassigner::record_success('TEST Requested', $b, $a, $bed_b_text);
+            } else {
+                $result = HMS_Autoassigner::assign($a, $room->_beds[0], $term);
+                if($result === TRUE) {
+                    $successes[] = HMS_Autoassigner::record_success('Requested', $a, $b, $bed_a_text);
+                    $assigned[] = $a->hms_student_id;
+                } else {
+                    $problems[] = $result;
+                }
+                
+                if(!is_null($b->id)) {
+                    $result = HMS_Autoassigner::assign($b, $room->_beds[1], $term);
+                    if($result === TRUE) {
+                        $successes[] = HMS_Autoassigner::record_success('Requested', $b, $a, $bed_b_text);
+                        $assigned[] = $b->hms_student_id;
+                    } else {
+                        $problems[] = $result;
+                    }
+                }
+            }
 
             $assigned[] = $a->hms_student_id;
             if(!is_null($b->id))
@@ -207,49 +225,33 @@ class HMS_Autoassigner
             $bed_a_text = $room->_beds[0]->get_banner_building_code() . ' ' . $room->_beds[0]->banner_id;
             $bed_b_text = $room->_beds[1]->get_banner_building_code() . ' ' . $room->_beds[1]->banner_id;
 
-            $successes[] = HMS_Autoassigner::record_success('Auto', $a, $b, $bed_a_text);
-            $successes[] = HMS_Autoassigner::record_success('Auto', $b, $a, $bed_b_text);
+            if($test) {
+                $successes[] = HMS_Autoassigner::record_success('TEST Auto', $a, $b, $bed_a_text);
+                $successes[] = HMS_Autoassigner::record_success('TEST Auto', $b, $a, $bed_b_text);
+            } else {
+                $result = HMS_Autoassigner::assign($a, $room->_beds[0], $term);
+                if($result === TRUE) {
+                    $successes[] = HMS_Autoassigner::record_success('Auto', $a, $b, $bed_a_text);
+                    $assigned[] = $a->hms_student_id;
+                } else {
+                    $problems[] = $result;
+                }
+
+                if(!is_null($b->id)) {
+                    $result = HMS_Autoassigner::assign($b, $room->_beds[1], $term);
+                    if($result === TRUE) {
+                        $successes[] = HMS_Autoassigner::record_success('Auto', $b, $a, $bed_b_text);
+                        $assigned[] = $b->hms_student_id;
+                    } else {
+                        $problems[] = $result;
+                    }
+                }
+            }
 
             $assigned[] = $a->hms_student_id;
             if(!is_null($b->id))
                 $assigned[] = $b->hms_student_id;
         }
-
-            // Assign
-/*            if(!$test) {
-                // Get Meal Plan
-                $meal_plan = HMS_SOAP::get_plan_meal_codes($applicant->hms_student_id, $bed['hall'], $applicant->meal_option);
-
-                $banner_success = HMS_Banner_Queue::queue_create_assignment(
-                    $applicant->hms_student_id,
-                    HMS_Term::get_selected_term(),
-                    $bed['banner_building_code'],
-                    $bed['banner_id'],
-                    $meal_plan['plan'],
-                    $meal_plan['meal']
-                );
-
-                if($banner_success) {
-                    $problems[] = "Skipped bed {$bed['bed']['id']} username {$applicant->hms_student_id} due to banner error code $banner_success";
-                    continue;
-                }
-
-                $assignment = new HMS_Assignment();
-
-                $assignment->asu_username = $applicant->hms_student_id;
-                $assignment->bed_id       = $bed['bed']['id'];
-                $assignment->term         = HMS_Term::get_selected_term();
-                $assignment->meal_option  = $applicant->meal_option;
-
-                $result = $assignment->save();
-
-                HMS_Activity_Log::log_activity($applicant->hms_student_id, ACTIVITY_AUTO_ASSIGNED, Current_User::getUsername(), HMS_Term::get_selected_term() . ' ' . $bed['banner_building_code'] . ' ' . $bed['banner_id']);
-
-                $successes[] = "Assigned <strong>{$applicant->hms_student_id}</strong> to <strong>{$bed['banner_building_code']} {$bed['banner_id']}</strong>";
-            } else {
-                $successes[] = "Would have assigned {$applicant->hms_student_id} to bed{$bed['id']}";
-            }
-        }*/
 
         $f_f_count = count($f_rooms);
         $f_m_count = count($m_rooms);
@@ -332,6 +334,37 @@ class HMS_Autoassigner
     function sort_successes($a, $b)
     {
         return strcmp($a['a'], $b['a']);
+    }
+
+    function assign($app, $bed, $term)
+    {
+        $bbc  = $bed->get_banner_building_code();
+        $bid  = $bed->banner_id;
+        $user = $app->hms_student_id;
+        
+        $meal_plan = HMS_SOAP::get_plan_meal_codes($user, $bbc, $app->meal_option);
+        
+        $error = HMS_Banner_Queue::queue_create_assignment($user, $term,
+            $bbc, $bid, $meal_plan['plan'], $meal_plan['meal']);
+
+        if($error) {
+            return "Skipped bed $bbc $bid username $user due to banner error code $error";
+        }
+
+        $assignment = new HMS_Assignment();
+        $assignment->asu_username = $user;
+        $assignment->bed_id       = $bed->id;
+        $assignment->term         = $term;
+        $assignment->meal_option  = $app->meal_option;
+
+        $result = $assignment->save();
+        // TODO: Check this result, throw major errorz if it's no good, since
+        // we'll have to reverse the Banner bit
+
+        HMS_Activity_Log::log_activity($user, ACTIVITY_AUTO_ASSIGNED,
+            Current_User::getUsername(), "$term $bbc $bid");
+
+        return TRUE;
     }
 }
 
