@@ -46,7 +46,7 @@ class HMS_SOAP{
         if(HMS_SOAP::is_soap_fault($student)){
             HMS_SOAP::log_soap('get_student_info: ' . $username . ' result: PEAR Error');
             HMS_SOAP::log_soap_fault($student,'get_student_info',$username);
-            return false;
+            HMS_SOAP::handle_soap_fault(); 
         }
 
         # Check for a banner error
@@ -95,7 +95,7 @@ class HMS_SOAP{
         if(HMS_SOAP::is_soap_fault($result)){
             HMS_SOAP::log_soap('report_application_received: ' . $username . ' result: PEAR Error');
             HMS_SOAP::log_soap_fault($result, 'report_application_received', $username . ' ' . $term);
-            return false;
+            HMS_SOAP::handle_soap_fault(); 
         }
 
         # It's not a SOAP Fault, so hopefully it's an int.
@@ -135,7 +135,7 @@ class HMS_SOAP{
         if(HMS_SOAP::is_soap_fault($assignment)){
             HMS_SOAP::log_soap('report_room_assignment: ' . $username . ' result: Banner error' . $assignment);
             HMS_SOAP::log_soap_fault($assignment, 'report_room_assignment', $username . ' ' . $term);
-            return false;
+            HMS_SOAP::handle_soap_fault(); 
         }
         
         # Check for a banner error
@@ -169,7 +169,7 @@ class HMS_SOAP{
         if(HMS_SOAP::is_soap_fault($removal)){
             HMS_SOAP::log_soap('remove_room_assignment: ' . $username . ' result: PEAR error');
             HMS_SOAP::log_soap_fault($removal, 'remove_room_assignment', $username . ' ' . $term);
-            return false;
+            HMS_SOAP::handle_soap_fault(); 
         }
         
         # Check for a banner error
@@ -207,7 +207,7 @@ class HMS_SOAP{
         if(HMS_SOAP::is_soap_fault($student)) {
             HMS_SOAP::log_soap('get_hous_meal_register: ' . $username . ' result: PEAR Error');
             HMS_SOAP::log_soap_fault($student, 'get_hous_meal_register', $username);
-            return false;
+            HMS_SOAP::handle_soap_fault(); 
         }
         
         # Check for a banner error
@@ -697,6 +697,18 @@ class HMS_SOAP{
 
         return $retval;
     }
+
+   function handle_soap_fault()
+   {
+        // Show an error page
+        if(Current_User::getUsername() == 'hms_student'){
+            Layout::add('An error occurred while trying to communicate with the primary Banner student information server on which the Housing Management System relies. The error has been logged, and server administrators have been notified. We apologize for any inconvenience this may have caused, please try again later. Please do not contact Housing & Residence Life regarding this error, as they will be unable to assist you.', 'hms');
+        }else{
+            Layout::add('An error occurred while trying to communicate with Banner. Please contact ESS.','hms');
+        }
+        echo Layout::display();
+        exit;
+   }
 
     /*************************
      * Canned data functions *
