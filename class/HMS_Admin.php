@@ -313,7 +313,8 @@ class HMS_Admin
         // (necessary since not everyone who is assigned will have an application) 
         $db->setSQLQuery("select DISTINCT * FROM (select hms_student_id from hms_application WHERE term=$term UNION select asu_username from hms_assignment WHERE term=$term) as foo");
         $result = $db->select('col');
-        test($result);
+
+        //test($result);
 
         if(PEAR::isError($result)){
             PHPWS_Error::logIfError($result);
@@ -324,12 +325,13 @@ class HMS_Admin
         $form->addHidden('module', 'hms');
         $form->addHidden('type', 'admin');
         $form->addHidden('op', 'withdrawn_search_process');
+        $form->addSubmit('submit', 'Remove Withdrawn Students');
 
         # Lookup each student
         foreach($result as $asu_username){
             # Query SOAP, skiping students who are not withdrawn
             if(HMS_SOAP::get_student_type($asu_username, $term) != TYPE_WITHDRAWN){
-                continue;
+                //continue;
             }
 
             $assignment = HMS_Assignment::get_assignment($asu_username, $term);
@@ -337,7 +339,7 @@ class HMS_Admin
             $tpl['withdrawn_students'][] = array(
                                     'NAME'              => HMS_Student::get_link($asu_username, TRUE),
                                     'BANNER_ID'         => HMS_SOAP::get_banner_id($asu_username),
-                                    'REMOVE_CHECKBOX'   => '<input type="checkbox" name="remove_checkbox" value="' . $asu_username . '">',
+                                    'REMOVE_CHECKBOX'   => '<input type="checkbox" name="remove_checkbox" value="' . $asu_username . '" checked>',
                                     'ASSIGNMENT'        => is_null($assignment)?'None':$assignment->where_am_i()
                                     );
 
@@ -345,6 +347,8 @@ class HMS_Admin
 
         $tpl['TITLE'] = 'Withdrawn Search - ' . HMS_Term::term_to_text(HMS_Term::get_selected_term(), TRUE);
         $tpl['TITLE_CLASS'] = HMS_Util::get_title_class();
+
+        $tpl['COUNT'] = sizeof($tpl['withdrawn_students']);
 
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();

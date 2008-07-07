@@ -27,6 +27,9 @@
           </tr>
           <!-- END withdrawn_students -->
         </table>
+        <br />
+        Found {COUNT} withdrawn students.<br /><br />
+        {SUBMIT}
         {END_FORM}
     </div>
   </div>
