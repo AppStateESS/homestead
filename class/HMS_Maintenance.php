@@ -133,7 +133,10 @@ class HMS_Maintenance
          * Student Maintenance *
          ***********************/
         if(Current_User::allow('hms', 'search'))
-            $tpl['SEARCH_FOR_STUDENT'] = PHPWS_Text::secureLink(_('Search for a Student'), 'hms', array('type'=>'student', 'op'=>'enter_student_search_data'));
+            $tpl['SEARCH_FOR_STUDENT']  = PHPWS_Text::secureLink(_('Search for a Student'), 'hms', array('type'=>'student', 'op'=>'enter_student_search_data'));
+
+        if(Current_User::allow('hms', 'search'))
+            $tpl['WITHDRAWN_SEARCH']    = PHPWS_Text::secureLink(_('Search for withdrawn students'), 'hms', array('type'=>'admin', 'op'=>'withdrawn_search_start'));
 
 /*
         if(Current_User::allow('hms', 'add_student'))

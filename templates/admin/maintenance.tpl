@@ -7,6 +7,7 @@
             <!-- BEGIN student_maint -->
             <h2><i>Student Maintenance</i></h2>
             &nbsp;&nbsp;&nbsp;{SEARCH_FOR_STUDENT}<br />
+            &nbsp;&nbsp;&nbsp;{WITHDRAWN_SEARCH}<br />
             <!-- &nbsp;&nbsp;&nbsp;{ADD_STUDENT}<br />
             &nbsp;&nbsp;&nbsp;{EDIT_STUDENT}<br />-->
             <br />

@@ -87,6 +87,12 @@ class HMS_Admin
                     case 'show_primary_admin_panel':
                         $final = HMS_Admin::show_primary_admin_panel();
                         break;
+                    case 'withdrawn_search_start':
+                        $final = HMS_Admin::withdrawn_search_start();
+                        break;
+                    case 'withdrawn_search':
+                        $final = HMS_Admin::withdrawn_search();
+                        break;
                     default:
                         PHPWS_Core::initModClass('hms', 'HMS_Display.php');
                         $final = HMS_Display::main();
@@ -254,6 +260,93 @@ class HMS_Admin
     {
         PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
         return HMS_Form::show_primary_admin_panel();
+    }
+
+    /**
+     * Shows the page where the user can start the withdrawn student search
+     */
+    function withdrawn_search_start($success_msg = NULL, $error_msg = NULL)
+    {
+        PHPWS_Core::initCoreClass('Form.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+
+        $form = &new PHPWS_Form();
+        $form->addSubmit('start', 'Begin Withdrawn Student Search');
+
+        $form->addHidden('mod', 'hms');
+        $form->addHidden('type', 'admin');
+        $form->addHidden('op', 'withdrawn_search');
+
+        $tpl = $form->getTemplate();
+
+        $tpl['TERM'] = HMS_Term::term_to_text(HMS_Term::get_selected_term(), TRUE);
+
+        if(isset($success_msg)){
+            $tpl['SUCCESS_MSG'] = $success_msg;
+        }
+
+        if(isset($error_msg)){
+            $tpl['ERROR_MSG'] = $error_msg;
+        }
+
+        return PHPWS_Template::process($tpl, 'hms', 'admin/withdrawn_search_start.tpl');
+    }
+
+    /**
+     * Performs the withdrawn student search
+     */
+    function withdrawn_search()
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Student.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
+
+        $db = &new PHPWS_DB('hms_application');
+
+        $db->addColumn('hms_student_id');
+        $db->addWhere('term', HMS_Term::get_selected_term());
+        
+        $result = $db->select('col');
+
+        if(PEAR::isError($result)){
+            PHPWS_Error::logIfError($result);
+            return HMS_Admin::withdrawn_search_start(NULL, 'An error occured while working with the HMS database.');
+        }
+
+        $term = HMS_Term::get_selected_term();
+
+        $form = &new PHPWS_Form('withdrawn_form');
+        $form->addHidden('module', 'hms');
+        $form->addHidden('type', 'admin');
+        $form->addHidden('op', 'withdrawn_search_process');
+
+        # Lookup each student
+        foreach($result as $asu_username){
+            # Query SOAP, skiping students who are not withdrawn
+            if(HMS_SOAP::get_student_type($asu_username, $term) != TYPE_WITHDRAWN){
+                continue;
+            }
+
+            $assignment = HMS_Assignment::get_assignment($asu_username, $term);
+
+            $tpl['withdrawn_students'][] = array(
+                                    'NAME'              => HMS_Student::get_link($asu_username, TRUE),
+                                    'BANNER_ID'         => HMS_SOAP::get_banner_id($asu_username),
+                                    'REMOVE_CHECKBOX'   => '<input type="checkbox" name="remove_checkbox" value="' . $asu_username . '">',
+                                    'ASSIGNMENT'        => is_null($assignment)?'None':$assignment->where_am_i()
+                                    );
+
+        }
+
+        $tpl['TITLE'] = 'Withdrawn Search - ' . HMS_Term::term_to_text(HMS_Term::get_selected_term(), TRUE);
+        $tpl['TITLE_CLASS'] = HMS_Util::get_title_class();
+
+        $form->mergeTemplate($tpl);
+        $tpl = $form->getTemplate();
+
+        return PHPWS_Template::process($tpl, 'hms', 'admin/withdrawn_search.tpl');
     }
 }
 
