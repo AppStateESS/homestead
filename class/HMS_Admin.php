@@ -331,7 +331,7 @@ class HMS_Admin
         foreach($result as $asu_username){
             # Query SOAP, skiping students who are not withdrawn
             if(HMS_SOAP::get_student_type($asu_username, $term) != TYPE_WITHDRAWN){
-                //continue;
+                continue;
             }
 
             $assignment = HMS_Assignment::get_assignment($asu_username, $term);
