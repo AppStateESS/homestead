@@ -303,19 +303,22 @@ class HMS_Admin
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
-        $db = &new PHPWS_DB('hms_application');
+        //$result = PHPWS_DB::select('col', 'select DISTINCT * FROM (select hms_student_id from hms_application UNION select asu_username from hms_assignment) as foo');
+        //$result = PHPWS_DB::query('select DISTINCT * FROM (select hms_student_id from hms_application UNION select asu_username from hms_assignment) as foo');
 
-        $db->addColumn('hms_student_id');
-        $db->addWhere('term', HMS_Term::get_selected_term());
-        
+        $db = &new PHPWS_DB('hms_application');
+        $term = HMS_Term::get_selected_term();
+       
+        // This is ugly, but it does what we need it to do...
+        // (necessary since not everyone who is assigned will have an application) 
+        $db->setSQLQuery("select DISTINCT * FROM (select hms_student_id from hms_application WHERE term=$term UNION select asu_username from hms_assignment WHERE term=$term) as foo");
         $result = $db->select('col');
+        test($result);
 
         if(PEAR::isError($result)){
             PHPWS_Error::logIfError($result);
             return HMS_Admin::withdrawn_search_start(NULL, 'An error occured while working with the HMS database.');
         }
-
-        $term = HMS_Term::get_selected_term();
 
         $form = &new PHPWS_Form('withdrawn_form');
         $form->addHidden('module', 'hms');
