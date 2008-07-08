@@ -103,6 +103,7 @@ class HMS_Bed extends HMS_Item {
             return true;
         }elseif(sizeof($result) > 1){
             PHPWS_Error::log(HMS_MULTIPLE_ASSIGNMENTS, 'hms', 'HMS_Bed::loadAssignment',sprintf('A=%s,B=%s', $ass->id, $this->id));
+            return false;
         }else{
             $this->_curr_assignment = $result[0];
         }
