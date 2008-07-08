@@ -337,7 +337,8 @@ class HMS_Student {
         } 
 
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
-        $student_info = HMS_SOAP::get_student_info($_REQUEST['username']);
+        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+        $student_info = HMS_SOAP::get_student_info($_REQUEST['username'], HMS_Term::get_selected_term());
 
         #test($student_info);
 
@@ -363,16 +364,41 @@ class HMS_Student {
         $tpl['DOB'] = $student_info->dob;
 
         if($student_info->projected_class == CLASS_FRESHMEN) {
-            $tpl['CLASS'] = "Freshman";
+            $tpl['CLASS'] = 'Freshman';
         } else if ($student_info->projected_class == CLASS_SOPHOMORE) {
-            $tpl['CLASS'] = "Sophomore";
+            $tpl['CLASS'] = 'Sophomore';
         } else if ($student_info->projected_class == CLASS_JUNIOR) {
-            $tpl['CLASS'] = "Junior";
+            $tpl['CLASS'] = 'Junior';
         } else if ($student_info->projected_class == CLASS_SENIOR) {
-            $tpl['CLASS'] = "Senior";
+            $tpl['CLASS'] = 'Senior';
         } else {
             $tpl['CLASS'] = "Unknown class: ({$student_info->projected_class})";
         }
+
+        switch($student_info->student_type){
+            case TYPE_FRESHMEN:
+                $tpl['TYPE'] = 'Freshmen';
+                break;
+            case TYPE_TRANSFER:
+                $tpl['TYPE'] = 'Transfer';
+                break;
+            case TYPE_CONTINUING:
+                $tpl['TYPE'] = 'Continuing';
+                break;
+            case TYPE_RETURNING:
+                $tpl['TYPE'] = 'Returning';
+                break;
+            case TYPE_READMIT:
+                $tpl['TYPE'] = 'Re-admit';
+                break;
+            case TYPE_WITHDRAWN:
+                $tpl['TYPE'] = 'Withdrawn';
+                break;
+            default:
+                $tpl['TYPE'] = 'Unknown type: ' . $student_info->student_type;
+                break;
+        }
+                
 
         $tpl['APPLICATION_TERM'] = $student_info->application_term;
         
@@ -409,7 +435,6 @@ class HMS_Student {
 
         $tpl['APPLICATION_TERM'] = HMS_SOAP::get_application_term($_REQUEST['username']);
 
-        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
         $this_term = HMS_Term::get_selected_term();
 
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');

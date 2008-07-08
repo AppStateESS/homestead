@@ -21,6 +21,9 @@
                 <td>Date of Birth: </td><td>{DOB}</td>
             </tr>
             <tr>
+                <td>Type: </td><td>{TYPE}</td>
+            </tr>
+            <tr>
                 <td>Class: </td><td>{CLASS}</td>
             </tr>
             <tr>
