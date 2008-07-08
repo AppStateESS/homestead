@@ -580,7 +580,8 @@ class HMS_Room extends HMS_Item
     {
         $db = &new PHPWS_DB('hms_room');
 
-        $db->addColumn('distinct id');
+        $db->addColumn('id');
+        $db->setDistinct();
 
         // Join other tables so we can do the other 'assignable' checks
         $db->addJoin('LEFT', 'hms_room', 'hms_bed', 'id', 'room_id');
@@ -618,11 +619,6 @@ class HMS_Room extends HMS_Item
         // Don't get rooms on floors reserved for an RLC
         $db->addWhere('hms_floor.rlc_id', NULL);
 
-        // Randomize if necessary
-        if($randomize) {
-            $db->addOrder('random');
-        }
-
         $result = $db->select('col');
 
         // In case of an error, log it and return FALSE
@@ -631,8 +627,14 @@ class HMS_Room extends HMS_Item
         }
 
         // Make sure each room is empty and has only two beds
-        return array_values(array_filter($result,
+        $ret = array_values(array_filter($result,
             array('HMS_Room', 'check_two_bed_and_empty_by_id')));
+
+        if($randomize) {
+            shuffle($ret);
+        }
+
+        return $ret;
     }
 
     function check_two_bed_and_empty_by_id($room)
