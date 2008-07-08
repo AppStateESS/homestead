@@ -12,7 +12,8 @@ class HMS_Reports{
                         'housing_asss'  => 'Assignment Demographics',
                         'assigned_f'    => 'Assigned Type F Students',
                         'system_stats'  => 'Get System Statistics',
-                        'special_needs' => 'Special Needs Applicants'
+                        'special_needs' => 'Special Needs Applicants',
+                        'unassd_apps'   => 'Unassigned Applicants'
                         );
 /*                        'housing_asss' =>'Housing Assignments Made',*/
 /*                        'unassd_rooms' =>'Currently Unassigned Rooms',*/
@@ -21,7 +22,6 @@ class HMS_Reports{
 /*                        'assd_alpha'   =>'Assigned Students',*/
 /*                        'special'      =>'Special Circumstances',*/
 /*                        'hall_structs' =>'Hall Structures');*/
-/*                        'unassd_apps'  =>'Unassigned Applicants',*/
 /*                        'no_ban_data'  =>'Students Without Banner Data',*/
 /*                        'no_deposit'   =>'Assigned Students with No Deposit',*/
 /*                        'bad_type'     =>'Assigned Students Withdrawn or with Bad Type',*/
@@ -92,6 +92,9 @@ class HMS_Reports{
             case 'special_needs':
                 $content .= HMS_Reports::special_needs();
                 break;
+            case 'unassd_apps':
+                return HMS_Reports::unassigned_applicants_report();
+                break;
             /*
             case 'unassd_rooms':
                 return HMS_Reports::run_unassigned_rooms_report();
@@ -110,9 +113,6 @@ class HMS_Reports{
                 break;
             case 'hall_structs':
                 return HMS_Reports::display_hall_structures();
-                break;
-            case 'unassd_apps':
-                return HMS_Reports::run_unassigned_applicants_report();
                 break;
             case 'no_ban_data':
                 return HMS_Reports::run_no_banner_data_report();
@@ -1122,8 +1122,11 @@ class HMS_Reports{
         return $content;
     }
 
-    function run_unassigned_applicants_report()
+    function unassigned_applicants_report()
     {
+        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+        $term = HMS_Term::get_selected_term();
+        
         $sql = "
             SELECT hms_student_id AS user,
                    student_status AS status,
@@ -1132,6 +1135,7 @@ class HMS_Reports{
             LEFT OUTER JOIN hms_assignment
             ON hms_assignment.asu_username = hms_application.hms_student_id
             WHERE hms_assignment.asu_username IS NULL
+            AND hms_application.term = {$term}
             ORDER BY hms_student_id
         ";
         $results = PHPWS_DB::getAll($sql);
@@ -1140,6 +1144,11 @@ class HMS_Reports{
         }
 
         $content = "<h2>Unassigned Applicants</h2><br />";
+
+        if(sizeof($results) == 0){
+            $content .= "No unassigned applicants found.";
+            return $content;
+        }
 
         PHPWS_Core::initModClass('hms','HMS_SOAP.php');
         foreach($results as $row) {
