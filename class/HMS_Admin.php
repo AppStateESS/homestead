@@ -340,7 +340,7 @@ class HMS_Admin
                                     'NAME'              => HMS_Student::get_link($asu_username, TRUE),
                                     'BANNER_ID'         => HMS_SOAP::get_banner_id($asu_username),
                                     'REMOVE_CHECKBOX'   => '<input type="checkbox" name="remove_checkbox" value="' . $asu_username . '" checked>',
-                                    'ASSIGNMENT'        => is_null($assignment)?'None':$assignment->where_am_i()
+                                    'ASSIGNMENT'        => is_null($assignment)?'None':PHPWS_Text::secureLink($assignment->where_am_i(), 'hms', array('type'=>'room', 'op'=>'show_edit_room', 'room'=>$assignment->get_room_id()))
                                     );
 
         }

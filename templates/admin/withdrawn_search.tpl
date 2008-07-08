@@ -11,7 +11,7 @@
         <!-- END success_msg -->
         {START_FORM}
         
-        <table>
+        <table cellspacing="2" cellpadding="2">
           <tr>
             <th>&nbsp;</th>
             <th>Name</th>

@@ -165,6 +165,18 @@ class HMS_Assignment extends HMS_Item
         return $floor->rt_movein_time_id;
     }
 
+    function get_room_id()
+    {
+
+        if(!$this->loadBed()){
+            return null;
+        }
+
+        $room   = $this->_bed->get_parent();
+
+        return $room->id;
+    }
+
     /******************
      * Static Methods *
      *****************/
