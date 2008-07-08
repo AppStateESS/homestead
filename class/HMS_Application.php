@@ -36,6 +36,8 @@ class HMS_Application {
     var $deleted = 0;
     var $deleted_by;
     var $deleted_on;
+
+    var $withdrawn;
     
 
     /**
@@ -65,7 +67,7 @@ class HMS_Application {
     function init($term = NULL)
     {
         # Check if an application for this user and semester already exists.
-        $result = HMS_Application::check_for_application($this->hms_student_id, $term);
+        $result = HMS_Application::check_for_application($this->hms_student_id, $term, TRUE);
 
         if(PEAR::isError($result)){
             PHPWS_Error::log($result,'hms','init',"Caught error from check_for_application.");
@@ -93,6 +95,8 @@ class HMS_Application {
         $this->setDeletedOn($result['deleted_on']);
         $this->setAgreedToTerms($result['agreed_to_terms']);
         $this->setAggregate($result['aggregate']);
+
+        $this->withdrawn = $result['withdrawn'];
 
         return $result;
     }
@@ -185,6 +189,8 @@ class HMS_Application {
         $db->addValue('agreed_to_terms',$this->getAgreedToTerms());
         $db->addValue('aggregate',$this->calculateAggregate());
 
+        $db->addValue('withdrawn', $this->withdrawn());
+
         $db->addValue('physical_disability',$this->physical_disability);
         $db->addValue('psych_disability',   $this->psych_disability);
         $db->addValue('medical_need',       $this->medical_need);
@@ -244,8 +250,12 @@ class HMS_Application {
      * Checks to see if a application already exists for the objects current $hms_user_id.
      * If so, it returns the ID of that application record, otherwise it returns false.
      * If no term is given, then the "current term" is used.
+     * 
+     * The 'withdrawn' parameter is optional. If set to true, then check_for_application will
+     * return true for withdrawn applications. If false (default), then check_for_application will
+     * ignore withdrawn applications.
      */
-    function check_for_application($asu_username = NULL, $term = NULL)
+    function check_for_application($asu_username = NULL, $term = NULL, $withdrawn = FALSE)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
         
@@ -260,6 +270,10 @@ class HMS_Application {
             $db->addWhere('term', $term);
         } else {
             $db->addWhere('term', HMS_Term::get_current_term());
+        }
+
+        if(!$withdrawn){
+            $db->addWhere('withdrawn', 0);
         }
         
         $db->addWhere('deleted',0,'=');
@@ -291,9 +305,7 @@ class HMS_Application {
     }
 
     /**
-     * Allows an admin to view a student application
-     * TODO: This is duplicated code from the show_application function above.
-     *       Consider removing this, and changing whatever uses it to use 'show_application' instead.
+     * Shows an existing application. Used for both students and admins.
      */
     function view_housing_application($username)
     {
@@ -320,6 +332,10 @@ class HMS_Application {
         else if($application->term_classification == 3) $tpl['CLASSIFICATION_FOR_TERM_LBL'] = "Junior";
         else if($application->term_classification == 4) $tpl['CLASSIFICATION_FOR_TERM_LBL'] = "Senior";
         else $tpl['CLASSIFICATION_FOR_TERM_LBL'] = 'Unknown';
+
+        if($application->withdrawn == 1){
+            $tpl['WITHDRAWN'] = 'Application withdrawn';
+        }
 
         $tpl['ENTRY_TERM']      = HMS_Term::term_to_text(HMS_SOAP::get_application_term($username), 1);
         $tpl['STUDENT_NAME']    = HMS_SOAP::get_full_name($username);

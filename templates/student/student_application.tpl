@@ -2,6 +2,9 @@
         {REDO} {NEWLINES}
         <!-- BEGIN application_form -->
         {START_FORM}
+        <!-- BEGIN withdrawn -->
+        <font color="red"><b>{WITHDRAWN}</b></font>
+        <!-- END withdrawn -->
         <table>
             <tr>
                 <th>Name: </th><td align="left">{STUDENT_NAME}</td>
