@@ -1130,13 +1130,17 @@ class HMS_Reports{
         $sql = "
             SELECT hms_student_id AS user,
                    student_status AS status,
-                   gender         AS gender
+                   gender         AS gender,
+                   lifestyle_option,
+                   preferred_bedtime,
+                   room_condition,
+                   hms_application.meal_option
             FROM hms_application
             LEFT OUTER JOIN hms_assignment
             ON hms_assignment.asu_username = hms_application.hms_student_id
             WHERE hms_assignment.asu_username IS NULL
             AND hms_application.term = {$term}
-            ORDER BY hms_student_id
+            ORDER BY student_status, gender, hms_student_id
         ";
         $results = PHPWS_DB::getAll($sql);
         if(PHPWS_Error::isError($results)) {
@@ -1150,6 +1154,8 @@ class HMS_Reports{
             return $content;
         }
 
+        $content .= "key: [gender, type, lifestyle preference, bed time, room condition, meal option]<br /><br />";
+
         PHPWS_Core::initModClass('hms','HMS_SOAP.php');
         foreach($results as $row) {
             $student = HMS_SOAP::get_student_info($row['user']);
@@ -1160,9 +1166,28 @@ class HMS_Reports{
             $content .= "($app) " . $student->last_name . ", " .
                         $student->first_name . " " .
                         $student->middle_name . " [" .
-                        ($row['gender'] == 0 ? "Female, " : "Male, ") .
-                        ($row['status'] == 1 ? "Freshman" : "Transfer") .
-                        "]<br />";
+                        ($row['gender']             == 0 ? "Female, " : "Male, ") .
+                        ($row['status']             == 1 ? "Freshman, " : "Transfer, ") .
+                        ($row['lifestyle_option']   == 1 ? "Single, " : "Co-ed, ") .
+                        ($row['preferred_bedtime']  == 1 ? "Early, " : "Late, ") .
+                        ($row['room_condition']     == 1 ? "Neat, " : "Cluttered, ");
+
+            switch($row['meal_option']){
+                case HMS_MEAL_LOW:
+                    $content .= "Low";
+                    break;
+                case HMS_MEAL_STD:
+                    $content .= "Std";
+                    break;
+                case HMS_MEAL_HIGH:
+                    $content .= "High";
+                    break;
+                case HMS_MEAL_SUPER:
+                    $content .= "Super";
+                    break;
+            }
+                        
+            $content .= "]<br />";
         }
 
         return $content;
