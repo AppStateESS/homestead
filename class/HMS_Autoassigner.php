@@ -143,10 +143,6 @@ class HMS_Autoassigner
                     }
                 }
             }
-
-            $assigned[] = $a->hms_student_id;
-            if(!is_null($b->id))
-                $assigned[] = $b->hms_student_id;
         }
 
         reset($applicants);
@@ -247,10 +243,6 @@ class HMS_Autoassigner
                     }
                 }
             }
-
-            $assigned[] = $a->hms_student_id;
-            if(!is_null($b->id))
-                $assigned[] = $b->hms_student_id;
         }
 
         $f_f_count = count($f_rooms);

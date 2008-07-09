@@ -116,7 +116,7 @@ class HMS_Admin
                 $final = HMS_Pending_Assignment::main();*/
                 PHPWS_Core::initModClass('hms', 'HMS_Autoassigner.php');
                 // TRUE for test, FALSE for real
-                $final = HMS_Autoassigner::auto_assign(TRUE);
+                $final = HMS_Autoassigner::auto_assign(FALSE);
                 break;
             case 'letter':
                 PHPWS_Core::initModClass('hms', 'HMS_Letter.php');
