@@ -93,6 +93,9 @@ class HMS_Admin
                     case 'withdrawn_search':
                         $final = HMS_Admin::withdrawn_search();
                         break;
+                    case 'withdrawn_search_process':
+                        $final = HMS_Admin::withdrawn_search_process();
+                        break;
                     default:
                         PHPWS_Core::initModClass('hms', 'HMS_Display.php');
                         $final = HMS_Display::main();
@@ -267,6 +270,11 @@ class HMS_Admin
      */
     function withdrawn_search_start($success_msg = NULL, $error_msg = NULL)
     {
+        if(!Current_User::allow('hms', 'search')){
+            $tpl = array();
+            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
+        }
+        
         PHPWS_Core::initCoreClass('Form.php');
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
 
@@ -297,6 +305,11 @@ class HMS_Admin
      */
     function withdrawn_search()
     {
+        if(!Current_User::allow('hms', 'search')){
+            $tpl = array();
+            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
+        }
+
         PHPWS_Core::initModClass('hms', 'HMS_Student.php');
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
@@ -328,6 +341,7 @@ class HMS_Admin
         $form->addSubmit('submit', 'Remove Withdrawn Students');
 
         # Lookup each student
+        $i = 0;
         foreach($result as $asu_username){
             # Query SOAP, skiping students who are not withdrawn
             if(HMS_SOAP::get_student_type($asu_username, $term) != TYPE_WITHDRAWN){
@@ -339,10 +353,10 @@ class HMS_Admin
             $tpl['withdrawn_students'][] = array(
                                     'NAME'              => HMS_Student::get_link($asu_username, TRUE),
                                     'BANNER_ID'         => HMS_SOAP::get_banner_id($asu_username),
-                                    'REMOVE_CHECKBOX'   => '<input type="checkbox" name="remove_checkbox" value="' . $asu_username . '" checked>',
+                                    'REMOVE_CHECKBOX'   => '<input type="checkbox" name="remove_checkbox' . "[{$i}]" . '" value="' . $asu_username . '" checked>',
                                     'ASSIGNMENT'        => is_null($assignment)?'None':PHPWS_Text::secureLink($assignment->where_am_i(), 'hms', array('type'=>'room', 'op'=>'show_edit_room', 'room'=>$assignment->get_room_id()))
                                     );
-
+            $i++;
         }
 
         $tpl['TITLE'] = 'Withdrawn Search - ' . HMS_Term::term_to_text(HMS_Term::get_selected_term(), TRUE);
@@ -354,6 +368,136 @@ class HMS_Admin
         $tpl = $form->getTemplate();
 
         return PHPWS_Template::process($tpl, 'hms', 'admin/withdrawn_search.tpl');
+    }
+
+    function withdrawn_search_process()
+    {
+        if(!Current_User::allow('hms', 'search')){
+            $tpl = array();
+            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
+        }
+
+        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Application.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
+        PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
+        PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
+        
+        #test($_REQUEST['remove_checkbox']);
+
+        $tpl['status']      = array();
+        $tpl['warnings']    = array();
+        $tpl['TITLE']       = 'Withdrawn Removal Results';
+
+        $term = HMS_Term::get_selected_term();
+
+        # Process each of the selected students
+        foreach($_REQUEST['remove_checkbox'] as $asu_username){
+            
+            # Check for and mark as withdrawn any application
+            if(HMS_Application::check_for_application($asu_username, $term, TRUE) != FALSE){
+                $application = &new HMS_Application($asu_username, $term);
+                $application->withdrarwn = 1;
+                $app_result = $application->save();
+                if(PEAR::isError($app_result)){
+                    $tpl['warnings'][] = array('USERNAME'   => $asu_username,
+                                               'MESSAGE'    => 'Saving application failed (database error).');
+                }else{
+                    $tpl['status'][] = array('USERNAME'    => $asu_username,
+                                             'MESSAGE'     => "Application removed.");
+                }
+
+                # TODO: log application withdrawl
+            }
+            /*
+            # Check for and delete any assignments
+            if(HMS_Assignment::check_for_assignment($asu_username, $term)){
+                $assignment = HMS_Assignment::get_assignment($asu_username, $term);
+                if($assignment == NULL || $assignment == FALSE){
+                    $tpl['warnings'][] = array('USERNAME'   => $asu_username,
+                                               'MESSAGE'    => 'Error loading assignment.');
+                }else{
+                    if($assignment->delete() != TRUE){
+                        $tpl['warnings'][] = array('USERNAME'   => $asu_username,
+                                                   'MESSAGE'    => 'Error deleting the assignment.');
+                    }else{
+                        $tpl['status'][] = array('USERNAME'    => $asu_username,
+                                                 'MESSAGE'     => "Assignment removed.");
+                        # TODO: log assignment removal
+                    }
+                }
+            }
+            */
+
+            /*
+            # check for and delete any roommate requests, perhaps let the other roommate know?
+            $roommates = HMS_Roommate::get_all_roommates($asu_username);
+            if($roommates == FALSE){
+                $tpl['warnings'][] = array('USERNAME'   => $asu_username,
+                                           'MESSAGE'    => 'Error deleting the assignment.');
+            }else if(sizeof($roommates) > 0){
+                # Delete each roommate request
+                foreach($roommates as $rm){
+                    if($rm->delete() == TRUE){
+                        $tpl['status'][] = array('USERNAME'    => $asu_username,
+                                                 'MESSAGE'     => "Roommate request removed. {$rm->requestor}->{$rm->$requestee}");
+                        # TODO: log the roommate request removal
+                        # TODO: notify the other roommate, perhaps?
+                    }else{
+                        $tpl['warnings'][] = array('USERNAME'   => $asu_username,
+                                                   'MESSAGE'    => "Error deleting roommate request. {$rm->requestor}->{$rm->requestee}");
+                    }
+                }
+            }
+            */
+
+            /*
+            # Check for and delete any learning community assignments
+            $rlc_app = HMS_RLC_Application::check_for_application($asu_username, $term, FALSE); // look only in non-denied RLC apps for this term
+            if(PEAR::isError($rlc_app)){
+                $tpl['warnings'][] = array('USERNAME'   => $asu_username,
+                                           'MESSAGE'    => 'Error looking for RLC application.');
+            }else if($rlc_app != FALSE){
+                # Get their rlc app
+                $rlc_app = &new HMS_RLC_Application($asu_username, $term);
+                if(PEAR::isError($rlc_app)){
+                    $tpl['warnings'][] = array('USERNAME'   => $asu_username,
+                                               'MESSAGE'    => 'Error loading RLC application.');
+                }else{
+                    # See if they're assigned anywhere
+                    $assignment_id = $rlc_app->hms_assignment_id;
+                    if($assignment_id != NULL){
+                        # Delete the assignment id from the application
+                        $rlc_app->hms_assignment_id = NULL;
+                        $rlc_app->denied = 1; // Mark as denied so it won't bother anyone
+                        if(PEAR::isError($rlc_app->save())){
+                            $tpl['warnings'][] = array('USERNAME'   => $asu_username,
+                                                       'MESSAGE'    => 'Error saving rlc application.');
+                        }else{
+                            $rlc_assignment = &new HMS_RLC_Assignment($assignment_id);
+                            if(PEAR::isError($rlc_assignment)){
+                                $tpl['warnings'][] = array('USERNAME'   => $asu_username,
+                                                           'MESSAGE'    => 'Error loading RLC assignment.');
+                            }else{
+                                if($rlc_assignment->delete() != TRUE){
+                                    $tpl['warnings'][] = array('USERNAME'   => $asu_username,
+                                                               'MESSAGE'    => 'Error deleting RLC assignment.');
+                                }else{
+                                    $tpl['status'][] = array('USERNAME'    => $asu_username,
+                                                             'MESSAGE'     => 'Deleted RLC assignment.');
+                                    #TODO: log removal of RLC assignment
+                                }
+                            }
+                        }
+                    }
+                }
+                                
+            }
+            */
+        }
+
+        return PHPWS_Template::process($tpl, 'hms', 'admin/withdrawn_search_process.tpl');
     }
 }
 

@@ -62,6 +62,30 @@ class HMS_RLC_Assignment{
         return $result;
     }
 
+    function delete()
+    {
+        if( !Current_User::allow('hms', 'learning_community_maintenance') ){
+            $tpl = array();
+            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
+        }
+
+        if(!isset($this->id)) {
+            return FALSE;
+        }
+
+        $db = &new PHPWS_DB('hms_learning_community_assignment');
+        $db->addWhere('id',$this->id);
+        $result = $db->delete();
+
+        if(PHPWS_Error::logIfError($result)) {
+            return FALSE;
+        }
+
+        $this->id = 0;
+
+        return TRUE;
+    }
+
     /**
      * Check to see if an assignment already exists for the specified user.  Returns FALSE if no assignment
      * exists.  If an assignment does exist, a db object containing that row is returned.  In the case of a db
