@@ -189,7 +189,7 @@ class HMS_Application {
         $db->addValue('agreed_to_terms',$this->getAgreedToTerms());
         $db->addValue('aggregate',$this->calculateAggregate());
 
-        $db->addValue('withdrawn', $this->withdrawn());
+        $db->addValue('withdrawn', $this->withdrawn);
 
         $db->addValue('physical_disability',$this->physical_disability);
         $db->addValue('psych_disability',   $this->psych_disability);
