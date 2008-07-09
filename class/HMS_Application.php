@@ -37,7 +37,7 @@ class HMS_Application {
     var $deleted_by;
     var $deleted_on;
 
-    var $withdrawn;
+    var $withdrawn = 0;
     
 
     /**
@@ -212,6 +212,8 @@ class HMS_Application {
             $db->addWhere('id',$this->getID(),'=');
             $result = $db->update();
         }
+        
+        test($result);
         
         if(!PEAR::isError($result)) {
             PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
