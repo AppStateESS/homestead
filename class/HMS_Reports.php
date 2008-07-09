@@ -1147,14 +1147,18 @@ class HMS_Reports{
             test($results,1);
         }
 
-        $content = "<h2>Unassigned Applicants</h2><br />";
-
         if(sizeof($results) == 0){
+            $content = "<h2>Unassigned Applicants</h2>";
             $content .= "No unassigned applicants found.";
             return $content;
         }
 
-        $content .= "key: [gender, type, lifestyle preference, bed time, room condition, meal option]<br /><br />";
+        $ff_count = 0;
+        $fm_count   = 0;
+        $tf_count = 0;
+        $tm_count   = 0;
+
+        $content = "key: [gender, type, lifestyle preference, bed time, room condition, meal option]<br /><br />";
 
         PHPWS_Core::initModClass('hms','HMS_SOAP.php');
         foreach($results as $row) {
@@ -1188,9 +1192,29 @@ class HMS_Reports{
             }
                         
             $content .= "]<br />";
+
+            if($row['gender'] == 0) {
+                if($row['status'] == 1) {
+                    $ff_count++;
+                } else {
+                    $tf_count++;
+                }
+            } else {
+                if($row['status'] == 1) {
+                    $fm_count++;
+                } else {
+                    $tm_count++;
+                }
+            }
         }
 
-        return $content;
+        $head  = "<h2>Unassigned Applicants</h2><br />";
+        $head .= "<p><strong>Freshman Female:</strong> $ff_count</p>";
+        $head .= "<p><strong>Freshman Male:</strong> $fm_count</p>";
+        $head .= "<p><strong>Transfer Female:</strong> $tf_count</p>";
+        $head .= "<p><strong>Transfer Male:</strong> $tm_count</p>";
+
+        return $head . $content;
     }
 
     function run_no_banner_data_report()
