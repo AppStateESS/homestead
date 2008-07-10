@@ -383,12 +383,13 @@ class HMS_Admin
         PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
-        PHPWS_Core::initModClass('hms', 'Activity_Log.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
         
         #test($_REQUEST['remove_checkbox']);
 
         $tpl['status']      = array();
         $tpl['warnings']    = array();
+        $tpl['rooms']       = array();
         $tpl['TITLE']       = 'Withdrawn Removal Results';
 
         $term = HMS_Term::get_selected_term();
@@ -413,8 +414,9 @@ class HMS_Admin
 
             # Check for and delete any assignments
             if(HMS_Assignment::check_for_assignment($asu_username, $term)){
-                $assignment = HMS_Assignment::get_assignment($asu_username, $term);
-                $assignment_location = $assignment->where_am_i();
+                $assignment             = HMS_Assignment::get_assignment($asu_username, $term);
+                $assignment_location    = $assignment->where_am_i();
+                $room_id                = $assignment->get_room_id();
                 if($assignment == NULL || $assignment == FALSE){
                     $tpl['warnings'][] = array('USERNAME'   => $asu_username,
                                                'MESSAGE'    => 'Error loading assignment.');
@@ -426,6 +428,7 @@ class HMS_Admin
                     }else{
                         $tpl['status'][] = array('USERNAME'    => $asu_username,
                                                  'MESSAGE'     => "Assignment removed.");
+                        $tpl['rooms'][] = array('ROOM' => PHPWS_Text::secureLink($assignment_location, 'hms', array('type'=>'room', 'op'=>'show_edit_room', 'room'=>$room_id)));
                         HMS_Activity_Log::log_activity($asu_username, ACTIVITY_WITHDRAWN_ASSIGNMENT_DELETED, Current_User::getUsername(), $assinment_location);
                     }
                 }

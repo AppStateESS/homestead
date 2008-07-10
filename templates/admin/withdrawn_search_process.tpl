@@ -36,6 +36,12 @@
             </tr>
             <!-- END warnings -->
         </table>
+        <h2>Rooms with new vacancies:</h2>
+        <ul>
+            <!-- BEGIN rooms -->
+            <li>{ROOM}</li>
+            <!-- END rooms -->
+        </ul>
     </div>
   </div>
 </div>
