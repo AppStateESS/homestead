@@ -383,6 +383,7 @@ class HMS_Admin
         PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
+        PHPWS_Core::initModClass('hms', 'Activity_Log.php');
         
         #test($_REQUEST['remove_checkbox']);
 
@@ -406,14 +407,14 @@ class HMS_Admin
                 }else{
                     $tpl['status'][] = array('USERNAME'    => $asu_username,
                                              'MESSAGE'     => "Application removed.");
+                    HMS_Activity_Log::log_activity($asu_username, ACTIVITY_WITHDRAWN_APP, Current_User::getUsername());
                 }
-
-                # TODO: log application withdrawl
             }
 
             # Check for and delete any assignments
             if(HMS_Assignment::check_for_assignment($asu_username, $term)){
                 $assignment = HMS_Assignment::get_assignment($asu_username, $term);
+                $assignment_location = $assignment->where_am_i();
                 if($assignment == NULL || $assignment == FALSE){
                     $tpl['warnings'][] = array('USERNAME'   => $asu_username,
                                                'MESSAGE'    => 'Error loading assignment.');
@@ -425,7 +426,7 @@ class HMS_Admin
                     }else{
                         $tpl['status'][] = array('USERNAME'    => $asu_username,
                                                  'MESSAGE'     => "Assignment removed.");
-                        # TODO: log assignment removal
+                        HMS_Activity_Log::log_activity($asu_username, ACTIVITY_WITHDRAWN_ASSIGNMENT_DELETED, Current_User::getUsername(), $assinment_location);
                     }
                 }
             }
@@ -441,7 +442,8 @@ class HMS_Admin
                     if($rm->delete() == TRUE){
                         $tpl['status'][] = array('USERNAME'    => $asu_username,
                                                  'MESSAGE'     => "Roommate request removed. {$rm->requestor} -> {$rm->requestee}");
-                        # TODO: log the roommate request removal
+                        HMS_Activity_Log::log_activity($rm->requestor, ACTIVITY_WITHDRAWN_ROOMMATE_DELETED, Current_User::getUsername(), "{$rm->requestor}->{$rm->requestee}");
+                        HMS_Activity_Log::log_activity($rm->requestee, ACTIVITY_WITHDRAWN_ROOMMATE_DELETED, Current_User::getUsername(), "{$rm->requestor}->{$rm->requestee}");
                         # TODO: notify the other roommate, perhaps?
                     }else{
                         $tpl['warnings'][] = array('USERNAME'   => $asu_username,
@@ -488,7 +490,8 @@ class HMS_Admin
                                 }else{
                                     $tpl['status'][] = array('USERNAME'    => $asu_username,
                                                              'MESSAGE'     => 'Marked application denied, deleted RLC assignment.');
-                                    #TODO: log removal of RLC assignment
+                                    HMS_Activity_Log::log_activity($asu_username, ACTIVITY_WITHDRAWN_RLC_APP_DENIED, Current_User::getUsername());
+                                    HMS_Activity_Log::log_activity($asu_username, ACTIVITY_WITHDRAWN_RLC_ASSIGN_DELETED, Current_User::getUsername());
                                 }
                             }
                         }
@@ -501,6 +504,7 @@ class HMS_Admin
                         }else{
                             $tpl['status'][] = array('USERNAME'    => $asu_username,
                                                      'MESSAGE'     => 'Marked RLC application as denied.');
+                            HMS_Activity_Log::log_activity($asu_username, ACTIVITY_WITHDRAWN_RLC_ASSIGN_DELETED, Current_User::getUsername());
                         }
                     }
                 }
