@@ -23,6 +23,19 @@
           <!-- END status -->
         </table>
         <br />
+        <h2>Warnings:</h2>
+        <table>
+            <tr>
+                <th>User name</th>
+                <th>Message</th>
+            </tr>
+            <!-- BEGIN warnings -->
+            <tr>
+                <td>{USERNAME}</td>
+                <td>{MESSAGE}</td>
+            </tr>
+            <!-- END warnings -->
+        </table>
     </div>
   </div>
 </div>
