@@ -1140,6 +1140,7 @@ class HMS_Reports{
             ON hms_assignment.asu_username = hms_application.hms_student_id
             WHERE hms_assignment.asu_username IS NULL
             AND hms_application.term = {$term}
+            AND hms_application.withdrawn = 0
             ORDER BY student_status, gender, hms_student_id
         ";
         $results = PHPWS_DB::getAll($sql);
