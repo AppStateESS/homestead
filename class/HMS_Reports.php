@@ -1154,9 +1154,9 @@ class HMS_Reports{
         }
 
         $ff_count = 0;
-        $fm_count   = 0;
+        $fm_count = 0;
         $tf_count = 0;
-        $tm_count   = 0;
+        $tm_count = 0;
 
         $content = "key: [gender, type, lifestyle preference, bed time, room condition, meal option]<br /><br />";
 

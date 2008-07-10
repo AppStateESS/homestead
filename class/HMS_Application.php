@@ -213,13 +213,11 @@ class HMS_Application {
             $result = $db->update();
         }
         
-        test($result);
-        
         if(!PEAR::isError($result)) {
             PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
             PHPWS_Core::initModClass('hms', 'HMS_Term.php');
-            $plancode = HMS_SOAP::get_plan_meal_codes($_SESSION['asu_username'], 'lawl', $this->getMealOption());
-            $result = HMS_SOAP::report_application_received($_SESSION['asu_username'], $_SESSION['application_term'], $plancode['plan'], $plancode['meal']);
+            $plancode = HMS_SOAP::get_plan_meal_codes($this->hms_student_id, 'lawl', $this->getMealOption());
+            $result = HMS_SOAP::report_application_received($this->hms_student_id, $this->term, $plancode['plan'], $plancode['meal']);
 
             # If there was an error it will have already been logged
             # but send out a notification anyway

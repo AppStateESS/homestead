@@ -21,8 +21,16 @@ class HMS_RLC_Assignment{
      */
     function HMS_RLC_Assignment($id = NULL)
     {
+        /*
         if(isset($user_id)){
             $this->setUserID($id);
+        }else{
+            return;
+        }
+        */
+
+        if(isset($id)){
+            $this->id = $id;
         }else{
             return;
         }
@@ -53,11 +61,9 @@ class HMS_RLC_Assignment{
 
         if($result == FALSE || $result == NULL) return;
 
-        $this->setAsuUsername($result['asu_username']);
-        $this->setRlcId($result['rlc_id']);
-        $this->setCourseOk($result['course_ok'] == 1 ? 'Y' : 'N');
-        $this->setAssignedByUser($result['assigned_by_user']);
-        $this->setAssignedByInitials($result['assigned_by_initials']);
+        $this->user_id = $result['asu_username'];
+        $this->rlc_id  = $result['rlc_id'];
+        $this->assigned_by_user = $result['assigned_by_user'];
 
         return $result;
     }

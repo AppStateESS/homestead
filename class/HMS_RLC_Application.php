@@ -125,7 +125,7 @@ class HMS_RLC_Application{
         $db->addValue('rlc_question_1',             $this->getRLCQuestion1());
         $db->addValue('rlc_question_2',             $this->getRLCQuestion2());
         $db->addValue('hms_assignment_id',          $this->getAssignmentID());
-        $db->addValue('term',                       $_SESSION['application_term']);
+        $db->addValue('term',                       $this->term);
         $db->addValue('denied',                     $this->denied);
 
         # If this object has an ID, then do an update. Otherwise, do an insert.
@@ -184,6 +184,8 @@ class HMS_RLC_Application{
         }else{
             $application->setRLCQuestion2(NULL);
         }
+
+        $application->term = $_SESSION['application_term'];
 
         $result = $application->save();
         
