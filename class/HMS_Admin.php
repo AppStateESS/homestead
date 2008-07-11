@@ -428,7 +428,13 @@ class HMS_Admin
                     }else{
                         $tpl['status'][] = array('USERNAME'    => $asu_username,
                                                  'MESSAGE'     => "Assignment removed.");
-                        $tpl['rooms'][] = array('ROOM' => PHPWS_Text::secureLink($assignment_location, 'hms', array('type'=>'room', 'op'=>'show_edit_room', 'room'=>$room_id)));
+                        $room = array('ROOM' => PHPWS_Text::secureLink($assignment_location, 'hms', array('type'=>'room', 'op'=>'show_edit_room', 'room'=>$room_id)));
+                        $key = array_search($room, $tpl['rooms']);
+                        if($key === FALSE){
+                            $tpl['rooms'][] = $room;
+                        }else{
+                            $tpl['rooms'][$key]['ROOM'] .= 'x2';
+                        }
                         HMS_Activity_Log::log_activity($asu_username, ACTIVITY_WITHDRAWN_ASSIGNMENT_DELETED, Current_User::getUsername(), $assinment_location);
                     }
                 }
@@ -507,13 +513,15 @@ class HMS_Admin
                         }else{
                             $tpl['status'][] = array('USERNAME'    => $asu_username,
                                                      'MESSAGE'     => 'Marked RLC application as denied.');
-                            HMS_Activity_Log::log_activity($asu_username, ACTIVITY_WITHDRAWN_RLC_ASSIGN_DELETED, Current_User::getUsername());
+                            HMS_Activity_Log::log_activity($asu_username, ACTIVITY_WITHDRAWN_RLC_APP_DENIED, Current_User::getUsername());
                         }
                     }
                 }
                                 
             }
         }
+
+        //test($tpl['rooms'], FALSE, TRUE);
 
         return PHPWS_Template::process($tpl, 'hms', 'admin/withdrawn_search_process.tpl');
     }
