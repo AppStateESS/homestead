@@ -422,9 +422,10 @@ class HMS_Admin
                                                'MESSAGE'    => 'Error loading assignment.');
                 }else{
                     # TODO: call the 'un-assign' function here instead
-                    if($assignment->delete() != TRUE){
+                    $unassign_result = HMS_Assignment::unassign_student($asu_username, $term);
+                    if($unassign_result != E_SUCCESS){
                         $tpl['warnings'][] = array('USERNAME'   => $asu_username,
-                                                   'MESSAGE'    => 'Error deleting assignment.');
+                                                   'MESSAGE'    => HMS_Assignment::get_assignment_error_msg($unassign_result));
                     }else{
                         $tpl['status'][] = array('USERNAME'    => $asu_username,
                                                  'MESSAGE'     => "Assignment removed.");

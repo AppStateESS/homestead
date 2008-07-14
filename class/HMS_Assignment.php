@@ -724,10 +724,8 @@ class HMS_Assignment extends HMS_Item
 
         # Actually try to make the assignment, decide whether to use the room id or the bed id
         if(isset($_REQUEST['bed']) && $_REQUEST['bed'] != 0){
-            echo "using bed id";
             $assign_result = HMS_Assignment::assign_student($_REQUEST['username'], HMS_Term::get_selected_term(), NULL, $_REQUEST['bed'], $_REQUEST['meal_plan']);
         }else{
-            echo "using room id";
             $assign_result = HMS_Assignment::assign_student($_REQUEST['username'], HMS_Term::get_selected_term(), $_REQUEST['room'], NULL, $_REQUEST['meal_plan']);
         }
             
@@ -781,17 +779,18 @@ class HMS_Assignment extends HMS_Item
         return PHPWS_Template::process($tpl, 'hms', 'admin/unassign_student.tpl');
     }
 
-    function show_unassign_student_result()
+    function unassign_student_result()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
         
         $unassign_result = HMS_Assignment::unassign_student($_REQUEST['username'], HMS_Term::get_selected_term());
 
         if($unassign_result == E_SUCCESS){
-            return HMS_Assignment::show_unassign_student('Successfully un-assigned ' . $_REQUEST['usrename'] '.');
+            return HMS_Assignment::show_unassign_student('Successfully un-assigned ' . $_REQUEST['username'] . '.');
         }else{
             $error_msg = HMS_Assignment::get_assignment_error_msg($unassign_result);
             return HMS_Assignment::show_unassign_student(NULL, $error_msg);
+        }
     }
 
     function assignment_pager_by_room($room_id)
