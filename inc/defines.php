@@ -193,14 +193,15 @@ define('E_ASSIGN_HMS_DB_ERROR',         23);
 define('E_ASSIGN_ALREADY_ASSIGNED',     24);
 define('E_ASSIGN_NO_DESTINATION',       25);
 define('E_ASSIGN_BED_NOT_EMPTY',        26);
+define('E_ASSIGN_WITHDRAWN',            27);
+define('E_ASSIGN_NO_DATA',              28);
 
 /**
  * Un-assignment Errors
  */
-define('E_UNASSIGN_NOT_ASSIGNED',       27);
-define('E_UNASSIGN_ASSIGN_LOAD_FAILED', 28);
-define('E_UNASSIGN_BANNER_ERROR',       29);
-define('E_UNASSIGN_HMS_DB_ERROR',       30);
-
+define('E_UNASSIGN_NOT_ASSIGNED',       29);
+define('E_UNASSIGN_ASSIGN_LOAD_FAILED', 30);
+define('E_UNASSIGN_BANNER_ERROR',       31);
+define('E_UNASSIGN_HMS_DB_ERROR',       32);
 
 ?>
