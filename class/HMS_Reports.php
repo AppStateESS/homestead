@@ -647,7 +647,6 @@ class HMS_Reports{
             $floors = $hall->get_floors();
 
             foreach($floors as $floor){
-                test($floor);
                 $tpl->setCurrentBlock('floor_repeat');
                 
                 if(is_null($floor->ft_movein_time_id)){
@@ -1217,7 +1216,12 @@ class HMS_Reports{
 
         PHPWS_Core::initModClass('hms','HMS_SOAP.php');
         foreach($results as $row) {
-            $student = HMS_SOAP::get_student_info($row['user']);
+            $student = HMS_SOAP::get_student_info($row['user'], $term);
+
+            // TODO: THIS IS A HACK.  Consider removing it.
+            if($student->student_type == TYPE_WITHDRAWN)
+                continue;
+
             $app = PHPWS_Text::secureLink($row['user'], 'hms',
                 array('type'    => 'student',
                       'op'      => 'view_housing_application',

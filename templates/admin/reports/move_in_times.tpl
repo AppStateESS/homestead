@@ -1,5 +1,6 @@
 <h2>Move-in Times Report</h2><br />
 
+<div align="left">
 <ul>
     <!-- BEGIN hall_repeat -->
     <li>{HALL_NAME}</li>
@@ -14,3 +15,4 @@
     </ul>
     <!-- END hall_repeat -->
 </ul>
+</div>
