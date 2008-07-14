@@ -108,6 +108,7 @@ class HMS_Autoassigner
 
             if(is_null($room)) {
                 $problems[] = "Could not assign <strong>{$a->hms_student_id}</strong>; out of empty ".($a->gender?'male':'female').' rooms.';
+                $problems[] = "Could not assign <strong>{$b->hms_student_id}</strong>; out of empty ".($b->gender?'male':'female').' rooms.';
                 continue;
             } else if($room === 'badgender') {
                 $problems[] = "Could not assign <strong>{$a->hms_student_id}</strong>; {$a->gender} is not a valid gender.";
@@ -208,6 +209,7 @@ class HMS_Autoassigner
             // We could be out of rooms or have database corruption
             if(is_null($room)) {
                 $problems[] = "Could not assign <strong>{$a->hms_student_id}</strong>; out of ".($a->gender?'male':'female').' rooms.';
+                $problems[] = "Could not assign <strong>{$b->hms_student_id}</strong>; out of ".($b->gender?'male':'female').' rooms.';
                 continue;
             } else if($room === 'badgender') {
                 $problems[] = "Could not assign <strong>{$a->hms_student_id}</strong>; {$a->gender} is not a valid gender.";
@@ -334,7 +336,9 @@ class HMS_Autoassigner
         $bid  = $bed->banner_id;
         $user = $app->hms_student_id;
         
-        $meal_plan = HMS_SOAP::get_plan_meal_codes($user, $bbc, $app->meal_option);
+        $meal_plan = array();
+        $meal_plan['plan'] = 'HOME';
+        $meal_plan['meal'] = $app->meal_option;
         
         $error = HMS_Banner_Queue::queue_create_assignment($user, $term,
             $bbc, $bid, $meal_plan['plan'], $meal_plan['meal']);

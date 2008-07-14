@@ -77,22 +77,15 @@ class HMS_Banner_Queue {
         return $this->id;
     }
 
-    function assign_queue_enabled()
-    {
-        return PHPWS_Settings::get('hms', 'assign_queue_enabled');
-    }
+    function delete() {
+        $db = new PHPWS_DB('hms_banner_queue');
+        $db->addWhere('id', $this->id);
+        $result = $db->delete();
+        if(!$result || PHPWS_Error::logIfError($result)) {
+            return $result;
+        }
 
-    function enable_assign_queue()
-    {
-        PHPWS_Settings::set('hms', 'assign_queue_enabled', TRUE);
-        PHPWS_Settings::save('hms');
-    }
-
-    function disable_assign_queue()
-    {
-        // TODO: If not empty, error
-        PHPWS_Settings::set('hms', 'assign_queue_enabled', FALSE);
-        PHPWS_Settings::save('hms');
+        return TRUE;
     }
 
     /**
@@ -195,6 +188,7 @@ class HMS_Banner_Queue {
     function process()
     {
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
 
         $result = -1;
 
@@ -242,6 +236,40 @@ class HMS_Banner_Queue {
         }
 
         return $result;
+    }
+
+    /********************
+     * Static Functions *
+     ********************/
+    function processAll($term)
+    {
+        // TODO: Process All.  Return an array of username=>error if there were
+        // any.  Don't stop on errors, just tally them up.  Return TRUE if
+        // there were no errors.
+        
+        $db = &new PHPWS_DB('hms_banner_queue');
+        $db->addWhere('term', $term);
+        $db->addOrder('id');
+        $items = $db->getObjects('HMS_Banner_Queue');
+
+        $errors = array();
+        foreach($items as $item) {
+            $result = $item->process();
+            if($result != 0) {
+                $error = array();
+                $error['id'] = $item->id;
+                $error['username'] = $item->asu_username;
+                $error['code'] = $result;
+                $errors[] = $error;
+            } else {
+                $r = $item->delete();
+            }
+        }
+
+        if(empty($errors))
+            return TRUE;
+
+        return $errors;
     }
 }
 

@@ -40,7 +40,8 @@ class HMS_Term{
             return FALSE;
         }
 
-        $this->banner_queue = $result['banner_queue'];
+        $this->banner_queue     = $result['banner_queue'];
+        $this->new_applications = $result['new_applications'];
 
         return $result;
     }
@@ -103,9 +104,6 @@ class HMS_Term{
                 break;
             case 'term_delete':
                 return HMS_Term::term_delete();
-                break;
-            case 'term_banner_queue_toggle':
-                return HMS_Term::term_banner_queue_toggle();
                 break;
             default:
                 return "Undefined term op";
@@ -237,11 +235,21 @@ class HMS_Term{
         if($this->is_current_term()){
             $actions[] = '<strong>Active</strong>';
         }else{
-             if(Current_User::allow('hms', 'activate_term')) {
-                $actions[] = PHPWS_Text::secureLink(_('Activate'), 'hms',
-                    array('type'=>'term',
-                          'op'  =>'term_activate',
-                          'term'=> $this->get_term()));
+            if(Current_User::allow('hms', 'activate_term')) {
+                $confirm = array();
+                $confirm['QUESTION'] =
+                    'This will set the HMS Active Term to '.$tags['TERM'].
+                    '.  This setting applies to all users of HMS and will '.
+                    'affect the Housing Application process.  Click OK to '.
+                    'set the Active Term to '.$tags['TERM'].'.';
+                $confirm['ADDRESS'] =
+                    PHPWS_Text::linkAddress('hms',
+                        array('type'=>'term',
+                              'op'  =>'term_activate',
+                              'term'=>$this->get_term()),
+                        TRUE);
+                $confirm['LINK'] = _('Activate');
+                $actions[] = Layout::getJavascript('confirm', $confirm);
             } 
         }
 
@@ -254,14 +262,38 @@ class HMS_Term{
         }
 
         // 'Banner Queue' toggles whether it's enabled or not
-        $text = $this->get_banner_queue() == 0 ? 'Disabled' : 'Enabled';
         if(Current_User::allow('hms', 'banner_queue')) {
-            $tags['BANNER_QUEUE'] = PHPWS_Text::secureLink($text,
-                'hms', array('type'=>'term',
-                             'op'  =>'term_banner_queue_toggle',
-                             'term'=>$this->get_term()));
-        }else{
-            $tags['BANNER_QUEUE'] = $text;
+            $confirm = array();
+            if($this->get_banner_queue() == 0) {
+                $confirm['QUESTION'] =
+                    'This will enable the Banner Queue for '. $tags['TERM'].
+                    '.  Any changes made in HMS will be queued up and NOT '.
+                    'sent to Banner. Click OK to enable the Banner Queue.';
+                $confirm['ADDRESS'] =
+                    PHPWS_Text::linkAddress('hms',
+                        array('type'=>'banner_queue',
+                              'op'  =>'enable',
+                              'term'=>$this->get_term()),
+                        TRUE);
+                $confirm['LINK'] = 'Disabled';
+            } else {
+                $confirm['QUESTION'] =
+                    'This will flush and then disable the Banner Queue for '.
+                    $tags['TERM'].'.  THIS WILL TAKE SEVERAL MINUTES.  Any '.
+                    'changes made in HMS will be sent immediately to Banner. '.
+                    'Click OK to disable the Banner Queue.';
+                $confirm['ADDRESS'] =
+                    PHPWS_Text::linkAddress('hms',
+                        array('type'=>'banner_queue',
+                              'op'  =>'disable',
+                              'term'=>$this->get_term()),
+                        TRUE);
+                $confirm['LINK'] = 'Enabled';
+            }
+            $tags['BANNER_QUEUE'] = Layout::getJavascript('confirm', $confirm);
+        } else {
+            $tags['BANNER_QUEUE'] = 
+                ($this->get_banner_queue() == 0 ? 'Disabled' : 'Enabled');
         }
         
         $tags['ACTION'] = implode(' | ', $actions);
@@ -371,23 +403,6 @@ class HMS_Term{
         }
 
         return HMS_Term::show_edit_terms(NULL, 'Sorry, term deletion is not yet implemented.');
-    }
-
-    /**
-     * Called in response to the 'term_banner_queue_toggle' action, and toggles whether or not we're queuing.
-     */
-    function term_banner_queue_toggle()
-    {
-        if( !Current_User::allow('hms', 'banner_queue') ){
-            $tpl = array();
-            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
-        }
-        $term = &new HMS_Term($_REQUEST['term']);
-        $enabled = $term->toggle_banner_queue();
-        $term->save();
-
-        $enabled_text = $enabled ? 'enabled' : 'disabled';
-        return HMS_Term::show_edit_terms("Banner queue $enabled_text for term " . HMS_Term::term_to_text($_REQUEST['term'], true));
     }
 
     /****************
@@ -575,18 +590,12 @@ class HMS_Term{
         return $this->banner_queue;
     }
 
-    function set_banner_queue($bq) {
-        $this->banner_queue = $bq;
+    function enable_banner_queue() {
+        $this->banner_queue = 1;
     }
 
-    function toggle_banner_queue() {
-        if($this->banner_queue == 0) {
-            $this->banner_queue = 1;
-        } else {
-            $this->banner_queue = 0;
-        }
-
-        return $this->banner_queue;
+    function disable_banner_queue() {
+        $this->banner_queue = 0;
     }
 }
 
