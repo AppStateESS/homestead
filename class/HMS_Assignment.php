@@ -344,7 +344,7 @@ class HMS_Assignment extends HMS_Item
         $student_gender = HMS_SOAP::get_gender($username, TRUE);
 
         if(is_null($student_gender)){
-            return HMS_Assignment::show_assign_student(NULL, 'No gender data returned for student. Check the user name and try again.');
+            return E_ASSIGN_NO_DATA;
         }
 
         if($room->gender_type != $student_gender){
@@ -922,6 +922,10 @@ class HMS_Assignment extends HMS_Item
                 break;
             case E_ASSIGN_WITHDRAWN:
                 $error_msg .= 'The student is withdrawn.';
+                break;
+            case E_ASSIGN_NO_DATA:
+                $error_msg .= 'No data is available for that student. Check the user name and try again.';
+                break;
             case E_ASSIGN_NO_DESTINATION:
                 $error_msg .= 'No destination was specified.';
                 break;
