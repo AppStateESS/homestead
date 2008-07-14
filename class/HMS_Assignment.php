@@ -674,6 +674,10 @@ class HMS_Assignment extends HMS_Item
         // Get the student's gender
         $student_gender = HMS_SOAP::get_gender($_REQUEST['username'], TRUE);
 
+        if(!isset($student_gender) || is_null($student_gender)){
+            return HMS_Assignment::show_assign_student(NULL, 'Error: No data found in Banner for the specified user name. Please check the user name and try again.');
+        }   
+
         # Create the room object so we can check gender
         $room = new HMS_Room($_REQUEST['room']);
         if(!$room){
