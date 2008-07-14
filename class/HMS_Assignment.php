@@ -297,6 +297,10 @@ class HMS_Assignment extends HMS_Item
             return E_ASSIGN_MALFORMED_USERNAME;
         }
 
+        if(HMS_SOAP::get_student_type($username, $term) == TYPE_WITHDRAWN){
+            return E_ASSIGN_WITHDRAWN;
+        }
+
         if(HMS_Assignment::check_for_assignment($username, $term)){
             return E_ASSIGN_ALREADY_ASSIGNED;
         }
@@ -916,6 +920,8 @@ class HMS_Assignment extends HMS_Item
             case E_ASSIGN_ALREADY_ASSIGNED:
                 $error_msg .= 'The student is already assigned.';
                 break;
+            case E_ASSIGN_WITHDRAWN:
+                $error_msg .= 'The student is withdrawn.';
             case E_ASSIGN_NO_DESTINATION:
                 $error_msg .= 'No destination was specified.';
                 break;
