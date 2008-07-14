@@ -13,7 +13,8 @@ class HMS_Reports{
                         'assigned_f'    => 'Assigned Type F Students',
                         'system_stats'  => 'Get System Statistics',
                         'special_needs' => 'Special Needs Applicants',
-                        'unassd_apps'   => 'Unassigned Applicants'
+                        'unassd_apps'   => 'Unassigned Applicants',
+                        'movein_times'  => 'Move-in Times'
                         );
 /*                        'housing_asss' =>'Housing Assignments Made',*/
 /*                        'unassd_rooms' =>'Currently Unassigned Rooms',*/
@@ -95,6 +96,8 @@ class HMS_Reports{
             case 'unassd_apps':
                 return HMS_Reports::unassigned_applicants_report();
                 break;
+            case 'movein_times':
+               return HMS_Reports::run_move_in_times_report();
             /*
             case 'unassd_rooms':
                 return HMS_Reports::run_unassigned_rooms_report();
@@ -623,6 +626,57 @@ class HMS_Reports{
         $content .= '</table';
 
         return $content;
+    }
+
+    function run_move_in_times_report()
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Movein_Time.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
+
+        $halls = HMS_Residence_Hall::get_halls(HMS_Term::get_selected_term());
+
+        $tpl = &new PHPWS_Template('hms');
+        if(!$tpl->setFile('admin/reports/move_in_times.tpl')){
+            return 'Template error...';
+        }
+
+        foreach($halls as $hall){
+            
+            $floors = $hall->get_floors();
+
+            foreach($floors as $floor){
+                test($floor);
+                $tpl->setCurrentBlock('floor_repeat');
+                
+                if(is_null($floor->ft_movein_time_id)){
+                    $ft_time = 'None';
+                }else{
+                    $ft_movein  = &new HMS_Movein_Time($floor->ft_movein_time_id);
+                    $ft_time    = $ft_movein->get_formatted_begin_end();
+                }
+
+                if(is_null($floor->rt_movein_time_id)){
+                    $rt_time = 'None';
+                }else{
+                    $rt_movein  = &new HMS_Movein_Time($floor->rt_movein_time_id);
+                    $rt_time    = $rt_movein->get_formatted_begin_end();
+                }
+                
+                $tpl->setData(array('FLOOR_NUM' => $floor->floor_number,
+                                    'FT_TIME'   => $ft_time,
+                                    'RT_TIME'   => $rt_time));
+                $tpl->parseCurrentBlock();
+            }
+
+            $tpl->setCurrentBlock('hall_repeat');
+            $tpl->setData(array('HALL_NAME' => $hall->hall_name));
+            $tpl->parseCurrentBlock();
+        }
+
+        return $tpl->get();
+
     }
 
     function run_unassigned_rooms_report()

@@ -16,6 +16,18 @@ class HMS_Movein_Time
     /********************
      * Instance Methods *
      *******************/
+    function HMS_Movein_Time($id = NULL){
+        if(!isset($id)){
+            return;
+        }
+
+        $db = new PHPWS_DB('hms_movein_time');
+        $db->addWhere('id', $this->id);
+        $result = $db->loadObject($this);
+        if(!$result || PHPWS_Error::logIfError($result)){
+            $this->id = 0;
+        }
+    }
 
     function save()
     {
@@ -26,6 +38,11 @@ class HMS_Movein_Time
             return false;
         }
         return true;
+    }
+
+    function get_formatted_begin_end()
+    {
+        return HMS_Util::get_long_date_time($this->begin_timestamp) . ' - ' . date('gA',$this->end_timestamp);
     }
 
     function getRowTags()
