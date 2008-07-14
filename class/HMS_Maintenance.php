@@ -138,6 +138,9 @@ class HMS_Maintenance
         if(Current_User::allow('hms', 'search'))
             $tpl['WITHDRAWN_SEARCH']    = PHPWS_Text::secureLink(_('Search for withdrawn students'), 'hms', array('type'=>'admin', 'op'=>'withdrawn_search_start'));
 
+        #todo: add permissions here
+        $tpl['USERNAME_CHANGE']         = PHPWS_Text::secureLink('Update student user names', 'hms', array('type'=>'admin', 'op'=>'show_username_change'));
+
 /*
         if(Current_User::allow('hms', 'add_student'))
             $tpl['ADD_STUDENT']     = PHPWS_Text::secureLink(_('Add Student'), 'hms', array('type'=>'student', 'op'=>'add_student'));

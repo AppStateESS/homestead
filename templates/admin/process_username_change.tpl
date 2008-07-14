@@ -1,6 +1,6 @@
 <div class="hms">
   <div class="box">
-    <div class="{TITLE_CLASS}"> <h1>{TITLE}</h1> </div>
+    <div class="title"> <h1>User Name Change Results</h1></div>
     <div class="box-content">
         <!-- BEGIN error_msg -->
         <font color="red">{ERROR_MSG}<br /></font>
@@ -9,6 +9,7 @@
         <!-- BEGIN success_msg -->
         <font color="green">{SUCCESS_MSG}<br /></font>
         <!-- END success_msg -->
+        Results:
         <table cellspacing="2" cellpadding="2">
           <tr>
             <th>User name</th>
@@ -35,12 +36,7 @@
             </tr>
             <!-- END warnings -->
         </table>
-        <h2>Rooms with new vacancies:</h2>
-        <ul>
-            <!-- BEGIN rooms -->
-            <li>{ROOM}</li>
-            <!-- END rooms -->
-        </ul>
+        <br />Done.<br />
     </div>
   </div>
 </div>

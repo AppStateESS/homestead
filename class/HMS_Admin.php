@@ -96,6 +96,12 @@ class HMS_Admin
                     case 'withdrawn_search_process':
                         $final = HMS_Admin::withdrawn_search_process();
                         break;
+                    case 'show_username_change':
+                        $final = HMS_Admin::show_username_change();
+                        break;
+                    case 'process_username_change':
+                        $final = HMS_Admin::process_username_change();
+                        break;
                     default:
                         PHPWS_Core::initModClass('hms', 'HMS_Display.php');
                         $final = HMS_Display::main();
@@ -146,6 +152,10 @@ class HMS_Admin
             case 'activity_log':
                 PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
                 $final = HMS_Activity_Log::main();
+                break;
+            case 'banner_queue':
+                PHPWS_Core::initModClass('hms', 'UI/Banner_Queue.php');
+                $final = HMS_Banner_Queue_UI::main();
                 break;
             default:
                 PHPWS_Core::initModClass('hms', 'HMS_Maintenance.php');
@@ -525,6 +535,121 @@ class HMS_Admin
         //test($tpl['rooms'], FALSE, TRUE);
 
         return PHPWS_Template::process($tpl, 'hms', 'admin/withdrawn_search_process.tpl');
+    }
+
+    function show_username_change()
+    {
+
+        PHPWS_Core::initCoreClass('Form.php');
+
+        $form = &new PHPWS_Form();
+        $form->addTextarea('usernames');
+        $form->addSubmit('submit', 'Submit');
+
+        $form->addHidden('module', 'hms');
+        $form->addHidden('type', 'admin');
+        $form->addHidden('op', 'process_username_change');
+
+        return PHPWS_Template::process($form->getTemplate(), 'hms', 'admin/username_change.tpl');
+    }
+
+    function process_username_change()
+    {
+        $tpl = array();
+
+        $tpl['status'] = array();
+        $tpl['errors'] = array();
+        
+        # break input down line by line
+        $lines = split("\n", $_REQUEST['usernames']);
+
+        # For each set of user names on a line...
+        foreach($lines as $line){
+            # Split the names (from: "old,new")
+            $names = split(',', $line);
+
+            # Open a DB connection and try to update applications
+            $db = &new PHPWS_DB('hms_application');
+            $db->addValue('hms_student_id', $names[1]);
+            $db->addWhere('hms_student_id', $names[0]);
+            $result = $db->update();
+
+            if(PEAR::isError($result)){
+                PHPWS_Error::logIfError($result);
+                $tpl['errors'][] = array('USERNAME'=>$names[0], 'MESSAGE' => 'DB error trying to update application.');
+            }else{
+                # Check to see if something happened
+                $rows_affected = $db->affectedRows();
+                if($rows_affected > 0){
+                    $tpl['status'][] = array('USERNAME'=>$names[0], 'MESSAGE' => "$rows_affected applications records updated.");
+                }
+            }
+
+            # Update assignments
+            $db = &new PHPWS_DB('hms_assignment');
+            $db->addValue('asu_username', $names[1]);
+            $db->addWhere('asu_username', $names[0]);
+            $result = $db->update();
+            if(PEAR::isError($result)){
+                PHPWS_Error::logIfError($result);
+                $tpl['errors'][] = array('USERNAME'=>$names[0], 'MESSAGE' => "DB error trying to update assignment.");
+            }else{
+                # Check to see if something happened
+                $rows_affected = $db->affectedRows();
+                if($rows_affected > 0){
+                    $tpl['status'][] = array('USERNAME'=>$names[0], 'MESSAGE' => "$rows_affected assignment records updated.");
+                }
+            }
+            
+            # Update roommates
+            $db = &new PHPWS_DB('hms_roommate');
+            $db->addValue('requestor', $names[1]);
+            $db->addWhere('requestor', $names[0]);
+            $result = $db->update();
+            if(PEAR::isError($result)){
+                PHPWS_Error::logIfError($result);
+                $tpl['errors'][] = array('USERNAME'=>$names[0], 'MESSAGE' => "DB error trying to update roommate requestor");
+            }else{
+                # Check to see if something happened
+                $rows_affected = $db->affectedRows();
+                if($rows_affected > 0){
+                    $tpl['status'][] = array('USERNAME'=>$names[0], 'MESSAGE' => "$rows_affected roommate requestor records updated.");
+                }
+            }
+            
+            $db = &new PHPWS_DB('hms_roommate');
+            $db->addValue('requestee', $names[1]);
+            $db->addWhere('requestee', $names[0]);
+            $result = $db->update();
+            if(PEAR::isError($result)){
+                PHPWS_Error::logIfError($result);
+                $tpl['errors'][] = array('USERNAME'=>$names[0], 'MESSAGE' => "DB error trying to update roommate requestee.");
+            }else{
+                # Check to see if something happened
+                $rows_affected = $db->affectedRows();
+                if($rows_affected > 0){
+                    $tpl['status'][] = array('USERNAME'=>$names[0], 'MESSAGE' => "$rows_affected roommate requestee records updated.");
+                }
+            }
+
+            # Update RLCs
+            $db = &new PHPWS_DB('hms_learning_community_applications');
+            $db->addValue('user_id', $names[1]);
+            $db->addWhere('user_id', $names[0]);
+            $result = $db->update();
+            if(PEAR::isError($result)){
+                PHPWS_Error::logIfError($result);
+                $tpl['errors'][] = array('USERNAME'=>$names[0], 'MESSAGE' => "DB error trying to update RLCs.");
+            }else{
+                # Check to see if something happened
+                $rows_affected = $db->affectedRows();
+                if($rows_affected > 0){
+                    $tpl['status'][] = array('USERNAME'=>$names[0], 'MESSAGE' => "$rows_affected RLC records updated.");
+                }
+            }
+        }
+
+        return PHPWS_Template::process($tpl, 'hms', 'admin/process_username_change.tpl');
     }
 }
 
