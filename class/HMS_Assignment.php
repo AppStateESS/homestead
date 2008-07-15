@@ -114,7 +114,7 @@ class HMS_Assignment extends HMS_Item
     /**
      * Returns a string like "Justice Hall Room 110"
      */
-    function where_am_i()
+    function where_am_i($link = FALSE)
     {
         if(!$this->loadBed()){
             return null;
@@ -125,7 +125,13 @@ class HMS_Assignment extends HMS_Item
         $floor = $room->get_parent();
         $building = $floor->get_parent();
 
-        return ($building->hall_name . ' Room ' . $room->room_number);
+        $text = $building->hall_name . ' Room ' . $room->room_number;
+
+        if($link){
+            return PHPWS_Text::secureLink($text, 'hms', array('type'=>'room', 'op'=>'show_edit_room', 'room'=>$room->id));
+        }else{
+            return $text;
+        }
     }
 
     /**
