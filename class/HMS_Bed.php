@@ -187,7 +187,7 @@ class HMS_Bed extends HMS_Item {
         }else{
             # TODO: make this a link to assign a student to this
             # particular bed
-            return PHPWS_Text::secureLink('&lt;unassigned&gt;', 'hms', array('type'=>'assignment', 'op'=>'show_assign_student', 'bed_id'=>$this->id));
+            return PHPWS_Text::secureLink('&lt;unassigned&gt;', 'hms', array('type'=>'assignment', 'op'=>'show_assign_student', 'bed_id'=>$this->id), 'index');
         }
 
     }

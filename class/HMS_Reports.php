@@ -748,16 +748,47 @@ class HMS_Reports{
                         if(!$bed->has_vacancy()){
                             continue;
                         }
+
+                        $content = $bed->bed_letter;
+                        if($bed->ra_bed == 1){
+                            $content .= ' (RA)';
+                        }
                         
+                        $content .= ' ' . $bed->get_assigned_to_link();
+
                         $tpl->setCurrentBlock('bed_repeat');
-                        $tpl->setData(array('BED_NUM' => $bed->bed_letter));
+                        $tpl->setData(array('BED_NUM' => $content));
                         $tpl->parseCurrentBlock();
                         $vacant_beds++;
                         $vacant_beds_by_hall++;
                     }
 
+                    $content = $room->room_number;
+                    if($room->ra_room == 1){
+                        $content .= ' (RA)';
+                    }
+                    if($room->private_room == 1){
+                        $content .= ' (private)';
+                    }
+                    if($room->is_lobby == 1){
+                        $content .= ' (lobby)';
+                    }
+                    if($room->is_medical == 1){
+                        $content .= ' (medical)';
+                    }
+                    if($room->is_reserved == 1){
+                        $content .= ' (reserved)';
+                    }
+                    if($room->gender_type == MALE){
+                        $content .= ' (male)';
+                    }else if($room->gender_type == FEAMLE){
+                        $content .= ' (female)';
+                    }else{
+                        $content .= ' (unknown gender)';
+                    }
+                   
                     $tpl->setCurrentBlock('room_repeat');
-                    $tpl->setData(array('ROOM_NUM' => $room->room_number));
+                    $tpl->setData(array('ROOM_NUM' => $content));
                     $tpl->parseCurrentBlock();
                 }
 
