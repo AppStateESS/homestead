@@ -678,6 +678,62 @@ class HMS_Reports{
 
     }
 
+    function run_unassigned_beds_report()
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+
+        $halls = HMS_Residence_Hall::get_halls(HMS_Term::get_selected_term());
+
+        $tpl = &new PHPWS_Template('hms');
+        if(!$tpl->setFile('admin/reports/unassigned_beds.tpl')){
+            return 'Template error....';
+        }
+
+        foreach($halls as $hall){
+            if(!$hall->has_vacancy()){
+                $tpl->setCurrentBlock('floor_repeat');
+                $tpl->setData(array('FLOOR_NUM' => 'No vacancy'));
+                $tpl->parseCurrentBlock();
+                continue;
+            }
+
+            $floors = $hall->get_floors();
+
+            foreach($floors as $floor){
+                if(!$floor->has_vacancy()){
+                    $tpl->setCurrentBlock('room_repeat');
+                    $tpl->setData(array('ROOM_NUM' => 'No vacancy'));
+                    $tpl->parseCurrentBlock();
+                    continue;
+                }
+
+                $rooms = $floor->get_rooms();
+                
+                foreach($rooms as $room){
+                    if(!$room->has_vacancy()){
+                        $tpl->setCurrentBlock('bed_repeat');
+                        $tpl->setData(array('BED_NUM' => 'No vacancy'));
+                        $tpl->parseCurrentBlock();
+                        continue;
+                    }
+
+                    $tpl->setCurrentBlock('room_repeat');
+                    $tpl->setData(array('ROOM_NUM' => $room->room_number));
+                    $tpl->parseCurrentBlock();
+                }
+
+                $tpl->setCurrentBlock('floor_repeat');
+                $tpl->setData(array('FLOOR_NUM' => $floor->floor_number));
+                $tpl->parseCurrentblock();
+            }
+            
+            $tpl->setCurrentBlock('hall_repeat');
+            $tpl->setData(array('HALL_NAME' => $hall->hall_name));
+            $tpl->parseCurrentBlock();
+        }
+    }
+
     function run_unassigned_rooms_report()
     {
         $db = &new PHPWS_DB('hms_residence_hall');
