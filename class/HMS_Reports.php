@@ -693,20 +693,41 @@ class HMS_Reports{
             return 'Template error....';
         }
 
+        $vacant_beds = 0; // accumulator for counting empty beds
+
         foreach($halls as $hall){
+            // skip offline halls
+            if($hall->is_online == 0){
+                $tpl->setCurrentBlock('hall_repeat');
+                $tpl->setData(array('HALL_NAME' => $hall->hall_name . ' - Offline'));
+                $tpl->parseCurrentBlock();
+                continue;
+            }
+           
+            // Skip full halls 
             if(!$hall->has_vacancy()){
-                $tpl->setCurrentBlock('floor_repeat');
-                $tpl->setData(array('FLOOR_NUM' => 'No vacancy'));
+                $tpl->setCurrentBlock('hall_repeat');
+                $tpl->setData(array('HALL_NAME' => $hall->hall_name . ' - No vacancy'));
                 $tpl->parseCurrentBlock();
                 continue;
             }
 
+            $vacant_beds_by_hall = 0;
+
             $floors = $hall->get_floors();
 
             foreach($floors as $floor){
+                // Skip offline floors
+                if($floor->is_online == 0){
+                    $tpl->setCurrentBlock('floor_repeat');
+                    $tpl->setData(array('FLOOR_NUM' => $floor->floor_number . ' - Offline'));
+                    $tpl->parseCurrentBlock();
+                    continue;
+                }
+                
                 if(!$floor->has_vacancy()){
-                    $tpl->setCurrentBlock('room_repeat');
-                    $tpl->setData(array('ROOM_NUM' => 'No vacancy'));
+                    $tpl->setCurrentBlock('floor_repeat');
+                    $tpl->setData(array('FLOOR_NUM' => $floor->floor_number . ' - No vacancy'));
                     $tpl->parseCurrentBlock();
                     continue;
                 }
@@ -715,10 +736,24 @@ class HMS_Reports{
                 
                 foreach($rooms as $room){
                     if(!$room->has_vacancy()){
-                        $tpl->setCurrentBlock('bed_repeat');
-                        $tpl->setData(array('BED_NUM' => 'No vacancy'));
-                        $tpl->parseCurrentBlock();
+                        //$tpl->setCurrentBlock('room_repeat');
+                        //$tpl->setData(array('ROOM_NUM' => $room->room_number . ' - No vacancy'));
+                        //$tpl->parseCurrentBlock();
                         continue;
+                    }
+
+                    $beds = $room->get_beds();
+
+                    foreach($beds as $bed){
+                        if(!$bed->has_vacancy()){
+                            continue;
+                        }
+                        
+                        $tpl->setCurrentBlock('bed_repeat');
+                        $tpl->setData(array('BED_NUM' => $bed->bed_letter));
+                        $tpl->parseCurrentBlock();
+                        $vacant_beds++;
+                        $vacant_beds_by_hall++;
                     }
 
                     $tpl->setCurrentBlock('room_repeat');
@@ -732,9 +767,13 @@ class HMS_Reports{
             }
             
             $tpl->setCurrentBlock('hall_repeat');
-            $tpl->setData(array('HALL_NAME' => $hall->hall_name));
+            $tpl->setData(array('HALL_NAME' => $hall->hall_name . ' - ' . $vacant_beds_by_hall . ' vacant beds'));
             $tpl->parseCurrentBlock();
         }
+
+        $tpl->setData(array('BED_COUNT' => $vacant_beds));
+
+        return $tpl->get();
     }
 
     function run_unassigned_rooms_report()

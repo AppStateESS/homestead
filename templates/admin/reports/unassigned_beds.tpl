@@ -21,4 +21,7 @@
     </ul>
     <!-- END hall_repeat -->
 </ul>
+
+<br />
+Found {BED_COUNT} vacant beds.
 </div>
