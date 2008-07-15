@@ -573,6 +573,7 @@ class HMS_Admin
             # Open a DB connection and try to update applications
             $db = &new PHPWS_DB('hms_application');
             $db->addValue('hms_student_id', $names[1]);
+            $db->addValue('created_by',     $names[1]);
             $db->addWhere('hms_student_id', $names[0]);
             $result = $db->update();
 
@@ -600,6 +601,22 @@ class HMS_Admin
                 $rows_affected = $db->affectedRows();
                 if($rows_affected > 0){
                     $tpl['status'][] = array('USERNAME'=>$names[0], 'MESSAGE' => "$rows_affected assignment records updated.");
+                }
+            }
+
+            # Update the banner queue
+            $db = &new PHPWS_DB('hms_banner_queue');
+            $db->addValue('asu_username', $names[1]);
+            $db->addWhere('asu_username', $names[0]);
+            $result = $db->update();
+            if(PEAR::isError($result)){
+                PHPWS_Error::logIfError($result);
+                $tpl['errors'][] = array('USERNAME'=>$names[0], 'MESSAGE' => "DB error trying to update banner queue.");
+            }else{
+                # Check to see if something happened
+                $rows_affected = $db->affectedRows();
+                if($rows_affected > 0){
+                    $tpl['status'][] = array('USERNAME'=>$names[0], 'MESSAGE' => "$rows_affected banner queue records updated.");
                 }
             }
             
