@@ -567,6 +567,8 @@ class HMS_Admin
         foreach($lines as $line){
             # Split the names (from: "old,new")
             $names = split(',', $line);
+            $names[0] = trim($names[0]);
+            $names[1] = trim($names[1]);
 
             # Open a DB connection and try to update applications
             $db = &new PHPWS_DB('hms_application');
