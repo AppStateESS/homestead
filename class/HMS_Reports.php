@@ -14,19 +14,21 @@ class HMS_Reports{
                         'system_stats'  => 'Get System Statistics',
                         'special_needs' => 'Special Needs Applicants',
                         'unassd_apps'   => 'Unassigned Applicants',
-                        'movein_times'  => 'Move-in Times'
+                        'movein_times'  => 'Move-in Times',
+                        'unassd_beds'   => 'Currently Unassigned Beds',
+                        'no_ban_data'  => 'Students Without Banner Data'
                         );
-/*                        'housing_asss' =>'Housing Assignments Made',*/
-/*                        'unassd_rooms' =>'Currently Unassigned Rooms',*/
-/*                        'unassd_beds'  =>'Currently Unassigned Beds',*/
-/*                        'reqd_roommate'=>'Unconfirmed Roommates',*/
-/*                        'assd_alpha'   =>'Assigned Students',*/
-/*                        'special'      =>'Special Circumstances',*/
-/*                        'hall_structs' =>'Hall Structures');*/
-/*                        'no_ban_data'  =>'Students Without Banner Data',*/
-/*                        'no_deposit'   =>'Assigned Students with No Deposit',*/
-/*                        'bad_type'     =>'Assigned Students Withdrawn or with Bad Type',*/
-/*                        'gender'       =>'Gender Mismatches');*/
+/*                        'housing_asss' => 'Housing Assignments Made',*/
+/*                        'unassd_rooms' => 'Currently Unassigned Rooms',*/
+/*                        'unassd_beds'  => 'Currently Unassigned Beds',*/
+/*                        'reqd_roommate'=> 'Unconfirmed Roommates',*/
+/*                        'assd_alpha'   => 'Assigned Students',*/
+/*                        'special'      => 'Special Circumstances',*/
+/*                        'hall_structs' => 'Hall Structures');*/
+/*                        'no_ban_data'  => 'Students Without Banner Data',*/
+/*                        'no_deposit'   => 'Assigned Students with No Deposit',*/
+/*                        'bad_type'     => 'Assigned Students Withdrawn or with Bad Type',*/
+/*                        'gender'       => 'Gender Mismatches');*/
 
         return $reports;
     }
@@ -98,12 +100,16 @@ class HMS_Reports{
                 break;
             case 'movein_times':
                return HMS_Reports::run_move_in_times_report();
+               break;
+            case 'unassd_beds':
+                return HMS_Reports::run_unassigned_beds_report();
+                break;
+            case 'no_ban_data':
+                return HMS_Reports::run_no_banner_data_report();
+                break;
             /*
             case 'unassd_rooms':
                 return HMS_Reports::run_unassigned_rooms_report();
-                break;
-            case 'unassd_beds':
-                return HMS_Reports::run_unassigned_beds_report();
                 break;
             case 'reqd_roommate':
                 return HMS_Reports::run_unconfirmed_roommates_report();
@@ -116,9 +122,6 @@ class HMS_Reports{
                 break;
             case 'hall_structs':
                 return HMS_Reports::display_hall_structures();
-                break;
-            case 'no_ban_data':
-                return HMS_Reports::run_no_banner_data_report();
                 break;
             case 'no_deposit':
                 return HMS_Reports::run_no_deposit_report();
@@ -840,6 +843,7 @@ class HMS_Reports{
         return $content;
     }
 
+    /*
     function run_unassigned_beds_report()
     {
         $sql = "select hall.hall_name,
@@ -933,6 +937,7 @@ class HMS_Reports{
 
         return $content;
     }
+    */
     
     function run_unconfirmed_roommates_report()
     {
