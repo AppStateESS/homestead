@@ -18,7 +18,8 @@ class HMS_Student {
     var $updated_on;
     var $deleted;
 
-    function HMS_Student($student_id = NULL) {
+    function HMS_Student($asu_username = NULL) {
+        $this->asu_username = $asu_username;
     }
 
     

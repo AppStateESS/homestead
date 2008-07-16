@@ -147,6 +147,34 @@ class HMS_Suite extends HMS_Item {
         return $result;
     }
 
+    function get_assignees()
+    {
+        $db = &new PHPWS_DB('hms_assignment');
+        $db->addJoin('LEFT OUTER', 'hms_assignment', 'hms_bed', 'bed_id', 'id'  );
+        $db->addJoin('LEFT OUTER', 'hms_bed', 'hms_room', 'room_id', 'id' );
+        $db->addJoin('LEFT OUTER', 'hms_room', 'hms_suite', 'suite_id', 'id');
+
+        $db->addWhere('hms_suite.id', $this->id);
+
+        $result = $db->select();
+
+        if(PHPWS_Error::logIfError($result)){
+            return false;
+        }
+
+        if(is_null($result)){
+            return NULL;
+        }
+
+        $student_array = array();
+
+        foreach($result as $row){
+            $student_array[] = new HMS_Student($row['asu_username']);
+        }
+        
+        return $student_array;
+    }
+
     /*****************
     * Static Methods *
     *****************/
