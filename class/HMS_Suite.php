@@ -149,6 +149,8 @@ class HMS_Suite extends HMS_Item {
 
     function get_assignees()
     {
+        PHPWS_Core::initModClass('hms', 'HMS_Student.php');
+
         $db = &new PHPWS_DB('hms_assignment');
         $db->addJoin('LEFT OUTER', 'hms_assignment', 'hms_bed', 'bed_id', 'id'  );
         $db->addJoin('LEFT OUTER', 'hms_bed', 'hms_room', 'room_id', 'id' );

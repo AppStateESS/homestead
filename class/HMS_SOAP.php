@@ -438,9 +438,9 @@ class HMS_SOAP{
 
         # Look for the various address types
         foreach($student->address as $address){
-            if($address->atyp_code == ADDRESS_PRMT_RESIDENCE) {
+            if(((string)$address->atyp_code) == ADDRESS_PRMT_RESIDENCE) {
                 $pr_address = $address;
-            }else if($address->atyp_code = ADDRESS_PRMT_STUDENT){
+            }else if(((string)$address->atyp_code) == ADDRESS_PRMT_STUDENT){
                 $ps_address = $address;
             }
         }

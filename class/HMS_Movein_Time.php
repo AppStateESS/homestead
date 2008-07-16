@@ -17,12 +17,13 @@ class HMS_Movein_Time
      * Instance Methods *
      *******************/
     function HMS_Movein_Time($id = NULL){
-        if(!isset($id)){
+        
+        if(!isset($id) || is_null($id)){
             return;
         }
 
         $db = new PHPWS_DB('hms_movein_time');
-        $db->addWhere('id', $this->id);
+        $db->addWhere('id', $id);
         $result = $db->loadObject($this);
         if(!$result || PHPWS_Error::logIfError($result)){
             $this->id = 0;
@@ -42,6 +43,7 @@ class HMS_Movein_Time
 
     function get_formatted_begin_end()
     {
+        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
         return HMS_Util::get_long_date_time($this->begin_timestamp) . ' - ' . date('gA',$this->end_timestamp);
     }
 

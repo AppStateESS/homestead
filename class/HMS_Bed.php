@@ -95,7 +95,7 @@ class HMS_Bed extends HMS_Item {
         $db->addWhere('term', $this->term);
         $db->loadClass('hms', 'HMS_Assignment.php');
         $result = $db->getObjects('HMS_Assignment');
-
+        
         if(PEAR::isError($result)){
             PHPWS_Error::logIfError($result);
             return false;
@@ -106,6 +106,7 @@ class HMS_Bed extends HMS_Item {
             return false;
         }else{
             $this->_curr_assignment = $result[0];
+            return TRUE;
         }
     }
 
@@ -138,6 +139,8 @@ class HMS_Bed extends HMS_Item {
 
     function get_assignee()
     {
+        PHPWS_Core::initModClass('hms', 'HMS_Student.php');
+        
         if(!$this->loadAssignment()){
             return false;
         }

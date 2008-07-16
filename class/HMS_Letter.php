@@ -20,13 +20,14 @@ class HMS_Letter
     var $address5   = NULL;
     var $date       = NULL;
     var $semester   = NULL;
-    var $hall       = NULL;
-    var $room       = NULL;
+    //var $hall       = NULL;
+    //var $room       = NULL;
+    var $assignment = NULL;
     var $room_phone = NULL;
-    var $roommate   = NULL;
-    var $rm_email   = NULL;
+    var $roommate   = array();
     var $checkin    = NULL;
     var $message    = NULL;
+    var $student_type = NULL;
 
     function Letter()
     {
@@ -70,23 +71,37 @@ class HMS_Letter
         $pdf->Cell(0, HEIGHT, $this->semester, NULL, 1, 'C');
         $pdf->Ln(HEIGHT);
 
-        $pdf->Write(HEIGHT, "Hall: ");
-        $pdf->Cell(2.25, HEIGHT, $this->hall);
-        $pdf->Write(HEIGHT, " Room: ");
-        $pdf->Cell(0.50, HEIGHT, $this->room);
-        $pdf->Write(HEIGHT, " Room Phone: ");
-        $pdf->Cell(1.25, HEIGHT, $this->room_phone);
+        $pdf->Write(HEIGHT, "Assignment: ");
+        $pdf->Cell(2.75, HEIGHT, $this->assignment);
+        
+        if($this->room_phone != '' && !is_null($this->room_phone)){
+            $pdf->Write(HEIGHT, " Room Phone: ");
+            $pdf->Cell(1.25, HEIGHT, '828-266-' . $this->room_phone);
+        }
         $pdf->Ln(HEIGHT);
 
-        $pdf->Write(HEIGHT, "Roommate: ");
-        $pdf->Cell(2.75, HEIGHT, $this->roommate);
-        $pdf->Write(HEIGHT, " Email: ");
-        $pdf->Cell(1.75, HEIGHT, $this->rm_email);
-        $pdf->Ln(HEIGHT);
+        // Skip roommate info if no roommates
+        if(!is_null($this->roommate)){
+            $roommate_list = implode("\n", $this->roommate);
+            $roommate_size = sizeof($this->roommate) * HEIGHT;
+        
+            $pdf->Write(HEIGHT, "Roommate: ");
+            $pdf->MultiCell(5.00, HEIGHT, $roommate_list);
+        }else{
+            $pdf->Write(HEIGHT, "Roommate: To be determined.");
+            $pdf->Cell(5.00, HEIGHT, $roommate_list);
+        }
+            
         $pdf->Ln(HEIGHT);
 
         $pdf->Write(HEIGHT, "Check-in Time: ");
-        $pdf->Cell(4.5, HEIGHT, $this->checkin);
+        $pdf->Cell(2.4, HEIGHT, $this->checkin);
+
+        if($this->student_type == TYPE_CONTINUING){
+            $pdf->Cell(2, HEIGHT, "UPPERCLASSMEN ONLY");
+        }else{
+            $pdf->Cell(2, HEIGHT, "FRESHMEN & TRANSFER ONLY");
+        }
         $pdf->Ln(HEIGHT);
         $pdf->Ln(HEIGHT);
 
@@ -111,87 +126,132 @@ class HMS_Letter
         $pdf->Write(HEIGHT, "Stacy R. Sears\nAssistant Director\nHousing & Residence Life");
     }
 
-    function put_into_pile(&$freshmen_new, &$freshmen_changed, &$upperclassmen_new, &$upperclassmen_changed, $student)
+    function put_into_pile(&$freshmen_male, &$freshmen_female, &$continuing_male, &$continuing_female, $student)
     {
-        $sql = "
-            SELECT
-                hms_cached_student_info.*,
-                hms_assignment.id as a_id,
-                hms_assignment.deleted
-            FROM hms_cached_student_info
-            JOIN hms_assignment ON
-                hms_cached_student_info.asu_username = hms_assignment.asu_username
-            WHERE
-                hms_cached_student_info.asu_username = '$student'
-            ORDER BY
-                deleted ASC
-        ";
+        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Movein_Time.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Room.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Suite.php');
+        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
 
-        $rows = PHPWS_DB::getAll($sql);
-        if(PHPWS_Error::isError($rows)) {
-            test($rows,1);
+        $term = HMS_Term::get_selected_term();
+
+        $assignment = HMS_Assignment::get_assignment($student, $term);
+        if($assignment === NULL || $assignment == FALSE){
+            test($assignment, 1); // This *shouldn't* ever happen...
+        }else{
+            $assignment_text    = $assignment->where_am_i();
+            $bed_phone          = $assignment->get_phone_number();
+
+            # Determine the student's type and figure out their movein time
+            $type = HMS_SOAP::get_student_type($student, $term);
+
+            //test($type,1);
+
+            if($type == TYPE_CONTINUING){
+                $movein_time_id = $assignment->get_rt_movein_time_id();
+            }else{
+                $movein_time_id = $assignment->get_ft_movein_time_id();
+            }
+
+            //test($assignment->get_ft_movein_time_id(),1);
+            
+            if($movein_time_id == NULL){
+                //test($assignment, 1); // Will only happen if there's no move-in time set for the floor,student type
+                $movein_time = "Unknown";
+            }else{
+                $movein_time_obj = new HMS_Movein_Time($movein_time_id);
+                $movein_time = $movein_time_obj->get_formatted_begin_end();
+            }
+        }
+
+        # Get a list of the roommates that are actually assigned with this student
+        $room_id = $assignment->get_room_id();
+        $room = new HMS_Room($room_id);
+
+        if($room->is_in_suite()){
+            # Go to the suite level to get all the roommates
+            $suite = new HMS_Suite($room->suite_id);
+            $assignees = $suite->get_assignees(); // get an array of student objects for those assigned to this suite
+        }else{
+            # Go to the room level to get all the roommates
+            $assignees = $room->get_assignees(); // get an array of student objects for those assigned to this room
         }
         
-        $count = count($rows);
-        $row = $rows[0];
-
-        if($row['deleted'] == 1 || $count < 1) return;
-
+        # Update this student's assignment to say we printed a letter
         $sql = "
             UPDATE hms_assignment
             SET letter_printed = 1
-            WHERE hms_assignment.id = {$row['a_id']}
+            WHERE hms_assignment.id = {$assignment->id}
         ";
         PHPWS_DB::getAll($sql);
 
         $letter = new HMS_Letter;
 
-        $letter->address1 = $row['last_name']  . ', ' .
-                            $row['first_name'] . ' '  .
-                            $row['middle_name'];
+        $letter->address1 = HMS_SOAP::get_full_name_inverted($assignment->asu_username);
+
+        $addr = HMS_SOAP::get_address($assignment->asu_username, NULL);
                             
-        $letter->address2 = $row['address1'];
+        $letter->address2 = $addr->line1;
         
-        $citystatezip = $row['city']  . ', ' .
-                        $row['state'] . ' '  .
-                        $row['zip'];
+        $citystatezip = $addr->city  . ', ' .
+                        $addr->state . ' '  .
+                        $addr->zip;
                         
-        if(empty($row['address2'])) {
+        if(empty($addr->line2)) {
             $letter->address3 = $citystatezip;
         } else {
-            $letter->address3 = $row['address2'];
-            if(empty($row['address3'])) {
+            $letter->address3 = $addr->line2;
+            if(empty($addr->line3)) {
                 $letter->address4 = $citystatezip;
             } else {
-                $letter->address4 = $row['address3'];
+                $letter->address4 = $addr->line3;
                 $letter->address5 = $citystatezip;
             }
         }
 
         $letter->date     = strftime("%B %d, %Y");
-        $letter->semester = "Fall, 2007";
+        $letter->semester = "Fall, 2008";
         
-        $letter->hall       = $row['hall_name'];
-        $letter->room       = $row['room_number'];
-        $letter->room_phone = $row['room_phone'];
+        $letter->assignment = $assignment_text;
+        $letter->room_phone = $bed_phone;
+    
+        // Skip adding roommate info if only this student is assigned
+        if(sizeof($assignees) > 1){
+            foreach($assignees as $roommate){
+                // Don't add *this* student to the roommate list
+                if($roommate->asu_username == $student){
+                    continue;
+                }
+                $letter->roommate[] = HMS_SOAP::get_full_name_inverted($roommate->asu_username) . ' (' . $roommate->asu_username . '@appstate.edu)';
+            }
+        }else{
+            $letter->roommate = NULL;
+        }
+        
+        $letter->checkin = $movein_time;
+        $letter->message = "Freshmen and transfer check-in is August 22 from 10am to 4pm.  Returning student check-in starts on August 23.  See above for your scheduled time.  Please go to your assigned hall office to pick up your residence hall room key and check-in information. If you have a conflict, you can check-in anytime after your scheduled time, until 6pm on August 26.  Failure to check-in by 6pm on August 26 will result in assignment cancellation (See pages 15-16 of the Residence Hall License Contract booklet).";
 
-        $letter->roommate = $row['roommate_name'];
-        $letter->rm_email = $row['roommate_user'] . '@appstate.edu';
+        $gender = HMS_SOAP::get_gender($student, TRUE);
+        $type   = HMS_SOAP::get_student_type($student, $term);
 
-        $letter->checkin = $row['movein_time'];
-        $letter->message = "Freshmen and transfer check-in is August 17 from 9am to 6pm.  Returning student check-in starts on August 18.  See above for your scheduled time.  If you have a conflict, you can check-in anytime after your scheduled time, until 6pm on August 21.  Failure to check-in by August 21 by 6pm will result in assignment cancellation.  (See pages 15-16 of the Residence Hall License Contract booklet).";
+        $letter->student_type = $type;
 
-        if($row['student_type'] == 'F' && $row['credit_hours'] == 0) {
-            if($count > 1) {
-                $freshmen_changed[] = $letter;
-            } else {
-                $freshmen_new[] = $letter;
+        if($type == TYPE_CONTINUING) {
+            
+            if($gender == MALE){
+                $continuing_male[] = $letter;
+            }
+            if($gender == FEMALE){
+                $continuing_female[] = $letter;
             }
         } else {
-            if($count > 1) {
-                $upperclassmen_changed[] = $letter;
-            } else {
-                $upperclassmen_new[] = $letter;
+            if($gender == MALE){
+                $freshmen_male[] = $letter;
+            }
+            if($gender == FEMALE){
+                $freshmen_female[] = $letter;
             }
         }
     }
@@ -334,26 +394,23 @@ class HMS_Letter
     {
         // Initialize list of people that need a letter
         $needs_letter = array();
+        
+        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+        $term = HMS_Term::get_selected_term();
 
         // Get everyone that needs a letter
         $sql = "
             SELECT
-                hms_cached_student_info.asu_username,
-                hms_cached_student_info.roommate_user
-            FROM hms_cached_student_info
-            JOIN hms_assignment ON
-                hms_assignment.asu_username = hms_cached_student_info.asu_username
+                hms_assignment.asu_username
+            FROM hms_assignment
             WHERE
-                hall_name != 'Mountaineer Apartments' AND
-                hms_assignment.deleted = 0 AND
                 hms_assignment.letter_printed = 0
+                AND hms_assignment.term = {$term}
             ORDER BY
-                last_name,
-                first_name,
-                middle_name
+                asu_username
         ";
 
-        $results = PHPWS_DB::getAll($sql);
+        $results = PHPWS_DB::getCol($sql);
         if(PHPWS_Error::isError($results)) {
             test($results,1);
         }
@@ -363,38 +420,34 @@ class HMS_Letter
             return "No new letters needed to be generated.";
         }
 
-        // Throw out duplicates
-        foreach($results as $result) {
-            if(!in_array($result['asu_username'], $needs_letter))
-                $needs_letter[] = $result['asu_username'];
-            if(!in_array($result['roommate_user'], $needs_letter))
-                $needs_letter[] = $result['roommate_user'];
-        }
+        // Separate into freshmen/transfer, and continuing, male and female
+        // Initalize a letter object for each student and place it in the proper array
+        $fm_letters = array(); // freshmen male
+        $ff_letters = array(); // freshmen female
+        $cm_letters = array(); // continuing male
+        $cf_letters = array(); // continuing female
 
-        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-        HMS_Assignment::update_local_student_assignment_data($needs_letter);
-
-        // Separate into freshmen and upperclassmen, new and changed
-        // Also initialize HMS_Letter objects for them
-        $fn_letters = array();
-        $fc_letters = array();
-        $un_letters = array();
-        $uc_letters = array();
-        foreach($needs_letter as $student) {
-            HMS_Letter::put_into_pile($fn_letters, $fc_letters, $un_letters, $uc_letters, $student);
+        $i = 0;
+        foreach($results as $student) {
+            /*
+            if($i > 10){
+                break;
+            }*/
+            HMS_Letter::put_into_pile($fm_letters, $ff_letters, $cm_letters, $cf_letters, $student);
+            $i++;
         }
 
         // Sort
-        HMS_Letter::letterSort($fn_letters);
-        HMS_Letter::letterSort($fc_letters);
-        HMS_Letter::letterSort($un_letters);
-        HMS_Letter::letterSort($uc_letters);
+        HMS_Letter::letterSort($fm_letters);
+        HMS_Letter::letterSort($ff_letters);
+        HMS_Letter::letterSort($cm_letters);
+        HMS_Letter::letterSort($cf_letters);
 
         // Total counts of letters created
-        $nfreshcount = count($fn_letters);
-        $cfreshcount = count($fc_letters);
-        $nuppercount = count($un_letters);
-        $cuppercount = count($uc_letters);
+        $fm_count = count($fm_letters);
+        $ff_count = count($ff_letters);
+        $cm_count = count($fm_letters);
+        $cf_count = count($cf_letters);
         
         // Initialize PDF and CSV files
         $pdf = HMS_Letter::pdf_factory();
@@ -402,50 +455,48 @@ class HMS_Letter
 
         // Render the letters and CSVs
         $q = '"';
-        if(count($fn_letters) > 0) {
+        if(count($fm_letters) > 0) {
             $pdf->AddPage();
             $pdf->SetFont('Times','',50);
-            $pdf->Write(1, "NEWLY");
-            $pdf->Write(1, "ASSIGNED");
+            $pdf->Write(1, "MALE");
             $pdf->Write(1, "FRESHMEN");
-            foreach($fn_letters as $letter) {
+            foreach($fm_letters as $letter) {
                 $letter->render($pdf);
                 $csv .= "$q{$letter->address1}$q,$q{$letter->address2}$q," .
                         "$q{$letter->address3}$q,$q{$letter->address4}$q," .
                         "$q{$letter->address5}$q\n";
             }
         }
-        if(count($fc_letters) > 0) {
+        if(count($ff_letters) > 0) {
             $pdf->AddPage();
             $pdf->SetFont('Times','',50);
-            $pdf->Write(1, "REASSIGNED");
+            $pdf->Write(1, "FEMALE");
             $pdf->Write(1, "FRESHMEN");
-            foreach($fc_letters as $letter) {
+            foreach($ff_letters as $letter) {
                 $letter->render($pdf);
                 $csv .= "$q{$letter->address1}$q,$q{$letter->address2}$q," .
                         "$q{$letter->address3}$q,$q{$letter->address4}$q," .
                         "$q{$letter->address5}$q\n";
             }
         }
-        if(count($un_letters) > 0) {
+        if(count($cm_letters) > 0) {
             $pdf->AddPage();
             $pdf->SetFont('Times','',50);
-            $pdf->Write(1, "NEWLY");
-            $pdf->Write(1, "ASSIGNED");
-            $pdf->Write(1, "UPPERCLASSMEN");
-            foreach($un_letters as $letter) {
+            $pdf->Write(1, "MALE");
+            $pdf->Write(1, "CONTINUING");
+            foreach($cm_letters as $letter) {
                 $letter->render($pdf);
                 $csv .= "$q{$letter->address1}$q,$q{$letter->address2}$q," .
                         "$q{$letter->address3}$q,$q{$letter->address4}$q," .
                         "$q{$letter->address5}$q\n";
             }
         }
-        if(count($uc_letters) > 0) {
+        if(count($cf_letters) > 0) {
             $pdf->AddPage();
             $pdf->SetFont('Times','',50);
-            $pdf->Write(1, "REASSIGNED");
-            $pdf->Write(1, "UPPERCLASSMEN");
-            foreach($uc_letters as $letter) {
+            $pdf->Write(1, "FEMALE");
+            $pdf->Write(1, "CONTINUING");
+            foreach($cf_letters as $letter) {
                 $letter->render($pdf);
                 $csv .= "$q{$letter->address1}$q,$q{$letter->address2}$q," .
                         "$q{$letter->address3}$q,$q{$letter->address4}$q," .
@@ -466,7 +517,7 @@ class HMS_Letter
         fclose($fp);
         
         // Report back to the user a job well done
-        $content = "Generated letters for $nfreshcount new freshmen, $cfreshcount changed freshmen, $nuppercount new upperclassmen, and $cuppercount changed upperclassmen.<br /><br />";
+        $content = "Generated letters for $fm_count male freshmen, $ff_count female freshmen, $cm_count male continuing, $cf_count female continuing.<br /><br />";
         $content .= PHPWS_Text::secureLink(_('Download PDF'), 'hms',
             array('type'=>'letter', 'op'=>'pdf', 'file'=>$filename));
         $content .= "<br /><br />";
