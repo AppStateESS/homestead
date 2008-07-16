@@ -15,6 +15,12 @@
 
     $permissions['search']              = _('Search for students');
 
+    /**************************
+     * High-level admin stuff *
+     **************************/
+    $permissions['withdrawn_search']        = _('Withdrawn student search');
+    $permissions['username_change']         = _('User name change');
+
     /*********
      * Terms *
      *********/
