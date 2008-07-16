@@ -926,6 +926,8 @@ function hms_update(&$content, $currentVersion)
             if(PEAR::isError($result)) {
                 return $result;
             }
+        case version_compare($currentVersion, '0.2.40', '<'):
+            PHPWS_Boost::registerMyModule('hms', 'users', $content);    #just need to update the permissions
     }
 
     return TRUE;
