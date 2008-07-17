@@ -50,7 +50,7 @@ class HMS_SOAP{
         }
 
         # Check for a banner error
-        if(is_int($student) && $student > 0){
+        if(is_numeric($student) && $student > 0){
             HMS_SOAP::log_soap('get_student_info: ' . $username . ' result: Banner error: ' . $student);
             HMS_SOAP::log_soap_error('error code: ' . $student, 'get_student_info', $username);
             return false;
@@ -106,7 +106,7 @@ class HMS_SOAP{
             HMS_SOAP::log_soap('report_application_received: ' . $username . ' result: Banner error: ' . $result);
             HMS_SOAP::log_soap_error($result, 'report_application_received', $username);
             return $result;
-        }/* else if(!is_int($result)) {
+        }/* else if(!is_numeric($result)) {
             HMS_SOAP::log_soap('report_application_received: ' . $username . ' result: Weird Error (result not an int): ' . $result);
             HMS_SOAP::log_soap_error('Weird Error: ', 'report_application_received', $username);
             return false;
@@ -139,7 +139,7 @@ class HMS_SOAP{
         }
         
         # Check for a banner error
-        if(is_int($assignment) && $assignment > 0){
+        if(is_numeric($assignment) && $assignment > 0){
             HMS_SOAP::log_soap('report_room_assignment: ' . $username . ' result: Banner error: ' . $assignment);
             HMS_SOAP::log_soap_error('Banner error: ' . $assignment, 'report_room_assignment', $username);
             return false;
@@ -173,7 +173,7 @@ class HMS_SOAP{
         }
         
         # Check for a banner error
-        if(is_int($removal) && $removal > 0){
+        if(is_numeric($removal) && $removal > 0){
             HMS_SOAP::log_soap('remove_room_assignment: ' . $username . ' result: Banner error: ' . $removal);
             HMS_SOAP::log_soap_error('Banner error: ' . $removal, 'remove_room_assignment', $username);
             return false;
@@ -211,7 +211,7 @@ class HMS_SOAP{
         }
         
         # Check for a banner error
-        if(is_int($student) && $student > 0){
+        if(is_numeric($student) && $student > 0){
             HMS_SOAP::log_soap('get_hous_meal_register: ' . $username . ' result: Banner error: ' . $student);
             HMS_SOAP::log_soap_error('Banner error: ' . $student, 'get_hous_meal_register', $username);
             return false;
@@ -427,6 +427,8 @@ class HMS_SOAP{
     function get_address($username, $type = ADDRESS_PRMT_RESIDENCE)
     {
         $student = HMS_SOAP::get_student_info($username);
+
+        //test($student);
         
         if(PEAR::isError($student)){
             HMS_SOAP::log_soap_error($student,'get_address',$username);
@@ -436,14 +438,27 @@ class HMS_SOAP{
         $pr_address = null;
         $ps_address = null;
 
-        # Look for the various address types
-        foreach($student->address as $address){
-            if(((string)$address->atyp_code) == ADDRESS_PRMT_RESIDENCE) {
-                $pr_address = $address;
-            }else if(((string)$address->atyp_code) == ADDRESS_PRMT_STUDENT){
-                $ps_address = $address;
+        // Determine if soap gave us just one object, or an array of objects
+        if(is_array($student->address) && count($student->address) > 1){
+            // multiple address, so loop over them
+            foreach($student->address as $address){
+                if(((string)$address->atyp_code) == ADDRESS_PRMT_RESIDENCE) {
+                    $pr_address = $address;
+                }else if(((string)$address->atyp_code) == ADDRESS_PRMT_STUDENT){
+                    $ps_address = $address;
+                }
+            }
+        }else{
+            // one address, so just decide if we're interested in it
+            if($student->address->atyp_code == ADDRESS_PRMT_RESIDENCE){
+                $pr_address = $student->address;
+            }
+            if($student->address->atyp_code == ADDRESS_PRMT_STUDENT){
+                $ps_address = $student->address;
             }
         }
+
+        
 
         # Decide which address type to return, based a $type parameter
         if(is_null($type)){
@@ -730,9 +745,11 @@ class HMS_SOAP{
         $student->credhrs_for_term      = 15;
         $student->on_campus             = 'false';
         
+        $student->address = array();
+        
         // Setup the address object
         $address->atyp_code = 'PS';
-        $address->line1     = '123 Rivers St.';
+        $address->line1     = '123 Rivers St. - PS Address';
         $address->line2     = 'c/o Electronic Student Services';
         $address->line3     = 'Room 267';
         $address->city      = 'Boone';
@@ -744,7 +761,7 @@ class HMS_SOAP{
 
         // Setup a second address object
         $address->atyp_code = 'PR';
-        $address->line1     = '123 Blowing Rock Road';
+        $address->line1     = '123 Blowing Rock Road - PR Address';
         $address->line2     = 'c/o Electronic Student Services';
         $address->line3     = 'Room 267';
         $address->city      = 'Boone';
@@ -752,7 +769,7 @@ class HMS_SOAP{
         $address->state     = 'NC';
         $address->zip       = '28608';
 
-        $student->address[1] = $address;
+        //$student->address[1] = $address;
         
         // Setup the phone number object
         $phone->area_code   = '123';
