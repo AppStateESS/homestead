@@ -17,6 +17,7 @@ class HMS_Assignment extends HMS_Item
     var $asu_username   = null;
     var $bed_id         = 0;
     var $meal_option    = 0;
+    var $letter_printed = 0;
     var $_gender        = 0;
     var $_bed           = null;
 
@@ -394,6 +395,7 @@ class HMS_Assignment extends HMS_Item
         $assignment->asu_username   = $username;
         $assignment->bed_id         = $vacant_bed->id;
         $assignment->term           = $term;
+        $assignment->letter_printed = 0;
 
         $result = $assignment->save();
 
