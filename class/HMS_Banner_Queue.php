@@ -205,7 +205,7 @@ class HMS_Banner_Queue {
                     $this->bed_code,
                     $meal_plan['plan'],
                     $meal_plan['meal']);
-                if($result == 0) {
+                if($result === 0) {
                     HMS_Activity_Log::log_activity(
                         $this->asu_username,
                         ACTIVITY_ASSIGNMENT_REPORTED,
@@ -223,7 +223,7 @@ class HMS_Banner_Queue {
                     $this->term,
                     $this->building_code,
                     $this->bed_code);
-                if($result == 0) {
+                if($result === 0) {
                     HMS_Activity_Log::log_activity(
                         $this->asu_username,
                         ACTIVITY_REMOVAL_REPORTED,

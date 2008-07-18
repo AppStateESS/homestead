@@ -176,7 +176,7 @@ class HMS_SOAP{
         if(is_numeric($removal) && $removal > 0){
             HMS_SOAP::log_soap('remove_room_assignment: ' . $username . ' result: Banner error: ' . $removal);
             HMS_SOAP::log_soap_error('Banner error: ' . $removal, 'remove_room_assignment', $username);
-            return false;
+            return $removal;
         }
         
         HMS_SOAP::log_soap('remove_room_assignment: ' . $username . ' result: success');
