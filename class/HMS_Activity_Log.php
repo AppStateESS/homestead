@@ -164,10 +164,10 @@ class HMS_Activity_Log{
         
         $tpl['ACTIVITY']  = $this->get_text_activity();
         
-        if(is_null($this->get_notes()))
-            $tpl['NOTES'] = '<i>None</i>';
-        else
-            $tpl['NOTES'] = $this->get_notes();
+        $notes = $this->get_notes();
+        if(!is_null($notes)) {
+            $tpl['NOTES'] = $notes;
+        }
 
         return $tpl;
     }

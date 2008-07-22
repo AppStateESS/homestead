@@ -4,7 +4,6 @@
         <th>User {USER_ID_SORT}</th>
         <th>Activity</th>
         <th>Time {TIMESTAMP_SORT}</th>
-        <th>Notes {NOTES_SORT}</th>
     </tr>
 <!-- BEGIN empty_table -->
     <tr>
@@ -15,11 +14,15 @@
 <!-- END empty_table -->
 <!-- BEGIN listrows -->
     <tr {TOGGLE}>
-        <td>{ACTEE}<br /><strong><!-- BEGIN by -->By:</strong> {ACTOR}</td><!-- END by -->
+        <td>{ACTEE} <!-- BEGIN by -->(<strong>By:</strong> {ACTOR})<!-- END by --></td>
         <td style="font-weight: bold;">{ACTIVITY}</td>
-        <td>{DATE}<br />{TIME}</td>
-        <td>{NOTES}</td>
+        <td>{DATE} at {TIME}</td>
     </tr>
+<!-- BEGIN notes -->
+    <tr {TOGGLE}>
+        <td colspan="3"><strong>Notes:</strong> {NOTES}</td>
+    </tr>
+<!-- END notes -->
 <!-- END listrows -->
 </table>
 <div class="align-center">

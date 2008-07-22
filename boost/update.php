@@ -928,6 +928,11 @@ function hms_update(&$content, $currentVersion)
             }
         case version_compare($currentVersion, '0.2.40', '<'):
             PHPWS_Boost::registerMyModule('hms', 'users', $content);    #just need to update the permissions
+
+        case version_compare($currentVersion, '0.2.41', '<'):
+            $files[] = 'templates/admin/activity_log_pager.tpl';
+            PHPWS_Boost::updateFiles($files, 'hms');
+
     }
 
     return TRUE;
