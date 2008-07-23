@@ -1,0 +1,14 @@
+dl.maintenance {
+    display: block;
+    float: left;
+    margin: 1em;
+}
+
+dl.maintenance dt {
+    margin: 1em 0 0 0;
+    font-weight: bold;
+}
+
+dl.maintenance dd {
+    margin: 0 0 0 1em;
+}

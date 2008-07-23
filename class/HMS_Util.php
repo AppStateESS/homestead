@@ -164,5 +164,49 @@ class HMS_Util{
             return 'Error: Unknown gender';
         }
     }
+
+    function formatClass($class)
+    {
+        switch($class){
+            case CLASS_FRESHMEN:
+                return 'Freshmen';
+            case CLASS_SOPHOMORE:
+                return 'Sophomore';
+            case CLASS_JUNIOR:
+                return 'Junior';
+            case CLASS_SENIOR:
+                return 'Senior';
+            default:
+                return 'Unknown';
+        }
+    }
+
+    function formatType($type)
+    {
+        switch($type){
+            case TYPE_FRESHMEN:
+                return 'New freshmen';
+            case TYPE_TRANSFER:
+                return 'Transfer';
+            default:
+                return 'Unknown';
+        }
+    }
+
+    function formatMealOption($meal)
+    {
+        switch($meal){
+            case BANNER_MEAL_LOW:
+                return 'Low';
+            case BANNER_MEAL_STD:
+                return 'Standard';
+            case BANNER_MEAL_HIGH:
+                return 'High';
+            case BANNER_MEAL_SUPER:
+                return 'Super';
+            default:
+                return 'Unknown';
+        }
+    }
 }
 ?>

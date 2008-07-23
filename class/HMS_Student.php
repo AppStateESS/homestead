@@ -89,12 +89,6 @@ class HMS_Student {
             case 'get_matching_students':
                 return HMS_Student::get_matching_students();
                 break;
-            case 'edit_student':
-                return HMS_Student::edit_student();
-                break;
-            case 'delete_student':
-                return HMS_Student::delete_student();
-                break;
             case 'show_terms_and_agreement_only':
                 # This is used to just show the terms & agreement, and then go back to the main menu (not part of application process)
                 PHPWS_Core::initModClass('hms', 'UI/Student_UI.php');
@@ -124,23 +118,59 @@ class HMS_Student {
                 PHPWS_Core::initModClass('hms', 'HMS_Side_Thingie.php');
                 $side_thingie = new HMS_Side_Thingie(HMS_SIDE_STUDENT_APPLY);
                 $side_thingie->show(FALSE);
-                PHPWS_Core::initModClass('hms','HMS_Application.php');
-                return HMS_Application::display_application_form();
+                PHPWS_Core::initModClass('hms','UI/Application_UI.php');
+                return Application_UI::show_housing_application();
                 break;
-            case 'review_application':
+            case 'submit_application':
+                # Show the side thingie
                 PHPWS_Core::initModClass('hms', 'HMS_Side_Thingie.php');
                 $side_thingie = new HMS_Side_Thingie(HMS_SIDE_STUDENT_APPLY);
                 $side_thingie->show(FALSE);
-                PHPWS_Core::initModClass('hms','HMS_Application.php');
-                return HMS_Application::display_application_form(TRUE);
+
+                PHPWS_Core::initModClass('hms', 'UI/Application_UI.php');
+                return Application_UI::submit_application();
                 break;
+            case 'submit_application_special_needs':
+                # Show the side thingie
+                PHPWS_Core::initModClass('hms', 'HMS_Side_Thingie.php');
+                $side_thingie = new HMS_Side_Thingie(HMS_SIDE_STUDENT_APPLY);
+                $side_thingie->show(FALSE);
+
+                PHPWS_Core::initModClass('hms', 'UI/Application_UI.php');
+                return Application_UI::show_application_review();
+            case 'redo_application':
+                # Show the side thingie
+                PHPWS_Core::initModClass('hms', 'HMS_Side_Thingie.php');
+                $side_thingie = new HMS_Side_Thingie(HMS_SIDE_STUDENT_APPLY);
+                $side_thingie->show(FALSE);
+                
+                PHPWS_Core::initModClass('hms','UI/Application_UI.php');
+                return Application_UI::show_housing_application();
+                break;
+            case 'submit_application_review':
+                # Show the side thingie
+                PHPWS_Core::initModClass('hms', 'HMS_Side_Thingie.php');
+                $side_thingie = new HMS_Side_Thingie(HMS_SIDE_STUDENT_APPLY);
+                $side_thingie->show(FALSE);
+
+                PHPWS_Core::initModClass('hms', 'UI/Application_UI.php');
+                return Application_UI::submit_application_review();
+            case 'view_application':
+                # Show the side thingie
+                PHPWS_Core::initModClass('hms', 'HMS_Side_Thingie.php');
+                $side_thingie = new HMS_Side_Thingie(HMS_SIDE_STUDENT_APPLY);
+                $side_thingie->show();
+                
+                PHPWS_Core::initModClass('hms', 'UI/Application_UI.php');
+                # Could be an admin or studnet, so figure out which data to use
+                if(isset($_SESSION['asu_username'])){
+                    return Application_UI::view_housing_application($_SESSION['asu_username'],$_SESSION['application_term']);
+                }else{
+                    return Application_UI::view_housing_application($_REQUEST['student'],HMS_SOAP::get_application_term($_RQUEST['student']));
+                }
             case 'show_main_menu':
                 PHPWS_Core::initModClass('hms', 'UI/Student_UI.php');
                 return HMS_Student_UI::show_main_menu();
-                break;
-            case 'view_housing_application':
-                PHPWS_Core::initModClass('hms', 'HMS_Application.php');
-                return HMS_Application::view_housing_application($_REQUEST['student']);
                 break;
             case 'save_application':
                 PHPWS_Core::initModClass('hms','HMS_Application.php');
@@ -153,13 +183,6 @@ class HMS_Student {
             case 'profile_search':
                 PHPWS_Core::initModClass('hms','HMS_Student_Profile.php');
                 return HMS_Student_Profile::profile_search();
-                break;
-            case 'show_application':
-                PHPWS_Core::initModClass('hms', 'HMS_Side_Thingie.php');
-                $side_thingie = new HMS_Side_Thingie(HMS_SIDE_STUDENT_APPLY);
-                $side_thingie->show();
-                PHPWS_Core::initModClass('hms','HMS_Application.php');
-                return HMS_Application::view_housing_application($_REQUEST['user']);
                 break;
             case 'show_profile':
                 PHPWS_Core::initModClass('hms', 'HMS_Side_Thingie.php');
@@ -516,10 +539,10 @@ class HMS_Student {
             $tpl['APPLICATION'] = 'This student has filled out an application.  [<a href="index.php?module=hms&type=student&op=get_matching_students&username='.$_REQUEST['username'].'&tab=housing_app">View Application</a>] '.$report_app;
             $app = &new HMS_Application($_REQUEST['username'], HMS_Term::get_selected_term());
             
-            if($app->getMealOption() == HMS_MEAL_LOW) $tpl['MEAL_PLAN'] = "Low";
-            else if($app->getMealOption() == HMS_MEAL_STD) $tpl['MEAL_PLAN'] = "Standard";
-            else if($app->getMealOption() == HMS_MEAL_HIGH) $tpl['MEAL_PLAN'] = "High";
-            else if($app->getMealOption() == HMS_MEAL_SUPER) $tpl['MEAL_PLAN'] = "Super";
+            if($app->meal_option == BANNER_MEAL_LOW) $tpl['MEAL_PLAN'] = "Low";
+            else if($app->meal_option == BANNER_MEAL_STD) $tpl['MEAL_PLAN'] = "Standard";
+            else if($app->meal_option == BANNER_MEAL_HIGH) $tpl['MEAL_PLAN'] = "High";
+            else if($app->meal_option == BANNER_MEAL_SUPER) $tpl['MEAL_PLAN'] = "Super";
             
         } else {
             $tpl['APPLICATION'] = 'This student has not filled out an application.  '.$report_app;
@@ -546,7 +569,8 @@ class HMS_Student {
                     $content = $final;
                     break;
                 case 'housing_app':
-                    $content = HMS_Application::view_housing_application($_REQUEST['username']);
+                    PHPWS_Core::initModClass('hms', 'UI/Application_UI.php');
+                    $content = Application_UI::view_housing_application($_REQUEST['username'], HMS_Term::get_selected_term());
                     break;
                 case 'student_logs':
                     PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');

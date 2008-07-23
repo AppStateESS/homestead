@@ -928,11 +928,21 @@ function hms_update(&$content, $currentVersion)
             }
         case version_compare($currentVersion, '0.2.40', '<'):
             PHPWS_Boost::registerMyModule('hms', 'users', $content);    #just need to update the permissions
-
+            
         case version_compare($currentVersion, '0.2.41', '<'):
             $files[] = 'templates/admin/activity_log_pager.tpl';
             PHPWS_Boost::updateFiles($files, 'hms');
+            
+        case version_compare($currentVersion, '0.2.42', '<'):
+            $files[] = 'templates/admin/maintenance.tpl';
+            $files[] = 'templates/css/maintenance.css';
+            PHPWS_Boost::updatefiles($files, 'hms');
 
+            $db = &new PHPWS_Db;
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_42.sql');
+            if(PEAR::isError($result)) {
+                return $result;
+            }
     }
 
     return TRUE;

@@ -1,78 +1,99 @@
-        <font color="red"><i>{MESSAGE}</i></font>
-        {REDO} {NEWLINES}
-        <!-- BEGIN application_form -->
-        {START_FORM}
+<div class="hms">
+  <div class="box">
+    <div class="title"> <h1>Residence Hall Application</h1> </div>
+    <div class="box-content">
+        <!-- BEGIN error_msg -->
+        <font color="red">{ERROR_MSG}<br /></font>
+        <!-- END error_msg -->
+        
+        <!-- BEGIN success_msg -->
+        <font color="green">{SUCCESS_MSG}<br /></font>
+        <!-- END success_msg -->
         <!-- BEGIN withdrawn -->
         <font color="red"><b>{WITHDRAWN}</b></font>
         <!-- END withdrawn -->
+        <!-- BEGIN review_msg -->
+        {REVIEW_MSG}
+        Please review the information you entered. If you need to go back and make changes to your application click the 'modify application' button below. If the information you have entered is correct click the 'submit application' button.
+        <!-- END review_msg -->
+        <!-- BEGIN menu_link -->
+        {MENU_LINK}
+        <!-- END menu_link -->
+        {START_FORM}
         <table>
             <tr>
-                <th>Name: </th><td align="left">{STUDENT_NAME}</td>
+                <th colspan="2">Demographic Information</th>
+            <tr>
+                <td>Name: </td><td align="left">{STUDENT_NAME}</td>
             </tr>
             <tr>
-                <th>Gender: </th><td align="left">{GENDER}</td>
+                <td>Gender: </td><td align="left">{GENDER}</td>
             </tr>
             <tr>
-                <th>Student Status: </th><td align="left">{STUDENT_STATUS_LBL}</td>
+                <td>Student Status: </td><td align="left">{STUDENT_STATUS_LBL}</td>
             </tr>
-            <tr><th></th><td></td></tr>
             <tr>
-                <th>Application Term: </th><td alighn="left">{ENTRY_TERM}</td>
+                <td>Application Term: </td><td align="left">{ENTRY_TERM}</td>
             </tr>
-            <tr><th></th><td></td></tr>
             <tr>
-                <th>Classification: </th><td align="left">{CLASSIFICATION_FOR_TERM_LBL}</td>
+                <td>Classification: </td><td align="left">{CLASSIFICATION_FOR_TERM_LBL}</td>
             </tr>
-            <tr><th></th><td></td></tr>
             <tr>
-                <th>Meal Option: </th><td align="left">{MEAL_OPTION}</td>
+                <th colspan="2">Meal Plan</th>
             </tr>
-            <tr><th></th><td></td></tr>
             <tr>
-                <th>Lifestyle Option: </th><td align="left">{LIFESTYLE_OPTION}</td>
+                <td>Meal Option: </td><td align="left">{MEAL_OPTION}</td>
             </tr>
-            <tr><th></th><td></td></tr>
             <tr>
-                <th>Preferred Bedtime: </th><td align="left">{PREFERRED_BEDTIME}</td>
+                <th colspan="2">Preferences</th>
             </tr>
-            <tr><th></th><td></td></tr>
             <tr>
-                <th>Room Condition: </th><td align="left">{ROOM_CONDITION}</td>
+                <td>Lifestyle Option: </td><td align="left">{LIFESTYLE_OPTION}</td>
             </tr>
-            <!-- BEGIN rlc_interest_1 -->
-            <tr><th> </th><td> </td></tr>
             <tr>
-                <th>
-                Do you have any special needs?<br />
-                <div style="font-size: 9px">
-                <a href="spec_needs.html" target="_blank">(More information)</a>
-                <div>
-                </th>
-                <!-- BEGIN special_needs_1 -->
-                <td>
-                {SPECIAL_NEEDS_1}{SPECIAL_NEEDS_1_LABEL} <a href="spec_needs.html#physical" target="_blank">(more info)</a><br />
-                {SPECIAL_NEEDS_2}{SPECIAL_NEEDS_2_LABEL} <a href="spec_needs.html#psych" target="_blank">(more info)</a><br />
-                {SPECIAL_NEEDS_3}{SPECIAL_NEEDS_3_LABEL} <a href="spec_needs.html#medical" target="_blank">(more info)</a><br />
-                {SPECIAL_NEEDS_4}{SPECIAL_NEEDS_4_LABEL} <a href="spec_needs.html#gender" target="_blank">(more info)</a><br />
+                <td>Preferred Bedtime: </td><td align="left">{PREFERRED_BEDTIME}</td>
+            </tr>
+            <tr>
+                <td>Room Condition: </td><td align="left">{ROOM_CONDITION}</td>
+            </tr>
+            <tr>
+                <th colspan="2">Special Needs Housing</th>
+            </tr>
+            <!-- BEGIN special_needs_text -->
+            {SPECIAL_NEEDS_TEXT}
+            <tr>
+                <td colspan="2">The Department of Housing & Residence Life is committed to meeting the needs of all students to the best of its ability.<br /><br />
+                
+                Special needs housing requests will be reviewed individually with a commitment to providing housing that best meets the need of the student.  The Department of Housing & Residence Life takes these concerns very seriously and confidentiality will be maintained.<br /><br />
+                
+                Housing for special needs may be limited due to space availability.<br /><br />
                 </td>
-                <!-- END special_needs_1 -->
+            </tr>
+            <!-- END special_needs_text -->
+            <tr>
+                <td>Do you have any special needs?</td>
+                <!-- BEGIN special_need -->
+                <td>{SPECIAL_NEED}{SPECIAL_NEED_LABEL}</td>
+                <!-- END special_need -->
                 <!-- BEGIN special_needs_result -->
-                <td>
-                {SPECIAL_NEEDS_RESULT}
-                </td>
+                <td>{SPECIAL_NEEDS_RESULT}</td>
                 <!-- END special_needs_result -->
             </tr>
-            <tr><th> </th><td> </td></tr>
             <tr>
-                <th>Are you interested in a <a href="http://housing.appstate.edu/index.php?module=pagemaster&PAGE_user_op=view_page&PAGE_id=134" target="_blank">unique housing option</a>?</th>
-                <td align="left">{RLC_INTEREST_1} {RLC_INTEREST_1_LABEL}</td>
+                <th colspan="2">Unique Housing Options</th>
             </tr>
+            <!-- BEGIN rlc_interest_1 -->
             <tr>
-                <th></th><td align="left">{RLC_INTEREST_2} {RLC_INTEREST_2_LABEL}</td>
+                <td>Are you interested in a <a href="http://housing.appstate.edu/index.php?module=pagemaster&PAGE_user_op=view_page&PAGE_id=134" target="_blank">unique housing option</a>?</td>
+                <td align="left">{RLC_INTEREST_1} {RLC_INTEREST_1_LABEL}&nbsp;{RLC_INTEREST_2} {RLC_INTEREST_2_LABEL}</td>
             </tr>
             <!-- END rlc_interest_1 -->
         </table>
         <br /><br />
         {SUBMIT}
+        {REDO_BUTTON}
+        {SUBMIT_APPLICATION}
         {END_FORM}
-        <!-- END application_form --> 
+    </div>
+  </div>
+</div>

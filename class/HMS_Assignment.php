@@ -562,12 +562,12 @@ class HMS_Assignment extends HMS_Item
             $tpl['LINK_STYLE'] = '';
         }
 
-        $form->addDropBox('meal_plan', array(HMS_MEAL_LOW=>'Low',
-                                             HMS_MEAL_STD=>'Standard',
-                                             HMS_MEAL_HIGH=>'High',
-                                             HMS_MEAL_SUPER=>'Super',
-                                             HMS_MEAL_NONE=>'None'));
-        $form->setMatch('meal_plan', HMS_MEAL_STD);
+        $form->addDropBox('meal_plan', array(BANNER_MEAL_LOW=>'Low',
+                                             BANNER_MEAL_STD=>'Standard',
+                                             BANNER_MEAL_HIGH=>'High',
+                                             BANNER_MEAL_SUPER=>'Super',
+                                             BANNER_MEAL_NONE=>'None'));
+        $form->setMatch('meal_plan', BANNER_MEAL_STD);
         $form->setLabel('meal_plan', 'Meal plan: ');
 
         $form->addSubmit('submit', 'Assign Student');
@@ -655,17 +655,19 @@ class HMS_Assignment extends HMS_Item
 
         $more = '';
 
-        # Create application object
-        $application = new HMS_Application($_REQUEST['username']);
-        if(PEAR::isError($application)){
-            return HMS_Assignment::show_assign_student(NULL, 'There was an error loading the student\'s application. Please contact ESS.');
-        }
+        
         
         # Check to make sure the student has an application on file
         $application_status = HMS_Application::check_for_application($_REQUEST['username'], HMS_Term::get_selected_term());
 
         if($application_status == FALSE){
             $more = ' (Warning: Did not find a housing application on file for this term)';
+        }else{
+            # Create application object
+            $application = new HMS_Application($_REQUEST['username'], HMS_Term::get_selected_term());
+            if(PEAR::isError($application)){
+                return HMS_Assignment::show_assign_student(NULL, 'There was an error loading the student\'s application. Please contact ESS.');
+            }
         }
         
         # If the student is already assigned, show the confirmation screen. If the student is already assigned

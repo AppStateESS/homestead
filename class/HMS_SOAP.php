@@ -674,39 +674,39 @@ class HMS_SOAP{
      *
      * TODO: It is a HACK that needs to be implemented more betterly.
      */
-    function get_plan_meal_codes($username, $building, $hms_meal_code)
+    function get_plan_meal_codes($username, $building, $banner_meal_code)
     {
         $type = HMS_SOAP::get_student_type($username, HMS_SOAP::get_application_term($username));
 
         $retval['plan'] = 'HOME';
 
-        if(is_null($hms_meal_code)) {
+        if(is_null($banner_meal_code)) {
             $retval['meal'] = NULL;
             return $retval;
         }
 
-        switch($hms_meal_code) {
-            case HMS_MEAL_LOW: // low
+        switch($banner_meal_code) {
+            case BANNER_MEAL_LOW: // low
                 if($type == TYPE_FRESHMEN)
                     $retval['meal'] = BANNER_MEAL_STD;
                 else
                     $retval['meal'] = BANNER_MEAL_LOW;
                 break;
-            case HMS_MEAL_STD: // standard
+            case BANNER_MEAL_STD: // standard
                 $retval['meal'] = BANNER_MEAL_STD;
                 break;
-            case HMS_MEAL_HIGH: // high
+            case BANNER_MEAL_HIGH: // high
                 $retval['meal'] = BANNER_MEAL_HIGH;
                 break;
-            case HMS_MEAL_SUPER: // super
+            case BANNER_MEAL_SUPER: // super
                 $retval['meal'] = BANNER_MEAL_SUPER;
                 break;
-            case HMS_MEAL_NONE: // none
+            case NULL: // none
                 if(($building == 'MAR' || $building == 'AHR') &&
                         $type != TYPE_FRESHMEN) {
                     $retval['meal'] = NULL;
                 } else {
-                    $retval['meal'] = '1';
+                    $retval['meal'] = BANNER_MEAL_STD;
                 }
         }
 

@@ -740,7 +740,7 @@ class HMS_Form
         $welcome .= "Please note that once you complete the Housing Application you do not have to fill out anything else provided at this website.<br /><br />";
       
         $welcome .= "<br /><br />";
-        $welcome .= "<b>If you are experiencing problems please read <a href=\"./index.php?module=webpage&id=1\" target=\"_blank\">this page</a>.";
+        $welcome .= "<b>If you are experiencing problems please read <a href=\"./index.php?module=webpage&id=1\" target=\"_blank\">this page</a>.</b>";
         $welcome .= "<br /><br />";
 
         $values = array('ADDITIONAL'=>'The Housing Management System will <strong>not</strong> work without cookies.  Please read about <a href="http://www.google.com/cookies.html" target="_blank">how to enable cookies</a>.');

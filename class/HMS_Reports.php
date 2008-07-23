@@ -1355,7 +1355,7 @@ class HMS_Reports{
 
             $app = PHPWS_Text::secureLink($row['user'], 'hms',
                 array('type'    => 'student',
-                      'op'      => 'view_housing_application',
+                      'op'      => 'view__application',
                       'student' => $row['user']));
             $content .= "($app) " . $student->last_name . ", " .
                         $student->first_name . " " .
@@ -1367,16 +1367,16 @@ class HMS_Reports{
                         ($row['room_condition']     == 1 ? "Neat, " : "Cluttered, ");
 
             switch($row['meal_option']){
-                case HMS_MEAL_LOW:
+                case BANNER_MEAL_LOW:
                     $content .= "Low";
                     break;
-                case HMS_MEAL_STD:
+                case BANNER_MEAL_STD:
                     $content .= "Std";
                     break;
-                case HMS_MEAL_HIGH:
+                case BANNER_MEAL_HIGH:
                     $content .= "High";
                     break;
-                case HMS_MEAL_SUPER:
+                case BANNER_MEAL_SUPER:
                     $content .= "Super";
                     break;
             }

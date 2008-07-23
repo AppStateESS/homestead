@@ -87,6 +87,7 @@ class HMS_Maintenance
     function show_options($type=MENU_TYPE_ALL)
     {
         Layout::addPageTitle("Comprehensive Maintenance");
+        Layout::addStyle('hms', 'css/maintenance.css');
 
         $tpl = array();
 
