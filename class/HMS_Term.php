@@ -49,7 +49,7 @@ class HMS_Term{
     function save()
     {
         $db = &new PHPWS_DB('hms_term');
-        $db->addWhere('term', $this->get_term());
+        //$db->addWhere('term', $this->get_term());
         $result = $db->saveObject($this, FALSE, FALSE);
 
         if(PEAR::isError($result)){
@@ -325,6 +325,8 @@ class HMS_Term{
 
         $term = &new HMS_Term(NULL);
         $term->set_term(HMS_Term::text_to_term($_REQUEST['year_drop'],$_REQUEST['term_drop']));
+        $term->banner_queue     = 0;
+        $term->new_applications = 0;
         //echo "saving new term<br>";
         $result = $term->save();
 
@@ -344,6 +346,7 @@ class HMS_Term{
         //echo "gettings halls<br>";
         # Get the halls from the current term
         $halls = HMS_Residence_Hall::get_halls();
+        //test($halls);
         
         //echo "copying halls<br>";
         foreach ($halls as $hall){
