@@ -58,6 +58,7 @@ class HMS_Residence_Hall extends HMS_Item
         $this->stamp();
         $db = new PHPWS_DB('hms_residence_hall');
         $result = $db->saveObject($this);
+        //test($result);
         if(!$result || PHPWS_Error::logIfError($result)){
             return false;
         }
