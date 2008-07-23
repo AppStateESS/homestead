@@ -40,15 +40,15 @@ class HMS_Suite extends HMS_Item {
 
         if(!$new_suite->save()) {
             // There was an error saving the new suite
-            echo "error saving the new suite<br>";
-            test($new_suite->save(),1);
+            //echo "error saving the new suite<br>";
+            //test($new_suite->save(),1);
             return false;
         }
 
         if(empty($this->_rooms)) {
             if(!$this->loadRooms()) {
                 // There was an error loading the rooms
-                echo "Error loading the rooms<br>";
+                //echo "Error loading the rooms<br>";
                 return false;
             }
         }
