@@ -9,8 +9,7 @@
     <div class="box-content">
     {WELCOME_MSG}
 
-
-    <h2>1. Terms & Agreements</h2>
+    <h2>{TERMS_ICON} 1. Terms & Agreements</h2>
     {TERMS_INTRO}
     <ul>
       <li>
@@ -19,7 +18,7 @@
       </li>
     </ul>
     
-    <h2>2. Housing Application</h2>
+    <h2>{APPLICATION_ICON} 2. Housing Application</h2>
     {APPLICATION_INTRO}
     <ul>
       <li>
@@ -32,18 +31,25 @@
         {NEW_APP_LINK}
       </li>
     </ul>
-
-    <h2>2b. Request a Roommate (optional)</h2>
+    
+    <h2>{ROOMMATE_ICON} 3. Select a Roommate</h2>
     {ROOMMATE_INTRO}
     <ul>
+<!-- BEGIN request_list -->
+      <li>
+        {ROOMMATE_REQUESTS_MSG}<br />
+        {ROOMMATE_REQUESTS}
+      </li>
+<!-- END request_list -->
       <li>
         {ROOMMATE_MSG}<br />
         {ROOMMATE_LINK}
       </li>
-    </ul>
 
-<!-- BEGIN STUDENT_VERIFY -->
-    <h2>3. Check Your Housing Status</h2>
+    </ul>
+    
+<!-- BEGIN housing_status -->
+    <h2>{VERIFY_ICON}4. Check Your Housing Status</h2>
     {VERIFY_INTRO}
     <ul>
       <li>
@@ -51,7 +57,7 @@
         {VERIFY_LINK}
       </li>
     </ul>
-<!-- END STUDENT_VERIFY -->
+<!-- END housing_status -->
 
     <br /><br />
 

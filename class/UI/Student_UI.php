@@ -490,70 +490,124 @@ class HMS_Student_UI{
 
     function show_spring_main_menu($deadlines)
     {
-
         PHPWS_Core::initModClass('hms','HMS_SOAP.php');
         $tags = array();
+
+        # Get the student's application for later use
+        $application = new HMS_Application($_SESSION['asu_username'], $_SESSION['application_term']);
+
+        # Tags for status images
+        $alert_img      = '<img src="images/mod/hms/icons/alert.png" />';
+        $arrow_img      = '<img src="images/mod/hms/icons/arrow.png" />';
+        $check_img      = '<img src="images/mod/hms/icons/check.png" />';
+        $lock_img       = '<img src="images/mod/hms/icons/lock.png" />';
+        $warning_img    = '<img src="images/mod/hms/icons/warning.png" />';
 
         /****************************************************
          * Welcome and view application link (always shown) *
          ***************************************************/
         $tags['WELCOME_MSG'] = 'Hello, ' . HMS_SOAP::get_full_name($_SESSION['asu_username'])  . '. Welcome to the Housing Management System!<br /><br />';
         #TODO: Make the term here dynamic.
-        $tags['WELCOME_MSG'] .= 'Please follow the steps listed below to apply for housing for the <b>Spring 2008</b> term.';
+        $tags['WELCOME_MSG'] .= 'Please follow the steps listed below to apply for housing for the <b>' . HMS_Term::term_to_text($_SESSION['application_term'], TRUE) . ' AND ' . HMS_Term::term_to_text(HMS_Term::get_next_term($_SESSION['application_term']), TRUE) . '</b> term.';
 
         /*************************************
          * Residence Hall Contract Agreement *
          ************************************/
-        $tags['TERMS_INTRO'] = 'If you are not at least 18 years old at the time you apply you must have a parent or guardian sign the <a href="http://hms.appstate.edu/files/contract.pdf">The Residence Hall Contract Agreement</a>. Your application will not be processed until the signed, last page of the contract is returned to Housing and Residence Life.';
-        # TODO: Check the 'agreed_to_terms' field for the student, to see if they need to print the application.
-        $tags['TERMS_MSG']   = 'You have agreed to the Residence Hall Contract. You may click the link above to review the Residence Hall Contract at any time.';
-        #$tags['TERMS_MSG']   = 'You were under 18 at the time you completed your application. You must print the last page of the Residence Hall Contract, complete it (including a parent/guardian signature), and return it to the Department of Housing & Residnce Life. (Note: If you have already mailed your completed Housing Contract Agreemnt, please allow 3-4 weeks for delivery and processing.)';
-        #$tags['TERMS_LINK']  = '<a href="http://hms.appstate.edu/files/contract.pdf">View the Residence Hall Contract Agreement</a>';
+        $tags['TERMS_INTRO'] = 'To view the Residence Hall Contract click the following link: <a href="http://hms.appstate.edu/files/contract.pdf">The Residence Hall Contract Agreement</a>.';
+        if($application->agreed_to_terms == 1){
+            $tags['TERMS_ICON']  = $check_img;
+            $tags['TERMS_MSG']   = '<b>You have agreed to the Residence Hall Contract.</b> You may click the link above to review the Residence Hall Contract at any time.';
+        }else{
+            $tags['TERMS_ICON']  = $alert_img;
+            $dob = explode('-', HMS_SOAP::get_dob($_SESSION['asu_username']));
+            if($dob[0] < date('Y') - 18) {
+                $tags['TERMS_MSG']   = '<b>You have not agreed to the Residence Hall Contract.</b> You may click the link below to view and agree to the Residence Hall Contract.';
+                $tags['TERMS_LINK']  = PHPWS_Text::secureLink('View & Agree to the Residence Hall Contract', 'hms', array('type'=>'student', 'op'=>'show_terms_and_agreement_only'));
+            }else{
+                $tags['TERMS_MSG']   = '<b>You have not agreed to the Residence Hall Contract.</b> You were under 18 at the time you completed your application. You must print the last page of the Residence Hall Contract, complete it (including a parent/guardian signature), and return it to the Department of Housing & Residnce Life. (Note: If you have already mailed your completed Housing Contract Agreemnt, please allow 3-4 weeks for delivery and processing.)<br /><br /><b>Signed Residence Hall Contracts may be mailed to:</b><br />Housing Assignments<br />P.O. Box 32111<br />Boone, NC 28608-2111';
+            }
+        }
        
         /***************
          * Application *
          **************/
-        $tags['APPLICATION_MSG']  = 'You have already completed a Housing Application. You may click the link below to review your current application.';
-        $tags['APPLICATION_LINK'] = PHPWS_Text::secureLink(_('View My Application'), 'hms', array('type'=>'student', 'op'=>'review_application'));
+        $tags['APPLICATION_ICON'] = $check_img;
+        $tags['APPLICATION_MSG']  = '<b>You have completed a Housing Application.</b> You may click the link below to review your current application.';
+        $tags['APPLICATION_LINK'] = PHPWS_Text::secureLink(_('View My Application'), 'hms', array('type'=>'student', 'op'=>'view_application'));
         
         # Check deadlines for editing applications
         if(HMS_Deadlines::check_within_deadlines('submit_application_begin_timestamp','edit_application_end_timestamp', $deadlines)){
-            $tags['NEW_APP_MSG']  = 'You may also submit a new application until ' . HMS_Deadlines::get_deadline_as_date('edit_application_end_timestamp', $deadlines)  . '. This will replace the application you have already saved.';
+            $tags['NEW_APP_MSG']  = '<b>You may also submit a new application</b> until ' . HMS_Deadlines::get_deadline_as_date('edit_application_end_timestamp', $deadlines)  . '. This will replace the application you have already saved.';
             $tags['NEW_APP_LINK'] = PHPWS_Text::secureLink(_('Submit a New Application'), 'hms', array('type'=>'student', 'op'=>'begin_application'));
         }else if(!HMS_Deadlines::check_deadline_past('submit_application_begin_timestamp', $deadlines)){
-            $tags['NEw_APP_MSG']  = "It is too soon to resubmit your housing application. You will be able to submit an edited application on " . HMS_Deadlines::get_deadline_as_date('submit_application_begin_timestamp', $deadlines) . ".";
+            $tags['NEw_APP_MSG']  = "<b>It is too soon to resubmit your housing application.</b> You will be able to submit an edited application on " . HMS_Deadlines::get_deadline_as_date('submit_application_begin_timestamp', $deadlines) . ".";
         }else{
-            $tags['NEW_APP_MSG']  = "The deadline for editing your housing application passed on " . HMS_Deadlines::get_deadline_as_date('edit_application_end_timestamp', $deadlines) . ".";
+            $tags['NEW_APP_MSG']  = "<b>The deadline for editing your housing application passed</b> on " . HMS_Deadlines::get_deadline_as_date('edit_application_end_timestamp', $deadlines) . ".";
+        }
+        
+        /**********************
+         * Roommate Selection *
+         *********************/
+        PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
+        $tags['ROOMMATE_INTRO'] = 'Once you\'ve had a chance to communicate with your desired roommate and you have both agreed that you would like to room together, either of you can use the menu below to initiate an electronic handshake to confirm your desire to be roommates.';
+
+        $roommate = HMS_Roommate::get_confirmed_roommate($_SESSION['asu_username'], $_SESSION['application_term']);
+            
+        if(!is_null($roommate)){
+            $name = HMS_SOAP::get_full_name($roommate);
+            $tags['ROOMMATE_MSG'] = "<b>$name</b> has confirmed your roommate request and will be your roommate.";
+            $tags['ROOMMATE_ICON'] = $check_img;
+        }else{
+            $requests = HMS_Roommate::count_pending_requests($_SESSION['asu_username']);
+            if($requests > 0) {
+                $tags['ROOMMATE_REQUESTS'] = HMS_Roommate::display_requests($_SESSION['asu_username']);
+                if($requests == 1) {
+                    $tags['ROOMMATE_REQUESTS_MSG'] = "<b style='color: #F00'>You have a roommate request.</b> Please click the name below to confirm or reject the request.";
+                } else {
+                    $tags['ROOMMATE_REQUESTS_MSG'] = "<b style='color: #F00'>You have roommate requests.</b> Please click a name below to confirm or reject a request.";
+                }
+            }
+            if(HMS_Roommate::has_roommate_request($_SESSION['asu_username'])) {
+                $tags['ROOMMATE_MSG'] = "<b>You have selected a roommate</b> and are awaiting their approval.";
+                $tags['ROOMMATE_ICON'] = $check_img;
+            } else {
+                if(HMS_Deadlines::check_within_deadlines('select_roommate_begin_timestamp','select_roommate_end_timestamp',$deadlines)){
+                    $tags['ROOMMATE_MSG']  = 'If you know who you want your roommate to be, <b>you may select your roommate now</b>. You will need to know your roommate\'s ASU user name (their e-mail address). You have until ' . HMS_Deadlines::get_deadline_as_date('search_profiles_end_timestamp', $deadlines) . ' to choose a roommate. Click the link below to select your roommate.';
+                    $tags['ROOMMATE_LINK'] = PHPWS_Text::secureLink(_('Select Your Roommate'), 'hms', array('type'=>'student','op'=>'show_request_roommate'));
+                    $tags['ROOMMATE_ICON'] = $arrow_img;
+                }else if(!HMS_Deadlines::check_deadline_past('select_roommate_begin_timestamp', $deadlines)){
+                    $tags['ROOMMATE_MSG'] = '<b>It is too early to choose a roommate.</b> You can choose a roommate on ' . HMS_Deadlines::get_deadline_as_date('select_roommate_begin_timestamp', $deadlines) . '.';
+                    $tags['ROOMMATE_ICON'] = $lock_img;
+                }else{
+                    $tags['ROOMMATE_MSG'] = '<b>It is too late to choose a roommate.</b> The deadline passed on ' . HMS_Deadlines::get_deadline_as_date('select_roommate_end_timestamp') . '.';
+                    $tags['ROOMMATE_ICON'] = $lock_img;
+                }
+            }
         }
 
-        /*************************************
-         * 200810 Roommates Hack - TEMPORARY *
-         *************************************/
-         $tags['ROOMMATE_MSG'] = 'If you would like to request a roommate, follow the link below.  Please note that this step is optional, and due to limited housing availability, we can NOT guarantee that your roommate request will be honored for the Spring semester.';
-         $tags['ROOMMATE_LINK'] = PHPWS_Text::secureLink(_('Request A Roommate'), 'hms', array('type'=>'student', 'op'=>'spring_roommate_hack'));
-        
-        # The following is entirely unimplemented and I don't have time to do it and Housing doesn't seem to want it anyway... we're going to do it eventually, but probably not for 200810
+        // Commented due to housing bitching about a feature
         /*********************
          * Verify Assignment *
          ********************
-         $tags['VERIFY_INTRO'] = 'Once the assignment process is complete, you can verify your assignment and roommate selection.';
+         $tags['VERIFY_INTRO'] = 'Once the assignment process is complete, you can view your up-to-the-minute application, assignment, roommate, and Learning Community status. <b><font color="red">Please note that this status is not final and is subject to change.</font></b>';
 
         # Check deadlines for verify assignment
         if(HMS_Deadlines::check_within_deadlines('view_assignment_begin_timestamp','view_assignment_end_timestamp',$deadlines)){
-            $tags['VERIFY_MSG'] = 'You may verify your assignment until ' . HMS_Deadlines::get_deadline_as_date('view_assignment_begin_timestamp', $deadlines) . '. Click the link below to verify your assignment.';
+            $tags['VERIFY_MSG'] = '<b>You may verify your housing status</b> until ' . HMS_Deadlines::get_deadline_as_date('view_assignment_begin_timestamp', $deadlines) . '. Click the link below to verify your assignment.';
             $tags['VERIFY_LINK'] = PHPWS_Text::secureLink(_('Verify Your Assignment'), 'hms', array('type'=>'student','op'=>'show_verify_assignment'));
+            $tags['VERIFY_ICON'] = $arrow_img;
         }else if(!HMS_Deadlines::check_deadline_past('view_assignment_begin_timestamp', $deadlines)){
-            $tags['VERIFY_MSG'] = 'It is too early to view your assignment. You will be able to view your assignment on ' . HMS_Deadlines::get_deadline_as_date('view_assignment_begin_timestamp', $deadlines) . '.';
+            $tags['VERIFY_MSG'] = '<b>It is too early to view your housing status</b>. You will be able to view your assignment on ' . HMS_Deadlines::get_deadline_as_date('view_assignment_begin_timestamp', $deadlines) . '.';
+            $tags['VERIFY_ICON'] = $lock_img;
         }else{
-            $tags['VERIFY_MSG'] = 'It is too late to view your assignment. The deadline past on ' . HMS_Deadlines::get_deadline_as_date('view_assignment_end_timestamp', $deadlines) . '.';
+            $tags['VERIFY_MSG'] = '<b>It is too late to view your housing status</b>. The deadline past on ' . HMS_Deadlines::get_deadline_as_date('view_assignment_end_timestamp', $deadlines) . '.';
+            $tags['VERIFY_ICON'] = $lock_img;
         }*/
-
 
         # Logout link
         $tags['LOGOUT_LINK'] = PHPWS_Text::secureLink(_('Log Out'), 'users', array('action'=>'user', 'command'=>'logout'));
-        
-        return PHPWS_Template::process($tags, 'hms', 'student/main_menu_spring.tpl');
 
+        return PHPWS_Template::process($tags, 'hms', 'student/main_menu_spring.tpl');
     }
 
     function show_verify_assignment()
