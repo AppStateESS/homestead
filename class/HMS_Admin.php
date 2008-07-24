@@ -326,15 +326,12 @@ class HMS_Admin
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
-        //$result = PHPWS_DB::select('col', 'select DISTINCT * FROM (select hms_student_id from hms_application UNION select asu_username from hms_assignment) as foo');
-        //$result = PHPWS_DB::query('select DISTINCT * FROM (select hms_student_id from hms_application UNION select asu_username from hms_assignment) as foo');
-
         $db = &new PHPWS_DB('hms_application');
         $term = HMS_Term::get_selected_term();
        
         // This is ugly, but it does what we need it to do...
         // (necessary since not everyone who is assigned will have an application) 
-        $db->setSQLQuery("select DISTINCT * FROM (select hms_student_id from hms_application WHERE term=$term UNION select asu_username from hms_assignment WHERE term=$term) as foo");
+        $db->setSQLQuery("select DISTINCT * FROM (select hms_username from hms_application WHERE term=$term AND withdrawn != 1 UNION select asu_username from hms_assignment WHERE term=$term) as foo");
         $result = $db->select('col');
 
         //test($result);
@@ -581,9 +578,9 @@ class HMS_Admin
 
             # Open a DB connection and try to update applications
             $db = &new PHPWS_DB('hms_application');
-            $db->addValue('hms_student_id', $names[1]);
+            $db->addValue('asu_username', $names[1]);
             $db->addValue('created_by',     $names[1]);
-            $db->addWhere('hms_student_id', $names[0]);
+            $db->addWhere('asu_username', $names[0]);
             $result = $db->update();
 
             if(PEAR::isError($result)){
