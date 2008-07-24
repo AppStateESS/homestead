@@ -127,7 +127,7 @@ class HMS_Maintenance
         if(Current_User::allow('hms', 'edit_terms'))
             $tpl['CREATE_TERM'] = PHPWS_Text::secureLink(_('Create a New Term'), 'hms', array('type'=>'term', 'op'=>'show_create_term'));
         
-        if(Current_User::allow('hms', 'select_term'))
+        if(Current_User::allow('hms', 'select_term') || Current_User::allow('hms', 'edit_terms')
             $tpl['EDIT_TERM']   = PHPWS_Text::secureLink(_('Edit Terms'), 'hms', array('type'=>'term', 'op'=>'show_edit_terms'));
 
         /***********************
@@ -136,11 +136,11 @@ class HMS_Maintenance
         if(Current_User::allow('hms', 'search'))
             $tpl['SEARCH_FOR_STUDENT']  = PHPWS_Text::secureLink(_('Search for a Student'), 'hms', array('type'=>'student', 'op'=>'enter_student_search_data'));
 
-        if(Current_User::allow('hms', 'search'))
+        if(Current_User::allow('hms', 'withdrawn_search'))
             $tpl['WITHDRAWN_SEARCH']    = PHPWS_Text::secureLink(_('Search for withdrawn students'), 'hms', array('type'=>'admin', 'op'=>'withdrawn_search_start'));
 
-        #todo: add permissions here
-        $tpl['USERNAME_CHANGE']         = PHPWS_Text::secureLink('Update student user names', 'hms', array('type'=>'admin', 'op'=>'show_username_change'));
+        if(Current_User::allow('hms', 'username_change'))
+            $tpl['USERNAME_CHANGE']         = PHPWS_Text::secureLink('Update student user names', 'hms', array('type'=>'admin', 'op'=>'show_username_change'));
 
 /*
         if(Current_User::allow('hms', 'add_student'))

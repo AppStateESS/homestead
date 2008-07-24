@@ -368,7 +368,7 @@ class HMS_Term{
     }
 
     /**
-     * Called in response to the 'term_select' action. Saves the selected term in the session variable for use in other editing.
+      Called in response to the 'term_select' action. Saves the selected term in the session variable for use in other editing.
      */
     function term_select()
     {
@@ -455,7 +455,7 @@ class HMS_Term{
 
     function show_edit_terms($success = NULL, $error = NULL)
     {
-        if( !Current_User::allow('hms', 'edit_terms') ){
+        if( !Current_User::allow('hms', 'select_term') && !Current_User::allow('edit_terms') && !Current_User::allow('activate_term') && !Current_User::allow('banner_queue')){
             $tpl = array();
             return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
         }
