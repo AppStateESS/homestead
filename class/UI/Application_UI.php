@@ -366,7 +366,7 @@ class Application_UI{
     {
         $application = &new HMS_Application($username, $term);
 
-        if(!$application || is_null($application)){
+        if($application->id == 0){
             return "No applicatin found for the specified user and term.";
         }
         
