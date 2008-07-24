@@ -443,10 +443,10 @@ class HMS_Reports{
         $start_time = microtime();
 
         $db = &new PHPWS_DB('hms_application');
-        $db->addColumn('hms_student_id');
+        $db->addColumn('asu_username');
         $db->addWhere('deleted', '0');
         $db->addWhere('term', HMS_Term::get_selected_term());
-        $db->addOrder('hms_student_id', 'ASC');
+        $db->addOrder('asu_username', 'ASC');
         $results = $db->select();
 
         if(PEAR::isError($results)) {
@@ -467,9 +467,9 @@ class HMS_Reports{
         
         $content = '';
         foreach($results as $line) {
-            $gender = HMS_SOAP::get_gender($line['hms_student_id'], TRUE);
-            $class  = HMS_SOAP::get_student_class($line['hms_student_id'], HMS_Term::get_selected_term());
-            $type   = HMS_SOAP::get_student_type($line['hms_student_id'], HMS_Term::get_selected_term());
+            $gender = HMS_SOAP::get_gender($line['asu_username'], TRUE);
+            $class  = HMS_SOAP::get_student_class($line['asu_username'], HMS_Term::get_selected_term());
+            $type   = HMS_SOAP::get_student_type($line['asu_username'], HMS_Term::get_selected_term());
 
             if($gender === NULL || $class === NULL || $type === NULL) {
                     $application_totals['bad_data']++;
@@ -1109,7 +1109,7 @@ class HMS_Reports{
     function run_special_circumstances_report()
     {
         $db = &new PHPWS_DB('hms_assignment');
-        $db->addWhere('hms_assignment.asu_username', 'hms_application.hms_student_id', 'ILIKE');
+        $db->addWhere('hms_assignment.asu_username', 'hms_application.asu_username', 'ILIKE');
         $db->addWhere('hms_assignment.deleted', 0);
 
         $db->addColumn('hms_assignment.asu_username');
@@ -1260,7 +1260,7 @@ class HMS_Reports{
         $term = HMS_Term::get_selected_term();
         
         $sql = "
-            SELECT hms_student_id AS user,
+            SELECT asu_username AS user,
                    student_status AS status,
                    gender         AS gender,
                    lifestyle_option,
@@ -1269,11 +1269,11 @@ class HMS_Reports{
                    hms_application.meal_option
             FROM hms_application
             LEFT OUTER JOIN hms_assignment
-            ON hms_assignment.asu_username = hms_application.hms_student_id
+            ON hms_assignment.asu_username = hms_application.asu_username
             WHERE hms_assignment.asu_username IS NULL
             AND hms_application.term = {$term}
             AND hms_application.withdrawn = 0
-            ORDER BY student_status, gender, hms_student_id
+            ORDER BY student_status, gender, asu_username
         ";
         $results = PHPWS_DB::getAll($sql);
         if(PHPWS_Error::isError($results)) {
@@ -1358,8 +1358,8 @@ class HMS_Reports{
     function run_no_banner_data_report()
     {
         $db = new PHPWS_DB('hms_application');
-        $db->addColumn('hms_student_id');
-        $db->addOrder('hms_student_id');
+        $db->addColumn('asu_username');
+        $db->addOrder('asu_username');
         $results = $db->select();
         if(PHPWS_Error::isError($results)) {
             test($results,1);
@@ -1372,8 +1372,8 @@ class HMS_Reports{
         $total = count($results);
         $whole = 0;
         foreach($results as $row) {
-            if(!HMS_SOAP::is_valid_student($row['hms_student_id'])) {
-                $content .= $row['hms_student_id'] . '<br />';
+            if(!HMS_SOAP::is_valid_student($row['asu_username'])) {
+                $content .= $row['asu_username'] . '<br />';
             }
 
             $percent = ((++$count / $total) * 100);
@@ -1642,7 +1642,7 @@ class HMS_Reports{
         $content = "<h2>Special Needs</h2>\n";
         
         $db = new PHPWS_DB('hms_application');
-        $db->addColumn('hms_student_id');
+        $db->addColumn('asu_username');
         $db->addWhere('term', HMS_Term::get_selected_term());
         $db->addWhere('physical_disability', 1);
         $results = $db->select();
@@ -1650,7 +1650,7 @@ class HMS_Reports{
 
         $content .= "<h3>Physical: $count</h3>\n<ul>\n";
         foreach($results as $row) {
-            $content .= HMS_Reports::show_student($row['hms_student_id']);
+            $content .= HMS_Reports::show_student($row['asu_username']);
         }
         $content .= "</ul>\n";
 
@@ -1662,7 +1662,7 @@ class HMS_Reports{
 
         $content .= "<h3>Psychological: $count</h3>\n<ul>\n";
         foreach($results as $row) {
-            $content .= HMS_Reports::show_student($row['hms_student_id']);
+            $content .= HMS_Reports::show_student($row['asu_username']);
         }
         $content .= "</ul>\n";
 
@@ -1674,7 +1674,7 @@ class HMS_Reports{
 
         $content .= "<h3>Medical: $count</h3>\n<ul>\n";
         foreach($results as $row) {
-            $content .= HMS_Reports::show_student($row['hms_student_id']);
+            $content .= HMS_Reports::show_student($row['asu_username']);
         }
         $content .= "</ul>\n";
 
@@ -1686,7 +1686,7 @@ class HMS_Reports{
 
         $content .= "<h3>Gender: $count</h3>\n<ul>\n";
         foreach($results as $row) {
-            $content .= HMS_Reports::show_student($row['hms_student_id']);
+            $content .= HMS_Reports::show_student($row['asu_username']);
         }
         $content .= "</ul>\n";
 

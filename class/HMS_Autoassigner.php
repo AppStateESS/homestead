@@ -47,58 +47,58 @@ class HMS_Autoassigner
         foreach($roommates as $pair) {
             $a = new HMS_Application($pair['requestor'], $term);
 
-            if(in_array($a->hms_student_id, $assigned)) {
-                $notices[] = "<strong>{$a->hms_student_id}</strong> already scheduled for assignment.";
+            if(in_array($a->asu_username, $assigned)) {
+                $notices[] = "<strong>{$a->asu_username}</strong> already scheduled for assignment.";
                 continue;
             }
 
-            $rlc = HMS_RLC_Assignment::check_for_assignment($a->hms_student_id, $term);
+            $rlc = HMS_RLC_Assignment::check_for_assignment($a->asu_username, $term);
             if($rlc !== FALSE) {
-                $rlcs[] = "Skipping <strong>{$a->hms_student_id}</strong>; assigned to an RLC.";
+                $rlcs[] = "Skipping <strong>{$a->asu_username}</strong>; assigned to an RLC.";
                 continue;
             }
             
             $b = new HMS_Application($pair['requestee'], $term);
 
-            if(in_array($b->hms_student_id, $assigned)) {
-                $notices[] = "<strong>{$b->hms_student_id}</strong> already scheduled for assignment.";
+            if(in_array($b->asu_username, $assigned)) {
+                $notices[] = "<strong>{$b->asu_username}</strong> already scheduled for assignment.";
                 continue;
             }
 
-            $rlc = HMS_RLC_Assignment::check_for_assignment($b->hms_student_id, $term);
+            $rlc = HMS_RLC_Assignment::check_for_assignment($b->asu_username, $term);
             if($rlc !== FALSE) {
-                $rlcs[] = "Skipping <strong>{$b->hms_student_id}</strong>; assigned to an RLC.";
+                $rlcs[] = "Skipping <strong>{$b->asu_username}</strong>; assigned to an RLC.";
                 continue;
             }
 
             if(is_null($a->id)) {
-                $problems[] = "Could not assign <strong>{$a->hms_student_id}</strong> with roommate <strong>{$b->hms_student_id}</strong>; {$a->hms_student_id} does not have an application.";
+                $problems[] = "Could not assign <strong>{$a->asu_username}</strong> with roommate <strong>{$b->asu_username}</strong>; {$a->asu_username} does not have an application.";
                 continue;
             }
 
             if(is_null($b->id)) {
-                $problems[] = "Could not assign <strong>{$a->hms_student_id}</strong> with roommate <strong>{$b->hms_student_id}</strong>; {$b->hms_student_id} does not have an application.";
+                $problems[] = "Could not assign <strong>{$a->asu_username}</strong> with roommate <strong>{$b->asu_username}</strong>; {$b->asu_username} does not have an application.";
                 continue;
             }
 
             if($a->gender != $b->gender) {
-                $problems[] = "Epic FAIL... <strong>{$a->hms_student_id}</strong> and <strong>{$b->hms_student_id}</strong> are not the same gender.";
+                $problems[] = "Epic FAIL... <strong>{$a->asu_username}</strong> and <strong>{$b->asu_username}</strong> are not the same gender.";
                 continue;
             }
 
-            $ass = HMS_Assignment::get_assignment($a->hms_student_id, $term);
+            $ass = HMS_Assignment::get_assignment($a->asu_username, $term);
             if(is_a($ass,'HMS_Assignment')) {
                 $bbc = $ass->get_banner_building_code();
                 $bed = $ass->get_banner_bed_id();
-                $assigns[] = "Could not assign <strong>{$a->hms_student_id}</strong>; already assigned to <strong>$bbc $bed</strong>";
+                $assigns[] = "Could not assign <strong>{$a->asu_username}</strong>; already assigned to <strong>$bbc $bed</strong>";
                 continue;
             }
 
-            $ass = HMS_Assignment::get_assignment($b->hms_student_id, $term);
+            $ass = HMS_Assignment::get_assignment($b->asu_username, $term);
             if(is_a($ass,'HMS_Assignment')) {
                 $bbc = $ass->get_banner_building_code();
                 $bed = $ass->get_banner_bed_id();
-                $assigns[] = "Could not assign <strong>{$b->hms_student_id}</strong>; already assigned to <strong>$bbc $bed</strong>";
+                $assigns[] = "Could not assign <strong>{$b->asu_username}</strong>; already assigned to <strong>$bbc $bed</strong>";
                 continue;
             }
 
@@ -107,11 +107,11 @@ class HMS_Autoassigner
                    'badgender'));
 
             if(is_null($room)) {
-                $problems[] = "Could not assign <strong>{$a->hms_student_id}</strong>; out of empty ".($a->gender?'male':'female').' rooms.';
-                $problems[] = "Could not assign <strong>{$b->hms_student_id}</strong>; out of empty ".($b->gender?'male':'female').' rooms.';
+                $problems[] = "Could not assign <strong>{$a->asu_username}</strong>; out of empty ".($a->gender?'male':'female').' rooms.';
+                $problems[] = "Could not assign <strong>{$b->asu_username}</strong>; out of empty ".($b->gender?'male':'female').' rooms.';
                 continue;
             } else if($room === 'badgender') {
-                $problems[] = "Could not assign <strong>{$a->hms_student_id}</strong>; {$a->gender} is not a valid gender.";
+                $problems[] = "Could not assign <strong>{$a->asu_username}</strong>; {$a->gender} is not a valid gender.";
                 continue;
             }
 
@@ -129,7 +129,7 @@ class HMS_Autoassigner
                 $result = HMS_Autoassigner::assign($a, $room->_beds[0], $term);
                 if($result === TRUE) {
                     $successes[] = HMS_Autoassigner::record_success('Requested', $a, $b, $bed_a_text);
-                    $assigned[] = $a->hms_student_id;
+                    $assigned[] = $a->asu_username;
                 } else {
                     $problems[] = $result;
                 }
@@ -138,7 +138,7 @@ class HMS_Autoassigner
                     $result = HMS_Autoassigner::assign($b, $room->_beds[1], $term);
                     if($result === TRUE) {
                         $successes[] = HMS_Autoassigner::record_success('Requested', $b, $a, $bed_b_text);
-                        $assigned[] = $b->hms_student_id;
+                        $assigned[] = $b->asu_username;
                     } else {
                         $problems[] = $result;
                     }
@@ -152,28 +152,28 @@ class HMS_Autoassigner
             if($a === FALSE) continue;
             if(!isset($a)) continue;
 
-            if(in_array($a->hms_student_id, $assigned)) {
-                $notices[] = "<strong>{$a->hms_student_id}</strong> already scheduled for assignment.";
+            if(in_array($a->asu_username, $assigned)) {
+                $notices[] = "<strong>{$a->asu_username}</strong> already scheduled for assignment.";
                 continue;
             }
 
-            $rlc = HMS_RLC_Assignment::check_for_assignment($a->hms_student_id, $term);
+            $rlc = HMS_RLC_Assignment::check_for_assignment($a->asu_username, $term);
             if($rlc !== FALSE) {
-                $rlcs[] = "Skipping <strong>{$a->hms_student_id}</strong>; assigned to an RLC.";
+                $rlcs[] = "Skipping <strong>{$a->asu_username}</strong>; assigned to an RLC.";
                 continue;
             }
 
             $b = array_shift($applicants);
 
-            if(in_array($b->hms_student_id, $assigned)) {
-                $notices[] = "<strong>{$b->hms_student_id}</strong> already scheduled for assignment.";
+            if(in_array($b->asu_username, $assigned)) {
+                $notices[] = "<strong>{$b->asu_username}</strong> already scheduled for assignment.";
                 array_unshift($applicants, $a);
                 continue;
             }
 
-            $rlc = HMS_RLC_Assignment::check_for_assignment($b->hms_student_id, $term);
+            $rlc = HMS_RLC_Assignment::check_for_assignment($b->asu_username, $term);
             if($rlc !== FALSE) {
-                $rlcs[] = "Skipping <strong>{$b->hms_student_id}</strong>; assigned to an RLC.";
+                $rlcs[] = "Skipping <strong>{$b->asu_username}</strong>; assigned to an RLC.";
                 array_unshift($applicants, $a);
                 continue;
             }
@@ -183,20 +183,20 @@ class HMS_Autoassigner
                 $b = NULL;
             }
 
-            $ass = HMS_Assignment::get_assignment($a->hms_student_id, $term);
+            $ass = HMS_Assignment::get_assignment($a->asu_username, $term);
             if(is_a($ass, 'HMS_Assignment')) {
                 $bbc = $ass->get_banner_building_code();
                 $bed = $ass->get_banner_bed_id();
-                $assigns[] = "Could not assign <strong>{$a->hms_student_id}</strong>; already assigned to <strong>$bbc $bed</strong>";
+                $assigns[] = "Could not assign <strong>{$a->asu_username}</strong>; already assigned to <strong>$bbc $bed</strong>";
                 array_unshift($applicants, $b);
                 continue;
             }
 
-            $ass = HMS_Assignment::get_assignment($b->hms_student_id, $term);
+            $ass = HMS_Assignment::get_assignment($b->asu_username, $term);
             if(is_a($ass, 'HMS_Assignment')) {
                 $bbc = $ass->get_banner_building_code();
                 $bed = $ass->get_banner_bed_id();
-                $assigns[] = "Could not assign <strong>{$b->hms_student_id}</strong>; already assigned to <strong>$bbc $bed</strong>";
+                $assigns[] = "Could not assign <strong>{$b->asu_username}</strong>; already assigned to <strong>$bbc $bed</strong>";
                 array_unshift($applicants, $a);
                 continue;
             }
@@ -208,11 +208,11 @@ class HMS_Autoassigner
 
             // We could be out of rooms or have database corruption
             if(is_null($room)) {
-                $problems[] = "Could not assign <strong>{$a->hms_student_id}</strong>; out of ".($a->gender?'male':'female').' rooms.';
-                $problems[] = "Could not assign <strong>{$b->hms_student_id}</strong>; out of ".($b->gender?'male':'female').' rooms.';
+                $problems[] = "Could not assign <strong>{$a->asu_username}</strong>; out of ".($a->gender?'male':'female').' rooms.';
+                $problems[] = "Could not assign <strong>{$b->asu_username}</strong>; out of ".($b->gender?'male':'female').' rooms.';
                 continue;
             } else if($room === 'badgender') {
-                $problems[] = "Could not assign <strong>{$a->hms_student_id}</strong>; {$a->gender} is not a valid gender.";
+                $problems[] = "Could not assign <strong>{$a->asu_username}</strong>; {$a->gender} is not a valid gender.";
                 continue;
             }
 
@@ -230,7 +230,7 @@ class HMS_Autoassigner
                 $result = HMS_Autoassigner::assign($a, $room->_beds[0], $term);
                 if($result === TRUE) {
                     $successes[] = HMS_Autoassigner::record_success('Auto', $a, $b, $bed_a_text);
-                    $assigned[] = $a->hms_student_id;
+                    $assigned[] = $a->asu_username;
                 } else {
                     $problems[] = $result;
                 }
@@ -239,7 +239,7 @@ class HMS_Autoassigner
                     $result = HMS_Autoassigner::assign($b, $room->_beds[1], $term);
                     if($result === TRUE) {
                         $successes[] = HMS_Autoassigner::record_success('Auto', $b, $a, $bed_b_text);
-                        $assigned[] = $b->hms_student_id;
+                        $assigned[] = $b->asu_username;
                     } else {
                         $problems[] = $result;
                     }
@@ -319,8 +319,8 @@ class HMS_Autoassigner
                 ($b->preferred_bedtime == 2 ? 'L' : 'U')) .
             ($b->room_condition == 1 ? 'C' :
                 ($b->room_condition == 2 ? 'D' : 'U'));
-        $success['a'] = $a->hms_student_id;
-        $success['b'] = $b->hms_student_id;
+        $success['a'] = $a->asu_username;
+        $success['b'] = $b->asu_username;
         $success['room'] = $room;
         return $success;
     }
@@ -334,7 +334,7 @@ class HMS_Autoassigner
     {
         $bbc  = $bed->get_banner_building_code();
         $bid  = $bed->banner_id;
-        $user = $app->hms_student_id;
+        $user = $app->asu_username;
         
         $meal_plan = array();
         $meal_plan['plan'] = 'HOME';

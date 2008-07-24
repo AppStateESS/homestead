@@ -535,7 +535,7 @@ class HMS_Student {
          * Application Status *
          **********************/
         $report_app = '[<a href="index.php?module=hms&type=student&op=admin_report_application&username='.$_REQUEST['username'].'&tab=student_info">Report Application Received</a>]';
-        if(HMS_Application::check_for_application($_REQUEST['username'], HMS_Term::get_selected_term())) {
+        if(HMS_Application::check_for_application($_REQUEST['username'], HMS_Term::get_selected_term(), TRUE)) {
             $tpl['APPLICATION'] = 'This student has filled out an application.  [<a href="index.php?module=hms&type=student&op=get_matching_students&username='.$_REQUEST['username'].'&tab=housing_app">View Application</a>] '.$report_app;
             $app = &new HMS_Application($_REQUEST['username'], HMS_Term::get_selected_term());
             

@@ -461,10 +461,10 @@ class HMS_XML{
     {
         $db = new PHPWS_DB('hms_application');
 
-        $db->addColumn('hms_student_id');
+        $db->addColumn('asu_username');
 
-        $db->addWhere('hms_student_id', $username . '%', 'ILIKE');
-        $db->addOrder('hms_student_id', 'ASC');
+        $db->addWhere('asu_username', $username . '%', 'ILIKE');
+        $db->addOrder('asu_username', 'ASC');
         $db->setLimit(5);
 
         $results = $db->select('col');
