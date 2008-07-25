@@ -369,6 +369,10 @@ class HMS_Assignment extends HMS_Item
         if (!$hall) {
             return E_ASSIGN_NULL_HALL_OBJECT;
         }        
+       
+        if($meal_plan == BANNER_MEAL_NONE){
+            $meal_plan = NULL;
+        }
         
         # Hard code for plan: HOME, and use the meal plan selected in the drop down by the user
         $meal['plan'] = 'HOME';

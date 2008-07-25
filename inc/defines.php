@@ -77,6 +77,7 @@ define('BANNER_MEAL_LOW',   2);
 define('BANNER_MEAL_STD',   1);
 define('BANNER_MEAL_HIGH',  0);
 define('BANNER_MEAL_SUPER', 8);
+define('BANNER_MEAL_NONE', -1);
 
 /**
  * Address types
