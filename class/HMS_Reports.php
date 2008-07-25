@@ -628,7 +628,9 @@ class HMS_Reports{
         return $tpl->get();
 
     }
-    /* TODO: finish
+
+    /*
+     * TODO: finish this
     function run_hall_occupancy_report()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
@@ -745,7 +747,9 @@ class HMS_Reports{
         $tpl->setData(array('BED_COUNT' => $vacant_beds));
 
         return $tpl->get();
-    } */
+    }
+    */
+    
     function run_unassigned_beds_report()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
@@ -1377,7 +1381,7 @@ class HMS_Reports{
         $term = HMS_Term::get_selected_term();
         
         $sql = "
-            SELECT asu_username AS user,
+            SELECT hms_application.asu_username AS user,
                    student_status AS status,
                    gender         AS gender,
                    lifestyle_option,
@@ -1390,7 +1394,7 @@ class HMS_Reports{
             WHERE hms_assignment.asu_username IS NULL
             AND hms_application.term = {$term}
             AND hms_application.withdrawn = 0
-            ORDER BY student_status, gender, asu_username
+            ORDER BY student_status, gender, hms_application.asu_username
         ";
         $results = PHPWS_DB::getAll($sql);
         if(PHPWS_Error::isError($results)) {
@@ -1420,7 +1424,7 @@ class HMS_Reports{
 
             $app = PHPWS_Text::secureLink($row['user'], 'hms',
                 array('type'    => 'student',
-                      'op'      => 'view__application',
+                      'op'      => 'view_application',
                       'student' => $row['user']));
             $content .= "($app) " . $student->last_name . ", " .
                         $student->first_name . " " .
