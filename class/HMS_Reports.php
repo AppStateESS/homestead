@@ -628,7 +628,7 @@ class HMS_Reports{
         return $tpl->get();
 
     }
-    
+    /* TODO: finish
     function run_hall_occupancy_report()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
@@ -745,7 +745,7 @@ class HMS_Reports{
         $tpl->setData(array('BED_COUNT' => $vacant_beds));
 
         return $tpl->get();
-    }
+    } */
     function run_unassigned_beds_report()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
