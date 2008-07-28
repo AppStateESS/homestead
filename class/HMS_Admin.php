@@ -331,7 +331,7 @@ class HMS_Admin
        
         // This is ugly, but it does what we need it to do...
         // (necessary since not everyone who is assigned will have an application) 
-        $db->setSQLQuery("select DISTINCT * FROM (select hms_username from hms_application WHERE term=$term AND withdrawn != 1 UNION select asu_username from hms_assignment WHERE term=$term) as foo");
+        $db->setSQLQuery("select DISTINCT * FROM (select hms_application.asu_username from hms_application WHERE term=$term AND withdrawn != 1 UNION select hms_assignment.asu_username from hms_assignment WHERE term=$term) as foo");
         $result = $db->select('col');
 
         //test($result);
