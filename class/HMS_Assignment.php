@@ -290,6 +290,7 @@ class HMS_Assignment extends HMS_Item
     {   
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
         PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Suite.php');
         PHPWS_Core::initModClass('hms', 'HMS_Room.php');
         PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
@@ -409,6 +410,31 @@ class HMS_Assignment extends HMS_Item
         
         # Log the assignment
         HMS_Activity_Log::log_activity($_REQUEST['username'], ACTIVITY_ASSIGNED, Current_User::getUsername(), HMS_Term::get_selected_term() . ' ' . $hall->hall_name . ' ' . $room->room_number);
+
+        # Look for roommates and flag their assignments as needing a new letter
+        $room_id = $assignment->get_room_id();
+        $room = new HMS_Room($room_id);
+
+        if($room->is_in_suite()){
+            # Go to the suite level to get all the roommates
+            $suite = new HMS_Suite($room->suite_id);
+            $assignees = $suite->get_assignees(); // get an array of student objects for those assigned to this suite
+        }else{
+            # Go to the room level to get all the roommates
+            $assignees = $room->get_assignees(); // get an array of student objects for those assigned to this room
+        }
+
+        if(sizeof($assignees) > 1){
+            foreach($assignees as $roommate){
+                // Skip this student
+                if($roommate->asu_username == $username){
+                    continue;
+                }
+                $roommate_assign = HMS_Assignment::get_assignment($roommate->asu_username,$term);
+                $roommate_assign->letter_printed = 0;
+                $result = $roommate_assign->save();
+            }
+        }
 
         # Return Sucess
         return E_SUCCESS;
