@@ -823,7 +823,7 @@ class HMS_Reports{
                             $content .= ' (RA)';
                         }
                         
-                        $content .= ' ' . $bed->get_assigned_to_link();
+                        $content .= ' ' . $bed->get_assigned_to_link(TRUE);
 
                         $tpl->setCurrentBlock('bed_repeat');
                         $tpl->setData(array('BED_NUM' => $content));
