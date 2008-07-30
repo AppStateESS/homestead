@@ -174,7 +174,7 @@ class HMS_Bed extends HMS_Item {
      * student info screen. Otherwise, the link the link is to the
      * assign student screen.
      */
-    function get_assigned_to_link()
+    function get_assigned_to_link($newWindow = FALSE)
     {
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
         
@@ -188,9 +188,11 @@ class HMS_Bed extends HMS_Item {
                                     . ' ' . PHPWS_Text::secureLink('(re-assign)', 'hms', array('type'=>'assignment', 'op'=>'show_assign_student', 'username'=>$this->_curr_assignment->asu_username))
                                     . ' ' . PHPWS_Text::secureLink('(un-assign)', 'hms', array('type'=>'assignment', 'op'=>'show_unassign_student', 'username'=>$this->_curr_assignment->asu_username));
         }else{
-            # TODO: make this a link to assign a student to this
-            # particular bed
-            return PHPWS_Text::secureLink('&lt;unassigned&gt;', 'hms', array('type'=>'assignment', 'op'=>'show_assign_student', 'bed_id'=>$this->id), 'index');
+            if($newWindow){
+                return PHPWS_Text::secureLink('&lt;unassigned&gt;', 'hms', array('type'=>'assignment', 'op'=>'show_assign_student', 'bed_id'=>$this->id), 'index');
+            }else{
+                return PHPWS_Text::secureLink('&lt;unassigned&gt;', 'hms', array('type'=>'assignment', 'op'=>'show_assign_student', 'bed_id'=>$this->id));
+            }
         }
 
     }
