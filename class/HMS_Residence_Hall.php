@@ -899,6 +899,12 @@ class HMS_Residence_Hall extends HMS_Item
                
                 # Load the beds
                 $room->loadBeds();
+
+                //test($room->_beds);
+
+                sort($room->_beds);
+
+                //test($room->_beds);
                
                 # For each bed, print the bed (and assignment)
                 foreach($room->_beds as $bed)
