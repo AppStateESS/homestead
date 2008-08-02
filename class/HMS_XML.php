@@ -50,6 +50,9 @@ class HMS_XML{
             case 'get_username_suggestions':
                 HMS_XML::get_username_suggestions($_REQUEST['username']);
                 break;
+            case 'get_username_suggestions_json':
+                HMS_XML::get_username_suggestions($_REQUEST['username']);
+                break;
             default:
                 # No such 'op', or no 'op' specified
                 # TODO: Find a way to throw an error here
@@ -486,8 +489,28 @@ class HMS_XML{
 
         header('Content-type: text/xml');
         echo $serializer->getSerializedData();
+        exit; 
+    }
+
+    function get_username_suggestions_json($username)
+    {
+        $db = new PHPWS_DB('hms_application');
+
+        $db->addColumn('asu_username');
+
+        $db->addWhere('asu_username', $username . '%', 'ILIKE');
+        $db->addOrder('asu_username', 'ASC');
+        $db->setLimit(5);
+
+        $results = $db->select('col');
+
+        test($results);
+
+        json_encode();
+
+        header('Content-type: text/xml');
+        echo $serializer->getSerializedData();
         exit;
-        
     }
 }
 
