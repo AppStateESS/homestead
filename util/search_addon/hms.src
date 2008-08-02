@@ -1,0 +1,13 @@
+<search
+	name="HMS"
+	description="HMS Student Search"
+	action="https://hms.appstate.edu/"
+	method="GET"
+>
+
+<input name="module" value="hms">
+<input name="type" value="student">
+<input name="op" value="get_matching_students">
+<input name="username" user="">
+
+</search>
