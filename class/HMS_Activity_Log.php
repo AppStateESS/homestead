@@ -127,7 +127,8 @@ class HMS_Activity_Log{
                         ACTIVITY_WITHDRAWN_ASSIGNMENT_DELETED   => "Assignment deleted due to withdrawl",
                         ACTIVITY_WITHDRAWN_ROOMMATE_DELETED     => "Roommate request deleted due to withdrawl",
                         ACTIVITY_WITHDRAWN_RLC_APP_DENIED       => "RLC application denied due to withdrawl",
-                        ACTIVITY_WITHDRAWN_RLC_ASSIGN_DELETED   => "RLC assignment deleted due to withdrawl");
+                        ACTIVITY_WITHDRAWN_RLC_ASSIGN_DELETED   => "RLC assignment deleted due to withdrawl"),
+                        ACTIVITY_APPLICATION_REPORTED           => "Application reported to Banner");
     }
 
     /**

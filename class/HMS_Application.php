@@ -146,6 +146,14 @@ class HMS_Application {
             $body = "Username: {$this->asu_username}\n";
             $mail->setMessageBody($body);
             $result = $mail->send();
+        }else{
+            # Log the fact that the application was sent to banner
+            PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
+            if(Current_User::getUsername() == 'hms_student'){
+                HMS_Activity_Log::log_activity($this->asu_username, ACTIVITY_APPLICATION_REPORTED, $this->asu_username);
+            }else{
+                HMS_Activity_Log::log_activity($this->asu_username, ACTIVITY_APPLICATION_REPORTED, Current_User::getUsername());
+            }
         }
     }
 
