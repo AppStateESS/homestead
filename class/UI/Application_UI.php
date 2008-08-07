@@ -333,6 +333,10 @@ class Application_UI{
         $tpl = array();
         
         if($result == TRUE){
+            # Log the fact that the application was submitted
+            PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
+            HMS_Activity_Log::log_activity($_SESSION['asu_username'], ACTIVITY_SUBMITTED_APPLICATION, $_SESSION['asu_username']);
+            
             # report the application to banner;
             $application->report_to_banner();
         }else{
