@@ -305,6 +305,8 @@ class HMS_Assignment extends HMS_Item
             return E_ASSIGN_MALFORMED_USERNAME;
         }
 
+        $username = strtolower($username);
+
         if(HMS_SOAP::get_student_type($username, $term) == TYPE_WITHDRAWN){
             return E_ASSIGN_WITHDRAWN;
         }
@@ -453,6 +455,8 @@ class HMS_Assignment extends HMS_Item
         if(!isset($username) || $username == ''){
             return E_ASSIGN_MALFORMED_USERNAME;
         }
+
+        $username = strtolower($username);
         
         # Make sure the requested username is actually assigned
         if(!HMS_Assignment::check_for_assignment($username, $term)) {

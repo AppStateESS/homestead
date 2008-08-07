@@ -95,7 +95,7 @@ class HMS_Banner_Queue {
     {
         $entry                = new HMS_Banner_Queue();
         $entry->type          = BANNER_QUEUE_ASSIGNMENT;
-        $entry->asu_username  = $username;
+        $entry->asu_username  = strtolower($username);
         $entry->building_code = $bldg;
         $entry->bed_code      = $bed;
         $entry->meal_plan     = $mealplan;
@@ -129,7 +129,7 @@ class HMS_Banner_Queue {
     {
         $entry                = new HMS_Banner_Queue();
         $entry->type          = BANNER_QUEUE_REMOVAL;
-        $entry->asu_username  = $username;
+        $entry->asu_username  = strtolower($username);
         $entry->building_code = $bldg;
         $entry->bed_code      = $bed;
         $entry->term          = $term;
