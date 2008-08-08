@@ -1,0 +1,13 @@
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/"
+                       xmlns:moz="http://www.mozilla.org/2006/browser/search/">
+<ShortName>HMS</ShortName>
+<Description>Housing Management Systems Student Search</Description>
+<Url type="text/html" method="GET" template="https://hms.appstate.edu/">
+  <Param name="module" value="paramValue1"/>
+  <Param name="type" value="paramValue1"/>
+  <Param name="op" value="paramValue1"/>
+  <Param name="username" value="{searchTerms}"/>
+</Url>
+<Url type="application/x-suggestions+json" template="https://hms.appstate.edu"/>
+<moz:SearchForm>http://blackfoot.appstate.edu/~jbooker/fallout/index.php?module=hms&type=student&op=enter_student_search_data</moz:SearchForm>
+</OpenSearchDescription>
