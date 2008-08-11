@@ -456,7 +456,7 @@ class HMS_Student_UI{
                     $tags['ROOMMATE_MSG'] = '<b>It is too early to choose a roommate.</b> You can choose a roommate on ' . HMS_Deadlines::get_deadline_as_date('select_roommate_begin_timestamp', $deadlines) . '.';
                     $tags['ROOMMATE_ICON'] = $lock_img;
                 }else{
-                    $tags['ROOMMATE_MSG'] = '<b>It is too late to choose a roommate.</b> The deadline passed on ' . HMS_Deadlines::get_deadline_as_date('select_roommate_end_timestamp') . '.';
+                    $tags['ROOMMATE_MSG'] = '<b>It is too late to choose a roommate.</b> The deadline passed on ' . HMS_Deadlines::get_deadline_as_date('select_roommate_end_timestamp', $deadlines) . '.';
                     $tags['ROOMMATE_ICON'] = $lock_img;
                 }
             }
@@ -579,7 +579,7 @@ class HMS_Student_UI{
                     $tags['ROOMMATE_MSG'] = '<b>It is too early to choose a roommate.</b> You can choose a roommate on ' . HMS_Deadlines::get_deadline_as_date('select_roommate_begin_timestamp', $deadlines) . '.';
                     $tags['ROOMMATE_ICON'] = $lock_img;
                 }else{
-                    $tags['ROOMMATE_MSG'] = '<b>It is too late to choose a roommate.</b> The deadline passed on ' . HMS_Deadlines::get_deadline_as_date('select_roommate_end_timestamp') . '.';
+                    $tags['ROOMMATE_MSG'] = '<b>It is too late to choose a roommate.</b> The deadline passed on ' . HMS_Deadlines::get_deadline_as_date('select_roommate_end_timestamp', $deadlines) . '.';
                     $tags['ROOMMATE_ICON'] = $lock_img;
                 }
             }
