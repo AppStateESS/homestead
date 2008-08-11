@@ -51,7 +51,7 @@ class HMS_XML{
                 HMS_XML::get_username_suggestions($_REQUEST['username']);
                 break;
             case 'get_username_suggestions_json':
-                HMS_XML::get_username_suggestions($_REQUEST['username']);
+                HMS_XML::get_username_suggestions_json($_REQUEST['username']);
                 break;
             default:
                 # No such 'op', or no 'op' specified
@@ -504,12 +504,31 @@ class HMS_XML{
 
         $results = $db->select('col');
 
-        test($results);
+        $json_result = array();
 
-        json_encode();
+        $json_result[0] = $username;
+        $json_result[1] = $results;
+	$json_result[2] = array();
+	$json_result[3] = array();
+        
+        header('Content-Type: application/json; charset=UTF-8');
+        $json_result = json_encode($json_result);
+       
+       /* 
+        PHPWS_Core::initCoreClass('Mail.php');
+        $mail = &new PHPWS_Mail;
 
-        header('Content-type: text/xml');
-        echo $serializer->getSerializedData();
+        $mail->addSendTo('jbooker@tux.appstate.edu');
+        $mail->setFrom('autosearch@tux.appstate.edu');
+        $mail->setSubject('Autosuggest request');
+
+        $mail->setMessageBody($_REQUEST['username'] . "\n" . $json_result);
+        $result = $mail->send();
+        */
+
+
+        echo $json_result . "\r\n";
+
         exit;
     }
 }
