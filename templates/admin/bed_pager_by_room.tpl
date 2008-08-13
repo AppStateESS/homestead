@@ -1,10 +1,11 @@
 <h2>{TABLE_TITLE}</h2>
-<table width="%60">
+<table width="%70">
     <tr>
         <th>{BEDROOM_LABEL}</th>
         <th>{BED_LETTER_LABEL}</th>
         <th>{ASSIGNED_TO_LABEL}</th>
         <th>{RA_LABEL}</th>
+        <th>Delete</th>
     </tr>
     <!-- BEGIN empty_table -->
     <tr>
@@ -17,10 +18,11 @@
         <td>{BED_LETTER}</td>
         <td>{ASSIGNED_TO}</td>
         <td>{RA}</td>
+        <td>{DELETE}</td>
     </tr>
     <!-- END listrows -->
 </table>
-<br />
+{ADD_BED_LINK}
 <!-- BEGIN page_label -->
 <div align="center">
 Assignments: {TOTAL_ROWS}

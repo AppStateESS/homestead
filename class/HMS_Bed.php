@@ -204,6 +204,15 @@ class HMS_Bed extends HMS_Item {
         $tags['ASSIGNED_TO']    = $this->get_assigned_to_link();
         $tags['RA']             = $this->ra_bed ? 'Yes' : 'No';
 
+        $this->loadAssignment();
+        if($this->_curr_assignment == NULL && Current_User::allow('hms', 'bed_structure')){
+            $confirm = array();
+            $confirm['QUESTION']    = 'Are you sure want to delete bed ' .  $this->bed_letter . '?';
+            $confirm['ADDRESS']     = PHPWS_Text::linkAddress('hms', array('type'=>'bed', 'op'=>'delete_bed_submit', 'bed_id'=>$this->id, 'room_id'=>$this->room_id));
+            $confirm['LINK']        = 'Delete';
+            $tags['DELETE']         = Layout::getJavascript('confirm', $confirm);
+        }
+
         return $tags;
     }
 
@@ -304,6 +313,15 @@ class HMS_Bed extends HMS_Item {
                 break;
             case 'edit_bed':
                 return HMS_Bed::edit_bed();
+                break;
+            case 'show_add_bed':
+                return HMS_Bed::show_add_bed();
+                break;
+            case 'add_bed_submit':
+                return HMS_Bed::add_bed_submit();
+                break;
+            case 'delete_bed_submit':
+                return HMS_Bed::delete_bed_submit();
                 break;
             default:
                 echo "undefined bed op: {$_REQUEST['op']}";
@@ -502,7 +520,75 @@ class HMS_Bed extends HMS_Item {
         return HMS_Bed::show_edit_bed($bed->id, 'Bed updated successfully.');
     }
 
-    
+    /*
+     * Adds a new bed to the specified room_id
+     * 
+     * The 'ra_bed' flag is expected to be either TRUE or FALSE.
+     * @return TRUE for success, FALSE otherwise
+     */
+    function add_bed($room_id, $bed_letter, $bedroom_label, $phone_number, $banner_id, $ra_bed = FALSE)
+    {
+        # Check permissions
+        if(!Current_User::allow('hms', 'bed_structure')){
+            return false;
+        }
+
+        # Load the room (need the 'term' field)
+        PHPWS_Core::initModClass('hms', 'HMS_Room.php');
+        $room = new HMS_Room($room_id);
+        
+        # Create a new bed object
+        $bed = new HMS_Bed();
+
+        $bed->room_id       = $room_id;
+        $bed->term          = $room->term;
+        $bed->bed_letter    = $bed_letter;
+        $bed->bedroom_label = $bedroom_label;
+        $bed->banner_id     = $banner_id;
+        $bed->phone_number  = $phone_number;
+
+        if($ra_bed === TRUE){
+            $bed->ra_bed = 1;
+        }else if($ra_bed === FALSE){
+            $bed->ra_bed = 0;
+        }else{
+            return false;
+        }
+
+        $result = $bed->save();
+
+        if(!$result || PHPWS_Error::logIfError($result)){
+            return false;
+        }
+
+        return true;
+    }
+
+    function delete_bed($bed_id)
+    {
+        if(!Current_User::allow('hms', 'bed_structure')){
+            return false;
+        }
+
+        # Create the bed object
+        $bed = new HMS_Bed($bed_id);
+
+        # Make sure the bed isn't assigned to anyone
+        $bed->loadAssignment();
+
+        if($bed->_curr_assignment != NULL){
+            return false;
+        }
+
+        $result = $bed->delete();
+
+        if(!$result || PHPWS_Error::logIfError($result)){
+            return false;
+        }
+
+        return true;
+    }
+
     /*********************
      * Static UI Methods *
      *********************/
@@ -624,6 +710,7 @@ class HMS_Bed extends HMS_Item {
             return PHPWS_Template::process($tpl, 'hms', 'admin/edit_bed.tpl');
         }
 
+        $tpl['TITLE']               = 'Bed Properties';
         $tpl['HALL_NAME']           = PHPWS_Text::secureLink($hall->hall_name, 'hms', array('type'=>'hall', 'op'=>'show_edit_hall', 'hall'=>$hall->id));
         $tpl['FLOOR_NUMBER']        = PHPWS_Text::secureLink($floor->floor_number, 'hms', array('type'=>'floor', 'op'=>'show_edit_floor', 'floor'=>$floor->id));
         $tpl['ROOM_NUMBER']         = PHPWS_Text::secureLink($room->room_number, 'hms', array('type'=>'room', 'op'=>'show_edit_room', 'room'=>$room->id));
@@ -646,7 +733,6 @@ class HMS_Bed extends HMS_Item {
         if($bed->ra_bed == 1){
             $form->setExtra('ra_bed', 'checked');
         }
-        //$form->setMatch('ra_bed', $bed->ra_bed);
 
         $form->addSubmit('submit', 'Submit');
         
@@ -669,6 +755,151 @@ class HMS_Bed extends HMS_Item {
         return PHPWS_Template::process($tpl, 'hms', 'admin/edit_bed.tpl');
     }
 
+    function show_add_bed($success = NULL, $error = NULL)
+    {
+        if(!Current_User::allow('hms', 'search')){
+            $tpl = array();
+            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
+        }
+        
+        PHPWS_Core::initModClass('hms', 'HMS_Room.php');
+        
+        $room_id = $_REQUEST['room_id'];
+        
+        $room = new HMS_Room($room_id);
+        if(!$room){
+            $tpl['ERROR_MSG'] = 'There was an error getting the room object. Please contact ESS.';
+            return PHPWS_Template::process($tpl, 'hms', 'admin/edit_bed.tpl');
+        }
+
+        # Create the floor object
+        $floor = $room->get_parent();
+        if(!$floor){
+            $tpl['ERROR_MSG'] = 'There was an error getting the floor object. Please contact ESS.';
+            return PHPWS_Template::process($tpl, 'hms', 'admin/edit_bed.tpl');
+        }
+
+        $hall = $floor->get_parent();
+        if(!$hall){
+            $tpl['ERROR_MSG'] = 'There was an error getting the hall object. Please contact ESS.';
+            return PHPWS_Template::process($tpl, 'hms', 'admin/edit_bed.tpl');
+        }
+
+        $tpl['TITLE']               = 'Add New Bed';
+        $tpl['HALL_NAME']           = PHPWS_Text::secureLink($hall->hall_name, 'hms', array('type'=>'hall', 'op'=>'show_edit_hall', 'hall'=>$hall->id));
+        $tpl['FLOOR_NUMBER']        = PHPWS_Text::secureLink($floor->floor_number, 'hms', array('type'=>'floor', 'op'=>'show_edit_floor', 'floor'=>$floor->id));
+        $tpl['ROOM_NUMBER']         = PHPWS_Text::secureLink($room->room_number, 'hms', array('type'=>'room', 'op'=>'show_edit_room', 'room'=>$room->id));
+
+        $tpl['ASSIGNED_TO'] = '&lt;unassigned&gt;';
+        
+        $form = new PHPWS_Form();
+
+        if(isset($_REQUEST['bed_letter'])){
+            $form->addText('bed_letter', $_REQUEST['bed_letter']);
+        }else{
+            $form->addText('bed_letter');
+        }
+
+        if(isset($_REQUEST['bedroom_label'])){
+            $form->addText('bedroom_label', $_REQUEST['bedroom_label']);
+        }else{
+            $form->addText('bedroom_label');
+        }
+       
+        if(isset($_REQUEST['phone_number'])){
+            $form->addText('phone_number', $_REQUEST['phone_number']);
+        }else{
+            $form->addText('phone_number');
+        }
+        $form->setMaxSize('phone_number', 4);
+        $form->setSize('phone_number', 5);
+       
+        if(isset($_REQUEST['banner_id'])){
+            $form->addText('banner_id', $_REQUEST['banner_id']);
+        }else{
+            $form->addText('banner_id');
+        }
+
+        $form->addCheckBox('ra_bed', 1);
+
+        $form->addSubmit('submit', 'Submit');
+        
+        $form->addHidden('module', 'hms');        
+        $form->addHidden('type', 'bed');
+        $form->addHidden('op', 'add_bed_submit');
+        $form->addHidden('room_id', $room_id);
+
+        $form->mergeTemplate($tpl);
+        $tpl = $form->getTemplate();
+        
+        if(isset($success)){
+            $tpl['SUCCESS_MSG'] = $success;
+        }
+
+        if(isset($error)){
+            $tpl['ERROR_MSG'] = $error;
+        }
+
+        # Reusing the edit bed template here
+        return PHPWS_Template::process($tpl, 'hms', 'admin/edit_bed.tpl');
+    }
+
+    function add_bed_submit()
+    {
+        if(!Current_User::allow('hms', 'bed_structure')){
+            $tpl = array();
+            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
+        }
+
+        # Sanity checking
+        if(!isset($_REQUEST['bed_letter']) || $_REQUEST['bed_letter'] == ''){
+            return HMS_Bed::show_add_bed(NULL, 'You must enter a bed letter.');
+        }
+
+        if(!isset($_REQUEST['bedroom_label']) || $_REQUEST['bedroom_label'] == ''){
+            return HMS_Bed::show_add_bed(NULL, 'You must enter a bedroom label.');
+        }
+
+        if(!isset($_REQUEST['phone_number']) || $_REQUEST['phone_number'] == ''){
+            return HMS_Bed::show_add_bed(NULL, 'You must enter a phone number.');
+        }
+
+        if(!isset($_REQUEST['banner_id']) || $_REQUEST['banner_id'] == ''){
+            return HMS_Bed::show_add_bed(NULL, 'You must enter a the bed\'s Banner id.');
+        }
+
+        if(!isset($_REQUEST['room_id']) || $_REQUEST['room_id'] == ''){
+            return HMS_Bed::show_add_bed(NULL, 'Error: no room id specified.');
+        }
+
+        # Try to create the bed
+        if(HMS_Bed::add_bed($_REQUEST['room_id'], $_REQUEST['bed_letter'], $_REQUEST['bedroom_label'], $_REQUEST['phone_number'], $_REQUEST['banner_id'], isset($_REQUEST['ra_bed']))){
+            PHPWS_Core::initModClass('hms', 'HMS_Room.php');
+            return HMS_Room::show_edit_room($_REQUEST['room_id'], 'Bed added successfully.');
+        }else{
+            return HMS_Bed::show_add_bed(NULL, 'There was an error saving the bed to the database.');
+        }
+    }
+
+    function delete_bed_submit()
+    {
+        if(!Current_User::allow('hms', 'bed_structure')){
+            $tpl = array();
+            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
+        }
+
+        #TODO: Sanity checking, make sure bed_id and room_id are set, what to do if they're not??
+        
+        $result = HMS_Bed::delete_bed($_REQUEST['bed_id']);
+
+        PHPWS_Core::initModClass('hms', 'HMS_Room.php');
+        if($result){
+            return HMS_Room::show_edit_room($_REQUEST['room_id'], 'Bed deleted.');
+        }else{
+            return HMS_Room::show_edit_room($_REQUEST['room_id'], 'Error removing bed.');
+        }
+    }
+
     function bed_pager_by_room($room_id)
     {
         PHPWS_Core::initCoreClass('DBPager.php');
@@ -685,6 +916,10 @@ class HMS_Bed extends HMS_Item {
         $page_tags['BED_LETTER_LABEL']  = 'Bed';
         $page_tags['ASSIGNED_TO_LABEL'] = 'Assigned to';
         $page_tags['RA_LABEL']          = 'RA bed';
+
+        if(Current_User::allow('hms', 'bed_structure')){
+            $page_tags['ADD_BED_LINK'] = PHPWS_Text::secureLink('Add bed', 'hms', array('type'=>'bed', 'op'=>'show_add_bed', 'room_id'=>$room_id));
+        }
 
         $pager->setModule('hms');
         $pager->setTemplate('admin/bed_pager_by_room.tpl');
