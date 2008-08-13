@@ -797,19 +797,25 @@ class HMS_Bed extends HMS_Item {
         if(isset($_REQUEST['bed_letter'])){
             $form->addText('bed_letter', $_REQUEST['bed_letter']);
         }else{
-            $form->addText('bed_letter');
+            $form->addText('bed_letter', chr($room->get_number_of_beds() + 97));
         }
 
         if(isset($_REQUEST['bedroom_label'])){
             $form->addText('bedroom_label', $_REQUEST['bedroom_label']);
         }else{
-            $form->addText('bedroom_label');
+            $form->addText('bedroom_label', 'a');
         }
        
         if(isset($_REQUEST['phone_number'])){
             $form->addText('phone_number', $_REQUEST['phone_number']);
         }else{
-            $form->addText('phone_number');
+            // Try to guess at the phone number
+            $beds = $room->get_beds();
+            if(sizeof($beds) > 0){
+                $form->addText('phone_number', $beds[0]->phone_number);
+            }else{
+                $form->addText('phone_number');
+            }
         }
         $form->setMaxSize('phone_number', 4);
         $form->setSize('phone_number', 5);
@@ -817,7 +823,8 @@ class HMS_Bed extends HMS_Item {
         if(isset($_REQUEST['banner_id'])){
             $form->addText('banner_id', $_REQUEST['banner_id']);
         }else{
-            $form->addText('banner_id');
+            // try to guess a the banner ID
+            $form->addText('banner_id', '0' . $room->room_number . ($room->get_number_of_beds()+1));
         }
 
         $form->addCheckBox('ra_bed', 1);
