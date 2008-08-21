@@ -443,6 +443,59 @@ class HMS_Residence_Hall extends HMS_Item
     }
 
     /*
+     * Determines the number of beds per room in a hall.  Should the count vary
+     * it returns the count that applies to the majority of the rooms.
+     */
+    function count_beds_per_room()
+    {
+        $total = array(); //stores the number of rooms with that many beds
+
+        //Get a list of all the rooms in the hall
+        $rdb = &new PHPWS_DB('hms_room');
+
+        $rdb->addJoin('LEFT OUTER', 'hms_room', 'hms_floor', 'floor_id', 'id');
+        $rdb->addJoin('LEFT OUTER', 'hms_floor', 'hms_residence_hall', 'residence_hall_id', 'id');
+
+        $rdb->addWhere('hms_residence_hall.id', $this->id);
+
+        $result = $rdb->select();
+
+        if(PHPWS_Error::logIfError($result)){
+            return false;
+        }
+
+        //and for each room get a list of the beds
+        foreach($result as $room){
+            $db = &new PHPWS_DB('hms_bed');
+            
+            $db->addJoin('LEFT OUTER', 'hms_bed', 'hms_room', 'room_id', 'id');
+            
+            $db->addWhere('hms_room.id',           $room['id']);
+
+            $result = $db->select('count');
+
+            if(PHPWS_Error::logIfError($result)){
+                return false;
+            }
+
+            //and increment the count of the number of rooms with that many 
+            //beds in this hall
+            if($result){
+                $total[$result] = empty($total[$result]) ? 1 : $total[$result]+1;
+            }
+        }
+
+        $top   = 0;
+        foreach($total as $key => $value){
+            if($total[$key] > $total[$top]){
+                $top = $key;
+            }
+        }
+
+        return $top;
+    }
+
+    /*
      * Returns an array of the student objects which are currently assigned to the current hall
      */
     function &get_assignees()
