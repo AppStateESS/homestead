@@ -267,15 +267,6 @@ class HMS_Admin
     }
 
     /**
-     * Display the admin panel requested by Housing 
-     */
-    function show_primary_admin_panel()
-    {
-        PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
-        return HMS_Form::show_primary_admin_panel();
-    }
-
-    /**
      * Shows the page where the user can start the withdrawn student search
      */
     function withdrawn_search_start($success_msg = NULL, $error_msg = NULL)
