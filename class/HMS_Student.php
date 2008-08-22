@@ -308,8 +308,6 @@ class HMS_Student {
 
     function enter_student_search_data($error = null)
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
-
         if(!Current_User::allow('hms', 'search')){
             $tpl = array();
             return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
@@ -351,11 +349,9 @@ class HMS_Student {
         }
         
         if(!isset($_REQUEST['username'])) {
-            PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
             $error = "You did not provide an ASU username.<br />";
             return HMS_Student::enter_student_search_data($error);
         } else if (!PHPWS_Text::isValidInput($_REQUEST['username'])) {
-            PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
             $error = "ASU usernames can only be alphanumeric.<br />";
             return HMS_Student::enter_student_search_data($error);
         } 

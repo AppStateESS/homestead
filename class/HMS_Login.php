@@ -6,13 +6,10 @@ class HMS_Login
 {
     function display_login_screen($error = NULL)
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
-        $form = &new HMS_Form;
         if($error != NULL) {
             $form->set_error_msg($error);
         }
-        $final = $form->display_login_screen();
-        Layout::add($final);
+        Layout::add(HMS_Login::show_login_screen());
     }
 
     function login_user()
@@ -68,6 +65,41 @@ class HMS_Login
         Current_User::getLogin();
         $_SESSION['asu_username'] = $_REQUEST['asu_username'];
         return ADMIN;
+    }
+    
+    function show_login_screen()
+    {
+        PHPWS_Core::initCoreClass('Form.php');
+        $form = &new PHPWS_Form;
+
+        $form->addText('asu_username');
+        $form->addPassword('password');
+
+        $form->addHidden('module', 'hms');
+        $form->addHidden('type', 'hms');
+        $form->addHidden('op', 'login');
+        $form->addSubmit('submit', _('Login'));
+
+        $tpl = $form->getTemplate();
+        $welcome  = "Welcome to the Housing Management System.<br /><br />";
+        $welcome .= "There are multiple parts to this process. These are:<br />";
+        $welcome .= " - Logging in<br />";
+        $welcome .= " - Agreeing to the Housing License Contract<br />";
+        $welcome .= " - Completing a Housing Application<br />";
+        $welcome .= " - Completing the Residential Learning Community Application if you wish to participate in a RLC<br />";
+        $welcome .= " - Completing the *OPTIONAL* student profile<br /><br />";
+        $welcome .= "Please note that once you complete the Housing Application you do not have to fill out anything else provided at this website.<br /><br />";
+      
+        $welcome .= "<br /><br />";
+        $welcome .= "<b>If you are experiencing problems please read <a href=\"./index.php?module=webpage&id=1\" target=\"_blank\">this page</a>.</b>";
+        $welcome .= "<br /><br />";
+
+        $values = array('ADDITIONAL'=>'The Housing Management System will <strong>not</strong> work without cookies.  Please read about <a href="http://www.google.com/cookies.html" target="_blank">how to enable cookies</a>.');
+        $tpl['COOKIE_WARNING'] = Layout::getJavascript('cookietest', $values);
+        $tpl['WELCOME'] = $welcome;
+        //$tpl['ERROR']   = $this->get_error_msg();
+        $final = PHPWS_Template::process($tpl, 'hms', 'misc/login.tpl');
+        return $final;
     }
 };
 

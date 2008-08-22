@@ -187,7 +187,7 @@ class HMS_Student_Profile{
      ****************/
 
     /**
-     * Uses HMS_Forms to display the profile form.
+     * Does not use HMS_Forms to display the profile form.
      */
     function show_profile_form()
     {

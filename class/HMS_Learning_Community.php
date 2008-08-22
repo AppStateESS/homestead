@@ -121,9 +121,13 @@ class HMS_Learning_Community
             $tpl = array();
             return PHPWS_Template::process($tpl, 'hms', 'admin/premission_denied.tpl');
         }
-
-        PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
-        return HMS_Form::add_learning_community($msg);
+    
+        PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
+        $tpl = HMS_Form::fill_learning_community_data_display();
+        $tpl['TITLE'] = "Add a Learning Community";
+        $tpl['MESSAGE'] = $msg;
+        $final = PHPWS_Template::process($tpl, 'hms', 'admin/display_learning_community_data.tpl');
+        return $final;
     }
    
     /*
@@ -131,8 +135,32 @@ class HMS_Learning_Community
      */
     function select_learning_community_for_delete()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Forms.php');
-        return HMS_Form::select_learning_community_for_delete();
+        PHPWS_Core::initCoreClass('Form.php');
+        $form = &new PHPWS_Form;
+
+        $db = &new PHPWS_DB('hms_learning_communities');
+        $all_lcs = $db->select();
+
+        if($all_lcs == NULL) {
+            $tpl['TITLE']   = "Error!";
+            $tpl['CONTENT'] = "You must add a Learning Community before you can delete a Community!<br />";
+            $final = PHPWS_Template::process($tpl, 'hms', 'admin/title_and_message.tpl');
+            return $final;
+        }
+
+        foreach($all_lcs as $lc) {
+            $lcs[$lc['id']] = $lc['community_name'];
+        }
+
+        $form->addDropBox('lcs', $lcs);
+        $form->addHidden('module', 'hms');
+        $form->addHidden('type', 'rlc');
+        $form->addHidden('op', 'confirm_delete_learning_community');
+        $form->addSubmit('submit', _('Delete Community'));
+        $tpl = $form->getTemplate();
+        $tpl['TITLE'] = "Select a Community to Delete";
+        $final = PHPWS_Template::process($tpl, 'hms', 'admin/select_learning_community.tpl');
+        return $final;
     }
 
     /*
@@ -577,13 +605,15 @@ class HMS_Learning_Community
                 'admin/make_new_rlc_assignments_summary.tpl');
     }
 
+/** HMS_Forms did not contain show_assign_rlc_members_to_rooms() so this
+    couldn't have been in use.
     function assign_rlc_members_to_rooms()
     {
         PHPWS_Core::initModClass('hms','HMS_Forms.php');
 
         return HMS_Form::show_assign_rlc_members_to_rooms();
     }
-
+*/
     function view_rlc_assignments()
     {
         if( !Current_User::allow('hms', 'view_rlc_members') ){

@@ -828,7 +828,7 @@ class HMS_Residence_Hall extends HMS_Item
     }
     
     /**
-     * Uses code from HMS_Forms add_residence_hall, fill_hall_data_display 
+     * Does not use code from HMS_Forms add_residence_hall, fill_hall_data_display 
      */
     function show_edit_residence_hall($hall_id = null, $success = null, $error = null)
     {
