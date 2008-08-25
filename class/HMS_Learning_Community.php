@@ -659,6 +659,10 @@ class HMS_Learning_Community
             $ass->addValue('assigned_by',  Current_User::getUsername());
             $ass_id = $ass->insert();
 
+            # Log the assignment
+            PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
+            HMS_Activity_Log::log_activity($application['user_id'], ACTIVITY_ASSIGN_TO_RLC, Current_User::getUsername(), "New Assignment");
+
             # Update the RLC application with the assignment id
             $app->reset();
             $app->addValue('hms_assignment_id', $ass_id);

@@ -194,7 +194,7 @@ class HMS_RLC_Application{
         }
 
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-        HMS_Activity_Log::log_activity();
+        HMS_Activity_Log::log_activity($_SESSION['asu_username'], ACTIVITY_RLC_APP_SUBMITTED, Current_User::getUsername(), "Submitted an RLC application");
         
         return $result;
     }
@@ -407,6 +407,10 @@ class HMS_RLC_Application{
             PHPWS_Error::log($result);
             return HMS_Learning_Community::assign_applicants_to_rlcs(null, 'There was an error working with the database. The application was not modified.');
         }else{
+            $result = $db->select();
+            PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
+            HMS_Activity_Log::log_activity($result['user_id'], 28, Current_User::getUsername(), "Application Denied");
+
             return HMS_Learning_Community::assign_applicants_to_rlcs('Application denied.');
         }
     }
@@ -431,6 +435,10 @@ class HMS_RLC_Application{
             PHPWS_Error::log($result);
             return HMS_Learning_Community::show_view_denied(null, 'There was an error working with the database. The application was not modified.');
         }else{
+            $result = $db->select();
+            PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
+            HMS_Activity_Log::log_activity($result['user_id'], 29, Current_User::getUsername(), "Application un-denied");
+
             return HMS_Learning_Community::show_view_denied('Application un-denied.');
         }
     }
