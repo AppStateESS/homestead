@@ -96,5 +96,9 @@
 
     $permissions['login_as_student']                =_('Login as a student');
 
+    /*****************
+     * Activity Logs *
+     ****************/
     $permissions['view_activity_log']               =_('Can view the global Activity Log');
+    $permissions['view_student_log']                =_('Can view student logs');
 ?>

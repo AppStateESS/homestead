@@ -220,8 +220,10 @@ class HMS_Admin
                                         "link_title" => "Assignment Options");
         $tabs['statistics']         = array("title" => "Statistics", "link" => $link,
                                         "link_title" => "View Statistics");
-        $tabs['logs']               = array("title" => "Activity Logs", "link" => $link,
-                                        "link_title" => "Activity Logs");
+        if(Current_User::allow('hms', 'view_activity_log')){
+            $tabs['logs']               = array("title" => "Activity Logs", "link" => $link,
+                                            "link_title" => "Activity Logs");
+        }
         $tabs['reports']            = array('title' => 'Reports', 'link' => $link,
                                         'link_title'=>'Reports');
         

@@ -584,8 +584,12 @@ class HMS_Student {
                                         'link_title' => 'Student Info Page');
         $tags['housing_app']    = array('title' => 'Housing Application', 'link' => $link,
                                         'link_title' => 'Housing Application');
-        $tags['student_logs']   = array('title' => 'Student Logs', 'link' => $link,
-                                        'link_title' => 'Student Logs');
+        if(Current_User::allow('hms', 'view_student_log')){
+            $tags['student_logs']   = array('title' => 'Student Logs', 'link' => $link,
+                                            'link_title' => 'Student Logs');
+        } else {
+            $tags['student_logs']   = array();
+        }
 
         PHPWS_Core::initModClass('controlpanel', 'Panel.php');
 
