@@ -551,6 +551,9 @@ class HMS_Admin
             $tpl = array();
             return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
         }
+        
+        PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
+        require_once('mod/hms/inc/defines.php');
 
         $tpl = array();
 
@@ -567,6 +570,11 @@ class HMS_Admin
             $names[0] = trim($names[0]);
             $names[1] = trim($names[1]);
 
+            # Start logging activities
+            $notes = "Username Updated: ".trim($names[0])."=>".trim($names[1]);
+            HMS_Activity_Log::log_activity(trim($names[0]), ACTIVITY_USERNAME_UPDATED, Current_User::getUsername(), $notes);
+            HMS_Activity_Log::log_activity(trim($names[1]), ACTIVITY_USERNAME_UPDATED, Current_User::getUsername(), $notes);
+
             # Open a DB connection and try to update applications
             $db = &new PHPWS_DB('hms_application');
             $db->addValue('asu_username', $names[1]);
@@ -582,6 +590,10 @@ class HMS_Admin
                 $rows_affected = $db->affectedRows();
                 if($rows_affected > 0){
                     $tpl['status'][] = array('USERNAME'=>$names[0], 'MESSAGE' => "$rows_affected applications records updated.");
+
+                    # Log Successful application update
+                    $notes = "Application Updated";
+                    HMS_Activity_Log::log_activity($trim($names[1]), ACTIVITY_APPLICATION_UPDATED, Current_User::getUsername(), $notes);
                 }
             }
 
@@ -598,6 +610,9 @@ class HMS_Admin
                 $rows_affected = $db->affectedRows();
                 if($rows_affected > 0){
                     $tpl['status'][] = array('USERNAME'=>$names[0], 'MESSAGE' => "$rows_affected assignment records updated.");
+                    
+                    $notes = "Assignments Updated";
+                    HMS_Activity_Log::log_activity($trim($names[1]), ACTIVITY_ASSIGNMENTS_UPDATED, Current_User::getUsername(), $notes);
                 }
             }
 
@@ -614,6 +629,9 @@ class HMS_Admin
                 $rows_affected = $db->affectedRows();
                 if($rows_affected > 0){
                     $tpl['status'][] = array('USERNAME'=>$names[0], 'MESSAGE' => "$rows_affected banner queue records updated.");
+                    
+                    $notes = "Banner Queue Updated";
+                    HMS_Activity_Log::log_activity($trim($names[1]), ACTIVITY_BANNER_QUEUE_UPDATED, Current_User::getUsername(), $notes);
                 }
             }
             
@@ -630,6 +648,9 @@ class HMS_Admin
                 $rows_affected = $db->affectedRows();
                 if($rows_affected > 0){
                     $tpl['status'][] = array('USERNAME'=>$names[0], 'MESSAGE' => "$rows_affected roommate requestor records updated.");
+                    
+                    $notes = "Roommates Updated";
+                    HMS_Activity_Log::log_activity($trim($names[1]), ACTIVITY_ROOMMATES_UPDATED, Current_User::getUsername(), $notes);
                 }
             }
             
@@ -645,6 +666,9 @@ class HMS_Admin
                 $rows_affected = $db->affectedRows();
                 if($rows_affected > 0){
                     $tpl['status'][] = array('USERNAME'=>$names[0], 'MESSAGE' => "$rows_affected roommate requestee records updated.");
+
+                    $notes = "Roommate Requests Updated";
+                    HMS_Activity_Log::log_activity($trim($names[1]), ACTIVITY_ROOMMATE_REQUESTS_UPDATED, Current_User::getUsername(), $notes);
                 }
             }
 
@@ -661,6 +685,9 @@ class HMS_Admin
                 $rows_affected = $db->affectedRows();
                 if($rows_affected > 0){
                     $tpl['status'][] = array('USERNAME'=>$names[0], 'MESSAGE' => "$rows_affected RLC records updated.");
+                    
+                    $notes = "RLCs Updated";
+                    HMS_Activity_Log::log_activity($trim($names[1]), ACTIVITY_RLC_APPLICATION_UPDATED, Current_User::getUsername(), $notes);
                 }
             }
         }

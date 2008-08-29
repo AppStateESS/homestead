@@ -132,7 +132,14 @@ class HMS_Activity_Log{
                         ACTIVITY_DENIED_RLC_APPLICATION         => "Denied RLC Application",
                         ACTIVITY_UNDENIED_RLC_APPLICATION       => "Un-denied RLC Application",
                         ACTIVITY_ASSIGN_TO_RLC                  => "Assigned student to RLC",
-                        ACTIVITY_RLC_APP_SUBMITTED              => "Submitted RLC Application");
+                        ACTIVITY_RLC_APP_SUBMITTED              => "Submitted RLC Application",
+                        ACTIVITY_USERNAME_UPDATED               => "Updated Username",
+                        ACTIVITY_APPLICATION_UPDATED            => "Updated Application",
+                        ACTIVITY_RLC_APPLICATION_UPDATED        => "Updated RLC Application",
+                        ACTIVITY_ASSIGNMENTS_UPDATED            => "Updated Assignments",
+                        ACTIVITY_BANNER_QUEUE_UPDATED           => "Updated Banner Queue",
+                        ACTIVITY_ROOMMATES_UPDATED              => "Updated Roommates",
+                        ACTIVITY_ROOMMATE_REQUESTS_UPDATED      => "Updated Roommate Requests");
     }
 
     /**

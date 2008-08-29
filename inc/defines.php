@@ -158,6 +158,15 @@ define('ACTIVITY_UNDENIED_RLC_APPLICATION',     29);
 define('ACTIVITY_ASSIGN_TO_RLC',                30);
 define('ACTIVITY_RLC_APP_SUBMITTED',            31);
 
+// Activities for updating a username
+define('ACTIVITY_USERNAME_UPDATED',             32);
+define('ACTIVITY_APPLICATION_UPDATED',          33);
+define('ACTIVITY_RLC_APPLICATION_UPDATED',      34);
+define('ACTIVITY_ASSIGNMENTS_UPDATED',          35);
+define('ACTIVITY_BANNER_QUEUE_UPDATED',         36);
+define('ACTIVITY_ROOMMATES_UPDATED',            37);
+define('ACTIVITY_ROOMMATE_REQUESTS_UPDATED',    38);
+
 /** 
  * Errors 
  */
