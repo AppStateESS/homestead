@@ -42,6 +42,7 @@
     $permissions['hall_structure']      = _('Add and delete halls');
     $permissions['hall_attributes']     = _('Edit hall attributes');
     $permissions['hall_view']           = _('View halls');
+    $permissions['run_hall_overview']   = _('Run the Hall Overview');
 
     # Floor tasks
     $permissions['floor_structure']     = _('Add and delete floors');

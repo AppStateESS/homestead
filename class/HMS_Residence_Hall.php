@@ -942,6 +942,11 @@ class HMS_Residence_Hall extends HMS_Item
      */
     function show_hall_overview($hall_id, $naked = FALSE)
     {
+        if( !Current_User::allow('hms', 'run_hall_overview') ){
+            $tpl = array();
+            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
+        }
+
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
 
         $hall = new HMS_Residence_Hall($hall_id);
