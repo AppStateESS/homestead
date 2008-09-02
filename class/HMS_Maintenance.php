@@ -260,7 +260,7 @@ class HMS_Maintenance
             $tpl['EDIT_HALL']   = PHPWS_Text::secureLink(_('Edit Residence Hall'), 'hms', array('type'=>'hall', 'op'=>'select_hall_to_edit'));
 
         # TODO: re-evaluate this permissions
-        if(Current_User::allow('hms', 'hall_attributes'))
+        if(Current_User::allow('hms', 'hall_attributes') || Current_User::allow('hms', 'hall_view'))
             $tpl['HALL_OVERVIEW'] = PHPWS_Text::secureLink(_('Get Hall Overview'), 'hms', array('type'=>'hall', 'op'=>'select_residence_hall_for_overview')) . ' [' . PHPWS_Text::secureLink(_('Printable'), 'hms', array('type'=>'hall', 'op'=>'select_residence_hall_for_overview', 'print'=>'1')) . ']';
 
         /*****************
@@ -272,7 +272,7 @@ class HMS_Maintenance
         if(Current_User::allow('hms', 'floor_structure'))
             $tpl['DELETE_FLOOR']   = PHPWS_Text::secureLink(_('Delete a Floor From a Hall'), 'hms', array('type'=>'hall', 'op'=>'select_residence_hall_for_delete_floor'));
 
-        if(Current_User::allow('hms', 'floor_attributes'))
+        if(Current_User::allow('hms', 'floor_attributes') || Current_User::allow('hms', 'floor_view'))
             $tpl['EDIT_FLOOR']   = PHPWS_Text::secureLink(_('Edit a Floor'), 'hms', array('type'=>'floor', 'op'=>'show_select_floor'));
         
         
@@ -285,13 +285,13 @@ class HMS_Maintenance
         if(Current_User::allow('hms', 'room_structure')) 
             $tpl['DELETE_ROOM'] = PHPWS_Text::secureLink(_('Delete a Room'), 'hms', array('type'=>'room', 'op'=>'select_residence_hall_for_delete_room'));
 
-        if(Current_User::allow('hms', 'room_attributes'))
+        if(Current_User::allow('hms', 'room_attributes') || Current_User::allow('hms', 'room_view'))
             $tpl['EDIT_ROOM'] = PHPWS_Text::secureLink(_('Edit a Room'), 'hms', array('type'=>'room', 'op'=>'select_room_to_edit'));
 
         /***************
          * Bed Options *
          **************/
-        if(Current_user::allow('hms', 'bed_attributes'))
+        if(Current_user::allow('hms', 'bed_attributes') || Current_User::allow('hms', 'bed_view'))
             $tpl['EDIT_BED'] = PHPWS_Text::secureLink(_('Edit a Bed'), 'hms', array('type'=>'bed', 'op'=>'select_bed_to_edit'));
 
         return $tpl;

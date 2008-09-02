@@ -679,6 +679,15 @@ class HMS_Floor extends HMS_Item
      *************/
     function show_select_floor($title, $type, $op, $success = NULL, $error = NULL)
     {
+        if(   !Current_User::allow('hms', 'floor_view')
+           && !Current_User::allow('hms', 'floor_attributes')
+           && !Current_User::allow('hms', 'floor_structure'))
+        {
+            $tpl = array();
+            echo(PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl'));
+            exit();
+        }
+
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
         PHPWS_Core::initCoreClass('Form.php');
@@ -828,6 +837,20 @@ class HMS_Floor extends HMS_Item
 
         if(isset($error)){
             $tpl['ERROR_MSG'] = $error;
+        }
+        
+        # if the user has permission to view the form but not edit it then
+        # disable it
+        if(   Current_User::allow('hms', 'floor_view') 
+           && !Current_User::allow('hms', 'floor_attributes')
+           && !Current_User::allow('hms', 'floor_structure'))
+        {
+            $form_vars = get_object_vars($form);
+            $elements = $form_vars['_elements'];
+
+            foreach($elements as $element => $value){
+                $form->setDisabled($element);
+            }
         }
 
         $form->mergeTemplate($tpl);

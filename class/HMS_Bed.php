@@ -595,6 +595,15 @@ class HMS_Bed extends HMS_Item {
      
     function show_select_bed($title, $type, $op, $success = NULL, $error = NULL)
     {
+        if(   !Current_User::allow('hms', 'bed_view') 
+           && !Current_User::allow('hms', 'bed_attributes')
+           && !Current_User::allow('hms', 'bed_structure'))
+        {
+            $tpl = array();
+            echo(PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl'));
+            exit();
+        }
+
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
         PHPWS_Core::initCoreClass('Form.php');
@@ -740,6 +749,19 @@ class HMS_Bed extends HMS_Item {
         $form->addHidden('type', 'bed');
         $form->addHidden('op', 'edit_bed');
         $form->addHidden('bed_id', $bed->id);
+
+        # if the user has permission to view the form but not edit it
+        if(   !Current_User::allow('hms', 'bed_view') 
+           && !Current_User::allow('hms', 'bed_attributes')
+           && !Current_User::allow('hms', 'bed_structure'))
+        {
+            $form_vars = get_object_vars($form);
+            $elements = $form_vars['_elements'];
+
+            foreach($elements as $element => $value){
+                $form->setDisabled($element);
+            }
+        }
 
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();

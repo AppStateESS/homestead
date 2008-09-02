@@ -41,22 +41,27 @@
     # Residence hall tasks
     $permissions['hall_structure']      = _('Add and delete halls');
     $permissions['hall_attributes']     = _('Edit hall attributes');
+    $permissions['hall_view']           = _('View halls');
 
     # Floor tasks
     $permissions['floor_structure']     = _('Add and delete floors');
     $permissions['floor_attributes']    = _('Edit floor attributes');
+    $permissions['floor_view']          = _('View floors');
 
     # Suite tasks
     $permissions['suite_structure']     = _('Add and delete suites');
     $permissions['suite_attributes']    = _('Edit suite attributes');
+    $permissions['suite_view']          = _('View suites');
 
     # Room tasks
     $permissions['room_structure']      = _('Add and delete rooms');
     $permissions['room_attributes']     = _('Edit room attributes');
+    $permissions['room_view']           = _('View rooms');
 
     # Bed tasks
     $permissions['bed_structure']       = _('Add and delete beds');
     $permissions['bed_attributes']      = _('Edit bed attributes');
+    $permissions['bed_view']            = _('View beds');
 
 
     /*************

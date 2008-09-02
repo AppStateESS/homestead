@@ -775,6 +775,15 @@ class HMS_Residence_Hall extends HMS_Item
      */
     function show_select_residence_hall($title, $type, $op, $success = NULL, $error = NULL)
     {
+        if(   !Current_User::allow('hms', 'hall_view')
+           && !Current_User::allow('hms', 'hall_attributes')
+           && !Current_User::allow('hms', 'hall_structure'))
+        {
+            $tpl = array();
+            echo(PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl'));
+            exit();
+        }
+
         if( !Current_User::allow('hms', 'hall_attributes') ){
             $tpl = array();
             return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
@@ -895,7 +904,21 @@ class HMS_Residence_Hall extends HMS_Item
         $form->addHidden('type', 'hall');
         $form->addHidden('op', 'edit_hall');
         $form->addHidden('hall_id', $hall->id);
-        
+     
+        # if the user has permission to view the form but not edit it then
+        # disable it
+        if(    Current_User::allow('hms', 'hall_view') 
+           && !Current_User::allow('hms', 'hall_attributes')
+           && !Current_User::allow('hms', 'hall_structure'))
+        {
+            $form_vars = get_object_vars($form);
+            $elements = $form_vars['_elements'];
+
+            foreach($elements as $element => $value){
+                $form->setDisabled($element);
+            }
+        }
+   
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
