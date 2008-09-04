@@ -167,6 +167,9 @@ define('ACTIVITY_BANNER_QUEUE_UPDATED',         36);
 define('ACTIVITY_ROOMMATES_UPDATED',            37);
 define('ACTIVITY_ROOMMATE_REQUESTS_UPDATED',    38);
 
+// Misc.
+define('ACTIVITY_CHANGE_ACTIVE_TERM',           39);
+
 /** 
  * Errors 
  */

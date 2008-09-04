@@ -129,6 +129,10 @@ class HMS_Term{
     function set_current_term($term){
         PHPWS_Settings::set('hms','current_term',$term);
         PHPWS_Settings::save('hms');
+
+        PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
+        $username = Current_User::getUsername();
+        HMS_Activity_Log::log_activity($username, ACTIVITY_CHANGE_ACTIVE_TERM, $username, "Active term set by $username to $term");
     }
 
 
