@@ -149,6 +149,10 @@ class HMS_Reports{
 
         # Start the timer
         $start_time = microtime();
+        
+        $total_other = 0; #Count all students with invalid data and lump 
+                          #them into their own column
+
 
         $building = array(); // Define an array to hold each building's summary
 	   
@@ -209,6 +213,9 @@ class HMS_Reports{
                 # Check the gender for bad data
                 if(!isset($gender) || $gender === NULL || ($gender != MALE && $gender != FEMALE)) {
                     $problems[] = $assignment['asu_username'] .': Gender is unrecognized ('. $gender .')';
+                    $building[$hall_row['hall_name']]['other']++;
+                    $total_other++;
+                    continue;
                 }
                     
                 # Get the class of the student for this assignment
@@ -219,6 +226,9 @@ class HMS_Reports{
                     ($class != CLASS_FRESHMEN && $class != CLASS_SOPHOMORE && 
                      $class != CLASS_JUNIOR && $class != CLASS_SENIOR)) {
                     $problems[] = $assignment['asu_username'] . ': Class is unrecognized ('. $class .')';
+                    $building[$hall_row['hall_name']]['other']++;
+                    $total_other++;
+                    continue;
                 }
 
                 # Get the type of the student for this assignment
@@ -228,6 +238,9 @@ class HMS_Reports{
                 if(!isset($type) || $type === NULL ||
                    ($type != TYPE_FRESHMEN && $type != TYPE_TRANSFER && $type != TYPE_CONTINUING && $type != TYPE_READMIT)) {
                     $problems[] = $assignment['asu_username'] . ': Type is unrecognized ('. $type .')';
+                    $building[$hall_row['hall_name']]['other']++;
+                    $total_other++;
+                    continue;
                 }
 
                 $credit_hours = HMS_SOAP::get_credit_hours($assignment['asu_username']);
@@ -235,11 +248,17 @@ class HMS_Reports{
                 # Check for a freshmen type, but a mis-matched class
                 if(($type == TYPE_FRESHMEN && $class != CLASS_FRESHMEN)){
                     $problems[] = $assignment['asu_username'] . ": Type is $type, class is $class, credit hours is $credit_hours";
+                    $building[$hall_row['hall_name']]['other']++;
+                    $total_other++;
+                    continue;
                 }
 
                 # Check for a mis-matched type/class/hours situation
                 if( $type == TYPE_CONTINUING && $class == CLASS_FRESHMEN && $credit_hours == 0){
                     $problems[] = $assignment['asu_username'] . ": Type is $type, class is $class, credit hours is $credit_hours";
+                    $building[$hall_row['hall_name']]['other']++;
+                    $total_other++;
+                    continue;
                 }
 
                 $t = $type;
@@ -279,14 +298,30 @@ class HMS_Reports{
         foreach($building as $hall) {
             ksort($hall);
             $name = key($building);
+            # Generate our totals for later in the form
+            $total_males = 0;
+            $total_females = 0;
+            $other = (isset($building[$name]['other']) ? $building[$name]['other'] : 0);
+            foreach($building[$name] as $type){
+                foreach($type as $year => $gender){
+                    if($gender == MALE){
+                        $total_males++;
+                    } elseif($gender == FEMALE){
+                        $total_females++;
+                    }
+                }
+            }
+
             $content .= '<table border="1">';
-            $content .= '<tr><th colspan="17"><h2 style="text-align: center">' . $name . '</h2></th></tr>';
+            $content .= '<tr><th colspan="19"><h2 style="text-align: center">' . $name . '</h2></th></tr>';
             $content .= '<tr>';
             $content .= '<td rowspan="2"></td>';
             $content .= '<th colspan="4">Freshmen (F)</th>';
             $content .= '<th colspan="4">Continuing (C)</th>';
             $content .= '<th colspan="4">Transfer (T)</th>';
             $content .= '<th colspan="4">Readmit (Z)</th>';
+            $content .= '<th rowspan="2">Other (O)</th>';
+            $content .= '<th rowspan="2">Totals </th>';
             $content .= '</tr><tr>';
             $content .= '<th>FR</th><th>SO</th><th>JR</th><th>SR</th>';
             $content .= '<th>FR</th><th>SO</th><th>JR</th><th>SR</th>';
@@ -310,6 +345,8 @@ class HMS_Reports{
             $content .= '<td>' . $building[$name]['Z']['SO'][MALE]   . '</td>';
             $content .= '<td>' . $building[$name]['Z']['JR'][MALE]   . '</td>';
             $content .= '<td>' . $building[$name]['Z']['SR'][MALE]   . '</td>';
+            $content .= '<td rowspan="2">' . $other . '</td>';
+            $content .= '<td>' . $total_males                        . '</td>';
             $content .= '</tr><tr>';
             $content .= '<th>Female</th>';
             $content .= '<td>' . $building[$name]['F']['FR'][FEMALE]   . '</td>';
@@ -328,6 +365,12 @@ class HMS_Reports{
             $content .= '<td>' . $building[$name]['Z']['SO'][FEMALE]   . '</td>';
             $content .= '<td>' . $building[$name]['Z']['JR'][FEMALE]   . '</td>';
             $content .= '<td>' . $building[$name]['Z']['SR'][FEMALE]   . '</td>';
+            $content .= '<td>' . $total_females                        . '</td>';
+            $content .= '</tr><tr>';
+            $content .= '<th>Total</th>';
+            $content .= '<td colspan="17">  </td>';
+            $content .= '<td>' . ($total_males+$total_females+$other >= 0 ? 
+                                  $total_males+$total_females+$other : '0') . '</td>';
             $content .= '</tr></table><br /><br />';
 
             $total['F']['FR']['M']  += $building[$name]['F']['FR'][MALE];
@@ -346,6 +389,7 @@ class HMS_Reports{
             $total['Z']['SO']['M']  += $building[$name]['Z']['SO'][MALE];
             $total['Z']['JR']['M']  += $building[$name]['Z']['JR'][MALE];
             $total['Z']['SR']['M']  += $building[$name]['Z']['SR'][MALE];
+            $total['MALE']          += $total_males;
             
             $total['F']['FR']['F']  += $building[$name]['F']['FR'][FEMALE];
             $total['F']['SO']['F']  += $building[$name]['F']['SO'][FEMALE];
@@ -363,19 +407,22 @@ class HMS_Reports{
             $total['Z']['SO']['F']  += $building[$name]['Z']['SO'][FEMALE];
             $total['Z']['JR']['F']  += $building[$name]['Z']['JR'][FEMALE];
             $total['Z']['SR']['F']  += $building[$name]['Z']['SR'][FEMALE];
+            $total['FEMALE']        += $total_females;
             
             next($building);
         }
         $content .= '======================================================';
 
         $content .= '<table border="1">';
-        $content .= '<tr><th colspan="17" style="text-align: center"><h2>TOTALS</h2></th></tr>';
+        $content .= '<tr><th colspan="19" style="text-align: center"><h2>TOTALS</h2></th></tr>';
         $content .= '<tr>';
         $content .= '<td rowspan="2"></td>';
         $content .= '<th colspan="4">Freshmen (F)</th>';
         $content .= '<th colspan="4">Continuing (C)</th>';
         $content .= '<th colspan="4">Transfer (T)</th>';
         $content .= '<th colspan="4">Readmit (Z)</th>';
+        $content .= '<th rowspan="2">Other (O)</th>';
+        $content .= '<th rowspan="2">Totals</th>';
         $content .= '</tr><tr>';
         $content .= '<th>FR</th><th>SO</th><th>JR</th><th>SR</th>';
         $content .= '<th>FR</th><th>SO</th><th>JR</th><th>SR</th>';
@@ -399,6 +446,8 @@ class HMS_Reports{
         $content .= '<td>' . $total['Z']['SO']['M']   . '</td>';
         $content .= '<td>' . $total['Z']['JR']['M']   . '</td>';
         $content .= '<td>' . $total['Z']['SR']['M']   . '</td>';
+        $content .= '<td rowspan="2">' . $total_other . '</td>';
+        $content .= '<td>' . $total['MALE']           . '</td>';
         $content .= '</tr><tr>';
         $content .= '<th>Female</th>';
         $content .= '<td>' . $total['F']['FR']['F']   . '</td>';
@@ -417,6 +466,12 @@ class HMS_Reports{
         $content .= '<td>' . $total['Z']['SO']['F']   . '</td>';
         $content .= '<td>' . $total['Z']['JR']['F']   . '</td>';
         $content .= '<td>' . $total['Z']['SR']['F']   . '</td>';
+        $content .= '<td>' . $total['FEMALE']         . '</td>';
+        $content .= '</tr><tr>';
+        $content .= '<th>Total</th>';
+        $content .= '<td colspan="17"></td>';
+        $content .= '<td>'. ($total['MALE']+$total['FEMALE']+$total_other >= 0 ?
+                             $total['MALE']+$total['FEMALE']+$total_other : 0). '</td>';
         $content .= '</tr></table><br /><br />';
         $content .=  "<br /> ";
 
