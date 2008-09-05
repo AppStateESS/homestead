@@ -10,10 +10,13 @@ class HMS_Term{
     var $term;
     var $banner_queue;
     var $new_applications;
+    var $_new;
 
     function HMS_Term($term = NULL)
     {
+        $this->_new = FALSE;
         if(!isset($term)){
+            $this->_new = TRUE;
             return;
         }
 
@@ -49,7 +52,9 @@ class HMS_Term{
     function save()
     {
         $db = &new PHPWS_DB('hms_term');
-        //$db->addWhere('term', $this->get_term());
+        if(!$this->_new) {
+            $db->addWhere('term', $this->get_term());
+        }
         $result = $db->saveObject($this, FALSE, FALSE);
 
         if(PEAR::isError($result)){
