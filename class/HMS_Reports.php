@@ -8,14 +8,15 @@ class HMS_Reports{
     function get_reports()
     {
         $reports = array(
-                        'housing_apps'  => 'Housing Applications Received',
-                        'housing_asss'  => 'Assignment Demographics',
-                        'assigned_f'    => 'Assigned Type F Students',
-                        'special_needs' => 'Special Needs Applicants',
-                        'unassd_apps'   => 'Unassigned Applicants',
-                        'movein_times'  => 'Move-in Times',
-                        'unassd_beds'   => 'Currently Unassigned Beds',
-                        'no_ban_data'  => 'Students Without Banner Data'
+                        'housing_apps'   => 'Housing Applications Received',
+                        'housing_asss'   => 'Assignment Demographics',
+                        'assigned_f'     => 'Assigned Type F Students',
+                        'special_needs'  => 'Special Needs Applicants',
+                        'unassd_apps'    => 'Unassigned Applicants',
+                        'movein_times'   => 'Move-in Times',
+                        'unassd_beds'    => 'Currently Unassigned Beds',
+                        'no_ban_data'    => 'Students Without Banner Data',
+                        'vacancy_report' => 'Hall Occupancy Report'
                         );
 /*                        'housing_asss' => 'Housing Assignments Made',*/
 /*                        'unassd_rooms' => 'Currently Unassigned Rooms',*/
@@ -102,6 +103,9 @@ class HMS_Reports{
                 break;
             case 'no_ban_data':
                 return HMS_Reports::run_no_banner_data_report();
+                break;
+            case 'vacancy_report';
+                return HMS_Reports::run_hall_occupancy_report();
                 break;
             /*
             case 'unassd_rooms':
@@ -686,8 +690,11 @@ class HMS_Reports{
 
     /*
      * TODO: finish this
+     */
     function run_hall_occupancy_report()
     {
+        ini_set("max_execution_time", "10000");
+        ini_set("memory_limit",       "512M");
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
 
@@ -729,6 +736,9 @@ class HMS_Reports{
                     continue;
                 }
 
+                $vacant_beds_by_floor = 0;
+                $total_beds_by_floor  = 0;
+
                 $rooms = $floor->get_rooms();
                 
                 foreach($rooms as $room){
@@ -742,24 +752,28 @@ class HMS_Reports{
                     $beds = $room->get_beds();
 
                     foreach($beds as $bed){
+                        $total_beds_by_floor++;
                         if(!$bed->has_vacancy()){
                             continue;
                         }
-
+                        
+                        /*
                         $content = $bed->bed_letter;
                         if($bed->ra_bed == 1){
                             $content .= ' (RA)';
                         }
                         
                         $content .= ' ' . $bed->get_assigned_to_link();
-
                         $tpl->setCurrentBlock('bed_repeat');
                         $tpl->setData(array('BED_NUM' => $content));
                         $tpl->parseCurrentBlock();
+                        */
                         $vacant_beds++;
                         $vacant_beds_by_hall++;
+                        $vacant_beds_by_floor++;
                     }
-
+                    
+                    /*
                     $content = $room->room_number;
                     if($room->ra_room == 1){
                         $content .= ' (RA)';
@@ -778,7 +792,7 @@ class HMS_Reports{
                     }
                     if($room->gender_type == MALE){
                         $content .= ' (male)';
-                    }else if($room->gender_type == FEAMLE){
+                    }else if($room->gender_type == FEMALE){
                         $content .= ' (female)';
                     }else{
                         $content .= ' (unknown gender)';
@@ -787,10 +801,12 @@ class HMS_Reports{
                     $tpl->setCurrentBlock('room_repeat');
                     $tpl->setData(array('ROOM_NUM' => $content));
                     $tpl->parseCurrentBlock();
+                    */
                 }
 
                 $tpl->setCurrentBlock('floor_repeat');
-                $tpl->setData(array('FLOOR_NUM' => $floor->floor_number));
+                $tpl->setData(array('FLOOR_NUM'  => $floor->floor_number,
+                                    'FLOOR_BEDS' => $vacant_beds_by_floor ."/". $total_beds_by_floor ." beds are Vacant"));
                 $tpl->parseCurrentblock();
             }
             
@@ -803,7 +819,6 @@ class HMS_Reports{
 
         return $tpl->get();
     }
-    */
     
     function run_unassigned_beds_report()
     {
