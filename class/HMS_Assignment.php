@@ -286,7 +286,7 @@ class HMS_Assignment extends HMS_Item
      * Does all the checks necessary to assign a student and makes the assignment
      * The $room_id and $bed_id fields are optional, but one or the other must be specificed
      */
-    function assign_student($username, $term, $room_id = NULL, $bed_id = NULL, $meal_plan)
+    function assign_student($username, $term, $room_id = NULL, $bed_id = NULL, $meal_plan, $notes="")
     {   
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
         PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
@@ -411,7 +411,7 @@ class HMS_Assignment extends HMS_Item
         }
         
         # Log the assignment
-        HMS_Activity_Log::log_activity($_REQUEST['username'], ACTIVITY_ASSIGNED, Current_User::getUsername(), HMS_Term::get_selected_term() . ' ' . $hall->hall_name . ' ' . $room->room_number);
+        HMS_Activity_Log::log_activity($_REQUEST['username'], ACTIVITY_ASSIGNED, Current_User::getUsername(), HMS_Term::get_selected_term() . ' ' . $hall->hall_name . ' ' . $room->room_number . ' ' . $notes);
 
         # Look for roommates and flag their assignments as needing a new letter
         $room_id = $assignment->get_room_id();
@@ -442,7 +442,7 @@ class HMS_Assignment extends HMS_Item
         return E_SUCCESS;
     }
 
-    function unassign_student($username, $term)
+    function unassign_student($username, $term, $notes="")
     {
         if(!Current_User::allow('hms', 'assignment_maintenance')){
             return E_PERMISSION_DENIED;
@@ -494,7 +494,7 @@ class HMS_Assignment extends HMS_Item
         }
 
         # Log in the activity log
-        HMS_Activity_Log::log_activity($username, ACTIVITY_REMOVED, Current_User::getUsername(), $term . ' ' . $banner_building_code . ' ' . $banner_bed_id);
+        HMS_Activity_Log::log_activity($username, ACTIVITY_REMOVED, Current_User::getUsername(), $term . ' ' . $banner_building_code . ' ' . $banner_bed_id . $notes);
         
         # Show a success message
         return E_SUCCESS;
@@ -526,6 +526,9 @@ class HMS_Assignment extends HMS_Item
         if(isset($_REQUEST['username'])){
             $form->setValue('username', $_REQUEST['username']);
         }
+
+        $form->addTextarea('note');
+        $form->setLabel('note', 'Note: ');
 
         $form->addHidden('term', HMS_Term::get_selected_term());
 
@@ -596,11 +599,11 @@ class HMS_Assignment extends HMS_Item
             $tpl['LINK_STYLE'] = '';
         }
 
-        $form->addDropBox('meal_plan', array(BANNER_MEAL_LOW=>'Low',
-                                             BANNER_MEAL_STD=>'Standard',
-                                             BANNER_MEAL_HIGH=>'High',
-                                             BANNER_MEAL_SUPER=>'Super',
-                                             BANNER_MEAL_NONE=>'None'));
+        $form->addDropBox('meal_plan', array(BANNER_MEAL_LOW   => 'Low',
+                                             BANNER_MEAL_STD   => 'Standard',
+                                             BANNER_MEAL_HIGH  => 'High',
+                                             BANNER_MEAL_SUPER => 'Super',
+                                             BANNER_MEAL_NONE  => 'None'));
         $form->setMatch('meal_plan', BANNER_MEAL_STD);
         $form->setLabel('meal_plan', 'Meal plan: ');
 
@@ -776,9 +779,9 @@ class HMS_Assignment extends HMS_Item
 
         # Actually try to make the assignment, decide whether to use the room id or the bed id
         if(isset($_REQUEST['bed']) && $_REQUEST['bed'] != 0){
-            $assign_result = HMS_Assignment::assign_student($_REQUEST['username'], HMS_Term::get_selected_term(), NULL, $_REQUEST['bed'], $_REQUEST['meal_plan']);
+            $assign_result = HMS_Assignment::assign_student($_REQUEST['username'], HMS_Term::get_selected_term(), NULL, $_REQUEST['bed'], $_REQUEST['meal_plan'], $_REQUEST['notes']);
         }else{
-            $assign_result = HMS_Assignment::assign_student($_REQUEST['username'], HMS_Term::get_selected_term(), $_REQUEST['room'], NULL, $_REQUEST['meal_plan']);
+            $assign_result = HMS_Assignment::assign_student($_REQUEST['username'], HMS_Term::get_selected_term(), $_REQUEST['room'], NULL, $_REQUEST['meal_plan'], $_REQUEST['notes']);
         }
             
         if($assign_result == E_SUCCESS){
@@ -807,6 +810,9 @@ class HMS_Assignment extends HMS_Item
         if(isset($_REQUEST['username'])) {
             $form->setValue('username', $_REQUEST['username']);
         }
+        
+        $form->addTextarea('note');
+        $form->setLabel('note', 'Note: ');
 
         $form->addHidden('module', 'hms');
         $form->addHidden('type', 'assignment');
@@ -834,8 +840,9 @@ class HMS_Assignment extends HMS_Item
     function unassign_student_result()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
         
-        $unassign_result = HMS_Assignment::unassign_student($_REQUEST['username'], HMS_Term::get_selected_term());
+        $unassign_result = HMS_Assignment::unassign_student($_REQUEST['username'], HMS_Term::get_selected_term(), $_REQEUST['notes']);
 
         if($unassign_result == E_SUCCESS){
             return HMS_Assignment::show_unassign_student('Successfully un-assigned ' . $_REQUEST['username'] . '.');

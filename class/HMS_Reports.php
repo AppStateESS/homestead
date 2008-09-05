@@ -729,13 +729,6 @@ class HMS_Reports{
                     continue;
                 }
                 
-                if(!$floor->has_vacancy()){
-                    $tpl->setCurrentBlock('floor_repeat');
-                    $tpl->setData(array('FLOOR_NUM' => $floor->floor_number . ' - No vacancy'));
-                    $tpl->parseCurrentBlock();
-                    continue;
-                }
-
                 $vacant_beds_by_floor = 0;
                 $total_beds_by_floor  = 0;
 
@@ -743,9 +736,6 @@ class HMS_Reports{
                 
                 foreach($rooms as $room){
                     if(!$room->has_vacancy()){
-                        //$tpl->setCurrentBlock('room_repeat');
-                        //$tpl->setData(array('ROOM_NUM' => $room->room_number . ' - No vacancy'));
-                        //$tpl->parseCurrentBlock();
                         continue;
                     }
 
@@ -757,56 +747,16 @@ class HMS_Reports{
                             continue;
                         }
                         
-                        /*
-                        $content = $bed->bed_letter;
-                        if($bed->ra_bed == 1){
-                            $content .= ' (RA)';
-                        }
-                        
-                        $content .= ' ' . $bed->get_assigned_to_link();
-                        $tpl->setCurrentBlock('bed_repeat');
-                        $tpl->setData(array('BED_NUM' => $content));
-                        $tpl->parseCurrentBlock();
-                        */
                         $vacant_beds++;
                         $vacant_beds_by_hall++;
                         $vacant_beds_by_floor++;
                     }
-                    
-                    /*
-                    $content = $room->room_number;
-                    if($room->ra_room == 1){
-                        $content .= ' (RA)';
-                    }
-                    if($room->private_room == 1){
-                        $content .= ' (private)';
-                    }
-                    if($room->is_lobby == 1){
-                        $content .= ' (lobby)';
-                    }
-                    if($room->is_medical == 1){
-                        $content .= ' (medical)';
-                    }
-                    if($room->is_reserved == 1){
-                        $content .= ' (reserved)';
-                    }
-                    if($room->gender_type == MALE){
-                        $content .= ' (male)';
-                    }else if($room->gender_type == FEMALE){
-                        $content .= ' (female)';
-                    }else{
-                        $content .= ' (unknown gender)';
-                    }
-                   
-                    $tpl->setCurrentBlock('room_repeat');
-                    $tpl->setData(array('ROOM_NUM' => $content));
-                    $tpl->parseCurrentBlock();
-                    */
                 }
 
+                $content = $vacant_beds_by_floor ."/". $total_beds_by_floor ." beds are vacant.";
                 $tpl->setCurrentBlock('floor_repeat');
                 $tpl->setData(array('FLOOR_NUM'  => $floor->floor_number,
-                                    'FLOOR_BEDS' => $vacant_beds_by_floor ."/". $total_beds_by_floor ." beds are Vacant"));
+                                    'FLOOR_BEDS' => $content));
                 $tpl->parseCurrentblock();
             }
             

@@ -39,6 +39,8 @@
                 <td>{MEAL_PLAN}</td>
             </tr>
         </table>
+        <p>Note: </p>
+        {NOTE}
         <br />
         {SUBMIT}
     </div>

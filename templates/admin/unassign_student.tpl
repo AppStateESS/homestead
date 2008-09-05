@@ -18,6 +18,10 @@
             </tr>
         </table>
         <br />
+        Note: 
+        <br>
+        {NOTE}
+        <br>
         {SUBMIT}
     </div>
   </div>
