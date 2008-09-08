@@ -838,7 +838,8 @@ class HMS_Residence_Hall extends HMS_Item
      */
     function show_edit_residence_hall($hall_id = null, $success = null, $error = null)
     {
-        if( !Current_User::allow('hms', 'hall_attributes') ){
+        if( !Current_User::allow('hms', 'hall_attributes') 
+            && !Current_User::allow('hms', 'hall_view')){
             $tpl = array();
             return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
         }

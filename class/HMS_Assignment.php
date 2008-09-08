@@ -779,9 +779,9 @@ class HMS_Assignment extends HMS_Item
 
         # Actually try to make the assignment, decide whether to use the room id or the bed id
         if(isset($_REQUEST['bed']) && $_REQUEST['bed'] != 0){
-            $assign_result = HMS_Assignment::assign_student($_REQUEST['username'], HMS_Term::get_selected_term(), NULL, $_REQUEST['bed'], $_REQUEST['meal_plan'], $_REQUEST['notes']);
+            $assign_result = HMS_Assignment::assign_student($_REQUEST['username'], HMS_Term::get_selected_term(), NULL, $_REQUEST['bed'], $_REQUEST['meal_plan'], $_REQUEST['note']);
         }else{
-            $assign_result = HMS_Assignment::assign_student($_REQUEST['username'], HMS_Term::get_selected_term(), $_REQUEST['room'], NULL, $_REQUEST['meal_plan'], $_REQUEST['notes']);
+            $assign_result = HMS_Assignment::assign_student($_REQUEST['username'], HMS_Term::get_selected_term(), $_REQUEST['room'], NULL, $_REQUEST['meal_plan'], $_REQUEST['note']);
         }
             
         if($assign_result == E_SUCCESS){
@@ -842,7 +842,7 @@ class HMS_Assignment extends HMS_Item
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
         
-        $unassign_result = HMS_Assignment::unassign_student($_REQUEST['username'], HMS_Term::get_selected_term(), $_REQEUST['notes']);
+        $unassign_result = HMS_Assignment::unassign_student($_REQUEST['username'], HMS_Term::get_selected_term(), $_REQEUST['note']);
 
         if($unassign_result == E_SUCCESS){
             return HMS_Assignment::show_unassign_student('Successfully un-assigned ' . $_REQUEST['username'] . '.');

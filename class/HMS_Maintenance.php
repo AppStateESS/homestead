@@ -256,7 +256,7 @@ class HMS_Maintenance
         if(Current_User::allow('hms', 'hall_structure'))
             $tpl['DELETE_HALL'] = PHPWS_Text::secureLink(_('Delete Residence Hall'), 'hms', array('type'=>'hall', 'op'=>'select_residence_hall_for_delete'));
 
-        if(Current_User::allow('hms', 'hall_attributes'))
+        if(Current_User::allow('hms', 'hall_attributes') || Current_User::allow('hms', 'hall_view'))
             $tpl['EDIT_HALL']   = PHPWS_Text::secureLink(_('Edit Residence Hall'), 'hms', array('type'=>'hall', 'op'=>'select_hall_to_edit'));
 
         # TODO: re-evaluate this permissions
