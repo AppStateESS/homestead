@@ -554,7 +554,9 @@ class HMS_Residence_Hall extends HMS_Item
      */
     function main()
     {
-        if( !Current_User::allow('hms', 'hall_structure') && !Current_User::allow('hms', 'hall_attributes') ){
+        if( !Current_User::allow('hms', 'hall_structure') 
+            && !Current_User::allow('hms', 'hall_attributes') 
+            && !Current_User::allow('hms', 'hall_view')){
             $tpl = array();
             return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
         }
@@ -784,11 +786,6 @@ class HMS_Residence_Hall extends HMS_Item
             exit();
         }
 
-        if( !Current_User::allow('hms', 'hall_attributes') ){
-            $tpl = array();
-            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
-        }
-
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
@@ -942,7 +939,7 @@ class HMS_Residence_Hall extends HMS_Item
      */
     function show_hall_overview($hall_id, $naked = FALSE)
     {
-        if( !Current_User::allow('hms', 'run_hall_overview') ){
+        if( !Current_User::allow('hms', 'run_hall_overview') && !Current_User::allow('hms', 'hall_view') ){
             $tpl = array();
             return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
         }

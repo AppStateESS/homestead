@@ -427,7 +427,9 @@ class HMS_Room extends HMS_Item
 
     function main()
     {
-        if( !Current_User::allow('hms', 'room_structure') && !Current_User::allow('hms', 'room_attributes') ){
+        if( !Current_User::allow('hms', 'room_structure') 
+            && !Current_User::allow('hms', 'room_attributes')
+            && !Current_User::allow('hms', 'room_view') ){
             $tpl = array();
             return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
         }
