@@ -595,7 +595,7 @@ class HMS_Admin
 
                     # Log Successful application update
                     $notes = "Application Updated";
-                    HMS_Activity_Log::log_activity($trim($names[1]), ACTIVITY_APPLICATION_UPDATED, Current_User::getUsername(), $notes);
+                    HMS_Activity_Log::log_activity(trim($names[1]), ACTIVITY_APPLICATION_UPDATED, Current_User::getUsername(), $notes);
                 }
             }
 
@@ -614,7 +614,7 @@ class HMS_Admin
                     $tpl['status'][] = array('USERNAME'=>$names[0], 'MESSAGE' => "$rows_affected assignment records updated.");
                     
                     $notes = "Assignments Updated";
-                    HMS_Activity_Log::log_activity($trim($names[1]), ACTIVITY_ASSIGNMENTS_UPDATED, Current_User::getUsername(), $notes);
+                    HMS_Activity_Log::log_activity(trim($names[1]), ACTIVITY_ASSIGNMENTS_UPDATED, Current_User::getUsername(), $notes);
                 }
             }
 
@@ -633,7 +633,7 @@ class HMS_Admin
                     $tpl['status'][] = array('USERNAME'=>$names[0], 'MESSAGE' => "$rows_affected banner queue records updated.");
                     
                     $notes = "Banner Queue Updated";
-                    HMS_Activity_Log::log_activity($trim($names[1]), ACTIVITY_BANNER_QUEUE_UPDATED, Current_User::getUsername(), $notes);
+                    HMS_Activity_Log::log_activity(trim($names[1]), ACTIVITY_BANNER_QUEUE_UPDATED, Current_User::getUsername(), $notes);
                 }
             }
             
@@ -652,7 +652,7 @@ class HMS_Admin
                     $tpl['status'][] = array('USERNAME'=>$names[0], 'MESSAGE' => "$rows_affected roommate requestor records updated.");
                     
                     $notes = "Roommates Updated";
-                    HMS_Activity_Log::log_activity($trim($names[1]), ACTIVITY_ROOMMATES_UPDATED, Current_User::getUsername(), $notes);
+                    HMS_Activity_Log::log_activity(trim($names[1]), ACTIVITY_ROOMMATES_UPDATED, Current_User::getUsername(), $notes);
                 }
             }
             
@@ -670,7 +670,7 @@ class HMS_Admin
                     $tpl['status'][] = array('USERNAME'=>$names[0], 'MESSAGE' => "$rows_affected roommate requestee records updated.");
 
                     $notes = "Roommate Requests Updated";
-                    HMS_Activity_Log::log_activity($trim($names[1]), ACTIVITY_ROOMMATE_REQUESTS_UPDATED, Current_User::getUsername(), $notes);
+                    HMS_Activity_Log::log_activity(trim($names[1]), ACTIVITY_ROOMMATE_REQUESTS_UPDATED, Current_User::getUsername(), $notes);
                 }
             }
 
@@ -689,7 +689,7 @@ class HMS_Admin
                     $tpl['status'][] = array('USERNAME'=>$names[0], 'MESSAGE' => "$rows_affected RLC records updated.");
                     
                     $notes = "RLCs Updated";
-                    HMS_Activity_Log::log_activity($trim($names[1]), ACTIVITY_RLC_APPLICATION_UPDATED, Current_User::getUsername(), $notes);
+                    HMS_Activity_Log::log_activity(trim($names[1]), ACTIVITY_RLC_APPLICATION_UPDATED, Current_User::getUsername(), $notes);
                 }
             }
         }
