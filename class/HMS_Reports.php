@@ -307,12 +307,9 @@ class HMS_Reports{
             $total_females = 0;
             $other = (isset($building[$name]['other']) ? $building[$name]['other'] : 0);
             foreach($building[$name] as $type){
-                foreach($type as $year => $gender){
-                    if($gender == MALE){
-                        $total_males++;
-                    } elseif($gender == FEMALE){
-                        $total_females++;
-                    }
+                foreach($type as $year){
+                    $total_males   += $year[MALE];
+                    $total_females += $year[FEMALE];
                 }
             }
 
