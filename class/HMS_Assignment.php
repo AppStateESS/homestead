@@ -494,7 +494,7 @@ class HMS_Assignment extends HMS_Item
         }
 
         # Log in the activity log
-        HMS_Activity_Log::log_activity($username, ACTIVITY_REMOVED, Current_User::getUsername(), $term . ' ' . $banner_building_code . ' ' . $banner_bed_id . $notes);
+        HMS_Activity_Log::log_activity($username, ACTIVITY_REMOVED, Current_User::getUsername(), $term . ' ' . $banner_building_code . ' ' . $banner_bed_id . ' ' . $notes);
         
         # Show a success message
         return E_SUCCESS;
@@ -842,7 +842,7 @@ class HMS_Assignment extends HMS_Item
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
         
-        $unassign_result = HMS_Assignment::unassign_student($_REQUEST['username'], HMS_Term::get_selected_term(), $_REQEUST['note']);
+        $unassign_result = HMS_Assignment::unassign_student($_REQUEST['username'], HMS_Term::get_selected_term(), $_REQUEST['note']);
 
         if($unassign_result == E_SUCCESS){
             return HMS_Assignment::show_unassign_student('Successfully un-assigned ' . $_REQUEST['username'] . '.');
