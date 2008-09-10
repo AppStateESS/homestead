@@ -733,6 +733,9 @@ class HMS_Reports{
                 $rooms = $floor->get_rooms();
                 
                 foreach($rooms as $room){
+                    if(!$room->is_online()){
+                        continue;
+                    }
                     $beds = $room->get_beds();
 
                     foreach($beds as $bed){
