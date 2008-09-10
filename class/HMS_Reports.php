@@ -703,6 +703,7 @@ class HMS_Reports{
         }
 
         $total_beds = 0; // accumulator for counting beds
+        $vacant_beds = 0;
 
         foreach($halls as $hall){
             // skip offline halls
@@ -718,6 +719,10 @@ class HMS_Reports{
 
             $floors = $hall->get_floors();
 
+            if($floors == NULL){
+                continue;
+            }
+
             foreach($floors as $floor){
                 // Skip offline floors
                 if($floor->is_online == 0){
@@ -731,12 +736,20 @@ class HMS_Reports{
                 $total_beds_by_floor  = 0;
 
                 $rooms = $floor->get_rooms();
+
+                if($rooms == NULL){
+                    continue;
+                }
                 
                 foreach($rooms as $room){
-                    if(!$room->is_online()){
+                    if(!$room->is_online == 1){
                         continue;
                     }
                     $beds = $room->get_beds();
+
+                    if($beds == NULL){
+                        continue;
+                    }
 
                     foreach($beds as $bed){
                         $beds_by_hall++;
