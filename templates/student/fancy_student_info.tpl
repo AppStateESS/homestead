@@ -81,7 +81,7 @@ $(document).ready(function(){
             <tr>
             <td rowspan="6">
             <div id="student_demographics">
-                <table>
+                <table cellspacing="3" cellpadding="2">
                     <tr>
                         <th>ASU Email Address:</th>
                         <td><a href="mailto:{USERNAME}@appstate.edu">{USERNAME}@appstate.edu</a></td>
@@ -117,48 +117,34 @@ $(document).ready(function(){
                     
                     
                         <td>
-                            <ul>
                             <!-- BEGIN pr_address -->
-                                Permanent address: {PR_ADDRESS_L1}
+                                Permanent address:<br />
+                                {PR_ADDRESS_L1}<br />
                                 
-                                <li>
                                 <!-- BEGIN pr_address_2 -->
-                                {PR_ADDRESS_L2}
+                                {PR_ADDRESS_L2}<br />
                                 <!-- END pr_address_2 -->
-                                </li>
-                                <li>
                                 <!-- BEGIN pr_address_3 -->
-                                {PR_ADDRESS_L3}
+                                {PR_ADDRESS_L3}<br />
                                 <!-- END pr_address_3 -->
-                                </li>
 
-                                <li>
-                                {PR_ADDRESS_CITY}, {PR_ADDRESS_STATE} {PR_ADDRESS_ZIP}
-                                </li>
-
-                                <li>
+                                {PR_ADDRESS_CITY}, {PR_ADDRESS_STATE} {PR_ADDRESS_ZIP}<br />
                             <!-- END pr_address -->
-                            </ul>
-                            <ul>
+                            <!-- BEGIN address_space -->
+                            {ADDRESS_SPACE}<br />
+                            <!-- END  address_space -->
                             <!-- BEGIN ps_address -->
-                                <li>
-                                Student address: {PS_ADDRESS_L1}
-                                </li>
+                                Student address:<br />
+                                {PS_ADDRESS_L1}<br />
 
-                                <li>
                                 <!-- BEGIN ps_address_2 -->
-                                {PS_ADDRESS_L2}
+                                {PS_ADDRESS_L2}<br />
                                 <!-- END ps_address_2 -->
-                                </li>
 
-                                <li>
                                 <!-- BEGIN ps_address_3 -->
-                                {PS_ADDRESS_L3}
+                                {PS_ADDRESS_L3}<br />
                                 <!-- END ps_address_3 -->
-                                </li>
-                                <li>
-                                {PS_ADDRESS_CITY}, {PS_ADDRESS_STATE} {PS_ADDRESS_ZIP}
-                                </li>
+                                {PS_ADDRESS_CITY}, {PS_ADDRESS_STATE} {PS_ADDRESS_ZIP}<br />
                             <!-- END ps_address -->
                             </ul>
                         </td>
