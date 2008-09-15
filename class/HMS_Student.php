@@ -483,9 +483,9 @@ class HMS_Student {
             $tpl['ROOM_ASSIGNMENT'] = "Error: Could not look up the current assignment. Please contact ESS.";
         }
 
-        /********************
-         * Roommate Request *
-         ********************/
+        /******************
+         * Roommate Stuff *
+         ******************/
         if($student_info->student_type == TYPE_FRESHMEN){
             PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
             $roommates = HMS_Roommate::get_all_roommates($_REQUEST['username'], HMS_Term::get_selected_term());
