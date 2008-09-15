@@ -169,6 +169,7 @@ define('ACTIVITY_ROOMMATE_REQUESTS_UPDATED',    38);
 
 // Misc.
 define('ACTIVITY_CHANGE_ACTIVE_TERM',           39);
+define('ACTIVITY_ADD_NOTE',                     40);
 
 /** 
  * Errors 

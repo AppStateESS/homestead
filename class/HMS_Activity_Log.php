@@ -139,7 +139,8 @@ class HMS_Activity_Log{
                         ACTIVITY_ASSIGNMENTS_UPDATED            => "Updated Assignments",
                         ACTIVITY_BANNER_QUEUE_UPDATED           => "Updated Banner Queue",
                         ACTIVITY_ROOMMATES_UPDATED              => "Updated Roommates",
-                        ACTIVITY_ROOMMATE_REQUESTS_UPDATED      => "Updated Roommate Requests");
+                        ACTIVITY_ROOMMATE_REQUESTS_UPDATED      => "Updated Roommate Requests",
+                        ACTIVITY_ADD_NOTE                       => "Note");
     }
 
     /**
@@ -183,9 +184,6 @@ class HMS_Activity_Log{
 
         return $tpl;
     }
-
-    /**
-     *
 
     /******************
     * Mutator Methods *
@@ -238,8 +236,12 @@ class HMS_Activity_Log{
     /**
      * Shows the DBPager for the Activity Log, along with options for limiting what
      * is shown.  If no limits are provided, the log will not be very useful.
+     *
+     * The static variable lets you switch between a static view of the pager
+     * (unsortable with unchangeable limits) that has a link to the main 
+     * activity log, or the regular dynamic log.
      */
-    function showPager($actor, $actee, $notes, $begin, $end, $activities)
+    function showPager($actor, $actee, $notes, $begin, $end, $activities, $limit=10, $static=false)
     {
         PHPWS_Core::initCoreClass('DBPager.php');
 
@@ -278,14 +280,19 @@ class HMS_Activity_Log{
             $pager->db->addWhere('activity', $activities, 'IN');
 
         $pager->setModule('hms');
-        $pager->setTemplate('admin/activity_log_pager.tpl');
         $pager->setLink('index.php?module=hms');
         $pager->setEmptyMessage('No log entries found under the limits provided.');
         $pager->addToggle('class="toggle1"');
         $pager->addToggle('class="toggle2"');
         $pager->addRowTags('getPagerTags');
         $pager->setOrder('timestamp', 'desc', TRUE);
+        $pager->setDefaultLimit($limit);
 
+        if($static){
+            $pager->setTemplate('admin/static_activity_log_pager.tpl');
+        } else {
+            $pager->setTemplate('admin/activity_log_pager.tpl');
+        }
         return $pager->get();
     }
 
