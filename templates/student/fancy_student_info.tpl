@@ -129,11 +129,11 @@ $(document).ready(function(){
                                 <!-- END pr_address_3 -->
 
                                 {PR_ADDRESS_CITY}, {PR_ADDRESS_STATE} {PR_ADDRESS_ZIP}<br />
-                            <!-- END pr_address -->
-                            <!-- BEGIN address_space -->
-                            {ADDRESS_SPACE}<br />
-                            <!-- END  address_space -->
-                            <!-- BEGIN ps_address -->
+                                <!-- END pr_address -->
+                                <!-- BEGIN address_space -->
+                                {ADDRESS_SPACE}<br />
+                                <!-- END  address_space -->
+                                <!-- BEGIN ps_address -->
                                 Student address:<br />
                                 {PS_ADDRESS_L1}<br />
 
@@ -164,7 +164,7 @@ $(document).ready(function(){
                 <table>
                     <tr>
                         <th>Have Application: </th>
-                        <td>{APPLICATION_RECEIVED}  [{APPLICATION}]
+                        <td>{APPLICATION_RECEIVED}  {APPLICATION}
                     </tr>
                     <tr>
                         <th>Assigned:</th>

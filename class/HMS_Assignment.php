@@ -27,6 +27,8 @@ class HMS_Assignment extends HMS_Item
     function HMS_Assignment($id = 0)
     {
         $this->construct($id, 'hms_assignment');
+
+        return $this;
     }
 
     function copy($to_term, $bed_id)

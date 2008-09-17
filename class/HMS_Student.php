@@ -495,10 +495,10 @@ class HMS_Student {
         /******************
          * Roommate Stuff *
          ******************/
-        if($student_info->student_type == TYPE_FRESHMEN){
-            PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
-            $roommates = HMS_Roommate::get_all_roommates($_REQUEST['username'], HMS_Term::get_selected_term());
-            $tpl['ROOMMATE'] = "";
+         PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
+         $roommates = HMS_Roommate::get_all_roommates($_REQUEST['username'], HMS_Term::get_selected_term());
+         $tpl['ROOMMATE'] = "";
+         if($student_info->student_type == TYPE_FRESHMEN){
             if(empty($roommates)) {
                 $tpl['ROOMMATE'] = "This person has no roommates or roommate requests.<br />";
             } else {
@@ -526,16 +526,40 @@ class HMS_Student {
             }
         } else {
             PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
+            PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
             PHPWS_Core::initModClass('hms', 'HMS_Room.php');
-            $assignment = HMS_Assignment::get_assignment($REQUEST['username']);
-            if(!is_null($assignment)){
+            $assignment = HMS_Assignment::get_assignment($_REQUEST['username']);
+            $pending    = HMS_Roommate::get_unconfirmed_roommate($_REQUEST['username']);
+            $confirmed  = HMS_Roommate::get_confirmed_roommate($_REQUEST['username']);
+            
+            if(!empty($assignment)){
                 $room       = new HMS_Room($assignment->get_room_id());
+                $roommies   = $room->get_assignees();
 
-                $roommates  = $room->get_assignees();
-                if(sizeof($roommates > 1)){
-                    foreach($roommates as $roommate){
-                        $tpl['ROOMMATE'] .= $roommate ."\n";
+                if(!empty($confirmed)){
+                    if(sizeof($roommies > 1)){
+                        foreach($roommies as $roommie){
+                            if($roommie->asu_username != $_REQUEST['username']){
+                                if($roommie->asu_username == $confirmed->asu_username){
+                                    $tpl['ROOMMATE'] .= "<a href=index.php?module=hms&type=student&op=get_matching_students&username=$roommie->asu_username&tab=student_info>$roommie->asu_username</a> (Student requested this Roommate)<br>";
+                                } else {
+                                    $tpl['ROOMMATE'] .= "<a href=index.php?module=hms&type=student&op=get_matching_students&username=$roommie->asu_username&tab=student_info>$roommie->asu_username</a> (Student did not request this Roommate)<br>";
+                                }
+                            }
+                        }
                     }
+                } else {
+                    foreach($roommies as $roommie){
+                        if($roommie->asu_username != $_REQUEST['username'])
+                            $tpl['ROOMMATE'] .= "<a href=index.php?module=hms&type=student&op=get_matching_students&username=$roommie->asu_username&tab=student_info>$roommie->asu_username</a> (Student did not request this Roommate)<a href=index.php?module=hms&type=roommate&op=show_confirmed_roommates&search=&pg=1&limit=10&authkey=8673a8f3228ac2f719df6e7d70d11f47&pager_c_search=".$_REQUEST['username'].">Break this roommate group</a><br>";
+                    }
+                }
+
+            } else {
+                if(empty($pending) && empty($confirmed)){
+                    $tpl['ROOMMATE'] .= "None (<a href=index.php?module=hms&type=roommate&op=show_admin_create_roommate_group>Pair this student</a>)";
+                } elseif(!empty($pending)){
+                    $tpl['ROOMMATE'] .= "Pending Requests: ".$pending;
                 }
             }
         }
@@ -565,7 +589,7 @@ class HMS_Student {
         /**********************
          * Application Status *
          **********************/
-        $report_app = '<a href="index.php?module=hms&type=student&op=admin_report_application&username='.$_REQUEST['username'].'&tab=student_info">Report Application Received</a>';
+        $report_app = '[<a href="index.php?module=hms&type=student&op=admin_report_application&username='.$_REQUEST['username'].'&tab=student_info">Report Application Received</a>]';
         if(HMS_Application::check_for_application($_REQUEST['username'], HMS_Term::get_selected_term(), TRUE)) {
             $tpl['APPLICATION'] = '[<a href="index.php?module=hms&type=student&op=get_matching_students&username='.$_REQUEST['username'].'&tab=housing_app">View Application</a>] '.$report_app;
             $app = &new HMS_Application($_REQUEST['username'], HMS_Term::get_selected_term());
