@@ -2,13 +2,13 @@
 
 .flora .ui-dialog,
 .flora.ui-dialog {
-	background-color: #e6f7d4;
+	background-color: #ffffff;
 }
 
 .flora .ui-dialog .ui-dialog-titlebar,
 .flora.ui-dialog .ui-dialog-titlebar {
 	border-bottom: 1px solid #d8d2aa;
-	background: #ff9900 url(i/dialog-title.gif) repeat-x;
+	background: #f4c20a url(i/dialog-title.gif) repeat-x;
 	padding: 0px;
 	height: 28px;
 	_height: 29px;

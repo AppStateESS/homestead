@@ -546,7 +546,7 @@ class HMS_Student {
                     if(sizeof($roommies > 1)){
                         foreach($roommies as $roommie){
                             if($roommie->asu_username != $_REQUEST['username']){
-                                if($student_info->student_type == FRESHMEN 
+                                if($student_info->student_type == TYPE_FRESHMEN 
                                    && $roommie->asu_username == $confirmed->asu_username){
                                     $tpl['ROOMMATE'] .= "<a href=index.php?module=hms&type=student&op=get_matching_students&username=$roommie->asu_username&tab=student_info>$roommie->asu_username</a><br />";
                                     $tpl['REQUESTED_ROOMMATE'] .= "<tr><td></td><td>Student Requested ".$confirmed->asu_username."<a href=index.php?module=hms&type=roommate&op=show_confirmed_roommates&search=&pg=1&limit=10&authkey=8673a8f3228ac2f719df6e7d70d11f47&pager_c_search=".$_REQUEST['username'].">Break this roommate group</a><td></tr>";
