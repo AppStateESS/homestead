@@ -317,6 +317,8 @@ class HMS_Student {
         Layout::addStyle('hms', 'css/autosuggest.css');
         
         $form = &new PHPWS_Form('student_search_form');
+
+        $form->setMethod('get');
         
         $form->addCheckBox('enable_autocomplete');
         $form->setLabel('enable_autocomplete', 'Enable Auto-complete: ');
