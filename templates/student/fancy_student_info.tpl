@@ -1,78 +1,7 @@
-<script type="text/javascript">
-$(document).ready(function(){
-    function hideMe(actor, actee){
-        actee.hide('normal');
-    }
-
-    function showMe(actor, actee){
-        actee.show('normal');
-    }
-
-    function hideOther(){
-        this.actor;
-        this.actee;
-        
-        this.hideMe;
-        this.showMe;
-    }
-
-    function hideOther(actor, actee, hidden){
-        var parent  = this;
-        this.actor  = $("#"+actor);
-        this.actee  = $("#"+actee);
-        this.hideMe = hideMe;
-        this.showMe = showMe;
-        
-        if(hidden == true){
-            this.actee.hide();
-            this.actor.toggle(
-                function(){
-                    parent.showMe(parent.actor, parent.actee);
-                    parent.actor.html("[-]");
-                },
-                function(){
-                    parent.hideMe(parent.actor, parent.actee);
-                    parent.actor.html("[+]");
-                }
-            );
-        } else {
-            this.actor.toggle(
-                function(){
-                    parent.hideMe(parent.actor, parent.actee);
-                    parent.actor.html("[+]");
-                },
-                function(){
-                    parent.showMe(parent.actor, parent.actee);
-                    parent.actor.html("[-]");
-                }
-            );
-        }
-    }
-
-    var demographicsToggle = new hideOther("demographics_toggle", "student_demographics", true);
-    var statusToggle       = new hideOther("status_toggle",       "housing_status",       false);
-    
-    $("#note_dialog").hide();
-    $("#add_note").click(function(){
-        $("#note_dialog").show();
-        $("#note_dialog").dialog(
-        { 
-            modal: true, 
-            width: 350,
-            height: 250,
-            overlay: { 
-                opacity: 0.5, 
-                background: "black" 
-            } 
-        });
-    });
-});
-</script>
-
 <div class="hms">
   <div class="box">
     <div class="box-content">
-        <h1>{FIRST_NAME} {MIDDLE_NAME} {LAST_NAME}, ({BANNER_ID})</h1><h2>Login as this student ( {LOGIN_AS_STUDENT} )</h2>
+        <h1>{FIRST_NAME} {MIDDLE_NAME} {LAST_NAME} -- {BANNER_ID}</h1><h2>Login as this student [ {LOGIN_AS_STUDENT} ]</h2>
         <br>
         <table>
             <tr>
@@ -174,6 +103,7 @@ $(document).ready(function(){
                         <th>Roommate</th>
                         <td>{ROOMMATE}</td>
                     </tr>
+                    {REQUESTED_ROOMMATE}
                     <tr>
                         <th>RLC</td>
                         <td>{RLC_STATUS}</td>
@@ -195,7 +125,7 @@ $(document).ready(function(){
 </div>
 
 <h1>Recent Notes</h1>
-<a id=add_note>Add a note</a>
+[<a id=add_note>Add a note</a>]
 {NOTE_PAGER}
 <h1>Student Log</h1>
 {LOG_PAGER}

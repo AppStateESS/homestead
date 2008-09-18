@@ -495,9 +495,9 @@ class HMS_Student {
         /******************
          * Roommate Stuff *
          ******************/
+/*
          PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
          $roommates = HMS_Roommate::get_all_roommates($_REQUEST['username'], HMS_Term::get_selected_term());
-         $tpl['ROOMMATE'] = "";
          if($student_info->student_type == TYPE_FRESHMEN){
             if(empty($roommates)) {
                 $tpl['ROOMMATE'] = "This person has no roommates or roommate requests.<br />";
@@ -525,12 +525,16 @@ class HMS_Student {
                 }
             }
         } else {
+*/
             PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
             PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
             PHPWS_Core::initModClass('hms', 'HMS_Room.php');
             $assignment = HMS_Assignment::get_assignment($_REQUEST['username']);
             $pending    = HMS_Roommate::get_unconfirmed_roommate($_REQUEST['username']);
             $confirmed  = HMS_Roommate::get_confirmed_roommate($_REQUEST['username']);
+            
+            $tpl['ROOMMATE']           = "";
+            $tpl['REQUESTED_ROOMMATE'] = "";
             
             if(!empty($assignment)){
                 $room       = new HMS_Room($assignment->get_room_id());
@@ -540,10 +544,12 @@ class HMS_Student {
                     if(sizeof($roommies > 1)){
                         foreach($roommies as $roommie){
                             if($roommie->asu_username != $_REQUEST['username']){
-                                if($roommie->asu_username == $confirmed->asu_username){
-                                    $tpl['ROOMMATE'] .= "<a href=index.php?module=hms&type=student&op=get_matching_students&username=$roommie->asu_username&tab=student_info>$roommie->asu_username</a> (Student requested this Roommate)<br>";
+                                if($student_info->student_type == FRESHMEN 
+                                   && $roommie->asu_username == $confirmed->asu_username){
+                                    $tpl['ROOMMATE'] .= "<a href=index.php?module=hms&type=student&op=get_matching_students&username=$roommie->asu_username&tab=student_info>$roommie->asu_username</a><br />";
+                                    $tpl['REQUESTED_ROOMMATE'] .= "<tr><td></td><td>Student Requested ".$confirmed->asu_username."<a href=index.php?module=hms&type=roommate&op=show_confirmed_roommates&search=&pg=1&limit=10&authkey=8673a8f3228ac2f719df6e7d70d11f47&pager_c_search=".$_REQUEST['username'].">Break this roommate group</a><td></tr>";
                                 } else {
-                                    $tpl['ROOMMATE'] .= "<a href=index.php?module=hms&type=student&op=get_matching_students&username=$roommie->asu_username&tab=student_info>$roommie->asu_username</a> (Student did not request this Roommate)<br>";
+                                    $tpl['ROOMMATE'] .= "<a href=index.php?module=hms&type=student&op=get_matching_students&username=$roommie->asu_username&tab=student_info>$roommie->asu_username</a><br />"; 
                                 }
                             }
                         }
@@ -551,18 +557,23 @@ class HMS_Student {
                 } else {
                     foreach($roommies as $roommie){
                         if($roommie->asu_username != $_REQUEST['username'])
-                            $tpl['ROOMMATE'] .= "<a href=index.php?module=hms&type=student&op=get_matching_students&username=$roommie->asu_username&tab=student_info>$roommie->asu_username</a> (Student did not request this Roommate)<a href=index.php?module=hms&type=roommate&op=show_confirmed_roommates&search=&pg=1&limit=10&authkey=8673a8f3228ac2f719df6e7d70d11f47&pager_c_search=".$_REQUEST['username'].">Break this roommate group</a><br>";
+                            $tpl['ROOMMATE'] .= "<a href=index.php?module=hms&type=student&op=get_matching_students&username=$roommie->asu_username&tab=student_info>$roommie->asu_username</a><br />";
                     }
                 }
 
             } else {
                 if(empty($pending) && empty($confirmed)){
-                    $tpl['ROOMMATE'] .= "None (<a href=index.php?module=hms&type=roommate&op=show_admin_create_roommate_group>Pair this student</a>)";
+                    $tpl['ROOMMATE'] .= "None";
+                    if($student_info->student_type == FRESHMEN)
+                        $tpl['REQUESTED_ROOMMATE'] .= "<tr><td>[<a href=index.php?module=hms&type=roommate&op=show_admin_create_roommate_group>Pair this student</a>]</td></tr>";
                 } elseif(!empty($pending)){
                     $tpl['ROOMMATE'] .= "Pending Requests: ".$pending;
                 }
             }
-        }
+            if(sizeof($tpl['REQUESTED_ROOMMATE']) == 0)
+                unset($tpl['REQUESTED_ROOMMATE']);
+
+//        }
 
 
         /**************
@@ -689,6 +700,7 @@ class HMS_Student {
 
         javascript('/jquery/');
         javascript('/modules/hms/jquery_ui/');
+        javascript('/modules/hms/student_info/');
         Layout::addStyle('hms', 'css/jquery/flora/flora.dialog.css');
 
         return $panel->display($content);
