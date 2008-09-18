@@ -519,6 +519,10 @@ class HMS_Room extends HMS_Item
            }
         }
 
+        if($room->get_number_of_assignees() > 0 && $_REQUEST['is_online'] != 1){
+            return HMS_Room::show_edit_room($room->id,NULL, 'Error: Cannot take room offline while students are assigned to the room.  No changes were made.');
+        }
+
        # Grab all the input from the form and save the room
        //Changed from radio buttons to checkboxes, ternary 
        //prevents null since only 1 is defined as a return value

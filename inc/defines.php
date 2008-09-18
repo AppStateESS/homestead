@@ -216,13 +216,14 @@ define('E_ASSIGN_NO_DESTINATION',       25);
 define('E_ASSIGN_BED_NOT_EMPTY',        26);
 define('E_ASSIGN_WITHDRAWN',            27);
 define('E_ASSIGN_NO_DATA',              28);
+define('E_ASSIGN_ROOM_OFFLINE',         29);
 
 /**
  * Un-assignment Errors
  */
-define('E_UNASSIGN_NOT_ASSIGNED',       29);
-define('E_UNASSIGN_ASSIGN_LOAD_FAILED', 30);
-define('E_UNASSIGN_BANNER_ERROR',       31);
-define('E_UNASSIGN_HMS_DB_ERROR',       32);
+define('E_UNASSIGN_NOT_ASSIGNED',       30);
+define('E_UNASSIGN_ASSIGN_LOAD_FAILED', 31);
+define('E_UNASSIGN_BANNER_ERROR',       32);
+define('E_UNASSIGN_HMS_DB_ERROR',       33);
 
 ?>

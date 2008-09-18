@@ -337,6 +337,11 @@ class HMS_Assignment extends HMS_Item
             if(!$room->has_vacancy()){
                 return E_ASSIGN_ROOM_FULL;
             }
+
+            # Make sure the room is not offline
+            if(!$room->is_online){
+                return E_ASSIGN_ROOM_OFFLINE;
+            }
             
             # And find a vacant bed in that room
             $beds = $room->get_beds_with_vacancies();
@@ -982,6 +987,9 @@ class HMS_Assignment extends HMS_Item
                 break;
             case E_ASSIGN_NO_DATA:
                 $error_msg .= 'No data is available for that student. Check the user name and try again.';
+                break;
+            case E_ASSIGN_ROOM_OFFLINE:
+                $error_msg .= 'Selected Room is offline.';
                 break;
             case E_ASSIGN_NO_DESTINATION:
                 $error_msg .= 'No destination was specified.';
