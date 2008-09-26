@@ -25,7 +25,4 @@
 <!-- END notes -->
 <!-- END listrows -->
 </table>
-<div class="align-center">
-[<a href="index.php?module=hms&type=activity_log&op=view">View More</a>]
-</div>
 <!-- END table -->
