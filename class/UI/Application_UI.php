@@ -236,7 +236,9 @@ class Application_UI{
         }
         $tpl['SPECIAL_NEEDS_RESULT'] = $special_needs;
 
-        $tpl['RLC_INTEREST_1'] = $_REQUEST['rlc_interest'] == 0?'No':'Yes';
+        if(HMS_Entry_Term::get_entry_semester($_SESSION['asu_username']) == FALL){
+            $tpl['RLC_INTEREST_1'] = $_REQUEST['rlc_interest'] == 0?'No':'Yes';
+        }
 
         $form = &new PHPWS_Form('hidden_form');
         

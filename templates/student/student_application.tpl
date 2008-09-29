@@ -79,10 +79,10 @@
                 <td>{SPECIAL_NEEDS_RESULT}</td>
                 <!-- END special_needs_result -->
             </tr>
+            <!-- BEGIN rlc_interest_1 -->
             <tr>
                 <th colspan="2">Unique Housing Options</th>
             </tr>
-            <!-- BEGIN rlc_interest_1 -->
             <tr>
                 <td>Are you interested in a <a href="http://housing.appstate.edu/index.php?module=pagemaster&PAGE_user_op=view_page&PAGE_id=134" target="_blank">unique housing option</a>?</td>
                 <td align="left">{RLC_INTEREST_1} {RLC_INTEREST_1_LABEL}&nbsp;{RLC_INTEREST_2} {RLC_INTEREST_2_LABEL}</td>
