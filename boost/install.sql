@@ -71,7 +71,7 @@ CREATE TABLE hms_suite (
     updated_on  integer,
     updated_by  smallint,
     added_on    integer,
-    added_by    smallint,
+    added_by    smallint NOT NULL DEFAULT 0,
     primary key(id)
 );
 
