@@ -1,33 +1,17 @@
-<!-- BEGIN table -->
-<table cellpadding="4" cellspacing="1" width="99%">
-    <tr>
-        <th>User {USER_ID_SORT}</th>
-        <th>Activity</th>
-        <th>Time {TIMESTAMP_SORT}</th>
-    </tr>
-<!-- BEGIN empty_table -->
-    <tr>
-        <td colspan="5">
-            <p>{EMPTY_MESSAGE}</p>
-        </td>
-    </tr>
-<!-- END empty_table -->
 <!-- BEGIN listrows -->
-    <tr {TOGGLE}>
-        <td>{ACTEE} <!-- BEGIN by -->(<strong>By:</strong> {ACTOR})<!-- END by --></td>
-        <td style="font-weight: bold;">{ACTIVITY}</td>
-        <td>{DATE} at {TIME}</td>
-    </tr>
-<!-- BEGIN notes -->
-    <tr {TOGGLE}>
-        <td colspan="3"><strong>Notes:</strong> {NOTES}</td>
-    </tr>
-<!-- END notes -->
+<div style="margin-bottom: 1em; border: solid 1px #ccc;">
+<div style="color: #333; font-size: 80%; background: #ccc; padding: .25em;">
+<strong>{ACTIVITY}</strong> - <strong>{ACTEE}</strong><br />
+<!-- BEGIN ACTOR -->By: {ACTOR} <!-- END ACTOR -->On: {DATE} at {TIME}
+</div>
+<div style="margin: .25em;">
+{NOTES}
+</div>
+</div>
 <!-- END listrows -->
-</table>
+
 <div class="align-center">
     {TOTAL_ROWS}<br />
     {PAGE_LABEL} {PAGES}<br />
     {LIMIT_LABEL} {LIMITS}
 </div>
-<!-- END table -->
