@@ -22,6 +22,19 @@
         {START_FORM}
         <table>
             <tr>
+                <th colspan="2">Application Term(s)</th>
+            </tr>
+            <tr>
+                <td><font color=red>{TERM_MSG}</font></td>
+                <td></td>
+            </tr>
+            <!-- BEGIN terms_repeat -->
+            <tr>
+                <td>{TERMS_LABEL}</td>
+                <td>{TERMS}</td>
+            </tr>
+            <!-- END terms_repeat -->
+            <tr>
                 <th colspan="2">Demographic Information</th>
             <tr>
                 <td>Name: </td><td align="left">{STUDENT_NAME}</td>

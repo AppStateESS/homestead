@@ -101,8 +101,8 @@ class HMS_Student {
                 break;
             case 'show_terms_and_agreement':
                 PHPWS_Core::initModClass('hms', 'UI/Student_UI.php');
-               return HMS_Student_UI::show_terms_and_agreement();
-               break;
+                return HMS_Student_UI::show_terms_and_agreement();
+                break;
             case 'begin_application':
                 # Check to see if the user hit 'do not agree' on the terms/agreement page
                 if(isset($_REQUEST['quit'])) {

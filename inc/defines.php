@@ -48,7 +48,7 @@ define('FALL',      'Fall');
 /**
  * Student Classes
  */
-define('CLASS_FRESHMEN',     'FR');
+define('CLASS_FRESHMEN',    'FR');
 define('CLASS_SOPHOMORE',   'SO');
 define('CLASS_JUNIOR',      'JR');
 define('CLASS_SENIOR',      'SR');

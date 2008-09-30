@@ -25,6 +25,101 @@ class Application_UI{
             $form->addHidden('agreed_to_terms', 0);
         }
 
+        /*************
+         * Term Info *
+         *************/
+        $db = &new PHPWS_DB('hms_term');
+        $db->addWhere('new_applications', 1);
+        $db->addWhere('term',             $_SESSION['application_term'], '>=');
+        $db->addColumn('term');
+
+        $result = $db->select();
+        if(PHPWS_Error::logIfError($result)){
+            return false;
+        }
+
+        $terms        = array();
+        $term_labels  = array();
+        $term_matches = array();
+        $disabled     = array();
+        //TODO: Only show a message if their application term is different than their entry term
+        $message      = "We show your entry term as ";
+        $done         = false;
+
+        foreach($result as $term){
+            if($done)  //break out of the foreach early if they are 
+                break; //are applying for spring or fall housing
+
+            //if this is the users entry term select it by default
+            $default = false;
+            if($term == $_SESSION['application_term']){
+                $default = true;
+            }
+
+            $term = $term['term'];
+            if(strlen(''.$term) == 6){
+                $year = substr(''.$term, 0, 4);
+
+                //switch on the last two digits of the term
+                switch(substr(''.$term, 4, 2)){ 
+                    case TERM_SPRING:
+                        $terms[] = $term;
+                        $term_labels[] = 'Spring '.$year;
+                        if($default){
+                            $term_matches['spring'] = $term;
+                            $disabled[] = $term;
+                            $form->addHidden('spring', $term);
+
+                            $message .= "Spring ".$year.", if this is incorrect please click ".$link." to have your entry term corrected.  Do not complete an application until your entry term is correct.";
+                        }
+                        $done = true;
+                        break;
+                    case TERM_SUMMER1:
+                        $terms[] = $term;
+                        $term_labels[] = 'Summer Session 1 '.$year;
+                        if($default){
+                            $term_matches['summer1'] = $term;
+                            $disabled[] = $term;
+                            $form->addHidden('summer1', $term);
+
+                            $message .= "Summer Session 1 ".$year.", if this is incorrect please click ".$link." to have your entry term corrected.  If you are also applying for Summer Session 2 then please check the checkbox next to Summer Session 2 and proceed with your application.  If you are applying for summer housing you must also apply for fall housing.  Do not complete an application until your entry term is correct.";
+                        }
+                        break;
+                    case TERM_SUMMER2:
+                        $terms[] = $term;
+                        $term_labels[] = 'Summer Session 2 '.$year;
+                        if($default){
+                            $term_matches['summer2'] = $term;
+                            $disabled[] = $term;
+                            $form->addHidden('summer2', $term);
+
+                            $message .= "Summer Session 2 ".$year.", if this is incorrect please click ".$link." to have your entry term corrected.  If you are applying for summer housing you must also apply for fall housing.  Do not complete an application until your entry term is correct.";
+                        }
+                        break;
+                    case TERM_FALL:
+                        $terms[] = $term;
+                        $term_labels[] = 'Fall '.$year;
+                        $term_matches['fall'] = $term;
+                        $form->addHidden('fall', $term);
+                        $disabled[] = $term;
+                        $done = true;
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        $form->addCheck('terms', $terms);
+        $form->setLabel('terms', $term_labels);
+        $form->setMatch('terms', $term_matches);
+        $form->useRowRepeat();
+
+        foreach($disabled as $index){
+            $form->_elements['terms'][$index]->disabled = true;
+        }
+
+        $tpl['TERM_MSG'] = $message;
+
         /****************
          * Display Info *
          ****************/
@@ -217,6 +312,50 @@ class Application_UI{
         $tpl['PREFERRED_BEDTIME']   = $_REQUEST['preferred_bedtime'] == 1?'Early':'Late';
         $tpl['ROOM_CONDITION']      = $_REQUEST['room_condition'] == 1?'Clean':'Dirty';
         
+        //Term information
+        $values = array();
+        if(isset($_REQUEST['terms'])){
+            foreach($_REQUEST['terms'] as $key => $value){
+                $values[] = $value;
+            }
+        }
+
+        if(isset($_REQUEST['spring'])){
+            $values[] = $_REQUEST['spring'];
+        } 
+        if(isset($_REQUEST['summer1'])){
+            $values[] = $_REQUEST['summer1'];
+        } 
+        if(isset($_REQUEST['summer2'])){
+            $values[] = $_REQUEST['summer2'];
+        } 
+        if(isset($_REQUEST['fall'])){
+            $values[] = $_REQUEST['fall'];
+        }
+
+        if(sizeof($values) > 0){
+            sort($values);
+            foreach($values as $term){
+                $term = substr(''.$term, 4, 2);
+                if($term == TERM_SPRING){
+                    $tpl['terms_repeat'][] = array('TERMS_LABEL' => 'Spring',
+                                                   'TERMS'       => 'Selected');
+                }
+                if($term == TERM_SUMMER1){
+                    $tpl['terms_repeat'][] = array('TERMS_LABEL' => 'Summer Session 1',
+                                                   'TERMS'       => 'Selected');
+                }
+                if($term == TERM_SUMMER2){
+                    $tpl['terms_repeat'][] = array('TERMS_LABEL' => 'Summer Session 2',
+                                                   'TERMS'       => 'Selected');
+                }
+                if($term == TERM_FALL){
+                    $tpl['terms_repeat'][] = array('TERMS_LABEL' => 'Fall',
+                                                   'TERMS'       => 'Selected');
+                }
+            }
+        }
+
         $special_needs = "";
         if(isset($_REQUEST['special_needs']['physical_disability'])){
             $special_needs = 'Physical disability<br />';
@@ -251,6 +390,7 @@ class Application_UI{
         $form->addHidden('rlc_interest',$_REQUEST['rlc_interest']);
         $form->addHidden('special_need',$_REQUEST['special_need']); // pass it on, just in case the user needs to redo their application
         $form->addHidden('special_needs',$_REQUEST['special_needs']);
+        $form->addHidden('terms',$values); //list of terms the user is attempting to apply for
 
         $form->addHidden('module', 'hms');
         $form->addHidden('type', 'student');
@@ -270,84 +410,110 @@ class Application_UI{
     {
         PHPWS_Core::initModClass('hms', 'HMS_Application.php');
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+        //TODO: this stuff foreach term, and let the user know which terms
+        //      succeeded.
+        $db = &new PHPWS_DB('hms_term');
+        $db->addWhere('new_applications', 1);
+        $db->addWhere('term',             $_SESSION['application_term'], '>=');
+        $db->addColumn('term');
 
-        # Create a new application from the request data and save it
-        $application = &new HMS_Application($_SESSION['asu_username'], $_SESSION['application_term']);
-        
-        $application->term                  = $_SESSION['application_term'];
-        $application->meal_option           = $_REQUEST['meal_option'];
-        $application->lifestyle_option      = $_REQUEST['lifestyle_option'];
-        $application->preferred_bedtime     = $_REQUEST['preferred_bedtime'];
-        $application->room_condition        = $_REQUEST['room_condition'];
-        $application->rlc_interest          = $_REQUEST['rlc_interest'];
-        $application->agreed_to_terms       = $_REQUEST['agreed_to_terms'];
-
-        if(isset($_REQUEST['special_needs']['physical_disability'])){
-            $application->physical_disability = 1;
+        $result = $db->select();
+        if(PHPWS_Error::logIfError($result)){
+            return false;
         }
 
-        if(isset($_REQUEST['special_needs']['psych_disability'])){
-            $application->psych_disability = 1;
+        $valid_terms = array();
+        foreach($_REQUEST['terms'] as $term){
+            $valid = false;
+
+            foreach($result as $value){
+                if($term == $value['term']){
+                    $valid = true;
+                }
+            }
+            if($valid){
+                $valid_terms[] = $term;
+            }
         }
 
-        if(isset($_REQUEST['special_needs']['medical_need'])){
-            $application->medical_need = 1;
-        }
-
-        if(isset($_REQUEST['special_needs']['gender_need'])){
-            $application->gender_need = 1;
-        }
-
-        $application->gender                = HMS_SOAP::get_gender($application->asu_username, TRUE);
-        
-        $type   = HMS_SOAP::get_student_type($application->asu_username, $application->term);
-        $class  = HMS_SOAP::get_student_class($application->asu_username, $application->term);
-
-        #TODO: Get rid of these aweful magic numbers
-        switch($type){
-            case TYPE_FRESHMEN:
-                $application->student_status = 1;
-                break;
-            case TYPE_TRANSFER:
-                $application->student_status = 2;
-                break;
-        }
-
-        switch($class){
-            case CLASS_FRESHMEN:
-                $application->term_classification = 1;
-                break;
-            case CLASS_SOPHOMORE:
-                $application->term_classification = 2;
-                break;
-            case CLASS_JUNIOR:
-                $application->term_classification = 3;
-                break;
-            case CLASS_SENIOR:
-                $application->term_classification = 4;
-                break;
-        }
-
-        $application->aggregate = $application->calculateAggregate();
-        
-        $result = $application->save();
-
-        $tpl = array();
-        
-        if($result == TRUE){
-            # Log the fact that the application was submitted
-            PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-            HMS_Activity_Log::log_activity($_SESSION['asu_username'], ACTIVITY_SUBMITTED_APPLICATION, $_SESSION['asu_username']);
+        foreach($valid_terms as $key => $term){
+            # Create a new application from the request data and save it
+            $application = &new HMS_Application($_SESSION['asu_username'], $term);
             
-            # report the application to banner;
-            $application->report_to_banner();
-        }else{
-            # Show an error
-            $tpl['TITLE'] = 'Error';
-            $tpl['MESSAGE'] = 'There was an error saving your application. Please try again.';
-            return PHPWS_Template::process($tpl,'hms', 'student/student_success_failure_message.tpl');
-        }
+            $application->term                  = $term;
+            $application->meal_option           = $_REQUEST['meal_option'];
+            $application->lifestyle_option      = $_REQUEST['lifestyle_option'];
+            $application->preferred_bedtime     = $_REQUEST['preferred_bedtime'];
+            $application->room_condition        = $_REQUEST['room_condition'];
+            $application->rlc_interest          = $_REQUEST['rlc_interest'];
+            $application->agreed_to_terms       = $_REQUEST['agreed_to_terms'];
 
+            if(isset($_REQUEST['special_needs']['physical_disability'])){
+                $application->physical_disability = 1;
+            }
+
+            if(isset($_REQUEST['special_needs']['psych_disability'])){
+                $application->psych_disability = 1;
+            }
+
+            if(isset($_REQUEST['special_needs']['medical_need'])){
+                $application->medical_need = 1;
+            }
+
+            if(isset($_REQUEST['special_needs']['gender_need'])){
+                $application->gender_need = 1;
+            }
+
+            $application->gender                = HMS_SOAP::get_gender($application->asu_username, TRUE);
+            
+            $type   = HMS_SOAP::get_student_type($application->asu_username, $application->term);
+            $class  = HMS_SOAP::get_student_class($application->asu_username, $application->term);
+
+            #TODO: Get rid of these aweful magic numbers
+            switch($type){
+                case TYPE_FRESHMEN:
+                    $application->student_status = 1;
+                    break;
+                case TYPE_TRANSFER:
+                    $application->student_status = 2;
+                    break;
+            }
+
+            switch($class){
+                case CLASS_FRESHMEN:
+                    $application->term_classification = 1;
+                    break;
+                case CLASS_SOPHOMORE:
+                    $application->term_classification = 2;
+                    break;
+                case CLASS_JUNIOR:
+                    $application->term_classification = 3;
+                    break;
+                case CLASS_SENIOR:
+                    $application->term_classification = 4;
+                    break;
+            }
+
+            $application->aggregate = $application->calculateAggregate();
+            
+            $result = $application->save();
+
+            $tpl = array();
+            
+            if($result == TRUE){
+                # Log the fact that the application was submitted
+                PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
+                HMS_Activity_Log::log_activity($_SESSION['asu_username'], ACTIVITY_SUBMITTED_APPLICATION, $_SESSION['asu_username']);
+                
+                # report the application to banner;
+                $application->report_to_banner();
+            }else{
+                # Show an error
+                $tpl['TITLE'] = 'Error';
+                $tpl['MESSAGE'] = 'There was an error saving your application. Please contact housing.';
+                return PHPWS_Template::process($tpl,'hms', 'student/student_success_failure_message.tpl');
+            }
+        }
         if($_REQUEST['rlc_interest'] == 1){
             # Show the RLC application
             PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
