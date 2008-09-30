@@ -181,7 +181,7 @@ class HMS_Term{
     {
         
         $db = &new PHPWS_DB('hms_term');
-        $db->addOrder('DESC');
+        $db->addOrder('term DESC');
         $results = $db->select();
 
         if(PEAR::isError($results)){
