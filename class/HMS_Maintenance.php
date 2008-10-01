@@ -130,6 +130,9 @@ class HMS_Maintenance
         if(Current_User::allow('hms', 'select_term') || Current_User::allow('hms', 'edit_terms'))
             $tpl['EDIT_TERM']   = PHPWS_Text::secureLink(_('Edit Terms'), 'hms', array('type'=>'term', 'op'=>'show_edit_terms'));
 
+        if(Current_User::allow('hms', 'edit_terms'))
+            $tpl['ASSOCIATE_TERM']   = PHPWS_Text::secureLink(_('Set Simultaneous Entry Terms'), 'hms', array('type'=>'term', 'op'=>'show_term_association'));
+
         /***********************
          * Student Maintenance *
          ***********************/

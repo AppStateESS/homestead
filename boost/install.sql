@@ -5,6 +5,13 @@ CREATE TABLE hms_term (
     primary key(term)
 );
 
+CREATE TABLE hms_term_applications (
+    app_term integer NOT NULL REFERENCES hms_term(term),
+    term     integer NOT NULL REFERENCES hms_term(term),
+    required integer NOT NULL default 0
+);
+ALTER TABLE hms_term_applications ADD CONSTRAINT unique_term_pairing UNIQUE (app_term, term);
+
 CREATE TABLE hms_pricing_tiers (
     id          integer NOT NULL,
     tier_value  numeric NOT NULL,

@@ -110,6 +110,9 @@ class HMS_Term{
             case 'term_delete':
                 return HMS_Term::term_delete();
                 break;
+            case 'show_term_association':
+                return HMS_Term::show_term_association();
+                break;
             default:
                 return "Undefined term op";
                 break;
@@ -414,6 +417,11 @@ class HMS_Term{
             return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
         }
 
+        /*
+         * When term deletion is implemented make sure to delete all references
+         * to that term in the valid application dates table.
+         */
+
         return HMS_Term::show_edit_terms(NULL, 'Sorry, term deletion is not yet implemented.');
     }
 
@@ -479,6 +487,42 @@ class HMS_Term{
         }       
         
         return PHPWS_Template::process($tpl, 'hms', 'admin/edit_terms.tpl');
+    }
+
+    function show_term_association($success = NULL, $error = NULL)
+    {
+        if(isset($_REQUEST['term1']) && isset($_REQUEST['term2']) 
+           && is_numeric($_REQUEST['term1']) && is_numeric($_REQUEST['term2']))
+        {
+            if(!HMS_Term::set_valid_term($_REQUEST['term1'], $_REQUEST['term2'],
+               (isset($_REQUEST['required']) ? 1 : 0)))
+            {
+                $error .= "<font color=red>Error associating terms.</font>";
+            } else {
+                $message .= "<font color=green>Terms Associated.</font>";
+            }
+        }
+
+        $tpl = array();
+        if(!is_null($message)){
+            $tpl['MESSAGE'] = $message;
+        } elseif(!is_null($error)){
+            $tpl['ERROR'] = $error;
+        }
+
+        $terms = HMS_Term::get_available_terms_list();
+        $form = &new PHPWS_Form('associate_terms');
+        $form->addSelect('term1', $terms);
+        $form->addSelect('term2', $terms);
+        $form->addCheck('required', 'yes');
+        $form->addSubmit('submit', 'Make Association');
+
+        $form->addHidden('type', 'term');
+        $form->addHidden('op', 'show_term_association');
+
+        $form->mergeTemplate($tpl);
+
+        return PHPWS_Template::process($form->getTemplate(), 'hms', 'admin/set_application_terms.tpl');
     }
 
     /**************************
@@ -584,6 +628,47 @@ class HMS_Term{
         }else{
             return "$year" . ($sem + 10);
         }
+    }
+
+    /**
+      * Returns a list application terms that can be applied for at the same
+      * time as the parameter $term, and whether or not that term is required.
+      *
+      * @param integer Term to check
+      * @return array $arr[$index] = array(0 => $valid_term, 1 => $required);
+      */
+    function get_valid_application_terms($term){
+        //the parameter is implicitly a valid and required term
+        $return[$term] = array(0 => $term, 1 => 1);
+
+        $db = &new PHPWS_DB('hms_term_applications');
+        $db->addWhere('app_term', $term);
+        $result = $db->select();
+
+        test($result,1);
+    }
+
+    /**
+      * Create a valid term association.
+      *
+      * @param integer $key
+      * @param integer $value
+      * @param bool    $required
+      *
+      * @return bool   $success
+      */
+    function set_valid_term($key, $value, $required){
+        $db = &new PHPWS_DB('hms_term_applications');
+        $db->addValue('app_term', $key);
+        $db->addValue('term', $value);
+        $db->addValue('required', $required);
+        $result = $db->insert();
+
+        if(PHPWS_Error::logIfError($result)){
+            return false;
+        } 
+        
+        return true;
     }
 
     /******************************

@@ -110,6 +110,7 @@
             <dt>Term Maintenance</dt>
             <dd>{CREATE_TERM}</dd>
             <dd>{EDIT_TERM}</dd>
+            <dd>{ASSOCIATE_TERM}</dd>
             <!-- END term -->
         </dl>
         <!-- END right -->
