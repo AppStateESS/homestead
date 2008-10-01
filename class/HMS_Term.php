@@ -638,14 +638,15 @@ class HMS_Term{
       * @return array $arr[$index] = array(0 => $valid_term, 1 => $required);
       */
     function get_valid_application_terms($term){
-        //the parameter is implicitly a valid and required term
-        $return[$term] = array(0 => $term, 1 => 1);
-
         $db = &new PHPWS_DB('hms_term_applications');
         $db->addWhere('app_term', $term);
         $result = $db->select();
 
-        test($result,1);
+        if(PHPWS_Error::logIfError($result)){
+            return false;
+        }
+
+        return $result;
     }
 
     /**
@@ -668,6 +669,27 @@ class HMS_Term{
             return false;
         } 
         
+        return true;
+    }
+
+    /*
+     * Check a term association.
+     *
+     * @param integer $key
+     * @param integer $value
+     *
+     * @return bool   $success
+     */
+    function is_valid_term($key){
+        $db = &new PHPWS_DB('hms_term_applications');
+        $db->addwhere('app_term', $key);
+        $db->addWhere('term', $key, 'or');
+        $result = $db->select();
+
+        if(PHPWS_Error::logIfError($result) || sizeof($result) == 0){
+            return false;
+        }
+
         return true;
     }
 

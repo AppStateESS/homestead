@@ -28,97 +28,42 @@ class Application_UI{
         /*************
          * Term Info *
          *************/
-        $db = &new PHPWS_DB('hms_term');
-        $db->addWhere('new_applications', 1);
-        $db->addWhere('term',             $_SESSION['application_term'], '>=');
-        $db->addColumn('term');
-
-        $result = $db->select();
-        if(PHPWS_Error::logIfError($result)){
-            return false;
-        }
-
-        $terms        = array();
+        $terms        = HMS_Term::get_valid_application_terms($_SESSION['application_term']);
+        $term_values  = array();
         $term_labels  = array();
         $term_matches = array();
-        $disabled     = array();
-        //TODO: Only show a message if their application term is different than their entry term
-        $message      = "We show your entry term as ";
-        $done         = false;
-
-        foreach($result as $term){
-            if($done)  //break out of the foreach early if they are 
-                break; //are applying for spring or fall housing
-
-            //if this is the users entry term select it by default
-            $default = false;
-            if($term == $_SESSION['application_term']){
-                $default = true;
+        foreach($terms as $term){
+            $label = HMS_Term::term_to_text($term['term']);
+            $term_values[]  = $term['term'];
+            $term_labels[]  = $label['term'] . ' ' . $label['year'];
+            if((int)$term['required'] == 1){
+                $term_matches[] = $term['term'];
             }
+        }
+        $i = 0;
+        foreach($term_values as $term){
+            $form->addCheck('terms_'.$i, $term);
+            $i++;
+        }
 
-            $term = $term['term'];
-            if(strlen(''.$term) == 6){
-                $year = substr(''.$term, 0, 4);
-
-                //switch on the last two digits of the term
-                switch(substr(''.$term, 4, 2)){ 
-                    case TERM_SPRING:
-                        $terms[] = $term;
-                        $term_labels[] = 'Spring '.$year;
-                        if($default){
-                            $term_matches['spring'] = $term;
-                            $disabled[] = $term;
-                            $form->addHidden('spring', $term);
-
-                            $message .= "Spring ".$year.", if this is incorrect please click ".$link." to have your entry term corrected.  Do not complete an application until your entry term is correct.";
-                        }
-                        $done = true;
-                        break;
-                    case TERM_SUMMER1:
-                        $terms[] = $term;
-                        $term_labels[] = 'Summer Session 1 '.$year;
-                        if($default){
-                            $term_matches['summer1'] = $term;
-                            $disabled[] = $term;
-                            $form->addHidden('summer1', $term);
-
-                            $message .= "Summer Session 1 ".$year.", if this is incorrect please click ".$link." to have your entry term corrected.  If you are also applying for Summer Session 2 then please check the checkbox next to Summer Session 2 and proceed with your application.  If you are applying for summer housing you must also apply for fall housing.  Do not complete an application until your entry term is correct.";
-                        }
-                        break;
-                    case TERM_SUMMER2:
-                        $terms[] = $term;
-                        $term_labels[] = 'Summer Session 2 '.$year;
-                        if($default){
-                            $term_matches['summer2'] = $term;
-                            $disabled[] = $term;
-                            $form->addHidden('summer2', $term);
-
-                            $message .= "Summer Session 2 ".$year.", if this is incorrect please click ".$link." to have your entry term corrected.  If you are applying for summer housing you must also apply for fall housing.  Do not complete an application until your entry term is correct.";
-                        }
-                        break;
-                    case TERM_FALL:
-                        $terms[] = $term;
-                        $term_labels[] = 'Fall '.$year;
-                        $term_matches['fall'] = $term;
-                        $form->addHidden('fall', $term);
-                        $disabled[] = $term;
-                        $done = true;
-                        break;
-                    default:
-                        break;
+        $i = 0;
+        foreach($term_labels as $term){
+            $form->setLabel('terms_'.$i, $term);
+            $i++;
+        }
+        
+        /* If this term cannot be deselected then disable it in the form */
+        foreach($term_values as $key => $value){
+            foreach($term_matches as $term){
+                if($value == $term){
+                    $form->setMatch('terms_'.$key, $term);
+                    $form->setDisabled('terms_'.$key);
+                    $form->addHidden('required_terms_'.$key, $term);
                 }
             }
         }
-        $form->addCheck('terms', $terms);
-        $form->setLabel('terms', $term_labels);
-        $form->setMatch('terms', $term_matches);
-        $form->useRowRepeat();
 
-        foreach($disabled as $index){
-            $form->_elements['terms'][$index]->disabled = true;
-        }
-
-        $tpl['TERM_MSG'] = $message;
+        $tpl['TERM_MSG'] = "Please check to make sure that your application terms are correct.  Do not fill out an application until your entry term (the first term on the list) is correct.";
 
         /****************
          * Display Info *
@@ -275,6 +220,16 @@ class Application_UI{
         $form->addHidden('room_condition',$_REQUEST['room_condition']);
         $form->addHidden('rlc_interest',$_REQUEST['rlc_interest']);
         $form->addHidden('special_need',$_REQUEST['special_need']); // pass it on, just in case the user needs to redo their application
+        
+        for($i = 0; $i < 4; $i++){
+            if(isset($_REQUEST['terms_'.$i]) || isset($_REQUEST['required_terms_'.$i])){
+                if(isset($_REQUEST['required_terms_'.$i])){
+                    $form->addHidden('terms_'.$i, $_REQUEST['required_terms_'.$i]);
+                } else {
+                    $form->addHidden('terms_'.$i, $_REQUEST['terms_'.$i]);
+                }
+            }
+        }
 
         $form->addHidden('module', 'hms');
         $form->addHidden('type','student');
@@ -319,43 +274,39 @@ class Application_UI{
                 $values[] = $value;
             }
         }
-
-        if(isset($_REQUEST['spring'])){
-            $values[] = $_REQUEST['spring'];
-        } 
-        if(isset($_REQUEST['summer1'])){
-            $values[] = $_REQUEST['summer1'];
-        } 
-        if(isset($_REQUEST['summer2'])){
-            $values[] = $_REQUEST['summer2'];
-        } 
-        if(isset($_REQUEST['fall'])){
-            $values[] = $_REQUEST['fall'];
+        
+        for($i = 0; $i < 4; $i++){
+            if(isset($_REQUEST['terms_'.$i]) || isset($_REQUEST['required_terms_'.$i])){
+                $values[] = isset($_REQUEST['required_terms_'.$i]) ? $_REQUEST['required_terms_'.$i] : $_REQUEST['terms_'.$i];
+            }
         }
-
+        
         if(sizeof($values) > 0){
             sort($values);
+            $i = 0;
             foreach($values as $term){
                 $term = substr(''.$term, 4, 2);
                 if($term == TERM_SPRING){
-                    $tpl['terms_repeat'][] = array('TERMS_LABEL' => 'Spring',
-                                                   'TERMS'       => 'Selected');
+                    $tpl['TERMS_'.$i.'_LABEL'] = 'Spring';
+                    $tpl['TERMS_'.$i]          = 'Selected';
                 }
                 if($term == TERM_SUMMER1){
-                    $tpl['terms_repeat'][] = array('TERMS_LABEL' => 'Summer Session 1',
-                                                   'TERMS'       => 'Selected');
+                    $tpl['TERMS_'.$i.'_LABEL'] = 'Summer Session 1';
+                    $tpl['TERMS_'.$i]          = 'Selected';
                 }
                 if($term == TERM_SUMMER2){
-                    $tpl['terms_repeat'][] = array('TERMS_LABEL' => 'Summer Session 2',
-                                                   'TERMS'       => 'Selected');
+                    $tpl['TERMS_'.$i.'_LABEL'] = 'Summer Session 2';
+                    $tpl['TERMS_'.$i]          = 'Selected';
                 }
                 if($term == TERM_FALL){
-                    $tpl['terms_repeat'][] = array('TERMS_LABEL' => 'Fall',
-                                                   'TERMS'       => 'Selected');
+                    $tpl['TERMS_'.$i.'_LABEL'] = 'Fall';
+                    $tpl['TERMS_'.$i]          = 'Selected';
                 }
+                $i++;
             }
         }
 
+        //Special Needs
         $special_needs = "";
         if(isset($_REQUEST['special_needs']['physical_disability'])){
             $special_needs = 'Physical disability<br />';
@@ -390,7 +341,7 @@ class Application_UI{
         $form->addHidden('rlc_interest',$_REQUEST['rlc_interest']);
         $form->addHidden('special_need',$_REQUEST['special_need']); // pass it on, just in case the user needs to redo their application
         $form->addHidden('special_needs',$_REQUEST['special_needs']);
-        $form->addHidden('terms',$values); //list of terms the user is attempting to apply for
+        $form->addHidden('terms', $values);
 
         $form->addHidden('module', 'hms');
         $form->addHidden('type', 'student');
@@ -410,28 +361,11 @@ class Application_UI{
     {
         PHPWS_Core::initModClass('hms', 'HMS_Application.php');
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
-        //TODO: this stuff foreach term, and let the user know which terms
-        //      succeeded.
-        $db = &new PHPWS_DB('hms_term');
-        $db->addWhere('new_applications', 1);
-        $db->addWhere('term',             $_SESSION['application_term'], '>=');
-        $db->addColumn('term');
-
-        $result = $db->select();
-        if(PHPWS_Error::logIfError($result)){
-            return false;
-        }
-
+        
+        //determine which terms requested by the user are valid and make an application
         $valid_terms = array();
         foreach($_REQUEST['terms'] as $term){
-            $valid = false;
-
-            foreach($result as $value){
-                if($term == $value['term']){
-                    $valid = true;
-                }
-            }
-            if($valid){
+            if(HMS_Term::is_valid_term($term)){
                 $valid_terms[] = $term;
             }
         }
@@ -536,13 +470,31 @@ class Application_UI{
 
     function view_housing_application($username,$term)
     {
-        $application = &new HMS_Application($username, $term);
+        $possible_terms = HMS_Term::get_valid_application_terms($term);
+
+        if($possible_terms !== false){
+            $term_list = array();
+            foreach($possible_terms as $possible_term){
+                $application = &new HMS_Application($username, $possible_term['term']);
+                if($application->id > 0){
+                    $term_list[] = $possible_term;
+                }
+            }
+        }
+
+        $application = &new HMS_Application($username, $possible_term);
 
         if($application->id == 0){
-            return "No applicatin found for the specified user and term.";
+            return "No application found for the specified user and term.";
         }
         
         $tpl = array();
+
+        //Plug the terms the user has applied for into the tags
+        for($i = 0; $i < 4; $i++){
+            $long_term = HMS_Term::term_to_text($term_list[$i]['term']);
+            $tpl['TERMS_'.$i] = $long_term['term'] . ' ' . $long_term['year'];
+        }
 
         $tpl['STUDENT_NAME']    = HMS_SOAP::get_full_name($username);
         $tpl['GENDER']          = (HMS_SOAP::get_gender($username,TRUE) == FEMALE) ? FEMALE_DESC : MALE_DESC;

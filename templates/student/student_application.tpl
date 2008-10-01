@@ -28,12 +28,22 @@
                 <td><font color=red>{TERM_MSG}</font></td>
                 <td></td>
             </tr>
-            <!-- BEGIN terms_repeat -->
             <tr>
-                <td>{TERMS_LABEL}</td>
-                <td>{TERMS}</td>
+                <td>{TERMS_0_LABEL}</td>
+                <td>{TERMS_0}</td>
             </tr>
-            <!-- END terms_repeat -->
+            <tr>
+                <td>{TERMS_1_LABEL}</td>
+                <td>{TERMS_1}</td>
+            </tr>
+            <tr>
+                <td>{TERMS_2_LABEL}</td>
+                <td>{TERMS_2}</td>
+            </tr>
+            <tr>
+                <td>{TERMS_3_LABEL}</td>
+                <td>{TERMS_3}</td>
+            </tr>
             <tr>
                 <th colspan="2">Demographic Information</th>
             <tr>
