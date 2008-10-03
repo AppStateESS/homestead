@@ -111,6 +111,7 @@
             <dd>{CREATE_TERM}</dd>
             <dd>{EDIT_TERM}</dd>
             <dd>{ASSOCIATE_TERM}</dd>
+            <dd>{EDIT_FEATURES}</dd>
             <!-- END term -->
         </dl>
         <!-- END right -->

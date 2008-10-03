@@ -58,6 +58,7 @@ class Application_UI{
                 if($value == $term){
                     $form->setMatch('terms_'.$key, $term);
                     $form->setDisabled('terms_'.$key);
+                    //let the next page know that the user is "requesting" this term
                     $form->addHidden('required_terms_'.$key, $term);
                 }
             }

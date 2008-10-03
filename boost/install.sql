@@ -247,7 +247,11 @@ CREATE TABLE hms_application (
 
 ALTER TABLE hms_application ADD CONSTRAINT application_key UNIQUE (asu_username, term); 
 
-
+CREATE TABLE hms_application_features (
+    term    int NOT NULL REFERENCES hms_term(term),
+    feature int NOT NULL,
+    enabled int NOT NULL default 0
+);
 
 CREATE TABLE hms_roommates (
     id integer NOT NULL,

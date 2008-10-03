@@ -107,4 +107,9 @@
      ****************/
     $permissions['view_activity_log']               =_('Can view the global Activity Log');
     $permissions['view_student_log']                =_('Can view student logs');
+
+    /*****************
+     * Edit Features *
+     ****************/
+    $permissions['edit_features'] = _('Can edit the application features per term');
 ?>

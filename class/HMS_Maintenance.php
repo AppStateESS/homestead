@@ -217,6 +217,15 @@ class HMS_Maintenance
                 _('Edit Move-in Times'), 'hms',
                 array('type'=>'movein', 'op'=>'show_edit_movein_times'));
         }
+        
+        /*****************
+         * Edit Features *
+         *****************/
+        if(Current_User::allow('hms', 'edit_features')){
+            $tpl['EDIT_FEATURES'] = PHPWS_Text::secureLink(_('Edit Application Features'),
+                                                           'hms', array('type' => 'application_features',
+                                                                        'op'   => 'edit_features'));
+        }
 
         /****************
          * Activity Log *

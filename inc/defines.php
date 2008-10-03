@@ -226,4 +226,12 @@ define('E_UNASSIGN_ASSIGN_LOAD_FAILED', 31);
 define('E_UNASSIGN_BANNER_ERROR',       32);
 define('E_UNASSIGN_HMS_DB_ERROR',       33);
 
+
+/**
+ * Assignment Features
+ */
+define('APPLICATION_RLC_APP',          0);
+define('APPLICATION_ROOMMATE_PROFILE', 1);
+define('APPLICATION_SELECT_ROOMMATE',  2);
+
 ?>
