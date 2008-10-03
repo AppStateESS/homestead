@@ -288,8 +288,19 @@ class HMS_Application {
         javascript('/modules/hms/page_refresh/');
 
         return implode('<br />', $form->getTemplate());
-        exit();
+    }
 
-        return $form->get();
+    function is_feature_enabled($term, $feature){
+        $db = &new PHPWS_DB('hms_application_features');
+        $db->addWhere('term', $term);
+        $db->addWhere('feature', $feature);
+        $db->addWhere('enabled', 1);
+        $result = $db->select();
+
+        if(PHPWS_Error::logIfError($result)){
+            return false;
+        }
+
+        return true;
     }
 }

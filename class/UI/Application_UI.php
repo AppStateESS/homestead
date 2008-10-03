@@ -159,7 +159,9 @@ class Application_UI{
         /*******
          * RLC *
          *******/
-        if(HMS_Entry_Term::get_entry_semester($_SESSION['asu_username']) == TERM_FALL && HMS_RLC_Application::check_for_application($_SESSION['asu_username'], $_SESSION['application_term']) == FALSE){
+        if($feature_enabled['rlc']
+           /* && HMS_Entry_Term::get_entry_semester($_SESSION['asu_username']) == TERM_FALL */
+           && HMS_RLC_Application::check_for_application($_SESSION['asu_username'], $_SESSION['application_term']) == FALSE){
             $form->addRadio('rlc_interest', array(0, 1));
             $form->setLabel('rlc_interest', array(_("No"), _("Yes")));
             if(isset($_REQUEST['rlc_interest'])){
