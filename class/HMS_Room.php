@@ -20,7 +20,7 @@ class HMS_Room extends HMS_Item
     var $gender_type            = 0;
     var $ra_room                = false;
     var $private_room           = false;
-    var $is_lobby               = false;
+    var $is_overflow            = false;
     var $learning_community_id  = 0;
     var $pricing_tier           = 0;
     var $is_medical             = false;
@@ -464,7 +464,7 @@ class HMS_Room extends HMS_Item
        $page_tags['GENDER_TYPE_LABEL']  = 'Gender';
        $page_tags['RA_LABEL']           = 'RA';
        $page_tags['PRIVATE_LABEL']      = 'Private';
-       $page_tags['LOBBY_LABEL']        = 'Lobby';
+       $page_tags['OVERFLOW_LABEL']     = 'Overflow';
        $page_tags['MEDICAL_LABEL']      = 'Medical';
        $page_tags['RESERVED_LABEL']     = 'Reserved';
        $page_tags['ONLINE_LABEL']       = 'Online';
@@ -491,7 +491,7 @@ class HMS_Room extends HMS_Item
         $tpl['GENDER_TYPE']  = HMS_Util::formatGender($this->gender_type);
         $tpl['RA_ROOM']      = $this->ra_room      ? 'Yes' : 'No';
         $tpl['PRIVATE_ROOM'] = $this->private_room ? 'Yes' : 'No';
-        $tpl['IS_LOBBY']     = $this->is_lobby     ? 'Yes' : 'No';
+        $tpl['IS_OVERFLOW']  = $this->is_overflow  ? 'Yes' : 'No';
         $tpl['IS_MEDICAL']   = $this->is_medical   ? 'Yes' : 'No';
         $tpl['IS_RESERVED']  = $this->is_reserved  ? 'Yes' : 'No';
         $tpl['IS_ONLINE']    = $this->is_online    ? 'Yes' : 'No';
@@ -530,12 +530,12 @@ class HMS_Room extends HMS_Item
        $room->room_number   = $_REQUEST['room_number'];
        $room->pricing_tier  = $_REQUEST['pricing_tier'];
        $room->gender_type   = $_REQUEST['gender_type'];
-       $room->is_online     = $_REQUEST['is_online'] == 1 ? 1 : 0;
-       $room->is_reserved   = $_REQUEST['is_reserved'] == 1 ? 1 : 0;
-       $room->ra_room       = $_REQUEST['ra_room'] == 1 ? 1 : 0;
+       $room->is_online     = $_REQUEST['is_online']    == 1 ? 1 : 0;
+       $room->is_reserved   = $_REQUEST['is_reserved']  == 1 ? 1 : 0;
+       $room->ra_room       = $_REQUEST['ra_room']      == 1 ? 1 : 0;
        $room->private_room  = $_REQUEST['private_room'] == 1 ? 1 : 0;
-       $room->is_medical    = $_REQUEST['is_medical'] == 1 ? 1 : 0;
-       $room->is_lobby      = $_REQUEST['is_lobby'] == 1 ? 1 : 0;
+       $room->is_medical    = $_REQUEST['is_medical']   == 1 ? 1 : 0;
+       $room->is_overflow   = $_REQUEST['is_overflow']  == 1 ? 1 : 0;
 
        $result = $room->save();
 
@@ -622,7 +622,7 @@ class HMS_Room extends HMS_Item
         $db->addWhere('hms_room.ra_room', 0);
 
         // Don't get lobbies
-        $db->addWhere('hms_room.is_lobby', 0);
+        $db->addWhere('hms_room.is_overflow', 0);
 
         // Don't get private rooms
         $db->addWhere('hms_room.private_room', 0);
@@ -854,9 +854,9 @@ class HMS_Room extends HMS_Item
         //$form->setLabel('is_medical', array(_('No'), _('Yes')));
         $form->setMatch('is_medical', $room->is_medical);
 
-        $form->addCheck('is_lobby', 1);
-        //$form->setLabel('is_lobby', array(_('No'), _('Yes')));
-        $form->setMatch('is_lobby', $room->is_lobby);
+        $form->addCheck('is_overflow', 1);
+        //$form->setLabel('is_overflow', array(_('No'), _('Yes')));
+        $form->setMatch('is_overflow', $room->is_overflow);
 
         if($is_in_suite){
             # Room is in a suite

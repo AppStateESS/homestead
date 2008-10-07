@@ -61,8 +61,8 @@
                 <td align="left">{IS_MEDICAL} {IS_MEDICAL_LABEL}</td>
             </tr>
             <tr>
-                <th>Is a Lobby:</th>
-                <td>{IS_LOBBY} {IS_LOBBY_LABEL}</td>
+                <th>Is an Overflow Room:</th>
+                <td>{IS_OVERFLOW} {IS_OVERFLOW_LABEL}</td>
             </tr>
             <tr>
                 <th>Is part of a suite: </th>

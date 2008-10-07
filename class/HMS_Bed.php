@@ -278,7 +278,7 @@ class HMS_Bed extends HMS_Item {
             return FALSE;
 
         # Make sure the room isn't a lobby
-        if($room->is_lobby == 1)
+        if($room->is_overflow == 1)
             return FALSE;
 
         # Make sure the room isn't private
@@ -421,7 +421,7 @@ class HMS_Bed extends HMS_Item {
         $db->addWhere('hms_room.ra_room', 0);
 
         // Don't get lobbies
-        $db->addWhere('hms_room.is_lobby', 0);
+        $db->addWhere('hms_room.is_overflow', 0);
 
         // Don't get private rooms
         $db->addWhere('hms_room.private_room', 0);

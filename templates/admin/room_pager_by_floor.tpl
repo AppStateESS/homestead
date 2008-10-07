@@ -5,7 +5,7 @@
         <th>{GENDER_TYPE_LABEL}</th>
         <th>{RA_LABEL}</th>
         <th>{PRIVATE_LABEL}</th>
-        <th>{LOBBY_LABEL}</th>
+        <th>{OVERFLOW_LABEL}</th>
         <th>{MEDICAL_LABEL}</th>
         <th>{RESERVED_LABEL}</th>
         <th>{ONLINE_LABEL}</th>
@@ -21,7 +21,7 @@
         <td>{GENDER_TYPE}</td>
         <td>{RA_ROOM}</td>
         <td>{PRIVATE_ROOM}</td>
-        <td>{IS_LOBBY}</td>
+        <td>{IS_OVERFLOW}</td>
         <td>{IS_MEDICAL}</td>
         <td>{IS_RESERVED}</td>
         <td>{IS_ONLINE}</td>

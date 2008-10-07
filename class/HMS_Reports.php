@@ -870,8 +870,8 @@ class HMS_Reports{
                     if($room->private_room == 1){
                         $content .= ' (private)';
                     }
-                    if($room->is_lobby == 1){
-                        $content .= ' (lobby)';
+                    if($room->is_overflow == 1){
+                        $content .= ' (overflow)';
                     }
                     if($room->is_medical == 1){
                         $content .= ' (medical)';

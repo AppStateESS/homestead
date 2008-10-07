@@ -91,7 +91,7 @@ CREATE TABLE hms_room (
     gender_type             smallint NOT NULL,
     ra_room                 smallint NOT NULL,
     private_room            smallint NOT NULL,
-    is_lobby                smallint NOT NULL,
+    is_overflow             smallint NOT NULL,
     learning_community_id   smallint DEFAULT (0)::smallint,
     phone_number            integer DEFAULT 0,
     pricing_tier            smallint REFERENCES hms_pricing_tiers(id),
