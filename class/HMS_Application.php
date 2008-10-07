@@ -240,23 +240,49 @@ class HMS_Application {
       * @return string $template Processed template ready for display
       */
     function show_feature_interface(){
+        $features = array(APPLICATION_RLC_APP          => 'RLC Applications',
+                          APPLICATION_ROOMMATE_PROFILE => 'Roommate Profile Searching',
+                          APPLICATION_SELECT_ROOMMATE  => 'Selecting Roommates');
+
         if(isset($_REQUEST['submit_form'])){
-            foreach($_REQUEST['feature'] as $key => $value){
+            for($i = 0; $i < sizeof($features); $i++){
                 $db = &new PHPWS_DB('hms_application_features');
-                $db->addValue('term', $_REQUEST['term']);
-                $db->addValue('feature', $key);
-                $db->addValue('enabled', $value);
-                $result = $db->insert();
-             
+                $db->addWhere('term', $_REQUEST['term']);
+                $db->addWhere('feature', $i);
+                $result = $db->select();
+                $exists = (sizeof($result) > 0 ? true : false);
+                unset($result);
+                
+                $db->reset();
+                if(isset($_REQUEST['feature'][$i])){
+                    $db->addValue('enabled', 1);
+                    if($exists){
+                        $db->addWhere('term', $_REQUEST['term']);
+                        $db->addWhere('feature', $i);
+                        $result = $db->update();
+                    } else {
+                        $db->addValue('term', $_REQUEST['term']);
+                        $db->addValue('feature', $i);
+                        $result = $db->insert();
+                    }
+                } else {
+                    $db->addValue('enabled', 0);
+                    if($exists){
+                        $db->addWhere('term', $_REQUEST['term']);
+                        $db->addWhere('feature', $i);
+                        $result = $db->update();
+                    } else {
+                        $db->addValue('term', $_REQUEST['term']);
+                        $db->addValue('feature', $i);
+                        $result = $db->insert();
+                    }
+                }
                 PHPWS_Error::logIfError($result);
             }
         }
 
         $term = (isset($_REQUEST['term']) ? $_REQUEST['term'] : HMS_Term::get_current_term());
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
-        $features = array(APPLICATION_RLC_APP          => 'RLC Applications',
-                          APPLICATION_ROOMMATE_PROFILE => 'Roommate Profile Searching',
-                          APPLICATION_SELECT_ROOMMATE  => 'Selecting Roommates');
 
         $db = &new PHPWS_DB('hms_application_features');
         $db->addWhere('term', $term);
@@ -268,7 +294,8 @@ class HMS_Application {
 
         $matches = array();
         foreach($result as $match){
-            $matches[] = ((int)$match['enabled'] == 1 ? $match['feature'] : null);
+            if((int)$match['enabled'] == 1)
+                $matches[] = $match['feature'];
         }
         sort($matches);
 
@@ -297,7 +324,7 @@ class HMS_Application {
         $db->addWhere('enabled', 1);
         $result = $db->select();
 
-        if(PHPWS_Error::logIfError($result)){
+        if(PHPWS_Error::logIfError($result) || sizeof($result) == 0){
             return false;
         }
 

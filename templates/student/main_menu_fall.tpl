@@ -31,45 +31,50 @@
         {NEW_APP_LINK}
       </li>
     </ul>
-    
+    <!-- BEGIN rlc -->
     <h2>{RLC_ICON} &nbsp;3. Unique Housing Options Application</h2>
     {RLC_INTRO}
     <ul>
       <li>
-        {RLC_MSG}<br />
-        {RLC_LINK}
+        <p>{RLC_MSG}</p>
+        <p>{RLC_LINK}</p>
       </li>
     </ul>
+    <!-- END rlc -->
 
-    <h2>{PROFILE_ICON} 4. Roommate Profile</h2>
+    <h2>{PROFILE_ICON} {PROFILE_HEADER}</h2>
     {PROFILE_INTRO}
+    <!-- BEGIN profile -->
     <ul>
       <li>
-        {PROFILE_MSG}<br />
-        {PROFILE_LINK}
+        <p>{PROFILE_MSG}</p>
+        <p>{PROFILE_LINK}</p>
       </li>
       
       <!-- BEGIN roommate_search -->
       <li>
-        {ROOMMATE_SEARCH_MSG}<br />
-        {ROOMMATE_SEARCH_LINK}
+        <p>{ROOMMATE_SEARCH_MSG}</p>
+        <p>{ROOMMATE_SEARCH_LINK}</p>
       </li>
       <!-- END roommate_search -->
     </ul>
+    <!-- END profile -->
     
-    <h2>{ROOMMATE_ICON} 5. Select a Roommate</h2>
+    <h2>{ROOMMATE_ICON} {ROOMMATE_HEADER}</h2>
     {ROOMMATE_INTRO}
     <ul>
 <!-- BEGIN request_list -->
       <li>
-        {ROOMMATE_REQUESTS_MSG}<br />
-        {ROOMMATE_REQUESTS}
+        <p>{ROOMMATE_REQUESTS_MSG}</p>
+        <p>{ROOMMATE_REQUESTS}</p>
       </li>
 <!-- END request_list -->
+<!-- BEGIN roommate -->
       <li>
-        {ROOMMATE_MSG}<br />
-        {ROOMMATE_LINK}
+        <p>{ROOMMATE_MSG}</p>
+        <p>{ROOMMATE_LINK}</p>
       </li>
+<!-- END roommate -->
 
     </ul>
     
@@ -78,8 +83,8 @@
     {VERIFY_INTRO}
     <ul>
       <li>
-        {VERIFY_MSG}<br />
-        {VERIFY_LINK}
+        <p>{VERIFY_MSG}</p>
+        <p>{VERIFY_LINK}</p>
       </li>
     </ul>
 <!-- END housing_status -->
