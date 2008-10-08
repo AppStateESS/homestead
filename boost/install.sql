@@ -89,6 +89,7 @@ CREATE TABLE hms_room (
     floor_id                integer NOT NULL REFERENCES hms_floor(id),
     suite_id                integer REFERENCES hms_suite(id),
     gender_type             smallint NOT NULL,
+    default_gender          smallint NOT NULL,
     ra_room                 smallint NOT NULL,
     private_room            smallint NOT NULL,
     is_overflow             smallint NOT NULL,

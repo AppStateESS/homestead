@@ -18,6 +18,7 @@ class HMS_Room extends HMS_Item
     var $room_number            = 0;
     
     var $gender_type            = 0;
+    var $default_gender         = 0;
     var $ra_room                = false;
     var $private_room           = false;
     var $is_overflow            = false;
@@ -96,6 +97,18 @@ class HMS_Room extends HMS_Item
         $new_room->floor_id = $floor_id;
         $new_room->suite_id = $suite_id;
 
+        //Set the default gender to the floor's gender if the floor isn't
+        //coed and the genders don't match.
+        $new_room->loadFloor();
+        if($new_room->_floor->gender_type != COED 
+           && $new_room->default_gender != $new_room->_floor->gender_type)
+        {
+            $new_room->default_gender = $new_room->_floor->gender_type;
+        }
+
+        //Set the gender of the room to the default gender
+        $new_room->gender_type = $new_room->default_gender;
+
         if (!$new_room->save()) {
             // There was an error saving the new room
             // Error will be logged.
@@ -117,7 +130,7 @@ class HMS_Room extends HMS_Item
         }
 
         /**
-         * Beds exist. Start makin copies.
+         * Beds exist. Start making copies.
          * Further copying is needed at the bed level.
          * The bed class will work much like this class. If assignments is true then
          * beds will load beds and assignments, foreach the bed list, and
@@ -527,15 +540,16 @@ class HMS_Room extends HMS_Item
        //Changed from radio buttons to checkboxes, ternary 
        //prevents null since only 1 is defined as a return value
        //test($_REQUEST['room_number']);
-       $room->room_number   = $_REQUEST['room_number'];
-       $room->pricing_tier  = $_REQUEST['pricing_tier'];
-       $room->gender_type   = $_REQUEST['gender_type'];
-       $room->is_online     = $_REQUEST['is_online']    == 1 ? 1 : 0;
-       $room->is_reserved   = $_REQUEST['is_reserved']  == 1 ? 1 : 0;
-       $room->ra_room       = $_REQUEST['ra_room']      == 1 ? 1 : 0;
-       $room->private_room  = $_REQUEST['private_room'] == 1 ? 1 : 0;
-       $room->is_medical    = $_REQUEST['is_medical']   == 1 ? 1 : 0;
-       $room->is_overflow   = $_REQUEST['is_overflow']  == 1 ? 1 : 0;
+       $room->room_number    = $_REQUEST['room_number'];
+       $room->pricing_tier   = $_REQUEST['pricing_tier'];
+       $room->gender_type    = $_REQUEST['gender_type'];
+       $room->default_gender = $_REQUEST['default_gender'];
+       $room->is_online      = $_REQUEST['is_online']    == 1 ? 1 : 0;
+       $room->is_reserved    = $_REQUEST['is_reserved']  == 1 ? 1 : 0;
+       $room->ra_room        = $_REQUEST['ra_room']      == 1 ? 1 : 0;
+       $room->private_room   = $_REQUEST['private_room'] == 1 ? 1 : 0;
+       $room->is_medical     = $_REQUEST['is_medical']   == 1 ? 1 : 0;
+       $room->is_overflow    = $_REQUEST['is_overflow']  == 1 ? 1 : 0;
 
        $result = $room->save();
 
@@ -576,7 +590,7 @@ class HMS_Room extends HMS_Item
      * Returns the ID of an empty room (which can be auto-assigned)
      * Returns FALSE if there are no more free rooms
      */
-# TODO: finish this, see Trac #156
+    # TODO: finish this, see Trac #156
     function get_free_room($term, $gender, $randomize = FALSE)
     {
         $db = &new PHPWS_DB('hms_room');
@@ -833,6 +847,10 @@ class HMS_Room extends HMS_Item
                 $tpl['GENDER_REASON'] = PHPWS_Text::secureLink('Edit the suite', 'hms', array('type'=>'suite', 'op'=>'show_edit_suite', 'suite'=>$room->suite_id)) . ' to change room gender.';
             }
         }
+
+        //Always show the option to set the default gender
+        $form->addDropBox('default_gender', array(FEMALE => FEMALE_DESC, MALE => MALE_DESC));
+        $form->setMatch('default_gender', $room->default_gender);
         
         $form->addCheck('is_online', 1);
         //$form->setLabel('is_online', array(_('No'), _('Yes') ));

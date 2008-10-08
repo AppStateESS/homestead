@@ -41,6 +41,10 @@
                 <!-- END gender_radio_button -->
             </tr>
             <tr>
+                <th>Default Gender: </th>
+                <td>{DEFAULT_GENDER}</td>
+            </tr>
+            <tr>
                 <th>Is online: </th>
                 <td align="left">{IS_ONLINE}</td> 
             </tr>
