@@ -578,7 +578,7 @@ class HMS_Admin
             $names[1] = trim($names[1]);
 
             # Start logging activities
-            $notes = "Username Updated: ".trim($names[0])."=>".trim($names[1]);
+            $notes = "Attempted to update username: ".trim($names[0])."=>".trim($names[1]);
             HMS_Activity_Log::log_activity(trim($names[0]), ACTIVITY_USERNAME_UPDATED, Current_User::getUsername(), $notes);
             HMS_Activity_Log::log_activity(trim($names[1]), ACTIVITY_USERNAME_UPDATED, Current_User::getUsername(), $notes);
 
