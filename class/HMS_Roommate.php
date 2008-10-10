@@ -929,7 +929,6 @@ class HMS_Roommate
         $form->addHidden('op', 'for_realz_accept_roommate');
         $form->addHidden('id', $request->id);
 
-        $form->addText('captcha');
         $form->addTplTag('CAPTCHA_IMAGE', Captcha::get());
         $form->addTplTag('NAME', HMS_SOAP::get_full_name($request->requestor));
 
@@ -952,14 +951,15 @@ class HMS_Roommate
     function accept_for_realz($request)
     {
         PHPWS_Core::initCoreClass('Captcha.php');
-        if(!Captcha::verify($_POST['captcha'])) {
+        $verified = Captcha::verify(true);
+        if($verified === false) {
             return HMS_Roommate::confirm_accept($request, 'Sorry, please try again.');
         }
 
         HMS_Activity_Log::log_activity($request->requestor,
                                        ACTIVITY_ACCEPTED_AS_ROOMMATE,
                                        $request->requestee,
-                                       "CAPTCHA: {$_POST['captcha']}");
+                                       "CAPTCHA: {$verified}");
         
         $request->confirmed = 1;
         $request->confirmed_on = mktime();
