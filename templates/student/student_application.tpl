@@ -1,6 +1,6 @@
 <div class="hms">
   <div class="box">
-    <div class="title"> <h1>Residence Hall Application</h1> </div>
+    <div class="title"> <h1>Residence Hall Application</h1><p>{RECEIVED_DATE}</p> </div>
     <div class="box-content">
         <!-- BEGIN error_msg -->
         <font color="red">{ERROR_MSG}<br /></font>

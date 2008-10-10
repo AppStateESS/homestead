@@ -548,10 +548,10 @@ class HMS_Student {
                             if($roommie->asu_username != $_REQUEST['username']){
                                 if($student_info->student_type == TYPE_FRESHMEN 
                                    && $roommie->asu_username == $confirmed->asu_username){
-                                    $tpl['ROOMMATE'] .= "<a href=index.php?module=hms&type=student&op=get_matching_students&username=$roommie->asu_username&tab=student_info>$roommie->asu_username</a><br />";
-                                    $tpl['REQUESTED_ROOMMATE'] .= "<tr><td></td><td>Student Requested ".$confirmed->asu_username."<a href=index.php?module=hms&type=roommate&op=show_confirmed_roommates&search=&pg=1&limit=10&pager_c_search=".$_REQUEST['username'].">Break this roommate group</a><td></tr>";
+                                    $tpl['ROOMMATE']            .= "<a href=index.php?module=hms&type=student&op=get_matching_students&username=$roommie->asu_username&tab=student_info>$roommie->asu_username</a><br />";
+                                    $tpl['REQUESTED_ROOMMATE']  .= "<tr><td></td><td>Student Requested ".$confirmed->asu_username."<a href=index.php?module=hms&type=roommate&op=show_confirmed_roommates&search=&pg=1&limit=10&pager_c_search=".$_REQUEST['username'].">Break this roommate group</a><td></tr>";
                                 } else {
-                                    $tpl['ROOMMATE'] .= "<a href=index.php?module=hms&type=student&op=get_matching_students&username=$roommie->asu_username&tab=student_info>$roommie->asu_username</a><br />"; 
+                                    $tpl['ROOMMATE']            .= "<a href=index.php?module=hms&type=student&op=get_matching_students&username=$roommie->asu_username&tab=student_info>$roommie->asu_username</a><br />"; 
                                 }
                             }
                         }

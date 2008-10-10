@@ -492,6 +492,9 @@ class Application_UI{
         }
         
         $tpl = array();
+        //If the application has been submitted plug in the date it was created
+        if( isset($application->created_on) )
+            $tpl['RECEIVED_DATE']   = "Received on: " . date('d-F-Y h:i:s a', $application->created_on);
 
         //Plug the terms the user has applied for into the tags
         for($i = 0; $i < 4; $i++){
