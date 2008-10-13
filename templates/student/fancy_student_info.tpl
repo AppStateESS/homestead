@@ -5,7 +5,7 @@
         <br>
         <table>
             <tr>
-                <th><a id="demographics_toggle">[+]</a>Student Demographics</th>
+                <th><a id="demographics_toggle">[-]</a>Student Demographics</th>
             </tr>
             <tr>
             <td rowspan="6">

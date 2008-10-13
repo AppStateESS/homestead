@@ -49,7 +49,7 @@ $(document).ready(function(){
         }
     }
 
-    var demographicsToggle = new hideOther("demographics_toggle", "student_demographics", true);
+    var demographicsToggle = new hideOther("demographics_toggle", "student_demographics", false);
     var statusToggle       = new hideOther("status_toggle",       "housing_status",       false);
     
     $("#note_dialog").hide();
