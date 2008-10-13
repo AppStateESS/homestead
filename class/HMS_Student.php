@@ -678,14 +678,17 @@ class HMS_Student {
         $everything_but_notes[] = ACTIVITY_ROOMMATE_REQUESTS_UPDATED;
         $everything_but_notes[] = ACTIVITY_CHANGE_ACTIVE_TERM;
 
-        PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-        $tpl['LOG_PAGER'] = HMS_Activity_Log::showPager(null, $_REQUEST['username'], null, null, null, $everything_but_notes, 5, true);
-        $tpl['NOTE_PAGER'] = HMS_Activity_Log::showPager(null, $_REQUEST['username'], null, null, null, array(0 => ACTIVITY_ADD_NOTE), 5, true);
+        if( Current_User::allow('hms', 'view_activity_log') && Current_User::allow('hms', 'view_student_log') ){
+            PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
+            $tpl['LOG_PAGER'] = HMS_Activity_Log::showPager(null, $_REQUEST['username'], null, null, null, $everything_but_notes, 5, true);
+            $tpl['NOTE_PAGER'] = HMS_Activity_Log::showPager(null, $_REQUEST['username'], null, null, null, array(0 => ACTIVITY_ADD_NOTE), 5, true);
 
-        $tpl['LOG_PAGER'] .= '<div align=center>[<a href="index.php?module=hms&type=student&op=get_matching_students&username='.$_REQUEST['username'].'&tab=student_logs">View More</a>]';
-        //TODO: if we ever renumber the activities change a40 to the number of
-        //the new logging activity
-        $tpl['NOTE_PAGER'] .= '<div align=center>[<a href="index.php?module=hms&type=student&op=get_matching_students&username='.$_REQUEST['username'].'&tab=student_logs&a40=1">View More</a>]';
+            $tpl['LOG_PAGER'] .= '<div align=center>[<a href="index.php?module=hms&type=student&op=get_matching_students&username='.$_REQUEST['username'].'&tab=student_logs">View More</a>]';
+            //TODO: if we ever renumber the activities change a40 to the number of
+            //the new logging activity
+            $tpl['NOTE_PAGER'] .= '<div align=center>[<a href="index.php?module=hms&type=student&op=get_matching_students&username='.$_REQUEST['username'].'&tab=student_logs&a40=1">View More</a>]';
+        }
+
         /********************
          * Login as Student *
          ********************/
