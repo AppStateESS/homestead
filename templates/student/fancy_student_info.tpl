@@ -92,7 +92,7 @@
                 <div id="housing_status">
                 <table>
                     <tr>
-                        <th>Have Application: </th>
+                        <th>Have Application:</th>
                         <td>{APPLICATION_RECEIVED}  {APPLICATION}
                     </tr>
                     <tr>
@@ -100,13 +100,22 @@
                         <td>{ASSIGNED}  [{ROOM_ASSIGNMENT}]</td>
                     </tr>
                     <tr>
-                        <th>Roommate</th>
+                        <th>Roommate:</th>
                         <td>{ROOMMATE}</td>
                     </tr>
-                    {REQUESTED_ROOMMATE}
+                    <!-- BEGIN requested_roommate -->
                     <tr>
-                        <th>RLC</td>
+                        <td></td>
+                        <td>{REQUESTED_ROOMMATE}</td>
+                    </tr>
+                    <!-- END requested_roommate -->
+                    <tr>
+                        <th>RLC:</td>
                         <td>{RLC_STATUS}</td>
+                    </tr>
+                    <tr>
+                        <th>Meal Option:</th>
+                        <td>{MEAL_PLAN}</td>
                     </tr>
                 </table>
                 </div>

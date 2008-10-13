@@ -566,8 +566,8 @@ class HMS_Student {
             } else {
                 if(empty($pending) && empty($confirmed)){
                     $tpl['ROOMMATE'] .= "None";
-                    if($student_info->student_type == FRESHMEN)
-                        $tpl['REQUESTED_ROOMMATE'] .= "<tr><td>[<a href=index.php?module=hms&type=roommate&op=show_admin_create_roommate_group>Pair this student</a>]</td></tr>";
+                    if($student_info->student_type == TYPE_FRESHMEN)
+                        $tpl['REQUESTED_ROOMMATE'] .= "[<a href=index.php?module=hms&type=roommate&op=show_admin_create_roommate_group>Pair this student</a>]";
                 } elseif(!empty($pending)){
                     $tpl['ROOMMATE'] .= "Pending Requests: ".$pending;
                 }
