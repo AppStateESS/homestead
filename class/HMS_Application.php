@@ -310,7 +310,7 @@ class HMS_Application {
 
         $form->addHidden('type', 'application_features');
         $form->addHidden('op', 'edit_features');
-        $form->addSubmit('submit', 'Submit');
+        $form->addSubmit('submit_form', 'Submit');
 
         javascript('/modules/hms/page_refresh/');
 
