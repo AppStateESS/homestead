@@ -491,6 +491,11 @@ class HMS_Term{
 
     function show_term_association($success = NULL, $error = NULL)
     {
+        PHPWS_Core::initModClass('hms', 'HMS_Term_Applications.php');
+        if(isset($_REQUEST['delete'])){
+            HMS_Term_Applications::remove($_REQUEST['delete']);
+        }
+
         if(isset($_REQUEST['term1']) && isset($_REQUEST['term2']) 
            && is_numeric($_REQUEST['term1']) && is_numeric($_REQUEST['term2']))
         {
@@ -504,11 +509,13 @@ class HMS_Term{
         }
 
         $tpl = array();
-        if(!is_null($message)){
+        if( isset($message) && !is_null($message)){
             $tpl['MESSAGE'] = $message;
         } elseif(!is_null($error)){
             $tpl['ERROR'] = $error;
         }
+        
+        $tpl['PAGER'] = HMS_Term_Applications::getPager();
 
         $terms = HMS_Term::get_available_terms_list();
         $form = &new PHPWS_Form('associate_terms');
@@ -517,11 +524,11 @@ class HMS_Term{
         $form->addCheck('required', 'yes');
         $form->addSubmit('submit', 'Make Association');
 
-        $form->addHidden('type', 'term');
-        $form->addHidden('op', 'show_term_association');
+        $form->addHidden('type',    'term');
+        $form->addHidden('op',      'show_term_association');
 
         $form->mergeTemplate($tpl);
-
+        
         return PHPWS_Template::process($form->getTemplate(), 'hms', 'admin/set_application_terms.tpl');
     }
 

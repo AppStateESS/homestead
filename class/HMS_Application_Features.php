@@ -9,12 +9,12 @@
 
 class HMS_Application_Features {
 
-    $features = array(APPLICATION_RLC_APP          => 'RLC Applications',
-                      APPLICATION_ROOMMATE_PROFILE => 'Roommate Profile Searching',
-                      APPLICATION_SELECT_ROOMMATE  => 'Selecting Roommates');
-
     function save($request)
     {
+        $features = array(APPLICATION_RLC_APP          => 'RLC Applications',
+                          APPLICATION_ROOMMATE_PROFILE => 'Roommate Profile Searching',
+                          APPLICATION_SELECT_ROOMMATE  => 'Selecting Roommates');
+
         for($i = 0; $i < sizeof($features); $i++){
             $db = &new PHPWS_DB('hms_application_features');
             $db->addWhere('term', $request['term']);
