@@ -540,6 +540,58 @@ class Application_UI{
 
         return PHPWS_Template::process($tpl, 'hms', 'student/student_application.tpl');
     }
+    
+    /**
+      * Shows the feature enabling/disabling interface.
+      *
+      * @param int $term The term to display
+      *
+      * @return string $template Processed template ready for display
+      */
+    function show_feature_interface(){
+        $features = array(APPLICATION_RLC_APP          => 'RLC Applications',
+                          APPLICATION_ROOMMATE_PROFILE => 'Roommate Profile Searching',
+                          APPLICATION_SELECT_ROOMMATE  => 'Selecting Roommates');
 
+        if(isset($_REQUEST['submit_form'])){
+            PHPWS_Core::initModClass('hms', 'HMS_Application_Features.php');
+            HMS_Application_Features::save($_REQUEST);
+        }
+
+        $term = (isset($_REQUEST['term']) ? $_REQUEST['term'] : HMS_Term::get_current_term());
+        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+
+        $db = &new PHPWS_DB('hms_application_features');
+        $db->addWhere('term', $term);
+        $result = $db->select();
+
+        if(PHPWS_Error::logIfError($result)){
+            return false;
+        }
+
+        $matches = array();
+        foreach($result as $match){
+            if((int)$match['enabled'] == 1)
+                $matches[] = $match['feature'];
+        }
+        sort($matches);
+
+        $form = &new PHPWS_Form('features');
+        $form->addSelect('term',    HMS_Term::get_available_terms_list());
+        $form->setMatch('term',     $term);
+        $form->setExtra('term',     'onchange=refresh_page(form)');
+
+        $form->addCheck('feature',  array_keys($features));
+        $form->setLabel('feature',  $features);
+        $form->setMatch('feature',  $matches);
+
+        $form->addHidden('type',    'application_features');
+        $form->addHidden('op',      'edit_features');
+        $form->addSubmit('submit',  'Submit');
+
+        javascript('/modules/hms/page_refresh/');
+
+        return implode('<br />', $form->getTemplate());
+    }
 }
 ?>
