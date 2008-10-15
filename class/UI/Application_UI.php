@@ -549,6 +549,8 @@ class Application_UI{
       * @return string $template Processed template ready for display
       */
     function show_feature_interface(){
+        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+
         $features = array(APPLICATION_RLC_APP          => 'RLC Applications',
                           APPLICATION_ROOMMATE_PROFILE => 'Roommate Profile Searching',
                           APPLICATION_SELECT_ROOMMATE  => 'Selecting Roommates');
@@ -587,7 +589,7 @@ class Application_UI{
 
         $form->addHidden('type',    'application_features');
         $form->addHidden('op',      'edit_features');
-        $form->addSubmit('submit',  'Submit');
+        $form->addSubmit('submit_button',  'Submit');
 
         javascript('/modules/hms/page_refresh/');
 
