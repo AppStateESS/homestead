@@ -18,15 +18,17 @@ class HMS_Term_Applications {
         $pager = &new DBPager('hms_term_applications', 'HMS_Term_Applications');
         $pager->setModule('hms');
         $pager->addRowTags('get_row_tags');
-        $pager->setTemplate('admin/application_terms_list.tpl');
+        $pager->setTemplate('admin/set_application_terms.tpl');
         $pager->setEmptyMessage('No rows returned.');
         $pager->setOrder('app_term', 'desc');
 
-        return $pager->get();
+        return $pager;
     }
 
     function get_row_tags()
     {
+        $tpl['APP_TERM']    = HMS_Term::term_to_text($this->app_term,   true);
+        $tpl['TERM']        = HMS_Term::term_to_text($this->term,       true);
         $tpl['REQUIRED']    = ($this->required == 1 ? 'yes' : 'no'); 
         $tpl['DELETE']      = '<a href=index.php?module=hms&type=term&op=show_term_association&delete='.$this->app_term.'>Delete</a>';
 

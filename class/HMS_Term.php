@@ -515,8 +515,6 @@ class HMS_Term{
             $tpl['ERROR'] = $error;
         }
         
-        $tpl['PAGER'] = HMS_Term_Applications::getPager();
-
         $terms = HMS_Term::get_available_terms_list();
         $form = &new PHPWS_Form('associate_terms');
         $form->addSelect('term1', $terms);
@@ -529,7 +527,11 @@ class HMS_Term{
 
         $form->mergeTemplate($tpl);
         
-        return PHPWS_Template::process($form->getTemplate(), 'hms', 'admin/set_application_terms.tpl');
+        $pager = HMS_Term_Applications::getPager();
+        $pager->addPageTags($form->getTemplate());
+
+        
+        return $pager->get();
     }
 
     /**************************

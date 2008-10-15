@@ -7,6 +7,7 @@
         <th>Required</th>
         <th>Action</th>
     </tr>
+    <!-- BEGIN form -->
     <tr>
     {START_FORM}
         <td>{TERM1}</td>
@@ -15,5 +16,22 @@
         <td>{SUBMIT}</td>
     {END_FORM}
     </tr>
-    {PAGER}
+    <!-- END form -->
+    <!-- BEGIN empty -->
+    {EMPTY_MESSAGE}
+    <!-- END empty -->
+    <!-- BEGIN listrows -->
+    <tr>
+        <td>{APP_TERM}</td>
+        <td>{TERM}</td>
+        <td>{REQUIRED}</td>
+        <td>{DELETE}</td>
+    </tr>
+    <!-- END listrows -->
 </table>
+<div align="center">
+      <b>{PAGE_LABEL}</b><br />
+      {PAGES}<br />
+      {LIMITS}
+    </div>
+
