@@ -995,10 +995,10 @@ class HMS_Residence_Hall extends HMS_Item
                         $username = $bed->_curr_assignment->asu_username;
                         $rlc  = HMS_RLC_Assignment::check_for_assignment($username, HMS_Term::get_current_term()); //false or index
                         if($rlc != FALSE){
-                            $rlc = $rlcs[$rlc['rlc_id']]; //get the full name for the rlc
+                            $rlc = ' (' . $rlcs[$rlc['rlc_id']] . ')'; //get the full name for the rlc
                         }
                         $name = HMS_SOAP::get_full_name($username);
-                        $link = PHPWS_Text::secureLink($name, 'hms', array('type'=>'student', 'op'=>'get_matching_students', 'username'=>$username)) . " (<em>$username</em>) ($rlc)";
+                        $link = PHPWS_Text::secureLink($name, 'hms', array('type'=>'student', 'op'=>'get_matching_students', 'username'=>$username)) . " (<em>$username</em>)$rlc";
                         $content .= 'Bedroom: ' . $bed->bedroom_label . '&nbsp;&nbsp;&nbsp;&nbsp;Bed: ' . $bed->bed_letter . '&nbsp;&nbsp;&nbsp;&nbsp;' . $link . '<br />';
                     }else{
                         # No one is assigned here
