@@ -525,6 +525,7 @@ class HMS_Student_UI{
         return PHPWS_Template::process($tags, 'hms', 'student/main_menu_fall.tpl');
     }
 
+/*
     function show_fall_main_menu($deadlines)
     {
 
@@ -541,16 +542,16 @@ class HMS_Student_UI{
         $lock_img       = '<img src="images/mod/hms/icons/lock.png" />';
         $warning_img    = '<img src="images/mod/hms/icons/warning.png" />';
 
-        /****************************************************
-         * Welcome and view application link (always shown) *
-         ***************************************************/
+        ///****************************************************
+        // * Welcome and view application link (always shown) *
+        // ***************************************************
         $tags['WELCOME_MSG'] = 'Hello, ' . HMS_SOAP::get_full_name($_SESSION['asu_username'])  . '. Welcome to the Housing Management System!<br /><br />';
         #TODO: Make the term here dynamic.
         $tags['WELCOME_MSG'] .= 'Please follow the steps listed below to apply for housing for the <b>' . HMS_Term::term_to_text($_SESSION['application_term'], TRUE) . ' AND ' . HMS_Term::term_to_text(HMS_Term::get_next_term($_SESSION['application_term']), TRUE) . '</b> term.';
 
         /*************************************
          * Residence Hall Contract Agreement *
-         ************************************/
+         ************************************
         $tags['TERMS_INTRO'] = 'To view the Residence Hall Contract click the following link: <a href="http://hms.appstate.edu/files/contract.pdf">The Residence Hall Contract Agreement</a>.';
         if($application->agreed_to_terms == 1){
             $tags['TERMS_ICON']  = $check_img;
@@ -568,7 +569,7 @@ class HMS_Student_UI{
        
         /***************
          * Application *
-         **************/
+         **************
         $tags['APPLICATION_ICON'] = $check_img;
         $tags['APPLICATION_MSG']  = '<b>You have completed a Housing Application.</b> You may click the link below to review your current application.';
         $tags['APPLICATION_LINK'] = PHPWS_Text::secureLink(_('View My Application'), 'hms', array('type'=>'student', 'op'=>'view_application'));
@@ -585,7 +586,7 @@ class HMS_Student_UI{
         
         /*******************
          * RLC Application *
-         ******************/
+         ******************
         PHPWS_Core::initModClass('hms','HMS_RLC_Application.php');
         $tags['RLC_INTRO'] = 'For more infomration about Appalachian\'s Unique Housing Options please visit the <a href="http://housing.appstate.edu/index.php?module=pagemaster&PAGE_user_op=view_page&PAGE_id=134" target="_blank">Housing & Residence Life Website</a>.';
 
@@ -618,7 +619,7 @@ class HMS_Student_UI{
         
         /***************************************
          * Student Profile & Profile Searching *
-         **************************************/
+         **************************************
 
         PHPWS_Core::initModClass('hms', 'HMS_Student_Profile.php');
         $tags['PROFILE_INTRO'] = "The HMS Student Profile is optional and can be used to help you find a roommate who shares your hobbies and interests. Once you complete your profile, you will be able to search for other students who share your interests based on their profiles.  Please note that this is ONLY a tool for finding roommates; your housing assignment will NOT be affected by this profile.";
@@ -656,7 +657,7 @@ class HMS_Student_UI{
 
         /**********************
          * Roommate Selection *
-         *********************/
+         *********************
         PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
         $tags['ROOMMATE_INTRO'] = 'Once you\'ve had a chance to communicate with your desired roommate and you have both agreed that you would like to room together, either of you can use the menu below to initiate an electronic handshake to confirm your desire to be roommates.';
 
@@ -695,9 +696,9 @@ class HMS_Student_UI{
         }
 
         // Commented due to housing bitching about a feature
-        /*********************
-         * Verify Assignment *
-         ********************
+        ///*********************
+        // * Verify Assignment *
+        // ********************
          $tags['VERIFY_INTRO'] = 'Once the assignment process is complete, you can view your up-to-the-minute application, assignment, roommate, and Learning Community status. <b><font color="red">Please note that this status is not final and is subject to change.</font></b>';
 
         # Check deadlines for verify assignment
@@ -711,7 +712,7 @@ class HMS_Student_UI{
         }else{
             $tags['VERIFY_MSG'] = '<b>It is too late to view your housing status</b>. The deadline past on ' . HMS_Deadlines::get_deadline_as_date('view_assignment_end_timestamp', $deadlines) . '.';
             $tags['VERIFY_ICON'] = $lock_img;
-        }*/
+        }
 
 
         # Logout link
@@ -720,6 +721,7 @@ class HMS_Student_UI{
         return PHPWS_Template::process($tags, 'hms', 'student/main_menu_fall.tpl');
     }
 
+    
     function show_spring_main_menu($deadlines)
     {
         PHPWS_Core::initModClass('hms','HMS_SOAP.php');
@@ -735,16 +737,16 @@ class HMS_Student_UI{
         $lock_img       = '<img src="images/mod/hms/icons/lock.png" />';
         $warning_img    = '<img src="images/mod/hms/icons/warning.png" />';
 
-        /****************************************************
-         * Welcome and view application link (always shown) *
-         ***************************************************/
+        ///****************************************************
+        // * Welcome and view application link (always shown) *
+        // ***************************************************
         $tags['WELCOME_MSG'] = 'Hello, ' . HMS_SOAP::get_full_name($_SESSION['asu_username'])  . '. Welcome to the Housing Management System!<br /><br />';
         #TODO: Make the term here dynamic.
         $tags['WELCOME_MSG'] .= 'Please follow the steps listed below to apply for housing for the <b>' . HMS_Term::term_to_text($_SESSION['application_term'], TRUE) . ' AND ' . HMS_Term::term_to_text(HMS_Term::get_next_term($_SESSION['application_term']), TRUE) . '</b> term.';
 
-        /*************************************
-         * Residence Hall Contract Agreement *
-         ************************************/
+        ///*************************************
+        // * Residence Hall Contract Agreement *
+        // ************************************
         $tags['TERMS_INTRO'] = 'To view the Residence Hall Contract click the following link: <a href="http://hms.appstate.edu/files/contract.pdf">The Residence Hall Contract Agreement</a>.';
         if($application->agreed_to_terms == 1){
             $tags['TERMS_ICON']  = $check_img;
@@ -760,9 +762,9 @@ class HMS_Student_UI{
             }
         }
        
-        /***************
-         * Application *
-         **************/
+        ///***************
+        // * Application *
+        // **************
         $tags['APPLICATION_ICON'] = $check_img;
         $tags['APPLICATION_MSG']  = '<b>You have completed a Housing Application.</b> You may click the link below to review your current application.';
         $tags['APPLICATION_LINK'] = PHPWS_Text::secureLink(_('View My Application'), 'hms', array('type'=>'student', 'op'=>'view_application'));
@@ -777,9 +779,9 @@ class HMS_Student_UI{
             $tags['NEW_APP_MSG']  = "<b>The deadline for editing your housing application passed</b> on " . HMS_Deadlines::get_deadline_as_date('edit_application_end_timestamp', $deadlines) . ".";
         }
         
-        /**********************
-         * Roommate Selection *
-         *********************/
+        ///**********************
+        // * Roommate Selection *
+        // *********************
         PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
         $tags['ROOMMATE_INTRO'] = 'Once you\'ve had a chance to communicate with your desired roommate and you have both agreed that you would like to room together, either of you can use the menu below to initiate an electronic handshake to confirm your desire to be roommates.';
 
@@ -818,9 +820,9 @@ class HMS_Student_UI{
         }
 
         // Commented due to housing bitching about a feature
-        /*********************
-         * Verify Assignment *
-         ********************
+        ///*********************
+        // * Verify Assignment *
+        // ********************
          $tags['VERIFY_INTRO'] = 'Once the assignment process is complete, you can view your up-to-the-minute application, assignment, roommate, and Learning Community status. <b><font color="red">Please note that this status is not final and is subject to change.</font></b>';
 
         # Check deadlines for verify assignment
@@ -834,13 +836,14 @@ class HMS_Student_UI{
         }else{
             $tags['VERIFY_MSG'] = '<b>It is too late to view your housing status</b>. The deadline past on ' . HMS_Deadlines::get_deadline_as_date('view_assignment_end_timestamp', $deadlines) . '.';
             $tags['VERIFY_ICON'] = $lock_img;
-        }*/
+        }
 
         # Logout link
         $tags['LOGOUT_LINK'] = PHPWS_Text::secureLink(_('Log Out'), 'users', array('action'=>'user', 'command'=>'logout'));
 
         return PHPWS_Template::process($tags, 'hms', 'student/main_menu_spring.tpl');
     }
+    */
 
     function show_verify_assignment()
     {

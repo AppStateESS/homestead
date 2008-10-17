@@ -9,6 +9,41 @@
 
 class HMS_Application_Features {
 
+    function main()
+    {
+        switch($_REQUEST['op'])
+        {
+            case 'show_edit_features':
+                PHPWS_Core::initModClass('hms', 'UI/Application_UI.php');
+                return Application_UI::show_feature_interface();
+                break;
+            case 'edit_features':
+                return HMS_Application_Features::handle_features_submit();
+                break;
+        }
+    }
+
+    function handle_features_submit()
+    {
+        # Check permissions
+        if( !Current_User::allow('hms', 'edit_features') ){
+            $tpl = array();
+            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
+        }
+
+        PHPWS_Core::initModClass('hms', 'UI/Application_UI.php');
+
+        $result = HMS_Application_Features::save($_REQUEST);
+
+        if($result){
+            echo "yes";
+            return Application_UI::show_feature_interface('Feature set updated successfully.');
+        }else{
+            echo "no";
+            return Application_UI::show_feature_interface(NULL, 'Error: There was a problem working with the database.');
+        }
+    }
+
     function save($request)
     {
         $features = array(APPLICATION_RLC_APP          => 'RLC Applications',

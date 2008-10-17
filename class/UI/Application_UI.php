@@ -548,7 +548,7 @@ class Application_UI{
       *
       * @return string $template Processed template ready for display
       */
-    function show_feature_interface(){
+    function show_feature_interface($success = NULL, $error = NULL){
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
 
         $features = array(APPLICATION_RLC_APP          => 'RLC Applications',
@@ -592,6 +592,9 @@ class Application_UI{
         $form->addSubmit('submit_button',  'Submit');
 
         javascript('/modules/hms/page_refresh/');
+
+        #TODO: create a template for this interface
+        #TODO: handle adding the error/success messages to the template
 
         return implode('<br />', $form->getTemplate());
     }

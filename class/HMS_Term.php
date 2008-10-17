@@ -649,6 +649,7 @@ class HMS_Term{
     function get_valid_application_terms($term){
         $db = &new PHPWS_DB('hms_term_applications');
         $db->addWhere('app_term', $term);
+        $db->addOrder('term asc');
         $result = $db->select();
 
         if(PHPWS_Error::logIfError($result)){
@@ -692,7 +693,7 @@ class HMS_Term{
     function is_valid_term($key){
         $db = &new PHPWS_DB('hms_term_applications');
         $db->addwhere('app_term', $key);
-        $db->addWhere('term', $key, 'or');
+        $db->addWhere('term', $key, '=', 'OR');
         $result = $db->select();
 
         if(PHPWS_Error::logIfError($result) || sizeof($result) == 0){

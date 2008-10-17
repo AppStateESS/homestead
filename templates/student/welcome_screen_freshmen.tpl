@@ -5,7 +5,7 @@
         Welcome to Appalachian State University Housing and Residence Life. The Department of Housing and Residence Life 
         is pleased you have chosen Appalachian and look forward to meeting your housing needs. We see that you are a new freshmen
         admitted for {ENTRY_TERM} semester and will be living on-campus for the first time. To begin your housing application for the 
-        <b>{ENTRY_TERM}</b> school year please click the 'Continue' button below. 
+        <b>{ENTRY_TERM}</b> term(s) please click the 'Continue' button below. 
         <!-- BEGIN hack_msg -->
         <br /><br />
         {HACK_MSG}

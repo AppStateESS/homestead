@@ -224,7 +224,7 @@ class HMS_Maintenance
         if(Current_User::allow('hms', 'edit_features')){
             $tpl['EDIT_FEATURES'] = PHPWS_Text::secureLink(_('Edit Application Features'),
                                                            'hms', array('type' => 'application_features',
-                                                                        'op'   => 'edit_features'));
+                                                                        'op'   => 'show_edit_features'));
         }
 
         /****************

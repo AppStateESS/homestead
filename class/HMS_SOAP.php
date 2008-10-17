@@ -743,8 +743,8 @@ class HMS_SOAP{
         $student->deposit_date          = '';
         $student->deposit_waved         = 'false';
         $student->student_type          = 'F';
-        $student->application_term      = '200910';
-        $student->projected_class       = 'SR';
+        $student->application_term      = '200920';
+        $student->projected_class       = 'FR';
         $student->credhrs_completed     = 0;
         $student->credhrs_for_term      = 15;
         $student->on_campus             = 'false';

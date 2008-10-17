@@ -158,9 +158,8 @@ class HMS_Admin
                 $final = HMS_Banner_Queue_UI::main();
                 break;
             case 'application_features':
-                PHPWS_Core::initModClass('hms', 'UI/Application_UI.php');
-                PHPWS_Core::initModClass('hms', 'HMS_Term.php');
-                $final = Application_UI::show_feature_interface();
+                PHPWS_Core::initModClass('hms', 'HMS_Application_Features.php');
+                $final = HMS_Application_Features::main();
                 break;
             default:
                 PHPWS_Core::initModClass('hms', 'HMS_Maintenance.php');
