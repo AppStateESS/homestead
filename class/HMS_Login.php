@@ -88,7 +88,6 @@ class HMS_Login
 
     function admin_login()
     {
-        require_once(PHPWS_SOURCE_DIR . '/mod/hms/inc/accounts.php');
         Current_User::loginUser(HMS_ADMIN_USER, HMS_ADMIN_PASS);
         Current_User::getLogin();
         $_SESSION['asu_username'] = $_REQUEST['asu_username'];

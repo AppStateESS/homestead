@@ -19,6 +19,7 @@ class HMS_Floor extends HMS_Item
     var $ft_movein_time_id;
     var $rt_movein_time_id;
     var $rlc_id;
+    var $floor_plan_image_id;
 
     /**
      * List of rooms associated with this floor
@@ -553,6 +554,83 @@ class HMS_Floor extends HMS_Item
         return $vacant_rooms;
     }
 
+    function where_am_i($link = FALSE)
+    {
+        $building = $this->get_parent();
+
+        $text = $building->hall_name . ', floor ' . $this->floor_number;
+
+        if($link){
+            return PHPWS_Text::secureLink($text, 'hms', array('type'=>'floor', 'op'=>'show_edit_floor', 'floor'=>$this->id));
+        }else{
+            return $text;
+        }
+    }
+
+    function count_avail_lottery_rooms($gender)
+    {
+        $now = mktime();
+
+        # Calculate the number of non-full male/female rooms in this hall
+        $query =   "SELECT DISTINCT COUNT(hms_room.id) FROM hms_room
+                    JOIN hms_bed ON hms_bed.room_id = hms_room.id
+                    JOIN hms_floor ON hms_room.floor_id = hms_floor.id
+                    WHERE (hms_bed.id NOT IN (SELECT bed_id FROM hms_lottery_reservation WHERE term = {$this->term} AND expires_on > $now)
+                    AND hms_bed.id NOT IN (SELECT bed_id FROM hms_assignment WHERE term = {$this->term}))
+                    AND hms_floor.id = {$this->id}
+                    AND hms_room.gender_type = $gender
+                    AND hms_room.is_reserved = 0
+                    AND hms_room.is_online = 1
+                    AND hms_room.private_room = 0
+                    AND hms_room.ra_room = 0
+                    AND hms_room.is_lobby = 0
+                    AND hms_floor.rlc_id IS NULL";
+
+        $avail_rooms = PHPWS_DB::getOne($query);
+        if(PEAR::isError($avail_rooms)){
+            PHPWS_Error::log($avail_rooms);
+            return FALSE;
+        }
+
+        return $avail_rooms;
+    }
+
+    function get_avail_lottery_rooms()
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Room.php');
+
+        $now = mktime();
+
+        $query =   "SELECT DISTINCT hms_room.* FROM hms_room
+                    JOIN hms_bed ON hms_bed.room_id = hms_room.id
+                    JOIN hms_floor ON hms_room.floor_id = hms_floor.id
+                    WHERE (hms_bed.id NOT IN (SELECT bed_id FROM hms_lottery_reservation WHERE term = {$this->term} AND expires_on > $now)
+                    AND hms_bed.id NOT IN (SELECT bed_id FROM hms_assignment WHERE term = {$this->term}))
+                    AND hms_floor.id = {$this->id}
+                    AND hms_room.is_reserved = 0
+                    AND hms_room.is_online = 1
+                    AND hms_room.private_room = 0
+                    AND hms_room.ra_room = 0
+                    AND hms_room.is_lobby = 0
+                    AND hms_floor.rlc_id IS NULL";
+
+        $avail_rooms = PHPWS_DB::getAll($query);
+        if(PEAR::isError($avail_rooms)){
+            PHPWS_Error::log($avail_rooms);
+            return FALSE;
+        }
+
+        $output_list = array();
+
+        foreach($avail_rooms as $room){
+            $obj = new HMS_Room();
+            PHPWS_Core::plugObject($obj, $room);
+            $output_list[] = $obj;
+        }
+
+        return $output_list;
+    }
+
     /**
      * Main Method
      */
@@ -648,6 +726,7 @@ class HMS_Floor extends HMS_Item
        $floor->is_online = isset($_REQUEST['is_online']) ? 1 : 0;
        $floor->ft_movein_time_id = $_REQUEST['ft_movein_time'];
        $floor->rt_movein_time_id = $_REQUEST['rt_movein_time'];
+       $floor->floor_plan_image_id = $_REQUEST['floor_plan_image_id'];
 
        if($_REQUEST['ft_movein_time'] == 0){
            $floor->ft_movein_time_id = NULL;
@@ -729,8 +808,8 @@ class HMS_Floor extends HMS_Item
         $form->setLabel('floor', 'Floor: ');
         $form->setExtra('floor', 'onChange="handle_floor_change()" disabled');
 
-        $form->addSubmit('submit', 'Select');
-        $form->setExtra('submit', 'disabled');
+        $form->addSubmit('submit_button', 'Select');
+        $form->setExtra('submit_button', 'disabled');
 
         # Use the type and op that was passed in
         $form->addHidden('module', 'hms');
@@ -824,6 +903,17 @@ class HMS_Floor extends HMS_Item
         }else{
             $form->setMatch('floor_rlc_id', 0);
         }
+
+        PHPWS_Core::initModClass('filecabinet', 'Cabinet.php');
+        if(isset($floor->floor_plan_image_id)){
+            $manager = Cabinet::fileManager('floor_plan_image_id', $floor->floor_plan_image_id);
+        }else{
+            $manager = Cabinet::fileManager('floor_plan_image_id');
+        }
+        $manager->maxImageWidth(300);
+        $manager->maxImageHeight(300);
+        $manager->imageOnly(false, false);
+        $form->addTplTag('FILE_MANAGER', $manager->get());
 
         $form->addHidden('type', 'floor');
         $form->addHidden('op', 'edit_floor');

@@ -170,6 +170,28 @@ class HMS_Bed extends HMS_Item {
     }
 
     /**
+     * Returns a string like "Justice Hall Room 110"
+     */
+    function where_am_i($link = FALSE)
+    {
+        if(!$this->loadRoom()){
+            return null;
+        }
+
+        $room = $this->get_parent();
+        $floor = $room->get_parent();
+        $building = $floor->get_parent();
+
+        $text = $building->hall_name . ' Room ' . $room->room_number;
+
+        if($link){
+            return PHPWS_Text::secureLink($text, 'hms', array('type'=>'room', 'op'=>'show_edit_room', 'room'=>$room->id));
+        }else{
+            return $text;
+        }
+    }
+
+    /**
      * Returns a link. If the bed is assigned, the link is to the
      * student info screen. Otherwise, the link the link is to the
      * assign student screen.
@@ -291,6 +313,58 @@ class HMS_Bed extends HMS_Item {
 
         return TRUE;
     }
+
+    function is_lottery_reserved()
+    {
+        $db = &new PHPWS_DB('hms_lottery_reservation');
+        $db->addWhere('bed_id', $this->id);
+        $db->addWhere('term', $this->term);
+        $db->addWhere('expires_on', mktime(), '>');
+        $result = $db->select('count');
+        
+        # TODO: error checking here
+
+        if($result > 0){
+            return TRUE;
+        }else{
+            return FALSE;
+        }
+    }
+
+    function get_lottery_reservation_info()
+    {
+        $db = &new PHPWS_DB('hms_lottery_reservation');
+        $db->addWhere('bed_id', $this->id);
+        $db->addWhere('term', $this->term);
+        $db->addWhere('expires_on', mktime(), '>');
+        $result = $db->select('row');
+
+        #TODO: error checking here
+
+        return $result;
+    }
+
+    function lottery_reserve($username, $requestor, $timestamp)
+    {
+        if($this->is_lottery_reserved()){
+            return FALSE;
+        }
+
+        $db = &new PHPWS_DB('hms_lottery_reservation');
+        $db->addValue('asu_username', $username);
+        $db->addValue('requestor', $requestor);
+        $db->addValue('term', $this->term);
+        $db->addValue('bed_id', $this->id);
+        $db->addValue('expires_on', $timestamp);
+        $result = $db->insert();
+
+        if(!$result || PHPWS_Error::logIfError($result)){
+            return FALSE;
+        }else{
+            return TRUE;
+        }
+    }
+
 
     /******************
      * Static Methods *
@@ -651,8 +725,8 @@ class HMS_Bed extends HMS_Item {
         $form->setLabel('bed', 'Bed: ');
         $form->setExtra('bed', 'disabled onChange="handle_bed_change()"');
 
-        $form->addSubmit('submit', 'Select');
-        $form->setExtra('submit', 'disabled');
+        $form->addSubmit('submit_button', 'Select');
+        $form->setExtra('submit_button', 'disabled');
 
         # Use the type and op that was passed in
         $form->addHidden('module', 'hms');

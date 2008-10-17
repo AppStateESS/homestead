@@ -24,66 +24,6 @@ class HMS_Maintenance
         return $this->error;
     }
     
-    function purge_data()
-    {
-        Layout::addPageTitle("Purging Data");
-
-        $content .= "Purging housing applications...<br />";
-        $db = &new PHPWS_DB('hms_application');
-        $db->delete();
-        
-        $content .= "Purging Housing Assignments...<br />";
-        $db = &new PHPWS_DB('hms_assignment');
-        $db->delete();
-
-        $content .= "Purging Deadlines...<br />";
-        $db = &new PHPWS_DB('hms_deadlines');
-        $db->delete();
-
-        $content .= "Purging Learning Communities...<br />";
-        $db = &new PHPWS_DB('hms_learning_communities');
-        $db->delete();
-
-        $content .= "Purging Learning Community Applications...<br />";
-        $db = &new PHPWS_DB('hms_learning_community_applications');
-        $db->delete();
-
-        $content .= "Purging Learning Community Assignments...<br />";
-        $db = &new PHPWS_DB('hms_learning_community_assignment');
-        $db->delete();
-
-        $content .= "Purging Learning Community Questions...<br />";
-        $db = &new PHPWS_DB('hms_learning_community_questions');
-        $db->delete();
-
-        $content .= "Purging residence hall data...<br />";
-        $db = &new PHPWS_DB('hms_residence_hall');
-        $db->delete();
-
-        $content .= "Purging floor data...<br />";
-        $db = &new PHPWS_DB('hms_floor');
-        $db->delete();
-
-        $content .= "Purging room data...<br />";
-        $db = &new PHPWS_DB('hms_room');
-        $db->delete();
-
-        $content .= "Purging bedroom data...<br />";
-        $db = &new PHPWS_DB('hms_bedrooms');
-        $db->delete();
-
-        $content .= "Purging bed data...<br />";
-        $db = &new PHPWS_DB('hms_beds');
-        $db->delete();
-
-        $content .= "Purging suite data...<br />";
-        $db = &new PHPWS_DB('hms_suite');
-        $db->delete();
-
-        $content .= "Done!<br />";
-        return $content;
-    }
-
     function show_options($type=MENU_TYPE_ALL)
     {
         Layout::addPageTitle("Comprehensive Maintenance");
@@ -106,6 +46,15 @@ class HMS_Maintenance
                 return PHPWS_Template::process($rlcs, 'hms', 'admin/maintenance.tpl');
             } else {
                 $tpl = array_merge($tpl, $rlcs);
+            }
+        }
+
+        if($type == MENU_TYPE_SETTINGS || $type == MENU_TYPE_ALL){
+            $settings = HMS_Maintenance::show_settings();
+            if($type != MENU_TYPE_ALL){
+                return PHPWS_Template::process($settings, 'hms', 'admin/maintenance.tpl');
+            }else{
+                $tpl = array_merge($tpl, $settings);
             }
         }
 
@@ -237,6 +186,15 @@ class HMS_Maintenance
                 array('type'=>'activity_log', 'op'=>'view'));
         }
 
+        /***********************************
+         * Lottery Special Needs Interface *
+         ***********************************/
+        if(Current_User::allow('hms', 'lottery_needs')) {
+            $tpl['LOTTERY_NEEDS'] = PHPWS_Text::secureLink(
+                _('View and clear lottery special needs'), 'hms',
+                array('type'=>'lottery', 'op'=>'view_lottery_needs'));
+        }
+
         $content = PHPWS_Template::process($tpl, 'hms', 'admin/maintenance.tpl');
         return $content;
     }
@@ -253,6 +211,9 @@ class HMS_Maintenance
         if(Current_User::allow('hms', 'assignment_maintenance'))
             $tpl['DELETE_ASSIGNMENT'] = PHPWS_Text::secureLink(_('Unassign Student'), 'hms', array('type'=>'assignment', 'op'=>'show_unassign_student'));
 
+        if(Current_User::allow('hms', 'assignment_maintenance'))
+            $tpl['HALL_OVERVIEW'] = PHPWS_Text::secureLink(_('Get Hall Overview'), 'hms', array('type'=>'hall', 'op'=>'select_residence_hall_for_overview')) . ' [' . PHPWS_Text::secureLink(_('Printable'), 'hms', array('type'=>'hall', 'op'=>'select_residence_hall_for_overview', 'print'=>'1')) . ']';
+
         return $tpl;
     }
 
@@ -262,11 +223,13 @@ class HMS_Maintenance
         /**************************
         * Residence Hall Options *
         **************************/
+        /*
         if(Current_User::allow('hms', 'hall_structure')) 
             $tpl['ADD_HALL']    = PHPWS_Text::secureLink(_('Add Residence Hall'), 'hms', array('type'=>'hall', 'op'=>'add_hall'));
 
         if(Current_User::allow('hms', 'hall_structure'))
             $tpl['DELETE_HALL'] = PHPWS_Text::secureLink(_('Delete Residence Hall'), 'hms', array('type'=>'hall', 'op'=>'select_residence_hall_for_delete'));
+        */
 
         if(Current_User::allow('hms', 'hall_attributes') || Current_User::allow('hms', 'hall_view'))
             $tpl['EDIT_HALL']   = PHPWS_Text::secureLink(_('Edit Residence Hall'), 'hms', array('type'=>'hall', 'op'=>'select_hall_to_edit'));
@@ -287,22 +250,11 @@ class HMS_Maintenance
         if(Current_User::allow('hms', 'floor_attributes') || Current_User::allow('hms', 'floor_view'))
             $tpl['EDIT_FLOOR']   = PHPWS_Text::secureLink(_('Edit a Floor'), 'hms', array('type'=>'floor', 'op'=>'show_select_floor'));
         
-        
-        /****************
-         * Room Options *
-         ***************/
-        if(Current_User::allow('hms', 'room_structure'))
-            $tpl['ADD_ROOM'] = PHPWS_Text::secureLink(_('Add a Room'), 'hms', array('type'=>'room', 'op'=>'select_residence_hall_for_add_room'));
-
-        if(Current_User::allow('hms', 'room_structure')) 
-            $tpl['DELETE_ROOM'] = PHPWS_Text::secureLink(_('Delete a Room'), 'hms', array('type'=>'room', 'op'=>'select_residence_hall_for_delete_room'));
-
+        # Edit rooms
         if(Current_User::allow('hms', 'room_attributes') || Current_User::allow('hms', 'room_view'))
             $tpl['EDIT_ROOM'] = PHPWS_Text::secureLink(_('Edit a Room'), 'hms', array('type'=>'room', 'op'=>'select_room_to_edit'));
 
-        /***************
-         * Bed Options *
-         **************/
+        # Edit beds
         if(Current_user::allow('hms', 'bed_attributes') || Current_User::allow('hms', 'bed_view'))
             $tpl['EDIT_BED'] = PHPWS_Text::secureLink(_('Edit a Bed'), 'hms', array('type'=>'bed', 'op'=>'select_bed_to_edit'));
 
@@ -338,6 +290,18 @@ class HMS_Maintenance
 
         if(Current_User::allow('hms', 'view_rlc_room_assignments'))
             $tpl['VIEW_RLC_ASSIGNMENTS'] = PHPWS_Text::secureLink(_('View RLC Room Assignments'), 'hms', array('type'=>'rlc', 'op'=>'view_rlc_assignments'));
+
+        return $tpl;
+    }
+
+    function show_settings()
+    {
+        $tpl = array();
+
+        # Lottery settings
+        if(Current_User::allow('hms', 'lottery_settings')){
+            $tpl['LOTTERY_SETTINGS'] = PHPWS_Text::secureLink('Lottery Settings', 'hms', array('type'=>'lottery', 'op'=>'show_lottery_settings'));
+        }
 
         return $tpl;
     }

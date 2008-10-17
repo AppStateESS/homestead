@@ -196,6 +196,8 @@ class HMS_Util{
     function formatMealOption($meal)
     {
         switch($meal){
+            case BANNER_MEAL_NONE:
+                return 'None';
             case BANNER_MEAL_LOW:
                 return 'Low';
             case BANNER_MEAL_STD:
@@ -207,6 +209,40 @@ class HMS_Util{
             default:
                 return 'Unknown';
         }
+    }
+
+
+    // when fed a number, adds the English ordinal suffix. Works for any
+    // number, even negatives
+    function ordinal($number) {
+        if ($number % 100 > 10 && $number %100 < 14){
+            $suffix = "th";
+        }else{
+            switch($number % 10) {
+
+                case 0:
+                    $suffix = "th";
+                    break;
+
+                case 1:
+                    $suffix = "st";
+                    break;
+
+                case 2:
+                    $suffix = "nd";
+                    break;
+
+                case 3:
+                    $suffix = "rd";
+                    break;
+
+                default:
+                    $suffix = "th";
+                    break;
+            }
+        }
+
+        return "${number}<SUP>$suffix</SUP>";
     }
 }
 ?>

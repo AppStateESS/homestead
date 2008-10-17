@@ -161,6 +161,10 @@ class HMS_Admin
                 PHPWS_Core::initModClass('hms', 'HMS_Application_Features.php');
                 $final = HMS_Application_Features::main();
                 break;
+            case 'lottery':
+                PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
+                $final = HMS_Lottery::main();
+                break;
             default:
                 PHPWS_Core::initModClass('hms', 'HMS_Maintenance.php');
                 $_REQUEST['op'] = 'show_maintenance_options';
@@ -208,6 +212,9 @@ class HMS_Admin
                     PHPWS_Core::initModClass('hms', 'HMS_Reports.php');
                     $content = HMS_Reports::display_reports();
                     break;
+                case 'settings':
+                    $content = HMS_Maintenance::show_options(MENU_TYPE_SETTINGS);
+                    break;
                 default:
                     $content = $final;
                     break;
@@ -230,6 +237,8 @@ class HMS_Admin
         }
         $tabs['reports']            = array('title' => 'Reports', 'link' => $link,
                                         'link_title'=>'Reports');
+        $tabs['settings']            = array('title' => 'Settings', 'link'=> $link,
+                                        'link_title'=>'Settings');
         
         //Allow a user to set their default tab
         if( $tab != PHPWS_Cookie::read('default_tab') && !isset($_REQUEST['make_default_tab']) ){
@@ -253,6 +262,9 @@ class HMS_Admin
         Layout::add($panel->display($content));
         Layout::addStyle('controlpanel');
 
+        /*************
+         * MiniAdmin *
+         *************/
         if(Current_User::allow('hms', 'reports')) 
             $links[] = PHPWS_Text::secureLink(_('HMS Reports'), 'hms', array('type'=>'reports', 'op'=>'display_reports')); 
 

@@ -169,11 +169,11 @@ function handle_suite_change()
     // the default value is selected
     if(roomId == 0){
         //alert('default selected');
-        document.getElementById('phpws_form_submit').disabled = true;
+        document.getElementById('phpws_form_submit_button').disabled = true;
         return;
     }
     
-    document.getElementById('phpws_form_submit').disabled = false;
+    document.getElementById('phpws_form_submit_button').disabled = false;
 }
 
 // Clears a drop down's options

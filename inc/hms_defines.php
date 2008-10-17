@@ -25,6 +25,13 @@ define('SOAP_REPORT_TEST_FLAG', true);
  */
 define('AXP_TEST_FLAG', true);
 
+/**
+ * Email testing flag
+ * Set to true to prevent email from actually being sent.
+ * Instead, it will be logged to a text file.
+ */
+define('EMAIL_TEST_FLAG', true);
+
 /* Errors */
 ini_set('ERROR_REPORTING', E_ALL);
 ini_set('display_errors', 1);

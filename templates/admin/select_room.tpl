@@ -27,7 +27,7 @@
             </tr>
         </table>
         <br />
-        {SUBMIT}
+        {SUBMIT_BUTTON}
         {END_FORM}
     </div>
   </div>

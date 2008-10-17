@@ -99,8 +99,6 @@ define('BANNER_QUEUE_ASSIGNMENT', 1);
 define('BANNER_QUEUE_REMOVAL',    2);
 
 /**
-
-/**
  * Menu Types
  */
 define('MENU_TYPE_ALL',         0);
@@ -108,6 +106,14 @@ define('MENU_TYPE_STRUCTURE',   1);
 define('MENU_TYPE_RLC',         2);
 define('MENU_TYPE_ASSIGNMENT',  3);
 define('MENU_TYPE_STATISTICS',  4);
+define('MENU_TYPE_SETTINGS',    5);
+
+/**
+ * Assignment Features
+ */
+define('APPLICATION_RLC_APP',          0);
+define('APPLICATION_ROOMMATE_PROFILE', 1);
+define('APPLICATION_SELECT_ROOMMATE',  2);
 
 /**
  * Activities (used for logging)
@@ -171,6 +177,17 @@ define('ACTIVITY_ROOMMATE_REQUESTS_UPDATED',    38);
 define('ACTIVITY_CHANGE_ACTIVE_TERM',           39);
 define('ACTIVITY_ADD_NOTE',                     40);
 
+// Activities for the lottery
+define('ACTIVITY_LOTTERY_SIGNUP_INVITE',        41);
+define('ACTIVITY_LOTTERY_ENTRY',                42);
+define('ACTIVITY_LOTTERY_INVITED',              43);
+define('ACTIVITY_LOTTERY_REMINDED',             44);
+define('ACTIVITY_LOTTERY_ROOM_CHOSEN',          45);
+define('ACTIVITY_LOTTERY_REQUESTED_AS_ROOMMATE',46);
+define('ACTIVITY_LOTTERY_ROOMMATE_REMINDED',    47);
+define('ACTIVITY_LOTTERY_CONFIRMED_ROOMMATE',   48);
+define('ACTIVITY_LOTTERY_EXECUTED',             49);
+
 /** 
  * Errors 
  */
@@ -226,12 +243,8 @@ define('E_UNASSIGN_ASSIGN_LOAD_FAILED', 31);
 define('E_UNASSIGN_BANNER_ERROR',       32);
 define('E_UNASSIGN_HMS_DB_ERROR',       33);
 
-
 /**
- * Assignment Features
+ * Lottery Errors
  */
-define('APPLICATION_RLC_APP',          0);
-define('APPLICATION_ROOMMATE_PROFILE', 1);
-define('APPLICATION_SELECT_ROOMMATE',  2);
-
+define('E_LOTTERY_ROOMMATE_INVITE_NOT_FOUND',   33);
 ?>

@@ -13,33 +13,24 @@
 
             <!-- BEGIN hall_options -->
             <dt>Residence Hall Options</dt>
-            <dd>{ADD_HALL}</dd>
+            <!-- <dd>{ADD_HALL}</dd> -->
+            <!-- <dd>{DELETE_HALL}</dd> -->
             <dd>{EDIT_HALL}</dd>
-            <dd>{DELETE_HALL}</dd>
-            <dd>{HALL_OVERVIEW}</dd>
             <!-- END hall_options -->
 
             <!-- BEGIN floor_options -->
-            <dt>Floor Options</dt>
-            <dd>{ADD_FLOOR}</dd>
             <dd>{EDIT_FLOOR}</dd>
-            <dd>{DELETE_FLOOR}</dd>
             <!-- END floor_options -->
 
             <!-- BEGIN room_options -->
-            <dt>Room Options</dt>
-            <dd>{ADD_ROOM}</dd>
-            <dd>{DELETE_ROOM}</dd>
             <dd>{EDIT_ROOM}</dd>
             <!-- END room_options -->
 
             <!-- BEGIN suite_options -->
-            <dt>Suite Options</dt>
             <dd>{EDIT_SUITE}</dd>
             <!-- END suite_options -->
 
             <!-- BEGIN bed_options -->
-            <dt>Bed Options</dt>
             <dd>{EDIT_BED}</dd>
             <!-- END bed_options -->
         </dl>
@@ -60,6 +51,7 @@
             <dt>Assignment Maintenance</dt>
             <dd>{CREATE_ASSIGNMENT}</dd>
             <dd>{DELETE_ASSIGNMENT}</dd>
+            <dd>{HALL_OVERVIEW}</dd>
             <dd>{ASSIGN_BY_FLOOR}</dd>
             <!-- END assignments -->
             
@@ -113,6 +105,16 @@
             <dd>{ASSOCIATE_TERM}</dd>
             <dd>{EDIT_FEATURES}</dd>
             <!-- END term -->
+
+            <!-- BEGIN settings -->
+            <dt>Settings</dt>
+            <dd>{LOTTERY_SETTINGS}</dd>
+            <!-- END settings -->
+
+            <!-- BEGIN lottery_needs -->
+            <dt>Lottery Needs</dt>
+            <dd>{LOTTERY_NEEDS}</dd>
+            <!-- END lottery_needs -->
         </dl>
         <!-- END right -->
     </div>

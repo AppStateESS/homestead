@@ -1,6 +1,6 @@
 <div class="hms">
   <div class="box">
-    <div class="{TITLE_CLASS}"><h1>{TITLE}</h1></div>
+    <div class="title"> <h1>Lottery Settings</h1> </div>
     <div class="box-content">
         <!-- BEGIN error_msg -->
         <font color="red">{ERROR_MSG}<br /></font>
@@ -9,29 +9,23 @@
         <!-- BEGIN success_msg -->
         <font color="green">{SUCCESS_MSG}<br /></font>
         <!-- END success_msg -->
-        
-        {MESSAGE}<br /><br />
         {START_FORM}
         <table>
             <tr>
-                <th align="left">{RESIDENCE_HALL_LABEL}</th>
-                <td>{RESIDENCE_HALL}</td>
+                <th>Lottery term: </th><td align="left">{LOTTERY_TERM}</td>
             </tr>
             <tr>
-                <th align="left">{FLOOR_LABEL}</th>
-                <td>{FLOOR}</td>
+                <th>Percent sophomore: </th><td align="left">{LOTTERY_PER_SOPH}</td>
             </tr>
             <tr>
-                <th align="left">{ROOM_LABEL}</th>
-                <td>{ROOM}</td>
+                <th>Percent junior: </th><td align="left">{LOTTERY_PER_JR}</td>
             </tr>
             <tr>
-                <th align="left">{BED_LABEL}</th>
-                <td>{BED}</td>
+                <th>Percent senior: </th><td align="left">{LOTTERY_PER_SENIOR}</td>
             </tr>
         </table>
         <br />
-        {SUBMIT_BUTTON}
+        {SUBMIT}
         {END_FORM}
     </div>
   </div>

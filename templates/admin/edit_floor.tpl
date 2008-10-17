@@ -46,6 +46,9 @@
             <tr>
                 <th>Reserved for RLC: </th><td>{FLOOR_RLC_ID}</td>
             </tr>
+            <tr>
+                <th>Floor plan:</th><td>{FILE_MANAGER}</td>
+            </tr>
         </table>
         <br />
         {SUBMIT_FORM}

@@ -703,6 +703,17 @@ class HMS_Term{
         return true;
     }
 
+    function get_term_year($term)
+    {
+        # Grab the year
+        return substr($term, 0, 4);
+    }
+
+    function get_term_sem($term)
+    {
+        return substr($term, 4, 2);
+    }
+
     /******************************
      * Accessor & Mutator Methods *
      *****************************/

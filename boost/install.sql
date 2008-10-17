@@ -35,14 +35,16 @@ CREATE TABLE hms_residence_hall (
     gender_type             smallint NOT NULL,
     air_conditioned         smallint NOT NULL,
     is_online               smallint NOT NULL,
-    per_freshmen_rsvd       integer NOT NULL,
-    per_sophomore_rsvd      integer NOT NULL,
-    per_junior_rsvd         integer NOT NULL,
-    per_senior_rsvd         integer NOT NULL,
+    rooms_for_lottery       integer DEFAULT 0 NOT NULL,
+    meal_plan_required      smallint DEFAULT 0 NOT NULL,
     added_by                smallint NOT NULL,
     added_on                integer NOT NULL,
     updated_by              smallint,
     updated_on              integer,
+    exterior_image_id       integer DEFAULT 0,
+    other_image_id          integer DEFAULT 0,
+    map_image_id            integer DEFAULT 0,
+    room_plan_image_id      integer DEFAULT 0,
     primary key(id)
 );
 
@@ -68,6 +70,7 @@ CREATE TABLE hms_floor (
     updated_by          smallint NOT NULL,
     updated_on          integer NOT NULL,
     rlc_id              smallint REFERENCES hms_learning_communities(id),
+    floor_plan_image_id integer DEFAULT 0,
     primary key(id)
 );
 
@@ -93,7 +96,6 @@ CREATE TABLE hms_room (
     ra_room                 smallint NOT NULL,
     private_room            smallint NOT NULL,
     is_overflow             smallint NOT NULL,
-    learning_community_id   smallint DEFAULT (0)::smallint,
     phone_number            integer DEFAULT 0,
     pricing_tier            smallint REFERENCES hms_pricing_tiers(id),
     is_medical              smallint DEFAULT (0)::smallint,
@@ -123,15 +125,17 @@ CREATE TABLE hms_bed (
 );
 
 CREATE TABLE hms_assignment (
-    id              integer NOT NULL,
-    term            integer NOT NULL REFERENCES hms_term(term),
+    id              integer     NOT NULL,
+    term            integer     NOT NULL REFERENCES hms_term(term),
     asu_username    character varying(32) NOT NULL,
-    bed_id          integer NOT NULL REFERENCES hms_bed(id),
+    bed_id          integer     NOT NULL REFERENCES hms_bed(id),
     meal_option     smallint default 0,
-    added_by        integer NOT NULL,
-    added_on        integer NOT NULL,
-    updated_by      integer NOT NULL,
-    updated_on      integer NOT NULL,
+    lottery         smallint    NOT NULL DEFAULT 0,
+    auto_assigned   smallint    NOT NULL DEFAULT 0,
+    added_by        integer     NOT NULL,
+    added_on        integer     NOT NULL,
+    updated_by      integer     NOT NULL,
+    updated_on      integer     NOT NULL,
     primary key(id)
 );
 
@@ -417,6 +421,34 @@ CREATE TABLE hms_activity_log (
     activity    INTEGER                 NOT NULL,
     actor       CHARACTER VARYING(32)   NOT NULL,
     notes       CHARACTER VARYING(512)
+);
+
+CREATE TABLE hms_lottery_entry (
+    id                  INTEGER                 NOT NULL,
+    asu_username        CHARACTER VARYING(32)   NOT NULL,
+    term                INTEGER                 NOT NULL,
+    created_on          INTEGER                 NOT NULL,
+    application_term    INTEGER                 NOT NULL,
+    gender              smallint                NOT NULL,
+    roommate1_username  CHARACTER VARYING(32),
+    roommate2_username  CHARACTER VARYING(32),
+    roommate3_username  CHARACTER VARYING(32),
+    physical_disability smallint DEFAULT 0,
+    psych_disability    smallint DEFAULT 0,
+    medical_need        smallint DEFAULT 0,
+    gender_need         smallint DEFAULT 0,
+    PRIMARY KEY (id)
+);
+ALTER TABLE hms_lottery_entry ADD CONSTRAINT unique_entry UNIQUE (term, asu_username);
+
+CREATE TABLE hms_lottery_reservation (
+    id                  INTEGER                 NOT NULL,
+    asu_username        CHARACTER VARYING(32)   NOT NULL,
+    requestor           CHARACTER VARYING(32)   NOT NULL,
+    term                INTEGER                 NOT NULL,
+    bed_id              INTEGER                 NOT NULL,
+    expires_on          INTEGER                 NOT NULL,
+    PRIMARY KEY (id)
 );
 
 INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity) VALUES (10, 'Community of Servant Leaders', 'LSC', 50);

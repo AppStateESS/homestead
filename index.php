@@ -5,6 +5,9 @@ if (!defined('PHPWS_SOURCE_DIR')) {
     exit();
 }
 
+require_once(PHPWS_SOURCE_DIR . '/mod/hms/inc/accounts.php');
+require_once(PHPWS_SOURCE_DIR . 'mod/hms/inc/defines.php');
+
 PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
 if(Current_User::isLogged()) {
@@ -20,7 +23,6 @@ if(Current_User::isLogged()) {
     
     HMS::main();
 } else if(isset($_REQUEST['type']) && $_REQUEST['type'] == 'hms' && $_REQUEST['op'] == 'login') {
-    require_once(PHPWS_SOURCE_DIR . 'mod/hms/inc/defines.php');
     PHPWS_Core::initModClass('hms', 'HMS_Login.php');
     $type = NULL;
     $type = HMS_Login::login_user();

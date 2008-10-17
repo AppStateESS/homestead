@@ -310,8 +310,8 @@ class HMS_Suite extends HMS_Item {
         $form->addHidden('type', $type);
         $form->addHidden('op', $op);
 
-        $form->addSubmit('submit', 'Select');
-        $form->setExtra('submit', 'disabled');
+        $form->addSubmit('submit_button', 'Select');
+        $form->setExtra('submit_button', 'disabled');
 
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();

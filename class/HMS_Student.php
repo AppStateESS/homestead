@@ -274,6 +274,42 @@ class HMS_Student {
                 $side_thingie->show();
                 return HMS_Student_UI::show_verify_assignment();                
                 break;
+            case 'lottery_signup_submit':
+                PHPWS_Core::initModClass('hms', 'UI/Lottery_UI.php');
+                return Lottery_UI::lottery_signup_submit();
+                break;
+            case 'lottery_signup_special_needs':
+                PHPWS_Core::initModClass('hms', 'UI/Lottery_UI.php');
+                return Lottery_UI::lottery_signup();
+                break;
+            case 'lottery_select_floor':
+                PHPWS_Core::initModClass('hms', 'UI/Lottery_UI.php');
+                return Lottery_UI::show_select_floor();
+                break;
+            case 'lottery_select_room':
+                PHPWS_Core::initModClass('hms', 'UI/Lottery_UI.php');
+                return Lottery_UI::show_select_room();
+                break;
+            case 'lottery_select_roommates': 
+                PHPWS_Core::initModClass('hms', 'UI/Lottery_UI.php');
+                return Lottery_UI::show_select_roommates();
+                break;
+            case 'lottery_show_confirm_roommates':
+                PHPWS_Core::initModClass('hms', 'UI/Lottery_UI.php');
+                return Lottery_UI::show_confirm_roommates();
+                break;
+            case 'lottery_confirmed':
+                PHPWS_Core::initModClass('hms', 'UI/Lottery_UI.php');
+                return Lottery_UI::show_confirmed();
+                break;
+            case 'lottery_show_confirm_roommate_request':
+                PHPWS_Core::initModClass('hms', 'UI/Lottery_UI.php');
+                return Lottery_UI::show_confirm_lottery_roommate_request();
+                break;
+            case 'lottery_confirm_roommate_request':
+                PHPWS_Core::initModClass('hms', 'UI/Lottery_UI.php');
+                return Lottery_UI::handle_lottery_roommate_confirmation();
+                break;
             case 'main':
                 //return HMS_Student::show_main_menu();
                 PHPWS_Core::initModClass('hms', 'UI/Student_UI.php');

@@ -243,20 +243,6 @@ class HMS_Assignment extends HMS_Item
         return !is_null($db->select('row'));
     }
 
-    /**
-     * Creates a new HMS_Assignment object, and appropriately assigns the student.  Also takes care
-     * of any fussy SOAP business.
-     *
-     * Returns the HMS_Assignment object, or FALSE if there was any error (like someone was
-     * already assigned)
-     *
-    function create_assignment($asu_username, $term, $bed_id, $meal)
-    {
-        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
-
-        $meal_plan = HMS_SOAP::get_plan_meal_codes($asu_username, 
-    }*/
-
     function get_assignment($asu_username, $term = NULL)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
@@ -288,7 +274,7 @@ class HMS_Assignment extends HMS_Item
      * Does all the checks necessary to assign a student and makes the assignment
      * The $room_id and $bed_id fields are optional, but one or the other must be specificed
      */
-    function assign_student($username, $term, $room_id = NULL, $bed_id = NULL, $meal_plan, $notes="")
+    function assign_student($username, $term, $room_id = NULL, $bed_id = NULL, $meal_plan, $notes="", $lottery = FALSE)
     {   
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
         PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
@@ -298,9 +284,14 @@ class HMS_Assignment extends HMS_Item
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
 
+        /*
+         * Have to comment this out for the lottery, since a student is the current user
         if(!Current_User::allow('hms', 'assignment_maintenance')){
             return E_PERMISSION_DENIED;
         }
+        */
+
+
 
         # Make sure a username was entered
         if(!isset($username) || $username == ''){
@@ -384,8 +375,17 @@ class HMS_Assignment extends HMS_Item
             $meal_plan = NULL;
         }
         
-        # Hard code for plan: HOME, and use the meal plan selected in the drop down by the user
+        # Hard code for plan: HOME
         $meal['plan'] = 'HOME';
+
+        # Determine which meal plan to use
+        // If this is a freshmen student and they've somehow selected none or low, give them standard
+        if(HMS_SOAP::get_student_type($username) == TYPE_FRESHMEN && ($meal_plan == BANNER_MEAL_NONE || $meal_plan == BANNER_MEAL_LOW)){
+            $meal_plan = BANNER_MEAL_STD;
+        // If a student is living in a dorm which requires a meal plan and they've selected none, give them low
+        }else if($hall->meal_plan_required == 1 && $meal_plan == BANNER_MEAL_NONE){
+            $meal_plan = BANNER_MEAL_LOW;
+        }
         $meal['meal'] = $meal_plan;
 
         # Send this off to the queue for assignment in banner
@@ -411,6 +411,13 @@ class HMS_Assignment extends HMS_Item
         $assignment->term           = $term;
         $assignment->letter_printed = 0;
 
+        # If this was a lottery assignment, flag it as such
+        if($lottery){
+            $assignment->lottery = 1;
+        }else{
+            $assignment->lottery = 0;
+        }
+
         $result = $assignment->save();
 
         if(!$result || PHPWS_Error::logIfError($result)){
@@ -418,7 +425,7 @@ class HMS_Assignment extends HMS_Item
         }
         
         # Log the assignment
-        HMS_Activity_Log::log_activity($_REQUEST['username'], ACTIVITY_ASSIGNED, Current_User::getUsername(), HMS_Term::get_selected_term() . ' ' . $hall->hall_name . ' ' . $room->room_number . ' ' . $notes);
+        HMS_Activity_Log::log_activity($username, ACTIVITY_ASSIGNED, Current_User::getUsername(), HMS_Term::get_selected_term() . ' ' . $hall->hall_name . ' ' . $room->room_number . ' ' . $notes);
 
         # Look for roommates and flag their assignments as needing a new letter
         $room_id = $assignment->get_room_id();

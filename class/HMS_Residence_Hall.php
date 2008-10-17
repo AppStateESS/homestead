@@ -19,10 +19,14 @@ class HMS_Residence_Hall extends HMS_Item
     var $air_conditioned        = 0;
     var $is_online              = 0;
 
-    var $per_freshmen_rsvd      = NULL;
-    var $per_sophomore_rsvd     = NULL;
-    var $per_junior_rsvd        = NULL;
-    var $per_senior_rsvd        = NULL;
+    var $rooms_for_lottery      = 0;
+    var $meal_plan_required     = 0;
+
+    // Photo IDs
+    var $exterior_image_id;
+    var $other_image_id;
+    var $map_image_id;
+    var $room_plan_image_id;
 
     /**
      * Listing of floors associated with this room
@@ -545,6 +549,62 @@ class HMS_Residence_Hall extends HMS_Item
         return $vacant_floors;
     }
 
+    function count_avail_lottery_rooms($gender)
+    {
+        $now = mktime();
+
+        # Calculate the number of non-full male/female rooms in this hall
+        $query =   "SELECT DISTINCT COUNT(hms_room.id) FROM hms_room
+                    JOIN hms_bed ON hms_bed.room_id = hms_room.id
+                    JOIN hms_floor ON hms_room.floor_id = hms_floor.id
+                    JOIN hms_residence_hall ON hms_floor.residence_hall_id = hms_residence_hall.id
+                    WHERE (hms_bed.id NOT IN (SELECT bed_id FROM hms_lottery_reservation WHERE term = {$this->term} AND expires_on > $now)
+                    AND hms_bed.id NOT IN (SELECT bed_id FROM hms_assignment WHERE term = {$this->term}))
+                    AND hms_residence_hall.id = {$this->id}
+                    AND hms_room.gender_type = $gender
+                    AND hms_room.is_medical = 0
+                    AND hms_room.is_reserved = 0
+                    AND hms_room.is_online = 1
+                    AND hms_room.private_room = 0
+                    AND hms_room.ra_room = 0
+                    AND hms_room.is_lobby = 0
+                    AND hms_floor.rlc_id IS NULL";
+
+        $avail_rooms = PHPWS_DB::getOne($query);
+        if(PEAR::isError($avail_rooms)){
+            PHPWS_Error::log($avail_rooms);
+            return FALSE;
+        }
+
+        return $avail_rooms;
+    }
+
+    function count_lottery_used_rooms()
+    {
+        $now = mktime();
+
+        # Get the number of rooms in this hall which have every bed either assigned or reserved through the lottery.
+        $query      = "SELECT count(hms_room.*) FROM hms_room 
+                       JOIN hms_floor ON hms_room.floor_id = hms_floor.id
+                       JOIN hms_residence_hall ON hms_floor.residence_hall_id = hms_residence_hall.id
+                       AND hms_residence_hall.id = {$this->id} AND
+                       hms_room.id NOT IN (SELECT DISTINCT hms_room.id FROM hms_room
+                       JOIN hms_bed ON hms_bed.room_id = hms_room.id
+                       JOIN hms_floor ON hms_room.floor_id = hms_floor.id
+                       JOIN hms_residence_hall ON hms_floor.residence_hall_id = hms_residence_hall.id
+                       WHERE (hms_bed.id NOT IN (SELECT bed_id FROM hms_lottery_reservation WHERE term = {$this->term} AND expires_on > $now)
+                       AND hms_bed.id NOT IN (SELECT bed_id FROM hms_assignment WHERE term = {$this->term} and lottery = 1))
+                       AND hms_residence_hall.id = {$this->id})";
+
+        $used_rooms = PHPWS_DB::getOne($query);
+        if(PEAR::isError($used_rooms)){
+            PHPWS_Error::log($used_rooms);
+            return FALSE;
+        }
+
+        return $used_rooms;
+    }
+    
     /******************
      * Static Methods *
      *****************/
@@ -662,6 +722,7 @@ class HMS_Residence_Hall extends HMS_Item
      */
     function get_halls_with_vacancies_array($term = NULL)
     {
+        PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
         $hall_array = array();
 
         $halls = HMS_Residence_Hall::get_halls_with_vacancies($term);
@@ -675,6 +736,39 @@ class HMS_Residence_Hall extends HMS_Item
         }
 
         return $hall_array;
+    }
+
+
+    /**
+     * Returns an associate array (key = hall id, value = hall name) of halls
+     * which have an available lottery bed (based on the term, gender, the number
+     * of lottery rooms allotted in the hall, the number of used lottery rooms, and 
+     * any pending lottery bed reservations.
+     */
+    function get_lottery_avail_hall_list($term)
+    {
+        $halls = HMS_Residence_Hall::get_halls($term);
+
+        $output_list = array();
+
+        foreach($halls as $hall){
+            $rooms_used = $hall->count_lottery_used_rooms();
+            
+            # If we've used up the number of allotted rooms, then remove this hall from the list
+            if($rooms_used >= $hall->rooms_for_lottery){
+                continue;
+            }
+            
+            # Make sure we have a room of the specified gender available in the hall (or a co-ed room)
+            if($hall->count_avail_lottery_rooms($gender) <= 0 &&
+               $hall->count_avail_lottery_rooms(COED) <= 0){
+                continue;
+            }
+
+            $output_list[] = $hall;
+        }
+
+        return $output_list;
     }
 
     /**
@@ -752,10 +846,35 @@ class HMS_Residence_Hall extends HMS_Item
         }
 
         # Grab all the input from the form and save the hall
-        $hall->hall_name        = $_REQUEST['hall_name'];
-        $hall->gender_type      = $_REQUEST['gender_type'];
-        $hall->air_conditioned  = isset($_REQUEST['air_conditioned'])   ? 1: 0;
-        $hall->is_online        = isset($_REQUEST['is_online'])         ? 1 : 0;
+        $hall->hall_name            = $_REQUEST['hall_name'];
+        $hall->gender_type          = $_REQUEST['gender_type'];
+        $hall->air_conditioned      = isset($_REQUEST['air_conditioned'])   ? 1 : 0;
+        $hall->is_online            = isset($_REQUEST['is_online'])         ? 1 : 0;
+        $hall->meal_plan_required   = isset($_REQUEST['meal_plan_required'])? 1 : 0;
+
+        $rooms_for_lottery = $_REQUEST['rooms_for_lottery'];
+        
+        if(!isset($rooms_for_lottery) || $rooms_for_lottery == ''){
+            $rooms_for_lottery = 0;
+        }else if(!is_numeric($rooms_for_lottery)){
+            $rooms_for_lottery = 0;
+        }else if ($rooms_for_lottery < 0 || $rooms_for_lottery > 999){
+            $rooms_for_lottery = 0;
+        }
+
+        # Check to make sure this isn't greater than the number of rooms in the hall
+        if($rooms_for_lottery > $hall->get_number_of_rooms()){
+            $rooms_for_lottery = $hall->get_number_of_rooms();
+        }
+
+        # TODO: check to make sure this isn't greater than the number of non-medical, non-reserved, non-ra, etc...... rooms
+
+        $hall->rooms_for_lottery = $rooms_for_lottery;
+
+        $hall->exterior_image_id    = $_REQUEST['exterior_image_id'];
+        $hall->other_image_id       = $_REQUEST['other_image_id'];
+        $hall->map_image_id         = $_REQUEST['map_image_id'];
+        $hall->room_plan_image_id   = $_REQUEST['room_plan_image_id'];
 
         $result = $hall->save();
 
@@ -847,6 +966,8 @@ class HMS_Residence_Hall extends HMS_Item
         PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
+        javascript('/jquery/');
+
         # Determine the hall id. If the passed in variable is null,
         # use the request.
         if(!isset($hall_id)){
@@ -862,13 +983,14 @@ class HMS_Residence_Hall extends HMS_Item
         # Create the hall given the hall id
         $hall = new HMS_Residence_Hall($hall_id);
         if(!$hall){
-            return HMS_Hall::show_select_hall('Edit Residence Hall', 'hall', 'show_edit_hall', null, 'Error: The select hall does not exist.'); 
+            return HMS_Hall::show_select_hall('Edit Residence Hall', 'hall', 'show_edit_hall', null, 'Error: The selected hall does not exist.'); 
         }
         
         $form = new PHPWS_Form;
 
+        $form->addHidden('beds_per_room', $hall->count_beds_per_room()); // add a hidden field for beds per room
+
         $form->addText('hall_name', $hall->hall_name);
-        $form->setLabel('hall_name', 'Hall name: ');
   
         /*
         $db = &new PHPWS_DB('hms_hall_communities');
@@ -890,11 +1012,64 @@ class HMS_Residence_Hall extends HMS_Item
         $form->addDropBox('gender_type', array(FEMALE => FEMALE_DESC, MALE => MALE_DESC, COED => COED_DESC));
         $form->setMatch('gender_type', $hall->gender_type);
 
+        $form->addText('rooms_for_lottery', $hall->rooms_for_lottery);
+        $form->setSize('rooms_for_lottery', 3, 3);
+        
         $form->addCheckBox('air_conditioned', 1);
         $form->setMatch('air_conditioned', $hall->air_conditioned);
       
         $form->addCheckBox('is_online', 1);
         $form->setMatch('is_online', $hall->is_online);
+
+        $form->addCheckBox('meal_plan_required', 1);
+        $form->setMatch('meal_plan_required', $hall->meal_plan_required);
+
+        // Images
+        PHPWS_Core::initModClass('filecabinet', 'Cabinet.php');
+        if(isset($hall->exterior_image_id)){
+            $manager = Cabinet::fileManager('exterior_image_id', $hall->exterior_image_id);
+        }else{
+            $manager = Cabinet::fileManager('exterior_image_id');
+        }
+
+        $manager->maxImageWidth(300);
+        $manager->MaxImageHeight(300);
+        $manager->imageOnly(false,false);
+        $form->addTplTag('EXTERIOR_IMG', $manager->get());
+
+
+        if(isset($hall->other_image_id)){
+            $manager = Cabinet::fileManager('other_image_id', $hall->other_image_id);
+        }else{
+            $manager = Cabinet::fileManager('other_image_id');
+        }
+
+        $manager->maxImageWidth(300);
+        $manager->MaxImageHeight(300);
+        $manager->imageOnly(false,false);
+        $form->addTplTag('OTHER_IMG', $manager->get());
+
+        if(isset($hall->map_image_id)){
+            $manager = Cabinet::fileManager('map_image_id', $hall->map_image_id);
+        }else{
+            $manager = Cabinet::fileManager('map_image_id');
+        }
+
+        $manager->maxImageWidth(300);
+        $manager->MaxImageHeight(300);
+        $manager->imageOnly(false,false);
+        $form->addTplTag('MAP_IMG', $manager->get());
+
+        if(isset($hall->room_plan_image_id)){
+            $manager = Cabinet::fileManager('room_plan_image_id', $hall->room_plan_image_id);
+        }else{
+            $manager = Cabinet::fileManager('room_plan_image_id');
+        }
+
+        $manager->maxImageWidth(300);
+        $manager->MaxImageHeight(300);
+        $manager->imageOnly(false,false);
+        $form->addTplTag('ROOM_PLAN_IMG', $manager->get());
 
         $form->addSubmit('submit', _('Save Hall'));
 

@@ -22,7 +22,6 @@ class HMS_Room extends HMS_Item
     var $ra_room                = false;
     var $private_room           = false;
     var $is_overflow            = false;
-    var $learning_community_id  = 0;
     var $pricing_tier           = 0;
     var $is_medical             = false;
     var $is_reserved            = false;
@@ -425,6 +424,20 @@ class HMS_Room extends HMS_Item
             return FALSE;
         }
     }
+
+    function where_am_i($link = FALSE)
+    {
+        $floor = $this->get_parent();
+        $building = $floor->get_parent();
+
+        $text = $building->hall_name . ' Room ' . $this->room_number;
+
+        if($link){
+            return PHPWS_Text::secureLink($text, 'hms', array('type'=>'room', 'op'=>'show_edit_room', 'room'=>$this->id));
+        }else{
+            return $text;
+        }
+    }
     
     function getRoomPagerBySuiteTags()
     {
@@ -432,6 +445,32 @@ class HMS_Room extends HMS_Item
         $tpl['ACTION']      = "Remove";
 
         return $tpl;
+    }
+
+    function count_avail_lottery_beds()
+    {
+        $now = mktime();
+
+        # Count the number of beds which are free in this room
+        $query =   "SELECT DISTINCT COUNT(hms_bed.id) FROM hms_bed
+                    JOIN hms_room ON hms_bed.room_id = hms_room.id
+                    WHERE (hms_bed.id NOT IN (SELECT bed_id FROM hms_lottery_reservation WHERE term = {$this->term} AND expires_on > $now)
+                    AND hms_bed.id NOT IN (SELECT bed_id FROM hms_assignment WHERE term = {$this->term}))
+                    AND hms_room.id = {$this->id}
+                    AND hms_room.is_medical = 0
+                    AND hms_room.is_reserved = 0
+                    AND hms_room.is_online = 1
+                    AND hms_room.private_room = 0
+                    AND hms_room.ra_room = 0
+                    AND hms_room.is_lobby = 0";
+
+        $avail_rooms = PHPWS_DB::getOne($query);
+        if(PEAR::isError($avail_rooms)){
+            PHPWS_Error::log($avail_rooms);
+            return FALSE;
+        }
+
+        return $avail_rooms;
     }
 
     /******************
@@ -744,8 +783,8 @@ class HMS_Room extends HMS_Item
         $form->setLabel('room', 'Room: ');
         $form->setExtra('room', 'disabled onChange="handle_room_change()"');
 
-        $form->addSubmit('submit', 'Select');
-        $form->setExtra('submit', 'disabled');
+        $form->addSubmit('submit_button', 'Select');
+        $form->setExtra('submit_button', 'disabled');
 
         # Use the type and op that was passed in
         $form->addHidden('module', 'hms');

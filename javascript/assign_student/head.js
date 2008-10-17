@@ -248,9 +248,9 @@ function handle_room_change()
         sendBedRequest();
     
         if(bedDropShown){
-            document.getElementById('phpws_form_submit').disabled = true;
+            document.getElementById('phpws_form_submit_form').disabled = true;
         }else{
-            document.getElementById('phpws_form_submit').disabled = false;
+            document.getElementById('phpws_form_submit_form').disabled = false;
         }
     }
 }
@@ -263,11 +263,11 @@ function handle_bed_change()
     // the default value is selected
     if(bedId == 0){
         //alert('default selected');
-        document.getElementById('phpws_form_submit').disabled = true;
+        document.getElementById('phpws_form_submit_form').disabled = true;
         return;
     }
 
-    document.getElementById('phpws_form_submit').disabled = false;
+    document.getElementById('phpws_form_submit_form').disabled = false;
 }
 
 function sendBedRequest()

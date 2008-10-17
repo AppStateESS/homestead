@@ -88,40 +88,61 @@ class HMS_Student_UI{
              **************/
             # Application term is in the past
             
-            # Check the deadlines to see if users can sign up for the lottery yet
-            # If so, show term->lottery entry,  or the "you're already entered" screen,
-            # if not, show a "welcome back, but sorry we're not ready" screen
-            # TODO
-            # NOTE: This is a temporary redirect for now. The above still needs to be implemented. See Trac ticket #55.
-            # TODO(workaround): if the admin is logged in as a student don't kill their session
-            if( Current_User::getUsername() != 'hms_student' && Current_User::allow('hms', 'login_as_student') ) {
-                Layout::add('<p>  The student would have been logged out at this point, if you would like to view the page that the student would be redirected to please go here: </p>');
-                Layout::add('<a href=http://www.housing.appstate.edu/index.php?module=pagemaster&PAGE_user_op=view_page&PAGE_id=253> http://www.housing.appstate.edu/index.php?module=pagemaster&PAGE_user_op=view_page&PAGE_id=253</a> <br>');
-                Layout::add('<p>Otherwise click <a href=index.php?module=hms&op=end_student_session>here</a> to logout of the student session.</p>');
-            } else {
-                header('Location: http://www.housing.appstate.edu/index.php?module=pagemaster&PAGE_user_op=view_page&PAGE_id=253');
-                exit;
+            # check for student type of 'C'
+            /*
+             * Can't check for this because we'll have students admitted in the spring who will still be type F
+             *
+            if($student_type != TYPE_CONTINUING){
+                return HMS_Contact_Form::show_contact_form();
+            }
+            */
+
+            $tpl = array();
+            $tpl['BEGIN_DEADLINE']  = HMS_Deadlines::get_deadline_as_date('lottery_signup_begin_timestamp', $deadlines);
+            $tpl['END_DEADLINE']    = HMS_Deadlines::get_deadline_as_date('lottery_signup_end_timestamp', $deadlines);
+            $tpl['LOGOUT']          = PHPWS_Text::secureLink(_('Log Out'), 'users', array('action'=>'user', 'command'=>'logout'));
+
+            # TODO: check for users who are already assigned, don't let them back in
+
+            # Check to see if the user has been requested as a roommate as is coming to confirm their room
+            PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
+            PHPWS_Core::initModClass('hms', 'HMS_Lottery_Entry.php');
+            PHPWS_Core::initModClass('hms', 'UI/Lottery_UI.php');
+            $roommate_invite = HMS_Lottery::get_lottery_roommate_invite($_SESSION['asu_username'], PHPWS_Settings::get('hms', 'lottery_term'));
+            if($roommate_invite != FALSE && !is_null($roommate_invite)){
+                return Lottery_UI::show_lottery_roommate_request();
             }
 
-            #TODO: check for student type of 'C' or 'R'
+            # Check to see if the user has won the lottery and is logging in to choose their room
+            $result = HMS_Lottery_Entry::check_for_entry($_SESSION['asu_username'], PHPWS_Settings::get('hms', 'lottery_term'), TRUE);
+            if($result != FALSE && !PEAR::isError($result)){
+                # Student has won, let them choose their room
+                PHPWS_Core::initModClass('hms', 'UI/Lottery_UI.php');
+                return Lottery_UI::show_select_residence_hall();
+            }
 
             # Check if the user is already entered for the lottery
             # if so, display the appropriate message
-            # TODO
+            $result = HMS_Lottery_Entry::check_for_entry($_SESSION['asu_username'], PHPWS_Settings::get('hms', 'lottery_term'));
+            if($result != FALSE && !PEAR::isError($result)){
+                # Student already has a lottery entry
+                return PHPWS_Template::process($tpl, 'hms', 'student/lottery_already_entered.tpl');
+            }
 
             # Check that we're within deadlines for lottery signup in the current term
-            if(HMS_Deadlines::check_within_deadlines('lottery_signup_begin_timestamp','lattery_signup_end_timestamp', $deadlines)){
+            if(HMS_Deadlines::check_within_deadlines('lottery_signup_begin_timestamp','lottery_signup_end_timestamp', $deadlines)){
                 # We're within deadlines, so show the "we see you're a returning student, click continue to enter the lottery" message
-                # TODO
+                PHPWS_Core::initModClass('hms', 'UI/Lottery_UI.php');
+                return Lottery_UI::show_lottery_signup();
             }else if(!HMS_Deadlines::check_deadline_past('lottery_signup_begin_timestamp', $deadlines)){
                 # Show a too early to signup message.
-                # TODO
+                return PHPWS_Template::process($tpl, 'hms', 'student/lottery_too_early.tpl');
             }else if(HMS_Deadlines::check_deadline_past('lottery_signup_end_timestamp', $deadlines)){
                 # Show a too late message.
-                # TODO
+                return PHPWS_Template::process($tpl, 'hms', 'student/lottery_too_late.tpl');
             }else{
                 # Show a general error message.
-                # TODO
+                return HMS_Contact_Form::show_contact_form();
             }
 
         }else if($application_term > $current_term){
