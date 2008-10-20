@@ -98,7 +98,7 @@ class HMS_Util{
         if(!isset($timestamp))
             $timestamp = mktime();
 
-        return date('j-n-Y', $timestamp);
+        return date('n-j-Y', $timestamp);
     }
 
     /**
