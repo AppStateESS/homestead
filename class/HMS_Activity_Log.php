@@ -140,7 +140,7 @@ class HMS_Activity_Log{
                         ACTIVITY_BANNER_QUEUE_UPDATED           => "Updated Banner Queue",
                         ACTIVITY_ROOMMATES_UPDATED              => "Updated Roommates",
                         ACTIVITY_ROOMMATE_REQUESTS_UPDATED      => "Updated Roommate Requests",
-                        ACTIVITY_ADD_NOTE                       => "Note");
+                        ACTIVITY_ADD_NOTE                       => "Note",
                         ACTIVITY_LOTTERY_SIGNUP_INVITE          => "Invited to enter lottery",
                         ACTIVITY_LOTTERY_ENTRY                  => "Lottery entry submitted",
                         ACTIVITY_LOTTERY_INVITED                => "Lottery invitation sent",
@@ -320,9 +320,22 @@ class HMS_Activity_Log{
         $form = &new PHPWS_Form();
         $form->setMethod('get');
         $form->addHidden('module', 'hms');
-        $form->addHidden('type', 'activity_log');
-        $form->addHidden('op', 'view');
-        
+
+        // Don't lose our place in any embedded menus
+        if(isset($_REQUEST['type']))
+            $form->addHidden('type', $_REQUEST['type']);
+        else
+            $form->addHidden('type', 'activity_log');
+        if(isset($_REQUEST['op']))
+            $form->addHidden('op', $_REQUEST['op']);
+        else
+            $form->addHidden('op', 'view');
+ 
+        // Keep the activity log from losing tabs when filters are applied
+        if(isset($_REQUEST['tab'])){
+            $form->addHidden('tab', $_REQUEST['tab']);
+        }       
+
         $form->addText('actor');
         $form->setLabel('actor', 'Action Performed By:');
         if(isset($selection['actor']))

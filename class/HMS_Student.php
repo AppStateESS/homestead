@@ -385,23 +385,29 @@ class HMS_Student {
             $tpl = array();
             return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
         }
+        if(isset($_REQUEST['actee'])){
+            $username = $_REQUEST['actee'];
+        }
+        elseif(isset($_REQUEST['username'])){
+            $username = $_REQUEST['username'];
+        }
         
-        if(!isset($_REQUEST['username'])) {
+        if(!isset($username)) {
             $error = "You did not provide an ASU username.<br />";
             return HMS_Student::enter_student_search_data($error);
-        } else if (!PHPWS_Text::isValidInput($_REQUEST['username'])) {
+        } else if (!PHPWS_Text::isValidInput($username)) {
             $error = "ASU usernames can only be alphanumeric.<br />";
             return HMS_Student::enter_student_search_data($error);
         }
 
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
-        $student_info = HMS_SOAP::get_student_info($_REQUEST['username'], HMS_Term::get_selected_term());
+        $student_info = HMS_SOAP::get_student_info($username, HMS_Term::get_selected_term());
         
         //Add a note if we're returning to this page after clicking the "Add Note" link
         if(isset($_REQUEST['note'])){
             PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-            HMS_Activity_Log::log_activity($_REQUEST['username'], ACTIVITY_ADD_NOTE, Current_User::getUsername(), $_REQUEST['note']);
+            HMS_Activity_Log::log_activity($username, ACTIVITY_ADD_NOTE, Current_User::getUsername(), $_REQUEST['note']);
         }
 
         #test($student_info);
@@ -469,7 +475,7 @@ class HMS_Student {
         /*************
          * Addresses *
          *************/
-        $pr_address = HMS_SOAP::get_address($_REQUEST['username'], ADDRESS_PRMT_RESIDENCE);
+        $pr_address = HMS_SOAP::get_address($username, ADDRESS_PRMT_RESIDENCE);
 
         $tpl['PR_ADDRESS_L1']       = $pr_address->line1;
         if(isset($pr_address->line2) && $pr_address->line2 != '')
@@ -480,7 +486,7 @@ class HMS_Student {
         $tpl['PR_ADDRESS_STATE']    = $pr_address->state;
         $tpl['PR_ADDRESS_ZIP']      = $pr_address->zip;
 
-        $ps_address = HMS_SOAP::get_address($_REQUEST['username'], ADDRESS_PRMT_STUDENT);
+        $ps_address = HMS_SOAP::get_address($username, ADDRESS_PRMT_STUDENT);
 
         $tpl['PS_ADDRESS_L1']       = $ps_address->line1;
         if(isset($ps_address->line2) && $ps_address->line2 != '')
@@ -502,11 +508,11 @@ class HMS_Student {
         
         $tpl['PHONE_AC'] = $student_info->phone->area_code;
         $tpl['PHONE_NUMBER'] = $student_info->phone->number;
-        $tpl['USERNAME'] = $_REQUEST['username'];
+        $tpl['USERNAME'] = $username;
 
         $tpl['TITLE'] = "Search Results - " . HMS_Term::term_to_text(HMS_Term::get_selected_term(),TRUE);
 
-        $tpl['APPLICATION_TERM'] = HMS_SOAP::get_application_term($_REQUEST['username']);
+        $tpl['APPLICATION_TERM'] = HMS_SOAP::get_application_term($username);
 
         $this_term = HMS_Term::get_selected_term();
 
@@ -515,16 +521,16 @@ class HMS_Student {
          **************/
 
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-        $assignment = HMS_Assignment::get_assignment($_REQUEST['username'], $this_term);
+        $assignment = HMS_Assignment::get_assignment($username, $this_term);
 
         if(isset($assignment) && $assignment != FALSE){
             $tpl['ASSIGNED'] = "Yes";
-            $unassign = PHPWS_Text::secureLink('Unassign', 'hms', array('type'=>'assignment', 'op'=>'show_unassign_student', 'username'=>$_REQUEST['username']));
-            $reassign = PHPWS_Text::secureLink('Reassign', 'hms', array('type'=>'assignment', 'op'=>'show_assign_student', 'username'=>$_REQUEST['username']));
+            $unassign = PHPWS_Text::secureLink('Unassign', 'hms', array('type'=>'assignment', 'op'=>'show_unassign_student', 'username'=>$username));
+            $reassign = PHPWS_Text::secureLink('Reassign', 'hms', array('type'=>'assignment', 'op'=>'show_assign_student', 'username'=>$username));
             $tpl['ROOM_ASSIGNMENT'] = $assignment->where_am_i(TRUE) . " | $reassign | $unassign";
         }else if($assignment == FALSE){
             $tpl['ASSIGNED'] = "No";
-            $tpl['ROOM_ASSIGNMENT'] = '' . PHPWS_Text::secureLink('Assign student now', 'hms', array('type'=>'assignment', 'op'=>'show_assign_student', 'username'=>$_REQUEST['username']));
+            $tpl['ROOM_ASSIGNMENT'] = '' . PHPWS_Text::secureLink('Assign student now', 'hms', array('type'=>'assignment', 'op'=>'show_assign_student', 'username'=>$username));
         }else{
             $tpl['ASSIGNED'] = "No";
             $tpl['ROOM_ASSIGNMENT'] = "Error: Could not look up the current assignment. Please contact ESS.";
@@ -535,26 +541,26 @@ class HMS_Student {
          ******************/
 /*
          PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
-         $roommates = HMS_Roommate::get_all_roommates($_REQUEST['username'], HMS_Term::get_selected_term());
+         $roommates = HMS_Roommate::get_all_roommates($username, HMS_Term::get_selected_term());
          if($student_info->student_type == TYPE_FRESHMEN){
             if(empty($roommates)) {
                 $tpl['ROOMMATE'] = "This person has no roommates or roommate requests.<br />";
             } else {
                 foreach($roommates as $roommate) {
                     if($roommate->confirmed) {
-                        $mate = $roommate->get_other_guy($_REQUEST['username']);
+                        $mate = $roommate->get_other_guy($username);
                         $user_link = PHPWS_Text::secureLink(HMS_SOAP::get_full_name($mate), 'hms',
                             array('type'=>'student',
                                   'op'=>'get_matching_students',
                                   'username'=>$mate));
                         $tpl['ROOMMATE'] .= "Confirmed roommates with $user_link<br />";
                     } else {
-                        $mate = $roommate->get_other_guy($_REQUEST['username']);
+                        $mate = $roommate->get_other_guy($username);
                         $user_link = PHPWS_Text::secureLink(HMS_SOAP::get_full_name($mate), 'hms',
                             array('type'=>'student',
                                   'op'=>'get_matching_students',
                                   'username'=>$mate));
-                        if($roommate->requestor == $_REQUEST['username']) {
+                        if($roommate->requestor == $username) {
                             $tpl['ROOMMATE'] .= "Awaiting approval from $user_link<br />";
                         } else {
                             $tpl['ROOMMATE'] .= "Request Pending from $user_link<br />";
@@ -567,9 +573,9 @@ class HMS_Student {
             PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
             PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
             PHPWS_Core::initModClass('hms', 'HMS_Room.php');
-            $assignment = HMS_Assignment::get_assignment($_REQUEST['username']);
-            $pending    = HMS_Roommate::get_unconfirmed_roommate($_REQUEST['username']);
-            $confirmed  = HMS_Roommate::get_confirmed_roommate($_REQUEST['username']);
+            $assignment = HMS_Assignment::get_assignment($username);
+            $pending    = HMS_Roommate::get_unconfirmed_roommate($username);
+            $confirmed  = HMS_Roommate::get_confirmed_roommate($username);
             
             $tpl['ROOMMATE']           = "";
             $tpl['REQUESTED_ROOMMATE'] = "";
@@ -581,11 +587,11 @@ class HMS_Student {
                 if(!empty($confirmed)){
                     if(sizeof($roommies > 1)){
                         foreach($roommies as $roommie){
-                            if($roommie->asu_username != $_REQUEST['username']){
+                            if($roommie->asu_username != $username){
                                 if($student_info->student_type == TYPE_FRESHMEN 
                                    && $roommie->asu_username == $confirmed->asu_username){
                                     $tpl['ROOMMATE']            .= "<a href=index.php?module=hms&type=student&op=get_matching_students&username=$roommie->asu_username&tab=student_info>$roommie->asu_username</a><br />";
-                                    $tpl['REQUESTED_ROOMMATE']  .= "<tr><td></td><td>Student Requested ".$confirmed->asu_username."<a href=index.php?module=hms&type=roommate&op=show_confirmed_roommates&search=&pg=1&limit=10&pager_c_search=".$_REQUEST['username'].">Break this roommate group</a><td></tr>";
+                                    $tpl['REQUESTED_ROOMMATE']  .= "<tr><td></td><td>Student Requested ".$confirmed->asu_username."<a href=index.php?module=hms&type=roommate&op=show_confirmed_roommates&search=&pg=1&limit=10&pager_c_search=".$username.">Break this roommate group</a><td></tr>";
                                 } else {
                                     $tpl['ROOMMATE']            .= "<a href=index.php?module=hms&type=student&op=get_matching_students&username=$roommie->asu_username&tab=student_info>$roommie->asu_username</a><br />"; 
                                 }
@@ -594,7 +600,7 @@ class HMS_Student {
                     }
                 } else {
                     foreach($roommies as $roommie){
-                        if($roommie->asu_username != $_REQUEST['username'])
+                        if($roommie->asu_username != $username)
                             $tpl['ROOMMATE'] .= "<a href=index.php?module=hms&type=student&op=get_matching_students&username=$roommie->asu_username&tab=student_info>$roommie->asu_username</a><br />";
                     }
                 }
@@ -624,13 +630,13 @@ class HMS_Student {
 
         $rlc_names = HMS_Learning_Community::getRLCList();
 
-        $rlc_assignment     = HMS_RLC_Assignment::check_for_assignment($_REQUEST['username'], HMS_Term::get_selected_term());
-        $rlc_application    = HMS_RLC_Application::check_for_application($_REQUEST['username'], HMS_Term::get_selected_term(), FALSE);
+        $rlc_assignment     = HMS_RLC_Assignment::check_for_assignment($username, HMS_Term::get_selected_term());
+        $rlc_application    = HMS_RLC_Application::check_for_application($username, HMS_Term::get_selected_term(), FALSE);
         
         if($rlc_assignment != FALSE){
             $tpl['RLC_STATUS'] = "This student is assigned to: " . $rlc_names[$rlc_assignment['rlc_id']];
         }else if ($rlc_application != FALSE){
-            $tpl['RLC_STATUS'] = "This student is currently awaiting RLC approval. You can view their application " . PHPWS_Text::secureLink(_('here'), 'hms', array('type'=>'rlc', 'op'=>'view_rlc_application', 'username'=>$_REQUEST['username']));
+            $tpl['RLC_STATUS'] = "This student is currently awaiting RLC approval. You can view their application " . PHPWS_Text::secureLink(_('here'), 'hms', array('type'=>'rlc', 'op'=>'view_rlc_application', 'username'=>$username));
         }else{
             $tpl['RLC_STATUS'] = "This student is not in a Learning Community and has no pending approval.";
         }
@@ -638,10 +644,10 @@ class HMS_Student {
         /**********************
          * Application Status *
          **********************/
-        $report_app = '[<a href="index.php?module=hms&type=student&op=admin_report_application&username='.$_REQUEST['username'].'&tab=student_info">Report Application Received</a>]';
-        if(HMS_Application::check_for_application($_REQUEST['username'], HMS_Term::get_selected_term(), TRUE)) {
-            $tpl['APPLICATION'] = '[<a href="index.php?module=hms&type=student&op=get_matching_students&username='.$_REQUEST['username'].'&tab=housing_app">View Application</a>] '.$report_app;
-            $app = &new HMS_Application($_REQUEST['username'], HMS_Term::get_selected_term());
+        $report_app = '[<a href="index.php?module=hms&type=student&op=admin_report_application&username='.$username.'&tab=student_info">Report Application Received</a>]';
+        if(HMS_Application::check_for_application($username, HMS_Term::get_selected_term(), TRUE)) {
+            $tpl['APPLICATION'] = '[<a href="index.php?module=hms&type=student&op=get_matching_students&username='.$username.'&tab=housing_app">View Application</a>] '.$report_app;
+            $app = &new HMS_Application($username, HMS_Term::get_selected_term());
             $tpl['APPLICATION_RECEIVED'] = 'Yes';
             
             if($app->meal_option == BANNER_MEAL_LOW) $tpl['MEAL_PLAN'] = "Low";
@@ -663,7 +669,7 @@ class HMS_Student {
         $form->addHidden('module',   'hms');
         $form->addHidden('type',     'student');
         $form->addHidden('op',       'get_matching_students');
-        $form->addHidden('username', $_REQUEST['username']);
+        $form->addHidden('username', $username);
         $form->addSubmit('Add Note');
 
         $tpl = array_merge($tpl, $form->getTemplate());
@@ -716,20 +722,20 @@ class HMS_Student {
 
         if( Current_User::allow('hms', 'view_activity_log') && Current_User::allow('hms', 'view_student_log') ){
             PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-            $tpl['LOG_PAGER'] = HMS_Activity_Log::showPager(null, $_REQUEST['username'], null, null, null, $everything_but_notes, 5, true);
-            $tpl['NOTE_PAGER'] = HMS_Activity_Log::showPager(null, $_REQUEST['username'], null, null, null, array(0 => ACTIVITY_ADD_NOTE), 5, true);
+            $tpl['LOG_PAGER'] = HMS_Activity_Log::showPager(null, $username, null, null, null, $everything_but_notes, 5, true);
+            $tpl['NOTE_PAGER'] = HMS_Activity_Log::showPager(null, $username, null, null, null, array(0 => ACTIVITY_ADD_NOTE), 5, true);
 
-            $tpl['LOG_PAGER'] .= '<div align=center>[<a href="index.php?module=hms&type=student&op=get_matching_students&username='.$_REQUEST['username'].'&tab=student_logs">View More</a>]';
+            $tpl['LOG_PAGER'] .= '<div align=center>[<a href="index.php?module=hms&type=student&op=get_matching_students&username='.$username.'&tab=student_logs">View More</a>]';
             //TODO: if we ever renumber the activities change a40 to the number of
             //the new logging activity
-            $tpl['NOTE_PAGER'] .= '<div align=center>[<a href="index.php?module=hms&type=student&op=get_matching_students&username='.$_REQUEST['username'].'&tab=student_logs&a40=1">View More</a>]';
+            $tpl['NOTE_PAGER'] .= '<div align=center>[<a href="index.php?module=hms&type=student&op=get_matching_students&username='.$username.'&tab=student_logs&a40=1">View More</a>]';
         }
 
         /********************
          * Login as Student *
          ********************/
         if( Current_User::allow('hms', 'login_as_student') ) { 
-            $tpl['LOGIN_AS_STUDENT'] = '<a href=index.php?module=hms&op=main&login_as_student=' . $_REQUEST['username'] . '> '. $_REQUEST['username'] . '</a></td></tr>';
+            $tpl['LOGIN_AS_STUDENT'] = '<a href=index.php?module=hms&op=main&login_as_student=' . $username . '> '. $username . '</a></td></tr>';
         }
 
         //test($tpl, 1);
@@ -740,7 +746,7 @@ class HMS_Student {
         /***********************/
         /* Tabify Student Info */
         /***********************/
-        $link    = "index.php?module=hms&type=student&op=get_matching_students&username=" . $_REQUEST['username'];
+        $link    = "index.php?module=hms&type=student&op=get_matching_students&username=" . $username;
         $content = $final;
         if( isset($_REQUEST['tab']) ){
             switch( $_REQUEST['tab'] ){
@@ -749,12 +755,12 @@ class HMS_Student {
                     break;
                 case 'housing_app':
                     PHPWS_Core::initModClass('hms', 'UI/Application_UI.php');
-                    $content = Application_UI::view_housing_application($_REQUEST['username'], HMS_Term::get_selected_term());
+                    $content = Application_UI::view_housing_application($username, HMS_Term::get_selected_term());
                     break;
                 case 'student_logs':
                     PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-                    $_REQUEST['actee'] = $_REQUEST['username'];
-                    $_REQUEST['actor'] = $_REQUEST['username'];
+                    $_REQUEST['actee'] = $username;
+                    $_REQUEST['actor'] = $username;
                     $content           = HMS_Activity_Log::main();
                     break;
                 default:
