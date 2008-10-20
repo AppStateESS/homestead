@@ -586,17 +586,26 @@ class Application_UI{
         $form->addCheck('feature',  array_keys($features));
         $form->setLabel('feature',  $features);
         $form->setMatch('feature',  $matches);
+        $form->useRowRepeat();
 
-        $form->addHidden('type',    'application_features');
-        $form->addHidden('op',      'edit_features');
-        $form->addSubmit('submit_button',  'Submit');
+        $form->addHidden('type',            'application_features');
+        $form->addHidden('op',              'edit_features');
+
+        // Keep track of the term being viewed for the purpose of saving it's 
+        // result separately from the term being selected in the dropbox, 
+        // this prevents page refreshes from overwriting data as you browse 
+        // term feature settings.
+        $form->addHidden('selected_term',   $term); 
+
+        $tpl['ERROR']       = $error;
+        $tpl['SUCCESSS']    = $success;
+        $form->mergeTemplate($tpl);
+
+        $form->addSubmit('submit_button',   'Submit');
 
         javascript('/modules/hms/page_refresh/');
 
-        #TODO: create a template for this interface
-        #TODO: handle adding the error/success messages to the template
-
-        return implode('<br />', $form->getTemplate());
+        return PHPWS_Template::process($form->getTemplate(), 'hms', 'admin/features.tpl');
     }
 }
 ?>

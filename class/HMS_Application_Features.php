@@ -36,23 +36,25 @@ class HMS_Application_Features {
         $result = HMS_Application_Features::save($_REQUEST);
 
         if($result){
-            echo "yes";
             return Application_UI::show_feature_interface('Feature set updated successfully.');
         }else{
-            echo "no";
             return Application_UI::show_feature_interface(NULL, 'Error: There was a problem working with the database.');
         }
     }
 
     function save($request)
     {
+        if(!isset($_REQUEST['selected_term'])){
+            return false;
+        }
+
         $features = array(APPLICATION_RLC_APP          => 'RLC Applications',
                           APPLICATION_ROOMMATE_PROFILE => 'Roommate Profile Searching',
                           APPLICATION_SELECT_ROOMMATE  => 'Selecting Roommates');
 
         for($i = 0; $i < sizeof($features); $i++){
             $db = &new PHPWS_DB('hms_application_features');
-            $db->addWhere('term', $request['term']);
+            $db->addWhere('term', $request['selected_term']);
             $db->addWhere('feature', $i);
             $result = $db->select();
             $exists = (sizeof($result) > 0 ? true : false);
@@ -62,22 +64,22 @@ class HMS_Application_Features {
             if(isset($request['feature'][$i])){
                 $db->addValue('enabled', 1);
                 if($exists){
-                    $db->addWhere('term', $request['term']);
+                    $db->addWhere('term', $request['selected_term']);
                     $db->addWhere('feature', $i);
                     $result = $db->update();
                 } else {
-                    $db->addValue('term', $request['term']);
+                    $db->addValue('term', $request['selected_term']);
                     $db->addValue('feature', $i);
                     $result = $db->insert();
                 }
             } else {
                 $db->addValue('enabled', 0);
                 if($exists){
-                    $db->addWhere('term', $request['term']);
+                    $db->addWhere('term', $request['selected_term']);
                     $db->addWhere('feature', $i);
                     $result = $db->update();
                 } else {
-                    $db->addValue('term', $request['term']);
+                    $db->addValue('term', $request['selected_term']);
                     $db->addValue('feature', $i);
                     $result = $db->insert();
                 }
