@@ -560,8 +560,9 @@ class Application_UI{
             HMS_Application_Features::save($_REQUEST);
         }
 
-        $term = (isset($_REQUEST['term']) ? $_REQUEST['term'] : HMS_Term::get_current_term());
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+        //$term = (isset($_REQUEST['term']) ? $_REQUEST['term'] : HMS_Term::get_current_term());
+        $term = HMS_Term::get_current_term();
 
         $db = &new PHPWS_DB('hms_application_features');
         $db->addWhere('term', $term);
@@ -579,10 +580,11 @@ class Application_UI{
         sort($matches);
 
         $form = &new PHPWS_Form('features');
+/*
         $form->addSelect('term',    HMS_Term::get_available_terms_list());
         $form->setMatch('term',     $term);
         $form->setExtra('term',     'onchange=refresh_page(form)');
-
+*/
         $form->addCheck('feature',  array_keys($features));
         $form->setLabel('feature',  $features);
         $form->setMatch('feature',  $matches);
