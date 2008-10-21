@@ -111,10 +111,10 @@ class HMS_Maintenance
         /*************
          * Roommates *
          ************/
-        if(Current_User::allow('hms', 'create_roommate_group'))
+        if(Current_User::allow('hms', 'roommate_maintenance'))
             $tpl['CREATE_ROOMMATE_GROUP'] = PHPWS_Text::secureLink(_('Create new roommate group'), 'hms', array('type'=>'roommate', 'op'=>'show_admin_create_roommate_group'));
 
-        if(Current_User::allow('hms', 'edit_roommate_group'))
+        if(Current_User::allow('hms', 'roommate_maintenance'))
             $tpl['EDIT_ROOMMATE_GROUP'] = PHPWS_Text::secureLink(_('Edit roommate group'), 'hms', array('type'=>'roommate', 'op'=>'show_confirmed_roommates'));
 
         /*******************
