@@ -508,8 +508,8 @@ class HMS_XML{
 
         $json_result[0] = $username;
         $json_result[1] = $results;
-	$json_result[2] = array();
-	$json_result[3] = array();
+    	$json_result[2] = array();
+    	$json_result[3] = array();
         
         header('Content-Type: application/json; charset=UTF-8');
         $json_result = json_encode($json_result);
