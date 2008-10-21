@@ -230,6 +230,7 @@ class HMS_RLC_Assignment{
         $pager->setEmptyMessage('There are no students assigned to this learning community.');
         $pager->addPageTags($tags);
         $pager->addRowTags('viewByRLCPagerTags');
+        $pager->setReportRow('report_by_rlc_pager_tags');
 
         return $pager->get();
     }
@@ -247,6 +248,15 @@ class HMS_RLC_Assignment{
 
         $tags['ACTION'] = implode(' | ', $actions);
         return $tags;
+    }
+
+    function report_by_rlc_pager_tags($data)
+    {
+        $row['name']        = HMS_SOAP::get_full_name($this->user_id);
+        $row['gender']      = HMS_SOAP::get_gender($this->user_id);
+        $row['username']    = $this->user_id;
+
+        return $row;
     }
 
 

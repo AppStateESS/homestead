@@ -36,3 +36,6 @@ Assignments: {TOTAL_ROWS}
 {LIMIT_LABEL}: {LIMITS}
 </div>
 <!-- END limits -->
+<!-- BEGIN csv -->
+{CSV_REPORT}
+<!-- END csv -->
