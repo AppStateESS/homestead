@@ -695,7 +695,7 @@ class HMS_Learning_Community
 
         // setup the title and headings
         $buffer = $title . "\n";
-        $buffer .= '"last_name","first_name","middle_name","gender","roommate","email","second_choice","third_choice","major","application_date"' . "\n";
+        $buffer .= '"last_name","first_name","middle_name","gender","roommate","email","second_choice","third_choice","major","application_date","denied"' . "\n";
 
         // get the userlist
         $db = &new PHPWS_DB('hms_learning_community_applications');
@@ -704,7 +704,8 @@ class HMS_Learning_Community
         $db->addColumn('rlc_third_choice_id');
         $db->addColumn('date_submitted');
         $db->addWhere('rlc_first_choice_id', $_REQUEST['rlc_list']);
-        $db->addWhere('denied', 0); // Only show non-denied applications
+        $db->addOrder('denied asc');
+        //$db->addWhere('denied', 0); // Only show non-denied applications
         $users = $db->select();
 
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
@@ -760,10 +761,13 @@ class HMS_Learning_Community
             //Application Date
             if(isset($user['date_submitted'])){
                 PHPWS_Core::initModClass('hms', 'HMS_Util.php');
-                $buffer .= '"' . HMS_Util::get_long_date($user['date_submitted']) . '"';
+                $buffer .= '"' . HMS_Util::get_long_date($user['date_submitted']) . '",';
             } else {
-                $buffer .= '"Error with the submission Date"';
+                $buffer .= '"Error with the submission Date",';
             }
+
+            //Denied
+            $buffer .= (isset($user['denied']) && $user['denied'] == 1) ? '"yes"' : '"no"';
             $buffer .= "\n";
         }
 
