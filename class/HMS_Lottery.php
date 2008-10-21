@@ -453,13 +453,18 @@ class HMS_Lottery {
     }
 
 
-    function save_lottery_settings($lottery_term, $lottery_per_soph, $lottery_per_jr, $lottery_per_senior)
+    function save_lottery_settings($lottery_term, $type, $lottery_per_soph, $lottery_per_jr, $lottery_per_senior, $max_soph, $max_jr, $max_senior)
     {
 
         PHPWS_Settings::set('hms','lottery_term',       $lottery_term);
+        PHPWS_Settings::set('hms', 'lottery_type',      $type);
         PHPWS_Settings::set('hms','lottery_per_soph',   $lottery_per_soph);
         PHPWS_Settings::set('hms','lottery_per_jr',     $lottery_per_jr);
         PHPWS_Settings::set('hms','lottery_per_senior', $lottery_per_senior);
+
+        PHPWS_Settings::set('hms', 'lottery_max_soph', $max_soph);
+        PHPWS_Settings::set('hms', 'lottery_max_jr', $max_jr);
+        PHPWS_Settings::set('hms', 'lottery_max_senior', $max_senior);
 
         PHPWS_Settings::save('hms');
     }
@@ -478,14 +483,48 @@ class HMS_Lottery {
         $form->addDropBox('lottery_term', HMS_Term::get_available_terms_list());
         $form->setMatch('lottery_term', PHPWS_Settings::get('hms', 'lottery_term'));
 
+        $form->addRadio('phase_radio', array('single_phase', 'multi_phase'));
+        $form->setMatch('phase_radio', PHPWS_Settings::get('hms', 'lottery_type'));
+        $form->setLabel('phase_radio', array('Single phase', 'Multi-phase'));
+        $form->setExtra('phase_radio', 'class="lotterystate"');
+
+        # Percent invites per class for single phase lottery
         $form->addText('lottery_per_soph', PHPWS_Settings::get('hms', 'lottery_per_soph'));
         $form->setSize('lottery_per_soph', 2, 3);
+        $form->setExtra('lottery_per_soph', 'class="single_phase"');
 
         $form->addText('lottery_per_jr', PHPWS_Settings::get('hms', 'lottery_per_jr'));
         $form->setSize('lottery_per_jr', 2, 3);
+        $form->setExtra('lottery_per_jr', 'class="single_phase"');
 
         $form->addText('lottery_per_senior', PHPWS_Settings::get('hms', 'lottery_per_senior'));
         $form->setSize('lottery_per_senior', 2, 3);
+        $form->setExtra('lottery_per_senior', 'class="single_phase"');
+
+        # Absolute max invites to send per class for multi-phase lottery
+        $form->addText('lottery_max_soph', PHPWS_Settings::get('hms', 'lottery_max_soph'));
+        $form->setSize('lottery_max_soph', 2, 4);
+        $form->setExtra('lottery_max_soph', 'class="multi_phase"');
+
+        $form->addText('lottery_max_jr', PHPWS_Settings::get('hms', 'lottery_max_jr'));
+        $form->setSize('lottery_max_jr', 2, 4);
+        $form->setExtra('lottery_max_jr', 'class="multi_phase"');
+
+        $form->addText('lottery_max_senior', PHPWS_Settings::get('hms', 'lottery_max_senior'));
+        $form->setSize('lottery_max_senior', 2, 4);
+        $form->setExtra('lottery_max_senior', 'class="multi_phase"');
+
+        # Set the initial enabled/disabled state
+        $type = PHPWS_Settings::get('hms', 'lottery_type');
+        if(isset($type) && $type == 'single_phase'){
+            $form->setDisabled('lottery_max_soph');
+            $form->setDisabled('lottery_max_jr');
+            $form->setDisabled('lottery_max_senior');
+        }else{
+            $form->setDisabled('lottery_per_soph');
+            $form->setDisabled('lottery_per_jr');
+            $form->setDisabled('lottery_per_senior');
+        }
 
         $form->addHidden('module', 'hms');
         $form->addHidden('type', 'lottery');
@@ -512,13 +551,13 @@ class HMS_Lottery {
         $per_jr     = $_REQUEST['lottery_per_jr'];
         $per_senior = $_REQUEST['lottery_per_senior'];
 
-        # Make sure the percents add up to exactly 100
-        if(($per_soph + $per_jr + $per_senior) != 100){
+        # if using single phase lottery, Make sure the percents add up to exactly 100
+        if($_REQUEST['phase_radio'] == 'single_phase' && ($per_soph + $per_jr + $per_senior) != 100){
             return HMS_Lottery::show_lottery_settings(NULL, 'Error: Percents must add up to 100');
         }
 
         # Save the settings
-        HMS_Lottery::save_lottery_settings($_REQUEST['lottery_term'], $per_soph, $per_jr, $per_senior);
+        HMS_Lottery::save_lottery_settings($_REQUEST['lottery_term'],$_REQUEST['phase_radio'], $per_soph, $per_jr, $per_senior, $_REQUEST['lottery_max_soph'],$_REQUEST['lottery_max_jr'],$_REQUEST['lottery_max_senior']);
 
         return HMS_Lottery::show_lottery_settings('Lottery settings updated.');
     }
