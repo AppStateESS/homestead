@@ -280,6 +280,7 @@ class HMS_RLC_Application{
         $pager->addToggle('class="toggle1"');
         $pager->addPageTags($tags);
         $pager->addRowTags('getAdminPagerTags');
+        $pager->setReportRow('applicantsReport');
 
         return $pager->get();
     }
@@ -307,6 +308,38 @@ class HMS_RLC_Application{
         $tags['DENY']           = PHPWS_Text::secureLink('Deny', 'hms', array('type'=>'rlc', 'op'=>'deny_rlc_application', 'id'=>$this->id));
 
         return $tags;
+    }
+
+    function applicantsReport()
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
+        
+        $sinfo            = HMS_SOAP::get_student_info($this->user_id);
+        $application_date = isset($this->date_submitted) ? HMS_Util::get_long_date($this->date_submitted) : 'Error with the submission date';
+
+        $roomie = NULL;
+        if(HMS_Roommate::has_confirmed_roommate($this->user_id)){
+            $roomie = HMS_Roommate::get_Confirmed_roommate($this->user_id);
+        }
+        elseif(HMS_Roommate::has_roommate_request($this->user_id)){
+            $roomie = HMS_Roommate::get_unconfirmed_roommate($this->user_id) . ' *pending* ';
+        }
+
+        $row['last_name']           = $sinfo->last_name;
+        $row['first_name']          = $sinfo->first_name;
+        $row['middle_name']         = $sinfo->middle_name;
+        $row['gender']              = $sinfo->gender;
+        $row['roommate']            = $roomie;
+        $row['email']               = $this->user_id . '@appstate.edu';
+        $row['second_choice']       = $this->getSecondChoice();
+        $row['third_choice']        = $this->getThirdChoice();
+        $row['major']               = 'N/A';                    //TODO: Plug this in from somewhere...
+        $row['application_date']    = $application_date;
+        $row['denied']              = (isset($this->denied) && $this->denied == 0) ? 'yes' : 'no';
+        
+        return $row;
     }
 
     function denied_pager()
@@ -380,6 +413,7 @@ class HMS_RLC_Application{
             $form->setMatch('rlc', $_REQUEST['rlc']);
         }
         $form->setExtra('rlc', 'onChange="refresh_page(form)"');
+        $form->setMethod('post');
 
         $form->addHidden('type', 'rlc');
         $form->addHidden('op', 'assign_applicants_to_rlcs');

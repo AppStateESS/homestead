@@ -42,7 +42,8 @@
 <div class="align-center">
     {TOTAL_ROWS}<br />
     {PAGE_LABEL} {PAGES}<br />
-    {LIMIT_LABEL} {LIMITS}
+    {LIMIT_LABEL} {LIMITS}<br />
+    {CSV_REPORT}
 </div>
 <!-- END table -->
 {SUBMIT}

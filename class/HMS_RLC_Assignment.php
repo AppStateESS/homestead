@@ -179,7 +179,7 @@ class HMS_RLC_Assignment{
         $pager->joinResult('id','hms_learning_community_applications','hms_assignment_id','user_id', 'user_id');
         $pager->setModule('hms');
         $pager->setTemplate('admin/display_final_rlc_assignments.tpl');
-        $pager->setLink('index.php?module=hms');
+        $pager->setLink('index.php?module=hms&type=rlc&op=assign_applicants_to_rlcs');
         $pager->setEmptyMessage('No RLC assignments have been made.');
         $pager->addPageTags($tags);
         $pager->addRowTags('getAdminPagerTags');
