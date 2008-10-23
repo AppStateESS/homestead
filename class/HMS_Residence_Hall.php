@@ -554,7 +554,7 @@ class HMS_Residence_Hall extends HMS_Item
         $now = mktime();
 
         # Calculate the number of non-full male/female rooms in this hall
-        $query =   "SELECT DISTINCT COUNT(hms_room.id) FROM hms_room
+        $query =   "SELECT COUNT(DISTINCT hms_room.id) FROM hms_room
                     JOIN hms_bed ON hms_bed.room_id = hms_room.id
                     JOIN hms_floor ON hms_room.floor_id = hms_floor.id
                     JOIN hms_residence_hall ON hms_floor.residence_hall_id = hms_residence_hall.id
