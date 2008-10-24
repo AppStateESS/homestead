@@ -145,7 +145,11 @@ class HMS_Bed extends HMS_Item {
             return false;
         }
 
-        return new HMS_Student($this->_curr_assignment->asu_username);
+        if(!isset($this->_curr_assignment->asu_username)){
+            return NULL;
+        }else{
+            return new HMS_Student($this->_curr_assignment->asu_username);
+        }
     }
     
     function save()
