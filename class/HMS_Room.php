@@ -462,7 +462,7 @@ class HMS_Room extends HMS_Item
                     AND hms_room.is_online = 1
                     AND hms_room.private_room = 0
                     AND hms_room.ra_room = 0
-                    AND hms_room.is_lobby = 0";
+                    AND hms_room.is_overflow = 0";
 
         $avail_rooms = PHPWS_DB::getOne($query);
         if(PEAR::isError($avail_rooms)){

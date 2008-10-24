@@ -373,7 +373,7 @@ class Lottery_UI {
                 $room->is_online    == 0 ||
                 $room->private_room == 1 ||
                 $room->ra_room      == 1 ||
-                $room->is_lobby     == 1){
+                $room->is_overflow  == 1){
                     // Show a grayed out row and no link
                     $row['ROOM_NUM']        = $room->room_number;
                     $row['ROW_TEXT_COLOR']  = 'grey';

@@ -491,7 +491,7 @@ class HMS_Residence_Hall extends HMS_Item
 
         $top   = 0;
         foreach($total as $key => $value){
-            if($total[$key] > $total[$top]){
+            if(@$total[$key] > @$total[$top]){ // supress notices here, since usually there's an undefined index
                 $top = $key;
             }
         }
@@ -567,7 +567,7 @@ class HMS_Residence_Hall extends HMS_Item
                     AND hms_room.is_online = 1
                     AND hms_room.private_room = 0
                     AND hms_room.ra_room = 0
-                    AND hms_room.is_lobby = 0
+                    AND hms_room.is_overflow = 0
                     AND hms_floor.rlc_id IS NULL";
 
         $avail_rooms = PHPWS_DB::getOne($query);
