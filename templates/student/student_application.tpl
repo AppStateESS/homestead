@@ -66,6 +66,10 @@
                 <td>Cell Phone Number: </td><td align="left">({AREA_CODE})-{EXCHANGE}-{NUMBER}</td>
             </tr>
             <!-- END form -->
+            <tr>
+                <td></td>
+                <td>{DO_NOT_CALL}<sub>Check here if you do not have or do not wish to provide your cellphone number.</sub></td>
+            </tr>
             <!-- BEGIN review -->
             <tr>
                 <td>Cell Phone Number: </td><td align="left">{CELLPHONE}</td>

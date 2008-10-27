@@ -83,6 +83,7 @@ class Application_UI{
         $form->addText('number');
         $form->setSize('number', 4);
         $form->setMaxSize('number', 4);
+        $form->addCheck('do_not_call', 1);
         
         /***************
          * Meal option *
@@ -260,11 +261,12 @@ class Application_UI{
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
         # Perform sanity checks on submitted values
-        if(!is_numeric($_REQUEST['meal_option']) ||
-            !is_numeric($_REQUEST['lifestyle_option']) ||
-            !is_numeric($_REQUEST['preferred_bedtime']) ||
-            !is_numeric($_REQUEST['room_condition']) ||
-            !is_numeric($_REQUEST['rlc_interest'])){
+        if(!is_numeric($_REQUEST['meal_option']) 
+           || !is_numeric($_REQUEST['lifestyle_option']) 
+           || !is_numeric($_REQUEST['preferred_bedtime']) 
+           || !is_numeric($_REQUEST['room_condition']) 
+           || !is_numeric($_REQUEST['rlc_interest']))
+        {
             return Application_UI::show_housing_application('Invalid values submitted. Please try again');
         }
 
@@ -287,6 +289,8 @@ class Application_UI{
             $tpl['AREA_CODE']   = $_REQUEST['area_code'];
             $tpl['EXCHANGE']    = $_REQUEST['exchange'];
             $tpl['NUMBER']      = $_REQUEST['number'];
+        } elseif(!isset($_REQUEST['do_not_call'])){
+            return Application_UI::show_housing_application('Please provide a cellphone number or click the checkbox stating that you do not wish to share your number with us.');
         }
         
         //Term information
