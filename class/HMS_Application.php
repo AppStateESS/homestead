@@ -17,6 +17,7 @@ class HMS_Application {
     var $student_status;
     var $term_classification;
     var $gender;
+    var $cellphone;
     var $meal_option        = NULL;
     var $lifestyle_option   = NULL;
     var $preferred_bedtime  = NULL;

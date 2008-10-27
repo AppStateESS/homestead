@@ -74,6 +74,15 @@ class Application_UI{
         $tpl['ENTRY_TERM']      = HMS_Term::term_to_text($_SESSION['application_term'], TRUE);
         $tpl['CLASSIFICATION_FOR_TERM_LBL'] = HMS_Util::formatClass(HMS_SOAP::get_student_class($_SESSION['asu_username'], $_SESSION['application_term']));
         $tpl['STUDENT_STATUS_LBL'] = HMS_Util::formatType(HMS_SOAP::get_student_type($_SESSION['asu_username'], $_SESSION['application_term']));
+        $form->addText('area_code');
+        $form->setSize('area_code', 3);
+        $form->setMaxSize('area_code', 3);
+        $form->addText('exchange');
+        $form->setSize('exchange', 3);
+        $form->setMaxSize('exchange', 3);
+        $form->addText('number');
+        $form->setSize('number', 4);
+        $form->setMaxSize('number', 4);
         
         /***************
          * Meal option *
@@ -216,13 +225,16 @@ class Application_UI{
         }
 
         # Carry over all the fields submitted on the first page of the application
-        $form->addHidden('agreed_to_terms',$_REQUEST['agreed_to_terms']);
-        $form->addHidden('meal_option',$_REQUEST['meal_option']);
-        $form->addHidden('lifestyle_option',$_REQUEST['lifestyle_option']);
-        $form->addHidden('preferred_bedtime',$_REQUEST['preferred_bedtime']);
-        $form->addHidden('room_condition',$_REQUEST['room_condition']);
-        $form->addHidden('rlc_interest',$_REQUEST['rlc_interest']);
-        $form->addHidden('special_need',$_REQUEST['special_need']); // pass it on, just in case the user needs to redo their application
+        $form->addHidden('agreed_to_terms',     $_REQUEST['agreed_to_terms']);
+        $form->addHidden('meal_option',         $_REQUEST['meal_option']);
+        $form->addHidden('lifestyle_option',    $_REQUEST['lifestyle_option']);
+        $form->addHidden('preferred_bedtime',   $_REQUEST['preferred_bedtime']);
+        $form->addHidden('room_condition',      $_REQUEST['room_condition']);
+        $form->addHidden('rlc_interest',        $_REQUEST['rlc_interest']);
+        $form->addHidden('special_need',        $_REQUEST['special_need']); // pass it on, just in case the user needs to redo their application
+        $form->addHidden('area_code',           $_REQUEST['area_code']);
+        $form->addHidden('exchange',            $_REQUEST['exchange']);
+        $form->addHidden('number',              $_REQUEST['number']);
         
         for($i = 0; $i < 4; $i++){
             if(isset($_REQUEST['terms_'.$i]) || isset($_REQUEST['required_terms_'.$i])){
@@ -269,6 +281,13 @@ class Application_UI{
         $tpl['LIFESTYLE_OPTION']    = $_REQUEST['lifestyle_option'] == 1?'Single gender':'Co-ed';
         $tpl['PREFERRED_BEDTIME']   = $_REQUEST['preferred_bedtime'] == 1?'Early':'Late';
         $tpl['ROOM_CONDITION']      = $_REQUEST['room_condition'] == 1?'Clean':'Dirty';
+        if( isset($_REQUEST['area_code']) && isset($_REQUEST['exchange'])
+            && isset($_REQUEST['number']) )
+        {
+            $tpl['AREA_CODE']   = $_REQUEST['area_code'];
+            $tpl['EXCHANGE']    = $_REQUEST['exchange'];
+            $tpl['NUMBER']      = $_REQUEST['number'];
+        }
         
         //Term information
         $values = array();
@@ -336,23 +355,31 @@ class Application_UI{
         $form = &new PHPWS_Form('hidden_form');
         
         # Carry over all the fields submitted on the first page of the application
-        $form->addHidden('agreed_to_terms',$_REQUEST['agreed_to_terms']);
-        $form->addHidden('meal_option',$_REQUEST['meal_option']);
-        $form->addHidden('lifestyle_option',$_REQUEST['lifestyle_option']);
-        $form->addHidden('preferred_bedtime',$_REQUEST['preferred_bedtime']);
-        $form->addHidden('room_condition',$_REQUEST['room_condition']);
-        $form->addHidden('rlc_interest',$_REQUEST['rlc_interest']);
-        $form->addHidden('special_need',$_REQUEST['special_need']); // pass it on, just in case the user needs to redo their application
-        $form->addHidden('special_needs',$_REQUEST['special_needs']);
-        $form->addHidden('terms', $values);
+        $form->addHidden('agreed_to_terms',     $_REQUEST['agreed_to_terms']);
+        $form->addHidden('meal_option',         $_REQUEST['meal_option']);
+        $form->addHidden('lifestyle_option',    $_REQUEST['lifestyle_option']);
+        $form->addHidden('preferred_bedtime',   $_REQUEST['preferred_bedtime']);
+        $form->addHidden('room_condition',      $_REQUEST['room_condition']);
+        $form->addHidden('rlc_interest',        $_REQUEST['rlc_interest']);
+        $form->addHidden('special_need',        $_REQUEST['special_need']); // pass it on, just in case the user needs to redo their application
+        $form->addHidden('special_needs',       $_REQUEST['special_needs']);
+        $form->addHidden('terms',               $values);
 
-        $form->addHidden('module', 'hms');
-        $form->addHidden('type', 'student');
-        $form->addHidden('op', 'submit_application_review');
+        if( isset($_REQUEST['area_code']) && isset($_REQUEST['exchange'])
+            && isset($_REQUEST['number']) )
+        {
+            $form->addHidden('area_code',   $_REQUEST['area_code']);
+            $form->addHidden('exchange',    $_REQUEST['exchange']);
+            $form->addHidden('number',      $_REQUEST['number']);
+        }
 
-        $form->addButton('redo_button', 'Modify application');
-        $form->setExtra('redo_button', 'onClick="document.getElementById(\'hidden_form\').op.value=\'redo_application\';document.getElementById(\'hidden_form\').submit()"');
-        $form->addSubmit('submit_application', 'Submit application');
+        $form->addHidden('module',  'hms');
+        $form->addHidden('type',    'student');
+        $form->addHidden('op',      'submit_application_review');
+
+        $form->addButton('redo_button',         'Modify application');
+        $form->setExtra('redo_button',          'onClick="document.getElementById(\'hidden_form\').op.value=\'redo_application\';document.getElementById(\'hidden_form\').submit()"');
+        $form->addSubmit('submit_application',  'Submit application');
 
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
@@ -384,6 +411,7 @@ class Application_UI{
             $application->room_condition        = $_REQUEST['room_condition'];
             $application->rlc_interest          = $_REQUEST['rlc_interest'];
             $application->agreed_to_terms       = $_REQUEST['agreed_to_terms'];
+            $application->cellphone             = $_REQUEST['area_code'] . $_REQUEST['exchange'] . $_REQUEST['number'];
 
             if(isset($_REQUEST['special_needs']['physical_disability'])){
                 $application->physical_disability = 1;
@@ -502,9 +530,9 @@ class Application_UI{
             $tpl['TERMS_'.$i] = $long_term['term'] . ' ' . $long_term['year'];
         }
 
-        $tpl['STUDENT_NAME']    = HMS_SOAP::get_full_name($username);
-        $tpl['GENDER']          = (HMS_SOAP::get_gender($username,TRUE) == FEMALE) ? FEMALE_DESC : MALE_DESC;
-        $tpl['ENTRY_TERM']      = HMS_Term::term_to_text($term, TRUE);
+        $tpl['STUDENT_NAME']                = HMS_SOAP::get_full_name($username);
+        $tpl['GENDER']                      = (HMS_SOAP::get_gender($username,TRUE) == FEMALE) ? FEMALE_DESC : MALE_DESC;
+        $tpl['ENTRY_TERM']                  = HMS_Term::term_to_text($term, TRUE);
         $tpl['CLASSIFICATION_FOR_TERM_LBL'] = HMS_Util::formatClass(HMS_SOAP::get_student_class($username, $term));
         $tpl['STUDENT_STATUS_LBL']          = HMS_Util::formatType(HMS_SOAP::get_student_type($username, $term));
 
@@ -512,6 +540,12 @@ class Application_UI{
         $tpl['LIFESTYLE_OPTION']    = $application->lifestyle_option == 1?'Single gender':'Co-ed';
         $tpl['PREFERRED_BEDTIME']   = $application->preferred_bedtime == 1?'Early':'Late';
         $tpl['ROOM_CONDITION']      = $application->room_condition == 1?'Clean':'Dirty';
+
+        if(strlen($application->cellphone) == 10){
+            $tpl['CELLPHONE']   .= '('.substr($application->cellphone, 0, 3).')';
+            $tpl['CELLPHONE']   .= '-'.substr($application->cellphone, 3, 3);
+            $tpl['CELLPHONE']   .= '-'.substr($application->cellphone, 6, 4);
+        }
         
         $special_needs = "";
         if($application->physical_disability == 1){

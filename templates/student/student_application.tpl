@@ -61,6 +61,16 @@
             <tr>
                 <td>Classification: </td><td align="left">{CLASSIFICATION_FOR_TERM_LBL}</td>
             </tr>
+            <!-- BEGIN form -->
+            <tr>
+                <td>Cell Phone Number: </td><td align="left">({AREA_CODE})-{EXCHANGE}-{NUMBER}</td>
+            </tr>
+            <!-- END form -->
+            <!-- BEGIN review -->
+            <tr>
+                <td>Cell Phone Number: </td><td align="left">{CELLPHONE}</td>
+            </tr>
+            <!-- END review -->
             <tr>
                 <th colspan="2">Meal Plan</th>
             </tr>
