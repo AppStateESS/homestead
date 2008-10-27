@@ -42,9 +42,12 @@
                     </tr>
                     
                     <tr>
+                        <th>Cellphone</th>
+                        <td>{CELLPHONE}</td>
+                    </tr>
+                    
+                    <tr>
                        <th>Addresses</th>
-                    
-                    
                         <td>
                             <!-- BEGIN pr_address -->
                                 Permanent address:<br />

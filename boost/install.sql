@@ -5,6 +5,7 @@ CREATE TABLE hms_term (
     primary key(term)
 );
 
+-- Terms that can recieve applications for a specific app_term
 CREATE TABLE hms_term_applications (
     app_term integer NOT NULL REFERENCES hms_term(term),
     term     integer NOT NULL REFERENCES hms_term(term),
@@ -246,7 +247,7 @@ CREATE TABLE hms_application (
     medical_need                    smallint,
     gender_need                     smallint,
     withdrawn                       smallint NOT NULL default 0,
-    
+    cellphone                       character varying(10),
     primary key(id)
 );
 

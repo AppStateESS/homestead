@@ -654,12 +654,21 @@ class HMS_Student {
             else if($app->meal_option == BANNER_MEAL_STD) $tpl['MEAL_PLAN'] = "Standard";
             else if($app->meal_option == BANNER_MEAL_HIGH) $tpl['MEAL_PLAN'] = "High";
             else if($app->meal_option == BANNER_MEAL_SUPER) $tpl['MEAL_PLAN'] = "Super";
-            
+        
+            /*************
+             * Cellphone *
+             *************/
+            if(strlen($app->cellphone) == 10){
+                $tpl['CELLPHONE']   .= '('.substr($app->cellphone, 0, 3).')';
+                $tpl['CELLPHONE']   .= '-'.substr($app->cellphone, 3, 3);
+                $tpl['CELLPHONE']   .= '-'.substr($app->cellphone, 6, 4);
+            }
         } else {
             $tpl['APPLICATION']          = ''.$report_app;
             $tpl['APPLICATION_RECEIVED'] = "No";
             $tpl['MEAL_PLAN']            = 'None';
         }
+
         
         /********/
         /* Note */
@@ -740,8 +749,6 @@ class HMS_Student {
 
         //test($tpl, 1);
         $final = PHPWS_Template::process($tpl, 'hms', 'student/fancy_student_info.tpl');
-
-
 
         /***********************/
         /* Tabify Student Info */
