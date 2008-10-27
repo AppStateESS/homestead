@@ -283,8 +283,9 @@ class Application_UI{
         $tpl['LIFESTYLE_OPTION']    = $_REQUEST['lifestyle_option'] == 1?'Single gender':'Co-ed';
         $tpl['PREFERRED_BEDTIME']   = $_REQUEST['preferred_bedtime'] == 1?'Early':'Late';
         $tpl['ROOM_CONDITION']      = $_REQUEST['room_condition'] == 1?'Clean':'Dirty';
-        if( isset($_REQUEST['area_code']) && isset($_REQUEST['exchange'])
-            && isset($_REQUEST['number']) )
+
+        if( !empty($_REQUEST['area_code']) && !empty($_REQUEST['exchange'])
+            && !empty($_REQUEST['number']) )
         {
             $tpl['AREA_CODE']   = $_REQUEST['area_code'];
             $tpl['EXCHANGE']    = $_REQUEST['exchange'];
