@@ -478,6 +478,11 @@ class HMS_Term{
         }
 
         $tpl['TITLE'] = 'Edit Terms';
+
+        if(Current_User::allow('hms', 'edit_terms'))
+            $tpl['CREATE_TERM_LINK'] = PHPWS_Text::secureLink(_('Create a New Term'), 'hms', array('type'=>'term', 'op'=>'show_create_term'));
+        
+
         $tpl['PAGER'] = HMS_Term::get_available_terms_pager();
 
         if(isset($success)){
@@ -530,7 +535,6 @@ class HMS_Term{
         $pager = HMS_Term_Applications::getPager();
         $pager->addPageTags($form->getTemplate());
 
-        
         return $pager->get();
     }
 
