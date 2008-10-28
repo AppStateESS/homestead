@@ -520,10 +520,9 @@ class HMS_Student_UI{
             }
         }
 
-        // Commented due to housing bitching about a feature
         /*********************
          * Verify Assignment *
-         ********************
+         ********************/
          $tags['VERIFY_INTRO'] = 'Once the assignment process is complete, you can view your up-to-the-minute application, assignment, roommate, and Learning Community status. <b><font color="red">Please note that this status is not final and is subject to change.</font></b>';
 
         # Check deadlines for verify assignment
@@ -537,8 +536,7 @@ class HMS_Student_UI{
         }else{
             $tags['VERIFY_MSG'] = '<b>It is too late to view your housing status</b>. The deadline past on ' . HMS_Deadlines::get_deadline_as_date('view_assignment_end_timestamp', $deadlines) . '.';
             $tags['VERIFY_ICON'] = $lock_img;
-        }*/
-
+        }
 
         # Logout link
         $tags['LOGOUT_LINK'] = PHPWS_Text::secureLink(_('Log Out'), 'users', array('action'=>'user', 'command'=>'logout'));
