@@ -74,12 +74,6 @@ class HMS_Maintenance
          * Term Maintenance *
          ********************/ 
         if(Current_User::allow('hms', 'edit_terms'))
-            $tpl['CREATE_TERM'] = PHPWS_Text::secureLink(_('Create a New Term'), 'hms', array('type'=>'term', 'op'=>'show_create_term'));
-        
-        if(Current_User::allow('hms', 'select_term') || Current_User::allow('hms', 'edit_terms'))
-            $tpl['EDIT_TERM']   = PHPWS_Text::secureLink(_('Edit Terms'), 'hms', array('type'=>'term', 'op'=>'show_edit_terms'));
-
-        if(Current_User::allow('hms', 'edit_terms'))
             $tpl['ASSOCIATE_TERM']   = PHPWS_Text::secureLink(_('Set Simultaneous Entry Terms'), 'hms', array('type'=>'term', 'op'=>'show_term_association'));
 
         /***********************
@@ -157,15 +151,7 @@ class HMS_Maintenance
                 array('type'=>'suite', 'op'=>'show_select_suite'));
         }
         
-        /****************
-         * Movein times *
-         ****************/
-
-        if(Current_User::allow('hms', 'edit_movein_times')){
-            $tpl['EDIT_MOVEIN_TIMES'] = PHPWS_Text::secureLink(
-                _('Edit Move-in Times'), 'hms',
-                array('type'=>'movein', 'op'=>'show_edit_movein_times'));
-        }
+        
         
         /*****************
          * Edit Features *
@@ -297,6 +283,19 @@ class HMS_Maintenance
     function show_settings()
     {
         $tpl = array();
+
+        if(Current_User::allow('hms', 'select_term') || Current_User::allow('hms', 'edit_terms'))
+            $tpl['EDIT_TERM']   = PHPWS_Text::secureLink(_('Edit Terms'), 'hms', array('type'=>'term', 'op'=>'show_edit_terms'));
+
+        /****************
+         * Movein times *
+         ****************/
+
+        if(Current_User::allow('hms', 'edit_movein_times')){
+            $tpl['EDIT_MOVEIN_TIMES'] = PHPWS_Text::secureLink(
+                _('Edit Move-in Times'), 'hms',
+                array('type'=>'movein', 'op'=>'show_edit_movein_times'));
+        }
 
         # Lottery settings
         if(Current_User::allow('hms', 'lottery_settings')){
