@@ -371,11 +371,11 @@ class HMS_Student_UI{
             $tags['NEW_APP_MSG']  = '<b>You may also submit a new application</b> until ' . HMS_Deadlines::get_deadline_as_date('edit_application_end_timestamp', $deadlines)  . '. This will replace the application you have already saved.';
             $tags['NEW_APP_LINK'] = PHPWS_Text::secureLink(_('Submit a New Application'), 'hms', array('type'=>'student', 'op'=>'begin_application'));
         }else if(!HMS_Deadlines::check_deadline_past('submit_application_begin_timestamp', $deadlines)){
-            $tags['NEw_APP_MSG']  = "<b>It is too soon to resubmit your housing application.</b> You will be able to submit an edited application on " . HMS_Deadlines::get_deadline_as_date('submit_application_begin_timestamp', $deadlines) . ".";
+            $tags['NEW_APP_MSG']  = "<b>It is too soon to resubmit your housing application.</b> You will be able to submit an edited application on " . HMS_Deadlines::get_deadline_as_date('submit_application_begin_timestamp', $deadlines) . ".";
         }else{
             $tags['NEW_APP_MSG']  = "<b>The deadline for editing your housing application passed</b> on " . HMS_Deadlines::get_deadline_as_date('edit_application_end_timestamp', $deadlines) . ".";
         }
-        
+
         /*******************
          * RLC Application *
          ******************/
