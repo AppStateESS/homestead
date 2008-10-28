@@ -42,11 +42,6 @@
             <dd>{VIEW_ACTIVITY_LOG}</dd>
             <!-- END activity_log -->
             
-            <!-- BEGIN deadlines -->
-            <dt>Deadline Maintenance</dt>
-            <dd>{EDIT_DEADLINES}</dd>
-            <!-- END deadlines -->
-
             <!-- BEGIN assignments -->
             <dt>Assignment Maintenance</dt>
             <dd>{CREATE_ASSIGNMENT}</dd>
@@ -65,11 +60,6 @@
             <dt>Auto-Assignment</dt>
             <dd>{ASSIGN}</dd>
             <!-- END autoassign -->
-
-            <!-- BEGIN movein_times -->
-            <dt>Move-in Times</dt>
-            <dd>{EDIT_MOVEIN_TIMES}</dd>
-            <!-- END movein_times -->
 
             <!-- BEGIN letters -->
             <dt>Letters</dt>
@@ -100,14 +90,15 @@
             
             <!-- BEGIN term -->
             <dt>Term Maintenance</dt>
-            <dd>{CREATE_TERM}</dd>
-            <dd>{EDIT_TERM}</dd>
             <dd>{ASSOCIATE_TERM}</dd>
             <dd>{EDIT_FEATURES}</dd>
             <!-- END term -->
 
             <!-- BEGIN settings -->
             <dt>Settings</dt>
+            <dd>{EDIT_TERM}</dd>
+            <dd>{EDIT_DEADLINES}</dd>
+            <dd>{EDIT_MOVEIN_TIMES}</dd>
             <dd>{LOTTERY_SETTINGS}</dd>
             <!-- END settings -->
 

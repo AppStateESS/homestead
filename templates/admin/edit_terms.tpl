@@ -10,8 +10,10 @@
       <!-- BEGIN success_msg -->
       <div><font color="green">{SUCCESS_MSG}</font></div>
       <!-- END success_msg -->
-      
-      {PAGER}
+
+    {CREATE_TERM_LINK}  
+
+    {PAGER}
     </div>
   </div>
 </div>
