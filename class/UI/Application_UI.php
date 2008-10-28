@@ -601,7 +601,7 @@ class Application_UI{
 
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
         //$term = (isset($_REQUEST['term']) ? $_REQUEST['term'] : HMS_Term::get_current_term());
-        $term = HMS_Term::get_current_term();
+        $term = HMS_Term::get_selected_term();
 
         $db = &new PHPWS_DB('hms_application_features');
         $db->addWhere('term', $term);
