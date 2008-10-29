@@ -464,7 +464,7 @@ INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity
 INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity) VALUES (9, 'The Man Floor', 'TMF', 50);
 
 CREATE SEQUENCE hms_learning_communities_seq;
-SELECT setval('hms_learning_communities_seq', max(hms_learning_communities.id));
+SELECT setval('hms_learning_communities_seq', max(hms_learning_communities.id)) FROM hms_learning_communities;
 
 INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (10, 10, 'Describe your current leadership and community service experience and the opportunities you are looking for.');
 INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (1, 1, 'What outdoor opportunities would you like to be involved in and describe your current experience.');
@@ -478,7 +478,7 @@ INSERT INTO hms_learning_community_questions (id, learning_community_id, questio
 INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (9, 9, 'The man floor question here!');
 
 CREATE SEQUENCE hms_learning_community_questions_seq;
-SELECT setval('hms_learning_community_questions_seq', max(hms_learning_community_questions.id));
+SELECT setval('hms_learning_community_questions_seq', max(hms_learning_community_questions.id)) FROM hms_learning_community_questions;
 
 INSERT INTO hms_pricing_tiers VALUES (1, 3250.00);
 INSERT INTO hms_pricing_tiers VALUES (2, 3550.00);
@@ -487,5 +487,5 @@ INSERT INTO hms_pricing_tiers VALUES (4, 4150.00);
 INSERT INTO hms_pricing_tiers VALUES (5, 4800.00);
 
 CREATE SEQUENCE hms_pricing_tiers_seq;
-SELECT setval('hms_pricing_tiers_seq', max(hms_pricing_tiers.id));
+SELECT setval('hms_pricing_tiers_seq', max(hms_pricing_tiers.id)) FROM hms_pricing_tiers;
 COMMIT;
