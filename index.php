@@ -10,7 +10,7 @@ require_once(PHPWS_SOURCE_DIR . 'mod/hms/inc/defines.php');
 
 PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
-Layout::addStyle('hms','hms.css');
+Layout::addStyle('hms','css/hms.css');
 
 if(Current_User::isLogged()) {
     PHPWS_Core::initModClass('hms', 'HMS.php');
