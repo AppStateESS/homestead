@@ -250,28 +250,30 @@ class HMS_Activity_Log{
      * (unsortable with unchangeable limits) that has a link to the main 
      * activity log, or the regular dynamic log.
      */
-    function showPager($actor, $actee, $notes, $begin, $end, $activities, $limit=10, $static=false)
+    function showPager($actor, $actee, $exact, $notes, $begin, $end, $activities, $limit=10, $static=false)
     {
         PHPWS_Core::initCoreClass('DBPager.php');
 
         $pager = &new DBPager('hms_activity_log','HMS_Activity_Log');
+        
+        $pct = ($exact == TRUE) ? '%' : '';
 
         if(!is_null($actor) && !is_null($actee) && $actor == $actee){
             // Both actor and actee were specified, and they match so use an 'OR'
             // to effectively show all entries for the username specified
-            $pager->db->addWhere('actor', "%$actor%", 'ILIKE', 'OR', 'actor_actee_group');
-            $pager->db->addWhere('user_id', "%$actee%", 'ILIKE', 'OR', 'actor_actee_group');
+            $pager->db->addWhere('actor', "$pct$actor$pct", 'ILIKE', 'OR', 'actor_actee_group');
+            $pager->db->addWhere('user_id', "$pct$actee$pct", 'ILIKE', 'OR', 'actor_actee_group');
             $pager->db->setGroupConj('actor_actee_group', 'AND');
         }else if(!is_null($actor) && !is_null($actee)){
             // Both actor and actee were specified, but they don't match so use an 'AND'
             // to get just the specific situation we're looking for
-            $pager->db->addWhere('actor', "%$actor%", 'ILIKE', 'AND', 'actor_actee_group');
-            $pager->db->addWhere('user_id', "%$actee%", 'ILIKE', 'AND', 'actor_actee_group');
+            $pager->db->addWhere('actor', "$pct$actor$pct", 'ILIKE', 'AND', 'actor_actee_group');
+            $pager->db->addWhere('user_id', "$pct$actee$pct", 'ILIKE', 'AND', 'actor_actee_group');
             $pager->db->setGroupConj('actor_actee_group', 'AND');
         }else if(!is_null($actor)){
-            $pager->db->addWhere('actor', "%$actor%", 'ILIKE');
+            $pager->db->addWhere('actor', "$pct$actor$pct", 'ILIKE');
         }else if(!is_null($actee)){
-            $pager->db->addWhere('user_id', "%$actee%", 'ILIKE');
+            $pager->db->addWhere('user_id', "$pct$actee$pct", 'ILIKE');
         }
 
         if(!is_null($notes))
@@ -346,6 +348,11 @@ class HMS_Activity_Log{
         if(isset($selection['actee']))
             $form->setValue('actee', $selection['actee']);
 
+        // "exact" flag
+        $form->addCheck('exact','yes');
+        $form->setMatch('exact','yes');
+        $form->setLabel('exact','Exact? ');
+
         $begindate = null;
         $enddate = null;
 /*
@@ -391,6 +398,8 @@ class HMS_Activity_Log{
         $notes = NULL;
         if(isset($_REQUEST['notes']) && !empty($_REQUEST['notes'])) 
             $notes = $_REQUEST['notes'];
+        
+        $exact = isset($_REQUEST['exact']) ? TRUE : FALSE;
 
         if(PHPWS_Form::testDate('begin'))
             $begin = PHPWS_Form::getPostedDate('begin');
@@ -424,7 +433,7 @@ class HMS_Activity_Log{
         }
 
         $tags['FILTERS'] = HMS_Activity_Log::showFilters($_REQUEST);
-        $tags['CONTENT'] = HMS_Activity_Log::showPager($actor, $actee, $notes, $begin, $end, $activities);
+        $tags['CONTENT'] = HMS_Activity_Log::showPager($actor, $actee, $exact, $notes, $begin, $end, $activities);
         return PHPWS_Template::Process($tags, 'hms', 'admin/activity_log_box.tpl');
     }
 }

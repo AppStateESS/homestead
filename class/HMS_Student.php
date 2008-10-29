@@ -731,8 +731,8 @@ class HMS_Student {
 
         if( Current_User::allow('hms', 'view_activity_log') && Current_User::allow('hms', 'view_student_log') ){
             PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-            $tpl['LOG_PAGER'] = HMS_Activity_Log::showPager(null, $username, null, null, null, $everything_but_notes, 5, true);
-            $tpl['NOTE_PAGER'] = HMS_Activity_Log::showPager(null, $username, null, null, null, array(0 => ACTIVITY_ADD_NOTE), 5, true);
+            $tpl['LOG_PAGER'] = HMS_Activity_Log::showPager(null, $username, TRUE, null, null, null, $everything_but_notes, 5, true);
+            $tpl['NOTE_PAGER'] = HMS_Activity_Log::showPager(null, $username, TRUE, null, null, null, array(0 => ACTIVITY_ADD_NOTE), 5, true);
 
             $tpl['LOG_PAGER'] .= '<div align=center>[<a href="index.php?module=hms&type=student&op=get_matching_students&username='.$username.'&tab=student_logs">View More</a>]';
             //TODO: if we ever renumber the activities change a40 to the number of

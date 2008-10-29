@@ -22,6 +22,11 @@
         </td>
     </tr>
     <tr>
+        <td colspan=2>
+            <strong>{EXACT_LABEL}</strong>{EXACT}
+        </td>
+    </tr>
+    <tr>
         <td>
             <strong>{NOTES_LABEL}</strong><br />
             {NOTES}
