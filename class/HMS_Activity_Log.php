@@ -256,7 +256,7 @@ class HMS_Activity_Log{
 
         $pager = &new DBPager('hms_activity_log','HMS_Activity_Log');
         
-        $pct = ($exact == TRUE) ? '%' : '';
+        $pct = ($exact == TRUE) ? '' : '%';
 
         if(!is_null($actor) && !is_null($actee) && $actor == $actee){
             // Both actor and actee were specified, and they match so use an 'OR'
