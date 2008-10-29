@@ -113,6 +113,12 @@ class HMS_Term{
             case 'show_term_association':
                 return HMS_Term::show_term_association();
                 break;
+            case 'edit_term_association':
+                return HMS_Term::edit_term_association();
+                break;
+            case 'delete_term_association':
+                return HMS_Term::delete_term_association();
+                break;
             default:
                 return "Undefined term op";
                 break;
@@ -494,28 +500,40 @@ class HMS_Term{
         return PHPWS_Template::process($tpl, 'hms', 'admin/edit_terms.tpl');
     }
 
-    function show_term_association($success = NULL, $error = NULL)
+    function delete_term_association()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Term_Applications.php');
-        if(isset($_REQUEST['delete'])){
-            HMS_Term_Applications::remove($_REQUEST['delete']);
-        }
+        HMS_Term_Applications::remove($_REQUEST['delete']);
+        
+        return HMS_Term::show_term_association();
+    }
 
+    function edit_term_association()
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Term_Applications.php');
+        $error   = null;
+        $success = null;
         if(isset($_REQUEST['term1']) && isset($_REQUEST['term2']) 
            && is_numeric($_REQUEST['term1']) && is_numeric($_REQUEST['term2']))
         {
             if(!HMS_Term::set_valid_term($_REQUEST['term1'], $_REQUEST['term2'],
                (isset($_REQUEST['required']) ? 1 : 0)))
             {
-                $error .= "<font color=red>Error associating terms.</font>";
+                $error   .= "<font color=red>Error associating terms.</font>";
             } else {
-                $message .= "<font color=green>Terms Associated.</font>";
+                $success .= "<font color=green>Terms Associated.</font>";
             }
         }
+        
+        return HMS_Term::show_term_association($success, $error);
+    }
 
+    function show_term_association($success = NULL, $error = NULL)
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Term_Applications.php');
         $tpl = array();
-        if( isset($message) && !is_null($message)){
-            $tpl['MESSAGE'] = $message;
+        if( isset($success) && !is_null($success)){
+            $tpl['MESSAGE'] = $success;
         } elseif(!is_null($error)){
             $tpl['ERROR'] = $error;
         }
@@ -528,7 +546,7 @@ class HMS_Term{
         $form->addSubmit('submit', 'Make Association');
 
         $form->addHidden('type',    'term');
-        $form->addHidden('op',      'show_term_association');
+        $form->addHidden('op',      'edit_term_association');
 
         $form->mergeTemplate($tpl);
         

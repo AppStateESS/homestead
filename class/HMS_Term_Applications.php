@@ -30,7 +30,7 @@ class HMS_Term_Applications {
         $tpl['APP_TERM']    = HMS_Term::term_to_text($this->app_term,   true);
         $tpl['TERM']        = HMS_Term::term_to_text($this->term,       true);
         $tpl['REQUIRED']    = ($this->required == 1 ? 'yes' : 'no'); 
-        $tpl['DELETE']      = '<a href=index.php?module=hms&type=term&op=show_term_association&delete='.$this->app_term.'>Delete</a>';
+        $tpl['DELETE']      = '<a href=index.php?module=hms&type=term&op=delete_term_association&delete='.$this->app_term.'>Delete</a>';
 
         return $tpl;
     }
