@@ -3,10 +3,10 @@
         <div class="box-title"><h1>{PAGE_TITLE}</h1></div>
         <div class="box-content">
             <!-- BEGIN message -->
-            <font color="red"><i>{MESSAGE}</i></font><br>
+            <span class="error">{MESSAGE}</span><br/>
             <!-- END message -->
             <!-- BEGIN success -->
-            {SUCCESS}
+            <span class="success">{SUCCESS}</span><br/>
             <!-- END success -->
         </div>
     </div>

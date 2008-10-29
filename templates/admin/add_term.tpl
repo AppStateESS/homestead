@@ -8,7 +8,7 @@
       <!-- END error_msg -->
 
       <!-- BEGIN success_msg -->
-      <div><span class="error">{SUCCESS_MSG}</span></div>
+      <div><span class="success">{SUCCESS_MSG}</span></div>
       <!-- END success_msg -->
       
       <!-- BEGIN term_form -->

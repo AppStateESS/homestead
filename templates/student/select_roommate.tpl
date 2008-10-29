@@ -4,14 +4,14 @@
         <div class="box-content">
 
             <!-- BEGIN error_msg -->
-            <span style="error">
+            <span class="error">
                 {ERROR_MSG}
             </span>
             <br /><br />
             <!-- END error_msg -->
 
             <!-- BEGIN success_msg -->
-            <span style="success">
+            <span class="success">
                 {SUCCESS_MSG}
             </span>
             <br /><br />

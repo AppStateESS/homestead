@@ -1,5 +1,8 @@
 {MESSAGE}
-{ERROR}
+<!-- BEGIN error_msg -->
+<span class="error">{ERROR}</span>
+<!-- END error_msg -->
+
 <table>
     <tr>
         <th>Application Term</th>

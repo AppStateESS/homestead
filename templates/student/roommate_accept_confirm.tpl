@@ -3,7 +3,7 @@
         <div class="box-title"><h2>Confirm Roommate - {NAME}</h2></div>
         <div class="box-content">
 <!-- BEGIN ERROR -->
-            <p style="color: #F00">{ERROR}</p>
+            <span class="error">{ERROR}</span><br/>
 <!-- END ERROR -->
             {START_FORM}
             <p>By copying the word in the image above into the box below, you are indicating that you understand that you are <b>confirming roommate status with {NAME}</b>.  This action cannot be undone without contacting Housing and Residence Life.</p>

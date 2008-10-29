@@ -4,12 +4,12 @@
         <div class="box-content">
         <!-- BEGIN success -->
         {SUCCESS}
-        You have been successfully entered into the lottery.
+        <span class="success">You have been successfully entered into the lottery.</span>
         <!-- END success -->
 
         <!-- BEGIN error -->
         {ERROR}
-        There was an error while creating your lottery entry.
+        <span class="error">There was an error while creating your lottery entry.</span>
         <!-- END error -->
 
         <br /><br />

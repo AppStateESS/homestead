@@ -4,7 +4,9 @@
     <div class="box-title"> <h1>{TITLE}</h1> </div>
     <div class="box-content">
         {MENU_LINK}<br /><br />
-        <font color="red"><i>{ERROR}</i><br /></font>
+        <!-- BEGIN error_msg -->
+        <span class="error">{ERROR}<br/></span>
+        <!-- END error_msg -->
         {MESSAGE}<br /><br />
         <table>
             <tr>

@@ -1,7 +1,11 @@
 <h1>Application Features</h1>
 <br />
-{ERROR}
-{SUCCESS}
+<!-- BEGIN error_msg -->
+<span class="error">{ERROR}</span>
+<!-- END error_msg -->
+<!-- BEGIN success_msg -->
+<span class="success">{SUCCESS}</span>
+<!-- END success_msg -->
 <br />
 {START_FORM}
 {TERM}

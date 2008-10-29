@@ -4,7 +4,9 @@
     <div class="box-title"> <h1>{TITLE}</h1> </div>
     <div class="box-content">
         {MENU_LINK}<br /><br />
-        <font color="red"><i>{ERROR}</i><br /></font>
+        <!-- BEGIN error_msg -->
+        <span class="error">{ERROR}</span><br />
+        <!-- END error_msg -->
         Please select a Learning Community from the list below to see a roster for that community.<br />
         <br />
         <br />

@@ -2,9 +2,9 @@
 <div class="quick">
     <h2>{TITLE}</h2>
 
-<!-- BEGIN error -->
-    <font style="color: #F00;">{ERROR}</font>
-<!-- END error -->
+<!-- BEGIN error_msg -->
+    <span class="error">{ERROR}</span><br/>
+<!-- END error_msg -->
 
     <ul>
     

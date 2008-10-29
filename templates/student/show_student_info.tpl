@@ -3,7 +3,9 @@
     <div class="box-title"> <h1>{TITLE}</h1> </div>
     <div class="box-content">
         {MENU_LINK}<br /><br />
-        <span style="color : red"><i>{ERROR}</i></span><br />
+        <!-- BEGIN error_msg -->
+        <span class="error">{ERROR}</span><br />
+        <!-- END error_msg -->
         <table cellspacing="8" cellpadding="1">
             <tr>
                 <td>Full Name: </td><td>{FIRST_NAME} {MIDDLE_NAME} {LAST_NAME}</td>

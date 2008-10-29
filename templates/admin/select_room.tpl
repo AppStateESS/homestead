@@ -7,7 +7,7 @@
         <!-- END error_msg -->
         
         <!-- BEGIN success_msg -->
-        <span class="error">{SUCCESS_MSG}<br /></span>
+        <span class="success">{SUCCESS_MSG}<br /></span>
         <!-- END success_msg -->
         
         {MESSAGE}<br /><br />

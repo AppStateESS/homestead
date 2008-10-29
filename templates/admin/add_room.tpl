@@ -3,7 +3,9 @@
   <div class="box">
     <div class="box-title"> <h1>{TITLE}</h1> </div>
     <div class="box-content">
-        <font color="red"><i>{ERROR}</i></font><br />
+        <!-- BEGIN error_msg -->
+        <span class="error">{ERROR}</span><br/>
+        <!-- END error_msg -->
         <br />
         <b>You are adding room {ROOM_NUMBER} to {HALL_NAME}, floor {FLOOR_NUMBER}.</b><br />
         <br />
