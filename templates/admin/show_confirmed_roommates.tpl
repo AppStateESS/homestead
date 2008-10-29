@@ -6,11 +6,11 @@
        {MENU_LINK}<br />
        
         <!-- BEGIN error_msg -->
-        <font color="red">{ERROR_MSG}<br /></font>
+        <span class="error">{ERROR_MSG}<br /></span>
         <!-- END error_msg -->
         
         <!-- BEGIN success_msg -->
-        <font color="green">{SUCCESS_MSG}<br /></font>
+        <span class="success">{SUCCESS_MSG}<br /></span>
         <!-- END success_msg -->
 
        {PAGER} 

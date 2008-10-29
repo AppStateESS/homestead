@@ -3,11 +3,11 @@
     <div class="title"> <h1>Residence Hall Application</h1><p>{RECEIVED_DATE}</p> </div>
     <div class="box-content">
         <!-- BEGIN error_msg -->
-        <font color="red">{ERROR_MSG}<br /></font>
+        <span class="error">{ERROR_MSG}<br /></span>
         <!-- END error_msg -->
         
         <!-- BEGIN success_msg -->
-        <font color="green">{SUCCESS_MSG}<br /></font>
+        <span class="success">{SUCCESS_MSG}<br /></span>
         <!-- END success_msg -->
         <!-- BEGIN withdrawn -->
         <font color="red"><b>{WITHDRAWN}</b></font>

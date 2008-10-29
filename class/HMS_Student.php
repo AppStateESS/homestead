@@ -802,7 +802,6 @@ class HMS_Student {
         javascript('/jquery/');
         javascript('/modules/hms/jquery_ui/');
         javascript('/modules/hms/student_info/');
-        Layout::addStyle('hms', 'css/jquery/flora/flora.dialog.css');
 
         return $panel->display($content);
     }

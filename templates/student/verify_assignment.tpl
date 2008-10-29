@@ -3,11 +3,11 @@
     <h1>Verify Your Housing Status</h1>
     <div class="box-content">
         <!-- BEGIN error_msg -->
-        <font color="red">{ERROR_MSG}<br /></font>
+        <span class="error">{ERROR_MSG}<br /></span>
         <!-- END error_msg -->
         
         <!-- BEGIN success_msg -->
-        <font color="green">{SUCCESS_MSG}<br /></font>
+        <span class="success">{SUCCESS_MSG}<br /></span>
         <!-- END success_msg -->
 
         <font color="red"><b>Note: This information is not final and is subject to change.</b></font>

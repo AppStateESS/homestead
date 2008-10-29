@@ -24,11 +24,11 @@ $('#beds_for_lottery').text($('#phpws_form_beds_per_room').attr('value') * $('#p
     <div class="{TITLE_CLASS}"><h1>{TITLE}</h1></div>
     <div class="box-content">
         <!-- BEGIN error_msg -->
-        <font color="red">{ERROR_MSG}<br /></font>
+        <span class="error">{ERROR_MSG}<br /></span>
         <!-- END error_msg -->
         
         <!-- BEGIN success_msg -->
-        <font color="green">{SUCCESS_MSG}<br /></font>
+        <span class="success">{SUCCESS_MSG}<br /></span>
         <!-- END success_msg -->
         <h2>Hall Properties</h2>
         {START_FORM}

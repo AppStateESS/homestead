@@ -1,12 +1,13 @@
 <div class="hms">
   <div class="box">
     <div class="header"> <h1>Confirm Roommate Request</h1> </div>
-    <div class="box-content">        <!-- BEGIN error_msg -->
-        <font color="red">{ERROR_MSG}<br /></font>
+    <div class="box-content">
+        <!-- BEGIN error_msg -->
+        <span class="error">{ERROR_MSG}<br /></span>
         <!-- END error_msg -->
         
         <!-- BEGIN success_msg -->
-        <font color="green">{SUCCESS_MSG}<br /></font>
+        <span class="success">{SUCCESS_MSG}<br /></span>
         <!-- END success_msg -->
  
         <p>

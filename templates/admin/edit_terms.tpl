@@ -4,11 +4,11 @@
     <div class="box-content">
     
       <!-- BEGIN error_msg -->
-      <div><font color="red">{ERROR_MSG}</font></div>
+      <div><span class="error">{ERROR_MSG}</span></div>
       <!-- END error_msg -->
 
       <!-- BEGIN success_msg -->
-      <div><font color="green">{SUCCESS_MSG}</font></div>
+      <div><span class="success">{SUCCESS_MSG}</span></div>
       <!-- END success_msg -->
 
     {CREATE_TERM_LINK}  

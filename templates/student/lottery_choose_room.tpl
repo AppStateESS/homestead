@@ -3,11 +3,11 @@
     <div class="header"> <h1>{HALL_FLOOR} - Choose room</h1> </div>
     <div class="box-content">
         <!-- BEGIN error_msg -->
-        <font color="red">{ERROR_MSG}<br /></font>
+        <span class="error">{ERROR_MSG}<br /></span>
         <!-- END error_msg -->
         
         <!-- BEGIN success_msg -->
-        <font color="green">{SUCCESS_MSG}<br /></font>
+        <span class="success">{SUCCESS_MSG}<br /></span>
         <!-- END success_msg -->
         <div style="float: right; width: 300px">
            {FLOOR_PLAN_IMAGE} 

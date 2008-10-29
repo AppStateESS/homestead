@@ -4,11 +4,19 @@
         <div class="box-content">
 
             <!-- BEGIN error_msg -->
-            <font color="red">
+            <span style="error">
                 {ERROR_MSG}
-            </font>
+            </span>
             <br /><br />
             <!-- END error_msg -->
+
+            <!-- BEGIN success_msg -->
+            <span style="success">
+                {SUCCESS_MSG}
+            </span>
+            <br /><br />
+            <!-- END success_msg -->
+
         
             In order to select your roommate please provide their Appalachian State University email address below.<br /><br />
             You will receive a follow-up email verifying the status of your invitation and your requested roommate will receive an email inviting them to confirm your request.<br /><br />
