@@ -261,7 +261,7 @@ class Lottery_UI {
             $row['HALL_NAME']       = $hall->hall_name;
             $row['ROW_TEXT_COLOR']  = 'black';
 
-            $rooms_used = $hall->count_lottery_used_rooms();
+            $rooms_used = $hall->count_lottery_full_rooms();
             # If we've used up the number of allotted rooms, then remove this hall from the list
             if($rooms_used >= $hall->rooms_for_lottery){
                 $row['ROW_TEXT_COLOR'] = 'grey';
