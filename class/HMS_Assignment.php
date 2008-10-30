@@ -18,6 +18,7 @@ class HMS_Assignment extends HMS_Item
     var $bed_id         = 0;
     var $meal_option    = 0;
     var $letter_printed = 0;
+    var $email_sent     = 0;
     var $_gender        = 0;
     var $_bed           = null;
 
@@ -410,6 +411,7 @@ class HMS_Assignment extends HMS_Item
         $assignment->bed_id         = $vacant_bed->id;
         $assignment->term           = $term;
         $assignment->letter_printed = 0;
+        $assignment->email_sent     = 0;
 
         # If this was a lottery assignment, flag it as such
         if($lottery){
@@ -448,6 +450,7 @@ class HMS_Assignment extends HMS_Item
                 }
                 $roommate_assign = HMS_Assignment::get_assignment($roommate->asu_username,$term);
                 $roommate_assign->letter_printed = 0;
+                $roommate_assign->email_sent     = 0;
                 $result = $roommate_assign->save();
             }
         }

@@ -62,11 +62,12 @@
             <!-- END autoassign -->
 
             <!-- BEGIN letters -->
-            <dt>Letters</dt>
+            <dt>Notifications</dt>
             <dd>{GENERATE_UPDATED_LETTERS}</dd>
             <dd>{DOWNLOAD_PDF}</dd>
             <dd>{DOWNLOAD_CSV}</dd>
             <dd>{LIST_LETTERS}</dd>
+            <dd>{EMAIL_NOTIFICATIONS}</dd>
             <!-- END letters -->
         </dl>
         <!-- END middle -->

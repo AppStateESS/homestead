@@ -137,6 +137,8 @@ CREATE TABLE hms_assignment (
     added_on        integer     NOT NULL,
     updated_by      integer     NOT NULL,
     updated_on      integer     NOT NULL,
+    letter_printed  smallint    NOT NULL DEFAULT 0,
+    email_sent      smallint    NOT NULL DEFAULT 0,
     primary key(id)
 );
 

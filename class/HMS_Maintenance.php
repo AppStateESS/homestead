@@ -119,9 +119,9 @@ class HMS_Maintenance
                 _('Auto-Assign'), 'hms',
                 array('type'=>'autoassign', 'op'=>'assign'));
         
-        /***********
-         * Letters *
-         ***********/
+        /*****************
+         * Notifications *
+         *****************/
         if(Current_User::allow('hms', 'assignment_maintenance'))
             $tpl['GENERATE_UPDATED_LETTERS'] = PHPWS_Text::secureLink(
                 _('Generate Updated Letters'), 'hms',
@@ -141,6 +141,11 @@ class HMS_Maintenance
             $tpl['DOWNLOAD_CSV'] = PHPWS_Text::secureLink(
                 _('Download Most Recent CSV'), 'hms',
                 array('type'=>'letter', 'op'=>'csv'));
+
+        if(Current_User::allow('hms', 'assignment_maintenance'))
+            $tpl['EMAIL_NOTIFICATIONS'] = PHPWS_Text::secureLink(
+                _('Send Email Notifications'), 'hms',
+                array('type'=>'letter', 'op'=>'email_menu'));
             
         /*****************
          * Suite Options *

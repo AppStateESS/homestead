@@ -142,7 +142,7 @@ class HMS_Letter
             test($assignment, 1); // This *shouldn't* ever happen...
         }else{
             $assignment_text    = $assignment->where_am_i();
-            $bed_phone          = $assignment->get_phone_number();
+            $bed_phone          = $assignment->get_phone_number(); //room phone number
 
             # Determine the student's type and figure out their movein time
             $type = HMS_SOAP::get_student_type($student, $term);
@@ -267,6 +267,13 @@ class HMS_Letter
                 return HMS_Letter::pdf();
             case 'csv':
                 return HMS_Letter::csv();
+            case 'email_menu':
+                return HMS_Letter::show_email_menu();
+            case 'email':
+                return HMS_Letter::email();
+            default:
+                HMS_Maintenance::main();
+                break;
         }
     }
 
@@ -554,6 +561,93 @@ class HMS_Letter
             
             $letters[$k+1] = $temp;
         }
+    }
+
+    function show_email_menu()
+    {
+        $message = 'Are you sure you want to send assignment status emails?<br /><br />';
+
+        $form = &new PHPWS_Form('hms_send_email');
+        $form->addSubmit('yes', 'Yes');
+        $form->addButton('no', 'No');
+        $form->addHidden('type', 'letter');
+        $form->addHidden('op', 'email');
+
+        $message .= implode(' ', $form->getTemplate());
+
+        return $message;
+    }
+    
+    function email()
+    {
+        // Accumulate output if any
+        $output = '';
+
+        $db = &new PHPWS_DB('hms_assignment');
+        $db->addWhere('email_sent', 0);
+        $db->addColumn('asu_username');
+        $db->addColumn('bed_id');
+
+        $result = $db->select();
+
+        if(PHPWS_Error::logIfError($result)){
+            return 'Database Error no emails were sent';
+        }
+
+        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
+        foreach($result as $assignment){
+            //get the students real name from their asu_username
+            PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+            $student = HMS_SOAP::get_student_info($assignment['asu_username']);
+            $name = $student->first_name . (strlen($student->middle_name) > 1 ? ' ' . $student->middle_name . ' ' : ' ') . $student->last_name;
+
+            //get the location of their assignment
+            PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
+            $bed = &new HMS_Bed($assignment['bed_id']);
+            $location = $bed->where_am_i();
+
+            //get the list of roommates
+            $roommates = array();
+            $room = $bed->get_parent();
+            if($room->is_in_suite()){
+                $suite = new HMS_Suite($room->suite_id);
+                $assignees = $suite->get_assignees();
+            } else {
+                $assignees = $room->get_assignees();
+            }
+
+            if(sizeof($assignees > 1)){
+                foreach($assignees as $roommate){
+                    // Don't include *this* student in the roommate list
+                    if($roommate->asu_username == $assignment['asu_username']){
+                        continue;
+                    }
+                    $roommates[] = HMS_SOAP::get_full_name_inverted($roommate->asu_username) . ' (' . $roommate->asu_username . '@appstate.edu)';
+                }
+            } else {
+                $roommates = null;
+            }
+
+            // Send the email
+
+            HMS_Email::send_assignment_email($assignment['asu_username'], $name, $location, $roommates);
+
+            // Mark the student as having received an email
+            $db->reset();
+            $db->addWhere('asu_username', $assignment['asu_username']);
+            $db->addValue('email_sent', 1);
+            $rslt = $db->update();
+
+            if(PHPWS_Error::logIfError($rslt)){
+                $output .= 'Database error, could not set email flag for ' . $assignment['asu_username'] . 'please contact ESS.';
+            }
+        }
+
+        if(strlen($output) == 0){
+            return 'Emails sent successfully';
+        }
+
+        return $output;
     }
 }
 

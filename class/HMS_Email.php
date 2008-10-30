@@ -223,5 +223,29 @@ class HMS_Email{
         HMS_Email::send_email(HMS_Email::get_tech_contacts(), NULL, "HMS Lottery results: $status", $log);
     }
 
+    function send_assignment_email($to, $name, $location, $roommates){
+        $tpl = array();
+
+        $tpl['NAME']        = $name;
+        $tpl['LOCATION']    = $location;
+
+        foreach($roommates as $roommate){
+            $tpl['roommates'][] = array('ROOMMATE' => $roommate);
+        }
+
+        HMS_Email::send_template_message($to . '@appstate.edu', 'Housing Assignment Notice!', 'email/assignment_notice.tpl', $tpl);
+    }
+
+    function send_assignment_update_email($to, $name, $location, $roommates){
+        $tpl = array();
+
+        $tpl['NAME']        = $name;
+        $tpl['HALL']        = $hall;
+        $tpl['ROOM']        = $room;
+        $tpl['YEAR']        = $year;
+        $tpl['roommates']   = $roommates;
+
+        HMS_Email::send_template_message($to . '@appstate.edu', 'Housing Assignment Notice!', 'email/assignment_update_notice.tpl', $tpl);
+    }
 } // End HMS_Email class
 ?>
