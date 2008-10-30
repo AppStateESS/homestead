@@ -217,7 +217,7 @@ class HMS_Bed extends HMS_Item {
             if($newWindow){
                 return '<span class="unassigned_link">' . PHPWS_Text::secureLink('&lt;unassigned&gt;', 'hms', array('type'=>'assignment', 'op'=>'show_assign_student', 'bed_id'=>$this->id), 'index') . '</span>';
             }else{
-                return '<span style="unassigned_link">' . PHPWS_Text::secureLink('&lt;unassigned&gt;', 'hms', array('type'=>'assignment', 'op'=>'show_assign_student', 'bed_id'=>$this->id)) . '</span>';
+                return '<span class="unassigned_link">' . PHPWS_Text::secureLink('&lt;unassigned&gt;', 'hms', array('type'=>'assignment', 'op'=>'show_assign_student', 'bed_id'=>$this->id)) . '</span>';
             }
         }
 
