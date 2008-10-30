@@ -351,6 +351,11 @@ class HMS_Term{
         if(PEAR::isError($result)){
             return HMS_Term::show_edit_terms(NULL,'Error: There was a problem working with the database. The new term could not be created.');
         }
+        
+        //Create an entry term association between this term and itself
+        PHPWS_Core::initModClass('hms', 'HMS_Term_Applications.php');
+        HMS_Term::set_valid_term($term->term, $term->term, 1); //set required term association with itself
+        
 
         if($_REQUEST['copy_drop'] == 1){
             # Copy the hall structure & assignments
@@ -381,7 +386,7 @@ class HMS_Term{
 
         //echo "done copying halls<br>";
         $db->query('COMMIT');
-        
+
         return HMS_Term::show_edit_terms('Term created successfully!');
     }
 
