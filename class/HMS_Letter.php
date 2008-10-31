@@ -434,12 +434,25 @@ class HMS_Letter
         $cm_letters = array(); // continuing male
         $cf_letters = array(); // continuing female
 
+        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
         $i = 0;
         foreach($results as $student) {
             /*
             if($i > 10){
                 break;
             }*/
+
+            // If assignment_notifications for the floor are disabled
+            $assignment = HMS_Assignment::get_assignment($student);
+            $bed = $assignment->get_parent();
+            $room = $bed->get_parent();
+            $floor = $room->get_parent();
+            $hall = $floor->get_parent();
+            
+            if($hall->assignment_notifications == 0)
+                continue;
+
+            // Endif
             HMS_Letter::put_into_pile($fm_letters, $ff_letters, $cm_letters, $cf_letters, $student);
             $i++;
         }
@@ -619,6 +632,8 @@ class HMS_Letter
             
             if($hall->assignment_notifications == 0)
                 continue;
+
+            // And now back to your regularly scheduled email generation.
 
             if($room->is_in_suite()){
                 $suite = new HMS_Suite($room->suite_id);
