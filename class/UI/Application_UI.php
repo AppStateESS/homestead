@@ -169,9 +169,12 @@ class Application_UI{
         /*******
          * RLC *
          *******/
-        if($feature_enabled['rlc']
+        PHPWS_Core::initModClass('hms', 'HMS_Application.php');
+        if(HMS_Application::is_feature_enabled($_SESSION['application_term'], APPLICATION_RLC_APP)
+           && HMS_SOAP::get_student_type($_SESSION['asu_username'], $_SESSION['application_term']) == 'F'
            /* && HMS_Entry_Term::get_entry_semester($_SESSION['asu_username']) == TERM_FALL */
-           && HMS_RLC_Application::check_for_application($_SESSION['asu_username'], $_SESSION['application_term']) == FALSE){
+           && HMS_RLC_Application::check_for_application($_SESSION['asu_username'], $_SESSION['application_term']) == FALSE)
+        {
             $form->addRadio('rlc_interest', array(0, 1));
             $form->setLabel('rlc_interest', array(_("No"), _("Yes")));
             if(isset($_REQUEST['rlc_interest'])){
