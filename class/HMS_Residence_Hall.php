@@ -12,15 +12,16 @@ PHPWS_Core::initModClass('hms', 'HMS_Item.php');
 
 class HMS_Residence_Hall extends HMS_Item
 {
-    var $hall_name              = NULL;
-    var $banner_building_code   = NULL;
+    var $hall_name                  = NULL;
+    var $banner_building_code       = NULL;
     
-    var $gender_type            = 2;
-    var $air_conditioned        = 0;
-    var $is_online              = 0;
+    var $gender_type                = 2;
+    var $air_conditioned            = 0;
+    var $is_online                  = 0;
 
-    var $rooms_for_lottery      = 0;
-    var $meal_plan_required     = 0;
+    var $rooms_for_lottery          = 0;
+    var $meal_plan_required         = 0;
+    var $assignment_notifications   = 1;
 
     // Photo IDs
     var $exterior_image_id;
@@ -862,11 +863,12 @@ class HMS_Residence_Hall extends HMS_Item
         }
 
         # Grab all the input from the form and save the hall
-        $hall->hall_name            = $_REQUEST['hall_name'];
-        $hall->gender_type          = $_REQUEST['gender_type'];
-        $hall->air_conditioned      = isset($_REQUEST['air_conditioned'])   ? 1 : 0;
-        $hall->is_online            = isset($_REQUEST['is_online'])         ? 1 : 0;
-        $hall->meal_plan_required   = isset($_REQUEST['meal_plan_required'])? 1 : 0;
+        $hall->hall_name                = $_REQUEST['hall_name'];
+        $hall->gender_type              = $_REQUEST['gender_type'];
+        $hall->air_conditioned          = isset($_REQUEST['air_conditioned'])           ? 1 : 0;
+        $hall->is_online                = isset($_REQUEST['is_online'])                 ? 1 : 0;
+        $hall->meal_plan_required       = isset($_REQUEST['meal_plan_required'])        ? 1 : 0;
+        $hall->assignment_notifications = isset($_REQUEST['assignment_notifications'])  ? 1 : 0;
 
         $rooms_for_lottery = $_REQUEST['rooms_for_lottery'];
         
@@ -1039,6 +1041,9 @@ class HMS_Residence_Hall extends HMS_Item
 
         $form->addCheckBox('meal_plan_required', 1);
         $form->setMatch('meal_plan_required', $hall->meal_plan_required);
+
+        $form->addCheckBox('assignment_notifications', 1);
+        $form->setMatch('assignment_notifications', $hall->assignment_notifications);
 
         // Images
         PHPWS_Core::initModClass('filecabinet', 'Cabinet.php');

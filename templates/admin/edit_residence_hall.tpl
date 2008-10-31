@@ -64,6 +64,9 @@ $('#beds_for_lottery').text($('#phpws_form_beds_per_room').attr('value') * $('#p
                 <th>Meal plan required: </th><td align="left">{MEAL_PLAN_REQUIRED}</td>
             </tr>
             <tr>
+                <th>Assignment Notifications: </th><td align="left">{ASSIGNMENT_NOTIFICATIONS}</td>
+            </tr>
+            <tr>
                 <th>Exterior image: </th><td align"left">{EXTERIOR_IMG}</td>
             </tr>
             <tr>

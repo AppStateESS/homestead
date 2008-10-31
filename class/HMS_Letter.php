@@ -609,6 +609,17 @@ class HMS_Letter
             //get the list of roommates
             $roommates = array();
             $room = $bed->get_parent();
+
+            // This non sequitor brought to you by the Dept. of Housing and Residence life
+            // (While we're here, and before we load more information that we aren't going
+            //  to use into memory, make sure the hall this bed is in has the 
+            //  assignment_notifications flag set).
+            $floor = $room->get_parent();
+            $hall  = $floor->get_parent();
+            
+            if($hall->assignment_notifications == 0)
+                continue;
+
             if($room->is_in_suite()){
                 $suite = new HMS_Suite($room->suite_id);
                 $assignees = $suite->get_assignees();
@@ -629,7 +640,6 @@ class HMS_Letter
             }
 
             // Send the email
-
             HMS_Email::send_assignment_email($assignment['asu_username'], $name, $location, $roommates);
 
             // Mark the student as having received an email
