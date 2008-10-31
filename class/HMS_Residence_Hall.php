@@ -1136,58 +1136,48 @@ class HMS_Residence_Hall extends HMS_Item
      */
     function show_hall_overview($hall_id, $naked = FALSE)
     {
-        if( !Current_User::allow('hms', 'run_hall_overview') && !Current_User::allow('hms', 'hall_view') ){
-            $tpl = array();
-            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
+        $tpl = new PHPWS_Template('hms');
+        
+        if(!$tpl->setFile('admin/reports/hall_overview.tpl')){
+            return 'Template error.';
+        }
+        
+        if(!Current_User::allow('hms','run_hall_overview')) {
+            $template = array();
+            return PHPWS_Template::process($template,'hms','admin/permission_denied.tpl');
         }
 
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
         PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
-
+        
         $rlcs = HMS_Learning_Community::getRLCList();
 
         $hall = new HMS_Residence_Hall($hall_id);
-        
-        $content = '<h2 style="font-size: 1.5em">Building overview for ' . $hall->hall_name . '</h2>';
+
+        $tpl->setData(array('HALL'=>$hall->hall_name));
 
         if($naked) {
-            $content .= '<p><a href="index.php">Back to Maintenance</a></p>';
+            $maint_link = PHPWS_Text::moduleLink('Back to Maintenance','hms');
+            $tpl->setData(array('MAINTENANCE'=>$maint_link));
         }
 
-        # Load the halls
         $hall->loadFloors();
+        foreach ($hall->_floors as $floor) {
 
-        # for each hall, print the floors
-        foreach ($hall->_floors as $floor)
-        {
-            $content .= '<div style="margin: 1em;"><h3 style="font-size: 1.5em; margin: 0;">Floor ' . $floor->floor_number . '</h3>';
-
-            # load the rooms
             $floor->loadRooms();
-
-            # If rooms is null, skip this floor
             if(!isset($floor->_rooms)){
                 continue;
             }
-
-            # for each room, print the beds, and assignments
-            foreach($floor->_rooms as $room)
-            {
-                $content .= '<div style="margin: 1em;"><strong>Room ' . $room->room_number . '</strong><br /><div style="margin: 0 0 0 1em;">';
-               
-                # Load the beds
+            
+            foreach($floor->_rooms as $room) {
                 $room->loadBeds();
 
-                # For each bed, print the bed (and assignment)
-                foreach($room->_beds as $bed)
-                {          
-                    # Attempt to load the bed's assignment
+                foreach($room->_beds as $bed) {
                     $bed->loadAssignment();
-
+                    $tpl->setCurrentBlock('bed_repeat');
                     if(isset($bed->_curr_assignment)){
-                        # There is an assignment, so print it
                         $username = $bed->_curr_assignment->asu_username;
                         $rlc  = HMS_RLC_Assignment::check_for_assignment($username, HMS_Term::get_current_term()); //false or index
                         if($rlc != FALSE){
@@ -1195,23 +1185,29 @@ class HMS_Residence_Hall extends HMS_Item
                         }
                         $name = HMS_SOAP::get_full_name($username);
                         $link = $bed->get_assigned_to_link() . "(<em>$username</em>)$rlc";
-                        $content .= 'Bedroom: ' . $bed->bedroom_label . '&nbsp;&nbsp;&nbsp;&nbsp;Bed: ' . $bed->bed_letter . '&nbsp;&nbsp;&nbsp;&nbsp;' . $link . '<br />';
+                        
+                        $tpl->setData(array('BED_LABEL'=>$bed->bedroom_label,'BED'=>$bed->bed_letter,'LINK'=>$link));
                     }else{
-                        # No one is assigned here
-                        #TODO: Link this to Assignment
-                        $content .= 'Bedroom: ' . $bed->bedroom_label . '&nbsp;&nbsp;&nbsp;&nbsp;Bed: ' . $bed->bed_letter . '&nbsp;&nbsp;&nbsp;&nbsp;' . $bed->get_assigned_to_link() . '<br />';
+                        $tpl->setData(array('BED_LABEL'=>$bed->bedroom_label,'BED'=>$bed->bed_letter,'LINK'=>$bed->get_assigned_to_link()));
                     }
-                }//end foreach beds
-                $content .= '</div></div>';
-            }//end foreach rooms
-            $content .= '</div>';
-        }// end foreach floors
 
-        if($naked) {
-            Layout::nakedDisplay($content, 'Building overview for ' . $hall->hall_name, TRUE);
+                    $tpl->parseCurrentBlock();
+                }
+
+                $tpl->setCurrentBlock('room_repeat');
+                $tpl->setData(array('ROOM_NUMBER'=>$room->room_number));
+                $tpl->parseCurrentBlock();
+            }
+
+            $tpl->setCurrentBlock('floor_repeat');
+            $tpl->setData(array('FLOOR_NUMBER' => $floor->floor_number));
+            $tpl->parseCurrentBlock();
         }
 
-        return $content; 
+        if($naked) {
+            Layout::nakedDisplay($tpl->get(), 'Building overview for ' . $hall->hall_name, TRUE);
+        }
+        return $tpl->get(); 
     }
 }
 ?>

@@ -212,19 +212,22 @@ class HMS_Bed extends HMS_Item {
         if(isset($this->_curr_assignment)){
             $link_re = '';
             $link_un = '';
-            if(Current_User::allow('hms','assignment_maintenance') {
+            if(Current_User::allow('hms','assignment_maintenance')) {
                 $link_re = PHPWS_Text::secureLink('(re-assign)', 'hms', array('type'=>'assignment', 'op'=>'show_assign_student', 'username'=>$this->_curr_assignment->asu_username));
                 $link_un = PHPWS_Text::secureLink('(un-assign)', 'hms', array('type'=>'assignment', 'op'=>'show_unassign_student', 'username'=>$this->_curr_assignment->asu_username));
             }
             return PHPWS_Text::secureLink(HMS_SOAP::get_full_name($this->_curr_assignment->asu_username),'hms', array('type'=>'student', 'op'=>'get_matching_students', 'username'=>$this->_curr_assignment->asu_username)) . ' ' . $link_re . ' ' . $link_un;
         }else{
+            $link = '&lt;unassigned&gt';
             if($newWindow){
-                $link = '&lt;unassigned&gt';
                 if(Current_User::allow('hms','assignment_maintenance')) {
-                    $link = PHPWS_Text::secureLink('&lt;unassigned&gt;', 'hms', array('type'=>'assignment', 'op'=>'show_assign_student', 'bed_id'=>$this->id);
+                    $link = PHPWS_Text::secureLink('&lt;unassigned&gt;', 'hms', array('type'=>'assignment', 'op'=>'show_assign_student', 'bed_id'=>$this->id),'index');
                 }
                 return '<span class="unassigned_link">' . $link . '</span>';
             }else{
+                if(Current_User::allow('hms','assignment_maintenance')) {
+                    $link = PHPWS_Text::secureLink('&lt;unassigned&gt;', 'hms', array('type'=>'assignment', 'op'=>'show_assign_student', 'bed_id'=>$this->id));
+                }
                 return '<span class="unassigned_link">' . $link . '</span>';
             }
         }
