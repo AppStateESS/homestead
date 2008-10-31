@@ -210,14 +210,22 @@ class HMS_Bed extends HMS_Item {
         }
         
         if(isset($this->_curr_assignment)){
-            return PHPWS_Text::secureLink(HMS_SOAP::get_full_name($this->_curr_assignment->asu_username),'hms', array('type'=>'student', 'op'=>'get_matching_students', 'username'=>$this->_curr_assignment->asu_username))
-                                    . ' ' . PHPWS_Text::secureLink('(re-assign)', 'hms', array('type'=>'assignment', 'op'=>'show_assign_student', 'username'=>$this->_curr_assignment->asu_username))
-                                    . ' ' . PHPWS_Text::secureLink('(un-assign)', 'hms', array('type'=>'assignment', 'op'=>'show_unassign_student', 'username'=>$this->_curr_assignment->asu_username));
+            $link_re = '';
+            $link_un = '';
+            if(Current_User::allow('hms','assignment_maintenance') {
+                $link_re = PHPWS_Text::secureLink('(re-assign)', 'hms', array('type'=>'assignment', 'op'=>'show_assign_student', 'username'=>$this->_curr_assignment->asu_username));
+                $link_un = PHPWS_Text::secureLink('(un-assign)', 'hms', array('type'=>'assignment', 'op'=>'show_unassign_student', 'username'=>$this->_curr_assignment->asu_username));
+            }
+            return PHPWS_Text::secureLink(HMS_SOAP::get_full_name($this->_curr_assignment->asu_username),'hms', array('type'=>'student', 'op'=>'get_matching_students', 'username'=>$this->_curr_assignment->asu_username)) . ' ' . $link_re . ' ' . $link_un;
         }else{
             if($newWindow){
-                return '<span class="unassigned_link">' . PHPWS_Text::secureLink('&lt;unassigned&gt;', 'hms', array('type'=>'assignment', 'op'=>'show_assign_student', 'bed_id'=>$this->id), 'index') . '</span>';
+                $link = '&lt;unassigned&gt';
+                if(Current_User::allow('hms','assignment_maintenance')) {
+                    $link = PHPWS_Text::secureLink('&lt;unassigned&gt;', 'hms', array('type'=>'assignment', 'op'=>'show_assign_student', 'bed_id'=>$this->id);
+                }
+                return '<span class="unassigned_link">' . $link . '</span>';
             }else{
-                return '<span class="unassigned_link">' . PHPWS_Text::secureLink('&lt;unassigned&gt;', 'hms', array('type'=>'assignment', 'op'=>'show_assign_student', 'bed_id'=>$this->id)) . '</span>';
+                return '<span class="unassigned_link">' . $link . '</span>';
             }
         }
 
