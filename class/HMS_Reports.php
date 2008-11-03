@@ -783,6 +783,8 @@ class HMS_Reports{
     
     function run_unassigned_beds_report()
     {
+        ini_set("max_execution_time", "10000");
+        ini_set("memory_limit",       "512M");
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
 
@@ -815,7 +817,7 @@ class HMS_Reports{
             $vacant_beds_by_hall = 0;
 
             $floors = $hall->get_floors();
-
+            
             foreach($floors as $floor){
                 // Skip offline floors
                 if($floor->is_online == 0){
@@ -881,12 +883,12 @@ class HMS_Reports{
                     }
                     if($room->gender_type == MALE){
                         $content .= ' (male)';
-                    }else if($room->gender_type == FEAMLE){
+                    }else if($room->gender_type == FEMALE){
                         $content .= ' (female)';
                     }else{
                         $content .= ' (unknown gender)';
                     }
-                   
+
                     $tpl->setCurrentBlock('room_repeat');
                     $tpl->setData(array('ROOM_NUM' => $content));
                     $tpl->parseCurrentBlock();
