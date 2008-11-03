@@ -66,6 +66,20 @@ class HMS_SOAP{
         return $student;
     }
 
+    function get_username($bannerid)
+    {
+        $wsdl = new SOAP_WSDL('file:///root/banner_utils/shs0001.wsdl', 'true');
+        $proxy = $wsdl->getProxy();
+        $username = $proxy->GetUserName($bannerid);
+
+        if(is_soap_fault($username)) {
+            log_soap_error($username, 'get_username', $bannerid);
+        }
+
+        return $username;
+    }
+
+
     /**
      * Report that a housing application has been received.
      * Makes First Connections stop bugging the students.
