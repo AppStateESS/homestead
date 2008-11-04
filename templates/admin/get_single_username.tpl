@@ -10,7 +10,7 @@
         {MESSAGE}<br /><br />
         <table>
             <tr>
-                <th align="left">ASU Email:</th><td>{USERNAME}@appstate.edu</td>
+                <th align="left">User Name or Banner ID:</th><td>{USERNAME}</td>
             </tr>
             <tr>
                 <td align="left">{ENABLE_AUTOCOMPLETE_LABEL}</td><td>{ENABLE_AUTOCOMPLETE}</td>
