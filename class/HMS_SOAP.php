@@ -38,7 +38,7 @@ class HMS_SOAP{
         }        
 
         include_once('SOAP/Client.php');
-        $wsdl = new SOAP_WSDL(PHPWS_SOURCE_DIR . 'mod/hms/inc/shs0001.wsdl', 'true');
+        $wsdl = new SOAP_WSDL('file://' . PHPWS_SOURCE_DIR . 'mod/hms/inc/shs0001.wsdl', 'true');
         $proxy = $wsdl->getProxy();
         $student = $proxy->GetStudentProfile($username, $term);
         
@@ -66,14 +66,23 @@ class HMS_SOAP{
         return $student;
     }
 
-    function get_username($bannerid)
+    /**
+     * Returns the ASU Username for the given banner id
+     */
+    function get_username($banner_id)
     {
-        $wsdl = new SOAP_WSDL('file:///root/banner_utils/shs0001.wsdl', 'true');
+        if(SOAP_INFO_TEST_FLAG){
+            return HMS_SOAP::get_test_username();
+        }
+
+        include_once('SOAP/Client.php');
+        $wsdl = new SOAP_WSDL('file://' . PHPWS_SOURCE_DIR . 'mod/hms/inc/shs0001.wsdl', 'true');
         $proxy = $wsdl->getProxy();
-        $username = $proxy->GetUserName($bannerid);
+        $username = $proxy->GetUserName($banner_id);
 
         if(is_soap_fault($username)) {
             log_soap_error($username, 'get_username', $bannerid);
+            HMS_SOAP::handle_soap_fault();
         }
 
         return $username;
@@ -90,7 +99,7 @@ class HMS_SOAP{
             $result = HMS_SOAP::get_test_report();
         } else {
             include_once('SOAP/Client.php');
-            $wsdl = new SOAP_WSDL(PHPWS_SOURCE_DIR . 'mod/hms/inc/shs0001.wsdl', 'true');
+            $wsdl = new SOAP_WSDL('file://' . PHPWS_SOURCE_DIR . 'mod/hms/inc/shs0001.wsdl', 'true');
             $proxy = $wsdl->getProxy();
             $result = $proxy->CreateHousingApp($username, $term, $plan_code, $meal_code);
         }
@@ -131,7 +140,7 @@ class HMS_SOAP{
         }
 
         include_once('SOAP/Client.php');
-        $wsdl = new SOAP_WSDL(PHPWS_SOURCE_DIR . 'mod/hms/inc/shs0001.wsdl', 'true');
+        $wsdl = new SOAP_WSDL('file://' . PHPWS_SOURCE_DIR . 'mod/hms/inc/shs0001.wsdl', 'true');
         $proxy = $wsdl->getProxy();
         $assignment = $proxy->CreateRoomAssignment($username, $term, $building_code, $room_code, $plan_code, $meal_code);
         
@@ -170,7 +179,7 @@ class HMS_SOAP{
         }
 
         include_once('SOAP/Client.php');
-        $wsdl = new SOAP_WSDL(PHPWS_SOURCE_DIR . 'mod/hms/inc/shs0001.wsdl', 'true');
+        $wsdl = new SOAP_WSDL('file://' . PHPWS_SOURCE_DIR . 'mod/hms/inc/shs0001.wsdl', 'true');
         $proxy = $wsdl->getProxy();
         $removal = $proxy->RemoveRoomAssignment($username, $term, $building, $room);
 
@@ -211,7 +220,7 @@ class HMS_SOAP{
         }
         
         include_once('SOAP/Client.php');
-        $wsdl = new SOAP_WSDL(PHPWS_SOURCE_DIR . 'mod/hms/inc/shs0001.wsdl', 'true');
+        $wsdl = new SOAP_WSDL('file://' . PHPWS_SOURCE_DIR . 'mod/hms/inc/shs0001.wsdl', 'true');
         $proxy = $wsdl->getProxy();
         $student = $proxy->GetHousMealRegister($username, $termcode, $opt);
 
@@ -653,7 +662,7 @@ class HMS_SOAP{
      */
     function log_soap_fault($soap_fault, $function, $extra_info)
     {
-        $error_msg = $soap_fault['message'] . 'in function: ' . $function . " Extra: " . $extra_info;    
+        $error_msg = $soap_fault->message . 'in function: ' . $function . " Extra: " . $extra_info;    
         PHPWS_Core::log($error_msg, 'soap_error.log', _('Error'));
     }
 
@@ -807,6 +816,10 @@ class HMS_SOAP{
         $student->phone = $phone;
 
         return $student;
+    }
+
+    function get_test_username(){
+        return 'jb67803';
     }
 
     function get_test_report()

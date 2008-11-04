@@ -393,16 +393,28 @@ class HMS_Student {
         }
         
         if(!isset($username)) {
-            $error = "You did not provide an ASU username.<br />";
+            $error = 'You did not provide an ASU username or Banner ID.<br />';
             return HMS_Student::enter_student_search_data($error);
         } else if (!PHPWS_Text::isValidInput($username)) {
-            $error = "ASU usernames can only be alphanumeric.<br />";
+            $error = 'Only alphanumeric characters are allowed.<br />';
             return HMS_Student::enter_student_search_data($error);
         }
 
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+
+        # Check to see if the user enterd a Banner ID or a user name
+        if(preg_match("/^[0-9]{9}/", $username)){
+            # Looks like a banner ID, try to find a user name
+            $username = HMS_SOAP::get_username($username);
+
+            if($username == NULL){
+                return HMS_Student::enter_student_search_data('Invalid Banner ID');
+            }
+        }
+
         $student_info = HMS_SOAP::get_student_info($username, HMS_Term::get_selected_term());
+        test($student_info);
         
         //Add a note if we're returning to this page after clicking the "Add Note" link
         if(isset($_REQUEST['note'])){
@@ -506,8 +518,8 @@ class HMS_Student {
          * Phone number *
          ****************/
         
-        $tpl['PHONE_AC'] = $student_info->phone->area_code;
-        $tpl['PHONE_NUMBER'] = $student_info->phone->number;
+        $tpl['PHONE_AC'] = $student_info->phone[0]->area_code;
+        $tpl['PHONE_NUMBER'] = $student_info->phone[0]->number;
         $tpl['USERNAME'] = $username;
 
         $tpl['TITLE'] = "Search Results - " . HMS_Term::term_to_text(HMS_Term::get_selected_term(),TRUE);
