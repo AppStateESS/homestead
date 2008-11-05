@@ -920,5 +920,35 @@ class Lottery_UI {
 
         return PHPWS_Template::process($tpl, 'hms', 'student/student_success_failure_message.tpl');
     }
+
+    function show_admin_entry($message = null)
+    {
+        $tpl = array();
+        $tpl['MESSAGE'] = $message;
+
+        $form = &new PHPWS_Form('admin_entry');
+        $form->addText('asu_username');
+        $form->setLabel('asu_username', 'ASU Username');
+
+        $form->addCheck('physical_disability');
+        $form->setLabel('physical_disability', 'Physical Disability');
+
+        $form->addCheck('psych_disability');
+        $form->setLabel('psych_disability', 'Psychological Disability');
+
+        $form->addCheck('medical_need');
+        $form->setLabel('medical_need', 'Medical Need');
+
+        $form->addCheck('gender_need');
+        $form->setLabel('gender_need', 'Gender Need');
+
+        $form->addHidden('type',    'lottery');
+        $form->addHidden('op',      'submit_admin_entry');
+        $form->addSubmit('enter_into_lottery', 'Add to lottery');
+
+        $form->mergeTemplate($tpl);
+
+        return PHPWS_Template::process($form->getTemplate(), 'hms', 'admin/add_to_lottery.tpl');
+    }
 }
 ?>

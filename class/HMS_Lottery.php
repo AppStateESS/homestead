@@ -447,6 +447,15 @@ class HMS_Lottery {
                 PHPWS_Core::initModClass('hms', 'HMS_Lottery_Entry.php');
                 return HMS_Lottery_Entry::get_special_needs_interface();
                 break;
+            case 'show_admin_entry':
+                PHPWS_Core::initModClass('hms', 'UI/Lottery_UI.php');
+                return Lottery_UI::show_admin_entry();
+                break;
+            case 'submit_admin_entry':
+                PHPWS_Core::initModClass('hms', 'UI/Lottery_UI.php');
+                PHPWS_Core::initModClass('hms', 'HMS_Lottery_Entry.php');
+                return Lottery_UI::show_admin_entry(HMS_Lottery_Entry::parse_entry($_REQUEST));
+                break;
             default:
                 break;
         }
@@ -456,14 +465,14 @@ class HMS_Lottery {
     function save_lottery_settings($lottery_term, $type, $lottery_per_soph, $lottery_per_jr, $lottery_per_senior, $max_soph, $max_jr, $max_senior)
     {
 
-        PHPWS_Settings::set('hms','lottery_term',       $lottery_term);
-        PHPWS_Settings::set('hms', 'lottery_type',      $type);
-        PHPWS_Settings::set('hms','lottery_per_soph',   $lottery_per_soph);
-        PHPWS_Settings::set('hms','lottery_per_jr',     $lottery_per_jr);
-        PHPWS_Settings::set('hms','lottery_per_senior', $lottery_per_senior);
+        PHPWS_Settings::set('hms', 'lottery_term',       $lottery_term);
+        PHPWS_Settings::set('hms', 'lottery_type',       $type);
+        PHPWS_Settings::set('hms', 'lottery_per_soph',   $lottery_per_soph);
+        PHPWS_Settings::set('hms', 'lottery_per_jr',     $lottery_per_jr);
+        PHPWS_Settings::set('hms', 'lottery_per_senior', $lottery_per_senior);
 
-        PHPWS_Settings::set('hms', 'lottery_max_soph', $max_soph);
-        PHPWS_Settings::set('hms', 'lottery_max_jr', $max_jr);
+        PHPWS_Settings::set('hms', 'lottery_max_soph',   $max_soph);
+        PHPWS_Settings::set('hms', 'lottery_max_jr',     $max_jr);
         PHPWS_Settings::set('hms', 'lottery_max_senior', $max_senior);
 
         PHPWS_Settings::save('hms');

@@ -106,6 +106,7 @@
             <!-- BEGIN lottery_needs -->
             <dt>Lottery Needs</dt>
             <dd>{LOTTERY_NEEDS}</dd>
+            <dd>{ADMIN_LOTTERY_ENTRY}</dd>
             <!-- END lottery_needs -->
         </dl>
         <!-- END right -->

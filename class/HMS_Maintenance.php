@@ -156,8 +156,6 @@ class HMS_Maintenance
                 array('type'=>'suite', 'op'=>'show_select_suite'));
         }
         
-        
-        
         /*****************
          * Edit Features *
          *****************/
@@ -184,6 +182,11 @@ class HMS_Maintenance
             $tpl['LOTTERY_NEEDS'] = PHPWS_Text::secureLink(
                 _('View and clear lottery special needs'), 'hms',
                 array('type'=>'lottery', 'op'=>'view_lottery_needs'));
+            
+            //Probably need to move this later, but if they can't sign up for the lottery themselves they do have a special need ;-)
+            $tpl['ADMIN_LOTTERY_ENTRY'] = PHPWS_Text::secureLink(
+                _('Administratively add a student to the lottery'), 'hms',
+                array('type'=>'lottery', 'op'=>'show_admin_entry'));
         }
 
         $content = PHPWS_Template::process($tpl, 'hms', 'admin/maintenance.tpl');

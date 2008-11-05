@@ -77,6 +77,80 @@ class HMS_Lottery_Entry {
         return TRUE;
     }
 
+    /*
+     * Create and add a new entry to the database while validating the input.
+     *
+     * @param string asu_username - The username of the student to add to the lottery
+     * @param int application_term - A valid application term
+     * @param array roommates - Array of roommates to invite with the student
+     * @param int term - A valid HMS_Term
+     * @param boolean physical_disability
+     * @param boolean psych_disability
+     * @param boolean medical_need
+     * @param boolean gender_need
+     *
+     * @return boolean success - Returns true or error message
+     */
+    function add_entry($asu_username, $physical_disability = false, 
+                        $psych_disability = false, $medical_need = false, 
+                        $gender_need = false, $term = null, $application_term = null)
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+        $result = HMS_Lottery_Entry::check_for_entry($asu_username, $term);
+        
+        if($result != FALSE && !PEAR::isError($result)){
+            return 'Student is already entered in the lottery.';
+        }
+        
+        if(is_null($application_term))
+            $application_term = HMS_SOAP::get_application_term($asu_username);
+
+        if(!isset($application_term) || is_null($application_term)){
+            return 'Application term is required.';
+        }
+
+        $gender = HMS_SOAP::get_gender($asu_username, TRUE);
+        
+        if($gender === FALSE || !isset($gender) || is_null($gender)){
+            return 'Failed to look up the student\'s gender.';
+        }
+
+        $entry = &new HMS_Lottery_Entry();
+
+        $entry->asu_username     = $asu_username;
+        $entry->term             = is_numeric($term) ? $term : PHPWS_Settings::get('hms', 'lottery_term');
+        $entry->application_term = $application_term;
+        $entry->gender           = $gender;
+
+        $entry->physical_disability = $physical_disability ? 1 : 0;
+        $entry->psych_disability    = $psych_disability    ? 1 : 0;
+        $entry->medical_need        = $medical_need        ? 1 : 0;
+        $entry->gender_need         = $gender_need         ? 1 : 0;
+
+        $result = $entry->save();
+
+        if(!$result){
+            return 'Error saving entry.';
+        }
+
+        return true;
+    }
+
+    function parse_entry($request)
+    {
+        if(isset($_REQUEST['asu_username']) && strlen($_REQUEST['asu_username']) > 0){
+            $physical_disability = isset($_REQUEST['physical_disability']) ? true : false;
+            $psych_disability    = isset($_REQUEST['psych_disability'])    ? true : false;
+            $medical_need        = isset($_REQUEST['medical_need'])        ? true : false;
+            $gender_need         = isset($_REQUEST['gender_need'])         ? true : false;
+            $result = HMS_Lottery_Entry::add_entry($_REQUEST['asu_username'], $physical_disability, $psych_disability, $medical_need, $gender_need);
+            
+            return $result;
+        }
+
+        return 'You must provide the ASU Username of the student to add to the lottery';
+    }
+
     /*************************
      * Static helper methods *
      *************************/
