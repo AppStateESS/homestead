@@ -473,7 +473,6 @@ class HMS_SOAP{
                 }
             }
         }else{
-            test($student->address);
             // one address, so just decide if we're interested in it
             if($student->address->atyp_code == ADDRESS_PRMT_RESIDENCE){
                 $pr_address = $student->address;
