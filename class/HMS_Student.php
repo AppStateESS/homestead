@@ -493,28 +493,32 @@ class HMS_Student {
          *************/
         $pr_address = HMS_SOAP::get_address($username, ADDRESS_PRMT_RESIDENCE);
 
-        $tpl['PR_ADDRESS_L1']       = $pr_address->line1;
-        if(isset($pr_address->line2) && $pr_address->line2 != '')
-            $tpl['PR_ADDRESS_L2']       = $pr_address->line2;
-        if(isset($pr_address->line3) && $pr_address->line3 != '')
-            $tpl['PR_ADDRESS_L3']       = $pr_address->line3;
-        $tpl['PR_ADDRESS_CITY']     = $pr_address->city;
-        $tpl['PR_ADDRESS_STATE']    = $pr_address->state;
-        $tpl['PR_ADDRESS_ZIP']      = $pr_address->zip;
+        if($pr_address !== FALSE){
+            $tpl['PR_ADDRESS_L1']       = $pr_address->line1;
+            if(isset($pr_address->line2) && $pr_address->line2 != '')
+                $tpl['PR_ADDRESS_L2']       = $pr_address->line2;
+            if(isset($pr_address->line3) && $pr_address->line3 != '')
+                $tpl['PR_ADDRESS_L3']       = $pr_address->line3;
+            $tpl['PR_ADDRESS_CITY']     = $pr_address->city;
+            $tpl['PR_ADDRESS_STATE']    = $pr_address->state;
+            $tpl['PR_ADDRESS_ZIP']      = $pr_address->zip;
+        }
 
         $ps_address = HMS_SOAP::get_address($username, ADDRESS_PRMT_STUDENT);
 
-        $tpl['PS_ADDRESS_L1']       = $ps_address->line1;
-        if(isset($ps_address->line2) && $ps_address->line2 != '')
-            $tpl['PS_ADDRESS_L2']       = $ps_address->line2;
-        if(isset($ps_address->line3) && $ps_address->line3 != '')
-            $tpl['PS_ADDRESS_L3']       = $ps_address->line3;
-        $tpl['PS_ADDRESS_CITY']     = $ps_address->city;
-        $tpl['PS_ADDRESS_STATE']    = $ps_address->state;
-        $tpl['PS_ADDRESS_ZIP']      = $ps_address->zip;
+        if($ps_address !== FALSE){
+            $tpl['PS_ADDRESS_L1']       = $ps_address->line1;
+            if(isset($ps_address->line2) && $ps_address->line2 != '')
+                $tpl['PS_ADDRESS_L2']       = $ps_address->line2;
+            if(isset($ps_address->line3) && $ps_address->line3 != '')
+                $tpl['PS_ADDRESS_L3']       = $ps_address->line3;
+            $tpl['PS_ADDRESS_CITY']     = $ps_address->city;
+            $tpl['PS_ADDRESS_STATE']    = $ps_address->state;
+            $tpl['PS_ADDRESS_ZIP']      = $ps_address->zip;
+        }
 
         # Add a blank line between the addresses if they're both set
-        if($pr_address->line1 != '' && $ps_address->line1 != ''){
+        if($pr_address !== FALSE && $ps_address !== FALSE && $pr_address->line1 != '' && $ps_address->line1 != ''){
             $tpl['ADDRESS_SPACE'] = '';
         }
         
