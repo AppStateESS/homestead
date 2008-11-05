@@ -272,7 +272,11 @@ class HMS_Roommate
             // TODO: Log Weird Situation
         }
 
-        return $result[0];
+        if(!isset($result[0])){
+            return null;
+        }else{
+            return $result[0];
+        }
     }
 
     /**
