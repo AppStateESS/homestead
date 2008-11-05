@@ -419,6 +419,10 @@ class HMS_Student {
 
         $student_info = HMS_SOAP::get_student_info($username, HMS_Term::get_selected_term());
         //test($student_info);
+
+        if($student_info->banner_id == ''){
+            return HMS_Student::enter_student_search_data('Invalid user name or Banner ID.');
+        }
         
         //Add a note if we're returning to this page after clicking the "Add Note" link
         if(isset($_REQUEST['note'])){
