@@ -13,6 +13,7 @@ class HMS
 {
     function main($type = NULL)
     {
+
         if(!Current_User::isLogged()) {
             $error = "<i><font color=red>Please enter a valid username/password pair.</font></i>";
             PHPWS_Core::initModClass('hms', 'HMS_Login.php');
@@ -45,7 +46,6 @@ class HMS
                     exit;
                 }
             }
-                
             if($type == NULL) {
                 if( $username == 'hms_student' || (Current_User::allow('hms', 'login_as_student') && isset($_SESSION['login_as_student'])) ) $type = STUDENT;
                 else $type = ADMIN;

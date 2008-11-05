@@ -13,6 +13,7 @@ PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 Layout::addStyle('hms','css/hms.css');
 
 if(Current_User::isLogged()) {
+
     PHPWS_Core::initModClass('hms', 'HMS.php');
 
     if(isset($_REQUEST['type']) && $_REQUEST['type'] == 'top_level'){
@@ -22,7 +23,7 @@ if(Current_User::isLogged()) {
                 break;
         }
     }
-    
+
     HMS::main();
 } else if(isset($_REQUEST['type']) && $_REQUEST['type'] == 'hms' && $_REQUEST['op'] == 'login') {
     PHPWS_Core::initModClass('hms', 'HMS_Login.php');
