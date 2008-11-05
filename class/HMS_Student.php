@@ -52,7 +52,7 @@ class HMS_Student {
             PHPWS_Core::killAllSessions();
             PHPWS_Core::home();
         }
-        
+
         if($_REQUEST['op'] == 'login') {
             $_REQUEST['op'] = 'main';
         }
@@ -309,6 +309,10 @@ class HMS_Student {
             case 'lottery_confirm_roommate_request':
                 PHPWS_Core::initModClass('hms', 'UI/Lottery_UI.php');
                 return Lottery_UI::handle_lottery_roommate_confirmation();
+                break;
+            case 'logout':
+                PHPWS_Core::killAllSessions();
+                PHPWS_Core::reroute('https://weblogin.appstate.edu/cosign-bin/logout');
                 break;
             case 'main':
                 //return HMS_Student::show_main_menu();

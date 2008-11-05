@@ -102,6 +102,10 @@ class HMS_Admin
                     case 'process_username_change':
                         $final = HMS_Admin::process_username_change();
                         break;
+                    case 'logout':
+                        PHPWS_Core::killAllSessions();
+                        PHPWS_Core::reroute('https://weblogin.appstate.edu/cosign-bin/logout');
+                        break;
                     default:
                         PHPWS_Core::initModClass('hms', 'HMS_Display.php');
                         $final = HMS_Display::main();
@@ -279,7 +283,7 @@ class HMS_Admin
         if( Current_User::allow('hms', 'login_as_student') && (isset($_SESSION['login_as_student']) && $_SESSION['login_as_student'] == true) ) 
             $links[] = PHPWS_Text::secureLink(_('Logout of Student Session'), 'hms', array('op' => 'end_student_session'));
             
-        $links[] = PHPWS_Text::secureLink(_('Logout'), 'users', array('action'=>'user', 'command'=>'logout'));
+        $links[] = PHPWS_Text::secureLink(_('Logout'), 'hms', array('type'=>'admin', 'op'=>'logout'));
 
         MiniAdmin::add('hms', $links);
     }
