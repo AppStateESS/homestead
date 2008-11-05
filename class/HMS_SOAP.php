@@ -473,6 +473,7 @@ class HMS_SOAP{
                 }
             }
         }else{
+            test($student->address);
             // one address, so just decide if we're interested in it
             if($student->address->atyp_code == ADDRESS_PRMT_RESIDENCE){
                 $pr_address = $student->address;
@@ -794,7 +795,7 @@ class HMS_SOAP{
         $address->state     = 'NC';
         $address->zip       = '28608';
 
-        $student->address[0] = $address;
+        $student->address[] = $address;
 
         // Setup a second address object
         $address->atyp_code = 'PR';
@@ -806,14 +807,14 @@ class HMS_SOAP{
         $address->state     = 'NC';
         $address->zip       = '28608';
 
-        //$student->address[1] = $address;
+        $student->address[] = $address;
         
         // Setup the phone number object
         $phone->area_code   = '123';
         $phone->number      = '4567890';
         $phone->ext         = '1337';
 
-        $student->phone = $phone;
+        $student->phone[] = $phone;
 
         return $student;
     }
