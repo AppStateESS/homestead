@@ -59,6 +59,7 @@ class HMS_Student_UI{
         
         # Get deadlines for the current term for future use
         $deadlines = HMS_Deadlines::get_deadlines($_SESSION['application_term']);
+        $lottery_deadlines = HMS_Deadlines::get_deadliens(PHPWS_Settings::get('hms', 'lottery_term'));
 
         # Calculate the student's age and check for >= 25 years old based on move-in day deadline
         $dob = explode('-', $dob); // in order: year, month, day
@@ -98,8 +99,8 @@ class HMS_Student_UI{
             */
 
             $tpl = array();
-            $tpl['BEGIN_DEADLINE']  = HMS_Deadlines::get_deadline_as_date('lottery_signup_begin_timestamp', $deadlines);
-            $tpl['END_DEADLINE']    = HMS_Deadlines::get_deadline_as_date('lottery_signup_end_timestamp', $deadlines);
+            $tpl['BEGIN_DEADLINE']  = HMS_Deadlines::get_deadline_as_date('lottery_signup_begin_timestamp', $lottery_deadlines);
+            $tpl['END_DEADLINE']    = HMS_Deadlines::get_deadline_as_date('lottery_signup_end_timestamp', $lottery_deadlines);
             $tpl['LOGOUT']          = PHPWS_Text::secureLink(_('Log Out'), 'users', array('action'=>'user', 'command'=>'logout'));
 
             # TODO: check for users who are already assigned, don't let them back in
@@ -130,14 +131,14 @@ class HMS_Student_UI{
             }
 
             # Check that we're within deadlines for lottery signup in the current term
-            if(HMS_Deadlines::check_within_deadlines('lottery_signup_begin_timestamp','lottery_signup_end_timestamp', $deadlines)){
+            if(HMS_Deadlines::check_within_deadlines('lottery_signup_begin_timestamp','lottery_signup_end_timestamp', $lottery_deadlines)){
                 # We're within deadlines, so show the "we see you're a returning student, click continue to enter the lottery" message
                 PHPWS_Core::initModClass('hms', 'UI/Lottery_UI.php');
                 return Lottery_UI::show_lottery_signup();
-            }else if(!HMS_Deadlines::check_deadline_past('lottery_signup_begin_timestamp', $deadlines)){
+            }else if(!HMS_Deadlines::check_deadline_past('lottery_signup_begin_timestamp', $lottery_deadlines)){
                 # Show a too early to signup message.
                 return PHPWS_Template::process($tpl, 'hms', 'student/lottery_too_early.tpl');
-            }else if(HMS_Deadlines::check_deadline_past('lottery_signup_end_timestamp', $deadlines)){
+            }else if(HMS_Deadlines::check_deadline_past('lottery_signup_end_timestamp', $lottery_deadlines)){
                 # Show a too late message.
                 return PHPWS_Template::process($tpl, 'hms', 'student/lottery_too_late.tpl');
             }else{
