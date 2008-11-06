@@ -22,7 +22,7 @@ You *must* log in and select your desired room before {EXPIRES_ON} in order to q
 
 Please log in and confirm your on-campus housing for {YEAR}!
 
-If you have any questions about the re-application process, please refer to the housing FAQ: http://somewhere.housing.appstate.edu/
+If you have any questions about the re-application process, please refer to the housing FAQ: http://hms.ess.appstate.edu/webpage/id/2
 
 We look forward to seeing you in {YEAR}!
 

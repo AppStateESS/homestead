@@ -21,7 +21,7 @@ Since there are a limited number of spaces for our returning students, on-campus
 
 If you want to be considered for on-campus housing for {YEAR}, you must complete the re-application process by going to: http://hms.appstate.edu/ and logging on with your AppalNet username and password.
 
-If you have any questions about the re-application process, please refer to the housing FAQ: http://somewhere.housing.appstate.edu/
+If you have any questions about the re-application process, please refer to the housing FAQ: http://hms.ess.appstate.edu/webpage/id/2
 
 Sincerely,
 

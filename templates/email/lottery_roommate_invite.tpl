@@ -26,7 +26,7 @@ In order to confirm your assignment and roommate, you must go to http://hms.apps
 ***IMPORTANT***
 You *must* log in confirm your assignment and roommate by {EXPIRES_ON} in order to qualify for housing for {YEAR}.  If you do not claim your room by {EXPIRES_ON} your roommate invitation for on-campus housing will be canceled.
 
-If you have any questions about the re-application process, please refer to the housing FAQ: http://somewhere.housing.appstate.edu/
+If you have any questions about the re-application process, please refer to the housing FAQ: http://hms.ess.appstate.edu/webpage/id/2
 
 We look forward to seeing you in {YEAR}!
 

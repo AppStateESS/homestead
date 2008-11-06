@@ -28,7 +28,7 @@ You *must* log in confirm your assignment and roommate by {EXPIRES_ON} in order 
 
 Please log in and confirm your on-campus housing for {YEAR}!
 
-If you have any questions about the re-application process, please refer to the housing FAQ: http://somewhere.housing.appstate.edu/
+If you have any questions about the re-application process, please refer to the housing FAQ: http://hms.ess.appstate.edu/webpage/id/2
 
 We look forward to seeing you in {YEAR}!
 
