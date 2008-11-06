@@ -17,6 +17,10 @@ class HMS_Lottery {
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
         require_once(PHPWS_SOURCE_DIR . '/mod/hms/inc/accounts.php');
 
+
+        /******************
+         * Initialization *
+         ******************/
         HMS_Activity_Log::log_activity(HMS_ADMIN_USER, ACTIVITY_LOTTERY_EXECUTED, HMS_ADMIN_USER);
 
         # One-time date/time calculations, setup for later on
@@ -28,24 +32,49 @@ class HMS_Lottery {
 
         $output = array(); // An array for holding the text output, one line per array element.
 
+        /*******************
+         * Reminder Emails *
+         *******************/
         $output[] = "Lottery system invoked on " . date("d M, Y @ g:i:s", $now) . " ($now)";
         
+        $output[] = "Sending invite reminder emails...";
         HMS_Lottery::send_winning_reminder_emails($term);
 
+        $output[] = "Sending roommate invite reminder emails";
         HMS_Lottery::send_roommate_reminder_emails($term);
 
-        # Count the number of female outstanding invites
+        /*****************
+         * Invite totals *
+         *****************/
+        $output[] = 'Counting invites sent so far... ';
+
+        # Count the number of invites sent (outstanding or confirmed) per class
+        $senior_invites_sent = HMS_Lottery::count_invites_by_class($term, CLASS_SENIOR);
+        $junior_invites_sent = HMS_Lottery::count_invites_by_class($term, CLASS_JUNIOR);
+        $soph_invites_sent   = HMS_Lottery::count_invites_by_class($term, CLASS_SOPHOMORE);
+
+        if($senior_invites_sent === FALSE || $junior_invites_sent === FALSE || $soph_invites_sent === FALSE){
+            $output[] = 'Error counting previously sent invites!';
+            HMS_Lottery::lottery_complete('FAILED', $output);
+        }else{
+            $output[] = "$senior_invites_sent senior invites previously sent";
+            $output[] = "$junior_invites_sent junior invites previously sent";
+            $output[] = "$soph_invites_sent sophomore invites previously sent";
+        }
+
+        # Count the number of outstanding female invites
         $female_invites_outstanding = HMS_Lottery::count_outstanding_invites($term, FEMALE);
         if($female_invites_outstanding === FALSE){
-            $output[] = "error counting outstanding female invites";
+            $output[] = 'error counting outstanding female invites';
             HMS_Lottery::lottery_complete("FAILED", $output);
         }else{
             $output[] = "$female_invites_outstanding female invites outstanding";
         }
 
+        # Count the number of outstanding male invites
         $male_invites_outstanding = HMS_Lottery::count_outstanding_invites($term, MALE);
         if($male_invites_outstanding === FALSE){
-            $output[] = "error counting outstanding male invites";
+            $output[] = 'error counting outstanding male invites';
             HMS_Lottery::lottery_complete("FAILED", $output);
         }else{
             $output[] = "$male_invites_outstanding male invites oustanding";
@@ -55,6 +84,21 @@ class HMS_Lottery {
         $outstanding_invite_count = $male_invites_outstanding + $female_invites_outstanding;
 
         $output[] = "$outstanding_invite_count total invites outstanding";
+
+        # Get the total number of outstanding roommate invites
+        $outstanding_roommate_invites = HMS_Lottery::count_outstanding_roommate_invites($term);
+
+        if($outstanding_roommate_invites === FALSE){
+            $output[] = 'error counting outstanding roommate invites';
+            HMS_Lottery::lottery_complete("FAILED", $output);
+        }else{
+            $output[] = "$outstanding_roommate_invites outstanding roommate invites";
+        }
+
+
+        /**************
+         * Bed Totals *
+         **************/
 
         # Get the halls
         $halls = HMS_Residence_Hall::get_halls($term);
@@ -71,6 +115,16 @@ class HMS_Lottery {
             $lottery_rooms = $hall->rooms_for_lottery;
             $output[] = "$lottery_rooms rooms reserved for lottery";
 
+            # Get the number of totally full rooms in this hall
+            $full_rooms = $hall->count_lottery_full_rooms();
+
+            if($full_rooms === FALSE){
+                $output[] = 'Error while counting full rooms.';
+                HMS_Lottery::lottery_complete('FAILED', $output); 
+            }
+
+            $output[] = "$full_rooms full lottery rooms";
+
             # Get the number of used rooms in this hall
             $used_rooms = $hall->count_lottery_used_rooms();
 
@@ -82,9 +136,13 @@ class HMS_Lottery {
             $output[] = "$used_rooms lottery rooms used";
 
             # Calculate the remaining number of rooms allowed for the lottery in this hall
-            $remaining_rooms_this_hall = $lottery_rooms - $used_rooms;
+            $remaining_rooms_this_hall = $lottery_rooms - $full_rooms;
 
             $output[] = "$remaining_rooms_this_hall remaining rooms available for lottery";
+
+            if($remaining_rooms_this_hall == 0){
+                continue;
+            }
 
             # Count the number of non-full male/female rooms in this hall
             $female_rooms_this_hall = $hall->count_avail_lottery_rooms(FEMALE);
@@ -113,26 +171,34 @@ class HMS_Lottery {
             # Add that number to to total number of lottery invites to send
             $remaining_rooms += $remaining_rooms_this_hall;
 
-            $output[] = "Running totals:";
-            $output[] = "$remaining_rooms remaining lottery rooms total";
 
             $remaining_coed_rooms   += $coed_rooms_this_hall;
             $remaining_male_rooms   += $male_rooms_this_hall;
             $remaining_female_rooms += $female_rooms_this_hall;
 
-            $output[] = "$remaining_coed_rooms total remaining coed rooms";
-            $output[] = "$remaining_male_rooms total remaining male rooms";
-            $output[] = "$remaining_female_rooms total remaining female rooms";
         }
 
+        $output[] = "$remaining_rooms remaining lottery rooms total";
+        $output[] = "$remaining_coed_rooms total remaining coed rooms";
+        $output[] = "$remaining_male_rooms total remaining male rooms";
+        $output[] = "$remaining_female_rooms total remaining female rooms";
+
         # If there are no free rooms and no outstanding invites, then we're done
-        if($remaining_rooms == 0 && $outstanding_invite_count == 0){
-            $output[] = "No remaining rooms and no outstanding invites, done!";
-            HMS_Lottery::lottery_complete("SUCCESS", $output, TRUE);
+        # This takes into account outstanding roommate invites, which if they fail would mean we'd need another lottery round
+        if($remaining_rooms <= 0 && $outstanding_invite_count <= 0 && $outstanding_roommate_invites <= 0){
+            $output[] = 'No remaining rooms and no outstanding invites, done!';
+            HMS_Lottery::lottery_complete('SUCCESS', $output, TRUE);
         }
+
+        if($remaining_rooms <= 0){
+            $output[] = 'No remaining rooms, but there are outstanding invites, quitting for now.';
+            HMS_Lottery::lottery_complete('SUCCESS', $output);
+        }
+
 
         # Calculate the number of new invites that can be sent
         # If there are co-ed rooms, then only send as many invites as there are co-ed rooms.
+        # TODO: move this inside the for loop below
         if($remaining_coed_rooms > 0){
             $invites_to_send = $remaining_coed_rooms - $outstanding_invite_count;
             $co_ed_only = TRUE;
@@ -146,8 +212,8 @@ class HMS_Lottery {
             $female_invites_avail  = $remaining_female_rooms - $female_invites_outstanding;
 
             $output[] = "No co-ed rooms remaining, can send $invites_to_send invites";
-            $output[] = "Can send $male_invites_avail new male invites";
-            $output[] = "Can send $female_invites_avail new female invites";
+            $output[] = "$male_invites_avail male invites available";
+            $output[] = "$female_invites_avail female invites available";
         }
 
         # Make sure we aren't sending more than our max at once
@@ -158,109 +224,91 @@ class HMS_Lottery {
 
         $output[] = "Sending $invites_to_send new invites";
 
-        # Randomly select the appropriate number of new winners
+        # Count the number of remaining entries
+        $remaining_entries = HMS_Lottery::count_remaining_entries($term);
+
+        if($remaining_entries === FALSE){
+            $output[] = 'Error counting outstanding lottery entires, quitting.';
+            HMS_Lottery::lottery_complete('FAILED', $output);
+        }
+
+        # Setup the lottery type
+        $lottery_type = PHPWS_Settings::get('hms', 'lottery_type');
+
+        # Setup the percentages for weighting by class
+        $soph_percent   = PHPWS_Settings::get('hms', 'lottery_per_soph');
+        $jr_percent     = PHPWS_Settings::get('hms', 'lottery_per_jr');
+        $senior_percent = PHPWS_Settings::get('hms', 'lottery_per_senior');
+
+        # Setup the max invites counts for multi-phase lottery
+        $soph_max_invites   = PHPWS_Settings::get('hms', 'lottery_max_soph');
+        $jr_max_invites     = PHPWS_Settings::get('hms', 'lottery_max_jr');
+        $senior_max_invites = PHPWS_Settings::get('hms', 'lottery_max_senior');
+
+        # Select the appropriate number of new winners
         for($i=0; $i < $invites_to_send; $i++){
 
-            # Make sure we're not out of lottery entires to choose from
-            $sql = "SELECT count(*) FROM hms_lottery_entry WHERE term = $term AND (invite_expires_on IS NULL OR invite_expires_on < $now)
-                    AND physical_disability = 0
-                    AND psych_disability = 0
-                    AND medical_need = 0
-                    AND gender_need = 0";
-
-            $num_remaining_entries = PHPWS_DB::getOne($sql);
-
-            if(PEAR::isError($num_remaining_entries)){
-                PHPWS_Error::log($num_remaining_entries);
-                $output[] = 'Error counting the number of lottery entries remaining.';
-                HMS_Lottery::lottery_complete('FAILED', $output); 
-            }
-
+            # Make sure we have students left who need to win
             if($num_remaining_entries == 0){
-                $output[] = "No entries remaining, quitting!";
-                HMS_Lottery::lottery_complete("SUCCESS", $output, TRUE);
+                $output[] = 'No entries remaining, quitting!';
+                HMS_Lottery::lottery_complete('SUCCESS', $output, TRUE);
             }
 
-            $output[] = "$num_remaining_entries entries remaining";
+            $output[] = "$remaining_entries entries remaining"; 
 
-            # Setup the percentages for weighting by class
-            $soph_percent   = PHPWS_Settings::get('hms', 'lottery_per_soph');
-            $jr_percent     = PHPWS_Settings::get('hms', 'lottery_per_jr');
-            $senior_percent = PHPWS_Settings::get('hms', 'lottery_per_senior');
+            $winning_row = NULL;
+            while(is_null($winning_row)){
 
-            # While we haven't found a winner yet
-            $winning_student = NULL;
-            $db = new PHPWS_DB('hms_lottery_entry');
-            while(!isset($winning_student)){
-                $db->reset();
-
+                # Decide which gender we need to invite
                 if($co_ed_only){
-                    $db->addWhere('gender', MALE, '=', 'OR', 'gender');
-                    $db->addWhere('gender', FEMALE, '=', 'OR', 'gender');
+                   $gender = COED; 
                 }else{
                     # Decide if we need to pick a male, female, or either
-                    if($male_invites_avail > 0){
-                        $db->addWhere('gender', MALE, '=', 'OR', 'gender');
-                    }
-
-                    if($female_invites_avail > 0){
-                        $db->addWhere('gender', FEMALE, '=', 'OR', 'gender');
+                    if($male_invites_avail > 0 && $female_invites_avail > 0){
+                        $gender = COED;
+                    }else if($male_invites_avail > 0){
+                        $gender = MALE;
+                    }else if($female_invites_avail > 0){
+                        $gender = FEMALE;
                     }
                 }
 
-                # Make sure we don't select anyone who has disability flags set
-                $db->addWhere('physical_disability', 0);
-                $db->addWhere('psych_disability', 0);
-                $db->addWhere('medical_need', 0);
-                $db->addWhere('gender_need', 0);
+                # Decide which class we need to invite
+                #TODO: 'AND' these conditions with the number of invites for that class being greater than 0 to prevent infinite loops
+                if($lottery_type == 'single_phase'){
+                    # Using a single-phase lottery, so choose which application term to use based on class weights
+                    # Choose a random number
+                    $random_num = mt_rand(0, 100);
 
-                # Choose a random number
-                $random_num = mt_rand(0, 100);
-
-                # Decide which application terms the random number says to use and add
-                # WHERE clauses for those application terms
-                if($random_num >= 0 && $random_num < $soph_percent){
-                    // Choose a rising sophmore (summer 1 thru fall of the previous year, plus spring of the same year)
-                    $db->addWhere('application_term', ($term_year - 1) . '20', '=', 'OR', 'appterm');
-                    $db->addWhere('application_term', ($term_year - 1) . '30', '=', 'OR', 'appterm');
-                    $db->addWhere('application_term', ($term_year - 1) . '40', '=', 'OR', 'appterm');
-                    $db->addWhere('application_term', $term_year . '10', '=', 'OR', 'appterm');
-                }else if($random_num >= $jr_percent && $random_num < ($soph_percent + $jr_percent)){
-                    // Choose a rising jr
-                    $db->addWhere('application_term', ($term_year - 2) . '20', '=', 'OR', 'appterm');
-                    $db->addWhere('application_term', ($term_year - 2) . '30', '=', 'OR', 'appterm');
-                    $db->addWhere('application_term', ($term_year - 2) . '40', '=', 'OR', 'appterm');
-                    $db->addWhere('application_term', ($term_year - 1) . '10', '=', 'OR', 'appterm');
+                    if($random_num < $soph_percent){
+                        $class = CLASS_SOPHOMORE;
+                    }else if($random_num >= $soph_percent && $random_num < ($soph_percent + $jr_percent)){
+                        $class = CLASS_JUNIOR;
+                    }else{
+                        $class = CLASS_SENIOR;
+                    }
                 }else{
-                    // Choose a rising senior or beyond
-                    $db->addWhere('application_term', ($term_year - 2) . '10', '<=');
+                    # Using a multi-phase lottery, so determine which phase we're in
+                    #TODO: 'AND' these conditions with the number of invites for that class being greater than 0 to prevent infinite loops
+                    if($senior_invites_sent < $senior_max_invites){
+                        $class = CLASS_SENIOR;
+                    }elseif($junior_invites_sent < $jr_max_invits){
+                        // Choose a rising jr
+                        $class = CLASS_JUNIOR;
+                    }elseif($soph_invites_sent < $soph_max_invites){
+                        // Choose a rising sophmore (summer 1 thru fall of the previous year, plus spring of the same year)
+                        $class = CLASS_SOPHOMORE;
+                    }else{
+                        // If this ever happens, it means we reached our invite caps for all calsses before all the available lottery rooms were filled
+                        $output[] = "All invite caps (by class) reached, quitting.";
+                        HMS_Lottery::lottery_complete('SUCCESS', $output); 
+                    }
                 }
 
-                # Randomly select a student with the given entry term, who does not have an outstanding invite
-                $db->addWhere('invite_expires_on', $now, '<', 'OR', 'expiration_group');
-                $db->addWhere('invite_expires_on', NULL, 'IS NULL', 'OR', 'expiration_group');
-
-                $db->addWhere('term', $term);
-
-                $result = $db->select();
-
-                if(PEAR::isError($result)){
-                    PHPWS_Error::log($result);
-                    $output[] = 'Error while trying to select a winning student.';
-                    HMS_Lottery::lottery_complete('FAILED', $output); 
-                }
-
-                # If there aren't any in that bin, choose another number and start over
-                if(sizeof($result) < 1){
-                    continue;
-                }
-
-                # Randomly pick a student from result
-                $winning_student = $result[mt_rand(0, sizeof($result)-1)];
-
-                $winning_username = $winning_student['asu_username'];
-                $output[] = "Inviting $winning_username";
+                $winning_row = HMS_Lottery::choose_winner($gender, $class, $term);
             }
+
+            $output[] = "Inviting $winning_username";
 
             # Update the winning student's invite
             $entry = HMS_Lottery_Entry::get_entry($winning_username, $term);
@@ -281,12 +329,105 @@ class HMS_Lottery {
                 }
             }
 
+            #TODO: need to increment the number of invites sent by class
+
             # Send them an invite
             HMS_Email::send_lottery_invite($winning_username . '@appstate.edu', HMS_SOAP::get_name($winning_student), $expire_time, $year);
 
             # Log that the invite was sent
             HMS_Activity_Log::log_activity($winning_username, ACTIVITY_LOTTERY_INVITED, HMS_ADMIN_USER, 'Expires: ' . HMS_Util::get_long_date_time($expire_time));
         }
+
+        HMS_Lottery::lottery_complete('SUCCESS', $output);
+    }
+
+    /*
+     * Chooses a winner and returns that stuent's row from the hms_lottery_entry table
+     */
+    function choose_winner($gender, $class, $term)
+    {
+        $db = new PHPWS_DB('hms_lottery_entry');
+
+        $winning_student = NULL;
+
+        if($gender == COED){
+            $db->addWhere('gender', MALE, '=', 'OR', 'gender');
+            $db->addWhere('gender', FEMALE, '=', 'OR', 'gender');
+        }else if($gender == MALE){
+            $db->addWhere('gender', MALE, '=');
+        }else if($gender == FEAMLE){
+            $db->addWhere('gender', FEMALE, '=', 'OR', 'gender');
+        }
+
+        # Make sure we don't select anyone who has disability flags set
+        $db->addWhere('physical_disability', 0);
+        $db->addWhere('psych_disability', 0);
+        $db->addWhere('medical_need', 0);
+        $db->addWhere('gender_need', 0);
+
+        if($class = CLASS_SOPHOMORE){
+            // Choose a rising sophmore (summer 1 thru fall of the previous year, plus spring of the same year)
+            $db->addWhere('application_term', ($term_year - 1) . '20', '=', 'OR', 'appterm');
+            $db->addWhere('application_term', ($term_year - 1) . '30', '=', 'OR', 'appterm');
+            $db->addWhere('application_term', ($term_year - 1) . '40', '=', 'OR', 'appterm');
+            $db->addWhere('application_term', $term_year . '10', '=', 'OR', 'appterm');
+        }else if($class == CLASS_JUNIOR){
+            // Choose a rising jr
+            $db->addWhere('application_term', ($term_year - 2) . '20', '=', 'OR', 'appterm');
+            $db->addWhere('application_term', ($term_year - 2) . '30', '=', 'OR', 'appterm');
+            $db->addWhere('application_term', ($term_year - 2) . '40', '=', 'OR', 'appterm');
+            $db->addWhere('application_term', ($term_year - 1) . '10', '=', 'OR', 'appterm');
+        }else{
+            // Choose a rising senior or beyond
+            $db->addWhere('application_term', ($term_year - 2) . '10', '<=');
+        }
+
+        # Only select students who either haven't been invited, or their invite has expired
+        $db->addWhere('invite_expires_on', $now, '<', 'OR', 'expiration_group');
+        $db->addWhere('invite_expires_on', NULL, 'IS NULL', 'OR', 'expiration_group');
+
+        $db->addWhere('term', $term);
+
+        $result = $db->select();
+
+        if(PEAR::isError($result)){
+            PHPWS_Error::log($result);
+            $output[] = 'Error while trying to select a winning student.';
+            HMS_Lottery::lottery_complete('FAILED', $output); 
+        }
+
+        # If there aren't any students which fit the parameters specified, return NULL
+        if(sizeof($result) < 1){
+            return NULL;
+        }
+
+        # Randomly pick a student from result
+        $winning_student = $result[mt_rand(0, sizeof($result)-1)];
+
+        return $winning_student;
+    }
+
+    /**
+     * Returns the number of lottery entries currently outstanding (i.e. non-winners)
+     */
+    function count_remaining_entries($term)
+    {
+        $now = mktime();
+
+        $sql = "SELECT count(*) FROM hms_lottery_entry WHERE term = $term AND (invite_expires_on IS NULL OR invite_expires_on < $now)
+                AND physical_disability = 0
+                AND psych_disability = 0
+                AND medical_need = 0
+                AND gender_need = 0";
+
+        $num_remaining_entries = PHPWS_DB::getOne($sql);
+
+        if(PEAR::isError($num_remaining_entries)){
+            PHPWS_Error::log($num_remaining_entries);
+            return FALSE;
+        }
+
+        return $num_remaining_entries;
     }
 
     function count_outstanding_invites($term, $gender = NULL)
@@ -298,15 +439,75 @@ class HMS_Lottery {
                 AND hms_lottery_entry.invite_expires_on > $now
                 AND hms_lottery_entry.term = $term";
         if(isset($gender)){
-            $query .= " AND hms_lottery_entry.gender = " . $gender;
+            $query .= ' AND hms_lottery_entry.gender = ' . $gender;
         }
 
         $result = PHPWS_DB::getOne($query);
 
         if(PEAR::isError($result)){
             PHPWS_Error::log($result);
-            //TODO: use the messaging system to let someone know..
             return false;
+        }else{
+            return $result;
+        }
+    }
+
+    /*
+     * Returns the number of outstanding *roommate* invites
+     */
+    function count_outstanding_roommate_invites($term)
+    {
+        $now = mktime();
+        $query = "select count(*) FROM hms_lottery_reservation
+                LEFT OUTER JOIN (SELECT asu_username FROM hms_assignment WHERE term=$term AND lottery = 1) as foo ON hms_lottery_reservation.asu_username = foo.asu_username
+                WHERE foo.asu_username IS NULL
+                AND hms_lottery_reservation.expires_on > $now
+                AND hms_lottery_reservation.term = $term";
+
+        $result = PHPWS_DB::getOne($query);
+
+        if(PEAR::isError($result)){
+            PHPWS_Error::log($result);
+            return false;
+        }else{
+            return $result;
+        }
+    }
+
+    /*
+     * Returns the number of invites sent (confirmed or outstanding) for the given class
+     */
+    function count_invites_by_class($term, $class)
+    {
+        $now = mktime();
+        $term_year = HMS_Term::get_term_year($term);
+
+        $query = "SELECT count(*) FROM hms_lottery_entry
+                LEFT OUTER JOIN (SELECT asu_username FROM hms_assignment WHERE term=$term AND lottery = 1) as foo ON hms_lottery_entry.asu_username = foo.asu_username
+                WHERE ((foo.asu_username IS NULL AND hms_lottery_entry.invite_expires_on > $now) OR (foo.asu_username IS NOT NULL))
+                AND hms_lottery_entry.term = $term ";
+
+        if($class == CLASS_SOPHOMORE){
+            $query .= 'AND (application_term = ' . ($term_year - 1) . '20';
+            $query .= ' OR application_term = ' . ($term_year - 1) . '30';
+            $query .= ' OR application_term = ' . ($term_year - 1) . '40';
+            $query .= ' OR application_term = ' . ($term_year) . '10';
+            $query .= ')';
+        }else if($class == CLASS_JUNIOR){
+            $query .= 'AND (application_term = ' . ($term_year - 2) . '20';
+            $query .= ' OR application_term = ' . ($term_year - 2) . '30';
+            $query .= ' OR application_term = ' . ($term_year - 2) . '40';
+            $query .= ' OR application_term = ' . ($term_year - 1) . '10';
+            $query .= ')';
+        }else{
+            $query .= 'AND application_term <= ' . ($term_year - 2) . '10';
+        }
+        
+        $result = PHPWS_DB::getOne($query);
+
+        if(PEAR::isError($result)){
+            PHPWS_Error::log($result);
+            return FALSE;
         }else{
             return $result;
         }
@@ -420,7 +621,7 @@ class HMS_Lottery {
         }
 
         # Make sure the student isn't assigned anywhere else
-        if(!HMS_Assignment::check_for_assignment($username, $term)){
+        if(HMS_Assignment::check_for_assignment($username, $term)){
             return E_ASSIGN_ALREADY_ASSIGNED;
         }
 
@@ -556,9 +757,13 @@ class HMS_Lottery {
 
     function submit_lottery_settings()
     {
-        $per_soph   = $_REQUEST['lottery_per_soph'];
-        $per_jr     = $_REQUEST['lottery_per_jr'];
-        $per_senior = $_REQUEST['lottery_per_senior'];
+        $per_soph   = isset($_REQUEST['lottery_per_soph'])?$_REQUEST['lottery_per_soph']:0;
+        $per_jr     = isset($_REQUEST['lottery_per_jr'])?$_REQUEST['lottery_per_jr']:0;
+        $per_senior = isset($_REQUEST['lottery_per_senior'])?$_REQUEST['lottery_per_senior']:0;
+
+        $max_soph   = isset($_REQUEST['lottery_max_soph'])?$_REQUEST['lottery_max_soph']:0;
+        $max_jr     = isset($_REQUEST['lottery_max_jr'])?$_REQUEST['lottery_max_jr']:0;
+        $max_senior = isset($_REQUEST['lottery_max_senior'])?$_REQUEST['lottery_max_senior']:0;
 
         # if using single phase lottery, Make sure the percents add up to exactly 100
         if($_REQUEST['phase_radio'] == 'single_phase' && ($per_soph + $per_jr + $per_senior) != 100){
@@ -566,7 +771,7 @@ class HMS_Lottery {
         }
 
         # Save the settings
-        HMS_Lottery::save_lottery_settings($_REQUEST['lottery_term'],$_REQUEST['phase_radio'], $per_soph, $per_jr, $per_senior, $_REQUEST['lottery_max_soph'],$_REQUEST['lottery_max_jr'],$_REQUEST['lottery_max_senior']);
+        HMS_Lottery::save_lottery_settings($_REQUEST['lottery_term'],$_REQUEST['phase_radio'], $per_soph, $per_jr, $per_senior, $max_soph, $max_jr, $max_senior);
 
         return HMS_Lottery::show_lottery_settings('Lottery settings updated.');
     }
