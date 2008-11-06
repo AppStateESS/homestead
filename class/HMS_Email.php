@@ -160,7 +160,7 @@ class HMS_Email{
         $tpl['EXPIRES_ON']  = HMS_Util::get_long_date_time($expires_on);
         $tpl['YEAR']        = $year;
 
-        HMS_Email::send_template_message($to . '@appstate.edu', 'You Have Been Selected for On-campus Housing!', 'email/lottery_invite.tpl', $tpl);
+        HMS_Email::send_template_message($to . '@appstate.edu', '[Testing] You Have Been Selected for On-campus Housing!', 'email/lottery_invite.tpl', $tpl);
     }
 
     function send_lottery_invite_reminder($to, $name, $expires_on, $year)
@@ -177,7 +177,7 @@ class HMS_Email{
         // TODO:
         //$hours = 
 
-        HMS_Email::send_template_message($to . '@appstate.edu', "On-Campus Housing Reminder: Only $hours hours left!", 'email/lottery_invite_reminder.tpl', $tpl);
+        HMS_Email::send_template_message($to . '@appstate.edu', "[Testing] On-Campus Housing Reminder: Only $hours hours left!", 'email/lottery_invite_reminder.tpl', $tpl);
     }
 
     function send_lottery_roommate_invite($to, $name, $expires_on, $requestor_name, $hall_room, $year)
@@ -190,7 +190,7 @@ class HMS_Email{
         $tpl['REQUESTOR']   = $requestor_name;
         $tpl['HALL_ROOM']   = $hall_room;
 
-        HMS_Email::send_template_message($to . '@appstate.edu', 'Roommate Invitation for On-campus Housing!', 'email/lottery_roommate_invite.tpl', $tpl);
+        HMS_Email::send_template_message($to . '@appstate.edu', '[Testing] Roommate Invitation for On-campus Housing!', 'email/lottery_roommate_invite.tpl', $tpl);
     }
 
     function send_lottery_roommate_reminder($to, $name, $expires_on, $requestor_name, $hall_room, $year)
@@ -204,7 +204,7 @@ class HMS_Email{
         $tpl['HALL_ROOM']   = $hall_room;
         $hours              = round(($expires_on - mktime()) / 3600);
 
-        HMS_Email::send_template_message($to . '@appstate.edu', "Roommate Invitation Reminder: Only $hours hours left!", 'email/lottery_roommate_invite_reminder.tpl', $tpl);
+        HMS_Email::send_template_message($to . '@appstate.edu', "[Testing] Roommate Invitation Reminder: Only $hours hours left!", 'email/lottery_roommate_invite_reminder.tpl', $tpl);
     }
 
     function send_signup_invite($to, $name, $requestor_name, $year)
@@ -215,7 +215,7 @@ class HMS_Email{
         $tpl['REQUESTOR']   = $requestor_name;
         $tpl['YEAR']        = $year;
 
-        HMS_Email::send_template_message($to . '@appstate.edu', "Signup for On-campus Housing!", 'email/lottery_signup_invite.tpl', $tpl);
+        HMS_Email::send_template_message($to . '@appstate.edu', "[Testing] Signup for On-campus Housing!", 'email/lottery_signup_invite.tpl', $tpl);
     }
 
     function send_lottery_status_report($status, $log)
@@ -233,9 +233,10 @@ class HMS_Email{
             $tpl['roommates'][] = array('ROOMMATE' => $roommate);
         }
 
-        HMS_Email::send_template_message($to . '@appstate.edu', 'Housing Assignment Notice!', 'email/assignment_notice.tpl', $tpl);
+        HMS_Email::send_template_message($to . '@appstate.edu', '[Testing] Housing Assignment Notice!', 'email/assignment_notice.tpl', $tpl);
     }
 
+    /*
     function send_assignment_update_email($to, $name, $location, $roommates){
         $tpl = array();
 
@@ -245,7 +246,8 @@ class HMS_Email{
         $tpl['YEAR']        = $year;
         $tpl['roommates']   = $roommates;
 
-        HMS_Email::send_template_message($to . '@appstate.edu', 'Housing Assignment Notice!', 'email/assignment_update_notice.tpl', $tpl);
+        HMS_Email::send_template_message($to . '@appstate.edu', '[Testing] Housing Assignment Notice!', 'email/assignment_update_notice.tpl', $tpl);
     }
+    */
 } // End HMS_Email class
 ?>
