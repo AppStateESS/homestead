@@ -197,7 +197,6 @@ class HMS_Lottery_Entry {
 
         $db = &new PHPWS_DB('hms_lottery_entry');
         $db->addWhere('asu_username', $asu_username, 'ILIKE');
-        $db->addWhere('asu_username', $asu_username, 'ILIKE');
         $db->addWhere('term', $term);
         $db->setLimit(1);
         $result = $db->loadObject($entry);
@@ -212,15 +211,22 @@ class HMS_Lottery_Entry {
 
     function get_special_needs_interface()
     {
+        $tpl = array();
         if(isset($_REQUEST) && isset($_REQUEST['da_clear'])){
             PHPWS_Core::initModClass('hms', 'HMS_Term.php');
-            $lottery_entry = HMS_Lottery_Entry::get_entry($_REQUEST['da_clear'], HMS_Term::get_current_term());
+            $lottery_entry = HMS_Lottery_Entry::get_entry($_REQUEST['da_clear'], PHPWS_Settings::get('hms', 'lottery_term'));
             $lottery_entry->physical_disability = 0;
             $lottery_entry->psych_disability    = 0;
             $lottery_entry->medical_need        = 0;
             $lottery_entry->gender_need         = 0;
-            $lottery_entry->save();
+            $result = $lottery_entry->save();
+
+            if(PHPWS_Error::logIfError($result))
+            {
+                Layout::add('<br /><font color=red>Error clearing special needs</font><br />');
+            }
         }
+
         PHPWS_Core::initCoreClass('DBPager.php');
         $pager = &new DBPager('hms_lottery_entry', 'HMS_Lottery_Entry');
         $pager->db->addWhere('term', PHPWS_Settings::get('hms', 'lottery_term'));
