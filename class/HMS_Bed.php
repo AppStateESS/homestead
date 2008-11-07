@@ -213,7 +213,7 @@ class HMS_Bed extends HMS_Item {
             $link_re = '';
             $link_un = '';
             if(Current_User::allow('hms','assignment_maintenance')) {
-                $link_re = PHPWS_Text::secureLink('(re-assign)', 'hms', array('type'=>'assignment', 'op'=>'show_assign_student', 'username'=>$this->_curr_assignment->asu_username));
+                $link_re = PHPWS_Text::secureLink('(re-assign)', 'hms', array('type'=>'assignment', 'op'=>'show_assign_student', 'username'=>$this->_curr_assignment->asu_username, 'bed_id'=>$this->id));
                 $link_un = PHPWS_Text::secureLink('(un-assign)', 'hms', array('type'=>'assignment', 'op'=>'show_unassign_student', 'username'=>$this->_curr_assignment->asu_username));
             }
             return PHPWS_Text::secureLink(HMS_SOAP::get_full_name($this->_curr_assignment->asu_username),'hms', array('type'=>'student', 'op'=>'get_matching_students', 'username'=>$this->_curr_assignment->asu_username)) . ' ' . $link_re . ' ' . $link_un;
