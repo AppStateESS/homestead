@@ -564,9 +564,13 @@ class HMS_Assignment extends HMS_Item
             $pre_populate = false;
         }
        
+        $halls_array = array();
+        $hall_list = HMS_Residence_Hall::get_halls_with_vacancies(HMS_Term::get_selected_term());
+        foreach ($hall_list as $_hall) {
+            $halls_array[$_hall->id] = $_hall->hall_name;
+        }
+
         if($pre_populate){
-            $halls_array = array();
-            $halls_array[$hall->id] = $hall->hall_name;
             $form->addDropBox('residence_hall', $halls_array);
             $form->setMatch('residence_hall', $hall->id);
         }else{
@@ -574,7 +578,7 @@ class HMS_Assignment extends HMS_Item
             $form->setMatch('residence_hall', 0);
         }
         $form->setLabel('residence_hall', 'Residence hall: ');
-        $form->setExtra('residence_hall', 'disabled onChange="handle_hall_change()"');
+        $form->setExtra('residence_hall', 'onChange="handle_hall_change()"');
 
         if($pre_populate){
             $form->addDropBox('floor', $hall->get_floors_array());

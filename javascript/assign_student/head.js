@@ -10,8 +10,6 @@ var xmlHttp;
 
 var bedDropShown = false;
 
-window.onload = load_halls;
-
 function showBedDrop()
 {
     bedDropShown = true;
@@ -22,74 +20,16 @@ function showBedDrop()
     document.getElementById('phpws_form_use_bed').value = "true";
 }
 
-function load_halls()
-{
-    var term = document.getElementById('phpws_form_term').value;
-
-    setSingleOption(res_hall_drop, "Loading...");
-
-    var requestURL = document.location + '?mod=hms&type=xml&op=get_halls_with_vacancies&term=' + term;
-
-    xmlHttp = createXMLHttp();
-    xmlHttp.open("GET", requestURL, true);
-    xmlHttp.onreadystatechange = function () {
-        if(xmlHttp.readyState == 4){
-            handle_load_halls_response();
-        }
-    };
-    xmlHttp.send(null);
-
-}
-
-function handle_load_halls_response()
-{
-    if(xmlHttp.status != 200){
-        return;
-    }else{
-
-    }
-    
-    setSingleOption(res_hall_drop, 'Select...');
-
-    var response = xmlHttp.responseXML;
-
-    var halls = response.firstChild;
-
-    for(i = 0; i < halls.childNodes.length; i++){
-	    hall = halls.childNodes[i];
-	    if (hall.nodeType == 3) {
-	        continue;
-        }
-	    for (j = 0; j < hall.childNodes.length; j++) {
-	        sub = hall.childNodes[j];
-            if (sub.nodeType == 3) {
-	            continue;
-            }
-	        if (sub.nodeName == 'id') {
-                id = sub.firstChild.nodeValue;
-                //alert('id is ' + id);
-            } 
-	        if (sub.nodeName == 'hall_name') {
-                hall_name = sub.firstChild.nodeValue;
-                //alert('floor_num is ' + floor_num);
-                var drop = document.getElementById(res_hall_drop);
-                drop.options[drop.options.length] = new Option(hall_name, id, false, false);
-            } 
-        }
-    }
-
-    enableDrop(res_hall_drop);
-
-}
-
 function handle_hall_change()
 {
     // Reset and disable all the lower-order drop downs
     resetDrop(floor_drop);
     resetDrop(room_drop);
+    resetDrop(bed_drop);
 
     disableDrop(floor_drop);
     disableDrop(room_drop);
+    disableDrop(bed_drop);
 
     // Get the selected value
     var hallId = document.getElementById(res_hall_drop).options[document.getElementById(res_hall_drop).selectedIndex].value
