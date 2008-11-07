@@ -197,7 +197,7 @@ class HMS_Bed extends HMS_Item {
 
     /**
      * Returns a link. If the bed is assigned, the link is to the
-     * student info screen. Otherwise, the link the link is to the
+     * student info screen. Otherwise, the link is to the
      * assign student screen.
      */
     function get_assigned_to_link($newWindow = FALSE)

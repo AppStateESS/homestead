@@ -1184,7 +1184,7 @@ class HMS_Residence_Hall extends HMS_Item
                             $rlc = ' (' . $rlcs[$rlc['rlc_id']] . ')'; //get the full name for the rlc
                         }
                         $name = HMS_SOAP::get_full_name($username);
-                        $link = $bed->get_assigned_to_link() . "(<em>$username</em>)$rlc";
+                        $link = "(<em>$username</em>)" . $bed->get_assigned_to_link() . " $rlc";
                         
                         $tpl->setData(array('BED_LABEL'=>$bed->bedroom_label,'BED'=>$bed->bed_letter,'LINK'=>$link));
                     }else{
