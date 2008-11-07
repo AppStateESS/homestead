@@ -166,7 +166,7 @@ class HMS_Student {
                 if(isset($_SESSION['asu_username'])){
                     return Application_UI::view_housing_application($_SESSION['asu_username'],$_SESSION['application_term']);
                 }else{
-                    return Application_UI::view_housing_application($_REQUEST['student'],HMS_SOAP::get_application_term($_RQUEST['student']));
+                    return Application_UI::view_housing_application($_REQUEST['student'],HMS_SOAP::get_application_term($_REQUEST['student']));
                 }
             case 'show_main_menu':
                 PHPWS_Core::initModClass('hms', 'UI/Student_UI.php');

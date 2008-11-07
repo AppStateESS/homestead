@@ -520,8 +520,8 @@ class Application_UI{
                 }
             }
         }
-
-        $application = &new HMS_Application($username, $possible_term);
+            
+        $application = &new HMS_Application($username, $term);
 
         if($application->id == 0){
             return "No application found for the specified user and term.";

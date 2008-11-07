@@ -27,8 +27,13 @@ class HMS
                         PHPWS_Core::initModClass('hms', 'HMS_Student.php');
                         PHPWS_Core::initModClass('hms', 'HMS_Activity_log.php');
                         $_SESSION['login_as_student'] = true;
-                        $_REQUEST['asu_username']     = $_REQUEST['login_as_student'];
-                        HMS_Login::student_login();
+
+                        //Don't try to set the asu_username if it's already set
+                        if(!isset($_SESSION['asu_username'])){
+                            $_SESSION['asu_username']     = $_REQUEST['login_as_student'];
+                        }
+
+                        HMS_Login::student_login($_SESSION['asu_username']);
                         HMS_Activity_Log::log_activity($_SESSION['asu_username'], ACTIVITY_LOGIN_AS_STUDENT, Current_User::getUsername(), '');
                     } else if( isset($_REQUEST['end_student_session']) ) { 
                         unset($_SESSION['login_as_student']);

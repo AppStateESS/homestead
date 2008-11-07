@@ -59,7 +59,7 @@ class HMS_Student_UI{
         
         # Get deadlines for the current term for future use
         $deadlines = HMS_Deadlines::get_deadlines($_SESSION['application_term']);
-        $lottery_deadlines = HMS_Deadlines::get_deadliens(PHPWS_Settings::get('hms', 'lottery_term'));
+        $lottery_deadlines = HMS_Deadlines::get_deadlines(PHPWS_Settings::get('hms', 'lottery_term'));
 
         # Calculate the student's age and check for >= 25 years old based on move-in day deadline
         $dob = explode('-', $dob); // in order: year, month, day
@@ -180,7 +180,7 @@ class HMS_Student_UI{
             }
                         
             # Make sure the student doesn't already have an assignment on file for the current term
-            if(HMS_Assignment::check_for_assignment($_SESSION['asu_username'])){
+            if(HMS_Assignment::check_for_assignment($_SESSION['asu_username']) && !isset($_SESSION['login_as_student'])){
                 # No idea what's going on here, send to a contact page
                 return HMS_Contact_Form::show_contact_form();
             }

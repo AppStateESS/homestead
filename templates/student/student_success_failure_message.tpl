@@ -8,6 +8,7 @@
             <!-- BEGIN success -->
             <span class="success">{SUCCESS}</span><br/>
             <!-- END success -->
+            <a href='index.php?module=hms&action=user&op=logout'>logout</a><br />
         </div>
     </div>
 </div>
