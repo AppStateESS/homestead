@@ -111,6 +111,146 @@ class HMS_Learning_Community
 
         return $final;
     }
+
+    /**
+      * Show the interface for editing a learning community, users can change
+      * the name and/or the capacity of the rlc.
+      *
+      * @param string $message An error message to display above the form
+      * @return string The html of the interface
+      */
+    function show_edit_learning_community($message = null)
+    {
+        if( !Current_User::allow('hms', 'learning_community_maintenance') ){
+            $tpl = array();
+            return PHPWS_Template::process($tpl, 'hms', 'admin/premission_denied.tpl');
+        }
+
+        $tpl = array();
+        $tpl['MESSAGE'] = ''.$message;
+
+        $form = new PHPWS_Form('edit_rlc');
+        
+        $form->addSelect('rlc', HMS_Learning_Community::getRLCList());
+        $form->setLabel('rlc', 'Learning Community');
+        $form->setExtra('rlc', 'onChange=getVals(this.value)');
+
+        $form->addText('name');
+        $form->setLabel('name', 'New Learning Community Name');
+        $form->setSize('name', 32);
+
+        $form->addText('abbv');
+        $form->setLabel('abbv', 'New Learning Community Abbreviation');
+        $form->setSize('abbv', 16);
+
+        $form->addText('capacity');
+        $form->setLabel('capacity', 'Capacity');
+        $form->setSize('capacity', 4);
+
+        $form->addHidden('type', 'rlc');
+        $form->addHidden('op', 'do_edit_learning_community');
+        $form->addSubmit('save_changes', 'Save Changes');
+
+        $form->mergeTemplate($tpl);
+
+        javascript('/jquery/');
+
+        return PHPWS_Template::process($form->getTemplate(), 'hms', 'admin/edit_learning_community.tpl');
+    }
+
+    /**
+      * Modify the attributes of a learning community.
+      *
+      * @param int $id The id of the learning community to edit
+      * @param string $name The new name of the learning community
+      * @param string $abbv The new abbreviation for the learning community
+      * @param int $capacity The new capacity of the learning community
+      * @return mixed $success true for success error message for failure
+      */
+    function edit_learning_community($id, $name, $abbv, $capacity)
+    {
+        $db = new PHPWS_DB('hms_learning_communities');
+        $db->addWhere('id', $id);
+
+        $result = $db->select();
+
+        if(PHPWS_Error::logIfError($result)){
+            return 'Error looking up the rlc in the database.';
+        }
+
+        $db->reset();
+        $db->addWhere('id', $id);
+        $db->addValue('community_name', $name);
+        $db->addValue('abbreviation', $abbv);
+        $db->addValue('capacity', $capacity);
+
+        $result = $db->update();
+
+        if(!PHPWS_Error::logIfError($result)){
+            return true;
+        }
+
+        return 'Error updating the RLC.';
+    }
+
+    function do_edit_learning_community()
+    {
+        if(isset($_REQUEST['rlc']) && isset($_REQUEST['name']) 
+            && isset($_REQUEST['abbv']) && isset($_REQUEST['capacity']))
+        {
+            if(!is_numeric($_REQUEST['rlc']))
+            {
+                return HMS_Learning_Community::show_edit_learning_community('The RLC ID must be numeric');
+            }
+
+            if(!is_numeric($_REQUEST['capacity']))
+            {
+                return HMS_Learning_Community::show_edit_learning_community('The capacity must be numeric');
+            }
+
+            if(!(strlen($_REQUEST['name']) <= 32))
+            {
+                return HMS_Learning_Community::show_edit_learning_community('The RLC name must be less than 32 characters long');
+            }
+
+            if(!(strlen($_REQUEST['abbv']) <= 16))
+            {
+                return HMS_Learning_Community::show_edit_learning_community('The RLC abbreviation must be less than 16 characters long');
+            }
+
+            $result = HMS_Learning_Community::edit_learning_community($_REQUEST['rlc'], $_REQUEST['name'], $_REQUEST['abbv'], $_REQUEST['capacity']);
+
+            if($result !== TRUE)
+                return HMS_Learning_Community::show_edit_learning_community($result);
+
+            else 
+                return HMS_Learning_Community::show_edit_learning_community();
+        }
+    }
+
+    /**
+      * Get a JSON encoded view of the learning community.
+      *
+      * @param int $id The id of the learning community to return
+      * @return json JSON encoded object
+      */
+    function JSONLearningCommunity($id)
+    {
+        if( !Current_User::allow('hms', 'learning_community_maintenance') ){
+            die();
+        }
+        if(is_numeric($id)){
+            $db = new PHPWS_DB('hms_learning_communities');
+            $db->addWhere('id', $id);
+            $result = $db->select();
+
+            if(!PHPWS_Error::logIfError($result)){
+                return json_encode($result);
+            }
+        }
+
+        return json_encode(array('error' => null));
+    }
     
     /*
      * Returns a HMS_Form that prompts the user for the name of the RLC to add
@@ -394,6 +534,16 @@ class HMS_Learning_Community
                 break;
             case 'save_learning_community':
                 return HMS_Learning_Community::save_learning_community();
+                break;
+            case 'edit_learning_community':
+                return HMS_Learning_Community::show_edit_learning_community();
+                break;
+            case 'do_edit_learning_community':
+                return HMS_Learning_Community::do_edit_learning_community();
+                break;
+            case 'get_json':
+                print(HMS_Learning_Community::JSONLearningCommunity($_REQUEST['id']));
+                die();
                 break;
             case 'select_learning_community_for_delete':
                 return HMS_Learning_Community::select_learning_community_for_delete();

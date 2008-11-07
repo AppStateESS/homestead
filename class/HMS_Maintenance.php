@@ -264,11 +264,13 @@ class HMS_Maintenance
         if(Current_User::allow('hms', 'learning_community_maintenance'))
             $tpl['ADD_LEARNING_COMMUNITY']      = PHPWS_Text::secureLink(_('Add Learning Community'), 'hms', array('type'=>'rlc', 'op'=>'add_learning_community'));
 
+        /* # Commented out because we really shouldn't delete learning communities....
         if(Current_User::allow('hms', 'learning_community_maintenance'))
             $tpl['DELETE_LEARNING_COMMUNITY']   = PHPWS_Text::secureLink(_('Delete Learning Community'), 'hms', array('type'=>'rlc', 'op'=>'select_learning_community_for_delete'));
+        */
 
-//        if(Current_User::allow('hms', 'learning_community_maintenance'))
-//            $tpl['EDIT_LEARNING_COMMUNITY']     = PHPWS_Text::secureLink(_('Edit Learning Community'), 'hms', array('type'=>'rlc', 'op'=>'edit_learning_community')) . " &nbsp;*not implemented*";
+        if(Current_User::allow('hms', 'learning_community_maintenance'))
+            $tpl['EDIT_LEARNING_COMMUNITY']     = PHPWS_Text::secureLink(_('Edit Learning Community'), 'hms', array('type'=>'rlc', 'op'=>'edit_learning_community'));
 
         if(Current_User::allow('hms', 'view_rlc_applications')) 
             $tpl['ASSIGN_TO_RLCS']    = PHPWS_Text::secureLink(_('Assign Applicants to RLCs'), 'hms', array('type'=>'rlc', 'op'=>'assign_applicants_to_rlcs'));

@@ -76,7 +76,7 @@
             <!-- BEGIN rlc_options -->
             <dt>Learning Community Options</dt>
             <dd>{ADD_LEARNING_COMMUNITY}</dd>
-             <!--<dd>{EDIT_LEARNING_COMMUNITY}/dd>-->
+            <dd>{EDIT_LEARNING_COMMUNITY}</dd>
             <dd>{DELETE_LEARNING_COMMUNITY}</dd>
             <!-- END rlc_options -->
 
