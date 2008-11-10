@@ -1,5 +1,12 @@
 <?php
 
+/**************
+ * Login Link *
+ **************/
+define('LOGIN_TEST_FLAG', 'false'); 
+//define('HMS_LOGIN_LINK', 'index.php?module=hms&type=student&op=fake_login');
+define('HMS_LOGIN_LINK', '/login');
+
 /**********************
  * SOAP Testing Flags *
  **********************/
@@ -17,13 +24,6 @@ define('SOAP_INFO_TEST_FLAG', true);
  * from being reported back to banner.
  */
 define('SOAP_REPORT_TEST_FLAG', true);
-
-/**
- * AXP Testing Flag
- * Set to true to allow fake users to login
- * (No actual authentication to AXP)
- */
-define('AXP_TEST_FLAG', true);
 
 /**
  * Email testing flag

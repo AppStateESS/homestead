@@ -9,8 +9,7 @@
     {COOKIE_WARNING}
     <!-- END cookie_warning -->
     <!-- BEGIN login -->
-    {login}
-    Please <a href="/login">login</a> to continue. [ <a href="#">more information</a> ]
+    Please <a href="{LOGIN_LINK}">login</a> to continue. [ <a href="#">more information</a> ]
     <!-- END login -->
     </div>
   </div>

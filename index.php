@@ -25,20 +25,20 @@ if(Current_User::isLogged()) {
     }
 
     HMS::main();
-} else if(isset($_REQUEST['type']) && $_REQUEST['type'] == 'hms' && $_REQUEST['op'] == 'login') {
+
+} else if(LOGIN_TEST_FLAG == true && isset($_POST['action']) && $_POST['action'] == 'fake_login'){
     PHPWS_Core::initModClass('hms', 'HMS_Login.php');
-    $type = NULL;
-    $type = HMS_Login::login_user();
-    
-    if($type == BADTUPLE) {
-        $error = "<i><h2>You have not entered a valid username/password combination!</h2></i>";
-        HMS_Login::display_login_screen($error);
-    } else if (isset($type) && is_string($type)) {
-        Layout::add($type);
-    } else {
-        PHPWS_Core::initModClass('hms', 'HMS.php');
-        HMS::main($type);
-    }
+
+    $type = null;
+    $type = HMS_Login::fake_login($_REQUEST['username']);
+
+    PHPWS_Core::initModClass('hms', 'HMS.php');
+    HMS::main($type);
+
+} else if(LOGIN_TEST_FLAG == TRUE && isset($_GET['action']) && $_GET['action'] == 'show_fake_login'){
+    PHPWS_Core::initModClass('hms', 'HMS_Login.php');
+    HMS_Login::show_fake_login();
+
 } else {
     PHPWS_Core::initModClass('hms', 'HMS_Login.php');
     HMS_Login::display_login_screen();

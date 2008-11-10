@@ -11,7 +11,7 @@ class HMS_Login
 
         # If the user has cookies enabled (and therefore is not being shown the cookie warning message...
         if(is_null($tpl['COOKIE_WARNING'])){
-            $tpl['login'] = ''; // a dummy tag to make the actual login content show
+            $tpl['LOGIN_LINK'] = HMS_LOGIN_LINK; // a dummy tag to make the actual login content show
         }
 
         Layout::add(PHPWS_Template::process($tpl, 'hms', 'misc/login.tpl'));
@@ -49,11 +49,7 @@ class HMS_Login
 
         /* Don't destroy our admin session if an admin is logging in as a user */
         /*
-        if( !Current_User::isLogged() ) {
-            require_once(PHPWS_SOURCE_DIR . '/mod/hms/inc/accounts.php');
-            Current_User::loginUser(HMS_STUDENT_USER, HMS_STUDENT_PASS);
-            Current_User::getLogin();
-        }
+        
         */
         //        $username = strtolower(trim($_REQUEST['asu_username']));
 
@@ -74,6 +70,28 @@ class HMS_Login
         Current_User::getLogin();
         $_SESSION['asu_username'] = $_REQUEST['asu_username'];
         return ADMIN;
+    }
+
+    function fake_login($username){
+        if( !Current_User::isLogged() ) {
+            require_once(PHPWS_SOURCE_DIR . '/mod/hms/inc/accounts.php');
+            Current_User::loginUser(HMS_STUDENT_USER, HMS_STUDENT_PASS);
+            Current_User::getLogin();
+        }
+        HMS_Login::student_login($username);
+    }
+
+    function show_fake_login()
+    {
+        $form = new PHPWS_Form();
+        $form->addText('username');
+
+        $form->addHidden('module', 'hms');
+        $form->addHidden('action', 'fake_login');
+
+        $form->addSubmit('login_button', 'Login');
+
+        Layout::add(PHPWS_Template::process($form->getTemplate(), 'hms', 'misc/fake_login.tpl'));
     }
 };
 
