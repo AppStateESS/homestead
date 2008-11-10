@@ -142,9 +142,11 @@
 {END_FORM}
 </div>
 <!-- BEGIN notes -->
+<center>
 <h1>Recent Notes</h1>
 [<a id=add_note>Add a note</a>]
 {NOTE_PAGER}
 <h1>Student Log</h1>
 {LOG_PAGER}
+</center>
 <!-- END notes -->

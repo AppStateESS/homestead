@@ -236,5 +236,20 @@ class HMS_Email{
         HMS_Email::send_template_message($to . '@appstate.edu', '[Testing] Housing Assignment Notice!', 'email/assignment_notice.tpl', $tpl);
     }
 
+    function send_roommate_confirmation($to, $name, $roomie){
+        $tpl = array();
+
+        if($name == null){
+            PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+            $tpl['NAME'] = HMS_SOAP::get_full_name($username);
+        } else {
+            $tpl['NAME']   = $name;
+        }
+
+        $tpl['ROOMIE'] = $roomie;
+
+        HMS_Email::send_template_message($to . '@appstate.edu', '[Testing] Roommate Confirmation!', 'email/roommate_confirmation.tpl', $tpl);
+    }
+
 } // End HMS_Email class
 ?>
