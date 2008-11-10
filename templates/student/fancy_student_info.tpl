@@ -94,6 +94,12 @@
                 <td>
                 <div id="housing_status">
                 <table>
+                    <!-- BEGIN application_term -->
+                    <tr>
+                        <th>Application Term:</th>
+                        <td>{APPLICATION_TERM} ({HUMAN_PARSEABLE_APPLICATION_TERM})</td>
+                    </tr>
+                    <!-- END application_term -->
                     <tr>
                         <th>Have Application:</th>
                         <td>{APPLICATION_RECEIVED}  {APPLICATION}
