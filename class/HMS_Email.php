@@ -223,11 +223,15 @@ class HMS_Email{
         HMS_Email::send_email(HMS_Email::get_tech_contacts(), NULL, "HMS Lottery results: $status", $log);
     }
 
-    function send_assignment_email($to, $name, $location, $roommates){
+    function send_assignment_email($to, $name, $location, $roommates, $phone, $movein_time, $type){
         $tpl = array();
 
-        $tpl['NAME']        = $name;
-        $tpl['LOCATION']    = $location;
+        $tpl['NAME']         = $name;
+        $tpl['LOCATION']     = $location;
+        $tpl['PHONE_NUMBER'] = $phone;
+        $tpl['MOVE_IN_TIME'] = $movein_time;
+        $tpl['TYPE']         = ($type == TYPE_CONTINUING ? 'RETURNING STUDENTS ONLY' : 'FRESHMAN & TRANSFER ONLY');
+        $tpl['DATE']         = strftime("%B %d, %Y");
 
         foreach($roommates as $roommate){
             $tpl['roommates'][] = array('ROOMMATE' => $roommate);

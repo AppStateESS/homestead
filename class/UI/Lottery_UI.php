@@ -367,13 +367,13 @@ class Lottery_UI {
 
             // We list the room dispite whether it's actually available to choose or not,
             // so decide whether to "gray out" this row in the room list or not
-            if($room->gender_type != HMS_SOAP::get_gender($_SESSION['asu_username'], TRUE) ||
-                $num_avail_beds     == 0 ||
-                $room->is_reserved  == 1 ||
-                $room->is_online    == 0 ||
-                $room->private_room == 1 ||
-                $room->ra_room      == 1 ||
-                $room->is_overflow  == 1){
+            if($room->gender_type != HMS_SOAP::get_gender($_SESSION['asu_username'], TRUE) 
+                || $num_avail_beds     == 0 
+                || $room->is_reserved  == 1 
+                || $room->is_online    == 0 
+                || $room->private_room == 1 
+                || $room->ra_room      == 1 
+                || $room->is_overflow  == 1){
                     // Show a grayed out row and no link
                     $row['ROOM_NUM']        = $room->room_number;
                     $row['ROW_TEXT_COLOR']  = 'grey';

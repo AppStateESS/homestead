@@ -608,6 +608,9 @@ class HMS_Letter
         }
 
         PHPWS_Core::initModClass('hms', 'HMS_Email.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Movein_Time.php');
         foreach($result as $assignment){
             //get the students real name from their asu_username
             PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
@@ -618,6 +621,26 @@ class HMS_Letter
             PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
             $bed = &new HMS_Bed($assignment['bed_id']);
             $location = $bed->where_am_i();
+            $phone    = $bed->phone_number;
+
+            //get the movein time for the student
+            $type = HMS_SOAP::get_student_type($assignment['asu_username'], HMS_Term::get_selected_term());
+
+            $assgmnt = HMS_Assignment::get_assignment($assignment['asu_username'], HMS_Term::get_selected_term());
+            
+            if($type == TYPE_CONTINUING){
+                $movein_time_id = $assgmnt->get_rt_movein_time_id();
+            }else{
+                $movein_time_id = $assgmnt->get_ft_movein_time_id();
+            }
+
+            if($movein_time_id == NULL){
+                //test($assignment, 1); // Will only happen if there's no move-in time set for the floor,student type
+                $movein_time = "Unknown";
+            }else{
+                $movein_time_obj = new HMS_Movein_Time($movein_time_id);
+                $movein_time = $movein_time_obj->get_formatted_begin_end();
+            }
 
             //get the list of roommates
             $roommates = array();
@@ -655,7 +678,7 @@ class HMS_Letter
             }
 
             // Send the email
-            HMS_Email::send_assignment_email($assignment['asu_username'], $name, $location, $roommates);
+            HMS_Email::send_assignment_email($assignment['asu_username'], $name, $location, $roommates, $phone, $movein_time, $type);
 
             // Mark the student as having received an email
             $db->reset();
