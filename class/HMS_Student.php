@@ -529,9 +529,9 @@ class HMS_Student {
         /****************
          * Phone number *
          ****************/
-        
-        $tpl['PHONE_AC'] = $student_info->phone[0]->area_code;
-        $tpl['PHONE_NUMBER'] = $student_info->phone[0]->number;
+        foreach($student_info->phone as $phone_number){
+            $tpl['phone_number'][] = array('NUMBER' =>'('.$phone_number->area_code.') '.$phone_number->number . (isset($phone_number->ext) ? ' ext. '.$phone_number->ext : ''));
+        }
         $tpl['USERNAME'] = $username;
 
         $tpl['TITLE'] = "Search Results - " . HMS_Term::term_to_text(HMS_Term::get_selected_term(),TRUE);

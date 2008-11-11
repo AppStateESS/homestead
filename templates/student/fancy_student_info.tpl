@@ -35,10 +35,11 @@
                         <th>Class</th>
                         <td>{CLASS}</td>
                     </tr>
-                    
                     <tr>
                         <th>Phone Number</th>
-                        <td>({PHONE_AC}) {PHONE_NUMBER}</td>
+                    <!-- BEGIN phone_number -->
+                        <td>{NUMBER}</td>
+                    <!-- END phone_number -->
                     </tr>
                     
                     <tr>
