@@ -222,10 +222,17 @@ class HMS_Lottery {
             $output[] = "Batch size limited to $invites_to_send";
         }
 
-        $output[] = "Sending $invites_to_send new invites";
+        $output[] = "Sending up to $invites_to_send new invites";
+
+        if($invites_to_send <= 0){
+            $output[] = "Cannout send any new entries, quitting.";
+            HMS_Lottery::lottery_complete('SUCCESS', $output);
+        }
 
         # Count the number of remaining entries
         $remaining_entries = HMS_Lottery::count_remaining_entries($term);
+
+        $output[] = "$remaining_entries lottery entries remaining";
 
         if($remaining_entries === FALSE){
             $output[] = 'Error counting outstanding lottery entires, quitting.';
@@ -249,7 +256,7 @@ class HMS_Lottery {
         for($i=0; $i < $invites_to_send; $i++){
 
             # Make sure we have students left who need to win
-            if($num_remaining_entries == 0){
+            if($remaining_entries == 0){
                 $output[] = 'No entries remaining, quitting!';
                 HMS_Lottery::lottery_complete('SUCCESS', $output, TRUE);
             }
@@ -308,6 +315,7 @@ class HMS_Lottery {
                 $winning_row = HMS_Lottery::choose_winner($gender, $class, $term);
             }
 
+            $winning_username = $winning_row['asu_username'];
             $output[] = "Inviting $winning_username";
 
             # Update the winning student's invite
@@ -322,9 +330,9 @@ class HMS_Lottery {
 
             # Update the counts of male/female invites available
             if(!$co_ed_only){
-                if($winning_student['gender'] == MALE){
+                if($winning_row['gender'] == MALE){
                     $male_invites_avail--;
-                }else if($winning_student['gender'] == FEMALE){
+                }else if($winning_row['gender'] == FEMALE){
                     $female_invites_avail--;
                 }
             }
@@ -347,6 +355,8 @@ class HMS_Lottery {
     function choose_winner($gender, $class, $term)
     {
         $db = new PHPWS_DB('hms_lottery_entry');
+
+        $term_year = HMS_Term::get_term_year($term);
 
         $winning_student = NULL;
 
@@ -383,6 +393,7 @@ class HMS_Lottery {
         }
 
         # Only select students who either haven't been invited, or their invite has expired
+        $now = mktime();
         $db->addWhere('invite_expires_on', $now, '<', 'OR', 'expiration_group');
         $db->addWhere('invite_expires_on', NULL, 'IS NULL', 'OR', 'expiration_group');
 

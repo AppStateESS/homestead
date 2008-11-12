@@ -582,6 +582,7 @@ class HMS_Residence_Hall extends HMS_Item
 
     function count_lottery_used_rooms()
     {
+        $now = mktime();
 
         $query = "SELECT count(hms_room.*) FROM hms_room 
                        JOIN hms_floor ON hms_room.floor_id = hms_floor.id
