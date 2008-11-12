@@ -593,7 +593,7 @@ class HMS_Room extends HMS_Item
        $result = $room->save();
 
        if(!$result || PHPWS_Error::logIfError($result)){
-           return show_edit_room($room->id, NULL, 'Error: There was a problem saving the room. No changes were made. Please contact ESS.');
+           return HMS_Room::show_edit_room($room->id, NULL, 'Error: There was a problem saving the room. No changes were made. Please contact ESS.');
        }
 
        return HMS_Room::show_edit_room($room->id, 'Room updated successfully.');
