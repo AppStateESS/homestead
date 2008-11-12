@@ -108,13 +108,14 @@
             </tr>
             <!-- END special_needs_text -->
             <tr>
-                <td>Do you have any special needs?</td>
+                <td>Do you have any special needs? <br/ >
                 <!-- BEGIN special_need -->
-                <td>{SPECIAL_NEED}{SPECIAL_NEED_LABEL}</td>
+                {SPECIAL_NEED}{SPECIAL_NEED_LABEL} <br />
                 <!-- END special_need -->
                 <!-- BEGIN special_needs_result -->
-                <td>{SPECIAL_NEEDS_RESULT}</td>
+                {SPECIAL_NEEDS_RESULT} <br/ >
                 <!-- END special_needs_result -->
+                </td>
             </tr>
             <!-- BEGIN rlc_interest_1 -->
             <tr>

@@ -369,8 +369,10 @@ class Application_UI{
         $form->addHidden('preferred_bedtime',   $_REQUEST['preferred_bedtime']);
         $form->addHidden('room_condition',      $_REQUEST['room_condition']);
         $form->addHidden('rlc_interest',        $_REQUEST['rlc_interest']);
-        $form->addHidden('special_need',        $_REQUEST['special_need']); // pass it on, just in case the user needs to redo their application
-        $form->addHidden('special_needs',       $_REQUEST['special_needs']);
+        if(isset($_REQUEST['special_need']))
+            $form->addHidden('special_need',        $_REQUEST['special_need']); // pass it on, just in case the user needs to redo their application
+        if(isset($_REQUEST['special_need']))
+            $form->addHidden('special_needs',       $_REQUEST['special_needs']);
         $form->addHidden('terms',               $values);
 
         if( isset($_REQUEST['area_code']) && isset($_REQUEST['exchange'])
