@@ -655,7 +655,7 @@ class HMS_Room extends HMS_Item
         PHPWS_Core::initModClass('hms','HMS_Floor.php');
         PHPWS_Core::initModClass('hms','HMS_Residence_Hall.php');
 
-       if(!Current_User::allow('hms','room_structure') {
+       if(!Current_User::allow('hms','room_structure')){
            return HMS_Floor::show_edit_floor($_REQUEST['floor_id'], NULL, 'Error: You do not have permission to add rooms');
        }
        $floor = new HMS_Floor($_REQUEST['floor_id']);
