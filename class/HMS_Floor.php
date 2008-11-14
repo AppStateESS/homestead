@@ -103,7 +103,7 @@ class HMS_Floor extends HMS_Item
             if($this->loadSuites() === FALSE) {
                 // There was an error loading the suites
                 echo "error loading suites";
-                test($this);
+                //test($this);
                 return false;
             }
         }
@@ -118,8 +118,8 @@ class HMS_Floor extends HMS_Item
                 $result = $suite->copy($to_term, $new_floor->id, $assignments);
                 if(!$result){
                     // What if bad result?
-                    test($result);
-                    test($suite);
+                    //test($result);
+                    //test($suite);
                     return false;
                     echo "error copying suite";
                 }
@@ -134,7 +134,7 @@ class HMS_Floor extends HMS_Item
             if(!$result) {
                 // There was an error loading the rooms
                 echo "There was an error loading the rooms";
-                test($this);
+                //test($this);
                 return false;
             }else{
                 //echo "rooms loaded successfully<br>";
@@ -653,8 +653,12 @@ class HMS_Floor extends HMS_Item
                 break;
             case 'edit_floor':
                 return HMS_Floor::edit_floor();
-            default:
-                echo "Undefined room op: {$_REQUEST['op']}";
+            case 'show_add_room':
+                PHPWS_Core::initModClass('hms','HMS_Room.php');
+                return HMS_Room::show_add_room($_REQUEST['hall_id'],$_REQUEST['floor_id']);
+            case 'delete_room':
+                return HMS_Floor::delete_room();default:
+                echo "Undefined floor op: {$_REQUEST['op']}";
                 break;
         }
     }
@@ -755,6 +759,18 @@ class HMS_Floor extends HMS_Item
        return HMS_Floor::show_edit_floor($floor->id, 'Floor update successfully.');
     }
 
+    function delete_room() {
+        PHPWS_Core::initModClass('hms','HMS_Room.php');
+
+        if(isset($_REQUEST['room'])) {
+            if(HMS_Room::delete_room($_REQUEST['room'])) {
+                return HMS_Floor::show_edit_floor($_REQUEST['floor'],'Room Successfully Deleted');
+            }else{
+                return HMS_Floor::show_edit_floor($_REQUEST['floor'],'Room Could Not Be Deleted');
+            }
+        }
+        return HMS_Floor::show_edit_floor($_REQUEST['floor']);
+    }
     /**************
      * UI Methods *
      *************/
@@ -923,6 +939,10 @@ class HMS_Floor extends HMS_Item
 
         $tpl['ROOM_PAGER'] = HMS_Room::room_pager_by_floor($floor->id);
         
+        if(Current_User::allow('hms','room_structure')) {
+            $tpl['ADD_LINK'] = PHPWS_Text::secureLink('Add Room','hms',array('type'=>'floor','op'=>'show_add_room','floor_id'=>$floor->id,'hall_id'=>$hall->id));
+        }
+
         if(isset($success)){
             $tpl['SUCCESS_MSG'] = $success;
         }

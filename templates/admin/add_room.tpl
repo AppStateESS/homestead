@@ -1,87 +1,70 @@
-{START_FORM}
 <div class="hms">
   <div class="box">
-    <div class="box-title"> <h1>{TITLE}</h1> </div>
+    <div class="{TITLE_CLASS}"> <h1>{TITLE}</h1> </div>
     <div class="box-content">
         <!-- BEGIN error_msg -->
-        <span class="error">{ERROR}</span><br/>
+        <span class="error">{ERROR_MSG}<br /></span>
         <!-- END error_msg -->
-        <br />
-        <b>You are adding room {ROOM_NUMBER} to {HALL_NAME}, floor {FLOOR_NUMBER}.</b><br />
-        <br />
+        
+        <!-- BEGIN success_msg -->
+        <span class="success">{SUCCESS_MSG}<br /></span>
+        <!-- END success_msg -->
+        <h2>Room Properties</h2>
+        {START_FORM}
         <table>
             <tr>
-                <th>Name of the Hall: </th><td>{HALL_NAME}</td>
+                <th>Hall Name:</th><td align="left">{HALL_NAME}</td>
             </tr>
             <tr>
-                <th>Floor number: </th><td>{FLOOR_NUMBER}</td>
+                <th>Floor: </th><td align="left">{FLOOR_NUMBER}</td>
             </tr>
             <tr>
-                <th>Room Number: </th><td>{ROOM_NUMBER}</td>
-            </tr>
-            <tr>
-                <th>Number bedrooms per room:</th><td>{BEDROOMS_PER_ROOM}</td>
-            </tr>
-            <tr>
-                <th>Number beds per bedroom:</th><td>{BEDS_PER_BEDROOM}</td>
+                <th>Room Number: </th><td align="left">{ROOM_NUMBER}</td>
             </tr>
             <tr>
                 <th>Pricing Tier: </th><td>{PRICING_TIER}</td>
             </tr>
             <tr>
-                <th>Select a gender type: </th><td>{GENDER_TYPE_1} {GENDER_TYPE_1_LABEL}</td>
+                <th>Gender type: </th>
+                <!-- BEGIN gender_message -->
+                <td>{GENDER_MESSAGE}</td>
+                <td>{GENDER_REASON}</td>
+                <!-- END gender_message -->
+                <!-- BEGIN gender_radio_buttons -->
+                <td align="left">{GENDER_TYPE}</td>
+                <!-- END gender_radio_button -->
             </tr>
             <tr>
-                <th></th><td>{GENDER_TYPE_2} {GENDER_TYPE_2_LABEL}</td>
+                <th>Default Gender: </th>
+                <td>{DEFAULT_GENDER}</td>
             </tr>
             <tr>
-                <th></th><td>{GENDER_TYPE_3} {GENDER_TYPE_3_LABEL}</td>
+                <th>Is online: </th>
+                <td align="left">{IS_ONLINE}</td> 
             </tr>
             <tr>
-                <th>Reserved for freshmen: </th><td>{FRESHMAN_RESERVED_1} {FRESHMAN_RESERVED_1_LABEL}</td>
+                <th>Is reserved: </th>
+                <td align="left">{IS_RESERVED} {IS_RESERVED_LABEL}</td>
             </tr>
             <tr>
-                <td></td><td>{FRESHMAN_RESERVED_2} {FRESHMAN_RESERVED_2_LABEL}</td>
+                <th>Reserved for RA: </th>
+                <td>{RA_ROOM} {RA_ROOM_LABEL}</td>
             </tr>
             <tr>
-                <th>Is this room online: </th><td>{IS_ONLINE_1} {IS_ONLINE_1_LABEL}</td>
+                <th>Private Room:</th>
+                <td>{PRIVATE_ROOM} {PRIVATE_ROOM_LABEL}</td>
             </tr>
             <tr>
-                <th></th><td>{IS_ONLINE_2} {IS_ONLINE_2_LABEL}</td>
+                <th>Is medical: </th>
+                <td align="left">{IS_MEDICAL} {IS_MEDICAL_LABEL}</td>
             </tr>
             <tr>
-                <th>Room is a medical room: </th><td>{IS_MEDICAL_1} {IS_MEDICAL_1_LABEL} </td>
-            </tr>
-            <tr>
-                <td></td><td>{IS_MEDICAL_2} {IS_MEDICAL_2_LABEL}</td>
-            </tr>
-            <tr>
-                <th>Room is reserved: </th><td>{IS_RESERVED_1} {IS_RESERVED_1_LABEL}</td>
-            </tr>
-            <tr>
-                <td></td><td>{IS_RESERVED_2} {IS_RESERVED_2_LABEL}</td>
-            </tr>
-             <tr>
-                <th>RA Room: </th><td>{RA_ROOM_1} {RA_ROOM_1_LABEL}</td>
-            </tr>
-            <tr>
-                <td></td><td>{RA_ROOM_2} {RA_ROOM_2_LABEL}</td>
-            </tr>
-            <tr>
-                <th>Room is private: </th><td>{PRIVATE_ROOM_1} {PRIVATE_ROOM_1_LABEL}</td>
-            </tr>
-            <tr>
-                <td></td><td>{PRIVATE_ROOM_2} {PRIVATE_ROOM_2_LABEL}</td>
-            </tr>
-            <tr>
-                <th>Room is a lobby: </th><td>{IS_LOBBY_1} {IS_LOBBY_1_LABEL}</td>
-            </tr>
-            <tr>
-                <td></td><td>{IS_LOBBY_2} {IS_LOBBY_2_LABEL}</td>
+                <th>Is an Overflow Room:</th>
+                <td>{IS_OVERFLOW} {IS_OVERFLOW_LABEL}</td>
             </tr>
         </table>
         {SUBMIT}
+        {END_FORM}
     </div>
   </div>
 </div>
-{END_FORM}

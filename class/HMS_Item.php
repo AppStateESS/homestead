@@ -49,6 +49,7 @@ class HMS_Item {
     {
         $db = new PHPWS_DB($this->_table);
         $db->addWhere('id', $this->id);
+        //$db->setTestMode();
         $result = $db->delete();
         if(!$result || PHPWS_Error::logIfError($result)){
             return $result;

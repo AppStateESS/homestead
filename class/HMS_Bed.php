@@ -51,7 +51,7 @@ class HMS_Bed extends HMS_Item {
             $result = $this->loadAssignment();
             if(PEAR::isError($result)){
                 //echo "error loading assignments<br>";
-                test($result);
+                //test($result);
                 return false;
             }
             
@@ -523,7 +523,7 @@ class HMS_Bed extends HMS_Item {
             $db->addOrder('random');
         }
 
-        $db->setTestMode();
+        //$db->setTestMode();
 
         if($banner) {
             $result = $db->select();

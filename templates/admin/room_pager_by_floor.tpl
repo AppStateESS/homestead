@@ -9,6 +9,7 @@
         <th>{MEDICAL_LABEL}</th>
         <th>{RESERVED_LABEL}</th>
         <th>{ONLINE_LABEL}</th>
+        <th>{DELETE_LABEL}</th>
     </tr>
     <!-- BEGIN empty_table -->
     <tr>
@@ -25,6 +26,7 @@
         <td>{IS_MEDICAL}</td>
         <td>{IS_RESERVED}</td>
         <td>{IS_ONLINE}</td>
+        <td>{DELETE}</td>
     </tr>
     <!-- END listrows -->
 </table>

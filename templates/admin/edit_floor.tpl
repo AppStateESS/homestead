@@ -55,6 +55,8 @@
         {END_FORM}
         <br /><br />
         {ROOM_PAGER}
+        <br />
+        {ADD_LINK}
     </div>
   </div>
 </div>

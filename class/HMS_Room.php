@@ -71,7 +71,49 @@ class HMS_Room extends HMS_Item
         return true;
     }
 
-    /*
+      /*
+     * Deletes a room and any beds in it.  Returns true
+     * if we're successful, false if not (or if there 
+     * is an assignment)
+     */
+    function delete_room($room_id)
+    {
+       // check that we're not about to do something stupid
+       if(!isset($room_id)) return false;
+
+       $room = new HMS_Room($room_id);
+
+       // make sure there isn't an assignment
+       if($room->get_number_of_assignees() != 0) {
+           return false;
+       }
+       
+       // delete any beds
+       if($room->loadBeds()) {
+           PHPWS_Core::initModClass('hms','HMS_Bed.php');
+           // remove any beds the room may have.
+           if(!empty($room->_beds)) { 
+               foreach($room->_beds as $bed) {
+                 if(!HMS_Bed::delete_bed($bed->id)) {
+                     return false;
+                 }
+               }
+           }
+       }
+
+       $result = $room->delete();
+
+       if(PEAR::isError($result)){
+           PHPWS_Error::log($result);
+           return false;
+       }
+
+       return true;
+    }
+
+
+
+   /*
      * Copies this room object to a new term, then calls copy on all
      * 'this' room's beds.
      *
@@ -496,11 +538,18 @@ class HMS_Room extends HMS_Item
                 break;
             case 'edit_room':
                 return HMS_Room::edit_room();
+            case 'add_room':
+                return HMS_Room::add_room();
+            case 'show_add_room':
+                return HMS_Room::show_add_room();
             default:
                 echo "undefied room op: {$_REQUEST['op']}";
                 break;
         }
     }
+
+
+
 
     function room_pager_by_floor($floor_id)
     {
@@ -547,6 +596,9 @@ class HMS_Room extends HMS_Item
         $tpl['IS_MEDICAL']   = $this->is_medical   ? 'Yes' : 'No';
         $tpl['IS_RESERVED']  = $this->is_reserved  ? 'Yes' : 'No';
         $tpl['IS_ONLINE']    = $this->is_online    ? 'Yes' : 'No';
+        if(Current_User::allow('hms','room_structure')) {
+            $tpl['DELETE']       = PHPWS_Text::secureLink('Delete', 'hms', array('type'=>'floor','op'=>'delete_room','room'=>$this->id,'floor'=>$this->floor_id));
+        }
 
         return $tpl;
     }
@@ -599,6 +651,45 @@ class HMS_Room extends HMS_Item
        return HMS_Room::show_edit_room($room->id, 'Room updated successfully.');
     }
     
+    function add_room() {
+        PHPWS_Core::initModClass('hms','HMS_Floor.php');
+        PHPWS_Core::initModClass('hms','HMS_Residence_Hall.php');
+
+       if(!Current_User::allow('hms','room_structure') {
+           return HMS_Floor::show_edit_floor($_REQUEST['floor_id'], NULL, 'Error: You do not have permission to add rooms');
+       }
+       $floor = new HMS_Floor($_REQUEST['floor_id']);
+       $room  = new HMS_Room();
+
+       # Grab all the input from the form and save the room
+       //Changed from radio buttons to checkboxes, ternary 
+       //prevents null since only 1 is defined as a return value
+       //test($_REQUEST['room_number']);
+       $room->floor_id       = $_REQUEST['floor_id'];
+       $room->hall_id        = $_REQUEST['hall_id'];
+       $room->room_number    = $_REQUEST['room_number'];
+       $room->pricing_tier   = $_REQUEST['pricing_tier'];
+       $room->gender_type    = $_REQUEST['gender_type'];
+       $room->default_gender = $_REQUEST['default_gender'];
+       $room->is_online      = isset($_REQUEST['is_online'])    ? 1 : 0;
+       $room->is_reserved    = isset($_REQUEST['is_reserved'])  ? 1 : 0;
+       $room->ra_room        = isset($_REQUEST['ra_room'])      ? 1 : 0;
+       $room->private_room   = isset($_REQUEST['private_room']) ? 1 : 0;
+       $room->is_medical     = isset($_REQUEST['is_medical'])   ? 1 : 0;
+       $room->is_overflow    = isset($_REQUEST['is_overflow'])  ? 1 : 0;
+       $room->term           = $floor->term;
+
+       $result = $room->save();
+
+       if(!$result || PHPWS_Error::logIfError($result)){
+           return HMS_Floor::show_edit_floor($room->floor_id, NULL, 'Error: There was a problem adding the room. No changes were made. Please contact ESS.');
+       }
+
+       return HMS_Floor::show_edit_floor($room->floor_id, 'Room added successfully.');
+
+
+    }
+
     function get_room_pager_by_suite($suite_id)
     {
         PHPWS_Core::initCoreClass('DBPager.php');
@@ -975,6 +1066,101 @@ class HMS_Room extends HMS_Item
         
         return PHPWS_Template::process($tpl, 'hms', 'admin/edit_room.tpl');   
     }
+
+function show_add_room($hall_id = NULL, $floor_id = NULL) {
+
+        # include what we need
+        PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Suite.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Pricing_Tier.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+
+
+        # Setup the title and color of the title bar
+        $tpl['TITLE']       = 'Add Room';
+        $tpl['TITLE_CLASS'] = HMS_Util::get_title_class();
+        
+        # Check to make sure we have a floor and hall.
+        $floor = new HMS_Floor($floor_id);
+        if(!$floor){
+            $tpl['ERROR_MSG'] = 'There was an error getting the floor object. Please contact ESS.';
+            return PHPWS_Template::process($tpl, 'hms', 'admin/add_room.tpl');
+        }
+        
+        $hall = new HMS_Residence_Hall($hall_id);
+        if(!$hall){
+            $tpl['ERROR_MSG'] = 'There was an error getting the hall object. Please contact ESS.';
+            return PHPWS_Template::process($tpl, 'hms', 'admin/add_room.tpl');
+        }
+
+        # Check Permissions
+        if(!Current_User::allow('hms','room_structure')) {
+            HMS_Floor::show_edit_floor($floor_id,NULL,'You do not have permission to add rooms.');
+        }
+
+        $tpl['HALL_NAME']           = PHPWS_Text::secureLink($hall->hall_name, 'hms', array('type'=>'hall', 'op'=>'show_edit_hall', 'hall'=>$hall->id));
+        $tpl['FLOOR_NUMBER']        = PHPWS_Text::secureLink($floor->floor_number, 'hms', array('type'=>'floor', 'op'=>'show_edit_floor', 'floor'=>$floor->id));
+
+        $form = new PHPWS_Form;
+        $form->addText('room_number');
+        $form->addHidden('hall_id',$hall->id);
+        $form->addHidden('floor_id',$floor->id);
+        
+        $form->addDropBox('pricing_tier', HMS_Pricing_Tier::get_pricing_tiers_array());
+
+        if($floor->gender_type == COED) {
+            $form->addDropBox('gender_type', array(FEMALE=>FEMALE_DESC, MALE=>MALE_DESC));
+            $form->setMatch('gender_type', HMS_Util::formatGender($floor->gender_type));
+        }else{
+            $form->addDropBox('gender_type', array($floor->gender_type=>HMS_Util::formatGender($floor->gender_type)));
+            $form->setReadOnly('gender_type', true);
+        }
+
+        //Always show the option to set the default gender
+        $defGenders = array(FEMALE => FEMALE_DESC, MALE => MALE_DESC);
+        if($floor->gender_type == MALE)     unset($defGenders[FEMALE]);
+        if($floor->gender_type == FEMALE)   unset($defGenders[MALE]);
+        $form->addDropBox('default_gender', $defGenders);
+        if($floor->gender_type != COED) {
+            $form->setMatch('default_gender', $floor->gender_type);
+        }
+
+        $form->addCheck('is_online', 1);
+
+        $form->addCheck('is_reserved', 1);
+        
+        $form->addCheck('ra_room', 1);
+        
+        $form->addCheck('private_room', 1);
+        
+        $form->addCheck('is_medical', 1);
+
+        $form->addCheck('is_overflow', 1);
+
+        $form->addHidden('module', 'hms');
+        $form->addHidden('type', 'room');
+        $form->addHidden('op', 'add_room');
+
+        $form->addSubmit('submit', 'Submit');
+        
+        if(isset($success)){
+            $tpl['SUCCESS_MSG'] = $success;
+        }
+
+        if(isset($error)){
+            $tpl['ERROR_MSG'] = $error;
+        }
+        
+        $form->mergeTemplate($tpl);
+        $tpl = $form->getTemplate();
+        
+        return PHPWS_Template::process($tpl, 'hms', 'admin/add_room.tpl');   
+    }
+ 
 }
 
 ?>
