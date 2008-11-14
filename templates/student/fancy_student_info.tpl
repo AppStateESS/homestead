@@ -1,7 +1,8 @@
 <div class="hms">
   <div class="box">
     <div class="box-content">
-        <h1>{FIRST_NAME} {MIDDLE_NAME} {LAST_NAME} -- {BANNER_ID}</h1><h2>Login as this student [ {LOGIN_AS_STUDENT} ]</h2>
+        <h1>{FIRST_NAME} {MIDDLE_NAME} {LAST_NAME} -- {BANNER_ID} -- {TERM}</h1>
+        <h2>Login as this student [ {LOGIN_AS_STUDENT} ]</h2>
         <br>
         <table>
             <tr>

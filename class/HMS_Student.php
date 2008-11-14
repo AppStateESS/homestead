@@ -442,6 +442,9 @@ class HMS_Student {
         $tpl['FIRST_NAME']  = $student_info->first_name;
         $tpl['MIDDLE_NAME'] = $student_info->middle_name;
         $tpl['LAST_NAME']   = $student_info->last_name;
+
+        $selected_term = HMS_Term::term_to_text(HMS_Term::get_selected_term());
+        $tpl['TERM'] = $selected_term['term'] . ' ' . $selected_term['year'];
         
         if($student_info->gender == 'F') {
             $tpl['GENDER'] = "Female";
