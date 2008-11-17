@@ -504,6 +504,9 @@ class Application_UI{
                 $tpl['RLC_LINK'] = PHPWS_Text::secureLink(_('Unique Housing Options Application'), 'hms', array('type'=>'student', 'op'=>'show_rlc_application_form'));
             }
             
+            PHPWS_Core::initModClass('hms', 'HMS_Email.php');
+            HMS_Email::send_hms_application_confirmation($_SESSION['asu_username'], null);
+
             return PHPWS_Template::process($tpl, 'hms', 'student/student_application_thankyou.tpl');
         }
 

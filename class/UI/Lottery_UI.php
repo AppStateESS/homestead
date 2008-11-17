@@ -240,6 +240,8 @@ class Lottery_UI {
                 HMS_Activity_Log::log_activity($roomie, ACTIVITY_LOTTERY_SIGNUP_INVITE, $_SESSION['asu_username']); // log that we sent this invite
             }
         }
+
+        HMS_Email::send_lottery_application_confirmation($_SESSION['asu_username'], null);
         
         return PHPWS_Template::process($tpl, 'hms', 'student/lottery_signup_thankyou.tpl');
     }

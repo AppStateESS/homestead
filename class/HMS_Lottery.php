@@ -640,11 +640,11 @@ class HMS_Lottery {
         # Actually make the assignment
         $assign_result = HMS_Assignment::assign_student($username, NULL, $invite['bed_id'], $meal_plan, 'Confirmed roommate invite', TRUE);
         if($assign_result != E_SUCCESS){
-            HMS_Email::send_roommate_confirmation($username, null, $invite['requestor']);
             return $assign_result;
         }
 
         # return successfully
+        HMS_Email::send_roommate_confirmation($username, null, $invite['requestor']);
         return E_SUCCESS;
     }
 
