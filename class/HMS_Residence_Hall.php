@@ -595,6 +595,14 @@ class HMS_Residence_Hall extends HMS_Item
                        WHERE (hms_bed.id IN (SELECT bed_id FROM hms_lottery_reservation WHERE term = {$this->term} AND expires_on > $now)
                        OR hms_bed.id IN (SELECT bed_id FROM hms_assignment WHERE term = {$this->term} and lottery = 1))
                        AND hms_residence_hall.id = {$this->id})";
+
+        $used_rooms = PHPWS_DB::getOne($query);
+        if(PEAR::isError($used_rooms)){
+            PHPWS_Error::log($used_rooms);
+            return FALSE;
+        }
+
+        return $used_rooms;
     }
 
     function count_lottery_full_rooms()

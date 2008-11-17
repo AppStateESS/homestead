@@ -293,6 +293,8 @@ class Lottery_UI {
         PHPWS_Core::initModClass('filecabinet', 'Cabinet.php');
 
         $hall = new HMS_Residence_Hall($_REQUEST['residence_hall']);
+        $hall_rooms_for_lottery = $hall->rooms_for_lottery;
+        $hall_rooms_used        = $hall->count_lottery_used_rooms();
 
         $tpl['HALL']            = $hall->hall_name;
 
@@ -317,11 +319,21 @@ class Lottery_UI {
         $floors = $hall->get_floors();
 
         foreach($floors as $floor){
+            $used_rooms = $floor->count_lottery_used_rooms();
+            $full_rooms = $floor->count_lottery_full_rooms();
+
             $row = array();
 
             if($floor->count_avail_lottery_rooms(HMS_SOAP::get_gender($_SESSION['asu_username'], TRUE)) <= 0 &&
                $floor->count_avail_lottery_rooms(COED) <= 0){
-                $row['FLOOR']           = $floor->floor_number;
+                $row['FLOOR']           = HMS_Util::ordinal($floor->floor_number);
+                $row['ROW_TEXT_COLOR']  = 'grey';
+                $tpl['floor_list'][]    = $row;
+                continue;
+            }
+
+            if($hall_rooms_used >= $hall_rooms_for_lottery && $full_rooms >= $used_rooms){
+                $row['FLOOR']           = HMS_Util::ordinal($floor->floor_number);
                 $row['ROW_TEXT_COLOR']  = 'grey';
                 $tpl['floor_list'][]    = $row;
                 continue;
@@ -332,13 +344,6 @@ class Lottery_UI {
             $tpl['floor_list'][]    = $row;
         }
         
-        //$form->addHidden('module', 'hms');
-        //$form->addHidden('type', 'student');
-        //$form->addHidden('op', 'lottery_select_room');
-
-        //$form->addSubmit('submit', 'Continue');
-        //$form->mergeTemplate($tpl);
-
         return PHPWS_Template::process($tpl, 'hms', 'student/lottery_choose_floor.tpl');
     }
 
@@ -347,7 +352,11 @@ class Lottery_UI {
         PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
 
-        $floor = new HMS_Floor($_REQUEST['floor']);
+        $floor  = new HMS_Floor($_REQUEST['floor']);
+        $hall   = $floor->get_parent();
+
+        $full_rooms = $hall->count_lottery_full_rooms();
+        $used_rooms = $hall->count_lottery_used_rooms();
 
         $tpl['HALL_FLOOR'] = $floor->where_am_i();
 
@@ -356,14 +365,15 @@ class Lottery_UI {
             $tpl['FLOOR_PLAN_IMAGE'] = $file->parentLinked();
         }
 
-        $rooms = $floor->get_avail_lottery_rooms(HMS_SOAP::get_gender($_SESSION['asu_username'], TRUE));
+        $rooms = $floor->get_rooms();
 
         $tpl['room_list'] = array();
 
         foreach($rooms as $room){
             $row = array();
 
-            $num_avail_beds = $room->count_avail_lottery_beds(); 
+            $num_avail_beds = $room->count_avail_lottery_beds();
+            $total_beds     = $room->get_number_of_beds();
 
             // We list the room dispite whether it's actually available to choose or not,
             // so decide whether to "gray out" this row in the room list or not
@@ -374,16 +384,25 @@ class Lottery_UI {
                 || $room->private_room == 1 
                 || $room->ra_room      == 1 
                 || $room->is_overflow  == 1){
-                    // Show a grayed out row and no link
-                    $row['ROOM_NUM']        = $room->room_number;
-                    $row['ROW_TEXT_COLOR']  = 'grey';
-                    $row['AVAIL_BEDS']      = 0; // show 0 available beds since this room is unavailable to the user
-                }else{
-                    // Show the room number as a link
-                    $row['ROOM_NUM']        = PHPWS_Text::secureLink($room->room_number, 'hms', array('type'=>'student', 'op'=>'lottery_select_roommates', 'room'=>$room->id));
-                    $row['ROW_TEXT_COLOR']  = 'black';
-                    $row['AVAIL_BEDS']      = $num_avail_beds;
-                }
+        
+                // Show a grayed out row and no link
+                $row['ROOM_NUM']        = $room->room_number;
+                $row['ROW_TEXT_COLOR']  = 'grey';
+                $row['AVAIL_BEDS']      = 0; // show 0 available beds since this room is unavailable to the user
+            
+            }else if($used_rooms >= $hall->rooms_for_lottery && $num_avail_beds == $total_beds){
+                // Check for if we've reached the room cap, and this room isn't partially used
+                // Show a grayed out row and no link
+                $row['ROOM_NUM']        = $room->room_number;
+                $row['ROW_TEXT_COLOR']  = 'grey';
+                $row['AVAIL_BEDS']      = 0; // show 0 available beds since this room is unavailable to the user
+
+            }else{
+                // Show the room number as a link
+                $row['ROOM_NUM']        = PHPWS_Text::secureLink($room->room_number, 'hms', array('type'=>'student', 'op'=>'lottery_select_roommates', 'room'=>$room->id));
+                $row['ROW_TEXT_COLOR']  = 'black';
+                $row['AVAIL_BEDS']      = $num_avail_beds;
+            }
 
             $row['NUM_BEDS']    = $room->get_number_of_beds();
 

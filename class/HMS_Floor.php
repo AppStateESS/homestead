@@ -631,6 +631,53 @@ class HMS_Floor extends HMS_Item
         return $output_list;
     }
 
+    function count_lottery_used_rooms()
+    {
+        $now = mktime();
+
+        $query = "SELECT count(hms_room.*) FROM hms_room 
+                       JOIN hms_floor ON hms_room.floor_id = hms_floor.id
+                       AND hms_floor.id = {$this->id} AND
+                       hms_room.id IN (SELECT DISTINCT hms_room.id FROM hms_room
+                       JOIN hms_bed ON hms_bed.room_id = hms_room.id
+                       JOIN hms_floor ON hms_room.floor_id = hms_floor.id
+                       WHERE (hms_bed.id IN (SELECT bed_id FROM hms_lottery_reservation WHERE term = {$this->term} AND expires_on > $now)
+                       OR hms_bed.id IN (SELECT bed_id FROM hms_assignment WHERE term = {$this->term} and lottery = 1))
+                       AND hms_floor.id = {$this->id})";
+
+        $used_rooms = PHPWS_DB::getOne($query);
+        if(PEAR::isError($used_rooms)){
+            PHPWS_Error::log($used_rooms);
+            return FALSE;
+        }
+
+        return $used_rooms;
+    }
+
+    function count_lottery_full_rooms()
+    {
+        $now = mktime();
+
+        # Get the number of rooms in this hall which have every bed either assigned or reserved through the lottery.
+        $query      = "SELECT count(hms_room.*) FROM hms_room 
+                       JOIN hms_floor ON hms_room.floor_id = hms_floor.id
+                       AND hms_floor.id = {$this->id} AND
+                       hms_room.id NOT IN (SELECT DISTINCT hms_room.id FROM hms_room
+                       JOIN hms_bed ON hms_bed.room_id = hms_room.id
+                       JOIN hms_floor ON hms_room.floor_id = hms_floor.id
+                       WHERE (hms_bed.id NOT IN (SELECT bed_id FROM hms_lottery_reservation WHERE term = {$this->term} AND expires_on > $now)
+                       AND hms_bed.id NOT IN (SELECT bed_id FROM hms_assignment WHERE term = {$this->term} and lottery = 1))
+                       AND hms_floor.id = {$this->id})";
+
+        $used_rooms = PHPWS_DB::getOne($query);
+        if(PEAR::isError($used_rooms)){
+            PHPWS_Error::log($used_rooms);
+            return FALSE;
+        }
+
+        return $used_rooms;
+    }
+
     /**
      * Main Method
      */
