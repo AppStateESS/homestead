@@ -297,17 +297,17 @@ class HMS_Lottery {
                 }else{
                     # Using a multi-phase lottery, so determine which phase we're in
                     #TODO: 'AND' these conditions with the number of invites for that class being greater than 0 to prevent infinite loops
-                    if($senior_invites_sent < $senior_max_invites){
+                    if($senior_invites_sent < $senior_max_invites && HMS_Lottery::count_remaining_entries_by_class($term, CLASS_SENIOR) > 0){
                         $class = CLASS_SENIOR;
-                    }elseif($junior_invites_sent < $jr_max_invits){
+                    }elseif($junior_invites_sent < $jr_max_invits && HMS_Lottery::count_remaining_entries_by_class($term, CLASS_JUNIOR) > 0){
                         // Choose a rising jr
                         $class = CLASS_JUNIOR;
-                    }elseif($soph_invites_sent < $soph_max_invites){
+                    }elseif($soph_invites_sent < $soph_max_invites && HMS_Lottery::count_remaining_entries_by_class($term, CLASS_SOPHOMORE) > 0){
                         // Choose a rising sophmore (summer 1 thru fall of the previous year, plus spring of the same year)
                         $class = CLASS_SOPHOMORE;
                     }else{
                         // If this ever happens, it means we reached our invite caps for all calsses before all the available lottery rooms were filled
-                        $output[] = "All invite caps (by class) reached, quitting.";
+                        $output[] = "All invite caps (by class) reached or out of students to invite, quitting.";
                         HMS_Lottery::lottery_complete('SUCCESS', $output); 
                     }
                 }
@@ -340,7 +340,7 @@ class HMS_Lottery {
             #TODO: need to increment the number of invites sent by class
 
             # Send them an invite
-            HMS_Email::send_lottery_invite($winning_username . '@appstate.edu', HMS_SOAP::get_name($winning_student), $expire_time, $year);
+            HMS_Email::send_lottery_invite($winning_username . '@appstate.edu', HMS_SOAP::get_name($winning_username), $expire_time, $year);
 
             # Log that the invite was sent
             HMS_Activity_Log::log_activity($winning_username, ACTIVITY_LOTTERY_INVITED, HMS_ADMIN_USER, 'Expires: ' . HMS_Util::get_long_date_time($expire_time));
@@ -514,6 +514,43 @@ class HMS_Lottery {
             $query .= 'AND application_term <= ' . ($term_year - 2) . '10';
         }
         
+        $result = PHPWS_DB::getOne($query);
+
+        if(PEAR::isError($result)){
+            PHPWS_Error::log($result);
+            return FALSE;
+        }else{
+            return $result;
+        }
+    }
+
+    function count_remaining_entries_by_class($term, $class)
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+        $now = mktime();
+        $term_year = HMS_Term::get_term_year($term);
+
+        $query = "SELECT count(*) FROM hms_lottery_entry
+                    LEFT OUTER JOIN (SELECT asu_username FROM hms_assignment WHERE term=$term) as foo ON hms_lottery_entry.asu_username = foo.asu_username
+                    WHERE (foo.asu_username IS NULL AND hms_lottery_entry.invite_expires_on < $now) OR (foo.asu_username IS NULL and hms_lottery_entry.invite_expires_on IS NULL)
+                    AND hms_lottery_entry.term = $term ";
+
+        if($class == CLASS_SOPHOMORE){
+            $query .= 'AND (application_term = ' . ($term_year - 1) . '20';
+            $query .= ' OR application_term = ' . ($term_year - 1) . '30';
+            $query .= ' OR application_term = ' . ($term_year - 1) . '40';
+            $query .= ' OR application_term = ' . ($term_year) . '10';
+            $query .= ')';
+        }else if($class == CLASS_JUNIOR){
+            $query .= 'AND (application_term = ' . ($term_year - 2) . '20';
+            $query .= ' OR application_term = ' . ($term_year - 2) . '30';
+            $query .= ' OR application_term = ' . ($term_year - 2) . '40';
+            $query .= ' OR application_term = ' . ($term_year - 1) . '10';
+            $query .= ')';
+        }else{
+            $query .= 'AND application_term <= ' . ($term_year - 2) . '10';
+        }
+
         $result = PHPWS_DB::getOne($query);
 
         if(PEAR::isError($result)){

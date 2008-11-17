@@ -613,14 +613,15 @@ class HMS_Residence_Hall extends HMS_Item
         $query      = "SELECT count(hms_room.*) FROM hms_room 
                        JOIN hms_floor ON hms_room.floor_id = hms_floor.id
                        JOIN hms_residence_hall ON hms_floor.residence_hall_id = hms_residence_hall.id
-                       AND hms_residence_hall.id = {$this->id} AND
+                       WHERE
+                       hms_residence_hall.id = {$this->id} AND
                        hms_room.id NOT IN (SELECT DISTINCT hms_room.id FROM hms_room
-                       JOIN hms_bed ON hms_bed.room_id = hms_room.id
-                       JOIN hms_floor ON hms_room.floor_id = hms_floor.id
-                       JOIN hms_residence_hall ON hms_floor.residence_hall_id = hms_residence_hall.id
-                       WHERE (hms_bed.id NOT IN (SELECT bed_id FROM hms_lottery_reservation WHERE term = {$this->term} AND expires_on > $now)
-                       AND hms_bed.id NOT IN (SELECT bed_id FROM hms_assignment WHERE term = {$this->term} and lottery = 1))
-                       AND hms_residence_hall.id = {$this->id})";
+                        JOIN hms_bed ON hms_bed.room_id = hms_room.id
+                        JOIN hms_floor ON hms_room.floor_id = hms_floor.id
+                        JOIN hms_residence_hall ON hms_floor.residence_hall_id = hms_residence_hall.id
+                        WHERE (hms_bed.id NOT IN (SELECT bed_id FROM hms_lottery_reservation WHERE term = {$this->term} AND expires_on > $now)
+                        AND hms_bed.id NOT IN (SELECT bed_id FROM hms_assignment WHERE term = {$this->term} and lottery = 1))
+                        AND hms_residence_hall.id = {$this->id})";
 
         $used_rooms = PHPWS_DB::getOne($query);
         if(PEAR::isError($used_rooms)){
