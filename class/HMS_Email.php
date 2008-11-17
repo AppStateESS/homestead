@@ -288,6 +288,24 @@ class HMS_Email{
 
         HMS_Email::send_template_message($to . '@appstate.edu', '[Testing] Lottery Application Confirmation!', 'email/application_confirmation.tpl', $tpl);
     }
+    
+    function send_lottery_assignment_confirmation($to, $name, $location)
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+        $tpl = array();
+
+        if($name == null){
+            PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+            $tpl['NAME'] = HMS_SOAP::get_full_name($to); //to is holding their asu_username
+        } else {
+            $tpl['NAME'] = $name;
+        }
+
+        $tpl['TERM']     = HMS_Term::term_to_text(HMS_Term::get_selected_term(), true);
+        $tpl['LOCATION'] = $location;
+
+        HMS_Email::send_template_message($to . '@appsatte.edu', '[Testing] Lottery Assignment Confirmation!', 'email/assignment_confirmation.tpl', $tpl);
+    }
 
 } // End HMS_Email class
 ?>

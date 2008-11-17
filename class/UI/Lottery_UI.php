@@ -772,6 +772,10 @@ class Lottery_UI {
 
         $tpl['SUCCESS_MSG'] = "Congratulations, you have been assigned to $hall_room. An email invite has been sent to each of your requested roommates.";
 
+        //Send a confirmation email
+        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
+        HMS_Email::send_lottery_assignment_confirmation($_SESSION['asu_username'], $hall->hall_name . ' ' . $room->room_number);
+
         return PHPWS_Template::process($tpl, 'hms', 'student/lottery_choose_room_thanks.tpl');
     }
 
