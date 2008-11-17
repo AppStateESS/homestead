@@ -3,6 +3,8 @@
     <div class="box-content">
         <h1>{FIRST_NAME} {MIDDLE_NAME} {LAST_NAME} -- {BANNER_ID} -- {TERM}</h1>
         <h2>Login as this student [ {LOGIN_AS_STUDENT} ]</h2>
+        <div class="success">{SUCCESS}</div>
+        <div class="error">{ERROR}</div>
         <br>
         <table>
             <tr>

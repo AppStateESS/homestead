@@ -72,8 +72,9 @@ class HMS_Student {
                 PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
                 PHPWS_Core::initModClass('hms', 'HMS_Term.php');
                 // TODO: Permission For This
-                $result = NULL;
-                $error  = NULL;
+                $result   = NULL;
+                $error    = NULL;
+                $succcess = NULL;
                 if(isset($_REQUEST['username'])) {
                     $result = HMS_SOAP::report_application_received($_REQUEST['username'], HMS_Term::get_selected_term());
                 } else {
@@ -82,9 +83,11 @@ class HMS_Student {
                 if(!is_null($result) && $result != 0) {
                     $error = 'Reporting Application: Banner Error: ' . $result;
                 } else {
-                    $error = 'Reporting Application: Successful';
+                    $success = 'Reporting Application: Successful';
+                    PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
+                    HMS_Activity_Log::log_activity($_REQUEST['username'], ACTIVITY_APPLICATION_REPORTED, HMS_Term::get_selected_term(), Current_User::getUsername());
                 }
-                return HMS_Student::get_matching_students($error);
+                return HMS_Student::get_matching_students($error, $success);
                 break;
             case 'get_matching_students':
                 return HMS_Student::get_matching_students();
@@ -383,7 +386,7 @@ class HMS_Student {
         return PHPWS_Template::process($tpl, 'hms', 'admin/get_single_username.tpl');
     }
 
-    function get_matching_students($error = NULL)
+    function get_matching_students($error = NULL, $success = NULL)
     {   
         if(!Current_User::allow('hms', 'search')){
             $tpl = array();
@@ -434,6 +437,9 @@ class HMS_Student {
 
         if(!is_null($error)) {
             $tpl['ERROR'] = $error;
+        }
+        if(!is_null($success)) {
+            $tpl['SUCCESS'] = $success;
         }
 
         $tpl['MENU_LINK']   = PHPWS_Text::secureLink(_('Return to Search'), 'hms', array('type'=>'student', 'op'=>'enter_student_search_data'));
@@ -569,37 +575,6 @@ class HMS_Student {
         /******************
          * Roommate Stuff *
          ******************/
-/*
-         PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
-         $roommates = HMS_Roommate::get_all_roommates($username, HMS_Term::get_selected_term());
-         if($student_info->student_type == TYPE_FRESHMEN){
-            if(empty($roommates)) {
-                $tpl['ROOMMATE'] = "This person has no roommates or roommate requests.<br />";
-            } else {
-                foreach($roommates as $roommate) {
-                    if($roommate->confirmed) {
-                        $mate = $roommate->get_other_guy($username);
-                        $user_link = PHPWS_Text::secureLink(HMS_SOAP::get_full_name($mate), 'hms',
-                            array('type'=>'student',
-                                  'op'=>'get_matching_students',
-                                  'username'=>$mate));
-                        $tpl['ROOMMATE'] .= "Confirmed roommates with $user_link<br />";
-                    } else {
-                        $mate = $roommate->get_other_guy($username);
-                        $user_link = PHPWS_Text::secureLink(HMS_SOAP::get_full_name($mate), 'hms',
-                            array('type'=>'student',
-                                  'op'=>'get_matching_students',
-                                  'username'=>$mate));
-                        if($roommate->requestor == $username) {
-                            $tpl['ROOMMATE'] .= "Awaiting approval from $user_link<br />";
-                        } else {
-                            $tpl['ROOMMATE'] .= "Request Pending from $user_link<br />";
-                        }
-                    }
-                }
-            }
-        } else {
-*/
             PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
             PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
             PHPWS_Core::initModClass('hms', 'HMS_Room.php');
