@@ -575,55 +575,41 @@ class HMS_Student {
         /******************
          * Roommate Stuff *
          ******************/
-            PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-            PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
-            PHPWS_Core::initModClass('hms', 'HMS_Room.php');
-            $assignment = HMS_Assignment::get_assignment($username);
-            $pending    = HMS_Roommate::get_unconfirmed_roommate($username);
-            $confirmed  = HMS_Roommate::get_confirmed_roommate($username);
-            
-            $tpl['ROOMMATE']           = "";
-            $tpl['REQUESTED_ROOMMATE'] = "";
-            
-            if(!empty($assignment)){
-                $room       = new HMS_Room($assignment->get_room_id());
-                $roommies   = $room->get_assignees();
+        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Room.php');
+        $assignment = HMS_Assignment::get_assignment($username);
+        $pending    = HMS_Roommate::get_unconfirmed_roommate($username);
+        $confirmed  = HMS_Roommate::get_confirmed_roommate($username);
 
-                if(!empty($confirmed)){
-                    if(sizeof($roommies > 1)){
-                        foreach($roommies as $roommie){
-                            if($roommie->asu_username != $username){
-                                if($student_info->student_type == TYPE_FRESHMEN 
-                                   && $roommie->asu_username == $confirmed->asu_username){
-                                    $tpl['ROOMMATE']            .= "<a href=index.php?module=hms&type=student&op=get_matching_students&username=$roommie->asu_username&tab=student_info>$roommie->asu_username</a><br />";
-                                    $tpl['REQUESTED_ROOMMATE']  .= "<tr><td></td><td>Student Requested ".$confirmed->asu_username."<a href=index.php?module=hms&type=roommate&op=show_confirmed_roommates&search=&pg=1&limit=10&pager_c_search=".$username.">Break this roommate group</a><td></tr>";
-                                } else {
-                                    $tpl['ROOMMATE']            .= "<a href=index.php?module=hms&type=student&op=get_matching_students&username=$roommie->asu_username&tab=student_info>$roommie->asu_username</a><br />"; 
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    foreach($roommies as $roommie){
-                        if($roommie->asu_username != $username)
-                            $tpl['ROOMMATE'] .= "<a href=index.php?module=hms&type=student&op=get_matching_students&username=$roommie->asu_username&tab=student_info>$roommie->asu_username</a><br />";
-                    }
-                }
+        $roommates = array();
 
-            } else {
-                if(empty($pending) && empty($confirmed)){
-                    $tpl['ROOMMATE'] .= "None";
-                    if($student_info->student_type == TYPE_FRESHMEN)
-                        $tpl['REQUESTED_ROOMMATE'] .= "[<a href=index.php?module=hms&type=roommate&op=show_admin_create_roommate_group>Pair this student</a>]";
-                } elseif(!empty($pending)){
-                    $tpl['ROOMMATE'] .= "Pending Requests: ".$pending;
-                }
+        if($assignment != NULL){
+            //get a list of assigned roommates
+            $assignments = $assignment->get_parent()->get_parent()->get_assignees();
+            foreach($assignments as $roomie){
+                if($roomie->asu_username != $username)
+                    $roommates[] = $roomie->asu_username;
             }
-            if(sizeof($tpl['REQUESTED_ROOMMATE']) == 0)
-                unset($tpl['REQUESTED_ROOMMATE']);
 
-//        }
-
+            if($pending != NULL && !in_array($pending, $roommates)){
+                $roommates[] = '' . $pending . '(Pending)';
+            } else if($confirmed != NULL && !in_array($confirmed, $roommates)){
+                $roommates[]      = $confirmed;
+            } 
+            
+            foreach($roommates as $roommate){
+                    $tpl['roommates'][] = array('ROOMMATE' => ''.HMS_Student::get_link($roommate,TRUE));
+            }
+        } else {
+            if($pending != NULL){
+                $tpl['roommates'] = array('ROOMMATE' => $pending);
+            } else if($confirmed != NULL){
+                $tpl['roommates'][] = array('ROOMMATE' => $confirmed);
+            } else {
+                $tpl['roommates'][] = array('ROOMMATE' => 'No pending or confirmed roommates');
+            }
+        }
 
         /**************
          * RLC Status *

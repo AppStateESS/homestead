@@ -114,7 +114,9 @@
                     </tr>
                     <tr>
                         <th>Roommate:</th>
+                        <!-- BEGIN roommates -->
                         <td>{ROOMMATE}</td>
+                        <!-- END roommates -->
                     </tr>
                     <!-- BEGIN requested_roommate -->
                     <tr>
