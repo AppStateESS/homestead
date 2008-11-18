@@ -23,8 +23,10 @@ class Lottery_UI {
             return PHPWS_Template::process($tpl, 'hms', 'student/lottery_already_entered.tpl');
         }
 
-
         $tpl = array();
+
+        $tpl['NAME'] = HMS_SOAP::get_name($_SESSION['asu_username']);
+
         $form = &new PHPWS_Form();
         if(isset($_REQUEST['roommate1'])){
             $form->addText('roommate1', $_REQUEST['roommate1']);
@@ -76,6 +78,21 @@ class Lottery_UI {
         # Make sure the agreed to terms checkbox was checked
         if(!isset($_REQUEST['terms_check'])){
             return Lottery_UI::show_lottery_signup('You must agree to the housing terms & conditions.');
+        }
+
+        # Make sure each of the user names is valid.
+        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+
+        if(isset($_REQUEST['roommate1']) && !HMS_SOAP::is_valid_student($_REQUEST['roommate1'])){
+            return Lottery_UI::lottery_signup("Error: '{$_REQUEST['roommate1']}' is not a valid ASU user name. Hint: Your roommate's user name is the first part of his/her email address.");
+        }
+
+        if(isset($_REQUEST['roommate2']) && !HMS_SOAP::is_valid_student($_REQUEST['roommate2'])){
+            return Lottery_UI::lottery_signup("Error: '{$_REQUEST['roommate2']}' is not a valid ASU user name. Hint: Your roommate's user name is the first part of his/her email address.");
+        }
+
+        if(isset($_REQUEST['roommate3']) && !HMS_SOAP::is_valid_student($_REQUEST['roommate3'])){
+            return Lottery_UI::lottery_signup("Error: '{$_REQUEST['roommate3']}' is not a valid ASU user name. Hint: Your roommate's user name is the first part of his/her email address.");
         }
 
         # Check for special needs
