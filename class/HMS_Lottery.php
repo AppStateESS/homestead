@@ -337,7 +337,17 @@ class HMS_Lottery {
                 }
             }
 
+            # Update the number of entries remaining
+            $remaining_entries--;
+
             #TODO: need to increment the number of invites sent by class
+            if($class == CLASS_SENIOR){
+                $senior_invites_sent++;
+            }else if($class == CLASS_JUNIOR){
+                $junior_invites_sent++;
+            }else if($class == CLASS_SOPHOMORE){
+                $soph_invites_sent++;
+            }
 
             # Send them an invite
             HMS_Email::send_lottery_invite($winning_username . '@appstate.edu', HMS_SOAP::get_name($winning_username), $expire_time, $year);
