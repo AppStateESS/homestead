@@ -299,7 +299,7 @@ class HMS_Lottery {
                     #TODO: 'AND' these conditions with the number of invites for that class being greater than 0 to prevent infinite loops
                     if($senior_invites_sent < $senior_max_invites && HMS_Lottery::count_remaining_entries_by_class($term, CLASS_SENIOR) > 0){
                         $class = CLASS_SENIOR;
-                    }elseif($junior_invites_sent < $jr_max_invits && HMS_Lottery::count_remaining_entries_by_class($term, CLASS_JUNIOR) > 0){
+                    }elseif($junior_invites_sent < $jr_max_invites && HMS_Lottery::count_remaining_entries_by_class($term, CLASS_JUNIOR) > 0){
                         // Choose a rising jr
                         $class = CLASS_JUNIOR;
                     }elseif($soph_invites_sent < $soph_max_invites && HMS_Lottery::count_remaining_entries_by_class($term, CLASS_SOPHOMORE) > 0){
