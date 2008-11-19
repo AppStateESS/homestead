@@ -283,7 +283,7 @@ class HMS_Admin
         if( Current_User::allow('hms', 'login_as_student') && (isset($_SESSION['login_as_student']) && $_SESSION['login_as_student'] == true) ) 
             $links[] = PHPWS_Text::secureLink(_('Logout of Student Session'), 'hms', array('op' => 'end_student_session'));
             
-        $links[] = PHPWS_Text::secureLink(_('Logout'), 'hms', array('module'=>'users', 'action'=>'logout'));
+        $links[] = PHPWS_Text::secureLink(_('Log Out'), 'users', array('action'=>'user', 'command'=>'logout'));
 
         MiniAdmin::add('hms', $links);
     }
