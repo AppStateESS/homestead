@@ -36,4 +36,6 @@ define('EMAIL_TEST_FLAG', true);
 ini_set('ERROR_REPORTING', E_ALL);
 ini_set('display_errors', 1);
 
+/* Memory limit */
+ini_set('memory_limit', '512M');
 ?>
