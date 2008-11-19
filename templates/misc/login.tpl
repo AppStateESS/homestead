@@ -12,7 +12,7 @@
     {COOKIE_WARNING}
     <!-- END cookie_warning -->
     <!-- BEGIN login -->
-    Please <a href="{LOGIN_LINK}">login</a> to continue. [ <a href="#">more information</a> ]
+    Please <a href="{LOGIN_LINK}">click here to login</a>. [ <a href="#">more information</a> ]
     <!-- END login -->
     <div style="font-size: 10px; color: grey">
     <p>
