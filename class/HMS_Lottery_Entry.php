@@ -32,7 +32,7 @@ class HMS_Lottery_Entry {
     # Lottery invite timestamp
     var $invite_expires_on;
 
-    function HMS_Lottery_Entry($asu_username = NULL, $term = NULL)
+    public function HMS_Lottery_Entry($asu_username = NULL, $term = NULL)
     {
         if(isset($asu_username)){
             $this->asu_username = $asu_username;
@@ -51,7 +51,7 @@ class HMS_Lottery_Entry {
         }
     }
 
-    function save()
+    public function save()
     {
         $db = new PHPWS_DB('hms_lottery_entry');
 
@@ -66,7 +66,7 @@ class HMS_Lottery_Entry {
         return true;
     }
 
-    function delete()
+    public function delete()
     {
         $db = new PHPWS_DB('hms_lottery_entry');
         $db->addWhere('id', $this->id);
@@ -91,7 +91,7 @@ class HMS_Lottery_Entry {
      *
      * @return boolean success - Returns true or error message
      */
-    function add_entry($asu_username, $physical_disability = false, 
+    public function add_entry($asu_username, $physical_disability = false, 
                         $psych_disability = false, $medical_need = false, 
                         $gender_need = false, $term = null, $application_term = null)
     {
@@ -136,7 +136,7 @@ class HMS_Lottery_Entry {
         return true;
     }
 
-    function parse_entry($request)
+    public function parse_entry($request)
     {
         if(isset($_REQUEST['asu_username']) && strlen($_REQUEST['asu_username']) > 0){
             $physical_disability = isset($_REQUEST['physical_disability']) ? true : false;
@@ -155,7 +155,7 @@ class HMS_Lottery_Entry {
      * Static helper methods *
      *************************/
      
-    function check_for_entry($asu_username, $term, $winning_only = FALSE)
+    public function check_for_entry($asu_username, $term, $winning_only = FALSE)
     {
         //test($asu_username);
         $db = &new PHPWS_DB('hms_lottery_entry');
@@ -190,7 +190,7 @@ class HMS_Lottery_Entry {
         }
     }
 
-    function get_entry($asu_username, $term)
+    public function get_entry($asu_username, $term)
     {
 
         $entry = new HMS_Lottery_Entry();
@@ -209,7 +209,7 @@ class HMS_Lottery_Entry {
         return $entry;
     }
 
-    function get_special_needs_interface()
+    public function get_special_needs_interface()
     {
         $tpl = array();
         if(isset($_REQUEST) && isset($_REQUEST['da_clear'])){
@@ -244,7 +244,7 @@ class HMS_Lottery_Entry {
         return $pager->get();
     }
 
-    function get_row_tags(){
+    public function get_row_tags(){
         PHPWS_Core::initModClass('hms', 'HMS_Student.php');
         $template['ASU_USERNAME']        = HMS_Student::get_link($this->asu_username, true);
         $template['PHYSICAL_DISABILITY'] = $this->physical_disability == 1 ? 'Yes' : 'No';

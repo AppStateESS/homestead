@@ -19,7 +19,7 @@ class HMS_RLC_Assignment{
      * Constructor
      *
      */
-    function HMS_RLC_Assignment($id = NULL)
+    public function HMS_RLC_Assignment($id = NULL)
     {
         /*
         if(isset($user_id)){
@@ -42,7 +42,7 @@ class HMS_RLC_Assignment{
         }
     }
 
-    function init()
+    public function init()
     {
         $db = &new PHPWS_DB('hms_learning_community_assignment');
 
@@ -68,7 +68,7 @@ class HMS_RLC_Assignment{
         return $result;
     }
 
-    function delete()
+    public function delete()
     {
         if( !Current_User::allow('hms', 'learning_community_maintenance') ){
             $tpl = array();
@@ -97,7 +97,7 @@ class HMS_RLC_Assignment{
      * exists.  If an assignment does exist, a db object containing that row is returned.  In the case of a db
      * error, a PEAR error object is returned.
      */
-    function check_for_assignment($asu_username = NULL, $application_term = NULL)
+    public function check_for_assignment($asu_username = NULL, $application_term = NULL)
     {
         $db = &new PHPWS_DB('hms_learning_community_assignment');
 
@@ -132,7 +132,7 @@ class HMS_RLC_Assignment{
     /**
      * Saves the current Assignment object to the database.
      */
-    function save()
+    public function save()
     {
         $db = &new PHPWS_DB('hms_learning_community_assignment');
 
@@ -158,7 +158,7 @@ class HMS_RLC_Assignment{
         }
     }
 
-    function rlc_assignment_admin_pager()
+    public function rlc_assignment_admin_pager()
     {
         PHPWS_Core::initCoreClass('DBPager.php');
         PHPWS_Core::initModClass('hms','HMS_Term.php');
@@ -187,7 +187,7 @@ class HMS_RLC_Assignment{
         return $pager->get();
     }
 
-    function getAdminPagerTags()
+    public function getAdminPagerTags()
     {
         PHPWS_Core::initModClass('hms','HMS_Learning_Community.php');
         PHPWS_Core::initModClass('hms','HMS_SOAP.php');
@@ -206,7 +206,7 @@ class HMS_RLC_Assignment{
         return $tags;
     }
 
-    function view_by_rlc_pager($rlc_id)
+    public function view_by_rlc_pager($rlc_id)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
         
@@ -235,7 +235,7 @@ class HMS_RLC_Assignment{
         return $pager->get();
     }
 
-    function viewByRLCPagerTags()
+    public function viewByRLCPagerTags()
     {
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
 
@@ -250,7 +250,7 @@ class HMS_RLC_Assignment{
         return $tags;
     }
 
-    function report_by_rlc_pager_tags($data)
+    public function report_by_rlc_pager_tags($data)
     {
         $row['name']        = HMS_SOAP::get_full_name($this->user_id);
         $row['gender']      = HMS_SOAP::get_gender($this->user_id);
@@ -260,43 +260,43 @@ class HMS_RLC_Assignment{
     }
 
 
-    function setId($id) {
+    public function setId($id) {
         $this->id = $id;
     }
 
-    function getId($id) {
+    public function getId($id) {
         return $this->id;
     }
 
-    function setRlcId($rlc_id) {
+    public function setRlcId($rlc_id) {
         $this->rlc_id = $rlc_id;
     }
 
-    function getRlcId() {
+    public function getRlcId() {
         return $this->rlc_id;
     }
 
-    function setCourseOk($course_ok) {
+    public function setCourseOk($course_ok) {
         $this->course_ok = $course_ok;
     }
 
-    function getCourseOk() {
+    public function getCourseOk() {
         return $this->course_ok;
     }
 
-    function setAssignedByUser($assigned_by_user) {
+    public function setAssignedByUser($assigned_by_user) {
         $this->assigned_by_user = $assigned_by_user;
     }
 
-    function getAssignedByUser() {
+    public function getAssignedByUser() {
         return $this->assigned_by_user;
     }
 
-    function setAssignedByInitials($assigned_by_initials) {
+    public function setAssignedByInitials($assigned_by_initials) {
         $this->assigned_by_initials = $assigned_by_initials;
     }
 
-    function getAssignedByInitials() {
+    public function getAssignedByInitials() {
         return $this->assigned_by_initials;
     }
 }

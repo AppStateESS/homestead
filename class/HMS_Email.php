@@ -10,7 +10,7 @@ require_once(PHPWS_SOURCE_DIR . 'mod/hms/inc/defines.php');
 
 class HMS_Email{
 
-    function get_tech_contacts()
+    public function get_tech_contacts()
     {
         $contacts = array();
 
@@ -20,7 +20,7 @@ class HMS_Email{
         return $contacts;
     }
 
-    function get_housing_contacts()
+    public function get_housing_contacts()
     {
         $contacts = array();
 
@@ -29,7 +29,7 @@ class HMS_Email{
         return $contacts;
     }
 
-    function send_template_message($to, $subject, $tpl, $tags)
+    public function send_template_message($to, $subject, $tpl, $tags)
     {
         $content = PHPWS_Template::process($tags, 'hms', $tpl);
 
@@ -37,10 +37,10 @@ class HMS_Email{
     }
 
     /*
-     * This is the central message sending function for HMS.
+     * This is the central message sending public function for HMS.
      * Returns true or false.
      */
-    function send_email($to, $from, $subject, $content, $cc = NULL, $bcc = NULL)
+    public function send_email($to, $from, $subject, $content, $cc = NULL, $bcc = NULL)
     {
         # Sanity checking
         if(!isset($to) || is_null($to)){
@@ -95,7 +95,7 @@ class HMS_Email{
     /**
      * Logs a PHPWS_Mail object to a text file
      */
-    function log_email($message)
+    public function log_email($message)
     {
         // Log the message to a text file
         $fd = fopen(PHPWS_SOURCE_DIR . 'logs/email.log',"a");
@@ -129,7 +129,7 @@ class HMS_Email{
      * Error notification *
      **********************/
 
-    function send_error_notification($content){
+    public function send_error_notification($content){
         HMS_Email::send_email(HMS_Email::get_technical_contacts(), NULL, 'HMS Error', $content);
     }
 
@@ -137,7 +137,7 @@ class HMS_Email{
      * Contact form *
      ****************/
 
-    function send_contact_form()
+    public function send_contact_form()
     {
 
     }
@@ -150,7 +150,7 @@ class HMS_Email{
      * Lottery Messages *
      ********************/
 
-    function send_lottery_invite($to, $name, $expires_on, $year)
+    public function send_lottery_invite($to, $name, $expires_on, $year)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
@@ -163,7 +163,7 @@ class HMS_Email{
         HMS_Email::send_template_message($to . '@appstate.edu', '[Testing] You Have Been Selected for On-campus Housing!', 'email/lottery_invite.tpl', $tpl);
     }
 
-    function send_lottery_invite_reminder($to, $name, $expires_on, $year)
+    public function send_lottery_invite_reminder($to, $name, $expires_on, $year)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
@@ -180,7 +180,7 @@ class HMS_Email{
         HMS_Email::send_template_message($to . '@appstate.edu', "[Testing] On-Campus Housing Reminder: Only $hours hours left!", 'email/lottery_invite_reminder.tpl', $tpl);
     }
 
-    function send_lottery_roommate_invite($to, $name, $expires_on, $requestor_name, $hall_room, $year)
+    public function send_lottery_roommate_invite($to, $name, $expires_on, $requestor_name, $hall_room, $year)
     {
         $tpl = array();
 
@@ -193,7 +193,7 @@ class HMS_Email{
         HMS_Email::send_template_message($to . '@appstate.edu', '[Testing] Roommate Invitation for On-campus Housing!', 'email/lottery_roommate_invite.tpl', $tpl);
     }
 
-    function send_lottery_roommate_reminder($to, $name, $expires_on, $requestor_name, $hall_room, $year)
+    public function send_lottery_roommate_reminder($to, $name, $expires_on, $requestor_name, $hall_room, $year)
     {
         $tpl = array();
 
@@ -207,7 +207,7 @@ class HMS_Email{
         HMS_Email::send_template_message($to . '@appstate.edu', "[Testing] Roommate Invitation Reminder: Only $hours hours left!", 'email/lottery_roommate_invite_reminder.tpl', $tpl);
     }
 
-    function send_signup_invite($to, $name, $requestor_name, $year)
+    public function send_signup_invite($to, $name, $requestor_name, $year)
     {
         $tpl = array();
 
@@ -218,12 +218,12 @@ class HMS_Email{
         HMS_Email::send_template_message($to . '@appstate.edu', "[Testing] Signup for On-campus Housing!", 'email/lottery_signup_invite.tpl', $tpl);
     }
 
-    function send_lottery_status_report($status, $log)
+    public function send_lottery_status_report($status, $log)
     {
         HMS_Email::send_email(HMS_Email::get_tech_contacts(), NULL, "HMS Lottery results: $status", $log);
     }
 
-    function send_assignment_email($to, $name, $location, $roommates, $phone, $movein_time, $type){
+    public function send_assignment_email($to, $name, $location, $roommates, $phone, $movein_time, $type){
         $tpl = array();
 
         $tpl['NAME']         = $name;
@@ -240,7 +240,7 @@ class HMS_Email{
         HMS_Email::send_template_message($to . '@appstate.edu', '[Testing] Housing Assignment Notice!', 'email/assignment_notice.tpl', $tpl);
     }
 
-    function send_roommate_confirmation($to, $name, $roomie){
+    public function send_roommate_confirmation($to, $name, $roomie){
         $tpl = array();
 
         if($name == null){
@@ -255,7 +255,7 @@ class HMS_Email{
         HMS_Email::send_template_message($to . '@appstate.edu', '[Testing] Roommate Confirmation!', 'email/roommate_confirmation.tpl', $tpl);
     }
 
-    function send_lottery_application_confirmation($to, $name)
+    public function send_lottery_application_confirmation($to, $name)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
         $tpl = array();
@@ -272,7 +272,7 @@ class HMS_Email{
         HMS_Email::send_template_message($to . '@appstate.edu', '[Testing] Lottery Application Confirmation!', 'email/lottery_confirmation.tpl', $tpl);
     }
 
-    function send_hms_application_confirmation($to, $name)
+    public function send_hms_application_confirmation($to, $name)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
         $tpl = array();
@@ -289,7 +289,7 @@ class HMS_Email{
         HMS_Email::send_template_message($to . '@appstate.edu', '[Testing] Lottery Application Confirmation!', 'email/application_confirmation.tpl', $tpl);
     }
     
-    function send_lottery_assignment_confirmation($to, $name, $location)
+    public function send_lottery_assignment_confirmation($to, $name, $location)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
         $tpl = array();

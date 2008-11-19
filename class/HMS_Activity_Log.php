@@ -22,7 +22,7 @@ class HMS_Activity_Log{
      * Constructor
      * 
      */
-    function HMS_Activity_Log($id = 0, $user_id = null, $timestamp = null, 
+    public function HMS_Activity_Log($id = 0, $user_id = null, $timestamp = null, 
         $activity = null, $actor = null, $notes = null)
     {
         $this->activity_text = HMS_Activity_Log::get_activity_mapping();
@@ -49,7 +49,7 @@ class HMS_Activity_Log{
      * Saves the current activity log object to the db.
      * Returns TRUE upon succes or a PEAR error object otherwise.
      */
-    function save()
+    public function save()
     {
         if($this->id != 0) {
             return FALSE;
@@ -80,7 +80,7 @@ class HMS_Activity_Log{
      * Takes a username whos log the record should go in, the activity, the actor, and the notes
      * and creates a new Activity_Log object and saves it to the db.
      */
-    function log_activity($userid, $activity, $actor, $notes = NULL)
+    public function log_activity($userid, $activity, $actor, $notes = NULL)
     {
         if( isset($_SESSION['login_as_student']) ) {
             $notes .= " Admin: " . Current_User::getUsername();
@@ -100,7 +100,7 @@ class HMS_Activity_Log{
     /**
      * Gets the mapping of activity number to activity name.
      */
-    function get_activity_mapping()
+    public function get_activity_mapping()
     {
         return array(   ACTIVITY_LOGIN                          => "Logged in",
                         ACTIVITY_AGREED_TO_TERMS                => "Agreed to terms & agreement",
@@ -155,7 +155,7 @@ class HMS_Activity_Log{
     /**
      * Turns an integer activity into text
      */
-    function get_text_activity($num = -1)
+    public function get_text_activity($num = -1)
     {
         $activities = HMS_Activity_Log::get_activity_mapping();
         if($num > -1)
@@ -167,7 +167,7 @@ class HMS_Activity_Log{
     /**
      * Generates the activity log table
      */
-    function getPagerTags()
+    public function getPagerTags()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Student.php');
         $tpl = array();
@@ -198,43 +198,43 @@ class HMS_Activity_Log{
     * Mutator Methods *
     ******************/
 
-    function get_user_id(){
+    public function get_user_id(){
         return $this->user_id;
     }
 
-    function set_user_id($id){
+    public function set_user_id($id){
         $this->user_id = $id;
     }
 
-    function get_timestamp(){
+    public function get_timestamp(){
         return $this->timestamp;
     }
 
-    function set_timestamp($time){
+    public function set_timestamp($time){
         $this->timestamp = $time;
     }
 
-    function get_activity(){
+    public function get_activity(){
         return $this->activity;
     }
 
-    function set_activity($activity){
+    public function set_activity($activity){
         $this->activity = $activity;
     }
 
-    function get_actor(){
+    public function get_actor(){
         return $this->actor;
     }
 
-    function set_actor($actor){
+    public function set_actor($actor){
         $this->actor = $actor;
     }
 
-    function get_notes(){
+    public function get_notes(){
         return $this->notes;
     }
 
-    function set_notes($notes){
+    public function set_notes($notes){
         $this->notes = $notes;
     }
     
@@ -250,7 +250,7 @@ class HMS_Activity_Log{
      * (unsortable with unchangeable limits) that has a link to the main 
      * activity log, or the regular dynamic log.
      */
-    function showPager($actor, $actee, $exact, $notes, $begin, $end, $activities, $limit=10, $static=false)
+    public function showPager($actor, $actee, $exact, $notes, $begin, $end, $activities, $limit=10, $static=false)
     {
         PHPWS_Core::initCoreClass('DBPager.php');
 
@@ -315,7 +315,7 @@ class HMS_Activity_Log{
      * in the Student Info thing, you can show the activity log for only that
      * user.
      */
-    function showFilters($selection = NULL, $defaults = NULL)
+    public function showFilters($selection = NULL, $defaults = NULL)
     {
         PHPWS_Core::initCoreClass('Form.php');
 
@@ -385,7 +385,7 @@ class HMS_Activity_Log{
         return PHPWS_Template::process($tpl, 'hms', 'admin/activity_log_filters.tpl');
     }
 
-    function main()
+    public function main()
     {
         $actee = NULL;
         if(isset($_REQUEST['actee']) && !empty($_REQUEST['actee']))

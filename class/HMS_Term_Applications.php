@@ -12,7 +12,7 @@ class HMS_Term_Applications {
     var $term;
     var $required;
 
-    function getPager()
+    public function getPager()
     {
         PHPWS_Core::initCoreClass('DBPager.php');
         $pager = &new DBPager('hms_term_applications', 'HMS_Term_Applications');
@@ -25,7 +25,7 @@ class HMS_Term_Applications {
         return $pager;
     }
 
-    function get_row_tags()
+    public function get_row_tags()
     {
         $tpl['APP_TERM']    = HMS_Term::term_to_text($this->app_term,   true);
         $tpl['TERM']        = HMS_Term::term_to_text($this->term,       true);
@@ -35,7 +35,7 @@ class HMS_Term_Applications {
         return $tpl;
     }
 
-    function remove($app_term)
+    public function remove($app_term)
     {
         $db = &new PHPWS_DB('hms_term_applications');
         $db->addWhere('app_term', $app_term);

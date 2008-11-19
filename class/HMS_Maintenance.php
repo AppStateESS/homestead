@@ -9,22 +9,22 @@
 class HMS_Maintenance
 {
 
-    function HMS_Maintenance()
+    public function HMS_Maintenance()
     {
         $this->error = "";
     }
     
-    function set_error_msg($msg)
+    public function set_error_msg($msg)
     {
         $this->error .= $msg;
     }
 
-    function get_error_msg()
+    public function get_error_msg()
     {
         return $this->error;
     }
     
-    function show_options($type=MENU_TYPE_ALL)
+    public function show_options($type=MENU_TYPE_ALL)
     {
         Layout::addPageTitle("Comprehensive Maintenance");
         Layout::addStyle('hms', 'css/maintenance.css');
@@ -193,7 +193,7 @@ class HMS_Maintenance
         return $content;
     }
 
-    function show_assignments()
+    public function show_assignments()
     {
         $tpl = array();
 /*      if(Current_User::allow('hms', 'assign_by_floor'))
@@ -211,7 +211,7 @@ class HMS_Maintenance
         return $tpl;
     }
 
-    function show_structure()
+    public function show_structure()
     {
         $tpl = array();
         /**************************
@@ -255,7 +255,7 @@ class HMS_Maintenance
         return $tpl;
     }
 
-    function show_rlcs()
+    public function show_rlcs()
     {
         $tpl = array();
         /***************
@@ -290,7 +290,7 @@ class HMS_Maintenance
         return $tpl;
     }
 
-    function show_settings()
+    public function show_settings()
     {
         $tpl = array();
 
@@ -315,7 +315,7 @@ class HMS_Maintenance
         return $tpl;
     }
 
-    function main()
+    public function main()
     {
 
         if(isset($_REQUEST['op'])){

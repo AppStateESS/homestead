@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Lottery_UI - A class for holding the static UI function for the lottery interface.
+ * Lottery_UI - A class for holding the static UI public function for the lottery interface.
  * 
  * @author Jeremy Booker <jbooker AT tux DOT appstate DOT edu>
  */
@@ -10,7 +10,7 @@ define('ROOMMATE_INVITE_TTL', 345600); // 96 hours
 
 class Lottery_UI {
 
-    function show_lottery_signup($error_msg = NULL)
+    public function show_lottery_signup($error_msg = NULL)
     {
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
         PHPWS_Core::initModClass('hms', 'HMS_Lottery_Entry.php');
@@ -73,7 +73,7 @@ class Lottery_UI {
         return PHPWS_Template::process($form->getTemplate(), 'hms', 'student/lottery_signup.tpl');
     }
 
-    function lottery_signup_submit()
+    public function lottery_signup_submit()
     {
         # Make sure the agreed to terms checkbox was checked
         if(!isset($_REQUEST['terms_check'])){
@@ -100,11 +100,11 @@ class Lottery_UI {
             return Lottery_UI::show_lottery_special_needs();
         }
 
-        # Otherwise, call the 'lottery_signup' function like normal
+        # Otherwise, call the 'lottery_signup' public function like normal
         return Lottery_UI::lottery_signup();
     }
 
-    function show_lottery_special_needs()
+    public function show_lottery_special_needs()
     {
         PHPWS_Core::initCoreClass('Form.php');
         $form = &new PHPWS_Form();
@@ -132,7 +132,7 @@ class Lottery_UI {
         return PHPWS_Template::process($form->getTemplate(), 'hms', 'student/special_needs.tpl');
     }
 
-    function lottery_signup()
+    public function lottery_signup()
     {
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
         PHPWS_Core::initModClass('hms', 'HMS_Lottery_Entry.php');
@@ -263,7 +263,7 @@ class Lottery_UI {
         return PHPWS_Template::process($tpl, 'hms', 'student/lottery_signup_thankyou.tpl');
     }
 
-    function show_select_residence_hall()
+    public function show_select_residence_hall()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
@@ -303,7 +303,7 @@ class Lottery_UI {
         return PHPWS_Template::process($tpl, 'hms', 'student/lottery_choose_hall.tpl');
     }
 
-    function show_select_floor()
+    public function show_select_floor()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
@@ -366,7 +366,7 @@ class Lottery_UI {
         return PHPWS_Template::process($tpl, 'hms', 'student/lottery_choose_floor.tpl');
     }
 
-    function show_select_room()
+    public function show_select_room()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
@@ -433,7 +433,7 @@ class Lottery_UI {
         return PHPWS_Template::process($tpl, 'hms', 'student/lottery_choose_room.tpl');
     }
 
-    function show_select_roommates($error = NULL)
+    public function show_select_roommates($error = NULL)
     {
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
         PHPWS_Core::initModClass('hms', 'HMS_Lottery_Entry.php');
@@ -574,7 +574,7 @@ class Lottery_UI {
         return PHPWS_Template::process($tpl, 'hms', 'student/lottery_select_roommate.tpl');
     }
 
-    function show_confirm_roommates($error = NULL)
+    public function show_confirm_roommates($error = NULL)
     {
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
         PHPWS_Core::initModClass('hms', 'HMS_Lottery_Entry.php');
@@ -707,7 +707,7 @@ class Lottery_UI {
         return PHPWS_Template::process($form->getTemplate(), 'hms', 'student/lottery_confirm.tpl');
     }
 
-    function show_confirmed()
+    public function show_confirmed()
     {
         PHPWS_Core::initCoreClass('Captcha.php');
         $captcha = Captcha::verify(TRUE); // returns the words entered if correct, FALSE otherwise
@@ -796,7 +796,7 @@ class Lottery_UI {
         return PHPWS_Template::process($tpl, 'hms', 'student/lottery_choose_room_thanks.tpl');
     }
 
-    function show_lottery_roommate_request()
+    public function show_lottery_roommate_request()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
 
@@ -869,7 +869,7 @@ class Lottery_UI {
         return PHPWS_Template::process($tpl, 'hms', 'student/lottery_roommate_request.tpl');
     }
 
-    function show_confirm_lottery_roommate_request($error_msg)
+    public function show_confirm_lottery_roommate_request($error_msg)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
         PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
@@ -936,7 +936,7 @@ class Lottery_UI {
         return PHPWS_Template::process($tpl, 'hms', 'student/lottery_confirm_roommate_request.tpl');
     }
 
-    function handle_lottery_roommate_confirmation()
+    public function handle_lottery_roommate_confirmation()
     {
         # Confirm the captcha
         PHPWS_Core::initCoreClass('Captcha.php');
@@ -963,7 +963,7 @@ class Lottery_UI {
         return PHPWS_Template::process($tpl, 'hms', 'student/student_success_failure_message.tpl');
     }
 
-    function show_admin_entry($message = null)
+    public function show_admin_entry($message = null)
     {
         $tpl = array();
         $tpl['MESSAGE'] = $message;

@@ -12,7 +12,7 @@ class HMS_Banner_Queue_UI
     /**
      * Enables the Banner Queue for the given term.
      */
-    function enable()
+    public function enable()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
         $term = $_REQUEST['term'];
@@ -28,7 +28,7 @@ class HMS_Banner_Queue_UI
     /**
      * Flushes the Banner Queue for the given term and then marks it disabled.
      */
-    function disable()
+    public function disable()
     {
         $term = $_REQUEST['term'];
 
@@ -60,9 +60,9 @@ class HMS_Banner_Queue_UI
     }
 
     /**
-     * Handles main UI functionality
+     * Handles main UI public functionality
      */
-    function main()
+    public function main()
     {
         if(!Current_User::allow('hms', 'banner_queue')) {
             return PHPWS_Template::process(array(), 'hms',

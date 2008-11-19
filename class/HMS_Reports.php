@@ -5,7 +5,7 @@ class HMS_Reports{
     /**
      * Returns an array listing all the possible reports
      */
-    function get_reports()
+    public function get_reports()
     {
         $reports = array(
                         'housing_apps'   => 'Housing Applications Received',
@@ -36,7 +36,7 @@ class HMS_Reports{
     /**
      * Shows the user a page where he/she can select which report to run from a drop down list
      */
-    function display_reports()
+    public function display_reports()
     {
         $tpl = array();
         if(!Current_User::allow('hms', 'reports')){
@@ -66,7 +66,7 @@ class HMS_Reports{
         return $final;
     }
     
-    function run_report()
+    public function run_report()
 	{
         if(!Current_User::allow('hms', 'reports')){
             $tpl = array();
@@ -147,7 +147,7 @@ class HMS_Reports{
      * A report which breaks down current assignments by student type, class, gender, and the hall to which they're assigned.
      * Also gives a totals by student type, class, and gender for all halls.
      */
-    function run_assignment_demographics_report()
+    public function run_assignment_demographics_report()
 	{
 	    PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
 
@@ -490,7 +490,7 @@ class HMS_Reports{
         return $content;
     }
 
-    function run_applicant_demographics_report()
+    public function run_applicant_demographics_report()
     {
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
@@ -590,7 +590,7 @@ class HMS_Reports{
     /**
      * Finds and lists all currently assigned students who have a banner type of F
      */
-    function run_assigned_type_f(){
+    public function run_assigned_type_f(){
 
         $db = &new PHPWS_DB('hms_assignment');
         $db->addWhere('term', HMS_Term::get_selected_term());
@@ -635,7 +635,7 @@ class HMS_Reports{
         return $content;
     }
 
-    function run_move_in_times_report()
+    public function run_move_in_times_report()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
         PHPWS_Core::initModClass('hms', 'HMS_Movein_Time.php');
@@ -688,7 +688,7 @@ class HMS_Reports{
     /*
      * TODO: finish this
      */
-    function run_hall_occupancy_report()
+    public function run_hall_occupancy_report()
     {
         ini_set("max_execution_time", "10000");
         ini_set("memory_limit",       "512M");
@@ -781,7 +781,7 @@ class HMS_Reports{
         return $tpl->get();
     }
     
-    function run_unassigned_beds_report()
+    public function run_unassigned_beds_report()
     {
         ini_set("max_execution_time", "10000");
         ini_set("memory_limit",       "512M");
@@ -909,7 +909,7 @@ class HMS_Reports{
         return $tpl->get();
     }
 
-    function run_unassigned_rooms_report()
+    public function run_unassigned_rooms_report()
     {
         $db = &new PHPWS_DB('hms_residence_hall');
         $db->addColumn('hms_residence_hall.hall_name');
@@ -1016,7 +1016,7 @@ class HMS_Reports{
     }
 
     /*
-    function run_unassigned_beds_report()
+    public function run_unassigned_beds_report()
     {
         $sql = "select hall.hall_name,
                floor.floor_number,
@@ -1111,7 +1111,7 @@ class HMS_Reports{
     }
     */
     
-    function run_unconfirmed_roommates_report()
+    public function run_unconfirmed_roommates_report()
     {
         $db = &new PHPWS_DB('hms_roommate_approval');
         $db->addColumn('number_roommates');
@@ -1153,7 +1153,7 @@ class HMS_Reports{
         return $content;
     }
 
-    function run_assigned_students_report()
+    public function run_assigned_students_report()
     {
         $content = '<h2>Assigned Students Report</h2>';
         if(!isset($_REQUEST['action'])) {
@@ -1190,7 +1190,7 @@ class HMS_Reports{
         return $content;
     }
 
-    function do_assigned_students_report()
+    public function do_assigned_students_report()
     {
         $db = &new PHPWS_DB('hms_cached_student_info');
         $db->addOrder('last_name');
@@ -1250,17 +1250,17 @@ class HMS_Reports{
         return $content;
     }
 
-    function create_pdf_letters()
+    public function create_pdf_letters()
     {
 
     }
 
-    function list_generated_student_assignment_data()
+    public function list_generated_student_assignment_data()
     {
         
     }
 
-    function run_special_circumstances_report()
+    public function run_special_circumstances_report()
     {
         $db = &new PHPWS_DB('hms_assignment');
         $db->addWhere('hms_assignment.asu_username', 'hms_application.asu_username', 'ILIKE');
@@ -1285,7 +1285,7 @@ class HMS_Reports{
         return $content;
     }
 
-    function display_hall_structures()
+    public function display_hall_structures()
     {
         $sql = "
             SELECT hms_residence_hall.id AS hall_id,
@@ -1408,7 +1408,7 @@ class HMS_Reports{
         return $content;
     }
 
-    function unassigned_applicants_report()
+    public function unassigned_applicants_report()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
         $term = HMS_Term::get_selected_term();
@@ -1509,7 +1509,7 @@ class HMS_Reports{
         return $head . $content;
     }
 
-    function run_no_banner_data_report()
+    public function run_no_banner_data_report()
     {
         $db = new PHPWS_DB('hms_application');
         $db->addColumn('asu_username');
@@ -1541,7 +1541,7 @@ class HMS_Reports{
         return $content;
     }
 
-    function run_no_deposit_report()
+    public function run_no_deposit_report()
     {
         $db = new PHPWS_DB('hms_assignment');
         $db->addColumn('asu_username');
@@ -1614,7 +1614,7 @@ class HMS_Reports{
         return $content;
     }
 
-    function run_bad_type_report()
+    public function run_bad_type_report()
     {
         $db = new PHPWS_DB('hms_assignment');
         $db->addColumn('hms_assignment.asu_username');
@@ -1671,7 +1671,7 @@ class HMS_Reports{
         return $content;
     }
     
-    function run_gender_report()
+    public function run_gender_report()
     {
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
 
@@ -1788,7 +1788,7 @@ class HMS_Reports{
         return $content;
     }
 
-    function special_needs()
+    public function special_needs()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
@@ -1847,7 +1847,7 @@ class HMS_Reports{
         return $content;
     }
 
-    function show_student($username) {
+    public function show_student($username) {
         $student = HMS_SOAP::get_student_info($username);
         $name = $student->last_name . ', ' . $student->first_name . ' ' .
             $student->middle_name;
@@ -1859,7 +1859,7 @@ class HMS_Reports{
         return "<li>$bid: $name [$phone]</li>";
     }
 
-    function main()
+    public function main()
     {
         if( !Current_User::allow('hms', 'reports') ){
             $tpl = array();

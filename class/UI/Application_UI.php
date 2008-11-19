@@ -2,7 +2,7 @@
 
 class Application_UI{
 
-    function show_housing_application($error_msg = NULL)
+    public function show_housing_application($error_msg = NULL)
     {
         # Try to load the user's application, in case it already exists
         $application = new HMS_Application($_SESSION['asu_username'], $_SESSION['application_term']);
@@ -206,7 +206,7 @@ class Application_UI{
         return PHPWS_Template::process($tpl,'hms','student/student_application.tpl');
     }
 
-    function submit_application()
+    public function submit_application()
     {
         # Check to see if the student has special needs
         if(isset($_REQUEST['special_need'])){
@@ -216,7 +216,7 @@ class Application_UI{
         }
     }
 
-    function show_special_needs()
+    public function show_special_needs()
     {
         PHPWS_Core::initCoreClass('Form.php');
         $form = &new PHPWS_Form();
@@ -259,7 +259,7 @@ class Application_UI{
         return PHPWS_Template::process($form->getTemplate(), 'hms', 'student/special_needs.tpl');
     }
 
-    function show_application_review()
+    public function show_application_review()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
@@ -397,7 +397,7 @@ class Application_UI{
         return PHPWS_Template::process($tpl, 'hms', 'student/student_application.tpl');
     }
 
-    function submit_application_review()
+    public function submit_application_review()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Application.php');
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
@@ -512,7 +512,7 @@ class Application_UI{
 
     }
 
-    function view_housing_application($username,$term)
+    public function view_housing_application($username,$term)
     {
         $possible_terms = HMS_Term::get_valid_application_terms($term);
 
@@ -595,7 +595,7 @@ class Application_UI{
       *
       * @return string $template Processed template ready for display
       */
-    function show_feature_interface($success = NULL, $error = NULL){
+    public function show_feature_interface($success = NULL, $error = NULL){
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
 
         $features = array(APPLICATION_RLC_APP          => 'RLC Applications',

@@ -6,7 +6,7 @@ PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 class HMS_XML{
 
 
-    function main(){
+    public function main(){
 
         $op = $_REQUEST['op'];
 
@@ -62,7 +62,7 @@ class HMS_XML{
 
     }
 
-    function getHalls(){
+    public function getHalls(){
         
         PHPWS_Core::initModClass('hms','HMS_Residence_Hall.php');
         
@@ -101,7 +101,7 @@ class HMS_XML{
     }
 
 
-    function getHallsWithVacancies(){
+    public function getHallsWithVacancies(){
         
         PHPWS_Core::initModClass('hms','HMS_Residence_Hall.php');
         
@@ -137,7 +137,7 @@ class HMS_XML{
         exit;
     }
 
-    function getFloors($building_id){
+    public function getFloors($building_id){
 
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
 
@@ -175,7 +175,7 @@ class HMS_XML{
         exit;
     }
 
-    function getFloorsWithVacancies($building_id){
+    public function getFloorsWithVacancies($building_id){
 
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
 
@@ -223,7 +223,7 @@ class HMS_XML{
         exit;
     }
 
-    function getRooms($floor_id){
+    public function getRooms($floor_id){
        
         PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
         
@@ -261,7 +261,7 @@ class HMS_XML{
         exit;
     }
 
-    function getRoomsWithVacancies($floor_id){
+    public function getRoomsWithVacancies($floor_id){
         PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
 
         $floor = &new HMS_Floor($floor_id);
@@ -313,7 +313,7 @@ class HMS_XML{
 
     }
 
-    function getBedsWithVacancies($room_id){
+    public function getBedsWithVacancies($room_id){
         PHPWS_Core::initModClass('hms', 'HMS_Room.php');
 
         $room = &new HMS_Room($room_id);
@@ -362,7 +362,7 @@ class HMS_XML{
 
     }
 
-     function getBeds($room_id){
+     public function getBeds($room_id){
         PHPWS_Core::initModClass('hms', 'HMS_Room.php');
 
         $room = &new HMS_Room($room_id);
@@ -403,7 +403,7 @@ class HMS_XML{
 
     }
 
-    function getSuites($floor_id)
+    public function getSuites($floor_id)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
         
@@ -460,7 +460,7 @@ class HMS_XML{
         exit;
     }
 
-    function get_username_suggestions($username)
+    public function get_username_suggestions($username)
     {
         $db = new PHPWS_DB('hms_application');
 
@@ -492,7 +492,7 @@ class HMS_XML{
         exit; 
     }
 
-    function get_username_suggestions_json($username)
+    public function get_username_suggestions_json($username)
     {
         $db = new PHPWS_DB('hms_application');
 

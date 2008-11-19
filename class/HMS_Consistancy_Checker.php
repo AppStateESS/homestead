@@ -17,7 +17,7 @@ class Consistancy_Checker {
       * Checks each hall, floor, and room for the given term and returns 
       * an associative array containing all of the invalid items.
       **/
-    function check($term=null){
+    public function check($term=null){
         $results = array();
 
         if(!isset($term)){

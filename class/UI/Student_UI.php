@@ -9,7 +9,7 @@ define('TWENTY_FIVE_YEARS', 788400000);
 class HMS_Student_UI{
     
     
-    function show_welcome_screen()
+    public function show_welcome_screen()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
@@ -236,7 +236,7 @@ class HMS_Student_UI{
         }   
     }
    
-    function show_terms_and_agreement($terms_and_agreement_only = FALSE)
+    public function show_terms_and_agreement($terms_and_agreement_only = FALSE)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Side_Thingie.php');
         $side_thingie = new HMS_Side_Thingie(HMS_SIDE_STUDENT_AGREE);
@@ -292,7 +292,7 @@ class HMS_Student_UI{
         return $message;
     }
     
-    function show_main_menu()
+    public function show_main_menu()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Application.php');
         PHPWS_Core::initModClass('hms', 'HMS_Deadlines.php');
@@ -317,7 +317,7 @@ class HMS_Student_UI{
         }
     }
 
-    function show_generic_main_menu($deadlines)
+    public function show_generic_main_menu($deadlines)
     {
         PHPWS_Core::initModClass('hms','HMS_SOAP.php');
         $tags = array();
@@ -545,7 +545,7 @@ class HMS_Student_UI{
         return PHPWS_Template::process($tags, 'hms', 'student/main_menu_fall.tpl');
     }
 
-    function show_verify_assignment()
+    public function show_verify_assignment()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');

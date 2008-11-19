@@ -9,7 +9,7 @@
 
 class HMS_Application_Features {
 
-    function main()
+    public function main()
     {
         switch($_REQUEST['op'])
         {
@@ -23,7 +23,7 @@ class HMS_Application_Features {
         }
     }
 
-    function handle_features_submit()
+    public function handle_features_submit()
     {
         # Check permissions
         if( !Current_User::allow('hms', 'edit_features') ){
@@ -42,7 +42,7 @@ class HMS_Application_Features {
         }
     }
 
-    function save($request)
+    public function save($request)
     {
         if(!isset($_REQUEST['selected_term'])){
             return false;

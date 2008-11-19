@@ -7,7 +7,7 @@
 
 class HMS_Autoassigner
 {
-    function auto_assign($test = 0)
+    public function auto_assign($test = 0)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Room.php');
         PHPWS_Core::initModClass('hms', 'HMS_Application.php');
@@ -293,7 +293,7 @@ class HMS_Autoassigner
         Layout::nakedDisplay($content, NULL, TRUE);
     }
 
-    function record_success($type, $a, $b, $room)
+    public function record_success($type, $a, $b, $room)
     {
         $success = array();
         $success['type'] = $type;
@@ -325,12 +325,12 @@ class HMS_Autoassigner
         return $success;
     }
 
-    function sort_successes($a, $b)
+    public function sort_successes($a, $b)
     {
         return strcmp($a['a'], $b['a']);
     }
 
-    function assign($app, $bed, $term)
+    public function assign($app, $bed, $term)
     {
         $bbc  = $bed->get_banner_building_code();
         $bid  = $bed->banner_id;

@@ -24,7 +24,7 @@ class HMS_Side_Thingie {
     var $deadlines;
     var $entry_term;
 
-    function HMS_Side_Thingie($step)
+    public function HMS_Side_Thingie($step)
     {
 
         $this->step = $step;
@@ -51,7 +51,7 @@ class HMS_Side_Thingie {
         $this->entry_term = HMS_Entry_Term::get_entry_semester($_SESSION['asu_username']);
     }
 
-    function show($links = TRUE)
+    public function show($links = TRUE)
     {
         
         $this->curr_timestamp = mktime();
@@ -84,7 +84,7 @@ class HMS_Side_Thingie {
         Layout::add($page, 'hms', 'default');
     }
 
-    function set_apply_agree($links)
+    public function set_apply_agree($links)
     {
 
         # If this is the step we're on, then set style accordingly
@@ -125,7 +125,7 @@ class HMS_Side_Thingie {
         return;
     }
 
-    function set_rlc($links)
+    public function set_rlc($links)
     {
         if($this->entry_term != TERM_FALL){
             unset($this->steps_text[HMS_SIDE_STUDENT_RLC]);
@@ -178,7 +178,7 @@ class HMS_Side_Thingie {
         }
     }
 
-    function set_profile($links)
+    public function set_profile($links)
     {
         if($this->entry_term != TERM_FALL){
             unset($this->steps_text[HMS_SIDE_STUDENT_PROFILE]);
@@ -227,7 +227,7 @@ class HMS_Side_Thingie {
         
     }
 
-    function set_roomate($links)
+    public function set_roomate($links)
     {
         /**
          * Commented this out to turn the roommate deadline back on for the spring semester
@@ -279,7 +279,7 @@ class HMS_Side_Thingie {
         }
     }
 
-    function set_verify($links)
+    public function set_verify($links)
     {
         # If this is the step we're on, then set style accordingly
         $on_this_step = FALSE;

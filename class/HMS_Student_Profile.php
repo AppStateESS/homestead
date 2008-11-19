@@ -100,7 +100,7 @@ class HMS_Student_Profile{
      * Constructor
      * Optional parameter is a id number corresponding to database column 'id'
      */
-    function HMS_Student_Profile($id = NULL)
+    public function HMS_Student_Profile($id = NULL)
     {
         if(!isset($id)){
             return;
@@ -116,7 +116,7 @@ class HMS_Student_Profile{
         }
     }
 
-    function init()
+    public function init()
     {
        if(!isset($this->id)){
            return FALSE;
@@ -133,7 +133,7 @@ class HMS_Student_Profile{
         return $result;
     }
 
-    function save()
+    public function save()
     {
         $db = &new PHPWS_DB('hms_student_profiles');
 
@@ -158,7 +158,7 @@ class HMS_Student_Profile{
      * exists for the given user name.
      * Returns FALSE if no profile is found.
      */
-    function check_for_profile($user_id = NULL)
+    public function check_for_profile($user_id = NULL)
     {
 
         if(!isset($user_id)){
@@ -189,7 +189,7 @@ class HMS_Student_Profile{
     /**
      * Does not use HMS_Forms to display the profile form.
      */
-    function show_profile_form()
+    public function show_profile_form()
     {
         PHPWS_Core::initModClass('hms','HMS_Deadlines.php');
         $deadlines = HMS_Deadlines::get_deadlines($_SESSION['application_term']);
@@ -344,7 +344,7 @@ class HMS_Student_Profile{
     /**
      * Shows the profile for the given username
      */
-    function show_profile($username)
+    public function show_profile($username)
     {
         require(PHPWS_SOURCE_DIR . 'mod/hms/inc/profile_options.php');
         
@@ -467,7 +467,7 @@ class HMS_Student_Profile{
     /**
      * Saves a submitted profile
      */
-    function submit_profile()
+    public function submit_profile()
     {
 
         # Check to see if a student already has a profile on file.
@@ -774,7 +774,7 @@ class HMS_Student_Profile{
     /**
      * Display the profile search page.
      */
-    function display_profile_search()
+    public function display_profile_search()
     {
         $_SESSION['profile_search_use_session'] = FALSE;
         require_once(PHPWS_SOURCE_DIR . 'mod/hms/inc/profile_options.php');
@@ -853,7 +853,7 @@ class HMS_Student_Profile{
     /**
      * Does the actual searching of profiles.
      */
-    function profile_search()
+    public function profile_search()
     {
         $tags = array();
 
@@ -865,7 +865,7 @@ class HMS_Student_Profile{
     /**
      * Sets up the pager object for searching questionnairs.
      */
-    function profile_search_pager()
+    public function profile_search_pager()
     {
         # get the current student's gender
         PHPWS_Core::initModClass('hms','HMS_SOAP.php');
@@ -1492,7 +1492,7 @@ class HMS_Student_Profile{
     /* 
      *Sets up the row tags for the pager
      */
-    function getPagerTags()
+    public function getPagerTags()
     {
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
         
@@ -1507,9 +1507,9 @@ class HMS_Student_Profile{
     /**
      * Function to determine which hobbies check boxes need to be checked
      * Takes a Student_Profile object and returns an array of the checkbox names
-     * which should be checked. (Used as input to the setMatch function).
+     * which should be checked. (Used as input to the setMatch public function).
      */
-    function get_hobbies_matches($profile)
+    public function get_hobbies_matches($profile)
     {
         $hobbies_matches = array();
         
@@ -1615,9 +1615,9 @@ class HMS_Student_Profile{
     /**
      * Function to determine which music check boxes need to be checked
      * Takes a Student_Profile object and returns an array of the checkbox names
-     * which should be checked. (Used as input to the setMatch function).
+     * which should be checked. (Used as input to the setMatch public function).
      */
-    function get_music_matches($profile)
+    public function get_music_matches($profile)
     {
         $music_matches = array();
         
@@ -1716,7 +1716,7 @@ class HMS_Student_Profile{
         return $music_matches;
     }
 
-    function get_study_matches($profile)
+    public function get_study_matches($profile)
     {
         $study_matches = array();
 
@@ -1748,23 +1748,23 @@ class HMS_Student_Profile{
      * Accessor / Mutator Methods
      */
 
-    function setID($id){
+    public function setID($id){
         $this->id = $id;
     }
     
-    function getID(){
+    public function getID(){
         return $this->id;
     }
     
-    function set_user_id($user_id){
+    public function set_user_id($user_id){
         $this->user_id = $user_id;
     }
 
-    function get_user_id(){
+    public function get_user_id(){
         return $this->user_id;
     }
 
-    function set_date_submitted($date = NULL){
+    public function set_date_submitted($date = NULL){
         if(isset($date)){
             $this->date_submitted = $date;
         }else{
@@ -1772,111 +1772,111 @@ class HMS_Student_Profile{
         }
     }
     
-    function get_date_submitted(){
+    public function get_date_submitted(){
         return $this->date_submitted;
     }
 
-    function set_alternate_email($mail){
+    public function set_alternate_email($mail){
         $this->alternate_email = $mail;
     }
 
-    function get_alternate_email(){
+    public function get_alternate_email(){
         return $this->alternate_email;
     }
 
-    function set_aim_sn($sn){
+    public function set_aim_sn($sn){
         $this->aim_sn = $sn;
     }
 
-    function get_aim_sn(){
+    public function get_aim_sn(){
         return $this->aim_sn;
     }
 
-    function set_yahoo_sn($sn){
+    public function set_yahoo_sn($sn){
         $this->yahoo_sn = $sn;
     }
 
-    function get_yahoo_sn(){
+    public function get_yahoo_sn(){
         return $this->yahoo_sn;
     }
     
-    function set_msn_sn($sn){
+    public function set_msn_sn($sn){
         $this->msn_sn = $sn;
     }
 
-    function get_msn_sn(){
+    public function get_msn_sn(){
         return $this->msn_sn;
     }
     
-    function set_political_view($view){
+    public function set_political_view($view){
         $this->political_view = $view;
     }
 
-    function get_political_view(){
+    public function get_political_view(){
         return $this->political_view;
     }
  
-    function set_major($major){
+    public function set_major($major){
         $this->major = $major;
     }
 
-    function get_major(){
+    public function get_major(){
         return $this->major;
     }
 
-    function set_experience($exp){
+    public function set_experience($exp){
         $this->experience = $exp;
     }
 
-    function get_experience(){
+    public function get_experience(){
         return $this->experience;
     }
 
-    function set_sleep_time($time){
+    public function set_sleep_time($time){
         $this->sleep_time = $time;
     }
 
-    function get_sleep_time(){
+    public function get_sleep_time(){
         return $this->sleep_time;
     }
 
-    function set_wakeup_time($time){
+    public function set_wakeup_time($time){
         $this->wakeup_time = $time;
     }
 
-    function get_wakeup_time(){
+    public function get_wakeup_time(){
         return $this->wakeup_time;
     }
 
-    function set_overnight_guests($guests){
+    public function set_overnight_guests($guests){
         $this->overnight_guests = $guests;
     }
 
-    function get_overnight_guests(){
+    public function get_overnight_guests(){
         return $this->overnight_guests;
     }
 
-    function set_loudness($loudness){
+    public function set_loudness($loudness){
         $this->loudness = $loudness;
     }
 
-    function get_loudness(){
+    public function get_loudness(){
         return $this->loudness;
     }
     
-    function set_cleanliness($clean){
+    public function set_cleanliness($clean){
         $this->cleanliness = $clean;
     }
 
-    function get_cleanliness(){
+    public function get_cleanliness(){
         return $this->cleanliness;
     }
     
-    function set_free_time($time){
+    public function set_free_time($time){
         $this->free_time = $time;
     }
     
-    function get_free_time(){
+    public function get_free_time(){
         return $this->free_time;
     }
 
@@ -1884,11 +1884,11 @@ class HMS_Student_Profile{
      * Hobbies check boxes
      */
 
-    function set_arts_and_crafts($value = 1){
+    public function set_arts_and_crafts($value = 1){
         $this->arts_and_crafts = $value;
     }
 
-    function get_arts_and_crafts(){
+    public function get_arts_and_crafts(){
         if($this->arts_and_crafts == 1){
             return TRUE;
         }else{
@@ -1896,11 +1896,11 @@ class HMS_Student_Profile{
         }
     }
     
-    function set_books_and_reading($value = 1){
+    public function set_books_and_reading($value = 1){
         $this->books_and_reading = $value;
     }
 
-    function get_books_and_reading(){
+    public function get_books_and_reading(){
         if($this->books_and_reading == 1){
             return TRUE;
         }else{
@@ -1908,11 +1908,11 @@ class HMS_Student_Profile{
         }
     }
     
-    function set_cars($value = 1){
+    public function set_cars($value = 1){
         $this->cars = $value;
     }
 
-    function get_cars(){
+    public function get_cars(){
         if($this->cars == 1){
             return TRUE;
         }else{
@@ -1920,11 +1920,11 @@ class HMS_Student_Profile{
         }
     }
 
-    function set_church_activities($value = 1){
+    public function set_church_activities($value = 1){
         $this->church_activities = $value;
     }
 
-    function get_church_activities(){
+    public function get_church_activities(){
         if($this->church_activities == 1){
             return TRUE;
         }else{
@@ -1932,11 +1932,11 @@ class HMS_Student_Profile{
         }
     }
     
-    function set_collecting($value = 1){
+    public function set_collecting($value = 1){
         $this->collecting = $value;
     }
 
-    function get_collecting(){
+    public function get_collecting(){
         if($this->collecting == 1){
             return TRUE;
         }else{
@@ -1944,11 +1944,11 @@ class HMS_Student_Profile{
         }
     }
     
-    function set_computers_and_technology($value = 1){
+    public function set_computers_and_technology($value = 1){
         $this->computers_and_technology = $value;
     }
 
-    function get_computers_and_technology(){
+    public function get_computers_and_technology(){
         if($this->computers_and_technology == 1){
             return TRUE;
         }else{
@@ -1956,11 +1956,11 @@ class HMS_Student_Profile{
         }
     }
     
-    function set_dancing($value = 1){
+    public function set_dancing($value = 1){
         $this->dancing = $value;
     }
 
-    function get_dancing(){
+    public function get_dancing(){
         if($this->dancing == 1){
             return TRUE;
         }else{
@@ -1968,11 +1968,11 @@ class HMS_Student_Profile{
         }
     }
     
-    function set_fashion($value = 1){
+    public function set_fashion($value = 1){
         $this->fashion = $value;
     }
 
-    function get_fashion(){
+    public function get_fashion(){
         if($this->fashion == 1){
             return TRUE;
         }else{
@@ -1980,11 +1980,11 @@ class HMS_Student_Profile{
         }
     }
     
-    function set_fine_arts($value = 1){
+    public function set_fine_arts($value = 1){
         $this->fine_arts = $value;
     }
 
-    function get_fine_arts(){
+    public function get_fine_arts(){
         if($this->fine_arts == 1){
             return TRUE;
         }else{
@@ -1992,11 +1992,11 @@ class HMS_Student_Profile{
         }
     }
     
-    function set_gardening($value = 1){
+    public function set_gardening($value = 1){
         $this->gardening = $value;
     }
 
-    function get_gardening(){
+    public function get_gardening(){
         if($this->gardening == 1){
             return TRUE;
         }else{
@@ -2004,11 +2004,11 @@ class HMS_Student_Profile{
         }
     }
     
-    function set_games($value = 1){
+    public function set_games($value = 1){
         $this->games = $value;
     }
 
-    function get_games(){
+    public function get_games(){
         if($this->games == 1){
             return TRUE;
         }else{
@@ -2016,11 +2016,11 @@ class HMS_Student_Profile{
         }
     }
     
-    function set_humor($value = 1){
+    public function set_humor($value = 1){
         $this->humor = $value;
     }
 
-    function get_humor(){
+    public function get_humor(){
         if($this->humor == 1){
             return TRUE;
         }else{
@@ -2028,11 +2028,11 @@ class HMS_Student_Profile{
         }
     }
     
-    function set_investing_personal_finance($value = 1){
+    public function set_investing_personal_finance($value = 1){
         $this->investing_personal_finance = $value;
     }
 
-    function get_investing_personal_finance(){
+    public function get_investing_personal_finance(){
         if($this->investing_personal_finance == 1){
             return TRUE;
         }else{
@@ -2040,11 +2040,11 @@ class HMS_Student_Profile{
         }
     }
     
-    function set_movies($value = 1){
+    public function set_movies($value = 1){
         $this->movies = $value;
     }
 
-    function get_movies(){
+    public function get_movies(){
         if($this->movies == 1){
             return TRUE;
         }else{
@@ -2052,11 +2052,11 @@ class HMS_Student_Profile{
         }
     }
     
-    function set_music($value = 1){
+    public function set_music($value = 1){
         $this->music = $value;
     }
 
-    function get_music(){
+    public function get_music(){
         if($this->music == 1){
             return TRUE;
         }else{
@@ -2064,11 +2064,11 @@ class HMS_Student_Profile{
         }
     }
     
-    function set_outdoor_activities($value = 1){
+    public function set_outdoor_activities($value = 1){
         $this->outdoor_activities = $value;
     }
 
-    function get_outdoor_activities(){
+    public function get_outdoor_activities(){
         if($this->outdoor_activities == 1){
             return TRUE;
         }else{
@@ -2076,11 +2076,11 @@ class HMS_Student_Profile{
         }
     }
     
-    function set_pets_and_animals($value = 1){
+    public function set_pets_and_animals($value = 1){
         $this->pets_and_animals = $value;
     }
 
-    function get_pets_and_animals(){
+    public function get_pets_and_animals(){
         if($this->pets_and_animals == 1){
             return TRUE;
         }else{
@@ -2088,11 +2088,11 @@ class HMS_Student_Profile{
         }
     }
     
-    function set_photography($value = 1){
+    public function set_photography($value = 1){
         $this->photography = $value;
     }
 
-    function get_photography(){
+    public function get_photography(){
         if($this->photography == 1){
             return TRUE;
         }else{
@@ -2100,11 +2100,11 @@ class HMS_Student_Profile{
         }
     }
     
-    function set_politics($value = 1){
+    public function set_politics($value = 1){
         $this->politics = $value;
     }
 
-    function get_politics(){
+    public function get_politics(){
         if($this->politics == 1){
             return TRUE;
         }else{
@@ -2112,11 +2112,11 @@ class HMS_Student_Profile{
         }
     }
     
-    function set_sports($value = 1){
+    public function set_sports($value = 1){
         $this->sports = $value;
     }
 
-    function get_sports(){
+    public function get_sports(){
         if($this->sports == 1){
             return TRUE;
         }else{
@@ -2124,11 +2124,11 @@ class HMS_Student_Profile{
         }
     }
     
-    function set_travel($value = 1){
+    public function set_travel($value = 1){
         $this->travel = $value;
     }
 
-    function get_travel(){
+    public function get_travel(){
         if($this->travel == 1){
             return TRUE;
         }else{
@@ -2136,11 +2136,11 @@ class HMS_Student_Profile{
         }
     }
     
-    function set_tv_shows($value = 1){
+    public function set_tv_shows($value = 1){
         $this->tv_shows = $value;
     }
 
-    function get_tv_shows(){
+    public function get_tv_shows(){
         if($this->tv_shows == 1){
             return TRUE;
         }else{
@@ -2148,11 +2148,11 @@ class HMS_Student_Profile{
         }
     }
 
-    function set_volunteering($value = 1){
+    public function set_volunteering($value = 1){
         $this->volunteering = $value;
     }
 
-    function get_volunteering(){
+    public function get_volunteering(){
         if($this->volunteering == 1){
             return TRUE;
         }else{
@@ -2160,11 +2160,11 @@ class HMS_Student_Profile{
         }
     }
     
-    function set_writing($value = 1){
+    public function set_writing($value = 1){
         $this->writing = $value;
     }
 
-    function get_writing(){
+    public function get_writing(){
         if($this->writing == 1){
             return TRUE;
         }else{
@@ -2176,11 +2176,11 @@ class HMS_Student_Profile{
      * Music check boxes
      */
 
-    function set_alternative($value = 1){
+    public function set_alternative($value = 1){
         $this->alternative = $value;
     }
 
-    function get_alternative(){
+    public function get_alternative(){
         if($this->alternative == 1){
             return TRUE;
         }else{
@@ -2188,11 +2188,11 @@ class HMS_Student_Profile{
         }
     }
     
-    function set_ambient($value = 1){
+    public function set_ambient($value = 1){
         $this->ambient = $value;
     }
 
-    function get_ambient(){
+    public function get_ambient(){
         if($this->ambient == 1){
             return TRUE;
         }else{
@@ -2200,11 +2200,11 @@ class HMS_Student_Profile{
         }
     }
     
-    function set_beach($value = 1){
+    public function set_beach($value = 1){
         $this->beach = $value;
     }
 
-    function get_beach(){
+    public function get_beach(){
         if($this->beach == 1){
             return TRUE;
         }else{
@@ -2212,11 +2212,11 @@ class HMS_Student_Profile{
         }
     }
     
-    function set_bluegrass($value = 1){
+    public function set_bluegrass($value = 1){
         $this->bluegrass = $value;
     }
 
-    function get_bluegrass(){
+    public function get_bluegrass(){
         if($this->bluegrass == 1){
             return TRUE;
         }else{
@@ -2224,11 +2224,11 @@ class HMS_Student_Profile{
         }
     }
     
-    function set_blues($value = 1){
+    public function set_blues($value = 1){
         $this->blues = $value;
     }
 
-    function get_blues(){
+    public function get_blues(){
         if($this->blues == 1){
             return TRUE;
         }else{
@@ -2236,11 +2236,11 @@ class HMS_Student_Profile{
         }
     }
     
-    function set_classical($value = 1){
+    public function set_classical($value = 1){
         $this->classical = $value;
     }
 
-    function get_classical(){
+    public function get_classical(){
         if($this->classical == 1){
             return TRUE;
         }else{
@@ -2248,11 +2248,11 @@ class HMS_Student_Profile{
         }
     }
     
-    function set_classic_rock($value = 1){
+    public function set_classic_rock($value = 1){
         $this->classic_rock = $value;
     }
 
-    function get_classic_rock(){
+    public function get_classic_rock(){
         if($this->classic_rock == 1){
             return TRUE;
         }else{
@@ -2260,11 +2260,11 @@ class HMS_Student_Profile{
         }
     }
     
-    function set_country($value = 1){
+    public function set_country($value = 1){
         $this->country = $value;
     }
 
-    function get_country(){
+    public function get_country(){
         if($this->country == 1){
             return TRUE;
         }else{
@@ -2272,11 +2272,11 @@ class HMS_Student_Profile{
         }
     }
     
-    function set_electronic($value = 1){
+    public function set_electronic($value = 1){
         $this->electronic = $value;
     }
 
-    function get_electronic(){
+    public function get_electronic(){
         if($this->electronic == 1){
             return TRUE;
         }else{
@@ -2284,11 +2284,11 @@ class HMS_Student_Profile{
         }
     }
     
-    function set_folk($value = 1){
+    public function set_folk($value = 1){
         $this->folk = $value;
     }
 
-    function get_folk(){
+    public function get_folk(){
         if($this->folk == 1){
             return TRUE;
         }else{
@@ -2296,11 +2296,11 @@ class HMS_Student_Profile{
         }
     }
     
-    function set_heavy_metal($value = 1){
+    public function set_heavy_metal($value = 1){
         $this->heavy_metal = $value;
     }
 
-    function get_heavy_metal(){
+    public function get_heavy_metal(){
         if($this->heavy_metal == 1){
             return TRUE;
         }else{
@@ -2308,11 +2308,11 @@ class HMS_Student_Profile{
         }
     }
     
-    function set_hip_hop($value = 1){
+    public function set_hip_hop($value = 1){
         $this->hip_hop = $value;
     }
 
-    function get_hip_hop(){
+    public function get_hip_hop(){
         if($this->hip_hop == 1){
             return TRUE;
         }else{
@@ -2320,11 +2320,11 @@ class HMS_Student_Profile{
         }
     }
     
-    function set_house($value = 1){
+    public function set_house($value = 1){
         $this->house = $value;
     }
 
-    function get_house(){
+    public function get_house(){
         if($this->house == 1){
             return TRUE;
         }else{
@@ -2332,11 +2332,11 @@ class HMS_Student_Profile{
         }
     }
     
-    function set_industrial($value = 1){
+    public function set_industrial($value = 1){
         $this->industrial = $value;
     }
 
-    function get_industrial(){
+    public function get_industrial(){
         if($this->industrial == 1){
             return TRUE;
         }else{
@@ -2344,11 +2344,11 @@ class HMS_Student_Profile{
         }
     }
     
-    function set_jazz($value = 1){
+    public function set_jazz($value = 1){
         $this->jazz = $value;
     }
 
-    function get_jazz(){
+    public function get_jazz(){
         if($this->jazz == 1){
             return TRUE;
         }else{
@@ -2356,11 +2356,11 @@ class HMS_Student_Profile{
         }
     }
     
-    function set_popular_music($value = 1){
+    public function set_popular_music($value = 1){
         $this->popular_music = $value;
     }
 
-    function get_popular_music(){
+    public function get_popular_music(){
         if($this->popular_music == 1){
             return TRUE;
         }else{
@@ -2368,11 +2368,11 @@ class HMS_Student_Profile{
         }
     }
     
-    function set_progressive($value = 1){
+    public function set_progressive($value = 1){
         $this->progressive = $value;
     }
 
-    function get_progressive(){
+    public function get_progressive(){
         if($this->progressive == 1){
             return TRUE;
         }else{
@@ -2380,11 +2380,11 @@ class HMS_Student_Profile{
         }
     }
     
-    function set_punk($value = 1){
+    public function set_punk($value = 1){
         $this->punk = $value;
     }
 
-    function get_punk(){
+    public function get_punk(){
         if($this->punk == 1){
             return TRUE;
         }else{
@@ -2392,11 +2392,11 @@ class HMS_Student_Profile{
         }
     }
     
-    function set_r_and_b($value = 1){
+    public function set_r_and_b($value = 1){
         $this->r_and_b = $value;
     }
 
-    function get_r_and_b(){
+    public function get_r_and_b(){
         if($this->r_and_b == 1){
             return TRUE;
         }else{
@@ -2404,11 +2404,11 @@ class HMS_Student_Profile{
         }
     }
     
-    function set_rap($value = 1){
+    public function set_rap($value = 1){
         $this->rap = $value;
     }
 
-    function get_rap(){
+    public function get_rap(){
         if($this->rap == 1){
             return TRUE;
         }else{
@@ -2416,11 +2416,11 @@ class HMS_Student_Profile{
         }
     }
     
-    function set_reggae($value = 1){
+    public function set_reggae($value = 1){
         $this->reggae = $value;
     }
 
-    function get_reggae(){
+    public function get_reggae(){
         if($this->reggae == 1){
             return TRUE;
         }else{
@@ -2428,11 +2428,11 @@ class HMS_Student_Profile{
         }
     }
     
-    function set_rock($value = 1){
+    public function set_rock($value = 1){
         $this->rock = $value;
     }
 
-    function get_rock(){
+    public function get_rock(){
         if($this->rock == 1){
             return TRUE;
         }else{
@@ -2440,11 +2440,11 @@ class HMS_Student_Profile{
         }
     }
     
-    function set_world_music($value = 1){
+    public function set_world_music($value = 1){
         $this->world_music = $value;
     }
 
-    function get_world_music(){
+    public function get_world_music(){
         if($this->world_music == 1){
             return TRUE;
         }else{
@@ -2455,11 +2455,11 @@ class HMS_Student_Profile{
     /**
      * Study times check boxes
      */
-    function set_study_early_morning($value = 1){
+    public function set_study_early_morning($value = 1){
         $this->study_early_morning = $value;
     }
 
-    function get_study_early_morning(){
+    public function get_study_early_morning(){
         if($this->study_early_morning == 1){
             return TRUE;
         }else{
@@ -2467,11 +2467,11 @@ class HMS_Student_Profile{
         }
     }
 
-    function set_study_morning_afternoon($value = 1){
+    public function set_study_morning_afternoon($value = 1){
         $this->study_morning_afternoon = $value;
     }
 
-    function get_study_morning_afternoon(){
+    public function get_study_morning_afternoon(){
         if($this->study_morning_afternoon == 1){
             return TRUE;
         }else{
@@ -2479,11 +2479,11 @@ class HMS_Student_Profile{
         }
     }
 
-    function set_study_afternoon_evening($value = 1){
+    public function set_study_afternoon_evening($value = 1){
         $this->study_afternoon_evening = $value;
     }
 
-    function get_study_afternoon_evening(){
+    public function get_study_afternoon_evening(){
         if($this->study_afternoon_evening == 1){
             return TRUE;
         }else{
@@ -2491,11 +2491,11 @@ class HMS_Student_Profile{
         }
     }
 
-    function set_study_evening($value = 1){
+    public function set_study_evening($value = 1){
         $this->study_evening = $value;
     }
 
-    function get_study_evening(){
+    public function get_study_evening(){
         if($this->study_evening == 1){
             return TRUE;
         }else{
@@ -2503,11 +2503,11 @@ class HMS_Student_Profile{
         }
     }
 
-    function set_study_late_night($value = 1){
+    public function set_study_late_night($value = 1){
         $this->study_late_night = $value;
     }
 
-    function get_study_late_night(){
+    public function get_study_late_night(){
         if($this->study_late_night == 1){
             return TRUE;
         }else{

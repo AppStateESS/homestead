@@ -7,7 +7,7 @@
 
 class HMS_User 
 {
-    function main()
+    public function main()
     {
         $title = "Welcome to HMS!<br />";
         $content = "Welcome to Housing Management System, or HMS.<br />";

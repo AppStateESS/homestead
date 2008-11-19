@@ -29,11 +29,11 @@ class HMS_Letter
     var $message    = NULL;
     var $student_type = NULL;
 
-    function Letter()
+    public function Letter()
     {
     }
 
-    function render(&$pdf)
+    public function render(&$pdf)
     {
         $pdf->AddPage();
         $pdf->SetFont('Times', '', 12);
@@ -126,7 +126,7 @@ class HMS_Letter
         $pdf->Write(HEIGHT, "Stacy R. Sears\nAssistant Director\nHousing & Residence Life");
     }
 
-    function put_into_pile(&$freshmen_male, &$freshmen_female, &$continuing_male, &$continuing_female, $student)
+    public function put_into_pile(&$freshmen_male, &$freshmen_female, &$continuing_male, &$continuing_female, $student)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
@@ -256,7 +256,7 @@ class HMS_Letter
         }
     }
 
-    function main()
+    public function main()
     {
         switch($_REQUEST['op']) {
             case 'generate':
@@ -277,7 +277,7 @@ class HMS_Letter
         }
     }
 
-    function list_generated()
+    public function list_generated()
     {
         $files = scandir('/var/generated_docs');
         if(count($files) < 3) {
@@ -334,7 +334,7 @@ class HMS_Letter
         return $content;
     }
 
-    function pdf()
+    public function pdf()
     {
         if($_REQUEST['authkey'] != Current_User::getAuthKey()) {
             return "Access Denied";
@@ -347,7 +347,7 @@ class HMS_Letter
         return HMS_Letter::print_file('pdf');
     }
 
-    function csv()
+    public function csv()
     {
         if($_REQUEST['authkey'] != Current_User::getAuthKey()) {
             return "Access Denied";
@@ -360,7 +360,7 @@ class HMS_Letter
         return HMS_Letter::print_file('csv');
     }
 
-    function print_file($ext, $name=null)
+    public function print_file($ext, $name=null)
     {
         if(!isset($name)) {
             $files = scandir('/var/generated_docs');
@@ -397,7 +397,7 @@ class HMS_Letter
         exit;
     }
 
-    function generate_updated()
+    public function generate_updated()
     {
         // Initialize list of people that need a letter
         $needs_letter = array();
@@ -547,7 +547,7 @@ class HMS_Letter
         return $content;
     }
 
-    function pdf_factory()
+    public function pdf_factory()
     {
         $pdf = new FPDF('P','in','Letter');
         $pdf->SetMargins(1.25,2.0625,1.25);
@@ -559,7 +559,7 @@ class HMS_Letter
 
     // Insertion Sort, because we sort by name when we pull
     // it out of the DB, so it's sort of sorted.
-    function letterSort(&$letters)
+    public function letterSort(&$letters)
     {
         $count = count($letters);
         for($i = 0; $i < $count; $i++) {
@@ -576,7 +576,7 @@ class HMS_Letter
         }
     }
 
-    function show_email_menu()
+    public function show_email_menu()
     {
         $message = 'Are you sure you want to send assignment status emails?<br /><br />';
 
@@ -591,7 +591,7 @@ class HMS_Letter
         return $message;
     }
     
-    function email()
+    public function email()
     {
         // Accumulate output if any
         $output = '';

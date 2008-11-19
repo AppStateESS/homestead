@@ -11,7 +11,7 @@
 
 class HMS 
 {
-    function main($type = NULL)
+    public function main($type = NULL)
     {
 
         if(!Current_User::isLogged()) {

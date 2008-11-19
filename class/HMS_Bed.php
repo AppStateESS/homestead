@@ -21,13 +21,13 @@ class HMS_Bed extends HMS_Item {
      */
     var $_room;
 
-    function HMS_Bed($id = 0)
+    public function HMS_Bed($id = 0)
     {
         $this->construct($id, 'hms_bed');
         //test($this);
     }
 
-    function copy($to_term, $room_id, $assignments)
+    public function copy($to_term, $room_id, $assignments)
     {
         if (!$this->id) {
             return false;
@@ -66,7 +66,7 @@ class HMS_Bed extends HMS_Item {
         return true;
     }
 
-    function get_banner_building_code()
+    public function get_banner_building_code()
     {
         $room = $this->get_parent();
         $floor = $room->get_parent();
@@ -75,7 +75,7 @@ class HMS_Bed extends HMS_Item {
         return $building->banner_building_code;
     }
 
-    function get_row_tags()
+    public function get_row_tags()
     {
         $tpl = $this->item_tags();
 
@@ -87,7 +87,7 @@ class HMS_Bed extends HMS_Item {
     }
 
 
-    function loadAssignment()
+    public function loadAssignment()
     {
         $assignment_found = false;
         $db = new PHPWS_DB('hms_assignment');
@@ -110,7 +110,7 @@ class HMS_Bed extends HMS_Item {
         }
     }
 
-    function loadRoom()
+    public function loadRoom()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Room.php');
         $result = new HMS_Room($this->room_id);
@@ -122,7 +122,7 @@ class HMS_Bed extends HMS_Item {
         return true;
     }
 
-    function get_parent()
+    public function get_parent()
     {
         if(!$this->loadRoom()){
             return false;
@@ -131,13 +131,13 @@ class HMS_Bed extends HMS_Item {
         return $this->_room;
     }
 
-    function get_number_of_assignees()
+    public function get_number_of_assignees()
     {
         $this->loadAssignment();
         return (bool)$this->_curr_assignment ? 1 : 0;
     }
 
-    function get_assignee()
+    public function get_assignee()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Student.php');
         
@@ -152,7 +152,7 @@ class HMS_Bed extends HMS_Item {
         }
     }
     
-    function save()
+    public function save()
     {
         $this->stamp();
 
@@ -164,7 +164,7 @@ class HMS_Bed extends HMS_Item {
         return true;
     }
 
-    function has_vacancy()
+    public function has_vacancy()
     {
         if($this->get_number_of_assignees() == 0){
             return TRUE;
@@ -176,7 +176,7 @@ class HMS_Bed extends HMS_Item {
     /**
      * Returns a string like "Justice Hall Room 110"
      */
-    function where_am_i($link = FALSE)
+    public function where_am_i($link = FALSE)
     {
         if(!$this->loadRoom()){
             return null;
@@ -200,7 +200,7 @@ class HMS_Bed extends HMS_Item {
      * student info screen. Otherwise, the link is to the
      * assign student screen.
      */
-    function get_assigned_to_link($newWindow = FALSE)
+    public function get_assigned_to_link($newWindow = FALSE)
     {
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
         
@@ -234,7 +234,7 @@ class HMS_Bed extends HMS_Item {
 
     }
 
-    function getPagerByRoomTags()
+    public function getPagerByRoomTags()
     {
         $tags['BEDROOM']        = $this->bedroom_label;
         $tags['BED_LETTER']     = PHPWS_Text::secureLink($this->bed_letter, 'hms', array('type'=>'bed', 'op'=>'show_edit_bed', 'bed'=>$this->id));
@@ -256,7 +256,7 @@ class HMS_Bed extends HMS_Item {
     /**
      * Returns TRUE if the room can be administratively assigned, FALSE otherwise
      */
-    function canAssignHere()
+    public function canAssignHere()
     {
         # Make sure this bed isn't already assigned
         $this->loadAssignment();
@@ -284,7 +284,7 @@ class HMS_Bed extends HMS_Item {
     /**
      * Returns TRUE if the room can be auto-assigned
      */
-    function canAutoAssignHere()
+    public function canAutoAssignHere()
     {  
         # Make sure this bed isn't already assigned
         $this->loadAssignment();
@@ -329,7 +329,7 @@ class HMS_Bed extends HMS_Item {
         return TRUE;
     }
 
-    function is_lottery_reserved()
+    public function is_lottery_reserved()
     {
         $db = &new PHPWS_DB('hms_lottery_reservation');
         $db->addWhere('bed_id', $this->id);
@@ -346,7 +346,7 @@ class HMS_Bed extends HMS_Item {
         }
     }
 
-    function get_lottery_reservation_info()
+    public function get_lottery_reservation_info()
     {
         $db = &new PHPWS_DB('hms_lottery_reservation');
         $db->addWhere('bed_id', $this->id);
@@ -359,7 +359,7 @@ class HMS_Bed extends HMS_Item {
         return $result;
     }
 
-    function lottery_reserve($username, $requestor, $timestamp)
+    public function lottery_reserve($username, $requestor, $timestamp)
     {
         if($this->is_lottery_reserved()){
             return FALSE;
@@ -385,7 +385,7 @@ class HMS_Bed extends HMS_Item {
      * Static Methods *
      ******************/
 
-    function main()
+    public function main()
     {
         if( !Current_User::allow('hms', 'bed_structure') && !Current_User::allow('hms', 'bed_attributes') ){
             $tpl = array();
@@ -419,9 +419,9 @@ class HMS_Bed extends HMS_Item {
     }
     
     /**
-     * This function is depricated, see get_all_free_beds() below
+     * This public function is depricated, see get_all_free_beds() below
      * 
-    function get_all_empty_beds($init = FALSE)
+    public function get_all_empty_beds($init = FALSE)
     {
         $sql = "
             SELECT
@@ -472,7 +472,7 @@ class HMS_Bed extends HMS_Item {
      * Returns an array of IDs of free beds (which can be auto_assigned)
      * Returns FALSE if there are no more free beds
      */
-    function get_all_free_beds($term, $gender, $randomize = FALSE, $banner = FALSE)
+    public function get_all_free_beds($term, $gender, $randomize = FALSE, $banner = FALSE)
     {
         $db = &new PHPWS_DB('hms_bed');
 
@@ -553,7 +553,7 @@ class HMS_Bed extends HMS_Item {
      * Returns the ID of a free bed (which can be auto-assigned)
      * Returns FALSE if there are no more free beds
      */
-    function get_free_bed($term, $gender, $randomize = FALSE)
+    public function get_free_bed($term, $gender, $randomize = FALSE)
     {
         // Get the list of all free beds
         $beds = HMS_Bed::get_all_free_beds($term, $gender);
@@ -577,7 +577,7 @@ class HMS_Bed extends HMS_Item {
         }
     }   
 
-    function edit_bed()
+    public function edit_bed()
     {
         if( !Current_User::allow('hms', 'bed_attributes') ){
             $tpl = array();
@@ -615,7 +615,7 @@ class HMS_Bed extends HMS_Item {
      * The 'ra_bed' flag is expected to be either TRUE or FALSE.
      * @return TRUE for success, FALSE otherwise
      */
-    function add_bed($room_id, $bed_letter, $bedroom_label, $phone_number, $banner_id, $ra_bed = FALSE)
+    public function add_bed($room_id, $bed_letter, $bedroom_label, $phone_number, $banner_id, $ra_bed = FALSE)
     {
         # Check permissions
         if(!Current_User::allow('hms', 'bed_structure')){
@@ -653,7 +653,7 @@ class HMS_Bed extends HMS_Item {
         return true;
     }
 
-    function delete_bed($bed_id)
+    public function delete_bed($bed_id)
     {
         if(!Current_User::allow('hms', 'bed_structure')){
             return false;
@@ -682,7 +682,7 @@ class HMS_Bed extends HMS_Item {
      * Static UI Methods *
      *********************/
      
-    function show_select_bed($title, $type, $op, $success = NULL, $error = NULL)
+    public function show_select_bed($title, $type, $op, $success = NULL, $error = NULL)
     {
         if(   !Current_User::allow('hms', 'bed_view') 
            && !Current_User::allow('hms', 'bed_attributes')
@@ -762,7 +762,7 @@ class HMS_Bed extends HMS_Item {
         return PHPWS_Template::process($tpl, 'hms', 'admin/select_bed.tpl');
     }
 
-    function show_edit_bed($bed_id = NULL, $success = null, $error = null)
+    public function show_edit_bed($bed_id = NULL, $success = null, $error = null)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
         PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
@@ -866,7 +866,7 @@ class HMS_Bed extends HMS_Item {
         return PHPWS_Template::process($tpl, 'hms', 'admin/edit_bed.tpl');
     }
 
-    function show_add_bed($success = NULL, $error = NULL)
+    public function show_add_bed($success = NULL, $error = NULL)
     {
         if(!Current_User::allow('hms', 'search')){
             $tpl = array();
@@ -962,7 +962,7 @@ class HMS_Bed extends HMS_Item {
         return PHPWS_Template::process($tpl, 'hms', 'admin/edit_bed.tpl');
     }
 
-    function add_bed_submit()
+    public function add_bed_submit()
     {
         if(!Current_User::allow('hms', 'bed_structure')){
             $tpl = array();
@@ -999,7 +999,7 @@ class HMS_Bed extends HMS_Item {
         }
     }
 
-    function delete_bed_submit()
+    public function delete_bed_submit()
     {
         if(!Current_User::allow('hms', 'bed_structure')){
             $tpl = array();
@@ -1018,7 +1018,7 @@ class HMS_Bed extends HMS_Item {
         }
     }
 
-    function bed_pager_by_room($room_id)
+    public function bed_pager_by_room($room_id)
     {
         PHPWS_Core::initCoreClass('DBPager.php');
 

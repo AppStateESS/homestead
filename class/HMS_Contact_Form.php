@@ -8,7 +8,7 @@
 
 class HMS_Contact_Form{
 
-    function main()
+    public function main()
     {
         switch($_REQUEST['op'])
         {
@@ -24,7 +24,7 @@ class HMS_Contact_Form{
         }
     }
 
-    function show_contact_form()
+    public function show_contact_form()
     {
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
 
@@ -68,7 +68,7 @@ class HMS_Contact_Form{
      * Called in response to the submission of a contact form
      * Handles emailing the data to a predefined list of admins
      */
-    function submit_contact_form()
+    public function submit_contact_form()
     {
         PHPWS_Core::initCoreClass('Mail.php');
 

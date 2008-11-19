@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Provides functionality to actually assign students to a room
+ * Provides public functionality to actually assign students to a room
  *
  * @author Jeremy Booker <jbooker at tux dot appstate dot edu>
  * @author Matt     <matt at tux dot appstate dot edu>
@@ -25,14 +25,14 @@ class HMS_Assignment extends HMS_Item
     /********************
      * Instance Methods *
      *******************/
-    function HMS_Assignment($id = 0)
+    public function HMS_Assignment($id = 0)
     {
         $this->construct($id, 'hms_assignment');
 
         return $this;
     }
 
-    function copy($to_term, $bed_id)
+    public function copy($to_term, $bed_id)
     {
         $new_ass = clone($this);
         $new_ass->reset();
@@ -41,7 +41,7 @@ class HMS_Assignment extends HMS_Item
         return $new_ass->save();
     }
 
-    function save()
+    public function save()
     {
         $db = new PHPWS_DB('hms_assignment');
         $this->stamp();
@@ -52,7 +52,7 @@ class HMS_Assignment extends HMS_Item
         return true;
     }
 
-    function get_row_tags()
+    public function get_row_tags()
     {
         $tpl = $this->item_tags();
 
@@ -66,7 +66,7 @@ class HMS_Assignment extends HMS_Item
     /*
      * Returns the parent floor object of this room
      */
-    function get_parent()
+    public function get_parent()
     {
         $this->loadBed();
         return $this->_bed;
@@ -75,7 +75,7 @@ class HMS_Assignment extends HMS_Item
     /*
      * Loads the parent bed object of this room
      */
-    function loadBed()
+    public function loadBed()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
         $result = new HMS_Bed($this->bed_id);
@@ -90,7 +90,7 @@ class HMS_Assignment extends HMS_Item
     /*
      * Returns the banner building code that is associated with this bed
      */
-    function get_banner_building_code()
+    public function get_banner_building_code()
     {
         if(!$this->loadBed()){
             return null;
@@ -107,7 +107,7 @@ class HMS_Assignment extends HMS_Item
     /*
      * Returns the banner bed id associated with this bed
      */
-    function get_banner_bed_id(){
+    public function get_banner_bed_id(){
         if(!$this->loadBed()){
             return null;
         }
@@ -118,7 +118,7 @@ class HMS_Assignment extends HMS_Item
     /**
      * Returns a string like "Justice Hall Room 110"
      */
-    function where_am_i($link = FALSE)
+    public function where_am_i($link = FALSE)
     {
         if(!$this->loadBed()){
             return null;
@@ -142,7 +142,7 @@ class HMS_Assignment extends HMS_Item
      * Returns the phone number of the bed for this assignment.
      * Useful when called from outside classes....
      */
-    function get_phone_number()
+    public function get_phone_number()
     {
         if(!$this->loadBed()){
             return null;
@@ -151,7 +151,7 @@ class HMS_Assignment extends HMS_Item
         return $this->_bed->phone_number;
     }
 
-    function get_ft_movein_time_id()
+    public function get_ft_movein_time_id()
     {
         if(!$this->loadBed()){
             return null;
@@ -163,7 +163,7 @@ class HMS_Assignment extends HMS_Item
         return $floor->ft_movein_time_id;
     }
 
-    function get_rt_movein_time_id()
+    public function get_rt_movein_time_id()
     {
         if(!$this->loadBed()){
             return null;
@@ -175,7 +175,7 @@ class HMS_Assignment extends HMS_Item
         return $floor->rt_movein_time_id;
     }
 
-    function get_room_id()
+    public function get_room_id()
     {
 
         if(!$this->loadBed()){
@@ -194,7 +194,7 @@ class HMS_Assignment extends HMS_Item
     /***************
      * Main Method *
      **************/
-    function main()
+    public function main()
     {
         if( !Current_User::allow('hms', 'assignment_maintenance') && !Current_User::allow('hms', 'autoassign') ){
             $tpl = array();
@@ -228,7 +228,7 @@ class HMS_Assignment extends HMS_Item
      * Uses the current term if none is supplied
      */
 
-    function check_for_assignment($asu_username, $term = NULL)
+    public function check_for_assignment($asu_username, $term = NULL)
     {
         $db = new PHPWS_DB('hms_assignment');
         $db->addWhere('asu_username', $asu_username, 'ILIKE');
@@ -244,7 +244,7 @@ class HMS_Assignment extends HMS_Item
         return !is_null($db->select('row'));
     }
 
-    function get_assignment($asu_username, $term = NULL)
+    public function get_assignment($asu_username, $term = NULL)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
 
@@ -275,7 +275,7 @@ class HMS_Assignment extends HMS_Item
      * Does all the checks necessary to assign a student and makes the assignment
      * The $room_id and $bed_id fields are optional, but one or the other must be specificed
      */
-    function assign_student($username, $term, $room_id = NULL, $bed_id = NULL, $meal_plan, $notes="", $lottery = FALSE)
+    public function assign_student($username, $term, $room_id = NULL, $bed_id = NULL, $meal_plan, $notes="", $lottery = FALSE)
     {   
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
         PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
@@ -459,7 +459,7 @@ class HMS_Assignment extends HMS_Item
         return E_SUCCESS;
     }
 
-    function unassign_student($username, $term, $notes="")
+    public function unassign_student($username, $term, $notes="")
     {
         if(!Current_User::allow('hms', 'assignment_maintenance')){
             return E_PERMISSION_DENIED;
@@ -521,7 +521,7 @@ class HMS_Assignment extends HMS_Item
      * Static UI Methods *
      ********************/
 
-    function show_assign_student($success = NULL, $error = NULL)
+    public function show_assign_student($success = NULL, $error = NULL)
     {
         PHPWS_Core::initCoreClass('Form.php');
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
@@ -534,7 +534,7 @@ class HMS_Assignment extends HMS_Item
         }
 
         javascript('/modules/hms/assign_student');
-//        javascript('onload', array('function'=>"load_halls()"));
+//        javascript('onload', array('public function'=>"load_halls()"));
 
         $form = &new PHPWS_Form;
 
@@ -662,7 +662,7 @@ class HMS_Assignment extends HMS_Item
         
     }
 
-    function show_assign_student_move_confirm(){
+    public function show_assign_student_move_confirm(){
         PHPWS_Core::initCoreClass('Form.php');
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
@@ -698,7 +698,7 @@ class HMS_Assignment extends HMS_Item
         return PHPWS_Template::process($tpl, 'hms', 'admin/assign_student_move_confirm.tpl');
     }
     
-    function assign_student_result()
+    public function assign_student_result()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Room.php');
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
@@ -769,7 +769,7 @@ class HMS_Assignment extends HMS_Item
         }
 
         # This code is only run if the move was flagged as confirmed above
-        # The code was copied/adapted from the 'unassign_student' function below
+        # The code was copied/adapted from the 'unassign_student' public function below
         if($move_needed){
             $assignment = HMS_Assignment::get_assignment($_REQUEST['username'], HMS_Term::get_selected_term());
             
@@ -815,7 +815,7 @@ class HMS_Assignment extends HMS_Item
         }
     }
     
-    function show_unassign_student($success = NULL, $error = NULL)
+    public function show_unassign_student($success = NULL, $error = NULL)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
 
@@ -858,7 +858,7 @@ class HMS_Assignment extends HMS_Item
         return PHPWS_Template::process($tpl, 'hms', 'admin/unassign_student.tpl');
     }
 
-    function unassign_student_result()
+    public function unassign_student_result()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
@@ -873,7 +873,7 @@ class HMS_Assignment extends HMS_Item
         }
     }
 
-    function assignment_pager_by_room($room_id)
+    public function assignment_pager_by_room($room_id)
     {
         PHPWS_Core::initCoreClass('DBPager.php');
 
@@ -900,7 +900,7 @@ class HMS_Assignment extends HMS_Item
         return $pager->get();
     }
 
-    function getPagerByRoomTags()
+    public function getPagerByRoomTags()
     {
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
         
@@ -913,7 +913,7 @@ class HMS_Assignment extends HMS_Item
         return $tags;
     }
 
-    function get_assignment_pager_by_suite($suite_id){
+    public function get_assignment_pager_by_suite($suite_id){
         PHPWS_Core::initCoreClass('DBPager.php');
 
         $pager = & new DBPager('hms_assignment', 'HMS_Assignment');
@@ -940,7 +940,7 @@ class HMS_Assignment extends HMS_Item
         return $pager->get();
     }
 
-    function getPagerBySuiteTags()
+    public function getPagerBySuiteTags()
     {
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
 
@@ -961,7 +961,7 @@ class HMS_Assignment extends HMS_Item
     /** 
      * Translates an error code into a string
      */
-    function get_assignment_error_msg($error_code)
+    public function get_assignment_error_msg($error_code)
     {
         $error_msg = 'Error: ';
         

@@ -5,10 +5,10 @@ require_once(PHPWS_SOURCE_DIR . 'mod/hms/inc/defines.php');
 class HMS_SOAP{
 
     /**
-     * Main function for getting student info.
-     * Used by the rest of the "get" functions
+     * Main public function for getting student info.
+     * Used by the rest of the "get" public functions
      */
-    function get_student_info($username, $term = NULL)
+    public function get_student_info($username, $term = NULL)
     {
         /**
          * This variable is a hash table that stores student
@@ -69,7 +69,7 @@ class HMS_SOAP{
     /**
      * Returns the ASU Username for the given banner id
      */
-    function get_username($banner_id)
+    public function get_username($banner_id)
     {
         if(SOAP_INFO_TEST_FLAG){
             return HMS_SOAP::get_test_username();
@@ -93,7 +93,7 @@ class HMS_SOAP{
      * Report that a housing application has been received.
      * Makes First Connections stop bugging the students.
      */
-    function report_application_received($username, $term, $plan_code = 'HOME', $meal_code = NULL)
+    public function report_application_received($username, $term, $plan_code = 'HOME', $meal_code = NULL)
     {
         if(SOAP_REPORT_TEST_FLAG) {
             $result = HMS_SOAP::get_test_report();
@@ -133,7 +133,7 @@ class HMS_SOAP{
     /**
      * Sends a room assignment to banner. Will cause students to be billed, etc.
      */
-    function report_room_assignment($username, $term, $building_code, $room_code, $plan_code, $meal_code)
+    public function report_room_assignment($username, $term, $building_code, $room_code, $plan_code, $meal_code)
     {
         if(SOAP_REPORT_TEST_FLAG){
             return HMS_SOAP::get_test_report();
@@ -172,7 +172,7 @@ class HMS_SOAP{
      * Remove the deletion of a room assignment to Banner.
      * Will cause students to be credited, etc.
      */
-    function remove_room_assignment($username, $term, $building, $room)
+    public function remove_room_assignment($username, $term, $building, $room)
     {
         if(SOAP_REPORT_TEST_FLAG) {
             return HMS_SOAP::get_test_report();
@@ -213,7 +213,7 @@ class HMS_SOAP{
      *  'RoomAssign'
      *  'MealAssign'
      */
-    function get_hous_meal_register($username, $termcode, $opt)
+    public function get_hous_meal_register($username, $termcode, $opt)
     {
         if(SOAP_INFO_TEST_FLAG) {
             return HMS_SOAP::get_test_hous_meal();
@@ -248,15 +248,15 @@ class HMS_SOAP{
 
 
     /*******************************
-     * Individual 'get' functions' *
+     * Individual 'get' public functions' *
      *******************************
      *
-     * The functions below pull various pieces from the 
+     * The public functions below pull various pieces from the 
      * student info object returned by 'get_student_info()'
      */
     
     
-    function is_valid_student($username)
+    public function is_valid_student($username)
     {
         $student = HMS_SOAP::get_student_info($username);
 
@@ -272,7 +272,7 @@ class HMS_SOAP{
         }
     }
 
-    function get_banner_id($username)
+    public function get_banner_id($username)
     {
         $student = HMS_SOAP::get_student_info($username);
         
@@ -284,7 +284,7 @@ class HMS_SOAP{
         return $student->banner_id;
     }
 
-    function get_credit_hours($username)
+    public function get_credit_hours($username)
     {
         $student = HMS_SOAP::get_student_info($username);
 
@@ -296,7 +296,7 @@ class HMS_SOAP{
         return $student->credhrs_completed;
     }
 
-    function get_name($username){
+    public function get_name($username){
         $student = HMS_SOAP::get_student_info($username);
 
         if(PEAR::isError($student)){
@@ -310,7 +310,7 @@ class HMS_SOAP{
         
     }
 
-    function get_first_name($username)
+    public function get_first_name($username)
     {
         $student = HMS_SOAP::get_student_info($username);
         
@@ -324,7 +324,7 @@ class HMS_SOAP{
         }
     }
 
-    function get_middle_name($username)
+    public function get_middle_name($username)
     {
         $student = HMS_SOAP::get_student_info($username);
 
@@ -338,7 +338,7 @@ class HMS_SOAP{
         }
     }
 
-    function get_last_name($username)
+    public function get_last_name($username)
     {
         $student = HMS_SOAP::get_student_info($username);
 
@@ -356,7 +356,7 @@ class HMS_SOAP{
      * Given a username, returns the full name of the student in
      * the natural order (first middle last).
      */
-    function get_full_name($username)
+    public function get_full_name($username)
     {
         $student = HMS_SOAP::get_student_info($username);
 
@@ -376,7 +376,7 @@ class HMS_SOAP{
      * Given a username, returns the full name of the student in the 
      * (last, first middle) format.
      */
-    function get_full_name_inverted($username)
+    public function get_full_name_inverted($username)
     {
         $student = HMS_SOAP::get_student_info($username);
 
@@ -397,7 +397,7 @@ class HMS_SOAP{
      * If $numeric is set to true, returns the gender as an int where 0 => Female
      * and 1 => Male. (For database operations).
      */
-    function get_gender($username, $numeric = FALSE)
+    public function get_gender($username, $numeric = FALSE)
     {
         $student = HMS_SOAP::get_student_info($username);
 
@@ -423,7 +423,7 @@ class HMS_SOAP{
      * Returns an array of all the address objects
      * associated with a student.
      */
-    function get_addresses($username)
+    public function get_addresses($username)
     {
         $student = HMS_SOAP::get_student_info($username);
 
@@ -448,7 +448,7 @@ class HMS_SOAP{
      * ADDRESS_PRMT_RESIDENCE ('PR' - permanent residence)
      * ADDRESS_PRMT_STUDENT   ('PS' - permanent student)
      */
-    function get_address($username, $type = ADDRESS_PRMT_RESIDENCE)
+    public function get_address($username, $type = ADDRESS_PRMT_RESIDENCE)
     {
         $student = HMS_SOAP::get_student_info($username);
 
@@ -515,7 +515,7 @@ class HMS_SOAP{
      * "line1, (line 2, )(line 3, )city, state, zip"
      * Uses data returned from get_data.
      */
-    function get_address_line($username)
+    public function get_address_line($username)
     {
         $addr = HMS_SOAP::get_address($username);
         if(PEAR::isError($addr)) {
@@ -538,7 +538,7 @@ class HMS_SOAP{
      * C => continuing
      * T => transfer
      */
-    function get_student_type($username, $term = NULL)
+    public function get_student_type($username, $term = NULL)
     {
         $student = HMS_SOAP::get_student_info($username, $term);
         
@@ -559,7 +559,7 @@ class HMS_SOAP{
      * JR => Junior
      * SR => Senior
      */
-    function get_student_class($username, $term = NULL)
+    public function get_student_class($username, $term = NULL)
     {
         $student = HMS_SOAP::get_student_info($username, $term);
         
@@ -577,7 +577,7 @@ class HMS_SOAP{
      * Returns the student's date of birth
      * Format: yyyy-mm-dd
      */
-    function get_dob($username)
+    public function get_dob($username)
     {
         $student = HMS_SOAP::get_student_info($username);
         
@@ -602,7 +602,7 @@ class HMS_SOAP{
      * 30 => Summer 2
      * 40 => Fall
      */
-    function get_application_term($username){
+    public function get_application_term($username){
         $student = HMS_SOAP::get_student_info($username);
 
         if(PEAR::isError($student)){
@@ -623,7 +623,7 @@ class HMS_SOAP{
     /**
      * Returns the student's phone number in either xxx.xxx.xxxx or (xxx)xxx-xxxx fashion
      */
-    function get_phone_number($username, $alt = NULL)
+    public function get_phone_number($username, $alt = NULL)
     {
         $student = HMS_SOAP::get_student_info($username);
         
@@ -648,7 +648,7 @@ class HMS_SOAP{
     /**
      * Returns TRUE if an error object is of class 'soap_fault'
      */
-    function is_soap_fault($object)
+    public function is_soap_fault($object)
     {
         if(is_object($object) && is_a($object, 'soap_fault')){
             return TRUE;
@@ -658,30 +658,30 @@ class HMS_SOAP{
     }
 
     /** 
-     * Uses the PHPWS_Core log function to 'manually' log soap errors to soap_error.log.
+     * Uses the PHPWS_Core log public function to 'manually' log soap errors to soap_error.log.
      */
-    function log_soap_fault($soap_fault, $function, $extra_info)
+    public function log_soap_fault($soap_fault, $public function, $extra_info)
     {
-        $error_msg = $soap_fault->message . 'in function: ' . $function . " Extra: " . $extra_info;    
+        $error_msg = $soap_fault->message . 'in public function: ' . $public function . " Extra: " . $extra_info;    
         PHPWS_Core::log($error_msg, 'soap_error.log', _('Error'));
     }
 
     /**
-     * Uses the PHPWS_Core log function to 'manually' log soap erros to soap_error.log.
+     * Uses the PHPWS_Core log public function to 'manually' log soap erros to soap_error.log.
      */
-    function log_soap_error($message, $function, $extra)
+    public function log_soap_error($message, $public function, $extra)
     {
-        PHPWS_Core::log('Banner error: ' . $message . ' in function: ' . $function . ' Extra: ' . $extra, 'soap_error.log', 'Error');
+        PHPWS_Core::log('Banner error: ' . $message . ' in public function: ' . $public function . ' Extra: ' . $extra, 'soap_error.log', 'Error');
     }
 
     /**
-     * Uses the PHPWS_Core log function to 'manually' log soap requests
+     * Uses the PHPWS_Core log public function to 'manually' log soap requests
      */
-    function log_soap($function, $result)
+    public function log_soap($public function, $result)
     {
         $arglist = func_get_args();
         $args = implode(', ', array_slice($arglist, 2));
-        $msg = "$function($args) result: $result";
+        $msg = "$public function($args) result: $result";
         PHPWS_Core::log($msg, 'soap.log', 'SOAP');
     }    
 
@@ -701,7 +701,7 @@ class HMS_SOAP{
      *
      * TODO: It is a HACK that needs to be implemented more betterly.
      */
-    function get_plan_meal_codes($username, $building, $banner_meal_code)
+    public function get_plan_meal_codes($username, $building, $banner_meal_code)
     {
         $type = HMS_SOAP::get_student_type($username, HMS_SOAP::get_application_term($username));
 
@@ -740,7 +740,7 @@ class HMS_SOAP{
         return $retval;
     }
 
-   function handle_soap_fault()
+   public function handle_soap_fault()
    {
         // Show an error page
         if(Current_User::getUsername() == 'hms_student'){
@@ -753,10 +753,10 @@ class HMS_SOAP{
    }
 
     /*************************
-     * Canned data functions *
+     * Canned data public functions *
      *************************/
 
-    function get_test_info(){
+    public function get_test_info(){
         $student->banner_id             = 900325006;
         $student->last_name             = 'Booker';
         $student->first_name            = 'Jeremy';
@@ -818,18 +818,18 @@ class HMS_SOAP{
         return $student;
     }
 
-    function get_test_username(){
+    public function get_test_username(){
         return 'jb67803';
     }
 
-    function get_test_report()
+    public function get_test_report()
     {
 //        return 1337; //error
         return 0;
     }
 
 
-    function get_test_hous_meal()
+    public function get_test_hous_meal()
     {
         // Assemble the housing_app object
         $housing_app->plan_code     = 'HOME';

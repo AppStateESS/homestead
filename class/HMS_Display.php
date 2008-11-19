@@ -10,7 +10,7 @@
 class HMS_Display
 {
  
-    function get_system_statistics()
+    public function get_system_statistics()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
         $term = HMS_Term::get_selected_term();
@@ -66,14 +66,14 @@ class HMS_Display
         return $final;
     }
 
-    function display_greeting()
+    public function display_greeting()
     {
         $content = "Thank you for logging in to Housing Management System.<br />";
         $content .= "Please choose an operation from the menu to the left.<br />";
         return $content;
     }
 
-    function main()
+    public function main()
     {
         switch(isset($_REQUEST['op'])?$_REQUEST['op']:'')
         {

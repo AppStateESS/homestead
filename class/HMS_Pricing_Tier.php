@@ -12,7 +12,7 @@ class HMS_Pricing_Tier
     var $id             = 0;
     var $tier_value     = null;
 
-    function HMS_Pricing_Tier($id = 0)
+    public function HMS_Pricing_Tier($id = 0)
     {
         if (!$id) {
             return;
@@ -31,7 +31,7 @@ class HMS_Pricing_Tier
     * Static Functions *
     *******************/
 
-    function get_pricing_tiers()
+    public function get_pricing_tiers()
     {
         $db = new PHPWS_DB('hms_pricing_tiers');
         $db->addOrder('tier_value', 'ASC');
@@ -46,7 +46,7 @@ class HMS_Pricing_Tier
         }
     }
 
-    function get_pricing_tiers_array()
+    public function get_pricing_tiers_array()
     {
         $tiers_array = array();
         

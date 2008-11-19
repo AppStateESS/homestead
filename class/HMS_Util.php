@@ -1,7 +1,7 @@
 <?php
 
 /**
- * HMS Utility class for various functions that don't fit anywhere else
+ * HMS Utility class for various public functions that don't fit anywhere else
  * @author Jeremy Booker <jbooker at tux dot appstate dot edu>
  */
 
@@ -14,7 +14,7 @@ class HMS_Util{
     /**
      * Returns an array where the keys are numeric 1-12, values are text month names
      */
-    function get_months()
+    public function get_months()
     {
         $months = array('1'=>'January',
                         '2'=>'February',
@@ -35,7 +35,7 @@ class HMS_Util{
     /**
      * Returns an array of days of of the month (1-31), keys and values match.
      */
-    function get_days()
+    public function get_days()
     {
         for($d = 1; $d <= 31; $d++) {
             $days[$d] = $d;
@@ -47,14 +47,14 @@ class HMS_Util{
     /**
      * Returns an array of the current year and the next year. Keys and values match.
      */
-    function get_years_2yr(){
+    public function get_years_2yr(){
         return array(date('Y')=>date('Y'), date('Y') + 1=>date('Y') + 1);
     }
 
     /**
      * Returns an array of hours 12 hour format, indexed in 24 hour
      */
-    function get_hours(){
+    public function get_hours(){
         $hours = array();
 
         $hours[0] = '12 AM';
@@ -82,7 +82,7 @@ class HMS_Util{
      *
      * @param int $timestamp
      */
-    function get_short_date($timestamp) {
+    public function get_short_date($timestamp) {
         if(!isset($timestamp))
             $timestamp = mktime();
      
@@ -94,7 +94,7 @@ class HMS_Util{
      *
      * @param int $timestamp
      */
-    function get_long_date($timestamp) {
+    public function get_long_date($timestamp) {
         if(!isset($timestamp))
             $timestamp = mktime();
 
@@ -106,7 +106,7 @@ class HMS_Util{
      *
      * @param int $timestamp
      */
-    function get_super_long_date($timestamp) {
+    public function get_super_long_date($timestamp) {
         if(!isset($timestamp))
             $timestamp = mktime();
 
@@ -118,7 +118,7 @@ class HMS_Util{
      *
      * @param int $timestamp
      */
-    function get_long_date_time($timestamp)
+    public function get_long_date_time($timestamp)
     {
         if(!isset($timestamp)){
             $timestamp = mktime();
@@ -131,7 +131,7 @@ class HMS_Util{
      * Determines which color the title bar should be based on
      * the selected and current terms.
      */
-    function get_title_class(){
+    public function get_title_class(){
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
 
         $selected_term = HMS_Term::get_selected_term();
@@ -148,7 +148,7 @@ class HMS_Util{
         }
     }
 
-    function formatGender($gender)
+    public function formatGender($gender)
     {
         switch ($gender) {
         case FEMALE:
@@ -165,7 +165,7 @@ class HMS_Util{
         }
     }
 
-    function formatClass($class)
+    public function formatClass($class)
     {
         switch($class){
             case CLASS_FRESHMEN:
@@ -181,7 +181,7 @@ class HMS_Util{
         }
     }
 
-    function formatType($type)
+    public function formatType($type)
     {
         switch($type){
             case TYPE_FRESHMEN:
@@ -193,7 +193,7 @@ class HMS_Util{
         }
     }
 
-    function formatMealOption($meal)
+    public function formatMealOption($meal)
     {
         switch($meal){
             case BANNER_MEAL_NONE:
@@ -214,7 +214,7 @@ class HMS_Util{
 
     // when fed a number, adds the English ordinal suffix. Works for any
     // number, even negatives
-    function ordinal($number) {
+    public function ordinal($number) {
         if ($number % 100 > 10 && $number %100 < 14){
             $suffix = "th";
         }else{

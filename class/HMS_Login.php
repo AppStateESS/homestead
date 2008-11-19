@@ -4,7 +4,7 @@ require_once(PHPWS_SOURCE_DIR . 'mod/hms/inc/defines.php');
 
 class HMS_Login
 {
-    function display_login_screen($error = NULL)
+    public function display_login_screen($error = NULL)
     {
         $values = array('ADDITIONAL'=>'The Housing Management System will <strong>not</strong> work without having your web browser\'s cookie features enabled.  Please read about <a href="http://www.google.com/cookies.html" target="_blank">how to enable cookies</a>.');
         $tpl['COOKIE_WARNING'] = Layout::getJavascript('cookietest', $values);
@@ -17,7 +17,7 @@ class HMS_Login
         Layout::add(PHPWS_Template::process($tpl, 'hms', 'misc/login.tpl'));
     }
 
-    function login_user()
+    public function login_user()
     {
         /*
         if(!file_exists(AXP_LOCATION)) {
@@ -41,7 +41,7 @@ class HMS_Login
         
     }
 
-    function student_login($username)
+    public function student_login($username)
     {
         PHPWS_Core::initModClass('hms','HMS_Deadlines.php');
         PHPWS_Core::initModClass('hms','HMS_SOAP.php');
@@ -64,7 +64,7 @@ class HMS_Login
         return STUDENT;
     }
 
-    function admin_login()
+    public function admin_login()
     {
         Current_User::loginUser(HMS_ADMIN_USER, HMS_ADMIN_PASS);
         Current_User::getLogin();
@@ -72,7 +72,7 @@ class HMS_Login
         return ADMIN;
     }
 
-    function fake_login($username){
+    public function fake_login($username){
         if( !Current_User::isLogged() ) {
             require_once(PHPWS_SOURCE_DIR . '/mod/hms/inc/accounts.php');
             Current_User::loginUser(HMS_STUDENT_USER, HMS_STUDENT_PASS);
@@ -81,7 +81,7 @@ class HMS_Login
         HMS_Login::student_login($username);
     }
 
-    function show_fake_login()
+    public function show_fake_login()
     {
         $form = new PHPWS_Form();
         $form->addText('username');

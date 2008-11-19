@@ -41,7 +41,7 @@ class HMS_Application {
      * Set $asu_username equal to the ASU email of the student you want
      * to create/load a application for.
      */
-    function HMS_Application($asu_username = NULL, $term = NULL)
+    public function HMS_Application($asu_username = NULL, $term = NULL)
     {
 
         if(isset($asu_username)){
@@ -59,7 +59,7 @@ class HMS_Application {
         }
     }
 
-    function init()
+    public function init()
     {
         $db = new PHPWS_DB('hms_application');
         $db->addWhere('asu_username', $this->asu_username);
@@ -70,7 +70,7 @@ class HMS_Application {
         }
     }
     
-    function save()
+    public function save()
     {
         $db = new PHPWS_DB('hms_application');
 
@@ -86,7 +86,7 @@ class HMS_Application {
         return true;
     }
     
-    function delete()
+    public function delete()
     {
         $db = new PHPWS_DB('hms_application');
         $db->addWhere('id', $this->id);
@@ -112,7 +112,7 @@ class HMS_Application {
      *
      * @author Jeff Tickle <jtickle at tux dot appstate dot edu>
      */
-    function calculateAggregate(){
+    public function calculateAggregate(){
         $aggregate = 0;
         $aggregate |= ($this->term_classification   - 1) << 3;
         $aggregate |= ($this->student_status        - 1) << 2;
@@ -124,7 +124,7 @@ class HMS_Application {
     /**
      * Reports 'this' application to Banner
      */
-    function report_to_banner()
+    public function report_to_banner()
     {
         $plancode = HMS_SOAP::get_plan_meal_codes($this->asu_username, 'lawl', $this->meal_option);
         $result = HMS_SOAP::report_application_received($this->asu_username, $this->term, $plancode['plan'], $plancode['meal']);
@@ -171,7 +171,7 @@ class HMS_Application {
      * return true for withdrawn applications. If false (default), then check_for_application will
      * ignore withdrawn applications.
      */
-    function check_for_application($asu_username = NULL, $term = NULL, $withdrawn = FALSE)
+    public function check_for_application($asu_username = NULL, $term = NULL, $withdrawn = FALSE)
     {
         $db = &new PHPWS_DB('hms_application');
         if(isset($asu_username)) {
@@ -203,7 +203,7 @@ class HMS_Application {
         }
     }
 
-    function get_all_applicants()
+    public function get_all_applicants()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
 
@@ -218,7 +218,7 @@ class HMS_Application {
         return $db->getObjects('HMS_Application');
     }
 
-    function get_unassigned_applicants()
+    public function get_unassigned_applicants()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
         
@@ -233,7 +233,7 @@ class HMS_Application {
         return $db->getObjects('HMS_Application');
     }
 
-    function is_feature_enabled($term, $feature){
+    public function is_feature_enabled($term, $feature){
         $db = &new PHPWS_DB('hms_application_features');
         $db->addWhere('term', $term);
         $db->addWhere('feature', $feature);

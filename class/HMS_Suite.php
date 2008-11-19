@@ -7,12 +7,12 @@ class HMS_Suite extends HMS_Item {
     var $_rooms   = array();
     var $_floor   = null;
 
-    function HMS_Suite($id = 0)
+    public function HMS_Suite($id = 0)
     {
         $this->construct($id, 'hms_suite');
     }
 
-    function save()
+    public function save()
     {
         $db = new PHPWS_DB('hms_suite');
 
@@ -23,7 +23,7 @@ class HMS_Suite extends HMS_Item {
         return true;
     }
 
-    function copy($to_term, $floor_id, $assignments=false)
+    public function copy($to_term, $floor_id, $assignments=false)
     {
         if (!$this->id) {
             return false;
@@ -71,7 +71,7 @@ class HMS_Suite extends HMS_Item {
 
 
     # The gender of a suite can only be changed if all of the rooms can be changed
-    function can_change_gender($target_gender, $ignore_upper = FALSE)
+    public function can_change_gender($target_gender, $ignore_upper = FALSE)
     {
         if(!$this->loadRooms()){
             return false;
@@ -90,7 +90,7 @@ class HMS_Suite extends HMS_Item {
      * Pulls all the rooms associated with this suite and stores
      * them in the _room variable.
      */
-    function loadRooms()
+    public function loadRooms()
     {
         $db = new PHPWS_DB('hms_room');
         $db->addWhere('floor_id', $this->floor_id);
@@ -109,7 +109,7 @@ class HMS_Suite extends HMS_Item {
     /**
      * Loads the parent floor object of this room
      */
-    function loadFloor()
+    public function loadFloor()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
         $result = new HMS_Floor($this->floor_id);
@@ -120,7 +120,7 @@ class HMS_Suite extends HMS_Item {
         return true;
     }
 
-    function get_rooms()
+    public function get_rooms()
     {
         if(!$this->loadRooms()){
             return false;
@@ -129,7 +129,7 @@ class HMS_Suite extends HMS_Item {
         return $this->_rooms;
     }
 
-    function get_number_of_assignees()
+    public function get_number_of_assignees()
     {
         $db = &new PHPWS_DB('hms_assignment');
         $db->addJoin('LEFT OUTER', 'hms_assignment', 'hms_bed', 'bed_id', 'id'  );
@@ -147,7 +147,7 @@ class HMS_Suite extends HMS_Item {
         return $result;
     }
 
-    function get_assignees()
+    public function get_assignees()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Student.php');
 
@@ -181,7 +181,7 @@ class HMS_Suite extends HMS_Item {
     * Static Methods *
     *****************/
     
-    function main()
+    public function main()
     {
         if( !Current_User::allow('hms', 'suite_structure') && !Current_User::allow('hms', 'suite_attributes') ){
             $tpl = array();
@@ -205,7 +205,7 @@ class HMS_Suite extends HMS_Item {
 
     }
 
-    function edit_suite_submit()
+    public function edit_suite_submit()
     {
         if( !Current_User::allow('hms', 'suite_attributes') ){
             $tpl = array();
@@ -261,7 +261,7 @@ class HMS_Suite extends HMS_Item {
     /*********************
      * Static UI Methods *
      ********************/
-    function show_select_suite($title, $type, $op, $success = NULL, $error = NULL)
+    public function show_select_suite($title, $type, $op, $success = NULL, $error = NULL)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
@@ -327,7 +327,7 @@ class HMS_Suite extends HMS_Item {
         return PHPWS_Template::process($tpl, 'hms', 'admin/select_suite.tpl');
     }
 
-    function show_edit_suite($suite_id = NULL, $success = NULL, $error = NULL)
+    public function show_edit_suite($suite_id = NULL, $success = NULL, $error = NULL)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');

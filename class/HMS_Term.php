@@ -12,7 +12,7 @@ class HMS_Term{
     var $new_applications;
     var $_new;
 
-    function HMS_Term($term = NULL)
+    public function HMS_Term($term = NULL)
     {
         $this->_new = FALSE;
         if(!isset($term)){
@@ -28,7 +28,7 @@ class HMS_Term{
         }
     }
 
-    function init()
+    public function init()
     {
         if(!isset($this->term)){
             return FALSE;
@@ -49,7 +49,7 @@ class HMS_Term{
         return $result;
     }
 
-    function save()
+    public function save()
     {
         $db = &new PHPWS_DB('hms_term');
         if(!$this->_new) {
@@ -67,14 +67,14 @@ class HMS_Term{
     /**
      * Boolean test for the current term
      */
-    function is_current_term(){
+    public function is_current_term(){
         return $this->get_term() == HMS_Term::get_current_term();
     }
     
     /**
      * Boolean test for if this term is currently being used by the user.
      */
-    function is_selected_term()
+    public function is_selected_term()
     {
         return $this->get_term() == HMS_Term::get_selected_term();
     }
@@ -83,7 +83,7 @@ class HMS_Term{
      * Main menu *
      ************/
     
-    function main()
+    public function main()
     {
         if( !Current_User::allow('hms', 'edit_terms') && !Current_User::allow('hms', 'select_term') ){
             $tpl = array();
@@ -133,14 +133,14 @@ class HMS_Term{
     /**
      * Returns the current term
      */
-    function get_current_term(){
+    public function get_current_term(){
         return PHPWS_Settings::get('hms','current_term');
     }
 
     /**
      * Sets the current term
      */
-    function set_current_term($term){
+    public function set_current_term($term){
         PHPWS_Settings::set('hms','current_term',$term);
         PHPWS_Settings::save('hms');
 
@@ -154,7 +154,7 @@ class HMS_Term{
      * Returns the current term the user has selected. If no term has been selected
      * yet then the 'current' term is returned.
      */
-    function get_selected_term()
+    public function get_selected_term()
     {
         if(isset($_SESSION['selected_term'])) {
             return $_SESSION['selected_term'];
@@ -166,7 +166,7 @@ class HMS_Term{
     /**
      * Sets the 'activate' term by saving the given term in the session variable.
      */
-    function set_selected_term($term)
+    public function set_selected_term($term)
     {
         $_SESSION['selected_term'] = $term;
         return;
@@ -174,7 +174,7 @@ class HMS_Term{
 
     /**
      */
-    function is_banner_queue_enabled($term)
+    public function is_banner_queue_enabled($term)
     {
         $term = &new HMS_Term($term);
         return $term->get_banner_queue();
@@ -186,7 +186,7 @@ class HMS_Term{
      * 
      * Useful for generating a drop down box of terms.
      */
-    function get_available_terms_list()
+    public function get_available_terms_list()
     {
         
         $db = &new PHPWS_DB('hms_term');
@@ -210,7 +210,7 @@ class HMS_Term{
     /**
      * Returns the HTML for a DB pager of the current set of terms available
      */
-    function get_available_terms_pager()
+    public function get_available_terms_pager()
     {
 
         PHPWS_Core::initCoreClass('DBPager.php');
@@ -232,7 +232,7 @@ class HMS_Term{
     /**
      * Setups the the row tags for the db pager
      */
-    function getRowTags()
+    public function getRowTags()
     {
         $tags['TERM'] = HMS_Term::term_to_text($this->get_term(), TRUE);
         $actions = array();
@@ -321,8 +321,8 @@ class HMS_Term{
     /**
      * Creates a new term based on $_REQUEST data and saves it. Called by main() in response to a 'create_new_term' op.
      */
-     //TODO: Add functionality here to call copy depending on what was selected in the 'copy_drop'
-    function create_new_term(){
+     //TODO: Add public functionality here to call copy depending on what was selected in the 'copy_drop'
+    public function create_new_term(){
         if( !Current_User::allow('hms', 'edit_terms') ){
             $tpl = array();
             return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
@@ -393,7 +393,7 @@ class HMS_Term{
     /**
       Called in response to the 'term_select' action. Saves the selected term in the session variable for use in other editing.
      */
-    function term_select()
+    public function term_select()
     {
         if(!Current_User::allow('hms', 'select_term')){
             $tpl = array();
@@ -407,7 +407,7 @@ class HMS_Term{
     /**
      * Called in response to the 'term_activate' action. Saves the selected term in the PHPWS_Settings class.
      */
-    function term_activate()
+    public function term_activate()
     {
         if(!Current_User::allow('hms', 'activate_term')){
             $tpl = array();
@@ -421,7 +421,7 @@ class HMS_Term{
     /**
      * Called in response to the 'term_delete action. Not yet impletemented.
      */
-    function term_delete()
+    public function term_delete()
     {
         if( !Current_User::allow('hms', 'edit_terms') ){
             $tpl = array();
@@ -440,7 +440,7 @@ class HMS_Term{
      * UI Functions *
      ***************/
 
-    function show_create_term($success = NULL, $error = NULL)
+    public function show_create_term($success = NULL, $error = NULL)
     {
         if( !Current_User::allow('hms', 'edit_terms') ){
             $tpl = array();
@@ -481,7 +481,7 @@ class HMS_Term{
         return PHPWS_Template::process($tpl, 'hms', 'admin/add_term.tpl');
     }
 
-    function show_edit_terms($success = NULL, $error = NULL)
+    public function show_edit_terms($success = NULL, $error = NULL)
     {
         if( !Current_User::allow('hms', 'select_term') && !Current_User::allow('edit_terms') && !Current_User::allow('activate_term') && !Current_User::allow('banner_queue')){
             $tpl = array();
@@ -505,7 +505,7 @@ class HMS_Term{
         return PHPWS_Template::process($tpl, 'hms', 'admin/edit_terms.tpl');
     }
 
-    function delete_term_association()
+    public function delete_term_association()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Term_Applications.php');
         HMS_Term_Applications::remove($_REQUEST['delete']);
@@ -513,7 +513,7 @@ class HMS_Term{
         return HMS_Term::show_term_association();
     }
 
-    function edit_term_association()
+    public function edit_term_association()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Term_Applications.php');
         $error   = null;
@@ -533,7 +533,7 @@ class HMS_Term{
         return HMS_Term::show_term_association($success, $error);
     }
 
-    function show_term_association($success = NULL, $error = NULL)
+    public function show_term_association($success = NULL, $error = NULL)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Term_Applications.php');
         $tpl = array();
@@ -569,7 +569,7 @@ class HMS_Term{
     * Returns an array of the list of terms. Useful for constructing 
     * drop down menus. Array is keyed using the TERM_* defines.
     */
-    function get_term_list()
+    public function get_term_list()
     {
         $terms = array();
 
@@ -584,7 +584,7 @@ class HMS_Term{
     /**
      * Returns TRUE if the given term has been create, FALSE otherwise
      */
-    function check_term_exists($term)
+    public function check_term_exists($term)
     {
         $db = &new PHPWS_DB('hms_term');
         $db->addWhere('term', $term, '=');
@@ -607,10 +607,10 @@ class HMS_Term{
      * returns an array with keys 'year' and 'term' 
      * holding a string description of the term given.
      * 
-     * If $concat parameter is TRUE, the function concatinates the 
+     * If $concat parameter is TRUE, the public function concatinates the 
      * array values and returns a single string (i.e. "spring 2008").
      */
-    function term_to_text($term, $concat = FALSE)
+    public function term_to_text($term, $concat = FALSE)
     {
         $result = array();
         
@@ -643,7 +643,7 @@ class HMS_Term{
      * Takes a year string and a TERM_* define and
      * returns an integer in the 'yyyytt' format used in banner.
      */
-    function text_to_term($year, $term)
+    public function text_to_term($year, $term)
     {
         return $year . $term;
     }
@@ -651,7 +651,7 @@ class HMS_Term{
     /**
      * Returns the 'next term' based on the term passed in
      */
-    function get_next_term($term)
+    public function get_next_term($term)
     {
         # Grab the year
         $year = substr($term, 0, 4);
@@ -673,7 +673,7 @@ class HMS_Term{
       * @param integer Term to check
       * @return array $arr[$index] = array(0 => $valid_term, 1 => $required);
       */
-    function get_valid_application_terms($term){
+    public function get_valid_application_terms($term){
         $db = &new PHPWS_DB('hms_term_applications');
         $db->addWhere('app_term', $term);
         $db->addOrder('term asc');
@@ -695,7 +695,7 @@ class HMS_Term{
       *
       * @return bool   $success
       */
-    function set_valid_term($key, $value, $required){
+    public function set_valid_term($key, $value, $required){
         $db = &new PHPWS_DB('hms_term_applications');
         $db->addValue('app_term', $key);
         $db->addValue('term', $value);
@@ -717,7 +717,7 @@ class HMS_Term{
      *
      * @return bool   $success
      */
-    function is_valid_term($key){
+    public function is_valid_term($key){
         $db = &new PHPWS_DB('hms_term_applications');
         $db->addwhere('app_term', $key);
         $db->addWhere('term', $key, '=', 'OR');
@@ -730,13 +730,13 @@ class HMS_Term{
         return true;
     }
 
-    function get_term_year($term)
+    public function get_term_year($term)
     {
         # Grab the year
         return substr($term, 0, 4);
     }
 
-    function get_term_sem($term)
+    public function get_term_sem($term)
     {
         return substr($term, 4, 2);
     }
@@ -745,23 +745,23 @@ class HMS_Term{
      * Accessor & Mutator Methods *
      *****************************/
 
-    function get_term(){
+    public function get_term(){
         return $this->term;
     }
 
-    function set_term($term){
+    public function set_term($term){
         $this->term = $term;
     }
 
-    function get_banner_queue() {
+    public function get_banner_queue() {
         return $this->banner_queue;
     }
 
-    function enable_banner_queue() {
+    public function enable_banner_queue() {
         $this->banner_queue = 1;
     }
 
-    function disable_banner_queue() {
+    public function disable_banner_queue() {
         $this->banner_queue = 0;
     }
 }

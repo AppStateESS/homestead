@@ -19,7 +19,7 @@ class HMS_Banner_Queue {
     var $queued_on     = 0;
     var $queued_by     = null;
 
-    function HMS_Banner_Queue($id = 0)
+    public function HMS_Banner_Queue($id = 0)
     {
         if(!$id) {
             return;
@@ -37,7 +37,7 @@ class HMS_Banner_Queue {
     /**
      * Resets this process item to zero values
      */
-    function reset()
+    public function reset()
     {
         $this->id        = 0;
         $this->queued_on = 0;
@@ -47,7 +47,7 @@ class HMS_Banner_Queue {
     /**
      * Sets up the queuer and the timestamp
      */
-    function stamp()
+    public function stamp()
     {
         $this->queued_on = mktime();
         $this->queued_by = Current_User::getId();
@@ -56,7 +56,7 @@ class HMS_Banner_Queue {
     /**
      * Saves this queue item
      */
-    function save()
+    public function save()
     {
         $db = new PHPWS_DB('hms_banner_queue');
 
@@ -69,15 +69,15 @@ class HMS_Banner_Queue {
         return TRUE;
     }
 
-    function set_id($id) {
+    public function set_id($id) {
         $this->id = $id;
     }
 
-    function get_id() {
+    public function get_id() {
         return $this->id;
     }
 
-    function delete() {
+    public function delete() {
         $db = new PHPWS_DB('hms_banner_queue');
         $db->addWhere('id', $this->id);
         $result = $db->delete();
@@ -91,7 +91,7 @@ class HMS_Banner_Queue {
     /**
      * Queues a Create Assignment
      */
-    function queue_create_assignment($username, $term, $bldg, $bed, $mealplan, $mealcode)
+    public function queue_create_assignment($username, $term, $bldg, $bed, $mealplan, $mealcode)
     {
         $entry                = new HMS_Banner_Queue();
         $entry->type          = BANNER_QUEUE_ASSIGNMENT;
@@ -125,7 +125,7 @@ class HMS_Banner_Queue {
      * commits are enabled, the it will be sent straight to Banner,
      * and so the force_queue flag will be ignored.
      */
-    function queue_remove_assignment($username, $term, $bldg, $bed, $force_queue = FALSE)
+    public function queue_remove_assignment($username, $term, $bldg, $bed, $force_queue = FALSE)
     {
         $entry                = new HMS_Banner_Queue();
         $entry->type          = BANNER_QUEUE_REMOVAL;
@@ -175,7 +175,7 @@ class HMS_Banner_Queue {
      * Returns TRUE if an action should be processed immediately (queue is disabled)
      * or FALSE if an action should be queued
      */
-    function process_immediately() {
+    public function process_immediately() {
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
         $queue = HMS_Term::is_banner_queue_enabled(HMS_Term::get_selected_term());
         return $queue == 0;
@@ -185,7 +185,7 @@ class HMS_Banner_Queue {
      * Processes a queued item.  This can be something actually queued,
      * or an immediate processing because the queue is disabled.
      */
-    function process()
+    public function process()
     {
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
@@ -241,7 +241,7 @@ class HMS_Banner_Queue {
     /********************
      * Static Functions *
      ********************/
-    function processAll($term)
+    public function processAll($term)
     {
         // TODO: Process All.  Return an array of username=>error if there were
         // any.  Don't stop on errors, just tally them up.  Return TRUE if

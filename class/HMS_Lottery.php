@@ -6,7 +6,7 @@ define('INVITE_TTL_HRS', 96);
 class HMS_Lottery {
 
 
-    function run_lottery()
+    public function run_lottery()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
         PHPWS_Core::initModClass('hms', 'HMS_Lottery_Entry.php');
@@ -362,7 +362,7 @@ class HMS_Lottery {
     /*
      * Chooses a winner and returns that stuent's row from the hms_lottery_entry table
      */
-    function choose_winner($gender, $class, $term)
+    public function choose_winner($gender, $class, $term)
     {
         $db = new PHPWS_DB('hms_lottery_entry');
 
@@ -431,7 +431,7 @@ class HMS_Lottery {
     /**
      * Returns the number of lottery entries currently outstanding (i.e. non-winners)
      */
-    function count_remaining_entries($term)
+    public function count_remaining_entries($term)
     {
         $now = mktime();
 
@@ -451,7 +451,7 @@ class HMS_Lottery {
         return $num_remaining_entries;
     }
 
-    function count_outstanding_invites($term, $gender = NULL)
+    public function count_outstanding_invites($term, $gender = NULL)
     {
         $now = mktime();
         $query = "select count(*) FROM hms_lottery_entry
@@ -476,7 +476,7 @@ class HMS_Lottery {
     /*
      * Returns the number of outstanding *roommate* invites
      */
-    function count_outstanding_roommate_invites($term)
+    public function count_outstanding_roommate_invites($term)
     {
         $now = mktime();
         $query = "select count(*) FROM hms_lottery_reservation
@@ -498,7 +498,7 @@ class HMS_Lottery {
     /*
      * Returns the number of invites sent (confirmed or outstanding) for the given class
      */
-    function count_invites_by_class($term, $class)
+    public function count_invites_by_class($term, $class)
     {
         $now = mktime();
         $term_year = HMS_Term::get_term_year($term);
@@ -534,7 +534,7 @@ class HMS_Lottery {
         }
     }
 
-    function count_remaining_entries_by_class($term, $class)
+    public function count_remaining_entries_by_class($term, $class)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
         $now = mktime();
@@ -571,7 +571,7 @@ class HMS_Lottery {
         }
     }
 
-    function send_winning_reminder_emails($term)
+    public function send_winning_reminder_emails($term)
     {
         # Get a list of lottery winners who have not chosen a room yet, send them reminder emails
         $query = "select hms_lottery_entry.asu_username, hms_lottery_entry.invite_expires_on FROM hms_lottery_entry
@@ -594,7 +594,7 @@ class HMS_Lottery {
         }
     }
 
-    function send_roommate_reminder_emails($term)
+    public function send_roommate_reminder_emails($term)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
 
@@ -620,7 +620,7 @@ class HMS_Lottery {
         }
     }
 
-    function lottery_complete($status, $log, $unschedule = FALSE)
+    public function lottery_complete($status, $log, $unschedule = FALSE)
     {
         echo "Lottery complete, status: $status<br />\n";
 
@@ -638,7 +638,7 @@ class HMS_Lottery {
         exit;
     }
 
-    function get_lottery_roommate_invite($username, $term)
+    public function get_lottery_roommate_invite($username, $term)
     {
         $db = new PHPWS_DB('hms_lottery_reservation');
 
@@ -655,7 +655,7 @@ class HMS_Lottery {
         return $result;
     }
 
-    function confirm_roommate_request($username,$meal_plan)
+    public function confirm_roommate_request($username,$meal_plan)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
@@ -695,7 +695,7 @@ class HMS_Lottery {
         return E_SUCCESS;
     }
 
-    function main()
+    public function main()
     {
         switch($_REQUEST['op']){
             case 'show_lottery_settings':
@@ -723,7 +723,7 @@ class HMS_Lottery {
     }
 
 
-    function save_lottery_settings($lottery_term, $type, $lottery_per_soph, $lottery_per_jr, $lottery_per_senior, $max_soph, $max_jr, $max_senior)
+    public function save_lottery_settings($lottery_term, $type, $lottery_per_soph, $lottery_per_jr, $lottery_per_senior, $max_soph, $max_jr, $max_senior)
     {
 
         PHPWS_Settings::set('hms', 'lottery_term',       $lottery_term);
@@ -742,7 +742,7 @@ class HMS_Lottery {
     /***********************
      * Lottery Settings UI *
      ***********************/
-    function show_lottery_settings($success = NULL, $error = NULL)
+    public function show_lottery_settings($success = NULL, $error = NULL)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
 
@@ -815,7 +815,7 @@ class HMS_Lottery {
         return PHPWS_Template::process($form->getTemplate(), 'hms', 'admin/lottery_settings.tpl');
     }
 
-    function submit_lottery_settings()
+    public function submit_lottery_settings()
     {
         $per_soph   = isset($_REQUEST['lottery_per_soph'])?$_REQUEST['lottery_per_soph']:0;
         $per_jr     = isset($_REQUEST['lottery_per_jr'])?$_REQUEST['lottery_per_jr']:0;

@@ -31,7 +31,7 @@ class HMS_Deadlines {
     var $updated_by;
     var $updated_on;
 
-    function HMS_Deadlines($term = NULL){
+    public function HMS_Deadlines($term = NULL){
         
         if(!isset($term)){
             PHPWS_Core::initModClass('hms', 'HMS_Term.php');
@@ -54,7 +54,7 @@ class HMS_Deadlines {
      * (column name) as a key.
      * Can be called statically.
      */
-    function get_deadlines($term = NULL)
+    public function get_deadlines($term = NULL)
     {
 
         if(!isset($term)){
@@ -97,14 +97,14 @@ class HMS_Deadlines {
      * Expects a deadline name as defined by the deadline table.
      * 
      * Optionally takes a deadlines array (like that returned from 'get_deadlines()' to use
-     * so you can call 'get_deadlines()' once and then pass the result to this function for repeated checks.
+     * so you can call 'get_deadlines()' once and then pass the result to this public function for repeated checks.
      * (avoids repetative database queries).
      * 
      * Returns TRUE if the deadline has passed, false otherwise.
      * Returns a PEAR error object in case of a DB error.
      * Can be called statically.
      */
-    function check_deadline_past($deadline_name, $deadlines = NULL, $term = null)
+    public function check_deadline_past($deadline_name, $deadlines = NULL, $term = null)
     {
 
         if(!isset($term)){
@@ -134,7 +134,7 @@ class HMS_Deadlines {
      * Expects two deadline names as defined by the deadline table.
      * 
      * Optionally takes a deadlines array (like that returned from 'get_deadlines()' to use
-     * so you can call 'get_deadlines()' once and then pass the result to this function for repeated checks.
+     * so you can call 'get_deadlines()' once and then pass the result to this public function for repeated checks.
      * (avoids repetative database queries).
      * 
      * Returns TRUE if the current time is within the start and end deadlines, FALSE otherwise.
@@ -142,7 +142,7 @@ class HMS_Deadlines {
      *
      * Can be called statically.
      */
-    function check_within_deadlines($deadline_name_start, $deadline_name_end, $deadlines = NULL, $term = NULL)
+    public function check_within_deadlines($deadline_name_start, $deadline_name_end, $deadlines = NULL, $term = NULL)
     {
         if(!isset($term)){
             PHPWS_Core::initModClass('hms', 'HMS_Term.php');
@@ -174,13 +174,13 @@ class HMS_Deadlines {
      * Returns a deadline as text (i.e. 'Wednesday, September 12th, 2007').
      * 
      * Optionally takes a deadlines array (like that returned from 'get_deadlines()' to use
-     * so you can call 'get_deadlines()' once and then pass the result to this function for repeated checks.
+     * so you can call 'get_deadlines()' once and then pass the result to this public function for repeated checks.
      * (avoids repetative database queries).
      *
      * Also optionally takes a date format, so you can get the date back in any format you'd like.
      * 
      */
-    function get_deadline_as_date($deadline_name, $deadlines = NULL, $date_format = NULL, $term = NULL)
+    public function get_deadline_as_date($deadline_name, $deadlines = NULL, $date_format = NULL, $term = NULL)
     {
 
         if(!isset($term)){
@@ -209,10 +209,10 @@ class HMS_Deadlines {
     /**
      * Function for saving deadlines. Uses the member variables.
      * All deadlines (member vars) must be set to something before
-     * calling this function. Returns TRUE on success, or PEAR DB
+     * calling this public function. Returns TRUE on success, or PEAR DB
      * error otherwise.
      */
-    function save()
+    public function save()
     {
         if(!(Current_User::authorized('hms', 'edit_deadlines') || Current_User::authorized('hms', 'admin'))) {
             exit('You do not have permission to edit deadlines.');
@@ -231,7 +231,7 @@ class HMS_Deadlines {
         return true;
     }
 
-    function main(){
+    public function main(){
         if( !Current_User::allow('hms', 'view_deadlines') && !Current_User::allow('hms', 'edit_deadlines') ){
             $tpl = array();
             return PHPWS_Template($tpl, 'hms', 'admin/permission_denied.tpl');
@@ -254,7 +254,7 @@ class HMS_Deadlines {
      * Static UI Methods *
      *********************/
 
-    function show_edit_deadlines($success_message = NULL, $error_message = NULL)
+    public function show_edit_deadlines($success_message = NULL, $error_message = NULL)
     {
         if(!(Current_User::allow('hms', 'edit_deadlines') || Current_User::allow('hms', 'admin'))) {
             exit('You do not have permission to edit deadlines.');
@@ -428,7 +428,7 @@ class HMS_Deadlines {
      * Static Methods *
      ******************/
 
-    function save_deadlines()
+    public function save_deadlines()
     {
         if(!(Current_User::authorized('hms', 'edit_deadlines') || Current_User::authorized('hms', 'admin'))) {
             exit('You do not have permission to edit deadlines.');

@@ -44,7 +44,7 @@ class HMS_Room extends HMS_Item
     /**
      * Constructor
      */
-    function HMS_Room($id = 0)
+    public function HMS_Room($id = 0)
     {
         $this->construct($id, 'hms_room');
     }
@@ -60,7 +60,7 @@ class HMS_Room extends HMS_Item
      *
      * @return bool True is successful, false otherwise.
      */
-    function save()
+    public function save()
     {
         $this->stamp();
         $db = new PHPWS_DB('hms_room');
@@ -76,7 +76,7 @@ class HMS_Room extends HMS_Item
      * if we're successful, false if not (or if there 
      * is an assignment)
      */
-    function delete_room($room_id)
+    public function delete_room($room_id)
     {
        // check that we're not about to do something stupid
        if(!isset($room_id)) return false;
@@ -117,12 +117,12 @@ class HMS_Room extends HMS_Item
      * Copies this room object to a new term, then calls copy on all
      * 'this' room's beds.
      *
-     * Setting $assignments to TRUE causes the copy function to copy
+     * Setting $assignments to TRUE causes the copy public function to copy
      * the c<urrent assignments as well as the hall structure.
      * 
      * @return bool False if unsuccessful.
      */
-    function copy($to_term, $floor_id, $suite_id=NULL, $assignments = FALSE)
+    public function copy($to_term, $floor_id, $suite_id=NULL, $assignments = FALSE)
     {
         if (!$this->id) {
             return false;
@@ -197,7 +197,7 @@ class HMS_Room extends HMS_Item
     /**
      * Loads the parent floor object of this room
      */
-    function loadFloor()
+    public function loadFloor()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
         $result = new HMS_Floor($this->floor_id);
@@ -213,7 +213,7 @@ class HMS_Room extends HMS_Item
      * the _beds variable.
      *
      */
-    function loadBeds()
+    public function loadBeds()
     {
         $db = new PHPWS_DB('hms_bed');
         $db->addWhere('room_id', $this->id);
@@ -233,9 +233,9 @@ class HMS_Room extends HMS_Item
      * Creates beds for a new room
      * Initial values for beds should be set in the declaration.
      * Assuming gender_type is carried over.
-     * added and updated variables need to be set in the bed save function.
+     * added and updated variables need to be set in the bed save public function.
      */
-    function create_child_objects($beds_per_room)
+    public function create_child_objects($beds_per_room)
     {
         for ($i = 0; $i < $bedroooms_per_room; $i++) {
             $bed = new HMS_Bed;
@@ -249,7 +249,7 @@ class HMS_Room extends HMS_Item
     /*
      * Returns TRUE or FALSE.
      *
-     * This function uses the following logic:
+     * This public function uses the following logic:
      * 
      * When ignore_upper = TRUE (a floor is trying to see if this room could be changed to a target gender):
      *      If the target gender is COED: then we can always return true (even though a room can never be COED).
@@ -268,7 +268,7 @@ class HMS_Room extends HMS_Item
      *                          to TRUE to avoid checking the parent hall's gender.
      * @return bool
      */
-    function can_change_gender($target_gender, $ignore_upper = FALSE)
+    public function can_change_gender($target_gender, $ignore_upper = FALSE)
     {   
         # Ignore upper is true, we're trying to change a hall/floor
         if($ignore_upper){
@@ -317,7 +317,7 @@ class HMS_Room extends HMS_Item
     /*
      * Returns the number of beds within the current room
      */
-    function get_number_of_beds()
+    public function get_number_of_beds()
     {
         $db = &new PHPWS_DB('hms_bed');
 
@@ -338,7 +338,7 @@ class HMS_Room extends HMS_Item
     /*
      * Returns the number of students assigned to the current room
      */
-    function get_number_of_assignees()
+    public function get_number_of_assignees()
     {
         $db = &new PHPWS_DB('hms_assignment');
 
@@ -361,7 +361,7 @@ class HMS_Room extends HMS_Item
     /*
      * Returns the parent floor object of this room
      */
-    function get_parent()
+    public function get_parent()
     {
         $this->loadFloor();
         return $this->_floor;
@@ -370,7 +370,7 @@ class HMS_Room extends HMS_Item
     /*
      * Returns an array of beds within the current room
      */
-    function get_beds()
+    public function get_beds()
     {
         if (!$this->loadBeds()) {
             return false;
@@ -383,7 +383,7 @@ class HMS_Room extends HMS_Item
      * Returns an associative array where the keys are bed ID's
      * and the values are the bed letter.
      */
-    function get_beds_array()
+    public function get_beds_array()
     {
         if(!$this->loadBeds()) {
             return FALSE;
@@ -402,7 +402,7 @@ class HMS_Room extends HMS_Item
      * Returns an array of HMS_Student objects which are currently
      * assigned to 'this' room.
      */
-    function get_assignees()
+    public function get_assignees()
     {
         if (!$this->loadBeds()) {
             return false;
@@ -423,7 +423,7 @@ class HMS_Room extends HMS_Item
     /**
      * Returns TRUE if the hall has vacant beds, false otherwise
      */
-    function has_vacancy()
+    public function has_vacancy()
     {
 
         if($this->get_number_of_assignees() < $this->get_number_of_beds()){
@@ -436,7 +436,7 @@ class HMS_Room extends HMS_Item
     /**
      * Returns an array of bed objects in this room that have vacancies
      */
-    function get_beds_with_vacancies()
+    public function get_beds_with_vacancies()
     {
         if(!$this->loadBeds()) {
             return FALSE;
@@ -458,7 +458,7 @@ class HMS_Room extends HMS_Item
     /**
      * Returns TRUE if this room is part of a suite.
      */
-    function is_in_suite()
+    public function is_in_suite()
     {
         if(isset($this->suite_id)){
             return TRUE;
@@ -467,7 +467,7 @@ class HMS_Room extends HMS_Item
         }
     }
 
-    function where_am_i($link = FALSE)
+    public function where_am_i($link = FALSE)
     {
         $floor = $this->get_parent();
         $building = $floor->get_parent();
@@ -481,7 +481,7 @@ class HMS_Room extends HMS_Item
         }
     }
     
-    function getRoomPagerBySuiteTags()
+    public function getRoomPagerBySuiteTags()
     {
         $tpl['ROOM_NUMBER'] = PHPWS_Text::secureLink($this->room_number, 'hms', array('type'=>'room', 'op'=>'show_edit_room', 'room'=>$this->id));
         $tpl['ACTION']      = "Remove";
@@ -489,7 +489,7 @@ class HMS_Room extends HMS_Item
         return $tpl;
     }
 
-    function count_avail_lottery_beds()
+    public function count_avail_lottery_beds()
     {
         $now = mktime();
 
@@ -519,7 +519,7 @@ class HMS_Room extends HMS_Item
      * Static Methods *
      *****************/
 
-    function main()
+    public function main()
     {
         if( !Current_User::allow('hms', 'room_structure') 
             && !Current_User::allow('hms', 'room_attributes')
@@ -551,7 +551,7 @@ class HMS_Room extends HMS_Item
 
 
 
-    function room_pager_by_floor($floor_id)
+    public function room_pager_by_floor($floor_id)
     {
        PHPWS_Core::initCoreClass('DBPager.php');
        
@@ -583,7 +583,7 @@ class HMS_Room extends HMS_Item
        return $pager->get();
     }
 
-    function get_row_tags()
+    public function get_row_tags()
     {
         //$tpl = $this->item_tags();
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
@@ -603,7 +603,7 @@ class HMS_Room extends HMS_Item
         return $tpl;
     }
     
-    function edit_room(){
+    public function edit_room(){
         if( !Current_User::allow('hms', 'room_attributes') ){
             $tpl = array();
             return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
@@ -616,7 +616,7 @@ class HMS_Room extends HMS_Item
         }
 
         # Compare the room's gender and the gender the user selected
-        # If they're not equal, call 'can_change_gender' function
+        # If they're not equal, call 'can_change_gender' public function
         if($room->gender_type != $_REQUEST['gender_type']){
             if(!$room->can_change_gender($_REQUEST['gender_type'])){
                 return HMS_Room::show_edit_room($room->id,NULL, 'Error: Incompatible genders detected. No changes were made.');
@@ -651,7 +651,7 @@ class HMS_Room extends HMS_Item
        return HMS_Room::show_edit_room($room->id, 'Room updated successfully.');
     }
     
-    function add_room() {
+    public function add_room() {
         PHPWS_Core::initModClass('hms','HMS_Floor.php');
         PHPWS_Core::initModClass('hms','HMS_Residence_Hall.php');
 
@@ -690,7 +690,7 @@ class HMS_Room extends HMS_Item
 
     }
 
-    function get_room_pager_by_suite($suite_id)
+    public function get_room_pager_by_suite($suite_id)
     {
         PHPWS_Core::initCoreClass('DBPager.php');
 
@@ -721,7 +721,7 @@ class HMS_Room extends HMS_Item
      * Returns FALSE if there are no more free rooms
      */
     # TODO: finish this, see Trac #156
-    function get_free_room($term, $gender, $randomize = FALSE)
+    public function get_free_room($term, $gender, $randomize = FALSE)
     {
         $db = &new PHPWS_DB('hms_room');
 
@@ -731,7 +731,7 @@ class HMS_Room extends HMS_Item
 
     }
 
-    function get_all_free_rooms($term, $gender, $randomize = FALSE)
+    public function get_all_free_rooms($term, $gender, $randomize = FALSE)
     {
         $db = &new PHPWS_DB('hms_room');
 
@@ -792,7 +792,7 @@ class HMS_Room extends HMS_Item
         return $ret;
     }
 
-    function check_two_bed_and_empty_by_id($room)
+    public function check_two_bed_and_empty_by_id($room)
     {
         $db = &new PHPWS_DB('hms_bed');
         $db->addJoin('LEFT OUTER', 'hms_bed', 'hms_assignment', 'id', 'bed_id');
@@ -819,7 +819,7 @@ class HMS_Room extends HMS_Item
      * Static UI Methods *
      ********************/
 
-    function show_select_room($title, $type, $op, $success = NULL, $error = NULL)
+    public function show_select_room($title, $type, $op, $success = NULL, $error = NULL)
     {
         if(   !Current_User::allow('hms', 'room_view')
            && !Current_User::allow('hms', 'room_attributes')
@@ -896,7 +896,7 @@ class HMS_Room extends HMS_Item
         return PHPWS_Template::process($tpl, 'hms', 'admin/select_room.tpl');
     }
 
-    function show_edit_room($room_id = NULL, $success = null, $error = null)
+    public function show_edit_room($room_id = NULL, $success = null, $error = null)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
         PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
@@ -1067,7 +1067,7 @@ class HMS_Room extends HMS_Item
         return PHPWS_Template::process($tpl, 'hms', 'admin/edit_room.tpl');   
     }
 
-function show_add_room($hall_id = NULL, $floor_id = NULL) {
+public function show_add_room($hall_id = NULL, $floor_id = NULL) {
 
         # include what we need
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');

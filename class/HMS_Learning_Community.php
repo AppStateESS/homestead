@@ -14,64 +14,64 @@ class HMS_Learning_Community
     var $capacity;
     var $error;
 
-    function HMS_Learning_Community()
+    public function HMS_Learning_Community()
     {
         $this->id = NULL;
         $this->community_name = NULL;
         $this->error = "";
     }
     
-    function set_error_msg($msg)
+    public function set_error_msg($msg)
     {
         $this->error .= $msg;
     }
 
-    function get_error_msg()
+    public function get_error_msg()
     {
         return $this->error;
     }
 
-    function set_id($id)
+    public function set_id($id)
     {
         $this->id = $id;
     }
 
-    function get_id()
+    public function get_id()
     {
         return $this->id;
     }
 
-    function set_community_name($name)
+    public function set_community_name($name)
     {
         $this->community_name = $name;
     }
 
-    function get_community_name()
+    public function get_community_name()
     {
         return $this->community_name;
     }
 
-    function set_abbreviation($abb)
+    public function set_abbreviation($abb)
     {
         $this->abbreviation = $abb;
     }
 
-    function get_abbreviation()
+    public function get_abbreviation()
     {
         return $this->abbreviation;
     }
 
-    function set_capacity($cap)
+    public function set_capacity($cap)
     {
         $this->capacity = $cap;
     }
 
-    function get_capacity()
+    public function get_capacity()
     {
         return $this->capacity;
     }
 
-    function set_variables()
+    public function set_variables()
     {
         if(isset($_REQUEST['id']) && $_REQUEST['id'] != NULL) $this->set_id($_REQUEST['id']);
         $this->set_community_name($_REQUEST['community_name']);
@@ -79,7 +79,7 @@ class HMS_Learning_Community
         $this->set_capacity($_REQUEST['capacity']);
     }
 
-    function save_learning_community()
+    public function save_learning_community()
     {
         if( !Current_User::allow('hms', 'learning_community_maintenance') ){
             $tpl = array();
@@ -119,7 +119,7 @@ class HMS_Learning_Community
       * @param string $message An error message to display above the form
       * @return string The html of the interface
       */
-    function show_edit_learning_community($message = null)
+    public function show_edit_learning_community($message = null)
     {
         if( !Current_User::allow('hms', 'learning_community_maintenance') ){
             $tpl = array();
@@ -167,7 +167,7 @@ class HMS_Learning_Community
       * @param int $capacity The new capacity of the learning community
       * @return mixed $success true for success error message for failure
       */
-    function edit_learning_community($id, $name, $abbv, $capacity)
+    public function edit_learning_community($id, $name, $abbv, $capacity)
     {
         $db = new PHPWS_DB('hms_learning_communities');
         $db->addWhere('id', $id);
@@ -193,7 +193,7 @@ class HMS_Learning_Community
         return 'Error updating the RLC.';
     }
 
-    function do_edit_learning_community()
+    public function do_edit_learning_community()
     {
         if(isset($_REQUEST['rlc']) && isset($_REQUEST['name']) 
             && isset($_REQUEST['abbv']) && isset($_REQUEST['capacity']))
@@ -234,7 +234,7 @@ class HMS_Learning_Community
       * @param int $id The id of the learning community to return
       * @return json JSON encoded object
       */
-    function JSONLearningCommunity($id)
+    public function JSONLearningCommunity($id)
     {
         if( !Current_User::allow('hms', 'learning_community_maintenance') ){
             die();
@@ -255,7 +255,7 @@ class HMS_Learning_Community
     /*
      * Returns a HMS_Form that prompts the user for the name of the RLC to add
      */
-    function add_learning_community($msg = NULL)
+    public function add_learning_community($msg = NULL)
     {
         if( !Current_User::allow('hms', 'learning_community_maintenance') ){
             $tpl = array();
@@ -273,7 +273,7 @@ class HMS_Learning_Community
     /*
      * Returns a HMS_Form that allows the user to select a RLC to delete
      */
-    function select_learning_community_for_delete()
+    public function select_learning_community_for_delete()
     {
         PHPWS_Core::initCoreClass('Form.php');
         $form = &new PHPWS_Form;
@@ -306,7 +306,7 @@ class HMS_Learning_Community
     /*
      * Returns a HMS_Form that allows the user to confirm deletion of a RLC
      */
-    function confirm_delete_learning_community()
+    public function confirm_delete_learning_community()
     {
         $db = new PHPWS_DB('hms_learning_communities');
         $db->addColumn('community_name');
@@ -336,7 +336,7 @@ class HMS_Learning_Community
     /*
      * Actually deletes a learning community
      */
-    function delete_learning_community()
+    public function delete_learning_community()
     {
         if( !Current_User::allow('hms', 'learning_community_maintenance') ){
             $tpl = array();
@@ -367,7 +367,7 @@ class HMS_Learning_Community
     /*
      * Let admins get a roster for a particular learning community
      */
-    function search_by_rlc()
+    public function search_by_rlc()
     {
         PHPWS_Core::initCoreClass('Form.php');
         $form = &new PHPWS_Form;
@@ -387,7 +387,7 @@ class HMS_Learning_Community
     /*
      * Actually display the roster for the rlc specified in search_by_rlc
      */
-    function view_by_rlc($rlc_id = NULL, $success_msg = NULL, $error_msg = NULL)
+    public function view_by_rlc($rlc_id = NULL, $success_msg = NULL, $error_msg = NULL)
     {
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php'); 
@@ -414,7 +414,7 @@ class HMS_Learning_Community
     /*
      * Verify that the user actually wants to remove this student from an RLC
      */
-    function confirm_remove_from_rlc()
+    public function confirm_remove_from_rlc()
     {
         $db = &new PHPWS_DB('hms_learning_community_applications');
         $db->addJoin('LEFT OUTER', 'hms_learning_community_applications', 'hms_learning_community_assignment', 'hms_assignment_id', 'id');
@@ -452,7 +452,7 @@ class HMS_Learning_Community
     /*
      * Actually remove a user from an RLC
      */
-    function perform_remove_from_rlc()
+    public function perform_remove_from_rlc()
     {
         if(!isset($_REQUEST['remove']) || $_REQUEST['remove'] != "Remove from RLC and Re-Activate Application" || !isset($_REQUEST['id'])) {
             return HMS_Learning_Community::view_by_rlc();
@@ -486,7 +486,7 @@ class HMS_Learning_Community
     /**
      * Returns an associative array containing the list of RLC abbreviations keyed by their id.
      */
-    function getRLCListAbbr()
+    public function getRLCListAbbr()
     {
         $db = &new PHPWS_DB('hms_learning_communities');
 
@@ -499,7 +499,7 @@ class HMS_Learning_Community
     /**
      * Returns an associative array containing the list of RLCs using their full names, keyed by their id.
      */
-    function getRLCList()
+    public function getRLCList()
     {
         $db = &new PHPWS_DB('hms_learning_communities');
         $db->addColumn('id');
@@ -514,9 +514,9 @@ class HMS_Learning_Community
     }
 
     /*
-     * Main function for RLC maintenance
+     * Main public function for RLC maintenance
      */
-    function main()
+    public function main()
     {
         if( !Current_User::allow('hms', 'learning_community_maintenance') 
             && !Current_User::allow('hms', 'view_rlc_applications')
@@ -605,7 +605,7 @@ class HMS_Learning_Community
      * Otherwise, displays page one again with an error message.
      */
      //TODO: move this to HMS_RLC_Application
-    function rlc_application_page1_submit()
+    public function rlc_application_page1_submit()
     {
         PHPWS_Core::initModClass('hms','HMS_RLC_Application.php');
 
@@ -620,7 +620,7 @@ class HMS_Learning_Community
     }
 
     //TODO: add comments and move this to HMS_RLC_Application
-    function rlc_application_page2_submit()
+    public function rlc_application_page2_submit()
     {
         PHPWS_Core::initModClass('hms','HMS_RLC_Application.php');
         
@@ -658,7 +658,7 @@ class HMS_Learning_Community
 
     }
 
-    function assign_applicants_to_rlcs($success_msg = NULL, $error_msg = NULL)
+    public function assign_applicants_to_rlcs($success_msg = NULL, $error_msg = NULL)
     {
         if( !Current_User::allow('hms', 'approve_rlc_applications') ){
             $tpl = array();
@@ -695,7 +695,7 @@ class HMS_Learning_Community
         return PHPWS_Template::process($tags, 'hms', 'admin/make_new_rlc_assignments.tpl');
     }
 
-    function display_rlc_assignment_summary()
+    public function display_rlc_assignment_summary()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
 
@@ -757,14 +757,14 @@ class HMS_Learning_Community
 
 /** HMS_Forms did not contain show_assign_rlc_members_to_rooms() so this
     couldn't have been in use.
-    function assign_rlc_members_to_rooms()
+    public function assign_rlc_members_to_rooms()
     {
         PHPWS_Core::initModClass('hms','HMS_Forms.php');
 
         return HMS_Form::show_assign_rlc_members_to_rooms();
     }
 */
-    function view_rlc_assignments()
+    public function view_rlc_assignments()
     {
         if( !Current_User::allow('hms', 'view_rlc_members') ){
             $tpl = array();
@@ -776,7 +776,7 @@ class HMS_Learning_Community
         return HMS_RLC_Assignment::rlc_assignment_admin_pager();
     }
 
-    function rlc_assignments_submit()
+    public function rlc_assignments_submit()
     {
         if(!Current_User::allow('hms', 'approve_rlc_applications')){
             $tpl = array();
@@ -829,7 +829,7 @@ class HMS_Learning_Community
      * Exports the pending RLC applications into a CSV file.
      * Looks in $_REQUEST for which RLC to export.
      */
-    function rlc_application_export()
+    public function rlc_application_export()
     {
         if( !Current_User::allow('hms', 'view_rlc_applications') ){
             $tpl = array();
@@ -942,7 +942,7 @@ class HMS_Learning_Community
     /**
      * Exports the completed RLC assignments.
      */
-    function rlc_assignment_export()
+    public function rlc_assignment_export()
     {
         if( !Current_User::allow('hms', 'view_rlc_applications') ){
             $tpl = array();
@@ -995,7 +995,7 @@ class HMS_Learning_Community
     /**
      * Shows an interface listing the denied RLC applications
      */
-    function show_view_denied($success_msg = NULL, $error_msg = NULL)
+    public function show_view_denied($success_msg = NULL, $error_msg = NULL)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');

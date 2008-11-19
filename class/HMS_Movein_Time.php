@@ -16,7 +16,7 @@ class HMS_Movein_Time
     /********************
      * Instance Methods *
      *******************/
-    function HMS_Movein_Time($id = NULL){
+    public function HMS_Movein_Time($id = NULL){
         
         if(!isset($id) || is_null($id)){
             return;
@@ -30,7 +30,7 @@ class HMS_Movein_Time
         }
     }
 
-    function save()
+    public function save()
     {
         $db = new PHPWS_DB('hms_movein_time');
 
@@ -41,13 +41,13 @@ class HMS_Movein_Time
         return true;
     }
 
-    function get_formatted_begin_end()
+    public function get_formatted_begin_end()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
         return HMS_Util::get_long_date_time($this->begin_timestamp) . ' - ' . date('gA',$this->end_timestamp);
     }
 
-    function getRowTags()
+    public function getRowTags()
     {
         $tags = array();
         $tags['BEGIN_TIMESTAMP']    = HMS_Util::get_long_date_time($this->begin_timestamp);
@@ -61,7 +61,7 @@ class HMS_Movein_Time
      * Static Methods *
      *****************/
      
-    function main()
+    public function main()
     {
         switch($_REQUEST['op'])
         {
@@ -80,7 +80,7 @@ class HMS_Movein_Time
         }
     }
 
-    function get_movein_times_array($term = NULL)
+    public function get_movein_times_array($term = NULL)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
@@ -114,7 +114,7 @@ class HMS_Movein_Time
      * Static UI Methods *
      ********************/
 
-    function show_edit_movein_times($success = null, $error = null)
+    public function show_edit_movein_times($success = null, $error = null)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
@@ -155,7 +155,7 @@ class HMS_Movein_Time
         return PHPWS_Template::process($tpl, 'hms', 'admin/edit_movein_time.tpl');
     }
 
-    function create_movein_time()
+    public function create_movein_time()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
 
@@ -182,7 +182,7 @@ class HMS_Movein_Time
         }
     }
 
-    function delete_movein_time()
+    public function delete_movein_time()
     {
         $db = &new PHPWS_DB('hms_movein_time');
 
@@ -197,7 +197,7 @@ class HMS_Movein_Time
         }
     }
     
-    function get_movein_times_pager(){
+    public function get_movein_times_pager(){
         PHPWS_Core::initCoreClass('DBPager.php');
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
 

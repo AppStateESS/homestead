@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Contains administrative functionality
+ * Contains administrative public functionality
  *
  * @author Kevin Wilcox <kevin at tux dot appstate dot edu>
  */
@@ -16,7 +16,7 @@ class HMS_Admin
      *
      * @author Kevin Wilcox <kevin at tux dot appstate dot edu>
      */
-    function HMS_Admin()
+    public function HMS_Admin()
     {
         $this->error = "";
     }
@@ -27,7 +27,7 @@ class HMS_Admin
      *
      * @author Kevin Wilcox <kevin at tux dot appstate dot edu>
      */
-    function main()
+    public function main()
     {
         if(isset($_REQUEST['type'])) {
             $type = $_REQUEST['type'];
@@ -291,7 +291,7 @@ class HMS_Admin
     /**
      * Shows the page where the user can start the withdrawn student search
      */
-    function withdrawn_search_start($success_msg = NULL, $error_msg = NULL)
+    public function withdrawn_search_start($success_msg = NULL, $error_msg = NULL)
     {
         if(!Current_User::allow('hms', 'withdrawn_search')){
             $tpl = array();
@@ -326,7 +326,7 @@ class HMS_Admin
     /**
      * Performs the withdrawn student search
      */
-    function withdrawn_search()
+    public function withdrawn_search()
     {
         if(!Current_User::allow('hms', 'withdrawn_search')){
             $tpl = array();
@@ -390,7 +390,7 @@ class HMS_Admin
         return PHPWS_Template::process($tpl, 'hms', 'admin/withdrawn_search.tpl');
     }
 
-    function withdrawn_search_process()
+    public function withdrawn_search_process()
     {
         if(!Current_User::allow('hms', 'withdrawn_search')){
             $tpl = array();
@@ -441,7 +441,7 @@ class HMS_Admin
                     $tpl['warnings'][] = array('USERNAME'   => $asu_username,
                                                'MESSAGE'    => 'Error loading assignment.');
                 }else{
-                    # TODO: call the 'un-assign' function here instead
+                    # TODO: call the 'un-assign' public function here instead
                     $unassign_result = HMS_Assignment::unassign_student($asu_username, $term);
                     if($unassign_result != E_SUCCESS){
                         $tpl['warnings'][] = array('USERNAME'   => $asu_username,
@@ -547,7 +547,7 @@ class HMS_Admin
         return PHPWS_Template::process($tpl, 'hms', 'admin/withdrawn_search_process.tpl');
     }
 
-    function show_username_change()
+    public function show_username_change()
     {
         if(!Current_User::allow('hms', 'username_change')){
             $tpl = array();
@@ -567,7 +567,7 @@ class HMS_Admin
         return PHPWS_Template::process($form->getTemplate(), 'hms', 'admin/username_change.tpl');
     }
 
-    function process_username_change()
+    public function process_username_change()
     {
         if(!Current_User::allow('hms', 'username_change')){
             $tpl = array();

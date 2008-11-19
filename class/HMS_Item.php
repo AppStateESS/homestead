@@ -11,7 +11,7 @@ class HMS_Item {
     var $updated_by = 0;
     var $_table     = null;
     
-    function construct($id=0, $table)
+    public function construct($id=0, $table)
     {
         if (!$id) {
             return;
@@ -28,12 +28,12 @@ class HMS_Item {
         }
     }
 
-    function reset()
+    public function reset()
     {
         $this->id         = 0;
     }
 
-    function stamp()
+    public function stamp()
     {
         $now = mktime();
 
@@ -45,7 +45,7 @@ class HMS_Item {
         $this->updated_by = Current_User::getId();
     }
 
-    function delete()
+    public function delete()
     {
         $db = new PHPWS_DB($this->_table);
         $db->addWhere('id', $this->id);
@@ -57,7 +57,7 @@ class HMS_Item {
         return TRUE;
     }
 
-    function item_tags()
+    public function item_tags()
     {
         $tpl['ADDED_ON']     = strftime('%c', $this->added_on);
         $tpl['UPDATED_ON']   = strftime('%c', $this->updated_on);
@@ -77,11 +77,11 @@ class HMS_Item {
     /*******************
      * Mutator Methods *
      ******************/
-    function set_id($id){
+    public function set_id($id){
         $this->id = $id;
     }
 
-    function get_id(){
+    public function get_id(){
         return $this->id;
     }
 

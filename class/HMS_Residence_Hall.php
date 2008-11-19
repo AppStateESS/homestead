@@ -46,7 +46,7 @@ class HMS_Residence_Hall extends HMS_Item
     /**
      * Constructor
      */
-    function HMS_Residence_Hall($id = 0)
+    public function HMS_Residence_Hall($id = 0)
     {
         $this->construct($id, 'hms_residence_hall');
     }
@@ -58,7 +58,7 @@ class HMS_Residence_Hall extends HMS_Item
     /*
      * Saves a new or updated residence hall object
      */
-    function save()
+    public function save()
     {
         $this->stamp();
         $db = new PHPWS_DB('hms_residence_hall');
@@ -76,12 +76,12 @@ class HMS_Residence_Hall extends HMS_Item
      * Copies this residence hall object to a new term, then calls copy
      * on all 'this' room's floors.
      *
-     * Setting $assignments to TRUE causes the copy function to copy
+     * Setting $assignments to TRUE causes the copy public function to copy
      * the current assignments as well as the hall structure.
      *
      * @return bool False if unsuccessful.
      */
-    function copy($to_term, $assignments = FALSE)
+    public function copy($to_term, $assignments = FALSE)
     {
         if(!$this->id) {
             return false;
@@ -139,7 +139,7 @@ class HMS_Residence_Hall extends HMS_Item
      * the _floors variable.
      *
      */
-    function loadFloors()
+    public function loadFloors()
     {
         if (!$this->id) {
             $this->_floor = null;
@@ -163,7 +163,7 @@ class HMS_Residence_Hall extends HMS_Item
     /*
      * Creates the floors, rooms, and beds for a new hall
      */
-    function create_child_objects($num_floors, $rooms_per_floor, $beds_per_room)
+    public function create_child_objects($num_floors, $rooms_per_floor, $beds_per_room)
     {
         if (!$this->id) {
             return false;
@@ -190,11 +190,11 @@ class HMS_Residence_Hall extends HMS_Item
      * changed to the target gender if all floors can be changed 
      * to the target gender.
      *
-     * This function checks to make sure all floors can be changed,
+     * This public function checks to make sure all floors can be changed,
      * those floors in tern check all thier rooms, and so on.
      */
     #TODO: rewrite this becase the behavior changed
-    function can_change_gender($target_gender)
+    public function can_change_gender($target_gender)
     {
         # You can always change to a COED gender.
         if($target_gender == COED){
@@ -224,7 +224,7 @@ class HMS_Residence_Hall extends HMS_Item
         return true;
     }
 
-    function check_for_floors_of_gender($gender_type)
+    public function check_for_floors_of_gender($gender_type)
     {
         $db = &new PHPWS_DB('hms_floor');
 
@@ -251,7 +251,7 @@ class HMS_Residence_Hall extends HMS_Item
     /*
      * Returns the number of floors in the current hall
      */
-    function get_number_of_floors()
+    public function get_number_of_floors()
     {
         $db = &new PHPWS_DB('hms_floor');
         
@@ -271,7 +271,7 @@ class HMS_Residence_Hall extends HMS_Item
     /*
      * Returns the number of suites in the current hall
      */
-    function get_number_of_suites()
+    public function get_number_of_suites()
     {
         $db = &new PHPWS_DB('hms_suite');
 
@@ -292,7 +292,7 @@ class HMS_Residence_Hall extends HMS_Item
     /*
      * Returns the number of rooms in the current hall
      */
-    function get_number_of_rooms()
+    public function get_number_of_rooms()
     {
         $db = &new PHPWS_DB('hms_room');
         
@@ -314,7 +314,7 @@ class HMS_Residence_Hall extends HMS_Item
     /*
      * Returns the number of beds in the current hall
      */
-    function get_number_of_beds()
+    public function get_number_of_beds()
     {
         $db = &new PHPWS_DB('hms_bed');
         
@@ -337,7 +337,7 @@ class HMS_Residence_Hall extends HMS_Item
     /*
      * Returns the number of students currently assigned to the current hall
      */
-    function get_number_of_assignees()
+    public function get_number_of_assignees()
     {
         $db = &new PHPWS_DB('hms_assignment');
         
@@ -364,7 +364,7 @@ class HMS_Residence_Hall extends HMS_Item
     /*
      * Returns an array of floor objects which are within the current hall.
      */
-    function &get_floors()
+    public function &get_floors()
     {
         if(!$this->loadFloors()) {
             return false;
@@ -377,7 +377,7 @@ class HMS_Residence_Hall extends HMS_Item
     /*
      * Returns an array with the keys being floor ID's and the value being the floor number
      */
-    function get_floors_array()
+    public function get_floors_array()
     {
         if(!$this->loadFloors()) {
             return false;
@@ -396,7 +396,7 @@ class HMS_Residence_Hall extends HMS_Item
     /*
      * Returns an array of the suite objects which are within the current hall.
      */
-    function &get_suites()
+    public function &get_suites()
     {
         if (!$this->loadFloors()) {
             return false;
@@ -414,7 +414,7 @@ class HMS_Residence_Hall extends HMS_Item
     /*
      * Returns an array of room objects which are in the current hall
      */
-    function &get_rooms()
+    public function &get_rooms()
     {
         if (!$this->loadFloors()) {
             return false;
@@ -432,7 +432,7 @@ class HMS_Residence_Hall extends HMS_Item
     /*
      * Returns an array of the bed objects which are in the current hall
      */
-    function &get_beds()
+    public function &get_beds()
     {
         if (!$this->loadFloors()) {
             return false;
@@ -451,7 +451,7 @@ class HMS_Residence_Hall extends HMS_Item
      * Determines the number of beds per room in a hall.  Should the count vary
      * it returns the count that applies to the majority of the rooms.
      */
-    function count_beds_per_room()
+    public function count_beds_per_room()
     {
         $total = array(); //stores the number of rooms with that many beds
 
@@ -503,7 +503,7 @@ class HMS_Residence_Hall extends HMS_Item
     /*
      * Returns an array of the student objects which are currently assigned to the current hall
      */
-    function &get_assignees()
+    public function &get_assignees()
     {
         if(!$this->loadFloors()) {
             return false;
@@ -521,7 +521,7 @@ class HMS_Residence_Hall extends HMS_Item
     /*
      * Returns TRUE if the hall has vacant beds, false otherwise
      */
-    function has_vacancy()
+    public function has_vacancy()
     {
         if($this->get_number_of_assignees() < $this->get_number_of_beds()){
             return TRUE;
@@ -533,7 +533,7 @@ class HMS_Residence_Hall extends HMS_Item
     /**
      * Returns an array of floor objects in this hall that have vacancies
      */
-    function get_floors_with_vacancies()
+    public function get_floors_with_vacancies()
     {
         if(!$this->loadFloors()) {
             return false;
@@ -550,7 +550,7 @@ class HMS_Residence_Hall extends HMS_Item
         return $vacant_floors;
     }
 
-    function count_avail_lottery_rooms($gender)
+    public function count_avail_lottery_rooms($gender)
     {
         $now = mktime();
 
@@ -580,7 +580,7 @@ class HMS_Residence_Hall extends HMS_Item
         return $avail_rooms;
     }
 
-    function count_lottery_used_rooms()
+    public function count_lottery_used_rooms()
     {
         $now = mktime();
 
@@ -605,7 +605,7 @@ class HMS_Residence_Hall extends HMS_Item
         return $used_rooms;
     }
 
-    function count_lottery_full_rooms()
+    public function count_lottery_full_rooms()
     {
         $now = mktime();
 
@@ -639,7 +639,7 @@ class HMS_Residence_Hall extends HMS_Item
     /**
      * Main Method
      */
-    function main()
+    public function main()
     {
         if( !Current_User::allow('hms', 'hall_structure') 
             && !Current_User::allow('hms', 'hall_attributes') 
@@ -676,7 +676,7 @@ class HMS_Residence_Hall extends HMS_Item
      * Returns an array of hall objects for the given term. If no
      * term is provided, then the current term is used.
      */
-    function get_halls($term = NULL)
+    public function get_halls($term = NULL)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
 
@@ -708,7 +708,7 @@ class HMS_Residence_Hall extends HMS_Item
     /**
      * Returns an array with the hall id as the key and the hall name as the value
      */
-    function get_halls_array($term = NULL)
+    public function get_halls_array($term = NULL)
     {
         $hall_array = array();
 
@@ -724,7 +724,7 @@ class HMS_Residence_Hall extends HMS_Item
     /**
      * Returns an array of only the halls with vacancies
      */
-    function get_halls_with_vacancies($term = NULL)
+    public function get_halls_with_vacancies($term = NULL)
     {
         $vacant_halls = array();
         
@@ -747,7 +747,7 @@ class HMS_Residence_Hall extends HMS_Item
      * Returns an array with a key of the hall ID and a value of the hall name
      * for halls which have vacancies
      */
-    function get_halls_with_vacancies_array($term = NULL)
+    public function get_halls_with_vacancies_array($term = NULL)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
         $hall_array = array();
@@ -772,7 +772,7 @@ class HMS_Residence_Hall extends HMS_Item
      * of lottery rooms allotted in the hall, the number of used lottery rooms, and 
      * any pending lottery bed reservations.
      */
-    function get_lottery_avail_hall_list($term)
+    public function get_lottery_avail_hall_list($term)
     {
         $halls = HMS_Residence_Hall::get_halls($term);
 
@@ -802,7 +802,7 @@ class HMS_Residence_Hall extends HMS_Item
      * Returns the HTML for a DB pager of the current set of
      * residence halls available.
      */
-    function residence_hall_pager()
+    public function residence_hall_pager()
     {
         PHPWS_Core::initCoreClass('DBPager.php');
         $pager = &new DBPager('hms_residence_hall','HMS_Residence_Hall');
@@ -823,7 +823,7 @@ class HMS_Residence_Hall extends HMS_Item
     /**
      * Returns the pager tags for the db pager
      */
-    function get_row_tags()
+    public function get_row_tags()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
         
@@ -856,7 +856,7 @@ class HMS_Residence_Hall extends HMS_Item
         return $tags; 
     }
 
-    function edit_residence_hall()
+    public function edit_residence_hall()
     {
         # Create the hall object given the hall id
         $hall = new HMS_Residence_Hall($_REQUEST['hall_id']);
@@ -865,7 +865,7 @@ class HMS_Residence_Hall extends HMS_Item
         }
 
         # Compare the hall's gender and the gender the user selected
-        # If they're not equal, call 'can_change_gender' function
+        # If they're not equal, call 'can_change_gender' public function
         if($hall->gender_type != $_REQUEST['gender_type']){
             if(!$hall->can_change_gender($_REQUEST['gender_type'])){
                 return HMS_Residence_Hall::show_edit_residence_hall($hall->id, NULL, 'Error: Incompatible gender detected. No changes were made.');
@@ -918,11 +918,11 @@ class HMS_Residence_Hall extends HMS_Item
      ********************/
 
     /**
-     * A general function for displaying a drop down to select a hall.
+     * A general public function for displaying a drop down to select a hall.
      * The page can be used for various actions by passing in the 'type' and 'op'
      * variables which are submitted as hidden values in the form.
      */
-    function show_select_residence_hall($title, $type, $op, $success = NULL, $error = NULL)
+    public function show_select_residence_hall($title, $type, $op, $success = NULL, $error = NULL)
     {
         if(   !Current_User::allow('hms', 'hall_view')
            && !Current_User::allow('hms', 'hall_attributes')
@@ -983,7 +983,7 @@ class HMS_Residence_Hall extends HMS_Item
     /**
      * Does not use code from HMS_Forms add_residence_hall, fill_hall_data_display 
      */
-    function show_edit_residence_hall($hall_id = null, $success = null, $error = null)
+    public function show_edit_residence_hall($hall_id = null, $success = null, $error = null)
     {
         if( !Current_User::allow('hms', 'hall_attributes') 
             && !Current_User::allow('hms', 'hall_view')){
@@ -1144,7 +1144,7 @@ class HMS_Residence_Hall extends HMS_Item
      * Shows a hall overview, listing the floors, rooms,
      * and assignments for those rooms
      */
-    function show_hall_overview($hall_id, $naked = FALSE)
+    public function show_hall_overview($hall_id, $naked = FALSE)
     {
         $tpl = new PHPWS_Template('hms');
         

@@ -23,7 +23,7 @@ class HMS_Pending_Assignment
     var $meal_zero;
     var $meal_one;
 
-    function HMS_Pending_Assignment($id = NULL)
+    public function HMS_Pending_Assignment($id = NULL)
     {
         if(!isset($id)) {
             return;
@@ -47,7 +47,7 @@ class HMS_Pending_Assignment
         }
     }
 
-    function save()
+    public function save()
     {
         $db = new PHPWS_DB('hms_pending_assignment');
         $result = $db->saveObject($this);
@@ -56,7 +56,7 @@ class HMS_Pending_Assignment
         }
     }
 
-    function delete()
+    public function delete()
     {
         $db = new PHPWS_DB('hms_pending_assignment');
         $db->addWhere('id',$this->id);
@@ -66,7 +66,7 @@ class HMS_Pending_Assignment
         }
     }
 
-    function eligible_for_queue($ass)
+    public function eligible_for_queue($ass)
     {
         if(empty($ass) || is_null($ass) || !isset($ass)) return FALSE;
 
@@ -80,7 +80,7 @@ class HMS_Pending_Assignment
         return TRUE;
     }
 
-    function is_pending($ass)
+    public function is_pending($ass)
     {
         $db = new PHPWS_DB('hms_pending_assignment');
         $db->addWhere('roommate_zero', $ass, NULL, 'OR');
@@ -89,7 +89,7 @@ class HMS_Pending_Assignment
         return !is_null($db->select('row'));
     }
 
-    function main()
+    public function main()
     {
         switch($_REQUEST['op']) {
             case 'fill':
@@ -110,7 +110,7 @@ class HMS_Pending_Assignment
     /**
      * Automatically pairs up unassigned roommates based on their applications
      */
-    function auto_pair()
+    public function auto_pair()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
         $beds = HMS_Bed::get_all_empty_beds();
@@ -365,7 +365,7 @@ class HMS_Pending_Assignment
         return $content;
     }
 
-    function add($zero, $one, $chosen)
+    public function add($zero, $one, $chosen)
     {
         $ass                = &new HMS_Pending_Assignment();
         $ass->gender        = $zero['gender'];
@@ -392,7 +392,7 @@ class HMS_Pending_Assignment
         $ass->save();
     }
 
-    function view()
+    public function view()
     {
         $db = new PHPWS_DB('hms_pending_assignment');
         $db->addOrder('roommate_zero');
@@ -440,14 +440,14 @@ class HMS_Pending_Assignment
         return $content;
     }
 
-    function clear()
+    public function clear()
     {
         $db = new PHPWS_DB('hms_pending_assignment');
         $db->delete();
         return "Assignment Queue Cleared";
     }
 
-    function doIt()
+    public function doIt()
     {
         $FEMALE = 0;
         $MALE   = 1;

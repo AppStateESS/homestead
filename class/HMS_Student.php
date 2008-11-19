@@ -18,14 +18,14 @@ class HMS_Student {
     var $updated_on;
     var $deleted;
 
-    function HMS_Student($asu_username = NULL) {
+    public function HMS_Student($asu_username = NULL) {
         $this->asu_username = $asu_username;
     }
 
     
 
     # Used to set 'agreed_to_terms' true after a user has already applied
-    function agreed_to_terms()
+    public function agreed_to_terms()
     {
         $db = &new PHPWS_DB('hms_application');
         $db->addwhere('hms_student_id', $_SESSION['asu_username'], 'ILIKE');
@@ -45,7 +45,7 @@ class HMS_Student {
      * Static Methods *
      ******************/
      
-    function main()
+    public function main()
     {
         # Check to make sure the 'op' variable is set, if not bail out here
         if(!isset($_REQUEST['op'])){
@@ -332,7 +332,7 @@ class HMS_Student {
      * Static UI Methods *
      *********************/
 
-    function get_link($username, $show_user = FALSE)
+    public function get_link($username, $show_user = FALSE)
     {
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
         $name = HMS_SOAP::get_full_name($username);
@@ -349,7 +349,7 @@ class HMS_Student {
         return $link;
     }
 
-    function enter_student_search_data($error = null)
+    public function enter_student_search_data($error = null)
     {
         if(!Current_User::allow('hms', 'search')){
             $tpl = array();
@@ -386,7 +386,7 @@ class HMS_Student {
         return PHPWS_Template::process($tpl, 'hms', 'admin/get_single_username.tpl');
     }
 
-    function get_matching_students($error = NULL, $success = NULL)
+    public function get_matching_students($error = NULL, $success = NULL)
     {   
         if(!Current_User::allow('hms', 'search')){
             $tpl = array();
