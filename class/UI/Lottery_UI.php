@@ -512,7 +512,6 @@ class Lottery_UI {
             $bed = $beds[$i];
             $bed_row = array();
 
-            $bed_row['BED_LETTER']      = $bed->bed_letter;
             $bed_row['BEDROOM_LETTER']  = $bed->bedroom_label;
 
             # Check for an assignment
@@ -668,7 +667,6 @@ class Lottery_UI {
             # Check for a reservation
             $reservation = $bed->get_lottery_reservation_info();
             
-            $bed_row['BED_LETTER']      = $bed->bed_letter;
             $bed_row['BEDROOM_LETTER']  = $bed->bedroom_label;
 
             if($bed->_curr_assignment != NULL){
@@ -821,7 +819,6 @@ class Lottery_UI {
             # Check for a reservation
             $reservation = $bed->get_lottery_reservation_info();
             
-            $bed_row['BED_LETTER']      = $bed->bed_letter;
             $bed_row['BEDROOM_LETTER']  = $bed->bedroom_label;
 
             if($bed->_curr_assignment != NULL){
@@ -896,7 +893,6 @@ class Lottery_UI {
             # Check for a reservation
             $reservation = $bed->get_lottery_reservation_info();
             
-            $bed_row['BED_LETTER']      = $bed->bed_letter;
             $bed_row['BEDROOM_LETTER']  = $bed->bedroom_label;
 
             if($bed->_curr_assignment != NULL){

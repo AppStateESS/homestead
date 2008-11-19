@@ -21,13 +21,11 @@
         <table>
             <tr>
                 <th>Bedroom</th>
-                <th>Bed</th>
                 <th>Roommate</th>
             </tr>
             <!-- BEGIN beds -->
             <tr>
                 <td>{BEDROOM_LETTER}</td>
-                <td>{BED_LETTER}</td>
                 <td>{TEXT}</td>
             </tr>
             <!-- END beds -->
