@@ -660,28 +660,28 @@ class HMS_SOAP{
     /** 
      * Uses the PHPWS_Core log public function to 'manually' log soap errors to soap_error.log.
      */
-    public function log_soap_fault($soap_fault, $public function, $extra_info)
+    public function log_soap_fault($soap_fault, $function, $extra_info)
     {
-        $error_msg = $soap_fault->message . 'in public function: ' . $public function . " Extra: " . $extra_info;    
+        $error_msg = $soap_fault->message . 'in public function: ' . $function . " Extra: " . $extra_info;    
         PHPWS_Core::log($error_msg, 'soap_error.log', _('Error'));
     }
 
     /**
      * Uses the PHPWS_Core log public function to 'manually' log soap erros to soap_error.log.
      */
-    public function log_soap_error($message, $public function, $extra)
+    public function log_soap_error($message, $function, $extra)
     {
-        PHPWS_Core::log('Banner error: ' . $message . ' in public function: ' . $public function . ' Extra: ' . $extra, 'soap_error.log', 'Error');
+        PHPWS_Core::log('Banner error: ' . $message . ' in public function: ' . $function . ' Extra: ' . $extra, 'soap_error.log', 'Error');
     }
 
     /**
      * Uses the PHPWS_Core log public function to 'manually' log soap requests
      */
-    public function log_soap($public function, $result)
+    public function log_soap($function, $result)
     {
         $arglist = func_get_args();
         $args = implode(', ', array_slice($arglist, 2));
-        $msg = "$public function($args) result: $result";
+        $msg = "$function($args) result: $result";
         PHPWS_Core::log($msg, 'soap.log', 'SOAP');
     }    
 
