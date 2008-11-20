@@ -75,7 +75,6 @@ class Lottery_UI {
 
     public function lottery_signup_submit()
     {
-        test($_REQUEST);
         # Make sure the agreed to terms checkbox was checked
         if(!isset($_REQUEST['terms_check'])){
             return Lottery_UI::show_lottery_signup('You must agree to the housing terms & conditions.');
