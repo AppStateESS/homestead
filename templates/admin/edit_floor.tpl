@@ -14,12 +14,47 @@ function edit_toggle(){
     }
 }
 
-function submit_form(form_element){
-    var elements = array();
-    $(form_element).parent().parent().children().each(function(){
-    });
+function submit_form(form_element, dropdown){
+    var table_row = $(form_element).parent().parent().get(0);
+    var form_element_value = 0;
+    if(dropdown){
+        form_element_value = $(form_element).val();
+    } else {
+        form_element_value = form_element.checked ? 1 : 0;
+    }
+    
+    form_element.disabled=true;
+    $.get('index.php', {'mod': 'hms', 'type': 'room', 'op': 'update_field', 'id': table_row.id, 'field': form_element.name, 'value': form_element_value}, function(json){
+        if(json != false){
+            var display_text;
+            switch(form_element_value){
+                case "0":
+                    display_text = 'Female';
+                    break;
+                case "1":
+                    display_text = 'Male';
+                    break;
+                case 0:
+                    display_text = 'No';
+                    break;
+                case 1:
+                    display_text = 'Yes';
+                    break;
+                case 2:
+                    display_text = 'COED';
+                    break;
+                default:
+                    display_text = 'Unkown field value';
+                    break;
+            }
 
-    alert(elements);
+            var tablecell = $('#'+json.id+',[name='+form_element.name+'],[form!=true]').get(0);
+            $(tablecell).text(""+display_text);
+        } else {
+            alert('Error updating the database, no changes were made');
+        }
+        form_element.disabled=false;
+    });
 }
 
 $(document).ready(function(){

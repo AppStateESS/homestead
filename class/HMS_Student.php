@@ -85,7 +85,7 @@ class HMS_Student {
                 } else {
                     $success = 'Reporting Application: Successful';
                     PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-                    HMS_Activity_Log::log_activity($_REQUEST['username'], ACTIVITY_APPLICATION_REPORTED, HMS_Term::get_selected_term(), Current_User::getUsername());
+                    HMS_Activity_Log::log_activity($_REQUEST['username'], ACTIVITY_APPLICATION_REPORTED, Current_User::getUsername());
                 }
                 return HMS_Student::get_matching_students($error, $success);
                 break;

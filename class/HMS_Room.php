@@ -65,6 +65,7 @@ class HMS_Room extends HMS_Item
         $this->stamp();
         $db = new PHPWS_DB('hms_room');
         $result = $db->saveObject($this);
+
         if (!$result || PHPWS_Error::logIfError($result)) {
             return false;
         }
@@ -538,12 +539,18 @@ class HMS_Room extends HMS_Item
                 break;
             case 'edit_room':
                 return HMS_Room::edit_room();
+                break;
             case 'add_room':
                 return HMS_Room::add_room();
+                break;
             case 'show_add_room':
                 return HMS_Room::show_add_room();
+                break;
             case 'get_row':
                 echo HMS_Room::get_row_edit($_REQUEST['room']);
+                die();
+            case 'update_field':
+                echo json_encode(HMS_Room::update_row($_REQUEST['id'], $_REQUEST['field'], $_REQUEST['value']));
                 die();
             default:
                 echo "undefied room op: {$_REQUEST['op']}";
@@ -551,9 +558,7 @@ class HMS_Room extends HMS_Item
         }
     }
 
-
-
-    public function room_pager_by_floor($floor_id)
+    public function room_pager_by_floor($floor_id, $editable=false)
     {
        PHPWS_Core::initCoreClass('DBPager.php');
        javascript('/jquery/');
@@ -584,6 +589,7 @@ class HMS_Room extends HMS_Item
            $pager->addRowTags('get_row_edit');
            $page_tags['FORM'] = 'form=true';
        } else {
+           $page_tags['FORM'] = 'form=false';
            $pager->addRowTags('get_row_tags');
        }
        $pager->addPageTags($page_tags);
@@ -612,44 +618,43 @@ class HMS_Room extends HMS_Item
         return $tpl;
     }
     
-    public function edit_room(){
-    {
+    public function get_row_edit(){
         javascript('/jquery/');
         $tpl = array();
         $tpl['ID']           = $this->id;
         $tpl['ROOM_NUMBER']  = PHPWS_Text::secureLink($this->room_number, 'hms', array('type'=>'room', 'op'=>'show_edit_room', 'room'=>$this->id));
 
-        $form = new PHPWS_Form('edit_room['.$this->id.']');
+        $form = new PHPWS_Form($this->id);
         $form->addSelect('gender_type', array(FEMALE => FEMALE_DESC,
                                          MALE   => MALE_DESC,
                                          COED   => COED_DESC)
                         );
         $form->setMatch('gender_type', $this->gender_type);
-        $form->setExtra('gender_type', 'onChange=submit_form(this)');
+        $form->setExtra('gender_type', 'onChange="submit_form(this, true)"');
 
         $form->addCheck('ra_room', 'yes');
-        $form->setMatch('ra_room', $this->ra_room == 1 ? 'yes' : 'no');
-        $form->setExtra('ra_room', 'onChange=submit_form(this)');
+        $form->setMatch('ra_room', $this->ra_room == 1 ? 'yes' : 0);
+        $form->setExtra('ra_room', 'onChange="submit_form(this, false)"');
 
         $form->addCheck('private_room', 'yes');
-        $form->setMatch('private_room', $this->private_room == 1 ? 'yes' : 'no');
-        $form->setExtra('private_room', 'onChange=submit_form(this)');
+        $form->setMatch('private_room', $this->private_room == 1 ? 'yes' : 0);
+        $form->setExtra('private_room', 'onChange="submit_form(this, false)"');
 
         $form->addCheck('is_overflow', 'yes');
-        $form->setMatch('is_overflow', $this->is_overflow == 1 ? 'yes' : 'no');
-        $form->setExtra('is_overflow', 'onChange=submit_form(this)');
+        $form->setMatch('is_overflow', $this->is_overflow == 1 ? 'yes' : 0);
+        $form->setExtra('is_overflow', 'onChange="submit_form(this, false)"');
 
         $form->addCheck('is_medical', 'yes');
-        $form->setMatch('is_medical', $this->is_medical == 1 ? 'yes' : 'no');
-        $form->setExtra('is_medical', 'onChange=submit_form(this)');
+        $form->setMatch('is_medical', $this->is_medical == 1 ? 'yes' : 0);
+        $form->setExtra('is_medical', 'onChange="submit_form(this, false)"');
 
         $form->addCheck('is_reserved', 'yes');
-        $form->setMatch('is_reserved', $this->is_reserved == 1 ? 'yes' : 'no');
-        $form->setExtra('is_reserved', 'onChange=submit_form(this)');
+        $form->setMatch('is_reserved', $this->is_reserved == 1 ? 'yes' : 0);
+        $form->setExtra('is_reserved', 'onChange="submit_form(this, false)"');
 
         $form->addCheck('is_online', 'yes');
-        $form->setMatch('is_online', $this->is_online == 1 ? 'yes' : 'no');
-        $form->setExtra('is_online', 'onChange=submit_form(this)');
+        $form->setMatch('is_online', $this->is_online == 1 ? 'yes' : 0);
+        $form->setExtra('is_online', 'onChange="submit_form(this, false)"');
 
         $form->addHidden('type', 'room');
         $form->addHidden('op',   'edit_row');
@@ -658,6 +663,29 @@ class HMS_Room extends HMS_Item
         $form->mergeTemplate($tpl);
 
         return $form->getTemplate();
+    }
+
+    function update_row($id, $element, $value){
+        if( !Current_User::allow('hms', 'room_attributes') ){
+            return 'bad permissions';
+        }
+
+        if(in_array($element, array_keys(get_class_vars('HMS_Room')))){
+            if(!is_numeric($value)){
+                $value = $value == 'yes' ? 1 : 0;
+            }
+
+            //Update the database by hand instead of loading and saving an
+            //object to avoid possible race conditions.
+            $db = new PHPWS_DB('hms_room');
+            $db->addWhere('id', $id);
+            $db->addValue($element, $value);
+            $result = $db->update();
+
+            $room = new HMS_Room($id);
+            return $room;
+        }
+        return false;
     }
     
     public function edit_room(){
