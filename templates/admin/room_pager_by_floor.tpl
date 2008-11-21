@@ -17,16 +17,15 @@
     </tr>
     <!-- END empty_table -->
     <!-- BEGIN listrows -->
-    <tr {TOGGLE}>
+    <tr name="row" id={ID} {FORM} {TOGGLE}>
         <td>{ROOM_NUMBER}</td>
-        <td>{GENDER_TYPE}</td>
+        <td>{START_FORM}{GENDER_TYPE}</td>
         <td>{RA_ROOM}</td>
         <td>{PRIVATE_ROOM}</td>
         <td>{IS_OVERFLOW}</td>
         <td>{IS_MEDICAL}</td>
         <td>{IS_RESERVED}</td>
-        <td>{IS_ONLINE}</td>
-        <td>{DELETE}</td>
+        <td>{IS_ONLINE}{END_FORM}</td>
     </tr>
     <!-- END listrows -->
 </table>

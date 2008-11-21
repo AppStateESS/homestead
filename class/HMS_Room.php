@@ -542,6 +542,9 @@ class HMS_Room extends HMS_Item
                 return HMS_Room::add_room();
             case 'show_add_room':
                 return HMS_Room::show_add_room();
+            case 'get_row':
+                echo HMS_Room::get_row_edit($_REQUEST['room']);
+                die();
             default:
                 echo "undefied room op: {$_REQUEST['op']}";
                 break;
@@ -550,10 +553,10 @@ class HMS_Room extends HMS_Item
 
 
 
-
     public function room_pager_by_floor($floor_id)
     {
        PHPWS_Core::initCoreClass('DBPager.php');
+       javascript('/jquery/');
        
        $pager = & new DBPager('hms_room', 'HMS_Room');
        
@@ -577,7 +580,12 @@ class HMS_Room extends HMS_Item
 
        $pager->addToggle('class="toggle1"');
        $pager->addToggle('class="toggle2"');
-       $pager->addRowTags('get_row_tags');
+       if($editable){
+           $pager->addRowTags('get_row_edit');
+           $page_tags['FORM'] = 'form=true';
+       } else {
+           $pager->addRowTags('get_row_tags');
+       }
        $pager->addPageTags($page_tags);
 
        return $pager->get();
@@ -587,7 +595,8 @@ class HMS_Room extends HMS_Item
     {
         //$tpl = $this->item_tags();
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
-
+        
+        $tpl['ID']           = $this->id;
         $tpl['ROOM_NUMBER']  = PHPWS_Text::secureLink($this->room_number, 'hms', array('type'=>'room', 'op'=>'show_edit_room', 'room'=>$this->id));
         $tpl['GENDER_TYPE']  = HMS_Util::formatGender($this->gender_type);
         $tpl['RA_ROOM']      = $this->ra_room      ? 'Yes' : 'No';
@@ -601,6 +610,54 @@ class HMS_Room extends HMS_Item
         }
 
         return $tpl;
+    }
+    
+    public function edit_room(){
+    {
+        javascript('/jquery/');
+        $tpl = array();
+        $tpl['ID']           = $this->id;
+        $tpl['ROOM_NUMBER']  = PHPWS_Text::secureLink($this->room_number, 'hms', array('type'=>'room', 'op'=>'show_edit_room', 'room'=>$this->id));
+
+        $form = new PHPWS_Form('edit_room['.$this->id.']');
+        $form->addSelect('gender_type', array(FEMALE => FEMALE_DESC,
+                                         MALE   => MALE_DESC,
+                                         COED   => COED_DESC)
+                        );
+        $form->setMatch('gender_type', $this->gender_type);
+        $form->setExtra('gender_type', 'onChange=submit_form(this)');
+
+        $form->addCheck('ra_room', 'yes');
+        $form->setMatch('ra_room', $this->ra_room == 1 ? 'yes' : 'no');
+        $form->setExtra('ra_room', 'onChange=submit_form(this)');
+
+        $form->addCheck('private_room', 'yes');
+        $form->setMatch('private_room', $this->private_room == 1 ? 'yes' : 'no');
+        $form->setExtra('private_room', 'onChange=submit_form(this)');
+
+        $form->addCheck('is_overflow', 'yes');
+        $form->setMatch('is_overflow', $this->is_overflow == 1 ? 'yes' : 'no');
+        $form->setExtra('is_overflow', 'onChange=submit_form(this)');
+
+        $form->addCheck('is_medical', 'yes');
+        $form->setMatch('is_medical', $this->is_medical == 1 ? 'yes' : 'no');
+        $form->setExtra('is_medical', 'onChange=submit_form(this)');
+
+        $form->addCheck('is_reserved', 'yes');
+        $form->setMatch('is_reserved', $this->is_reserved == 1 ? 'yes' : 'no');
+        $form->setExtra('is_reserved', 'onChange=submit_form(this)');
+
+        $form->addCheck('is_online', 'yes');
+        $form->setMatch('is_online', $this->is_online == 1 ? 'yes' : 'no');
+        $form->setExtra('is_online', 'onChange=submit_form(this)');
+
+        $form->addHidden('type', 'room');
+        $form->addHidden('op',   'edit_row');
+        $form->addHidden('room', $this->id);
+
+        $form->mergeTemplate($tpl);
+
+        return $form->getTemplate();
     }
     
     public function edit_room(){
@@ -1067,7 +1124,7 @@ class HMS_Room extends HMS_Item
         return PHPWS_Template::process($tpl, 'hms', 'admin/edit_room.tpl');   
     }
 
-public function show_add_room($hall_id = NULL, $floor_id = NULL) {
+    public function show_add_room($hall_id = NULL, $floor_id = NULL) {
 
         # include what we need
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');

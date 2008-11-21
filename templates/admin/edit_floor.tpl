@@ -1,3 +1,31 @@
+<script type="text/javascript">
+function edit_toggle(){
+    $("#static_pager").toggle();
+    $("#dynamic_pager").toggle();
+    switch($("#edit").text()){
+        case 'Edit':
+            $("#edit").text('View');
+            break;
+        case 'View':
+            $("#edit").text('Edit');
+            break;
+        default:
+            break;
+    }
+}
+
+function submit_form(form_element){
+    var elements = array();
+    $(form_element).parent().parent().children().each(function(){
+    });
+
+    alert(elements);
+}
+
+$(document).ready(function(){
+    $("#dynamic_pager").hide();
+});
+</script>
 <div class="hms">
   <div class="box">
     <div class="{TITLE_CLASS}"> <h1>{TITLE}</h1> </div>
@@ -54,9 +82,13 @@
         {SUBMIT_FORM}
         {END_FORM}
         <br /><br />
-        {ROOM_PAGER}
-        <br />
-        {ADD_LINK}
+        <a id="edit" onclick="edit_toggle()">Edit</a>
+        <div id="static_pager">
+        {STATIC_ROOM_PAGER}
+        </div>
+        <div id="dynamic_pager">
+        {DYNAMIC_ROOM_PAGER}
+        </div>
     </div>
   </div>
 </div>

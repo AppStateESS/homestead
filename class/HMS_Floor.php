@@ -984,7 +984,8 @@ class HMS_Floor extends HMS_Item
 
         $form->addSubmit('submit_form', 'Submit');
 
-        $tpl['ROOM_PAGER'] = HMS_Room::room_pager_by_floor($floor->id);
+        $tpl['STATIC_ROOM_PAGER'] = HMS_Room::room_pager_by_floor($floor->id);
+        $tpl['DYNAMIC_ROOM_PAGER'] = HMS_Room::room_pager_by_floor($floor->id, true);
         
         if(Current_User::allow('hms','room_structure')) {
             $tpl['ADD_LINK'] = PHPWS_Text::secureLink('Add Room','hms',array('type'=>'floor','op'=>'show_add_room','floor_id'=>$floor->id,'hall_id'=>$hall->id));
