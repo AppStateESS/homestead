@@ -8,15 +8,16 @@ class HMS_Reports{
     public function get_reports()
     {
         $reports = array(
-                        'housing_apps'   => 'Housing Applications Received',
-                        'housing_asss'   => 'Assignment Demographics',
-                        'assigned_f'     => 'Assigned Type F Students',
-                        'special_needs'  => 'Special Needs Applicants',
-                        'unassd_apps'    => 'Unassigned Applicants',
-                        'movein_times'   => 'Move-in Times',
-                        'unassd_beds'    => 'Currently Unassigned Beds',
-                        'no_ban_data'    => 'Students Without Banner Data',
-                        'vacancy_report' => 'Hall Occupancy Report'
+                        'housing_apps'       => 'Housing Applications Received',
+                        'housing_asss'       => 'Assignment Demographics',
+                        'assigned_f'         => 'Assigned Type F Students',
+                        'special_needs'      => 'Special Needs Applicants',
+                        'unassd_apps'        => 'Unassigned Applicants',
+                        'movein_times'       => 'Move-in Times',
+                        'unassd_beds'        => 'Currently Unassigned Beds',
+                        'no_ban_data'        => 'Students Without Banner Data',
+                        'vacancy_report'     => 'Hall Occupancy Report',
+                        'roster_report'      => 'Floor Roster Report'
                         );
 /*                        'housing_asss' => 'Housing Assignments Made',*/
 /*                        'unassd_rooms' => 'Currently Unassigned Rooms',*/
@@ -104,8 +105,11 @@ class HMS_Reports{
             case 'no_ban_data':
                 return HMS_Reports::run_no_banner_data_report();
                 break;
-            case 'vacancy_report';
+            case 'vacancy_report':
                 return HMS_Reports::run_hall_occupancy_report();
+                break;
+            case 'roster_report':
+                return HMS_Reports::assignment_roster_report();
                 break;
             /*
             case 'unassd_rooms':
@@ -1880,6 +1884,97 @@ class HMS_Reports{
                 return $op;
                 break;
         }
+    }
+
+    public function assignment_roster_report()
+    {
+        ini_set("max_execution_time", "10000");
+        ini_set("memory_limit",       "512M");
+
+        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
+        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+        require_once(PHPWS_SOURCE_DIR . '/mod/hms/fpdf.php');
+        define('HEIGHT', 0.1875);
+
+        $db = new PHPWS_DB('hms_residence_hall');
+        $db->addWhere('is_online', 1);
+        $db->addWhere('term', HMS_Term::get_selected_term()); 
+        $result = $db->select();
+
+        if(PHPWS_Error::logIfError($result)){
+            return 'No Online Halls found for the currently selected term.';
+        }
+
+        $pdf = new FPDF('L','mm','A4');
+
+        foreach($result as $id){
+            $hall = new HMS_Residence_Hall($id['id']);
+            $hall->loadFloors();
+            $floors = $hall->_floors;
+
+            foreach($floors as $floor){
+                $rooms = $floor->get_rooms();
+                if(!is_array($rooms))
+                    continue;
+
+                $pdf->AddPage();
+                $pdf->SetFont('Arial', 'B', 12);
+                $pdf->Cell(80);
+                $pdf->Cell(120, 5, 'Appalachian State University', 0, 2, 'C');
+                $pdf->Cell(120, 5, 'Residence Life Occupancy Report', 0, 2, 'C');
+                $pdf->Ln(10);
+                $pdf->Cell(30, 5, ''.$hall->hall_name, 0);
+                $pdf->Ln(20);
+                $pdf->Cell(20, 5, 'Floor', 1);
+                $pdf->Cell(20, 5, 'Room', 1);
+                $pdf->Cell(30, 5, 'Bedroom ID', 1);
+                $pdf->Cell(30, 5, 'Banner ID', 1);
+                $pdf->Cell(50, 5, 'Name', 1);
+                $pdf->Cell(40, 5, 'Username', 1);
+                $pdf->Cell(20, 5, 'Year', 1);
+                $pdf->Cell(30, 5, 'Birthdate', 1);
+                $pdf->Cell(30, 5, 'Gender', 1);
+                $pdf->Ln(5);
+                
+                foreach($rooms as $room){
+                    //get the beds in the floor
+                    $room->loadBeds();
+                    
+                    foreach($room->_beds as $bed){
+                        //output the floor and room number
+                        $pdf->Cell(20, 5, $floor->floor_number, 1);
+                        $pdf->Cell(20, 5, $room->room_number, 1);
+                        //output the bed id
+                        $pdf->Cell(30, 5, $bed->bedroom_label, 1);
+                        //if the bed has an assignment
+                        if($bed->loadAssignment()){
+                            if(!is_null($bed->_curr_assignment)){
+                                $student = HMS_SOAP::get_student_info($bed->_curr_assignment);
+                                $pdf->Cell(30, 5, ''.$student->banner_id, 1);
+                                $pdf->Cell(50, 5, ''.HMS_SOAP::get_full_name_inverted($bed->_curr_assignment), 1);
+                                $pdf->Cell(40, 5, ''.$bed->_curr_assignment->asu_username, 1);
+                                $pdf->Cell(20, 5, ''.$student->projected_class, 1);
+                                $pdf->Cell(30, 5, ''.$student->dob, 1);
+                                $pdf->Cell(30, 5, ''.$student->gender, 1);
+                            } else {
+                                $pdf->Cell(30, 5, 'N/A', 1);
+                                $pdf->Cell(50, 5, 'No Assignment', 1);
+                                $pdf->Cell(40, 5, '', 1);
+                                $pdf->Cell(20, 5, '', 1);
+                                $pdf->Cell(30, 5, '', 1);
+                                $pdf->Cell(30, 5, '', 1);
+                            }
+                        }
+                        $pdf->Ln(5);
+                    }
+                }
+            }
+        }
+            
+        $pdf->Output();
+        exit();
     }
 }
 
