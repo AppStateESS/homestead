@@ -34,14 +34,14 @@ function submit_form(form_element, dropdown){
                 case "1":
                     display_text = 'Male';
                     break;
+                case "2":
+                    display_text = 'COED';
+                    break;
                 case 0:
                     display_text = 'No';
                     break;
                 case 1:
                     display_text = 'Yes';
-                    break;
-                case 2:
-                    display_text = 'COED';
                     break;
                 default:
                     display_text = 'Unkown field value';
