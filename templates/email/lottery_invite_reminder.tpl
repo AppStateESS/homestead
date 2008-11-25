@@ -12,7 +12,6 @@ below. If you have questions, feedback, or trouble using
 this site please email: beta@tux.appstate.edu
 Thank you for your assistance.
 
-
 Dear {NAME},
 
 You were selected for on-campus housing and you have not yet confirmed your on-campus housing for {YEAR}. To do so, go to http://hms.ess.appstate.edu/beta/

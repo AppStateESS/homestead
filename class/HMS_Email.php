@@ -269,7 +269,7 @@ class HMS_Email{
 
         $tpl['TERM'] = HMS_Term::term_to_text(HMS_Term::get_selected_term(), true);
 
-        HMS_Email::send_template_message($to . '@appstate.edu', '[Testing] Lottery Application Confirmation!', 'email/lottery_confirmation.tpl', $tpl);
+        HMS_Email::send_template_message($to . '@appstate.edu', '[Testing] On-campus Housing Re-application Confirmation!', 'email/lottery_confirmation.tpl', $tpl);
     }
 
     public function send_hms_application_confirmation($to, $name)
@@ -286,7 +286,7 @@ class HMS_Email{
 
         $tpl['TERM'] = HMS_Term::term_to_text(HMS_Term::get_selected_term(), true);
 
-        HMS_Email::send_template_message($to . '@appstate.edu', '[Testing] Lottery Application Confirmation!', 'email/application_confirmation.tpl', $tpl);
+        HMS_Email::send_template_message($to . '@appstate.edu', '[Testing] On-campus Houisng Application Confirmation!', 'email/application_confirmation.tpl', $tpl);
     }
     
     public function send_lottery_assignment_confirmation($to, $name, $location)
@@ -304,7 +304,7 @@ class HMS_Email{
         $tpl['TERM']     = HMS_Term::term_to_text(HMS_Term::get_selected_term(), true);
         $tpl['LOCATION'] = $location;
 
-        HMS_Email::send_template_message($to . '@appsatte.edu', '[Testing] Lottery Assignment Confirmation!', 'email/assignment_confirmation.tpl', $tpl);
+        HMS_Email::send_template_message($to . '@appsatte.edu', '[Testing] On-campus Housing Re-assignment Confirmation!', 'email/lottery_self_assignment_confirmation.tpl', $tpl);
     }
 
 } // End HMS_Email class
