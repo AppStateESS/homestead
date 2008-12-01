@@ -570,11 +570,12 @@ class HMS_Assignment extends HMS_Item
             $halls_array[$_hall->id] = $_hall->hall_name;
         }
 
+
+        $form->addDropBox('residence_hall', $halls_array);
+
         if($pre_populate){
-            $form->addDropBox('residence_hall', $halls_array);
             $form->setMatch('residence_hall', $hall->id);
         }else{
-            $form->addDropBox('residence_hall', array(0 => ''));
             $form->setMatch('residence_hall', 0);
         }
         $form->setLabel('residence_hall', 'Residence hall: ');
