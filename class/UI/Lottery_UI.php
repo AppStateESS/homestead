@@ -472,7 +472,7 @@ class Lottery_UI {
 
             $status = array();
 
-            $status['NAME'] = HMS_SOAP::get_name($roommate['asu_username']);
+            $status['NAME'] = HMS_SOAP::get_name($roommate);
 
             if(HMS_Lottery_Entry::check_for_entry($roommate, $term) === FALSE){
                 $status['STATUS'] = 'Did not enter lottery.';
