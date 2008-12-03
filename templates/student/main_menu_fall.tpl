@@ -31,6 +31,8 @@
         {NEW_APP_LINK}
       </li>
     </ul>
+    <!-- BEGIN term -->
+    <h1>{TERM}</h1>
     <!-- BEGIN rlc -->
     <h2>{RLC_ICON} &nbsp;3. Unique Housing Options Application</h2>
     {RLC_INTRO}
@@ -75,8 +77,8 @@
         <p>{ROOMMATE_LINK}</p>
       </li>
 <!-- END roommate -->
-
     </ul>
+<!-- END term -->
     
 <!-- BEGIN housing_status -->
     <h2>{VERIFY_ICON}6. Check Your Housing Status</h2>
