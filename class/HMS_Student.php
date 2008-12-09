@@ -49,8 +49,8 @@ class HMS_Student {
     {
         # Check to make sure the 'op' variable is set, if not bail out here
         if(!isset($_REQUEST['op'])){
-            PHPWS_Core::killAllSessions();
-            PHPWS_Core::home();
+            //PHPWS_Core::killAllSessions();
+            //PHPWS_Core::home();
         }
 
         if($_REQUEST['op'] == 'login') {
