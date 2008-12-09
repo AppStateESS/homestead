@@ -40,9 +40,11 @@
                     </tr>
                     <tr>
                         <th>Phone Number</th>
+                        <td>
                     <!-- BEGIN phone_number -->
-                        <td>{NUMBER}</td>
+                        {NUMBER}<br />
                     <!-- END phone_number -->
+                        </td>
                     </tr>
                     
                     <tr>

@@ -539,7 +539,7 @@ class HMS_Student {
          * Phone number *
          ****************/
         foreach($student_info->phone as $phone_number){
-            $tpl['phone_number'][] = array('NUMBER' =>'('.$phone_number->area_code.') '.$phone_number->number . (isset($phone_number->ext) ? ' ext. '.$phone_number->ext : ''));
+            $tpl['phone_number'][] = array('NUMBER' =>'('.$phone_number->area_code.') '.$phone_number->number . (!empty($phone_number->ext) ? ' ext. '.$phone_number->ext : ''));
         }
         $tpl['USERNAME'] = $username;
 
