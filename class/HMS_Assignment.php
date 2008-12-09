@@ -565,6 +565,7 @@ class HMS_Assignment extends HMS_Item
         }
        
         $halls_array = array();
+        $halls_array[0] = 'Select...';
         $hall_list = HMS_Residence_Hall::get_halls_with_vacancies(HMS_Term::get_selected_term());
         foreach ($hall_list as $_hall) {
             $halls_array[$_hall->id] = $_hall->hall_name;
