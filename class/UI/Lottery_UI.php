@@ -27,7 +27,7 @@ class Lottery_UI {
 
         $tpl['NAME'] = HMS_SOAP::get_name($_SESSION['asu_username']);
 
-        $form = &new PHPWS_Form();
+        $form = new PHPWS_Form();
         if(isset($_REQUEST['roommate1'])){
             $form->addText('roommate1', $_REQUEST['roommate1']);
         }else{
@@ -751,6 +751,7 @@ class Lottery_UI {
 
         # Assign the student to the requested bed
         $bed_id = array_search($_SESSION['asu_username'], $roommates); // Find the bed id of the student who's logged in
+
         $result = HMS_Assignment::assign_student($_SESSION['asu_username'], PHPWS_Settings::get('hms', 'lottery_term'), NULL, $bed_id, $_REQUEST['meal_plan'], 'Confirmed lottery invite', TRUE);
 
         if($result != E_SUCCESS){
@@ -789,7 +790,7 @@ class Lottery_UI {
 
         //Send a confirmation email
         PHPWS_Core::initModClass('hms', 'HMS_Email.php');
-        HMS_Email::send_lottery_assignment_confirmation($_SESSION['asu_username'], $hall->hall_name . ' ' . $room->room_number);
+        HMS_Email::send_lottery_assignment_confirmation($_SESSION['asu_username'], HMS_SOAP::get_name($_SESSION['asu_username']), $hall_room);
 
         return PHPWS_Template::process($tpl, 'hms', 'student/lottery_choose_room_thanks.tpl');
     }
