@@ -47,11 +47,7 @@ class HMS_Login
         PHPWS_Core::initModClass('hms','HMS_SOAP.php');
         $deadlines = HMS_Deadlines::get_deadlines();
 
-        /* Don't destroy our admin session if an admin is logging in as a user */
-        /*
-        
-        */
-        //        $username = strtolower(trim($_REQUEST['asu_username']));
+        $username = strtolower(trim($username));
 
         # Log the student's login in their activity log
         PHPWS_Core::initModClass('hms','HMS_Activity_Log.php');
