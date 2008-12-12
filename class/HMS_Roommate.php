@@ -955,15 +955,15 @@ class HMS_Roommate
     public function accept_for_realz($request)
     {
         PHPWS_Core::initCoreClass('Captcha.php');
-        $verified = Captcha::verify(true);
-        if($verified === false) {
+        $verified = Captcha::verify(TRUE);
+        if($verified === FALSE) {
             return HMS_Roommate::confirm_accept($request, 'Sorry, please try again.');
         }
 
         HMS_Activity_Log::log_activity($request->requestor,
                                        ACTIVITY_ACCEPTED_AS_ROOMMATE,
                                        $request->requestee,
-                                       "CAPTCHA: {$verified}");
+                                       "CAPTCHA: $verified");
         
         $request->confirmed = 1;
         $request->confirmed_on = mktime();
