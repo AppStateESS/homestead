@@ -35,8 +35,10 @@
             <!-- END bed_options -->
 
             <!-- BEGIN messaging -->
+            <!-- Commented out for now
             <dt>Messaging</dt>
             <dd>{EMAIL_HALL}</dd>
+            -->
             <!-- END messaging -->
         </dl>
         <!-- END left -->
