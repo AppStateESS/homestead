@@ -103,7 +103,7 @@
                     <!-- BEGIN application_term -->
                     <tr>
                         <th>Application Term:</th>
-                        <td>{APPLICATION_TERM} ({HUMAN_PARSEABLE_APPLICATION_TERM})</td>
+                        <td>{APPLICATION_TERM}</td>
                     </tr>
                     <!-- END application_term -->
                     <tr>

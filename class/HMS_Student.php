@@ -545,10 +545,7 @@ class HMS_Student {
 
         $tpl['TITLE'] = "Search Results - " . HMS_Term::term_to_text(HMS_Term::get_selected_term(),TRUE);
 
-        $tpl['APPLICATION_TERM'] = HMS_SOAP::get_application_term($username);
-        
-        $human_parseable = HMS_Term::term_to_text(HMS_SOAP::get_application_term($username));
-        $tpl['HUMAN_PARSEABLE_APPLICATION_TERM'] = $human_parseable['term'] . ' ' . $human_parseable['year'];
+        $tpl['APPLICATION_TERM'] = HMS_Term::term_to_text(HMS_SOAP::get_application_term($username), TRUE);
         
         $this_term = HMS_Term::get_selected_term();
 
