@@ -166,6 +166,7 @@ class Notification {
         }
         $subject = $_REQUEST['subject'];
         $body    = $_REQUEST['body'];
+        $content = $_REQUEST['content'];
 
         //Consider using a batch process instead of doing this this inline
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
