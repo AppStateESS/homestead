@@ -112,4 +112,10 @@
      * Edit Features *
      ****************/
     $permissions['edit_features'] = _('Can edit the application features per term');
+
+    /*******************************
+     * Email Messaging permissions *
+     ******************************/
+    $permission['email_hall'] = _('Can send Hall emails');
+    $permission['email_all']  = _('Can campus wide emails to residents');
 ?>

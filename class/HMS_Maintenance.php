@@ -189,6 +189,10 @@ class HMS_Maintenance
                 array('type'=>'lottery', 'op'=>'show_admin_entry'));
         }
 
+        if(Current_User::allow('hms', 'message_hall') || Current_User::allow('hms', 'message_all')){
+            $tpl['EMAIL_HALL'] = PHPWS_Text::secureLink(_('Send email notifications by hall'), 'hms', array('type'=>'notification', 'op'=>'show_select_hall'));
+        }
+
         $content = PHPWS_Template::process($tpl, 'hms', 'admin/maintenance.tpl');
         return $content;
     }

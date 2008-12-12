@@ -169,6 +169,14 @@ class HMS_Admin
                 PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
                 $final = HMS_Lottery::main();
                 break;
+            case 'notification':
+                PHPWS_Core::initModClass('hms', 'UI/Notification.php');
+                if(isset($_REQUEST['op'])){
+                    $final = Notification::main($_REQUEST['op']);
+                } else {
+                    $final = HMS_Maintenance::main();
+                }
+                break;
             default:
                 PHPWS_Core::initModClass('hms', 'HMS_Maintenance.php');
                 $_REQUEST['op'] = 'show_maintenance_options';

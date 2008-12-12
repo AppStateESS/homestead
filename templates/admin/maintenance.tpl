@@ -33,6 +33,11 @@
             <!-- BEGIN bed_options -->
             <dd>{EDIT_BED}</dd>
             <!-- END bed_options -->
+
+            <!-- BEGIN messaging -->
+            <dt>Messaging</dt>
+            <dd>{EMAIL_HALL}</dd>
+            <!-- END messaging -->
         </dl>
         <!-- END left -->
         <!-- BEGIN middle -->
