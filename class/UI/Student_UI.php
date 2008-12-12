@@ -83,11 +83,16 @@ class HMS_Student_UI{
          * freshmen (first-time application)      *
          ******************************************/
         # Check application term for past or future
-        if($application_term <= $current_term){
+        if($application_term <= $current_term && $student_type != TYPE_READMIT){
             /**************
              * Continuing *
              **************/
             # Application term is in the past
+
+            /*
+             * There's an exception for type 'Z' (readmit) students.
+             * Their application term will be in the past, but they're not a continuing student
+             */
             
             # check for student type of 'C'
             /*
@@ -146,7 +151,22 @@ class HMS_Student_UI{
                 return HMS_Contact_Form::show_contact_form();
             }
 
-        }else if($application_term > $current_term){
+        }else if($application_term > $current_term || $student_type == TYPE_READMIT){
+
+            /**
+             * Exception for type 'Z' (readmit) students.
+             * Their application term is in the past, but they should be treated as freshmen/transfer
+             */
+             
+            /**
+             * This is somehwat of a hack for type 'Z' (readmit) students.
+             * This code sets the student's application term to the term after the current term, since type Z students.
+             * This makes *everything* else work right.
+             */
+            if($student_type == TYPE_READMIT){
+                $application_term = HMS_Term::get_next_term(HMS_Term::get_current_term());
+                $_SESSION['application_term'] = $application_term;
+            }
 
             /*********************
              * Incoming Freshmen *
@@ -167,8 +187,8 @@ class HMS_Student_UI{
 
             $tpl['CONTACT_LINK'] = PHPWS_Text::secureLink('click here', 'hms', array('type'=>'student', 'op'=>'show_contact_form'));
 
-            # Check the student type, must be freshmen or transfer
-            if($student_type != TYPE_FRESHMEN && $student_type != TYPE_TRANSFER && $student_type != TYPE_RETURNING){
+            # Check the student type, must be freshmen, transfer, or readmit
+            if($student_type != TYPE_FRESHMEN && $student_type != TYPE_TRANSFER && $student_type != TYPE_RETURNING && $student_type != TYPE_READMIT){
                 # No idea what's going on here, send to a contact page
                 return HMS_Contact_Form::show_contact_form();
             }
