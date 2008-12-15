@@ -596,8 +596,9 @@ class HMS_Student {
             } 
             
             foreach($roommates as $roommate){
-                    $tpl['roommates'][] = array('ROOMMATE' => ''.HMS_Student::get_link($roommate,TRUE));
+                $tpl['roommates'][] = array('ROOMMATE' => HMS_Student::get_link($roommate,TRUE));
             }
+
         } else {
             if($pending != NULL){
                 $tpl['roommates'][] = array('ROOMMATE' => HMS_Student::get_link($pending, TRUE) . ' (Pending)');
