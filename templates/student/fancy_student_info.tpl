@@ -115,7 +115,7 @@
                         <td>{ASSIGNED}  [{ROOM_ASSIGNMENT}]</td>
                     </tr>
                     <tr>
-                        <th>Roommate:</th>
+                        <th>Roommate(s):</th>
                         <!-- BEGIN roommates -->
                         <td>{ROOMMATE}</td>
                         <!-- END roommates -->

@@ -234,6 +234,34 @@ class HMS_Roommate
         return $result['requestor'];
     }
 
+    public function get_pending_roommate($asu_username, $term = NULL)
+    {
+        if(is_null($term)) PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+        
+        $db = new PHPWS_DB('hms_roommate');
+        $db->addWhere('requestor', $asu_username, 'ILIKE', 'OR', 'grp');
+        $db->addWhere('requestee', $asu_username, 'ILIKE', 'OR', 'grp');
+        $db->setGroupConj('grp', 'AND');
+        $db->addWhere('confirmed', 0);
+        $db->addWhere('term', (is_null($term) ? HMS_Term::get_selected_term() : $term));
+        $db->addColumn('requestor');
+        $db->addColumn('requestee');
+        $result = $db->select('row');
+
+        if(count($result) > 1) {
+            // TODO: Log Weird Situation
+        }
+
+        if(count($result) == 0)
+            return null;
+
+        if(trim($result['requestor']) == trim($asu_username)) {
+            return $result['requestee'];
+        }
+
+        return $result['requestor'];
+    }
+
     /**
      * Checks whether a given user has made a roommate request which is still pending.
      *

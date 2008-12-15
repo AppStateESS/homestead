@@ -575,9 +575,9 @@ class HMS_Student {
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
         PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
         PHPWS_Core::initModClass('hms', 'HMS_Room.php');
-        $assignment = HMS_Assignment::get_assignment($username);
-        $pending    = HMS_Roommate::get_unconfirmed_roommate($username);
-        $confirmed  = HMS_Roommate::get_confirmed_roommate($username);
+        $assignment = HMS_Assignment::get_assignment($username, $this_term);
+        $pending    = HMS_Roommate::get_pending_roommate($username, $this_term);
+        $confirmed  = HMS_Roommate::get_confirmed_roommate($username, $this_term);
 
         $roommates = array();
 
@@ -590,9 +590,9 @@ class HMS_Student {
             }
 
             if($pending != NULL && !in_array($pending, $roommates)){
-                $roommates[] = '' . $pending . '(Pending)';
+                $tpl['REQUESTED_ROOMMATE'] = HMS_Student::get_link($pending, TRUE) . ' (Pending)';
             } else if($confirmed != NULL && !in_array($confirmed, $roommates)){
-                $roommates[]      = $confirmed;
+                $tpl['REQUESTED_ROOMMATE'] = HMS_Student::get_link($confirmed, TRUE) . '(Confirmed)';
             } 
             
             foreach($roommates as $roommate){
@@ -600,9 +600,9 @@ class HMS_Student {
             }
         } else {
             if($pending != NULL){
-                $tpl['roommates'] = array('ROOMMATE' => $pending);
+                $tpl['roommates'][] = array('ROOMMATE' => HMS_Student::get_link($pending, TRUE));
             } else if($confirmed != NULL){
-                $tpl['roommates'][] = array('ROOMMATE' => $confirmed);
+                $tpl['roommates'][] = array('ROOMMATE' => HMS_Student::get_link($confirmed,TRUE));
             } else {
                 $tpl['roommates'][] = array('ROOMMATE' => 'No pending or confirmed roommates');
             }
