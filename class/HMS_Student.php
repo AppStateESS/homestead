@@ -600,7 +600,7 @@ class HMS_Student {
             }
         } else {
             if($pending != NULL){
-                $tpl['roommates'][] = array('ROOMMATE' => HMS_Student::get_link($pending, TRUE));
+                $tpl['roommates'][] = array('ROOMMATE' => HMS_Student::get_link($pending, TRUE) . ' (Pending)');
             } else if($confirmed != NULL){
                 $tpl['roommates'][] = array('ROOMMATE' => HMS_Student::get_link($confirmed,TRUE));
             } else {
