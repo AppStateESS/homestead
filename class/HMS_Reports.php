@@ -1898,19 +1898,17 @@ class HMS_Reports{
         require_once(PHPWS_SOURCE_DIR . '/mod/hms/fpdf.php');
         define('HEIGHT', 0.1875);
 
-        $db = new PHPWS_DB('hms_residence_hall');
-        $db->addWhere('is_online', 1);
-        $db->addWhere('term', HMS_Term::get_selected_term()); 
-        $result = $db->select();
+        $term = HMS_Term::get_selected_term();
 
-        if(PHPWS_Error::logIfError($result)){
+        $halls = HMS_Residence_Hall::get_halls($term);
+
+        if(!isset($halls)){
             return 'No Online Halls found for the currently selected term.';
         }
 
         $pdf = new FPDF('L','mm','A4');
 
-        foreach($result as $id){
-            $hall = new HMS_Residence_Hall($id['id']);
+        foreach($halls as $hall){
             $hall->loadFloors();
             $floors = $hall->_floors;
 
@@ -1951,9 +1949,9 @@ class HMS_Reports{
                         //if the bed has an assignment
                         if($bed->loadAssignment()){
                             if(!is_null($bed->_curr_assignment)){
-                                $student = HMS_SOAP::get_student_info($bed->_curr_assignment);
+                                $student = HMS_SOAP::get_student_info($bed->_curr_assignment->asu_username, $term);
                                 $pdf->Cell(30, 5, ''.$student->banner_id, 1);
-                                $pdf->Cell(50, 5, ''.HMS_SOAP::get_full_name_inverted($bed->_curr_assignment), 1);
+                                $pdf->Cell(50, 5, ''.HMS_SOAP::get_full_name_inverted($bed->_curr_assignment->asu_username), 1);
                                 $pdf->Cell(40, 5, ''.$bed->_curr_assignment->asu_username, 1);
                                 $pdf->Cell(20, 5, ''.$student->projected_class, 1);
                                 $pdf->Cell(30, 5, ''.$student->dob, 1);
