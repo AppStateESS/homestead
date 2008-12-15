@@ -672,7 +672,6 @@ class HMS_Lottery {
             return E_LOTTERY_ROOMMATE_INVITE_NOT_FOUND;
         }
 
-
         # Check that the reserved bed is still empty
         $bed = &new HMS_Bed($invite['bed_id']);
         if(!$bed->has_vacancy()){
@@ -683,9 +682,9 @@ class HMS_Lottery {
         if(HMS_Assignment::check_for_assignment($username, $term)){
             return E_ASSIGN_ALREADY_ASSIGNED;
         }
-
+        
         # Actually make the assignment
-        $assign_result = HMS_Assignment::assign_student($username, NULL, $invite['bed_id'], $meal_plan, 'Confirmed roommate invite', TRUE);
+        $assign_result = HMS_Assignment::assign_student($username, $term, NULL, $invite['bed_id'], $meal_plan, 'Confirmed roommate invite', TRUE);
         if($assign_result != E_SUCCESS){
             return $assign_result;
         }

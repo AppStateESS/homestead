@@ -867,7 +867,7 @@ class Lottery_UI {
         return PHPWS_Template::process($tpl, 'hms', 'student/lottery_roommate_request.tpl');
     }
 
-    public function show_confirm_lottery_roommate_request($error_msg)
+    public function show_confirm_lottery_roommate_request($error_msg = NULL)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
         PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
