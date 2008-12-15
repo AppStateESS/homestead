@@ -15,7 +15,9 @@ class Notification {
                 return Notification::show_select_hall();
                 break;
             case 'edit':
-                return Notification::show_edit_email();
+                $subject = isset($_REQUEST['subject']) ? $_REQUEST['subject'] : null;
+                $body    = isset($_REQUEST['body'])    ? $_REQUEST['body']    : null;
+                return Notification::show_edit_email('', $subject, $body);
                 break;
             case 'review':
                 return Notification::show_review_email();
@@ -166,7 +168,6 @@ class Notification {
         }
         $subject = $_REQUEST['subject'];
         $body    = $_REQUEST['body'];
-        $content = $_REQUEST['content'];
 
         //Consider using a batch process instead of doing this this inline
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
@@ -181,7 +182,7 @@ class Notification {
                     foreach($rooms as $room){
                         $students = $room->get_assignees();
                         foreach($students as $student){
-                            HMS_Email::send_email($student->asu_username . '@appstate.edu', Current_User::getEmail(), $subject, $content);
+                            HMS_Email::send_email($student->asu_username . '@appstate.edu', Current_User::getEmail(), $subject, $body);
                         }
                     }
                 }
@@ -194,7 +195,7 @@ class Notification {
                 foreach($rooms as $room){
                     $students = $room->get_assignees();
                     foreach($students as $student){
-                        HMS_Email::send_email($student->asu_username . '@appstate.edu', Current_User::getEmail(), $subject, $content);
+                        HMS_Email::send_email($student->asu_username . '@appstate.edu', Current_User::getEmail(), $subject, $body);
                     }
                 }
             }
