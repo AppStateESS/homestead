@@ -188,6 +188,9 @@ define('ACTIVITY_LOTTERY_ROOMMATE_REMINDED',    47);
 define('ACTIVITY_LOTTERY_CONFIRMED_ROOMMATE',   48);
 define('ACTIVITY_LOTTERY_EXECUTED',             49);
 
+// Term Activities
+define('ACTIVITY_CREATE_TERM',                  50);
+
 /** 
  * Errors 
  */

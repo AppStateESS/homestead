@@ -387,6 +387,9 @@ class HMS_Term{
         //echo "done copying halls<br>";
         $db->query('COMMIT');
 
+        PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
+        HMS_Activity_Log::log_activity(Current_User::getUsername(), ACTIVITY_CREATE_TERM, Current_User::getUsername(), 'Created new term: ' . $term->term);
+
         return HMS_Term::show_edit_terms('Term created successfully!');
     }
 

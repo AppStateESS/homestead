@@ -149,7 +149,8 @@ class HMS_Activity_Log{
                         ACTIVITY_LOTTERY_REQUESTED_AS_ROOMMATE  => "Requested as a roommate for lottery room",
                         ACTIVITY_LOTTERY_ROOMMATE_REMINDED      => "Lottery roommate invivation reminder sent",
                         ACTIVITY_LOTTERY_CONFIRMED_ROOMMATE     => "Confirmed lottery roommate request",
-                        ACTIVITY_LOTTERY_EXECUTED               => "Lottery process executed");
+                        ACTIVITY_LOTTERY_EXECUTED               => "Lottery process executed",
+                        ACTIVITY_CREATE_TERM                    => "Created a new Term");
     }
 
     /**
