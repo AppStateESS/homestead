@@ -13,21 +13,23 @@ define('HEIGHT', 0.1875);
 
 class HMS_Letter
 {
-    var $address1   = NULL;
-    var $address2   = NULL;
-    var $address3   = NULL;
-    var $address4   = NULL;
-    var $address5   = NULL;
-    var $date       = NULL;
-    var $semester   = NULL;
+    var $address1       = NULL;
+    var $address2       = NULL;
+    var $address3       = NULL;
+    var $address4       = NULL;
+    var $address5       = NULL;
+    var $date           = NULL;
+    var $semester       = NULL;
     //var $hall       = NULL;
     //var $room       = NULL;
-    var $assignment = NULL;
-    var $room_phone = NULL;
-    var $roommate   = array();
-    var $checkin    = NULL;
-    var $message    = NULL;
-    var $student_type = NULL;
+    var $assignment     = NULL;
+    var $room_phone     = NULL;
+    var $roommate       = array();
+    var $checkin        = NULL;
+    var $message        = NULL;
+    var $paragraph1     = NULL;
+    var $paragraph2     = NULL;
+    var $student_type   = NULL;
 
     public function Letter()
     {
@@ -54,11 +56,13 @@ class HMS_Letter
         $pdf->Write(HEIGHT, $this->date . "\n\n");
 
         // First Body of Text
-        $pdf->Write(HEIGHT, "The Department of Housing & Residence Life would like to welcome you to Appalachian State University and let you know we are preparing for your arrival.\n\nYou will find your housing assignment for the Fall Semester listed below.  Enclosed is additional information concerning living in the residence halls.  Please be sure to read all this information carefully.  ");
-        $pdf->SetFont('Times','BI');
-        $pdf->Write(HEIGHT, "IT IS IMPERATIVE THAT YOU BRING THIS LETTER WITH YOU");
-        $pdf->SetFont('Times');
-        $pdf->Write(HEIGHT, " so the move-in parking staff can issue a parking pass once you arrive on campus.\n\n");
+        $pdf->Write(HEIGHT, $this->paragraph1);
+        $pdf->Ln(HEIGHT);
+        $pdf->Ln(HEIGHT);
+        //$pdf->SetFont('Times','BI');
+        //$pdf->Write(HEIGHT, "IT IS IMPERATIVE THAT YOU BRING THIS LETTER WITH YOU");
+        //$pdf->SetFont('Times');
+        //$pdf->Write(HEIGHT, " so the move-in parking staff can issue a parking pass once you arrive on campus.\n\n");
 
         // Table
         $pdf->SetLineWidth(0.025);
@@ -89,7 +93,7 @@ class HMS_Letter
             $pdf->MultiCell(5.00, HEIGHT, $roommate_list);
         }else{
             $pdf->Write(HEIGHT, "Roommate: To be determined.");
-            $pdf->Cell(5.00, HEIGHT, $roommate_list);
+            //$pdf->Cell(5.00, HEIGHT, $roommate_list);
         }
             
         $pdf->Ln(HEIGHT);
@@ -111,11 +115,8 @@ class HMS_Letter
 
         $pdf->Ln(HEIGHT);
 
-        // Message
-        $pdf->Write(HEIGHT, $this->message . "\n\n");
-
         // Second Body of Text
-        $pdf->Write(HEIGHT, "Should you have any questions, please feel free to contact our office at 828-262-6111.  You may also visit our website at: www.housing.appstate.edu.\n\n");
+        $pdf->Write(HEIGHT, $this->paragraph2);
 
         // Signature
         $pdf->Write(HEIGHT, "Sincerely,\n");
@@ -138,6 +139,8 @@ class HMS_Letter
         $term = HMS_Term::get_selected_term();
 
         $assignment = HMS_Assignment::get_assignment($student, $term);
+        $prev_assignment = HMS_Assignment::get_assignment($student, HMS_Term::get_current_term());
+
         if($assignment === NULL || $assignment == FALSE){
             test($assignment, 1); // This *shouldn't* ever happen...
         }else{
@@ -147,16 +150,12 @@ class HMS_Letter
             # Determine the student's type and figure out their movein time
             $type = HMS_SOAP::get_student_type($student, $term);
 
-            //test($type,1);
-
-            if($type == TYPE_CONTINUING){
+            if(!is_null($prev_assignment) || $type == TYPE_CONTINUING){
                 $movein_time_id = $assignment->get_rt_movein_time_id();
             }else{
                 $movein_time_id = $assignment->get_ft_movein_time_id();
             }
 
-            //test($assignment->get_ft_movein_time_id(),1);
-            
             if($movein_time_id == NULL){
                 //test($assignment, 1); // Will only happen if there's no move-in time set for the floor,student type
                 $movein_time = "Unknown";
@@ -178,41 +177,45 @@ class HMS_Letter
             # Go to the room level to get all the roommates
             $assignees = $room->get_assignees(); // get an array of student objects for those assigned to this room
         }
-        
-        # Update this student's assignment to say we printed a letter
-        $sql = "
-            UPDATE hms_assignment
-            SET letter_printed = 1
-            WHERE hms_assignment.id = {$assignment->id}
-        ";
-        PHPWS_DB::getAll($sql);
 
         $letter = new HMS_Letter;
 
         $letter->address1 = HMS_SOAP::get_full_name_inverted($assignment->asu_username);
 
         $addr = HMS_SOAP::get_address($assignment->asu_username, NULL);
+
+        if(!isset($addr) && !is_null($addr)){
+            $letter->address2 = $addr->line1;
+            
+            $citystatezip = $addr->city  . ', ' .
+                            $addr->state . ' '  .
+                            $addr->zip;
                             
-        $letter->address2 = $addr->line1;
-        
-        $citystatezip = $addr->city  . ', ' .
-                        $addr->state . ' '  .
-                        $addr->zip;
-                        
-        if(empty($addr->line2)) {
-            $letter->address3 = $citystatezip;
-        } else {
-            $letter->address3 = $addr->line2;
-            if(empty($addr->line3)) {
-                $letter->address4 = $citystatezip;
+            if(empty($addr->line2)) {
+                $letter->address3 = $citystatezip;
             } else {
-                $letter->address4 = $addr->line3;
-                $letter->address5 = $citystatezip;
+                $letter->address3 = $addr->line2;
+                if(empty($addr->line3)) {
+                    $letter->address4 = $citystatezip;
+                } else {
+                    $letter->address4 = $addr->line3;
+                    $letter->address5 = $citystatezip;
+                }
             }
         }
 
         $letter->date     = strftime("%B %d, %Y");
         $letter->semester = "Fall, 2008";
+
+        if(!is_null($prev_assignment)){
+            // returning
+            $letter->paragraph1 = "The Department of Housing & Residence Life would like to welcome you to Appalachian State University and let you know we are preparing for your arrival.\n\nYour housing assignment for the Spring semester is listed below. Your residence hall office will be open for check-in starting January 10-11, 9am-11pm. A phone number will be posted at the front desk for the Resident Assistant on duty. Please call this number and someone will come to check you in.";
+            $letter->paragraph2 = "Failure to check in by January 12th, 6pm will result in assignment cancellation (see pages 15-16 of the Residence Hall License Contract booklet).\n\nWe hope your on campus housing experience has been a pleasant one. We are looking forward to sharing another great year with you. The re-application process for on campus housing for the academic year 2009-10 will begin in January, 2009.\n\nShould you have any questions, please feel free to contact our office at 828-262-6111 or 828-262-2278. You may also visit our website at: http://www.housing.appstate.edu.";
+        }else{
+            // Freshmen/transfer
+            $letter->paragraph1 = "The Department of Housing & Residence Life would like to welcome you to Appalachian State University and let you know we are preparing for your arrival.\n\nYour housing assignment for the Spring semester is listed below. You may check-in at Newland Hall, where you will receive your residence hall room key and check-in information.";
+            $letter->paragraph2 = "Freshmen and transfer check-in is January 6th, 1pm - 9pm.  Returning student check-in starts on January 10th and 11th.  See above for your scheduled time.\n\nIf you have a conflict, you can check in anytime after your scheduled time until 6 pm on January 12th.  Failure to check in by January 12th, 6pm will result in assignment cancellation (see pages 15-16 of the Residence Hall License Contract booklet).\n\nShould you have any questions, please feel free to contact our office at 828-262-6111.  You may also visit our website at: http://www.housing.appstate.edu.";
+        }
         
         $letter->assignment = $assignment_text;
         $letter->room_phone = $bed_phone;
@@ -231,7 +234,6 @@ class HMS_Letter
         }
         
         $letter->checkin = $movein_time;
-        $letter->message = "Freshmen and transfer check-in is August 22 from 10am to 4pm.  Returning student check-in starts on August 23.  See above for your scheduled time.  Please go to your assigned hall office to pick up your residence hall room key and check-in information. If you have a conflict, you can check-in anytime after your scheduled time, until 6pm on August 26.  Failure to check-in by 6pm on August 26 will result in assignment cancellation (See pages 15-16 of the Residence Hall License Contract booklet).";
 
         $gender = HMS_SOAP::get_gender($student, TRUE);
         $type   = HMS_SOAP::get_student_type($student, $term);
@@ -254,6 +256,14 @@ class HMS_Letter
                 $freshmen_female[] = $letter;
             }
         }
+
+        # Update this student's assignment to say we printed a letter
+        $sql = "
+            UPDATE hms_assignment
+            SET letter_printed = 1
+            WHERE hms_assignment.id = {$assignment->id}
+        ";
+        PHPWS_DB::getAll($sql);
     }
 
     public function main()
@@ -440,10 +450,11 @@ class HMS_Letter
             /*
             if($i > 10){
                 break;
-            }*/
+            }
+            */
 
             // If assignment_notifications for the floor are disabled
-            $assignment = HMS_Assignment::get_assignment($student);
+            $assignment = HMS_Assignment::get_assignment($student, $term);
             $bed = $assignment->get_parent();
             $room = $bed->get_parent();
             $floor = $room->get_parent();
