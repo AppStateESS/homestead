@@ -366,6 +366,10 @@ class HMS_Lottery {
     {
         $db = new PHPWS_DB('hms_lottery_entry');
 
+        # Choose from people who aren't already assigned
+        $db->addJoin('LEFT OUTER', 'hms_lottery_entry', 'hms_assignment', 'asu_username', 'asu_username');
+        $db->addWhere('hms_assignment.asu_username', NULL);
+
         $term_year = HMS_Term::get_term_year($term);
 
         $winning_student = NULL;
