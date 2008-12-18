@@ -184,7 +184,7 @@ class HMS_Letter
 
         $addr = HMS_SOAP::get_address($assignment->asu_username, NULL);
 
-        if(!isset($addr) && !is_null($addr)){
+        if(isset($addr) && !is_null($addr)){
             $letter->address2 = $addr->line1;
             
             $citystatezip = $addr->city  . ', ' .
