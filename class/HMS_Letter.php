@@ -604,11 +604,18 @@ class HMS_Letter
     
     public function email()
     {
+        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Suite.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Movein_Time.php');
+
         // Accumulate output if any
         $output = '';
 
         $db = &new PHPWS_DB('hms_assignment');
         $db->addWhere('email_sent', 0);
+        $db->addWhere('term', HMS_Term::get_selected_term());
         $db->addColumn('asu_username');
         $db->addColumn('bed_id');
 
@@ -618,10 +625,6 @@ class HMS_Letter
             return 'Database Error no emails were sent';
         }
 
-        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Movein_Time.php');
         foreach($result as $assignment){
             //get the students real name from their asu_username
             PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
@@ -638,10 +641,13 @@ class HMS_Letter
             $type = HMS_SOAP::get_student_type($assignment['asu_username'], HMS_Term::get_selected_term());
 
             $assgmnt = HMS_Assignment::get_assignment($assignment['asu_username'], HMS_Term::get_selected_term());
+            $prev_assignment = HMS_Assignment::get_assignment($student, HMS_Term::get_current_term());
             
-            if($type == TYPE_CONTINUING){
+            if(!is_null($prev_assignment) || $type == TYPE_CONTINUING){
+                $returning = TRUE;
                 $movein_time_id = $assgmnt->get_rt_movein_time_id();
             }else{
+                $returning = FALSE;
                 $movein_time_id = $assgmnt->get_ft_movein_time_id();
             }
 
@@ -689,11 +695,12 @@ class HMS_Letter
             }
 
             // Send the email
-            HMS_Email::send_assignment_email($assignment['asu_username'], $name, $location, $roommates, $phone, $movein_time, $type);
+            HMS_Email::send_assignment_email($assignment['asu_username'], $name, $location, $roommates, $phone, $movein_time, $type, $returning);
 
             // Mark the student as having received an email
             $db->reset();
             $db->addWhere('asu_username', $assignment['asu_username']);
+            $db->addWhere('term', HMS_Term::get_selected_term());
             $db->addValue('email_sent', 1);
             $rslt = $db->update();
 

@@ -223,7 +223,7 @@ class HMS_Email{
         HMS_Email::send_email(HMS_Email::get_tech_contacts(), NULL, "HMS Lottery results: $status", $log);
     }
 
-    public function send_assignment_email($to, $name, $location, $roommates, $phone, $movein_time, $type){
+    public function send_assignment_email($to, $name, $location, $roommates, $phone, $movein_time, $type, $returning){
         $tpl = array();
 
         $tpl['NAME']         = $name;
@@ -237,7 +237,11 @@ class HMS_Email{
             $tpl['roommates'][] = array('ROOMMATE' => $roommate);
         }
 
-        HMS_Email::send_template_message($to . '@appstate.edu', '[Testing] Housing Assignment Notice!', 'email/assignment_notice.tpl', $tpl);
+        if($returning == TRUE){
+            HMS_Email::send_template_message($to . '@appstate.edu', '[Testing] Housing Assignment Notice!', 'email/assignment_notice_returning.tpl', $tpl);
+        }else{
+            HMS_Email::send_template_message($to . '@appstate.edu', '[Testing] Housing Assignment Notice!', 'email/assignment_notice.tpl', $tpl);
+        }
     }
 
     public function send_roommate_confirmation($to, $name, $roomie){
