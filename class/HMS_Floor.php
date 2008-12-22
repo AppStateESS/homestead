@@ -87,6 +87,8 @@ class HMS_Floor extends HMS_Item
         $new_floor->reset();
         $new_floor->term = $to_term;
         $new_floor->residence_hall_id = $hall_id;
+        $new_floor->ft_movein_time_id = NULL;
+        $new_floor->rt_movein_time_id = NULL;
 
         if(!$new_floor->save()) {
             // There was an error saving the new floor
