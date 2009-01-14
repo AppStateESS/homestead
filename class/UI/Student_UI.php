@@ -505,7 +505,7 @@ class HMS_Student_UI{
                     
                 if(!is_null($roommate)){
                     $name = HMS_SOAP::get_full_name($roommate);
-                    $tags['term'][$key]['ROOMMATE_MSG']  = "<b>$name</b> has confirmed your roommate request and will be your roommate.";
+                    $tags['term'][$key]['ROOMMATE_MSG']  = "<b>$name</b> has confirmed your roommate request. Roommate requests are subject to space availability.";
                     $tags['term'][$key]['ROOMMATE_ICON'] = $check_img;
                 }else{
                     $requests = HMS_Roommate::count_pending_requests($_SESSION['asu_username']);
