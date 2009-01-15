@@ -596,11 +596,23 @@ class HMS_Student_UI{
             }
         }
 
-        $roommate = HMS_Roommate::get_confirmed_roommate($_SESSION['asu_username']);
-        if($roommate == NULL){
-            $tpl['ROOMMATE'] = 'You do not have a confirmed roommate.';
-        }else{
-            $tpl['ROOMMATE'] = 'Your confirmed roommate is: ' . HMS_SOAP::get_name($roommate) . ' (<a href="mailto:' . $roommate . '@appstate.edu">'. $roommate . '@appstate.edu</a>)';
+        //get the assignees to the room that the bed that the assignment is in
+        $assignees = !is_null($assignment) ? $assignment->get_parent()->get_parent()->get_assignees() : NULL;
+        $roommates = array();
+        if(!is_null($assignees)){
+            foreach($assignees as $roommate){
+                if($roommate->asu_username == $_SESSION['asu_username']){
+                    $roommates[] = $roommate->asu_username; 
+                }
+            }
+        }
+
+        if(empty($roommates)){
+            $tpl['roommate'][]['ROOMMATE'] = 'You do not have a roommate.';
+        } else {
+            foreach($roommates as $roommate){
+                $tpl['roommate'][]['ROOMMATE'] = '' . HMS_SOAP::get_name($roommate) . ' (<a href="mailto:' . $roommate . '@appstate.edu">'. $roommate . '@appstate.edu</a>)';
+            }
         }
 
         $rlc_assignment = HMS_RLC_Assignment::check_for_assignment($_SESSION['asu_username'], $_SESSION['application_term']);

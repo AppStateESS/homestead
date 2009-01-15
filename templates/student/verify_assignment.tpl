@@ -28,7 +28,9 @@
                 <td align="left">{NO_ASSIGNMENT}</td>
                 <!-- END no_assignment -->
             <tr>
+                <!-- BEGIN roommate -->
                 <th>Roommate:</th><td align="left">{ROOMMATE}</td>
+                <!-- END roommate -->
             </tr>
             <tr>
                 <th>Learning Community:</th><td align="left">{RLC}</td>
