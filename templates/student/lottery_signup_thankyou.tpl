@@ -4,12 +4,12 @@
         <div class="box-content">
         <!-- BEGIN success -->
         {SUCCESS}
-        <span class="success">You have been successfully entered into the lottery.</span>
+        <span class="success">You have successfully re-applied for on-campus housing.</span>
         <!-- END success -->
 
         <!-- BEGIN error -->
         {ERROR}
-        <span class="error">There was an error while creating your lottery entry.</span>
+        <span class="error">There was an error while processing your re-application.</span>
         <!-- END error -->
 
         <br /><br />
