@@ -277,6 +277,13 @@ class HMS_Student {
                 $side_thingie->show();
                 return HMS_Student_UI::show_verify_assignment();                
                 break;
+            case 'returning_menu':
+                PHPWS_Core::initModclass('hms', 'UI/Student_UI.php');
+                return HMS_Student_UI::show_returning_menu();
+                break;
+            case 'show_lottery_signup':
+                PHPWS_Core::initModClass('hms', 'UI/Lottery_UI.php');
+                return Lottery_UI::show_lottery_signup();
             case 'lottery_signup_submit':
                 PHPWS_Core::initModClass('hms', 'UI/Lottery_UI.php');
                 return Lottery_UI::lottery_signup_submit();
@@ -285,6 +292,9 @@ class HMS_Student {
                 PHPWS_Core::initModClass('hms', 'UI/Lottery_UI.php');
                 return Lottery_UI::lottery_signup();
                 break;
+            case 'lottery_select_residence_hall':
+                PHPWS_Core::initModClass('hms', 'UI/Lottery_UI.php');
+                return Lottery_UI::show_select_residence_hall();
             case 'lottery_select_floor':
                 PHPWS_Core::initModClass('hms', 'UI/Lottery_UI.php');
                 return Lottery_UI::show_select_floor();
@@ -305,6 +315,10 @@ class HMS_Student {
                 PHPWS_Core::initModClass('hms', 'UI/Lottery_UI.php');
                 return Lottery_UI::show_confirmed();
                 break;
+            case 'lottery_show_roommate_request':
+                PHPWS_Core::initModClass('hms', 'UI/Lottery_UI.php');
+                return Lottery_UI::show_lottery_roommate_request();
+                break;
             case 'lottery_show_confirm_roommate_request':
                 PHPWS_Core::initModClass('hms', 'UI/Lottery_UI.php');
                 return Lottery_UI::show_confirm_lottery_roommate_request();
@@ -318,12 +332,12 @@ class HMS_Student {
                 PHPWS_Core::reroute('https://weblogin.appstate.edu/cosign-bin/logout');
                 break;
             case 'main':
-                //return HMS_Student::show_main_menu();
                 PHPWS_Core::initModClass('hms', 'UI/Student_UI.php');
                 return HMS_Student_UI::show_welcome_screen();
                 break;
             default:
-                return "unknown student op: {$_REQUEST['op']} <br />";
+                PHPWS_Core::initModClass('hms', 'UI/Student_UI.php');
+                return HMS_Student_UI::show_welcome_screen();
                 break;
         }
     }

@@ -28,6 +28,33 @@ class Lottery_UI {
         $tpl['NAME'] = HMS_SOAP::get_name($_SESSION['asu_username']);
 
         $form = new PHPWS_Form();
+
+        if(isset($_REQUEST['area_code'])){
+            $form->addText('area_code', $_REQUEST['area_code']);
+        }else{
+            $form->addText('area_code');
+        }
+        $form->setSize('area_code', 3);
+        $form->setMaxSize('area_code', 3);
+
+        if(isset($_REQUEST['exchange'])){
+            $form->addText('exchange', $_REQUEST['exchange']);
+        }else{
+            $form->addText('exchange');
+        }
+        $form->setSize('exchange', 3);
+        $form->setMaxSize('exchange', 3);
+
+        if(isset($_REQUEST['number'])){
+            $form->addText('number', $_REQUEST['number']);
+        }else{
+            $form->addText('number');
+        }
+        $form->setSize('number', 4);
+        $form->setMaxSize('number', 4);
+        $form->addCheck('do_not_call', 1);
+
+
         if(isset($_REQUEST['roommate1'])){
             $form->addText('roommate1', $_REQUEST['roommate1']);
         }else{
@@ -45,6 +72,31 @@ class Lottery_UI {
         }else{
             $form->addText('roommate3');
         }
+
+        $special_interests['none']              = 'None';
+        $special_interests['honors']            = 'Heltzer Honors Program';
+        $special_interests['watauga_global']    = 'Watauga Global Community';
+        $special_interests['teaching']          = 'Teaching Fellows';
+        $special_interests['servant_leaders']   = 'Community of Servant Leaders';
+        $special_interests['sciences']          = 'Academy of Sciences';
+        $special_interests['language']          = 'Language & Culture Community';
+        $special_interests['black_and_gold']    = 'Black & Gold Community';
+        $special_interests['sophomore']         = 'Sophomore Year Experience';
+        $special_interests['living_free']       = 'Living Free Community';
+        $special_interests['quite_study']       = 'Quiet Study Community';
+        $special_interests['educators']         = 'Community for Future Educators';
+        $special_interests['man_floor']         = 'The Man Floor';
+        $special_interests['sorority_adp']      = 'Alpha Delta Pi Sorority';
+        $special_interests['sorority_ap']       = 'Aplha Phi Sorority';
+        $special_interests['sorority_co']       = 'Chi Omega Sorority';
+        $special_interests['sorority_dz']       = 'Delta Zeta Sorority';
+        $special_interests['sorority_kd']       = 'Kappa Delta Sorority';
+        $special_interests['sorority_pm']       = 'Phi Mu Sorority';
+        $special_interests['sorority_sk']       = 'Sigma Kappa Sorority';
+        $special_interests['sorority_aop']      = 'Alpha Omicron Pi Sorority';
+
+        $form->addDropBox('special_interest', $special_interests);
+        $form->setLabel('special_interest', 'Special interest group: ');
 
         $form->addCheck('special_need', array('special_need'));
         $form->setLabel('special_need', array('Yes, I require special needs housing.'));
@@ -78,6 +130,11 @@ class Lottery_UI {
         # Make sure the agreed to terms checkbox was checked
         if(!isset($_REQUEST['terms_check'])){
             return Lottery_UI::show_lottery_signup('You must agree to the housing terms & conditions.');
+        }
+
+        # Make sure a valid phone number was entered
+        if((empty($_REQUEST['area_code']) || empty($_REQUEST['exchange']) || empty($_REQUEST['number'])) && !isset($_REQUEST['do_not_call'])){
+            return Lottery_UI::show_lottery_signup("Error: You must provide a valid phone number or check the 'I do not wish to provide it' checkbox.");
         }
 
         # Make sure each of the user names is valid.
@@ -117,11 +174,15 @@ class Lottery_UI {
         }
 
         # Carry over all the fields submitted on the first page of the application
-        $form->addHidden('roommate1',$_REQUEST['roommate1']);
-        $form->addHidden('roommate2',$_REQUEST['roommate2']);
-        $form->addHidden('roommate3',$_REQUEST['roommate3']);
-        $form->addHidden('terms_check',$_REQUEST['terms_check']);
-        $form->addHidden('special_need',$_REQUEST['special_need']); // pass it on, just in case the user needs to redo their application
+        $form->addHidden('roommate1',       $_REQUEST['roommate1']);
+        $form->addHidden('roommate2',       $_REQUEST['roommate2']);
+        $form->addHidden('roommate3',       $_REQUEST['roommate3']);
+        $form->addHidden('area_code',       $_REQUEST['area_code']);
+        $form->addHidden('exchange',        $_REQUEST['exchange']);
+        $form->addHIddeN('number',          $_REQUEST['number']);
+        $form->addHidden('terms_check',     $_REQUEST['terms_check']);
+        $form->addHidden('special_interest',$_REQUEST['special_interest']);
+        $form->addHidden('special_need',    $_REQUEST['special_need']); // pass it on, just in case the user needs to redo their application
 
         $form->addHidden('module', 'hms');
         $form->addHidden('type','student');
@@ -135,12 +196,19 @@ class Lottery_UI {
     public function lottery_signup()
     {
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
         PHPWS_Core::initModClass('hms', 'HMS_Lottery_Entry.php');
 
         $tpl = array();
         $roommates = array(); // An array to hold the list of roommates for later processing
 
         $lottery_term = PHPWS_Settings::get('hms', 'lottery_term'); // save this for later because it's used all over the place
+
+        # Check eligibility
+        if(!HMS_Lottery::determine_eligibility($_SESSION['asu_username'])){
+            $tpl['ERROR']   = ""; // dummy tag, set to turn display of a template section on/off.
+            return PHPWS_Template::process($tpl, 'hms', 'student/lottery_signup_thankyou.tpl');
+        }
 
         # Check if the user is already entered for the lottery
         # if so, display the appropriate message
@@ -153,6 +221,7 @@ class Lottery_UI {
         $entry = new HMS_Lottery_Entry();
         $entry->asu_username    = $_SESSION['asu_username'];
         $entry->term            = $lottery_term;
+        $entry->special_interest= ($_REQUEST['special_interest'] == 'none') ? NULL : $_REQUEST['special_interest'];
 
         $application_term = HMS_SOAP::get_application_term($_SESSION['asu_username']);
 
@@ -174,9 +243,7 @@ class Lottery_UI {
 
         $entry->gender = $gender;
 
-
         if(isset($_REQUEST['roommate1']) && $_REQUEST['roommate1'] != ''){
-            $entry->roommate1_username = $_REQUEST['roommate1'];
             # Only insert roommate user name into array if it doesn't already exist, avoids
             # duplicate roommate user names and sending multiple invites emails to the same person
             if(!in_array($_REQUEST['roommate1'], $roommates)){
@@ -185,25 +252,19 @@ class Lottery_UI {
         }
 
         if(isset($_REQUEST['roommate2']) && $_REQUEST['roommate2'] != ''){
-            $entry->roommate2_username = $_REQUEST['roommate2'];
             if(!in_array($_REQUEST['roommate2'], $roommates)){
                 $roommates[] = $_REQUEST['roommate2'];
             }
         }
 
         if(isset($_REQUEST['roommate3']) && $_REQUEST['roommate3'] != ''){
-            $entry->roommate3_username = $_REQUEST['roommate3'];
             if(!in_array($_REQUEST['roommate3'], $roommates)){
                 $roommates[] = $_REQUEST['roommate3'];
             }
         }
 
-        # Sanity checks on the preferred roommate user names
-        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
-        $requestor_name = HMS_SOAP::get_name($_SESSION['asu_username']);
-        $year = HMS_Term::term_to_text($lottery_term, TRUE) . ' - ' . HMS_Term::term_to_text(HMS_Term::get_next_term($lottery_term),TRUE);
-        foreach($roommates as $roomie){
+        # Sanity checks on the preferred roommate user names        
+        foreach($roommates as $key => $roomie){
             # Check for invalid chars
             if(!PHPWS_Text::isValidInput($roomie)){
                 return Lottery_UI::show_lottery_signup("You entered an invalid user name. Please try again.");
@@ -211,12 +272,29 @@ class Lottery_UI {
 
             # Check banner to make sure the user name is valid
             if(!HMS_SOAP::is_valid_student($roomie)){
-                return Lottery_UI::show_lottery_signup("\"$roommie\" is not a valid user name. Please try again.");
+                return Lottery_UI::show_lottery_signup("\"$roomie\" is not a valid user name. Please try again.");
             }
 
             # Check to make sure the user name is not the same as the current user
             if($roomie == $_SESSION['asu_username']){
                 return Lottery_UI::show_lottery_signup("You cannot choose yourself as a roommate, please try again.");
+            }
+
+            # Check to make sure the roommate is the same gender
+            if($gender != HMS_SOAP::get_gender($roomie, TRUE)){
+                return Lottery_UI::show_lottery_signup("\"$roomie\" is not the same gender as you, please try again.");
+            }
+
+            # Add the verified roommate user name to the lottery entry object
+            if($key == 0){
+                $entry->roommate1_username = $roomie;
+                $entry->roommate1_app_term = HMS_SOAP::get_application_term($roomie);
+            }else if($key == 1){
+                $entry->roommate2_username = $roomie;
+                $entry->roommate2_app_term = HMS_SOAP::get_application_term($roomie);
+            }else if($key == 2){
+                $entry->roommate3_username = $roomie;
+                $entry->roommate3_app_term = HMS_SOAP::get_application_term($roomie);
             }
         }
 
@@ -236,6 +314,12 @@ class Lottery_UI {
             $entry->gender_need = 1;
         }
 
+        if(isset($_REQUEST['area_code'])){
+            $entry->phone_number = $_REQUEST['area_code'] . $_REQUEST['exchange'] . $_REQUEST['number'];
+        }else{
+            $entry->phone_number = NULL;
+        }
+
         $result = $entry->save();
 
         if(!$result){
@@ -248,7 +332,12 @@ class Lottery_UI {
         # Log the fact that the entry was saved
         HMS_Activity_Log::log_activity($_SESSION['asu_username'], ACTIVITY_LOTTERY_ENTRY, $_SESSION['asu_username']);
 
-        # If all those roommate names are ok, then send them all invite emails if they're not already entered in the lottery
+        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+        $requestor_name = HMS_SOAP::get_name($_SESSION['asu_username']);
+        $year = HMS_Term::term_to_text($lottery_term, TRUE) . ' - ' . HMS_Term::term_to_text(HMS_Term::get_next_term($lottery_term),TRUE);
+
+        # Send them all invite emails if they're not already entered in the lottery
         foreach($roommates as $roomie){
             if(HMS_Lottery_Entry::check_for_entry($roomie, $lottery_term) === FALSE){
                 HMS_Email::send_signup_invite($roomie, HMS_SOAP::get_name($roomie), $requestor_name, $year);
@@ -267,6 +356,7 @@ class Lottery_UI {
     {
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
             
         $term = PHPWS_Settings::get('hms', 'lottery_term');
         $tpl['TERM'] = HMS_Term::term_to_text($term, TRUE) . ' - ' . HMS_Term::term_to_text(HMS_Term::get_next_term($term),TRUE);
@@ -615,8 +705,25 @@ class Lottery_UI {
                 return Lottery_UI::show_select_roommates("$roommate is not a valid user name. Please try again.");
             }
 
+            /*
             # Make sure none of the students are type freshmen
             if(HMS_SOAP::get_student_type($roommate, $term) != TYPE_CONTINUING){
+                return Lottery_UI::show_select_roommates("$roommate is not a continuing student. Only continuing students (i.e. not a first semester freshmen) may be selected as roommates. Please select a different roommate.");
+            }
+            */
+
+            /*
+             * We can't check the student type here, because we're working in the future with students who are possibly still considered freshmen (which will always show up as type F)
+             * What we can do is make sure their application term is less than the lottery term
+             */
+
+            # Make sure the student's application term is less than the lottery term
+            if(HMS_SOAP::get_application_term($roommate) >= $term){
+                return Lottery_UI::show_select_roommates("$roommate is not a continuing student. Only continuing students (i.e. not a first semester freshmen) may be selected as roommates. Please select a different roommate.");
+            }
+
+            # Make sure the student is not withdrawn for the lottery term (again, we can't actually check for 'continuing' here)
+            if(HMS_SOAP::get_student_type($roommate, $term) == TYPE_WITHDRAWN){
                 return Lottery_UI::show_select_roommates("$roommate is not a continuing student. Only continuing students (i.e. not a first semester freshmen) may be selected as roommates. Please select a different roommate.");
             }
 
@@ -798,9 +905,11 @@ class Lottery_UI {
     public function show_lottery_roommate_request()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
+        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
 
         # Get the roommate request record from the database
-        $invite = HMS_Lottery::get_lottery_roommate_invite($_SESSION['asu_username'], PHPWS_Settings::get('hms', 'lottery_term'));
+        $invite = HMS_Lottery::get_lottery_roommate_invite_by_id($_REQUEST['id']);
         $bed = new HMS_Bed($invite['bed_id']);
         $room = $bed->get_parent();
 
@@ -857,6 +966,7 @@ class Lottery_UI {
 
         $form->addSubmit('continue', 'Continue');
 
+        $form->addHidden('id', $_REQUEST['id']);
         $form->addHidden('module', 'hms');
         $form->addHidden('type', 'student');
         $form->addHidden('op', 'lottery_show_confirm_roommate_request');
@@ -874,7 +984,7 @@ class Lottery_UI {
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
 
         # Get the roommate request record from the database
-        $invite = HMS_Lottery::get_lottery_roommate_invite($_SESSION['asu_username'], PHPWS_Settings::get('hms', 'lottery_term'));
+        $invite = HMS_Lottery::get_lottery_roommate_invite_by_id($_REQUEST['id']);
         $bed = new HMS_Bed($invite['bed_id']);
         $room = $bed->get_parent();
 
@@ -921,6 +1031,7 @@ class Lottery_UI {
         $form = new PHPWS_Form();
         $form->addHidden('meal_plan', $_REQUEST['meal_plan']);
 
+        $form->addHidden('id', $_REQUEST['id']);
         $form->addHidden('module', 'hms');
         $form->addHidden('type', 'student');
         $form->addHidden('op', 'lottery_confirm_roommate_request');
@@ -952,7 +1063,7 @@ class Lottery_UI {
         # Log the fact that the roommate was accepted and successfully assigned
         HMS_Activity_Log::log_activity($_SESSION['asu_username'], ACTIVITY_LOTTERY_CONFIRMED_ROOMMATE,$_SESSION['asu_username'], "Captcha: \"$captcha\"");
         
-        $invite = HMS_Lottery::get_lottery_roommate_invite($_SESSION['asu_username'], PHPWS_Settings::get('hms', 'lottery_term'));
+        $invite = HMS_Lottery::get_lottery_roommate_invite_by_id($_REQUEST['id']);
         $bed = new HMS_Bed($invite['bed_id']);
 
         $tpl['SUCCESS'] = 'Your roommate request was successfully confirmed. You have been assigned to ' . $bed->where_am_i() . ".";

@@ -435,12 +435,18 @@ CREATE TABLE hms_lottery_entry (
     application_term    INTEGER                 NOT NULL,
     gender              smallint                NOT NULL,
     roommate1_username  CHARACTER VARYING(32),
+    roommate1_app_term  INTEGER,
     roommate2_username  CHARACTER VARYING(32),
+    roommate2_app_term  INTEGER,
     roommate3_username  CHARACTER VARYING(32),
+    roommate3_app_term  INTEGER,
+    phone_number        CHARACTER VARYING(32),
     physical_disability smallint DEFAULT 0,
     psych_disability    smallint DEFAULT 0,
     medical_need        smallint DEFAULT 0,
     gender_need         smallint DEFAULT 0,
+    magic_winner        smallint DEFAULT 0      NOT NULL,
+    special_interest    CHARACTER VARYING(32),
     PRIMARY KEY (id)
 );
 ALTER TABLE hms_lottery_entry ADD CONSTRAINT unique_entry UNIQUE (term, asu_username);

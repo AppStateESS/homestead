@@ -264,7 +264,13 @@ class HMS_Lottery {
             $output[] = "$remaining_entries entries remaining"; 
 
             $winning_row = NULL;
-            while(is_null($winning_row)){
+
+            # Check to see if we have a 'magic winner first
+            $winning_row = HMS_Lottery::check_magic_winner($term);
+
+            $j = 0;
+            // Loop until we have a winner, stop if we do this 200 times without a winner
+            while(is_null($winning_row) && $j < 200){
 
                 # Decide which gender we need to invite
                 if($co_ed_only){
@@ -281,7 +287,6 @@ class HMS_Lottery {
                 }
 
                 # Decide which class we need to invite
-                #TODO: 'AND' these conditions with the number of invites for that class being greater than 0 to prevent infinite loops
                 if($lottery_type == 'single_phase'){
                     # Using a single-phase lottery, so choose which application term to use based on class weights
                     # Choose a random number
@@ -296,7 +301,6 @@ class HMS_Lottery {
                     }
                 }else{
                     # Using a multi-phase lottery, so determine which phase we're in
-                    #TODO: 'AND' these conditions with the number of invites for that class being greater than 0 to prevent infinite loops
                     if($senior_invites_sent < $senior_max_invites && HMS_Lottery::count_remaining_entries_by_class($term, CLASS_SENIOR) > 0){
                         $class = CLASS_SENIOR;
                     }elseif($junior_invites_sent < $jr_max_invites && HMS_Lottery::count_remaining_entries_by_class($term, CLASS_JUNIOR) > 0){
@@ -313,6 +317,12 @@ class HMS_Lottery {
                 }
 
                 $winning_row = HMS_Lottery::choose_winner($gender, $class, $term);
+                $j++;
+            }
+
+            if($j >= 200){
+                $output[] = "Couldn't find a winner. Stopping.";
+                HMS_Lottery::lottery_complete('SUCCESS', $output);
             }
 
             $winning_username = $winning_row['asu_username'];
@@ -340,7 +350,7 @@ class HMS_Lottery {
             # Update the number of entries remaining
             $remaining_entries--;
 
-            #TODO: need to increment the number of invites sent by class
+            # increment the number of invites sent by class
             if($class == CLASS_SENIOR){
                 $senior_invites_sent++;
             }else if($class == CLASS_JUNIOR){
@@ -364,56 +374,47 @@ class HMS_Lottery {
      */
     public function choose_winner($gender, $class, $term)
     {
-        $db = new PHPWS_DB('hms_lottery_entry');
+        $winning_student = NULL;
+        $now = mktime();
 
-        # Choose from people who aren't already assigned
-        $db->addJoin('LEFT OUTER', 'hms_lottery_entry', 'hms_assignment', 'asu_username', 'asu_username');
-        $db->addWhere('hms_assignment.asu_username', NULL);
+        $query = "SELECT hms_lottery_entry.* FROM hms_lottery_entry
+                    LEFT OUTER JOIN (SELECT asu_username FROM hms_assignment WHERE term=$term) as foo ON hms_lottery_entry.asu_username = foo.asu_username
+                    WHERE foo.asu_username IS NULL AND (hms_lottery_entry.invite_expires_on < $now OR hms_lottery_entry.invite_expires_on IS NULL)
+                    AND hms_lottery_entry.term = $term
+                    AND hms_lottery_entry.physical_disability = 0
+                    AND hms_lottery_entry.psych_disability = 0
+                    AND hms_lottery_entry.medical_need = 0
+                    AND hms_lottery_entry.gender_need = 0 ";
+        
+
+
+        if($gender == MALE){
+            $query .= "AND hms_lottery_entry.gender = 1 ";
+        }else if($gender == FEMALE){
+            $query .= "AND hms_lottery_entry.gender = 0 ";
+        }
 
         $term_year = HMS_Term::get_term_year($term);
-
-        $winning_student = NULL;
-
-        if($gender == COED){
-            $db->addWhere('gender', MALE, '=', 'OR', 'gender');
-            $db->addWhere('gender', FEMALE, '=', 'OR', 'gender');
-        }else if($gender == MALE){
-            $db->addWhere('gender', MALE, '=');
-        }else if($gender == FEAMLE){
-            $db->addWhere('gender', FEMALE, '=', 'OR', 'gender');
-        }
-
-        # Make sure we don't select anyone who has disability flags set
-        $db->addWhere('physical_disability', 0);
-        $db->addWhere('psych_disability', 0);
-        $db->addWhere('medical_need', 0);
-        $db->addWhere('gender_need', 0);
-
         if($class == CLASS_SOPHOMORE){
             // Choose a rising sophmore (summer 1 thru fall of the previous year, plus spring of the same year)
-            $db->addWhere('application_term', ($term_year - 1) . '20', '=', 'OR', 'appterm');
-            $db->addWhere('application_term', ($term_year - 1) . '30', '=', 'OR', 'appterm');
-            $db->addWhere('application_term', ($term_year - 1) . '40', '=', 'OR', 'appterm');
-            $db->addWhere('application_term', $term_year . '10', '=', 'OR', 'appterm');
+            $query .= 'AND (application_term = ' . ($term_year - 1) . '20 ';
+            $query .=   'OR application_term = ' . ($term_year - 1) . '30 ';
+            $query .=   'OR application_term = ' . ($term_year - 1) . '40 ';
+            $query .=   'OR application_term = ' . $term_year . '10';
+            $query .= ') ';
         }else if($class == CLASS_JUNIOR){
             // Choose a rising jr
-            $db->addWhere('application_term', ($term_year - 2) . '20', '=', 'OR', 'appterm');
-            $db->addWhere('application_term', ($term_year - 2) . '30', '=', 'OR', 'appterm');
-            $db->addWhere('application_term', ($term_year - 2) . '40', '=', 'OR', 'appterm');
-            $db->addWhere('application_term', ($term_year - 1) . '10', '=', 'OR', 'appterm');
+            $query .= 'AND (application_term = ' . ($term_year - 2) . '20 ';
+            $query .=   'OR application_term = ' . ($term_year - 2) . '30 ';
+            $query .=   'OR application_term = ' . ($term_year - 2) . '40 ';
+            $query .=   'OR application_term = ' . ($term_year - 1) . '10';
+            $query .= ') ';
         }else{
             // Choose a rising senior or beyond
-            $db->addWhere('application_term', ($term_year - 2) . '10', '<=');
+            $query .= 'AND application_term <= ' . ($term_year - 2) . '10 ';
         }
 
-        # Only select students who either haven't been invited, or their invite has expired
-        $now = mktime();
-        $db->addWhere('invite_expires_on', $now, '<', 'OR', 'expiration_group');
-        $db->addWhere('invite_expires_on', NULL, 'IS NULL', 'OR', 'expiration_group');
-
-        $db->addWhere('term', $term);
-
-        $result = $db->select();
+        $result = PHPWS_DB::getAll($query);
 
         if(PEAR::isError($result)){
             PHPWS_Error::log($result);
@@ -430,6 +431,33 @@ class HMS_Lottery {
         $winning_student = $result[mt_rand(0, sizeof($result)-1)];
 
         return $winning_student;
+    }
+
+    /**
+     * Looks for an entry with the 'magic_winner' flag set and returns it, otherwise it returns null
+     */
+    public function check_magic_winner($term){
+
+        $now = mktime();
+
+        $query = "SELECT hms_lottery_entry.* FROM hms_lottery_entry
+                    LEFT OUTER JOIN (SELECT asu_username FROM hms_assignment WHERE term=$term) as foo ON hms_lottery_entry.asu_username = foo.asu_username
+                    WHERE foo.asu_username IS NULL AND (hms_lottery_entry.invite_expires_on < $now OR hms_lottery_entry.invite_expires_on IS NULL)
+                    AND hms_lottery_entry.term = $term
+                    AND hms_lottery_entry.magic_winner = 1";
+
+        $result = PHPWS_DB::getRow($query);
+
+        if(PEAR::isError($result)){
+            PHPWS_Error::log($result);
+            return NULL;
+        }
+
+        if(!isset($result) || empty($result)){
+            return NULL;
+        }else{
+            return $result;
+        }
     }
 
     /**
@@ -546,7 +574,7 @@ class HMS_Lottery {
 
         $query = "SELECT count(*) FROM hms_lottery_entry
                     LEFT OUTER JOIN (SELECT asu_username FROM hms_assignment WHERE term=$term) as foo ON hms_lottery_entry.asu_username = foo.asu_username
-                    WHERE ((foo.asu_username IS NULL AND hms_lottery_entry.invite_expires_on < $now) OR (foo.asu_username IS NULL and hms_lottery_entry.invite_expires_on IS NULL))
+                    WHERE foo.asu_username IS NULL AND (hms_lottery_entry.invite_expires_on < $now OR hms_lottery_entry.invite_expires_on IS NULL)
                     AND hms_lottery_entry.term = $term ";
 
         if($class == CLASS_SOPHOMORE){
@@ -642,13 +670,33 @@ class HMS_Lottery {
         exit;
     }
 
-    public function get_lottery_roommate_invite($username, $term)
+
+    /**
+     * Retuns an array of lottery roommate invites
+     */
+    public function get_lottery_roommate_invites($username, $term)
     {
         $db = new PHPWS_DB('hms_lottery_reservation');
 
         $db->addWhere('asu_username', $username);
         $db->addWhere('term', $term);
         $db->addWhere('expires_on', mktime(), '>'); // make sure the request hasn't expired
+        
+        $result = $db->select();
+
+        if(!$result || PHPWS_Error::logIfError($result)){
+            return FALSE;
+        }
+
+        return $result;
+    }
+
+    public function get_lottery_roommate_invite_by_id($id)
+    {
+        $db = new PHPWS_DB('hms_lottery_reservation');
+
+        $db->addWhere('expires_on', mktime(), '>'); // make sure the request hasn't expired
+        $db->addWhere('id', $id);
         
         $result = $db->select('row');
 
@@ -669,7 +717,7 @@ class HMS_Lottery {
         $term = PHPWS_Settings::get('hms', 'lottery_term');
 
         # Get the roommate invite
-        $invite = HMS_Lottery::get_lottery_roommate_invite($_SESSION['asu_username'], $term);
+        $invite = HMS_Lottery::get_lottery_roommate_invite_by_id($_REQUEST['id']);
 
         # If the invite wasn't found, show an error
         if($invite === FALSE){
@@ -696,6 +744,31 @@ class HMS_Lottery {
         # return successfully
         HMS_Email::send_roommate_confirmation($username, null, $invite['requestor']);
         return E_SUCCESS;
+    }
+
+    /*
+     * Returns TRUE if the student is assigned in the current term
+     */
+    public function determine_eligibility($username){
+        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+
+        $db = new PHPWS_DB('hms_assignment');
+        
+        $db->addWhere('term', HMS_Term::get_current_term());
+        $db->addWhere('asu_username', $username);
+
+        $result = $db->select();
+
+        if(PEAR::isError($result)){
+            PHPWS_Error::log($result);
+            return FALSE;
+        }
+
+        if(sizeof($result) <= 0){
+            return FALSE;
+        }else{
+            return TRUE;
+        }
     }
 
     public function main()

@@ -21,7 +21,14 @@ class HMS_Lottery_Entry {
     var $roommate1_username;
     var $roommate2_username;
     var $roommate3_username;
-    var $roommate4_username;
+
+    # Fields for the preferred roommates' application terms
+    var $roommate1_app_term;
+    var $roommate2_app_term;
+    var $roommate3_app_term;
+
+    var $phone_number           = NULL;
+    var $special_interest       = NULL;
 
     # Disability flags
     var $physical_disability    = 0;
