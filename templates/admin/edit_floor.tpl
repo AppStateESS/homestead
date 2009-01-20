@@ -117,9 +117,7 @@ $(document).ready(function(){
         {SUBMIT_FORM}
         {END_FORM}
         <br /><br />
-        <!-- Commenting this out for now
         <a id="edit" onclick="edit_toggle()">Edit</a>
-        -->
         <div id="static_pager">
         {STATIC_ROOM_PAGER}
         </div>
