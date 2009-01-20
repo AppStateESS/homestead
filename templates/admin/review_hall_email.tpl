@@ -9,6 +9,9 @@ Please review your message below before sending emails to the residents of the f
     <th colspan="2"><center>Email Review</center></th>
 </tr>
 <tr>
+    <th width="15%"><b>From:</b></th><td>{FROM}</td>
+</tr>
+<tr>
     <th width="15%"><b>Subject:</b></th><td>{SUBJECT}</td>
 </tr>
 <tr>

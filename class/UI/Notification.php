@@ -95,6 +95,12 @@ class Notification {
 
         $tpl['HEADER'] = 'Email';
         $form = new PHPWS_Form('email_content');
+        
+        if(Current_User::allow('hms', 'anonymous_notifications')){
+            $form->addCheck('anonymous');
+            $form->setMatch('anonymous', isset($_REQUEST['anonymous']) ? true : false);
+            $form->setLabel('anonymous', 'Send Anonymously: ');
+        }
 
         $form->addText('subject', (!is_null($subject) ? $subject : ''));
         $form->setLabel('subject', 'Subject:');
@@ -111,7 +117,7 @@ class Notification {
 
         $form->addSubmit('Submit');
 
-        $tpl['EMAIL'] = implode('<br />', $form->getTemplate());
+        $tpl['EMAIL'] = preg_replace('/<br \/>/', '', implode('<br />', $form->getTemplate()), 2);
 
         return PHPWS_Template::process($tpl, 'hms', 'admin/hall_notification_email_page.tpl');
     }
@@ -135,24 +141,27 @@ class Notification {
         } else if(empty($_REQUEST['body'])){
             return Notification::show_edit_email('You must fill in the message to be sent.', $_REQUEST['subject'], '');
         }
+        $tpl['FROM']    = isset($_REQUEST['anonymous']) && Current_User::allow('hms', 'anonymous_notification') ? 'housing@appstate.edu' : Current_User::getEmail();
         $tpl['SUBJECT'] = $_REQUEST['subject'];
         $tpl['BODY']    = $_REQUEST['body'];
 
         $form = new PHPWS_Form('edit_email');
-        $form->addHidden('subject', $_REQUEST['subject']);
-        $form->addHidden('body', $_REQUEST['body']);
-        $form->addHidden('type', 'notification');
-        $form->addHidden('op',   'edit');
-        $form->addHidden('hall', $_REQUEST['hall']);
-        $form->addSubmit('back', 'Edit Message');
+        $form->addHidden('anonymous',   $_REQUEST['anonymous']);
+        $form->addHidden('subject',     $_REQUEST['subject']);
+        $form->addHidden('body',        $_REQUEST['body']);
+        $form->addHidden('type',        'notification');
+        $form->addHidden('op',          'edit');
+        $form->addHidden('hall',        $_REQUEST['hall']);
+        $form->addSubmit('back',        'Edit Message');
         $tpl['BACK'] = implode('', $form->getTemplate());
 
         $form2 = new PHPWS_Form('review_email');
-        $form2->addHidden('subject', $_REQUEST['subject']);
-        $form2->addHidden('body', $_REQUEST['body']);
-        $form2->addHidden('type', 'notification');
-        $form2->addHidden('op',   'mail');
-        $form2->addHidden('hall', $_REQUEST['hall']);
+        $form2->addHidden('anonymous',  $_REQUEST['anonymous']);
+        $form2->addHidden('subject',    $_REQUEST['subject']);
+        $form2->addHidden('body',       $_REQUEST['body']);
+        $form2->addHidden('type',       'notification');
+        $form2->addHidden('op',         'mail');
+        $form2->addHidden('hall',       $_REQUEST['hall']);
         $form2->addSubmit('Send Emails');
         $tpl['SUBMIT'] = implode('', $form2->getTemplate());
 
@@ -166,8 +175,9 @@ class Notification {
         } else if(empty($_REQUEST['body'])){
             return Notification::show_edit_email('You must fill in the message to be sent.', $_REQUEST['subject'], '');
         }
-        $subject = $_REQUEST['subject'];
-        $body    = $_REQUEST['body'];
+        $from       = isset($_REQUEST['anonymous']) && Current_User::allow('hms', 'anonymous_notification') ? 'housing@appstate.edu' : Current_User::getEmail();
+        $subject    = $_REQUEST['subject'];
+        $body       = $_REQUEST['body'];
 
         //Consider using a batch process instead of doing this this inline
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
@@ -182,7 +192,7 @@ class Notification {
                     foreach($rooms as $room){
                         $students = $room->get_assignees();
                         foreach($students as $student){
-                            HMS_Email::send_email($student->asu_username . '@appstate.edu', Current_User::getEmail(), $subject, $body);
+                            HMS_Email::send_email($student->asu_username . '@appstate.edu', $from, $subject, $body);
                         }
                     }
                 }
@@ -195,7 +205,7 @@ class Notification {
                 foreach($rooms as $room){
                     $students = $room->get_assignees();
                     foreach($students as $student){
-                        HMS_Email::send_email($student->asu_username . '@appstate.edu', Current_User::getEmail(), $subject, $body);
+                        HMS_Email::send_email($student->asu_username . '@appstate.edu', $from, $subject, $body);
                     }
                 }
             }
