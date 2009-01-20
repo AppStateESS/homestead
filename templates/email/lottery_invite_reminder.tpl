@@ -1,17 +1,3 @@
-==========================================================
-BETA TESTING   BETA TESTING    BETA TESTING   BETA TESTING
-==========================================================
-You have received this email because we are testing the
-Housing Management System. Please read this message and
-follow its instructions, but be aware that you WILL NOT
-actually receive on-campus housing through this process.
-Because of our testing, you may receive several similar
-emails and be asked to complete the same task multiple
-times. For more information, please see the FAQ listed
-below. If you have questions, feedback, or trouble using
-this site please email: beta@tux.appstate.edu
-Thank you for your assistance.
-
 Dear {NAME},
 
 You were selected for on-campus housing and you have not yet confirmed your on-campus housing for {YEAR}. To do so, go to http://hms.ess.appstate.edu/beta/
