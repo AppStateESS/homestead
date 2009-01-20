@@ -270,6 +270,24 @@ class HMS_Admin
         if( $tab != null ){
             $panel->setCurrentTab($tab);
         }
+        
+        if(Current_User::allow('hms', 'select_term')){
+            //select the new term if one has been chosen by the user
+            PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+            if(isset($_REQUEST['new_term']) && Current_User::allow('hms', 'select_term')){
+                HMS_Term::set_selected_term($_REQUEST['new_term']);
+            }
+
+            //Add the term dropdown to the panel
+            javascript('/modules/hms/page_refresh');
+
+            $form = new PHPWS_Form('select_term');
+            $form->addSelect('new_term', HMS_Term::get_available_terms_list());
+            $form->setMatch('new_term', HMS_Term::get_selected_term());
+            $form->setExtra('new_term', 'onChange="refresh_page(form)"');
+
+            $content = '<div align=left>' . implode('', $form->getTemplate()) . '</div>' . $content;
+        }
 
         Layout::add($panel->display($content));
         Layout::addStyle('controlpanel');
