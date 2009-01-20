@@ -12,8 +12,16 @@
     {COOKIE_WARNING}
     <!-- END cookie_warning -->
     <!-- BEGIN login -->
-    Please <a href="{LOGIN_LINK}">click here to login</a>. [ <a href="#">more information</a> ]
+    <strong>Please <a href="{LOGIN_LINK}">click here to login</a></strong>. [ <a href="#">more information</a> ]
     <!-- END login -->
+    <br />
+    <br />
+    <p>
+    <div style="float: left; width: 375px; background: #ECEFF5; padding: 3px">
+    Are you re-applying for on-campus housing for Fall 2009 - Spring 2010? Read the <a href="https://hms.appstate.edu/webpage/2">reapplication page</a> and the <a href="https://hms.appstate.edu/webpage/3">reapplication FAQ</a>.
+    </div>
+    </p>
+    <br/><br />
     <div style="font-size: 10px; color: grey">
     <p>
     <br /><br />
