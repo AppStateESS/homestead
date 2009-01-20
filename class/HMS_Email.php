@@ -48,7 +48,7 @@ class HMS_Email{
         }
 
         if(!isset($from) || is_null($from)){
-            $from = 'ASU Housing Management System <hms@tux.appstate.edu>';
+            $from = 'ASU Housing Management System <housing@appstate.edu>';
         }
 
         if(!isset($subject) || is_null($subject)){
