@@ -42,7 +42,7 @@ class HMS
                         header('Location: index.php?module=hms&type=maintenance&op=show_maintenance_options');
                         exit;
                     }
-                    Layout::add('<table width=100%><tr><td bgcolor=#fa1515><center><h1><a href=index.php?module=hms&end_student_session=true>Logout of student Session</a></h1></center></td></tr></table>');
+                    Layout::add('<div style="background: #eceff5; border-style: solid; border-width: thin; font-size: large; font-weight: bold; text-align: center; padding: 15px; width: 900px; margin-left: 5px;"><a href=index.php?module=hms&end_student_session=true><img height=24px src="images/mod/hms/icons/log-out.png" /> Logout of student Session </a></div>');
                 } else {
                     # Someone is being naughty...
                     //exit();
