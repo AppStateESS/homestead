@@ -546,7 +546,7 @@ class HMS_Student_UI{
         $roommates = array();
         if(!is_null($assignees)){
             foreach($assignees as $roommate){
-                if($roommate->asu_username == $_SESSION['asu_username']){
+                if($roommate->asu_username != $_SESSION['asu_username']){
                     $roommates[] = $roommate->asu_username; 
                 }
             }
