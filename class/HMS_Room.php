@@ -219,6 +219,7 @@ class HMS_Room extends HMS_Item
         $db = new PHPWS_DB('hms_bed');
         $db->addWhere('room_id', $this->id);
         $db->addOrder('bedroom_label', 'ASC');
+        $db->addOrder('bed_letter', 'ASC');
 
         $db->loadClass('hms', 'HMS_Bed.php');
         $result = $db->getObjects('HMS_Bed');
