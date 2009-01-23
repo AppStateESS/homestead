@@ -56,6 +56,9 @@ class HMS_Student_UI{
         }else{
             $show_summer_hack_msg = FALSE;
         }
+
+        # Check for an assignment in the current term. So far, this only matters for type 'Z' (readmit) students
+        $assignment = HMS_Assignment::check_for_assignment($_SESSION['asu_username']);
         
         # Get deadlines for the current term for future use
         $deadlines = HMS_Deadlines::get_deadlines($_SESSION['application_term']);
@@ -82,7 +85,7 @@ class HMS_Student_UI{
          * freshmen (first-time application)      *
          ******************************************/
         # Check application term for past or future
-        if($application_term <= $current_term && $student_type != TYPE_READMIT){
+        if($application_term <= $current_term || ($student_type == TYPE_READMIT && $assignment === TRUE)){
             /**************
              * Continuing *
              **************/
@@ -90,7 +93,8 @@ class HMS_Student_UI{
 
             /*
              * There's an exception above for type 'Z' (readmit) students.
-             * Their application term will be in the past, but they're not a continuing student
+             * Their application terms will be in the past. They're considered continuing if they're
+             * already assigned. Otherwise, (not assigned) they're considered freshmen
              */
             
             # Redirect to the returning student menu
