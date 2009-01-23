@@ -23,7 +23,7 @@ Failure to check in by 6pm January 12th will result in assignment cancellation (
 
 We hope your on campus housing experience has been a pleasant one. We are looking forward to sharing another great year with you. The re-application process for on campus housing for the academic year 2009-10 will begin in January, 2009.
 
-Should you have any questions, please feel free to contact our office at 828-262-6111. You may also visit our website at: http://www.housing.appstate.edu/ .
+Should you have any questions, please feel free to contact our office at 828-262-6111. You may also visit our website at: http://housing.appstate.edu/ .
 
 Sincerely,
 

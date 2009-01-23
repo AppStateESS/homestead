@@ -21,7 +21,7 @@ Check-in Time: {MOVE_IN_TIME}          {TYPE}
 
 Freshmen and transfer check-in is January 6th, 1pm-9pm. Returning student check-in starts on January 10th and 11th. See above for your scheduled time. If you have a conflict, you can check in anytime after your scheduled time until 6pm on January 12th. Failure to check in by 6pm January 12th will result in assignment cancellation (see pages 15-16 of the Residence Hall License Contract booklet).
 
-Should you have any questions, please feel free to contact our office at 828-262-6111. You may also visit our website at: http://www.housing.appstate.edu/ .
+Should you have any questions, please feel free to contact our office at 828-262-6111. You may also visit our website at: http://housing.appstate.edu/ .
 
 Sincerely,
 
