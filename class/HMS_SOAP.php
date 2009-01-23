@@ -30,7 +30,7 @@ class HMS_SOAP{
         }
 
         /**
-         * sepcial exceptions for the housing staff
+         * sepcial exceptions for me
          */
         if($username == 'jb67803'){
             $student = HMS_SOAP::get_test_info();
@@ -38,85 +38,6 @@ class HMS_SOAP{
             $student->middle_name   = 'L';
             $student->last_name     = 'Booker';
             $student->gender        = 'M';
-            $student->application_term  = '200840'; // a freshmen/rising sophomore
-            $student->projected_class   = 'SO';
-            $student->student_type      = 'C';
-
-            return $student;
-        }
-
-
-        if($username == 'braswelldl'){
-            $student = HMS_SOAP::get_test_info();
-            $student->first_name    = 'Dana';
-            $student->middle_name   = 'L';
-            $student->last_name     = 'Braswell';
-            $student->gender        = 'M';
-            $student->application_term  = '200740'; // a freshmen/rising sophomore
-            $student->projected_class   = 'SO';
-            $student->student_type      = 'C';
-
-            return $student;
-        }
-
-        if($username == 'yatespj'){
-            $student = HMS_SOAP::get_test_info();
-            $student->first_name        = 'Phyllis';
-            $student->middle_name       = 'J';
-            $student->last_name         = 'Yates';
-            $student->gender            = 'F';
-            $student->application_term  = '200710'; // a soph/jr sophomore
-            $student->projected_class   = 'JR';
-            $student->student_type      = 'C';
-
-            return $student;
-        }
-
-        if($username == 'pasourea'){
-            $student = HMS_SOAP::get_test_info();
-            $student->first_name        = 'Emily';
-            $student->middle_name       = 'A';
-            $student->last_name         = 'Pasour';
-            $student->gender            = 'F';
-            $student->application_term  = '200810'; // a freshmen/rising sophomore
-            $student->projected_class   = 'SO';
-            $student->student_type      = 'C';
-
-            return $student;
-        }
-
-        if($username == 'dibernardibj'){
-            $student = HMS_SOAP::get_test_info();
-            $student->first_name        = 'Dino';
-            $student->middle_name       = 'J';
-            $student->last_name         = 'Dibernardi';
-            $student->gender            = 'M';
-            $student->application_term  = '200640'; // a freshmen/rising sophomore
-            $student->projected_class   = 'SR';
-            $student->student_type      = 'C';
-
-            return $student;
-        }
-
-        if($username == 'searssr'){
-            $student = HMS_SOAP::get_test_info();
-            $student->first_name        = 'Stacy';
-            $student->middle_name       = 'R';
-            $student->last_name         = 'Sears';
-            $student->gender            = 'F';
-            $student->application_term  = '200610'; // a freshmen/rising sophomore
-            $student->projected_class   = 'SR';
-            $student->student_type      = 'C';
-
-            return $student;
-        }
-
-        if($username == 'kanetl'){
-            $student = HMS_SOAP::get_test_info();
-            $student->first_name        = 'Thomas';
-            $student->middle_name       = 'L';
-            $student->last_name         = 'Kane';
-            $student->gender            = 'M';
             $student->application_term  = '200840'; // a freshmen/rising sophomore
             $student->projected_class   = 'SO';
             $student->student_type      = 'C';
