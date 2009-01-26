@@ -1065,7 +1065,7 @@ class HMS_Room extends HMS_Item
         }
 
         //Always show the option to set the default gender
-        $form->addDropBox('default_gender', array(FEMALE => FEMALE_DESC, MALE => MALE_DESC));
+        $form->addDropBox('default_gender', array(FEMALE => FEMALE_DESC, MALE => MALE_DESC, COED => COED_DESC));
         $form->setMatch('default_gender', $room->default_gender);
         
         $form->addCheck('is_online', 1);
