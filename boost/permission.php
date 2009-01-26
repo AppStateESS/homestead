@@ -118,5 +118,5 @@
      ******************************/
     $permission['email_hall'] = _('Can send Hall emails');
     $permission['email_all']  = _('Can campus wide emails to residents');
-    $permission['anonymous_notifications') = _('Can send notifications anonymously (as hms@appstate.edu)');
+    $permission['anonymous_notifications'] = _('Can send notifications anonymously (as hms@appstate.edu)');
 ?>
