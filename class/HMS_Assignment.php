@@ -230,6 +230,8 @@ class HMS_Assignment extends HMS_Item
 
     public function check_for_assignment($asu_username, $term = NULL)
     {
+        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+
         $db = new PHPWS_DB('hms_assignment');
         $db->addWhere('asu_username', $asu_username, 'ILIKE');
 
