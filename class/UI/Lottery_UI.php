@@ -275,6 +275,11 @@ class Lottery_UI {
                 return Lottery_UI::show_lottery_signup("\"$roomie\" is not a valid user name. Please try again.");
             }
 
+            # Check to make sure the roommate is eligible for reapplication
+            if(!HMS_Lottery::determine_eligibility($roomie)){
+                return Lottery_UI::show_lottery_signup("\"$roomie\" is not eligible for re-application. Please try again.");
+            }
+
             # Check to make sure the user name is not the same as the current user
             if($roomie == $_SESSION['asu_username']){
                 return Lottery_UI::show_lottery_signup("You cannot choose yourself as a roommate, please try again.");
@@ -729,7 +734,7 @@ class Lottery_UI {
 
             # Make sure every student entered the lottery
             if(HMS_Lottery_Entry::check_for_entry($roommate, $term) === FALSE){
-                return Lottery_UI::show_select_roommates("$roommate did not enter the lottery. Please select a different roommate.");
+                return Lottery_UI::show_select_roommates("$roommate did not re-apply for housing. Please select a different roommate.");
             }
 
             # Make sure every student's gender matches, and that those are compatible with the room
