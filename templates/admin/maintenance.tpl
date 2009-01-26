@@ -112,6 +112,7 @@
             <dt>Lottery Needs</dt>
             <dd>{LOTTERY_NEEDS}</dd>
             <dd>{ADMIN_LOTTERY_ENTRY}</dd>
+            <dd>{ELIGIBILITY_WAIVER}</dd>
             <!-- END lottery_needs -->
         </dl>
         <!-- END right -->

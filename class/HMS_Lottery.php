@@ -748,27 +748,24 @@ class HMS_Lottery {
 
     /*
      * Returns TRUE if the student is assigned in the current term
+     * or if the student has an eligibility waiver.
      */
     public function determine_eligibility($username){
-        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Eligibility_Waiver.php');
 
-        $db = new PHPWS_DB('hms_assignment');
-        
-        $db->addWhere('term', HMS_Term::get_current_term());
-        $db->addWhere('asu_username', $username);
-
-        $result = $db->select();
-
-        if(PEAR::isError($result)){
-            PHPWS_Error::log($result);
-            return FALSE;
-        }
-
-        if(sizeof($result) <= 0){
-            return FALSE;
-        }else{
+        # First, check for an assignment in the current term
+        if(HMS_Assignment::check_for_assignment($username)){
             return TRUE;
+        # If that didn't work, check for a waiver in the lottery term
+        }elseif(HMS_Eligibility_Waiver::checkForWaiver($username, PHPWS_Settings::get('hms', 'lottery_term'))){
+            return TRUE;
+        # If that didn't work either, then the student is not elibible, so return false
+        }else{
+            return FALSE;
         }
+
+        
     }
 
     public function main()
@@ -792,6 +789,14 @@ class HMS_Lottery {
                 PHPWS_Core::initModClass('hms', 'UI/Lottery_UI.php');
                 PHPWS_Core::initModClass('hms', 'HMS_Lottery_Entry.php');
                 return Lottery_UI::show_admin_entry(HMS_Lottery_Entry::parse_entry($_REQUEST));
+                break;
+            case 'show_eligibility_waiver':
+                PHPWS_Core::initModClass('hms', 'UI/Lottery_UI.php');
+                return Lottery_UI::show_eligibility_waiver();
+                break;
+            case 'create_waiver':
+                PHPWS_Core::initModClass('hms', 'UI/Lottery_UI.php');
+                return Lottery_UI::create_eligibility_waiver();
                 break;
             default:
                 break;

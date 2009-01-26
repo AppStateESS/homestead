@@ -187,6 +187,8 @@ class HMS_Maintenance
             $tpl['ADMIN_LOTTERY_ENTRY'] = PHPWS_Text::secureLink(
                 _('Administratively add a student to the lottery'), 'hms',
                 array('type'=>'lottery', 'op'=>'show_admin_entry'));
+
+            $tpl['ELIGIBILITY_WAIVER'] = PHPWS_Text::secureLink(_('Eligibility Waiver'), 'hms', array('type'=>'lottery', 'op'=>'show_eligibility_waiver'));
         }
 
         if(Current_User::allow('hms', 'message_hall') || Current_User::allow('hms', 'message_all')){

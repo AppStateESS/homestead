@@ -461,6 +461,15 @@ CREATE TABLE hms_lottery_reservation (
     PRIMARY KEY (id)
 );
 
+CREATE TABLE hms_eligibility_waiver (
+   id                   INTEGER                 NOT NULL,
+   asu_username         CHARACTER VARYING(32)   NOT NULL,
+   term                 INTEGER                 NOT NULL,
+   created_on           INTEGER                 NOT NULL,
+   created_by           CHARACTER VARYING(32)   NOT NULL,
+   PRIMARY KEY (id)
+);
+
 INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity) VALUES (10, 'Community of Servant Leaders', 'LSC', 50);
 INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity) VALUES (1, 'Outdoor Community', 'OC', 50);
 INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity) VALUES (2, 'Community of Scientific Interest', 'CSI', 50);

@@ -1100,5 +1100,48 @@ class Lottery_UI {
 
         return PHPWS_Template::process($form->getTemplate(), 'hms', 'admin/add_to_lottery.tpl');
     }
+
+    public function show_eligibility_waiver($success = NULL, $error = NULL)
+    {
+        $form = &new PHPWS_Form('waiver');
+        $form->addTextArea('usernames');
+        $form->setLabel('usernames', 'ASU User names (one per line):');
+
+        $form->addSubmit('submit_btn', 'Create');
+        
+        $form->addHidden('module', 'hms');
+        $form->addHidden('type', 'lottery');
+        $form->addHidden('op', 'create_waiver');
+
+        $tpl = array();
+        
+        if(isset($success)){
+            $tpl['SUCCESS_MSG'] = '';
+        }elseif(isset($error)){
+            $tpl['ERROR_MSG'] = '';
+        }
+
+        $form->mergeTemplate($tpl);
+
+        return PHPWS_Template::process($form->getTemplate(), 'hms', 'admin/eligibility_waiver.tpl');
+    }
+
+    public function create_eligibility_waiver()
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Eligibility_Waiver.php');
+
+        $usernames = split("\n", $_REQUEST['usernames']);
+        $term = PHPWS_Settings::get('hms', 'lottery_term');
+
+        foreach($usernames as $user){
+            $waiver = new HMS_Eligibility_Waiver(trim($user),$term);
+            $result = $waiver->save();
+            if(!$result){
+                return Lottery_UI::show_eligibility_wavier(NULL, 'Error creating wavier for: ' . $user );
+            }
+        }
+
+        return Lottery_UI::show_eligibility_waiver('Waivers created successfully.');
+    }
 }
 ?>
