@@ -191,7 +191,7 @@ class HMS_Maintenance
             $tpl['ELIGIBILITY_WAIVER'] = PHPWS_Text::secureLink(_('Eligibility Waiver'), 'hms', array('type'=>'lottery', 'op'=>'show_eligibility_waiver'));
         }
 
-        if(Current_User::allow('hms', 'message_hall') || Current_User::allow('hms', 'message_all')){
+        if(Current_User::allow('hms', 'email_hall') || Current_User::allow('hms', 'email_all')){
             $tpl['EMAIL_HALL'] = PHPWS_Text::secureLink(_('Send email notifications by hall'), 'hms', array('type'=>'notification', 'op'=>'show_select_hall'));
         }
 

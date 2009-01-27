@@ -36,13 +36,13 @@ class Notification {
 
     public function show_select_hall()
     {
-        if(!Current_User::allow('hms', 'message_hall')){
+        if(!Current_User::allow('hms', 'email_hall')){
              return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
         }
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
 
         $tpl=array();
-        if(Current_User::allow('hms', 'message_all')){
+        if(Current_User::allow('hms', 'email_all')){
             $halls = HMS_Residence_Hall::get_halls();
             $form = new PHPWS_Form('select_halls_to_email');
             foreach($halls as $hall){
