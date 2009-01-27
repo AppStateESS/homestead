@@ -920,6 +920,7 @@ class HMS_Lottery {
     public function run_monte_carlo()
     {
 
+
     }
 }
 
