@@ -175,15 +175,14 @@ class HMS_Maintenance
                 array('type'=>'activity_log', 'op'=>'view'));
         }
 
-        /***********************************
-         * Lottery Special Needs Interface *
-         ***********************************/
-        if(Current_User::allow('hms', 'lottery_needs')) {
+        /**************************
+         * Lottery Administration *
+         **************************/
+        if(Current_User::allow('hms', 'lottery_admin')) {
             $tpl['LOTTERY_NEEDS'] = PHPWS_Text::secureLink(
                 _('View and clear lottery special needs'), 'hms',
                 array('type'=>'lottery', 'op'=>'view_lottery_needs'));
             
-            //Probably need to move this later, but if they can't sign up for the lottery themselves they do have a special need ;-)
             $tpl['ADMIN_LOTTERY_ENTRY'] = PHPWS_Text::secureLink(
                 _('Administratively add a student to the lottery'), 'hms',
                 array('type'=>'lottery', 'op'=>'show_admin_entry'));
@@ -314,7 +313,7 @@ class HMS_Maintenance
         }
 
         # Lottery settings
-        if(Current_User::allow('hms', 'lottery_settings')){
+        if(Current_User::allow('hms', 'lottery_admin')){
             $tpl['LOTTERY_SETTINGS'] = PHPWS_Text::secureLink('Lottery Settings', 'hms', array('type'=>'lottery', 'op'=>'show_lottery_settings'));
         }
 

@@ -102,6 +102,11 @@
 
     $permissions['login_as_student']                =_('Login as a student');
 
+    /********************
+     * Lottery Settings *
+     ********************/
+    $permissions['lottery_admin']                   =_('Lottery administration');
+
     /*****************
      * Activity Logs *
      ****************/
