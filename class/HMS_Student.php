@@ -553,8 +553,15 @@ class HMS_Student {
          * Phone number *
          ****************/
         foreach($student_info->phone as $phone_number){
-            $tpl['phone_number'][] = array('NUMBER' =>'('.$phone_number->area_code.') '.$phone_number->number . (!empty($phone_number->ext) ? ' ext. '.$phone_number->ext : ''));
+            $phone_numbers[] = '('.$phone_number->area_code.') '.$phone_number->number . (!empty($phone_number->ext) ? ' ext. '.$phone_number->ext : '');
         }
+
+        $phone_numbers = array_unique($phone_numbers);
+
+        foreach($phone_numbers as $phone_number){
+            $tpl['phone_number'][] = array('NUMBER' =>$phone_number);
+        }
+
         $tpl['USERNAME'] = $username;
 
         $tpl['TITLE'] = "Search Results - " . HMS_Term::term_to_text(HMS_Term::get_selected_term(),TRUE);
