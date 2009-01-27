@@ -916,6 +916,11 @@ class HMS_Lottery {
 
         return HMS_Lottery::show_lottery_settings('Lottery settings updated.');
     }
+
+    public function run_monte_carlo()
+    {
+
+    }
 }
 
 ?>
