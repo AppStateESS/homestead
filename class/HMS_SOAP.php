@@ -75,6 +75,26 @@ class HMS_SOAP{
         }
 
         HMS_SOAP::log_soap('get_student_info', 'success', $username, $term);
+
+        /**************
+         * Exceptions *
+         **************/
+         // Because Banner sux0rz
+        if($username == 'wilsonkm'){
+            $student->application_term = 200640;
+        }
+
+        if($username == 'nw78795'){
+            $studnet->application_term = 200540;
+        }
+
+        if($username == 'ms78595'){
+            $student->application_term = 200540;
+        }
+
+        if($username == 'nf67284'){
+            $student->application_term = 200540;
+        }
         
         // insert into hash table
         $student_info_table[$hash_key] = $student;
