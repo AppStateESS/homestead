@@ -53,23 +53,30 @@ class HMS_Side_Thingie {
 
     public function show($links = TRUE)
     {
-        
         $this->curr_timestamp = mktime();
 
         $template = array();
         $template['TITLE'] = _('Application Progress');
 
+        $term = HMS_Term::get_current_term();
+
         # Check for an application on file, set dates/styles if an application is not found
         $this->set_apply_agree($links);
+        
+        if(HMS_Application::is_feature_enabled($term, APPLICATION_RLC_APP){
+            # Check for an RLC application on file, set dates/styles if a RLC application is not found
+            $this->set_rlc($links);
+        }
 
-        # Check for an RLC application on file, set dates/styles if a RLC application is not found
-        $this->set_rlc($links);
-
-        # Check for a profile, show dates accordingly
-        $this->set_profile($links);
-
-        # Check for a roomate, show dates accordingly
-        $this->set_roomate($links);
+        if(HMS_Application::is_feature_enabled($term, APPLICATION_ROOMMATE_PROFILE){
+            # Check for a profile, show dates accordingly
+            $this->set_profile($links);
+        }
+        
+        if(HMS_Application::is_feature_enabled($term, APPLICATION_SELECT_ROOMMATE){
+            # Check for a roomate, show dates accordingly
+            $this->set_roomate($links);
+        }
 
         # Always show as available.
         $this->set_verify($links);
