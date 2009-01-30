@@ -798,11 +798,33 @@ class HMS_Lottery {
                 PHPWS_Core::initModClass('hms', 'UI/Lottery_UI.php');
                 return Lottery_UI::create_eligibility_waiver();
                 break;
+            case 'magic':
+                PHPWS_Core::initModClass('hms', 'UI/Lottery_UI.php');
+                return Lottery_UI::show_magic_interface();
+            case 'apply_magic':
+                return HMS_Lottery::apply_magic($_REQUEST['asu_username'], $_REQUEST['magic']);
             default:
                 break;
         }
     }
 
+    public function apply_magic($username, $enabled){
+        PHPWS_Core::initModClass('hms', 'HMS_Lottery_Entry.php');
+        PHPWS_Core::initModClass('hms', 'UI/Lottery_UI.php');
+
+        $entry = new HMS_Lottery_Entry($username);
+        if(!is_null($enabled)){
+            $entry->magic_winner = 1;
+        } else {
+            $entry->magic_winner = 0;
+        }
+
+        if($entry->save()){
+            return Lottery_UI::show_magic_interface("User: $username successfully updated.");
+        }
+        
+        return Lottery_UI::show_magic_interface("Error updating user: $username");
+    }
 
     public function save_lottery_settings($lottery_term, $type, $lottery_per_soph, $lottery_per_jr, $lottery_per_senior, $max_soph, $max_jr, $max_senior)
     {

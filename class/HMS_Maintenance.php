@@ -188,6 +188,10 @@ class HMS_Maintenance
                 array('type'=>'lottery', 'op'=>'show_admin_entry'));
 
             $tpl['ELIGIBILITY_WAIVER'] = PHPWS_Text::secureLink(_('Eligibility Waiver'), 'hms', array('type'=>'lottery', 'op'=>'show_eligibility_waiver'));
+            
+            $tpl['MAGIC_FLAG'] = PHPWS_Text::secureLink(
+                _('Set the magic flag'), 'hms', array('type'=>'lottery',
+                'op'=>'magic'));
         }
 
         if(Current_User::allow('hms', 'email_hall') || Current_User::allow('hms', 'email_all')){

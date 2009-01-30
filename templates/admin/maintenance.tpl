@@ -113,6 +113,7 @@
             <dd>{LOTTERY_NEEDS}</dd>
             <dd>{ADMIN_LOTTERY_ENTRY}</dd>
             <dd>{ELIGIBILITY_WAIVER}</dd>
+            <dd>{MAGIC_FLAG}</dd>
             <!-- END lottery_needs -->
         </dl>
         <!-- END right -->

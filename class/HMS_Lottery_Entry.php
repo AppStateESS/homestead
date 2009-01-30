@@ -35,6 +35,7 @@ class HMS_Lottery_Entry {
     var $psych_disability       = 0;
     var $medical_need           = 0;
     var $gender_need            = 0;
+    var $magic_winner           = 0;
 
     # Lottery invite timestamp
     var $invite_expires_on;

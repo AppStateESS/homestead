@@ -1082,6 +1082,8 @@ class Lottery_UI {
         $tpl['MESSAGE'] = $message;
 
         $form = &new PHPWS_Form('admin_entry');
+        $form->mergeTemplate($tpl);
+
         $form->addText('asu_username');
         $form->setLabel('asu_username', 'ASU Username');
 
@@ -1101,9 +1103,39 @@ class Lottery_UI {
         $form->addHidden('op',      'submit_admin_entry');
         $form->addSubmit('enter_into_lottery', 'Add to lottery');
 
+        return PHPWS_Template::process($form->getTemplate(), 'hms', 'admin/add_to_lottery.tpl');
+    }
+
+    public function show_magic_interface($success=null,$error=null) {
+        $tpl['MESSAGE'] = $success . '' . $error;
+
+        $form = new PHPWS_Form('magic_form');
         $form->mergeTemplate($tpl);
 
-        return PHPWS_Template::process($form->getTemplate(), 'hms', 'admin/add_to_lottery.tpl');
+        $form->addText('asu_username');
+        $form->setLabel('asu_username', 'ASU Username: ');
+
+        //Before changing see http://catb.org/jargon/html/magic-story.html
+        $options       = array('disabled', 'enabled');
+        $option_labels = array('Magic: ', 'More Magic: ');
+        $form->addRadio('magic', $options);
+        $form->setLabel('magic', $option_labels);
+
+        $form->addHidden('type', 'lottery');
+        $form->addHidden('op', 'apply_magic');
+        $form->addSubmit('Submit');
+
+        $tpl    = $form->getTemplate();
+        $output = array();
+        foreach($tpl as $key => $value){
+            if(preg_match('/LABEL/', $key)){
+                $output[$key] = $value;
+            } else {
+                $output[$key.'_LABEL'] .= $value;
+            }
+        }
+
+        return implode('<br />', $output);
     }
 
     public function show_eligibility_waiver($success = NULL, $error = NULL)
