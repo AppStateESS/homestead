@@ -1115,10 +1115,9 @@ class Lottery_UI {
         $form->addText('asu_username');
         $form->setLabel('asu_username', 'ASU Username: ');
 
-        //Before changing see http://catb.org/jargon/html/magic-story.html
-        $options       = array('disabled', 'enabled');
-        $option_labels = array('Magic: ', 'More Magic: ');
-        $form->addRadio('magic', $options);
+        $options       = array('enabled');
+        $option_labels = array('Magic Flag: ');
+        $form->addCheck('magic', $options);
         $form->setLabel('magic', $option_labels);
 
         $form->addHidden('type', 'lottery');
@@ -1131,7 +1130,11 @@ class Lottery_UI {
             if(preg_match('/LABEL/', $key)){
                 $output[$key] = $value;
             } else {
-                $output[$key.'_LABEL'] .= $value;
+                if(isset($output[$key.'_LABEL'])){
+                    $output[$key.'_LABEL'] .= $value;
+                } else {
+                    $output[$key.'_LABEL'] = $value;
+                }
             }
         }
 
