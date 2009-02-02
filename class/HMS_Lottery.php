@@ -818,7 +818,7 @@ class HMS_Lottery {
         PHPWS_Core::initModClass('hms', 'UI/Lottery_UI.php');
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
 
-        $entry = new HMS_Lottery_Entry($username, HMS_Term::get_current_term());
+        $entry = new HMS_Lottery_Entry($username, PHPWS_Settings::get('hms', 'lottery_term'));
         if(!is_null($enabled)){
             $entry->magic_winner = 1;
         } else {
