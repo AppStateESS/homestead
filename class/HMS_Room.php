@@ -578,6 +578,7 @@ class HMS_Room extends HMS_Item
        $page_tags['MEDICAL_LABEL']      = 'Medical';
        $page_tags['RESERVED_LABEL']     = 'Reserved';
        $page_tags['ONLINE_LABEL']       = 'Online';
+       $page_tags['DELETE_LABEL']       = 'Delete';
 
        $pager->setModule('hms');
        $pager->setTemplate('admin/room_pager_by_floor.tpl');

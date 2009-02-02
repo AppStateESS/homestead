@@ -26,6 +26,7 @@
         <td id={ID}is_medical   {FORM}>{IS_MEDICAL}</td>
         <td id={ID}is_reserved  {FORM}>{IS_RESERVED}</td>
         <td id={ID}is_online    {FORM}>{IS_ONLINE}{END_FORM}</td>
+        <td>{DELETE}</td>
     </tr>
     <!-- END listrows -->
 </table>
