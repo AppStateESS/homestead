@@ -811,13 +811,16 @@ class HMS_Lottery {
     public function apply_magic($username, $enabled){
         PHPWS_Core::initModClass('hms', 'HMS_Lottery_Entry.php');
         PHPWS_Core::initModClass('hms', 'UI/Lottery_UI.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
 
-        $entry = new HMS_Lottery_Entry($username);
+        $entry = new HMS_Lottery_Entry($username, HMS_Term::get_current_term());
         if(!is_null($enabled)){
             $entry->magic_winner = 1;
         } else {
             $entry->magic_winner = 0;
         }
+
+        test($entry->save(),1);
 
         if($entry->save()){
             return Lottery_UI::show_magic_interface("User: $username successfully updated.");
