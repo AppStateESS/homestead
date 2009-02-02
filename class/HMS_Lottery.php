@@ -820,8 +820,6 @@ class HMS_Lottery {
             $entry->magic_winner = 0;
         }
 
-        test($entry->save(),1);
-
         if($entry->save()){
             return Lottery_UI::show_magic_interface("User: $username successfully updated.");
         }
