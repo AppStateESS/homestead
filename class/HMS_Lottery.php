@@ -803,6 +803,11 @@ class HMS_Lottery {
                 return Lottery_UI::show_magic_interface();
             case 'apply_magic':
                 return HMS_Lottery::apply_magic($_REQUEST['asu_username'], $_REQUEST['magic']);
+            case 'show_special_interest_approval':
+                PHPWS_Core::initModClass('hms', 'UI/Lottery_UI.php');
+                return Lottery_UI::show_special_interest_approval();
+            case 'remove_special_interest':
+                return HMS_Lottery::remove_special_interest();
             default:
                 break;
         }
@@ -900,6 +905,14 @@ class HMS_Lottery {
             $form->setDisabled('lottery_per_senior');
         }
 
+        if($type == 'multi_phase'){
+            $result = HMS_Lottery::run_monte_carlo(PHPWS_Settings::get('hms', 'lottery_term'), 1000, $_REQUEST['lottery_max_soph'], $_REQUEST['lottery_max_jr'], $_REQUEST['lottery_max_senior']);
+            $tpl = array_merge($result, $tpl);
+            $tpl['soph_mode'] = implode(', ', $tpl['soph_mode']);
+            $tpl['jr_mode'] = implode(', ', $tpl['jr_mode']);
+            $tpl['sr_mode'] = implode(', ', $tpl['sr_mode']);
+        }
+
         $form->addHidden('module', 'hms');
         $form->addHidden('type', 'lottery');
         $form->addHidden('op', 'submit_lottery_settings');
@@ -940,13 +953,304 @@ class HMS_Lottery {
         return HMS_Lottery::show_lottery_settings('Lottery settings updated.');
     }
 
-    public function run_monte_carlo()
+    public function run_monte_carlo($term, $num_iterations, $soph_invites, $jr_invites, $sr_invites)
+    {
+        # Declare an array for the final output
+        $output = array();
+
+        $num_two_beds = 1976;
+        $num_four_beds = 424;
+
+        # Query the database for the set of entry application terms, and the application terms of their roommates
+        $db = new PHPWS_DB('hms_lottery_entry');
+        $db->addColumn('application_term');
+        $db->addColumn('roommate1_app_term');
+        $db->addColumn('roommate2_app_term');
+        $db->addColumn('roommate3_app_term');
+
+        $db->addWhere('term', $term); // Only for the specified term
+
+        $result = $db->select();
+
+        # Transform the 2D array of application terms into a 2D array of classes (i.e. 'SOPH', 'JR', 'SR')
+        $transformed_entries = HMS_Lottery::monte_carlo_translate_array($result, $term);
+
+        # Separate the entries into individual lists of soph, jr, senior entires
+        $soph_entries = $jr_entries = $sr_entries = array();
+
+        foreach($transformed_entries as $entry){
+            if($entry[0] == CLASS_SOPHOMORE){
+                $soph_entries[] = $entry;
+            }elseif($entry[0] == CLASS_JUNIOR){
+                $jr_entries[] = $entry;
+            }elseif($entry[0] == CLASS_SENIOR){
+                $sr_entries[] = $entry;
+            }
+        }
+
+        $soph_results   = array();
+        $jr_results     = array();
+        $sr_results     = array();
+
+        # Run the simulation the requested number of times
+        for($i = 0; $i < $num_iterations; $i++){
+            $result = HMS_Lottery::monte_carlo_interation($soph_entries, $jr_entries, $sr_entries, $soph_invites, $jr_invites, $sr_invites, $num_two_beds, $num_four_beds);
+
+            $soph_results[] = $result['soph'];
+            $jr_results[]   = $result['jr'];
+            $sr_results[]   = $result['sr'];
+        }
+
+        # Compute stats about the generated dataset
+        $output['soph_min'] = min($soph_results);
+        $output['soph_max'] = max($soph_results);
+        $output['soph_avg'] = floor(HMS_Lottery::mean($soph_results));
+        $output['soph_mode']= HMS_Lottery::mode($soph_results);
+
+        $output['jr_min']   = min($jr_results);
+        $output['jr_max']   = max($jr_results);
+        $output['jr_avg']   = floor(HMS_Lottery::mean($jr_results));
+        $output['jr_mode']  = HMS_Lottery::mode($jr_results);
+
+        $output['sr_min']   = min($sr_results);
+        $output['sr_max']   = max($sr_results);
+        $output['sr_avg']   = floor(HMS_Lottery::mean($sr_results));
+        $output['sr_mode']  = HMS_Lottery::mode($sr_results);
+
+        return $output;
+    }
+
+    public function monte_carlo_interation($soph_entries, $jr_entries, $sr_entries, $soph_invites, $jr_invites, $sr_invites, $num_two_beds, $num_four_beds)
+    {
+        $actual_soph = $actual_jr = $actual_sr = 0;
+
+        // Copy the value of these vars
+        $two_beds   = $num_two_beds;
+        $four_beds  = $num_four_beds;
+
+        # Randomize the arrays
+        shuffle($sr_entries);
+        shuffle($jr_entries);
+        shuffle($soph_entries);
+
+        $result = HMS_Lottery::monte_carlo_choose_entries($sr_entries, $sr_invites, $two_beds, $four_beds);
+        $actual_sr      += $result['sr'];
+        $actual_jr      += $result['jr'];
+        $actual_soph    += $result['soph'];
+
+        $result = HMS_Lottery::monte_carlo_choose_entries($jr_entries, $jr_invites, $two_beds, $four_beds);
+        $actual_sr      += $result['sr'];
+        $actual_jr      += $result['jr'];
+        $actual_soph    += $result['soph'];
+
+        $result = HMS_Lottery::monte_carlo_choose_entries($soph_entries, $soph_invites, $two_beds, $four_beds);
+        $actual_sr      += $result['sr'];
+        $actual_jr      += $result['jr'];
+        $actual_soph    += $result['soph'];
+
+        return array('soph'=>$actual_soph, 'jr'=>$actual_jr, 'sr'=>$actual_sr);
+    }
+
+    public function monte_carlo_choose_entries($entries, $num_invites, &$two_beds, &$four_beds)
+    {
+        $actual_sr = $actual_jr = $actual_soph = 0;
+
+        for($i = 0; $i < $num_invites && $i < count($entries); $i++){
+
+            # Get the entry at the current index
+            $entry = $entries[$i];
+
+            # Reset these flags
+            $use_two_beds   = FALSE;
+            $use_foure_beds = FALSE;
+
+            # Tally the number of each bed type used for this student
+            if($four_beds > 0){
+                $four_beds--;
+            }else if($two_beds > 0){
+                $two_beds--;
+            }else{
+                // We're out of beds, so quit before we actually count this student or his roommates
+                break;
+            }
+
+            # Tally the student who entered
+            if($entry[0] == CLASS_SENIOR){
+                $actual_sr++;
+            }elseif($entry[0] == CLASS_JUNIOR){
+                $actual_jr++;
+            }elseif($entry[0] == CLASS_SOPHOMORE){
+                $actual_soph++;
+            }
+
+            # For each of the other roommates
+            for($j = 1; $j < 4; $j++){
+
+                if(is_null($entry[$j])){
+                    continue;
+                }
+
+                // Tally the bed this student will occupy
+                if($four_beds > 0){
+                    $four_beds--;
+                }else if($two_beds > 0){
+                    $two_beds--;
+                }else{
+                    // We're out of beds, skip 'em and quit
+                    break;
+                }
+
+                // Tally the student's class
+                if($entry[$j] == CLASS_SENIOR){
+                    $actual_sr++;
+                }else if($entry[$j] == CLASS_JUNIOR){
+                    $actual_jr++;
+                }else if($entry[$j] == CLASS_SOPHOMORE){
+                    $actual_soph++;
+                }
+            }
+        }
+
+        return array('soph'=>$actual_soph, 'jr'=>$actual_jr, 'sr'=>$actual_sr);
+    }
+
+    public function monte_carlo_translate_array($array, $term)
+    {
+        $result = array();
+
+        foreach($array as $element){
+            $entry = array();
+            foreach($element as $entry_term){
+                $entry[] = HMS_Lottery::application_term_to_class($term, $entry_term);
+            }
+            $result[] = $entry;
+        }
+
+        return $result;
+    }
+
+    // Translates an application term into a class (fr, soph, etc) based on the term given
+    public function application_term_to_class($curr_term, $application_term)
     {
 
+        // Break up the term and year
+        $yr     = floor($application_term / 100);
+        $sem    = $application_term - ($yr * 100);
 
+        $curr_year = floor($curr_term / 100);
+        $curr_sem  = $curr_term - ($curr_year * 100);
 
+        if($curr_sem == 10){
+            $curr_year -= 1;
+            $curr_sem   = 40;
+        }
 
+        if(is_null($application_term) || !isset($application_term)){
+            # If there's no application term, just return null
+            return NULL;
+        }else if($application_term >= $curr_term){
+            // The application term is greater than the current term, then they're certainly a freshmen
+            return CLASS_FRESHMEN;
+        }else if(
+            ($yr == $curr_year + 1 && $sem = 10) ||
+            ($yr == $curr_year && $sem >= 20 && $sem <= 40)){
+            // freshmen
+            return CLASS_FRESHMEN;
+        }else if(
+            ($yr == $curr_year && $sem == 10) ||
+            ($yr + 1 == $curr_year && $sem >= 20 && $sem <= 40)){
+            // soph
+            return CLASS_SOPHOMORE;
+        }else if(
+            ($yr + 1 == $curr_year && $sem == 10) ||
+            ($yr + 2 == $curr_year && $sem >= 20 && $sem <= 40)){
+            // jr
+            return CLASS_JUNIOR;
+        }else{
+            // senior
+            return CLASS_SENIOR;
+        }
     }
+
+    public function mean($array)
+    {
+        $sum = 0;
+
+        foreach($array as $value){
+            $sum += $value;
+        }
+
+        return $sum/count($array);
+    }
+
+    public function mode($array)
+    {
+        $counts = array();
+
+        foreach($array as $value){
+            if(isset($counts[$value])){
+                $counts[$value] = $counts[$value] + 1;
+            }else{
+                $counts[$value] = 1;
+            }
+        }
+
+        arsort($counts);
+        $keys = array_keys($counts);
+        return array($keys[0], $keys[1], $keys[2]);
+    }
+
+    public function get_special_interest_groups()
+    {
+        $special_interests['none']              = 'None';
+        $special_interests['honors']            = 'Heltzer Honors Program';
+        $special_interests['watauga_global']    = 'Watauga Global Community';
+        $special_interests['teaching']          = 'Teaching Fellows';
+        $special_interests['servant_leaders']   = 'Community of Servant Leaders';
+        $special_interests['sciences']          = 'Academy of Sciences';
+        $special_interests['language']          = 'Language & Culture Community';
+        $special_interests['black_and_gold']    = 'Black & Gold Community';
+        $special_interests['sophomore']         = 'Sophomore Year Experience';
+        $special_interests['living_free']       = 'Living Free Community';
+        $special_interests['quite_study']       = 'Quiet Study Community';
+        $special_interests['educators']         = 'Community for Future Educators';
+        $special_interests['man_floor']         = 'The Man Floor';
+        $special_interests['sorority_adp']      = 'Alpha Delta Pi Sorority';
+        $special_interests['sorority_ap']       = 'Aplha Phi Sorority';
+        $special_interests['sorority_co']       = 'Chi Omega Sorority';
+        $special_interests['sorority_dz']       = 'Delta Zeta Sorority';
+        $special_interests['sorority_kd']       = 'Kappa Delta Sorority';
+        $special_interests['sorority_pm']       = 'Phi Mu Sorority';
+        $special_interests['sorority_sk']       = 'Sigma Kappa Sorority';
+        $special_interests['sorority_aop']      = 'Alpha Omicron Pi Sorority';
+
+        return $special_interests;
+    }
+
+    public function remove_special_interest()
+    {
+        # Check permissions
+        if(!Current_User::allow('hms', 'special_interest_approval')){
+            $tpl = array();
+            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
+        }
+
+        PHPWS_Core::initModClass('hms', 'HMS_Lottery_Entry.php');
+        PHPWS_Core::initModClass('hms', 'UI/Lottery_UI.php');
+
+        $entry = new HMS_Lottery_Entry($_REQUEST['asu_username'], PHPWS_Settings::get('hms', 'lottery_term'));
+
+        $entry->special_interest = NULL;
+
+        $result = $entry->save();
+
+        if(PEAR::isError($result)){
+            return Lottery_UI::show_special_interest_approval(NULL, "Error removing {$_REQUEST['asu_username']}");
+        }else{
+            return Lottery_UI::show_special_interest_approval("Removed {$_REQUEST['asu_username']}");
+        }
+    }
+
 }
 
 ?>

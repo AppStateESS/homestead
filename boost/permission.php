@@ -106,6 +106,7 @@
      * Lottery Settings *
      ********************/
     $permissions['lottery_admin']                   =_('Lottery administration');
+    $permissions['special_interest_approval']       =_('Special interest group approval');
 
     /*****************
      * Activity Logs *

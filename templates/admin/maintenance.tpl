@@ -109,11 +109,12 @@
             <!-- END settings -->
 
             <!-- BEGIN lottery_needs -->
-            <dt>Lottery Needs</dt>
+            <dt>Re-application</dt>
             <dd>{LOTTERY_NEEDS}</dd>
             <dd>{ADMIN_LOTTERY_ENTRY}</dd>
             <dd>{ELIGIBILITY_WAIVER}</dd>
             <dd>{MAGIC_FLAG}</dd>
+            <dd>{SPECIAL_INTEREST}</dd>
             <!-- END lottery_needs -->
         </dl>
         <!-- END right -->

@@ -236,7 +236,7 @@ class HMS_Lottery_Entry {
         }
 
         PHPWS_Core::initCoreClass('DBPager.php');
-        $pager = &new DBPager('hms_lottery_entry', 'HMS_Lottery_Entry');
+        $pager = new DBPager('hms_lottery_entry', 'HMS_Lottery_Entry');
         $pager->db->addWhere('term', PHPWS_Settings::get('hms', 'lottery_term'));
         $pager->db->addWhere('physical_disability', 1, '=', 'or', 'special_needs');
         $pager->db->addWhere('psych_disability', 1, '=', 'or', 'special_needs');
@@ -271,5 +271,37 @@ class HMS_Lottery_Entry {
 
         return $template;
     }
+
+    public function get_pager_by_group($group_name, $term)
+    {
+        PHPWS_Core::initCoreClass('DBPager.php');
+        $pager = new DBPager('hms_lottery_entry', 'HMS_Lottery_Entry');
+        $pager->db->addWhere('term', $term);
+        $pager->db->addWhere('special_interest', $group_name);
+
+        $pager->setModule('hms');
+        $pager->setTemplate('admin/special_interest_pager.tpl');
+        $pager->setEmptyMessage('No students found.');
+        $pager->addToggle('class="toggle1"');
+        $pager->addToggle('class="toggle2"');
+        $pager->addRowTags('special_interest_tags');
+
+        return $pager->get();
+    }
+
+    public function special_interest_tags()
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+
+        $tags = array();
+
+        $tags['NAME']       = HMS_SOAP::get_name($this->asu_username);
+        $tags['USER']       = $this->asu_username;
+        $tags['BANNER_ID']  = HMS_SOAP::get_banner_id($this->asu_username);
+        $tags['ACTION']     = PHPWS_Text::secureLink('Remove', 'hms', array('type'=>'lottery', 'op'=>'remove_special_interest', 'asu_username'=>$this->asu_username, 'group'=>$_REQUEST['group']));
+
+        return $tags;
+    }
+
 }
 ?>

@@ -14,6 +14,7 @@ class Lottery_UI {
     {
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
         PHPWS_Core::initModClass('hms', 'HMS_Lottery_Entry.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
         # Check if the user is already entered for the lottery
         # if so, display the appropriate message
         $result = HMS_Lottery_Entry::check_for_entry($_SESSION['asu_username'], HMS_SOAP::get_application_term($_SESSION['asu_username']));
@@ -73,27 +74,7 @@ class Lottery_UI {
             $form->addText('roommate3');
         }
 
-        $special_interests['none']              = 'None';
-        $special_interests['honors']            = 'Heltzer Honors Program';
-        $special_interests['watauga_global']    = 'Watauga Global Community';
-        $special_interests['teaching']          = 'Teaching Fellows';
-        $special_interests['servant_leaders']   = 'Community of Servant Leaders';
-        $special_interests['sciences']          = 'Academy of Sciences';
-        $special_interests['language']          = 'Language & Culture Community';
-        $special_interests['black_and_gold']    = 'Black & Gold Community';
-        $special_interests['sophomore']         = 'Sophomore Year Experience';
-        $special_interests['living_free']       = 'Living Free Community';
-        $special_interests['quite_study']       = 'Quiet Study Community';
-        $special_interests['educators']         = 'Community for Future Educators';
-        $special_interests['man_floor']         = 'The Man Floor';
-        $special_interests['sorority_adp']      = 'Alpha Delta Pi Sorority';
-        $special_interests['sorority_ap']       = 'Aplha Phi Sorority';
-        $special_interests['sorority_co']       = 'Chi Omega Sorority';
-        $special_interests['sorority_dz']       = 'Delta Zeta Sorority';
-        $special_interests['sorority_kd']       = 'Kappa Delta Sorority';
-        $special_interests['sorority_pm']       = 'Phi Mu Sorority';
-        $special_interests['sorority_sk']       = 'Sigma Kappa Sorority';
-        $special_interests['sorority_aop']      = 'Alpha Omicron Pi Sorority';
+        $special_interests = HMS_Lottery::get_special_interest_groups();
 
         $form->addDropBox('special_interest', $special_interests);
         $form->setLabel('special_interest', 'Special interest group: ');
@@ -1182,6 +1163,44 @@ class Lottery_UI {
         }
 
         return Lottery_UI::show_eligibility_waiver('Waivers created successfully.');
+    }
+    
+    public function show_special_interest_approval($success = NULL, $error = NULL)
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Lottery_Entry.php');
+        javascript('jquery');
+
+        $tpl = array();
+
+        $groups = HMS_Lottery::get_special_interest_groups();
+
+        $form = new PHPWS_Form('special_interest');
+        $form->setMethod('get');
+        $form->addDropBox('group', $groups);
+
+        if(isset($_REQUEST['group'])){
+            $form->setMatch('group', $_REQUEST['group']);
+        }
+
+        $form->addHidden('type', 'lottery');
+        $form->addHidden('op', 'show_special_interest_approval');
+        
+        $tpl = $form->getTemplate();
+
+        if(isset($_REQUEST['group'])){
+            $tpl['GROUP_PAGER'] = HMS_Lottery_Entry::get_pager_by_group($_REQUEST['group'], PHPWS_Settings::get('hms', 'lottery_term'));
+        }
+
+        if(isset($success)){
+            $tpl['SUCCESS_MSG'] = $success;
+        }
+
+        if(isset($error)){
+            $tpl['ERROR_MSG'] = $error;
+        }
+
+        return PHPWS_Template::process($tpl, 'hms', 'admin/special_interest_approval.tpl');
     }
 }
 ?>
