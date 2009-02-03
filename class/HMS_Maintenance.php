@@ -194,7 +194,7 @@ class HMS_Maintenance
                 'op'=>'magic'));
         }
 
-        if(Current_User::allow('hms', 'special_interest_groups')){
+        if(Current_User::allow('hms', 'special_interest_approval')){
             $tpl['SPECIAL_INTEREST'] = PHPWS_Text::secureLink('Special interest group approval', 'hms',
                 array('type'=>'lottery', 'op'=>'show_special_interest_approval'));
         }
