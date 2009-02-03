@@ -46,6 +46,9 @@ $('#beds_for_lottery').text($('#phpws_form_beds_per_room').attr('value') * $('#p
                 <th>Number of beds: </th><td align="left">{NUMBER_OF_BEDS}</td>
             </tr>
             <tr>
+                <th>Number of online/non-overflow beds: </th><td align="left">{NUMBER_OF_BEDS_ONLINE}</td>
+            </tr>
+            <tr>
                 <th>Number of assignees: </th><td align="left">{NUMBER_OF_ASSIGNEES}</td>
             </tr>
             <tr>

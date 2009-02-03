@@ -334,6 +334,27 @@ class HMS_Residence_Hall extends HMS_Item
 
     }
 
+    public function get_number_of_online_nonoverflow_beds()
+    {
+        $db = &new PHPWS_DB('hms_bed');
+        
+        $db->addJoin('LEFT OUTER', 'hms_bed',     'hms_room',           'room_id',        'id');
+        $db->addJoin('LEFT OUTER', 'hms_room',    'hms_floor',          'floor_id',          'id');
+        $db->addJoin('LEFT OUTER', 'hms_floor',   'hms_residence_hall', 'residence_hall_id', 'id');
+        
+        $db->addWhere('hms_residence_hall.id', $this->id);
+        $db->addWhere('hms_room.is_online', 1);
+        $db->addWhere('hms_room.is_overflow', 0);
+
+        $result = $db->select('count');
+        
+        if(!$result || PHPWS_Error::logIfError($result)){
+            return false;
+        }
+
+        return $result;
+    }
+
     /*
      * Returns the number of students currently assigned to the current hall
      */
@@ -1032,10 +1053,11 @@ class HMS_Residence_Hall extends HMS_Item
         }
         */
 
-        $tpl['NUMBER_OF_FLOORS']    = $hall->get_number_of_floors();
-        $tpl['NUMBER_OF_ROOMS']     = $hall->get_number_of_rooms();
-        $tpl['NUMBER_OF_BEDS']      = $hall->get_number_of_beds();
-        $tpl['NUMBER_OF_ASSIGNEES'] = $hall->get_number_of_assignees();
+        $tpl['NUMBER_OF_FLOORS']        = $hall->get_number_of_floors();
+        $tpl['NUMBER_OF_ROOMS']         = $hall->get_number_of_rooms();
+        $tpl['NUMBER_OF_BEDS']          = $hall->get_number_of_beds();
+        $tpl['NUMBER_OF_BEDS_ONLINE']   = $hall->get_number_of_online_nonoverflow_beds();
+        $tpl['NUMBER_OF_ASSIGNEES']     = $hall->get_number_of_assignees();
 
         $form->addDropBox('gender_type', array(FEMALE => FEMALE_DESC, MALE => MALE_DESC, COED => COED_DESC));
         $form->setMatch('gender_type', $hall->gender_type);
