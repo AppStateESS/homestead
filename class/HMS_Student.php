@@ -738,6 +738,7 @@ class HMS_Student {
         $everything_but_notes[] = ACTIVITY_ROOMMATES_UPDATED;
         $everything_but_notes[] = ACTIVITY_ROOMMATE_REQUESTS_UPDATED;
         $everything_but_notes[] = ACTIVITY_CHANGE_ACTIVE_TERM;
+        $everything_but_notes[] = ACTIVITY_LOTTERY_ENTRY;
 
         if( Current_User::allow('hms', 'view_activity_log') && Current_User::allow('hms', 'view_student_log') ){
             PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
