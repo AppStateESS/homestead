@@ -497,7 +497,7 @@ class HMS_Roommate
      */
     public function can_live_together($requestor, $requestee, $term=null)
     {
-        if(!isset($term) && isset($_SESSION['application_term')){
+        if(!isset($term) && isset($_SESSION['application_term'])){
             $term = $_SESSION['application_term'];
         }
 
@@ -994,7 +994,7 @@ class HMS_Roommate
      */
     public function accept_for_realz($request, $term)
     {
-        if(!isset($term) && isset($_SESSION['application_term']){
+        if(!isset($term) && isset($_SESSION['application_term'])){
             $term = $_SESSION['application_term'];
         }
 
