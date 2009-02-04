@@ -786,6 +786,8 @@ class HMS_Student {
             }
         } 
 
+        $tags['new_search']     = array('title' => 'New Search', 'link' => 'index.php?module=hms&type=student&op=enter_student_search_data',
+                                        'link_title' => 'New Search');
         $tags['student_info']   = array('title' => 'Student Info Page', 'link' => $link,
                                         'link_title' => 'Student Info Page');
         $tags['housing_app']    = array('title' => 'Housing Application', 'link' => $link,
