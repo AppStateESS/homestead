@@ -39,13 +39,13 @@ class HMS_Roommate
         }
     }
 
-    public function request($requestor, $requestee)
+    public function request($requestor, $requestee, $term=null)
     {
         if(HMS_Roommate::can_live_together($requestor, $requestee) != E_SUCCESS) {
             return false;
         }
 
-        $this->term         = $_SESSION['application_term'];
+        $this->term         = isset($term) ? $term : $_SESSION['application_term'];
         $this->requestor    = $requestor;
         $this->requestee    = $requestee;
         $this->confirmed    = 0;
@@ -495,8 +495,12 @@ class HMS_Roommate
      * @param requestor The person requesting a roommate
      * @param requestee The person requested as a roommate
      */
-    public function can_live_together($requestor, $requestee)
+    public function can_live_together($requestor, $requestee, $term=null)
     {
+        if(!isset($term) && isset($_SESSION['application_term')){
+            $term = $_SESSION['application_term'];
+        }
+
         // This is always a good idea
         $requestor = strToLower($requestor);
         $requestee = strToLower($requestee);
@@ -537,8 +541,8 @@ class HMS_Roommate
 
         // Use SOAP for the rest of the checks
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
-        $requestor_info = HMS_SOAP::get_student_info($requestor, $_SESSION['application_term']);
-        $requestee_info = HMS_SOAP::get_student_info($requestee, $_SESSION['application_term']);
+        $requestor_info = HMS_SOAP::get_student_info($requestor, $term);
+        $requestee_info = HMS_SOAP::get_student_info($requestee, $term);
 
         // Make sure the requestee is actually a user
         if(empty($requestee_info->last_name)) {
@@ -552,7 +556,7 @@ class HMS_Roommate
 
         PHPWS_Core::initModClass('hms', 'HMS_Application.php');
         // Make sure the requestee has filled out an application
-        if(HMS_Application::check_for_application($requestee, $_SESSION['application_term']) === false) {
+        if(HMS_Application::check_for_application($requestee, $term) === false) {
             return E_ROOMMATE_NO_APPLICATION;
         }
 
@@ -771,8 +775,12 @@ class HMS_Roommate
      * @param requestor The person requesting a roommate
      * @param requestee The person requested as a roommate
      */
-    public function create_roommate_request($remove_rlc_app = FALSE)
+    public function create_roommate_request($remove_rlc_app = FALSE, $term=null)
     {
+        if(!isset($term) && isset($_SESSION['application_term'])){
+            $term = $_SESSION['application_term'];
+        }
+
         if(empty($_REQUEST['username'])) {
             $error = "You did not enter a username.";
             return HMS_Roommate::show_select_roommate($error);
@@ -792,7 +800,7 @@ class HMS_Roommate
         // Did they say go ahead and trash the RLC application?
         if($remove_rlc_app) {
             PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
-            $rlcapp = &new HMS_RLC_Application($requestor, $_SESSION['application_term']);
+            $rlcapp = &new HMS_RLC_Application($requestor, $term);
             $rlcapp->delete();
         }
 
@@ -950,8 +958,12 @@ class HMS_Roommate
     /**
      * Shows the Confirm Accept Screen, captcha and all
      */
-    public function confirm_accept($request, $error = null)
+    public function confirm_accept($request, $error = null, $term=null)
     {
+        if(!isset($term) && isset($_SESSION['application_term'])){
+            $term = $_SESSION['application_term'];
+        } 
+
         PHPWS_Core::initCoreClass('Captcha.php');
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
 
@@ -964,7 +976,7 @@ class HMS_Roommate
         $form->addTplTag('CAPTCHA_IMAGE', Captcha::get());
         $form->addTplTag('NAME', HMS_SOAP::get_full_name($request->requestor));
 
-        if(!HMS_Roommate::check_rlc_applications($request->requestee, $request->requestor, $_SESSION['application_term']))
+        if(!HMS_Roommate::check_rlc_applications($request->requestee, $request->requestor, $term))
             $form->addTplTag('RLC', 'ohno');
 
         if(!is_null($error)) {
@@ -980,8 +992,12 @@ class HMS_Roommate
      * Verify the captcha, and if it's all good, mark the confirmed flag
      * + Should probably also remove any outstanding requests for either roommate, and log that this happened
      */
-    public function accept_for_realz($request)
+    public function accept_for_realz($request, $term)
     {
+        if(!isset($term) && isset($_SESSION['application_term']){
+            $term = $_SESSION['application_term'];
+        }
+
         PHPWS_Core::initCoreClass('Captcha.php');
         $verified = Captcha::verify(TRUE);
         if($verified === FALSE) {
@@ -1006,7 +1022,7 @@ class HMS_Roommate
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
 
         // If they got this far they already agreed to dump an RLC application
-        if(!HMS_Roommate::check_rlc_applications($request->requestee, $request->requestor, $_SESSION['application_term'])) {
+        if(!HMS_Roommate::check_rlc_applications($request->requestee, $request->requestor, $term)) {
             $rlcapp = &new HMS_RLC_Application($request->requestee, $_SESSION['application_term']);
             $rlcapp->delete();
         }

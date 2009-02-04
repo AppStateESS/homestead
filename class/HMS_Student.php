@@ -233,7 +233,7 @@ class HMS_Student {
                 break;
             case 'request_roommate':
                 PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
-                return HMS_Roommate::create_roommate_request();
+                return HMS_Roommate::create_roommate_request(FALSE, $_SESSION['application_term']);
                 break;
             case 'roommate_confirm_rlc_removal':
                 PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
@@ -258,12 +258,12 @@ class HMS_Student {
             case 'confirm_accept_roommate':
                 PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
                 $mate = &new HMS_Roommate($_REQUEST['id']);
-                return HMS_Roommate::confirm_accept($mate);
+                return HMS_Roommate::confirm_accept($mate, $_SESSION['application_term']);
                 break;
             case 'for_realz_accept_roommate':
                 PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
                 $mate = &new HMS_Roommate($_REQUEST['id']);
-                return HMS_Roommate::accept_for_realz($mate);
+                return HMS_Roommate::accept_for_realz($mate, $_SESSION['application_term']);
                 break;
             case 'confirm_reject_roommate':
                 PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
