@@ -63,17 +63,17 @@ class HMS_Side_Thingie {
         # Check for an application on file, set dates/styles if an application is not found
         $this->set_apply_agree($links);
         
-        if(HMS_Application::is_feature_enabled($term, APPLICATION_RLC_APP){
+        if(HMS_Application::is_feature_enabled($term, APPLICATION_RLC_APP)){
             # Check for an RLC application on file, set dates/styles if a RLC application is not found
             $this->set_rlc($links);
         }
 
-        if(HMS_Application::is_feature_enabled($term, APPLICATION_ROOMMATE_PROFILE){
+        if(HMS_Application::is_feature_enabled($term, APPLICATION_ROOMMATE_PROFILE)){
             # Check for a profile, show dates accordingly
             $this->set_profile($links);
         }
         
-        if(HMS_Application::is_feature_enabled($term, APPLICATION_SELECT_ROOMMATE){
+        if(HMS_Application::is_feature_enabled($term, APPLICATION_SELECT_ROOMMATE)){
             # Check for a roomate, show dates accordingly
             $this->set_roomate($links);
         }
