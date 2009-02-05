@@ -384,7 +384,8 @@ class HMS_Lottery {
                     AND hms_lottery_entry.physical_disability = 0
                     AND hms_lottery_entry.psych_disability = 0
                     AND hms_lottery_entry.medical_need = 0
-                    AND hms_lottery_entry.gender_need = 0 ";
+                    AND hms_lottery_entry.gender_need = 0
+                    AND special_interest IS NULL ";
         
 
 
@@ -467,11 +468,15 @@ class HMS_Lottery {
     {
         $now = mktime();
 
-        $sql = "SELECT count(*) FROM hms_lottery_entry WHERE term = $term AND (invite_expires_on IS NULL OR invite_expires_on < $now)
+        $sql = "SELECT count(*) FROM hms_lottery_entry
+                LEFT OUTER JOIN (SELECT asu_username FROM hms_assignment WHERE hms_assignment.term=$term AND lottery = 1) as foo ON hms_lottery_entry.asu_username = foo.asu_username
+                WHERE hms_lottery_entry.term = $term
+                AND (invite_expires_on IS NULL OR (invite_expires_on < $now AND foo.asu_username IS NULL))
                 AND physical_disability = 0
                 AND psych_disability = 0
                 AND medical_need = 0
-                AND gender_need = 0";
+                AND gender_need = 0
+                AND special_interest IS NULL";
 
         $num_remaining_entries = PHPWS_DB::getOne($sql);
 
@@ -575,7 +580,12 @@ class HMS_Lottery {
         $query = "SELECT count(*) FROM hms_lottery_entry
                     LEFT OUTER JOIN (SELECT asu_username FROM hms_assignment WHERE term=$term) as foo ON hms_lottery_entry.asu_username = foo.asu_username
                     WHERE foo.asu_username IS NULL AND (hms_lottery_entry.invite_expires_on < $now OR hms_lottery_entry.invite_expires_on IS NULL)
-                    AND hms_lottery_entry.term = $term ";
+                    AND hms_lottery_entry.term = $term
+                    AND hms_lottery_entry.physical_disability = 0
+                    AND hms_lottery_entry.psych_disability = 0
+                    AND hms_lottery_entry.medical_need = 0
+                    AND hms_lottery_entry.gender_need = 0
+                    AND special_interest IS NULL ";
 
         if($class == CLASS_SOPHOMORE){
             $query .= 'AND (application_term = ' . ($term_year - 1) . '20';
