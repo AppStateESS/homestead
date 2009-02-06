@@ -11,6 +11,7 @@
         <!-- END success_msg -->
         <div style="float: right; height: 500; width: 300;">
            {EXTERIOR_IMAGE}<br /><br />
+           <!-- commenting out for now 
             <div style="border: 1px solid #AAAAAA;">
                 <h2>Hall Features</h2>
                 <ul>
@@ -19,8 +20,9 @@
                     <li>Three</li>
                 </ul>
             </div>
+            -->
             <br /><br />
-            {ROOM_PLAN_IMAGE}
+            {ROOM_PLAN_IMAGE}<br />
             {MAP_IMAGE}<br />
             {OTHER_IMAGE}
         </div>

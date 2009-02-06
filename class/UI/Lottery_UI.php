@@ -406,7 +406,7 @@ class Lottery_UI {
             $tpl['MAP_IMAGE']       = Cabinet::getTag($hall->map_image_id);
         }
 
-        if(isset($hall->other_image_id)){
+        if(isset($hall->other_image_id) && $hall->other_image_id != 0 && $hall->other_image_id != '0'){
             $file = Cabinet::getFile($hall->other_image_id);
             $tpl['OTHER_IMAGE'] = $file->parentLinked();
         }

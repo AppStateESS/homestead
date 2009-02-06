@@ -14,11 +14,10 @@
             <br /><br />
             <div style="border: 1px solid #AAAAAA">
                 <h2 style="background-color: #E3E3E3; color: #222222; margin: 0; padding: 6px 5px;">Housing Facts</h2>
-                <ul style="list-style-image: none; list-style-position: outside; list-style-type: none;">
-                    <li style="padding: 0 5px 0 15px; font-weight: normal; line-height:2em; color: #333;  background: transparent url(images/hms/smallarrow.gif) no-repeat scroll left top;">Fun</li>
-                    <li>Housing</li>
-                    <li>Facts</li>
-                    <li>Here</li>
+                <ul>
+                    <li>There are 21 residence halls.</li>
+                    <li>ASU can house 5622 students total.</li>
+                    <li>Residence Life employs approx. 125 resident assistants each semester.</li>
                 </ul>
             </div>
         </div>
