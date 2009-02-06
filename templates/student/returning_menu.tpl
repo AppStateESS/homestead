@@ -25,7 +25,7 @@
           You have already re-applied for on-campus housing for this term. You will be notified by email if you are selected.<br />
           <!-- END applied -->
           <!-- BEGIN select -->
-          You have been selected for re-application. Please click the link below to choose your room.<br />
+          You have been selected for re-application. You have until {EXPIRE_DATE} to confirm your room selection and request roommates. Please click the link below to choose your room.<br />
           {SELECT_LINK}
           <!-- END select -->
           <!-- BEGIN not_eligible -->

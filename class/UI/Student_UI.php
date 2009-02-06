@@ -585,6 +585,7 @@ class HMS_Student_UI{
         PHPWS_Core::initModClass('hms', 'HMS_Deadlines.php');
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
         $tpl = array();
 
@@ -603,7 +604,8 @@ class HMS_Student_UI{
             $tpl['ASSIGNED'] = ''; // dummy tag
         }elseif($winner_result != FALSE && !PEAR::isError($winner_result)){
             # Student has won, let them choose their room
-            PHPWS_Core::initModClass('hms', 'UI/Lottery_UI.php');
+            $entry = HMS_Lottery_Entry::get_entry($_SESSION['asu_username'], PHPWS_Settings::get('hms', 'lottery_term'));
+            $tpl['EXPIRE_DATE'] = HMS_Util::get_long_date_time($entry->invite_expires_on);
             $tpl['SELECT_LINK'] = PHPWS_Text::secureLink('Click here to select your room', 'hms', array('type'=>'student', 'op'=>'lottery_select_residence_hall'));
         }elseif($entry_result != FALSE && !PEAR::isError($entry_result)){
             # Student already has a lottery entry
