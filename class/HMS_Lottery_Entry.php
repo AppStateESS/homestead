@@ -285,6 +285,7 @@ class HMS_Lottery_Entry {
         $pager->addToggle('class="toggle1"');
         $pager->addToggle('class="toggle2"');
         $pager->addRowTags('special_interest_tags');
+        $pager->setReportRow('special_interest_csv_row');
 
         return $pager->get();
     }
@@ -303,5 +304,15 @@ class HMS_Lottery_Entry {
         return $tags;
     }
 
+    public function special_interest_csv_row(){
+        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+        $row = array();
+
+        $tags['NAME']       = HMS_SOAP::get_name($this->asu_username);
+        $tags['USER']       = $this->asu_username;
+        $tags['BANNER_ID']  = HMS_SOAP::get_banner_id($this->asu_username);
+
+        return $tags;
+    }
 }
 ?>

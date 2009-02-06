@@ -1,6 +1,6 @@
 <table>
     <tr>
-        <th>Name</th>
+        <th>Name {ASU_USERNAME_SORT}</th>
         <th>User Name</th>
         <th>Banner ID</th>
         <th>Action</th>
@@ -19,8 +19,9 @@
     </tr>
     <!-- END listrows -->
 </table>
-<div align="center">
-  <b>{PAGE_LABEL}</b><br />
-  {PAGES}<br />
-  {LIMITS}
+<div class="align-center">
+    {TOTAL_ROWS}<br />
+    {PAGE_LABEL} {PAGES}<br />
+    {LIMIT_LABEL} {LIMITS}<br />
+    {CSV_REPORT}
 </div>
