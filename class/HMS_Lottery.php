@@ -1,7 +1,7 @@
 <?php
 
 define('MAX_INVITES_PER_BATCH', 10);
-define('INVITE_TTL_HRS', 72);
+define('INVITE_TTL_HRS', 96);
 
 class HMS_Lottery {
 
@@ -140,7 +140,7 @@ class HMS_Lottery {
 
             $output[] = "$remaining_rooms_this_hall remaining rooms available for lottery";
 
-            if($remaining_rooms_this_hall == 0){
+            if($remaining_rooms_this_hall <= 0){
                 continue;
             }
 
@@ -350,12 +350,14 @@ class HMS_Lottery {
             # Update the number of entries remaining
             $remaining_entries--;
 
+            $actual_class = HMS_Lottery::application_term_to_class($term, $winning_row['application_term']);
+
             # increment the number of invites sent by class
-            if($class == CLASS_SENIOR){
+            if($actual_class == CLASS_SENIOR){
                 $senior_invites_sent++;
-            }else if($class == CLASS_JUNIOR){
+            }else if($actual_class == CLASS_JUNIOR){
                 $junior_invites_sent++;
-            }else if($class == CLASS_SOPHOMORE){
+            }else if($actual_class == CLASS_SOPHOMORE){
                 $soph_invites_sent++;
             }
 
