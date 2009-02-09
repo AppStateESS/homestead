@@ -62,6 +62,26 @@ class HMS_Display
         $tpl['NUM_T_APPLICATIONS']      = $num_t_applications;
         $tpl['NUM_RLC_APPLICATIONS']    = $num_rlc_applications;
 
+        PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
+        $lottery_term = PHPWS_Settings::get('hms', 'lottery_term');
+
+        $soph_entries   = HMS_Lottery::count_remaining_entries_by_class($lottery_term, CLASS_SOPHOMORE);
+        $jr_entries     = HMS_Lottery::count_remaining_entries_by_class($lottery_term, CLASS_JUNIOR);
+        $sr_entries     = HMS_Lottery::count_remaining_entries_by_class($lottery_term, CLASS_SENIOR);
+
+        $tpl['SOPH_ENTRIES']            = $soph_entries;
+        $tpl['JR_ENTRIES']              = $jr_entries;
+        $tpl['SR_ENTRIES']              = $sr_entries;
+        $tpl['LOTTERY_APPLICATIONS']    = $soph_entries + $jr_entries + $sr_entries;
+
+        $tpl['OUTSTANDING_INVITES']     = HMS_Lottery::count_outstanding_invites($lottery_term, MALE) + HMS_Lottery::count_outstanding_invites($lottery_term, FEMALE);
+        $tpl['ROOMMATE_INVITES']        = HMS_Lottery::count_outstanding_roommate_invites($lottery_term);
+        $tpl['REMAINING_ENTRIES']       = HMS_Lottery::count_remaining_entries($lottery_term);
+
+        $tpl['SOPH_INVITES']            = HMS_Lottery::count_invites_by_class($lottery_term, CLASS_SOPHOMORE);
+        $tpl['JR_INVITES']              = HMS_Lottery::count_invites_by_class($lottery_term, CLASS_JUNIOR);
+        $tpl['SR_INVITES']              = HMS_Lottery::count_invites_by_class($lottery_term, CLASS_SENIOR);
+
         $final = PHPWS_Template::process($tpl, 'hms', 'admin/statistics.tpl');
         return $final;
     }

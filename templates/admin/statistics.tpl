@@ -24,6 +24,46 @@
             <tr>
                 <th>Number of Learning Community Applications Received: &nbsp;&nbsp;&nbsp;</th><td>{NUM_RLC_APPLICATIONS}</td>
             </tr>
+            <tr>
+              <td>Lottery applications total:</td>
+              <td>{LOTTERY_APPLICATIONS}</td>
+            </tr>
+            <tr>
+              <td>Sophomore applications: </td>
+              <td>{SOPH_ENTRIES}</td>
+            </tr>
+            <tr>
+              <td>Junior applications:</td>
+              <td>{JR_ENTRIES}</td>
+            </tr>
+            <tr>
+              <td>Senior applications:</td>
+              <td>{SR_ENTRIES}</td>
+            </tr>
+            <tr>
+              <td>Outstanding invites:</td>
+              <td>{OUTSTANDING_INVITES}</td>
+            </tr>
+            <tr>
+              <td>Outstanding roommate invitations:</td>
+              <td>{ROOMMATE_INVITES}</td>
+            </tr>
+            <tr>
+              <td>Remaining entries:</td>
+              <td>{REMAINING_ENTRIES}</td>
+            </td>
+            <tr>
+              <td>Sophomore invites sent: </td>
+              <td>{SOPH_INVITES}</td>
+            </tr>
+            <tr>
+              <td>Junior invites sent:</td>
+              <td>{JR_INVITES}</td>
+            </tr>
+            <tr>
+              <td>Senior invites sent:</td>
+              <td>{SR_INVITES}</td>
+            </tr>
         </table>
     </div>
   </div>
