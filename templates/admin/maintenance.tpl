@@ -3,120 +3,159 @@
     <div class="box-title"> <h1>HMS General Maintenance</h1> </div>
     <div class="box-content">
         <!-- BEGIN left -->
-        <dl class="maintenance">
-            <!-- BEGIN student_maint -->
-            <dt>Student Maintenance</dt>
-            <dd>{SEARCH_FOR_STUDENT}</dd>
-            <dd>{WITHDRAWN_SEARCH}</dd>
-            <dd>{USERNAME_CHANGE}</dd>
-            <!-- END student_maint -->
+        <div class="maintenance">
+            <img src="mod/hms/img/maintenance/system-search.png" class="hms_icon"> 
+            <div class="hms_maint">
+                <!-- BEGIN student_maint -->
+                Student Maintenance<br />
+                {SEARCH_FOR_STUDENT}<br />
+                {WITHDRAWN_SEARCH}<br />
+                {USERNAME_CHANGE}<br />
+                <!-- END student_maint -->
+            </div>
 
-            <!-- BEGIN hall_options -->
-            <dt>Residence Hall Options</dt>
-            <!-- <dd>{ADD_HALL}</dd> -->
-            <!-- <dd>{DELETE_HALL}</dd> -->
-            <dd>{EDIT_HALL}</dd>
-            <!-- END hall_options -->
+            <img src="mod/hms/img/maintenance/go-home.png" class="hms_icon">
+            <div class="hms_maint">
+                <!-- BEGIN hall_options -->
+                Residence Hall Options<br />
+                <!-- {ADD_HALL}<br /> -->
+                <!-- {DELETE_HALL}<br /> -->
+                {EDIT_HALL}<br />
+                <!-- END hall_options -->
 
-            <!-- BEGIN floor_options -->
-            <dd>{EDIT_FLOOR}</dd>
-            <!-- END floor_options -->
+                <!-- BEGIN floor_options -->
+                {EDIT_FLOOR}<br />
+                <!-- END floor_options -->
 
-            <!-- BEGIN room_options -->
-            <dd>{EDIT_ROOM}</dd>
-            <!-- END room_options -->
+                <!-- BEGIN room_options -->
+                {EDIT_ROOM}<br />
+                <!-- END room_options -->
 
-            <!-- BEGIN suite_options -->
-            <dd>{EDIT_SUITE}</dd>
-            <!-- END suite_options -->
+                <!-- BEGIN suite_options -->
+                {EDIT_SUITE}<br />
+                <!-- END suite_options -->
 
-            <!-- BEGIN bed_options -->
-            <dd>{EDIT_BED}</dd>
-            <!-- END bed_options -->
-
-            <!-- BEGIN messaging -->
-            <dt>Messaging</dt>
-            <dd>{EMAIL_HALL}</dd>
-            <!-- END messaging -->
-        </dl>
+                <!-- BEGIN bed_options -->
+                {EDIT_BED}<br />
+                <!-- END bed_options -->
+            </div>
+            
+            <img src="mod/hms/img/maintenance/mail-reply-all.png" class="hms_icon">
+            <div class="hms_maint">
+                <!-- BEGIN messaging -->
+                Messaging<br />
+                {EMAIL_HALL}<br />
+                <!-- END messaging -->
+            </div>
+        </div>
         <!-- END left -->
-        <!-- BEGIN middle -->
-        <dl class="maintenance">
-            <!-- BEGIN activity_log -->
-            <dt>Activity Log</dt>
-            <dd>{VIEW_ACTIVITY_LOG}</dd>
-            <!-- END activity_log -->
+        <!-- BEGIN middive -->
+        <div class="maintenance">
+            <img src="mod/hms/img/maintenance/accessories-text-editor.png" class="hms_icon">
+            <div class="hms_maint">
+                <!-- BEGIN activity_log -->
+                Activity Log<br />
+                {VIEW_ACTIVITY_LOG}<br />
+                <!-- END activity_log -->
+            </div>
             
-            <!-- BEGIN assignments -->
-            <dt>Assignment Maintenance</dt>
-            <dd>{CREATE_ASSIGNMENT}</dd>
-            <dd>{DELETE_ASSIGNMENT}</dd>
-            <dd>{HALL_OVERVIEW}</dd>
-            <dd>{ASSIGN_BY_FLOOR}</dd>
-            <!-- END assignments -->
+            <img src="mod/hms/img/maintenance/preferences-system.png" class="hms_icon">
+            <div class="hms_maint">
+                <!-- BEGIN assignments -->
+                Assignment Maintenance<br />
+                {CREATE_ASSIGNMENT}<br />
+                {DELETE_ASSIGNMENT}<br />
+                {HALL_OVERVIEW}<br />
+                {ASSIGN_BY_FLOOR}<br />
+                <!-- END assignments -->
+            </div>
             
-            <!-- BEGIN roommates -->
-            <dt>Roommate Maintenance</dt>
-            <dd>{CREATE_ROOMMATE_GROUP}</dd>
-            <dd>{EDIT_ROOMMATE_GROUP}</dd>
-            <!-- END roommates -->
+            <img src="mod/hms/img/maintenance/system-users.png" class="hms_icon">
+            <div class="hms_maint">
+                <!-- BEGIN roommates -->
+                Roommate Maintenance<br />
+                {CREATE_ROOMMATE_GROUP}<br />
+                {EDIT_ROOMMATE_GROUP}<br />
+                <!-- END roommates -->
+            </div>
 
-            <!-- BEGIN autoassign -->
-            <dt>Auto-Assignment</dt>
-            <dd>{ASSIGN}</dd>
-            <!-- END autoassign -->
+            <img src="mod/hms/img/maintenance/applications-system.png" class="hms_icon">
+            <div class="hms_maint">
+                <!-- BEGIN autoassign -->
+                Auto-Assignment<br />
+                {ASSIGN}<br />
+                <!-- END autoassign -->
+            </div>
 
-            <!-- BEGIN letters -->
-            <dt>Notifications</dt>
-            <dd>{GENERATE_UPDATED_LETTERS}</dd>
-            <dd>{DOWNLOAD_PDF}</dd>
-            <dd>{DOWNLOAD_CSV}</dd>
-            <dd>{LIST_LETTERS}</dd>
-            <dd>{EMAIL_NOTIFICATIONS}</dd>
-            <!-- END letters -->
-        </dl>
-        <!-- END middle -->
+            <img src="mod/hms/img/maintenance/emblem-important.png" class="hms_icon">
+            <div class="hms_maint">
+                <!-- BEGIN letters -->
+                {NOTIFICATION_IMG}Notifications<br />
+                {GENERATE_UPDATED_LETTERS}<br />
+                {DOWNLOAD_PDF}<br />
+                {DOWNLOAD_CSV}<br />
+                {LIST_LETTERS}<br />
+                {EMAIL_NOTIFICATIONS}<br />
+                <!-- END letters -->
+            </div>
+        </div>
+        <!-- END middive -->
         <!-- BEGIN right -->
-        <dl class="maintenance">
-            <!-- BEGIN rlc_options -->
-            <dt>Learning Community Options</dt>
-            <dd>{ADD_LEARNING_COMMUNITY}</dd>
-            <dd>{EDIT_LEARNING_COMMUNITY}</dd>
-            <dd>{DELETE_LEARNING_COMMUNITY}</dd>
-            <!-- END rlc_options -->
+        <div class="maintenance">
+            <img src="mod/hms/img/maintenance/address-book-new.png" class="hms_icon">
+            <div class="hms_maint">
+                <!-- BEGIN rlc_options -->
+                Learning Community Options<br />
+                {ADD_LEARNING_COMMUNITY}<br />
+                {EDIT_LEARNING_COMMUNITY}<br />
+                {DELETE_LEARNING_COMMUNITY}<br />
+                <!-- END rlc_options -->
+            </div>
 
-            <!-- BEGIN rlc_apps -->
-            <dt>Learning Community Applications</dt>
-            <dd>{ASSIGN_TO_RLCS}</dd>
-            <dd>{VIEW_DENIED_RLC_APPS}</dd>
-            <dd>{RLC_ROOM_ASSIGNMENTS}</dd>
-            <dd>{VIEW_RLC_ASSIGNMENTS}</dd>
-            <dd>{SEARCH_BY_RLC}</dd>
-            <!-- END rlc_apps -->
-            
-            <!-- BEGIN term -->
-            <dt>Term Maintenance</dt>
-            <dd>{ASSOCIATE_TERM}</dd>
-            <dd>{EDIT_FEATURES}</dd>
-            <!-- END term -->
+            <img src="mod/hms/img/maintenance/contact-new.png" class="hms_icon">
+            <div class="hms_maint">
+                <!-- BEGIN rlc_apps -->
+                Learning Community Applications<br />
+                {ASSIGN_TO_RLCS}<br />
+                {VIEW_DENIED_RLC_APPS}
+                {RLC_ROOM_ASSIGNMENTS}<br />
+                {VIEW_RLC_ASSIGNMENTS}<br />
+                {SEARCH_BY_RLC}<br />
+                <!-- END rlc_apps -->
+            </div>
+                
+            <img src="mod/hms/img/maintenance/office-calendar.png" class="hms_icon">
+            <div class="hms_maint">
+                <!-- BEGIN term -->
+                Term Maintenance<br />
+                {ASSOCIATE_TERM}<br />
+                {EDIT_FEATURES}<br />
+                <!-- END term -->
+            </div>
 
-            <!-- BEGIN settings -->
-            <dt>Settings</dt>
-            <dd>{EDIT_TERM}</dd>
-            <dd>{EDIT_DEADLINES}</dd>
-            <dd>{EDIT_MOVEIN_TIMES}</dd>
-            <dd>{LOTTERY_SETTINGS}</dd>
-            <!-- END settings -->
+            <img src="mod/hms/img/maintenance/preferences-desktop.png" class="hms_icon">
+            <div class="hms_maint">
+                <!-- BEGIN settings -->
+                Settings<br />
+                {EDIT_TERM}<br />
+                {EDIT_DEADLINES}<br />
+                {EDIT_MOVEIN_TIMES}<br />
+                {LOTTERY_SETTINGS}<br />
+                <!-- END settings -->
+            </div>
 
-            <!-- BEGIN lottery_needs -->
-            <dt>Re-application</dt>
-            <dd>{LOTTERY_NEEDS}</dd>
-            <dd>{ADMIN_LOTTERY_ENTRY}</dd>
-            <dd>{ELIGIBILITY_WAIVER}</dd>
-            <dd>{MAGIC_FLAG}</dd>
-            <dd>{SPECIAL_INTEREST}</dd>
-            <!-- END lottery_needs -->
-        </dl>
+            <img src="mod/hms/img/maintenance/view-refresh.png" class="hms_icon">
+            <div class="hms_maint">
+                <!-- BEGIN lottery_needs -->
+                Re-application<br />
+                {LOTTERY_NEEDS}<br />
+                {ADMIN_LOTTERY_ENTRY}<br />
+                {ELIGIBILITY_WAIVER}<br />
+                {MAGIC_FLAG}<br />
+                {SPECIAL_INTEREST}<br />
+                <!-- END lottery_needs -->
+            </div>
+        </div>
         <!-- END right -->
     </div>
   </div>
