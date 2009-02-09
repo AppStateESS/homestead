@@ -362,7 +362,7 @@ class HMS_Lottery {
             }
 
             # Send them an invite
-            HMS_Email::send_lottery_invite($winning_username . '@appstate.edu', HMS_SOAP::get_name($winning_username), $expire_time, $year);
+            HMS_Email::send_lottery_invite($winning_username, HMS_SOAP::get_name($winning_username), $expire_time, $year);
 
             # Log that the invite was sent
             HMS_Activity_Log::log_activity($winning_username, ACTIVITY_LOTTERY_INVITED, HMS_ADMIN_USER, 'Expires: ' . HMS_Util::get_long_date_time($expire_time));
