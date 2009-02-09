@@ -25,7 +25,7 @@ class HMS
                 if( $type == ADMIN || Current_User::allow('hms', 'login_as_student') ) {
                     if( isset($_REQUEST['login_as_student']) ) {
                         PHPWS_Core::initModClass('hms', 'HMS_Student.php');
-                        PHPWS_Core::initModClass('hms', 'HMS_Activity_log.php');
+                        PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
                         $_SESSION['login_as_student'] = true;
 
                         //Don't try to set the asu_username if it's already set
