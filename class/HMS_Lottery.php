@@ -617,6 +617,11 @@ class HMS_Lottery {
 
     public function send_winning_reminder_emails($term)
     {
+        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
+        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+
         # Get a list of lottery winners who have not chosen a room yet, send them reminder emails
         $query = "select hms_lottery_entry.asu_username, hms_lottery_entry.invite_expires_on FROM hms_lottery_entry
                 LEFT OUTER JOIN (SELECT asu_username FROM hms_assignment WHERE term=$term AND lottery = 1) as foo ON hms_lottery_entry.asu_username = foo.asu_username
