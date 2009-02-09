@@ -1,6 +1,6 @@
 <?php
 
-define('MAX_INVITES_PER_BATCH', 10);
+define('MAX_INVITES_PER_BATCH', 25);
 define('INVITE_TTL_HRS', 96);
 
 class HMS_Lottery {
