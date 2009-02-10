@@ -41,6 +41,10 @@ class HMS_Room extends HMS_Item
      */
     var $_floor                 = null;
 
+    /* Hack for the javascript DO NOT TOUCH */
+    var $message = '';
+    var $value   = false; 
+
     /**
      * Constructor
      */
@@ -671,8 +675,18 @@ class HMS_Room extends HMS_Item
     }
 
     function update_row($id, $element, $value){
-        if( !Current_User::allow('hms', 'room_attributes') ){
+        if(!Current_User::allow('hms', 'room_attributes')){
             return 'bad permissions';
+        }
+        
+        if($element == 'gender_type'){
+            $r = new HMS_Room($id);
+            if($r->get_number_of_assignees() > 0){
+                $r->value   = false;
+                $r->message = 'Cannot change the gender of a room while it contains students.';
+                return $r;
+            }
+            return 'foo';
         }
 
         if(in_array($element, array_keys(get_class_vars('HMS_Room')))){
@@ -686,11 +700,14 @@ class HMS_Room extends HMS_Item
             $db->addWhere('id', $id);
             $db->addValue($element, $value);
             $result = $db->update();
-
+            
             $room = new HMS_Room($id);
+            $room->value = true;
             return $room;
         }
-        return false;
+        $room = new HMS_Room($id);
+        $room->value = false;
+        return $room;
     }
     
     public function edit_room(){

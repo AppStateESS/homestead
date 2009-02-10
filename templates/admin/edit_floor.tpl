@@ -25,7 +25,7 @@ function submit_form(form_element, dropdown){
     
     form_element.disabled=true;
     $.getJSON('index.php', {'mod': 'hms', 'type': 'room', 'op': 'update_field', 'id': table_row.id, 'field': form_element.name, 'value': form_element_value}, function(json){
-        if(json != false){
+        if(json.value != false){
             var display_text;
             switch(form_element_value){
                 case "0":
@@ -51,7 +51,7 @@ function submit_form(form_element, dropdown){
             var tablecell = $("#"+json.id+""+form_element.name+",[form='false']").get(0);
             $(tablecell).text(""+display_text);
         } else {
-            alert('Error updating the database, no changes were made');
+            alert('Error updating the database, no changes were made.\n'+json.message);
         }
         form_element.disabled=false;
     });
