@@ -15,42 +15,50 @@ class HMS_Display
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
         $term = HMS_Term::get_selected_term();
 
-        $db = &new PHPWS_DB('hms_residence_hall');
+        $db = new PHPWS_DB('hms_residence_hall');
         $db->addWhere('is_online', '1');
         $db->addWhere('term', $term);
         $num_online = $db->select('count');
         unset($db);
 
-        $db = &new PHPWS_DB('hms_residence_hall');
+        $db = new PHPWS_DB('hms_residence_hall');
         $db->addWhere('is_online', '0');
         $db->addWhere('term', $term);
         $num_offline = $db->select('count');
         unset($db);
 
-        $db = &new PHPWS_DB('hms_learning_communities');
+        $db = new PHPWS_DB('hms_learning_communities');
         $num_lcs = $db->select('count');
         unset($db);
 
-        $db = &new PHPWS_DB('hms_assignment');
+        $db = new PHPWS_DB('hms_assignment');
         $db->addWhere('term', $term);
         $num_assigned = $db->select('count');
         unset($db);
 
-        $db = &new PHPWS_DB('hms_application');
+        $db = new PHPWS_DB('hms_application');
         $db->addWhere('term', $term);
         $db->addWhere('student_status', 1);
         $num_f_applications = $db->select('count');
         unset($db);
 
-        $db = &new PHPWS_DB('hms_application');
+        $db = new PHPWS_DB('hms_application');
         $db->addWhere('term', $term);
         $db->addWhere('student_status', 2);
         $num_t_applications = $db->select('count');
         unset($db);
 
-        $db = &new PHPWS_DB('hms_learning_community_applications');
+        $db = new PHPWS_DB('hms_learning_community_applications');
         $db->addWhere('term', $term);
         $num_rlc_applications = $db->select('count');
+        unset($db);
+
+        PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
+        $lottery_term = PHPWS_Settings::get('hms', 'lottery_term');
+
+        $db = new PHPWS_DB('hms_lottery_entry');
+        $db->addWhere('term', $lottery_term);
+        $num_lottery_entries = $db->select('count');
         unset($db);
 
         $tpl['TITLE']                   = "HMS Overview - $term";
@@ -65,7 +73,7 @@ class HMS_Display
         PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
         $lottery_term = PHPWS_Settings::get('hms', 'lottery_term');
 
-        $tpl['LOTTERY_APPLICATIONS']    = '';
+        $tpl['LOTTERY_APPLICATIONS']    = $num_lottery_entries;
 
         $tpl['SOPH_ENTRIES_REMAIN']     = HMS_Lottery::count_remaining_entries_by_class($lottery_term, CLASS_SOPHOMORE);
         $tpl['JR_ENTRIES_REMAIN']       = HMS_Lottery::count_remaining_entries_by_class($lottery_term, CLASS_JUNIOR);
