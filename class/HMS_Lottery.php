@@ -471,9 +471,9 @@ class HMS_Lottery {
         $now = mktime();
 
         $sql = "SELECT count(*) FROM hms_lottery_entry
-                LEFT OUTER JOIN (SELECT asu_username FROM hms_assignment WHERE hms_assignment.term=$term AND lottery = 1) as foo ON hms_lottery_entry.asu_username = foo.asu_username
-                WHERE hms_lottery_entry.term = $term
-                AND (invite_expires_on IS NULL OR (invite_expires_on < $now AND foo.asu_username IS NULL))
+                LEFT OUTER JOIN (SELECT asu_username FROM hms_assignment WHERE hms_assignment.term=$term) as foo ON hms_lottery_entry.asu_username = foo.asu_username
+                WHERE foo.asu_username IS NULL AND (hms_lottery_entry.invite_expires_on < $now OR hms_lottery_entry.invite_expires_on IS NULL)
+                AND hms_lottery_entry.term = $term
                 AND physical_disability = 0
                 AND psych_disability = 0
                 AND medical_need = 0
