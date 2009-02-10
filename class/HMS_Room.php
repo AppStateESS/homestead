@@ -292,9 +292,12 @@ class HMS_Room extends HMS_Item
 
             # Since we can't have coed rooms, we can never change to a
             # target of COED.
+            /*
+             * Just kidding, we can have co-ed rooms
             if($target_gender == COED){
                 return false;
             }
+            */
             
             # If the target gender is not the same, and someone is assigned
             # here, then the gender can't be changed (i.e. return false)
@@ -1042,7 +1045,7 @@ class HMS_Room extends HMS_Item
 
         if(($number_of_assignees == 0) && !$is_in_suite){
             # Room is empty and not in a suite, show the drop down so the user can change the gender
-            $form->addDropBox('gender_type', array(FEMALE => FEMALE_DESC, MALE => MALE_DESC));
+            $form->addDropBox('gender_type', array(FEMALE => FEMALE_DESC, MALE => MALE_DESC, COED=>COED_DESC));
             $form->setMatch('gender_type', $room->gender_type);
         }else{
             # Room is not empty or in a suite so just show the gender (no drop down)

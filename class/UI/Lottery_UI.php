@@ -472,7 +472,7 @@ class Lottery_UI {
 
             // We list the room dispite whether it's actually available to choose or not,
             // so decide whether to "gray out" this row in the room list or not
-            if($room->gender_type != HMS_SOAP::get_gender($_SESSION['asu_username'], TRUE) 
+            if(($room->gender_type != HMS_SOAP::get_gender($_SESSION['asu_username'], TRUE) && $room->gender_type != COED)
                 || $num_avail_beds     == 0 
                 || $room->is_reserved  == 1 
                 || $room->is_online    == 0 
@@ -833,13 +833,26 @@ class Lottery_UI {
                 return Lottery_UI::show_select_roommates('One or more of the beds in the room you selected is no longer available. Please try again.');
             }
 
-            # Double check the genders
+            # Double check the genders are all the same as the person logged in
+            if(HMS_SOAP::get_gender($_SESSION['asu_username']) != HMS_SOAP::get_gender($username)){
+                return Lottery_UI::show_select_roommates("$username is a different gender. Please choose a roommate of the same gender.");
+            }
+
+            # Double check the genders are the same as the room (as long as the room isn't COED)
             if($room->gender_type != COED && HMS_SOAP::get_gender($username, TRUE) != $room->gender_type){
                 return Lottery_UI::show_select_roommates("$username is a different gender. Please choose a roommate of the same gender.");
             }
 
             # Double check the students' elligibilities
-            #TODO: determine what housing wants to do here
+            if(HMS_Lottery::determine_eligibility($username) !== TRUE){
+                return Lottery_UI::show_select_roommates("$username is not eligibile for assignment.");
+            }
+        }
+
+        # If the room's gender is 'COED' and no one is assigned to it yet, switch it to the student's gender
+        if($room->gender_type == COED && $room->get_number_of_assignees() == 0){
+            $room->gender_type = HMS_SOAP::get_gender($_SESSION['asu_username'], TRUE);
+            $room->save();
         }
 
         # Assign the student to the requested bed
