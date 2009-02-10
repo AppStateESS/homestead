@@ -686,7 +686,6 @@ class HMS_Room extends HMS_Item
                 $r->message = 'Cannot change the gender of a room while it contains students.';
                 return $r;
             }
-            return 'foo';
         }
 
         if(in_array($element, array_keys(get_class_vars('HMS_Room')))){
