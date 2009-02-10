@@ -271,7 +271,7 @@ class HMS_Email{
             $tpl['NAME'] = $name;
         }
 
-        $tpl['TERM'] = HMS_Term::term_to_text(PHPWS_Settings::get('hms', 'lottery_term'), true) . ' - ' . HMS_Term::term_to_text(HMS_Term::get_next_term(PHPWS_Setting::get('hms', 'lottery')), TRUE);
+        $tpl['TERM'] = HMS_Term::term_to_text(PHPWS_Settings::get('hms', 'lottery_term'), true) . ' - ' . HMS_Term::term_to_text(HMS_Term::get_next_term(PHPWS_Settings::get('hms', 'lottery')), TRUE);
 
         HMS_Email::send_template_message($to . '@appstate.edu', 'On-campus Housing Re-application Confirmation!', 'email/lottery_confirmation.tpl', $tpl);
     }
