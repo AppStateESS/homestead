@@ -195,7 +195,7 @@ class HMS_Lottery {
             HMS_Lottery::lottery_complete('SUCCESS', $output);
         }
 
-
+/*
         # Calculate the number of new invites that can be sent
         # If there are co-ed rooms, then only send as many invites as there are co-ed rooms.
         # TODO: move this inside the for loop below
@@ -209,12 +209,36 @@ class HMS_Lottery {
 
             # Calculate the maximum number of male/female invites we can send
             $male_invites_avail     = $remaining_male_rooms - $male_invites_outstanding;
-            $female_invites_avail  = $remaining_female_rooms - $female_invites_outstanding;
+            $female_invites_avail   = $remaining_female_rooms - $female_invites_outstanding;
 
             $output[] = "No co-ed rooms remaining, can send $invites_to_send invites";
             $output[] = "$male_invites_avail male invites available";
             $output[] = "$female_invites_avail female invites available";
         }
+*/
+
+        # Calculate the maximum number of male/female/coed invites we can send
+        $male_invites_avail     = $remaining_male_rooms - $male_invites_outstanding;
+        $female_invites_avail   = $remaining_female_rooms - $female_invites_outstanding;
+        $coed_invites_avail     = $remaining_coed_rooms - $outstanding_invite_count;
+
+        if($male_invites_avail < $female_invites_avail){
+            $invites_to_send = $male_invites_avail;
+        }else{
+            $invites_to_send = $female_invites_avail;
+        }
+
+        $invites_to_send += $coed_invites_avail;
+        
+        # Make sure we're not sending out more invites than we have rooms
+        if($invites_to_send > ($remaining_rooms - $outstanding_invite_count)){
+            $invites_to_send = $remaining_rooms - $outstanding_invite_count;
+        }
+
+        $output[] = "$male_invites_avail male invites available";
+        $output[] = "$female_invites_avail female invites available";
+        $output[] = "$coed_invites_avail  co-ed invites";
+        $output[] = "Could send $invites_to_send total invites";
 
         # Make sure we aren't sending more than our max at once
         if($invites_to_send > MAX_INVITES_PER_BATCH){
@@ -273,7 +297,7 @@ class HMS_Lottery {
             while(is_null($winning_row) && $j < 200){
 
                 # Decide which gender we need to invite
-                if($co_ed_only){
+                if($coed_invites_avail > 0){
                    $gender = COED; 
                 }else{
                     # Decide if we need to pick a male, female, or either
@@ -339,12 +363,10 @@ class HMS_Lottery {
             }
 
             # Update the counts of male/female invites available
-            if(!$co_ed_only){
-                if($winning_row['gender'] == MALE){
-                    $male_invites_avail--;
-                }else if($winning_row['gender'] == FEMALE){
-                    $female_invites_avail--;
-                }
+            if($winning_row['gender'] == MALE){
+                $male_invites_avail--;
+            }else if($winning_row['gender'] == FEMALE){
+                $female_invites_avail--;
             }
 
             # Update the number of entries remaining
