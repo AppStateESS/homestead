@@ -279,16 +279,17 @@ class HMS_Email{
     public function send_hms_application_confirmation($to, $name)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+
         $tpl = array();
 
         if($name == null){
-            PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
             $tpl['NAME'] = HMS_SOAP::get_full_name($to); //to is holding their asu_username
         } else {
             $tpl['NAME'] = $name;
         }
 
-        $tpl['TERM'] = HMS_Term::term_to_text(HMS_Term::get_selected_term(), true);
+        $tpl['TERM'] = HMS_Term::term_to_text(HMS_SOAP::get_application_term($to), true);
 
         HMS_Email::send_template_message($to . '@appstate.edu', 'On-campus Houisng Application Confirmation!', 'email/application_confirmation.tpl', $tpl);
     }
@@ -305,7 +306,7 @@ class HMS_Email{
             $tpl['NAME'] = $name;
         }
 
-        $tpl['TERM']     = HMS_Term::term_to_text(HMS_Term::get_selected_term(), true);
+        $tpl['TERM']     = HMS_Term::term_to_text(PHPWS_Settings::get('hms', 'lottery_term'), true);
         $tpl['LOCATION'] = $location;
 
         HMS_Email::send_template_message($to . '@appsatte.edu', 'On-campus Housing Re-assignment Confirmation!', 'email/lottery_self_assignment_confirmation.tpl', $tpl);
