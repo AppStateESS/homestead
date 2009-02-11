@@ -1,6 +1,6 @@
 <?php
 
-define('MAX_INVITES_PER_BATCH', 50);
+define('MAX_INVITES_PER_BATCH', 100);
 define('INVITE_TTL_HRS', 96);
 
 class HMS_Lottery {
@@ -566,7 +566,7 @@ class HMS_Lottery {
 
         $query = "SELECT count(*) FROM hms_lottery_entry
                 LEFT OUTER JOIN (SELECT asu_username FROM hms_assignment WHERE term=$term AND lottery = 1) as foo ON hms_lottery_entry.asu_username = foo.asu_username
-                WHERE ((foo.asu_username IS NULL AND hms_lottery_entry.invite_expires_on > $now) OR (foo.asu_username IS NOT NULL))
+                WHERE ((foo.asu_username IS NULL AND hms_lottery_entry.invite_expires_on > $now) OR (foo.asu_username IS NOT NULL AND hms_lottery_entry.invite_expires_on IS NOT NULL))
                 AND hms_lottery_entry.term = $term ";
 
         if($class == CLASS_SOPHOMORE){
