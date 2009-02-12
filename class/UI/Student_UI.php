@@ -230,6 +230,10 @@ class HMS_Student_UI{
         $message .= '<a href="http://hms.appstate.edu/files/contract.pdf" target="_blank">click here.</a><br /><br />';
         $message .= 'If you need to update or download a PDF viewer you can <a href="http://www.adobe.com/products/acrobat/readstep2.html" target="_blank">get one here</a><br /><br />';
 
+
+        /*
+         * Commenting this code out, per ticket #355
+         *
         # Check for under 18, display link to print message
         PHPWS_Core::initModClass('hms','HMS_SOAP.php');
         $dob = explode('-', HMS_SOAP::get_dob($_SESSION['asu_username']));
@@ -250,6 +254,10 @@ class HMS_Student_UI{
             #echo "over 18!!<br>\n";
             $form->addHidden('agreed_to_terms',1);
         }
+
+        */
+
+        $form->addHidden('agreed_to_terms',1);
         
         $tpl = $form->getTemplate();
 
@@ -315,6 +323,10 @@ class HMS_Student_UI{
          * Residence Hall Contract Agreement *
          ************************************/
         $tags['TERMS_INTRO'] = 'To view the Residence Hall Contract click the following link: <a href="http://hms.appstate.edu/files/contract.pdf">The Residence Hall Contract Agreement</a>.';
+
+        /**
+         * Commenting this code out, per ticket #355
+         *
         if($application->agreed_to_terms == 1){
             $tags['TERMS_ICON']  = $check_img;
             $tags['TERMS_MSG']   = '<b>You have agreed to the Residence Hall Contract.</b> You may click the link above to review the Residence Hall Contract at any time.';
@@ -328,7 +340,11 @@ class HMS_Student_UI{
                 $tags['TERMS_MSG']   = '<b>You have not agreed to the Residence Hall Contract.</b> You were under 18 at the time you completed your application. You must print the last page of the Residence Hall Contract, complete it (including a parent/guardian signature), and return it to the Department of Housing & Residnce Life. (Note: If you have already mailed your completed Housing Contract Agreemnt, please allow 3-4 weeks for delivery and processing.)<br /><br /><b>Signed Residence Hall Contracts may be mailed to:</b><br />Housing Assignments<br />P.O. Box 32111<br />Boone, NC 28608-2111';
             }
         }
+        */
        
+        $tags['TERMS_ICON']  = $check_img;
+        $tags['TERMS_MSG']   = '<b>You have agreed to the Residence Hall Contract.</b> You may click the link above to review the Residence Hall Contract at any time.';
+
         /***************
          * Application *
          **************/
