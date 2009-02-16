@@ -90,7 +90,7 @@ CREATE TABLE hms_suite (
 CREATE TABLE hms_room (
     id                      integer NOT NULL,
     term                    integer NOT NULL REFERENCES hms_term(term),
-    room_number             character varying(6) NOT NULL,
+    room_number             character varying(32) NOT NULL,
     floor_id                integer NOT NULL REFERENCES hms_floor(id),
     suite_id                integer REFERENCES hms_suite(id),
     gender_type             smallint NOT NULL,
@@ -417,6 +417,19 @@ CREATE TABLE hms_pending_assignment (
     roommate_one     CHARACTER VARYING(32),
     meal_one         SMALLINT,
     PRIMARY KEY (id)
+);
+
+CREATE TABLE hms_banner_queue (
+    id integer NOT NULL,
+    "type" integer NOT NULL,
+    asu_username character varying(32) NOT NULL,
+    building_code character varying(6) NOT NULL,
+    bed_code character varying(15) NOT NULL,
+    meal_plan character varying(5),
+    meal_code smallint DEFAULT 0,
+    term integer NOT NULL,
+    queued_on integer NOT NULL,
+    queued_by integer NOT NULL
 );
 
 CREATE TABLE hms_activity_log (
