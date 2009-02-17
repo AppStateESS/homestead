@@ -25,7 +25,7 @@
 
             <b>Note: </b>If you have been accepted as a member of a Residential Learning Community or a Common Interest Housing group you will only be able to choose a roommate who has also been accepted into the same group.<br /><br />
 
-            <b>Note: </b>If you are a member of the Heltzer Honors Program or the Watauga Global Community you roommate request may not be honored if your roommate is not also a member of the same organization.<br/><br />
+            <b>Note: </b>If you are a member of the Heltzer Honors Program or the Watauga Global Community your roommate request may not be honored if your roommate is not also a member of the same organization.<br/><br />
             
             <b>Please note, we cannot guarantee that you will be assigned with your requested roommate. Roommate requests will be honored where space allows.</b>
 
