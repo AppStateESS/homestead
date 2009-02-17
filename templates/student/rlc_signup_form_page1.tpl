@@ -5,7 +5,9 @@
         <div>
         This is an additional application for <a href="http://housing.appstate.edu/index.php?module=pagemaster&PAGE_user_op=view_page&PAGE_id=134" target="_blank">Unique Housing Options</a>.
         To learn more about the unqiue housing options avaiable to you please vist the <a href="http://housing.appstate.edu/index.php?module=pagemaster&PAGE_user_op=view_page&PAGE_id=134" target="_blank">Unique Housing Options website</a>.
+        <br /><br />
 
+        This is <strong>not</strong> the application for the Heltzer Honors Program or the Watauga Global Community. For more information only applying to be a member of these organizations see the <a href="http://www.honors.appstate.edu/">honors website</a> or the <a href="http://wataugaglobal.appstate.edu/index.php">Watauga Global Community</a> website.
         <br /><br />
 
         <div style="color:#F00; font-weight:bold; font-size:16px">Note:</div>
