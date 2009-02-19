@@ -1,7 +1,7 @@
 <?php
 
-define('MAX_INVITES_PER_BATCH', 100);
-define('INVITE_TTL_HRS', 96);
+define('MAX_INVITES_PER_BATCH', 150);
+define('INVITE_TTL_HRS', 72);
 
 class HMS_Lottery {
 
@@ -340,7 +340,12 @@ class HMS_Lottery {
                     }
                 }
 
-                $winning_row = HMS_Lottery::choose_winner($gender, $class, $term);
+                if($j < 100){
+                    $winning_row = HMS_Lottery::choose_winner($gender, $class, $term, FALSE);
+                }else{
+                    $winning_row = HMS_Lottery::choose_winner($gender, $class, $term, TRUE);
+                }
+
                 $j++;
             }
 
@@ -396,22 +401,27 @@ class HMS_Lottery {
     /*
      * Chooses a winner and returns that stuent's row from the hms_lottery_entry table
      */
-    public function choose_winner($gender, $class, $term)
+    public function choose_winner($gender, $class, $term, $allow_previous_winners)
     {
         $winning_student = NULL;
         $now = mktime();
 
         $query = "SELECT hms_lottery_entry.* FROM hms_lottery_entry
                     LEFT OUTER JOIN (SELECT asu_username FROM hms_assignment WHERE term=$term) as foo ON hms_lottery_entry.asu_username = foo.asu_username
-                    WHERE foo.asu_username IS NULL AND (hms_lottery_entry.invite_expires_on < $now OR hms_lottery_entry.invite_expires_on IS NULL)
-                    AND hms_lottery_entry.term = $term
-                    AND hms_lottery_entry.physical_disability = 0
-                    AND hms_lottery_entry.psych_disability = 0
-                    AND hms_lottery_entry.medical_need = 0
-                    AND hms_lottery_entry.gender_need = 0
-                    AND special_interest IS NULL ";
-        
+                    WHERE foo.asu_username IS NULL";
+                    
+        if($allow_previous_winners){
+            $query .= "AND (hms_lottery_entry.invite_expires_on < $now OR hms_lottery_entry.invite_expires_on IS NULL) ";
+        }else{
+            $query .= "AND hms_lottery_entry.invite_expires_on IS NULL ";
+        }
 
+        $query .= "AND hms_lottery_entry.term = $term
+                   AND hms_lottery_entry.physical_disability = 0
+                   AND hms_lottery_entry.psych_disability = 0
+                   AND hms_lottery_entry.medical_need = 0
+                   AND hms_lottery_entry.gender_need = 0
+                   AND special_interest IS NULL ";
 
         if($gender == MALE){
             $query .= "AND hms_lottery_entry.gender = 1 ";
@@ -610,6 +620,119 @@ class HMS_Lottery {
                     AND hms_lottery_entry.medical_need = 0
                     AND hms_lottery_entry.gender_need = 0
                     AND special_interest IS NULL ";
+
+        if($class == CLASS_SOPHOMORE){
+            $query .= 'AND (application_term = ' . ($term_year - 1) . '20';
+            $query .= ' OR application_term = ' . ($term_year - 1) . '30';
+            $query .= ' OR application_term = ' . ($term_year - 1) . '40';
+            $query .= ' OR application_term = ' . ($term_year) . '10';
+            $query .= ')';
+        }else if($class == CLASS_JUNIOR){
+            $query .= 'AND (application_term = ' . ($term_year - 2) . '20';
+            $query .= ' OR application_term = ' . ($term_year - 2) . '30';
+            $query .= ' OR application_term = ' . ($term_year - 2) . '40';
+            $query .= ' OR application_term = ' . ($term_year - 1) . '10';
+            $query .= ')';
+        }else{
+            $query .= 'AND application_term <= ' . ($term_year - 2) . '10';
+        }
+
+        $result = PHPWS_DB::getOne($query);
+
+        if(PEAR::isError($result)){
+            PHPWS_Error::log($result);
+            return FALSE;
+        }else{
+            return $result;
+        }
+    }
+
+    function count_outstanding_invites_by_class($term, $class){
+        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+
+        $now = mktime();
+        $term_year = HMS_Term::get_term_year($term);
+
+        $query = "SELECT count(*) from hms_lottery_entry
+                    LEFT OUTER JOIN (SELECT asu_username FROM hms_assignment WHERE term=$term) as foo ON hms_lottery_entry.asu_username = foo.asu_username
+                    WHERE foo.asu_username IS NULL
+                    AND hms_lottery_entry.invite_expires_on > $now
+                    AND hms_lottery_entry.term = $term ";
+
+        if($class == CLASS_SOPHOMORE){
+            $query .= 'AND (application_term = ' . ($term_year - 1) . '20';
+            $query .= ' OR application_term = ' . ($term_year - 1) . '30';
+            $query .= ' OR application_term = ' . ($term_year - 1) . '40';
+            $query .= ' OR application_term = ' . ($term_year) . '10';
+            $query .= ')';
+        }else if($class == CLASS_JUNIOR){
+            $query .= 'AND (application_term = ' . ($term_year - 2) . '20';
+            $query .= ' OR application_term = ' . ($term_year - 2) . '30';
+            $query .= ' OR application_term = ' . ($term_year - 2) . '40';
+            $query .= ' OR application_term = ' . ($term_year - 1) . '10';
+            $query .= ')';
+        }else{
+            $query .= 'AND application_term <= ' . ($term_year - 2) . '10';
+        }
+
+        $result = PHPWS_DB::getOne($query);
+
+        if(PEAR::isError($result)){
+            PHPWS_Error::log($result);
+            return FALSE;
+        }else{
+            return $result;
+        }
+    }
+
+    function count_applications_by_class($term, $class){
+        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+
+        $term_year = HMS_Term::get_term_year($term);
+
+        $query = "SELECT count(*) from hms_lottery_entry
+                    WHERE term = $term
+                    AND special_interest IS NULL
+                    AND gender_need = 0
+                    AND medical_need = 0
+                    AND physical_disability = 0
+                    AND psych_disability = 0 ";
+
+        if($class == CLASS_SOPHOMORE){
+            $query .= 'AND (application_term = ' . ($term_year - 1) . '20';
+            $query .= ' OR application_term = ' . ($term_year - 1) . '30';
+            $query .= ' OR application_term = ' . ($term_year - 1) . '40';
+            $query .= ' OR application_term = ' . ($term_year) . '10';
+            $query .= ')';
+        }else if($class == CLASS_JUNIOR){
+            $query .= 'AND (application_term = ' . ($term_year - 2) . '20';
+            $query .= ' OR application_term = ' . ($term_year - 2) . '30';
+            $query .= ' OR application_term = ' . ($term_year - 2) . '40';
+            $query .= ' OR application_term = ' . ($term_year - 1) . '10';
+            $query .= ')';
+        }else{
+            $query .= 'AND application_term <= ' . ($term_year - 2) . '10';
+        }
+
+        $result = PHPWS_DB::getOne($query);
+
+        if(PEAR::isError($result)){
+            PHPWS_Error::log($result);
+            return FALSE;
+        }else{
+            return $result;
+        }
+    }
+
+    function count_assignments_by_class($term, $class){
+        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+
+        $term_year = HMS_Term::get_term_year($term);
+
+        $query = "SELECT count(*) from hms_assignment
+                    JOIN hms_lottery_entry ON hms_assignment.asu_username = hms_lottery_entry.asu_username
+                    WHERE hms_assignment.term = $term 
+                    AND hms_lottery_entry.term = $term ";
 
         if($class == CLASS_SOPHOMORE){
             $query .= 'AND (application_term = ' . ($term_year - 1) . '20';
@@ -997,8 +1120,8 @@ class HMS_Lottery {
         # Declare an array for the final output
         $output = array();
 
-        $num_two_beds = 1976;
-        $num_four_beds = 424;
+        $num_two_beds = 930;
+        $num_four_beds = 492;
 
         # Query the database for the set of entry application terms, and the application terms of their roommates
         $db = new PHPWS_DB('hms_lottery_entry');
