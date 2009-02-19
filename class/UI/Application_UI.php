@@ -190,7 +190,7 @@ class Application_UI{
             $form->addHidden('special_needs', $_REQUEST['special_needs']);
         }
 
-        $form->addSubmit('submit', _('Submit Application'));
+        $form->addSubmit('submit', _('Continue'));
         $form->addHidden('module', 'hms');
         $form->addHidden('type', 'student');
         $form->addHidden('op', 'submit_application');
@@ -389,7 +389,7 @@ class Application_UI{
 
         $form->addButton('redo_button',         'Modify application');
         $form->setExtra('redo_button',          'onClick="document.getElementById(\'hidden_form\').op.value=\'redo_application\';document.getElementById(\'hidden_form\').submit()"');
-        $form->addSubmit('submit_application',  'Submit application');
+        $form->addSubmit('submit_application',  'Verify information & continue');
 
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
