@@ -408,7 +408,7 @@ class HMS_Lottery {
 
         $query = "SELECT hms_lottery_entry.* FROM hms_lottery_entry
                     LEFT OUTER JOIN (SELECT asu_username FROM hms_assignment WHERE term=$term) as foo ON hms_lottery_entry.asu_username = foo.asu_username
-                    WHERE foo.asu_username IS NULL";
+                    WHERE foo.asu_username IS NULL ";
                     
         if($allow_previous_winners){
             $query .= "AND (hms_lottery_entry.invite_expires_on < $now OR hms_lottery_entry.invite_expires_on IS NULL) ";
