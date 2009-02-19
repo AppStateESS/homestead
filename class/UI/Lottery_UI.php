@@ -1107,7 +1107,7 @@ class Lottery_UI {
         $form->mergeTemplate($tpl);
 
         $form->addText('asu_username');
-        $form->setLabel('asu_username', 'ASU Username: ');
+        $form->setLabel('asu_username', 'Banner ID Or User name: ');
 
         $options       = array('enabled');
         $option_labels = array('Magic Flag: ');

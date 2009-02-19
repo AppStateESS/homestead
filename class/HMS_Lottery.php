@@ -979,6 +979,15 @@ class HMS_Lottery {
         PHPWS_Core::initModClass('hms', 'HMS_Lottery_Entry.php');
         PHPWS_Core::initModClass('hms', 'UI/Lottery_UI.php');
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+
+        if(preg_match("/^[0-9]{9}/", $username)){
+            $username = HMS_SOAP::get_username($username);
+
+            if($username == NULL){
+                return Lottery_UI::show_magic_interface("Error updating user: $username, unknown banner ID");
+            }
+        }
 
         $entry = new HMS_Lottery_Entry($username, PHPWS_Settings::get('hms', 'lottery_term'));
         if(!is_null($enabled)){
