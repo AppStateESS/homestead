@@ -138,6 +138,10 @@ class HMS_Lottery {
             # Calculate the remaining number of rooms allowed for the lottery in this hall
             $remaining_rooms_this_hall = $lottery_rooms - $full_rooms;
 
+            if($remaining_rooms_this_hall < 0){
+                $remaining_rooms_this_hall = 0;
+            }
+
             $output[] = "$remaining_rooms_this_hall remaining rooms available for lottery";
 
             if($remaining_rooms_this_hall <= 0){
@@ -226,6 +230,10 @@ class HMS_Lottery {
             $invites_to_send = $male_invites_avail;
         }else{
             $invites_to_send = $female_invites_avail;
+        }
+
+        if($coed_invites_avail < 0){
+            $coed_invites_avail = 0;
         }
 
         $invites_to_send += $coed_invites_avail;
@@ -732,6 +740,7 @@ class HMS_Lottery {
         $query = "SELECT count(*) from hms_assignment
                     JOIN hms_lottery_entry ON hms_assignment.asu_username = hms_lottery_entry.asu_username
                     WHERE hms_assignment.term = $term 
+                    AND hms_assignment.lottery = 1
                     AND hms_lottery_entry.term = $term ";
 
         if($class == CLASS_SOPHOMORE){
@@ -932,44 +941,34 @@ class HMS_Lottery {
 
     public function main()
     {
+        PHPWS_Core::initModClass('hms', 'HMS_Lottery_Entry.php');
+        PHPWS_Core::initModClass('hms', 'UI/Lottery_UI.php');
+
         switch($_REQUEST['op']){
             case 'show_lottery_settings':
                 return HMS_Lottery::show_lottery_settings();
-                break;
             case 'submit_lottery_settings':
                 return HMS_Lottery::submit_lottery_settings();
-                break;
             case 'view_lottery_needs':
-                PHPWS_Core::initModClass('hms', 'HMS_Lottery_Entry.php');
                 return HMS_Lottery_Entry::get_special_needs_interface();
-                break;
             case 'show_admin_entry':
-                PHPWS_Core::initModClass('hms', 'UI/Lottery_UI.php');
                 return Lottery_UI::show_admin_entry();
-                break;
             case 'submit_admin_entry':
-                PHPWS_Core::initModClass('hms', 'UI/Lottery_UI.php');
-                PHPWS_Core::initModClass('hms', 'HMS_Lottery_Entry.php');
                 return Lottery_UI::show_admin_entry(HMS_Lottery_Entry::parse_entry($_REQUEST));
-                break;
             case 'show_eligibility_waiver':
-                PHPWS_Core::initModClass('hms', 'UI/Lottery_UI.php');
                 return Lottery_UI::show_eligibility_waiver();
-                break;
             case 'create_waiver':
-                PHPWS_Core::initModClass('hms', 'UI/Lottery_UI.php');
                 return Lottery_UI::create_eligibility_waiver();
-                break;
             case 'magic':
-                PHPWS_Core::initModClass('hms', 'UI/Lottery_UI.php');
                 return Lottery_UI::show_magic_interface();
             case 'apply_magic':
                 return HMS_Lottery::apply_magic($_REQUEST['asu_username'], $_REQUEST['magic']);
             case 'show_special_interest_approval':
-                PHPWS_Core::initModClass('hms', 'UI/Lottery_UI.php');
                 return Lottery_UI::show_special_interest_approval();
             case 'remove_special_interest':
                 return HMS_Lottery::remove_special_interest();
+            case 'show_waiting_list':
+                return Lottery_UI::show_waiting_list();
             default:
                 break;
         }
