@@ -87,12 +87,12 @@ class Lottery_UI {
         }
 
         $form->addCheck('terms_check', array('terms_check'));
-        $form->setLabel('terms_check', 'I have read and I agree to the housing <a href=\'http://housing.appstate.edu\'>terms and conditions.</a>');
+        $form->setLabel('terms_check', 'I have read and I agree to the housing <a href=\'http://hms.appstate.edu/files/contract.pdf\'>terms and conditions.</a>');
         if(isset($_REQUEST['terms_check'])){
             $form->setMatch('terms_check', $_REQUEST['terms_check']);
         }
         
-        $form->addSubmit('submit', 'Enter the lottery');
+        $form->addSubmit('submit', 'Submit re-application');
 
         $form->addHidden('module', 'hms');
         $form->addHidden('op', 'lottery_signup_submit');
@@ -1214,6 +1214,11 @@ class Lottery_UI {
         }
 
         return PHPWS_Template::process($tpl, 'hms', 'admin/special_interest_approval.tpl');
+    }
+
+    public function show_waiting_list()
+    {
+
     }
 }
 ?>
