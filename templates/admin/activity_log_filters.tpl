@@ -57,6 +57,36 @@
             <div style="float:left; width:33%">{A18} {A18_LABEL}</div>
             <div style="float:left; width:33%">{A19} {A19_LABEL}</div>
             <div style="float:left; width:33%">{A20} {A20_LABEL}</div>
+            <div style="float:left; width:33%">{A21} {A21_LABEL}</div>
+            <div style="float:left; width:33%">{A22} {A22_LABEL}</div>
+            <div style="float:left; width:33%">{A23} {A23_LABEL}</div>
+            <div style="float:left; width:33%">{A24} {A24_LABEL}</div>
+            <div style="float:left; width:33%">{A25} {A25_LABEL}</div>
+            <div style="float:left; width:33%">{A26} {A26_LABEL}</div>
+            <div style="float:left; width:33%">{A27} {A27_LABEL}</div>
+            <div style="float:left; width:33%">{A28} {A28_LABEL}</div>
+            <div style="float:left; width:33%">{A29} {A29_LABEL}</div>
+            <div style="float:left; width:33%">{A30} {A30_LABEL}</div>
+            <div style="float:left; width:33%">{A31} {A31_LABEL}</div>
+            <div style="float:left; width:33%">{A32} {A32_LABEL}</div>
+            <div style="float:left; width:33%">{A33} {A33_LABEL}</div>
+            <div style="float:left; width:33%">{A34} {A34_LABEL}</div>
+            <div style="float:left; width:33%">{A35} {A35_LABEL}</div>
+            <div style="float:left; width:33%">{A36} {A36_LABEL}</div>
+            <div style="float:left; width:33%">{A37} {A37_LABEL}</div>
+            <div style="float:left; width:33%">{A38} {A38_LABEL}</div>
+            <div style="float:left; width:33%">{A39} {A39_LABEL}</div>
+            <div style="float:left; width:33%">{A40} {A40_LABEL}</div>
+            <div style="float:left; width:33%">{A41} {A41_LABEL}</div>
+            <div style="float:left; width:33%">{A42} {A42_LABEL}</div>
+            <div style="float:left; width:33%">{A43} {A43_LABEL}</div>
+            <div style="float:left; width:33%">{A44} {A44_LABEL}</div>
+            <div style="float:left; width:33%">{A45} {A45_LABEL}</div>
+            <div style="float:left; width:33%">{A46} {A46_LABEL}</div>
+            <div style="float:left; width:33%">{A47} {A47_LABEL}</div>
+            <div style="float:left; width:33%">{A48} {A48_LABEL}</div>
+            <div style="float:left; width:33%">{A49} {A49_LABEL}</div>
+            <div style="float:left; width:33%">{A50} {A50_LABEL}</div>
         </td>
     </tr>
     <tr>
