@@ -785,7 +785,7 @@ class HMS_Bed extends HMS_Item {
         # Create the room object given the room_id
         $bed = new HMS_Bed($bed_id);
         if(!$bed){
-            return HMS_Bed::show_select_bed('Edit B', 'bed', 'show_edit_bed', NULL, 'Error: The selected bed does not exist!'); 
+            return HMS_Bed::show_select_bed('Edit Bed', 'bed', 'show_edit_bed', NULL, 'Error: The selected bed does not exist!'); 
         }
 
         # Create the room object
@@ -976,10 +976,6 @@ class HMS_Bed extends HMS_Item {
 
         if(!isset($_REQUEST['bedroom_label']) || $_REQUEST['bedroom_label'] == ''){
             return HMS_Bed::show_add_bed(NULL, 'You must enter a bedroom label.');
-        }
-
-        if(!isset($_REQUEST['phone_number']) || $_REQUEST['phone_number'] == ''){
-            return HMS_Bed::show_add_bed(NULL, 'You must enter a phone number.');
         }
 
         if(!isset($_REQUEST['banner_id']) || $_REQUEST['banner_id'] == ''){
