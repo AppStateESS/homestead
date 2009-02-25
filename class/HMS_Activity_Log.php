@@ -154,6 +154,21 @@ class HMS_Activity_Log{
     }
 
     /**
+     * Returns an array of all the activity ids. Based on the activity mapping above.
+     */
+    public function get_activity_list()
+    {
+        $activities = HMS_Activity_Log::get_activity_mapping();
+        $list = array();
+
+        foreach ($activities as $id=>$desc){
+            $list[] = $id;
+        }
+
+        return $list;
+    }
+
+    /**
      * Turns an integer activity into text
      */
     public function get_text_activity($num = -1)

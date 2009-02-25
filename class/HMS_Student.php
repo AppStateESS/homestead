@@ -697,48 +697,8 @@ class HMS_Student {
         /* Logs */
         /********/
         //TODO: Fix activity logs to accept a blacklist as well as a whitelist
-        $everything_but_notes   = array();
-        $everything_but_notes[] = ACTIVITY_LOGIN;
-        $everything_but_notes[] = ACTIVITY_AGREED_TO_TERMS;
-        $everything_but_notes[] = ACTIVITY_SUBMITTED_APPLICATION;
-        $everything_but_notes[] = ACTIVITY_SUBMITTED_RLC_APPLICATION;
-        $everything_but_notes[] = ACTIVITY_ACCEPTED_TO_RLC;
-        $everything_but_notes[] = ACTIVITY_TOO_OLD_REDIRECTED;
-        $everything_but_notes[] = ACTIVITY_REQUESTED_AS_ROOMMATE;
-        $everything_but_notes[] = ACTIVITY_REJECTED_AS_ROOMMATE;
-        $everything_but_notes[] = ACTIVITY_ACCEPTED_AS_ROOMMATE;
-        $everything_but_notes[] = ACTIVITY_PROFILE_CREATED;
-        $everything_but_notes[] = ACTIVITY_ASSIGNED;
-        $everything_but_notes[] = ACTIVITY_AUTO_ASSIGNED;
-        $everything_but_notes[] = ACTIVITY_REMOVED;
-        $everything_but_notes[] = ACTIVITY_ASSIGNMENT_REPORTED;
-        $everything_but_notes[] = ACTIVITY_REMOVAL_REPORTED;
-        $everything_but_notes[] = ACTIVITY_LETTER_PRINTED;
-        $everything_but_notes[] = ACTIVITY_BANNER_ERROR;
-        $everything_but_notes[] = HMS_MULTIPLE_ASSIGNMENTS;
-        $everything_but_notes[] = ACTIVITY_LOGIN_AS_STUDENT;
-        $everything_but_notes[] = ACTIVITY_ADMIN_ASSIGNED_ROOMMATE;
-        $everything_but_notes[] = ACTIVITY_ADMIN_REMOVED_ROOMMATE;
-        $everything_but_notes[] = ACTIVITY_AUTO_CANCEL_ROOMMATE_REQ;
-        $everything_but_notes[] = ACTIVITY_WITHDRAWN_APP;
-        $everything_but_notes[] = ACTIVITY_WITHDRAWN_ASSIGNMENT_DELETED;
-        $everything_but_notes[] = ACTIVITY_WITHDRAWN_ROOMMATE_DELETED;
-        $everything_but_notes[] = ACTIVITY_WITHDRAWN_RLC_APP_DENIED;
-        $everything_but_notes[] = ACTIVITY_WITHDRAWN_RLC_ASSIGN_DELETED;
-        $everything_but_notes[] = ACTIVITY_APPLICATION_REPORTED;
-        $everything_but_notes[] = ACTIVITY_DENIED_RLC_APPLICATION;
-        $everything_but_notes[] = ACTIVITY_UNDENIED_RLC_APPLICATION;
-        $everything_but_notes[] = ACTIVITY_ASSIGN_TO_RLC;
-        $everything_but_notes[] = ACTIVITY_RLC_APP_SUBMITTED;
-        $everything_but_notes[] = ACTIVITY_USERNAME_UPDATED;
-        $everything_but_notes[] = ACTIVITY_APPLICATION_UPDATED;
-        $everything_but_notes[] = ACTIVITY_RLC_APPLICATION_UPDATED;
-        $everything_but_notes[] = ACTIVITY_ASSIGNMENTS_UPDATED;
-        $everything_but_notes[] = ACTIVITY_BANNER_QUEUE_UPDATED;
-        $everything_but_notes[] = ACTIVITY_ROOMMATES_UPDATED;
-        $everything_but_notes[] = ACTIVITY_ROOMMATE_REQUESTS_UPDATED;
-        $everything_but_notes[] = ACTIVITY_CHANGE_ACTIVE_TERM;
-        $everything_but_notes[] = ACTIVITY_LOTTERY_ENTRY;
+        $everything_but_notes = HMS_Activity_Log::get_activity_list();
+        unset($everything_but_notes[array_search(ACTIVITY_ADD_NOTE, $everything_but_notes)]);
 
         if( Current_User::allow('hms', 'view_activity_log') && Current_User::allow('hms', 'view_student_log') ){
             PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
