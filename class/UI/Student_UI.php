@@ -47,16 +47,6 @@ class HMS_Student_UI{
             }
             
         
-
-        # THIS IS A HACK
-        $student = HMS_SOAP::get_student_info($_SESSION['asu_username']);
-        
-        if($student->application_term == 200820 || $student->application_term == 200830){
-            $show_summer_hack_msg = TRUE;
-        }else{
-            $show_summer_hack_msg = FALSE;
-        }
-
         # Check for an assignment in the current term. So far, this only matters for type 'Z' (readmit) students
         $assignment = HMS_Assignment::check_for_assignment($_SESSION['asu_username']);
         
@@ -185,11 +175,6 @@ class HMS_Student_UI{
                 $form->mergeTemplate($tpl);
                 $tpl = $form->getTemplate();
 
-                # THIS IS PART OF THE SUMMER HACK
-                if($show_summer_hack_msg){
-                    $tpl['HACK_MSG'] = '<b>Note:</b> This is the <b>Fall 2008 & Spring 2009</b> housing application. As a freshmen student attending Appalachian for a summer semester, <b>you must also apply for summer housing on paper</b>. The Department of Housing & Residence Life will be mailing summer housing information packets on April 1st.';
-                }
-                
                 # Application deadline has not passed, so show welcome page
                 if($student_type == TYPE_FRESHMEN){
                     return PHPWS_Template::process($tpl, 'hms', 'student/welcome_screen_freshmen.tpl');

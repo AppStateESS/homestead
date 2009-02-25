@@ -13,10 +13,6 @@
         as an off-campus option.  If you have any questions please visit our web site at: <a href="http://housing.appstate.edu/">www.housing.appstate.edu</a>.
         <br /><br />
         To begin your housing application for the <b>{ENTRY_TERM}</b> school year please click the 'Continue' button below. 
-        <!-- BEGIN hack_msg -->
-        <br /><br />
-        {HACK_MSG}
-        <!-- END hack_msg -->
         <br /><br />
         {START_FORM}
         {SUBMIT}
