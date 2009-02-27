@@ -729,6 +729,13 @@ class HMS_Room extends HMS_Item
            }
         }
 
+        # Check the default gender in the same way
+        if($room->default_gender != $_REQUEST['default_gender']){
+            if(!$room->can_change_gender($_REQUEST['default_gender'])){
+                return HMS_Room::show_edit_room($room->id, NULL, 'Error: Default gender incompatable. No changes were made.');
+            }
+        }
+
         if($room->get_number_of_assignees() > 0 && $_REQUEST['is_online'] != 1){
             return HMS_Room::show_edit_room($room->id,NULL, 'Error: Cannot take room offline while students are assigned to the room.  No changes were made.');
         }
