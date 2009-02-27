@@ -293,10 +293,12 @@ class HMS_Lottery_Entry {
     public function special_interest_tags()
     {
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Student.php');
 
         $tags = array();
 
-        $tags['NAME']       = HMS_SOAP::get_name($this->asu_username);
+        //$tags['NAME']       = HMS_SOAP::get_name($this->asu_username);
+        $tags['NAME']       = HMS_Student::get_link($this->asu_username, FALSE);
         $tags['USER']       = $this->asu_username;
         $tags['BANNER_ID']  = HMS_SOAP::get_banner_id($this->asu_username);
         $tags['ACTION']     = PHPWS_Text::secureLink('Remove', 'hms', array('type'=>'lottery', 'op'=>'remove_special_interest', 'asu_username'=>$this->asu_username, 'group'=>$_REQUEST['group']));

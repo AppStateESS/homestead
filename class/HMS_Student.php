@@ -406,6 +406,11 @@ class HMS_Student {
             $tpl = array();
             return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
         }
+
+        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
+
         if(isset($_REQUEST['actee'])){
             $username = $_REQUEST['actee'];
         }
@@ -420,9 +425,6 @@ class HMS_Student {
             $error = 'Only alphanumeric characters are allowed.<br />';
             return HMS_Student::enter_student_search_data($error);
         }
-
-        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
 
         # Check to see if the user enterd a Banner ID or a user name
         if(preg_match("/^[0-9]{9}/", $username)){
@@ -443,7 +445,6 @@ class HMS_Student {
         
         //Add a note if we're returning to this page after clicking the "Add Note" link
         if(isset($_REQUEST['note'])){
-            PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
             HMS_Activity_Log::log_activity($username, ACTIVITY_ADD_NOTE, Current_User::getUsername(), $_REQUEST['note']);
         }
 
@@ -651,9 +652,9 @@ class HMS_Student {
             $tpl['RLC_STATUS'] = "This student is not in a Learning Community and has no pending approval.";
         }
 
-        /**********************
-         * Application Status *
-         **********************/
+        /*******************************
+         * Freshmen Application Status *
+         *******************************/
         $report_app = '[<a href="index.php?module=hms&type=student&op=admin_report_application&username='.$username.'&tab=student_info">Report Application Received</a>]';
         if(HMS_Application::check_for_application($username, HMS_Term::get_selected_term(), TRUE)) {
             $tpl['APPLICATION'] = '[<a href="index.php?module=hms&type=student&op=get_matching_students&username='.$username.'&tab=housing_app">View Application</a>] '.$report_app;
@@ -679,6 +680,25 @@ class HMS_Student {
             $tpl['MEAL_PLAN']            = 'None';
         }
 
+        /*************************
+         * Re-application status *
+         *************************/
+        PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Lottery_Entry.php');
+        $reapplication = HMS_Lottery_Entry::check_for_entry($username, HMS_Term::get_selected_term());
+        if($reapplication !== FALSE){
+            $tpl['HAS_REAPPLICATION'] = 'Yes';
+        }else{
+            $tpl['HAS_REAPPLICATION'] = 'No';
+        }
+
+        if(!is_null($reapplication['special_interest'])){
+            $special_interest_groups = HMS_Lottery::get_special_interest_groups();
+            $tpl['SPECIAL_INTEREST'] = $special_interest_groups[$reapplication['special_interest']];
+        }else{
+            $tpl['SPECIAL_INTEREST'] = 'No';
+        }
+
         
         /********/
         /* Note */
@@ -696,7 +716,6 @@ class HMS_Student {
         /********/
         /* Logs */
         /********/
-        //TODO: Fix activity logs to accept a blacklist as well as a whitelist
         $everything_but_notes = HMS_Activity_Log::get_activity_list();
         unset($everything_but_notes[array_search(ACTIVITY_ADD_NOTE, $everything_but_notes)]);
 
@@ -706,9 +725,7 @@ class HMS_Student {
             $tpl['NOTE_PAGER'] = HMS_Activity_Log::showPager(null, $username, TRUE, null, null, null, array(0 => ACTIVITY_ADD_NOTE), 5, true);
 
             $tpl['LOG_PAGER'] .= '<div align=center>[<a href="index.php?module=hms&type=student&op=get_matching_students&username='.$username.'&tab=student_logs">View More</a>]';
-            //TODO: if we ever renumber the activities change a40 to the number of
-            //the new logging activity
-            $tpl['NOTE_PAGER'] .= '<div align=center>[<a href="index.php?module=hms&type=student&op=get_matching_students&username='.$username.'&tab=student_logs&a40=1">View More</a>]';
+            $tpl['NOTE_PAGER'] .= '<div align=center>[<a href="index.php?module=hms&type=student&op=get_matching_students&username='.$username.'&tab=student_logs&a'. ACTIVITY_ADD_NOTE .'=1">View More</a>]';
         }
 
         /********************
@@ -719,7 +736,7 @@ class HMS_Student {
         }
 
         //test($tpl, 1);
-        $final = PHPWS_Template::process($tpl, 'hms', 'student/fancy_student_info.tpl');
+        $final = PHPWS_Template::process($tpl, 'hms', 'admin/fancy_student_info.tpl');
 
         /***********************/
         /* Tabify Student Info */

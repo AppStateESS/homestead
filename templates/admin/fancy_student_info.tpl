@@ -33,7 +33,12 @@
                         <th>Type</th>
                         <td>{TYPE}</td>
                     </tr>
-                    
+                    <!-- BEGIN application_term -->
+                    <tr>
+                        <th>Application Term:</th>
+                        <td>{APPLICATION_TERM}</td>
+                    </tr>
+                    <!-- END application_term -->
                     <tr>
                         <th>Class</th>
                         <td>{CLASS}</td>
@@ -100,16 +105,7 @@
                 <td>
                 <div id="housing_status">
                 <table>
-                    <!-- BEGIN application_term -->
-                    <tr>
-                        <th>Application Term:</th>
-                        <td>{APPLICATION_TERM}</td>
-                    </tr>
-                    <!-- END application_term -->
-                    <tr>
-                        <th>Have Application:</th>
-                        <td>{APPLICATION_RECEIVED}  {APPLICATION}
-                    </tr>
+                    
                     <tr>
                         <th>Assigned:</th>
                         <td>{ASSIGNED}  [{ROOM_ASSIGNMENT}]</td>
@@ -127,12 +123,24 @@
                     </tr>
                     <!-- END requested_roommate -->
                     <tr>
-                        <th>RLC:</td>
-                        <td>{RLC_STATUS}</td>
+                        <th>Freshmen application:</th>
+                        <td>{APPLICATION_RECEIVED}  {APPLICATION}
                     </tr>
                     <tr>
                         <th>Meal Option:</th>
                         <td>{MEAL_PLAN}</td>
+                    </tr>
+                    <tr>
+                        <th>RLC:</td>
+                        <td>{RLC_STATUS}</td>
+                    </tr>
+                    <tr>
+                        <th>Re-applied: </th>
+                        <td>{HAS_REAPPLICATION}</td>
+                    </tr>
+                    <tr>
+                        <th>Special Interest Group: </th>
+                        <td>{SPECIAL_INTEREST}</td>
                     </tr>
                 </table>
                 </div>
