@@ -192,6 +192,8 @@ class HMS_Maintenance
             $tpl['MAGIC_FLAG'] = PHPWS_Text::secureLink(
                 _('Set the magic flag'), 'hms', array('type'=>'lottery',
                 'op'=>'magic'));
+
+            $tpl['WAIT_LIST'] = PHPWS_Text::secureLink('Waiting List', 'hms', array('type'=>'lottery', 'op'=>'show_waiting_list'));
         }
 
         if(Current_User::allow('hms', 'special_interest_approval')){

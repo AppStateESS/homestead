@@ -148,11 +148,12 @@
             <div class="hms_maint">
                 <!-- BEGIN lottery_needs -->
                 Re-application<br />
-                {LOTTERY_NEEDS}<br />
                 {ADMIN_LOTTERY_ENTRY}<br />
-                {ELIGIBILITY_WAIVER}<br />
                 {MAGIC_FLAG}<br />
+                {ELIGIBILITY_WAIVER}<br />
+                {LOTTERY_NEEDS}<br />
                 {SPECIAL_INTEREST}<br />
+                {WAIT_LIST}<br />
                 <!-- END lottery_needs -->
             </div>
         </div>
