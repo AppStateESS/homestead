@@ -144,21 +144,6 @@ class HMS_Lottery_Entry {
         return true;
     }
 
-    public function parse_entry($request)
-    {
-        if(isset($_REQUEST['asu_username']) && strlen($_REQUEST['asu_username']) > 0){
-            $physical_disability = isset($_REQUEST['physical_disability']) ? true : false;
-            $psych_disability    = isset($_REQUEST['psych_disability'])    ? true : false;
-            $medical_need        = isset($_REQUEST['medical_need'])        ? true : false;
-            $gender_need         = isset($_REQUEST['gender_need'])         ? true : false;
-            $result = HMS_Lottery_Entry::add_entry($_REQUEST['asu_username'], $physical_disability, $psych_disability, $medical_need, $gender_need);
-            
-            return $result;
-        }
-
-        return 'You must provide the ASU Username of the student to add to the lottery';
-    }
-
     /*************************
      * Static helper methods *
      *************************/
@@ -306,7 +291,8 @@ class HMS_Lottery_Entry {
         return $tags;
     }
 
-    public function special_interest_csv_row(){
+    public function special_interest_csv_row()
+    {
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
         $row = array();
 
@@ -315,6 +301,33 @@ class HMS_Lottery_Entry {
         $tags['BANNER_ID']  = HMS_SOAP::get_banner_id($this->asu_username);
 
         return $tags;
+    }
+
+
+    /*
+     * Control method called to handle the submissions of the form
+     * for administratively creating lottery entries
+     */
+    public function submit_admin_entry()
+    {
+        // parse/sanity check the input
+        if(!isset($_REQUEST['asu_username']) || $_REQUEST['asu_username'] == ''){
+            return Lottery_UI::show_admin_entry(NULL, 'You must provide an ASU user name.');
+        }
+
+        $physical_disability = isset($_REQUEST['physical_disability']) ? true : false;
+        $psych_disability    = isset($_REQUEST['psych_disability'])    ? true : false;
+        $medical_need        = isset($_REQUEST['medical_need'])        ? true : false;
+        $gender_need         = isset($_REQUEST['gender_need'])         ? true : false;
+
+        $result = HMS_Lottery_Entry::add_entry($_REQUEST['asu_username'], $physical_disability, $psych_disability, $medical_need, $gender_need, PHPWS_Settings::get('hms', 'lottery_term'));
+
+        if($result !== TRUE){
+            // show the error message
+            return Lottery_UI::show_admin_entry(NULL,$result);
+        }else{
+            return Lottery_UI::show_admin_entry('Re-application successfully created.');
+        }
     }
 }
 ?>

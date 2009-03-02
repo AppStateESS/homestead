@@ -1,30 +1,36 @@
 <h2>Add a student to the lottery</h2>
 <br />
-<div class='error'>{MESSAGE}</div>
+<!-- BEGIN error_msg -->
+<span class="error">{ERROR_MSG}<br /></span>
+<!-- END error_msg -->
+
+<!-- BEGIN success_msg -->
+<span class="success">{SUCCESS_MSG}<br /></span>
+<!-- END success_msg -->
 {START_FORM}
 <table>
     <tr>
-        <th>{ASU_USERNAME_LABEL}</th>
+        <td>{ASU_USERNAME_LABEL}</td>
         <td>{ASU_USERNAME}</td>
     </tr>
     <tr>
-        <th>{PHYSICAL_DISABILITY_LABEL}</th>
+        <td>{PHYSICAL_DISABILITY_LABEL}</td>
         <td>{PHYSICAL_DISABILITY}</td>
     </tr>
     <tr>
-        <th>{PSYCH_DISABILITY_LABEL}</th>
+        <td>{PSYCH_DISABILITY_LABEL}</td>
         <td>{PSYCH_DISABILITY}</td>
     </tr>
     <tr>
-        <th>{MEDICAL_NEED_LABEL}</th>
+        <td>{MEDICAL_NEED_LABEL}</td>
         <td>{MEDICAL_NEED}</td>
     </tr>
     <tr>
-        <th>{GENDER_NEED_LABEL}</th>
+        <td>{GENDER_NEED_LABEL}</td>
         <td>{GENDER_NEED}</td>
     </tr>
     <tr>
-        <th></th>
+        <td></td>
         <td align=right>{ENTER_INTO_LOTTERY}</td>
     </tr>
 </table>

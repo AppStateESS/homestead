@@ -1070,10 +1070,16 @@ class Lottery_UI {
         return PHPWS_Template::process($tpl, 'hms', 'student/student_success_failure_message.tpl');
     }
 
-    public function show_admin_entry($message = null)
+    public function show_admin_entry($success = NULL, $error = NULL)
     {
         $tpl = array();
-        $tpl['MESSAGE'] = $message;
+        if(isset($success)){
+            $tpl['SUCCESS_MSG'] = $success;
+        }
+
+        if(isset($error)){
+            $tpl['ERROR_MSG'] = $error;
+        }
 
         $form = &new PHPWS_Form('admin_entry');
         $form->mergeTemplate($tpl);

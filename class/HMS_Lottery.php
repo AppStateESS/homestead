@@ -954,7 +954,8 @@ class HMS_Lottery {
             case 'show_admin_entry':
                 return Lottery_UI::show_admin_entry();
             case 'submit_admin_entry':
-                return Lottery_UI::show_admin_entry(HMS_Lottery_Entry::parse_entry($_REQUEST));
+                //return Lottery_UI::show_admin_entry(HMS_Lottery_Entry::parse_entry($_REQUEST));
+                return HMS_Lottery_Entry::submit_admin_entry();
             case 'show_eligibility_waiver':
                 return Lottery_UI::show_eligibility_waiver();
             case 'create_waiver':
