@@ -61,7 +61,7 @@ class HMS_Student_UI{
         $dob = explode('-', $dob); // in order: year, month, day
         // Calculate a unix timestamp for the student's birthday
         $dob_timestamp = mktime(0, 0, 0, $dob[1], $dob[2], $dob[0]); // hour, min, sec, month, day, year
-        if(is_null($deadlines) || $dob_timestamp < ($deadlines['move_in_timestamp'] - TWENTY_FIVE_YEARS)) {   // Twenty five years from move_in_timestamp
+        if($dob_timestamp < ($deadlines['move_in_timestamp'] - TWENTY_FIVE_YEARS)) {   // Twenty five years from move_in_timestamp
             # Log that it happened
             HMS_Activity_Log::log_activity($_SESSION['asu_username'],
                                            ACTIVITY_TOO_OLD_REDIRECTED,
