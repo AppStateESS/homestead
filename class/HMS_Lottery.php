@@ -970,6 +970,8 @@ class HMS_Lottery {
                 return HMS_Lottery::remove_special_interest();
             case 'show_waiting_list':
                 return Lottery_UI::show_waiting_list();
+            case 'waiting_list_remove':
+                return HMS_Lottery_Entry::wait_list_remove(); 
             default:
                 break;
         }

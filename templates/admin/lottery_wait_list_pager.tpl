@@ -1,3 +1,11 @@
+<!-- BEGIN error_msg -->
+<span class="error">{ERROR_MSG}<br /></span>
+<!-- END error_msg -->
+
+<!-- BEGIN success_msg -->
+<span class="success">{SUCCESS_MSG}<br /></span>
+<!-- END success_msg -->
+
 <table>
     <tr>
         <th>Name {ASU_USERNAME_SORT}</th>

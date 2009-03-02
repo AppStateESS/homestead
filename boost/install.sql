@@ -460,6 +460,7 @@ CREATE TABLE hms_lottery_entry (
     gender_need         smallint DEFAULT 0,
     magic_winner        smallint DEFAULT 0      NOT NULL,
     special_interest    CHARACTER VARYING(32),
+    waiting_list_hide   INTEGER,
     PRIMARY KEY (id)
 );
 ALTER TABLE hms_lottery_entry ADD CONSTRAINT unique_entry UNIQUE (term, asu_username);

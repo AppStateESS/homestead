@@ -1222,47 +1222,46 @@ class Lottery_UI {
         return PHPWS_Template::process($tpl, 'hms', 'admin/special_interest_approval.tpl');
     }
 
-    public function show_waiting_list()
+    public function show_waiting_list($success = NULL, $error = NULL)
     {
         PHPWS_Core::initCoreClass('DBPager.php');
 
+        $tpl = array();
+        if(isset($success)){
+            $tpl['SUCCESS_MSG'] = $success;
+        }
+
+        if(isset($error)){
+            $tpl['ERROR_MSG'] = $error;
+        }
+
         $term = PHPWS_Settings::get('hms', 'lottery_term');
 
-        $sub_select = new PHPWS_DB('hms_assignment');
-        $sub_select->addWhere('term', $term);
+        //$sub_select = new PHPWS_DB('hms_assignment');
+        //$sub_select->addWhere('term', $term);
 
-        $pager = new DBPager('hms_lottery_entry', 'HMS_Lottery_entry');
-        $pager->db->addJoin('LEFT OUTER', 'hms_lottery_entry', $sub_select, 'asu_username', 'asu_username');
-        $pager->db->setSubselectAs('foo');
-        $pager->db->addWhere('foo.asu_username', 'IS NULL');
+        $pager = new DBPager('hms_lottery_entry', 'HMS_Lottery_Entry');
+        $pager->db->addJoin('LEFT OUTER', 'hms_lottery_entry', 'hms_assignment', 'asu_username', 'asu_username AND hms_lottery_entry.term = hms_assignment.term');
+        $pager->db->addWhere('hms_assignment.asu_username', 'NULL');
         $pager->db->addWhere('hms_lottery_entry.term', $term);
-        $pager->db->addWhere('hms_lottery_entry.special_interest', 'IS NULL');
+        $pager->db->addWhere('hms_lottery_entry.special_interest', 'NULL');
         $pager->db->addWhere('hms_lottery_entry.physical_disability', 0);
         $pager->db->addWhere('hms_lottery_entry.psych_disability', 0);
         $pager->db->addWhere('hms_lottery_entry.medical_need', 0);
         $pager->db->addWhere('hms_lottery_entry.gender_need', 0);
+        $pager->db->addWhere('hms_lottery_entry.waiting_list_hide', 0);
 
         $pager->setModule('hms');
         $pager->setTemplate('admin/lottery_wait_list_pager.tpl');
         $pager->setEmptyMessage('No students found.');
         $pager->addToggle('class="toggle1"');
         $pager->addToggle('class="toggle2"');
+        $pager->addPageTags($tpl);
         $pager->addRowTags('waiting_list_tags');
         
-        test($pager->get(),1);
+        return $pager->get();
     }
 
-    public function waiting_list_tags()
-    {
-        $tags = array();
 
-        $tags['NAME']       = HMS_SOAP::get_name($this->asu_username);
-        $tags['USER']       = $this->asu_username;
-        $tags['BANNER_ID']  = HMS_SOAP::get_banner_id($this->asu_username);
-        $tags['CLASS']      = $this->application_term;
-        $tags['ACTION']     = '';
-
-        return $tags;
-    }
 }
 ?>

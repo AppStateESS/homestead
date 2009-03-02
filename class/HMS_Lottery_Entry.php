@@ -40,6 +40,8 @@ class HMS_Lottery_Entry {
     # Lottery invite timestamp
     var $invite_expires_on;
 
+    var $waiting_list_hide      = 0;
+
     public function HMS_Lottery_Entry($asu_username = NULL, $term = NULL)
     {
         if(isset($asu_username)){
@@ -328,6 +330,51 @@ class HMS_Lottery_Entry {
         }else{
             return Lottery_UI::show_admin_entry('Re-application successfully created.');
         }
+    }
+
+    /**
+     * DBPager tags for the waiting list pager in Lottery_UI::show_waiting_list
+     */
+    public function waiting_list_tags()
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Student.php');
+
+        $tags = array();
+
+        $tags['NAME']       = HMS_Student::get_link($this->asu_username);
+        $tags['USER']       = $this->asu_username;
+        $tags['BANNER_ID']  = HMS_SOAP::get_banner_id($this->asu_username);
+        $tags['CLASS']      = HMS_Term::term_to_text($this->application_term, TRUE);
+
+
+        $assign_link = PHPWS_Text::secureLink('[Assign]','hms', array('module'=>'hms', 'type'=>'assignment', 'op'=>'show_assign_student', 'username'=>$this->asu_username)); 
+        $remove_link = PHPWS_Text::secureLink('[Remove]','hms', array('module'=>'hms', 'type'=>'lottery', 'op'=>'waiting_list_remove', 'username'=>$this->asu_username));
+        $tags['ACTION']     = "$assign_link $remove_link";
+
+        return $tags;
+    }
+
+    /**
+     * Hides a student's lottery entry from the waiting list
+     */
+    public function wait_list_remove()
+    {
+        $entry = new HMS_Lottery_Entry($_REQUEST['username'], PHPWS_Settings::get('hms', 'lottery_term'));
+
+        if(!isset($entry)){
+            Lottery_UI::show_waiting_list(NULL, 'Could not load lottery entry.');
+        }
+
+        $entry->waiting_list_hide = 1;
+
+        $result = $entry->save();
+
+        if(PEAR::isError($result)){
+            Lottery_UI::show_waiting_list(NULL, 'Could not save lottery entry.');
+        }
+
+        return Lottery_UI::show_waiting_list($_REQUEST['username'] . ' successfully removed.');
     }
 }
 ?>
