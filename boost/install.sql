@@ -56,6 +56,7 @@ CREATE TABLE hms_learning_communities (
     community_name character varying(32) NOT NULL,
     abbreviation character varying(16) NOT NULL,
     capacity integer NOT NULL,
+    hide integer NOT NULL DEFAULT 0,
     primary key(id)
 );
 

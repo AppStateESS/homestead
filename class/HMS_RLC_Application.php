@@ -573,7 +573,7 @@ class HMS_RLC_Application{
         # 2. Rank Your RLC Choices
 
         # Get the list of RLCs from the database
-        $rlc_choices = HMS_Learning_Community::getRLCList();
+        $rlc_choices = HMS_Learning_Community::getRLCList(FALSE);
        
         # Add an inital element to the list.
         $rlc_choices[-1] = "Select";

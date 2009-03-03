@@ -12,6 +12,7 @@ class HMS_Learning_Community
     var $community_name;
     var $abbreviation;
     var $capacity;
+    var $hide;
     var $error;
 
     public function HMS_Learning_Community()
@@ -499,11 +500,16 @@ class HMS_Learning_Community
     /**
      * Returns an associative array containing the list of RLCs using their full names, keyed by their id.
      */
-    public function getRLCList()
+    public function getRLCList($hidden = NULL)
     {
         $db = &new PHPWS_DB('hms_learning_communities');
         $db->addColumn('id');
         $db->addColumn('community_name');
+
+        if($hidden === FALSE){
+            $db->addWhere('hide', 0);
+        }
+
         $rlc_choices = $db->select('assoc');
 
         if(PEAR::isError($rlc_choices)){
