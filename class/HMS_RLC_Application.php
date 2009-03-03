@@ -702,11 +702,11 @@ class HMS_RLC_Application{
         }
 
         if(strlen($_REQUEST['why_specific_communities']) > RLC_RESPONSE_LIMIT){
-            return 'Error: Your response to the first question in section 3 too long. Your response may not exceede ' . RLC_RESPONSE_LIMIT . ' characters.';
+            return 'Error: Your response to the first question in section 3 too long. Your response may not exceed ' . RLC_RESPONSE_LIMIT . ' characters.';
         }
 
         if(strlen($_REQUEST['strengths_weaknesses']) > RLC_RESPONSE_LIMIT){
-            return 'Error: Your response to the second question in section 3 too long. Your response may not exceede ' . RLC_RESPONSE_LIMIT . ' characters.';
+            return 'Error: Your response to the second question in section 3 too long. Your response may not exceed ' . RLC_RESPONSE_LIMIT . ' characters.';
         }
 
         return TRUE;
@@ -803,15 +803,15 @@ class HMS_RLC_Application{
 
 
         if(strlen($_REQUEST['rlc_question_0']) > RLC_RESPONSE_LIMIT){
-            return 'Error: Your response to the first question is too long. Your response may not exceede ' . RLC_RESPONSE_LIMIT . ' characters.';
+            return 'Error: Your response to the first question is too long. Your response may not exceed ' . RLC_RESPONSE_LIMIT . ' characters.';
         }
 
         if(strlen($_REQUEST['rlc_question_1']) > RLC_RESPONSE_LIMIT){
-            return 'Error: Your response to the second question is too long. Your response may not exceede ' . RLC_RESPONSE_LIMIT . ' characters.';
+            return 'Error: Your response to the second question is too long. Your response may not exceed ' . RLC_RESPONSE_LIMIT . ' characters.';
         }
 
         if(strlen($_REQUEST['rlc_question_2']) > RLC_RESPONSE_LIMIT){
-            return 'Error: Your response to the third question is too long. Your response may not exceede ' . RLC_RESPONSE_LIMIT . ' characters.';
+            return 'Error: Your response to the third question is too long. Your response may not exceed ' . RLC_RESPONSE_LIMIT . ' characters.';
         }
 
         return TRUE;
