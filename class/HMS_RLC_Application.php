@@ -8,6 +8,8 @@
  * @author Jeremy Booker <jbooker at tux dot appstate dot edu>
  */
 
+define('RLC_RESPONSE_LIMIT', 4096);
+
 class HMS_RLC_Application{
 
     var $id;
@@ -697,6 +699,14 @@ class HMS_RLC_Application{
         if(!(isset($_REQUEST['why_specific_communities']) &&
            isset($_REQUEST['strengths_weaknesses']))){
             return "Error: Please complete both of the questions in section 3.";
+        }
+
+        if(strlen($_REQUEST['why_specific_communities']) > RLC_RESPONSE_LIMIT){
+            return 'Error: Your response to the first question in section 3 too long. Your response may not exceede ' . RLC_RESPONSE_LIMIT . ' characters.';
+        }
+
+        if(strlen($_REQUEST['strengths_weaknesses']) > RLC_RESPONSE_LIMIT){
+            return 'Error: Your response to the second question in section 3 too long. Your response may not exceede ' . RLC_RESPONSE_LIMIT . ' characters.';
         }
 
         return TRUE;
