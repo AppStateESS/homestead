@@ -718,6 +718,10 @@ class HMS_RLC_Application{
     public function show_rlc_application_form_page2($message = NULL){
         
         $template = array();
+
+        if(isset($message)){
+            $template['MESSAGE'] = $message;
+        }
         
         $rlc_form2 = new PHPWS_Form();
         $rlc_form2->addHidden('type','student');
@@ -790,11 +794,24 @@ class HMS_RLC_Application{
         }
 
         # Verify that all three text areas have content
-        if(($_REQUEST['rlc_first_choice'] > -1  && !isset($_REQUEST['rlc_question_0'])) &&
-           ($_REQUEST['rlc_second_choice'] > -1 && !isset($_REQUEST['rlc_question_1'])) &&
-           ($_REQUEST['rlc_third_choice'] > -1  && !isset($_REQUEST['rlc_question_2']))
+        if(($_REQUEST['rlc_first_choice'] > -1  && $_REQUEST['rlc_question_0'] == '') ||
+           ($_REQUEST['rlc_second_choice'] > -1 && $_REQUEST['rlc_question_1'] == '') ||
+           ($_REQUEST['rlc_third_choice'] > -1  && $_REQUEST['rlc_question_2'] == '')
           ){
             return "Error: Please answer all of the questions below.";
+        }
+
+
+        if(strlen($_REQUEST['rlc_question_0']) > RLC_RESPONSE_LIMIT){
+            return 'Error: Your response to the first question is too long. Your response may not exceede ' . RLC_RESPONSE_LIMIT . ' characters.';
+        }
+
+        if(strlen($_REQUEST['rlc_question_1']) > RLC_RESPONSE_LIMIT){
+            return 'Error: Your response to the second question is too long. Your response may not exceede ' . RLC_RESPONSE_LIMIT . ' characters.';
+        }
+
+        if(strlen($_REQUEST['rlc_question_2']) > RLC_RESPONSE_LIMIT){
+            return 'Error: Your response to the third question is too long. Your response may not exceede ' . RLC_RESPONSE_LIMIT . ' characters.';
         }
 
         return TRUE;
