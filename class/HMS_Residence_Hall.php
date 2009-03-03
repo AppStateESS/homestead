@@ -1205,6 +1205,7 @@ class HMS_Residence_Hall extends HMS_Item
             
             foreach($floor->_rooms as $room) {
                 $room->loadBeds();
+                $bed_labels = array();
 
                 foreach($room->_beds as $bed) {
                     $bed->loadAssignment();
@@ -1215,8 +1216,9 @@ class HMS_Residence_Hall extends HMS_Item
                         if($rlc != FALSE){
                             $rlc = ' (' . $rlcs[$rlc['rlc_id']] . ')'; //get the full name for the rlc
                         }
-                        $name = HMS_SOAP::get_full_name($username);
-                        $link = "(<em>$username</em>)  " . $bed->get_assigned_to_link() . "  $rlc";
+                        $name      = HMS_SOAP::get_full_name($username);
+                        $banner_id = HMS_SOAP::get_banner_id($username);
+                        $link      = "(<em>$username</em>)  " . $bed->get_assigned_to_link() . "  $rlc"."<em>[Banner ID: $banner_id]</em>";
                         
                         $tpl->setData(array('BED_LABEL'=>$bed->bedroom_label,'BED'=>$bed->bed_letter,'LINK'=>$link));
                     }else{
