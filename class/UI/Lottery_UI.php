@@ -301,9 +301,9 @@ class Lottery_UI {
         }
 
         if(isset($_REQUEST['area_code'])){
-            $entry->phone_number = $_REQUEST['area_code'] . $_REQUEST['exchange'] . $_REQUEST['number'];
+            $entry->cell_phone = $_REQUEST['area_code'] . $_REQUEST['exchange'] . $_REQUEST['number'];
         }else{
-            $entry->phone_number = NULL;
+            $entry->cell_phone = NULL;
         }
 
         $result = $entry->save();

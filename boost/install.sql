@@ -251,7 +251,7 @@ CREATE TABLE hms_application (
     medical_need                    smallint,
     gender_need                     smallint,
     withdrawn                       smallint NOT NULL default 0,
-    cellphone                       character varying(10),
+    cell_phone                      character varying(10),
     primary key(id)
 );
 
@@ -454,7 +454,7 @@ CREATE TABLE hms_lottery_entry (
     roommate2_app_term  INTEGER,
     roommate3_username  CHARACTER VARYING(32),
     roommate3_app_term  INTEGER,
-    phone_number        CHARACTER VARYING(32),
+    cell_phone          CHARACTER VARYING(32),
     physical_disability smallint DEFAULT 0,
     psych_disability    smallint DEFAULT 0,
     medical_need        smallint DEFAULT 0,
@@ -462,6 +462,7 @@ CREATE TABLE hms_lottery_entry (
     magic_winner        smallint DEFAULT 0      NOT NULL,
     special_interest    CHARACTER VARYING(32),
     waiting_list_hide   INTEGER,
+    meal_option         smallint,
     PRIMARY KEY (id)
 );
 ALTER TABLE hms_lottery_entry ADD CONSTRAINT unique_entry UNIQUE (term, asu_username);

@@ -53,11 +53,6 @@
                     </tr>
                     
                     <tr>
-                        <th>Cellphone</th>
-                        <td>{CELLPHONE}</td>
-                    </tr>
-                    
-                    <tr>
                        <th>Addresses</th>
                         <td>
                             <!-- BEGIN pr_address -->
@@ -97,6 +92,7 @@
             </tr>
         </table>
         <br>
+
         <table>
             <tr>
                 <th><a id="status_toggle">[-]</a>Housing Status</th>
@@ -105,15 +101,18 @@
                 <td>
                 <div id="housing_status">
                 <table>
-                    
                     <tr>
                         <th>Assigned:</th>
                         <td>{ASSIGNED}  [{ROOM_ASSIGNMENT}]</td>
                     </tr>
                     <tr>
                         <th>Roommate(s):</th>
+                    </tr>
                         <!-- BEGIN roommates -->
-                        <td>{ROOMMATE}</td>
+                        <tr>
+                            <td></td>
+                            <td>{ROOMMATE}<td>
+                        </tr>
                         <!-- END roommates -->
                     </tr>
                     <!-- BEGIN requested_roommate -->
@@ -123,20 +122,8 @@
                     </tr>
                     <!-- END requested_roommate -->
                     <tr>
-                        <th>Freshmen application:</th>
-                        <td>{APPLICATION_RECEIVED}  {APPLICATION}
-                    </tr>
-                    <tr>
-                        <th>Meal Option:</th>
-                        <td>{MEAL_PLAN}</td>
-                    </tr>
-                    <tr>
                         <th>RLC:</td>
                         <td>{RLC_STATUS}</td>
-                    </tr>
-                    <tr>
-                        <th>Re-applied: </th>
-                        <td>{HAS_REAPPLICATION}</td>
                     </tr>
                     <tr>
                         <th>Special Interest Group: </th>
@@ -147,6 +134,37 @@
                 </td>
             </tr>
         </table>
+        <br /><br />
+        <table>
+            <tr>
+                <th><a id="application_toggle">[-]</a>Applications</th>
+            </tr>
+            <tr>
+                <td>
+                    <div id="applications">
+                    <table>
+                        <tr>
+                            <th>Term</th>
+                            <th>Type</th>
+                            <th>Cell phone #</th>
+                            <th>Meal plan</th>
+                            <th>Actions</th>
+                        </tr>
+                        <!-- BEGIN APPLICATIONS -->
+                        <tr>
+                            <td>{term}</td>
+                            <td>{type}</td>
+                            <td>{cell_phone}</td>
+                            <td>{meal_option}</td>
+                            <td>{actions}</td>
+                        </tr>
+                        <!-- END APPLICATIONS -->
+                    </table>
+                    </div>
+                </td>
+            </tr>
+        </table>
+
         </div>
     </div>
 </div>

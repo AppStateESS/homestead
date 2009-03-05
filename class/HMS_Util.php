@@ -195,6 +195,10 @@ class HMS_Util{
 
     public function formatMealOption($meal)
     {
+        if(is_null($meal)){
+            return 'Unknown';
+        }
+
         switch($meal){
             case BANNER_MEAL_NONE:
                 return 'None';

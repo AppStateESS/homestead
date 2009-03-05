@@ -444,11 +444,12 @@ class HMS_Student {
         }
         
         //Add a note if we're returning to this page after clicking the "Add Note" link
+        //TODO - move this. This is 'control' code inside 'view' code
         if(isset($_REQUEST['note'])){
             HMS_Activity_Log::log_activity($username, ACTIVITY_ADD_NOTE, Current_User::getUsername(), $_REQUEST['note']);
         }
 
-        #test($student_info);
+        $tpl['MENU_LINK'] = PHPWS_Text::secureLink(_('Return to Search'), 'hms', array('type'=>'student', 'op'=>'enter_student_search_data'));
 
         if(!is_null($error)) {
             $tpl['ERROR'] = $error;
@@ -456,16 +457,27 @@ class HMS_Student {
         if(!is_null($success)) {
             $tpl['SUCCESS'] = $success;
         }
-
-        $tpl['MENU_LINK']   = PHPWS_Text::secureLink(_('Return to Search'), 'hms', array('type'=>'student', 'op'=>'enter_student_search_data'));
         
+        $tpl['TITLE'] = "Search Results - " . HMS_Term::term_to_text(HMS_Term::get_selected_term(),TRUE);
+        $tpl['USERNAME'] = $username;
+
+        /********************
+         * Login as Student *
+         ********************/
+        if( Current_User::allow('hms', 'login_as_student') ) { 
+            $tpl['LOGIN_AS_STUDENT'] = '<a href=index.php?module=hms&op=main&login_as_student=' . $username . '> '. $username . '</a></td></tr>';
+        }
+
+        /**************
+         * Vital info *
+         **************/
         $tpl['BANNER_ID']   = $student_info->banner_id;
         $tpl['FIRST_NAME']  = $student_info->first_name;
         $tpl['MIDDLE_NAME'] = $student_info->middle_name;
         $tpl['LAST_NAME']   = $student_info->last_name;
 
-        $selected_term = HMS_Term::term_to_text(HMS_Term::get_selected_term());
-        $tpl['TERM'] = $selected_term['term'] . ' ' . $selected_term['year'];
+        $selected_term = HMS_Term::term_to_text(HMS_Term::get_selected_term(), TRUE);
+        $tpl['TERM'] = $selected_term;
         
         if($student_info->gender == 'F') {
             $tpl['GENDER'] = "Female";
@@ -513,9 +525,8 @@ class HMS_Student {
                 break;
         }
                 
-
         $tpl['APPLICATION_TERM'] = $student_info->application_term;
-        
+
         /*************
          * Addresses *
          *************/
@@ -553,7 +564,12 @@ class HMS_Student {
         /****************
          * Phone number *
          ****************/
-        foreach($student_info->phone as $phone_number){
+        if(is_array($student_info->phone)){
+            foreach($student_info->phone as $phone_number){
+                $phone_numbers[] = '('.$phone_number->area_code.') '.$phone_number->number . (!empty($phone_number->ext) ? ' ext. '.$phone_number->ext : '');
+            }
+        }else{
+            $phone_number = $student_info->phone;
             $phone_numbers[] = '('.$phone_number->area_code.') '.$phone_number->number . (!empty($phone_number->ext) ? ' ext. '.$phone_number->ext : '');
         }
 
@@ -563,19 +579,14 @@ class HMS_Student {
             $tpl['phone_number'][] = array('NUMBER' =>$phone_number);
         }
 
-        $tpl['USERNAME'] = $username;
-
-        $tpl['TITLE'] = "Search Results - " . HMS_Term::term_to_text(HMS_Term::get_selected_term(),TRUE);
 
         $tpl['APPLICATION_TERM'] = HMS_Term::term_to_text(HMS_SOAP::get_application_term($username), TRUE);
         
-        $this_term = HMS_Term::get_selected_term();
-
         /**************
          * Assignment *
          **************/
-
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
+        $this_term = HMS_Term::get_selected_term();
         $assignment = HMS_Assignment::get_assignment($username, $this_term);
 
         if(isset($assignment) && $assignment != FALSE){
@@ -631,11 +642,24 @@ class HMS_Student {
             }
         }
 
+        /*************************
+         * Re-application status *
+         *************************/
+        PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Lottery_Entry.php');
+        $reapplication = HMS_Lottery_Entry::check_for_entry($username, HMS_Term::get_selected_term());
+
+        if($reapplication !== FALSE && !is_null($reapplication['special_interest'])){
+            $special_interest_groups = HMS_Lottery::get_special_interest_groups();
+            $tpl['SPECIAL_INTEREST'] = $special_interest_groups[$reapplication['special_interest']];
+        }else{
+            $tpl['SPECIAL_INTEREST'] = 'No';
+        }
+
         /**************
          * RLC Status *
          **************/
         PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Application.php');
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
 
@@ -652,57 +676,40 @@ class HMS_Student {
             $tpl['RLC_STATUS'] = "This student is not in a Learning Community and has no pending approval.";
         }
 
-        /*******************************
-         * Freshmen Application Status *
-         *******************************/
-        $report_app = '[<a href="index.php?module=hms&type=student&op=admin_report_application&username='.$username.'&tab=student_info">Report Application Received</a>]';
-        if(HMS_Application::check_for_application($username, HMS_Term::get_selected_term(), TRUE)) {
-            $tpl['APPLICATION'] = '[<a href="index.php?module=hms&type=student&op=get_matching_students&username='.$username.'&tab=housing_app">View Application</a>] '.$report_app;
-            $app = &new HMS_Application($username, HMS_Term::get_selected_term());
-            $tpl['APPLICATION_RECEIVED'] = 'Yes';
-            
-            if($app->meal_option == BANNER_MEAL_LOW) $tpl['MEAL_PLAN'] = "Low";
-            else if($app->meal_option == BANNER_MEAL_STD) $tpl['MEAL_PLAN'] = "Standard";
-            else if($app->meal_option == BANNER_MEAL_HIGH) $tpl['MEAL_PLAN'] = "High";
-            else if($app->meal_option == BANNER_MEAL_SUPER) $tpl['MEAL_PLAN'] = "Super";
-        
-            /*************
-             * Cellphone *
-             *************/
-            if(strlen($app->cellphone) == 10){
-                $tpl['CELLPHONE']   .= '('.substr($app->cellphone, 0, 3).')';
-                $tpl['CELLPHONE']   .= '-'.substr($app->cellphone, 3, 3);
-                $tpl['CELLPHONE']   .= '-'.substr($app->cellphone, 6, 4);
+        /****************
+         * Applications *
+         ****************/
+        $query = "SELECT term, cell_phone, meal_option, 'freshmen' as type FROM hms_application WHERE asu_username = '$username' UNION SELECT term, cell_phone, meal_option, 're-application' as type FROM hms_lottery_entry WHERE asu_username = '$username' ORDER BY term DESC";
+        $result = PHPWS_DB::getAll($query);
+
+        # Format each row appropriately
+        foreach($result as $id=>$row){
+            $result[$id]['term']        = HMS_Term::term_to_text($row['term'],TRUE);
+            $result[$id]['meal_option'] = HMS_Util::formatMealOption($row['meal_option']);
+
+            if(strlen($row['cell_phone']) == 10){
+                $result[$id]['cell_phone']   = '('.substr($row['cell_phone'], 0, 3).')';
+                $result[$id]['cell_phone']   .= substr($row['cell_phone'], 3, 3);
+                $result[$id]['cell_phone']   .= '-'.substr($row['cell_phone'], 6, 4);
             }
-        } else {
-            $tpl['APPLICATION']          = ''.$report_app;
-            $tpl['APPLICATION_RECEIVED'] = "No";
-            $tpl['MEAL_PLAN']            = 'None';
+
+            if($row['type'] == 'freshmen'){
+                $result[$id]['actions'] = "[";
+                $result[$id]['actions'] .= PHPWS_Text::secureLink('View', 'hms', array('type'=>'student', 'op'=>'get_matching_students', 'username'=>$username, 'tab'=>'housing_app'));
+                $result[$id]['actions'] .= ' | '. PHPWS_Text::secureLink('Report to Banner', 'hms', array('type'=>'student', 'op'=>'admin_report_application', 'username'=>$username, 'tab'=>'student_info'));
+                $result[$id]['actions'] .= ']';
+            }
         }
 
-        /*************************
-         * Re-application status *
-         *************************/
-        PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Lottery_Entry.php');
-        $reapplication = HMS_Lottery_Entry::check_for_entry($username, HMS_Term::get_selected_term());
-        if($reapplication !== FALSE){
-            $tpl['HAS_REAPPLICATION'] = 'Yes';
+        if(PEAR::isError($result)){
+            $tpl['APPLICATIONS'] = 'Error loading applications.';
         }else{
-            $tpl['HAS_REAPPLICATION'] = 'No';
+            $tpl['APPLICATIONS'] = $result;
         }
 
-        if(!is_null($reapplication['special_interest'])){
-            $special_interest_groups = HMS_Lottery::get_special_interest_groups();
-            $tpl['SPECIAL_INTEREST'] = $special_interest_groups[$reapplication['special_interest']];
-        }else{
-            $tpl['SPECIAL_INTEREST'] = 'No';
-        }
-
-        
-        /********/
-        /* Note */
-        /********/
+        /********
+         * Note *
+         ********/
         $form = &new PHPWS_Form('add_note_dialog');
         $form->addTextarea('note');
         $form->addHidden('module',   'hms');
@@ -713,9 +720,9 @@ class HMS_Student {
 
         $tpl = array_merge($tpl, $form->getTemplate());
 
-        /********/
-        /* Logs */
-        /********/
+        /********
+         * Logs *
+         ********/
         $everything_but_notes = HMS_Activity_Log::get_activity_list();
         unset($everything_but_notes[array_search(ACTIVITY_ADD_NOTE, $everything_but_notes)]);
 
@@ -728,14 +735,7 @@ class HMS_Student {
             $tpl['NOTE_PAGER'] .= '<div align=center>[<a href="index.php?module=hms&type=student&op=get_matching_students&username='.$username.'&tab=student_logs&a'. ACTIVITY_ADD_NOTE .'=1">View More</a>]';
         }
 
-        /********************
-         * Login as Student *
-         ********************/
-        if( Current_User::allow('hms', 'login_as_student') ) { 
-            $tpl['LOGIN_AS_STUDENT'] = '<a href=index.php?module=hms&op=main&login_as_student=' . $username . '> '. $username . '</a></td></tr>';
-        }
-
-        //test($tpl, 1);
+        
         $final = PHPWS_Template::process($tpl, 'hms', 'admin/fancy_student_info.tpl');
 
         /***********************/

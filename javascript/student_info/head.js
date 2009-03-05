@@ -51,6 +51,7 @@ $(document).ready(function(){
 
     var demographicsToggle = new hideOther("demographics_toggle", "student_demographics", false);
     var statusToggle       = new hideOther("status_toggle",       "housing_status",       false);
+    var applicationToggle  = new hideOther("application_toggle",  "applications",         false);
     
     $("#note_dialog").hide();
     $("#add_note").click(function(){

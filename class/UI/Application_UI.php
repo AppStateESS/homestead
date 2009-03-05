@@ -294,7 +294,7 @@ class Application_UI{
             $tpl['EXCHANGE']    = $_REQUEST['exchange'];
             $tpl['NUMBER']      = $_REQUEST['number'];
         } elseif(!isset($_REQUEST['do_not_call'])){
-            return Application_UI::show_housing_application('Please provide a cellphone number or click the checkbox stating that you do not wish to share your number with us.');
+            return Application_UI::show_housing_application('Please provide a cell-phone number or click the checkbox stating that you do not wish to share your number with us.');
         }
         
         //Term information
@@ -421,7 +421,7 @@ class Application_UI{
             $application->room_condition        = $_REQUEST['room_condition'];
             $application->rlc_interest          = $_REQUEST['rlc_interest'];
             $application->agreed_to_terms       = $_REQUEST['agreed_to_terms'];
-            $application->cellphone             = $_REQUEST['area_code'] . $_REQUEST['exchange'] . $_REQUEST['number'];
+            $application->cell_phone            = $_REQUEST['area_code'] . $_REQUEST['exchange'] . $_REQUEST['number'];
 
             if(isset($_REQUEST['special_needs']['physical_disability'])){
                 $application->physical_disability = 1;
@@ -514,6 +514,8 @@ class Application_UI{
 
     public function view_housing_application($username,$term)
     {
+        PHPWS_Core::initModClass('hms', 'HMS_Application.php');
+
         $possible_terms = HMS_Term::get_valid_application_terms($term);
 
         if($possible_terms !== false){
@@ -554,10 +556,10 @@ class Application_UI{
         $tpl['PREFERRED_BEDTIME']   = $application->preferred_bedtime == 1?'Early':'Late';
         $tpl['ROOM_CONDITION']      = $application->room_condition == 1?'Clean':'Dirty';
 
-        if(strlen($application->cellphone) == 10){
-            $tpl['CELLPHONE']   .= '('.substr($application->cellphone, 0, 3).')';
-            $tpl['CELLPHONE']   .= '-'.substr($application->cellphone, 3, 3);
-            $tpl['CELLPHONE']   .= '-'.substr($application->cellphone, 6, 4);
+        if(strlen($application->cell_phone) == 10){
+            $tpl['CELLPHONE']   .= '('.substr($application->cell_phone, 0, 3).')';
+            $tpl['CELLPHONE']   .= '-'.substr($application->cell_phone, 3, 3);
+            $tpl['CELLPHONE']   .= '-'.substr($application->cell_phone, 6, 4);
         }
         
         $special_needs = "";

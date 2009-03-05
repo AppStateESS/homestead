@@ -27,7 +27,7 @@ class HMS_Lottery_Entry {
     var $roommate2_app_term;
     var $roommate3_app_term;
 
-    var $phone_number           = NULL;
+    var $cell_phone             = NULL;
     var $special_interest       = NULL;
 
     # Disability flags
