@@ -12,11 +12,12 @@
         <th>User Name</th>
         <th>Banner ID</th>
         <th>Class{APPLICATION_TERM_SORT}</th>
+        <th>Cell Phone</th>
         <th>Action</th>
     </tr>
     <!-- BEGIN empty_table -->
     <tr>
-        <td colspan="4">{EMPTY_MESSAGE}</td>
+        <td colspan="5">{EMPTY_MESSAGE}</td>
     </tr>
     <!-- END empty_table-->
     <!-- BEGIN listrows -->
@@ -25,6 +26,7 @@
         <td>{USER}</td>
         <td>{BANNER_ID}</td>
         <td>{CLASS}</td>
+        <td>{PHONE}</td>
         <td>{ACTION}</td>
     </tr>
     <!-- END listrows -->
