@@ -170,6 +170,7 @@ class HMS_Roommate
         $db->addWhere('requestor', $b, 'ILIKE', 'AND', 'ba');
         $db->addWhere('requestee', $a, 'ILIKE', 'AND', 'ba');
         $db->addWhere('confirmed', 0, NULL, 'AND');
+        $db->addWhere('requested_on', mktime() - ROOMMATE_REQ_TIMEOUT, '>=');
         $db->setGroupConj('ab', 'OR');
         $db->setGroupConj('ba', 'OR');
         $result = $db->count();
