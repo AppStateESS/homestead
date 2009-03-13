@@ -12,20 +12,25 @@
     {COOKIE_WARNING}
     <!-- END cookie_warning -->
     <!-- BEGIN login -->
-    <strong>Please <a href="{LOGIN_LINK}">click here to login</a></strong>. [ <a href="#">more information</a> ]
+    <strong>Please <a href="{LOGIN_LINK}">click here to login</a></strong>.
+    <!-- commented out for now
+    [ <a href="#">more information</a> ]
+    -->
     <!-- END login -->
     <br />
     <br />
     <p>
     <div style="float: left; width: 375px; background: #ECEFF5; padding: 3px">
-    Are you re-applying for on-campus housing for Fall 2009 - Spring 2010? Read the <a href="https://hms.appstate.edu/webpage/2">reapplication page</a> and the <a href="https://hms.appstate.edu/webpage/3">reapplication FAQ</a>.
+    Are you a freshmen applying for Fall 2009? Read the <a href="http://housing.appstate.edu/pagesmith/49">on-campus housing FAQ</a>.
+    <br /><br />
+    Fall 2009 re-application for current students is now complete. Please see <a href="http://housing.appstate.edu/blog/id/7">the announcement</a> for more information.
     </div>
     </p>
-    <br/><br />
+    <br/><br /><br /><br />
     <div style="font-size: 10px; color: grey">
     <p>
     <br /><br />
-    A service of Appalachian State's <a href="http://housing.appstate.edu/">Department of Housing & Residence Life</a> provided by <a href="http://ess.appstate.edu/">Electronic Student Services</a>.
+    The Housing Management System is a service of Appalachian State's <a href="http://housing.appstate.edu/">Department of Housing & Residence Life</a> provided by <a href="http://ess.appstate.edu/">Electronic Student Services</a>.
     </p>
     </div>
     </div>
