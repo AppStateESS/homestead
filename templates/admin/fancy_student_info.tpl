@@ -140,6 +140,9 @@
                 <th><a id="application_toggle">[-]</a>Applications</th>
             </tr>
             <tr>
+                <td>{REPORT_APPLICATION}</td>
+            </tr>
+            <tr>
                 <td>
                     <div id="applications">
                     <table>

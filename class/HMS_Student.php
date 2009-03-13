@@ -69,25 +69,8 @@ class HMS_Student {
                 return HMS_Student::enter_student_search_data();
                 break;
             case 'admin_report_application':
-                PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
-                PHPWS_Core::initModClass('hms', 'HMS_Term.php');
-                // TODO: Permission For This
-                $result   = NULL;
-                $error    = NULL;
-                $succcess = NULL;
-                if(isset($_REQUEST['username'])) {
-                    $result = HMS_SOAP::report_application_received($_REQUEST['username'], HMS_Term::get_selected_term());
-                } else {
-                    $error = 'No username provided for application.';
-                }
-                if(!is_null($result) && $result != 0) {
-                    $error = 'Reporting Application: Banner Error: ' . $result;
-                } else {
-                    $success = 'Reporting Application: Successful';
-                    PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-                    HMS_Activity_Log::log_activity($_REQUEST['username'], ACTIVITY_APPLICATION_REPORTED, Current_User::getUsername());
-                }
-                return HMS_Student::get_matching_students($error, $success);
+                PHPWS_Core::initModClass('hms', 'HMS_Application.php');
+                return HMS_Application::admin_report_to_banner($_REQUEST['username'], (isset($_REQUEST['term']) ? $_REQUEST['term'] : NULL));
                 break;
             case 'get_matching_students':
                 return HMS_Student::get_matching_students();
@@ -679,6 +662,9 @@ class HMS_Student {
         /****************
          * Applications *
          ****************/
+        // This is the link for reporting an application to banner for the selected term when an application doesn't exist in the database
+        $tpl['REPORT_APPLICATION'] = PHPWS_Text::secureLink('Report application to banner for selected term', 'hms', array('type'=>'student', 'op'=>'admin_report_application', 'username'=>$username, 'tab'=>'student_info'));
+
         $query = "SELECT term, cell_phone, meal_option, 'freshmen' as type FROM hms_application WHERE asu_username = '$username' UNION SELECT term, cell_phone, meal_option, 're-application' as type FROM hms_lottery_entry WHERE asu_username = '$username' ORDER BY term DESC";
         $result = PHPWS_DB::getAll($query);
 
@@ -695,8 +681,10 @@ class HMS_Student {
 
             if($row['type'] == 'freshmen'){
                 $result[$id]['actions'] = "[";
+                // The link to view an existing application
                 $result[$id]['actions'] .= PHPWS_Text::secureLink('View', 'hms', array('type'=>'student', 'op'=>'get_matching_students', 'username'=>$username, 'tab'=>'housing_app'));
-                $result[$id]['actions'] .= ' | '. PHPWS_Text::secureLink('Report to Banner', 'hms', array('type'=>'student', 'op'=>'admin_report_application', 'username'=>$username, 'tab'=>'student_info'));
+                // The link to re-report an existing application
+                $result[$id]['actions'] .= ' | '. PHPWS_Text::secureLink('Report to Banner', 'hms', array('type'=>'student', 'op'=>'admin_report_application', 'username'=>$username, 'term'=>$result[$id]['term'], 'tab'=>'student_info'));
                 $result[$id]['actions'] .= ']';
             }
         }

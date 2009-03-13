@@ -246,4 +246,33 @@ class HMS_Application {
 
         return true;
     }
+
+    /**
+     * Reports an application to banner as having been received
+     * whether there's actually an application in the database or not
+     */
+    public function admin_report_to_banner($username, $term = NULL)
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+        // TODO: Permission For This
+
+        if(is_null($term)){
+            $term = HMS_Term::get_selected_term();
+        }
+
+        if(!isset($username)){
+            return HMS_Student::get_matching_students('No user name provided for reporting application.');
+        }
+
+        $result = HMS_SOAP::report_application_received($username, $term);
+
+        if(!is_null($result) && $result != 0){
+            return HMS_Student::get_matching_students('Error reporting application. Banner error: ' . $result);
+        }else{
+            PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
+            HMS_Activity_Log::log_activity($username, ACTIVITY_APPLICATION_REPORTED, Current_User::getUsername());
+            return HMS_Student::get_matching_students(NULL, 'Application successfully reported.');
+        }
+    }
 }
