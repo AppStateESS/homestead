@@ -666,7 +666,7 @@ class HMS_Learning_Community
 
     public function assign_applicants_to_rlcs($success_msg = NULL, $error_msg = NULL)
     {
-        if( !Current_User::allow('hms', 'approve_rlc_applications') ){
+        if( !Current_User::allow('hms', 'view_rlc_applications') ){
             $tpl = array();
             return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
         }

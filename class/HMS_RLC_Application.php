@@ -851,9 +851,9 @@ class HMS_RLC_Application{
 
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
         if(isset($_SESSION['application_term'])){
-            $rlc_app = &new HMS_RLC_Application($username, $_SESSION['application_term']);
+            $rlc_app = new HMS_RLC_Application($username, $_SESSION['application_term']);
         }else{
-            $rlc_app = &new HMS_RLC_Application($username, HMS_SOAP::get_application_term($username));
+            $rlc_app = new HMS_RLC_Application($username, HMS_SOAP::get_application_term($username));
         }
         
         $db = &new PHPWS_DB('hms_learning_communities');
