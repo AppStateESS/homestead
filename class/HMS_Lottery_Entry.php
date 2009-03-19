@@ -361,6 +361,27 @@ class HMS_Lottery_Entry {
         return $tags;
     }
 
+    public function waiting_list_csv_tags()
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Student.php');
+
+        $tags = array();
+
+        $tags['NAME']       = HMS_SOAP::get_full_name($this->asu_username);
+        $tags['USER']       = $this->asu_username;
+        $tags['BANNER_ID']  = HMS_SOAP::get_banner_id($this->asu_username);
+        $tags['CLASS']      = HMS_Term::term_to_text($this->application_term, TRUE);
+        
+        if(isset($this->cell_phone) && !is_null($this->cell_phone) && $this->cell_phone != ''){
+            $tags['PHONE']      = '('.substr($this->cell_phone, 0, 3).')';
+            $tags['PHONE']      .= substr($this->cell_phone, 3, 3);
+            $tags['PHONE']      .= '-'.substr($this->cell_phone, 6, 4);
+        }
+
+        return $tags;
+    }
+
     /**
      * Hides a student's lottery entry from the waiting list
      */
