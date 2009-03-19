@@ -1258,6 +1258,7 @@ class Lottery_UI {
         $pager->addToggle('class="toggle2"');
         $pager->addPageTags($tpl);
         $pager->addRowTags('waiting_list_tags');
+        $pager->setReportRow('waiting_list_tags');
         
         return $pager->get();
     }
