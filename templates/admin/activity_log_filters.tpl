@@ -87,6 +87,8 @@
             <div style="float:left; width:33%">{A48} {A48_LABEL}</div>
             <div style="float:left; width:33%">{A49} {A49_LABEL}</div>
             <div style="float:left; width:33%">{A50} {A50_LABEL}</div>
+            <div style="float:left; width:33%">{A51} {A51_LABEL}</div>
+            <div style="float:left; width:33%">{A52} {A52_LABEL}</div>
         </td>
     </tr>
     <tr>

@@ -6,6 +6,10 @@
   * @package    mod
   * @subpackage hms
   */
+
+// The address notifications are sent from when sent anonymously
+define('ANONYMOUS_FROM_ADDRESS', 'housing@appstate.edu');
+
 class Notification {
 
     public function main($op=null)
@@ -175,13 +179,21 @@ class Notification {
         } else if(empty($_REQUEST['body'])){
             return Notification::show_edit_email('You must fill in the message to be sent.', $_REQUEST['subject'], '');
         }
-        $from       = isset($_REQUEST['anonymous']) && Current_User::allow('hms', 'anonymous_notification') ? 'housing@appstate.edu' : Current_User::getEmail();
+        $from       = isset($_REQUEST['anonymous']) && Current_User::allow('hms', 'anonymous_notification') ? ANONYMOUS_FROM_ADDRESS : Current_User::getEmail();
         $subject    = $_REQUEST['subject'];
         $body       = $_REQUEST['body'];
 
         //Consider using a batch process instead of doing this this inline
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
         PHPWS_Core::initModClass('hms', 'HMS_Email.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
+        
+        // Log that this is happening
+        if($from == ANONYMOUS_FROM_ADDRESS){
+            HMS_Activity_Log::log_activity(Current_user::getUsername(), ACTIVITY_ANON_NOTIFICATION_SENT, Current_User::getUsername());
+        }else{
+            HMS_Activity_Log::log_activity(Current_user::getUsername(), ACTIVITY_NOTIFICATION_SENT, Current_User::getUsername());
+        }
 
         if(is_array($_REQUEST['hall'])){
             foreach($_REQUEST['hall'] as $hall_id){
