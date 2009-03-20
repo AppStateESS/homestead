@@ -842,6 +842,9 @@ class HMS_Learning_Community
             return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
         }
 
+        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+
         $db = &new PHPWS_DB('hms_learning_communities');
         $db->addColumn('community_name');
         $db->addWhere('id',$_REQUEST['rlc_list']);
@@ -860,11 +863,11 @@ class HMS_Learning_Community
         $db->addColumn('rlc_third_choice_id');
         $db->addColumn('date_submitted');
         $db->addWhere('rlc_first_choice_id', $_REQUEST['rlc_list']);
+        $db->addWhere('term', HMS_Term::get_selected_term());
         $db->addOrder('denied asc');
         //$db->addWhere('denied', 0); // Only show non-denied applications
         $users = $db->select();
 
-        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
 
         foreach($users as $user) {
             PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
