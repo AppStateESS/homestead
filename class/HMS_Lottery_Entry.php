@@ -339,6 +339,7 @@ class HMS_Lottery_Entry {
     {
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
         PHPWS_Core::initModClass('hms', 'HMS_Student.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
         $tags = array();
 
@@ -353,6 +354,8 @@ class HMS_Lottery_Entry {
             $tags['PHONE']      .= '-'.substr($this->cell_phone, 6, 4);
         }
 
+        $tags['GENDER']     = HMS_Util::formatGender($this->gender);
+
 
         $assign_link = PHPWS_Text::secureLink('[Assign]','hms', array('module'=>'hms', 'type'=>'assignment', 'op'=>'show_assign_student', 'username'=>$this->asu_username)); 
         $remove_link = PHPWS_Text::secureLink('[Remove]','hms', array('module'=>'hms', 'type'=>'lottery', 'op'=>'waiting_list_remove', 'username'=>$this->asu_username));
@@ -365,6 +368,7 @@ class HMS_Lottery_Entry {
     {
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
         PHPWS_Core::initModClass('hms', 'HMS_Student.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
         $tags = array();
 
@@ -373,6 +377,8 @@ class HMS_Lottery_Entry {
         $tags['BANNER_ID']  = HMS_SOAP::get_banner_id($this->asu_username);
         $tags['CLASS']      = HMS_Term::term_to_text($this->application_term, TRUE);
         
+        $tags['GENDER']     = HMS_Util::formatGender($this->gender);
+
         if(isset($this->cell_phone) && !is_null($this->cell_phone) && $this->cell_phone != ''){
             $tags['PHONE']      = '('.substr($this->cell_phone, 0, 3).')';
             $tags['PHONE']      .= substr($this->cell_phone, 3, 3);

@@ -12,6 +12,7 @@
         <th>User Name</th>
         <th>Banner ID</th>
         <th>Class{APPLICATION_TERM_SORT}</th>
+        <th>Gender{GENDER_SORT}</th>
         <th>Cell Phone</th>
         <th>Action</th>
     </tr>
@@ -26,6 +27,7 @@
         <td>{USER}</td>
         <td>{BANNER_ID}</td>
         <td>{CLASS}</td>
+        <td>{GENDER}</td>
         <td>{PHONE}</td>
         <td>{ACTION}</td>
     </tr>
