@@ -150,6 +150,43 @@ abstract class HousingApplication {
         HMS_Activity_Log::log_activity($this->getUsername(), ACTIVITY_SUBMITTED_APPLICATION, $username, 'Term: ' . $this->getTerm());
     }
 
+    /**
+     * Reports 'this' application to Banner
+     */
+    public function reportToBanner()
+    {
+        $plancode = HMS_SOAP::get_plan_meal_codes($this->getUsername(), 'lawl', $this->getMealPlan());
+        $result = HMS_SOAP::report_application_received($this->getUsername(), $this->getTerm(), $plancode['plan'], $plancode['meal']);
+
+        # If there was an error it will have already been logged
+        # but send out a notification anyway
+        # TODO: Improve the notification system
+        if($result > 0){
+            PHPWS_Core::initCoreClass('Mail.php');
+            $send_to = array();
+            $send_to[] = 'jbooker@tux.appstate.edu';
+            $send_to[] = 'jtickle@tux.appstate.edu';
+            
+            $mail = &new PHPWS_Mail;
+
+            $mail->addSendTo($send_to);
+            $mail->setFrom('hms@tux.appstate.edu');
+            $mail->setSubject('HMS Application Error!');
+
+            $body = "Username: {$this->getUsername()}\n";
+            $mail->setMessageBody($body);
+            $result = $mail->send();
+        }else{
+            # Log the fact that the application was sent to banner
+            PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
+            if(Current_User::getUsername() == HMS_STUDENT_USER){
+                HMS_Activity_Log::log_activity($this->getUsername(), ACTIVITY_APPLICATION_REPORTED, $this->getUsername());
+            }else{
+                HMS_Activity_Log::log_activity($this->getUsername(), ACTIVITY_APPLICATION_REPORTED, Current_User::getUsername());
+            }
+        }
+    }
+
     /******************
      * Static Methods *
      ******************/

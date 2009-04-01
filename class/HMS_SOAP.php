@@ -772,6 +772,12 @@ class HMS_SOAP{
             case BANNER_MEAL_SUPER: // super
                 $retval['meal'] = BANNER_MEAL_SUPER;
                 break;
+            case BANNER_MEAL_SUMMER1:
+                $retval['meal'] = BANNER_MEAL_SUMMER1;
+                break;
+            case BANNER_MEAL_SUMMER2:
+                $retval['meal'] = BANNER_MEAL_SUMMER2;
+                break;
             case NULL: // none
                 if(($building == 'MAR' || $building == 'AHR') &&
                         $type != TYPE_FRESHMEN) {

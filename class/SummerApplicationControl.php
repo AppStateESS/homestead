@@ -90,8 +90,10 @@ class SummerApplicationControl {
             return $summer_app->showForm();
         }
 
+        # Report the application to Banner
+        $application->reportToBanner();
+
         return HMS_Student_UI::show_returning_menu('Your application was successfully saved.');
-            
     }
 }
 
