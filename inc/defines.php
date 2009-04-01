@@ -73,11 +73,11 @@ define('TYPE_WITHDRAWN',    'W');
 //define('HMS_MEAL_NONE',     4);
 
 // WTF??!? Banner sucks!
-define('BANNER_MEAL_LOW',   2);
-define('BANNER_MEAL_STD',   1);
-define('BANNER_MEAL_HIGH',  0);
-define('BANNER_MEAL_SUPER', 8);
-define('BANNER_MEAL_NONE', -1);
+define('BANNER_MEAL_LOW',   '2');
+define('BANNER_MEAL_STD',   '1');
+define('BANNER_MEAL_HIGH',  '0');
+define('BANNER_MEAL_SUPER', '8');
+define('BANNER_MEAL_NONE', '-1');
 
 // Summer Meal plan codes
 define('BANNER_MEAL_SUMMER1', 'S4');

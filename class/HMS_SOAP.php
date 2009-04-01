@@ -756,7 +756,7 @@ class HMS_SOAP{
             return $retval;
         }
 
-        switch($banner_meal_code) {
+        switch((String)$banner_meal_code) {
             case BANNER_MEAL_LOW: // low
                 if($type == TYPE_FRESHMEN)
                     $retval['meal'] = BANNER_MEAL_STD;
