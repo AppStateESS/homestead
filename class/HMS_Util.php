@@ -188,6 +188,8 @@ class HMS_Util{
                 return 'New freshmen';
             case TYPE_TRANSFER:
                 return 'Transfer';
+            case TYPE_CONTINUING:
+                return 'Continuing';
             default:
                 return 'Unknown';
         }

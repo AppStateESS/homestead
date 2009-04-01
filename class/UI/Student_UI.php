@@ -73,7 +73,7 @@ class HMS_Student_UI{
             Layout::metaRoute('http://www.housing.appstate.edu/index.php?module=pagemaster&PAGE_user_op=view_page&PAGE_id=33&MMN_position=164:116&MMN_position=190:190',10);
             return PHPWS_Template::process($tpl, 'hms', 'student/welcome_screen_non_traditional.tpl');
         }
-        
+
         /******************************************
          * Sort returning students (lottery) from *
          * freshmen (first-time application)      *
@@ -194,7 +194,7 @@ class HMS_Student_UI{
         }   
     }
    
-    public function show_terms_and_agreement($terms_and_agreement_only = FALSE)
+    public function show_terms_and_agreement($terms_and_agreement_only = FALSE, $action = NULL)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Side_Thingie.php');
         $side_thingie = new HMS_Side_Thingie(HMS_SIDE_STUDENT_AGREE);
@@ -582,26 +582,51 @@ class HMS_Student_UI{
         return PHPWS_Template::process($tpl, 'hms', 'student/verify_assignment.tpl');
     }
 
-    public function show_returning_menu()
+    public function show_returning_menu($success = NULL, $error = NULL)
     {
+        PHPWS_Core::initModClass('hms', 'HousingApplication.php');
         PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
         PHPWS_Core::initModClass('hms', 'HMS_Lottery_Entry.php');
         PHPWS_Core::initModClass('hms', 'UI/Lottery_UI.php');
         PHPWS_Core::initModClass('hms', 'HMS_Deadlines.php');
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
         $tpl = array();
 
-        $lottery_deadlines = HMS_Deadlines::get_deadlines(PHPWS_Settings::get('hms', 'lottery_term'));
-        $begin_deadline = HMS_Deadlines::get_deadline_as_date('lottery_signup_begin_timestamp', $lottery_deadlines);
-        $end_deadline   = HMS_Deadlines::get_deadline_as_date('lottery_signup_end_timestamp', $lottery_deadlines);
+        # Show success/error messages if we have any
+        if(isset($success)){
+            $tpl['SUCCESS_MSG'] = $success;
+        }
+
+        if(isset($error)){
+            $tpl['ERROR_MSG'] = $error;
+        }
+
+        # Figure out which terms we're working with
+        $lottery_term   = PHPWS_Settings::get('hms', 'lottery_term');
+        $spring_term    = HMS_Term::get_next_term($lottery_term);
+        $summer2_term   = HMS_Term::get_previous_term($lottery_term);
+        $summer1_term   = HMS_Term::get_previous_term($summer2_term);
+
+        /***********************
+         * Fall Re-application *
+         ***********************/
+        $lottery_deadlines  = HMS_Deadlines::get_deadlines(PHPWS_Settings::get('hms', 'lottery_term'));
+        $begin_deadline     = HMS_Deadlines::get_deadline_as_date('lottery_signup_begin_timestamp', $lottery_deadlines);
+        $end_deadline       = HMS_Deadlines::get_deadline_as_date('lottery_signup_end_timestamp', $lottery_deadlines);
 
         # Check for lottery entries, or winning lottery entires
-        $assignment_result  = HMS_Assignment::check_for_assignment($_SESSION['asu_username'], PHPWS_Settings::get('hms', 'lottery_term'));
-        $entry_result       = HMS_Lottery_Entry::check_for_entry($_SESSION['asu_username'], PHPWS_Settings::get('hms', 'lottery_term'));
-        $winner_result      = HMS_Lottery_Entry::check_for_entry($_SESSION['asu_username'], PHPWS_Settings::get('hms', 'lottery_term'), TRUE);
+        $assignment_result  = HMS_Assignment::check_for_assignment($_SESSION['asu_username'], $lottery_term);
+        $entry_result       = HMS_Lottery_Entry::check_for_entry($_SESSION['asu_username'], $lottery_term);
+        $winner_result      = HMS_Lottery_Entry::check_for_entry($_SESSION['asu_username'], $lottery_term, TRUE);
+
+        # Determine which terms the lottery is running for
+        $tpl['LOTTERY_TERM']    = HMS_Term::term_to_text($lottery_term, TRUE);
+        $tpl['NEXT_TERM']       = HMS_Term::term_to_text($spring_term, TRUE);
+        $fall_spring_label      = $tpl['LOTTERY_TERM'] . ' - ' . $tpl['NEXT_TERM'];
 
         # Decide what the lottery link should be
         if($assignment_result != FALSE && !PEAR::isError($assignment_result)){
@@ -609,7 +634,7 @@ class HMS_Student_UI{
             $tpl['ASSIGNED'] = ''; // dummy tag
         }elseif($winner_result != FALSE && !PEAR::isError($winner_result)){
             # Student has won, let them choose their room
-            $entry = HMS_Lottery_Entry::get_entry($_SESSION['asu_username'], PHPWS_Settings::get('hms', 'lottery_term'));
+            $entry = HMS_Lottery_Entry::get_entry($_SESSION['asu_username'], $lottery_term);
             $tpl['EXPIRE_DATE'] = HMS_Util::get_long_date_time($entry->invite_expires_on);
             $tpl['SELECT_LINK'] = PHPWS_Text::secureLink('Click here to select your room', 'hms', array('type'=>'student', 'op'=>'lottery_select_residence_hall'));
         }elseif($entry_result != FALSE && !PEAR::isError($entry_result)){
@@ -621,23 +646,23 @@ class HMS_Student_UI{
                 # We're within deadlines, so show the "we see you're a returning student, click continue to enter the lottery" message
                 # Check the student's eligibility
                 if(HMS_Lottery::determine_eligibility($_SESSION['asu_username'])){
-                    $tpl['ENTRY_LINK'] = PHPWS_Text::secureLink('Fall 2009 - Spring 2010 Re-application', 'hms', array('module'=>'hms', 'type'=>'student', 'op'=>'show_lottery_signup'));
+                    $tpl['ENTRY_LINK'] = PHPWS_Text::secureLink($fall_spring_label . ' Re-application', 'hms', array('module'=>'hms', 'type'=>'student', 'op'=>'show_lottery_signup'));
                 }else{
                     $tpl['not_eligible'] = ""; //dummy tag
                 }
             }else if(!HMS_Deadlines::check_deadline_past('lottery_signup_begin_timestamp', $lottery_deadlines)){
                 # Show a too early to signup message.
-                $tpl['TOO_SOON']    = "Re-application for this term will begin on $begin_deadline.";
+                $tpl['BEGIN_DEADLINE']    = $begin_deadline;
             }else if(HMS_Deadlines::check_deadline_past('lottery_signup_end_timestamp', $lottery_deadlines)){
                 # Show a too late message.
-                $tpl['TOO_LATE']    = "Re-application for this term ended on $end_deadline.";
+                $tpl['END_DEADLINE']    = $end_deadline;
             }else{
                 # Show a general error message.
                 return HMS_Contact_Form::show_contact_form();
             }
         }
 
-        $roommate_invites = HMS_Lottery::get_lottery_roommate_invites($_SESSION['asu_username'], PHPWS_Settings::get('hms', 'lottery_term'));
+        $roommate_invites = HMS_Lottery::get_lottery_roommate_invites($_SESSION['asu_username'], $lottery_term);
         if($roommate_invites != FALSE && !is_null($roommate_invites) && $assignment_result != TRUE && !PEAR::isError($assignment_result)){
             $tpl['roommates'] = array();
             $tpl['ROOMMATE_REQUEST'] = ''; // dummy tag
@@ -646,8 +671,81 @@ class HMS_Student_UI{
             }
         }
 
-        $tpl['SUMMER1_LINK'] = PHPWS_Text::secureLink('Summer 1 2009 Application', 'hms', array('module'=>'hms', 'type'=>'student', 'op'=>''));
-        $tpl['SUMMER2_LINK'] = PHPWS_Text::secureLink('Summer 2 Application', 'hms', array('module'=>'hms', 'type'=>'student', 'op'=>''));
+        /***************************
+         * Summer 1 Re-application *
+         ***************************/
+        $summer1_label  = HMS_Term::term_to_text($summer1_term, TRUE);
+
+        $summer1_deadlines      = HMS_Deadlines::get_deadlines($summer1_term);
+        $summer1_begin_date     = HMS_Deadlines::get_deadline_as_date('submit_application_begin_timestamp', $summer1_deadlines);
+        $summer1_end_date       = HMS_Deadlines::get_deadline_as_date('submit_application_end_timestamp', $summer1_deadlines);
+
+        $summer1_assignment     = HMS_Assignment::check_for_assignment($_SESSION['asu_username'], $summer1_term);
+        $summer1_application    = HousingApplication::checkForApplication($_SESSION['asu_username'], $summer1_term);
+
+        $tpl['SUMMER_1_TERM']   = $summer1_label;
+
+        # Decide what the summer 1 text should say
+        if($summer1_assignment != FALSE && !PEAR::isError($summer1_assignment)){
+            # Student is already assigned
+            $tpl['SUMMER1_ASSIGNED'] = '';
+        }elseif($summer1_application != FALSE && !PEAR::isError($summer1_application)){
+            # Student has already applied for this term
+            $tpl['SUMMER1_APPLIED'] = '';
+        }else{
+            # Student is not assigned, and has not applied, so check the necessary deadlines
+            if(HMS_Deadlines::check_within_deadlines('submit_application_begin_timestamp', 'submit_application_end_timestamp', $summer1_deadlines)){
+                # We're within deadlines, so show the link
+                $tpl['SUMMER1_LINK']    = PHPWS_Text::secureLink($summer1_label . ' Application', 'hms', array('module'=>'hms', 'type'=>'student', 'op'=>'summer_application_begin', 'term'=>$summer1_term));
+            }else if(!HMS_Deadlines::check_deadline_past('submit_application_begin_timestamp', $summer1_deadlines)){
+                # Show a too early message
+                $tpl['SUMMER1_START_DEADLINE'] = $summer1_begin_date;
+            }else if(HMS_Deadlines::check_deadline_past('submit_application_end_timestamp', $summer1_deadlines)){
+                # Show a too late message
+                $tpl['SUMMER1_END_DEADLINE'] = $summer1_end_date;
+            }else{
+                # Shouldn't ever get here.. show a general error
+                return HMS_Contact_Form::show_contact_form();
+            }
+        }
+
+        /***************************
+         * Summer 2 Re-application *
+         ***************************/
+        $summer2_label  = HMS_Term::term_to_text($summer2_term, TRUE);
+
+        $summer2_deadlines      = HMS_Deadlines::get_deadlines($summer2_term);
+        $summer2_begin_date     = HMS_Deadlines::get_deadline_as_date('submit_application_begin_timestamp', $summer2_deadlines);
+        $summer2_end_date       = HMS_Deadlines::get_deadline_as_date('submit_application_end_timestamp', $summer2_deadlines);
+
+        $summer2_assignment     = HMS_Assignment::check_for_assignment($_SESSION['asu_username'], $summer2_term);
+        $summer2_application    = HousingApplication::checkForApplication($_SESSION['asu_username'], $summer2_term);
+
+        $tpl['SUMMER_2_TERM']   = $summer2_label;
+
+        # Decide what the summer 1 text should say
+        if($summer2_assignment != FALSE && !PEAR::isError($summer2_assignment)){
+            # Student is already assigned
+            $tpl['SUMMER2_ASSIGNED'] = '';
+        }elseif($summer2_application != FALSE && !PEAR::isError($summer2_application)){
+            # Student has already applied for this term
+            $tpl['SUMMER2_APPLIED'] = '';
+        }else{
+            # Student is not assigned, and has not applied, so check the necessary deadlines
+            if(HMS_Deadlines::check_within_deadlines('submit_application_begin_timestamp', 'submit_application_end_timestamp', $summer2_deadlines)){
+                # We're within deadlines, so show the link
+                $tpl['SUMMER2_LINK']    = PHPWS_Text::secureLink($summer2_label . ' Application', 'hms', array('module'=>'hms', 'type'=>'student', 'op'=>'summer_application_begin', 'term'=>$summer2_term));
+            }else if(!HMS_Deadlines::check_deadline_past('submit_application_begin_timestamp', $summer2_deadlines)){
+                # Show a too early message
+                $tpl['SUMMER2_START_DEADLINE'] = $summer2_begin_date;
+            }else if(HMS_Deadlines::check_deadline_past('submit_application_end_timestamp', $summer2_deadlines)){
+                # Show a too late message
+                $tpl['SUMMER2_END_DEADLINE'] = $summer2_end_date;
+            }else{
+                # Shouldn't ever get here.. show a general error
+                return HMS_Contact_Form::show_contact_form();
+            }
+        }
 
         $tpl['LOGOUT_LINK'] = PHPWS_Text::secureLink('Logout', 'users', array('action'=>'user', 'command'=>'logout'));
 

@@ -79,6 +79,10 @@ define('BANNER_MEAL_HIGH',  0);
 define('BANNER_MEAL_SUPER', 8);
 define('BANNER_MEAL_NONE', -1);
 
+// Summer Meal plan codes
+define('BANNER_MEAL_SUMMER1', 'S4');
+define('BANNER_MEAL_SUMMER2', 'S5');
+
 /**
  * Address types
  */

@@ -310,6 +310,32 @@ class HMS_Student {
                 PHPWS_Core::initModClass('hms', 'UI/Lottery_UI.php');
                 return Lottery_UI::handle_lottery_roommate_confirmation();
                 break;
+            case 'summer_application_begin':
+                PHPWS_Core::initModClass('hms', 'UI/Application_UI.php');
+                return Application_UI::showTermsAndAgreement(false, 'summer_application_form', $_REQUEST['term']);
+            case 'summer_application_form':
+                # Check to see if the user hit 'do not agree' on the terms/agreement page
+                if(isset($_REQUEST['quit'])) {
+                    PHPWS_Core::killAllSessions();
+                    PHPWS_Core::reroute('https://weblogin.appstate.edu/cosign-bin/logout');
+                }
+
+                PHPWS_Core::initModClass('hms', 'UI/SummerApplicationUI.php');
+                $summerUI = new SummerApplicationUI(NULL, $_REQUEST['term']);
+                return $summerUI->showForm();
+                break;
+            case 'summer_application_submit':
+                PHPWS_Core::initModClass('hms', 'SummerApplicationControl.php');
+                return SummerApplicationControl::summer_application_submit();
+                break;
+            case 'summer_application_confirmation':
+                PHPWS_Core::initModClass('hms', 'SummerApplicationControl.php');
+                return SummerApplicationControl::summer_application_confirmation();
+                break;
+            case 'summer_application_save':
+                PHPWS_Core::initModClass('hms', 'SummerApplicationControl.php');
+                return SummerApplicationControl::summer_application_save();
+                break;
             case 'logout':
                 PHPWS_Core::killAllSessions();
                 PHPWS_Core::reroute('https://weblogin.appstate.edu/cosign-bin/logout');

@@ -670,6 +670,24 @@ class HMS_Term{
     }
 
     /**
+     * Return the 'previous term' based on the given term
+     */
+    public function get_previous_term($term)
+    {
+        # Grab the year
+        $year = substr($term, 0, 4);
+
+        # Grab the term
+        $sem = substr($term, 4, 2);
+
+        if($sem == TERM_SPRING){
+            return ($year - 1) . TERM_FALL;
+        }else{
+            return "$year" . ($sem - 10);
+        }
+    }
+
+    /**
       * Returns a list application terms that can be applied for at the same
       * time as the parameter $term, and whether or not that term is required.
       *

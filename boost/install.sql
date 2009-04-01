@@ -263,6 +263,36 @@ CREATE TABLE hms_application_features (
     enabled int NOT NULL default 0
 );
 
+CREATE TABLE hms_new_application (
+    id                              integer                 NOT NULL,
+    term                            integer                 NOT NULL REFERENCES hms_term(term),
+    banner_id                       character varying(9)    NOT NULL,
+    username                        character varying(32)   NOT NULL,
+    gender                          smallint                NOT NULL,
+    application_term                integer                 NOT NULL,
+    cell_phone                      character varying(10),
+    meal_plan                       character varying(3),
+    physical_disability             smallint,
+    psych_disability                smallint,
+    medical_need                    smallint,
+    gender_need                     smallint,
+    withdrawn                       smallint NOT NULL default 0,
+    created_on                      integer NOT NULL,
+    created_by                      character varying(32) NOT NULL,
+    modified_on                     integer NOT NULL,
+    modified_by                     character varying(32) NOT NULL,
+    PRIMARY KEY(id)
+);
+
+ALTER TABLE hms_new_application ADD CONSTRAINT new_application_key UNIQUE (asu_username, term);
+ALTER TABLE hms_new_application ADD CONSTRAINT new_application_key2 UNIQUE (banner_id, term);
+
+CREATE TABLE hms_summer_application (
+    id          integer NOT NULL,
+    room_type   integer NOT NULL,
+    PRIMARY KEY(id)
+);
+
 CREATE TABLE hms_roommates (
     id integer NOT NULL,
     roommate_zero character varying(32) NOT NULL,

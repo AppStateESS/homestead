@@ -2,6 +2,41 @@
 
 class Application_UI{
 
+    /**
+     * Shows the Terms & Agreement page.
+     *
+     * @param terms_and_agreemtn_only bool If true, only the terms will be shown, with no way to agree/disagree. If false, 'agree' and 'disagree' buttons will be shown.
+     * @param action String The action which will be submitted in the agree/disagree form.
+     */
+    public function showTermsAndAgreement($terms_and_agreement_only = FALSE, $action = NULL, $term = NULL)
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Side_Thingie.php');
+        $side_thingie = new HMS_Side_Thingie(HMS_SIDE_STUDENT_AGREE);
+
+        if($terms_and_agreement_only){
+            $side_thingie->show(TRUE);
+        }else{
+            $side_thingie->show(FALSE);
+        }
+
+        $form = new PHPWS_Form;
+        $form->addHidden('module', 'hms');
+        $form->addHidden('type', 'student');
+        $form->addSubmit('begin', _('I Agree'));
+        $form->addSubmit('quit', _('I Disagree'));
+        $form->addSubmit('agreed_to_terms', 1);
+
+        $form->addHidden('type', 'student');
+        $form->addHidden('op', $action);
+        $form->addHidden('term', $term);
+
+        $tpl = $form->getTemplate();
+
+        $tpl['CONTRACT'] = str_replace("\n", "<br />", file_get_contents('mod/hms/inc/contract.txt'));
+
+        return PHPWS_Template::process($tpl, 'hms', 'student/applications/contract.tpl');
+    }
+
     public function show_housing_application($error_msg = NULL)
     {
         # Try to load the user's application, in case it already exists
