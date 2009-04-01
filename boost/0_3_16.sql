@@ -10,7 +10,7 @@ CREATE TABLE hms_new_application (
     PRIMARY KEY(id)
 );
 
-ALTER TABLE hms_new_application ADD CONSTRAINT new_application_key UNIQUE (asu_username, term);
+ALTER TABLE hms_new_application ADD CONSTRAINT new_application_key UNIQUE (username, term);
 ALTER TABLE hms_new_application ADD CONSTRAINT new_application_key2 UNIQUE (banner_id, term);
 
 CREATE TABLE hms_summer_application (
