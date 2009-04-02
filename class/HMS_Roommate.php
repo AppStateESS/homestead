@@ -165,14 +165,18 @@ class HMS_Roommate
     public function have_requested_each_other($a, $b)
     {
         $db = new PHPWS_DB('hms_roommate');
+        $db->addWhere('confirmed', 0, NULL, 'AND');
+        $db->addWhere('requested_on', mktime() - ROOMMATE_REQ_TIMEOUT, '>=');
         $db->addWhere('requestor', $a, 'ILIKE', 'AND', 'ab');
         $db->addWhere('requestee', $b, 'ILIKE', 'AND', 'ab');
         $db->addWhere('requestor', $b, 'ILIKE', 'AND', 'ba');
         $db->addWhere('requestee', $a, 'ILIKE', 'AND', 'ba');
-        $db->addWhere('confirmed', 0, NULL, 'AND');
-        $db->addWhere('requested_on', mktime() - ROOMMATE_REQ_TIMEOUT, '>=');
-        $db->setGroupConj('ab', 'OR');
+        $db->setGroupConj('ab', 'AND');
         $db->setGroupConj('ba', 'OR');
+
+        $db->groupIn('ab','ba');
+
+        $db->setTestMode();
         $result = $db->count();
 
         if($result > 1) {
