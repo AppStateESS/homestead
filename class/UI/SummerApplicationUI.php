@@ -35,7 +35,7 @@ class SummerApplicationUI {
         $tpl = array();
         $tpl['NAME']                = HMS_SOAP::get_full_name($username);
         $tpl['TERM']                = HMS_Term::term_to_text($term, TRUE);
-        $tpl['GENDER']              = HMS_Util::formatGender(HMS_SOAP::get_gender($username));
+        $tpl['GENDER']              = HMS_Util::formatGender(HMS_SOAP::get_gender($username, TRUE));
         $tpl['CLASS']               = HMS_Util::formatClass(HMS_SOAP::get_student_class($username));
         $tpl['TYPE']                = HMS_Util::formatType(HMS_SOAP::get_student_type($username));
 
