@@ -12,18 +12,17 @@
     {COOKIE_WARNING}
     <!-- END cookie_warning -->
     <!-- BEGIN login -->
-    <strong>Please <a href="{LOGIN_LINK}">click here to login</a></strong>.
+    <div style="font-size: 14px;"><strong><a href="{LOGIN_LINK}"><img align="center" src="images/mod/hms/tango/edit-redo.png"></a><a href="{LOGIN_LINK}">Log In</a></strong></div>
+    <em style="font-size: 10px;">Use your AppalNet user name and password,<br /><strong>NOT</strong> your First Connections password.</em>
     <!-- commented out for now
     [ <a href="#">more information</a> ]
     -->
     <!-- END login -->
-    <br />
-    <br />
     <p>
     <div style="float: left; width: 375px; background: #ECEFF5; padding: 3px">
     Are you a freshmen applying for Fall 2009? Read the <a href="http://housing.appstate.edu/pagesmith/49">on-campus housing FAQ</a>.
     <br /><br />
-    Fall 2009 re-application for current students is now complete. Please see <a href="http://housing.appstate.edu/blog/id/7">the announcement</a> for more information.
+    Housing applications for returning (non-freshmen) students for the Summer 1 and Summer 2 terms are now avilable. Sign in using the link above to apply.
     </div>
     </p>
     <br/><br /><br /><br />
