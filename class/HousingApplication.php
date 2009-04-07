@@ -1,7 +1,7 @@
 <?php
 
 
-abstract class HousingApplication {
+class HousingApplication {
 
     public $id = 0;
 
@@ -11,6 +11,7 @@ abstract class HousingApplication {
     public $username;
 
     public $gender;
+    public $student_type;  // 'F', 'C', 'T', etc...
     public $application_term; // The term the student started school
     public $cell_phone;
     public $meal_plan;
@@ -46,12 +47,13 @@ abstract class HousingApplication {
      * and this method will handle initializing the values of the core application member variables defined in
      * this class
      */
-    public function __construct($term, $banner_id, $username, $gender, $application_term, $cell_phone, $meal_plan, $physical_disability, $psych_disability, $gender_need, $medical_need){
+    public function __construct($term = NULL, $banner_id = NULL, $username = NULL, $gender = NULL, $student_type = NULL, $application_term = NULL, $cell_phone = NULL, $meal_plan = NULL, $physical_disability = NULL, $psych_disability = NULL, $gender_need = NULL, $medical_need = NULL){
         
         $this->setTerm($term);
         $this->setBannerId($banner_id);
         $this->setUsername($username);
         $this->setGender($gender);
+        $this->setStudentType($student_type);
         $this->setApplicationTerm($application_term);
         $this->setCellPhone($cell_phone);
         $this->setMealPlan($meal_plan);
@@ -150,6 +152,18 @@ abstract class HousingApplication {
         HMS_Activity_Log::log_activity($this->getUsername(), ACTIVITY_SUBMITTED_APPLICATION, $username, 'Term: ' . $this->getTerm());
     }
 
+     public function delete()
+    {
+        $db = new PHPWS_DB('hms_new_application');
+        $db->addWhere('id', $this->id);
+        $result = $db->delete();
+        if(!$result || PHPWS_Error::logIfError($result)){
+            return $result;
+        }
+
+        return TRUE;
+    }
+
     /**
      * Reports 'this' application to Banner
      */
@@ -232,6 +246,38 @@ abstract class HousingApplication {
         }
     }
 
+    /**
+     * Returns an array of HousingApplication objects, one object for each application the
+     * given student has completed. The username and banner_id parameters are optional, but one or the other
+     * must be specified. Returns false if the request cannot be compelted for any reason.
+     */
+    public static function getAllApplications($username = NULL, $banner_id = NULL){
+
+        if(is_null($username) && is_null($banner_id)){
+            # Neither parameter was specificed, so return false.
+            return false;
+        }
+
+        $db = new PHPWS_DB('hms_new_application');
+
+        if(!is_null($banner_id)){
+            $db->addWhere('banner_id', $banner_id);
+        }
+
+        if(!is_null($username)){
+            $db->addWhere('username', $username);
+        }
+
+        $result = $db->getObjects('HousingApplication');
+
+        if(PEAR::isError($result)){
+            PHPWS_Error::log($result);
+            return false;
+        }
+
+        return $result;
+    }
+
     /************************
      * Accessors & Mutators *
      ************************/
@@ -274,6 +320,14 @@ abstract class HousingApplication {
 
     public function setGender($gender){
         $this->gender = $gender;
+    }
+
+    public function getStudentType(){
+        return $this->student_type;
+    }
+
+    public function setStudentType($type){
+        $this->student_type = $type;
     }
 
     public function getApplicationTerm(){

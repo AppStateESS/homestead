@@ -688,37 +688,40 @@ class HMS_Student {
         /****************
          * Applications *
          ****************/
+        PHPWS_Core::initModClass('hms', 'HousingApplication.php');
+
         // This is the link for reporting an application to banner for the selected term when an application doesn't exist in the database
         $tpl['REPORT_APPLICATION'] = PHPWS_Text::secureLink('Report application to banner for selected term', 'hms', array('type'=>'student', 'op'=>'admin_report_application', 'username'=>$username, 'tab'=>'student_info'));
 
-        $query = "SELECT term, cell_phone, meal_option, 'freshmen' as type FROM hms_application WHERE asu_username = '$username' UNION SELECT term, cell_phone, meal_option, 're-application' as type FROM hms_lottery_entry WHERE asu_username = '$username' ORDER BY term DESC";
-        $result = PHPWS_DB::getAll($query);
+        $applications = HousingApplication::getAllApplications($username);
 
-        # Format each row appropriately
-        foreach($result as $id=>$row){
-            $result[$id]['term']        = HMS_Term::term_to_text($row['term'],TRUE);
-            $result[$id]['meal_option'] = HMS_Util::formatMealOption($row['meal_option']);
+        # Show a row for each application
+        if(isset($applications)){
+            foreach($applications as $app){
+                $term = HMS_Term::term_to_text($app->getTerm(), TRUE);
+                $meal_plan = HMS_Util::formatMealOption($app->getMealPlan());
+                $phone = HMS_Util::formatCellPhone($app->getCellPhone());
 
-            if(strlen($row['cell_phone']) == 10){
-                $result[$id]['cell_phone']   = '('.substr($row['cell_phone'], 0, 3).')';
-                $result[$id]['cell_phone']   .= substr($row['cell_phone'], 3, 3);
-                $result[$id]['cell_phone']   .= '-'.substr($row['cell_phone'], 6, 4);
+                # If this is a freshmen application (the term matches the student's application term)
+                if($app->getTerm() == $app->getApplicationTerm()){
+                    $type = 'Freshmen';
+                    $actions = "[";
+                    // The link to view an existing application
+                    $actions .= PHPWS_Text::secureLink('View', 'hms', array('type'=>'student', 'op'=>'get_matching_students', 'username'=>$username, 'tab'=>'housing_app'));
+                    // The link to re-report an existing application
+                    $actions .= ' | '. PHPWS_Text::secureLink('Report to Banner', 'hms', array('type'=>'student', 'op'=>'admin_report_application', 'username'=>$username, 'term'=>$row['term'], 'tab'=>'student_info'));
+                    $actions .= ']';
+                }else{
+                    $type = 'Continuing';
+                    $actions = '';
+                }
+
+                $app_rows[] = array('term'=>$term, 'type'=>$type, 'meal_plan'=>$meal_plan, 'cell_phone'=>$phone, 'actions'=>$actions);
             }
 
-            if($row['type'] == 'freshmen'){
-                $result[$id]['actions'] = "[";
-                // The link to view an existing application
-                $result[$id]['actions'] .= PHPWS_Text::secureLink('View', 'hms', array('type'=>'student', 'op'=>'get_matching_students', 'username'=>$username, 'tab'=>'housing_app'));
-                // The link to re-report an existing application
-                $result[$id]['actions'] .= ' | '. PHPWS_Text::secureLink('Report to Banner', 'hms', array('type'=>'student', 'op'=>'admin_report_application', 'username'=>$username, 'term'=>$row['term'], 'tab'=>'student_info'));
-                $result[$id]['actions'] .= ']';
-            }
-        }
-
-        if(PEAR::isError($result)){
-            $tpl['APPLICATIONS'] = 'Error loading applications.';
+            $tpl['APPLICATIONS'] = $app_rows;
         }else{
-            $tpl['APPLICATIONS'] = $result;
+            $tpl['APPLICATIONS_EMPTY'] = 'No applications found.';
         }
 
         /********

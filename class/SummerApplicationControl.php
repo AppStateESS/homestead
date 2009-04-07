@@ -70,6 +70,7 @@ class SummerApplicationControl {
                                             HMS_SOAP::get_banner_id($username),
                                             $username,
                                             HMS_SOAP::get_gender($username,TRUE),
+                                            HMS_SOAP::get_student_type($username),
                                             HMS_SOAP::get_application_term($username),
                                             $cellphone,
                                             $meal_plan,

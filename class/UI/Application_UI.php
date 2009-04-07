@@ -39,26 +39,21 @@ class Application_UI{
 
     public function show_housing_application($error_msg = NULL)
     {
+        PHPWS_Core::initModClass('hms', 'HMS_Application_Features.php');
+        PHPWS_Core::initModClass('hms', 'HousingApplication.php');
+        PHPWS_Core::initModClass('hms', 'FallApplication.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
+
         # Try to load the user's application, in case it already exists
-        $application = new HMS_Application($_SESSION['asu_username'], $_SESSION['application_term']);
+        $app_result = HousingApplication::checkForApplication($_SESSION['asu_username'], $_SESSION['application_term']);
+        $application = new FallApplication($app_result['id']);
         
         PHPWS_Core::initCoreClass('Form.php');
         $form = &new PHPWS_Form();
 
         $tpl = array();
-
-        /*******************
-         * Agreed to terms *
-         *******************/
-        # If the 'agreed_to_terms' flag was passed in the request, then use it.
-        # Otherwise look for it from an existing application.
-        if(isset($_REQUEST['agreed_to_terms'])){
-            $form->addHidden('agreed_to_terms', $_REQUEST['agreed_to_terms']);
-        }else if(isset($application->agreed_to_terms)){
-            $form->addHidden('agreed_to_terms',$application->agreed_to_terms);
-        }else{
-            $form->addHidden('agreed_to_terms', 0);
-        }
 
         /*************
          * Term Info *
@@ -204,8 +199,7 @@ class Application_UI{
         /*******
          * RLC *
          *******/
-        PHPWS_Core::initModClass('hms', 'HMS_Application.php');
-        if(HMS_Application::is_feature_enabled($_SESSION['application_term'], APPLICATION_RLC_APP)
+        if(HMS_Application_Features::is_feature_enabled($_SESSION['application_term'], APPLICATION_RLC_APP)
            && HMS_SOAP::get_student_type($_SESSION['asu_username'], $_SESSION['application_term']) == 'F'
            /* && HMS_Entry_Term::get_entry_semester($_SESSION['asu_username']) == TERM_FALL */
            && HMS_RLC_Application::check_for_application($_SESSION['asu_username'], $_SESSION['application_term']) == FALSE)
@@ -434,7 +428,8 @@ class Application_UI{
 
     public function submit_application_review()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Application.php');
+        PHPWS_Core::initModClass('hms', 'HousingApplication.php');
+        PHPWS_Core::initModClass('hms', 'FallApplication.php');
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
         
         //determine which terms requested by the user are valid and make an application
@@ -446,66 +441,30 @@ class Application_UI{
         }
 
         foreach($valid_terms as $key => $term){
+            # Check for an existing application and delete it
+            $app_result = HousingApplication::checkForApplication($_SESSION['asu_username'], $term);
+            if($app_result !== FALSE){
+                $application = new FallApplication($app_result['id']);
+                $application->delete();
+            }
+
             # Create a new application from the request data and save it
-            $application = &new HMS_Application($_SESSION['asu_username'], $term);
-            
-            $application->term                  = $term;
-            $application->meal_option           = $_REQUEST['meal_option'];
-            $application->lifestyle_option      = $_REQUEST['lifestyle_option'];
-            $application->preferred_bedtime     = $_REQUEST['preferred_bedtime'];
-            $application->room_condition        = $_REQUEST['room_condition'];
-            $application->rlc_interest          = $_REQUEST['rlc_interest'];
-            $application->agreed_to_terms       = $_REQUEST['agreed_to_terms'];
-            $application->cell_phone            = $_REQUEST['area_code'] . $_REQUEST['exchange'] . $_REQUEST['number'];
+            $banner_id = HMS_SOAP::get_banner_id($_SESSION['asu_username']);
+            $application = new FallApplication(0, $term, $banner_id, $_SESSION['asu_username'],
+                                                HMS_SOAP::get_gender($_SESSION['asu_username'], TRUE),
+                                                HMS_SOAP::get_student_type($_SESSION['asu_username']),
+                                                HMS_SOAP::get_application_term($_SESSION['asu_username']),
+                                                $_REQUEST['area_code'] . $_REQUEST['exchange'] . $_REQUEST['number'],
+                                                $_REQUEST['meal_option'],
+                                                isset($_REQUEST['special_needs']['physical_disability']) ? 1 : 0,
+                                                isset($_REQUEST['special_needs']['psych_disability']) ? 1 : 0,
+                                                isset($_REQUEST['special_needs']['gender_need']) ? 1 : 0,
+                                                isset($_REQUEST['special_needs']['medical_need']) ? 1 : 0,
+                                                $_REQUEST['lifestyle_option'],
+                                                $_REQUEST['preferred_bedtime'],
+                                                $_REQUEST['room_condition'],
+                                                $_REQUEST['rlc_interest']);
 
-            if(isset($_REQUEST['special_needs']['physical_disability'])){
-                $application->physical_disability = 1;
-            }
-
-            if(isset($_REQUEST['special_needs']['psych_disability'])){
-                $application->psych_disability = 1;
-            }
-
-            if(isset($_REQUEST['special_needs']['medical_need'])){
-                $application->medical_need = 1;
-            }
-
-            if(isset($_REQUEST['special_needs']['gender_need'])){
-                $application->gender_need = 1;
-            }
-
-            $application->gender                = HMS_SOAP::get_gender($application->asu_username, TRUE);
-            
-            $type   = HMS_SOAP::get_student_type($application->asu_username, $application->term);
-            $class  = HMS_SOAP::get_student_class($application->asu_username, $application->term);
-
-            #TODO: Get rid of these aweful magic numbers
-            switch($type){
-                case TYPE_FRESHMEN:
-                    $application->student_status = 1;
-                    break;
-                case TYPE_TRANSFER:
-                    $application->student_status = 2;
-                    break;
-            }
-
-            switch($class){
-                case CLASS_FRESHMEN:
-                    $application->term_classification = 1;
-                    break;
-                case CLASS_SOPHOMORE:
-                    $application->term_classification = 2;
-                    break;
-                case CLASS_JUNIOR:
-                    $application->term_classification = 3;
-                    break;
-                case CLASS_SENIOR:
-                    $application->term_classification = 4;
-                    break;
-            }
-
-            $application->aggregate = $application->calculateAggregate();
-            
             $result = $application->save();
 
             $tpl = array();
@@ -516,7 +475,12 @@ class Application_UI{
                 HMS_Activity_Log::log_activity($_SESSION['asu_username'], ACTIVITY_SUBMITTED_APPLICATION, $_SESSION['asu_username']);
                 
                 # report the application to banner;
-                $application->report_to_banner();
+                $application->reportToBanner();
+
+                # Send the email confirmation
+                PHPWS_Core::initModClass('hms', 'HMS_Email.php');
+                HMS_Email::send_hms_application_confirmation($_SESSION['asu_username'], null);
+
             }else{
                 # Show an error
                 $tpl['TITLE'] = 'Error';
@@ -524,6 +488,7 @@ class Application_UI{
                 return PHPWS_Template::process($tpl,'hms', 'student/student_success_failure_message.tpl');
             }
         }
+
         if($_REQUEST['rlc_interest'] == 1){
             # Show the RLC application
             PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
@@ -539,9 +504,6 @@ class Application_UI{
                 $tpl['RLC_LINK'] = PHPWS_Text::secureLink(_('Unique Housing Options Application'), 'hms', array('type'=>'student', 'op'=>'show_rlc_application_form'));
             }
             
-            PHPWS_Core::initModClass('hms', 'HMS_Email.php');
-            HMS_Email::send_hms_application_confirmation($_SESSION['asu_username'], null);
-
             return PHPWS_Template::process($tpl, 'hms', 'student/student_application_thankyou.tpl');
         }
 
@@ -549,21 +511,24 @@ class Application_UI{
 
     public function view_housing_application($username,$term)
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Application.php');
+        PHPWS_Core::initModClass('hms', 'HousingApplication.php');
+        PHPWS_Core::initModClass('hms', 'FallApplication.php');
 
         $possible_terms = HMS_Term::get_valid_application_terms($term);
 
         if($possible_terms !== false){
             $term_list = array();
             foreach($possible_terms as $possible_term){
-                $application = &new HMS_Application($username, $possible_term['term']);
+                $app_result = HousingApplication::checkForApplication($username, $possible_term['term']);
+                $application = new FallApplication($app_result['id']);
                 if($application->id > 0){
                     $term_list[] = $possible_term;
                 }
             }
         }
-            
-        $application = &new HMS_Application($username, $term);
+        
+        $app_result = HousingApplication::checkForApplication($username, $term);
+        $application = new FallApplication($app_result['id']);
 
         if($application->id == 0){
             return "No application found for the specified user and term.";

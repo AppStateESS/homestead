@@ -212,9 +212,25 @@ class HMS_Util{
                 return 'High';
             case BANNER_MEAL_SUPER:
                 return 'Super';
+            case BANNER_MEAL_SUMMER1:
+                return 'Summer';
+            case BANNER_MEAL_SUMMER2:
+                return 'Summer';
             default:
                 return 'Unknown';
         }
+    }
+
+    public function formatCellPhone($number){
+        $result = "";
+
+        if(strlen($number) == 10){
+            $result  = '('.substr($number, 0, 3).')';
+            $result .= substr($number, 3, 3);
+            $result .= '-'.substr($number, 6, 4);
+        }
+
+        return $result;
     }
 
 

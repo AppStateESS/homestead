@@ -10,7 +10,7 @@ class HMS_Autoassigner
     public function auto_assign($test = 0)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Room.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Application.php');
+        //PHPWS_Core::initModClass('hms', 'HMS_Application.php'); // TODO update this to use HousignAssignment
         PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');

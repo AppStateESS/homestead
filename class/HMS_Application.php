@@ -233,20 +233,6 @@ class HMS_Application {
         return $db->getObjects('HMS_Application');
     }
 
-    public function is_feature_enabled($term, $feature){
-        $db = &new PHPWS_DB('hms_application_features');
-        $db->addWhere('term', $term);
-        $db->addWhere('feature', $feature);
-        $db->addWhere('enabled', 1);
-        $result = $db->select();
-
-        if(PHPWS_Error::logIfError($result) || sizeof($result) == 0){
-            return false;
-        }
-
-        return true;
-    }
-
     /**
      * Reports an application to banner as having been received
      * whether there's actually an application in the database or not

@@ -269,6 +269,7 @@ CREATE TABLE hms_new_application (
     banner_id                       character varying(9)    NOT NULL,
     username                        character varying(32)   NOT NULL,
     gender                          smallint                NOT NULL,
+    student_type                    character(1)            NOT NULL,
     application_term                integer                 NOT NULL,
     cell_phone                      character varying(10),
     meal_plan                       character varying(3),
@@ -286,6 +287,15 @@ CREATE TABLE hms_new_application (
 
 ALTER TABLE hms_new_application ADD CONSTRAINT new_application_key UNIQUE (username, term);
 ALTER TABLE hms_new_application ADD CONSTRAINT new_application_key2 UNIQUE (banner_id, term);
+
+CREATE TABLE hms_fall_application (
+    id                      integer     NOT NULL,
+    lifestyle_option        smallint    NOT NULL,
+    preferred_bedtime       smallint    NOT NULL,
+    room_condition          smallint    NOT NULL,
+    rlc_interest            smallint    NOT NULL,
+    PRIMARY KEY(id)
+);
 
 CREATE TABLE hms_summer_application (
     id          integer NOT NULL,

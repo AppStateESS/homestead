@@ -559,9 +559,9 @@ class HMS_Roommate
             return E_ROOMMATE_GENDER_MISMATCH;
         }
 
-        PHPWS_Core::initModClass('hms', 'HMS_Application.php');
+        PHPWS_Core::initModClass('hms', 'HousingApplication.php');
         // Make sure the requestee has filled out an application
-        if(HMS_Application::check_for_application($requestee, $term) === false) {
+        if(HousingApplication::checkForApplication($requestee, $term) === false) {
             return E_ROOMMATE_NO_APPLICATION;
         }
 

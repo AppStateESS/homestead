@@ -706,7 +706,8 @@ class HMS_Assignment extends HMS_Item
     {
         PHPWS_Core::initModClass('hms', 'HMS_Room.php');
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Application.php');
+        PHPWS_Core::initModClass('hms', 'HousingApplication.php');
+        PHPWS_Core::initModClass('hms', 'FallApplication.php');
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
 
@@ -720,13 +721,13 @@ class HMS_Assignment extends HMS_Item
         
         
         # Check to make sure the student has an application on file
-        $application_status = HMS_Application::check_for_application($_REQUEST['username'], HMS_Term::get_selected_term());
+        $application_status = HousingApplication::checkForApplication($_REQUEST['username'], HMS_Term::get_selected_term());
 
         if($application_status == FALSE){
             $more = ' (Warning: Did not find a housing application on file for this term)';
         }else{
             # Create application object
-            $application = new HMS_Application($_REQUEST['username'], HMS_Term::get_selected_term());
+            $application = new FallApplication($application_status['id']);
             if(PEAR::isError($application)){
                 return HMS_Assignment::show_assign_student(NULL, 'There was an error loading the student\'s application. Please contact ESS.');
             }

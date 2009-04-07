@@ -16,7 +16,7 @@ class HMS_Student_UI{
         PHPWS_Core::initModClass('hms', 'HMS_Deadlines.php');
         PHPWS_Core::initModClass('hms', 'HMS_Entry_Term.php');
         PHPWS_Core::initModClass('hms', 'HMS_Contact_Form.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Application.php');
+        PHPWS_Core::initModClass('hms', 'HousingApplication.php');
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
 
         # Grab the current term for use late
@@ -150,7 +150,7 @@ class HMS_Student_UI{
             
             # Check to see if the user has an application on file already
             # If so, forward to main menu
-            if(HMS_Application::check_for_application($_SESSION['asu_username'], $application_term)){
+            if(HousingApplication::checkForApplication($_SESSION['asu_username'], $application_term)){
                 return HMS_Student_UI::show_main_menu();
             }
             
@@ -260,7 +260,6 @@ class HMS_Student_UI{
     
     public function show_main_menu()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Application.php');
         PHPWS_Core::initModClass('hms', 'HMS_Deadlines.php');
 
         # Show the side thingie
@@ -286,10 +285,14 @@ class HMS_Student_UI{
     public function show_generic_main_menu($deadlines)
     {
         PHPWS_Core::initModClass('hms','HMS_SOAP.php');
+        PHPWS_Core::initModClass('hms','HousingApplication.php');
+        PHPWS_Core::initModClass('hms','FallApplication.php');
+        PHPWS_Core::initModClass('hms','HMS_Application_Features.php');
         $tags = array();
 
         # Get the student's application for later use
-        $application = new HMS_Application($_SESSION['asu_username'], $_SESSION['application_term']);
+        $app_result     = HousingApplication::checkForApplication($_SESSION['asu_username'], $_SESSION['application_term']);
+        $application    = new FallApplication($app_result['id']);
 
         # Terms open to the studnet
         $valid_terms = HMS_Term::get_valid_application_terms($_SESSION['application_term']);
@@ -363,7 +366,7 @@ class HMS_Student_UI{
              * RLC Application *
              ******************/
             $rlc_menu = false;
-            if(HMS_Application::is_feature_enabled($term['term'], APPLICATION_RLC_APP)){
+            if(HMS_Application_Features::is_feature_enabled($term['term'], APPLICATION_RLC_APP)){
                $rlc_menu = true;
                $menu_count++;
             }
@@ -403,7 +406,7 @@ class HMS_Student_UI{
             /***************************************
              * Student Profile & Profile Searching *
              **************************************/
-            $profile_search = HMS_Application::is_feature_enabled($term['term'], APPLICATION_ROOMMATE_PROFILE) ? true : false;
+            $profile_search = HMS_Application_Features::is_feature_enabled($term['term'], APPLICATION_ROOMMATE_PROFILE) ? true : false;
 
             if($profile_search){
                 PHPWS_Core::initModClass('hms', 'HMS_Student_Profile.php');
@@ -446,7 +449,7 @@ class HMS_Student_UI{
             /**********************
              * Roommate Selection *
              *********************/
-            $roommate_selection = HMS_Application::is_feature_enabled($term['term'], APPLICATION_SELECT_ROOMMATE) ? true : false;
+            $roommate_selection = HMS_Application_Features::is_feature_enabled($term['term'], APPLICATION_SELECT_ROOMMATE) ? true : false;
             
             if($roommate_selection){
                 PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');

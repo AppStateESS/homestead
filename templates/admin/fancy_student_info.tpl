@@ -158,10 +158,15 @@
                             <td>{term}</td>
                             <td>{type}</td>
                             <td>{cell_phone}</td>
-                            <td>{meal_option}</td>
+                            <td>{meal_plan}</td>
                             <td>{actions}</td>
                         </tr>
                         <!-- END APPLICATIONS -->
+                        <!-- BEGIN no_apps -->
+                        <tr>
+                            <td colspan="5">{APPLICATIONS_EMPTY}</td>
+                        </tr>
+                        <!-- END no_apps -->
                     </table>
                     </div>
                 </td>

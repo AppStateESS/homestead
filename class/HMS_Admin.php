@@ -424,7 +424,8 @@ class HMS_Admin
         }
 
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Application.php');
+        PHPWS_Core::initModClass('hms', 'HousingApplication.php');
+        PHPWS_Core::initModClass('hms', 'FallApplication.php');
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
         PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
@@ -444,9 +445,10 @@ class HMS_Admin
         foreach($_REQUEST['remove_checkbox'] as $asu_username){
             
             # Check for and mark as withdrawn any application
-            if(HMS_Application::check_for_application($asu_username, $term, TRUE) != FALSE){
-                $application = &new HMS_Application($asu_username, $term);
-                $application->withdrawn = 1;
+            $app = HousingApplication::checkForApplication($asu_username, $term, TRUE);
+            if($app != FALSE){
+                $application = new FallApplication($app['id']);
+                $application->setWithdrawn(true);
                 $app_result = $application->save();
                 if(PEAR::isError($app_result)){
                     $tpl['warnings'][] = array('USERNAME'   => $asu_username,

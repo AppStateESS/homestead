@@ -29,7 +29,8 @@ class HMS_Side_Thingie {
 
         $this->step = $step;
 
-        PHPWS_Core::initModClass('hms','HMS_Application.php');
+        PHPWS_Core::initModClass('hms','HousingApplication.php');
+        PHPWS_Core::initModClass('hms','HMS_Application_Features.php');
         PHPWS_Core::initModClass('hms','HMS_RLC_Application.php');
         PHPWS_Core::initModClass('hms','HMS_Student_Profile.php');
         PHPWS_Core::initModClass('hms','HMS_Deadlines.php');
@@ -63,17 +64,17 @@ class HMS_Side_Thingie {
         # Check for an application on file, set dates/styles if an application is not found
         $this->set_apply_agree($links);
         
-        if(HMS_Application::is_feature_enabled($term, APPLICATION_RLC_APP)){
+        if(HMS_Application_Features::is_feature_enabled($term, APPLICATION_RLC_APP)){
             # Check for an RLC application on file, set dates/styles if a RLC application is not found
             $this->set_rlc($links);
         }
 
-        if(HMS_Application::is_feature_enabled($term, APPLICATION_ROOMMATE_PROFILE)){
+        if(HMS_Application_Features::is_feature_enabled($term, APPLICATION_ROOMMATE_PROFILE)){
             # Check for a profile, show dates accordingly
             $this->set_profile($links);
         }
         
-        if(HMS_Application::is_feature_enabled($term, APPLICATION_SELECT_ROOMMATE)){
+        if(HMS_Application_Features::is_feature_enabled($term, APPLICATION_SELECT_ROOMMATE)){
             # Check for a roomate, show dates accordingly
             $this->set_roomate($links);
         }
@@ -106,7 +107,7 @@ class HMS_Side_Thingie {
         }
 
         # Check if the student has an application on file already. If so, set agreed/applied steps to completed and we're done here.
-        if(HMS_Application::check_for_application($_SESSION['asu_username'],$_SESSION['application_term']) !== FALSE){
+        if(HousingApplication::checkForApplication($_SESSION['asu_username'],$_SESSION['application_term']) !== FALSE){
             $this->steps_styles[HMS_SIDE_STUDENT_AGREE] = 'STEP_COMPLETED';
             $this->steps_styles[HMS_SIDE_STUDENT_APPLY] = 'STEP_COMPLETED';
             return;

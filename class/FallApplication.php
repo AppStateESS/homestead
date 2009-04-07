@@ -2,11 +2,15 @@
 
 PHPWS_Core::initModClass('hms', 'HousingApplication.php');
 
-class SummerApplication extends HousingApplication{
+class FallApplication extends HousingApplication{
 
-    public $room_type = 0;
+    public $lifestyle_option    = NULL;
+    public $preferred_bedtime   = NULL;
+    public $room_condition      = NULL;
 
-    public function __construct($id = 0, $term = NULL, $banner_id = NULL, $username = NULL, $gender = NULL, $student_type = NULL, $application_term = NULL, $cell_phone = NULL, $meal_plan = NULL, $physical_disability = NULL, $psych_disability = NULL, $gender_need = NULL, $medical_need = NULL, $room_type = NULL){
+    public $rlc_interest;
+
+    public function __construct($id = 0, $term = NULL, $banner_id = NULL, $username = NULL, $gender = NULL, $student_type = NULL, $application_term = NULL, $cell_phone = NULL, $meal_plan = NULL, $physical_disability = NULL, $psych_disability = NULL, $gender_need = NULL, $medical_need = NULL, $lifestyle_option = NULL, $preferred_bedtime = NULL, $room_condition = NULL, $rlc_interest = NULL){
         
         /**
          * If the id is non-zero, then we need to load the other member variables 
@@ -20,12 +24,15 @@ class SummerApplication extends HousingApplication{
 
         parent::__construct($term, $banner_id, $username, $gender, $student_type, $application_term, $cell_phone, $meal_plan, $physical_disability, $psych_disability, $gender_need, $medical_need);
 
-        $this->setRoomType($room_type);
+        $this->setLifestyleOption($lifestyle_option);
+        $this->setPreferredBedtime($preferred_bedtime);
+        $this->setRoomCondition($room_condition);
+        $this->setRlcInterest($rlc_interest);
     }
 
     
     /**
-     * Loads the SummerApplication object with the corresponding id. Requires that $this->id be non-zero.
+     * Loads the FallApplication object with the corresponding id. Requires that $this->id be non-zero.
      */
     protected function load()
     {
@@ -39,7 +46,7 @@ class SummerApplication extends HousingApplication{
         }
 
         # Load the application-specific data
-        $db = new PHPWS_DB('hms_summer_application');
+        $db = new PHPWS_DB('hms_fall_application');
 
         if(PHPWS_Error::logIfError($db->loadObject($this))){
             $this->id = 0;
@@ -50,7 +57,7 @@ class SummerApplication extends HousingApplication{
     }
 
     /**
-     * Saves this SummerApplication object
+     * Saves this object
      */
     public function save()
     {
@@ -62,7 +69,7 @@ class SummerApplication extends HousingApplication{
         }
 
         # Save the application-specific data
-        $db = new PHPWS_DB('hms_summer_application');
+        $db = new PHPWS_DB('hms_fall_application');
 
         /* If this is a new object, call saveObject with the third parameter as 'false' so
          * the database class will insert the object with the ID set by the parent::save() call.
@@ -88,7 +95,7 @@ class SummerApplication extends HousingApplication{
             return false;
         }
 
-        $db = new PHPWS_DB('hms_summer_application');
+        $db = new PHPWS_DB('hms_fall_application');
         $db->addWhere('id', $this->id);
         $result = $db->delete();
         if(!$result || PHPWS_Error::logIfError($result)){
@@ -102,12 +109,36 @@ class SummerApplication extends HousingApplication{
      * Accessors & Mutators *
      ************************/
 
-    public function getRoomType(){
-        return $this->room_type;
+    public function getLifestyleOption(){
+        return $this->lifestyle_option;
     }
 
-    public function setRoomType($type){
-        $this->room_type = $type;
+    public function setLifestyleOption($option){
+        $this->lifestyle_option = $option;
+    }
+
+    public function getPreferredBedtime(){
+        return $this->preferred_bedtime;
+    }
+
+    public function setPreferredBedtime($bedtime){
+        $this->preferred_bedtime = $bedtime;
+    }
+
+    public function getRoomCondition(){
+        return $this->room_condition;
+    }
+
+    public function setRoomCondition($condition){
+        $this->room_condition = $condition;
+    }
+
+    public function getRlcInterest(){
+        return $this->rlc_interest;
+    }
+
+    public function setRlcInterest($interest){
+        $this->rlc_interest = $interest;
     }
 }
 ?>

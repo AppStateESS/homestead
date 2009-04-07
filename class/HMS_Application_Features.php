@@ -89,5 +89,19 @@ class HMS_Application_Features {
         }
         return true;
     }
+
+    public function is_feature_enabled($term, $feature){
+        $db = &new PHPWS_DB('hms_application_features');
+        $db->addWhere('term', $term);
+        $db->addWhere('feature', $feature);
+        $db->addWhere('enabled', 1);
+        $result = $db->select();
+
+        if(PHPWS_Error::logIfError($result) || sizeof($result) == 0){
+            return false;
+        }
+
+        return true;
+    }
 }
 ?>
