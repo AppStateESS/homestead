@@ -68,22 +68,6 @@
                 <th>Is an Overflow Room:</th>
                 <td>{IS_OVERFLOW} {IS_OVERFLOW_LABEL}</td>
             </tr>
-            <tr>
-                <th>Is part of a suite: </th>
-                <td align="left">{IS_IN_SUITE}</td>
-            </tr>
-            <!-- BEGIN suite -->
-            <tr>
-                <th>Other rooms in suite:</th>
-                <td align="left">
-                    <ul>
-                <!-- BEGIN SUITE_ROOM_LIST -->
-                    <li>{SUITE_ROOM}</li>
-                <!-- END SUITE_ROOM_LIST -->
-                    </ul>
-                </td>
-            </tr>
-            <!-- END suite -->
         </table>
         {SUBMIT}
         {END_FORM}

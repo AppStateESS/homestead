@@ -269,27 +269,6 @@ class HMS_Residence_Hall extends HMS_Item
     }
 
     /*
-     * Returns the number of suites in the current hall
-     */
-    public function get_number_of_suites()
-    {
-        $db = &new PHPWS_DB('hms_suite');
-
-        $db->addJoin('LEFT OUTER', 'hms_suite', 'hms_floor',          'floor_id',          'id');
-        $db->addJoin('LEFT OUTER', 'hms_floor', 'hms_residence_hall', 'residence_hall_id', 'id');
-
-        $db->addWhere('hms_residence_hall.id', $this->id);
-
-        $result = $db->select('count');
-        
-        if(!$result || PHPWS_Error::logIfError($result)){
-            return false;
-        }
-
-        return $result;
-    }
-
-    /*
      * Returns the number of rooms in the current hall
      */
     public function get_number_of_rooms()
@@ -413,25 +392,6 @@ class HMS_Residence_Hall extends HMS_Item
         return $floors;
     }
      
-
-    /*
-     * Returns an array of the suite objects which are within the current hall.
-     */
-    public function &get_suites()
-    {
-        if (!$this->loadFloors()) {
-            return false;
-        }
-        
-        $suites = array();
-
-        foreach($this->_floors as $floor){
-            $floor_suites = $floor->get_suites();
-            $suites = array_merge($suites, $floor_suites);
-        }
-        return $suites;
-    }
-
     /*
      * Returns an array of room objects which are in the current hall
      */

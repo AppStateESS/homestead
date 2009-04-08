@@ -133,7 +133,6 @@ class HMS_Letter
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
         PHPWS_Core::initModClass('hms', 'HMS_Movein_Time.php');
         PHPWS_Core::initModClass('hms', 'HMS_Room.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Suite.php');
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
 
         $term = HMS_Term::get_selected_term();
@@ -169,14 +168,8 @@ class HMS_Letter
         $room_id = $assignment->get_room_id();
         $room = new HMS_Room($room_id);
 
-        if($room->is_in_suite()){
-            # Go to the suite level to get all the roommates
-            $suite = new HMS_Suite($room->suite_id);
-            $assignees = $suite->get_assignees(); // get an array of student objects for those assigned to this suite
-        }else{
-            # Go to the room level to get all the roommates
-            $assignees = $room->get_assignees(); // get an array of student objects for those assigned to this room
-        }
+        # Go to the room level to get all the roommates
+        $assignees = $room->get_assignees(); // get an array of student objects for those assigned to this room
 
         $letter = new HMS_Letter;
 
@@ -605,7 +598,6 @@ class HMS_Letter
     public function email()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Email.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Suite.php');
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
         PHPWS_Core::initModClass('hms', 'HMS_Movein_Time.php');
@@ -674,13 +666,7 @@ class HMS_Letter
                 continue;
 
             // And now back to your regularly scheduled email generation.
-
-            if($room->is_in_suite()){
-                $suite = new HMS_Suite($room->suite_id);
-                $assignees = $suite->get_assignees();
-            } else {
-                $assignees = $room->get_assignees();
-            }
+            $assignees = $room->get_assignees();
 
             if(sizeof($assignees > 1)){
                 foreach($assignees as $roommate){

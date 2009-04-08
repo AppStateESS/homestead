@@ -53,10 +53,6 @@ class HMS_Admin
                 PHPWS_Core::initModClass('hms', 'HMS_Room.php');
                 $final = HMS_Room::main();
                 break;
-            case 'suite':
-                PHPWS_Core::initModClass('hms', 'HMS_Suite.php');
-                $final = HMS_Suite::main();
-                break;
             case 'bed':
                 PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
                 $final = HMS_Bed::main();

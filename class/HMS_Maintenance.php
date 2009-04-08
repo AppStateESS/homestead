@@ -148,15 +148,6 @@ class HMS_Maintenance
                 array('type'=>'letter', 'op'=>'email_menu'));
             
         /*****************
-         * Suite Options *
-         *****************/
-        if(Current_User::allow('hms', 'suite_attributes')){
-            $tpl['EDIT_SUITE'] = PHPWS_Text::secureLink(
-                _('Edit Suite'), 'hms',
-                array('type'=>'suite', 'op'=>'show_select_suite'));
-        }
-        
-        /*****************
          * Edit Features *
          *****************/
         if(Current_User::allow('hms', 'edit_features')){

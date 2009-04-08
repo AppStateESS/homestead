@@ -38,9 +38,6 @@ class HMS_XML{
             case 'get_rooms_with_vacancies':
                 HMS_XML::getRoomsWithVacancies($_REQUEST['floor_id']);
                 break; 
-            case 'get_suites':
-                HMS_XML::getSuites($_REQUEST['floor_id']);
-                break;
             case 'get_beds':
                 HMS_XML::getBeds($_REQUEST['room_id']);
                 break;
@@ -401,63 +398,6 @@ class HMS_XML{
         echo $serializer->getSerializedData();
         exit;
 
-    }
-
-    public function getSuites($floor_id)
-    {
-        PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
-        
-        $floor = &new HMS_Floor($floor_id);
-
-        $suites = $floor->get_suites();
-
-        if(!$suites){
-            // throw an error
-        }
-
-        $xml_suites = array();
-        $sorted_suites = array();
-
-        foreach($suites as $suite){
-            $rooms = $suite->get_rooms();
-            
-            unset($room_nums);
-            foreach ($rooms as $room){
-                $room_nums[] =  $room->room_number;
-            }
-            sort($room_nums);
-            $room_list = implode(', ', $room_nums);
-            
-            $sorted_suites[$suite->id] = $room_list;
-        }
-
-        // sort the array of suites where the keys are suite ids, the values are the room numbers
-        asort($sorted_suites);
-
-        // place the sorted list of suites into the final array for XML serialization
-
-        foreach($sorted_suites as $s_id=>$room_nums){
-            $xml_suites[] = array('id' => $s_id, 'room_list' => $room_nums);
-        }
-
-        $serializer_options = array (
-            'addDecl' => TRUE,
-            'encoding' => 'ISO-8859-1',
-            'indent' => '  ',
-            'rootName' => 'suites',
-            'defaultTagName' => 'suite',);
-
-        $serializer = &new XML_Serializer($serializer_options);
-
-        $status = $serializer->serialize($xml_suites);
-
-        if(PEAR::isError($status)){
-            die($status->getMessage());
-        }
-
-        header('Content-type: text/xml');
-        echo $serializer->getSerializedData();
-        exit;
     }
 
     public function get_username_suggestions($username)

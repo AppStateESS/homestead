@@ -31,10 +31,6 @@
                 {EDIT_ROOM}<br />
                 <!-- END room_options -->
 
-                <!-- BEGIN suite_options -->
-                {EDIT_SUITE}<br />
-                <!-- END suite_options -->
-
                 <!-- BEGIN bed_options -->
                 {EDIT_BED}<br />
                 <!-- END bed_options -->

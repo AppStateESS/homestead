@@ -49,11 +49,6 @@
     $permissions['floor_attributes']    = _('Edit floor attributes');
     $permissions['floor_view']          = _('View floors');
 
-    # Suite tasks
-    $permissions['suite_structure']     = _('Add and delete suites');
-    $permissions['suite_attributes']    = _('Edit suite attributes');
-    $permissions['suite_view']          = _('View suites');
-
     # Room tasks
     $permissions['room_structure']      = _('Add and delete rooms');
     $permissions['room_attributes']     = _('Edit room attributes');

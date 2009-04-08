@@ -25,6 +25,5 @@ drop table hms_roommate_approval cascade;
 drop table hms_roommates cascade; 
 drop table hms_student cascade; 
 drop table hms_student_profiles cascade; 
-drop table hms_suite cascade; 
 drop table hms_term cascade;
 commit;

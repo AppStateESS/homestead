@@ -77,23 +77,11 @@ CREATE TABLE hms_floor (
     primary key(id)
 );
 
-CREATE TABLE hms_suite (
-    id          integer NOT NULL,
-    term        integer NOT NULL REFERENCES hms_term(term),
-    floor_id    integer NOT NULL REFERENCES hms_floor(id),
-    updated_on  integer,
-    updated_by  smallint,
-    added_on    integer,
-    added_by    smallint NOT NULL DEFAULT 0,
-    primary key(id)
-);
-
 CREATE TABLE hms_room (
     id                      integer NOT NULL,
     term                    integer NOT NULL REFERENCES hms_term(term),
     room_number             character varying(32) NOT NULL,
     floor_id                integer NOT NULL REFERENCES hms_floor(id),
-    suite_id                integer REFERENCES hms_suite(id),
     gender_type             smallint NOT NULL,
     default_gender          smallint NOT NULL,
     ra_room                 smallint NOT NULL,

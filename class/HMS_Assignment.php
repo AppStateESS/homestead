@@ -281,7 +281,6 @@ class HMS_Assignment extends HMS_Item
     {   
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
         PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Suite.php');
         PHPWS_Core::initModClass('hms', 'HMS_Room.php');
         PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
@@ -435,14 +434,8 @@ class HMS_Assignment extends HMS_Item
         $room_id = $assignment->get_room_id();
         $room = new HMS_Room($room_id);
 
-        if($room->is_in_suite()){
-            # Go to the suite level to get all the roommates
-            $suite = new HMS_Suite($room->suite_id);
-            $assignees = $suite->get_assignees(); // get an array of student objects for those assigned to this suite
-        }else{
-            # Go to the room level to get all the roommates
-            $assignees = $room->get_assignees(); // get an array of student objects for those assigned to this room
-        }
+        # Go to the room level to get all the roommates
+        $assignees = $room->get_assignees(); // get an array of student objects for those assigned to this room
 
         if(sizeof($assignees) > 1){
             foreach($assignees as $roommate){
@@ -918,47 +911,6 @@ class HMS_Assignment extends HMS_Item
         return $tags;
     }
 
-    public function get_assignment_pager_by_suite($suite_id){
-        PHPWS_Core::initCoreClass('DBPager.php');
-
-        $pager = & new DBPager('hms_assignment', 'HMS_Assignment');
-
-        $pager->db->addJoin('LEFT OUTER', 'hms_assignment', 'hms_bed', 'bed_id', 'id');
-        $pager->db->addJoin('LEFT OUTER', 'hms_bed', 'hms_room', 'room_id', 'id');
-
-        $pager->addWhere('hms_room.suite_id', $suite_id);
-
-        $page_tags['NAME_LABEL']    = "Name";
-        $page_tags['ACTION_LABEL']  = "Action";
-        $page_tags['TABLE_TITLE']   = "Current Assignments";
-
-        $pager->setModule('hms');
-        $pager->setTemplate('admin/assignment_pager_by_suite.tpl');
-        $pager->setLink('index.php?module=hms');
-        $pager->SetEmptyMessage("No assignments found.");
-
-        $pager->addToggle('class="toggle1"');
-        $pager->addToggle('class="toggle2"');
-        $pager->addRowTags('getPagerBySuiteTags');
-        $pager->addPageTags($page_tags);
-       
-        return $pager->get();
-    }
-
-    public function getPagerBySuiteTags()
-    {
-        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
-
-        $tags['NAME']       = PHPWS_Text::secureLink(HMS_SOAP::get_full_name($this->asu_username), 'hms', array('type'=>'student', 'op'=>'get_matching_students', 'username'=>$this->asu_username));
-
-        $reassign_link = PHPWS_Text::secureLink('Re-Assign','hms', array('module'=>'hms', 'type'=>'assignment', 'op'=>'show_assign_student', 'username'=>$this->asu_username)); 
-        $unassign_link = PHPWS_Text::secureLink('Unassign', 'hms', array('module'=>'hms', 'type'=>'assignment', 'op'=>'show_unassign_student', 'username'=>$this->asu_username));
-        $tags['ACTION']     = $reassign_link . ' | ' . $unassign_link;
-        
-        return $tags;
-    }
-        
-     
     /**************************
      * Static Utility Methods *
      *************************/

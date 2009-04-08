@@ -26,7 +26,6 @@ class HMS_Room extends HMS_Item
     var $is_medical             = false;
     var $is_reserved            = false;
     var $is_online              = false;
-    var $suite_id               = NULL;
 
 
     /**
@@ -141,7 +140,6 @@ class HMS_Room extends HMS_Item
         $new_room->reset();
         $new_room->term     = $to_term;
         $new_room->floor_id = $floor_id;
-        $new_room->suite_id = $suite_id;
 
         //Set the default gender to the floor's gender if the floor isn't
         //coed and the genders don't match.
@@ -464,18 +462,6 @@ class HMS_Room extends HMS_Item
         return $vacant_beds;
     }
 
-    /**
-     * Returns TRUE if this room is part of a suite.
-     */
-    public function is_in_suite()
-    {
-        if(isset($this->suite_id)){
-            return TRUE;
-        }else{
-            return FALSE;
-        }
-    }
-
     public function where_am_i($link = FALSE)
     {
         $floor = $this->get_parent();
@@ -490,14 +476,6 @@ class HMS_Room extends HMS_Item
         }
     }
     
-    public function getRoomPagerBySuiteTags()
-    {
-        $tpl['ROOM_NUMBER'] = PHPWS_Text::secureLink($this->room_number, 'hms', array('type'=>'room', 'op'=>'show_edit_room', 'room'=>$this->id));
-        $tpl['ACTION']      = "Remove";
-
-        return $tpl;
-    }
-
     public function count_avail_lottery_beds()
     {
         $now = mktime();
@@ -803,32 +781,6 @@ class HMS_Room extends HMS_Item
 
     }
 
-    public function get_room_pager_by_suite($suite_id)
-    {
-        PHPWS_Core::initCoreClass('DBPager.php');
-
-        $pager = & new DBPager('hms_room', 'HMS_Room');
-
-        $pager->addWhere('hms_room.suite_id', $suite_id);
-
-        $page_tags['ROOM_NUMBER_LABEL'] = "Room Number";
-        $page_tags['ACTION_LABEL']      = "Action";
-        $page_tags['TABLE_TITLE']       = "Rooms In Suite";
-
-        $pager->setModule('hms');
-        $pager->setTemplate('admin/room_pager_by_suite.tpl');
-        $pager->setLink('index.php?module=hms');
-        $pager->setEmptyMessage("No rooms found.");
-        $pager->addToggle('class="toggle1"');
-        $pager->addToggle('class="toggle2"');
-        $pager->addRowTags('getRoomPagerBySuiteTags');
-        $pager->addPageTags($page_tags);
-
-        $pager->initialize();
-
-        return $pager->get();
-    }
-
     /**
      * Returns the ID of an empty room (which can be auto-assigned)
      * Returns FALSE if there are no more free rooms
@@ -1013,7 +965,6 @@ class HMS_Room extends HMS_Item
     {
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
         PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Suite.php');
         PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
         PHPWS_Core::initModClass('hms', 'HMS_Pricing_Tier.php');
@@ -1052,7 +1003,6 @@ class HMS_Room extends HMS_Item
 
         
         $number_of_assignees    = $room->get_number_of_assignees();
-        $is_in_suite            = $room->is_in_suite();
 
         $tpl['HALL_NAME']           = PHPWS_Text::secureLink($hall->hall_name, 'hms', array('type'=>'hall', 'op'=>'show_edit_hall', 'hall'=>$hall->id));
         $tpl['FLOOR_NUMBER']        = PHPWS_Text::secureLink($floor->floor_number, 'hms', array('type'=>'floor', 'op'=>'show_edit_floor', 'floor'=>$floor->id));
@@ -1066,12 +1016,12 @@ class HMS_Room extends HMS_Item
         $form->addDropBox('pricing_tier', HMS_Pricing_Tier::get_pricing_tiers_array());
         $form->setMatch('pricing_tier', $room->pricing_tier);
 
-        if(($number_of_assignees == 0) && !$is_in_suite){
-            # Room is empty and not in a suite, show the drop down so the user can change the gender
+        if($number_of_assignees == 0){
+            # Room is empty, show the drop down so the user can change the gender
             $form->addDropBox('gender_type', array(FEMALE => FEMALE_DESC, MALE => MALE_DESC, COED=>COED_DESC));
             $form->setMatch('gender_type', $room->gender_type);
         }else{
-            # Room is not empty or in a suite so just show the gender (no drop down)
+            # Room is not empty so just show the gender (no drop down)
             if($room->gender_type == FEMALE){
                 $tpl['GENDER_MESSAGE'] = "Female";
             }else if($room->gender_type == MALE){
@@ -1086,8 +1036,6 @@ class HMS_Room extends HMS_Item
             # Show the reason the gender could not be changed.
             if($number_of_assignees != 0){
                 $tpl['GENDER_REASON'] = 'Remove occupants to change room gender.';
-            }else if($is_in_suite){
-                $tpl['GENDER_REASON'] = PHPWS_Text::secureLink('Edit the suite', 'hms', array('type'=>'suite', 'op'=>'show_edit_suite', 'suite'=>$room->suite_id)) . ' to change room gender.';
             }
         }
 
@@ -1118,29 +1066,6 @@ class HMS_Room extends HMS_Item
         $form->addCheck('is_overflow', 1);
         //$form->setLabel('is_overflow', array(_('No'), _('Yes')));
         $form->setMatch('is_overflow', $room->is_overflow);
-
-        if($is_in_suite){
-            # Room is in a suite
-            $tpl['IS_IN_SUITE'] = PHPWS_Text::secureLink('Yes', 'hms', array('type'=>'suite', 'op'=>'show_edit_suite', 'suite'=>$room->suite_id));
-            
-            # Create the suite and get the rooms in it
-            $suite = new HMS_Suite($room->suite_id);
-            $suite_rooms = $suite->get_rooms();
-
-            # Generate the list of other rooms in this suite
-            foreach ($suite_rooms as $suite_room){
-                # Remove this room from the list
-                if($room->id == $suite_room->id){
-                    #continue;
-                }else{
-                    $tpl['SUITE_ROOM_LIST'][] = array('SUITE_ROOM' => PHPWS_Text::secureLink($suite_room->room_number, 'hms', array('type'=>'room', 'op'=>'show_edit_room', 'room'=>$suite_room->id)));
-                }
-            }
-
-        }else{
-            # Room is not in a suite
-            $tpl['IS_IN_SUITE'] = 'No';
-        }
 
         $form->addHidden('room_id', $room->id);
         $form->addHidden('module', 'hms');
@@ -1185,7 +1110,6 @@ class HMS_Room extends HMS_Item
         # include what we need
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
         PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Suite.php');
         PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
         PHPWS_Core::initModClass('hms', 'HMS_Pricing_Tier.php');
