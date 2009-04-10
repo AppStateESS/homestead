@@ -176,7 +176,6 @@ class HMS_Roommate
 
         $db->groupIn('ab','ba');
 
-        $db->setTestMode();
         $result = $db->count();
 
         if($result > 1) {
