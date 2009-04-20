@@ -1259,6 +1259,7 @@ class Lottery_UI {
         $pager->addPageTags($tpl);
         $pager->addRowTags('waiting_list_tags');
         $pager->setReportRow('waiting_list_csv_tags');
+        $pager->setSearch('hms_lottery_entry.asu_username');
         
         return $pager->get();
     }

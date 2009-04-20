@@ -5,7 +5,7 @@
 <!-- BEGIN success_msg -->
 <span class="success">{SUCCESS_MSG}<br /></span>
 <!-- END success_msg -->
-
+<div align="right">{SEARCH}</div>
 <table>
     <tr>
         <th>Name {ASU_USERNAME_SORT}</th>
