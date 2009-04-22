@@ -1414,34 +1414,93 @@ class HMS_Reports{
 
     public function unassigned_applicants_report()
     {
+        PHPWS_Core::initCoreClass('DBPager.php');
+
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
+        PHPWS_Core::initModClass('hms', 'HousingApplication.php');
+        PHPWS_Core::initModClass('hms', 'SpringApplication.php');
+        PHPWS_Core::initModClass('hms', 'SummerApplication.php');
+        PHPWS_Core::initModClass('hms', 'FallApplication.php');
+
         $term = HMS_Term::get_selected_term();
-        
-        $sql = "
-            SELECT hms_application.asu_username AS user,
-                   student_status AS status,
-                   gender         AS gender,
-                   lifestyle_option,
-                   preferred_bedtime,
-                   room_condition,
-                   hms_application.meal_option
-            FROM hms_application
-            LEFT OUTER JOIN hms_assignment
-            ON hms_assignment.asu_username = hms_application.asu_username
-            WHERE hms_assignment.asu_username IS NULL
-            AND hms_application.term = {$term}
-            AND hms_application.withdrawn = 0
-            ORDER BY student_status, gender, hms_application.asu_username
-        ";
+        $sem = HMS_Term::get_term_sem($term);
+
+        $tpl = array();
+
+        $tpl['TERM'] = HMS_Term::term_to_text($term, TRUE);
+
+        switch($sem){
+            case TERM_SUMMER1:
+            case TERM_SUMMER2:
+                $pager = new DBPager('hms_new_application', 'SummerApplication');
+                $pager->db->addJoin('LEFT OUTER', 'hms_new_application', 'hms_summer_application', 'id', 'id');
+                $pager->joinResult('id', 'hms_summer_application', 'id', 'room_type');
+                $pager->addSortHeader('room_type', 'Room Type');
+                break;
+            case TERM_FALL:
+                $pager = new DBPager('hms_new_application', 'FallApplication');
+                $pager->db->addJoin('LEFT OUTER', 'hms_new_application', 'hms_fall_application', 'id', 'id');
+                $pager->joinResult('id', 'hms_fall_application', 'id', 'lifestyle_option');
+                $pager->joinResult('id', 'hms_fall_application', 'id', 'preferred_bedtime');
+                $pager->joinResult('id', 'hms_fall_application', 'id', 'room_condition');
+                $pager->addSortHeader('lifestyle_option','Lifestyle');
+                $pager->addSortHeader('preferred_bedtime','Preferred Bedtime');
+                $pager->addSortHeader('room_condition','Room Condition');
+                break;
+            case TERM_SPRING:
+                $pager = new DBPager('hms_new_application', 'SpringApplication');
+                $pager->db->addJoin('LEFT OUTER', 'hms_new_application', 'hms_fall_application', 'id', 'id');
+                $pager->joinResult('id', 'hms_spring_application', 'id', 'lifestyle_option');
+                $pager->joinResult('id', 'hms_spring_application', 'id', 'preferred_bedtime');
+                $pager->joinResult('id', 'hms_spring_application', 'id', 'room_condition');
+                $pager->addSortHeader('lifestyle_option','Lifestyle');
+                $pager->addSortHeader('preferred_bedtime','Preferred Bedtime');
+                $pager->addSortHeader('room_condition','Room Condition');
+                break;
+            default:
+                // error
+                return "Invalid term specified."
+        }
+
+        $pager->addSortHeader('banner_id', 'Banner ID');
+        $pager->addSortHeader('username', 'User Name');
+        $pager->addSortHeader('gender', 'Gender');
+        $pager->addSortHeader('application_term', 'Application Term');
+
+        $pager->db->addJoin('LEFT OUTER', 'hms_new_application', 'hms_assignment', 'username', 'asu_username AND hms_new_application.term = hms_assignment.term');
+        $pager->db->addWhere('hms_assignment.asu_username', 'NULL');
+        $pager->db->addWhere('hms_new_application.term', $term);
+        $pager->db->addWhere('hms_new_application.withdrawn', 0);
+
+        $pager->setModule('hms');
+        $pager->setTemplate('admin/reports/unassigned_applicants.tpl');
+        $pager->setEmptyMessage('No students found.');
+        $pager->addToggle('class="bgcolor1"');
+        $pager->addToggle('class="bgcolor2"');
+        $pager->addPageTags($tpl);
+        $pager->addRowTags('unassigned_applicants_rows');
+
+        return $pager->get();
+
+/*    
+        $sql = "SELECT * FROM hms_new_application
+                        JOIN $extra_table ON hms_new_application.id = $extra_table.id
+                        LEFT OUTER JOIN (SELECT * FROM hms_assignment WHERE term = $term) AS assign ON assign.asu_username = hms_new_application.username
+                        WHERE assign.asu_username IS NULL
+                        AND hms_new_application.term = $term
+                        AND hms_new_application.withdrawn = 0
+                        ORDER BY hms_new_application.gender, hms_new_application.gender, hms_new_application.username";
+
+
         $results = PHPWS_DB::getAll($sql);
         if(PHPWS_Error::isError($results)) {
             test($results,1);
         }
 
         if(sizeof($results) == 0){
-            $content = "<h2>Unassigned Applicants</h2>";
-            $content .= "No unassigned applicants found.";
-            return $content;
+            $tpl['EMPTY_RESULTS'] = ""; // dummy tag
+            return PHPWS_Template::process($tpl, 'hms', 'admin/reports/unassigned_applicants.tpl');
         }
 
         $ff_count = 0;
@@ -1511,6 +1570,7 @@ class HMS_Reports{
         $head .= "<p><strong>Transfer Male:</strong> $tm_count</p>";
 
         return $head . $content;
+        */
     }
 
     public function run_no_banner_data_report()

@@ -20,7 +20,7 @@
     <tr>
         <td colspan="5">{EMPTY_MESSAGE}</td>
     </tr>
-    <!-- END empty_table-->
+    <!-- END empty_table -->
     <!-- BEGIN listrows -->
     <tr>
         <td>{NAME}</td>

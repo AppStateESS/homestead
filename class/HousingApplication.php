@@ -102,7 +102,9 @@ class HousingApplication {
 
         $db = new PHPWS_DB('hms_new_application');
 
-        if(PHPWS_Error::logIfError($db->saveObject($this))){
+        $result = $db->saveObject($this);
+        if(PHPWS_Error::logIfError($result)){
+            test($result,1);
             return false;
         }
 
@@ -119,21 +121,28 @@ class HousingApplication {
         $this->setModifiedOn(time());
 
         # Sets the 'last modified by' field according to who's logged in
+        /*
         if(Current_User::getUsername() == HMS_STUDENT_USER){
             $this->setModifiedBy($_SESSION['asu_username']);
         }else{
             $this->setModifiedBy(Current_User::getUsername());
         }
+        */
+        $this->setMOdifiedBy('converted');
 
         # If the object is new, set the 'created' fields
         if($this->getId() == 0){
             $this->setCreatedOn(time());
 
+            /*
             if(Current_User::getUsername() == HMS_STUDENT_USER){
                 $this->setCreatedBy($_SESSION['asu_username']);
             }else{
                 $this->setCreatedBy(Current_User::getUsername());
             }
+            */
+
+            $this->setCreatedBy('converted');
         }
     }
 
@@ -143,12 +152,16 @@ class HousingApplication {
     public function log()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
+        /*
         # Determine which user name to use as the current user
         if(Current_User::getUsername() == HMS_STUDENT_USER){
             $username = $this->getUsername();
         }else{
             $username = Current_User::getUsername();
         }
+        */
+        $username = 'converted';
+
         HMS_Activity_Log::log_activity($this->getUsername(), ACTIVITY_SUBMITTED_APPLICATION, $username, 'Term: ' . $this->getTerm());
     }
 
@@ -200,6 +213,23 @@ class HousingApplication {
             }
         }
     }
+
+    /*
+     * Returns the table row tags for the 'unassigned applications report' in
+     * HMS_Reports.php
+     */
+    public function unassigned_applicants_rows()
+    {
+        $tpl = array();
+        $tpl['BANNER_ID']       = $this->getBannerId();
+        $tpl['USERNAME']        = $this->getUsername();
+        $tpl['GENDER']          = HMS_Util::formatGender($this->getGender());
+        $tpl['APP_TERM']        = HMS_Term::term_to_text($this->getApplicationTerm(), TRUE);
+        $tpl['MEAL']            = HMS_Util::formatMealOption($this->getMealPlan());
+
+        return $tpl;
+    }
+
 
     /******************
      * Static Methods *

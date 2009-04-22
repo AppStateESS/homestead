@@ -105,6 +105,21 @@ class FallApplication extends HousingApplication{
         return TRUE;
     }
 
+    /*
+     * Returns the table row tags for the 'unassigned applications report' in
+     * HMS_Reports.php
+     */
+    public function unassigned_applicants_rows()
+    {
+        $tpl = parent::unassigned_applicants_rows();
+
+        $tpl['LIFESTYLE']       = $this->getLifestyleOption();
+        $tpl['BEDTIME']         = $this->getPreferredBedtime();
+        $tpl['ROOM_CONDITION']  = $this->getRoomCondition();
+
+        return $tpl;
+    }
+
     /************************
      * Accessors & Mutators *
      ************************/
