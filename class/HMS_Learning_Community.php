@@ -845,6 +845,8 @@ class HMS_Learning_Community
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
 
+        $term = HMS_Term::get_selected_term();
+
         $db = &new PHPWS_DB('hms_learning_communities');
         $db->addColumn('community_name');
         $db->addWhere('id',$_REQUEST['rlc_list']);
@@ -873,9 +875,9 @@ class HMS_Learning_Community
             PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
             $roomie = NULL;
 
-            $roomie = HMS_Roommate::has_confirmed_roommate($user) ? HMS_Roommate::get_Confirmed_roommate($user) : NULL;
+            $roomie = HMS_Roommate::has_confirmed_roommate($user, $term) ? HMS_Roommate::get_Confirmed_roommate($user, $term) : NULL;
             if($roomie == NULL) {
-                $roomie = HMS_Roommate::has_roommate_request($user) ? HMS_Roommate::get_unconfirmed_roommate($user) . ' *pending* ' : NULL;
+                $roomie = HMS_Roommate::has_roommate_request($user, $term) ? HMS_Roommate::get_unconfirmed_roommate($user, $term) . ' *pending* ' : NULL;
             }
 
             $sinfo = HMS_SOAP::get_student_info($user['user_id']);

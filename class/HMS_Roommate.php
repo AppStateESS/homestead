@@ -39,9 +39,9 @@ class HMS_Roommate
         }
     }
 
-    public function request($requestor, $requestee, $term=null)
+    public function request($requestor, $requestee, $term)
     {
-        if(HMS_Roommate::can_live_together($requestor, $requestee) != E_SUCCESS) {
+        if(HMS_Roommate::can_live_together($requestor, $requestee, $term) != E_SUCCESS) {
             return false;
         }
 
@@ -162,9 +162,10 @@ class HMS_Roommate
      * @param a A user to check on
      * @param b Another user to check on
      */
-    public function have_requested_each_other($a, $b)
+    public function have_requested_each_other($a, $b, $term)
     {
         $db = new PHPWS_DB('hms_roommate');
+        $db->addWhere('term', $term);
         $db->addWhere('confirmed', 0, NULL, 'AND');
         $db->addWhere('requested_on', mktime() - ROOMMATE_REQ_TIMEOUT, '>=');
         $db->addWhere('requestor', $a, 'ILIKE', 'AND', 'ab');
@@ -188,9 +189,10 @@ class HMS_Roommate
     /* 
      * Returns TRUE if the student has a confirmed roommate, FALSE otherwise
      */ 
-    public function has_confirmed_roommate($asu_username)
+    public function has_confirmed_roommate($asu_username, $term)
     {
         $db = new PHPWS_DB('hms_roommate');
+        $db->addwhere('term', $term);
         $db->addWhere('requestor', $asu_username, 'ILIKE', 'OR', 'grp');
         $db->addwhere('requestee', $asu_username, 'ILIKE', 'OR', 'grp');
         $db->setGroupConj('grp', 'AND');
@@ -273,12 +275,13 @@ class HMS_Roommate
      *
      * @param username The user to check on
      */
-    public function has_roommate_request($username)
+    public function has_roommate_request($username,$term)
     {
         $db = new PHPWS_DB('hms_roommate');
         $db->addWhere('requestor', $username, 'ILIKE');
         $db->addWhere('confirmed', 0);
         $db->addWhere('requested_on', mktime() - ROOMMATE_REQ_TIMEOUT, '>=');
+        $db->addWhere('term', $term);
         $result = $db->count();
 
         if(PHPWS_Error::logIfError($result))
@@ -291,11 +294,12 @@ class HMS_Roommate
      * Returns the asu username of the student which the given user has requested, or NULL
      * if either the user has not requested anyone or the pairing is confirmed.
      */
-    public function get_unconfirmed_roommate($asu_username)
+    public function get_unconfirmed_roommate($asu_username, $term)
     {
         $db = new PHPWS_DB('hms_roommate');
         $db->addWhere('requestor', $asu_username, 'ILIKE');
         $db->addWhere('confirmed', 0);
+        $db->addWhere('term', $term);
         $db->addWhere('requested_on', mktime() - ROOMMATE_REQ_TIMEOUT, '>=');
         $db->addColumn('requestee');
         $result = $db->select('col');
@@ -314,10 +318,11 @@ class HMS_Roommate
     /**
      * Returns an array of requests in which the given user is requestee
      */
-    public function get_pending_requests($asu_username)
+    public function get_pending_requests($asu_username,$term)
     {
         $db = new PHPWS_DB('hms_roommate');
         $db->addWhere('requestee', $asu_username, 'ILIKE');
+        $db->addWhere('term', $term);
         $db->addWhere('confirmed', 0);
         $db->addWhere('requested_on', mktime() - ROOMMATE_REQ_TIMEOUT, '>=');
         $result = $db->getObjects('HMS_Roommate');
@@ -328,11 +333,12 @@ class HMS_Roommate
     /**
      * Returns a count of pending requests
      */
-    public function count_pending_requests($asu_username)
+    public function count_pending_requests($asu_username,$term)
     {
         $db = new PHPWS_DB('hms_roommate');
         $db->addWhere('requestee', $asu_username, 'ILIKE');
         $db->addWhere('confirmed', 0);
+        $db->addWhere('term', $term);
         $db->addWhere('requested_on', mktime() - ROOMMATE_REQ_TIMEOUT, '>=');
         $result = $db->count();
 
@@ -361,7 +367,7 @@ class HMS_Roommate
      * Removes all pending requests.  THIS DOES WORK SO BE CAREFUL.  Used when roommates are confirmed.
      * Logs each individual removal to cover our butts.
      */
-    public function remove_outstanding_requests($asu_username)
+    public function remove_outstanding_requests($asu_username, $term)
     {
         $db = new PHPWS_DB('hms_roommate');
         $db->addWhere('requestee', $asu_username, 'ILIKE', NULL, 'username_group');
@@ -369,6 +375,7 @@ class HMS_Roommate
         $db->setGroupConj('username_group', 'AND');
         
         $db->addWhere('confirmed', 0);
+        $db->addWhere('term', $term);
         $requests = $db->getObjects('HMS_Roommate');
 
         if(PHPWS_Error::logIfError($requests)) {
@@ -479,7 +486,7 @@ class HMS_Roommate
     {
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
         $name = HMS_SOAP::get_full_name($this->requestor);
-        $tpl['NAME'] = PHPWS_Text::secureLink($name, 'hms', array('type'=>'student','op'=>'show_roommate_confirmation','id'=>$this->id));
+        $tpl['NAME'] = PHPWS_Text::secureLink($name, 'hms', array('type'=>'student','op'=>'show_roommate_confirmation','id'=>$this->id, 'term'=>$this->term));
         $expires = floor(($this->calc_req_expiration_date() - mktime()) / 60 / 60);
         if($expires == 0) {
             $expires = floor(($this->calc_req_expiration_date() - mktime()) / 60);
@@ -524,22 +531,22 @@ class HMS_Roommate
         }
 
         // Check if the requestor has a confirmed roommate
-        if(HMS_Roommate::has_confirmed_roommate($requestor)){
+        if(HMS_Roommate::has_confirmed_roommate($requestor, $term)){
             return E_ROOMMATE_ALREADY_CONFIRMED;
         }
 
         // Check if the requestee has a confirmed roommate
-        if(HMS_Roommate::has_confirmed_roommate($requestee)){
+        if(HMS_Roommate::has_confirmed_roommate($requestee, $term)){
             return E_ROOMMATE_REQUESTED_CONFIRMED;
         }
 
         // Make sure requestor and requestee are not requesting each other
-        if(HMS_Roommate::have_requested_each_other($requestor, $requestee)) {
+        if(HMS_Roommate::have_requested_each_other($requestor, $requestee, $term)) {
             return E_ROOMMATE_ALREADY_REQUESTED;
         }
 
         // Make sure requestor does not have a pending roommate request
-        if(HMS_Roommate::has_roommate_request($requestor)) {
+        if(HMS_Roommate::has_roommate_request($requestor,$term)) {
             return E_ROOMMATE_PENDING_REQUEST;
         }
 
@@ -596,7 +603,7 @@ class HMS_Roommate
      * Performs all the checks necessary before allowing an administrator to
      * create a roommate pairing
      */
-    public function can_live_together_admin($roommate_1, $roommate_2){
+    public function can_live_together_admin($roommate_1, $roommate_2, $term){
         
         # This is always a good idea
         $requestor = strToLower($roommate_1);
@@ -637,11 +644,11 @@ class HMS_Roommate
         }
         
         # Check if either has a confirmed roommate
-        if(HMS_Roommate::has_confirmed_roommate($roommate_1)){
+        if(HMS_Roommate::has_confirmed_roommate($roommate_1, $term)){
             return E_ROOMMATE_ALREADY_CONFIRMED;
         }
 
-        if(HMS_Roommate::has_confirmed_roommate($roommate_2)){
+        if(HMS_Roommate::has_confirmed_roommate($roommate_2, $term)){
             return E_ROOMMATE_REQUESTED_CONFIRMED;
         }
 
@@ -722,12 +729,17 @@ class HMS_Roommate
      * UI Methods *
      **************/
 
-    public function show_request_roommate($error_message = NULL)
+    public function show_request_roommate($error_message = NULL, $term = NULL)
     {
         PHPWS_Core::initCoreClass('Form.php');
 
+        # If the term was passed in, then use it.... if not, then look in the request
+        if(is_null($term)){
+            $term = $_REQUEST['term'];
+        }
+
         # Make sure the user doesn't already have a request out
-        $result = HMS_Roommate::has_roommate_request($_SESSION['asu_username']);
+        $result = HMS_Roommate::has_roommate_request($_SESSION['asu_username'],$term);
         if(PHPWS_Error::isError($result)) {
             $tpl['ERROR_MSG'] = 'There was an unexpected database error which has been reported to the administrators.  Please try again later.';
             // TODO: Log and Report
@@ -738,8 +750,8 @@ class HMS_Roommate
             return PHPWS_Template::process($tpl, 'hms', 'student/select_roommate.tpl');
         }
 
-        # Make sur ethe user doesn't already have a confirmed roommate
-        $result = HMS_Roommate::has_confirmed_roommate($_SESSION['asu_username']);
+        # Make sure the user doesn't already have a confirmed roommate
+        $result = HMS_Roommate::has_confirmed_roommate($_SESSION['asu_username'], $term);
         if(PHPWS_Error::isError($result)) {
 
             $tpl['ERROR_MSG'] = 'There was an unexpected database error which has been reported to the administrators.  Please try again later.';
@@ -755,6 +767,7 @@ class HMS_Roommate
 
         $form->addText('username');
         
+        $form->addHidden('term', $term);
         $form->addHidden('module', 'hms');
         $form->addHidden('type', 'student');
         $form->addHidden('op', 'request_roommate');
@@ -779,15 +792,19 @@ class HMS_Roommate
      * @param requestor The person requesting a roommate
      * @param requestee The person requested as a roommate
      */
-    public function create_roommate_request($remove_rlc_app = FALSE, $term=null)
+    public function create_roommate_request($remove_rlc_app = FALSE, $term = NULL)
     {
-        if(!isset($term) && isset($_SESSION['application_term'])){
+        if(isset($_REQUEST['term'])){
+            $term = $_REQUEST['term'];
+        }else if(!isset($term) && isset($_SESSION['application_term'])){
             $term = $_SESSION['application_term'];
+        }else if(!isset($term)){
+            $term = HMS_SOAP::get_application_term($_SESSION['asu_username']);
         }
 
         if(empty($_REQUEST['username'])) {
             $error = "You did not enter a username.";
-            return HMS_Roommate::show_select_roommate($error);
+            return HMS_Roommate::show_select_roommate($error, $term);
         }
         if(!PHPWS_Text::isValidInput($_REQUEST['username'])) {
             $error = "You entered an invalid user name. Please use letters and numbers *only*.";
@@ -798,7 +815,7 @@ class HMS_Roommate
         $requestee = strtolower(trim($_REQUEST['username']));
 
         if(!PHPWS_Text::isValidInput($requestee)) {
-            return HMS_Roommate::show_request_roommate('Malformed Username.');
+            return HMS_Roommate::show_request_roommate('Malformed Username.', $term);
         }
 
         // Did they say go ahead and trash the RLC application?
@@ -809,7 +826,7 @@ class HMS_Roommate
         }
 
         // Attempt to Create Roommate Request
-        $result = HMS_Roommate::can_live_together($requestor, $requestee);
+        $result = HMS_Roommate::can_live_together($requestor, $requestee, $term);
 
         if($result != E_SUCCESS) {
             // Pairing Error
@@ -855,12 +872,12 @@ class HMS_Roommate
                     // TODO: Log Weirdness
                     break;
             }
-            return HMS_Roommate::show_request_roommate($msg);
+            return HMS_Roommate::show_request_roommate($msg, $term);
         }
 
         // Create request object and initialize
-        $request = &new HMS_Roommate();
-        $result = $request->request($requestor,$requestee);
+        $request = new HMS_Roommate();
+        $result = $request->request($requestor,$requestee, $term);
 
         HMS_Activity_Log::log_activity($requestee,
                                        ACTIVITY_REQUESTED_AS_ROOMMATE,
@@ -868,7 +885,7 @@ class HMS_Roommate
         if(!$result) {
             // TODO: Log and Notify
             $msg = "An unknown error has occurred.";
-            return HMS_Roommate::show_request_roommate($msg);
+            return HMS_Roommate::show_request_roommate($msg, $term);
         }
 
         // Save the Roommate object
@@ -877,7 +894,7 @@ class HMS_Roommate
         if(!$result) {
             // TODO: Log and Notify
             $msg = "An unknown error has occurred.";
-            return HMS_Roommate::show_request_roommate($msg);
+            return HMS_Roommate::show_request_roommate($msg, $term);
         }
 
         // Email both parties
@@ -885,7 +902,7 @@ class HMS_Roommate
         if($result !== TRUE) {
             // TODO: Log and Notify
             $msg = "An unknown error has occurred.";
-            return HMS_Roommate::show_request_roommate($msg);
+            return HMS_Roommate::show_request_roommate($msg, $term);
         }
 
         return HMS_Roommate::show_requested_confirmation();
@@ -917,7 +934,7 @@ class HMS_Roommate
     {
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
         $tpl['REQUESTED_ROOMMATE_NAME'] = HMS_SOAP::get_full_name($_REQUEST['username']);
-        $tpl['MENU_LINK']               = PHPWS_Text::secureLink('Click here to return to the main menu.', 'hms', array('module'=>'hms', 'type'=>'student', 'op'=>'show_main_menu'));
+        $tpl['MENU_LINK']               = PHPWS_Text::secureLink('Click here to return to the main menu.', 'hms', array('module'=>'hms', 'type'=>'student'));
         return PHPWS_Template::process($tpl, 'hms', 'student/select_roommate_confirmation.tpl');
     }
 
@@ -931,6 +948,7 @@ class HMS_Roommate
         $accept_form->addHidden('type', 'student');
         $accept_form->addHidden('op', 'confirm_accept_roommate');
         $accept_form->addHidden('id', $request->id);
+        $accept_form->addHidden('term', $request->term);
         $accept_form->addSubmit('Accept Roommate');
 
         $reject_form = new PHPWS_Form;
@@ -938,6 +956,7 @@ class HMS_Roommate
         $reject_form->addHidden('type', 'student');
         $reject_form->addHidden('op', 'confirm_reject_roommate');
         $reject_form->addHidden('id', $request->id);
+        $reject_form->addHidden('term', $request->term);
         $reject_form->addSubmit('Reject Roommate');
 
         $cancel_form = new PHPWS_Form;
@@ -975,6 +994,7 @@ class HMS_Roommate
         $form->addHidden('module', 'hms');
         $form->addHidden('type', 'student');
         $form->addHidden('op', 'for_realz_accept_roommate');
+        $form->addHidden('term', $request->term);
         $form->addHidden('id', $request->id);
 
         $form->addTplTag('CAPTCHA_IMAGE', Captcha::get());
@@ -1018,10 +1038,10 @@ class HMS_Roommate
         $request->save();
 
         // Remove any other requests for the requestor
-        HMS_Roommate::remove_outstanding_requests($request->requestor);
+        HMS_Roommate::remove_outstanding_requests($request->requestor, $request->term);
 
         // Remove any other requests for the requestee
-        HMS_Roommate::remove_outstanding_requests($request->requestee);
+        HMS_Roommate::remove_outstanding_requests($request->requestee, $request->term);
 
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
 
@@ -1032,7 +1052,7 @@ class HMS_Roommate
         }
 
         $tpl['NAME']      = HMS_SOAP::get_full_name($request->requestor);
-        $tpl['MENU_LINK'] = PHPWS_Text::secureLink('Click here to return to the main menu.', 'hms', array('module'=>'hms', 'type'=>'student', 'op'=>'show_main_menu'));
+        $tpl['MENU_LINK'] = PHPWS_Text::secureLink('Click here to return to the main menu.', 'hms', array('module'=>'hms', 'type'=>'student'));
         return PHPWS_Template::process($tpl, 'hms', 'student/roommate_accept_done.tpl');
     }
 
@@ -1115,6 +1135,10 @@ class HMS_Roommate
             $tpl = array();
             return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
         }
+
+        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+
+        $term = HMS_Term::get_selected_term();
         
         # Check for reasonable input
         if(empty($_REQUEST['roommate_1']) || empty($_REQUEST['roommate_2'])){
@@ -1126,7 +1150,7 @@ class HMS_Roommate
         $roommate_2 = trim(strtolower($_REQUEST['roommate_2']));
 
         # Check if these two can live together
-        $result = HMS_Roommate::can_live_together_admin($roommate_1, $roommate_2);
+        $result = HMS_Roommate::can_live_together_admin($roommate_1, $roommate_2, $term);
         if($result != E_SUCCESS){
             switch($result){
                 case E_ROOMMATE_MALFORMED_USERNAME:
@@ -1158,24 +1182,24 @@ class HMS_Roommate
         $more = "";
 
         # Check for pending requests for either roommate and break them
-        if(HMS_Roommate::count_pending_requests($roommate_1) > 0){
+        if(HMS_Roommate::count_pending_requests($roommate_1, $term) > 0){
             $more .= " Warning: Pending roommate requests for $roommate_1 were deleted.";
         }
-        $result = HMS_Roommate::remove_outstanding_requests($roommate_1);
+        $result = HMS_Roommate::remove_outstanding_requests($roommate_1, $term);
         if(!$result){
             return HMS_Roommate::show_admin_create_roommate_group(NULL, "Error removing pending requests for $roommate_1, roommate group was not created.");
         }
 
-        if(HMS_Roommate::count_pending_requests($roommate_2) > 0){
+        if(HMS_Roommate::count_pending_requests($roommate_2, $term) > 0){
             $more .= " Warning: Pending roommate requests for $roommate_2 were deleted.";
         }
-        $result = HMS_Roommate::remove_outstanding_requests($roommate_2);
+        $result = HMS_Roommate::remove_outstanding_requests($roommate_2, $term);
         if(!$result){
             return HMS_Roommate::show_admin_create_roommate_group(NULL, "Error removing pending requests for $roommate_2, roommate group was not created.");
         }
 
         # Create the roommate group and save it
-        $roommate_group                 = &new HMS_Roommate();
+        $roommate_group                 = new HMS_Roommate();
         $roommate_group->term           = HMS_Term::get_selected_term();
         $roommate_group->requestor      = $roommate_1;
         $roommate_group->requestee      = $roommate_2;
@@ -1202,7 +1226,7 @@ class HMS_Roommate
             return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
         }
 
-        $roommate_group = &new HMS_Roommate($_REQUEST['id']);
+        $roommate_group = new HMS_Roommate($_REQUEST['id']);
 
         # Save the user names for logging if all goes well
         $requestor = $roommate_group->requestor;
@@ -1248,7 +1272,7 @@ class HMS_Roommate
     /**
      * Shows a pager of roommate requests
      */
-    public function display_requests($asu_username)
+    public function display_requests($asu_username, $term)
     {
         PHPWS_Core::initCoreClass('DBPager.php');
         $pager = new DBPager('hms_roommate', 'HMS_Roommate');
@@ -1257,6 +1281,8 @@ class HMS_Roommate
         $pager->addRowTags('get_requested_pager_tags');
         $pager->db->addWhere('requestee', $asu_username, 'ILIKE');
         $pager->db->addWhere('confirmed', 0);
+        $pager->db->addWhere('term', $term);
+        $pager->db->addWhere('requested_on', mktime() - ROOMMATE_REQ_TIMEOUT, '>=');
         return $pager->get();
     }
 

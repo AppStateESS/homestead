@@ -474,7 +474,7 @@ class HMS_Student_UI{
                             $tags['term'][$key]['ROOMMATE_REQUESTS_MSG'] = "<b style='color: #F00'>You have roommate requests.</b> Please click a name below to confirm or reject a request.";
                         }
                     }
-                    if(HMS_Roommate::has_roommate_request($_SESSION['asu_username'])) {
+                    if(HMS_Roommate::has_roommate_request($_SESSION['asu_username'],$term['term'])) {
                         $tags['term'][$key]['ROOMMATE_MSG'] = "<b>You have selected a roommate</b> and are awaiting their approval.";
                         $tags['term'][$key]['ROOMMATE_ICON'] = $check_img;
                     } else {
@@ -596,6 +596,7 @@ class HMS_Student_UI{
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
 
         $tpl = array();
 
@@ -688,11 +689,8 @@ class HMS_Student_UI{
 
         $tpl['SUMMER_1_TERM']   = $summer1_label;
 
-        # Decide what the summer 1 text should say
-        if($summer1_assignment != FALSE && !PEAR::isError($summer1_assignment)){
-            # Student is already assigned
-            $tpl['SUMMER1_ASSIGNED'] = '';
-        }elseif($summer1_application != FALSE && !PEAR::isError($summer1_application)){
+        # Summer 1 Application
+        if($summer1_application != FALSE && !PEAR::isError($summer1_application)){
             # Student has already applied for this term
             $tpl['SUMMER1_APPLIED'] = '';
         }else{
@@ -710,6 +708,41 @@ class HMS_Student_UI{
                 # Shouldn't ever get here.. show a general error
                 return HMS_Contact_Form::show_contact_form();
             }
+        }
+
+        #  Summer 1 Roommate Request
+        $summer1_confirmed_roommate = HMS_Roommate::get_confirmed_roommate($_SESSION['asu_username'], $summer1_term);
+        $summer1_pending_roommate = HMS_Roommate::has_roommate_request($_SESSION['asu_username'], $summer1_term);
+
+        if($summer1_application == FALSE){
+            $tpl['SUMMER1_ROOMMATE_NOT_APPLIED'] = '';
+        }else if($summer1_confirmed_roommate != NULL){
+            $tpl['SUMMER1_CONFIRMED_ROOMMATE_NAME'] = HMS_SOAP::get_name($summer1_confirmed_roommate);
+        }else if($summer1_pending_roommate != NULL){
+            $tpl['SUMMER1_PENDING_ROOMMATE_NAME'] = HMS_SOAP::get_name($summer1_pending_roommate);
+        }else{
+            if(HMS_Deadlines::check_within_deadlines('select_roommate_begin_timestamp', 'select_roommate_end_timestamp', $summer1_deadlines)){
+                // Show the link to request someone
+                $tpl['SUMMER1_ROOMMATE_REQUEST_LINK'] = PHPWS_Text::secureLink(_('Select Your Roommate'), 'hms', array('type'=>'student','op'=>'show_request_roommate', 'term'=>$summer1_term));
+
+                # Show any incoming requests for this student
+                if(HMS_Roommate::count_pending_requests($_SESSION['asu_username'], $summer1_term) > 0){
+                    $tpl['SUMMER1_ROOMMATE_REQUESTS'] = HMS_Roommate::display_requests($_SESSION['asu_username'], $summer1_term);
+                }
+            }else if(!HMS_Deadlines::check_deadline_past('select_roommate_begin_timestamp', $summer1_deadlines)){
+                $tpl['SUMMER1_ROOMMATE_START_DATE'] = HMS_Deadlines::get_deadline_as_date('select_roommate_begin_timestamp', $summer1_deadlines);
+            }else if(HMS_Deadlines::check_deadline_past('select_roommate_end_timestamp')){
+                $tpl['SUMMER1_ROOMMATE_END_DATE'] = HMS_Deadlines::get_deadline_as_date('select_roommate_end_timestamp', $summer1_deadlines);
+            }
+        }
+
+        # Summer 1 Assignment
+        if($summer1_assignment != FALSE && !PEAR::isError($summer1_assignment)){
+            # Student is already assigned
+            $assign = HMS_Assignment::get_assignment($_SESSION['asu_username'], $summer1_term);
+            $tpl['SUMMER1_ASSIGNED'] = $assign->where_am_i();
+        }else{
+            $tpl['SUMMER1_NOT_ASSIGNED'] = '';
         }
 
         /***************************
@@ -748,6 +781,42 @@ class HMS_Student_UI{
                 # Shouldn't ever get here.. show a general error
                 return HMS_Contact_Form::show_contact_form();
             }
+        }
+
+
+        #  Summer 2 Roommate Request
+        $summer2_confirmed_roommate = HMS_Roommate::get_confirmed_roommate($_SESSION['asu_username'], $summer2_term);
+        $summer2_pending_roommate = HMS_Roommate::has_roommate_request($_SESSION['asu_username'], $summer2_term);
+
+        if($summer2_application == FALSE){
+            $tpl['SUMMER2_ROOMMATE_NOT_APPLIED'] = '';
+        }else if($summer2_confirmed_roommate != NULL){
+            $tpl['SUMMER2_CONFIRMED_ROOMMATE_NAME'] = HMS_SOAP::get_name($summer2_confirmed_roommate);
+        }else if($summer2_pending_roommate != NULL){
+            $tpl['SUMMER2_PENDING_ROOMMATE_NAME'] = HMS_SOAP::get_name($summer2_pending_roommate);
+        }else{
+            if(HMS_Deadlines::check_within_deadlines('select_roommate_begin_timestamp', 'select_roommate_end_timestamp', $summer2_deadlines)){
+                // Show the link to request someone
+                $tpl['SUMMER2_ROOMMATE_REQUEST_LINK'] = PHPWS_Text::secureLink(_('Select Your Roommate'), 'hms', array('type'=>'student','op'=>'show_request_roommate', 'term'=>$summer2_term));
+
+                # Show any incoming requests for this student
+                if(HMS_Roommate::count_pending_requests($_SESSION['asu_username'], $summer2_term) > 0){
+                    $tpl['SUMMER2_ROOMMATE_REQUESTS'] = HMS_Roommate::display_requests($_SESSION['asu_username'], $summer2_term);
+                }
+            }else if(!HMS_Deadlines::check_deadline_past('select_roommate_begin_timestamp', $summer2_deadlines)){
+                $tpl['SUMMER2_ROOMMATE_START_DATE'] = HMS_Deadlines::get_deadline_as_date('select_roommate_begin_timestamp', $summer2_deadlines);
+            }else if(HMS_Deadlines::check_deadline_past('select_roommate_end_timestamp')){
+                $tpl['SUMMER2_ROOMMATE_END_DATE'] = HMS_Deadlines::get_deadline_as_date('select_roommate_end_timestamp', $summer2_deadlines);
+            }
+        }
+
+        # Summer 2 Assignment
+        if($summer2_assignment != FALSE && !PEAR::isError($summer2_assignment)){
+            # Student is already assigned
+            $assign = HMS_Assignment::get_assignment($_SESSION['asu_username'], $summer2_term);
+            $tpl['SUMMER2_ASSIGNED'] = $assign->where_am_i();
+        }else{
+            $tpl['SUMMER2_NOT_ASSIGNED'] = '';
         }
 
         $tpl['LOGOUT_LINK'] = PHPWS_Text::secureLink('Logout', 'users', array('action'=>'user', 'command'=>'logout'));

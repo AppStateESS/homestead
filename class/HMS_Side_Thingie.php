@@ -76,7 +76,7 @@ class HMS_Side_Thingie {
         
         if(HMS_Application_Features::is_feature_enabled($term, APPLICATION_SELECT_ROOMMATE)){
             # Check for a roomate, show dates accordingly
-            $this->set_roomate($links);
+            $this->set_roomate($links,$term);
         }
 
         # Always show as available.
@@ -235,7 +235,7 @@ class HMS_Side_Thingie {
         
     }
 
-    public function set_roomate($links)
+    public function set_roomate($links, $term)
     {
         /**
          * Commented this out to turn the roommate deadline back on for the spring semester
@@ -256,7 +256,7 @@ class HMS_Side_Thingie {
         PHPWS_Core::initModClass('hms','HMS_Roommate.php');
 
         # If the user has roommates confirmed or has request pending approval, then call this step completed
-        if(HMS_Roommate::has_confirmed_roommate($_SESSION['asu_username']) || HMS_Roommate::has_roommate_request($_SESSION['asu_username'])){
+        if(HMS_Roommate::has_confirmed_roommate($_SESSION['asu_username'], $term) || HMS_Roommate::has_roommate_request($_SESSION['asu_username'], $term)){
             $this->steps_styles[HMS_SIDE_STUDENT_ROOMMATE] = 'STEP_COMPLETED';
             return;
         }
@@ -273,7 +273,7 @@ class HMS_Side_Thingie {
             }else{
                 # We're not on this step, so add the link and text
                 if($links){
-                    $this->steps_text[HMS_SIDE_STUDENT_ROOMMATE] = PHPWS_Text::secureLink($this->steps_text[HMS_SIDE_STUDENT_ROOMMATE] . " (complete by ". date('n/j/y',$this->deadlines->select_roommate_end_timestamp) . ")", 'hms', array('type'=>'student', 'op'=>'show_request_roommate'));
+                    $this->steps_text[HMS_SIDE_STUDENT_ROOMMATE] = PHPWS_Text::secureLink($this->steps_text[HMS_SIDE_STUDENT_ROOMMATE] . " (complete by ". date('n/j/y',$this->deadlines->select_roommate_end_timestamp) . ")", 'hms', array('type'=>'student', 'op'=>'show_request_roommate', 'term' => $term));
                 }else{
                     $this->steps_text[HMS_SIDE_STUDENT_ROOMMATE] = $this->steps_text[HMS_SIDE_STUDENT_ROOMMATE] . " (complete by ". date('n/j/y',$this->deadlines->select_roommate_end_timestamp) . ")";
                 }

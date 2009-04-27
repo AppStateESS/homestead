@@ -317,16 +317,19 @@ class HMS_RLC_Application{
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
         PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+
+        $term = HMS_Term::get_selected_term();
         
         $sinfo            = HMS_SOAP::get_student_info($this->user_id);
         $application_date = isset($this->date_submitted) ? HMS_Util::get_long_date($this->date_submitted) : 'Error with the submission date';
 
         $roomie = NULL;
-        if(HMS_Roommate::has_confirmed_roommate($this->user_id)){
-            $roomie = HMS_Roommate::get_Confirmed_roommate($this->user_id);
+        if(HMS_Roommate::has_confirmed_roommate($this->user_id, $term)){
+            $roomie = HMS_Roommate::get_Confirmed_roommate($this->user_id, $term);
         }
-        elseif(HMS_Roommate::has_roommate_request($this->user_id)){
-            $roomie = HMS_Roommate::get_unconfirmed_roommate($this->user_id) . ' *pending* ';
+        elseif(HMS_Roommate::has_roommate_request($this->user_id, $term)){
+            $roomie = HMS_Roommate::get_unconfirmed_roommate($this->user_id, $term) . ' *pending* ';
         }
 
         $row['last_name']           = $sinfo->last_name;
