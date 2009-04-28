@@ -130,8 +130,8 @@ class HMS_Student_UI{
 
             $tpl['CONTACT_LINK'] = PHPWS_Text::secureLink('click here', 'hms', array('type'=>'student', 'op'=>'show_contact_form'));
 
-            # Check the student type, must be freshmen, transfer, or readmit
-            if($student_type != TYPE_FRESHMEN && $student_type != TYPE_TRANSFER && $student_type != TYPE_RETURNING && $student_type != TYPE_READMIT){
+            # Check the student type, must be freshmen, transfer, or readmit, or non-degree
+            if($student_type != TYPE_FRESHMEN && $student_type != TYPE_TRANSFER && $student_type != TYPE_RETURNING && $student_type != TYPE_READMIT && $student_type != TYPE_NONDEGREE){
                 # No idea what's going on here, send to a contact page
                 return HMS_Contact_Form::show_contact_form();
             }

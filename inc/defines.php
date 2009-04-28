@@ -62,6 +62,7 @@ define('TYPE_CONTINUING',   'C');
 define('TYPE_RETURNING',    'R');
 define('TYPE_READMIT',      'Z');
 define('TYPE_WITHDRAWN',    'W');
+define('TYPE_NONDEGREE',    'N');
 
 /**
  * Meal Plans
