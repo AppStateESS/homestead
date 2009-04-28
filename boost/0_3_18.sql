@@ -9,6 +9,6 @@ CREATE TABLE hms_fall_application (
     PRIMARY KEY(id)
 );
 
-ALTER TABLE hms_new_application ADD COLUMN student_type character(1) NOT NULL;
+ALTER TABLE hms_new_application ADD COLUMN student_type character(1);
 
 COMMIT;
