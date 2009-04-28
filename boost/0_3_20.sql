@@ -8,4 +8,9 @@ CREATE TABLE hms_spring_application (
     PRIMARY KEY(id)
 );
 
+
+ALTER TABLE hms_spring_application ADD CONSTRAINT id_fkey FOREIGN KEY (id) REFERENCES hms_new_application (id);
+ALTER TABLE hms_fall_application ADD CONSTRAINT id_fkey FOREIGN KEY (id) REFERENCES hms_new_application (id);
+ALTER TABLE hms_summer_application ADD CONSTRAINT id_fkey FOREIGN KEY (id) REFERENCES hms_new_application (id);
+
 COMMIT;
