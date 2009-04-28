@@ -276,6 +276,7 @@ class HMS_RLC_Application{
         }
 
         $pager->setModule('hms');
+        $pager->setLink('index.php?module=hms&type=rlc&op=rlc_assignments_submit');
         $pager->setTemplate('admin/rlc_assignments_pager.tpl');
         $pager->setEmptyMessage("No pending RLC applications.");
         $pager->addToggle('class="toggle1"');
@@ -413,12 +414,13 @@ class HMS_RLC_Application{
         javascript('/modules/hms/page_refresh');
 
         $form = &new PHPWS_Form('dropdown_selector');
+        $form->setMethod('get');
         $form->addSelect('rlc', $communities);
         if( isset($_REQUEST['rlc']) ) {
             $form->setMatch('rlc', $_REQUEST['rlc']);
         }
         $form->setExtra('rlc', 'onChange="refresh_page(form)"');
-        $form->setMethod('post');
+        //$form->setMethod('post');
 
         $form->addHidden('type', 'rlc');
         $form->addHidden('op', 'assign_applicants_to_rlcs');
