@@ -38,9 +38,9 @@ class HMS_SOAP{
             $student->middle_name   = 'L';
             $student->last_name     = 'Booker';
             $student->gender        = 'M';
-            $student->application_term  = '200810'; // a freshmen/rising sophomore
-            $student->projected_class   = 'SO';
-            $student->student_type      = 'C';
+            $student->application_term  = '200940'; // a freshmen/rising sophomore
+            $student->projected_class   = 'FR';
+            $student->student_type      = 'F';
 
             return $student;
         }
@@ -816,19 +816,17 @@ class HMS_SOAP{
         $student->deposit_date          = '';
         $student->deposit_waved         = 'false';
 
-        $student->student_type          = 'C';
-        $student->application_term      = '200840';
-        $student->projected_class       = 'SO';
+        //$student->student_type          = 'C';
+        //$student->application_term      = '200840';
+        //$student->projected_class       = 'SO';
 
         //$student->student_type          = 'C';
         //$student->application_term      = '200840';
         //$student->projected_class       = 'SR';
 
-/*
         $student->student_type          = 'F';
         $student->application_term      = '200940';
         $student->projected_class       = 'FR';
-*/
 
         $student->credhrs_completed     = 0;
         $student->credhrs_for_term      = 15;

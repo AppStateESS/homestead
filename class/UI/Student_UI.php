@@ -458,16 +458,16 @@ class HMS_Student_UI{
 
                 $tags['term'][$key]['ROOMMATE_INTRO'] = 'Once you\'ve had a chance to communicate with your desired roommate and you have both agreed that you would like to room together, either of you can use the menu below to initiate an electronic handshake to confirm your desire to be roommates.';
 
-                $roommate = HMS_Roommate::get_confirmed_roommate($_SESSION['asu_username'], $term);
+                $roommate = HMS_Roommate::get_confirmed_roommate($_SESSION['asu_username'], $term['term']);
                     
                 if(!is_null($roommate)){
                     $name = HMS_SOAP::get_full_name($roommate);
                     $tags['term'][$key]['ROOMMATE_MSG']  = "<b>$name</b> has confirmed your roommate request. Roommate requests are subject to space availability.";
                     $tags['term'][$key]['ROOMMATE_ICON'] = $check_img;
                 }else{
-                    $requests = HMS_Roommate::count_pending_requests($_SESSION['asu_username']);
+                    $requests = HMS_Roommate::count_pending_requests($_SESSION['asu_username'], $term['term']);
                     if($requests > 0) {
-                        $tags['term'][$key]['ROOMMATE_REQUESTS'] = HMS_Roommate::display_requests($_SESSION['asu_username']);
+                        $tags['term'][$key]['ROOMMATE_REQUESTS'] = HMS_Roommate::display_requests($_SESSION['asu_username'], $term['term']);
                         if($requests == 1) {
                             $tags['term'][$key]['ROOMMATE_REQUESTS_MSG'] = "<b style='color: #F00'>You have a roommate request.</b> Please click the name below to confirm or reject the request.";
                         } else {
@@ -480,7 +480,7 @@ class HMS_Student_UI{
                     } else {
                         if(HMS_Deadlines::check_within_deadlines('select_roommate_begin_timestamp','select_roommate_end_timestamp',$deadlines)){
                             $tags['term'][$key]['ROOMMATE_MSG'] = 'If you know who you want your roommate to be, <b>you may select your roommate now</b>. You will need to know your roommate\'s ASU user name (their e-mail address). You have until ' . HMS_Deadlines::get_deadline_as_date('search_profiles_end_timestamp', $deadlines) . ' to choose a roommate. Click the link below to select your roommate.';
-                            $tags['term'][$key]['ROOMMATE_LINK'] = PHPWS_Text::secureLink(_('Select Your Roommate'), 'hms', array('type'=>'student','op'=>'show_request_roommate'));
+                            $tags['term'][$key]['ROOMMATE_LINK'] = PHPWS_Text::secureLink(_('Select Your Roommate'), 'hms', array('type'=>'student','op'=>'show_request_roommate', 'term'=>$term['term']));
                             $tags['term'][$key]['ROOMMATE_ICON'] = $arrow_img;
                         }else if(!HMS_Deadlines::check_deadline_past('select_roommate_begin_timestamp', $deadlines)){
                             $tags['term'][$key]['ROOMMATE_MSG']  = '<b>It is too early to choose a roommate.</b> You can choose a roommate on ' . HMS_Deadlines::get_deadline_as_date('select_roommate_begin_timestamp', $deadlines) . '.';
