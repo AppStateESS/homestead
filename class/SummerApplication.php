@@ -108,6 +108,18 @@ class SummerApplication extends HousingApplication{
 
         $tpl['ROOM_TYPE']  = $this->getRoomType();
 
+        switch($this->getRoomType()){
+            case ROOM_TYPE_DOUBLE:
+                $tpl['ROOM_TYPE']   = 'Double';
+                break;
+            case ROOM_TYPE_PRIVATE:
+                $tpl['ROOM_TYPE']   = 'Private';
+                break;
+            default:
+                $tpl['ROOM_TYPE']   = 'Unknown';
+                break;
+        }
+
         return $tpl;
     }
 

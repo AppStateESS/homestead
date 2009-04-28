@@ -91,6 +91,12 @@ define('ADDRESS_PRMT_STUDENT',      'PS'); // Permanent student address
 define('ADDRESS_PRMT_RESIDENCE',    'PR'); // permenent student residence
 
 /**
+ * Room Types (used for summer applications)
+ */
+define('ROOM_TYPE_DOUBLE', 0);
+define('ROOM_TYPE_PRIVATE', 1);
+
+/**
  * User classes
  */
 define('STUDENT',   1);
