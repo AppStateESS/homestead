@@ -176,7 +176,7 @@ class HMS_Student_UI{
                 $tpl = $form->getTemplate();
 
                 # Application deadline has not passed, so show welcome page
-                if($student_type == TYPE_FRESHMEN){
+                if($student_type == TYPE_FRESHMEN || $student_type == TYPE_NONDEGREE){
                     return PHPWS_Template::process($tpl, 'hms', 'student/welcome_screen_freshmen.tpl');
                 }else{
                     return PHPWS_Template::process($tpl, 'hms', 'student/welcome_screen_transfer.tpl');
