@@ -2,7 +2,7 @@
   <div class="box">
     <div class="title"> <h1>Residence Hall Application</h1> </div>
     <div class="box-content">
-        <font color="green">Your application was submitted sucessuflly.<br /></font>
+        <font color="green">Your application was submitted successfully.<br /></font>
 
         Please use the links below to continue using HMS or to log out:
         <ul>
