@@ -621,7 +621,9 @@ class HMS_Assignment extends HMS_Item
                                              BANNER_MEAL_STD   => 'Standard',
                                              BANNER_MEAL_HIGH  => 'High',
                                              BANNER_MEAL_SUPER => 'Super',
-                                             BANNER_MEAL_NONE  => 'None'));
+                                             BANNER_MEAL_NONE  => 'None',
+                                             BANNER_MEAL_SUMMER1 => 'Summer 1',
+                                             BANNER_MEAL_SUMMER2 => 'Summer 2'));
         $form->setMatch('meal_plan', BANNER_MEAL_STD);
         $form->setLabel('meal_plan', 'Meal plan: ');
 
