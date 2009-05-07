@@ -432,8 +432,14 @@ class HMS_Room extends HMS_Item
      */
     public function has_vacancy()
     {
+        $num_assigned = $this->get_number_of_assignees();
 
-        if($this->get_number_of_assignees() < $this->get_number_of_beds()){
+        # If this is a private room, then this room is full is one person is assigned
+        if($this->isPrivate() && $num_assigned >= 1){
+            return FALSE;
+        }
+
+        if($num_assigned < $this->get_number_of_beds()){
             return TRUE;
         }
 
@@ -453,9 +459,14 @@ class HMS_Room extends HMS_Item
 
         $vacant_beds = array();
 
-        foreach($this->_beds as $bed){
-            if($bed->has_vacancy()){
-                $vacant_beds[] = $bed;
+        # Search for vacant beds in this room's set of beds, only if this room
+        # has a vacancy according to 'has_vacancy()'. This accounts for private rooms.
+        if($this->has_vacancy()){
+
+            foreach($this->_beds as $bed){
+                if($bed->has_vacancy()){
+                    $vacant_beds[] = $bed;
+                }
             }
         }
 
@@ -473,6 +484,16 @@ class HMS_Room extends HMS_Item
             return PHPWS_Text::secureLink($text, 'hms', array('type'=>'room', 'op'=>'show_edit_room', 'room'=>$this->id));
         }else{
             return $text;
+        }
+    }
+
+    public function isPrivate()
+    {
+
+        if($this->private_room == true){
+            return true;
+        }else{
+            return false;
         }
     }
     
