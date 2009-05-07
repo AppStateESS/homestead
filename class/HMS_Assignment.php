@@ -131,6 +131,10 @@ class HMS_Assignment extends HMS_Item
 
         $text = $building->hall_name . ' Room ' . $room->room_number;
 
+        if($room->isPrivate()){
+            $text .= ' (private)';
+        }
+
         if($link){
             return PHPWS_Text::secureLink($text, 'hms', array('type'=>'room', 'op'=>'show_edit_room', 'room'=>$room->id));
         }else{
