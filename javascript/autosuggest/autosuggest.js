@@ -412,7 +412,7 @@ SuggestionProvider.prototype.requestSuggestions = function (oAutoSuggestControl 
     };
     */
 
-    var oData = "?module=hms&type=xml&op=get_username_suggestions&username=" + oAutoSuggestControl.userText;
+    var oData = "index.php?module=hms&type=xml&op=get_username_suggestions&username=" + oAutoSuggestControl.userText;
 
     //alert('Request: ' + oData);
     
