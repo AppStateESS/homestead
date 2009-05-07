@@ -1,4 +1,4 @@
-BEGIN
+BEGIN;
 
 ALTER TABLE hms_banner_queue ALTER COLUMN meal_code TYPE character(2); 
 ALTER TABLE hms_banner_queue ALTER COLUMN meal_code set default 1;
