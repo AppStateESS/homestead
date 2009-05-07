@@ -60,7 +60,7 @@ class HMS_Banner_Queue {
     {
         $db = new PHPWS_DB('hms_banner_queue');
 
-        $this->stamp();
+        //$this->stamp();
 
         $result = $db->saveObject($this);
         if(!$result || PHPWS_Error::logIfError($result)) {
