@@ -440,6 +440,10 @@ class HMS_RLC_Application{
 
         $db = new PHPWS_DB('hms_learning_community_applications');
         $db->addWhere('id', $_REQUEST['id']);
+        $app = $db->select('one');
+
+        $db = new PHPWS_DB('hms_learning_community_applications');
+        $db->addWhere('id', $_REQUEST['id']);
         $db->addValue('denied', 1);
 
         $result = $db->update();
@@ -450,7 +454,7 @@ class HMS_RLC_Application{
         }else{
             $result = $db->select();
             PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-            HMS_Activity_Log::log_activity($result['user_id'], 28, Current_User::getUsername(), "Application Denied");
+            HMS_Activity_Log::log_activity($app['user_id'], 28, Current_User::getUsername(), 'Application Denied');
 
             return HMS_Learning_Community::assign_applicants_to_rlcs('Application denied.');
         }
