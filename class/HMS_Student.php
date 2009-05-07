@@ -709,7 +709,7 @@ class HMS_Student {
                     // The link to view an existing application
                     $actions .= PHPWS_Text::secureLink('View', 'hms', array('type'=>'student', 'op'=>'get_matching_students', 'username'=>$username, 'tab'=>'housing_app'));
                     // The link to re-report an existing application
-                    $actions .= ' | '. PHPWS_Text::secureLink('Report to Banner', 'hms', array('type'=>'student', 'op'=>'admin_report_application', 'username'=>$username, 'term'=>$row['term'], 'tab'=>'student_info'));
+                    $actions .= ' | '. PHPWS_Text::secureLink('Report to Banner', 'hms', array('type'=>'student', 'op'=>'admin_report_application', 'username'=>$username, 'term'=>$app->getTerm(), 'tab'=>'student_info'));
                     $actions .= ']';
                 }else{
                     $type = 'Continuing';
