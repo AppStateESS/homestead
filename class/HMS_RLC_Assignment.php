@@ -250,7 +250,7 @@ class HMS_RLC_Assignment{
         return $tags;
     }
 
-    public function report_by_rlc_pager_tags($data)
+    public function report_by_rlc_pager_tags()
     {
         $row['name']        = HMS_SOAP::get_full_name($this->user_id);
         $row['gender']      = HMS_SOAP::get_gender($this->user_id);
