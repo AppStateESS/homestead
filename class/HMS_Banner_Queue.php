@@ -255,7 +255,7 @@ class HMS_Banner_Queue {
         $errors = array();
         foreach($items as $item) {
             $result = $item->process();
-            if($result != 0) {
+            if($result !== 0) {
                 $error = array();
                 $error['id'] = $item->id;
                 $error['username'] = $item->asu_username;
