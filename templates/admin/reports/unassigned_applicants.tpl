@@ -21,6 +21,8 @@
         <th>{ROOM_CONDITION_SORT}</th>
         <!-- END fall_headers -->
 
+        <th>Actions</th>
+
     </tr>
     <!-- BEGIN empty_table -->
     <tr>
@@ -42,6 +44,7 @@
         <td>{BEDTIME}</td>
         <td>{ROOM_CONDITION}</td>
         <!-- END fall_app -->
+        <td>{ACTIONS}</td>
     </tr>
     <!-- END listrows -->
 </table>
