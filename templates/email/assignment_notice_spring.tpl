@@ -7,7 +7,6 @@ The Department of Housing & Residence Life would like to welcome you to Appalach
 Room Assignment Notification
                                         Fall, 2008
 Assignment: {LOCATION}
-Room Phone #: {PHONE_NUMBER} 
 <!-- BEGIN roommate_text -->
 Roommates:
 <!-- BEGIN roommates -->

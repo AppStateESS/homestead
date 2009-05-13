@@ -23,7 +23,6 @@ class HMS_Letter
     //var $hall       = NULL;
     //var $room       = NULL;
     var $assignment     = NULL;
-    var $room_phone     = NULL;
     var $roommate       = array();
     var $checkin        = NULL;
     var $message        = NULL;
@@ -78,10 +77,6 @@ class HMS_Letter
         $pdf->Write(HEIGHT, "Assignment: ");
         $pdf->Cell(2.75, HEIGHT, $this->assignment);
         
-        if($this->room_phone != '' && !is_null($this->room_phone)){
-            $pdf->Write(HEIGHT, " Room Phone: ");
-            $pdf->Cell(1.25, HEIGHT, '828-266-' . $this->room_phone);
-        }
         $pdf->Ln(HEIGHT);
 
         // Skip roommate info if no roommates
@@ -144,7 +139,6 @@ class HMS_Letter
             test($assignment, 1); // This *shouldn't* ever happen...
         }else{
             $assignment_text    = $assignment->where_am_i();
-            $bed_phone          = $assignment->get_phone_number(); //room phone number
 
             # Determine the student's type and figure out their movein time
             $type = HMS_SOAP::get_student_type($student, $term);
@@ -211,7 +205,6 @@ class HMS_Letter
         }
         
         $letter->assignment = $assignment_text;
-        $letter->room_phone = $bed_phone;
     
         // Skip adding roommate info if only this student is assigned
         if(sizeof($assignees) > 1){
@@ -627,7 +620,6 @@ class HMS_Letter
             PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
             $bed = &new HMS_Bed($assignment['bed_id']);
             $location = $bed->where_am_i();
-            $phone    = $bed->phone_number;
 
             //get the movein time for the student
             $type = HMS_SOAP::get_student_type($assignment['asu_username'], HMS_Term::get_selected_term());
@@ -683,7 +675,7 @@ class HMS_Letter
             }
 
             // Send the email
-            HMS_Email::send_assignment_email($assignment['asu_username'], $name, $term, $location, $roommates, $phone, $movein_time, $type, $returning);
+            HMS_Email::send_assignment_email($assignment['asu_username'], $name, $term, $location, $roommates, $movein_time, $type, $returning);
 
             // Mark the student as having received an email
             $db->reset();

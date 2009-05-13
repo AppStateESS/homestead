@@ -7,7 +7,6 @@ The Department of Housing & Residence Life would like to welcome you to Appalach
 Room Assignment Notification
                                         Fall, 2008
 Assignment: {LOCATION}
-Room Phone #: {PHONE_NUMBER} 
 <!-- BEGIN roommate_text -->
 Roommates:
 <!-- BEGIN roommates -->
@@ -16,7 +15,7 @@ Roommates:
 <!-- END roommate_text -->
 
 <!-- BEGIN movein_time -->
-Check-in Time: {MOVE_IN_TIME}          {TYPE} 
+Check-in Time: {MOVE_IN_TIME} 
 <!-- END movein_time -->
 
 Failure to check in by 6pm January 12th will result in assignment cancellation (see pages 15-16 of the Residence Hall License Contract booklet).

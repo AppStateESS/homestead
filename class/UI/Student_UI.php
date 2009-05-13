@@ -534,7 +534,6 @@ class HMS_Student_UI{
             $tpl['NO_ASSIGNMENT'] = "You do not currently have a housing assignment.";
         }else{
             $tpl['ASSIGNMENT'] = $assignment->where_am_i() . '<br />';
-            $tpl['ROOM_PHONE'] = $assignment->get_phone_number();
 
             # Determine the student's type and figure out their movein time
             $type = HMS_SOAP::get_student_type($_SESSION['asu_username'], $_SESSION['application_term']);

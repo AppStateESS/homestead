@@ -223,13 +223,12 @@ class HMS_Email{
         HMS_Email::send_email(HMS_Email::get_tech_contacts(), NULL, "HMS Lottery results: $status", $log);
     }
 
-    public function send_assignment_email($to, $name, $term, $location, $roommates, $phone, $movein_time, $type, $returning){
+    public function send_assignment_email($to, $name, $term, $location, $roommates, $movein_time, $type, $returning){
         $tpl = array();
 
         $tpl['NAME']            = $name;
         $tpl['TERM']            = HMS_Term::term_to_text($term, TRUE);
         $tpl['LOCATION']        = $location;
-        $tpl['PHONE_NUMBER']    = $phone;
         $tpl['MOVE_IN_TIME']    = $movein_time;
         $tpl['DATE']            = strftime("%B %d, %Y");
 

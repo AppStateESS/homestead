@@ -21,7 +21,6 @@
                 <th rowspan="4">Room assignment:</th>
             </tr>
                 <tr><td align="left">{ASSIGNMENT}</td></tr>
-                <tr><td align="left">Room phone number: 828-266-{ROOM_PHONE}</td></tr>
                 <tr><td align="left">Move-in time: {MOVE_IN_TIME}</td></tr>
                 <!-- END assignment -->
                 <!-- BEGIN no_assignment -->
