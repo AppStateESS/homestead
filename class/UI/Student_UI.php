@@ -635,7 +635,8 @@ class HMS_Student_UI{
         # Decide what the lottery link should be
         if($assignment_result != FALSE && !PEAR::isError($assignment_result)){
             # Student has already been assigned.
-            $tpl['ASSIGNED'] = ''; // dummy tag
+            $assign = HMS_Assignment::get_assignment($_SESSION['asu_username'], $lottery_term);
+            $tpl['ASSIGNED'] = $assign->where_am_i();
         }elseif($winner_result != FALSE && !PEAR::isError($winner_result)){
             # Student has won, let them choose their room
             $entry = HMS_Lottery_Entry::get_entry($_SESSION['asu_username'], $lottery_term);

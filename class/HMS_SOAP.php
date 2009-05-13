@@ -38,9 +38,9 @@ class HMS_SOAP{
             $student->middle_name   = 'L';
             $student->last_name     = 'Booker';
             $student->gender        = 'M';
-            $student->application_term  = '200940'; // a freshmen/rising sophomore
-            $student->projected_class   = 'FR';
-            $student->student_type      = 'N';
+            $student->application_term  = '200840'; // a freshmen/rising sophomore
+            $student->projected_class   = 'SO';
+            $student->student_type      = 'C';
 
             return $student;
         }

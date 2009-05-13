@@ -21,8 +21,7 @@
         <li>
           <h1>{LOTTERY_TERM} - {NEXT_TERM}</h1>
           <!-- BEGIN assigned -->
-          {ASSIGNED}
-          You have already been assigned for this term.<br />
+          You have been assigned to {ASSIGNED}.<br />
           <!-- END assigned -->
           <!-- BEGIN eligible -->
           You are eligible to re-apply for on-campus housing for the {LOTTERY_TERM} - {NEXT_TERM} academic year. Please click the link below to apply.<br />
