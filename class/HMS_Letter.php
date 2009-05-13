@@ -634,6 +634,8 @@ class HMS_Letter
 
             $assgmnt = HMS_Assignment::get_assignment($assignment['asu_username'], HMS_Term::get_selected_term());
             $prev_assignment = HMS_Assignment::get_assignment($student, HMS_Term::get_current_term());
+
+            $term = $assgmnt->term;
             
             if(!is_null($prev_assignment) || $type == TYPE_CONTINUING){
                 $returning = TRUE;
@@ -681,7 +683,7 @@ class HMS_Letter
             }
 
             // Send the email
-            HMS_Email::send_assignment_email($assignment['asu_username'], $name, $location, $roommates, $phone, $movein_time, $type, $returning);
+            HMS_Email::send_assignment_email($assignment['asu_username'], $name, $term, $location, $roommates, $phone, $movein_time, $type, $returning);
 
             // Mark the student as having received an email
             $db->reset();

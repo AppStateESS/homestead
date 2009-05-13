@@ -223,25 +223,39 @@ class HMS_Email{
         HMS_Email::send_email(HMS_Email::get_tech_contacts(), NULL, "HMS Lottery results: $status", $log);
     }
 
-    public function send_assignment_email($to, $name, $location, $roommates, $phone, $movein_time, $type, $returning){
+    public function send_assignment_email($to, $name, $term, $location, $roommates, $phone, $movein_time, $type, $returning){
         $tpl = array();
 
-        $tpl['NAME']         = $name;
-        $tpl['LOCATION']     = $location;
-        $tpl['PHONE_NUMBER'] = $phone;
-        $tpl['MOVE_IN_TIME'] = $movein_time;
-        $tpl['TYPE']         = ($type == TYPE_CONTINUING ? 'RETURNING STUDENTS ONLY' : 'FRESHMAN & TRANSFER ONLY');
-        $tpl['DATE']         = strftime("%B %d, %Y");
+        $tpl['NAME']            = $name;
+        $tpl['TERM']            = HMS_Term::term_to_text($term, TRUE);
+        $tpl['LOCATION']        = $location;
+        $tpl['PHONE_NUMBER']    = $phone;
+        $tpl['MOVE_IN_TIME']    = $movein_time;
+        $tpl['DATE']            = strftime("%B %d, %Y");
 
         foreach($roommates as $roommate){
             $tpl['roommates'][] = array('ROOMMATE' => $roommate);
         }
 
-        if($returning == TRUE){
-            HMS_Email::send_template_message($to . '@appstate.edu', 'Housing Assignment Notice!', 'email/assignment_notice_returning.tpl', $tpl);
-        }else{
-            HMS_Email::send_template_message($to . '@appstate.edu', 'Housing Assignment Notice!', 'email/assignment_notice.tpl', $tpl);
+        $sem = HMS_Term::get_term_sem($term);
+
+        switch($sem){
+            case TERM_SPRING:
+            break;
+            case TERM_SUMMER1:
+            case TERM_SUMMER2:
+                    HMS_Email::send_template_message($to . '@appstate.edu', 'Housing Assignment Notice!', 'email/assignment_notice_summer.tpl', $tpl);
+            break;
+            case TERM_FALL:
+                if($returning == TRUE){
+                    HMS_Email::send_template_message($to . '@appstate.edu', 'Housing Assignment Notice!', 'email/assignment_notice_returning.tpl', $tpl);
+                }else{
+                    HMS_Email::send_template_message($to . '@appstate.edu', 'Housing Assignment Notice!', 'email/assignment_notice.tpl', $tpl);
+                }
+            break;
         }
+
+        
     }
 
     public function send_roommate_confirmation($to, $name, $roomie){

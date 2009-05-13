@@ -40,7 +40,7 @@ class HMS_SOAP{
             $student->gender        = 'M';
             $student->application_term  = '200940'; // a freshmen/rising sophomore
             $student->projected_class   = 'FR';
-            $student->student_type      = 'F';
+            $student->student_type      = 'N';
 
             return $student;
         }
@@ -824,9 +824,9 @@ class HMS_SOAP{
         //$student->application_term      = '200840';
         //$student->projected_class       = 'SR';
 
-        $student->student_type          = 'F';
-        $student->application_term      = '200940';
-        $student->projected_class       = 'FR';
+        $student->student_type          = 'C';
+        $student->application_term      = '200840';
+        $student->projected_class       = 'SO';
 
         $student->credhrs_completed     = 0;
         $student->credhrs_for_term      = 15;
