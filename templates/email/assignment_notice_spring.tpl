@@ -2,7 +2,7 @@
 
 {NAME},
 
-The Department of Housing & Residence Life would like to welcome you to Appalachian State University and let you know we are preparing for your arrival.  You will find your housing assignment for the Spring semester listed below. You may check-in at Newland Hall where you will receive your residence hall room key and check-in information.
+The Department of Housing & Residence Life would like to welcome you to Appalachian State University and let you know we are preparing for your arrival.
 
 Room Assignment Notification
                                         Fall, 2008
