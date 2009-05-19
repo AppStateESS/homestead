@@ -212,10 +212,10 @@ class HMS_Util{
                 return 'High';
             case BANNER_MEAL_SUPER:
                 return 'Super';
-            case BANNER_MEAL_SUMMER1:
-                return 'Summer';
-            case BANNER_MEAL_SUMMER2:
-                return 'Summer';
+            case BANNER_MEAL_4WEEK:
+                return 'Summer (4 weeks)';
+            case BANNER_MEAL_5WEEK:
+                return 'Summer (5 weeks)';
             default:
                 return 'Unknown';
         }

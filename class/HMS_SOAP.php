@@ -772,11 +772,11 @@ class HMS_SOAP{
             case BANNER_MEAL_SUPER: // super
                 $retval['meal'] = BANNER_MEAL_SUPER;
                 break;
-            case BANNER_MEAL_SUMMER1:
-                $retval['meal'] = BANNER_MEAL_SUMMER1;
+            case BANNER_MEAL_4WEEK:
+                $retval['meal'] = BANNER_MEAL_4WEEK;
                 break;
-            case BANNER_MEAL_SUMMER2:
-                $retval['meal'] = BANNER_MEAL_SUMMER2;
+            case BANNER_MEAL_5WEEK:
+                $retval['meal'] = BANNER_MEAL_5WEEK;
                 break;
             case NULL: // none
                 if(($building == 'MAR' || $building == 'AHR') &&
@@ -790,8 +790,8 @@ class HMS_SOAP{
         return $retval;
     }
 
-   public function handle_soap_fault()
-   {
+    public function handle_soap_fault()
+    {
         // Show an error page
         if(Current_User::getUsername() == 'hms_student'){
             Layout::add('An error occurred while trying to communicate with the primary Banner student information server on which the Housing Management System relies. The error has been logged, and server administrators have been notified. We apologize for any inconvenience this may have caused, please try again later. Please do not contact Housing & Residence Life regarding this error, as they will be unable to assist you.', 'hms');
@@ -875,7 +875,7 @@ class HMS_SOAP{
     public function get_test_report()
     {
 //        return 1337; //error
-        return 0;
+        return "0";
     }
 
 

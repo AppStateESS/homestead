@@ -1155,6 +1155,8 @@ class HMS_Residence_Hall extends HMS_Item
             $tpl->setData(array('MAINTENANCE'=>$maint_link));
         }
 
+        $class = 'toggle1';
+
         $hall->loadFloors();
         foreach ($hall->_floors as $floor) {
 
@@ -1178,9 +1180,16 @@ class HMS_Residence_Hall extends HMS_Item
                         }
                         $name      = HMS_SOAP::get_full_name($username);
                         $banner_id = HMS_SOAP::get_banner_id($username);
-                        $link      = "(<em>$username</em>)  " . $bed->get_assigned_to_link() . "  $rlc"."<em>[Banner ID: $banner_id]</em>";
+                        $link      = $bed->get_assigned_to_link();
                         
-                        $tpl->setData(array('BED_LABEL'=>$bed->bedroom_label,'BED'=>$bed->bed_letter,'LINK'=>$link));
+                        $tpl->setData(array('BED_LABEL'=>$bed->bedroom_label,'BED'=>$bed->bed_letter,'NAME'=>$name, 'USERNAME'=>$username, 'BANNER_ID'=>$banner_id, 'TOGGLE'=>$class));
+
+                        // Alternating background colors
+                        if($class == 'toggle1'){
+                            $class = 'toggle2';
+                        }else{
+                            $class = 'toggle1';
+                        }
                     }else{
                         $tpl->setData(array('BED_LABEL'=>$bed->bedroom_label,'BED'=>$bed->bed_letter,'LINK'=>$bed->get_assigned_to_link()));
                     }

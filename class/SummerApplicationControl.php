@@ -57,12 +57,7 @@ class SummerApplicationControl {
             $cellphone = NULL;
         }
 
-        $sem = HMS_Term::get_term_sem($term);
-        if($sem == TERM_SUMMER1){
-            $meal_plan = BANNER_MEAL_SUMMER1;
-        }else if($sem == TERM_SUMMER2){
-            $meal_plan = BANNER_MEAL_SUMMER2;
-        }
+        $meal_plan = BANNER_MEAL_5WEEK;
 
         # Create the SummerApplication object and try to save it
         $application = new SummerApplication(0,
