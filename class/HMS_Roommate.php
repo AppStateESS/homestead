@@ -250,6 +250,7 @@ class HMS_Roommate
         $db->setGroupConj('grp', 'AND');
         $db->addWhere('confirmed', 0);
         $db->addWhere('term', (is_null($term) ? HMS_Term::get_selected_term() : $term));
+        $db->addWhere('requested_on', mktime() - ROOMMATE_REQ_TIMEOUT, '>=');
         $db->addColumn('requestor');
         $db->addColumn('requestee');
         $result = $db->select('row');
