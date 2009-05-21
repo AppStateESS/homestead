@@ -1143,8 +1143,10 @@ class HMS_Residence_Hall extends HMS_Item
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
         PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Student.php');
         
-        $rlcs = HMS_Learning_Community::getRLCList();
+        $rlcs       = HMS_Learning_Community::getRLCList();
+        $rlcs_abbr  = HMS_Learning_Community::getRLCListAbbr();
 
         $hall = new HMS_Residence_Hall($hall_id);
 
@@ -1164,25 +1166,63 @@ class HMS_Residence_Hall extends HMS_Item
             if(!isset($floor->_rooms)){
                 continue;
             }
+
+            if($floor->rlc_id != NULL){
+                $floor_rlc = $rlcs[$floor->rlc_id];
+            }else{
+                $floor_rlc = '';
+            }
             
             foreach($floor->_rooms as $room) {
+                $extra_attribs = '';
+
+                if($room->ra_room){
+                    $extra_attribs .= 'RA ';
+                }
+
+                if($room->private_room){
+                    $extra_attribs .= 'Private ';
+                }
+
+                if($room->is_overflow){
+                    $extra_attribs .= 'Overflow ';
+                }
+
+                if($room->is_medical){
+                    $extra_attribs .= 'Medical ';
+                }
+
+                if($room->is_reserved){
+                    $extra_attribs .= 'Reserved ';
+                }
+
+                if(!$room->is_online){
+                    $extra_attribs .= 'Offline ';
+                }
+
                 $room->loadBeds();
                 $bed_labels = array();
+
 
                 foreach($room->_beds as $bed) {
                     $bed->loadAssignment();
                     $tpl->setCurrentBlock('bed_repeat');
+
+                    $bed_link = PHPWS_Text::secureLink($bed->bed_letter, 'hms', array('type'=>'bed', 'op'=>'show_edit_bed', 'bed'=>$bed->id));
+
                     if(isset($bed->_curr_assignment)){
                         $username = $bed->_curr_assignment->asu_username;
-                        $rlc  = HMS_RLC_Assignment::check_for_assignment($username, HMS_Term::get_current_term()); //false or index
-                        if($rlc != FALSE){
-                            $rlc = ' (' . $rlcs[$rlc['rlc_id']] . ')'; //get the full name for the rlc
-                        }
-                        $name      = HMS_SOAP::get_full_name($username);
-                        $banner_id = HMS_SOAP::get_banner_id($username);
-                        $link      = $bed->get_assigned_to_link();
                         
-                        $tpl->setData(array('BED_LABEL'=>$bed->bedroom_label,'BED'=>$bed->bed_letter,'NAME'=>$name, 'USERNAME'=>$username, 'BANNER_ID'=>$banner_id, 'TOGGLE'=>$class));
+
+                        $name      = HMS_Student::get_link($username);
+                        $banner_id = HMS_SOAP::get_banner_id($username);
+
+                        $assign_rlc  = HMS_RLC_Assignment::check_for_assignment($username, HMS_Term::get_selected_term()); //false or index
+                        if($assign_rlc != FALSE){
+                            $rlc_abbr = $rlcs_abbr[$assign_rlc['rlc_id']]; //get the abbr for the rlc
+                        }else{
+                            $rlc_abbr = '';
+                        }
 
                         // Alternating background colors
                         if($class == 'toggle1'){
@@ -1190,20 +1230,22 @@ class HMS_Residence_Hall extends HMS_Item
                         }else{
                             $class = 'toggle1';
                         }
+                        
+                        $tpl->setData(array('BED_LABEL'=>$bed->bedroom_label,'BED'=>$bed_link,'NAME'=>$name, 'USERNAME'=>$username, 'BANNER_ID'=>$banner_id, 'TOGGLE'=>$class, 'RLC_ABBR'=>$rlc_abbr));
                     }else{
-                        $tpl->setData(array('BED_LABEL'=>$bed->bedroom_label,'BED'=>$bed->bed_letter,'LINK'=>$bed->get_assigned_to_link()));
+                        $tpl->setData(array('BED_LABEL'=>$bed->bedroom_label,'BED'=>$bed_link,'NAME'=>$bed->get_assigned_to_link(), 'TOGGLE'=>'vacant'));
                     }
 
                     $tpl->parseCurrentBlock();
                 }
 
                 $tpl->setCurrentBlock('room_repeat');
-                $tpl->setData(array('ROOM_NUMBER'=>$room->room_number));
+                $tpl->setData(array('EXTRA_ATTRIBS'=>$extra_attribs, 'ROOM_NUMBER'=>PHPWS_Text::secureLink('Room ' . $room->room_number, 'hms', array('type'=>'room', 'op'=>'show_edit_room', 'room'=>$room->id), NULL, NULL, 'hall_link')));
                 $tpl->parseCurrentBlock();
             }
 
             $tpl->setCurrentBlock('floor_repeat');
-            $tpl->setData(array('FLOOR_NUMBER' => $floor->floor_number));
+            $tpl->setData(array('FLOOR_NUMBER' =>PHPWS_Text::secureLink('Floor ' . $floor->floor_number, 'hms', array('type'=>'floor', 'op'=>'show_edit_floor', 'floor'=>$floor->id), NULL, NULL, 'hall_link'), 'FLOOR_RLC'=>$floor_rlc));
             $tpl->parseCurrentBlock();
         }
 

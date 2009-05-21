@@ -363,7 +363,7 @@ class HMS_Student {
         $vars = array('type'     => 'student',
                       'op'       => 'get_matching_students',
                       'username' => $username);
-        $link = PHPWS_Text::secureLink($name, 'hms', $vars);
+        $link = PHPWS_Text::secureLink($name, 'hms', $vars, NULL, NULL, 'username');
 
         if($show_user) {
             return $link . " (<em>$username</em>)";
