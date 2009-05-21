@@ -1150,7 +1150,7 @@ class HMS_Residence_Hall extends HMS_Item
 
         $hall = new HMS_Residence_Hall($hall_id);
 
-        $tpl->setData(array('HALL'=>$hall->hall_name));
+        $tpl->setData(array('HALL'=>$hall->hall_name, 'TERM'=>HMS_Term::term_to_text(HMS_Term::get_selected_term(), TRUE)));
 
         if($naked) {
             $maint_link = PHPWS_Text::moduleLink('Back to Maintenance','hms');

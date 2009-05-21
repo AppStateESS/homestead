@@ -40,8 +40,8 @@ a.hall_link {
 <style type="text/css" media="print">
 </style>
 
-<h2>Building Overview for {HALL}</h2>
-<table class="overview_table" width="400">
+<h2>Building Overview for {HALL} - {TERM}</h2>
+<table class="overview_table" width="500">
 <!-- BEGIN floor_repeat -->
         <tr>
             <td class="floor" colspan="7">{FLOOR_NUMBER} {FLOOR_RLC}</th>
