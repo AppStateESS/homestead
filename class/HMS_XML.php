@@ -402,12 +402,12 @@ class HMS_XML{
 
     public function get_username_suggestions($username)
     {
-        $db = new PHPWS_DB('hms_application');
+        $db = new PHPWS_DB('hms_new_application');
 
-        $db->addColumn('asu_username');
+        $db->addColumn('username');
 
-        $db->addWhere('asu_username', $username . '%', 'ILIKE');
-        $db->addOrder('asu_username', 'ASC');
+        $db->addWhere('username', $username . '%', 'ILIKE');
+        $db->addOrder('username', 'ASC');
         $db->setLimit(5);
 
         $results = $db->select('col');
@@ -434,7 +434,7 @@ class HMS_XML{
 
     public function get_username_suggestions_json($username)
     {
-        $db = new PHPWS_DB('hms_application');
+        $db = new PHPWS_DB('hms_new_application');
 
         $db->addColumn('asu_username');
 
