@@ -120,7 +120,7 @@
                 <th colspan="2">Unique Housing Options</th>
             </tr>
             <tr>
-                <td>Are you interested in a <a href="http://housing.appstate.edu/index.php?module=pagemaster&PAGE_user_op=view_page&PAGE_id=134" target="_blank">unique housing option</a>?</td>
+                <td>Are you interested in a <a href="http://housing.appstate.edu/pagesmith/29" target="_blank">Unique Housing Option</a> where you will live together with a group of students who share at least one similar interest?  Students in these communities report finding it easier to meet people and make friends. They also earn higher GPAs in their first semester than students not living in a unique housing option.  For more information <a href="http://housing.appstate.edu/pagesmith/29">vist Unique Housing Options website</a>.</td>
                 <td align="left">{RLC_INTEREST_1} {RLC_INTEREST_1_LABEL}&nbsp;{RLC_INTEREST_2} {RLC_INTEREST_2_LABEL}</td>
             </tr>
             <!-- END rlc_interest_1 -->
