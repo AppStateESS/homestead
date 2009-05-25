@@ -104,7 +104,6 @@ class HousingApplication {
 
         $result = $db->saveObject($this);
         if(PHPWS_Error::logIfError($result)){
-            test($result,1);
             return false;
         }
 
