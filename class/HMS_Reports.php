@@ -502,11 +502,9 @@ class HMS_Reports{
         # Note the start time
         $start_time = microtime();
 
-        $db = &new PHPWS_DB('hms_application');
-        $db->addColumn('asu_username');
-        $db->addWhere('deleted', '0');
+        $db = new PHPWS_DB('hms_new_application');
         $db->addWhere('term', HMS_Term::get_selected_term());
-        $db->addOrder('asu_username', 'ASC');
+        $db->addOrder('username', 'ASC');
         $results = $db->select();
 
         if(PEAR::isError($results)) {
@@ -527,9 +525,10 @@ class HMS_Reports{
         
         $content = '';
         foreach($results as $line) {
-            $gender = HMS_SOAP::get_gender($line['asu_username'], TRUE);
-            $class  = HMS_SOAP::get_student_class($line['asu_username'], HMS_Term::get_selected_term());
-            $type   = HMS_SOAP::get_student_type($line['asu_username'], HMS_Term::get_selected_term());
+            $gender = $line['gender'];
+            //$class  = $line['class'];
+            $class = 'FR';
+            $type   = $line['student_type'];
 
             if($gender === NULL || $class === NULL || $type === NULL) {
                     $application_totals['bad_data']++;
