@@ -429,8 +429,11 @@ class Application_UI{
     public function submit_application_review()
     {
         PHPWS_Core::initModClass('hms', 'HousingApplication.php');
+        PHPWS_Core::initModClass('hms', 'SpringApplication.php');
+        PHPWS_Core::initModClass('hms', 'SummerApplication.php');
         PHPWS_Core::initModClass('hms', 'FallApplication.php');
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
         
         //determine which terms requested by the user are valid and make an application
         $valid_terms = array();
@@ -448,14 +451,55 @@ class Application_UI{
                 $application->delete();
             }
 
-            # Create a new application from the request data and save it
+            $sem = HMS_Term::get_term_sem($term);
+
             $banner_id = HMS_SOAP::get_banner_id($_SESSION['asu_username']);
-            $application = new FallApplication(0, $term, $banner_id, $_SESSION['asu_username'],
+
+            // Hard code a sumemr meal option for all summer applications.
+            // Application for other terms use whatever the student selected
+            if($sem == TERM_SUMMER1 || $sem == TERM_SUMMER2){
+                $meal_plan = BANNER_MEAL_5WEEK;
+            }else{
+                $meal_plan = $_REQUEST['meal_option'];
+            }
+
+
+            # Create a new application from the request data and save it
+            if($sem == TERM_SUMMER1 || $sem == TERM_SUMMER2){
+                $application = new SummerApplication(0, $term, $banner_id, $_SESSION['asu_username'],
                                                 HMS_SOAP::get_gender($_SESSION['asu_username'], TRUE),
                                                 HMS_SOAP::get_student_type($_SESSION['asu_username']),
                                                 HMS_SOAP::get_application_term($_SESSION['asu_username']),
                                                 $_REQUEST['area_code'] . $_REQUEST['exchange'] . $_REQUEST['number'],
-                                                $_REQUEST['meal_option'],
+                                                $meal_plan,
+                                                isset($_REQUEST['special_needs']['physical_disability']) ? 1 : 0,
+                                                isset($_REQUEST['special_needs']['psych_disability']) ? 1 : 0,
+                                                isset($_REQUEST['special_needs']['gender_need']) ? 1 : 0,
+                                                isset($_REQUEST['special_needs']['medical_need']) ? 1 : 0,
+                                                ROOM_TYPE_DOUBLE
+                                                );
+
+            }else if ($sem == TERM_SPRING){
+                $application = new FallApplication(0, $term, $banner_id, $_SESSION['asu_username'],
+                                                HMS_SOAP::get_gender($_SESSION['asu_username'], TRUE),
+                                                HMS_SOAP::get_student_type($_SESSION['asu_username']),
+                                                HMS_SOAP::get_application_term($_SESSION['asu_username']),
+                                                $_REQUEST['area_code'] . $_REQUEST['exchange'] . $_REQUEST['number'],
+                                                $meal_plan,
+                                                isset($_REQUEST['special_needs']['physical_disability']) ? 1 : 0,
+                                                isset($_REQUEST['special_needs']['psych_disability']) ? 1 : 0,
+                                                isset($_REQUEST['special_needs']['gender_need']) ? 1 : 0,
+                                                isset($_REQUEST['special_needs']['medical_need']) ? 1 : 0,
+                                                $_REQUEST['lifestyle_option'],
+                                                $_REQUEST['preferred_bedtime'],
+                                                $_REQUEST['room_condition']);
+            }else if ($sem == TERM_FALL){
+                $application = new FallApplication(0, $term, $banner_id, $_SESSION['asu_username'],
+                                                HMS_SOAP::get_gender($_SESSION['asu_username'], TRUE),
+                                                HMS_SOAP::get_student_type($_SESSION['asu_username']),
+                                                HMS_SOAP::get_application_term($_SESSION['asu_username']),
+                                                $_REQUEST['area_code'] . $_REQUEST['exchange'] . $_REQUEST['number'],
+                                                $meal_plan,
                                                 isset($_REQUEST['special_needs']['physical_disability']) ? 1 : 0,
                                                 isset($_REQUEST['special_needs']['psych_disability']) ? 1 : 0,
                                                 isset($_REQUEST['special_needs']['gender_need']) ? 1 : 0,
@@ -464,6 +508,12 @@ class Application_UI{
                                                 $_REQUEST['preferred_bedtime'],
                                                 $_REQUEST['room_condition'],
                                                 $_REQUEST['rlc_interest']);
+            }else{
+                // Error because of invalid semester
+
+            }
+
+            
 
             $result = $application->save();
 
