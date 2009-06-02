@@ -440,7 +440,7 @@ class HMS_RLC_Application{
 
         $db = new PHPWS_DB('hms_learning_community_applications');
         $db->addWhere('id', $_REQUEST['id']);
-        $app = $db->select('one');
+        $app = $db->select('row');
 
         $db = new PHPWS_DB('hms_learning_community_applications');
         $db->addWhere('id', $_REQUEST['id']);
