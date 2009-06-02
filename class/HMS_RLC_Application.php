@@ -833,11 +833,6 @@ class HMS_RLC_Application{
      */
     public function view_rlc_application($username = NULL)
     {
-       if( !Current_User::allow('hms', 'view_rlc_applications') ){
-           $tpl = array();
-           return PHPWS_Template::process($tpl, 'hms', 'admin/premission_denied.tpl');
-       }
-
        if($username == NULL) {
             $username = $_SESSION['asu_username'];
             $tags['MENU_LINK'] = PHPWS_Text::secureLink(_('Return to Menu'), 'hms', array('type'=>'student', 'op'=>'main'));
