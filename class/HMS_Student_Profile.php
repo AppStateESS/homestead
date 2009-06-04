@@ -1468,9 +1468,9 @@ class HMS_Student_Profile{
         }
         
         # Join with hms_application table on user_id to make sure genders match.
-        $pager->db->addJoin('LEFT OUTER', 'hms_student_profiles', 'hms_application', 'user_id', 'asu_username');
+        $pager->db->addJoin('LEFT OUTER', 'hms_student_profiles', 'hms_new_application', 'user_id', 'username');
         //$pager->addWhere('hms_student_profiles.user_id','hms_application.asu_username','ILIKE');
-        $pager->addWhere('hms_application.gender',$gender,'=');
+        $pager->addWhere('hms_new_application.gender',$gender,'=');
 
         # Don't list the current user as a match
         $pager->addWhere('hms_student_profiles.user_id',$_SESSION['asu_username'],'NOT LIKE');

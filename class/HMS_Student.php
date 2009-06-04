@@ -25,14 +25,17 @@ class HMS_Student {
     
 
     # Used to set 'agreed_to_terms' true after a user has already applied
+    # TODO: Remove this function? There is no longer an 'agreed_to_terms' field in the hms_new_application table
     public function agreed_to_terms()
     {
-        $db = &new PHPWS_DB('hms_application');
+        /*
+        $db = new PHPWS_DB('hms_new_application');
         $db->addwhere('hms_student_id', $_SESSION['asu_username'], 'ILIKE');
         $db->addValue('agreed_to_terms', 1);
         $result = $db->update();
 
         PHPWS_Error::logIfError($result);
+        */
         
         # Log the fact that the user agreed to the terms and agreemnts
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');

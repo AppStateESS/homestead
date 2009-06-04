@@ -1266,7 +1266,7 @@ class HMS_Reports{
     public function run_special_circumstances_report()
     {
         $db = &new PHPWS_DB('hms_assignment');
-        $db->addWhere('hms_assignment.asu_username', 'hms_application.asu_username', 'ILIKE');
+        $db->addWhere('hms_assignment.asu_username', 'hms_new_application.username', 'ILIKE');
         $db->addWhere('hms_assignment.deleted', 0);
 
         $db->addColumn('hms_assignment.asu_username');
@@ -1481,102 +1481,13 @@ class HMS_Reports{
         $pager->addRowTags('unassigned_applicants_rows');
 
         return $pager->get();
-
-/*    
-        $sql = "SELECT * FROM hms_new_application
-                        JOIN $extra_table ON hms_new_application.id = $extra_table.id
-                        LEFT OUTER JOIN (SELECT * FROM hms_assignment WHERE term = $term) AS assign ON assign.asu_username = hms_new_application.username
-                        WHERE assign.asu_username IS NULL
-                        AND hms_new_application.term = $term
-                        AND hms_new_application.withdrawn = 0
-                        ORDER BY hms_new_application.gender, hms_new_application.gender, hms_new_application.username";
-
-
-        $results = PHPWS_DB::getAll($sql);
-        if(PHPWS_Error::isError($results)) {
-            test($results,1);
-        }
-
-        if(sizeof($results) == 0){
-            $tpl['EMPTY_RESULTS'] = ""; // dummy tag
-            return PHPWS_Template::process($tpl, 'hms', 'admin/reports/unassigned_applicants.tpl');
-        }
-
-        $ff_count = 0;
-        $fm_count = 0;
-        $tf_count = 0;
-        $tm_count = 0;
-
-        $content = "key: [gender, type, lifestyle preference, bed time, room condition, meal option]<br /><br />";
-
-        PHPWS_Core::initModClass('hms','HMS_SOAP.php');
-        foreach($results as $row) {
-            $student = HMS_SOAP::get_student_info($row['user'], $term);
-
-            // TODO: THIS IS A HACK.  Consider removing it.
-            if($student->student_type == TYPE_WITHDRAWN)
-                continue;
-
-            $app = PHPWS_Text::secureLink($row['user'], 'hms',
-                array('type'    => 'student',
-                      'op'      => 'view_application',
-                      'student' => $row['user']));
-            $content .= "($app) " . $student->last_name . ", " .
-                        $student->first_name . " " .
-                        $student->middle_name . " [" .
-                        ($row['gender']             == 0 ? "Female, " : "Male, ") .
-                        ($row['status']             == 1 ? "Freshman, " : "Transfer, ") .
-                        ($row['lifestyle_option']   == 1 ? "Single, " : "Co-ed, ") .
-                        ($row['preferred_bedtime']  == 1 ? "Early, " : "Late, ") .
-                        ($row['room_condition']     == 1 ? "Neat, " : "Cluttered, ");
-
-            switch($row['meal_option']){
-                case BANNER_MEAL_LOW:
-                    $content .= "Low";
-                    break;
-                case BANNER_MEAL_STD:
-                    $content .= "Std";
-                    break;
-                case BANNER_MEAL_HIGH:
-                    $content .= "High";
-                    break;
-                case BANNER_MEAL_SUPER:
-                    $content .= "Super";
-                    break;
-            }
-                        
-            $content .= "]<br />";
-
-            if($row['gender'] == 0) {
-                if($row['status'] == 1) {
-                    $ff_count++;
-                } else {
-                    $tf_count++;
-                }
-            } else {
-                if($row['status'] == 1) {
-                    $fm_count++;
-                } else {
-                    $tm_count++;
-                }
-            }
-        }
-
-        $head  = "<h2>Unassigned Applicants</h2><br />";
-        $head .= "<p><strong>Freshman Female:</strong> $ff_count</p>";
-        $head .= "<p><strong>Freshman Male:</strong> $fm_count</p>";
-        $head .= "<p><strong>Transfer Female:</strong> $tf_count</p>";
-        $head .= "<p><strong>Transfer Male:</strong> $tm_count</p>";
-
-        return $head . $content;
-        */
     }
 
     public function run_no_banner_data_report()
     {
-        $db = new PHPWS_DB('hms_application');
-        $db->addColumn('asu_username');
-        $db->addOrder('asu_username');
+        $db = new PHPWS_DB('hms_new_application');
+        $db->addColumn('username');
+        $db->addOrder('username');
         $results = $db->select();
         if(PHPWS_Error::isError($results)) {
             test($results,1);
@@ -1589,8 +1500,8 @@ class HMS_Reports{
         $total = count($results);
         $whole = 0;
         foreach($results as $row) {
-            if(!HMS_SOAP::is_valid_student($row['asu_username'])) {
-                $content .= $row['asu_username'] . '<br />';
+            if(!HMS_SOAP::is_valid_student($row['username'])) {
+                $content .= $row['username'] . '<br />';
             }
 
             $percent = ((++$count / $total) * 100);
@@ -1858,8 +1769,8 @@ class HMS_Reports{
         
         $content = "<h2>Special Needs</h2>\n";
         
-        $db = new PHPWS_DB('hms_application');
-        $db->addColumn('asu_username');
+        $db = new PHPWS_DB('hms_new_application');
+        $db->addColumn('username');
         $db->addWhere('term', HMS_Term::get_selected_term());
         $db->addWhere('physical_disability', 1);
         $results = $db->select();
@@ -1867,7 +1778,7 @@ class HMS_Reports{
 
         $content .= "<h3>Physical: $count</h3>\n<ul>\n";
         foreach($results as $row) {
-            $content .= HMS_Reports::show_student($row['asu_username']);
+            $content .= HMS_Reports::show_student($row['username']);
         }
         $content .= "</ul>\n";
 
@@ -1879,7 +1790,7 @@ class HMS_Reports{
 
         $content .= "<h3>Psychological: $count</h3>\n<ul>\n";
         foreach($results as $row) {
-            $content .= HMS_Reports::show_student($row['asu_username']);
+            $content .= HMS_Reports::show_student($row['username']);
         }
         $content .= "</ul>\n";
 
@@ -1891,7 +1802,7 @@ class HMS_Reports{
 
         $content .= "<h3>Medical: $count</h3>\n<ul>\n";
         foreach($results as $row) {
-            $content .= HMS_Reports::show_student($row['asu_username']);
+            $content .= HMS_Reports::show_student($row['username']);
         }
         $content .= "</ul>\n";
 
@@ -1903,7 +1814,7 @@ class HMS_Reports{
 
         $content .= "<h3>Gender: $count</h3>\n<ul>\n";
         foreach($results as $row) {
-            $content .= HMS_Reports::show_student($row['asu_username']);
+            $content .= HMS_Reports::show_student($row['username']);
         }
         $content .= "</ul>\n";
 

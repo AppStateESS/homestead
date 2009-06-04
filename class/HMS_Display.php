@@ -36,15 +36,15 @@ class HMS_Display
         $num_assigned = $db->select('count');
         unset($db);
 
-        $db = new PHPWS_DB('hms_application');
+        $db = new PHPWS_DB('hms_new_application');
         $db->addWhere('term', $term);
-        $db->addWhere('student_status', 1);
+        $db->addWhere('student_type', TYPE_FRESHMEN);
         $num_f_applications = $db->select('count');
         unset($db);
 
-        $db = new PHPWS_DB('hms_application');
+        $db = new PHPWS_DB('hms_new_application');
         $db->addWhere('term', $term);
-        $db->addWhere('student_status', 2);
+        $db->addWhere('student_type', TYPE_TRANSFER);
         $num_t_applications = $db->select('count');
         unset($db);
 

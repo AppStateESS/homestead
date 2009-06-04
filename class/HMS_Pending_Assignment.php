@@ -208,8 +208,8 @@ class HMS_Pending_Assignment
         // Bush... so here's a hack.  Delete all this shit ASAP.
         PHPWS_Core::initCoreClass("Database.php");
         $db = new PHPWS_DB('hms_roommate_hack');
-        $db->addTable('hms_application', 'zero');
-        $db->addTable('hms_application', 'one');
+        $db->addTable('hms_new_application', 'zero');
+        $db->addTable('hms_new_application', 'one');
         $db->addColumn('hms_roommate_hack.requestor');
         $db->addColumn('hms_roommate_hack.requestee_username');
         $db->addColumn('zero.gender',           NULL, 'zero_gender');
@@ -218,8 +218,8 @@ class HMS_Pending_Assignment
         $db->addColumn('one.lifestyle_option',  NULL, 'one_lifestyle');
         $db->addColumn('zero.meal_option',      NULL, 'zero_meal');
         $db->addColumn('one.meal_option',       NULL, 'one_meal');
-        $db->addColumn('zero.student_status',   NULL, 'zero_status');
-        $db->addColumn('one.student_status',    NULL, 'one_status');
+        $db->addColumn('zero.student_type',     NULL, 'zero_status');
+        $db->addColumn('one.student_type',      NULL, 'one_status');
         $db->addJoin('left', 'hms_roommate_hack', 'zero', 'requestor', 'hms_student_id');
         $db->addJoin('left', 'hms_roommate_hack', 'one',  'requestor', 'hms_student_id');
         $results = $db->select('all');
@@ -235,12 +235,12 @@ class HMS_Pending_Assignment
             $zero['gender']           = $result['zero_gender'];
             $zero['lifestyle_option'] = $result['zero_lifestyle_option'];
             $zero['meal_option']      = $result['zero_meal_option'];
-            $zero['student_status']   = $result['zero_student_status'];
+            $zero['student_type']     = $result['zero_student_type'];
             $one['hms_student_id']    = $result['roommate_one'];
             $one['gender']            = $result['one_gender'];
             $one['lifestyle_option']  = $result['one_lifestyle_option'];
             $one['meal_option']       = $result['one_meal_option'];
-            $one['student_status']    = $result['one_student_status'];
+            $one['student_type']      = $result['one_student_type'];
 
             if(!HMS_Pending_Assignment::eligible_for_queue($zero['hms_student_id'])) {
                 continue;
@@ -256,7 +256,7 @@ class HMS_Pending_Assignment
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
 
         // Singletons
-        $db = new PHPWS_DB('hms_application');
+        $db = new PHPWS_DB('hms_new_application');
         $db->addColumn('id');
         $db->addColumn('gender');
         $db->addColumn('lifestyle_option');
@@ -264,7 +264,7 @@ class HMS_Pending_Assignment
         $db->addColumn('room_condition');
         $db->addColumn('hms_student_id');
         $db->addColumn('meal_option');
-        $db->addWhere('student_status',1);
+        $db->addWhere('student_type',1);
         $db->addWhere('term', HMS_Term::get_current_term());
         $db->addOrder('gender');
         $db->addOrder('lifestyle_option');
