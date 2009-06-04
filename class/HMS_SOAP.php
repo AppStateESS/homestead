@@ -103,6 +103,10 @@ class HMS_SOAP{
         if($username == 'watsonmc'){
             $student->application_term = 200840;
         }
+
+        if($username == 'kernanas'){
+            $student->application_term = 200940;
+        }
         
         // insert into hash table
         $student_info_table[$hash_key] = $student;
@@ -824,9 +828,9 @@ class HMS_SOAP{
         //$student->application_term      = '200840';
         //$student->projected_class       = 'SR';
 
-        $student->student_type          = 'C';
-        $student->application_term      = '200840';
-        $student->projected_class       = 'SO';
+        $student->student_type          = 'F';
+        $student->application_term      = '200930';
+        $student->projected_class       = 'FR';
 
         $student->credhrs_completed     = 0;
         $student->credhrs_for_term      = 15;
