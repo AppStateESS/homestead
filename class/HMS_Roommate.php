@@ -444,37 +444,6 @@ class HMS_Roommate
     }
 
     /**
-     * In the spring, FT can request C.  In the fall, not so much.
-     */
-
-    /*
-     * Commented out since housing chnaged their minds about freshmen/transfers/continuing students requesting eachother
-     *
-    public function can_ft_and_c_live_together_this_term($requestor, $requestee)
-    {
-        $a_type = $requestor->student_type;
-        $b_type = $requestee->student_type;
-
-        // If there are no continuing students involved, we're good
-        if(($a_type == TYPE_FRESHMEN ||
-            $a_type == TYPE_TRANSFER) &&
-           ($b_type == TYPE_FRESHMEN ||
-            $b_type == TYPE_TRANSFER))
-            return TRUE;
-
-        $term = substr($_SESSION['application_term'], 4, 2);
-
-        // This is acceptable in the spring
-        if($term == TERM_SPRING && $b_type == TYPE_CONTINUING)
-            return TRUE;
-
-        // Any other time or types and we have a problem.
-        return FALSE;
-    }
-
-    */
-    
-    /**
      * Gets pager tags for the Student Main Menu page
      */
     public function get_requested_pager_tags()
@@ -565,16 +534,6 @@ class HMS_Roommate
         if(HousingApplication::checkForApplication($requestee, $term) === false) {
             return E_ROOMMATE_NO_APPLICATION;
         }
-
-        /*
-         * Commented out since housing changed their minds
-         *
-        // Depending on term, freshmen and continuing may or may not be able to live
-        // together... so this public function makes sure of that.
-        if(!HMS_Roommate::can_ft_and_c_live_together_this_term($requestor_info, $requestee_info)) {
-            return E_ROOMMATE_TYPE_MISMATCH;
-        }
-        */
 
         // Students can only request a student of the same type
         if($requestor_info->student_type != $requestee_info->student_type){
@@ -896,25 +855,6 @@ class HMS_Roommate
         return HMS_Roommate::show_requested_confirmation();
     }
 
-    /**
-     * Handle a requestor that has an RLC Application problem.
-     */
-    public function requestor_handle_rlc_application($requestor, $requestee)
-    {
-        $form = &new PHPWS_Form;
-        $form->addHidden('module', 'hms');
-        $form->addHidden('type', 'student');
-        $form->addHidden('op', 'roommate_confirm_rlc_removal');
-        $form->addHidden('username', $requestee);
-
-        $form->addSubmit('submit', 'Withdraw Unique Housing Options Application');
-
-        $form->addButton('cancel', 'Cancel');
-        $form->setExtra('cancel','onClick="document.location=\'index.php?module=hms&type=student&op=show_main_menu\'"');
-
-        return PHPWS_Template::process($form->getTemplate(), 'hms', 'student/requestor_handle_rlc_application.tpl');
-    }
-
     /*
      * Shows a "you successfully requested ab1234" as your roommate" message
      */
@@ -1016,14 +956,20 @@ class HMS_Roommate
             return HMS_Roommate::confirm_accept($request, 'Sorry, please try again.');
         }
 
+
+        // If either student is assigned to an RLC, do not allow the request
+        if(!HMS_Roommate::check_rlc_assignments($request->requestor, $request->requestee, $term)) {
+            return HMS_Roommate::confirm_accept($request, 'Your roommate reqeust could not be confirmed because you and/or your roommate have been assigned to a Unique Housing Option.');
+        }
+
+        $request->confirmed = 1;
+        $request->confirmed_on = mktime();
+        $request->save();
+
         HMS_Activity_Log::log_activity($request->requestor,
                                        ACTIVITY_ACCEPTED_AS_ROOMMATE,
                                        $request->requestee,
                                        "CAPTCHA: $verified");
-        
-        $request->confirmed = 1;
-        $request->confirmed_on = mktime();
-        $request->save();
 
         // Remove any other requests for the requestor
         HMS_Roommate::remove_outstanding_requests($request->requestor, $request->term);
@@ -1032,12 +978,6 @@ class HMS_Roommate
         HMS_Roommate::remove_outstanding_requests($request->requestee, $request->term);
 
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
-
-        // If they got this far they already agreed to dump an RLC application
-        if(!HMS_Roommate::check_rlc_applications($request->requestee, $request->requestor, $term)) {
-            $rlcapp = &new HMS_RLC_Application($request->requestee, $_SESSION['application_term']);
-            $rlcapp->delete();
-        }
 
         $tpl['NAME']      = HMS_SOAP::get_full_name($request->requestor);
         $tpl['MENU_LINK'] = PHPWS_Text::secureLink('Click here to return to the main menu.', 'hms', array('module'=>'hms', 'type'=>'student'));
