@@ -1,5 +1,14 @@
 .error {
-    color:red;
+    color:black;
+    background:#F0CACA;
+    border:solid thin red;
+    padding:5px;
+}
+
+.note {
+    color:black;
+    background:#ECEFF5;
+    padding:5px;
 }
 
 .success {
