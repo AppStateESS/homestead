@@ -432,21 +432,15 @@ class HMS_Roommate
     public function check_rlc_assignments($a, $b, $term)
     {
         PHPWS_Core::initModClass('hms','HMS_RLC_Assignment.php');
-        $result = HMS_RLC_Assignment::check_for_assignment($a, $term);
-
-        if(PHPWS_Error::isError($result)) {
-            test($result,1);    // TODO: Break Cleanly
-        }
-
-        if($result == FALSE)
-            return TRUE;
+        $resulta = HMS_RLC_Assignment::check_for_assignment($a, $term);
 
         $resultb = HMS_RLC_Assignment::check_for_assignment($b, $term);
 
-        if($result == FALSE)
+        if($resulta !== FALSE || $resultb !== FALSE){
             return FALSE;
+        }
 
-        return $result['rlc_id'] == $resultb['rlc_id'];
+        return TRUE;
     }
 
     /**
@@ -587,14 +581,9 @@ class HMS_Roommate
             return E_ROOMMATE_TYPE_MISMATCH;
         }
 
-        // If requestor is assigned to a different RLC, STOP and call HRL
+        // If either student is assigned to an RLC, do not allow the request
         if(!HMS_Roommate::check_rlc_assignments($requestor, $requestee, $requestor_info->application_term)) {
             return E_ROOMMATE_RLC_ASSIGNMENT;
-        }
-
-        // If requestor applied to a different RLC, ask to remove application
-        if(!HMS_Roommate::check_rlc_applications($requestor, $requestee, $requestor_info->application_term)) {
-            return E_ROOMMATE_RLC_APPLICATION;
         }
 
         return E_SUCCESS;
@@ -864,10 +853,8 @@ class HMS_Roommate
                     $msg = "You can not choose a student of a different type than yourself (i.e. a freshmen student can only request another freshmen student, and not a transfer or continuing student).";
                     break;
                 case E_ROOMMATE_RLC_ASSIGNMENT:
-                    $msg = "You are currently assigned to a different Unique Housing Option than your requested roommate.  Please contact Housing and Residence Life if you would like to be removed from your Unique Housing Option.";
+                    $msg = "Your roommate request could not be completed because you and/or your requested roommate are currently assigned to a Unique Housing Option.";
                     break;
-                case E_ROOMMATE_RLC_APPLICATION:
-                    return HMS_Roommate::requestor_handle_rlc_application($requestor, $requestee);
                 default:
                     $msg = "Unknown Error $result.";
                     // TODO: Log Weirdness
