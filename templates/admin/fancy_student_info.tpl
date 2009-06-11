@@ -3,9 +3,15 @@
     <div class="box-content">
         <h1>{FIRST_NAME} {MIDDLE_NAME} {LAST_NAME} -- {BANNER_ID} -- {TERM}</h1>
         <h2>Login as this student [ {LOGIN_AS_STUDENT} ]</h2>
-        <div class="success">{SUCCESS}</div>
-        <div class="error">{ERROR}</div>
-        <br>
+
+        <!-- BEGIN success_msg -->
+            <div class="success">{SUCCESS}</div><br />
+        <!-- END success_msg -->
+
+        <!-- BEGIN error_msg -->
+            <div class="error">{ERROR}</div><br />
+        <!-- END error_msg -->
+
         <table>
             <tr>
                 <th><a id="demographics_toggle">[-]</a>Student Demographics</th>
