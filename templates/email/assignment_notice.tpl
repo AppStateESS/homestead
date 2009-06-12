@@ -2,8 +2,12 @@
 
 {NAME},
 
-The Department of Housing & Residence Life would like to welcome you to Appalachian State University and let you know we are preparing for your arrival.  You will find your housing assignment for {TERM} listed below. You may check-in at your assigned residence hall during your assigned check-in time (see below), at which time you will receive your room key and check-in information.
+The Department of Housing & Residence Life would like to welcome you to Appalachian State University and let you know we are preparing for your arrival.
 
+You will find your housing assignment for {TERM} listed below. You may access additional information about living in the residence halls online at http://housing.appstate.edu/assignmentinfo .
+
+Room Assignment Information
+---------------------------
 Assignment: {LOCATION}
 <!-- BEGIN roommate_text -->
 Roommates:
@@ -16,13 +20,12 @@ Roommates:
 Check-in Time: {MOVE_IN_TIME} 
 <!-- END movein_time -->
 
-Freshmen and transfer check-in is January 6th, 1pm-9pm. Returning student check-in starts on January 10th and 11th. See above for your scheduled time. If you have a conflict, you can check in anytime after your scheduled time until 6pm on January 12th. Failure to check in by 6pm January 12th will result in assignment cancellation (see pages 15-16 of the Residence Hall License Contract booklet).
 
-Should you have any questions, please feel free to contact our office at 828-262-6111. You may also visit our website at: http://housing.appstate.edu/ .
+Should you have any questions, please feel free to contact our office at 828-262-6111 or 828-262-2278. You may also visit our website at: http://housing.appstate.edu/ .
 
 Sincerely,
 
 Stacy R. Sears
 
-Assistant Director
-Housing & Residence Life 
+Associate Director
+Housing & Residence Life
