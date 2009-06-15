@@ -531,7 +531,7 @@ class HMS_Roommate
 
         PHPWS_Core::initModClass('hms', 'HousingApplication.php');
         // Make sure the requestee has filled out an application
-        if(HousingApplication::checkForApplication($requestee, $term) === false) {
+        if(HousingApplication::checkForApplication($requestee, $term) === FALSE) {
             return E_ROOMMATE_NO_APPLICATION;
         }
 
