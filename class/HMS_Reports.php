@@ -8,16 +8,17 @@ class HMS_Reports{
     public function get_reports()
     {
         $reports = array(
-                        'housing_apps'       => 'Housing Applications Received',
-                        'housing_asss'       => 'Assignment Demographics',
-                        'assigned_f'         => 'Assigned Type F Students',
-                        'special_needs'      => 'Special Needs Applicants',
-                        'unassd_apps'        => 'Unassigned Applicants',
-                        'movein_times'       => 'Move-in Times',
-                        'unassd_beds'        => 'Currently Unassigned Beds',
-                        'no_ban_data'        => 'Students Without Banner Data',
-                        'vacancy_report'     => 'Hall Occupancy Report',
-                        'roster_report'      => 'Floor Roster Report'
+                        'housing_apps'      => 'Housing Applications Received',
+                        'housing_asss'      => 'Assignment Demographics',
+                        'assigned_f'        => 'Assigned Type F Students',
+                        'special_needs'     => 'Special Needs Applicants',
+                        'unassd_apps'       => 'Unassigned Applicants',
+                        'movein_times'      => 'Move-in Times',
+                        'unassd_beds'       => 'Currently Unassigned Beds',
+                        'no_ban_data'       => 'Students Without Banner Data',
+                        'vacancy_report'    => 'Hall Occupancy Report',
+                        'roster_report'     => 'Floor Roster Report',
+                        'data_export'       => 'Student Data Export'
                         );
 /*                        'housing_asss' => 'Housing Assignments Made',*/
 /*                        'unassd_rooms' => 'Currently Unassigned Rooms',*/
@@ -110,6 +111,9 @@ class HMS_Reports{
                 break;
             case 'roster_report':
                 return HMS_Reports::assignment_roster_report();
+                break;
+            case 'data_export':
+                return HMS_Reports::student_data_export();
                 break;
             /*
             case 'unassd_rooms':
@@ -494,7 +498,66 @@ class HMS_Reports{
         return $content;
     }
 
-    public function run_applicant_demographics_report()
+    public function run_applicant_demographics_report(){
+        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+
+        # Note the start time
+        $start_time = microtime();
+
+        $term           = HMS_Term::get_selected_term();
+        $tpl['TERM']    = HMS_Term::term_to_text($term, TRUE);
+
+        $db = new PHPWS_DB('hms_new_application');
+        $db->addWhere('term', $term);
+        $results = $db->select();
+
+        if(PEAR::isError($results)){
+            PHPWS_Error::log($results);
+            $tpl['ERROR_MSG'] = '<font color="red"><b>A database error occurred running this report.  Please contact Electronic Student Services immediately.</b></font>';
+            return PHPWS_Template::process($tpl, 'hms', 'admin/reports/application_demographics.tpl');
+        }
+
+        $types      = array(TYPE_FRESHMEN, TYPE_TRANSFER, TYPE_CONTINUING, TYPE_READMIT, TYPE_RETURNING, TYPE_NONDEGREE, TYPE_WITHDRAWN);
+        $genders    = array(MALE, FEMALE);
+
+        # Initalize the array for totals
+        foreach($types as $init_type){
+            foreach($genders as $init_gender){
+                $application_totals[$init_type][$init_gender] = 0;
+            }
+        }
+
+        # Calculate the totals
+        foreach($results as $application){
+            $application_totals[$application['student_type']][$application['gender']]++;
+        }
+
+        # Populate the template vars
+        $male_sum = 0;
+        foreach($types as $type){
+            $tpl['male_totals'][] = array('COUNT'=>$application_totals[$type][MALE]);
+            $male_sum += $application_totals[$type][MALE];
+        }
+        $tpl['MALE_SUM'] = $male_sum;
+
+        $female_sum = 0;
+        foreach($types as $type){
+            $tpl['female_totals'][] = array('COUNT'=>$application_totals[$type][FEMALE]);
+            $female_sum += $application_totals[$type][FEMALE];
+        }
+        $tpl['FEMALE_SUM'] = $female_sum;
+
+        $tpl['ALL_TOTAL'] = $female_sum + $male_sum;
+
+        $type_totals = array();
+        foreach($types as $type){
+            $tpl['type_totals'][] = array('COUNT'=>array_sum($application_totals[$type]));
+        }
+
+        return PHPWS_Template::process($tpl, 'hms', 'admin/reports/application_demographics.tpl');
+    }
+
+    public function run_applicant_demographics_report_old()
     {
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
@@ -513,7 +576,7 @@ class HMS_Reports{
         }
 
         # Initalize the array for totals
-        foreach(array(TYPE_FRESHMEN, TYPE_TRANSFER, TYPE_CONTINUING) as $init_type){
+        foreach(array(TYPE_FRESHMEN, TYPE_TRANSFER, TYPE_CONTINUING, TYPE_WITHDRAWN) as $init_type){
             foreach(array(CLASS_FRESHMEN, CLASS_SOPHOMORE, CLASS_JUNIOR, CLASS_SENIOR) as $init_class){
                 foreach(array(MALE, FEMALE) as $init_gender){
                     $application_totals[$init_type][$init_class][$init_gender] = 0;
