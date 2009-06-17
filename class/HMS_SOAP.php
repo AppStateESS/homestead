@@ -244,7 +244,7 @@ class HMS_SOAP{
             HMS_SOAP::log_soap('remove_room_assignemnt',
                 "Banner error: $removal", $username, $term, $building, $room);
             HMS_SOAP::log_soap_error('Banner error: ' . $removal, 'remove_room_assignment', $username);
-            return $removal;
+            return false;
         }
         
         HMS_SOAP::log_soap('remove_room_assignment', 'success', $username,
@@ -811,7 +811,8 @@ class HMS_SOAP{
      *************************/
 
     public function get_test_info(){
-        $student->banner_id             = 900325006;
+        //$student->banner_id             = 900325006;
+        $student->banner_id             = 900325007;
         $student->last_name             = 'Booker';
         $student->first_name            = 'Jeremy';
         $student->middle_name           = 'Lee';
@@ -829,7 +830,7 @@ class HMS_SOAP{
         //$student->projected_class       = 'SR';
 
         $student->student_type          = 'F';
-        $student->application_term      = '200930';
+        $student->application_term      = '200940';
         $student->projected_class       = 'FR';
 
         $student->credhrs_completed     = 0;
