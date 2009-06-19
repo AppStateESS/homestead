@@ -252,7 +252,7 @@ class HousingApplication {
             $db->addWhere('withdrawn', 0);
         }
         
-        $result = $db->select();
+        $result = $db->select('row');
 
         if(PEAR::isError($result)){
             PHPWS_Error::log($result,'hms','check_for_application',"username:{$_SESSION['asu_username']}");
