@@ -22,3 +22,16 @@
 .rooms_list {
     padding-left:10px;
 }
+
+.hms table {
+    border-collapse:separate;
+    border-spacing:2px;
+}
+
+.hms td {
+    padding:3px;
+}
+
+.hms th {
+    padding:3px;
+}
