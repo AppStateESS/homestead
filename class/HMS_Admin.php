@@ -445,6 +445,7 @@ class HMS_Admin
             if($app != FALSE){
                 $application = new FallApplication($app['id']);
                 $application->setWithdrawn(true);
+                $application->setStudentType(TYPE_WITHDRAWN);
                 $app_result = $application->save();
                 if(PEAR::isError($app_result)){
                     $tpl['warnings'][] = array('USERNAME'   => $asu_username,
