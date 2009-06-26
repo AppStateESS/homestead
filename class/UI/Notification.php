@@ -150,7 +150,7 @@ class Notification {
         $tpl['BODY']    = $_REQUEST['body'];
 
         $form = new PHPWS_Form('edit_email');
-        $form->addHidden('anonymous',   $_REQUEST['anonymous']);
+        $form->addHidden('anonymous',  isset($_REQUEST['anonymous']) ? $_REQUEST['anonymous'] : '');
         $form->addHidden('subject',     $_REQUEST['subject']);
         $form->addHidden('body',        $_REQUEST['body']);
         $form->addHidden('type',        'notification');
@@ -160,7 +160,7 @@ class Notification {
         $tpl['BACK'] = implode('', $form->getTemplate());
 
         $form2 = new PHPWS_Form('review_email');
-        $form2->addHidden('anonymous',  $_REQUEST['anonymous']);
+        $form2->addHidden('anonymous',  isset($_REQUEST['anonymous']) ? $_REQUEST['anonymous'] : '');
         $form2->addHidden('subject',    $_REQUEST['subject']);
         $form2->addHidden('body',       $_REQUEST['body']);
         $form2->addHidden('type',       'notification');
@@ -190,9 +190,9 @@ class Notification {
         
         // Log that this is happening
         if($from == ANONYMOUS_FROM_ADDRESS){
-            HMS_Activity_Log::log_activity(Current_user::getUsername(), ACTIVITY_ANON_NOTIFICATION_SENT, Current_User::getUsername());
+            HMS_Activity_Log::log_activity(Current_User::getUsername(), ACTIVITY_ANON_NOTIFICATION_SENT, Current_User::getUsername());
         }else{
-            HMS_Activity_Log::log_activity(Current_user::getUsername(), ACTIVITY_NOTIFICATION_SENT, Current_User::getUsername());
+            HMS_Activity_Log::log_activity(Current_User::getUsername(), ACTIVITY_NOTIFICATION_SENT, Current_User::getUsername());
         }
 
         if(is_array($_REQUEST['hall'])){
@@ -208,6 +208,11 @@ class Notification {
                         }
                     }
                 }
+                if($from == ANONYMOUS_FROM_ADDRESS){
+                    HMS_Activity_Log::log_activity(Current_User::getUsername(), ACTIVITY_HALL_NOTIFIED_ANONYMOUSLY, Current_User::getUsername(), $hall->hall_name);
+                } else {
+                    HMS_Activity_Log::log_activity(Current_User::getUsername(), ACTIVITY_HALL_NOTIFIED, Current_User::getUsername(), $hall->hall_name);
+                }
             }
         } else {
             $hall = new HMS_Residence_Hall($_REQUEST['hall']);
@@ -220,6 +225,11 @@ class Notification {
                         HMS_Email::send_email($student->asu_username . '@appstate.edu', $from, $subject, $body);
                     }
                 }
+            }
+            if($from == ANONYMOUS_FROM_ADDRESS){
+                HMS_Activity_Log::log_activity(Current_User::getUsername(), ACTIVITY_HALL_NOTIFIED_ANONYMOUSLY, Current_User::getUsername(), $hall->hall_name);
+            } else {
+                HMS_Activity_Log::log_activity(Current_User::getUsername(), ACTIVITY_HALL_NOTIFIED, Current_User::getUsername(), $hall->hall_name);
             }
         }
 

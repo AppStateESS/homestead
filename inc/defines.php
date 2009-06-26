@@ -205,6 +205,8 @@ define('ACTIVITY_CREATE_TERM',                  50);
 // Notification activities
 define('ACTIVITY_NOTIFICATION_SENT',            51);
 define('ACTIVITY_ANON_NOTIFICATION_SENT',       52);
+define('ACTIVITY_HALL_NOTIFIED',                53);
+define('ACTIVITY_HALL_NOTIFIED_ANONYMOUSLY',    54);
 
 /** 
  * Errors 

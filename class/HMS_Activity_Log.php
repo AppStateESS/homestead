@@ -152,7 +152,9 @@ class HMS_Activity_Log{
                         ACTIVITY_LOTTERY_EXECUTED               => "Lottery process executed",
                         ACTIVITY_CREATE_TERM                    => "Created a new Term",
                         ACTIVITY_NOTIFICATION_SENT              => "Notification sent",
-                        ACTIVITY_ANON_NOTIFICATION_SENT         => "Anonymous notification sent");
+                        ACTIVITY_ANON_NOTIFICATION_SENT         => "Anonymous notification sent",
+                        ACTIVITY_HALL_NOTIFIED                  => "Email notification sent to hall",
+                        ACTIVITY_HALL_NOTIFIED_ANONYMOUSLY      => "Anonymous email notification sent to hall");
     }
 
     /**
