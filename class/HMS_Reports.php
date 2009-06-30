@@ -1081,6 +1081,42 @@ class HMS_Reports{
         return $content;
     }
 
+    public function student_data_export()
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+        PHPWS_Core::initModClass('hms', 'HousingApplication.php');
+
+        $term = HMS_Term::get_selected_term();
+        $filename = "hms_applications-$term-" . date("Y-m-d") . '.csv';
+        $output = '';
+
+        $apps = HousingApplication::getAllApplications(NULL, NULL, $term);
+
+        $output .= "user name, banner id, first name, middle name, last name, student type, address 1, address 2, address 3, city, state, zip\n";
+
+        foreach($apps as $application){
+
+            $username   = $application->getUsername();
+            $bannerId   = $application->getBannerId();
+            $type       = $application->getStudentType();
+
+            $first  = HMS_SOAP::get_first_name($username);
+            $middle = HMS_SOAP::get_middle_name($username);
+            $last   = HMS_SOAP::get_last_name($username);
+
+            $address = HMS_SOAP::get_address($username, NULL);
+
+            $output .= "$username,$bannerId,$first,$middle,$last,$type,$address->line1,$address->line2,$address->line3,$address->city,$address->state,$address->zip\n";
+        }
+
+        header('Content-Type: application/octet-stream');
+        header('Content-Disposition: attachment; filename="' . $filename . '"');
+
+        echo $output;
+        exit;
+
+    }
+
     /*
     public function run_unassigned_beds_report()
     {
