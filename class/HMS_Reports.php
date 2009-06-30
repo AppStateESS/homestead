@@ -1960,13 +1960,12 @@ class HMS_Reports{
                 $pdf->Ln(20);
                 $pdf->Cell(20, 5, 'Floor', 1);
                 $pdf->Cell(20, 5, 'Room', 1);
-                $pdf->Cell(30, 5, 'Bedroom ID', 1);
                 $pdf->Cell(30, 5, 'Banner ID', 1);
-                $pdf->Cell(50, 5, 'Name', 1);
+                $pdf->Cell(88, 5, 'Name', 1);
                 $pdf->Cell(40, 5, 'Username', 1);
                 $pdf->Cell(20, 5, 'Year', 1);
                 $pdf->Cell(30, 5, 'Birthdate', 1);
-                $pdf->Cell(30, 5, 'Gender', 1);
+                $pdf->Cell(22, 5, 'Gender', 1);
                 $pdf->Ln(5);
                 
                 foreach($rooms as $room){
@@ -1976,26 +1975,25 @@ class HMS_Reports{
                     foreach($room->_beds as $bed){
                         //output the floor and room number
                         $pdf->Cell(20, 5, $floor->floor_number, 1);
-                        $pdf->Cell(20, 5, $room->room_number, 1);
-                        //output the bed id
-                        $pdf->Cell(30, 5, $bed->bedroom_label, 1);
+                        //concatenate the room number with the bedroom label to save space
+                        $pdf->Cell(20, 5, $room->room_number .' '. $bed->bedroom_label, 1);
                         //if the bed has an assignment
                         if($bed->loadAssignment()){
                             if(!is_null($bed->_curr_assignment)){
                                 $student = HMS_SOAP::get_student_info($bed->_curr_assignment->asu_username, $term);
                                 $pdf->Cell(30, 5, ''.$student->banner_id, 1);
-                                $pdf->Cell(50, 5, ''.HMS_SOAP::get_full_name_inverted($bed->_curr_assignment->asu_username), 1);
+                                $pdf->Cell(88, 5, ''.HMS_SOAP::get_full_name_inverted($bed->_curr_assignment->asu_username), 1);
                                 $pdf->Cell(40, 5, ''.$bed->_curr_assignment->asu_username, 1);
                                 $pdf->Cell(20, 5, ''.$student->projected_class, 1);
                                 $pdf->Cell(30, 5, ''.$student->dob, 1);
-                                $pdf->Cell(30, 5, ''.$student->gender, 1);
+                                $pdf->Cell(22, 5, ''.$student->gender, 1);
                             } else {
                                 $pdf->Cell(30, 5, 'N/A', 1);
-                                $pdf->Cell(50, 5, 'No Assignment', 1);
+                                $pdf->Cell(88, 5, 'No Assignment', 1);
                                 $pdf->Cell(40, 5, '', 1);
                                 $pdf->Cell(20, 5, '', 1);
                                 $pdf->Cell(30, 5, '', 1);
-                                $pdf->Cell(30, 5, '', 1);
+                                $pdf->Cell(22, 5, '', 1);
                             }
                         }
                         $pdf->Ln(5);
