@@ -267,16 +267,53 @@ class HousingApplication {
     }
 
     /**
-     * Returns an array of HousingApplication objects, one object for each application the
-     * given student has completed. The username and banner_id parameters are optional, but one or the other
-     * must be specified. Returns false if the request cannot be compelted for any reason.
+     * 
      */
-    public static function getAllApplications($username = NULL, $banner_id = NULL){
+    function getApplicationByUser($username, $term)
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
 
-        if(is_null($username) && is_null($banner_id)){
-            # Neither parameter was specificed, so return false.
-            return false;
+        PHPWS_Core::initModClass('hms', 'HousingApplication.php');
+        PHPWS_Core::initModClass('hms', 'FallApplication.php');
+        PHPWS_Core::initModClass('hms', 'SpringApplication.php');
+        PHPWS_Core::initModClass('hms', 'SummerApplication.php');
+
+        $db = new PHPWS_DB('hms_new_application');
+        $db->addWhere('username', $username);
+        $db->addWhere('term', $term);
+
+        $result = $db->select('one');
+
+        if($result == NULL){
+            return FALSE;
         }
+
+        $sem = HMS_Term::get_term_sem($term);
+
+        $app = NULL;
+
+        switch($sem){
+            case TERM_FALL:
+                $app = new FallApplication($result);
+                break;
+            case TERM_SPRING:
+                $app = new SpringApplication($result);
+                break;
+            case TERM_SUMMER1:
+            case TERM_SUMMER2:
+                $app = new SummerApplication($result);
+                break;
+        }
+
+        return $app;
+    }
+
+    /**
+     * Returns an array of HousingApplication objects, one object for each application the
+     * given student has completed. All parameters are optional.
+     * Returns false if the request cannot be compelted for any reason.
+     */
+    public static function getAllApplications($username = NULL, $banner_id = NULL, $term = NULL){
 
         $db = new PHPWS_DB('hms_new_application');
 
@@ -288,6 +325,10 @@ class HousingApplication {
             $db->addWhere('username', $username);
         }
 
+        if(!is_null($term)){
+            $db->addWhere('term', $term);
+        }
+
         $result = $db->getObjects('HousingApplication');
 
         if(PEAR::isError($result)){
@@ -296,6 +337,50 @@ class HousingApplication {
         }
 
         return $result;
+    }
+
+    public static function getAllFreshmenApplications($term = NULL){
+        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+
+        PHPWS_Core::initModClass('hms', 'HousingApplication.php');
+        PHPWS_Core::initModClass('hms', 'FallApplication.php');
+        PHPWS_Core::initModClass('hms', 'SpringApplication.php');
+        PHPWS_Core::initModClass('hms', 'SummerApplication.php');
+
+        if(is_null($term)){
+            $term = HMS_Term::get_selected_term();
+        }
+
+        $sem = HMS_Term::get_term_sem($term);
+        
+        $db = new PHPWS_DB('hms_new_application');
+
+        # Add 'where' clause for term and student type
+        $db->addWhere('term', $term);
+        $db->addWhere('student_type', TYPE_FRESHMEN);
+
+        for($i = 1; $i < func_num_args(); $i++){
+            $db->addOrder(func_get_arg($i));
+        }
+
+        # Add the appropriate join, based on the term
+        if($sem == TERM_FALL){
+            $db->addJoin('LEFT OUTER', 'hms_new_application', 'hms_fall_application', 'id', 'id');
+            $result = $db->getObjects('FallApplication');
+        }else if($term == TERM_SPRING){
+            $db->addJoin('LEFT OUTER', 'hms_new_application', 'hms_spring_application', 'id', 'id');
+            $result = $db->getObjects('SpringApplication');
+        }else if($term == TERM_SUMMER1 || $term == TERM_SUMMER2){
+            $db->addJoin('LEFT OUTER', 'hms_new_application', 'hms_summer_application', 'id', 'id');
+            $result = $db->getObjects('SummerApplication');
+        }
+
+        if(PEAR::isError($result)){
+            return FALSE;
+        }
+
+        return $result;
+
     }
 
     /************************
