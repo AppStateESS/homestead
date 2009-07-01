@@ -405,7 +405,7 @@ class HMS_Assignment extends HMS_Item
             $meal['meal']
             );
 
-        if($banner_success !== E_SUCCESS){
+        if($banner_success != "0" || $banner_success === FALSE){
             return E_ASSIGN_BANNER_ERROR;
         }
         
