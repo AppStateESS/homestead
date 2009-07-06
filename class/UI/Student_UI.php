@@ -39,6 +39,7 @@ class HMS_Student_UI{
             empty($student_type) ||
             empty($student_class) ||
             empty($dob) ||
+            is_null($dob) ||
             empty($gender))
             {
                 # TODO: HMS_Mail here
@@ -57,6 +58,12 @@ class HMS_Student_UI{
             $deadlines = HMS_Deadlines::get_deadlines($application_term);
         }
 
+        # If the move-in day deadline isn't set to something reasonable, show an error
+        if(!isset($deadlines['move_in_timestamp']) || empty($deadlines['move_in_timestamp']) || is_null($deadlines['move_in_timestamp'])){
+            $tpl['ERROR'] = "Move-in day date is not set.";
+            return PHPWS_Template::process($tpl, 'hms', 'misc/general_error.tpl');
+        }
+        
         # Calculate the student's age and check for >= 25 years old based on move-in day deadline
         $dob = explode('-', $dob); // in order: year, month, day
         // Calculate a unix timestamp for the student's birthday
