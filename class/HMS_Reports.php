@@ -1579,7 +1579,8 @@ class HMS_Reports{
         $pager->addToggle('class="bgcolor1"');
         $pager->addToggle('class="bgcolor2"');
         $pager->addPageTags($tpl);
-        $pager->addRowTags('unassigned_applicants_rows');
+        $pager->addRowTags('unassignedApplicantsRows');
+        $pager->setReportRow('unassignedApplicantsCSV');
 
         return $pager->get();
     }

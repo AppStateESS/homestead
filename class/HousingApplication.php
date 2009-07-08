@@ -207,7 +207,7 @@ class HousingApplication {
      * Returns the table row tags for the 'unassigned applications report' in
      * HMS_Reports.php
      */
-    public function unassigned_applicants_rows()
+    public function unassignedApplicantsRows()
     {
         $tpl = array();
         $tpl['BANNER_ID']       = $this->getBannerId();
@@ -218,6 +218,20 @@ class HousingApplication {
         $tpl['MEAL']            = HMS_Util::formatMealOption($this->getMealPlan());
         $tpl['ROOMMATE']        = HMS_Roommate::get_confirmed_roommate($this->getUsername(), $this->getTerm());
         $tpl['ACTIONS']         = '[' . PHPWS_Text::secureLink('Assign', 'hms', array('type'=>'assignment', 'op'=>'show_assign_student', 'username'=>$this->getUsername()), '_blank') . ' ]';
+
+        return $tpl;
+    }
+
+    public function unassignedApplicantsCSV()
+    {
+        $tpl = array();
+        $tpl['BANNER_ID']       = $this->getBannerId();
+        $tpl['USERNAME']        = $this->getUsername();
+        $tpl['GENDER']          = HMS_Util::formatGender($this->getGender());
+        $tpl['STUDENT_TYPE']    = HMS_Util::formatType($this->getStudentType());
+        $tpl['APP_TERM']        = HMS_Term::term_to_text($this->getApplicationTerm(), TRUE);
+        $tpl['MEAL']            = HMS_Util::formatMealOption($this->getMealPlan());
+        $tpl['ROOMMATE']        = HMS_Roommate::get_confirmed_roommate($this->getUsername(), $this->getTerm());
 
         return $tpl;
     }
