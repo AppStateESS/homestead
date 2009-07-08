@@ -1520,6 +1520,7 @@ class HMS_Reports{
         PHPWS_Core::initModClass('hms', 'SpringApplication.php');
         PHPWS_Core::initModClass('hms', 'SummerApplication.php');
         PHPWS_Core::initModClass('hms', 'FallApplication.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
 
         $term = HMS_Term::get_selected_term();
         $sem = HMS_Term::get_term_sem($term);

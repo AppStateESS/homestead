@@ -216,6 +216,7 @@ class HousingApplication {
         $tpl['STUDENT_TYPE']    = HMS_Util::formatType($this->getStudentType());
         $tpl['APP_TERM']        = HMS_Term::term_to_text($this->getApplicationTerm(), TRUE);
         $tpl['MEAL']            = HMS_Util::formatMealOption($this->getMealPlan());
+        $tpl['ROOMMATE']        = HMS_Roommate::get_confirmed_roommate($this->getUsername(), $this->getTerm());
         $tpl['ACTIONS']         = '[' . PHPWS_Text::secureLink('Assign', 'hms', array('type'=>'assignment', 'op'=>'show_assign_student', 'username'=>$this->getUsername()), '_blank') . ' ]';
 
         return $tpl;

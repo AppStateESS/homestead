@@ -20,6 +20,7 @@
         <th>{LIFESTYLE_OPTION_SORT}</th>
         <th>{PREFERRED_BEDTIME_SORT}</th>
         <th>{ROOM_CONDITION_SORT}</th>
+        <th>Roommate</th>
         <!-- END fall_headers -->
 
         <th>Actions</th>
@@ -46,6 +47,7 @@
         <td>{BEDTIME}</td>
         <td>{ROOM_CONDITION}</td>
         <!-- END fall_app -->
+        <td>{ROOMMATE}</td>
         <td>{ACTIONS}</td>
     </tr>
     <!-- END listrows -->
