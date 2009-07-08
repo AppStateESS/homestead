@@ -8,6 +8,7 @@
         <th>Banner ID</th>
         <th>{USERNAME_SORT}</th>
         <th>{GENDER_SORT}</th>
+        <th>{STUDENT_TYPE_SORT}</th>
         <th>{APPLICATION_TERM_SORT}
         <th>Meal Plan</th>
 
@@ -34,6 +35,7 @@
         <td>{BANNER_ID}</td>
         <td>{USERNAME}</td>
         <td>{GENDER}</td>
+        <td>{STUDENT_TYPE}</td>
         <td>{APP_TERM}</td>
         <td>{MEAL}</td>
         <!-- BEGIN summer_app -->

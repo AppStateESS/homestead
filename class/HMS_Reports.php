@@ -1565,6 +1565,7 @@ class HMS_Reports{
         $pager->addSortHeader('username', 'User Name');
         $pager->addSortHeader('gender', 'Gender');
         $pager->addSortHeader('application_term', 'Application Term');
+        $pager->addSortHeader('student_type', 'Student Type');
 
         $pager->db->addJoin('LEFT OUTER', 'hms_new_application', 'hms_assignment', 'username', 'asu_username AND hms_new_application.term = hms_assignment.term');
         $pager->db->addWhere('hms_assignment.asu_username', 'NULL');
