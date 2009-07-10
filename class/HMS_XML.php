@@ -416,8 +416,9 @@ class HMS_XML{
             'addDecl' => TRUE,
             'encoding' => 'ISO-8859-1',
             'indent' => '  ',
-            'rootName' => 'suggestions',
-            'defaultTagName' => 'suggestion',);
+            'rootName' => 'results',
+            'defaultTagName' => 'rs',
+            'keyAttribute' => 'id');
 
         $serializer = &new XML_Serializer($serializer_options);
 
@@ -436,37 +437,23 @@ class HMS_XML{
     {
         $db = new PHPWS_DB('hms_new_application');
 
-        $db->addColumn('asu_username');
+        $db->addColumn('username');
 
-        $db->addWhere('asu_username', $username . '%', 'ILIKE');
-        $db->addOrder('asu_username', 'ASC');
-        $db->setLimit(5);
+        $db->addWhere('username', '%' . $username . '%', 'ILIKE');
+        $db->addOrder('username', 'ASC');
+        $db->setLimit(10);
 
         $results = $db->select('col');
 
         $json_result = array();
 
-        $json_result[0] = $username;
-        $json_result[1] = $results;
-    	$json_result[2] = array();
-    	$json_result[3] = array();
-        
-        header('Content-Type: application/json; charset=UTF-8');
+        for($i = 0; $i < sizeof($results); $i++){
+            $json_result['results'][] = array('id'=>$i, 'value'=>$results[$i], 'info'=>'First Last');
+        }
+
+        //header('Content-Type: application/json; charset=UTF-8');
         $json_result = json_encode($json_result);
        
-       /* 
-        PHPWS_Core::initCoreClass('Mail.php');
-        $mail = &new PHPWS_Mail;
-
-        $mail->addSendTo('jbooker@tux.appstate.edu');
-        $mail->setFrom('autosearch@tux.appstate.edu');
-        $mail->setSubject('Autosuggest request');
-
-        $mail->setMessageBody($_REQUEST['username'] . "\n" . $json_result);
-        $result = $mail->send();
-        */
-
-
         echo $json_result . "\r\n";
 
         exit;

@@ -382,8 +382,9 @@ class HMS_Student {
             return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
         }
 
-        javascript('/modules/hms/autosuggest');
-        Layout::addStyle('hms', 'css/autosuggest.css');
+        javascript('/jquery');
+        javascript('/modules/hms/new_autosuggest');
+        Layout::addStyle('hms', 'css/autosuggest2.css');
         
         $form = &new PHPWS_Form('student_search_form');
 
