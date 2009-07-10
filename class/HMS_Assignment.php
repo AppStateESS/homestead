@@ -532,8 +532,9 @@ class HMS_Assignment extends HMS_Item
             return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
         }
 
+        javascript('/jquery');
         javascript('/modules/hms/assign_student');
-//        javascript('onload', array('public function'=>"load_halls()"));
+        Layout::addStyle('hms', 'css/autosuggest2.css');
 
         $form = &new PHPWS_Form;
 
