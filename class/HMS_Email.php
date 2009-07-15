@@ -248,11 +248,14 @@ class HMS_Email{
                     HMS_Email::send_template_message($to . '@appstate.edu', 'Housing Assignment Notice!', 'email/assignment_notice_summer.tpl', $tpl);
             break;
             case TERM_FALL:
+            /*
                 if($returning == TRUE){
                     HMS_Email::send_template_message($to . '@appstate.edu', 'Housing Assignment Notice!', 'email/assignment_notice_returning.tpl', $tpl);
                 }else{
                     HMS_Email::send_template_message($to . '@appstate.edu', 'Housing Assignment Notice!', 'email/assignment_notice.tpl', $tpl);
                 }
+            */
+                HMS_Email::send_template_message($to . '@appstate.edu', 'Housing Assignment Notice!', 'email/assignment_notice.tpl', $tpl);
             break;
         }
 
