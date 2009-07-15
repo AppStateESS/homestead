@@ -232,8 +232,10 @@ class HMS_Email{
         $tpl['MOVE_IN_TIME']    = $movein_time;
         $tpl['DATE']            = strftime("%B %d, %Y");
 
-        foreach($roommates as $roommate){
-            $tpl['roommates'][] = array('ROOMMATE' => $roommate);
+        if(!is_null($roommates)){
+            foreach($roommates as $roommate){
+                $tpl['roommates'][] = array('ROOMMATE' => $roommate);
+            }
         }
 
         $sem = HMS_Term::get_term_sem($term);

@@ -619,7 +619,8 @@ class HMS_Letter
             //get the location of their assignment
             PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
             $bed = &new HMS_Bed($assignment['bed_id']);
-            $location = $bed->where_am_i();
+            $room = $bed->get_parent();
+            $location = $bed->where_am_i() . ' - ' . $room->room_number . ' ' . $bed->bedroom_label;
 
             //get the movein time for the student
             $type = HMS_SOAP::get_student_type($assignment['asu_username'], HMS_Term::get_selected_term());
@@ -647,7 +648,6 @@ class HMS_Letter
 
             //get the list of roommates
             $roommates = array();
-            $room = $bed->get_parent();
 
             // This non sequitor brought to you by the Dept. of Housing and Residence life
             // (While we're here, and before we load more information that we aren't going
@@ -660,17 +660,16 @@ class HMS_Letter
                 continue;
 
             // And now back to your regularly scheduled email generation.
-            $assignees = $room->get_assignees();
+            $beds = $room->get_beds();
+            foreach($beds as $bed){
+                $roommate = $bed->get_assignee();
 
-            if(sizeof($assignees > 1)){
-                foreach($assignees as $roommate){
-                    // Don't include *this* student in the roommate list
-                    if($roommate->asu_username == $assignment['asu_username']){
-                        continue;
-                    }
-                    $roommates[] = HMS_SOAP::get_full_name_inverted($roommate->asu_username) . ' (' . $roommate->asu_username . '@appstate.edu)';
+                if($roommate->asu_username == $assignment['asu_username'] || $roommate == false || is_null($roommate)){
+                    continue;
                 }
-            } else {
+                $roommates[] = HMS_SOAP::get_full_name_inverted($roommate->asu_username) . ' ('. $roommate->asu_username . '@appstate.edu) - ' . $room->room_number . ' ' . $bed->bedroom_label;
+            }
+            if(sizeof($roommates) == 0){
                 $roommates = null;
             }
 
