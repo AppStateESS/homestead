@@ -620,7 +620,7 @@ class HMS_Letter
             PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
             $bed = &new HMS_Bed($assignment['bed_id']);
             $room = $bed->get_parent();
-            $location = $bed->where_am_i() . ' - ' . $room->room_number . ' ' . $bed->bedroom_label;
+            $location = $bed->where_am_i() . ' - ' . $bed->bedroom_label;
 
             //get the movein time for the student
             $type = HMS_SOAP::get_student_type($assignment['asu_username'], HMS_Term::get_selected_term());
@@ -667,7 +667,7 @@ class HMS_Letter
                 if($roommate->asu_username == $assignment['asu_username'] || $roommate == false || is_null($roommate)){
                     continue;
                 }
-                $roommates[] = HMS_SOAP::get_full_name_inverted($roommate->asu_username) . ' ('. $roommate->asu_username . '@appstate.edu) - ' . $room->room_number . ' ' . $bed->bedroom_label;
+                $roommates[] = HMS_SOAP::get_full_name_inverted($roommate->asu_username) . ' ('. $roommate->asu_username . '@appstate.edu) - ' . $bed->bedroom_label;
             }
             if(sizeof($roommates) == 0){
                 $roommates = null;
