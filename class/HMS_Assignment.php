@@ -494,8 +494,7 @@ class HMS_Assignment extends HMS_Item
             $assignment->get_banner_bed_id());
         
         # Show an error and return if there was an error
-        if($banner_result != E_SUCCESS) {
-            //$error_msg = "Error: Banner returned error code: $banner_result. Please contact ESS immediately. $username was not removed.";
+        if($banner_result != "0" || $banner_result === FALSE) {
             return E_UNASSIGN_BANNER_ERROR;
         }
 
