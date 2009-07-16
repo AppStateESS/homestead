@@ -41,7 +41,7 @@ a.hall_link {
 </style>
 
 <h2>Building Overview for {HALL} - {TERM}</h2>
-<table class="overview_table" width="500">
+<table class="overview_table" width="575">
 <!-- BEGIN floor_repeat -->
         <tr>
             <td class="floor" colspan="7">{FLOOR_NUMBER} {FLOOR_RLC}</th>
