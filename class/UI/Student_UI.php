@@ -474,7 +474,7 @@ class HMS_Student_UI{
 
         # Check deadlines for verify assignment
         if(HMS_Deadlines::check_within_deadlines('view_assignment_begin_timestamp','view_assignment_end_timestamp',$deadlines)){
-            $tags['VERIFY_MSG'] = '<b>You may verify your housing status</b> until ' . HMS_Deadlines::get_deadline_as_date('view_assignment_begin_timestamp', $deadlines) . '. Click the link below to verify your assignment.';
+            $tags['VERIFY_MSG'] = '<b>You may verify your housing status</b> until ' . HMS_Deadlines::get_deadline_as_date('view_assignment_end_timestamp', $deadlines) . '. Click the link below to verify your assignment.';
             $tags['VERIFY_LINK'] = PHPWS_Text::secureLink(_('Verify Your Assignment'), 'hms', array('type'=>'student','op'=>'show_verify_assignment'));
             $tags['VERIFY_ICON'] = $arrow_img;
         }else if(!HMS_Deadlines::check_deadline_past('view_assignment_begin_timestamp', $deadlines)){
