@@ -107,6 +107,10 @@ class HMS_SOAP{
         if($username == 'kernanas'){
             $student->application_term = 200940;
         }
+
+        if($username == 'healynj'){
+            $student->application_term = 200940;
+        }
         
         // insert into hash table
         $student_info_table[$hash_key] = $student;
