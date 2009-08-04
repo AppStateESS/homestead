@@ -260,17 +260,17 @@ class HMS_Reports{
                 # Check for a freshmen type, but a mis-matched class
                 if(($type == TYPE_FRESHMEN && $class != CLASS_FRESHMEN)){
                     $problems[] = $assignment['asu_username'] . ": Type is $type, class is $class, credit hours is $credit_hours";
-                    $building[$hall_row['hall_name']]['other']++;
-                    $total_other++;
-                    continue;
+                    //$building[$hall_row['hall_name']]['other']++;
+                    //$total_other++;
+                    //continue;
                 }
 
                 # Check for a mis-matched type/class/hours situation
                 if( $type == TYPE_CONTINUING && $class == CLASS_FRESHMEN && $credit_hours == 0){
                     $problems[] = $assignment['asu_username'] . ": Type is $type, class is $class, credit hours is $credit_hours";
-                    $building[$hall_row['hall_name']]['other']++;
-                    $total_other++;
-                    continue;
+                    //$building[$hall_row['hall_name']]['other']++;
+                    //$total_other++;
+                    //continue;
                 }
 
                 $t = $type;
