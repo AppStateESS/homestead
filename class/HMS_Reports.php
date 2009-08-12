@@ -1085,6 +1085,7 @@ class HMS_Reports{
     {
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
         PHPWS_Core::initModClass('hms', 'HousingApplication.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
 
         $term = HMS_Term::get_selected_term();
         $filename = "hms_applications-$term-" . date("Y-m-d") . '.csv';
@@ -1092,7 +1093,7 @@ class HMS_Reports{
 
         $apps = HousingApplication::getAllApplications(NULL, NULL, $term);
 
-        $output .= "user name, banner id, first name, middle name, last name, student type, address 1, address 2, address 3, city, state, zip\n";
+        $output .= "user name, banner id, first name, middle name, last name, student type, assignment, address 1, address 2, address 3, city, state, zip\n";
 
         foreach($apps as $application){
 
@@ -1100,13 +1101,21 @@ class HMS_Reports{
             $bannerId   = $application->getBannerId();
             $type       = $application->getStudentType();
 
+            $assignment = HMS_Assignment::get_assignment($application->getUsername(), $term);
+
+            if(!is_null($assignment)){
+                $room = $assignment->where_am_i();
+            }else{
+                $room = '';
+            }
+
             $first  = HMS_SOAP::get_first_name($username);
             $middle = HMS_SOAP::get_middle_name($username);
             $last   = HMS_SOAP::get_last_name($username);
 
             $address = HMS_SOAP::get_address($username, NULL);
 
-            $output .= "$username,$bannerId,$first,$middle,$last,$type,$address->line1,$address->line2,$address->line3,$address->city,$address->state,$address->zip\n";
+            $output .= "$username,$bannerId,$first,$middle,$last,$type,$room,$address->line1,$address->line2,$address->line3,$address->city,$address->state,$address->zip\n";
         }
 
         header('Content-Type: application/octet-stream');
