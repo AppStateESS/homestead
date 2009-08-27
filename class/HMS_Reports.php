@@ -8,17 +8,18 @@ class HMS_Reports{
     public function get_reports()
     {
         $reports = array(
-                        'housing_apps'      => 'Housing Applications Received',
-                        'housing_asss'      => 'Assignment Demographics',
-                        'assigned_f'        => 'Assigned Type F Students',
-                        'special_needs'     => 'Special Needs Applicants',
-                        'unassd_apps'       => 'Unassigned Applicants',
-                        'movein_times'      => 'Move-in Times',
-                        'unassd_beds'       => 'Currently Unassigned Beds',
-                        'no_ban_data'       => 'Students Without Banner Data',
-                        'vacancy_report'    => 'Hall Occupancy Report',
-                        'roster_report'     => 'Floor Roster Report',
-                        'data_export'       => 'Student Data Export'
+                        'housing_apps'       => 'Housing Applications Received',
+                        'housing_asss'       => 'Assignment Demographics',
+                        'assigned_f'         => 'Assigned Type F Students',
+                        'special_needs'      => 'Special Needs Applicants',
+                        'unassd_apps'        => 'Unassigned Applicants',
+                        'movein_times'       => 'Move-in Times',
+                        'unassd_beds'        => 'Currently Unassigned Beds',
+                        'no_ban_data'        => 'Students Without Banner Data',
+                        'vacancy_report'     => 'Hall Occupancy Report',
+                        'roster_report'      => 'Floor Roster Report',
+                        'data_export'        => 'Student Data Export',
+                        'full_roster_report' => 'Student Roster Report'
                         );
 /*                        'housing_asss' => 'Housing Assignments Made',*/
 /*                        'unassd_rooms' => 'Currently Unassigned Rooms',*/
@@ -115,6 +116,8 @@ class HMS_Reports{
             case 'data_export':
                 return HMS_Reports::student_data_export();
                 break;
+            case 'full_roster_report':
+                return HMS_Reports::roster_report();
             /*
             case 'unassd_rooms':
                 return HMS_Reports::run_unassigned_rooms_report();
@@ -2053,6 +2056,45 @@ class HMS_Reports{
         $pdf->Output();
         exit();
     }
-}
 
+    public function roster_report()
+    {
+        $output = "Hall,Floor,Room,First Name,Last Name,Cell Phone Number";
+
+        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
+        $db = new PHPWS_DB('hms_assignment');
+
+        $db->addColumn('hms_student.first_name');
+        $db->addColumn('hms_student.last_name');
+        $db->addColumn('hms_assignment.asu_username');
+        $db->addColumn('hms_application.cellphone');
+        $db->addColumn('hms_room.room_number');
+        $db->addColumn('hms_floor.floor_number');
+        $db->addColumn('hms_residence_hall.hall_name');
+
+        $db->addWhere('term', HMS_Term::get_current_term());
+        $db->addWhere('hms_assignment.asu_username', 'hms_application.asu_username');
+        $db->addWhere('hms_assignment.bed_id', 'hms_bed.id');
+        $db->addWhere('hms_bed.room_id', 'hms_room.id');
+        $db->addWhere('hms_room.floor_id', 'hms_floor.id');
+        $db->addWhere('hms_floor.residence_hall_id', 'hms_residence_hall.id');
+        $db->addWhere('hms_student.asu_username', 'hms_assignment.asu_username');
+
+        $results = $db->select();
+
+        if(PHPWS_Error::logIfError($results)){
+            Layout::add('Error running the Roster Report, please contact ESS');
+        }
+
+        foreach($results as $result){
+            $output .= "{$result['hall_name']},{$result['floor_number']},{$result['room_number']},{$result['first_name']},{$result['last_name']},{$result['cellphone']}\n";
+        }
+
+        header('Content-Type: application/octet-stream');
+        header('Content-Disposition: attachment; filename="Roster_Report'.HMS_Term::get_current_term().'"');
+        echo $output;
+        exit;
+    }
+}
 ?>
