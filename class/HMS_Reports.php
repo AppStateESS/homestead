@@ -19,7 +19,7 @@ class HMS_Reports{
                         'vacancy_report'     => 'Hall Occupancy Report',
                         'roster_report'      => 'Floor Roster Report',
                         'data_export'        => 'Student Data Export',
-                        'full_roster_report' => 'Student Roster Report'
+                        'full_roster_report' => 'Package Desk Roster'
                         );
 /*                        'housing_asss' => 'Housing Assignments Made',*/
 /*                        'unassd_rooms' => 'Currently Unassigned Rooms',*/
