@@ -2059,27 +2059,29 @@ class HMS_Reports{
 
     public function roster_report()
     {
-        $output = "Hall,Floor,Room,First Name,Last Name,Cell Phone Number";
+        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+
+        $output = "Hall,Floor,Room,First Name,Last Name,Cell Phone Number\n";
 
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
         $db = new PHPWS_DB('hms_assignment');
 
-        $db->addColumn('hms_student.first_name');
-        $db->addColumn('hms_student.last_name');
         $db->addColumn('hms_assignment.asu_username');
-        $db->addColumn('hms_application.cellphone');
+        $db->addColumn('hms_new_application.cell_phone');
         $db->addColumn('hms_room.room_number');
         $db->addColumn('hms_floor.floor_number');
         $db->addColumn('hms_residence_hall.hall_name');
 
-        $db->addWhere('term', HMS_Term::get_current_term());
-        $db->addWhere('hms_assignment.asu_username', 'hms_application.asu_username');
-        $db->addWhere('hms_assignment.bed_id', 'hms_bed.id');
-        $db->addWhere('hms_bed.room_id', 'hms_room.id');
-        $db->addWhere('hms_room.floor_id', 'hms_floor.id');
-        $db->addWhere('hms_floor.residence_hall_id', 'hms_residence_hall.id');
-        $db->addWhere('hms_student.asu_username', 'hms_assignment.asu_username');
+        $db->addJoin('LEFT', 'hms_assignment', 'hms_new_application', 'asu_username', 'username');
+        $db->addJoin('LEFT', 'hms_assignment', 'hms_bed', 'bed_id', 'id');
+        $db->addJoin('LEFT', 'hms_bed', 'hms_room', 'room_id', 'id');
+        $db->addJoin('LEFT', 'hms_room', 'hms_floor', 'floor_id', 'id');
+        $db->addJoin('LEFT', 'hms_floor', 'hms_residence_hall', 'residence_hall_id', 'id');
+
+        $db->addWhere('term', HMS_Term::get_selected_term());
+
+        $db->addOrder('hms_residence_hall.id ASC');
 
         $results = $db->select();
 
@@ -2088,11 +2090,13 @@ class HMS_Reports{
         }
 
         foreach($results as $result){
-            $output .= "{$result['hall_name']},{$result['floor_number']},{$result['room_number']},{$result['first_name']},{$result['last_name']},{$result['cellphone']}\n";
+            $student = HMS_SOAP::get_student_info($result['asu_username']);
+
+            $output .= "{$result['hall_name']},{$result['floor_number']},{$result['room_number']},{$student->last_name},{$student->first_name},{$result['cell_phone']}\n";
         }
 
         header('Content-Type: application/octet-stream');
-        header('Content-Disposition: attachment; filename="Roster_Report'.HMS_Term::get_current_term().'"');
+        header('Content-Disposition: attachment; filename="Roster_Report'.HMS_Term::get_current_term().'.csv"');
         echo $output;
         exit;
     }
