@@ -2061,7 +2061,7 @@ class HMS_Reports{
     {
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
 
-        $output = "Hall,Floor,Room,First Name,Last Name,Banner ID,Cell Phone Number\n";
+        $output = "Hall,Floor,Room,First Name,Last Name,Banner ID,Cell Phone Number, Email Address\n";
 
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
@@ -2092,7 +2092,7 @@ class HMS_Reports{
         foreach($results as $result){
             $student = HMS_SOAP::get_student_info($result['asu_username']);
 
-            $output .= "{$result['hall_name']},{$result['floor_number']},{$result['room_number']},{$student->last_name},{$student->first_name},{$student->banner_id},{$result['cell_phone']}\n";
+            $output .= "{$result['hall_name']},{$result['floor_number']},{$result['room_number']},{$student->last_name},{$student->first_name},{$student->banner_id},{$result['cell_phone']},{$result['asu_username']}@appstate.edu\n";
         }
 
         header('Content-Type: application/octet-stream');
