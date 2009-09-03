@@ -884,7 +884,7 @@ class HMS_Reports{
             }
 
             // skip Mountaineer Apts
-            if($hall->hall_name = 'Mountaineer Apartments'){
+            if($hall->hall_name == 'Mountaineer Apartments'){
                 continue;
             }
 
