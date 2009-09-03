@@ -913,6 +913,11 @@ class HMS_Reports{
                         continue;
                     }
 
+                    // Skip offline and overflow rooms
+                    if($room->is_online == 0 || $room->is_overflow == 1){
+                        continue;
+                    }
+
                     $beds = $room->get_beds();
 
                     foreach($beds as $bed){
@@ -925,7 +930,8 @@ class HMS_Reports{
                             $content .= ' (RA)';
                         }
                         
-                        $content .= ' ' . $bed->get_assigned_to_link(TRUE);
+                        //$content .= ' ' . $bed->get_assigned_to_link(TRUE);
+                        $content .= ' ' . '&lt;unassigned&gt;';
 
                         $tpl->setCurrentBlock('bed_repeat');
                         $tpl->setData(array('BED_NUM' => $content));
