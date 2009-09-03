@@ -883,6 +883,11 @@ class HMS_Reports{
                 continue;
             }
 
+            // skip Mountaineer Apts
+            if($hall->hall_name = 'Mountaineer Apartments'){
+                continue;
+            }
+
             $vacant_beds_by_hall = 0;
 
             $floors = $hall->get_floors();
