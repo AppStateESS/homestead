@@ -918,8 +918,8 @@ class HMS_Reports{
                         continue;
                     }
 
-                    // Skip offline and overflow rooms
-                    if($room->is_online == 0 || $room->is_overflow == 1){
+                    // Skip offline, overflow, and reserved rooms
+                    if($room->is_online == 0 || $room->is_overflow == 1 || $room->is_reserved == 1){
                         continue;
                     }
 
