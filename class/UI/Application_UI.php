@@ -480,7 +480,7 @@ class Application_UI{
                                                 );
 
             }else if ($sem == TERM_SPRING){
-                $application = new FallApplication(0, $term, $banner_id, $_SESSION['asu_username'],
+                $application = new SpringApplication(0, $term, $banner_id, $_SESSION['asu_username'],
                                                 HMS_SOAP::get_gender($_SESSION['asu_username'], TRUE),
                                                 HMS_SOAP::get_student_type($_SESSION['asu_username']),
                                                 HMS_SOAP::get_application_term($_SESSION['asu_username']),
