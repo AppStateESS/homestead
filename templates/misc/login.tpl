@@ -14,9 +14,7 @@
     <!-- BEGIN login -->
     <div style="font-size: 14px;"><strong><a href="{LOGIN_LINK}"><img align="center" src="images/mod/hms/tango/edit-redo.png"></a><a href="{LOGIN_LINK}">Log In</a></strong></div>
     <em style="font-size: 10px;">Use your AppalNet user name and password,<br /><strong>NOT</strong> your First Connections password.</em>
-    <!-- commented out for now
-    [ <a href="#">more information</a> ]
-    -->
+
     <!-- END login -->
     <p>
     <div style="float: left; width: 375px; background: #ECEFF5; padding: 3px">
