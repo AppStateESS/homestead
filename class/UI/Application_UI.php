@@ -563,6 +563,8 @@ class Application_UI{
     {
         PHPWS_Core::initModClass('hms', 'HousingApplication.php');
         PHPWS_Core::initModClass('hms', 'FallApplication.php');
+        PHPWS_Core::initModClass('hms', 'SpringApplication.php');
+        PHPWS_Core::initModClass('hms', 'SummerApplication.php');
 
         $possible_terms = HMS_Term::get_valid_application_terms($term);
 
@@ -578,7 +580,19 @@ class Application_UI{
         }
         
         $app_result = HousingApplication::checkForApplication($username, $term);
-        $application = new FallApplication($app_result['id']);
+
+        $sem = HMS_Term::get_term_sem($term);
+        switch($sem){
+            case TERM_SPRING:
+                $application = new SpringApplication($app_result['id']);
+                break;
+            case TERM_SUMMER1:
+            case TERM_SUMMER2:
+                $application = new SummerApplication($app_result['id']);
+                break;
+            case TERM_FALL:
+                $application = new FallApplication($app_result['id']);
+        }
 
         if($application->id == 0){
             return "No application found for the specified user and term.";
@@ -590,9 +604,10 @@ class Application_UI{
             $tpl['RECEIVED_DATE']   = "Received on: " . date('d-F-Y h:i:s a', $application->created_on);
 
         //Plug the terms the user has applied for into the tags
-        for($i = 0; $i < 4; $i++){
-            $long_term = HMS_Term::term_to_text($term_list[$i]['term']);
-            $tpl['TERMS_'.$i] = $long_term['term'] . ' ' . $long_term['year'];
+        $i = 0;
+        foreach($term_list as $t){
+            $tpl['TERMS_'.$i] = HMS_Term::term_to_text($term_list[$i]['term']);
+            $i++;
         }
 
         $tpl['STUDENT_NAME']                = HMS_SOAP::get_full_name($username);
@@ -601,7 +616,7 @@ class Application_UI{
         $tpl['CLASSIFICATION_FOR_TERM_LBL'] = HMS_Util::formatClass(HMS_SOAP::get_student_class($username, $term));
         $tpl['STUDENT_STATUS_LBL']          = HMS_Util::formatType(HMS_SOAP::get_student_type($username, $term));
 
-        $tpl['MEAL_OPTION']         = HMS_Util::formatMealOption($application->meal_option);
+        $tpl['MEAL_OPTION']         = HMS_Util::formatMealOption($application->meal_plan);
         $tpl['LIFESTYLE_OPTION']    = $application->lifestyle_option == 1?'Single gender':'Co-ed';
         $tpl['PREFERRED_BEDTIME']   = $application->preferred_bedtime == 1?'Early':'Late';
         $tpl['ROOM_CONDITION']      = $application->room_condition == 1?'Clean':'Dirty';
@@ -631,7 +646,9 @@ class Application_UI{
         }
         $tpl['SPECIAL_NEEDS_RESULT'] = $special_needs;
 
-        $tpl['RLC_INTEREST_1'] = $application->rlc_interest == 0?'No':'Yes';
+        if($sem == TERM_FALL){
+            $tpl['RLC_INTEREST_1'] = $application->rlc_interest == 0?'No':'Yes';
+        }
 
         if(Current_User::getUsername() == "hms_student"){
             $tpl['MENU_LINK'] = PHPWS_Text::secureLink('Back to main menu', 'hms', array('type'=>'student', 'op'=>'show_main_menu'));
