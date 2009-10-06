@@ -468,7 +468,7 @@ class Application_UI{
             if($sem == TERM_SUMMER1 || $sem == TERM_SUMMER2){
                 $application = new SummerApplication(0, $term, $banner_id, $_SESSION['asu_username'],
                                                 HMS_SOAP::get_gender($_SESSION['asu_username'], TRUE),
-                                                HMS_SOAP::get_student_type($_SESSION['asu_username']),
+                                                HMS_SOAP::get_student_type($_SESSION['asu_username'],$term),
                                                 HMS_SOAP::get_application_term($_SESSION['asu_username']),
                                                 $_REQUEST['area_code'] . $_REQUEST['exchange'] . $_REQUEST['number'],
                                                 $meal_plan,
@@ -482,7 +482,7 @@ class Application_UI{
             }else if ($sem == TERM_SPRING){
                 $application = new SpringApplication(0, $term, $banner_id, $_SESSION['asu_username'],
                                                 HMS_SOAP::get_gender($_SESSION['asu_username'], TRUE),
-                                                HMS_SOAP::get_student_type($_SESSION['asu_username']),
+                                                HMS_SOAP::get_student_type($_SESSION['asu_username'], $term),
                                                 HMS_SOAP::get_application_term($_SESSION['asu_username']),
                                                 $_REQUEST['area_code'] . $_REQUEST['exchange'] . $_REQUEST['number'],
                                                 $meal_plan,
@@ -496,7 +496,7 @@ class Application_UI{
             }else if ($sem == TERM_FALL){
                 $application = new FallApplication(0, $term, $banner_id, $_SESSION['asu_username'],
                                                 HMS_SOAP::get_gender($_SESSION['asu_username'], TRUE),
-                                                HMS_SOAP::get_student_type($_SESSION['asu_username']),
+                                                HMS_SOAP::get_student_type($_SESSION['asu_username'], $term),
                                                 HMS_SOAP::get_application_term($_SESSION['asu_username']),
                                                 $_REQUEST['area_code'] . $_REQUEST['exchange'] . $_REQUEST['number'],
                                                 $meal_plan,
