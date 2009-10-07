@@ -239,12 +239,11 @@ class HMS_Side_Thingie {
     {
         /**
          * Commented this out to turn the roommate deadline back on for the spring semester
-         *
+         */
         if($this->entry_term != TERM_FALL){
             unset($this->steps_text[HMS_SIDE_STUDENT_ROOMMATE]);
             return;
         }
-        */
         
         # If this is the step we're on, then set style accordingly
         $on_this_step = FALSE;
