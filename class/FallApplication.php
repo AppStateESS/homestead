@@ -91,15 +91,15 @@ class FallApplication extends HousingApplication{
 
     public function delete()
     {
-        if(!parent::delete()){
-            return false;
-        }
-
         $db = new PHPWS_DB('hms_fall_application');
         $db->addWhere('id', $this->id);
         $result = $db->delete();
         if(!$result || PHPWS_Error::logIfError($result)){
             return $result;
+        }
+        
+        if(!parent::delete()){
+            return false;
         }
 
         return TRUE;

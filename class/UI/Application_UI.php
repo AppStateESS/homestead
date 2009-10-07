@@ -444,14 +444,25 @@ class Application_UI{
         }
 
         foreach($valid_terms as $key => $term){
+            $sem = HMS_Term::get_term_sem($term);
+
             # Check for an existing application and delete it
             $app_result = HousingApplication::checkForApplication($_SESSION['asu_username'], $term);
             if($app_result !== FALSE){
-                $application = new FallApplication($app_result['id']);
+                switch($sem){
+                    case TERM_SPRING:
+                        $application = new SpringApplication($app_result['id']);
+                        break;
+                    case TERM_SUMMER1:
+                    case TERM_SUMMER2:
+                        $application = new SummerApplication($app_result['id']);
+                        break;
+                    case TERM_FALL:
+                        $application = new FallApplication($app_result['id']);
+                }
+
                 $application->delete();
             }
-
-            $sem = HMS_Term::get_term_sem($term);
 
             $banner_id = HMS_SOAP::get_banner_id($_SESSION['asu_username']);
 
