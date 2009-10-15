@@ -38,12 +38,40 @@ class HMS_SOAP{
             $student->middle_name   = 'L';
             $student->last_name     = 'Booker';
             $student->gender        = 'M';
-            $student->application_term  = '200840'; // a freshmen/rising sophomore
-            $student->projected_class   = 'SO';
-            $student->student_type      = 'C';
+            $student->application_term  = '201010'; // a freshmen/rising sophomore
+            $student->projected_class   = 'FR';
+            $student->student_type      = 'F';
 
             return $student;
         }
+        
+        /**
+         * More special exceptions
+         */
+        if(LOGIN_TEST_FLAG && preg_match("/^freshmen_.*/",$username)){
+            $student = HMS_SOAP::get_test_info();
+            $student->projected_class   = 'FR';
+            $student->student_type      = 'F';
+            $student->application_term  = 200940;
+            return $student;
+        }
+
+        if(LOGIN_TEST_FLAG && preg_match("/^continuing_.*/",$username)){
+            $student = HMS_SOAP::get_test_info();
+            $student->projected_class   = 'JR';
+            $student->student_type      = 'C';
+            $student->application_term  = 200840;
+            return $student;
+        }
+
+        if(LOGIN_TEST_FLAG && preg_match("/^transfer_.*/",$username)){
+            $student = HMS_SOAP::get_test_info();
+            $student->projected_class   = 'FR';
+            $student->student_type      = 'T';
+            $student->application_term  = 200940;
+            return $student;
+        }
+
 
         // Return canned data
         if(SOAP_INFO_TEST_FLAG) {
@@ -816,7 +844,7 @@ class HMS_SOAP{
 
     public function get_test_info(){
         //$student->banner_id             = 900325006;
-        $student->banner_id             = 900325007;
+        $student->banner_id             = 900325008;
         $student->last_name             = 'Booker';
         $student->first_name            = 'Jeremy';
         $student->middle_name           = 'Lee';
@@ -834,7 +862,7 @@ class HMS_SOAP{
         //$student->projected_class       = 'SR';
 
         $student->student_type          = 'F';
-        $student->application_term      = '200940';
+        $student->application_term      = '201010';
         $student->projected_class       = 'FR';
 
         $student->credhrs_completed     = 0;

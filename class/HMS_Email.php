@@ -62,25 +62,27 @@ class HMS_Email{
         # Create a Mail object and set it up
         PHPWS_Core::initCoreClass('Mail.php');
         $message = &new PHPWS_Mail;
-        $message->addSendTo($to);
-
-        if(isset($cc)){
-            $message->addCarbonCopy($cc);
-        }
-
-        if(isset($bcc)){
-            $message->addBlindCopy($bcc);
-        }
-
+        
         $message->setFrom($from);
         $message->setSubject($subject);
         $message->setMessageBody($content);
 
         # Send the message
         if(EMAIL_TEST_FLAG){
+            $message->addSendTo('housing_test@tux.appstate.edu');
             HMS_Email::log_email($message);
             $result = true;
         }else{
+            $message->addSendTo($to);
+
+            if(isset($cc)){
+                $message->addCarbonCopy($cc);
+            }
+
+            if(isset($bcc)){
+                $message->addBlindCopy($bcc);
+            }
+
             $result = $message->send();
         }
 
