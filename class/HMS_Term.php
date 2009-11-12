@@ -339,9 +339,8 @@ class HMS_Term{
         $db = new PHPWS_DB();
         
         //echo "beginning transaction<br>";
-        $db->query('BEGIN');
 
-        $term = &new HMS_Term(NULL);
+        $term = new HMS_Term(NULL);
         $term->set_term(HMS_Term::text_to_term($_REQUEST['year_drop'],$_REQUEST['term_drop']));
         $term->banner_queue     = 0;
         $term->new_applications = 0;
@@ -356,7 +355,6 @@ class HMS_Term{
         PHPWS_Core::initModClass('hms', 'HMS_Term_Applications.php');
         HMS_Term::set_valid_term($term->term, $term->term, 1); //set required term association with itself
         
-
         if($_REQUEST['copy_drop'] == 1){
             # Copy the hall structure & assignments
             $assignments = TRUE;
@@ -364,33 +362,46 @@ class HMS_Term{
             $assignments = FALSE;
         }
 
-        PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
+        $result = HMS_Term::copyHallStructure($term->getTerm(), $assignments); 
 
-        //echo "gettings halls<br>";
-        # Get the halls from the current term
-        $halls = HMS_Residence_Hall::get_halls();
-        //test($halls);
-        
-        //echo "copying halls<br>";
-        foreach ($halls as $hall){
-            //echo "copying hall with id: $hall->id <br>";
-            $result = $hall->copy($term->get_term(), $assignments);
-            if(!$result){
-                //echo "error returned from copying hall with id: $hall->id <br>";
-                //test($result);
-                //echo "rolling back<br>";
-                $db->query('ROLLBACK');
-                return HMS_Term::show_edit_terms(NULL, 'There was an error copying data. Please contact ESS.');
-            }
+        if(!$result){
+            return HMS_Term::show_edit_terms(NULL, 'There was an error copying data. Please contact ESS.');
         }
-
-        //echo "done copying halls<br>";
-        $db->query('COMMIT');
 
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
         HMS_Activity_Log::log_activity(Current_User::getUsername(), ACTIVITY_CREATE_TERM, Current_User::getUsername(), 'Created new term: ' . $term->term);
 
         return HMS_Term::show_edit_terms('Term created successfully!');
+    }
+
+    public function copyHallStructure($term, $assignments)
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
+
+        $db = new PHPWS_DB();
+        $db->query('BEGIN');
+
+        //echo "gettings halls<br>";
+        # Get the halls from the current term
+        $halls = HMS_Residence_Hall::get_halls(HMS_Term::get_current_term());
+        //test($halls,1);
+        
+        //echo "copying halls<br>";
+        foreach ($halls as $hall){
+            //echo "copying hall with id: $hall->id <br>";
+            $result = $hall->copy($term, $assignments);
+            if(!$result){
+                echo "error returned from copying hall with id: $hall->id <br>";
+                test($result);
+                //echo "rolling back<br>";
+                $db->query('ROLLBACK');
+                return false;
+            }
+        }
+
+        $db->query('COMMIT');
+
+        return true;
     }
 
     /**

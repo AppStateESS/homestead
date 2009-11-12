@@ -39,10 +39,10 @@ class HMS_Item {
 
         if (!$this->id) {
             $this->added_on = & $now;
-            $this->added_by = Current_User::getId();
+            //$this->added_by = Current_User::getId();
         }
         $this->updated_on = & $now;
-        $this->updated_by = Current_User::getId();
+        //$this->updated_by = Current_User::getId();
     }
 
     public function delete()

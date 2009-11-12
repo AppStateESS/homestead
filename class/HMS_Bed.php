@@ -55,7 +55,7 @@ class HMS_Bed extends HMS_Item {
                 return false;
             }
             
-            test($this->_curr_assignment);
+            //test($this->_curr_assignment);
             if (isset($this->_curr_assignment)) {
                 return $this->_curr_assignment->copy($to_term, $new_bed->id);
             }
