@@ -2112,7 +2112,7 @@ class HMS_Reports{
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
         $tpl = array();
 
-        $db = new PHPWS_DB('hms_application');
+        $db = new PHPWS_DB('hms_new_application');
         $db->addWhere('term', HMS_Term::get_current_term());
         $results = $db->select();
         
@@ -2122,11 +2122,11 @@ class HMS_Reports{
         }
 
         foreach($results as $result){
-            $student = HMS_SOAP::get_student_info($result['asu_username']);
+            $student = HMS_SOAP::get_student_info($result['username']);
 
             if(strtotime("-25 years") > strtotime($student->dob)){
                 $tpl['students'][] = array('NAME'     => $student->last_name.' '.$student->first_name,
-                                           'ASU_USERNAME'  => $result['asu_username'],
+                                           'ASU_USERNAME'  => $result['username'],
                                            'DATE_OF_BIRTH' => $student->dob,
                                            'BANNER_ID'     => $student->banner_id);
             }
