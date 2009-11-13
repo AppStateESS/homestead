@@ -19,7 +19,8 @@ class HMS_Reports{
                         'vacancy_report'     => 'Hall Occupancy Report',
                         'roster_report'      => 'Floor Roster Report',
                         'data_export'        => 'Student Data Export',
-                        'full_roster_report' => 'Package Desk Roster'
+                        'full_roster_report' => 'Package Desk Roster',
+                        'over_twenty_five'   => 'Over 25 report'
                         );
 /*                        'housing_asss' => 'Housing Assignments Made',*/
 /*                        'unassd_rooms' => 'Currently Unassigned Rooms',*/
@@ -97,27 +98,22 @@ class HMS_Reports{
                 break;
             case 'unassd_apps':
                 return HMS_Reports::unassigned_applicants_report();
-                break;
             case 'movein_times':
                return HMS_Reports::run_move_in_times_report();
-               break;
             case 'unassd_beds':
                 return HMS_Reports::run_unassigned_beds_report();
-                break;
             case 'no_ban_data':
                 return HMS_Reports::run_no_banner_data_report();
-                break;
             case 'vacancy_report':
                 return HMS_Reports::run_hall_occupancy_report();
-                break;
             case 'roster_report':
                 return HMS_Reports::assignment_roster_report();
-                break;
             case 'data_export':
                 return HMS_Reports::student_data_export();
-                break;
             case 'full_roster_report':
                 return HMS_Reports::roster_report();
+            case 'over_twenty_five':
+                return HMS_Reports::over_twenty_five_report();
             /*
             case 'unassd_rooms':
                 return HMS_Reports::run_unassigned_rooms_report();
@@ -2110,6 +2106,33 @@ class HMS_Reports{
         header('Content-Disposition: attachment; filename="Roster_Report'.HMS_Term::get_current_term().'.csv"');
         echo $output;
         exit;
+    }
+
+    public function over_twenty_five_report(){
+        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+        $tpl = array();
+
+        $db = new PHPWS_DB('hms_application');
+        $db->addWhere('term', HMS_Term::get_current_term());
+        $results = $db->select();
+        
+        if(PHPWS_Error::logIfError($results)){
+            Layout::add('<div color="font-color: red;">An error occured running the "Over-25" report, please contact ESS if this problem persists.</div>');
+            return false;
+        }
+
+        foreach($results as $result){
+            $student = HMS_SOAP::get_student_info($result['asu_username']);
+
+            if(strtotime("-25 years") > strtotime($student->dob)){
+                $tpl['students'][] = array('NAME'     => $student->last_name.' '.$student->first_name,
+                                           'ASU_USERNAME'  => $result['asu_username'],
+                                           'DATE_OF_BIRTH' => $student->dob,
+                                           'BANNER_ID'     => $student->banner_id);
+            }
+        }
+
+        return PHPWS_Template::process($tpl, 'hms', 'admin/reports/over_twenty_five_report.tpl');
     }
 }
 ?>
