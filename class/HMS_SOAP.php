@@ -84,6 +84,7 @@ class HMS_SOAP{
         include_once('SOAP/Client.php');
         $wsdl = new SOAP_WSDL('file://' . PHPWS_SOURCE_DIR . 'mod/hms/inc/shs0001.wsdl', 'true');
         $proxy = $wsdl->getProxy();
+        $proxy->setOpt('timeout', 5000);
         $student = $proxy->GetStudentProfile($username, $term);
         
         # Check for an PEAR error and log it
@@ -158,6 +159,7 @@ class HMS_SOAP{
         include_once('SOAP/Client.php');
         $wsdl = new SOAP_WSDL('file://' . PHPWS_SOURCE_DIR . 'mod/hms/inc/shs0001.wsdl', 'true');
         $proxy = $wsdl->getProxy();
+        $proxy->setOpt('timeout', 5000);
         $username = $proxy->GetUserName($banner_id);
 
         if(is_soap_fault($username)) {
@@ -181,6 +183,7 @@ class HMS_SOAP{
             include_once('SOAP/Client.php');
             $wsdl = new SOAP_WSDL('file://' . PHPWS_SOURCE_DIR . 'mod/hms/inc/shs0001.wsdl', 'true');
             $proxy = $wsdl->getProxy();
+            $proxy->setOpt('timeout', 5000);
             $result = $proxy->CreateHousingApp($username, $term, $plan_code, $meal_code);
         }
 
@@ -222,6 +225,7 @@ class HMS_SOAP{
         include_once('SOAP/Client.php');
         $wsdl = new SOAP_WSDL('file://' . PHPWS_SOURCE_DIR . 'mod/hms/inc/shs0001.wsdl', 'true');
         $proxy = $wsdl->getProxy();
+        $proxy->setOpt('timeout', 5000);
         $assignment = $proxy->CreateRoomAssignment($username, $term, $building_code, $room_code, $plan_code, $meal_code);
         
         # Check for an error and log it
@@ -261,6 +265,7 @@ class HMS_SOAP{
         include_once('SOAP/Client.php');
         $wsdl = new SOAP_WSDL('file://' . PHPWS_SOURCE_DIR . 'mod/hms/inc/shs0001.wsdl', 'true');
         $proxy = $wsdl->getProxy();
+        $proxy->setOpt('timeout', 5000);
         $removal = $proxy->RemoveRoomAssignment($username, $term, $building, $room);
 
         # Check for an error and log it
@@ -302,6 +307,7 @@ class HMS_SOAP{
         include_once('SOAP/Client.php');
         $wsdl = new SOAP_WSDL('file://' . PHPWS_SOURCE_DIR . 'mod/hms/inc/shs0001.wsdl', 'true');
         $proxy = $wsdl->getProxy();
+        $proxy->setOpt('timeout', 5000);
         $student = $proxy->GetHousMealRegister($username, $termcode, $opt);
 
         # Check for an error and log it
