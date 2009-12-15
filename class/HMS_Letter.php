@@ -145,8 +145,10 @@ class HMS_Letter
 
             if(!is_null($prev_assignment) || $type == TYPE_CONTINUING){
                 $movein_time_id = $assignment->get_rt_movein_time_id();
+            }elseif($type == TYPE_TRANSFER){
+                $movein_time_id = $assignment->get_t_movein_time_id();
             }else{
-                $movein_time_id = $assignment->get_ft_movein_time_id();
+                $movein_time_id = $assignment->get_f_movein_time_id();
             }
 
             if($movein_time_id == NULL){
@@ -633,9 +635,12 @@ class HMS_Letter
             if(!is_null($prev_assignment) || $type == TYPE_CONTINUING){
                 $returning = TRUE;
                 $movein_time_id = $assgmnt->get_rt_movein_time_id();
+            }else if($type == TYPE_TRANSFER){
+                $returning = FALSE;
+                $movein_time_id = $assgmnt->get_t_movein_time_id();
             }else{
                 $returning = FALSE;
-                $movein_time_id = $assgmnt->get_ft_movein_time_id();
+                $movein_time_id = $assgmnt->get_f_movein_time_id();
             }
 
             if($movein_time_id == NULL){

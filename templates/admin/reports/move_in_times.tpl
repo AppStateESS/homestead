@@ -8,7 +8,8 @@
         <!-- BEGIN floor_repeat -->
         <li>{FLOOR_NUM}</li>
         <ul>
-            <li>Freshmen/Transfer:{FT_TIME}</li>
+            <li>Freshmen: {F_TIME}</li>
+            <li>Transfer: {T_TIME}</li>
             <li>Returning: {RT_TIME}</li>
         </ul>
         <!-- END floor_repeat -->

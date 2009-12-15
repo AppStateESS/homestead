@@ -496,8 +496,10 @@ class HMS_Student_UI{
 
             if($type == TYPE_CONTINUING){
                 $movein_time_id = $assignment->get_rt_movein_time_id();
+            }elseif($type == TYPE_TRANFER){
+                $movein_time_id = $assignment->get_t_movein_time_id();
             }else{
-                $movein_time_id = $assignment->get_ft_movein_time_id();
+                $movein_time_id = $assignment->get_f_movein_time_id();
             }
             
             if($movein_time_id == NULL){

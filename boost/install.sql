@@ -73,6 +73,9 @@ CREATE TABLE hms_floor (
     updated_by          smallint NOT NULL,
     updated_on          integer NOT NULL,
     rlc_id              smallint REFERENCES hms_learning_communities(id),
+    f_movein_time_id    integer REFERENCES hms_movein_time(id),
+    t_movein_time_id    integer REFERENCES hms_movein_time(id),
+    rt_movein_time_id   integer REFERENCES hms_movein_time(id),
     floor_plan_image_id integer DEFAULT 0,
     primary key(id)
 );

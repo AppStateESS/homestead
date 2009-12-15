@@ -244,6 +244,7 @@ class HMS_Email{
 
         switch($sem){
             case TERM_SPRING:
+                HMS_Email::send_template_message($to . '@appstate.edu', 'Housing Assignment Notice!', 'email/assignment_notice_spring.tpl', $tpl);
             break;
             case TERM_SUMMER1:
             case TERM_SUMMER2:

@@ -16,7 +16,8 @@ class HMS_Floor extends HMS_Item
     var $residence_hall_id;
     var $is_online;
     var $gender_type;
-    var $ft_movein_time_id;
+    var $f_movein_time_id;
+    var $t_movein_time_id;
     var $rt_movein_time_id;
     var $rlc_id;
     var $floor_plan_image_id;
@@ -81,7 +82,8 @@ class HMS_Floor extends HMS_Item
         $new_floor->reset();
         $new_floor->term = $to_term;
         $new_floor->residence_hall_id = $hall_id;
-        $new_floor->ft_movein_time_id = NULL;
+        $new_floor->f_movein_time_id = NULL;
+        $new_floor->t_movein_time_id = NULL;
         $new_floor->rt_movein_time_id = NULL;
 
         if(!$new_floor->save()) {
@@ -675,15 +677,23 @@ class HMS_Floor extends HMS_Item
        # Grab all the input from the form and save the floor
        $floor->gender_type = $_REQUEST['gender_type'];
        $floor->is_online = isset($_REQUEST['is_online']) ? 1 : 0;
-       $floor->ft_movein_time_id = $_REQUEST['ft_movein_time'];
+       $floor->f_movein_time_id = $_REQUEST['f_movein_time'];
+       $floor->t_movein_time_id = $_REQUEST['t_movein_time'];
        $floor->rt_movein_time_id = $_REQUEST['rt_movein_time'];
        $floor->floor_plan_image_id = $_REQUEST['floor_plan_image_id'];
 
-       if($_REQUEST['ft_movein_time'] == 0){
-           $floor->ft_movein_time_id = NULL;
+       if($_REQUEST['f_movein_time'] == 0){
+           $floor->f_movein_time_id = NULL;
        }else{
-           $floor->ft_movein_time_id = $_REQUEST['ft_movein_time'];
+           $floor->f_movein_time_id = $_REQUEST['f_movein_time'];
        }
+
+        if($_REQUEST['t_movein_time'] == 0){
+           $floor->t_movein_time_id = NULL;
+       }else{
+           $floor->t_movein_time_id = $_REQUEST['t_movein_time'];
+       }
+
 
        if($_REQUEST['rt_movein_time'] == 0){
            $floor->rt_movein_time_id = NULL;
@@ -841,11 +851,18 @@ class HMS_Floor extends HMS_Item
 
         $movein_times = HMS_Movein_Time::get_movein_times_array();
 
-        $form->addDropBox('ft_movein_time', $movein_times);
-        if(!isset($floor->ft_movein_time_id)){
-            $form->setMatch('ft_movein_time', 0);
+        $form->addDropBox('f_movein_time', $movein_times);
+        if(!isset($floor->f_movein_time_id)){
+            $form->setMatch('f_movein_time', 0);
         }else{
-            $form->setMatch('ft_movein_time', $floor->ft_movein_time_id);
+            $form->setMatch('f_movein_time', $floor->f_movein_time_id);
+        }
+
+        $form->addDropBox('t_movein_time', $movein_times);
+        if(!isset($floor->t_movein_time_id)){
+            $form->setMatch('t_movein_time', 0);
+        }else{
+            $form->setMatch('t_movein_time', $floor->t_movein_time_id);
         }
         
         $form->addDropBox('rt_movein_time', $movein_times);

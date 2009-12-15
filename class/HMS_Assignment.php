@@ -155,7 +155,7 @@ class HMS_Assignment extends HMS_Item
         return $this->_bed->phone_number;
     }
 
-    public function get_ft_movein_time_id()
+    public function get_f_movein_time_id()
     {
         if(!$this->loadBed()){
             return null;
@@ -164,7 +164,19 @@ class HMS_Assignment extends HMS_Item
         $room   = $this->_bed->get_parent();
         $floor  = $room->get_parent();
 
-        return $floor->ft_movein_time_id;
+        return $floor->f_movein_time_id;
+    }
+
+    public function get_t_movein_time_id()
+    {
+        if(!$this->loadBed()){
+            return null;
+        }
+
+        $room   = $this->_bed->get_parent();
+        $floor  = $room->get_parent();
+
+        return $floor->t_movein_time_id;
     }
 
     public function get_rt_movein_time_id()

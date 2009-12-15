@@ -101,7 +101,10 @@ $(document).ready(function(){
                 <td align="left">{IS_ONLINE}</td>
             </tr>
             <tr>
-                <th>Freshmen Move-in Time: </th><td>{FT_MOVEIN_TIME}</td>
+                <th>Freshmen Move-in Time: </th><td>{F_MOVEIN_TIME}</td>
+            </tr>
+            <tr>
+                <th>Transfer Move-in Time: </th><td>{T_MOVEIN_TIME}</td>
             </tr>
             <tr>
                 <th>Returning Move-in Time: </th><td>{RT_MOVEIN_TIME}</td>

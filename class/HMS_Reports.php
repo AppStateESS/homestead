@@ -721,11 +721,18 @@ class HMS_Reports{
             foreach($floors as $floor){
                 $tpl->setCurrentBlock('floor_repeat');
                 
-                if(is_null($floor->ft_movein_time_id)){
-                    $ft_time = 'None';
+                if(is_null($floor->f_movein_time_id)){
+                    $f_time = 'None';
                 }else{
-                    $ft_movein  = &new HMS_Movein_Time($floor->ft_movein_time_id);
-                    $ft_time    = $ft_movein->get_formatted_begin_end();
+                    $f_movein  = new HMS_Movein_Time($floor->f_movein_time_id);
+                    $f_time    = $f_movein->get_formatted_begin_end();
+                }
+
+                if(is_null($floor->t_movein_time_id)){
+                    $t_time = 'None';
+                }else{
+                    $t_movein  = &new HMS_Movein_Time($floor->t_movein_time_id);
+                    $t_time    = $t_movein->get_formatted_begin_end();
                 }
 
                 if(is_null($floor->rt_movein_time_id)){
@@ -736,7 +743,8 @@ class HMS_Reports{
                 }
                 
                 $tpl->setData(array('FLOOR_NUM' => $floor->floor_number,
-                                    'FT_TIME'   => $ft_time,
+                                    'F_TIME'    => $f_time,
+                                    'T_TIME'    => $t_time,
                                     'RT_TIME'   => $rt_time));
                 $tpl->parseCurrentBlock();
             }
