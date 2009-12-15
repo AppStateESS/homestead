@@ -8,19 +8,20 @@ class HMS_Reports{
     public function get_reports()
     {
         $reports = array(
-                        'housing_apps'       => 'Housing Applications Received',
-                        'housing_asss'       => 'Assignment Demographics',
-                        'assigned_f'         => 'Assigned Type F Students',
-                        'special_needs'      => 'Special Needs Applicants',
-                        'unassd_apps'        => 'Unassigned Applicants',
-                        'movein_times'       => 'Move-in Times',
-                        'unassd_beds'        => 'Currently Unassigned Beds',
-                        'no_ban_data'        => 'Students Without Banner Data',
-                        'vacancy_report'     => 'Hall Occupancy Report',
-                        'roster_report'      => 'Floor Roster Report',
-                        'data_export'        => 'Student Data Export',
-                        'full_roster_report' => 'Package Desk Roster',
-                        'over_twenty_five'   => 'Over 25 report'
+                        'housing_apps'          => 'Housing Applications Received',
+                        'housing_asss'          => 'Assignment Demographics',
+                        'assigned_f'            => 'Assigned Type F Students',
+                        'special_needs'         => 'Special Needs Applicants',
+                        'unassd_apps'           => 'Unassigned Applicants',
+                        'movein_times'          => 'Move-in Times',
+                        'unassd_beds'           => 'Currently Unassigned Beds',
+                        'no_ban_data'           => 'Students Without Banner Data',
+                        'vacancy_report'        => 'Hall Occupancy Report',
+                        'roster_report'         => 'Floor Roster Report',
+                        'applied_data_export'   => 'Applied Student Data Export',
+                        'assigned_data_export'  => 'Assigned Student Data Export',
+                        'full_roster_report'    => 'Package Desk Roster',
+                        'over_twenty_five'      => 'Over 25 report'
                         );
 /*                        'housing_asss' => 'Housing Assignments Made',*/
 /*                        'unassd_rooms' => 'Currently Unassigned Rooms',*/
@@ -108,8 +109,10 @@ class HMS_Reports{
                 return HMS_Reports::run_hall_occupancy_report();
             case 'roster_report':
                 return HMS_Reports::assignment_roster_report();
-            case 'data_export':
-                return HMS_Reports::student_data_export();
+            case 'applied_data_export':
+                return HMS_Reports::applied_student_data_export();
+            case 'assigned_data_export':
+                return HMS_Reports::assigned_student_data_export();
             case 'full_roster_report':
                 return HMS_Reports::roster_report();
             case 'over_twenty_five':
@@ -1099,7 +1102,7 @@ class HMS_Reports{
         return $content;
     }
 
-    public function student_data_export()
+    public function applied_student_data_export()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
         PHPWS_Core::initModClass('hms', 'HousingApplication.php');
@@ -1142,6 +1145,79 @@ class HMS_Reports{
         echo $output;
         exit;
 
+    }
+
+    public function assigned_student_data_export()
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+
+        $term = HMS_Term::get_selected_term();
+
+        $db = new PHPWS_DB('hms_assignment');
+        $db->addColumn('hms_assignment.*');
+        $db->addColumn('hms_residence_hall.*');
+        $db->addColumn('hms_room.*');
+
+        $db->addWhere('hms_assignment.term', $term);
+
+        $db->addJoin('LEFT OUTER', 'hms_assignment', 'hms_bed', 'bed_id', 'id');
+        $db->addJoin('LEFT OUTER', 'hms_bed', 'hms_room', 'room_id', 'id');
+        $db->addJoin('LEFT OUTER', 'hms_room', 'hms_floor', 'floor_id', 'id');
+        $db->addJoin('LEFT OUTER', 'hms_floor', 'hms_residence_hall', 'residence_hall_id', 'id');
+
+        $results = $db->select();
+
+        if(PHPWS_Error::logIfError($results)){
+            return $results;
+        }
+
+        $filename = "hms_assignments-$term-" . date("Y-m-d") . '.csv';
+
+        $output = "user name, banner id, first name, middle name, last name, student type, assignment, address 1, address 2, address 3, city, state, zip\n";
+
+        foreach($results as $row){
+            $student = HMS_SOAP::get_student_info($row['asu_username'], $term);
+
+            $username = $row['asu_username'];
+
+            if(!isset($student->banner_id) || is_null($student->banner_id) || empty($student->banner_id)){
+                continue;
+            }
+
+            $bannerId   = $student->banner_id;
+            $first      = $student->first_name;
+            $middle     = $student->middle_name;
+            $last       = $student->last_name;
+            $type       = $student->student_type;
+
+            $room = $row['hall_name'] . ' ' . $row['room_number'];
+
+            $address = HMS_SOAP::get_address($row['asu_username'], NULL); 
+
+            if(!$address || !isset($address) || is_null($address)){
+                $line1 = "";
+                $line2 = "";
+                $line3 = "";
+                $city  = "";
+                $state = "";
+                $zip   = "";
+            } else {
+                $line1 = $address->line1;
+                $line2 = $address->line2;
+                $line3 = $address->line3;
+                $city  = $address->city;
+                $state = $address->state;
+                $zip   = $address->zip;
+            }
+
+            $output .= "$username,$bannerId,$first,$middle,$last,$type,$room,$line1,$line2,$line3,$city,$state,$zip\n";
+        }
+
+        header('Content-Type: application/octet-stream');
+        header('Content-Disposition: attachment; filename="' . $filename . '"');
+
+        echo $output;
+        exit;
     }
 
     /*
