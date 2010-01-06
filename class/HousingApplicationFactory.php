@@ -32,7 +32,8 @@ class HousingApplicationFactory {
 			case TERM_SPRING:
 				$application = new SpringApplication();
 				break;
-			case TERM_SUMMER:
+			case TERM_SUMMER1:
+			case TERM_SUMMER2:
 				$application = new SummerApplication();
 				break;
 		}
