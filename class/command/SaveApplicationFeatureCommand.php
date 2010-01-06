@@ -86,9 +86,15 @@ class SaveApplicationFeatureCommand extends Command {
         	}
         }
         
-        $feature->save();
+        PHPWS_Core::initModClass('hms', 'exception/MissingDataException.php');
+        try {
+            $feature->save();
+        } catch(MissingDataException $e) {
+        	echo json_encode($e);
+        	HMS::quit();
+        }
         
-        echo "Success!";
+        echo json_encode($feature);
         HMS::quit();
 	} 
 }

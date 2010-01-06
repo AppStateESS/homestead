@@ -64,6 +64,10 @@ class TermEditView extends View {
 			$tpl['BANNER_QUEUE_LINK'] = $cmd->getLink('Enable');
 		}
 		
+		// Terms and Conditions
+		$tpl['TERMS_CONDITIONS_LEGEND'] = dgettext('hms', 'Terms and Conditions');
+		// TODO: Upload File Javascript
+		
 		// Features and Deadlines
 		$tpl['FEATURES_DEADLINES_LEGEND'] = dgettext('hms', 'Important Dates and Deadlines');
 		PHPWS_Core::initModClass('hms', 'ApplicationFeatureListView.php');

@@ -63,9 +63,40 @@
 			$this.bind('submit', {submitSelector:o.submitSelector}, function(e) {
 				// TODO: Respect GET and POST
 				uri = $(this).attr('action');
+				$$this = $(this);
 				$.post(uri, $(this).serialize(), function(data) {
-					alert(data);
+					try {
+						data = eval('(' + data + ')');
+					} catch(e) {
+						alert("We're sorry... something went wrong and what you just did wasn't saved.  Check the logs.");
+						return;
+					}
+					
+					
+					if(!data.id) {
+						if(!data.data) {
+							alert("We're sorry... something went wrong and what you just did wasn't saved.  Check the logs.");
+							return;
+						} else {
+							var err = "Please check the following fields: ";
+							for(var d in data.data) {
+								err += data.data[d] + " ";
+							}
+							alert(err);
+							$$this.find('input').removeAttr('disabled');
+						}
+					} else {
+						//for(var n in data) {
+						//	$$this.find('input[name="'+n+'"]').attr('value', data[n]);
+						//}
+						$$this.find('input').removeAttr('disabled');
+						console.log(e);
+						if(e.data.submitSelector != '') {
+							$$this.find(e.data.submitSelector).hide('fast');
+						}
+					}
 				});
+				$(this).find('input').attr('disabled', 'disabled');
 				e.preventDefault()
 				return false;
 			});

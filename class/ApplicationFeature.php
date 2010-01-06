@@ -95,6 +95,12 @@ abstract class ApplicationFeature {
     		$this->name = get_class($this);
     	}
     	
+    	$missing = $this->validate();
+    	if(!empty($missing)) {
+    	    PHPWS_Core::initModClass('hms', 'exception/MissingDataException.php');
+    	    throw new MissingDataException('Missing required data.', $missing);	
+    	} 
+    	
         $db = new PHPWS_DB('hms_application_feature');
         $result = $db->saveObject($this);
 
@@ -102,6 +108,35 @@ abstract class ApplicationFeature {
             PHPWS_Core::initModclass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
+    }
+    
+    /**
+     * Validates this object for saving.
+     * @return array An array of fields that are WRONG.
+     */
+    public function validate()
+    {
+    	$reg = $this->getRegistration();
+        $missing = array();
+    	
+        if($reg->requiresStartDate() && !self::validateDate($this->start_date)) {
+            $missing[] = 'start_date';
+        }
+        
+        if($reg->requiresEndDate() && !self::validateDate($this->end_date)) {
+        	$missing[] = 'end_date';
+        }
+        
+        return $missing;
+    }
+    
+    private static function validateDate($date)
+    {
+    	if(is_null($date) || empty($date)) {
+    		return FALSE;
+    	}
+        
+        return TRUE;
     }
 
     /**
