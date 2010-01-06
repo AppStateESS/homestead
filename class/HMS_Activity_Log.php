@@ -25,7 +25,7 @@ class HMS_Activity_Log{
     public function HMS_Activity_Log($id = 0, $user_id = null, $timestamp = null, 
         $activity = null, $actor = null, $notes = null)
     {
-        $this->activity_text = HMS_Activity_Log::get_activity_mapping();
+        $this->activity_text = HMS_Activity_Log::getActivityMapping();
 
         if(is_null($id) || $id == 0) {
             $this->id = 0;
@@ -100,7 +100,7 @@ class HMS_Activity_Log{
     /**
      * Gets the mapping of activity number to activity name.
      */
-    public function get_activity_mapping()
+    public static function getActivityMapping()
     {
         return array(   ACTIVITY_LOGIN                          => "Logged in",
                         ACTIVITY_AGREED_TO_TERMS                => "Agreed to terms & agreement",
@@ -162,7 +162,7 @@ class HMS_Activity_Log{
      */
     public function get_activity_list()
     {
-        $activities = HMS_Activity_Log::get_activity_mapping();
+        $activities = HMS_Activity_Log::getActivityMapping();
         $list = array();
 
         foreach ($activities as $id=>$desc){
@@ -177,7 +177,7 @@ class HMS_Activity_Log{
      */
     public function get_text_activity($num = -1)
     {
-        $activities = HMS_Activity_Log::get_activity_mapping();
+        $activities = HMS_Activity_Log::getActivityMapping();
         if($num > -1)
             return $activities[$num];
 
@@ -192,7 +192,9 @@ class HMS_Activity_Log{
         PHPWS_Core::initModClass('hms', 'HMS_Student.php');
         $tpl = array();
         
-        $tpl['ACTEE'] = HMS_Student::get_link($this->get_user_id());
+        $student = StudentFactory::getStudentByUsername($this->get_user_id(), Term::getSelectedTerm());
+        
+        $tpl['ACTEE'] = $student->getFullNameProfileLink();
 
         if(strcmp($this->get_user_id(),$this->get_actor()) == 0)
             $tpl['ACTOR'] = NULL;
@@ -256,205 +258,6 @@ class HMS_Activity_Log{
 
     public function set_notes($notes){
         $this->notes = $notes;
-    }
-    
-    /******************
-     * User Interface *
-     ******************/
-
-    /**
-     * Shows the DBPager for the Activity Log, along with options for limiting what
-     * is shown.  If no limits are provided, the log will not be very useful.
-     *
-     * The static variable lets you switch between a static view of the pager
-     * (unsortable with unchangeable limits) that has a link to the main 
-     * activity log, or the regular dynamic log.
-     */
-    public function showPager($actor, $actee, $exact, $notes, $begin, $end, $activities, $limit=10, $static=false)
-    {
-        PHPWS_Core::initCoreClass('DBPager.php');
-
-        $pager = &new DBPager('hms_activity_log','HMS_Activity_Log');
-        
-        $pct = ($exact == TRUE) ? '' : '%';
-
-        if(!is_null($actor) && !is_null($actee) && $actor == $actee){
-            // Both actor and actee were specified, and they match so use an 'OR'
-            // to effectively show all entries for the username specified
-            $pager->db->addWhere('actor', "$pct$actor$pct", 'ILIKE', 'OR', 'actor_actee_group');
-            $pager->db->addWhere('user_id', "$pct$actee$pct", 'ILIKE', 'OR', 'actor_actee_group');
-            $pager->db->setGroupConj('actor_actee_group', 'AND');
-        }else if(!is_null($actor) && !is_null($actee)){
-            // Both actor and actee were specified, but they don't match so use an 'AND'
-            // to get just the specific situation we're looking for
-            $pager->db->addWhere('actor', "$pct$actor$pct", 'ILIKE', 'AND', 'actor_actee_group');
-            $pager->db->addWhere('user_id', "$pct$actee$pct", 'ILIKE', 'AND', 'actor_actee_group');
-            $pager->db->setGroupConj('actor_actee_group', 'AND');
-        }else if(!is_null($actor)){
-            $pager->db->addWhere('actor', "$pct$actor$pct", 'ILIKE');
-        }else if(!is_null($actee)){
-            $pager->db->addWhere('user_id', "$pct$actee$pct", 'ILIKE');
-        }
-
-        if(!is_null($notes))
-            $pager->db->addWhere('notes', "%$notes%", 'ILIKE');
-
-        if($begin != $end && $begin < $end) {
-            if(!is_null($begin))
-                $pager->db->addWhere('timestamp', $begin, '>');
-
-            if(!is_null($end))
-                $pager->db->addWhere('timestamp', $end, '<');
-        }
-            
-        if(!is_null($activities) && !empty($activities))
-            $pager->db->addWhere('activity', $activities, 'IN');
-
-        $pager->setModule('hms');
-        $pager->setLink('index.php?module=hms');
-        $pager->setEmptyMessage('No log entries found under the limits provided.');
-        $pager->addToggle('class="toggle1"');
-        $pager->addToggle('class="toggle2"');
-        $pager->addRowTags('getPagerTags');
-        $pager->setOrder('timestamp', 'desc', TRUE);
-        $pager->setDefaultLimit($limit);
-
-        if($static){
-            $pager->setTemplate('admin/static_activity_log_pager.tpl');
-        } else {
-            $pager->setTemplate('admin/activity_log_pager.tpl');
-        }
-        return $pager->get();
-    }
-
-    /**
-     * Shows filtering options for the log view.  The first argument is usually
-     * $_SESSION. The second argument is laid out in the same way, and
-     * specifies default values.  If a default value is specified in the second
-     * argument, that option will not appear in the filter; this way, if you're
-     * in the Student Info thing, you can show the activity log for only that
-     * user.
-     */
-    public function showFilters($selection = NULL, $defaults = NULL)
-    {
-        PHPWS_Core::initCoreClass('Form.php');
-
-        $form = &new PHPWS_Form();
-        $form->setMethod('get');
-        $form->addHidden('module', 'hms');
-
-        // Don't lose our place in any embedded menus
-        if(isset($_REQUEST['type']))
-            $form->addHidden('type', $_REQUEST['type']);
-        else
-            $form->addHidden('type', 'activity_log');
-        if(isset($_REQUEST['op']))
-            $form->addHidden('op', $_REQUEST['op']);
-        else
-            $form->addHidden('op', 'view');
- 
-        // Keep the activity log from losing tabs when filters are applied
-        if(isset($_REQUEST['tab'])){
-            $form->addHidden('tab', $_REQUEST['tab']);
-        }       
-
-        $form->addText('actor');
-        $form->setLabel('actor', 'Action Performed By:');
-        if(isset($selection['actor']))
-            $form->setValue('actor', $selection['actor']);
-
-        $form->addText('actee');
-        $form->setLabel('actee', 'Action Affected:');
-        if(isset($selection['actee']))
-            $form->setValue('actee', $selection['actee']);
-
-        // "exact" flag
-        $form->addCheck('exact','yes');
-        $form->setMatch('exact','yes');
-        $form->setLabel('exact','Exact? ');
-
-        $begindate = null;
-        $enddate = null;
-/*
-        if(PHPWS_Form::testDate('begin'))
-            $begindate = PHPWS_Form::getPostedDate('begin');
-        $form->dateSelect('begin', $begindate, '%b', 10, 10);
-
-        if(PHPWS_Form::testDate('end'))
-            $enddate = PHPWS_Form::getPostedDate('end');
-        $form->dateSelect('end', $enddate, '%b', 10, 10);*/
-        
-        $form->addText('notes');
-        $form->setLabel('notes', 'Note:');
-        if(isset($selection['notes']))
-            $form->setValue('notes', $selection['notes']);
-
-        $activities = HMS_Activity_Log::get_activity_mapping();
-        foreach($activities as $id => $text) {
-            $name = "a$id";
-            $form->addCheckbox($name);
-            $form->setLabel($name, $text);
-            $form->setMatch($name, isset($selection[$name]));
-        }
-
-        $form->addSubmit('Refresh');
-        
-        $tpl = $form->getTemplate();
-        $tpl['BEGIN_LABEL'] = 'After:';
-        $tpl['END_LABEL'] = 'Before:';
-        return PHPWS_Template::process($tpl, 'hms', 'admin/activity_log_filters.tpl');
-    }
-
-    public function main()
-    {
-        $actee = NULL;
-        if(isset($_REQUEST['actee']) && !empty($_REQUEST['actee']))
-            $actee = $_REQUEST['actee'];
-
-        $actor = NULL;
-        if(isset($_REQUEST['actor']) && !empty($_REQUEST['actor']))
-            $actor = $_REQUEST['actor'];
-
-        $notes = NULL;
-        if(isset($_REQUEST['notes']) && !empty($_REQUEST['notes'])) 
-            $notes = $_REQUEST['notes'];
-        
-        $exact = isset($_REQUEST['exact']) ? TRUE : FALSE;
-
-        if(PHPWS_Form::testDate('begin'))
-            $begin = PHPWS_Form::getPostedDate('begin');
-        else
-            $begin = null;
-
-        if(PHPWS_Form::testDate('end'))
-            $end = PHPWS_Form::getPostedDate('end');
-        else
-            $end = null;
-
-        // Sanity Checking
-        if($end <= $begin) {
-            unset($_REQUEST['begin_year'],
-                  $_REQUEST['begin_month'],
-                  $_REQUEST['begin_day'],
-                  $_REQUEST['end_year'],
-                  $_REQUEST['end_month'],
-                  $_REQUEST['end_day']);
-            $begin = null;
-            $end = null;
-        }
-
-        $activity_map = HMS_Activity_Log::get_activity_mapping();
-
-        $activities = array();
-
-        foreach($activity_map as $i => $t) {
-            if(isset($_REQUEST["a$i"]))
-                $activities[] = $i;
-        }
-
-        $tags['FILTERS'] = HMS_Activity_Log::showFilters($_REQUEST);
-        $tags['CONTENT'] = HMS_Activity_Log::showPager($actor, $actee, $exact, $notes, $begin, $end, $activities);
-        return PHPWS_Template::Process($tags, 'hms', 'admin/activity_log_box.tpl');
     }
 }
 ?>

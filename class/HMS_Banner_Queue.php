@@ -176,8 +176,7 @@ class HMS_Banner_Queue {
      * or FALSE if an action should be queued
      */
     public function process_immediately() {
-        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
-        $queue = HMS_Term::is_banner_queue_enabled(HMS_Term::get_selected_term());
+        $queue = Term::getBannerQueue(Term::getSelectedTerm());
         return $queue == 0;
     }
 
@@ -187,24 +186,22 @@ class HMS_Banner_Queue {
      */
     public function process()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
+        PHPWS_Core::initModClass('hms', 'SOAP.php');
 
+        $soap = SOAP::getInstance();
+        
         $result = -1;
-
-        $meal_plan = HMS_SOAP::get_plan_meal_codes($this->asu_username,
-                                                   $this->building_code,
-                                                   $this->meal_code);
 
         switch($this->type) {
             case BANNER_QUEUE_ASSIGNMENT:
-                $result = HMS_SOAP::report_room_assignment(
+                $result = $soap->reportRoomAssignment(
                     $this->asu_username,
                     $this->term,
                     $this->building_code,
                     $this->bed_code,
-                    $meal_plan['plan'],
-                    $meal_plan['meal']);
+                    'HOME',
+                    $this->meal_code);
                 if($result == "0") {
                     HMS_Activity_Log::log_activity(
                         $this->asu_username,
@@ -213,12 +210,12 @@ class HMS_Banner_Queue {
                         $this->term . ' ' . 
                         $this->building_code . ' ' .
                         $this->bed_code . ' ' .
-                        $meal_plan['plan'] . ' ' .
-                        $meal_plan['meal']);
+                        'HOME' . ' ' .
+                        $this->meal_code);
                 }
                 break;
             case BANNER_QUEUE_REMOVAL:
-                $result = HMS_SOAP::remove_room_assignment(
+                $result = $soap->removeRoomAssignment(
                     $this->asu_username,
                     $this->term,
                     $this->building_code,

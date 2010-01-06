@@ -9,5 +9,4 @@
   <Param name="username" value="{searchTerms}"/>
 </Url>
 <Url type="application/x-suggestions+json" template="https://hms.appstate.edu"/>
-<moz:SearchForm>http://blackfoot.appstate.edu/~jbooker/fallout/index.php?module=hms&type=student&op=enter_student_search_data</moz:SearchForm>
 </OpenSearchDescription>

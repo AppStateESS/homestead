@@ -21,8 +21,7 @@ class Consistancy_Checker {
         $results = array();
 
         if(!isset($term)){
-            PHPWS_Core::initModClass('hms', 'HMS_Term.php');
-            $term = HMS_Term::get_current_term();
+            $term = Term::getCurrentTerm();
         }
 
         $halls = HMS_Residence_Hall::get_halls($term);

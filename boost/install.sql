@@ -218,40 +218,14 @@ CREATE TABLE hms_learning_community_floors (
     learning_communities_id integer NOT NULL REFERENCES hms_learning_communities(id),
     floor_id                integer NOT NULL REFERENCES hms_floor(id),
     PRIMARY KEY (learning_communities_id)
-);
+); 
 
-CREATE TABLE hms_application (
-    id                              integer DEFAULT 0 NOT NULL,
-    asu_username                    character varying(32) NOT NULL,
-    term                            integer NOT NULL REFERENCES hms_term(term),
-    student_status                  smallint NOT NULL,
-    term_classification             smallint NOT NULL,
-    gender                          smallint NOT NULL,
-    meal_option                     smallint,
-    lifestyle_option                smallint NOT NULL,
-    preferred_bedtime               smallint NOT NULL,
-    room_condition                  smallint NOT NULL,
-    currently_employed              smallint NOT NULL,
-    rlc_interest                    smallint NOT NULL,
-    agreed_to_terms                 smallint NOT NULL default 0,
-    aggregate                       smallint default 0,
-    created_on                      integer NOT NULL,
-    created_by                      character varying(32) NOT NULL,
-    physical_disability             smallint,
-    psych_disability                smallint,
-    medical_need                    smallint,
-    gender_need                     smallint,
-    withdrawn                       smallint NOT NULL default 0,
-    cell_phone                      character varying(10),
-    primary key(id)
-);
-
-ALTER TABLE hms_application ADD CONSTRAINT application_key UNIQUE (asu_username, term); 
-
-CREATE TABLE hms_application_features (
-    term    int NOT NULL REFERENCES hms_term(term),
-    feature int NOT NULL,
-    enabled int NOT NULL default 0
+CREATE TABLE hms_application_feature (
+	id			int NOT NULL,
+    term    	int NOT NULL REFERENCES hms_term(term),
+    name 		character varying(32) NOT NULL,
+    startDate	int NOT NULL,
+    endDate		int NOT NULL
 );
 
 CREATE TABLE hms_new_application (
@@ -280,7 +254,7 @@ ALTER TABLE hms_new_application ADD CONSTRAINT new_application_key UNIQUE (usern
 ALTER TABLE hms_new_application ADD CONSTRAINT new_application_key2 UNIQUE (banner_id, term);
 
 CREATE TABLE hms_fall_application (
-    id                      integer     NOT NULL,
+    id                      integer     NOT NULL REFERENCES hms_new_application(id),
     lifestyle_option        smallint    NOT NULL,
     preferred_bedtime       smallint    NOT NULL,
     room_condition          smallint    NOT NULL,
@@ -289,7 +263,7 @@ CREATE TABLE hms_fall_application (
 );
 
 CREATE TABLE hms_spring_application (
-    id                      integer     NOT NULL,
+    id                      integer     NOT NULL REFERENCES hms_new_application(id),
     lifestyle_option        smallint    NOT NULL,
     preferred_bedtime       smallint    NOT NULL,
     room_condition          smallint    NOT NULL,
@@ -297,36 +271,35 @@ CREATE TABLE hms_spring_application (
 );
 
 CREATE TABLE hms_summer_application (
-    id          integer NOT NULL,
+    id          integer NOT NULL REFERENCES hms_new_application(id),
     room_type   integer NOT NULL,
     PRIMARY KEY(id)
 );
 
-CREATE TABLE hms_roommates (
-    id integer NOT NULL,
-    roommate_zero character varying(32) NOT NULL,
-    roommate_one character varying(32) NOT NULL,
-    roommate_two character varying(32),
-    roommate_three character varying(32),
-    primary key(id)
+CREATE TABLE hms_lottery_application (
+    id                      integer NOT NULL REFERENCES hms_new_application(id),
+    roommate1_username      character varying(32),
+    roommate2_username      character varying(32),
+    roommate3_username      character varying(32),
+    roommate1_app_term      integer,
+    roommate2_app_term      integer,
+    roommate3_app_term      integer,
+    special_interest        character varying(32),
+    magic_winner            smallint NOT NULL default 0,
+    invite_expires_on       integer,
+    waiting_list_hide       smallint DEFAULT 0,
+    PRIMARY KEY(id)
 );
 
-CREATE TABLE hms_roommate_approval (
-    id INTEGER NOT NULL,
-    number_roommates SMALLINT NOT NULL,
-    roommate_zero CHARACTER VARYING(32) NOT NULL,
-    roommate_zero_approved SMALLINT NOT NULL,
-    roommate_zero_personal_hash CHARACTER VARYING(32) NOT NULL,
-    roommate_one CHARACTER VARYING(32) NOT NULL,
-    roommate_one_approved SMALLINT NOT NULL,
-    roommate_one_personal_hash CHARACTER VARYING(32) NOT NULL,
-    roommate_two CHARACTER VARYING(32),
-    roommate_two_approved SMALLINT,
-    roommate_two_personal_hash CHARACTER VARYING(32),
-    roommate_three CHARACTER VARYING(32),
-    roommate_three_approved SMALLINT,
-    roommate_three_personal_hash CHARACTER VARYING(32),
-    PRIMARY KEY (id)
+CREATE TABLE hms_roommate (
+    id           INTEGER NOT NULL,
+    term         INTEGER NOT NULL REFERENCES hms_term(term),
+    requestor    CHARACTER VARYING(32) NOT NULL,
+    requestee    CHARACTER VARYING(32) NOT NULL,
+    confirmed    INTEGER NOT NULL DEFAULT 0,
+    requested_on INTEGER NOT NULL,
+    confirmed_on INTEGER,
+    PRIMARY KEY(id)
 );
 
 CREATE TABLE hms_student (

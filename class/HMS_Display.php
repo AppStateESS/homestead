@@ -12,8 +12,7 @@ class HMS_Display
  
     public function get_system_statistics()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
-        $term = HMS_Term::get_selected_term();
+        $term = Term::getSelectedTerm();
 
         $db = new PHPWS_DB('hms_residence_hall');
         $db->addWhere('is_online', '1');

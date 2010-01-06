@@ -11,9 +11,9 @@ class FallApplication extends HousingApplication{
     public $rlc_interest;
 
     public function __construct($id = 0, $term = NULL, $banner_id = NULL, $username = NULL, $gender = NULL, $student_type = NULL, $application_term = NULL, $cell_phone = NULL, $meal_plan = NULL, $physical_disability = NULL, $psych_disability = NULL, $gender_need = NULL, $medical_need = NULL, $lifestyle_option = NULL, $preferred_bedtime = NULL, $room_condition = NULL, $rlc_interest = NULL){
-        
+
         /**
-         * If the id is non-zero, then we need to load the other member variables 
+         * If the id is non-zero, then we need to load the other member variables
          * of this object from the database
          */
         if($id != 0){
@@ -30,7 +30,7 @@ class FallApplication extends HousingApplication{
         $this->setRlcInterest($rlc_interest);
     }
 
-    
+
     /**
      * Loads the FallApplication object with the corresponding id. Requires that $this->id be non-zero.
      */
@@ -50,7 +50,8 @@ class FallApplication extends HousingApplication{
 
         if(PHPWS_Error::logIfError($db->loadObject($this))){
             $this->id = 0;
-            return false;
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException($result->toString());
         }
 
         return true;
@@ -78,14 +79,16 @@ class FallApplication extends HousingApplication{
          */
         if($is_new){
             if(PHPWS_Error::logIfError($db->saveObject($this, false, false))){
-                return false;
+                PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+                throw new DatabaseException($result->toString());
             }
         }else{
             if(PHPWS_Error::logIfError($db->saveObject($this))){
-                return false;
+                PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+                throw new DatabaseException($result->toString());
             }
         }
-        
+
         return true;
     }
 
@@ -97,7 +100,7 @@ class FallApplication extends HousingApplication{
         if(!$result || PHPWS_Error::logIfError($result)){
             return $result;
         }
-        
+
         if(!parent::delete()){
             return false;
         }

@@ -4,7 +4,6 @@
  * Student_UI.php
  * A class for consolidating the the methods for student UI/Interface handling.
  */
-define('TWENTY_FIVE_YEARS', 788400000);
 
 class HMS_Student_UI{
     
@@ -19,7 +18,7 @@ class HMS_Student_UI{
         PHPWS_Core::initModClass('hms', 'HousingApplication.php');
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
 
-        # Grab the current term for use late
+        # Grab the current term for use later
         $current_term = HMS_Term::get_current_term();
 
         # Try initial lookups of the student's application_term, type, and class
@@ -58,12 +57,6 @@ class HMS_Student_UI{
             $deadlines = HMS_Deadlines::get_deadlines($application_term);
         }
 
-        # If the move-in day deadline isn't set to something reasonable, show an error
-        if(!isset($deadlines['move_in_timestamp']) || empty($deadlines['move_in_timestamp']) || is_null($deadlines['move_in_timestamp'])){
-            $tpl['ERROR'] = "Move-in day date is not set.";
-            return PHPWS_Template::process($tpl, 'hms', 'misc/general_error.tpl');
-        }
-        
         /******************************************
          * Sort returning students (lottery) from *
          * freshmen (first-time application)      *

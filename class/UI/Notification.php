@@ -7,9 +7,6 @@
   * @subpackage hms
   */
 
-// The address notifications are sent from when sent anonymously
-define('ANONYMOUS_FROM_ADDRESS', 'housing@appstate.edu');
-
 class Notification {
 
     public function main($op=null)
@@ -47,7 +44,7 @@ class Notification {
 
         $tpl=array();
         if(Current_User::allow('hms', 'email_all')){
-            $halls = HMS_Residence_Hall::get_halls();
+            $halls = HMS_Residence_Hall::get_halls(HMS_Term::get_selected_term());
             $form = new PHPWS_Form('select_halls_to_email');
             foreach($halls as $hall){
                 if($hall->is_online != 1){
@@ -64,7 +61,7 @@ class Notification {
             $i=0;
             $elements = $form->getTemplate();
             foreach($elements as $row){
-                //put the first and last elements directly into the template, not the row repeat
+                //put the first and last elements directly into the template, not the row repeat because they are form tags
                 if($i == 0){ 
                     $tpl['START_FORM'] = $row;
                     $i++;
@@ -150,7 +147,7 @@ class Notification {
         $tpl['BODY']    = $_REQUEST['body'];
 
         $form = new PHPWS_Form('edit_email');
-        $form->addHidden('anonymous',  isset($_REQUEST['anonymous']) ? $_REQUEST['anonymous'] : '');
+        $form->addHidden('anonymous',   isset($_REQUEST['anonymous']) ? $_REQUEST['anonymous'] : '');
         $form->addHidden('subject',     $_REQUEST['subject']);
         $form->addHidden('body',        $_REQUEST['body']);
         $form->addHidden('type',        'notification');

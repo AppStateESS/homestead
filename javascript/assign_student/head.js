@@ -1,11 +1,12 @@
 <script type="text/javascript" src="javascript/modules/hms/new_autosuggest/bsn.AutoSuggest_2.1.3.js" charset="utf-8"></script>
+<script type="text/javascript" src="javascript/modules/hms/jquery.selectboxes.js"></script>
 
 <script type="text/javascript">
 
 $(document).ready(function(){
 
     var options = {
-        script:"index.php?module=hms&type=xml&op=get_username_suggestions_json&json=true&",
+        script:"index.php?module=hms&action=AjaxGetUsernameSuggestions&ajax=true&",
         varname:"username",
         json:true,
         shownoresults:false,
@@ -14,6 +15,16 @@ $(document).ready(function(){
     };
 
     var suggest = new bsn.AutoSuggest('phpws_form_username', options);
+    
+	$('#phpws_form_floor').attr('disabled', true);
+	$('#phpws_form_room').attr('disabled', true);
+	$('#phpws_form_bed').attr('disabled', true);
+
+	// Set event listeners
+	$("#phpws_form_residence_hall").bind("change", handleHallChange);
+	$("#phpws_form_floor").bind("change", handleFloorChange);
+	$("#phpws_form_room").bind("change", handleRoomChange);
+	$("#phpws_form_bed").bind("change", handleBedChange);
 
 });
 
@@ -22,341 +33,174 @@ $(document).ready(function(){
 <script type="text/javascript">
 //<![CDATA[
 
-var res_hall_drop   = 'phpws_form_residence_hall';
-var floor_drop      = 'phpws_form_floor';
-var room_drop       = 'phpws_form_room';
-var bed_drop        = 'phpws_form_bed';
-
-var xmlHttp;
+var res_hall_drop   = '#phpws_form_residence_hall';
+var floor_drop      = '#phpws_form_floor';
+var room_drop       = '#phpws_form_room';
+var bed_drop        = '#phpws_form_bed';
 
 var bedDropShown = false;
 
 function showBedDrop()
 {
     bedDropShown = true;
+    
+    $('#link_row').hide();
+    $('#bed_row').show();
 
-    document.getElementById('link_row').style.display = "none";
-    document.getElementById('bed_row').style.display  = "table-row";
-
-    document.getElementById('phpws_form_use_bed').value = "true";
+    $('#phpws_form_use_bed').val("true");
 }
 
-function handle_hall_change()
+function handleHallChange()
 {
-    // Reset and disable all the lower-order drop downs
-    resetDrop(floor_drop);
-    resetDrop(room_drop);
-    resetDrop(bed_drop);
+  // Reset and disable all the lower-order drop downs
+  setOptions(floor_drop, {});
+  setOptions(room_drop, {});
+  setOptions(bed_drop, {});
+  $(floor_drop).attr('disabled', true);
+  $(room_drop).attr('disabled', true);
+  $(bed_drop).attr('disabled', true);
 
-    disableDrop(floor_drop);
-    disableDrop(room_drop);
-    disableDrop(bed_drop);
+  // Get the selected value
+  var hallId = $('#phpws_form_residence_hall').val();
+  
+  // the default value is selected
+  if(hallId == 0){
+      // alert('default selected');
+      return;
+  }
+  
+  // Set the floor drop down to "loading", show the loading animation
+  setOptions(floor_drop, {'0': 'Loading...'});
+  $("#loading_img").show();
 
-    // Get the selected value
-    var hallId = document.getElementById(res_hall_drop).options[document.getElementById(res_hall_drop).selectedIndex].value
-    
-    // the default value is selected
-    if(hallId == 0){
-        //alert('default selected');
-        return;
-    }
-    
-    // Set the floor drop down to "loading"
-    setSingleOption(floor_drop, "Loading...");
-    
-    // Assemble the necessary URL
-    var requestURL = document.location + '?mod=hms&type=xml&op=get_floors_with_vacancies&hall_id=' + hallId;
-
-    //alert('request URL: ' + requestURL);
-
-    xmlHttp = createXMLHttp();
-    xmlHttp.open("GET", requestURL, true);
-    xmlHttp.onreadystatechange = function () {
-        if(xmlHttp.readyState == 4){
-            handle_hall_response();
-        }
-    };
-    xmlHttp.send(null);
-    //alert('Query sent');
+	var request = $.ajax( {
+	type : "GET",
+	url : "index.php",
+	dataType : "json",
+	data : {
+		module : "hms",
+		ajax : true,
+		action : "AjaxGetFloorsWithVacancies",
+		hallId : hallId
+	},
+	success : function(data, textStatus) {
+		handleFloorResponse(data, textStatus);
+	},
+	error : function(XMLHttpRequest, textStatus, errorThrown) {
+		ajaxError(XMLHttpRequest, textStatus, errorThrown);
+	}
+});
 }
 
-function handle_hall_response()
-{
-    if(xmlHttp.status != 200){
-        //alert('An error occurred. HTTP status code: ' + xmlHttp.status); 
-        return;
-    }else{
-        //alert('Received response!');
-    }
-
-    setSingleOption(floor_drop, 'Select...');
-
-    var response = xmlHttp.responseXML;
-
-    var floors = response.firstChild;
-
-    for(i = 0; i < floors.childNodes.length; i++){
-	    floor = floors.childNodes[i];
-	    if (floor.nodeType == 3) {
-	        continue;
-        }
-	    for (j = 0; j < floor.childNodes.length; j++) {
-	        sub = floor.childNodes[j];
-            if (sub.nodeType == 3) {
-	            continue;
-            }
-	        if (sub.nodeName == 'id') {
-                id = sub.firstChild.nodeValue;
-                //alert('id is ' + id);
-            } 
-	        if (sub.nodeName == 'floor_num') {
-                floor_num = sub.firstChild.nodeValue;
-                //alert('floor_num is ' + floor_num);
-                var drop = document.getElementById(floor_drop);
-                drop.options[drop.options.length] = new Option(floor_num, id, false, false);
-            } 
-        }
-    }
-
-    enableDrop(floor_drop);
+function handleFloorResponse(data, textStatus){
+	$("#loading_img").hide();
+	$(floor_drop).attr('disabled', false);
+	setOptions(floor_drop, data);
 }
 
-function handle_floor_change()
-{
-    // Reset and disable all the lower-order drop downs
-    resetDrop(room_drop);
-    disableDrop(room_drop);
-
-    // Get the selected value
-    var floorId = document.getElementById(floor_drop).options[document.getElementById(floor_drop).selectedIndex].value
-    
-    // the default value is selected
-    if(floorId == 0){
-        //alert('default selected');
-        return;
-    }
-    
-    // Set the floor drop down to "loading"
-    setSingleOption(room_drop, "Loading...");
-    
-    // Assemble the necessary URL
-    var requestURL = document.location + '?mod=hms&type=xml&op=get_rooms_with_vacancies&floor_id=' + floorId;
-    
-    //alert('request URL: ' + requestURL);
-    
-    xmlHttp = createXMLHttp();
-    xmlHttp.open("GET", requestURL, true);
-    xmlHttp.onreadystatechange = function () {
-        if(xmlHttp.readyState == 4){
-            handle_floor_response();
-        }
-    };
-    xmlHttp.send(null);
-    //alert('Query sent');
+function handleFloorChange(){
+	var floorId = $("#phpws_form_floor").val();
+	
+	setOptions(room_drop,{});
+	setOptions(bed_drop,{});
+	$(room_drop).attr('disabled', true);
+	$(bed_drop).attr('disabled', true);
+	
+	if(floorId == 0){
+		return;
+	}
+	
+	// Set the floor drop down to "loading", show the loading animation
+ 	setOptions(room_drop, {'0': 'Loading...'});
+ 	$("#loading_img").show();
+	var request = $.ajax( {
+		type : "GET",
+		url : "index.php",
+		dataType : "json",
+		data : {
+			module : "hms",
+			ajax : true,
+			action : "AjaxGetRoomsWithVacancies",
+			floorId : floorId
+		},
+		success : function(data, textStatus) {
+			handleRoomResponse(data, textStatus);
+		},
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			ajaxError(XMLHttpRequest, textStatus, errorThrown);
+		}
+	});
 }
 
-function handle_floor_response()
+function handleRoomResponse(data, textStatus)
 {
-    if(xmlHttp.status != 200){
-        alert('An error occurred.. HTTP status code: ' + xmlHttp.status);
-    }else{
-        //alert('Received response!');
-    }
-
-    setSingleOption(room_drop, 'Select...');
-
-    var response = xmlHttp.responseXML;
-
-    //alert(response);
-
-    var rooms = response.firstChild;
-
-    for(var i = 0; i < rooms.childNodes.length; i++){
-        var room = rooms.childNodes[i];
-        if(room.nodeType == 3){
-            continue;
-        }
-        for (j = 0; j < room.childNodes.length; j++){
-            sub = room.childNodes[j];
-            if(sub.nodeType == 3){
-                continue;
-            }
-            if(sub.nodeName == 'id'){
-                id = sub.firstChild.nodeValue;
-                //alert('id is ' + id);
-            }
-            if(sub.nodeName == 'room_num') {
-                room_num = sub.firstChild.nodeValue;
-                //alert('room_num is ' + room_num);
-                var drop = document.getElementById(room_drop);
-                drop.options[drop.options.length] = new Option(room_num, id, false, false);
-            }
-        }
-    }
-
-    enableDrop(room_drop);
+	$("#loading_img").hide();
+	$(room_drop).attr('disabled', false);
+	setOptions(room_drop, data);
 }
 
-function handle_room_change()
+function handleRoomChange()
 {
-    // Get the selected value
-    var roomId = document.getElementById(room_drop).options[document.getElementById(room_drop).selectedIndex].value
-
-    resetDrop(bed_drop);
-    disableDrop(bed_drop);
-
-    if(roomId != 0){
-        sendBedRequest();
-    
-        if(bedDropShown){
-            document.getElementById('phpws_form_submit_form').disabled = true;
-        }else{
-            document.getElementById('phpws_form_submit_form').disabled = false;
-        }
-    }
+	var roomId = $('#phpws_form_room').val();
+	
+	setOptions(bed_drop,{});
+	$(bed_drop).attr('disabled', true);
+	
+	if(roomId == 0){
+		return;
+	}
+	
+	// Set the floor drop down to "loading", show the loading animation
+	setOptions(bed_drop, {'0': 'Loading...'});
+	$("#loading_img").show();
+	
+	var request = $.ajax( {
+		type : "GET",
+		url : "index.php",
+		dataType : "json",
+		data : {
+			module : "hms",
+			ajax : true,
+			action : "AjaxGetBedsWithVacancies",
+			roomId : roomId
+		},
+		success : function(data, textStatus) {
+			handleBedResponse(data, textStatus);
+		},
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			ajaxError(XMLHttpRequest, textStatus, errorThrown);
+		}
+	});
 }
 
-function handle_bed_change()
+function handleBedResponse(data, textStatus)
 {
-    // Get the selected value
-    var bedId = document.getElementById(bed_drop).options[document.getElementById(bed_drop).selectedIndex].value
-
-    // the default value is selected
-    if(bedId == 0){
-        //alert('default selected');
-        document.getElementById('phpws_form_submit_form').disabled = true;
-        return;
-    }
-
-    document.getElementById('phpws_form_submit_form').disabled = false;
+	$("#loading_img").hide();
+	$(bed_drop).attr('disabled', false);
+	setOptions(bed_drop, data);
+}
+		
+function handleBedChange()
+{
+	var bedId = $('#phpws_form_bed').val();
+	
+	if(bedId == 0){
+		$('#phpws_form_submit_button').attr('disabled', true);
+	}else{
+		$('#phpws_form_submit_button').attr('disabled', false);
+	}
 }
 
-function sendBedRequest()
+function setOptions(elementId, options)
 {
-    // Reset and disable all the lower-order drop downs
-    resetDrop(bed_drop);
-    disableDrop(bed_drop);
-    
-    // Get the selected value
-    var roomId = document.getElementById(room_drop).options[document.getElementById(room_drop).selectedIndex].value
-    
-    // the default value is selected
-    if(roomId == 0){
-        //alert('default selected');
-        return;
-    }
-    
-    // Set the floor drop down to "loading"
-    setSingleOption(bed_drop, "Loading...");
-    
-    // Assemble the necessary URL
-    var requestURL = document.location+ '?mod=hms&type=xml&op=get_beds_with_vacancies&room_id=' + roomId;
-    
-    //alert('request URL: ' + requestURL);
-    
-    xmlHttp = createXMLHttp();
-    xmlHttp.open("GET", requestURL, true);
-    xmlHttp.onreadystatechange = function () {
-        if(xmlHttp.readyState == 4){
-            handle_bed_response();
-        }
-    };
-    xmlHttp.send(null);
-    //alert('Query sent');
-
+	 $(elementId).empty();
+	 $(elementId).addOption(options);
+	 $(elementId).selectOptions("", true);
 }
 
-function handle_bed_response()
+function ajaxError(XMLHttpRequest, textStatus, errorThrown)
 {
-    if(xmlHttp.status != 200){
-        alert('An error occurred.. HTTP status code: ' + xmlHttp.status);
-    }else{
-        //alert('Received response!');
-    }
-
-    setSingleOption(bed_drop, 'Select...');
-
-    var response = xmlHttp.responseXML;
-
-    //alert(response);
-
-    var rooms = response.firstChild;
-
-    for(var i = 0; i < rooms.childNodes.length; i++){
-        var room = rooms.childNodes[i];
-        if(room.nodeType == 3){
-            continue;
-        }
-        for (j = 0; j < room.childNodes.length; j++){
-            sub = room.childNodes[j];
-            if(sub.nodeType == 3){
-                continue;
-            }
-            if(sub.nodeName == 'id'){
-                id = sub.firstChild.nodeValue;
-                //alert('id is ' + id);
-            }
-            if(sub.nodeName == 'bed_letter') {
-                room_num = sub.firstChild.nodeValue;
-                //alert('room_num is ' + room_num);
-                var drop = document.getElementById(bed_drop);
-                drop.options[drop.options.length] = new Option(room_num, id, false, false);
-            }
-        }
-    }
-
-    enableDrop(bed_drop);
-}
-
-// Clears a drop down's options
-function resetDrop(dropDownId)
-{
-    document.getElementById(dropDownId).options.length = 0;
-}
-
-// Disables a drop down
-function disableDrop(dropDownId)
-{
-    document.getElementById(dropDownId).disabled = true;
-}
-
-// Enables a drop down
-function enableDrop(dropDownId)
-{
-    document.getElementById(dropDownId).disabled = false;
-}
-
-// Clears a drop down's options and creates a single "default" option
-function setSingleOption(dropDownId, text)
-{
-    // Clear the drop down first
-    resetDrop(dropDownId);
-    
-    // Create the option
-    document.getElementById(dropDownId).options[0] = new Option(text, 0, true, true);
-}
-
-function createXMLHttp()
-{
-    if (typeof XMLHttpRequest != "undefined") {
-        return new XMLHttpRequest();
-    } else if(window.ActiveXObject) {
-        var aVersions = ["MSXML2.XMLHttp.5.0",
-                            "MSXML2.XMLHttp.4.0",
-                            "MSXML2.XMLHttp.3.0",
-                            "MSXML2.XMLHttp",
-                            "Microsoft.XMLHttp"];
-        for (var i = 0; i < aVersions.length; i++) {
-            try{
-                var oXMLHttp = new ActiveXObject(aVersions[i]);
-                return xXMLHttp;
-            } catch (oError) {
-                // Do nothing
-            }
-        }
-    }
-
-    throw new Error("XMLHttp object could not be created.");
+	alert('Ajax error: ' + textStatus);
 }
 //]]>
 </script>

@@ -253,8 +253,6 @@ class HMS_Pending_Assignment
             HMS_Pending_Assignment::add($zero,$one,TRUE);
         }
 
-        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
-
         // Singletons
         $db = new PHPWS_DB('hms_new_application');
         $db->addColumn('id');
@@ -265,7 +263,7 @@ class HMS_Pending_Assignment
         $db->addColumn('hms_student_id');
         $db->addColumn('meal_option');
         $db->addWhere('student_type',1);
-        $db->addWhere('term', HMS_Term::get_current_term());
+        $db->addWhere('term', Term::getCurrentTerm());
         $db->addOrder('gender');
         $db->addOrder('lifestyle_option');
         $db->addOrder('preferred_bedtime');

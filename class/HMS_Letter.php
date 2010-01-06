@@ -124,16 +124,15 @@ class HMS_Letter
 
     public function put_into_pile(&$freshmen_male, &$freshmen_female, &$continuing_male, &$continuing_female, $student)
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
         PHPWS_Core::initModClass('hms', 'HMS_Movein_Time.php');
         PHPWS_Core::initModClass('hms', 'HMS_Room.php');
-        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 
-        $term = HMS_Term::get_selected_term();
+        $term = Term::getSelectedTerm();
 
         $assignment = HMS_Assignment::get_assignment($student, $term);
-        $prev_assignment = HMS_Assignment::get_assignment($student, HMS_Term::get_current_term());
+        $prev_assignment = HMS_Assignment::get_assignment($student, Term::getCurrentTerm());
 
         if($assignment === NULL || $assignment == FALSE){
             test($assignment, 1); // This *shouldn't* ever happen...
@@ -400,8 +399,7 @@ class HMS_Letter
         // Initialize list of people that need a letter
         $needs_letter = array();
         
-        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
-        $term = HMS_Term::get_selected_term();
+        $term = Term::getSelectedTerm();
 
         // Get everyone that needs a letter
         $sql = "
@@ -593,7 +591,6 @@ class HMS_Letter
     public function email()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Email.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
         PHPWS_Core::initModClass('hms', 'HMS_Movein_Time.php');
 
@@ -602,7 +599,7 @@ class HMS_Letter
 
         $db = &new PHPWS_DB('hms_assignment');
         $db->addWhere('email_sent', 0);
-        $db->addWhere('term', HMS_Term::get_selected_term());
+        $db->addWhere('term', Term::getSelectedTerm());
         $db->addColumn('asu_username');
         $db->addColumn('bed_id');
 
@@ -625,10 +622,10 @@ class HMS_Letter
             $location = $bed->where_am_i() . ' - Bedroom ' . $bed->bedroom_label;
 
             //get the movein time for the student
-            $type = HMS_SOAP::get_student_type($assignment['asu_username'], HMS_Term::get_selected_term());
+            $type = HMS_SOAP::get_student_type($assignment['asu_username'], Term::getSelectedTerm());
 
-            $assgmnt = HMS_Assignment::get_assignment($assignment['asu_username'], HMS_Term::get_selected_term());
-            $prev_assignment = HMS_Assignment::get_assignment($student, HMS_Term::get_current_term());
+            $assgmnt = HMS_Assignment::get_assignment($assignment['asu_username'], Term::getSelectedTerm());
+            $prev_assignment = HMS_Assignment::get_assignment($student, Term::getCurrentTerm());
 
             $term = $assgmnt->term;
             
@@ -684,7 +681,7 @@ class HMS_Letter
             // Mark the student as having received an email
             $db->reset();
             $db->addWhere('asu_username', $assignment['asu_username']);
-            $db->addWhere('term', HMS_Term::get_selected_term());
+            $db->addWhere('term', Term::getSelectedTerm());
             $db->addValue('email_sent', 1);
             $rslt = $db->update();
 

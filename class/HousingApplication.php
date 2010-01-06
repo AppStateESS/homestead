@@ -33,7 +33,7 @@ class HousingApplication {
     /**
      * Set to 'true' by the withdrawn search process. Should always be false by default.
      */
-    public $withdrawn; 
+    public $withdrawn;
 
     /**
      * Constructor for the abstract HousingApplication class. It can never be called directly. Instead,
@@ -41,14 +41,14 @@ class HousingApplication {
      *
      * If the object already exists (i.e. has a non-zero 'id'), then it is up to the sub-class
      * to call the 'load()' method in this class to load the core data.
-     * 
-     * This constrcutor should only be called 
+     *
+     * This constrcutor should only be called
      * remaining parameters are required
      * and this method will handle initializing the values of the core application member variables defined in
      * this class
      */
     public function __construct($term = NULL, $banner_id = NULL, $username = NULL, $gender = NULL, $student_type = NULL, $application_term = NULL, $cell_phone = NULL, $meal_plan = NULL, $physical_disability = NULL, $psych_disability = NULL, $gender_need = NULL, $medical_need = NULL){
-        
+
         $this->setTerm($term);
         $this->setBannerId($banner_id);
         $this->setUsername($username);
@@ -81,9 +81,10 @@ class HousingApplication {
         }
 
         $db = new PHPWS_DB('hms_new_application');
-        if(PHPWS_Error::logIfError($db->loadObject($this))){
-            $this->id = 0;
-            return false;
+        $result = $db->loadObject($this);
+        if(PHPWS_Error::logIfError($result)){
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException($result->toString());
         }
 
         return true;
@@ -104,7 +105,8 @@ class HousingApplication {
 
         $result = $db->saveObject($this);
         if(PHPWS_Error::logIfError($result)){
-            return false;
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException($result->toString());
         }
 
         $this->log();
@@ -154,13 +156,14 @@ class HousingApplication {
         HMS_Activity_Log::log_activity($this->getUsername(), ACTIVITY_SUBMITTED_APPLICATION, $username, 'Term: ' . $this->getTerm());
     }
 
-     public function delete()
+    public function delete()
     {
         $db = new PHPWS_DB('hms_new_application');
         $db->addWhere('id', $this->id);
         $result = $db->delete();
         if(!$result || PHPWS_Error::logIfError($result)){
-            return $result;
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException($result->toString());
         }
 
         return TRUE;
@@ -171,18 +174,18 @@ class HousingApplication {
      */
     public function reportToBanner()
     {
-        $plancode = HMS_SOAP::get_plan_meal_codes($this->getUsername(), 'lawl', $this->getMealPlan());
-        $result = HMS_SOAP::report_application_received($this->getUsername(), $this->getTerm(), $plancode['plan'], $plancode['meal']);
-
-        # If there was an error it will have already been logged
-        # but send out a notification anyway
-        # TODO: Improve the notification system
-        if($result > 0){
+        PHPWS_Core::initModClass('hms', 'SOAP.php');
+        
+        try{
+            $soap = SOAP::getInstance();
+            $result = $soap->reportApplicationReceived($this->getUsername(), $this->getTerm());
+        }catch(Exception $e){
+            // Send an email notification
             PHPWS_Core::initCoreClass('Mail.php');
             $send_to = array();
             $send_to[] = 'jbooker@tux.appstate.edu';
             $send_to[] = 'jtickle@tux.appstate.edu';
-            
+
             $mail = &new PHPWS_Mail;
 
             $mail->addSendTo($send_to);
@@ -192,15 +195,13 @@ class HousingApplication {
             $body = "Username: {$this->getUsername()}\n";
             $mail->setMessageBody($body);
             $result = $mail->send();
-        }else{
-            # Log the fact that the application was sent to banner
-            PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-            if(Current_User::getUsername() == HMS_STUDENT_USER){
-                HMS_Activity_Log::log_activity($this->getUsername(), ACTIVITY_APPLICATION_REPORTED, $this->getUsername());
-            }else{
-                HMS_Activity_Log::log_activity($this->getUsername(), ACTIVITY_APPLICATION_REPORTED, Current_User::getUsername());
-            }
+             
+            throw $e; // rethrow the exception it
         }
+
+        # Log the fact that the application was sent to banner
+        PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
+        HMS_Activity_Log::log_activity($this->getUsername(), ACTIVITY_APPLICATION_REPORTED, UserStatus::getUsername());
     }
 
     /*
@@ -214,7 +215,7 @@ class HousingApplication {
         $tpl['USERNAME']        = $this->getUsername();
         $tpl['GENDER']          = HMS_Util::formatGender($this->getGender());
         $tpl['STUDENT_TYPE']    = HMS_Util::formatType($this->getStudentType());
-        $tpl['APP_TERM']        = HMS_Term::term_to_text($this->getApplicationTerm(), TRUE);
+        $tpl['APP_TERM']        = Term::toString($this->getApplicationTerm(), TRUE);
         $tpl['MEAL']            = HMS_Util::formatMealOption($this->getMealPlan());
         $tpl['ROOMMATE']        = HMS_Roommate::get_confirmed_roommate($this->getUsername(), $this->getTerm());
         $tpl['ACTIONS']         = '[' . PHPWS_Text::secureLink('Assign', 'hms', array('type'=>'assignment', 'op'=>'show_assign_student', 'username'=>$this->getUsername()), '_blank') . ' ]';
@@ -229,7 +230,7 @@ class HousingApplication {
         $tpl['USERNAME']        = $this->getUsername();
         $tpl['GENDER']          = HMS_Util::formatGender($this->getGender());
         $tpl['STUDENT_TYPE']    = HMS_Util::formatType($this->getStudentType());
-        $tpl['APP_TERM']        = HMS_Term::term_to_text($this->getApplicationTerm(), TRUE);
+        $tpl['APP_TERM']        = Term::toString($this->getApplicationTerm(), TRUE);
         $tpl['MEAL']            = HMS_Util::formatMealOption($this->getMealPlan());
         $tpl['ROOMMATE']        = HMS_Roommate::get_confirmed_roommate($this->getUsername(), $this->getTerm());
 
@@ -245,34 +246,27 @@ class HousingApplication {
      * Checks to see if a application already exists for the given username.
      * If so, it returns the true, otherwise it returns false.
      * If no term is given, then the "current term" is used.
-     * 
+     *
      * The 'withdrawn' parameter is optional. If set to true, then this method will
      * return true for withdrawn applications. If false (default), then this method will
      * ignore withdrawn applications.
      */
-    public static function checkForApplication($username = NULL, $term = NULL, $withdrawn = FALSE)
+    public static function checkForApplication($username, $term, $withdrawn = FALSE)
     {
         $db = &new PHPWS_DB('hms_new_application');
-        if(isset($username)) {
-            $db->addWhere('username',$username,'ILIKE');
-        }
-        
-        if(isset($term)){
-            $db->addWhere('term', $term);
-        } else {
-            PHPWS_Core::initModClass('hms', 'HMS_Term.php');
-            $db->addWhere('term', HMS_Term::get_current_term());
-        }
+        $db->addWhere('username',$username,'ILIKE');
+
+        $db->addWhere('term', $term);
 
         if(!$withdrawn){
             $db->addWhere('withdrawn', 0);
         }
-        
+
         $result = $db->select('row');
 
         if(PEAR::isError($result)){
-            PHPWS_Error::log($result,'hms','check_for_application',"username:{$_SESSION['asu_username']}");
-            return FALSE;
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException($result->toString());
         }
 
         if(sizeof($result) > 0){
@@ -283,16 +277,17 @@ class HousingApplication {
     }
 
     /**
-     * 
+     *
      */
     function getApplicationByUser($username, $term)
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
-
         PHPWS_Core::initModClass('hms', 'HousingApplication.php');
         PHPWS_Core::initModClass('hms', 'FallApplication.php');
         PHPWS_Core::initModClass('hms', 'SpringApplication.php');
         PHPWS_Core::initModClass('hms', 'SummerApplication.php');
+        PHPWS_Core::initModClass('hms', 'LotteryApplication.php');
+
+        $student = StudentFactory::getStudentByUsername($username, $term);
 
         $db = new PHPWS_DB('hms_new_application');
         $db->addWhere('username', $username);
@@ -300,12 +295,22 @@ class HousingApplication {
 
         $result = $db->select('one');
 
-        if($result == NULL){
-            return FALSE;
+        if(PHPWS_Error::logIfError($result)){
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException($result->toString());
         }
 
-        $sem = HMS_Term::get_term_sem($term);
+        if($result == NULL){
+            return NULL;
+        }
 
+        # If the student is type 'C', return a LotteryApplication object
+        if($student->getType() == TYPE_CONTINUING){
+            $app = new LotteryApplication($result);
+            return $app;
+        }
+
+        $sem = Term::getTermSem($term);
         $app = NULL;
 
         switch($sem){
@@ -355,20 +360,14 @@ class HousingApplication {
         return $result;
     }
 
-    public static function getAllFreshmenApplications($term = NULL){
-        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
-
+    public static function getAllFreshmenApplications($term){
         PHPWS_Core::initModClass('hms', 'HousingApplication.php');
         PHPWS_Core::initModClass('hms', 'FallApplication.php');
         PHPWS_Core::initModClass('hms', 'SpringApplication.php');
         PHPWS_Core::initModClass('hms', 'SummerApplication.php');
 
-        if(is_null($term)){
-            $term = HMS_Term::get_selected_term();
-        }
+        $sem = Term::getTermSem($term);
 
-        $sem = HMS_Term::get_term_sem($term);
-        
         $db = new PHPWS_DB('hms_new_application');
 
         # Add 'where' clause for term and student type
@@ -399,14 +398,75 @@ class HousingApplication {
 
     }
 
+    /**
+     * Returns a list of application terms that can be applied for at the same
+     * time for the given entry term, and whether or not an application for that term is required
+     * (i.e. a student with an application_term of 200920 must apply for 200920, 200940, and may
+     * optionally apply for 200930.)
+     *
+     * In the returned array, 'app_term' is the application term which was given. 'term' is a term
+     * which may be applied (or required to be applied) for by a student with the given 'app_term'.
+     *
+     * Term list is returned in ascending order (earliest term first).
+     *
+     * @param integer Term to check
+     * @return array $arr[$index] = array('app_term' => <term>, 'term' => <term>, 'required'=> 0|1);
+     */
+    public static function getValidApplicationTerms($term){
+        //TODO make this use ApplicationFeatures class
+        $db = new PHPWS_DB('hms_term_applications');
+        $db->addWhere('app_term', $term);
+        $db->addOrder('term asc');
+        $result = $db->select();
+
+        if(PHPWS_Error::logIfError($result)){
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException($result->toString());
+        }
+
+        return $result;
+    }
+
+    /**
+     * Determines whether or not a student has applied for all terms for which he/she is required
+     * to apply for according to his/her application term.
+     *
+     * If the student has not applied for all required terms, the terms which he/she still needs to
+     * apply for are returned in an array. If the student has applied for all required terms, then
+     * the returned array will be empty.
+     *
+     * @param Student $student
+     * @return Array list of terms which the student still needs to apply for
+     */
+    public static function checkAppliedForAllRequiredTerms(Student $student)
+    {
+        $requiredTerms = HousingApplication::getValidApplicationTerms($student->getApplicationTerm());
+
+        $needToApplyFor = array();
+         
+        foreach($requiredTerms as $t){
+            // Skip this term if it's not required
+            if($t['required'] == 0){
+                continue;
+            }
+             
+            // Check if a housing application exists for this student in this term
+            if(!HousingApplication::checkForApplication($student->getUsername(), $t['term'])){
+                $needToApplyFor[] = $t['term'];
+            }
+        }
+
+        return $needToApplyFor;
+    }
+
     /************************
      * Accessors & Mutators *
      ************************/
-     
+
     public function getId(){
         return $this->id;
     }
-    
+
     public function setId($id){
         $this->id = $id;
     }

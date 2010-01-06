@@ -1,20 +1,12 @@
 {START_FORM}
 <div class="hms">
   <div class="box">
-    <div class="{TITLE_CLASS}"> <h1>{TITLE}</h1> </div>
+    <h1>Unassign Student - {TERM}</h1>
     <div class="box-content">
-        <!-- BEGIN error_msg -->
-        <span class="error">{ERROR_MSG}<br /></span>
-        <!-- END error_msg -->
-        
-        <!-- BEGIN success_msg -->
-        <span class="success">{SUCCESS_MSG}<br /></span>
-        <!-- END success_msg -->
-        
-        {MESSAGE}<br /><br />
+        Please enter an ASU username to unassign:<br /><br />
         <table>
             <tr>
-                <th align="left">ASU Email:</th><td>{USERNAME}@appstate.edu</td>
+                <td align="left">ASU Email:</td><td>{USERNAME}@appstate.edu</td>
             </tr>
         </table>
         <br />

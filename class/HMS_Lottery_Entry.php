@@ -7,6 +7,8 @@
  * @author Jeremy Booker <jbooker AT tux DOT appstate DOT edu>
  */
 
+//TODO This class is deprecated. Delete it and check for anywhere this code is still in use (by code that's also still in use)
+
 class HMS_Lottery_Entry {
 
     var $id;
@@ -85,6 +87,16 @@ class HMS_Lottery_Entry {
             return $result;
         }
         return TRUE;
+    }
+    
+    public function isWinner()
+    {
+    	if($this->magic_winner == 1 || (!is_null($this->invite_expires_on) && $this->invite_expires_on <= time()))
+    	{
+    		return true;
+    	}else{
+    		return false;
+    	}
     }
 
     /*
@@ -187,21 +199,18 @@ class HMS_Lottery_Entry {
 
     public function get_entry($asu_username, $term)
     {
-
-        $entry = new HMS_Lottery_Entry();
-
-        $db = &new PHPWS_DB('hms_lottery_entry');
+        $db = new PHPWS_DB('hms_lottery_entry');
         $db->addWhere('asu_username', $asu_username, 'ILIKE');
         $db->addWhere('term', $term);
         $db->setLimit(1);
-        $result = $db->loadObject($entry);
+        $result = $db->getObjects('HMS_Lottery_Entry');
 
-        if(PEAR::isError($result)){
-            PHPWS_Error::log($result);
-            return fase;
+        if(PHPWS_Error::logIfError($result)){
+        	PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+        	throw new DatabaseException($result->toString());
         }
-
-        return $entry;
+        
+        return $result;
     }
 
     public function get_special_needs_interface()
@@ -288,7 +297,7 @@ class HMS_Lottery_Entry {
         $tags['NAME']       = HMS_Student::get_link($this->asu_username, FALSE);
         $tags['USER']       = $this->asu_username;
         $tags['BANNER_ID']  = HMS_SOAP::get_banner_id($this->asu_username);
-        $tags['ACTION']     = PHPWS_Text::secureLink('Remove', 'hms', array('type'=>'lottery', 'op'=>'remove_special_interest', 'asu_username'=>$this->asu_username, 'group'=>$_REQUEST['group']));
+        $tags['ACTION']     = PHPWS_Text::secureLink('Remove', 'hms', array('action'=>'RemoveSpecialInterest', 'asu_username'=>$this->asu_username, 'group'=>$_REQUEST['group']));
 
         return $tags;
     }

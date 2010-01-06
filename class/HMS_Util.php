@@ -127,15 +127,22 @@ class HMS_Util{
         return date('M jS, Y g:i A', $timestamp);
     }
     
+    public function getFriendlyDate($timestamp)
+    {
+    	if(!isset($timestamp)){
+    		$timestamp = mktime();
+    	}
+    	
+    	return date('M jS, Y', $timestamp);
+    }
+    
     /**
      * Determines which color the title bar should be based on
      * the selected and current terms.
      */
     public function get_title_class(){
-        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
-
-        $selected_term = HMS_Term::get_selected_term();
-        $current_term = HMS_Term::get_current_term();
+        $selected_term = Term::getSelectedTerm();
+        $current_term = Term::getCurrentTerm();
         
         if($selected_term < $current_term){
             return "box-title-red";

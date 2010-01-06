@@ -69,7 +69,7 @@ class HMS_Item {
         $updater = new PHPWS_User($this->updated_by);
         $tpl['UPDATED_BY']     = $updater->username;
 
-        $tpl['TERM']         = HMS_Term::term_to_text($this->term, true);
+        $tpl['TERM']         = Term::toString($this->term, true);
 
         return $tpl;
     }

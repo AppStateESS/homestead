@@ -48,6 +48,7 @@ class HMS_Side_Thingie {
             return;
         }
 
+        // TODO HMS_Entry_Term is deprecated, use something else
         PHPWS_Core::initModClass('hms','HMS_Entry_Term.php');
         $this->entry_term = HMS_Entry_Term::get_entry_semester($_SESSION['asu_username']);
     }
@@ -59,7 +60,7 @@ class HMS_Side_Thingie {
         $template = array();
         $template['TITLE'] = _('Application Progress');
 
-        $term = HMS_Term::get_current_term();
+        $term = Term::getCurrentTerm();
 
         # Check for an application on file, set dates/styles if an application is not found
         $this->set_apply_agree($links);

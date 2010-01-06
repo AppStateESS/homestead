@@ -112,8 +112,7 @@ class HMS_RLC_Assignment{
         if(isset($application_term)) {
             $db->addWhere('hms_learning_community_applications.term', $application_term);
         } else {
-            PHPWS_Core::initModClass('hms', 'HMS_Term.php');
-            $db->addWhere('hms_learning_community_applications.term', HMS_Term::get_current_term());
+            $db->addWhere('hms_learning_community_applications.term', Term::getCurrentTerm());
         }
 
         $result = $db->select('row');
@@ -161,11 +160,10 @@ class HMS_RLC_Assignment{
     public function rlc_assignment_admin_pager()
     {
         PHPWS_Core::initCoreClass('DBPager.php');
-        PHPWS_Core::initModClass('hms','HMS_Term.php');
 
         $tags = array();
 
-        $tags['TITLE'] = "View Final RLC Assignments " . HMS_Term::term_to_text(HMS_Term::get_selected_term(), TRUE);
+        $tags['TITLE'] = "View Final RLC Assignments " . Term::toString(Term::getSelectedTerm(), TRUE);
 
 /*        $tags['PRINT_RECORDS'] = "// TODO: Print Records";
         $tags['EXPORT'] = "// TODO: Export Records";*/
@@ -174,7 +172,7 @@ class HMS_RLC_Assignment{
       
         //$pager->db->addWhere('hms_learning_community_applications.hms_assignment_id','hms_learning_community_assignment.id','=');
         $pager->db->addJoin('LEFT OUTER', 'hms_learning_community_assignment', 'hms_learning_community_applications', 'id', 'hms_assignment_id');
-        $pager->db->addWhere('hms_learning_community_applications.term', HMS_Term::get_selected_term()); 
+        $pager->db->addWhere('hms_learning_community_applications.term', Term::getSelectedTerm()); 
 
         $pager->joinResult('id','hms_learning_community_applications','hms_assignment_id','user_id', 'user_id');
         $pager->setModule('hms');
@@ -208,25 +206,23 @@ class HMS_RLC_Assignment{
 
     public function view_by_rlc_pager($rlc_id)
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
-        
         // Get the community name for the title
         $db = &new PHPWS_DB('hms_learning_communities');
         $db->addWhere('id', $rlc_id);
         $db->addColumn('community_name');
-        $tags['TITLE'] = $db->select('one') . ' Assignments ' . HMS_Term::term_to_text(HMS_Term::get_selected_term(), TRUE);
+        $tags['TITLE'] = $db->select('one') . ' Assignments ' . Term::toString(Term::getSelectedTerm(), TRUE);
        
         PHPWS_Core::initCoreClass('DBPager.php');
         
         $pager = &new DBPager('hms_learning_community_assignment', 'HMS_RLC_Assignment');
         $pager->db->addJoin('LEFT OUTER', 'hms_learning_community_assignment', 'hms_learning_community_applications', 'id', 'hms_assignment_id');
-        $pager->db->addWhere('hms_learning_community_applications.term', HMS_Term::get_selected_term()); 
+        $pager->db->addWhere('hms_learning_community_applications.term', Term::getSelectedTerm()); 
         $pager->db->addWhere('rlc_id', $rlc_id);
         
         $pager->joinResult('id','hms_learning_community_applications','hms_assignment_id','user_id', 'user_id');
         $pager->setModule('hms');
         $pager->setTemplate('admin/view_by_rlc_pager.tpl');
-        $pager->setLink('index.php?module=hms&type=rlc&op=view_by_rlc&rlc='.$rlc_id);
+        $pager->setLink('index.php?module=hms&action=ViewByRlc&rlc='.$rlc_id);
         $pager->setEmptyMessage('There are no students assigned to this learning community.');
         $pager->addPageTags($tags);
         $pager->addRowTags('viewByRLCPagerTags');

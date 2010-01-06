@@ -220,8 +220,7 @@ class HMS_RLC_Application{
         if(isset($entry_term)){
             $db->addWhere('term', $entry_term);
         } else {
-            PHPWS_Core::initModClass('hms', 'HMS_Term.php');
-            $db->addWhere('term', HMS_Term::get_current_term());
+            $db->addWhere('term', Term::getCurrentTerm());
         }
 
         if(!$include_denied){
@@ -248,7 +247,6 @@ class HMS_RLC_Application{
     public function rlc_application_admin_pager()
     {
         PHPWS_Core::initCoreClass('DBPager.php');
-        PHPWS_Core::initModClass('hms','HMS_Term.php');
         PHPWS_Core::initModClass('hms','HMS_SOAP.php');
         PHPWS_Core::initModClass('hms', 'HMS_Student.php');
 
@@ -269,7 +267,7 @@ class HMS_RLC_Application{
         $pager->db->addWhere('hms_learning_community_applications.rlc_first_choice_id',
                              'hms_learning_communities.id','=');
         $pager->db->addWhere('hms_assignment_id',NULL,'is');
-        $pager->db->addWhere('term', HMS_Term::get_selected_term());
+        $pager->db->addWhere('term', Term::getSelectedTerm());
         $pager->db->addWhere('denied', 0); // Only show non-denied applications in this pager
         if( isset($_REQUEST['rlc']) ) {
             $pager->db->addWhere('hms_learning_communities.id', $_REQUEST['rlc'], '=');
@@ -318,9 +316,8 @@ class HMS_RLC_Application{
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
         PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
 
-        $term = HMS_Term::get_selected_term();
+        $term = Term::getSelectedTerm();
         
         $sinfo            = HMS_SOAP::get_student_info($this->user_id);
         $application_date = isset($this->date_submitted) ? HMS_Util::get_long_date($this->date_submitted) : 'Error with the submission date';
@@ -351,13 +348,12 @@ class HMS_RLC_Application{
     public function denied_pager()
     {
         PHPWS_Core::initCoreClass('DBPager.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
         PHPWS_Core::initModClass('hms', 'HMS_Student.php');
 
         $pager = &new DBPager('hms_learning_community_applications', 'HMS_RLC_Application');
 
-        $pager->db->addWhere('term', HMS_Term::get_selected_term());
+        $pager->db->addWhere('term', Term::getSelectedTerm());
         $pager->db->addWhere('denied', 1); // show only denied applications
 
         $pager->db->addColumn('hms_learning_community_applications.*');

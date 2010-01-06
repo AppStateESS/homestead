@@ -26,7 +26,10 @@ class HMS_Contact_Form{
 
     public function show_contact_form()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+        $username = UserStatus::getUsername();
+        $currentTerm = Term::getCurrentTerm();
+		$student = StudentFactory::getStudentByUsername($username, $currentTerm);
+		$applicationTerm = $student->getApplicationTerm();
 
         $tpl = array();
         $tpl['TITLE'] = 'Contact Form';
@@ -37,9 +40,9 @@ class HMS_Contact_Form{
         $form->addHidden('type', 'contact_form');
         $form->addHidden('op', 'submit_contact_form');
 
-        $form->addHidden('asu_username', $_SESSION['asu_username']);
-        $form->addHidden('application_term', HMS_SOAP::get_application_term($_SESSION['asu_username']));
-        $form->addHidden('student_type', HMS_SOAP::get_student_type($_SESSION['asu_username'], $_SESSION['application_term']));
+        $form->addHidden('asu_username', $username);
+        $form->addHidden('application_term', $applicationTerm);
+        $form->addHidden('student_type', $student->getType());
 
         $form->addText('name');
         $form->setLabel('name', 'Name');

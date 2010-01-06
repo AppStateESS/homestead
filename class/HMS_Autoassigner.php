@@ -12,14 +12,12 @@ class HMS_Autoassigner
         PHPWS_Core::initModClass('hms', 'HMS_Room.php');
         PHPWS_Core::initModClass('hms', 'HousingApplication.php'); // TODO update this to use HousignAssignment
         PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
         PHPWS_Core::initModClass('hms', 'HMS_Banner_Queue.php');
 
-        $term = HMS_Term::get_selected_term();
+        $term = Term::get_selected_term();
 
         // In both cases: Random, and include Banner info
         $f_rooms = HMS_Room::get_all_free_rooms($term, FEMALE, TRUE);

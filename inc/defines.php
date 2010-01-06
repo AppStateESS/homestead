@@ -7,20 +7,13 @@
 require_once(PHPWS_SOURCE_DIR . 'inc/hms_defines.php');
 
 /**
- * Required Files
+ * Name & Email address info - Used for sending out emails
  */
-define('AXP_LOCATION', 'inc/axp.php');
-
-/**
- * Gender defines
- */
-define('FEMALE',    0);
-define('MALE',      1);
-define('COED',      2);
-
-define('FEMALE_DESC',   'Female');
-define('MALE_DESC',     'Male');
-define('COED_DESC',     'Coed');
+define('SYSTEM_NAME', 'ASU Housing Management System'); // Used as "from" name in emails
+define('EMAIL_ADDRESS', 'housing'); // user name of email account to send email from
+define('DOMAIN_NAME', 'appstate.edu'); // domain name to send email from
+define('FROM_ADDRESS', EMAIL_ADDRESS . '@' . DOMAIN_NAME); // fully qualified "from" address
+define('TO_DOMAIN', '@'. DOMAIN_NAME); // Default domain to send email to, beginning with '@'
 
 /**
  * Online/Offline Defines
@@ -32,18 +25,15 @@ define("ONLINE_DESC",   'Online');
 define("OFFLINE_DESC",  'Offline');
 
 /**
- * Terms
+ * Gender defines
  */
-define('TERM_SPRING',   '10');
-define('TERM_SUMMER1',  '20');
-define('TERM_SUMMER2',  '30');
-define('TERM_FALL',     '40');
+define('FEMALE',    0);
+define('MALE',      1);
+define('COED',      2);
 
-define('SPRING',    'Spring');
-define('SUMMER1',   'Summer 1');
-define('SUMMER2',   'Summer 2');
-define('FALL',      'Fall');
-
+define('FEMALE_DESC',   'Female');
+define('MALE_DESC',     'Male');
+define('COED_DESC',     'Coed');
 
 /**
  * Student Classes

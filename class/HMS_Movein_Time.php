@@ -85,8 +85,8 @@ class HMS_Movein_Time
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
         if(!isset($term)){
-            PHPWS_Core::initModClass('hms', 'HMS_Term.php');
-            $term = HMS_Term::get_selected_term();
+            PHPWS_Core::initModClass('hms', 'Term.php');
+            $term = Term::getSelectedTerm();
         }
         
         $db = new PHPWS_DB('hms_movein_time');
@@ -157,8 +157,6 @@ class HMS_Movein_Time
 
     public function create_movein_time()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
-
         # Create the timestamp
         $begin_timestamp    = mktime($_REQUEST['begin_hour'], 0, 0, $_REQUEST['begin_month'], $_REQUEST['begin_day'], $_REQUEST['begin_year']);
         $end_timestamp      = mktime($_REQUEST['end_hour'], 0, 0, $_REQUEST['end_month'], $_REQUEST['end_day'], $_REQUEST['end_year']);
@@ -171,7 +169,7 @@ class HMS_Movein_Time
         $movein_time = &new HMS_Movein_Time();
         $movein_time->begin_timestamp = $begin_timestamp;
         $movein_time->end_timestamp   = $end_timestamp;
-        $movein_time->term = HMS_Term::get_selected_term();
+        $movein_time->term = Term::getSelectedTerm();
 
         $result = $movein_time->save();
 
@@ -199,11 +197,10 @@ class HMS_Movein_Time
     
     public function get_movein_times_pager(){
         PHPWS_Core::initCoreClass('DBPager.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
 
         $pager = &new DBPager('hms_movein_time', 'HMS_Movein_Time');
 
-        $pager->addWhere('term', HMS_Term::get_selected_term());
+        $pager->addWhere('term', Term::getSelectedTerm());
         $pager->db->addOrder('begin_timestamp', 'DESC');
 
         $pager_tags['BEGIN_TIMESTAMP_LABEL']    = 'Begin Date & Time';

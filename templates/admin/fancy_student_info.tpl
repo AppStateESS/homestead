@@ -1,7 +1,7 @@
 <div class="hms">
   <div class="box">
     <div class="box-content">
-        <h1>{FIRST_NAME} {MIDDLE_NAME} {LAST_NAME} -- {BANNER_ID} -- {TERM}</h1>
+        <h1>{NAME} -- {BANNER_ID} -- {TERM}</h1>
         <h2>Login as this student [ {LOGIN_AS_STUDENT} ]</h2>
 
         <!-- BEGIN success_msg -->
@@ -61,35 +61,13 @@
                     <tr>
                        <th>Addresses</th>
                         <td>
-                            <!-- BEGIN pr_address -->
-                                Permanent address:<br />
-                                {PR_ADDRESS_L1}<br />
-                                
-                                <!-- BEGIN pr_address_2 -->
-                                {PR_ADDRESS_L2}<br />
-                                <!-- END pr_address_2 -->
-                                <!-- BEGIN pr_address_3 -->
-                                {PR_ADDRESS_L3}<br />
-                                <!-- END pr_address_3 -->
-
-                                {PR_ADDRESS_CITY}, {PR_ADDRESS_STATE} {PR_ADDRESS_ZIP}<br />
-                                <!-- END pr_address -->
-                                <!-- BEGIN address_space -->
-                                {ADDRESS_SPACE}<br />
-                                <!-- END  address_space -->
-                                <!-- BEGIN ps_address -->
-                                Student address:<br />
-                                {PS_ADDRESS_L1}<br />
-
-                                <!-- BEGIN ps_address_2 -->
-                                {PS_ADDRESS_L2}<br />
-                                <!-- END ps_address_2 -->
-
-                                <!-- BEGIN ps_address_3 -->
-                                {PS_ADDRESS_L3}<br />
-                                <!-- END ps_address_3 -->
-                                {PS_ADDRESS_CITY}, {PS_ADDRESS_STATE} {PS_ADDRESS_ZIP}<br />
-                            <!-- END ps_address -->
+                            <!-- BEGIN addresses -->
+                            	{ADDR_TYPE}<br />
+                            	{ADDRESS_L1}<br />
+                            	{ADDRESS_L2}<br />
+                            	{ADDRESS_L3}<br />
+                            	{CITY}, {STATE} {ZIP}<br /><br />
+                            <!-- END addresses -->
                             </ul>
                         </td>
                 </div>
@@ -109,7 +87,7 @@
                 <table>
                     <tr>
                         <th>Assigned:</th>
-                        <td>{ASSIGNED}  [{ROOM_ASSIGNMENT}]</td>
+                        <td>{ASSIGNMENT}</td>
                     </tr>
                     <tr>
                         <th>Roommate(s):</th>

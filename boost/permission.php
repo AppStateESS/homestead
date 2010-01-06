@@ -32,8 +32,7 @@
     /*************
      * Deadlines *
      *************/
-    $permissions['view_deadlines']          = _('Deadline Maintenance');
-    $permissions['edit_deadlines']          = _('Edit Deadlines');
+    $permissions['deadlines']               = _('View and Change Deadlines');
 
     /******************
      * Hall Structure *
@@ -118,6 +117,6 @@
      * Email Messaging permissions *
      ******************************/
     $permissions['email_hall'] = _('Can send Hall emails');
-    $permissions['email_all']  = _('Can campus wide emails to residents');
+    $permissions['email_all']  = _('Can send campus wide emails to residents');
     $permissions['anonymous_notifications'] = _('Can send notifications anonymously (as hms@appstate.edu)');
 ?>

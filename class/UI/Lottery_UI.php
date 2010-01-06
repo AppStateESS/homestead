@@ -6,7 +6,7 @@
  * @author Jeremy Booker <jbooker AT tux DOT appstate DOT edu>
  */
 
-define('ROOMMATE_INVITE_TTL', 345600); // 96 hours
+define('ROOMMATE_INVITE_TTL', 172800); // 48 hours
 
 class Lottery_UI {
 

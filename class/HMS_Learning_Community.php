@@ -390,7 +390,6 @@ class HMS_Learning_Community
      */
     public function view_by_rlc($rlc_id = NULL, $success_msg = NULL, $error_msg = NULL)
     {
-        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php'); 
 
         // If the rlc_id wasn't passed in, get it from the request
@@ -442,7 +441,6 @@ class HMS_Learning_Community
         $form->addSubmit('remove', _('Remove from RLC and Re-Activate Application'));
         $form->addSubmit('cancel', _('Do Nothing'));
 
-        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
         $tpl = $form->getTemplate();
         $tpl['NAME'] = HMS_SOAP::get_name($result['user_id']);
         $tpl['RLC'] = $result['community_name'];
@@ -672,10 +670,9 @@ class HMS_Learning_Community
         }
 
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
 
         $tags = array();
-        $tags['TITLE'] = 'RLC Assignments - ' . HMS_Term::term_to_text(HMS_Term::get_selected_term(), TRUE);
+        $tags['TITLE'] = 'RLC Assignments - ' . Term::toString(Term::getSelectedTerm());
         $tags['SUMMARY']           = HMS_Learning_Community::display_rlc_assignment_summary();
         $tags['DROPDOWN']          = PHPWS_Template::process(HMS_RLC_Application::getDropDown(), 'hms', 'admin/dropdown_template.tpl');
         $tags['ASSIGNMENTS_PAGER'] = HMS_RLC_Application::rlc_application_admin_pager();
@@ -703,8 +700,6 @@ class HMS_Learning_Community
 
     public function display_rlc_assignment_summary()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
-
         $template = array();
 
         $db = &new PHPWS_DB('hms_learning_communities');
@@ -728,13 +723,13 @@ class HMS_Learning_Community
             $db->addJoin('LEFT OUTER', 'hms_learning_community_assignment', 'hms_learning_community_applications', 'id', 'hms_assignment_id');
             $db->addWhere('rlc_id', $community['id']);
             $db->addWhere('gender', MALE);
-            $db->addWhere('hms_learning_community_applications.term', HMS_Term::get_selected_term());
+            $db->addWhere('hms_learning_community_applications.term', Term::getSelectedTerm());
             $male = $db->select('count');
             
             $db->resetWhere();
             $db->addWhere('rlc_id', $community['id']);
             $db->addWhere('gender', FEMALE);
-            $db->addWhere('hms_learning_community_applications.term', HMS_Term::get_selected_term());
+            $db->addWhere('hms_learning_community_applications.term', Term::getSelectedTerm());
             $female = $db->select('count');
 
             if($male   == NULL) $male   = 0;
@@ -791,11 +786,10 @@ class HMS_Learning_Community
         
         $errors = array();
 
-        PHPWS_Core::initModClass('hms','HMS_SOAP.php');
         PHPWS_Core::initModClass('hms','HMS_RLC_Application.php');
 
-        $app = &new PHPWS_DB('hms_learning_community_applications');
-        $ass = &new PHPWS_DB('hms_learning_community_assignment');
+        $app = new PHPWS_DB('hms_learning_community_applications');
+        $ass = new PHPWS_DB('hms_learning_community_assignment');
 
         # Foreach rlc assignment made
         # $app_id is the 'id' column in the 'learning_community_applications' table, tells which student we're assigning
@@ -842,10 +836,7 @@ class HMS_Learning_Community
             return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
         }
 
-        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
-
-        $term = HMS_Term::get_selected_term();
+        $term = Term::getSelectedTerm();
 
         $db = &new PHPWS_DB('hms_learning_communities');
         $db->addColumn('community_name');
@@ -865,7 +856,7 @@ class HMS_Learning_Community
         $db->addColumn('rlc_third_choice_id');
         $db->addColumn('date_submitted');
         $db->addWhere('rlc_first_choice_id', $_REQUEST['rlc_list']);
-        $db->addWhere('term', HMS_Term::get_selected_term());
+        $db->addWhere('term', Term::getSelectedTerm());
         $db->addOrder('denied asc');
         //$db->addWhere('denied', 0); // Only show non-denied applications
         $users = $db->select();
@@ -977,8 +968,6 @@ class HMS_Learning_Community
         $db->addWhere('hms_learning_community_assignment.rlc_id',$_REQUEST['rlc_list']); # select assignments only for the given RLC
         $users = $db->select();
 
-        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
-
         foreach($users as $user){
             $sinfo = HMS_SOAP::get_student_info($user['user_id']);
             $buffer .= '"' . $sinfo->last_name . '",';
@@ -1008,12 +997,11 @@ class HMS_Learning_Community
      */
     public function show_view_denied($success_msg = NULL, $error_msg = NULL)
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
 
         $tpl = array();
 
-        $tpl['TITLE'] = "Denied RLC Applications - " . HMS_Term::term_to_text(HMS_Term::get_selected_term(), TRUE);
+        $tpl['TITLE'] = "Denied RLC Applications - " . Term::toString(Term::getSelectedTerm());
         $tpl['DENIED_PAGER'] = HMS_RLC_Application::denied_pager();
 
         if(isset($success_msg)){
@@ -1025,6 +1013,10 @@ class HMS_Learning_Community
         }
 
         return PHPWS_Template::process($tpl, 'hms', 'admin/view_denied_rlc_applications.tpl');
+    }
+
+    public function rowTags(){
+        return array('ACTIONS' => "<a href=\"index.php?module=hms&action=ShowAddRlc&id={$this->id}\">Edit</a>");
     }
 }
 ?>

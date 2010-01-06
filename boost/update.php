@@ -1,8 +1,8 @@
 <?php
 
-  /**
-   * @author theFergus <kevin at tux dot appstate dot edu>
-   */
+/**
+ * @author theFergus <kevin at tux dot appstate dot edu>
+ */
 
 function hms_update(&$content, $currentVersion)
 {
@@ -13,22 +13,22 @@ function hms_update(&$content, $currentVersion)
             if (PEAR::isError($result)) {
                 return $result;
             }
-            
+
             $files = array();
             $files[] = 'templates/student/rlc_signup_form_page2.tmp';
-            
+
             PHPWS_Boost::updateFiles($files, 'hms');
-            
+
             $content[] = _('+ RLC application form template');
             $content[] = _('+ RLC application table');
-        
+
         case version_compare($currentVersion, '0.1.3', '<'):
             $files = array();
             $files[] = 'templates/student/rlc_signup_confirmation.tpl';
             PHPWS_Boost::updateFiles($files, 'hms');
 
             $content[] = _('+ Complete system for RLC applications');
-        
+
         case version_compare($currentVersion, '0.1.4', '<'):
             $db = & new PHPWS_DB;
             $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_1_4.sql');
@@ -48,7 +48,7 @@ function hms_update(&$content, $currentVersion)
             $content[] = _('+ RLC administration templates');
             $content[] = _('+ Deadline for Questionnaire replaced by deadlines for Profile and Application');
             $content[] = _('+ Deadline added for editing applications');
-            $content[] = _('+ Deadline added for submitting RLC applications'); 
+            $content[] = _('+ Deadline added for submitting RLC applications');
 
         case version_compare($currentVersion, '0.1.5', '<'):
             $db = &new PHPWS_DB;
@@ -86,7 +86,7 @@ function hms_update(&$content, $currentVersion)
             if(PEAR::isError($result)) {
                 return $result;
             }
-            
+
             $files      = array();
             $files[]    = 'templates/admin/maintenance.tpl';
             $files[]    = 'templates/misc/login.tpl';
@@ -160,7 +160,7 @@ function hms_update(&$content, $currentVersion)
             PHPWS_Boost::updateFiles($files, 'hms');
 
             $content[] = '+ Sync\'d with the current live release.';
-       
+
         case version_compare($currentVersion, '0.1.10', '<'):
             $files = array();
             $files[] = 'templates/admin/assign_floor.tpl';
@@ -171,9 +171,9 @@ function hms_update(&$content, $currentVersion)
             $files[] = 'templates/admin/select_residence_hall.tpl';
             $files[] = 'templates/admin/select_room_for_edit.tpl';
             $fiels[] = 'templates/student/student_application.tpl';
-            
+
             PHPWS_Boost::updateFiles($files, 'hms');
-            
+
             $content[] = '+ Changed templates regarding editing/deleting rooms and floors to be more user friendly';
             $content[] = '+ Changed to version 0.1.10 to get all dev sites and production site in sync';
             $content[] = '+ Changed HMS_Room so beds are deleted manually instead of through a db object';
@@ -203,7 +203,7 @@ function hms_update(&$content, $currentVersion)
             if(PEAR::isError($result)) {
                 return $result;
             }
-            
+
             $files = array();
             $files[] = 'templates/admin/maintenance.tpl';
             $files[] = 'templates/admin/bed_and_id.tpl';
@@ -211,7 +211,7 @@ function hms_update(&$content, $currentVersion)
             $files[] = 'templates/student/profile_form.tpl';
 
             PHPWS_Boost::updateFiles($files, 'hms');
-            
+
             $content[] = '+ Jeremy\'s updates to the side bar and various debugging options';
             $content[] = '+ Alphabetization of hall drop-downs';
             $content[] = '+ Assign by floor should always show ascending room numbers';
@@ -229,21 +229,21 @@ function hms_update(&$content, $currentVersion)
             if(PEAR::isError($result)) {
                 return $result;
             }
-            
+
             $files = array();
             $files[] = 'templates/student/profile_form.tpl';
 
             PHPWS_Boost::updateFiles($files, 'hms');
 
             $content[] = '+ Updated profile_form template';
-        
+
         case version_compare($currentVersion, '0.1.15', '<'):
             $db = &new PHPWS_DB;
             $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_1_15.sql');
             if(PEAR::isError($result)) {
                 return $result;
             }
-            
+
             $files = array();
             $files[] = 'templates/student/student_success_failure_message.tpl';
             $files[] = 'templates/admin/deadlines.tpl';
@@ -265,7 +265,7 @@ function hms_update(&$content, $currentVersion)
             $content[] = '+ Finalized Final RLC Assignments page.';
             $content[] = '+ Fixed formatting in the RLC Applicatition assignments pager and the corresponding summary.';
             $content[] = '+ Added student viewing of their RLC applications.';
-        
+
         case version_compare($currentVersion, '0.1.16', '<'):
             $db = &new PHPWS_DB;
             $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_1_16.sql');
@@ -275,7 +275,7 @@ function hms_update(&$content, $currentVersion)
 
             $files = array();
             $files[] = 'templates/student/profile_form.tpl';
-            
+
             PHPWS_Boost::updateFiles($files, 'hms');
 
             $content[] = '+ Added "writing" column to student_profiles table';
@@ -296,14 +296,14 @@ function hms_update(&$content, $currentVersion)
             PHPWS_Boost::updateFiles($files, 'hms');
 
             $content[] = '+ Yay for searching by student';
-        
+
 
             PHPWS_Boost::updateFiles($files, 'hms');
 
             $content[] = '+ Added profile searching!';
             $content[] = '+ Added code to prevent duplicate RLC Applications';
             $content[] = '+ Improved "Side Thingie" to show roomate status/deadlines';
-        
+
         case version_compare($currentVersion, '0.1.19', '<'):
             $files = array();
             $files[] = 'templates/admin/rlc_assignments_pager.tpl';
@@ -314,7 +314,7 @@ function hms_update(&$content, $currentVersion)
             $files[] = 'templates/admin/rlc_roster_table.tpl';
             $files[] = 'templates/admin/search_by_rlc.tpl';
             $files[] = 'templates/admin/full_name_gender_email.tpl';
-            
+
             PHPWS_Boost::updateFiles($files, 'hms');
 
             $content[] = '+ Minor improvement to RLC Assignments pager';
@@ -327,7 +327,7 @@ function hms_update(&$content, $currentVersion)
             if(PEAR::isError($result)) {
                 return $result;
             }
-           
+
             $files = array();
             $files[] = 'templates/student/rlc_application.tpl';
             PHPWS_Boost::updateFiles($files, 'hms');
@@ -335,9 +335,9 @@ function hms_update(&$content, $currentVersion)
             $content[] = '* Modified some text when viewing a RLC app for less clutter';
             $content[] = 'Roommate preference (or assigned roommate) listed in the RLC application export';
             $content[] = '+ Added support for an aggregate value in the application';
-            
+
             $content[] = 'Calculating Aggregates...';
-            
+
             $db = &new PHPWS_DB('hms_application');
             $db->addColumn('id');
             $db->addColumn('term_classification');
@@ -384,7 +384,7 @@ function hms_update(&$content, $currentVersion)
                 }
                 $i++;
             }
-            
+
             $content[] = "+ Calculated $i aggregates.";
 
         case version_compare($currentVersion, '0.1.22', '<'):
@@ -393,7 +393,7 @@ function hms_update(&$content, $currentVersion)
             if(PEAR::isError($result)) {
                 return $result;
             }
-           
+
             $files = array();
             $files[] = 'templates/admin/display_room_data.tpl';
             $files[] = 'templates/student/profile_search_pager.tpl';
@@ -411,7 +411,7 @@ function hms_update(&$content, $currentVersion)
             if(PEAR::isError($result)) {
                 return $result;
             }
-      
+
             $content[] = '+ Increased length of the asu_username field for RLC assignments';
             $content[] = '+ Added stateful pagination when assigning people to RLCs';
             $content[] = '+ Corrected count when viewing the Learning Community Assignments';
@@ -472,7 +472,7 @@ function hms_update(&$content, $currentVersion)
             if(PEAR::isError($result)) {
                 return $result;
             }
-            
+
             $content[] = '+ Letters are ready!';
 
         case version_compare($currentVersion, '0.1.27', '<'):
@@ -502,11 +502,11 @@ function hms_update(&$content, $currentVersion)
             if(PEAR::isError($result)) {
                 return $result;
             }
-            
+
             $files[] = 'templates/admin/deadlines.tpl';
             $files[] = 'templates/student/main_menu_spring.tpl';
             $files[] = 'templates/student/main_menu_fall.tpl';
-            $files[] = 'templates/student/student_application.tpl'; 
+            $files[] = 'templates/student/student_application.tpl';
             PHPWS_Boost::updatefiles($files, 'hms');
 
             $content[] = '+ Added check to prevent students selecting themselves as roommates';
@@ -522,7 +522,7 @@ function hms_update(&$content, $currentVersion)
             if(PEAR::isError($result)){
                 return $result;
             }
-            
+
             $files[] = 'templates/student/rlc_signup_form_page1.tpl';
             PHPWS_Boost::updatefiles($files, 'hms');
 
@@ -530,7 +530,7 @@ function hms_update(&$content, $currentVersion)
             $content[] = '+ Added activity log table';
 
         case version_compare($currentVersion, '0.1.32', '<'):
-            
+
             $files[] = 'templates/admin/display_room_data.tpl';
             PHPWS_Boost::updatefiles($files, 'hms');
 
@@ -563,21 +563,21 @@ function hms_update(&$content, $currentVersion)
             }
 
             $content[] = '+ Renamed entry_term column in hms_application to term';
-            
+
         case version_compare($currentVersion, '0.2.2', '<'):
             $db = &new PHPWS_DB;
             $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_2.sql');
             if(PEAR::isError($result)) {
                 return $result;
             }
-            
+
         case version_compare($currentVersion, '0.2.3', '<'):
             $db = &new PHPWS_DB;
             $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_3.sql');
             if(PEAR::isError($result)){
                 return $result;
             }
-            
+
             $files[] = 'templates/admin/edit_terms.tpl';
             $files[] = 'templates/admin/add_term.tpl';
             $fiels[] = 'maintenance.tpl';
@@ -596,7 +596,7 @@ function hms_update(&$content, $currentVersion)
         case version_compare($currentVersion, '0.2.5', '<'):
             $files[] = 'templates/admin/select_residence_hall.tpl';
             PHPWS_Boost::updatefiles($files, 'hms');
-            
+
         case version_compare($currentVersion, '0.2.6', '<'):
             $files[] = 'templates/admin/assign_student_move_confirm.tpl';
             PHPWS_Boost::updatefiles($files, 'hms');
@@ -634,7 +634,7 @@ function hms_update(&$content, $currentVersion)
             $content[] = '+ Added queue items to Maintenance panel';
             $content[] = '+ Removed "move student" link';
             $content[] = '+ Added assignment pager to room edit page';
-            
+
         case version_compare($currentVersion, '0.2.10', '<'):
             $files[] = 'templates/admin/maintenance.tpl';
             $files[] = 'templates/admin/edit_room.tpl';
@@ -643,11 +643,11 @@ function hms_update(&$content, $currentVersion)
             $files[] = 'templates/admin/edit_suite.tpl';
             $files[] = 'templates/admin/room_pager_by_suite.tpl';
             $files[] = 'templates/admin/assignment_pager_by_suite.tpl';
-            
+
             PHPWS_Boost::updatefiles($files, 'hms');
             $content[] = '+ Added ability to edit suites.';
             $content[] = '+ Fixed "DB Error" in queued assignments';
-            
+
         case version_compare($currentVersion, '0.2.12', '<'):
             $files[] = 'javascript/autosuggest/autosuggest.js';
             $files[] = 'javascript/autosuggest/head.js';
@@ -658,7 +658,7 @@ function hms_update(&$content, $currentVersion)
             PHPWS_Boost::updatefiles($files, 'hms');
             $content[] = 'Autoassigner baby!';
             $content[] = 'Autocompletion for usernames';
-            
+
         case version_compare($currentVersion, '0.2.13', '<'):
             $db = &new PHPWS_DB;
             $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_13.sql');
@@ -676,15 +676,15 @@ function hms_update(&$content, $currentVersion)
             $files[] = 'templates/admin/select_room.tpl';
 
             PHPWS_Boost::updatefiles($files, 'hms');
-            
+
         case version_compare($currentVersion, '0.2.14', '<'):
             $db = &new PHPWS_DB;
-            
+
             $result = $db->query('ALTER TABLE hms_floor DROP COLUMN ft_movein;');
             if(PEAR::isError($result)) {
                 return $result;
             }
-            
+
             $result = $db->query('ALTER TABLE hms_floor DROP COLUMN c_movein;');
             if(PEAR::isError($result)) {
                 return $result;
@@ -694,7 +694,7 @@ function hms_update(&$content, $currentVersion)
             if(PEAR::isError($result)) {
                 return $result;
             }
-            
+
             $result = $db->query('ALTER TABLE hms_floor ADD COLUMN rt_movein_time_id smallint REFERENCES hms_movein_time(id);');
             if(PEAR::isError($result)) {
                 return $result;
@@ -704,7 +704,7 @@ function hms_update(&$content, $currentVersion)
             $files[] = 'templates/admin/edit_floor.tpl';
             PHPWS_Boost::updatefiles($files, 'hms');
         case version_compare($currentVersion, '0.2.15', '<'):
-            
+
             $files[] = 'templates/admin/floor_pager_by_hall.tpl';
             $files[] = 'templates/admin/edit_residence_hall.tpl';
             $files[] = 'templates/admin/select_residence_hall.tpl';
@@ -719,7 +719,7 @@ function hms_update(&$content, $currentVersion)
 
             $files[] = 'templates/admin/edit_room.tpl';
             PHPWS_Boost::updatefiles($files, 'hms');
-            
+
         case version_compare($currentVersion, '0.2.17', '<'):
             $db = &new PHPWS_DB;
             $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_17.sql');
@@ -736,7 +736,7 @@ function hms_update(&$content, $currentVersion)
             $files[] = 'javascript/assign_student/head.js';
             $files[] = 'templates/admin/assign_student.tpl';
             PHPWS_Boost::updatefiles($files, 'hms');
-            
+
         case version_compare($currentVersion, '0.2.18', '<'):
             $db = &new PHPWS_DB;
             $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_18.sql');
@@ -746,7 +746,7 @@ function hms_update(&$content, $currentVersion)
 
             $files[] = 'templates/admin/deadlines.tpl';
             PHPWS_Boost::updatefiles($files, 'hms');
-        
+
         case version_compare($currentVersion, '0.2.19', '<'):
             $db = &new PHPWS_DB;
             $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_19.sql');
@@ -767,13 +767,13 @@ function hms_update(&$content, $currentVersion)
             }
 
         case version_compare($currentVersion, '0.2.21', '<'):
-            
+
             $db = &new PHPWS_DB;
             $result = $db->importFIle(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_21.sql');
             if(PEAR::isError($result)) {
                 return $result;
             }
-            
+
             $files[] = 'templates/student/welcome_screen_freshmen.tpl';
             $files[] = 'templates/student/welcome_screen_transfer.tpl';
             $files[] = 'templates/student/welcome_screen_no_entry_term.tpl';
@@ -793,7 +793,7 @@ function hms_update(&$content, $currentVersion)
             PHPWS_Boost::updatefiles($files, 'hms');
 
         case version_compare($currentVersion, '0.2.22', '<'):
-            
+
             $db = &new PHPWS_DB;
             $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_22.sql');
             if(PEAR::isError($result)) {
@@ -827,7 +827,7 @@ function hms_update(&$content, $currentVersion)
             if(PEAR::isError($result)) {
                 return $result;
             }
-        
+
         case version_compare($currentVersion, '0.2.25', '<'):
 
             $db = &new PHPWS_DB;
@@ -851,7 +851,7 @@ function hms_update(&$content, $currentVersion)
             PHPWS_Boost::updatefiles($files, 'hms');
 
         case version_compare($currentVersion, '0.2.28', '<'):
-            
+
             $db = &new PHPWS_DB;
             $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_28.sql');
             if(PEAR::isError($result)) {
@@ -869,13 +869,13 @@ function hms_update(&$content, $currentVersion)
             PHPWS_Boost::updatefiles($files, 'hms');
 
         case version_compare($currentVersion, '0.2.30', '<'):
-            
+
             $db = &new PHPWS_DB;
             $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_30.sql');
             if(PEAR::isError($result)) {
                 return $result;
             }
-            
+
             $files[] = 'templates/admin/make_new_rlc_assignments.tpl';
             $files[] = 'templates/admin/rlc_assignments_pager.tpl';
             $files[] = 'templates/admin/view_by_rlc_pager.tpl';
@@ -887,7 +887,7 @@ function hms_update(&$content, $currentVersion)
         case version_compare($currentVersion, '0.2.31', '<'):
 
             PHPWS_Boost::registerMyModule('hms', 'users', $content);    #just need to update the permissions
-            
+
         case version_compare($currentVersion, '0.2.32', '<'):
             $files[] = 'templates/admin/show_confirmed_roommates.tpl';
             $files[] = 'templates/admin/roommate_pager.tpl';
@@ -907,7 +907,7 @@ function hms_update(&$content, $currentVersion)
 
             $content[] = 'Added Special Needs report.';
             $content[] = 'Reports now better suited for printing.';
-            
+
         case version_compare($currentVersion, '0.2.35', '<'):
             $files[] = 'templates/admin/statistics.tpl';
             PHPWS_Boost::updateFiles($files, 'hms');
@@ -928,11 +928,11 @@ function hms_update(&$content, $currentVersion)
             }
         case version_compare($currentVersion, '0.2.40', '<'):
             PHPWS_Boost::registerMyModule('hms', 'users', $content);    #just need to update the permissions
-            
+
         case version_compare($currentVersion, '0.2.41', '<'):
             $files[] = 'templates/admin/activity_log_pager.tpl';
             PHPWS_Boost::updateFiles($files, 'hms');
-            
+
         case version_compare($currentVersion, '0.2.42', '<'):
             $files[] = 'templates/admin/maintenance.tpl';
             $files[] = 'templates/css/maintenance.css';
@@ -947,7 +947,7 @@ function hms_update(&$content, $currentVersion)
         case version_compare($currentVersion, '0.2.45', '<'):
             PHPWS_Core::initModClass('users', 'Permission.php');
             Users_Permission::registerPermissions('hms', $content);
-        
+
         case version_compare($currentVersion, '0.2.46', '<'):
             PHPWS_Core::initModClass('users', 'Permission.php');
             Users_Permission::registerPermissions('hms', $content);
@@ -1093,6 +1093,32 @@ function hms_update(&$content, $currentVersion)
         case version_compare($currentVersion, '0.3.31', '<'):
             $db = &new PHPWS_DB;
             $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_3_31.sql');
+            if(PEAR::isError($result)){
+                return $result;
+            }
+        case version_compare($currentVersion, '0.4.0', '<'):
+            $db = &new PHPWS_DB;
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_4_0.sql');
+            if(PEAR::isError($result)){
+                return $result;
+            }
+        case version_compare($currentVersion, '0.4.1', '<'):
+            $db = new PHPWS_DB;
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_4_1.sql');
+            if(PEAR::isError($result)){
+                return $result;
+            }
+        case version_compare($currentVersion, '0.4.2', '<'):
+            PHPWS_Core::initModClass('users', 'Permission.php');
+            Users_Permission::registerPermissions('hms', $content);
+            $db = new PHPWS_DB;
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_4_2.sql');
+            if(PEAR::isError($result)){
+                return $result;
+            }
+        case version_compare($currentVersion, '0.4.3', '<'):
+            $db = new PHPWS_DB;
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_4_3.sql');
             if(PEAR::isError($result)){
                 return $result;
             }

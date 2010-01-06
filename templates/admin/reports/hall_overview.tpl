@@ -1,38 +1,51 @@
 <style type="text/css">
-td.floor {
+#hall_overview td.floor {
     background-color: #3B5998;
     color: white;
 }
 
-td.room {
+#hall_overview td.floor {
+    background-color: #3B5998;
+    color: white;
+}
+
+#hall_overview td.floor a{
+    color: white;
+}
+
+#hall_overview td.room {
     background-color: #8497BF;
     color: white;
 }
 
-.toggle1 {
+#hall_overview td.room a {
+    color: white;
+}
+
+#hall_overview .toggle1 {
     background-color: #ECEFF5;
 }
 
-.toggle2 {
+#hall_overview .toggle2 {
     background-color: #DDDDDD;
 }
 
-.vacant {
+#hall_overview .vacant {
     background-color: #FFFFCC;
 }
 
-a.username {
+#hall_overview a.username {
     color: #43609C;
 }
 
-.overview_table {
+#hall_overview {
     padding: 3px;
     border-width: 2px;
     border-color: #FFFFFF;
     border-collapse: separate;
 }
 
-a.hall_link {
+#hall_overview a.hall_link {
     color: white;
 }
 </style>
@@ -41,7 +54,7 @@ a.hall_link {
 </style>
 
 <h2>Building Overview for {HALL} - {TERM}</h2>
-<table class="overview_table" width="575">
+<table id="hall_overview" class="overview_table" width="575">
 <!-- BEGIN floor_repeat -->
         <tr>
             <td class="floor" colspan="7">{FLOOR_NUMBER} {FLOOR_RLC}</th>

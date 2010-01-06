@@ -45,13 +45,11 @@ class HMS_Eligibility_Waiver{
     
     public function checkForWaiver($username, $term = NULL)
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
-        
         $db = new PHPWS_DB('hms_eligibility_waiver');
         $db->addWhere('asu_username', $username);
 
         if(!isset($term)){
-            $db->addWhere('term', HMS_Term::get_current_term());
+            $db->addWhere('term', Term::getCurrentTerm());
         }else{
             $db->addWhere('term', $term);
         }

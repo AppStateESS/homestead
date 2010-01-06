@@ -48,7 +48,7 @@ class HMS_Email{
         }
 
         if(!isset($from) || is_null($from)){
-            $from = 'ASU Housing Management System <housing@appstate.edu>';
+            $from = SYSTEM_NAME . ' <' . FROM_ADDRESS .'>';
         }
 
         if(!isset($subject) || is_null($subject)){
@@ -102,7 +102,7 @@ class HMS_Email{
         // Log the message to a text file
         $fd = fopen(PHPWS_SOURCE_DIR . 'logs/email.log',"a");
         fprintf($fd, "=======================\n");
-       
+         
         foreach($message->send_to as $recipient){
             fprintf($fd, "To: %s\n", $recipient);
         }
@@ -162,7 +162,7 @@ class HMS_Email{
         $tpl['EXPIRES_ON']  = HMS_Util::get_long_date_time($expires_on);
         $tpl['YEAR']        = $year;
 
-        HMS_Email::send_template_message($to . '@appstate.edu', 'You Have Been Selected for On-campus Housing!', 'email/lottery_invite.tpl', $tpl);
+        HMS_Email::send_template_message($to . TO_DOMAIN, 'You Have Been Selected for On-campus Housing!', 'email/lottery_invite.tpl', $tpl);
     }
 
     public function send_lottery_invite_reminder($to, $name, $expires_on, $year)
@@ -175,11 +175,11 @@ class HMS_Email{
         $tpl['EXPIRES_ON']  = HMS_Util::get_long_date_time($expires_on);
         $tpl['YEAR']        = $year;
         $hours              = round(($expires_on - mktime()) / 3600);
-        
-        // TODO:
-        //$hours = 
 
-        HMS_Email::send_template_message($to . '@appstate.edu', "On-Campus Housing Reminder: Only $hours hours left!", 'email/lottery_invite_reminder.tpl', $tpl);
+        // TODO:
+        //$hours =
+
+        HMS_Email::send_template_message($to . TO_DOMAIN, "On-Campus Housing Reminder: Only $hours hours left!", 'email/lottery_invite_reminder.tpl', $tpl);
     }
 
     public function send_lottery_roommate_invite($to, $name, $expires_on, $requestor_name, $hall_room, $year)
@@ -192,7 +192,7 @@ class HMS_Email{
         $tpl['REQUESTOR']   = $requestor_name;
         $tpl['HALL_ROOM']   = $hall_room;
 
-        HMS_Email::send_template_message($to . '@appstate.edu', 'Roommate Invitation for On-campus Housing!', 'email/lottery_roommate_invite.tpl', $tpl);
+        HMS_Email::send_template_message($to . TO_DOMAIN, 'Roommate Invitation for On-campus Housing!', 'email/lottery_roommate_invite.tpl', $tpl);
     }
 
     public function send_lottery_roommate_reminder($to, $name, $expires_on, $requestor_name, $hall_room, $year)
@@ -206,7 +206,7 @@ class HMS_Email{
         $tpl['HALL_ROOM']   = $hall_room;
         $hours              = round(($expires_on - mktime()) / 3600);
 
-        HMS_Email::send_template_message($to . '@appstate.edu', "Roommate Invitation Reminder: Only $hours hours left!", 'email/lottery_roommate_invite_reminder.tpl', $tpl);
+        HMS_Email::send_template_message($to . TO_DOMAIN, "Roommate Invitation Reminder: Only $hours hours left!", 'email/lottery_roommate_invite_reminder.tpl', $tpl);
     }
 
     public function send_signup_invite($to, $name, $requestor_name, $year)
@@ -217,7 +217,7 @@ class HMS_Email{
         $tpl['REQUESTOR']   = $requestor_name;
         $tpl['YEAR']        = $year;
 
-        HMS_Email::send_template_message($to . '@appstate.edu', "Signup for On-campus Housing!", 'email/lottery_signup_invite.tpl', $tpl);
+        HMS_Email::send_template_message($to . TO_DOMAIN, "Signup for On-campus Housing!", 'email/lottery_signup_invite.tpl', $tpl);
     }
 
     public function send_lottery_status_report($status, $log)
@@ -229,7 +229,7 @@ class HMS_Email{
         $tpl = array();
 
         $tpl['NAME']            = $name;
-        $tpl['TERM']            = HMS_Term::term_to_text($term, TRUE);
+        $tpl['TERM']            = Term::toString($term);
         $tpl['LOCATION']        = $location;
         $tpl['MOVE_IN_TIME']    = $movein_time;
         $tpl['DATE']            = strftime("%B %d, %Y");
@@ -240,97 +240,76 @@ class HMS_Email{
             }
         }
 
-        $sem = HMS_Term::get_term_sem($term);
+        $sem = Term::getTermSem($term);
 
         switch($sem){
             case TERM_SPRING:
-                HMS_Email::send_template_message($to . '@appstate.edu', 'Housing Assignment Notice!', 'email/assignment_notice_spring.tpl', $tpl);
-            break;
+                HMS_Email::send_template_message($to . TO_DOMAIN, 'Housing Assignment Notice!', 'email/assignment_notice_spring.tpl', $tpl);
+                break;
             case TERM_SUMMER1:
             case TERM_SUMMER2:
-                    HMS_Email::send_template_message($to . '@appstate.edu', 'Housing Assignment Notice!', 'email/assignment_notice_summer.tpl', $tpl);
-            break;
+                HMS_Email::send_template_message($to . TO_DOMAIN, 'Housing Assignment Notice!', 'email/assignment_notice_summer.tpl', $tpl);
+                break;
             case TERM_FALL:
-            /*
-                if($returning == TRUE){
-                    HMS_Email::send_template_message($to . '@appstate.edu', 'Housing Assignment Notice!', 'email/assignment_notice_returning.tpl', $tpl);
-                }else{
-                    HMS_Email::send_template_message($to . '@appstate.edu', 'Housing Assignment Notice!', 'email/assignment_notice.tpl', $tpl);
-                }
-            */
-                HMS_Email::send_template_message($to . '@appstate.edu', 'Housing Assignment Notice!', 'email/assignment_notice.tpl', $tpl);
-            break;
+                /*
+                 if($returning == TRUE){
+                 HMS_Email::send_template_message($to . TO_DOMAIN, 'Housing Assignment Notice!', 'email/assignment_notice_returning.tpl', $tpl);
+                 }else{
+                 HMS_Email::send_template_message($to . TO_DOMAIN, 'Housing Assignment Notice!', 'email/assignment_notice.tpl', $tpl);
+                 }
+                 */
+                HMS_Email::send_template_message($to . TO_DOMAIN, 'Housing Assignment Notice!', 'email/assignment_notice.tpl', $tpl);
+                break;
         }
 
-        
+
     }
 
-    public function send_roommate_confirmation($to, $name, $roomie){
+    public function send_roommate_confirmation(Student $to, Student $roomie){
         $tpl = array();
 
-        if($name == null){
-            PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
-            $tpl['NAME'] = HMS_SOAP::get_full_name($to); //to is holding their asu_username
-        } else {
-            $tpl['NAME'] = $name;
-        }
+        $tpl['NAME'] = $to->getName();
+        $tpl['ROOMIE'] = $roomie->getName();
 
-        $tpl['ROOMIE'] = $roomie;
-
-        HMS_Email::send_template_message($to . '@appstate.edu', 'Roommate Confirmation!', 'email/roommate_confirmation.tpl', $tpl);
+        HMS_Email::send_template_message($to->getUsername() . TO_DOMAIN, 'Roommate Confirmation!', 'email/roommate_confirmation.tpl', $tpl);
     }
 
-    public function send_lottery_application_confirmation($to, $name)
+    public function send_lottery_application_confirmation(Student $student, $year)
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+        PHPWS_Core::initModClass('hms', 'Term.php');
+
         $tpl = array();
 
-        if($name == null){
-            PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
-            $tpl['NAME'] = HMS_SOAP::get_full_name($to); //to is holding their asu_username
-        } else {
-            $tpl['NAME'] = $name;
-        }
+        $tpl['NAME'] = $student->getName();
 
-        $tpl['TERM'] = HMS_Term::term_to_text(PHPWS_Settings::get('hms', 'lottery_term'), true) . ' - ' . HMS_Term::term_to_text(HMS_Term::get_next_term(PHPWS_Settings::get('hms', 'lottery')), TRUE);
+        $tpl['TERM'] = $year;
 
-        HMS_Email::send_template_message($to . '@appstate.edu', 'On-campus Housing Re-application Confirmation!', 'email/lottery_confirmation.tpl', $tpl);
+        HMS_Email::send_template_message($student->getUsername() . TO_DOMAIN, 'On-campus Housing Re-application Confirmation!', 'email/lottery_confirmation.tpl', $tpl);
     }
 
-    public function send_hms_application_confirmation($to, $name)
+    public function send_hms_application_confirmation(Student $to)
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
-        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+        PHPWS_Core::initModClass('hms', 'Term.php');
 
         $tpl = array();
+        $tpl['NAME'] = $to->getName();
 
-        if($name == null){
-            $tpl['NAME'] = HMS_SOAP::get_full_name($to); //to is holding their asu_username
-        } else {
-            $tpl['NAME'] = $name;
-        }
+        $tpl['TERM'] = Term::toString($to->getApplicationTerm());
 
-        $tpl['TERM'] = HMS_Term::term_to_text(HMS_SOAP::get_application_term($to), true);
-
-        HMS_Email::send_template_message($to . '@appstate.edu', 'On-campus Houisng Application Confirmation!', 'email/application_confirmation.tpl', $tpl);
+        HMS_Email::send_template_message($to->getUsername() . TO_DOMAIN, 'On-campus Houisng Application Confirmation!', 'email/application_confirmation.tpl', $tpl);
     }
-    
-    public function send_lottery_assignment_confirmation($to, $name, $location)
+
+    public function send_lottery_assignment_confirmation(Student $to, $location, $term)
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
+        PHPWS_Core::initModClass('hms', 'Term.php');
         $tpl = array();
 
-        if($name == null){
-            PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
-            $tpl['NAME'] = HMS_SOAP::get_full_name($to); //to is holding their asu_username
-        } else {
-            $tpl['NAME'] = $name;
-        }
+        $tpl['NAME']     = $to->getName();
 
-        $tpl['TERM']     = HMS_Term::term_to_text(PHPWS_Settings::get('hms', 'lottery_term'), true);
+        $tpl['TERM']     = Term::toString($term);
         $tpl['LOCATION'] = $location;
 
-        HMS_Email::send_template_message($to . '@appsatte.edu', 'On-campus Housing Re-assignment Confirmation!', 'email/lottery_self_assignment_confirmation.tpl', $tpl);
+        HMS_Email::send_template_message($to->getUsername() . TO_DOMAIN, 'On-campus Housing Re-assignment Confirmation!', 'email/lottery_self_assignment_confirmation.tpl', $tpl);
     }
 
 } // End HMS_Email class

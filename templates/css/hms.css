@@ -1,18 +1,23 @@
-.error {
-    color:black;
-    background:#F0CACA;
-    border:solid thin red;
-    padding:5px;
+.hms-main-admin-menu-block{
+	background:#FAFAFA;
+	width:200px;
 }
+
+.hms-main-admin-menu-block legend img {
+	vertical-align:middle;
+	width:25px;
+	height:25px;
+	padding-right:4px;
+}
+
+.hms-main-admin-menu-block li {
+	margin-left:7px;
+} 
 
 .note {
     color:black;
     background:#ECEFF5;
     padding:5px;
-}
-
-.success {
-    color:green;
 }
 
 .unassigned_link a {
@@ -34,4 +39,87 @@
 
 .hms th {
     padding:3px;
+}
+
+#hms-term {
+    float: left;
+    font-weight: bold;
+}
+
+#hms-user {
+    float: right;
+}
+
+#hms-main {
+    clear: both;
+    padding: 1em 0;
+}
+
+#hms-guest-message {
+    margin-left: 5em;
+}
+
+#hms-guest-main {
+    display: block;
+    padding: 0 5em;
+}
+
+#hms-user-main {
+	margin-left: 210px;
+}
+
+#hms-sidebar {
+	width: 200px;
+	float: left;
+}
+
+.hms-notification {
+	margin: 1em 0;
+	padding: 0.25em;
+}
+
+.error {
+    border: solid 1px #FF0000;
+    background: #FFCCCC;
+}
+
+.warning {
+	border: solid 1px #FFFF00;
+	background: #FFFFCC;
+}
+
+.success {
+	border: solid 1px #00FF00;
+	background: #CCFFCC;
+}
+
+.unknown {
+	border: solid 1px #0000FF;
+	background: #CCCCFF;
+}
+
+.hms-sidebox {
+    border: 1px solid #000;
+    padding: 5px;
+    margin-bottom: 5px;
+}
+
+.hms-sidebox li.active {
+    font-weight: bold;
+}
+
+.special-needs-text {
+	background:#F3F3F3;
+	margin-left: 35px;
+	margin-top: 15px;
+	padding: 4px;
+}
+
+.hms-application-submit-button {
+	font-size: 1.3em;
+	padding: 7px;
+}
+
+.hms-student-menu-term-block {
+	margin-left: 20px;
 }

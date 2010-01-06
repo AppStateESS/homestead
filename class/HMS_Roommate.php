@@ -10,6 +10,8 @@
 // The number of seconds before a roommate request expires, (hrs * 60 * 60) 
 define('ROOMMATE_REQ_TIMEOUT', 259200); // 259200 = 72 hours
 
+PHPWS_Core::initModClass('hms', 'exception/RoommateException.php');
+
 class HMS_Roommate
 {
 
@@ -36,6 +38,8 @@ class HMS_Roommate
         $result = $db->loadObject($this);
         if(!$result || PHPWS_Error::logIfError($result)) {
             $this->id = 0;
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException($result->toString());
         }
     }
 
@@ -70,7 +74,8 @@ class HMS_Roommate
         $db = new PHPWS_DB('hms_roommate');
         $result = $db->saveObject($this);
         if(!$result || PHPWS_Error::logIfError($result)) {
-            return false;
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException($result->toString());
         }
         return true;
 
@@ -81,9 +86,10 @@ class HMS_Roommate
         $db = new PHPWS_DB('hms_roommate');
         $db->addWhere('id', $this->id);
         $result = $db->delete();
-
+        
         if(PHPWS_Error::logIfError($result)) {
-            return FALSE;
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException($result->toString());
         }
 
         $this->id = 0;
@@ -106,8 +112,7 @@ class HMS_Roommate
     public function get_all_confirmed_roommates($term = NULL, $random = FALSE)
     {
         if(is_null($term)) {
-            PHPWS_Core::initModClass('hms', 'HMS_Term.php');
-            $term = HMS_Term::getSelectedTerm();
+            $term = Term::getSelectedTerm();
         }
 
         $db = &new PHPWS_DB('hms_roommate');
@@ -212,44 +217,45 @@ class HMS_Roommate
     /*
      * Returns the given user's confirmed roommate or FALSE if the roommate is unconfirmed
      */
-    public function get_confirmed_roommate($asu_username, $term = NULL)
+    public function get_confirmed_roommate($asu_username, $term)
     {
-        if(is_null($term)) PHPWS_Core::initModClass('hms', 'HMS_Term.php');
         
         $db = new PHPWS_DB('hms_roommate');
         $db->addWhere('requestor', $asu_username, 'ILIKE', 'OR', 'grp');
         $db->addWhere('requestee', $asu_username, 'ILIKE', 'OR', 'grp');
         $db->setGroupConj('grp', 'AND');
         $db->addWhere('confirmed', 1);
-        $db->addWhere('term', (is_null($term) ? HMS_Term::get_selected_term() : $term));
+        $db->addWhere('term', $term);
         $db->addColumn('requestor');
         $db->addColumn('requestee');
+        
+        //$db->setTestMode();
+        
         $result = $db->select('row');
 
         if(count($result) > 1) {
             // TODO: Log Weird Situation
         }
 
-        if(count($result) == 0)
+        if(count($result) == 0){
             return null;
+        }
 
         if(trim($result['requestor']) == trim($asu_username)) {
             return $result['requestee'];
         }
-
+        
         return $result['requestor'];
     }
 
-    public function get_pending_roommate($asu_username, $term = NULL)
-    {
-        if(is_null($term)) PHPWS_Core::initModClass('hms', 'HMS_Term.php');
-        
+    public function get_pending_roommate($asu_username, $term)
+    {   
         $db = new PHPWS_DB('hms_roommate');
         $db->addWhere('requestor', $asu_username, 'ILIKE', 'OR', 'grp');
         $db->addWhere('requestee', $asu_username, 'ILIKE', 'OR', 'grp');
         $db->setGroupConj('grp', 'AND');
         $db->addWhere('confirmed', 0);
-        $db->addWhere('term', (is_null($term) ? HMS_Term::get_selected_term() : $term));
+        $db->addWhere('term', $term);
         $db->addWhere('requested_on', mktime() - ROOMMATE_REQ_TIMEOUT, '>=');
         $db->addColumn('requestor');
         $db->addColumn('requestee');
@@ -261,6 +267,8 @@ class HMS_Roommate
 
         if(count($result) == 0)
             return null;
+            
+            test($result,1);
 
         if(trim($result['requestor']) == trim($asu_username)) {
             return $result['requestee'];
@@ -334,7 +342,7 @@ class HMS_Roommate
     /**
      * Returns a count of pending requests
      */
-    public function count_pending_requests($asu_username,$term)
+    public function countPendingRequests($asu_username,$term)
     {
         $db = new PHPWS_DB('hms_roommate');
         $db->addWhere('requestee', $asu_username, 'ILIKE');
@@ -368,7 +376,7 @@ class HMS_Roommate
      * Removes all pending requests.  THIS DOES WORK SO BE CAREFUL.  Used when roommates are confirmed.
      * Logs each individual removal to cover our butts.
      */
-    public function remove_outstanding_requests($asu_username, $term)
+    public function removeOutstandingRequests($asu_username, $term)
     {
         $db = new PHPWS_DB('hms_roommate');
         $db->addWhere('requestee', $asu_username, 'ILIKE', NULL, 'username_group');
@@ -552,56 +560,49 @@ class HMS_Roommate
      * Performs all the checks necessary before allowing an administrator to
      * create a roommate pairing
      */
-    public function can_live_together_admin($roommate_1, $roommate_2, $term){
+    public function canLiveTogetherAdmin(Student $roommate1, Student $roommate2, $term){
         
-        # This is always a good idea
-        $requestor = strToLower($roommate_1);
-        $requestee = strToLower($roommate_2);
-
         # Sanity Checking
-        if(is_null($roommate_1)) {
-            return E_ROOMMATE_MALFORMED_USERNAME;
+        if(is_null($roommate1)) {
+            throw new RoommateException('Null student object for roommate 1.');
         }
 
-        if(is_null($roommate_2)) {
-            return E_ROOMMATE_MALFORMED_USERNAME;
+        if(is_null($roommate2)) {
+            throw new RoommateException('Null student object for roommate 1.');
         }
 
         # Check that the two user names aren't the same
-        if($roommate_1 == $roommate_2){
-            return E_ROOMMATE_REQUESTED_SELF;
+        if($roommate1->getUsername() == $roommate2->getUsername()){
+            throw new RoommateException('Roommate user names must be unique.');
         }
         
         # Use SOAP for the following checks
-        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
-        $roommate_1_info = HMS_SOAP::get_student_info($roommate_1, HMS_Term::get_selected_term());
-        $roommate_2_info = HMS_SOAP::get_student_info($roommate_2, HMS_Term::get_selected_term());
-
         # Make that both roommate have some sort of soap info
-        if(empty($roommate_1_info->last_name)) {
-            return E_ROOMMATE_USER_NOINFO;
+        $name = $roommate1->getLastName();
+        if(empty($name)) {
+            throw new RoommateException('No banner information for first roommate.');
         }
 
-        if(empty($roommate_2_info->last_name)){
-            return E_ROOMMATE_USER_NOINFO;
+        $name = $roommate2->getLastName();
+        if(empty($name)) {
+            throw new RoommateException('No banner information for second roommate.');
         }
         
         # Make sure the genders match
-        if($roommate_1_info->gender != $roommate_2_info->gender){
-            return E_ROOMMATE_GENDER_MISMATCH;
+        if($roommate1->getGender() != $roommate2->getGender()){
+            throw new RoommateException('Roommate genders do not match.');
         }
         
         # Check if either has a confirmed roommate
-        if(HMS_Roommate::has_confirmed_roommate($roommate_1, $term)){
-            return E_ROOMMATE_ALREADY_CONFIRMED;
+        if(HMS_Roommate::has_confirmed_roommate($roommate1->getUsername(), $term)){
+            throw new RoommateException('The first roommate already has a confirmed roommate.');
         }
 
-        if(HMS_Roommate::has_confirmed_roommate($roommate_2, $term)){
-            return E_ROOMMATE_REQUESTED_CONFIRMED;
+        if(HMS_Roommate::has_confirmed_roommate($roommate2->getUsername(), $term)){
+            throw new RoommateException('The second roommate already has a confirmed roommate.');
         }
 
-        return E_SUCCESS;
+        true;
     }
 
     /*******************
@@ -1003,150 +1004,6 @@ class HMS_Roommate
         return PHPWS_Template::process($tpl, 'hms', 'student/roommate_reject_done.tpl');
     }
 
-    /**
-     * Shows the UI for administratively creating a roommate group
-     */
-    public function show_admin_create_roommate_group($success = NULL, $error = NULL)
-    {
-        if(!Current_User::allow('hms', 'roommate_maintenance')){
-            $tpl = array();
-            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
-        }
-        
-        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
-        
-        $tpl = array();
-
-        $tpl['TERM'] = HMS_Term::term_to_text(HMS_Term::get_selected_term(), TRUE);
-
-        $form = &new PHPWS_Form('roommate_group');
-        
-        if(isset($_REQUEST['roommate_1']) && isset($error)){
-            $form->addText('roommate_1', $_REQUEST['roommate_1']);
-        }else{
-            $form->addText('roommate_1');
-        }
-        if(isset($_REQUEST['roommate_2']) && isset($error)){
-            $form->addText('roommate_2', $_REQUEST['roommate_2']);
-        }else{
-            $form->addText('roommate_2');
-        }
-
-        $form->addSubmit('submit', 'Create Group');
-
-        $form->addHidden('module', 'hms');
-        $form->addHidden('type', 'roommate');
-        $form->addHidden('op', 'show_admin_create_roommate_group_result');
-
-        $form->mergeTemplate($tpl);
-        $tpl = $form->getTemplate();
-
-        if(isset($success)){
-            $tpl['SUCCESS_MSG'] = $success;
-        }
-
-        if(isset($error)){
-            $tpl['ERROR_MSG'] = $error;
-        }
-
-        $tpl['MENU_LINK'] = PHPWS_Text::secureLink('Back to Main Menu', 'hms', array('type'=>'maintenance', 'op'=>'show_maintenance_options'));
-
-        return PHPWS_Template::process($tpl, 'hms', 'admin/create_roommate_group.tpl');
-    }
-
-    /**
-     * Handles administrately creating roommate groups
-     */
-    public function show_admin_create_roommate_group_result()
-    {
-        if(!Current_User::allow('hms', 'roommate_maintenance')){
-            $tpl = array();
-            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
-        }
-
-        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
-
-        $term = HMS_Term::get_selected_term();
-        
-        # Check for reasonable input
-        if(empty($_REQUEST['roommate_1']) || empty($_REQUEST['roommate_2'])){
-            return HMS_Roommate::show_admin_create_roommate_group(null, 'Error: Please enter two user names.');
-        }
-
-        # Trim/lowercase and store locally
-        $roommate_1 = trim(strtolower($_REQUEST['roommate_1']));
-        $roommate_2 = trim(strtolower($_REQUEST['roommate_2']));
-
-        # Check if these two can live together
-        $result = HMS_Roommate::can_live_together_admin($roommate_1, $roommate_2, $term);
-        if($result != E_SUCCESS){
-            switch($result){
-                case E_ROOMMATE_MALFORMED_USERNAME:
-                    $msg = 'Invalid user name.';
-                    break;
-                case E_ROOMMATE_REQUESTED_SELF:
-                    $msg = 'User names cannot match.';
-                    break;
-                case E_ROOMMATE_USER_NOINFO:
-                    $msg = 'No banner info for student.';
-                    break;
-                case E_ROOMMATE_GENDER_MISMATCH:
-                    $msg = 'Gender mis-match';
-                    break;
-                case E_ROOMMATE_ALREADY_CONFIRMED:
-                    $msg = "$roommate_1 already has a confirmed roommate";
-                    break;
-                case E_ROOMMATE_REQUESTED_CONFIRMED:
-                    $msg = "$roommate_2 already has a confirmed roommate";
-                    break;
-                default:
-                    $msg = "Unknown error: {$result}.";
-                    break;
-            }
-
-            return HMS_Roommate::show_admin_create_roommate_group(NULL, $msg);
-        }
-
-        $more = "";
-
-        # Check for pending requests for either roommate and break them
-        if(HMS_Roommate::count_pending_requests($roommate_1, $term) > 0){
-            $more .= " Warning: Pending roommate requests for $roommate_1 were deleted.";
-        }
-        $result = HMS_Roommate::remove_outstanding_requests($roommate_1, $term);
-        if(!$result){
-            return HMS_Roommate::show_admin_create_roommate_group(NULL, "Error removing pending requests for $roommate_1, roommate group was not created.");
-        }
-
-        if(HMS_Roommate::count_pending_requests($roommate_2, $term) > 0){
-            $more .= " Warning: Pending roommate requests for $roommate_2 were deleted.";
-        }
-        $result = HMS_Roommate::remove_outstanding_requests($roommate_2, $term);
-        if(!$result){
-            return HMS_Roommate::show_admin_create_roommate_group(NULL, "Error removing pending requests for $roommate_2, roommate group was not created.");
-        }
-
-        # Create the roommate group and save it
-        $roommate_group                 = new HMS_Roommate();
-        $roommate_group->term           = HMS_Term::get_selected_term();
-        $roommate_group->requestor      = $roommate_1;
-        $roommate_group->requestee      = $roommate_2;
-        $roommate_group->confirmed      = 1;
-        $roommate_group->requested_on   = mktime();
-        $roommate_group->confirmed_on   = mktime();
-        
-        $result = $roommate_group->save();
-
-        if(!$result){
-            return HMS_Roommate::show_admin_create_roommate_group(NULL, 'Error save roommate group. The group was not created.' . $more);
-        }else{
-            PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-            HMS_Activity_Log::log_activity($roommate_1, ACTIVITY_ADMIN_ASSIGNED_ROOMMATE, Current_User::getUsername(), $roommate_2);
-            HMS_Activity_Log::log_activity($roommate_2, ACTIVITY_ADMIN_ASSIGNED_ROOMMATE, Current_User::getUsername(), $roommate_1);
-            return HMS_Roommate::show_admin_create_roommate_group('Roommate group created.' . $more);
-        }
-    }
-
     public function delete_roommate_group()
     {
         if(!Current_User::allow('hms', 'roommate_maintenance')){
@@ -1184,7 +1041,7 @@ class HMS_Roommate
 
         $tpl['MENU_LINK']   = PHPWS_Text::secureLink('Back to Main Menu', 'hms', array('type'=>'maintenance', 'op'=>'show_maintenance_options'));
         $tpl['PAGER']       = HMS_Roommate::roommate_pager();
-        $tpl['TITLE']      = 'Confrimed Roommates - ' . HMS_Term::term_to_text(HMS_Term::get_selected_term(), TRUE);
+        $tpl['TITLE']      = 'Confrimed Roommates - ' . Term::toString(Term::getSelectedTerm(), TRUE);
 
         if(isset($success)){
             $tpl['SUCCESS_MSG'] = $success;
@@ -1220,12 +1077,11 @@ class HMS_Roommate
     public function roommate_pager()
     {
         PHPWS_Core::initCoreClass('DBPager.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
 
         $pager = new DBPager('hms_roommate', 'HMS_Roommate');
         
         $pager->db->addWhere('confirmed', 1);
-        $pager->db->addWhere('term', HMS_Term::get_selected_term());
+        $pager->db->addWhere('term', Term::getSelectedTerm());
         
         $pager->setModule('hms');
         $pager->setTemplate('admin/roommate_pager.tpl');
@@ -1241,15 +1097,21 @@ class HMS_Roommate
     }
 
     public function get_roommate_pager_tags(){
-        PHPWS_Core::initModClass('hms', 'HMS_Student.php');
-        
         $tags = array();
         
-        $tags['REQUESTOR']      = HMS_Student::get_link($this->requestor, TRUE);
-        $tags['REQUESTEE']      = HMS_Student::get_link($this->requestee, TRUE);
+        $term = Term::getSelectedTerm();
+        
+        $requestor = StudentFactory::getStudentByUsername($this->requestor,$term);
+        $requestee = StudentFactory::getStudentByUsername($this->requestee,$term);
+        
+        $deleteCmd = CommandFactory::getCommand('DeleteRoommateGroup');
+        $deleteCmd->setId($this->id);
+        
+        $tags['REQUESTOR']      = $requestor->getFullNameProfileLink();
+        $tags['REQUESTEE']      = $requestee->getFullNameProfileLink();
         $tags['REQUESTED_ON']   = HMS_Util::get_long_date_time($this->requested_on);
         $tags['CONFIRMED_ON']   = HMS_Util::get_long_date_time($this->confirmed_on);
-        $tags['ACTION']         = PHPWS_Text::secureLink('Delete', 'hms', array('type'=>'roommate', 'op'=>'delete_roommate_group', 'id'=>$this->id));
+        $tags['ACTION']         = $deleteCmd->getLink('Delete');
         
         return $tags;
     }

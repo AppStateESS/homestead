@@ -1,0 +1,1 @@
+DROP TABLE hms_term_applications;

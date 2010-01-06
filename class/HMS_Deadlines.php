@@ -7,6 +7,8 @@
  * @author Jeremy Booker <jbooker at tux dot appstate dot edu>
  */
 
+//TODO This class is deprecated. Delete it and check for anywhere this code is still in use (by code that's also still in use)
+
 class HMS_Deadlines {
 
     var $id; // This is only here to make loadObject and saveObject work as expected

@@ -5,7 +5,7 @@
 $(document).ready(function(){
 
     var options = {
-        script:"index.php?module=hms&type=xml&op=get_username_suggestions_json&json=true&",
+        script:"index.php?module=hms&action=AjaxGetUsernameSuggestions&ajax=true&",
         varname:"username",
         json:true,
         shownoresults:false,

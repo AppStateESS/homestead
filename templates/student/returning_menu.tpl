@@ -2,19 +2,13 @@
   <div class="box">
     <div class="box-title"><h2>On-campus Housing Re-application</h2></div>
 
-    <div align="right">
-        {LOGOUT_LINK}
-    </div>
-
-    <!-- BEGIN error_msg -->
-    <span class="error">{ERROR_MSG}<br /></span>
-    <!-- END error_msg -->
-    
-    <!-- BEGIN success_msg -->
-    <span class="success">{SUCCESS_MSG}<br /></span>
-    <!-- END success_msg -->
-
     Use the menu below the re-apply for on-campus housing. You must complete an application for each available term individually.
+
+	<!-- BEGIN TERMBLOCK -->
+		<div class="hms-studentmenu-termblock">
+			{TERMBLOCK_CONTENT}
+		</div>
+	<!-- END TERMBLOCK -->
 
     <div class="box-content">
       <ul>

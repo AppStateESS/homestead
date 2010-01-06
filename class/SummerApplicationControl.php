@@ -1,5 +1,7 @@
 <?php
 
+///TODO This class is deprecated. Delete it and check for anywhere this code is still in use (by code that's also still in use)
+
 class SummerApplicationControl {
 
     public function summer_application_submit()
