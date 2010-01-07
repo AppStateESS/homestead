@@ -6,5 +6,4 @@
      **********/
 
     PHPWS_Core::initModClass('hms', 'HMS_Login.php');
-PHPWS_Core::requireInc('hms', 'accounts.php');
 ?>

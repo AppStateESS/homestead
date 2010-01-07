@@ -15,13 +15,11 @@ class HMS_Lottery {
         PHPWS_Core::initModClass('hms', 'HousingApplication.php');
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
-        require_once(PHPWS_SOURCE_DIR . '/mod/hms/inc/accounts.php');
-
 
         /******************
          * Initialization *
          ******************/
-        HMS_Activity_Log::log_activity(HMS_ADMIN_USER, ACTIVITY_LOTTERY_EXECUTED, HMS_ADMIN_USER);
+        HMS_Activity_Log::log_activity('hms', ACTIVITY_LOTTERY_EXECUTED, 'hms');
 
         # One-time date/time calculations, setup for later on
         $term = PHPWS_Settings::get('hms', 'lottery_term');
@@ -409,7 +407,7 @@ class HMS_Lottery {
             HMS_Email::send_lottery_invite($winning_username, $student->getName(), $expire_time, $year);
 
             # Log that the invite was sent
-            HMS_Activity_Log::log_activity($winning_username, ACTIVITY_LOTTERY_INVITED, HMS_ADMIN_USER, 'Expires: ' . HMS_Util::get_long_date_time($expire_time));
+            HMS_Activity_Log::log_activity($winning_username, ACTIVITY_LOTTERY_INVITED, 'hms', 'Expires: ' . HMS_Util::get_long_date_time($expire_time));
         }
 
         HMS_Lottery::lottery_complete('SUCCESS', $output);
@@ -796,7 +794,7 @@ class HMS_Lottery {
         foreach($result as $row){
             $student = StudentFactory::getStudentByUsername($row['asu_username'], $term);
             HMS_Email::send_lottery_invite_reminder($row['asu_username'], $student->getName(), $row['invite_expires_on'], $year);
-            HMS_Activity_Log::log_activity($row['asu_username'], ACTIVITY_LOTTERY_REMINDED, HMS_ADMIN_USER);
+            HMS_Activity_Log::log_activity($row['asu_username'], ACTIVITY_LOTTERY_REMINDED, 'hms');
         }
     }
 
@@ -826,7 +824,7 @@ class HMS_Lottery {
             $bed = new HMS_Bed($row['bed_id']);
             $hall_room = $bed->where_am_i();
             HMS_Email::send_lottery_roommate_reminder($row['asu_username'], $student->getName(), $row['expires_on'], $requestor->getName(), $hall_room, $year);
-            HMS_Activity_Log::log_activity($row['asu_username'], ACTIVITY_LOTTERY_ROOMMATE_REMINDED, HMS_ADMIN_USER);
+            HMS_Activity_Log::log_activity($row['asu_username'], ACTIVITY_LOTTERY_ROOMMATE_REMINDED, 'hms');
         }
     }
 

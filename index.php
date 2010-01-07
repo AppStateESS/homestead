@@ -5,7 +5,6 @@ if (!defined('PHPWS_SOURCE_DIR')) {
     exit();
 }
 
-//require_once(PHPWS_SOURCE_DIR . '/mod/hms/inc/accounts.php');
 require_once(PHPWS_SOURCE_DIR . 'mod/hms/inc/defines.php');
 
 //PHPWS_Core::initModClass('hms', 'HMS_Util.php');

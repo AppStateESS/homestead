@@ -122,21 +122,12 @@ class HousingApplication {
         $this->setModifiedOn(time());
 
         # Sets the 'last modified by' field according to who's logged in
-        if(Current_User::getUsername() == HMS_STUDENT_USER){
-            $this->setModifiedBy($_SESSION['asu_username']);
-        }else{
-            $this->setModifiedBy(Current_User::getUsername());
-        }
+        $this->setModifiedBy(UserStatus::getUsername());
 
         # If the object is new, set the 'created' fields
         if($this->getId() == 0){
             $this->setCreatedOn(time());
-
-            if(Current_User::getUsername() == HMS_STUDENT_USER){
-                $this->setCreatedBy($_SESSION['asu_username']);
-            }else{
-                $this->setCreatedBy(Current_User::getUsername());
-            }
+            $this->setCreatedBy(UserStatus::getUsername());
         }
     }
 
@@ -147,11 +138,7 @@ class HousingApplication {
     {
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
         # Determine which user name to use as the current user
-        if(Current_User::getUsername() == HMS_STUDENT_USER){
-            $username = $this->getUsername();
-        }else{
-            $username = Current_User::getUsername();
-        }
+            $username = UserStatus::getUsername();
 
         HMS_Activity_Log::log_activity($this->getUsername(), ACTIVITY_SUBMITTED_APPLICATION, $username, 'Term: ' . $this->getTerm());
     }
