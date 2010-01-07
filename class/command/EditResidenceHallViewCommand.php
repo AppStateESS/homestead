@@ -34,7 +34,7 @@ class EditResidenceHallViewCommand extends Command {
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to edit halls.');
         }
-         
+
         // Check for a  hall ID
         $hallId = $context->get('hallId');
         if(!isset($hallId)){

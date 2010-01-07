@@ -34,7 +34,7 @@ class SelectHallView extends View {
         $this->onSelectCmd->initForm($form);
         
         $form->setMethod('get');
-        $form->addDropBox('hallID', $this->halls);
+        $form->addDropBox('hallId', $this->halls);
         
         $form->addSubmit('submit', _('Select Hall'));
 
