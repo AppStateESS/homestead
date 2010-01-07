@@ -13,7 +13,10 @@ class StudentFactory {
 		
 		$soap = SOAP::getInstance();
 		$soapData = $soap->getStudentInfo($username, $term);
-		//TODO throw exception if null result from SOAP
+		
+		if(!isset($soapData->banner_id) || is_null($soapData->banner_id) || empty($soapData->banner_id)){
+		    throw new StudentNotFoundException('No matching student found.');
+		}
 		
 		StudentFactory::plugSOAPData($student, $soapData);
 		
@@ -22,9 +25,13 @@ class StudentFactory {
 	
 	public static function getStudentByBannerId($bannerId, $term)
 	{
+	    test('I AM HERE!',1);
 		$soap = SOAP::getInstance();
 		$username = $soap->getUsername($bannerId);
-		// TODO: throw exception if nothing is returned
+		
+	   if(!isset($username) || is_null($username) || empty($username)){
+            throw new StudentNotFoundException('No matching student found.');
+        }
 		
 		return StudentFactory::getStudentByUsername($username, $term);
 	}
