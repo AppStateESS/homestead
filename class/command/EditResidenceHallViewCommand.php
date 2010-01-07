@@ -36,7 +36,7 @@ class EditResidenceHallViewCommand extends Command {
         }
          
         // Check for a  hall ID
-        $hallId = $context->get('hallID');
+        $hallId = $context->get('hallId');
         if(!isset($hallId)){
             throw new InvalidArgumentException('Missing hall ID.');
         }
