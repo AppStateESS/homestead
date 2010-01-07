@@ -2,8 +2,20 @@
 
 class ShowStudentSearchCommand extends Command {
 
+    private $username;
+
+    public function setUsername($username){
+        $this->username = $username;
+    }
+
     function getRequestVars(){
-        return array('action'=>'ShowStudentSearch');
+        $vars = array('action'=>'ShowStudentSearch');
+
+        if(isset($this->username)){
+            $vars['username'] = $this->username;
+        }
+
+        return $vars;
     }
 
     function execute(CommandContext $context)
@@ -24,7 +36,14 @@ class ShowStudentSearchCommand extends Command {
 
         $form->setMethod('get');
 
-        $form->addText('username');
+
+        $username = $context->get('username');
+        if(isset($username)){
+            $form->addText('username', $username);
+        }else{
+            $form->addText('username');
+        }
+
         $form->setExtra('username', 'autocomplete="off" ');
 
         $form->addSubmit('submit_button', _('Submit'));

@@ -15,6 +15,7 @@ class StudentFactory {
 		$soapData = $soap->getStudentInfo($username, $term);
 		
 		if(!isset($soapData->banner_id) || is_null($soapData->banner_id) || empty($soapData->banner_id)){
+            PHPWS_Core::initModClass('hms', 'exception/StudentNotFoundException.php');
 		    throw new StudentNotFoundException('No matching student found.');
 		}
 		
@@ -25,11 +26,11 @@ class StudentFactory {
 	
 	public static function getStudentByBannerId($bannerId, $term)
 	{
-	    test('I AM HERE!',1);
 		$soap = SOAP::getInstance();
 		$username = $soap->getUsername($bannerId);
 		
 	   if(!isset($username) || is_null($username) || empty($username)){
+            PHPWS_Core::initModClass('hms', 'exception/StudentNotFoundException.php');
             throw new StudentNotFoundException('No matching student found.');
         }
 		

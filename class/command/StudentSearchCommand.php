@@ -19,12 +19,19 @@ class StudentSearchCommand extends Command {
         $userid = $context->get('username');
         $term = Term::getSelectedTerm();
 
-        # Check to see if the user enterd a Banner ID or a user name
-        if(preg_match("/^[0-9]{9}/", $userid)){
-            # Looks like a banner ID
-            $student = StudentFactory::getStudentByBannerId($userid, $term);
-        } else {
-            $student = StudentFactory::getStudentByUsername($userid, $term);
+        try {
+            # Check to see if the user enterd a Banner ID or a user name
+            if(preg_match("/^[0-9]{9}/", $userid)){
+                # Looks like a banner ID
+                $student = StudentFactory::getStudentByBannerId($userid, $term);
+            } else {
+                $student = StudentFactory::getStudentByUsername($userid, $term);
+            }
+        }catch (StudentNotFoundException $e){
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, $e->getMessage());
+            $cmd = CommandFactory::getCommand('ShowStudentSearch');
+            $cmd->setUsername($userid);
+            $cmd->redirect();
         }
 
         $profile = new StudentProfile($student, $term);
