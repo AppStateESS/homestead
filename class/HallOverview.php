@@ -90,7 +90,12 @@ class HallOverview extends View {
 
 					if(isset($bed->_curr_assignment)){
 						$username = $bed->_curr_assignment->asu_username;
+                        try {
 						$student = StudentFactory::getStudentByUsername($username, $this->hall->term);
+                        }catch(StudentNotFoundException $e){
+                            $student = null;
+                            NQ::simple('hms', HMS_NOTIFICATION_WARNING, "Could not find data for: $username");
+                        }
 
 						$assign_rlc  = HMS_RLC_Assignment::check_for_assignment($username, $this->hall->term); //false or index
 						if($assign_rlc != FALSE){
@@ -106,7 +111,11 @@ class HallOverview extends View {
 							$class = 'toggle1';
 						}
 
-						$tpl->setData(array('BED_LABEL'=>$bed->bedroom_label,'BED'=>$bed_link,'NAME'=>$student->getFullNameProfileLink(), 'USERNAME'=>$student->getUsername(), 'BANNER_ID'=>$student->getBannerId(), 'TOGGLE'=>$class, 'RLC_ABBR'=>$rlc_abbr));
+                        if(is_null($student)){
+						    $tpl->setData(array('BED_LABEL'=>$bed->bedroom_label,'BED'=>$bed_link,'NAME'=>'UNKNOWN', 'USERNAME'=>$username, 'BANNER_ID'=>'', 'TOGGLE'=>$class, 'RLC_ABBR'=>$rlc_abbr));
+                        }else{
+						    $tpl->setData(array('BED_LABEL'=>$bed->bedroom_label,'BED'=>$bed_link,'NAME'=>$student->getFullNameProfileLink(), 'USERNAME'=>$student->getUsername(), 'BANNER_ID'=>$student->getBannerId(), 'TOGGLE'=>$class, 'RLC_ABBR'=>$rlc_abbr));
+                        }
 					}else{
 						$tpl->setData(array('BED_LABEL'=>$bed->bedroom_label,'BED'=>$bed_link,'NAME'=>$bed->get_assigned_to_link(), 'TOGGLE'=>'vacant'));
 					}
