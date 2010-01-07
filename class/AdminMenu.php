@@ -18,7 +18,10 @@ class AdminMenu extends CommandMenu
 		$this->addCommandByName('Main menu', 'ShowAdminMaintenanceMenu');
 		$this->addCommandByName('Search students', 'ShowStudentSearch');
 		$this->addCommandByName('Reports', 'ListReports');
-		$this->addCommandByName('Control Panel', 'ShowControlPanel');
+
+        if(Current_User::isDeity()){
+    		$this->addCommandByName('Control Panel', 'ShowControlPanel');
+        }
 	}
 	
 	public function show()
