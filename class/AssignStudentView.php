@@ -50,6 +50,7 @@ class AssignStudentView extends View {
 		# the user clicked an 'unassigned' link. We need to pre-populate
 		# the drop downs.
 		unset($pre_populate);
+
 		if(isset($this->bed)){
 			$pre_populate = true;
 

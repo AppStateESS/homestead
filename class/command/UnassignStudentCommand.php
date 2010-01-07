@@ -19,8 +19,8 @@ class UnassignStudentCommand extends Command {
 
         $username = $context->get('username');
 
-        $errorCmd = CommandFactory::getCommand('ShowUnassignStudent');
-        $errorCmd->setUsername($username);
+        $cmd = CommandFactory::getCommand('ShowUnassignStudent');
+        $cmd->setUsername($username);
 
         if(!isset($username) || is_null($username)){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Invalid or missing username.');
@@ -35,11 +35,12 @@ class UnassignStudentCommand extends Command {
             $result = HMS_Assignment::unassignStudent($student, $term, $notes);
         }catch(Exception $e){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Error: ' . $e->getMessage());
+            $cmd->setUsername($username);
+            $cmd->redirect();
         }
 
         NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Successfully unassigned ' . $student->getFullName());
-        $successCmd = CommandFactory::getCommand('ShowUnassignStudent');
-        $successCmd->redirect();
+        $cmd->redirect();
     }
 }
 

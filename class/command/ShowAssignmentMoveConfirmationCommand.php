@@ -61,7 +61,7 @@ class ShowAssignmentMoveConfirmationCommand extends Command {
         PHPWS_Core::initModClass('hms', 'AssignmentMoveConfirmationView.php');
         	
         $student = StudentFactory::getStudentByUsername($context->get('username'), Term::getSelectedTerm());
-        $assignment = HMS_Assignment::get_assignment($student->getUsername(), Term::getSelectedTerm());
+        $assignment = HMS_Assignment::getAssignment($student->getUsername(), Term::getSelectedTerm());
 
         $moveConfirmView = new AssignmentMoveConfirmationView($student,
         $assignment,

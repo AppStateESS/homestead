@@ -15,10 +15,12 @@ $(document).ready(function(){
     };
 
     var suggest = new bsn.AutoSuggest('phpws_form_username', options);
-    
-	$('#phpws_form_floor').attr('disabled', true);
-	$('#phpws_form_room').attr('disabled', true);
-	$('#phpws_form_bed').attr('disabled', true);
+
+    if($('#phpws_form_use_bed').val() == "false"){
+        $('#phpws_form_floor').attr('disabled', true);
+        $('#phpws_form_room').attr('disabled', true);
+        $('#phpws_form_bed').attr('disabled', true);
+    }
 
 	// Set event listeners
 	$("#phpws_form_residence_hall").bind("change", handleHallChange);

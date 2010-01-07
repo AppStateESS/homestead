@@ -176,7 +176,8 @@ class HMS_Banner_Queue {
      * or FALSE if an action should be queued
      */
     public function process_immediately() {
-        $queue = Term::getBannerQueue(Term::getSelectedTerm());
+        $term = new Term(Term::getSelectedTerm());
+        $queue = $term->getBannerQueue();
         return $queue == 0;
     }
 

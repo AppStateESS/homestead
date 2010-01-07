@@ -101,7 +101,7 @@ class AssignStudentCommand extends Command {
 		# If the student is already assigned, redirect to the confirmation screen. If the student is already assigned
 		# and the confirmation flag is true, then set a flag and proceed.
 		$moveNeeded = FALSE;
-		if(HMS_Assignment::check_for_assignment($username, $term)){
+		if(HMS_Assignment::checkForAssignment($username, $term)){
 			if($context->get('moveConfirmed') == 'true'){
 				# Move has been confirmed
 				$moveNeeded = true;
@@ -120,8 +120,8 @@ class AssignStudentCommand extends Command {
 
 		$gender = $student->getGender();
 
-		if(!isset($gender) || is_null($gender) || empty($gender)){
-			throw new InvalidArgumentExceptoin('Missing student gender.');
+		if(!isset($gender) || is_null($gender)){
+			throw new InvalidArgumentException('Missing student gender.');
 		}
 
 		# Create the room object so we can check gender
@@ -151,7 +151,7 @@ class AssignStudentCommand extends Command {
 		# This code is only run if the move was flagged as confirmed above
 		# The code was copied/adapted from the 'unassign_student' public function below
 		if($moveNeeded){
-			$assignment = HMS_Assignment::get_assignment($username, $term);
+			$assignment = HMS_Assignment::getAssignment($username, $term);
 
 			# Attempt to unassign the student in Banner though SOAP
 			$banner_result = HMS_Banner_Queue::queue_remove_assignment(

@@ -273,7 +273,7 @@ class HMS_Assignment extends HMS_Item
 			throw new AssignmentException('Invalid student type. Student is withdrawn.');
 		}
 
-		if(HMS_Assignment::check_for_assignment($username, $term)){
+		if(HMS_Assignment::checkForAssignment($username, $term)){
 			throw new AssignmentException('The student is already assigned.');
 		}
 
@@ -405,7 +405,7 @@ class HMS_Assignment extends HMS_Item
 				if($roommate->asu_username == $username){
 					continue;
 				}
-				$roommate_assign = HMS_Assignment::get_assignment($roommate->asu_username,$term);
+				$roommate_assign = HMS_Assignment::getAssignment($roommate->asu_username,$term);
 				$roommate_assign->letter_printed = 0;
 				$roommate_assign->email_sent     = 0;
 				$result = $roommate_assign->save();
@@ -438,11 +438,11 @@ class HMS_Assignment extends HMS_Item
 		$username = strtolower($username);
 
 		# Make sure the requested username is actually assigned
-		if(!HMS_Assignment::check_for_assignment($username, $term)) {
+		if(!HMS_Assignment::checkForAssignment($username, $term)) {
 			throw new AssignmentException('Student is not assigned.');
 		}
 
-		$assignment = HMS_Assignment::get_assignment($username, $term);
+		$assignment = HMS_Assignment::getAssignment($username, $term);
 		if($assignment == FALSE || $assignment == NULL){
 			return E_UNASSIGN_ASSIGN_LOAD_FAILED;
 		}
