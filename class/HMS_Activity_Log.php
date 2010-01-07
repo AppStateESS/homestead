@@ -191,10 +191,19 @@ class HMS_Activity_Log{
     {
         PHPWS_Core::initModClass('hms', 'HMS_Student.php');
         $tpl = array();
+       
+        try {
+            $student = StudentFactory::getStudentByUsername($this->get_user_id(), Term::getSelectedTerm());
+        }catch(StudentNotFoundException $e){
+            NQ::simple('hms', HMS_NOTIFICATION_WARNING, "Could not find data for student: {$this->get_user_id()}");
+            $student = null;
+        }
         
-        $student = StudentFactory::getStudentByUsername($this->get_user_id(), Term::getSelectedTerm());
-        
-        $tpl['ACTEE'] = $student->getFullNameProfileLink();
+        if(is_null($student)){
+            $tpl['ACTEE'] = 'UNKNOWN';
+        }else{
+            $tpl['ACTEE'] = $student->getFullNameProfileLink();
+        }
 
         if(strcmp($this->get_user_id(),$this->get_actor()) == 0)
             $tpl['ACTOR'] = NULL;
