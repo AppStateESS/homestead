@@ -38,10 +38,18 @@ class ShowAssignStudentCommand extends Command {
          
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
         PHPWS_Core::initModClass('hms', 'AssignStudentView.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
 
         $username	= $context->get('username');
-        $bed		= $context->get('bedId');
-
+        
+        $bedId		= $context->get('bedId');
+        
+        if(isset($bedId) && !is_null($bedId) && !empty($bedId)){
+            $bed = new HMS_Bed($bedId);
+        }else{
+            $bed = NULL;
+        }
+        
         if(isset($username)){
             $student = StudentFactory::getStudentByUsername($context->get('username'), Term::getSelectedTerm());
         }else{
