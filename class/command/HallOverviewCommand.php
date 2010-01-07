@@ -9,7 +9,13 @@ class HallOverviewCommand extends Command {
 	}
 	
 	public function getRequestVars(){
-		return array('action'=>'HallOverview', 'hallId'=>$this->hallId);
+        $vars = array('action'=>'HallOverview');
+
+        if(isset($this->hallId)){
+            $vars['hallId'] = $this->hallId;
+        }
+
+		return $vars;
 	}
 	
 	public function getSubLink($text, $parentVars)
@@ -34,7 +40,7 @@ class HallOverviewCommand extends Command {
 		PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
 		PHPWS_Core::initModClass('hms', 'HallOverview.php');
 		
-		$hallId = $context->get('hallID');
+		$hallId = $context->get('hallId');
 		
 		if(!isset($hallId)){
 			throw new InvalidArgumentException('Missing hall ID.');

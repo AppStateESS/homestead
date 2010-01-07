@@ -32,10 +32,10 @@ class SelectHallView extends View {
         PHPWS_Core::initCoreClass('Form.php');
         $form = new PHPWS_Form();
         $this->onSelectCmd->initForm($form);
-        
+
         $form->setMethod('get');
         $form->addDropBox('hallId', $this->halls);
-        
+
         $form->addSubmit('submit', _('Select Hall'));
 
         $form->mergeTemplate($tpl);
