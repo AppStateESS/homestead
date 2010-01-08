@@ -40,7 +40,6 @@ abstract class HMS {
 		$cmd = CommandFactory::getCommand($this->context->get('action'));
 		
 		try {
-			throw new Exception('Testing Exceptions');
 			$cmd->execute($this->context);
 		} catch(Exception $e) {
 			try {
