@@ -9,7 +9,6 @@ abstract class ApplicationFeatureRegistration {
     protected $startDateRequired;
     protected $endDateRequired;
     protected $priority;
-    protected $allowedTypes;
 
     abstract function __construct();
 
@@ -32,6 +31,8 @@ abstract class ApplicationFeatureRegistration {
     function getPriority(){
         return $this->priority;
     }
+    
+    public abstract function showForStudent(Student $s);
 
     function getAllowedTypes(){
         return $this->allowedTypes;
