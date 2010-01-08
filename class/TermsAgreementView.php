@@ -23,6 +23,9 @@ class TermsAgreementView extends View {
         $form->setExtra('begin', 'class="hms-application-submit-button"');
         
         $form->addButton('quit', _('I Disagree'));
+        // TODO: Find a Command Pattern way of doing this
+        test('WHAT THE HELL');
+        $form->setExtra('quit', 'onclick="javascript:window.location.href=\"index.php?module=hms&action=DisagreeToTerms\";"');
 
         $tpl = $form->getTemplate();
 
