@@ -21,6 +21,11 @@ class StudentMenuTermBlock {
 		$tpl = array();
 		$tpl['TERM'] = Term::toString($this->term);
 		
+		// In case there are no features enabled for this term
+		if(empty($features)){
+		    $tpl['BLOCKS'][] = array('BLOCK'=>'No options are available for this term.');
+		}
+		
 		foreach($features as $feat){
 			$tpl['BLOCKS'][] = array('BLOCK'=>$feat->getMenuBlockView($this->student)->show());
 		}

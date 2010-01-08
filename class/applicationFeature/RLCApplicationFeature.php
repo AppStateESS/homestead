@@ -10,7 +10,15 @@ class RLCApplicationFeatureRegistration extends ApplicationFeatureRegistration {
         $this->startDateRequired = true;
         $this->endDateRequired = true;
         $this->priority = 2;
-        $this->allowedTypes = array('F');
+    }
+    
+    public function showForStudent(Student $student, $term)
+    {
+        if($student->getType() == TYPE_FRESHMEN && $term == $student->getApplicationTerm()){        
+            return true;
+        }
+        
+        return false;
     }
 }
 

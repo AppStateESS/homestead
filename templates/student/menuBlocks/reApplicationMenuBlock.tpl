@@ -1,4 +1,4 @@
-<h3>Application</h3>
+<h3>Re-Application</h3>
 <!-- BEGIN eligible -->
 You are eligible to re-apply for on-campus housing for the {LOTTERY_TERM_1} - {NEXT_TERM_1} academic year. {ENTRY_LINK}
 <!-- END eligible -->

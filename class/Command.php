@@ -30,7 +30,7 @@ abstract class Command
 	function initForm(PHPWS_Form &$form)
 	{
 		$moduleElement = $form->get('module');
-		if(!isset($moduleElement)){
+		if(PEAR::isError($moduleElement)){
 			$form->addHidden('module', 'hms');
 		}
 		 

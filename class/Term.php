@@ -280,7 +280,7 @@ class Term
 
 		$cmd = CommandFactory::getCommand('SelectTerm');
 		$cmd->initForm($form);
-
+		
 		$form->addDropBox('term', $terms);
 		$form->setMatch('term', self::getSelectedTerm());
 

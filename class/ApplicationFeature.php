@@ -33,10 +33,6 @@ abstract class ApplicationFeatureRegistration {
     }
     
     public abstract function showForStudent(Student $student, $term);
-
-    function getAllowedTypes(){
-        return $this->allowedTypes;
-    }
 }
 
 /**
@@ -313,7 +309,7 @@ abstract class ApplicationFeature {
             $reg = new $regClass;
 
             # Check to see if this feature is allowed for this student
-            if($reg->showForStudent($student, $term)){
+            if(!$reg->showForStudent($student, $term)){
                 continue;
             }
 

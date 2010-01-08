@@ -138,7 +138,7 @@ class HousingApplication {
     {
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
         # Determine which user name to use as the current user
-            $username = UserStatus::getUsername();
+        $username = UserStatus::getUsername();
 
         HMS_Activity_Log::log_activity($this->getUsername(), ACTIVITY_SUBMITTED_APPLICATION, $username, 'Term: ' . $this->getTerm());
     }
@@ -162,7 +162,7 @@ class HousingApplication {
     public function reportToBanner()
     {
         PHPWS_Core::initModClass('hms', 'SOAP.php');
-        
+
         try{
             $soap = SOAP::getInstance();
             $result = $soap->reportApplicationReceived($this->getUsername(), $this->getTerm());
@@ -300,17 +300,24 @@ class HousingApplication {
         $sem = Term::getTermSem($term);
         $app = NULL;
 
-        switch($sem){
-            case TERM_FALL:
-                $app = new FallApplication($result);
-                break;
-            case TERM_SPRING:
-                $app = new SpringApplication($result);
-                break;
-            case TERM_SUMMER1:
-            case TERM_SUMMER2:
-                $app = new SummerApplication($result);
-                break;
+        //TODO find a better way of doing this, or fix this logic
+        if($sem == TERM_FALL && $term > $student->getApplicationTerm())
+        {
+            $app = new LotteryApplication($result);
+        }else{
+
+            switch($sem){
+                case TERM_FALL:
+                    $app = new FallApplication($result);
+                    break;
+                case TERM_SPRING:
+                    $app = new SpringApplication($result);
+                    break;
+                case TERM_SUMMER1:
+                case TERM_SUMMER2:
+                    $app = new SummerApplication($result);
+                    break;
+            }
         }
 
         return $app;

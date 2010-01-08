@@ -10,8 +10,23 @@ class ApplicationRegistration extends ApplicationFeatureRegistration {
 		$this->startDateRequired = true;
 		$this->endDateRequired = true;
 		$this->priority = 1;
-		$this->allowedTypes = array('F', 'C', 'T');
 	}
+	
+    public function showForStudent(Student $student, $term)
+    {
+        // for freshmen
+        if($term == $student->getApplicationTerm())
+        {
+            return true;
+        }
+        
+        // for returning students (summer terms)
+        if($term > $student->getApplicationTerm() && $term != PHPWS_Settings::get('hms', 'lottery_term')){
+            return true;
+        }
+        
+        return false;
+    }
 }
 
 class Application extends ApplicationFeature {

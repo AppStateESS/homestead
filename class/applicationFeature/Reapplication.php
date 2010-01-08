@@ -10,7 +10,15 @@ class ReapplicationRegistration extends ApplicationFeatureRegistration {
 		$this->startDateRequired = true;
 		$this->endDateRequired = true;
 		$this->priority = 1;
-		$this->allowedTypes = array('C');
+	}
+	
+	public function showForStudent(Student $student, $term)
+	{
+	    if($term > $student->getApplicationTerm()){
+	        return true;
+	    }
+	    
+	    return false;
 	}
 }
 
@@ -22,8 +30,6 @@ class Reapplication extends ApplicationFeature {
 		PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
 		PHPWS_Core::initModClass('hms', 'HousingApplication.php');
 		PHPWS_Core::initModClass('hms', 'ReapplicationMenuBlockView.php');
-		
-		//TODO check eligibility!
 		
 		$assignment       = HMS_Assignment::getAssignment($student->getUsername(), $this->term);
 		$application      = HousingApplication::getApplicationByUser($student->getUsername(), $this->term);
