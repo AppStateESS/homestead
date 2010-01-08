@@ -32,7 +32,7 @@ abstract class ApplicationFeatureRegistration {
         return $this->priority;
     }
     
-    public abstract function showForStudent(Student $s);
+    public abstract function showForStudent(Student $student, $term);
 
     function getAllowedTypes(){
         return $this->allowedTypes;
@@ -274,8 +274,8 @@ abstract class ApplicationFeature {
             return FALSE;
         }
          
-        if(!in_array($student->getType(), $feature->getAllowedTypes())){
-            return FALSE;
+        if(!$feature->showForStudent($student, $term)) {
+        	return FALSE;
         }
          
         if(!is_null($result['start_date']) && time() < $result['start_date']){
@@ -313,7 +313,7 @@ abstract class ApplicationFeature {
             $reg = new $regClass;
 
             # Check to see if this feature is allowed for this student
-            if(!in_array($student->getType(), $reg->getAllowedTypes())){
+            if($reg->showForStudent($student, $term)){
                 continue;
             }
 
