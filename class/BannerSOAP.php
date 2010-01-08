@@ -152,13 +152,13 @@ class BannerSOAP extends SOAP{
 
 		# Check for a banner error
 		if(is_numeric($assignment) && $assignment > 0){
-			$this->log_soap('report_room_assignment',
+			$this->logSoap('report_room_assignment',
                 "Banner error: $assignment", $username, $term, $building_code,
 			$room_code, $plan_code, $meal_code);
 			SOAP::logSoapError('Banner error: ' . $assignment, 'report_room_assignment', $username);
 
 			PHPWS_Core::initModClass('hms', 'exception/BannerException.php');
-			throw new BannerException('Banner error', $result);
+			throw new BannerException('Banner error', $assignment);
 		}
 
 		SOAP::logSoap('report_room_assignment', 'success', $username,
