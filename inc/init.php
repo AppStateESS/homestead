@@ -5,5 +5,4 @@
      *
      **********/
 
-    PHPWS_Core::initModClass('hms', 'HMS_Login.php');
 ?>
