@@ -28,6 +28,15 @@ abstract class HMS {
 
 	public function process()
 	{
+		// This hack is the most awful hack ever.  Fix phpWebSite so that
+		// user logins are logged separately.
+    	if(Current_User::isLogged() && !isset($_SESSION['HMS_LOGGED_THE_LOGIN'])) {
+            PHPWS_Core::initModClass('hms','HMS_Activity_Log.php');
+            $username = strtolower(Current_User::getUsername());
+            HMS_Activity_Log::log_activity($username,ACTIVITY_LOGIN, $username, NULL);
+            $_SESSION['HMS_LOGGED_THE_LOGIN'] = $username;
+        }
+		
 		$cmd = CommandFactory::getCommand($this->context->get('action'));
 		
 		try {
