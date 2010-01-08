@@ -15,11 +15,11 @@ class EditResidenceHallViewCommand extends Command {
     function getRequestVars()
     {
         $vars = array('action'=>'EditResidenceHallView');
-        	
+         
         if(isset($this->hallId)){
             $vars['hallId'] = $this->hallId;
         }
-        	
+         
         return $vars;
     }
 
@@ -40,13 +40,22 @@ class EditResidenceHallViewCommand extends Command {
         if(!isset($hallId)){
             throw new InvalidArgumentException('Missing hall ID.');
         }
-        	
+
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
         PHPWS_Core::initModClass('hms', 'ResidenceHallView.php');
-        	
+         
         $hall = new HMS_Residence_Hall($hallId);
+
+        // Check for a hall/term mismatch, since halls are indexed by ID and not by name & term
+        if($hall->term != Term::getSelectedTerm()){
+            $residenceHallCmd = CommandFactory::getCommand('SelectResidenceHall');
+            $residenceHallCmd->setTitle('Edit a Residence Hall');
+            $residenceHallCmd->setOnSelectCmd(CommandFactory::getCommand('EditResidenceHallView'));
+            $residenceHallCmd->redirect();
+        }
+
         $hallView = new ResidenceHallView($hall);
-        	
+         
         $context->setContent($hallView->show());
     }
 }

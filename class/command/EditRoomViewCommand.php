@@ -43,6 +43,14 @@ class EditRoomViewCommand extends Command {
         PHPWS_Core::initModClass('hms', 'RoomView.php');
          
         $room = new HMS_Room($roomId);
+
+        if($room->term != Term::getSelectedTerm()){
+            $roomCmd = CommandFactory::getCommand('SelectRoom');
+            $roomCmd->setTitle('Edit a Room');
+            $roomCmd->setOnSelectCmd(CommandFactory::getCommand('EditRoomView'));
+            $roomCmd->redirect();
+        }
+
         $floor = $room->get_parent();
         $hall = $floor->get_parent();
          

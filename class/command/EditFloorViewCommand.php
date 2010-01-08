@@ -41,6 +41,14 @@ class EditFloorViewCommand extends Command {
         PHPWS_Core::initModClass('hms', 'FloorView.php');
          
         $floor = new HMS_Floor($floorId);
+
+        if($floor->term != Term::getSelectedTerm()){
+            $floorCmd = CommandFactory::getCommand('SelectFloor');
+            $floorCmd->setTitle('Edit a Floor');
+            $floorCmd->setOnSelectCmd(CommandFactory::getCommand('EditFloorView'));
+            $floorCmd->redirect();
+        }
+
         $hall = $floor->get_parent();
         $floorView = new FloorView($hall, $floor);
          

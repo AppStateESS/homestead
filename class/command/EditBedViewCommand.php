@@ -44,6 +44,14 @@ class EditBedViewCommand extends Command {
         PHPWS_Core::initModClass('hms', 'BedView.php');
          
         $bed = new HMS_Bed($bedId);
+
+        if($bed->term != Term::getSelectedTerm()){
+            $bedCmd = CommandFactory::getCommand('SelectBed');
+            $bedCmd->setTitle('Edit a Bed');
+            $bedCmd->setOnSelectCmd(CommandFactory::getCommand('EditBedView'));
+            $bedCmd->redirect();
+        }
+
         $room = $bed->get_parent();
         $floor = $room->get_parent();
         $hall = $floor->get_parent();
