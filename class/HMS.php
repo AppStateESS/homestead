@@ -40,18 +40,17 @@ abstract class HMS {
 		$cmd = CommandFactory::getCommand($this->context->get('action'));
 		
 		try {
+			throw new Exception('Testing Exceptions');
 			$cmd->execute($this->context);
-		} catch (UnsupportedFunctionException $e){
-			NQ::Simple('hms', HMS_NOTIFICATION_ERROR, 'Unsupported Function Exception: ' . $e->getMessage());
-		} 
-		
-		/*
-		catch(Exception $e) {
+		} catch(Exception $e) {
 			try {
 				$message = $this->formatException($e);
 				NQ::Simple('hms', HMS_NOTIFICATION_ERROR, 'An internal error has occurred, and the authorities have been notified.  We apologize for the inconvenience.');
 				self::emailError($message);
-				CommandContext::goBack();
+				PHPWS_Core::initModClass('hms', 'HMSNotificationView.php');
+				$nv = new HMSNotificationView();
+				$nv->popNotifications();
+				Layout::add($nv->show());
 			} catch(Exception $e) {
 				$message2 = $this->formatException($e);
 				echo "HMS has experienced a major internal error.  Attempting to email an admin and then exit.";
@@ -60,7 +59,6 @@ abstract class HMS {
 				exit();
 			}
 		}
-		*/
 	}
 
 	private function formatException(Exception $e)
@@ -83,21 +81,13 @@ abstract class HMS {
 
 	private static function emailError($message)
 	{
-		/*
-		PHPWS_Core::initModClass('hms', 'EmailMessage.php');
-		$to = HMSSettings::getUberAdminEmail();
-		$to = 'jbooker@tux.appstate.edu';
-
-		if(is_null($to) || empty($to)) {
-			throw new Exception('No Uber Admin Email was set.  Please check HMS Global Settings.');
-		}
-		$email = new EmailMessage($to, 'hms_system', $to, NULL, NULL, NULL, 'Uncaught Exception', 'email/admin/UncaughtException.tpl');
-
-		$email_tags = array('MESSAGE' => $message);
-
-		$email->setTags($email_tags);
-		$email->send();
-		*/
+		PHPWS_Core::initModClass('hms', 'HMS_Email.php');
+		//$to = HMSSettings::getUberAdminEmail();
+		$to = HMS_Email::get_tech_contacts();
+		
+		$tags = array('MESSAGE' => $message);
+		HMS_Email::send_template_message($to, 'Uncaught Exception',
+		    'email/UncaughtException.tpl', $tags);
 	}
 
 	protected function saveState()
