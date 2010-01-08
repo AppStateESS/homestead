@@ -33,7 +33,7 @@ class TestSOAP extends SOAP{
         $student->deposit_waved         = 'false';
 
    		$student->student_type          = 'F';
-   		$student->application_term      = '201010';
+   		$student->application_term      = '201040';
    		$student->projected_class       = 'FR';
 
         //$student->student_type          = 'C';

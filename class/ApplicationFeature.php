@@ -340,19 +340,22 @@ abstract class ApplicationFeature {
     	$db->addWhere('name', $name);
     	$db->addWhere('term', $term);
     	$result = $db->select('one');
-        
+    	
         if(PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         }
     	
     	if(count($result) > 0) {
-    		// TODO: Load from DB
-    		return NULL;
+    		return self::getInstanceById($result);
     	}
     	
+    	/*
     	$f = self::getInstanceByName($name);
     	$f->setTerm($term);
     	return $f;
+    	*/
+    	
+    	return NULL;
     }
     
     public static function getInstanceByName($name)
