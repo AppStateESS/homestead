@@ -32,13 +32,25 @@ class TestSOAP extends SOAP{
         $student->deposit_date          = '';
         $student->deposit_waved         = 'false';
 
-   		$student->student_type          = 'F';
-   		$student->application_term      = '201040';
-   		$student->projected_class       = 'FR';
+   		//$student->student_type          = 'F';
+   		//$student->application_term      = '201010';
+   		//$student->projected_class       = 'FR';
 
-        //$student->student_type          = 'C';
-        //$student->application_term      = '200840';
-        //$student->projected_class       = 'SR';
+        $student->student_type          = 'C';
+        $student->application_term      = '200840';
+        $student->projected_class       = 'SR';
+
+        if($username == 'housing_test_spring_freshmen'){
+            $student->student_type      = 'F';
+            $student->application_term  = '201010';
+            $student->projected_class   = 'FR';
+        }
+
+        if($username == 'housing_test_fall_freshmen'){
+            $student->student_type      = 'F';
+            $student->application_term  = '2010140';
+            $student->projected_class   = 'FR';
+        }
 
         //$student->student_type          = 'T';
         //$student->application_term      = '200940';
