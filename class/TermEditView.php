@@ -66,7 +66,9 @@ class TermEditView extends View {
 		
 		// Terms and Conditions
 		$tpl['TERMS_CONDITIONS_LEGEND'] = dgettext('hms', 'Terms and Conditions');
-		// TODO: Upload File Javascript
+		PHPWS_Core::initModClass('hms', 'TermsConditionsAdminView.php');
+		$tcav = new TermsConditionsAdminView(Term::getSelectedTerm());
+		$tpl['TERMS_CONDITIONS_CONTENT'] = $tcav->show();
 		
 		// Features and Deadlines
 		$tpl['FEATURES_DEADLINES_LEGEND'] = dgettext('hms', 'Important Dates and Deadlines');

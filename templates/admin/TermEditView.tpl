@@ -9,6 +9,9 @@
             <p>{BANNER_QUEUE_TEXT}<!-- BEGIN BQ_LINK -->&nbsp;&nbsp;[{BANNER_QUEUE_LINK}]<!-- END BQ_LINK --></p>
             <!-- BEGIN BANNER_QUEUE_PROCESS --><p>{BANNER_QUEUE_COUNT}<!-- BEGIN BQP_LINK --> [{BANNER_QUEUE_PROCESS}]<!-- END BQP_LINK --></p><!-- END BANNER_QUEUE_PROCESS -->
         </fieldset>
+        <fieldset><legend>{TERMS_CONDITIONS_LEGEND}</legend>
+            {TERMS_CONDITIONS_CONTENT}
+        </fieldset>
         <fieldset><legend>{FEATURES_DEADLINES_LEGEND}</legend>
             {FEATURES_DEADLINES_CONTENT}
         </fieldset>
