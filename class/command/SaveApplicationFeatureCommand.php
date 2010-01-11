@@ -64,7 +64,8 @@ class SaveApplicationFeatureCommand extends Command {
         if(!is_null($featureId)) {
         	$feature = ApplicationFeature::getInstanceById($featureId);
         } else if(!is_null($name) && !is_null($term)) {
-        	$feature = ApplicationFeature::getInstanceByNameAndTerm($name, $term);
+        	$feature = ApplicationFeature::getInstanceByName($name);
+            $feature->setTerm($term);
         } else {
         	throw new InvalidArgumentException('You must either provide a featureId, or a name and a term.');
         }
