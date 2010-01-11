@@ -13,6 +13,7 @@ class ShowStudentMenuCommand extends Command {
 
     public function execute(CommandContext $context){
 
+        test('got here');
         $currentTerm = Term::getCurrentTerm();
         $username = UserStatus::getUsername();
 
@@ -36,13 +37,11 @@ class ShowStudentMenuCommand extends Command {
         $studentType === FALSE ||
         $studentClass === FALSE ||
         $dob === FALSE ||
-        $gender === FALSE ||
         empty($applicationTerm) ||
         empty($studentType) ||
         empty($studentClass) ||
         empty($dob) ||
-        is_null($dob) ||
-        empty($gender))
+        is_null($dob))
         {
             # TODO: HMS_Mail here
             PHPWS_Error::log('Initial banner lookup failed', 'hms', 'show_welcome_screen', "username: {$_SESSION['asu_username']}");
@@ -58,6 +57,7 @@ class ShowStudentMenuCommand extends Command {
         }else{
             $deadlines = HMS_Deadlines::get_deadlines($applicationTerm);
         }
+
 
         /******************************************
          * Sort returning students (lottery) from *
