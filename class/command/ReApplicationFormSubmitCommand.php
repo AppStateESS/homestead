@@ -75,14 +75,15 @@ class ReApplicationFormSubmitCommand extends Command {
                 NQ::simple('hms', HMS_NOTIFICATION_ERROR, "'$roomie' is an invalid user name. Hint: Your roommate's user name is the first part of his/her email address.");
                 $errorCmd->redirect();
             }
-
-            $roommateStudent = StudentFactory::getStudentByUsername($roomie, $term);
-            $bannerId = $roommateStudent->getBannerId();
-
-            if(!isset($bannerId) || is_null($bannerId) || empty($bannerId)){
+            
+            try{
+                $roommateStudent = StudentFactory::getStudentByUsername($roomie, $term);
+            }catch(StudentNotFoundException $e){
                 NQ::simple('hms', HMS_NOTIFICATION_ERROR, "'$roomie' is not a valid ASU user name. Hint: Your roommate's user name is the first part of his/her email address.");
                 $errorCmd->redirect();
             }
+            
+            $bannerId = $roommateStudent->getBannerId();
 
             # Check to make sure the roommate is eligible for reapplication
             if(!HMS_Lottery::determineEligibility($roomie)){
