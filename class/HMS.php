@@ -37,7 +37,7 @@ abstract class HMS {
             $_SESSION['HMS_LOGGED_THE_LOGIN'] = $username;
         }
 		
-        if(!Currest_User::isLogged() && $this->context->get('action') != 'ShowFrontPage'){
+        if(!Current_User::isLogged() && $this->context->get('action') != 'ShowFrontPage'){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You must be logged in to do that.');
             $action = 'ShowFrontPage';
         }else{
