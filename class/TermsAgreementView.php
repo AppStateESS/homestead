@@ -25,9 +25,12 @@ class TermsAgreementView extends View {
         $form->setExtra('quit', 'onclick="javascript:window.location.href='."'".'index.php?module=users&action=user&command=logout'."'".';"');
 
         $tpl = $form->getTemplate();
+        
+        $term = new Term($this->term);
 
         $tpl['TERM'] = Term::toString($this->term);
-        $tpl['CONTRACT'] = str_replace("\n", "<br />", file_get_contents('mod/hms/inc/contract.txt'));
+        $tpl['TXT_CONTRACT'] = file_get_contents($term->getTxtTerms());
+        $tpl['PDF_CONTRACT'] = $term->getPdfTerms();
 
         return PHPWS_Template::process($tpl, 'hms', 'student/applications/contract.tpl');
 	}
