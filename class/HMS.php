@@ -37,7 +37,13 @@ abstract class HMS {
             $_SESSION['HMS_LOGGED_THE_LOGIN'] = $username;
         }
 		
-		$cmd = CommandFactory::getCommand($this->context->get('action'));
+        if(!Currest_User::isLogged() && $this->context->get('action') != 'ShowFrontPage'){
+            $action = 'ShowFrontPage';
+        }else{
+            $action = $this->context->get('action'); 
+        }
+        
+		$cmd = CommandFactory::getCommand($action);
 		
 		try {
 			$cmd->execute($this->context);
