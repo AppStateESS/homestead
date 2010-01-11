@@ -38,6 +38,7 @@ abstract class HMS {
         }
 		
         if(!Currest_User::isLogged() && $this->context->get('action') != 'ShowFrontPage'){
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You must be logged in to do that.');
             $action = 'ShowFrontPage';
         }else{
             $action = $this->context->get('action'); 
