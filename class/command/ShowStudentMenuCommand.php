@@ -13,7 +13,6 @@ class ShowStudentMenuCommand extends Command {
 
     public function execute(CommandContext $context){
 
-        test('got here');
         $currentTerm = Term::getCurrentTerm();
         $username = UserStatus::getUsername();
 
