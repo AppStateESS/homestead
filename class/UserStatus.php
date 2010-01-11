@@ -21,14 +21,14 @@ class UserStatus
 	{
 		return !self::isMasquerading() &&
 		Current_User::isLogged() &&
-		Current_User::allow('sdr', 'admin');
+		Current_User::isUnrestricted('hms');
 	}
 
 	public static function isUser()
 	{
 		return self::isMasquerading() ||
 		(Current_User::isLogged() &&
-		!Current_User::allow('sdr', 'admin'));
+		!Current_User::isUnrestricted('hms'));
 	}
 
 	public static function isGuest()
