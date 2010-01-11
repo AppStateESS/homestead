@@ -30,6 +30,9 @@
         <td>{GENDER_NEED}</td>
     </tr>
     <tr>
+        <td>{SPECIAL_INTEREST_LABEL}</td>
+        <td>{SPECIAL_INTEREST}</td>
+    <tr>
         <td></td>
         <td align=right>{ENTER_INTO_LOTTERY}</td>
     </tr>

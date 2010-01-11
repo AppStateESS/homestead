@@ -1,4 +1,5 @@
 <?php
+PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
 
 class LotteryAdminEntryView extends View {
 
@@ -28,6 +29,9 @@ class LotteryAdminEntryView extends View {
 
         $form->addCheck('gender_need');
         $form->setLabel('gender_need', 'Gender Need');
+
+        $form->addSelect('special_interest', HMS_Lottery::get_special_interest_groups());
+        $form->setLabel('special_interest', 'Special Interest Group');
 
         $form->addSubmit('enter_into_lottery', 'Add to lottery');
 

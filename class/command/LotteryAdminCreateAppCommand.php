@@ -25,10 +25,10 @@ class LotteryAdminCreateAppCommand extends Command {
         $psychDisability    = $context->get('psych_disability');
         $genderNeed         = $context->get('gender_need');
         $medicalNeed        = $context->get('medical_need');
-
+        $specialInterest    = $context->get('special_interest');
         $viewCmd = CommandFactory::getCommand('ShowLotteryAdminEntry');
 
-        $application = new LotteryApplication(0, $term, $student->getBannerId(), $student->getUsername(), $student->getGender(), $student->getType(), $student->getApplicationTerm(), null, BANNER_MEAL_STD, $physicalDisability, $psychDisability, $genderNeed, $medicalNeed);
+        $application = new LotteryApplication(0, $term, $student->getBannerId(), $student->getUsername(), $student->getGender(), $student->getType(), $student->getApplicationTerm(), null, BANNER_MEAL_STD, $physicalDisability, $psychDisability, $genderNeed, $medicalNeed, NULL, $specialInterest);
 
         try{
             $application->save();
@@ -41,3 +41,4 @@ class LotteryAdminCreateAppCommand extends Command {
         $viewCmd->redirect();
     }
 }
+?>
