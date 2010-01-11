@@ -25,13 +25,13 @@ class TermsConditionsAdminView extends View
 		if(is_null($pdf) || empty($pdf)) {
 			$tpl['PDF'] = 'No PDF has been uploaded.';
 		} else {
-			// TODO
+			$tpl['PDF'] = '<a href="'.$pdf.'">View PDF</a>';
 		}
 		
 		if(is_null($txt) || empty($txt)) {
 			$tpl['TXT'] = 'No Plain Text has been uploaded.';
 		} else {
-			// TODO
+			$tpl['TXT'] = '<a href="'.$txt.'">View Plain Text</a>';
 		}
 		
 		$cmd = CommandFactory::getCommand('ShowUploadTermsConditions');
@@ -42,8 +42,8 @@ class TermsConditionsAdminView extends View
 		$cmd->setType('txt');
 		$tpl['TXT_UPLOAD'] = $cmd->getLink('Upload Plain Text', NULL, 'popup-link', 'Upload Plain Text');
 		
-		$vars=array('LINK_SELECTOR' => 'a.popup-link');
-		javascript('linkPopup');
+		$vars=array('LINK_SELECT' => 'a.popup-link');
+		javascript('modules/hms/linkPopup', $vars);
 		
 		return PHPWS_Template::process($tpl, 'hms', 'admin/TermsConditionsAdminView.tpl');
 	}

@@ -17,7 +17,6 @@ class TermsAgreementView extends View {
 		
 		$form = new PHPWS_Form;
 		$this->submitCommand->initForm($form);
-		
         
         $form->addSubmit('begin', _('I Agree'));
         $form->setExtra('begin', 'class="hms-application-submit-button"');
