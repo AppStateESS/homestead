@@ -100,10 +100,10 @@ class ReApplicationFormSaveCommand extends Command {
                 $errorCmd->redirect();
             }
 
-            $roommateStudent = StudentFactory::getStudentByUsername($roomie, $term);
-            $bannerId = $roommateStudent->getBannerId();
-
-            if(!isset($bannerId) || is_null($bannerId) || empty($bannerId)){
+            try {
+                $roommateStudent = StudentFactory::getStudentByUsername($roomie, $term);
+                $bannerId = $roommateStudent->getBannerId();
+            }catch(StudentNotFoundException $e){
                 NQ::simple('hms', HMS_NOTIFICATION_ERROR, "'$roomie' is not a valid ASU user name. Hint: Your roommate's user name is the first part of his/her email address.");
                 $errorCmd->redirect();
             }
@@ -123,7 +123,7 @@ class ReApplicationFormSaveCommand extends Command {
                 NQ::simpe('hms', HMS_NOTIFICATION_ERROR, "$roomie is not the same gender as you. Please try again.");
                 $errorCmd->redirect();
             }
-            
+
             $roommateObjects[] = $roommateStudent;
         }
 
@@ -144,7 +144,7 @@ class ReApplicationFormSaveCommand extends Command {
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'There was an error saving your re-application. Please try again or contact the Department of Housing & Residence Life.');
             $errorCmd->redirect();
         }
-        
+
         # Log the fact that the entry was saved
         HMS_Activity_Log::log_activity(UserStatus::getUsername(), ACTIVITY_LOTTERY_ENTRY, UserStatus::getUsername());
 
