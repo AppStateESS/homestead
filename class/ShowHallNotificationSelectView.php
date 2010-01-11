@@ -17,12 +17,17 @@ class ShowHallNotificationSelectView extends View {
         if(!Current_User::allow('hms', 'email_hall')){
              return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
         }
+        
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
+        
+        $submitCmd = CommandFactory::getCommand('ShowHallNotificationEdit');
 
         $tpl=array();
         if(Current_User::allow('hms', 'email_all')){
             $halls = HMS_Residence_Hall::get_halls(Term::getSelectedTerm());
             $form = new PHPWS_Form('select_halls_to_email');
+            $submitCmd->initForm($form);
+            
             foreach($halls as $hall){
                 if($hall->is_online != 1){
                     continue;
@@ -31,8 +36,10 @@ class ShowHallNotificationSelectView extends View {
                     $form->setLabel('hall['.$hall->id.']', $hall->hall_name);
                 }
             }
-            $form->addHidden('action', 'ShowHallNotificationEdit');
-            $form->addSubmit('Continue'); 
+            
+            //$form->addHidden('module', 'hms');
+            //$form->addHidden('action', 'ShowHallNotificationEdit');
+            $form->addSubmit('Continue');
 
             $i=0;
             $elements = $form->getTemplate();
