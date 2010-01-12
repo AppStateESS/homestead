@@ -59,6 +59,7 @@ class AssignStudentCommand extends Command {
     public function execute(CommandContext $context)
     {
         PHPWS_Core::initModClass('hms', 'HousingApplication.php');
+        PHPWS_Core::initModClass('hms', 'FallApplication.php');
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
         PHPWS_Core::initModClass('hms', 'HMS_Room.php');
@@ -95,7 +96,7 @@ class AssignStudentCommand extends Command {
             NQ::simple('hms', HMS_NOTIFICATION_WARNING, 'Warning: No housing application found for this student in this term.');
         }else{
             # Create application object (it doesn't really matter that we always create a fall application)
-            $application = new FallApplication($applicationStatus['id']);
+            $application = new HousingApplication($applicationStatus['id']);
         }
 
         # If the student is already assigned, redirect to the confirmation screen. If the student is already assigned
