@@ -48,7 +48,11 @@ class StudentProfileView extends View {
 		$tpl['CLASS'] = $this->student->getPrintableClass();
 
 		$tpl['TYPE'] = $this->student->getPrintableType();
-		$tpl['APPLICATION_TERM'] = Term::toString($this->student->getApplicationTerm());
+		try {
+		    $tpl['APPLICATION_TERM'] = Term::toString($this->student->getApplicationTerm());
+		} catch(InvalidTermException $e) {
+			$tpl['APPLICATION_TERM'] = 'WARNING: Application Term is bad or missing: "'.$this->student->getApplicationTerm().'"';
+		}
 
 		/*****************
 		 * Phone Numbers *
