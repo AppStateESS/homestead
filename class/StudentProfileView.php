@@ -51,6 +51,7 @@ class StudentProfileView extends View {
 		try {
 		    $tpl['APPLICATION_TERM'] = Term::toString($this->student->getApplicationTerm());
 		} catch(InvalidTermException $e) {
+		    NQ::simple('hms', HMS_NOTIFICATION_WARNING, 'Application term is bad or missing.');
 			$tpl['APPLICATION_TERM'] = 'WARNING: Application Term is bad or missing: "'.$this->student->getApplicationTerm().'"';
 		}
 
