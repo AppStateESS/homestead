@@ -176,7 +176,7 @@ class Notification {
         } else if(empty($_REQUEST['body'])){
             return Notification::show_edit_email('You must fill in the message to be sent.', $_REQUEST['subject'], '');
         }
-        $from       = isset($_REQUEST['anonymous']) && Current_User::allow('hms', 'anonymous_notification') ? ANONYMOUS_FROM_ADDRESS : Current_User::getEmail();
+        $from       = isset($_REQUEST['anonymous']) && Current_User::allow('hms', 'anonymous_notification') ? FROM_ADDRESS : Current_User::getEmail();
         $subject    = $_REQUEST['subject'];
         $body       = $_REQUEST['body'];
 
@@ -186,7 +186,7 @@ class Notification {
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
         
         // Log that this is happening
-        if($from == ANONYMOUS_FROM_ADDRESS){
+        if($from == FROM_ADDRESS){
             HMS_Activity_Log::log_activity(Current_User::getUsername(), ACTIVITY_ANON_NOTIFICATION_SENT, Current_User::getUsername());
         }else{
             HMS_Activity_Log::log_activity(Current_User::getUsername(), ACTIVITY_NOTIFICATION_SENT, Current_User::getUsername());
@@ -205,7 +205,7 @@ class Notification {
                         }
                     }
                 }
-                if($from == ANONYMOUS_FROM_ADDRESS){
+                if($from == FROM_ADDRESS){
                     HMS_Activity_Log::log_activity(Current_User::getUsername(), ACTIVITY_HALL_NOTIFIED_ANONYMOUSLY, Current_User::getUsername(), $hall->hall_name);
                 } else {
                     HMS_Activity_Log::log_activity(Current_User::getUsername(), ACTIVITY_HALL_NOTIFIED, Current_User::getUsername(), $hall->hall_name);
@@ -223,7 +223,7 @@ class Notification {
                     }
                 }
             }
-            if($from == ANONYMOUS_FROM_ADDRESS){
+            if($from == FROM_ADDRESS){
                 HMS_Activity_Log::log_activity(Current_User::getUsername(), ACTIVITY_HALL_NOTIFIED_ANONYMOUSLY, Current_User::getUsername(), $hall->hall_name);
             } else {
                 HMS_Activity_Log::log_activity(Current_User::getUsername(), ACTIVITY_HALL_NOTIFIED, Current_User::getUsername(), $hall->hall_name);
