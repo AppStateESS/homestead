@@ -1233,19 +1233,19 @@ class HMS_Reports{
         $term = Term::getCurrentTerm();
 
         $db = new PHPWS_DB('hms_new_application');
-        $db->setSQLQuery("SELECT DISTINCT * FROM (SELECT * FROM hms_new_application WHERE term = $term UNION SELECT * FROM hms_assignment WHERE term = $term)");
-        $results = $db->select();
-        
+        $db->setSQLQuery("SELECT DISTINCT * FROM (SELECT username FROM hms_new_application WHERE term = $term UNION SELECT asu_username FROM hms_assignment WHERE term = $term) as foo");
+        $results = $db->select('col');
+
         if(PHPWS_Error::logIfError($results)){
             Layout::add('<div color="font-color: red;">An error occured running the "Over-25" report, please contact ESS if this problem persists.</div>');
             return false;
         }
 
-        foreach($results as $result){
+        foreach($results as $username){
             try{
-                $student = StudentFactory::getStudentByUsername($result['username'], $term);
+                $student = StudentFactory::getStudentByUsername($username, $term);
             }catch(StudentNotFoundException $e){
-                NQ::simple('hms', HMS_NOTIFICATION_WARNING, "Could not find data for {$result['username']}.");
+                NQ::simple('hms', HMS_NOTIFICATION_WARNING, "Could not find data for {$username}.");
                 continue;
             }
 
