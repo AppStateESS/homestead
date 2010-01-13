@@ -26,7 +26,7 @@ class SendNotificationEmailsCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        if(!Current_User::allow('hms', 'message_hall')){
+        if(!Current_User::allow('hms', 'message_hall') && !Current_User::allow('hms', 'message_all')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to send messages.');
         }
