@@ -55,12 +55,12 @@ class StudentFactory {
 		
 		$phoneNumbers = array();
 		
-		if(is_array($soapData->phone)){
+		if(isset($soapData->phone) && is_array($soapData->phone)){
             foreach($soapData->phone as $phone_number){
                 $phoneNumbers[] = '('.$phone_number->area_code.') '.$phone_number->number . (!empty($phone_number->ext) ? ' ext. '.$phone_number->ext : '');
             }
-        }else{
-            $phone_umber = $soapData->phone;
+        }elseif (isset($soapData->phone)){
+            $phone_number = $soapData->phone;
             $phoneNumbers[] = '('.$phone_number->area_code.') '.$phone_number->number . (!empty($phone_number->ext) ? ' ext. '.$phone_number->ext : '');
         }
         
