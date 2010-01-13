@@ -1242,7 +1242,12 @@ class HMS_Reports{
         }
 
         foreach($results as $result){
-            $student = StudentFactory::getStudentByUsername($result['username'], $term);
+            try{
+                $student = StudentFactory::getStudentByUsername($result['username'], $term);
+            }catch(StudentNotFoundException $e){
+                NQ::simple('hms', HMS_NOTIFICATION_WARNING, "Could not find data for {$result['username']}.");
+                continue;
+            }
 
             if(strtotime("-25 years") > strtotime($student->getDob())){
                 $tpl['students'][] = array('NAME'     => $student->getFullNameProfileLink(),
