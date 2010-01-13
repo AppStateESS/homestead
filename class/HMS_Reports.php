@@ -1227,11 +1227,13 @@ class HMS_Reports{
     }
 
     public function over_twenty_five_report(){
-        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
         $tpl = array();
+        
+        $term = Term::getCurrentTerm();
 
         $db = new PHPWS_DB('hms_new_application');
-        $db->addWhere('term', HMS_Term::get_current_term());
+        $db->addWhere('term', $term);
         $results = $db->select();
         
         if(PHPWS_Error::logIfError($results)){
@@ -1240,13 +1242,13 @@ class HMS_Reports{
         }
 
         foreach($results as $result){
-            $student = HMS_SOAP::get_student_info($result['username']);
+            $student = StudentFactory::getStudentByUsername($result['username'], $term);
 
-            if(strtotime("-25 years") > strtotime($student->dob)){
-                $tpl['students'][] = array('NAME'     => $student->last_name.' '.$student->first_name,
+            if(strtotime("-25 years") > strtotime($student->getDob())){
+                $tpl['students'][] = array('NAME'     => $student->getFullNameProfileLink(),
                                            'ASU_USERNAME'  => $result['username'],
-                                           'DATE_OF_BIRTH' => $student->dob,
-                                           'BANNER_ID'     => $student->banner_id);
+                                           'DATE_OF_BIRTH' => $student->getDob(),
+                                           'BANNER_ID'     => $student->getBannerId());
             }
         }
 
