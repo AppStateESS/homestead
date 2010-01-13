@@ -41,9 +41,9 @@ class UserStatus
 		return isset($_SESSION['hms_masquerade_username']);
 	}
 
-	public static function getUsername()
+	public static function getUsername($respectMask = TRUE)
 	{
-		if(self::isMasquerading()) {
+		if(self::isMasquerading() && $respectMask) {
 			return $_SESSION['hms_masquerade_username'];
 		}
 

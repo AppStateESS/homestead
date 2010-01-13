@@ -160,7 +160,7 @@
         </div>
     </div>
 </div>
-<div class="flora" id="note_dialog" title="Enter a note for: {FIRST_NAME} {MIDDLE_NAME} {LAST_NAME}">
+<div id="note_dialog" title="Enter a note for: {FIRST_NAME} {MIDDLE_NAME} {LAST_NAME}">
 {START_FORM}
 {NOTE}
 <br>

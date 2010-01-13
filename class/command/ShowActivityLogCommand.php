@@ -2,9 +2,38 @@
 
 class ShowActivityLogCommand extends Command {
 
+    private $acteeUsername;
+    private $actorUsername;
+    private $activity;
+
+    public function setActeeUsername($username){
+        $this->acteeUsername = $username;
+    }
+
+    public function setActorUsername($username){
+        $this->actorUsername = $username;
+    }
+
+    public function setActivity(Array $activity){
+        $this->activity = $activity;
+    }
 
     function getRequestVars(){
         $vars = array('action'=>'ShowActivityLog');
+
+        if(isset($this->acteeUsername)){
+            $vars['actee'] = $this->acteeUsername;
+        }
+
+        if(isset($this->actorUsername)){
+            $vars['actor'] = $this->actorUsername;
+        }
+
+        if(isset($this->activity) && !empty($this->activity)){
+            foreach($this->activity as $act){
+                $vars["a$act"] = 1;
+            }
+        }
 
         return $vars;
     }

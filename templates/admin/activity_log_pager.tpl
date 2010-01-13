@@ -1,3 +1,7 @@
+<!-- BEGIN empty_table -->
+<p>{EMPTY_MESSAGE}</p>
+<!-- END empty_table -->
+
 <!-- BEGIN listrows -->
 <div style="margin-bottom: 1em; border: solid 1px #ccc;">
 <div style="color: #333; font-size: 80%; background: #ccc; padding: .25em;">

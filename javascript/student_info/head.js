@@ -53,19 +53,16 @@ $(document).ready(function(){
     var statusToggle       = new hideOther("status_toggle",       "housing_status",       false);
     var applicationToggle  = new hideOther("application_toggle",  "applications",         false);
     
-    $("#note_dialog").hide();
+    $("#note_dialog").dialog(
+            { 
+                modal: true,
+                autoOpen: false,
+                width: 350,
+                height: 250
+            });
+    
     $("#add_note").click(function(){
-        $("#note_dialog").show();
-        $("#note_dialog").dialog(
-        { 
-            modal: true, 
-            width: 350,
-            height: 250,
-            overlay: { 
-                opacity: 0.5, 
-                background: "black" 
-            } 
-        });
+        $("#note_dialog").dialog('open');
     });
 });
 </script>

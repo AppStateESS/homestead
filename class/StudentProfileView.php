@@ -20,8 +20,8 @@ class StudentProfileView extends View {
 
 	public function show()
 	{
-		javascript('/jquery/');
-		javascript('/modules/hms/jquery_ui/');
+		javascript('jquery');
+		javascript('jquery_ui');
 		javascript('/modules/hms/student_info/');
 
 		$tpl = array();
@@ -183,12 +183,13 @@ class StudentProfileView extends View {
 		/*********
 		 * Notes *
 		 *********/
-		$form = &new PHPWS_Form('add_note_dialog');
+		$addNoteCmd = CommandFactory::getCommand('AddNote');
+		$addNoteCmd->setUsername($this->student->getUsername());
+		
+		$form = new PHPWS_Form('add_note_dialog');
+		$addNoteCmd->initForm($form);
+		
 		$form->addTextarea('note');
-		$form->addHidden('module',   'hms');
-		$form->addHidden('type',     'student');
-		$form->addHidden('op',       'get_matching_students');
-		$form->addHidden('username', $this->student->getUsername());
 		$form->addSubmit('Add Note');
 
 		/********
@@ -200,14 +201,20 @@ class StudentProfileView extends View {
 
 		if( Current_User::allow('hms', 'view_activity_log') && Current_User::allow('hms', 'view_student_log') ){
 			PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-			$activityLogPager = new ActivityLogPager(null, $this->student->getUsername(), null, true, null, null, $everything_but_notes, true, 10);
-			$activityNotePager = new ActivityLogPager(null, $this->student->getUsername(), null, true, null, null, array(0 => ACTIVITY_ADD_NOTE), true, 10);
+			$activityLogPager = new ActivityLogPager($this->student->getUsername(), null, null, true, null, null, $everything_but_notes, true, 10);
+			$activityNotePager = new ActivityLogPager($this->student->getUsername(), null, null, true, null, null, array(0 => ACTIVITY_ADD_NOTE), true, 10);
 			 
 			$tpl['LOG_PAGER'] = $activityLogPager->show(); 
 			$tpl['NOTE_PAGER'] = $activityNotePager->show();
 
-			$tpl['LOG_PAGER'] .= '<div align=center>[<a href="index.php?module=hms&type=student&op=get_matching_students&username='.$this->student->getUsername() .'&tab=student_logs">View More</a>]';
-			$tpl['NOTE_PAGER'] .= '<div align=center>[<a href="index.php?module=hms&type=student&op=get_matching_students&username='.$this->student->getUsername().'&tab=student_logs&a'. ACTIVITY_ADD_NOTE .'=1">View More</a>]';
+			$logsCmd = CommandFactory::getCommand('ShowActivityLog');
+			$logsCmd->setActeeUsername($this->student->getUsername());
+			$tpl['LOG_PAGER'] .= $logsCmd->getLink('View more');
+			
+			$notesCmd = CommandFactory::getCommand('ShowActivityLog');
+			$notesCmd->setActeeUsername($this->student->getUsername());
+			$notesCmd->setActivity(array(0 =>ACTIVITY_ADD_NOTE));
+			$tpl['NOTE_PAGER'] .= $notesCmd->getLink('View more');
 		}
 
 		$tpl = array_merge($tpl, $form->getTemplate());
