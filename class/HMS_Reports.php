@@ -1233,7 +1233,7 @@ class HMS_Reports{
         $term = Term::getCurrentTerm();
 
         $db = new PHPWS_DB('hms_new_application');
-        $db->addWhere('term', $term);
+        $db->setSQLQuery("SELECT DISTINCT * FROM (SELECT * FROM hms_new_application WHERE term = $term UNION SELECT * FROM hms_assignment WHERE term = $term)");
         $results = $db->select();
         
         if(PHPWS_Error::logIfError($results)){
