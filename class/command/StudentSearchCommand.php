@@ -28,6 +28,11 @@ class StudentSearchCommand extends Command {
             } else {
                 $student = StudentFactory::getStudentByUsername($userid, $term);
             }
+        }catch (InvalidArgumentException $e){
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, $e->getMessage());
+            $cmd = CommandFactory::getCommand('ShowStudentSearch');
+            $cmd->setUsername($userid);
+            $cmd->redirect();
         }catch (StudentNotFoundException $e){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, $e->getMessage());
             $cmd = CommandFactory::getCommand('ShowStudentSearch');
