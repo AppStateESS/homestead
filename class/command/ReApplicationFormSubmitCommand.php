@@ -97,7 +97,7 @@ class ReApplicationFormSubmitCommand extends Command {
             }
 
             if($roommateStudent->getGender() != $student->getGender()){
-                NQ::simpe('hms', HMS_NOTIFICATION_ERROR, "$roomie is not the same gender as you. Please try again.");
+                NQ::simple('hms', HMS_NOTIFICATION_ERROR, "$roomie is not the same gender as you. Please try again.");
                 $errorCmd->redirect();
             }
         }
