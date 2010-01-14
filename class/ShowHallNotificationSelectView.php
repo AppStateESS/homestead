@@ -20,13 +20,15 @@ class ShowHallNotificationSelectView extends View {
         
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
         
+        $halls = HMS_Residence_Hall::get_halls(Term::getSelectedTerm());
+
         $submitCmd = CommandFactory::getCommand('ShowHallNotificationEdit');
+        $form = new PHPWS_Form('select_halls_to_email');
+        $submitCmd->initForm($form);
 
         $tpl=array();
+        
         if(Current_User::allow('hms', 'email_all')){
-            $halls = HMS_Residence_Hall::get_halls(Term::getSelectedTerm());
-            $form = new PHPWS_Form('select_halls_to_email');
-            $submitCmd->initForm($form);
             
             foreach($halls as $hall){
                 if($hall->is_online != 1){
@@ -37,10 +39,8 @@ class ShowHallNotificationSelectView extends View {
                 }
             }
             
-            //$form->addHidden('module', 'hms');
-            //$form->addHidden('action', 'ShowHallNotificationEdit');
-            $form->addSubmit('Continue');
-
+            $form->addSubmit('submit', 'Continue');
+            
             $i=0;
             $elements = $form->getTemplate();
             foreach($elements as $row){
@@ -63,9 +63,19 @@ class ShowHallNotificationSelectView extends View {
                 $i++;
             }
         } else {
-            $tpl['SELECT'] = HMS_Residence_Hall::show_select_residence_hall('Select recipient Hall', 'notification', 'edit');
+            //TODO use the SelectResidenceHall command here
+            $halls_array = array();
+            foreach($halls as $hall){
+                $halls_array[$hall->id] = $hall->hall_name;
+            }
+            
+            $form->addDropBox('hall', $halls_array);
+            $form->setLabel('hall', 'Choose a hall:');
+            $form->addSubmit('submit', 'Continue');
+            $form->mergeTemplate($tpl);
+            $tpl = $form->getTemplate();
         }
-
+        
         return PHPWS_Template::process($tpl, 'hms', 'admin/messages.tpl');
     }
 }
