@@ -44,6 +44,10 @@ class StudentProfileView extends View {
 		$tpl['GENDER'] = $this->student->getPrintableGender();
 
 		$tpl['DOB'] = $this->student->getDOB();
+		
+		if(strtotime("-25 years") > $this->student->getDOB()){
+		    NQ::simple('hms', HMS_NOTIFICATION_WARNING, 'Student is 25 years old or older!');
+		}
 
 		$tpl['CLASS'] = $this->student->getPrintableClass();
 

@@ -123,6 +123,11 @@ class AssignStudentCommand extends Command {
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Invalid user name, no such student found.');
             $errorCmd->redirect();
         }
+        
+        # Check age, issue a warning for over 25
+        if(strtotime("-25 years") > $student->getDOB()){
+            NQ::simple('hms', HMS_NOTIFICATION_WARNING, 'Student is 25 years old or older!');
+        }
 
         $gender = $student->getGender();
 
