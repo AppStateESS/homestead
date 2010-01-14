@@ -45,6 +45,8 @@ class SaveApplicationFeatureCommand extends Command {
 			throw new PermissionException('You do not have permission to edit deadlines.');
 		}
 		
+		PHPWS_Core::initModClass('hms', 'exception/MissingDataException.php');
+		
 		if(!isset($this->featureId)) {
 			$this->featureId = $context->get('featureId');
 		}
@@ -78,6 +80,11 @@ class SaveApplicationFeatureCommand extends Command {
         	$startDate = strtotime($context->get('start_date'));
         	$endDate   = strtotime($context->get('end_date'));
         	
+        	if(!is_null($startDate) && !is_null($endDate) && $startDate >= $endDate){
+        	    echo json_encode(new MissingDataException ('Start date must be before the end date.', array('Start date', 'End date')));
+        	    HMS::quit();
+        	}
+        	
         	if(!is_null($startDate)) {
         		$feature->setStartDate($startDate);
         	}
@@ -87,7 +94,6 @@ class SaveApplicationFeatureCommand extends Command {
         	}
         }
         
-        PHPWS_Core::initModClass('hms', 'exception/MissingDataException.php');
         try {
             $feature->save();
         } catch(MissingDataException $e) {
