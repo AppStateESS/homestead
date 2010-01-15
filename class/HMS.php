@@ -73,7 +73,11 @@ abstract class HMS {
 		echo "Ohes Noes!  HMS threw an exception that was not caught!\n\n";
 		echo "Host: {$_SERVER['SERVER_NAME']}({$_SERVER['SERVER_ADDR']})\n";
 		echo 'Request time: ' . date("D M j G:i:s T Y", $_SERVER['REQUEST_TIME']) . "\n";
-		echo "Referrer: {$_SERVER['HTTP_REFERER']}\n";
+		if(isset($_SERVER['HTTP_REFERER'])){
+		  echo "Referrer: {$_SERVER['HTTP_REFERER']}\n";
+		}else{
+		    echo "Referrer: (none)\n";
+		}
 		echo "Remote addr: {$_SERVER['REMOTE_ADDR']}\n\n";
 		echo "Here is CurrentUser:\n\n";
 		print_r(Current_User::getUserObj());
