@@ -1249,7 +1249,7 @@ class HMS_Reports{
                 continue;
             }
 
-            if(strtotime("-25 years") > strtotime($student->getDob())){
+            if(strtotime($student->getDOB()) < strtotime("-25 years")){
                 $tpl['students'][] = array('NAME'     => $student->getFullNameProfileLink(),
                                            'ASU_USERNAME'  => $username,
                                            'DATE_OF_BIRTH' => $student->getDob(),

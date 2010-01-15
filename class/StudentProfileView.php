@@ -45,7 +45,7 @@ class StudentProfileView extends View {
 
 		$tpl['DOB'] = $this->student->getDOB();
 		
-		if(strtotime("-25 years") > $this->student->getDOB()){
+		if(strtotime($this->student->getDOB()) < strtotime("-25 years")){
 		    NQ::simple('hms', HMS_NOTIFICATION_WARNING, 'Student is 25 years old or older!');
 		}
 

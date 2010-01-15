@@ -125,7 +125,7 @@ class AssignStudentCommand extends Command {
         }
         
         # Check age, issue a warning for over 25
-        if(strtotime("-25 years") > $student->getDOB()){
+        if(strtotime($student->getDOB()) < strtotime("-25 years")){
             NQ::simple('hms', HMS_NOTIFICATION_WARNING, 'Student is 25 years old or older!');
         }
 
