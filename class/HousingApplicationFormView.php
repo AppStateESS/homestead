@@ -181,8 +181,8 @@ class HousingApplicationFormView extends View {
 		/*******
 		 * RLC *
 		 *******/
-		PHPWS_Core::initModClass('hms', 'applicationFeature/RLCApplicationFeature.php');
-		$rlcReg = new RLCApplicationFeatureRegistration();
+		PHPWS_Core::initModClass('hms', 'applicationFeature/RlcApplication.php');
+		$rlcReg = new RLCApplicationRegistration();
 		
 		if(ApplicationFeature::isEnabledForStudent($rlcReg, $this->term, $this->student)
 		&& $this->student->getType() == TYPE_FRESHMEN

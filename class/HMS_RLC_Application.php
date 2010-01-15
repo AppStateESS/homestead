@@ -114,7 +114,6 @@ class HMS_RLC_Application{
      */
     public function save()
     {
-        
         $db = &new PHPWS_DB('hms_learning_community_applications');
 
         $db->addValue('user_id',                    $this->getUserID());

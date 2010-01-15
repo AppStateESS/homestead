@@ -354,7 +354,7 @@ abstract class ApplicationFeature {
     	$f->setTerm($term);
     	return $f;
     	*/
-    	
+
     	return NULL;
     }
     
