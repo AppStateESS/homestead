@@ -19,95 +19,105 @@ define('FALL', 'Fall');
 
 class Term
 {
-	public $term;
-	public $banner_queue;
-	public $pdf_terms;
-	public $txt_terms;
-	
-	public function __construct($term = NULL)
-	{
-		if(is_null($term)) {
-			return;
-		}
-		
-		$this->term = $term;
-		$this->init();
-	}
-	
-	public function init()
-	{
-		$db = new PHPWS_DB('hms_term');
-		$db->addWhere('term', $this->term);
-		$result = $db->loadObject($this);
-		
-		if(PHPWS_Error::logIfError($result)) {
-			PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
-			throw new DatabaseException($result->__toString());
-		}
-	}
-	
-	public function save()
-	{
-		$db = new PHPWS_DB('hms_term');
-		$db->addWhere('term', $this->term);
-		$result = $db->saveObject($this);
-        
+    public $term;
+    public $banner_queue;
+    public $pdf_terms;
+    public $txt_terms;
+
+    public function __construct($term = NULL)
+    {
+        if(is_null($term)) {
+            return;
+        }
+
+        $this->term = $term;
+        $this->init();
+    }
+
+    public function init()
+    {
+        $db = new PHPWS_DB('hms_term');
+        $db->addWhere('term', $this->term);
+        $result = $db->loadObject($this);
+
         if(PHPWS_Error::logIfError($result)) {
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->__toString());
         }
-	}
-	
-	public function getBannerQueue()
-	{
-		return $this->banner_queue;
-	}
-	
-	public function setBannerQueue($flag)
-	{
-		$this->banner_queue = $flag;
-	}
-	
-	public function getPdfTerms()
-	{
-		return $this->pdf_terms;
-	}
-	
-	public function setPdfTerms($pdf_terms)
-	{
-		$this->pdf_terms = $pdf_terms;
-	}
-	
-	public function getTxtTerms()
-	{
-		return $this->txt_terms;
-	}
-	
-	public function setTxtTerms($txt_terms)
-	{
-		$this->txt_terms = $txt_terms;
-	}
-	
-	public function getQueueCount()
-	{
-		$db = new PHPWS_DB('hms_banner_queue');
-		$db->addWhere('term', $this->term);
-		$result = $db->count();
-		
-		if(PHPWS_Error::logIfError($result)) {
-			PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
-			throw new DatabaseException($result->__toString());
-		}
-		
-		return $result;
-	}
-    
+    }
+
+    public function save()
+    {
+        $db = new PHPWS_DB('hms_term');
+        $db->addWhere('term', $this->term);
+        $result = $db->saveObject($this);
+
+        if(PHPWS_Error::logIfError($result)) {
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException($result->__toString());
+        }
+    }
+
+    public function getBannerQueue()
+    {
+        return $this->banner_queue;
+    }
+
+    public function setBannerQueue($flag)
+    {
+        $this->banner_queue = $flag;
+    }
+
+    public function getPdfTerms()
+    {
+        if(is_null($this->pdf_terms) || empty($this->pdf_terms)){
+            PHPWS_Core::initModClass('hms', 'exception/InvalidConfigurationException.php');
+            throw new InvalidConfigurationException('No pdf contract file uploaded for ' . $this->term);
+        }
+        
+        return $this->pdf_terms;
+    }
+
+    public function setPdfTerms($pdf_terms)
+    {
+        $this->pdf_terms = $pdf_terms;
+    }
+
+    public function getTxtTerms()
+    {
+        if(is_null($this->txt_terms) || empty($this->txt_terms)){
+            PHPWS_Core::initModClass('hms', 'exception/InvalidConfigurationException.php');
+            throw new InvalidConfigurationException('No text contract file uploaded for ' . $this->term);
+        }
+        
+        return $this->txt_terms;
+    }
+
+    public function setTxtTerms($txt_terms)
+    {
+        $this->txt_terms = $txt_terms;
+    }
+
+    public function getQueueCount()
+    {
+        $db = new PHPWS_DB('hms_banner_queue');
+        $db->addWhere('term', $this->term);
+        $result = $db->count();
+
+        if(PHPWS_Error::logIfError($result)) {
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException($result->__toString());
+        }
+
+        return $result;
+    }
+
     public function toString($term = NULL, $concat = TRUE)
     {
         if(is_null($term)) {
             $term = $this->term;
         }
-        
+
         # Grab the year from the entry_term
         $result['year'] = Term::getTermYear($term);
 
@@ -134,10 +144,10 @@ class Term
         }
     }
 
-	/*************************
-	 * Static helper methods *
-	 *************************/
-    
+    /*************************
+     * Static helper methods *
+     *************************/
+
     public static function getCurrentTerm()
     {
         return PHPWS_Settings::get('hms','current_term');
@@ -208,86 +218,86 @@ class Term
         }
     }
 
-	/**
-	 * Returns a list of all the terms currently available. Useful for making drop down boxes.
-	 * @return Array Associate array of terms and their textual representations.
-	 */
-	public static function getTerms()
-	{
-		$db = new PHPWS_DB('hms_term');
-		$db->addOrder('term desc');
-		$result = $db->getObjects('Term');
+    /**
+     * Returns a list of all the terms currently available. Useful for making drop down boxes.
+     * @return Array Associate array of terms and their textual representations.
+     */
+    public static function getTerms()
+    {
+        $db = new PHPWS_DB('hms_term');
+        $db->addOrder('term desc');
+        $result = $db->getObjects('Term');
 
-		if(PHPWS_Error::logIfError($result)){
-			PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
-			throw new DatabaseException($result->toString());
-		}
+        if(PHPWS_Error::logIfError($result)){
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException($result->toString());
+        }
 
-		return $result;
-	}
+        return $result;
+    }
 
-	/**
-	 * Checks a term to see if it really exists in the database.
-	 * @return boolean True if it exists, False if it doesn't
-	 */
-	public static function isValidTerm($term)
-	{
-		$db = new PHPWS_DB('hms_term');
-		$result = $db->select('col');
+    /**
+     * Checks a term to see if it really exists in the database.
+     * @return boolean True if it exists, False if it doesn't
+     */
+    public static function isValidTerm($term)
+    {
+        $db = new PHPWS_DB('hms_term');
+        $result = $db->select('col');
 
-		if(PHPWS_Error::logIfError($result)){
-			PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
-			throw new DatabaseException($result->toString());
-		}
+        if(PHPWS_Error::logIfError($result)){
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException($result->toString());
+        }
 
-		return in_array($term, $result);
-	}
+        return in_array($term, $result);
+    }
 
-	public static function validateTerm($term)
-	{
-		if(!self::isValidTerm($term)) {
-			PHPWS_Core::initModClass('hms', 'exception/InvalidTermException.php');
-			throw new InvalidTermException("$term is not a valid term.");
-		}
-	}
+    public static function validateTerm($term)
+    {
+        if(!self::isValidTerm($term)) {
+            PHPWS_Core::initModClass('hms', 'exception/InvalidTermException.php');
+            throw new InvalidTermException("$term is not a valid term.");
+        }
+    }
 
-	public static function getTermsAssoc()
-	{
-		$objs = self::getTerms();
-		 
-		$terms = array();
-		 
-		foreach($objs as $term) {
-			$t = $term->term;
-			$terms[$t] = Term::toString($t);
-		}
-		 
-		return $terms;
-	}
+    public static function getTermsAssoc()
+    {
+        $objs = self::getTerms();
+        	
+        $terms = array();
+        	
+        foreach($objs as $term) {
+            $t = $term->term;
+            $terms[$t] = Term::toString($t);
+        }
+        	
+        return $terms;
+    }
 
-	public static function getTermSelector()
-	{
-		if(UserStatus::isGuest()) {
-			return dgettext('hms', 'Housing Management System');
-		}
+    public static function getTermSelector()
+    {
+        if(UserStatus::isGuest()) {
+            return dgettext('hms', 'Housing Management System');
+        }
 
-		$terms = self::getTermsAssoc(TRUE);
+        $terms = self::getTermsAssoc(TRUE);
 
-		$current = self::getCurrentTerm();
-		$terms[$current] .= ' (Current)';
+        $current = self::getCurrentTerm();
+        $terms[$current] .= ' (Current)';
 
-		$form = new PHPWS_Form('term_selector');
+        $form = new PHPWS_Form('term_selector');
 
-		$cmd = CommandFactory::getCommand('SelectTerm');
-		$cmd->initForm($form);
-		
-		$form->addDropBox('term', $terms);
-		$form->setMatch('term', self::getSelectedTerm());
+        $cmd = CommandFactory::getCommand('SelectTerm');
+        $cmd->initForm($form);
 
-		$tags = $form->getTemplate();
-		javascript('modules/hms/SelectTerm');
-		return PHPWS_Template::process($tags, 'hms', 'admin/SelectTerm.tpl');
-	}
+        $form->addDropBox('term', $terms);
+        $form->setMatch('term', self::getSelectedTerm());
+
+        $tags = $form->getTemplate();
+        javascript('modules/hms/SelectTerm');
+        return PHPWS_Template::process($tags, 'hms', 'admin/SelectTerm.tpl');
+    }
 }
 
 ?>
