@@ -392,33 +392,47 @@ class HousingApplication {
 
     }
 
-    /**
-     * Returns a list of application terms that can be applied for at the same
-     * time for the given entry term, and whether or not an application for that term is required
-     * (i.e. a student with an application_term of 200920 must apply for 200920, 200940, and may
-     * optionally apply for 200930.)
-     *
-     * In the returned array, 'app_term' is the application term which was given. 'term' is a term
-     * which may be applied (or required to be applied) for by a student with the given 'app_term'.
-     *
-     * Term list is returned in ascending order (earliest term first).
-     *
-     * @param integer Term to check
-     * @return array $arr[$index] = array('app_term' => <term>, 'term' => <term>, 'required'=> 0|1);
-     */
-    public static function getValidApplicationTerms($term){
-        //TODO make this use ApplicationFeatures class
-        $db = new PHPWS_DB('hms_term_applications');
-        $db->addWhere('app_term', $term);
-        $db->addOrder('term asc');
-        $result = $db->select();
+    public static function getAvailableApplicationTermsForStudent(Student $student){
+        $availableTerms = array();
 
-        if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
-            throw new DatabaseException($result->toString());
+        $applicationTerm = $student->getApplicationTerm();
+        $sem = Term::getTermSem($applicationTerm);
+
+        switch($sem){
+            case TERM_SPRING:
+            case TERM_FALL:
+                $availableTerms[] = array('term'=>$applicationTerm, 'required'=>1);
+                break;
+            case TERM_SUMMER1:
+                $availableTerms[] = array('term'=>$applicationTerm, 'required'=>1);
+                $summer2Term = Term::getNextTerm($applicationTerm);
+                $availableTerms[] = array('term'=>$summer2Term, 'required'=>0);
+                $fallTerm = Term::getNextTerm($applicationTerm);
+                $availableTerms[] = array('term'=>$fallTerm, 'required'=>1);
+                break;
+            case TERM_SUMMER2:
+                $availableTerms[] = array('term'=>$applicationTerm, 'required'=>1);
+                $fallTerm = Term::getNextTerm($applicationTerm);
+                $availableTerms[] = array('term'=>$fallTerm, 'required'=>1);
+                break;
         }
 
-        return $result;
+        return $availableTerms;
+    }
+
+    public static function getRequiredApplicationTermsForStudent(Student $student)
+    {
+        $availableTerms = self::getAvailableApplicationTermsForStudent($student);
+        
+        $requiredTerms = array();
+        
+        foreach($availableTerms as $term){
+            if($term['required'] == 1){
+                $requiredTerms[] = $term;
+            }
+        }
+        
+        return $requiredTerms;
     }
 
     /**
@@ -434,19 +448,14 @@ class HousingApplication {
      */
     public static function checkAppliedForAllRequiredTerms(Student $student)
     {
-        $requiredTerms = HousingApplication::getValidApplicationTerms($student->getApplicationTerm());
-
+        $requiredTerms = self::getRequiredApplicationTermsForStudent($student);
+        
         $needToApplyFor = array();
          
-        foreach($requiredTerms as $t){
-            // Skip this term if it's not required
-            if($t['required'] == 0){
-                continue;
-            }
-             
+        foreach($requiredTerms as $term){
             // Check if a housing application exists for this student in this term
-            if(!HousingApplication::checkForApplication($student->getUsername(), $t['term'])){
-                $needToApplyFor[] = $t['term'];
+            if(!HousingApplication::checkForApplication($student->getUsername(), $term['term'])){
+                $needToApplyFor[] = $term['term'];
             }
         }
 

@@ -25,7 +25,7 @@ class ShowHousingApplicationWelcomeCommand extends Command {
 		$submitCmd = CommandFactory::getCommand('ShowHousingApplicationForm');
 		$submitCmd->setTerm($term);
 		
-		$requiredTerms = HousingApplication::getValidApplicationTerms($student->getApplicationTerm());
+		$requiredTerms = HousingApplication::getAvailableApplicationTermsForStudent($student);
 		
 		//TODO get rid of the magic string
 		$feature = ApplicationFeature::getInstanceByNameAndTerm('Application', $term);
