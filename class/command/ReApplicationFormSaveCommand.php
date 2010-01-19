@@ -68,10 +68,10 @@ class ReApplicationFormSaveCommand extends Command {
         $mealPlan = $context->get('meal_plan');
 
         $specialNeeds = $context->get('special_needs');
-        $physicalDisability = isset($specialNeeds['physical_disability'])?1: NULL;
-        $psychDisability    = isset($specialNeeds['psych_disability'])?1: NULL;
-        $genderNeed         = isset($specialNeeds['gender_need'])?1: NULL;
-        $medicalNeed        = isset($specialNeeds['medical_need'])?1: NULL;
+        $physicalDisability = isset($specialNeeds['physical_disability'])?1: 0;
+        $psychDisability    = isset($specialNeeds['psych_disability'])?1: 0;
+        $genderNeed         = isset($specialNeeds['gender_need'])?1: 0;
+        $medicalNeed        = isset($specialNeeds['medical_need'])?1: 0;
 
         $roommate1 = $context->get('roommate1');
         $roommate2 = $context->get('roommate2');
