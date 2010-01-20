@@ -1230,7 +1230,7 @@ class HMS_Reports{
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
         $tpl = array();
         
-        $term = Term::getCurrentTerm();
+        $term = Term::getSelectedTerm();
 
         $db = new PHPWS_DB('hms_new_application');
         $db->setSQLQuery("SELECT DISTINCT * FROM (SELECT username FROM hms_new_application WHERE term = $term UNION SELECT asu_username FROM hms_assignment WHERE term = $term) as foo");
