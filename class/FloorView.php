@@ -105,10 +105,10 @@ class FloorView extends View {
 
         # if the user has permission to view the form but not edit it then
         # disable it
-        if(   Current_User::allow('hms', 'floor_view')
+        if( Current_User::allow('hms', 'floor_view')
         && !Current_User::allow('hms', 'floor_attributes')
         && !Current_User::allow('hms', 'floor_structure'))
-        {
+            {
             $form_vars = get_object_vars($form);
             $elements = $form_vars['_elements'];
 

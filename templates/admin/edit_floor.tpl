@@ -24,7 +24,8 @@ function submit_form(form_element, dropdown){
     }
     
     form_element.disabled=true;
-    $.getJSON('index.php', {'mod': 'hms', 'type': 'room', 'op': 'update_field', 'id': table_row.id, 'field': form_element.name, 'value': form_element_value}, function(json){
+
+    $.getJSON('index.php', {'module': 'hms', 'action': 'UpdateRoomField', 'id': table_row.id, 'field': form_element.name, 'value': form_element_value}, function(json){
         if(json.value != false){
             var display_text;
             switch(form_element_value){
