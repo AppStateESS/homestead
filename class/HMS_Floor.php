@@ -12,6 +12,7 @@ PHPWS_Core::initModClass('hms', 'HMS_Item.php');
 
 class HMS_Floor extends HMS_Item
 {
+    public $term;
 	public $floor_number;
 	public $residence_hall_id;
 	public $is_online;
@@ -607,13 +608,13 @@ class HMS_Floor extends HMS_Item
                        AND hms_bed.id NOT IN (SELECT bed_id FROM hms_assignment WHERE term = {$this->term} and lottery = 1))
                        AND hms_floor.id = {$this->id})";
 
-		$used_rooms = PHPWS_DB::getOne($query);
-		if(PHPWS_Error::logIfError($avail_rooms)){
+		$usedRooms = PHPWS_DB::getOne($query);
+		if(PHPWS_Error::logIfError($usedRooms)){
 			PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
-			throw new DatabaseException($result->toString());
+			throw new DatabaseException($usedRooms->toString());
 		}
 
-		return $used_rooms;
+		return $usedRooms;
 	}
 	
 	public function get_pager_by_hall_tags()
@@ -635,7 +636,7 @@ class HMS_Floor extends HMS_Item
 	{
 		PHPWS_Core::initCoreClass('DBPager.php');
 
-		$pager = & new DBPager('hms_floor', 'HMS_Floor');
+		$pager = new DBPager('hms_floor', 'HMS_Floor');
 
 		$pager->addWhere('hms_floor.residence_hall_id', $hall_id);
 		$pager->db->addOrder('hms_floor.floor_number');

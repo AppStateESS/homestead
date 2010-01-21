@@ -12,36 +12,38 @@ PHPWS_Core::initModClass('hms', 'HMS_Item.php');
 
 class HMS_Residence_Hall extends HMS_Item
 {
-	var $hall_name                  = NULL;
-	var $banner_building_code       = NULL;
+	public $hall_name                  = NULL;
+	public $term;
+	public $banner_building_code       = NULL;
+	
 
-	var $gender_type                = 2;
-	var $air_conditioned            = 0;
-	var $is_online                  = 0;
+	public $gender_type                = 2;
+	public $air_conditioned            = 0;
+	public $is_online                  = 0;
 
-	var $rooms_for_lottery          = 0;
-	var $meal_plan_required         = 0;
-	var $assignment_notifications   = 1;
+	public $rooms_for_lottery          = 0;
+	public $meal_plan_required         = 0;
+	public $assignment_notifications   = 1;
 
 	// Photo IDs
-	var $exterior_image_id;
-	var $other_image_id;
-	var $map_image_id;
-	var $room_plan_image_id;
+	public $exterior_image_id;
+	public $other_image_id;
+	public $map_image_id;
+	public $room_plan_image_id;
 
 	/**
 	 * Listing of floors associated with this room
 	 * @var array
 	 */
-	var $_floors                = null;
+	public $_floors                = null;
 
 	/**
 	 * Temporary values for rh creation
 	 */
-	var $_number_of_floors      = 0;
-	var $_rooms_per_floor       = 0;
-	var $_beds_per_room         = 0;
-	var $_numbering_scheme      = 0;
+	public $_number_of_floors      = 0;
+	public $_rooms_per_floor       = 0;
+	public $_beds_per_room         = 0;
+	public $_numbering_scheme      = 0;
 
 	/**
 	 * Constructor
@@ -227,7 +229,7 @@ class HMS_Residence_Hall extends HMS_Item
 
 	public function check_for_floors_of_gender($gender_type)
 	{
-		$db = &new PHPWS_DB('hms_floor');
+		$db = new PHPWS_DB('hms_floor');
 		$db->addJoin('LEFT OUTER', 'hms_floor', 'hms_residence_hall', 'residence_hall_id', 'id');
 		$db->addWhere('hms_floor.gender_type', $gender_type);
 		$db->addWhere('hms_residence_hall.id', $this->id);
@@ -266,7 +268,7 @@ class HMS_Residence_Hall extends HMS_Item
 	 */
 	public function get_number_of_floors()
 	{
-		$db = &new PHPWS_DB('hms_floor');
+		$db = new PHPWS_DB('hms_floor');
 		$db->addJoin('LEFT OUTER', 'hms_floor',   'hms_residence_hall', 'residence_hall_id', 'id');
 		$db->addWhere('hms_residence_hall.id', $this->id);
 
@@ -285,7 +287,7 @@ class HMS_Residence_Hall extends HMS_Item
 	 */
 	public function get_number_of_rooms()
 	{
-		$db = &new PHPWS_DB('hms_room');
+		$db = new PHPWS_DB('hms_room');
 
 		$db->addJoin('LEFT OUTER', 'hms_room',    'hms_floor',          'floor_id',          'id');
 		$db->addJoin('LEFT OUTER', 'hms_floor',   'hms_residence_hall', 'residence_hall_id', 'id');
@@ -308,7 +310,7 @@ class HMS_Residence_Hall extends HMS_Item
 	 */
 	public function get_number_of_beds()
 	{
-		$db = &new PHPWS_DB('hms_bed');
+		$db = new PHPWS_DB('hms_bed');
 
 		$db->addJoin('LEFT OUTER', 'hms_bed',     'hms_room',           'room_id',        'id');
 		$db->addJoin('LEFT OUTER', 'hms_room',    'hms_floor',          'floor_id',          'id');
@@ -329,7 +331,7 @@ class HMS_Residence_Hall extends HMS_Item
 
 	public function get_number_of_online_nonoverflow_beds()
 	{
-		$db = &new PHPWS_DB('hms_bed');
+		$db = new PHPWS_DB('hms_bed');
 
 		$db->addJoin('LEFT OUTER', 'hms_bed',     'hms_room',           'room_id',        'id');
 		$db->addJoin('LEFT OUTER', 'hms_room',    'hms_floor',          'floor_id',          'id');
@@ -354,7 +356,7 @@ class HMS_Residence_Hall extends HMS_Item
 	 */
 	public function get_number_of_assignees()
 	{
-		$db = &new PHPWS_DB('hms_assignment');
+		$db = new PHPWS_DB('hms_assignment');
 
 		$db->addJoin('LEFT OUTER', 'hms_assignment', 'hms_bed',             'bed_id',           'id');
 		$db->addJoin('LEFT OUTER', 'hms_bed',        'hms_room',            'room_id',          'id');
@@ -453,7 +455,7 @@ class HMS_Residence_Hall extends HMS_Item
 		$total = array(); //stores the number of rooms with that many beds
 
 		//Get a list of all the rooms in the hall
-		$rdb = &new PHPWS_DB('hms_room');
+		$rdb = new PHPWS_DB('hms_room');
 
 		$rdb->addJoin('LEFT OUTER', 'hms_room', 'hms_floor', 'floor_id', 'id');
 		$rdb->addJoin('LEFT OUTER', 'hms_floor', 'hms_residence_hall', 'residence_hall_id', 'id');
@@ -592,11 +594,13 @@ class HMS_Residence_Hall extends HMS_Item
                        WHERE (hms_bed.id IN (SELECT bed_id FROM hms_lottery_reservation WHERE term = {$this->term} AND expires_on > $now)
                        OR hms_bed.id IN (SELECT bed_id FROM hms_assignment WHERE term = {$this->term} and lottery = 1))
                        AND hms_residence_hall.id = {$this->id})";
+		
+		//test(preg_replace("/\s+/", ' ',$query),1);
 
 		$used_rooms = PHPWS_DB::getOne($query);
 		if(PHPWS_Error::logIfError($used_rooms)){
 			PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
-			throw new DatabaseException($result->toString());
+			throw new DatabaseException($used_rooms->toString());
 		}
 
 		return $used_rooms;

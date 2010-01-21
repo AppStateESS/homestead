@@ -31,7 +31,9 @@ class ReapplicationMenuBlockView extends View {
         }else if(!is_null($this->application) && $this->application->isWinner()){
             # Student has won, let them choose their room
             $tpl['EXPIRE_DATE'] = HMS_Util::get_long_date_time($this->application->invite_expires_on);
-            $tpl['SELECT_LINK'] = PHPWS_Text::secureLink('Click here to select your room', 'hms', array('type'=>'student', 'op'=>'lottery_select_residence_hall'));
+            $chooseRoomCmd = CommandFactory::getCommand('LotteryShowChooseHall');
+            $tpl['SELECT_LINK'] = $chooseRoomCmd->getLink('Click here to select your room');
+            //$tpl['SELECT_LINK'] = PHPWS_Text::secureLink('Click here to select your room', 'hms', array('type'=>'student', 'op'=>'lottery_select_residence_hall'));
         }else if(!is_null($this->application)){
             # Student has already re-applied
             $tpl['ALREADY_APPLIED'] = ""; // dummy tag, text is in template
