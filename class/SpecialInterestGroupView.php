@@ -26,9 +26,6 @@ class SpecialInterestGroupView extends View {
 
         $form->setMatch('group', $this->group);
 
-        $form->addHidden('type', 'lottery');
-        $form->addHidden('op', 'show_special_interest_approval');
-
         $cmd = CommandFactory::getCommand('ShowSpecialInterestGroupApproval');
         $cmd->initForm($form);
         
