@@ -19,10 +19,16 @@ class ShowStudentMenuCommand extends Command {
         # Create a contact form command, redirect to it in case of error.
         $contactCmd = CommandFactory::getCommand('ShowContactForm');
 
+        //TODO add try catch blocks here for StudentNotFound exception
         $student = StudentFactory::getStudentByUsername($username, $currentTerm);
 
         $applicationTerm = $student->getApplicationTerm();
 
+        if(!isset($applicationTerm) || is_null($applicationTerm) || empty($applicationTerm))
+        {
+            $contactCmd->redirect();
+        }
+        
         # Recreate the student object using the student's application term
         $student = StudentFactory::getStudentByUsername($username, $applicationTerm);
 
