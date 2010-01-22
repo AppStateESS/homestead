@@ -172,9 +172,15 @@ class LotteryApplication extends HousingApplication {
         $tags['NAME']       = $student->getFullNameProfileLink();
         $tags['USER']       = $this->username;
         $tags['BANNER_ID']  = $student->getBannerId();
-        $tags['ROOMMATE1']  = StudentFactory::getStudentByUsername($this->roommate1_username, $this->term)->getProfileLink();
-        $tags['ROOMMATE2']  = StudentFactory::getStudentByUsername($this->roommate2_username, $this->term)->getProfileLink();
-        $tags['ROOMMATE3']  = StudentFactory::getStudentByUsername($this->roommate3_username, $this->term)->getProfileLink();
+        if(!is_null($this->roommate1_username)){
+            $tags['ROOMMATE1']  = StudentFactory::getStudentByUsername($this->roommate1_username, $this->term)->getProfileLink();
+        }
+        if(!is_null($this->roommate2_username)){
+            $tags['ROOMMATE2']  = StudentFactory::getStudentByUsername($this->roommate2_username, $this->term)->getProfileLink();
+        }
+        if(!is_null($this->roommate3_username)){
+            $tags['ROOMMATE3']  = StudentFactory::getStudentByUsername($this->roommate3_username, $this->term)->getProfileLink();
+        }
         $tags['ACTION']     = PHPWS_Text::secureLink('Remove', 'hms', array('action'=>'RemoveSpecialInterest', 'asu_username'=>$this->username, 'group'=>$this->special_interest, 'id'=>$this->id));
 
         return $tags;
