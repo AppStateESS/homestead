@@ -60,7 +60,7 @@ class LotteryChooseRoommatesView extends View {
                 $status = array();
                 
                 $roommateObj = StudentFactory::getStudentByUsername($roommate, $this->term);
-                $status['NAME'] = $roommateObj->getFriendlyName();
+                $status['NAME'] = $roommateObj->getName();
 
                 if(HousingApplication::checkForAplication($roommate, $this->term) === FALSE){
                     $status['STATUS'] = 'Did not enter lottery.';

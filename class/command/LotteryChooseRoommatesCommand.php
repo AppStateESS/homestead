@@ -15,10 +15,15 @@ class LotteryChooseRoommatesCommand extends Command {
 
     public function execute(CommandContext $context)
     {
+        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
+        PHPWS_Core::initModClass('hms', 'HousingApplication.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
+        
         $roommates = $context->get('roommates');
+        $mealPlan = $context->get('meal_plan');
         $term = PHPWS_Settings::get('hms', 'lottery_term');
 
-        $student = StudentFactory::getStudentByUsername(UserStatus::getUsername());
+        $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
 
         $roomId = $context->get('roomId');
 
@@ -58,7 +63,13 @@ class LotteryChooseRoommatesCommand extends Command {
                 $errorCmd->redirect();
             }
 
-            $studentObj = StudentFactory::getStudentByUsername($roommate, $term);
+            try {
+                $studentObj = StudentFactory::getStudentByUsername($roommate, $term);
+            }catch(StudentNotFoundException $e){
+                NQ::simple('hms', HMS_NOTIFICATION_ERROR, "$roommate is not a valid user name. Please try again.");
+                $errorCmd->redirect();
+            }
+            
             $bannerId = $studentObj->getBannerId();
 
             # Make sure every user name is a valid student
@@ -71,6 +82,12 @@ class LotteryChooseRoommatesCommand extends Command {
              * We can't check the student type here, because we're working in the future with students who are possibly still considered freshmen (which will always show up as type F)
              * What we can do is make sure their application term is less than the lottery term
              */
+            
+            $roommateAppTerm = $studentObj->getApplicationTerm();
+            if(!isset($roommateAppTerm) || is_null($roommateAppTerm) || empty($roommateAppTerm)){
+                NQ::simple('hms', HMS_NOTIFICATION_ERROR, "The Housing Management System does not have complete student data for $roommate. Please select a different roommate.");
+                $errorCmd->redirect();
+            }
 
             # Make sure the student's application term is less than the current term
             if($studentObj->getApplicationTerm() >= Term::getCurrentTerm()){
@@ -85,23 +102,30 @@ class LotteryChooseRoommatesCommand extends Command {
             }
 
             # Make sure every student entered the lottery
-            if(HMS_Lottery_Entry::check_for_entry($roommate, $term) === FALSE){
+            if(HousingApplication::checkForApplication($roommate, $term) === FALSE){
                 NQ::simple('hms', HMS_NOTIFICATION_ERROR, "$roommate did not re-apply for housing. Please select a different roommate.");
                 $errorCmd->redirect();
             }
 
             # Make sure every student's gender matches, and that those are compatible with the room
-            if($roommateObj->getGender() != $student->getGender()){
+            if($studentObj->getGender() != $student->getGender()){
                 NQ::simple('hms', HMS_NOTIFICATION_ERROR, "$roommate is not the same gender as you. Please choose a roommate of the same gender.");
                 $errorCmd->redirect();
             }
 
             # Make sure none of the students are assigned yet
-            if(HMS_Assignment::check_for_assignment($roommate, $term) === TRUE){
+            if(HMS_Assignment::checkForAssignment($roommate, $term) === TRUE){
                 NQ::simple('hms', HMS_NOTIFICATION_ERROR, "$roommate is already assigned to a room. Please choose a different roommate.");
                 $errorCmd->redirect();
             }
         }
+        
+        # If we've made it this far, then everything is ok.. redirect to the confirmation screen
+        $confirmCmd = CommandFactory::getCommand('LotteryShowConfirm');
+        $confirmCmd->setRoomId($roomId);
+        $confirmCmd->setRoommates($roommates);
+        $confirmCmd->setMealPlan($mealPlan);
+        $confirmCmd->redirect();
     }
 }
 
