@@ -33,7 +33,7 @@ class UpdateRoomFieldCommand extends Command {
         }
 
         $room = HMS_Room::update_row($id, $element, $value);
-        echo json_encode(array('value' => $room->value));
+        echo json_encode($room);
         die();
     }
 }
