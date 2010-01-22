@@ -33,22 +33,22 @@ class LotteryApplication extends HousingApplication {
         }
 
         parent::__construct($term, $banner_id, $username, $gender, $student_type, $application_term, $cell_phone, $meal_plan, $physical_disability, $psych_disability, $gender_need, $medical_need);
-        
+
         if(isset($roommates[0])){
             $this->roommate1_username = $roommates[0]->getUsername();
             $this->roommate1_app_term = $roommates[0]->getApplicationTerm();
         }
-        
+
         if(isset($roommates[1])){
             $this->roommate2_username = $roommates[1]->getUsername();
             $this->roommate2_app_term = $roommates[1]->getApplicationTerm();
         }
-        
+
         if(isset($roommates[2])){
             $this->roommate3_username = $roommates[2]->getUsername();
             $this->roommate3_app_term = $roommates[2]->getApplicationTerm();
         }
-        
+
         $this->special_interest = $specialInterest;
         $this->magic_winner = $magicWinner;
     }
@@ -85,7 +85,7 @@ class LotteryApplication extends HousingApplication {
     public function save()
     {
         $is_new = $this->getId() == 0 ? true : false;
-        
+
         # Save the core application data using the parent class
         if(!parent::save()){
             return false;
@@ -195,9 +195,18 @@ class LotteryApplication extends HousingApplication {
         $tags['NAME']       = $student->getFullName();
         $tags['USER']       = $this->username;
         $tags['BANNER_ID']  = $student->getBannerId();
-        $tags['ROOMMATE1']  = StudentFactory::getStudentByUsername($this->roommate1_username, $this->term)->getName();
-        $tags['ROOMMATE2']  = StudentFactory::getStudentByUsername($this->roommate2_username, $this->term)->getName();
-        $tags['ROOMMATE3']  = StudentFactory::getStudentByUsername($this->roommate3_username, $this->term)->getName();
+
+        if(!is_null($this->roommate1_username)){
+            $tags['ROOMMATE1']  = StudentFactory::getStudentByUsername($this->roommate1_username, $this->term)->getName();
+        }
+
+        if(!is_null($this->roommate1_username)){
+            $tags['ROOMMATE2']  = StudentFactory::getStudentByUsername($this->roommate2_username, $this->term)->getName();
+        }
+
+        if(!is_null($this->roommate1_username)){
+            $tags['ROOMMATE3']  = StudentFactory::getStudentByUsername($this->roommate3_username, $this->term)->getName();
+        }
 
         return $tags;
     }
@@ -206,12 +215,15 @@ class LotteryApplication extends HousingApplication {
     {
         PHPWS_Core::initCoreClass('DBPager.php');
 
-        $pager = new DBPager('hms_lottery_application', 'LotteryApplication');
+        $pager = new DBPager('hms_new_application', 'LotteryApplication');
         $pager->setModule('hms');
         $pager->addRowTags('specialInterestTags');
 
-        $pager->db->addColumn('hms_new_application.*');
-        $pager->db->addJoin('left outer', 'hms_lottery_application', 'hms_new_application', 'id', 'id');
+        $pager->db->addJoin('left outer', 'hms_new_application', 'hms_lottery_application', 'id', 'id');
+        $pager->joinResult('id', 'hms_lottery_application', 'id', 'roommate1_username');
+        $pager->joinResult('id', 'hms_lottery_application', 'id', 'roommate2_username');
+        $pager->joinResult('id', 'hms_lottery_application', 'id', 'roommate3_username');
+
         $pager->addWhere('hms_new_application.term', $term);
         $pager->addWhere('hms_lottery_application.special_interest', $group);
 
@@ -266,7 +278,7 @@ class LotteryApplication extends HousingApplication {
         $tags['USER']       = $this->username;
         $tags['BANNER_ID']  = $student->getBannerId();
         $tags['CLASS']      = $student->getPrintableClass();
-        
+
         if(isset($this->cell_phone) && !is_null($this->cell_phone) && $this->cell_phone != ''){
             $tags['PHONE']      = '('.substr($this->cell_phone, 0, 3).')';
             $tags['PHONE']      .= substr($this->cell_phone, 3, 3);
@@ -276,7 +288,7 @@ class LotteryApplication extends HousingApplication {
         $tags['GENDER']     = $student->getPrintableGender();
 
 
-        $assign_link = PHPWS_Text::secureLink('[Assign]','hms', array('module'=>'hms', 'action'=>'ShowAssignStudent', 'username'=>$this->username)); 
+        $assign_link = PHPWS_Text::secureLink('[Assign]','hms', array('module'=>'hms', 'action'=>'ShowAssignStudent', 'username'=>$this->username));
         $remove_link = PHPWS_Text::secureLink('[Remove]','hms', array('module'=>'hms', 'action'=>'WaitingListRemove', 'username'=>$this->username));
         $tags['ACTION']     = "$assign_link $remove_link";
 
