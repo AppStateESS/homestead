@@ -200,11 +200,11 @@ class LotteryApplication extends HousingApplication {
             $tags['ROOMMATE1']  = StudentFactory::getStudentByUsername($this->roommate1_username, $this->term)->getName();
         }
 
-        if(!is_null($this->roommate1_username)){
+        if(!is_null($this->roommate2_username)){
             $tags['ROOMMATE2']  = StudentFactory::getStudentByUsername($this->roommate2_username, $this->term)->getName();
         }
 
-        if(!is_null($this->roommate1_username)){
+        if(!is_null($this->roommate3_username)){
             $tags['ROOMMATE3']  = StudentFactory::getStudentByUsername($this->roommate3_username, $this->term)->getName();
         }
 
