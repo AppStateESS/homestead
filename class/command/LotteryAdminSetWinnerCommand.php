@@ -22,7 +22,12 @@ class LotteryAdminSetWinnerCommand extends Command {
 
         $viewCmd = CommandFactory::getCommand('ShowLotteryAutoWinners');
 
-        $application = HousingApplication::getApplicationByUser($username, $term);
+        try{
+            $application = HousingApplication::getApplicationByUser($username, $term);
+        }catch(StudentNotFoundException $e){
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'No matching student was found.');
+            $viewCmd->redirect();
+        }
 
         if(is_null($application)){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'The requested student has not completed a re-application.');
