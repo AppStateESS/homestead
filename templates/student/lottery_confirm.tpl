@@ -13,10 +13,12 @@
         <p>Please confirm your room and roommate choices below.</p>
 
         <p>You will be assigned to:<br />
-            <blockquote>
-            <b>{ROOM}</b>
-            </blockquote>
+            <div style="margin-left: 25px; padding: 6px; background: #ECEFF5; font: bold; font-size: 18px; display: inline">
+            {ROOM}
+            </div>
         </p>
+        
+        <p>The roommate(s) you have chosen will be sent an email to confirm your request. If confirmed, the people in your room will be: </p>
         
         <table>
             <tr>

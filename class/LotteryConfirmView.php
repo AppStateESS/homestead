@@ -25,19 +25,16 @@ class LotteryConfirmView extends View {
         $submitCmd = CommandFactory::getCommand('LotteryConfirm');
         $submitCmd->setRoomId($this->roomId);
         $submitCmd->setMealPlan($this->mealPlan);
-        $submitCmd->setRoommates($this->roommates);
 
         $form = new PHPWS_Form;
         $submitCmd->initForm($form);
 
         # Add the beds and user names back to the form so they end up in the request in a pretty way
-        /*
-        foreach($roommates as $key => $value){
+        foreach($this->roommates as $key => $value){
             if(isset($value) && $value != ''){
                 $form->addHidden("roommates[$key]", $value);
             }
         }
-        */
 
         # List the student's room
         PHPWS_Core::initModClass('hms', 'HMS_Room.php');

@@ -3,7 +3,6 @@
 class LotteryConfirmCommand extends Command {
 
     private $roomId;
-    private $roommates;
     private $mealPlan;
 
     public function setRoomId($id){
@@ -23,25 +22,29 @@ class LotteryConfirmCommand extends Command {
 
         $vars['roomId'] = $this->roomId;
         $vars['mealPlan'] = $this->mealPlan;
-        $vars['roommates'] = $this->roommates;
 
         return $vars;
     }
 
     public function execute(CommandContext $context)
     {
+        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
+
         $roomId = $context->get('roomId');
         $roommates = $context->get('roommates');
         $mealPlan = $context->get('mealPlan');
 
         $term = PHPWS_Settings::get('hms', 'lottery_term');
-        
+
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
-        
+
         $errorCmd = CommandFactory::getCommand('LotteryShowConfirm');
         $errorCmd->setRoomId($roomId);
         $errorCmd->setRoommates($roommates);
         $errorCmd->setMealPlan($mealPlan);
+        
+        $successCmd = CommandFactory::getCommand('LotteryShowConfirmed');
+        $successCmd->setRoomId($roomId);
 
         PHPWS_Core::initCoreClass('Captcha.php');
         $captcha = Captcha::verify(TRUE); // returns the words entered if correct, FALSE otherwise
@@ -61,8 +64,6 @@ class LotteryConfirmCommand extends Command {
 
         $room = new HMS_Room($roomId);
 
-        test($roommates,1);
-        
         foreach($roommates as $bed_id => $username){
             # Double check the student is valid
             try{
@@ -71,7 +72,7 @@ class LotteryConfirmCommand extends Command {
                 NQ::simple('hms', HMS_NOTIFICATION_ERROR, "$username is not a valid student. Please choose a different roommate.");
                 $errorCmd->redirect();
             }
-            
+
             # Make sure the bed is still empty
             $bed = new HMS_Bed($bed_id);
 
@@ -99,7 +100,7 @@ class LotteryConfirmCommand extends Command {
             }
 
             # Double check the students' elligibilities
-            if(HMS_Lottery::determine_eligibility($username) !== TRUE){
+            if(HMS_Lottery::determineEligibility($username) !== TRUE){
                 NQ::simple('hms', HMS_NOTIFICATION_ERROR, "$username is not eligibile for assignment.");
                 $errorCmd->redirect();
             }
@@ -114,38 +115,39 @@ class LotteryConfirmCommand extends Command {
         # Assign the student to the requested bed
         $bed_id = array_search(UserStatus::getUsername(), $roommates); // Find the bed id of the student who's logged in
 
-        $result = HMS_Assignment::assign_student(UserStatus::getUsername(), PHPWS_Settings::get('hms', 'lottery_term'), NULL, $bed_id, $this->mealPlan, 'Confirmed lottery invite', TRUE);
-
-        if($result != E_SUCCESS){
-            return Lottery_UI::show_select_roommates('Sorry, there was an error creating your room assignment. Please try again or contact Housing & Residence Life');
+        try{
+            $result = HMS_Assignment::assignStudent($student, PHPWS_Settings::get('hms', 'lottery_term'), NULL, $bed_id, $mealPlan, 'Confirmed lottery invite', TRUE);
+        }catch(Exception $e){
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Sorry, there was an error creating your room assignment. Please try again or contact Housing & Residence Life');
+            $errorCmd->redirect();
         }
-
+        
         # Log the assignment
-        HMS_Activity_Log::log_activity($_SESSION['asu_username'], ACTIVITY_LOTTERY_ROOM_CHOSEN, $_SESSION['asu_username'], 'Captcha: ' . $captcha);
+        HMS_Activity_Log::log_activity(UserStatus::getUsername(), ACTIVITY_LOTTERY_ROOM_CHOSEN, UserStatus::getUsername(), 'Captcha: ' . $captcha);
 
-        $requestor_name = HMS_SOAP::get_name($_SESSION['asu_username']);
+        $requestor_name = $student->getName();
 
         foreach($roommates as $bed_id => $username){
             // Skip the current user
-            if($username == $_SESSION['asu_username']){
+            if($username == $student->getUsername()){
                 continue;
             }
 
             # Reserve the bed for the roommate
-            $expires_on = mktime() + ROOMMATE_INVITE_TTL;
-            $bed = &new HMS_Bed($bed_id);
-            if(!$bed->lottery_reserve($username, $_SESSION['asu_username'], $expires_on)){
-                $tpl['ERROR_MSG'] = "You were assigned, but there was a problem reserving space for your roommates. Please contact Housing & Residence Life.";
-                return PHPWS_Template::process($tpl, 'hms', 'student/lottery_choose_room_thanks.tpl');
+            $expires_on = mktime() + (INVITE_TTL_HRS * 3600);
+            $bed = new HMS_Bed($bed_id);
+            if(!$bed->lottery_reserve($username, $student->getUsername(), $expires_on)){
+                NQ::smiple('hms', HMS_NOTIFICATION_WARNING, "You were assigned, but there was a problem reserving space for your roommates. Please contact Housing & Residence Life.");
+                $successCmd->redirect();
             }
 
-            HMS_Activity_Log::log_activity($username, ACTIVITY_LOTTERY_REQUESTED_AS_ROOMMATE, $_SESSION['asu_username'], 'Expires: ' . HMS_Util::get_long_date_time($expires_on));
+            HMS_Activity_Log::log_activity($username, ACTIVITY_LOTTERY_REQUESTED_AS_ROOMMATE, $student->getUsername(), 'Expires: ' . HMS_Util::get_long_date_time($expires_on));
 
             # Invite the selected roommates
-            $name = HMS_SOAP::get_name($username);
+            $roomie = StudentFactory::getStudentByUsername($username, $term);
             $term = PHPWS_Settings::get('hms', 'lottery_term');
-            $year = HMS_Term::term_to_text($term, TRUE) . ' - ' . HMS_Term::term_to_text(HMS_Term::get_next_term($term),TRUE);
-            HMS_Email::send_lottery_roommate_invite($username, $name, $expires_on, $requestor_name, $hall_room, $year);
+            $year = Term::toString($term) . ' - ' . Term::toString(Term::getNextTerm($term));
+            HMS_Email::send_lottery_roommate_invite($roomie, $student, $expires_on, $room->where_am_i(), $year);
         }
     }
 }

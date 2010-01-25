@@ -182,17 +182,17 @@ class HMS_Email{
         HMS_Email::send_template_message($to . TO_DOMAIN, "On-Campus Housing Reminder: Only $hours hours left!", 'email/lottery_invite_reminder.tpl', $tpl);
     }
 
-    public function send_lottery_roommate_invite($to, $name, $expires_on, $requestor_name, $hall_room, $year)
+    public function send_lottery_roommate_invite(Student $to, Student $from, $expires_on, $hall_room, $year)
     {
         $tpl = array();
 
-        $tpl['NAME'] = $name;
+        $tpl['NAME'] = $to->getName();
         $tpl['EXPIRES_ON'] = HMS_Util::get_long_date_time($expires_on);
         $tpl['YEAR']        = $year;
-        $tpl['REQUESTOR']   = $requestor_name;
+        $tpl['REQUESTOR']   = $from->getName();
         $tpl['HALL_ROOM']   = $hall_room;
 
-        HMS_Email::send_template_message($to . TO_DOMAIN, 'Roommate Invitation for On-campus Housing!', 'email/lottery_roommate_invite.tpl', $tpl);
+        HMS_Email::send_template_message($to->getUsername() . TO_DOMAIN, 'Roommate Invitation for On-campus Housing!', 'email/lottery_roommate_invite.tpl', $tpl);
     }
 
     public function send_lottery_roommate_reminder($to, $name, $expires_on, $requestor_name, $hall_room, $year)

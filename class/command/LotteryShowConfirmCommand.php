@@ -33,7 +33,7 @@ class LotteryShowConfirmCommand extends Command {
         $roomId = $context->get('roomId');
         $roommates = $context->get('roommates');
         $mealPlan = $context->get('mealPlan');
-
+        
         $term = PHPWS_Settings::get('hms', 'lottery_term');
 
         PHPWS_Core::initModClass('hms', 'LotteryConfirmView.php');
