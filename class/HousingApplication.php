@@ -122,12 +122,21 @@ class HousingApplication {
         $this->setModifiedOn(time());
 
         # Sets the 'last modified by' field according to who's logged in
-        $this->setModifiedBy(UserStatus::getUsername());
+        $user = UserStatus::getUsername();
+        if(isset($user) && !is_null($user)){
+            $this->setModifiedBy(UserStatus::getUsername());
+        }else{
+            $this->setModifiedBy('hms');
+        }
 
         # If the object is new, set the 'created' fields
         if($this->getId() == 0){
             $this->setCreatedOn(time());
-            $this->setCreatedBy(UserStatus::getUsername());
+            if(isset($user) && !is_null($user)){
+                $this->setCreatedBy(UserStatus::getUsername());
+            }else{
+                $this->setCreatedBy('hms');
+            }
         }
     }
 
@@ -423,15 +432,15 @@ class HousingApplication {
     public static function getRequiredApplicationTermsForStudent(Student $student)
     {
         $availableTerms = self::getAvailableApplicationTermsForStudent($student);
-        
+
         $requiredTerms = array();
-        
+
         foreach($availableTerms as $term){
             if($term['required'] == 1){
                 $requiredTerms[] = $term;
             }
         }
-        
+
         return $requiredTerms;
     }
 
@@ -449,7 +458,7 @@ class HousingApplication {
     public static function checkAppliedForAllRequiredTerms(Student $student)
     {
         $requiredTerms = self::getRequiredApplicationTermsForStudent($student);
-        
+
         $needToApplyFor = array();
          
         foreach($requiredTerms as $term){
