@@ -4,6 +4,8 @@ class LotterySettingsFormView extends View {
     
     public function show()
     {
+        PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
+
         $tpl = array();
 
         $form = new PHPWS_Form();
@@ -59,8 +61,12 @@ class LotterySettingsFormView extends View {
             $form->setDisabled('lottery_per_senior');
         }
 
-        if($type == 'multi_phase'){
-            $result = HMS_Lottery::run_monte_carlo(PHPWS_Settings::get('hms', 'lottery_term'), 1000, $_REQUEST['lottery_max_soph'], $_REQUEST['lottery_max_jr'], $_REQUEST['lottery_max_senior']);
+        $max_soph = PHPWS_Settings::get('hms', 'lottery_max_soph');
+        $max_jr   = PHPWS_Settings::get('hms', 'lottery_max_jr');
+        $max_sr   = PHPWS_Settings::get('hms', 'lottery_max_sr');
+
+        if(isset($max_soph)){
+            $result = HMS_Lottery::run_monte_carlo(PHPWS_Settings::get('hms', 'lottery_term'), 1000, $max_soph, $max_jr, $max_sr);
             $tpl = array_merge($result, $tpl);
             $tpl['soph_mode'] = implode(', ', $tpl['soph_mode']);
             $tpl['jr_mode'] = implode(', ', $tpl['jr_mode']);

@@ -700,7 +700,7 @@ class HMS_Lottery {
     function count_applications_by_class($term, $class){
         $term_year = Term::getTermYear($term);
 
-        $query = "SELECT count(*) from from hms_new_application JOIN hms_lottery_application ON hms_new_application.id = hms_lottery_application.id
+        $query = "SELECT count(*) from hms_new_application JOIN hms_lottery_application ON hms_new_application.id = hms_lottery_application.id
                     WHERE term = $term
                     AND special_interest IS NULL
                     AND gender_need = 0
@@ -1025,9 +1025,9 @@ class HMS_Lottery {
         $db->addJoin('left outer', 'hms_new_application', 'hms_lottery_application', 'id', 'id');
         
         $db->addColumn('application_term');
-        $db->addColumn('roommate1_app_term');
-        $db->addColumn('roommate2_app_term');
-        $db->addColumn('roommate3_app_term');
+        $db->addColumn('hms_lottery_application.roommate1_app_term');
+        $db->addColumn('hms_lottery_application.roommate2_app_term');
+        $db->addColumn('hms_lottery_application.roommate3_app_term');
 
         $db->addWhere('term', $term); // Only for the specified term
 
