@@ -1021,7 +1021,9 @@ class HMS_Lottery {
         $num_four_beds = 492;
 
         # Query the database for the set of entry application terms, and the application terms of their roommates
-        $db = new PHPWS_DB('hms_lottery_entry');
+        $db = new PHPWS_DB('hms_new_application');
+        $db->addJoin('left outer', 'hms_new_application', 'hms_lottery_application', 'id', 'id');
+        
         $db->addColumn('application_term');
         $db->addColumn('roommate1_app_term');
         $db->addColumn('roommate2_app_term');
