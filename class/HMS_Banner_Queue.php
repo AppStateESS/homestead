@@ -102,7 +102,7 @@ class HMS_Banner_Queue {
         $entry->meal_code     = $mealcode;
         $entry->term          = $term;
 
-        if(HMS_Banner_Queue::process_immediately()) {
+        if(HMS_Banner_Queue::process_immediately($term)) {
             return $entry->process();
         }
 
@@ -134,7 +134,7 @@ class HMS_Banner_Queue {
         $entry->bed_code      = $bed;
         $entry->term          = $term;
 
-        if(HMS_Banner_Queue::process_immediately()) {
+        if(HMS_Banner_Queue::process_immediately($term)) {
             return $entry->process();
         }
 
@@ -175,8 +175,8 @@ class HMS_Banner_Queue {
      * Returns TRUE if an action should be processed immediately (queue is disabled)
      * or FALSE if an action should be queued
      */
-    public function process_immediately() {
-        $term = new Term(Term::getSelectedTerm());
+    public function process_immediately($termCode) {
+        $term = new Term($termCode);
         $queue = $term->getBannerQueue();
         return $queue == 0;
     }
