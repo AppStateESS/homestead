@@ -792,9 +792,9 @@ class HMS_Lottery {
         $year = Term::toString($term) . ' - ' . Term::toString(Term::getNextTerm($term));
 
         foreach($result as $row){
-            $student = StudentFactory::getStudentByUsername($row['asu_username'], $term);
-            HMS_Email::send_lottery_invite_reminder($row['asu_username'], $student->getName(), $row['invite_expires_on'], $year);
-            HMS_Activity_Log::log_activity($row['asu_username'], ACTIVITY_LOTTERY_REMINDED, 'hms');
+            $student = StudentFactory::getStudentByUsername($row['username'], $term);
+            HMS_Email::send_lottery_invite_reminder($row['username'], $student->getName(), $row['invite_expires_on'], $year);
+            HMS_Activity_Log::log_activity($row['username'], ACTIVITY_LOTTERY_REMINDED, 'hms');
         }
     }
 
