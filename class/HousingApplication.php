@@ -146,10 +146,15 @@ class HousingApplication {
     public function log()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
+        
         # Determine which user name to use as the current user
         $username = UserStatus::getUsername();
-
-        HMS_Activity_Log::log_activity($this->getUsername(), ACTIVITY_SUBMITTED_APPLICATION, $username, 'Term: ' . $this->getTerm());
+        
+        if(isset($username) && !is_null($username)){
+            HMS_Activity_Log::log_activity($this->getUsername(), ACTIVITY_SUBMITTED_APPLICATION, $username, 'Term: ' . $this->getTerm());
+        }else{
+            HMS_Activity_Log::log_activity($this->getUsername(), ACTIVITY_SUBMITTED_APPLICATION, 'hms', 'Term: ' . $this->getTerm());
+        }
     }
 
     public function delete()
