@@ -8,7 +8,14 @@
             <!-- BEGIN success -->
             <span class="success">{SUCCESS}</span><br/>
             <!-- END success -->
-            <a href='index.php?module=hms&action=user&op=logout'>logout</a><br />
+            
+            <br />
+            You can:
+                <ul>
+                    <li>{MAIN_MENU}</li>
+                    <li>{LOGOUT_LINK}</li>
+                </ul>
+            
         </div>
     </div>
 </div>

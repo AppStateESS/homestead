@@ -30,6 +30,7 @@ You have been assigned to {ASSIGNED}.<br />
 <!-- END assigned -->
 
 <!-- BEGIN roommate_request -->
+<br />
 {ROOMMATE_REQUEST}
 You have one or more pending roommate requests. Click the name of the person who requested you to view the details of that request. You will then have the option to approve or deny the request.<br />
 <ul>

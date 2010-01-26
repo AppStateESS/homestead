@@ -883,17 +883,18 @@ class HMS_Lottery {
         return $result;
     }
 
-    public function confirm_roommate_request($username,$meal_plan)
+    public function confirm_roommate_request($username, $requestId, $meal_plan)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
         PHPWS_Core::initModClass('hms', 'HMS_Email.php');
+        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 
         $term = PHPWS_Settings::get('hms', 'lottery_term');
 
         # Get the roommate invite
-        $invite = HMS_Lottery::get_lottery_roommate_invite_by_id($_REQUEST['id']);
+        $invite = HMS_Lottery::get_lottery_roommate_invite_by_id($requestId);
 
         # If the invite wasn't found, show an error
         if($invite === FALSE){
@@ -901,24 +902,24 @@ class HMS_Lottery {
         }
 
         # Check that the reserved bed is still empty
-        $bed = &new HMS_Bed($invite['bed_id']);
+        $bed = new HMS_Bed($invite['bed_id']);
         if(!$bed->has_vacancy()){
             return E_ASSIGN_BED_NOT_EMPTY;
         }
 
         # Make sure the student isn't assigned anywhere else
-        if(HMS_Assignment::check_for_assignment($username, $term)){
+        if(HMS_Assignment::checkForAssignment($username, $term)){
             return E_ASSIGN_ALREADY_ASSIGNED;
         }
+        
+        $student = StudentFactory::getStudentByUsername($username, $term);
+        $requestor = StudentFactory::getStudentByUsername($invite['requestor'], $term);
 
         # Actually make the assignment
-        $assign_result = HMS_Assignment::assign_student($username, $term, NULL, $invite['bed_id'], $meal_plan, 'Confirmed roommate invite', TRUE);
-        if($assign_result != E_SUCCESS){
-            return $assign_result;
-        }
+        $assign_result = HMS_Assignment::assignStudent($student, $term, NULL, $invite['bed_id'], $meal_plan, 'Confirmed roommate invite', TRUE);
 
         # return successfully
-        HMS_Email::send_roommate_confirmation($username, null, $invite['requestor']);
+        HMS_Email::send_roommate_confirmation($student, $requestor);
         return E_SUCCESS;
     }
 

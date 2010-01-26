@@ -33,7 +33,6 @@ class ReapplicationMenuBlockView extends View {
             $tpl['EXPIRE_DATE'] = HMS_Util::get_long_date_time($this->application->invite_expires_on);
             $chooseRoomCmd = CommandFactory::getCommand('LotteryShowChooseHall');
             $tpl['SELECT_LINK'] = $chooseRoomCmd->getLink('Click here to select your room');
-            //$tpl['SELECT_LINK'] = PHPWS_Text::secureLink('Click here to select your room', 'hms', array('type'=>'student', 'op'=>'lottery_select_residence_hall'));
         }else if(!is_null($this->application)){
             # Student has already re-applied
             $tpl['ALREADY_APPLIED'] = ""; // dummy tag, text is in template
@@ -57,7 +56,17 @@ class ReapplicationMenuBlockView extends View {
             }
         }
 
-        //TODO roommate requests!!
+        if($this->roommateRequests != FALSE && !is_null($this->roommateRequests) && $this->assignment != TRUE && !PEAR::isError($this->assignment)){
+            $tpl['roommates'] = array();
+            $tpl['ROOMMATE_REQUEST'] = ''; // dummy tag
+            foreach($this->roommateRequests as $invite){
+                $cmd = CommandFactory::getCommand('LotteryShowRoommateRequest');
+                $cmd->setRequestId($invite['id']);
+                $roommie = StudentFactory::getStudentByUsername($invite['requestor'], $this->term);
+                $tpl['roommates'][]['ROOMMATE_LINK'] = $cmd->getLink($roommie->getName()); 
+                //$tpl['roommates'][]['ROOMMATE_LINK'] = PHPWS_Text::secureLink(HMS_SOAP::get_name($invite['requestor']), 'hms', array('type'=>'student', 'op'=>'lottery_show_roommate_request', 'id'=>$invite['id']));
+            }
+        }
 
         return PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/reApplicationMenuBlock.tpl');
     }
