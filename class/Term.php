@@ -60,7 +60,8 @@ class Term
 
     public function getBannerQueue()
     {
-        return $this->banner_queue;
+        //return $this->banner_queue;
+        return 1;
     }
 
     public function setBannerQueue($flag)
