@@ -62,7 +62,7 @@ class LotteryChooseRoommatesView extends View {
                 $roommateObj = StudentFactory::getStudentByUsername($roommate, $this->term);
                 $status['NAME'] = $roommateObj->getName();
 
-                if(HousingApplication::checkForAplication($roommate, $this->term) === FALSE){
+                if(HousingApplication::checkForApplication($roommate, $this->term) === FALSE){
                     $status['STATUS'] = 'Did not enter lottery.';
                     $status['COLOR'] = 'red';
                 }else if(!is_null(HMS_Assignment::get_assignment($roommate, $term))){
