@@ -149,6 +149,10 @@ class LotteryConfirmCommand extends Command {
             $year = Term::toString($term) . ' - ' . Term::toString(Term::getNextTerm($term));
             HMS_Email::send_lottery_roommate_invite($roomie, $student, $expires_on, $room->where_am_i(), $year);
         }
+        
+        HMS_Email::send_lottery_assignment_confirmation($student, $room->where_am_i(), $term);
+        
+        $successCmd->redirect();
     }
 }
 

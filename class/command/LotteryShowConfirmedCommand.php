@@ -18,7 +18,16 @@ class LotteryShowConfirmedCommand extends Command {
     
     public function execute(CommandContext $context)
     {
-        $context->setContent('Success: room ' . $context->get('roomId'));
+        PHPWS_Core::initModClass('hms', 'HMS_Room.php');
+        PHPWS_Core::initModClass('hms', 'LotteryChooseRoomThanksView.php');
+        
+        $roomId = $context->get('roomId');
+        
+        $room = new HMS_Room($roomId);
+        
+        $view = new LotteryChooseRoomThanksView($room);
+        
+        $context->setContent($view->show());
     }
 }
 

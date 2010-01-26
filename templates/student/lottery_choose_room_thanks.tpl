@@ -1,20 +1,14 @@
 <div class="hms">
   <div class="box">
-    <div class="{TITLE_CLASS}"> <h1>Congratulations</h1> </div>
+    <h1>Congratulations</h1>
     <div class="box-content">
-        <!-- BEGIN error_msg -->
-        <span class="error">{ERROR_MSG}<br /></span>
-        <!-- END error_msg -->
-        
-        <!-- BEGIN success_msg -->
-        <span class="success">{SUCCESS_MSG}<br /></span>
-        <!-- END success_msg -->
-        {START_FORM}
-        {RESIDENCE_HALL}<br /><br />
-        {SUBMIT}
-        {END_FORM}
-        <br /><br />
-        {BED_PAGER}
+       You have been assigned to {LOCATION}. The roommate(s) you requested have each been sent an email with instructions on how to confirm your request, which they must do in the next 24 hours.
+       <br /><br />
+       You can:
+       <ul>
+            <li>{LOGOUT}</li>
+            <li>{MAIN_MENU}</li>
+       </ul>
     </div>
   </div>
 </div>
