@@ -90,7 +90,7 @@ class LotteryChooseRoommatesCommand extends Command {
             }
 
             # Make sure the student's application term is less than the current term
-            if($studentObj->getApplicationTerm() >= Term::getCurrentTerm()){
+            if($studentObj->getApplicationTerm() > Term::getCurrentTerm()){
                 NQ::simple('hms', HMS_NOTIFICATION_ERROR, "$roommate is not a continuing student. Only continuing students (i.e. not a first semester freshmen) may be selected as roommates. Please select a different roommate.");
                 $errorCmd->redirect();
             }
