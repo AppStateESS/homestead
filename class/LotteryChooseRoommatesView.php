@@ -65,7 +65,7 @@ class LotteryChooseRoommatesView extends View {
                 if(HousingApplication::checkForApplication($roommate, $this->term) === FALSE){
                     $status['STATUS'] = 'Did not enter lottery.';
                     $status['COLOR'] = 'red';
-                }else if(!is_null(HMS_Assignment::get_assignment($roommate, $term))){
+                }else if(!is_null(HMS_Assignment::getAssignment($roommate, $term))){
                     $status['STATUS'] = 'Already assigned.';
                     $status['COLOR'] = 'red';
                 }else{
