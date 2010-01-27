@@ -46,10 +46,10 @@ class ScheduledLottery extends ScheduledPulse
 
             $newdate = date('m/d/Y H:i:s', $then);
 
-            echo "Lottery will now execute.  The time is $date.  Lottery has been scheduled to run at $newdate.\n";
+            echo "Lottery has executed.  The time is $date.  Lottery has been scheduled to run at $newdate.\n";
 
             $sp = $this->makeClone();
-            $sp->execute_after = $then;
+            $sp->execute_at = $then;
             $sp->save();
         }
 
