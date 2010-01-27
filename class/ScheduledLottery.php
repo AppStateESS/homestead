@@ -30,20 +30,28 @@ class ScheduledLottery extends ScheduledPulse
         HMS_Lottery::runLottery();
 
         $now = time();
-        $hr = date('H', $now);
-        $day = date('d', $now);
+        $date = date('m/d/Y H:i:s', $now);
 
-        if($hr >= 9 && $hr < 16) {
-            $then = strtotime("16:00:00", $now);
+        if($_SESSION['UNSCHEDULE_LOTTERY']) {
+            echo "Lottery has executed.  The time is $date.  Lottery asked to be unscheduled.\n";
         } else {
-            $then = strtotime("+1 day 09:00:00", $this->execute_after);
+            $hr = date('H', $now);
+            $day = date('d', $now);
+
+            if($hr >= 9 && $hr < 16) {
+                $then = strtotime("16:00:00", $now);
+            } else {
+                $then = strtotime("+1 day 09:00:00", $this->execute_after);
+            }
+
+            $newdate = date('m/d/Y H:i:s', $then);
+
+            echo "Lottery will now execute.  The time is $date.  Lottery has been scheduled to run at $newdate.\n";
+
+            $sp = $this->makeClone();
+            $sp->execute_after = $then;
+            $sp->save();
         }
-
-        echo "Lottery Run.  The time is $date.  Next run time will be $newdate.\n";
-
-        $sp = $this->makeClone();
-        $sp->execute_after = $then;
-        $sp->save();
 
         return TRUE;
     }

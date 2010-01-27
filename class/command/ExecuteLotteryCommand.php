@@ -16,5 +16,6 @@ class ExecuteLotteryCommand extends Command {
 
         PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
         HMS_Lottery::runLottery();
+        exit;
     }
 }
