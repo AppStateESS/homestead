@@ -41,7 +41,7 @@ class ScheduledLottery extends ScheduledPulse
             if($hr >= 9 && $hr < 16) {
                 $then = strtotime("16:00:00", $now);
             } else {
-                $then = strtotime("+1 day 09:00:00", $this->execute_after);
+                $then = strtotime("+1 day 09:00:00", $now);
             }
 
             $newdate = date('m/d/Y H:i:s', $then);
