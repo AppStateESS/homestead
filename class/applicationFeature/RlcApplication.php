@@ -22,7 +22,7 @@ class RlcApplicationRegistration extends ApplicationFeatureRegistration {
     }
 }
 
-class RLCApplication extends ApplicationFeature {
+class RlcApplication extends ApplicationFeature {
     
     public function getMenuBlockView(Student $student)
     {

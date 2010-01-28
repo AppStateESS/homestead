@@ -81,8 +81,8 @@ class HMS_RLC_Application{
 
     public function init($user_id = NULL, $term = NULL)
     {
-        PHPWS_Core::initModClass('hms','HMS_SOAP.php');
-        $student = HMS_SOAP::get_student_info($user_id);
+        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
+        $student = StudentFactory::getStudentByUsername($user_id, $term);
         # Check if an application for this user already exits.
         $result = HMS_RLC_Application::check_for_application($user_id, $term);
 
@@ -246,15 +246,11 @@ class HMS_RLC_Application{
     public function rlc_application_admin_pager()
     {
         PHPWS_Core::initCoreClass('DBPager.php');
-        PHPWS_Core::initModClass('hms','HMS_SOAP.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Student.php');
 
         $form = new PHPWS_Form;
-        $form->addHidden('type','rlc');
-        $form->addHidden('op','rlc_assignments_submit');
+        $form->addHidden('action','SubmitRlcAssignments');
         $form->addSubmit('Submit Changes');
         $tags = $form->getTemplate();
-
 
         $pager = &new DBPager('hms_learning_community_applications','HMS_RLC_Application');
         $pager->db->addColumn('hms_learning_community_applications.*');
@@ -273,7 +269,7 @@ class HMS_RLC_Application{
         }
 
         $pager->setModule('hms');
-        $pager->setLink('index.php?module=hms&type=rlc&op=rlc_assignments_submit');
+        $pager->setLink('index.php?module=hms&action=SubmitRlcAssignments');
         $pager->setTemplate('admin/rlc_assignments_pager.tpl');
         $pager->setEmptyMessage("No pending RLC applications.");
         $pager->addToggle('class="toggle1"');
@@ -287,25 +283,29 @@ class HMS_RLC_Application{
     
     public function getAdminPagerTags()
     {
+        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
+        PHPWS_Core::initModClass('hms', 'Term.php');
+
+        $student = StudentFactory::getStudentByUsername($this->user_id, Term::getCurrentTerm());
 
         $rlc_list = HMS_Learning_Community::getRLCList();
 
         $tags = array();
         
-        $tags['NAME']           = HMS_Student::get_link($this->user_id);
-        $tags['1ST_CHOICE']     = '<a href="./index.php?module=hms&type=rlc&op=view_rlc_application&username=' . $this->getUserID() . '" target="_blank">' . $rlc_list[$this->getFirstChoice()] . '</a>';
+        $tags['NAME']           = $student->getFullNameProfileLink();
+        $tags['1ST_CHOICE']     = '<a href="./index.php?module=hms&action=ViewRlcApplication&username=' . $this->getUserID() . '" target="_blank">' . $rlc_list[$this->getFirstChoice()] . '</a>';
         if(isset($rlc_list[$this->getSecondChoice()]))
             $tags['2ND_CHOICE'] = $rlc_list[$this->getSecondChoice()];
         if(isset($rlc_list[$this->getThirdChoice()]))
             $tags['3RD_CHOICE'] = $rlc_list[$this->getThirdChoice()];
         $tags['FINAL_RLC']      = HMS_RLC_Application::generateRLCDropDown($rlc_list,$this->getID());
-        $tags['CLASS']          = HMS_SOAP::get_student_class($this->getUserID(), HMS_SOAP::get_application_term($this->getUserID()));
+        $tags['CLASS']          = $student->getClass();
 //        $tags['SPECIAL_POP']    = ;
 //        $tags['MAJOR']          = ;
 //        $tags['HS_GPA']         = ;
-        $tags['GENDER']         = HMS_SOAP::get_gender($this->getUserID());
+        $tags['GENDER']         = $student->getGender();
         $tags['DATE_SUBMITTED'] = date('d-M-y',$this->getDateSubmitted());
-        $tags['DENY']           = PHPWS_Text::secureLink('Deny', 'hms', array('type'=>'rlc', 'op'=>'deny_rlc_application', 'id'=>$this->id));
+        $tags['DENY']           = PHPWS_Text::secureLink('Deny', 'hms', array('action'=>'DenyRlcApplication', 'id'=>$this->id));
 
         return $tags;
     }

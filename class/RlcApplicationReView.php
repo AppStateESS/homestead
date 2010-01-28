@@ -1,16 +1,24 @@
 <?php
+PHPWS_Core::initModClass('hms', 'View.php');
+PHPWS_Core::initModClass('hms', 'Term.php');
 
-  /* TODO: wrap this in a view class, just getting it out of the model...
+class RlcApplicationReView extends View {
+    protected $context;
 
-       if($username == NULL) {
-            $username = $_SESSION['asu_username'];
-            $tags['MENU_LINK'] = PHPWS_Text::secureLink(_('Return to Menu'), 'hms', array('type'=>'student', 'op'=>'main'));
-       } else {
-            $tags['MENU_LINK'] = PHPWS_Text::secureLink(_('Return to RLC Applications'), 'hms', array('type'=>'rlc', 'op'=>'assign_applicants_to_rlcs'));
-       }
+    public function __construct(CommandContext $context){
+        $this->context = $context;
+    }
 
-        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
-        $tags['FULL_NAME'] = HMS_SOAP::get_first_name($username) . " " . HMS_SOAP::get_last_name($username);
+    public function show(){
+        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
+        try{
+            $student = StudentFactory::getStudentByUsername($this->context->get('username'), Term::getCurrentTerm());
+            $tags['MENU_LINK'] = PHPWS_Text::secureLink(_('Return to RLC Applications'), 'hms', array('action'=>'AssignRlcApplicants'));
+        } catch(StudentNotFoundException $e){
+            $tags['MENU_LINK'] = PHPWS_Text::secureLink(_('Return to Menu'), 'hms', array('action'=>'ShowStudentMenu'));
+        }
+
+        $tags['FULL_NAME'] = $student->getFullName();
 
         $tags['FIRST_CHOICE_LABEL'] = "First choice RLC is: ";
         $tags['SECOND_CHOICE_LABEL'] = "Second choice is: ";
@@ -23,11 +31,7 @@
         $tags['WHY_THIRD_CHOICE_LABEL'] = "Third choice selected because: ";
 
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
-        if(isset($_SESSION['application_term'])){
-            $rlc_app = new HMS_RLC_Application($username, $_SESSION['application_term']);
-        }else{
-            $rlc_app = new HMS_RLC_Application($username, HMS_SOAP::get_application_term($username));
-        }
+        $rlc_app = new HMS_RLC_Application($student->getUsername(), $student->getApplicationTerm());
         
         $db = &new PHPWS_DB('hms_learning_communities');
         $db->addColumn('id');
@@ -69,5 +73,6 @@
         }
 
         return PHPWS_Template::process($tags, 'hms', 'student/rlc_application.tpl');
-  */
+    }
+}
 ?>

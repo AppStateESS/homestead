@@ -14,7 +14,7 @@ class RlcAssignmentView extends View {
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
 
         $tags = array();
-        $tags['TITLE'] = 'RLC Assignments - ' . Term::toString(Term::getSelectedTerm());
+        $tags['TITLE']             = 'RLC Assignments - ' . Term::toString(Term::getSelectedTerm());
         $tags['SUMMARY']           = HMS_Learning_Community::display_rlc_assignment_summary();
         $tags['DROPDOWN']          = PHPWS_Template::process(HMS_RLC_Application::getDropDown(), 'hms', 'admin/dropdown_template.tpl');
         $tags['ASSIGNMENTS_PAGER'] = HMS_RLC_Application::rlc_application_admin_pager();
