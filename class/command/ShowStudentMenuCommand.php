@@ -116,7 +116,7 @@ class ShowStudentMenuCommand extends Command {
             # otherwise give a "too early" message
             if(!Term::isValidTerm($applicationTerm)){
                 PHPWS_Core::initModClass('hms', 'WelcomeScreenViewInvalidTerm.php');
-                $view = new WelcomeScreenViewInvalidTerm();
+                $view = new WelcomeScreenViewInvalidTerm($applicationTerm, $contactCmd);
                 $context->setContent($view->show());
                 return;
             }
