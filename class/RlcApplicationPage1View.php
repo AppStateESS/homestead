@@ -30,8 +30,7 @@ class RlcApplicationPage1View extends View {
         $student = StudentFactory::getStudentByUsername(Current_User::getUsername(), Term::getCurrentTerm());
  
         $template = array();
-        
-        
+
         $rlc_form = new PHPWS_Form();
         CommandFactory::getCommand('ShowRlcApplicationPage2View')->initForm($rlc_form);
 
@@ -72,8 +71,8 @@ class RlcApplicationPage1View extends View {
 
         # 2. Rank Your RLC Choices
 
-        # Get the list of RLCs from the database
-        $rlc_choices = HMS_Learning_Community::getRLCList(FALSE);
+        # Get the list of RLCs from the database that this student is allowed to apply for and which are not hidden
+        $rlc_choices = HMS_Learning_Community::getRLCList(FALSE, $student->getType());
        
         # Add an inital element to the list.
         $rlc_choices[-1] = "Select";

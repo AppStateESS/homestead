@@ -53,6 +53,11 @@ class HMS_Residence_Hall extends HMS_Item
 		$this->construct($id, 'hms_residence_hall');
 	}
 
+    public function getDb()
+    {
+        return new PHPWS_DB('hms_residence_hall');
+    }
+
 	/********************
 	 * Instance Methods *
 	 *******************/

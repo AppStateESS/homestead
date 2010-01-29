@@ -42,6 +42,11 @@ class HMS_Floor extends HMS_Item
 		$this->construct($id, 'hms_floor');
 	}
 
+    public function getDb()
+    {
+        return new PHPWS_DB('hms_floor');
+    }
+
 	/********************
 	 * Instance Methods *
 	 *******************/

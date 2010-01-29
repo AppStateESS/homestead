@@ -1,5 +1,5 @@
 <?php
-
+PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 /**
  * The HMS_RLC_Application class
  * Implements the RLC_Application object and methods to load/save
@@ -113,8 +113,12 @@ class HMS_RLC_Application{
      * Saves the current Application object to the database.
      */
     public function save()
-    {
-        $db = &new PHPWS_DB('hms_learning_community_applications');
+    {   
+        //Ensure that the user is allowed to apply for all of their choices
+        //before doing anything else
+        $student = StudentFactory::getStudentByUsername($this->getUserID(), $this->term);
+        //$choice1 = new HMS_Learning_Community #TODO, load student
+        $db = new PHPWS_DB('hms_learning_community_applications');
 
         $db->addValue('user_id',                    $this->getUserID());
         $db->addValue('rlc_first_choice_id',        $this->getFirstChoice());

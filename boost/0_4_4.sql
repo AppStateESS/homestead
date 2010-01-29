@@ -1,0 +1,1 @@
+alter table hms_learning_communities add column allowed_student_types varchar(16);

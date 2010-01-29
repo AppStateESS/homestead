@@ -32,6 +32,11 @@ class HMS_Assignment extends HMS_Item
 		return $this;
 	}
 
+    public function getDb()
+    {
+        return new PHPWS_DB('hms_assignment');
+    }
+
 	public function copy($to_term, $bed_id)
 	{
 		$new_ass = clone($this);

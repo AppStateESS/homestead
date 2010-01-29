@@ -1,6 +1,6 @@
 <?php
 
-class HMS_Item {
+abstract class HMS_Item {
     var $id         = 0;
     var $term       = null;
 
@@ -9,23 +9,50 @@ class HMS_Item {
 
     var $updated_on = 0;
     var $updated_by = 0;
-    var $_table     = null;
     
     public function construct($id=0, $table)
     {
-        if (!$id) {
-            return;
-        }
+        if(!is_null($id) && is_numeric($id)){
+            $this->id = $id;
 
-        $this->_table = $table;
-
-        $this->id = $id;
-        $db = new PHPWS_DB($table);
-        $db->addWhere('id', $this->id);
-        $result = $db->loadObject($this);
-        if (!$result || PHPWS_Error::logIfError($result)) {
+            if (!$this->load()) {
+                $this->id = 0;
+            }
+        } else {
             $this->id = 0;
         }
+    }
+
+    //Override this to return a db object pointing at your table
+    abstract public function getDb();
+
+    public function save(){
+        $db = $this->getDb();
+        $result = $db->saveObject($this);
+
+        if(PHPWS_Error::logIfError($result)){
+            return false;
+        }
+        return true;
+    }
+
+    public function load($id=null){
+        if(!is_null($id) && is_numeric($id)){
+            $this->id = $id;
+        }
+
+        if(is_null($this->id) || !is_numeric($this->id) )
+            return false;
+
+        $db = $this->getDb();
+        $db->addWhere('id', $this->id);
+        $result = $db->loadObject($this);
+
+        if(PHPWS_Error::logIfError($result)){
+            return false;
+        }
+
+        return true;
     }
 
     public function reset()
@@ -74,9 +101,9 @@ class HMS_Item {
         return $tpl;
     }
 
-    /*******************
-     * Mutator Methods *
-     ******************/
+    /****************************
+     * Accessor/Mutator Methods *
+     ****************************/
     public function set_id($id){
         $this->id = $id;
     }

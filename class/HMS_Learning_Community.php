@@ -1,4 +1,5 @@
 <?php
+PHPWS_Core::initModClass('hms', 'HMS_Item.php');
 
 /**
  * Learning Community objects for HMS
@@ -6,22 +7,22 @@
  * @author Kevin Wilcox <kevin at tux dot appstate dot edu>
  */
 
-class HMS_Learning_Community
+class HMS_Learning_Community extends HMS_Item
 {
-    var $id;
-    var $community_name;
+    var $id=NULL;
+    var $community_name=NULL;
     var $abbreviation;
     var $capacity;
     var $hide;
-    var $error;
+    var $error="";
+    //A string containing a character for each allowed student type, maxLen() == 16;
+    var $allowed_student_types;
 
-    public function HMS_Learning_Community()
+    public function getDb()
     {
-        $this->id = NULL;
-        $this->community_name = NULL;
-        $this->error = "";
+        return new PHPWS_DB('hms_learning_communities');
     }
-    
+
     public function set_error_msg($msg)
     {
         $this->error .= $msg;
@@ -215,6 +216,7 @@ class HMS_Learning_Community
             }
 
             if(!(strlen($_REQUEST['abbv']) <= 16))
+
             {
                 return HMS_Learning_Community::show_edit_learning_community('The RLC abbreviation must be less than 16 characters long');
             }
@@ -485,12 +487,15 @@ class HMS_Learning_Community
     /**
      * Returns an associative array containing the list of RLC abbreviations keyed by their id.
      */
-    public function getRLCListAbbr()
+    public function getRLCListAbbr($student_type = NULL)
     {
         $db = &new PHPWS_DB('hms_learning_communities');
 
         $db->addColumn('id');
         $db->addColumn('abbreviation');
+        if(!is_null($student_type) && strlen($student_type) == 1)
+            $db->addColumn('allowed_student_types', "%{$student_type}%", 'ilike');
+
         $result = $db->select('assoc');
         return $result;
     }
@@ -498,11 +503,13 @@ class HMS_Learning_Community
     /**
      * Returns an associative array containing the list of RLCs using their full names, keyed by their id.
      */
-    public function getRLCList($hidden = NULL)
+    public function getRLCList($hidden = NULL, $student_type = NULL)
     {
         $db = &new PHPWS_DB('hms_learning_communities');
         $db->addColumn('id');
         $db->addColumn('community_name');
+        if(!is_null($student_type) && strlen($student_type) == 1)
+            $db->addWhere('allowed_student_types', "%{$student_type}%", 'ilike');
 
         if($hidden === FALSE){
             $db->addWhere('hide', 0);
@@ -1017,6 +1024,17 @@ class HMS_Learning_Community
 
     public function rowTags(){
         return array('ACTIONS' => "<a href=\"index.php?module=hms&action=ShowAddRlc&id={$this->id}\">Edit</a>");
+    }
+
+    public function allowStudentType($student_type){
+        if(!is_string($student_type) 
+            || strlen($student_type) != 1 
+            || stripos($this->allowed_student_types, $student_type) === false
+        ){
+            return false;
+        }
+
+        return true;
     }
 }
 ?>

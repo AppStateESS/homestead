@@ -27,6 +27,11 @@ class HMS_Bed extends HMS_Item {
 		//test($this);
 	}
 
+    public function getDb()
+    {
+        return new PHPWS_DB('hms_bed');
+    }
+
 	public function copy($to_term, $room_id, $assignments)
 	{
 		if (!$this->id) {

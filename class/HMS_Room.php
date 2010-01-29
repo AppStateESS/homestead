@@ -52,6 +52,11 @@ class HMS_Room extends HMS_Item
 		$this->construct($id, 'hms_room');
 	}
 
+    public function getDb()
+    {
+        return new PHPWS_DB('hms_room');
+    }
+
 	/********************
 	 * Instance Methods *
 	 *******************/
