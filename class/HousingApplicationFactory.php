@@ -81,7 +81,8 @@ class HousingApplicationFactory {
 		$areaCode 	= $context->get('area_code');
 		$exchange 	= $context->get('exchange');
 		$number		= $context->get('number');
-		$mealOption			= $context->get('meal_option');
+		$mealOption	= $context->get('meal_option');
+        $roomType   = $context->get('room_type');
 		
 		$specialNeeds = $context->get('special_needs');
 		
@@ -103,7 +104,7 @@ class HousingApplicationFactory {
 			throw new InvalidArgumentException('Invalid values were submitted. Please try again.');
 		}
 		
-		return new SummerApplication(0, $term, $student->getBannerId(), $student->getUsername(), $student->getGender(), $student->getType(), $student->getApplicationTerm(), $cellPhone, $mealOption, $physicalDisability, $psychDisability, $genderNeed, $medicalNeed);
+		return new SummerApplication(0, $term, $student->getBannerId(), $student->getUsername(), $student->getGender(), $student->getType(), $student->getApplicationTerm(), $cellPhone, $mealOption, $physicalDisability, $psychDisability, $genderNeed, $medicalNeed, $roomType);
     }
 
     public static function getApplicationById($id)

@@ -57,7 +57,7 @@ class HousingApplicationConfirmCommand extends Command {
             $application->delete();
         }
 
-        // Hard code a sumemr meal option for all summer applications.
+        // Hard code a summer meal option for all summer applications.
         // Application for other terms use whatever the student selected
         if($sem == TERM_SUMMER1 || $sem == TERM_SUMMER2){
             $mealPlan = BANNER_MEAL_5WEEK;
@@ -79,7 +79,7 @@ class HousingApplicationConfirmCommand extends Command {
             isset($specialNeeds['psych_disability']) ? 1 : 0,
             isset($specialNeeds['gender_need']) ? 1 : 0,
             isset($specialNeeds['medical_need']) ? 1 : 0,
-            ROOM_TYPE_DOUBLE
+            $context->get('room_type')
             );
 
         }else if ($sem == TERM_SPRING){
