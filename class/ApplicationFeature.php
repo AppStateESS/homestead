@@ -301,6 +301,7 @@ abstract class ApplicationFeature {
 
         $results = $db->select();
 
+        $features = array();
         foreach($results as $result){
             // Instanciate a registration object
             $path = 'applicationFeature/' . $result['name'] . '.php';
@@ -315,7 +316,7 @@ abstract class ApplicationFeature {
 
             $className = $result['name'];
 
-            $features[] = new $className($result['id']);
+            $features[$reg->getPriority()] = new $className($result['id']);
         }
 
         return $features;

@@ -11,7 +11,14 @@ class FreshmenMainMenuView extends View {
 	
 	public function show()
 	{
-		return "main menu here";
+        PHPWS_Core::initModClass('hms', 'ApplicationFeature.php');
+        $features = ApplicationFeature::getEnabledFeaturesForStudent($this->student, $this->student->getApplicationTerm());
+
+        $output = "Main Menu:<br />\n";
+        foreach($features as $feature) {
+            $output .= $feature->getMenuBlockView($this->student) . "<br />\n";
+        }
+        return $output;
 	}
 	
 }

@@ -14,11 +14,16 @@ class RlcApplicationRegistration extends ApplicationFeatureRegistration {
     
     public function showForStudent(Student $student, $term)
     {
-        if($student->getType() == TYPE_FRESHMEN && $term == $student->getApplicationTerm()){        
-            return true;
+        if($student->getType() != TYPE_FRESHMEN) {
+            return false;
+        }
+
+        $sem = substr($term, 4, 2);
+        if($sem != TERM_SUMMER1 && $sem != TERM_SUMMER2 && $sem != TERM_FALL) {
+            return false;
         }
         
-        return false;
+        return true;
     }
 }
 
@@ -26,7 +31,7 @@ class RlcApplication extends ApplicationFeature {
     
     public function getMenuBlockView(Student $student)
     {
-       //TODO
+        return "RLC Application";
     }
 }
 
