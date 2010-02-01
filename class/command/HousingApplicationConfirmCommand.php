@@ -135,13 +135,14 @@ class HousingApplicationConfirmCommand extends Command {
 
             # Send the email confirmation
             PHPWS_Core::initModClass('hms', 'HMS_Email.php');
-            HMS_Email::send_hms_application_confirmation($username, null);
+            HMS_Email::send_hms_application_confirmation($student, null);
 
         }
 
-        NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Your application was successfully processed!');
+        $friendly_term = Term::toString($application->getTerm());
+        NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, "Your application for $friendly_term was successfully processed!  You will receive an email confirmation in the next 24 hours.");
 
-        $successCmd = CommandFactory::getCommand('ShowHousingApplicationThanks');
+        $successCmd = CommandFactory::getCommand('ShowStudentMenu');
         $successCmd->redirect();
     }
 }

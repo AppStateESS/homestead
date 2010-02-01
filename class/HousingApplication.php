@@ -421,7 +421,7 @@ class HousingApplication {
                 $availableTerms[] = array('term'=>$applicationTerm, 'required'=>1);
                 $summer2Term = Term::getNextTerm($applicationTerm);
                 $availableTerms[] = array('term'=>$summer2Term, 'required'=>0);
-                $fallTerm = Term::getNextTerm($applicationTerm);
+                $fallTerm = Term::getNextTerm($summer2Term);
                 $availableTerms[] = array('term'=>$fallTerm, 'required'=>1);
                 break;
             case TERM_SUMMER2:

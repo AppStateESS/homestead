@@ -108,47 +108,54 @@ class HousingApplicationFormView extends View {
 			$form->setMatch('meal_option', BANNER_MEAL_STD);
 		}
 
-		/*************
-		 * Lifestyle *
-		 *************/
-		# TODO: get rid of the magic numbers!!!
-		$form->addDropBox('lifestyle_option', array('1'=>_('Single Gender Building'),
-                                                    '2'=>_('Co-Ed Building')));
-		if(!is_null($this->contextApplication)){
-			$form->setMatch('lifestyle_option',$this->contextApplication->getLifestyleOption());
-		}else if(!is_null($this->existingApplication)){
-			$form->setMatch('lifestyle_option',$this->existingApplication->getLifestyleOption());
-		}else{
-			$form->setMatch('lifestyle_option', '1');
-		}
+        // This is just getting worse and worse.
+        // TODO: this, correctly.
+        $sem = substr($this->term, 4, 2);
+        if($sem == 10 || $sem == 40) {
 
-		/************
-		 * Bed time *
-		 ************/
-		# TODO: magic numbers
-		$form->addDropBox('preferred_bedtime', array('1'=>_('Early'),
-                                                     '2'=>_('Late')));
-		if(!is_null($this->contextApplication)){
-			$form->setMatch('preferred_bedtime',$this->contextApplication->getPreferredBedtime());
-		}else if(!is_null($this->existingApplication)){
-			$form->setMatch('preferred_bedtime',$this->existingApplication->getPreferredBedtime());
-		}else{
-			$form->setMatch('preferred_bedtime', '1');
-		}
+            /*************
+             * Lifestyle *
+             *************/
+            # TODO: get rid of the magic numbers!!!
+            $form->addDropBox('lifestyle_option', array('1'=>_('Single Gender Building'),
+                                                        '2'=>_('Co-Ed Building')));
+            if(!is_null($this->contextApplication)){
+                $form->setMatch('lifestyle_option',$this->contextApplication->getLifestyleOption());
+            }else if(!is_null($this->existingApplication)){
+                $form->setMatch('lifestyle_option',$this->existingApplication->getLifestyleOption());
+            }else{
+                $form->setMatch('lifestyle_option', '1');
+            }
 
-		/******************
-		 * Room condition *
-		 ******************/
-		#TODO: magic numbers
-		$form->addDropBox('room_condition', array('1'=>_('Neat'),
-                                                  '2'=>_('Cluttered')));
-		if(!is_null($this->contextApplication)){
-			$form->setMatch('room_condition',$this->contextApplication->getRoomCondition());
-		}else if(!is_null($this->existingApplication)){
-			$form->setMatch('room_condition',$this->existingApplication->getRoomCondition());
-		}else{
-			$form->setMatch('room_condition', '1');
-		}
+            /************
+             * Bed time *
+             ************/
+            # TODO: magic numbers
+            $form->addDropBox('preferred_bedtime', array('1'=>_('Early'),
+                                                         '2'=>_('Late')));
+            if(!is_null($this->contextApplication)){
+                $form->setMatch('preferred_bedtime',$this->contextApplication->getPreferredBedtime());
+            }else if(!is_null($this->existingApplication)){
+                $form->setMatch('preferred_bedtime',$this->existingApplication->getPreferredBedtime());
+            }else{
+                $form->setMatch('preferred_bedtime', '1');
+            }
+
+            /******************
+             * Room condition *
+             ******************/
+            #TODO: magic numbers
+            $form->addDropBox('room_condition', array('1'=>_('Neat'),
+                                                      '2'=>_('Cluttered')));
+            if(!is_null($this->contextApplication)){
+                $form->setMatch('room_condition',$this->contextApplication->getRoomCondition());
+            }else if(!is_null($this->existingApplication)){
+                $form->setMatch('room_condition',$this->existingApplication->getRoomCondition());
+            }else{
+                $form->setMatch('room_condition', '1');
+            }
+
+        }
 
 		/*****************
 		 * Special needs *

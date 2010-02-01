@@ -31,7 +31,19 @@ class HousingApplicationWelcomeView extends View {
 				$tpl['REQUIRED_TERMS'][] = array('REQ_TERM'=>Term::toString($t['term']));
 			}
 		}
-		
+
+        # Get the applications the user has on file so we can mark them off
+        $appsOnFile = HousingApplication::getAllApplications($this->student->getUsername());
+
+        $tpl['APPLIED_TERMS'] = array();
+        foreach($appsOnFile as $t) {
+            if(Term::getTermSem($t->getTerm()) == TERM_FALL) {
+                $tpl['APPLIED_TERMS'][] = array('APP_TERM'=>Term::toString($t->getTerm()) . ' - ' . Term::toString(Term::getNextTerm($t->getTerm())));
+            } else {
+                $tpl['APPLIED_TERMS'][] = array('APP_TERM'=>Term::toString($t->getTerm()));
+            }
+        }
+
 		$contactCmd = CommandFactory::getCommand('ShowContactForm');
 		
 		$tpl['CONTACT_LINK'] = $contactCmd->getLink('contact us');
@@ -47,6 +59,11 @@ class HousingApplicationWelcomeView extends View {
 		$tpl = $form->getTemplate();
 
 		$studentType = $this->student->getType();
+
+        if(count($appsOnFile) > 0) {
+            // User is now past step one.  No longer just welcoming, we are now welcoming back.
+            return PHPWS_Template::process($tpl, 'hms', 'student/welcome_back_screen.tpl');
+        }
 		
 		# Application deadline has not passed, so show welcome page
 		if($studentType == TYPE_FRESHMEN || $studentType == TYPE_NONDEGREE){

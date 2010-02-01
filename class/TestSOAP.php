@@ -36,11 +36,9 @@ class TestSOAP extends SOAP{
    		$student->application_term      = '201040';
    		$student->projected_class       = 'FR';
 
-/*
-        $student->student_type          = 'C';
+        $student->student_type          = 'F';
         $student->application_term      = '200840';
         $student->projected_class       = 'SR';
-*/
 
         if($username == 'housing_test_spring_freshmen'){
             $student->student_type      = 'F';
@@ -48,9 +46,9 @@ class TestSOAP extends SOAP{
             $student->projected_class   = 'FR';
         }
 
-        if($username == 'housing_test_fall_freshmen'){
+        if($username == 'freshman'){
             $student->student_type      = 'F';
-            $student->application_term  = '2010140';
+            $student->application_term  = '201020';
             $student->projected_class   = 'FR';
         }
 

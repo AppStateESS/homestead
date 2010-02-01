@@ -122,7 +122,7 @@ class ShowStudentMenuCommand extends Command {
             }
 
             # Make sure the student doesn't already have an assignment on file for the current term
-            if(HMS_Assignment::checkForAssignment($student->getUsername(), $currentTerm)){
+            if(HMS_Assignment::checkForAssignment($username, $currentTerm)){
                 # No idea what's going on here, send to a contact page
                 $contactCmd->redirect();
             }
@@ -130,9 +130,8 @@ class ShowStudentMenuCommand extends Command {
             # Check to see if the user has an application on file already for every required term
             # If so, forward to main menu
             $requiredTerms = HousingApplication::checkAppliedForAllRequiredTerms($student);
-            	
+
             if(count($requiredTerms) > 0){
-                //TODO if the student has one or more applications submitted, skip the welcome screen and go stright to the terms & agreement
                 # Student is missing a required application, so redirect to the application form for that term
                 $appCmd = CommandFactory::getCommand('ShowHousingApplicationWelcome');
                 $appCmd->setTerm($requiredTerms[0]);

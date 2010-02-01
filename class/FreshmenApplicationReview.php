@@ -27,9 +27,14 @@ class FreshmenApplicationReview extends View {
         $tpl['STUDENT_STATUS_LBL']          = $this->student->getPrintableType();
 
         $tpl['MEAL_OPTION']         = HMS_Util::formatMealOption($this->app->getMealPlan());
-        $tpl['LIFESTYLE_OPTION']    = $this->app->getLifestyleOption()	== 1?'Single gender':'Co-ed';
-        $tpl['PREFERRED_BEDTIME']   = $this->app->getPreferredBedtime()	== 1?'Early':'Late';
-        $tpl['ROOM_CONDITION']      = $this->app->getRoomCondition()	== 1?'Clean':'Dirty';
+
+        // TODO: This, right
+        $sem = substr($this->term, 4, 2);
+        if($sem == 10 || $sem == 40) {
+            $tpl['LIFESTYLE_OPTION']    = $this->app->getLifestyleOption()	== 1?'Single gender':'Co-ed';
+            $tpl['PREFERRED_BEDTIME']   = $this->app->getPreferredBedtime()	== 1?'Early':'Late';
+            $tpl['ROOM_CONDITION']      = $this->app->getRoomCondition()	== 1?'Clean':'Dirty';
+        }
 
         $tpl['CELLPHONE']   = is_null($this->app->getCellPhone())?"(not provided)":$this->app->getCellPhone();
         

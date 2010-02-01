@@ -49,6 +49,7 @@
             <tr>
                 <td>Meal Option: </td><td align="left">{MEAL_OPTION}</td>
             </tr>
+            <!-- BEGIN preferences -->
             <tr>
                 <th colspan="2">Preferences</th>
             </tr>
@@ -61,6 +62,7 @@
             <tr>
                 <td>Room Condition: </td><td align="left">{ROOM_CONDITION}</td>
             </tr>
+            <!-- END preferences -->
             <tr>
                 <th colspan="2">Special Needs Housing</th>
             </tr>

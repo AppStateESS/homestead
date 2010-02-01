@@ -39,14 +39,23 @@ class HousingApplicationFormSubmitCommand extends Command {
         }
 
         $mealOption			= $context->get('meal_option');
-        $lifestyleOption	= $context->get('lifestyle_option');
-        $preferredBedtime	= $context->get('preferred_bedtime');
-        $roomCondition		= $context->get('room_condition');
-
-        if(!is_numeric($mealOption) || !is_numeric($lifestyleOption) || !is_numeric($preferredBedtime) || !is_numeric($roomCondition))
-        {
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Invalid values enterd. Please try again.');
+        if(!is_numeric($mealOption)) {
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Invalid values entered.  Please try again.');
             $errorCmd->redirect();
+        }
+
+        // TODO: this, right
+        $sem = substr($term, 4, 2);
+        if($sem == 10 || $sem == 40) {
+            $lifestyleOption	= $context->get('lifestyle_option');
+            $preferredBedtime	= $context->get('preferred_bedtime');
+            $roomCondition		= $context->get('room_condition');
+
+            if(!is_numeric($lifestyleOption) || !is_numeric($preferredBedtime) || !is_numeric($roomCondition))
+            {
+                NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Invalid values entered. Please try again.');
+                $errorCmd->redirect();
+            }
         }
 
         //TODO add side thingie

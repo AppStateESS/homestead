@@ -22,7 +22,7 @@
         {SUBMIT}
         {END_FORM}
         <br /><br />
-        If the above information in incorrect, if you are not a new freshman,
+        If the above information is incorrect, if you are not a new freshman,
         or if this will not be your first time living on campus, then please {CONTACT_LINK}.
         </div>
     </div>
