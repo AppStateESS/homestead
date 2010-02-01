@@ -135,6 +135,8 @@ class HMS_Activity_Log{
      */
     public static function log_activity($userid, $activity, $actor, $notes = NULL)
     {
+        test($activity);
+        
         if(UserStatus::isMasquerading()) {
             $notes .= " Admin: " . UserStatus::getUsername(FALSE); // get the *real* username
         }
@@ -200,7 +202,8 @@ class HMS_Activity_Log{
         ACTIVITY_NOTIFICATION_SENT              => "Notification sent",
         ACTIVITY_ANON_NOTIFICATION_SENT         => "Anonymous notification sent",
         ACTIVITY_HALL_NOTIFIED                  => "Email notification sent to hall",
-        ACTIVITY_HALL_NOTIFIED_ANONYMOUSLY      => "Anonymous email notification sent to hall");
+        ACTIVITY_HALL_NOTIFIED_ANONYMOUSLY      => "Anonymous email notification sent to hall",
+        ACTIVITY_LOTTERY_OPTOUT                 => "Opted-out of waiting list");
     }
 
     /**

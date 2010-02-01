@@ -198,6 +198,8 @@ define('ACTIVITY_ANON_NOTIFICATION_SENT',       52);
 define('ACTIVITY_HALL_NOTIFIED',                53);
 define('ACTIVITY_HALL_NOTIFIED_ANONYMOUSLY',    54);
 
+define('ACTIVITY_LOTTERY_OPTOUT',               55);
+
 /** 
  * Errors 
  */

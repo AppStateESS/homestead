@@ -54,7 +54,6 @@ class HMS_Lottery {
         }catch(Exception $e){
             $output[] = 'Error counting previously sent invites! Exception: ' . $e->getMessage();
             HMS_Lottery::lottery_complete('FAILED', $output);
-            return;
         }
 
         $output[] = "$senior_invites_sent senior invites previously sent";
@@ -67,7 +66,6 @@ class HMS_Lottery {
         }catch(Exception $e){
             $output[] = 'error counting outstanding female invites Exception: ' . $e->getMessage();
             HMS_Lottery::lottery_complete("FAILED", $output);
-            return;
         }
 
         $output[] = "$female_invites_outstanding female invites outstanding";
@@ -78,7 +76,6 @@ class HMS_Lottery {
         }catch(Exception $e){
             $output[] = 'error counting outstanding male invites Exception: ' . $e->getMessage();
             HMS_Lottery::lottery_complete("FAILED", $output);
-            return;
         }
 
         $output[] = "$male_invites_outstanding male invites oustanding";
@@ -94,7 +91,6 @@ class HMS_Lottery {
         }catch(Exception $e){
             $output[] = 'error counting outstanding roommate invites Exception: ' . $e->getMessage();
             HMS_Lottery::lottery_complete("FAILED", $output);
-            return;
         }
 
         $output[] = "$outstanding_roommate_invites outstanding roommate invites";
@@ -125,7 +121,6 @@ class HMS_Lottery {
             }catch(Exception $e){
                 $output[] = 'Error while counting full rooms. Exception: ' . $e->getMessage();
                 HMS_Lottery::lottery_complete('FAILED', $output);
-                return;
             }
 
             $output[] = "$full_rooms full lottery rooms";
@@ -136,7 +131,6 @@ class HMS_Lottery {
             }catch(Exception $e){
                 $output[] = 'Error while counting full rooms. Check the error logs. Exception: ' . $e->getMessage();
                 HMS_Lottery::lottery_complete('FAILED', $output);
-                return;
             }
 
             $output[] = "$used_rooms lottery rooms used";
@@ -160,7 +154,6 @@ class HMS_Lottery {
             }catch(Exception $e){
                 $output[] = 'Error counting non-full female rooms. Exception: ' . $e->getMessage();
                 HMS_Lottery::lottery_complete('FAILED', $output);
-                return;
             }
 
             try{
@@ -168,7 +161,6 @@ class HMS_Lottery {
             }catch(Exception $e){
                 $output[] = 'Error counting non-full male rooms. Exception: ' . $e->getMessage();;
                 HMS_Lottery::lottery_complete('FAILED', $output);
-                return;
             }
 
             # Count the number of co-ed rooms
@@ -177,7 +169,6 @@ class HMS_Lottery {
             }catch(Exception $e){
                 $output[] = 'Error counting non-full co-ed rooms. Exception: ' . $e->getMessage();
                 HMS_Lottery::lottery_complete('FAILED', $output);
-                return;
             }
 
             $output[] = "$coed_rooms_this_hall remaining coed rooms";
@@ -204,13 +195,11 @@ class HMS_Lottery {
         if($remaining_rooms <= 0 && $outstanding_invite_count <= 0 && $outstanding_roommate_invites <= 0){
             $output[] = 'No remaining rooms and no outstanding invites, done!';
             HMS_Lottery::lottery_complete('SUCCESS', $output, TRUE);
-            return;
         }
 
         if($remaining_rooms <= 0){
             $output[] = 'No remaining rooms, but there are outstanding invites, quitting for now.';
             HMS_Lottery::lottery_complete('SUCCESS', $output);
-            return;
         }
 
         /*
@@ -273,7 +262,6 @@ class HMS_Lottery {
         if($invites_to_send <= 0){
             $output[] = "Cannout send any new entries, quitting.";
             HMS_Lottery::lottery_complete('SUCCESS', $output);
-            return;
         }
 
         # Count the number of remaining entries
@@ -282,7 +270,6 @@ class HMS_Lottery {
         }catch(Exception $e){
             $output[] = 'Error counting outstanding lottery entires, quitting. Exception: ' . $e->getMessage();
             HMS_Lottery::lottery_complete('FAILED', $output);
-            return;
         }
 
         $output[] = "$remaining_entries lottery entries remaining";
@@ -307,7 +294,6 @@ class HMS_Lottery {
             if($remaining_entries <= 0){
                 $output[] = 'No entries remaining, quitting!';
                 HMS_Lottery::lottery_complete('SUCCESS', $output, TRUE);
-                return;
             }
 
             $output[] = "$remaining_entries entries remaining";
@@ -362,7 +348,6 @@ class HMS_Lottery {
                         // If this ever happens, it means we reached our invite caps for all calsses before all the available lottery rooms were filled
                         $output[] = "All invite caps (by class) reached or out of students to invite, quitting.";
                         HMS_Lottery::lottery_complete('SUCCESS', $output);
-                        return;
                     }
                 }
 
@@ -379,7 +364,6 @@ class HMS_Lottery {
             if($j >= 200){
                 $output[] = "Couldn't find a winner. Stopping.";
                 HMS_Lottery::lottery_complete('SUCCESS', $output);
-                return;
             }
 
             $winning_username = $winning_row['username'];
@@ -394,7 +378,6 @@ class HMS_Lottery {
             }catch(Exception $e){
                 $output[] = 'Error while trying to select a winning student. Exception: ' . $e->getMessage();
                 HMS_Lottery::lottery_complete('FAILED', $output);
-                return;
             }
 
             # Update the counts of male/female invites available
@@ -428,7 +411,6 @@ class HMS_Lottery {
         }
 
         HMS_Lottery::lottery_complete('SUCCESS', $output);
-        return;
     }
 
     /*
@@ -858,9 +840,10 @@ class HMS_Lottery {
             $email .= $line . "\n";
         }
 
-        $_SESSION['UNSCHEDULE_LOTTERY'] = $unschedule;
+        # TODO: unschedule from pulse here, if true
 
         HMS_Email::send_lottery_status_report($status, $email);
+        exit;
     }
 
 
