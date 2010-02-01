@@ -19,30 +19,31 @@ class HousingApplicationWelcomeView extends View {
 		
 		$tpl['ENTRY_TERM'] = Term::toString($this->student->getApplicationTerm());
 		$tpl['REQUIRED_TERMS'] = array();
+
+        $appsOnFile = HousingApplication::getAllApplications($this->student->getUsername());
+        $termsOnFile = array();
+        foreach($appsOnFile as $app) {
+            $termsOnFile[] = $app->getTerm();
+        }
 		
 		foreach($this->requiredTerms as $t){
 			if($t['required'] == 0){
 				continue;
 			}
+
+            $completed = '';
+            if(in_array($t['term'], $termsOnFile)) {
+                $completed = ' <span style="color: #0000AA">(Completed)</span>';
+            }
 			
 			if(Term::getTermSem($t['term']) == TERM_FALL){
-				$tpl['REQUIRED_TERMS'][] = array('REQ_TERM'=>Term::toString($t['term']) . ' - ' . Term::toString(Term::getNextTerm($t['term'])));
+                $tpl['REQUIRED_TERMS'][] = array('REQ_TERM'=>Term::toString($t['term']) . ' - ' . Term::toString(Term::getNextTerm($t['term'])),
+                                                 'COMPLETED' => $completed);
 			}else{
-				$tpl['REQUIRED_TERMS'][] = array('REQ_TERM'=>Term::toString($t['term']));
+                $tpl['REQUIRED_TERMS'][] = array('REQ_TERM'=>Term::toString($t['term']),
+                                                 'COMPLETED' => $completed);
 			}
 		}
-
-        # Get the applications the user has on file so we can mark them off
-        $appsOnFile = HousingApplication::getAllApplications($this->student->getUsername());
-
-        $tpl['APPLIED_TERMS'] = array();
-        foreach($appsOnFile as $t) {
-            if(Term::getTermSem($t->getTerm()) == TERM_FALL) {
-                $tpl['APPLIED_TERMS'][] = array('APP_TERM'=>Term::toString($t->getTerm()) . ' - ' . Term::toString(Term::getNextTerm($t->getTerm())));
-            } else {
-                $tpl['APPLIED_TERMS'][] = array('APP_TERM'=>Term::toString($t->getTerm()));
-            }
-        }
 
 		$contactCmd = CommandFactory::getCommand('ShowContactForm');
 		

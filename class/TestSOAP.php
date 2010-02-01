@@ -48,7 +48,7 @@ class TestSOAP extends SOAP{
 
         if($username == 'freshman'){
             $student->student_type      = 'F';
-            $student->application_term  = '201040';
+            $student->application_term  = '201020';
             $student->projected_class   = 'FR';
         }
 
