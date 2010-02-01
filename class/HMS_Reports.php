@@ -23,7 +23,8 @@ class HMS_Reports{
                         'applied_data_export'   => 'Applied Student Data Export',
                         'assigned_data_export'  => 'Assigned Student Data Export',
                         'full_roster_report'    => 'Package Desk Roster',
-                        'over_twenty_five'      => 'Over 25 report'
+                        'over_twenty_five'      => 'Over 25 report',
+                        'single_vs_coed'        => 'Single gender vs. Co-ed report'
                         );
                         /*                        'housing_asss' => 'Housing Assignments Made',*/
                         /*                        'unassd_rooms' => 'Currently Unassigned Rooms',*/
@@ -86,6 +87,8 @@ class HMS_Reports{
                 return HMS_Reports::roster_report();
             case 'over_twenty_five':
                 return HMS_Reports::over_twenty_five_report();
+            case 'single_vs_coed':
+                return HMS_Reports::single_vs_coed();
            default:
                 $content .= "ugh";
                 break;
@@ -1286,6 +1289,111 @@ class HMS_Reports{
         }
 
         return $content;
+    }
+
+    public static function single_vs_coed()
+    {
+        PHPWS_Core::initModClass('hms', 'CommandFactory.php');
+        $cmd = CommandFactory::getCommand('ListReports');
+        $semester = Term::getTermSem(Term::getSelectedTerm());
+        $tpl = array();
+        
+        if($semester != TERM_FALL && $semester != TERM_SPRING){
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Your selected term must be fall or spring!');
+
+            $cmd->redirect();
+        }
+
+        PHPWS_Core::initModClass('hms', 'FallApplication.php');
+        PHPWS_Core::initModClass('hms', 'SpringApplication.php');
+
+        $table2 = $semester == TERM_FALL ? 'hms_fall_application' : 'hms_spring_application';
+
+        /*
+         * Male Coed total
+         */
+        $db = new PHPWS_DB('hms_new_application');
+        $db->addTable('hms_fall_application');
+        $db->addJoin('left', 'hms_new_application', $table2, 'id', 'id');
+        $db->addWhere($table2.'.lifestyle_option', COED);
+
+        $db->addWhere('term', Term::getSelectedTerm());
+        $db->addWhere('gender', MALE);
+        $db->addColumn('id', null, 'total', TRUE);
+        $result = $db->select('row');
+
+        if(PHPWS_Error::logIfError($result)){
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Database Error!');
+
+            $cmd->redirect();
+        }
+
+        $tpl['MALE_COED'] = $result['total'];
+
+        /*
+         * Male Single Gender total
+         */
+        $db = new PHPWS_DB('hms_new_application');
+        $db->addTable('hms_fall_application');
+        $db->addJoin('left', 'hms_new_application', $table2, 'id', 'id');
+        $db->addWhere($table2.'.lifestyle_option', COED, '<>'); // <> == '!=';
+
+        $db->addWhere('term', Term::getSelectedTerm());
+        $db->addWhere('gender', MALE);
+        $db->addColumn('id', null, 'total', TRUE);
+        $result = $db->select('row');
+
+        if(PHPWS_Error::logIfError($result)){
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Database Error!');
+
+            $cmd->redirect();
+        }
+
+        $tpl['MALE_SINGLE_GENDER'] = $result['total'];
+
+        /*
+         * Female Coed total
+         */
+        $db = new PHPWS_DB('hms_new_application');
+        $db->addTable('hms_fall_application');
+        $db->addJoin('left', 'hms_new_application', $table2, 'id', 'id');
+        $db->addWhere($table2.'.lifestyle_option', COED);
+
+        $db->addWhere('term', Term::getSelectedTerm());
+        $db->addWhere('gender', FEMALE);
+        $db->addColumn('id', null, 'total', TRUE);
+        $result = $db->select('row');
+
+        if(PHPWS_Error::logIfError($result)){
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Database Error!');
+
+            $cmd->redirect();
+        }
+
+        $tpl['FEMALE_COED'] = $result['total'];
+
+        /*
+         * Female Single Gender
+         */
+        $db = new PHPWS_DB('hms_new_application');
+        $db->addTable('hms_fall_application');
+        $db->addJoin('left', 'hms_new_application', $table2, 'id', 'id');
+        $db->addWhere($table2.'.lifestyle_option', COED, '<>'); // <> == '!=';
+
+        $db->addWhere('term', Term::getSelectedTerm());
+        $db->addWhere('gender', FEMALE);
+        $db->addColumn('id', null, 'total', TRUE);
+        $result = $db->select('row');
+
+        if(PHPWS_Error::logIfError($result)){
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Database Error!');
+
+            $cmd->redirect();
+        }
+
+        $tpl['FEMALE_SINGLE_GENDER'] = $result['total'];
+
+        return PHPWS_Template::process($tpl, 'hms', 'admin/reports/single_vs_coed.tpl');
     }
 }
 ?>
