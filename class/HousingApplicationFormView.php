@@ -155,6 +155,16 @@ class HousingApplicationFormView extends View {
                 $form->setMatch('room_condition', '1');
             }
 
+        } else if($sem == 20 || $sem == 30) {
+            $form->addDropBox('room_type', array('0'=>'Two person', '1'=>'Private (if available)'));
+
+            if(!is_null($this->contextApplication)) {
+                $form->setMatch('room_type', $this->contextApplication->getRoomType());
+            } else if(!is_null($this->existingApplication)) {
+                $form->setMatch('room_type', $this->existingApplication->getRoomType());
+            } else {
+                $form->setMatch('room_type', '0');
+            }
         }
 
 		/*****************

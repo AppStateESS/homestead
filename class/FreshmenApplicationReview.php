@@ -34,6 +34,8 @@ class FreshmenApplicationReview extends View {
             $tpl['LIFESTYLE_OPTION']    = $this->app->getLifestyleOption()	== 1?'Single gender':'Co-ed';
             $tpl['PREFERRED_BEDTIME']   = $this->app->getPreferredBedtime()	== 1?'Early':'Late';
             $tpl['ROOM_CONDITION']      = $this->app->getRoomCondition()	== 1?'Clean':'Dirty';
+        } else if($sem == 20 || $sem == 30) {
+            $tpl['ROOM_TYPE'] = $this->app->getRoomType() == 0?'Two person':'Private (if available)';
         }
 
         $tpl['CELLPHONE']   = is_null($this->app->getCellPhone())?"(not provided)":$this->app->getCellPhone();

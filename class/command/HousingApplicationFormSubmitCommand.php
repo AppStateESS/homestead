@@ -56,6 +56,13 @@ class HousingApplicationFormSubmitCommand extends Command {
                 NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Invalid values entered. Please try again.');
                 $errorCmd->redirect();
             }
+        } else if($sem == 20 || $sem == 30) {
+            $roomType = $context->get('room_type');
+
+            if(!is_numeric($roomType)) {
+                NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Invalid values entered.  Please try again.');
+                $errorCmd->redirect();
+            }
         }
 
         //TODO add side thingie
