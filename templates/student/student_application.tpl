@@ -43,12 +43,14 @@
                 <td>Cell Phone Number: </td><td align="left">{CELLPHONE}</td>
             </tr>
             <!-- END review -->
+            <!-- BEGIN meal_plan -->
             <tr>
                 <th colspan="2">Meal Plan</th>
             </tr>
             <tr>
                 <td>Meal Option: </td><td align="left">{MEAL_OPTION}</td>
             </tr>
+            <!-- END meal_plan -->
             <!-- BEGIN preferences -->
             <tr>
                 <th colspan="2">Preferences</th>

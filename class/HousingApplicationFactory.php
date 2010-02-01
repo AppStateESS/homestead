@@ -98,11 +98,6 @@ class HousingApplicationFactory {
 		}else{
 			$cellPhone = NULL;
 		}
-
-		if(!is_numeric($mealOption))
-		{
-			throw new InvalidArgumentException('Invalid values were submitted. Please try again.');
-		}
 		
 		return new SummerApplication(0, $term, $student->getBannerId(), $student->getUsername(), $student->getGender(), $student->getType(), $student->getApplicationTerm(), $cellPhone, $mealOption, $physicalDisability, $psychDisability, $genderNeed, $medicalNeed, $roomType);
     }

@@ -83,35 +83,35 @@ class HousingApplicationFormView extends View {
 			$form->setMatch('do_not_call', 1);
 		}
 
-		/***************
-		 * Meal Option *
-		 */
-		# Don't show *low* meal option to freshmen
-		if($this->student->getType() == TYPE_FRESHMEN){
-			$form->addDropBox('meal_option', array(BANNER_MEAL_STD=>_('Standard'),
-			BANNER_MEAL_HIGH=>_('High'),
-			BANNER_MEAL_SUPER=>_('Super')));
-		}else{
-			$form->addDropBox('meal_option', array(BANNER_MEAL_LOW=>_('Low'),
-			BANNER_MEAL_STD=>_('Standard'),
-			BANNER_MEAL_HIGH=>_('High'),
-			BANNER_MEAL_SUPER=>_('Super')));
-		}
-		
-		$form->setMatch('meal_option', BANNER_MEAL_STD);
-
-		if(!is_null($this->contextApplication)){
-			$form->setMatch('meal_option',$this->contextApplication->getMealPlan());
-		}elseif(!is_null($this->existingApplication)){
-			$form->setMatch('meal_option',$this->existingApplication->getMealPlan());
-		}else{
-			$form->setMatch('meal_option', BANNER_MEAL_STD);
-		}
-
         // This is just getting worse and worse.
         // TODO: this, correctly.
         $sem = substr($this->term, 4, 2);
         if($sem == 10 || $sem == 40) {
+
+            /***************
+             * Meal Option *
+             */
+            # Don't show *low* meal option to freshmen
+            if($this->student->getType() == TYPE_FRESHMEN){
+                $form->addDropBox('meal_option', array(BANNER_MEAL_STD=>_('Standard'),
+                BANNER_MEAL_HIGH=>_('High'),
+                BANNER_MEAL_SUPER=>_('Super')));
+            }else{
+                $form->addDropBox('meal_option', array(BANNER_MEAL_LOW=>_('Low'),
+                BANNER_MEAL_STD=>_('Standard'),
+                BANNER_MEAL_HIGH=>_('High'),
+                BANNER_MEAL_SUPER=>_('Super')));
+            }
+            
+            $form->setMatch('meal_option', BANNER_MEAL_STD);
+
+            if(!is_null($this->contextApplication)){
+                $form->setMatch('meal_option',$this->contextApplication->getMealPlan());
+            }elseif(!is_null($this->existingApplication)){
+                $form->setMatch('meal_option',$this->existingApplication->getMealPlan());
+            }else{
+                $form->setMatch('meal_option', BANNER_MEAL_STD);
+            }
 
             /*************
              * Lifestyle *
@@ -197,7 +197,7 @@ class HousingApplicationFormView extends View {
 
 		/*******
 		 * RLC *
-		 *******/
+		 *******
 		PHPWS_Core::initModClass('hms', 'applicationFeature/RlcApplication.php');
 		$rlcReg = new RLCApplicationRegistration();
 		
@@ -215,7 +215,7 @@ class HousingApplicationFormView extends View {
 			}
 		}else{
 			$form->addHidden('rlc_interest', 0);
-		}
+        }*/
 
 		$form->addSubmit('submit', _('Continue'));
 		$form->setExtra('submit', 'class="hms-application-submit-button"');
