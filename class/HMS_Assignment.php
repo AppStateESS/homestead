@@ -235,8 +235,8 @@ class HMS_Assignment extends HMS_Item
 
 		$db->addWhere('term', $term);
 			
-		$result = $db->select('row');
-
+		$result = $db->select('one');
+		
 		if (PHPWS_Error::logIfError($result)) {
 			PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
 			throw new DatabaseException($result->toString());

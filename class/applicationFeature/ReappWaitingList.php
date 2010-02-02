@@ -9,7 +9,7 @@ class ReappWaitingListRegistration extends ApplicationFeatureRegistration {
         $this->description = 'Re-application Waiting List';
         $this->startDateRequired = true;
         $this->endDateRequired = true;
-        $this->priority = 1;
+        $this->priority = 2;
     }
     
     public function showForStudent(Student $student, $term)
@@ -38,6 +38,7 @@ class ReappWaitingList extends ApplicationFeature {
     public function getMenuBlockView(Student $student)
     {
         PHPWS_Core::initModClass('hms', 'ReapplicationWaitingListMenuBlockView.php');
+        PHPWS_Core::initModClass('hms', 'HousingApplication.php');
         
         $term = PHPWS_Settings::get('hms', 'lottery_term');
         $application = HousingApplication::getApplicationByUser(UserStatus::getUsername(), $term);

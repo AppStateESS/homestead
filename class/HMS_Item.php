@@ -36,11 +36,8 @@ abstract class HMS_Item {
         return true;
     }
 
-    public function load($id=null){
-        if(!is_null($id) && is_numeric($id)){
-            $this->id = $id;
-        }
-
+    public function load(){
+        
         if(is_null($this->id) || !is_numeric($this->id) )
             return false;
 
@@ -74,13 +71,15 @@ abstract class HMS_Item {
 
     public function delete()
     {
-        $db = new PHPWS_DB($this->_table);
+        $db = $this->getDb();
         $db->addWhere('id', $this->id);
         //$db->setTestMode();
         $result = $db->delete();
-        if(!$result || PHPWS_Error::logIfError($result)){
-            return $result;
+        if(PHPWS_Error::logIfError($result)){
+            PHPWS_Core::initModClass('hms', 'execption/DatabaseException.php');
+            throw new DatabaseException($result->toString());
         }
+        
         return TRUE;
     }
 

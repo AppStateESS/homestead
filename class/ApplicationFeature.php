@@ -300,9 +300,10 @@ abstract class ApplicationFeature {
         $db->addWhere('term', $term);
 
         $results = $db->select();
-
+        
         $features = array();
         foreach($results as $result){
+            
             // Instanciate a registration object
             $path = 'applicationFeature/' . $result['name'] . '.php';
             PHPWS_Core::initModClass('hms', $path);

@@ -7,7 +7,7 @@ class ReapplicationWaitingListMenuBlockView extends View {
     private $endDate;
     private $application;
 
-    public function __construct($term, $startDate, $endDate, LotteryApplication $application)
+    public function __construct($term, $startDate, $endDate, LotteryApplication $application = NULL)
     {
         $this->term = $term;
         $this->startDate = $startDate;
@@ -17,6 +17,7 @@ class ReapplicationWaitingListMenuBlockView extends View {
     
     public function show()
     {
+        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
         $tpl = array();
         
         $now = time();
@@ -25,7 +26,7 @@ class ReapplicationWaitingListMenuBlockView extends View {
             $tpl['BEGIN_DEADLINE'] = HMS_Util::get_long_date_time($this->startDate);
         }else if($this->endDate < $now){
             $tpl['END_DEADLINE'] = HMS_Util::get_long_date_time($this->endDate);
-        }else if ($this->application->waiting_list_hide == 1){
+        }else if (isset($this->application) && $this->application->waiting_list_hide == 1){
             $tpl['OPTED_OUT'] = " ";
         }else{
             $optOutCmd = CommandFactory::getCommand('LotteryShowWaitingListOptOut');
