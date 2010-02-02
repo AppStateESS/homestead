@@ -1,24 +1,27 @@
 <?php
 
+PHPWS_Core::initModClass('hms', 'StudentMenuTermBlock.php');
+PHPWS_Core::initModClass('hms', 'HousingApplication.php');
+
 class FreshmenMainMenuView extends View {
 	
-	private $student;
-	
+    private $student;
+    
 	public function __construct(Student $student)
 	{
-		$this->student = $student;
+	    $this->student = $student;
 	}
 	
 	public function show()
 	{
-        PHPWS_Core::initModClass('hms', 'ApplicationFeature.php');
-        $features = ApplicationFeature::getEnabledFeaturesForStudent($this->student, $this->student->getApplicationTerm());
-
-        $output = "Main Menu:<br />\n";
-        foreach($features as $feature) {
-            $output .= $feature->getMenuBlockView($this->student) . "<br />\n";
+	    $terms = HousingApplication::getAvailableApplicationTermsForStudent($this->student);
+	    
+	    foreach($terms as $t){
+            $termBlock = new StudentMenuTermBlock($this->student, $t['term']);
+            $tpl['TERMBLOCK'][] = array('TERMBLOCK_CONTENT'=>$termBlock->show());
         }
-        return $output;
+        
+        return PHPWS_Template::process($tpl, 'hms', 'student/freshmenMenu.tpl');
 	}
 	
 }

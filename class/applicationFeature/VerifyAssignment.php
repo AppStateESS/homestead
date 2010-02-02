@@ -15,7 +15,7 @@ class VerifyAssignmentRegistration extends ApplicationFeatureRegistration {
     public function showForStudent(Student $student, $term)
     {
         // Freshmen only
-        if($term == $student->getApplicationTerm())
+        if($student->getApplicationTerm() > Term::getCurrentTerm())
         {
             return true;
         }
@@ -28,7 +28,8 @@ class VerifyAssignment extends ApplicationFeature {
 
     public function getMenuBlockView(Student $student)
     {
-        return 'Verify Assignment';
+        PHPWS_Core::initModClass('hms', 'VerifyAssignmentMenuBlockView.php');
+        return new VerifyAssignmentMenuBlockView($student, $this->getStartDate(), $this->getEndDate());
     }
 
 }

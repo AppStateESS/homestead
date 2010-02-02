@@ -15,9 +15,9 @@ class ReappWaitingListRegistration extends ApplicationFeatureRegistration {
     public function showForStudent(Student $student, $term)
     {
         // for freshmen
-        if($term == $student->getApplicationTerm())
+        if($student->getApplicationTerm() > Term::getCurrentTerm())
         {
-            return true;
+            return false;
         }
         
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');

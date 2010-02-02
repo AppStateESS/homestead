@@ -137,10 +137,8 @@ class ShowStudentMenuCommand extends Command {
                 $appCmd->setTerm($requiredTerms[0]);
                 $appCmd->redirect();
             }else{
-                //TODO redirect?
-                PHPWS_Core::initModClass('hms', 'FreshmenMainMenuView.php');
-                $view = new FreshmenMainMenuView($student);
-                $context->setContent($view->show());
+                $menuCmd = CommandFactory::getCommand('ShowFreshmenMainMenu');
+                $menuCmd->redirect();
             }
         }
     }

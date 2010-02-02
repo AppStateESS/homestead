@@ -15,7 +15,7 @@ class ApplicationRegistration extends ApplicationFeatureRegistration {
     public function showForStudent(Student $student, $term)
     {
         // for freshmen
-        if($term == $student->getApplicationTerm())
+        if($student->getApplicationTerm() > Term::getCurrentTerm())
         {
             return true;
         }
@@ -38,7 +38,6 @@ class Application extends ApplicationFeature {
 		
 		$application      = HousingApplication::getApplicationByUser($student->getUsername(), $this->term);
 		
-        return 'Applicaton';
 		return new ApplicationMenuBlockView($this->term, $this->getStartDate(), $this->getEndDate(), $application);
 	}
 }

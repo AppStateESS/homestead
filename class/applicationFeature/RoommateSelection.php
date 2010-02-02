@@ -15,7 +15,7 @@ class RoommateSelectionRegistration extends ApplicationFeatureRegistration {
     public function showForStudent(Student $student, $term)
     {
         // Freshmen only
-        if($term == $student->getApplicationTerm())
+        if($student->getApplicationTerm() > Term::getCurrentTerm())
         {
             return true;
         }
@@ -28,7 +28,8 @@ class RoommateSelection extends ApplicationFeature {
 
     public function getMenuBlockView(Student $student)
     {
-        return 'Roommate Selection';
+        PHPWS_Core::initModClass('hms', 'RoommateSelectionMenuBlockView.php');
+        return new RoommateSelectionMenuBlockView($student, $this->getStartDate(), $this->getEndDate());
     }
 
 }

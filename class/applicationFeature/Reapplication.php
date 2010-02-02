@@ -14,8 +14,12 @@ class ReapplicationRegistration extends ApplicationFeatureRegistration {
 	
 	public function showForStudent(Student $student, $term)
 	{
-	    if($term > $student->getApplicationTerm()){
+	    if($student->getApplicationTerm() <= Term::getCurrentTerm()){
 	        return true;
+	    }
+	    
+	    if($student->getApplicationTerm() > Term::getCurrentTerm()){
+	        return false;
 	    }
 	    
 	    return false;

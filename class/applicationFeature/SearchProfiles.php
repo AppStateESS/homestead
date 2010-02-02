@@ -15,7 +15,7 @@ class SearchProfilesRegistration extends ApplicationFeatureRegistration {
     public function showForStudent(Student $student, $term)
     {
         // For freshmen
-        if($term == $student->getApplicationTerm())
+        if($student->getApplicationTerm() > Term::getCurrentTerm())
         {
             return true;
         }
@@ -28,7 +28,8 @@ class SearchProfiles extends ApplicationFeature {
 
     public function getMenuBlockView(Student $student)
     {
-        return 'Search Profiles';
+        PHPWS_Core::initModClass('hms', 'SearchProfilesMenuBlockView.php');
+        return new SearchProfilesMenuBlockView($student, $this->getStartDate(), $this->getEndDate());
     }
 
 }

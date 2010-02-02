@@ -15,7 +15,7 @@ class CreateProfileRegistration extends ApplicationFeatureRegistration {
     public function showForStudent(Student $student, $term)
     {
         // New Incoming Freshmen
-        if($term == $student->getApplicationTerm())
+        if($student->getApplicationTerm() > Term::getCurrentTerm())
         {
             return true;
         }
@@ -28,7 +28,8 @@ class CreateProfile extends ApplicationFeature {
 
     public function getMenuBlockView(Student $student)
     {
-        return 'Create Profile';
+        PHPWS_Core::initModClass('hms', 'StudentMenuProfileView.php');
+        return new StudentMenuProfileView($student, $this->getStartDate(), $this->getEndDate());
     }
 
 }

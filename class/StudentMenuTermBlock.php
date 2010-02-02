@@ -19,7 +19,13 @@ class StudentMenuTermBlock {
 		$features = ApplicationFeature::getEnabledFeaturesForStudent($this->student, $this->term);
 		
 		$tpl = array();
-		$tpl['TERM'] = Term::toString($this->term);
+		
+		if(Term::getTermSem($this->term) == TERM_FALL){
+		    // If it's fall, then it's really the fall & spring terms
+		    $tpl['TERM'] = Term::toString($this->term) . ' - ' . Term::toString(Term::getNextTerm($this->term));
+		}else{
+		    $tpl['TERM'] = Term::toString($this->term);
+		}
 		
 		// In case there are no features enabled for this term
 		if(empty($features)){

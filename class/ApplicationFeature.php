@@ -319,6 +319,8 @@ abstract class ApplicationFeature {
             $features[$reg->getPriority()] = new $className($result['id']);
         }
 
+        ksort($features);
+        
         return $features;
     }
     
