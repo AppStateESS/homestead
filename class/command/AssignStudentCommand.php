@@ -63,6 +63,7 @@ class AssignStudentCommand extends Command {
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
         PHPWS_Core::initModClass('hms', 'HMS_Room.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
 
         if(!Current_User::allow('hms', 'assignment_maintenance')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
