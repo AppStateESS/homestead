@@ -1313,7 +1313,6 @@ class HMS_Reports{
          * Male Coed total
          */
         $db = new PHPWS_DB('hms_new_application');
-        $db->addTable('hms_fall_application');
         $db->addJoin('left', 'hms_new_application', $table2, 'id', 'id');
         $db->addWhere($table2.'.lifestyle_option', COED);
 
@@ -1334,7 +1333,6 @@ class HMS_Reports{
          * Male Single Gender total
          */
         $db = new PHPWS_DB('hms_new_application');
-        $db->addTable('hms_fall_application');
         $db->addJoin('left', 'hms_new_application', $table2, 'id', 'id');
         $db->addWhere($table2.'.lifestyle_option', COED, '<>'); // <> == '!=';
 
@@ -1355,7 +1353,6 @@ class HMS_Reports{
          * Female Coed total
          */
         $db = new PHPWS_DB('hms_new_application');
-        $db->addTable('hms_fall_application');
         $db->addJoin('left', 'hms_new_application', $table2, 'id', 'id');
         $db->addWhere($table2.'.lifestyle_option', COED);
 
@@ -1376,7 +1373,6 @@ class HMS_Reports{
          * Female Single Gender
          */
         $db = new PHPWS_DB('hms_new_application');
-        $db->addTable('hms_fall_application');
         $db->addJoin('left', 'hms_new_application', $table2, 'id', 'id');
         $db->addWhere($table2.'.lifestyle_option', COED, '<>'); // <> == '!=';
 
