@@ -204,9 +204,9 @@ class AssignStudentCommand extends Command {
 
         # Show a success message
         if($context->get('moveConfirmed') == 'true'){
-            NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Successfully moved ' . $username . ' to ' . $hall->hall_name . ' room ' . $room->room_number . $more);
+            NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Successfully moved ' . $username . ' to ' . $hall->hall_name . ' room ' . $room->room_number);
         }else{
-            NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Successfully assigned ' . $username . ' to ' . $hall->hall_name . ' room ' . $room->room_number . $more);
+            NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Successfully assigned ' . $username . ' to ' . $hall->hall_name . ' room ' . $room->room_number);
         }
         
         $successCmd = CommandFactory::getCommand('ShowAssignStudent');
