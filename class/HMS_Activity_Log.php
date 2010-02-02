@@ -135,8 +135,6 @@ class HMS_Activity_Log{
      */
     public static function log_activity($userid, $activity, $actor, $notes = NULL)
     {
-        test($activity);
-        
         if(UserStatus::isMasquerading()) {
             $notes .= " Admin: " . UserStatus::getUsername(FALSE); // get the *real* username
         }
