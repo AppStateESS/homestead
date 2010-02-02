@@ -7,9 +7,9 @@ class SummerApplication extends HousingApplication{
     public $room_type = 0;
 
     public function __construct($id = 0, $term = NULL, $banner_id = NULL, $username = NULL, $gender = NULL, $student_type = NULL, $application_term = NULL, $cell_phone = NULL, $meal_plan = NULL, $physical_disability = NULL, $psych_disability = NULL, $gender_need = NULL, $medical_need = NULL, $room_type = NULL){
-        
+
         /**
-         * If the id is non-zero, then we need to load the other member variables 
+         * If the id is non-zero, then we need to load the other member variables
          * of this object from the database
          */
         if($id != 0){
@@ -23,7 +23,7 @@ class SummerApplication extends HousingApplication{
         $this->setRoomType($room_type);
     }
 
-    
+
     /**
      * Loads the SummerApplication object with the corresponding id. Requires that $this->id be non-zero.
      */
@@ -70,15 +70,16 @@ class SummerApplication extends HousingApplication{
          * update the object.
          */
         if($is_new){
-            if(PHPWS_Error::logIfError($db->saveObject($this, false, false))){
-                return false;
-            }
+            $reslut = $db->saveObject($this, false, false);
         }else{
-            if(PHPWS_Error::logIfError($db->saveObject($this))){
-                return false;
-            }
+            $result = $db->saveObject($this);
         }
-        
+
+        if(PHPWS_Error::logIfError($result)){
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException($result->toString());
+        }
+
         return true;
     }
 

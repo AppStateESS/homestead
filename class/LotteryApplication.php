@@ -100,17 +100,14 @@ class LotteryApplication extends HousingApplication {
          * update the object.
          */
         if($is_new){
-            $result = $db->saveObject($this, false, false);
-            if(PHPWS_Error::logIfError($result)){
-                PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
-                throw new DatabaseException($result->toString());
-            }
+            $reslut = $db->saveObject($this, false, false);
         }else{
             $result = $db->saveObject($this);
-            if(PHPWS_Error::logIfError($result)){
-                PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
-                throw new DatabaseException($result->toString());
-            }
+        }
+
+        if(PHPWS_Error::logIfError($result)){
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException($result->toString());
         }
 
         return true;

@@ -78,15 +78,14 @@ class FallApplication extends HousingApplication{
          * update the object.
          */
         if($is_new){
-            if(PHPWS_Error::logIfError($db->saveObject($this, false, false))){
-                PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
-                throw new DatabaseException($result->toString());
-            }
+            $reslut = $db->saveObject($this, false, false);
         }else{
-            if(PHPWS_Error::logIfError($db->saveObject($this))){
-                PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
-                throw new DatabaseException($result->toString());
-            }
+            $result = $db->saveObject($this);
+        }
+
+        if(PHPWS_Error::logIfError($result)){
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException($result->toString());
         }
 
         return true;
