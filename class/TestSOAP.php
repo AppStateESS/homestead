@@ -30,15 +30,15 @@ class TestSOAP extends SOAP{
         $student->dob                   = '1986-09-05';
         $student->gender                = 'M';
         $student->deposit_date          = '';
-        $student->deposit_waved         = 'false';
+        $student->deposit_waived        = 'false';
 
    		$student->student_type          = 'F';
    		$student->application_term      = '201040';
    		$student->projected_class       = 'FR';
 
-        $student->student_type          = 'F';
-        $student->application_term      = '200840';
-        $student->projected_class       = 'SR';
+//        $student->student_type          = 'F';
+//        $student->application_term      = '201020';
+//        $student->projected_class       = 'SR';
 
         if($username == 'housing_test_spring_freshmen'){
             $student->student_type      = 'F';

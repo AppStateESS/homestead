@@ -53,6 +53,9 @@ class StudentFactory {
 		$student->setClass($soapData->projected_class);
 		$student->setCreditHours($soapData->credhrs_completed);
 		
+		$student->setDepositDate($soapData->deposit_date);
+		$student->setDepositWaived($soapData->deposit_waived);
+		
 		$phoneNumbers = array();
 		
 		if(isset($soapData->phone) && is_array($soapData->phone)){

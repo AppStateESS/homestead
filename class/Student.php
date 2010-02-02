@@ -16,6 +16,9 @@ class Student {
 	private $type;
 	private $class;
 	private $creditHours;
+	
+	private $depositDate;
+	private $depositWaived;
 
 	private $addressList;
 	private $phoneNumberList;
@@ -285,6 +288,22 @@ class Student {
 		$this->creditHours = $hrs;
 	}
 
+	public function getDepositDate(){
+	    return $this->depositDate;
+	}
+	
+	public function setDepositDate($date){
+	    $this->depositDate = $date;
+	}
+	
+	public function depositWaived(){
+	    return $this->depositWaived;
+	}
+	
+	public function setDepositWaived($status){
+	    $this->depositWaived = $status;
+	}
+	
 	public function getAddressList(){
 		return $this->addressList;
 	}
