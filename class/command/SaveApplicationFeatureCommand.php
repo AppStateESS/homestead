@@ -79,8 +79,8 @@ class SaveApplicationFeatureCommand extends Command {
         if($enabled) {
         	$startDate = strtotime($context->get('start_date'));
         	$endDate   = strtotime($context->get('end_date'));
-        	
-        	if(!is_null($startDate) && !is_null($endDate) && $startDate >= $endDate){
+
+        	if($startDate && $endDate && $startDate >= $endDate){
         	    echo json_encode(new MissingDataException ('Start date must be before the end date.', array('Start date', 'End date')));
         	    HMS::quit();
         	}

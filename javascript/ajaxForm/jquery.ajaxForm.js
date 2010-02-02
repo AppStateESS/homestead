@@ -68,6 +68,7 @@
 					try {
 						data = eval('(' + data + ')');
 					} catch(e) {
+                        console.log(data);
 						alert("We're sorry... something went wrong and what you just did wasn't saved.  Check the logs.");
 						return;
 					}
@@ -78,6 +79,7 @@
 							alert("We're sorry... something went wrong and what you just did wasn't saved.  Check the logs.");
 							return;
 						} else {
+                            console.log(data);
 							var err = "Please check the following fields: ";
 							for(var d in data.data) {
 								err += data.data[d] + " ";
@@ -90,10 +92,15 @@
 						//	$$this.find('input[name="'+n+'"]').attr('value', data[n]);
 						//}
 						$$this.find('input').removeAttr('disabled');
-						console.log(e);
 						if(e.data.submitSelector != '') {
 							$$this.find(e.data.submitSelector).hide('fast');
 						}
+
+                        // Remove 'term' and 'name', replace with 'featureId'
+                        // TODO: loosen the coupling here
+                        par = $$this.find("input[name='featureId'], input[name='name']").parent()
+                        $$this.find("input[name='featureId'], input[name='name'], input[name='term']").remove();
+                        par.append('<input type="hidden" name="featureId" value="'+data.id+'" />');
 					}
 				});
 				$(this).find('input').attr('disabled', 'disabled');
