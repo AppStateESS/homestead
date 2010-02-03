@@ -456,8 +456,26 @@ class HMS_Reports{
         $term           = Term::getSelectedTerm();
         $tpl['TERM']    = Term::getPrintableSelectedTerm();
 
-        $db = new PHPWS_DB('hms_new_application');
-        $db->addWhere('term', $term);
+        $sem = Term::getTermSem($term);
+
+        switch($sem){
+            case TERM_FALL:
+                $db = new PHPWS_DB('hms_fall_application');
+                $db->addJoin('LEFT OUTER', 'hms_fall_application', 'hms_new_application', 'id', 'id');
+                break;
+            case TERM_SPRING:
+                $db = new PHPWS_DB('hms_spring_application');
+                $db->addJoin('LEFT OUTER', 'hms_spring_application', 'hms_new_application', 'id', 'id');
+                break;
+            case TERM_SUMMER1:
+            case TERM_SUMMER2:
+                $db = new PHPWS_DB('hms_summer_application');
+                $db->addJoin('LEFT OUTER', 'hms_summer_application', 'hms_new_application', 'id', 'id');
+                break;
+        }
+        
+        $db->addColumn('hms_new_application.*');
+        $db->addWhere('hms_new_application.term', $term);
         $results = $db->select();
 
         if(PHPWS_Error::logIfError($results)) {
