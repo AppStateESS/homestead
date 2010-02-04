@@ -49,10 +49,13 @@ class HMS_Movein_Time
 
     public function getRowTags()
     {
+        $delete_cmd = CommandFactory::getCommand('DeleteMoveinTime');
+        $delete_cmd->setId($this->id);
+
         $tags = array();
         $tags['BEGIN_TIMESTAMP']    = HMS_Util::get_long_date_time($this->begin_timestamp);
         $tags['END_TIMESTAMP']      = HMS_Util::get_long_date_time($this->end_timestamp);
-        $tags['ACTION']             = PHPWS_Text::secureLink(_('Delete'), 'hms', array('type'=>'movein', 'op'=>'delete_movein_time', 'id'=>$this->id));
+        $tags['ACTION']             = $delete_cmd->getLink('Delete');
 
         return $tags;
     }
@@ -139,7 +142,6 @@ class HMS_Movein_Time
         $form->addHidden('op', 'create_movein_time');
 
         $tpl['MOVEIN_TIME_PAGER'] = HMS_Movein_Time::get_movein_times_pager();
-        //test(HMS_Movein_Time::get_movein_times_pager());
 
         if(isset($success)){
             $tpl['SUCCESS_MSG'] = $success;
@@ -180,19 +182,17 @@ class HMS_Movein_Time
         }
     }
 
-    public function delete_movein_time()
+    public function delete()
     {
         $db = &new PHPWS_DB('hms_movein_time');
 
-        $db->addWhere('id', $_REQUEST['id']);
-        //$db->setLimit(1);
+        $db->addWhere('id', $this->id);
         $result = $db->delete();
 
         if(!$result || PHPWS_Error::logIfError($result)){
-            return HMS_Movein_Time::show_edit_movein_times(NULL, 'There was an error deleting the move-in time.');
-        }else{
-            return HMS_Movein_Time::show_edit_movein_times('Move-in time deleted.');
+            return false;
         }
+        return true;
     }
     
     public function get_movein_times_pager(){
