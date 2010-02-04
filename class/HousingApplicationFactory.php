@@ -112,7 +112,7 @@ class HousingApplicationFactory {
         if(PHPWS_Error::logIfError($result)){
             throw new Exception("Application does not exist!");
         }
-
+        
         if($application->student_type != 'F' && $application->student_type != 'T'){
             $semester = Term::getTermSem($application->term);
             switch($semester){

@@ -51,7 +51,8 @@ class HousingApplicationView extends View {
         $tpl['MEAL_OPTION']         = HMS_Util::formatMealOption($application->meal_plan);
         $tpl['LIFESTYLE_OPTION']    = $application->lifestyle_option == 1?'Single gender':'Co-ed';
         $tpl['PREFERRED_BEDTIME']   = $application->preferred_bedtime == 1?'Early':'Late';
-        $tpl['ROOM_CONDITION']      = $application->room_condition == 1?'Clean':'Dirty';
+        
+        $tpl['ROOM_CONDITION']      = $application->room_condition == 1?'Neat':'Cluttered';
         
         $tpl['CELLPHONE'] = '';
         if(strlen($application->cell_phone) == 10){

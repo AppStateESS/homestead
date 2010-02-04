@@ -32,7 +32,7 @@ class FreshmenApplicationReview extends View {
             $tpl['MEAL_OPTION']         = HMS_Util::formatMealOption($this->app->getMealPlan());
             $tpl['LIFESTYLE_OPTION']    = $this->app->getLifestyleOption()	== 1?'Single gender':'Co-ed';
             $tpl['PREFERRED_BEDTIME']   = $this->app->getPreferredBedtime()	== 1?'Early':'Late';
-            $tpl['ROOM_CONDITION']      = $this->app->getRoomCondition()	== 1?'Clean':'Dirty';
+            $tpl['ROOM_CONDITION']      = $this->app->getRoomCondition()	== 1?'Neat':'Cluttered';
         } else if($sem == 20 || $sem == 30) {
             $tpl['ROOM_TYPE'] = $this->app->getRoomType() == 0?'Two person':'Private (if available)';
         }

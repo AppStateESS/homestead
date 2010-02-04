@@ -100,7 +100,7 @@ class LotteryApplication extends HousingApplication {
          * update the object.
          */
         if($is_new){
-            $reslut = $db->saveObject($this, false, false);
+            $result = $db->saveObject($this, false, false);
         }else{
             $result = $db->saveObject($this);
         }

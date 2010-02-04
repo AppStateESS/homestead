@@ -44,7 +44,7 @@ class FallApplication extends HousingApplication{
         if(!parent::load()){
             return false;
         }
-
+        
         # Load the application-specific data
         $db = new PHPWS_DB('hms_fall_application');
 
@@ -53,7 +53,7 @@ class FallApplication extends HousingApplication{
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
-
+        
         return true;
     }
 
@@ -68,7 +68,7 @@ class FallApplication extends HousingApplication{
         if(!parent::save()){
             return false;
         }
-
+        
         # Save the application-specific data
         $db = new PHPWS_DB('hms_fall_application');
 
@@ -78,7 +78,7 @@ class FallApplication extends HousingApplication{
          * update the object.
          */
         if($is_new){
-            $reslut = $db->saveObject($this, false, false);
+            $result = $db->saveObject($this, false, false);
         }else{
             $result = $db->saveObject($this);
         }
