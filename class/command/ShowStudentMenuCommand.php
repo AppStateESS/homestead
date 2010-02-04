@@ -24,14 +24,6 @@ class ShowStudentMenuCommand extends Command {
 
         $applicationTerm = $student->getApplicationTerm();
 
-        if(!isset($applicationTerm) || is_null($applicationTerm) || empty($applicationTerm))
-        {
-            $contactCmd->redirect();
-        }
-        
-        # Recreate the student object using the student's application term
-        $student = StudentFactory::getStudentByUsername($username, $applicationTerm);
-
         $studentType 	= $student->getType();
         $studentClass	= $student->getClass();
         $dob 			= $student->getDob();
@@ -50,8 +42,12 @@ class ShowStudentMenuCommand extends Command {
         {
             # TODO: HMS_Mail here
             PHPWS_Error::log('Initial banner lookup failed', 'hms', 'show_welcome_screen', "username: {$_SESSION['asu_username']}");
-            $contactCmd->redirect();
+            $badDataCmd = CommandFactory::getCommand('ShowBadBannerData');
+            $badDataCmd->redirect();
         }
+        
+        # Recreate the student object using the student's application term
+        $student = StudentFactory::getStudentByUsername($username, $applicationTerm);
 
         # Check for an assignment in the current term. So far, this only matters for type 'Z' (readmit) students
         $assignment = HMS_Assignment::checkForAssignment($username, $currentTerm);
