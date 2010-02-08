@@ -300,7 +300,7 @@ class LotteryApplication extends HousingApplication {
 
         $tags = array();
 
-        $tags['NAME']       = $student->getFullNameProfileLink();
+        $tags['NAME']       = $student->getFulLName();
         $tags['USER']       = $this->username;
         $tags['BANNER_ID']  = $student->getBannerId();
         $tags['CLASS']      = $student->getPrintableClass();
