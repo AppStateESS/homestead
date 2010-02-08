@@ -10,12 +10,14 @@ class AssignmentMenu extends CommandMenu {
 		
 		$this->addCommandByName('Assign student', 'ShowAssignStudent');
 		
-		$this->addCommandByName('Unassign Student', 'ShowUnassignStudent');
+		$this->addCommandByName('Unassign student', 'ShowUnassignStudent');
 		
 		$hallOverviewCmd = CommandFactory::getCommand('SelectResidenceHall');
 		$hallOverviewCmd->setTitle('Hall Overview');
 		$hallOverviewCmd->setOnSelectCmd(CommandFactory::getCommand('HallOverview'));
 		$this->addCommand('Hall Overview', $hallOverviewCmd);
+		
+		$this->addCommandByName('Set move-in times', 'ShowMoveinTimesView');
 	}
 	
 	public function show()
@@ -27,3 +29,5 @@ class AssignmentMenu extends CommandMenu {
 		return PHPWS_Template::process($tpl, 'hms', 'admin/menus/AssignmentMenu.tpl');
 	}
 }
+
+?>
