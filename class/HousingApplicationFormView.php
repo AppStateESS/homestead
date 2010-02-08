@@ -182,11 +182,10 @@ class HousingApplicationFormView extends View {
 				$form->setMatch('special_need', 'special_need');
 			}
 		}else if(isset($this->existingApplication)){
-
-			if(!is_null($this->existingApplication->physical_disability) ||
-			!is_null($this->existingApplication->psych_disability) ||
-			!is_null($this->existingApplication->medical_need) ||
-			!is_null($this->existingApplication->gender_need)) {
+			if((!is_null($this->existingApplication->physical_disability) && $this->existingApplication->physical_disability != "0") ||
+			(!is_null($this->existingApplication->psych_disability) && $this->existingApplication->psych_disability != "0") ||
+			(!is_null($this->existingApplication->medical_need) && $this->existingApplication->medical_need != "0") ||
+			(!is_null($this->existingApplication->gender_need) && $this->existingApplication->gender_need != "0")) {
 				$form->setMatch('special_need', 'special_need');
 			}
 		}
