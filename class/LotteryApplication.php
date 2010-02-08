@@ -294,8 +294,9 @@ class LotteryApplication extends HousingApplication {
 
     public function waitingListCsvTags()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Student.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
+        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
+
+        $student = StudentFactory::getStudentByUsername($this->username, $this->term);
 
         $tags = array();
 
