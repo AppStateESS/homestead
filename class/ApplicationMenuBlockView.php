@@ -38,7 +38,12 @@ class ApplicationMenuBlockView extends View {
             if(!is_null($this->application)){
                 $appCommand->setAppId($this->application->id);
             }
-            $tpl['VIEW_APP'] = $appCommand->getLink('View your application');
+            $tpl['VIEW_APP'] = $appCommand->getLink('view your application');
+            
+            $newApp = CommandFactory::getCommand('ShowHousingApplicationForm');
+            $newApp->setAgreedToTerms(1);
+            $newApp->setTerm($this->term);
+            $tpl['NEW_APP'] = $newApp->getLink('submit a new application');
         }
 
         return PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/applicationMenuBlock.tpl');

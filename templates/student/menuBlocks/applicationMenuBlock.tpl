@@ -8,8 +8,7 @@ The deadline to apply for this term was {END_DEADLINE}.
 <!-- END too_late -->
 
 <!-- BEGIN review_app -->
-You've already applied for this term.
-    {VIEW_APP}
+You have applied for on-campus housing for this term. You may {VIEW_APP} or, if you'd like to change your preferences, you may {NEW_APP}.
 <!-- END review_app -->
 
 <!-- BEGIN no_app -->
