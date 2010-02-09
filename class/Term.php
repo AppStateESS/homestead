@@ -74,7 +74,7 @@ class Term
             PHPWS_Core::initModClass('hms', 'exception/InvalidConfigurationException.php');
             throw new InvalidConfigurationException('No pdf contract file uploaded for ' . $this->term);
         }
-        
+
         return $this->pdf_terms;
     }
 
@@ -89,7 +89,7 @@ class Term
             PHPWS_Core::initModClass('hms', 'exception/InvalidConfigurationException.php');
             throw new InvalidConfigurationException('No text contract file uploaded for ' . $this->term);
         }
-        
+
         return $this->txt_terms;
     }
 
@@ -264,14 +264,14 @@ class Term
     public static function getTermsAssoc()
     {
         $objs = self::getTerms();
-        	
+         
         $terms = array();
-        	
+         
         foreach($objs as $term) {
             $t = $term->term;
             $terms[$t] = Term::toString($t);
         }
-        	
+         
         return $terms;
     }
 
@@ -297,6 +297,22 @@ class Term
         $tags = $form->getTemplate();
         javascript('modules/hms/SelectTerm');
         return PHPWS_Template::process($tags, 'hms', 'admin/SelectTerm.tpl');
+    }
+
+    /**
+     * Returns an array of the list of semesters. Useful for constructing
+     * drop down menus. Array is keyed using the TERM_* defines.
+     */
+    public static function getSemesterList()
+    {
+        $terms = array();
+
+        $terms[TERM_SPRING]  = SPRING;
+        $terms[TERM_SUMMER1] = SUMMER1;
+        $terms[TERM_SUMMER2] = SUMMER2;
+        $terms[TERM_FALL]    = FALL;
+
+        return $terms;
     }
 }
 
