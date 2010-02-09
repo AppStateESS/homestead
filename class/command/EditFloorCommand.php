@@ -59,14 +59,18 @@ class EditFloorCommand extends Command {
         $context->setDefault('is_online', 0);
         $floor->is_online = $context->get('is_online');
 
-        $floor->ft_movein_time_id = $context->get('ft_movein_time');
-        $floor->rt_movein_time_id = $context->get('rt_movein_time');
         $floor->floor_plan_image_id = $context->get('floor_plan_image_id');
 
-        if($context->get('ft_movein_time') == 0){
-            $floor->ft_movein_time_id = NULL;
+        if($context->get('f_movein_time') == 0){
+            $floor->f_movein_time_id = NULL;
         }else{
-            $floor->ft_movein_time_id = $context->get('ft_movein_time');
+            $floor->f_movein_time_id = $context->get('f_movein_time');
+        }
+
+        if($context->get('t_movein_time') == 0){
+            $floor->t_movein_time_id = NULL;
+        }else{
+            $floor->t_movein_time_id = $context->get('t_movein_time');
         }
 
         if($context->get('rt_movein_time') == 0){
