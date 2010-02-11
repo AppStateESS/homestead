@@ -44,31 +44,28 @@ class HMS_Bed extends HMS_Item {
 		$new_bed->reset();
 		$new_bed->term    = $to_term;
 		$new_bed->room_id = $room_id;
-		if (!$new_bed->save()) {
-			// There was an error saving the new room
-			// Error will be logged.
-			//echo "error saving a copy of this bed<br>";
-			return false;
+		try{
+    		$new_bed->save();
+		}catch(Exception $e){
+		    throw $e;
 		}
 
 		if ($assignments) {
 			//echo "loading assignments for this bed<br>";
-			$result = $this->loadAssignment();
-			if(PEAR::isError($result)){
-				//echo "error loading assignments<br>";
-				//test($result);
-				return false;
+			try{
+    			$this->loadAssignment();
+			}catch(Exception $e){
+			    throw $e;
 			}
 
-			//test($this->_curr_assignment);
 			if (isset($this->_curr_assignment)) {
-				return $this->_curr_assignment->copy($to_term, $new_bed->id);
+			    try{
+				    $this->_curr_assignment->copy($to_term, $new_bed->id);
+			    }catch(Exception $e){
+			        throw $e;
+			    }
 			}
 		}
-
-		//echo "bed copied<br>";
-
-		return true;
 	}
 
 	public function get_banner_building_code()

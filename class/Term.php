@@ -49,13 +49,22 @@ class Term
     public function save()
     {
         $db = new PHPWS_DB('hms_term');
-        $db->addWhere('term', $this->term);
+        //$db->addWhere('term', $this->term);
         $result = $db->saveObject($this);
-
+        
         if(PHPWS_Error::logIfError($result)) {
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->__toString());
         }
+    }
+
+    public function getTerm(){
+        return $this->term;
+    }
+
+    public function setTerm($term)
+    {
+        $this->term = $term;
     }
 
     public function getBannerQueue()
@@ -249,7 +258,7 @@ class Term
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
-
+        
         return in_array($term, $result);
     }
 

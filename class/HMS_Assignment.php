@@ -43,7 +43,12 @@ class HMS_Assignment extends HMS_Item
 		$new_ass->reset();
 		$new_ass->bed_id = (int)$bed_id;
 		$new_ass->term   = $to_term;
-		return $new_ass->save();
+		
+		try{
+		    $new_ass->save();
+		}catch(Exception $e){
+		    throw $e;
+		}
 	}
 
 	public function save()
