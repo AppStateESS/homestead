@@ -946,7 +946,7 @@ class HMS_Reports{
             $first      = $student->getFirstName();
             $middle     = $student->getMiddleName();
             $last       = $student->getLastName();
-            $type       = $student->getStudentType();
+            $type       = $student->getType();
 
             $room = $row['hall_name'] . ' ' . $row['room_number'];
 
