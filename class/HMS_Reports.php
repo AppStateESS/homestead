@@ -966,7 +966,7 @@ class HMS_Reports{
 
             $room = $row['hall_name'] . ' ' . $row['room_number'];
 
-            $address = $student->getAddress('NULL');
+            $address = $student->getAddress(NULL);
 
             if(!$address || !isset($address) || is_null($address)){
                 $line1 = "";
