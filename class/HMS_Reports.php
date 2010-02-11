@@ -89,7 +89,7 @@ class HMS_Reports{
                 return HMS_Reports::over_twenty_five_report();
             case 'single_vs_coed':
                 return HMS_Reports::single_vs_coed();
-           default:
+            default:
                 $content .= "ugh";
                 break;
         }
@@ -473,7 +473,7 @@ class HMS_Reports{
                 $db->addJoin('LEFT OUTER', 'hms_summer_application', 'hms_new_application', 'id', 'id');
                 break;
         }
-        
+
         $db->addColumn('hms_new_application.*');
         $db->addWhere('hms_new_application.term', $term);
         $results = $db->select();
@@ -935,7 +935,22 @@ class HMS_Reports{
         $output = "user name, banner id, first name, middle name, last name, student type, assignment, address 1, address 2, address 3, city, state, zip\n";
 
         foreach($results as $row){
-            $student = StudentFactory::getStudentByUsername($row['asu_username'], $term);
+            try{
+                $student = StudentFactory::getStudentByUsername($row['asu_username'], $term);
+            }catch(StudentNotFoundException $e){
+                $username   = $row['asu_username'];
+                $username   = '';
+                $first      = '';
+                $middle     = '';
+                $last       = '';
+                $type       = '';
+                $line1      = "";
+                $line2      = "";
+                $line3      = "";
+                $city       = "";
+                $state      = "";
+                $zip        = "";
+            }
 
             $bannerId = $student->getBannerId();
 
@@ -943,6 +958,7 @@ class HMS_Reports{
                 continue;
             }
 
+            $username   = $student->getUsername();
             $first      = $student->getFirstName();
             $middle     = $student->getMiddleName();
             $last       = $student->getLastName();
@@ -950,7 +966,7 @@ class HMS_Reports{
 
             $room = $row['hall_name'] . ' ' . $row['room_number'];
 
-            $address = $student->getAddress('NULL'); 
+            $address = $student->getAddress('NULL');
 
             if(!$address || !isset($address) || is_null($address)){
                 $line1 = "";
@@ -1250,7 +1266,7 @@ class HMS_Reports{
     public function over_twenty_five_report(){
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
         $tpl = array();
-        
+
         $term = Term::getSelectedTerm();
 
         $db = new PHPWS_DB('hms_new_application');
@@ -1315,7 +1331,7 @@ class HMS_Reports{
         $cmd = CommandFactory::getCommand('ListReports');
         $semester = Term::getTermSem(Term::getSelectedTerm());
         $tpl = array();
-        
+
         if($semester != TERM_FALL && $semester != TERM_SPRING){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Your selected term must be fall or spring!');
 
