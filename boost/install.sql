@@ -1,7 +1,9 @@
 BEGIN;
 CREATE TABLE hms_term (
     term    integer NOT NULL,
-    new_applications smallint NOT NULL DEFAULT 0,
+    banner_queue smallint NOT NULL,
+    pdf_terms character varying(255),
+    txt_terms character varying(255),
     primary key(term)
 );
 
