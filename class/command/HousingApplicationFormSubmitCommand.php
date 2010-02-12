@@ -32,7 +32,7 @@ class HousingApplicationFormSubmitCommand extends Command {
 
         if(is_null($doNotCall)){
             // do not call checkbox was not selected, so check the number
-            if(is_null($areaCode) || is_null($exchange) || is_null($number)){
+            if(empty($areaCode) || empty($exchange) || empty($number)){
                 NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Please provide a cell-phone number or click the checkbox stating that you do not wish to share your number with us.');
                 $errorCmd->redirect();
             }

@@ -1,27 +1,16 @@
 <div class="hms">
   <div class="box">
-    <div class="box-title"> <h1>Unique Housing Options Application</h1> </div>
+    <div class="box-title"> <h1>Residential Learning Community Application</h1> </div>
     <div class="box-content">
-        <div>
-        This is an additional application for <a href="http://housing.appstate.edu/index.php?module=pagemaster&PAGE_user_op=view_page&PAGE_id=134" target="_blank">Unique Housing Options</a>.
-        To learn more about the unqiue housing options avaiable to you please vist the <a href="http://housing.appstate.edu/index.php?module=pagemaster&PAGE_user_op=view_page&PAGE_id=134" target="_blank">Unique Housing Options website</a>.
-        <br /><br />
+    
+    <p>This is an additional application for Residential Learning Communities. To learn more about the different options available to you please visit the <a href="http://housing.appstate.edu/pagesmith/29" target="_blank">Residential Learning Communities website</a>.</p> 
 
-        This is <strong>not</strong> the application for the Heltzer Honors Program or the Watauga Global Community. For more information only applying to be a member of these organizations see the <a href="http://www.honors.appstate.edu/">honors website</a> or the <a href="http://wataugaglobal.appstate.edu/index.php">Watauga Global Community</a> website.
-        <br /><br />
+    <p>Those students interested in the Heltzer Honors Program, Watauga Global Community, or the Academy of Science please note your interest below.  In addition to this application, you must also fill out a separate application for these communities.  Please apply for membership to any of these programs -- the <a href="http://www.honors.appstate.edu/" target="_blank">Honors Program</a>, <a href="http://wataugaglobal.appstate.edu/" target="_blank">Watauga Global Community</a>, or the <a href="http://housing.appstate.edu/pagesmith/34" target="_blank">Academy of Science</a> -- on their websites.</p> 
 
-        <div style="color:#F00; font-weight:bold; font-size:16px">Note:</div>
-        When you apply for a Residential Learning Community or Common Interest
-        Housing, please note that you are limiting your roommate options!  You
-        cannot be accepted into a community with a pre-chosen roommate who does
-        not apply to the same community, and once you apply, you can no longer
-        choose roommates who have not applied to the same community.
-        </div>
-        <!-- BEGIN message -->
-        <br /><br />
-        <font color="red"><i>{MESSAGE}</i></font><br>
-        <!-- END message -->
+    <p>Students interested in the Academy of Science will automatically qualify for a scholarship upon acceptance into the community.  However, applications to both the Academy's RLC and the Academy of Science Scholarship program must be completed before a student is considered for membership.</p>
 
+    <p style="border: 1px solid red; padding: 3px; background: #F5F5F5"><strong>Note:</strong> You cannot be accepted into a learning community with a pre-chosen roommate who does not apply to the same community.  In addition, once you apply, you can no longer choose roommates who have not applied to the same community.</p>
+    
         <!-- BEGIN rlc_form -->
         {START_FORM}
         <table>

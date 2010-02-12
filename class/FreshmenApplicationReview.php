@@ -59,8 +59,8 @@ class FreshmenApplicationReview extends View {
         }
         $tpl['SPECIAL_NEEDS_RESULT'] = $special_needs;
 
-        if(Term::getTermSem($this->term) == FALL){
-            $tpl['RLC_INTEREST_1'] = $this->app->rlcInterest == 0?'No':'Yes';
+        if(Term::getTermSem($this->term) == TERM_FALL){
+            $tpl['RLC_REVIEW'] = $this->app->rlc_interest == 0?'No':'Yes';
         }
 
         $form = new PHPWS_Form('hidden_form');

@@ -274,6 +274,10 @@ abstract class ApplicationFeature {
         	return FALSE;
         }
          
+        if($result['enabled'] == 0){
+            return FALSE;
+        }
+        
         if(!is_null($result['start_date']) && time() < $result['start_date']){
             return FALSE;
         }

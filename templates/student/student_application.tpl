@@ -14,6 +14,7 @@
         <table>
             <tr>
                 <th colspan="2">Demographic Information</th>
+            </tr>
             <tr>
                 <td>Name: </td><td align="left">{STUDENT_NAME}</td>
             </tr>
@@ -100,10 +101,28 @@
                 <th colspan="2">Unique Housing Options</th>
             </tr>
             <tr>
-                <td>Are you interested in a <a href="http://housing.appstate.edu/pagesmith/29" target="_blank">Unique Housing Option</a> where you will live together with a group of students who share at least one similar interest?  Students in these communities report finding it easier to meet people and make friends. They also earn higher GPAs in their first semester than students not living in a unique housing option.  For more information <a href="http://housing.appstate.edu/pagesmith/29">vist Unique Housing Options website</a>.</td>
+                <td>
+                    <p>Are you interested in living in a <a href="http://housing.appstate.edu/pagesmith/29" target="_blank">Residential Learning Community</a> (RLC)?</p>                  
+                    <p>RLCs afford students a unique opportunity for an academic learning experience outside of the classroom.  Students participating in a learning community live together on the same floor of a residence hall and are often required to enroll in one or more linked courses which emphasize the theme of each specific community.  In addition, research shows that students who participate in a residential learning community have a higher GPA and enjoy a better college experience.</p>
+                    <p>Appalachian State University was ranked as a 2010 Best College for Learning Communities according to U.S. News & World Report. We offer 17 options for students to choose from, including those focused on particular majors, and others with a focus on a particular student interest.  One of the best ways to develop strong friendships and succeed in college is to join a residential learning community. </p>
+                    <p>For more information visit the <a href="http://housing.appstate.edu/pagesmith/29" target="_blank">Residential Learning Communities website.</a></p>
+                </td>
                 <td align="left">{RLC_INTEREST_1} {RLC_INTEREST_1_LABEL}&nbsp;{RLC_INTEREST_2} {RLC_INTEREST_2_LABEL}</td>
             </tr>
             <!-- END rlc_interest_1 -->
+            <!-- BEGIN rlc_review -->
+            <tr>
+            <tr>
+                <th colspan="2">Unique Housing Options</th>
+            </tr>
+                <td>
+                    <p>Are you interested in living in a Residential Learning Community (RLC)?</p>
+                </td>
+                <td>
+                    <p>{RLC_REVIEW}</p>
+                </td>
+            </tr>
+            <!-- END rlc_review -->
         </table>
         <br /><br />
         {SUBMIT}

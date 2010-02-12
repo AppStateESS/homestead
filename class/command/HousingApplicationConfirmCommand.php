@@ -66,7 +66,7 @@ class HousingApplicationConfirmCommand extends Command {
         }
 
         $specialNeeds = $context->get('special_needs');
-        
+
         # Create a new application from the request data and save it
         if($sem == TERM_SUMMER1 || $sem == TERM_SUMMER2){
             $application = new SummerApplication(0, $term, $student->getBannerId(), $username,
@@ -97,7 +97,6 @@ class HousingApplicationConfirmCommand extends Command {
             $context->get('preferred_bedtime'),
             $context->get('room_condition'));
         }else if ($sem == TERM_FALL){
-            test('got here - fall');
             $application = new FallApplication(0, $term, $student->getBannerId(), $username,
             $student->getGender(),
             $student->getType(),
@@ -112,7 +111,7 @@ class HousingApplicationConfirmCommand extends Command {
             $context->get('preferred_bedtime'),
             $context->get('room_condition'),
             $context->get('rlc_interest'));
-            
+
             // TODO this is a hack fix this when we fix RLCs
             $application->rlc_interest = 0;
         }else{
@@ -146,8 +145,20 @@ class HousingApplicationConfirmCommand extends Command {
         $friendly_term = Term::toString($application->getTerm());
         NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, "Your application for $friendly_term was successfully processed!  You will receive an email confirmation in the next 24 hours.");
 
-        $successCmd = CommandFactory::getCommand('ShowStudentMenu');
-        $successCmd->redirect();
+        PHPWS_Core::initModClass('hms', 'applicationFeature/RlcApplication.php');
+        PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
+        $rlcReg = new RLCApplicationRegistration();
+
+        if(ApplicationFeature::isEnabledForStudent($rlcReg, $term, $student)
+        && HMS_RLC_Application::check_for_application($student->getUsername(), $term) == FALSE
+        && $context->get('rlc_interest') == 1)
+        {
+            $rlcCmd = CommandFactory::getCommand('ShowRlcApplicationPage1View');
+            $rlcCmd->redirect();
+        }else{
+            $successCmd = CommandFactory::getCommand('ShowStudentMenu');
+            $successCmd->redirect();
+        }
     }
 }
 

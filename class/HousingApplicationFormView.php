@@ -196,12 +196,11 @@ class HousingApplicationFormView extends View {
 
 		/*******
 		 * RLC *
-		 *******
+		 *******/
 		PHPWS_Core::initModClass('hms', 'applicationFeature/RlcApplication.php');
 		$rlcReg = new RLCApplicationRegistration();
 		
 		if(ApplicationFeature::isEnabledForStudent($rlcReg, $this->term, $this->student)
-		&& $this->student->getType() == TYPE_FRESHMEN
 		&& HMS_RLC_Application::check_for_application($this->student->getUsername(), $this->term) == FALSE)
 		{
 			$form->addRadio('rlc_interest', array(0, 1));
@@ -214,7 +213,7 @@ class HousingApplicationFormView extends View {
 			}
 		}else{
 			$form->addHidden('rlc_interest', 0);
-        }*/
+        }
 
 		$form->addSubmit('submit', _('Continue'));
 		$form->setExtra('submit', 'class="hms-application-submit-button"');
