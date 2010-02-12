@@ -85,9 +85,9 @@ class EditFloorCommand extends Command {
             $floor->rlc_id = $context->get('floor_rlc_id');
         }
 
-        $result = $floor->save();
-
-        if(!$result || PHPWS_Error::logIfError($result)){
+        try{
+            $floor->save();
+        }catch(DatabaseException $e){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'There was a problem saving the floor data. No changes were made.');
             $viewCmd->redirect();
         }
