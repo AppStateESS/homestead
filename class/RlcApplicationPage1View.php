@@ -43,32 +43,14 @@ class RlcApplicationPage1View extends View {
         }
 
         # 1. About You Section
-        $first_name  = $student->getFirstName();
-        $middle_name = $student->getMiddleName();
-        $last_name   = $student->getLastName();
+        $name  = $student->getName();
         
-        # Check for error in SOAP communication. isset doesn't work to check these, for some reason
-        if( !isset($first_name) || !isset($last_name) ){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Error: There was a problem communicating with the student information server. Please try again later.");
-            return PHPWS_Template::process($template,'hms','student/rlc_signup_form_page1.tpl');
-        }
-
         $template['APPLENET_USERNAME']       = $student->getUsername();
         $template['APPLENET_USERNAME_LABEL'] = 'Applenet User Name: ';
 
-        $template['FIRST_NAME']        = $first_name;
-        $template['FIRST_NAME_LABEL']  = 'First Name: ';
+        $template['NAME']        = $name;
+        $template['NAME_LABEL']  = 'Name: ';
         
-        $template['MIDDLE_NAME']       = $middle_name;
-        $template['MIDDLE_NAME_LABEL'] = 'Middle Name: ';
-        
-        $template['LAST_NAME']         = $last_name;
-        $template['LAST_NAME_LABEL']   = 'Last Name: ';
-
-        $rlc_form->addHidden('first_name',  $first_name);
-        $rlc_form->addHidden('middle_name', $middle_name);
-        $rlc_form->addHidden('last_name',   $last_name);
-
         # 2. Rank Your RLC Choices
 
         # Get the list of RLCs from the database that this student is allowed to apply for and which are not hidden
@@ -127,7 +109,7 @@ class RlcApplicationPage1View extends View {
         $rlc_form->setMaxSize('strengths_weaknesses',2048);
 
         $rlc_form->addButton('cancel','Cancel');
-        $rlc_form->setExtra('cancel','onClick="document.location=\'index.php?module=hms&type=student&op=show_main_menu\'"');
+        $rlc_form->setExtra('cancel','onClick="document.location=\'index.php?module=hms&action=ShowStudentMenu\'"');
 
         $rlc_form->addSubmit('submit', 'Continue'); 
     

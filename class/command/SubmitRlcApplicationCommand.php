@@ -1,5 +1,5 @@
 <?php
-PHPWS_Core::initModClass('hms', 'Command.php');
+
 PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
 PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
 PHPWS_Core::initModClass('hms', 'StudentFactory.php');
@@ -13,13 +13,10 @@ class SubmitRlcApplicationCommand extends Command {
 
     public function execute(CommandContext $context){
         $student = StudentFactory::getStudentByUsername(Current_User::getUsername(), Term::getCurrentTerm());
-        $choice1 = new HMS_Learning_Community();
-        $choice1->load($context->get('rlc_first_choice'));
-        $choice2 = new HMS_Learning_Community();
-        $choice2->load($context->get('rlc_second_choice'));
-        $choice3 = new HMS_Learning_Community();
-        $choice3->load($context->get('rlc_third_choice'));
-
+        $choice1 = new HMS_Learning_Community($context->get('rlc_first_choice'));
+        $choice2 = new HMS_Learning_Community($context->get('rlc_second_choice'));
+        $choice3 = new HMS_Learning_Community($context->get('rlc_third_choice'));
+        
         if(!$choice1->allowStudentType($student->getType()) 
            || ($choice2->id != -1 && !$choice2->allowStudentType($student->getType()))
            || ($choice3->id != -1 && !$choice3->allowStudentType($student->getType()))

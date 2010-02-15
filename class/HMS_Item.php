@@ -10,7 +10,7 @@ abstract class HMS_Item {
     var $updated_on = 0;
     var $updated_by = 0;
     
-    public function construct($id=0, $table)
+    public function construct($id=0)
     {
         if(!is_null($id) && is_numeric($id)){
             $this->id = $id;

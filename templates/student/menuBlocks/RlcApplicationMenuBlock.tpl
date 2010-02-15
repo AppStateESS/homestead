@@ -8,11 +8,11 @@ The deadline to apply for this term was {END_DEADLINE}.
 <!-- END too_late -->
 
 <!-- BEGIN review_app -->
-You've already applied for this term.
-    {VIEW_APP}
+You have completed a Residential Learning Community Application. You will be notified by email if you are invited to be a member of a community.
+You can {VIEW_APP} or {NEW_APP}.
 <!-- END review_app -->
 
 <!-- BEGIN no_app -->
-You have not applied for this term yet.
+You have not applied for a Residential Learning Community.
     {APP_NOW}
 <!-- END no_app -->

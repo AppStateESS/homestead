@@ -18,6 +18,11 @@ class HMS_Learning_Community extends HMS_Item
     //A string containing a character for each allowed student type, maxLen() == 16;
     var $allowed_student_types;
 
+    public function __construct($id = 0)
+    {
+        $this->construct($id);
+    }
+    
     public function getDb()
     {
         return new PHPWS_DB('hms_learning_communities');
@@ -674,8 +679,8 @@ class HMS_Learning_Community extends HMS_Item
             }
 
             $result = HMS_RLC_Application::save_application();
-            
-            
+
+
 
             # Check for an error
             if(PEAR::isError($result)){

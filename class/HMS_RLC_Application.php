@@ -66,7 +66,7 @@ class HMS_RLC_Application{
             return FALSE;
         }
 
-        $db = &new PHPWS_DB('hms_learning_community_applications');
+        $db = new PHPWS_DB('hms_learning_community_applications');
         $db->addWhere('id',$this->id);
         $result = $db->delete();
 
@@ -163,7 +163,7 @@ class HMS_RLC_Application{
     */
     public function save_application()
     {
-        $application = &new HMS_RLC_Application($_SESSION['asu_username']);
+        $application = new HMS_RLC_Application($_SESSION['asu_username']);
 
         $application->setUserID($_SESSION['asu_username']);
         $application->setFirstChoice($_REQUEST['rlc_first_choice']);
