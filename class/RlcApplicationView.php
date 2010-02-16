@@ -30,11 +30,6 @@ class RlcApplicationView extends View {
             $cmd->redirect();
         }
 
-        if( HMS_RLC_Application::check_for_application($student->getUsername(), $student->getApplicationTerm()) !== FALSE ){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Sorry, you can only submit one RLC application.");
-            $cmd->redirect();
-        }
-
         # Check feature deadlines
         if( $feature->getStartDate() > mktime() ){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Sorry, it is too soon to fill out an RLC application.");
@@ -43,6 +38,7 @@ class RlcApplicationView extends View {
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Sorry, the RLC application deadline has already passed. Please contact Housing & Residence Life if you are interested in applying for a RLC.");
             $cmd->redirect();
         }
+        
         $cmd = CommandFactory::getCommand('ShowRlcApplicationPage1View');
         $cmd->redirect();
     }

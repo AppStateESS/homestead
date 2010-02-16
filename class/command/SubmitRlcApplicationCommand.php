@@ -13,6 +13,14 @@ class SubmitRlcApplicationCommand extends Command {
 
     public function execute(CommandContext $context){
         $student = StudentFactory::getStudentByUsername(Current_User::getUsername(), Term::getCurrentTerm());
+        
+        # Check for an existing application and delete it
+        $oldApp = new HMS_RLC_Application($student->getUsername(), $student->getApplicationTerm());
+        
+        if($oldApp->id != NULL){
+            $result = $oldApp->delete();
+        }
+        
         $choice1 = new HMS_Learning_Community($context->get('rlc_first_choice'));
         $choice2 = new HMS_Learning_Community($context->get('rlc_second_choice'));
         $choice3 = new HMS_Learning_Community($context->get('rlc_third_choice'));

@@ -3,22 +3,27 @@ PHPWS_Core::initModClass('hms', 'View.php');
 PHPWS_Core::initModClass('hms', 'Term.php');
 
 class RlcApplicationReView extends View {
-    protected $context;
+    
+    private $student;
+    private $application;
 
-    public function __construct(CommandContext $context){
-        $this->context = $context;
+    public function __construct(Student $student, HMS_RLC_Application $application){
+        $this->student      = $student;
+        $this->application  = $application;
     }
 
     public function show(){
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        try{
-            $student = StudentFactory::getStudentByUsername($this->context->get('username'), Term::getCurrentTerm());
-            $tags['MENU_LINK'] = PHPWS_Text::secureLink(_('Return to RLC Applications'), 'hms', array('action'=>'AssignRlcApplicants'));
-        } catch(StudentNotFoundException $e){
-            $tags['MENU_LINK'] = PHPWS_Text::secureLink(_('Return to Menu'), 'hms', array('action'=>'ShowStudentMenu'));
+        
+        if(UserStatus::isAdmin()){
+            $menuCmd = CommandFactory::getCommand('AssignRlcApplicants');
+            $tags['MENU_LINK'] = $menuCmd->getLink('Return to RLC Applications');
+        }else{
+            $menuCmd = CommandFactory::getCommand('ShowStudentMenu');
+            $tags['MENU_LINK'] = $menuCmd->getLink('Return to Menu');
         }
 
-        $tags['FULL_NAME'] = $student->getFullName();
+        $tags['FULL_NAME'] = $this->student->getFullName();
 
         $tags['FIRST_CHOICE_LABEL'] = "First choice RLC is: ";
         $tags['SECOND_CHOICE_LABEL'] = "Second choice is: ";
@@ -30,10 +35,7 @@ class RlcApplicationReView extends View {
         $tags['WHY_SECOND_CHOICE_LABEL'] = "Second choice selected because: ";
         $tags['WHY_THIRD_CHOICE_LABEL'] = "Third choice selected because: ";
 
-        PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
-        $rlc_app = new HMS_RLC_Application($student->getUsername(), $student->getApplicationTerm());
-        
-        $db = &new PHPWS_DB('hms_learning_communities');
+        $db = new PHPWS_DB('hms_learning_communities');
         $db->addColumn('id');
         $db->addColumn('community_name');
         $rlcs_raw = $db->select();
@@ -42,32 +44,32 @@ class RlcApplicationReView extends View {
             $rlcs[$rlc['id']] = $rlc['community_name'];
         }
 
-        $tags['FIRST_CHOICE'] = $rlcs[$rlc_app->rlc_first_choice_id];
+        $tags['FIRST_CHOICE'] = $rlcs[$this->application->rlc_first_choice_id];
         
-        if(isset($rlc_app->rlc_second_choice_id)){
-            $tags['SECOND_CHOICE'] = $rlcs[$rlc_app->rlc_second_choice_id];
+        if(isset($this->application->rlc_second_choice_id)){
+            $tags['SECOND_CHOICE'] = $rlcs[$this->application->rlc_second_choice_id];
         }else{
             $tags['SECOND_CHOICE'] = 'None';
         }
 
-        if(isset($rlc_app->rlc_third_choice_id)){
-            $tags['THIRD_CHOICE'] = $rlcs[$rlc_app->rlc_third_choice_id];
+        if(isset($this->application->rlc_third_choice_id)){
+            $tags['THIRD_CHOICE'] = $rlcs[$this->application->rlc_third_choice_id];
         }else{
             $tags['THIRD_CHOICE'] = 'None';
         }
 
-        $tags['WHY_SPECIFIC'] = $rlc_app->why_specific_communities;
-        $tags['STRENGTHS_AND_WEAKNESSES'] = $rlc_app->strengths_weaknesses;
-        $tags['WHY_FIRST_CHOICE'] = $rlc_app->rlc_question_0;
+        $tags['WHY_SPECIFIC'] = $this->application->why_specific_communities;
+        $tags['STRENGTHS_AND_WEAKNESSES'] = $this->application->strengths_weaknesses;
+        $tags['WHY_FIRST_CHOICE'] = $this->application->rlc_question_0;
 
-        if(isset($rlc_app->rlc_second_choice_id)){
-            $tags['WHY_SECOND_CHOICE'] = $rlc_app->rlc_question_1;
+        if(isset($this->application->rlc_second_choice_id)){
+            $tags['WHY_SECOND_CHOICE'] = $this->application->rlc_question_1;
         }else{
             $tags['WHY_SECOND_CHOICE'] = 'n/a';
         }
         
-        if(isset($rlc_app->rlc_second_choice_id)){
-            $tags['WHY_THIRD_CHOICE'] = $rlc_app->rlc_question_2;
+        if(isset($this->application->rlc_second_choice_id)){
+            $tags['WHY_THIRD_CHOICE'] = $this->application->rlc_question_2;
         }else{
             $tags['WHY_THIRD_CHOICE'] = 'n/a';
         }

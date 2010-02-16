@@ -20,16 +20,17 @@ class RlcApplicationMenuView extends View {
         $tpl = array();
         
         if(isset($this->application) && !is_null($this->application)) {
-            $viewCmd = 'view your application';
-            $tpl['VIEW_APP'] = $viewCmd;
-            $newCmd = CommandFactory::getCommand('ShowRlcApplicationPage1View');
+            $viewCmd = CommandFactory::getCommand('ShowRlcApplicationReView');
+            $viewCmd->setUsername($this->student->getUsername());
+            $tpl['VIEW_APP'] = $viewCmd->getLink('view your application');
+            $newCmd = CommandFactory::getCommand('ShowRlcApplicationView');
             $tpl['NEW_APP'] = $newCmd->getLink('submit a new application');
         }else if(time() < $this->startDate){
             $tpl['BEGIN_DEADLINE'] = HMS_Util::getFriendlyDate($this->startDate); 
         }else if (time() > $this->endDate){
             $tpl['END_DEADLINE'] = HMS_Util::getFriendlyDate($this->endDate);
         }else{
-            $applyCmd = CommandFactory::getCommand('ShowRlcApplicationPage1View');
+            $applyCmd = CommandFactory::getCommand('ShowRlcApplicationView');
             $tpl['APP_NOW'] = $applyCmd->getLink('Apply for a Residential Learning Community now.');
         }
         

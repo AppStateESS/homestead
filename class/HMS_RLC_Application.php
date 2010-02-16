@@ -13,17 +13,17 @@ define('RLC_RESPONSE_LIMIT', 4096);
 class HMS_RLC_Application{
 
     var $id;
-    
+
     var $user_id;
     var $date_submitted;
-    
+
     var $rlc_first_choice_id;
     var $rlc_second_choice_id;
     var $rlc_third_choice_id;
-    
+
     var $why_specific_communities;
     var $strengths_weaknesses;
-    
+
     var $rlc_question_0;
     var $rlc_question_1;
     var $rlc_question_2;
@@ -57,11 +57,6 @@ class HMS_RLC_Application{
 
     public function delete()
     {
-        if( !Current_User::allow('hms', 'learning_community_maintenance') ){
-            $tpl = array();
-            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
-        }
-
         if(!isset($this->id)) {
             return FALSE;
         }
@@ -71,7 +66,8 @@ class HMS_RLC_Application{
         $result = $db->delete();
 
         if(PHPWS_Error::logIfError($result)) {
-            return FALSE;
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException($result->toString());
         }
 
         $this->id = 0;
@@ -113,7 +109,7 @@ class HMS_RLC_Application{
      * Saves the current Application object to the database.
      */
     public function save()
-    {   
+    {
         //Ensure that the user is allowed to apply for all of their choices
         //before doing anything else
         $student = StudentFactory::getStudentByUsername($this->getUserID(), $this->term);
@@ -155,12 +151,12 @@ class HMS_RLC_Application{
     }
 
     /*****************
-    * Static Methods *
-    *****************/
-    
+     * Static Methods *
+     *****************/
+
     /**
-    * Creates a new application object from $_REQUEST data and saves it the database.
-    */
+     * Creates a new application object from $_REQUEST data and saves it the database.
+     */
     public function save_application()
     {
         $application = new HMS_RLC_Application($_SESSION['asu_username']);
@@ -177,7 +173,7 @@ class HMS_RLC_Application{
         $application->setStrengthsWeaknesses($_REQUEST['strengths_weaknesses']);
         $application->setRLCQuestion0($_REQUEST['rlc_question_0']);
         $application->setEntryTerm($_SESSION['application_term']);
-        
+
         if(isset($_REQUEST['rlc_question_1'])){
             $application->setRLCQuestion1($_REQUEST['rlc_question_1']);
         }else{
@@ -193,38 +189,30 @@ class HMS_RLC_Application{
         $application->term = $_SESSION['application_term'];
 
         $result = $application->save();
-        
+
         if(PEAR::isError($result)){
             PHPWS_Error::log($result,'hms','Caught error from Application::save()');
         }
 
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
         HMS_Activity_Log::log_activity($_SESSION['asu_username'], ACTIVITY_RLC_APP_SUBMITTED, Current_User::getUsername(), "Submitted an RLC application");
-        
+
         return $result;
     }
-    
+
     /**
-    * Check to see if an application already exists for the specified user. Returns FALSE if no application exists.
-    * If an application does exist, a db object containing that row is returned. In the case of a db error, a PEAR
-    * error object is returned. 
-    * @param include_denied Controls whether or not denied applications are returned
-    */
-    public function check_for_application($asu_username = NULL, $entry_term = NULL, $include_denied = TRUE)
+     * Check to see if an application already exists for the specified user. Returns FALSE if no application exists.
+     * If an application does exist, an associative array containing that row is returned. In the case of a db error, a PEAR
+     * error object is returned.
+     * @param include_denied Controls whether or not denied applications are returned
+     */
+    public function check_for_application($asu_username, $term, $include_denied = TRUE)
     {
-        $db = &new PHPWS_DB('hms_learning_community_applications');
+        $db = new PHPWS_DB('hms_learning_community_applications');
 
-        if(isset($asu_username)){
-            $db->addWhere('user_id',$asu_username,'ILIKE');
-        }else{
-            $db->addWhere('user_id',$_SESSION['asu_username'],'ILIKE');
-        }
+        $db->addWhere('user_id',$asu_username,'ILIKE');
 
-        if(isset($entry_term)){
-            $db->addWhere('term', $entry_term);
-        } else {
-            $db->addWhere('term', Term::getCurrentTerm());
-        }
+        $db->addWhere('term', $term);
 
         if(!$include_denied){
             $db->addWhere('denied', 0);
@@ -232,9 +220,9 @@ class HMS_RLC_Application{
 
         $result = $db->select('row');
 
-        if(PEAR::isError($result)){
-            PHPWS_Error::log($result,'hms','check_for_rlc_application',"asu_username:{$_SESSION['asu_username']}");
-            return $result;
+        if(PHPWS_Error::logIfError($result)){
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException($result->toString());
         }
 
         if(sizeof($result) > 1){
@@ -243,7 +231,7 @@ class HMS_RLC_Application{
             return FALSE;
         }
     }
-    
+
     /**
      * RLC Application pager for the RLC admin panel
      */
@@ -261,7 +249,7 @@ class HMS_RLC_Application{
         $pager->db->addColumn('hms_learning_communities.abbreviation');
         // The 'addOrder' calls must not be used in order for the sort order buttons on the pager to work
         #$pager->db->addOrder('hms_learning_communities.abbreviation','ASC');
-        #$pager->db->addOrder('hms_learning_community_applications.date_submitted', 'ASC');        
+        #$pager->db->addOrder('hms_learning_community_applications.date_submitted', 'ASC');
         //$pager->db->addOrder('user_id','ASC');
         $pager->db->addWhere('hms_learning_community_applications.rlc_first_choice_id',
                              'hms_learning_communities.id','=');
@@ -284,7 +272,7 @@ class HMS_RLC_Application{
 
         return $pager->get();
     }
-    
+
     public function getAdminPagerTags()
     {
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
@@ -295,18 +283,18 @@ class HMS_RLC_Application{
         $rlc_list = HMS_Learning_Community::getRLCList();
 
         $tags = array();
-        
+
         $tags['NAME']           = $student->getFullNameProfileLink();
         $tags['1ST_CHOICE']     = '<a href="./index.php?module=hms&action=ViewRlcApplication&username=' . $this->getUserID() . '" target="_blank">' . $rlc_list[$this->getFirstChoice()] . '</a>';
         if(isset($rlc_list[$this->getSecondChoice()]))
-            $tags['2ND_CHOICE'] = $rlc_list[$this->getSecondChoice()];
+        $tags['2ND_CHOICE'] = $rlc_list[$this->getSecondChoice()];
         if(isset($rlc_list[$this->getThirdChoice()]))
-            $tags['3RD_CHOICE'] = $rlc_list[$this->getThirdChoice()];
+        $tags['3RD_CHOICE'] = $rlc_list[$this->getThirdChoice()];
         $tags['FINAL_RLC']      = HMS_RLC_Application::generateRLCDropDown($rlc_list,$this->getID());
         $tags['CLASS']          = $student->getClass();
-//        $tags['SPECIAL_POP']    = ;
-//        $tags['MAJOR']          = ;
-//        $tags['HS_GPA']         = ;
+        //        $tags['SPECIAL_POP']    = ;
+        //        $tags['MAJOR']          = ;
+        //        $tags['HS_GPA']         = ;
         $tags['GENDER']         = $student->getGender();
         $tags['DATE_SUBMITTED'] = date('d-M-y',$this->getDateSubmitted());
         $tags['DENY']           = PHPWS_Text::secureLink('Deny', 'hms', array('action'=>'DenyRlcApplication', 'id'=>$this->id));
@@ -321,7 +309,7 @@ class HMS_RLC_Application{
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
         $term = Term::getSelectedTerm();
-        
+
         $sinfo            = HMS_SOAP::get_student_info($this->user_id);
         $application_date = isset($this->date_submitted) ? HMS_Util::get_long_date($this->date_submitted) : 'Error with the submission date';
 
@@ -344,7 +332,7 @@ class HMS_RLC_Application{
         $row['major']               = 'N/A';                    //TODO: Plug this in from somewhere...
         $row['application_date']    = $application_date;
         $row['denied']              = (isset($this->denied) && $this->denied == 0) ? 'yes' : 'no';
-        
+
         return $row;
     }
 
@@ -363,7 +351,7 @@ class HMS_RLC_Application{
         $pager->db->addColumn('hms_learning_communities.abbreviation');
         $pager->db->addWhere('hms_learning_community_applications.rlc_first_choice_id',
                              'hms_learning_communities.id','=');
-        
+
         $pager->setModule('hms');
         $pager->setTemplate('admin/denied_rlc_app_pager.tpl');
         $pager->setEmptyMessage("No denied RLC applications exist.");
@@ -382,9 +370,9 @@ class HMS_RLC_Application{
         $tags['NAME']           = HMS_Student::get_link($this->user_id);
         $tags['1ST_CHOICE']     = '<a href="./index.php?module=hms&type=rlc&op=view_rlc_application&username=' . $this->getUserID() . '" target="_blank">' . $rlc_list[$this->getFirstChoice()] . '</a>';
         if(isset($rlc_list[$this->getSecondChoice()]))
-            $tags['2ND_CHOICE'] = $rlc_list[$this->getSecondChoice()];
+        $tags['2ND_CHOICE'] = $rlc_list[$this->getSecondChoice()];
         if(isset($rlc_list[$this->getThirdChoice()]))
-            $tags['3RD_CHOICE'] = $rlc_list[$this->getThirdChoice()];
+        $tags['3RD_CHOICE'] = $rlc_list[$this->getThirdChoice()];
         $tags['CLASS']          = HMS_SOAP::get_student_class($this->getUserID(), HMS_SOAP::get_application_term($this->getUserID()));
         $tags['GENDER']         = HMS_SOAP::get_gender($this->getUserID());
         $tags['DATE_SUBMITTED'] = date('d-M-y',$this->getDateSubmitted());
@@ -392,7 +380,7 @@ class HMS_RLC_Application{
 
         return $tags;
     }
-    
+
     /****************************************************************/
     /* Generates a processed template for the rlc sort dropdown box */
     /****************************************************************/
@@ -491,7 +479,7 @@ class HMS_RLC_Application{
      * Generates a drop down menu using the RLC abbreviations
      */
     public function generateRLCDropDown($rlc_list,$application_id){
-        
+
         $output = "<select name=\"final_rlc[$application_id]\">";
 
         $output .= '<option value="-1">None</option>';
@@ -504,7 +492,7 @@ class HMS_RLC_Application{
 
         return $output;
     }
-    
+
     /*
      * Does the checks required before showing the rlc application, and then shows it
      */
@@ -537,7 +525,7 @@ class HMS_RLC_Application{
         PHPWS_Core::initModClass('hms','HMS_Learning_Community.php');
 
         $template = array();
-        
+
         $rlc_form = & new PHPWS_Form();
         $rlc_form->addHidden('type', 'student');
         $rlc_form->addHidden('op','rlc_application_page1_submit');
@@ -553,11 +541,11 @@ class HMS_RLC_Application{
         $template['MESSAGE'] = $message;
 
         $username = $_SESSION['asu_username'];
-        
+
         $first_name  = HMS_SOAP::get_first_name($username);
         $middle_name = HMS_SOAP::get_middle_name($username);
         $last_name   = HMS_SOAP::get_last_name($username);
-        
+
         # Check for error in SOAP communication. isset doesn't work to check these, for some reason
         if(!(isset($first_name) && isset($last_name))){
             $template['MESSAGE'] = "Error: There was a problem communicating with the student information server. Please try again later.";
@@ -569,10 +557,10 @@ class HMS_RLC_Application{
 
         $template['FIRST_NAME']        = $first_name;
         $template['FIRST_NAME_LABEL']  = 'First Name: ';
-        
+
         $template['MIDDLE_NAME']       = $middle_name;
         $template['MIDDLE_NAME_LABEL'] = 'Middle Name: ';
-        
+
         $template['LAST_NAME']         = $last_name;
         $template['LAST_NAME_LABEL']   = 'Last Name: ';
 
@@ -584,10 +572,10 @@ class HMS_RLC_Application{
 
         # Get the list of RLCs from the database
         $rlc_choices = HMS_Learning_Community::getRLCList(FALSE);
-       
+         
         # Add an inital element to the list.
         $rlc_choices[-1] = "Select";
-        
+
         # Make a copy of the RLC choices list, replacing "Select" with "None".
         # To be used with the second and third RLC choices
         $rlc_choices_none = $rlc_choices;
@@ -600,7 +588,7 @@ class HMS_RLC_Application{
         }else{
             $rlc_form->setMatch('rlc_first_choice', -1); # Select the default
         }
-        
+
         $rlc_form->addDropBox('rlc_second_choice', $rlc_choices_none);
         $rlc_form->setLabel('rlc_second_choice','Second Choice: ');
         if(isset($_REQUEST['rlc_second_choice'])){
@@ -608,7 +596,7 @@ class HMS_RLC_Application{
         }else{
             $rlc_form->setMatch('rlc_second_choice', -1); # Select the default
         }
-        
+
         $rlc_form->addDropBox('rlc_third_choice', $rlc_choices_none);
         $rlc_form->setLabel('rlc_third_choice','Third Choice: ');
         if(isset($_REQUEST['rlc_third_choice'])){
@@ -640,11 +628,11 @@ class HMS_RLC_Application{
         $rlc_form->addButton('cancel','Cancel');
         $rlc_form->setExtra('cancel','onClick="document.location=\'index.php?module=hms&type=student&op=show_main_menu\'"');
 
-        $rlc_form->addSubmit('submit', 'Continue'); 
-    
+        $rlc_form->addSubmit('submit', 'Continue');
+
         $rlc_form->mergeTemplate($template);
         $template = $rlc_form->getTemplate();
-                
+
         PHPWS_Core::initModClass('hms', 'HMS_Side_Thingie.php');
         $side_thingie = new HMS_Side_Thingie(HMS_SIDE_STUDENT_RLC);
         $side_thingie->show();
@@ -659,53 +647,53 @@ class HMS_RLC_Application{
      * Requires:    first, middle and last name are set
      *              rlc choices are set and are numeric
      *              text fields are set
-     */               
+     */
     public function validate_rlc_application_page1(){
 
         # Make sure username and first, middle, last name was submitted
         if(!(isset($_REQUEST['first_name'])        &&
-             isset($_REQUEST['middle_name'])       &&
-             isset($_REQUEST['last_name'])
-          )){
+        isset($_REQUEST['middle_name'])       &&
+        isset($_REQUEST['last_name'])
+        )){
             return "Error: Missing a name or username field.";
         }
-        
+
         # Make sure rlc choices were selected.
         if(!(isset($_REQUEST['rlc_first_choice'])  &&
-             isset($_REQUEST['rlc_second_choice']) &&
-             isset($_REQUEST['rlc_third_choice'])
-           )){
+        isset($_REQUEST['rlc_second_choice']) &&
+        isset($_REQUEST['rlc_third_choice'])
+        )){
             return "Error: No communitiess submitted.";
         }
 
         # Make sure rlc choices are numeric
         if(!(is_numeric($_REQUEST['rlc_first_choice'])  &&
-             is_numeric($_REQUEST['rlc_second_choice']) &&
-             is_numeric($_REQUEST['rlc_third_choice'])
-           )){
+        is_numeric($_REQUEST['rlc_second_choice']) &&
+        is_numeric($_REQUEST['rlc_third_choice'])
+        )){
             return "Error: Invalid community choices.";
         }
 
         # Make sure rlc choice indicies are > 0 (i.e. not default value)
         # Only check first choice, allowing second and third choices to be "none".
         if($_REQUEST['rlc_first_choice']  < 0 ){
-               return "Error: Please rank your community choices.";
+            return "Error: Please rank your community choices.";
         }
 
         # Make sure that if 2nd choice is "none", that there isn't a third choice
         if($_REQUEST['rlc_second_choice'] == -1 && $_REQUEST['rlc_third_choice'] > -1){
             return "Error: You cannot choose a third community without also choosing a second.";
         }
-        
+
         # Make sure none of the rlc choices match, but allow for second and third choices to match as long as they're both "none".
         if(($_REQUEST['rlc_first_choice']  == $_REQUEST['rlc_second_choice']) ||
-           ($_REQUEST['rlc_second_choice'] == $_REQUEST['rlc_third_choice'] && ($_REQUEST['rlc_second_choice'] > -1 && $_REQUEST['rlc_third_choice'] > -1))  ||
-           ($_REQUEST['rlc_first_choice']  == $_REQUEST['rlc_third_choice'])){
+        ($_REQUEST['rlc_second_choice'] == $_REQUEST['rlc_third_choice'] && ($_REQUEST['rlc_second_choice'] > -1 && $_REQUEST['rlc_third_choice'] > -1))  ||
+        ($_REQUEST['rlc_first_choice']  == $_REQUEST['rlc_third_choice'])){
             return "Error: While ranking your community choices, you cannot select a community more than once.";
         }
 
         if(!(isset($_REQUEST['why_specific_communities']) &&
-           isset($_REQUEST['strengths_weaknesses']))){
+        isset($_REQUEST['strengths_weaknesses']))){
             return "Error: Please complete both of the questions in section 3.";
         }
 
@@ -724,13 +712,13 @@ class HMS_RLC_Application{
      * Displays page 2 of the rlc application form.
      */
     public function show_rlc_application_form_page2($message = NULL){
-        
+
         $template = array();
 
         if(isset($message)){
             $template['MESSAGE'] = $message;
         }
-        
+
         $rlc_form2 = new PHPWS_Form();
         $rlc_form2->addHidden('type','student');
         $rlc_form2->addHidden('op','rlc_application_page2_submit');
@@ -748,7 +736,7 @@ class HMS_RLC_Application{
         $choices = array($_REQUEST['rlc_first_choice'], $_REQUEST['rlc_second_choice'], $_REQUEST['rlc_third_choice']);
 
         $db = &new PHPWS_DB('hms_learning_community_questions');
-        
+
         for($i = 0; $i < 3; $i++){
             # Skip the question lookup if "none" was selected
             if($choices[$i] == -1){
@@ -759,7 +747,7 @@ class HMS_RLC_Application{
             $db->addWhere('learning_community_id',$choices[$i]);
             $result = $db->select('row');
 
-            
+
             if(PEAR::isError($result)){
                 $template['MESSAGE'] = "There was an error looking up the community questions.";
                 return PHPWS_Template::process($template,'hms','student/rlc_signup_form_page2.tpl');
@@ -769,7 +757,7 @@ class HMS_RLC_Application{
             $rlc_form2->setLabel("rlc_question_$i", $result['question_text']);
             $rlc_form2->setMaxSize("rlc_question_$i", 2048);
         }
-        
+
         $rlc_form2->addSubmit('submit','Submit Application');
 
         $rlc_form2->addButton('cancel','Cancel');
@@ -777,22 +765,22 @@ class HMS_RLC_Application{
 
         $rlc_form2->mergeTemplate($template);
         $template = $rlc_form2->getTemplate();
-                
+
         PHPWS_Core::initModClass('hms', 'HMS_Side_Thingie.php');
         $side_thingie = new HMS_Side_Thingie(HMS_SIDE_STUDENT_RLC);
         $side_thingie->show();
-        
+
         return PHPWS_Template::process($template,'hms','student/rlc_signup_form_page2.tpl');
-        
+
     }
-    
+
     /*
      * Validates the second page of the rlc application form
      * Returns true upon successful validation, or an error
      *         message otherwise.
      * Requires:    Verification from page 1
      *              All three text areas to have some content
-     */               
+     */
     public function validate_rlc_application_page2(){
 
         # Verify that all information from page 1 is still in the request
@@ -803,9 +791,9 @@ class HMS_RLC_Application{
 
         # Verify that all three text areas have content
         if(($_REQUEST['rlc_first_choice'] > -1  && $_REQUEST['rlc_question_0'] == '') ||
-           ($_REQUEST['rlc_second_choice'] > -1 && $_REQUEST['rlc_question_1'] == '') ||
-           ($_REQUEST['rlc_third_choice'] > -1  && $_REQUEST['rlc_question_2'] == '')
-          ){
+        ($_REQUEST['rlc_second_choice'] > -1 && $_REQUEST['rlc_question_1'] == '') ||
+        ($_REQUEST['rlc_third_choice'] > -1  && $_REQUEST['rlc_question_2'] == '')
+        ){
             return "Error: Please answer all of the questions below.";
         }
 
@@ -825,19 +813,19 @@ class HMS_RLC_Application{
         return TRUE;
     }
 
-    /* 
+    /*
      * Displays a RLC Application
      * If no options passed, shows for the currently logged student
      * If an username is provided, shows the RLC application for that student
      */
     public function view_rlc_application($username = NULL)
     {
-       if($username == NULL) {
+        if($username == NULL) {
             $username = $_SESSION['asu_username'];
             $tags['MENU_LINK'] = PHPWS_Text::secureLink(_('Return to Menu'), 'hms', array('type'=>'student', 'op'=>'main'));
-       } else {
+        } else {
             $tags['MENU_LINK'] = PHPWS_Text::secureLink(_('Return to RLC Applications'), 'hms', array('type'=>'rlc', 'op'=>'assign_applicants_to_rlcs'));
-       }
+        }
 
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
         $tags['FULL_NAME'] = HMS_SOAP::get_first_name($username) . " " . HMS_SOAP::get_last_name($username);
@@ -845,7 +833,7 @@ class HMS_RLC_Application{
         $tags['FIRST_CHOICE_LABEL'] = "First choice RLC is: ";
         $tags['SECOND_CHOICE_LABEL'] = "Second choice is: ";
         $tags['THIRD_CHOICE_LABEL'] =  "Third choice is: ";
-        
+
         $tags['WHY_SPECIFIC_LABEL'] = "Specific communities chosen because: ";
         $tags['STRENGTHS_AND_WEAKNESSES_LABEL'] = "Strengths and weaknesses: ";
         $tags['WHY_FIRST_CHOICE_LABEL'] = "First choice selected because: ";
@@ -858,18 +846,18 @@ class HMS_RLC_Application{
         }else{
             $rlc_app = new HMS_RLC_Application($username, HMS_SOAP::get_application_term($username));
         }
-        
+
         $db = &new PHPWS_DB('hms_learning_communities');
         $db->addColumn('id');
         $db->addColumn('community_name');
         $rlcs_raw = $db->select();
-        
+
         foreach($rlcs_raw as $rlc) {
             $rlcs[$rlc['id']] = $rlc['community_name'];
         }
 
         $tags['FIRST_CHOICE'] = $rlcs[$rlc_app->rlc_first_choice_id];
-        
+
         if(isset($rlc_app->rlc_second_choice_id)){
             $tags['SECOND_CHOICE'] = $rlcs[$rlc_app->rlc_second_choice_id];
         }else{
@@ -891,7 +879,7 @@ class HMS_RLC_Application{
         }else{
             $tags['WHY_SECOND_CHOICE'] = 'n/a';
         }
-        
+
         if(isset($rlc_app->rlc_second_choice_id)){
             $tags['WHY_THIRD_CHOICE'] = $rlc_app->rlc_question_2;
         }else{
@@ -928,7 +916,7 @@ class HMS_RLC_Application{
             $this->date_submitted = $date;
         }
     }
-    
+
     public function getDateSubmitted(){
         return $this->date_submitted;
     }
