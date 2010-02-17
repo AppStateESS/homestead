@@ -1,4 +1,7 @@
 <h3>Learning Community Application</h3>
+
+<p>For more infomration about Appalachian\'s Residential Learning Communities please visit the <a href="http://housing.appstate.edu/pagesmith/29" target="_blank">Residential Learning Communities Website</a>.</p>
+
 <!-- BEGIN too_soon -->
 This feature will be available on {BEGIN_DEADLINE}.
 <!-- END too_soon -->

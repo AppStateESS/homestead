@@ -9,14 +9,15 @@ PHPWS_Core::initModClass('hms', 'HMS_Item.php');
 
 class HMS_Learning_Community extends HMS_Item
 {
-    var $id=NULL;
-    var $community_name=NULL;
-    var $abbreviation;
-    var $capacity;
-    var $hide;
-    var $error="";
-    //A string containing a character for each allowed student type, maxLen() == 16;
-    var $allowed_student_types;
+    public $id=NULL;
+    public $community_name=NULL;
+    public $abbreviation;
+    public $capacity;
+    public $hide;
+    public $error="";
+        
+    public $allowed_student_types; //A string containing a character for each allowed student type, maxLen() == 16;
+    public $extra_into; // A text field, show to the student when the RLC is selected
 
     public function __construct($id = 0)
     {

@@ -12,26 +12,26 @@ define('RLC_RESPONSE_LIMIT', 4096);
 
 class HMS_RLC_Application{
 
-    var $id;
+    public $id;
 
-    var $user_id;
-    var $date_submitted;
+    public $user_id;
+    public $date_submitted;
 
-    var $rlc_first_choice_id;
-    var $rlc_second_choice_id;
-    var $rlc_third_choice_id;
+    public $rlc_first_choice_id;
+    public $rlc_second_choice_id;
+    public $rlc_third_choice_id;
 
-    var $why_specific_communities;
-    var $strengths_weaknesses;
+    public $why_specific_communities;
+    public $strengths_weaknesses;
 
-    var $rlc_question_0;
-    var $rlc_question_1;
-    var $rlc_question_2;
+    public $rlc_question_0;
+    public $rlc_question_1;
+    public $rlc_question_2;
 
-    var $hms_assignment_id = NULL;
-    var $term = NULL;
+    public $hms_assignment_id = NULL;
+    public $term = NULL;
 
-    var $denied = 0;
+    public $denied = 0;
 
     /**
      * Constructor
