@@ -17,7 +17,7 @@ class HMS_Learning_Community extends HMS_Item
     public $error="";
         
     public $allowed_student_types; //A string containing a character for each allowed student type, maxLen() == 16;
-    public $extra_into; // A text field, show to the student when the RLC is selected
+    public $extra_info; // A text field, show to the student when the RLC is selected
 
     public function __construct($id = 0)
     {

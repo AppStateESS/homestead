@@ -23,7 +23,7 @@ class RlcApplicationPage1View extends View {
     }
 
     public function show(){
-        $jsVars = array('ELEMENTS_TO_BIND'=>'"#phpws_form_rlc_first_choice","#phpws_form_rlc_second_choice","#phpws_form_rlc_third_choice"', 'ACTION'=>'GetRLCExtraInfo');
+        $jsVars = array('ELEMENTS_TO_BIND'=>'"#phpws_form_rlc_first_choice","#phpws_form_rlc_second_choice","#phpws_form_rlc_third_choice"', 'ACTION'=>'AjaxGetRLCExtraInfo');
         javascript('modules/hms/formDialog', $jsVars);
         
         //Seriously php?  Can't resolve context without this?  Fail.
