@@ -15,85 +15,86 @@
 
 class HMS_Student_Profile{
 
-    var $id;
+    public $id;
 
-    var $user_id;
-    var $date_submitted;
+    public $user_id;
+    public $date_submitted;
+    public $term;
 
     # Alternate contact info
-    var $alternate_email = NULL;
-    var $aim_sn = NULL;
-    var $yahoo_sn = NULL;
-    var $msn_sn = NULL;
+    public $alternate_email = NULL;
+    public $aim_sn = NULL;
+    public $yahoo_sn = NULL;
+    public $msn_sn = NULL;
 
     # Music choices 
-    var $arts_and_crafts = 0;
-    var $books_and_reading = 0;
-    var $cars = 0;
-    var $church_activities = 0;
-    var $collecting = 0;
-    var $computers_and_technology = 0;
-    var $dancing = 0;
-    var $fashion = 0;
-    var $fine_arts = 0;
-    var $gardening = 0;
-    var $games = 0;
-    var $humor = 0;
-    var $investing_personal_finance = 0;
-    var $movies = 0;
-    var $music = 0;
-    var $outdoor_activities = 0;
-    var $pets_and_animals = 0;
-    var $photography = 0;
-    var $politics = 0;
-    var $sports = 0;
-    var $travel = 0;
-    var $tv_shows = 0;
-    var $volunteering = 0;
-    var $writing = 0;
+    public $arts_and_crafts = 0;
+    public $books_and_reading = 0;
+    public $cars = 0;
+    public $church_activities = 0;
+    public $collecting = 0;
+    public $computers_and_technology = 0;
+    public $dancing = 0;
+    public $fashion = 0;
+    public $fine_arts = 0;
+    public $gardening = 0;
+    public $games = 0;
+    public $humor = 0;
+    public $investing_personal_finance = 0;
+    public $movies = 0;
+    public $music = 0;
+    public $outdoor_activities = 0;
+    public $pets_and_animals = 0;
+    public $photography = 0;
+    public $politics = 0;
+    public $sports = 0;
+    public $travel = 0;
+    public $tv_shows = 0;
+    public $volunteering = 0;
+    public $writing = 0;
 
     # Hobby choices
-    var $alternative = 0;
-    var $ambient = 0;
-    var $beach = 0;
-    var $bluegrass = 0;
-    var $blues = 0;
-    var $classical = 0;
-    var $classic_rock = 0;
-    var $country = 0;
-    var $electronic = 0;
-    var $folk = 0;
-    var $heavy_metal = 0;
-    var $hip_hop = 0;
-    var $house = 0;
-    var $industrial = 0;
-    var $jazz = 0;
-    var $popular_music = 0;
-    var $progressive = 0;
-    var $punk = 0;
-    var $r_and_b = 0;
-    var $rap = 0;
-    var $reggae = 0;
-    var $rock = 0;
-    var $world_music = 0;
+    public $alternative = 0;
+    public $ambient = 0;
+    public $beach = 0;
+    public $bluegrass = 0;
+    public $blues = 0;
+    public $classical = 0;
+    public $classic_rock = 0;
+    public $country = 0;
+    public $electronic = 0;
+    public $folk = 0;
+    public $heavy_metal = 0;
+    public $hip_hop = 0;
+    public $house = 0;
+    public $industrial = 0;
+    public $jazz = 0;
+    public $popular_music = 0;
+    public $progressive = 0;
+    public $punk = 0;
+    public $r_and_b = 0;
+    public $rap = 0;
+    public $reggae = 0;
+    public $rock = 0;
+    public $world_music = 0;
     
     # Study times
-    var $study_early_morning = 0;
-    var $study_morning_afternoon = 0;
-    var $study_afternoon_evening = 0;
-    var $study_evening = 0;
-    var $study_late_night = 0;
+    public $study_early_morning = 0;
+    public $study_morning_afternoon = 0;
+    public $study_afternoon_evening = 0;
+    public $study_evening = 0;
+    public $study_late_night = 0;
 
     # drop downs
-    var $political_view = 0;
-    var $major = 0;
-    var $experience = 0;
-    var $sleep_time = 0;
-    var $wakeup_time = 0;
-    var $overnight_guests = 0;
-    var $loudness = 0;
-    var $cleanliness = 0;
-    var $free_time = 0;
+    public $political_view = 0;
+    public $major = 0;
+    public $experience = 0;
+    public $sleep_time = 0;
+    public $wakeup_time = 0;
+    public $overnight_guests = 0;
+    public $loudness = 0;
+    public $cleanliness = 0;
+    public $free_time = 0;
 
     
     /**
@@ -892,7 +893,7 @@ class HMS_Student_Profile{
             //$pager->db->setTestMode();
         }
 
-        # If the $_SESSION variable is set, and set to true, then use the session, otherwise pull from $_REQUEST and create $_SESSION
+        # If the $_SESSION publiciable is set, and set to true, then use the session, otherwise pull from $_REQUEST and create $_SESSION
         if(isset($_SESSION['profile_search_use_session']) && $_SESSION['profile_search_use_session'] == TRUE){
             # if a username was set, use it and ignore the rest
             if(isset($_SESSION['profile_search_asu_username'])){
