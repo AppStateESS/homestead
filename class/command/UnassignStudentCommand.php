@@ -29,8 +29,8 @@ class UnassignStudentCommand extends Command {
 
         $term = Term::getSelectedTerm();
         $student = StudentFactory::getStudentByUsername($username, $term);
-        $notes = $context->get('notes');
-
+        $notes = $context->get('note');
+        
         try{
             $result = HMS_Assignment::unassignStudent($student, $term, $notes);
         }catch(Exception $e){
