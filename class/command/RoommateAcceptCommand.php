@@ -47,22 +47,22 @@ class RoommateAcceptCommand extends Command
             $err->redirect();
         }
 
-        // TODO: RLC Errors
-        /*if(!$roommate->check_rlc_applications()) {
+        try {
+            $roommate->confirm();
+        } catch(RoommateCompatibilityException $rce) {
+            NQ::simple('hms', HMS_NOTIFICATION_WARNING, $rce->getMessage());
+            $err->redirect();
         }
 
-        if(!$roommate->check_rlc_assignments()) {
-        }*/
-
-        // We're good... make it official!
-        $roommate->confirmed = 1;
-        $roommate->confirmed_on = mktime();
         $roommate->save();
 
         HMS_Activity_Log::log_activity($roommate->requestor,
                                        ACTIVITY_ACCEPTED_AS_ROOMMATE,
                                        $roommate->requestee,
                                        "CAPTCHA: $verified");
+
+        // Email both parties
+        // $request->send_confirm_emails();
 
         // Remove any other requests for the requestor
         HMS_Roommate::removeOutstandingRequests($roommate->requestor, $roommate->term);

@@ -48,25 +48,28 @@ class HMS_Roommate
 
     public function request($requestor, $requestee, $term)
     {
-        $result = HMS_Roommate::can_live_together($requestor, $requestee, $term);
-        if($result != E_SUCCESS) {
-            PHPWS_Core::initModClass('hms', 'exception/RequestRoommateException.php');
-            throw new RequestRoommateException($result);
-        }
-
         $this->term         = $term;
         $this->requestor    = strToLower($requestor);
         $this->requestee    = strToLower($requestee);
         $this->confirmed    = 0;
         $this->requested_on = mktime();
 
+        $result = $this->can_live_together();
+        if($result != E_SUCCESS) {
+            PHPWS_Core::initModClass('hms', 'exception/RoommateCompatibilityException.php');
+            throw new RoommateCompatibilityException($result);
+        }
+
         return true;
     }
 
     public function confirm()
     {
-        if($id == 0)
-            return false;
+        $result = $this->can_live_together();
+        if($result != E_SUCCESS) {
+            PHPWS_Core::initModClass('hms', 'exception/RoommateCompatibilityException.php');
+            throw new RoommateCompatibilityException($result);
+        }
 
         $this->confirmed    = 1;
         $this->confirmed_on = mktime();
@@ -419,23 +422,14 @@ class HMS_Roommate
         return TRUE;
     }
 
-    public function check_rlc_applications($a, $b, $term)
+    public function check_rlc_applications()
     {
         PHPWS_Core::initModClass('hms','HMS_RLC_Application.php');
-        $result = HMS_RLC_Application::check_for_application($a, $term, FALSE);
+        $result  = HMS_RLC_Application::check_for_application($this->requestor, $this->term, FALSE);
+        $resultb = HMS_RLC_Application::check_for_application($this->requestee, $this->term, FALSE);
 
-        if(PHPWS_Error::isError($result)) {
-            test($result,1);    // TODO: Break Cleanly
-        }
-
-        if($result == FALSE || $result == NULL)
+        if($result === FALSE && $resultb === FALSE)
             return TRUE;
-        
-
-        $resultb = HMS_RLC_Application::check_for_application($b, $term, FALSE);
-
-        if($result == FALSE || $result == NULL)
-            echo "roommate has not applied for an RLC";
 
         // Check to see if any of a's choices match any of b's choices
         if($result['rlc_first_choice_id']  == $resultb['rlc_first_choice_id'] ||
@@ -447,20 +441,26 @@ class HMS_Roommate
            $result['rlc_third_choice_id']  == $resultb['rlc_first_choice_id'] ||
            $result['rlc_third_choice_id']  == $resultb['rlc_second_choice_id'] ||
            $result['rlc_third_choice_id']  == $resultb['rrlc_third_choice_id']){
-            echo "applications match";
             return TRUE;
         }
+
+        return FALSE;
     }
 
-    public function check_rlc_assignments($a, $b, $term)
+    public function check_rlc_assignments()
     {
         PHPWS_Core::initModClass('hms','HMS_RLC_Assignment.php');
-        $resulta = HMS_RLC_Assignment::check_for_assignment($a, $term);
+        $resulta = HMS_RLC_Assignment::check_for_assignment($this->requestor, $this->term);
+        $resultb = HMS_RLC_Assignment::check_for_assignment($this->requestee, $this->term);
 
-        $resultb = HMS_RLC_Assignment::check_for_assignment($b, $term);
+        if($resulta === FALSE || $resultb === FALSE){
+            return TRUE;
+        }
 
-        if($resulta !== FALSE || $resultb !== FALSE){
-            return FALSE;
+        if($resulta !== FALSE && $resultb !== FALSE) {
+            if($resulta['rlc_id'] == $resultb['rlc_id']) {
+                return TRUE;
+            }
         }
 
         return TRUE;
@@ -498,11 +498,12 @@ class HMS_Roommate
      * @param requestor The person requesting a roommate
      * @param requestee The person requested as a roommate
      */
-    public function can_live_together($requestor, $requestee, $term)
+    public function can_live_together()
     {
         // This is always a good idea
-        $requestor = strToLower($requestor);
-        $requestee = strToLower($requestee);
+        $requestor = strToLower($this->requestor);
+        $requestee = strToLower($this->requestee);
+        $term = $this->term;
 
         // Sanity Checking
         if(is_null($requestor)) {
@@ -564,8 +565,13 @@ class HMS_Roommate
             return E_ROOMMATE_TYPE_MISMATCH;
         }
 
+        // Make sure RLC Applications are compatible
+        if(!$this->check_rlc_applications()) {
+            return E_ROOMMATE_RLC_APPLICATION;
+        }
+
         // If either student is assigned to an RLC, do not allow the request
-        if(!HMS_Roommate::check_rlc_assignments($requestor, $requestee, $requestor_info->getApplicationTerm())) {
+        if(!$this->check_rlc_assignments()) {
             return E_ROOMMATE_RLC_ASSIGNMENT;
         }
 
@@ -637,7 +643,7 @@ class HMS_Roommate
      * Email Methods *
      *****************/
      
-    public function send_emails() 
+    public function send_request_emails() 
     {
         PHPWS_Core::initModClass('hms', 'HMS_Email.php');
 

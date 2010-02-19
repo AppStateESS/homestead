@@ -97,28 +97,18 @@ class HMS_RLC_Assignment{
      * exists.  If an assignment does exist, a db object containing that row is returned.  In the case of a db
      * error, a PEAR error object is returned.
      */
-    public function check_for_assignment($asu_username = NULL, $application_term = NULL)
+    public function check_for_assignment($asu_username, $term)
     {
-        $db = &new PHPWS_DB('hms_learning_community_assignment');
-
+        $db = new PHPWS_DB('hms_learning_community_assignment');
         $db->addJoin('LEFT OUTER', 'hms_learning_community_assignment', 'hms_learning_community_applications', 'id', 'hms_assignment_id');
-
-        if(isset($asu_username)) {
-            $db->addWhere('hms_learning_community_applications.user_id',$asu_username,'ILIKE');
-        } else {
-            $db->addWhere('hms_learning_community_applications.user_id',$_SESSION['asu_username'],'ILIKE');
-        }
-
-        if(isset($application_term)) {
-            $db->addWhere('hms_learning_community_applications.term', $application_term);
-        } else {
-            $db->addWhere('hms_learning_community_applications.term', Term::getCurrentTerm());
-        }
+        $db->addWhere('hms_learning_community_applications.user_id',$asu_username,'ILIKE');
+        $db->addWhere('hms_learning_community_applications.term', $term);
 
         $result = $db->select('row');
 
         if(PHPWS_Error::logIfError($result)) {
-            return $result;
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException("Could not check for assignment - $asu_username $term");
         }
 
         if(sizeof($result) > 1) {

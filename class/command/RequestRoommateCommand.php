@@ -76,17 +76,17 @@ class RequestRoommateCommand extends Command
         $request = new HMS_Roommate();
         try {
             $request->request($requestor, $requestee, $term);
-        } catch (RequestRoommateException $rre) {
+        } catch (RoommateCompatibilityException $rre) {
             NQ::simple('hms', HMS_NOTIFICATION_WARNING, $rre->getMessage());
             $err->redirect();
         }
 
-        $result = $request->save();
+        $request->save();
 
         HMS_Activity_Log::log_activity($requestee, ACTIVITY_REQUESTED_AS_ROOMMATE, $requestor);
 
         // Email both parties
-        $request->send_emails();
+        $request->send_request_emails();
 
         // Notify
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
