@@ -54,7 +54,7 @@ class HMS_Roommate
         $this->confirmed    = 0;
         $this->requested_on = mktime();
 
-        $result = $this->can_live_together();
+        $result = $this->is_request_valid();
         if($result != E_SUCCESS) {
             PHPWS_Core::initModClass('hms', 'exception/RoommateCompatibilityException.php');
             throw new RoommateCompatibilityException($result);
@@ -498,7 +498,7 @@ class HMS_Roommate
      * @param requestor The person requesting a roommate
      * @param requestee The person requested as a roommate
      */
-    public function can_live_together()
+    public function is_request_valid()
     {
         // This is always a good idea
         $requestor = strToLower($this->requestor);
@@ -519,16 +519,6 @@ class HMS_Roommate
             return E_ROOMMATE_REQUESTED_SELF;
         }
 
-        // Check if the requestor has a confirmed roommate
-        if(HMS_Roommate::has_confirmed_roommate($requestor, $term)){
-            return E_ROOMMATE_ALREADY_CONFIRMED;
-        }
-
-        // Check if the requestee has a confirmed roommate
-        if(HMS_Roommate::has_confirmed_roommate($requestee, $term)){
-            return E_ROOMMATE_REQUESTED_CONFIRMED;
-        }
-
         // Make sure requestor and requestee are not requesting each other
         if(HMS_Roommate::have_requested_each_other($requestor, $requestee, $term)) {
             return E_ROOMMATE_ALREADY_REQUESTED;
@@ -537,6 +527,21 @@ class HMS_Roommate
         // Make sure requestor does not have a pending roommate request
         if(HMS_Roommate::has_roommate_request($requestor,$term)) {
             return E_ROOMMATE_PENDING_REQUEST;
+        }
+
+        return $this->can_live_together();
+    }
+
+    function can_live_together()
+    {
+        // Check if the requestor has a confirmed roommate
+        if(HMS_Roommate::has_confirmed_roommate($requestor, $term)){
+            return E_ROOMMATE_ALREADY_CONFIRMED;
+        }
+
+        // Check if the requestee has a confirmed roommate
+        if(HMS_Roommate::has_confirmed_roommate($requestee, $term)){
+            return E_ROOMMATE_REQUESTED_CONFIRMED;
         }
 
         // Use SOAP for the rest of the checks
