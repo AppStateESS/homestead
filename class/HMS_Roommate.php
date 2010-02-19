@@ -54,9 +54,9 @@ class HMS_Roommate
             throw new RequestRoommateException($result);
         }
 
-        $this->term         = isset($term) ? $term : $_SESSION['application_term'];
-        $this->requestor    = $requestor;
-        $this->requestee    = $requestee;
+        $this->term         = $term;
+        $this->requestor    = strToLower($requestor);
+        $this->requestee    = strToLower($requestee);
         $this->confirmed    = 0;
         $this->requested_on = mktime();
 
@@ -402,7 +402,8 @@ class HMS_Roommate
         $requests = $db->getObjects('HMS_Roommate');
 
         if(PHPWS_Error::logIfError($requests)) {
-            return FALSE;
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException('Could not remove outstanding requests');
         }
 
         if($requests == null)
@@ -410,8 +411,8 @@ class HMS_Roommate
 
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
         foreach($requests as $request) {
-            HMS_Activity_Log::log_activity($request->requestor, ACTIVITY_AUTO_CANCEL_ROOMMATE_REQ, $_SESSION['asu_username'], "$request->requestee: Due to confirmed roommate");
-            HMS_Activity_Log::log_activity($request->requestee, ACTIVITY_AUTO_CANCEL_ROOMMATE_REQ, $_SESSION['asu_username'], "$request->requestor: Due to confirmed roommate");
+            HMS_Activity_Log::log_activity($request->requestor, ACTIVITY_AUTO_CANCEL_ROOMMATE_REQ, UserStatus::getUsername(), "$request->requestee: Due to confirmed roommate");
+            HMS_Activity_Log::log_activity($request->requestee, ACTIVITY_AUTO_CANCEL_ROOMMATE_REQ, UserStatus::getUsername(), "$request->requestor: Due to confirmed roommate");
             $request->delete();
         }
 
@@ -497,12 +498,8 @@ class HMS_Roommate
      * @param requestor The person requesting a roommate
      * @param requestee The person requested as a roommate
      */
-    public function can_live_together($requestor, $requestee, $term=null)
+    public function can_live_together($requestor, $requestee, $term)
     {
-        if(!isset($term) && isset($_SESSION['application_term'])){
-            $term = $_SESSION['application_term'];
-        }
-
         // This is always a good idea
         $requestor = strToLower($requestor);
         $requestee = strToLower($requestee);
@@ -687,95 +684,6 @@ class HMS_Roommate
     /**************
      * UI Methods *
      **************/
-
-    public function show_request_roommate($error_message = NULL, $term = NULL)
-    {
-        PHPWS_Core::initCoreClass('Form.php');
-
-        # If the term was passed in, then use it.... if not, then look in the request
-        if(is_null($term)){
-            $term = $_REQUEST['term'];
-        }
-
-        # Make sure the user doesn't already have a request out
-        $result = HMS_Roommate::has_roommate_request(UserStatus::getUsername(),$term);
-        if($result === TRUE){
-            $tpl['ERROR_MSG'] = 'You have a pending roommate request. You can not request another roommate request until your current request is either denied or expires.';
-            return PHPWS_Template::process($tpl, 'hms', 'student/select_roommate.tpl');
-        }
-
-        # Make sure the user doesn't already have a confirmed roommate
-        $result = HMS_Roommate::has_confirmed_roommate(UserStatus::getUsername(), $term);
-        if($result === TRUE) {
-            $tpl['ERROR_MSG'] = 'You already have a roommate so you cannot make a roommate request.';
-            return PHPWS_Template::process($tpl, 'hms', 'student/select_roommate.tpl');
-        }
-        
-        $form = &new PHPWS_Form;
-
-        $cmd = CommandFactory::getCommand('RequestRoommate');
-        $cmd->setTerm($term);
-        $cmd->initForm($form);
-
-        $form->addText('username');
-        
-        $form->addSubmit('submit', _('Request Roommate'));
-        
-        $form->addButton('cancel', 'Cancel');
-        $form->setExtra('cancel','onClick="document.location=\'index.php\'"');
-
-        $tpl = $form->getTemplate();
-
-        if(isset($error_message)){
-            $tpl['ERROR_MSG'] = $error_message;
-        }
-
-        return PHPWS_Template::process($tpl, 'hms', 'student/select_roommate.tpl');
-    }
-
-    /**
-     * Verify the captcha, and if it's all good, mark the confirmed flag
-     * + Should probably also remove any outstanding requests for either roommate, and log that this happened
-     */
-    public function accept_for_realz($request, $term)
-    {
-        if(!isset($term) && isset($_SESSION['application_term'])){
-            $term = $_SESSION['application_term'];
-        }
-
-        PHPWS_Core::initCoreClass('Captcha.php');
-        $verified = Captcha::verify(TRUE);
-        if($verified === FALSE) {
-            return HMS_Roommate::confirm_accept($request, 'Sorry, please try again.');
-        }
-
-
-        // If either student is assigned to an RLC, do not allow the request
-        if(!HMS_Roommate::check_rlc_assignments($request->requestor, $request->requestee, $term)) {
-            return HMS_Roommate::confirm_accept($request, 'Your roommate reqeust could not be confirmed because you and/or your roommate have been assigned to a Unique Housing Option.');
-        }
-
-        $request->confirmed = 1;
-        $request->confirmed_on = mktime();
-        $request->save();
-
-        HMS_Activity_Log::log_activity($request->requestor,
-                                       ACTIVITY_ACCEPTED_AS_ROOMMATE,
-                                       $request->requestee,
-                                       "CAPTCHA: $verified");
-
-        // Remove any other requests for the requestor
-        HMS_Roommate::remove_outstanding_requests($request->requestor, $request->term);
-
-        // Remove any other requests for the requestee
-        HMS_Roommate::remove_outstanding_requests($request->requestee, $request->term);
-
-        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
-
-        $tpl['NAME']      = HMS_SOAP::get_full_name($request->requestor);
-        $tpl['MENU_LINK'] = PHPWS_Text::secureLink('Click here to return to the main menu.', 'hms', array('module'=>'hms', 'type'=>'student'));
-        return PHPWS_Template::process($tpl, 'hms', 'student/roommate_accept_done.tpl');
-    }
 
     public function delete_roommate_group()
     {
