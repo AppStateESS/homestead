@@ -21,11 +21,13 @@ class ReappWaitingListRegistration extends ApplicationFeatureRegistration {
         }
         
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-        
+        PHPWS_Core::initModClass('hms', 'HousingApplication.php');
+
+        $application = HousingApplication::checkForApplication($student->getUsername(), $term);
         $assignment = HMS_Assignment::checkForAssignment($student->getUsername(), $term);
         
         // for returning students (summer terms)
-        if($term > $student->getApplicationTerm() && $assignment !== TRUE){
+        if($term > $student->getApplicationTerm() && $assignment !== TRUE && $application !== FALSE){
             return true;
         }
         
