@@ -48,10 +48,10 @@ class RoommateCompatibilityException extends RoommateException
                 return "You can not choose a student of a different type than yourself (i.e. a freshmen student can only request another freshmen student, and not a transfer or continuing student).";
 
             case E_ROOMMATE_RLC_APPLICATION:
-                return "Your roommate request could not be completed because you and/or your requested roommate have applied for different Unique Housing Options.";
+                return "Your roommate request could not be completed because you and/or your requested roommate have applied for different Residential Learning Communities.";
 
             case E_ROOMMATE_RLC_ASSIGNMENT:
-                return "Your roommate request could not be completed because you and/or your requested roommate are assigned to a Unique Housing Option, and you are both not a member of the same Unique Housing Option.";
+                return "Your roommate request could not be completed because you and/or your requested roommate are assigned to a Unique Housing Option, and you are both not a member of the same Residential Learning Community.";
 
             default:
                 return "Unknown Error $result.";
