@@ -698,14 +698,14 @@ class HMS_Roommate
         }
 
         # Make sure the user doesn't already have a request out
-        $result = HMS_Roommate::has_roommate_request($_SESSION['asu_username'],$term);
+        $result = HMS_Roommate::has_roommate_request(UserStatus::getUsername(),$term);
         if($result === TRUE){
             $tpl['ERROR_MSG'] = 'You have a pending roommate request. You can not request another roommate request until your current request is either denied or expires.';
             return PHPWS_Template::process($tpl, 'hms', 'student/select_roommate.tpl');
         }
 
         # Make sure the user doesn't already have a confirmed roommate
-        $result = HMS_Roommate::has_confirmed_roommate($_SESSION['asu_username'], $term);
+        $result = HMS_Roommate::has_confirmed_roommate(UserStatus::getUsername(), $term);
         if($result === TRUE) {
             $tpl['ERROR_MSG'] = 'You already have a roommate so you cannot make a roommate request.';
             return PHPWS_Template::process($tpl, 'hms', 'student/select_roommate.tpl');
