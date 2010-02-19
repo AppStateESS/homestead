@@ -18,8 +18,8 @@ class RlcApplicationMenuView extends View {
     public function show()
     {
         $tpl = array();
-        
-        if(isset($this->application) && !is_null($this->application)) {
+
+        if(isset($this->application) && !is_null($this->application->id)) {
             $viewCmd = CommandFactory::getCommand('ShowRlcApplicationReView');
             $viewCmd->setUsername($this->student->getUsername());
             $tpl['VIEW_APP'] = $viewCmd->getLink('view your application');

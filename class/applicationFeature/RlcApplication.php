@@ -14,7 +14,12 @@ class RlcApplicationRegistration extends ApplicationFeatureRegistration {
     
     public function showForStudent(Student $student, $term)
     {
-        if($student->getType() != TYPE_FRESHMEN) {
+        if($student->getType() != TYPE_FRESHMEN && $student->getType() != TYPE_TRANSFER) {
+            return false;
+        }
+
+        // Application term must be in the future
+        if($student->getApplicationTerm() <= Term::getCurrentTerm()){
             return false;
         }
 
