@@ -500,7 +500,6 @@ class HMS_Roommate
      */
     public function is_request_valid()
     {
-        // This is always a good idea
         $requestor = strToLower($this->requestor);
         $requestee = strToLower($this->requestee);
         $term = $this->term;
@@ -534,6 +533,10 @@ class HMS_Roommate
 
     function can_live_together()
     {
+        $requestor = strToLower($this->requestor);
+        $requestee = strToLower($this->requestee);
+        $term = $this->term;
+
         // Check if the requestor has a confirmed roommate
         if(HMS_Roommate::has_confirmed_roommate($requestor, $term)){
             return E_ROOMMATE_ALREADY_CONFIRMED;
