@@ -32,8 +32,45 @@ class ShowRequestRoommateCommand extends Command {
             throw new PermissionException('You do not have permission to request a roommate.');
         }
 
+        $term = $context->get('term');
+        if(is_null($term)) {
+            throw new InvalidArgumentException('Must specify a term.');
+        }
+
         PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
-        $context->setContent(HMS_Roommate::show_request_roommate(NULL, $context->get('term')));
+        $username = UserStatus::getUsername();
+
+        $err = CommandFactory::getCommand('ShowStudentMenu');
+
+        // Make sure the user doesn't already have a request pending
+        $result = HMS_Roommate::has_roommate_request($username, $term);
+        if($result === TRUE) {
+            NQ::simple('hms', HMS_NOTIFICATION_WARNING, 'You have a pending roommate request. You can not request another roommate request until your current request is either denied or expires.');
+            $err->redirect();
+        }
+
+        // Make sure the user doesn't already have a confirmed roommate
+        $result = HMS_Roommate::has_confirmed_roommate($username, $term);
+        if($result === TRUE) {
+            NQ::simple('hms', HMS_NOTIFICATION_WARNING, 'You already have a confirmed roommate.');
+            $err->redirect();
+        }
+
+        $form = new PHPWS_Form;
+
+        $cmd = CommandFactory::getCommand('RequestRoommate');
+        $cmd->setTerm($term);
+        $cmd->initForm($form);
+
+        $form->addText('username');
+        $form->addSubmit('submit', 'Request Roommate');
+
+        $form->addButton('cancel', 'Cancel');
+        $form->setExtra('cancel', 'onClick="document.location=\'index.php\'"');
+
+        $tpl = $form->getTemplate();
+
+        $context->setContent(PHPWS_Template::process($tpl, 'hms', 'student/select_roommate.tpl'));
     }
 }
 
