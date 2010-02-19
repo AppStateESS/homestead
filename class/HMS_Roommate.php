@@ -668,7 +668,7 @@ class HMS_Roommate
         $message .= "From:  Housing Management System\n\n";
         $message .= "This email is to let you know " . $requestorStudent->getFullName() . " has requested you as a roommate.\n\n";
         $message .= "This request will expire on " . date('l, F jS, Y', $expire_date) . " at " . date('g:i A', $expire_date) . "\n\n";
-        $message .= "You can accept or reject this invitation by logging into the Housing Management System.  Please log in and follow the directions under Step 5: Select A Roommate.\n\n";
+        $message .= "You can accept or reject this invitation by logging into the Housing Management System.  Please log in and follow the directions under Roommate Selection.\n\n";
         $message .= "Click the link below to access the Housing Management System:\n\n";
         $message .= "http://hms.appstate.edu/\n\n";
         $message .= "Please note that you can not reply to this email.\n";
