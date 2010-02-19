@@ -46,7 +46,7 @@ class CommandFactory {
         $class = $action.'Command';
 
         try {
-            $found = PHPWS_Core::initModClass('hms', "{$dir}/{$class}.php");
+            PHPWS_Core::initModClass('hms', "{$dir}/{$class}.php");
         }catch(Exception $e){
             PHPWS_Core::initModClass('hms', 'exception/CommandNotFoundException.php');
             throw new CommandNotFoundException("Could not initialize {$class}: {$e->getMessage()}");

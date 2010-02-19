@@ -37,10 +37,12 @@ class HMS_Roommate
         $db = new PHPWS_DB('HMS_Roommate');
         $db->addWhere('id', $this->id);
         $result = $db->loadObject($this);
-        if(!$result || PHPWS_Error::logIfError($result)) {
-            $this->id = 0;
+        if(PHPWS_Error::logIfError($result)) {
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
+        }
+        if($result === FALSE) {
+            $this->id = 0;
         }
     }
 
@@ -732,80 +734,6 @@ class HMS_Roommate
     }
 
     /**
-     * Shows the Approve/Reject Screen
-     */
-    public function show_approve_reject($request)
-    {
-        $accept_form = new PHPWS_Form;
-        $accept_form->addHidden('module', 'hms');
-        $accept_form->addHidden('type', 'student');
-        $accept_form->addHidden('op', 'confirm_accept_roommate');
-        $accept_form->addHidden('id', $request->id);
-        $accept_form->addHidden('term', $request->term);
-        $accept_form->addSubmit('Accept Roommate');
-
-        $reject_form = new PHPWS_Form;
-        $reject_form->addHidden('module', 'hms');
-        $reject_form->addHidden('type', 'student');
-        $reject_form->addHidden('op', 'confirm_reject_roommate');
-        $reject_form->addHidden('id', $request->id);
-        $reject_form->addHidden('term', $request->term);
-        $reject_form->addSubmit('Reject Roommate');
-
-        $cancel_form = new PHPWS_Form;
-        $cancel_form->setMethod('get');
-        $cancel_form->addHidden('module', 'hms');
-        $cancel_form->addHidden('type', 'student');
-        $cancel_form->addHidden('op', 'show_main_menu');
-        $cancel_form->addSubmit('Cancel');
-
-        // TODO: This thing needs to handle RLC Assignments, but it's broken right now so I'm not going to waste my time.
-
-        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
-        $tpl['REQUESTOR_NAME'] = HMS_SOAP::get_full_name($request->requestor);
-
-        $tpl['ACCEPT'] = PHPWS_Template::process($accept_form->getTemplate(), 'hms', 'student/roommate_accept_reject_form.tpl');
-        $tpl['REJECT'] = PHPWS_Template::process($reject_form->getTemplate(), 'hms', 'student/roommate_accept_reject_form.tpl');
-        $tpl['CANCEL'] = PHPWS_Template::process($cancel_form->getTemplate(), 'hms', 'student/roommate_accept_reject_form.tpl');
-
-        return PHPWS_Template::process($tpl, 'hms', 'student/roommate_accept_reject_screen.tpl');
-    }
-
-    /**
-     * Shows the Confirm Accept Screen, captcha and all
-     */
-    public function confirm_accept($request, $error = null, $term=null)
-    {
-        if(!isset($term) && isset($_SESSION['application_term'])){
-            $term = $_SESSION['application_term'];
-        } 
-
-        PHPWS_Core::initCoreClass('Captcha.php');
-        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
-
-        $form = &new PHPWS_Form;
-        $form->addHidden('module', 'hms');
-        $form->addHidden('type', 'student');
-        $form->addHidden('op', 'for_realz_accept_roommate');
-        $form->addHidden('term', $request->term);
-        $form->addHidden('id', $request->id);
-
-        $form->addTplTag('CAPTCHA_IMAGE', Captcha::get());
-        $form->addTplTag('NAME', HMS_SOAP::get_full_name($request->requestor));
-
-        if(!HMS_Roommate::check_rlc_applications($request->requestee, $request->requestor, $term))
-            $form->addTplTag('RLC', 'ohno');
-
-        if(!is_null($error)) {
-            $form->addTplTag('ERROR', $error);
-        }
-
-        $form->addSubmit('Confirm');
-
-        return PHPWS_Template::process($form->getTemplate(), 'hms', 'student/roommate_accept_confirm.tpl');
-    }
-
-    /**
      * Verify the captcha, and if it's all good, mark the confirmed flag
      * + Should probably also remove any outstanding requests for either roommate, and log that this happened
      */
@@ -847,25 +775,6 @@ class HMS_Roommate
         $tpl['NAME']      = HMS_SOAP::get_full_name($request->requestor);
         $tpl['MENU_LINK'] = PHPWS_Text::secureLink('Click here to return to the main menu.', 'hms', array('module'=>'hms', 'type'=>'student'));
         return PHPWS_Template::process($tpl, 'hms', 'student/roommate_accept_done.tpl');
-    }
-
-    /**
-     * Removes the request and tells the user that if it was an oops, go back and re-request, thank you.
-     */
-    public function reject_for_realz($request)
-    {
-        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
-        $tpl['NAME']      = HMS_SOAP::get_full_name($request->requestor);
-        $tpl['USERNAME']  = $request->requestor;
-        $tpl['MENU_LINK'] = PHPWS_Text::secureLink('Click here to return to the main menu.', 'hms', array('module'=>'hms', 'type'=>'student', 'op'=>'show_main_menu'));
-
-        HMS_Activity_Log::log_activity($request->requestor,
-                                       ACTIVITY_REJECTED_AS_ROOMMATE,
-                                       $request->requestee);
-
-        $request->delete();
-
-        return PHPWS_Template::process($tpl, 'hms', 'student/roommate_reject_done.tpl');
     }
 
     public function delete_roommate_group()
