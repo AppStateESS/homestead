@@ -12,6 +12,7 @@ PHPWS_Core::initModClass('hms', 'Command.php');
 PHPWS_Core::initModClass('hms', 'CommandContext.php');
 PHPWS_Core::initModClass('hms', 'CommandFactory.php');
 PHPWS_Core::initModClass('hms', 'HMSNotificationView.php');
+PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
 
 abstract class HMS {
 	var $context;

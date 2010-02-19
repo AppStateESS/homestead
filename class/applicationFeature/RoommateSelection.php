@@ -29,7 +29,7 @@ class RoommateSelection extends ApplicationFeature {
     public function getMenuBlockView(Student $student)
     {
         PHPWS_Core::initModClass('hms', 'RoommateSelectionMenuBlockView.php');
-        return new RoommateSelectionMenuBlockView($student, $this->getStartDate(), $this->getEndDate());
+        return new RoommateSelectionMenuBlockView($student, $this->getStartDate(), $this->getEndDate(), $this->getTerm());
     }
 
 }

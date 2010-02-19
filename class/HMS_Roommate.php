@@ -10,6 +10,7 @@
 // The number of seconds before a roommate request expires, (hrs * 60 * 60) 
 define('ROOMMATE_REQ_TIMEOUT', 259200); // 259200 = 72 hours
 
+PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 PHPWS_Core::initModClass('hms', 'exception/RoommateException.php');
 
 class HMS_Roommate
@@ -45,8 +46,10 @@ class HMS_Roommate
 
     public function request($requestor, $requestee, $term)
     {
-        if(HMS_Roommate::can_live_together($requestor, $requestee, $term) != E_SUCCESS) {
-            return false;
+        $result = HMS_Roommate::can_live_together($requestor, $requestee, $term);
+        if($result != E_SUCCESS) {
+            PHPWS_Core::initModClass('hms', 'exception/RequestRoommateException.php');
+            throw new RequestRoommateException($result);
         }
 
         $this->term         = isset($term) ? $term : $_SESSION['application_term'];
@@ -204,8 +207,10 @@ class HMS_Roommate
         $db->addWhere('confirmed', 1);
         $result = (int)$db->count();
 
-        if(PHPWS_Error::logIfError($result))
-            return $result;
+        if(PHPWS_Error::logIfError($result)) {
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException('Unexpected error in has_roommate_request');
+        }
 
         if($result > 1) {
             // TODO: Log Weird Situation
@@ -233,6 +238,11 @@ class HMS_Roommate
         
         $result = $db->select('row');
 
+        if(PHPWS_Error::logIfError($result)) {
+            PHPWS_Core::initModClass('hms', 'DatabaseException.php');
+            throw new DatabaseException("Could not select confirmed roommate for $asu_username $term");
+        }
+
         if(count($result) > 1) {
             // TODO: Log Weird Situation
         }
@@ -242,10 +252,10 @@ class HMS_Roommate
         }
 
         if(trim($result['requestor']) == trim($asu_username)) {
-            return $result['requestee'];
+            return StudentFactory::getStudentByUsername($result['requestee'], $term);
         }
         
-        return $result['requestor'];
+        return StudentFactory::getStudentByUsername($result['requestor'], $term);
     }
 
     public function get_pending_roommate($asu_username, $term)
@@ -293,8 +303,10 @@ class HMS_Roommate
         $db->addWhere('term', $term);
         $result = $db->count();
 
-        if(PHPWS_Error::logIfError($result))
-            return $result;
+        if(PHPWS_Error::logIfError($result)) {
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException('Unexpected error in has_roommate_request');
+        }
 
         return ($result > 0 ? TRUE : FALSE);
     }
@@ -456,9 +468,14 @@ class HMS_Roommate
      */
     public function get_requested_pager_tags()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
-        $name = HMS_SOAP::get_full_name($this->requestor);
-        $tpl['NAME'] = PHPWS_Text::secureLink($name, 'hms', array('type'=>'student','op'=>'show_roommate_confirmation','id'=>$this->id, 'term'=>$this->term));
+        $requestor = StudentFactory::getStudentByUsername($this->requestor, $this->term);
+        $name = $requestor->getFullName();
+
+        // TODO: COMMAND PATTERN
+        $cmd = CommandFactory::getCommand('ShowRoommateConfirmation');
+        $cmd->setRoommateId($this->id);
+        $tpl['NAME'] = $cmd->getLink($name);
+
         $expires = floor(($this->calc_req_expiration_date() - mktime()) / 60 / 60);
         if($expires == 0) {
             $expires = floor(($this->calc_req_expiration_date() - mktime()) / 60);
@@ -523,17 +540,17 @@ class HMS_Roommate
         }
 
         // Use SOAP for the rest of the checks
-        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
-        $requestor_info = HMS_SOAP::get_student_info($requestor, $term);
-        $requestee_info = HMS_SOAP::get_student_info($requestee, $term);
+        $requestor_info = StudentFactory::getStudentByUsername($requestor, $term);
 
         // Make sure the requestee is actually a user
-        if(empty($requestee_info->last_name)) {
+        try {
+            $requestee_info = StudentFactory::getStudentByUsername($requestee, $term);
+        } catch(StudentNotFoundException $snfe) {
             return E_ROOMMATE_USER_NOINFO;
         }
 
         // Make sure we have compatible genders
-        if($requestor_info->gender != $requestee_info->gender) {
+        if($requestor_info->getGender() != $requestee_info->getGender()) {
             return E_ROOMMATE_GENDER_MISMATCH;
         }
 
@@ -544,12 +561,12 @@ class HMS_Roommate
         }
 
         // Students can only request a student of the same type
-        if($requestor_info->student_type != $requestee_info->student_type){
+        if($requestor_info->getType() != $requestee_info->getType()){
             return E_ROOMMATE_TYPE_MISMATCH;
         }
 
         // If either student is assigned to an RLC, do not allow the request
-        if(!HMS_Roommate::check_rlc_assignments($requestor, $requestee, $requestor_info->application_term)) {
+        if(!HMS_Roommate::check_rlc_assignments($requestor, $requestee, $requestor_info->getApplicationTerm())) {
             return E_ROOMMATE_RLC_ASSIGNMENT;
         }
 
@@ -623,53 +640,43 @@ class HMS_Roommate
      
     public function send_emails() 
     {
-        PHPWS_Core::initCoreClass('Mail.php');
-        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
+
+        $requestorStudent = StudentFactory::getStudentByUsername($this->requestor, $this->term);
+        $requesteeStudent = StudentFactory::getStudentByUsername($this->requestee, $this->term);
 
         // set tags for the email to the person doing the requesting
-        $message = "To:     " . HMS_SOAP::get_full_name($this->requestor) . "\n"; 
+        $message = "To:     " . $requestorStudent->getFullName() . "\n"; 
         $message .= "From:   Housing Management System\n\n";
-        $message .= "This is a follow-up email to let you know you have requested " . HMS_SOAP::get_full_name($this->requestee) . " as your roommate.\n\n";
+        $message .= "This is a follow-up email to let you know you have requested " . $requesteeStudent->getFullName() . " as your roommate.\n\n";
         $message .= "We have sent your requested roommate an email invitation to confirm his/her desire to be your roommate. Your requested ";
         $message .= "roommate must respond to this invitation within 72 hours or the invitation will expire. You will be notified ";
         $message .= "via email when your requested roommate either accepts or rejects the invitation.\n\n";
         $message .= "Please note that you can not reply to this email.\n";
 
         // create the Mail object and send it
-        $requestor_mail = &new PHPWS_Mail;
-        $requestor_mail->addSendTo($this->requestor . "@appstate.edu");
-        $requestor_mail->setFrom('hms@tux.appstate.edu');
-        $requestor_mail->setSubject('HMS Roommate Request');
-        $requestor_mail->setMessageBody($message);
-        $success = $requestor_mail->send();
-        $success = true;
+        $success = HMS_Email::send_email($this->requestor . '@appstate.edu', NULL, 'HMS Roommate Request', $message);
        
         if($success != TRUE) {
-            return "There was an error emailing your requested roommate. Please contact Housing and Residence Life.";
+            throw new RoommateException('Error occurred emailing the requestor ' . $this->requestor . ' of a roommate request for requestee ' . $this->requestee . ', HMS_Roommate ' . $this->id);
         }
 
         $expire_date = $this->calc_req_expiration_date();
 
         // create the Mail object and send it
-        $message = "To:     " . HMS_SOAP::get_full_name($this->requestee) . "\n";
+        $message = "To:     " . $requesteeStudent->getFullName() . "\n";
         $message .= "From:  Housing Management System\n\n";
-        $message .= "This email is to let you know " . HMS_SOAP::get_full_name($this->requestor) . " has requested you as a roommate.\n\n";
+        $message .= "This email is to let you know " . $requestorStudent->getFullName() . " has requested you as a roommate.\n\n";
         $message .= "This request will expire on " . date('l, F jS, Y', $expire_date) . " at " . date('g:i A', $expire_date) . "\n\n";
         $message .= "You can accept or reject this invitation by logging into the Housing Management System.  Please log in and follow the directions under Step 5: Select A Roommate.\n\n";
         $message .= "Click the link below to access the Housing Management System:\n\n";
         $message .= "http://hms.appstate.edu/\n\n";
         $message .= "Please note that you can not reply to this email.\n";
 
-        $requestee_mail = &new PHPWS_Mail;
-        $requestee_mail->addSendTo($this->requestee . '@appstate.edu');
-        $requestee_mail->setFrom('hms@tux.appstate.edu');
-        $requestee_mail->setSubject('HMS Roommate Request');
-        $requestee_mail->setMessageBody($message);
-        $success = $requestee_mail->send();
-        $success = true;
+        $success = HMS_Email::send_email($this->requestee . '@appstate.edu', NULL, 'HMS Roommate Request', $message);
 
         if($success != TRUE) {
-            return "There was an error emailing your requested roommate. Please contact Housing and Residence Life.";
+            throw new RoommateException('Error occurred notifying the requestee ' . $this->requestee . ' of a roommate request from requestor ' . $this->requestor . ', HMS_Roommate ' . $this->id);
         }
 
         return TRUE;
@@ -690,11 +697,6 @@ class HMS_Roommate
 
         # Make sure the user doesn't already have a request out
         $result = HMS_Roommate::has_roommate_request($_SESSION['asu_username'],$term);
-        if(PHPWS_Error::isError($result)) {
-            $tpl['ERROR_MSG'] = 'There was an unexpected database error which has been reported to the administrators.  Please try again later.';
-            // TODO: Log and Report
-            return PHPWS_Template::process($tpl, 'hms', 'student/select_roommate.tpl');
-        }
         if($result === TRUE){
             $tpl['ERROR_MSG'] = 'You have a pending roommate request. You can not request another roommate request until your current request is either denied or expires.';
             return PHPWS_Template::process($tpl, 'hms', 'student/select_roommate.tpl');
@@ -702,12 +704,6 @@ class HMS_Roommate
 
         # Make sure the user doesn't already have a confirmed roommate
         $result = HMS_Roommate::has_confirmed_roommate($_SESSION['asu_username'], $term);
-        if(PHPWS_Error::isError($result)) {
-
-            $tpl['ERROR_MSG'] = 'There was an unexpected database error which has been reported to the administrators.  Please try again later.';
-            // TODO: Log and Report
-            return PHPWS_Template::process($tpl, 'hms', 'student/select_roommate.tpl');
-        }
         if($result === TRUE) {
             $tpl['ERROR_MSG'] = 'You already have a roommate so you cannot make a roommate request.';
             return PHPWS_Template::process($tpl, 'hms', 'student/select_roommate.tpl');
@@ -715,16 +711,16 @@ class HMS_Roommate
         
         $form = &new PHPWS_Form;
 
+        $cmd = CommandFactory::getCommand('RequestRoommate');
+        $cmd->setTerm($term);
+        $cmd->initForm($form);
+
         $form->addText('username');
         
-        $form->addHidden('term', $term);
-        $form->addHidden('module', 'hms');
-        $form->addHidden('type', 'student');
-        $form->addHidden('op', 'request_roommate');
         $form->addSubmit('submit', _('Request Roommate'));
         
         $form->addButton('cancel', 'Cancel');
-        $form->setExtra('cancel','onClick="document.location=\'index.php?module=hms&type=student&op=show_main_menu\'"');
+        $form->setExtra('cancel','onClick="document.location=\'index.php\'"');
 
         $tpl = $form->getTemplate();
 
@@ -733,138 +729,6 @@ class HMS_Roommate
         }
 
         return PHPWS_Template::process($tpl, 'hms', 'student/select_roommate.tpl');
-    }
-
-    /**
-     * Creates a new roommate request, doing all appropriate gender
-     * checks and such to make sure they can actually room together.
-     *
-     * @param requestor The person requesting a roommate
-     * @param requestee The person requested as a roommate
-     */
-    public function create_roommate_request($remove_rlc_app = FALSE, $term = NULL)
-    {
-        if(isset($_REQUEST['term'])){
-            $term = $_REQUEST['term'];
-        }else if(!isset($term) && isset($_SESSION['application_term'])){
-            $term = $_SESSION['application_term'];
-        }else if(!isset($term)){
-            $term = HMS_SOAP::get_application_term($_SESSION['asu_username']);
-        }
-
-        if(empty($_REQUEST['username'])) {
-            $error = "You did not enter a username.";
-            return HMS_Roommate::show_select_roommate($error, $term);
-        }
-        if(!PHPWS_Text::isValidInput($_REQUEST['username'])) {
-            $error = "You entered an invalid user name. Please use letters and numbers *only*.";
-            return $error;
-        }
-
-        $requestor = $_SESSION['asu_username'];
-        $requestee = strtolower(trim($_REQUEST['username']));
-
-        if(!PHPWS_Text::isValidInput($requestee)) {
-            return HMS_Roommate::show_request_roommate('Malformed Username.', $term);
-        }
-
-        // Did they say go ahead and trash the RLC application?
-        if($remove_rlc_app) {
-            PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
-            $rlcapp = &new HMS_RLC_Application($requestor, $term);
-            $rlcapp->delete();
-        }
-
-        // Attempt to Create Roommate Request
-        $result = HMS_Roommate::can_live_together($requestor, $requestee, $term);
-
-        if($result != E_SUCCESS) {
-            // Pairing Error
-            $msg = "";
-            switch($result) {
-                case E_ROOMMATE_MALFORMED_USERNAME:
-                    $msg = "Malformed Username.";
-                    break;
-                case E_ROOMMATE_REQUESTED_SELF:
-                    $msg = "You cannot request yourself.";
-                    break;
-                case E_ROOMMATE_ALREADY_CONFIRMED:
-                    $msg = "You already have a confirmed roommate.";
-                    break;
-                case E_ROOMMATE_REQUESTED_CONFIRMED:
-                    $msg = "The roommate you requested already has a confirmed roommate.";
-                    break;
-                case E_ROOMMATE_ALREADY_REQUESTED:
-                    $msg = "You already have a pending request with $requestee.  Please <a href='index.php?module=hms&type=student&op=show_main_menu'>return to the main menu</a> and look under Step 5: Select A Roommate in order to confirm this request.";
-                    break;
-                case E_ROOMMATE_PENDING_REQUEST:
-                    $msg = "You already have an uncomfirmed roommate request.";
-                    break;
-                case E_ROOMMATE_USER_NOINFO:
-                    $msg = "Your requested roommate does not seem to have a student record.  Please be sure you typed the username correctly.";
-                    break;
-                case E_ROOMMATE_NO_APPLICATION:
-                    $msg = "Your requested roommate has not filled out a housing application.";
-                    break;
-                case E_ROOMMATE_GENDER_MISMATCH:
-                    $msg = "Please select a roommate of the same sex as yourself.";
-                    break;
-                case E_ROOMMATE_TYPE_MISMATCH:
-                    $msg = "You can not choose a student of a different type than yourself (i.e. a freshmen student can only request another freshmen student, and not a transfer or continuing student).";
-                    break;
-                case E_ROOMMATE_RLC_ASSIGNMENT:
-                    $msg = "Your roommate request could not be completed because you and/or your requested roommate are currently assigned to a Unique Housing Option.";
-                    break;
-                default:
-                    $msg = "Unknown Error $result.";
-                    // TODO: Log Weirdness
-                    break;
-            }
-            return HMS_Roommate::show_request_roommate($msg, $term);
-        }
-
-        // Create request object and initialize
-        $request = new HMS_Roommate();
-        $result = $request->request($requestor,$requestee, $term);
-
-        HMS_Activity_Log::log_activity($requestee,
-                                       ACTIVITY_REQUESTED_AS_ROOMMATE,
-                                       $requestor);
-        if(!$result) {
-            // TODO: Log and Notify
-            $msg = "An unknown error has occurred.";
-            return HMS_Roommate::show_request_roommate($msg, $term);
-        }
-
-        // Save the Roommate object
-        $result = $request->save();
-
-        if(!$result) {
-            // TODO: Log and Notify
-            $msg = "An unknown error has occurred.";
-            return HMS_Roommate::show_request_roommate($msg, $term);
-        }
-
-        // Email both parties
-        $result = $request->send_emails();
-        if($result !== TRUE) {
-            // TODO: Log and Notify
-            $msg = "An unknown error has occurred.";
-            return HMS_Roommate::show_request_roommate($msg, $term);
-        }
-
-        return HMS_Roommate::show_requested_confirmation();
-    }
-
-    /*
-     * Shows a "you successfully requested ab1234" as your roommate" message
-     */
-    public function show_requested_confirmation()
-    {
-        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
-        $tpl['REQUESTED_ROOMMATE_NAME'] = HMS_SOAP::get_full_name($_REQUEST['username']);
-        $tpl['MENU_LINK']               = PHPWS_Text::secureLink('Click here to return to the main menu.', 'hms', array('module'=>'hms', 'type'=>'student'));
-        return PHPWS_Template::process($tpl, 'hms', 'student/select_roommate_confirmation.tpl');
     }
 
     /**

@@ -52,6 +52,10 @@ class TestSOAP extends SOAP{
             $student->projected_class   = 'FR';
         }
 
+        if($username == 'jb67803') {
+            $student->banner_id = 987654321;
+        }
+
         //$student->student_type          = 'T';
         //$student->application_term      = '200940';
         //$student->projected_class       = 'FR';
