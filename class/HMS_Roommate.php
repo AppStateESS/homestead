@@ -427,9 +427,16 @@ class HMS_Roommate
         PHPWS_Core::initModClass('hms','HMS_RLC_Application.php');
         $result  = HMS_RLC_Application::check_for_application($this->requestor, $this->term, FALSE);
         $resultb = HMS_RLC_Application::check_for_application($this->requestee, $this->term, FALSE);
+        echo "<pre>";
+        print_r($result);
+        print_r($resultb);
+        echo "</pre>";
 
         if($result === FALSE && $resultb === FALSE)
             return TRUE;
+
+        if($result === FALSE || $resultb === FALSE)
+            return FALSE;
 
         // Check to see if any of a's choices match any of b's choices
         if($result['rlc_first_choice_id']  == $resultb['rlc_first_choice_id'] ||
@@ -453,7 +460,7 @@ class HMS_Roommate
         $resulta = HMS_RLC_Assignment::check_for_assignment($this->requestor, $this->term);
         $resultb = HMS_RLC_Assignment::check_for_assignment($this->requestee, $this->term);
 
-        if($resulta === FALSE || $resultb === FALSE){
+        if($resulta === FALSE && $resultb === FALSE) {
             return TRUE;
         }
 
@@ -463,7 +470,7 @@ class HMS_Roommate
             }
         }
 
-        return TRUE;
+        return FALSE;
     }
 
     /**
