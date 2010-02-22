@@ -141,9 +141,11 @@ class StudentProfileView extends View {
         if($rlc_assignment != FALSE){
             $tpl['RLC_STATUS'] = "This student is assigned to: " . $rlc_names[$rlc_assignment['rlc_id']];
         }else if ($rlc_application != FALSE){
-            $tpl['RLC_STATUS'] = "This student is currently awaiting RLC approval. You can view their application " . PHPWS_Text::secureLink(_('here'), 'hms', array('type'=>'rlc', 'op'=>'view_rlc_application', 'username'=>$username));
+            $rlcViewCmd = CommandFactory::getCommand('ShowRlcApplicationReView');
+            $rlcViewCmd->setUsername($this->student->getUsername());
+            $tpl['RLC_STATUS'] = "This has a " . $rlcViewCmd->getLink('pending RLC application') . "."; 
         }else{
-            $tpl['RLC_STATUS'] = "This student is not in a Learning Community and has no pending approval.";
+            $tpl['RLC_STATUS'] = "This student is not in a Learning Community and has no pending application.";
         }
 
         /*************************

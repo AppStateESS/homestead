@@ -35,6 +35,7 @@ class RlcApplicationReView extends View {
         $tags['WHY_SECOND_CHOICE_LABEL'] = "Second choice selected because: ";
         $tags['WHY_THIRD_CHOICE_LABEL'] = "Third choice selected because: ";
 
+        //TODO move this to a function in HMS_Learning_Communities
         $db = new PHPWS_DB('hms_learning_communities');
         $db->addColumn('id');
         $db->addColumn('community_name');
