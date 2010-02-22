@@ -21,7 +21,7 @@ PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
 class RlcApplicationView extends View {
 
     public function show(){
-        $student = StudentFactory::getStudentByUsername(Current_User::getUsername(), Term::getCurrentTerm());
+        $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), Term::getCurrentTerm());
         $cmd     = CommandFactory::getCommand('ShowStudentMenu');
         $feature = ApplicationFeature::getInstanceByNameAndTerm('RlcApplication', $student->getApplicationTerm());
 
