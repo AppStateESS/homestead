@@ -41,7 +41,7 @@ class ShowStudentMenuCommand extends Command {
         is_null($dob))
         {
             # TODO: HMS_Mail here
-            PHPWS_Error::log('Initial banner lookup failed', 'hms', 'show_welcome_screen', "username: {$_SESSION['asu_username']}");
+            PHPWS_Error::log('Initial banner lookup failed', 'hms', 'show_welcome_screen', "username: " . UserStatus::getUsername());
             $badDataCmd = CommandFactory::getCommand('ShowBadBannerData');
             $badDataCmd->redirect();
         }
