@@ -49,7 +49,7 @@ class SubmitRoommateProfileCommand extends Command {
         if(isset($_REQUEST['aim_sn']) && $_REQUEST['aim_sn'] != ''){
             $profile->set_aim_sn($_REQUEST['aim_sn']);
         }else{
-            $profile->set_am_sn('');
+            $profile->set_aim_sn('');
         }
 
         if(isset($_REQUEST['yahoo_sn']) && $_REQUEST['yahoo_sn'] != ''){
