@@ -110,6 +110,20 @@
                 <td align="left">{RLC_INTEREST_1} {RLC_INTEREST_1_LABEL}&nbsp;{RLC_INTEREST_2} {RLC_INTEREST_2_LABEL}</td>
             </tr>
             <!-- END rlc_interest_1 -->
+            
+            <!-- BEGIN rlc_submitted -->
+            {RLC_SUBMITTED}
+            <tr>
+                <th colspan="3">Unique Housing Options</th>
+            </tr>
+            <tr>
+                <td>
+                    <p>Are you interested in living in a <a href="http://housing.appstate.edu/pagesmith/29" target="_blank">Residential Learning Community</a> (RLC)?</p>
+                    <p>You have already submitted a separate Learning Community Application. Use the options on the main menu to view or edit your Learning Community Application.</p>                  
+                </td>
+            </tr>
+            <!-- END rlc_submitted -->
+            
             <!-- BEGIN rlc_review -->
             <tr>
             <tr>

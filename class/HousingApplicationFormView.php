@@ -6,82 +6,82 @@ PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
 
 class HousingApplicationFormView extends View {
 
-	private $student;
-	private $existingApplication;
-	private $term;
-	private $contextApplication;
+    private $student;
+    private $existingApplication;
+    private $term;
+    private $contextApplication;
 
-	public function __construct(Student $student, $term, HousingApplication $existingApplication = NULL, HousingApplication $contextApplication = NULL)
-	{
-		$this->student				= $student;
-		$this->term					= $term;
-		$this->existingApplication	= $existingApplication;
-		$this->contextApplication	= $contextApplication;
-	}
+    public function __construct(Student $student, $term, HousingApplication $existingApplication = NULL, HousingApplication $contextApplication = NULL)
+    {
+        $this->student				= $student;
+        $this->term					= $term;
+        $this->existingApplication	= $existingApplication;
+        $this->contextApplication	= $contextApplication;
+    }
 
-	public function show()
-	{
-		PHPWS_Core::initCoreClass('Form.php');
-		$form = new PHPWS_Form();
+    public function show()
+    {
+        PHPWS_Core::initCoreClass('Form.php');
+        $form = new PHPWS_Form();
 
-		$submitCmd = CommandFactory::getCommand('HousingApplicationFormSubmit');
-		$submitCmd->setTerm($this->term);
+        $submitCmd = CommandFactory::getCommand('HousingApplicationFormSubmit');
+        $submitCmd->setTerm($this->term);
 
-		$submitCmd->initForm($form);
+        $submitCmd->initForm($form);
 
-		$tpl = array();
+        $tpl = array();
 
-		/****************
-		 * Display Info *
-		 ****************/
-		$tpl['STUDENT_NAME']    = $this->student->getFullName();
-		$tpl['GENDER']          = $this->student->getPrintableGender();
-		$tpl['ENTRY_TERM']      = Term::toString($this->student->getApplicationTerm());
-		$tpl['CLASSIFICATION_FOR_TERM_LBL'] = HMS_Util::formatClass($this->student->getClass());
-		$tpl['STUDENT_STATUS_LBL']			= HMS_Util::formatType($this->student->getType());
-		$tpl['TERM']			= Term::toString($this->term);
+        /****************
+         * Display Info *
+         ****************/
+        $tpl['STUDENT_NAME']    = $this->student->getFullName();
+        $tpl['GENDER']          = $this->student->getPrintableGender();
+        $tpl['ENTRY_TERM']      = Term::toString($this->student->getApplicationTerm());
+        $tpl['CLASSIFICATION_FOR_TERM_LBL'] = HMS_Util::formatClass($this->student->getClass());
+        $tpl['STUDENT_STATUS_LBL']			= HMS_Util::formatType($this->student->getType());
+        $tpl['TERM']			= Term::toString($this->term);
 
-		/**************
-		 * Cell Phone *
-		 */
+        /**************
+         * Cell Phone *
+         */
 
-		$form->addText('area_code');
-		$form->setSize('area_code', 3);
-		$form->setMaxSize('area_code', 3);
+        $form->addText('area_code');
+        $form->setSize('area_code', 3);
+        $form->setMaxSize('area_code', 3);
 
-		if(!is_null($this->contextApplication)){
-			$form->setValue('area_code', substr($this->contextApplication->getCellPhone(), 0, 3));
-		}else if(!is_null($this->existingApplication)){
-			$form->setValue('area_code', substr($this->existingApplication->getCellPhone(), 0, 3));
-		}
+        if(!is_null($this->contextApplication)){
+            $form->setValue('area_code', substr($this->contextApplication->getCellPhone(), 0, 3));
+        }else if(!is_null($this->existingApplication)){
+            $form->setValue('area_code', substr($this->existingApplication->getCellPhone(), 0, 3));
+        }
 
-		$form->addText('exchange');
-		$form->setSize('exchange', 3);
-		$form->setMaxSize('exchange', 3);
+        $form->addText('exchange');
+        $form->setSize('exchange', 3);
+        $form->setMaxSize('exchange', 3);
 
-		if(!is_null($this->contextApplication)){
-			$form->setValue('exchange', substr($this->contextApplication->getCellPhone(), 3, 3));
-		}else if(!is_null($this->existingApplication)){
-			$form->setValue('exchange', substr($this->existingApplication->getCellPhone(), 3, 3));
-		}
+        if(!is_null($this->contextApplication)){
+            $form->setValue('exchange', substr($this->contextApplication->getCellPhone(), 3, 3));
+        }else if(!is_null($this->existingApplication)){
+            $form->setValue('exchange', substr($this->existingApplication->getCellPhone(), 3, 3));
+        }
 
 
-		$form->addText('number');
-		$form->setSize('number', 4);
-		$form->setMaxSize('number', 4);
+        $form->addText('number');
+        $form->setSize('number', 4);
+        $form->setMaxSize('number', 4);
 
-		if(!is_null($this->contextApplication)){
-			$form->setValue('number', substr($this->contextApplication->getCellPhone(), 6));
-		}else if(!is_null($this->existingApplication)){
-			$form->setValue('number', substr($this->existingApplication->getCellPhone(), 6));
-		}
+        if(!is_null($this->contextApplication)){
+            $form->setValue('number', substr($this->contextApplication->getCellPhone(), 6));
+        }else if(!is_null($this->existingApplication)){
+            $form->setValue('number', substr($this->existingApplication->getCellPhone(), 6));
+        }
 
-		$form->addCheck('do_not_call', 1);
-		if(!is_null($this->contextApplication) && is_null($this->contextApplication->getCellPhone())){
-			$form->setMatch('do_not_call', 1);
-		}else if(!is_null($this->existingApplication) && is_null($this->existingApplication->getCellPhone())){
-			$form->setMatch('do_not_call', 1);
-		}
+        $form->addCheck('do_not_call', 1);
+        if(!is_null($this->contextApplication) && is_null($this->contextApplication->getCellPhone())){
+            $form->setMatch('do_not_call', 1);
+        }else if(!is_null($this->existingApplication) && is_null($this->existingApplication->getCellPhone())){
+            $form->setMatch('do_not_call', 1);
+        }
 
         // This is just getting worse and worse.
         // TODO: this, correctly.
@@ -102,7 +102,7 @@ class HousingApplicationFormView extends View {
                 BANNER_MEAL_HIGH=>_('High'),
                 BANNER_MEAL_SUPER=>_('Super')));
             }
-            
+
             $form->setMatch('meal_option', BANNER_MEAL_STD);
 
             if(!is_null($this->contextApplication)){
@@ -167,62 +167,65 @@ class HousingApplicationFormView extends View {
             }
         }
 
-		/*****************
-		 * Special needs *
-		 *****************/
-		$tpl['SPECIAL_NEEDS_TEXT'] = ''; // setting this template variable to anything causes the special needs text to be displayed
-		$form->addCheck('special_need', array('special_need'));
-		$form->setLabel('special_need', array('Yes, I require special needs housing.'));
+        /*****************
+         * Special needs *
+         *****************/
+        $tpl['SPECIAL_NEEDS_TEXT'] = ''; // setting this template variable to anything causes the special needs text to be displayed
+        $form->addCheck('special_need', array('special_need'));
+        $form->setLabel('special_need', array('Yes, I require special needs housing.'));
 
-		if(!is_null($this->contextApplication)){
-			if(!is_null($this->contextApplication->physical_disability) ||
-			!is_null($this->contextApplication->psych_disability) ||
-			!is_null($this->contextApplication->medical_need) ||
-			!is_null($this->contextApplication->gender_need)){
-				$form->setMatch('special_need', 'special_need');
-			}
-		}else if(isset($this->existingApplication)){
-			if((!is_null($this->existingApplication->physical_disability) && $this->existingApplication->physical_disability != "0") ||
-			(!is_null($this->existingApplication->psych_disability) && $this->existingApplication->psych_disability != "0") ||
-			(!is_null($this->existingApplication->medical_need) && $this->existingApplication->medical_need != "0") ||
-			(!is_null($this->existingApplication->gender_need) && $this->existingApplication->gender_need != "0")) {
-				$form->setMatch('special_need', 'special_need');
-			}
-		}
-
-		if(isset($_REQUEST['special_needs'])){
-			$form->addHidden('special_needs', $_REQUEST['special_needs']);
-		}
-
-		/*******
-		 * RLC *
-		 *******/
-		PHPWS_Core::initModClass('hms', 'applicationFeature/RlcApplication.php');
-		$rlcReg = new RLCApplicationRegistration();
-		
-		if(ApplicationFeature::isEnabledForStudent($rlcReg, $this->term, $this->student)
-		&& HMS_RLC_Application::check_for_application($this->student->getUsername(), $this->term) == FALSE)
-		{
-			$form->addRadio('rlc_interest', array(0, 1));
-			$form->setLabel('rlc_interest', array(_("No"), _("Yes")));
-			
-			if(!is_null($this->contextApplication) && !is_null($this->contextApplication->getRLCInterest())){
-				$form->setMatch('rlc_interest', 'rlc_interest');
-			}else{
-				$form->setMatch('rlc_interest', '0');
-			}
-		}else{
-			$form->addHidden('rlc_interest', 0);
+        if(!is_null($this->contextApplication)){
+            if(!is_null($this->contextApplication->physical_disability) ||
+            !is_null($this->contextApplication->psych_disability) ||
+            !is_null($this->contextApplication->medical_need) ||
+            !is_null($this->contextApplication->gender_need)){
+                $form->setMatch('special_need', 'special_need');
+            }
+        }else if(isset($this->existingApplication)){
+            if((!is_null($this->existingApplication->physical_disability) && $this->existingApplication->physical_disability != "0") ||
+            (!is_null($this->existingApplication->psych_disability) && $this->existingApplication->psych_disability != "0") ||
+            (!is_null($this->existingApplication->medical_need) && $this->existingApplication->medical_need != "0") ||
+            (!is_null($this->existingApplication->gender_need) && $this->existingApplication->gender_need != "0")) {
+                $form->setMatch('special_need', 'special_need');
+            }
         }
 
-		$form->addSubmit('submit', _('Continue'));
-		$form->setExtra('submit', 'class="hms-application-submit-button"');
+        if(isset($_REQUEST['special_needs'])){
+            $form->addHidden('special_needs', $_REQUEST['special_needs']);
+        }
 
-		$form->mergeTemplate($tpl);
-		$tpl = $form->getTemplate();
+        /*******
+         * RLC *
+         *******/
+        PHPWS_Core::initModClass('hms', 'applicationFeature/RlcApplication.php');
+        $rlcReg = new RLCApplicationRegistration();
+        if(HMS_RLC_Application::check_for_application($this->student->getUsername(), $this->term) == TRUE){
+            // Student has an RLC application on file already
+            $tpl['RLC_SUBMITTED'] = '';
+            $form->addHidden('rlc_interest', 0);
+        }else if(ApplicationFeature::isEnabledForStudent($rlcReg, $this->term, $this->student)){
+            // Feature is enabled, but student hasn't submitted one yet
+            $form->addRadio('rlc_interest', array(0, 1));
+            $form->setLabel('rlc_interest', array(_("No"), _("Yes")));
+            	
+            if(!is_null($this->contextApplication) && !is_null($this->contextApplication->getRLCInterest())){
+                $form->setMatch('rlc_interest', 'rlc_interest');
+            }else{
+                $form->setMatch('rlc_interest', '0');
+            }
+        }else{
+            // Feature is not enabled
+            $form->addHidden('rlc_interest', 0);
+        }
 
-		return PHPWS_Template::process($tpl,'hms','student/student_application.tpl');
-	}
+        $form->addSubmit('submit', _('Continue'));
+        $form->setExtra('submit', 'class="hms-application-submit-button"');
+
+        $form->mergeTemplate($tpl);
+        $tpl = $form->getTemplate();
+
+        return PHPWS_Template::process($tpl,'hms','student/student_application.tpl');
+    }
 }
 
 ?>
