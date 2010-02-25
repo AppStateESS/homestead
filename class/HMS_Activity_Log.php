@@ -158,6 +158,7 @@ class HMS_Activity_Log{
         ACTIVITY_REJECTED_AS_ROOMMATE           => "Rejected a roommate request",
         ACTIVITY_ACCEPTED_AS_ROOMMATE           => "Accepted as roommate",
         ACTIVITY_STUDENT_BROKE_ROOMMATE         => "Broke roommate pairing",
+        ACTIVITY_STUDENT_CANCELLED_ROOMMATE_REQUEST => "Cancelled roommate request",
         ACTIVITY_PROFILE_CREATED                => "Created a profile",
         ACTIVITY_ASSIGNED                       => "Assigned to room",
         ACTIVITY_AUTO_ASSIGNED                  => "Auto-assigned to room",

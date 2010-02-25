@@ -43,6 +43,11 @@ class RoommateSelectionMenuBlockView extends View {
             } else {
                 if(HMS_Roommate::has_roommate_request(UserStatus::getUsername(),$this->term)) {
                     $tpl['ROOMMATE_MSG'] = "<b>You have selected a roommate</b> and are awaiting their approval.";
+                    $requestee = HMS_Roommate::get_unconfirmed_roommate(UserStatus::getUsername(), $this->term);
+                    $rm = HMS_Roommate::getByUsernames(UserStatus::getUsername(), $requestee, $this->term);
+                    $cmd = CommandFactory::getCommand('RoommateRequestCancel');
+                    $cmd->setRoommateId($rm->id);
+                    $tpl['ROOMMATE_BREAK'] = $cmd->getLink('Cancel Request');
                 } else {
                     if(time() < $this->startDate) {
                         $tpl['ROOMMATE_MSG']  = '<b>It is too early to choose a roommate.</b> You can choose a roommate on ' . HMS_Util::getFriendlyDate($this->startDate) . '.';
