@@ -37,6 +37,12 @@ class ShowRoommateConfirmAcceptCommand extends Command
             throw new InvalidArgumentException('Invalid roommateId ' . $id);
         }
 
+        $username = UserStatus::getUsername();
+        if($username != $roommate->requestee) {
+            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
+            throw new PermissionException("$username tried to display accept confirmation for roommate pairing {$roommate->id}");
+        }
+
         PHPWS_Core::initCoreClass('Captcha.php');
 
         $requestor = StudentFactory::getStudentByUsername($roommate->requestor, $roommate->term);

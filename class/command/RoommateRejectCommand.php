@@ -37,6 +37,11 @@ class RoommateRejectCommand extends Command
             throw new InvalidArgumentException('Invalid roommateId ' . $id);
         }
 
+        if(UserStatus::getUsername() != $roommate->requestee) {
+            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
+            throw new PermissionException("$username tried to reject roommate pairing {$roommate->id}");
+        }
+
         $requestor = StudentFactory::getStudentByUsername($roommate->requestor, $roommate->term);
         $name = $requestor->getFullName();
         $username = $requestor->getUsername();

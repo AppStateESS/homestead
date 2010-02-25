@@ -39,7 +39,7 @@ class RoommateBreakCommand extends Command
 
         $username = UserStatus::getUsername();
         if($username != $roommate->requestor && $username != $roommate->requestee) {
-            PHPWS_Core::initModClass('hms', 'PermissionException.php');
+            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException("$username tried to break roommate pairing {$roommate->id}");
         }
 
