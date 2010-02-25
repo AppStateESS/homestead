@@ -11,6 +11,7 @@
       <li>
         <p>{ROOMMATE_MSG}</p>
         <p>{ROOMMATE_LINK}</p>
+        <p>{ROOMMATE_BREAK}</p>
       </li>
 <!-- END roommate -->
 </ul>

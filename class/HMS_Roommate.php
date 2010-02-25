@@ -117,6 +117,29 @@ class HMS_Roommate
      * Static Methods *
      ******************/
 
+    public static function getByUsernames($a, $b, $term)
+    {
+        $db = new PHPWS_DB('hms_roommate');
+        $db->addWhere('term', $term);
+        $db->addWhere('requestor', $a, 'ILIKE', 'AND', 'ab');
+        $db->addWhere('requestee', $b, 'ILIKE', 'AND', 'ab');
+        $db->addWhere('requestor', $b, 'ILIKE', 'AND', 'ba');
+        $db->addWhere('requestee', $a, 'ILIKE', 'AND', 'ba');
+        $db->setGroupConj('ab', 'AND');
+        $db->setGroupConj('ba', 'OR');
+
+        $db->groupIn('ab', 'ba');
+
+        $roommate = new HMS_Roommate();
+        $result = $db->loadObject($roommate);
+        if(PHPWS_Error::logIfError($result)) {
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException($result->toString());
+        }
+
+        return $roommate;
+    }
+
     public function get_all_confirmed_roommates($term = NULL, $random = FALSE)
     {
         if(is_null($term)) {
@@ -138,33 +161,6 @@ class HMS_Roommate
         }
 
         return $result;
-    }
-     
-    public function main()
-    {
-        if( !Current_User::allow('hms', 'roommate_maintenance') ){
-            $tpl = array();
-            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
-        }
-
-        switch($_REQUEST['op'])
-        {
-            case 'show_admin_create_roommate_group':
-                return HMS_Roommate::show_admin_create_roommate_group();
-                break;
-            case 'show_admin_create_roommate_group_result':
-                return HMS_Roommate::show_admin_create_roommate_group_result();
-                break;
-            case 'show_confirmed_roommates':
-                return HMS_Roommate::show_confirmed_roommates();
-                break;
-            case 'delete_roommate_group':
-                return HMS_Roommate::delete_roommate_group();
-                break;
-            default:
-                echo "Unknown roommate op {$REQUEST['op']}";
-                break;
-        }
     }
 
     /**

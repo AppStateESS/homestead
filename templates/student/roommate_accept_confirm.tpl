@@ -6,7 +6,7 @@
             <span class="error">{ERROR}</span><br/>
 <!-- END ERROR -->
             {START_FORM}
-            <p>By copying the word in the image above into the box below, you are indicating that you understand that you are <b>confirming roommate status with {NAME}</b>.  This action cannot be undone without contacting Housing and Residence Life.</p>
+            <p>By copying the word in the image above into the box below, you are indicating that you understand that you are <b>confirming roommate status with {NAME}</b>.</p>
             {CAPTCHA_IMAGE}<br />
 <!-- BEGIN RLC_WITHDRAWAL -->
             <p style="display: none">{RLC}</p>

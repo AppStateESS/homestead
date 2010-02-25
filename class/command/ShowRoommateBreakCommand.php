@@ -5,12 +5,12 @@
  * @author Jeff Tickle <jtickle at tux dot appstate dot edu>
  */
 
-class ShowRoommateConfirmAcceptCommand extends Command
+class ShowRoommateBreakCommand extends Command
 {
     private $roommateId;
 
     public function getRequestVars() {
-        $vars = array('action' => 'ShowRoommateConfirmAccept');
+        $vars = array('action' => 'ShowRoommateBreak');
 
         if(isset($this->roommateId)) {
             $vars['roommateId'] = $this->roommateId;
@@ -33,26 +33,33 @@ class ShowRoommateConfirmAcceptCommand extends Command
 
         PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
         $roommate = new HMS_Roommate($id);
-        if($roommate->id == 0) {
+        if($roommate->id = 0) {
             throw new InvalidArgumentException('Invalid roommateId ' . $id);
+        }
+
+        $username = UserStatus::getUsername();
+        if($username != $roommate->requestor && $username != $roommate->requestee) {
+            PHPWS_Core::initModClass('hms', 'PermissionException.php');
+            throw new PermissionException("$username tried to break roommate pairing {$roommate->id}");
         }
 
         PHPWS_Core::initCoreClass('Captcha.php');
 
-        $requestor = StudentFactory::getStudentByUsername($roommate->requestor, $roommate->term);
+        // get other roommate
+        $other = StudentFactory::getStudentByUsername($roommate->get_other_guy($username), $roommate->term);
 
         $form = new PHPWS_Form;
 
-        $cmd = CommandFactory::getCommand('RoommateAccept');
+        $cmd = CommandFactory::getCommand('RoommateBreak');
         $cmd->setRoommateId($id);
         $cmd->initForm($form);
 
         $form->addTplTag('CAPTCHA_IMAGE', Captcha::get());
-        $form->addTplTag('NAME', $requestor->getFullName());
+        $form->addTplTag('NAME', $other->getFullName());
 
         $form->addSubmit('Confirm');
 
-        $context->setContent(PHPWS_Template::process($form->getTemplate(), 'hms', 'student/roommate_accept_confirm.tpl'));
+        $context->setContent(PHPWS_Template::process($form->getTemplate(), 'hms', 'student/roommate_break_confirm.tpl'));
     }
 }
 

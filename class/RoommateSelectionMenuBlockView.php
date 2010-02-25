@@ -27,6 +27,10 @@ class RoommateSelectionMenuBlockView extends View {
         if(!is_null($roommate)){
             $name = $roommate->getFullName();
             $tpl['ROOMMATE_MSG']  = "<b>$name</b> has confirmed your roommate request. Roommate requests are subject to space availability.";
+            $cmd = CommandFactory::GetCommand('ShowRoommateBreak');
+            $rm = HMS_Roommate::getByUsernames(UserStatus::getUsername(), $roommate->getUsername(), $this->term);
+            $cmd->setRoommateId($rm->id);
+            $tpl['ROOMMATE_BREAK'] = $cmd->getLink('Break');
         }else{
             $requests = HMS_Roommate::countPendingRequests(UserStatus::getUsername(), $this->term);
             if($requests > 0) {

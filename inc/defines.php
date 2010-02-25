@@ -200,6 +200,8 @@ define('ACTIVITY_HALL_NOTIFIED_ANONYMOUSLY',    54);
 
 define('ACTIVITY_LOTTERY_OPTOUT',               55);
 
+define('ACTIVITY_STUDENT_BROKE_ROOMMATE',       56);
+
 /** 
  * Errors 
  */
