@@ -109,8 +109,11 @@ class HMS_Roommate
     {
         if(trim($this->requestor) == trim($username)) {
             return $this->requestee;
+        } else if(trim($this->requestee) == trim($username)) {
+            return $this->requestor;
         }
-        return $this->requestor;
+        
+        throw new RoommateException("$username is not in roommate pairing " . $this->id);
     }
 
     /******************
@@ -701,18 +704,156 @@ class HMS_Roommate
     public function send_confirm_emails()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Email.php');
+
+        $requestorStudent = StudentFactory::getStudentByUsername($this->requestor, $this->term);
+        $requesteeStudent = StudentFactory::getStudentByUsername($this->requestee, $this->term);
+
+        // to the requestor
+        $message  = "To:     " . $requestorStudent->getFullName() . "\n";
+        $message .= "From:   Housing Management System\n\n";
+        $message .= "Congratulations!  " . $requesteeStudent->getFullName() . " has accepted your roommate request.\n\n";
+        $message .= "Please do not reply to this email.  If there is a problem, please contact the Housing Assignments office ";
+        $message .= "at 828-262-6111, or by emailing housing@appstate.edu.\n";
+
+        $success = HMS_Email::send_email($this->requestor . '@appstate.edu', NULL, 'HMS Roommate Confirmed', $message);
+
+        if($success != TRUE) {
+            throw new RoommateException('Error occurred emailing the requestor ' . $this->requestor . ' of a roommate confirmation from requestee ' . $this->requestee . ', HMS_Roommate ' . $this->id);
+        }
+
+        // to the requestee
+        $message  = "To:     " . $requesteeStudent->getFullName() . "\n";
+        $message .= "From:   Housing Management System\n\n";
+        $message .= "This is a follow-up email to notify that you have accepted the roommate request from " . $requestorStudent->getFullName() . ".\n\n";
+        $message .= "Please do not reply to this email.  If there is a problem, please contact the Housing Assignments office ";
+        $message .= "at 828-262-6111, or by emailing housing@appstate.edu.\n";
+
+        $success = HMS_Email::send_email($this->requestee . '@appstate.edu', NULL, 'HMS Roommate Confirmed', $message);
+
+        if($success != TRUE) {
+            throw new RoommateException('Error occurred emailing the requestee ' . $this->requestee . ' of a roommate confirmation for requestor ' . $this->requestor . ', HMS_Roommate ' . $this->id);
+        }
+
+        return TRUE;
     }
 
-    public function send_break_emails()
+    public function send_break_emails($breakor)
     {
+        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
+
+        $breakee = $this->get_other_guy($breakor);
+
+        $breakorStudent = StudentFactory::getStudentByUsername($breakor, $this->term);
+        $breakeeStudent = Studentfactory::getStudentByUsername($breakee, $this->term);
+
+        // to the breakor
+        $message  = "To:     " . $breakorStudent->getFullName() . "\n";
+        $message .= "From:   Housing Management System\n\n";
+        $message .= "This is a follow-up email to notify you that you have broken your roommate pairing with " . $breakeeStudent->getFullName() . ".\n\n";
+        $message .= "If this was in error, you may go through the request process again by logging into the Housing Management System at ";
+        $message .= "http://hms.appstate.edu\n\n";
+        $message .= "Please do not reply to this email.  If there is a problem, please contact the Housing Assignments office ";
+        $message .= "at 828-262-6111, or by emailing housing@appstate.edu.\n";
+
+        $success = HMS_Email::send_email($breakor . '@appstate.edu', NULL, 'HMS Roommate Pairing Broken', $message);
+
+        if($success != TRUE) {
+            throw new RoommateException('Error occurred emailing the breakor ' . $breakor . ' of their broken roommate pairing with ' . $breakee . ', HMS_Roommate ' . $this->id);
+        }
+
+        // to the breakee
+        $message  = "To:     " . $breakeeStudent->getFullName() . "\n";
+        $message .= "From:   Housing Management System\n\n";
+        $message .= "We're sorry, but " . $breakorStudent->getFullName() . " has broken your roommate pairing.  Please contact ";
+        $message .= $breakorStudent->getFirstName() . " to resolve any issues.\n\n";
+        $message .= "Please do not reply to this email.  If there is a problem, please contact the Housing Assignments office ";
+        $message .= "at 828-262-6111, or by emailing housing@appstate.edu.\n";
+
+        $success = HMS_Email::send_email($breakee . '@appstate.edu', NULL, 'HMS Roommate Pairing Broken', $message);
+
+        if($success != TRUE) {
+            throw new RoommateException('Error occurred emailing the breakee ' . $breakee . ' of their broken roommate pairing with ' . $breakor . ', HMS_Roommate ' . $this->id);
+        }
+
+        return TRUE;
     }
 
     public function send_reject_emails()
     {
+        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
+
+        $requestorStudent = StudentFactory::getStudentByUsername($this->requestor, $this->term);
+        $requesteeStudent = StudentFactory::getStudentByUsername($this->requestee, $this->term);
+
+        // to the requestor
+        $message  = "To:     " . $requestorStudent->getFullName() . "\n";
+        $message .= "From:   Housing Management System\n\n";
+        $message .= "We're sorry, but " . $requesteeStudent->getFullName() . " has declined your roommate request.  Please contact ";
+        $message .= $requesteeStudent->getFirstName() . " to resolve any issues.\n\n";
+        $message .= "Please do not reply to this email.  If there is a problem, please contact the Housing Assignments office ";
+        $message .= "at 828-262-6111, or by emailing housing@appstate.edu.\n";
+
+        $success = HMS_Email::send_email($this->requestor . '@appstate.edu', NULL, 'HMS Roommate Declined', $message);
+
+        if($success != TRUE) {
+            throw new RoommateException('Error occurred emailing the requestor ' . $this->requestor . ' of a declined roommate request from requestee ' . $this->requestee . ', HMS_Roommate ' . $this->id);
+        }
+
+        // to the requestee
+        $message  = "To:     " . $requesteeStudent->getFullName() . "\n";
+        $message .= "From:   Housing Management System\n\n";
+        $message .= "This is a follow-up email to notify that you have declined the roommate request from " . $requestorStudent->getFullName() . ".\n\n";
+        $message .= "If this was in error, you may re-request " . $requestorStudent->getFirstName() . " by logging into the Housing Management System at ";
+        $message .= "http://hms.appstate.edu\n\n";
+        $message .= "Please do not reply to this email.  If there is a problem, please contact the Housing Assignments office ";
+        $message .= "at 828-262-6111, or by emailing housing@appstate.edu.\n";
+
+        $success = HMS_Email::send_email($this->requestee . '@appstate.edu', NULL, 'HMS Roommate Declined', $message);
+
+        if($success != TRUE) {
+            throw new RoommateException('Error occurred emailing the requestee ' . $this->requestee . ' of a declined roommate request for requestor ' . $this->requestor . ', HMS_Roommate ' . $this->id);
+        }
+
+        return TRUE;
     }
 
     public function send_cancel_emails()
     {
+        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
+
+        $requestorStudent = StudentFactory::getStudentByUsername($this->requestor, $this->term);
+        $requesteeStudent = StudentFactory::getStudentByUsername($this->requestee, $this->term);
+
+        // to the requestor
+        $message  = "To:     " . $requestorStudent->getFullName() . "\n";
+        $message .= "From:   Housing Management System\n\n";
+        $message .= "This is a follow-up email to notify that you have cancelled your roommate request for " . $requesteeStudent->getFullName() . ".\n\n";
+        $mesaage .= "If this was in error, you may re-request " . $requesteeStudent->getFirstName() . " by logging into the Housing Management System at ";
+        $message .= "http://hms.appstate.edu\n\n";
+        $message .= "Please do not reply to this email.  If there is a problem, please contact the Housing Assignments office ";
+        $message .= "at 828-262-6111, or by emailing housing@appstate.edu.\n";
+
+        $success = HMS_Email::send_email($this->requestor . '@appstate.edu', NULL, 'HMS Roommate Request Cancelled', $message);
+
+        if($success != TRUE) {
+            throw new RoommateException('Error occurred emailing the requestor ' . $this->requestor . ' of a roommate request cancellation for requestee ' . $this->requestee . ', HMS_Roommate ' . $this->id);
+        }
+
+        // to the requestee
+        $message  = "To:     " . $requesteeStudent->getFullName() . "\n";
+        $message .= "From:   Housing Management System\n\n";
+        $message .= $requestorStudent->getFullName() . " has cancelled the request for you to be roommates.  Please contact ";
+        $message .= $requestorStudent->getFirstName() . " to resolve any issues.\n\n";
+        $message .= "Please do not reply to this email.  If there is a problem, please contact the Housing Assignments office ";
+        $message .= "at 828-262-6111, or by emailing housing@appstate.edu.\n";
+
+        $success = HMS_Email::send_email($this->requestee . '@appstate.edu', NULL, 'HMS Roommate Request Cancelled', $message);
+
+        if($success != TRUE) {
+            throw new RoommateException('Error occurred emailing the requestee ' . $this->requestee . ' of a roommate request cancellation from requestor ' . $this->requestor . ', HMS_Roommate ' . $this->id);
+        }
+
+        return TRUE;
     }
 
     /**************
