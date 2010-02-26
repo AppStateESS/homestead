@@ -52,6 +52,9 @@ class RoommateRejectCommand extends Command
                                        ACTIVITY_REJECTED_AS_ROOMMATE,
                                        $roommate->requestee);
 
+        // Email both parties
+        $request->send_reject_emails();
+
         NQ::Simple('hms', HMS_NOTIFICATION_SUCCESS, "<b>You rejected the roommate request from $name.</b>  If this was an error, you may re-request using their username, <b>$username</b>.");
 
         $cmd = CommandFactory::getCommand('ShowStudentMenu');

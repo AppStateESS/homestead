@@ -698,6 +698,23 @@ class HMS_Roommate
         return TRUE;
     }
 
+    public function send_confirm_emails()
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
+    }
+
+    public function send_break_emails()
+    {
+    }
+
+    public function send_reject_emails()
+    {
+    }
+
+    public function send_cancel_emails()
+    {
+    }
+
     /**************
      * UI Methods *
      **************/

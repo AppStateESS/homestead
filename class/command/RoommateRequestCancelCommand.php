@@ -50,7 +50,7 @@ class RoommateRequestCancelCommand extends Command
                                        $roommate->requestee);
 
         // Email both parties
-        // $request->send_cancel_emails();
+        $request->send_cancel_emails();
 
         $other = StudentFactory::getStudentByUsername($roommate->get_other_guy($username), $roommate->term);
         $name = $other->getFullName();
