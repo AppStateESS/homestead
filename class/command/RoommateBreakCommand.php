@@ -61,7 +61,7 @@ class RoommateBreakCommand extends Command
                                        "CAPTCHA: $verified");
 
         // Email both parties
-        $request->send_break_emails();
+        $roommate->send_break_emails();
 
         $other = StudentFactory::getStudentByUsername($roommate->get_other_guy($username), $roommate->term);;
         $name = $other->getFullName();

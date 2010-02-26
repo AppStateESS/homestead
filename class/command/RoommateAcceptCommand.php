@@ -68,7 +68,7 @@ class RoommateAcceptCommand extends Command
                                        "CAPTCHA: $verified");
 
         // Email both parties
-        $request->send_confirm_emails();
+        $roommate->send_confirm_emails();
 
         // Remove any other requests for the requestor
         HMS_Roommate::removeOutstandingRequests($roommate->requestor, $roommate->term);
