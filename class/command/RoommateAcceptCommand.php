@@ -62,9 +62,9 @@ class RoommateAcceptCommand extends Command
 
         $roommate->save();
 
-        HMS_Activity_Log::log_activity($roommate->requestor,
+        HMS_Activity_Log::log_activity($roommate->requestee,
                                        ACTIVITY_ACCEPTED_AS_ROOMMATE,
-                                       $roommate->requestee,
+                                       $roommate->requestor,
                                        "CAPTCHA: $verified");
 
         // Email both parties

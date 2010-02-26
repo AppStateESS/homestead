@@ -55,9 +55,9 @@ class RoommateBreakCommand extends Command
 
         $roommate->delete();
 
-        HMS_Activity_Log::log_activity($roommate->requestor,
+        HMS_Activity_Log::log_activity($roommate->requestee,
                                        ACTIVITY_STUDENT_BROKE_ROOMMATE,
-                                       $roommate->requestee,
+                                       $roommate->requestor,
                                        "CAPTCHA: $verified");
 
         // Email both parties

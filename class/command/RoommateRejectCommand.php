@@ -48,9 +48,9 @@ class RoommateRejectCommand extends Command
         
         $roommate->delete();
 
-        HMS_Activity_Log::log_activity($roommate->requestor,
+        HMS_Activity_Log::log_activity($roommate->requestee,
                                        ACTIVITY_REJECTED_AS_ROOMMATE,
-                                       $roommate->requestee);
+                                       $roommate->requestor);
 
         // Email both parties
         $roommate->send_reject_emails();
