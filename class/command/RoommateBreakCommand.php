@@ -54,16 +54,17 @@ class RoommateBreakCommand extends Command
         }
 
         $roommate->delete();
+        
+        $other = StudentFactory::getStudentByUsername($roommate->get_other_guy($username), $roommate->term);;
 
-        HMS_Activity_Log::log_activity($roommate->requestee,
+        HMS_Activity_Log::log_activity($other->getUsername(),
                                        ACTIVITY_STUDENT_BROKE_ROOMMATE,
-                                       $roommate->requestor,
+                                       $username,
                                        "CAPTCHA: $verified");
 
         // Email both parties
         $roommate->send_break_emails();
 
-        $other = StudentFactory::getStudentByUsername($roommate->get_other_guy($username), $roommate->term);;
         $name = $other->getFullName();
         NQ::Simple('hms', HMS_NOTIFICATION_SUCCESS, "You and $name are no longer marked as roommates.");
 
