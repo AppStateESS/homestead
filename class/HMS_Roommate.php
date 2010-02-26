@@ -665,7 +665,7 @@ class HMS_Roommate
         $requesteeStudent = StudentFactory::getStudentByUsername($this->requestee, $this->term);
 
         // set tags for the email to the person doing the requesting
-        $message = "To:     " . $requestorStudent->getFullName() . "\n"; 
+        $message  = "To:     " . $requestorStudent->getFullName() . "\n"; 
         $message .= "From:   Housing Management System\n\n";
         $message .= "This is a follow-up email to let you know you have requested " . $requesteeStudent->getFullName() . " as your roommate.\n\n";
         $message .= "We have sent your requested roommate an email invitation to confirm his/her desire to be your roommate. Your requested ";
@@ -683,7 +683,7 @@ class HMS_Roommate
         $expire_date = $this->calc_req_expiration_date();
 
         // create the Mail object and send it
-        $message = "To:     " . $requesteeStudent->getFullName() . "\n";
+        $message  = "To:    " . $requesteeStudent->getFullName() . "\n";
         $message .= "From:  Housing Management System\n\n";
         $message .= "This email is to let you know " . $requestorStudent->getFullName() . " has requested you as a roommate.\n\n";
         $message .= "This request will expire on " . date('l, F jS, Y', $expire_date) . " at " . date('g:i A', $expire_date) . "\n\n";
