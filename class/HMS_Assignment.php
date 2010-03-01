@@ -412,10 +412,10 @@ class HMS_Assignment extends HMS_Item
 		if(sizeof($assignees) > 1){
 			foreach($assignees as $roommate){
 				// Skip this student
-				if($roommate->asu_username == $username){
+				if($roommate->getUsername() == $username){
 					continue;
 				}
-				$roommate_assign = HMS_Assignment::getAssignment($roommate->asu_username,$term);
+				$roommate_assign = HMS_Assignment::getAssignment($roommate->getUsername(),$term);
 				$roommate_assign->letter_printed = 0;
 				$roommate_assign->email_sent     = 0;
 				$result = $roommate_assign->save();

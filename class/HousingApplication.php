@@ -6,6 +6,8 @@ class HousingApplication {
     public $id = 0;
 
     public $term; // The term which this application is for
+    
+    public $type; // The type of this application, defined by each subclass' constructor
 
     public $banner_id;
     public $username;

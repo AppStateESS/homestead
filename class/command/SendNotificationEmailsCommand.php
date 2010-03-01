@@ -76,7 +76,7 @@ class SendNotificationEmailsCommand extends Command {
                     foreach($rooms as $room){
                         $students = $room->get_assignees();
                         foreach($students as $student){
-                            HMS_Email::send_email($student->asu_username . '@appstate.edu', $from, $subject, $body);
+                            HMS_Email::send_email($student->getUsername() . '@appstate.edu', $from, $subject, $body);
                         }
                     }
                 }
@@ -94,7 +94,7 @@ class SendNotificationEmailsCommand extends Command {
                 foreach($rooms as $room){
                     $students = $room->get_assignees();
                     foreach($students as $student){
-                        HMS_Email::send_email($student->asu_username . '@appstate.edu', $from, $subject, $body);
+                        HMS_Email::send_email($student->getUsername() . '@appstate.edu', $from, $subject, $body);
                     }
                 }
             }

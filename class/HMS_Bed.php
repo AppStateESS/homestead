@@ -142,7 +142,7 @@ class HMS_Bed extends HMS_Item {
 
 	public function get_assignee()
 	{
-		PHPWS_Core::initModClass('hms', 'HMS_Student.php');
+		PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 
 		if(!$this->loadAssignment()){
 			return false;
@@ -151,7 +151,7 @@ class HMS_Bed extends HMS_Item {
 		if(!isset($this->_curr_assignment->asu_username)){
 			return NULL;
 		}else{
-			return new HMS_Student($this->_curr_assignment->asu_username);
+			return StudentFactory::getStudentByUsername($this->_curr_assignment->asu_username, $this->term);
 		}
 	}
 

@@ -499,7 +499,7 @@ class HMS_Residence_Hall extends HMS_Item
     /*
      * Returns an array of the student objects which are currently assigned to the current hall
      */
-    public function &get_assignees()
+    public function get_assignees()
     {
         if(!$this->loadFloors()) {
             return false;

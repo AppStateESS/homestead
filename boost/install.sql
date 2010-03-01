@@ -238,6 +238,7 @@ CREATE TABLE hms_new_application (
     gender                          smallint                NOT NULL,
     student_type                    character(1)            NOT NULL,
     application_term                integer                 NOT NULL,
+    application_type                character varying(255)  NOT NULL,
     cell_phone                      character varying(10),
     meal_plan                       character varying(3),
     physical_disability             smallint,

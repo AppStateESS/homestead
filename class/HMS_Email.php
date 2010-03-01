@@ -311,6 +311,14 @@ class HMS_Email{
 
         HMS_Email::send_template_message($to->getUsername() . TO_DOMAIN, 'On-campus Housing Re-assignment Confirmation!', 'email/lottery_self_assignment_confirmation.tpl', $tpl);
     }
+    
+    public function sendWaitListApplicationConfirmation(Student $student, $year)
+    {
+        $tpl['NAME'] = $student->getName();
+        $tpl['YEAR'] = $year;
+        
+        HMS_Email::send_template_message($student->getUsername() . TO_DOMAIN, 'On-campus Housing Waiting List Confirmation', 'email/waitingListConfirmation.tpl');
+    }
 
 } // End HMS_Email class
 ?>

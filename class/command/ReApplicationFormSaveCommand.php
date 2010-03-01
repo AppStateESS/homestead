@@ -163,7 +163,7 @@ class ReApplicationFormSaveCommand extends Command {
 
         HMS_Email::send_lottery_application_confirmation($student, $year);
 
-        NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'You re-application was submitted successfully.');
+        NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Your re-application was submitted successfully.');
         $cmd = CommandFactory::getCommand('ShowStudentMenu');
         $cmd->redirect();
     }

@@ -22,6 +22,8 @@ class FallApplication extends HousingApplication{
             return;
         }
 
+        $this->application_type = 'fall';
+        
         parent::__construct($term, $banner_id, $username, $gender, $student_type, $application_term, $cell_phone, $meal_plan, $physical_disability, $psych_disability, $gender_need, $medical_need);
 
         $this->setLifestyleOption($lifestyle_option);

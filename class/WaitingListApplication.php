@@ -2,12 +2,12 @@
 
 PHPWS_Core::initModClass('hms', 'HousingApplication.php');
 
-class SummerApplication extends HousingApplication{
+class WaitingListApplication extends HousingApplication {
 
-    public $room_type = 0;
+    public $waiting_list_hide = 0;
 
-    public function __construct($id = 0, $term = NULL, $banner_id = NULL, $username = NULL, $gender = NULL, $student_type = NULL, $application_term = NULL, $cell_phone = NULL, $meal_plan = NULL, $physical_disability = NULL, $psych_disability = NULL, $gender_need = NULL, $medical_need = NULL, $room_type = NULL){
-
+    public function __construct($id = 0, $term = NULL, $banner_id = NULL, $username = NULL, $gender = NULL, $student_type = NULL, $application_term = NULL, $cell_phone = NULL, $meal_plan = NULL, $physical_disability = NULL, $psych_disability = NULL, $gender_need = NULL, $medical_need = NULL)
+    {
         /**
          * If the id is non-zero, then we need to load the other member variables
          * of this object from the database
@@ -18,16 +18,14 @@ class SummerApplication extends HousingApplication{
             return;
         }
 
-        $this->application_type = 'summer';
-        
-        parent::__construct($term, $banner_id, $username, $gender, $student_type, $application_term, $cell_phone, $meal_plan, $physical_disability, $psych_disability, $gender_need, $medical_need);
+        // Set this application type
+        $this->application_type = 'offcampus_waiting_list';
 
-        $this->setRoomType($room_type);
+        parent::__construct($term, $banner_id, $username, $gender, $student_type, $application_term, $cell_phone, $meal_plan, $physical_disability, $psych_disability, $gender_need, $medical_need);
     }
 
-
     /**
-     * Loads the SummerApplication object with the corresponding id. Requires that $this->id be non-zero.
+     * Loads the LotteryApplication object with the corresponding id. Requires that $this->id be non-zero.
      */
     protected function load()
     {
@@ -41,18 +39,19 @@ class SummerApplication extends HousingApplication{
         }
 
         # Load the application-specific data
-        $db = new PHPWS_DB('hms_summer_application');
+        $db = new PHPWS_DB('hms_waitlist_application');
 
         if(PHPWS_Error::logIfError($db->loadObject($this))){
             $this->id = 0;
-            return false;
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException($result->toString());
         }
 
         return true;
     }
 
     /**
-     * Saves this SummerApplication object
+     * Saves this object
      */
     public function save()
     {
@@ -64,7 +63,7 @@ class SummerApplication extends HousingApplication{
         }
 
         # Save the application-specific data
-        $db = new PHPWS_DB('hms_summer_application');
+        $db = new PHPWS_DB('hms_waitlist_application');
 
         /* If this is a new object, call saveObject with the third parameter as 'false' so
          * the database class will insert the object with the ID set by the parent::save() call.
@@ -87,7 +86,7 @@ class SummerApplication extends HousingApplication{
 
     public function delete()
     {
-        $db = new PHPWS_DB('hms_summer_application');
+        $db = new PHPWS_DB('hms_waitlist_application');
         $db->addWhere('id', $this->id);
         $result = $db->delete();
         if(!$result || PHPWS_Error::logIfError($result)){
@@ -100,42 +99,6 @@ class SummerApplication extends HousingApplication{
 
         return TRUE;
     }
-
-    /*
-     * Returns the table row tags for the 'unassigned applications report' in
-     * HMS_Reports.php
-     */
-    public function unassigned_applicants_rows()
-    {
-        $tpl = parent::unassigned_applicants_rows();
-
-        $tpl['ROOM_TYPE']  = $this->getRoomType();
-
-        switch($this->getRoomType()){
-            case ROOM_TYPE_DOUBLE:
-                $tpl['ROOM_TYPE']   = 'Double';
-                break;
-            case ROOM_TYPE_PRIVATE:
-                $tpl['ROOM_TYPE']   = 'Private';
-                break;
-            default:
-                $tpl['ROOM_TYPE']   = 'Unknown';
-                break;
-        }
-
-        return $tpl;
-    }
-
-    /************************
-     * Accessors & Mutators *
-     ************************/
-
-    public function getRoomType(){
-        return $this->room_type;
-    }
-
-    public function setRoomType($type){
-        $this->room_type = $type;
-    }
 }
+
 ?>

@@ -13,12 +13,12 @@ class ReapplicationMenuBlockView extends View {
 
     public function __construct($term, $startDate, $endDate, HMS_Assignment $assignment = NULL, LotteryApplication $application = NULL, $roommateRequests)
     {
-        $this->term               = $term;
-        $this->startDate          = $startDate;
-        $this->endDate            = $endDate;
-        $this->application        = $application;
-        $this->assignment         = $assignment;
-        $this->roommateRequests   = $roommateRequests;
+        $this->term             = $term;
+        $this->startDate        = $startDate;
+        $this->endDate          = $endDate;
+        $this->application      = $application;
+        $this->assignment       = $assignment;
+        $this->roommateRequests = $roommateRequests;
     }
 
     public function show()
@@ -37,9 +37,9 @@ class ReapplicationMenuBlockView extends View {
             # Student has already re-applied
             $tpl['ALREADY_APPLIED'] = ""; // dummy tag, text is in template
         }else if(time() < $this->startDate){
-            $tpl['BEGIN_DEADLINE'] = HMS_Util::getFriendlyDate($this->beginDate);
+            $tpl['BEGIN_DEADLINE'] = HMS_Util::getFriendlyDate($this->startDate);
         }else if(time() > $this->endDate){
-            $tpl['END_DEADLINE'] = HMS_Util::getFriendlyDate($this->startDate);
+            $tpl['END_DEADLINE'] = HMS_Util::getFriendlyDate($this->endDate);
         }else{
             if(HMS_Lottery::determineEligibility(UserStatus::getUsername())){
                 $reAppCommand = CommandFactory::getCommand('ShowReApplication');

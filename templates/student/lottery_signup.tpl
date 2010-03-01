@@ -6,9 +6,6 @@
         
         <strong>For more information on how the selection process works, please read the <a href="https://hms.appstate.edu/webpage/3" target="_blank">housing re-application FAQ</a>.</strong><br />
         <br />
-        <!-- BEGIN error_message -->
-        <div style="color: red;">{ERROR_MESSAGE}</div><br />
-        <!-- END error_message -->
         {START_FORM}
         <table>
             <tr>

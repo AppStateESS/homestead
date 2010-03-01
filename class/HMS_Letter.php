@@ -168,7 +168,7 @@ class HMS_Letter
 
         $letter = new HMS_Letter;
 
-        $letter->address1 = HMS_SOAP::get_full_name_inverted($assignment->asu_username);
+        $letter->address1 = HMS_SOAP::get_full_name_inverted($assignment->getUsername());
 
         $addr = HMS_SOAP::get_address($assignment->asu_username, NULL);
 

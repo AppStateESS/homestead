@@ -89,7 +89,7 @@ class HMS_Activity_Log{
      */
     public function getPagerTags()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Student.php');
+        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
         $tpl = array();
          
         try {
