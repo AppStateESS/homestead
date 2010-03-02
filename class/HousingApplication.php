@@ -7,7 +7,7 @@ class HousingApplication {
 
     public $term; // The term which this application is for
     
-    public $type; // The type of this application, defined by each subclass' constructor
+    public $application_type; // The type of this application, defined by each subclass' constructor
 
     public $banner_id;
     public $username;
@@ -289,6 +289,7 @@ class HousingApplication {
         PHPWS_Core::initModClass('hms', 'SpringApplication.php');
         PHPWS_Core::initModClass('hms', 'SummerApplication.php');
         PHPWS_Core::initModClass('hms', 'LotteryApplication.php');
+        PHPWS_Core::initModClass('hms', 'WaitingListApplication.php');
 
         $student = StudentFactory::getStudentByUsername($username, $term);
 
@@ -296,8 +297,8 @@ class HousingApplication {
         $db->addWhere('username', $username);
         $db->addWhere('term', $term);
 
-        $result = $db->select('one');
-
+        $result = $db->select('row');
+        
         if(PHPWS_Error::logIfError($result)){
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
@@ -306,34 +307,25 @@ class HousingApplication {
         if($result == NULL){
             return NULL;
         }
-
-        # If the student is type 'C', return a LotteryApplication object
-        if($student->getType() == TYPE_CONTINUING){
-            $app = new LotteryApplication($result);
-            return $app;
-        }
-
-        $sem = Term::getTermSem($term);
-        $app = NULL;
-
-        //TODO find a better way of doing this, or fix this logic
-        if($sem == TERM_FALL && $term > $student->getApplicationTerm())
-        {
-            $app = new LotteryApplication($result);
-        }else{
-
-            switch($sem){
-                case TERM_FALL:
-                    $app = new FallApplication($result);
-                    break;
-                case TERM_SPRING:
-                    $app = new SpringApplication($result);
-                    break;
-                case TERM_SUMMER1:
-                case TERM_SUMMER2:
-                    $app = new SummerApplication($result);
-                    break;
-            }
+        
+        switch($result['application_type']){
+            case 'fall':
+                $app = new FallApplication($result['id']);
+                break;
+            case 'spring':
+                $app = new SpringApplication($result['id']);
+                break;
+            case 'summer':
+                $app = new SummerApplication($result['id']);
+                break;
+            case 'lottery':
+                $app = new LotteryApplication($result['id']);
+                break;
+            case 'offcampus_waiting_list':
+                $app = new WaitingListApplication($result['id']);
+                break;
+            default:
+                throw new InvalidArgumentException('Unknown application type: ' . $result['application_type']);
         }
 
         return $app;

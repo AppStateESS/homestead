@@ -32,7 +32,7 @@ class OffCampusWaitingListFormSaveCommand extends Command {
         # Double check that the student was not eligible to re-apply, and is therefore
         # eligible to apply to the wait list
         if(HMS_Lottery::determineEligibility(UserStatus::getUsername())){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You are not eligible to apply for the on-campus housing waiting list for this semester.');
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You are not eligible to apply for the on-campus housing Open Waiting List for this semester.');
             $menuCmd = CommandFactory::getCommand('ShowStudentMenu');
             $menuCmd->redirect();
         }
@@ -79,7 +79,7 @@ class OffCampusWaitingListFormSaveCommand extends Command {
             $application->save();
         }catch(Exception $e){
             test($e->getMessage(),1);
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'There was an error saving your re-application. Please try again or contact the Department of Housing & Residence Life.');
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'There was an error saving your application. Please try again or contact the Department of Housing & Residence Life.');
             $errorCmd->redirect();
         }
 
@@ -89,7 +89,7 @@ class OffCampusWaitingListFormSaveCommand extends Command {
         $year = Term::toString($term) . ' - ' . Term::toString(Term::getNextTerm($term));
         HMS_Email::sendWaitListApplicationConfirmation($student, $year);
 
-        NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Your application to the waiting list was submitted successfully.');
+        NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Your application to the Open Waiting List was submitted successfully.');
         $cmd = CommandFactory::getCommand('ShowStudentMenu');
         $cmd->redirect();
     }

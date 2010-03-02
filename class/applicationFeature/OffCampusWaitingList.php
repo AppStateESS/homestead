@@ -7,7 +7,7 @@ class OffCampusWaitingListRegistration extends ApplicationFeatureRegistration {
     function __construct()
     {
         $this->name = 'OffCampusWaitingList';
-        $this->description = 'Off-campus Waiting List';
+        $this->description = 'Open Waiting List';
         $this->startDateRequired = true;
         $this->endDateRequired = true;
         $this->priority = 2;
@@ -21,8 +21,10 @@ class OffCampusWaitingListRegistration extends ApplicationFeatureRegistration {
             return false;
         }
         
-        // Must be a returning student and must be in-eligible
-        if($student->getApplicationTerm() <= Term::getCurrentTerm() && !HMS_Lottery::determineEligibility($student->getUsername())){
+        $app = HousingApplication::getApplicationByUser($student->getUsername(), $term);
+        
+        // Must be a returning student and either have not re-applied or have re-applied to the waiting list already
+        if($student->getApplicationTerm() <= Term::getCurrentTerm() && (is_null($app) || (!is_null($app) && $app->application_type == 'offcampus_waiting_list'))){
             return true;
         }
         

@@ -1,8 +1,8 @@
 <div class="hms">
     <div class="box">
-        <div class="box-title"><h2>{TERM} On-campus Housing Waiting List Application</h2></div>
+        <div class="box-title"><h2>{TERM} On-campus Housing - Open Waiting List Application</h2></div>
         <div class="box-content">
-        <p>Welcome to Appalachian State University Housing and Residence Life. As a returning student who was not eligible for re-application, you must apply to the on-campus housing waiting list. If you are selected for housing you will be notified by email and/or telephone.</p>
+        <p>Welcome to Appalachian State University Housing and Residence Life. As a returning student who did not, or was not eligible to re-apply, you must apply to the on-campus housing Open Waiting List. If you are selected to receive on-campus housing you will be notified by email and/or telephone.</p>
         {START_FORM}
         <table>
             <tr>

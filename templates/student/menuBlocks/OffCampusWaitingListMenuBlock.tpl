@@ -1,7 +1,7 @@
-<h3>Waiting List for Off-campus Students</h3>
+<h3>Open Waiting List</h3>
 
 <!-- BEGIN eligible -->
-You are eligible to enter your name on the Re-application Waiting List for off-campus students. Students are selected from this list as space in the residence hall allows. Enrolling yourself in the waiting list does not guarantee you will be offered on-campus housing.
+You are eligible to enter your name on the Open Waiting List. Students are selected from this list as space in the residence halls becomes available. Enrolling yourself on the waiting list does not guarantee you will be offered on-campus housing.
 {WAIT_LIST_LINK}
 <!-- END eligible -->
 
@@ -15,5 +15,5 @@ Waiting list enrollment ended on {END_DEADLINE}.
 
 <!-- BEGIN already_applied -->
 {ALREADY_APPLIED}
-You have applied to the on-campus housing waiting list for this term. You will be notified by phone and/or email if you are selected for housing.
+You have applied to the on-campus housing Open Waiting List for this term. You will be notified by phone and/or email if you are selected to receive on-campus housing.
 <!-- END already_applied -->

@@ -37,6 +37,11 @@ class Reapplication extends ApplicationFeature {
 		
 		$assignment       = HMS_Assignment::getAssignment($student->getUsername(), $this->term);
 		$application      = HousingApplication::getApplicationByUser($student->getUsername(), $this->term);
+		
+		if(!$application instanceof LotteryApplication){
+		    $application = null;
+		}
+		
 		$roommateRequests = HMS_Lottery::get_lottery_roommate_invites($student->getUsername(), $this->term);
 		
 		return new ReapplicationMenuBlockView($this->term, $this->getStartDate(), $this->getEndDate(), $assignment, $application, $roommateRequests);
