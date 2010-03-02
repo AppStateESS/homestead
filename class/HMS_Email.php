@@ -32,7 +32,7 @@ class HMS_Email{
     public function send_template_message($to, $subject, $tpl, $tags)
     {
         $content = PHPWS_Template::process($tags, 'hms', $tpl);
-
+        
         HMS_Email::send_email($to, NULL, $subject, $content);
     }
 
@@ -314,10 +314,12 @@ class HMS_Email{
     
     public function sendWaitListApplicationConfirmation(Student $student, $year)
     {
+        $tpl = array();
+        
         $tpl['NAME'] = $student->getName();
         $tpl['YEAR'] = $year;
         
-        HMS_Email::send_template_message($student->getUsername() . TO_DOMAIN, 'On-campus Housing Waiting List Confirmation', 'email/waitingListConfirmation.tpl');
+        HMS_Email::send_template_message($student->getUsername() . TO_DOMAIN, 'On-campus Housing Waiting List Confirmation', 'email/waitingListConfirmation.tpl', $tpl);
     }
 
 } // End HMS_Email class
