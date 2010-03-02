@@ -30,7 +30,7 @@ class RoommateSelectionMenuBlockView extends View {
             $cmd = CommandFactory::GetCommand('ShowRoommateBreak');
             $rm = HMS_Roommate::getByUsernames(UserStatus::getUsername(), $roommate->getUsername(), $this->term);
             $cmd->setRoommateId($rm->id);
-            $tpl['ROOMMATE_BREAK'] = $cmd->getLink('Break');
+            $tpl['ROOMMATE_BREAK'] = $cmd->getLink('Break roommate pairing');
         }else{
             $requests = HMS_Roommate::countPendingRequests(UserStatus::getUsername(), $this->term);
             if($requests > 0) {
