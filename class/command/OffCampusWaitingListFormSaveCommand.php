@@ -29,14 +29,6 @@ class OffCampusWaitingListFormSaveCommand extends Command {
         
         $term = $context->get('term');
         
-        # Double check that the student was not eligible to re-apply, and is therefore
-        # eligible to apply to the wait list
-        if(HMS_Lottery::determineEligibility(UserStatus::getUsername())){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You are not eligible to apply for the on-campus housing Open Waiting List for this semester.');
-            $menuCmd = CommandFactory::getCommand('ShowStudentMenu');
-            $menuCmd->redirect();
-        }
-
         $errorCmd = CommandFactory::getCommand('ShowOffCampusWaitListApplication');
         $errorCmd->setTerm($term);
         $errorCmd->setAgreedToTerms(true);
