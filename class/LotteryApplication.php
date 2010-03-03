@@ -258,6 +258,7 @@ class LotteryApplication extends HousingApplication {
         $pager->setEmptyMessage('No students found.');
         $pager->addToggle('class="toggle1"');
         $pager->addToggle('class="toggle2"');
+        $pager->addPageTags(array('TITLE'=>'Re-application Waiting List - ' . Term::toString($term)));
         $pager->addRowTags('waitingListTags');
         $pager->setReportRow('waitingListCsvTags');
         $pager->setSearch('hms_new_application.username', 'hms_new_application.banner_id');

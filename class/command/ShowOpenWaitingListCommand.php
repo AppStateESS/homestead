@@ -1,11 +1,11 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'LotteryWaitingListView.php');
+PHPWS_Core::initModClass('hms', 'OpenWaitingListView.php');
 
-class ShowLotteryWaitingListCommand extends Command {
+class ShowOpenWaitingListCommand extends Command {
 
     public function getRequestVars(){
-        return array('action'=>'ShowLotteryWaitingList');
+        return array('action'=>'ShowOpenWaitingList');
     }
 
     public function execute(CommandContext $context)
@@ -14,10 +14,11 @@ class ShowLotteryWaitingListCommand extends Command {
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to add lottery entries.');
         }
-         
-        $view = new LotteryWaitingListView();
+        
+        $view = new OpenWaitingListView();
         $context->setContent($view->show());
     }
+
 }
 
 ?>

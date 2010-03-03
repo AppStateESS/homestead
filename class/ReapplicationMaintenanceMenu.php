@@ -13,7 +13,8 @@ class ReapplicationMaintenanceMenu extends CommandMenu {
 		$this->addCommandByName('Set automatic winners', 'ShowLotteryAutoWinners');
 		$this->addCommandByName('Eligibility waivers', 'ShowLotteryEligibilityWaiver');
 		$this->addCommandByName('Interest group approval', 'ShowSpecialInterestGroupApproval');
-		$this->addCommandByName('Waiting list', 'ShowLotteryWaitingList');
+		$this->addCommandByName('Re-Application waiting list', 'ShowLotteryWaitingList');
+		$this->addCommandByName('Open Waiting list', 'ShowOpenWaitingList');
 	}
 	
 	public function show()

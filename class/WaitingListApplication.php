@@ -99,6 +99,95 @@ class WaitingListApplication extends HousingApplication {
 
         return TRUE;
     }
+
+    public function waitingListTags()
+    {
+        //test($this,1);
+        
+        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
+
+        $student = StudentFactory::getStudentByUsername($this->username, $this->term);
+
+        $tags = array();
+
+        $tags['NAME']       = $student->getFullNameProfileLink();
+        $tags['USER']       = $this->username;
+        $tags['BANNER_ID']  = $student->getBannerId();
+        $tags['CLASS']      = $student->getPrintableClass();
+
+        if(isset($this->cell_phone) && !is_null($this->cell_phone) && $this->cell_phone != ''){
+            $tags['PHONE']      = '('.substr($this->cell_phone, 0, 3).')';
+            $tags['PHONE']      .= substr($this->cell_phone, 3, 3);
+            $tags['PHONE']      .= '-'.substr($this->cell_phone, 6, 4);
+        }
+
+        $tags['GENDER']     = $student->getPrintableGender();
+
+
+        $assign_link = PHPWS_Text::secureLink('[Assign]','hms', array('module'=>'hms', 'action'=>'ShowAssignStudent', 'username'=>$this->username));
+        $remove_link = PHPWS_Text::secureLink('[Remove]','hms', array('module'=>'hms', 'action'=>'WaitingListRemove', 'username'=>$this->username));
+        $tags['ACTION']     = "$assign_link $remove_link";
+
+        return $tags;
+    }
+
+    public function waitingListCsvTags()
+    {
+        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
+
+        $student = StudentFactory::getStudentByUsername($this->username, $this->term);
+
+        $tags = array();
+
+        $tags['NAME']       = $student->getFulLName();
+        $tags['USER']       = $this->username;
+        $tags['BANNER_ID']  = $student->getBannerId();
+        $tags['CLASS']      = $student->getPrintableClass();
+        $tags['GENDER']     = $student->getPrintableGender();
+
+        if(isset($this->cell_phone) && !is_null($this->cell_phone) && $this->cell_phone != ''){
+            $tags['PHONE']      = '('.substr($this->cell_phone, 0, 3).')';
+            $tags['PHONE']      .= substr($this->cell_phone, 3, 3);
+            $tags['PHONE']      .= '-'.substr($this->cell_phone, 6, 4);
+        }
+
+        return $tags;
+    }
+
+    /*********************
+     *  Static functions *
+     */
+
+    public function waitingListPager()
+    {
+        PHPWS_Core::initCoreClass('DBPager.php');
+
+        $term = PHPWS_Settings::get('hms', 'lottery_term');
+
+        $pager = new DBPager('hms_new_application', 'WaitingListApplication');
+        $pager->db->addJoin('LEFT OUTER', 'hms_new_application', 'hms_waitlist_application', 'id', 'id');
+        $pager->db->addJoin('LEFT OUTER', 'hms_new_application', 'hms_assignment', 'username', 'asu_username AND hms_new_application.term = hms_assignment.term');
+        $pager->db->addWhere('hms_assignment.asu_username', 'NULL');
+        $pager->db->addWhere('hms_new_application.term', $term);
+        $pager->db->addWhere('hms_new_application.application_type', 'offcampus_waiting_list');
+        $pager->db->addWhere('hms_new_application.physical_disability', 0);
+        $pager->db->addWhere('hms_new_application.psych_disability', 0);
+        $pager->db->addWhere('hms_new_application.medical_need', 0);
+        $pager->db->addWhere('hms_new_application.gender_need', 0);
+        $pager->db->addWhere('hms_waitlist_application.waiting_list_hide', 0);
+
+        $pager->setModule('hms');
+        $pager->setTemplate('admin/lottery_wait_list_pager.tpl');
+        $pager->setEmptyMessage('No students found.');
+        $pager->addToggle('class="toggle1"');
+        $pager->addToggle('class="toggle2"');
+        $pager->addPageTags(array('TITLE'=>'Open Waiting List - ' . Term::toString($term)));
+        $pager->addRowTags('waitingListTags');
+        $pager->setReportRow('waitingListCsvTags');
+        $pager->setSearch('hms_new_application.username', 'hms_new_application.banner_id');
+
+        return $pager->get();
+    }
 }
 
 ?>
