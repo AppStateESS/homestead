@@ -282,6 +282,7 @@ class HousingApplication {
     /**
      *
      */
+    //TODO move this to the HousingApplicationFactory class, perhaps?
     function getApplicationByUser($username, $term)
     {
         PHPWS_Core::initModClass('hms', 'HousingApplication.php');

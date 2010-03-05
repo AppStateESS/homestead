@@ -104,40 +104,48 @@ class HousingApplicationFactory {
 
     public static function getApplicationById($id)
     {
+        PHPWS_Core::initModClass('hms', 'HousingApplication.php');
+        PHPWS_Core::initModClass('hms', 'FallApplication.php');
+        PHPWS_Core::initModClass('hms', 'SpringApplication.php');
+        PHPWS_Core::initModClass('hms', 'SummerApplication.php');
+        PHPWS_Core::initModClass('hms', 'LotteryApplication.php');
+        PHPWS_Core::initModClass('hms', 'WaitingListApplication.php');
+        
         $application = new HousingApplication();
         $db = new PHPWS_DB('hms_new_application');
         $db->addWhere('id', $id);
         $result = $db->loadObject($application);
         
         if(PHPWS_Error::logIfError($result)){
-            throw new Exception("Application does not exist!");
+            throw new Exception("There was an retreiving the HousingApplication object from the database.");
         }
         
-        if($application->student_type != 'F' && $application->student_type != 'T'){
-            $semester = Term::getTermSem($application->term);
-            switch($semester){
-                case TERM_SUMMER1: 
-                case TERM_SUMMER2:
-                    $application = new SummerApplication($application->id);
-                    break;
-                case TERM_SPRING:
-                    $application = new SpringApplication($application->id);
-                    break;
-                case TERM_FALL:
-                    $application = new FallApplication($application->id);
-                    break;
-                default:
-                    throw new Exception("Unable to determine the term!");
-            }
-        } else {
-            if($application->student_type == 'F'){
-                $application = new FallApplication($application->id);
-            } else {
-                $application = new SpringApplication($application->id);
-            }
+        if(is_null($application)){
+            return null;
+        }
+
+        switch($application->application_type){
+            case 'fall':
+                $app = new FallApplication($application->id);
+                break;
+            case 'spring':
+                $app = new SpringApplication($application->id);
+                break;
+            case 'summer':
+                $app = new SummerApplication($application->id);
+                break;
+            case 'lottery':
+                $app = new LotteryApplication($application->id);
+                break;
+            case 'offcampus_waiting_list':
+                $app = new WaitingListApplication($application->id);
+                break;
+            default:
+                test('ohh hai2',1);
+                throw new InvalidArgumentException('Unknown application type: ' . $application->application_type);
         }
         
-        return $application;
+        return $app;
     }
 
 }
