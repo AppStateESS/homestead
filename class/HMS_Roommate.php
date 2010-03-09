@@ -657,6 +657,8 @@ class HMS_Roommate
      * Email Methods *
      *****************/
      
+    //TODO move email messages below into templates of their own and use HMS_Email class
+    
     public function send_request_emails() 
     {
         PHPWS_Core::initModClass('hms', 'HMS_Email.php');
@@ -859,56 +861,6 @@ class HMS_Roommate
     /**************
      * UI Methods *
      **************/
-
-    public function delete_roommate_group()
-    {
-        if(!Current_User::allow('hms', 'roommate_maintenance')){
-            $tpl = array();
-            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
-        }
-
-        $roommate_group = new HMS_Roommate($_REQUEST['id']);
-
-        # Save the user names for logging if all goes well
-        $requestor = $roommate_group->requestor;
-        $requestee = $roommate_group->requestee;
-
-        # Attempt to actually delete the group
-        $result = $roommate_group->delete();
-
-        if(!$result){
-            return HMS_Roommate::show_confirmed_roommates(NULL,'Error deleting group.');
-        }else{
-            PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-            HMS_Activity_Log::log_activity($requestor, ACTIVITY_ADMIN_REMOVED_ROOMMATE, Current_User::getUsername(), $requestee);
-            HMS_Activity_Log::log_activity($requestee, ACTIVITY_ADMIN_REMOVED_ROOMMATE, Current_User::getUsername(), $requestor);
-            return HMS_Roommate::show_confirmed_roommates('Roommate group deleted.');
-        }
-    }
-
-    public function show_confirmed_roommates($success = NULL, $error = NULL)
-    {
-        if(!Current_User::allow('hms', 'roommate_maintenance')){
-            $tpl = array();
-            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
-        }
-        
-        $tpl = array();
-
-        $tpl['MENU_LINK']   = PHPWS_Text::secureLink('Back to Main Menu', 'hms', array('type'=>'maintenance', 'op'=>'show_maintenance_options'));
-        $tpl['PAGER']       = HMS_Roommate::roommate_pager();
-        $tpl['TITLE']      = 'Confrimed Roommates - ' . Term::toString(Term::getSelectedTerm(), TRUE);
-
-        if(isset($success)){
-            $tpl['SUCCESS_MSG'] = $success;
-        }
-
-        if(isset($error)){
-            $tpl['ERROR_MSG'] = $error;
-        }
-        
-        return PHPWS_Template::process($tpl, 'hms', 'admin/show_confirmed_roommates.tpl');
-    }
 
     /**
      * Shows a pager of roommate requests
