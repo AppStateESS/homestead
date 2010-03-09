@@ -124,8 +124,9 @@ class WaitingListApplication extends HousingApplication {
         $tags['GENDER']     = $student->getPrintableGender();
 
 
+        // TODO.. fix these - they should actually instanciate the command objects
         $assign_link = PHPWS_Text::secureLink('[Assign]','hms', array('module'=>'hms', 'action'=>'ShowAssignStudent', 'username'=>$this->username));
-        $remove_link = PHPWS_Text::secureLink('[Remove]','hms', array('module'=>'hms', 'action'=>'WaitingListRemove', 'username'=>$this->username));
+        $remove_link = PHPWS_Text::secureLink('[Remove]','hms', array('module'=>'hms', 'action'=>'OpenWaitingListRemove', 'username'=>$this->username));
         $tags['ACTION']     = "$assign_link $remove_link";
 
         return $tags;
