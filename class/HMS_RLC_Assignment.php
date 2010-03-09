@@ -44,7 +44,7 @@ class HMS_RLC_Assignment{
 
     public function init()
     {
-        $db = &new PHPWS_DB('hms_learning_community_assignment');
+        $db = new PHPWS_DB('hms_learning_community_assignment');
 
         $db->addWhere('id',$this->getId(), '=');
 
@@ -123,7 +123,7 @@ class HMS_RLC_Assignment{
      */
     public function save()
     {
-        $db = &new PHPWS_DB('hms_learning_community_assignment');
+        $db = new PHPWS_DB('hms_learning_community_assignment');
 
         $db->addValue('asu_username',         $this->getAsuUsername());
         $db->addValue('rlc_id',               $this->getRlcId());
@@ -197,14 +197,14 @@ class HMS_RLC_Assignment{
     public function view_by_rlc_pager($rlc_id)
     {
         // Get the community name for the title
-        $db = &new PHPWS_DB('hms_learning_communities');
+        $db = new PHPWS_DB('hms_learning_communities');
         $db->addWhere('id', $rlc_id);
         $db->addColumn('community_name');
         $tags['TITLE'] = $db->select('one') . ' Assignments ' . Term::toString(Term::getSelectedTerm(), TRUE);
        
         PHPWS_Core::initCoreClass('DBPager.php');
         
-        $pager = &new DBPager('hms_learning_community_assignment', 'HMS_RLC_Assignment');
+        $pager = new DBPager('hms_learning_community_assignment', 'HMS_RLC_Assignment');
         $pager->db->addJoin('LEFT OUTER', 'hms_learning_community_assignment', 'hms_learning_community_applications', 'id', 'hms_assignment_id');
         $pager->db->addWhere('hms_learning_community_applications.term', Term::getSelectedTerm()); 
         $pager->db->addWhere('rlc_id', $rlc_id);
