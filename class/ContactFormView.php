@@ -15,7 +15,7 @@ class ContactFormView extends View {
         $tpl = array();
         $tpl['TITLE'] = 'Contact Form';
 
-        $form = &new PHPWS_Form();
+        $form = new PHPWS_Form();
 
         $form->addText('name');
         $form->setLabel('name', 'Name');
