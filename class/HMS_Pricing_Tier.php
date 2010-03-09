@@ -4,6 +4,8 @@
  * HMS Pricing Tier class
  *
  * @author Jeremy Booker <jbooker at tux dot appstate dot edu>
+ * 
+ * TODO: We've never had any need for these in HMS. See if housing still needs them. See ticket #520
  */
 
 class HMS_Pricing_Tier
