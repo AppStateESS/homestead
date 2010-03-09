@@ -2,7 +2,6 @@
 
 PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-PHPWS_Core::initModClass('hms', 'HMS_Deadlines.php');
 PHPWS_Core::initModClass('hms', 'HousingApplication.php');
 
 class ShowStudentMenuCommand extends Command {
@@ -51,14 +50,6 @@ class ShowStudentMenuCommand extends Command {
 
         # Check for an assignment in the current term. So far, this only matters for type 'Z' (readmit) students
         $assignment = HMS_Assignment::checkForAssignment($username, $currentTerm);
-
-        # Get deadlines for the current term for future use
-        if($applicationTerm <= $currentTerm || ($studentType == TYPE_READMIT && $assignment === TRUE)){
-            $deadlines = HMS_Deadlines::get_deadlines(PHPWS_Settings::get('hms', 'lottery_term'));
-        }else{
-            $deadlines = HMS_Deadlines::get_deadlines($applicationTerm);
-        }
-
 
         /******************************************
          * Sort returning students (lottery) from *
