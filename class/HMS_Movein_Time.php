@@ -40,6 +40,19 @@ class HMS_Movein_Time
         }
         return true;
     }
+    
+    public function delete()
+    {
+        $db = new PHPWS_DB('hms_movein_time');
+
+        $db->addWhere('id', $this->id);
+        $result = $db->delete();
+
+        if(!$result || PHPWS_Error::logIfError($result)){
+            return false;
+        }
+        return true;
+    }
 
     public function get_formatted_begin_end()
     {
@@ -63,25 +76,6 @@ class HMS_Movein_Time
     /******************
      * Static Methods *
      *****************/
-     
-    public function main()
-    {
-        switch($_REQUEST['op'])
-        {
-            case 'show_edit_movein_times':
-                return HMS_Movein_Time::show_edit_movein_times();
-                break;
-            case 'create_movein_time':
-                return HMS_Movein_Time::create_movein_time();
-                break;
-            case 'delete_movein_time':
-                return HMS_Movein_Time::delete_movein_time();
-                break;
-            default:
-                echo "Unknown movein-time op: {$_REQUEST['op']}";
-                return;
-        }
-    }
 
     public function get_movein_times_array($term = NULL)
     {
@@ -112,88 +106,6 @@ class HMS_Movein_Time
 
         return $timestamps;
     }
-
-    /*********************
-     * Static UI Methods *
-     ********************/
-
-    public function show_edit_movein_times($success = null, $error = null)
-    {
-        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
-
-        $tpl['TITLE'] = 'Edit Move-in Times';
-        $tpl['TITLE_CLASS'] = HMS_Util::get_title_class();
-        
-        $form = new PHPWS_Form();
-        
-        $form->addDropBox('begin_day', HMS_Util::get_days());
-        $form->addDropBox('begin_month', HMS_Util::get_months());
-        $form->addDropBox('begin_year', HMS_Util::get_years_2yr());
-        $form->addDropBox('begin_hour', HMS_Util::get_hours());
-        
-        $form->addDropBox('end_day', HMS_Util::get_days());
-        $form->addDropBox('end_month', HMS_Util::get_months());
-        $form->addDropBox('end_year', HMS_Util::get_years_2yr());
-        $form->addDropBox('end_hour', HMS_Util::get_hours());
-        
-        $form->addSubmit('submit', 'Create');
-
-        $form->addHidden('type', 'movein');
-        $form->addHidden('op', 'create_movein_time');
-
-        $tpl['MOVEIN_TIME_PAGER'] = HMS_Movein_Time::get_movein_times_pager();
-
-        if(isset($success)){
-            $tpl['SUCCESS_MSG'] = $success;
-        }
-
-        if(isset($error)){
-            $tpl['ERROR_MSG'] = $error;
-        }
-
-        $form->mergeTemplate($tpl);
-        $tpl = $form->getTemplate();
-
-        return PHPWS_Template::process($tpl, 'hms', 'admin/edit_movein_time.tpl');
-    }
-
-    public function create_movein_time()
-    {
-        # Create the timestamp
-        $begin_timestamp    = mktime($_REQUEST['begin_hour'], 0, 0, $_REQUEST['begin_month'], $_REQUEST['begin_day'], $_REQUEST['begin_year']);
-        $end_timestamp      = mktime($_REQUEST['end_hour'], 0, 0, $_REQUEST['end_month'], $_REQUEST['end_day'], $_REQUEST['end_year']);
-
-        if($end_timestamp <= $begin_timestamp){
-            return HMS_Movein_Time::show_edit_movein_times(NULL, 'Error: The ending time must be after the beginning time.');
-        }
-        
-        # Create the new movein time object
-        $movein_time = &new HMS_Movein_Time();
-        $movein_time->begin_timestamp = $begin_timestamp;
-        $movein_time->end_timestamp   = $end_timestamp;
-        $movein_time->term = Term::getSelectedTerm();
-
-        $result = $movein_time->save();
-
-        if(!$result || PHPWS_Error::logIfError($result)){
-            return HMS_Movein_Time::show_edit_movein_times(NULL, 'There was an error saving the move-in time.');
-        }else{
-            return HMS_Movein_Time::show_edit_movein_times('Move-in time saved successfully.');
-        }
-    }
-
-    public function delete()
-    {
-        $db = &new PHPWS_DB('hms_movein_time');
-
-        $db->addWhere('id', $this->id);
-        $result = $db->delete();
-
-        if(!$result || PHPWS_Error::logIfError($result)){
-            return false;
-        }
-        return true;
-    }
     
     public function get_movein_times_pager(){
         PHPWS_Core::initCoreClass('DBPager.php');
@@ -218,7 +130,5 @@ class HMS_Movein_Time
 
         return $pager->get();
     }
-
 }
-
 ?>
