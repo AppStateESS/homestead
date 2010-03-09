@@ -75,6 +75,7 @@ class HMS_RLC_Application{
         return TRUE;
     }
 
+    //TODO loadObject
     public function init($user_id = NULL, $term = NULL)
     {
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
@@ -107,6 +108,7 @@ class HMS_RLC_Application{
 
     /**
      * Saves the current Application object to the database.
+     * TODO: saveObject
      */
     public function save()
     {
@@ -153,52 +155,6 @@ class HMS_RLC_Application{
     /*****************
      * Static Methods *
      *****************/
-
-    /**
-     * Creates a new application object from $_REQUEST data and saves it the database.
-     */
-    public function save_application()
-    {
-        $application = new HMS_RLC_Application($_SESSION['asu_username']);
-
-        $application->setUserID($_SESSION['asu_username']);
-        $application->setFirstChoice($_REQUEST['rlc_first_choice']);
-        if($_REQUEST['rlc_second_choice'] > -1){
-            $application->setSecondChoice($_REQUEST['rlc_second_choice']);
-        }
-        if($_REQUEST['rlc_third_choice'] > -1){
-            $application->setThirdChoice($_REQUEST['rlc_third_choice']);
-        }
-        $application->setWhySpecificCommunities($_REQUEST['why_specific_communities']);
-        $application->setStrengthsWeaknesses($_REQUEST['strengths_weaknesses']);
-        $application->setRLCQuestion0($_REQUEST['rlc_question_0']);
-        $application->setEntryTerm($_SESSION['application_term']);
-
-        if(isset($_REQUEST['rlc_question_1'])){
-            $application->setRLCQuestion1($_REQUEST['rlc_question_1']);
-        }else{
-            $application->setRLCQuestion1(NULL);
-        }
-
-        if(isset($_REQUEST['rlc_question_2'])){
-            $application->setRLCQuestion2($_REQUEST['rlc_question_2']);
-        }else{
-            $application->setRLCQuestion2(NULL);
-        }
-
-        $application->term = $_SESSION['application_term'];
-
-        $result = $application->save();
-
-        if(PEAR::isError($result)){
-            PHPWS_Error::log($result,'hms','Caught error from Application::save()');
-        }
-
-        PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-        HMS_Activity_Log::log_activity($_SESSION['asu_username'], ACTIVITY_RLC_APP_SUBMITTED, Current_User::getUsername(), "Submitted an RLC application");
-
-        return $result;
-    }
 
     /**
      * Check to see if an application already exists for the specified user. Returns FALSE if no application exists.
@@ -388,7 +344,7 @@ class HMS_RLC_Application{
     /****************************************************************/
     public function getDropDown()
     {
-        $db = &new PHPWS_DB('hms_learning_communities');
+        $db = new PHPWS_DB('hms_learning_communities');
         $result = $db->select();
 
         if( PHPWS_Error::logIfError($result) ) {
@@ -402,7 +358,7 @@ class HMS_RLC_Application{
 
         javascript('/modules/hms/page_refresh');
 
-        $form = &new PHPWS_Form('dropdown_selector');
+        $form = new PHPWS_Form('dropdown_selector');
         $form->setMethod('get');
         $form->addSelect('rlc', $communities);
         if( isset($_REQUEST['rlc']) ) {
@@ -415,66 +371,6 @@ class HMS_RLC_Application{
         $form->addHidden('op', 'assign_applicants_to_rlcs');
 
         return $form->getTemplate();
-    }
-
-    /**
-     * Marks an RLC application as denied
-     */
-    public function deny_rlc_application()
-    {
-        if(!Current_User::allow('hms', 'approve_rlc_applications')){
-            $tpl = array();
-            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
-        }
-
-        $db = new PHPWS_DB('hms_learning_community_applications');
-        $db->addWhere('id', $_REQUEST['id']);
-        $app = $db->select('row');
-
-        $db = new PHPWS_DB('hms_learning_community_applications');
-        $db->addWhere('id', $_REQUEST['id']);
-        $db->addValue('denied', 1);
-
-        $result = $db->update();
-
-        if(PEAR::isError($result)){
-            PHPWS_Error::log($result);
-            return HMS_Learning_Community::assign_applicants_to_rlcs(null, 'There was an error working with the database. The application was not modified.');
-        }else{
-            $result = $db->select();
-            PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-            HMS_Activity_Log::log_activity($app['user_id'], 28, Current_User::getUsername(), 'Application Denied');
-
-            return HMS_Learning_Community::assign_applicants_to_rlcs('Application denied.');
-        }
-    }
-
-    /**
-     * Marks an RLC application as un-denied
-     */
-    public function un_deny_rlc_application()
-    {
-        if(!Current_User::allow('hms', 'approve_rlc_applications')){
-            $tpl = array();
-            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
-        }
-
-        $db = new PHPWS_DB('hms_learning_community_applications');
-        $db->addWhere('id', $_REQUEST['id']);
-        $db->addValue('denied', 0);
-
-        $result = $db->update();
-
-        if(PEAR::isError($result)){
-            PHPWS_Error::log($result);
-            return HMS_Learning_Community::show_view_denied(null, 'There was an error working with the database. The application was not modified.');
-        }else{
-            $result = $db->select();
-            PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-            HMS_Activity_Log::log_activity($result['user_id'], 29, Current_User::getUsername(), "Application un-denied");
-
-            return HMS_Learning_Community::show_view_denied('Application un-denied.');
-        }
     }
 
     /**
