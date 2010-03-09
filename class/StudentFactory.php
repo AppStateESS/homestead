@@ -51,10 +51,16 @@ class StudentFactory {
 		$student->setApplicationTerm($soapData->application_term);
 		$student->setType($soapData->student_type);
 		$student->setClass($soapData->projected_class);
+		$student->setStudentLevel($soapData->student_level);
 		$student->setCreditHours($soapData->credhrs_completed);
 		
 		$student->setDepositDate($soapData->deposit_date);
 		$student->setDepositWaived($soapData->deposit_waived);
+		
+		$student->setInternational($soapData->international);
+		$student->setHonors($soapData->honors);
+		$student->setTeachingFellow($soapData->teaching_fellow);
+		$student->setWataugaMember($soapData->watauga_member);
 		
 		$phoneNumbers = array();
 		

@@ -31,11 +31,23 @@ class TestSOAP extends SOAP{
         $student->gender                = 'M';
         $student->deposit_date          = '';
         $student->deposit_waived        = 'false';
+        
+        $student->international         = 'false';
+        $student->student_level         = 'U';
+        
+        $student->honors                = 'false';
+        $student->teaching_fellow       = 'false';
+        $student->watauga_member        = 'false';
+        
 
-   		$student->student_type          = 'F';
-   		$student->application_term      = '201040';
-   		$student->projected_class       = 'FR';
+//   		$student->student_type          = 'T';
+//   		$student->application_term      = '201040';
+//   		$student->projected_class       = 'FR';
 
+          $student->student_type          = 'C';
+          $student->application_term      = '200940';
+          $student->projected_class       = 'JR';
+        
 //        $student->student_type          = 'F';
 //        $student->application_term      = '201020';
 //        $student->projected_class       = 'SR';
@@ -51,14 +63,6 @@ class TestSOAP extends SOAP{
             $student->application_term  = '201020';
             $student->projected_class   = 'FR';
         }
-
-        if($username == 'jb67803') {
-            $student->banner_id = 987654321;
-        }
-
-        //$student->student_type          = 'T';
-        //$student->application_term      = '200940';
-        //$student->projected_class       = 'FR';
 
         $student->credhrs_completed     = 0;
         $student->credhrs_for_term      = 15;
