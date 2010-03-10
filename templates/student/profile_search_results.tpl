@@ -1,5 +1,4 @@
-<h2>Search Results</h2>
+<h2>Roommate Profile Search Results</h2>
 
-<br /><br />
 
 {RESULTS}

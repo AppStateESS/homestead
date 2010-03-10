@@ -7,14 +7,14 @@ class RoommateProfileSearchCommand extends Command {
         return array('action'=>'RoommateProfileSearch');
     }
 
-    //TODO update all this
     public function execute(CommandContext $context)
     {
+        PHPWS_Core::initModClass('hms', 'RoommateProfile.php');
+        
         $tags = array();
-
-        $tags['RESULTS'] = HMS_Student_Profile::profile_search_pager();
-
-        return PHPWS_Template::process($tags, 'hms', 'student/profile_search_results.tpl');
+        $tags['RESULTS'] = RoommateProfile::profile_search_pager();
+        
+        $context->setContent(PHPWS_Template::process($tags, 'hms', 'student/profile_search_results.tpl'));
     }
 }
 

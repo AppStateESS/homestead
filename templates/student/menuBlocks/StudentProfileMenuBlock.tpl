@@ -1,4 +1,4 @@
-<h3>Roommate Profile</h3>
+<h3>Your Roommate Profile</h3>
 
 <p>The Roommate Profile is optional and can be used to help you find a roommate who shares your hobbies and interests. Once you complete your profile, you will be able to search for other students who share your interests based on their profiles.</p>
 

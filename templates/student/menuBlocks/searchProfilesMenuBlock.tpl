@@ -1,18 +1,17 @@
-<h3>Search Profiles</h3>
+<h3>Search Roommate Profiles</h3>
 <!-- BEGIN too_soon -->
 This feature will be available on {BEGIN_DEADLINE}.
 <!-- END too_soon -->
 
 <!-- BEGIN too_late -->
-The deadline to apply for this term was {END_DEADLINE}.
+Roommate profile searching ended on {END_DEADLINE}.
 <!-- END too_late -->
 
-<!-- BEGIN review_app -->
-You've already applied for this term.
-    {VIEW_APP}
-<!-- END review_app -->
+<!-- BEGIN no_profile -->
+To use the roommate profile search feature, please create your profile first in the section above. {NO_PROFILE}
+<!-- END no_profile -->
 
 <!-- BEGIN no_app -->
-You have not applied for this term yet.
-    {APP_NOW}
+Click the link below to use the Roommate Search Tool to look for potential roommates based on their profiles.<br />
+    {SEARCH_ROOMMATES}
 <!-- END no_app -->

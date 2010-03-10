@@ -28,8 +28,12 @@ class SearchProfiles extends ApplicationFeature {
 
     public function getMenuBlockView(Student $student)
     {
+        PHPWS_Core::initModClass('hms', 'RoommateProfile.php');
         PHPWS_Core::initModClass('hms', 'SearchProfilesMenuBlockView.php');
-        return new SearchProfilesMenuBlockView($student, $this->getStartDate(), $this->getEndDate());
+        
+        $profile = RoommateProfile::getProfile($student->getUsername(), $this->term);
+        
+        return new SearchProfilesMenuBlockView($student, $this->getStartDate(), $this->getEndDate(), $profile);
     }
 
 }

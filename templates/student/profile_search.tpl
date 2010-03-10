@@ -1,8 +1,7 @@
 <div class="hms">
   <div class="box">
-    <div class="box-title"> <h1>Profile Search</h1> </div>
+    <div class="box-title"> <h1>Roommate Profile Search</h1> </div>
     <div class="box-content">
-    {MENU_LINK}<br /><br />
         Select the qualities and attributes below which you would like your roommate to posses. This tool only searches for <b>exact</b> matches
         to the information you supply below. If no results are found,
         you should try a broader search by selecting fewer attributes. If you enter an ASU user name, all other fields will be ignored.
@@ -16,14 +15,14 @@
             </tr>
             <tr>
                 <td>{ASU_USERNAME_LABEL}</td>
-                <td>{ASU_USERNAME}</td>
+                <td>{ASU_USERNAME}@appstate.edu</td>
             </tr>
             <tr>
                 <th colspan="2">2. Music &amp; Hobbies</th>
             </tr>
             <tr>
                 <td colspan="2">
-                    <table width="100%" cellspacing="2" cellpadding="3" rows="1" cols="2">
+                    <table width="100%" cellspacing="2" cellpadding="3">
                         <tr>
                             <td valign="top" width="50%">{HOBBIES_CHECKBOX_QUESTION}<br />
                             <!-- BEGIN hobbies_checkbox_repeat -->
