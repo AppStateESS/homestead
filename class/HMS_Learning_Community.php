@@ -87,6 +87,10 @@ class HMS_Learning_Community extends HMS_Item
         $this->set_capacity($_REQUEST['capacity']);
     }
 
+    public function rowTags(){
+        return array('ACTIONS' => "<a href=\"index.php?module=hms&action=ShowAddRlc&id={$this->id}\">Edit</a>");
+    }
+
     /**
      * Get a JSON encoded view of the learning community.
      *
