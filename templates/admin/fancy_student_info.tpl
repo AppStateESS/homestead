@@ -50,18 +50,6 @@
                         <td>{INTERNATIONAL}</td>
                     </tr>
                     <tr>
-                        <th>Honors</th>
-                        <td>{HONORS}</td>
-                    </tr>
-                    <tr>
-                        <th>Teaching Fellow</th>
-                        <td>{TEACHING_FELLOW}</td>
-                    </tr>
-                    <tr>
-                        <th>Watauga Global</th>
-                        <td>{WATAUGA}</td>
-                    </tr>
-                    <tr>
                         <th>Phone Number</th>
                         <td>
                     <!-- BEGIN phone_number -->
@@ -122,7 +110,19 @@
                         <td>{RLC_STATUS}</td>
                     </tr>
                     <tr>
-                        <th>Special Interest Group: </th>
+                        <th>Honors</th>
+                        <td>{HONORS}</td>
+                    </tr>
+                    <tr>
+                        <th>Teaching Fellow</th>
+                        <td>{TEACHING_FELLOW}</td>
+                    </tr>
+                    <tr>
+                        <th>Watauga Global Member</th>
+                        <td>{WATAUGA}</td>
+                    </tr>
+                    <tr>
+                        <th>Re-application Special Interest Group: </th>
                         <td>{SPECIAL_INTEREST}</td>
                     </tr>
                 </table>
