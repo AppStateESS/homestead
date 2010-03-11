@@ -9,16 +9,27 @@
         <br />
         <!-- BEGIN search_form -->
         {START_FORM}
+        
+        <h3>Search by ASU User name</h3>
         <table cellspacing="2" cellpadding="3">
-            <tr>
-                <th colspan="2">1. Search By ASU Username</th>
-            </tr>
             <tr>
                 <td>{ASU_USERNAME_LABEL}</td>
                 <td>{ASU_USERNAME}@appstate.edu</td>
             </tr>
             <tr>
-                <th colspan="2">2. Music &amp; Hobbies</th>
+                <td colspan="2">{SUBMIT}</td>
+            </tr>
+        </table>
+
+        <div align="center">
+            <strong> -- OR -- </strong>
+        </div>
+
+        <h3>Search By Preferences</h3>
+        
+        <table cellspacing="2" cellpadding="3">
+            <tr>
+                <th colspan="2">1. Music &amp; Hobbies</th>
             </tr>
             <tr>
                 <td colspan="2">
@@ -43,7 +54,7 @@
                 <td>{POLITICAL_VIEWS_DROPBOX}<br />&nbsp;</td>
             </tr>
             <tr>
-                <th colspan="2">3. College Life</th>
+                <th colspan="2">2. College Life</th>
             </tr>
             <tr valign="top">
                 <td>{INTENDED_MAJOR_LABEL}</td>
@@ -54,7 +65,7 @@
                 <td>{IMPORTANT_EXPERIENCE}<br />&nbsp;</td>
             </tr>
             <tr>
-                <th colspan="2">4. Daily Life</th>
+                <th colspan="2">3. Daily Life</th>
             </tr>
             <tr valign="top">
                 <td>{SLEEP_TIME_LABEL}</td>

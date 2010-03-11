@@ -564,7 +564,7 @@ class RoommateProfile{
         $pager->setModule('hms');
         $pager->setTemplate('student/profile_search_pager.tpl');
         $pager->setLink('index.php?module=hms');
-        $pager->setEmptyMessage("No matches found.");
+        $pager->setEmptyMessage("No matches found. Try broadening your search by selecting fewer criteria.");
         $pager->addToggle('class="toggle1"');
         $pager->addToggle('class="toggle2"');
         $pager->addRowTags('getPagerTags');
