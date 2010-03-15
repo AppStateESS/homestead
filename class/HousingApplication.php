@@ -189,7 +189,7 @@ class HousingApplication {
             $send_to[] = 'jbooker@tux.appstate.edu';
             $send_to[] = 'jtickle@tux.appstate.edu';
 
-            $mail = &new PHPWS_Mail;
+            $mail = new PHPWS_Mail;
 
             $mail->addSendTo($send_to);
             $mail->setFrom('hms@tux.appstate.edu');
@@ -256,7 +256,7 @@ class HousingApplication {
      */
     public static function checkForApplication($username, $term, $withdrawn = FALSE)
     {
-        $db = &new PHPWS_DB('hms_new_application');
+        $db = new PHPWS_DB('hms_new_application');
         $db->addWhere('username',$username,'ILIKE');
 
         $db->addWhere('term', $term);

@@ -373,7 +373,7 @@ class HMS_Bed extends HMS_Item {
 
 	public function is_lottery_reserved()
 	{
-		$db = &new PHPWS_DB('hms_lottery_reservation');
+		$db = new PHPWS_DB('hms_lottery_reservation');
 		$db->addWhere('bed_id', $this->id);
 		$db->addWhere('term', $this->term);
 		$db->addWhere('expires_on', mktime(), '>');
@@ -393,7 +393,7 @@ class HMS_Bed extends HMS_Item {
 
 	public function get_lottery_reservation_info()
 	{
-		$db = &new PHPWS_DB('hms_lottery_reservation');
+		$db = new PHPWS_DB('hms_lottery_reservation');
 		$db->addWhere('bed_id', $this->id);
 		$db->addWhere('term', $this->term);
 		$db->addWhere('expires_on', mktime(), '>');
@@ -413,7 +413,7 @@ class HMS_Bed extends HMS_Item {
 			return FALSE;
 		}
 
-		$db = &new PHPWS_DB('hms_lottery_reservation');
+		$db = new PHPWS_DB('hms_lottery_reservation');
 		$db->addValue('asu_username', $username);
 		$db->addValue('requestor', $requestor);
 		$db->addValue('term', $this->term);
@@ -440,7 +440,7 @@ class HMS_Bed extends HMS_Item {
 	 */
 	public static function get_all_free_beds($term, $gender, $randomize = FALSE, $banner = FALSE)
 	{
-		$db = &new PHPWS_DB('hms_bed');
+		$db = new PHPWS_DB('hms_bed');
 
 		if($banner) {
 			$db->addColumn('hms_bed.banner_id');
@@ -622,7 +622,7 @@ class HMS_Bed extends HMS_Item {
 	{
 		PHPWS_Core::initCoreClass('DBPager.php');
 
-		$pager = & new DBPager('hms_bed', 'HMS_Bed');
+		$pager = new DBPager('hms_bed', 'HMS_Bed');
 		$pager->db->addJoin('LEFT OUTER', 'hms_bed', 'hms_room', 'room_id', 'id');
 
 		$pager->addWhere('hms_room.id', $room_id);

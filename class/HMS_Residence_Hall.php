@@ -468,7 +468,7 @@ class HMS_Residence_Hall extends HMS_Item
 
         //and for each room get a list of the beds
         foreach($result as $room){
-            $db = &new PHPWS_DB('hms_bed');
+            $db = new PHPWS_DB('hms_bed');
             $db->addJoin('LEFT OUTER', 'hms_bed', 'hms_room', 'room_id', 'id');
             $db->addWhere('hms_room.id',           $room['id']);
 
@@ -680,7 +680,7 @@ class HMS_Residence_Hall extends HMS_Item
     {
         $halls = array();
 
-        $db = &new PHPWS_DB('hms_residence_hall');
+        $db = new PHPWS_DB('hms_residence_hall');
         $db->addColumn('id');
         $db->addOrder('hall_name', 'DESC');
 
@@ -810,7 +810,7 @@ class HMS_Residence_Hall extends HMS_Item
     public static function residence_hall_pager()
     {
         PHPWS_Core::initCoreClass('DBPager.php');
-        $pager = &new DBPager('hms_residence_hall','HMS_Residence_Hall');
+        $pager = new DBPager('hms_residence_hall','HMS_Residence_Hall');
         $pager->db->addOrder('hall_name','DESC');
         #TODO: $pager->db->addWhere('term', SOMETHING);
 
