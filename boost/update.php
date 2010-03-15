@@ -9,7 +9,7 @@ function hms_update(&$content, $currentVersion)
     switch ($currentVersion) {
         case version_compare($currentVersion, '0.1.2', '<'):
             $db = & new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_1_2.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_1_2.sql');
             if (PEAR::isError($result)) {
                 return $result;
             }
@@ -31,7 +31,7 @@ function hms_update(&$content, $currentVersion)
 
         case version_compare($currentVersion, '0.1.4', '<'):
             $db = & new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_1_4.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_1_4.sql');
             if (PEAR::isError($result)) {
                 return $result;
             }
@@ -52,7 +52,7 @@ function hms_update(&$content, $currentVersion)
 
         case version_compare($currentVersion, '0.1.5', '<'):
             $db = &new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_1_5.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_1_5.sql');
             if(PEAR::isError($result)) {
                 return $result;
             }
@@ -82,7 +82,7 @@ function hms_update(&$content, $currentVersion)
 
         case version_compare($currentVersion, '0.1.6', '<'):
             $db = &new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_1_6.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_1_6.sql');
             if(PEAR::isError($result)) {
                 return $result;
             }
@@ -98,7 +98,7 @@ function hms_update(&$content, $currentVersion)
 
         case version_compare($currentVersion, '0.1.7', '<'):
             $db = &new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_1_7.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_1_7.sql');
             if(PEAR::isError($result)) {
                 return $result;
             }
@@ -121,7 +121,7 @@ function hms_update(&$content, $currentVersion)
 
         case version_compare($currentVersion, '0.1.8', '<'):
             $db = &new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_1_8.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_1_8.sql');
             if(PEAR::isError($result)) {
                 return $result;
             }
@@ -149,7 +149,7 @@ function hms_update(&$content, $currentVersion)
 
         case version_compare($currentVersion, '0.1.9', '<'):
             $db = &new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_1_9.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_1_9.sql');
             if(PEAR::isError($result)) {
                 return $result;
             }
@@ -199,7 +199,7 @@ function hms_update(&$content, $currentVersion)
 
         case version_compare($currentVersion, '0.1.13', '<'):
             $db = &new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_1_13.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_1_13.sql');
             if(PEAR::isError($result)) {
                 return $result;
             }
@@ -225,7 +225,7 @@ function hms_update(&$content, $currentVersion)
 
         case version_compare($currentVersion, '0.1.14', '<'):
             $db = &new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_1_14.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_1_14.sql');
             if(PEAR::isError($result)) {
                 return $result;
             }
@@ -239,7 +239,7 @@ function hms_update(&$content, $currentVersion)
 
         case version_compare($currentVersion, '0.1.15', '<'):
             $db = &new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_1_15.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_1_15.sql');
             if(PEAR::isError($result)) {
                 return $result;
             }
@@ -268,7 +268,7 @@ function hms_update(&$content, $currentVersion)
 
         case version_compare($currentVersion, '0.1.16', '<'):
             $db = &new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_1_16.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_1_16.sql');
             if(PEAR::isError($result)) {
                 return $result;
             }
@@ -323,7 +323,7 @@ function hms_update(&$content, $currentVersion)
 
         case version_compare($currentVersion, '0.1.21', '<'):
             $db = &new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_1_21.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_1_21.sql');
             if(PEAR::isError($result)) {
                 return $result;
             }
@@ -389,7 +389,7 @@ function hms_update(&$content, $currentVersion)
 
         case version_compare($currentVersion, '0.1.22', '<'):
             $db = &new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_1_22.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_1_22.sql');
             if(PEAR::isError($result)) {
                 return $result;
             }
@@ -407,7 +407,7 @@ function hms_update(&$content, $currentVersion)
 
         case version_compare($currentVersion, '0.1.23', '<'):
             $db = &new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_1_23.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_1_23.sql');
             if(PEAR::isError($result)) {
                 return $result;
             }
@@ -418,7 +418,7 @@ function hms_update(&$content, $currentVersion)
 
         case version_compare($currentVersion, '0.1.24', '<'):
             $db = &new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_1_24.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_1_24.sql');
             if(PEAR::isError($result)) {
                 return $result;
             }
@@ -447,7 +447,7 @@ function hms_update(&$content, $currentVersion)
 
         case version_compare($currentVersion, '0.1.25', '<'):
             $db = &new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_1_25.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_1_25.sql');
             if(PEAR::isError($result)) {
                 return $result;
             }
@@ -468,7 +468,7 @@ function hms_update(&$content, $currentVersion)
 
         case version_compare($currentVersion, '0.1.26', '<'):
             $db = &new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_1_26.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_1_26.sql');
             if(PEAR::isError($result)) {
                 return $result;
             }
@@ -498,7 +498,7 @@ function hms_update(&$content, $currentVersion)
 
         case version_compare($currentVersion, '0.1.30', '<'):
             $db = &new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_1_30.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_1_30.sql');
             if(PEAR::isError($result)) {
                 return $result;
             }
@@ -518,7 +518,7 @@ function hms_update(&$content, $currentVersion)
 
         case version_compare($currentVersion, '0.1.31', '<'):
             $db = &new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_1_31.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_1_31.sql');
             if(PEAR::isError($result)){
                 return $result;
             }
@@ -543,7 +543,7 @@ function hms_update(&$content, $currentVersion)
 
         case version_compare($currentVersion, '0.2.0', '<'):
             $db = &new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_0.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_2_0.sql');
             if(PEAR::isError($result)){
                 return $result;
             }
@@ -557,7 +557,7 @@ function hms_update(&$content, $currentVersion)
 
         case version_compare($currentVersion, '0.2.1', '<'):
             $db = &new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_1.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_2_1.sql');
             if(PEAR::isError($result)){
                 return $result;
             }
@@ -566,14 +566,14 @@ function hms_update(&$content, $currentVersion)
 
         case version_compare($currentVersion, '0.2.2', '<'):
             $db = &new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_2.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_2_2.sql');
             if(PEAR::isError($result)) {
                 return $result;
             }
 
         case version_compare($currentVersion, '0.2.3', '<'):
             $db = &new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_3.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_2_3.sql');
             if(PEAR::isError($result)){
                 return $result;
             }
@@ -608,7 +608,7 @@ function hms_update(&$content, $currentVersion)
             $content[] = '+ Maintenance template was phoned in, now properly updated';
         case version_compare($currentVersion, '0.2.8', '<'):
             $db = &new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_8.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_2_8.sql');
             if(PEAR::isError($result)) {
                 return $result;
             }
@@ -661,7 +661,7 @@ function hms_update(&$content, $currentVersion)
 
         case version_compare($currentVersion, '0.2.13', '<'):
             $db = &new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_13.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_2_13.sql');
             if(PEAR::isError($result)) {
                 return $result;
             }
@@ -712,7 +712,7 @@ function hms_update(&$content, $currentVersion)
             PHPWS_Boost::updatefiles($files, 'hms');
         case version_compare($currentVersion, '0.2.16', '<'):
             $db = &new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_16.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_2_16.sql');
             if(PEAR::isError($result)) {
                 return $result;
             }
@@ -722,7 +722,7 @@ function hms_update(&$content, $currentVersion)
 
         case version_compare($currentVersion, '0.2.17', '<'):
             $db = &new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_17.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_2_17.sql');
             if(PEAR::isError($result)) {
                 return $result;
             }
@@ -739,7 +739,7 @@ function hms_update(&$content, $currentVersion)
 
         case version_compare($currentVersion, '0.2.18', '<'):
             $db = &new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_18.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_2_18.sql');
             if(PEAR::isError($result)) {
                 return $result;
             }
@@ -749,7 +749,7 @@ function hms_update(&$content, $currentVersion)
 
         case version_compare($currentVersion, '0.2.19', '<'):
             $db = &new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_19.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_2_19.sql');
             if(PEAR::isError($result)) {
                 return $result;
             }
@@ -761,7 +761,7 @@ function hms_update(&$content, $currentVersion)
 
         case version_compare($currentVersion, '0.2.20', '<'):
             $db = &new PHPWS_DB;
-            $result = $db->importFIle(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_20.sql');
+            $result = $db->importFIle(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_2_20.sql');
             if(PEAR::isError($result)) {
                 return $result;
             }
@@ -769,7 +769,7 @@ function hms_update(&$content, $currentVersion)
         case version_compare($currentVersion, '0.2.21', '<'):
 
             $db = &new PHPWS_DB;
-            $result = $db->importFIle(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_21.sql');
+            $result = $db->importFIle(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_2_21.sql');
             if(PEAR::isError($result)) {
                 return $result;
             }
@@ -795,7 +795,7 @@ function hms_update(&$content, $currentVersion)
         case version_compare($currentVersion, '0.2.22', '<'):
 
             $db = &new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_22.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_2_22.sql');
             if(PEAR::isError($result)) {
                 return $result;
             }
@@ -803,7 +803,7 @@ function hms_update(&$content, $currentVersion)
         case version_compare($currentVersion, '0.2.23', '<'):
 
             $db = &new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_23.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_2_23.sql');
             if(PEAR::isError($result)) {
                 return $result;
             }
@@ -823,7 +823,7 @@ function hms_update(&$content, $currentVersion)
         case version_compare($currentVersion, '0.2.24', '<'):
 
             $db = &new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_24.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_2_24.sql');
             if(PEAR::isError($result)) {
                 return $result;
             }
@@ -831,7 +831,7 @@ function hms_update(&$content, $currentVersion)
         case version_compare($currentVersion, '0.2.25', '<'):
 
             $db = &new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_25.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_2_25.sql');
             if(PEAR::isError($result)) {
                 return $result;
             }
@@ -841,7 +841,7 @@ function hms_update(&$content, $currentVersion)
         case version_compare($currentVersion, '0.2.26', '<'):
 
             $db = &new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_26.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_2_26.sql');
             if(PEAR::isError($result)) {
                 return $result;
             }
@@ -853,7 +853,7 @@ function hms_update(&$content, $currentVersion)
         case version_compare($currentVersion, '0.2.28', '<'):
 
             $db = &new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_28.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_2_28.sql');
             if(PEAR::isError($result)) {
                 return $result;
             }
@@ -871,7 +871,7 @@ function hms_update(&$content, $currentVersion)
         case version_compare($currentVersion, '0.2.30', '<'):
 
             $db = &new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_30.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_2_30.sql');
             if(PEAR::isError($result)) {
                 return $result;
             }
@@ -896,7 +896,7 @@ function hms_update(&$content, $currentVersion)
 
         case version_compare($currentVersion, '0.2.33', '<'):
             $db = &new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_33.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_2_33.sql');
             if(PEAR::isError($result)) {
                 return $result;
             }
@@ -913,7 +913,7 @@ function hms_update(&$content, $currentVersion)
             PHPWS_Boost::updateFiles($files, 'hms');
 
             $db = &new PHPWS_Db;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_35.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_2_35.sql');
             if(PEAR::isError($result)) {
                 return $result;
             }
@@ -922,7 +922,7 @@ function hms_update(&$content, $currentVersion)
             $content[] = 'Updated Term Information';
         case version_compare($currentVersion, '0.2.36', '<'):
             $db = &new PHPWS_Db;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_36.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_2_36.sql');
             if(PEAR::isError($result)) {
                 return $result;
             }
@@ -939,7 +939,7 @@ function hms_update(&$content, $currentVersion)
             PHPWS_Boost::updatefiles($files, 'hms');
 
             $db = &new PHPWS_Db;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_42.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_2_42.sql');
             if(PEAR::isError($result)) {
                 return $result;
             }
@@ -954,56 +954,56 @@ function hms_update(&$content, $currentVersion)
 
         case version_compare($currentVersion, '0.2.49', '<'):
             $db = &new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_49.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_2_49.sql');
             if(PEAR::isError($result)){
                 return $result;
             }
 
         case version_compare($currentVersion, '0.2.50', '<'):
             $db = &new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_50.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_2_50.sql');
             if(PEAR::isError($result)){
                 return $result;
             }
 
         case version_compare($currentVersion, '0.2.51', '<'):
             $db = &new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_51.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_2_51.sql');
             if(PEAR::isError($result)){
                 return $result;
             }
 
         case version_compare($currentVersion, '0.2.52', '<'):
             $db = &new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_2_52.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_2_52.sql');
             if(PEAR::isError($result)){
                 return $result;
             }
 
         case version_compare($currentVersion, '0.3.0', '<'):
             $db = &new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_3_0.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_3_0.sql');
             if(PEAR::isError($result)){
                 return $result;
             }
 
         case version_compare($currentVersion, '0.3.1', '<'):
             $db = &new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_3_1.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_3_1.sql');
             if(PEAR::isError($result)){
                 return $result;
             }
 
         case version_compare($currentVersion, '0.3.2', '<'):
             $db = &new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_3_2.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_3_2.sql');
             if(PEAR::isError($result)){
                 return $result;
             }
 
         case version_compare($currentVersion, '0.3.3', '<'):
             $db = &new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_3_3.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_3_3.sql');
             if(PEAR::isError($result)){
                 return $result;
             }
@@ -1014,19 +1014,19 @@ function hms_update(&$content, $currentVersion)
 
         case version_compare($currentVersion, '0.3.7', '<'):
             $db = &new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_3_7.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_3_7.sql');
             if(PEAR::isError($result)){
                 return $result;
             }
         case version_compare($currentVersion, '0.3.8', '<'):
             $db = &new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_3_8.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_3_8.sql');
             if(PEAR::isError($result)){
                 return $result;
             }
         case version_compare($currentVersion, '0.3.9', '<'):
             $db = &new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_3_9.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_3_9.sql');
             if(PEAR::isError($result)){
                 return $result;
             }
@@ -1035,7 +1035,7 @@ function hms_update(&$content, $currentVersion)
             Users_Permission::registerPermissions('hms', $content);
 
             $db = &new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_3_10.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_3_10.sql');
             if(PEAR::isError($result)){
                 return $result;
             }
@@ -1047,25 +1047,25 @@ function hms_update(&$content, $currentVersion)
             Users_Permission::registerPermissions('hms', $content);
 
             $db = &new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_3_13.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_3_13.sql');
             if(PEAR::isError($result)){
                 return $result;
             }
         case version_compare($currentVersion, '0.3.16', '<'):
             $db = &new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_3_16.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_3_16.sql');
             if(PEAR::isError($result)){
                 return $result;
             }
         case version_compare($currentVersion, '0.3.17', '<'):
             $db = &new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_3_17.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_3_17.sql');
             if(PEAR::isError($result)){
                 return $result;
             }
         case version_compare($currentVersion, '0.3.18', '<'):
             $db = &new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_3_18.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_3_18.sql');
             if(PEAR::isError($result)){
                 return $result;
             }
@@ -1074,37 +1074,37 @@ function hms_update(&$content, $currentVersion)
             Users_Permission::registerPermissions('hms', $content);
 
             $db = &new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_3_19.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_3_19.sql');
             if(PEAR::isError($result)){
                 return $result;
             }
         case version_compare($currentVersion, '0.3.20', '<'):
             $db = &new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_3_20.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_3_20.sql');
             if(PEAR::isError($result)){
                 return $result;
             }
         case version_compare($currentVersion, '0.3.21', '<'):
             $db = &new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_3_21.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_3_21.sql');
             if(PEAR::isError($result)){
                 return $result;
             }
         case version_compare($currentVersion, '0.3.31', '<'):
             $db = &new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_3_31.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_3_31.sql');
             if(PEAR::isError($result)){
                 return $result;
             }
         case version_compare($currentVersion, '0.4.0', '<'):
             $db = &new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_4_0.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_4_0.sql');
             if(PEAR::isError($result)){
                 return $result;
             }
         case version_compare($currentVersion, '0.4.1', '<'):
             $db = new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_4_1.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_4_1.sql');
             if(PEAR::isError($result)){
                 return $result;
             }
@@ -1112,43 +1112,43 @@ function hms_update(&$content, $currentVersion)
             PHPWS_Core::initModClass('users', 'Permission.php');
             Users_Permission::registerPermissions('hms', $content);
             $db = new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_4_2.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_4_2.sql');
             if(PEAR::isError($result)){
                 return $result;
             }
         case version_compare($currentVersion, '0.4.3', '<'):
             $db = new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_4_3.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_4_3.sql');
             if(PEAR::isError($result)){
                 return $result;
             }
         case version_compare($currentVersion, '0.4.4', '<'):
             $db = new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_4_4.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_4_4.sql');
             if(PEAR::isError($result)){
                 return $result;
             }
         case version_compare($currentVersion, '0.4.5', '<'):
             $db = new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_4_5.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_4_5.sql');
             if(PEAR::isError($result)){
                 return $result;
             }
         case version_compare($currentVersion, '0.4.6', '<'):
             $db = new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_4_6.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_4_6.sql');
             if(PEAR::isError($result)){
                 return $result;
             }
         case version_compare($currentVersion, '0.4.7', '<'):
             $db = new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_4_7.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_4_7.sql');
             if(PEAR::isError($result)){
                 return $result;
             }
         case version_compare($currentVersion, '0.4.9', '<'):
             $db = new PHPWS_DB;
-            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/0_4_9.sql');
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_4_9.sql');
             if(PEAR::isError($result)){
                 return $result;
             }
