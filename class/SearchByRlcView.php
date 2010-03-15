@@ -7,7 +7,7 @@ class SearchByRlcView extends View {
 
     public function show(){
         PHPWS_Core::initCoreClass('Form.php');
-        $form = &new PHPWS_Form;
+        $form = new PHPWS_Form;
         $form->addDropBox('rlc', HMS_Learning_Community::getRLCList());
         $form->addHidden('module', 'hms');
         $form->addHidden('action', 'ShowSearchByRlc');
