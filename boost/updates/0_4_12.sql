@@ -1,0 +1,6 @@
+alter table hms_learning_community_applications drop column hms_assignment_id;
+delete from hms_learning_community_assignment;
+
+alter table hms_learning_community_applications rename user_id to username;
+
+alter table hms_learning_community_assignment add column application_id integer NOT NULL REFERENCES hms_learning_community_applications(id);

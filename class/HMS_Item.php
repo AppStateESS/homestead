@@ -46,9 +46,10 @@ abstract class HMS_Item {
         $result = $db->loadObject($this);
 
         if(PHPWS_Error::logIfError($result)){
-            return false;
+            PHPWS_Core::initModClass('hms', 'execption/DatabaseException.php');
+            throw new DatabaseException($result->toString());
         }
-
+        
         return true;
     }
 

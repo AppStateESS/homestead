@@ -17,7 +17,7 @@ class ShowAssignRlcApplicantsCommand extends Command {
             throw new PermissionException('You do not have permission to view RLC applications.');
         }
 
-        $view = new RlcAssignmentView();
+        $view = new RlcAssignmentView($context->get('rlc'));
         $context->setContent($view->show());
     }
 }

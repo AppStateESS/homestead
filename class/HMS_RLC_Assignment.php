@@ -14,10 +14,8 @@ class HMS_RLC_Assignment{
     public $rlc_id;
     public $assigned_by_user;
 
-    public $user_id; # For the DBPager join stuff to work right
+    public $username; # For the DBPager join stuff to work right
     public $term; // For dbPager
-    
-    public $hms_assignment_id;
 
     /**
      * Constructor
@@ -25,14 +23,6 @@ class HMS_RLC_Assignment{
      */
     public function HMS_RLC_Assignment($id = NULL)
     {
-        /*
-        if(isset($user_id)){
-            $this->setUserID($id);
-        }else{
-            return;
-        }
-        */
-
         if(isset($id)){
             $this->id = $id;
         }else{
@@ -41,7 +31,7 @@ class HMS_RLC_Assignment{
 
         $result = $this->init();
         if(PEAR::isError($result)){
-            PHPWS_Error::log($result,'hms','HMS_RLC_Assignment()','Caught error from init'); 
+            PHPWS_Error::log($result,'hms','HMS_RLC_Assignment()','Caught error from init');
             return $result;
         }
     }
@@ -58,7 +48,7 @@ class HMS_RLC_Assignment{
             PHPWS_Error::log($result,'hms','init',"id:{$id}");
             return $result;
         }
-        
+
         if(sizeof($result) < 1) {
             return FALSE;
         }
@@ -83,7 +73,7 @@ class HMS_RLC_Assignment{
             return FALSE;
         }
 
-        $db = &new PHPWS_DB('hms_learning_community_assignment');
+        $db = new PHPWS_DB('hms_learning_community_assignment');
         $db->addWhere('id',$this->id);
         $result = $db->delete();
 
@@ -97,22 +87,43 @@ class HMS_RLC_Assignment{
     }
 
     /**
+     * Saves the current Assignment object to the database.
+     */
+    public function save()
+    {
+        $db = new PHPWS_DB('hms_learning_community_assignment');
+
+        $result = $db->saveObject($this);
+
+        if(PHPWS_Error::logIfError($result)){
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException($result->toString());
+        }
+
+        return TRUE;
+    }
+
+    /******************
+     * Static methods *
+     */
+
+    /**
      * Check to see if an assignment already exists for the specified user.  Returns FALSE if no assignment
      * exists.  If an assignment does exist, a db object containing that row is returned.  In the case of a db
      * error, a PEAR error object is returned.
      */
-    public function check_for_assignment($asu_username, $term)
+    public static function checkForAssignment($username, $term)
     {
-        $db = new PHPWS_DB('hms_learning_community_assignment');
-        $db->addJoin('LEFT OUTER', 'hms_learning_community_assignment', 'hms_learning_community_applications', 'id', 'hms_assignment_id');
-        $db->addWhere('hms_learning_community_applications.user_id',$asu_username,'ILIKE');
+        $db = new PHPWS_DB('hms_learning_community_applications');
+        $db->addJoin('LEFT OUTER', 'hms_learning_community_assignment', 'hms_learning_community_applications', 'application_id', 'id');
+        $db->addWhere('hms_learning_community_applications.username',$username,'ILIKE');
         $db->addWhere('hms_learning_community_applications.term', $term);
 
         $result = $db->select('row');
 
         if(PHPWS_Error::logIfError($result)) {
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
-            throw new DatabaseException("Could not check for assignment - $asu_username $term");
+            throw new DatabaseException("Could not check for assignment - $asu_username $term " . $result->toString());
         }
 
         if(sizeof($result) > 1) {
@@ -122,33 +133,45 @@ class HMS_RLC_Assignment{
         }
     }
 
-    /**
-     * Saves the current Assignment object to the database.
-     */
-    public function save()
-    {
+    public static function getAssignmentById($id){
+        $assignment = new HMS_RLC_Assignment();
+
         $db = new PHPWS_DB('hms_learning_community_assignment');
+        $db->addWhere('id', $id);
 
-        $db->addValue('asu_username',         $this->getAsuUsername());
-        $db->addValue('rlc_id',               $this->getRlcId());
-        $db->addValue('assigned_by_user',     $this->getAssignedByUser());
-        $db->addValue('assigned_by_initials', $this->getAssignedByInitials());
+        $result = $db->loadObject($assignment);
 
-        if(!$this->getId() || $this->getId() == NULL) {
-            // do an insert
-            $result = $db->insert();
-        } else {
-            // do an update
-            $db->addWhere('id',$this->getId(), '=');
-            $result = $db->update();
+        if(PHPWS_Error::logIfError($result)){
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException($result->toString());
         }
 
-        if(PEAR::isError($result)) {
-            PHPWS_Error::log($result, 'hms', 'save_rlc_assignment', 'Could not insert/update rlc assignment for user: '.$this->getId());
-            return $result;
-        } else {
-            return TRUE;
+        if(is_null($assignment->id)){
+            return null;
         }
+
+        return $assignment;
+    }
+
+    public static function getAssignmentByUsername($username, $term){
+        $app = HMS_RLC_Application::getApplicationByUsername($username, $term);
+        
+        $assignment = new HMS_RLC_Assignment();
+        $db = new PHPWS_DB('hms_learning_community_assignment');
+        $db->addWhere('application_id', $app->id);
+
+        $result = $db->loadObject($assignment);
+
+        if(PHPWS_Error::logIfError($result)){
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException($result->toString());
+        }
+
+        if(is_null($assignment->id)){
+            return null;
+        }
+        
+        return $assignment;
     }
 
     public function rlc_assignment_admin_pager()
@@ -158,14 +181,14 @@ class HMS_RLC_Assignment{
         $tags = array();
 
         test('ooh hia!',1);
-        
+
         $tags['TITLE'] = "View Final RLC Assignments " . Term::toString(Term::getSelectedTerm(), TRUE);
 
         $pager = new DBPager('hms_learning_community_assignment','HMS_RLC_Assignment');
-      
+
         //$pager->db->addWhere('hms_learning_community_applications.hms_assignment_id','hms_learning_community_assignment.id','=');
         $pager->db->addJoin('LEFT OUTER', 'hms_learning_community_assignment', 'hms_learning_community_applications', 'id', 'hms_assignment_id');
-        $pager->db->addWhere('hms_learning_community_applications.term', Term::getSelectedTerm()); 
+        $pager->db->addWhere('hms_learning_community_applications.term', Term::getSelectedTerm());
 
         //$pager->joinResult('id','hms_learning_community_applications','hms_assignment_id','user_id', 'user_id');
         $pager->joinResult('id','hms_learning_community_applications','hms_assignment_id','term');
@@ -184,37 +207,38 @@ class HMS_RLC_Assignment{
         PHPWS_Core::initModClass('hms','HMS_Learning_Community.php');
 
         $rlc_list = HMS_Learning_Community::getRLCListAbbr();
-        
-        $student = StudentFactory::getStudentByUsername($this->user_id, $this->term);
-        
+
+        $student = StudentFactory::getStudentByUsername($this->username, $this->term);
+
         $tags = array();
-        
+
         $tags['NAME']      = $student->getFullNameProfileLink();
         $tags['FINAL_RLC'] = $rlc_list[$this->getRlcId()];
         $tags['ROOMMATE']  = '';
-        
+
         $addr = $student->getAddress();
         $reflect = new ReflectionObject($addr);
         $address = array();
-        
+
         foreach($reflect->getProperties() as $prop){
             $address[] = $addr->{$prop->getName()};
         }
-        
+
         $tags['ADDRESS']   = implode(", ", $address);
-        
+
         $phones = $student->getPhoneNumberList();
         if(isset($phones) && !empty($phones)){
             $tags['PHONE']     = $phones[0];
         }else{
             $tags['PHONE']     = '';
         }
-        
-        $tags['EMAIL']     = "{$this->user_id}@appstate.edu";
+
+        $tags['EMAIL']     = "{$this->username}@appstate.edu";
 
         return $tags;
     }
 
+    //TODO move this!!
     public function view_by_rlc_pager($rlc_id)
     {
         // Get the community name for the title
@@ -222,15 +246,16 @@ class HMS_RLC_Assignment{
         $db->addWhere('id', $rlc_id);
         $db->addColumn('community_name');
         $tags['TITLE'] = $db->select('one') . ' Assignments ' . Term::toString(Term::getSelectedTerm(), TRUE);
-       
+         
         PHPWS_Core::initCoreClass('DBPager.php');
-        
-        $pager = new DBPager('hms_learning_community_assignment', 'HMS_RLC_Assignment');
-        $pager->db->addJoin('LEFT OUTER', 'hms_learning_community_assignment', 'hms_learning_community_applications', 'id', 'hms_assignment_id');
-        $pager->db->addWhere('hms_learning_community_applications.term', Term::getSelectedTerm()); 
-        $pager->db->addWhere('rlc_id', $rlc_id);
-        
-        $pager->joinResult('id','hms_learning_community_applications','hms_assignment_id','user_id', 'user_id');
+        PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
+
+        $pager = new DBPager('hms_learning_community_applications', 'HMS_RLC_Application');
+        $pager->db->addJoin('LEFT OUTER', 'hms_learning_community_assignment', 'hms_learning_community_applications', 'application_id', 'id');
+        $pager->db->addWhere('hms_learning_community_applications.term', Term::getSelectedTerm());
+        $pager->db->addWhere('hms_learning_community_assignment.rlc_id', $rlc_id);
+
+        //$pager->joinResult('id','hms_learning_community_applications','hms_assignment_id','user_id', 'user_id');
         $pager->setModule('hms');
         $pager->setTemplate('admin/view_by_rlc_pager.tpl');
         $pager->setLink('index.php?module=hms&action=ViewByRlc&rlc='.$rlc_id);
@@ -241,40 +266,6 @@ class HMS_RLC_Assignment{
 
         return $pager->get();
     }
-
-    public function viewByRLCPagerTags()
-    {
-        $student = StudentFactory::getStudentByUsername($this->user_id, Term::getSelectedTerm());
-        
-        $tags['NAME'] = $student->getFulLNameProfileLink();
-        $tags['GENDER'] = $student->getPrintableGender();
-        $tags['USERNAME'] = $this->user_id;
-
-        $viewCmd = CommandFactory::getCommand('ShowRlcApplicationReView');
-        $viewCmd->setUsername($student->getUsername());
-        
-        $actions[] = $viewCmd->getLink('View Application');
-        
-        $rmCmd = CommandFactory::getCommand('RemoveRlcAssignment');
-        $rmCmd->setAssignmentId($this->id);
-        
-        $actions[] = $rmCmd->getLink('Remove');
-
-        $tags['ACTION'] = implode(' | ', $actions);
-        return $tags;
-    }
-
-    public function report_by_rlc_pager_tags()
-    {
-        $student = StudentFactory::getStudentByUsername($this->user_id, Term::getSelectedTerm());
-        
-        $row['name']        = $student->getFullName();
-        $row['gender']      = $student->getPrintableGender();
-        $row['username']    = $student->getGender();
-
-        return $row;
-    }
-
 
     public function setId($id) {
         $this->id = $id;

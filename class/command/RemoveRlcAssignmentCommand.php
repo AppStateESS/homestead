@@ -20,7 +20,16 @@ class RemoveRlcAssignmentCommand extends Command{
             throw new PermissionException('You do not have permission to approve/deny RLC applications.');
         }
         
+        PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
         
-        $context->setContent('todo: remove');
+        $assignment = HMS_RLC_Assignment::getAssignmentById($context->get('assignmentId'));
+        
+        if(!is_null($assignment)){
+            $assignment->delete();
+        }else{
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Could not find an RLC assignment with that id.');
+        }
+
+        $context->goBack();
     }
 }

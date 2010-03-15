@@ -21,16 +21,12 @@ class DenyRlcApplicationCommand extends Command {
         
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
 
-        $db = new PHPWS_DB('hms_learning_community_applications');
-        $db->addWhere('id', $context->get('applicationId'));
-        $db->addValue('denied', 1);
-
-        $result = $db->update();
-
-        $app = HMS_RLC_Application::getApplicationById($context->get('applicationId'), Term::getSelectedTerm());
+        $app = HMS_RLC_Application::getApplicationById($context->get('applicationId'));
+        $app->denied = 1;
+        $app->save();
 
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-        HMS_Activity_Log::log_activity($app->user_id, 28, Current_User::getUsername(), 'Application Denied');
+        HMS_Activity_Log::log_activity($app->username, 28, Current_User::getUsername(), 'Application Denied');
 
         NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Application denied.');
         

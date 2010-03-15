@@ -15,7 +15,7 @@ class SubmitRlcApplicationCommand extends Command {
         $student = StudentFactory::getStudentByUsername(Current_User::getUsername(), Term::getCurrentTerm());
         
         # Check for an existing application and delete it
-        $oldApp = new HMS_RLC_Application($student->getUsername(), $student->getApplicationTerm());
+        $oldApp = HMS_RLC_Application::getApplicationByUsername($student->getUsername(), $student->getApplicationTerm());
         
         if($oldApp->id != NULL){
             $result = $oldApp->delete();
@@ -35,7 +35,7 @@ class SubmitRlcApplicationCommand extends Command {
         }
 
         $application = new HMS_RLC_Application();
-        $application->setUserID(Current_User::getUsername());
+        $application->setUsername(Current_User::getUsername());
         $application->setDateSubmitted(mktime());
         $application->setFirstChoice($context->get('rlc_first_choice'));
         $application->setSecondChoice($choice2->id > 0 ? $choice2->id : NULL);

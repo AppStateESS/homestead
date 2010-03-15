@@ -116,6 +116,22 @@ class HMS_Learning_Community extends HMS_Item
         }
     }
 
+    public static function getRlcsById(){
+        $db = new PHPWS_DB('hms_learning_communities');
+        $result = $db->select();
+
+        if( PHPWS_Error::logIfError($result) ) {
+            return $result;
+        }
+
+        $communities = array();
+        foreach( $result as $community ) {
+            $communities[$community['id']] = $community['community_name'];
+        }
+        
+        return $communities;
+    }
+
     /**
      * Returns an associative array containing the list of RLC abbreviations keyed by their id.
      */
@@ -169,114 +185,6 @@ class HMS_Learning_Community extends HMS_Item
      */
     public function rlc_application_export()
     {
-        if( !Current_User::allow('hms', 'view_rlc_applications') ){
-            $tpl = array();
-            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
-        }
-
-        $term = Term::getSelectedTerm();
-
-        $db = new PHPWS_DB('hms_learning_communities');
-        $db->addColumn('community_name');
-        $db->addWhere('id',$_REQUEST['rlc_list']);
-        $title = $db->select('one');
-
-        $filename = $title . '-applications-' . date('Ymd') . ".csv";
-
-        // setup the title and headings
-        $buffer = $title . "\n";
-        $buffer .= '"last_name","first_name","middle_name","gender","roommate","email","second_choice","third_choice","major","application_date","denied"' . "\n";
-
-        // get the userlist
-        $db = new PHPWS_DB('hms_learning_community_applications');
-        $db->addColumn('user_id');
-        $db->addColumn('rlc_second_choice_id');
-        $db->addColumn('rlc_third_choice_id');
-        $db->addColumn('date_submitted');
-        $db->addWhere('rlc_first_choice_id', $_REQUEST['rlc_list']);
-        $db->addWhere('term', Term::getSelectedTerm());
-        $db->addOrder('denied asc');
-        //$db->addWhere('denied', 0); // Only show non-denied applications
-        $users = $db->select();
-
-
-        foreach($users as $user) {
-            PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
-            $roomie = NULL;
-
-            $roomie = HMS_Roommate::has_confirmed_roommate($user, $term) ? HMS_Roommate::get_Confirmed_roommate($user, $term) : NULL;
-            if($roomie == NULL) {
-                $roomie = HMS_Roommate::has_roommate_request($user, $term) ? HMS_Roommate::get_unconfirmed_roommate($user, $term) . ' *pending* ' : NULL;
-            }
-
-            $sinfo = HMS_SOAP::get_student_info($user['user_id']);
-            $buffer .= '"' . $sinfo->last_name . '",';
-            $buffer .= '"' . $sinfo->first_name . '",';
-            $buffer .= '"' . $sinfo->middle_name . '",';
-            $buffer .= '"' . $sinfo->gender . '",';
-            if($roomie != NULL) {
-                $buffer .= '"' . HMS_SOAP::get_full_name($roomie) . '",';
-            } else {
-                $buffer .= '"",';
-            }
-            $buffer .= '"' . $user['user_id'] . '@appstate.edu' . '",';
-
-            if(isset($user['rlc_second_choice_id'])) {
-                $db = new PHPWS_DB('hms_learning_communities');
-                $db->addColumn('community_name');
-                $db->addWhere('id', $user['rlc_second_choice_id']);
-                $result = $db->select('one');
-                if(!PHPWS_Error::logIfError($result)) {
-                    $buffer .= '"' . $result . '",';
-                }
-            } else {
-                $buffer .= '"",';
-            }
-
-            if(isset($user['rlc_third_choice_id'])) {
-                $db = new PHPWS_DB('hms_learning_communities');
-                $db->addColumn('community_name');
-                $db->addWhere('id', $user['rlc_third_choice_id']);
-                $result = $db->select('one');
-                if(!PHPWS_Error::logIfError($result)) {
-                    $buffer .= '"' . $result . '",';
-                }
-            } else {
-                $buffer .= '"",';
-            }
-
-            //Major for this user, N/A for now
-            $buffer .= '"N/A",';
-
-            //Application Date
-            if(isset($user['date_submitted'])){
-                PHPWS_Core::initModClass('hms', 'HMS_Util.php');
-                $buffer .= '"' . HMS_Util::get_long_date($user['date_submitted']) . '",';
-            } else {
-                $buffer .= '"Error with the submission Date",';
-            }
-
-            //Denied
-            $buffer .= (isset($user['denied']) && $user['denied'] == 1) ? '"yes"' : '"no"';
-            $buffer .= "\n";
-        }
-
-        //HERES THE QUERY:
-        //select hms_learning_community_applications.user_id, date_submitted, rlc_first_choice.abbreviation as first_choice, rlc_second_choice.abbreviation as second_choice, rlc_third_choice.abbreviation as third_choice FROM (SELECT hms_learning_community_applications.user_id, hms_learning_communities.abbreviation FROM hms_learning_communities,hms_learning_community_applications WHERE hms_learning_communities.id = hms_learning_community_applications.rlc_first_choice_id) as rlc_first_choice, (SELECT hms_learning_community_applications.user_id, hms_learning_communities.abbreviation FROM hms_learning_communities,hms_learning_community_applications WHERE hms_learning_communities.id = hms_learning_community_applications.rlc_second_choice_id) as rlc_second_choice, (SELECT hms_learning_community_applications.user_id, hms_learning_communities.abbreviation FROM hms_learning_communities,hms_learning_community_applications WHERE hms_learning_communities.id = hms_learning_community_applications.rlc_third_choice_id) as rlc_third_choice, hms_learning_community_applications WHERE rlc_first_choice.user_id = hms_learning_community_applications.user_id AND rlc_second_choice.user_id = hms_learning_community_applications.user_id AND rlc_third_choice.user_id = hms_learning_community_applications.user_id;
-         
-        //Download file
-        if(ob_get_contents())
-        print('Some data has already been output, can\'t send file');
-        if(isset($_SERVER['HTTP_USER_AGENT']) && strpos($_SERVER['HTTP_USER_AGENT'],'MSIE'))
-        header('Content-Type: application/force-download');
-        else
-        header('Content-Type: application/octet-stream');
-        if(headers_sent())
-        print('Some data has already been output to browser, can\'t send file');
-        header('Content-Length: '.strlen($buffer));
-        header('Content-disposition: attachment; filename="'.$filename.'"');
-        echo $buffer;
-        die();
     }
 
     /**

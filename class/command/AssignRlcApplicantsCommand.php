@@ -19,40 +19,29 @@ class AssignRlcApplicantsCommand extends Command {
         $errors = array();
 
         PHPWS_Core::initModClass('hms','HMS_RLC_Application.php');
+        PHPWS_Core::initModClass('hms','HMS_RLC_Assignment.php');
         PHPWS_Core::initModClass('hms','StudentFactory.php');
-
-        $app = new PHPWS_DB('hms_learning_community_applications');
-        $ass = new PHPWS_DB('hms_learning_community_assignment');
 
         # Foreach rlc assignment made
         # $app_id is the 'id' column in the 'learning_community_applications' table, tells which student we're assigning
         # $rlc_id is the 'id' column in the 'learning_communitites' table, and refers to the RLC selected for the student
         foreach($_REQUEST['final_rlc'] as $app_id => $rlc_id){
             
-            $app->reset();
-            $ass->reset();
-            
-            # Lookup the student's RLC application (so we can have their username)
-            $app->addWhere('id', $app_id);
-            $application = $app->select('row');
-            
-            $student = StudentFactory::getStudentByUsername($application['user_id'], Term::getSelectedTerm());
+            $app = HMS_RLC_Application::getApplicationById($app_id);            
+            $student = StudentFactory::getStudentByUsername($app->username, $app->term);
            
             # Insert a new assignment in the 'learning_community_assignment' table
-            $ass->addValue('rlc_id',            $rlc_id);
-            $ass->addValue('gender',            $student->getGender());
-            $ass->addValue('assigned_by',       UserStatus::getUsername());
-            $ass_id = $ass->insert();
-
+            $assign = new HMS_RLC_Assignment();
+            $assign->rlc_id         = $rlc_id;
+            $assign->gender         = $student->getGender();
+            $assign->assigned_by    = UserStatus::getUsername();
+            $assign->application_id = $app->id;
+            
+            $assign->save();
+            
             # Log the assignment
             PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-            HMS_Activity_Log::log_activity($application['user_id'], ACTIVITY_ASSIGN_TO_RLC, UserStatus::getUsername(), "New Assignment");
-
-            # Update the RLC application with the assignment id
-            $app->reset();
-            $app->addValue('hms_assignment_id', $ass_id);
-            $app->addWhere('id', $app_id);
-            $app->update();
+            HMS_Activity_Log::log_activity($app->username, ACTIVITY_ASSIGN_TO_RLC, UserStatus::getUsername(), "New Assignment");
         }
         
         $context->goBack();

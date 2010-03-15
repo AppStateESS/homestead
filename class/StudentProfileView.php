@@ -135,15 +135,15 @@ class StudentProfileView extends View {
 
         $rlc_names = HMS_Learning_Community::getRLCList();
 
-        $rlc_assignment     = HMS_RLC_Assignment::check_for_assignment($this->student->getUsername(), Term::getSelectedTerm());
-        $rlc_application    = HMS_RLC_Application::check_for_application($this->student->getUsername(), Term::getSelectedTerm(), FALSE);
+        $rlc_assignment     = HMS_RLC_Assignment::getAssignmentByUsername($this->student->getUsername(), Term::getSelectedTerm());
+        $rlc_application    = HMS_RLC_Application::getApplicationByUsername($this->student->getUsername(), Term::getSelectedTerm(), FALSE);
 
-        if($rlc_assignment != FALSE){
-            $tpl['RLC_STATUS'] = "This student is assigned to: " . $rlc_names[$rlc_assignment['rlc_id']];
-        }else if ($rlc_application != FALSE){
+        if(!is_null($rlc_assignment)){
+            $tpl['RLC_STATUS'] = "This student is assigned to: " . $rlc_names[$rlc_assignment->rlc_id];
+        }else if (!is_null($rlc_application)){
             $rlcViewCmd = CommandFactory::getCommand('ShowRlcApplicationReView');
             $rlcViewCmd->setUsername($this->student->getUsername());
-            $tpl['RLC_STATUS'] = "This has a " . $rlcViewCmd->getLink('pending RLC application') . "."; 
+            $tpl['RLC_STATUS'] = "This student has a " . $rlcViewCmd->getLink('pending RLC application') . "."; 
         }else{
             $tpl['RLC_STATUS'] = "This student is not in a Learning Community and has no pending application.";
         }

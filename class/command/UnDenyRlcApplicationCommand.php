@@ -19,16 +19,14 @@ class UnDenyRlcApplicationCommand extends Command {
             throw new PermissionException('You do not have permission to approve/deny RLC applications.');
         }
 
-        $db = new PHPWS_DB('hms_learning_community_applications');
-        $db->addWhere('id', $context->get('applicationId'));
-        $db->addValue('denied', 0);
-
-        $result = $db->update();
-
-        $result = $db->select('row');
+        PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
         
+        $app = HMS_RLC_Application::getApplicationById($context->get('applicationId'));
+        $app->denied = 0;
+        $app->save();
+
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-        HMS_Activity_Log::log_activity($result['user_id'], 29, UserStatus::getUsername(), "Application un-denied");
+        HMS_Activity_Log::log_activity($app->username, 29, UserStatus::getUsername(), "Application un-denied");
 
         NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Application un-denied.');
 

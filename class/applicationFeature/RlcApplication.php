@@ -37,8 +37,8 @@ class RlcApplication extends ApplicationFeature {
     public function getMenuBlockView(Student $student)
     {
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
-        $application = new HMS_RLC_Application($student->getUsername(), $student->getApplicationTerm());
-        
+        $application = HMS_RLC_Application::getApplicationByUsername($student->getUsername(), $student->getApplicationTerm());
+
         PHPWS_Core::initModClass('hms', 'RlcApplicationMenuView.php');
         return new RlcApplicationMenuView($student, $this->getStartDate(), $this->getEndDate(), $application);
     }
