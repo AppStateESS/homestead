@@ -1,19 +1,15 @@
 {DROPDOWN}
 {START_FORM}
 <!-- BEGIN table -->
-<table cellpadding="4" cellspacing="1" width="99%">
+<table cellpadding="3" cellspacing="1" width="850px">
     <tr>
         <th>Name </th>
-        <th>1st Choice {RLC_FIRST_CHOICE_ID_SORT}</th>
-        <th>2nd Choice {RLC_SECOND_CHOICE_ID_SORT}</th>
-        <th>3rd Choice {RLC_THIRD_CHOICE_ID_SORT}</th>
+        <th>1st {RLC_FIRST_CHOICE_ID_SORT}</th>
+        <th>2nd {RLC_SECOND_CHOICE_ID_SORT}</th>
+        <th>3rd {RLC_THIRD_CHOICE_ID_SORT}</th>
+        <th>Sex</th>
+        <th>Date {DATE_SUBMITTED_SORT}</th>
         <th>Final RLC</th>
-<!--Maybe someday we will get this data... -->
-<!--    <th>Special Pop</th> 
-        <th>Major</th>
-        <th>HS GPA</th>  -->
-        <th>Gender</th>
-        <th>Apply Date {DATE_SUBMITTED_SORT}</th>
         <th>Action</th>
     </tr>
 <!-- BEGIN empty_table -->
@@ -29,12 +25,9 @@
         <td>{1ST_CHOICE}</td>
         <td>{2ND_CHOICE}</td>
         <td>{3RD_CHOICE}</td>
+        <td width="20px">{GENDER}</td>
+        <td width="75px">{DATE_SUBMITTED}</td>
         <td>{FINAL_RLC}</td>
-<!--    <td>{SPECIAL_POP}</td> 
-        <td>{MAJOR}</td>
-        <td>{HS_GPA}</td> -->
-        <td>{GENDER}</td>
-        <td>{DATE_SUBMITTED}</td>
         <td>{DENY}</td>
     </tr>
 <!-- END listrows -->

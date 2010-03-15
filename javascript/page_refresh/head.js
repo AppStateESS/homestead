@@ -1,10 +1,9 @@
 <script type="text/javascript">
-//<![CDATA[
+// <![CDATA[
 
 function refresh_page(form){
-   form.action.value = "refresh";
-   form.submit(); 
+	$("#" + form).submit();
 }
 
-//]]>
+// ]]>
 </script>

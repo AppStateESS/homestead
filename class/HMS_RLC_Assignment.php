@@ -5,15 +5,19 @@
  *
  */
 
+PHPWS_Core::initModClass('hms','StudentFactory.php');
+
 class HMS_RLC_Assignment{
 
-    var $id;
+    public $id;
 
-    var $rlc_id;
-    var $assigned_by_user;
+    public $rlc_id;
+    public $assigned_by_user;
 
-    var $user_id; # For the DBPager join stuff to work right
-    var $hms_assignment_id;
+    public $user_id; # For the DBPager join stuff to work right
+    public $term; // For dbPager
+    
+    public $hms_assignment_id;
 
     /**
      * Constructor
@@ -153,18 +157,18 @@ class HMS_RLC_Assignment{
 
         $tags = array();
 
+        test('ooh hia!',1);
+        
         $tags['TITLE'] = "View Final RLC Assignments " . Term::toString(Term::getSelectedTerm(), TRUE);
 
-/*        $tags['PRINT_RECORDS'] = "// TODO: Print Records";
-        $tags['EXPORT'] = "// TODO: Export Records";*/
-
-        $pager = &new DBPager('hms_learning_community_assignment','HMS_RLC_Assignment');
+        $pager = new DBPager('hms_learning_community_assignment','HMS_RLC_Assignment');
       
         //$pager->db->addWhere('hms_learning_community_applications.hms_assignment_id','hms_learning_community_assignment.id','=');
         $pager->db->addJoin('LEFT OUTER', 'hms_learning_community_assignment', 'hms_learning_community_applications', 'id', 'hms_assignment_id');
         $pager->db->addWhere('hms_learning_community_applications.term', Term::getSelectedTerm()); 
 
-        $pager->joinResult('id','hms_learning_community_applications','hms_assignment_id','user_id', 'user_id');
+        //$pager->joinResult('id','hms_learning_community_applications','hms_assignment_id','user_id', 'user_id');
+        $pager->joinResult('id','hms_learning_community_applications','hms_assignment_id','term');
         $pager->setModule('hms');
         $pager->setTemplate('admin/display_final_rlc_assignments.tpl');
         $pager->setLink('index.php?module=hms&type=rlc&op=assign_applicants_to_rlcs');
@@ -178,17 +182,34 @@ class HMS_RLC_Assignment{
     public function getAdminPagerTags()
     {
         PHPWS_Core::initModClass('hms','HMS_Learning_Community.php');
-        PHPWS_Core::initModClass('hms','HMS_SOAP.php');
 
         $rlc_list = HMS_Learning_Community::getRLCListAbbr();
-
+        
+        $student = StudentFactory::getStudentByUsername($this->user_id, $this->term);
+        
         $tags = array();
         
-        $tags['NAME']      = PHPWS_Text::secureLink(HMS_SOAP::get_full_name_inverted($this->user_id), 'hms', array('type'=>'rlc', 'op'=>'view_rlc_application', 'username'=>$this->user_id), 'blank');
+        $tags['NAME']      = $student->getFullNameProfileLink();
         $tags['FINAL_RLC'] = $rlc_list[$this->getRlcId()];
-//        $tags['ROOMMATE']  = TODO: Roommate Stuff
-        $tags['ADDRESS']   = HMS_SOAP::get_address_line($this->user_id);
-        $tags['PHONE']     = HMS_SOAP::get_phone_number($this->user_id);
+        $tags['ROOMMATE']  = '';
+        
+        $addr = $student->getAddress();
+        $reflect = new ReflectionObject($addr);
+        $address = array();
+        
+        foreach($reflect->getProperties() as $prop){
+            $address[] = $addr->{$prop->getName()};
+        }
+        
+        $tags['ADDRESS']   = implode(", ", $address);
+        
+        $phones = $student->getPhoneNumberList();
+        if(isset($phones) && !empty($phones)){
+            $tags['PHONE']     = $phones[0];
+        }else{
+            $tags['PHONE']     = '';
+        }
+        
         $tags['EMAIL']     = "{$this->user_id}@appstate.edu";
 
         return $tags;
@@ -223,14 +244,21 @@ class HMS_RLC_Assignment{
 
     public function viewByRLCPagerTags()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
-
-        $tags['NAME'] = PHPWS_Text::secureLink(HMS_SOAP::get_full_name($this->user_id), 'hms', array('type'=>'student', 'op'=>'get_matching_students', 'username'=>$this->user_id));
-        $tags['GENDER'] = HMS_SOAP::get_gender($this->user_id);
+        $student = StudentFactory::getStudentByUsername($this->user_id, Term::getSelectedTerm());
+        
+        $tags['NAME'] = $student->getFulLNameProfileLink();
+        $tags['GENDER'] = $student->getPrintableGender();
         $tags['USERNAME'] = $this->user_id;
 
-        $actions[] = PHPWS_Text::secureLink('View Application', 'hms', array('type'=>'rlc', 'op'=>'view_rlc_application', 'username'=>$this->user_id));
-        $actions[] = PHPWS_Text::secureLink('Remove', 'hms', array('type'=>'rlc', 'op'=>'confirm_remove_from_rlc', 'id'=>$this->id, 'rlc'=>$_REQUEST['rlc']));
+        $viewCmd = CommandFactory::getCommand('ShowRlcApplicationReView');
+        $viewCmd->setUsername($student->getUsername());
+        
+        $actions[] = $viewCmd->getLink('View Application');
+        
+        $rmCmd = CommandFactory::getCommand('RemoveRlcAssignment');
+        $rmCmd->setAssignmentId($this->id);
+        
+        $actions[] = $rmCmd->getLink('Remove');
 
         $tags['ACTION'] = implode(' | ', $actions);
         return $tags;
@@ -238,9 +266,11 @@ class HMS_RLC_Assignment{
 
     public function report_by_rlc_pager_tags()
     {
-        $row['name']        = HMS_SOAP::get_full_name($this->user_id);
-        $row['gender']      = HMS_SOAP::get_gender($this->user_id);
-        $row['username']    = $this->user_id;
+        $student = StudentFactory::getStudentByUsername($this->user_id, Term::getSelectedTerm());
+        
+        $row['name']        = $student->getFullName();
+        $row['gender']      = $student->getPrintableGender();
+        $row['username']    = $student->getGender();
 
         return $row;
     }

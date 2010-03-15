@@ -10,7 +10,7 @@ class RLCMenu extends CommandMenu {
 		
 		$this->addCommandByName('Add Learning Community', 'ShowAddRlc');
         $this->addCommandByName('Edit Learning Community', 'ShowEditRlc');
-        $this->addCommandByName('Assign Applicants to RLCs', 'AssignRlcApplicants');
+        $this->addCommandByName('Assign Applicants to RLCs', 'ShowAssignRlcApplicants');
         $this->addCommandByName('View Denied Applications', 'ShowDeniedRlcApplicants');
         $this->addCommandByName('View RLC Members by RLC', 'ShowSearchByRlc');
         $this->addCommandByName('View RLC Assignments', 'ViewRlcAssignments');

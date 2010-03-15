@@ -8,7 +8,7 @@ PHPWS_Core::initModClass('hms', 'StudentFactory.php');
  * @author Jeremy Booker <jbooker at tux dot appstate dot edu>
  */
 
-define('RLC_RESPONSE_LIMIT', 4096);
+define('RLC_RESPONSE_LIMIT', 4096); // max number of characters allowed in the text areas on the RLC application
 
 class HMS_RLC_Application{
 
@@ -76,16 +76,12 @@ class HMS_RLC_Application{
     }
 
     //TODO loadObject
-    public function init($user_id = NULL, $term = NULL)
+    public function init($user_id = NULL, $term)
     {
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
         $student = StudentFactory::getStudentByUsername($user_id, $term);
         # Check if an application for this user already exits.
         $result = HMS_RLC_Application::check_for_application($user_id, $term);
-
-        if(PEAR::isError($result)){
-            PHPWS_Error::log($result,'hms','init',"Caught error from check_for_application");
-        }
 
         # If an application exists, then load its data into this object.
         if($result == FALSE || $result == NULL) return;
@@ -175,7 +171,7 @@ class HMS_RLC_Application{
         }
 
         $result = $db->select('row');
-
+        
         if(PHPWS_Error::logIfError($result)){
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
@@ -187,46 +183,16 @@ class HMS_RLC_Application{
             return FALSE;
         }
     }
+    
+    public function getApplicationById($id, $term){
+        
+        $app = new HMS_RLC_Application();
 
-    /**
-     * RLC Application pager for the RLC admin panel
-     */
-    public function rlc_application_admin_pager()
-    {
-        PHPWS_Core::initCoreClass('DBPager.php');
-
-        $form = new PHPWS_Form;
-        $form->addHidden('action','SubmitRlcAssignments');
-        $form->addSubmit('Submit Changes');
-        $tags = $form->getTemplate();
-
-        $pager = &new DBPager('hms_learning_community_applications','HMS_RLC_Application');
-        $pager->db->addColumn('hms_learning_community_applications.*');
-        $pager->db->addColumn('hms_learning_communities.abbreviation');
-        // The 'addOrder' calls must not be used in order for the sort order buttons on the pager to work
-        #$pager->db->addOrder('hms_learning_communities.abbreviation','ASC');
-        #$pager->db->addOrder('hms_learning_community_applications.date_submitted', 'ASC');
-        //$pager->db->addOrder('user_id','ASC');
-        $pager->db->addWhere('hms_learning_community_applications.rlc_first_choice_id',
-                             'hms_learning_communities.id','=');
-        $pager->db->addWhere('hms_assignment_id',NULL,'is');
-        $pager->db->addWhere('term', Term::getSelectedTerm());
-        $pager->db->addWhere('denied', 0); // Only show non-denied applications in this pager
-        if( isset($_REQUEST['rlc']) ) {
-            $pager->db->addWhere('hms_learning_communities.id', $_REQUEST['rlc'], '=');
-        }
-
-        $pager->setModule('hms');
-        $pager->setLink('index.php?module=hms&action=SubmitRlcAssignments');
-        $pager->setTemplate('admin/rlc_assignments_pager.tpl');
-        $pager->setEmptyMessage("No pending RLC applications.");
-        $pager->addToggle('class="toggle1"');
-        $pager->addToggle('class="toggle1"');
-        $pager->addPageTags($tags);
-        $pager->addRowTags('getAdminPagerTags');
-        $pager->setReportRow('applicantsReport');
-
-        return $pager->get();
+        $db = new PHPWS_DB('hms_learning_community_applications');
+        $db->addWhere('id', $id);
+        $result = $db->loadObject($app);
+        
+        return $app;
     }
 
     public function getAdminPagerTags()
@@ -241,7 +207,11 @@ class HMS_RLC_Application{
         $tags = array();
 
         $tags['NAME']           = $student->getFullNameProfileLink();
-        $tags['1ST_CHOICE']     = '<a href="./index.php?module=hms&action=ViewRlcApplication&username=' . $this->getUserID() . '" target="_blank">' . $rlc_list[$this->getFirstChoice()] . '</a>';
+        
+        $rlcCmd = CommandFactory::getCommand('ShowRlcApplicationReView');
+        $rlcCmd->setUsername($this->getUserID());
+        
+        $tags['1ST_CHOICE']     = $rlcCmd->getLink($rlc_list[$this->getFirstChoice()],'_blank');
         if(isset($rlc_list[$this->getSecondChoice()]))
         $tags['2ND_CHOICE'] = $rlc_list[$this->getSecondChoice()];
         if(isset($rlc_list[$this->getThirdChoice()]))
@@ -253,7 +223,11 @@ class HMS_RLC_Application{
         //        $tags['HS_GPA']         = ;
         $tags['GENDER']         = $student->getGender();
         $tags['DATE_SUBMITTED'] = date('d-M-y',$this->getDateSubmitted());
-        $tags['DENY']           = PHPWS_Text::secureLink('Deny', 'hms', array('action'=>'DenyRlcApplication', 'id'=>$this->id));
+        
+        $denyCmd = CommandFactory::getCommand('DenyRlcApplication');
+        $denyCmd->setApplicationId($this->getID());
+        
+        $tags['DENY']           = $denyCmd->getLink('Deny');
 
         return $tags;
     }
@@ -320,6 +294,7 @@ class HMS_RLC_Application{
     //TODO update this!!
     public function getDeniedPagerTags()
     {
+        PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
         $student = StudentFactory::getStudentByUsername($this->user_id, $this->term);
         
         $tags = array();
@@ -331,46 +306,16 @@ class HMS_RLC_Application{
         $tags['2ND_CHOICE'] = $rlc_list[$this->getSecondChoice()];
         if(isset($rlc_list[$this->getThirdChoice()]))
         $tags['3RD_CHOICE'] = $rlc_list[$this->getThirdChoice()];
-        $tags['CLASS']          = HMS_SOAP::get_student_class($this->getUserID(), HMS_SOAP::get_application_term($this->getUserID()));
-        $tags['GENDER']         = HMS_SOAP::get_gender($this->getUserID());
+        $tags['CLASS']          = $student->getClass();
+        $tags['GENDER']         = $student->getGender();
         $tags['DATE_SUBMITTED'] = date('d-M-y',$this->getDateSubmitted());
-        $tags['ACTION']         = PHPWS_Text::secureLink('Un-Deny', 'hms', array('type'=>'rlc', 'op'=>'un_deny_rlc_application', 'id'=>$this->id));
+        
+        $unDenyCmd = CommandFactory::getCommand('UnDenyRlcApplication');
+        $unDenyCmd->setApplicationId($this->id);
+        
+        $tags['ACTION']         = $unDenyCmd->getLink('Un-Deny');
 
         return $tags;
-    }
-
-    /****************************************************************/
-    /* Generates a processed template for the rlc sort dropdown box */
-    /****************************************************************/
-    public function getDropDown()
-    {
-        $db = new PHPWS_DB('hms_learning_communities');
-        $result = $db->select();
-
-        if( PHPWS_Error::logIfError($result) ) {
-            return $result;
-        }
-
-        $communities = array();
-        foreach( $result as $community ) {
-            $communities[$community['id']] = $community['community_name'];
-        }
-
-        javascript('/modules/hms/page_refresh');
-
-        $form = new PHPWS_Form('dropdown_selector');
-        $form->setMethod('get');
-        $form->addSelect('rlc', $communities);
-        if( isset($_REQUEST['rlc']) ) {
-            $form->setMatch('rlc', $_REQUEST['rlc']);
-        }
-        $form->setExtra('rlc', 'onChange="refresh_page(form)"');
-        //$form->setMethod('post');
-
-        $form->addHidden('type', 'rlc');
-        $form->addHidden('op', 'assign_applicants_to_rlcs');
-
-        return $form->getTemplate();
     }
 
     /**

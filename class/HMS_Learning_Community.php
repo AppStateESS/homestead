@@ -14,7 +14,6 @@ class HMS_Learning_Community extends HMS_Item
     public $abbreviation;
     public $capacity;
     public $hide;
-    public $error="";
 
     public $allowed_student_types; //A string containing a character for each allowed student type, maxLen() == 16;
     public $extra_info; // A text field, show to the student when the RLC is selected
@@ -29,14 +28,15 @@ class HMS_Learning_Community extends HMS_Item
         return new PHPWS_DB('hms_learning_communities');
     }
 
-    public function set_error_msg($msg)
-    {
-        $this->error .= $msg;
-    }
+    public function allowStudentType($student_type){
+        if(!is_string($student_type)
+        || strlen($student_type) != 1
+        || stripos($this->allowed_student_types, $student_type) === false
+        ){
+            return false;
+        }
 
-    public function get_error_msg()
-    {
-        return $this->error;
+        return true;
     }
 
     public function set_id($id)
@@ -162,103 +162,6 @@ class HMS_Learning_Community extends HMS_Item
 
         return $rlc_choices;
     }
-
-    //TODO: move this....
-    public function assign_applicants_to_rlcs($success_msg = NULL, $error_msg = NULL)
-    {
-        if( !Current_User::allow('hms', 'view_rlc_applications') ){
-            $tpl = array();
-            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
-        }
-
-        PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
-
-        $tags = array();
-        $tags['TITLE'] = 'RLC Assignments - ' . Term::toString(Term::getSelectedTerm());
-        $tags['SUMMARY']           = HMS_Learning_Community::display_rlc_assignment_summary();
-        $tags['DROPDOWN']          = PHPWS_Template::process(HMS_RLC_Application::getDropDown(), 'hms', 'admin/dropdown_template.tpl');
-        $tags['ASSIGNMENTS_PAGER'] = HMS_RLC_Application::rlc_application_admin_pager();
-
-        if(isset($success_msg)){
-            $tags['SUCCESS_MSG'] = $success_msg;
-        }
-
-        if(isset($error_msg)){
-            $tags['ERROR_MSG'] = $error_msg;
-        }
-
-        $export_form = &new PHPWS_Form('export_form');
-        $export_form->addHidden('type','rlc');
-        $export_form->addHidden('op','rlc_application_export');
-
-        $export_form->addDropBox('rlc_list',HMS_Learning_Community::getRLCListAbbr());
-        $export_form->addSubmit('submit');
-
-        $export_form->mergeTemplate($tags);
-        $tags = $export_form->getTemplate();
-
-        return PHPWS_Template::process($tags, 'hms', 'admin/make_new_rlc_assignments.tpl');
-    }
-
-    //TODO move this...
-    public function display_rlc_assignment_summary()
-    {
-        $template = array();
-
-        $db = &new PHPWS_DB('hms_learning_communities');
-        $db->addColumn('community_name');
-        $db->addColumn('capacity');
-        $db->addColumn('id');
-        $communities = $db->select();
-
-        if(!$communities) {
-            $template['no_communities'] = _('No communities have been enterred.');
-            return PHPWS_Template::process($template, 'hms',
-                    'admin/make_new_rlc_assignments_summary.tpl');
-        }
-
-        $count = 0;
-        $total_assignments = 0;
-        $total_available = 0;
-
-        foreach($communities as $community) {
-            $db = &new PHPWS_DB('hms_learning_community_assignment');
-            $db->addJoin('LEFT OUTER', 'hms_learning_community_assignment', 'hms_learning_community_applications', 'id', 'hms_assignment_id');
-            $db->addWhere('rlc_id', $community['id']);
-            $db->addWhere('gender', MALE);
-            $db->addWhere('hms_learning_community_applications.term', Term::getSelectedTerm());
-            $male = $db->select('count');
-
-            $db->resetWhere();
-            $db->addWhere('rlc_id', $community['id']);
-            $db->addWhere('gender', FEMALE);
-            $db->addWhere('hms_learning_community_applications.term', Term::getSelectedTerm());
-            $female = $db->select('count');
-
-            if($male   == NULL) $male   = 0;
-            if($female == NULL) $female = 0;
-            $assigned = $male + $female;
-
-            $template['headings'][$count]['HEADING']       = $community['community_name'];
-             
-            $template['assignments'][$count]['ASSIGNMENT'] = "$assigned ($male/$female)";
-            $total_assignments += $assigned;
-
-            $template['available'][$count]['AVAILABLE']    = $community['capacity'];
-            $total_available += $community['capacity'];
-
-            $template['remaining'][$count]['REMAINING']    = $community['capacity'] - $assigned;
-            $count++;
-        }
-
-        $template['TOTAL_ASSIGNMENTS'] = $total_assignments;
-        $template['TOTAL_AVAILABLE'] = $total_available;
-        $template['TOTAL_REMAINING'] = $total_available - $total_assignments;
-
-        return PHPWS_Template::process($template, 'hms',
-                'admin/make_new_rlc_assignments_summary.tpl');
-    }
-
 
     /**
      * Exports the pending RLC applications into a CSV file.

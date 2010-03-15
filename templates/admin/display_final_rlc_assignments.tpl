@@ -25,7 +25,7 @@
 <!-- BEGIN listrows -->
                 <tr {TOGGLE}>
                     <td>{NAME}</td>
-                    <td>{FINAL_RLC}<td>
+                    <td>{FINAL_RLC}</td>
                     <td>{ROOMMATE}</td>
                     <td>{ADDRESS}</td>
                     <td>{PHONE}<br />{EMAIL}</td>
