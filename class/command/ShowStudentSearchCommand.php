@@ -31,7 +31,7 @@ class ShowStudentSearchCommand extends Command {
 
         $cmd = CommandFactory::getCommand('StudentSearch');
 
-        $form = &new PHPWS_Form('student_search_form');
+        $form = new PHPWS_Form('student_search_form');
         $cmd->initForm($form);
 
         $form->setMethod('get');

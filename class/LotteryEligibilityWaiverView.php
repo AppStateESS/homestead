@@ -6,7 +6,7 @@ PHPWS_Core::initModClass('hms', 'CommandFactory.php');
 class LotteryEligibilityWaiverView extends View {
 
     public function show(){
-    	$form = &new PHPWS_Form('waiver');
+    	$form = new PHPWS_Form('waiver');
         $form->addTextArea('usernames');
         $form->setLabel('usernames', 'ASU User names (one per line):');
 
