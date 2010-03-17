@@ -155,7 +155,11 @@ class HMS_RLC_Assignment{
 
     public static function getAssignmentByUsername($username, $term){
         $app = HMS_RLC_Application::getApplicationByUsername($username, $term);
-        
+       
+        if(is_null($app)){
+            return null;
+        }
+
         $assignment = new HMS_RLC_Assignment();
         $db = new PHPWS_DB('hms_learning_community_assignment');
         $db->addWhere('application_id', $app->id);
