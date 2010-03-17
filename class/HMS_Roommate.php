@@ -149,7 +149,7 @@ class HMS_Roommate
             $term = Term::getSelectedTerm();
         }
 
-        $db = &new PHPWS_DB('hms_roommate');
+        $db = new PHPWS_DB('hms_roommate');
         $db->addWhere('term', $term);
         $db->addWhere('confirmed', 1);
         if($random) {
