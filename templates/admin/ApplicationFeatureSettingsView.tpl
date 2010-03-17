@@ -5,6 +5,9 @@
         <p>{START_DATE_LABEL} {START_DATE}</p>
     </div>
     <div class="app-feature-setting-hidable">
+        <p>{EDIT_DATE_LABEL} {EDIT_DATE}</p>
+    </div>
+    <div class="app-feature-setting-hidable">
         <p>{END_DATE_LABEL} {END_DATE}</p>
     </div>
     <div class="app-feature-setting-submit">

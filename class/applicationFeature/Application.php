@@ -8,6 +8,7 @@ class ApplicationRegistration extends ApplicationFeatureRegistration {
 		$this->name = 'Application';
 		$this->description = 'Application';
 		$this->startDateRequired = true;
+        $this->editDateRequired = true;
 		$this->endDateRequired = true;
 		$this->priority = 1;
 	}

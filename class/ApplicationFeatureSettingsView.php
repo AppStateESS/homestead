@@ -42,6 +42,15 @@ class ApplicationFeatureSettingsView extends View
 			}
 			$form->setLabel('start_date', dgettext('hms', 'Start Date:'));
 		}
+
+        if($reg->requiresEditDate()) {
+            $form->addText('edit_date');
+            $form->setExtra('edit_date', 'class="datepicker"');
+            if(!is_null($f->getEditDate())) {
+                $form->setValue('edit_date', strftime('%m/%d/%Y', $f->getEditDate()));
+            }
+            $form->setLabel('edit_date', dgettext('hms', 'Edit Date:'));
+        }
 		
 		if($reg->requiresEndDate()) {
 			$form->addText('end_date');

@@ -7,6 +7,7 @@ abstract class ApplicationFeatureRegistration {
     protected $name;
     protected $description;
     protected $startDateRequired;
+    protected $editDateRequired;
     protected $endDateRequired;
     protected $priority;
 
@@ -22,6 +23,10 @@ abstract class ApplicationFeatureRegistration {
 
     function requiresStartDate(){
         return $this->startDateRequired;
+    }
+
+    function requiresEditDate() {
+        return $this->editDateRequired;
     }
 
     function requiresEndDate(){
@@ -51,6 +56,7 @@ abstract class ApplicationFeature {
     public $name;
     public $enabled;
     public $start_date;
+    public $edit_date;
     public $end_date;
 
     /**
@@ -118,6 +124,10 @@ abstract class ApplicationFeature {
     	
         if($reg->requiresStartDate() && !self::validateDate($this->start_date)) {
             $missing[] = 'start_date';
+        }
+
+        if($reg->requiresEditDate() && !self::validateDate($this->edit_date)) {
+            $missing[] = 'edit_date';
         }
         
         if($reg->requiresEndDate() && !self::validateDate($this->end_date)) {
@@ -212,6 +222,14 @@ abstract class ApplicationFeature {
     
     public function setStartDate($start_date) {
     	$this->start_date = $start_date;
+    }
+
+    public function getEditDate() {
+        return $this->edit_date;
+    }
+
+    public function setEditDate($edit_date) {
+        $this->edit_date = $edit_date;
     }
 
     public function getEndDate(){

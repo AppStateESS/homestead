@@ -78,16 +78,29 @@ class SaveApplicationFeatureCommand extends Command {
         $feature->setEnabled($enabled);
         if($enabled) {
         	$startDate = strtotime($context->get('start_date'));
+            $editDate   = strtotime($context->get('edit_date'));
         	$endDate   = strtotime($context->get('end_date'));
 
-        	if($startDate && $endDate && $startDate >= $endDate){
-        	    echo json_encode(new MissingDataException ('Start date must be before the end date.', array('Start date', 'End date')));
-        	    HMS::quit();
+            if($startDate && $endDate) {
+                if($startDate >= $endDate){
+                    $e = new MissingDataException ('Start date must be before the end date.', array('Start date', 'End date'));
+                    echo $e->getJSON();
+                    HMS::quit();
+                }
+                if($editDate && ($editDate <= $startDate || $editDate >= $endDate)) {
+                    $e = new MissingDataException('Edit date must be between the start and end dates.', array('Edit date'));
+                    echo $e->getJSON();
+                    HMS::quit();
+                }
         	}
         	
         	if(!is_null($startDate)) {
         		$feature->setStartDate($startDate);
-        	}
+            }
+
+            if(!is_null($editDate)) {
+                $feature->setEditDate($editDate);
+            }
         	
         	if(!is_null($endDate)) {
         		$feature->setEndDate($endDate);

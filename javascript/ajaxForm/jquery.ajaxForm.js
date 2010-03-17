@@ -80,7 +80,11 @@
 							return;
 						} else {
                             console.log(data);
-							var err = "Please check the following fields: ";
+                            var err = "";
+                            if(data.message != undefined) {
+                                err += data.message + "\n\n";
+                            }
+							err += "Please check the following fields: ";
 							for(var d in data.data) {
 								err += data.data[d] + " ";
 							}

@@ -9,4 +9,13 @@ class MissingDataException extends HMSException {
 		parent::__construct($message, $code);
 		$this->data = $data;
 	}
+
+    public function getJSON()
+    {
+        foreach($this as $key=>$value)
+        {
+            $json->$key = $value;
+        }
+        return json_encode($json);
+    }
 }
