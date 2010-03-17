@@ -30,7 +30,7 @@ class RlcApplicationPage1View extends View {
         $context = $this->context;
         PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
         
-        $student = StudentFactory::getStudentByUsername(Current_User::getUsername(), Term::getCurrentTerm());
+        $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), Term::getCurrentTerm());
  
         $template = array();
 
