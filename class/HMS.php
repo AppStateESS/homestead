@@ -47,8 +47,16 @@ abstract class HMS {
         
 		$cmd = CommandFactory::getCommand($action);
 		
-		try {
+		//try {
 			$cmd->execute($this->context);
+            /*
+        } catch(PermissionException $e){
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Permission exception: ' . $e->getMessage());
+                PHPWS_Core::initModClass('hms', 'HMSNotificationView.php');
+				$nv = new HMSNotificationView();
+				$nv->popNotifications();
+				Layout::add($nv->show());
+                
 		} catch(Exception $e) {
 			try {
 				$message = $this->formatException($e);
@@ -66,6 +74,7 @@ abstract class HMS {
 				exit();
 			}
 		}
+        */
 	}
 
 	private function formatException(Exception $e)
