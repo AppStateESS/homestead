@@ -42,11 +42,9 @@ class StudentProfile {
 			}
 		} else {
 			if($pendingRoommates != NULL){
-				$pendingStudent = StudentFactory::getStudentByUsername($roomie, $this->term);
-				$roommates[] = $pendingStudent->getFullNameProfileLink() . ' (Pending)';
+				$roommates[] = $pendingRoommates->getFullNameProfileLink() . ' (Pending)';
 			} else if(!is_null($confirmedRoommates)){
-				$confirmedStudent = StudentFactory::getStudentByUsername($roomie, $this->term);
-				$roommates[] = $confirmedStudent->getFullNameProfileLink() . '(Confirmed)';
+				$roommates[] = $confirmedRoommates->getFullNameProfileLink() . ' (Confirmed)';
 			}
 		}
 
