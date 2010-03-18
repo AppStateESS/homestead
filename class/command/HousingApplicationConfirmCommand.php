@@ -150,7 +150,7 @@ class HousingApplicationConfirmCommand extends Command {
         $rlcReg = new RLCApplicationRegistration();
 
         if(ApplicationFeature::isEnabledForStudent($rlcReg, $term, $student)
-        && HMS_RLC_Application::check_for_application($student->getUsername(), $term) == FALSE
+        && HMS_RLC_Application::checkForApplication($student->getUsername(), $term) == FALSE
         && $context->get('rlc_interest') == 1)
         {
             $rlcCmd = CommandFactory::getCommand('ShowRlcApplicationPage1View');

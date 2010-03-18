@@ -424,12 +424,8 @@ class HMS_Roommate
     public function check_rlc_applications()
     {
         PHPWS_Core::initModClass('hms','HMS_RLC_Application.php');
-        $result  = HMS_RLC_Application::check_for_application($this->requestor, $this->term, FALSE);
-        $resultb = HMS_RLC_Application::check_for_application($this->requestee, $this->term, FALSE);
-        echo "<pre>";
-        print_r($result);
-        print_r($resultb);
-        echo "</pre>";
+        $result  = HMS_RLC_Application::checkForApplication($this->requestor, $this->term, FALSE);
+        $resultb = HMS_RLC_Application::checkForApplication($this->requestee, $this->term, FALSE);
 
         if($result === FALSE && $resultb === FALSE)
             return TRUE;
@@ -456,8 +452,8 @@ class HMS_Roommate
     public function check_rlc_assignments()
     {
         PHPWS_Core::initModClass('hms','HMS_RLC_Assignment.php');
-        $resulta = HMS_RLC_Assignment::check_for_assignment($this->requestor, $this->term);
-        $resultb = HMS_RLC_Assignment::check_for_assignment($this->requestee, $this->term);
+        $resulta = HMS_RLC_Assignment::checkForAssignment($this->requestor, $this->term);
+        $resultb = HMS_RLC_Assignment::checkForAssignment($this->requestee, $this->term);
 
         if($resulta === FALSE && $resultb === FALSE) {
             return TRUE;

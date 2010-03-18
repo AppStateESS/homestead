@@ -206,7 +206,7 @@ class HMS_Admin
             }
 
             # Check for and delete any learning community assignments
-            $rlc_app = HMS_RLC_Application::check_for_application($asu_username, $term);
+            $rlc_app = HMS_RLC_Application::checkForApplication($asu_username, $term);
             if(PEAR::isError($rlc_app)){
                 $tpl['warnings'][] = array('USERNAME'   => $asu_username,
                                            'MESSAGE'    => 'Error looking for RLC application.');

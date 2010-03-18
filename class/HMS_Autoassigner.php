@@ -48,7 +48,7 @@ class HMS_Autoassigner
                 continue;
             }
 
-            $rlc = HMS_RLC_Assignment::check_for_assignment($a->username, $term);
+            $rlc = HMS_RLC_Assignment::checkForAssignment($a->username, $term);
             if($rlc !== FALSE) {
                 $rlcs[] = "Skipping <strong>{$a->username}</strong>; assigned to an RLC.";
                 continue;
@@ -61,7 +61,7 @@ class HMS_Autoassigner
                 continue;
             }
 
-            $rlc = HMS_RLC_Assignment::check_for_assignment($b->username, $term);
+            $rlc = HMS_RLC_Assignment::checkForAssignment($b->username, $term);
             if($rlc !== FALSE) {
                 $rlcs[] = "Skipping <strong>{$b->username}</strong>; assigned to an RLC.";
                 continue;
@@ -153,7 +153,7 @@ class HMS_Autoassigner
                 continue;
             }
 
-            $rlc = HMS_RLC_Assignment::check_for_assignment($a->username, $term);
+            $rlc = HMS_RLC_Assignment::checkForAssignment($a->username, $term);
             if($rlc !== FALSE) {
                 $rlcs[] = "Skipping <strong>{$a->username}</strong>; assigned to an RLC.";
                 continue;
@@ -167,7 +167,7 @@ class HMS_Autoassigner
                 continue;
             }
 
-            $rlc = HMS_RLC_Assignment::check_for_assignment($b->username, $term);
+            $rlc = HMS_RLC_Assignment::checkForAssignment($b->username, $term);
             if($rlc !== FALSE) {
                 $rlcs[] = "Skipping <strong>{$b->username}</strong>; assigned to an RLC.";
                 array_unshift($applicants, $a);

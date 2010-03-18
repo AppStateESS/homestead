@@ -227,7 +227,7 @@ class RoommateProfile{
         $pager = new DBPager('hms_student_profiles','RoommateProfile');
 
         // Check to see if user is assigned to an RLC
-        $rlc_assignment = HMS_RLC_Assignment::check_for_assignment($student->getUsername(), $student->getApplicationTerm());
+        $rlc_assignment = HMS_RLC_Assignment::checkForAssignment($student->getUsername(), $student->getApplicationTerm());
         if($rlc_assignment != FALSE){
             // User is assigned to an RLC, only show results from other students in the same RLC
             $pager->db->addJoin('LEFT OUTER', 'hms_student_profiles', 'hms_learning_community_applications', 'username', 'user_id');

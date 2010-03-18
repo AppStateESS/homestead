@@ -199,7 +199,7 @@ class HousingApplicationFormView extends View {
          *******/
         PHPWS_Core::initModClass('hms', 'applicationFeature/RlcApplication.php');
         $rlcReg = new RLCApplicationRegistration();
-        if(HMS_RLC_Application::check_for_application($this->student->getUsername(), $this->term) == TRUE){
+        if(HMS_RLC_Application::checkForApplication($this->student->getUsername(), $this->term) == TRUE){
             // Student has an RLC application on file already
             $tpl['RLC_SUBMITTED'] = '';
             $form->addHidden('rlc_interest', 0);

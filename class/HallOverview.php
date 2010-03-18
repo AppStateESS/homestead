@@ -97,7 +97,7 @@ class HallOverview extends View {
                             NQ::simple('hms', HMS_NOTIFICATION_WARNING, "Could not find data for: $username");
                         }
 
-						$assign_rlc  = HMS_RLC_Assignment::check_for_assignment($username, $this->hall->term); //false or index
+						$assign_rlc  = HMS_RLC_Assignment::checkForAssignment($username, $this->hall->term); //false or index
 						if($assign_rlc != FALSE){
 							$rlc_abbr = $rlcs_abbr[$assign_rlc['rlc_id']]; //get the abbr for the rlc
 						}else{
