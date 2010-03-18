@@ -8,7 +8,6 @@
 class RequestRoommateCommand extends Command
 {
     private $term;
-    private $rlcConfirm;
 
     public function getRequestVars()
     {
@@ -18,21 +17,12 @@ class RequestRoommateCommand extends Command
             $vars['term'] = $this->term;
         }
 
-        if(isset($this->rlcConfirm)) {
-            $vars['rlcConfirm'] = $this->rlcConfirm;
-        }
-
         return $vars;
     }
 
     public function setTerm($term)
     {
         $this->term = $term;
-    }
-
-    public function setRlcConfirm($rlcConfirm)
-    {
-        $this->rlcConfirm = $rlcConfirm;
     }
 
     public function execute(CommandContext $context)
@@ -62,13 +52,6 @@ class RequestRoommateCommand extends Command
         if(!PHPWS_Text::isValidInput($requestee)) {
             NQ::simple('hms', HMS_NOTIFICATION_WARNING, 'You entered an invalid username.  Please use letters and numbers only.');
             $err->redirect();
-        }
-
-        // Did they say go ahead and trash the RLC application?
-        if(!empty($rlcConfirm)) {
-            PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
-            $rlcapp = new HMS_RLC_Application($requestor, $term);
-            $rlcapp->delete();
         }
 
         // Attempt to Create Roommate Request

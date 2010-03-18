@@ -6,8 +6,8 @@
  * @author Jeremy Booker <jbooker at tux dot appstate dot edu>
  * @author Jeff Tickle <jtickle at tux dot appstate dot edu>
  */
- 
-// The number of seconds before a roommate request expires, (hrs * 60 * 60) 
+
+// The number of seconds before a roommate request expires, (hrs * 60 * 60)
 define('ROOMMATE_REQ_TIMEOUT', 259200); // 259200 = 72 hours
 
 PHPWS_Core::initModClass('hms', 'StudentFactory.php');
@@ -94,7 +94,7 @@ class HMS_Roommate
         $db = new PHPWS_DB('hms_roommate');
         $db->addWhere('id', $this->id);
         $result = $db->delete();
-        
+
         if(PHPWS_Error::logIfError($result)) {
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
@@ -112,7 +112,7 @@ class HMS_Roommate
         } else if(trim($this->requestee) == trim($username)) {
             return $this->requestor;
         }
-        
+
         throw new RoommateException("$username is not in roommate pairing " . $this->id);
     }
 
@@ -198,9 +198,9 @@ class HMS_Roommate
         return ($result > 0 ? TRUE : FALSE);
     }
 
-    /* 
+    /*
      * Returns TRUE if the student has a confirmed roommate, FALSE otherwise
-     */ 
+     */
     public function has_confirmed_roommate($asu_username, $term)
     {
         $db = new PHPWS_DB('hms_roommate');
@@ -222,13 +222,13 @@ class HMS_Roommate
 
         return ($result > 0 ? TRUE : FALSE);
     }
-    
+
     /*
      * Returns the given user's confirmed roommate or FALSE if the roommate is unconfirmed
      */
     public function get_confirmed_roommate($asu_username, $term)
     {
-        
+
         $db = new PHPWS_DB('hms_roommate');
         $db->addWhere('requestor', $asu_username, 'ILIKE', 'OR', 'grp');
         $db->addWhere('requestee', $asu_username, 'ILIKE', 'OR', 'grp');
@@ -237,9 +237,9 @@ class HMS_Roommate
         $db->addWhere('term', $term);
         $db->addColumn('requestor');
         $db->addColumn('requestee');
-        
+
         //$db->setTestMode();
-        
+
         $result = $db->select('row');
 
         if(PHPWS_Error::logIfError($result)) {
@@ -258,12 +258,12 @@ class HMS_Roommate
         if(trim($result['requestor']) == trim($asu_username)) {
             return StudentFactory::getStudentByUsername($result['requestee'], $term);
         }
-        
+
         return StudentFactory::getStudentByUsername($result['requestor'], $term);
     }
 
     public function get_pending_roommate($asu_username, $term)
-    {   
+    {
         $db = new PHPWS_DB('hms_roommate');
         $db->addWhere('requestor', $asu_username, 'ILIKE', 'OR', 'grp');
         $db->addWhere('requestee', $asu_username, 'ILIKE', 'OR', 'grp');
@@ -280,9 +280,9 @@ class HMS_Roommate
         }
 
         if(count($result) == 0)
-            return null;
-            
-            test($result,1);
+        return null;
+
+        test($result,1);
 
         if(trim($result['requestor']) == trim($asu_username)) {
             return $result['requestee'];
@@ -383,7 +383,7 @@ class HMS_Roommate
         $result = $db->getObjects('HMS_Roommate');
 
         if(PHPWS_Error::logIfError($result))
-            return FALSE;
+        return FALSE;
 
         return $result;
     }
@@ -398,7 +398,7 @@ class HMS_Roommate
         $db->addWhere('requestee', $asu_username, 'ILIKE', NULL, 'username_group');
         $db->addWhere('requestor', $asu_username, 'ILIKE', 'OR', 'username_group');
         $db->setGroupConj('username_group', 'AND');
-        
+
         $db->addWhere('confirmed', 0);
         $db->addWhere('term', $term);
         $requests = $db->getObjects('HMS_Roommate');
@@ -409,7 +409,7 @@ class HMS_Roommate
         }
 
         if($requests == null)
-            return TRUE;
+        return TRUE;
 
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
         foreach($requests as $request) {
@@ -421,6 +421,7 @@ class HMS_Roommate
         return TRUE;
     }
 
+    // Depricated per ticket #530
     public function check_rlc_applications()
     {
         PHPWS_Core::initModClass('hms','HMS_RLC_Application.php');
@@ -428,27 +429,28 @@ class HMS_Roommate
         $resultb = HMS_RLC_Application::checkForApplication($this->requestee, $this->term, FALSE);
 
         if($result === FALSE && $resultb === FALSE)
-            return TRUE;
+        return TRUE;
 
         if($result === FALSE || $resultb === FALSE)
-            return FALSE;
+        return FALSE;
 
         // Check to see if any of a's choices match any of b's choices
         if($result['rlc_first_choice_id']  == $resultb['rlc_first_choice_id'] ||
-           $result['rlc_first_choice_id']  == $resultb['rlc_second_choice_id'] ||
-           $result['rlc_first_choice_id']  == $resultb['rlc_third_choice_id'] ||
-           $result['rlc_second_choice_id'] == $resultb['rlc_first_choice_id'] ||
-           $result['rlc_second_choice_id'] == $resultb['rlc_second_choice_id'] ||
-           $result['rlc_second_choice_id'] == $resultb['rlc_third_choice_id'] ||
-           $result['rlc_third_choice_id']  == $resultb['rlc_first_choice_id'] ||
-           $result['rlc_third_choice_id']  == $resultb['rlc_second_choice_id'] ||
-           $result['rlc_third_choice_id']  == $resultb['rrlc_third_choice_id']){
+        $result['rlc_first_choice_id']  == $resultb['rlc_second_choice_id'] ||
+        $result['rlc_first_choice_id']  == $resultb['rlc_third_choice_id'] ||
+        $result['rlc_second_choice_id'] == $resultb['rlc_first_choice_id'] ||
+        $result['rlc_second_choice_id'] == $resultb['rlc_second_choice_id'] ||
+        $result['rlc_second_choice_id'] == $resultb['rlc_third_choice_id'] ||
+        $result['rlc_third_choice_id']  == $resultb['rlc_first_choice_id'] ||
+        $result['rlc_third_choice_id']  == $resultb['rlc_second_choice_id'] ||
+        $result['rlc_third_choice_id']  == $resultb['rrlc_third_choice_id']){
             return TRUE;
         }
 
         return FALSE;
     }
 
+    // Depricated per ticket #530
     public function check_rlc_assignments()
     {
         PHPWS_Core::initModClass('hms','HMS_RLC_Assignment.php');
@@ -489,6 +491,26 @@ class HMS_Roommate
             $tpl['EXPIRES'] = $expires . ' hour' . ($expires > 1 ? 's' : '');
         }
         return $tpl;
+    }
+
+    public function get_roommate_pager_tags(){
+        $tags = array();
+
+        $term = Term::getSelectedTerm();
+
+        $requestor = StudentFactory::getStudentByUsername($this->requestor,$term);
+        $requestee = StudentFactory::getStudentByUsername($this->requestee,$term);
+
+        $deleteCmd = CommandFactory::getCommand('DeleteRoommateGroup');
+        $deleteCmd->setId($this->id);
+
+        $tags['REQUESTOR']      = $requestor->getFullNameProfileLink();
+        $tags['REQUESTEE']      = $requestee->getFullNameProfileLink();
+        $tags['REQUESTED_ON']   = HMS_Util::get_long_date_time($this->requested_on);
+        $tags['CONFIRMED_ON']   = HMS_Util::get_long_date_time($this->confirmed_on);
+        $tags['ACTION']         = $deleteCmd->getLink('Delete');
+
+        return $tags;
     }
 
     /**
@@ -575,15 +597,17 @@ class HMS_Roommate
             return E_ROOMMATE_TYPE_MISMATCH;
         }
 
-        // Make sure RLC Applications are compatible
-        if(!$this->check_rlc_applications()) {
-            return E_ROOMMATE_RLC_APPLICATION;
-        }
+        /*
+         // Make sure RLC Applications are compatible
+         if(!$this->check_rlc_applications()) {
+         return E_ROOMMATE_RLC_APPLICATION;
+         }
 
-        // If either student is assigned to an RLC, do not allow the request
-        if(!$this->check_rlc_assignments()) {
-            return E_ROOMMATE_RLC_ASSIGNMENT;
-        }
+         // If either student is assigned to an RLC, do not allow the request
+         if(!$this->check_rlc_assignments()) {
+         return E_ROOMMATE_RLC_ASSIGNMENT;
+         }
+         */
 
         return E_SUCCESS;
     }
@@ -593,7 +617,7 @@ class HMS_Roommate
      * create a roommate pairing
      */
     public function canLiveTogetherAdmin(Student $roommate1, Student $roommate2, $term){
-        
+
         # Sanity Checking
         if(is_null($roommate1)) {
             throw new RoommateException('Null student object for roommate 1.');
@@ -607,7 +631,7 @@ class HMS_Roommate
         if($roommate1->getUsername() == $roommate2->getUsername()){
             throw new RoommateException('Roommate user names must be unique.');
         }
-        
+
         # Use SOAP for the following checks
         # Make that both roommate have some sort of soap info
         $name = $roommate1->getLastName();
@@ -619,12 +643,12 @@ class HMS_Roommate
         if(empty($name)) {
             throw new RoommateException('No banner information for second roommate.');
         }
-        
+
         # Make sure the genders match
         if($roommate1->getGender() != $roommate2->getGender()){
             throw new RoommateException('Roommate genders do not match.');
         }
-        
+
         # Check if either has a confirmed roommate
         if(HMS_Roommate::has_confirmed_roommate($roommate1->getUsername(), $term)){
             throw new RoommateException('The first roommate already has a confirmed roommate.');
@@ -648,14 +672,14 @@ class HMS_Roommate
     {
         return ($this->requested_on + ROOMMATE_REQ_TIMEOUT);
     }
-    
+
     /*****************
      * Email Methods *
      *****************/
      
     //TODO move email messages below into templates of their own and use HMS_Email class
-    
-    public function send_request_emails() 
+
+    public function send_request_emails()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Email.php');
 
@@ -663,7 +687,7 @@ class HMS_Roommate
         $requesteeStudent = StudentFactory::getStudentByUsername($this->requestee, $this->term);
 
         // set tags for the email to the person doing the requesting
-        $message  = "To:     " . $requestorStudent->getFullName() . "\n"; 
+        $message  = "To:     " . $requestorStudent->getFullName() . "\n";
         $message .= "From:   Housing Management System\n\n";
         $message .= "This is a follow-up email to let you know you have requested " . $requesteeStudent->getFullName() . " as your roommate.\n\n";
         $message .= "We have sent your requested roommate an email invitation to confirm his/her desire to be your roommate. Your requested ";
@@ -673,7 +697,7 @@ class HMS_Roommate
 
         // create the Mail object and send it
         $success = HMS_Email::send_email($this->requestor . '@appstate.edu', NULL, 'HMS Roommate Request', $message);
-       
+         
         if($success != TRUE) {
             throw new RoommateException('Error occurred emailing the requestor ' . $this->requestor . ' of a roommate request for requestee ' . $this->requestee . ', HMS_Roommate ' . $this->id);
         }
@@ -861,7 +885,7 @@ class HMS_Roommate
     /**
      * Shows a pager of roommate requests
      */
-    public function display_requests($asu_username, $term)
+    public static function display_requests($asu_username, $term)
     {
         PHPWS_Core::initCoreClass('DBPager.php');
         $pager = new DBPager('hms_roommate', 'HMS_Roommate');
@@ -878,15 +902,15 @@ class HMS_Roommate
     /**
      *
      */
-    public function roommate_pager()
+    public static function roommate_pager()
     {
         PHPWS_Core::initCoreClass('DBPager.php');
 
         $pager = new DBPager('hms_roommate', 'HMS_Roommate');
-        
+
         $pager->db->addWhere('confirmed', 1);
         $pager->db->addWhere('term', Term::getSelectedTerm());
-        
+
         $pager->setModule('hms');
         $pager->setTemplate('admin/roommate_pager.tpl');
         $pager->addRowTags('get_roommate_pager_tags');
@@ -899,26 +923,5 @@ class HMS_Roommate
 
         return $pager->get();
     }
-
-    public function get_roommate_pager_tags(){
-        $tags = array();
-        
-        $term = Term::getSelectedTerm();
-        
-        $requestor = StudentFactory::getStudentByUsername($this->requestor,$term);
-        $requestee = StudentFactory::getStudentByUsername($this->requestee,$term);
-        
-        $deleteCmd = CommandFactory::getCommand('DeleteRoommateGroup');
-        $deleteCmd->setId($this->id);
-        
-        $tags['REQUESTOR']      = $requestor->getFullNameProfileLink();
-        $tags['REQUESTEE']      = $requestee->getFullNameProfileLink();
-        $tags['REQUESTED_ON']   = HMS_Util::get_long_date_time($this->requested_on);
-        $tags['CONFIRMED_ON']   = HMS_Util::get_long_date_time($this->confirmed_on);
-        $tags['ACTION']         = $deleteCmd->getLink('Delete');
-        
-        return $tags;
-    }
 }
-
 ?>
