@@ -8,6 +8,7 @@ class RlcApplicationRegistration extends ApplicationFeatureRegistration {
         $this->name = 'RlcApplication';
         $this->description = 'RLC Applications';
         $this->startDateRequired = true;
+        $this->editDateRequired = true;
         $this->endDateRequired = true;
         $this->priority = 2;
     }
@@ -40,7 +41,7 @@ class RlcApplication extends ApplicationFeature {
         $application = HMS_RLC_Application::getApplicationByUsername($student->getUsername(), $student->getApplicationTerm());
 
         PHPWS_Core::initModClass('hms', 'RlcApplicationMenuView.php');
-        return new RlcApplicationMenuView($student, $this->getStartDate(), $this->getEndDate(), $application);
+        return new RlcApplicationMenuView($student, $this->getStartDate(), $this->getEditDate(), $this->getEndDate(), $application);
     }
 }
 

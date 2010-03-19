@@ -4,13 +4,15 @@ class RlcApplicationMenuView extends View {
     
     private $student;
     private $startDate;
+    private $editDate;
     private $endDate;
     private $application;
     
-    public function __construct(Student $student, $startDate, $endDate, HMS_RLC_Application $application = NULL)
+    public function __construct(Student $student, $startDate, $editDate, $endDate, HMS_RLC_Application $application = NULL)
     {
         $this->student      = $student;
         $this->startDate    = $startDate;
+        $this->editDate     = $editDate;
         $this->endDate      = $endDate;
         $this->application  = $application;
     }
@@ -23,8 +25,11 @@ class RlcApplicationMenuView extends View {
             $viewCmd = CommandFactory::getCommand('ShowRlcApplicationReView');
             $viewCmd->setUsername($this->student->getUsername());
             $tpl['VIEW_APP'] = $viewCmd->getLink('view your application');
-            $newCmd = CommandFactory::getCommand('ShowRlcApplicationView');
-            $tpl['NEW_APP'] = $newCmd->getLink('submit a new application');
+            
+            if(time() < $this->editDate){
+                $newCmd = CommandFactory::getCommand('ShowRlcApplicationView');
+                $tpl['NEW_APP'] = $newCmd->getLink('submit a new application');
+            }
         }else if(time() < $this->startDate){
             $tpl['BEGIN_DEADLINE'] = HMS_Util::getFriendlyDate($this->startDate); 
         }else if (time() > $this->endDate){
