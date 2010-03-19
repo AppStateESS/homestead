@@ -17,7 +17,7 @@ class ApplicationFeatureSettingsView extends View
 		$reg = $f->getRegistration();
 		
 		PHPWS_Core::initCoreClass('Form.php');
-		$form = &new PHPWS_Form($reg->getName());
+		$form = new PHPWS_Form($reg->getName());
 		
         $cmd = CommandFactory::getCommand('SaveApplicationFeature');
         if($f->getId() < 1) {

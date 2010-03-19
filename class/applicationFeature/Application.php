@@ -39,7 +39,7 @@ class Application extends ApplicationFeature {
 		
 		$application      = HousingApplication::getApplicationByUser($student->getUsername(), $this->term);
 		
-		return new ApplicationMenuBlockView($this->term, $this->getStartDate(), $this->getEndDate(), $application);
+		return new ApplicationMenuBlockView($this->term, $this->getStartDate(), $this->getEditDate(), $this->getEndDate(), $application);
 	}
 }
 ?>

@@ -6,13 +6,15 @@ class ApplicationMenuBlockView extends View {
 
     private $term;
     private $startDate;
+    private $editDate;
     private $endDate;
     private $application;
 
-    public function __construct($term, $startDate, $endDate, HousingApplication $application = NULL)
+    public function __construct($term, $startDate, $editDate, $endDate, HousingApplication $application = NULL)
     {
         $this->term               = $term;
         $this->startDate          = $startDate;
+        $this->editDate           = $editDate;
         $this->endDate            = $endDate;
         $this->application        = $application;
     }
@@ -38,12 +40,15 @@ class ApplicationMenuBlockView extends View {
             if(!is_null($this->application)){
                 $appCommand->setAppId($this->application->id);
             }
+            
             $tpl['VIEW_APP'] = $appCommand->getLink('view your application');
             
-            $newApp = CommandFactory::getCommand('ShowHousingApplicationForm');
-            $newApp->setAgreedToTerms(1);
-            $newApp->setTerm($this->term);
-            $tpl['NEW_APP'] = $newApp->getLink('submit a new application');
+            if(time() < $this->editDate){
+                $newApp = CommandFactory::getCommand('ShowHousingApplicationForm');
+                $newApp->setAgreedToTerms(1);
+                $newApp->setTerm($this->term);
+                $tpl['NEW_APP'] = $newApp->getLink('submit a new application');
+            }
         }
 
         return PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/applicationMenuBlock.tpl');
