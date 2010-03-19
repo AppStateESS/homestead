@@ -17,6 +17,13 @@ class ShowRlcApplicationReViewCommand extends Command {
     }
 
     public function execute(CommandContext $context){
+        
+        // This is used both on the admin side and on the student side, so the permission check is a bit more complex
+        if((UserStatus::isAdmin() && !Current_User::allow('view_rlc_applications')) || (UserStatus::isUser() && $context->get('username') != UserStatus::getUsername())){
+            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
+            throw new PermissionException('You do not have permission to view this RLC application.');
+        }
+        
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
         PHPWS_Core::initModClass('hms', 'RlcApplicationReView.php');
