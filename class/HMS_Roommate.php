@@ -282,8 +282,6 @@ class HMS_Roommate
         if(count($result) == 0)
         return null;
 
-        test($result,1);
-
         if(trim($result['requestor']) == trim($asu_username)) {
             return $result['requestee'];
         }

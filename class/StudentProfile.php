@@ -41,8 +41,9 @@ class StudentProfile {
 				}
 			}
 		} else {
-			if($pendingRoommates != NULL){
-				$roommates[] = $pendingRoommates->getFullNameProfileLink() . ' (Pending)';
+			if(!is_null($pendingRoommates)){
+			    $pendingStudent = StudentFactory::getStudentByUsername($pendingRoommates, $this->term);
+				$roommates[] = $pendingStudent->getFullNameProfileLink() . ' (Pending)';
 			} else if(!is_null($confirmedRoommates)){
 				$roommates[] = $confirmedRoommates->getFullNameProfileLink() . ' (Confirmed)';
 			}
