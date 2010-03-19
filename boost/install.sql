@@ -355,6 +355,7 @@ CREATE TABLE hms_student_profiles (
     tv_shows smallint,
     volunteering smallint,
     writing smallint,
+    rotc smallint,
     alternative smallint,
     ambient smallint,
     beach smallint,
