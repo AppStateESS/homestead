@@ -27,7 +27,7 @@ class RoommateProfile{
     public $yahoo_sn = NULL;
     public $msn_sn = NULL;
 
-    # Music choices
+    # Hobby choices
     public $arts_and_crafts = 0;
     public $books_and_reading = 0;
     public $cars = 0;
@@ -52,8 +52,9 @@ class RoommateProfile{
     public $tv_shows = 0;
     public $volunteering = 0;
     public $writing = 0;
+    public $rotc = 0;
 
-    # Hobby choices
+    # music choices
     public $alternative = 0;
     public $ambient = 0;
     public $beach = 0;
@@ -137,7 +138,7 @@ class RoommateProfile{
         if($this->get_date_submitted() == NULL){
             $this->set_date_submitted();
         }
-
+        
         $result = $db->saveObject($this);
 
         if(PHPWS_Error::logIfError($result)){
@@ -362,6 +363,11 @@ class RoommateProfile{
                 $_SESSION['hobbies_checkbox']['writing'] = 1;
             }
 
+            if(isset($_REQUEST['hobbies_checkbox']['rotc'])){
+                $pager->addWhere('hms_student_profiles.rotc',1,'=');
+                $_SESSION['hobbies_checkbox']['rotc'] = 1;
+            }
+
             # Music check boxes
             if(isset($_REQUEST['music_checkbox']['alternative'])){
                 $pager->addWhere('hms_student_profiles.alternative',1,'=');
@@ -584,11 +590,11 @@ class RoommateProfile{
         $tags['STUDENT_ID'] = $student->getUsername() . "@appstate.edu";
         $tags['FIRST_NAME'] = $student->getFirstName();
         $tags['LAST_NAME'] = $student->getLastName();
-        
+
         $viewProfileCmd = CommandFactory::getCommand('ShowRoommateProfile');
         $viewProfileCmd->setUsername($student->getUsername());
         $viewProfileCmd->setTerm($this->term);
-        
+
         $tags['ACTIONS'] = $viewProfileCmd->getLink('[View Profile]');
 
         return $tags;
@@ -697,6 +703,10 @@ class RoommateProfile{
 
         if($profile->get_writing()){
             $hobbies_matches[] = 'writing';
+        }
+        
+        if($profile->get_rotc()){
+            $hobbies_matches[] = 'rotc';
         }
 
         return $hobbies_matches;
@@ -1264,6 +1274,18 @@ class RoommateProfile{
 
     public function get_writing(){
         if($this->writing == 1){
+            return TRUE;
+        }else{
+            return FALSE;
+        }
+    }
+    
+    public function set_rotc($value = 1){
+        $this->rotc = $value;
+    }
+    
+    public function get_rotc(){
+        if($this->rotc == 1){
             return TRUE;
         }else{
             return FALSE;

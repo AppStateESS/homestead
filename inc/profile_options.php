@@ -28,7 +28,8 @@ $hobbies = array(
             'travel',
             'tv_shows',
             'volunteering',
-            'writing');
+            'writing',
+            'rotc');
 $hobbies_labels = array(
             'Arts and Crafts',
             'Books and Reading',
@@ -53,7 +54,8 @@ $hobbies_labels = array(
             'Travel',
             'TV Shows',
             'Volunteering',
-            'Writing');
+            'Writing',
+            'Military / ROTC');
 
 $music = array(
             'alternative',

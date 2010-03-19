@@ -209,6 +209,12 @@ class SubmitRoommateProfileCommand extends Command {
             $profile->set_writing(0);
         }
 
+        if(isset($_REQUEST['hobbies_checkbox']['rotc'])){
+            $profile->set_rotc();
+        }else{
+            $profile->set_rotc(0);
+        }
+
         # Music check boxes
         if(isset($_REQUEST['music_checkbox']['alternative'])){
             $profile->set_alternative();
