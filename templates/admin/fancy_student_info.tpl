@@ -135,6 +135,8 @@
                             <th>Type</th>
                             <th>Cell phone #</th>
                             <th>Meal plan</th>
+                            <th>Cleanliness</th>
+                            <th>Bedtime</th>
                             <th>Actions</th>
                         </tr>
                         <!-- BEGIN APPLICATIONS -->
@@ -143,6 +145,8 @@
                             <td>{type}</td>
                             <td>{cell_phone}</td>
                             <td>{meal_plan}</td>
+                            <td>{clean}</td>
+                            <td>{bedtime}</td>
                             <td>{actions}</td>
                         </tr>
                         <!-- END APPLICATIONS -->

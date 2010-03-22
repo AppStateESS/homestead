@@ -34,7 +34,7 @@ class StudentProfile {
 					if(!is_null($pendingRoommates) && $roomie->getUsername() == $pendingRoommates){
 						$roommates[] =  $rm->getFullNameProfileLink() . ' (Pending)';
 					} else if(!is_null($confirmedRoommates) && $roomie->getUsername() == $confirmedRoommates){
-						$roommates[] = $rm->getFullNameProfileLink() . '(Confirmed)';
+						$roommates[] = $rm->getFullNameProfileLink() . ' (Confirmed)';
 					}else{
 						$roommates[] = $rm->getFullNameProfileLink();
 					}

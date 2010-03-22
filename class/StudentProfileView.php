@@ -11,7 +11,7 @@ class StudentProfileView extends View {
     private $assignment;
     private $roommates;
 
-    public function __construct(Student $student, Array $applications = NULL, HMS_Assignment $assignment = NULL, Array $roommates){
+    public function __construct(Student $student, $applications = NULL, HMS_Assignment $assignment = NULL, Array $roommates){
         $this->student		= $student;
         $this->applications = $applications;
         $this->assignment	= $assignment;
@@ -143,7 +143,7 @@ class StudentProfileView extends View {
         }else if (!is_null($rlc_application)){
             $rlcViewCmd = CommandFactory::getCommand('ShowRlcApplicationReView');
             $rlcViewCmd->setUsername($this->student->getUsername());
-            $tpl['RLC_STATUS'] = "This student has a " . $rlcViewCmd->getLink('pending RLC application') . "."; 
+            $tpl['RLC_STATUS'] = "This student has a " . $rlcViewCmd->getLink('pending RLC application') . ".";
         }else{
             $tpl['RLC_STATUS'] = "This student is not in a Learning Community and has no pending application.";
         }
@@ -175,11 +175,23 @@ class StudentProfileView extends View {
 
                 $type = $app->getStudentType() == TYPE_CONTINUING ? 'Returning' : 'Freshmen';
 
+                if(isset($app->room_condition)){
+                    $clean = $app->room_condition == 1 ? 'Neat' : 'Cluttered';
+                }else{
+                    $clean = '';
+                }
+
+                if(isset($app->preferred_bedtime)){
+                    $bedtime = $app->preferred_bedtime == 1 ? 'Early' : 'Late';
+                }else{
+                    $bedtime = '';
+                }
+
                 $viewCmd = CommandFactory::getCommand('ShowApplicationView');
                 $viewCmd->setAppId($app->getId());
                 $actions = $viewCmd->getLink('View');
 
-                $app_rows[] = array('term'=>$term, 'type'=>$type, 'meal_plan'=>$meal_plan, 'cell_phone'=>$phone, 'actions'=>$actions);
+                $app_rows[] = array('term'=>$term, 'type'=>$type, 'meal_plan'=>$meal_plan, 'cell_phone'=>$phone, 'clean'=>$clean, 'bedtime'=>$bedtime, 'actions'=>$actions);
             }
 
             $tpl['APPLICATIONS'] = $app_rows;
@@ -217,7 +229,7 @@ class StudentProfileView extends View {
             $logsCmd = CommandFactory::getCommand('ShowActivityLog');
             $logsCmd->setActeeUsername($this->student->getUsername());
             $tpl['LOG_PAGER'] .= $logsCmd->getLink('View more');
-            	
+             
             $notesCmd = CommandFactory::getCommand('ShowActivityLog');
             $notesCmd->setActeeUsername($this->student->getUsername());
             $notesCmd->setActivity(array(0 =>ACTIVITY_ADD_NOTE));

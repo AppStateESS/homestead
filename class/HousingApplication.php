@@ -338,7 +338,8 @@ class HousingApplication {
      * Returns false if the request cannot be compelted for any reason.
      */
     public static function getAllApplications($username = NULL, $banner_id = NULL, $term = NULL){
-
+        PHPWS_Core::initModClass('hms', 'HousingApplicationFactory.php');
+        
         $db = new PHPWS_DB('hms_new_application');
 
         if(!is_null($banner_id)){
@@ -353,14 +354,15 @@ class HousingApplication {
             $db->addWhere('term', $term);
         }
 
-        $result = $db->getObjects('HousingApplication');
-
-        if(PEAR::isError($result)){
-            PHPWS_Error::log($result);
-            return false;
+        $result = $db->select();
+        
+        $apps = array();
+        
+        foreach($result as $app){
+            $apps[] = HousingApplicationFactory::getApplicationById($app['id']);
         }
-
-        return $result;
+        
+        return $apps;
     }
 
     public static function getAllFreshmenApplications($term){
