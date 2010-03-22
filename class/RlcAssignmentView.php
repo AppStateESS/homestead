@@ -102,6 +102,12 @@ class RlcAssignmentView extends View {
         javascript('/modules/hms/page_refresh');
         
         $communities = HMS_Learning_Community::getRlcsById();
+        
+        $dropList = array('0'=>'All');
+        
+        foreach($communities as $key=>$val){
+            $dropList[$key] = $val;
+        }
 
         $submitCmd = CommandFactory::getCommand('ShowAssignRlcApplicants');
 
@@ -109,7 +115,7 @@ class RlcAssignmentView extends View {
         $submitCmd->initForm($form);
 
         $form->setMethod('get');
-        $form->addSelect('rlc', $communities);
+        $form->addSelect('rlc', $dropList);
         
         if( isset($this->rlcId) && !is_null($this->rlcId)) {
             $form->setMatch('rlc', $this->rlcId);
@@ -145,7 +151,7 @@ class RlcAssignmentView extends View {
         $pager->db->addWhere('denied', 0); // Only show non-denied applications in this pager
 
         
-        if(isset($this->rlcId) && !is_null($this->rlcId)){
+        if(isset($this->rlcId) && !is_null($this->rlcId) && $this->rlcId > 0){
             $pager->db->addWhere('hms_learning_community_applications.rlc_first_choice_id', $this->rlcId ,'=');
         }
         
