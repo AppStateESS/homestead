@@ -49,10 +49,23 @@ class HousingApplicationView extends View {
         $tpl['STUDENT_STATUS_LBL']          = $student->getPrintableType();
 
         $tpl['MEAL_OPTION']         = HMS_Util::formatMealOption($application->meal_plan);
-        $tpl['LIFESTYLE_OPTION']    = $application->lifestyle_option == 1?'Single gender':'Co-ed';
-        $tpl['PREFERRED_BEDTIME']   = $application->preferred_bedtime == 1?'Early':'Late';
+        if(isset($application->lifestyle_option)){
+            $tpl['LIFESTYLE_OPTION']    = $application->lifestyle_option == 1?'Single gender':'Co-ed';
+        }else{
+            $tpl['LIFESTYLE_OPTION']    = 'n/a';
+        }
         
-        $tpl['ROOM_CONDITION']      = $application->room_condition == 1?'Neat':'Cluttered';
+        if(isset($application->preferred_bedtime)){
+            $tpl['PREFERRED_BEDTIME']   = $application->preferred_bedtime == 1?'Early':'Late';
+        }else{
+            $tpl['PREFERRED_BEDTIME']   = 'n/a';
+        }
+        
+        if(isset($application->room_condition)){
+            $tpl['ROOM_CONDITION']      = $application->room_condition == 1?'Neat':'Cluttered';
+        }else{
+            $tpl['ROOM_CONDITION']      = 'n/a';
+        }
         
         $tpl['CELLPHONE'] = '';
         if(strlen($application->cell_phone) == 10){
