@@ -39,8 +39,13 @@ class HousingApplicationView extends View {
         $tpl = array();
         
         //If the application has been submitted plug in the date it was created
-        if( isset($application->created_on) )
+        if(isset($application->created_on)){
             $tpl['RECEIVED_DATE']   = "Received on: " . date('d-F-Y h:i:s a', $application->created_on);
+        }
+            
+        if($application->withdrawn == 1){
+            NQ::simple('hms', HMS_NOTIFICATION_WARNING, 'This application has been withdrawn.');
+        }
 
         $tpl['STUDENT_NAME']                = $student->getFullName();
         $tpl['GENDER']                      = $student->getPrintableGender();
