@@ -189,7 +189,16 @@ class StudentProfileView extends View {
 
                 $viewCmd = CommandFactory::getCommand('ShowApplicationView');
                 $viewCmd->setAppId($app->getId());
-                $actions = $viewCmd->getLink('View');
+                
+                if($app->getWithdrawn() == 0){
+                    $withdrawCmd = CommandFactory::getCommand('MarkApplicationWithdrawn');
+                    $withdrawCmd->setAppId($app->getId());
+                    $withdrawn = '[' . $withdrawCmd->getLink('Withdraw') . ']'; 
+                }else{
+                    $withdrawn = '(widthdrawn)';
+                }
+                
+                $actions = '[' . $viewCmd->getLink('View') . '] ' . $withdrawn;
 
                 $app_rows[] = array('term'=>$term, 'type'=>$type, 'meal_plan'=>$meal_plan, 'cell_phone'=>$phone, 'clean'=>$clean, 'bedtime'=>$bedtime, 'actions'=>$actions);
             }
