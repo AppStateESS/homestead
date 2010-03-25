@@ -27,6 +27,10 @@ class AssignRlcApplicantsCommand extends Command {
         # $rlc_id is the 'id' column in the 'learning_communitites' table, and refers to the RLC selected for the student
         foreach($_REQUEST['final_rlc'] as $app_id => $rlc_id){
             
+            if($rlc_id <= 0){
+                continue;
+            }
+            
             $app = HMS_RLC_Application::getApplicationById($app_id);            
             $student = StudentFactory::getStudentByUsername($app->username, $app->term);
            
