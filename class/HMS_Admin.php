@@ -13,7 +13,7 @@ class HMS_Admin
      */
     public function withdrawn_search_start($success_msg = NULL, $error_msg = NULL)
     {
-        if(!Current_User::allow('hms', 'withdrawn_search')){
+        if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'withdrawn_search')){
             $tpl = array();
             return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
         }
@@ -48,7 +48,7 @@ class HMS_Admin
      */
     public function withdrawn_search()
     {
-        if(!Current_User::allow('hms', 'withdrawn_search')){
+        if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'withdrawn_search')){
             $tpl = array();
             return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
         }
@@ -112,7 +112,7 @@ class HMS_Admin
 
     public function withdrawn_search_process()
     {
-        if(!Current_User::allow('hms', 'withdrawn_search')){
+        if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'withdrawn_search')){
             $tpl = array();
             return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
         }
@@ -272,7 +272,7 @@ class HMS_Admin
 
     public function show_username_change()
     {
-        if(!Current_User::allow('hms', 'username_change')){
+        if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'username_change')){
             $tpl = array();
             return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
         }
@@ -292,7 +292,7 @@ class HMS_Admin
 
     public function process_username_change()
     {
-        if(!Current_User::allow('hms', 'username_change')){
+        if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'username_change')){
             $tpl = array();
             return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
         }

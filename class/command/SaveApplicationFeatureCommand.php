@@ -40,7 +40,7 @@ class SaveApplicationFeatureCommand extends Command {
 	
 	public function execute(CommandContext $context)
 	{
-		if(!Current_User::allow('hms', 'deadlines')) {
+		if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'deadlines')) {
 			PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
 			throw new PermissionException('You do not have permission to edit deadlines.');
 		}

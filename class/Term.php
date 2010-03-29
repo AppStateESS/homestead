@@ -42,7 +42,7 @@ class Term
 
         if(PHPWS_Error::logIfError($result)) {
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
-            throw new DatabaseException($result->__toString());
+            throw new DatabaseException($result->toString());
         }
     }
 
@@ -54,7 +54,7 @@ class Term
         
         if(PHPWS_Error::logIfError($result)) {
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
-            throw new DatabaseException($result->__toString());
+            throw new DatabaseException($result->toString());
         }
     }
 

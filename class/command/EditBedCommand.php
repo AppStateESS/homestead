@@ -25,7 +25,7 @@ class EditBedCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        if( !Current_User::allow('hms', 'bed_attributes') ){
+        if(!UserStatus::isAdmin() ||  !Current_User::allow('hms', 'bed_attributes') ){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to edit beds.');
         }

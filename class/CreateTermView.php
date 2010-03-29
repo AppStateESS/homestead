@@ -6,6 +6,10 @@ class CreateTermView extends View {
 
     public function show()
     {
+        if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'edit_terms')){
+            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
+            throw new PermissionException('You do not have permission to edit terms.');
+        }
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
         
         $tpl['TITLE'] = 'Add a New Term';

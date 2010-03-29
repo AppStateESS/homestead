@@ -54,7 +54,7 @@ class ShowAddBedCommand extends Command {
 
     function execute(CommandContext $context)
     {
-        if(!Current_User::allow('hms', 'bed_structure')){
+        if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'bed_structure')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to create a bed.');
         }

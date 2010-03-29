@@ -14,6 +14,10 @@ class FloorView extends View {
 
     public function show()
     {
+        if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'floor_view'){
+            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
+            throw new PermissionException('You are not allowed to edit or view floors.');
+        }
         PHPWS_Core::initModClass('hms', 'HMS_Movein_Time.php');
         PHPWS_Core::initModClass('hms', 'HMS_Room.php');
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');

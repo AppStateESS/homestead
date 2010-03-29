@@ -18,7 +18,7 @@ class ProcessBannerQueueCommand extends Command {
     }
 
     function execute(CommandContext $context) {
-        if(!Current_User::allow('hms', 'banner_queue')){
+        if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'banner_queue')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to enable/disable the Banner queue.');
         }

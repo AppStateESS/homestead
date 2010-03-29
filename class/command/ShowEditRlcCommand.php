@@ -27,7 +27,7 @@ class ShowEditRlcCommand extends Command {
 
     function execute(CommandContext $context){
 
-        if(!Current_User::allow('hms', 'learning_community_maintenance')) {
+        if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'learning_community_maintenance')) {
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to edit RLCs.');
         }

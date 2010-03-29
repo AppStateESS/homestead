@@ -10,8 +10,8 @@
 
 class CommandMenu extends View
 {
-    private $context;
-	private $commands;
+    protected $context;
+	protected $commands;
 	
 	public function __construct()
 	{

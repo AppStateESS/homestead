@@ -58,17 +58,18 @@ class AssignStudentCommand extends Command {
 
     public function execute(CommandContext $context)
     {
+        if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'assignment_maintenance')){
+            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
+            throw new PermissionException('You do not have permission to assign students.');
+        }
+
+
         PHPWS_Core::initModClass('hms', 'HousingApplication.php');
         PHPWS_Core::initModClass('hms', 'FallApplication.php');
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
         PHPWS_Core::initModClass('hms', 'HMS_Room.php');
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-
-        if(!Current_User::allow('hms', 'assignment_maintenance')){
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
-            throw new PermissionException('You do not have permission to assign students.');
-        }
 
         PHPWS_Core::initModClass('hms', 'HMS_Banner_Queue.php');
 

@@ -16,9 +16,16 @@ class AdminMenu extends CommandMenu
 		parent::__construct();
 		
 		$this->addCommandByName('Main menu', 'ShowAdminMaintenanceMenu');
-		$this->addCommandByName('Search students', 'ShowStudentSearch');
-		$this->addCommandByName('Reports', 'ListReports');
-        $this->addCommandByName('Stats','ShowStats');
+
+        if(Current_User::allow('hms', 'search')){
+            $this->addCommandByName('Search students', 'ShowStudentSearch');
+        }
+        if(Current_User::allow('hms', 'reports')){
+            $this->addCommandByName('Reports', 'ListReports');
+        }
+        if(Current_User::allow('hms', 'stats')){
+            $this->addCommandByName('Stats','ShowStats');
+        }
 
         if(Current_User::isDeity()){
     		$this->addCommandByName('Control Panel', 'ShowControlPanel');

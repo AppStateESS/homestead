@@ -241,7 +241,7 @@ class HMS_Bed extends HMS_Item {
 		if(isset($this->_curr_assignment)){
 			$link_re = '';
 			$link_un = '';
-			if(Current_User::allow('hms','assignment_maintenance')) {
+			if(UserStatus::isAdmin() && Current_User::allow('hms','assignment_maintenance')) {
 				$reAssignCmd = CommandFactory::getCommand('ShowAssignStudent');
 				$reAssignCmd->setUsername($this->_curr_assignment->asu_username);
 				$reAssignCmd->setBedId($this->id);
@@ -257,7 +257,7 @@ class HMS_Bed extends HMS_Item {
 			return $student->getProfileLink() . ' ' . $link_re . ' ' . $link_un;
 		}else{
 			$text = '&lt;unassigned&gt';
-			if(Current_User::allow('hms','assignment_maintenance')) {
+			if(UserStatus::isAdmin() && Current_User::allow('hms','assignment_maintenance')) {
 				$assignCmd = CommandFactory::getCommand('ShowAssignStudent');
 				$assignCmd->setBedId($this->id);
 				if($newWindow){
@@ -280,7 +280,7 @@ class HMS_Bed extends HMS_Item {
 		$tags['RA']             = $this->ra_bed ? 'Yes' : 'No';
 
 		$this->loadAssignment();
-		if($this->_curr_assignment == NULL && Current_User::allow('hms', 'bed_structure')){
+		if($this->_curr_assignment == NULL && Current_User::allow('hms', 'bed_structure') && UserStatus::isAdmin()){
 			$deleteBedCmd = CommandFactory::getCommand('DeleteBed');
 			$deleteBedCmd->setBedId($this->id);
 			$deleteBedCmd->setRoomId($this->room_id);
@@ -554,7 +554,7 @@ class HMS_Bed extends HMS_Item {
 	public static function addBed($roomId, $term, $bedLetter, $bedroomLabel, $phoneNumber, $bannerId, $raBed)
 	{
 		# Check permissions
-		if(!Current_User::allow('hms', 'bed_structure')){
+		if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'bed_structure')){
 			PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
 			throw new PermissionException('You do not have permission to add a bed.');
 		}
@@ -586,7 +586,7 @@ class HMS_Bed extends HMS_Item {
 
 	public static function deleteBed($bedId)
 	{
-		if(!Current_User::allow('hms', 'bed_structure')){
+		if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'bed_structure')){
 			PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
 			throw new PermissionException('You do not have permission to delete a bed.');
 		}
@@ -635,7 +635,7 @@ class HMS_Bed extends HMS_Item {
 		$page_tags['ASSIGNED_TO_LABEL'] = 'Assigned to';
 		$page_tags['RA_LABEL']          = 'RA bed';
 
-		if(Current_User::allow('hms', 'bed_structure')){
+		if(Current_User::allow('hms', 'bed_structure') && UserStatus::isAdmin()){
 			$addBedCmd = CommandFactory::getCommand('ShowAddBed');
 			$addBedCmd->setRoomId($room_id);
 			$page_tags['ADD_BED_LINK'] = $addBedCmd->getLink('Add bed');

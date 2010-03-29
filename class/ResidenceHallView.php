@@ -12,6 +12,11 @@ class ResidenceHallView extends View {
 	
 	public function show()
 	{
+        if(!UserStatus::isAdmin()){
+            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
+            throw new PermissionException('You are not allowed to view residence halls');
+        }
+
 		PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 

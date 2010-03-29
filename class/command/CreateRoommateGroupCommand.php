@@ -13,7 +13,7 @@ class CreateRoommateGroupCommand extends Command {
 
 	public function execute(CommandContext $context){
 
-		if(!Current_User::allow('hms', 'roommate_maintenance')){
+		if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'roommate_maintenance')){
 			PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
 			throw new PermissionException('You do not have permission to create/edit roommate groups.');
 		}

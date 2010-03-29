@@ -7,12 +7,17 @@ class ActivityLogMenu extends CommandMenu {
 	public function __construct()
 	{
 		parent::__construct();
-		
-		$this->addCommandByName('View activity logs', 'ShowActivityLog');
+        // Check permissions
+        if(UserStatus::isAdmin() && Current_User::allow('hms', 'view_activity_log')){		
+            $this->addCommandByName('View activity logs', 'ShowActivityLog');
+        }
 	}
 	
 	public function show()
 	{
+        if(empty($this->commands)){
+            return "";
+        }
 		$tpl = array();
 		
 		$tpl['MENU'] = parent::show();

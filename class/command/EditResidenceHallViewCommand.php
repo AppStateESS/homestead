@@ -30,7 +30,7 @@ class EditResidenceHallViewCommand extends Command {
     function execute(CommandContext $context)
     {
          
-        if( !Current_User::allow('hms', 'hall_view') ){
+        if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'hall_view') ){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to edit halls.');
         }

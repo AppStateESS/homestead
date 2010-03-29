@@ -260,6 +260,11 @@ class HMS_Assignment extends HMS_Item
 	 */
 	public static function assignStudent(Student $student, $term, $room_id = NULL, $bed_id = NULL, $meal_plan, $notes="", $lottery = FALSE)
 	{
+        if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'assignment_maintenance')){
+            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
+            throw new PermissionException('You are not allowed to edit student assignments.');
+        }
+
 		PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
 		PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
 		PHPWS_Core::initModClass('hms', 'HMS_Room.php');
@@ -428,7 +433,7 @@ class HMS_Assignment extends HMS_Item
 
 	public static function unassignStudent(Student $student, $term, $notes="")
 	{
-		if(!Current_User::allow('hms', 'assignment_maintenance')){
+		if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'assignment_maintenance')){
 			PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
 			throw new PermissionException('You do not have permission to unassign students.');
 		}

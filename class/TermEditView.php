@@ -11,11 +11,11 @@ class TermEditView extends View {
 	
 	public function show()
 	{
-		if(!Current_User::allow('hms', 'edit_terms')) {
-			$tpl = array();
-			return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
-		}
-		
+        if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'edit_terms')) {
+            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
+            throw new PermissionException('You do not have permission to edit terms.');
+        }
+
 		$term = Term::getSelectedTerm();
 		$printable = Term::getPrintableSelectedTerm();
 		

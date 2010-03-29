@@ -25,12 +25,12 @@ class EditFloorCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
-
-        if( !Current_User::allow('hms', 'floor_attributes') ){
+        if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'floor_attributes') ){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to edit floors.');
         }
+
+        PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
         	
         $floorId = $context->get('floorId');
         	

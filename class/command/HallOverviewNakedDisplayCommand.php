@@ -24,7 +24,7 @@ class HallOverviewNakedDisplayCommand extends Command {
 	
 	public function execute(CommandContext $context)
 	{
-		if(!Current_User::allow('hms','run_hall_overview')) {
+		if(!UserStatus::isAdmin() || !Current_User::allow('hms','run_hall_overview')) {
 			PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
 			throw new PermissionException('You do not have permission to see the Hall Overview.');
 		}

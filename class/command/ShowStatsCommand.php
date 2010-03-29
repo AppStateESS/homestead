@@ -8,6 +8,10 @@ class ShowStatsCommand extends Command {
 
     public function execute(CommandContext $context)
     {
+        if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'stats')){
+            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
+            throw new PermissionException('You are not allowed to view stats.');
+        }
         PHPWS_Core::initModClass('hms', 'StatsView.php');
 
         $view = new StatsView();
