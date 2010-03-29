@@ -168,6 +168,7 @@ class StudentProfileView extends View {
          */
         # Show a row for each application
         if(isset($this->applications)){
+            $app_rows = "";
             foreach($this->applications as $app){
                 $term = Term::toString($app->getTerm());
                 $meal_plan = HMS_Util::formatMealOption($app->getMealPlan());
