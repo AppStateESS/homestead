@@ -81,6 +81,7 @@
     $permissions['approve_rlc_applications']        = _('Approve/Deny RLC applications');
     
     $permissions['view_rlc_members']                = _('View list of RLC members');
+    $permissions['remove_rlc_members']              = _('Remove rlc members');
 
     # RLC assignment tasks
     $permissions['view_rlc_room_assignments']       = _('View RLC room assignments');
