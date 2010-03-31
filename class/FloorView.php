@@ -14,7 +14,7 @@ class FloorView extends View {
 
     public function show()
     {
-        if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'floor_view'){
+        if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'floor_view')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You are not allowed to edit or view floors.');
         }
