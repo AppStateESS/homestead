@@ -39,7 +39,7 @@ class TermsConditionsAdminView extends View
             $tpl['PDF'] = '<a href="'.$pdf.'">View PDF</a>';
         }
 
-        if(!isset($pdf) || is_null($txt) || empty($txt)) {
+        if(!isset($txt) || is_null($txt) || empty($txt)) {
             $tpl['TXT'] = 'No Plain Text has been uploaded.';
         } else {
             $tpl['TXT'] = '<a href="'.$txt.'">View Plain Text</a>';

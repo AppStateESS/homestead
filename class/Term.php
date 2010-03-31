@@ -49,7 +49,7 @@ class Term
     public function save()
     {
         $db = new PHPWS_DB('hms_term');
-        //$db->addWhere('term', $this->term);
+        $db->addWhere('term', $this->term);
         $result = $db->saveObject($this);
         
         if(PHPWS_Error::logIfError($result)) {
