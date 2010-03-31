@@ -64,9 +64,9 @@ class HMS_RLC_Assignment{
 
     public function delete()
     {
-        if( !Current_User::allow('hms', 'learning_community_maintenance') ){
-            $tpl = array();
-            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
+        if(!Current_User::allow('hms', 'remove_rlc_members') ){
+            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
+            throw new PermissionException('You do not have permission to remove RLC members.');
         }
 
         if(!isset($this->id)) {
