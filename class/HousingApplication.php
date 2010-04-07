@@ -375,7 +375,7 @@ class HousingApplication {
         }
 
         if(!is_null($username)){
-            $db->addWhere('username', $username);
+            $db->addWhere('username', $username, 'ILIKE');
         }
 
         if(!is_null($term)){
