@@ -229,7 +229,7 @@ class HousingApplication {
             case 'offcampus_waitlist':
                 return "Open Waiting-list";
                 break;
-            case default:
+            default:
                 return "Unknown";
                 break;
         }
