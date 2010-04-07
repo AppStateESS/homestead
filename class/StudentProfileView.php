@@ -174,7 +174,7 @@ class StudentProfileView extends View {
                 $meal_plan = HMS_Util::formatMealOption($app->getMealPlan());
                 $phone = HMS_Util::formatCellPhone($app->getCellPhone());
 
-                $type = $app->getStudentType() == TYPE_CONTINUING ? 'Returning' : 'Freshmen';
+                $type = $app->getPrintableAppType();
 
                 if(isset($app->room_condition)){
                     $clean = $app->room_condition == 1 ? 'Neat' : 'Cluttered';
