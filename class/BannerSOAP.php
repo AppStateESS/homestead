@@ -35,7 +35,7 @@ class BannerSOAP extends SOAP{
 			SOAP::logSoapFault($student,'get_student_info',$username);
 
 			PHPWS_Core::initModClass('hms', 'exception/SOAPException.php');
-			throw new SOAPExcepetion('SOAP Fault');
+			throw new SOAPException('SOAP Fault');
 		}
 
 		# Check for a banner error
