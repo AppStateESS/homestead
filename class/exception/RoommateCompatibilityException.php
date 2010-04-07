@@ -5,7 +5,7 @@
  * @author Jeff Tickle <jtickle at tux dot appstate dot edu>
  */
 
-PHPWS_Core::initModClass('hms', 'RoommateException.php');
+PHPWS_Core::initModClass('hms', 'exception/RoommateException.php');
 
 class RoommateCompatibilityException extends RoommateException
 {
