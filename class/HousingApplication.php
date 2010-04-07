@@ -206,6 +206,34 @@ class HousingApplication {
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
         HMS_Activity_Log::log_activity($this->getUsername(), ACTIVITY_APPLICATION_REPORTED, UserStatus::getUsername());
     }
+    
+    /**
+     * Returns a nicely formatted string with the "type" of this application
+     * @return String
+     */
+    public function getPrintableAppType()
+    {
+        switch($this->application_type){
+            case 'fall':
+                return "Fall";
+                break;
+            case 'spring':
+                return "Spring";
+                break;
+            case 'summer':
+                return "Summer";
+                break;
+            case 'lottery':
+                return "Re-application";
+                break;
+            case 'offcampus_waitlist':
+                return "Open Waiting-list";
+                break;
+            case default:
+                return "Unknown";
+                break;
+        }
+    }
 
     /*
      * Returns the table row tags for the 'unassigned applications report' in
