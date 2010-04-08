@@ -53,6 +53,8 @@ class SubmitRlcApplicationCommand extends Command {
             $cmd = CommandFactory::getCommand('ShowRlcApplicationView');
             $cmd->redirect();
         } else {
+            PHPWS_Core::initModClass('hms', 'HMS_Email.php');
+            HMS_Email::send_rlc_application_confirmation($student);
             NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Your application has been submitted');
             $cmd = CommandFactory::getCommand('ShowStudentMenu');
             $cmd->redirect();

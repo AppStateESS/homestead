@@ -227,7 +227,9 @@ CREATE TABLE hms_application_feature (
     term    	int NOT NULL REFERENCES hms_term(term),
     name 		character varying(32) NOT NULL,
     startDate	int NOT NULL,
-    endDate		int NOT NULL
+    endDate		int NOT NULL,
+    edit_date   int not null default 0,
+    PRIMARY KEY(id)
 );
 
 CREATE TABLE hms_new_application (
