@@ -168,14 +168,14 @@ CREATE TABLE hms_learning_community_applications (
     PRIMARY KEY(id)
 );
 
-ALTER TABLE hms_learning_community_applications ADD CONSTRAINT rlc_application_key UNIQUE (user_id, term);
+ALTER TABLE hms_learning_community_applications ADD CONSTRAINT rlc_application_key UNIQUE (username, term);
 
 CREATE TABLE hms_learning_community_assignment (
-    id                   integer NOT NULL,
-    application_id      integer NOT NULL REFERENCES hms_learning_community_applications(id);      
-    rlc_id               integer NOT NULL REFERENCES hms_learning_communities(id),
-    gender               integer NOT NULL,
-    assigned_by          character varying(32) NOT NULL,
+    id                  integer NOT NULL,
+    application_id      integer NOT NULL REFERENCES hms_learning_community_applications(id), 
+    rlc_id              integer NOT NULL REFERENCES hms_learning_communities(id),
+    gender              integer NOT NULL,
+    assigned_by         character varying(32) NOT NULL,
     PRIMARY KEY (id)
 );
 
@@ -276,7 +276,7 @@ CREATE TABLE hms_roommate (
 CREATE TABLE hms_student_profiles (
     id INTEGER NOT NULL,
     username character varying(32) UNIQUE NOT NULL,
-    term            INTEGER NOT NULL REFERENCES hms_term(term);
+    term            INTEGER NOT NULL REFERENCES hms_term(term),
     date_submitted INTEGER NOT NULL,
     alternate_email character varying(64) NULL,
     aim_sn character varying(32) NULL,
