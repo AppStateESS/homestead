@@ -6,7 +6,6 @@ CREATE TABLE hms_term (
     txt_terms character varying(255),
     primary key(term)
 );
-
 CREATE TABLE hms_pricing_tiers (
     id          integer NOT NULL,
     tier_value  numeric NOT NULL,
@@ -153,7 +152,7 @@ CREATE TABLE hms_learning_community_questions (
 
 CREATE TABLE hms_learning_community_applications (
     id                              integer NOT NULL,
-    username                        character varying(32) NOT NULL,
+	username                        character varying(32) NOT NULL,
     term                            integer NOT NULL REFERENCES hms_term(term),
     date_submitted                  integer NOT NULL,
     rlc_first_choice_id             integer NOT NULL REFERENCES hms_learning_communities(id),
@@ -180,13 +179,13 @@ CREATE TABLE hms_learning_community_assignment (
 );
 
 CREATE TABLE hms_application_feature (
-    id          int NOT NULL,
-    term        int NOT NULL REFERENCES hms_term(term),
-    name        character varying(32) NOT NULL,
-    start_date  int NOT NULL,
-    edit_date   int NOT NULL,
-    end_date    int NOT NULL,
-    enabled     smallint NOT NULL DEFAULT 0,
+	id			int NOT NULL,
+    term    	int NOT NULL REFERENCES hms_term(term),
+    name 		character varying(32) NOT NULL,
+    start_date	int NOT NULL,
+    end_date	int NOT NULL,
+    edit_date   int not null default 0,
+    enabled		smallint NOT NULL DEFAULT 0,
     PRIMARY KEY(id)
 );
 
