@@ -7,14 +7,6 @@ CREATE TABLE hms_term (
     primary key(term)
 );
 
--- Terms that can recieve applications for a specific app_term
-CREATE TABLE hms_term_applications (
-    app_term integer NOT NULL REFERENCES hms_term(term),
-    term     integer NOT NULL REFERENCES hms_term(term),
-    required integer NOT NULL default 0
-);
-ALTER TABLE hms_term_applications ADD CONSTRAINT unique_term_pairing UNIQUE (app_term, term);
-
 CREATE TABLE hms_pricing_tiers (
     id          integer NOT NULL,
     tier_value  numeric NOT NULL,
@@ -55,10 +47,12 @@ CREATE TABLE hms_residence_hall (
 -- Referenced by hms_floor, needs to be created first
 CREATE TABLE hms_learning_communities (
     id integer DEFAULT 0 NOT NULL,
-    community_name character varying(32) NOT NULL,
+    community_name character varying(64) NOT NULL,
     abbreviation character varying(16) NOT NULL,
     capacity integer NOT NULL,
     hide integer NOT NULL DEFAULT 0,
+    extra_info text,
+    allowed_student_types varchar(16),
     primary key(id)
 );
 
@@ -150,37 +144,6 @@ CREATE TABLE hms_assignment_queue (
     primary key(id)
 );
 
-CREATE TABLE hms_deadlines (
-    id                                      integer NOT NULL,
-    term                                    integer NOT NULL REFERENCES hms_term(term),
-    submit_application_begin_timestamp      integer NOT NULL,
-    submit_application_end_timestamp        integer NOT NULL,
-    edit_application_end_timestamp          integer NOT NULL,
-    edit_profile_begin_timestamp            integer NOT NULL,
-    edit_profile_end_timestamp              integer NOT NULL,
-    search_profiles_begin_timestamp         integer NOT NULL,
-    search_profiles_end_timestamp           integer NOT NULL,
-    submit_rlc_application_end_timestamp    integer NOT NULL,
-    select_roommate_begin_timestamp         integer NOT NULL,
-    select_roommate_end_timestamp           integer NOT NULL,
-    view_assignment_begin_timestamp         integer NOT NULL,
-    view_assignment_end_timestamp           integer NOT NULL,
-    move_in_timestamp                       integer NOT NULL,
-    lottery_signup_begin_timestamp          integer NOT NULL,
-    lottery_signup_end_timestamp            integer NOT NULL,
-    updated_by                              smallint NOT NULL,
-    updated_on                              integer NOT NULL,
-    primary key(id)
-);
-
-ALTER TABLE hms_deadlines ADD UNIQUE(term);
-
-CREATE TABLE hms_hall_communities (
-    id integer DEFAULT 0 NOT NULL,
-    community_name character varying(32) NOT NULL,
-    primary key(id)
-);
-
 CREATE TABLE hms_learning_community_questions (
     id integer DEFAULT 0 NOT NULL,
     learning_community_id integer DEFAULT 0 NOT NULL REFERENCES hms_learning_communities(id),
@@ -188,17 +151,9 @@ CREATE TABLE hms_learning_community_questions (
     primary key(id)
 );
 
-CREATE TABLE hms_learning_community_assignment (
-    id                   integer NOT NULL,
-    rlc_id               integer NOT NULL REFERENCES hms_learning_communities(id),
-    gender               integer NOT NULL,
-    assigned_by          character varying(32) NOT NULL,
-    PRIMARY KEY (id)
-);
-
 CREATE TABLE hms_learning_community_applications (
     id                              integer NOT NULL,
-    user_id                         character varying(32) NOT NULL,
+    username                        character varying(32) NOT NULL,
     term                            integer NOT NULL REFERENCES hms_term(term),
     date_submitted                  integer NOT NULL,
     rlc_first_choice_id             integer NOT NULL REFERENCES hms_learning_communities(id),
@@ -210,25 +165,32 @@ CREATE TABLE hms_learning_community_applications (
     rlc_question_1                  character varying(4096),
     rlc_question_2                  character varying(4096),
     denied                          integer DEFAULT 0 NOT NULL,
-    hms_assignment_id               integer REFERENCES hms_learning_community_assignment(id),
     PRIMARY KEY(id)
 );
 
-ALTER TABLE hms_learning_community_applications ADD CONSTRAINT rlc_application_key UNIQUE (user_id, term);
+ALTER TABLE hms_learning_community_applications ADD CONSTRAINT rlc_application_key UNIQUE (username, term);
 
-CREATE TABLE hms_learning_community_floors (
-    learning_communities_id integer NOT NULL REFERENCES hms_learning_communities(id),
-    floor_id                integer NOT NULL REFERENCES hms_floor(id),
-    PRIMARY KEY (learning_communities_id)
-); 
+CREATE TABLE hms_learning_community_assignment (
+    id                  integer NOT NULL,
+    application_id      integer NOT NULL REFERENCES hms_learning_community_applications(id), 
+    rlc_id              integer NOT NULL REFERENCES hms_learning_communities(id),
+    gender              integer NOT NULL,
+    assigned_by         character varying(32) NOT NULL,
+    PRIMARY KEY (id)
+);
 
 CREATE TABLE hms_application_feature (
-	id			int NOT NULL,
-    term    	int NOT NULL REFERENCES hms_term(term),
-    name 		character varying(32) NOT NULL,
-    startDate	int NOT NULL,
-    endDate		int NOT NULL
+    id          int NOT NULL,
+    term        int NOT NULL REFERENCES hms_term(term),
+    name        character varying(32) NOT NULL,
+    start_date  int NOT NULL,
+    edit_date   int NOT NULL,
+    end_date    int NOT NULL,
+    enabled     smallint NOT NULL DEFAULT 0,
+    PRIMARY KEY(id)
 );
+
+CREATE UNIQUE INDEX hms_application_feature_term_name_idx ON hms_application_feature (term, name);
 
 CREATE TABLE hms_new_application (
     id                              integer                 NOT NULL,
@@ -294,6 +256,12 @@ CREATE TABLE hms_lottery_application (
     PRIMARY KEY(id)
 );
 
+create table hms_waitlist_application (
+    id integer NOT NULL references hms_new_application (id),
+    waiting_list_hide integer NOT NULL default 0,
+    PRIMARY KEY(id)
+);
+
 CREATE TABLE hms_roommate (
     id           INTEGER NOT NULL,
     term         INTEGER NOT NULL REFERENCES hms_term(term),
@@ -305,27 +273,10 @@ CREATE TABLE hms_roommate (
     PRIMARY KEY(id)
 );
 
-CREATE TABLE hms_student (
-    id integer DEFAULT 0 NOT NULL,
-    asu_username character varying(10) NOT NULL,
-    first_name character varying(32) NOT NULL,
-    middle_name character varying(32),
-    last_name character varying(32) NOT NULL,
-    gender smallint NOT NULL,
-    application_received smallint DEFAULT 0,
-    added_by smallint NOT NULL,
-    added_on integer NOT NULL,
-    deleted_by smallint,
-    deleted_on integer,
-    updated_by smallint,
-    updated_on integer,
-    deleted smallint DEFAULT 0,
-    primary key(id)
-);
-
 CREATE TABLE hms_student_profiles (
     id INTEGER NOT NULL,
-    user_id character varying(32) UNIQUE NOT NULL,
+    username character varying(32) UNIQUE NOT NULL,
+    term            INTEGER NOT NULL REFERENCES hms_term(term),
     date_submitted INTEGER NOT NULL,
     alternate_email character varying(64) NULL,
     aim_sn character varying(32) NULL,
@@ -457,32 +408,6 @@ CREATE TABLE hms_activity_log (
     notes       CHARACTER VARYING(512)
 );
 
-CREATE TABLE hms_lottery_entry (
-    id                  INTEGER                 NOT NULL,
-    asu_username        CHARACTER VARYING(32)   NOT NULL,
-    term                INTEGER                 NOT NULL,
-    created_on          INTEGER                 NOT NULL,
-    application_term    INTEGER                 NOT NULL,
-    gender              smallint                NOT NULL,
-    roommate1_username  CHARACTER VARYING(32),
-    roommate1_app_term  INTEGER,
-    roommate2_username  CHARACTER VARYING(32),
-    roommate2_app_term  INTEGER,
-    roommate3_username  CHARACTER VARYING(32),
-    roommate3_app_term  INTEGER,
-    cell_phone          CHARACTER VARYING(32),
-    physical_disability smallint DEFAULT 0,
-    psych_disability    smallint DEFAULT 0,
-    medical_need        smallint DEFAULT 0,
-    gender_need         smallint DEFAULT 0,
-    magic_winner        smallint DEFAULT 0      NOT NULL,
-    special_interest    CHARACTER VARYING(32),
-    waiting_list_hide   INTEGER,
-    meal_option         smallint,
-    PRIMARY KEY (id)
-);
-ALTER TABLE hms_lottery_entry ADD CONSTRAINT unique_entry UNIQUE (term, asu_username);
-
 CREATE TABLE hms_lottery_reservation (
     id                  INTEGER                 NOT NULL,
     asu_username        CHARACTER VARYING(32)   NOT NULL,
@@ -502,30 +427,48 @@ CREATE TABLE hms_eligibility_waiver (
    PRIMARY KEY (id)
 );
 
-INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity) VALUES (10, 'Community of Servant Leaders', 'LSC', 50);
-INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity) VALUES (1, 'Outdoor Community', 'OC', 50);
-INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity) VALUES (2, 'Community of Scientific Interest', 'CSI', 50);
-INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity) VALUES (3, 'Language & Culture Community', 'LCC', 50);
-INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity) VALUES (4, 'Black & Gold Community', 'BGC', 50);
-INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity) VALUES (5, 'Community for Future Educators', 'FE', 50);
-INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity) VALUES (6, 'Quiet Study Community', 'QS', 50);
-INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity) VALUES (7, 'Living Free Community', 'LF', 50);
-INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity) VALUES (8, 'Entrepreneurs Community', 'EN', 50);
-INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity) VALUES (9, 'The Man Floor', 'TMF', 50);
+
+INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info) VALUES (3, 'Language & Culture Community', 'LCC', 50, 0, 'F', '');
+INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info) VALUES (20, 'Watauga Global Community', 'WG', 50, 0, 'F', '<p>Watauga Global Community is where classes meet general education requirements in interdisciplinary team-taught (multiple professor) core classes that blend fact, fiction, culture, philosophy, motion, art, music, myth, and religion.</p><p><strong>This community requires a separate application in addition to marking it as a housing preference.  For more information, go to the <a href="http://wataugaglobal.appstate.edu/pagesmith/4" target="_blank" style="color: blue;">Watauga Global Community Website</a>.</strong></p>');
+INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info) VALUES (21, 'Heltzer Honors Program', 'HN', 50, 0, 'F', '<p><strong>This community requires a separate application in addition to marking it as a housing preference.</strong></p><p>To apply for the Heltzer Honors Program, log into <a href="https://firstconnections.appstate.edu/ugaweb/" target="_blank" style="color: blue;">First Connections</a> and complete the on-line application accordingly.</p><p>For more information, go to the <a href="http://www.honors.appstate.edu/" target="_blank" style="color: blue;"> Heltzer Honors Program website</a>.</p>');
+INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info) VALUES (2, 'Academy of Science', 'AS', 40, 0, 'F', '');
+INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info) VALUES (14, 'Art Haus', 'AC', 68, 0, 'F', '');
+INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info) VALUES (4, 'Black & Gold Community', 'BGC', 68, 0, 'F', '');
+INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info) VALUES (15, 'Brain Matters - A Psychology Community', 'PC', 41, 0, 'F', '');
+INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info) VALUES (8, 'Business Exploration', 'AE', 41, 0, 'F', '');
+INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info) VALUES (19, 'Cycling Community', 'CC', 28, 0, 'F', '');
+INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info) VALUES (5, 'Future Educators', 'FE', 38, 0, 'F', '');
+INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info) VALUES (7, 'Living Free Community', 'LF', 34, 0, 'F', '');
+INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info) VALUES (11, 'Living Green', 'LG', 38, 0, 'F', '');
+INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info) VALUES (1, 'Outdoor Community', 'OC', 42, 0, 'F', '');
+INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info) VALUES (6, 'Quiet Study Community', 'QS', 34, 0, 'F', '');
+INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info) VALUES (10, 'Service and Leadership Community', 'SL', 38, 0, 'F', '');
+INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info) VALUES (12, 'Sophomore Year Experience', 'SYE', 32, 0, 'C', '');
+INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info) VALUES (13, 'Transfer Teacher Educators Community', 'TE', 38, 0, 'T', '');
+INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info) VALUES (16, 'Sisterhood Experience', 'PC', 116, 0, 'F', '');
+INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info) VALUES (18, 'Band of Brothers Community for Men', 'MC', 114, 0, 'F', '');
+
+INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (11, 1, 'What role have outdoor adventure experiences played in your life and how do you see these continuing in your college years? Are there more experiences you want to have or contribute to, and skills or abilities you want to develop?');
+INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (12, 10, 'What service and/or leadership experiences do you bring to the community and what do you hope to gain from involvement with service and/or leadership activities on campus?');
+INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (13, 5, 'What are your future education goals and how will this community be of benefit to you?');
+INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (14, 11, 'What do you hope to learn by living in the Living Green Community and what will you contribute to sustainability effors in the residence hall?');
+INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (15, 14, 'How do you feel an artist and/or the creative process can be supported though community?');
+INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (16, 15, 'What about psychology interests you and why are you interested in living in a residential community focused on exploring relationships between the brain, behavior, and mind?');
+INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (17, 8, 'Why do you think business would make a great career? Give one example of some business event that has been of interest to you.');
+INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (18, 16, 'Why are you interested in living in an all female residence hall?');
+INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (19, 18, 'How will your involvement in a community of men enhance your college experience?');
+INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (20, 19, 'What is it about bicycling that you enjoy?');
+INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (21, 3, 'What language(s) do you know/want to learn, and how would you take action in this community to craete an environment that promotes language appreciation and cultural understanding?');
+INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (23, 13, 'How will this community be of benefit to you as a future teacher? How will this community be of benefit to you as a transfer student?');
+INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (22, 4, 'How do you plan to be an active member of the ASU community and the Black and Gold Community?');
+INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (24, 7, 'What lifestyle choices have you made that will help you contribute to the Living Free Community?');
+INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (25, 6, 'What are your study goals and how will the quiet study community help you to reach them?');
+INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (26, 2, 'This National Science Foundation-supported scholarship provides mentoring and research in the math and science disciplines of chemistry, computer science, geology, mathematics, physics, and astronomy. Which of these areas are you most interested in and why?');
+INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (27, 20, 'Why are you interested in the Watauga Global Community?');
+INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (28, 21, 'Why are you interested in the Heltzer Honors Program?');
 
 CREATE SEQUENCE hms_learning_communities_seq;
 SELECT setval('hms_learning_communities_seq', max(hms_learning_communities.id)) FROM hms_learning_communities;
-
-INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (10, 10, 'Describe your current leadership and community service experience and the opportunities you are looking for.');
-INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (1, 1, 'What outdoor opportunities would you like to be involved in and describe your current experience.');
-INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (2, 2, 'What knowledge, skills, or talent could you offer other students in the Community of Scientific Interests?');
-INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (3, 3, 'In what languages are you proficient, learning to speak, or interested in learning?');
-INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (4, 4, 'How do you plan to be an active member of the ASU community?');
-INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (5, 5, 'What are your future education goals and how will this community be of benefit to you?');
-INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (6, 6, 'What are your study goals and how will this community help you to reach them?');
-INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (7, 7, 'What lifestyle choices have you made that will help you contribute to this community?');
-INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (8, 8, 'What are your goals for joining this community and how do you plan to be an active member in this community?');
-INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (9, 9, 'The man floor question here!');
 
 CREATE SEQUENCE hms_learning_community_questions_seq;
 SELECT setval('hms_learning_community_questions_seq', max(hms_learning_community_questions.id)) FROM hms_learning_community_questions;

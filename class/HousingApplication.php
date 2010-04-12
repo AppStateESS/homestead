@@ -461,6 +461,11 @@ class HousingApplication {
 
     public static function getRequiredApplicationTermsForStudent(Student $student)
     {
+        // Special case for Transfer students: They're not required to apply for any term
+        if($student->getType() == TYPE_TRANSFER){
+            return array();
+        }
+        
         $availableTerms = self::getAvailableApplicationTermsForStudent($student);
 
         $requiredTerms = array();
