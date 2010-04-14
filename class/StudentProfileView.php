@@ -142,7 +142,7 @@ class StudentProfileView extends View {
             $tpl['RLC_STATUS'] = "This student is assigned to: " . $rlc_names[$rlc_assignment->rlc_id];
         }else if (!is_null($rlc_application)){
             $rlcViewCmd = CommandFactory::getCommand('ShowRlcApplicationReView');
-            $rlcViewCmd->setUsername($this->student->getUsername());
+            $rlcViewCmd->setAppId($rlc_application->getId());
             $tpl['RLC_STATUS'] = "This student has a " . $rlcViewCmd->getLink('pending RLC application') . ".";
         }else{
             $tpl['RLC_STATUS'] = "This student is not in a Learning Community and has no pending application.";

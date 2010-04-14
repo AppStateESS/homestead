@@ -319,7 +319,7 @@ class HMS_Room extends HMS_Item
      */
     public function get_number_of_beds()
     {
-        $db = &new PHPWS_DB('hms_bed');
+        $db = new PHPWS_DB('hms_bed');
 
         $db->addJoin('LEFT OUTER', 'hms_bed', 'hms_room', 'room_id', 'id');
 
@@ -341,7 +341,7 @@ class HMS_Room extends HMS_Item
      */
     public function get_number_of_assignees()
     {
-        $db = &new PHPWS_DB('hms_assignment');
+        $db = new PHPWS_DB('hms_assignment');
 
         $db->addJoin('LEFT OUTER', 'hms_assignment', 'hms_bed', 'bed_id', 'id'  );
         $db->addJoin('LEFT OUTER', 'hms_bed', 'hms_room', 'room_id', 'id' );
@@ -640,7 +640,7 @@ class HMS_Room extends HMS_Item
         PHPWS_Core::initCoreClass('DBPager.php');
         javascript('/jquery/');
          
-        $pager = & new DBPager('hms_room', 'HMS_Room');
+        $pager = new DBPager('hms_room', 'HMS_Room');
         $pager->addWhere('hms_room.floor_id', $floor_id);
         $pager->db->addOrder('hms_room.room_number');
 
@@ -767,7 +767,7 @@ class HMS_Room extends HMS_Item
     # TODO: finish this, see Trac #156
     public static function get_free_room($term, $gender, $randomize = FALSE)
     {
-        $db = &new PHPWS_DB('hms_room');
+        $db = new PHPWS_DB('hms_room');
 
         // Only get free rooms
         $db->addJoin('LEFT OUTER', 'hms_room', 'hms_bed', 'id', 'room_id');
@@ -777,7 +777,7 @@ class HMS_Room extends HMS_Item
 
     public static function get_all_free_rooms($term, $gender, $randomize = FALSE)
     {
-        $db = &new PHPWS_DB('hms_room');
+        $db = new PHPWS_DB('hms_room');
 
         $db->addColumn('id');
         $db->setDistinct();
@@ -838,7 +838,7 @@ class HMS_Room extends HMS_Item
 
     public static function check_two_bed_and_empty_by_id($room)
     {
-        $db = &new PHPWS_DB('hms_bed');
+        $db = new PHPWS_DB('hms_bed');
         $db->addJoin('LEFT OUTER', 'hms_bed', 'hms_assignment', 'id', 'bed_id');
         $db->addColumn('hms_assignment.id', NULL, 'ass_id');
         $db->addWhere('room_id', $room);

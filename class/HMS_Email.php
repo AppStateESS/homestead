@@ -61,7 +61,7 @@ class HMS_Email{
 
         # Create a Mail object and set it up
         PHPWS_Core::initCoreClass('Mail.php');
-        $message = &new PHPWS_Mail;
+        $message = new PHPWS_Mail;
         
         $message->setFrom($from);
         $message->setSubject($subject);
@@ -297,6 +297,17 @@ class HMS_Email{
         $tpl['TERM'] = Term::toString($to->getApplicationTerm());
 
         HMS_Email::send_template_message($to->getUsername() . TO_DOMAIN, 'On-campus Houisng Application Confirmation!', 'email/application_confirmation.tpl', $tpl);
+    }
+
+    public function send_rlc_application_confirmation(Student $to)
+    {
+        PHPWS_Core::initModClass('hms', 'Term.php');
+
+        $tpl = array();
+        $tpl['NAME'] = $to->getName();
+        $tpl['TERM'] = Term::toString($to->getApplicationTerm());
+
+        HMS_Email::send_template_message($to->getUsername() . TO_DOMAIN, 'Learning Community Application Confirmation!', 'email/rlc_application_confirmation.tpl', $tpl);
     }
 
     public function send_lottery_assignment_confirmation(Student $to, $location, $term)
