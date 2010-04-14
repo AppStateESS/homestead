@@ -32,7 +32,7 @@ class RoomView extends View {
 		$tpl['NUMBER_OF_BEDS']      = $this->room->get_number_of_beds();
 		$tpl['NUMBER_OF_ASSIGNEES'] = $number_of_assignees;
 
-		$form = &new PHPWS_Form;
+		$form = new PHPWS_Form;
 
 		$submitCmd = CommandFactory::getCommand('EditRoom');
 		$submitCmd->setRoomId($this->room->id);
