@@ -35,7 +35,7 @@ class SubmitRlcApplicationCommand extends Command {
         }
 
         $application = new HMS_RLC_Application();
-        $application->setUsername(Current_User::getUsername());
+        $application->setUsername($student->getUsername());
         $application->setDateSubmitted(mktime());
         $application->setFirstChoice($context->get('rlc_first_choice'));
         $application->setSecondChoice($choice2->id > 0 ? $choice2->id : NULL);
