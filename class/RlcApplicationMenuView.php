@@ -23,7 +23,7 @@ class RlcApplicationMenuView extends View {
 
         if(isset($this->application) && !is_null($this->application->id)) {
             $viewCmd = CommandFactory::getCommand('ShowRlcApplicationReView');
-            $viewCmd->setUsername($this->student->getUsername());
+            $viewCmd->setAppId($this->application->getId());
             $tpl['VIEW_APP'] = $viewCmd->getLink('view your application');
             
             if(time() < $this->editDate){

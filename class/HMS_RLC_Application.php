@@ -64,7 +64,7 @@ class HMS_RLC_Application extends HMS_Item {
         $tags['NAME']           = $student->getFullNameProfileLink();
 
         $rlcCmd = CommandFactory::getCommand('ShowRlcApplicationReView');
-        $rlcCmd->setUsername($this->getUsername());
+        $rlcCmd->setAppId($this->getId());
 
         $tags['1ST_CHOICE']     = $rlcCmd->getLink($rlc_list[$this->getFirstChoice()],'_blank');
         if(isset($rlc_list[$this->getSecondChoice()]))
@@ -131,7 +131,7 @@ class HMS_RLC_Application extends HMS_Item {
         $tags['NAME']           = $student->getProfileLink();
 
         $rlcCmd = CommandFactory::getCommand('ShowRlcApplicationReView');
-        $rlcCmd->setUsername($this->getUsername());
+        $rlcCmd->setAppId($this->getId());
 
         $tags['1ST_CHOICE']     = $rlcCmd->getLink($rlc_list[$this->getFirstChoice()],'_blank');
 
@@ -160,7 +160,7 @@ class HMS_RLC_Application extends HMS_Item {
         $tags['USERNAME']   = $this->username;
 
         $viewCmd = CommandFactory::getCommand('ShowRlcApplicationReView');
-        $viewCmd->setUsername($student->getUsername());
+        $viewCmd->setAppId($this->getId());
 
         $actions[] = $viewCmd->getLink('View Application');
 
