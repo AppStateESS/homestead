@@ -502,6 +502,33 @@ CREATE TABLE hms_eligibility_waiver (
    PRIMARY KEY (id)
 );
 
+CREATE TABLE hms_role (
+    id                  INTEGER                 NOT NULL,
+    name                text                    NOT NULL,
+    PRIMARY KEY(id)
+);
+
+CREATE TABLE hms_permission (
+    id                  INTEGER                 NOT NULL,
+    name                VARCHAR(32)             NOT NULL,
+    full_name           text,
+    PRIMARY KEY(id)
+);
+
+CREATE TABLE hms_role_perm (
+    role                INTEGER NOT NULL REFERENCES hms_role(id),
+    permission          INTEGER NOT NULL REFERENCES hms_permission(id),
+    PRIMARY KEY(role, permission)
+);
+
+CREATE TABLE hms_user_role (
+    user_id             INTEGER NOT NULL REFERENCES users(id),
+    role                INTEGER NOT NULL REFERENCES hms_role(id),
+    class               VARCHAR(64),
+    instance            INTEGER,
+    PRIMARY KEY(user_id, role)
+);
+
 INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity) VALUES (10, 'Community of Servant Leaders', 'LSC', 50);
 INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity) VALUES (1, 'Outdoor Community', 'OC', 50);
 INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity) VALUES (2, 'Community of Scientific Interest', 'CSI', 50);
