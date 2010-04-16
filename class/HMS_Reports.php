@@ -116,7 +116,7 @@ class HMS_Reports{
         $building = array(); // Define an array to hold each building's summary
 
         # Get a list of hall ID's and names
-        $db = &new PHPWS_DB('hms_residence_hall');
+        $db = new PHPWS_DB('hms_residence_hall');
         $db->addColumn('id');
         $db->addColumn('hall_name');
         $db->addWhere('term', $term);
@@ -131,7 +131,7 @@ class HMS_Reports{
 
         # For each hall, get every assignment in that hall and tally it up
         foreach($result as $hall_row) {
-            $db = &new PHPWS_DB('hms_assignment');
+            $db = new PHPWS_DB('hms_assignment');
             $db->addColumn('hms_assignment.asu_username');
 
             # Just get "this" hall
@@ -530,7 +530,7 @@ class HMS_Reports{
 
         $term = Term::getSelectedTerm();
 
-        $db = &new PHPWS_DB('hms_assignment');
+        $db = new PHPWS_DB('hms_assignment');
         $db->addWhere('term', $term);
 
         $result = $db->select();
@@ -732,7 +732,7 @@ class HMS_Reports{
 
         $halls = HMS_Residence_Hall::get_halls(Term::getSelectedTerm());
 
-        $tpl = &new PHPWS_Template('hms');
+        $tpl = new PHPWS_Template('hms');
         if(!$tpl->setFile('admin/reports/unassigned_beds.tpl')){
             return 'Template error....';
         }
@@ -1226,28 +1226,15 @@ class HMS_Reports{
 
     public static function roster_report()
     {
+        $term = Term::getSelectedTerm();
+        
         $output = "Hall,Floor,Room,First Name,Last Name,Banner ID,Cell Phone Number, Email Address\n";
 
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
-        $db = new PHPWS_DB('hms_assignment');
 
-        $db->addColumn('hms_assignment.asu_username');
-        $db->addColumn('hms_new_application.cell_phone');
-        $db->addColumn('hms_room.room_number');
-        $db->addColumn('hms_floor.floor_number');
-        $db->addColumn('hms_residence_hall.hall_name');
-
-        $db->addJoin('LEFT', 'hms_assignment', 'hms_new_application', 'asu_username', 'username');
-        $db->addJoin('LEFT', 'hms_assignment', 'hms_bed', 'bed_id', 'id');
-        $db->addJoin('LEFT', 'hms_bed', 'hms_room', 'room_id', 'id');
-        $db->addJoin('LEFT', 'hms_room', 'hms_floor', 'floor_id', 'id');
-        $db->addJoin('LEFT', 'hms_floor', 'hms_residence_hall', 'residence_hall_id', 'id');
-
-        $db->addWhere('term', Term::getSelectedTerm());
-
-        $db->addOrder('hms_residence_hall.id ASC');
-
-        $results = $db->select();
+        $query = "SELECT hms_assignment.id, hms_assignment.asu_username, hms_new_application.cell_phone, hms_room.room_number, hms_floor.floor_number, hms_residence_hall.hall_name FROM hms_assignment LEFT JOIN (SELECT username, MAX(term) AS mterm FROM hms_new_application GROUP BY username) AS a ON hms_assignment.asu_username = a.username LEFT JOIN hms_new_application ON a.username = hms_new_application.username AND a.mterm = hms_new_application.term LEFT JOIN hms_bed ON hms_assignment.bed_id = hms_bed.id LEFT JOIN hms_room ON hms_bed.room_id = hms_room.id LEFT JOIN hms_floor ON hms_room.floor_id = hms_floor.id LEFT JOIN hms_residence_hall ON hms_floor.residence_hall_id = hms_residence_hall.id WHERE ( hms_assignment.term = $term) ORDER BY hms_residence_hall.id ASC";
+        
+        $results = PHPWS_DB::getAll($query);
 
         if(PHPWS_Error::logIfError($results)){
             Layout::add('Error running the Roster Report, please contact ESS');
@@ -1256,7 +1243,7 @@ class HMS_Reports{
         foreach($results as $result){
             $student = StudentFactory::getStudentByUsername($result['asu_username'], Term::getSelectedTerm());
 
-            $output .= "{$result['hall_name']},{$result['floor_number']},{$result['room_number']},{$student->getLastName()},{$student->getFirstName()},{$student->getBannerId()},{$result['cell_phone']},{$result['asu_username']}@appstate.edu\n";
+            $output .= "{$result['id']},{$result['hall_name']},{$result['floor_number']},{$result['room_number']},{$student->getLastName()},{$student->getFirstName()},{$student->getBannerId()},{$result['cell_phone']},{$result['asu_username']}@appstate.edu\n";
         }
 
         header('Content-Type: application/octet-stream');
