@@ -8,6 +8,7 @@ class RoommateSelectionRegistration extends ApplicationFeatureRegistration {
         $this->name = 'RoommateSelection';
         $this->description = 'Roommate Selection';
         $this->startDateRequired = true;
+        $this->editDateRequired = true;
         $this->endDateRequired = true;
         $this->priority = 5;
     }
@@ -29,7 +30,7 @@ class RoommateSelection extends ApplicationFeature {
     public function getMenuBlockView(Student $student)
     {
         PHPWS_Core::initModClass('hms', 'RoommateSelectionMenuBlockView.php');
-        return new RoommateSelectionMenuBlockView($student, $this->getStartDate(), $this->getEndDate(), $this->getTerm());
+        return new RoommateSelectionMenuBlockView($student, $this->getStartDate(), $this->getEditDate(), $this->getEndDate(), $this->getTerm());
     }
 
 }
