@@ -1243,7 +1243,7 @@ class HMS_Reports{
         foreach($results as $result){
             $student = StudentFactory::getStudentByUsername($result['asu_username'], Term::getSelectedTerm());
 
-            $output .= "{$result['id']},{$result['hall_name']},{$result['floor_number']},{$result['room_number']},{$student->getLastName()},{$student->getFirstName()},{$student->getBannerId()},{$result['cell_phone']},{$result['asu_username']}@appstate.edu\n";
+            $output .= "{$result['hall_name']},{$result['floor_number']},{$result['room_number']},{$student->getLastName()},{$student->getFirstName()},{$student->getBannerId()},{$result['cell_phone']},{$result['asu_username']}@appstate.edu\n";
         }
 
         header('Content-Type: application/octet-stream');
