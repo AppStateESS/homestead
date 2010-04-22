@@ -20,12 +20,14 @@
             <tr>
                 <th rowspan="4">Room assignment:</th>
             </tr>
+            <tr>
                 <tr><td align="left">{ASSIGNMENT}</td></tr>
                 <tr><td align="left">Move-in time: {MOVE_IN_TIME}</td></tr>
                 <!-- END assignment -->
                 <!-- BEGIN no_assignment -->
                 <td align="left">{NO_ASSIGNMENT}</td>
                 <!-- END no_assignment -->
+            </tr>
             <tr>
                 <!-- BEGIN roommate -->
                 <th>Roommate:</th><td align="left">{ROOMMATE}</td>

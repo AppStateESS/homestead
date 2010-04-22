@@ -8,8 +8,8 @@ The deadline to apply for this term was {END_DEADLINE}.
 <!-- END too_late -->
 
 <!-- BEGIN review_app -->
-You've already applied for this term.
-    {VIEW_APP}
+You may click {VIEW_APP} to view your current assignment.
+
 <!-- END review_app -->
 
 <!-- BEGIN no_app -->

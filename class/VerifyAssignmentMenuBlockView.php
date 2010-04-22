@@ -17,9 +17,16 @@ class VerifyAssignmentMenuBlockView extends View {
     {
         $tpl = array();
 
-        $tpl['BEGIN_DEADLINE'] = HMS_Util::getFriendlyDate($this->startDate);
-
-        return PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/verifyAssignmentMenuBlock.tpl');
+        // Don't show the app-feature if it's not time
+        if($this->startDate <= mktime()){
+            $cmd = CommandFactory::getCommand('ShowVerifyAssignment');
+            $cmd->setUsername($this->student->getUsername());
+            $tpl['VIEW_APP'] = $cmd->getLink('here');
+            return PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/verifyAssignmentMenuBlock.tpl');
+        } else {
+            $tpl['BEGIN_DEADLINE'] = HMS_Util::getFriendlyDate($this->startDate);
+            return PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/verifyAssignmentMenuBlock.tpl');
+        }
     }
 }
 

@@ -112,6 +112,11 @@ class Student {
 		return $profileCmd->getLink($this->getFullName());
 	}
 
+    public function getEmailLink()
+    {
+        return '<a href="mailto:'.$this->getUsername().'@appstate.edu">'.$this->getUsername().'@appstate.edu</a>';
+    }
+
 	/**
 	 * Returns an associate array with keys:
 	 * line1, line2, line3, city, county, state, zip
