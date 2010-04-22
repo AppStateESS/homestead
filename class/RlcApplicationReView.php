@@ -16,7 +16,7 @@ class RlcApplicationReView extends View {
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
         
         if(UserStatus::isAdmin()){
-            $menuCmd = CommandFactory::getCommand('AssignRlcApplicants');
+            $menuCmd = CommandFactory::getCommand('ShowAssignRlcApplicants');
             $tags['MENU_LINK'] = $menuCmd->getLink('Return to RLC Applications');
         }else{
             $menuCmd = CommandFactory::getCommand('ShowStudentMenu');
