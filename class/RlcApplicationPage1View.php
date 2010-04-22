@@ -40,7 +40,7 @@ class RlcApplicationPage1View extends View {
 
         # Make sure the user is eligible for an RLC
         if($student->getCreditHours() > 15){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Sorry, you are not eligible for a Unique Housing Option for Underclassmen. Please visit the <a href="http://housing.appstate.edu/index.php?module=pagemaster&PAGE_user_op=view_page&PAGE_id=293" target="_blank">Unique Housing Options for Upperclassmen website</a> for information on applying for Unique Housing Options for Upperclassmen.');
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Sorry, you are not eligible for a Residential Learning Community for Underclassmen. Please visit the <a href="http://housing.appstate.edu/index.php?module=pagemaster&PAGE_user_op=view_page&PAGE_id=293" target="_blank">Residential Learning Communities for Upperclassmen website</a> for information on applying for Residential Learning Communities for Upperclassmen.');
             $cmd     = CommandFactory::getCommand('ShowRlcApplicationPage1View');
             $cmd->redirect();
         }
