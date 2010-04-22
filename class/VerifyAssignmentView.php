@@ -22,6 +22,7 @@ class VerifyAssignmentView extends View
         PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
         PHPWS_Core::initModClass('hms', 'HMS_Movein_Time.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
 
         $tpl = array();
 
@@ -57,7 +58,10 @@ class VerifyAssignmentView extends View
         if(!is_null($assignees)){
             foreach($assignees as $roommate){
                 if($roommate->getUsername() != $this->student->getUsername()){
-                    $tpl['roommate'][]['ROOMMATE'] = $roommate->getFullName() . '(' . $roommate->getEmailLink() . ')';
+                    $assignment = HMS_Assignment::getAssignment($roommate->getUsername(), $this->term);
+                    $assignment->loadBed();
+                    $label = $assignment->_bed->bedroom_label;
+                    $tpl['roommate'][]['ROOMMATE'] = $roommate->getFullName(). ' - ' . $label.' (' . $roommate->getEmailLink() . ')';
                 }
             }
         } else {
