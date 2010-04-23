@@ -17,6 +17,7 @@ class StudentProfile {
 		PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
 		PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
 		PHPWS_Core::initModClass('hms', 'HousingApplication.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
 
 		$assignment = HMS_Assignment::getAssignment($this->student->getUsername(), $this->term);
 		
@@ -31,21 +32,23 @@ class StudentProfile {
 				$rm = null;
 				if($roomie !== FALSE && $roomie->getUsername() != $this->student->getUsername()){
 					$rm = StudentFactory::getStudentByUsername($roomie->getUsername(), $this->term);
+                    $roomLink = $this->getRoommateRoomLink($rm->getUsername());
 					if(!is_null($pendingRoommates) && $roomie->getUsername() == $pendingRoommates->getUsername()){
-						$roommates[] =  $rm->getFullNameProfileLink() . ' (Pending)';
+						$roommates[] =  $rm->getFullNameProfileLink() . " - $roomLink (Pending)";
 					} else if(!is_null($confirmedRoommates) && $roomie->getUsername() == $confirmedRoommates->getUsername()){
-						$roommates[] = $rm->getFullNameProfileLink() . ' (Confirmed)';
+						$roommates[] = $rm->getFullNameProfileLink() . " - $roomLink (Confirmed)";
 					}else{
-						$roommates[] = $rm->getFullNameProfileLink();
+						$roommates[] = $rm->getFullNameProfileLink() . " - $roomLink";
 					}
 				}
 			}
 		} else {
 			if(!is_null($pendingRoommates)){
 			    $pendingStudent = StudentFactory::getStudentByUsername($pendingRoommates, $this->term);
-				$roommates[] = $pendingStudent->getFullNameProfileLink() . ' (Pending)';
+                $roomLink = $this->getRoommateRoomLink($pendingStudent->getUsername());
+				$roommates[] = $pendingStudent->getFullNameProfileLink() . " - $roomLink (Pending)";
 			} else if(!is_null($confirmedRoommates)){
-				$roommates[] = $confirmedRoommates->getFullNameProfileLink() . ' (Confirmed)';
+				$roommates[] = $confirmedRoommates->getFullNameProfileLink() . " - $roomLink (Confirmed)";
 			}
 		}
 
@@ -53,5 +56,19 @@ class StudentProfile {
 
 		return new StudentProfileView($this->student, $applications, $assignment, $roommates);
 	}
+    
+    /**
+     * Fetch a roommate's bedroom label and create a link to that room
+     */
+    private function getRoommateRoomLink($username)
+    {
+        // Get link for roommates' room
+        $rmAssignment = HMS_Assignment::getAssignment($username, $this->term);
+        $rmAssignment->loadBed();
+        $editRoomCmd = CommandFactory::getCommand('EditRoomView');
+        $editRoomCmd->setRoomId($rmAssignment->_bed->room_id);
+        $roomLink = $editRoomCmd->getLink($rmAssignment->_bed->bedroom_label);
+        return $roomLink;
+    }
 
 }
