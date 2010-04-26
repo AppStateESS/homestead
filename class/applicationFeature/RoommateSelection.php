@@ -20,6 +20,13 @@ class RoommateSelectionRegistration extends ApplicationFeatureRegistration {
         {
             return true;
         }
+        
+        // Possibly available for continuing students in the summer terms (this is sort of a hack)
+        //TODO: find a better way to implement this
+        $termSem = Term::getTermSem($term);
+        if($student->getApplicationTerm() <= Term::getCurrentTerm() && ($termSem == TERM_SUMMER1 || $termSem == TERM_SUMMER2)){
+            return true;
+        }
 
         return false;
     }

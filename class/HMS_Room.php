@@ -775,7 +775,7 @@ class HMS_Room extends HMS_Item
 
     }
 
-    public static function get_all_free_rooms($term, $gender, $randomize = FALSE)
+    public static function getAllFreeRooms($term, $gender, $randomize = FALSE)
     {
         $db = new PHPWS_DB('hms_room');
 
@@ -796,6 +796,9 @@ class HMS_Room extends HMS_Item
 
         // Gender
         $db->addWhere('gender_type', $gender);
+        
+        // Order by gender preference (0=>female, 1=>male, 2=>coed), rooms in a single gender hall will be first
+        $db->addOrder('hms_residence_hall.gender_type ASC');
 
         // Make sure everything is online
         $db->addWhere('hms_room.is_online', 1);
@@ -817,6 +820,8 @@ class HMS_Room extends HMS_Item
 
         // Don't get rooms on floors reserved for an RLC
         $db->addWhere('hms_floor.rlc_id', NULL);
+        
+        $db->setOrder('hms_residence_hall.')
 
         $result = $db->select('col');
 
@@ -857,7 +862,6 @@ class HMS_Room extends HMS_Item
             // If anyone is assigned, toss it out
             if($r != NULL) { return FALSE; }
         }
-
 
         // Looks like we're good.
         return TRUE;

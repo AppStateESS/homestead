@@ -249,7 +249,10 @@ class HousingApplication {
         $tpl['APP_TERM']        = Term::toString($this->getApplicationTerm(), TRUE);
         $tpl['MEAL']            = HMS_Util::formatMealOption($this->getMealPlan());
         $tpl['ROOMMATE']        = HMS_Roommate::get_confirmed_roommate($this->getUsername(), $this->getTerm());
-        $tpl['ACTIONS']         = '[' . PHPWS_Text::secureLink('Assign', 'hms', array('type'=>'assignment', 'op'=>'show_assign_student', 'username'=>$this->getUsername()), '_blank') . ' ]';
+        $assignCmd = CommandFactory::getCommand('ShowAssignStudent');
+        $assignCmd->setUsername($this->getUsername());
+        
+        $tpl['ACTIONS']         = '[' . $assignCmd->getLink('Assign', '_blank') . ' ]';
 
         return $tpl;
     }

@@ -105,9 +105,30 @@ class SummerApplication extends HousingApplication{
      * Returns the table row tags for the 'unassigned applications report' in
      * HMS_Reports.php
      */
-    public function unassigned_applicants_rows()
+    public function unassignedApplicantsRows()
     {
-        $tpl = parent::unassigned_applicants_rows();
+        $tpl = parent::unassignedApplicantsRows();
+
+        $tpl['ROOM_TYPE']  = $this->getRoomType();
+
+        switch($this->getRoomType()){
+            case ROOM_TYPE_DOUBLE:
+                $tpl['ROOM_TYPE']   = 'Double';
+                break;
+            case ROOM_TYPE_PRIVATE:
+                $tpl['ROOM_TYPE']   = 'Private';
+                break;
+            default:
+                $tpl['ROOM_TYPE']   = 'Unknown';
+                break;
+        }
+
+        return $tpl;
+    }
+    
+    public function unassignedApplicantsCSV()
+    {
+        $tpl = parent::unassignedApplicantsCSV();
 
         $tpl['ROOM_TYPE']  = $this->getRoomType();
 

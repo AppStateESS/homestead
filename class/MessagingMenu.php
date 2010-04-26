@@ -9,7 +9,7 @@ class MessagingMenu extends CommandMenu {
 		parent::__construct();
         if(UserStatus::isAdmin() &&
            (Current_User::allow('hms', 'email_hall')
-            && Current_User::allow('hms', 'email_all'))){
+            || Current_User::allow('hms', 'email_all'))){
 
             $this->addCommandByName('Send messages by Hall', 'ShowHallNotificationSelect');
         }

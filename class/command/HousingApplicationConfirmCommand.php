@@ -138,7 +138,7 @@ class HousingApplicationConfirmCommand extends Command {
 
             # Send the email confirmation
             PHPWS_Core::initModClass('hms', 'HMS_Email.php');
-            HMS_Email::send_hms_application_confirmation($student, null);
+            HMS_Email::send_hms_application_confirmation($student, $application->getTerm());
 
         }
 
