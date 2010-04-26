@@ -23,7 +23,7 @@ class Term
     public $banner_queue;
     public $pdf_terms;
     public $txt_terms;
-    private $isNew;
+    private $isNew = false;
 
     public function __construct($term = NULL)
     {
