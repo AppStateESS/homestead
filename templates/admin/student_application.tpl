@@ -61,6 +61,11 @@
             <tr>
                 <td>Room Condition: </td><td align="left">{ROOM_CONDITION}</td>
             </tr>
+            <!-- BEGIN room_type -->
+            <tr>
+                <td>Room Type: </td><td align="left">{ROOM_TYPE}</td>
+            </tr>
+            <!-- END room_type -->
             <tr>
                 <th colspan="2">Special Needs Housing</th>
             </tr>

@@ -72,6 +72,10 @@ class HousingApplicationView extends View {
             $tpl['ROOM_CONDITION']      = 'n/a';
         }
         
+        if(isset($application->room_type)){
+            $tpl['ROOM_TYPE']           = $application->room_type == ROOM_TYPE_DOUBLE ? 'Double' : 'Private (if available)';
+        }
+        
         $tpl['CELLPHONE'] = '';
         if(strlen($application->cell_phone) == 10){
             $tpl['CELLPHONE']   .= '('.substr($application->cell_phone, 0, 3).')';
