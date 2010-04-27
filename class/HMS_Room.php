@@ -821,7 +821,7 @@ class HMS_Room extends HMS_Item
         // Don't get rooms on floors reserved for an RLC
         $db->addWhere('hms_floor.rlc_id', NULL);
         
-        $db->setOrder('hms_residence_hall.')
+        $db->setOrder('hms_residence_hall.');
 
         $result = $db->select('col');
 
