@@ -19,7 +19,7 @@ class HousingApplicationThanksView extends View {
 		// TODO HMS_Entry_Term is deprecated, use something else
 		PHPWS_Core::initModClass('hms','HMS_Entry_Term.php');
 		if(HMS_Entry_Term::get_entry_semester($_SESSION['asu_username']) == TERM_FALL){
-			$tpl['RLC_LINK'] = PHPWS_Text::secureLink(_('Unique Housing Options Application'), 'hms', array('type'=>'student', 'op'=>'show_rlc_application_form'));
+			$tpl['RLC_LINK'] = PHPWS_Text::secureLink(_('Residential Learning Communities Application'), 'hms', array('type'=>'student', 'op'=>'show_rlc_application_form'));
 		}
 
 		return PHPWS_Template::process($tpl, 'hms', 'student/student_application_thankyou.tpl');

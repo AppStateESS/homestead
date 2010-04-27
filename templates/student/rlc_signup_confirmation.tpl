@@ -1,6 +1,6 @@
 <div class="hms">
     <div class="box">
-        <div class="box-title"><h1>Unique Housing Options Application</h1></div>
+        <div class="box-title"><h1>Residential Learning Community Application</h1></div>
         <div class="box-content">
             <!-- BEGIN message -->
             <span class="error">{MESSAGE}</span><br/>

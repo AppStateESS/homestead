@@ -34,7 +34,7 @@
     <!-- BEGIN term -->
     <h1>{TERM}</h1>
     <!-- BEGIN rlc -->
-    <h2>{RLC_ICON} &nbsp;3. Unique Housing Options Application</h2>
+    <h2>{RLC_ICON} &nbsp;3. Residential Learning Communities Application</h2>
     {RLC_INTRO}
     <ul>
       <li>
