@@ -51,10 +51,12 @@ class CreateTermCommand extends Command {
         $text = Term::toString($term->getTerm());
 
         $copy = $context->get('copy_drop');
-
-        if('hallStructure'){
+        
+        if($copy == 'struct'){
+            // Only hall structure
             $copyAssignments = false;
-        }else if('assignments'){
+        }else if($copy == 'struct_assign'){
+            // Hall structure and assignments
             $copyAssignments = true;
         }else{
             // either $copy == 'nothing', or the view didn't specify... either way, we're done
@@ -68,16 +70,15 @@ class CreateTermCommand extends Command {
 
         try{
             $db->query('BEGIN');
-
             # Get the halls from the current term
             $halls = HMS_Residence_Hall::get_halls(Term::getCurrentTerm());
-
+            set_time_limit(36000);
             foreach ($halls as $hall){
                 $hall->copy($term->getTerm(), $copyAssignments);
             }
 
             $db->query('COMMIT');
-
+            
         }catch(Exception $e){
             $db->query('ROLLBACK');
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'There was an error copying the hall structure and/or assignments. The term was created, but nothing was copied.');

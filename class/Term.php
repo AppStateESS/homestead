@@ -23,10 +23,12 @@ class Term
     public $banner_queue;
     public $pdf_terms;
     public $txt_terms;
+    private $isNew = false;
 
     public function __construct($term = NULL)
     {
         if(is_null($term)) {
+            $this->isNew = true;
             return;
         }
 
@@ -49,9 +51,11 @@ class Term
     public function save()
     {
         $db = new PHPWS_DB('hms_term');
-        $db->addWhere('term', $this->term);
+        // "where" breaks the save if creating new term
+        if(!$this->isNew)
+            $db->addWhere('term', $this->term);
         $result = $db->saveObject($this);
-        
+
         if(PHPWS_Error::logIfError($result)) {
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
