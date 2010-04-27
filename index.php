@@ -18,7 +18,7 @@ $permission->id = 1;
 $permission->load();
 $floor = new HMS_Floor();
 $floor->id = 1;
-test($permission->getMembership('email'), 1, true);
+test($permission->getMembership(null, $floor), 1, true);
 test($permission->verify('hms_student', $floor),1);
 */
 

@@ -20,7 +20,7 @@ class ResidenceHallView extends View {
 		PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
-        javascript('/jquery/');
+        javascript('/jquery_ui/');
 
         # Setup the title and color of the title bar
         $tpl['TITLE'] = $this->hall->getHallName() . ' - ' . Term::getPrintableSelectedTerm();
@@ -125,7 +125,9 @@ class ResidenceHallView extends View {
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
-        $tpl['FLOOR_PAGER'] = HMS_Floor::get_pager_by_hall($this->hall->getId());
+        //$tpl['FLOOR_PAGER'] = HMS_Floor::get_pager_by_hall($this->hall->getId());
+		javascript('modules/hms/role_editor');
+        $tpl['ROLE_EDITOR'] = PHPWS_Template::process(array('CLASS_NAME'=>"'HMS_Residence_Hall'", 'ID'=>$this->hall->id), 'hms', 'admin/role_editor.tpl');
 
         return PHPWS_Template::process($tpl, 'hms', 'admin/edit_residence_hall.tpl');
 	}

@@ -49,7 +49,17 @@ class HMS_Role extends HMS_Item {
      * access to the object of type $classname with the id $intance (none if
      * null).
      */
-    public function addUser($user_id, $classname, $instance=null){
+    public function addUser($username, $classname, $instance=null){
+        $db = new PHPWS_DB('users');
+        $db->addWhere('username', $username);
+        $result = $db->select('row');
+
+        if(PHPWS_Error::logIfError($result) || is_null($result['id'])){
+            return false;
+        }
+
+        $user_id = $result['id'];
+
         $db = new PHPWS_DB('hms_user_role');
         $db->addValue('user_id', $user_id);
         $db->addValue('role', $this->id);
@@ -58,18 +68,38 @@ class HMS_Role extends HMS_Item {
         $result = $db->insert();
 
         if(PHPWS_Error::logIfError($result)){
+		/*
             $db->addWhere('user_id', $user_id);
             $db->addWhere('role', $this->id);
             return !PHPWS_Error::logIfError($db->update());
+		*/
+			
+			return false;
         }
 
         return true;
     }
 
-    public function removeUser($user_id){
+    public function removeUser($username, $classname=null, $instanceId=null){
+        $db = new PHPWS_DB('users');
+        $db->addWhere('username', $username);
+        $result = $db->select('row');
+
+        if(PHPWS_Error::logIfError($result) || is_null($result['id'])){
+            return false;
+        }
+
+        $user_id = $result['id'];
+
         $db = new PHPWS_DB('hms_user_role');
-        $db->addValue('user_id', $user_id);
-        $db->addValue('role', $this->id);
+        $db->addWhere('user_id', $user_id);
+        $db->addWhere('role', $this->id);
+		if(!is_null($classname)){
+			$db->addWhere('class', strtolower($classname));
+		}
+		if(!is_null($instanceId)){
+			$db->addWhere('instance', $instanceId);
+		}
         $result = $db->delete();
 
         if(PHPWS_Error::logIfError($result)){

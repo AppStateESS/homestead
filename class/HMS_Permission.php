@@ -15,13 +15,15 @@ class HMS_Permission extends HMS_Item {
         $this->full_name = $full_name;
     }
 
-    public function getMembership($permission, $object=null, $username=null){
-        $db = $this->getDb();
+    public static function getMembership($permission=null, $object=null, $username=null){
+        $db = HMS_Permission::getDb();
         $db->addJoin('left outer', 'hms_permission', 'hms_role_perm', 'id', 'permission');
         $db->addJoin('left outer', 'hms_role_perm', 'hms_role', 'role', 'id');
         $db->addJoin('left outer', 'hms_role', 'hms_user_role', 'id', 'role');
         $db->addJoin('left outer', 'hms_user_role', 'users', 'user_id', 'id');
-        $db->addWhere('hms_permission.name', $permission);
+
+        if(!is_null($permission))
+            $db->addWhere('hms_permission.name', $permission);
         if(!is_null($username)){
             $db->addWhere('users.username', $username);
         } else {

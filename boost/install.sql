@@ -522,11 +522,13 @@ CREATE TABLE hms_role_perm (
 );
 
 CREATE TABLE hms_user_role (
+	id                  INTEGER NOT NULL,
     user_id             INTEGER NOT NULL REFERENCES users(id),
     role                INTEGER NOT NULL REFERENCES hms_role(id),
     class               VARCHAR(64),
     instance            INTEGER,
-    PRIMARY KEY(user_id, role)
+	UNIQUE (user_id, role, class, instance),
+    PRIMARY KEY(id)
 );
 
 INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity) VALUES (10, 'Community of Servant Leaders', 'LSC', 50);
