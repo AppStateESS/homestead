@@ -4,7 +4,7 @@
  * Letter
  *
  * This class facilitates the printing of letters for students in HMS.
- * 
+ *
  * @author Jeff Tickle <jtickle at tux dot appstate dot edu>
  */
 
@@ -41,14 +41,14 @@ class HMS_Letter
 
         // Address
         if(is_null($this->address4) && is_null($this->address5))
-            $pdf->Write(HEIGHT, "\n");
+        $pdf->Write(HEIGHT, "\n");
         $pdf->Write(HEIGHT, $this->address1 . "\n");
         $pdf->Write(HEIGHT, $this->address2 . "\n");
         $pdf->Write(HEIGHT, $this->address3 . "\n");
         if(!is_null($this->address4))
-            $pdf->Write(HEIGHT, $this->address4 . "\n");
+        $pdf->Write(HEIGHT, $this->address4 . "\n");
         if(!is_null($this->address5))
-            $pdf->Write(HEIGHT, $this->address5 . "\n");
+        $pdf->Write(HEIGHT, $this->address5 . "\n");
         $pdf->Ln(HEIGHT);
 
         // Date
@@ -69,28 +69,28 @@ class HMS_Letter
         $y = $pdf->GetY();
         $pdf->Line($x, $y, $x + 6, $y);
         $pdf->SetY($y + 0.025);
-        
+
         $pdf->Cell(0, HEIGHT, "Room Assignment Notification", NULL, 1, 'C');
         $pdf->Cell(0, HEIGHT, $this->semester, NULL, 1, 'C');
         $pdf->Ln(HEIGHT);
 
         $pdf->Write(HEIGHT, "Assignment: ");
         $pdf->Cell(2.75, HEIGHT, $this->assignment);
-        
+
         $pdf->Ln(HEIGHT);
 
         // Skip roommate info if no roommates
         if(!is_null($this->roommate)){
             $roommate_list = implode("\n", $this->roommate);
             $roommate_size = sizeof($this->roommate) * HEIGHT;
-        
+
             $pdf->Write(HEIGHT, "Roommate: ");
             $pdf->MultiCell(5.00, HEIGHT, $roommate_list);
         }else{
             $pdf->Write(HEIGHT, "Roommate: To be determined.");
             //$pdf->Cell(5.00, HEIGHT, $roommate_list);
         }
-            
+
         $pdf->Ln(HEIGHT);
 
         $pdf->Write(HEIGHT, "Check-in Time: ");
@@ -174,11 +174,11 @@ class HMS_Letter
 
         if(isset($addr) && !is_null($addr)){
             $letter->address2 = $addr->line1;
-            
+
             $citystatezip = $addr->city  . ', ' .
-                            $addr->state . ' '  .
-                            $addr->zip;
-                            
+            $addr->state . ' '  .
+            $addr->zip;
+
             if(empty($addr->line2)) {
                 $letter->address3 = $citystatezip;
             } else {
@@ -204,9 +204,9 @@ class HMS_Letter
             $letter->paragraph1 = "The Department of Housing & Residence Life would like to welcome you to Appalachian State University and let you know we are preparing for your arrival.\n\nYour housing assignment for the Spring semester is listed below. You may check-in at Newland Hall, where you will receive your residence hall room key and check-in information.";
             $letter->paragraph2 = "Freshmen and transfer check-in is January 6th, 1pm - 9pm.  Returning student check-in starts on January 10th and 11th.  See above for your scheduled time.\n\nIf you have a conflict, you can check in anytime after your scheduled time until 6 pm on January 12th.  Failure to check in by January 12th, 6pm will result in assignment cancellation (see pages 15-16 of the Residence Hall License Contract booklet).\n\nShould you have any questions, please feel free to contact our office at 828-262-6111.  You may also visit our website at: http://www.housing.appstate.edu.";
         }
-        
+
         $letter->assignment = $assignment_text;
-    
+
         // Skip adding roommate info if only this student is assigned
         if(sizeof($assignees) > 1){
             foreach($assignees as $roommate){
@@ -219,7 +219,7 @@ class HMS_Letter
         }else{
             $letter->roommate = NULL;
         }
-        
+
         $letter->checkin = $movein_time;
 
         $gender = HMS_SOAP::get_gender($student, TRUE);
@@ -228,7 +228,7 @@ class HMS_Letter
         $letter->student_type = $type;
 
         if($type == TYPE_CONTINUING) {
-            
+
             if($gender == MALE){
                 $continuing_male[] = $letter;
             }
@@ -293,24 +293,24 @@ class HMS_Letter
             $filename = $files[$i];
 
             if(substr($filename, 0, 16) != 'housing_letters_')
-                continue;
+            continue;
 
             $namepart = substr($filename, 0, 30);
 
             $date = substr($filename, 16, 4) . '/' .
-                    substr($filename, 20, 2) . '/' .
-                    substr($filename, 22, 2) . ' ' .
-                    substr($filename, 24, 2) . ':' .
-                    substr($filename, 26, 2) . ':' .
-                    substr($filename, 28, 2);
+            substr($filename, 20, 2) . '/' .
+            substr($filename, 22, 2) . ' ' .
+            substr($filename, 24, 2) . ':' .
+            substr($filename, 26, 2) . ':' .
+            substr($filename, 28, 2);
 
             $type = substr($filename, 31, 3);
 
             if($type != 'pdf' && $type != 'csv')
-                continue;
+            continue;
 
             $link = PHPWS_Text::secureLink(_('Download'), 'hms',
-                array('type'=>'letter', 'op'=>$type, 'file'=>$namepart));
+            array('type'=>'letter', 'op'=>$type, 'file'=>$namepart));
 
             if($i % 4 > 1) {
                 $bgcolor = ' bgcolor="#DDDDDD"';
@@ -336,7 +336,7 @@ class HMS_Letter
         if($_REQUEST['authkey'] != Current_User::getAuthKey()) {
             return "Access Denied";
         }
-        
+
         if(isset($_REQUEST['file'])) {
             return HMS_Letter::print_file('pdf', $_REQUEST['file']);
         }
@@ -349,7 +349,7 @@ class HMS_Letter
         if($_REQUEST['authkey'] != Current_User::getAuthKey()) {
             return "Access Denied";
         }
-        
+
         if(isset($_REQUEST['file'])) {
             return HMS_Letter::print_file('csv', $_REQUEST['file']);
         }
@@ -390,7 +390,7 @@ class HMS_Letter
         header('Content-Disposition: attachment; filename="'.$name.'"');
 
         readfile($filename);
-        
+
         exit;
     }
 
@@ -398,7 +398,7 @@ class HMS_Letter
     {
         // Initialize list of people that need a letter
         $needs_letter = array();
-        
+
         $term = Term::getSelectedTerm();
 
         // Get everyone that needs a letter
@@ -434,10 +434,10 @@ class HMS_Letter
         $i = 0;
         foreach($results as $student) {
             /*
-            if($i > 10){
-                break;
-            }
-            */
+             if($i > 10){
+             break;
+             }
+             */
 
             // If assignment_notifications for the floor are disabled
             $assignment = HMS_Assignment::get_assignment($student, $term);
@@ -445,9 +445,9 @@ class HMS_Letter
             $room = $bed->get_parent();
             $floor = $room->get_parent();
             $hall = $floor->get_parent();
-            
+
             if($hall->assignment_notifications == 0)
-                continue;
+            continue;
 
             // Endif
             HMS_Letter::put_into_pile($fm_letters, $ff_letters, $cm_letters, $cf_letters, $student);
@@ -465,7 +465,7 @@ class HMS_Letter
         $ff_count = count($ff_letters);
         $cm_count = count($fm_letters);
         $cf_count = count($cf_letters);
-        
+
         // Initialize PDF and CSV files
         $pdf = HMS_Letter::pdf_factory();
         $csv = "";
@@ -524,7 +524,7 @@ class HMS_Letter
         // Unique filename for the generated files
         $now = strftime("%Y%m%d%H%M%S");
         $filename = "housing_letters_$now";
-        
+
         // Write the PDF
         $pdf->Output("/var/generated_docs/$filename.pdf");
 
@@ -532,14 +532,14 @@ class HMS_Letter
         $fp = fopen("/var/generated_docs/$filename.csv", 'w');
         fwrite($fp,$csv);
         fclose($fp);
-        
+
         // Report back to the user a job well done
         $content = "Generated letters for $fm_count male freshmen, $ff_count female freshmen, $cm_count male continuing, $cf_count female continuing.<br /><br />";
         $content .= PHPWS_Text::secureLink(_('Download PDF'), 'hms',
-            array('type'=>'letter', 'op'=>'pdf', 'file'=>$filename));
+        array('type'=>'letter', 'op'=>'pdf', 'file'=>$filename));
         $content .= "<br /><br />";
         $content .= PHPWS_Text::secureLink(_('Download CSV'), 'hms',
-            array('type'=>'letter', 'op'=>'csv', 'file'=>$filename));
+        array('type'=>'letter', 'op'=>'csv', 'file'=>$filename));
 
         return $content;
     }
@@ -563,12 +563,12 @@ class HMS_Letter
             $temp = $letters[$i];
             $k = $i - 1;
 
-            while($k >= 0 && 
-                strcmp($temp->address1, $letters[$k]->address1) < 0) {
+            while($k >= 0 &&
+            strcmp($temp->address1, $letters[$k]->address1) < 0) {
                 $letters[$k+1] = $letters[$k];
                 $k--;
             }
-            
+
             $letters[$k+1] = $temp;
         }
     }
@@ -577,7 +577,7 @@ class HMS_Letter
     {
         $message = 'Are you sure you want to send assignment status emails?<br /><br />';
 
-        $form = &new PHPWS_Form('hms_send_email');
+        $form = new PHPWS_Form('hms_send_email');
         $form->addSubmit('yes', 'Yes');
         $form->addButton('no', 'No');
         $form->addHidden('type', 'letter');
@@ -587,48 +587,57 @@ class HMS_Letter
 
         return $message;
     }
-    
+
     public function email()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Email.php');
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
         PHPWS_Core::initModClass('hms', 'HMS_Movein_Time.php');
+        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 
         // Accumulate output if any
         $output = '';
 
-        $db = &new PHPWS_DB('hms_assignment');
+        $term = Term::getSelectedTerm();
+
+        $db = new PHPWS_DB('hms_assignment');
         $db->addWhere('email_sent', 0);
-        $db->addWhere('term', Term::getSelectedTerm());
+        $db->addWhere('term', $term);
         $db->addColumn('asu_username');
         $db->addColumn('bed_id');
 
         $result = $db->select();
 
         if(PHPWS_Error::logIfError($result)){
-            return 'Database Error no emails were sent';
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException($result->toString());
         }
 
         foreach($result as $assignment){
             //get the students real name from their asu_username
-            PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
-            $student = HMS_SOAP::get_student_info($assignment['asu_username']);
-            $name = $student->first_name . (strlen($student->middle_name) > 1 ? ' ' . $student->middle_name . ' ' : ' ') . $student->last_name;
+            $student = StudentFactory::getStudentByUsername($assignment['asu_username'], $term);
+            $name = $student->getFirstName() . (strlen($student->getMiddleName()) > 1 ? ' ' . $student->getMiddleName() . ' ' : ' ') . $student->getLastName();
 
             //get the location of their assignment
             PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
-            $bed = &new HMS_Bed($assignment['bed_id']);
+            $bed = new HMS_Bed($assignment['bed_id']);
             $room = $bed->get_parent();
             $location = $bed->where_am_i() . ' - Bedroom ' . $bed->bedroom_label;
 
             //get the movein time for the student
-            $type = HMS_SOAP::get_student_type($assignment['asu_username'], Term::getSelectedTerm());
+            $type = $student->getType();
 
-            $assgmnt = HMS_Assignment::get_assignment($assignment['asu_username'], Term::getSelectedTerm());
-            $prev_assignment = HMS_Assignment::get_assignment($student, Term::getCurrentTerm());
+            // Lookup the floor and hall to make sure the
+            // assignment notifications flag is true for this hall
+            $floor = $room->get_parent();
+            $hall  = $floor->get_parent();
 
-            $term = $assgmnt->term;
-            
+            if($hall->assignment_notifications == 0)
+            continue;
+
+            $assgmnt = HMS_Assignment::getAssignment($student->getUsername(), $term);
+            $prev_assignment = HMS_Assignment::getAssignment($student->getUsername(), Term::getCurrentTerm());
+
             if(!is_null($prev_assignment) || $type == TYPE_CONTINUING){
                 $returning = TRUE;
                 $movein_time_id = $assgmnt->get_rt_movein_time_id();
@@ -651,50 +660,38 @@ class HMS_Letter
             //get the list of roommates
             $roommates = array();
 
-            // This non sequitor brought to you by the Dept. of Housing and Residence life
-            // (While we're here, and before we load more information that we aren't going
-            //  to use into memory, make sure the hall this bed is in has the 
-            //  assignment_notifications flag set).
-            $floor = $room->get_parent();
-            $hall  = $floor->get_parent();
-            
-            if($hall->assignment_notifications == 0)
-                continue;
-
-            // And now back to your regularly scheduled email generation.
             $beds = $room->get_beds();
             foreach($beds as $bed){
                 $roommate = $bed->get_assignee();
 
-                if($roommate->asu_username == $assignment['asu_username'] || $roommate == false || is_null($roommate)){
+                if($roommate == false || is_null($roommate || $roommate->getUsername() == $student->getUsername())){
                     continue;
                 }
-                $roommates[] = HMS_SOAP::get_full_name_inverted($roommate->asu_username) . ' ('. $roommate->asu_username . '@appstate.edu) - Bedroom ' . $bed->bedroom_label;
+
+                $roommates[] = $roommate->getFullName() . ' ('. $roommate->getUsername() . '@appstate.edu) - Bedroom ' . $bed->bedroom_label;
             }
+
             if(sizeof($roommates) == 0){
                 $roommates = null;
             }
 
             // Send the email
-            HMS_Email::send_assignment_email($assignment['asu_username'], $name, $term, $location, $roommates, $movein_time, $type, $returning);
+            HMS_Email::send_assignment_email($student->getUsername(), $name, $term, $location, $roommates, $movein_time, $type, $returning);
 
             // Mark the student as having received an email
             $db->reset();
             $db->addWhere('asu_username', $assignment['asu_username']);
-            $db->addWhere('term', Term::getSelectedTerm());
+            $db->addWhere('term', $term);
             $db->addValue('email_sent', 1);
             $rslt = $db->update();
 
             if(PHPWS_Error::logIfError($rslt)){
-                $output .= 'Database error, could not set email flag for ' . $assignment['asu_username'] . 'please contact ESS.';
+                PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+                throw new DatabaseException($result->toString());
             }
         }
-
-        if(strlen($output) == 0){
-            return 'Emails sent successfully';
-        }
-
-        return $output;
+        
+        return true;
     }
 }
 

@@ -3,27 +3,33 @@
 PHPWS_Core::initModClass('hms', 'CommandMenu.php');
 
 class MessagingMenu extends CommandMenu {
-	
-	public function __construct()
-	{
-		parent::__construct();
+
+    public function __construct()
+    {
+        parent::__construct();
         if(UserStatus::isAdmin() &&
-           (Current_User::allow('hms', 'email_hall')
-            || Current_User::allow('hms', 'email_all'))){
+        (Current_User::allow('hms', 'email_hall')
+        || Current_User::allow('hms', 'email_all'))){
 
             $this->addCommandByName('Send messages by Hall', 'ShowHallNotificationSelect');
         }
-	}
-	
-	public function show()
-	{
+
+        if(UserStatus::isAdmin() &&
+        Current_User::allow('hms', 'assignment_notify')){
+
+            $this->addCommandByName('Send assignment notifications', 'SendAssignmentNotification');
+        }
+    }
+
+    public function show()
+    {
         if(empty($this->commands)){
             return "";
         }
-		$tpl = array();
-		
-		$tpl['MENU'] = parent::show();
-		
-		return PHPWS_Template::process($tpl, 'hms', 'admin/menus/MessagingMenu.tpl');
-	}
+        $tpl = array();
+
+        $tpl['MENU'] = parent::show();
+
+        return PHPWS_Template::process($tpl, 'hms', 'admin/menus/MessagingMenu.tpl');
+    }
 }
