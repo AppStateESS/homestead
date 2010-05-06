@@ -2,26 +2,26 @@
 
 class Student {
 
-	private $username;
-	private $bannerId;
+	protected $username;
+	protected $banner_id;
 
-	private $firstName;
-	private $middleName;
-	private $lastName;
+	protected $first_name;
+	protected $middle_name;
+	protected $last_name;
 
-	private $gender;
-	private $dob;
+	protected $gender;
+	protected $dob;
 
-	private $applicationTerm;
-	private $type;
-	private $class;
-	private $creditHours;
+	protected $application_term;
+	protected $type;
+	protected $class;
+	protected $credit_hours;
 	
-	private $depositDate;
-	private $depositWaived;
+	protected $deposit_date;
+	protected $deposit_waived;
 
-	private $addressList;
-	private $phoneNumberList;
+	protected $addressList;
+	protected $phoneNumberList;
 
 	public function __construct()
 	{
@@ -30,16 +30,16 @@ class Student {
 
 	public function getName()
 	{
-		return $this->firstName . ' ' . $this->lastName;
+		return $this->getFirstName() . ' ' . $this->getLastName();
 	}
 
 	public function getFullName(){
-		return $this->firstName . ' ' . $this->middleName . ' ' . $this->lastName;
+		return $this->getFirstName() . ' ' . $this->getMiddleName() . ' ' . $this->getLastName();
 	}
 
 	public function getPrintableGender()
 	{
-		switch($this->gender){
+		switch($this->getGender()){
 			case FEMALE:
 				return FEMALE_DESC;
 				break;
@@ -53,7 +53,7 @@ class Student {
 
 	public function getPrintableType()
 	{
-		switch($this->type){
+		switch($this->getType()){
 			case TYPE_FRESHMEN:
 				return 'Freshmen';
 				break;
@@ -80,7 +80,7 @@ class Student {
 
 	public function getPrintableClass()
 	{
-		switch($this->class){
+		switch($this->getClass()){
 			case CLASS_FRESHMEN:
 				return 'Freshmen';
 				break;
@@ -202,35 +202,35 @@ class Student {
 	}
 
 	public function getBannerId(){
-		return $this->bannerId;
+		return $this->banner_id;
 	}
 
 	public function setBannerId($id){
-		$this->bannerId = $id;
+		$this->banner_id = $id;
 	}
 
 	public function getFirstName(){
-		return $this->firstName;
+		return $this->first_name;
 	}
 
 	public function setFirstName($name){
-		$this->firstName = $name;
+		$this->first_name = $name;
 	}
 
 	public function getMiddleName(){
-		return $this->middleName;
+		return $this->middle_name;
 	}
 
 	public function setMiddleName($name){
-		$this->middleName = $name;
+		$this->middle_name = $name;
 	}
 
 	public function getLastName(){
-		return $this->lastName;
+		return $this->last_name;
 	}
 
 	public function setLastName($name){
-		$this->lastName = $name;
+		$this->last_name = $name;
 	}
 
 	public function getGender()
@@ -262,11 +262,11 @@ class Student {
 	}
 
 	public function getApplicationTerm(){
-		return $this->applicationTerm;
+		return $this->application_term;
 	}
 
 	public function setApplicationTerm($term){
-		$this->applicationTerm = $term;
+		$this->application_term = $term;
 	}
 
 	public function getType(){
@@ -286,27 +286,27 @@ class Student {
 	}
 	
 	public function getCreditHours(){
-		return $this->creditHours;
+		return $this->credit_hours;
 	}
 	
 	public function setCreditHours($hrs){
-		$this->creditHours = $hrs;
+		$this->credit_hours = $hrs;
 	}
 
 	public function getDepositDate(){
-	    return $this->depositDate;
+	    return $this->deposit_date;
 	}
 	
 	public function setDepositDate($date){
-	    $this->depositDate = $date;
+	    $this->deposit_date = $date;
 	}
 	
 	public function depositWaived(){
-	    return $this->depositWaived;
+	    return $this->deposit_waived;
 	}
 	
 	public function setDepositWaived($status){
-	    $this->depositWaived = $status;
+	    $this->deposit_waived = $status;
 	}
 	
 	public function getAddressList(){

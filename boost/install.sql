@@ -6,6 +6,26 @@ CREATE TABLE hms_term (
     txt_terms character varying(255),
     primary key(term)
 );
+
+CREATE TABLE hms_cached_student (
+    banner_id           integer NOT NULL,
+    term                integer NOT NULL,
+    expires_on          integer NOT NULL,
+    username            character varying(155) NOT NULL,
+    last_name           character varying(255) NOT NULL,
+    first_name          character varying(255) NOT NULL,
+    middle_name         character varying(255),
+    dob                 character(10) NOT NULL,
+    gender              character(1) NOT NULL,
+    deposit_date        character(10),
+    deposit_waived      character varying(5) NOT NULL,
+    type                character(1) NOT NULL,
+    application_term    character(6) NOT NULL,
+    class               character(2) NOT NULL,
+    credit_hours        integer NOT NULL,
+    PRIMARY KEY (banner_id, term)
+);
+
 CREATE TABLE hms_pricing_tiers (
     id          integer NOT NULL,
     tier_value  numeric NOT NULL,
