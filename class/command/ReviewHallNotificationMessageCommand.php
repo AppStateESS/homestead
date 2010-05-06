@@ -36,20 +36,20 @@ class ReviewHallNotificationMessageCommand extends Command {
         $body      = $context->get('body');
         $anonymous = !is_null($context->get('anonymous')) ? $context->get('anonymous') : false;
         $halls     = $context->get('hall');
+        $floors    = $context->get('floor');
 
+        $cmd = CommandFactory::getCommand('ShowHallNotificationEdit');
         if(empty($subject)){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You must fill in the subject line of the email.');
-            $cmd = CommandFactory::getCommand('ShowHallNotificationEdit');
             $cmd->loadContext($context);
             $cmd->redirect();
         } else if(empty($body)){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You must fill in the message to be sent.');
-            $cmd = CommandFactory::getCommand('ShowHallNotificationEdit');
             $cmd->loadContext($context);
             $cmd->redirect();
         }
 
-        $view = new ReviewHallNotificationMessageView($subject, $body, $anonymous, $halls);
+        $view = new ReviewHallNotificationMessageView($subject, $body, $anonymous, $halls, $floors);
 
         $context->setContent($view->show());
     }

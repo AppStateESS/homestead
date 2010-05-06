@@ -22,7 +22,7 @@ class FloorView extends View {
         PHPWS_Core::initModClass('hms', 'HMS_Room.php');
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
-        javascript('jquery');
+        javascript('jquery_ui');
 
         $floor_num = $this->floor->getFloorNumber();
 

@@ -16,7 +16,7 @@ class ShowHallNotificationEditCommand extends Command {
     public function getRequestVars(){
         $vars = array('action'  => 'ShowHallNotificationEdit');
 
-        foreach(array('anonymous', 'subject', 'body', 'hall') as $key){
+        foreach(array('anonymous', 'subject', 'body', 'hall', 'floor') as $key){
             if( !is_null($this->context) && !is_null($this->context->get($key)) ){
                 $vars[$key] = $this->context->get($key);
             }
@@ -26,14 +26,13 @@ class ShowHallNotificationEditCommand extends Command {
     }
 
     public function execute(CommandContext $context){
-
         if(!Current_User::allow('hms', 'email_hall') && !Current_User::allow('hms', 'email_all')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to send messages.');
         }
 
-        if(is_null($context->get('hall'))){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You must select a hall to continue!');
+        if(is_null($context->get('hall')) || is_null($context->get('floor')) ){
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You must select a hall or floor to continue!');
             $cmd = CommandFactory::getCommand('ShowHallNotificationSelect');
             $cmd->redirect();
         }
@@ -42,7 +41,8 @@ class ShowHallNotificationEditCommand extends Command {
         $body      = $context->get('body');
         $anonymous = !is_null($context->get('anonymous')) ? $context->get('anonymous') : false;
         $halls     = $context->get('hall');
-        $view      = new ShowHallNotificationEditView($subject, $body, $anonymous, $halls);
+        $floors    = $context->get('floor');
+        $view      = new ShowHallNotificationEditView($subject, $body, $anonymous, $halls, $floors);
 
         $context->setContent($view->show());
     }

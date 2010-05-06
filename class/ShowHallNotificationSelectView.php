@@ -28,6 +28,7 @@ class ShowHallNotificationSelectView extends View {
 
         $tpl=array();
         
+        /*
         if(Current_User::allow('hms', 'email_all')){
             
             foreach($halls as $hall){
@@ -75,8 +76,17 @@ class ShowHallNotificationSelectView extends View {
             $form->mergeTemplate($tpl);
             $tpl = $form->getTemplate();
         }
+        */
+        javascript('jquery_ui');
+
+        $cmd = CommandFactory::getCommand('ShowHallNotificationEdit');
+        $form = new PHPWS_Form("select_halls");
+        $cmd->initForm($form);
+        $form->addSubmit('submit', 'Submit');
+        $form->setExtra('submit', 'onclick="submitHallList();"');
+        $tpl = $form->getTemplate();
         
-        return PHPWS_Template::process($tpl, 'hms', 'admin/messages.tpl');
+        return PHPWS_Template::process($tpl, 'hms', 'admin/messages.tpl').Layout::getJavascript("modules/hms/hall_expander", array("DIV"=>"hall_list", "FORM"=>"select_halls"));
     }
 }
 ?>

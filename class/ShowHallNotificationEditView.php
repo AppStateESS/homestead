@@ -16,12 +16,14 @@ class ShowHallNotificationEditView extends View {
     private $body;
     private $anonymous;
     private $halls;
+    private $floors;
 
-    public function __construct($subject=null, $body=null, $anonymous=false, $halls=array()){
+    public function __construct($subject=null, $body=null, $anonymous=false, $halls=array(), $floors=array()){
         $this->subject   = $subject;
         $this->body      = $body;
         $this->anonymous = $anonymous;
         $this->halls     = $halls;
+        $this->floors    = $floors;
     }
 
     public function show(){
@@ -48,6 +50,10 @@ class ShowHallNotificationEditView extends View {
 
         if(!empty($this->halls)){
             $form->addHidden('hall', $this->halls);
+        }
+
+        if(!empty($this->floors)){
+            $form->addHidden('floor', $this->floors);
         }
 
         $form->addSubmit('Submit');

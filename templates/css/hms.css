@@ -123,3 +123,16 @@
 .hms-student-menu-term-block {
 	margin-left: 20px;
 }
+
+li.expanded.container {
+    list-style-image: url("mod/hms/img/arrow_down.png");
+}
+
+li.collapsed.container {
+    list-style-image: url("mod/hms/img/arrow_right.png");
+}
+
+li.noexpand {
+    list-style-image: none;
+    list-style: none;
+}

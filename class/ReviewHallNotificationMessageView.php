@@ -16,11 +16,12 @@ class ReviewHallNotificationMessageView extends View {
     private $anonymous;
     private $halls;
 
-    public function __construct($subject=null, $body=null, $anonymous=false, $halls=array()){
+    public function __construct($subject=null, $body=null, $anonymous=false, $halls=array(), $floors=array()){
         $this->subject   = $subject;
         $this->body      = $body;
         $this->anonymous = $anonymous;
         $this->halls     = $halls;
+        $this->floors    = $floors;
     }
 
     public function show(){
@@ -49,6 +50,7 @@ class ReviewHallNotificationMessageView extends View {
         $form->addHidden('subject',     $this->subject);
         $form->addHidden('body',        $this->body);
         $form->addHidden('hall',        $this->halls);
+        $form->addHidden('floor',       $this->floors);
         $form->addSubmit('back',        'Edit Message');
         $tpl['BACK'] = implode('', $form->getTemplate());
 
@@ -61,6 +63,7 @@ class ReviewHallNotificationMessageView extends View {
         $form2->addHidden('subject',    $this->subject);
         $form2->addHidden('body',       $this->body);
         $form2->addHidden('hall',       $this->halls);
+        $form2->addHidden('floor',      $this->floors);
         $form2->addSubmit('Send Emails');
         $tpl['SUBMIT'] = implode('', $form2->getTemplate());
 
