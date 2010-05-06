@@ -13,6 +13,10 @@ var element = function(){
         return "";
     }
 
+    this.getName = function(){
+        return ''+(!this.isEnabled() ? '<span style="color: gray"><i>'+this.name+'</i></span>' : this.name)
+    }
+
     this.load = function(obj){
         this.name = obj.name;
         this.index = obj.id;
@@ -33,7 +37,7 @@ hall.prototype.addChild = function(child){
 }
 
 hall.prototype.draw = function(){
-    var output = '<span id="hall_'+this.index+'" class="hall"><input type="checkbox" ref="'+this.index+'" objtype="'+this.type+'" '+(this.isEnabled() ? '' : 'disabled="true"')+' />'+this.name;
+    var output = '<span id="hall_'+this.index+'" class="hall"><input type="checkbox" ref="'+this.index+'" objtype="'+this.type+'" '+(this.isEnabled() ? '' : 'disabled="true"')+' />'+this.getName();
     output += '<span class="subtree"><ul>';
 
     for(var i in this.children){
@@ -60,5 +64,5 @@ floor.prototype.constructor = floor;
 floor.prototype.type = 'floor';
 
 floor.prototype.draw = function(){
-    return '<input type="checkbox" ref="'+this.index+'" objtype="'+this.type+'" '+(this.isEnabled() ? '' : 'disabled="true"' )+' />'+this.name;
+    return '<input type="checkbox" ref="'+this.index+'" objtype="'+this.type+'" '+(this.isEnabled() ? '' : 'disabled="true"' )+' />'+this.getName();
 }

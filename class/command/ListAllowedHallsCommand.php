@@ -21,6 +21,8 @@ class ListAllowedHallsCommand extends Command {
 
         $data = array();
         foreach($results as $result){
+            $somethingEnabled = false;
+
             $hall        = new HMS_Residence_Hall($result['id']);
             $floors      = $hall->get_floors();
             unset($obj);
@@ -30,6 +32,7 @@ class ListAllowedHallsCommand extends Command {
             $obj->floors = array();
             if($permission->verify(Current_User::getUsername(), $hall, 'email')){
                 $obj->enabled = true;
+                $somethingEnabled = true;
                 foreach($floors as $floor){
                     unset($floor_obj);
                     $floor_obj;
@@ -47,9 +50,13 @@ class ListAllowedHallsCommand extends Command {
                     $floor_obj->id      = $floor->getId();
                     $floor_obj->enabled = $permission->verify(Current_User::getUsername(), $floor, 'email');
                     $obj->floors[]      = $floor_obj;
+
+                    if($floor_obj->enabled)
+                        $somethingEnabled = true;
                 }
             }
-            $data[] = $obj;
+            if($somethingEnabled)
+                $data[] = $obj;
         }
 
         echo json_encode($data);
