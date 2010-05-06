@@ -69,6 +69,7 @@
      ***************/
     $permissions['assignment_maintenance']  = _('Create, move, and delete assignments');
     $permissions['autoassign']              = _('Run the auto-assigner');
+    $permissions['assignment_notify']       = _('Send assignment notifications');
 
     /*************
      * RLC tasks *
