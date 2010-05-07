@@ -92,19 +92,30 @@
                     <tr>
                         <th>Roommate(s):</th>
                     </tr>
-                        <!-- BEGIN roommates -->
+                    <tr>
+                        <!-- BEGIN pending -->
+                        <tr>
+                            <td></td>
+                            <td id="requested_roommate">
+                            {ROOMMATE}<img class="warning" src="images/mod/hms/icons/warning.png" />
+                            <td>
+                        </tr>
+                        <!-- END pending -->
+                        <!-- BEGIN confirmed -->
+                        <tr>
+                            <td></td>
+                            <td id="requested_roommate">
+                            {ROOMMATE}<img class="warning" src="images/mod/hms/icons/warning.png" />
+                            <td>
+                        </tr>
+                        <!-- END confirmed -->
+                        <!-- BEGIN neither -->
                         <tr>
                             <td></td>
                             <td>{ROOMMATE}<td>
                         </tr>
-                        <!-- END roommates -->
+                        <!-- END neither -->
                     </tr>
-                    <!-- BEGIN requested_roommate -->
-                    <tr>
-                        <td></td>
-                        <td>{REQUESTED_ROOMMATE}</td>
-                    </tr>
-                    <!-- END requested_roommate -->
                     <tr>
                         <th>RLC:</td>
                         <td>{RLC_STATUS}</td>

@@ -78,6 +78,19 @@
 	padding: 0.25em;
 }
 
+#requested_roommate{
+    border: solid 1px #FF0000;
+    background: #FFCCCC;
+}
+
+img.warning {
+    border: transparent;
+    background-color: transparent;
+    float:right;
+    width: 20px;
+    height: 20px;
+}
+
 .error {
     border: solid 1px #FF0000;
     background: #FFCCCC;
