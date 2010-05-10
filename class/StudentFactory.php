@@ -1,9 +1,10 @@
 <?php
 
+PHPWS_Core::initModClass('hms', 'StudentDataFactory.php');
 PHPWS_Core::initModClass('hms', 'Student.php');
 PHPWS_Core::initModClass('hms', 'SOAP.php');
 
-class StudentFactory {
+class StudentFactory extends StudentDataFactory{
 	
 	public static function getStudentByUsername($username, $term)
 	{
