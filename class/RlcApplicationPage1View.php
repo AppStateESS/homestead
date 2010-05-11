@@ -118,6 +118,8 @@ class RlcApplicationPage1View extends View {
     
         $rlc_form->mergeTemplate($template);
         $template = $rlc_form->getTemplate();
+
+        Layout::addPageTitle("RLC Application");
                 
         return PHPWS_Template::process($template,'hms','student/rlc_signup_form_page1.tpl');
   }

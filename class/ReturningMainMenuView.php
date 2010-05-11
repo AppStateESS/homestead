@@ -27,6 +27,8 @@ class ReturningMainMenuView extends View {
 			$termBlock = new StudentMenuTermBlock($this->student, $t);
 			$tpl['TERMBLOCK'][] = array('TERMBLOCK_CONTENT'=>$termBlock->show());
 		}
+
+        Layout::addPageTitle("Main Menu");
 		
 		return PHPWS_Template::process($tpl, 'hms', 'student/returningMenu.tpl');
 	}

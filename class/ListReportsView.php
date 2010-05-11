@@ -34,6 +34,8 @@ class ListReportsView extends View {
 			$tpl['REPORTS'][]['REPORT_LINK'] =  $cmd->getLink($name);
 		}
 
+        Layout::addPageTitle("Reports");
+
 		$final = PHPWS_Template::process($tpl, 'hms', 'admin/display_reports.tpl');
 		return $final;
 	}

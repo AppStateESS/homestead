@@ -41,6 +41,8 @@ class SelectHallView extends View {
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
+        Layout::addPageTitle("Select Hall");
+
         return PHPWS_Template::process($tpl, 'hms', 'admin/select_residence_hall.tpl');
 	}
 }

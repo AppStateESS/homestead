@@ -19,6 +19,8 @@ class LotteryEligibilityWaiverView extends View {
         
         $form->mergeTemplate($tpl);
 
+        Layout::addPageTitle("Lottery Eligibility Waiver");
+
         return PHPWS_Template::process($form->getTemplate(), 'hms', 'admin/eligibility_waiver.tpl');
     }
 }

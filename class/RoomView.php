@@ -110,6 +110,8 @@ class RoomView extends View {
 		$form->mergeTemplate($tpl);
 		$tpl = $form->getTemplate();
 
+        Layout::addPageTitle("Edit Room");
+
 		return PHPWS_Template::process($tpl, 'hms', 'admin/edit_room.tpl');
 	}
 }

@@ -76,6 +76,8 @@ class LotteryChooseRoomView extends View {
             $tpl['room_list'][] = $row;
         }
 
+        Layout::addPageTitle("Lottery Choose Room");
+
         return PHPWS_Template::process($tpl, 'hms', 'student/lottery_choose_room.tpl');
     }
 }

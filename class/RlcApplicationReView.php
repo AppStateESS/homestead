@@ -75,6 +75,8 @@ class RlcApplicationReView extends View {
             $tags['WHY_THIRD_CHOICE'] = 'n/a';
         }
 
+        Layout::addPageTitle("RLC Application Review");
+
         return PHPWS_Template::process($tags, 'hms', 'student/rlc_application.tpl');
     }
 }

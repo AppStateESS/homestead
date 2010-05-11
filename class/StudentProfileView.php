@@ -251,6 +251,8 @@ class StudentProfileView extends View {
         // TODO logs
 
         // TODO tabs
+        
+        Layout::addPageTitle("Student Profile");
 
         return PHPWS_Template::process($tpl, 'hms', 'admin/fancy_student_info.tpl');
     }

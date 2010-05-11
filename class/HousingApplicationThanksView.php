@@ -22,6 +22,8 @@ class HousingApplicationThanksView extends View {
 			$tpl['RLC_LINK'] = PHPWS_Text::secureLink(_('Residential Learning Communities Application'), 'hms', array('type'=>'student', 'op'=>'show_rlc_application_form'));
 		}
 
+        Layout::addPageTitle("Thank you");
+
 		return PHPWS_Template::process($tpl, 'hms', 'student/student_application_thankyou.tpl');
 	}
 }

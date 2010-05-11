@@ -33,6 +33,8 @@ class AddCommunityView extends View {
         $tpl['TITLE']     = 'Add/Edit a learning Community';
         $tpl['MESSAGE']   = ''; //TODO: use NQ here
 
+        Layout::addPageTitle("Add RLC");
+
         return PHPWS_Template::process($tpl, 'hms', 'admin/display_learning_community_data.tpl');
     }
 }

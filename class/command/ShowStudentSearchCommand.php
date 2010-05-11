@@ -50,6 +50,8 @@ class ShowStudentSearchCommand extends Command {
 
         $tpl = $form->getTemplate();
 
+        Layout::addPageTitle("Student Search");
+
         $context->setContent(PHPWS_Template::process($tpl, 'hms', 'admin/get_single_username.tpl'));
     }
 }
