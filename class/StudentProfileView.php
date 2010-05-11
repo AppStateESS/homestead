@@ -129,8 +129,12 @@ class StudentProfileView extends View {
             else if(isset($this->roommates['CONFIRMED'])){
                 $tpl['confirmed'][]['ROOMMATE'] = $this->roommates['CONFIRMED'];
             }
+            // semi-error states
             else if(isset($this->roommates['NO_BED_AVAILABLE'])){
-                $tpl['no_bed_available'][]['ROOMMATE'] = $this->roommates['NO_BED_AVAILABLE'];
+                $tpl['error_status'][]['ROOMMATE'] = $this->roommates['NO_BED_AVAILABLE'];
+            } 
+            else if(isset($this->roommates['MISMATCHED_ROOMS'])){
+                $tpl['error_status'][]['ROOMMATE'] = $this->roommates['MISMATCHED_ROOMS'];
             }
 
             if(isset($this->roommates['ASSIGNED'])){

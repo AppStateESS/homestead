@@ -94,19 +94,18 @@
                         <!-- BEGIN confirmed -->
                             <td class="success">
                             {ROOMMATE}<img class="roommate_request_icon" src="images/mod/hms/icons/check.png" />
-                            <td>
+                            </td>
                         <!-- END confirmed -->
                         <!-- BEGIN pending -->
                             <td class="warning">
                             {ROOMMATE}<img class="roommate_request_icon" src="images/mod/hms/icons/warning.png" />
-                            <td>
+                            </td>
                         <!-- END pending -->
-                        <!-- BEGIN no_bed_available -->
+                        <!-- BEGIN error_status -->
                             <td class="error">
                             {ROOMMATE}<img class="roommate_request_icon" src="images/mod/hms/icons/warning.png" />
-                            <td>
-                        <!-- END no_bed_available -->
-                        
+                            </td>
+                        <!-- END error_status -->
                     </tr>
                     <tr>
                         <!-- BEGIN assigned -->

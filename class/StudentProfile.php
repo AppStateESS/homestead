@@ -5,6 +5,7 @@ class StudentProfile {
     private $student;
     private $term;
     private $profileView;
+    private $roommates = array();
 
     public function __construct(Student $student, $term){
         $this->student = $student;
@@ -27,11 +28,8 @@ class StudentProfile {
         PHPWS_Core::initModClass('hms', 'HousingApplication.php');
         PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
 
-        $roommates = array();
-
         $studentUsername = $this->student->getUsername();        
         $assignment = HMS_Assignment::getAssignment($studentUsername, $this->term);
-        $ass2 = HMS_Assignment::getAssignment("sally",$this->term);
 
         $pendingRoommate = HMS_Roommate::get_pending_roommate($studentUsername, $this->term);
         $confirmedRoommate = HMS_Roommate::get_confirmed_roommate($studentUsername, $this->term);
@@ -53,7 +51,7 @@ class StudentProfile {
                             // Get student object and room link
                             $roomLink = $this->getRoommateRoomLink($roomie->getUsername());
                             // if $roomie was assigned but not requested
-                            $roommates['ASSIGNED'][] = $roomie->getFullNameProfileLink() . " - $roomLink";
+                            $this->roommates['ASSIGNED'][] = $roomie->getFullNameProfileLink() . " - $roomLink";
                         }
                     }
                 }
@@ -63,47 +61,108 @@ class StudentProfile {
         //
         // Check status of requested roommates
         //
-        if(!is_null($pendingRoommate)){
-            // Check if there is an available bed for the pending requested student
-            if(is_null($assignment) || $assignment->get_parent()->get_parent()->has_vacancy()
-               || in_array($pendingRoommate, $assignedRoommates)){
-                $roomLink = $this->getRoommateRoomLink($pendingRoommate->getUsername());
-                if(!is_null($roomLink))
-                    $roommates['PENDING'] = $pendingRoommate->getFullNameProfileLink() . " - $roomLink (Pending)";
-                else
-                    $roommates['PENDING'] = $pendingRoommate->getFullNameProfileLink() . " (Pending)";
-            } 
+        if(!is_null($confirmedRoommate)){
+            if(!is_null($assignment)){
+                $confirmedRmAssignment = HMS_Assignment::getAssignment($confirmedRoommate->getUsername(), $this->term);
+
+                if(!is_null($confirmedRmAssignment)){
+                    // if confirmed roommate is assigned to different room than profile student
+                    if($assignment->get_parent()->room_id != $confirmedRmAssignment->get_parent()->room_id){
+                        $this->setRoommateVar($confirmedRoommate, "confirmed", "mismatched_rooms");
+                    }
+                    else{
+                        $this->setRoommateVar($confirmedRoommate, "confirmed");
+                    }
+                }
+                else{
+                    // if profile student's room is full
+                    if(!$assignment->get_parent()->get_parent()->has_vacancy()){
+                        $this->setRoommateVar($confirmedRoommate, "confirmed", "no_bed_available");                        
+                    }
+                    else{
+                        $this->setRoommateVar($confirmedRoommate, "confirmed");
+                    }
+                }
+            }
+            // assignment is null
             else {
-                $roomLink = $this->getRoommateRoomLink($pendingRoommate->getUsername());
-                if(!is_null($roomLink))
-                    $roommates['NO_BED_AVAILABLE'] = $pendingRoommate->getFullNameProfileLink() . " - $roomLink (Pending/No bed)";
-                else
-                    $roommates['NO_BED_AVAILABLE'] = $pendingRoommate->getFullNameProfileLink() . " (Pending/No Bed)";
+                $this->setRoommateVar($confirmedRoommate, "confirmed");
             }
         }
-        else if (!is_null($confirmedRoommate)){
-            // Check if there is an available bed for the confirmed requested student
-            if(is_null($assignment) || $assignment->get_parent()->get_parent()->has_vacancy()
-               || in_array($confirmedRoommate, $assignedRoommates)){
-                $roomLink = $this->getRoommateRoomLink($confirmedRoommate->getUsername());
-                if(!is_null($roomLink))
-                    $roommates['CONFIRMED'] = $confirmedRoommate->getFullNameProfileLink() . " - $roomLink (Confirmed)";
-                else
-                    $roommates['CONFIRMED'] = $confirmedRoommate->getFullNameProfileLink() . " (Confirmed)";
-            }
-            else {
-                $roomLink = $this->getRoommateRoomLink($confirmedRoommate->getUsername());
-                if(!is_null($roomLink))
-                    $roommates['NO_BED_AVAILABLE'] = $confirmedRoommate->getFullNameProfileLink() . " - $roomLink (Confirmed/No bed)";
-                else
-                    $roommates['NO_BED_AVAILABLE'] = $confirmedRoommate->getFullNameProfileLink() . " (Confirmed/No Bed)";
-            }
+        else if (!is_null($pendingRoommate)){
+            if(!is_null($assignment)){
+                $pendingRmAssignment = HMS_Assignment::getAssignment($pendingRoommate->getUsername(), $this->term);
 
+                if(!is_null($pendingRmAssignment)){
+                    // if pending roommate is assigned to different room than profile student
+                    if($assignment->get_parent()->room_id != $pendingRmAssignment->get_parent()->room_id){
+                        $this->setRoommateVar($pendingRoommate, "pending", "mismatched_rooms");
+                    }
+                    else{
+                        $this->setRoommateVar($pendingRoommate, "pending");
+                    }
+                }
+                else{
+                    // if profile student's room is full
+                    if(!$assignment->get_parent()->get_parent()->has_vacancy()){
+                        $this->setRoommateVar($pendingRoommate, "pending", "no_bed_available");                        
+                    }
+                    else{
+                        $this->setRoommateVar($pendingRoommate, "pending");
+                    }
+                }
+            }
+            // assignment is null
+            else {
+                $this->setRoommateVar($pendingRoommate, "pending");
+            }
         }
 
         $applications = HousingApplication::getAllApplications($this->student->getUsername());
 
-        return new StudentProfileView($this->student, $applications, $assignment, $roommates);
+        return new StudentProfileView($this->student, $applications, $assignment, $this->roommates);
+    }
+
+    
+    /**
+     * setRoommateVar will set the variable in $roommates properly
+     * It can handle requested roommates that are confirmed/pending,
+     * assigned to separate rooms or assigned to a room that has no more 
+     * beds left.
+     */
+    private function setRoommateVar($roomie, $status, $status_extra=null)
+    {
+        $roomLink = $this->getRoommateRoomLink($roomie->getUsername());
+        if(is_null($roomLink)){
+            $roomLink = "";
+        }else{
+            $roomLink = " - ".$roomLink;
+        }
+
+        if($status_extra == "no_bed_available"){
+            if($status == "confirmed"){
+                $this->roommates['NO_BED_AVAILABLE'] = $roomie->getFullNameProfileLink() . $roomLink . " (Confirmed | No Bed Available)";
+            }
+            else if($status == "pending"){
+                $this->roommates['NO_BED_AVAILABLE'] = $roomie->getFullNameProfileLink() . $roomLink . " (Pending | No Bed Available)";
+            }
+        }
+        else if($status_extra == "mismatched_rooms"){
+            if($status == "confirmed"){
+                $this->roommates['MISMATCHED_ROOMS'] = $roomie->getFullNameProfileLink() . $roomLink . " (Confirmed | Mismatched)";
+            }
+            else if($status == "pending"){
+                $this->roommates['MISMATCHED_ROOMS'] = $roomie->getFullNameProfileLink() . $roomLink . " (Pending | Mismatched)";
+            }
+        }
+        else {
+            if($status == "confirmed"){
+                $this->roommates['CONFIRMED'] = $roomie->getFullNameProfileLink() . $roomLink . " (Confirmed)";
+            }
+            else if($status == "pending"){
+                $this->roommates['PENDING'] = $roomie->getFullNameProfileLink() . $roomLink . " (Pending)";
+            }
+        }
     }
     
     /**
