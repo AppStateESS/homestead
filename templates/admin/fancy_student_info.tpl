@@ -91,30 +91,30 @@
                     </tr>
                     <tr>
                         <th>Roommate(s):</th>
+                        <!-- BEGIN confirmed -->
+                            <td class="success">
+                            {ROOMMATE}<img class="roommate_request_icon" src="images/mod/hms/icons/check.png" />
+                            <td>
+                        <!-- END confirmed -->
+                        <!-- BEGIN pending -->
+                            <td class="warning">
+                            {ROOMMATE}<img class="roommate_request_icon" src="images/mod/hms/icons/warning.png" />
+                            <td>
+                        <!-- END pending -->
+                        <!-- BEGIN no_bed_available -->
+                            <td class="error">
+                            {ROOMMATE}<img class="roommate_request_icon" src="images/mod/hms/icons/warning.png" />
+                            <td>
+                        <!-- END no_bed_available -->
+                        
                     </tr>
                     <tr>
-                        <!-- BEGIN pending -->
+                        <!-- BEGIN assigned -->
                         <tr>
                             <td></td>
-                            <td id="requested_roommate">
-                            {ROOMMATE}<img class="warning" src="images/mod/hms/icons/warning.png" />
-                            <td>
+                            <td>{ROOMMATE}</td>
                         </tr>
-                        <!-- END pending -->
-                        <!-- BEGIN confirmed -->
-                        <tr>
-                            <td></td>
-                            <td id="requested_roommate">
-                            {ROOMMATE}<img class="warning" src="images/mod/hms/icons/warning.png" />
-                            <td>
-                        </tr>
-                        <!-- END confirmed -->
-                        <!-- BEGIN neither -->
-                        <tr>
-                            <td></td>
-                            <td>{ROOMMATE}<td>
-                        </tr>
-                        <!-- END neither -->
+                        <!-- END assigned -->
                     </tr>
                     <tr>
                         <th>RLC:</td>

@@ -78,12 +78,7 @@
 	padding: 0.25em;
 }
 
-#requested_roommate{
-    border: solid 1px #FF0000;
-    background: #FFCCCC;
-}
-
-img.warning {
+img.roommate_request_icon {
     border: transparent;
     background-color: transparent;
     float:right;

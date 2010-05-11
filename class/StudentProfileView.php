@@ -123,15 +123,19 @@ class StudentProfileView extends View {
         if(isset($this->roommates) && !empty($this->roommates)){
             // Remember, student can only have one confirmed or pending request
             // but multiple assigned roommates
-            if(isset($this->roommates['CONFIRMED'])){
-                $tpl['confirmed'][]['ROOMMATE'] = $this->roommates['CONFIRMED'];
-            }
-            else if (isset($this->roommates['PENDING'])){
+            if(isset($this->roommates['PENDING'])){
                 $tpl['pending'][]['ROOMMATE'] = $this->roommates['PENDING'];
             }
-            if(isset($this->roommates['NEITHER'])){
-                foreach($this->roommates['NEITHER'] as $roommate){
-                    $tpl['neither'][]['ROOMMATE'] = $roommate;
+            else if(isset($this->roommates['CONFIRMED'])){
+                $tpl['confirmed'][]['ROOMMATE'] = $this->roommates['CONFIRMED'];
+            }
+            else if(isset($this->roommates['NO_BED_AVAILABLE'])){
+                $tpl['no_bed_available'][]['ROOMMATE'] = $this->roommates['NO_BED_AVAILABLE'];
+            }
+
+            if(isset($this->roommates['ASSIGNED'])){
+                foreach($this->roommates['ASSIGNED'] as $roommate){
+                    $tpl['assigned'][]['ROOMMATE'] = $roommate;
                 }
             }
         }
