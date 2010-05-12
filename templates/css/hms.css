@@ -123,3 +123,8 @@
 .hms-student-menu-term-block {
 	margin-left: 20px;
 }
+
+.overlay {
+    background: white;
+    border: solid thin black;
+}
