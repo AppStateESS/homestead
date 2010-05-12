@@ -11,10 +11,9 @@ timeout:100000
 /*
  * AssignWidget
  *
- *   Creates an assignment widget for a bed with the id of the contents of the
- * div passed as the parameter to the constructor.  Create a new one by calling
- * new AssignWidget(div).  Everything else should happen automagically.  The div
- * ***MUST*** contain the id and only the id of the bed this widget is for.
+ *   Creates an assignment widget for a bed with the id of bed field of the div
+ * passed to the constructor.  Create a new one by calling new AssignWidget(div),
+ * everything else should happen automagically.
  *
  * @param div - the div to create the widget in
  *
@@ -24,7 +23,7 @@ timeout:100000
  */
 var AssignWidget = function(div){
     this.div = div;
-    this.bed = $(this.div).text();
+    this.bed = $(this.div).attr('bed');
     this.username = '';
     this.fullname = '';
     this.profile_link = '';
@@ -81,6 +80,10 @@ var AssignWidget = function(div){
                 $("#username_"+me.bed).keyup(function(){
                         me.updateUsername();
                     });
+                $("#accept_"+me.bed).click(function(){
+                        me.syncOverlay();
+                        me.submitAssignment()
+                            });
                 $("#cancel_"+me.bed).click(me.toggleOverlayFunc());
             } else {
                 $("#overlay_"+me.bed).remove();
@@ -105,6 +108,25 @@ var AssignWidget = function(div){
         $("#fullname_"+this.bed).html(this.fullname);
     }
 
+    this.syncOverlay = function(){
+        if($("#username_"+this.bed).get().length > 0){
+            this.username = $("#username_"+this.bed).val();
+        }
+        this.mealplan = $('#overlay_'+this.bed).children().find("#select_meal_plan").val();
+    }
+
     this.submitAssignment = function(){
+        var me = this;
+        $.post('index.php', {module: 'hms', action: 'FloorAssignStudent', bed: this.bed, mealplan: this.mealplan, username: this.username},
+               function(data){
+                   if(!data.success){
+                       $("#overlay_"+me.bed).append('<div class="error">'+data.message+'</div>');
+                   } else {
+                       var func = me.toggleOverlayFunc();
+                       func();
+                       var newAssigner = new AssignWidget(me.div);
+                       newAssigner.setup();
+                   }
+               },'json');
     }
 }

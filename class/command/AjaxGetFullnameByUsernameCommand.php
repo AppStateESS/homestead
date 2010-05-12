@@ -15,7 +15,7 @@ class AjaxGetFullnameByUsernameCommand extends Command {
         }
 
         $username = $context->get('username');
-        if(is_null($username)){
+        if(is_null($username) || empty($username)){
             echo "";
             exit;
         }

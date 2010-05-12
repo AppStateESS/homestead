@@ -1182,6 +1182,10 @@ function hms_update(&$content, $currentVersion)
             if(PEAR::isError($result)){
                 return $result;
             }
+        case version_compare($currentVersion, '0.4.20', '<'):
+            PHPWS_Boost::registerMyModule('hms', 'users', $content);
+            $files[] = 'templates/admin/floor_assignment.tpl';
+            PHPWS_Boost::updatefiles($files, 'hms');
     }
 
     return TRUE;
