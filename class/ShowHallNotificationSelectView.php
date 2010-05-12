@@ -28,55 +28,6 @@ class ShowHallNotificationSelectView extends View {
 
         $tpl=array();
         
-        /*
-        if(Current_User::allow('hms', 'email_all')){
-            
-            foreach($halls as $hall){
-                if($hall->is_online != 1){
-                    continue;
-                } else {
-                    $form->addCheck('hall['.$hall->id.']', $hall->id);
-                    $form->setLabel('hall['.$hall->id.']', $hall->hall_name);
-                }
-            }
-            
-            $form->addSubmit('submit', 'Continue');
-            
-            $i=0;
-            $elements = $form->getTemplate();
-            foreach($elements as $row){
-                //put the first and last elements directly into the template, not the row repeat because they are form tags
-                if($i == 0){ 
-                    $tpl['START_FORM'] = $row;
-                    $i++;
-                    continue;
-                } elseif($i == sizeof($elements)-1){
-                    $tpl['END_FORM'] = $row;
-                    break;
-                }
-               
-                //even numbered rows are checkboxes, odd are labels
-                if($i % 2 == 1)
-                    $tpl['halls_list'][$i+1]['LABEL'] = $row; //group the label with the checkbox
-                else
-                    $tpl['halls_list'][$i]['SELECT'] = $row;
-
-                $i++;
-            }
-        } else {
-            //TODO use the SelectResidenceHall command here
-            $halls_array = array();
-            foreach($halls as $hall){
-                $halls_array[$hall->id] = $hall->hall_name;
-            }
-            
-            $form->addDropBox('hall', $halls_array);
-            $form->setLabel('hall', 'Choose a hall:');
-            $form->addSubmit('submit', 'Continue');
-            $form->mergeTemplate($tpl);
-            $tpl = $form->getTemplate();
-        }
-        */
         javascript('jquery_ui');
 
         $cmd = CommandFactory::getCommand('ShowHallNotificationEdit');

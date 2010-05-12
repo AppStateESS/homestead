@@ -23,7 +23,7 @@ class HMS_Permission extends HMS_Item {
         $db->addJoin('left outer', 'hms_user_role', 'users', 'user_id', 'id');
 
         if(!is_null($permission))
-            $db->addWhere('hms_permission.name', $permission);
+        $db->addWhere('hms_permission.name', $permission);
         if(!is_null($username)){
             $db->addWhere('users.username', $username);
         } else {
@@ -41,7 +41,8 @@ class HMS_Permission extends HMS_Item {
         $result = $db->select();
 
         if(PHPWS_Error::logIfError($result)){
-            return false;
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException($result->toString());
         }
 
         return $result;
@@ -52,7 +53,11 @@ class HMS_Permission extends HMS_Item {
             return false;
         }
 
-        $result = $this->getMembership(is_null($otherPermission) ? $this->name : $otherPermission, $object, $username);
+        try{
+            $result = $this->getMembership(is_null($otherPermission) ? $this->name : $otherPermission, $object, $username);
+        }catch(DatabaseException $e){
+            return false;
+        }
 
         return sizeof($result) > 0;
     }

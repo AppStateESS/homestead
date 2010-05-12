@@ -17,6 +17,12 @@ var submitHallList = function(e){
 $(document).ready(function(){
     $.post('index.php', {module: 'hms', action: 'ListAllowedHalls'},
         function(data){
+    	
+    		if(data == ""){
+    			$("#{DIV}").append("You do not have permission to message any residence halls. <br /><br />");
+    			return;
+    		}
+    	
             var halls = new Array();
             for(var i in data){
                 var newHall = new hall();

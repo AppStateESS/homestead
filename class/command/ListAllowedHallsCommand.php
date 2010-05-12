@@ -10,27 +10,28 @@ class ListAllowedHallsCommand extends Command {
 
     public function execute(CommandContext $context){
         $term = Term::getSelectedTerm();
+        
         $db = new PHPWS_DB('hms_residence_hall');
         $db->addWhere('term', $term);
-        $results = $db->select();
-
+        $results = $db->getObjects('HMS_Residence_Hall');;
+        
         if(PHPWS_Error::logIfError($results)){
             exit;
         }
         $permission = new HMS_Permission();
 
         $data = array();
-        foreach($results as $result){
+        foreach($results as $hall){
             $somethingEnabled = false;
 
-            $hall        = new HMS_Residence_Hall($result['id']);
             $floors      = $hall->get_floors();
             unset($obj);
             $obj;
             $obj->name   = $hall->getHallName();
             $obj->id     = $hall->getId();
             $obj->floors = array();
-            if($permission->verify(Current_User::getUsername(), $hall, 'email')){
+            $blah = 'Verify: ' . ($permission->verify(UserStatus::getUsername(), $hall, 'email') ? 'true' : 'false');
+            if($permission->verify(UserStatus::getUsername(), $hall, 'email')){
                 $obj->enabled = true;
                 $somethingEnabled = true;
                 foreach($floors as $floor){

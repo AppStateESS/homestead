@@ -549,7 +549,7 @@ class HMS_Room extends HMS_Item
 
     // TODO: move this
     public function get_row_edit(){
-        javascript('/jquery/');
+        javascript('jquery');
         $tpl = array();
         $tpl['ID']           = $this->id;
         $tpl['ROOM_NUMBER']  = PHPWS_Text::secureLink($this->room_number, 'hms', array('type'=>'room', 'op'=>'show_edit_room', 'room'=>$this->id));
@@ -638,7 +638,7 @@ class HMS_Room extends HMS_Item
     public static function room_pager_by_floor($floor_id, $editable=false)
     {
         PHPWS_Core::initCoreClass('DBPager.php');
-        javascript('/jquery/');
+        javascript('jquery');
          
         $pager = & new DBPager('hms_room', 'HMS_Room');
         $pager->addWhere('hms_room.floor_id', $floor_id);
