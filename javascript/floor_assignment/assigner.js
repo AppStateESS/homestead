@@ -46,7 +46,7 @@ var AssignWidget = function(div){
         output += '<tr><th>Username</th><td><input id="username_'+this.bed+'" class="username-input" type="text" value="'+this.username+'" /></td></tr>';
         output += '<tr><th>Full Name</th><td><b id="fullname_'+this.bed+'">'+this.fullname+'</b></td></tr>';
         output += '<tr><th>Meal Plan</th><td>'+dropbox+'</td></tr>';
-        output += '<tr><td></td><td style="text-align: right"><button id="accept_'+this.bed+'">Assign</button><button id="cancel_'+this.bed+'">Cancel</button></td></tr>';
+        output += '<tr><td></td><td style="text-align: right"><span id="status_'+this.bed+'" /><button id="accept_'+this.bed+'">Assign</button><button id="cancel_'+this.bed+'">Cancel</button></td></tr>';
         output += '</table>';
         output += '</div>';
 
@@ -70,6 +70,7 @@ var AssignWidget = function(div){
 
     this.toggleOverlayFunc = function(){
         var me = this;
+
         return function(){
             me.overlayShown = !me.overlayShown;
 
@@ -81,6 +82,7 @@ var AssignWidget = function(div){
                         me.updateUsername();
                     });
                 $("#accept_"+me.bed).click(function(){
+                        $("#status_"+me.bed).html('<img src="images/core/ajax-loader.gif" />');
                         me.syncOverlay();
                         me.submitAssignment()
                             });
@@ -121,11 +123,15 @@ var AssignWidget = function(div){
                function(data){
                    if(!data.success){
                        $("#overlay_"+me.bed).append('<div class="error">'+data.message+'</div>');
+                       $("#status_"+me.bed).html('<img src="images/mod/hms/tango/dialog-error.png" />');
                    } else {
-                       var func = me.toggleOverlayFunc();
-                       func();
-                       var newAssigner = new AssignWidget(me.div);
-                       newAssigner.setup();
+                       $("#status_"+me.bed).html('<img src="images/mod/hms/icons/check.png" />');
+                       setTimeout(function(){
+                               var func = me.toggleOverlayFunc();
+                               func();
+                               var newAssigner = new AssignWidget(me.div);
+                               newAssigner.setup();
+                           }, 1000);
                    }
                },'json');
     }
