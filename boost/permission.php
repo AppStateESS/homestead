@@ -87,6 +87,7 @@
     # RLC assignment tasks
     $permissions['view_rlc_room_assignments']       = _('View RLC room assignments');
     $permissions['rlc_room_assignments']            = _('Create RLC room assignments');
+    $permissions['email_rlc_rejections']            = _('Send RLC rejection emails');
 
     /********
      * Misc *

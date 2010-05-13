@@ -260,6 +260,32 @@ class HMS_RLC_Application extends HMS_Item {
         return $app;
     }
 
+    /**
+     * Get denied RLC applicants by term 
+     * @return Array of Student objects
+     */
+    public static function getDeniedApplicantsByTerm($term)
+    {
+        // query DB
+        $db = new PHPWS_DB('hms_learning_community_applications');
+        $db->addWhere('denied',1);
+        $db->addWhere('term', $term);
+        $result = $db->select();
+        
+        if(PHPWS_Error::logIfError($result)){
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException($result->toString());
+        }
+
+        // create student objects from the denied applications
+        $students = array();
+        foreach($result as $app){
+            $students[] = StudentFactory::getStudentByUsername($app['username'], $term);
+        }
+
+        return $students;
+    }
+
     //TODO move this!!
     public function denied_pager()
     {
