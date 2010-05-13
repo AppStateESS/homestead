@@ -133,7 +133,7 @@ class LotteryApplication extends HousingApplication {
 
     public function isWinner()
     {
-        if($this->magic_winner == 1 || (!is_null($this->invite_expires_on) && $this->invite_expires_on >= time())){
+        if(!is_null($this->invite_expires_on) && $this->invite_expires_on >= time()){
             return true;
         }else{
             return false;
