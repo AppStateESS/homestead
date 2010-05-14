@@ -65,6 +65,7 @@ class CreateTermCommand extends Command {
         }
 
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
+        PHPWS_Core::initModClass('hms', 'HousingApplication.php');
 
         $db = new PHPWS_DB();
 
@@ -73,13 +74,39 @@ class CreateTermCommand extends Command {
             # Get the halls from the current term
             $halls = HMS_Residence_Hall::get_halls(Term::getCurrentTerm());
             set_time_limit(36000);
+
             foreach ($halls as $hall){
-                $hall->copy($term->getTerm(), $copyAssignments);
+
+                // we always copy hall structure!
+                $hall->copy($term->getTerm());
+
+                if($copyAssignments){
+                    $assignees = $hall->get_assignees();
+                    foreach($assignees as $student){
+                        // Get student's old assignment and application
+                        $assignment = HMS_Assignment::getAssignment($student->getUsername(), Term::getCurrentTerm());
+                        $app = HousingApplication::getApplicationByUser($student->getUsername(), Term::getCurrentTerm());
+                        
+                        // Meal option is set to standard by default
+                        $meal_option = BANNER_MEAL_STD;
+                        if(!is_null($app)){
+                            $meal_option = $app->getMealPlan();
+                        }
+
+                        $room_id = $assignment->get_room_id();
+                        $bed_id = $assignment->bed_id;
+
+                        $note = ", Assignment copied from ".Term::getCurrentTerm()." to ".$term->getTerm();
+                        $result = HMS_Assignment::assignStudent($student, $term->getTerm(), $room_id, $bed_id, $meal_option, $note);
+                    }
+                }
+
             }
 
             $db->query('COMMIT');
-            
+
         }catch(Exception $e){
+
             $db->query('ROLLBACK');
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'There was an error copying the hall structure and/or assignments. The term was created, but nothing was copied.');
             $errorCmd->redirect();
