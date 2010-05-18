@@ -77,6 +77,7 @@ var AssignWidget = function(div, semaphore){
         output += '<tr><th>Meal Plan</th><td>'+dropbox+'</td></tr>';
         output += '<tr><td></td><td style="text-align: right"><span id="status_'+this.bed+'" /><button id="accept_'+this.bed+'">Assign</button><button id="cancel_'+this.bed+'">Cancel</button></td></tr>';
         output += '</table>';
+        output += '<div id="message_'+this.bed+'" />'; 
         output += '</div>';
 
         return output;
@@ -160,10 +161,11 @@ var AssignWidget = function(div, semaphore){
         $.post('index.php', {module: 'hms', action: 'FloorAssignStudent', bed: this.bed, mealplan: this.mealplan, username: this.username},
                function(data){
                    if(!data.success){
-                       $("#overlay_"+me.bed).append('<div class="error"><img src="images/mod/hms/tango/dialog-error.png" />'+data.message+'</div>');
+                       $("#message_"+me.bed).html('<div class="error"><img src="images/mod/hms/tango/dialog-error.png" />'+data.message+'</div>');
                        $("#status_"+me.bed).html('');
                    } else {
-                       $("#overlay_"+me.bed).append('<div class="success"><img src="images/mod/hms/icons/check.png" />Student Assigned!</div>');
+                       $("#message_"+me.bed).html('<div class="success"><img src="images/mod/hms/icons/check.png" />Student Assigned!</div>');
+                       $("#status_"+me.bed).html('');
                        setTimeout(function(){
                                var func = me.toggleOverlayFunc();
                                func();
