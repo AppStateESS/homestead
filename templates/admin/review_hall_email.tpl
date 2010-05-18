@@ -1,8 +1,17 @@
 <h1>Review Message</h1>
 Please review your message below before sending emails to the residents of the following Halls <br /><br />
 <!-- BEGIN halls -->
-{HALL}<br /> 
+<ul>
+  <li>{HALL}
+    <ul>
+    <!-- BEGIN floors -->
+    <li>{FLOOR}</li>
+    <!-- END floors -->
+    </ul>
+  </li>
+</ul>
 <!-- END halls -->
+<!-- BEGIN remainder -->
 <br />
 <table border="1" width="50%">
 <tr>
@@ -27,3 +36,4 @@ Please review your message below before sending emails to the residents of the f
     <td>{SUBMIT}</td>
 </tr>
 </table>
+<!-- END remainder -->
