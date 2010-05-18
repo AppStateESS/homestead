@@ -8,6 +8,16 @@ maxresults:6,
 timeout:100000
 };
 
+/*
+ * Semaphore
+ *
+ *   Control access to a resource.  Only allow a limited number of
+ * users to acquire a resource at a given time.
+ *
+ * @author Daniel West <dwest at tux dot appstate dot edu>
+ * @package hms
+ * @subpackage javascript
+ */
 var Semaphore = function(count){
     this.count = count;
 
@@ -59,7 +69,7 @@ var AssignWidget = function(div, semaphore){
     this.getOverlay = function(){
         var offset = $(this.div).offset();
         var height = $(this.div).height();
-        var output = '<div id="overlay_'+this.bed+'" class="overlay" style="position: absolute; top: '+(offset.top+height)+'px; left: '+offset.left+'px; z-index: 50;">';
+        var output = '<div id="overlay_'+this.bed+'" class="overlay" style="position: absolute; top: '+(offset.top+height)+'px; left: '+offset.left+'px;">';
 
         output += '<table>';
         output += '<tr><th>Username</th><td><input id="username_'+this.bed+'" class="username-input" type="text" value="'+this.username+'" /></td></tr>';
@@ -68,8 +78,6 @@ var AssignWidget = function(div, semaphore){
         output += '<tr><td></td><td style="text-align: right"><span id="status_'+this.bed+'" /><button id="accept_'+this.bed+'">Assign</button><button id="cancel_'+this.bed+'">Cancel</button></td></tr>';
         output += '</table>';
         output += '</div>';
-
-
 
         return output;
     }
