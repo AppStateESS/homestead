@@ -8,6 +8,23 @@ maxresults:6,
 timeout:100000
 };
 
+var Semaphore = function(count){
+    this.count = count;
+
+    this.acquire = function(){
+        if(this.count > 0){
+            this.count--;
+            return true;
+        }
+        return false;
+    }
+
+    this.release = function(){
+        this.count++;
+        return true;
+    }
+}
+
 /*
  * AssignWidget
  *
@@ -21,13 +38,15 @@ timeout:100000
  * @package hms
  * @subpackage javascript
  */
-var AssignWidget = function(div){
+var AssignWidget = function(div, semaphore){
     this.div = div;
     this.bed = $(this.div).attr('bed');
     this.username = '';
     this.fullname = '';
     this.profile_link = '';
     this.overlayShown = false;
+    this.semaphore = semaphore // determine whether or not a dialog is already show on the page
+    this.haveSemaphore = false;
 
     this.getStaticAssigner = function(){
         if(this.fullname.length == 0){
@@ -72,13 +91,22 @@ var AssignWidget = function(div){
         var me = this;
 
         return function(){
+            if(!me.haveSemaphore && !me.semaphore.acquire())
+                return;
+
+            me.haveSemaphore = true;
             me.overlayShown = !me.overlayShown;
 
             if(me.overlayShown){
                 $(document.body).append(me.getOverlay());
                 //options is defined at the top of this document
                 var suggest = new bsn.AutoSuggest('username_'+me.bed, options);
-                $("#username_"+me.bed).keyup(function(){
+                $("#username_"+me.bed).keydown(function(e){
+                        if(e.keyCode == 13){
+                            me.submitAssignment();
+                        }
+                    });
+                $("#username_"+me.bed).keyup(function(){                        
                         me.updateUsername();
                     });
                 $("#accept_"+me.bed).click(function(){
@@ -89,6 +117,8 @@ var AssignWidget = function(div){
                 $("#cancel_"+me.bed).click(me.toggleOverlayFunc());
             } else {
                 $("#overlay_"+me.bed).remove();
+                me.semaphore.release();
+                me.haveSemaphore = false;
             }
         }
     }
@@ -122,16 +152,16 @@ var AssignWidget = function(div){
         $.post('index.php', {module: 'hms', action: 'FloorAssignStudent', bed: this.bed, mealplan: this.mealplan, username: this.username},
                function(data){
                    if(!data.success){
-                       $("#overlay_"+me.bed).append('<div class="error">'+data.message+'</div>');
-                       $("#status_"+me.bed).html('<img src="images/mod/hms/tango/dialog-error.png" />');
+                       $("#overlay_"+me.bed).append('<div class="error"><img src="images/mod/hms/tango/dialog-error.png" />'+data.message+'</div>');
+                       $("#status_"+me.bed).html('');
                    } else {
-                       $("#status_"+me.bed).html('<img src="images/mod/hms/icons/check.png" />');
+                       $("#overlay_"+me.bed).append('<div class="success"><img src="images/mod/hms/icons/check.png" />Student Assigned!</div>');
                        setTimeout(function(){
                                var func = me.toggleOverlayFunc();
                                func();
                                var newAssigner = new AssignWidget(me.div);
                                newAssigner.setup();
-                           }, 1000);
+                           }, 2500);
                    }
                },'json');
     }
