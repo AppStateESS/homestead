@@ -96,6 +96,9 @@ class StatsView extends View {
         $tpl['SR_INVITES']              = HMS_Lottery::count_invites_by_class($lottery_term, CLASS_SENIOR);
 
         $final = PHPWS_Template::process($tpl, 'hms', 'admin/statistics.tpl');
+
+        Layout::addPageTitle("Statistics");
+        
         return $final;
     }
 

@@ -47,6 +47,8 @@ class SpecialNeedsFormView extends View {
 		
 		$form->addSubmit('submit', 'Continue');
 		$form->setExtra('submit', 'class="hms-application-submit-button"');
+
+        Layout::addPageTitle("Special Needs Form");
 		
 		return PHPWS_Template::process($form->getTemplate(), 'hms', 'student/special_needs.tpl');
 	}

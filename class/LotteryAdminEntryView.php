@@ -35,6 +35,8 @@ class LotteryAdminEntryView extends View {
 
         $form->addSubmit('enter_into_lottery', 'Add to lottery');
 
+        Layout::addPageTitle("Lottery Entry");
+
         return PHPWS_Template::process($form->getTemplate(), 'hms', 'admin/add_to_lottery.tpl');
     }
 }

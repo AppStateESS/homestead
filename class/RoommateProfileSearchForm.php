@@ -76,6 +76,8 @@ class RoommateProfileSearchForm extends View {
 
         $form->mergeTemplate($tags);
         $tags = $form->getTemplate();
+        
+        Layout::addPageTitle("Roommate Profile Search");
 
         return PHPWS_Template::process($tags,'hms','student/profile_search.tpl');
     }

@@ -65,6 +65,8 @@ class RoommateSelectionMenuBlockView extends View {
             $tpl['ROOMMATE_LINK'] = $cmd->getLink('Select Your Roommate');
         }
 
+        Layout::addPageTitle("Roommate Selection");
+
         return PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/roommateMenuBlock.tpl');
     }
 }

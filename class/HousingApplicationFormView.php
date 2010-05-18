@@ -224,6 +224,8 @@ class HousingApplicationFormView extends View {
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
+        Layout::addPageTitle("Housing Application Form");
+
         return PHPWS_Template::process($tpl,'hms','student/student_application.tpl');
     }
 }

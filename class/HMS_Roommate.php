@@ -283,10 +283,10 @@ class HMS_Roommate
         return null;
 
         if(trim($result['requestor']) == trim($asu_username)) {
-            return $result['requestee'];
+            return StudentFactory::getStudentByUsername($result['requestee'], $term);
         }
 
-        return $result['requestor'];
+        return StudentFactory::getStudentByUsername($result['requestor'], $term);
     }
 
     /**

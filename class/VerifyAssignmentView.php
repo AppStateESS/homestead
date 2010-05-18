@@ -77,6 +77,8 @@ class VerifyAssignmentView extends View
         }
 
         $tpl['MENU_LINK'] = PHPWS_Text::secureLink('Back to Main Menu', 'hms', array('type'=>'student', 'op'=>'show_main_menu'));
+
+        Layout::addPageTitle("Verify Assignment");
         
         return PHPWS_Template::process($tpl, 'hms', 'student/verify_assignment.tpl');
     }

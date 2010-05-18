@@ -68,6 +68,8 @@ class ReapplicationMenuBlockView extends View {
             }
         }
 
+        Layout::addPageTitle("Re-Application");
+
         return PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/reApplicationMenuBlock.tpl');
     }
 }

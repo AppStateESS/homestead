@@ -38,6 +38,8 @@ class RlcApplicationMenuView extends View {
             $applyCmd = CommandFactory::getCommand('ShowRlcApplicationView');
             $tpl['APP_NOW'] = $applyCmd->getLink('Apply for a Residential Learning Community now.');
         }
+
+        Layout::addPageTitle("RLC Application Menu");
         
         return PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/RlcApplicationMenuBlock.tpl');
     }

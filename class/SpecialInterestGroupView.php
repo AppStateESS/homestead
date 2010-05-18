@@ -35,6 +35,8 @@ class SpecialInterestGroupView extends View {
             $tpl['GROUP_PAGER'] = LotteryApplication::specialInterestPager($this->group, PHPWS_Settings::get('hms', 'lottery_term'));
             $tpl['GROUP'] = $groups[$this->group];
         }
+        
+        Layout::addPageTitle("Special Interest Group");
 
         return PHPWS_Template::process($tpl, 'hms', 'admin/special_interest_approval.tpl');
     }

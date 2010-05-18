@@ -127,6 +127,8 @@ class ResidenceHallView extends View {
 
         $tpl['FLOOR_PAGER'] = HMS_Floor::get_pager_by_hall($this->hall->getId());
 
+        Layout::addPageTitle("Edit Residence Hall");
+
         return PHPWS_Template::process($tpl, 'hms', 'admin/edit_residence_hall.tpl');
 	}
 }

@@ -75,6 +75,8 @@ class ShowHallNotificationSelectView extends View {
             $form->mergeTemplate($tpl);
             $tpl = $form->getTemplate();
         }
+
+        Layout::addPageTitle("Hall Notification Select");
         
         return PHPWS_Template::process($tpl, 'hms', 'admin/messages.tpl');
     }
