@@ -64,6 +64,8 @@ class ReviewHallNotificationMessageView extends View {
         $form2->addSubmit('Send Emails');
         $tpl['SUBMIT'] = implode('', $form2->getTemplate());
 
+        Layout::addPageTitle("Review Hall Email");
+
         return PHPWS_Template::process($tpl, 'hms', 'admin/review_hall_email.tpl');
     }
 }

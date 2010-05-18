@@ -16,6 +16,8 @@ class LotteryAutoWinnersView extends View {
         $form->setLabel('magic', array('Magic Flag: '));
 
         $form->addSubmit('Submit');
+
+        Layout::addPageTitle("Automatic Lottery Winners");
         
         return PHPWS_Template::process($form->getTemplate(), 'hms', 'admin/lotteryAutoWinnersView.tpl');
     }

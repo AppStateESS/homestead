@@ -124,6 +124,8 @@ class FloorView extends View {
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
+        Layout::addPageTitle("Edit Floor");
+
         return PHPWS_Template::process($tpl, 'hms', 'admin/edit_floor.tpl');
     }
 }

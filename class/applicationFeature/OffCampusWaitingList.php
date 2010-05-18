@@ -16,6 +16,7 @@ class OffCampusWaitingListRegistration extends ApplicationFeatureRegistration {
     public function showForStudent(Student $student, $term)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
+        PHPWS_Core::initModClass('hms', 'HousingApplication.php');
         
         if($student->getApplicationTerm() > Term::getCurrentTerm()){
             return false;

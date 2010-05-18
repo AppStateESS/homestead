@@ -117,13 +117,31 @@ class StudentProfileView extends View {
             //$tpl['ASSIGNMENT'] = 'No';
         }
 
-        // Roommates
+        /*************
+         * Roommates 
+         *************/
         if(isset($this->roommates) && !empty($this->roommates)){
-            foreach($this->roommates as $roommate){
-                $tpl['roommates'][]['ROOMMATE'] = $roommate;
+            // Remember, student can only have one confirmed or pending request
+            // but multiple assigned roommates
+            if(isset($this->roommates['PENDING'])){
+                $tpl['pending'][]['ROOMMATE'] = $this->roommates['PENDING'];
             }
-        }else{
-            $tpl['roommates'][] = array('ROOMMATE' => 'No pending or confirmed roommates');
+            else if(isset($this->roommates['CONFIRMED'])){
+                $tpl['confirmed'][]['ROOMMATE'] = $this->roommates['CONFIRMED'];
+            }
+            // semi-error states
+            else if(isset($this->roommates['NO_BED_AVAILABLE'])){
+                $tpl['error_status'][]['ROOMMATE'] = $this->roommates['NO_BED_AVAILABLE'];
+            } 
+            else if(isset($this->roommates['MISMATCHED_ROOMS'])){
+                $tpl['error_status'][]['ROOMMATE'] = $this->roommates['MISMATCHED_ROOMS'];
+            }
+
+            if(isset($this->roommates['ASSIGNED'])){
+                foreach($this->roommates['ASSIGNED'] as $roommate){
+                    $tpl['assigned'][]['ROOMMATE'] = $roommate;
+                }
+            }
         }
 
         /**************
@@ -251,6 +269,8 @@ class StudentProfileView extends View {
         // TODO logs
 
         // TODO tabs
+        
+        Layout::addPageTitle("Student Profile");
 
         return PHPWS_Template::process($tpl, 'hms', 'admin/fancy_student_info.tpl');
     }

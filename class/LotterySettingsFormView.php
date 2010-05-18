@@ -77,6 +77,8 @@ class LotterySettingsFormView extends View {
 
         $form->mergeTemplate($tpl);
 
+        Layout::addPageTitle("Lottery Settings");
+
         return PHPWS_Template::process($form->getTemplate(), 'hms', 'admin/lottery_settings.tpl');
     }
 }

@@ -44,6 +44,8 @@ class CreateRoommateGroupView extends View {
 		$form->mergeTemplate($tpl);
 		$tpl = $form->getTemplate();
 
+        Layout::addPageTitle("Create Roommate Group");
+
 		return PHPWS_Template::process($tpl, 'hms', 'admin/create_roommate_group.tpl');
 	}
 }

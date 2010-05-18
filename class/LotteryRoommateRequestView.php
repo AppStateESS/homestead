@@ -84,6 +84,8 @@ class LotteryRoommateRequestView extends View {
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
         
+        Layout::addPageTitle("Lottery Request Roommate");
+        
         return PHPWS_Template::process($tpl, 'hms', 'student/lottery_roommate_request.tpl');
     }
 }

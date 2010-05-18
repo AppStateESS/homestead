@@ -55,6 +55,8 @@ class ShowHallNotificationEditView extends View {
         //After you ask "wtf?", check the third parameter on preg_replace (only removes the first two occurances)
         $tpl['EMAIL'] = preg_replace('/<br \/>/', '', implode('<br />', $form->getTemplate()), 2);
 
+        Layout::addPageTitle("Hall Notification Edit");
+
         return PHPWS_Template::process($tpl, 'hms', 'admin/hall_notification_email_page.tpl');
     }
 }

@@ -25,6 +25,8 @@ class RlcAssignmentsView extends View {
         $pager->setEmptyMessage('No RLC assignments have been made.');
         $pager->addPageTags($tags);
         $pager->addRowTags('getAdminPagerTags');
+
+        Layout::addPageTitle("RLC Assignments");
         
         return $pager->get();
     }
