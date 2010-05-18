@@ -2,6 +2,8 @@
 
 PHPWS_Core::initModClass('hms', 'View.php');
 PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
+PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
+PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
 class FloorAssignmentView extends View {
     protected $floor;
@@ -18,6 +20,12 @@ class FloorAssignmentView extends View {
         javascript('jquery_ui');
         javascript('modules/hms/floor_assignment');
         Layout::addStyle('hms', 'css/autosuggest2.css');
+
+        $this->floor->loadHall();
+        $hall = $this->floor->_hall;
+
+        $tpl->setCurrentBlocK('title');
+        $tpl->setData(array('TITLE'=>HMS_Util::ordinal($this->floor->getFloorNumber()). ' Floor - ' . $hall->getHallName() . ' - ' . Term::getPrintableSelectedTerm()));
 
         foreach($this->floor->_rooms as $room){
             $room->loadBeds();

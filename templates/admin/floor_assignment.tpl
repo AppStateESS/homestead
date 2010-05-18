@@ -1,3 +1,6 @@
+<!-- BEGIN title -->
+<h1>{TITLE}</h1>
+<!-- END title -->
 <!-- BEGIN room-list -->
 <div><b>Room {ROOM}</b>
 
