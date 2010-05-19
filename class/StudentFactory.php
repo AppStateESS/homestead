@@ -16,7 +16,7 @@ class StudentFactory {
 		
 		if(!isset($soapData->banner_id) || is_null($soapData->banner_id) || empty($soapData->banner_id)){
             PHPWS_Core::initModClass('hms', 'exception/StudentNotFoundException.php');
-		    throw new StudentNotFoundException('No matching student found.');
+		    throw new StudentNotFoundException("No matching student found for $username.");
 		}
 		
 		StudentFactory::plugSOAPData($student, $soapData);
