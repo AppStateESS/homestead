@@ -17,25 +17,26 @@ class SendAssignmentNotificationCommand extends Command {
         PHPWS_Core::initModClass('hms', 'HMS_Letter.php');
         PHPWS_Core::initModClass('hms', 'HMS_Movein_Time.php');
         PHPWS_Core::initModClass('hms', 'Term.php');
-        
-        // Check that Move-In Times are set before sending email.
-        // If not set warn user and go back to main menu.
-        $term = Term::getSelectedTerm();
-        $moveinTimes = HMS_Movein_Time::get_movein_times_array($term);
-        if(sizeof($moveinTimes) < 2 || is_null($moveinTimes) || !isset($moveinTimes)){
-            $termString = Term::toString($term);
-            NQ::simple('hms', HMS_NOTIFICATION_WARNING, "No move-in times are set for $termString.");
-            $context->goBack();
-        }
-        
+
+        $missing = null;
+
         try{
-            HMS_Letter::email();
+            $missing = HMS_Letter::email();
         }catch(Exception $e){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'There was a problem sending the assignment notices. Please contact ESS.');
             $context->goBack();
         }
 
-        NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Assignment notifications sent.');
+        if(empty($missing) || is_null($missing)){
+            NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, "Assignment notifications sent.");
+        }
+        else {
+            foreach($missing as $floor){
+                $hall = $floor->get_parent();
+                $text = $floor->getLink($hall->getHallName()." floor ") . " move-in times not set.";
+                NQ::simple('hms', HMS_NOTIFICATION_WARNING, $text);
+            }
+        }
         $context->goBack();
     }
 }
