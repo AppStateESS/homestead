@@ -76,31 +76,7 @@ class CreateTermCommand extends Command {
             set_time_limit(36000);
 
             foreach ($halls as $hall){
-
-                // we always copy hall structure!
-                $hall->copy($term->getTerm());
-
-                if($copyAssignments){
-                    $assignees = $hall->get_assignees();
-                    foreach($assignees as $student){
-                        // Get student's old assignment and application
-                        $assignment = HMS_Assignment::getAssignment($student->getUsername(), Term::getCurrentTerm());
-                        $app = HousingApplication::getApplicationByUser($student->getUsername(), Term::getCurrentTerm());
-                        
-                        // Meal option is set to standard by default
-                        $meal_option = BANNER_MEAL_STD;
-                        if(!is_null($app)){
-                            $meal_option = $app->getMealPlan();
-                        }
-
-                        $room_id = $assignment->get_room_id();
-                        $bed_id = $assignment->bed_id;
-
-                        $note = ", Assignment copied from ".Term::getCurrentTerm()." to ".$term->getTerm();
-                        $result = HMS_Assignment::assignStudent($student, $term->getTerm(), $room_id, $bed_id, $meal_option, $note);
-                    }
-                }
-
+                $hall->copy($term->getTerm(), $copyAssignments);
             }
 
             $db->query('COMMIT');
