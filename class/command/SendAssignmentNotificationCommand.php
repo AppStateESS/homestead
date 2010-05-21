@@ -18,6 +18,16 @@ class SendAssignmentNotificationCommand extends Command {
         PHPWS_Core::initModClass('hms', 'HMS_Movein_Time.php');
         PHPWS_Core::initModClass('hms', 'Term.php');
 
+        // Check if any move-in times are set for the selected term
+        $moveinTimes = HMS_Movein_Time::get_movein_times_array(Term::getSelectedTerm());
+        
+        // If the array of move-in times ONLY has the zero-th element ['None'] then it's no good
+        // Or, of course, if the array is null or emtpy it is no good
+        if(count($moveinTimes) <= 1 || is_null($moveinTimes) || empty($moveinTimes)){
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'There are no move-in times set for '.Term::getPrintableSelectedTerm());
+            $context->goBack();
+        }
+
         $missing = null;
 
         try{
