@@ -2,14 +2,16 @@
 
 class RlcApplicationMenuView extends View {
     
+    private $term;
     private $student;
     private $startDate;
     private $editDate;
     private $endDate;
     private $application;
     
-    public function __construct(Student $student, $startDate, $editDate, $endDate, HMS_RLC_Application $application = NULL)
+    public function __construct($term, Student $student, $startDate, $editDate, $endDate, HMS_RLC_Application $application = NULL)
     {
+        $this->term         = $term;
         $this->student      = $student;
         $this->startDate    = $startDate;
         $this->editDate     = $editDate;
@@ -28,6 +30,7 @@ class RlcApplicationMenuView extends View {
             
             if(time() < $this->editDate){
                 $newCmd = CommandFactory::getCommand('ShowRlcApplicationView');
+                $newCmd->setTerm($this->term);
                 $tpl['NEW_APP'] = $newCmd->getLink('submit a new application');
             }
         }else if(time() < $this->startDate){

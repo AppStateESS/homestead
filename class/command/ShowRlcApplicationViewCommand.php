@@ -5,12 +5,18 @@ PHPWS_Core::initModClass('hms', 'RlcApplicationView.php');
 
 class ShowRlcApplicationViewCommand extends Command {
 
+    private $term;
+
+    public function setTerm($term){
+        $this->term = $term;
+    }
+
     public function getRequestVars(){
-        return array('action'=>'ShowRlcApplicationView');
+        return array('action'=>'ShowRlcApplicationView', 'term'=>$this->term);
     }
 
     public function execute(CommandContext $context){
-        $view = new RlcApplicationView();
+        $view = new RlcApplicationView($context->get('term'));
 
         $context->setContent($view->show());
     }
