@@ -40,7 +40,7 @@ class SendNotificationEmailsCommand extends Command {
         $subject   = $context->get('subject');
         $body      = $context->get('body');
         $anonymous = (!is_null($context->get('anonymous')) && $context->get('anonymous')) ? true : false;
-        $from      = ($anonymous && Current_User::allow('hms', 'anonymous_notification')) ? FROM_ADDRESS : Current_User::getEmail();
+        $from      = ($anonymous && Current_User::allow('hms', 'anonymous_notifications')) ? FROM_ADDRESS : Current_User::getEmail();
         $halls     = $context->get('hall');
 
         if(empty($subject)){
