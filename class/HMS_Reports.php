@@ -881,7 +881,7 @@ class HMS_Reports{
             $bannerId   = $application->getBannerId();
             $type       = $application->getStudentType();
 
-            $assignment = HMS_Assignment::get_assignment($application->getUsername(), $term);
+            $assignment = HMS_Assignment::getAssignment($application->getUsername(), $term);
 
             if(!is_null($assignment)){
                 $room = $assignment->where_am_i();
@@ -1227,13 +1227,13 @@ class HMS_Reports{
     public static function roster_report()
     {
         $term = Term::getSelectedTerm();
-        
+
         $output = "Hall,Floor,Room,First Name,Last Name,Banner ID,Cell Phone Number, Email Address\n";
 
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
 
         $query = "SELECT hms_assignment.id, hms_assignment.asu_username, hms_new_application.cell_phone, hms_room.room_number, hms_floor.floor_number, hms_residence_hall.hall_name FROM hms_assignment LEFT JOIN (SELECT username, MAX(term) AS mterm FROM hms_new_application GROUP BY username) AS a ON hms_assignment.asu_username = a.username LEFT JOIN hms_new_application ON a.username = hms_new_application.username AND a.mterm = hms_new_application.term LEFT JOIN hms_bed ON hms_assignment.bed_id = hms_bed.id LEFT JOIN hms_room ON hms_bed.room_id = hms_room.id LEFT JOIN hms_floor ON hms_room.floor_id = hms_floor.id LEFT JOIN hms_residence_hall ON hms_floor.residence_hall_id = hms_residence_hall.id WHERE ( hms_assignment.term = $term) ORDER BY hms_residence_hall.id ASC";
-        
+
         $results = PHPWS_DB::getAll($query);
 
         if(PHPWS_Error::logIfError($results)){
@@ -1289,9 +1289,9 @@ class HMS_Reports{
     public static function run_no_banner_data_report()
     {
         PHPWS_Core::initModClass('hms', 'SOAP.php');
-         
+
         $soap = SOAP::getInstance();
-         
+
         $term = Term::getSelectedTerm();
 
         $db = new PHPWS_DB('hms_new_application');
