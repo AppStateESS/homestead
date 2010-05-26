@@ -4,7 +4,9 @@
 
 <!-- BEGIN BLOCKS -->
 <div class="hms-student-menu-term-block">
+    <table>
 	{BLOCK}
+    </table>
 </div>
 <!-- END BLOCKS -->
 </div>

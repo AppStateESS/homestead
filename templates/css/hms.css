@@ -131,3 +131,18 @@ img.roommate_request_icon {
 .hms-student-menu-term-block {
 	margin-left: 20px;
 }
+
+.hms-student-menu-term-block .status-icon {
+    float:left;
+    margin-right: 4px;
+    margin-top: 8px;
+    width: 28px;
+    height: 28px;
+}
+
+.hms-student-menu-term-block .availability-dates {
+    font-style: italic;
+    font-weight: lighter;
+    font-size: smaller;
+    color: #696969;    
+}

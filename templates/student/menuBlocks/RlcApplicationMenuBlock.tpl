@@ -1,4 +1,12 @@
-<h3>Learning Community Application</h3>
+<td>
+{ICON}
+</td>
+
+<td>
+<h3>Learning Community Application
+
+<div class="availability-dates">Available: {DATES}</div>
+</h3>
 
 <p>For more infomration about Appalachian's Residential Learning Communities please visit the <a href="http://housing.appstate.edu/pagesmith/29" target="_blank">Residential Learning Communities Website</a>.</p>
 
@@ -23,3 +31,4 @@ If you would like to change your answers on your Learning Community application,
 You have not applied for a Residential Learning Community. There are a limited number of Learning Community spaces on campus. If you are interested in living in a Learning Community, please complete your application as soon as possible.
     {APP_NOW}
 <!-- END no_app -->
+</td>

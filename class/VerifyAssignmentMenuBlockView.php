@@ -17,6 +17,10 @@ class VerifyAssignmentMenuBlockView extends View {
     {
         $tpl = array();
 
+
+        $tpl['DATES'] = @HMS_Util::getPrettyDateRange($this->startDate, $this->endDate);
+        $tpl['ICON'] = '<img class="status-icon" src="images/mod/hms/icons/arrow.png" alt="Open"/>';            
+
         // Don't show the app-feature if it's not time
         if($this->startDate <= mktime()){
             $cmd = CommandFactory::getCommand('ShowVerifyAssignment');

@@ -22,13 +22,19 @@ class ApplicationMenuBlockView extends View {
     public function show()
     {
         $tpl = array();
+        // Show availability dates!        
 
+        // @ suppresses warnings
+        $tpl['DATES'] = @HMS_Util::getPrettyDateRange($this->startDate, $this->endDate);
 
         if(time() < $this->startDate){
+            $tpl['ICON'] = '<img class="status-icon" src="images/mod/hms/tango/emblem-readonly.png" alt="Locked"/>';
             $tpl['BEGIN_DEADLINE'] = HMS_Util::getFriendlyDate($this->startDate);
         } else if(time() > $this->endDate){
+            $tpl['ICON'] = '<img class="status-icon" src="images/mod/hms/tango/emblem-readonly.png" alt="Locked"/>';
             $tpl['END_DEADLINE'] = HMS_Util::getFriendlyDate($this->endDate);
         } else if( is_null($this->application) ){
+            $tpl['ICON'] = '<img class="status-icon" src="images/mod/hms/icons/arrow.png" alt="Open"/>';            
             $appCommand = CommandFactory::getCommand('ShowTermsAgreement');
             $appCommand->setTerm($this->term);
             $cmd = CommandFactory::getCommand('ShowHousingApplicationForm');
@@ -38,12 +44,14 @@ class ApplicationMenuBlockView extends View {
         } else {
             $appCommand = CommandFactory::getCommand('ShowApplicationView');
             if(!is_null($this->application)){
+                $tpl['ICON'] = '<img class="status-icon" src="images/mod/hms/icons/check.png" alt="Open"/>';
                 $appCommand->setAppId($this->application->id);
             }
             
             $tpl['VIEW_APP'] = $appCommand->getLink('view your application');
             
             if(time() < $this->editDate){
+                $tpl['ICON'] = '<img class="status-icon" src="images/mod/hms/icons/arrow.png" alt="Open"/>';            
                 $newApp = CommandFactory::getCommand('ShowHousingApplicationForm');
                 $newApp->setAgreedToTerms(1);
                 $newApp->setTerm($this->term);
