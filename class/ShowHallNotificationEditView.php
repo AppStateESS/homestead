@@ -50,6 +50,7 @@ class ShowHallNotificationEditView extends View {
             $form->addHidden('hall', $this->halls);
         }
 
+        javascript('/modules/hms/autoFocus', array('ELEMENT'=>$form->getId('subject')));
         $form->addSubmit('Submit');
 
         //After you ask "wtf?", check the third parameter on preg_replace (only removes the first two occurances)

@@ -36,13 +36,14 @@ class ShowStudentSearchCommand extends Command {
 
         $form->setMethod('get');
 
-
         $username = $context->get('username');
         if(isset($username)){
             $form->addText('username', $username);
         }else{
             $form->addText('username');
         }
+
+        javascript('/modules/hms/autoFocus', array('ELEMENT' => $form->getId('username')));
 
         $form->setExtra('username', 'autocomplete="off" ');
 
