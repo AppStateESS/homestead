@@ -24,8 +24,7 @@ class ApplicationMenuBlockView extends View {
         $tpl = array();
         // Show availability dates!        
 
-        // @ suppresses warnings
-        $tpl['DATES'] = @HMS_Util::getPrettyDateRange($this->startDate, $this->endDate);
+        $tpl['DATES'] = HMS_Util::getPrettyDateRange($this->startDate, $this->endDate);
 
         if(time() < $this->startDate){
             $tpl['ICON'] = '<img class="status-icon" src="images/mod/hms/tango/emblem-readonly.png" alt="Locked"/>';
@@ -44,14 +43,14 @@ class ApplicationMenuBlockView extends View {
         } else {
             $appCommand = CommandFactory::getCommand('ShowApplicationView');
             if(!is_null($this->application)){
-                $tpl['ICON'] = '<img class="status-icon" src="images/mod/hms/icons/check.png" alt="Open"/>';
+                $tpl['ICON'] = '<img class="status-icon" src="images/mod/hms/icons/check.png" alt="Completed"/>';
                 $appCommand->setAppId($this->application->id);
             }
             
             $tpl['VIEW_APP'] = $appCommand->getLink('view your application');
             
             if(time() < $this->editDate){
-                $tpl['ICON'] = '<img class="status-icon" src="images/mod/hms/icons/arrow.png" alt="Open"/>';            
+                $tpl['ICON'] = '<img class="status-icon" src="images/mod/hms/icons/arrow.png" alt="Completed"/>';            
                 $newApp = CommandFactory::getCommand('ShowHousingApplicationForm');
                 $newApp->setAgreedToTerms(1);
                 $newApp->setTerm($this->term);

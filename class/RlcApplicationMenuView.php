@@ -23,10 +23,10 @@ class RlcApplicationMenuView extends View {
     {
         $tpl = array();
 
-        // @ suppresses warnings
-        $tpl['DATES'] = @HMS_Util::getPrettyDateRange($this->startDate, $this->endDate);
+        $tpl['DATES'] = HMS_Util::getPrettyDateRange($this->startDate, $this->endDate);
+
         if(isset($this->application) && !is_null($this->application->id)) {
-            $tpl['ICON'] = '<img class="status-icon" src="images/mod/hms/icons/check.png" alt="Open"/>';
+            $tpl['ICON'] = '<img class="status-icon" src="images/mod/hms/icons/check.png" alt="Completed"/>';
             $viewCmd = CommandFactory::getCommand('ShowRlcApplicationReView');
             $viewCmd->setAppId($this->application->getId());
             $tpl['VIEW_APP'] = $viewCmd->getLink('view your application');

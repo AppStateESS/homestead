@@ -24,17 +24,15 @@ class RoommateSelectionMenuBlockView extends View {
         PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
 
         $roommate = HMS_Roommate::get_confirmed_roommate(UserStatus::getUsername(), $this->term);
-
         $requests = HMS_Roommate::countPendingRequests(UserStatus::getUsername(), $this->term);
         
-        // @ suppresses warnings
-        $tpl['DATES'] = @HMS_Util::getPrettyDateRange($this->startDate, $this->endDate);
+        $tpl['DATES'] = HMS_Util::getPrettyDateRange($this->startDate, $this->endDate);
 
         // Roommate has been selected and confirmed
         if(!is_null($roommate)){
             $name = $roommate->getFullName();
             $tpl['ROOMMATE_MSG']  = "<b>$name</b> has confirmed your roommate request. Roommate requests are subject to space availability.";
-            $tpl['ICON'] = '<img class="status-icon" src="images/mod/hms/icons/check.png" alt="Open"/>';
+            $tpl['ICON'] = '<img class="status-icon" src="images/mod/hms/icons/check.png" alt="Completed"/>';
             if(time() < $this->editDate){
                 $cmd = CommandFactory::GetCommand('ShowRoommateBreak');
                 $rm = HMS_Roommate::getByUsernames(UserStatus::getUsername(), $roommate->getUsername(), $this->term);
@@ -61,7 +59,7 @@ class RoommateSelectionMenuBlockView extends View {
                 $tpl['ROOMMATE_REQUESTS_MSG'] = "<b style='color: #F00'>You have roommate requests.</b> Please click a name below to confirm or reject a request.";
             }
         }else if(HMS_Roommate::has_roommate_request(UserStatus::getUsername(),$this->term)) {
-            $tpl['ICON'] = '<img class="status-icon" src="images/mod/hms/icons/check.png" alt="Open"/>';
+            $tpl['ICON'] = '<img class="status-icon" src="images/mod/hms/icons/check.png" alt="Completed"/>';
             $tpl['ROOMMATE_MSG'] = "<b>You have selected a roommate</b> and are awaiting their approval.";
             $requestee = HMS_Roommate::get_unconfirmed_roommate(UserStatus::getUsername(), $this->term);
 

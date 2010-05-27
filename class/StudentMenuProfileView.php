@@ -23,10 +23,10 @@ class StudentMenuProfileView extends View {
     {
         $tpl = array();
 
-        $tpl['DATES'] = @HMS_Util::getPrettyDateRange($this->startDate, $this->endDate);
+        $tpl['DATES'] = HMS_Util::getPrettyDateRange($this->startDate, $this->endDate);
         
         if(isset($this->profile) && !is_null($this->profile)){
-            $tpl['ICON'] = '<img class="status-icon" src="images/mod/hms/icons/check.png" alt="Open"/>';
+            $tpl['ICON'] = '<img class="status-icon" src="images/mod/hms/icons/check.png" alt="Completed"/>';
             $editCmd = CommandFactory::getCommand('ShowRoommateProfileForm');
             $editCmd->setTerm($this->term);
             $tpl['EDIT_PROFILE'] = $editCmd->getLink('view and edit your profile');

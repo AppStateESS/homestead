@@ -1,4 +1,12 @@
-<h3>Re-Application</h3>
+<td>
+{ICON}
+</td>
+
+<td>
+<h3>Re-Application
+<div class="availability-dates">Available: {DATES}</div>
+</h3>
+
 <!-- BEGIN eligible -->
 You are eligible to re-apply for on-campus housing for the {LOTTERY_TERM_1} - {NEXT_TERM_1} academic year. {ENTRY_LINK}
 <!-- END eligible -->
@@ -41,3 +49,4 @@ You have one or more pending roommate requests. Click the name of the person who
 <!-- END roommates -->
 </ul>
 <!-- END roommate_request -->
+</td>

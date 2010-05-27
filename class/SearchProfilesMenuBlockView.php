@@ -19,8 +19,7 @@ class SearchProfilesMenuBlockView extends View {
     {
         $tpl = array();
 
-        // @ suppresses warnings
-        $tpl['DATES'] = @HMS_Util::getPrettyDateRange($this->startDate, $this->endDate);
+        $tpl['DATES'] = HMS_Util::getPrettyDateRange($this->startDate, $this->endDate);
 
         if(time() < $this->startDate){
             $tpl['ICON'] = '<img class="status-icon" src="images/mod/hms/tango/emblem-readonly.png" alt="Locked"/>';
@@ -32,7 +31,7 @@ class SearchProfilesMenuBlockView extends View {
             $tpl['ICON'] = '<img class="status-icon" src="images/mod/hms/icons/arrow.png" alt="Open"/>';            
             $tpl['NO_PROFILE'] = '';
         }else{
-            $tpl['ICON'] = '<img class="status-icon" src="images/mod/hms/icons/check.png" alt="Open"/>';
+            $tpl['ICON'] = '<img class="status-icon" src="images/mod/hms/icons/check.png" alt="Completed"/>';
             $searchCmd = CommandFactory::getCommand('ShowRoommateProfileSearch');
             $tpl['SEARCH_ROOMMATES'] = $searchCmd->getLink('Search roommate profiles.');
         }
