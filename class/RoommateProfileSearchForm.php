@@ -31,6 +31,8 @@ class RoommateProfileSearchForm extends View {
         $form->addText('asu_username');
         $form->setLabel('asu_username','ASU Username: ');
 
+        javascript('/modules/hms/autoFocus', array('ELEMENT' => $form->getId('asu_username')));
+
         $form->addCheck('hobbies_checkbox',$hobbies);
         $form->setLabel('hobbies_checkbox',$hobbies_labels);
         $tags['HOBBIES_CHECKBOX_QUESTION'] = 'Hobbies and Interests (check all that apply):';
