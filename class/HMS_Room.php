@@ -14,35 +14,36 @@ PHPWS_Core::initModClass('hms', 'HMS_Item.php');
 class HMS_Room extends HMS_Item
 {
 
-    var $floor_id               = 0;
-    var $room_number            = 0;
+    public $floor_id               = 0;
+    public $room_number            = 0;
 
-    var $gender_type            = 0;
-    var $default_gender         = 0;
-    var $ra_room                = false;
-    var $private_room           = false;
-    var $is_overflow            = false;
-    var $pricing_tier           = 0;
-    var $is_medical             = false;
-    var $is_reserved            = false;
-    var $is_online              = false;
+    public $gender_type            = 0;
+    public $default_gender         = 0;
+    public $ra_room                = false;
+    public $private_room           = false;
+    public $is_overflow            = false;
+    public $pricing_tier           = 0;
+    public $is_medical             = false;
+    public $is_reserved            = false;
+    public $is_online              = false;
+    public $term;
 
 
     /**
      * Listing of beds associated with this room
      * @var array
      */
-    var $_beds                  = null;
+    public $_beds                  = null;
 
     /**
      * Parent HMS_Floor object of this room
-     * @var object
+     * @public object
      */
-    var $_floor                 = null;
+    public $_floor                 = null;
 
     /* Hack for the javascript DO NOT TOUCH */
-    var $message = '';
-    var $value   = false;
+    public $message = '';
+    public $value   = false;
 
     /**
      * Constructor
