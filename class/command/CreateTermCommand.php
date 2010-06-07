@@ -32,26 +32,36 @@ class CreateTermCommand extends Command {
         }
 
         // Check to see if the specified term already exists
-        if(Term::isValidTerm($year . $sem)){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Error: That term already exists.');
-            $errorCmd->redirect();
-        }
+        if(!Term::isValidTerm($year . $sem)){
+            $term = new Term(NULL);
+            $term->setTerm($year . $sem);
+            $term->setBannerQueue(1);
 
-        $term = new Term(NULL);
-        $term->setTerm($year . $sem);
-        $term->setBannerQueue(1);
+            try{
+                $term->save();
+            }catch(DatabaseException $e){
+                NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'There was an error saving the term. Please try again or contact ESS.');
+                $viewCmd->redirect();
+            }
+        }else{
 
-        try{
-            $term->save();
-        }catch(DatabaseException $e){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'There was an error saving the term. Please try again or contact ESS.');
-            $viewCmd->redirect();
+            $term = new Term($year . $sem);
+
+            // The term already exists, make sure there are no halls for this term
+            $db = new PHPWS_DB('hms_residence_hall');
+            $db->addWhere('term', $term->getTerm());
+            $num = $db->count();
+
+            if(!is_null($num) && $count > 0){
+                NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'One or more halls already exist for this term, so nothing can be copied.');
+                $viewCmd->redirect();
+            }
         }
 
         $text = Term::toString($term->getTerm());
 
         $copy = $context->get('copy_drop');
-        
+
         if($copy == 'struct'){
             // Only hall structure
             $copyAssignments = false;
@@ -78,7 +88,7 @@ class CreateTermCommand extends Command {
             }
 
             $db->query('COMMIT');
-            
+
         }catch(Exception $e){
             $db->query('ROLLBACK');
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'There was an error copying the hall structure and/or assignments. The term was created, but nothing was copied.');
