@@ -154,6 +154,7 @@ class HousingApplicationConfirmCommand extends Command {
         && $context->get('rlc_interest') == 1)
         {
             $rlcCmd = CommandFactory::getCommand('ShowRlcApplicationPage1View');
+            $rlcCmd->setTerm($term);
             $rlcCmd->redirect();
         }else{
             $successCmd = CommandFactory::getCommand('ShowStudentMenu');

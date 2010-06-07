@@ -325,7 +325,7 @@ abstract class ApplicationFeature {
         
         $features = array();
         foreach($results as $result){
-            
+
             // Instanciate a registration object
             $path = 'applicationFeature/' . $result['name'] . '.php';
             PHPWS_Core::initModClass('hms', $path);
@@ -368,6 +368,7 @@ abstract class ApplicationFeature {
     	$result = $db->select('one');
     	
         if(PHPWS_Error::logIfError($result)) {
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
     	

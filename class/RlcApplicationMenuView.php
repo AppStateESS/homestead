@@ -39,6 +39,7 @@ class RlcApplicationMenuView extends View {
             $tpl['END_DEADLINE'] = HMS_Util::getFriendlyDate($this->endDate);
         }else{
             $applyCmd = CommandFactory::getCommand('ShowRlcApplicationView');
+            $applyCmd->setTerm($this->term);
             $tpl['APP_NOW'] = $applyCmd->getLink('Apply for a Residential Learning Community now.');
         }
 
