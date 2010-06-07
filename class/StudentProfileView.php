@@ -62,8 +62,11 @@ class StudentProfileView extends View {
         /*****************
          * Phone Numbers *
          *****************/
-        foreach($this->student->getPhoneNumberList() as $phone_number){
-            $tpl['phone_number'][] = array('NUMBER' =>$phone_number);
+        $phoneNumberList = $this->student->getPhoneNumberList();
+        if(isset($phoneNumberList) && !is_null($phoneNumberList)){
+            foreach($this->student->getPhoneNumberList() as $phone_number){
+                $tpl['phone_number'][] = array('NUMBER' =>$phone_number);
+            }
         }
 
         /*************
@@ -190,15 +193,15 @@ class StudentProfileView extends View {
 
                 $viewCmd = CommandFactory::getCommand('ShowApplicationView');
                 $viewCmd->setAppId($app->getId());
-                
+
                 if($app->getWithdrawn() == 0){
                     $withdrawCmd = CommandFactory::getCommand('MarkApplicationWithdrawn');
                     $withdrawCmd->setAppId($app->getId());
-                    $withdrawn = '[' . $withdrawCmd->getLink('Withdraw') . ']'; 
+                    $withdrawn = '[' . $withdrawCmd->getLink('Withdraw') . ']';
                 }else{
                     $withdrawn = '(widthdrawn)';
                 }
-                
+
                 $actions = '[' . $viewCmd->getLink('View') . '] ' . $withdrawn;
 
                 $app_rows[] = array('term'=>$term, 'type'=>$type, 'meal_plan'=>$meal_plan, 'cell_phone'=>$phone, 'clean'=>$clean, 'bedtime'=>$bedtime, 'actions'=>$actions);
@@ -239,7 +242,7 @@ class StudentProfileView extends View {
             $logsCmd = CommandFactory::getCommand('ShowActivityLog');
             $logsCmd->setActeeUsername($this->student->getUsername());
             $tpl['LOG_PAGER'] .= $logsCmd->getLink('View more');
-             
+
             $notesCmd = CommandFactory::getCommand('ShowActivityLog');
             $notesCmd->setActeeUsername($this->student->getUsername());
             $notesCmd->setActivity(array(0 =>ACTIVITY_ADD_NOTE));

@@ -2,26 +2,26 @@
 
 class Student {
 
-	protected $username;
-	protected $banner_id;
+	public $username;
+	public $banner_id;
 
-	protected $first_name;
-	protected $middle_name;
-	protected $last_name;
+	public $first_name;
+	public $middle_name;
+	public $last_name;
 
-	protected $gender;
-	protected $dob;
+	public $gender;
+	public $dob;
 
-	protected $application_term;
-	protected $type;
-	protected $class;
-	protected $credit_hours;
-	
-	protected $deposit_date;
-	protected $deposit_waived;
+	public $application_term;
+	public $type;
+	public $class;
+	public $credit_hours;
 
-	protected $addressList;
-	protected $phoneNumberList;
+	public $deposit_date;
+	public $deposit_waived;
+
+	public $addressList;
+	public $phoneNumberList;
 
 	public function __construct()
 	{
@@ -284,11 +284,11 @@ class Student {
 	public function setClass($class){
 		$this->class = $class;
 	}
-	
+
 	public function getCreditHours(){
 		return $this->credit_hours;
 	}
-	
+
 	public function setCreditHours($hrs){
 		$this->credit_hours = $hrs;
 	}
@@ -296,19 +296,19 @@ class Student {
 	public function getDepositDate(){
 	    return $this->deposit_date;
 	}
-	
+
 	public function setDepositDate($date){
 	    $this->deposit_date = $date;
 	}
-	
+
 	public function depositWaived(){
 	    return $this->deposit_waived;
 	}
-	
+
 	public function setDepositWaived($status){
 	    $this->deposit_waived = $status;
 	}
-	
+
 	public function getAddressList(){
 		return $this->addressList;
 	}

@@ -2,17 +2,54 @@
 
 abstract class StudentDataProvider {
 
-    private $fallbackProvider;
+    // For singleton pattern
+    public static $instance;
 
-    function __construct($fallbackProvider = NULL){
+    // Default settings for concrete instances
+    protected static $defaultTtl = 86400;
+
+    // Member variables
+    protected $fallbackProvider;
+    protected $ttl;
+
+    private function __construct(StudentDataProvider $fallbackProvider = NULL, $ttl = NULL){
+
+        if(is_null($ttl)){
+            $this->ttl = self::$defaultTtl;
+        }else{
+            $this->ttl = $ttl;
+        }
+
         $this->fallbackProvider = $fallbackProvider;
     }
 
-    abstract function getStudentByUsername($username, $term, $ttl);
+    public static function getInstance()
+    {
+        if(!is_null(self::$instance)){
+            return self::$instance;
+        }
 
-    abstract function getStudentById($username, $term, $ttl);
+        PHPWS_Core::initModClass('hms', 'SOAPDataProvider.php');
+        PHPWS_Core::initModClass('hms', 'LocalCacheDataProvider.php');
+        self::$instance = new LocalCacheDataProvider(new SOAPDataProvider(), 120);
 
-    abstract function getFallbackProvider();
+        return self::$instance;
+    }
+
+    abstract public function getStudentByUsername($username, $term);
+
+    abstract public function getStudentById($id, $term);
+
+    protected function getFallbackProvider()
+    {
+        if(!isset($this->fallbackProvider) || is_null($this->fallbackProvider)){
+            // No fallback provider is set, so throw an exception
+            PHPWS_Core::initModClass('hms', 'exception/StudentNotFoundException.php');
+            throw new StudentNotFoundException();
+        }else{
+            return $this->fallbackProvider;
+        }
+    }
 }
 
 ?>

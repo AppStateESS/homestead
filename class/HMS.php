@@ -37,18 +37,19 @@ abstract class HMS {
             HMS_Activity_Log::log_activity($username,ACTIVITY_LOGIN, $username, NULL);
             $_SESSION['HMS_LOGGED_THE_LOGIN'] = $username;
         }
-		
+
         if(!Current_User::isLogged() && $this->context->get('action') != 'ShowFrontPage'){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You must be logged in to do that.');
             $action = 'ShowFrontPage';
         }else{
-            $action = $this->context->get('action'); 
+            $action = $this->context->get('action');
         }
-        
+
 		$cmd = CommandFactory::getCommand($action);
-		
-		try {
+
+		//try {
 			$cmd->execute($this->context);
+			/*
 		} catch(Exception $e) {
 			try {
 				$message = $this->formatException($e);
@@ -66,6 +67,7 @@ abstract class HMS {
 				exit();
 			}
 		}
+		*/
 	}
 
 	private function formatException(Exception $e)
@@ -99,7 +101,7 @@ abstract class HMS {
 		PHPWS_Core::initModClass('hms', 'HMS_Email.php');
 		//$to = HMSSettings::getUberAdminEmail();
 		$to = HMS_Email::get_tech_contacts();
-		
+
 		$tags = array('MESSAGE' => $message);
 		HMS_Email::send_template_message($to, 'Uncaught Exception',
 		    'email/UncaughtException.tpl', $tags);
