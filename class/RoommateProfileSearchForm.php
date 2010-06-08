@@ -1,7 +1,7 @@
 <?php
 
 class RoommateProfileSearchForm extends View {
-    
+
     public function show()
     {
         $_SESSION['profile_search_use_session'] = FALSE;
@@ -22,7 +22,7 @@ class RoommateProfileSearchForm extends View {
         $tags = array();
 
         $submitCmd = CommandFactory::getCommand('RoommateProfileSearch');
-        
+
         $form = new PHPWS_Form();
         $submitCmd->initForm($form);
         $form->setMethod('get');
@@ -31,7 +31,7 @@ class RoommateProfileSearchForm extends View {
         $form->addText('asu_username');
         $form->setLabel('asu_username','ASU Username: ');
 
-        javascript('/modules/hms/autoFocus', array('ELEMENT' => $form->getId('asu_username')));
+        javascriptMod('hms', 'autoFocus', array('ELEMENT' => $form->getId('asu_username')));
 
         $form->addCheck('hobbies_checkbox',$hobbies);
         $form->setLabel('hobbies_checkbox',$hobbies_labels);
@@ -60,7 +60,7 @@ class RoommateProfileSearchForm extends View {
 
         $form->addDropBox('overnight_guests',$overnight_guests);
         $form->setLabel('overnight_guests','He/she plans on hosting overnight guests: ');
-        
+
         $form->addDropBox('loudness',$loudness);
         $form->setLabel('loudness','In his/her daily activities (music, conversations, etc.): ');
 
@@ -70,15 +70,15 @@ class RoommateProfileSearchForm extends View {
         $tags['STUDY_TIMES_QUESTION'] = 'He/she prefers to study (check all that apply):';
         $form->addCheck('study_times',$study_times);
         $form->setLabel('study_times',$study_times_labels);
-        
+
         $form->addDropBox('free_time',$free_time);
         $form->setLabel('free_time','If he/she has free time he/she would rather: ');
-        
+
         $form->addSubmit('Search');
 
         $form->mergeTemplate($tags);
         $tags = $form->getTemplate();
-        
+
         Layout::addPageTitle("Roommate Profile Search");
 
         return PHPWS_Template::process($tags,'hms','student/profile_search.tpl');
