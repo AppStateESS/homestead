@@ -15,6 +15,7 @@ class LotteryAutoWinnersView extends View {
         $form->addCheck('magic', array('enabled'));
         $form->setLabel('magic', array('Magic Flag: '));
 
+        javascript('/modules/hms/autoFocus', array('ELEMENT' => $form->getId('asu_username')));
         $form->addSubmit('Submit');
 
         Layout::addPageTitle("Automatic Lottery Winners");

@@ -32,6 +32,7 @@ class ContactFormView extends View {
         $form->addTextArea('comments');
         $form->setLabel('comments', 'Comments and/or what you were trying to do');
 
+        javascript('/modules/hms/autoFocus', array('ELEMENT'=>$form->getId('name')));
         $form->addSubmit('Submit');
 
         $form->mergeTemplate($tpl);

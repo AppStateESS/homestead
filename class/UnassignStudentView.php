@@ -29,7 +29,10 @@ class UnassignStudentView extends View {
         if(!is_null($this->student)) {
             $form->setValue('username', $this->student->getUsername());
         }
-        
+
+        $var = array('ELEMENT' => $form->getId('username'));
+        javascript('modules/hms/autoFocus', $var);        
+
         $form->addTextarea('note');
         $form->setLabel('note', 'Note: ');
 
