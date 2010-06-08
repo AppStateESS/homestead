@@ -7,7 +7,6 @@ class StudentFactory {
 	
 	public static function getStudentByUsername($username, $term)
 	{
-	    
 		$student = new Student();
 		$student->setUsername($username);
 		
