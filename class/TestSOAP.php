@@ -21,7 +21,7 @@ class TestSOAP extends SOAP{
         if(empty($term) || is_null($term) || !isset($username)){
             throw new InvalidArgumentException('Bad term');
         }
-        	
+
         //$student->banner_id             = 900325006;
         $student->banner_id             = 900325007;
         $student->last_name             = 'Booker';
@@ -32,9 +32,21 @@ class TestSOAP extends SOAP{
         $student->deposit_date          = '';
         $student->deposit_waived        = 'false';
 
-   		$student->student_type          = 'F';
-   		$student->application_term      = '201040';
-   		$student->projected_class       = 'FR';
+        $student->international         = 'true';
+        $student->student_level         = 'G';
+
+        $student->honors                = 'false';
+        $student->teaching_fellow       = 'false';
+        $student->watauga_member        = 'false';
+
+
+//   		$student->student_type          = 'T';
+//   		$student->application_term      = '201040';
+//   		$student->projected_class       = 'FR';
+
+          $student->student_type          = 'F';
+          $student->application_term      = '201040';
+          $student->projected_class       = 'JR';
 
 //        $student->student_type          = 'F';
 //        $student->application_term      = '201020';
@@ -51,14 +63,6 @@ class TestSOAP extends SOAP{
             $student->application_term  = '201020';
             $student->projected_class   = 'FR';
         }
-
-        if($username == 'jb67803') {
-            $student->banner_id = 987654321;
-        }
-
-        //$student->student_type          = 'T';
-        //$student->application_term      = '200940';
-        //$student->projected_class       = 'FR';
 
         $student->credhrs_completed     = 0;
         $student->credhrs_for_term      = 15;

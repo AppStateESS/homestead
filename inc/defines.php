@@ -55,6 +55,16 @@ define('TYPE_WITHDRAWN',    'W');
 define('TYPE_NONDEGREE',    'N');
 
 /**
+ * Student Levels
+ */
+define('LEVEL_UNDERGRAD',   'U');
+define('LEVEL_GRAD',        'G');
+define('LEVEL_DOCTORAL',    'D');
+define('LEVEL_SPECIALIST',  'P');
+define('LEVEL_UNDECLARED',  '00');
+define('LEVEL_GRAD2',       'G2');
+
+/**
  * Meal Plans
  */
 //define('HMS_MEAL_LOW',      0);

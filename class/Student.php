@@ -15,10 +15,17 @@ class Student {
 	private $applicationTerm;
 	private $type;
 	private $class;
+	private $studentLevel;
 	private $creditHours;
-	
+
 	private $depositDate;
 	private $depositWaived;
+
+	private $international;
+
+	private $honors;
+	private $teachingFellow;
+	private $wataugaMember;
 
 	private $addressList;
 	private $phoneNumberList;
@@ -96,6 +103,32 @@ class Student {
 			default:
 				return 'Unknown class: ' . $this->class;
 		}
+	}
+
+	public function getPrintableLevel()
+	{
+	    switch($this->studentLevel){
+	        case LEVEL_UNDERGRAD:
+	            return 'Undergraduate';
+	            break;
+	        case LEVEL_GRAD:
+	            return 'Graduate';
+	            break;
+	        case LEVEL_GRAD2:
+	            return 'Graduate II';
+	            break;
+	        case LEVEL_DOCTORAL:
+	            return 'Doctoral';
+	            break;
+	        case LEVEL_SPECIALIST:
+	            return 'Specialist';
+	            break;
+	        case LEVEL_UNDECLARED:
+	            return 'Undeclared';
+	            break;
+	        default:
+	            return 'Unknown level ' . $this->studentLevel;
+	    }
 	}
 
 	public function getProfileLink()
@@ -284,11 +317,19 @@ class Student {
 	public function setClass($class){
 		$this->class = $class;
 	}
-	
+
 	public function getCreditHours(){
 		return $this->creditHours;
 	}
-	
+
+	public function setStudentLevel($level){
+	    $this->studentLevel = $level;
+	}
+
+	public function getStudentLevel(){
+	    return $this->studentLevel;
+	}
+
 	public function setCreditHours($hrs){
 		$this->creditHours = $hrs;
 	}
@@ -296,19 +337,51 @@ class Student {
 	public function getDepositDate(){
 	    return $this->depositDate;
 	}
-	
+
 	public function setDepositDate($date){
 	    $this->depositDate = $date;
 	}
-	
+
 	public function depositWaived(){
 	    return $this->depositWaived;
 	}
-	
+
 	public function setDepositWaived($status){
 	    $this->depositWaived = $status;
 	}
-	
+
+	public function setInternational($intl){
+	    $this->international = $intl;
+	}
+
+	public function isInternational(){
+	    return $this->international;
+	}
+
+	public function setHonors($hon){
+	    $this->honors = $hon;
+	}
+
+	public function isHonors(){
+	    return $this->honors;
+	}
+
+	public function setTeachingFellow($teach){
+	    $this->teachingFellow = $teach;
+	}
+
+	public function isTeachingFellow(){
+	    return $this->teachingFellow;
+	}
+
+	public function setWataugaMember($member){
+	    $this->wataugaMember = $member;
+	}
+
+	public function isWataugaMember(){
+	    return $this->wataugaMember;
+	}
+
 	public function getAddressList(){
 		return $this->addressList;
 	}

@@ -44,13 +44,12 @@ class ShowStudentMenuCommand extends Command {
             $badDataCmd = CommandFactory::getCommand('ShowBadBannerData');
             $badDataCmd->redirect();
         }
-        
+
         # Recreate the student object using the student's application term
         $student = StudentFactory::getStudentByUsername($username, $applicationTerm);
 
         # Check for an assignment in the current term. So far, this only matters for type 'Z' (readmit) students
         $assignment = HMS_Assignment::checkForAssignment($username, $currentTerm);
-
 
         /******************************************
          * Sort returning students (lottery) from *

@@ -6,7 +6,7 @@ class HousingApplication {
     public $id = 0;
 
     public $term; // The term which this application is for
-    
+
     public $application_type; // The type of this application, defined by each subclass' constructor
 
     public $banner_id;
@@ -25,6 +25,8 @@ class HousingApplication {
     public $psych_disability;
     public $medical_need;
     public $gender_need;
+
+    public $international; // Whether or not this student is an international student. 0 => false, 1=> true (0 by default)
 
     public $created_on; // unix timestamp when the application as first saved
     public $created_by; // user name of the person who created this application
@@ -49,7 +51,7 @@ class HousingApplication {
      * and this method will handle initializing the values of the core application member variables defined in
      * this class
      */
-    public function __construct($term = NULL, $banner_id = NULL, $username = NULL, $gender = NULL, $student_type = NULL, $application_term = NULL, $cell_phone = NULL, $meal_plan = NULL, $physical_disability = NULL, $psych_disability = NULL, $gender_need = NULL, $medical_need = NULL){
+    public function __construct($term = NULL, $banner_id = NULL, $username = NULL, $gender = NULL, $student_type = NULL, $application_term = NULL, $cell_phone = NULL, $meal_plan = NULL, $physical_disability = NULL, $psych_disability = NULL, $gender_need = NULL, $medical_need = NULL, $international = NULL){
 
         $this->setTerm($term);
         $this->setBannerId($banner_id);
@@ -64,6 +66,8 @@ class HousingApplication {
         $this->setPsychDisability($psych_disability);
         $this->setMedicalNeed($medical_need);
         $this->setGenderNeed($gender_need);
+
+        $this->setInternational($international);
 
         $this->setWithdrawn(false);
     }
@@ -148,10 +152,10 @@ class HousingApplication {
     public function log()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-        
+
         # Determine which user name to use as the current user
         $username = UserStatus::getUsername();
-        
+
         if(isset($username) && !is_null($username)){
             HMS_Activity_Log::log_activity($this->getUsername(), ACTIVITY_SUBMITTED_APPLICATION, $username, 'Term: ' . $this->getTerm());
         }else{
@@ -198,7 +202,7 @@ class HousingApplication {
             $body = "Username: {$this->getUsername()}\n";
             $mail->setMessageBody($body);
             $result = $mail->send();
-             
+
             throw $e; // rethrow the exception it
         }
 
@@ -206,7 +210,7 @@ class HousingApplication {
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
         HMS_Activity_Log::log_activity($this->getUsername(), ACTIVITY_APPLICATION_REPORTED, UserStatus::getUsername());
     }
-    
+
     /**
      * Returns a nicely formatted string with the "type" of this application
      * @return String
@@ -251,7 +255,7 @@ class HousingApplication {
         $tpl['ROOMMATE']        = HMS_Roommate::get_confirmed_roommate($this->getUsername(), $this->getTerm());
         $assignCmd = CommandFactory::getCommand('ShowAssignStudent');
         $assignCmd->setUsername($this->getUsername());
-        
+
         $tpl['ACTIONS']         = '[' . $assignCmd->getLink('Assign', '_blank') . ' ]';
 
         return $tpl;
@@ -330,7 +334,7 @@ class HousingApplication {
         $db->addWhere('term', $term);
 
         $result = $db->select('row');
-        
+
         if(PHPWS_Error::logIfError($result)){
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
@@ -339,7 +343,7 @@ class HousingApplication {
         if($result == NULL){
             return NULL;
         }
-        
+
         switch($result['application_type']){
             case 'fall':
                 $app = new FallApplication($result['id']);
@@ -370,7 +374,7 @@ class HousingApplication {
      */
     public static function getAllApplications($username = NULL, $banner_id = NULL, $term = NULL){
         PHPWS_Core::initModClass('hms', 'HousingApplicationFactory.php');
-        
+
         $db = new PHPWS_DB('hms_new_application');
 
         if(!is_null($banner_id)){
@@ -386,13 +390,13 @@ class HousingApplication {
         }
 
         $result = $db->select();
-        
+
         $apps = array();
-        
+
         foreach($result as $app){
             $apps[] = HousingApplicationFactory::getApplicationById($app['id']);
         }
-        
+
         return $apps;
     }
 
@@ -468,7 +472,7 @@ class HousingApplication {
         if($student->getType() == TYPE_TRANSFER){
             return array();
         }
-        
+
         $availableTerms = self::getAvailableApplicationTermsForStudent($student);
 
         $requiredTerms = array();
@@ -498,7 +502,7 @@ class HousingApplication {
         $requiredTerms = self::getRequiredApplicationTermsForStudent($student);
 
         $needToApplyFor = array();
-         
+
         foreach($requiredTerms as $term){
             // Check if a housing application exists for this student in this term
             if(!HousingApplication::checkForApplication($student->getUsername(), $term['term'])){
@@ -615,6 +619,14 @@ class HousingApplication {
 
     public function setGenderNeed($gender){
         $this->gender_need = $gender;
+    }
+
+    public function getInternational(){
+        return $this->international;
+    }
+
+    public function setInternational($intl){
+        $this->international = $intl;
     }
 
     public function setCreatedOn($timestamp){
