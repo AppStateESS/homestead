@@ -1185,7 +1185,6 @@ function hms_update(&$content, $currentVersion)
             PHPWS_Core::initModClass('users', 'Permission.php');
             Users_Permission::registerPermissions('hms', $content);
         case version_compare($currentVersion, '0.4.22', '<'):
-            PHPWS_Boost::registerMyModule('hms', 'users', $content);
 
             $files[] = 'templates/admin/floor_assignment.tpl';
             PHPWS_Boost::updatefiles($files, 'hms');
