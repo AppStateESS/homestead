@@ -26,9 +26,9 @@ class OffCampusWaitingListFormSaveCommand extends Command {
         PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
         PHPWS_Core::initModClass('hms', 'HMS_Email.php');
-        
+
         $term = $context->get('term');
-        
+
         $errorCmd = CommandFactory::getCommand('ShowOffCampusWaitListApplication');
         $errorCmd->setTerm($term);
         $errorCmd->setAgreedToTerms(true);
@@ -63,21 +63,21 @@ class OffCampusWaitingListFormSaveCommand extends Command {
         $psychDisability    = isset($specialNeeds['psych_disability'])?1: 0;
         $genderNeed         = isset($specialNeeds['gender_need'])?1: 0;
         $medicalNeed        = isset($specialNeeds['medical_need'])?1: 0;
-        
-        
-        $application = new WaitingListApplication(0, $term, $student->getBannerId(), $student->getUsername(), $student->getGender(), $student->getType(), $student->getApplicationTerm(), $cellPhone, $mealPlan, $physicalDisability, $psychDisability, $genderNeed, $medicalNeed);
-        
+
+        $international = ($student->isInternational()) == 'true'?1:0;
+
+        $application = new WaitingListApplication(0, $term, $student->getBannerId(), $student->getUsername(), $student->getGender(), $student->getType(), $student->getApplicationTerm(), $cellPhone, $mealPlan, $physicalDisability, $psychDisability, $genderNeed, $medicalNeed, $international);
+
         try{
             $application->save();
         }catch(Exception $e){
-            test($e->getMessage(),1);
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'There was an error saving your application. Please try again or contact the Department of Housing & Residence Life.');
             $errorCmd->redirect();
         }
 
         # Log the fact that the entry was saved
         HMS_Activity_Log::log_activity(UserStatus::getUsername(), ACTIVITY_LOTTERY_ENTRY, UserStatus::getUsername());
-        
+
         $year = Term::toString($term) . ' - ' . Term::toString(Term::getNextTerm($term));
         HMS_Email::sendWaitListApplicationConfirmation($student, $year);
 
