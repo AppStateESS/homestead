@@ -1,6 +1,10 @@
 {ICON}
 
-<h3>Application</h3>
+
+<h3>
+<div class={STATUS}>Application</div>
+</h3>
+
 
 <div class="block-content">
 

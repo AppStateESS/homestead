@@ -1,7 +1,9 @@
 {ICON}
 
 
-<h3>Waiting List</h3>
+<h3>
+<div class={STATUS}>Waiting List</div>
+</h3>
 
 <div class="block-content">
 

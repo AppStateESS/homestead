@@ -1,6 +1,8 @@
 {ICON}
 
-<h3>Your Roommate Profile</h3>
+<h3>
+<div class={STATUS}>Your Roommate Profile</div>
+</h3>
 
 <div class="block-content">
 

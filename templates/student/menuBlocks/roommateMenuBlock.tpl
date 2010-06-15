@@ -1,6 +1,8 @@
 {ICON}
 
-<h3>Roommate Selection</h3>
+<h3>
+<div class={STATUS}>Roommate Selection</div>
+</h3>
 
 <div class="block-content">
 

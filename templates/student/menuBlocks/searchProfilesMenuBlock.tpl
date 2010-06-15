@@ -1,6 +1,8 @@
 {ICON}
 
-<h3>Search Roommate Profiles</h3>
+<h3>
+<div class={STATUS}>Search Roommate Profiles</div>
+</h3>
 
 <div class="block-content">
 

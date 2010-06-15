@@ -1,6 +1,8 @@
 {ICON}
 
-<h3>Open Waiting List</h3>
+<h3>
+<div class={STATUS}>Open Waiting List</div>
+</h3>
 
 <div class="block-content">
 

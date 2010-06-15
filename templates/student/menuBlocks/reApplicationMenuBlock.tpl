@@ -1,6 +1,8 @@
 {ICON}
 
-<h3>Re-Application</h3>
+<h3>
+<div class={STATUS}>Re-Application</div>
+</h3>
 
 <div class="block-content">
 

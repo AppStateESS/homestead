@@ -1,6 +1,8 @@
 {ICON}
 
-<h3>Learning Community Application</h3>
+<h3>
+<div class={STATUS}>Learning Community Application</div>
+</h3>
 
 <div class="block-content">
 
