@@ -3,6 +3,10 @@
 PHPWS_Core::initModClass('hms', 'StudentMenuTermBlock.php');
 PHPWS_Core::initModClass('hms', 'HousingApplication.php');
 
+define('FEATURE_LOCKED_ICON',   '<img class="status-icon" src="images/mod/hms/tango/emblem-readonly.png" alt="Locked"/>');
+define('FEATURE_OPEN_ICON',     '<img class="status-icon" src="images/mod/hms/icons/arrow.png" alt="Open"/>');
+define('FEATURE_COMPLETED_ICON','<img class="status-icon" src="images/mod/hms/icons/check.png" alt="Completed"/>'); 
+
 class FreshmenMainMenuView extends View {
 	
     private $student;

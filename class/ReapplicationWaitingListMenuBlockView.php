@@ -26,17 +26,17 @@ class ReapplicationWaitingListMenuBlockView extends View {
 
         if($this->startDate > $now){
             // Too early!        
-            $tpl['ICON'] = '<img class="status-icon" src="images/mod/hms/tango/emblem-readonly.png" alt="Locked"/>';
+            $tpl['ICON'] = FEATURE_LOCKED_ICON;
             $tpl['BEGIN_DEADLINE'] = HMS_Util::get_long_date_time($this->startDate);
         }else if($this->endDate < $now){
             // Too late 
-            $tpl['ICON'] = '<img class="status-icon" src="images/mod/hms/tango/emblem-readonly.png" alt="Locked"/>';
+            $tpl['ICON'] = FEATURE_LOCKED_ICON;
             $tpl['END_DEADLINE'] = HMS_Util::get_long_date_time($this->endDate);
         }else if (isset($this->application) && $this->application->waiting_list_hide == 1){
-            $tpl['ICON'] = '<img class="status-icon" src="images/mod/hms/icons/check.png" alt="Completed"/>';
+            $tpl['ICON'] = FEATURE_COMPLETED_ICON;
             $tpl['OPTED_OUT'] = " ";
         }else{
-            $tpl['ICON'] = '<img class="status-icon" src="images/mod/hms/icons/arrow.png" alt="Open"/>';            
+            $tpl['ICON'] = FEATURE_OPEN_ICON;
             $optOutCmd = CommandFactory::getCommand('LotteryShowWaitingListOptOut');
             $tpl['OUT_OUT_LINK'] = $optOutCmd->getLink('Click here to opt-out of the waiting list');
         }
