@@ -23,7 +23,7 @@ class SearchProfilesMenuBlockView extends View {
         $tpl['STATUS'] = "";
 
         if(time() < $this->startDate){
-            $tpl['ICON'] = FEATURE_LOCKED_ICON;
+            $tpl['ICON'] = FEATURE_NOTYET_ICON;
             $tpl['BEGIN_DEADLINE'] = HMS_Util::getFriendlyDate($this->startDate);
         }else if(time() > $this->endDate){
             $tpl['ICON'] = FEATURE_LOCKED_ICON;

@@ -23,12 +23,12 @@ class ApplicationMenuBlockView extends View {
     {
         $tpl = array();
 
-        // Show availability dates!        
+        // Show availability dates!
         $tpl['DATES'] = HMS_Util::getPrettyDateRange($this->startDate, $this->endDate);
         $tpl['STATUS'] = "";
 
         if(time() < $this->startDate){
-            $tpl['ICON'] = FEAUTRE_LOCKED_ICON;
+            $tpl['ICON'] = FEATURE_NOTYET_ICON;
             $tpl['BEGIN_DEADLINE'] = HMS_Util::getFriendlyDate($this->startDate);
         } else if(time() > $this->endDate){
             $tpl['ICON'] = FEATURE_LOCKED_ICON;
@@ -49,9 +49,9 @@ class ApplicationMenuBlockView extends View {
                 $tpl['ICON'] = FEATURE_COMPLETED_ICON;
                 $appCommand->setAppId($this->application->id);
             }
-            
+
             $tpl['VIEW_APP'] = $appCommand->getLink('view your application');
-            
+
             if(time() < $this->editDate){
                 $tpl['ICON'] = FEATURE_COMPLETED_ICON;
                 $newApp = CommandFactory::getCommand('ShowHousingApplicationForm');

@@ -14,23 +14,23 @@ class ReapplicationWaitingListMenuBlockView extends View {
         $this->endDate = $endDate;
         $this->application = $application;
     }
-    
+
     public function show()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
         $tpl = array();
-        
+
         $now = time();
 
         $tpl['DATES'] = HMS_Util::getPrettyDateRange($this->startDate, $this->endDate);
         $tpl['STATUS'] = "";
 
         if($this->startDate > $now){
-            // Too early!        
-            $tpl['ICON'] = FEATURE_LOCKED_ICON;
+            // Too early!
+            $tpl['ICON'] = FEATURE_NOTYET_ICON;
             $tpl['BEGIN_DEADLINE'] = HMS_Util::get_long_date_time($this->startDate);
         }else if($this->endDate < $now){
-            // Too late 
+            // Too late
             $tpl['ICON'] = FEATURE_LOCKED_ICON;
             // fade out header
             $tpl['STATUS'] = "locked";
@@ -45,7 +45,7 @@ class ReapplicationWaitingListMenuBlockView extends View {
         }
 
         Layout::addPageTitle("Re-Application Waiting List");
-        
+
         return PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/reApplicationWaitingListMenuBlock.tpl');
     }
 }

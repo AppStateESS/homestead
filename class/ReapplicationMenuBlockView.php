@@ -44,7 +44,7 @@ class ReapplicationMenuBlockView extends View {
             $tpl['ALREADY_APPLIED'] = ""; // dummy tag, text is in template
         }else if(time() < $this->startDate){
             // Too early
-            $tpl['ICON'] = FEATURE_LOCKED_ICON;
+            $tpl['ICON'] = FEATURE_NOTYET_ICON;
             $tpl['BEGIN_DEADLINE'] = HMS_Util::getFriendlyDate($this->startDate);
         }else if(time() > $this->endDate){
             // Too late
@@ -77,7 +77,7 @@ class ReapplicationMenuBlockView extends View {
                 $cmd = CommandFactory::getCommand('LotteryShowRoommateRequest');
                 $cmd->setRequestId($invite['id']);
                 $roommie = StudentFactory::getStudentByUsername($invite['requestor'], $this->term);
-                $tpl['roommates'][]['ROOMMATE_LINK'] = $cmd->getLink($roommie->getName()); 
+                $tpl['roommates'][]['ROOMMATE_LINK'] = $cmd->getLink($roommie->getName());
                 //$tpl['roommates'][]['ROOMMATE_LINK'] = PHPWS_Text::secureLink(HMS_SOAP::get_name($invite['requestor']), 'hms', array('type'=>'student', 'op'=>'lottery_show_roommate_request', 'id'=>$invite['id']));
             }
         }

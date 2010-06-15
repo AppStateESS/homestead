@@ -44,7 +44,7 @@ class RoommateSelectionMenuBlockView extends View {
         // Roommate selected hasn't started yet
         else if(time() < $this->startDate){
             $tpl['ROOMMATE_MSG']  = '<b>It is too early to choose a roommate.</b> You can choose a roommate on ' . HMS_Util::getFriendlyDate($this->startDate) . '.';
-            $tpl['ICON'] = FEATURE_LOCKED_ICON;
+            $tpl['ICON'] = FEATURE_NOTYET_ICON;
         }
         // Roommate selection is over dawg
         else if(time() > $this->endDate){
