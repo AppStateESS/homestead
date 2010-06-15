@@ -44,7 +44,7 @@ class ShowFreshmenApplicationReviewCommand extends Command {
 			NQ::simple('hms', HMS_NOTIFICATION_ERROR, $e->getMessage());
 			$errorCmd->redirect();
 		}
-		
+
 		//TODO side thingie
 
 		PHPWS_Core::initModClass('hms', 'FreshmenApplicationReview.php');
