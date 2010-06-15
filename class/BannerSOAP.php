@@ -51,7 +51,7 @@ class BannerSOAP extends SOAP{
 		SOAP::logSoap('get_student_info', 'success', $username, $term);
 
 		// Apply Banner-specific exceptions
-		self::applyExceptions($student);
+		self::applyExceptions($username, $student);
 
 		return $student;
 	}
@@ -250,10 +250,10 @@ class BannerSOAP extends SOAP{
 		return $student;
 	}
 
-	private function applyExceptions(Student &$student){
+	private function applyExceptions($username, &$student){
 
-	    if($student->getUsername() == 'weldoncr'){
-	        $student->setApplicationTerm(200840);
+	    if($username == 'weldoncr'){
+	        $student->application_term = 200840;
 	    }
 	}
 }
