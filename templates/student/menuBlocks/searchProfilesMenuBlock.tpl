@@ -1,13 +1,12 @@
-<td>
 {ICON}
-</td>
 
-<td>
-<h3>Search Roommate Profiles
+<h3>Search Roommate Profiles</h3>
+
+<div class="block-content">
 
 <div class="availability-dates">Available: {DATES}</div>
-</h3>
 
+<p>
 <!-- BEGIN too_soon -->
 This feature will be available on {BEGIN_DEADLINE}.
 <!-- END too_soon -->
@@ -24,4 +23,5 @@ To use the roommate profile search feature, please create your profile first in 
 Click the link below to use the Roommate Search Tool to look for potential roommates based on their profiles.<br />
     {SEARCH_ROOMMATES}
 <!-- END no_app -->
-</td>
+</p>
+</div>

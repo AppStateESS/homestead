@@ -1,13 +1,12 @@
-<td>
 {ICON}
-</td>
 
-<td>
-<h3>Roommate Selection
+<h3>Roommate Selection</h3>
+
+<div class="block-content">
 
 <div class="availability-dates">Available: {DATES}</div>
-</h3>
 
+<p>
 Once you've had a chance to communicate with your desired roommate and you have both agreed that you would like to room together, either of you can use the menu below to initiate an electronic handshake to confirm your desire to be roommates.
 
 <ul>
@@ -25,4 +24,5 @@ Once you've had a chance to communicate with your desired roommate and you have 
       </li>
 <!-- END roommate -->
 </ul>
-</td>
+</p>
+</div>

@@ -1,9 +1,13 @@
-<td>
 {ICON}
-</td>
 
-<td>
+
 <h3>Waiting List</h3>
+
+<div class="block-content">
+
+<div class="availability-dates">Available: {DATES}</div>
+
+<p>
 <!-- BEGIN too_soon -->
 If you have not selected a room by {BEGIN_DEADLINE} you will be automatically placed on the housing waiting list. Any time after {BEGIN_DEADLINE} you will be able to opt-out of this waiting list if you have found other off-campus housing.
 <!-- END too_soon -->
@@ -22,4 +26,5 @@ You have not been assigned to a room yet so we have automatically placed you on 
 <br /><br />
 {OUT_OUT_LINK}
 <!-- END opt_out -->
-</td>
+</p>
+</div>

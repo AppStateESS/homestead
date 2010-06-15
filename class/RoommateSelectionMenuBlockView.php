@@ -25,7 +25,7 @@ class RoommateSelectionMenuBlockView extends View {
 
         $roommate = HMS_Roommate::get_confirmed_roommate(UserStatus::getUsername(), $this->term);
         $requests = HMS_Roommate::countPendingRequests(UserStatus::getUsername(), $this->term);
-        
+
         $tpl['DATES'] = HMS_Util::getPrettyDateRange($this->startDate, $this->endDate);
 
         // Roommate has been selected and confirmed
@@ -43,14 +43,14 @@ class RoommateSelectionMenuBlockView extends View {
         // Roommate selected hasn't started yet
         else if(time() < $this->startDate){
             $tpl['ROOMMATE_MSG']  = '<b>It is too early to choose a roommate.</b> You can choose a roommate on ' . HMS_Util::getFriendlyDate($this->startDate) . '.';
-            $tpl['ICON'] = '<img class="status-icon" src="images/mod/hms/tango/emblem-readonly.png" alt="Locked"/>';
+            $tpl['ICON'] = '<img class="status-icon" src="images/mod/hms/tango/appointment-new.png" alt="Locked"/>';
         }
         // Roommate selection is over dawg
         else if(time() > $this->endDate){
             $tpl['ROOMMATE_MSG'] = '<b>It is too late to choose a roommate.</b> The deadline passed on ' . HMS_Util::getFriendlyDate($this->endDate) . '.';
             $tpl['ICON'] = '<img class="status-icon" src="images/mod/hms/tango/emblem-readonly.png" alt="Locked"/>';
         }
-        // Student has some roommate requests! 
+        // Student has some roommate requests!
         else if($requests > 0){
             $tpl['ROOMMATE_REQUESTS'] = HMS_Roommate::display_requests(UserStatus::getUsername(), $this->term);
             if($requests == 1) {
@@ -70,7 +70,7 @@ class RoommateSelectionMenuBlockView extends View {
                 $tpl['ROOMMATE_BREAK'] = $cmd->getLink('Cancel Request');
             }
         }else{
-            $tpl['ICON'] = '<img class="status-icon" src="images/mod/hms/icons/arrow.png" alt="Open"/>';            
+            $tpl['ICON'] = '<img class="status-icon" src="images/mod/hms/tango/go-next.png" alt="Open"/>';
             $tpl['ROOMMATE_MSG'] = 'If you know who you want your roommate to be, <b>you may select your roommate now</b>. You will need to know your roommate\'s ASU user name (their e-mail address). You have until ' . HMS_Util::getFriendlyDate($this->endDate) . ' to choose a roommate. Click the link below to select your roommate.';
             $cmd = CommandFactory::getCommand('ShowRequestRoommate');
             $cmd->setTerm($this->term);

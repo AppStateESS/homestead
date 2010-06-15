@@ -1,15 +1,14 @@
-<td>
 {ICON}
-</td>
 
-<td>
-<h3>Your Roommate Profile
+<h3>Your Roommate Profile</h3>
+
+<div class="block-content">
 
 <div class="availability-dates">Available: {DATES}</div>
-</h3>
 
 <p>The Roommate Profile is optional and can be used to help you find a roommate who shares your hobbies and interests. Once you complete your profile, you will be able to search for other students who share your interests based on their profiles.</p>
 
+<p>
 <!-- BEGIN too_soon -->
 This feature will be available on {BEGIN_DEADLINE}.
 <!-- END too_soon -->
@@ -25,4 +24,5 @@ You've created your roommate profile. You may {EDIT_PROFILE}.
 <!-- BEGIN no_app -->
 You have not created a roommate profile yet. {CREATE_PROFILE}
 <!-- END no_app -->
-</td>
+</p>
+</div>
