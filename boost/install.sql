@@ -531,6 +531,33 @@ CREATE TABLE hms_user_role (
     PRIMARY KEY(id)
 );
 
+CREATE TABLE hms_room_change_request (
+    id                  INTEGER NOT NULL,
+    state               INTEGER NOT NULL DEFAULT 0,
+    term                INTEGER NOT NULL REFERENCES hms_term(term),
+    bed_id              INTEGER REFERENCES hms_bed(id),
+    reason              TEXT,
+    cell_phone          VARCHAR(11),
+    username            VARCHAR(32),
+    denied_reason       TEXT,
+    denied_by           VARCHAR(32),
+    PRIMARY KEY(id)
+);
+
+CREATE TABLE hms_room_chage_participants (
+    id                  INTEGER NOT NULL,
+    request             INTEGER NOT NULL REFERENCES hms_room_change_request(id),
+    username            VARCHAR(32),
+    PRIMARY KEY(id)
+);
+
+CREATE TABLE hms_room_change_preferences (
+    id                  INTEGER NOT NULL,
+    request             INTEGER NOT NULL REFERENCES hms_room_change_request(id),
+    building            INTEGER NOT NULL REFERENCES hms_residence_hall(id),
+    PRIMARY KEY(id)
+);
+
 INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity) VALUES (10, 'Community of Servant Leaders', 'LSC', 50);
 INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity) VALUES (1, 'Outdoor Community', 'OC', 50);
 INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity) VALUES (2, 'Community of Scientific Interest', 'CSI', 50);
