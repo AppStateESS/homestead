@@ -8,13 +8,14 @@ PHPWS_Core::initModClass('hms', 'HMS_Item.php');
 
 class HMS_Bed extends HMS_Item {
 
-	var $room_id            = 0;
-	var $bed_letter         = null;
-	var $banner_id          = null;
-	var $phone_number       = null;
-	var $bedroom_label      = null;
-	var $ra_bed             = null;
-	var $_curr_assignment   = null;
+	var $room_id              = 0;
+	var $bed_letter           = null;
+	var $banner_id            = null;
+	var $phone_number         = null;
+	var $bedroom_label        = null;
+	var $ra_bed               = null;
+    var $room_change_reserved = 0;
+	var $_curr_assignment     = null;
 
 	/**
 	 * Holds the parent room object of this bed.

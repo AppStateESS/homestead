@@ -20,12 +20,24 @@ class RDSubmitUpdateCommand extends Command {
         $approve = $context->get('approve_deny') == 'approve' ? true : false;
 
         if($approve){
+            $bed = $context->get('bed');
+            if(is_null($bed)){
+                NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You must select a bed!');
+                $cmd = CommandFactory::getCommand('RDRoomChange');
+                $cmd->username = $context->get('username');
+                $cmd->redirect();
+            }
+            $rc->bed_id = $bed;
             $rc->change(new RDApprovedChangeRequest);
         } else {
             $rc->change(new DeniedChangeRequest);
             $rc->denied_reason = $context->get('reason');
+            $rc->save();
+            $cmd = CommandFactory::getCommand('RDRoomChange');
+            $cmd->redirect();
         }
 
+        //okay, it worked, save the state change
         $rc->save();
 
         $cmd = CommandFactory::getCommand('RDRoomChange');

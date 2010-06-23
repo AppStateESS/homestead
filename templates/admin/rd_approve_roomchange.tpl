@@ -29,18 +29,45 @@
     <td>{REASON}
     </td>
   </tr>
+  <tr class="bed_selection">
+    <th>{RESIDENCE_HALL_LABEL}
+    </th>
+    <td>{RESIDENCE_HALL}
+    </td>
+  </tr>
+  <tr class="bed_selection">
+    <th>{FLOOR_LABEL}
+    </th>
+    <td>{FLOOR}
+    </td>
+  </tr>
+  <tr class="bed_selection">
+    <th>{ROOM_LABEL}
+    </th>
+    <td>{ROOM}
+    </td>
+  </tr>
+  <tr class="bed_selection">
+    <th>{BED_LABEL}
+    </th>
+    <td>{BED}
+    </td>
+  </tr>
 </table>
-{SUBMIT}
+{SUBMIT_BUTTON}
 {END_FORM}
 
 <script type="text/javascript">
 $(document).ready(function(){
-    $("#room_change_approval_approve_deny_approve").click(function(){
+    $("#phpws_form_approve_deny_approve").click(function(){
         $("#reason_row").hide();
+        $(".bed_selection").show();
     });
-    $("#room_change_approval_approve_deny_deny").click(function(){
+    $("#phpws_form_approve_deny_deny").click(function(){
         $("#reason_row").show();
+        $(".bed_selection").hide();
     });
     $("#reason_row").hide();
+    $(".bed_selection").hide();
 });
 </script>

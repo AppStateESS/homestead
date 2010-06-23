@@ -48,7 +48,7 @@ class RoomChangeRequest extends HMS_Item {
             }
 
             if(sizeof($result) == 0){
-                return false;
+                return NULL;
             }
         }
         
@@ -275,7 +275,16 @@ class RDApprovedChangeRequest extends BaseRoomChangeState {
 
     public function onEnter(){
         $this->addParticipant('rd', UserStatus::getUsername(), 'Housing and Residence Life');
-        //reserve room
+        $params = new CommandContext;
+        $params->addParam('last_command', 'RDRoomChange');
+        $params->addParam('username', $this->request->username);
+        $params->addParam('bed', $this->request->bed_id);
+        $cmd = CommandFactory::getCommand('ReserveRoom');
+        $cmd = $cmd->execute($params);
+
+        if($cmd instanceof Command){
+            $cmd->redirect();
+        }
     }
 
     public function getType(){
@@ -303,8 +312,20 @@ class CompletedChangeRequest extends BaseRoomChangeState {
     //state cannot change
 
     public function onEnter(){
-        //assign student
         //clear reserved flag
+        $this->addParticipant('rd', UserStatus::getUsername(), 'Housing and Residence Life');
+        $params = new CommandContext;
+        $params->addParam('last_command', 'RDRoomChange');
+        $params->addParam('username', $this->request->username);
+        $params->addParam('bed', $this->request->bed_id);
+        $params->addParam('clear', true);
+        $cmd = CommandFactory::getCommand('ReserveRoom');
+        $cmd = $cmd->execute($params);
+
+        $params = new CommandContext;
+        $params->addParam('username', $this->request->username);
+        $params->addParam('bed', $this->request->bed_id);
+        $params->addParam('moveConfirmed', 'true');
     }
 
     public function getType(){
@@ -314,7 +335,6 @@ class CompletedChangeRequest extends BaseRoomChangeState {
 
 class DeniedChangeRequest extends BaseRoomChangeState {
     
-
     //state cannot change
 
     public function onEnter(){

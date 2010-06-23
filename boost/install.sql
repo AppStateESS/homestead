@@ -117,6 +117,7 @@ CREATE TABLE hms_bed (
     updated_on      integer NOT NULL,
     banner_id       character varying(15),
     phone_number    character(4),
+    room_change_reserved smallint NOT NULL DEFAULT(0)::smallint,
     PRIMARY KEY(id)
 );
 
@@ -548,6 +549,8 @@ CREATE TABLE hms_room_chage_participants (
     id                  INTEGER NOT NULL,
     request             INTEGER NOT NULL REFERENCES hms_room_change_request(id),
     username            VARCHAR(32),
+    added_on            INTEGER NOT NULL,
+    updated_on          INTEGER NOT NULL,
     PRIMARY KEY(id)
 );
 

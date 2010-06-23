@@ -8,9 +8,15 @@
     </td>
   </tr>
   <tr>
-    <th>Preferences
+    <th>{FIRST_CHOICE_LABEL}
     </th>
-    <td>TODO
+    <td>{FIRST_CHOICE}
+    </td>
+  </tr>
+  <tr>
+    <th>{SECOND_CHOICE_LABEL}
+    </th>
+    <td>{SECOND_CHOICE}
     </td>
   </tr>
   <tr>

@@ -2,6 +2,8 @@
 
 PHPWS_Core::initModClass('hms', 'RoomChangeRequest.php');
 PHPWS_Core::initModClass('hms', 'Command.php');
+PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
+PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
 
 class RoomChangeView extends View {
 
@@ -42,6 +44,14 @@ class RoomChangeView extends View {
         $form->addText('cell_num');
         $form->setLabel('cell_num', 'Cellphone Number');
         $form->addCheck('cell_opt_out');
+
+        $halls = array(0=>'Choose from below...');
+        $halls = $halls+HMS_Residence_Hall::get_halls_array(Term::getSelectedTerm());
+
+        $form->addDropBox('first_choice', $halls);
+        $form->setLabel('first_choice', 'First Choice');
+        $form->addDropBox('second_choice', $halls);
+        $form->setLabel('second_choice', 'Second Choice');
         
         $form->addTextArea('reason');
         $form->setLabel('reason', 'Reason');
@@ -72,15 +82,33 @@ class RoomChangeView extends View {
             return PHPWS_Template::process($tpl, 'hms', 'admin/room_change_status.tpl');
         }
 
-        $form = new PHPWS_Form('room_change_approval');
-        //todo: choose bed
+        $halls = HMS_Residence_Hall::getHallsDropDownValues(Term::getSelectedTerm());
+        javascript('jquery');
+        javascript('/modules/hms/assign_student');
+
+        $form = new PHPWS_Form();
+        $form->addHidden('username', $student->getUsername());
+
+        $form->addDropBox('residence_hall', $halls);
+        $form->setLabel('residence_hall', 'Residence hall: ');
+        $form->setMatch('residence_hall', 0);
+
+        $form->addDropBox('floor', array(0 => ''));
+        $form->setLabel('floor', 'Floor: ');
+        
+        $form->addDropBox('room', array(0 => ''));
+        $form->setLabel('room', 'Room: ');
+        
+        $form->addDropBox('bed', array(0 => ''));
+        $form->setLabel('bed', 'Bed: ');
+
         $form->addRadio('approve_deny', array('approve', 'deny'));
         $form->setLabel('approve_deny', array('Approve', 'Deny'));
 
         $form->addTextArea('reason');
         $form->setLabel('reason', 'Reason');
 
-        $form->addSubmit('Submit');
+        $form->addSubmit('submit_button', 'Submit');
 
         $cmd = CommandFactory::getCommand('RDSubmitUpdate');
         $cmd->initForm($form);
@@ -137,6 +165,13 @@ class RoomChangeView extends View {
         $tpl['FULLNAME']       = $student->getFullName();
         $tpl['NUMBER']         = $this->request->cell_number;
         $tpl['STUDENT_REASON'] = $this->request->reason;
+
+        $bed   = new HMS_Bed($this->request->bed_id);
+        $room  = $bed->get_parent();
+        $floor = $room->get_parent();
+        $hall  = $floor->get_parent();
+
+        $tpl['BED'] = $hall->getHallName() . ' <b>Floor</b> ' . $floor->getFloorNumber() . ' <b>Room</b> ' . $room->room_number . ' <b>Bed -</b> '.$bed->bed_letter;
 
         return PHPWS_Template::process($tpl, 'hms', 'admin/housing_approve_roomchange.tpl');
     }

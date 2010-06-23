@@ -25,6 +25,9 @@ class AjaxGetBedsCommand extends Command {
         $json_beds[0] = 'Select...';
         
         foreach ($beds as $bed){
+            if($bed->room_change_reserved != 0){ //Cannot assign to reserved rooms
+                continue;
+            }
             $json_beds[$bed->id] = $bed->bed_letter;
         }
         

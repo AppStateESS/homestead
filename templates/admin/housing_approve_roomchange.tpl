@@ -14,8 +14,12 @@
     </td>
   </tr>
   <tr>
-    <th>Student's Reason</th>
+    <th>Student's Reason:</th>
     <td>{STUDENT_REASON}</td>
+  </tr>
+  <tr>
+    <th>Selected Bed:</th>
+    <td>{BED}</td>
   </tr>
   <tr>
     <th>Approve or Deny
