@@ -438,6 +438,57 @@ class HousingApplication {
 
     }
 
+    public static function getUnassignedFreshmenApplications($term, $gender)
+    {
+        PHPWS_Core::initModClass('hms', 'Term.php');
+
+        $db = new PHPWS_DB('hms_new_application');
+        $db->addWhere('student_type', 'F');
+        $db->addWhere('term', $term);
+        $db->addWhere('gender', $gender);
+
+        // Add join for extra application fields (sub-class fields)
+        switch(Term::getTermSem($term)){
+            case TERM_SUMMER1:
+            case TERM_SUMMER2:
+                PHPWS_Core::initModClass('hms', 'SummerApplication.php');
+                $db->addJoin('LEFT OUTER', 'hms_new_application', 'hms_summer_application', 'id', 'id');
+                $db->addColumn('hms_new_application.*');
+                //TODO addColumns for joined table
+                $result = $db->getObjects('SummerApplication');
+                break;
+            case TERM_FALL:
+                PHPWS_Core::initModClass('hms', 'FallApplication.php');
+                $db->addJoin('LEFT OUTER', 'hms_new_application', 'hms_fall_application', 'id', 'id');
+                // Add columns for joined table
+                $db->addColumn('hms_new_application.*');
+                $db->addColumn('hms_fall_application.lifestyle_option');
+                $db->addColumn('hms_fall_application.preferred_bedtime');
+                $db->addColumn('hms_fall_application.room_condition');
+                $result = $db->getObjects('FallApplication');
+                break;
+            case TERM_SPRING:
+                PHPWS_Core::initModClass('hms', 'SpringApplication.php');
+                $db->addJoin('LEFT OUTER', 'hms_new_application', 'hms_spring_application', 'id', 'id');
+                $db->addColumn('hms_new_application.*');
+                //TODO addColumns for joined table
+                $result = $db->getObjects('SpringApplication');
+                break;
+            default:
+                PHPWS_Core::initModClass('hms', 'exception/InvalidTermException.php');
+                throw new InvalidTermException($term);
+        }
+
+        // Add join for 'unassigned'
+
+        if(PHPWS_Error::logIfError($result)){
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException($result->toString());
+        }
+
+        return $result;
+    }
+
     public static function getAvailableApplicationTermsForStudent(Student $student){
         $availableTerms = array();
 
