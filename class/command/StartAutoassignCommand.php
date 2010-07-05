@@ -1,6 +1,6 @@
 <?php
 
-class StartAutoassignCommand {
+class StartAutoassignCommand extends Command {
 
     public function getRequestVars(){
         return array('action'=>'StartAutoassign');
@@ -10,7 +10,20 @@ class StartAutoassignCommand {
     {
         PHPWS_Core::initModClass('hms', 'Autoassigner.php');
 
-        $assigner = new Autoassigner(Term::getSelectedTerm());
+        // TODO: PULSE!
+
+        echo "<html><head><title>AUTOASSIGNER TEST MODE</title></head><body><pre>\n\n";
+        echo "AUTOASSIGNER 1970s MODE\n\n";
+
+        try {
+            $assigner = new Autoassigner(Term::getSelectedTerm());
+            $assigner->autoassign();
+        } catch(Exception $e) {
+            echo "EXCEPTION CAUGHT: " . $e->getMessage();
+        }
+
+        echo "</pre></body></html>\n\n";
+        exit(0);
     }
 }
 

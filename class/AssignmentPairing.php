@@ -5,11 +5,44 @@ class AssignmentPairing {
     private $student1;
     private $student2;
 
+    private $gender;
     private $lifestyle;
+
+    private $bed1;
+    private $bed2;
 
     public function __construct(Student $student1, Student $student2, $lifestyle)
     {
+        $this->student1 = $student1;
+        $this->student2 = $student2;
+        $this->lifestyle = $lifestyle;
+        $this->gender = $student1->getGender();
+    }
 
+    public function getGender()
+    {
+        return $this->gender;
+    }
+
+    public function getLifestyle()
+    {
+        return $this->lifestyle;
+    }
+
+    public function get($username)
+    {
+        if($this->student1->getUsername() == $username) {
+            return $this->student1;
+        } else if($this->student2->getUsername() == $username) {
+            return $this->student2;
+        } else {
+            return null;
+        }
+    }
+
+    public function __toString()
+    {
+        return $this->student1->getUsername() . '+' . $this->student2->getUsername();
     }
 }
 
