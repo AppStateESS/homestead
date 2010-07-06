@@ -13,6 +13,10 @@ abstract class AssignmentStrategy {
 
     abstract function doAssignment($pair);
 
+    public function init(&$pairs)
+    {
+    }
+
     protected function allowed(AssignmentPairing $pair, HMS_Room $room)
     {
         // If the genders don't match...

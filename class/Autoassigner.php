@@ -60,6 +60,11 @@ class Autoassigner {
         // Randomize the array of pairs
         shuffle($this->pairs);
 
+        # Some assignment strategies require initialization.
+        foreach($this->assignmentStrategies as $strategy) {
+            $strategy->init($this->pairs);
+        }
+
         # Run each assignment strategy
         foreach($this->pairs as $pair) {
             $success = false;
