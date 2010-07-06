@@ -76,12 +76,6 @@ class Autoassigner {
             // TODO: handle success or failure
         }
     }
-
-    public function mix()
-    {
-        // TODO: Take the male pairs and female pairs and randomly mix them
-        // return the mixed array from $this member variables
-    }
 }
 
 ?>

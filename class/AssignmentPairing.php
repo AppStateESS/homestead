@@ -44,6 +44,17 @@ class AssignmentPairing {
     {
         return $this->student1->getUsername() . '+' . $this->student2->getUsername();
     }
+
+    public function getStudent1()
+    {
+        return $this->student1;
+    }
+
+    public function getStudent2()
+    {
+        return $this->student2;
+    }
+    }
 }
 
 ?>

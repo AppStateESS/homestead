@@ -1,5 +1,7 @@
 <?php
 
+PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
+
 abstract class AssignmentStrategy {
 
     protected $term;
@@ -33,8 +35,35 @@ abstract class AssignmentStrategy {
             throw new AssignmentException('Cannot assign ' . $pair->__tostring() . ' to ' . $room->__tostring());
         }
 
-        echo get_class($this) . " is pretend assigning " . $pair->__tostring() . " to room " . $room->__tostring() . "\n";
-        // TODO: How do you assign again?
+        echo get_class($this) . " is assigning " . $pair->__tostring() . " to room " . $room->__tostring() . "\n";
+
+
+        // Actually assign the given pairing to the given room
+        try{
+            $application = HousingApplication::getApplicationByUser($pair->getStudent1->getUsername(), $this->term);
+
+            if(is_null($application)){
+                $student1MealPlan = BANNER_MEAL_STD;
+            }else{
+                $student1MealPlan = $application->getMealPlan();
+            }
+            HMS_Assignment::assignStudent($pair->getStudent1(), $this->term, $room->id, NULL, $student1MealPlan, 'Auto-assigned');
+        }catch(Exception $e){
+            echo "Could not assign '{$pair->getStudent1()->getUsername()}': {$e->getMessage()}";
+        }
+
+        try{
+            $application = HousingApplication::getApplicationByUser($pair->getStudent2->getUsername(), $this->term);
+
+            if(is_null($application)){
+                $student2MealPlan = BANNER_MEAL_STD;
+            }else{
+                $student2MealPlan = $application->getMealPlan();
+            }
+            HMS_Assignment::assignStudent($pair->getStudent2(), $this->term, $room->id, NULL, $student2MealPlan, 'Auto-assigned');
+        }catch(Exception $e){
+            echo "Could not assign '{$pair->getStudent2()->getUsername()}': {$e->getMessage()}";
+        }
     }
 
     // TODO: this, better?
