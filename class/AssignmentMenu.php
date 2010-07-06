@@ -26,7 +26,7 @@ class AssignmentMenu extends CommandMenu {
                 $this->addCommand('Assign students by floor', $floorAssignCmd);
             }
             if(Current_User::allow('hms', 'autoassign')) {
-                $autoAssignCmd = CommandFactory::getCommand('StartAutoassign');
+                $autoAssignCmd = CommandFactory::getCommand('ScheduleAutoassign');
                 $this->addCommand('Start Autoassigner', $autoAssignCmd);
             }
         }
