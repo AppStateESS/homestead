@@ -40,7 +40,7 @@ abstract class AssignmentStrategy {
 
         // Actually assign the given pairing to the given room
         try{
-            $application = HousingApplication::getApplicationByUser($pair->getStudent1->getUsername(), $this->term);
+            $application = HousingApplication::getApplicationByUser($pair->getStudent1()->getUsername(), $this->term);
 
             if(is_null($application)){
                 $student1MealPlan = BANNER_MEAL_STD;
@@ -53,7 +53,7 @@ abstract class AssignmentStrategy {
         }
 
         try{
-            $application = HousingApplication::getApplicationByUser($pair->getStudent2->getUsername(), $this->term);
+            $application = HousingApplication::getApplicationByUser($pair->getStudent2()->getUsername(), $this->term);
 
             if(is_null($application)){
                 $student2MealPlan = BANNER_MEAL_STD;
