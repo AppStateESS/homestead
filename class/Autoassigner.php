@@ -60,26 +60,15 @@ class Autoassigner {
         // Randomize the array of pairs
         shuffle($this->pairs);
 
-        # Some assignment strategies require initialization.
-        foreach($this->assignmentStrategies as $strategy) {
-            $strategy->init($this->pairs);
-        }
-
         # Run each assignment strategy
-        foreach($this->pairs as $pair) {
-            $success = false;
-            foreach($this->assignmentStrategies as $strategy) {
-                if($strategy->doAssignment($pair)) {
-                    $success = true;
-                    break;
-                }
+        foreach($this->assignmentStrategies as $strategy) {
+            foreach($this->pairs as $pair) {
+                if($pair->isAssigned()) continue;
+                $strategy->doAssignment($pair);
             }
-
-            if(!$success) {
-                echo "Could not assign " . $pair->__tostring() . " to a room.\n";
-            }
-            // TODO: handle success or failure
         }
+
+        // TODO: Print report of assigned vs unassigned.
     }
 }
 

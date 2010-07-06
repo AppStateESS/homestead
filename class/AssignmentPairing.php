@@ -54,6 +54,11 @@ class AssignmentPairing {
     {
         return $this->student2;
     }
+
+    public function isAssigned()
+    {
+        return isset($bed1) || isset($bed2);
+    }
 }
 
 ?>
