@@ -54,7 +54,6 @@ class AssignmentPairing {
     {
         return $this->student2;
     }
-    }
 }
 
 ?>
