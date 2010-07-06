@@ -425,6 +425,14 @@ CREATE TABLE hms_eligibility_waiver (
    created_by           CHARACTER VARYING(32)   NOT NULL,
    PRIMARY KEY (id)
 );
+CREATE TABLE hms_special_assignment (
+    id INTEGER NOT NULL,
+    term INTEGER NOT NULL,
+    username VARCHAR(16) NOT NULL,
+    hall VARCHAR(6) NOT NULL,
+    floor INTEGER,
+    room INTEGER
+);
 
 
 INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info) VALUES (3, 'Language & Culture Community', 'LCC', 50, 0, 'F', '');
