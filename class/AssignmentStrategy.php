@@ -13,10 +13,6 @@ abstract class AssignmentStrategy {
 
     abstract function doAssignment($pair);
 
-    public function init(&$pairs)
-    {
-    }
-
     protected function allowed(AssignmentPairing $pair, HMS_Room $room)
     {
         // If the genders don't match...
@@ -71,78 +67,96 @@ abstract class AssignmentStrategy {
     }
 
     // TODO: this, better?
-    protected function roomSearch($gender = FALSE, $lifestyle = FALSE, $building = FALSE, $floor = FALSE, $room = FALSE)
+    protected function roomSearch($gender = FALSE, $lifestyle = FALSE, $pbuilding = FALSE, $pfloor = FALSE, $proom = FALSE)
     {
-        $db = new PHPWS_DB('hms_room');
-        $db->addColumn('hms_room.*');
-        $db->addColumn('hms_residence_hall.banner_building_code');
+        PHPWS_Core::initCoreClass('DB2.php');
 
-        // Join other tables so we can do the other 'assignable' checks
-        $db->addJoin('LEFT', 'hms_room', 'hms_bed', 'id', 'room_id');
-        $db->addJoin('LEFT', 'hms_room', 'hms_floor', 'floor_id', 'id');
-        $db->addJoin('LEFT', 'hms_floor', 'hms_residence_hall', 'residence_hall_id', 'id');
+        $sub = new DB2;
 
-        // Term
-        $db->addWhere('hms_room.term', $this->term);
+        $ass   = $sub->addTable('hms_assignment');
+        $bed   = $sub->addTable('hms_bed');
+        $room  = $sub->addTable('hms_room');
+        $floor = $sub->addTable('hms_floor');
+        $hall  = $sub->addTable('hms_residence_hall');
+        $ass->showAllFields(false);
+        $bed->showAllFields(false);
+        $room->showAllFields(false);
+        $floor->showAllFields(false);
+        $hall->showAllFields(false);
 
-        // Only get rooms with free beds
-        $db->addJoin('LEFT OUTER', 'hms_bed', 'hms_assignment', 'id', 'bed_id');
-        $db->addWhere('hms_assignment.asu_username', NULL);
+        $bbc = $hall->getField('banner_building_code');
+        $rid = $room->getField('id');
+        $room->addField($rid);
+        $hall->addField($bbc);
+
+        $sub->join($hall->getField('id'), $floor->getField('residence_hall_id'));
+        $sub->join($floor->getField('id'), $room->getField('floor_id'));
+        $sub->join($room->getField('id'), $bed->getField('room_id'));
+        $sub->join($bed->getField('id'), $ass->getField('bed_id'), 'left outer');
 
         // Make sure everything is online
-        $db->addWhere('hms_room.is_online', 1);
-        $db->addWhere('hms_floor.is_online', 1);
-        $db->addWhere('hms_residence_hall.is_online', 1);
+        $hall->addWhere('is_online', 1);
+        $floor->addWhere('is_online', 1);
+        $room->addWhere('is_online', 1);
 
         // Make sure nothing is reserved
-        $db->addWhere('hms_room.is_reserved', 0);
-        $db->addWhere('hms_room.is_medical', 0);
+        $room->addWhere('is_reserved', 0);
+        $room->addWhere('is_medical', 0);
 
         // Don't get RA beds
-        $db->addWhere('hms_room.ra_room', 0);
+        $room->addWhere('ra_room', 0);
 
         // Don't get lobbies
-        $db->addWhere('hms_room.is_overflow', 0);
+        $room->addWhere('is_overflow', 0);
 
         // Don't get private rooms
-        $db->addWhere('hms_room.private_room', 0);
+        $room->addWhere('private_room', 0);
 
-        // Don't get rooms on floors reserved for an RLC
-        $db->addWhere('hms_floor.rlc_id', NULL);
+        // Don't get RLC floors
+        $floor->addWhere('rlc_id', NULL, 'is');
 
-        // Random Order
-        $db->addOrder('random()');
+        // Term
+        $room->addWhere('term', $this->term);
 
-        // We only need one
-        $db->setLimit(1);
+        // Count Free Beds
+        $ass->addWhere('asu_username', NULL, 'is');
+        $bid = $bed->getField('id');
+        $sub->addExpression("count($bid)", 'bed_count');
+        $sub->setGroupBy(array($bbc, $rid));
 
         // Limit to selection
         if($gender !== FALSE) {
-            $db->addWhere('gender_type', $gender);
+            $room->addWhere('gender_type', $gender);
         }
         if($lifestyle !== FALSE) {
-            $db->addWhere('hms_residence_hall.gender_type', 2, ($lifestyle == 2 ? '=' : '!='));
+            $hall->addWhere('gender_type', 2, ($lifestyle == 2 ? '=' : '!='));
         }
-        if($building !== FALSE) {
-            $db->addWhere('hms_residence_hall.banner_building_code', $building);
+        if($pbuilding !== FALSE) {
+            $hall->addWhere('banner_building_code', $pbuilding);
         }
-        if($floor !== FALSE) {
-            $db->addWhere('hms_floor.floor_number', $floor);
+        if($pfloor !== FALSE) {
+            $floor->addWhere('floor_number', $pfloor);
         }
-        if($room !== FALSE) {
-            $db->addWhere('room_number', $room);
+        if($proom !== FALSE) {
+            $room->addWhere('room_number', $proom);
         }
+
+        // Select only rooms with two free beds
+        $main = new DB2;
+        $sel = $main->addSubSelect($sub, 'sub');
+        $room = $main->addTable('hms_room');
+        $main->join($sel->getField('id'), $room->getField('id'));
+        $sel->addField('banner_building_code');
+        $sel->addWhere('bed_count', 2);
+
+        // Random order
+        $room->addOrderBy($main->getExpression('random()'));
+
+        // We only need one
+        $main->setLimit(1);
 
         $room = new HMS_Room();
-        $result = $db->loadObject($room);
-
-        if($result !== TRUE) {
-            if($result === FALSE) {
-                return null;
-            }
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
-            throw new DatabaseException($result->getMessage());
-        }
+        PHPWS_Core::plugObject($room, $main->select(DB2_ROW));
 
         return $room;
     }
