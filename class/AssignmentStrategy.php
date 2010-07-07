@@ -52,7 +52,7 @@ abstract class AssignmentStrategy {
             echo "Could not assign '{$pair->getStudent1()->getUsername()}': {get_class($e)}: {$e->getMessage()}<br />\n";
         }
 
-        $pair->bed1 = $room->__toString();
+        $pair->setBed1($room->__toString());
 
         try{
             $application = HousingApplication::getApplicationByUser($pair->getStudent2()->getUsername(), $this->term);
@@ -67,7 +67,7 @@ abstract class AssignmentStrategy {
             echo "Could not assign '{$pair->getStudent2()->getUsername()}': " . get_class($e) . ": {$e->getMessage()}<br />\n";
         }
 
-        $pair->bed2 = $room->__toString();
+        $pair->setBed2($room->__toString());
     }
 
     // TODO: this, better?
