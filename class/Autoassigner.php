@@ -60,13 +60,26 @@ class Autoassigner {
         // Randomize the array of pairs
         shuffle($this->pairs);
 
+        $fp = fopen('/tmp/WTFISGOINGON', 'w');
+
         # Run each assignment strategy
         foreach($this->assignmentStrategies as $strategy) {
+            $paircount = 0;
+            $pairtotal = count($this->pairs);
             foreach($this->pairs as $pair) {
+                $paircount++;
+                if(!isset($pair->count)) {
+                    $pair->count = 0;
+                }
+                $pair->count++;
+                fwrite($fp, "[$paircount/$pairtotal] Strategy is " . get_class($strategy) . ".  " . $pair->__toString() . " seen " . $pair->count . " times.\n");
+                fflush($fp);
                 if($pair->isAssigned()) continue;
                 $strategy->doAssignment($pair);
             }
         }
+
+        fclose($fp);
 
         // TODO: Print report of assigned vs unassigned.
     }
