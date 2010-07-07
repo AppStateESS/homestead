@@ -156,7 +156,10 @@ abstract class AssignmentStrategy {
         $main->setLimit(1);
 
         $room = new HMS_Room();
-        PHPWS_Core::plugObject($room, $main->select(DB2_ROW));
+        $result = $main->select(DB2_ROW);
+        if(is_null($result)) return null;
+
+        PHPWS_Core::plugObject($room, $result);
 
         return $room;
     }
