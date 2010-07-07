@@ -66,6 +66,7 @@ class Autoassigner {
         foreach($this->assignmentStrategies as $strategy) {
             $paircount = 0;
             $pairtotal = count($this->pairs);
+            $assignedcount = 0;
             foreach($this->pairs as $pair) {
                 $paircount++;
                 if(!isset($pair->count)) {
@@ -76,7 +77,7 @@ class Autoassigner {
                 fflush($fp);
                 if($pair->isAssigned()) continue;
                 if($strategy->doAssignment($pair)) {
-                    fwrite($fp, "Assigned\n");
+                    fwrite($fp, "Assigned" . ++$assignedcount . "\n");
                     fflush($fp);
                 }
             }
@@ -88,8 +89,8 @@ class Autoassigner {
 
         foreach($this->pairs as $pair) {
             if($pair->isAssigned()) {
-                echo $pair->student1->getUsername() . " is assigned to " . $pair->bed1 . "\n";
-                echo $pair->student2->getUsername() . " is assigned to " . $pair->bed2 . "\n\n";
+                echo $pair->student1->getUsername() . " is assigned to " . $pair->getBed1() . "\n";
+                echo $pair->student2->getUsername() . " is assigned to " . $pair->getBed2() . "\n\n";
             }
         }
 

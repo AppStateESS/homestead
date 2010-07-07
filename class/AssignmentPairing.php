@@ -55,9 +55,19 @@ class AssignmentPairing {
         return $this->student2;
     }
 
+    public function getBed1()
+    {
+        return $this->bed1;
+    }
+
     public function setBed1($bed1)
     {
         $this->bed1 = $bed1;
+    }
+
+    public function getBed2()
+    {
+        return $this->bed2;
     }
 
     public function setBed2($bed2)
