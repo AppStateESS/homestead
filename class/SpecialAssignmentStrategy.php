@@ -41,6 +41,7 @@ class SpecialAssignmentStrategy extends Assignmentstrategy
                 continue;
             }
             $this->assign($pair, $room);
+            return true;
         }
 
         return false;
