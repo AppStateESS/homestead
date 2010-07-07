@@ -75,13 +75,31 @@ class Autoassigner {
                 fwrite($fp, "[$paircount/$pairtotal] Strategy is " . get_class($strategy) . ".  " . $pair->__toString() . " seen " . $pair->count . " times.\n");
                 fflush($fp);
                 if($pair->isAssigned()) continue;
-                $strategy->doAssignment($pair);
+                if($strategy->doAssignment($pair)) {
+                    fwrite($fp, "Assigned\n");
+                    fflush($fp);
+                }
             }
         }
 
         fclose($fp);
 
-        // TODO: Print report of assigned vs unassigned.
+        shuffle($this->pairs);
+
+        foreach($this->pairs as $pair) {
+            if($pair->isAssigned()) {
+                echo $pair->student1->getUsername() . " is assigned to " . $pair->bed1 . "\n";
+                echo $pair->student2->getUsername() . " is assigned to " . $pair->bed2 . "\n\n";
+            }
+        }
+
+        foreach($this->pairs as $pair) {
+            if(!$pair->isAssigned()) {
+                echo $pair->student1->getUsername() . " did not get assigned.\n";
+                echo $pair->student2->getUsername() . " did not get assigned.\n\n";
+
+            }
+        }
     }
 }
 
