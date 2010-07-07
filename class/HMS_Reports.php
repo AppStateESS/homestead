@@ -1341,6 +1341,7 @@ class HMS_Reports{
 
         $db->addWhere('term', Term::getSelectedTerm());
         $db->addWhere('gender', MALE);
+        $db->addWhere('student_type', TYPE_FRESHMEN);
         $db->addColumn('id', null, 'total', TRUE);
         $result = $db->select('row');
 
@@ -1361,6 +1362,7 @@ class HMS_Reports{
 
         $db->addWhere('term', Term::getSelectedTerm());
         $db->addWhere('gender', MALE);
+        $db->addWhere('student_type', TYPE_FRESHMEN);
         $db->addColumn('id', null, 'total', TRUE);
         $result = $db->select('row');
 
@@ -1381,6 +1383,7 @@ class HMS_Reports{
 
         $db->addWhere('term', Term::getSelectedTerm());
         $db->addWhere('gender', FEMALE);
+        $db->addWhere('student_type', TYPE_FRESHMEN);
         $db->addColumn('id', null, 'total', TRUE);
         $result = $db->select('row');
 
@@ -1401,6 +1404,7 @@ class HMS_Reports{
 
         $db->addWhere('term', Term::getSelectedTerm());
         $db->addWhere('gender', FEMALE);
+        $db->addWhere('student_type', TYPE_FRESHMEN);
         $db->addColumn('id', null, 'total', TRUE);
         $result = $db->select('row');
 
@@ -1411,6 +1415,8 @@ class HMS_Reports{
         }
 
         $tpl['FEMALE_SINGLE_GENDER'] = $result['total'];
+
+        $tpl['TERM'] = Term::getPrintableSelectedTerm();
 
         return PHPWS_Template::process($tpl, 'hms', 'admin/reports/single_vs_coed.tpl');
     }

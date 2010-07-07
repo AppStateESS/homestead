@@ -28,6 +28,8 @@ class HMS_Room extends HMS_Item
     public $is_online              = false;
     public $term;
 
+    public $banner_building_code;
+
 
     /**
      * Listing of beds associated with this room
@@ -776,7 +778,7 @@ class HMS_Room extends HMS_Item
 
     }
 
-    public static function getAllFreeRooms($term, $gender, $randomize = FALSE)
+    public static function getAllFreeRooms($term)
     {
         $db = new PHPWS_DB('hms_room');
 
@@ -795,9 +797,6 @@ class HMS_Room extends HMS_Item
         $db->addJoin('LEFT OUTER', 'hms_bed', 'hms_assignment', 'id', 'bed_id');
         $db->addWhere('hms_assignment.asu_username', NULL);
 
-        // Gender
-        $db->addWhere('gender_type', $gender);
-        
         // Order by gender preference (0=>female, 1=>male, 2=>coed), rooms in a single gender hall will be first
         $db->addOrder('hms_residence_hall.gender_type ASC');
 
@@ -822,8 +821,6 @@ class HMS_Room extends HMS_Item
         // Don't get rooms on floors reserved for an RLC
         $db->addWhere('hms_floor.rlc_id', NULL);
         
-        $db->setOrder('hms_residence_hall.');
-
         $result = $db->select('col');
 
         // In case of an error, log it and return FALSE
@@ -866,6 +863,11 @@ class HMS_Room extends HMS_Item
 
         // Looks like we're good.
         return TRUE;
+    }
+
+    public function __tostring()
+    {
+        return ($this->banner_building_code ? $this->banner_building_code . ' ' : '') . $this->room_number;
     }
 }
 
