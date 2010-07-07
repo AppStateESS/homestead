@@ -10,6 +10,11 @@ class RandomAssignmentStrategy extends Assignmentstrategy
     public function doAssignment($pair)
     {
         $room = $this->roomSearchPlusCoed($pair->getGender());
+
+        if(is_null($room)){
+            return false;
+        }
+
         $this->assign($pair, $room);
         return true;
     }

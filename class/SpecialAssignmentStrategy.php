@@ -22,37 +22,25 @@ class SpecialAssignmentStrategy extends Assignmentstrategy
         $this->specials = $result;
     }
 
-    public function init(&$pairs)
-    {
-        $offset = 0;
-
-        // Find these kids and bubble them to the top to ensure assignment
-        foreach($this->specials as $special) {
-            for($i = $offset; $i < count($pairs); $i++) {
-                $pair = $pairs[$i];
-                if(!is_null($pair->get($special->username))) {
-                    $temporary = $pairs[$offset];
-                    $pairs[$offset] = $pairs[$i];
-                    $pairs[$i] = $temporary;
-                    $offset++;
-                    break;
-                }
-            }
-        }
-    }
-
     public function doAssignment($pair)
     {
+
+        if(is_null($this->specials)){
+            return false;
+        }
+
         foreach($this->specials as $special)
         {
             $student = $pair->get($special->username);
             if(is_null($student)) continue;
-
             $room = $this->roomSearchPlusCoed($student->getGender(), FALSE, $special->hall,
-                (is_null($special->floor) ? FALSE : $special->floor),
-                (is_null($special->room)  ? FALSE : $special->room));
+            (is_null($special->floor) ? FALSE : $special->floor),
+            (is_null($special->room)  ? FALSE : $special->room));
+
+            if(is_null($room)){
+                continue;
+            }
             $this->assign($pair, $room);
-            return true;
         }
 
         return false;

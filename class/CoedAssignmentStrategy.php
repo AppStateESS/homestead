@@ -12,6 +12,11 @@ class CoedAssignmentStrategy extends AssignmentStrategy
         if($pair->getLifestyle() != 2) return false;
 
         $room = $this->roomSearchPlusCoed($pair->getGender(), 2);
+
+        if(is_null($room)){
+            return false;
+        }
+
         $this->assign($pair, $room);
         return true;
     }

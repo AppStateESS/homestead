@@ -12,6 +12,11 @@ class SingleGenderAssignmentStrategy extends Assignmentstrategy
         if($pair->getLifestyle() != 1) return false;
 
         $room = $this->roomSearch($pair->getGender(), 1);
+
+        if(is_null($room)){
+            return false;
+        }
+
         $this->assign($pair, $room);
         return true;
     }
