@@ -110,6 +110,10 @@ abstract class AssignmentStrategy {
             throw new DatabaseException($result->getMessage());
         }
 
+        if(is_null($result)){
+            return null;
+        }
+
         $room = new HMS_Room();
         PHPWS_Core::plugObject($room, $result);
         return $room;
