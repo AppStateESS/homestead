@@ -12,6 +12,7 @@ class RandomAssignmentStrategy extends Assignmentstrategy
         $room = $this->roomSearchPlusCoed($pair->getGender());
 
         if(is_null($room)){
+            echo "Could not find a room for " . $pair->__toString() . "\n";
             return false;
         }
 

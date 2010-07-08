@@ -17,6 +17,7 @@ class HMS_Reports{
                         'unassd_apps'           => 'Unassigned Applicants',
                         'movein_times'          => 'Move-in Times',
                         'unassd_beds'           => 'Currently Unassigned Beds',
+                        'unassd_beds_etc'       => 'All Unassigned Beds (includes offline, reserved, etc)',
                         'no_ban_data'           => 'Students Without Banner Data',
                         'vacancy_report'        => 'Hall Occupancy Report',
                         'roster_report'         => 'Floor Roster Report',
@@ -73,6 +74,8 @@ class HMS_Reports{
                 return HMS_Reports::run_move_in_times_report();
             case 'unassd_beds':
                 return HMS_Reports::run_unassigned_beds_report();
+            case 'unassd_beds_etc':
+                return HMS_Reports::run_unassigned_beds_report_plus_offline_etc();
             case 'no_ban_data':
                 return HMS_Reports::run_no_banner_data_report();
             case 'vacancy_report':
@@ -737,6 +740,9 @@ class HMS_Reports{
             return 'Template error....';
         }
 
+        PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
+        $rlcs = HMS_Learning_Community::getRLCList();
+
         $vacant_beds = 0; // accumulator for counting empty beds
 
         foreach($halls as $hall){
@@ -779,6 +785,11 @@ class HMS_Reports{
                     $tpl->setData(array('FLOOR_NUM' => $floor->floor_number . ' - No vacancy'));
                     $tpl->parseCurrentBlock();
                     continue;
+                }
+
+                $floor_content = $floor->floor_number;
+                if($floor->rlc_id != null) {
+                    $floor_content .= ' (' . $rlcs[$floor->rlc_id] . ')';
                 }
 
                 $rooms = $floor->get_rooms();
@@ -848,7 +859,146 @@ class HMS_Reports{
                 }
 
                 $tpl->setCurrentBlock('floor_repeat');
-                $tpl->setData(array('FLOOR_NUM' => $floor->floor_number));
+                $tpl->setData(array('FLOOR_NUM' => $floor_content));
+                $tpl->parseCurrentblock();
+            }
+
+            $tpl->setCurrentBlock('hall_repeat');
+            $tpl->setData(array('HALL_NAME' => $hall->hall_name . ' - ' . $vacant_beds_by_hall . ' vacant beds'));
+            $tpl->parseCurrentBlock();
+        }
+
+        $tpl->setData(array('BED_COUNT' => $vacant_beds));
+
+        return $tpl->get();
+    }
+
+    public static function run_unassigned_beds_report_plus_offline_etc()
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
+
+        $halls = HMS_Residence_Hall::get_halls(Term::getSelectedTerm());
+
+        $tpl = new PHPWS_Template('hms');
+        if(!$tpl->setFile('admin/reports/unassigned_beds.tpl')){
+            return 'Template error....';
+        }
+
+        PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
+        $rlcs = HMS_Learning_Community::getRLCList();
+
+        $vacant_beds = 0; // accumulator for counting empty beds
+
+        foreach($halls as $hall){
+            // skip offline halls
+            if($hall->is_online == 0){
+                $tpl->setCurrentBlock('hall_repeat');
+                $tpl->setData(array('HALL_NAME' => $hall->hall_name . ' - Offline'));
+                $tpl->parseCurrentBlock();
+                continue;
+            }
+
+            // Skip full halls
+            if(!$hall->has_vacancy()){
+                $tpl->setCurrentBlock('hall_repeat');
+                $tpl->setData(array('HALL_NAME' => $hall->hall_name . ' - No vacancy'));
+                $tpl->parseCurrentBlock();
+                continue;
+            }
+
+            // skip Mountaineer Apts
+            if($hall->hall_name == 'Mountaineer Apartments'){
+                continue;
+            }
+
+            $vacant_beds_by_hall = 0;
+
+            $floors = $hall->get_floors();
+
+            foreach($floors as $floor){
+                // Skip offline floors
+                if($floor->is_online == 0){
+                    $tpl->setCurrentBlock('floor_repeat');
+                    $tpl->setData(array('FLOOR_NUM' => $floor->floor_number . ' - Offline'));
+                    $tpl->parseCurrentBlock();
+                    continue;
+                }
+
+                if(!$floor->has_vacancy()){
+                    $tpl->setCurrentBlock('floor_repeat');
+                    $tpl->setData(array('FLOOR_NUM' => $floor->floor_number . ' - No vacancy'));
+                    $tpl->parseCurrentBlock();
+                    continue;
+                }
+
+                $floor_content = $floor->floor_number;
+                if($floor->rlc_id != null) {
+                    $floor_content .= ' (' . $rlcs[$floor->rlc_id] . ')';
+                }
+
+                $rooms = $floor->get_rooms();
+
+                foreach($rooms as $room){
+                    if(!$room->has_vacancy()){
+                        //$tpl->setCurrentBlock('room_repeat');
+                        //$tpl->setData(array('ROOM_NUM' => $room->room_number . ' - No vacancy'));
+                        //$tpl->parseCurrentBlock();
+                        continue;
+                    }
+
+                    $beds = $room->get_beds();
+
+                    foreach($beds as $bed){
+                        if(!$bed->has_vacancy()){
+                            continue;
+                        }
+
+                        $content = $bed->bed_letter;
+                        if($bed->ra_bed == 1){
+                            $content .= ' (RA)';
+                        }
+
+                        //$content .= ' ' . $bed->get_assigned_to_link(TRUE);
+                        $content .= ' ' . '&lt;unassigned&gt;';
+
+                        $tpl->setCurrentBlock('bed_repeat');
+                        $tpl->setData(array('BED_NUM' => $content));
+                        $tpl->parseCurrentBlock();
+                        $vacant_beds++;
+                        $vacant_beds_by_hall++;
+                    }
+
+                    $content = $room->room_number;
+                    if($room->ra_room == 1){
+                        $content .= ' (RA)';
+                    }
+                    if($room->private_room == 1){
+                        $content .= ' (private)';
+                    }
+                    if($room->is_overflow == 1){
+                        $content .= ' (overflow)';
+                    }
+                    if($room->is_medical == 1){
+                        $content .= ' (medical)';
+                    }
+                    if($room->is_reserved == 1){
+                        $content .= ' (reserved)';
+                    }
+                    if($room->gender_type == MALE){
+                        $content .= ' (male)';
+                    }else if($room->gender_type == FEMALE){
+                        $content .= ' (female)';
+                    }else{
+                        $content .= ' (unknown gender)';
+                    }
+
+                    $tpl->setCurrentBlock('room_repeat');
+                    $tpl->setData(array('ROOM_NUM' => $content));
+                    $tpl->parseCurrentBlock();
+                }
+
+                $tpl->setCurrentBlock('floor_repeat');
+                $tpl->setData(array('FLOOR_NUM' => $floor_content));
                 $tpl->parseCurrentblock();
             }
 

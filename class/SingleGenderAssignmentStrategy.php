@@ -14,6 +14,7 @@ class SingleGenderAssignmentStrategy extends Assignmentstrategy
         $room = $this->roomSearch($pair->getGender(), 1);
 
         if(is_null($room)){
+            echo "Could not find a room for ".$pair->__toString()."\n";
             return false;
         }
 
