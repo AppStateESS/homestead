@@ -49,7 +49,11 @@ class RequestedRoommatePairingStrategy extends RoommatePairingStrategy{
                 continue;
             }
 
-            $pairs[] = $this->createPairing($requestor, $requestee);
+            $newPair = $this->createPairing($requestor, $requestee);
+
+            if(!is_null($newPair)){
+                $pairs[] = $newPair;
+            }
 
             unset($applications[$pair['requestor']]);
             unset($applications[$pair['requestee']]);

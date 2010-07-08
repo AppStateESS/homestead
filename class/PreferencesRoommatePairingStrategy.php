@@ -29,7 +29,11 @@ class PreferencesRoommatePairingStrategy extends RoommatePairingStrategy {
             //    $this->formatApp($applications[$a]) . "\n" .
             //    $this->formatApp($applications[$b]) . "\n\n";
 
-            $pairs[] = $this->createPairing($applications[$a], $applications[$b]);
+            $newPair = $this->createPairing($applications[$a], $applications[$b]);
+
+            if(!is_null($newPair)){
+                $pairs[] = $newPair;
+            }
 
             unset($applications[$a]);
             unset($applications[$b]);
@@ -59,12 +63,12 @@ class PreferencesRoommatePairingStrategy extends RoommatePairingStrategy {
     private function formatApp(HousingApplication $app)
     {
         return
-            $app->username . "\t" .
-            (strlen($app->username) < 8 ? "\t" : '') .
-            $app->gender . "\t" .
-            $app->lifestyle_option . "\t" .
-            $app->room_condition . "\t" .
-            $app->preferred_bedtime;
+        $app->username . "\t" .
+        (strlen($app->username) < 8 ? "\t" : '') .
+        $app->gender . "\t" .
+        $app->lifestyle_option . "\t" .
+        $app->room_condition . "\t" .
+        $app->preferred_bedtime;
     }
 }
 
@@ -115,16 +119,16 @@ class PreferenceValues
     public static function compatible($a, $b)
     {
         return $a instanceof HousingApplication && $b instanceof HousingApplication &&
-            $a->gender == $b->gender;
+        $a->gender == $b->gender;
     }
 
     public function accept(HousingApplication $app)
     {
         return
-            $app->gender == $this->gender &&
-            $app->lifestyle_option == $this->lifestyle &&
-            $app->room_condition == $this->condition &&
-            $app->preferred_bedtime == $this->bedtime;
+        $app->gender == $this->gender &&
+        $app->lifestyle_option == $this->lifestyle &&
+        $app->room_condition == $this->condition &&
+        $app->preferred_bedtime == $this->bedtime;
     }
 
     public function getGender()

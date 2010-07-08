@@ -27,11 +27,22 @@ abstract class RoommatePairingStrategy {
             $option = LO_SINGLE_GENDER;
         }
 
+        try{
+            $studentA = StudentFactory::getStudentByUsername($a->username, $this->term);
+        }catch(StudentNotFoundException $e){
+            echo('StudentNotFoundException: ' . $a->username . ' Could not pair ' . $a->username . ', ' . $b->username . "\n");
+            return null;
+        }
+
+        try{
+            $studentB = Studentfactory::getStudentByUsername($b->username, $this->term);
+        }catch(StudentNotFoundException $e){
+            echo 'StudentNotFoundException: ' . $b->username . ' Could not pair ' . $a->username . ', ' . $b->username . "\n";
+            return null;
+        }
+
         // Looks like there is no problem here.
-        return new AssignmentPairing(
-            StudentFactory::getStudentByUsername($a->username, $this->term),
-            Studentfactory::getStudentByUsername($b->username, $this->term),
-            $option);
+        return new AssignmentPairing($studentA, $studentB, $option);
     }
 }
 
