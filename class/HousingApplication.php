@@ -252,7 +252,7 @@ class HousingApplication {
         $tpl['STUDENT_TYPE']    = HMS_Util::formatType($this->getStudentType());
         $tpl['APP_TERM']        = Term::toString($this->getApplicationTerm(), TRUE);
         $tpl['MEAL']            = HMS_Util::formatMealOption($this->getMealPlan());
-        $tpl['ROOMMATE']        = HMS_Roommate::get_confirmed_roommate($this->getUsername(), $this->getTerm());
+        $tpl['ROOMMATE']        = HMS_Roommate::get_confirmed_roommate($this->getUsername(), $this->getTerm())->getFulLName();
         $assignCmd = CommandFactory::getCommand('ShowAssignStudent');
         $assignCmd->setUsername($this->getUsername());
 
@@ -270,7 +270,7 @@ class HousingApplication {
         $tpl['STUDENT_TYPE']    = HMS_Util::formatType($this->getStudentType());
         $tpl['APP_TERM']        = Term::toString($this->getApplicationTerm(), TRUE);
         $tpl['MEAL']            = HMS_Util::formatMealOption($this->getMealPlan());
-        $tpl['ROOMMATE']        = HMS_Roommate::get_confirmed_roommate($this->getUsername(), $this->getTerm());
+        $tpl['ROOMMATE']        = HMS_Roommate::get_confirmed_roommate($this->getUsername(), $this->getTerm())->getFulLName();
 
         return $tpl;
     }
@@ -445,6 +445,7 @@ class HousingApplication {
         $db = new PHPWS_DB('hms_new_application');
         $db->addWhere('student_type', 'F');
         $db->addWhere('term', $term);
+        $db->addWhere('withdrawn', 0);
 //        $db->addWhere('gender', $gender);
 
         // Add join for extra application fields (sub-class fields)
@@ -485,9 +486,9 @@ class HousingApplication {
         }
 
         // The following is a hack to overcome shortcomings in the Database class.  What should happen
-        // is a left outer join on (SELECT id, asu_username FROM hms_assignment WHERE term=201040) 
+        // is a left outer join on (SELECT id, asu_username FROM hms_assignment WHERE term=201040)
         // where id is null.
-        
+
         $db = new PHPWS_DB('hms_assignment');
         $db->addWhere('term', $term);
         $db->addColumn('asu_username');
