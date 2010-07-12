@@ -29,6 +29,7 @@ class WithdrawnSearchCommand extends Command {
                 // Get the application and mark it withdrawn
                 $app = HousingApplication::getApplicationByUser($user, $term);
                 $app->setWithdrawn(1);
+                $app->setStudentType('W');
                 $app->save();
             }
         }
