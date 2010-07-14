@@ -14,7 +14,7 @@ class PreferencesRoommatePairingStrategy extends RoommatePairingStrategy {
     {
         $keys = $this->sort($applications);
 
-        while(count($pairs) > 0) {
+        while(count($applications) > 1) {
             $a = array_shift($keys);
             $b = array_shift($keys);
 
