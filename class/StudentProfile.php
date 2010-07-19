@@ -16,7 +16,7 @@ class StudentProfile {
      * $roommates is the focus of getProfileView(). It's structure is helpful in
      * StudentProfileView.  It also makes it a little easier to recognize which roommmates
      * are requested ones so they can be emphasized in the template (admin/fancy-student-info.tpl)
-     * Note that a student can only have a single pending/confirmed roommate request but multiple 
+     * Note that a student can only have a single pending/confirmed roommate request but multiple
      * assigned roommates!
      *
      */
@@ -28,7 +28,7 @@ class StudentProfile {
         PHPWS_Core::initModClass('hms', 'HousingApplication.php');
         PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
 
-        $studentUsername = $this->student->getUsername();        
+        $studentUsername = $this->student->getUsername();
         $assignment = HMS_Assignment::getAssignment($studentUsername, $this->term);
 
         $pendingRoommate = HMS_Roommate::get_pending_roommate($studentUsername, $this->term);
@@ -44,8 +44,8 @@ class StudentProfile {
         if(!is_null($assignment)){
             foreach($assignedRoommates as $roomie){
                 // make sure $roomie isn't the student being profiled or the requested roomies
-                $roomieUsername = $roomie->getUsername();
-                if($roomie != FALSE && $roomieUsername != $studentUsername){
+                if($roomie != FALSE && $roomie->getUsername() != $studentUsername){
+                    $roomieUsername = $roomie->getUsername();
                     if(is_null($confirmedRoommate) || $roomieUsername != $confirmedRoommate->getUsername()){
                         if(is_null($pendingRoommate) || $roomieUsername != $pendingRoommate->getUsername()){
                             // Get student object and room link
@@ -77,7 +77,7 @@ class StudentProfile {
                 else{
                     // if profile student's room is full
                     if(!$assignment->get_parent()->get_parent()->has_vacancy()){
-                        $this->setRoommateVar($confirmedRoommate, "confirmed", "no_bed_available");                        
+                        $this->setRoommateVar($confirmedRoommate, "confirmed", "no_bed_available");
                     }
                     else{
                         $this->setRoommateVar($confirmedRoommate, "confirmed");
@@ -105,7 +105,7 @@ class StudentProfile {
                 else{
                     // if profile student's room is full
                     if(!$assignment->get_parent()->get_parent()->has_vacancy()){
-                        $this->setRoommateVar($pendingRoommate, "pending", "no_bed_available");                        
+                        $this->setRoommateVar($pendingRoommate, "pending", "no_bed_available");
                     }
                     else{
                         $this->setRoommateVar($pendingRoommate, "pending");
@@ -123,11 +123,11 @@ class StudentProfile {
         return new StudentProfileView($this->student, $applications, $assignment, $this->roommates);
     }
 
-    
+
     /**
      * setRoommateVar will set the variable in $roommates properly
      * It can handle requested roommates that are confirmed/pending,
-     * assigned to separate rooms or assigned to a room that has no more 
+     * assigned to separate rooms or assigned to a room that has no more
      * beds left.
      */
     private function setRoommateVar($roomie, $status, $status_extra=null)
@@ -164,7 +164,7 @@ class StudentProfile {
             }
         }
     }
-    
+
     /**
      * Fetch a roommate's bedroom label and create a link to that room
      */
