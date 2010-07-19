@@ -23,6 +23,12 @@ class ShowStudentMenuCommand extends Command {
 
         $applicationTerm = $student->getApplicationTerm();
 
+        // In case this is a new freshmen, they'll likely have no student type in the "current" term.
+        // So, instead, we need to lookup the student in their application term.
+        if($applicationTerm > $currentTerm){
+            $student = StudentFactory::getStudentByUsername($username, $applicationTerm);
+        }
+
         $studentType 	= $student->getType();
         $studentClass	= $student->getClass();
         $dob 			= $student->getDob();
