@@ -3,7 +3,7 @@
 PHPWS_Core::initModClass('hms', 'CommandMenu.php');
 
 class AssignmentMenu extends CommandMenu {
-	
+
 	public function __construct()
 	{
 		parent::__construct();
@@ -29,18 +29,27 @@ class AssignmentMenu extends CommandMenu {
                 $autoAssignCmd = CommandFactory::getCommand('ScheduleAutoassign');
                 $this->addCommand('Start Autoassigner', $autoAssignCmd);
             }
+            if(Current_User::allow('hms', 'withdrawn_search')){
+                $withdrawnSearchCmd = CommandFactory::getCommand('JSConfirm');
+                $withdrawnSearchCmd->setLink('Withdrawn search');
+                $withdrawnSearchCmd->setTitle('Withdrawn search');
+                $withdrawnSearchCmd->setQuestion('Start search for withdrawn students for the selected term?');
+
+                $withdrawnSearchCmd->setOnConfirmCommand(CommandFactory::getCommand('WithdrawnSearch'));
+                $this->addCommand('Withdrawn search', $withdrawnSearchCmd);
+            }
         }
 	}
-	
+
 	public function show()
 	{
         if(empty($this->commands))
             return "";
 
 		$tpl = array();
-		
+
 		$tpl['MENU'] = parent::show();
-		
+
 		return PHPWS_Template::process($tpl, 'hms', 'admin/menus/AssignmentMenu.tpl');
 	}
 }
