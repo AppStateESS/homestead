@@ -13,22 +13,31 @@ class AssignmentMenu extends CommandMenu {
                 $this->addCommandByName('Unassign student', 'ShowUnassignStudent');
                 $this->addCommandByName('Set move-in times', 'ShowMoveinTimesView');
             }
+
             if(Current_User::allow('hms', 'run_hall_overview')){
                 $hallOverviewCmd = CommandFactory::getCommand('SelectResidenceHall');
                 $hallOverviewCmd->setTitle('Hall Overview');
                 $hallOverviewCmd->setOnSelectCmd(CommandFactory::getCommand('HallOverview'));
                 $this->addCommand('Hall Overview', $hallOverviewCmd);
             }
+
             if(Current_User::allow('hms', 'assign_by_floor')){
                 $floorAssignCmd = CommandFactory::getCommand('SelectFloor');
                 $floorAssignCmd->setOnSelectCmd(CommandFactory::getCommand('ShowFloorAssignmentView'));
                 $floorAssignCmd->setTitle('Assign Students to Floor');
                 $this->addCommand('Assign students by floor', $floorAssignCmd);
             }
+
             if(Current_User::allow('hms', 'autoassign')) {
-                $autoAssignCmd = CommandFactory::getCommand('ScheduleAutoassign');
+                $autoAssignCmd = CommandFactory::getCommand('JSConfirm');
+                $autoAssignCmd->setLink('Auto-assign');
+                $autoAssignCmd->setTitle('Auto-assign');
+                $autoAssignCmd->setQuestion('Start auto-assign process for the selected term?');
+
+                $autoAssignCmd->setOnConfirmCommand(CommandFactory::getCommand('ScheduleAutoassign'));
                 $this->addCommand('Start Autoassigner', $autoAssignCmd);
             }
+
             if(Current_User::allow('hms', 'withdrawn_search')){
                 $withdrawnSearchCmd = CommandFactory::getCommand('JSConfirm');
                 $withdrawnSearchCmd->setLink('Withdrawn search');
