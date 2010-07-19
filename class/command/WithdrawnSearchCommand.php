@@ -15,6 +15,7 @@ class WithdrawnSearchCommand extends Command {
         $term = Term::getSelectedTerm();
 
         $search = new WithdrawnSearch($term);
+        $search->doSearch();
 
         $context->setContent($search->getHTMLView());
     }

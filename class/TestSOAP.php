@@ -64,6 +64,11 @@ class TestSOAP extends SOAP{
             $student->projected_class   = 'FR';
         }
 
+//        $random = mt_rand(0,100);
+//        if($random >= 85){
+//            $student->student_type = 'W';
+//        }
+
         $student->credhrs_completed     = 0;
         $student->credhrs_for_term      = 15;
         $student->on_campus             = 'false';
