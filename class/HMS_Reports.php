@@ -1184,7 +1184,7 @@ class HMS_Reports{
                 break;
             case TERM_SPRING:
                 $pager = new DBPager('hms_new_application', 'SpringApplication');
-                $pager->db->addJoin('LEFT OUTER', 'hms_new_application', 'hms_fall_application', 'id', 'id');
+                $pager->db->addJoin('LEFT OUTER', 'hms_new_application', 'hms_spring_application', 'id', 'id');
                 $pager->joinResult('id', 'hms_spring_application', 'id', 'lifestyle_option');
                 $pager->joinResult('id', 'hms_spring_application', 'id', 'preferred_bedtime');
                 $pager->joinResult('id', 'hms_spring_application', 'id', 'room_condition');
