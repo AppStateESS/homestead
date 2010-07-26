@@ -597,6 +597,8 @@ class HMS_Letter
 
         // Accumulate output if any
         $output = '';
+        // Keep track of floors missing move-in times
+        $missingMovein = array();
 
         $term = Term::getSelectedTerm();
 
@@ -651,47 +653,48 @@ class HMS_Letter
 
             if($movein_time_id == NULL){
                 //test($assignment, 1); // Will only happen if there's no move-in time set for the floor,student type
-                $movein_time = "Unknown";
+                // Lets only keep a set of the floors
+                if(!in_array($floor, $missingMovein))
+                    $missingMovein[] = $floor;
             }else{
                 $movein_time_obj = new HMS_Movein_Time($movein_time_id);
                 $movein_time = $movein_time_obj->get_formatted_begin_end();
-            }
 
-            //get the list of roommates
-            $roommates = array();
+                //get the list of roommates
+                $roommates = array();
 
-            $beds = $room->get_beds();
-            foreach($beds as $bed){
-                $roommate = $bed->get_assignee();
+                $beds = $room->get_beds();
+                foreach($beds as $bed){
+                    $roommate = $bed->get_assignee();
+                    if($roommate == false || is_null($roommate) || $roommate->getUsername() == $student->getUsername()){
+                        continue;
+                    }
 
-                if($roommate == false || is_null($roommate || $roommate->getUsername() == $student->getUsername())){
-                    continue;
+                    $roommates[] = $roommate->getFullName() . ' ('. $roommate->getUsername() . '@appstate.edu) - Bedroom ' . $bed->bedroom_label;
                 }
 
-                $roommates[] = $roommate->getFullName() . ' ('. $roommate->getUsername() . '@appstate.edu) - Bedroom ' . $bed->bedroom_label;
-            }
+                if(sizeof($roommates) == 0){
+                    $roommates = null;
+                }
 
-            if(sizeof($roommates) == 0){
-                $roommates = null;
-            }
+                // Send the email
+                HMS_Email::send_assignment_email($student->getUsername(), $name, $term, $location, $roommates, $movein_time, $type, $returning);
 
-            // Send the email
-            HMS_Email::send_assignment_email($student->getUsername(), $name, $term, $location, $roommates, $movein_time, $type, $returning);
+                // Mark the student as having received an email
+                $db->reset();
+                $db->addWhere('asu_username', $assignment['asu_username']);
+                $db->addWhere('term', $term);
+                $db->addValue('email_sent', 1);
+                $rslt = $db->update();
 
-            // Mark the student as having received an email
-            $db->reset();
-            $db->addWhere('asu_username', $assignment['asu_username']);
-            $db->addWhere('term', $term);
-            $db->addValue('email_sent', 1);
-            $rslt = $db->update();
-
-            if(PHPWS_Error::logIfError($rslt)){
-                PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
-                throw new DatabaseException($result->toString());
+                if(PHPWS_Error::logIfError($rslt)){
+                    PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+                    throw new DatabaseException($result->toString());
+                }
             }
         }
         
-        return true;
+        return $missingMovein;
     }
 }
 
