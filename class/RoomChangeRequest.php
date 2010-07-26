@@ -196,6 +196,12 @@ class RoomChangeRequest extends HMS_Item {
         $template['ACTIONS']  = implode($actions, ',');
         return $template;
     }
+
+    public function emailParticipants($subject, $status){
+        foreach($this->participants as $participant){
+            HMS_Email::send_template_message($participant['username'], $subject, $status.'_'.$participant['role'].'_email.tpl', $participant);
+        }
+    }
 }
 
 interface RoomChangeState {
@@ -265,6 +271,10 @@ class PendingRoomChangeRequest extends BaseRoomChangeState {
     public function getType(){
         return ROOM_CHANGE_PENDING;
     }
+
+    public function onEnter(){
+        $this->request->emailParticipants('Your room change request has been submitted', 'pending');
+    }
 }
 
 class RDApprovedChangeRequest extends BaseRoomChangeState {
@@ -285,6 +295,8 @@ class RDApprovedChangeRequest extends BaseRoomChangeState {
         if($cmd instanceof Command){
             $cmd->redirect();
         }
+
+        $this->request->emailParticipants('Room Change Request Approved!', 'rd_approved');
     }
 
     public function getType(){
@@ -300,6 +312,7 @@ class HousingApprovedChangeRequest extends BaseRoomChangeState {
 
     public function onEnter(){
         $this->addParticipant('housing', 'hrlassignments', 'Housing and Residence Life');
+        $this->request->emailParticipants('Housing Approved Room Change!', 'housing_approved');
     }
 
     public function getType(){
@@ -322,10 +335,25 @@ class CompletedChangeRequest extends BaseRoomChangeState {
         $cmd = CommandFactory::getCommand('ReserveRoom');
         $cmd = $cmd->execute($params);
 
+        if($cmd instanceof Command){
+            $this->request->state = new HousingApprovedChangeRequest;
+            $this->request->save();
+            $cmd->redirect();
+        }
+
         $params = new CommandContext;
         $params->addParam('username', $this->request->username);
         $params->addParam('bed', $this->request->bed_id);
-        $params->addParam('moveConfirmed', 'true');
+        $cmd = CommandFactory::getCommand('RoomChangeAssign');
+        $cmd = $cmd->execute($params);
+
+        //todo: relock room
+        if($cmd instanceof Command){
+            $cmd->redirect();
+        }
+
+        //email participants
+        $this->request->emailParticipants('Room Change Complete!', 'completed');
     }
 
     public function getType(){
