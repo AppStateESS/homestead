@@ -132,6 +132,11 @@ img.roommate_request_icon {
 	margin-left: 20px;
 }
 
+.overlay {
+    background: white;
+    border: solid thin black;
+}
+
 .hms-student-menu-term-block .status-icon {
     float:left;
     margin-right: 5px;

@@ -14,35 +14,38 @@ PHPWS_Core::initModClass('hms', 'HMS_Item.php');
 class HMS_Room extends HMS_Item
 {
 
-    var $floor_id               = 0;
-    var $room_number            = 0;
+    public $floor_id               = 0;
+    public $room_number            = 0;
 
-    var $gender_type            = 0;
-    var $default_gender         = 0;
-    var $ra_room                = false;
-    var $private_room           = false;
-    var $is_overflow            = false;
-    var $pricing_tier           = 0;
-    var $is_medical             = false;
-    var $is_reserved            = false;
-    var $is_online              = false;
+    public $gender_type            = 0;
+    public $default_gender         = 0;
+    public $ra_room                = false;
+    public $private_room           = false;
+    public $is_overflow            = false;
+    public $pricing_tier           = 0;
+    public $is_medical             = false;
+    public $is_reserved            = false;
+    public $is_online              = false;
+    public $term;
+
+    public $banner_building_code;
 
 
     /**
      * Listing of beds associated with this room
      * @var array
      */
-    var $_beds                  = null;
+    public $_beds                  = null;
 
     /**
      * Parent HMS_Floor object of this room
-     * @var object
+     * @public object
      */
-    var $_floor                 = null;
+    public $_floor                 = null;
 
     /* Hack for the javascript DO NOT TOUCH */
-    var $message = '';
-    var $value   = false;
+    public $message = '';
+    public $value   = false;
 
     /**
      * Constructor
@@ -775,7 +778,7 @@ class HMS_Room extends HMS_Item
 
     }
 
-    public static function getAllFreeRooms($term, $gender, $randomize = FALSE)
+    public static function getAllFreeRooms($term)
     {
         $db = new PHPWS_DB('hms_room');
 
@@ -794,9 +797,6 @@ class HMS_Room extends HMS_Item
         $db->addJoin('LEFT OUTER', 'hms_bed', 'hms_assignment', 'id', 'bed_id');
         $db->addWhere('hms_assignment.asu_username', NULL);
 
-        // Gender
-        $db->addWhere('gender_type', $gender);
-        
         // Order by gender preference (0=>female, 1=>male, 2=>coed), rooms in a single gender hall will be first
         $db->addOrder('hms_residence_hall.gender_type ASC');
 
@@ -821,8 +821,6 @@ class HMS_Room extends HMS_Item
         // Don't get rooms on floors reserved for an RLC
         $db->addWhere('hms_floor.rlc_id', NULL);
         
-        $db->setOrder('hms_residence_hall.');
-
         $result = $db->select('col');
 
         // In case of an error, log it and return FALSE
@@ -865,6 +863,11 @@ class HMS_Room extends HMS_Item
 
         // Looks like we're good.
         return TRUE;
+    }
+
+    public function __tostring()
+    {
+        return ($this->banner_building_code ? $this->banner_building_code . ' ' : '') . $this->room_number;
     }
 }
 

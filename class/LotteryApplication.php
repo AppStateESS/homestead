@@ -20,7 +20,7 @@ class LotteryApplication extends HousingApplication {
 
     public $waiting_list_hide   = 0;
 
-    public function __construct($id = 0, $term = NULL, $banner_id = NULL, $username = NULL, $gender = NULL, $student_type = NULL, $application_term = NULL, $cell_phone = NULL, $meal_plan = NULL, $physical_disability = NULL, $psych_disability = NULL, $gender_need = NULL, $medical_need = NULL, Array $roommates = NULL, $specialInterest = NULL, $magicWinner = 0)
+    public function __construct($id = 0, $term = NULL, $banner_id = NULL, $username = NULL, $gender = NULL, $student_type = NULL, $application_term = NULL, $cell_phone = NULL, $meal_plan = NULL, $physical_disability = NULL, $psych_disability = NULL, $gender_need = NULL, $medical_need = NULL, $international = NULL, Array $roommates = NULL, $specialInterest = NULL, $magicWinner = 0)
     {
         /**
          * If the id is non-zero, then we need to load the other member variables
@@ -31,10 +31,10 @@ class LotteryApplication extends HousingApplication {
             $this->load();
             return;
         }
-        
+
         $this->application_type = 'lottery';
 
-        parent::__construct($term, $banner_id, $username, $gender, $student_type, $application_term, $cell_phone, $meal_plan, $physical_disability, $psych_disability, $gender_need, $medical_need);
+        parent::__construct($term, $banner_id, $username, $gender, $student_type, $application_term, $cell_phone, $meal_plan, $physical_disability, $psych_disability, $gender_need, $medical_need, $international);
 
         if(isset($roommates[0])){
             $this->roommate1_username = $roommates[0]->getUsername();

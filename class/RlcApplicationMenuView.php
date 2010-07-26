@@ -1,14 +1,14 @@
 <?php
 
 class RlcApplicationMenuView extends View {
-    
+
     private $term;
     private $student;
     private $startDate;
     private $editDate;
     private $endDate;
     private $application;
-    
+
     public function __construct($term, Student $student, $startDate, $editDate, $endDate, HMS_RLC_Application $application = NULL)
     {
         $this->term         = $term;
@@ -18,7 +18,7 @@ class RlcApplicationMenuView extends View {
         $this->endDate      = $endDate;
         $this->application  = $application;
     }
-    
+
     public function show()
     {
         $tpl = array();
@@ -31,7 +31,7 @@ class RlcApplicationMenuView extends View {
             $viewCmd = CommandFactory::getCommand('ShowRlcApplicationReView');
             $viewCmd->setAppId($this->application->getId());
             $tpl['VIEW_APP'] = $viewCmd->getLink('view your application');
-            
+
             if(time() < $this->editDate){
                 $newCmd = CommandFactory::getCommand('ShowRlcApplicationView');
                 $newCmd->setTerm($this->term);
@@ -53,7 +53,7 @@ class RlcApplicationMenuView extends View {
         }
 
         Layout::addPageTitle("RLC Application Menu");
-        
+
         return PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/RlcApplicationMenuBlock.tpl');
     }
 }

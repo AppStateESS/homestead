@@ -6,7 +6,7 @@ class WaitingListApplication extends HousingApplication {
 
     public $waiting_list_hide = 0;
 
-    public function __construct($id = 0, $term = NULL, $banner_id = NULL, $username = NULL, $gender = NULL, $student_type = NULL, $application_term = NULL, $cell_phone = NULL, $meal_plan = NULL, $physical_disability = NULL, $psych_disability = NULL, $gender_need = NULL, $medical_need = NULL)
+    public function __construct($id = 0, $term = NULL, $banner_id = NULL, $username = NULL, $gender = NULL, $student_type = NULL, $application_term = NULL, $cell_phone = NULL, $meal_plan = NULL, $physical_disability = NULL, $psych_disability = NULL, $gender_need = NULL, $medical_need = NULL, $international = NULL)
     {
         /**
          * If the id is non-zero, then we need to load the other member variables
@@ -21,7 +21,7 @@ class WaitingListApplication extends HousingApplication {
         // Set this application type
         $this->application_type = 'offcampus_waiting_list';
 
-        parent::__construct($term, $banner_id, $username, $gender, $student_type, $application_term, $cell_phone, $meal_plan, $physical_disability, $psych_disability, $gender_need, $medical_need);
+        parent::__construct($term, $banner_id, $username, $gender, $student_type, $application_term, $cell_phone, $meal_plan, $physical_disability, $psych_disability, $gender_need, $medical_need, $international);
     }
 
     /**
@@ -103,7 +103,7 @@ class WaitingListApplication extends HousingApplication {
     public function waitingListTags()
     {
         //test($this,1);
-        
+
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 
         $student = StudentFactory::getStudentByUsername($this->username, $this->term);

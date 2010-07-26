@@ -44,6 +44,7 @@ class RlcApplicationView extends View {
         }
         
         $cmd = CommandFactory::getCommand('ShowRlcApplicationPage1View');
+        $cmd->setTerm($this->term);
         $cmd->redirect();
     }
 }

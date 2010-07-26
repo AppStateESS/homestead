@@ -52,6 +52,17 @@ class StudentProfileView extends View {
         $tpl['CLASS'] = $this->student->getPrintableClass();
 
         $tpl['TYPE'] = $this->student->getPrintableType();
+        
+        $tpl['STUDENT_LEVEL'] = $this->student->getPrintableLevel();
+        
+        $tpl['INTERNATIONAL'] = $this->student->isInternational() == 'true' ? 'Yes' : 'No';
+        
+        $tpl['HONORS'] = $this->student->isHonors() == 'true' ? 'Yes' : 'No';
+        
+        $tpl['TEACHING_FELLOW'] = $this->student->isTeachingFellow() == 'true' ? 'Yes' : 'No';
+        
+        $tpl['WATAUGA'] = $this->student->isWataugaMember() == 'true' ? 'Yes' : 'No';
+        
         try {
             $tpl['APPLICATION_TERM'] = Term::toString($this->student->getApplicationTerm());
         } catch(InvalidTermException $e) {

@@ -1,4 +1,4 @@
-<?php
+0<?php
 
 /**
  * Contains administrative public functionality
@@ -6,7 +6,7 @@
  * @author Kevin Wilcox <kevin at tux dot appstate dot edu>
  */
 
-class HMS_Admin 
+class HMS_Admin
 {
     /**
      * Shows the page where the user can start the withdrawn student search
@@ -17,7 +17,7 @@ class HMS_Admin
             $tpl = array();
             return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
         }
-        
+
         PHPWS_Core::initCoreClass('Form.php');
         PHPWS_Core::initModClass('hms', 'HMS_Term.php');
 
@@ -61,9 +61,9 @@ class HMS_Admin
 
         $db = new PHPWS_DB('hms_new_application');
         $term = HMS_Term::get_selected_term();
-       
+
         // This is ugly, but it does what we need it to do...
-        // (necessary since not everyone who is assigned will have an application) 
+        // (necessary since not everyone who is assigned will have an application)
         $db->setSQLQuery("select DISTINCT * FROM (select hms_new_application.username from hms_new_application WHERE term=$term AND withdrawn != 1 UNION select hms_assignment.asu_username from hms_assignment WHERE term=$term) as foo");
         $result = $db->select('col');
 
@@ -125,7 +125,7 @@ class HMS_Admin
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-        
+
         #test($_REQUEST['remove_checkbox']);
 
         $tpl['status']      = array();
@@ -137,7 +137,7 @@ class HMS_Admin
 
         # Process each of the selected students
         foreach($_REQUEST['remove_checkbox'] as $asu_username){
-            
+
             # Check for and mark as withdrawn any application
             $app = HousingApplication::checkForApplication($asu_username, $term, TRUE);
             if($app != FALSE){
@@ -233,7 +233,7 @@ class HMS_Admin
                                 $tpl['warnings'][] = array('USERNAME'   => $asu_username,
                                                            'MESSAGE'    => 'Error loading RLC assignment.');
                             }else{
-                                
+
                                 $del = $rlc_assignment->delete();
                                 if($del != TRUE){
                                 //if($rlc_assignment->delete() != TRUE){
@@ -261,7 +261,7 @@ class HMS_Admin
                         }
                     }
                 }
-                                
+
             }
         }
 
@@ -296,7 +296,7 @@ class HMS_Admin
             $tpl = array();
             return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
         }
-        
+
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
         require_once('mod/hms/inc/defines.php');
 
@@ -304,7 +304,7 @@ class HMS_Admin
 
         $tpl['status'] = array();
         $tpl['errors'] = array();
-        
+
         # break input down line by line
         $lines = split("\n", $_REQUEST['usernames']);
 
@@ -355,7 +355,7 @@ class HMS_Admin
                 $rows_affected = $db->affectedRows();
                 if($rows_affected > 0){
                     $tpl['status'][] = array('USERNAME'=>$names[0], 'MESSAGE' => "$rows_affected assignment records updated.");
-                    
+
                     $notes = "Assignments Updated";
                     HMS_Activity_Log::log_activity(trim($names[1]), ACTIVITY_ASSIGNMENTS_UPDATED, Current_User::getUsername(), $notes);
                 }
@@ -374,12 +374,12 @@ class HMS_Admin
                 $rows_affected = $db->affectedRows();
                 if($rows_affected > 0){
                     $tpl['status'][] = array('USERNAME'=>$names[0], 'MESSAGE' => "$rows_affected banner queue records updated.");
-                    
+
                     $notes = "Banner Queue Updated";
                     HMS_Activity_Log::log_activity(trim($names[1]), ACTIVITY_BANNER_QUEUE_UPDATED, Current_User::getUsername(), $notes);
                 }
             }
-            
+
             # Update roommates
             $db = &new PHPWS_DB('hms_roommate');
             $db->addValue('requestor', $names[1]);
@@ -393,12 +393,12 @@ class HMS_Admin
                 $rows_affected = $db->affectedRows();
                 if($rows_affected > 0){
                     $tpl['status'][] = array('USERNAME'=>$names[0], 'MESSAGE' => "$rows_affected roommate requestor records updated.");
-                    
+
                     $notes = "Roommates Updated";
                     HMS_Activity_Log::log_activity(trim($names[1]), ACTIVITY_ROOMMATES_UPDATED, Current_User::getUsername(), $notes);
                 }
             }
-            
+
             $db = &new PHPWS_DB('hms_roommate');
             $db->addValue('requestee', $names[1]);
             $db->addWhere('requestee', $names[0]);
@@ -430,7 +430,7 @@ class HMS_Admin
                 $rows_affected = $db->affectedRows();
                 if($rows_affected > 0){
                     $tpl['status'][] = array('USERNAME'=>$names[0], 'MESSAGE' => "$rows_affected RLC records updated.");
-                    
+
                     $notes = "RLCs Updated";
                     HMS_Activity_Log::log_activity(trim($names[1]), ACTIVITY_RLC_APPLICATION_UPDATED, Current_User::getUsername(), $notes);
                 }

@@ -26,6 +26,8 @@ class AddCommunityView extends View {
             $form->addHidden('id', $this->community->get_id());
         }
 
+        $var = array('ELEMENT' => $form->getId('community_name'));
+        javascript('/modules/hms/autoFocus', $var);
         $form->addSubmit('Save');
 
         $tpl = $form->getTemplate();

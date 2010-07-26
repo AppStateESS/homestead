@@ -4,14 +4,6 @@
         <h1>{NAME} -- {BANNER_ID} -- {TERM}</h1>
         <h2>Login as this student [ {LOGIN_AS_STUDENT} ]</h2>
 
-        <!-- BEGIN success_msg -->
-            <div class="success">{SUCCESS}</div><br />
-        <!-- END success_msg -->
-
-        <!-- BEGIN error_msg -->
-            <div class="error">{ERROR}</div><br />
-        <!-- END error_msg -->
-
         <table>
             <tr>
                 <th><a id="demographics_toggle">[-]</a>Student Demographics</th>
@@ -48,6 +40,14 @@
                     <tr>
                         <th>Class</th>
                         <td>{CLASS}</td>
+                    </tr>
+                    <tr>
+                        <th>Level</th>
+                        <td>{STUDENT_LEVEL}</td>
+                    </tr>
+                    <tr>
+                        <th>International</th>
+                        <td>{INTERNATIONAL}</td>
                     </tr>
                     <tr>
                         <th>Phone Number</th>
@@ -120,7 +120,19 @@
                         <td>{RLC_STATUS}</td>
                     </tr>
                     <tr>
-                        <th>Special Interest Group: </th>
+                        <th>Honors</th>
+                        <td>{HONORS}</td>
+                    </tr>
+                    <tr>
+                        <th>Teaching Fellow</th>
+                        <td>{TEACHING_FELLOW}</td>
+                    </tr>
+                    <tr>
+                        <th>Watauga Global Member</th>
+                        <td>{WATAUGA}</td>
+                    </tr>
+                    <tr>
+                        <th>Re-application Special Interest Group: </th>
                         <td>{SPECIAL_INTEREST}</td>
                     </tr>
                 </table>

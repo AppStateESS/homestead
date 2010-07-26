@@ -41,6 +41,8 @@ class AssignStudentView extends View {
 			$form->setValue('username', $this->student->getUsername());
 		}
 
+        javascript('/modules/hms/autoFocus', array('ELEMENT' => $form->getId('username')));
+
 		$form->addTextarea('note');
 		$form->setLabel('note', 'Note: ');
 

@@ -37,7 +37,7 @@ class HousingApplicationFactory {
                 $application = HousingApplicationFactory::getSummerApplicationFromContext($context, $term, $student);
 				break;
 		}
-		
+
 		return $application;
 	}
 
@@ -51,16 +51,18 @@ class HousingApplicationFactory {
 		$lifestyleOption	= $context->get('lifestyle_option');
 		$preferredBedtime	= $context->get('preferred_bedtime');
 		$roomCondition		= $context->get('room_condition');
-		
+
 		$specialNeeds = $context->get('special_needs');
-		
-		$physicalDisability = isset($specialNeeds['physical_disability'])?$specialNeeds['physical_disability']: NULL;	
+
+		$physicalDisability = isset($specialNeeds['physical_disability'])?$specialNeeds['physical_disability']: NULL;
 		$psychDisability	= isset($specialNeeds['psych_disability'])?$specialNeeds['psych_disability']: NULL;
 		$genderNeed			= isset($specialNeeds['gender_need'])?$specialNeeds['gender_need']: NULL;
 		$medicalNeed		= isset($specialNeeds['medical_need'])?$specialNeeds['medical_need']: NULL;
-		
+
 		$rlcInterest 		= $context->get('rlc_interest');
-		
+
+		$international = null;
+
 		if(is_null($doNotCall)){
 			$cellPhone = $areaCode . $exchange . $number;
 		}else{
@@ -71,8 +73,8 @@ class HousingApplicationFactory {
 		{
 			throw new InvalidArgumentException('Invalid values were submitted. Please try again.');
 		}
-		
-		return new FallApplication(0, $term, $student->getBannerId(), $student->getUsername(), $student->getGender(), $student->getType(), $student->getApplicationTerm(), $cellPhone, $mealOption, $physicalDisability, $psychDisability, $genderNeed, $medicalNeed, $lifestyleOption, $preferredBedtime, $roomCondition, $rlcInterest);
+
+		return new FallApplication(0, $term, $student->getBannerId(), $student->getUsername(), $student->getGender(), $student->getType(), $student->getApplicationTerm(), $cellPhone, $mealOption, $physicalDisability, $psychDisability, $genderNeed, $medicalNeed, $international, $lifestyleOption, $preferredBedtime, $roomCondition, $rlcInterest);
 	}
     public static function getSummerApplicationFromContext(CommandContext $context, $term, Student $student)
     {
@@ -83,23 +85,25 @@ class HousingApplicationFactory {
 		$number		= $context->get('number');
 		$mealOption	= $context->get('meal_option');
         $roomType   = $context->get('room_type');
-		
+
 		$specialNeeds = $context->get('special_needs');
-		
-		$physicalDisability = isset($specialNeeds['physical_disability'])?$specialNeeds['physical_disability']: NULL;	
+
+		$physicalDisability = isset($specialNeeds['physical_disability'])?$specialNeeds['physical_disability']: NULL;
 		$psychDisability	= isset($specialNeeds['psych_disability'])?$specialNeeds['psych_disability']: NULL;
 		$genderNeed			= isset($specialNeeds['gender_need'])?$specialNeeds['gender_need']: NULL;
 		$medicalNeed		= isset($specialNeeds['medical_need'])?$specialNeeds['medical_need']: NULL;
-		
+
 		$rlcInterest 		= $context->get('rlc_interest');
-		
+
+		$international = null;
+
 		if(is_null($doNotCall)){
 			$cellPhone = $areaCode . $exchange . $number;
 		}else{
 			$cellPhone = NULL;
 		}
-		
-		return new SummerApplication(0, $term, $student->getBannerId(), $student->getUsername(), $student->getGender(), $student->getType(), $student->getApplicationTerm(), $cellPhone, $mealOption, $physicalDisability, $psychDisability, $genderNeed, $medicalNeed, $roomType);
+
+		return new SummerApplication(0, $term, $student->getBannerId(), $student->getUsername(), $student->getGender(), $student->getType(), $student->getApplicationTerm(), $cellPhone, $mealOption, $physicalDisability, $psychDisability, $genderNeed, $medicalNeed, $international, $roomType);
     }
 
     public static function getApplicationById($id)
@@ -110,16 +114,16 @@ class HousingApplicationFactory {
         PHPWS_Core::initModClass('hms', 'SummerApplication.php');
         PHPWS_Core::initModClass('hms', 'LotteryApplication.php');
         PHPWS_Core::initModClass('hms', 'WaitingListApplication.php');
-        
+
         $application = new HousingApplication();
         $db = new PHPWS_DB('hms_new_application');
         $db->addWhere('id', $id);
         $result = $db->loadObject($application);
-        
+
         if(PHPWS_Error::logIfError($result)){
             throw new Exception("There was an retreiving the HousingApplication object from the database.");
         }
-        
+
         if(is_null($application)){
             return null;
         }
@@ -143,7 +147,7 @@ class HousingApplicationFactory {
             default:
                 throw new InvalidArgumentException('Unknown application type: ' . $application->application_type);
         }
-        
+
         return $app;
     }
 

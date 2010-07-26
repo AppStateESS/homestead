@@ -6,7 +6,7 @@ class SummerApplication extends HousingApplication{
 
     public $room_type = 0;
 
-    public function __construct($id = 0, $term = NULL, $banner_id = NULL, $username = NULL, $gender = NULL, $student_type = NULL, $application_term = NULL, $cell_phone = NULL, $meal_plan = NULL, $physical_disability = NULL, $psych_disability = NULL, $gender_need = NULL, $medical_need = NULL, $room_type = NULL){
+    public function __construct($id = 0, $term = NULL, $banner_id = NULL, $username = NULL, $gender = NULL, $student_type = NULL, $application_term = NULL, $cell_phone = NULL, $meal_plan = NULL, $physical_disability = NULL, $psych_disability = NULL, $gender_need = NULL, $medical_need = NULL, $international = NULL, $room_type = NULL){
 
         /**
          * If the id is non-zero, then we need to load the other member variables
@@ -19,8 +19,8 @@ class SummerApplication extends HousingApplication{
         }
 
         $this->application_type = 'summer';
-        
-        parent::__construct($term, $banner_id, $username, $gender, $student_type, $application_term, $cell_phone, $meal_plan, $physical_disability, $psych_disability, $gender_need, $medical_need);
+
+        parent::__construct($term, $banner_id, $username, $gender, $student_type, $application_term, $cell_phone, $meal_plan, $physical_disability, $psych_disability, $gender_need, $medical_need, $international);
 
         $this->setRoomType($room_type);
     }
@@ -125,7 +125,7 @@ class SummerApplication extends HousingApplication{
 
         return $tpl;
     }
-    
+
     public function unassignedApplicantsCSV()
     {
         $tpl = parent::unassignedApplicantsCSV();
