@@ -135,6 +135,28 @@ class HMS_Util{
     	
     	return date('M jS, Y', $timestamp);
     }
+
+    public function getPrettyDateRange($startDate, $endDate)
+    {
+        $avail = "";
+
+        if(!empty($startDate)){
+            $avail .= HMS_Util::getFriendlyDate($startDate);
+        } else {
+            $avail .= "...";
+        }
+
+        $avail .= " - ";
+        
+        if(!empty($endDate)){
+            $avail .= HMS_Util::getFriendlyDate($endDate);
+        } else {
+            $avail .= "...";
+        }
+
+        return $avail;
+
+    }
     
     /**
      * Determines which color the title bar should be based on

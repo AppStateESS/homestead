@@ -2,7 +2,6 @@
 
 PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-PHPWS_Core::initModClass('hms', 'HMS_Deadlines.php');
 PHPWS_Core::initModClass('hms', 'HousingApplication.php');
 
 class ShowStudentMenuCommand extends Command {
@@ -23,6 +22,12 @@ class ShowStudentMenuCommand extends Command {
         $student = StudentFactory::getStudentByUsername($username, $currentTerm);
 
         $applicationTerm = $student->getApplicationTerm();
+
+        // In case this is a new freshmen, they'll likely have no student type in the "current" term.
+        // So, instead, we need to lookup the student in their application term.
+        if($applicationTerm > $currentTerm){
+            $student = StudentFactory::getStudentByUsername($username, $applicationTerm);
+        }
 
         $studentType 	= $student->getType();
         $studentClass	= $student->getClass();
@@ -45,20 +50,12 @@ class ShowStudentMenuCommand extends Command {
             $badDataCmd = CommandFactory::getCommand('ShowBadBannerData');
             $badDataCmd->redirect();
         }
-        
+
         # Recreate the student object using the student's application term
         $student = StudentFactory::getStudentByUsername($username, $applicationTerm);
 
         # Check for an assignment in the current term. So far, this only matters for type 'Z' (readmit) students
         $assignment = HMS_Assignment::checkForAssignment($username, $currentTerm);
-
-        # Get deadlines for the current term for future use
-        if($applicationTerm <= $currentTerm || ($studentType == TYPE_READMIT && $assignment === TRUE)){
-            $deadlines = HMS_Deadlines::get_deadlines(PHPWS_Settings::get('hms', 'lottery_term'));
-        }else{
-            $deadlines = HMS_Deadlines::get_deadlines($applicationTerm);
-        }
-
 
         /******************************************
          * Sort returning students (lottery) from *

@@ -303,7 +303,7 @@ class HMS_Floor extends HMS_Item
      */
     public function get_number_of_rooms()
     {
-        $db = &new PHPWS_DB('hms_room');
+        $db = new PHPWS_DB('hms_room');
 
         $db->addJoin('LEFT OUTER', 'hms_room', 'hms_floor', 'floor_id', 'id');
         $db->addWhere('hms_floor.id', $this->id);
@@ -323,7 +323,7 @@ class HMS_Floor extends HMS_Item
      */
     public function get_number_of_beds()
     {
-        $db = &new PHPWS_DB('hms_bed');
+        $db = new PHPWS_DB('hms_bed');
 
         $db->addJoin('LEFT OUTER', 'hms_bed',     'hms_room',           'room_id',           'id');
         $db->addJoin('LEFT OUTER', 'hms_room',    'hms_floor',          'floor_id',          'id');
@@ -344,7 +344,7 @@ class HMS_Floor extends HMS_Item
      */
     public function get_number_of_assignees()
     {
-        $db = &new PHPWS_DB('hms_assignment');
+        $db = new PHPWS_DB('hms_assignment');
 
         $db->addJoin('LEFT OUTER', 'hms_assignment','hms_bed',            'bed_id',             'id');
         $db->addJoin('LEFT OUTER', 'hms_bed',       'hms_room',           'room_id',            'id');

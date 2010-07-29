@@ -26,7 +26,7 @@ class HMS_Banner_Queue {
         }
 
         $this->id = $id;
-        $db = &new PHPWS_DB('hms_banner_queue');
+        $db = new PHPWS_DB('hms_banner_queue');
         $db->addWhere('id', $this->id);
         $result = $db->loadObject($this);
         if(!$result || PHPWS_Error::logIfError($result)) {
@@ -107,7 +107,7 @@ class HMS_Banner_Queue {
         }
 
         if(!$entry->save())
-            return "DB Error";
+        return "DB Error";
 
         return 0;
     }
@@ -117,7 +117,7 @@ class HMS_Banner_Queue {
      *
      * NOTE: If the queue contains a Create Assignment for the same
      * user to the same room, this will NOT queue a room assignment,
-     * but rather will delete the original assignment, UNLESS the 
+     * but rather will delete the original assignment, UNLESS the
      * $force_queue flag is set.  The $force_queue flag being true will
      * queue a removal no matter what.
      *
@@ -140,11 +140,11 @@ class HMS_Banner_Queue {
 
         if($force_queue === TRUE) {
             if(!$entry->save())
-                return "DB Error";
+            return "DB Error";
             return 0;
         }
 
-        $db = &new PHPWS_DB('hms_banner_queue');
+        $db = new PHPWS_DB('hms_banner_queue');
         $db->addWhere('type',          BANNER_QUEUE_ASSIGNMENT);
         $db->addWhere('asu_username',  $username);
         $db->addWhere('building_code', $bldg);
@@ -158,7 +158,7 @@ class HMS_Banner_Queue {
 
         if($result == 0) {
             if(!$entry->save())
-                return "DB Error";
+            return "DB Error";
             return 0;
         }
 
@@ -191,44 +191,44 @@ class HMS_Banner_Queue {
         PHPWS_Core::initModClass('hms', 'SOAP.php');
 
         $soap = SOAP::getInstance();
-        
+
         $result = -1;
 
         switch($this->type) {
             case BANNER_QUEUE_ASSIGNMENT:
                 $result = $soap->reportRoomAssignment(
-                    $this->asu_username,
-                    $this->term,
-                    $this->building_code,
-                    $this->bed_code,
+                $this->asu_username,
+                $this->term,
+                $this->building_code,
+                $this->bed_code,
                     'HOME',
-                    $this->meal_code);
+                $this->meal_code);
                 if($result == "0") {
                     HMS_Activity_Log::log_activity(
-                        $this->asu_username,
-                        ACTIVITY_ASSIGNMENT_REPORTED,
-                        Current_User::getUsername(),
-                        $this->term . ' ' . 
-                        $this->building_code . ' ' .
-                        $this->bed_code . ' ' .
+                    $this->asu_username,
+                    ACTIVITY_ASSIGNMENT_REPORTED,
+                    Current_User::getUsername(),
+                    $this->term . ' ' .
+                    $this->building_code . ' ' .
+                    $this->bed_code . ' ' .
                         'HOME' . ' ' .
-                        $this->meal_code);
+                    $this->meal_code);
                 }
                 break;
             case BANNER_QUEUE_REMOVAL:
                 $result = $soap->removeRoomAssignment(
-                    $this->asu_username,
-                    $this->term,
-                    $this->building_code,
-                    $this->bed_code);
+                $this->asu_username,
+                $this->term,
+                $this->building_code,
+                $this->bed_code);
                 if($result == "0") {
                     HMS_Activity_Log::log_activity(
-                        $this->asu_username,
-                        ACTIVITY_REMOVAL_REPORTED,
-                        Current_User::getUsername(),
-                        $this->term . ' ' .
-                        $this->building_code . ' ' .
-                        $this->bed_code . ' ');
+                    $this->asu_username,
+                    ACTIVITY_REMOVAL_REPORTED,
+                    Current_User::getUsername(),
+                    $this->term . ' ' .
+                    $this->building_code . ' ' .
+                    $this->bed_code . ' ');
                 }
                 break;
         }
@@ -244,15 +244,26 @@ class HMS_Banner_Queue {
         // TODO: Process All.  Return an array of username=>error if there were
         // any.  Don't stop on errors, just tally them up.  Return TRUE if
         // there were no errors.
-        
-        $db = &new PHPWS_DB('hms_banner_queue');
+
+        $db = new PHPWS_DB('hms_banner_queue');
         $db->addWhere('term', $term);
         $db->addOrder('id');
         $items = $db->getObjects('HMS_Banner_Queue');
 
         $errors = array();
         foreach($items as $item) {
-            $result = $item->process();
+            $result = null;
+
+            try{
+                $result = $item->process();
+            }catch(Exception $e){
+                $error = array();
+                $error['id'] = $item->id;
+                $error['username'] = $item->asu_username;
+                $error['code'] = $result;
+                $errors[] = $error;
+            }
+
             if($result === FALSE) {
                 $error = array();
                 $error['id'] = $item->id;
@@ -265,7 +276,7 @@ class HMS_Banner_Queue {
         }
 
         if(empty($errors))
-            return TRUE;
+        return TRUE;
 
         return $errors;
     }

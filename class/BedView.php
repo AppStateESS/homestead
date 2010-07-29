@@ -77,6 +77,8 @@ class BedView extends View {
 		$form->mergeTemplate($tpl);
 		$tpl = $form->getTemplate();
 
+        Layout::addPageTitle("Edit Bed");
+
 		return PHPWS_Template::process($tpl, 'hms', 'admin/edit_bed.tpl');
 	}
 }

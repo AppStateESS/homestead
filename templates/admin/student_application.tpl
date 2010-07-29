@@ -61,6 +61,11 @@
             <tr>
                 <td>Room Condition: </td><td align="left">{ROOM_CONDITION}</td>
             </tr>
+            <!-- BEGIN room_type -->
+            <tr>
+                <td>Room Type: </td><td align="left">{ROOM_TYPE}</td>
+            </tr>
+            <!-- END room_type -->
             <tr>
                 <th colspan="2">Special Needs Housing</th>
             </tr>
@@ -85,10 +90,10 @@
             </tr>
             <!-- BEGIN rlc_interest_1 -->
             <tr>
-                <th colspan="2">Unique Housing Options</th>
+                <th colspan="2">Residential Learning Communities</th>
             </tr>
             <tr>
-                <td>Are you interested in a <a href="http://housing.appstate.edu/pagesmith/29" target="_blank">Unique Housing Option</a> where you will live together with a group of students who share at least one similar interest?  Students in these communities report finding it easier to meet people and make friends. They also earn higher GPAs in their first semester than students not living in a unique housing option.  For more information <a href="http://housing.appstate.edu/pagesmith/29">vist Unique Housing Options website</a>.</td>
+                <td>Are you interested in a <a href="http://housing.appstate.edu/pagesmith/29" target="_blank">Residential Learning Community</a> where you will live together with a group of students who share at least one similar interest?  Students in these communities report finding it easier to meet people and make friends. They also earn higher GPAs in their first semester than students not living in a Residential Learning Community.  For more information <a href="http://housing.appstate.edu/pagesmith/29">vist Residential Learning Communities website</a>.</td>
                 <td align="left">{RLC_INTEREST_1} {RLC_INTEREST_1_LABEL}&nbsp;{RLC_INTEREST_2} {RLC_INTEREST_2_LABEL}</td>
             </tr>
             <!-- END rlc_interest_1 -->

@@ -49,6 +49,8 @@ class SelectFloorView extends View {
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
+        Layout::addPageTitle("Select Floor");
+
         return PHPWS_Template::process($tpl, 'hms', 'admin/select_floor.tpl');
 	}
 }

@@ -19,6 +19,8 @@ class LotteryChooseRoomThanksView extends View {
         $tpl['MAIN_MENU'] = $mainMenuCmd->getLink('Return to the main menu');
         
         $tpl['LOGOUT'] = UserStatus::getLogoutLink();
+
+        Layout::addPageTitle("Thank you");
         
         return PHPWS_Template::process($tpl, 'hms', 'student/lottery_choose_room_thanks.tpl');
     }

@@ -69,6 +69,8 @@
      ***************/
     $permissions['assignment_maintenance']  = _('Create, move, and delete assignments');
     $permissions['autoassign']              = _('Run the auto-assigner');
+    $permissions['assignment_notify']       = _('Send assignment notifications');
+    $permissions['assign_by_floor']         = _('Assign Students by Floor');
 
     /*************
      * RLC tasks *
@@ -86,6 +88,7 @@
     # RLC assignment tasks
     $permissions['view_rlc_room_assignments']       = _('View RLC room assignments');
     $permissions['rlc_room_assignments']            = _('Create RLC room assignments');
+    $permissions['email_rlc_rejections']            = _('Send RLC rejection emails');
 
     /********
      * Misc *

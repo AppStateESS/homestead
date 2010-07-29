@@ -14,6 +14,8 @@ class EditRlcView extends View {
         $pager->addToggle('class="toggle2"');
         $pager->addRowTags('rowTags');
 
+        Layout::addPageTitle("Edit RLC");
+
         return $pager->get();
     }
 }

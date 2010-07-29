@@ -51,7 +51,7 @@ class RoommateCompatibilityException extends RoommateException
                 return "Your roommate request could not be completed because you and/or your requested roommate have applied for different Residential Learning Communities.";
 
             case E_ROOMMATE_RLC_ASSIGNMENT:
-                return "Your roommate request could not be completed because you and/or your requested roommate are assigned to a Unique Housing Option, and you are both not a member of the same Residential Learning Community.";
+                return "Your roommate request could not be completed because you and/or your requested roommate are assigned to a Residential Learning Community, and you are both not a member of the same Residential Learning Community.";
 
             default:
                 return "Unknown Error $result.";

@@ -136,6 +136,9 @@ class HallOverview extends View {
 		if($this->nakedDisplay) {
 			Layout::nakedDisplay($tpl->get(), 'Building overview for ' . $this->hall->hall_name, TRUE);
 		}
+        
+        Layout::addPageTitle("Hall Overview");
+
 		return $tpl->get();
 	}
 }

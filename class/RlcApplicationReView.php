@@ -16,7 +16,7 @@ class RlcApplicationReView extends View {
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
         
         if(UserStatus::isAdmin()){
-            $menuCmd = CommandFactory::getCommand('AssignRlcApplicants');
+            $menuCmd = CommandFactory::getCommand('ShowAssignRlcApplicants');
             $tags['MENU_LINK'] = $menuCmd->getLink('Return to RLC Applications');
         }else{
             $menuCmd = CommandFactory::getCommand('ShowStudentMenu');
@@ -74,6 +74,8 @@ class RlcApplicationReView extends View {
         }else{
             $tags['WHY_THIRD_CHOICE'] = 'n/a';
         }
+
+        Layout::addPageTitle("RLC Application Review");
 
         return PHPWS_Template::process($tags, 'hms', 'student/rlc_application.tpl');
     }

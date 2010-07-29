@@ -32,29 +32,41 @@ class CreateTermCommand extends Command {
         }
 
         // Check to see if the specified term already exists
-        if(Term::isValidTerm($year . $sem)){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Error: That term already exists.');
-            $errorCmd->redirect();
-        }
+        if(!Term::isValidTerm($year . $sem)){
+            $term = new Term(NULL);
+            $term->setTerm($year . $sem);
+            $term->setBannerQueue(1);
 
-        $term = new Term(NULL);
-        $term->setTerm($year . $sem);
-        $term->setBannerQueue(1);
+            try{
+                $term->save();
+            }catch(DatabaseException $e){
+                NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'There was an error saving the term. Please try again or contact ESS.');
+                $viewCmd->redirect();
+            }
+        }else{
 
-        try{
-            $term->save();
-        }catch(DatabaseException $e){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'There was an error saving the term. Please try again or contact ESS.');
-            $viewCmd->redirect();
+            $term = new Term($year . $sem);
+
+            // The term already exists, make sure there are no halls for this term
+            $db = new PHPWS_DB('hms_residence_hall');
+            $db->addWhere('term', $term->getTerm());
+            $num = $db->count();
+
+            if(!is_null($num) && $count > 0){
+                NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'One or more halls already exist for this term, so nothing can be copied.');
+                $viewCmd->redirect();
+            }
         }
 
         $text = Term::toString($term->getTerm());
 
         $copy = $context->get('copy_drop');
 
-        if('hallStructure'){
+        if($copy == 'struct'){
+            // Only hall structure
             $copyAssignments = false;
-        }else if('assignments'){
+        }else if($copy == 'struct_assign'){
+            // Hall structure and assignments
             $copyAssignments = true;
         }else{
             // either $copy == 'nothing', or the view didn't specify... either way, we're done
@@ -68,10 +80,9 @@ class CreateTermCommand extends Command {
 
         try{
             $db->query('BEGIN');
-
             # Get the halls from the current term
             $halls = HMS_Residence_Hall::get_halls(Term::getCurrentTerm());
-
+            set_time_limit(36000);
             foreach ($halls as $hall){
                 $hall->copy($term->getTerm(), $copyAssignments);
             }

@@ -16,9 +16,9 @@ Roommates:
 Check-in Time: {MOVE_IN_TIME} 
 <!-- END movein_time -->
 
-Check-in is Sunday, July 5th from 12noon to 5pm. See above for your scheduled time. Failure to check in by 6pm on Sunday, July 5th will result in assignment cancellation (see page seven of Summer 2009 the Residence Hall License Contract booklet).
+Please go to your hall office to check in. Failure to check in by 6pm on May 25, will result in assignment cancellation and you will be declared a No Show.  Please note that No Shows will be responsible for all related housing charges for the term if you are still enrolled for classes. 
 
-Should you have any questions, please feel free to contact our office at 828-262-6111. You may also visit our website at: http://housing.appstate.edu/ .
+Should you have any questions, please feel free to contact our office at 828-262-6111. You may also visit our website at: http://housing.appstate.edu/ . 
 
 Sincerely,
 

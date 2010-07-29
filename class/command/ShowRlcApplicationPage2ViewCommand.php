@@ -4,14 +4,16 @@ PHPWS_Core::initModClass('hms', 'CommandContext.php');
 PHPWS_Core::initModClass('hms', 'RlcApplicationPage2View.php');
 
 class ShowRlcApplicationPage2ViewCommand extends Command {
-    private $requestVars = array('action'=>'ShowRlcApplicationPage2View');
 
-    public function setRequestVars(Array $vars){
-        $this->requestVars = $vars;
-    }
+    private $term;
 
     public function getRequestVars(){
-        return $this->requestVars;
+        return array('action'=>'ShowRlcApplicationPage2View', 'term' => $this->term);
+    }
+
+    public function setTerm($term)
+    {
+        $this->term = $term;
     }
 
     public function execute(CommandContext $context){

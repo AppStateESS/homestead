@@ -3,20 +3,20 @@
 PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
 class FreshmenApplicationReview extends View {
-	
+
 	private $student;
 	private $term;
 	private $app;
-	
+
 	public function __construct(Student $student, $term, HousingApplication $app)
 	{
 		$this->student	= $student;
 		$this->term		= $term;
 		$this->app		= $app;
 	}
-	
+
 	public function show()
-	{	
+	{
         $tpl = array();
         $tpl['REVIEW_MSG']      = ''; // set this to show the review message
 
@@ -38,7 +38,7 @@ class FreshmenApplicationReview extends View {
         }
 
         $tpl['CELLPHONE']   = is_null($this->app->getCellPhone())?"(not provided)":$this->app->getCellPhone();
-        
+
         //Special Needs
         $special_needs = "";
         if(isset($this->app->physical_disability)){
@@ -66,24 +66,24 @@ class FreshmenApplicationReview extends View {
         $form = new PHPWS_Form('hidden_form');
         $submitCmd = CommandFactory::getCommand('HousingApplicationConfirm');
         $submitCmd->setVars($_REQUEST);
-		
+
         $submitCmd->initForm($form);
-        
+
         $form->addSubmit('submit', 'Confirm & Continue');
         $form->setExtra('submit', 'class="hms-application-submit-button"');
-        
-        
+
+
         $redoCmd = CommandFactory::getCommand('ShowHousingApplicationForm');
         $redoCmd->setTerm($this->term);
         $redoCmd->setAgreedToTerms(1);
         $redoCmd->setVars($_REQUEST);
-        
+
 		$tpl['REDO_BUTTON'] = $redoCmd->getLink('modify your application');
-        
+
         $form->mergeTemplate($tpl);
-        
+
         $tpl = $form->getTemplate();
-        
+
         return PHPWS_Template::process($tpl, 'hms', 'student/student_application.tpl');
 	}
 }

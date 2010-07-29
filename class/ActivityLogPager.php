@@ -46,28 +46,28 @@ class ActivityLogPager extends View {
 	{
 		$pct = ($this->exact == TRUE) ? '' : '%';
 
-		if(!is_null($this->actor) && !is_null($this->actee) && $this->actor == $this->actee){
+		if(!empty($this->actor) && !empty($this->actee) && $this->actor == $this->actee){
 			// Both actor and actee were specified, and they match so use an 'OR'
 			// to effectively show all entries for the username specified
 			$this->pager->db->addWhere('actor', "$pct$this->actor$pct", 'ILIKE', 'OR', 'actor_actee_group');
 			$this->pager->db->addWhere('user_id', "$pct$this->actee$pct", 'ILIKE', 'OR', 'actor_actee_group');
 			$this->pager->db->setGroupConj('actor_actee_group', 'AND');
-		}else if(!is_null($this->actor) && !is_null($this->actee)){
+		}else if(!empty($this->actor) && !empty($this->actee)){
 			// Both actor and actee were specified, but they don't match so use an 'AND'
 			// to get just the specific situation we're looking for
 			$this->pager->db->addWhere('actor', "$pct$this->actor$pct", 'ILIKE', 'AND', 'actor_actee_group');
 			$this->pager->db->addWhere('user_id', "$pct$this->actee$pct", 'ILIKE', 'AND', 'actor_actee_group');
 			$this->pager->db->setGroupConj('actor_actee_group', 'AND');
-		}else if(!is_null($this->actor)){
+		}else if(!empty($this->actor)){
 			$this->pager->db->addWhere('actor', "$pct$this->actor$pct", 'ILIKE');
-		}else if(!is_null($this->actee)){
+		}else if(!empty($this->actee)){
 			$this->pager->db->addWhere('user_id', "$pct$this->actee$pct", 'ILIKE');
 		}
 
-		if(!is_null($this->notes))
+		if(!empty($this->notes))
 		$this->pager->db->addWhere('notes', "%$this->notes%", 'ILIKE');
 
-		if($this->begin != $this->end && $bthis->egin < $this->end) {
+		if($this->begin != $this->end && $this->begin < $this->end) {
 			if(!is_null($this->begin))
 			$this->pager->db->addWhere('timestamp', $this->begin, '>');
 
@@ -76,7 +76,7 @@ class ActivityLogPager extends View {
 		}
 
 		if(!is_null($this->activities) && !empty($this->activities))
-		$this->pager->db->addWhere('activity', $this->activities, 'IN');
+            $this->pager->db->addWhere('activity', $this->activities, 'IN');
 
 		$this->pager->setModule('hms');
 		$this->pager->setLink('index.php?module=hms');

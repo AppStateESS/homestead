@@ -52,6 +52,8 @@ class SelectRoomView extends View {
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
+        Layout::addPageTitle("Select Room");
+
         return PHPWS_Template::process($tpl, 'hms', 'admin/select_room.tpl');
 	}
 }

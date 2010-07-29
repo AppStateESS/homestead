@@ -29,18 +29,20 @@ class RlcApplicationPage1View extends View {
         //Seriously php?  Can't resolve context without this?  Fail.
         $context = $this->context;
         PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
-        
+
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), Term::getCurrentTerm());
  
         $template = array();
 
         $rlc_form = new PHPWS_Form();
-        CommandFactory::getCommand('ShowRlcApplicationPage2View')->initForm($rlc_form);
+        $page2Cmd = CommandFactory::getCommand('ShowRlcApplicationPage2View');
+        $page2Cmd->setTerm($context->get('term'));
+        $page2Cmd->initForm($rlc_form);
 
 
         # Make sure the user is eligible for an RLC
         if($student->getCreditHours() > 15){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Sorry, you are not eligible for a Unique Housing Option for Underclassmen. Please visit the <a href="http://housing.appstate.edu/index.php?module=pagemaster&PAGE_user_op=view_page&PAGE_id=293" target="_blank">Unique Housing Options for Upperclassmen website</a> for information on applying for Unique Housing Options for Upperclassmen.');
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Sorry, you are not eligible for a Residential Learning Community for Underclassmen. Please visit the <a href="http://housing.appstate.edu/index.php?module=pagemaster&PAGE_user_op=view_page&PAGE_id=293" target="_blank">Residential Learning Communities for Upperclassmen website</a> for information on applying for Residential Learning Communities for Upperclassmen.');
             $cmd     = CommandFactory::getCommand('ShowRlcApplicationPage1View');
             $cmd->redirect();
         }
@@ -118,6 +120,8 @@ class RlcApplicationPage1View extends View {
     
         $rlc_form->mergeTemplate($template);
         $template = $rlc_form->getTemplate();
+
+        Layout::addPageTitle("RLC Application");
                 
         return PHPWS_Template::process($template,'hms','student/rlc_signup_form_page1.tpl');
   }
