@@ -22,8 +22,6 @@ INSERT INTO hms_permission VALUES (1, 'email', 'send emails');
 CREATE SEQUENCE hms_permission_seq;
 SELECT setval('hms_permission_seq', (SELECT max(id) FROM hms_permission));
 
-CREATE SEQUENCE hms_permission_seq;
-
 CREATE TABLE hms_role_perm (
     role                INTEGER NOT NULL REFERENCES hms_role(id),
     permission          INTEGER NOT NULL REFERENCES hms_permission(id),
