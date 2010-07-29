@@ -8,7 +8,7 @@
 
     $use_permissions = TRUE;
     $item_permissions = TRUE;
-    
+
     /***********************
      * General Permissions *
      ***********************/
@@ -63,7 +63,7 @@
      * Roommates *
      *************/
     $permissions['roommate_maintenance']     = _('Create and crush roommate groups');
-    
+
     /***************
      * Assignments *
      ***************/
@@ -79,7 +79,7 @@
     # RLC application tasks
     $permissions['view_rlc_applications']           = _('View RLC applications');
     $permissions['approve_rlc_applications']        = _('Approve/Deny RLC applications');
-    
+
     $permissions['view_rlc_members']                = _('View list of RLC members');
     $permissions['remove_rlc_members']              = _('Remove rlc members');
 
@@ -117,7 +117,7 @@
     /*******************************
      * Email Messaging permissions *
      ******************************/
-    $permissions['email_hall'] = _('Can send Hall emails');
+    //$permissions['email_hall'] = _('Can send Hall emails');
     $permissions['email_all']  = _('Can send campus wide emails to residents');
     $permissions['anonymous_notifications'] = _('Can send notifications anonymously (as hms@appstate.edu)');
 ?>

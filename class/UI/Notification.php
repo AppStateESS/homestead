@@ -37,9 +37,12 @@ class Notification {
 
     public function show_select_hall()
     {
+        /*
         if(!Current_User::allow('hms', 'email_hall')){
              return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
         }
+        */
+
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
 
         $tpl=array();
@@ -56,13 +59,13 @@ class Notification {
             }
             $form->addHidden('type', 'notification');
             $form->addHidden('op',   'edit');
-            $form->addSubmit('Continue'); 
+            $form->addSubmit('Continue');
 
             $i=0;
             $elements = $form->getTemplate();
             foreach($elements as $row){
                 //put the first and last elements directly into the template, not the row repeat because they are form tags
-                if($i == 0){ 
+                if($i == 0){
                     $tpl['START_FORM'] = $row;
                     $i++;
                     continue;
@@ -70,7 +73,7 @@ class Notification {
                     $tpl['END_FORM'] = $row;
                     break;
                 }
-               
+
                 //even numbered rows are checkboxes, odd are labels
                 if($i % 2 == 1)
                     $tpl['halls_list'][$i+1]['LABEL'] = $row; //group the label with the checkbox
@@ -96,7 +99,7 @@ class Notification {
 
         $tpl['HEADER'] = 'Email';
         $form = new PHPWS_Form('email_content');
-        
+
         if(Current_User::allow('hms', 'anonymous_notifications')){
             $form->addCheck('anonymous');
             $form->setMatch('anonymous', isset($_REQUEST['anonymous']) ? true : false);
@@ -136,7 +139,7 @@ class Notification {
             $hall = new HMS_Residence_Hall($_REQUEST['hall']);
             $tpl['halls'][] = array('HALL'=>$hall->hall_name);
         }
-        
+
         if(empty($_REQUEST['subject'])){
             return Notification::show_edit_email('You must fill in the subject line of the email.', '', $_REQUEST['body']);
         } else if(empty($_REQUEST['body'])){
@@ -184,7 +187,7 @@ class Notification {
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
         PHPWS_Core::initModClass('hms', 'HMS_Email.php');
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-        
+
         // Log that this is happening
         if($from == FROM_ADDRESS){
             HMS_Activity_Log::log_activity(Current_User::getUsername(), ACTIVITY_ANON_NOTIFICATION_SENT, Current_User::getUsername());
@@ -232,7 +235,7 @@ class Notification {
 
         return Notification::show_confirmation();
     }
- 
+
     public function show_confirmation()
     {
         return '<font color="green">Emails sent successfully</font><br /><br />Please click '. PHPWS_Text::secureLink(_('Here'), 'hms', array('type'=>'maintenance','op'=>'show_maintenance_options','tab'=>'maintenance_main')) . ' to return to the main menu.';
