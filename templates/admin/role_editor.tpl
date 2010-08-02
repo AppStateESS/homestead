@@ -1,7 +1,7 @@
-<h3>Permissions</h3>
+<h2>Permissions</h2>
 
-<div id="manager" />
-<div id="managerPopup" />
+<div id="manager"></div>
+<div id="managerPopup"></div>
 
 <script type="text/javascript">
 var className = {CLASS_NAME};
@@ -26,7 +26,7 @@ var managerPopup = new function(){
                     options.push('<option value="'+data[i].id+'">'+data[i].name+'</option>');
                 }
                 $("#managerPopup").html(
-                    '<div id="popupError" />'+
+                    '<div id="popupError"></div>'+
 					'<form id="popupForm" onsubmit="return managerPopup.submit();">'+
 					'<input type="hidden" id="popupType" value="'+className+'" />'+
 					'<input type="hidden" id="popupInstance" value="'+instance+'" />'+
@@ -66,10 +66,10 @@ var managerPopup = new function(){
 
         $.post('index.php', {module: 'hms', action: 'RoleAddUser', username: username, role: role, class: type, instance: instance},
             function(data){
-                if(data){
+                if(data == "true"){
                     me.close();
                 } else {
-                    $("#popupError").html('<span class="error">Could not add the user to the role!</span>');
+                    $("#popupError").html('<span class="error">' + data + '</span>');
                 }
             },
             'json'

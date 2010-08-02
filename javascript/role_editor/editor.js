@@ -64,11 +64,6 @@ var roleMan = function(className, instance, div, name){
 								}
 							}
 						}
-						for(var i in me.roles){
-							if(me.roles[i].getMembers().length == 0){
-								me.roles[i].addMember('Please add members with the button below');
-							}
-						}
 						me.draw();
 					},
 					'json'
@@ -88,12 +83,20 @@ var roleMan = function(className, instance, div, name){
         tabs.push('<ul>');
         for(var i in this.roles){
             tabs.push('<li><a href="#tabs-'+i+'">'+this.roles[i].getName()+'</a></li>');
-            var divContents = '<div id="tabs-'+i+'"><ul>';
+            var divContents = '<div id="tabs-'+i+'">';
             var members = this.roles[i].getMembers();
-            for(var j in members){
-                divContents += '<li>'+members[j]+'<img width="16" height="16" src="images/mod/hms/tango/process-stop.png" onclick="removeUser(\''+members[j]+'\', \''+this.roles[i].getName()+'\', newMan);"></li>';
+            
+            if(members.length == 0){
+            	divContents += 'Please add members with the button below.';
+            }else{
+            	divContents += '<ul>';
+            	for(var j in members){
+            		divContents += '<li>'+members[j]+'<img width="13" height="13" style="margin-left: 5px; cursor: pointer" src="images/mod/hms/tango/process-stop.png" onclick="removeUser(\''+members[j]+'\', \''+this.roles[i].getName()+'\', newMan);"></li>';
+            	}
+            	divContents += '</ul>';
             }
-            divContents += '</ul></div>';
+            
+            divContents += '</div>';
             divs.push(divContents);
         }
         tabs.push('</ul>');

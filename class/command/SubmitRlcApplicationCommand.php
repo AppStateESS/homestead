@@ -12,10 +12,11 @@ class SubmitRlcApplicationCommand extends Command {
     }
 
     public function execute(CommandContext $context){
+
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), Term::getCurrentTerm());
-        
+
         # Check for an existing application and delete it
-        $oldApp = HMS_RLC_Application::getApplicationByUsername($student->getUsername(), $student->getApplicationTerm());
+        $oldApp = HMS_RLC_Application::getApplicationByUsername($student->getUsername(), $context->get('term'));
         
         if($oldApp->id != NULL){
             $result = $oldApp->delete();
@@ -35,7 +36,7 @@ class SubmitRlcApplicationCommand extends Command {
         }
 
         $application = new HMS_RLC_Application();
-        $application->setUsername(Current_User::getUsername());
+        $application->setUsername($student->getUsername());
         $application->setDateSubmitted(mktime());
         $application->setFirstChoice($context->get('rlc_first_choice'));
         $application->setSecondChoice($choice2->id > 0 ? $choice2->id : NULL);
@@ -45,7 +46,7 @@ class SubmitRlcApplicationCommand extends Command {
         $application->setRLCQuestion0($context->get('rlc_question_0'));
         $application->setRLCQuestion1(is_null($context->get('rlc_question_1')) ? '' : $context->get('rlc_question_1'));
         $application->setRLCQuestion2(is_null($context->get('rlc_question_2')) ? '' : $context->get('rlc_question_2'));
-        $application->setEntryTerm($student->getApplicationTerm());
+        $application->setEntryTerm($context->get('term'));
         $result = $application->save();
 
         if(PEAR::isError($result)){
@@ -53,6 +54,8 @@ class SubmitRlcApplicationCommand extends Command {
             $cmd = CommandFactory::getCommand('ShowRlcApplicationView');
             $cmd->redirect();
         } else {
+            PHPWS_Core::initModClass('hms', 'HMS_Email.php');
+            HMS_Email::send_rlc_application_confirmation($student);
             NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Your application has been submitted');
             $cmd = CommandFactory::getCommand('ShowStudentMenu');
             $cmd->redirect();

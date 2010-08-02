@@ -4,14 +4,6 @@
         <h1>{NAME} -- {BANNER_ID} -- {TERM}</h1>
         <h2>Login as this student [ {LOGIN_AS_STUDENT} ]</h2>
 
-        <!-- BEGIN success_msg -->
-            <div class="success">{SUCCESS}</div><br />
-        <!-- END success_msg -->
-
-        <!-- BEGIN error_msg -->
-            <div class="error">{ERROR}</div><br />
-        <!-- END error_msg -->
-
         <table>
             <tr>
                 <th><a id="demographics_toggle">[-]</a>Student Demographics</th>
@@ -48,6 +40,14 @@
                     <tr>
                         <th>Class</th>
                         <td>{CLASS}</td>
+                    </tr>
+                    <tr>
+                        <th>Level</th>
+                        <td>{STUDENT_LEVEL}</td>
+                    </tr>
+                    <tr>
+                        <th>International</th>
+                        <td>{INTERNATIONAL}</td>
                     </tr>
                     <tr>
                         <th>Phone Number</th>
@@ -91,26 +91,48 @@
                     </tr>
                     <tr>
                         <th>Roommate(s):</th>
+                        <!-- BEGIN confirmed -->
+                            <td class="success">
+                            {ROOMMATE}<img class="roommate_request_icon" src="images/mod/hms/icons/check.png" />
+                            </td>
+                        <!-- END confirmed -->
+                        <!-- BEGIN pending -->
+                            <td class="warning">
+                            {ROOMMATE}<img class="roommate_request_icon" src="images/mod/hms/icons/warning.png" />
+                            </td>
+                        <!-- END pending -->
+                        <!-- BEGIN error_status -->
+                            <td class="error">
+                            {ROOMMATE}<img class="roommate_request_icon" src="images/mod/hms/icons/warning.png" />
+                            </td>
+                        <!-- END error_status -->
                     </tr>
-                        <!-- BEGIN roommates -->
+                    <tr>
+                        <!-- BEGIN assigned -->
                         <tr>
                             <td></td>
-                            <td>{ROOMMATE}<td>
+                            <td>{ROOMMATE}</td>
                         </tr>
-                        <!-- END roommates -->
+                        <!-- END assigned -->
                     </tr>
-                    <!-- BEGIN requested_roommate -->
-                    <tr>
-                        <td></td>
-                        <td>{REQUESTED_ROOMMATE}</td>
-                    </tr>
-                    <!-- END requested_roommate -->
                     <tr>
                         <th>RLC:</td>
                         <td>{RLC_STATUS}</td>
                     </tr>
                     <tr>
-                        <th>Special Interest Group: </th>
+                        <th>Honors</th>
+                        <td>{HONORS}</td>
+                    </tr>
+                    <tr>
+                        <th>Teaching Fellow</th>
+                        <td>{TEACHING_FELLOW}</td>
+                    </tr>
+                    <tr>
+                        <th>Watauga Global Member</th>
+                        <td>{WATAUGA}</td>
+                    </tr>
+                    <tr>
+                        <th>Re-application Special Interest Group: </th>
                         <td>{SPECIAL_INTEREST}</td>
                     </tr>
                 </table>

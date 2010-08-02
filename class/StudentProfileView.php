@@ -52,6 +52,17 @@ class StudentProfileView extends View {
         $tpl['CLASS'] = $this->student->getPrintableClass();
 
         $tpl['TYPE'] = $this->student->getPrintableType();
+        
+        $tpl['STUDENT_LEVEL'] = $this->student->getPrintableLevel();
+        
+        $tpl['INTERNATIONAL'] = $this->student->isInternational() == 'true' ? 'Yes' : 'No';
+        
+        $tpl['HONORS'] = $this->student->isHonors() == 'true' ? 'Yes' : 'No';
+        
+        $tpl['TEACHING_FELLOW'] = $this->student->isTeachingFellow() == 'true' ? 'Yes' : 'No';
+        
+        $tpl['WATAUGA'] = $this->student->isWataugaMember() == 'true' ? 'Yes' : 'No';
+        
         try {
             $tpl['APPLICATION_TERM'] = Term::toString($this->student->getApplicationTerm());
         } catch(InvalidTermException $e) {
@@ -117,13 +128,31 @@ class StudentProfileView extends View {
             //$tpl['ASSIGNMENT'] = 'No';
         }
 
-        // Roommates
+        /*************
+         * Roommates 
+         *************/
         if(isset($this->roommates) && !empty($this->roommates)){
-            foreach($this->roommates as $roommate){
-                $tpl['roommates'][]['ROOMMATE'] = $roommate;
+            // Remember, student can only have one confirmed or pending request
+            // but multiple assigned roommates
+            if(isset($this->roommates['PENDING'])){
+                $tpl['pending'][]['ROOMMATE'] = $this->roommates['PENDING'];
             }
-        }else{
-            $tpl['roommates'][] = array('ROOMMATE' => 'No pending or confirmed roommates');
+            else if(isset($this->roommates['CONFIRMED'])){
+                $tpl['confirmed'][]['ROOMMATE'] = $this->roommates['CONFIRMED'];
+            }
+            // semi-error states
+            else if(isset($this->roommates['NO_BED_AVAILABLE'])){
+                $tpl['error_status'][]['ROOMMATE'] = $this->roommates['NO_BED_AVAILABLE'];
+            } 
+            else if(isset($this->roommates['MISMATCHED_ROOMS'])){
+                $tpl['error_status'][]['ROOMMATE'] = $this->roommates['MISMATCHED_ROOMS'];
+            }
+
+            if(isset($this->roommates['ASSIGNED'])){
+                foreach($this->roommates['ASSIGNED'] as $roommate){
+                    $tpl['assigned'][]['ROOMMATE'] = $roommate;
+                }
+            }
         }
 
         /**************
@@ -142,7 +171,7 @@ class StudentProfileView extends View {
             $tpl['RLC_STATUS'] = "This student is assigned to: " . $rlc_names[$rlc_assignment->rlc_id];
         }else if (!is_null($rlc_application)){
             $rlcViewCmd = CommandFactory::getCommand('ShowRlcApplicationReView');
-            $rlcViewCmd->setUsername($this->student->getUsername());
+            $rlcViewCmd->setAppId($rlc_application->getId());
             $tpl['RLC_STATUS'] = "This student has a " . $rlcViewCmd->getLink('pending RLC application') . ".";
         }else{
             $tpl['RLC_STATUS'] = "This student is not in a Learning Community and has no pending application.";
@@ -251,6 +280,8 @@ class StudentProfileView extends View {
         // TODO logs
 
         // TODO tabs
+        
+        Layout::addPageTitle("Student Profile");
 
         return PHPWS_Template::process($tpl, 'hms', 'admin/fancy_student_info.tpl');
     }

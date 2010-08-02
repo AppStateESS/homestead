@@ -61,7 +61,7 @@ class HMS_Email{
 
         # Create a Mail object and set it up
         PHPWS_Core::initCoreClass('Mail.php');
-        $message = &new PHPWS_Mail;
+        $message = new PHPWS_Mail;
         
         $message->setFrom($from);
         $message->setSubject($subject);
@@ -90,7 +90,7 @@ class HMS_Email{
             PHPWS_Error::log($result);
             return false;
         }
-
+        
         return true;
     }
 
@@ -287,17 +287,44 @@ class HMS_Email{
         HMS_Email::send_template_message($student->getUsername() . TO_DOMAIN, 'On-campus Housing Re-application Confirmation!', 'email/lottery_confirmation.tpl', $tpl);
     }
 
-    public function send_hms_application_confirmation(Student $to)
+    /**
+     * Sends an email to the specified student to confirm submission of a housing application for a particular term
+     * @param $to Student object representing the student to send this email too
+     * @param $term The term the housing application was submitted for.
+     */
+    public function send_hms_application_confirmation(Student $to, $term)
     {
         PHPWS_Core::initModClass('hms', 'Term.php');
 
         $tpl = array();
         $tpl['NAME'] = $to->getName();
 
-        $tpl['TERM'] = Term::toString($to->getApplicationTerm());
+        $tpl['TERM'] = Term::toString($term);
 
         HMS_Email::send_template_message($to->getUsername() . TO_DOMAIN, 'On-campus Houisng Application Confirmation!', 'email/application_confirmation.tpl', $tpl);
     }
+
+    public function send_rlc_application_confirmation(Student $to)
+    {
+        PHPWS_Core::initModClass('hms', 'Term.php');
+
+        $tpl = array();
+        $tpl['NAME'] = $to->getName();
+        $tpl['TERM'] = Term::toString($to->getApplicationTerm());
+
+        HMS_Email::send_template_message($to->getUsername() . TO_DOMAIN, 'Learning Community Application Confirmation!', 'email/rlc_application_confirmation.tpl', $tpl);
+    }
+
+    public function sendRlcApplicationRejected(Student $to)
+    {
+        PHPWS_Core::initModClass('hms', 'Term.php');
+        
+        $tpl = array();
+        $tpl['NAME'] = $to->getName();
+        $tpl['TERM'] = Term::toString($to->getApplicationTerm());
+
+        HMS_Email::send_template_message($to->getUsername() . TO_DOMAIN, 'Learning Community Application Rejected', 'email/rlc_application_rejection.tpl',$tpl);
+    }                    
 
     public function send_lottery_assignment_confirmation(Student $to, $location, $term)
     {

@@ -39,6 +39,8 @@ class ActivityLogView extends View {
 		$tags['CONTENT'] = $this->pager->show();
 		$tags['FILTERS'] = ActivityLogView::showFilters($_REQUEST);
 
+        Layout::addPageTitle("Activity Log");
+
 		return PHPWS_Template::Process($tags, 'hms', 'admin/activity_log_box.tpl');
 	}
 

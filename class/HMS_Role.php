@@ -13,7 +13,7 @@ class HMS_Role extends HMS_Item {
     public function __construct($name=''){
         $this->name = $name;
     }
-    
+
     /*
      * Will return false on subsequent attempts to add a permission to a role.
      * ie. you can only add it once.
@@ -23,7 +23,7 @@ class HMS_Role extends HMS_Item {
         $db->addValue('role', $this->id);
         $db->addValue('permission', $permission->id);
         $result = $db->insert();
-        
+
         if(PHPWS_Error::logIfError($result)){
             return false;
         }
@@ -54,8 +54,13 @@ class HMS_Role extends HMS_Item {
         $db->addWhere('username', $username);
         $result = $db->select('row');
 
-        if(PHPWS_Error::logIfError($result) || is_null($result['id'])){
-            return false;
+        if(PHPWS_Error::logIfError($result)){
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException($result->toString());
+        }
+
+        if(is_null($result['id'])){
+            throw new InvalidArgumentException('User name "' . $username . '" does not exist.');
         }
 
         $user_id = $result['id'];
@@ -68,13 +73,8 @@ class HMS_Role extends HMS_Item {
         $result = $db->insert();
 
         if(PHPWS_Error::logIfError($result)){
-		/*
-            $db->addWhere('user_id', $user_id);
-            $db->addWhere('role', $this->id);
-            return !PHPWS_Error::logIfError($db->update());
-		*/
-			
-			return false;
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException($result->toString());
         }
 
         return true;
@@ -103,7 +103,8 @@ class HMS_Role extends HMS_Item {
         $result = $db->delete();
 
         if(PHPWS_Error::logIfError($result)){
-            return false;
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException($result->toString());
         }
 
         return true;

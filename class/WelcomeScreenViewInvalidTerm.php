@@ -16,6 +16,9 @@ class WelcomeScreenViewInvalidTerm extends View {
     {
         $tpl = array('ENTRY_TERM'   => $this->term,
                      'CONTACT_LINK' => $this->cmd->getLink('click here'));
+
+        Layout::addPageTitle("Welcome");
+
 		return PHPWS_Template::process($tpl, 'hms', 'student/welcome_screen_no_entry_term.tpl');
 	}
 }

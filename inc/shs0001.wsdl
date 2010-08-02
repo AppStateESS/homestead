@@ -34,6 +34,11 @@
           <s:element minOccurs="1" maxOccurs="1" name="credhrs_completed" type="s:short" />
           <s:element minOccurs="1" maxOccurs="1" name="credhrs_for_term" type="s:short" />
           <s:element minOccurs="1" maxOccurs="1" name="on_campus" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="honors" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="teaching_fellow" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="watauga_member" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="student_level" type="s:NMTOKEN" />
+          <s:element minOccurs="1" maxOccurs="1" name="international" type="s:boolean" />
           <s:element minOccurs="0" maxOccurs="unbounded" name="address" nillable="true" type="tns:Address" />
           <s:element minOccurs="0" maxOccurs="unbounded" name="phone" nillable="true" type="tns:Phone" />
           <s:element minOccurs="0" maxOccurs="unbounded" name="disability" nillable="true" type="tns:Disability" />

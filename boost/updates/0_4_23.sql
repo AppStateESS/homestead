@@ -1,0 +1,1 @@
+alter table hms_new_application add column international smallint not null default 0;

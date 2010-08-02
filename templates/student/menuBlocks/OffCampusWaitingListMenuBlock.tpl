@@ -1,5 +1,14 @@
-<h3>Open Waiting List</h3>
+{ICON}
 
+<h3>
+<div class={STATUS}>Open Waiting List</div>
+</h3>
+
+<div class="block-content">
+
+<div class="availability-dates">Available: {DATES}</div>
+
+<p>
 <!-- BEGIN eligible -->
 You are eligible to enter your name on the Open Waiting List. Students are selected from this list as space in the residence halls becomes available. Enrolling yourself on the waiting list does not guarantee you will be offered on-campus housing.
 {WAIT_LIST_LINK}
@@ -17,3 +26,5 @@ Waiting list enrollment ended on {END_DEADLINE}.
 {ALREADY_APPLIED}
 You have applied to the on-campus housing Open Waiting List for this term. You will be notified by phone and/or email if you are selected to receive on-campus housing.
 <!-- END already_applied -->
+</p>
+</div>

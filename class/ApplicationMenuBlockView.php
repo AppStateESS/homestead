@@ -23,12 +23,20 @@ class ApplicationMenuBlockView extends View {
     {
         $tpl = array();
 
+        // Show availability dates!
+        $tpl['DATES'] = HMS_Util::getPrettyDateRange($this->startDate, $this->endDate);
+        $tpl['STATUS'] = "";
 
         if(time() < $this->startDate){
+            $tpl['ICON'] = FEATURE_NOTYET_ICON;
             $tpl['BEGIN_DEADLINE'] = HMS_Util::getFriendlyDate($this->startDate);
         } else if(time() > $this->endDate){
+            $tpl['ICON'] = FEATURE_LOCKED_ICON;
+            // fade out header
+            $tpl['STATUS'] = "locked";
             $tpl['END_DEADLINE'] = HMS_Util::getFriendlyDate($this->endDate);
         } else if( is_null($this->application) ){
+            $tpl['ICON'] = FEATURE_OPEN_ICON;
             $appCommand = CommandFactory::getCommand('ShowTermsAgreement');
             $appCommand->setTerm($this->term);
             $cmd = CommandFactory::getCommand('ShowHousingApplicationForm');
@@ -38,12 +46,14 @@ class ApplicationMenuBlockView extends View {
         } else {
             $appCommand = CommandFactory::getCommand('ShowApplicationView');
             if(!is_null($this->application)){
+                $tpl['ICON'] = FEATURE_COMPLETED_ICON;
                 $appCommand->setAppId($this->application->id);
             }
-            
+
             $tpl['VIEW_APP'] = $appCommand->getLink('view your application');
-            
+
             if(time() < $this->editDate){
+                $tpl['ICON'] = FEATURE_COMPLETED_ICON;
                 $newApp = CommandFactory::getCommand('ShowHousingApplicationForm');
                 $newApp->setAgreedToTerms(1);
                 $newApp->setTerm($this->term);

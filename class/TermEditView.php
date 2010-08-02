@@ -75,6 +75,8 @@ class TermEditView extends View {
 		PHPWS_Core::initModClass('hms', 'ApplicationFeatureListView.php');
 		$aflv = new ApplicationFeatureListView(Term::getSelectedTerm());
 		$tpl['FEATURES_DEADLINES_CONTENT'] = $aflv->show();
+
+        Layout::addPageTitle("Term Settings");
 		
 		return PHPWS_Template::process($tpl, 'hms', 'admin/TermEditView.tpl');
 	}

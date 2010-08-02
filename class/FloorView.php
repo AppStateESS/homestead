@@ -126,6 +126,8 @@ class FloorView extends View {
 		javascript('modules/hms/role_editor');
         $tpl['ROLE_EDITOR'] = PHPWS_Template::process(array('CLASS_NAME'=>"'HMS_Floor'", 'ID'=>$this->floor->id), 'hms', 'admin/role_editor.tpl');
 
+        Layout::addPageTitle("Edit Floor");
+
         return PHPWS_Template::process($tpl, 'hms', 'admin/edit_floor.tpl');
     }
 }

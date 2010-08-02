@@ -26,12 +26,16 @@ class AddCommunityView extends View {
             $form->addHidden('id', $this->community->get_id());
         }
 
+        $var = array('ELEMENT' => $form->getId('community_name'));
+        javascript('/modules/hms/autoFocus', $var);
         $form->addSubmit('Save');
 
         $tpl = $form->getTemplate();
         $tpl['COMMUNITY'] = $this->community->get_community_name();
         $tpl['TITLE']     = 'Add/Edit a learning Community';
         $tpl['MESSAGE']   = ''; //TODO: use NQ here
+
+        Layout::addPageTitle("Add RLC");
 
         return PHPWS_Template::process($tpl, 'hms', 'admin/display_learning_community_data.tpl');
     }

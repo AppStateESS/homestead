@@ -85,8 +85,8 @@ class HousingApplicationFormView extends View {
 
         // This is just getting worse and worse.
         // TODO: this, correctly.
-        $sem = substr($this->term, 4, 2);
-        if($sem == 10 || $sem == 40) {
+        $sem = Term::getTermSem($this->term);
+        if($sem == TERM_SPRING || $sem == TERM_FALL) {
 
             /***************
              * Meal Option *
@@ -155,8 +155,8 @@ class HousingApplicationFormView extends View {
                 $form->setMatch('room_condition', '1');
             }
 
-        } else if($sem == 20 || $sem == 30) {
-            $form->addDropBox('room_type', array('0'=>'Two person', '1'=>'Private (if available)'));
+        } else if($sem == TERM_SUMMER1 || $sem == TERM_SUMMER2) {
+            $form->addDropBox('room_type', array(ROOM_TYPE_DOUBLE=>'Two person', ROOM_TYPE_PRIVATE=>'Private (if available)'));
 
             if(!is_null($this->contextApplication)) {
                 $form->setMatch('room_type', $this->contextApplication->getRoomType());
@@ -223,6 +223,8 @@ class HousingApplicationFormView extends View {
 
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
+
+        Layout::addPageTitle("Housing Application Form");
 
         return PHPWS_Template::process($tpl,'hms','student/student_application.tpl');
     }

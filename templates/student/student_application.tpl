@@ -98,7 +98,7 @@
             </tr>
             <!-- BEGIN rlc_interest_1 -->
             <tr>
-                <th colspan="2">Unique Housing Options</th>
+                <th colspan="2">Residential Learning Communities</th>
             </tr>
             <tr>
                 <td>
@@ -114,7 +114,7 @@
             <!-- BEGIN rlc_submitted -->
             {RLC_SUBMITTED}
             <tr>
-                <th colspan="3">Unique Housing Options</th>
+                <th colspan="3">Residential Learning Communities</th>
             </tr>
             <tr>
                 <td>
@@ -127,7 +127,7 @@
             <!-- BEGIN rlc_review -->
             <tr>
             <tr>
-                <th colspan="2">Unique Housing Options</th>
+                <th colspan="2">Residential Learning Communities</th>
             </tr>
                 <td>
                     <p>Are you interested in living in a Residential Learning Community (RLC)?</p>

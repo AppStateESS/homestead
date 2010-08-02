@@ -23,11 +23,16 @@ class RoleAddUserCommand extends Command {
         $role = new HMS_Role();
         $role->id = $role_id;
         if($role->load()){
-            echo json_encode($role->addUser($username, $classname, $instance));
-            exit;
+
+            try{
+                $role->addUser($username, $classname, $instance);
+                echo json_encode('true');
+                exit;
+            }catch(Exception $e){
+                echo json_encode($e->getMessage());
+                exit;
+            }
         }
-        echo json_encode(false);
-        exit;
     }
 }
 

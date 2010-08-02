@@ -33,6 +33,8 @@ class TermsAgreementView extends View {
         $tpl['TXT_CONTRACT'] = file_get_contents($term->getTxtTerms());
         $tpl['PDF_CONTRACT'] = $term->getPdfTerms();
 
+        Layout::addPageTitle("License Agreement");
+
         return PHPWS_Template::process($tpl, 'hms', 'student/applications/contract.tpl');
     }
 }

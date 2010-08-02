@@ -85,9 +85,9 @@ $('#beds_for_lottery').text($('#phpws_form_beds_per_room').attr('value') * $('#p
         {SUBMIT}
         {END_FORM}
         <br /><br />
-        {FLOOR_PAGER}
-        <br /><br />
         {ROLE_EDITOR}
+        <br /><br />
+        {FLOOR_PAGER}
     </div>
   </div>
 </div>

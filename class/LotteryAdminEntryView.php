@@ -33,7 +33,10 @@ class LotteryAdminEntryView extends View {
         $form->addSelect('special_interest', HMS_Lottery::get_special_interest_groups());
         $form->setLabel('special_interest', 'Special Interest Group');
 
+        javascript('/modules/hms/autoFocus', array('ELEMENT' => $form->getId('asu_username')));
         $form->addSubmit('enter_into_lottery', 'Add to lottery');
+
+        Layout::addPageTitle("Lottery Entry");
 
         return PHPWS_Template::process($form->getTemplate(), 'hms', 'admin/add_to_lottery.tpl');
     }

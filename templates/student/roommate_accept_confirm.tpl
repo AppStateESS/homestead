@@ -10,7 +10,7 @@
             {CAPTCHA_IMAGE}<br />
 <!-- BEGIN RLC_WITHDRAWAL -->
             <p style="display: none">{RLC}</p>
-            <p><b style="color: #F00">Unique Housing Options Warning:</b> You have applied for a Unique Housing Option.  <b>Accepting this roommate request will withdraw your Unique Housing Options Application.</b></p>
+            <p><b style="color: #F00">Residential Learning Communities Warning:</b> You have applied for a Residential Learning Community.  <b>Accepting this roommate request will withdraw your Residential Learning Communities Application.</b></p>
 <!-- END RLC_WITHDRAWAL -->
             {CAPTCHA} {SUBMIT}
             <p><i>'Captcha' technology provides added protection against malicious software hackers, but can sometimes be hard to read.  If the word is too obscured, click on it and another will be provided.</i></p>

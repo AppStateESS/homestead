@@ -36,8 +36,14 @@ class CreateRoommateGroupCommand extends Command {
 			$viewCmd->redirect();
 		}
 
-		$student1 = StudentFactory::getStudentByUsername($roommate1, $term);
-		$student2 = StudentFactory::getStudentByUsername($roommate2, $term);
+        try{
+            $student1 = StudentFactory::getStudentByUsername($roommate1, $term);
+            $student2 = StudentFactory::getStudentByUsername($roommate2, $term);
+        } catch (StudentNotFoundException $e) {
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, $e->getMessage());
+            $viewCmd->redirect();
+        }
+
 
 		try{
 			# Check if these two can live together

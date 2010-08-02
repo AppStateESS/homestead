@@ -26,12 +26,14 @@ class ShowHallNotificationEditCommand extends Command {
     }
 
     public function execute(CommandContext $context){
+        /*
         if(!Current_User::allow('hms', 'email_hall') && !Current_User::allow('hms', 'email_all')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to send messages.');
         }
+        */
 
-        if(is_null($context->get('hall')) || is_null($context->get('floor')) ){
+        if(is_null($context->get('hall')) && is_null($context->get('floor')) ){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You must select a hall or floor to continue!');
             $cmd = CommandFactory::getCommand('ShowHallNotificationSelect');
             $cmd->redirect();

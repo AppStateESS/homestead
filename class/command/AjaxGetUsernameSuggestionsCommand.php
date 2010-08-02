@@ -12,6 +12,7 @@ class AjaxGetUsernameSuggestionsCommand extends Command {
 
 	public function execute(CommandContext $context)
 	{
+        PHPWS_Core::initModClass('hms', 'Term.php');
 
 		$username = $context->get('username');
 		
@@ -19,7 +20,7 @@ class AjaxGetUsernameSuggestionsCommand extends Command {
 
 		$db->addColumn('username');
 		$db->addColumn('banner_id');
-
+        $db->addWhere('term', Term::getSelectedTerm());
 		$db->addWhere('username', '%' . $username . '%', 'ILIKE');
 		$db->addOrder('username', 'ASC');
 		$db->setLimit(10);

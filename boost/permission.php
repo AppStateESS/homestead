@@ -8,7 +8,7 @@
 
     $use_permissions = TRUE;
     $item_permissions = TRUE;
-    
+
     /***********************
      * General Permissions *
      ***********************/
@@ -63,12 +63,14 @@
      * Roommates *
      *************/
     $permissions['roommate_maintenance']     = _('Create and crush roommate groups');
-    
+
     /***************
      * Assignments *
      ***************/
     $permissions['assignment_maintenance']  = _('Create, move, and delete assignments');
     $permissions['autoassign']              = _('Run the auto-assigner');
+    $permissions['assignment_notify']       = _('Send assignment notifications');
+    $permissions['assign_by_floor']         = _('Assign Students by Floor');
 
     /*************
      * RLC tasks *
@@ -79,13 +81,14 @@
     # RLC application tasks
     $permissions['view_rlc_applications']           = _('View RLC applications');
     $permissions['approve_rlc_applications']        = _('Approve/Deny RLC applications');
-    
+
     $permissions['view_rlc_members']                = _('View list of RLC members');
     $permissions['remove_rlc_members']              = _('Remove rlc members');
 
     # RLC assignment tasks
     $permissions['view_rlc_room_assignments']       = _('View RLC room assignments');
     $permissions['rlc_room_assignments']            = _('Create RLC room assignments');
+    $permissions['email_rlc_rejections']            = _('Send RLC rejection emails');
 
     /********
      * Misc *
@@ -117,7 +120,7 @@
     /*******************************
      * Email Messaging permissions *
      ******************************/
-    $permissions['email_hall'] = _('Can send Hall emails');
+    //$permissions['email_hall'] = _('Can send Hall emails');
     $permissions['email_all']  = _('Can send campus wide emails to residents');
     $permissions['anonymous_notifications'] = _('Can send notifications anonymously (as hms@appstate.edu)');
 ?>

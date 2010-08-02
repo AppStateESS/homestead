@@ -16,6 +16,8 @@ class ShowViewByRlc extends View {
         $tpl['RLC_PAGER'] = HMS_RLC_Assignment::view_by_rlc_pager($this->rlcId);
         $tpl['MENU_LINK'] = PHPWS_Text::secureLink(_('Return to previous'), 'hms', array('action'=>'ShowSearchByRlc'));
 
+        Layout::addPageTitle("View By RLC");
+
         return PHPWS_Template::processTemplate($tpl, 'hms', 'admin/rlc_roster.tpl');
     }
 }

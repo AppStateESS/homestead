@@ -72,6 +72,10 @@ class HousingApplicationView extends View {
             $tpl['ROOM_CONDITION']      = 'n/a';
         }
         
+        if(isset($application->room_type)){
+            $tpl['ROOM_TYPE']           = $application->room_type == ROOM_TYPE_DOUBLE ? 'Double' : 'Private (if available)';
+        }
+        
         $tpl['CELLPHONE'] = '';
         if(strlen($application->cell_phone) == 10){
             $tpl['CELLPHONE']   .= '('.substr($application->cell_phone, 0, 3).')';
@@ -105,6 +109,8 @@ class HousingApplicationView extends View {
         if(Current_User::getUsername() == "hms_student"){
             $tpl['MENU_LINK'] = PHPWS_Text::secureLink('Back to main menu', 'hms', array('type'=>'student', 'op'=>'show_main_menu'));
         }
+        
+        Layout::addPageTitle("Housing Application");
 
         return PHPWS_Template::process($tpl, 'hms', 'admin/student_application.tpl');
     }

@@ -96,6 +96,8 @@ class ReApplicationFormView extends View {
 
         $form->mergeTemplate($tpl);
 
+        Layout::addPageTitle("Re-Application Form");
+
         return PHPWS_Template::process($form->getTemplate(), 'hms', 'student/lottery_signup.tpl');
     }
 }
