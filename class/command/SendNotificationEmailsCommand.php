@@ -33,6 +33,8 @@ class SendNotificationEmailsCommand extends Command {
         }
         */
 
+        
+
         if(is_null($context->get('hall')) && is_null($context->get('floor')) ){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You must select a hall or floor to continue!');
             $cmd = CommandFactory::getCommand('ShowHallNotificationSelect');
@@ -103,7 +105,6 @@ class SendNotificationEmailsCommand extends Command {
                     HMS_Email::send_email($student->getUsername() . '@appstate.edu', $from, $subject, $body);
                 }
             }
-            //TODO: add activity for anonymous floor notification
         }
 
         NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Emails sent successfully!');
