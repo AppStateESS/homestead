@@ -43,8 +43,8 @@
         <td>{ROOM_TYPE}</td>
         <!-- END summer_app -->
         <!-- BEGIN fall_app -->
-        <td>{LIFESTYLE}</td>
-        <td>{BEDTIME}</td>
+        <td>{LIFESTYLE_OPTION}</td>
+        <td>{PREFERRED_BEDTIME}</td>
         <td>{ROOM_CONDITION}</td>
         <!-- END fall_app -->
         <td>{ROOMMATE}</td>

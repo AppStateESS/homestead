@@ -228,7 +228,6 @@ class HMS_Roommate
      */
     public function get_confirmed_roommate($asu_username, $term)
     {
-
         $db = new PHPWS_DB('hms_roommate');
         $db->addWhere('requestor', $asu_username, 'ILIKE', 'OR', 'grp');
         $db->addWhere('requestee', $asu_username, 'ILIKE', 'OR', 'grp');
