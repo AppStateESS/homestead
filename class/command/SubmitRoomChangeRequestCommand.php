@@ -11,10 +11,6 @@ class SubmitRoomChangeRequestCommand extends Command {
     }
 
     public function execute(CommandContext $context){
-        test($context->get('cell_num'));
-        test($context->get('cell_num_opt_cout'));
-        test($context->get('reason'));
-
         $request = RoomChangeRequest::getNew();
         $request->username = UserStatus::getUsername();
         $request->cell_number = $context->get('cell_num');  //opt out is kinda silly when it's nullable anyway...
