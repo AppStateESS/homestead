@@ -246,13 +246,23 @@ class HousingApplication {
     public function unassignedApplicantsRows()
     {
         $tpl = array();
-        $tpl['BANNER_ID']       = $this->getBannerId();
-        $tpl['USERNAME']        = $this->getUsername();
-        $tpl['GENDER']          = HMS_Util::formatGender($this->getGender());
-        $tpl['STUDENT_TYPE']    = HMS_Util::formatType($this->getStudentType());
-        $tpl['APP_TERM']        = Term::toString($this->getApplicationTerm(), TRUE);
-        $tpl['MEAL']            = HMS_Util::formatMealOption($this->getMealPlan());
-        $tpl['ROOMMATE']        = HMS_Roommate::get_confirmed_roommate($this->getUsername(), $this->getTerm())->getFulLName();
+        $tpl['BANNER_ID']         = $this->getBannerId();
+        $tpl['USERNAME']          = $this->getUsername();
+        $tpl['GENDER']            = HMS_Util::formatGender($this->getGender());
+        $tpl['STUDENT_TYPE']      = HMS_Util::formatType($this->getStudentType());
+        $tpl['APP_TERM']          = Term::toString($this->getApplicationTerm(), TRUE);
+        $tpl['MEAL']              = HMS_Util::formatMealOption($this->getMealPlan());
+
+        if(is_null($this->lifestyle_option))
+            $tpl['LIFESTYLE_OPTION']     = 'n/a';
+        else
+            $tpl['LIFESTYLE_OPTION']     = $this->lifestyle_option == 1 ? 'Single Gender' : 'Co-ed';
+
+        $tpl['PREFERRED_BEDTIME'] = $this->preferred_bedtime == 1 ? 'Early' : 'Late';
+        $tpl['ROOMMATE']          = HMS_Roommate::get_confirmed_roommate($this->getUsername(), $this->getTerm());
+        if(!is_null($tpl['ROOMMATE']))
+            $tpl['ROOMMATE']    = $tpl['ROOMMATE']->getFullName();
+
         $assignCmd = CommandFactory::getCommand('ShowAssignStudent');
         $assignCmd->setUsername($this->getUsername());
 
