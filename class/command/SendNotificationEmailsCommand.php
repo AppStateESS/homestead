@@ -33,6 +33,8 @@ class SendNotificationEmailsCommand extends Command {
         }
         */
 
+        
+
         if(is_null($context->get('hall')) && is_null($context->get('floor')) ){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You must select a hall or floor to continue!');
             $cmd = CommandFactory::getCommand('ShowHallNotificationSelect');
@@ -74,7 +76,7 @@ class SendNotificationEmailsCommand extends Command {
 
         $permission = new HMS_Permission();
         //load the floors
-        foreach($floors as $key=>$floor_id){
+        foreach(Current_User::allow('hms', 'email_all') || $floors as $key=>$floor_id){
             $floors[$key] = new HMS_Floor($floor_id);
             if(!$permission->verify(Current_User::getUsername(), $floors[$key], 'email')){
                 unset($floors[$key]);
@@ -83,7 +85,7 @@ class SendNotificationEmailsCommand extends Command {
 
         foreach($halls as $hall_id){
             $hall = new HMS_Residence_Hall($hall_id);
-            if($permission->verify(Current_User::getUsername(), $hall, 'email')){
+            if(Current_User::allow('hms', 'email_all') || $permission->verify(Current_User::getUsername(), $hall, 'email')){
                 foreach($hall->get_floors() as $floor){
                     $floors[] = new HMS_Floor($floor->id);
                 }
@@ -103,7 +105,6 @@ class SendNotificationEmailsCommand extends Command {
                     HMS_Email::send_email($student->getUsername() . '@appstate.edu', $from, $subject, $body);
                 }
             }
-            //TODO: add activity for anonymous floor notification
         }
 
         NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Emails sent successfully!');
