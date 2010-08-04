@@ -11,18 +11,36 @@ class SubmitRoomChangeRequestCommand extends Command {
     }
 
     public function execute(CommandContext $context){
-        test($context->get('cell_num'));
-        test($context->get('cell_num_opt_cout'));
-        test($context->get('reason'));
+
+        // Cmd to redirect to when we're done or upon error.
+        $cmd = CommandFactory::getCommand('StudentRoomChange');
+
+        $cellNum = $context->get('cell_num');
+        $optOut  = $context->get('cell_opt_out');
+
+        // Check that a cell phone number was provided, or that the opt-out box was checked.
+        if((!isset($cellNum) || empty($cellNum)) && !isset($optOut)){
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Please provide a cell phone number or check the box indicating you do not wish to provide it.');
+            $cmd->redirect();
+        }
+
+        $reason = $context->get('reason');
+
+        // Make sure a 'reason' was provided.
+        if(!isset($reason) || empty($reason)){
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Please provide a breif explaniation of why you are requesting a room change.');
+            $cmd->redirect();
+        }
+
+        //TODO: hall preferences?
 
         $request = RoomChangeRequest::getNew();
         $request->username = UserStatus::getUsername();
-        $request->cell_number = $context->get('cell_num');  //opt out is kinda silly when it's nullable anyway...
+        $request->cell_number = $context->get('cell_num');
         $request->reason = $context->get('reason');
         $request->change(new PendingRoomChangeRequest);
         $request->save();
 
-        $cmd = CommandFactory::getCommand('StudentRoomChange');
         $cmd->redirect();
     }
 }

@@ -33,7 +33,8 @@ class RoomChangeRequest extends HMS_Item {
         $result = $db->getObjects('RoomChangeRequest');
 
         if(PHPWS_Error::logIfError($result)){
-            throw new DatabaseException('Database error!');
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException($result->toString());
         }
 
         //okay, look for a completed/denied change request then...
@@ -44,14 +45,15 @@ class RoomChangeRequest extends HMS_Item {
             $result = $db->getObjects('RoomChangeRequest');
 
             if(PHPWS_Error::logIfError($result)){
-                throw new DatabaseException('Database error!');
+                PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+                throw new DatabaseException($result->toString());
             }
 
             if(sizeof($result) == 0){
                 return NULL;
             }
         }
-        
+
         $result[0]->load();
         return $result[0];
     }
@@ -68,28 +70,29 @@ class RoomChangeRequest extends HMS_Item {
 
     public function load(){
         if(!parent::load()){
-            throw new DatabaseException("Load failed!");
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException($result->toString());
         }
 
         switch($this->state){
-        case 0:
-            $this->state = new NewRoomChangeRequest;
-            break;
-        case 1:
-            $this->state = new PendingRoomChangeRequest;
-            break;
-        case 2:
-            $this->state = new RDApprovedChangeRequest;
-            break;
-        case 3:
-            $this->state = new HousingApprovedChangeRequest;
-            break;
-        case 4:
-            $this->state = new CompletedChangeRequest;
-            break;
-        case 5:
-            $this->state = new DeniedChangeRequest;
-            break;
+            case 0:
+                $this->state = new NewRoomChangeRequest;
+                break;
+            case 1:
+                $this->state = new PendingRoomChangeRequest;
+                break;
+            case 2:
+                $this->state = new RDApprovedChangeRequest;
+                break;
+            case 3:
+                $this->state = new HousingApprovedChangeRequest;
+                break;
+            case 4:
+                $this->state = new CompletedChangeRequest;
+                break;
+            case 5:
+                $this->state = new DeniedChangeRequest;
+                break;
         }
 
         //        $this->loadParticipants();
@@ -199,7 +202,7 @@ class RoomChangeRequest extends HMS_Item {
 
     public function emailParticipants($subject, $status){
         foreach($this->participants as $participant){
-            HMS_Email::send_template_message($participant['username'], $subject, $status.'_'.$participant['role'].'_email.tpl', $participant);
+            //HMS_Email::send_template_message($participant['username'], $subject, $status.'_'.$participant['role'].'_email.tpl', $participant);
         }
     }
 }
@@ -252,7 +255,7 @@ class BaseRoomChangeState implements RoomChangeState {
 }
 
 class NewRoomChangeRequest extends BaseRoomChangeState {
-    
+
     public function getValidTransitions(){
         return array('PendingRoomChangeRequest');
     }
@@ -362,7 +365,7 @@ class CompletedChangeRequest extends BaseRoomChangeState {
 }
 
 class DeniedChangeRequest extends BaseRoomChangeState {
-    
+
     //state cannot change
 
     public function onEnter(){

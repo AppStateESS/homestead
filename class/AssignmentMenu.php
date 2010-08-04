@@ -47,6 +47,14 @@ class AssignmentMenu extends CommandMenu {
                 $withdrawnSearchCmd->setOnConfirmCommand(CommandFactory::getCommand('WithdrawnSearch'));
                 $this->addCommand('Withdrawn search', $withdrawnSearchCmd);
             }
+
+            //TODO: permissions
+            $RDRoomChangeCmd = CommandFactory::getCommand('RDRoomChange');
+            $this->addCommand('Room Change Approval (RD)', $RDRoomChangeCmd);
+
+            //TODO: permissions
+            $AdminRoomChangeCmd = CommandFactory::getcommand('HousingRoomChange');
+            $this->addCommand('Room Change Approval (Admin)', $AdminRoomChangeCmd);
         }
 	}
 

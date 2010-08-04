@@ -475,10 +475,11 @@ CREATE TABLE hms_room_change_request (
     username            VARCHAR(32),
     denied_reason       TEXT,
     denied_by           VARCHAR(32),
+    updated_on          INTEGER,
     PRIMARY KEY(id)
 );
 
-CREATE TABLE hms_room_chage_participants (
+CREATE TABLE hms_room_change_participants (
     id                  INTEGER NOT NULL,
     request             INTEGER NOT NULL REFERENCES hms_room_change_request(id),
     username            VARCHAR(32),
