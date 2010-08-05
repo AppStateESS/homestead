@@ -36,7 +36,6 @@ class ShowStudentSearchCommand extends Command {
 
         $form->setMethod('get');
 
-
         $username = $context->get('username');
         if(isset($username)){
             $form->addText('username', $username);
@@ -44,11 +43,15 @@ class ShowStudentSearchCommand extends Command {
             $form->addText('username');
         }
 
+        javascript('/modules/hms/autoFocus', array('ELEMENT' => $form->getId('username')));
+
         $form->setExtra('username', 'autocomplete="off" ');
 
         $form->addSubmit('submit_button', _('Submit'));
 
         $tpl = $form->getTemplate();
+
+        Layout::addPageTitle("Student Search");
 
         $context->setContent(PHPWS_Template::process($tpl, 'hms', 'admin/get_single_username.tpl'));
     }

@@ -33,8 +33,6 @@ class SendNotificationEmailsCommand extends Command {
         }
         */
 
-        
-
         if(is_null($context->get('hall')) && is_null($context->get('floor')) ){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You must select a hall or floor to continue!');
             $cmd = CommandFactory::getCommand('ShowHallNotificationSelect');
@@ -44,7 +42,7 @@ class SendNotificationEmailsCommand extends Command {
         $subject   = $context->get('subject');
         $body      = $context->get('body');
         $anonymous = (!is_null($context->get('anonymous')) && $context->get('anonymous')) ? true : false;
-        $from      = ($anonymous && Current_User::allow('hms', 'anonymous_notification')) ? FROM_ADDRESS : Current_User::getEmail();
+        $from      = ($anonymous && Current_User::allow('hms', 'anonymous_notifications')) ? FROM_ADDRESS : Current_User::getEmail();
         $halls     = $context->get('hall');
         $floors    = $context->get('floor');
 

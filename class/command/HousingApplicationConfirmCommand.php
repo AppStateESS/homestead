@@ -67,6 +67,8 @@ class HousingApplicationConfirmCommand extends Command {
 
         $specialNeeds = $context->get('special_needs');
 
+        $international = ($student->isInternational()) == 'true'?1:0;
+
         # Create a new application from the request data and save it
         if($sem == TERM_SUMMER1 || $sem == TERM_SUMMER2){
             $application = new SummerApplication(0, $term, $student->getBannerId(), $username,
@@ -79,9 +81,8 @@ class HousingApplicationConfirmCommand extends Command {
             isset($specialNeeds['psych_disability']) ? 1 : 0,
             isset($specialNeeds['gender_need']) ? 1 : 0,
             isset($specialNeeds['medical_need']) ? 1 : 0,
-            $context->get('room_type')
-            );
-
+            $international,
+            $context->get('room_type'));
         }else if ($sem == TERM_SPRING){
             $application = new SpringApplication(0, $term, $student->getBannerId(), $username,
             $student->getGender(),
@@ -93,6 +94,7 @@ class HousingApplicationConfirmCommand extends Command {
             isset($specialNeeds['psych_disability']) ? 1 : 0,
             isset($specialNeeds['gender_need']) ? 1 : 0,
             isset($specialNeeds['medical_need']) ? 1 : 0,
+            $international,
             $context->get('lifestyle_option'),
             $context->get('preferred_bedtime'),
             $context->get('room_condition'));
@@ -107,6 +109,7 @@ class HousingApplicationConfirmCommand extends Command {
             isset($specialNeeds['psych_disability']) ? 1 : 0,
             isset($specialNeeds['gender_need']) ? 1 : 0,
             isset($specialNeeds['medical_need']) ? 1 : 0,
+            $international,
             $context->get('lifestyle_option'),
             $context->get('preferred_bedtime'),
             $context->get('room_condition'),
@@ -138,7 +141,7 @@ class HousingApplicationConfirmCommand extends Command {
 
             # Send the email confirmation
             PHPWS_Core::initModClass('hms', 'HMS_Email.php');
-            HMS_Email::send_hms_application_confirmation($student, null);
+            HMS_Email::send_hms_application_confirmation($student, $application->getTerm());
 
         }
 
@@ -154,6 +157,7 @@ class HousingApplicationConfirmCommand extends Command {
         && $context->get('rlc_interest') == 1)
         {
             $rlcCmd = CommandFactory::getCommand('ShowRlcApplicationPage1View');
+            $rlcCmd->setTerm($term);
             $rlcCmd->redirect();
         }else{
             $successCmd = CommandFactory::getCommand('ShowStudentMenu');

@@ -10,7 +10,7 @@ class FallApplication extends HousingApplication{
 
     public $rlc_interest;
 
-    public function __construct($id = 0, $term = NULL, $banner_id = NULL, $username = NULL, $gender = NULL, $student_type = NULL, $application_term = NULL, $cell_phone = NULL, $meal_plan = NULL, $physical_disability = NULL, $psych_disability = NULL, $gender_need = NULL, $medical_need = NULL, $lifestyle_option = NULL, $preferred_bedtime = NULL, $room_condition = NULL, $rlc_interest = NULL){
+    public function __construct($id = 0, $term = NULL, $banner_id = NULL, $username = NULL, $gender = NULL, $student_type = NULL, $application_term = NULL, $cell_phone = NULL, $meal_plan = NULL, $physical_disability = NULL, $psych_disability = NULL, $gender_need = NULL, $medical_need = NULL, $international = NULL, $lifestyle_option = NULL, $preferred_bedtime = NULL, $room_condition = NULL, $rlc_interest = NULL){
 
         /**
          * If the id is non-zero, then we need to load the other member variables
@@ -23,8 +23,8 @@ class FallApplication extends HousingApplication{
         }
 
         $this->application_type = 'fall';
-        
-        parent::__construct($term, $banner_id, $username, $gender, $student_type, $application_term, $cell_phone, $meal_plan, $physical_disability, $psych_disability, $gender_need, $medical_need);
+
+        parent::__construct($term, $banner_id, $username, $gender, $student_type, $application_term, $cell_phone, $meal_plan, $physical_disability, $psych_disability, $gender_need, $medical_need, $international);
 
         $this->setLifestyleOption($lifestyle_option);
         $this->setPreferredBedtime($preferred_bedtime);
@@ -46,7 +46,7 @@ class FallApplication extends HousingApplication{
         if(!parent::load()){
             return false;
         }
-        
+
         # Load the application-specific data
         $db = new PHPWS_DB('hms_fall_application');
 
@@ -55,7 +55,7 @@ class FallApplication extends HousingApplication{
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
-        
+
         return true;
     }
 
@@ -70,7 +70,7 @@ class FallApplication extends HousingApplication{
         if(!parent::save()){
             return false;
         }
-        
+
         # Save the application-specific data
         $db = new PHPWS_DB('hms_fall_application');
 

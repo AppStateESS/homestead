@@ -48,6 +48,8 @@ class LotteryChooseHallView extends View {
             $tpl['hall_list'][] = $row;
         }
 
+        Layout::addPageTitle("Lottery Choose Hall");
+
         return PHPWS_Template::process($tpl, 'hms', 'student/lottery_choose_hall.tpl');
     }
 }

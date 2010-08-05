@@ -10,7 +10,7 @@ require_once(PHPWS_SOURCE_DIR . 'inc/hms_defines.php');
  * Name & Email address info - Used for sending out emails
  */
 define('SYSTEM_NAME', 'ASU Housing Management System'); // Used as "from" name in emails
-define('EMAIL_ADDRESS', 'housing'); // user name of email account to send email from
+define('EMAIL_ADDRESS', 'uha'); // user name of email account to send email from
 define('DOMAIN_NAME', 'appstate.edu'); // domain name to send email from
 define('FROM_ADDRESS', EMAIL_ADDRESS . '@' . DOMAIN_NAME); // fully qualified "from" address
 define('TO_DOMAIN', '@'. DOMAIN_NAME); // Default domain to send email to, beginning with '@'
@@ -53,6 +53,16 @@ define('TYPE_RETURNING',    'R');
 define('TYPE_READMIT',      'Z');
 define('TYPE_WITHDRAWN',    'W');
 define('TYPE_NONDEGREE',    'N');
+
+/**
+ * Student Levels
+ */
+define('LEVEL_UNDERGRAD',   'U');
+define('LEVEL_GRAD',        'G');
+define('LEVEL_DOCTORAL',    'D');
+define('LEVEL_SPECIALIST',  'P');
+define('LEVEL_UNDECLARED',  '00');
+define('LEVEL_GRAD2',       'G2');
 
 /**
  * Meal Plans
@@ -203,8 +213,8 @@ define('ACTIVITY_LOTTERY_OPTOUT',               55);
 define('ACTIVITY_STUDENT_BROKE_ROOMMATE',       56);
 define('ACTIVITY_STUDENT_CANCELLED_ROOMMATE_REQUEST', 57);
 
-/** 
- * Errors 
+/**
+ * Errors
  */
 define('E_SUCCESS', 0); // Everything is fine, nothing is broken.
 

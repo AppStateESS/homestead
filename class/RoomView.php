@@ -32,7 +32,7 @@ class RoomView extends View {
 		$tpl['NUMBER_OF_BEDS']      = $this->room->get_number_of_beds();
 		$tpl['NUMBER_OF_ASSIGNEES'] = $number_of_assignees;
 
-		$form = &new PHPWS_Form;
+		$form = new PHPWS_Form;
 
 		$submitCmd = CommandFactory::getCommand('EditRoom');
 		$submitCmd->setRoomId($this->room->id);
@@ -109,6 +109,8 @@ class RoomView extends View {
 
 		$form->mergeTemplate($tpl);
 		$tpl = $form->getTemplate();
+
+        Layout::addPageTitle("Edit Room");
 
 		return PHPWS_Template::process($tpl, 'hms', 'admin/edit_room.tpl');
 	}

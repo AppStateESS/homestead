@@ -64,7 +64,7 @@ class HMS_RLC_Application extends HMS_Item {
         $tags['NAME']           = $student->getFullNameProfileLink();
 
         $rlcCmd = CommandFactory::getCommand('ShowRlcApplicationReView');
-        $rlcCmd->setUsername($this->getUsername());
+        $rlcCmd->setAppId($this->getId());
 
         $tags['1ST_CHOICE']     = $rlcCmd->getLink($rlc_list[$this->getFirstChoice()],'_blank');
         if(isset($rlc_list[$this->getSecondChoice()]))
@@ -131,7 +131,7 @@ class HMS_RLC_Application extends HMS_Item {
         $tags['NAME']           = $student->getProfileLink();
 
         $rlcCmd = CommandFactory::getCommand('ShowRlcApplicationReView');
-        $rlcCmd->setUsername($this->getUsername());
+        $rlcCmd->setAppId($this->getId());
 
         $tags['1ST_CHOICE']     = $rlcCmd->getLink($rlc_list[$this->getFirstChoice()],'_blank');
 
@@ -160,7 +160,7 @@ class HMS_RLC_Application extends HMS_Item {
         $tags['USERNAME']   = $this->username;
 
         $viewCmd = CommandFactory::getCommand('ShowRlcApplicationReView');
-        $viewCmd->setUsername($student->getUsername());
+        $viewCmd->setAppId($this->getId());
 
         $actions[] = $viewCmd->getLink('View Application');
 
@@ -258,6 +258,32 @@ class HMS_RLC_Application extends HMS_Item {
         }
 
         return $app;
+    }
+
+    /**
+     * Get denied RLC applicants by term 
+     * @return Array of Student objects
+     */
+    public static function getDeniedApplicantsByTerm($term)
+    {
+        // query DB
+        $db = new PHPWS_DB('hms_learning_community_applications');
+        $db->addWhere('denied',1);
+        $db->addWhere('term', $term);
+        $result = $db->select();
+        
+        if(PHPWS_Error::logIfError($result)){
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException($result->toString());
+        }
+
+        // create student objects from the denied applications
+        $students = array();
+        foreach($result as $app){
+            $students[] = StudentFactory::getStudentByUsername($app['username'], $term);
+        }
+
+        return $students;
     }
 
     //TODO move this!!

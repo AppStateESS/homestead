@@ -31,13 +31,15 @@ class CreateTermView extends View {
         $form->addDropBox('term_drop',Term::getSemesterList());
         $form->setLabel('term_drop','Semester: ');
 
-        $form->addDropBox('copy_drop', array(0 => 'Hall structure only', 1 => 'Hall structure & assignments'));
+        $form->addDropBox('copy_drop', array('struct' => 'Hall structure only', 'struct_assign' => 'Hall structure & assignments'));
         $form->setLabel('copy_drop', 'What to copy: ');
 
         $form->addSubmit('submit','Add Term');
 
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
+
+        Layout::addPageTitle("Create Term");
 
         return PHPWS_Template::process($tpl, 'hms', 'admin/add_term.tpl');
     }

@@ -1,0 +1,1 @@
+ALTER TABLE hms_new_application alter column application_type SET NOT NULL;

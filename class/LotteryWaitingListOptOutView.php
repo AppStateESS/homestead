@@ -27,6 +27,8 @@ class LotteryWaitingListOptOutView extends View {
         $form->addSubmit('submit', 'Opt-out of waiting list');
         
         $form->mergeTemplate($tpl);
+
+        Layout::addPageTitle("Lottery Opt Out");
         
         return PHPWS_Template::process($form->getTemplate(), 'hms', 'student/lotteryWaitingListOptOut.tpl');
     }

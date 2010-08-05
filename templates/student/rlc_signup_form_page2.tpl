@@ -1,6 +1,6 @@
 <div class="hms">
   <div class="box">
-    <div class="box-title"><h1>Unique Housing Options Application</h1></div>
+    <div class="box-title"><h1>Residential Learning Community Application</h1></div>
     <div class="box-content">
         <font color="red"><i>{MESSAGE}</i></font><br>
         <!-- BEGIN rlc_form2 -->

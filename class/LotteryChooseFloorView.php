@@ -73,6 +73,8 @@ class LotteryChooseFloorView extends View {
             $row['ROW_TEXT_COLOR']  = 'grey';
             $tpl['floor_list'][]    = $row;
         }
+
+        Layout::addPageTitle("Lottery Choose Floor");
         
         return PHPWS_Template::process($tpl, 'hms', 'student/lottery_choose_floor.tpl');
     }

@@ -164,6 +164,8 @@ class RlcAssignmentView extends View {
         $pager->addPageTags($tags);
         $pager->addRowTags('getAdminPagerTags');
         $pager->setReportRow('applicantsReport');
+        
+        Layout::addPageTitle("RLC Assignments");
 
         return $pager->get();
     }

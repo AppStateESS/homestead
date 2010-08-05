@@ -40,6 +40,7 @@ class RoomChangeView extends View {
     }
 
     public function studentSubmitView(){
+        javascript('jquery');
         $form = new PHPWS_Form('room_change_request');
         $form->addText('cell_num');
         $form->setLabel('cell_num', 'Cellphone Number');
@@ -52,11 +53,9 @@ class RoomChangeView extends View {
         $form->setLabel('first_choice', 'First Choice');
         $form->addDropBox('second_choice', $halls);
         $form->setLabel('second_choice', 'Second Choice');
-        
+
         $form->addTextArea('reason');
         $form->setLabel('reason', 'Reason');
-
-        //TODO: building preference here
 
         $form->addSubmit('Submit Request');
 
@@ -95,10 +94,10 @@ class RoomChangeView extends View {
 
         $form->addDropBox('floor', array(0 => ''));
         $form->setLabel('floor', 'Floor: ');
-        
+
         $form->addDropBox('room', array(0 => ''));
         $form->setLabel('room', 'Room: ');
-        
+
         $form->addDropBox('bed', array(0 => ''));
         $form->setLabel('bed', 'Bed: ');
 
@@ -134,7 +133,7 @@ class RoomChangeView extends View {
         $pager->addWhere('state', ROOM_CHANGE_COMPLETED, '<>');
         $pager->addWhere('term', Term::getSelectedTerm());
         $pager->setOrder('state', 'asc');
-        
+
         return $pager->get();
     }
 
@@ -182,7 +181,7 @@ class RoomChangeView extends View {
         $panel = new PHPWS_Panel('room_change_panel');
         $tabs = array();
         $tabs['approve'] = array('title'=>'Pending Approval', 'link'=>'index.php?module=hms&action=HousingRoomChange&tab=approve', 'link_title'=>'View Students Awaiting Approval');
-        $tabs['complete'] = array('title'=>'Pending Completion', 'link'=>'index.php?module=hms&action=HousingRoomChange&tab=complete', 'link_title'=>'View Requests awaiting Completion');        
+        $tabs['complete'] = array('title'=>'Pending Completion', 'link'=>'index.php?module=hms&action=HousingRoomChange&tab=complete', 'link_title'=>'View Requests awaiting Completion');
 
         PHPWS_Core::initCoreClass('DBPager.php');
         $pager = new DBPager('hms_room_change_request', 'RoomChangeRequest');

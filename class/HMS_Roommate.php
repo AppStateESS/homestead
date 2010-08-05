@@ -228,7 +228,6 @@ class HMS_Roommate
      */
     public function get_confirmed_roommate($asu_username, $term)
     {
-
         $db = new PHPWS_DB('hms_roommate');
         $db->addWhere('requestor', $asu_username, 'ILIKE', 'OR', 'grp');
         $db->addWhere('requestee', $asu_username, 'ILIKE', 'OR', 'grp');
@@ -283,10 +282,10 @@ class HMS_Roommate
         return null;
 
         if(trim($result['requestor']) == trim($asu_username)) {
-            return $result['requestee'];
+            return StudentFactory::getStudentByUsername($result['requestee'], $term);
         }
 
-        return $result['requestor'];
+        return StudentFactory::getStudentByUsername($result['requestor'], $term);
     }
 
     /**
@@ -380,8 +379,10 @@ class HMS_Roommate
         $db->addWhere('term', $term);
         $result = $db->getObjects('HMS_Roommate');
 
-        if(PHPWS_Error::logIfError($result))
-        return FALSE;
+        if(PHPWS_Error::logIfError($result)){
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException($result->toString());
+        }
 
         return $result;
     }
@@ -674,7 +675,7 @@ class HMS_Roommate
     /*****************
      * Email Methods *
      *****************/
-     
+
     //TODO move email messages below into templates of their own and use HMS_Email class
 
     public function send_request_emails()
@@ -695,7 +696,7 @@ class HMS_Roommate
 
         // create the Mail object and send it
         $success = HMS_Email::send_email($this->requestor . '@appstate.edu', NULL, 'HMS Roommate Request', $message);
-         
+
         if($success != TRUE) {
             throw new RoommateException('Error occurred emailing the requestor ' . $this->requestor . ' of a roommate request for requestee ' . $this->requestee . ', HMS_Roommate ' . $this->id);
         }

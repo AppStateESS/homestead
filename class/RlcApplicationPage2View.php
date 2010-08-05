@@ -23,8 +23,10 @@ class RlcApplicationPage2View extends View {
     }
 
     public function show(){
+
         //Seriously php?  Can't resolve context without this?  Fail.
         $context = $this->context;
+
         $template = array();
 
         $cmd = CommandFactory::getCommand('SubmitRlcApplication');
@@ -40,6 +42,7 @@ class RlcApplicationPage2View extends View {
         $rlc_form2->addHidden('rlc_third_choice',  $context->get('rlc_third_choice'));
         $rlc_form2->addHidden('why_specific_communities', $context->get('why_specific_communities'));
         $rlc_form2->addHidden('strengths_weaknesses', $context->get('strengths_weaknesses'));
+        $rlc_form2->addHidden('term', $context->get('term'));
 
         $choices = array($context->get('rlc_first_choice'), $context->get('rlc_second_choice'), $context->get('rlc_third_choice'));
 
@@ -74,6 +77,8 @@ class RlcApplicationPage2View extends View {
 
         $rlc_form2->mergeTemplate($template);
         $template = $rlc_form2->getTemplate();
+        
+        Layout::addPageTitle("RLC Application");
                 
         return PHPWS_Template::process($template,'hms','student/rlc_signup_form_page2.tpl');
     }

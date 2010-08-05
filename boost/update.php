@@ -1173,7 +1173,37 @@ function hms_update(&$content, $currentVersion)
         case version_compare($currentVersion, '0.4.15', '<'):
             PHPWS_Core::initModClass('users', 'Permission.php');
             Users_Permission::registerPermissions('hms', $content);
-        case version_compare($currentVersion, '0.4.26', '<'):
+        case version_compare($currentVersion, '0.4.18', '<'):
+            PHPWS_Core::initModClass('users', 'Permission.php');
+            Users_Permission::registerPermissions('hms', $content);
+        case version_compare($currentVersion, '0.4.19', '<'):
+            $db = new PHPWS_DB;
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_4_19.sql');
+            if(PEAR::isError($result)){
+                return $result;
+            }
+            PHPWS_Core::initModClass('users', 'Permission.php');
+            Users_Permission::registerPermissions('hms', $content);
+        case version_compare($currentVersion, '0.4.22', '<'):
+
+            $files[] = 'templates/admin/floor_assignment.tpl';
+            PHPWS_Boost::updatefiles($files, 'hms');
+
+            PHPWS_Core::initModClass('users', 'Permission.php');
+            Users_Permission::registerPermissions('hms', $content);
+        case version_compare($currentVersion, '0.4.23', '<'):
+            $db = new PHPWS_DB;
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_4_23.sql');
+            if(PEAR::isError($result)){
+                return $result;
+            }
+        case version_compare($currentVersion, '0.4.24', '<'):
+            $db = new PHPWS_DB;
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_4_24.sql');
+            if(PEAR::isError($result)){
+                return $result;
+            }
+    	case version_compare($currentVersion, '0.4.26', '<'):
             $db = new PHPWS_DB;
             $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_4_26.sql');
             if(PEAR::isError($result)){

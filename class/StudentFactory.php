@@ -7,7 +7,6 @@ class StudentFactory {
 	
 	public static function getStudentByUsername($username, $term)
 	{
-	    
 		$student = new Student();
 		$student->setUsername($username);
 		
@@ -16,7 +15,7 @@ class StudentFactory {
 		
 		if(!isset($soapData->banner_id) || is_null($soapData->banner_id) || empty($soapData->banner_id)){
             PHPWS_Core::initModClass('hms', 'exception/StudentNotFoundException.php');
-		    throw new StudentNotFoundException('No matching student found.');
+		    throw new StudentNotFoundException("No matching student found for $username.");
 		}
 		
 		StudentFactory::plugSOAPData($student, $soapData);
@@ -51,10 +50,16 @@ class StudentFactory {
 		$student->setApplicationTerm($soapData->application_term);
 		$student->setType($soapData->student_type);
 		$student->setClass($soapData->projected_class);
+		$student->setStudentLevel($soapData->student_level);
 		$student->setCreditHours($soapData->credhrs_completed);
 		
 		$student->setDepositDate($soapData->deposit_date);
 		$student->setDepositWaived($soapData->deposit_waived);
+		
+		$student->setInternational($soapData->international);
+		$student->setHonors($soapData->honors);
+		$student->setTeachingFellow($soapData->teaching_fellow);
+		$student->setWataugaMember($soapData->watauga_member);
 		
 		$phoneNumbers = array();
 		
