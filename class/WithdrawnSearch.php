@@ -40,7 +40,8 @@ class WithdrawnSearch {
             try{
                 $student = StudentFactory::getStudentByUsername($username, $term);
             }catch(Exception $e){
-                //TODO
+                NQ::simple('hms', HMS_NOTIFICATION_WARNING, 'Unknown student: ' . $username);
+                continue;
             }
 
             if($student->getType() != TYPE_WITHDRAWN){
