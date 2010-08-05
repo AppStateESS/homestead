@@ -259,6 +259,10 @@ class BannerSOAP extends SOAP{
 	    if($username == 'weldoncr'){
 	        $student->application_term = 200840;
 	    }
+
+	    if($username == 'ekasca'){
+	        $student->dob = '1986-09-05';
+	    }
 	}
 }
 
