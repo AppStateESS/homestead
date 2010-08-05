@@ -71,7 +71,7 @@ class HousingApplicationWelcomeView extends View {
             return PHPWS_Template::process($tpl, 'hms', 'student/welcome_back_screen.tpl');
         }
 
-        if($studentType == TYPE_FRESHMEN || $studentType == TYPE_NONDEGREE){
+        if($studentType == TYPE_FRESHMEN || $studentType == TYPE_NONDEGREE || $this->student->isInternational() == 'true'){
             return PHPWS_Template::process($tpl, 'hms', 'student/welcome_screen_freshmen.tpl');
         }else{
             return PHPWS_Template::process($tpl, 'hms', 'student/welcome_screen_transfer.tpl');
