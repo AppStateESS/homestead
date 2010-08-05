@@ -33,7 +33,7 @@ class SendNotificationEmailsCommand extends Command {
         }
         */
 
-        
+
 
         if(is_null($context->get('hall')) && is_null($context->get('floor')) ){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You must select a hall or floor to continue!');
@@ -76,28 +76,17 @@ class SendNotificationEmailsCommand extends Command {
 
         $permission = new HMS_Permission();
         //load the floors
-        foreach(Current_User::allow('hms', 'email_all') || $floors as $key=>$floor_id){
-            $floors[$key] = new HMS_Floor($floor_id);
-            if(!$permission->verify(Current_User::getUsername(), $floors[$key], 'email')){
-                unset($floors[$key]);
+        foreach($floors as $key=>$floor_id){
+            if(Current_User::allow('hms', 'email_all') || $permission->verify(Current_User::getUsername(), $floors[$key], 'email')){
+                $floorObj[] = new HMS_Floor($floor_id);
             }
         }
 
-        foreach($halls as $hall_id){
-            $hall = new HMS_Residence_Hall($hall_id);
-            if(Current_User::allow('hms', 'email_all') || $permission->verify(Current_User::getUsername(), $hall, 'email')){
-                foreach($hall->get_floors() as $floor){
-                    $floors[] = new HMS_Floor($floor->id);
-                }
-                if($anonymous){
-                    HMS_Activity_Log::log_activity(Current_User::getUsername(), ACTIVITY_HALL_NOTIFIED_ANONYMOUSLY, Current_User::getUsername(), $hall->hall_name);
-                } else {
-                    HMS_Activity_Log::log_activity(Current_User::getUsername(), ACTIVITY_HALL_NOTIFIED, Current_User::getUsername(), $hall->hall_name);
-                }
-            }
-        }
+        // TODO accurate logging
+        //HMS_Activity_Log::log_activity(Current_User::getUsername(), ACTIVITY_HALL_NOTIFIED_ANONYMOUSLY, Current_User::getUsername(), $hall->hall_name);
+        //HMS_Activity_Log::log_activity(Current_User::getUsername(), ACTIVITY_HALL_NOTIFIED, Current_User::getUsername(), $hall->hall_name);
 
-        foreach($floors as $floor){
+        foreach($floorObj as $floor){
             $rooms = $floor->get_rooms();
             foreach($rooms as $room){
                 $students = $room->get_assignees();
@@ -106,6 +95,7 @@ class SendNotificationEmailsCommand extends Command {
                 }
             }
         }
+
 
         NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Emails sent successfully!');
         $cmd = CommandFactory::getCommand('ShowAdminMaintenanceMenu');
