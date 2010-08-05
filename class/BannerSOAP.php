@@ -252,6 +252,10 @@ class BannerSOAP extends SOAP{
 
 	private function applyExceptions($username, &$student){
 
+	    if(empty($student->student_type) && $student->international=="true"){
+	        $student->student_type = 'G';
+	    }
+
 	    if($username == 'weldoncr'){
 	        $student->application_term = 200840;
 	    }
