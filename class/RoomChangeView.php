@@ -118,6 +118,14 @@ class RoomChangeView extends View {
         $tpl['FULLNAME']       = $student->getFullName();
         $tpl['NUMBER']         = $this->request->cell_number;
         $tpl['STUDENT_REASON'] = $this->request->reason;
+        $tpl['preferences']    = array();
+
+        foreach($this->request->preferences as $preference){
+            $hall = new HMS_Residence_Hall();
+            $hall->id = $preference['building'];
+            $hall->load();
+            $tpl['preferences'][] = array('PREFERENCE'=>$hall->getHallName());
+        }
 
         return PHPWS_Template::process($tpl, 'hms', 'admin/rd_approve_roomchange.tpl');
     }

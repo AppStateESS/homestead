@@ -18,6 +18,15 @@
     <td>{STUDENT_REASON}</td>
   </tr>
   <tr>
+    <th>Student's Preferred Halls
+    </th>
+    <td>
+    <!-- BEGIN preferences -->
+    <b>{PREFERENCE}</b><br />
+    <!-- END preferences -->
+    </td>
+  </tr>
+  <tr>
     <th>Approve or Deny
     </th>
     <td>{APPROVE_DENY_1} {APPROVE_DENY_1_LABEL} {APPROVE_DENY_2} {APPROVE_DENY_2_LABEL}
