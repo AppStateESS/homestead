@@ -36,7 +36,7 @@ class SubmitRoomChangeRequestCommand extends Command {
 
         $request = RoomChangeRequest::getNew();
         $request->username = UserStatus::getUsername();
-        $request->cell_number = $context->get('cell_num');
+        $request->cell_phone = $context->get('cell_num');
         $request->reason = $context->get('reason');
         $request->change(new PendingRoomChangeRequest);
         if(!empty($first))

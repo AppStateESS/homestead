@@ -116,7 +116,7 @@ class RoomChangeView extends View {
 
         $tpl['USERNAME']       = $student->getUsername();
         $tpl['FULLNAME']       = $student->getFullName();
-        $tpl['NUMBER']         = $this->request->cell_number;
+        $tpl['NUMBER']         = $this->request->cell_phone;
         $tpl['STUDENT_REASON'] = $this->request->reason;
         $tpl['preferences']    = array();
 
@@ -140,6 +140,10 @@ class RoomChangeView extends View {
         $pager->addWhere('state', ROOM_CHANGE_DENIED, '<>');
         $pager->addWhere('state', ROOM_CHANGE_COMPLETED, '<>');
         $pager->addWhere('term', Term::getSelectedTerm());
+        //only grab requests that this rd has permission for
+        foreach($this->command->_memberships as $membership){
+            $pager->db->addWhere('curr_hall', $membership['instance'], '=', 'OR', 'valid_halls');
+        }
         $pager->setOrder('state', 'asc');
 
         return $pager->get();
@@ -170,7 +174,7 @@ class RoomChangeView extends View {
 
         $tpl['USERNAME']       = $student->getUsername();
         $tpl['FULLNAME']       = $student->getFullName();
-        $tpl['NUMBER']         = $this->request->cell_number;
+        $tpl['NUMBER']         = $this->request->cell_phone;
         $tpl['STUDENT_REASON'] = $this->request->reason;
 
         $bed   = new HMS_Bed($this->request->bed_id);
@@ -184,6 +188,10 @@ class RoomChangeView extends View {
     }
 
     public function housingList(){
+        if(!Current_User::allow('admin_approve_room_change')){
+            throw new Exception("I'm sorry, I can't do that Dave.");
+        }
+
         PHPWS_Core::initModClass('controlpanel', 'Panel.php');
         Layout::addStyle('controlpanel');
         $panel = new PHPWS_Panel('room_change_panel');

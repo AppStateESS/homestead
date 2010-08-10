@@ -43,7 +43,16 @@ class RoomChangeAssignCommand extends Command {
         }
 
         try{
-            $assign_result = HMS_Assignment::assignStudent($student, $term, NULL, $bed, $plan, '');
+            $curr_assignment = HMS_Assignment::getAssignment($student->getUsername(), $term); // in case we need to reassign
+            if(!HMS_Assignment::unassignStudent($student, $term, "Room Change")){
+                throw new AssignmentException("Could not unassign student, unable to reassign.");
+            }
+            if(!HMS_Assignment::assignStudent($student, $term, NULL, $bed, $plan, 'Room change')){
+                //put them back...
+                HMS_Assignment::assignStudent($student, $term, NULL, $curr_assignment->bed_id, $curr_assignment->meal_option, "Room change failed!  Putting them back where we found them...");
+                //and bail
+                throw new AssignmentException("Could not assign student to their new bed, rassignment failed.");
+            }
         }catch(AssignmentException $e){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, $e->getMessage());
             //redirect

@@ -6,6 +6,7 @@ PHPWS_Core::initModClass('hms', 'UserStatus.php');
 PHPWS_Core::initModClass('hms', 'Term.php');
 PHPWS_Core::initModClass('hms', 'HMS_Email.php');
 PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
+PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
 
 define('ROOM_CHANGE_NEW',              0);
 define('ROOM_CHANGE_PENDING',          1);
@@ -13,16 +14,20 @@ define('ROOM_CHANGE_RD_APPROVED',      2);
 define('ROOM_CHANGE_HOUSING_APPROVED', 3);
 define('ROOM_CHANGE_COMPLETED',        4);
 define('ROOM_CHANGE_DENIED',           5);
+
 define('MAX_PREFERENCES',              2);
 
 class RoomChangeRequest extends HMS_Item {
     public $state;
     public $participants;
+    public $curr_hall;
     public $bed_id;
     public $reason;
-    public $cell_number;
+    public $cell_phone;
     public $preferences;
     public $username;
+    public $rd_username;
+    public $rd_timestamp;
     public $denied_reason;
     public $denied_by;
     public $term;
@@ -67,7 +72,14 @@ class RoomChangeRequest extends HMS_Item {
     public function save(){
         $this->state = $this->state->getType(); // replace the object with the id before saving
         $this->stamp();
+
+        //get the id of the hall they are currently in, so that we can filter the rd pager later
+        $assignment = HMS_Assignment::getAssignment($this->username, Term::getSelectedTerm());
+        $building = $assignment->get_parent()->get_parent()->get_parent()->get_parent();
+        $this->curr_hall = $building->id;
+
         parent::save();
+
         $this->savePreferences();
         $this->saveParticipants();
         return true; // will throw an exception on failure, only returns true for backwards compatability
@@ -134,17 +146,19 @@ class RoomChangeRequest extends HMS_Item {
         }
 
         $i = 0;
-        foreach($this->participants as $preference){
+        foreach($this->participants as $participant){
             $db->reset();
-            if(sizeof($results) <= $i)
+            if(!empty($results) && sizeof($results) <= $i)
                 $db->addValue('id', $results[$i]['id']);
             $db->addValue('request', $this->id);
-            $db->addValue('building', $preference);
+            $db->addValue('role', $participant['role']);
+            $db->addValue('username', $participant['username']);
+            $db->addValue('name', $participant['name']);
 
-            if(sizeof($results) <= $i)
-                $db->update();
+            if(!empty($results) && sizeof($results) <= $i)
+                $result = $db->update();
             else
-                $db->insert();
+                $result = $db->insert();
 
             $i++;
         }
@@ -381,6 +395,8 @@ class RDApprovedChangeRequest extends BaseRoomChangeState {
 
     public function onEnter(){
         $this->addParticipant('rd', UserStatus::getUsername(), 'Housing and Residence Life');
+        $this->request->rd_username = UserStatus::getUsername();
+        $this->request->rd_timestamp = mktime();
         $params = new CommandContext;
         $params->addParam('last_command', 'RDRoomChange');
         $params->addParam('username', $this->request->username);
@@ -443,8 +459,16 @@ class CompletedChangeRequest extends BaseRoomChangeState {
         $cmd = CommandFactory::getCommand('RoomChangeAssign');
         $cmd = $cmd->execute($params);
 
-        //todo: relock room
         if($cmd instanceof Command){
+            //relock the room
+            $params = new CommandContext;
+            $params->addParam('last_command', 'RDRoomChange');
+            $params->addParam('username', $this->request->username);
+            $params->addParam('bed', $this->request->bed_id);
+            $relock = CommandFactory::getCommand('ReserveRoom');
+            $relock->execute($params);
+
+            //and redirect to the error page
             $cmd->redirect();
         }
 
@@ -462,7 +486,7 @@ class DeniedChangeRequest extends BaseRoomChangeState {
     //state cannot change
 
     public function onEnter(){
-        //set denied reason
+        $this->request->denied_by = UserStatus::getUsername();
     }
 
     public function getType(){
