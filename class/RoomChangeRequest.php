@@ -423,7 +423,7 @@ class HousingApprovedChangeRequest extends BaseRoomChangeState {
     }
 
     public function onEnter(){
-        $this->addParticipant('housing', 'hrlassignments', 'Housing and Residence Life');
+        $this->addParticipant('housing', EMAIL_ADDRESS, 'Housing and Residence Life');
         $this->request->emailParticipants('Housing Approved Room Change!', 'housing_approved');
     }
 

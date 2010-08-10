@@ -10,6 +10,12 @@ class RDSubmitUpdateCommand extends Command {
     }
 
     public function execute(CommandContext $context){
+        $memberships = HMS_Permission::getMembership('room_change_approve', NULL, UserStatus::getUsername());
+
+        if(empty($memberships)){
+            throw new PermissionException("You can't do that");
+        }
+
         $rc = new RoomChangeRequest;
         $rc = $rc->search(UserStatus::getUsername());
 
