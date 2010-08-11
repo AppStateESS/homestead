@@ -39,6 +39,8 @@ class CreateTermView extends View {
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
+        Layout::addPageTitle("Create Term");
+
         return PHPWS_Template::process($tpl, 'hms', 'admin/add_term.tpl');
     }
 }

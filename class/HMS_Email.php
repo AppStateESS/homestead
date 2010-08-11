@@ -90,7 +90,7 @@ class HMS_Email{
             PHPWS_Error::log($result);
             return false;
         }
-
+        
         return true;
     }
 
@@ -314,6 +314,17 @@ class HMS_Email{
 
         HMS_Email::send_template_message($to->getUsername() . TO_DOMAIN, 'Learning Community Application Confirmation!', 'email/rlc_application_confirmation.tpl', $tpl);
     }
+
+    public function sendRlcApplicationRejected(Student $to)
+    {
+        PHPWS_Core::initModClass('hms', 'Term.php');
+        
+        $tpl = array();
+        $tpl['NAME'] = $to->getName();
+        $tpl['TERM'] = Term::toString($to->getApplicationTerm());
+
+        HMS_Email::send_template_message($to->getUsername() . TO_DOMAIN, 'Learning Community Application Rejected', 'email/rlc_application_rejection.tpl',$tpl);
+    }                    
 
     public function send_lottery_assignment_confirmation(Student $to, $location, $term)
     {

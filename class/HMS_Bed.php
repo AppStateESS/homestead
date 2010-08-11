@@ -8,13 +8,14 @@ PHPWS_Core::initModClass('hms', 'HMS_Item.php');
 
 class HMS_Bed extends HMS_Item {
 
-	var $room_id            = 0;
-	var $bed_letter         = null;
-	var $banner_id          = null;
-	var $phone_number       = null;
-	var $bedroom_label      = null;
-	var $ra_bed             = null;
-	var $_curr_assignment   = null;
+    public $room_id              = 0;
+	public $bed_letter           = null;
+	public $banner_id            = null;
+	public $phone_number         = null;
+	public $bedroom_label        = null;
+	public $ra_bed               = null;
+    public $room_change_reserved = 0;
+	public $_curr_assignment     = null;
 
 	/**
 	 * Holds the parent room object of this bed.
@@ -266,14 +267,14 @@ class HMS_Bed extends HMS_Item {
 				$reAssignCmd->setUsername($this->_curr_assignment->asu_username);
 				$reAssignCmd->setBedId($this->id);
 				$link_re = $reAssignCmd->getLink('(Re-assign)');
-				
+
 				$unAssignCmd = CommandFactory::getCommand('ShowUnassignStudent');
 				$unAssignCmd->setUsername($this->_curr_assignment->asu_username);
 				$link_un = $unAssignCmd->getLink('(Un-assign)');
 			}
-			
+
 			$student = StudentFactory::getStudentByUsername($this->_curr_assignment->asu_username, Term::getSelectedTerm());
-			
+
 			return $student->getProfileLink() . ' ' . $link_re . ' ' . $link_un;
 		}else{
 			$text = '&lt;unassigned&gt';

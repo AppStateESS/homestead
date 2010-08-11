@@ -15,7 +15,7 @@ class SendNotificationEmailsCommand extends Command {
     public function getRequestVars(){
         $vars = array('action'  => 'SendNotificationEmails');
 
-        foreach(array('anonymous', 'subject', 'body', 'hall') as $key){
+        foreach(array('anonymous', 'subject', 'body', 'hall', 'floor') as $key){
             if( !is_null($this->context) && !is_null($this->context->get($key)) ){
                 $vars[$key] = $this->context->get($key);
             }
@@ -26,13 +26,17 @@ class SendNotificationEmailsCommand extends Command {
 
     public function execute(CommandContext $context)
     {
+        /*
         if(!Current_User::allow('hms', 'email_hall') && !Current_User::allow('hms', 'email_all')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to send messages.');
         }
+        */
 
-        if(is_null($context->get('hall'))){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You must select a hall to continue!');
+
+
+        if(is_null($context->get('hall')) && is_null($context->get('floor')) ){
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You must select a hall or floor to continue!');
             $cmd = CommandFactory::getCommand('ShowHallNotificationSelect');
             $cmd->redirect();
         }
@@ -40,8 +44,9 @@ class SendNotificationEmailsCommand extends Command {
         $subject   = $context->get('subject');
         $body      = $context->get('body');
         $anonymous = (!is_null($context->get('anonymous')) && $context->get('anonymous')) ? true : false;
-        $from      = ($anonymous && Current_User::allow('hms', 'anonymous_notification')) ? FROM_ADDRESS : Current_User::getEmail();
+        $from      = ($anonymous && Current_User::allow('hms', 'anonymous_notifications')) ? FROM_ADDRESS : Current_User::getEmail();
         $halls     = $context->get('hall');
+        $floors    = $context->get('floor');
 
         if(empty($subject)){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You must fill in the subject line of the email.');
@@ -57,8 +62,10 @@ class SendNotificationEmailsCommand extends Command {
 
         //Consider using a batch process instead of doing this this inline
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
         PHPWS_Core::initModClass('hms', 'HMS_Email.php');
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Permission.php');
 
         // Log that this is happening
         if($anonymous){
@@ -67,43 +74,28 @@ class SendNotificationEmailsCommand extends Command {
             HMS_Activity_Log::log_activity(Current_User::getUsername(), ACTIVITY_NOTIFICATION_SENT, Current_User::getUsername());
         }
 
-        if(is_array($halls)){
-            foreach($halls as $hall_id){
-                $hall = new HMS_Residence_Hall($hall_id);
-                $floors = $hall->get_floors();
-                foreach($floors as $floor){
-                    $rooms = $floor->get_rooms();
-                    foreach($rooms as $room){
-                        $students = $room->get_assignees();
-                        foreach($students as $student){
-                            HMS_Email::send_email($student->getUsername() . '@appstate.edu', $from, $subject, $body);
-                        }
-                    }
-                }
-                if($anonymous){
-                    HMS_Activity_Log::log_activity(Current_User::getUsername(), ACTIVITY_HALL_NOTIFIED_ANONYMOUSLY, Current_User::getUsername(), $hall->hall_name);
-                } else {
-                    HMS_Activity_Log::log_activity(Current_User::getUsername(), ACTIVITY_HALL_NOTIFIED, Current_User::getUsername(), $hall->hall_name);
-                }
-            }
-        } else {
-            $hall = new HMS_Residence_Hall($halls);
-            $floors = $hall->get_floors();
-            foreach($floors as $floor){
-                $rooms = $floor->get_rooms();
-                foreach($rooms as $room){
-                    $students = $room->get_assignees();
-                    foreach($students as $student){
-                        HMS_Email::send_email($student->getUsername() . '@appstate.edu', $from, $subject, $body);
-                    }
-                }
-            }
-            if($anonymous){
-                HMS_Activity_Log::log_activity(Current_User::getUsername(), ACTIVITY_HALL_NOTIFIED_ANONYMOUSLY, Current_User::getUsername(), $hall->hall_name);
-            } else {
-                HMS_Activity_Log::log_activity(Current_User::getUsername(), ACTIVITY_HALL_NOTIFIED, Current_User::getUsername(), $hall->hall_name);
+        $permission = new HMS_Permission();
+        //load the floors
+        foreach($floors as $key=>$floor_id){
+            if(Current_User::allow('hms', 'email_all') || $permission->verify(Current_User::getUsername(), $floors[$key], 'email')){
+                $floorObj[] = new HMS_Floor($floor_id);
             }
         }
+
+        // TODO accurate logging
+        //HMS_Activity_Log::log_activity(Current_User::getUsername(), ACTIVITY_HALL_NOTIFIED_ANONYMOUSLY, Current_User::getUsername(), $hall->hall_name);
+        //HMS_Activity_Log::log_activity(Current_User::getUsername(), ACTIVITY_HALL_NOTIFIED, Current_User::getUsername(), $hall->hall_name);
+
+        foreach($floorObj as $floor){
+            $rooms = $floor->get_rooms();
+            foreach($rooms as $room){
+                $students = $room->get_assignees();
+                foreach($students as $student){
+                    HMS_Email::send_email($student->getUsername() . '@appstate.edu', $from, $subject, $body);
+                }
+            }
+        }
+
 
         NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Emails sent successfully!');
         $cmd = CommandFactory::getCommand('ShowAdminMaintenanceMenu');

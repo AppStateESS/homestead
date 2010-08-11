@@ -22,7 +22,7 @@ class FloorView extends View {
         PHPWS_Core::initModClass('hms', 'HMS_Room.php');
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
-        javascript('jquery');
+        javascript('jquery_ui');
 
         $floor_num = $this->floor->getFloorNumber();
 
@@ -123,6 +123,10 @@ class FloorView extends View {
 
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
+		javascript('modules/hms/role_editor');
+        $tpl['ROLE_EDITOR'] = PHPWS_Template::process(array('CLASS_NAME'=>"'HMS_Floor'", 'ID'=>$this->floor->id), 'hms', 'admin/role_editor.tpl');
+
+        Layout::addPageTitle("Edit Floor");
 
         return PHPWS_Template::process($tpl, 'hms', 'admin/edit_floor.tpl');
     }

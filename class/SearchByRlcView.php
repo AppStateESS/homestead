@@ -15,6 +15,8 @@ class SearchByRlcView extends View {
 
         $tags = $form->getTemplate();
         $tags['TITLE'] = "RLC Search";
+
+        Layout::addPageTitle("RLC Search");
         
         $final = PHPWS_Template::processTemplate($tags, 'hms', 'admin/search_by_rlc.tpl');
         return $final;

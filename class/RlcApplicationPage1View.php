@@ -29,13 +29,15 @@ class RlcApplicationPage1View extends View {
         //Seriously php?  Can't resolve context without this?  Fail.
         $context = $this->context;
         PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
-        
+
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), Term::getCurrentTerm());
  
         $template = array();
 
         $rlc_form = new PHPWS_Form();
-        CommandFactory::getCommand('ShowRlcApplicationPage2View')->initForm($rlc_form);
+        $page2Cmd = CommandFactory::getCommand('ShowRlcApplicationPage2View');
+        $page2Cmd->setTerm($context->get('term'));
+        $page2Cmd->initForm($rlc_form);
 
 
         # Make sure the user is eligible for an RLC
@@ -118,6 +120,8 @@ class RlcApplicationPage1View extends View {
     
         $rlc_form->mergeTemplate($template);
         $template = $rlc_form->getTemplate();
+
+        Layout::addPageTitle("RLC Application");
                 
         return PHPWS_Template::process($template,'hms','student/rlc_signup_form_page1.tpl');
   }

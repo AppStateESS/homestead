@@ -15,6 +15,9 @@ table th {
 
 <table cellspacing="0">
 <tr>
+    <td colspan="3" style="text-align: center">{TERM} - Housing Applications Received<br />(by lifestyle option, New Freshmen only):</td>
+</tr>
+<tr>
     <td></td>
     <th>Single Gender</th>
     <th>Co-ed</th>

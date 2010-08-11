@@ -16,12 +16,14 @@ class ShowHallNotificationEditView extends View {
     private $body;
     private $anonymous;
     private $halls;
+    private $floors;
 
-    public function __construct($subject=null, $body=null, $anonymous=false, $halls=array()){
+    public function __construct($subject=null, $body=null, $anonymous=false, $halls=array(), $floors=array()){
         $this->subject   = $subject;
         $this->body      = $body;
         $this->anonymous = $anonymous;
         $this->halls     = $halls;
+        $this->floors    = $floors;
     }
 
     public function show(){
@@ -49,11 +51,18 @@ class ShowHallNotificationEditView extends View {
         if(!empty($this->halls)){
             $form->addHidden('hall', $this->halls);
         }
+        
+	    if(!empty($this->floors)){
+            $form->addHidden('floor', $this->floors);
+        }
 
+        javascript('/modules/hms/autoFocus', array('ELEMENT'=>$form->getId('subject')));
         $form->addSubmit('Submit');
 
         //After you ask "wtf?", check the third parameter on preg_replace (only removes the first two occurances)
         $tpl['EMAIL'] = preg_replace('/<br \/>/', '', implode('<br />', $form->getTemplate()), 2);
+
+        Layout::addPageTitle("Hall Notification Edit");
 
         return PHPWS_Template::process($tpl, 'hms', 'admin/hall_notification_email_page.tpl');
     }

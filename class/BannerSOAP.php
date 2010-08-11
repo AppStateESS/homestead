@@ -50,6 +50,9 @@ class BannerSOAP extends SOAP{
 
 		SOAP::logSoap('get_student_info', 'success', $username, $term);
 
+		// Apply Banner-specific exceptions
+		self::applyExceptions($username, $student);
+
 		return $student;
 	}
 
@@ -73,16 +76,16 @@ class BannerSOAP extends SOAP{
 
 		return $username;
 	}
-	
+
 	public function isValidStudent($username, $term)
 	{
 	    $student = self::getStudentInfo($username, $term);
-	    
+
 	    // Check for a banner ID. If that's null/empty, then we're pretty sure this student doesn't exist
 	    if(!isset($student->banner_id) || is_null($student->banner_id) || empty($student->banner_id)){
 	        return false;
 	    }
-	    
+
 	    return true;
 	}
 
@@ -245,6 +248,21 @@ class BannerSOAP extends SOAP{
 		$username, $termcode, $opt);
 
 		return $student;
+	}
+
+	private function applyExceptions($username, &$student){
+
+	    if(empty($student->student_type) && $student->international=="true"){
+	        $student->student_type = 'G';
+	    }
+
+	    if($username == 'weldoncr'){
+	        $student->application_term = 200840;
+	    }
+
+	    if($username == 'ekasca'){
+	        $student->dob = '1986-09-05';
+	    }
 	}
 }
 

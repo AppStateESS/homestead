@@ -109,6 +109,8 @@ class HousingApplicationView extends View {
         if(Current_User::getUsername() == "hms_student"){
             $tpl['MENU_LINK'] = PHPWS_Text::secureLink('Back to main menu', 'hms', array('type'=>'student', 'op'=>'show_main_menu'));
         }
+        
+        Layout::addPageTitle("Housing Application");
 
         return PHPWS_Template::process($tpl, 'hms', 'admin/student_application.tpl');
     }

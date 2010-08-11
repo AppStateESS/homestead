@@ -25,6 +25,17 @@ class RLCMenu extends CommandMenu {
                 $this->addCommandByName('View RLC Members by RLC', 'ShowSearchByRlc');
                 $this->addCommandByName('View RLC Assignments', 'ViewRlcAssignments');
             }
+            if(Current_User::allow('hms', 'email_rlc_rejections')){
+                // Using JSConfirm, ask user if the _really_ want to send the emails
+                $onConfirmCmd = CommandFactory::getCommand('SendRlcRejectionEmails');
+                $cmd = CommandFactory::getCommand('JSConfirm');
+
+                $cmd->setLink('Send RLC Rejection Emails');
+                $cmd->setTitle('Send RLC Rejection Emails');
+                $cmd->setQuestion('Send notification emails to denied RLC applicants for selected term?');
+                $cmd->setOnConfirmCommand($onConfirmCmd);
+                $this->addCommand('Send RLC Rejection Emails', $cmd);
+            }
         }
 	}
 	

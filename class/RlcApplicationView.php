@@ -1,7 +1,6 @@
 <?php
 PHPWS_Core::initModClass('hms', 'View.php');
 PHPWS_Core::initModClass('hms', 'CommandFactory.php');
-PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 PHPWS_Core::initModClass('hms', 'ApplicationFeature.php');
 PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
 
@@ -20,10 +19,15 @@ PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
 
 class RlcApplicationView extends View {
 
+    private $term;
+
+    public function __construct($term){
+        $this->term = $term;
+    }
+
     public function show(){
-        $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), Term::getCurrentTerm());
         $cmd     = CommandFactory::getCommand('ShowStudentMenu');
-        $feature = ApplicationFeature::getInstanceByNameAndTerm('RlcApplication', $student->getApplicationTerm());
+        $feature = ApplicationFeature::getInstanceByNameAndTerm('RlcApplication', $this->term);
 
         if( is_null($feature) || !$feature->isEnabled() ){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Sorry, RLC applications are not avaialable for this term.");
@@ -40,6 +44,7 @@ class RlcApplicationView extends View {
         }
         
         $cmd = CommandFactory::getCommand('ShowRlcApplicationPage1View');
+        $cmd->setTerm($this->term);
         $cmd->redirect();
     }
 }

@@ -6,6 +6,7 @@ CREATE TABLE hms_term (
     txt_terms character varying(255),
     primary key(term)
 );
+
 CREATE TABLE hms_pricing_tiers (
     id          integer NOT NULL,
     tier_value  numeric NOT NULL,
@@ -110,6 +111,7 @@ CREATE TABLE hms_bed (
     updated_on      integer NOT NULL,
     banner_id       character varying(15),
     phone_number    character(4),
+    room_change_reserved smallint NOT NULL DEFAULT(0)::smallint,
     PRIMARY KEY(id)
 );
 
@@ -425,7 +427,73 @@ CREATE TABLE hms_eligibility_waiver (
    created_by           CHARACTER VARYING(32)   NOT NULL,
    PRIMARY KEY (id)
 );
+CREATE TABLE hms_special_assignment (
+    id INTEGER NOT NULL,
+    term INTEGER NOT NULL,
+    username VARCHAR(16) NOT NULL,
+    hall VARCHAR(6) NOT NULL,
+    floor INTEGER,
+    room INTEGER
+);
 
+CREATE TABLE hms_role (
+    id                  INTEGER                 NOT NULL,
+    name                text                    NOT NULL,
+    PRIMARY KEY(id)
+);
+
+CREATE TABLE hms_permission (
+    id                  INTEGER                 NOT NULL,
+    name                VARCHAR(32)             NOT NULL,
+    full_name           text,
+    PRIMARY KEY(id)
+);
+
+CREATE TABLE hms_role_perm (
+    role                INTEGER NOT NULL REFERENCES hms_role(id),
+    permission          INTEGER NOT NULL REFERENCES hms_permission(id),
+    PRIMARY KEY(role, permission)
+);
+
+CREATE TABLE hms_user_role (
+	id                  INTEGER NOT NULL,
+    user_id             INTEGER NOT NULL REFERENCES users(id),
+    role                INTEGER NOT NULL REFERENCES hms_role(id),
+    class               VARCHAR(64),
+    instance            INTEGER,
+	UNIQUE (user_id, role, class, instance),
+    PRIMARY KEY(id)
+);
+
+CREATE TABLE hms_room_change_request (
+    id                  INTEGER NOT NULL,
+    state               INTEGER NOT NULL DEFAULT 0,
+    term                INTEGER NOT NULL REFERENCES hms_term(term),
+    bed_id              INTEGER REFERENCES hms_bed(id),
+    reason              TEXT,
+    cell_phone          VARCHAR(11),
+    username            VARCHAR(32),
+    denied_reason       TEXT,
+    denied_by           VARCHAR(32),
+    updated_on          INTEGER,
+    PRIMARY KEY(id)
+);
+
+CREATE TABLE hms_room_change_participants (
+    id                  INTEGER NOT NULL,
+    request             INTEGER NOT NULL REFERENCES hms_room_change_request(id),
+    username            VARCHAR(32),
+    added_on            INTEGER NOT NULL,
+    updated_on          INTEGER NOT NULL,
+    PRIMARY KEY(id)
+);
+
+CREATE TABLE hms_room_change_preferences (
+    id                  INTEGER NOT NULL,
+    request             INTEGER NOT NULL REFERENCES hms_room_change_request(id),
+    building            INTEGER NOT NULL REFERENCES hms_residence_hall(id),
+    PRIMARY KEY(id)
+);
 
 INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info) VALUES (3, 'Language & Culture Community', 'LCC', 50, 0, 'F', '');
 INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info) VALUES (20, 'Watauga Global Community', 'WG', 50, 0, 'F', '<p>Watauga Global Community is where classes meet general education requirements in interdisciplinary team-taught (multiple professor) core classes that blend fact, fiction, culture, philosophy, motion, art, music, myth, and religion.</p><p><strong>This community requires a separate application in addition to marking it as a housing preference.  For more information, go to the <a href="http://wataugaglobal.appstate.edu/pagesmith/4" target="_blank" style="color: blue;">Watauga Global Community Website</a>.</strong></p>');

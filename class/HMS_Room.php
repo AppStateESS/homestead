@@ -14,35 +14,38 @@ PHPWS_Core::initModClass('hms', 'HMS_Item.php');
 class HMS_Room extends HMS_Item
 {
 
-    var $floor_id               = 0;
-    var $room_number            = 0;
+    public $floor_id               = 0;
+    public $room_number            = 0;
 
-    var $gender_type            = 0;
-    var $default_gender         = 0;
-    var $ra_room                = false;
-    var $private_room           = false;
-    var $is_overflow            = false;
-    var $pricing_tier           = 0;
-    var $is_medical             = false;
-    var $is_reserved            = false;
-    var $is_online              = false;
+    public $gender_type            = 0;
+    public $default_gender         = 0;
+    public $ra_room                = false;
+    public $private_room           = false;
+    public $is_overflow            = false;
+    public $pricing_tier           = 0;
+    public $is_medical             = false;
+    public $is_reserved            = false;
+    public $is_online              = false;
+    public $term;
+
+    public $banner_building_code;
 
 
     /**
      * Listing of beds associated with this room
      * @var array
      */
-    var $_beds                  = null;
+    public $_beds                  = null;
 
     /**
      * Parent HMS_Floor object of this room
-     * @var object
+     * @public object
      */
-    var $_floor                 = null;
+    public $_floor                 = null;
 
     /* Hack for the javascript DO NOT TOUCH */
-    var $message = '';
-    var $value   = false;
+    public $message = '';
+    public $value   = false;
 
     /**
      * Constructor
@@ -432,13 +435,22 @@ class HMS_Room extends HMS_Item
     {
         $num_assigned = $this->get_number_of_assignees();
 
-        # If this is a private room, then this room is full is one person is assigned
+        # If this is a private room, then this room is full if one person is assigned
         if($this->isPrivate() && $num_assigned >= 1){
             return FALSE;
         }
 
         if($num_assigned < $this->get_number_of_beds()){
-            return TRUE;
+            //make sure the rooms aren't all reserved
+            $this->loadBeds();
+            $vacant = FALSE;
+            foreach($this->_beds as $bed){
+                $bed->loadAssignment();
+                if(is_null($bed->_curr_assignment) && $bed->room_change_reserved == 0){
+                    $vacant = TRUE;
+                }
+            }
+            return $vacant;
         }
 
         return FALSE;
@@ -552,7 +564,7 @@ class HMS_Room extends HMS_Item
 
     // TODO: move this
     public function get_row_edit(){
-        javascript('/jquery/');
+        javascript('jquery');
         $tpl = array();
         $tpl['ID']           = $this->id;
         $tpl['ROOM_NUMBER']  = PHPWS_Text::secureLink($this->room_number, 'hms', array('type'=>'room', 'op'=>'show_edit_room', 'room'=>$this->id));
@@ -641,7 +653,7 @@ class HMS_Room extends HMS_Item
     public static function room_pager_by_floor($floor_id, $editable=false)
     {
         PHPWS_Core::initCoreClass('DBPager.php');
-        javascript('/jquery/');
+        javascript('jquery');
          
         $pager = new DBPager('hms_room', 'HMS_Room');
         $pager->addWhere('hms_room.floor_id', $floor_id);
@@ -778,7 +790,7 @@ class HMS_Room extends HMS_Item
 
     }
 
-    public static function getAllFreeRooms($term, $gender, $randomize = FALSE)
+    public static function getAllFreeRooms($term)
     {
         $db = new PHPWS_DB('hms_room');
 
@@ -797,9 +809,6 @@ class HMS_Room extends HMS_Item
         $db->addJoin('LEFT OUTER', 'hms_bed', 'hms_assignment', 'id', 'bed_id');
         $db->addWhere('hms_assignment.asu_username', NULL);
 
-        // Gender
-        $db->addWhere('gender_type', $gender);
-        
         // Order by gender preference (0=>female, 1=>male, 2=>coed), rooms in a single gender hall will be first
         $db->addOrder('hms_residence_hall.gender_type ASC');
 
@@ -824,8 +833,6 @@ class HMS_Room extends HMS_Item
         // Don't get rooms on floors reserved for an RLC
         $db->addWhere('hms_floor.rlc_id', NULL);
         
-        $db->setOrder('hms_residence_hall.');
-
         $result = $db->select('col');
 
         // In case of an error, log it and return FALSE
@@ -868,6 +875,11 @@ class HMS_Room extends HMS_Item
 
         // Looks like we're good.
         return TRUE;
+    }
+
+    public function __tostring()
+    {
+        return ($this->banner_building_code ? $this->banner_building_code . ' ' : '') . $this->room_number;
     }
 }
 

@@ -6,7 +6,7 @@ class HousingApplication {
     public $id = 0;
 
     public $term; // The term which this application is for
-    
+
     public $application_type; // The type of this application, defined by each subclass' constructor
 
     public $banner_id;
@@ -25,6 +25,8 @@ class HousingApplication {
     public $psych_disability;
     public $medical_need;
     public $gender_need;
+
+    public $international; // Whether or not this student is an international student. 0 => false, 1=> true (0 by default)
 
     public $created_on; // unix timestamp when the application as first saved
     public $created_by; // user name of the person who created this application
@@ -49,7 +51,7 @@ class HousingApplication {
      * and this method will handle initializing the values of the core application member variables defined in
      * this class
      */
-    public function __construct($term = NULL, $banner_id = NULL, $username = NULL, $gender = NULL, $student_type = NULL, $application_term = NULL, $cell_phone = NULL, $meal_plan = NULL, $physical_disability = NULL, $psych_disability = NULL, $gender_need = NULL, $medical_need = NULL){
+    public function __construct($term = NULL, $banner_id = NULL, $username = NULL, $gender = NULL, $student_type = NULL, $application_term = NULL, $cell_phone = NULL, $meal_plan = NULL, $physical_disability = NULL, $psych_disability = NULL, $gender_need = NULL, $medical_need = NULL, $international = NULL){
 
         $this->setTerm($term);
         $this->setBannerId($banner_id);
@@ -64,6 +66,8 @@ class HousingApplication {
         $this->setPsychDisability($psych_disability);
         $this->setMedicalNeed($medical_need);
         $this->setGenderNeed($gender_need);
+
+        $this->setInternational($international);
 
         $this->setWithdrawn(false);
     }
@@ -148,10 +152,10 @@ class HousingApplication {
     public function log()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-        
+
         # Determine which user name to use as the current user
         $username = UserStatus::getUsername();
-        
+
         if(isset($username) && !is_null($username)){
             HMS_Activity_Log::log_activity($this->getUsername(), ACTIVITY_SUBMITTED_APPLICATION, $username, 'Term: ' . $this->getTerm());
         }else{
@@ -198,7 +202,7 @@ class HousingApplication {
             $body = "Username: {$this->getUsername()}\n";
             $mail->setMessageBody($body);
             $result = $mail->send();
-             
+
             throw $e; // rethrow the exception it
         }
 
@@ -206,7 +210,7 @@ class HousingApplication {
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
         HMS_Activity_Log::log_activity($this->getUsername(), ACTIVITY_APPLICATION_REPORTED, UserStatus::getUsername());
     }
-    
+
     /**
      * Returns a nicely formatted string with the "type" of this application
      * @return String
@@ -242,16 +246,33 @@ class HousingApplication {
     public function unassignedApplicantsRows()
     {
         $tpl = array();
-        $tpl['BANNER_ID']       = $this->getBannerId();
-        $tpl['USERNAME']        = $this->getUsername();
-        $tpl['GENDER']          = HMS_Util::formatGender($this->getGender());
-        $tpl['STUDENT_TYPE']    = HMS_Util::formatType($this->getStudentType());
-        $tpl['APP_TERM']        = Term::toString($this->getApplicationTerm(), TRUE);
-        $tpl['MEAL']            = HMS_Util::formatMealOption($this->getMealPlan());
-        $tpl['ROOMMATE']        = HMS_Roommate::get_confirmed_roommate($this->getUsername(), $this->getTerm());
+        $tpl['BANNER_ID']         = $this->getBannerId();
+        $tpl['USERNAME']          = $this->getUsername();
+        $tpl['GENDER']            = HMS_Util::formatGender($this->getGender());
+        $tpl['STUDENT_TYPE']      = HMS_Util::formatType($this->getStudentType());
+        $tpl['APP_TERM']          = Term::toString($this->getApplicationTerm(), TRUE);
+        $tpl['MEAL']              = HMS_Util::formatMealOption($this->getMealPlan());
+
+        if(is_null($this->lifestyle_option)){
+            $tpl['LIFESTYLE_OPTION']     = 'n/a';
+        }else{
+            $tpl['LIFESTYLE_OPTION']     = $this->lifestyle_option == 1 ? 'Single Gender' : 'Co-ed';
+        }
+
+        if(is_null($this->preferred_bedtime)){
+            $tpl['Preferred_BEDTIME'] = 'n/a';
+        }else{
+            $tpl['PREFERRED_BEDTIME'] = $this->preferred_bedtime == 1 ? 'Early' : 'Late';
+        }
+
+        $roommate = HMS_Roommate::get_confirmed_roommate($this->getUsername(), $this->getTerm());
+        if(!is_null($roommate)){
+            $tpl['ROOMMATE']    = $roommate->getFullName();
+        }
+
         $assignCmd = CommandFactory::getCommand('ShowAssignStudent');
         $assignCmd->setUsername($this->getUsername());
-        
+
         $tpl['ACTIONS']         = '[' . $assignCmd->getLink('Assign', '_blank') . ' ]';
 
         return $tpl;
@@ -266,7 +287,23 @@ class HousingApplication {
         $tpl['STUDENT_TYPE']    = HMS_Util::formatType($this->getStudentType());
         $tpl['APP_TERM']        = Term::toString($this->getApplicationTerm(), TRUE);
         $tpl['MEAL']            = HMS_Util::formatMealOption($this->getMealPlan());
-        $tpl['ROOMMATE']        = HMS_Roommate::get_confirmed_roommate($this->getUsername(), $this->getTerm());
+
+        $roommate = HMS_Roommate::get_confirmed_roommate($this->getUsername(), $this->getTerm());
+        if(!is_null($roommate)){
+            $tpl['ROOMMATE']    = $roommate->getFullName();
+        }
+
+        if(is_null($this->lifestyle_option)){
+            $tpl['LIFESTYLE_OPTION']     = 'n/a';
+        }else{
+            $tpl['LIFESTYLE_OPTION']     = $this->lifestyle_option == 1 ? 'Single Gender' : 'Co-ed';
+        }
+
+        if(is_null($this->preferred_bedtime)){
+            $tpl['PREFERRED_BEDTIME'] = 'n/a';
+        }else{
+            $tpl['PREFERRED_BEDTIME'] = $this->preferred_bedtime == 1 ? 'Early' : 'Late';
+        }
 
         return $tpl;
     }
@@ -330,7 +367,7 @@ class HousingApplication {
         $db->addWhere('term', $term);
 
         $result = $db->select('row');
-        
+
         if(PHPWS_Error::logIfError($result)){
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
@@ -339,7 +376,7 @@ class HousingApplication {
         if($result == NULL){
             return NULL;
         }
-        
+
         switch($result['application_type']){
             case 'fall':
                 $app = new FallApplication($result['id']);
@@ -370,7 +407,7 @@ class HousingApplication {
      */
     public static function getAllApplications($username = NULL, $banner_id = NULL, $term = NULL){
         PHPWS_Core::initModClass('hms', 'HousingApplicationFactory.php');
-        
+
         $db = new PHPWS_DB('hms_new_application');
 
         if(!is_null($banner_id)){
@@ -386,13 +423,13 @@ class HousingApplication {
         }
 
         $result = $db->select();
-        
+
         $apps = array();
-        
+
         foreach($result as $app){
             $apps[] = HousingApplicationFactory::getApplicationById($app['id']);
         }
-        
+
         return $apps;
     }
 
@@ -434,6 +471,75 @@ class HousingApplication {
 
     }
 
+    public static function getUnassignedFreshmenApplications($term, $gender)
+    {
+        PHPWS_Core::initModClass('hms', 'Term.php');
+
+        $db = new PHPWS_DB('hms_new_application');
+        $db->addWhere('student_type', 'F');
+        $db->addWhere('term', $term);
+        $db->addWhere('withdrawn', 0);
+        //        $db->addWhere('gender', $gender);
+
+        // Add join for extra application fields (sub-class fields)
+        switch(Term::getTermSem($term)){
+            case TERM_SUMMER1:
+            case TERM_SUMMER2:
+                PHPWS_Core::initModClass('hms', 'SummerApplication.php');
+                $db->addJoin('LEFT OUTER', 'hms_new_application', 'hms_summer_application', 'id', 'id');
+                $db->addColumn('hms_new_application.*');
+                //TODO addColumns for joined table
+                $result = $db->getObjects('SummerApplication');
+                break;
+            case TERM_FALL:
+                PHPWS_Core::initModClass('hms', 'FallApplication.php');
+                $db->addJoin('LEFT OUTER', 'hms_new_application', 'hms_fall_application', 'id', 'id');
+                // Add columns for joined table
+                $db->addColumn('hms_new_application.*');
+                $db->addColumn('hms_fall_application.lifestyle_option');
+                $db->addColumn('hms_fall_application.preferred_bedtime');
+                $db->addColumn('hms_fall_application.room_condition');
+                $result = $db->getObjects('FallApplication');
+                break;
+            case TERM_SPRING:
+                PHPWS_Core::initModClass('hms', 'SpringApplication.php');
+                $db->addJoin('LEFT OUTER', 'hms_new_application', 'hms_spring_application', 'id', 'id');
+                $db->addColumn('hms_new_application.*');
+                //TODO addColumns for joined table
+                $result = $db->getObjects('SpringApplication');
+                break;
+            default:
+                PHPWS_Core::initModClass('hms', 'exception/InvalidTermException.php');
+                throw new InvalidTermException($term);
+        }
+
+        if(PHPWS_Error::logIfError($result)){
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException($result->toString());
+        }
+
+        // The following is a hack to overcome shortcomings in the Database class.  What should happen
+        // is a left outer join on (SELECT id, asu_username FROM hms_assignment WHERE term=201040)
+        // where id is null.
+
+        $db = new PHPWS_DB('hms_assignment');
+        $db->addWhere('term', $term);
+        $db->addColumn('asu_username');
+        $assignments = $db->select('col');
+
+        $newresult = array();
+
+        for($count = 0; $count < count($result); $count++) {
+            $app = $result[$count];
+            if(!in_array($app->username, $assignments)) {
+                //unset($result[$count]);
+                $newresult[$app->username] = $app;
+            }
+        }
+
+        return $newresult;
+    }
+
     public static function getAvailableApplicationTermsForStudent(Student $student){
         $availableTerms = array();
 
@@ -468,7 +574,7 @@ class HousingApplication {
         if($student->getType() == TYPE_TRANSFER){
             return array();
         }
-        
+
         $availableTerms = self::getAvailableApplicationTermsForStudent($student);
 
         $requiredTerms = array();
@@ -498,7 +604,7 @@ class HousingApplication {
         $requiredTerms = self::getRequiredApplicationTermsForStudent($student);
 
         $needToApplyFor = array();
-         
+
         foreach($requiredTerms as $term){
             // Check if a housing application exists for this student in this term
             if(!HousingApplication::checkForApplication($student->getUsername(), $term['term'])){
@@ -615,6 +721,14 @@ class HousingApplication {
 
     public function setGenderNeed($gender){
         $this->gender_need = $gender;
+    }
+
+    public function getInternational(){
+        return $this->international;
+    }
+
+    public function setInternational($intl){
+        $this->international = $intl;
     }
 
     public function setCreatedOn($timestamp){

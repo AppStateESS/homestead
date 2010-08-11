@@ -13,7 +13,9 @@ class FrontPageView extends View {
         if(is_null($tpl['COOKIE_WARNING'])){
             $tpl['LOGIN_LINK'] = HMS_LOGIN_LINK; // a dummy tag to make the actual login content show
         }
-        
+
+        Layout::addPageTitle("Cookie Warning");
+
         return PHPWS_Template::process($tpl, 'hms', 'misc/login.tpl');
     }
 }

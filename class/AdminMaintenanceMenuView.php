@@ -48,6 +48,8 @@ class AdminMaintenanceMenuView extends View {
 		$messaging = new MessagingMenu();
 		$tpl['MESSAGING'] = $messaging->show();
 
+        Layout::addPageTitle("Main Menu");
+
 		return PHPWS_Template::process($tpl, 'hms', 'AdminMaintenanceMenu.tpl');
 	}
 }
