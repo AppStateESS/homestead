@@ -65,11 +65,15 @@ class HMS_Bed extends HMS_Item {
 
 			if (isset($this->_curr_assignment)) {
 			    try{
-                    //				    $this->_curr_assignment->copy($to_term, $new_bed->id);
-                    $app = HousingApplication::getApplicationByUser($this->_curr_assignment->asu_username,
+                    try{
+                        $student = StudentFactory::getStudentByUsername($this->_curr_assignment->asu_username,
                                                                     Term::getCurrentTerm());
-                    $student = StudentFactory::getStudentByUsername($this->_curr_assignment->asu_username,
+                        $app = HousingApplication::getApplicationByUser($this->_curr_assignment->asu_username,
                                                                     Term::getCurrentTerm());
+                    }catch(StudentNotFoundException $e){
+                        NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Could not copy assignment for ' . $this->_curr_assignment->asu_username);
+                        return;
+                    }
                     // meal option defaults to standard
                     $meal_option = BANNER_MEAL_STD;
                     if(!is_null($app)){
