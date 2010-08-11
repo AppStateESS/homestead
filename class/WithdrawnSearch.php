@@ -160,7 +160,7 @@ class WithdrawnSearch {
             return 'Template error...';
         }
 
-        $tpl->setData(array('DATE'=>date('F j, Y g:ia')));
+        $tpl->setData(array('DATE'=>date('F j, Y g:ia'), 'TERM'=>Term::toString($this->term)));
 
         if(sizeof($this->actions) < 1){
             $tpl->setData(array('NORESULTS'=>'No withdrawn students found.'));
