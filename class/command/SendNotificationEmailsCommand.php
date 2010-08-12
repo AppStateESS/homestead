@@ -33,8 +33,6 @@ class SendNotificationEmailsCommand extends Command {
         }
         */
 
-
-
         if(is_null($context->get('hall')) && is_null($context->get('floor')) ){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You must select a hall or floor to continue!');
             $cmd = CommandFactory::getCommand('ShowHallNotificationSelect');
@@ -86,6 +84,23 @@ class SendNotificationEmailsCommand extends Command {
         //HMS_Activity_Log::log_activity(Current_User::getUsername(), ACTIVITY_HALL_NOTIFIED_ANONYMOUSLY, Current_User::getUsername(), $hall->hall_name);
         //HMS_Activity_Log::log_activity(Current_User::getUsername(), ACTIVITY_HALL_NOTIFIED, Current_User::getUsername(), $hall->hall_name);
 
+        //load the halls and add floors that aren't already present if they have js enabled should be zero
+        foreach($halls as $hall){
+            $hallObj = new HMS_Residence_Hall;
+            $hallObj->id = $hall;
+            $hallObj->load();
+
+            $hallFloors = $hallObj->get_floors();
+            foreach($hallFloors as $hallFloor){
+                foreach($floorObj as $floor){
+                    if($hallFloor->id == $floor->id){
+                        break;
+                    }
+                }
+                $floorObj[] = $hallFloor;
+            }
+        }
+
         foreach($floorObj as $floor){
             $rooms = $floor->get_rooms();
             foreach($rooms as $room){
@@ -95,7 +110,6 @@ class SendNotificationEmailsCommand extends Command {
                 }
             }
         }
-
 
         NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Emails sent successfully!');
         $cmd = CommandFactory::getCommand('ShowAdminMaintenanceMenu');
