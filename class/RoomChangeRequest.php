@@ -18,22 +18,25 @@ define('ROOM_CHANGE_DENIED',           5);
 define('MAX_PREFERENCES',              2);
 
 class RoomChangeRequest extends HMS_Item {
+
+    public $id;
     public $state;
-    public $participants;
+    public $term;
     public $curr_hall;
     public $bed_id;
     public $reason;
     public $cell_phone;
-    public $preferences;
     public $username;
     public $rd_username;
     public $rd_timestamp;
     public $denied_reason;
     public $denied_by;
-    public $term;
 
-    public function search($username){
-        $db = $this->getDb();
+    public $participants;
+    public $preferences;
+
+    public static function search($username){
+        $db = self::getDb();
         $db->addWhere('username', $username);
         $db->addWhere('state', ROOM_CHANGE_DENIED, '<>');
         $db->addWhere('state', ROOM_CHANGE_COMPLETED, '<>');
@@ -46,7 +49,7 @@ class RoomChangeRequest extends HMS_Item {
 
         //okay, look for a completed/denied change request then...
         if(sizeof($result) == 0){
-            $db = $this->getDb();
+            $db = self::getDb();
             $db->addWhere('username', $username);
             $db->addOrder('updated_on desc');
             $result = $db->getObjects('RoomChangeRequest');
@@ -75,6 +78,13 @@ class RoomChangeRequest extends HMS_Item {
 
         //get the id of the hall they are currently in, so that we can filter the rd pager later
         $assignment = HMS_Assignment::getAssignment($this->username, Term::getSelectedTerm());
+
+        if(!isset($assignment)){
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You are not currently assigned to a room, so you cannot request a room change.');
+            $errorCmd = CommandFactory::getCommand('ShowStudentMenu');
+            $errorCmd->redirect();
+        }
+
         $building = $assignment->get_parent()->get_parent()->get_parent()->get_parent();
         $this->curr_hall = $building->id;
 
@@ -174,7 +184,7 @@ class RoomChangeRequest extends HMS_Item {
         $db = new PHPWS_DB('hms_room_change_preferences');
         $db->addWhere('request', $this->id);
         $results = $db->select();
-        
+
         if(PHPWS_Error::logIfError($results)){
             throw new DatabaseException('Error loading preferences');
         }
@@ -233,6 +243,11 @@ class RoomChangeRequest extends HMS_Item {
     }
 
     public function getFloor(){
+    }
+
+    public function getState()
+    {
+        return $this->state;
     }
 
     public function getStatus(){

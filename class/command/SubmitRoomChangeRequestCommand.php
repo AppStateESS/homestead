@@ -13,6 +13,7 @@ class SubmitRoomChangeRequestCommand extends Command {
     public function execute(CommandContext $context){
         // Cmd to redirect to when we're done or upon error.
         $cmd = CommandFactory::getCommand('StudentRoomChange');
+        $successCmd = CommandFactory::getCommand('ShowStudentMenu');
 
         $cellNum = $context->get('cell_num');
         $optOut  = $context->get('cell_opt_out');
@@ -26,6 +27,18 @@ class SubmitRoomChangeRequestCommand extends Command {
             $cmd->redirect();
         }
 
+        // Check the format of the cell phone number
+        if(isset($cellNum)){
+            // Filter out non-numeric characters
+            $cellNum = preg_replace("/[^0-9]/", '', $cellNum);
+
+            // Double check the length for the db (limit of 11 chars)
+            if(strlen($cellNum) > 11){
+                NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Please provide a cell phone number or check the box indicating you do not wish to provide it.');
+                $cmd->redirect();
+            }
+        }
+
         $reason = $context->get('reason');
 
         // Make sure a 'reason' was provided.
@@ -36,7 +49,7 @@ class SubmitRoomChangeRequestCommand extends Command {
 
         $request = RoomChangeRequest::getNew();
         $request->username = UserStatus::getUsername();
-        $request->cell_phone = $context->get('cell_num');
+        $request->cell_phone = $cellNum;
         $request->reason = $context->get('reason');
         $request->change(new PendingRoomChangeRequest);
         if(!empty($first))
@@ -46,7 +59,8 @@ class SubmitRoomChangeRequestCommand extends Command {
 
         $request->save();
 
-        $cmd->redirect();
+        NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Your room change request has been received and is pending approval. You will be contacted by your Residence Director (RD) in the next 24-48 hours regarding your request.');
+        $successCmd->redirect();
     }
 }
 ?>

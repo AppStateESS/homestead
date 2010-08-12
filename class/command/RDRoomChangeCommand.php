@@ -23,7 +23,8 @@ class RDRoomChangeCommand extends Command {
         $memberships = HMS_Permission::getMembership('room_change_approve', NULL, UserStatus::getUsername());
 
         if(empty($memberships)){
-            throw new PermissionException("You can't do that");
+            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
+            throw new PermissionException("You do not have permission to approve room change requests.");
         }
 
         $this->_memberships = $memberships;
