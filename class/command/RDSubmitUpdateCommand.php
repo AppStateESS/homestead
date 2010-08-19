@@ -39,11 +39,11 @@ class RDSubmitUpdateCommand extends Command {
                 $cmd->username = $context->get('username');
                 $cmd->redirect();
             }
-            $rc->bed_id = $bed;
+            $rc->requested_bed_id = $bed;
             $rc->change(new RDApprovedChangeRequest);
         } else {
-            $rc->change(new DeniedChangeRequest);
             $rc->denied_reason = $context->get('reason');
+            $rc->change(new DeniedChangeRequest);
             $rc->save();
             $cmd = CommandFactory::getCommand('RDRoomChange');
             $cmd->redirect();

@@ -177,7 +177,7 @@ class RoomChangeView extends View {
         $tpl['NUMBER']         = $this->request->cell_phone;
         $tpl['STUDENT_REASON'] = $this->request->reason;
 
-        $bed   = new HMS_Bed($this->request->bed_id);
+        $bed   = new HMS_Bed($this->request->requested_bed_id);
         $room  = $bed->get_parent();
         $floor = $room->get_parent();
         $hall  = $floor->get_parent();

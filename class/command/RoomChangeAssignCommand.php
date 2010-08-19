@@ -38,7 +38,7 @@ class RoomChangeAssignCommand extends Command {
         $plan = BANNER_MEAL_STD;
 
         if(!HMS_Assignment::checkForAssignment($student->getUsername(), $term)){
-            NQ::simple('hms', HMS_NOTFICATION_ERROR, 'Error: Student is not assigned anywhere, how are they "changing" rooms?');
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Error: Student is not assigned anywhere, how are they "changing" rooms?');
             //redirect
         }
 

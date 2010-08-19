@@ -470,7 +470,7 @@ CREATE TABLE hms_room_change_request (
     state               INTEGER NOT NULL DEFAULT 0,
     term                INTEGER NOT NULL REFERENCES hms_term(term),
     curr_hall           INTEGER NOT NULL REFERENCES hms_residence_hall(id),
-    bed_id              INTEGER REFERENCES hms_bed(id),
+    requested_bed_id    INTEGER REFERENCES hms_bed(id),
     reason              TEXT,
     cell_phone          VARCHAR(11),
     username            VARCHAR(32),

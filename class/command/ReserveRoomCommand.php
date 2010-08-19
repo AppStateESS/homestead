@@ -26,7 +26,7 @@ class ReserveRoomCommand extends Command {
             $bed->room_change_reserved = $status;
             $bed->save();
 
-            if($staus == 1){
+            if($status == 1){
                 NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'The bed has been reserved!');
             }
         }
