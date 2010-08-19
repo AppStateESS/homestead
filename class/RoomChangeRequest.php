@@ -29,8 +29,6 @@ class RoomChangeRequest extends HMS_Item {
     public $reason;
     public $cell_phone;
     public $username;
-    public $rd_username;
-    public $rd_timestamp;
     public $denied_reason;
     public $denied_by;
 
@@ -390,6 +388,29 @@ class BaseRoomChangeState implements RoomChangeState {
         return -1;
     }
 
+    public function reserveRoom(){
+        $params = new CommandContext;
+        $params->addParam('last_command', 'RDRoomChange');
+        $params->addParam('username', $this->request->username);
+        $params->addParam('bed', $this->request->requested_bed_id);
+        $cmd = CommandFactory::getCommand('ReserveRoom');
+        $cmd = $cmd->execute($params);
+
+        return $cmd;
+    }
+
+    public function clearReservedFlag(){
+        //clear reserved flag
+        $params = new CommandContext;
+        $params->addParam('last_command', 'RDRoomChange');
+        $params->addParam('username', $this->request->username);
+        $params->addParam('bed', $this->request->requested_bed_id);
+        $params->addParam('clear', true);
+        $cmd = CommandFactory::getCommand('ReserveRoom');
+        $cmd = $cmd->execute($params);
+
+        return $cmd;
+    }
 }
 
 class NewRoomChangeRequest extends BaseRoomChangeState {
@@ -427,14 +448,7 @@ class RDApprovedChangeRequest extends BaseRoomChangeState {
 
     public function onEnter(){
         $this->addParticipant('rd', UserStatus::getUsername(), 'Housing and Residence Life');
-        $this->request->rd_username = UserStatus::getUsername();
-        $this->request->rd_timestamp = mktime();
-        $params = new CommandContext;
-        $params->addParam('last_command', 'RDRoomChange');
-        $params->addParam('username', $this->request->username);
-        $params->addParam('bed', $this->request->requested_bed_id);
-        $cmd = CommandFactory::getCommand('ReserveRoom');
-        $cmd = $cmd->execute($params);
+        $cmd = $this->reserveRoom();
 
         if($cmd instanceof Command){
             $cmd->redirect();
@@ -483,17 +497,11 @@ class CompletedChangeRequest extends BaseRoomChangeState {
 
     public function onEnter(){
         //clear reserved flag
-        $params = new CommandContext;
-        $params->addParam('last_command', 'RDRoomChange');
-        $params->addParam('username', $this->request->username);
-        $params->addParam('bed', $this->request->requested_bed_id);
-        $params->addParam('clear', true);
-        $cmd = CommandFactory::getCommand('ReserveRoom');
-        $cmd = $cmd->execute($params);
+        $cmd = $this->clearReservedFlag();
 
+        //if it fails...
         if($cmd instanceof Command){
-            $this->request->state = new HousingApprovedChangeRequest;
-            $this->request->save();
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Could not clear the reserved flag, assignment was not changed.');
             $cmd->redirect();
         }
 
@@ -504,15 +512,7 @@ class CompletedChangeRequest extends BaseRoomChangeState {
         $cmd = $cmd->execute($params);
 
         if($cmd instanceof Command){
-            //relock the room
-            $params = new CommandContext;
-            $params->addParam('last_command', 'RDRoomChange');
-            $params->addParam('username', $this->request->username);
-            $params->addParam('bed', $this->request->requested_bed_id);
-            $relock = CommandFactory::getCommand('ReserveRoom');
-            $relock->execute($params);
-
-            //and redirect to the error page
+            //redirect on failure
             $cmd->redirect();
         }
 
@@ -537,6 +537,7 @@ class DeniedChangeRequest extends BaseRoomChangeState {
 
     public function onEnter(){
         $this->request->denied_by = UserStatus::getUsername();
+        $this->clearReservedFlag();
         HMS_Activity_Log::log_activity(UserStatus::getUsername(), ACTIVITY_ROOM_CHANGE_DENIED, UserStatus::getUsername(FALSE), $this->request->denied_reason);
     }
 

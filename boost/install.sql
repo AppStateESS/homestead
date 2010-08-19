@@ -474,8 +474,6 @@ CREATE TABLE hms_room_change_request (
     reason              TEXT,
     cell_phone          VARCHAR(11),
     username            VARCHAR(32),
-    rd_username         VARCHAR(32),
-    rd_timestamp        INTEGER,
     denied_reason       TEXT,
     denied_by           VARCHAR(32),
     updated_on          INTEGER,

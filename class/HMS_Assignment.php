@@ -332,6 +332,11 @@ class HMS_Assignment extends HMS_Item
 			throw new AssignmentException('The bed is not empty.');
 		}
 
+        # Issue a warning if the bed was reserved for room change
+        if($vacant_bed->room_change_reserved != 0){
+            NQ::simple('hms', HMS_NOTIFICATION_WARNING, 'Room was reserved for room change');
+        }
+
 		# Check that the room's gender and the student's gender match
 		$student_gender = $student->getGender();
 
