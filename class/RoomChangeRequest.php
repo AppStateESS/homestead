@@ -337,8 +337,11 @@ class RoomChangeRequest extends HMS_Item {
     }
 
     public function emailParticipants($subject, $status){
+        $tags = array();
+        $tags['STUDENT'] = $this->username;
+
         foreach($this->participants as $participant){
-            //HMS_Email::send_template_message($participant['username'], $subject, $status.'_'.$participant['role'].'_email.tpl', $participant);
+            //HMS_Email::send_template_message($participant['username'], $subject, $status.'_'.$participant['role'].'_email.tpl', $tags);
         }
     }
 }
@@ -536,6 +539,7 @@ class DeniedChangeRequest extends BaseRoomChangeState {
     //state cannot change
 
     public function onEnter(){
+        $this->request->emailParticipants('Room Change Denied', 'denied');
         $this->request->denied_by = UserStatus::getUsername();
         $this->clearReservedFlag();
         HMS_Activity_Log::log_activity(UserStatus::getUsername(), ACTIVITY_ROOM_CHANGE_DENIED, UserStatus::getUsername(FALSE), $this->request->denied_reason);
