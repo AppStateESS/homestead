@@ -40,6 +40,12 @@ abstract class StudentDataProvider {
 
     abstract public function getStudentById($id, $term);
 
+    /**
+     * Clears any cached results this DataProvider may be storing
+     */
+    abstract public function clearCache();
+
+
     protected function getFallbackProvider()
     {
         if(!isset($this->fallbackProvider) || is_null($this->fallbackProvider)){
@@ -51,5 +57,4 @@ abstract class StudentDataProvider {
         }
     }
 }
-
 ?>

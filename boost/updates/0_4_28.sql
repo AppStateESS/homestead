@@ -11,11 +11,15 @@ CREATE TABLE hms_student_cache (
     dob                 character(10) NOT NULL,
     gender              character(1) NOT NULL,
     deposit_date        character(10),
-    deposit_waived      character varying(5) NOT NULL,
     type                character(1) NOT NULL,
     application_term    character(6) NOT NULL,
     class               character(2) NOT NULL,
     credit_hours        integer NOT NULL,
+    student_level       character varying(16) NOT NULL,
+    international       character varying(5) NOT NULL,
+    honors              character varying(5) NOT NULL,
+    teaching_fellow     character varying(5) NOT NULL,
+    watauga_member      character varying(5) NOT NULL,
     PRIMARY KEY (banner_id, term)
 );
 

@@ -25,7 +25,7 @@ class SOAPDataProvider extends StudentDataProvider {
     public function getStudentById($id, $term)
     {
         $soap = SOAP::getInstance();
-        $username = $soap->getUsername($bannerId);
+        $username = $soap->getUsername($id);
 
         if(!isset($username) || is_null($username) || empty($username)){
             PHPWS_Core::initModClass('hms', 'exception/StudentNotFoundException.php');
@@ -52,7 +52,13 @@ class SOAPDataProvider extends StudentDataProvider {
         $student->setCreditHours($soapData->credhrs_completed);
 
         $student->setDepositDate($soapData->deposit_date);
-        $student->setDepositWaived($soapData->deposit_waived);
+
+        $student->setStudentLevel($soapData->student_level);
+        $student->setInternational($soapData->international);
+
+        $student->setHonors($soapData->honors);
+        $student->setTeachingFellow($soapData->teaching_fellow);
+        $student->setWataugaMember($soapData->watauga_member);
 
         $phoneNumbers = array();
 
@@ -75,6 +81,14 @@ class SOAPDataProvider extends StudentDataProvider {
             // Only one address object give, make it into an array
             $student->setAddressList(array($soapData->address));
         }
+    }
+
+    /**
+     * No cache used in this provider, so this method doesn't do anything,
+     * but we're still required to define it, just in case.
+     */
+    public function clearCache()
+    {
     }
 }
 

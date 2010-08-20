@@ -9,16 +9,17 @@ class Student {
 	public $middle_name;
 	public $last_name;
 
+	public $gender;
+    public $dob;
+
 	public $application_term;
 	public $type;
 	public $class;
 	public $credit_hours;
 
-	public $student_level;
-
 	public $deposit_date;
-	public $deposit_waived;
 
+	public $student_level;
 	public $international;
 
 	public $honors;
