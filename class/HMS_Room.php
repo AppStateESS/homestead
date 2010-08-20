@@ -141,6 +141,9 @@ class HMS_Room extends HMS_Item
         if(!$assignments){
             $new_room->gender_type = $new_room->default_gender;
         }
+        else if($assignments) {
+            $new_room->gender_type = $this->gender_type;
+        }
 
         try{
             $new_room->save();

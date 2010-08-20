@@ -21,7 +21,7 @@ class OffCampusWaitingListRegistration extends ApplicationFeatureRegistration {
         if($student->getApplicationTerm() > Term::getCurrentTerm()){
             return false;
         }
-        
+
         $app = HousingApplication::getApplicationByUser($student->getUsername(), $term);
         
         // Must be a returning student and either have not re-applied or have re-applied to the waiting list already

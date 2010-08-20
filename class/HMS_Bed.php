@@ -50,9 +50,14 @@ class HMS_Bed extends HMS_Item {
 		}catch(Exception $e){
 		    throw $e;
 		}
-
+        // Copy assignment
 		if ($assignments) {
 			//echo "loading assignments for this bed<br>";
+            PHPWS_Core::initModClass('hms', 'HousingApplication.php');
+            PHPWS_Core::initModClass('hms', 'Term.php');
+            PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
+            PHPWS_Core::initModClass('hms', 'StudentFactory.php');
+
 			try{
     			$this->loadAssignment();
 			}catch(Exception $e){
@@ -61,7 +66,22 @@ class HMS_Bed extends HMS_Item {
 
 			if (isset($this->_curr_assignment)) {
 			    try{
-				    $this->_curr_assignment->copy($to_term, $new_bed->id);
+                    try{
+                        $student = StudentFactory::getStudentByUsername($this->_curr_assignment->asu_username,
+                                                                    Term::getCurrentTerm());
+                        $app = HousingApplication::getApplicationByUser($this->_curr_assignment->asu_username,
+                                                                    Term::getCurrentTerm());
+                    }catch(StudentNotFoundException $e){
+                        NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Could not copy assignment for ' . $this->_curr_assignment->asu_username);
+                        return;
+                    }
+                    // meal option defaults to standard
+                    $meal_option = BANNER_MEAL_STD;
+                    if(!is_null($app)){
+                        $meal_option = $app->getMealPlan();
+                    }
+                    $note = "Assignment copied from ".Term::getPrintableCurrentTerm()." to ".Term::toString($to_term);
+                    HMS_Assignment::assignStudent($student, $to_term, null, $new_bed->id, $meal_option, $note);
 			    }catch(Exception $e){
 			        throw $e;
 			    }
