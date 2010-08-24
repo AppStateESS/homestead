@@ -23,6 +23,8 @@ CREATE TABLE hms_student_cache (
     PRIMARY KEY (banner_id, term)
 );
 
+CREATE INDEX hms_student_cache_usr_idx ON hms_student_cache(username);
+
 CREATE TABLE hms_student_address_cache (
     banner_id       integer NOT NULL,
     atyp_code       character varying(2) NOT NULL,
@@ -31,7 +33,7 @@ CREATE TABLE hms_student_address_cache (
     line3           character varying(255) NOT NULL,
     city            character varying(255) NOT NULL,
     state           character varying(255) NOT NULL,
-    zip             integer NOT NULL
+    zip             character varying(10)  NOT NULL
 );
 
 CREATE INDEX hms_student_address_cache_idx ON hms_student_address_cache(banner_id);
