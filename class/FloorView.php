@@ -126,6 +126,16 @@ class FloorView extends View {
 		javascript('modules/hms/role_editor');
         $tpl['ROLE_EDITOR'] = PHPWS_Template::process(array('CLASS_NAME'=>"'HMS_Floor'", 'ID'=>$this->floor->id), 'hms', 'admin/role_editor.tpl');
 
+        $form = new PHPWS_Form('add_room');
+        $cmd = CommandFactory::getCommand('AddRoomView');
+        $cmd->floor = $this->floor->id;
+        $cmd->residence_hall = $this->hall->id;
+        $cmd->initForm($form);
+
+        $form->addSubmit('Add Room');
+
+        $tpl['ADD_ROOM'] = implode('', $form->getTemplate());
+
         Layout::addPageTitle("Edit Floor");
 
         return PHPWS_Template::process($tpl, 'hms', 'admin/edit_floor.tpl');
