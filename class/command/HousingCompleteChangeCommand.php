@@ -19,13 +19,9 @@ class HousingCompleteChangeCommand extends Command {
     }
 
     public function execute(CommandContext $context){
-
-        test($_REQUEST);
-
         if(!is_null($context->get('username'))){
             $rc = new RoomChangeRequest;
             $rc = $rc->search($context->get('username'));
-            test($rc);
         } else {
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Cannot complete room change for non-existant user!');
         }
