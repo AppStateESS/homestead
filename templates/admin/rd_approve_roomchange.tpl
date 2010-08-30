@@ -2,65 +2,48 @@
 {START_FORM}
 <table>
   <tr>
-    <th>Name:
-    </th>
-    <td>{FULLNAME}
-    </td>
+    <td>Name:</td>
+    <td>{FULLNAME}</td>
   </tr>
   <tr>
-    <th>Username:
-    </th>
-    <td>{USERNAME}
-    </td>
+    <td>Username:</td>
+    <td>{USERNAME}</td>
   </tr>
   <tr>
-    <th>Student's Reason</th>
+    <td>Student's Reason:</td>
     <td>{STUDENT_REASON}</td>
   </tr>
   <tr>
-    <th>Student's Preferred Halls
-    </th>
+    <td>Student's Preferred Halls:</td>
     <td>
-    <!-- BEGIN preferences -->
-    <b>{PREFERENCE}</b><br />
-    <!-- END preferences -->
+        <!-- BEGIN preferences -->
+        <b>{PREFERENCE}</b><br />
+        <!-- END preferences -->
     </td>
   </tr>
   <tr>
-    <th>Approve or Deny
-    </th>
-    <td>{APPROVE_DENY_1} {APPROVE_DENY_1_LABEL} {APPROVE_DENY_2} {APPROVE_DENY_2_LABEL}
-    </td>
+    <td>Action:</td>
+    <td>{APPROVE_DENY_1} {APPROVE_DENY_1_LABEL} {APPROVE_DENY_2} {APPROVE_DENY_2_LABEL}</td>
   </tr>
   <tr id="reason_row">
-    <th>{REASON_LABEL}
-    </th>
-    <td>{REASON}
-    </td>
+    <td>{REASON_LABEL}</td>
+    <td>{REASON}</td>
   </tr>
   <tr class="bed_selection">
-    <th>{RESIDENCE_HALL_LABEL}
-    </th>
-    <td>{RESIDENCE_HALL}
-    </td>
+    <td>{RESIDENCE_HALL_LABEL}</td>
+    <td>{RESIDENCE_HALL}</td>
   </tr>
   <tr class="bed_selection">
-    <th>{FLOOR_LABEL}
-    </th>
-    <td>{FLOOR}
-    </td>
+    <td>{FLOOR_LABEL}</td>
+    <td>{FLOOR}</td>
   </tr>
   <tr class="bed_selection">
-    <th>{ROOM_LABEL}
-    </th>
-    <td>{ROOM}
-    </td>
+    <td>{ROOM_LABEL}</td>
+    <td>{ROOM}</td>
   </tr>
   <tr class="bed_selection">
-    <th>{BED_LABEL}
-    </th>
-    <td>{BED}
-    </td>
+    <td>{BED_LABEL}</td>
+    <td>{BED}</td>
   </tr>
 </table>
 {SUBMIT_BUTTON}

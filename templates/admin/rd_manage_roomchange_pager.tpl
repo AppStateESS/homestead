@@ -3,11 +3,13 @@
 <table>
 <tr>
   <th>Student</th>
+  <th>User name</th>
   <th>Status</th>
   <th>Actions</th>
 </tr>
 <!-- BEGIN listrows -->
 <tr {TOGGLE}>
+  <td>{NAME}</td>
   <td>{USERNAME}</td>
   <td>{STATUS}</td>
   <td>{ACTIONS}</td>

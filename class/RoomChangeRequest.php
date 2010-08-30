@@ -109,7 +109,7 @@ class RoomChangeRequest extends HMS_Item {
         if(empty($this->preferences)){
             $result = $db->delete();
             if(PHPWS_Error::logIfError($result))
-                throw new DatabaseException($result->toString());
+            throw new DatabaseException($result->toString());
             return true;
         }
 
@@ -129,12 +129,10 @@ class RoomChangeRequest extends HMS_Item {
                 $db->addValue('id', $preference['id']);
             $db->addValue('request', $this->id);
             $db->addValue('building', is_array($preference) ? $preference['building'] : $preference);
-
             if(is_array($preference) && isset($preference['id']))
                 $result = $db->update();
             else
                 $result = $db->insert();
-
         }
         return true;
     }
@@ -142,32 +140,45 @@ class RoomChangeRequest extends HMS_Item {
     public function saveParticipants(){
         $db = new PHPWS_DB('hms_room_change_participants');
         $db->addWhere('request', $this->id);
-        //clear if the array is empty
+
+        //delete participants from table if the participants array is empty
         if(empty($this->participants)){
             $result = $db->delete();
-            if(PHPWS_Error::logIfError($result))
+            if(PHPWS_Error::logIfError($result)){
+                PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
                 throw new DatabaseException($result->toString());
+            }
             return true;
         }
+
+        // Otherwise, get the list of participants
         $results = $db->select();
 
         if(PHPWS_Error::logIfError($results)){
-            throw new DatabaseException('Database Error');
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException($results->toString());
         }
 
         foreach($this->participants as $participant){
             $db->reset();
             if(isset($participant['id']))
-                $db->addValue('id', $participant['id']);
+                $db->addWhere('id', $participant['id']);
             $db->addValue('request', $this->id);
             $db->addValue('role', $participant['role']);
             $db->addValue('username', $participant['username']);
             $db->addValue('name', $participant['name']);
+            $db->addValue('updated_on', time());
 
             if(isset($participant['id'])){
                 $result = $db->update();
             }else{
+                $db->addValue('added_on', time());
                 $result = $db->insert();
+            }
+
+            if(PHPWS_Error::logIfError($result)){
+                PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+                throw new DatabaseException($result->toString());
             }
         }
         return true;
@@ -292,14 +303,17 @@ class RoomChangeRequest extends HMS_Item {
     }
 
     public function rdRowFunction(){
-        try{
+        //try{
             $this->load();
-        } catch(Exception $e){
-        }
+        //} catch(Exception $e){
+        //}
 
         $cmd = CommandFactory::getCommand('RDRoomChange');
         $cmd->username = $this->username;
 
+        $student = StudentFactory::getStudentByUsername($this->username, Term::getCurrentTerm());
+
+        $template['NAME']     = $student->getFullName();
         $template['USERNAME'] = $this->username;
         $template['STATUS']   = $this->getStatus();
         $template['ACTIONS']  = $cmd->getLink($this->state->getType() == ROOM_CHANGE_PENDING ? 'Manage' : 'View');
@@ -398,6 +412,11 @@ class BaseRoomChangeState implements RoomChangeState {
 
     public function clearReservedFlag(){
         //clear reserved flag
+
+        if(!isset($this->request->requested_bed_id) || is_null($this->request->requested_bed_id)){
+            return;
+        }
+
         $params = new CommandContext;
         $params->addParam('last_command', 'RDRoomChange');
         $params->addParam('username', $this->request->username);
@@ -433,7 +452,7 @@ class PendingRoomChangeRequest extends BaseRoomChangeState {
 
     public function onEnter(){
         $this->request->emailParticipants('Your room change request has been submitted', 'pending');
-        HMS_Activity_Log::log_activity(UserStatus::getUsername(), ACTIVITY_ROOM_CHANGE_SUBMITTED, UserStatus::getUsername(FALSE), $this->request->reason);
+        HMS_Activity_Log::log_activity($this->request->username, ACTIVITY_ROOM_CHANGE_SUBMITTED, UserStatus::getUsername(FALSE), $this->request->reason);
     }
 }
 
@@ -456,7 +475,7 @@ class RDApprovedChangeRequest extends BaseRoomChangeState {
         $bed->load();
 
         $this->request->emailParticipants('Room Change Request Approved!', 'rd_approved');
-        HMS_Activity_Log::log_activity(UserStatus::getUsername(), ACTIVITY_ROOM_CHANGE_APPROVED_RD, UserStatus::getUsername(FALSE), "Selected ".$bed->where_am_i());
+        HMS_Activity_Log::log_activity($this->request->username, ACTIVITY_ROOM_CHANGE_APPROVED_RD, UserStatus::getUsername(FALSE), "Selected ".$bed->where_am_i());
     }
 
     public function getType(){
@@ -476,11 +495,11 @@ class HousingApprovedChangeRequest extends BaseRoomChangeState {
 
         $curr_assignment = HMS_Assignment::getAssignment($this->request->username, Term::getSelectedTerm());
         $bed = $curr_assignment->get_parent();
-        
+
         $newBed = new HMS_Bed;
         $newBed->id = $this->request->requested_bed_id;
         $newBed->load();
-        HMS_Activity_Log::log_activity(UserStatus::getUsername(), ACTIVITY_ROOM_CHANGE_APPROVED_HOUSING, UserStatus::getUsername(FALSE), "Approved Room Change to ".$newBed->where_am_i()." from ".$bed->where_am_i());
+        HMS_Activity_Log::log_activity($this->request->username, ACTIVITY_ROOM_CHANGE_APPROVED_HOUSING, UserStatus::getUsername(FALSE), "Approved Room Change to ".$newBed->where_am_i()." from ".$bed->where_am_i());
     }
 
     public function getType(){
@@ -508,6 +527,8 @@ class CompletedChangeRequest extends BaseRoomChangeState {
         $cmd = CommandFactory::getCommand('RoomChangeAssign');
         $cmd = $cmd->execute($params);
 
+        test($cmd,1);
+
         if($cmd instanceof Command){
             //redirect on failure
             $cmd->redirect();
@@ -520,7 +541,7 @@ class CompletedChangeRequest extends BaseRoomChangeState {
         $newBed = new HMS_Bed;
         $newBed->id = $this->request->requested_bed_id;
         $newBed->load();
-        HMS_Activity_Log::log_activity(UserStatus::getUsername(), ACTIVITY_ROOM_CHANGE_APPROVED_HOUSING, UserStatus::getUsername(FALSE), "Completed Room change to ".$newBed->where_am_i());
+        HMS_Activity_Log::log_activity($this->request->username, ACTIVITY_ROOM_CHANGE_APPROVED_HOUSING, UserStatus::getUsername(FALSE), "Completed Room change to ".$newBed->where_am_i());
     }
 
     public function getType(){
@@ -536,7 +557,7 @@ class DeniedChangeRequest extends BaseRoomChangeState {
         $this->request->emailParticipants('Room Change Denied', 'denied');
         $this->request->denied_by = UserStatus::getUsername();
         $this->clearReservedFlag();
-        HMS_Activity_Log::log_activity(UserStatus::getUsername(), ACTIVITY_ROOM_CHANGE_DENIED, UserStatus::getUsername(FALSE), $this->request->denied_reason);
+        HMS_Activity_Log::log_activity($this->request->username, ACTIVITY_ROOM_CHANGE_DENIED, UserStatus::getUsername(FALSE), $this->request->denied_reason);
     }
 
     public function getType(){

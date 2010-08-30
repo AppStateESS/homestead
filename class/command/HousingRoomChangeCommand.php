@@ -23,8 +23,9 @@ class HousingRoomChangeCommand extends Command {
     }
 
     public function execute(CommandContext $context){
-        if(!Current_User::allow('admin_approve_room_change')){
-            throw new Exception("I'm sorry, I can't do that Dave.");
+        if(!Current_User::allow('hms', 'admin_approve_room_change')){
+            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
+            throw new PermissionException("You do not have permission to approve room changes.");
         }
 
         if(!is_null($context->get('username'))){
