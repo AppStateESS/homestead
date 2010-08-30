@@ -123,20 +123,18 @@ class RoomChangeRequest extends HMS_Item {
             throw new DatabaseException("You aren't allowed to prefer that many things!");
         }
 
-        $i = 0;
         foreach($this->preferences as $preference){
             $db->reset();
-            if(!empty($results) && sizeof($results) <= $i)
-                $db->addValue('id', $results[$i]['id']);
+            if(is_array($preference) && isset($preference['id']))
+                $db->addValue('id', $preference['id']);
             $db->addValue('request', $this->id);
-            $db->addValue('building', $preference);
+            $db->addValue('building', is_array($preference) ? $preference['building'] : $preference);
 
-            if(!empty($results) && sizeof($results) <= $i)
+            if(is_array($preference) && isset($preference['id']))
                 $result = $db->update();
             else
                 $result = $db->insert();
 
-            $i++;
         }
         return true;
     }
@@ -157,22 +155,20 @@ class RoomChangeRequest extends HMS_Item {
             throw new DatabaseException('Database Error');
         }
 
-        $i = 0;
         foreach($this->participants as $participant){
             $db->reset();
-            if(!empty($results) && sizeof($results) <= $i)
-                $db->addValue('id', $results[$i]['id']);
+            if(isset($participant['id']))
+                $db->addValue('id', $participant['id']);
             $db->addValue('request', $this->id);
             $db->addValue('role', $participant['role']);
             $db->addValue('username', $participant['username']);
             $db->addValue('name', $participant['name']);
 
-            if(!empty($results) && sizeof($results) <= $i)
+            if(isset($participant['id'])){
                 $result = $db->update();
-            else
+            }else{
                 $result = $db->insert();
-
-            $i++;
+            }
         }
         return true;
     }
@@ -226,8 +222,6 @@ class RoomChangeRequest extends HMS_Item {
                 break;
         }
 
-        //        $this->loadParticipants();
-        //        $this->loadPreferences();
         $this->state->setRequest($this);
     }
 
