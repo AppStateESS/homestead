@@ -233,11 +233,14 @@ class RoomChangeRequest extends HMS_Item {
 
     public function change(RoomChangeState $state){
         if($this->canChangeState($state)){
+            //only used by denied
+            $prev = $this->state;
+
             $this->state->onExit();
             $this->state = $state;
             $this->state->request = $this;
             $this->onChange();
-            $this->state->onEnter();
+            $this->state->onEnter($prev);
             return true;
         }
         return false;
@@ -342,7 +345,7 @@ class RoomChangeRequest extends HMS_Item {
 
 interface RoomChangeState {
     public function canTransition(RoomChangeState $state);
-    public function onEnter();
+    public function onEnter($from=NULL);
     public function onExit();
     public function setRequest(RoomChangeRequest $request);
     public function checkPermissions();
@@ -361,7 +364,7 @@ class BaseRoomChangeState implements RoomChangeState {
         return in_array(get_class($state), $this->getValidTransitions());
     }
 
-    public function onEnter(){
+    public function onEnter($from=NULL){
         //pass;
     }
 
@@ -385,9 +388,9 @@ class BaseRoomChangeState implements RoomChangeState {
         return -1;
     }
 
-    public function reserveRoom(){
+    public function reserveRoom($last_command){
         $params = new CommandContext;
-        $params->addParam('last_command', 'RDRoomChange');
+        $params->addParam('last_command', $last_command);
         $params->addParam('username', $this->request->username);
         $params->addParam('bed', $this->request->requested_bed_id);
         $cmd = CommandFactory::getCommand('ReserveRoom');
@@ -396,10 +399,10 @@ class BaseRoomChangeState implements RoomChangeState {
         return $cmd;
     }
 
-    public function clearReservedFlag(){
+    public function clearReservedFlag($last_command){
         //clear reserved flag
         $params = new CommandContext;
-        $params->addParam('last_command', 'RDRoomChange');
+        $params->addParam('last_command', $last_command);
         $params->addParam('username', $this->request->username);
         $params->addParam('bed', $this->request->requested_bed_id);
         $params->addParam('clear', true);
@@ -431,7 +434,7 @@ class PendingRoomChangeRequest extends BaseRoomChangeState {
         return ROOM_CHANGE_PENDING;
     }
 
-    public function onEnter(){
+    public function onEnter($from=NULL){
         $this->request->emailParticipants('Your room change request has been submitted', 'pending');
         HMS_Activity_Log::log_activity(UserStatus::getUsername(), ACTIVITY_ROOM_CHANGE_SUBMITTED, UserStatus::getUsername(FALSE), $this->request->reason);
     }
@@ -443,9 +446,9 @@ class RDApprovedChangeRequest extends BaseRoomChangeState {
         return array('HousingApprovedChangeRequest', 'DeniedChangeRequest');
     }
 
-    public function onEnter(){
+    public function onEnter($from=NULL){
         $this->addParticipant('rd', UserStatus::getUsername(), 'Housing and Residence Life');
-        $cmd = $this->reserveRoom();
+        $cmd = $this->reserveRoom('RDRoomChange');
 
         if($cmd instanceof Command){
             $cmd->redirect();
@@ -470,7 +473,7 @@ class HousingApprovedChangeRequest extends BaseRoomChangeState {
         return array('CompletedChangeRequest', 'DeniedChangeRequest');
     }
 
-    public function onEnter(){
+    public function onEnter($from=NULL){
         $this->addParticipant('housing', EMAIL_ADDRESS, 'Housing and Residence Life');
         $this->request->emailParticipants('Housing Approved Room Change!', 'housing_approved');
 
@@ -492,9 +495,9 @@ class CompletedChangeRequest extends BaseRoomChangeState {
 
     //state cannot change
 
-    public function onEnter(){
+    public function onEnter($from=NULL){
         //clear reserved flag
-        $cmd = $this->clearReservedFlag();
+        $cmd = $this->clearReservedFlag('HousingRoomChange');
 
         //if it fails...
         if($cmd instanceof Command){
@@ -532,10 +535,21 @@ class DeniedChangeRequest extends BaseRoomChangeState {
 
     //state cannot change
 
-    public function onEnter(){
+    public function onEnter($from=NULL){
         $this->request->emailParticipants('Room Change Denied', 'denied');
         $this->request->denied_by = UserStatus::getUsername();
-        $this->clearReservedFlag();
+
+        //this will break if from is null, but allowing null makes the interface cleaner
+        //therefor ***MAKE SURE THIS ISN'T NULL***
+        
+        //if denied by RD
+        if($from instanceof PendingRoomChangeRequest){
+            //send back to RD screen
+            $this->clearReservedFlag('RDRoomChange');
+        } else { //denied by housing
+            //send back to housing screen
+            $this->clearReservedFlag('HousingRoomChange');
+        }
         HMS_Activity_Log::log_activity(UserStatus::getUsername(), ACTIVITY_ROOM_CHANGE_DENIED, UserStatus::getUsername(FALSE), $this->request->denied_reason);
     }
 
