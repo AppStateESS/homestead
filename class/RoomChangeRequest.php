@@ -530,8 +530,6 @@ class CompletedChangeRequest extends BaseRoomChangeState {
         $cmd = CommandFactory::getCommand('RoomChangeAssign');
         $cmd = $cmd->execute($params);
 
-        test($cmd,1);
-
         if($cmd instanceof Command){
             //redirect on failure
             $cmd->redirect();
@@ -544,7 +542,7 @@ class CompletedChangeRequest extends BaseRoomChangeState {
         $newBed = new HMS_Bed;
         $newBed->id = $this->request->requested_bed_id;
         $newBed->load();
-        HMS_Activity_Log::log_activity($this->request->username, ACTIVITY_ROOM_CHANGE_APPROVED_HOUSING, UserStatus::getUsername(FALSE), "Completed Room change to ".$newBed->where_am_i());
+        HMS_Activity_Log::log_activity($this->request->username, ACTIVITY_ROOM_CHANGE_COMPLETED, UserStatus::getUsername(FALSE), "Completed Room change to ".$newBed->where_am_i());
     }
 
     public function getType(){
@@ -562,7 +560,7 @@ class DeniedChangeRequest extends BaseRoomChangeState {
 
         //this will break if from is null, but allowing null makes the interface cleaner
         //therefor ***MAKE SURE THIS ISN'T NULL***
-        
+
         //if denied by RD
         if($from instanceof PendingRoomChangeRequest){
             //send back to RD screen
