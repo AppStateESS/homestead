@@ -569,7 +569,7 @@ class DeniedChangeRequest extends BaseRoomChangeState {
             //send back to housing screen
             $this->clearReservedFlag('HousingRoomChange');
         }
-        HMS_Activity_Log::log_activity(UserStatus::getUsername(), ACTIVITY_ROOM_CHANGE_DENIED, UserStatus::getUsername(FALSE), $this->request->denied_reason);
+        HMS_Activity_Log::log_activity($this->request->username, ACTIVITY_ROOM_CHANGE_DENIED, UserStatus::getUsername(FALSE), $this->request->denied_reason);
     }
 
     public function getType(){
