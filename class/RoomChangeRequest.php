@@ -276,7 +276,7 @@ class RoomChangeRequest extends HMS_Item {
         if($this->state instanceof PendingRoomChangeRequest){
             return 'Awaiting RD Approval';
         } elseif($this->state instanceof RDApprovedChangeRequest){
-            return 'Awaiting Housing and Residence Life Approval';
+            return 'Awaiting University Housing Approval';
         } elseif($this->state instanceof HousingApprovedChangeRequest){
             return 'Awaiting Completion';
         } elseif($this->state instanceof CompletedChangeRequest){
@@ -466,7 +466,7 @@ class RDApprovedChangeRequest extends BaseRoomChangeState {
     }
 
     public function onEnter($from=NULL){
-        $this->addParticipant('rd', UserStatus::getUsername(), 'Housing and Residence Life');
+        $this->addParticipant('rd', UserStatus::getUsername(), 'University Housing');
         $cmd = $this->reserveRoom('RDRoomChange');
 
         if($cmd instanceof Command){
@@ -493,7 +493,7 @@ class HousingApprovedChangeRequest extends BaseRoomChangeState {
     }
 
     public function onEnter($from=NULL){
-        $this->addParticipant('housing', EMAIL_ADDRESS, 'Housing and Residence Life');
+        $this->addParticipant('housing', EMAIL_ADDRESS, 'University Housing');
         $this->request->emailParticipants('Housing Approved Room Change!', 'housing_approved');
 
         $curr_assignment = HMS_Assignment::getAssignment($this->request->username, Term::getSelectedTerm());
@@ -569,7 +569,7 @@ class DeniedChangeRequest extends BaseRoomChangeState {
             //send back to housing screen
             $this->clearReservedFlag('HousingRoomChange');
         }
-        HMS_Activity_Log::log_activity(UserStatus::getUsername(), ACTIVITY_ROOM_CHANGE_DENIED, UserStatus::getUsername(FALSE), $this->request->denied_reason);
+        HMS_Activity_Log::log_activity($this->request->username, ACTIVITY_ROOM_CHANGE_DENIED, UserStatus::getUsername(FALSE), $this->request->denied_reason);
     }
 
     public function getType(){

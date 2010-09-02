@@ -10,6 +10,10 @@
     <td>{USERNAME}</td>
   </tr>
   <tr>
+    <td>Phone number:</td>
+    <td>{NUMBER}</td>
+  </tr>
+  <tr>
     <td>Student's Reason:</td>
     <td>{STUDENT_REASON}</td>
   </tr>
