@@ -47,14 +47,22 @@ class HousingCompleteSwapCommand extends Command {
         //unassign the students
         HMS_Assignment::unassignStudent($student0, Term::getSelectedTerm(), "Room Change Swap - Unassign first");
         HMS_Assignment::unassignStudent($student1, Term::getSelectedTerm(), "Room Change Swap - Unassign first");
-        
+
         //put the second student in the first student's former bed
         HMS_Assignment::assignStudent($student1, Term::getSelectedTerm(), NULL, $assignment0->bed_id, $assignment1->meal_option, "Room Change Swap - Reassign second to first");
 
         //put the first student in the second's former bed
         HMS_Assignment::assignStudent($student0, Term::getSelectedTerm(), NULL, $assignment1->bed_id, $assignment0->meal_option, "Room Change Swap - Reassign first to second");
 
-        test(array($assignment0, $assignment1),1);
+        //update the state of the two requests
+        if($rc0->change(new CompletedChangeRequest) && $rc0->save()
+           && $rc1->change(new CompletedChangeRequest) && $rc1->save())
+            NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Room Swap Completed');
+
+        //and redirect
+        $cmd = CommandFactory::getCommand('HousingRoomChange');
+        $cmd->tab = 'complete';
+        $cmd->redirect();
     }
 }
 

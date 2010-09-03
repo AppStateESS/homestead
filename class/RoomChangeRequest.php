@@ -551,6 +551,11 @@ class CompletedChangeRequest extends BaseRoomChangeState {
     //state cannot change
 
     public function onEnter($from=NULL){
+        //if this is a swap this code is irrelevant TODO: refactor
+        if(!empty($this->request->switch_with)){
+            return;
+        }
+
         //clear reserved flag
         $cmd = $this->clearReservedFlag('HousingRoomChange');
 
