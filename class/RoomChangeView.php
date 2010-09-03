@@ -108,7 +108,7 @@ class RoomChangeView extends View {
             return PHPWS_Template::process($tpl, 'hms', 'admin/room_change_status.tpl');
         }
 
-        $halls = HMS_Residence_Hall::getHallsDropDownValues(Term::getSelectedTerm());
+        $halls = HMS_Residence_Hall::getHallsWithVacanciesArray(Term::getSelectedTerm());
         javascript('jquery');
         javascript('/modules/hms/assign_student');
 

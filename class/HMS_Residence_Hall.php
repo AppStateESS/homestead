@@ -127,7 +127,7 @@ class HMS_Residence_Hall extends HMS_Item
                 try{
                     $floor->copy($to_term, $new_hall->id, $assignments);
                 }catch(Exception $e){
-                    throw $e;                    
+                    throw $e;
                 }
             }
         }
@@ -519,8 +519,17 @@ class HMS_Residence_Hall extends HMS_Item
      */
     public function has_vacancy()
     {
+        /*
         if($this->get_number_of_assignees() < $this->get_number_of_beds()){
             return TRUE;
+        }
+        */
+
+        $floors = $this->getFloorsWithVacancies();
+
+        if(sizeof($floors) > 0)
+        {
+            return true;
         }
 
         return FALSE;
