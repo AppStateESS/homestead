@@ -350,9 +350,13 @@ class RoomChangeRequest extends HMS_Item {
     public function emailParticipants($subject, $status){
         $tags = array();
         $tags['STUDENT'] = $this->username;
+        $tags['PHONE']   = $this->cell_phone;
+
+        $student = StudentFactory::getStudentByUsername($this->username, Term::getSelectedTerm());
+        $tags['NAME'] = $student->getName();
 
         foreach($this->participants as $participant){
-            //HMS_Email::send_template_message($participant['username'], $subject, $status.'_'.$participant['role'].'_email.tpl', $tags);
+            HMS_Email::send_template_message($participant['username'], $subject, 'email/roomChange_' . $status . '_' . $participant['role'] . '.tpl', $tags);
         }
     }
 }
