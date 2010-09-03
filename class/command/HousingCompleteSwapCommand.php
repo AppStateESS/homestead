@@ -37,8 +37,22 @@ class HousingCompleteSwapCommand extends Command {
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Cannot complete room change for non-existant user!');
         }
 
+        //get both assignments
         $assignment0 = HMS_Assignment::getAssignment($rc0->username, Term::getSelectedTerm());
+        $student0    = StudentFactory::getStudentByUsername($rc0->username, Term::getSelectedTerm());
+
         $assignment1 = HMS_Assignment::getAssignment($rc1->username, Term::getSelectedTerm());
+        $student1    = StudentFactory::getStudentByUsername($rc1->username, Term::getSelectedTerm());
+
+        //unassign the students
+        HMS_Assignment::unassignStudent($student0, Term::getSelectedTerm(), "Room Change Swap - Unassign first");
+        HMS_Assignment::unassignStudent($student1, Term::getSelectedTerm(), "Room Change Swap - Unassign first");
+        
+        //put the second student in the first student's former bed
+        HMS_Assignment::assignStudent($student1, Term::getSelectedTerm(), NULL, $assignment0->bed_id, $assignment1->meal_option, "Room Change Swap - Reassign second to first");
+
+        //put the first student in the second's former bed
+        HMS_Assignment::assignStudent($student0, Term::getSelectedTerm(), NULL, $assignment1->bed_id, $assignment0->meal_option, "Room Change Swap - Reassign first to second");
 
         test(array($assignment0, $assignment1),1);
     }
