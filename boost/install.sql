@@ -471,6 +471,7 @@ CREATE TABLE hms_room_change_request (
     term                INTEGER NOT NULL REFERENCES hms_term(term),
     curr_hall           INTEGER NOT NULL REFERENCES hms_residence_hall(id),
     requested_bed_id    INTEGER REFERENCES hms_bed(id),
+    switch_with         VARCHAR(32),
     reason              TEXT,
     cell_phone          VARCHAR(11),
     username            VARCHAR(32),

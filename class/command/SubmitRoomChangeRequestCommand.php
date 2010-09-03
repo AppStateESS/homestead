@@ -3,6 +3,7 @@
 PHPWS_Core::initModClass('hms', 'Command.php');
 PHPWS_Core::initModClass('hms', 'RoomChangeRequest.php');
 PHPWS_Core::initModClass('hms', 'UserStatus.php');
+PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
 
 class SubmitRoomChangeRequestCommand extends Command {
 
@@ -20,6 +21,8 @@ class SubmitRoomChangeRequestCommand extends Command {
 
         $first  = $context->get('first_choice');
         $second = $context->get('second_choice');
+
+        $swap = $context->get('swap_with');
 
         // Check that a cell phone number was provided, or that the opt-out box was checked.
         if((!isset($cellNum) || empty($cellNum)) && !isset($optOut)){
@@ -47,15 +50,23 @@ class SubmitRoomChangeRequestCommand extends Command {
             $cmd->redirect();
         }
 
+        //create the request object
         $request = RoomChangeRequest::getNew();
         $request->username = UserStatus::getUsername();
         $request->cell_phone = $cellNum;
         $request->reason = $context->get('reason');
         $request->change(new PendingRoomChangeRequest);
+
+        //preferences
         if(!empty($first))
             $request->addPreference($first);
         if(!empty($second))
             $request->addPreference($second);
+
+        //swap - make sure the other person has an assignment
+        if(!empty($swap) && !is_null(HMS_Assignment::getAssignment($swap, Term::getSelectedTerm()))){
+            $request->switch_with = $swap;
+        }
 
         $request->save();
 

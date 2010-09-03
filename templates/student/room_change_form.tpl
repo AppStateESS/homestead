@@ -16,7 +16,7 @@ You will be notified via your ASU email address when your request is approved or
 </p>
 
 <h3>Hall Preferences</h3>
-<p>Your RD will take these preferences into consideration when finding an available room for you to move to.</p>
+<p>If you are not switching rooms with another student, please select your hall preferences below.  Your RD will take these preferences into consideration when finding an available room for you to move to.</p>
 
 <table>
     <tr>
@@ -29,6 +29,12 @@ You will be notified via your ASU email address when your request is approved or
     </tr>
 </table>
 
+<h3>Room Swap</h3>
+<p>If you are switching rooms with another student please enter their ASU Username here.</p>
+<p>
+{SWAP_WITH_LABEL}:
+{SWAP_WITH}
+</p>
 
 <h3>Reason</h3>
 <p>In the box below, please provide a <em>short</em> explanation of why you would like to move to a different room. A few sentences is sufficient. You should also indicate any special circumstances (i.e. you want to switch rooms with a friend on your floor).</p>

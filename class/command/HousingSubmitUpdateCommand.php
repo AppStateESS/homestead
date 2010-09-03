@@ -20,11 +20,13 @@ class HousingSubmitUpdateCommand extends Command {
         $rc = new RoomChangeRequest;
         $rc = $rc->search($context->get('username'));
 
-        if(is_null($context->get('approve_deny'))){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You must either approve or deny the request!');
+        if(!is_null($context->get('approve_deny'))){
+            $approve = $context->get('approve_deny') == 'approve' ? true : false;
         }
 
-        $approve = $context->get('approve_deny') == 'approve' ? true : false;
+        if(!isset($approve)){
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You must either approve or deny the request!');
+        }
 
         if($approve){
             $rc->change(new HousingApprovedChangeRequest);

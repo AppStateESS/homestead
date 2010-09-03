@@ -32,15 +32,19 @@ class RDSubmitUpdateCommand extends Command {
         $approve = $context->get('approve_deny') == 'approve' ? true : false;
 
         if($approve){
-            $bed = $context->get('bed');
-            if(is_null($bed)){
-                NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You must select a bed!');
-                $cmd = CommandFactory::getCommand('RDRoomChange');
-                $cmd->username = $context->get('username');
-                $cmd->redirect();
+            if(!empty($rc->switch_with)){
+                $rc->change(new WaitingForPairing);
+            } else { //preserving existing logic for now TODO: un-nest this crud
+                $bed = $context->get('bed');
+                if(is_null($bed)){
+                    NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You must select a bed!');
+                    $cmd = CommandFactory::getCommand('RDRoomChange');
+                    $cmd->username = $context->get('username');
+                    $cmd->redirect();
+                }
+                $rc->requested_bed_id = $bed;
+                $rc->change(new RDApprovedChangeRequest);
             }
-            $rc->requested_bed_id = $bed;
-            $rc->change(new RDApprovedChangeRequest);
         } else {
             $rc->denied_reason = $context->get('reason');
             $rc->change(new DeniedChangeRequest);

@@ -35,17 +35,30 @@ class RoomChangeView extends View {
                 return $this->housingHistory();
             } else {
                 return $this->housingList();
+                return $this->pairingList();
             }
         }
     }
 
+    /*
+     * studentSubmitView
+     *
+     *   Creates the view by which a student can submit a room change or swap
+     * request.
+     *
+     * @return html
+     */
     public function studentSubmitView(){
         javascript('jquery');
+
         $form = new PHPWS_Form('room_change_request');
+
+        /* Cell phone */
         $form->addText('cell_num');
         $form->setLabel('cell_num', 'Cellphone Number');
         $form->addCheck('cell_opt_out');
 
+        /* Preferences */
         $halls = array(0=>'Choose from below...');
         $halls = $halls+HMS_Residence_Hall::get_halls_array(Term::getSelectedTerm());
 
@@ -54,11 +67,17 @@ class RoomChangeView extends View {
         $form->addDropBox('second_choice', $halls);
         $form->setLabel('second_choice', 'Second Choice');
 
+        /* Swap */
+        $form->addText('swap_with');
+        $form->setLabel('swap_with', 'ASU Username');
+
+        /* Reason */
         $form->addTextArea('reason');
         $form->setLabel('reason', 'Reason');
 
         $form->addSubmit('Submit Request');
 
+        /* POST location */
         $cmd = CommandFactory::getCommand('SubmitRoomChangeRequest');
         $cmd->initForm($form);
 
@@ -67,6 +86,14 @@ class RoomChangeView extends View {
         return PHPWS_Template::process($tpl, 'hms', 'student/room_change_form.tpl');
     }
 
+    /*
+     * studentTrack
+     *
+     *   Creates a view which provides the student information about their current
+     * room change request.
+     *
+     * @return html
+     */
     public function studentTrack(){
         $tpl['STATUS'] = $this->request->getStatus();
 
@@ -88,19 +115,6 @@ class RoomChangeView extends View {
         $form = new PHPWS_Form();
         $form->addHidden('username', $student->getUsername());
 
-        $form->addDropBox('residence_hall', $halls);
-        $form->setLabel('residence_hall', 'Residence hall: ');
-        $form->setMatch('residence_hall', 0);
-
-        $form->addDropBox('floor', array(0 => ''));
-        $form->setLabel('floor', 'Floor: ');
-
-        $form->addDropBox('room', array(0 => ''));
-        $form->setLabel('room', 'Room: ');
-
-        $form->addDropBox('bed', array(0 => ''));
-        $form->setLabel('bed', 'Bed: ');
-
         $form->addRadio('approve_deny', array('approve', 'deny'));
         $form->setLabel('approve_deny', array('Approve', 'Deny'));
 
@@ -112,20 +126,43 @@ class RoomChangeView extends View {
         $cmd = CommandFactory::getCommand('RDSubmitUpdate');
         $cmd->initForm($form);
 
-        $tpl = $form->getTemplate();
-
+        $tpl                   = array();
         $tpl['USERNAME']       = $student->getUsername();
         $tpl['FULLNAME']       = $student->getFullName();
         $tpl['NUMBER']         = $this->request->cell_phone;
         $tpl['STUDENT_REASON'] = $this->request->reason;
-        $tpl['preferences']    = array();
 
-        foreach($this->request->preferences as $preference){
-            $hall = new HMS_Residence_Hall();
-            $hall->id = $preference['building'];
-            $hall->load();
-            $tpl['preferences'][] = array('PREFERENCE'=>$hall->getHallName());
+        //if we aren't switching
+        if(empty($this->request->switch_with)){
+            //make sure the preferences show up
+            $tpl['preferences']    = array();
+
+            //and add the room selection form elements
+            $form->addDropBox('residence_hall', $halls);
+            $form->setLabel('residence_hall', 'Residence hall: ');
+            $form->setMatch('residence_hall', 0);
+            
+            $form->addDropBox('floor', array(0 => ''));
+            $form->setLabel('floor', 'Floor: ');
+
+            $form->addDropBox('room', array(0 => ''));
+            $form->setLabel('room', 'Room: ');
+
+            $form->addDropBox('bed', array(0 => ''));
+            $form->setLabel('bed', 'Bed: ');
+
+            foreach($this->request->preferences as $preference){
+                $hall = new HMS_Residence_Hall();
+                $hall->id = $preference['building'];
+                $hall->load();
+                $tpl['preferences'][] = array('PREFERENCE'=>$hall->getHallName());
+            }
+        } else {
+            $tpl['SWAP'] = $this->request->switch_with; //TODO: pull their real name and assignment
         }
+        
+        $form->mergeTemplate($tpl);
+        $tpl = $form->getTemplate();
 
         return PHPWS_Template::process($tpl, 'hms', 'admin/rd_approve_roomchange.tpl');
     }
@@ -158,9 +195,14 @@ class RoomChangeView extends View {
         }
 
         $form = new PHPWS_Form('room_change_approval');
-        //todo: choose bed
-        $form->addRadio('approve_deny', array('approve', 'deny'));
-        $form->setLabel('approve_deny', array('Approve', 'Deny'));
+
+        if($this->request->state instanceof WaitingForPairing){
+            $form->addCheck('approve_deny', 'deny');
+            $form->setLabel('approve_deny', 'Deny');
+        } else {
+            $form->addRadio('approve_deny', array('approve', 'deny'));
+            $form->setLabel('approve_deny', array('Approve', 'Deny'));
+        }
 
         $form->addTextArea('reason');
         $form->setLabel('reason', 'Reason');
@@ -218,6 +260,57 @@ class RoomChangeView extends View {
         $panel->quickSetTabs($tabs);
         return $panel->display($pager->get(), 'Manage Room Change Requests', '');
     }
+
+    public function pairingList(){
+        if(!Current_User::allow('admin_approve_room_change')){
+            throw new Exception("I'm sorry, I can't do that Dave.");
+        }
+
+        $db = new PHPWS_DB('hms_room_change_request');
+        $db->addWhere('state', ROOM_CHANGE_PAIRED, '=', 'or');
+        $db->addWhere('state', ROOM_CHANGE_PAIRING, '=', 'or');
+        $db->addOrder('state desc');
+
+        $results = $db->getObjects('RoomChangeRequest');
+
+        if(PHPWS_Error::logIfError($results)){
+            throw new DatabaseException($results->toString());
+        }
+
+        //fake the empty message
+        if(empty($results)){
+            return PHPWS_Template::process(array('EMPTY'=>'No room swaps outstanding.'), 'hms', 'admin/room_change_approve_pairing.tpl');
+        }
+
+        //create the commands to use to get the deny/view links
+        $view    = CommandFactory::getCommand('HousingRoomChange');
+
+        $tpl = array();
+        foreach($results as $result){
+            $result->load();
+
+            if($result->state instanceof WaitingForPairing){
+                $paired = $result->state->attemptToPair(); //TODO: Move this to the top if it was paired
+                //if it paired, then we need to save so that we don't forget the pairing
+                if($paired){
+                    $result->save();
+                }
+                $result->load(); //have to unmap the defines to the state class
+            }
+
+            $student = StudentFactory::getStudentByUsername($result->username, Term::getSelectedTerm());
+
+            $actions = "";
+            $view->username = $student->getUsername();
+            $actions .= $view->getLink('Manage');
+            $tpl['requests'][] = array('NAME'     => $student->getFullName(),
+                                       'USERNAME' => $student->getUsername(),
+                                       'STATUS'   => $result->getStatus(),
+                                       'ACTIONS'  => $actions);
+        }
+
+        return PHPWS_Template::process($tpl, 'hms', 'admin/room_change_approve_pairing.tpl');
+    }
 }
 
-?>
+//?>

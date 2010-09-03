@@ -145,7 +145,8 @@ class HousingApplicationFactory {
                 $app = new WaitingListApplication($application->id);
                 break;
             default:
-                throw new InvalidArgumentException('Unknown application type: ' . $application->application_type);
+                //throw new InvalidArgumentException('Unknown application type: ' . $application->application_type);
+                $app = new FallApplication($application->id);
         }
 
         return $app;

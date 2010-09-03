@@ -24,7 +24,13 @@
   <tr>
     <th>Approve or Deny
     </th>
-    <td>{APPROVE_DENY_1} {APPROVE_DENY_1_LABEL} {APPROVE_DENY_2} {APPROVE_DENY_2_LABEL}
+    <td>
+      <!-- BEGIN radio_approve -->
+      {APPROVE_DENY_1} {APPROVE_DENY_1_LABEL} {APPROVE_DENY_2} {APPROVE_DENY_2_LABEL}
+      <!-- END radio_approve -->
+      <!-- BEGIN check_deny -->
+      {APPROVE_DENY_LABEL} {APPROVE_DENY}
+      <!-- END check_deny -->
     </td>
   </tr>
   <tr id="reason_row">
