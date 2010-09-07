@@ -662,6 +662,7 @@ class WaitingForPairing extends BaseRoomChangeState {
 
         if(!is_null($other) && $other->state instanceof WaitingForPairing){
             $this->request->change(new PairedRoomChangeRequest);
+            $other->change(new PairedRoomChangeRequest);
         }
 
         return !is_null($other);
