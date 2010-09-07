@@ -88,6 +88,13 @@ class RoomChangeRequest extends HMS_Item {
             $errorCmd->redirect();
         }
 
+        //sanity check
+        if(isset($this->switch_with) && $this->switch_with == $this->username){
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Please select someone other than yourself to switch rooms with.");
+            $errorCmd = CommandFactory::getCommand('StudentRoomChange');
+            $errorCmd->redirect();
+        }
+
         $building = $assignment->get_parent()->get_parent()->get_parent()->get_parent();
         $this->curr_hall = $building->id;
 
@@ -551,7 +558,8 @@ class CompletedChangeRequest extends BaseRoomChangeState {
     //state cannot change
 
     public function onEnter($from=NULL){
-        //if this is a swap this code is irrelevant TODO: refactor
+        //if this is a swap, then all of this is handled in the command
+        //TODO: move this into the complete change command
         if(!empty($this->request->switch_with)){
             return;
         }
@@ -632,12 +640,14 @@ class WaitingForPairing extends BaseRoomChangeState {
 
     public function onEnter($from=NULL)
     {
+        /* Double save was causing some bugs, commenting out for deadline
         //look for roommate pair
         $paired = $this->attemptToPair();
 
         if($paired){
             $this->request->save();
         }
+        */
     }
 
     public function attemptToPair()
@@ -645,11 +655,12 @@ class WaitingForPairing extends BaseRoomChangeState {
         $other = NULL;
         try{
             $other = $this->request->search($this->request->switch_with);
+            $other->load();
         } catch(DatabaseException $e){
             //pass; broken database is equivalent to NULL here
         }
 
-        if(!is_null($other)){
+        if(!is_null($other) && $other->state instanceof WaitingForPairing){
             $this->request->change(new PairedRoomChangeRequest);
         }
 
@@ -674,3 +685,5 @@ class PairedRoomChangeRequest extends BaseRoomChangeState {
         return $other = $this->request->search($this->request->switch_with);
     }
 }
+
+//?>

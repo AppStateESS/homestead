@@ -14,6 +14,7 @@ class RDSubmitUpdateCommand extends Command {
     public function execute(CommandContext $context){
         $rc = new RoomChangeRequest;
         $rc = $rc->search($context->get('username'));
+        $rc->load();
 
         $hall = new HMS_Residence_Hall;
         $hall->id = $rc->curr_hall;

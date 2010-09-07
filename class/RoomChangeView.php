@@ -35,7 +35,6 @@ class RoomChangeView extends View {
                 return $this->housingHistory();
             } else {
                 return $this->housingList();
-                return $this->pairingList();
             }
         }
     }
@@ -239,7 +238,8 @@ class RoomChangeView extends View {
         Layout::addStyle('controlpanel');
         $panel = new PHPWS_Panel('room_change_panel');
         $tabs = array();
-        $tabs['approve'] = array('title'=>'Pending Approval', 'link'=>'index.php?module=hms&action=HousingRoomChange&tab=approve', 'link_title'=>'View Students Awaiting Approval');
+        $tabs['approve']  = array('title'=>'Pending Approval', 'link'=>'index.php?module=hms&action=HousingRoomChange&tab=approve', 'link_title'=>'View Students Awaiting Approval');
+        $tabs['swap']     = array('title'=>'Swaps Pending Approval', 'link'=>'index.php?module=hms&action=HousingRoomChange&tab=swap', 'link_title'=>'View Swaps Awaiting Approval');
         $tabs['complete'] = array('title'=>'Pending Completion', 'link'=>'index.php?module=hms&action=HousingRoomChange&tab=complete', 'link_title'=>'View Requests awaiting Completion');
 
         PHPWS_Core::initCoreClass('DBPager.php');
@@ -254,11 +254,14 @@ class RoomChangeView extends View {
             $pager->addWhere('state', ROOM_CHANGE_RD_APPROVED);
         } elseif(isset($_GET['tab']) && $_GET['tab'] == 'complete') {
             $pager->addWhere('state', ROOM_CHANGE_HOUSING_APPROVED);
+        } elseif(isset($_GET['tab']) && $_GET['tab'] == 'swap'){
+            $content = $this->pairingList();
         }
+
         $pager->addWhere('term', Term::getSelectedTerm());
 
         $panel->quickSetTabs($tabs);
-        return $panel->display($pager->get(), 'Manage Room Change Requests', '');
+        return $panel->display(isset($content) ? $content : $pager->get(), 'Manage Room Change Requests', '');
     }
 
     public function pairingList(){
@@ -285,12 +288,12 @@ class RoomChangeView extends View {
         //create the commands to use to get the deny/view links
         $view    = CommandFactory::getCommand('HousingRoomChange');
 
-        $tpl = array();
+        $tpl['requests'] = array();
         foreach($results as $result){
             $result->load();
 
             if($result->state instanceof WaitingForPairing){
-                $paired = $result->state->attemptToPair(); //TODO: Move this to the top if it was paired
+                $paired = $result->state->attemptToPair();
                 //if it paired, then we need to save so that we don't forget the pairing
                 if($paired){
                     $result->save();
@@ -303,10 +306,18 @@ class RoomChangeView extends View {
             $actions = "";
             $view->username = $student->getUsername();
             $actions .= $view->getLink('Manage');
-            $tpl['requests'][] = array('NAME'     => $student->getFullName(),
-                                       'USERNAME' => $student->getUsername(),
-                                       'STATUS'   => $result->getStatus(),
-                                       'ACTIONS'  => $actions);
+
+            if(isset($paired) && $paired){
+                $tpl['requests'][] = array('NAME'     => $student->getFullName(),
+                                           'USERNAME' => $student->getUsername(),
+                                           'STATUS'   => $result->getStatus(),
+                                           'ACTIONS'  => $actions);
+            } else { //else prepend it so we know it's at the top, saves us from doing another select
+                array_unshift($tpl['requests'], array('NAME'     => $student->getFullName(),
+                                                      'USERNAME' => $student->getUsername(),
+                                                      'STATUS'   => $result->getStatus(),
+                                                      'ACTIONS'  => $actions));
+            }
         }
 
         return PHPWS_Template::process($tpl, 'hms', 'admin/room_change_approve_pairing.tpl');
