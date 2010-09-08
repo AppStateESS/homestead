@@ -626,6 +626,8 @@ class DeniedChangeRequest extends BaseRoomChangeState {
         $this->request->emailParticipants('Room Change Denied', 'denied');
         $this->request->denied_by = UserStatus::getUsername();
 
+        $other = is_null($this->request->switch_with) ? NULL : $this->request->search($this->request->switch_with);
+
         //this will break if from is null, but allowing null makes the interface cleaner
         //therefor ***MAKE SURE THIS ISN'T NULL***
 
@@ -636,6 +638,18 @@ class DeniedChangeRequest extends BaseRoomChangeState {
         } else { //denied by housing
             //send back to housing screen
             $this->clearReservedFlag('HousingRoomChange');
+        }
+
+        //if it's a swap and the requests were paired
+        if(!is_null($other)
+           && $from         == PairedRoomChangeRequest
+           && $other->state == PairedRoomChangeRequest){
+            //Fixes recursion, don't touch it for now...
+            $this->request->save();
+            $this->request->load();
+
+            //deny the buddy too
+            $this->request->updateBuddy(new DeniedChangeRequest);
         }
         HMS_Activity_Log::log_activity($this->request->username, ACTIVITY_ROOM_CHANGE_DENIED, UserStatus::getUsername(FALSE), $this->request->denied_reason);
     }
