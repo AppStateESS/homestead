@@ -2,28 +2,28 @@
 {START_FORM}
 <table>
   <tr>
-    <th>Name:
-    </th>
+    <td>Name:
+    </td>
     <td>{FULLNAME}
     </td>
   </tr>
   <tr>
-    <th>Username:
-    </th>
+    <td>Username:
+    </td>
     <td>{USERNAME}
     </td>
   </tr>
   <tr>
-    <th>Student's Reason:</th>
+    <td>Student's Reason:</td>
     <td>{STUDENT_REASON}</td>
   </tr>
   <tr>
-    <th>Selected Bed:</th>
+    <td>Selected Bed:</td>
     <td>{BED}</td>
   </tr>
   <tr>
-    <th>Approve or Deny
-    </th>
+    <td>Approve or Deny
+    </td>
     <td>
       <!-- BEGIN radio_approve -->
       {APPROVE_DENY_1} {APPROVE_DENY_1_LABEL} {APPROVE_DENY_2} {APPROVE_DENY_2_LABEL}
@@ -34,8 +34,8 @@
     </td>
   </tr>
   <tr id="reason_row">
-    <th>{REASON_LABEL}
-    </th>
+    <td>{REASON_LABEL}
+    </td>
     <td>{REASON}
     </td>
   </tr>
