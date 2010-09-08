@@ -397,7 +397,12 @@ class RoomChangeRequest extends HMS_Item {
         }
 
         $buddy = $this->search($this->switch_with);
-        $buddy->change($newState);
+        if($buddy->change($newState)){
+            if($newState instanceof DeniedChangeRequest)
+                $buddy->denied_reason = "Other half of the swap was denied.";
+
+            $buddy->save();
+        }
     }
 }
 
@@ -642,8 +647,8 @@ class DeniedChangeRequest extends BaseRoomChangeState {
 
         //if it's a swap and the requests were paired
         if(!is_null($other)
-           && $from         == PairedRoomChangeRequest
-           && $other->state == PairedRoomChangeRequest){
+           && $from         instanceof PairedRoomChangeRequest
+           && $other->state instanceof PairedRoomChangeRequest){
             //Fixes recursion, don't touch it for now...
             $this->request->save();
             $this->request->load();
@@ -651,6 +656,7 @@ class DeniedChangeRequest extends BaseRoomChangeState {
             //deny the buddy too
             $this->request->updateBuddy(new DeniedChangeRequest);
         }
+
         HMS_Activity_Log::log_activity($this->request->username, ACTIVITY_ROOM_CHANGE_DENIED, UserStatus::getUsername(FALSE), $this->request->denied_reason);
     }
 
