@@ -390,6 +390,15 @@ class RoomChangeRequest extends HMS_Item {
             HMS_Email::send_template_message($participant['username'], $subject, 'email/roomChange_' . $status . '_' . $participant['role'] . '.tpl', $tags);
         }
     }
+
+    public function updateBuddy(RoomChangeState $newState){
+        if(is_null($this->switch_with)){ //such a joker
+            throw new Exception("This is not a room swap, I can't do that.");
+        }
+
+        $buddy = $this->search($this->switch_with);
+        $buddy->change($newState);
+    }
 }
 
 interface RoomChangeState {
@@ -539,13 +548,23 @@ class HousingApprovedChangeRequest extends BaseRoomChangeState {
         $this->addParticipant('housing', EMAIL_ADDRESS, 'University Housing');
         $this->request->emailParticipants('Housing Approved Room Change!', 'housing_approved');
 
-        $curr_assignment = HMS_Assignment::getAssignment($this->request->username, Term::getSelectedTerm());
-        $bed = $curr_assignment->get_parent();
+        //if this is a move request
+        if(is_null($this->request->switch_with)){
+            $curr_assignment = HMS_Assignment::getAssignment($this->request->username, Term::getSelectedTerm());
+            $bed = $curr_assignment->get_parent();
 
-        $newBed = new HMS_Bed;
-        $newBed->id = $this->request->requested_bed_id;
-        $newBed->load();
-        HMS_Activity_Log::log_activity($this->request->username, ACTIVITY_ROOM_CHANGE_APPROVED_HOUSING, UserStatus::getUsername(FALSE), "Approved Room Change to ".$newBed->where_am_i()." from ".$bed->where_am_i());
+            $newBed = new HMS_Bed;
+            $newBed->id = $this->request->requested_bed_id;
+            $newBed->load();
+            HMS_Activity_Log::log_activity($this->request->username, ACTIVITY_ROOM_CHANGE_APPROVED_HOUSING, UserStatus::getUsername(FALSE), "Approved Room Change to ".$newBed->where_am_i()." from ".$bed->where_am_i());
+        } else { //if it's a swap
+            /* Update our state in the db, don't touch this.  Trust me. */
+            $this->request->save();
+            $this->request->load();
+         
+            //then approving the swap should also update it's pair
+            $this->request->updateBuddy(new HousingApprovedChangeRequest);
+        }
     }
 
     public function getType(){
@@ -662,7 +681,7 @@ class WaitingForPairing extends BaseRoomChangeState {
 
         if(!is_null($other) && $other->state instanceof WaitingForPairing){
             $this->request->change(new PairedRoomChangeRequest);
-            $other->change(new PairedRoomChangeRequest);
+            $this->request->updateBuddy(new PairedRoomChangeRequest);
         }
 
         return !is_null($other);
@@ -680,6 +699,12 @@ class PairedRoomChangeRequest extends BaseRoomChangeState {
     }
 
     public function onEnter($from=NULL){
+        /* Prevent recursion, TODO: cleanup
+           For now don't touch this. */
+        $this->request->save();
+        $this->request->load();
+
+        $this->request->updateBuddy(new PairedRoomChangeRequest);    
     }
 
     public function getOther(){

@@ -29,12 +29,22 @@ class HousingCompleteSwapCommand extends Command {
     }
 
     public function execute(CommandContext $context){
+        $cmd = CommandFactory::getCommand('HousingRoomChange');
+        $cmd->tab = 'complete';
+
         if(!is_null($context->get('username'))){
             $rc0    = new RoomChangeRequest;
             $rc0    = $rc0->search($context->get('username'));
             $rc1    = $rc0->search($rc0->switch_with);
+
+            /* Sanity check, if this happend something failed horribly. */
+            if(!($rc0->state instanceof HousingApprovedChangeRequest)
+               || !($rc1->state instanceof HousingApprovedChangeRequest)){
+                throw new Exception("Both Room Change Requests must be approved before you can complete a swap");
+            }
         } else {
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Cannot complete room change for non-existant user!');
+            $cmd->redirect();
         }
 
         //get both assignments
@@ -60,8 +70,6 @@ class HousingCompleteSwapCommand extends Command {
             NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Room Swap Completed');
 
         //and redirect
-        $cmd = CommandFactory::getCommand('HousingRoomChange');
-        $cmd->tab = 'complete';
         $cmd->redirect();
     }
 }
