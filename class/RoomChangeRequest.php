@@ -519,12 +519,12 @@ class PendingRoomChangeRequest extends BaseRoomChangeState {
         $tpl['PHONE_NUM']   = $this->request->cell_phone;
 
         // Send confirmation to student
-        HMS_Email::send_template_message($student->getUsername(), 'Room Change Request Received', 'email/roomChange_submitted_student.tpl', $tpl);
+        HMS_Email::send_template_message($student->getUsername() . TO_DOMAIN, 'Room Change Request Received', 'email/roomChange_submitted_student.tpl', $tpl);
 
         // Send 'New Room Change' to RD
         $approvers = HMS_Permission::getMembership('room_change_approve', $hall);
         foreach($approvers as $user){
-            HMS_Email::send_template_message($user['username'], 'New Room Change Request', 'email/roomChange_submitted_rd.tpl', $tpl);
+            HMS_Email::send_template_message($user['username'] . TO_DOMAIN, 'New Room Change Request', 'email/roomChange_submitted_rd.tpl', $tpl);
         }
     }
 }
@@ -573,10 +573,10 @@ class RDApprovedChangeRequest extends BaseRoomChangeState {
         $tpl['BANNER_ID']   = $student->getBannerId();
 
         // Notify the student
-        HMS_Email::send_template_message($student->getUsername(), 'Room Change Pending Approval', 'email/roomChange_rdApproved_student.tpl', $tpl);
+        HMS_Email::send_template_message($student->getUsername() . TO_DOMAIN, 'Room Change Pending Approval', 'email/roomChange_rdApproved_student.tpl', $tpl);
 
         // Confirm with the user who did it and Housing
-        HMS_Email::send_template_message(UserStatus::getUsername(), 'Room Change Pending Approval', 'email/roomChange_rdApproved_housing.tpl', $tpl);
+        HMS_Email::send_template_message(UserStatus::getUsername() . TO_DOMAIN, 'Room Change Pending Approval', 'email/roomChange_rdApproved_housing.tpl', $tpl);
         HMS_Email::send_template_message(EMAIL_ADDRESS . '@' . DOMAIN_NAME, 'Room Change Pending Approval', 'email/roomChange_rdApproved_housing.tpl', $tpl);
     }
 }
@@ -634,22 +634,26 @@ class HousingApprovedChangeRequest extends BaseRoomChangeState {
         $tpl['NEW_ROOM']    = $newRoom->where_am_i();
 
         // Notify student
-        HMS_Email::send_template_message($student->getUsername(), 'Room Change Approved', 'email/roomChange_housingApproved_student.tpl', $tpl);
+        HMS_Email::send_template_message($student->getUsername() . TO_DOMAIN, 'Room Change Approved', 'email/roomChange_housingApproved_student.tpl', $tpl);
 
         // Notify new roommates
         $newRoommates = $newRoom->get_assignees();
 
         foreach($newRoommates as $roommate){
             $tpl['ROOMMATE'] = $roommate->getName();
-            HMS_Email::send_template_message($roommate->getUsername(), 'New Roommate Notification', 'email/roomChange_approved_newRoommate.tpl', $tpl);
+            HMS_Email::send_template_message($roommate->getUsername() . TO_DOMAIN, 'New Roommate Notification', 'email/roomChange_approved_newRoommate.tpl', $tpl);
         }
 
         // Notify old roommates
         $oldRoommates = $oldRoom->get_assignees();
 
         foreach($oldRoommates as $roommate){
+            if($roommate->getUsername() == $student->getUsername()){
+                //Skip the student who actually made the request
+                continue;
+            }
             $tpl['ROOMMATE'] = $roommate->getName();
-            HMS_Email::send_template_message($roommate->getUsername(), 'Roommate Change Notification', 'email/roomChange_approved_oldRoommate.tpl', $tpl);
+            HMS_Email::send_template_message($roommate->getUsername() . TO_DOMAIN, 'Roommate Change Notification', 'email/roomChange_approved_oldRoommate.tpl', $tpl);
         }
 
         // Notify old and new RDs
@@ -658,7 +662,7 @@ class HousingApprovedChangeRequest extends BaseRoomChangeState {
         $RDs = array_merge($oldRDs, $newRDs);
 
         foreach($RDs as $rd){
-            HMS_Email::send_template_message($rd['username'], 'Room Change Approved', 'email/roomChange_housingApproved_student.tpl', $tpl);
+            HMS_Email::send_template_message($rd['username'] . TO_DOMAIN, 'Room Change Approved', 'email/roomChange_housingApproved_student.tpl', $tpl);
         }
     }
 }
@@ -723,7 +727,7 @@ class CompletedChangeRequest extends BaseRoomChangeState {
 
         // Notify new RD that move is complete
         foreach($newRDs as $rd){
-            HMS_Email::send_template_message($rd['username'], 'Room Change Completed', 'email/roomChange_completed.tpl', $tpl);
+            HMS_Email::send_template_message($rd['username'] . TO_DOMAIN, 'Room Change Completed', 'email/roomChange_completed.tpl', $tpl);
         }
     }
 }
@@ -776,7 +780,7 @@ class DeniedChangeRequest extends BaseRoomChangeState {
         $tpl = array();
         $tpl['NAME'] = $student->getName();
 
-        HMS_Email::send_template_message($student->getUsername(), 'Room Change Denied', 'email/roomChange_denied_housing.tpl', $tpl);
+        HMS_Email::send_template_message($student->getUsername() . TO_DOMAIN, 'Room Change Denied', 'email/roomChange_denied_housing.tpl', $tpl);
     }
 }
 
