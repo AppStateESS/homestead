@@ -15,23 +15,23 @@ class ReserveRoomCommand extends Command {
         $bed = new HMS_Bed($bed);
         $bed->loadAssignment();
 
-        if($bed->_curr_assignment instanceof HMS_Assignment || is_null($context->get('clear')) && $bed->room_change_reserved != 0) {
-            test(is_null($context->get('clear')));
-            test($bed->_curr_assignment != 0);
-            test('wtf?',1);
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'That bed is unavailable!');
-            $cmd = CommandFactory::getCommand($context->get('last_command'));
-            return $cmd;
-        }
-
-        if(is_null($bed->_curr_assignment)){
+        if(!is_null($context->get('clear'))){
             $status = is_null($context->get('clear')) ? 1 : 0;
             $bed->room_change_reserved = $status;
             $bed->save();
 
-            if($staus == 1){
+            if($status == 1){
                 NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'The bed has been reserved!');
+            } else {
+                NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'The reserved flag has been cleared!');
             }
+            return;
+        }
+
+        if($bed->_curr_assignment instanceof HMS_Assignment || is_null($context->get('clear')) && $bed->room_change_reserved != 0) {
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'That bed is unavailable!');
+            $cmd = CommandFactory::getCommand($context->get('last_command'));
+            return $cmd;
         }
     }
 }

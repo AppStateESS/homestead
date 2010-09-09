@@ -7,7 +7,7 @@ PHPWS_Core::initModClass('hms', 'CommandFactory.php');
 
 class HousingCompleteChangeCommand extends Command {
     public $username;
-    
+
     public function getRequestVars(){
         $vars = array('action'=>'HousingCompleteChange');
 

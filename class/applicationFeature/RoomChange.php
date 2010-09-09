@@ -31,7 +31,14 @@ class RoomChange extends ApplicationFeature {
     public function getMenuBlockView(Student $student)
     {
         PHPWS_Core::initModClass('hms', 'RoomChangeMenuBlockView.php');
-        return new RoomChangeMenuBlockView($student, $this->getStartDate(), $this->getEndDate());
+        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
+        PHPWS_Core::initModClass('hms', 'RoomChangeRequest.php');
+
+        $assignment = HMS_Assignment::getAssignment($student->getUsername(), $this->term);
+
+        $changeReq = RoomChangeRequest::search($student->getUsername());
+
+        return new RoomChangeMenuBlockView($student, $this->getStartDate(), $this->getEndDate(), $assignment, $changeReq);
     }
 }
 

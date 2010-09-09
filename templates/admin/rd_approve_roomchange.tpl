@@ -2,58 +2,77 @@
 {START_FORM}
 <table>
   <tr>
-    <th>Name:
-    </th>
-    <td>{FULLNAME}
-    </td>
+    <td>Name:</td>
+    <td>{FULLNAME}</td>
   </tr>
   <tr>
-    <th>Username:
-    </th>
-    <td>{USERNAME}
-    </td>
+    <td>Username:</td>
+    <td>{USERNAME}</td>
   </tr>
   <tr>
-    <th>Student's Reason</th>
+    <td>Phone number:</td>
+    <td>{NUMBER}</td>
+  </tr>
+  <tr>
+    <td>Current Assignment:</td>
+    <td>{CURR_ASSIGN}</td>
+  </tr>
+  <tr>
+    <td>Student's Reason:</td>
     <td>{STUDENT_REASON}</td>
   </tr>
+  <!-- BEGIN NUMBER -->
   <tr>
-    <th>Approve or Deny
-    </th>
-    <td>{APPROVE_DENY_1} {APPROVE_DENY_1_LABEL} {APPROVE_DENY_2} {APPROVE_DENY_2_LABEL}
+    <td>Student's Number:</td>
+    <td>{NUMBER}</td>
+  </tr>
+  <!-- END NUMBER -->
+  <!-- BEGIN swap -->
+  <tr>
+    <td>Requested swap with:
     </td>
+    <td>{SWAP}
+    </td>
+  </tr>
+  <!-- END swap -->
+  <!-- BEGIN haspref -->
+  <tr>
+    <td>Student's Preferred Halls:</td>
+    <td>
+        <!-- BEGIN preferences -->
+        <b>{PREFERENCE}</b><br />
+        <!-- END preferences -->
+    </td>
+  </tr>
+  <!-- END haspref -->
+  <tr>
+    <td>Action:</td>
+    <td>{APPROVE_DENY_1} {APPROVE_DENY_1_LABEL} {APPROVE_DENY_2} {APPROVE_DENY_2_LABEL}</td>
   </tr>
   <tr id="reason_row">
-    <th>{REASON_LABEL}
-    </th>
-    <td>{REASON}
-    </td>
+    <td>{REASON_LABEL}</td>
+    <td>{REASON}</td>
+  </tr>
+  <!-- BEGIN selectroom -->
+  <tr class="bed_selection">
+    <td>{RESIDENCE_HALL_LABEL}</td>
+    <td>{RESIDENCE_HALL}</td>
   </tr>
   <tr class="bed_selection">
-    <th>{RESIDENCE_HALL_LABEL}
-    </th>
-    <td>{RESIDENCE_HALL}
-    </td>
+    <td>{FLOOR_LABEL}</td>
+    <td>{FLOOR}</td>
   </tr>
   <tr class="bed_selection">
-    <th>{FLOOR_LABEL}
-    </th>
-    <td>{FLOOR}
-    </td>
+    <td>{ROOM_LABEL}</td>
+    <td>{ROOM}</td>
   </tr>
   <tr class="bed_selection">
-    <th>{ROOM_LABEL}
-    </th>
-    <td>{ROOM}
-    </td>
+    <td>{BED_LABEL}</td>
+    <td>{BED}</td>
   </tr>
-  <tr class="bed_selection">
-    <th>{BED_LABEL}
-    </th>
-    <td>{BED}
-    </td>
-  </tr>
+  <!-- END selectroom -->
 </table>
+
 {SUBMIT_BUTTON}
 {END_FORM}
 

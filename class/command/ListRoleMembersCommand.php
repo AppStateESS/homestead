@@ -17,7 +17,7 @@ class ListRoleMembersCommand extends Command {
         
         $class     = new $class;
         $class->id = $instance;
-        $members = HMS_Permission::getMembership(null, $class);
+        $members = HMS_Permission::getMembership('email', $class);
 
         echo json_encode($members);
         exit();

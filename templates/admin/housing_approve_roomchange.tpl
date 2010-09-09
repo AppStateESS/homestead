@@ -2,34 +2,54 @@
 {START_FORM}
 <table>
   <tr>
-    <th>Name:
-    </th>
+    <td>Name:
+    </td>
     <td>{FULLNAME}
     </td>
   </tr>
   <tr>
-    <th>Username:
-    </th>
+    <td>Username:
+    </td>
     <td>{USERNAME}
     </td>
   </tr>
   <tr>
-    <th>Student's Reason:</th>
+    <td>Banner ID:
+    </td>
+    <td>{BANNER_ID}
+    </td>
+  </tr>
+  <tr>
+    <td>Phone number:</td>
+    <td>{NUMBER}</td>
+  </tr>
+  <tr>
+    <td>Current Assignment:</td>
+    <td>{CURR_ASSIGN}</td>
+  </tr>
+  <tr>
+  <tr>
+    <td>Student's Reason:</td>
     <td>{STUDENT_REASON}</td>
   </tr>
   <tr>
-    <th>Selected Bed:</th>
+    <td>Selected Bed:</td>
     <td>{BED}</td>
   </tr>
   <tr>
-    <th>Approve or Deny
-    </th>
-    <td>{APPROVE_DENY_1} {APPROVE_DENY_1_LABEL} {APPROVE_DENY_2} {APPROVE_DENY_2_LABEL}
+    <td>Approve or Deny</td>
+    <td>
+      <!-- BEGIN radio_approve -->
+      {APPROVE_DENY_1} {APPROVE_DENY_1_LABEL} {APPROVE_DENY_2} {APPROVE_DENY_2_LABEL}
+      <!-- END radio_approve -->
+      <!-- BEGIN check_deny -->
+      {APPROVE_DENY_LABEL} {APPROVE_DENY}
+      <!-- END check_deny -->
     </td>
   </tr>
   <tr id="reason_row">
-    <th>{REASON_LABEL}
-    </th>
+    <td>{REASON_LABEL}
+    </td>
     <td>{REASON}
     </td>
   </tr>

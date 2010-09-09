@@ -1,6 +1,7 @@
 <?php
 
 PHPWS_Core::initModClass('hms', 'CommandMenu.php');
+PHPWS_Core::initModClass('hms', 'HMS_Permission.php');
 
 class AssignmentMenu extends CommandMenu {
 
@@ -48,13 +49,16 @@ class AssignmentMenu extends CommandMenu {
                 $this->addCommand('Withdrawn search', $withdrawnSearchCmd);
             }
 
-            //TODO: permissions
-            $RDRoomChangeCmd = CommandFactory::getCommand('RDRoomChange');
-            $this->addCommand('Room Change Approval (RD)', $RDRoomChangeCmd);
+            $memberships = HMS_Permission::getMembership('room_change_approve', NULL, UserStatus::getUsername());
+            if(!empty($memberships)){
+                $RDRoomChangeCmd = CommandFactory::getCommand('RDRoomChange');
+                $this->addCommand('Room Change Approval (RD)', $RDRoomChangeCmd);
+            }
 
-            //TODO: permissions
-            $AdminRoomChangeCmd = CommandFactory::getcommand('HousingRoomChange');
-            $this->addCommand('Room Change Approval (Admin)', $AdminRoomChangeCmd);
+            if(Current_User::allow('hms', 'hadmin_approve_room_change')){
+                $AdminRoomChangeCmd = CommandFactory::getcommand('HousingRoomChange');
+                $this->addCommand('Room Change Approval (Admin)', $AdminRoomChangeCmd);
+            }
         }
 	}
 

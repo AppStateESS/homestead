@@ -13,7 +13,6 @@ class MessagingMenu extends CommandMenu {
 
         if(UserStatus::isAdmin() &&
         Current_User::allow('hms', 'assignment_notify')){
-
             $cmd = CommandFactory::getCommand('JSConfirm');
             $cmd->setLink('Send assignment notifications');
             $cmd->setTitle('Send assignment notification emails');
@@ -34,6 +33,6 @@ class MessagingMenu extends CommandMenu {
 
         $tpl['MENU'] = parent::show();
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/menus/MessagingMenu.tpl');
-    }
+		return PHPWS_Template::process($tpl, 'hms', 'admin/menus/MessagingMenu.tpl');
+	}
 }
