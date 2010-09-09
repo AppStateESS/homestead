@@ -53,6 +53,7 @@ abstract class HMS {
             try {
                 $cmd->execute($this->context);
             } catch(Exception $e) {
+                test($e->getMessage(),1);
                 try {
                     $message = $this->formatException($e);
                     NQ::Simple('hms', HMS_NOTIFICATION_ERROR, 'An internal error has occurred, and the authorities have been notified.  We apologize for the inconvenience.');

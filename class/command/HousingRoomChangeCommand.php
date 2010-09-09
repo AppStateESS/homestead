@@ -40,4 +40,5 @@ class HousingRoomChangeCommand extends Command {
         $context->setContent($view->show());
     }
 }
-?>
+
+//?>

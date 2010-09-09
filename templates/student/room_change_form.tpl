@@ -24,7 +24,7 @@ Once your receive your room change confirmation from the Housing Assignments Off
 <h3>Hall Preferences</h3>
 <p>
 <ul>
-    <li>You are not guaranteed a spcae in either of your preferred halls.</li>
+    <li>You are not guaranteed a space in either of your preferred halls.</li>
     <li>Room changes are subject to space availability. Your RD will work with you to select a space from available vacancies.</li>
     <li><strong>The room fee may increase/decrease depending upon your selection of residence hall.</strong></li>
 </ul>
@@ -41,6 +41,12 @@ Once your receive your room change confirmation from the Housing Assignments Off
     </tr>
 </table>
 
+<h3>Room Swap</h3>
+<p>If you are switching rooms with another student please enter their ASU Username here.</p>
+<p>
+{SWAP_WITH_LABEL}:
+{SWAP_WITH}
+</p>
 
 <h3>Reason</h3>
 <p>In the box below, please provide a <em>short</em> explanation of why you would like to move to a different room. A few sentences are sufficient. You should also indicate any special circumstances (i.e. you want to switch rooms with a friend on your floor).</p>

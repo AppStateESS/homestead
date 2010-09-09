@@ -21,6 +21,21 @@
     <td>Student's Reason:</td>
     <td>{STUDENT_REASON}</td>
   </tr>
+  <!-- BEGIN NUMBER -->
+  <tr>
+    <td>Student's Number:</td>
+    <td>{NUMBER}</td>
+  </tr>
+  <!-- END NUMBER -->
+  <!-- BEGIN swap -->
+  <tr>
+    <td>Student's Requested Swap:
+    </td>
+    <td>{SWAP}
+    </td>
+  </tr>
+  <!-- END swap -->
+  <!-- BEGIN haspref -->
   <tr>
     <td>Student's Preferred Halls:</td>
     <td>
@@ -29,6 +44,7 @@
         <!-- END preferences -->
     </td>
   </tr>
+  <!-- END haspref -->
   <tr>
     <td>Action:</td>
     <td>{APPROVE_DENY_1} {APPROVE_DENY_1_LABEL} {APPROVE_DENY_2} {APPROVE_DENY_2_LABEL}</td>
@@ -37,6 +53,7 @@
     <td>{REASON_LABEL}</td>
     <td>{REASON}</td>
   </tr>
+  <!-- BEGIN selectroom -->
   <tr class="bed_selection">
     <td>{RESIDENCE_HALL_LABEL}</td>
     <td>{RESIDENCE_HALL}</td>
@@ -53,7 +70,9 @@
     <td>{BED_LABEL}</td>
     <td>{BED}</td>
   </tr>
+  <!-- END selectroom -->
 </table>
+
 {SUBMIT_BUTTON}
 {END_FORM}
 
