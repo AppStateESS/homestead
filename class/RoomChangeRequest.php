@@ -360,7 +360,7 @@ class RoomChangeRequest extends HMS_Item {
         if($this->state->getType() == ROOM_CHANGE_HOUSING_APPROVED){
             //if it's a room swap our strategy changes completely
             if(empty($this->switch_with))
-                $cmd = CommandFactory::getCommand('HousingCompleteChange');               
+                $cmd = CommandFactory::getCommand('HousingCompleteChange');
             else
                 $cmd = CommandFactory::getCommand('HousingCompleteSwap');
 
@@ -603,7 +603,7 @@ class HousingApprovedChangeRequest extends BaseRoomChangeState {
             /* Update our state in the db, don't touch this.  Trust me. */
             $this->request->save();
             $this->request->load();
-         
+
             //then approving the swap should also update it's pair
             $this->request->updateBuddy(new HousingApprovedChangeRequest);
         }
@@ -641,7 +641,7 @@ class HousingApprovedChangeRequest extends BaseRoomChangeState {
 
         foreach($newRoommates as $roommate){
             $tpl['ROOMMATE'] = $roommate->getName();
-            HMS_Email::sendTemplateMessage($roommate->getUsername(), 'New Roommate Notification', 'email/roomChange_approved_newRoommate.tpl', $tpl);
+            HMS_Email::send_template_message($roommate->getUsername(), 'New Roommate Notification', 'email/roomChange_approved_newRoommate.tpl', $tpl);
         }
 
         // Notify old roommates
@@ -649,7 +649,7 @@ class HousingApprovedChangeRequest extends BaseRoomChangeState {
 
         foreach($oldRoommates as $roommate){
             $tpl['ROOMMATE'] = $roommate->getName();
-            HMS_Email::sendTemplateMessage($roommate->getUsername(), 'Roommate Change Notification', 'email/roomChange_approved_oldRoommate.tpl', $tpl);
+            HMS_Email::send_template_message($roommate->getUsername(), 'Roommate Change Notification', 'email/roomChange_approved_oldRoommate.tpl', $tpl);
         }
 
         // Notify old and new RDs
@@ -658,7 +658,7 @@ class HousingApprovedChangeRequest extends BaseRoomChangeState {
         $RDs = array_merge($oldRDs, $newRDs);
 
         foreach($RDs as $rd){
-            HMS_Email::sendTemplateMessage($rd['username'], 'Room Change Approved', 'email/roomChange_housingApproved_student.tpl', $tpl);
+            HMS_Email::send_template_message($rd['username'], 'Room Change Approved', 'email/roomChange_housingApproved_student.tpl', $tpl);
         }
     }
 }
@@ -723,7 +723,7 @@ class CompletedChangeRequest extends BaseRoomChangeState {
 
         // Notify new RD that move is complete
         foreach($newRDs as $rd){
-            HMS_Email::sendTemplateMessage($rd['username'], 'Room Change Completed', 'email/roomChange_completed.tpl', $tpl);
+            HMS_Email::send_template_message($rd['username'], 'Room Change Completed', 'email/roomChange_completed.tpl', $tpl);
         }
     }
 }
@@ -776,7 +776,7 @@ class DeniedChangeRequest extends BaseRoomChangeState {
         $tpl = array();
         $tpl['NAME'] = $student->getName();
 
-        HMS_Email::sendTemplateMessage($student->getUsername(), 'Room Change Denied', 'email/roomChange_denied_housing.tpl', $tpl);
+        HMS_Email::send_template_message($student->getUsername(), 'Room Change Denied', 'email/roomChange_denied_housing.tpl', $tpl);
     }
 }
 
@@ -839,7 +839,7 @@ class PairedRoomChangeRequest extends BaseRoomChangeState {
         $this->request->save();
         $this->request->load();
 
-        $this->request->updateBuddy(new PairedRoomChangeRequest);    
+        $this->request->updateBuddy(new PairedRoomChangeRequest);
     }
 
     public function getOther(){
