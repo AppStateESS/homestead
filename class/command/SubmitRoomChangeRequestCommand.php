@@ -66,7 +66,10 @@ class SubmitRoomChangeRequestCommand extends Command {
         //swap - make sure the other person has an assignment
         if(!empty($swap) && !is_null(HMS_Assignment::getAssignment($swap, Term::getSelectedTerm()))){
             $request->switch_with = $swap;
+            $request->is_swap     = true;
         }
+
+        //test($request,1);
 
         $request->save();
 

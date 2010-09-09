@@ -35,6 +35,7 @@ class RoomChangeRequest extends HMS_Item {
     public $username;
     public $denied_reason;
     public $denied_by;
+    public $is_swap;
 
     public $participants = array();
     public $preferences  = array();
@@ -90,7 +91,7 @@ class RoomChangeRequest extends HMS_Item {
         }
 
         //sanity check
-        if(isset($this->switch_with) && $this->switch_with == $this->username){
+        if($this->is_swap && $this->switch_with == $this->username){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Please select someone other than yourself to switch rooms with.");
             $errorCmd = CommandFactory::getCommand('StudentRoomChange');
             $errorCmd->redirect();
@@ -98,6 +99,9 @@ class RoomChangeRequest extends HMS_Item {
 
         $building = $assignment->get_parent()->get_parent()->get_parent()->get_parent();
         $this->curr_hall = $building->id;
+
+        //convert bool to int for db
+        $this->is_swap = ($this->is_swap ? 1 : 0);
 
         parent::save();
 
@@ -250,6 +254,8 @@ class RoomChangeRequest extends HMS_Item {
                 break;
         }
 
+        $this->is_swap = $this->is_swap != 0;
+
         $this->state->setRequest($this);
     }
 
@@ -359,7 +365,7 @@ class RoomChangeRequest extends HMS_Item {
 
         if($this->state->getType() == ROOM_CHANGE_HOUSING_APPROVED){
             //if it's a room swap our strategy changes completely
-            if(empty($this->switch_with))
+            if(!$this->is_swap)
                 $cmd = CommandFactory::getCommand('HousingCompleteChange');
             else
                 $cmd = CommandFactory::getCommand('HousingCompleteSwap');
@@ -369,7 +375,7 @@ class RoomChangeRequest extends HMS_Item {
         }
 
         /* might be cleaner as a ternary + append... */
-        if(!empty($this->switch_with))
+        if($this->is_swap)
             $template['USERNAME'] = $this->username . ' and ' . $this->switch_with;
         else
             $template['USERNAME'] = $this->username;
@@ -382,7 +388,7 @@ class RoomChangeRequest extends HMS_Item {
 
 
     public function updateBuddy(RoomChangeState $newState){
-        if(is_null($this->switch_with)){ //such a joker
+        if(!$this->is_swap){ //such a joker
             throw new Exception("This is not a room swap, I can't do that.");
         }
 
@@ -536,7 +542,7 @@ class RDApprovedChangeRequest extends BaseRoomChangeState {
 
         if(isset($this->request->requested_bed_id)){
             $valid[] = 'HousingApprovedChangeRequest';
-        } elseif(isset($this->request->switch_with)){
+        } elseif($this->request->is_swap){
             $valid[] = 'WaitingForPairing';
         }
 
@@ -591,7 +597,7 @@ class HousingApprovedChangeRequest extends BaseRoomChangeState {
         $this->addParticipant('housing', EMAIL_ADDRESS, 'University Housing');
 
         //if this is a move request
-        if(is_null($this->request->switch_with)){
+        if(!$this->request->is_swap){
             $curr_assignment = HMS_Assignment::getAssignment($this->request->username, Term::getSelectedTerm());
             $bed = $curr_assignment->get_parent();
 
@@ -670,7 +676,7 @@ class CompletedChangeRequest extends BaseRoomChangeState {
     public function onEnter($from=NULL){
         //if this is a swap, then all of this is handled in the command
         //TODO: move this into the complete change command
-        if(!empty($this->request->switch_with)){
+        if($this->request->is_swap){
             return;
         }
 
@@ -794,14 +800,16 @@ class WaitingForPairing extends BaseRoomChangeState {
 
     public function onEnter($from=NULL)
     {
-        /* Double save was causing some bugs, commenting out for deadline
-        //look for roommate pair
-        $paired = $this->attemptToPair();
+        $student    = StudentFactory::getStudentByUsername($this->request->switch_with, Term::getSelectedTerm());
+        $assignment = HMS_Assignment::getAssignment($student->getUsername(), Term::getSelectedTerm());
 
-        if($paired){
-            $this->request->save();
+        if(is_null($assignment)){
+            throw new Exception('Requested swap partner is not assigned, cannot complete.');
         }
-        */
+
+        $this->requested_bed_id = $assignment->bed_id;
+        $this->request->save();
+        $this->request->load();
     }
 
     public function attemptToPair()
