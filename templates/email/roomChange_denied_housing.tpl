@@ -1,1 +1,6 @@
-You denied {STUDENT}'s room change request.
+{NAME},
+
+Your room change request has been denied. Please contact University Housing Assignments (by calling 828-262-6111) for further details.
+
+Assignments Office
+University Housing

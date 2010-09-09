@@ -43,7 +43,7 @@ class RoomChangeView extends View {
         javascript('jquery');
         $form = new PHPWS_Form('room_change_request');
         $form->addText('cell_num');
-        $form->setLabel('cell_num', 'Cellphone Number');
+        $form->setLabel('cell_num', 'Cell phone Number');
         $form->addCheck('cell_opt_out');
 
         $halls = array(0=>'Choose from below...');
@@ -114,11 +114,14 @@ class RoomChangeView extends View {
 
         $tpl = $form->getTemplate();
 
-        $tpl['USERNAME']       = $student->getUsername();
-        $tpl['FULLNAME']       = $student->getFullName();
-        $tpl['NUMBER']         = $this->request->cell_phone;
-        $tpl['STUDENT_REASON'] = $this->request->reason;
-        $tpl['preferences']    = array();
+        $assign = HMS_Assignment::getAssignment($this->request->username, Term::getSelectedTerm());
+
+        $tpl['USERNAME']        = $student->getUsername();
+        $tpl['FULLNAME']        = $student->getFullName();
+        $tpl['NUMBER']          = $this->request->cell_phone;
+        $tpl['CURR_ASSIGN']     = $assign->where_am_i();
+        $tpl['STUDENT_REASON']  = $this->request->reason;
+        $tpl['preferences']     = array();
 
         foreach($this->request->preferences as $preference){
             $hall = new HMS_Residence_Hall();
@@ -171,10 +174,14 @@ class RoomChangeView extends View {
         $cmd->username = $this->request->username;
         $cmd->initForm($form);
 
+        $assign = HMS_Assignment::getAssignment($this->request->username, Term::getSelectedTerm());
+
         $tpl = $form->getTemplate();
 
         $tpl['USERNAME']       = $student->getUsername();
         $tpl['FULLNAME']       = $student->getFullName();
+        $tpl['BANNER_ID']      = $student->getBannerId();
+        $tpl['CURR_ASSIGN']    = $assign->where_am_i();
         $tpl['NUMBER']         = $this->request->cell_phone;
         $tpl['STUDENT_REASON'] = $this->request->reason;
 

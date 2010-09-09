@@ -9,6 +9,7 @@ PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
 PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
 PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
 PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
+PHPWS_Core::initModClass('hms', 'HMS_Permission.php');
 
 define('ROOM_CHANGE_NEW',              0);
 define('ROOM_CHANGE_PENDING',          1);
@@ -248,10 +249,11 @@ class RoomChangeRequest extends HMS_Item {
             $prev = $this->state;
 
             $this->state->onExit();
-            $this->state = $state;
+            $this->state = $state; // Set new state
             $this->state->request = $this;
-            $this->onChange();
+            $this->onChange(); // Call onChange
             $this->state->onEnter($prev);
+            $this->state->sendNotification();
             return true;
         }
         return false;
@@ -347,6 +349,7 @@ class RoomChangeRequest extends HMS_Item {
         return $template;
     }
 
+    /*
     public function emailParticipants($subject, $status){
         $tags = array();
         $tags['STUDENT'] = $this->username;
@@ -359,6 +362,7 @@ class RoomChangeRequest extends HMS_Item {
             HMS_Email::send_template_message($participant['username'], $subject, 'email/roomChange_' . $status . '_' . $participant['role'] . '.tpl', $tags);
         }
     }
+    */
 }
 
 interface RoomChangeState {
@@ -369,6 +373,7 @@ interface RoomChangeState {
     public function checkPermissions();
     public function addParticipant($role, $username, $name='');
     public function getType();
+    public function sendNotification();
 }
 
 class BaseRoomChangeState implements RoomChangeState {
@@ -434,6 +439,11 @@ class BaseRoomChangeState implements RoomChangeState {
 
         return $cmd;
     }
+
+    public function sendNotification()
+    {
+        // By default, don't send any notifications.
+    }
 }
 
 class NewRoomChangeRequest extends BaseRoomChangeState {
@@ -458,8 +468,33 @@ class PendingRoomChangeRequest extends BaseRoomChangeState {
     }
 
     public function onEnter($from=NULL){
-        $this->request->emailParticipants('Your room change request has been submitted', 'pending');
         HMS_Activity_Log::log_activity($this->request->username, ACTIVITY_ROOM_CHANGE_SUBMITTED, UserStatus::getUsername(FALSE), $this->request->reason);
+    }
+
+    public function sendNotification()
+    {
+        $student    = StudentFactory::getStudentByUsername($this->request->username, Term::getSelectedTerm());
+        $assign     = HMS_Assignment::getAssignment($this->request->username, Term::getSelectedTerm());
+
+        $bed        = $assign->get_parent();
+        $room       = $bed->get_parent();
+        $floor      = $room->get_parent();
+        $hall       = $floor->get_parent();
+
+        // Send confirmation to student
+        $tpl = array();
+        $tpl['NAME']        = $student->getName();
+        $tpl['CURR_ASSIGN'] = $assign->where_am_i();
+        $tpl['PHONE_NUM']   = $this->request->cell_phone;
+
+        // Send confirmation to student
+        HMS_Email::send_template_message($student->getUsername(), 'Room Change Request Received', 'email/roomChange_submitted_student.tpl', $tpl);
+
+        // Send 'New Room Change' to RD
+        $approvers = HMS_Permission::getMembership('room_change_approve', $hall);
+        foreach($approvers as $user){
+            HMS_Email::send_template_message($user['username'], 'New Room Change Request', 'email/roomChange_submitted_rd.tpl', $tpl);
+        }
     }
 }
 
@@ -481,12 +516,29 @@ class RDApprovedChangeRequest extends BaseRoomChangeState {
         $bed->id = $this->request->requested_bed_id;
         $bed->load();
 
-        $this->request->emailParticipants('Room Change Request Approved!', 'rd_approved');
         HMS_Activity_Log::log_activity($this->request->username, ACTIVITY_ROOM_CHANGE_APPROVED_RD, UserStatus::getUsername(FALSE), "Selected ".$bed->where_am_i());
     }
 
     public function getType(){
         return ROOM_CHANGE_RD_APPROVED;
+    }
+
+    public function sendNotification()
+    {
+        $student = StudentFactory::getStudentByUsername($this->request->username, Term::getSelectedTerm());
+
+        $tpl = array();
+        $tpl['NAME']        = $student->getName();
+
+        $tpl['USERNAME']    = $student->getUsername();
+        $tpl['BANNER_ID']   = $student->getBannerId();
+
+        // Notify the student
+        HMS_Email::send_template_message($student->getUsername(), 'Room Change Pending Approval', 'email/roomChange_rdApproved_student.tpl', $tpl);
+
+        // Confirm with the user who did it and Housing
+        HMS_Email::send_template_message(UserStatus::getUsername(), 'Room Change Pending Approval', 'email/roomChange_rdApproved_housing.tpl', $tpl);
+        HMS_Email::send_template_message(EMAIL_ADDRESS . '@' . DOMAIN_NAME, 'Room Change Pending Approval', 'email/roomChange_rdApproved_housing.tpl', $tpl);
     }
 }
 
@@ -498,7 +550,6 @@ class HousingApprovedChangeRequest extends BaseRoomChangeState {
 
     public function onEnter($from=NULL){
         $this->addParticipant('housing', EMAIL_ADDRESS, 'University Housing');
-        $this->request->emailParticipants('Housing Approved Room Change!', 'housing_approved');
 
         $curr_assignment = HMS_Assignment::getAssignment($this->request->username, Term::getSelectedTerm());
         $bed = $curr_assignment->get_parent();
@@ -511,6 +562,55 @@ class HousingApprovedChangeRequest extends BaseRoomChangeState {
 
     public function getType(){
         return ROOM_CHANGE_HOUSING_APPROVED;
+    }
+
+    public function sendNotification()
+    {
+        $student    = StudentFactory::getStudentByUsername($this->request->username, Term::getSelectedTerm());
+        $assign     = HMS_Assignment::getAssignment($this->request->username, Term::getSelectedTerm());
+
+        $oldBed     = $assign->get_parent();
+        $oldRoom    = $oldBed->get_parent();
+        $oldFloor   = $oldRoom->get_parent();
+        $oldHall    = $oldFloor->get_parent();
+
+        $newBed     = new HMS_Bed($this->request->requested_bed_id);
+        $newRoom    = $newBed->get_parent();
+        $newFloor   = $newRoom->get_parent();
+        $newHall    = $newFloor->get_parent();
+
+        $tpl = array();
+        $tpl['NAME']        = $student->getName();
+        $tpl['OLD_ROOM']    = $oldRoom->where_am_i();
+        $tpl['NEW_ROOM']    = $newRoom->where_am_i();
+
+        // Notify student
+        HMS_Email::send_template_message($student->getUsername(), 'Room Change Approved', 'email/roomChange_housingApproved_student.tpl', $tpl);
+
+        // Notify new roommates
+        $newRoommates = $newRoom->get_assignees();
+
+        foreach($newRoommates as $roommate){
+            $tpl['ROOMMATE'] = $roommate->getName();
+            HMS_Email::sendTemplateMessage($roommate->getUsername(), 'New Roommate Notification', 'email/roomChange_approved_newRoommate.tpl', $tpl);
+        }
+
+        // Notify old roommates
+        $oldRoommates = $oldRoom->get_assignees();
+
+        foreach($oldRoommates as $roommate){
+            $tpl['ROOMMATE'] = $roommate->getName();
+            HMS_Email::sendTemplateMessage($roommate->getUsername(), 'Roommate Change Notification', 'email/roomChange_approved_oldRoommate.tpl', $tpl);
+        }
+
+        // Notify old and new RDs
+        $oldRDs = HMS_Permission::getMembership('room_change_approve', $oldHall);
+        $newRDs = HMS_Permission::getMembership('room_change_approve', $newHall);
+        $RDs = array_merge($oldRDs, $newRDs);
+
+        foreach($RDs as $rd){
+            HMS_Email::sendTemplateMessage($rd['username'], 'Room Change Approved', 'email/roomChange_housingApproved_student.tpl', $tpl);
+        }
     }
 }
 
@@ -539,18 +639,37 @@ class CompletedChangeRequest extends BaseRoomChangeState {
             $cmd->redirect();
         }
 
-        //email participants
-        $this->request->emailParticipants('Room Change Complete!', 'completed');
-
         //log
-        $newBed = new HMS_Bed;
-        $newBed->id = $this->request->requested_bed_id;
-        $newBed->load();
+        $newBed = new HMS_Bed($this->request->requested_bed_id);
         HMS_Activity_Log::log_activity($this->request->username, ACTIVITY_ROOM_CHANGE_COMPLETED, UserStatus::getUsername(FALSE), "Completed Room change to ".$newBed->where_am_i());
     }
 
     public function getType(){
         return ROOM_CHANGE_COMPLETED;
+    }
+
+    public function sendNotification()
+    {
+        $student    = StudentFactory::getStudentByUsername($this->request->username, Term::getSelectedTerm());
+
+        $newBed     = new HMS_Bed($this->request->requested_bed_id);
+        $newRoom    = $newBed->get_parent();
+        $newFloor   = $newRoom->get_parent();
+        $newHall    = $newFloor->get_parent();
+
+        $newRDs = HMS_Permission::getMembership('room_change_approve', $newHall);
+
+        $tpl = array();
+        $tpl['NAME'] = $student->getName();
+        $tpl['USER_NAME'] = $student->getUsername();
+
+        //$tpl['MOVED_FROM'] =
+        $tpl['MOVED_TO'] = $newRoom->where_am_i();
+
+        // Notify new RD that move is complete
+        foreach($newRDs as $rd){
+            HMS_Email::sendTemplateMessage($rd['username'], 'Room Change Completed', 'email/roomChange_completed.tpl', $tpl);
+        }
     }
 }
 
@@ -559,7 +678,6 @@ class DeniedChangeRequest extends BaseRoomChangeState {
     //state cannot change
 
     public function onEnter($from=NULL){
-        $this->request->emailParticipants('Room Change Denied', 'denied');
         $this->request->denied_by = UserStatus::getUsername();
 
         //this will break if from is null, but allowing null makes the interface cleaner
@@ -573,11 +691,22 @@ class DeniedChangeRequest extends BaseRoomChangeState {
             //send back to housing screen
             $this->clearReservedFlag('HousingRoomChange');
         }
+
         HMS_Activity_Log::log_activity($this->request->username, ACTIVITY_ROOM_CHANGE_DENIED, UserStatus::getUsername(FALSE), $this->request->denied_reason);
     }
 
     public function getType(){
         return ROOM_CHANGE_DENIED;
+    }
+
+    public function sendNotification()
+    {
+        $student    = StudentFactory::getStudentByUsername($this->request->username, Term::getSelectedTerm());
+
+        $tpl = array();
+        $tpl['NAME'] = $student->getName();
+
+        HMS_Email::sendTemplateMessage($student->getUsername(), 'Room Change Denied', 'email/roomChange_denied_housing.tpl', $tpl);
     }
 }
 

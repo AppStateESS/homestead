@@ -14,6 +14,10 @@
     <td>{NUMBER}</td>
   </tr>
   <tr>
+    <td>Current Assignment:</td>
+    <td>{CURR_ASSIGN}</td>
+  </tr>
+  <tr>
     <td>Student's Reason:</td>
     <td>{STUDENT_REASON}</td>
   </tr>
