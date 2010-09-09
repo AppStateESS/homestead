@@ -29,7 +29,7 @@
   <!-- END NUMBER -->
   <!-- BEGIN swap -->
   <tr>
-    <td>Student's Requested Swap:
+    <td>Requested swap with:
     </td>
     <td>{SWAP}
     </td>

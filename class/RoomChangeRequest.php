@@ -809,7 +809,9 @@ class WaitingForPairing extends BaseRoomChangeState {
         $other = NULL;
         try{
             $other = $this->request->search($this->request->switch_with);
-            $other->load();
+            if(!is_null($other)){
+                $other->load();
+            }
         } catch(DatabaseException $e){
             //pass; broken database is equivalent to NULL here
         }

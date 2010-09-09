@@ -68,7 +68,7 @@ class RoomChangeView extends View {
 
         /* Swap */
         $form->addText('swap_with');
-        $form->setLabel('swap_with', 'ASU Username');
+        $form->setLabel('swap_with', 'ASU Email Address');
 
         /* Reason */
         $form->addTextArea('reason');
@@ -144,7 +144,7 @@ class RoomChangeView extends View {
             $form->addDropBox('residence_hall', $halls);
             $form->setLabel('residence_hall', 'Residence hall: ');
             $form->setMatch('residence_hall', 0);
-            
+
             $form->addDropBox('floor', array(0 => ''));
             $form->setLabel('floor', 'Floor: ');
 
@@ -161,9 +161,10 @@ class RoomChangeView extends View {
                 $tpl['preferences'][] = array('PREFERENCE'=>$hall->getHallName());
             }
         } else {
-            $tpl['SWAP'] = $this->request->switch_with; //TODO: pull their real name and assignment
+            $swapStudent = StudentFactory::getStudentByUsername($this->request->switch_with, Term::getSelectedTerm());
+            $tpl['SWAP'] = $swapStudent->getName() . ' ('. $this->request->switch_with . ')'; //TODO: pull their real name and assignment
         }
-        
+
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
