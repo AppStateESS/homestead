@@ -101,7 +101,7 @@ class RoomChangeView extends View {
 
     public function rdManage(){
         $student = StudentFactory::getStudentByUsername($this->request->username, Term::getSelectedTerm());
-        if($this->request->state instanceof RDApprovedChangeRequest){
+        if(!($this->request->state instanceof PendingRoomChangeRequest)){
             $tpl['STUDENT'] = $student->getFullNameProfileLink();
             $tpl['STATUS']  = $this->request->getStatus();
             return PHPWS_Template::process($tpl, 'hms', 'admin/room_change_status.tpl');
@@ -136,7 +136,7 @@ class RoomChangeView extends View {
         $tpl['STUDENT_REASON']  = $this->request->reason;
 
         //if we aren't switching
-        if(empty($this->request->switch_with)){
+        if(!$this->request->is_swap){
             //make sure the preferences show up
             $tpl['preferences']    = array();
 

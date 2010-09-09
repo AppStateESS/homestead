@@ -33,7 +33,7 @@ class RDSubmitUpdateCommand extends Command {
         $approve = $context->get('approve_deny') == 'approve' ? true : false;
 
         if($approve){
-            if(!empty($rc->switch_with)){
+            if($rc->is_swap){
                 $rc->change(new WaitingForPairing);
             } else { //preserving existing logic for now TODO: un-nest this crud
                 $bed = $context->get('bed');
