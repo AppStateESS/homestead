@@ -12,7 +12,7 @@ abstract class StudentDataProvider {
     protected $fallbackProvider;
     protected $ttl;
 
-    private function __construct(StudentDataProvider $fallbackProvider = NULL, $ttl = NULL){
+    protected function __construct(StudentDataProvider $fallbackProvider = NULL, $ttl = NULL){
 
         if(is_null($ttl)){
             $this->ttl = self::$defaultTtl;
