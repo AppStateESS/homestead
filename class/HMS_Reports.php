@@ -111,6 +111,8 @@ class HMS_Reports{
         # Start the timer
         $start_time = microtime();
 
+        $problems = array();
+
         $total_other = 0; #Count all students with invalid data and lump
         #them into their own column
 
@@ -173,7 +175,12 @@ class HMS_Reports{
             foreach($assignments as $assignment) {
 
                 # Create the student object
-                $student = StudentFactory::getStudentByUsername($assignment['asu_username'], $term);
+                try{
+                    $student = StudentFactory::getStudentByUsername($assignment['asu_username'], $term);
+                }catch(StudentNotFoundException $e){
+                    $problems[] = $assignment['asu_username'] . ': Unknown student';
+                    continue;
+                }
 
                 # Get the gender (in numeric form) of the student for this assignment
                 $gender = $student->getGender();

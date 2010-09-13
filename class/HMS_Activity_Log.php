@@ -91,7 +91,7 @@ class HMS_Activity_Log{
     {
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
         $tpl = array();
-         
+
         try {
             $student = StudentFactory::getStudentByUsername($this->get_user_id(), Term::getSelectedTerm());
         }catch(StudentNotFoundException $e){
@@ -204,7 +204,12 @@ class HMS_Activity_Log{
         ACTIVITY_ANON_NOTIFICATION_SENT         => "Anonymous notification sent",
         ACTIVITY_HALL_NOTIFIED                  => "Email notification sent to hall",
         ACTIVITY_HALL_NOTIFIED_ANONYMOUSLY      => "Anonymous email notification sent to hall",
-        ACTIVITY_LOTTERY_OPTOUT                 => "Opted-out of waiting list");
+        ACTIVITY_LOTTERY_OPTOUT                 => "Opted-out of waiting list",
+        ACTIVITY_ROOM_CHANGE_SUBMITTED          => "Submitted Room Change Request",
+        ACTIVITY_ROOM_CHANGE_APPROVED_RD        => "RD Approved Room Change",
+        ACTIVITY_ROOM_CHANGE_APPROVED_HOUSING   => "Housing Approved Room Change",
+        ACTIVITY_ROOM_CHANGE_COMPLETED          => "Room Change Completed",
+        ACTIVITY_ROOM_CHANGE_DENIED             => "Room Change Denied");
     }
 
     /**

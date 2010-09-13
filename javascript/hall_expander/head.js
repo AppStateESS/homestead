@@ -15,6 +15,20 @@ var submitHallList = function(e){
 }
 
 $(document).ready(function(){
+        $("#select_all").click(function(){
+                $("#hall_list :checkbox:enabled").each(function(){
+                        $(this).attr('checked', true);
+                    });
+                return false;
+            });
+
+        $("#select_none").click(function(){
+                $("#hall_list :checkbox:enabled").each(function(){
+                        $(this).attr('checked', false);
+                    });
+                return false;
+            });
+
     $.post('index.php', {module: 'hms', action: 'ListAllowedHalls'},
         function(data){
     	
@@ -57,14 +71,21 @@ $(document).ready(function(){
                         });
                 });
             
-            $("#{DIV} li").toggle(
+            $("#{DIV} li").click(
                 function(){
-                    $(this).removeClass("expanded");
-                    $(this).addClass("collapsed");
-                },
-                function(){
-                    $(this).removeClass("collapsed");
-                    $(this).addClass("expanded");
+                    if(!this.flip)
+                        this.flip = 0;
+
+                    if(this.flip % 2 == 0){
+                        $(this).removeClass("expanded");
+                        $(this).addClass("collapsed");
+                        $(this).find(".subtree").hide();
+                    } else {
+                        $(this).removeClass("collapsed");
+                        $(this).addClass("expanded");
+                        $(this).find(".subtree").show();
+                    }
+                    this.flip++;
                 }
             );
         },

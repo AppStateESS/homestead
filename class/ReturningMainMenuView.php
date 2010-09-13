@@ -22,11 +22,12 @@ class ReturningMainMenuView extends View {
 	{
 		$tpl = array();
 
+		$currTerm = Term::getCurrentTerm();
 		$springTerm = Term::getNextTerm($this->lotteryTerm);
 		$summerTerm1 = Term::getNextTerm(Term::getCurrentTerm());
 		$summerTerm2 = Term::getNextTerm($summerTerm1);
 
-		$terms = array($this->lotteryTerm, $summerTerm1, $summerTerm2);
+		$terms = array($currTerm, $this->lotteryTerm, $summerTerm1, $summerTerm2);
 
 		foreach($terms as $t){
 			$termBlock = new StudentMenuTermBlock($this->student, $t);

@@ -1,0 +1,1 @@
+ALTER TABLE hms_room_change_request ADD COLUMN switch_with VARCHAR(32);

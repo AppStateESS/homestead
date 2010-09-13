@@ -8,13 +8,14 @@ PHPWS_Core::initModClass('hms', 'HMS_Item.php');
 
 class HMS_Bed extends HMS_Item {
 
-	var $room_id            = 0;
-	var $bed_letter         = null;
-	var $banner_id          = null;
-	var $phone_number       = null;
-	var $bedroom_label      = null;
-	var $ra_bed             = null;
-	var $_curr_assignment   = null;
+    public $room_id              = 0;
+	public $bed_letter           = null;
+	public $banner_id            = null;
+	public $phone_number         = null;
+	public $bedroom_label        = null;
+	public $ra_bed               = null;
+    public $room_change_reserved = 0;
+	public $_curr_assignment     = null;
 
 	/**
 	 * Holds the parent room object of this bed.
@@ -49,9 +50,14 @@ class HMS_Bed extends HMS_Item {
 		}catch(Exception $e){
 		    throw $e;
 		}
-
+        // Copy assignment
 		if ($assignments) {
 			//echo "loading assignments for this bed<br>";
+            PHPWS_Core::initModClass('hms', 'HousingApplication.php');
+            PHPWS_Core::initModClass('hms', 'Term.php');
+            PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
+            PHPWS_Core::initModClass('hms', 'StudentFactory.php');
+
 			try{
     			$this->loadAssignment();
 			}catch(Exception $e){
@@ -60,7 +66,22 @@ class HMS_Bed extends HMS_Item {
 
 			if (isset($this->_curr_assignment)) {
 			    try{
-				    $this->_curr_assignment->copy($to_term, $new_bed->id);
+                    try{
+                        $student = StudentFactory::getStudentByUsername($this->_curr_assignment->asu_username,
+                                                                    Term::getCurrentTerm());
+                        $app = HousingApplication::getApplicationByUser($this->_curr_assignment->asu_username,
+                                                                    Term::getCurrentTerm());
+                    }catch(StudentNotFoundException $e){
+                        NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Could not copy assignment for ' . $this->_curr_assignment->asu_username);
+                        return;
+                    }
+                    // meal option defaults to standard
+                    $meal_option = BANNER_MEAL_STD;
+                    if(!is_null($app)){
+                        $meal_option = $app->getMealPlan();
+                    }
+                    $note = "Assignment copied from ".Term::getPrintableCurrentTerm()." to ".Term::toString($to_term);
+                    HMS_Assignment::assignStudent($student, $to_term, null, $new_bed->id, $meal_option, $note);
 			    }catch(Exception $e){
 			        throw $e;
 			    }
@@ -246,14 +267,14 @@ class HMS_Bed extends HMS_Item {
 				$reAssignCmd->setUsername($this->_curr_assignment->asu_username);
 				$reAssignCmd->setBedId($this->id);
 				$link_re = $reAssignCmd->getLink('(Re-assign)');
-				
+
 				$unAssignCmd = CommandFactory::getCommand('ShowUnassignStudent');
 				$unAssignCmd->setUsername($this->_curr_assignment->asu_username);
 				$link_un = $unAssignCmd->getLink('(Un-assign)');
 			}
-			
+
 			$student = StudentFactory::getStudentByUsername($this->_curr_assignment->asu_username, Term::getSelectedTerm());
-			
+
 			return $student->getProfileLink() . ' ' . $link_re . ' ' . $link_un;
 		}else{
 			$text = '&lt;unassigned&gt';

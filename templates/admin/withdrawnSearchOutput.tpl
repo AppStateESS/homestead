@@ -1,6 +1,6 @@
-<h2>Withdrawn Student Search Results</h2>
+<h2>Withdrawn Student Search Results </h2>
 
-<div>{DATE}</div><br />
+<div>Run {DATE} for {TERM}</div><br />
 
 <!-- BEGIN no_results -->
 {NORESULTS}

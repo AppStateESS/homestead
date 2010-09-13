@@ -48,27 +48,6 @@ class TestSOAP extends SOAP{
           $student->application_term      = '201040';
           $student->projected_class       = 'JR';
 
-//        $student->student_type          = 'F';
-//        $student->application_term      = '201020';
-//        $student->projected_class       = 'SR';
-
-        if($username == 'housing_test_spring_freshmen'){
-            $student->student_type      = 'F';
-            $student->application_term  = '201010';
-            $student->projected_class   = 'FR';
-        }
-
-        if($username == 'freshman'){
-            $student->student_type      = 'F';
-            $student->application_term  = '201020';
-            $student->projected_class   = 'FR';
-        }
-
-//        $random = mt_rand(0,100);
-//        if($random >= 85){
-//            $student->student_type = 'W';
-//        }
-
         $student->credhrs_completed     = 0;
         $student->credhrs_for_term      = 15;
         $student->on_campus             = 'false';

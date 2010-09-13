@@ -141,6 +141,9 @@ class HMS_Room extends HMS_Item
         if(!$assignments){
             $new_room->gender_type = $new_room->default_gender;
         }
+        else if($assignments) {
+            $new_room->gender_type = $this->gender_type;
+        }
 
         try{
             $new_room->save();
@@ -432,13 +435,22 @@ class HMS_Room extends HMS_Item
     {
         $num_assigned = $this->get_number_of_assignees();
 
-        # If this is a private room, then this room is full is one person is assigned
+        # If this is a private room, then this room is full if one person is assigned
         if($this->isPrivate() && $num_assigned >= 1){
             return FALSE;
         }
 
         if($num_assigned < $this->get_number_of_beds()){
-            return TRUE;
+            //make sure the rooms aren't all reserved
+            $this->loadBeds();
+            $vacant = FALSE;
+            foreach($this->_beds as $bed){
+                $bed->loadAssignment();
+                if(is_null($bed->_curr_assignment) && $bed->room_change_reserved == 0){
+                    $vacant = TRUE;
+                }
+            }
+            return $vacant;
         }
 
         return FALSE;

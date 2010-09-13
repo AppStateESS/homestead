@@ -295,6 +295,7 @@ class HMS_Assignment extends HMS_Item
 		if(isset($bed_id)){
 			# A bed_id was given, so create that bed object
 			$vacant_bed = new HMS_Bed($bed_id);
+            $vacant_bed->term = $term;
 			if(!$vacant_bed){
 				throw new AssignmentException('Null bed object.');
 			}
@@ -331,6 +332,11 @@ class HMS_Assignment extends HMS_Item
 		if($vacant_bed->get_number_of_assignees() > 0){
 			throw new AssignmentException('The bed is not empty.');
 		}
+
+        # Issue a warning if the bed was reserved for room change
+        if($vacant_bed->room_change_reserved != 0){
+            NQ::simple('hms', HMS_NOTIFICATION_WARNING, 'Room was reserved for room change');
+        }
 
 		# Check that the room's gender and the student's gender match
 		$student_gender = $student->getGender();
@@ -390,6 +396,7 @@ class HMS_Assignment extends HMS_Item
 		$assignment->term           = $term;
 		$assignment->letter_printed = 0;
 		$assignment->email_sent     = 0;
+        $assignment->meal_option    = $meal_plan;
 
 		# If this was a lottery assignment, flag it as such
 		if($lottery){
@@ -405,7 +412,7 @@ class HMS_Assignment extends HMS_Item
 		}
 
 		# Log the assignment
-		HMS_Activity_Log::log_activity($username, ACTIVITY_ASSIGNED, UserStatus::getUsername(), Term::getSelectedTerm() . ' ' . $hall->hall_name . ' ' . $room->room_number . ' ' . $notes);
+		HMS_Activity_Log::log_activity($username, ACTIVITY_ASSIGNED, UserStatus::getUsername(), $term . ' ' . $hall->hall_name . ' ' . $room->room_number . ' ' . $notes);
 
 		# Look for roommates and flag their assignments as needing a new letter
 		$room_id = $assignment->get_room_id();
@@ -420,9 +427,10 @@ class HMS_Assignment extends HMS_Item
 				if($roommate->getUsername() == $username){
 					continue;
 				}
-				$roommate_assign = HMS_Assignment::getAssignment($roommate->getUsername(),$term);
+				$roommate_assign = HMS_Assignment::getAssignment($roommate->getUsername(),Term::getCurrentTerm());
 				$roommate_assign->letter_printed = 0;
 				$roommate_assign->email_sent     = 0;
+
 				$result = $roommate_assign->save();
 			}
 		}

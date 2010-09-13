@@ -59,7 +59,7 @@ class ShowHallNotificationEditView extends View {
         javascript('/modules/hms/autoFocus', array('ELEMENT'=>$form->getId('subject')));
         $form->addSubmit('Submit');
 
-        //After you ask "wtf?", check the third parameter on preg_replace (only removes the first two occurances)
+        //After you ask "wtf?", check the last parameter on preg_replace (only removes the first two occurances)
         $tpl['EMAIL'] = preg_replace('/<br \/>/', '', implode('<br />', $form->getTemplate()), 2);
 
         Layout::addPageTitle("Hall Notification Edit");

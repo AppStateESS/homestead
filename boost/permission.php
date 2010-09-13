@@ -121,6 +121,11 @@
      * Email Messaging permissions *
      ******************************/
     //$permissions['email_hall'] = _('Can send Hall emails');
-    $permissions['email_all']  = _('Can send campus wide emails to residents');
+    $permissions['email_all']               = _('Can send campus wide emails to residents');
     $permissions['anonymous_notifications'] = _('Can send notifications anonymously (as hms@appstate.edu)');
+
+    /***************************
+     * Room change permissions *
+     **************************/
+    $permissions['admin_approve_room_change'] = _('Can approve room change requests');
 ?>
