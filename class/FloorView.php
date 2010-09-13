@@ -102,11 +102,6 @@ class FloorView extends View {
         $tpl['STATIC_ROOM_PAGER'] = HMS_Room::room_pager_by_floor($this->floor->id);
         $tpl['DYNAMIC_ROOM_PAGER'] = HMS_Room::room_pager_by_floor($this->floor->id, true);
 
-        if(Current_User::allow('hms','room_structure')) {
-            //TODO Add Room command
-            $tpl['ADD_LINK'] = '[ Add Room ]';
-        }
-
         # if the user has permission to view the form but not edit it then
         # disable it
         if( Current_User::allow('hms', 'floor_view')
@@ -125,16 +120,6 @@ class FloorView extends View {
         $tpl = $form->getTemplate();
 		javascript('modules/hms/role_editor');
         $tpl['ROLE_EDITOR'] = PHPWS_Template::process(array('CLASS_NAME'=>"'HMS_Floor'", 'ID'=>$this->floor->id), 'hms', 'admin/role_editor.tpl');
-
-        $form = new PHPWS_Form('add_room');
-        $cmd = CommandFactory::getCommand('AddRoomView');
-        $cmd->floor = $this->floor->id;
-        $cmd->residence_hall = $this->hall->id;
-        $cmd->initForm($form);
-
-        $form->addSubmit('Add Room');
-
-        $tpl['ADD_ROOM'] = implode('', $form->getTemplate());
 
         Layout::addPageTitle("Edit Floor");
 

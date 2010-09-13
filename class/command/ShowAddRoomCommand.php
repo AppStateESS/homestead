@@ -2,23 +2,24 @@
 
 //TODO finish this class, make a view
 
-class AddRoomViewCommand extends Command {
-    public $floor;
-    public $residence_hall;
+class ShowAddRoomCommand extends Command {
+
+    private $floorId;
 
     public function getRequestVars()
     {
-        $vars = array('action'=>'AddRoomView');
+        $vars = array('action'=>'ShowAddRoom');
 
-        if(isset($this->floor)){
-            $vars['floor'] = $this->floor;
-        }
-
-        if(isset($this->residence_hall)){
-            $vars['residence_hall'] = $this->residence_hall;
+        if(isset($this->floorId)){
+            $vars['floor'] = $this->floorId;
         }
 
         return $vars;
+    }
+
+    public function setFloorId($id)
+    {
+        $this->floorId = $id;
     }
 
     public function execute(CommandContext $context)
@@ -37,7 +38,6 @@ class AddRoomViewCommand extends Command {
         PHPWS_Core::initModClass('hms', 'AddRoomView.php');
 
         $floor_id = $context->get('floor');
-        $hall_id  = $context->get('residence_hall');
 
         # Setup the title and color of the title bar
         $tpl['TITLE']       = 'Add Room';
@@ -50,7 +50,7 @@ class AddRoomViewCommand extends Command {
             return PHPWS_Template::process($tpl, 'hms', 'admin/add_room.tpl');
         }
 
-        $hall = new HMS_Residence_Hall($hall_id);
+        $hall = $floor->get_parent();
         if(!$hall){
             $tpl['ERROR_MSG'] = 'There was an error getting the hall object. Please contact ESS.';
             return PHPWS_Template::process($tpl, 'hms', 'admin/add_room.tpl');
@@ -61,9 +61,7 @@ class AddRoomViewCommand extends Command {
             HMS_Floor::show_edit_floor($floor_id,NULL,'You do not have permission to add rooms.');
         }
 
-        $view = new AddRoomView;
-        $view->hall = $hall;
-        $view->floor = $floor;
+        $view = new AddRoomView($floor);
         $context->setContent($view->show());
     }
 }

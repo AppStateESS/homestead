@@ -7,10 +7,15 @@
 PHPWS_Core::initModClass('hms', 'View.php');
 PHPWS_Core::initModClass('hms', 'CommandFactory.php');
 
-class AddRoomView extends View { 
+class AddRoomView extends View {
 
-    public $hall;
-    public $floor;
+    private $hall;
+    private $floor;
+
+    public function __construct(HMS_Floor $floor){
+        $this->floor = $floor;
+        $this->hall = $floor->get_parent();
+    }
 
     public function show()
     {
@@ -47,6 +52,7 @@ class AddRoomView extends View {
         }
 
         $form->addCheck('is_online', 1);
+        $form->setExtra('is_online', 'checked');
 
         $form->addCheck('is_reserved', 1);
 
@@ -74,4 +80,3 @@ class AddRoomView extends View {
         return PHPWS_Template::process($tpl, 'hms', 'admin/add_room.tpl');
     }
 }
-        

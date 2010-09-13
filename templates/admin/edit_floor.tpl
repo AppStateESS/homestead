@@ -121,9 +121,6 @@ $(document).ready(function(){
         <div id="dynamic_pager">
         {DYNAMIC_ROOM_PAGER}
         </div>
-        <div>
-        {ADD_ROOM}
-        </div>
         <div id="roles">
         {ROLE_EDITOR}
         </div>
