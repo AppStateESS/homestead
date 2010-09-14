@@ -1386,11 +1386,17 @@ class HMS_Reports{
         $results = PHPWS_DB::getAll($query);
 
         if(PHPWS_Error::logIfError($results)){
-            Layout::add('Error running the Roster Report, please contact ESS');
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException($results->toString());
         }
 
         foreach($results as $result){
-            $student = StudentFactory::getStudentByUsername($result['asu_username'], Term::getSelectedTerm());
+            try{
+                $student = StudentFactory::getStudentByUsername($result['asu_username'], Term::getSelectedTerm());
+            }catch(Exception $e){
+                $output .="{$result['hall_name']},{$result['floor_number']},{$result['room_number']},ERROR,ERROR,ERROR,{$result['cell_phone']},{$result['asu_username']}@appstate.edu\n";
+                continue;
+            }
 
             $output .= "{$result['hall_name']},{$result['floor_number']},{$result['room_number']},{$student->getLastName()},{$student->getFirstName()},{$student->getBannerId()},{$result['cell_phone']},{$result['asu_username']}@appstate.edu\n";
         }
