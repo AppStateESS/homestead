@@ -37,7 +37,6 @@ abstract class HMS_Item {
     }
 
     public function load(){
-        
         if(is_null($this->id) || !is_numeric($this->id) )
             return false;
 

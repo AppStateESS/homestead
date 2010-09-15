@@ -30,6 +30,7 @@
     </tr>
     <!-- END listrows -->
 </table>
+{ADD_ROOM_LINK}
 <br />
 <!-- BEGIN page_label -->
 <div align="center">

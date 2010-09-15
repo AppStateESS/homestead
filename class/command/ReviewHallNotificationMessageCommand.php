@@ -27,7 +27,6 @@ class ReviewHallNotificationMessageCommand extends Command {
         }
         */
 
-
         if(is_null($context->get('hall'))){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You must select a hall to continue!');
             $cmd = CommandFactory::getCommand('ShowHallNotificationSelect');

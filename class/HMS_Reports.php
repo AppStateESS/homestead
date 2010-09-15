@@ -111,6 +111,8 @@ class HMS_Reports{
         # Start the timer
         $start_time = microtime();
 
+        $problems = array();
+
         $total_other = 0; #Count all students with invalid data and lump
         #them into their own column
 
@@ -173,7 +175,12 @@ class HMS_Reports{
             foreach($assignments as $assignment) {
 
                 # Create the student object
-                $student = StudentFactory::getStudentByUsername($assignment['asu_username'], $term);
+                try{
+                    $student = StudentFactory::getStudentByUsername($assignment['asu_username'], $term);
+                }catch(StudentNotFoundException $e){
+                    $problems[] = $assignment['asu_username'] . ': Unknown student';
+                    continue;
+                }
 
                 # Get the gender (in numeric form) of the student for this assignment
                 $gender = $student->getGender();
@@ -212,14 +219,6 @@ class HMS_Reports{
                 }
 
                 $credit_hours = $student->getCreditHours();
-
-                # Check for a freshmen type, but a mis-matched class
-                if(($type == TYPE_FRESHMEN && $class != CLASS_FRESHMEN)){
-                    $problems[] = $assignment['asu_username'] . ": Type is $type, class is $class, credit hours is $credit_hours";
-                    //$otherByHall[$hall_row['hall_name']]++;
-                    //$total_other++;
-                    //continue;
-                }
 
                 # Check for a mis-matched type/class/hours situation
                 if( $type == TYPE_CONTINUING && $class == CLASS_FRESHMEN && $credit_hours == 0){
@@ -1387,11 +1386,17 @@ class HMS_Reports{
         $results = PHPWS_DB::getAll($query);
 
         if(PHPWS_Error::logIfError($results)){
-            Layout::add('Error running the Roster Report, please contact ESS');
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException($results->toString());
         }
 
         foreach($results as $result){
-            $student = StudentFactory::getStudentByUsername($result['asu_username'], Term::getSelectedTerm());
+            try{
+                $student = StudentFactory::getStudentByUsername($result['asu_username'], Term::getSelectedTerm());
+            }catch(Exception $e){
+                $output .="{$result['hall_name']},{$result['floor_number']},{$result['room_number']},ERROR,ERROR,ERROR,{$result['cell_phone']},{$result['asu_username']}@appstate.edu\n";
+                continue;
+            }
 
             $output .= "{$result['hall_name']},{$result['floor_number']},{$result['room_number']},{$student->getLastName()},{$student->getFirstName()},{$student->getBannerId()},{$result['cell_phone']},{$result['asu_username']}@appstate.edu\n";
         }

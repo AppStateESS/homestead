@@ -141,13 +141,16 @@ class HMS_Room extends HMS_Item
         if(!$assignments){
             $new_room->gender_type = $new_room->default_gender;
         }
+        else if($assignments) {
+            $new_room->gender_type = $this->gender_type;
+        }
 
         try{
             $new_room->save();
         }catch(Exception $e){
             throw $e;
         }
-         
+
         // Save successful, create new beds
 
         // Load all beds for this room
@@ -651,7 +654,7 @@ class HMS_Room extends HMS_Item
     {
         PHPWS_Core::initCoreClass('DBPager.php');
         javascript('jquery');
-         
+
         $pager = new DBPager('hms_room', 'HMS_Room');
         $pager->addWhere('hms_room.floor_id', $floor_id);
         $pager->db->addOrder('hms_room.room_number');
@@ -666,6 +669,12 @@ class HMS_Room extends HMS_Item
         $page_tags['RESERVED_LABEL']     = 'Reserved';
         $page_tags['ONLINE_LABEL']       = 'Online';
         $page_tags['DELETE_LABEL']       = 'Delete';
+
+        if(Current_User::allow('hms', 'room_structure')){
+            $addRoomCmd = CommandFactory::getCommand('ShowAddRoom');
+            $addRoomCmd->setFloorId($floor_id);
+            $page_tags['ADD_ROOM_LINK'] = $addRoomCmd->getLink('Add room');
+        }
 
         $pager->setModule('hms');
         $pager->setTemplate('admin/room_pager_by_floor.tpl');
@@ -713,7 +722,7 @@ class HMS_Room extends HMS_Item
             PHPWS_Core::initModClass('hms', 'exception/HallStructureException.php');
             throw new HallStructureException('One or more students are currently assigned to that room and therefore it cannot deleted.');
         }
-         
+
         // delete any beds
         try{
             if($room->loadBeds()) {
@@ -829,7 +838,7 @@ class HMS_Room extends HMS_Item
 
         // Don't get rooms on floors reserved for an RLC
         $db->addWhere('hms_floor.rlc_id', NULL);
-        
+
         $result = $db->select('col');
 
         // In case of an error, log it and return FALSE

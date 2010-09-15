@@ -509,7 +509,7 @@ class HMS_Residence_Hall extends HMS_Item
 
         foreach($this->_floors as $floor){
             $floor_assignees = $floor->get_assignees();
-            $assignees = array_merge($rooms, $floor_assignees);
+            $assignees = array_merge($assignees, $floor_assignees);
         }
         return $assignees;
     }

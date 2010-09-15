@@ -40,7 +40,8 @@ class WithdrawnSearch {
             try{
                 $student = StudentFactory::getStudentByUsername($username, $term);
             }catch(Exception $e){
-                //TODO
+                NQ::simple('hms', HMS_NOTIFICATION_WARNING, 'Unknown student: ' . $username);
+                continue;
             }
 
             if($student->getType() != TYPE_WITHDRAWN){
@@ -159,7 +160,7 @@ class WithdrawnSearch {
             return 'Template error...';
         }
 
-        $tpl->setData(array('DATE'=>date('F j, Y g:ia')));
+        $tpl->setData(array('DATE'=>date('F j, Y g:ia'), 'TERM'=>Term::toString($this->term)));
 
         if(sizeof($this->actions) < 1){
             $tpl->setData(array('NORESULTS'=>'No withdrawn students found.'));

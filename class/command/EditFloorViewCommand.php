@@ -55,5 +55,3 @@ class EditFloorViewCommand extends Command {
         $context->setContent($floorView->show());
     }
 }
-
-?>
