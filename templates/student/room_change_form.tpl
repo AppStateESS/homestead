@@ -42,7 +42,7 @@ Once your receive your room change confirmation from the Housing Assignments Off
 </table>
 
 <h3>Room Swap</h3>
-<p>If you would like to switch rooms with another student, enter their ASU email address below.</p>
+<p>If you would like to switch rooms with someone you know, enter their ASU email address below. <strong>The person you want to switch with must also complete this form separetely, requesting to switch with you (using your ASU email address).</strong></p>
 <p>
 {SWAP_WITH_LABEL}:
 {SWAP_WITH}@appstate.edu
