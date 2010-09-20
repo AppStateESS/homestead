@@ -109,13 +109,24 @@ class SpringApplication extends HousingApplication{
      * Returns the table row tags for the 'unassigned applications report' in
      * HMS_Reports.php
      */
-    public function unassigned_applicants_rows()
+    public function unassignedApplicantsRows()
     {
-        $tpl = parent::unassigned_applicants_rows();
+        $tpl = parent::unassignedApplicantsRows();
 
-        $tpl['LIFESTYLE']       = $this->getLifestyleOption();
-        $tpl['BEDTIME']         = $this->getPreferredBedtime();
-        $tpl['ROOM_CONDITION']  = $this->getRoomCondition();
+        $tpl['LIFESTYLE']       = $this->getLifestyleOption()  == 1 ? 'Single gender' : 'Co-ed';
+        $tpl['BEDTIME']         = $this->getPreferredBedtime() == 1 ? 'Early'         : 'Late';
+        $tpl['ROOM_CONDITION']  = $this->getRoomCondition()    == 1 ? 'Neat'          : 'Cluttered';
+
+        return $tpl;
+    }
+
+    public function unassignedApplicantsCSV()
+    {
+        $tpl = parent::unassignedApplicantsCSV();
+
+        $tpl['LIFESTYLE']       = $this->getLifestyleOption()  == 1 ? 'Single gender' : 'Co-ed';
+        $tpl['BEDTIME']         = $this->getPreferredBedtime() == 1 ? 'Early'         : 'Late';
+        $tpl['ROOM_CONDITION']  = $this->getRoomCondition()    == 1 ? 'Neat'          : 'Cluttered';
 
         return $tpl;
     }
