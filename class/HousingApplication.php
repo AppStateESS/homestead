@@ -115,7 +115,8 @@ class HousingApplication {
             throw new DatabaseException($result->toString());
         }
 
-        $this->log();
+        //see ticket #581, we don't want to log every time we save
+        //$this->log();
 
         return true;
     }
