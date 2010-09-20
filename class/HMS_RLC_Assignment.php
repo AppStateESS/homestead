@@ -127,7 +127,7 @@ class HMS_RLC_Assignment{
 
         if(PHPWS_Error::logIfError($result)) {
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
-            throw new DatabaseException("Could not check for assignment - $asu_username $term " . $result->toString());
+            throw new DatabaseException("Could not check for assignment - $username $term " . $result->toString());
         }
 
         if(sizeof($result) > 1) {
