@@ -228,12 +228,15 @@ class RoomChangeView extends View {
         $tpl['NUMBER']         = $this->request->cell_phone;
         $tpl['STUDENT_REASON'] = $this->request->reason;
 
-        $bed   = new HMS_Bed($this->request->requested_bed_id);
-        $room  = $bed->get_parent();
-        $floor = $room->get_parent();
-        $hall  = $floor->get_parent();
-
-        $tpl['BED'] = $hall->getHallName() . ' <b>Floor</b> ' . $floor->getFloorNumber() . ' <b>Room</b> ' . $room->room_number . ' <b>Bed -</b> '.$bed->bed_letter;
+        if($this->request->is_swap)
+            $tpl['SWAP'] = $this->request->switch_with;
+        else {
+            $bed   = new HMS_Bed($this->request->requested_bed_id);
+            $room  = $bed->get_parent();
+            $floor = $room->get_parent();
+            $hall  = $floor->get_parent();
+            $tpl['BED'] = $hall->getHallName() . ' <b>Floor</b> ' . $floor->getFloorNumber() . ' <b>Room</b> ' . $room->room_number . ' <b>Bed -</b> '.$bed->bed_letter;
+        }
 
         return PHPWS_Template::process($tpl, 'hms', 'admin/housing_approve_roomchange.tpl');
     }

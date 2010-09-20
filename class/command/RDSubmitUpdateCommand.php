@@ -43,6 +43,7 @@ class RDSubmitUpdateCommand extends Command {
                     $cmd->username = $context->get('username');
                     $cmd->redirect();
                 }
+
                 $rc->requested_bed_id = $bed;
                 $rc->change(new RDApprovedChangeRequest);
             }

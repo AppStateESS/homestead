@@ -472,6 +472,7 @@ CREATE TABLE hms_eligibility_waiver (
    created_by           CHARACTER VARYING(32)   NOT NULL,
    PRIMARY KEY (id)
 );
+
 CREATE TABLE hms_special_assignment (
     id INTEGER NOT NULL,
     term INTEGER NOT NULL,
