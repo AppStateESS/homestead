@@ -116,8 +116,12 @@ class HMS_RLC_Assignment{
     {
         $db = new PHPWS_DB('hms_learning_community_applications');
         $db->addJoin('LEFT OUTER', 'hms_learning_community_assignment', 'hms_learning_community_applications', 'application_id', 'id');
+        $db->addWhere('hms_learning_community_assignment.id', null, 'IS NOT');
         $db->addWhere('hms_learning_community_applications.username',$username,'ILIKE');
         $db->addWhere('hms_learning_community_applications.term', $term);
+
+        $db->addColumn('hms_learning_community_assignment.*');
+        $db->addColumn('hms_learning_community_applications.*');
 
         $result = $db->select('row');
 
