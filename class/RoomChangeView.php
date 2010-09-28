@@ -48,6 +48,7 @@ class RoomChangeView extends View {
      * @return html
      */
     public function studentSubmitView(){
+        //TODO preserve the field values if the user screws something up
         javascript('jquery');
 
         $form = new PHPWS_Form('room_change_request');
@@ -61,20 +62,24 @@ class RoomChangeView extends View {
         $halls = array(0=>'Choose from below...');
         $halls = $halls+HMS_Residence_Hall::get_halls_array(Term::getSelectedTerm());
 
-        $form->addDropBox('first_choice', $halls);
-        $form->setLabel('first_choice', 'First Choice');
-        $form->addDropBox('second_choice', $halls);
-        $form->setLabel('second_choice', 'Second Choice');
+        $form->addRadioAssoc('type', array('switch'=>'I want to change to an open bed.', 'swap'=>'I want to swap beds with someone I know.'));
 
         /* Swap */
         $form->addText('swap_with');
         $form->setLabel('swap_with', 'ASU Email Address');
+
+        /* Switch */
+        $form->addDropBox('first_choice', $halls);
+        $form->setLabel('first_choice', 'First Choice');
+        $form->addDropBox('second_choice', $halls);
+        $form->setLabel('second_choice', 'Second Choice');
 
         /* Reason */
         $form->addTextArea('reason');
         $form->setLabel('reason', 'Reason');
 
         $form->addSubmit('Submit Request');
+        $form->setExtra('submit', 'class="hms-application-submit-button"');
 
         /* POST location */
         $cmd = CommandFactory::getCommand('SubmitRoomChangeRequest');
@@ -162,7 +167,10 @@ class RoomChangeView extends View {
             }
         } else {
             $swapStudent = StudentFactory::getStudentByUsername($this->request->switch_with, Term::getSelectedTerm());
-            $tpl['SWAP'] = $swapStudent->getName() . ' ('. $this->request->switch_with . ')'; //TODO: pull their real name and assignment
+            $tpl['SWAP'] = $swapStudent->getName() . ' ('. $this->request->switch_with . ')';
+            $assignment = HMS_Assignment::getAssignment($this->request->switch_with, Term::getSelectedTerm());
+            $bed = new HMS_Bed($assignment->bed_id);
+            $tpl['SWAP_ROOM']  = $bed->where_am_i();
         }
 
         $form->mergeTemplate($tpl);
@@ -228,9 +236,12 @@ class RoomChangeView extends View {
         $tpl['NUMBER']         = $this->request->cell_phone;
         $tpl['STUDENT_REASON'] = $this->request->reason;
 
-        if($this->request->is_swap)
+        if($this->request->is_swap){
             $tpl['SWAP'] = $this->request->switch_with;
-        else {
+            $assignment = HMS_Assignment::getAssignment($this->request->switch_with, Term::getSelectedTerm());
+            $bed = new HMS_Bed($assignment->bed_id);
+            $tpl['SWAP_ROOM']  = $bed->where_am_i();
+        }else{
             $bed   = new HMS_Bed($this->request->requested_bed_id);
             $room  = $bed->get_parent();
             $floor = $room->get_parent();

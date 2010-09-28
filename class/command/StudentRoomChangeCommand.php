@@ -23,10 +23,10 @@ class StudentRoomChangeCommand extends Command {
         $rc = $rc->search(UserStatus::getUsername());
 
         if(!is_null($rc) && $rc->state instanceof CompletedChangeRequest){
-            NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Your previous room change has completed, fill out this form to begin another.');
+            //NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Your previous room change has completed, fill out this form to begin another.');
             $rc = NULL;
         } elseif(!is_null($rc) && $rc->state instanceof DeniedChangeRequest){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Your previous room change was denied, fill out this form to begin another.');
+            //NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Your previous room change was denied, fill out this form to begin another.');
             $rc = NULL;
         }
 

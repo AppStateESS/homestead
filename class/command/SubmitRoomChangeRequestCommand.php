@@ -57,19 +57,23 @@ class SubmitRoomChangeRequestCommand extends Command {
         $request->reason = $context->get('reason');
         $request->change(new PendingRoomChangeRequest);
 
-        //preferences
-        if(!empty($first))
-            $request->addPreference($first);
-        if(!empty($second))
-            $request->addPreference($second);
+        if($context->get('type') == 'switch'){
 
-        //swap - make sure the other person has an assignment
-        if(!empty($swap) && !is_null(HMS_Assignment::getAssignment($swap, Term::getSelectedTerm()))){
-            $request->switch_with = $swap;
-            $request->is_swap     = true;
+            //preferences
+            if(!empty($first))
+                $request->addPreference($first);
+            if(!empty($second))
+                $request->addPreference($second);
+        }else{
+            // swap - make sure the other person has an assignment
+            if(!empty($swap) && !is_null(HMS_Assignment::getAssignment($swap, Term::getSelectedTerm()))){
+                $request->switch_with = $swap;
+                $request->is_swap     = true;
+            }else{
+                NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'The user name you supplied was invalid or the student is not currently assigned to a room. (Hint: Don\'t include the "@appstate.edu" portion of the email address.)');
+                $cmd->redirect();
+            }
         }
-
-        //test($request,1);
 
         $request->save();
 

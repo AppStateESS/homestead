@@ -29,10 +29,12 @@
   <!-- END NUMBER -->
   <!-- BEGIN swap -->
   <tr>
-    <td>Requested swap with:
-    </td>
-    <td>{SWAP}
-    </td>
+    <td>Requested swap with:</td>
+    <td>{SWAP}</td>
+  </tr>
+  <tr>
+    <td>Swap to room:</td>
+    <td>{SWAP_ROOM}</td>
   </tr>
   <!-- END swap -->
   <!-- BEGIN haspref -->
