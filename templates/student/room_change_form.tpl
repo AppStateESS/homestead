@@ -7,13 +7,13 @@ Students completing unauthorized room changes will be required to return to thei
 
 <p>
 You will be notified via your ASU email address when your request is approved or denied. <strong>Do not</strong> begin moving your belongings until you receive the final approval from University Housing.
-Once your receive your room change confirmation from the Housing Assignments Office, you must complete your move and be checked into your new assignment within 48 hours. 
+Once you receive your room change confirmation from the Housing Assignments Office, you must complete your move and be checked into your new assignment within 48 hours. 
 </p>
 
 <p>
 <h2>Important Notes:</h2>
 <ul>
-    <li>Room changes are subject to space availability. You are not guaranteed that a space will available for you to change to. Your RD will work with you to select a space from available vacancies.</li>
+    <li>Room changes are subject to space availability. You are not guaranteed that there will be a vacancy. Your RD will work with you to select a space from available vacancies.</li>
     <li><strong>The room fee may increase/decrease depending upon your selection of residence hall. Your student account will be billed accordingly.</strong></li>
     <li>Requests submitted on Fridays may not be processed until the following business day.</li>
 </ul>
