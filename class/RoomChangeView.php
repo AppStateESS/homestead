@@ -127,7 +127,7 @@ class RoomChangeView extends View {
 
         $form->addSubmit('submit_button', 'Submit');
 
-        $cmd = CommandFactory::getCommand('RDSubmitUpdate');
+        $cmd = CommandFactory::getCommand('RDRoomChangeSubmit');
         $cmd->initForm($form);
 
         $tpl = $form->getTemplate();
@@ -221,7 +221,7 @@ class RoomChangeView extends View {
 
         $form->addSubmit('Submit');
 
-        $cmd = CommandFactory::getCommand('HousingSubmitUpdate');
+        $cmd = CommandFactory::getCommand('HousingRoomChangeSubmit');
         $cmd->username = $this->request->username;
         $cmd->initForm($form);
 

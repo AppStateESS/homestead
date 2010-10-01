@@ -5,10 +5,10 @@ PHPWS_Core::initModClass('hms', 'RoomChangeRequest.php');
 PHPWS_Core::initModClass('hms', 'HMS_Permission.php');
 PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
 
-class RDSubmitUpdateCommand extends Command {
+class RDRoomChangeSubmitCommand extends Command {
 
     public function getRequestVars(){
-        return array('action'=>'RDSubmitUpdate');
+        return array('action'=>'RDRoomChangeSubmit');
     }
 
     public function execute(CommandContext $context){
