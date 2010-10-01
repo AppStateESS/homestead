@@ -24,6 +24,13 @@ class SubmitRoomChangeRequestCommand extends Command {
 
         $swap = $context->get('swap_with');
 
+        // Check for an existing room change request
+        $changeReq = RoomChangeRequest::search(UserStatus::getUsername());
+        if(!is_null($changeReq) && !($changeReq->getState() instanceof CompletedChangeRequest) && !($changeReq->getState() instanceof DeniedChangeRequest)){ // has pending request
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You already have a pending room change request. You cannot submit another request until your pending request is processed.');
+            $cmd->redirect();
+        }
+
         // Check that a cell phone number was provided, or that the opt-out box was checked.
         if((!isset($cellNum) || empty($cellNum)) && !isset($optOut)){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Please provide a cell phone number or check the box indicating you do not wish to provide it.');
@@ -55,15 +62,13 @@ class SubmitRoomChangeRequestCommand extends Command {
         $request->username = UserStatus::getUsername();
         $request->cell_phone = $cellNum;
         $request->reason = $context->get('reason');
-        $request->change(new PendingRoomChangeRequest);
 
         if($context->get('type') == 'switch'){
-
             //preferences
             if(!empty($first))
-                $request->addPreference($first);
+            $request->addPreference($first);
             if(!empty($second))
-                $request->addPreference($second);
+            $request->addPreference($second);
         }else{
             // swap - make sure the other person has an assignment
             if(!empty($swap) && !is_null(HMS_Assignment::getAssignment($swap, Term::getSelectedTerm()))){
@@ -74,6 +79,26 @@ class SubmitRoomChangeRequestCommand extends Command {
                 $cmd->redirect();
             }
         }
+
+        //sanity check
+        if($request->is_swap && $request->switch_with == $request->username){
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Please select someone other than yourself to switch rooms with.");
+            $cmd->redirect();
+        }
+
+        //get the id of the hall they are currently in, so that we can filter the rd pager later
+        $assignment = HMS_Assignment::getAssignment($request->username, Term::getSelectedTerm());
+
+        if(!isset($assignment)){
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You are not currently assigned to a room, so you cannot request a room change.');
+            $errorCmd = CommandFactory::getCommand('ShowStudentMenu');
+            $errorCmd->redirect();
+        }
+
+        $building = $assignment->get_parent()->get_parent()->get_parent()->get_parent();
+        $request->curr_hall = $building->id;
+
+        $request->change(new PendingRoomChangeRequest); // This triggers emails to be sent, so don't do it until as late as possible
 
         $request->save();
 

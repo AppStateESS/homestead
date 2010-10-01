@@ -81,25 +81,6 @@ class RoomChangeRequest extends HMS_Item {
         $this->state = $this->state->getType(); // replace the object with the id before saving
         $this->stamp();
 
-        //get the id of the hall they are currently in, so that we can filter the rd pager later
-        $assignment = HMS_Assignment::getAssignment($this->username, Term::getSelectedTerm());
-
-        if(!isset($assignment)){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You are not currently assigned to a room, so you cannot request a room change.');
-            $errorCmd = CommandFactory::getCommand('ShowStudentMenu');
-            $errorCmd->redirect();
-        }
-
-        //sanity check
-        if($this->is_swap && $this->switch_with == $this->username){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Please select someone other than yourself to switch rooms with.");
-            $errorCmd = CommandFactory::getCommand('StudentRoomChange');
-            $errorCmd->redirect();
-        }
-
-        $building = $assignment->get_parent()->get_parent()->get_parent()->get_parent();
-        $this->curr_hall = $building->id;
-
         //convert bool to int for db
         $this->is_swap = ($this->is_swap ? 1 : 0);
 

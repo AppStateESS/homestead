@@ -9,7 +9,7 @@ abstract class HMS_Item {
 
     var $updated_on = 0;
     var $updated_by = 0;
-    
+
     public function construct($id=0)
     {
         if(!is_null($id) && is_numeric($id)){
@@ -31,8 +31,10 @@ abstract class HMS_Item {
         $result = $db->saveObject($this);
 
         if(PHPWS_Error::logIfError($result)){
-            return false;
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException($result->toString());
         }
+
         return true;
     }
 
@@ -45,10 +47,10 @@ abstract class HMS_Item {
         $result = $db->loadObject($this);
 
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'execption/DatabaseException.php');
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
-        
+
         return true;
     }
 
@@ -79,7 +81,7 @@ abstract class HMS_Item {
             PHPWS_Core::initModClass('hms', 'execption/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
-        
+
         return TRUE;
     }
 
@@ -88,7 +90,7 @@ abstract class HMS_Item {
         $tpl['ADDED_ON']     = strftime('%c', $this->added_on);
         $tpl['UPDATED_ON']   = strftime('%c', $this->updated_on);
 
-        
+
         $adder = new PHPWS_User($this->added_by);
         $tpl['ADDED_BY']     = $adder->username;
 
