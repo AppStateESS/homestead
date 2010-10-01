@@ -25,8 +25,8 @@ class SubmitRoomChangeRequestCommand extends Command {
         $swap = $context->get('swap_with');
 
         // Check for an existing room change request
-        $request = RoomChangeRequest::search(UserStatus::getUsername());
-        if(!is_null($this->changeReq) && !($this->changeReq->getState() instanceof CompletedChangeRequest) && !($this->changeReq->getState() instanceof DeniedChangeRequest)){ // has pending request
+        $changeReq = RoomChangeRequest::search(UserStatus::getUsername());
+        if(!is_null($changeReq) && !($changeReq->getState() instanceof CompletedChangeRequest) && !($changeReq->getState() instanceof DeniedChangeRequest)){ // has pending request
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You already have a pending room change request. You cannot submit another request until your pending request is processed.');
             $cmd->redirect();
         }
@@ -81,13 +81,13 @@ class SubmitRoomChangeRequestCommand extends Command {
         }
 
         //sanity check
-        if($this->is_swap && $this->switch_with == $this->username){
+        if($request->is_swap && $request->switch_with == $request->username){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Please select someone other than yourself to switch rooms with.");
             $cmd->redirect();
         }
 
         //get the id of the hall they are currently in, so that we can filter the rd pager later
-        $assignment = HMS_Assignment::getAssignment($this->username, Term::getSelectedTerm());
+        $assignment = HMS_Assignment::getAssignment($request->username, Term::getSelectedTerm());
 
         if(!isset($assignment)){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You are not currently assigned to a room, so you cannot request a room change.');
@@ -96,7 +96,7 @@ class SubmitRoomChangeRequestCommand extends Command {
         }
 
         $building = $assignment->get_parent()->get_parent()->get_parent()->get_parent();
-        $this->curr_hall = $building->id;
+        $request->curr_hall = $building->id;
 
         $request->change(new PendingRoomChangeRequest); // This triggers emails to be sent, so don't do it until as late as possible
 

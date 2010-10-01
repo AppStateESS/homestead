@@ -53,9 +53,6 @@ class RDRoomChangeSubmitCommand extends Command {
         } else {
             $rc->denied_reason = $context->get('reason');
             $rc->change(new DeniedChangeRequest);
-            $rc->save();
-            $cmd = CommandFactory::getCommand('RDRoomChange');
-            $cmd->redirect();
         }
 
         //okay, it worked, save the state change
