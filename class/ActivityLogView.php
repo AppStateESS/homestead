@@ -41,6 +41,9 @@ class ActivityLogView extends View {
 
         Layout::addPageTitle("Activity Log");
 
+        javascript('/jquery_ui');
+        javascript('/modules/hms/note', array('LINK'=>'activity-log-note'));
+
 		return PHPWS_Template::Process($tags, 'hms', 'admin/activity_log_box.tpl');
 	}
 
