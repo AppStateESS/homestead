@@ -486,7 +486,7 @@ class PendingRoomChangeRequest extends BaseRoomChangeState {
     }
 
     public function onEnter($from=NULL){
-        HMS_Activity_Log::log_activity($this->request->username, ACTIVITY_ROOM_CHANGE_SUBMITTED, UserStatus::getUsername(FALSE), $this->request->reason);
+
     }
 
     public function sendNotification()

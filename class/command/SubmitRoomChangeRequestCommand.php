@@ -102,6 +102,14 @@ class SubmitRoomChangeRequestCommand extends Command {
 
         $request->save();
 
+        $reason = $request->reason;
+        if(strlen($reason) > 575){
+            $reason = substr($request->reason, 0, 475);
+            $reason .= '...';
+        }
+
+        HMS_Activity_Log::log_activity($request->username, ACTIVITY_ROOM_CHANGE_SUBMITTED, UserStatus::getUsername(FALSE), $reason);
+
         NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Your room change request has been received and is pending approval. You will be contacted by your Residence Director (RD) in the next 24-48 hours regarding your request.');
         $successCmd->redirect();
     }
