@@ -1179,7 +1179,7 @@ class HMS_Reports{
                 //$pager->joinResult('id', 'hms_fall_application', 'id', 'room_condition');
                 $pager->addSortHeader('lifestyle_option','Lifestyle');
                 $pager->addSortHeader('preferred_bedtime','Preferred Bedtime');
-                $pager->addSortHeader('room_condition','Room Condition');
+                //$pager->addSortHeader('hms_fall_application.room_condition','Room Condition');
                 break;
             case TERM_SPRING:
                 $pager = new DBPager('hms_new_application', 'SpringApplication');

@@ -117,9 +117,9 @@ class FallApplication extends HousingApplication{
     {
         $tpl = parent::unassignedApplicantsRows();
 
-        $tpl['LIFESTYLE']       = $this->getLifestyleOption();
-        $tpl['BEDTIME']         = $this->getPreferredBedtime();
-        $tpl['ROOM_CONDITION']  = $this->getRoomCondition();
+        $tpl['LIFESTYLE']       = $this->getLifestyleOption()  == 1 ? 'Single gender' : 'Co-ed';
+        $tpl['BEDTIME']         = $this->getPreferredBedtime() == 1 ? 'Early'         : 'Late';
+        $tpl['ROOM_CONDITION']  = $this->getRoomCondition()    == 1 ? 'Neat'          : 'Cluttered';
 
         return $tpl;
     }
@@ -128,9 +128,9 @@ class FallApplication extends HousingApplication{
     {
         $tpl = parent::unassignedApplicantsCSV();
 
-        $tpl['LIFESTYLE']       = $this->getLifestyleOption();
-        $tpl['BEDTIME']         = $this->getPreferredBedtime();
-        $tpl['ROOM_CONDITION']  = $this->getRoomCondition();
+        $tpl['LIFESTYLE']       = $this->getLifestyleOption()  == 1 ? 'Single gender' : 'Co-ed';
+        $tpl['BEDTIME']         = $this->getPreferredBedtime() == 1 ? 'Early'         : 'Late';
+        $tpl['ROOM_CONDITION']  = $this->getRoomCondition()    == 1 ? 'Neat'          : 'Cluttered';
 
         return $tpl;
     }

@@ -21,10 +21,10 @@ class RoomChangeMenuBlockView extends View {
 
         $tpl['DATES'] = HMS_Util::getPrettyDateRange($this->startDate, $this->endDate);
 
-        if(time() < $this->startDate){
+        if(time() < $this->startDate){ // too early
             $tpl['BEGIN_DEADLINE'] = HMS_Util::getFriendlyDate($this->startDate);
             $tpl['ICON'] = FEATURE_NOTYET_ICON;
-        }else if(time() > $this->endDate){
+        }else if(time() > $this->endDate){ // too late
             $tpl['ICON'] = FEATURE_LOCKED_ICON;
             $tpl['END_DEADLINE'] = HMS_Util::getFriendlyDate($this->endDate);
         }else if(is_null($this->assignment)){ // Not assigned anywhere

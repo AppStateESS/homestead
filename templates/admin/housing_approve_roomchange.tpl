@@ -32,10 +32,22 @@
     <td>Student's Reason:</td>
     <td>{STUDENT_REASON}</td>
   </tr>
+  <!-- BEGIN swap -->
+  <tr>
+    <td>Requested swap with:</td>
+    <td>{SWAP}</td>
+  </tr>
+  <tr>
+    <td>Swap to room:</td>
+    <td>{SWAP_ROOM}</td>
+  </tr>
+  <!-- END swap -->
+  <!-- BEGIN bed -->
   <tr>
     <td>Selected Bed:</td>
     <td>{BED}</td>
   </tr>
+  <!-- END bed -->
   <tr>
     <td>Approve or Deny</td>
     <td>

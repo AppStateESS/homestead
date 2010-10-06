@@ -3,11 +3,11 @@
 PHPWS_Core::initModClass('hms', 'Command.php');
 PHPWS_Core::initModClass('hms', 'RoomChangeRequest.php');
 
-class HousingSubmitUpdateCommand extends Command {
+class HousingRoomChangeSubmitCommand extends Command {
     public $username;
 
     public function getRequestVars(){
-        $vars = array('action'=>'HousingSubmitUpdate');
+        $vars = array('action'=>'HousingRoomChangeSubmit');
 
         if(isset($this->username)){
             $vars['username'] = $this->username;
