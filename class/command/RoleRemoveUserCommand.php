@@ -11,6 +11,11 @@ class RoleRemoveUserCommand extends Command {
     }
 
     public function execute(CommandContext $context){
+        if(!Current_User::allow('hms', 'edit_role_members')){
+            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
+            throw new PermissionException('You do not have permission to edit role members.');
+        }
+
         $username = $context->get('username');
         $rolename = $context->get('role');
 		$class    = $context->get('className');
@@ -29,7 +34,7 @@ class RoleRemoveUserCommand extends Command {
             echo json_encode(false);
             exit;
         }
-        
+
         $role_id = $result['id'];
 
         $role = new HMS_Role();
