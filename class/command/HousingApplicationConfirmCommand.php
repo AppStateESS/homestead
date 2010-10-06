@@ -134,7 +134,6 @@ class HousingApplicationConfirmCommand extends Command {
             try{
                 # report the application to banner;
                 $application->reportToBanner();
-                $application->save();
             }catch(Exception $e){
                 // ignore any errors reporting this to banner, they'll be logged and admins notified
                 // we've saved the student's application locally, so it's ok if this doesn't work
