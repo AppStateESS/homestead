@@ -19,19 +19,24 @@ class HousingCompleteChangeCommand extends Command {
     }
 
     public function execute(CommandContext $context){
+        // Command to redirect to when done (success or error)
+        $cmd = CommandFactory::getCommand('HousingRoomChange');
+        $cmd->tab = 'complete';
+
         if(!is_null($context->get('username'))){
             $rc = new RoomChangeRequest;
             $rc = $rc->search($context->get('username'));
         } else {
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Cannot complete room change for non-existant user!');
+            $cmd->redirect();
         }
 
         if($rc->change(new CompletedChangeRequest) && $rc->save()){
             NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Room Change Completed');
+        }else{
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Could not complere room change.');
         }
 
-        $cmd = CommandFactory::getCommand('HousingRoomChange');
-        $cmd->tab = 'complete';
         $cmd->redirect();
     }
 }
