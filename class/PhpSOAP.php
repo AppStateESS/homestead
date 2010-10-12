@@ -8,6 +8,8 @@ class PhpSOAP extends SOAP
 
     protected function __construct()
     {
+        parent::__construct();
+
         $this->client = new SoapClient('file://' . PHPWS_SOURCE_DIR . 'mod/hms/inc/shs0001.wsdl', array('trace'=>true));
     }
 
@@ -67,13 +69,28 @@ class PhpSOAP extends SOAP
 
     public function removeRoomAssignment($username, $term, $building, $room)
     {
+        $params = array(
+                        'StudentID'=>$username,
+                        'TermCode'=>$term,
+                        'BldgCode'=>$building,
+                        'RoomCode'=>$room);
 
+        $response = $this->client->RemoveRoomAssignment($params);
+
+        return $response->RemoveRoomAssignmentResult;
     }
 
     public function getHousMealRegister($username, $termcode, $opt)
     {
-    }
+        $params = array(
+                        'StudentID'=>$username,
+                        'TermCode'=>$term,
+                        'Option'=>$opt);
 
+        $response = $this->client->GetHousMealRegister($params);
+        
+        return $response->GetHousMealRegister;
+    }
 }
 
 ?>
