@@ -2,8 +2,7 @@
     <div class="box">
         <div class="box-title"><h2>Welcome to the Housing Management System</h2></div>
         <div class="box-content">
-        Welcome to Appalachian State University Housing and Residence Life. The Department of Housing and Residence Life 
-        is pleased you have chosen Appalachian and look forward to meeting your housing needs. 
+        Welcome to Appalachian State University Housing. University Housing is pleased you have chosen Appalachian and looks forward to meeting your housing needs. 
         <br /><br />
         <div style="border: 2px solid #F00; background-color: #F0F0F0; padding: 3px">
             <div style="margin-left: 10px; margin-top: 10px; margin-right: 10px; float: left"><img src="images/mod/hms/icons/alert.png"></div>

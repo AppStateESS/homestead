@@ -2,8 +2,8 @@
     <div class="box">
         <div class="box-title"><h2>Welcome to the Housing Management System</h2></div>
         <div class="box-content">
-        Welcome to Appalachian State University Housing and Residence Life. The Department of Housing and Residence Life 
-        is pleased you have chosen Appalachian and look forward to meeting your housing needs. We see that you are a new freshmen
+        Welcome to Appalachian State University Housing. The Department of University Housing 
+        is pleased you have chosen Appalachian and looks forward to meeting your housing needs. We see that you are a new freshmen
         admitted for the <strong>{ENTRY_TERM}</strong> semester and will be living on-campus for the first time.
         <br />
         You are required to apply for housing for the following terms:

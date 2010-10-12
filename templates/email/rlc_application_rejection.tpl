@@ -12,4 +12,4 @@ Corinne
 -- 
 M. Corinne Smith
 Residence Life and Learning Communities Coordinator
-Housing and Residence Life - Appalachian State University 
+University Housing - Appalachian State University 
