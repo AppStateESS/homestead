@@ -17,7 +17,7 @@
             <tr>
                 <td>{SPECIAL_NEEDS_1}&nbsp;<strong>{SPECIAL_NEEDS_1_LABEL}</strong>
                     <div class="special-needs-text">
-                    Students with physical disabilities should contact <a href="http://www.gstudies.appstate.edu/dss" target="_blank">Disability Support Services</a>, who will then work with the Department of Housing & Residence Life to determine whether or not special housing is warranted.
+                    Students with physical disabilities should contact <a href="http://www.gstudies.appstate.edu/dss" target="_blank">Disability Support Services</a>, who will then work with University Housing to determine whether or not special housing is warranted.
                     </div>
                 </td>
             </tr>
@@ -26,12 +26,12 @@
                 <div class="special-needs-text">
                 Students with mental health needs may put their request in writing to the following address:<br />
                 <br />
-                Department of Housing & Residence Life<br />
+                University Housing<br />
                 Attn: Housing Assignments<br />
                 ASU PO Box 32111<br />
                 Boone, NC  28608<br />
                 <br />
-                Counseling & Psychological Services will then work with the Department of Housing & Residence Life to determine whether or not special housing is warranted.  For further information, please visit the <a href="http://www.counseling.appstate.edu/" target="_blank">Counseling & Psychological Services</a> website.
+                Counseling & Psychological Services will then work with University Housing to determine whether or not special housing is warranted.  For further information, please visit the <a href="http://www.counseling.appstate.edu/" target="_blank">Counseling & Psychological Services</a> website.
                 </div>
                 </td>
             </tr>
@@ -39,14 +39,14 @@
                 <td>{SPECIAL_NEEDS_3}&nbsp;<strong>{SPECIAL_NEEDS_3_LABEL}</strong>
                 
                 <div class="special-needs-text">
-                Students with medical concerns should send documentation from their physician to the Department of Housing & Residence Life.  This information may be faxed to (828)262-2945 or mailed to the following address:<br />
+                Students with medical concerns should send documentation from their physician to University Housing.  This information may be faxed to (828)262-2945 or mailed to the following address:<br />
                 <br />
-                Department of Housing & Residence Life<br />
+                University Housing<br />
                 Attn: Housing Assignments<br />
                 ASU PO Box 32111<br />
                 Boone, NC  28608<br />
                 <br />
-                Health Services will then work with the Department of Housing & Residence Life to determine whether or not special housing is warranted.  For further information, please visit the <a href="http://www.healthservices.appstate.edu/" target="_blank">Health Services</a> website.
+                Health Services will then work with University Housing to determine whether or not special housing is warranted.  For further information, please visit the <a href="http://www.healthservices.appstate.edu/" target="_blank">Health Services</a> website.
                 </div>
                 </td>
             </tr>
@@ -55,12 +55,12 @@
                 <div class="special-needs-text">
                 Students who are transgendered and wish to apply for special needs housing may put their request in writing to the following address:<br />
                 <br />
-                Department of Housing & Residence Life<br />
+                University Housing<br />
                 Attn: Housing Assignments<br />
                 ASU PO Box 32111<br />
                 Boone, NC  28608<br />
                 <br />
-                The Office of Multicultural Student Development will then work with the Department of Housing & Residence life to determine whether or not special housing is warranted.  For further information, please visit the <a href="http://www.glbt.appstate.edu/" target="_blank">GLBT Online Resources</a> website.
+                The Office of Multicultural Student Development will then work with University Housing to determine whether or not special housing is warranted.  For further information, please visit the <a href="http://www.glbt.appstate.edu/" target="_blank">GLBT Online Resources</a> website.
                 </div>
                 </td>
             </tr>

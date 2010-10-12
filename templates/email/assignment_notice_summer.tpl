@@ -2,7 +2,7 @@
 
 {NAME},
 
-The Department of Housing & Residence Life would like to welcome you to Appalachian State University and let you know we are preparing for your arrival.  You will find your housing assignment for {TERM} listed below.
+University Housing would like to welcome you to Appalachian State University and let you know we are preparing for your arrival.  You will find your housing assignment for {TERM} listed below.
 
 Assignment: {LOCATION}
 <!-- BEGIN roommate_text -->
@@ -25,4 +25,4 @@ Sincerely,
 Stacy R. Sears
 
 Associate Director
-Housing & Residence Life 
+University Housing 

@@ -1315,7 +1315,7 @@ class HMS_Reports{
                 $pdf->SetFont('Arial', 'B', 12);
                 $pdf->Cell(80);
                 $pdf->Cell(120, 5, 'Appalachian State University', 0, 2, 'C');
-                $pdf->Cell(120, 5, 'Residence Life Occupancy Report', 0, 2, 'C');
+                $pdf->Cell(120, 5, 'University Housing Occupancy Report', 0, 2, 'C');
                 $pdf->Ln(10);
                 $pdf->Cell(30, 5, ''.$hall->hall_name, 0);
                 $pdf->Ln(20);

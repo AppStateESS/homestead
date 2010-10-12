@@ -119,7 +119,7 @@ class HMS_Letter
         $y = $pdf->GetY();
         $pdf->Image(PHPWS_SOURCE_DIR . '/mod/hms/img/stacysig.png', $x, $y, NULL, .5, 'PNG');
         $pdf->SetY($y + .5);
-        $pdf->Write(HEIGHT, "Stacy R. Sears\nAssistant Director\nHousing & Residence Life");
+        $pdf->Write(HEIGHT, "Stacy R. Sears\nAssistant Director\nUniversity Housing");
     }
 
     public function put_into_pile(&$freshmen_male, &$freshmen_female, &$continuing_male, &$continuing_female, $student)
@@ -197,11 +197,11 @@ class HMS_Letter
 
         if(!is_null($prev_assignment)){
             // returning
-            $letter->paragraph1 = "The Department of Housing & Residence Life would like to welcome you to Appalachian State University and let you know we are preparing for your arrival.\n\nYour housing assignment for the Spring semester is listed below. Your residence hall office will be open for check-in starting January 10-11, 9am-11pm. A phone number will be posted at the front desk for the Resident Assistant on duty. Please call this number and someone will come to check you in.";
+            $letter->paragraph1 = "The Department of University Housing would like to welcome you to Appalachian State University and let you know we are preparing for your arrival.\n\nYour housing assignment for the Spring semester is listed below. Your residence hall office will be open for check-in starting January 10-11, 9am-11pm. A phone number will be posted at the front desk for the Resident Assistant on duty. Please call this number and someone will come to check you in.";
             $letter->paragraph2 = "Failure to check in by January 12th, 6pm will result in assignment cancellation (see pages 15-16 of the Residence Hall License Contract booklet).\n\nWe hope your on campus housing experience has been a pleasant one. We are looking forward to sharing another great year with you. The re-application process for on campus housing for the academic year 2009-10 will begin in January, 2009.\n\nShould you have any questions, please feel free to contact our office at 828-262-6111 or 828-262-2278. You may also visit our website at: http://www.housing.appstate.edu.";
         }else{
             // Freshmen/transfer
-            $letter->paragraph1 = "The Department of Housing & Residence Life would like to welcome you to Appalachian State University and let you know we are preparing for your arrival.\n\nYour housing assignment for the Spring semester is listed below. You may check-in at Newland Hall, where you will receive your residence hall room key and check-in information.";
+            $letter->paragraph1 = "The Department of University Housing would like to welcome you to Appalachian State University and let you know we are preparing for your arrival.\n\nYour housing assignment for the Spring semester is listed below. You may check-in at Newland Hall, where you will receive your residence hall room key and check-in information.";
             $letter->paragraph2 = "Freshmen and transfer check-in is January 6th, 1pm - 9pm.  Returning student check-in starts on January 10th and 11th.  See above for your scheduled time.\n\nIf you have a conflict, you can check in anytime after your scheduled time until 6 pm on January 12th.  Failure to check in by January 12th, 6pm will result in assignment cancellation (see pages 15-16 of the Residence Hall License Contract booklet).\n\nShould you have any questions, please feel free to contact our office at 828-262-6111.  You may also visit our website at: http://www.housing.appstate.edu.";
         }
 
@@ -693,7 +693,7 @@ class HMS_Letter
                 }
             }
         }
-        
+
         return $missingMovein;
     }
 }

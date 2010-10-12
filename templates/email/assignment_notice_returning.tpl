@@ -2,7 +2,7 @@
 
 {NAME},
 
-The Department of Housing & Residence Life would like to welcome you to Appalachian State University and let you know we are preparing for your arrival.  You will find your housing assignment for the Spring semester listed below. Your residence hall office will be open for check-in starting January 10-11th, 9am-11pm. A phone number will be posted at the front desk for the Resident Assistant on duty. Please call this number and someone will come to check you in. 
+University Housing would like to welcome you to Appalachian State University and let you know we are preparing for your arrival.  You will find your housing assignment for the Spring semester listed below. Your residence hall office will be open for check-in starting January 10-11th, 9am-11pm. A phone number will be posted at the front desk for the Resident Assistant on duty. Please call this number and someone will come to check you in. 
 
 Room Assignment Notification
                                         Fall, 2008
@@ -28,5 +28,5 @@ Sincerely,
 
 Stacy R. Sears
 
-Assistant Director
-Housing & Residence Life 
+Associate Director
+University Housing

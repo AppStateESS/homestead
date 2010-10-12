@@ -39,10 +39,10 @@ class RlcApplicationView extends View {
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Sorry, it is too soon to fill out an RLC application.");
             $cmd->redirect();
         }else if( $feature->getEndDate() < mktime() ){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Sorry, the RLC application deadline has already passed. Please contact Housing & Residence Life if you are interested in applying for a RLC.");
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Sorry, the RLC application deadline has already passed. Please contact University Housing if you are interested in applying for a RLC.");
             $cmd->redirect();
         }
-        
+
         $cmd = CommandFactory::getCommand('ShowRlcApplicationPage1View');
         $cmd->setTerm($this->term);
         $cmd->redirect();

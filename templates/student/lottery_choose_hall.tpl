@@ -17,7 +17,7 @@
                 <ul>
                     <li>There are 21 residence halls.</li>
                     <li>ASU can house 5622 students total.</li>
-                    <li>Residence Life employs approx. 125 resident assistants each semester.</li>
+                    <li>University Housing employs approx. 125 resident assistants each semester.</li>
                 </ul>
             </div>
         </div>

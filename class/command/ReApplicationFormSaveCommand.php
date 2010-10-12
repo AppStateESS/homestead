@@ -140,7 +140,7 @@ class ReApplicationFormSaveCommand extends Command {
         try{
             $application->save();
         }catch(Exception $e){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'There was an error saving your re-application. Please try again or contact the Department of Housing & Residence Life.');
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'There was an error saving your re-application. Please try again or contact the Department of University Housing.');
             $errorCmd->redirect();
         }
 
