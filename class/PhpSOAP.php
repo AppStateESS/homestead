@@ -9,7 +9,7 @@ class PhpSOAP extends SOAP
     protected function __construct()
     {
         parent::__construct();
-
+        //ini_set('soap.wsdl_cache_enabled', 0);
         $this->client = new SoapClient('file://' . PHPWS_SOURCE_DIR . 'mod/hms/inc/shs0001.wsdl', array('trace'=>true));
     }
 
