@@ -677,6 +677,14 @@ class HMS_Residence_Hall extends HMS_Item
         return $tags;
     }
 
+    /*********************
+     * Getters & Setters *
+     */
+    public function getBannerBuildingCode()
+    {
+        return $this->banner_building_code;
+    }
+
     /******************
      * Static Methods *
      *****************/

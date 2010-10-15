@@ -44,8 +44,8 @@ class ProcessBannerQueueCommand extends Command {
                 $term->save();
                 NQ::Simple('hms', HMS_NOTIFICATION_SUCCESS, 'Banner Queue has been disabled for ' . $term->toString() . '.');
             } else {
-                PHPWS_Core::initModClass('hms', 'HMS_Banner_Queue.php');
-                $result = HMS_Banner_Queue::processAll($term->term);
+                PHPWS_Core::initModClass('hms', 'BannerQueue.php');
+                $result = BannerQueue::processAll($term->term);
                 if($result === TRUE) {
                     NQ::Simple('hms', HMS_NOTIFICATION_SUCCESS, 'Banner Queue has been processed for ' . $term->toString() . '.');
                     $term->setBannerQueue(FALSE);
@@ -54,16 +54,17 @@ class ProcessBannerQueueCommand extends Command {
                 } else {
                     // TODO: This is just awful.
                     $text = 'The following failures occurred reporting to Banner:<br /><br /><ul>';
-                    foreach($result as $username=>$error) {
-                        $text .= "<li>$username: $error</li>";
+                    foreach($result as $error) {
+                        $text .= "<li>{$error['username']}: ({$error['code']}) - {$error['message']}</li>";
                     }
                     $text .= '</ul>The queue was not disabled.';
-                    NQ::Simple('hms', HMS_NOTIFICATION_WARNING, $text);
+                    NQ::Simple('hms', HMS_NOTIFICATION_ERROR, $text);
                 }
             }
         }
 
-        CommandContext::goBack();
+        $cmd = CommandFactory::getCommand('ShowEditTerm');
+        $cmd->redirect();
     }
 }
 

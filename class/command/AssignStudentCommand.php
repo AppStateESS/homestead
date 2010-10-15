@@ -71,7 +71,7 @@ class AssignStudentCommand extends Command {
         PHPWS_Core::initModClass('hms', 'HMS_Room.php');
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
 
-        PHPWS_Core::initModClass('hms', 'HMS_Banner_Queue.php');
+        PHPWS_Core::initModClass('hms', 'BannerQueue.php');
 
         $username = strtolower(trim($context->get('username')));
         $term = Term::getSelectedTerm();
@@ -167,7 +167,7 @@ class AssignStudentCommand extends Command {
             $assignment = HMS_Assignment::getAssignment($username, $term);
 
             # Attempt to unassign the student in Banner though SOAP
-            $banner_result = HMS_Banner_Queue::queue_remove_assignment(
+            $banner_result = BannerQueue::queueRemoveAssignment(
             $username,
             $term,
             $assignment->get_banner_building_code(),

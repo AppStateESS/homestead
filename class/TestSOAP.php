@@ -139,7 +139,7 @@ class TestSOAP extends SOAP{
      *  'RoomAssign'
      *  'MealAssign'
      */
-    public function getHousMealRegister($username, $termcode, $opt)
+    public function getHousMealRegister($username, $term, $opt)
     {
         // Assemble the housing_app object
         $housing_app->plan_code     = 'HOME';
