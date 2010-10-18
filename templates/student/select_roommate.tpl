@@ -31,7 +31,7 @@
 
             <div class="note">
                 <img style="vertical-align:middle;" src="images/mod/hms/tango/emblem-important.png">
-            <b>Note: </b>If you are a member of the Heltzer Honors Program or the Watauga Global Community your roommate request may not be honored if your roommate is not also a member of the same organization.</div>
+            <b>Note: </b>If you are a member of The Honors College or Watauga Global Community your roommate request may not be honored if your roommate is not also a member of the same organization.</div>
             <br/>
             
             <div class="note">
