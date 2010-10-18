@@ -80,12 +80,15 @@ abstract class SOAP {
 	 *  'MealAssign'
 	 *  @throws InvalidArgumentException, SOAPException
 	 */
-	public abstract function getHousMealRegister($username, $termcode, $opt);
+	public abstract function getHousMealRegister($username, $term, $opt);
 
 	/*********************
 	 * Utility Functions *
 	 *********************/
 
+    /**
+     * @depricated
+     */
     protected static function checkResponse($resonse)
     {
         # Check for a SOAP fault
@@ -121,6 +124,7 @@ abstract class SOAP {
 
 	/**
 	 * Uses the PHPWS_Core log public function to 'manually' log soap errors to soap_error.log.
+     * @depricated
 	 */
 	protected static function logSoapFault($soap_fault, $function, $extra_info)
 	{
@@ -130,6 +134,7 @@ abstract class SOAP {
 
 	/**
 	 * Uses the PHPWS_Core log public function to 'manually' log soap erros to soap_error.log.
+     * @depricated
 	 */
 	protected static function logSoapError($message, $function, $extra)
 	{

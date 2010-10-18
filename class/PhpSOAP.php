@@ -9,15 +9,23 @@ class PhpSOAP extends SOAP
     protected function __construct()
     {
         parent::__construct();
-        //ini_set('soap.wsdl_cache_enabled', 0);
+        ini_set('soap.wsdl_cache_enabled', 0);
         $this->client = new SoapClient('file://' . PHPWS_SOURCE_DIR . 'mod/hms/inc/shs0001.wsdl', array('trace'=>true));
     }
 
     public function getStudentInfo($username, $term)
     {
-        $response = $this->client->GetStudentProfile(array('StudentID'=>$username, 'TermCode'=>$term));
+        $params = array('StudentID'=>$username, 'TermCode'=>$term);
 
-		SOAP::logSoap('get_student_info', 'success', $username, $term);
+        try{
+            $response = $this->client->GetStudentProfile($params);
+        }catch(SoapFault $e){
+            PHPWS_Core::initModClass('hms', 'exception/SOAPException.php');
+            throw new SOAPException($e->getMessage(), $e->getCode(), 'getStudentInfo', $params);
+            return false;
+        }
+
+		SOAP::logSoap('getStudentInfo', 'success', $username, $term);
 
         return $response->profile;
     }
@@ -26,9 +34,15 @@ class PhpSOAP extends SOAP
     {
         $params = array('BannerID'=>$bannerId);
 
-        $response = $this->client->getUserName($params);
+        try{
+            $response = $this->client->getUserName($params);
+        }catch(SoapFault $e){
+            PHPWS_Core::initModClass('hms', 'exception/SOAPException.php');
+            throw new SOAPException($e->getMessage(), $e->getCode(), 'getUsername', $params);
+            return false;
+        }
 
-		SOAP::logSoap('get_student_info', 'success', $username, $term);
+		SOAP::logSoap('getUsername', 'success', $username, $term);
 
         return $response->GetUserNameResult;
     }
@@ -47,9 +61,23 @@ class PhpSOAP extends SOAP
                         'PlanCode'  => 'HOME',
                         'MealCode'  => 1);
 
-        $response = $this->client->CreateHousingApp($params);
+        try{
+            $response = $this->client->CreateHousingApp($params);
+        }catch(SoapFault $e){
+		    PHPWS_Core::initModClass('hms', 'exception/SOAPException.php');
+            throw new SOAPException($e->getMessage(), $e->getCode(), 'reportApplicationReceived', $params);
+            return false;
+        }
 
-        return $response->CreateHousingAppResult;
+        if($response->CreateHousingAppResult != "0"){
+		    SOAP::logSoap('reportApplicationReceived', 'failed', $username, $term);
+            PHPWS_Core::initModClass('hms', 'exception/BannerException.php');
+            throw new BannerException('Error while reporting application to Banner.', $response->CreateHousingAppResult, 'reportApplicationReceived', $params);
+            return false;
+        }
+
+		SOAP::logSoap('reportApplicationReceived', 'success', $username, $term);
+        return true;
     }
 
     public function reportRoomAssignment($username, $term, $building, $room, $plan = 'HOME', $meal)
@@ -61,10 +89,23 @@ class PhpSOAP extends SOAP
                         'RoomCode'=>$room,
                         'PlanCode'=>$plan,
                         'MealCode'=>$meal);
+        try{
+            $response = $this->client->CreateRoomAssignment($params);
+        }catch(SoapFault $e){
+            PHPWS_Core::initModClass('hms', 'exception/SOAPException.php');
+            throw new SOAPException($e->getMessage(), $e->getCode(), 'reportRoomAssignment', $params);
+            return false;
+        }
 
-        $response = $this->client->CreateRoomAssignment($params);
+        if($response->CreateRoomAssignmentResult != "0"){
+		    SOAP::logSoap('reportRoomAssignment', 'failed', $username, $term, $building, $room, $meal);
+            PHPWS_Core::initModClass('hms', 'exception/BannerException.php');
+            throw new BannerException('Error while reporting assignment to Banner.', $response->CreateRoomAssignmentResult, 'reportRoomAssignment', $params);
+            return FALSE;
+        }
 
-        return $response->CreateRoomAssignmentResult;
+        SOAP::logSoap('reportRoomAssignment', 'success', $username, $term, $building, $room, $meal);
+        return true;
     }
 
     public function removeRoomAssignment($username, $term, $building, $room)
@@ -75,20 +116,41 @@ class PhpSOAP extends SOAP
                         'BldgCode'=>$building,
                         'RoomCode'=>$room);
 
-        $response = $this->client->RemoveRoomAssignment($params);
+        try{
+            $response = $this->client->RemoveRoomAssignment($params);
+        }catch(SoapFault $e){
+            PHPWS_Core::initModClass('hms', 'exception/SOAPException.php');
+            throw new SOAPException($e->getMessage(), $e->getCode(), 'removeRoomAssignment', $params);
+            return false;
+        }
 
-        return $response->RemoveRoomAssignmentResult;
+        if($response->RemoveRoomAssignmentResult != "0"){
+		    SOAP::logSoap('removeRoomAssignment', 'failed (' . $response->RemoveRoomAssignmentResult . ')', $username, $term, $building, $room);
+            PHPWS_Core::initModClass('hms', 'exception/BannerException.php');
+            throw new BannerException('Error while reporting removal to Banner.', $response->RemoveRoomAssignmentResult, 'removeRoomAssignment', $params);
+            return false;
+        }
+
+	    SOAP::logSoap('removeRoomAssignment', 'success', $username, $term, $building, $room);
+        return TRUE;
     }
 
-    public function getHousMealRegister($username, $termcode, $opt)
+    public function getHousMealRegister($username, $term, $opt)
     {
         $params = array(
                         'StudentID'=>$username,
                         'TermCode'=>$term,
                         'Option'=>$opt);
 
-        $response = $this->client->GetHousMealRegister($params);
+        try{
+            $response = $this->client->GetHousMealRegister($params);
+        }catch(SoapFault $e){
+            PHPWS_Core::initModClass('hms', 'exception/SOAPException.php');
+            throw new SOAPException($e->getMessage(), $e->getCode(), 'getHousMealRegister', $params);
+            return false;
+        }
         
+	    SOAP::logSoap('getHousMealRegister', 'success', $username, $term, $opt);
         return $response->GetHousMealRegister;
     }
 }
