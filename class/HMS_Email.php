@@ -25,6 +25,7 @@ class HMS_Email{
         $contacts = array();
 
         $contacts[] = 'dbraswell@appstate.edu';
+        $contacts[] = 'burlesonst@appstate.edu';
 
         return $contacts;
     }
@@ -32,7 +33,7 @@ class HMS_Email{
     public function send_template_message($to, $subject, $tpl, $tags)
     {
         $content = PHPWS_Template::process($tags, 'hms', $tpl);
-        
+
         HMS_Email::send_email($to, NULL, $subject, $content);
     }
 
@@ -62,7 +63,7 @@ class HMS_Email{
         # Create a Mail object and set it up
         PHPWS_Core::initCoreClass('Mail.php');
         $message = new PHPWS_Mail;
-        
+
         $message->setFrom($from);
         $message->setSubject($subject);
         $message->setMessageBody($content);
@@ -90,7 +91,7 @@ class HMS_Email{
             PHPWS_Error::log($result);
             return false;
         }
-        
+
         return true;
     }
 
@@ -102,7 +103,7 @@ class HMS_Email{
         // Log the message to a text file
         $fd = fopen(PHPWS_SOURCE_DIR . 'logs/email.log',"a");
         fprintf($fd, "=======================\n");
-         
+
         foreach($message->send_to as $recipient){
             fprintf($fd, "To: %s\n", $recipient);
         }
@@ -318,13 +319,13 @@ class HMS_Email{
     public function sendRlcApplicationRejected(Student $to)
     {
         PHPWS_Core::initModClass('hms', 'Term.php');
-        
+
         $tpl = array();
         $tpl['NAME'] = $to->getName();
         $tpl['TERM'] = Term::toString($to->getApplicationTerm());
 
         HMS_Email::send_template_message($to->getUsername() . TO_DOMAIN, 'Learning Community Application Rejected', 'email/rlc_application_rejection.tpl',$tpl);
-    }                    
+    }
 
     public function send_lottery_assignment_confirmation(Student $to, $location, $term)
     {
@@ -338,14 +339,14 @@ class HMS_Email{
 
         HMS_Email::send_template_message($to->getUsername() . TO_DOMAIN, 'On-campus Housing Re-assignment Confirmation!', 'email/lottery_self_assignment_confirmation.tpl', $tpl);
     }
-    
+
     public function sendWaitListApplicationConfirmation(Student $student, $year)
     {
         $tpl = array();
-        
+
         $tpl['NAME'] = $student->getName();
         $tpl['YEAR'] = $year;
-        
+
         HMS_Email::send_template_message($student->getUsername() . TO_DOMAIN, 'On-campus Housing Waiting List Confirmation', 'email/waitingListConfirmation.tpl', $tpl);
     }
 
