@@ -1,12 +1,12 @@
 <?php
 
 class LotteryConfirmView extends View {
-    
+
     private $roomId;
     private $mealPlan;
     private $roommates;
     private $term;
-    
+
     public function __construct($roomId, $mealPlan, $roommates, $term)
     {
         $this->roomId       = $roomId;
@@ -14,14 +14,14 @@ class LotteryConfirmView extends View {
         $this->roommates    = $roommates;
         $this->term         = $term;
     }
-    
+
     public function show()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        
+
         $tpl = array();
-        
+
         $submitCmd = CommandFactory::getCommand('LotteryConfirm');
         $submitCmd->setRoomId($this->roomId);
         $submitCmd->setMealPlan($this->mealPlan);
@@ -43,7 +43,7 @@ class LotteryConfirmView extends View {
 
         # List all the students which will be assigned and their beds
         $beds = $room->get_beds();
-        
+
         foreach($beds as $bed){
             $bed_row = array();
 
@@ -51,11 +51,11 @@ class LotteryConfirmView extends View {
             $bed->loadAssignment();
             # Check for a reservation
             $reservation = $bed->get_lottery_reservation_info();
-            
+
             $bed_row['BEDROOM_LETTER']  = $bed->bedroom_label;
 
             $roommate = null;
-            
+
             if($bed->_curr_assignment != NULL){
                 # Bed is assigned
                 $roommate = StudentFactory::getStudentByUsername($bed->_curr_assignment->asu_username, $this->term);
@@ -80,14 +80,14 @@ class LotteryConfirmView extends View {
         # Show the meal plan
         $tpl['MEAL_PLAN'] = HMS_Util::formatMealOption($this->mealPlan);
         $form->addHidden('meal_plan', $this->mealPlan);
- 
+
         PHPWS_Core::initCoreClass('Captcha.php');
         $form->addTplTag('CAPTCHA_IMAGE', Captcha::get());
 
         $form->addSubmit('submit_form', 'Confirm room & roommates');
         $form->mergeTemplate($tpl);
 
-        Layout::addPageTitle("Lottery Confirm);
+        Layout::addPageTitle("Lottery Confirm");
 
         return PHPWS_Template::process($form->getTemplate(), 'hms', 'student/lottery_confirm.tpl');
     }
