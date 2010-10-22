@@ -213,6 +213,9 @@ define('ACTIVITY_LOTTERY_OPTOUT',               55);
 define('ACTIVITY_STUDENT_BROKE_ROOMMATE',       56);
 define('ACTIVITY_STUDENT_CANCELLED_ROOMMATE_REQUEST', 57);
 
+define('ACTIVITY_FLOOR_NOTIFIED_ANONYMOUSLY',   58);
+define('ACTIVITY_FLOOR_NOTIFIED',               59);
+
 /**
  * Errors
  */

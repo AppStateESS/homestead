@@ -103,7 +103,7 @@ class SendNotificationEmailsCommand extends Command {
                     HMS_Email::send_email($student->getUsername() . '@appstate.edu', $from, $subject, $body);
                 }
             }
-            //TODO: add activity for anonymous floor notification
+            HMS_Activity_Log::log_activity(Current_User::getUsername(), ($anonymous ? ACTIVITY_FLOOR_NOTIFIED_ANONYMOUSLY : ACTIVITY_FLOOR_NOTIFIED), Current_User::getUsername(), $floor->where_am_i());
         }
 
         NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Emails sent successfully!');

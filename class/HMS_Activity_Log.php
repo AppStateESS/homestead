@@ -204,7 +204,9 @@ class HMS_Activity_Log{
         ACTIVITY_ANON_NOTIFICATION_SENT         => "Anonymous notification sent",
         ACTIVITY_HALL_NOTIFIED                  => "Email notification sent to hall",
         ACTIVITY_HALL_NOTIFIED_ANONYMOUSLY      => "Anonymous email notification sent to hall",
-        ACTIVITY_LOTTERY_OPTOUT                 => "Opted-out of waiting list");
+        ACTIVITY_LOTTERY_OPTOUT                 => "Opted-out of waiting list",
+        ACTIVITY_FLOOR_NOTIFIED_ANONYMOUSLY     => "Anonymous email notification sent to floor",
+        ACTIVITY_FLOOR_NOTIFIED                 => "Email notification sent to floor");
     }
 
     /**
