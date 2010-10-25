@@ -524,7 +524,6 @@ CREATE TABLE hms_room_change_request (
     denied_reason       TEXT,
     denied_by           VARCHAR(32),
     updated_on          INTEGER,
-    switch_with         VARCHAR(32),
     is_swap             SMALLINT NOT NULL DEFAULT 0,
     PRIMARY KEY(id)
 );

@@ -171,6 +171,13 @@ class HMS_RLC_Application extends HMS_Item {
 
         $actions[] = $rmCmd->getLink('Remove');
 
+        // Remove and Deny macro command
+        $rmDenyCmd = CommandFactory::getCommand('RemoveDenyRlcAssignment');
+        $rmDenyCmd->setAppId($this->getId());
+        $rmDenyCmd->setAssignmentId($assign->id);
+        
+        $actions[] = $rmDenyCmd->getLink('Remove & Deny');
+
         $tags['ACTION'] = implode(' | ', $actions);
         return $tags;
     }
