@@ -28,10 +28,25 @@ class RlcApplicationMenuView extends View {
 
         if(isset($this->application) && !is_null($this->application->id)) {
             $tpl['ICON'] = FEATURE_COMPLETED_ICON;
+            // Let student view their application
             $viewCmd = CommandFactory::getCommand('ShowRlcApplicationReView');
             $viewCmd->setAppId($this->application->getId());
             $tpl['VIEW_APP'] = $viewCmd->getLink('view your application');
 
+            // The student can also delete their application if
+            // they aren't already assigned
+            PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
+            if(HMS_RLC_Application::checkForApplication(UserStatus::getUsername(), Term::getSelectedTerm()) &&
+               !HMS_RLC_Assignment::checkForAssignment(UserStatus::getUsername(), Term::getSelectedTerm())){
+                $delCmd = CommandFactory::getCommand('JSConfirm');
+                $delCmd->setLink('delete your application');
+                $delCmd->setTitle('delete your application');
+                $delCmd->setQuestion('Are you sure you want to delete your RLC Application?');
+                $delCmd->setOnConfirmCommand(CommandFactory::getCommand('DeleteRlcApplication'));
+                $tpl['DELETE_TEXT'] = 'You may also ';
+                $tpl['DELETE_APP'] = $delCmd->getLink().'.';
+            }
+            
             if(time() < $this->editDate){
                 $newCmd = CommandFactory::getCommand('ShowRlcApplicationView');
                 $newCmd->setTerm($this->term);
