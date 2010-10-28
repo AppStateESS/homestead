@@ -577,16 +577,13 @@ class HousingApprovedChangeRequest extends BaseRoomChangeState {
     public function onEnter($from=NULL){
         $this->addParticipant('housing', EMAIL_ADDRESS, 'University Housing');
 
-        //if this is a move request
-        if(!$this->request->is_swap){
-            $curr_assignment = HMS_Assignment::getAssignment($this->request->username, Term::getSelectedTerm());
-            $bed = $curr_assignment->get_parent();
+        $curr_assignment = HMS_Assignment::getAssignment($this->request->username, Term::getSelectedTerm());
+        $bed = $curr_assignment->get_parent();
 
-            $newBed = new HMS_Bed;
-            $newBed->id = $this->request->requested_bed_id;
-            $newBed->load();
-            HMS_Activity_Log::log_activity($this->request->username, ACTIVITY_ROOM_CHANGE_APPROVED_HOUSING, UserStatus::getUsername(FALSE), "Approved Room Change to ".$newBed->where_am_i()." from ".$bed->where_am_i());
-        } else { //if it's a swap
+        $newBed = new HMS_Bed($this->request->requested_bed_id);
+
+        //if this is a move request
+        if($this->request->is_swap){
             /* Update our state in the db, don't touch this.  Trust me. */
             $this->request->save();
             $this->request->load();
@@ -594,6 +591,8 @@ class HousingApprovedChangeRequest extends BaseRoomChangeState {
             //then approving the swap should also update it's pair
             $this->request->updateBuddy(new HousingApprovedChangeRequest);
         }
+        
+        HMS_Activity_Log::log_activity($this->request->username, ACTIVITY_ROOM_CHANGE_APPROVED_HOUSING, UserStatus::getUsername(FALSE), "Approved Room Change to ".$newBed->where_am_i()." from ".$bed->where_am_i());
     }
 
     public function getType(){
@@ -791,10 +790,15 @@ class WaitingForPairing extends BaseRoomChangeState {
         if(is_null($assignment)){
             throw new Exception('Requested swap partner is not assigned, cannot complete.');
         }
-
-        $this->requested_bed_id = $assignment->bed_id;
+        
+        $this->request->requested_bed_id = $assignment->bed_id;
         $this->request->save();
         $this->request->load();
+
+        $assignment = HMS_Assignment::getAssignment($this->request->username, Term::getSelectedTerm());
+        $bed = $assignment->get_parent();
+        
+        HMS_Activity_Log::log_activity($this->request->username, ACTIVITY_ROOM_CHANGE_APPROVED_RD, UserStatus::getUsername(FALSE), "Selected ".$bed->where_am_i());
     }
 
     public function attemptToPair()
