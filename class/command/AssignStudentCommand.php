@@ -165,19 +165,23 @@ class AssignStudentCommand extends Command {
         # The code was copied/adapted from the 'unassign_student' public function below
         if($moveNeeded){
             $assignment = HMS_Assignment::getAssignment($username, $term);
+            $oldBed     = $assignment->get_parent();
+            $oldRoom    = $oldBed->get_parent();
+            $oldFloor   = $oldRoom->get_parent();
+            $oldHall    = $oldFloor->get_parent();
 
             # Attempt to unassign the student in Banner though SOAP
-            $banner_result = BannerQueue::queueRemoveAssignment(
-            $username,
-            $term,
-            $assignment->get_banner_building_code(),
-            $assignment->get_banner_bed_id());
-
-            # Show an error and return if there was an error
-            if($banner_result != 0) {
+            try{
+	         $banner_result = BannerQueue::queueRemoveAssignment(
+     	         $student,
+	         $term,
+	         $oldHall,
+	         $oldBed);
+             }catch(AssignmentException $e){
                 NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Error deleting current assignment: Banner returned error code: $banner_result. Please contact ESS immediately. {$username} was not removed.");
                 $errorCmd->redirect();
-            }
+             }
+                 
 
             # Attempt to delete the assignment in HMS
             if(!$assignment->delete()){

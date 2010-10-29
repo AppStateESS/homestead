@@ -375,8 +375,7 @@ class HMS_Assignment extends HMS_Item
 		}
 
 		# Send this off to the queue for assignment in banner
-        $banner_success = BannerQueue::queueAssignment($student, $term, $hall, $vacant_bed, 'HOME', $meal_plan);
-
+	        $banner_success = BannerQueue::queueAssignment($student, $term, $hall, $vacant_bed, 'HOME', $meal_plan);
 		if($banner_success !== TRUE){
 			throw new AssignmentException('Error while adding the assignment to the Banner queue.');
 		}
