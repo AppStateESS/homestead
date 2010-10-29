@@ -53,3 +53,8 @@
         <td>{WHY_THIRD_CHOICE}</td>
     </tr>
 </table>
+<br />
+{START_FORM}
+{APPROVE}{RLC_LIST}
+{END_FORM}
+{DENY_APP}
