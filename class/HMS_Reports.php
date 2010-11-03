@@ -1398,7 +1398,7 @@ class HMS_Reports{
                 continue;
             }
 
-            $output .= "{$result['hall_name']},{$result['floor_number']},{$result['room_number']},{$student->getLastName()},{$student->getFirstName()},{$student->getBannerId()},{$result['cell_phone']},{$result['asu_username']}@appstate.edu\n";
+            $output .= "{$student->getLastName()},{$student->getFirstName()},{$result['hall_name']},{$result['floor_number']},{$result['room_number']},{$student->getBannerId()},{$result['cell_phone']},{$result['asu_username']}@appstate.edu\n";
         }
 
         header('Content-Type: application/octet-stream');
