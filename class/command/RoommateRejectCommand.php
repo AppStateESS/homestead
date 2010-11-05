@@ -53,7 +53,8 @@ class RoommateRejectCommand extends Command
                                        $roommate->requestee);
 
         // Email both parties
-        $roommate->send_reject_emails();
+        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
+        HMS_Email::send_reject_emails($roommate);
 
         NQ::Simple('hms', HMS_NOTIFICATION_SUCCESS, "<b>You rejected the roommate request from $name.</b>  If this was an error, you may re-request using their username, <b>$username</b>.");
 
