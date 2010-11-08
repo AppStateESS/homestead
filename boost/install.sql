@@ -393,34 +393,6 @@ CREATE TABLE hms_student_profiles (
     PRIMARY KEY(id)
 );
 
-CREATE TABLE hms_cached_student_info (
-    id              INTEGER                NOT NULL,
-    asu_username    CHARACTER VARYING(32)  NOT NULL,
-    room_number     CHARACTER VARYING(10)  NOT NULL,
-    hall_name       CHARACTER VARYING(64)  NOT NULL,
-    first_name      CHARACTER VARYING(64)  NOT NULL,
-    middle_name     CHARACTER VARYING(64),
-    last_name       CHARACTER VARYING(64)  NOT NULL,
-    address1        CHARACTER VARYING(128),
-    address2        CHARACTER VARYING(128),
-    address3        CHARACTER VARYING(128),
-    city            CHARACTER VARYING(64),
-    state           CHARACTER VARYING(5),
-    zip             CHARACtER VARYING(11),
-    roommate_name   CHARACTER VARYING(172),
-    roommate_user   CHARACTER VARYING(32),
-    room_phone      CHARACTER VARYING(20),
-    phone_number    CHARACTER VARYING(20),
-    gender          CHARACTER(1),
-    student_type    CHARACTER(5),
-    class           CHARACTER(5),
-    credit_hours    INTEGER,
-    deposit_date    CHARACTER(10),
-    deposit_waived  CHARACTER(5),
-    movein_time     CHARACTER VARYING(64),
-    PRIMARY KEY (id)
-);
-
 CREATE TABLE hms_pending_assignment (
     id               INTEGER               NOT NULL,
     gender           SMALLINT              NOT NULL,
@@ -545,6 +517,17 @@ CREATE TABLE hms_room_change_preferences (
     request             INTEGER NOT NULL REFERENCES hms_room_change_request(id),
     building            INTEGER NOT NULL REFERENCES hms_residence_hall(id),
     PRIMARY KEY(id)
+);
+
+CREATE TABLE hms_report_exec (
+    id              INTEGER NOT NULL,
+    report          character varying(255) NOT NULL,
+    format          character varying(255) NOT NULL,
+    from_term       INTEGER NOT NULL REFERENCES hms_term(term),
+    to_term         INTEGER NOT NULL REFERENCES hms_term(term),
+    exec_timestamp  INTEGER NOT NULL,
+    exec_by_user_id INTEGER NOT NULL,
+    PRIMARY KEY (id)
 );
 
 INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info) VALUES (3, 'Language & Culture Community', 'LCC', 50, 0, 'F', '');

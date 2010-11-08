@@ -6,8 +6,8 @@
  */
 
 /************************
-* Date & Time Functions *
-************************/
+ * Date & Time Functions *
+ ************************/
 
 class HMS_Util{
 
@@ -40,7 +40,7 @@ class HMS_Util{
         for($d = 1; $d <= 31; $d++) {
             $days[$d] = $d;
         }
-        
+
         return $days;
     }
 
@@ -59,7 +59,7 @@ class HMS_Util{
 
         $hours[0] = '12 AM';
 
-        for($i=1; $i < 24; $i++){            
+        for($i=1; $i < 24; $i++){
             $hours[$i] = $i;
 
             if($i == 12){
@@ -84,8 +84,8 @@ class HMS_Util{
      */
     public function get_short_date($timestamp) {
         if(!isset($timestamp))
-            $timestamp = mktime();
-     
+        $timestamp = mktime();
+
         return date('j-n-y', $timestamp);
     }
 
@@ -96,7 +96,7 @@ class HMS_Util{
      */
     public function get_long_date($timestamp) {
         if(!isset($timestamp))
-            $timestamp = mktime();
+        $timestamp = mktime();
 
         return date('n-j-Y', $timestamp);
     }
@@ -108,7 +108,7 @@ class HMS_Util{
      */
     public function get_super_long_date($timestamp) {
         if(!isset($timestamp))
-            $timestamp = mktime();
+        $timestamp = mktime();
 
         return date('jS-M-Y', $timestamp);
     }
@@ -126,14 +126,14 @@ class HMS_Util{
 
         return date('M jS, Y g:i A', $timestamp);
     }
-    
+
     public function getFriendlyDate($timestamp)
     {
-    	if(!isset($timestamp)){
-    		$timestamp = mktime();
-    	}
-    	
-    	return date('M jS, Y', $timestamp);
+        if(!isset($timestamp)){
+            $timestamp = mktime();
+        }
+
+        return date('M jS, Y', $timestamp);
     }
 
     public function getPrettyDateRange($startDate, $endDate)
@@ -147,7 +147,7 @@ class HMS_Util{
         }
 
         $avail .= " - ";
-        
+
         if(!empty($endDate)){
             $avail .= HMS_Util::getFriendlyDate($endDate);
         } else {
@@ -157,7 +157,34 @@ class HMS_Util{
         return $avail;
 
     }
-    
+
+    function relativeTime($time, $now = NULL)
+    {
+        $time = (int) $time;
+        $curr = !is_null($now) ? $now : time();
+        $shift = $curr - $time;
+
+        if ($shift < 45){
+            $diff = $shift;
+            $term = "second";
+        }elseif ($shift < 2700){
+            $diff = round($shift / 60);
+            $term = "minute";
+        }elseif ($shift < 64800){
+            $diff = round($shift / 60 / 60);
+            $term = "hour";
+        }else{
+            $diff = round($shift / 60 / 60 / 24);
+            $term = "day";
+        }
+
+        if ($diff == 1){
+            $term .= "s";
+        }
+
+        return "$diff $term ago";
+    }
+
     /**
      * Determines which color the title bar should be based on
      * the selected and current terms.
@@ -165,7 +192,7 @@ class HMS_Util{
     public function get_title_class(){
         $selected_term = Term::getSelectedTerm();
         $current_term = Term::getCurrentTerm();
-        
+
         if($selected_term < $current_term){
             return "box-title-red";
         }else if($selected_term == $current_term){
@@ -180,17 +207,17 @@ class HMS_Util{
     public function formatGender($gender)
     {
         switch ($gender) {
-        case FEMALE:
-            return FEMALE_DESC;
-           
-        case MALE:
-            return MALE_DESC;
+            case FEMALE:
+                return FEMALE_DESC;
 
-        case COED:
-            return COED_DESC;
+            case MALE:
+                return MALE_DESC;
 
-        default:
-            return 'Error: Unknown gender';
+            case COED:
+                return COED_DESC;
+
+            default:
+                return 'Error: Unknown gender';
         }
     }
 
@@ -294,6 +321,6 @@ class HMS_Util{
         }
 
         return "${number}<SUP>$suffix</SUP>";
-    }
+}
 }
 ?>
