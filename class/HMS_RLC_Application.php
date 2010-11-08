@@ -150,7 +150,7 @@ class HMS_RLC_Application extends HMS_Item {
 
         return $tags;
     }
-
+    
     public function viewByRLCPagerTags()
     {
         $student = StudentFactory::getStudentByUsername($this->username, Term::getSelectedTerm());
@@ -172,9 +172,31 @@ class HMS_RLC_Application extends HMS_Item {
         $actions[] = $rmCmd->getLink('Remove');
 
         $tags['ACTION'] = implode(' | ', $actions);
+
+        // Show all possible roommates for this application
+        PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
+        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
+
+        $allRoommates = HMS_Roommate::get_all_roommates($this->username, $this->term);
+        $tags['ROOMMATES'] = 'N/A'; // Default text
+
+        if(sizeof($allRoommates) > 1){
+            // Don't show all the roommates
+            $tags['ROOMMATES'] = "Multiple Requests";
+        } 
+        elseif(sizeof($allRoommates) == 1) {
+            // Get other roommate
+            $otherGuy = StudentFactory::getStudentByUsername($allRoommates[0]->get_other_guy($this->username), $this->term);
+            $tags['ROOMMATES'] = $otherGuy->getFullNameProfileLink();
+            // If roommate is pending then show little status message
+            if(!$allRoommates[0]->confirmed){
+                $tags['ROOMMATES'] .= " (Pending)";
+            }
+        }
+
         return $tags;
     }
-    
+
     public function report_by_rlc_pager_tags()
     {
         $student = StudentFactory::getStudentByUsername($this->username, $this->term);
