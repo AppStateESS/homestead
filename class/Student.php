@@ -60,7 +60,7 @@ class Student {
 	public function getPrintableType()
 	{
 		switch($this->getType()){
-			case TYPE_FRESHMEN:
+            case TYPE_FRESHMEN:
 				return 'Freshmen';
 				break;
 			case TYPE_TRANSFER:
@@ -78,7 +78,13 @@ class Student {
 			case TYPE_WITHDRAWN:
 				return 'Withdrawn';
 				break;
-			default:
+            case TYPE_NONDEGREE:
+                return 'New non-degree';
+                break;
+            case TYPE_GRADUATE:
+                return 'Graduate';
+                break;
+            default:
 				return 'Unknown type: ' . $this->type;
 				break;
 		}
