@@ -1,6 +1,5 @@
 <?php
 
-
 class HousingApplication {
 
     public $id = 0;
