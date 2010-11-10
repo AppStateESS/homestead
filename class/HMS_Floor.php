@@ -465,7 +465,7 @@ class HMS_Floor extends HMS_Item
             return FALSE;
         }
 
-        $vacant_room = array();
+        $vacant_rooms = array();
 
         foreach($this->_rooms as $room){
             if($room->has_vacancy()){

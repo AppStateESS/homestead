@@ -17,20 +17,20 @@ class SubmitRlcApplicationCommand extends Command {
 
         # Check for an existing application and delete it
         $oldApp = HMS_RLC_Application::getApplicationByUsername($student->getUsername(), $context->get('term'));
-        
+
         if($oldApp->id != NULL){
             $result = $oldApp->delete();
         }
-        
+
         $choice1 = new HMS_Learning_Community($context->get('rlc_first_choice'));
         $choice2 = new HMS_Learning_Community($context->get('rlc_second_choice'));
         $choice3 = new HMS_Learning_Community($context->get('rlc_third_choice'));
-        
-        if(!$choice1->allowStudentType($student->getType()) 
+
+        if(!$choice1->allowStudentType($student->getType())
            || ($choice2->id != -1 && !$choice2->allowStudentType($student->getType()))
            || ($choice3->id != -1 && !$choice3->allowStudentType($student->getType()))
         ){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Sorry, you cannot apply for the selected RLC please contact Housing and Residence Life if you believe this to be in error.');
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Sorry, you cannot apply for the selected RLC please contact University Housing if you believe this to be in error.');
             $cmd = CommandFactory::getCommand('ShowRlcApplicationView');
             $cmd->redirect();
         }
@@ -50,7 +50,7 @@ class SubmitRlcApplicationCommand extends Command {
         $result = $application->save();
 
         if(PEAR::isError($result)){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Sorry, an error occured while attempting to submit your application.  If this problem persists please contact Housing and Residence Life.');
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Sorry, an error occured while attempting to submit your application.  If this problem persists please contact University Housing.');
             $cmd = CommandFactory::getCommand('ShowRlcApplicationView');
             $cmd->redirect();
         } else {

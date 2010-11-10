@@ -15,12 +15,27 @@ var submitHallList = function(e){
 }
 
 $(document).ready(function(){
-    //put up an AJAX spinner
-    $("#{DIV}").html('<img src="images/core/ajax-loader-big.gif" />');
+        $("#select_all").click(function(){
+                $("#hall_list :checkbox:enabled").each(function(){
+                        $(this).attr('checked', true);
+                    });
+                return false;
+            });
+
+        $("#select_none").click(function(){
+                $("#hall_list :checkbox:enabled").each(function(){
+                        $(this).attr('checked', false);
+                    });
+                return false;
+            });
+
+	    //put up an AJAX spinner
+        $("#{DIV}").html('<img src="images/core/ajax-loader-big.gif" />');
+        
     $.post('index.php', {module: 'hms', action: 'ListAllowedHalls'},
         function(data){
-            $("#{DIV}").empty();
-
+    		$("#{DIV}").empty();
+    		
     		if(data == ""){
     			$("#{DIV}").append("You do not have permission to message any residence halls. <br /><br />");
     			return;
@@ -38,7 +53,6 @@ $(document).ready(function(){
                 var tmp = halls[i].draw();
                 output += '<li class="container '+(halls[i].collapsed ? 'collapsed' : 'expanded' )+'">'+tmp+"</li>";
             }
-
             output += "</ul>";
             $("#{DIV}").empty();
             $("#{DIV}").append(output);
@@ -62,20 +76,25 @@ $(document).ready(function(){
                         });
                 });
             
-            $("#{DIV} li").toggle(
+            $("#{DIV} li").click(
                 function(){
-                    $(this).removeClass("expanded");
-                    $(this).addClass("collapsed");
-                    $(this).find('.subtree').hide();
-                },
-                function(){
-                    $(this).removeClass("collapsed");
-                    $(this).addClass("expanded");
-                    $(this).find('.subtree').show();
+                    if(!this.flip)
+                        this.flip = 0;
+
+                    if(this.flip % 2 == 0){
+                        $(this).removeClass("expanded");
+                        $(this).addClass("collapsed");
+                        $(this).find(".subtree").hide();
+                    } else {
+                        $(this).removeClass("collapsed");
+                        $(this).addClass("expanded");
+                        $(this).find(".subtree").show();
+                    }
+                    this.flip++;
                 }
             );
-
-            $("#{DIV} .collapsed").click();
-        },'json');
+        },
+        'json'
+    );
 });
 </script>

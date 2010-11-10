@@ -102,11 +102,6 @@ class FloorView extends View {
         $tpl['STATIC_ROOM_PAGER'] = HMS_Room::room_pager_by_floor($this->floor->id);
         $tpl['DYNAMIC_ROOM_PAGER'] = HMS_Room::room_pager_by_floor($this->floor->id, true);
 
-        if(Current_User::allow('hms','room_structure')) {
-            //TODO Add Room command
-            $tpl['ADD_LINK'] = '[ Add Room ]';
-        }
-
         # if the user has permission to view the form but not edit it then
         # disable it
         if( Current_User::allow('hms', 'floor_view')

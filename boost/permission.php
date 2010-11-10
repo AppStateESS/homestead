@@ -58,6 +58,13 @@
     $permissions['bed_attributes']      = _('Edit bed attributes');
     $permissions['bed_view']            = _('View beds');
 
+    /****************
+     * Role editing *
+     ****************/
+    $permission['edit_roles'] = _('Create/edit/delete roles');
+    $permission['edit_role_permissions']  = _('Add/remove permissions for roles');
+    $permission['view_role_members']  = _('See who is a member of a role');
+    $permission['edit_role_members'] = _('Edit who is a member of a role');
 
     /*************
      * Roommates *
@@ -121,6 +128,11 @@
      * Email Messaging permissions *
      ******************************/
     //$permissions['email_hall'] = _('Can send Hall emails');
-    $permissions['email_all']  = _('Can send campus wide emails to residents');
+    $permissions['email_all']               = _('Can send campus wide emails to residents');
     $permissions['anonymous_notifications'] = _('Can send notifications anonymously (as hms@appstate.edu)');
+
+    /***************************
+     * Room change permissions *
+     **************************/
+    $permissions['admin_approve_room_change'] = _('Can approve room change requests');
 ?>

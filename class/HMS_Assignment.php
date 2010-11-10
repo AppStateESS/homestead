@@ -270,7 +270,7 @@ class HMS_Assignment extends HMS_Item
 		PHPWS_Core::initModClass('hms', 'HMS_Room.php');
 		PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
 		PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-		PHPWS_Core::initModClass('hms', 'HMS_Banner_Queue.php');
+		PHPWS_Core::initModClass('hms', 'BannerQueue.php');
 
 		PHPWS_Core::initModClass('hms', 'exception/AssignmentException.php');
 		PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
@@ -295,6 +295,7 @@ class HMS_Assignment extends HMS_Item
 		if(isset($bed_id)){
 			# A bed_id was given, so create that bed object
 			$vacant_bed = new HMS_Bed($bed_id);
+            $vacant_bed->term = $term;
 			if(!$vacant_bed){
 				throw new AssignmentException('Null bed object.');
 			}
@@ -331,6 +332,11 @@ class HMS_Assignment extends HMS_Item
 		if($vacant_bed->get_number_of_assignees() > 0){
 			throw new AssignmentException('The bed is not empty.');
 		}
+
+        # Issue a warning if the bed was reserved for room change
+        if($vacant_bed->room_change_reserved != 0){
+            NQ::simple('hms', HMS_NOTIFICATION_WARNING, 'Room was reserved for room change');
+        }
 
 		# Check that the room's gender and the student's gender match
 		$student_gender = $student->getGender();
@@ -369,16 +375,9 @@ class HMS_Assignment extends HMS_Item
 		}
 
 		# Send this off to the queue for assignment in banner
-		$banner_success = HMS_Banner_Queue::queue_create_assignment(
-		$username,
-		$term,
-		$hall->banner_building_code,
-		$vacant_bed->banner_id,
-		'HOME',
-		$meal_plan
-		);
+        $banner_success = BannerQueue::queueAssignment($student, $term, $hall, $vacant_bed, 'HOME', $meal_plan);
 
-		if($banner_success != "0" || $banner_success === FALSE){
+		if($banner_success !== TRUE){
 			throw new AssignmentException('Error while adding the assignment to the Banner queue.');
 		}
 
@@ -390,6 +389,7 @@ class HMS_Assignment extends HMS_Item
 		$assignment->term           = $term;
 		$assignment->letter_printed = 0;
 		$assignment->email_sent     = 0;
+        $assignment->meal_option    = $meal_plan;
 
 		# If this was a lottery assignment, flag it as such
 		if($lottery){
@@ -405,7 +405,7 @@ class HMS_Assignment extends HMS_Item
 		}
 
 		# Log the assignment
-		HMS_Activity_Log::log_activity($username, ACTIVITY_ASSIGNED, UserStatus::getUsername(), Term::getSelectedTerm() . ' ' . $hall->hall_name . ' ' . $room->room_number . ' ' . $notes);
+		HMS_Activity_Log::log_activity($username, ACTIVITY_ASSIGNED, UserStatus::getUsername(), $term . ' ' . $hall->hall_name . ' ' . $room->room_number . ' ' . $notes);
 
 		# Look for roommates and flag their assignments as needing a new letter
 		$room_id = $assignment->get_room_id();
@@ -420,9 +420,10 @@ class HMS_Assignment extends HMS_Item
 				if($roommate->getUsername() == $username){
 					continue;
 				}
-				$roommate_assign = HMS_Assignment::getAssignment($roommate->getUsername(),$term);
+				$roommate_assign = HMS_Assignment::getAssignment($roommate->getUsername(),Term::getCurrentTerm());
 				$roommate_assign->letter_printed = 0;
 				$roommate_assign->email_sent     = 0;
+
 				$result = $roommate_assign->save();
 			}
 		}
@@ -438,6 +439,7 @@ class HMS_Assignment extends HMS_Item
 			throw new PermissionException('You do not have permission to unassign students.');
 		}
 
+		PHPWS_Core::initModClass('hms', 'BannerQueue.php');
 		PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
 
 		PHPWS_Core::initModClass('hms', 'exception/AssignmentException.php');
@@ -459,25 +461,25 @@ class HMS_Assignment extends HMS_Item
 
 		$assignment = HMS_Assignment::getAssignment($username, $term);
 		if($assignment == FALSE || $assignment == NULL){
-			return E_UNASSIGN_ASSIGN_LOAD_FAILED;
+            throw new AssignmentException('Could not load assignment object.');
 		}
 
+        $bed = $assignment->get_parent();
+        $room = $bed->get_parent();
+		$floor = $room->get_parent();
+		$building = $floor->get_parent();
+
 		# Attempt to unassign the student in Banner though SOAP
-		PHPWS_Core::initModClass('hms', 'HMS_Banner_Queue.php');
-		$banner_result = HMS_Banner_Queue::queue_remove_assignment(
-		$username,
-		$term,
-		$assignment->get_banner_building_code(),
-		$assignment->get_banner_bed_id());
+		$banner_result = BannerQueue::queueRemoveAssignment($student,$term,$building,$bed);
 
 		# Show an error and return if there was an error
-		if($banner_result != "0" || $banner_result === FALSE) {
-			throw new AssignmentException('Banner error.');
+		if($banner_result !== TRUE) {
+			throw new AssignmentException('Error while adding the assignment removal to the Banner queue.');
 		}
 
 		# Record this before we delete from the db
-		$banner_bed_id          = $assignment->get_banner_bed_id();
-		$banner_building_code   = $assignment->get_banner_building_code();
+		$banner_bed_id          = $bed->getBannerId();
+		$banner_building_code   = $building->getBannerBuildingCode();
 
 		# Attempt to delete the assignment in HMS
 		$result = $assignment->delete();

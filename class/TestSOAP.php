@@ -32,8 +32,8 @@ class TestSOAP extends SOAP{
         $student->deposit_date          = '';
         $student->deposit_waived        = 'false';
 
-        $student->international         = 'true';
-        $student->student_level         = 'G';
+        $student->international         = 'false';
+        $student->student_level         = 'U';
 
         $student->honors                = 'false';
         $student->teaching_fellow       = 'false';
@@ -45,29 +45,8 @@ class TestSOAP extends SOAP{
 //   		$student->projected_class       = 'FR';
 
           $student->student_type          = 'F';
-          $student->application_term      = '201040';
-          $student->projected_class       = 'JR';
-
-//        $student->student_type          = 'F';
-//        $student->application_term      = '201020';
-//        $student->projected_class       = 'SR';
-
-        if($username == 'housing_test_spring_freshmen'){
-            $student->student_type      = 'F';
-            $student->application_term  = '201010';
-            $student->projected_class   = 'FR';
-        }
-
-        if($username == 'freshman'){
-            $student->student_type      = 'F';
-            $student->application_term  = '201020';
-            $student->projected_class   = 'FR';
-        }
-
-//        $random = mt_rand(0,100);
-//        if($random >= 85){
-//            $student->student_type = 'W';
-//        }
+          $student->application_term      = '201110';
+          $student->projected_class       = 'FR';
 
         $student->credhrs_completed     = 0;
         $student->credhrs_for_term      = 15;
@@ -160,7 +139,7 @@ class TestSOAP extends SOAP{
      *  'RoomAssign'
      *  'MealAssign'
      */
-    public function getHousMealRegister($username, $termcode, $opt)
+    public function getHousMealRegister($username, $term, $opt)
     {
         // Assemble the housing_app object
         $housing_app->plan_code     = 'HOME';

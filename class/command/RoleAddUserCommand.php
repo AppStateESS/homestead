@@ -11,6 +11,11 @@ class RoleAddUserCommand extends Command {
     }
 
     public function execute(CommandContext $context){
+        if(!Current_User::allow('hms', 'edit_role_members')){
+            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
+            throw new PermissionException('You do not have permission to edit role members.');
+        }
+
         $username  = $context->get('username');
         $role_id   = $context->get('role');
         $classname = $context->get('class');

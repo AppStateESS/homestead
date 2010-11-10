@@ -53,6 +53,7 @@ define('TYPE_RETURNING',    'R');
 define('TYPE_READMIT',      'Z');
 define('TYPE_WITHDRAWN',    'W');
 define('TYPE_NONDEGREE',    'N');
+define('TYPE_GRADUATE',     'G');
 
 /**
  * Student Levels
@@ -213,8 +214,15 @@ define('ACTIVITY_LOTTERY_OPTOUT',               55);
 define('ACTIVITY_STUDENT_BROKE_ROOMMATE',       56);
 define('ACTIVITY_STUDENT_CANCELLED_ROOMMATE_REQUEST', 57);
 
-define('ACTIVITY_FLOOR_NOTIFIED_ANONYMOUSLY',   58);
-define('ACTIVITY_FLOOR_NOTIFIED',               59);
+// Room Change activities
+define('ACTIVITY_ROOM_CHANGE_SUBMITTED', 58);
+define('ACTIVITY_ROOM_CHANGE_APPROVED_RD', 59);
+define('ACTIVITY_ROOM_CHANGE_APPROVED_HOUSING', 60);
+define('ACTIVITY_ROOM_CHANGE_COMPLETED', 61);
+define('ACTIVITY_ROOM_CHANGE_DENIED', 62);
+
+define('ACTIVITY_FLOOR_NOTIFIED_ANONYMOUSLY',   63);
+define('ACTIVITY_FLOOR_NOTIFIED',               64);
 
 /**
  * Errors

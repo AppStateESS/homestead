@@ -14,8 +14,10 @@ abstract class SOAP {
 				PHPWS_Core::initModClass('hms', 'TestSOAP.php');
 				self::$instance = new TestSOAP();
 			}else{
-				PHPWS_Core::initModClass('hms', 'BannerSOAP.php');
-				self::$instance = new BannerSOAP();
+				//PHPWS_Core::initModClass('hms', 'BannerSOAP.php');
+				//self::$instance = new BannerSOAP();
+				PHPWS_Core::initModClass('hms', 'PhpSOAP.php');
+				self::$instance = new PhpSOAP();
 			}
 		}
 
@@ -78,14 +80,38 @@ abstract class SOAP {
 	 *  'MealAssign'
 	 *  @throws InvalidArgumentException, SOAPException
 	 */
-	public abstract function getHousMealRegister($username, $termcode, $opt);
+	public abstract function getHousMealRegister($username, $term, $opt);
 
 	/*********************
 	 * Utility Functions *
 	 *********************/
 
+    /**
+     * @depricated
+     */
+    protected static function checkResponse($resonse)
+    {
+        # Check for a SOAP fault
+        if($response instanceof SoapFault){
+            SOAP::logSoapFault($response, 'getStudentInfo', $username);
+
+			PHPWS_Core::initModClass('hms', 'exception/SOAPException.php');
+			throw new SOAPExcpetion($response->__toString());
+        }
+
+        # Check for a banner error
+		if(is_numeric($response) && $response > 0){
+			SOAP::logSoap('get_student_info', "Banner Error: $response", $username, $term);
+			SOAP::logSoapError('error code: ' . $response, 'get_student_info', $username);
+
+			PHPWS_Core::initModClass('hms', 'exception/BannerException.php');
+			throw new BannerException('Banner error', $response);
+		}
+    }
+
 	/**
 	 * Returns TRUE if an error object is of class 'soap_fault'
+     * @depricated - use CheckResponse() instead
 	 */
 	protected static function isSoapFault($object)
 	{
@@ -98,6 +124,7 @@ abstract class SOAP {
 
 	/**
 	 * Uses the PHPWS_Core log public function to 'manually' log soap errors to soap_error.log.
+     * @depricated
 	 */
 	protected static function logSoapFault($soap_fault, $function, $extra_info)
 	{
@@ -107,6 +134,7 @@ abstract class SOAP {
 
 	/**
 	 * Uses the PHPWS_Core log public function to 'manually' log soap erros to soap_error.log.
+     * @depricated
 	 */
 	protected static function logSoapError($message, $function, $extra)
 	{

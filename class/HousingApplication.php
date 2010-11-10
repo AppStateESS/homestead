@@ -115,7 +115,8 @@ class HousingApplication {
             throw new DatabaseException($result->toString());
         }
 
-        $this->log();
+        //see ticket #581, we don't want to log every time we save
+        //$this->log();
 
         return true;
     }
@@ -253,15 +254,22 @@ class HousingApplication {
         $tpl['APP_TERM']          = Term::toString($this->getApplicationTerm(), TRUE);
         $tpl['MEAL']              = HMS_Util::formatMealOption($this->getMealPlan());
 
-        if(is_null($this->lifestyle_option))
+        if(is_null($this->lifestyle_option)){
             $tpl['LIFESTYLE_OPTION']     = 'n/a';
-        else
+        }else{
             $tpl['LIFESTYLE_OPTION']     = $this->lifestyle_option == 1 ? 'Single Gender' : 'Co-ed';
+        }
 
-        $tpl['PREFERRED_BEDTIME'] = $this->preferred_bedtime == 1 ? 'Early' : 'Late';
-        $tpl['ROOMMATE']          = HMS_Roommate::get_confirmed_roommate($this->getUsername(), $this->getTerm());
-        if(!is_null($tpl['ROOMMATE']))
-            $tpl['ROOMMATE']    = $tpl['ROOMMATE']->getFullName();
+        if(is_null($this->preferred_bedtime)){
+            $tpl['Preferred_BEDTIME'] = 'n/a';
+        }else{
+            $tpl['PREFERRED_BEDTIME'] = $this->preferred_bedtime == 1 ? 'Early' : 'Late';
+        }
+
+        $roommate = HMS_Roommate::get_confirmed_roommate($this->getUsername(), $this->getTerm());
+        if(!is_null($roommate)){
+            $tpl['ROOMMATE']    = $roommate->getFullName();
+        }
 
         $assignCmd = CommandFactory::getCommand('ShowAssignStudent');
         $assignCmd->setUsername($this->getUsername());
@@ -280,7 +288,23 @@ class HousingApplication {
         $tpl['STUDENT_TYPE']    = HMS_Util::formatType($this->getStudentType());
         $tpl['APP_TERM']        = Term::toString($this->getApplicationTerm(), TRUE);
         $tpl['MEAL']            = HMS_Util::formatMealOption($this->getMealPlan());
-        $tpl['ROOMMATE']        = HMS_Roommate::get_confirmed_roommate($this->getUsername(), $this->getTerm())->getFulLName();
+
+        $roommate = HMS_Roommate::get_confirmed_roommate($this->getUsername(), $this->getTerm());
+        if(!is_null($roommate)){
+            $tpl['ROOMMATE']    = $roommate->getFullName();
+        }
+
+        if(is_null($this->lifestyle_option)){
+            $tpl['LIFESTYLE_OPTION']     = 'n/a';
+        }else{
+            $tpl['LIFESTYLE_OPTION']     = $this->lifestyle_option == 1 ? 'Single Gender' : 'Co-ed';
+        }
+
+        if(is_null($this->preferred_bedtime)){
+            $tpl['PREFERRED_BEDTIME'] = 'n/a';
+        }else{
+            $tpl['PREFERRED_BEDTIME'] = $this->preferred_bedtime == 1 ? 'Early' : 'Late';
+        }
 
         return $tpl;
     }
@@ -456,7 +480,7 @@ class HousingApplication {
         $db->addWhere('student_type', 'F');
         $db->addWhere('term', $term);
         $db->addWhere('withdrawn', 0);
-//        $db->addWhere('gender', $gender);
+        //        $db->addWhere('gender', $gender);
 
         // Add join for extra application fields (sub-class fields)
         switch(Term::getTermSem($term)){

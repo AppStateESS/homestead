@@ -42,7 +42,7 @@ class LotteryConfirmCommand extends Command {
         $errorCmd->setRoomId($roomId);
         $errorCmd->setRoommates($roommates);
         $errorCmd->setMealPlan($mealPlan);
-        
+
         $successCmd = CommandFactory::getCommand('LotteryShowConfirmed');
         $successCmd->setRoomId($roomId);
 
@@ -119,11 +119,11 @@ class LotteryConfirmCommand extends Command {
             $result = HMS_Assignment::assignStudent($student, PHPWS_Settings::get('hms', 'lottery_term'), NULL, $bed_id, $mealPlan, 'Confirmed lottery invite', TRUE);
             /*
         }catch(Exception $e){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Sorry, there was an error creating your room assignment. Please try again or contact Housing & Residence Life');
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Sorry, there was an error creating your room assignment. Please try again or contact University Housing.');
             $errorCmd->redirect();
         }
         */
-        
+
         # Log the assignment
         HMS_Activity_Log::log_activity(UserStatus::getUsername(), ACTIVITY_LOTTERY_ROOM_CHOSEN, UserStatus::getUsername(), 'Captcha: ' . $captcha);
 
@@ -139,7 +139,7 @@ class LotteryConfirmCommand extends Command {
             $expires_on = mktime() + (INVITE_TTL_HRS * 3600);
             $bed = new HMS_Bed($bed_id);
             if(!$bed->lottery_reserve($username, $student->getUsername(), $expires_on)){
-                NQ::smiple('hms', HMS_NOTIFICATION_WARNING, "You were assigned, but there was a problem reserving space for your roommates. Please contact Housing & Residence Life.");
+                NQ::smiple('hms', HMS_NOTIFICATION_WARNING, "You were assigned, but there was a problem reserving space for your roommates. Please contact University Housing.");
                 $successCmd->redirect();
             }
 
@@ -151,9 +151,9 @@ class LotteryConfirmCommand extends Command {
             $year = Term::toString($term) . ' - ' . Term::toString(Term::getNextTerm($term));
             HMS_Email::send_lottery_roommate_invite($roomie, $student, $expires_on, $room->where_am_i(), $year);
         }
-        
+
         HMS_Email::send_lottery_assignment_confirmation($student, $room->where_am_i(), $term);
-        
+
         $successCmd->redirect();
     }
 }

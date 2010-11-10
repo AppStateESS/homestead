@@ -2,7 +2,7 @@
     <div class="box">
         <div class="box-title"><h2>{TERM} On-campus Housing Re-application</h2></div>
         <div class="box-content">
-        Welcome to Appalachian State University Housing and Residence Life. As a returning student you must re-apply and be selected in order to be guaranteed on-campus housing for {TERM}. Students will be selected at random. If you are selected you will be notified by email.
+        Welcome to Appalachian State University Housing. As a returning student you must re-apply and be selected in order to be guaranteed on-campus housing for {TERM}. Students will be selected at random. If you are selected you will be notified by email.
         
         <strong>For more information on how the selection process works, please read the <a href="https://hms.appstate.edu/webpage/3" target="_blank">housing re-application FAQ</a>.</strong><br />
         <br />

@@ -23,7 +23,7 @@
 -->
     
     <div style="margin-left: 275px; margin-top: 75px; width: 375px; font-size: 10px; color: grey">
-    The Housing Management System is a service of Appalachian State's <a href="http://housing.appstate.edu/">Department of Housing & Residence Life</a> provided by <a href="http://ess.appstate.edu/">Electronic Student Services</a>.
+    The Housing Management System is a service of Appalachian State's <a href="http://housing.appstate.edu/">University Housing</a> provided by <a href="http://ess.appstate.edu/">Electronic Student Services</a>.
     </div>
     
 {END_FORM}

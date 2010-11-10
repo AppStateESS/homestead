@@ -75,6 +75,7 @@ class CreateTermCommand extends Command {
         }
 
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
+        PHPWS_Core::initModClass('hms', 'HousingApplication.php');
 
         $db = new PHPWS_DB();
 
@@ -83,6 +84,7 @@ class CreateTermCommand extends Command {
             # Get the halls from the current term
             $halls = HMS_Residence_Hall::get_halls(Term::getCurrentTerm());
             set_time_limit(36000);
+
             foreach ($halls as $hall){
                 $hall->copy($term->getTerm(), $copyAssignments);
             }
@@ -90,6 +92,7 @@ class CreateTermCommand extends Command {
             $db->query('COMMIT');
 
         }catch(Exception $e){
+
             $db->query('ROLLBACK');
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'There was an error copying the hall structure and/or assignments. The term was created, but nothing was copied.');
             $errorCmd->redirect();

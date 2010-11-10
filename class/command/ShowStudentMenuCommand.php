@@ -35,12 +35,7 @@ class ShowStudentMenuCommand extends Command {
         $gender 		= $student->getGender();
 
         # Check for banner errors in any of these calls
-        if($applicationTerm === FALSE ||
-        $studentType === FALSE ||
-        $studentClass === FALSE ||
-        $dob === FALSE ||
-        empty($applicationTerm) ||
-        empty($studentType) ||
+        if(empty($applicationTerm) || empty($studentType) ||
         empty($studentClass) ||
         empty($dob) ||
         is_null($dob))
@@ -100,7 +95,7 @@ class ShowStudentMenuCommand extends Command {
             # Application term is in the future
 
             # Check the student type, must be freshmen, transfer, readmit, or non-degree
-            if($studentType != TYPE_FRESHMEN && $studentType != TYPE_TRANSFER && $studentType != TYPE_RETURNING && $studentType != TYPE_READMIT && $studentType != TYPE_NONDEGREE){
+            if($student->isInternational() != 'true' && $studentType != TYPE_FRESHMEN && $studentType != TYPE_TRANSFER && $studentType != TYPE_RETURNING && $studentType != TYPE_READMIT && $studentType != TYPE_NONDEGREE){
                 # No idea what's going on here, send to a contact page
                 $contactCmd->redirect();
             }

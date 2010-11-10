@@ -81,21 +81,28 @@ class SendNotificationEmailsCommand extends Command {
             }
         }
 
-        foreach($halls as $hall_id){
-            $hall = new HMS_Residence_Hall($hall_id);
-            if($permission->verify(Current_User::getUsername(), $hall, 'email')){
-                foreach($hall->get_floors() as $floor){
-                    $floors[] = new HMS_Floor($floor->id);
+        // TODO accurate logging
+        //HMS_Activity_Log::log_activity(Current_User::getUsername(), ACTIVITY_HALL_NOTIFIED_ANONYMOUSLY, Current_User::getUsername(), $hall->hall_name);
+        //HMS_Activity_Log::log_activity(Current_User::getUsername(), ACTIVITY_HALL_NOTIFIED, Current_User::getUsername(), $hall->hall_name);
+
+        //load the halls and add floors that aren't already present if they have js enabled should be zero
+        foreach($halls as $hall){
+            $hallObj = new HMS_Residence_Hall;
+            $hallObj->id = $hall;
+            $hallObj->load();
+
+            $hallFloors = $hallObj->get_floors();
+            foreach($hallFloors as $hallFloor){
+                foreach($floorObj as $floor){
+                    if($hallFloor->id == $floor->id){
+                        break;
+                    }
                 }
-                if($anonymous){
-                    HMS_Activity_Log::log_activity(Current_User::getUsername(), ACTIVITY_HALL_NOTIFIED_ANONYMOUSLY, Current_User::getUsername(), $hall->hall_name);
-                } else {
-                    HMS_Activity_Log::log_activity(Current_User::getUsername(), ACTIVITY_HALL_NOTIFIED, Current_User::getUsername(), $hall->hall_name);
-                }
+                $floorObj[] = $hallFloor;
             }
         }
 
-        foreach($floors as $floor){
+        foreach($floorObj as $floor){
             $rooms = $floor->get_rooms();
             foreach($rooms as $room){
                 $students = $room->get_assignees();
@@ -103,6 +110,7 @@ class SendNotificationEmailsCommand extends Command {
                     HMS_Email::send_email($student->getUsername() . '@appstate.edu', $from, $subject, $body);
                 }
             }
+
             HMS_Activity_Log::log_activity(Current_User::getUsername(), ($anonymous ? ACTIVITY_FLOOR_NOTIFIED_ANONYMOUSLY : ACTIVITY_FLOOR_NOTIFIED), Current_User::getUsername(), $floor->where_am_i());
         }
 

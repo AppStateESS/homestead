@@ -72,9 +72,9 @@
             <!-- BEGIN special_needs_text -->
             {SPECIAL_NEEDS_TEXT}
             <tr>
-                <td colspan="2">The Department of Housing & Residence Life is committed to meeting the needs of all students to the best of its ability.<br /><br />
+                <td colspan="2">University Housing is committed to meeting the needs of all students to the best of its ability.<br /><br />
                 
-                Special needs housing requests will be reviewed individually with a commitment to providing housing that best meets the needs of the student.  The Department of Housing & Residence Life takes these concerns very seriously and confidentiality will be maintained. Housing for special needs may be limited due to space availability.<br /><br />
+                Special needs housing requests will be reviewed individually with a commitment to providing housing that best meets the needs of the student.  University Housing takes these concerns very seriously and confidentiality will be maintained. Housing for special needs may be limited due to space availability.<br /><br />
                 </td>
             </tr>
             <!-- END special_needs_text -->

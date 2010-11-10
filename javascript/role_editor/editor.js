@@ -24,8 +24,8 @@ var role = function(){
         return this.members;
     }
 
-    this.addMember = function(member){
-        this.members.push(member);
+    this.addMember = function(member, displayName){
+        this.members.push({username: member, fullname: displayName});
     }
 
     this.getId = function(){
@@ -60,7 +60,7 @@ var roleMan = function(className, instance, div, name){
 						for(var i in data){
 							for(var j in me.roles){
 								if(me.roles[j].getName() == data[i].name){
-									me.roles[j].addMember(data[i].username);
+									me.roles[j].addMember(data[i].username, data[i].display_name);
 								}
 							}
 						}
@@ -91,7 +91,7 @@ var roleMan = function(className, instance, div, name){
             }else{
             	divContents += '<ul>';
             	for(var j in members){
-            		divContents += '<li>'+members[j]+'<img width="13" height="13" style="margin-left: 5px; cursor: pointer" src="images/mod/hms/tango/process-stop.png" onclick="removeUser(\''+members[j]+'\', \''+this.roles[i].getName()+'\', newMan);"></li>';
+            		divContents += '<li>'+members[j].fullname+'<img width="13" height="13" style="margin-left: 5px; cursor: pointer" src="images/mod/hms/tango/process-stop.png" onclick="removeUser(\''+members[j].username+'\', \''+this.roles[i].getName()+'\', newMan);"></li>';
             	}
             	divContents += '</ul>';
             }

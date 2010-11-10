@@ -111,6 +111,8 @@ class HMS_Reports{
         # Start the timer
         $start_time = microtime();
 
+        $problems = array();
+
         $total_other = 0; #Count all students with invalid data and lump
         #them into their own column
 
@@ -173,7 +175,12 @@ class HMS_Reports{
             foreach($assignments as $assignment) {
 
                 # Create the student object
-                $student = StudentFactory::getStudentByUsername($assignment['asu_username'], $term);
+                try{
+                    $student = StudentFactory::getStudentByUsername($assignment['asu_username'], $term);
+                }catch(StudentNotFoundException $e){
+                    $problems[] = $assignment['asu_username'] . ': Unknown student';
+                    continue;
+                }
 
                 # Get the gender (in numeric form) of the student for this assignment
                 $gender = $student->getGender();
@@ -213,17 +220,9 @@ class HMS_Reports{
 
                 $credit_hours = $student->getCreditHours();
 
-                # Check for a freshmen type, but a mis-matched class
-                if(($type == TYPE_FRESHMEN && $class != CLASS_FRESHMEN)){
-                    $problems[] = $assignment['asu_username'] . ": Type is $type, class is $class, credit hours are $credit_hours";
-                    //$otherByHall[$hall_row['hall_name']]++;
-                    //$total_other++;
-                    //continue;
-                }
-
                 # Check for a mis-matched type/class/hours situation
                 if( $type == TYPE_CONTINUING && $class == CLASS_FRESHMEN && $credit_hours == 0){
-                    $problems[] = $assignment['asu_username'] . ": Type is $type, class is $class, credit hours are $credit_hours";
+                    $problems[] = $assignment['asu_username'] . ": Type is $type, class is $class, credit hours is $credit_hours";
                     //$otherByHall[$hall_row['hall_name']]++;
                     //$total_other++;
                     //continue;
@@ -1180,7 +1179,7 @@ class HMS_Reports{
                 //$pager->joinResult('id', 'hms_fall_application', 'id', 'room_condition');
                 $pager->addSortHeader('lifestyle_option','Lifestyle');
                 $pager->addSortHeader('preferred_bedtime','Preferred Bedtime');
-                $pager->addSortHeader('room_condition','Room Condition');
+                //$pager->addSortHeader('hms_fall_application.room_condition','Room Condition');
                 break;
             case TERM_SPRING:
                 $pager = new DBPager('hms_new_application', 'SpringApplication');
@@ -1316,7 +1315,7 @@ class HMS_Reports{
                 $pdf->SetFont('Arial', 'B', 12);
                 $pdf->Cell(80);
                 $pdf->Cell(120, 5, 'Appalachian State University', 0, 2, 'C');
-                $pdf->Cell(120, 5, 'Residence Life Occupancy Report', 0, 2, 'C');
+                $pdf->Cell(120, 5, 'University Housing Occupancy Report', 0, 2, 'C');
                 $pdf->Ln(10);
                 $pdf->Cell(30, 5, ''.$hall->hall_name, 0);
                 $pdf->Ln(20);
@@ -1378,22 +1377,28 @@ class HMS_Reports{
     {
         $term = Term::getSelectedTerm();
 
-        $output = "Hall,Floor,Room,First Name,Last Name,Banner ID,Cell Phone Number, Email Address\n";
+        $output = "Last Name,First Name,Hall,Floor,Room,Banner ID,Cell Phone Number, Email Address\n";
 
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
 
-        $query = "SELECT hms_assignment.id, hms_assignment.asu_username, hms_new_application.cell_phone, hms_room.room_number, hms_floor.floor_number, hms_residence_hall.hall_name FROM hms_assignment LEFT JOIN (SELECT username, MAX(term) AS mterm FROM hms_new_application GROUP BY username) AS a ON hms_assignment.asu_username = a.username LEFT JOIN hms_new_application ON a.username = hms_new_application.username AND a.mterm = hms_new_application.term LEFT JOIN hms_bed ON hms_assignment.bed_id = hms_bed.id LEFT JOIN hms_room ON hms_bed.room_id = hms_room.id LEFT JOIN hms_floor ON hms_room.floor_id = hms_floor.id LEFT JOIN hms_residence_hall ON hms_floor.residence_hall_id = hms_residence_hall.id WHERE ( hms_assignment.term = $term) ORDER BY hms_residence_hall.id ASC";
+        $query = "SELECT hms_assignment.id, hms_assignment.asu_username, hms_new_application.cell_phone, hms_room.room_number, hms_floor.floor_number, hms_residence_hall.hall_name FROM hms_assignment LEFT JOIN (SELECT username, MAX(term) AS mterm FROM hms_new_application GROUP BY username) AS a ON hms_assignment.asu_username = a.username LEFT JOIN hms_new_application ON a.username = hms_new_application.username AND a.mterm = hms_new_application.term LEFT JOIN hms_bed ON hms_assignment.bed_id = hms_bed.id LEFT JOIN hms_room ON hms_bed.room_id = hms_room.id LEFT JOIN hms_floor ON hms_room.floor_id = hms_floor.id LEFT JOIN hms_residence_hall ON hms_floor.residence_hall_id = hms_residence_hall.id WHERE ( hms_assignment.term = $term ) order by asu_username ASC";
 
         $results = PHPWS_DB::getAll($query);
 
         if(PHPWS_Error::logIfError($results)){
-            Layout::add('Error running the Roster Report, please contact ESS');
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException($results->toString());
         }
 
         foreach($results as $result){
-            $student = StudentFactory::getStudentByUsername($result['asu_username'], Term::getSelectedTerm());
+            try{
+                $student = StudentFactory::getStudentByUsername($result['asu_username'], Term::getSelectedTerm());
+            }catch(Exception $e){
+                $output .="{$result['hall_name']},{$result['floor_number']},{$result['room_number']},ERROR,ERROR,ERROR,{$result['cell_phone']},{$result['asu_username']}@appstate.edu\n";
+                continue;
+            }
 
-            $output .= "{$result['hall_name']},{$result['floor_number']},{$result['room_number']},{$student->getLastName()},{$student->getFirstName()},{$student->getBannerId()},{$result['cell_phone']},{$result['asu_username']}@appstate.edu\n";
+            $output .= "{$student->getLastName()},{$student->getFirstName()},{$result['hall_name']},{$result['floor_number']},{$result['room_number']},{$student->getBannerId()},{$result['cell_phone']},{$result['asu_username']}@appstate.edu\n";
         }
 
         header('Content-Type: application/octet-stream');
