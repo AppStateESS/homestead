@@ -319,6 +319,7 @@ abstract class ApplicationFeature {
         $features = array();
 
         $db = new PHPWS_DB('hms_application_feature');
+        $db->addWhere('enabled', 1);
         $db->addWhere('term', $term);
 
         $results = $db->select();
