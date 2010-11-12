@@ -4,23 +4,13 @@ PHPWS_Core::initModClass('hms', 'HousingApplication.php');
 
 class LotteryApplication extends HousingApplication {
 
-    # Fields for the student's preferred roommates
-    public $roommate1_username;
-    public $roommate2_username;
-    public $roommate3_username;
-
-    # Fields for the preferred roommates' application terms
-    public $roommate1_app_term;
-    public $roommate2_app_term;
-    public $roommate3_app_term;
-
     public $special_interest	= NULL;
     public $magic_winner        = 0;
     public $invite_expires_on   = NULL;
 
     public $waiting_list_hide   = 0;
 
-    public function __construct($id = 0, $term = NULL, $banner_id = NULL, $username = NULL, $gender = NULL, $student_type = NULL, $application_term = NULL, $cell_phone = NULL, $meal_plan = NULL, $physical_disability = NULL, $psych_disability = NULL, $gender_need = NULL, $medical_need = NULL, $international = NULL, Array $roommates = NULL, $specialInterest = NULL, $magicWinner = 0)
+    public function __construct($id = 0, $term = NULL, $banner_id = NULL, $username = NULL, $gender = NULL, $student_type = NULL, $application_term = NULL, $cell_phone = NULL, $meal_plan = NULL, $physical_disability = NULL, $psych_disability = NULL, $gender_need = NULL, $medical_need = NULL, $international = NULL, $specialInterest = NULL, $magicWinner = 0)
     {
         /**
          * If the id is non-zero, then we need to load the other member variables
@@ -35,21 +25,6 @@ class LotteryApplication extends HousingApplication {
         $this->application_type = 'lottery';
 
         parent::__construct($term, $banner_id, $username, $gender, $student_type, $application_term, $cell_phone, $meal_plan, $physical_disability, $psych_disability, $gender_need, $medical_need, $international);
-
-        if(isset($roommates[0])){
-            $this->roommate1_username = $roommates[0]->getUsername();
-            $this->roommate1_app_term = $roommates[0]->getApplicationTerm();
-        }
-
-        if(isset($roommates[1])){
-            $this->roommate2_username = $roommates[1]->getUsername();
-            $this->roommate2_app_term = $roommates[1]->getApplicationTerm();
-        }
-
-        if(isset($roommates[2])){
-            $this->roommate3_username = $roommates[2]->getUsername();
-            $this->roommate3_app_term = $roommates[2]->getApplicationTerm();
-        }
 
         $this->special_interest = $specialInterest;
         $this->magic_winner = $magicWinner;
@@ -171,15 +146,6 @@ class LotteryApplication extends HousingApplication {
         $tags['NAME']       = $student->getFullNameProfileLink();
         $tags['USER']       = $this->username;
         $tags['BANNER_ID']  = $student->getBannerId();
-        if(!is_null($this->roommate1_username)){
-            $tags['ROOMMATE1']  = StudentFactory::getStudentByUsername($this->roommate1_username, $this->term)->getProfileLink();
-        }
-        if(!is_null($this->roommate2_username)){
-            $tags['ROOMMATE2']  = StudentFactory::getStudentByUsername($this->roommate2_username, $this->term)->getProfileLink();
-        }
-        if(!is_null($this->roommate3_username)){
-            $tags['ROOMMATE3']  = StudentFactory::getStudentByUsername($this->roommate3_username, $this->term)->getProfileLink();
-        }
         $tags['ACTION']     = PHPWS_Text::secureLink('Remove', 'hms', array('action'=>'RemoveSpecialInterest', 'asu_username'=>$this->username, 'group'=>$this->special_interest, 'id'=>$this->id));
 
         return $tags;
@@ -195,18 +161,6 @@ class LotteryApplication extends HousingApplication {
         $tags['USER']       = $this->username;
         $tags['BANNER_ID']  = $student->getBannerId();
 
-        if(!is_null($this->roommate1_username)){
-            $tags['ROOMMATE1']  = StudentFactory::getStudentByUsername($this->roommate1_username, $this->term)->getName();
-        }
-
-        if(!is_null($this->roommate2_username)){
-            $tags['ROOMMATE2']  = StudentFactory::getStudentByUsername($this->roommate2_username, $this->term)->getName();
-        }
-
-        if(!is_null($this->roommate3_username)){
-            $tags['ROOMMATE3']  = StudentFactory::getStudentByUsername($this->roommate3_username, $this->term)->getName();
-        }
-
         return $tags;
     }
 
@@ -219,9 +173,6 @@ class LotteryApplication extends HousingApplication {
         $pager->addRowTags('specialInterestTags');
 
         $pager->db->addJoin('left outer', 'hms_new_application', 'hms_lottery_application', 'id', 'id');
-        $pager->joinResult('id', 'hms_lottery_application', 'id', 'roommate1_username');
-        $pager->joinResult('id', 'hms_lottery_application', 'id', 'roommate2_username');
-        $pager->joinResult('id', 'hms_lottery_application', 'id', 'roommate3_username');
 
         $pager->addWhere('hms_new_application.term', $term);
         $pager->addWhere('hms_lottery_application.special_interest', $group);

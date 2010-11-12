@@ -210,17 +210,6 @@ class HMS_Email{
         HMS_Email::send_template_message($to . TO_DOMAIN, "Roommate Invitation Reminder: Only $hours hours left!", 'email/lottery_roommate_invite_reminder.tpl', $tpl);
     }
 
-    public function send_signup_invite($to, $name, $requestor_name, $year)
-    {
-        $tpl = array();
-
-        $tpl['NAME']        = $name;
-        $tpl['REQUESTOR']   = $requestor_name;
-        $tpl['YEAR']        = $year;
-
-        HMS_Email::send_template_message($to . TO_DOMAIN, "Signup for On-campus Housing!", 'email/lottery_signup_invite.tpl', $tpl);
-    }
-
     public function send_lottery_status_report($status, $log)
     {
         HMS_Email::send_email(HMS_Email::get_tech_contacts(), NULL, "HMS Lottery results: $status", $log);

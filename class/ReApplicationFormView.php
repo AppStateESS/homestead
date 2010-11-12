@@ -49,25 +49,6 @@ class ReApplicationFormView extends View {
         $form->setMaxSize('number', 4);
         $form->addCheck('do_not_call', 1);
 
-
-        if(isset($_REQUEST['roommate1'])){
-            $form->addText('roommate1', $_REQUEST['roommate1']);
-        }else{
-            $form->addText('roommate1');
-        }
-
-        if(isset($_REQUEST['roommate2'])){
-            $form->addText('roommate2', $_REQUEST['roommate2']);
-        }else{
-            $form->addText('roommate2');
-        }
-
-        if(isset($_REQUEST['roommate3'])){
-            $form->addText('roommate3', $_REQUEST['roommate3']);
-        }else{
-            $form->addText('roommate3');
-        }
-
         $mealPlans = array(BANNER_MEAL_LOW=>_('Low'),
             BANNER_MEAL_STD=>_('Standard'),
             BANNER_MEAL_HIGH=>_('High'),
@@ -93,6 +74,7 @@ class ReApplicationFormView extends View {
         $form->setLabel('deposit_check', 'I understand & acknowledge that if I cancel my License Contract my student account will be charged $250.  If I cancel my License Contract after July 1, I will be liable for the entire amount of the on-campus housing fees for the Fall semester.');
 
         $form->addSubmit('submit', 'Submit re-application');
+        $form->setExtra('submit', 'class="hms-application-submit-button"');
 
         $form->mergeTemplate($tpl);
 
