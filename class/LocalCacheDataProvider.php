@@ -9,18 +9,23 @@ class LocalCacheDataProvider extends StudentDataProvider {
         PHPWS_Core::initModClass('hms', 'Student.php');
         $student = new CachedStudent();
 
-        $db = new PHPWS_DB('hms_student_cache');
-        $db->addWhere('username', $username);
-        $db->addWhere('term', $term);
-        $db->addWhere('timestamp', time() - $this->ttl, '>');
+        //if the ttl isn't set to "now"
+        if($this->ttl != 0){
+            $db = new PHPWS_DB('hms_student_cache');
+            $db->addWhere('username', $username);
+            $db->addWhere('term', $term);
+            $db->addWhere('timestamp', time() - $this->ttl, '>');
 
-        //$db->setTestMode();
-        $result = $db->select('row');
+            //$db->setTestMode();
+            $result = $db->select('row');
 
-        // If there's an error, fail gracefully to the fall-back provider
-        if(PHPWS_Error::logIfError($result)){
-            $provider = $this->getFallbackProvider();
-            return $provider->getStudentByUsername($username, $term);
+            // If there's an error, fail gracefully to the fall-back provider
+            if(PHPWS_Error::logIfError($result)){
+                $provider = $this->getFallbackProvider();
+                return $provider->getStudentByUsername($username, $term);
+            }
+        } else {
+            $result = NULL;
         }
 
         // If the result was empty, use the fallback

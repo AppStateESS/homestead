@@ -48,10 +48,8 @@ $provider = MyLocalCacheDataProvider::getInstance();
 
 foreach($results as $result){
     try{
-        printf("Refreshing cache for: %s...  ", $result['username']);
         //asking for the student updates the cache since the ttl is zero
         $student = StudentFactory::getStudentByUsername($result['username'], $term, $provider);
-        printf("done!\n");
     } catch(Exception $e){
         echo $e->getMessage()."\n";
     }
