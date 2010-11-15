@@ -190,7 +190,7 @@ define('ACTIVITY_CHANGE_ACTIVE_TERM',           39);
 define('ACTIVITY_ADD_NOTE',                     40);
 
 // Activities for the lottery
-define('ACTIVITY_LOTTERY_SIGNUP_INVITE',        41);
+define('ACTIVITY_LOTTERY_SIGNUP_INVITE',        41); //depricated
 define('ACTIVITY_LOTTERY_ENTRY',                42);
 define('ACTIVITY_LOTTERY_INVITED',              43);
 define('ACTIVITY_LOTTERY_REMINDED',             44);

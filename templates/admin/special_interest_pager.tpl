@@ -3,9 +3,6 @@
         <th>Name {ASU_USERNAME_SORT}</th>
         <th>User Name</th>
         <th>Banner ID</th>
-        <th>Roommate 1</th>
-        <th>Roommate 2</th>
-        <th>Roommate 3</th>
         <th>Action</th>
     </tr>
     <!-- BEGIN empty_table -->
@@ -18,9 +15,6 @@
         <td>{NAME}</td>
         <td>{USER}</td>
         <td>{BANNER_ID}</td>
-        <td>{ROOMMATE1}</td>
-        <td>{ROOMMATE2}</td>
-        <td>{ROOMMATE3}</td>
         <td>{ACTION}</td>
     </tr>
     <!-- END listrows -->
