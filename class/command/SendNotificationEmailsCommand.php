@@ -72,13 +72,9 @@ class SendNotificationEmailsCommand extends Command {
             HMS_Activity_Log::log_activity(Current_User::getUsername(), ACTIVITY_NOTIFICATION_SENT, Current_User::getUsername());
         }
 
-        $permission = new HMS_Permission();
         //load the floors
         foreach($floors as $key=>$floor_id){
             $floors[$key] = new HMS_Floor($floor_id);
-            if(!$permission->verify(Current_User::getUsername(), $floors[$key], 'email')){
-                unset($floors[$key]);
-            }
         }
 
         // TODO accurate logging
@@ -92,17 +88,41 @@ class SendNotificationEmailsCommand extends Command {
             $hallObj->load();
 
             $hallFloors = $hallObj->get_floors();
+
+            //if the hall has zero floors, skip it
+            if(!is_array($hallFloors))
+                continue;
+
             foreach($hallFloors as $hallFloor){
-                foreach($floorObj as $floor){
-                    if($hallFloor->id == $floor->id){
-                        break;
+                if(!empty($floorObj)){
+                    foreach($floorObj as $floor){
+                        if($hallFloor->id == $floor->id){
+                            break;
+                        }
                     }
                 }
                 $floorObj[] = $hallFloor;
             }
         }
 
+        if(!is_array($floorObj)){
+            $floorObj = array();
+        }
+
+        if(!is_array($floors)){
+            $floors = array();
+        }
+
+        $floorObj = array_merge($floorObj, $floors);
+
+        $permission = new HMS_Permission();
         foreach($floorObj as $floor){
+            if(!$permission->verify(Current_User::getUsername(), $floor, 'email') 
+               && !$permission->verify(Current_User::getUsername(), $floor->get_parent(), 'email')
+               && !Current_User::allow('hms', 'email_all')
+               ){
+                continue;
+            }
             $rooms = $floor->get_rooms();
             foreach($rooms as $room){
                 $students = $room->get_assignees();
