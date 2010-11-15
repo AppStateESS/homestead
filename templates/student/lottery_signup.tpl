@@ -12,13 +12,13 @@ re-application FAQ</a>.</strong></p>
 {START_FORM}
 
 <h2>Contact Information</h2>
-<p>We'll only use this information to contact you in case we have a
-question about your application or if you receive a package (via UPS,
-FedEx, etc). This information will not be shared with anyone else.</p>
-<p>Cell Phone Number: ({AREA_CODE})-{EXCHANGE}-{NUMBER}<br/>
-{DO_NOT_CALL}<sub>Check here if you do not have a cell
-phone or do not wish to provide your cell phone number.</sub>
-</p>
+<p>We'll only use this information to contact you if we have a
+question about your application and to notify you if you receive a
+package (via UPS, FedEx, etc). This information will not be shared with
+anyone else.</p>
+<p>Cell Phone Number: ({AREA_CODE})-{EXCHANGE}-{NUMBER}<br />
+{DO_NOT_CALL}<sub>Check here if you do not have a cell phone or do
+not wish to provide your cell phone number.</sub></p>
 
 <h2>Meal Plan</h2>
 <p>Please choose a meal plan. You'll have the opportunity to change
@@ -41,5 +41,4 @@ administratively assigned and may not be able to choose your room.</p>
 
 <br />
 
-{SUBMIT}
-{END_FORM}
+{SUBMIT} {END_FORM}
