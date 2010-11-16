@@ -13,7 +13,7 @@ $(document).ready(function(){
         timeout:100000
     };
 
-    var suggest = new bsn.AutoSuggest('student_search_form_username', options);
+    var suggest = new bsn.AutoSuggest('{ELEMENT}', options);
 
 });
 
