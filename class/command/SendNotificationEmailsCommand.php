@@ -94,8 +94,8 @@ class SendNotificationEmailsCommand extends Command {
                 continue;
 
             foreach($hallFloors as $hallFloor){
-                if(!empty($floorObj)){
-                    foreach($floorObj as $floor){
+                if(!empty($floors)){
+                    foreach($floors as $floor){
                         if($hallFloor->id == $floor->id){
                             break;
                         }
