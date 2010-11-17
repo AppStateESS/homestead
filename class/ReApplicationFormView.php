@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Shows the re-application (lottery) form.
+ *
+ * @author jbooker
+ * @package hms
+ */
+
 class ReApplicationFormView extends View {
 
     private $student;
@@ -15,14 +22,19 @@ class ReApplicationFormView extends View {
     {
         $tpl = array();
 
-        $tpl['NAME'] = $this->student->getFullName();
         $tpl['TERM'] = Term::toString($this->term) . ' - ' . Term::toString(Term::getNextTerm($this->term));
 
+        /*
+         * onSubmit command
+         */
         $form = new PHPWS_Form();
         $submitCmd = CommandFactory::getCommand('ReApplicationFormSubmit');
         $submitCmd->setTerm($this->term);
         $submitCmd->initForm($form);
 
+        /*
+         * Contact info
+         */
         if(isset($_REQUEST['area_code'])){
             $form->addText('area_code', $_REQUEST['area_code']);
         }else{
@@ -49,6 +61,9 @@ class ReApplicationFormView extends View {
         $form->setMaxSize('number', 4);
         $form->addCheck('do_not_call', 1);
 
+        /*
+         * Meal Plan
+         */
         $mealPlans = array(BANNER_MEAL_LOW=>_('Low'),
             BANNER_MEAL_STD=>_('Standard'),
             BANNER_MEAL_HIGH=>_('High'),
@@ -57,12 +72,27 @@ class ReApplicationFormView extends View {
         $form->setLabel('meal_plan', 'Meal plan: ');
         $form->setMatch('meal_plan', BANNER_MEAL_STD);
 
+        /*
+         * Special interest stuff
+         */
+/*
         PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
         $special_interests = HMS_Lottery::get_special_interest_groups();
 
         $form->addDropBox('special_interest', $special_interests);
         $form->setLabel('special_interest', 'Special interest group: ');
+*/
+        // RLC
+        $form->addCheck('rlc_interest', array('rlc_interest'));
+        $form->setLabel('rlc_interest', "I'm interseted in applying for (or continuing in) a Residential Learning Community.");
 
+        // Sorority
+        $form->addCheck('sorority_check', array('sorority_check'));
+        $form->setLabel('sorority_check', "I'm a member of a sorority.");
+
+        /*
+         * Special needs
+         */
         $form->addCheck('special_need', array('special_need'));
         $form->setLabel('special_need', array('Yes, I require special needs housing.'));
 
@@ -70,6 +100,9 @@ class ReApplicationFormView extends View {
             $form->setMatch('special_need', $_REQUEST['special_need']);
         }
 
+        /*
+         * Contract
+         */
         $form->addCheck('deposit_check', array('deposit_check'));
         $form->setLabel('deposit_check', 'I understand & acknowledge that if I cancel my License Contract my student account will be charged $250.  If I cancel my License Contract after July 1, I will be liable for the entire amount of the on-campus housing fees for the Fall semester.');
 

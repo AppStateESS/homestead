@@ -25,13 +25,16 @@ not wish to provide your cell phone number.</sub></p>
 this again later (after you choose your room).</p>
 <p>{MEAL_PLAN_LABEL}{MEAL_PLAN}</p>
 
-<h2>Special Interest Housing</h2>
+<h2>On-campus Housing Groups</h2>
 <p>To re-apply for housing with a particular program on-campus,
-select that group in the box below. Each group/program may have a
-separate (on-line or paper-based) application to complete. If you are
-approved by the group/program you apply for, then you will be
-administratively assigned and may not be able to choose your room.</p>
-<p>{SPECIAL_INTEREST_LABEL}{SPECIAL_INTEREST}</p>
+select that group in the box below. If you are approved by the
+group/program you apply for, then you will be administratively assigned
+and may not be able to choose your room.</p>
+<p>{RLC_INTEREST}{RLC_INTEREST_LABEL}</p>
+<div><fieldset style="width:40%;">
+    <legend>Greek Letter Organizations</legend>
+    {SORORITY_CHECK}{SORORITY_CHECK_LABEL}
+</fieldset></div>
 
 <h2>Special needs</h2>
 <p>{SPECIAL_NEED}&nbsp;{SPECIAL_NEED_LABEL}</p>
