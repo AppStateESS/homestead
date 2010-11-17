@@ -12,26 +12,29 @@ re-application FAQ</a>.</strong></p>
 {START_FORM}
 
 <h2>Contact Information</h2>
-<p>We'll only use this information to contact you in case we have a
-question about your application or if you receive a package (via UPS,
-FedEx, etc). This information will not be shared with anyone else.</p>
-<p>Cell Phone Number: ({AREA_CODE})-{EXCHANGE}-{NUMBER}<br/>
-{DO_NOT_CALL}<sub>Check here if you do not have a cell
-phone or do not wish to provide your cell phone number.</sub>
-</p>
+<p>We'll only use this information to contact you if we have a
+question about your application or to notify you if you receive a
+package (via UPS, FedEx, etc). This information will not be shared with
+anyone else.</p>
+<p>Cell Phone Number: ({AREA_CODE})-{EXCHANGE}-{NUMBER}<br />
+{DO_NOT_CALL}<sub>Check here if you do not have a cell phone or do
+not wish to provide your cell phone number.</sub></p>
 
 <h2>Meal Plan</h2>
 <p>Please choose a meal plan. You'll have the opportunity to change
 this again later (after you choose your room).</p>
 <p>{MEAL_PLAN_LABEL}{MEAL_PLAN}</p>
 
-<h2>Special Interest Housing</h2>
+<h2>On-campus Housing Groups</h2>
 <p>To re-apply for housing with a particular program on-campus,
-select that group in the box below. Each group/program may have a
-separate (on-line or paper-based) application to complete. If you are
-approved by the group/program you apply for, then you will be
-administratively assigned and may not be able to choose your room.</p>
-<p>{SPECIAL_INTEREST_LABEL}{SPECIAL_INTEREST}</p>
+select that group in the box below. If you are approved by the
+group/program you apply for, then you will be administratively assigned
+and may not be able to choose your room.</p>
+<p>{RLC_INTEREST}{RLC_INTEREST_LABEL}</p>
+<div><fieldset style="width:40%;">
+    <legend>Greek Letter Organizations</legend>
+    {SORORITY_CHECK}{SORORITY_CHECK_LABEL}
+</fieldset></div>
 
 <h2>Special needs</h2>
 <p>{SPECIAL_NEED}&nbsp;{SPECIAL_NEED_LABEL}</p>
@@ -41,5 +44,4 @@ administratively assigned and may not be able to choose your room.</p>
 
 <br />
 
-{SUBMIT}
-{END_FORM}
+{SUBMIT} {END_FORM}
