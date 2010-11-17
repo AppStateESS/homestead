@@ -33,6 +33,13 @@ class SendNotificationEmailsCommand extends Command {
         }
         */
 
+        PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Permission.php');
+
+        // Sanity checks
         if(is_null($context->get('hall')) && is_null($context->get('floor')) ){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You must select a hall or floor to continue!');
             $cmd = CommandFactory::getCommand('ShowHallNotificationSelect');
@@ -59,11 +66,7 @@ class SendNotificationEmailsCommand extends Command {
         }
 
         //Consider using a batch process instead of doing this this inline
-        PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Permission.php');
+        
 
         // Log that this is happening
         if($anonymous){
@@ -81,11 +84,9 @@ class SendNotificationEmailsCommand extends Command {
         //HMS_Activity_Log::log_activity(Current_User::getUsername(), ACTIVITY_HALL_NOTIFIED_ANONYMOUSLY, Current_User::getUsername(), $hall->hall_name);
         //HMS_Activity_Log::log_activity(Current_User::getUsername(), ACTIVITY_HALL_NOTIFIED, Current_User::getUsername(), $hall->hall_name);
 
-        //load the halls and add floors that aren't already present if they have js enabled should be zero
+        //load the halls and add floors that aren't already present, if they have js enabled should be zero
         foreach($halls as $hall){
-            $hallObj = new HMS_Residence_Hall;
-            $hallObj->id = $hall;
-            $hallObj->load();
+            $hallObj = new HMS_Residence_Hall($hall);
 
             $hallFloors = $hallObj->get_floors();
 
@@ -127,6 +128,7 @@ class SendNotificationEmailsCommand extends Command {
             foreach($rooms as $room){
                 $students = $room->get_assignees();
                 foreach($students as $student){
+                    $people[] = $student->getUsername();
                     HMS_Email::send_email($student->getUsername() . '@appstate.edu', $from, $subject, $body);
                 }
             }
