@@ -26,8 +26,7 @@ class ReviewHallNotificationMessageCommand extends Command {
             throw new PermissionException('You do not have permission to send messages.');
         }
         */
-
-        if(is_null($context->get('hall'))){
+        if(is_null($context->get('hall')) && is_null($context->get('floor'))){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You must select a hall to continue!');
             $cmd = CommandFactory::getCommand('ShowHallNotificationSelect');
             $cmd->redirect();
