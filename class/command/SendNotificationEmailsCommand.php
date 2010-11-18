@@ -102,7 +102,9 @@ class SendNotificationEmailsCommand extends Command {
                         }
                     }
                 }
-                $floorObj[] = $hallFloor;
+                if(!in_array($hallFloor, $floors)){
+                    $floorObj[] = $hallFloor;
+                }
             }
         }
 
