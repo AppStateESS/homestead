@@ -340,7 +340,7 @@ class HMS_Residence_Hall extends HMS_Item
 
         $result = $db->select('count');
 
-        if(!$result || PHPWS_Error::logIfError($result)){
+        if(PHPWS_Error::logIfError($result)){
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
