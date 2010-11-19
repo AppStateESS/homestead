@@ -373,7 +373,7 @@ class HMS_Lottery {
             try{
             $entry = HousingApplication::getApplicationByUser($winning_username, $term);
             $entry->invite_expires_on = $expire_time;
-            
+
             $result = $entry->save();
             }catch(Exception $e){
                 $output[] = 'Error while trying to select a winning student. Exception: ' . $e->getMessage();
@@ -400,7 +400,7 @@ class HMS_Lottery {
             }else if($actual_class == CLASS_SOPHOMORE){
                 $soph_invites_sent++;
             }
-            
+
             $student = StudentFactory::getStudentByUsername($winning_username, $term);
 
             # Send them an invite
@@ -516,7 +516,7 @@ class HMS_Lottery {
     public function count_remaining_entries($term)
     {
         $now = mktime();
-        
+
         $sql = "SELECT count(*) FROM hms_new_application JOIN hms_lottery_application ON hms_new_application.id = hms_lottery_application.id
                 LEFT OUTER JOIN (SELECT asu_username FROM hms_assignment WHERE hms_assignment.term=$term) as foo ON hms_new_application.username = foo.asu_username
                 WHERE foo.asu_username IS NULL AND (hms_lottery_application.invite_expires_on < $now OR hms_lottery_application.invite_expires_on IS NULL)
@@ -526,7 +526,7 @@ class HMS_Lottery {
                 AND medical_need = 0
                 AND gender_need = 0
                 AND special_interest IS NULL";
-        
+
         $num_remaining_entries = PHPWS_DB::getOne($sql);
 
         if(PEAR::isError($num_remaining_entries)){
@@ -739,8 +739,8 @@ class HMS_Lottery {
 
         $query = "SELECT count(*) from hms_assignment
                     JOIN hms_new_application ON hms_assignment.asu_username = hms_new_application.username
-                    JOIN hms_lottery_application ON hms_new_application.id = hms_lottery_application.id 
-                    WHERE hms_assignment.term = $term 
+                    JOIN hms_lottery_application ON hms_new_application.id = hms_lottery_application.id
+                    WHERE hms_assignment.term = $term
                     AND hms_assignment.lottery = 1
                     AND hms_new_application.term = $term ";
 
@@ -820,7 +820,7 @@ class HMS_Lottery {
         foreach($result as $row){
             $student = StudentFactory::getStudentByUsername($row['asu_username'], $term);
             $requestor = StudentFactory::getStudentByUsername($row['requestor'], $term);
-            
+
             $bed = new HMS_Bed($row['bed_id']);
             $hall_room = $bed->where_am_i();
             HMS_Email::send_lottery_roommate_reminder($row['asu_username'], $student->getName(), $row['expires_on'], $requestor->getName(), $hall_room, $year);
@@ -911,7 +911,7 @@ class HMS_Lottery {
         if(HMS_Assignment::checkForAssignment($username, $term)){
             return E_ASSIGN_ALREADY_ASSIGNED;
         }
-        
+
         $student = StudentFactory::getStudentByUsername($username, $term);
         $requestor = StudentFactory::getStudentByUsername($invite['requestor'], $term);
 
@@ -956,7 +956,7 @@ class HMS_Lottery {
         # Query the database for the set of entry application terms, and the application terms of their roommates
         $db = new PHPWS_DB('hms_new_application');
         $db->addJoin('left outer', 'hms_new_application', 'hms_lottery_application', 'id', 'id');
-        
+
         $db->addColumn('application_term');
         $db->addColumn('hms_lottery_application.roommate1_app_term');
         $db->addColumn('hms_lottery_application.roommate2_app_term');
@@ -1193,7 +1193,7 @@ class HMS_Lottery {
         $keys = array_keys($counts);
         return array($keys[0], $keys[1], $keys[2]);
     }
-
+/*
     public function get_special_interest_groups()
     {
         $special_interests['none']              = 'None';
@@ -1221,6 +1221,20 @@ class HMS_Lottery {
         $special_interests['international']     = 'International Programs';
 
         return $special_interests;
+    }
+*/
+    public static function getSororities()
+    {
+        $sororities['sorority_adp']      = 'Alpha Delta Pi Sorority';
+        $sororities['sorority_ap']       = 'Aplha Phi Sorority';
+        $sororities['sorority_co']       = 'Chi Omega Sorority';
+        $sororities['sorority_dz']       = 'Delta Zeta Sorority';
+        $sororities['sorority_kd']       = 'Kappa Delta Sorority';
+        $sororities['sorority_pm']       = 'Phi Mu Sorority';
+        $sororities['sorority_sk']       = 'Sigma Kappa Sorority';
+        $sororities['sorority_aop']      = 'Alpha Omicron Pi Sorority';
+
+        return $sororities;
     }
 
 }

@@ -1,3 +1,16 @@
+<script>
+	$(document).ready(
+			function() {
+				// Bind the event for the sorority checkbox
+				$('#phpws_form_sorority_check_sorority_check').bind('change',
+						function() {
+							$('#sorority_options').toggle('fast');
+						});
+				// Collapse the sorority checkbox by default
+				$('#sorority_options').hide();
+			});
+</script>
+
 <h1>{TERM} On-campus Housing Re-application</h1>
 <p>Welcome to Appalachian State University Housing. As a returning
 student you must re-apply and be selected in order to be guaranteed
@@ -30,11 +43,46 @@ this again later (after you choose your room).</p>
 select that group in the box below. If you are approved by the
 group/program you apply for, then you will be administratively assigned
 and may not be able to choose your room.</p>
-<p>{RLC_INTEREST}{RLC_INTEREST_LABEL}</p>
-<div><fieldset style="width:40%;">
-    <legend>Greek Letter Organizations</legend>
-    {SORORITY_CHECK}{SORORITY_CHECK_LABEL}
-</fieldset></div>
+<div>
+<fieldset style="width: 65%;"><legend>Learning
+Communities</legend> {RLC_INTEREST}{RLC_INTEREST_LABEL}</fieldset>
+</div>
+
+<!-- BEGIN greek -->
+<div>
+<fieldset style="width: 65%;"><legend>Greek Letter
+Organizations</legend> {SORORITY_CHECK}{SORORITY_CHECK_LABEL}
+<div id="sorority_options" style="padding-left: 30px;">
+{SORORITY_DROP_LABEL}&nbsp;{SORORITY_DROP}<br />
+{SORORITY_PREF_1}{SORORITY_PREF_1_LABEL}<br />
+{SORORITY_PREF_2}{SORORITY_PREF_2_LABEL}</div>
+</fieldset>
+</div>
+<!-- END greek -->
+
+<!-- BEGIN teaching -->
+<div>
+<fieldset style="width: 65%;"><legend>Teaching
+Fellows</legend> {TF_PREF_1}{TF_PREF_1_LABEL}<br />
+{TF_PREF_2}{TF_PREF_2_LABEL}</fieldset>
+</div>
+<!-- END teaching -->
+
+<!-- BEGIN watauga -->
+<div>
+<fieldset style="width: 65%;"><legend>Watauga Global</legend>
+{WG_PREF_1}{WG_PREF_1_LABEL}<br />
+{WG_PREF_2}{WG_PREF_2_LABEL}</fieldset>
+</div>
+<!-- END watauga -->
+
+<!-- BEGIN honors -->
+<div>
+<fieldset style="width: 65%;"><legend>Heltzer Honors
+Program</legend> {HONORS_PREF_1}{HONORS_PREF_1_LABEL}<br />
+{HONORS_PREF_2}{HONORS_PREF_2_LABEL}</fieldset>
+</div>
+<!-- END honors -->
 
 <h2>Special needs</h2>
 <p>{SPECIAL_NEED}&nbsp;{SPECIAL_NEED_LABEL}</p>

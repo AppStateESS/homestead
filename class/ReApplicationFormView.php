@@ -20,6 +20,10 @@ class ReApplicationFormView extends View {
 
     public function show()
     {
+        PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
+
+        javascript('jquery');
+
         $tpl = array();
 
         $tpl['TERM'] = Term::toString($this->term) . ' - ' . Term::toString(Term::getNextTerm($this->term));
@@ -65,9 +69,9 @@ class ReApplicationFormView extends View {
          * Meal Plan
          */
         $mealPlans = array(BANNER_MEAL_LOW=>_('Low'),
-            BANNER_MEAL_STD=>_('Standard'),
-            BANNER_MEAL_HIGH=>_('High'),
-            BANNER_MEAL_SUPER=>_('Super'));
+        BANNER_MEAL_STD=>_('Standard'),
+        BANNER_MEAL_HIGH=>_('High'),
+        BANNER_MEAL_SUPER=>_('Super'));
         $form->addDropBox('meal_plan', $mealPlans);
         $form->setLabel('meal_plan', 'Meal plan: ');
         $form->setMatch('meal_plan', BANNER_MEAL_STD);
@@ -75,20 +79,49 @@ class ReApplicationFormView extends View {
         /*
          * Special interest stuff
          */
-/*
-        PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
-        $special_interests = HMS_Lottery::get_special_interest_groups();
+        /*
+         PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
+         $special_interests = HMS_Lottery::get_special_interest_groups();
 
-        $form->addDropBox('special_interest', $special_interests);
-        $form->setLabel('special_interest', 'Special interest group: ');
-*/
+         $form->addDropBox('special_interest', $special_interests);
+         $form->setLabel('special_interest', 'Special interest group: ');
+         */
+
         // RLC
         $form->addCheck('rlc_interest', array('rlc_interest'));
         $form->setLabel('rlc_interest', "I'm interseted in applying for (or continuing in) a Residential Learning Community.");
 
         // Sorority
-        $form->addCheck('sorority_check', array('sorority_check'));
-        $form->setLabel('sorority_check', "I'm a member of a sorority.");
+        if($this->student->getGender() == FEMALE){
+            $sororities = HMS_Lottery::getSororities();
+
+            $form->addCheck('sorority_check', array('sorority_check'));
+            $form->setLabel('sorority_check', "I'm a member of a sorority.");
+
+            $form->addDropBox('sorority_drop', array_merge(array('none'=>'Select...'), HMS_Lottery::getSororities()));
+            $form->setLabel('sorority_drop', 'Which sorority?');
+
+            $form->addRadioButton('sorority_pref', array('aph', 'on-campus'));
+            $form->setLabel('sorority_pref', array("I would like to live in the APH.", "I would like to live in a central-campus hall."));
+        }
+
+        // Teaching Fellows
+        if($this->student->isTeachingFellow()){
+            $form->addRadioButton('tf_pref', array('with_tf', 'not_tf'));
+            $form->setLabel('tf_pref', array("I would like to live with other Teaching Fellows.", "I would like to live elsewhere on-campus."));
+        }
+
+        // Watauga Global
+        if($this->student->isWataugaMember()){
+            $form->addRadioButton('wg_pref', array('with_wg', 'not_wg'));
+            $form->setLabel('wg_pref', array("I would like to live with other Watauga Global students.", "I would like to live elsewhere on-campus."));
+        }
+
+        // Honors
+        if($this->student->isHonors()){
+            $form->addRadioButton('honors_pref', array('with_honors', 'not_honors'));
+            $form->setLabel('honors_pref', array("I would like to live in Honors Housing.", "I would like to live elsewhere on campus."));
+        }
 
         /*
          * Special needs
