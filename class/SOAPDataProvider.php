@@ -17,7 +17,7 @@ class SOAPDataProvider extends StudentDataProvider {
             throw new StudentNotFoundException('No matching student found.');
         }
 
-        SOAPDataProvider::plugSOAPData($student, $soapData);
+        Soapdataprovider::plugSOAPData($student, $soapData);
 
         return $student;
     }
