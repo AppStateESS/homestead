@@ -17,9 +17,9 @@ class ReApplicationFormSubmitCommand extends Command {
     {
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
         PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
-        
-        $term       = $context->get('term');
-        
+
+        $term = $context->get('term');
+
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
 
         $errorCmd = CommandFactory::getCommand('ShowReApplication');
@@ -47,63 +47,42 @@ class ReApplicationFormSubmitCommand extends Command {
             }
         }
 
-        $mealOption         = $context->get('meal_option');
+        //$mealOption = $context->get('meal_option');
 
-        # Sanity checks on preferred roommate user names
-        $roommate1 = $context->get('roommate1');
-        $roommate2 = $context->get('roommate2');
-        $roommate3 = $context->get('roommate3');
-        
-        $roommates = array();
-
-        if($roommate1 != "" && !in_array($roommate1, $roommates)){
-            $roommates[] = $roommate1;
-        }
-
-        if($roommate2 != "" && !in_array($roommate2, $roommates)){
-            $roommates[] = $roommate2;
-        }
-
-        if($roommate3 != "" && !in_array($roommate3, $roommates)){
-            $roommates[] = $roommate3;
-        }
-        
-        # Sanity checks on preferred roommate user names
-        foreach($roommates as $key => $roomie){
-            # Check for invalid chars
-            if(!PHPWS_Text::isValidInput($roomie)){
-                NQ::simple('hms', HMS_NOTIFICATION_ERROR, "'$roomie' is an invalid user name. Hint: Your roommate's user name is the first part of his/her email address.");
-                $errorCmd->redirect();
-            }
-            
-            try{
-                $roommateStudent = StudentFactory::getStudentByUsername($roomie, $term);
-            }catch(StudentNotFoundException $e){
-                NQ::simple('hms', HMS_NOTIFICATION_ERROR, "'$roomie' is not a valid ASU user name. Hint: Your roommate's user name is the first part of his/her email address.");
-                $errorCmd->redirect();
-            }
-            
-            $bannerId = $roommateStudent->getBannerId();
-
-            # Check to make sure the roommate is eligible for reapplication
-            if(!HMS_Lottery::determineEligibility($roomie)){
-                NQ::simple('hms', HMS_NOTIFICATION_ERROR, "'$roomie' is not eligible for re-application. Please try again.");
+        // Sorority stuff
+        if(!is_null($context->get('sorority_check'))){
+            $sorority = $context->get('sorority_drop');
+            if($sorority == 'none'){
+                NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Please select your sorority from the drop down menu.');
                 $errorCmd->redirect();
             }
 
-            if($roomie == UserStatus::getUsername()){
-                NQ::simple('hms', HMS_NOTIFICATION_ERROR, "You cannot choose yourself as a roommate, please try again.");
-                $errorCmd->redirect();
-            }
-
-            if($roommateStudent->getGender() != $student->getGender()){
-                NQ::simple('hms', HMS_NOTIFICATION_ERROR, "$roomie is not the same gender as you. Please try again.");
+            $sororityPref = $context->get('sorority_pref');
+            if(is_null($sororityPref)){
+                NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Please indicate your preference for APH or central-campus housing.');
                 $errorCmd->redirect();
             }
         }
-        
+
+        // Teaching Fellows check
+        if($student->isTeachingFellow() && is_null($context->get('tf_pref'))){
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Please indicate your preference for Teaching Fellow housing.');
+            $errorCmd->redirect();
+        }
+
+        // Watauga Global check
+        if($student->isWataugaMember() && is_null($context->get('wg_pref'))){
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Please indicate your preference for Watauga Global housing.');
+            $errorCmd->redirect();
+        }
+
+        // Honors check
+        if($student->isHonors() & is_null($context->get('honors_pref'))){
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Please indicate your preference for Honors housing.');
+            $errorCmd->redirect();
+        }
+
         $specialNeed = $context->get('special_need');
-
         if(isset($specialNeed)){
             $onSubmitCmd = CommandFactory::getCommand('ReApplicationFormSave');
             $onSubmitCmd->loadContext($context);

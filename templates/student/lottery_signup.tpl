@@ -8,6 +8,9 @@
 						});
 				// Collapse the sorority checkbox by default
 				$('#sorority_options').hide();
+				
+				// Create the button style
+				$("#phpws_form_submit_form").button();
 			});
 </script>
 

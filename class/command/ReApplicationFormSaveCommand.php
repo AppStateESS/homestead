@@ -73,12 +73,28 @@ class ReApplicationFormSaveCommand extends Command {
         $genderNeed         = isset($specialNeeds['gender_need'])?1: 0;
         $medicalNeed        = isset($specialNeeds['medical_need'])?1: 0;
 
-        $specialInterest = $context->get('special_interest');
-
-        if($specialInterest == 'none'){
-            $specialInterest = null;
+        /**
+         * Special interest housing groups
+         */
+        // Sororities - If they checked the box, and their pref is APH,
+        // then record her sorority choice
+        $sororityCheck = $context->get('sorority_check');
+        if(isset($sororityCheck) && $context->get('sorority_pref') == 'aph'){
+            $sororityPref = $context->get('sorority_drop');
+        }else{
+            $sororityPref = null;
         }
 
+        // Teaching Fellows, Watauga Global, and Honors
+        $tfPref = ($context->get('tf_pref') == 'with_tf')?1:0;
+        $wgPref = ($context->get('wg_pref') == 'with_wg')?1:0;
+        $honorsPref = ($context->get('honors_pref') == 'with_honors')?1:0;
+
+        // Learning Community Interest
+        $rlcInterest = $context->get('rlc_interest');
+        $rlcInterest = isset($rlcInterest)?1:0;
+
+        // International
         if($student->isInternational()){
             $international = 1;
         }else{
@@ -87,7 +103,7 @@ class ReApplicationFormSaveCommand extends Command {
 
         $magicWinner = 0;
 
-        $application = new LotteryApplication(0, $term, $student->getBannerId(), $student->getUsername(), $student->getGender(), $student->getType(), $student->getApplicationTerm(), $cellPhone, $mealPlan, $physicalDisability, $psychDisability, $genderNeed, $medicalNeed, $international, $specialInterest, $magicWinner);
+        $application = new LotteryApplication(0, $term, $student->getBannerId(), $student->getUsername(), $student->getGender(), $student->getType(), $student->getApplicationTerm(), $cellPhone, $mealPlan, $physicalDisability, $psychDisability, $genderNeed, $medicalNeed, $international, NULL, $magicWinner, $sororityPref, $tfPref, $wgPref, $honorsPref, $rlcInterest);
 
         try{
             $application->save();
@@ -105,6 +121,7 @@ class ReApplicationFormSaveCommand extends Command {
         HMS_Email::send_lottery_application_confirmation($student, $year);
 
         # Show success message
+        #TODO: Redirect to RLC app if student is interested
         NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Your re-application was submitted successfully.');
         $cmd = CommandFactory::getCommand('ShowStudentMenu');
         $cmd->redirect();

@@ -352,7 +352,10 @@ class Student {
     }
 
     public function isInternational(){
-        return $this->international;
+        if($this->international == 'true'){
+            return true;
+        }
+        return false;
     }
 
     public function setHonors($hon){

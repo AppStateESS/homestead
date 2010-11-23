@@ -293,6 +293,11 @@ CREATE TABLE hms_lottery_application (
     magic_winner            smallint NOT NULL default 0,
     invite_expires_on       integer,
     waiting_list_hide       smallint DEFAULT 0,
+    rlc_interest            smallint not null default 0,
+    sorority_pref           character varying(32),
+    tf_pref                 smallint NOT NULL default 0,
+    wg_pref                 smallint NOT NULL default 0,
+    honors_pref             smallint NOT NULL default 0,
     PRIMARY KEY(id)
 );
 

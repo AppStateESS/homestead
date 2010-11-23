@@ -23,6 +23,7 @@ class ReApplicationFormView extends View {
         PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
 
         javascript('jquery');
+        javascript('jquery_ui');
 
         $tpl = array();
 
@@ -140,7 +141,7 @@ class ReApplicationFormView extends View {
         $form->setLabel('deposit_check', 'I understand & acknowledge that if I cancel my License Contract my student account will be charged $250.  If I cancel my License Contract after July 1, I will be liable for the entire amount of the on-campus housing fees for the Fall semester.');
 
         $form->addSubmit('submit', 'Submit re-application');
-        $form->setExtra('submit', 'class="hms-application-submit-button"');
+        //$form->setExtra('submit', 'class="hms-application-submit-button"');
 
         $form->mergeTemplate($tpl);
 
