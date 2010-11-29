@@ -60,6 +60,7 @@ class RoommateProfile{
     public $beach = 0;
     public $bluegrass = 0;
     public $blues = 0;
+    public $christian = 0;
     public $classical = 0;
     public $classic_rock = 0;
     public $country = 0;
@@ -392,6 +393,11 @@ class RoommateProfile{
             if(isset($_REQUEST['music_checkbox']['blues'])){
                 $pager->addWhere('hms_student_profiles.blues',1,'=');
                 $_SESSION['hobbies_checkbox']['blues'] = 1;
+            }
+
+            if(isset($_REQUEST['music_checkbox']['christian'])){
+                $pager->addWhere('hms_student_profiles.christian',1,'=');
+                $_SESSION['hobbies_checkbox']['christian'] = 1;
             }
 
             if(isset($_REQUEST['music_checkbox']['classical'])){
@@ -739,6 +745,10 @@ class RoommateProfile{
 
         if($profile->get_blues()){
             $music_matches[] = 'blues';
+        }
+
+        if($profile->get_christian()){
+            $music_matches[] = 'christian';
         }
 
         if($profile->get_classical()){
@@ -1352,6 +1362,19 @@ class RoommateProfile{
         if($this->blues == 1){
             return TRUE;
         }else{
+            return FALSE;
+        }
+    }
+
+    public function set_christian($value = 1){
+        $this->christian = $value;
+    }
+
+    public function get_christian(){
+        if($this->christian == 1){
+            return TRUE;
+        }
+        else{
             return FALSE;
         }
     }

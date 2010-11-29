@@ -357,6 +357,7 @@ CREATE TABLE hms_student_profiles (
     beach smallint,
     bluegrass smallint,
     blues smallint,
+    christian smallint,
     classical smallint,
     classic_rock smallint,
     country smallint,

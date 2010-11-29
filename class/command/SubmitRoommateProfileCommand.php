@@ -246,6 +246,12 @@ class SubmitRoommateProfileCommand extends Command {
             $profile->set_blues(0);
         }
 
+        if(isset($_REQUEST['music_checkbox']['christian'])){
+            $profile->set_christian();
+        }else{
+            $profile->set_christian(0);
+        }
+
         if(isset($_REQUEST['music_checkbox']['classical'])){
             $profile->set_classical();
         }else{
