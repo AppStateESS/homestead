@@ -41,6 +41,10 @@ class RoommateProfileSearchForm extends View {
         $form->setLabel('music_checkbox',$music_labels);
         $tags['MUSIC_CHECKBOX_QUESTION'] = 'Music Preferences (check all that apply):';
 
+        $form->addCheck('language_checkbox', $language);
+        $form->setLabel('language_checkbox', $language_labels);
+        $tags['LANGUAGE_CHECKBOX_QUESTION'] = 'Spoken Languages (check all that apply):';
+
         $form->addDropBox('political_views_dropbox',$political_views);
         $form->setLabel('political_views_dropbox','His/her political view: ');
 

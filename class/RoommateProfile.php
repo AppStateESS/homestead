@@ -98,6 +98,29 @@ class RoommateProfile{
     public $cleanliness = 0;
     public $free_time = 0;
 
+    # Spoken languages
+    # Top 20 most spoken languages: 
+    #     http://en.wikipedia.org/wiki/Ethnologue_list_of_most_spoken_languages
+    public $arabic = 0;
+    public $bengali = 0;
+    public $chinese = 0;
+    public $english = 0;
+    public $french = 0;
+    public $german = 0;
+    public $hindi = 0;
+    public $italian = 0;
+    public $japanese = 0;
+    public $javanese = 0;
+    public $korean = 0;
+    public $malay = 0;
+    public $marathi = 0;
+    public $portuguese = 0;
+    public $punjabi = 0;
+    public $russian = 0;
+    public $spanish = 0;
+    public $tamil = 0;
+    public $telugu = 0;
+    public $vietnamese = 0;
 
     /**
      * Constructor
@@ -561,6 +584,102 @@ class RoommateProfile{
                 $pager->addWhere('hms_student_profiles.free_time',$_REQUEST['free_time'],'=');
                 $_SESSION['free_time'] = $_REQUEST['free_time'];
             }
+
+            # Spoken Languages
+            if(isset($_REQUEST['language_checkbox']['arabic'])){
+                $pager->addWhere('hms_student_profiles.arabic', 1, '=');
+                $_SESSION['language_checkbox']['arabic'] = 1;
+            }
+
+            if(isset($_REQUEST['language_checkbox']['bengali'])){
+                $pager->addWhere('hms_student_profiles.bengali', 1, '=');
+                $_SESSION['language_checkbox']['bengali'] = 1;
+            }
+
+            if(isset($_REQUEST['language_checkbox']['english'])){
+                $pager->addWhere('hms_student_profiles.english', 1, '=');
+                $_SESSION['language_checkbox']['english'] = 1;
+            }
+
+            if(isset($_REQUEST['language_checkbox']['french'])){
+                $pager->addWhere('hms_student_profiles.french', 1, '=');
+                $_SESSION['language_checkbox']['french'] = 1;
+            }
+
+            if(isset($_REQUEST['language_checkbox']['german'])){
+                $pager->addWhere('hms_student_profiles.german', 1, '=');
+                $_SESSION['language_checkbox']['german'] = 1;
+            }
+
+            if(isset($_REQUEST['language_checkbox']['hindi'])){
+                $pager->addWhere('hms_student_profiles.hindi', 1, '=');
+                $_SESSION['language_checkbox']['hindi'] = 1;
+            }
+
+            if(isset($_REQUEST['language_checkbox']['italian'])){
+                $pager->addWhere('hms_student_profiles.italian', 1, '=');
+                $_SESSION['language_checkbox']['italian'] = 1;
+            }
+
+            if(isset($_REQUEST['language_checkbox']['japanese'])){
+                $pager->addWhere('hms_student_profiles.japanese', 1, '=');
+                $_SESSION['language_checkbox']['japanese'] = 1;
+            }
+
+            if(isset($_REQUEST['language_checkbox']['javanese'])){
+                $pager->addWhere('hms_student_profiles.javanese', 1, '=');
+                $_SESSION['language_checkbox']['javanese'] = 1;
+            }
+
+            if(isset($_REQUEST['language_checkbox']['korean'])){
+                $pager->addWhere('hms_student_profiles.korean', 1, '=');
+                $_SESSION['language_checkbox']['korean'] = 1;
+            }
+
+            if(isset($_REQUEST['language_checkbox']['malay'])){
+                $pager->addWhere('hms_student_profiles.malay', 1, '=');
+                $_SESSION['language_checkbox']['malay'] = 1;
+            }
+
+            if(isset($_REQUEST['language_checkbox']['marathi'])){
+                $pager->addWhere('hms_student_profiles.marathi', 1, '=');
+                $_SESSION['language_checkbox']['marathi'] = 1;
+            }
+
+            if(isset($_REQUEST['language_checkbox']['portuguese'])){
+                $pager->addWhere('hms_student_profiles.portuguese', 1, '=');
+                $_SESSION['language_checkbox']['portuguese'] = 1;
+            }
+
+            if(isset($_REQUEST['language_checkbox']['punjabi'])){
+                $pager->addWhere('hms_student_profiles.punjabi', 1, '=');
+                $_SESSION['language_checkbox']['punjabi'] = 1;
+            }
+
+            if(isset($_REQUEST['language_checkbox']['russian'])){
+                $pager->addWhere('hms_student_profiles.russian', 1, '=');
+                $_SESSION['language_checkbox']['russian'] = 1;
+            }
+
+            if(isset($_REQUEST['language_checkbox']['spanish'])){
+                $pager->addWhere('hms_student_profiles.spanish', 1, '=');
+                $_SESSION['language_checkbox']['spanish'] = 1;
+            }
+
+            if(isset($_REQUEST['language_checkbox']['tamil'])){
+                $pager->addWhere('hms_student_profiles.tamil', 1, '=');
+                $_SESSION['language_checkbox']['tamil'] = 1;
+            }
+
+            if(isset($_REQUEST['language_checkbox']['telugu'])){
+                $pager->addWhere('hms_student_profiles.telugu', 1, '=');
+                $_SESSION['language_checkbox']['telugu'] = 1;
+            }
+
+            if(isset($_REQUEST['language_checkbox']['vietnamese'])){
+                $pager->addWhere('hms_student_profiles.vietnamese', 1, '=');
+                $_SESSION['language_checkbox']['vietnamese'] = 1;
+            }
         }
 
         # Join with hms_application table on username to make sure genders match.
@@ -851,6 +970,74 @@ class RoommateProfile{
         }
 
         return $study_matches;
+    }
+
+    public static function get_language_matches($profile)
+    {
+        $lang_match = array();
+        
+        if($profile->get_arabic()){
+            $lang_match[] = 'arabic';
+        }
+        if($profile->get_bengali()){
+            $lang_match[] = 'bengali';
+        }
+        if($profile->get_chinese()){
+            $lang_match[] = 'chinese';
+        }
+        if($profile->get_english()){
+            $lang_match[] = 'english';
+        }
+        if($profile->get_french()){
+            $lang_match[] = 'french';
+        }
+        if($profile->get_german()){
+            $lang_match[] = 'german';
+        }
+        if($profile->get_hindi()){
+            $lang_match[] = 'hindi';
+        }
+        if($profile->get_italian()){
+            $lang_match[] = 'italian';
+        }
+        if($profile->get_japanese()){
+            $lang_match[] = 'japanese';
+        }
+        if($profile->get_javanese()){
+            $lang_match[] = 'javanese';
+        }
+        if($profile->get_korean()){
+            $lang_match[] = 'korean';
+        }
+        if($profile->get_malay()){
+            $lang_match[] = 'malay';
+        }
+        if($profile->get_marathi()){
+            $lang_match[] = 'marathi';
+        }
+        if($profile->get_portuguese()){
+            $lang_match[] = 'portuguese';
+        }
+        if($profile->get_punjabi()){
+            $lang_match[] = 'punjabi';
+        }
+        if($profile->get_russian()){
+            $lang_match[] = 'russian';
+        }
+        if($profile->get_spanish()){
+            $lang_match[] = 'spanish';
+        }
+        if($profile->get_tamil()){
+            $lang_match[] = 'tamil';
+        }
+        if($profile->get_telugu()){
+            $lang_match[] = 'telugu';
+        }
+        if($profile->get_vietnamese()){
+            $lang_match[] = 'vietnamese';
+        }
+
+        return $lang_match;
     }
 
 
@@ -1656,6 +1843,129 @@ class RoommateProfile{
         }else{
             return FALSE;
         }
+    }
+
+    # Spoken Languages
+    public function get_arabic(){
+        return $this->arabic == 1 ? TRUE : FALSE;
+    }
+    public function get_bengali(){
+        return $this->bengali == 1 ? TRUE : FALSE;
+    }
+    public function get_chinese(){
+        return $this->chinese == 1 ? TRUE : FALSE;
+    }
+    public function get_english(){
+        return $this->english == 1 ? TRUE : FALSE;
+    }
+    public function get_french(){
+        return $this->french == 1 ? TRUE : FALSE;
+    }
+    public function get_german(){
+        return $this->german == 1 ? TRUE : FALSE;
+    }
+    public function get_hindi(){
+        return $this->hindi == 1 ? TRUE : FALSE;
+    }
+    public function get_italian(){
+        return $this->italian == 1 ? TRUE : FALSE;
+    }
+    public function get_japanese(){
+        return $this->japanese == 1 ? TRUE : FALSE;
+    }
+    public function get_javanese(){
+        return $this->javanese == 1 ? TRUE : FALSE;
+    }
+    public function get_korean(){
+        return $this->korean == 1 ? TRUE : FALSE;
+    }
+    public function get_malay(){
+        return $this->malay == 1 ? TRUE : FALSE;
+    }
+    public function get_marathi(){
+        return $this->marathi == 1 ? TRUE : FALSE;
+    }
+    public function get_portuguese(){
+        return $this->portuguese == 1 ? TRUE : FALSE;
+    }
+    public function get_punjabi(){
+        return $this->punjabi == 1 ? TRUE : FALSE;
+    }
+    public function get_russian(){
+        return $this->russian == 1 ? TRUE : FALSE;
+    }
+    public function get_spanish(){
+        return $this->spanish == 1 ? TRUE : FALSE;
+    }
+    public function get_tamil(){
+        return $this->tamil == 1 ? TRUE : FALSE;
+    }
+    public function get_telugu(){
+        return $this->telugu == 1 ? TRUE : FALSE;
+    }
+    public function get_vietnamese(){
+        return $this->vietnamese == 1 ? TRUE : FALSE;
+    }
+    
+    public function set_arabic($value=1){
+        $this->arabic = $value;
+    }
+    public function set_bengali($value=1){
+        $this->bengali = $value;
+    }
+    public function set_chinese($value=1){
+        $this->chinese = $value;
+    }
+    public function set_english($value=1){
+        $this->english = $value;
+    }
+    public function set_french($value=1){
+        $this->french = $value;
+    }
+    public function set_german($value=1){
+        $this->german = $value;
+    }
+    public function set_hindi($value=1){
+        $this->hindi = $value;
+    }
+    public function set_italian($value=1){
+        $this->italian = $value;
+    }
+    public function set_japanese($value=1){
+        $this->japanese = $value;
+    }
+    public function set_javanese($value=1){
+        $this->javanese = $value;
+    }
+    public function set_korean($value=1){
+        $this->korean = $value;
+    }
+    public function set_malay($value=1){
+        $this->malay = $value;
+    }
+    public function set_marathi($value=1){
+        $this->marathi = $value;
+    }
+    public function set_portuguese($value=1){
+        $this->portuguese = $value;
+    }
+    public function set_punjabi($value=1){
+         $this->punjabi = $value;
+    }
+    public function set_russian($value=1){
+         $this->russian = $value;
+    }
+    public function set_spanish($value=1){
+         $this->spanish = $value;
+    }
+    public function set_tamil($value=1){
+         $this->tamil = $value;
+    }
+    public function set_telugu($value=1){
+         $this->telugu = $value;
+    }
+    public function set_vietnamese($value=1){
+         $this->vietnamese = $value;
     }
 };
 ?>

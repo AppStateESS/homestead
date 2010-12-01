@@ -108,6 +108,52 @@ $music_labels = array(
             'Rock',
             'World music');
 
+$language = array(
+                  'arabic',
+                  'bengali',
+                  'chinese',
+                  'english',
+                  'french',
+                  'german',
+                  'hindi',
+                  'italian',
+                  'japanese',
+                  'javanese',
+                  'korean',
+                  'malay',
+                  'marathi',
+                  'portuguese',
+                  'punjabi',
+                  'russian',
+                  'spanish',
+                  'tamil',
+                  'telugu',
+                  'vietnamese',
+                  );
+$language_labels = array(
+                         'Arabic',
+                         'Bengali',
+                         'Chinese',
+                         'English',
+                         'French',
+                         'German',
+                         'Hindi',
+                         'Italian',
+                         'Japanese',
+                         'Javanese',
+                         'Korean',
+                         'Malay',
+                         'Marathi',
+                         'Portuguese',
+                         'Punjabi',
+                         'Russian',
+                         'Spanish',
+                         'Tamil',
+                         'Telugu',
+                         'Vietnamese',
+                         );
+
+
 $study_times = array(
             'study_early_morning',
             'study_morning_afternoon',

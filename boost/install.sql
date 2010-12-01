@@ -390,6 +390,27 @@ CREATE TABLE hms_student_profiles (
     loudness smallint,
     cleanliness smallint,
     free_time smallint,
+    arabic smallint,
+    bengali smallint,
+    chinese smallint,
+    english smallint,
+    french smallint,
+    german smallint,
+    hindi smallint,
+    italian smallint,
+    japanese smallint,
+    javanese smallint,
+    korean smallint,
+    malay smallint,
+    marathi smallint,
+    portuguese smallint,
+    punjabi smallint,
+    russian smallint,
+    spanish smallint,
+    tamil smallint,
+    telugu smallint,
+    vietnamese smallint,
+
     PRIMARY KEY(id)
 );
 
