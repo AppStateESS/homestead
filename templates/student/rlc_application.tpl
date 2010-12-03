@@ -6,6 +6,12 @@
         <td>{FULL_NAME}</td>
     </tr>
     <tr>
+      <td>Student Type:
+      </td>
+      <td>{STUDENT_TYPE}
+      </td>
+    </tr>
+    <tr>
         <td>{FIRST_CHOICE_LABEL}</td>
         <td>{FIRST_CHOICE}</td>
     </tr>

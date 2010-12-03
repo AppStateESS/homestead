@@ -23,7 +23,8 @@ class RlcApplicationReView extends View {
             $tags['MENU_LINK'] = $menuCmd->getLink('Return to Menu');
         }
 
-        $tags['FULL_NAME'] = $this->student->getFullName();
+        $tags['FULL_NAME']    = $this->student->getFullName();
+        $tags['STUDENT_TYPE'] = $this->student->getPrintableType();
 
         $tags['FIRST_CHOICE_LABEL'] = "First choice RLC is: ";
         $tags['SECOND_CHOICE_LABEL'] = "Second choice is: ";
