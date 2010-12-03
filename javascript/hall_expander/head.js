@@ -12,7 +12,14 @@ var submitHallList = function(e){
     );
 
     return true;
-}
+ };
+
+var autocollapse = function(){
+    $(".collapsed").each(function(e){
+            //simulates a click event to set up the initial state of the item
+            $(this).click();
+        });
+};
 
 $(document).ready(function(){
         $("#select_all").click(function(){
@@ -36,8 +43,8 @@ $(document).ready(function(){
         function(data){
     		$("#{DIV}").empty();
     		
-    		if(data == ""){
-    			$("#{DIV}").append("You do not have permission to message any residence halls. <br /><br />");
+    		if(data.error !== undefined){
+    			$("#{DIV}").append('<div class="hms-notification error">'+data.error+'</div>');
     			return;
     		}
     	
@@ -93,6 +100,8 @@ $(document).ready(function(){
                     this.flip++;
                 }
             );
+
+            autocollapse();
         },
         'json'
     );
