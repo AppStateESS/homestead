@@ -18,7 +18,7 @@ class TestSOAP extends SOAP{
         }
 
         // Sanity checking on the term
-        if(empty($term) || is_null($term) || !isset($username)){
+        if(empty($term) || is_null($term) || !isset($term)){
             throw new InvalidArgumentException('Bad term');
         }
 

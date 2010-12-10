@@ -103,6 +103,12 @@ class HMS_RLC_Assignment{
         return TRUE;
     }
 
+    public function getRlcName(){
+        PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
+        $rlc = new HMS_Learning_Community($this->getRlcId());
+        return $rlc->get_community_name();
+    }
+
     /******************
      * Static methods *
      */
@@ -158,8 +164,10 @@ class HMS_RLC_Assignment{
     }
 
     public static function getAssignmentByUsername($username, $term){
+        PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
+
         $app = HMS_RLC_Application::getApplicationByUsername($username, $term);
-       
+
         if(is_null($app)){
             return null;
         }
@@ -178,7 +186,7 @@ class HMS_RLC_Assignment{
         if(is_null($assignment->id)){
             return null;
         }
-        
+
         return $assignment;
     }
 
@@ -254,7 +262,7 @@ class HMS_RLC_Assignment{
         $db->addWhere('id', $rlc_id);
         $db->addColumn('community_name');
         $tags['TITLE'] = $db->select('one') . ' Assignments ' . Term::toString(Term::getSelectedTerm(), TRUE);
-         
+
         PHPWS_Core::initCoreClass('DBPager.php');
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
 
@@ -274,6 +282,10 @@ class HMS_RLC_Assignment{
 
         return $pager->get();
     }
+
+    /***********************
+     * Accessor / Mutators *
+     */
 
     public function setId($id) {
         $this->id = $id;

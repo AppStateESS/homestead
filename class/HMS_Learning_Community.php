@@ -16,6 +16,8 @@ class HMS_Learning_Community extends HMS_Item
     public $hide;
 
     public $allowed_student_types; //A string containing a character for each allowed student type, maxLen() == 16;
+    public $allowed_reapplication_student_types;
+    public $members_reapply; // Indicates whether current members of the community are always allowed to reapply, regardless of student type
     public $extra_info; // A text field, show to the student when the RLC is selected
 
     public function __construct($id = 0)
@@ -79,6 +81,30 @@ class HMS_Learning_Community extends HMS_Item
         return $this->capacity;
     }
 
+    public function getAllowedStudentTypes(){
+        return $this->allowed_student_types;
+    }
+
+    public function setAllowedStudentTypes($types){
+        $this->allowd_student_types = $types;
+    }
+
+    public function getAllowedReapplicationStudentTypes(){
+        return $this->allowed_reapplication_student_types;
+    }
+
+    public function setAllowedReapplicationStudentTypes($types){
+        $this->allowed_reapplication_student_types = $types;
+    }
+
+    public function getMembersReapply(){
+        return $this->members_reapply;
+    }
+
+    public function setMembersReapply($apply){
+        $this->members_reapply = $apply;
+    }
+
     public function set_variables()
     {
         if(isset($_REQUEST['id']) && $_REQUEST['id'] != NULL) $this->set_id($_REQUEST['id']);
@@ -128,7 +154,7 @@ class HMS_Learning_Community extends HMS_Item
         foreach( $result as $community ) {
             $communities[$community['id']] = $community['community_name'];
         }
-        
+
         return $communities;
     }
 

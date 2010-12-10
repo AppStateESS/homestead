@@ -47,7 +47,7 @@ select that group in the box below. If you are approved by the
 group/program you apply for, then you will be administratively assigned
 and may not be able to choose your room.</p>
 <div>
-<fieldset style="width: 65%;"><legend>Learning
+<fieldset style="width: 65%;"><legend>Residential Learning
 Communities</legend> {RLC_INTEREST}{RLC_INTEREST_LABEL}</fieldset>
 </div>
 
