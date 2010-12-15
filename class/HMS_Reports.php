@@ -1100,6 +1100,7 @@ class HMS_Reports{
                 $state      = "";
                 $zip        = "";
                 $appTerm    = "";
+                continue;
             }
 
             $bannerId = $student->getBannerId();
