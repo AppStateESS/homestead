@@ -419,7 +419,7 @@ class HMS_Assignment extends HMS_Item
 				if($roommate->getUsername() == $username){
 					continue;
 				}
-				$roommate_assign = HMS_Assignment::getAssignment($roommate->getUsername(),Term::getCurrentTerm());
+				$roommate_assign = HMS_Assignment::getAssignment($roommate->getUsername(),$term);
 				$roommate_assign->letter_printed = 0;
 				$roommate_assign->email_sent     = 0;
 
