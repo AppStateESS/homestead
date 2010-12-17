@@ -18,7 +18,8 @@ class RoomChangeMenuBlockView extends View {
     public function show()
     {
         $tpl = array();
-
+        
+        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
         $tpl['DATES'] = HMS_Util::getPrettyDateRange($this->startDate, $this->endDate);
 
         if(time() < $this->startDate){ // too early
