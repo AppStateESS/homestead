@@ -18,3 +18,4 @@ alter table hms_lottery_application alter column honors_pref SET NOT NULL;
 
 alter table hms_learning_communities add column allowed_reapplication_student_types character varying(16);
 alter table hms_learning_communities add column members_reapply smallint;
+update hms_learning_communities set members_reapply = 0;

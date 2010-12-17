@@ -15,7 +15,15 @@ class EditRlcView extends View {
         $pager->addToggle('class="toggle2"');
         $pager->addRowTags('rowTags');
 
-        Layout::addPageTitle("Edit RLC");
+        $addCmd = CommandFactory::getCommand('ShowAddRlc');
+
+        $pageTags = array();
+
+        $pageTags['ADD_LINK'] = '['.$addCmd->getLink('Add a Community').']';
+
+        $pager->addPageTags($pageTags);
+
+        $this->setPageTitle('Edit Learning Communities');
 
         return $pager->get();
     }

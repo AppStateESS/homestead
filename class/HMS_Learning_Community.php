@@ -206,6 +206,32 @@ class HMS_Learning_Community extends HMS_Item
     }
 
     /**
+     * Returns an associative array containing the list of RLCs using their full names,
+     * keyed by their id, that a student is allowed to re-apply for.
+     */
+    public function getRLCListReapplication($hidden = NULL, $student_type = NULL)
+    {
+        $db = new PHPWS_DB('hms_learning_communities');
+        $db->addColumn('id');
+        $db->addColumn('community_name');
+        if(!is_null($student_type) && strlen($student_type) == 1)
+        $db->addWhere('allowed_reapplication_student_types', "%{$student_type}%", 'ilike');
+
+        if($hidden === FALSE){
+            $db->addWhere('hide', 0);
+        }
+
+        $rlc_choices = $db->select('assoc');
+
+        if(PHPWS_Error::logIfError($rlc_choices)){
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException($rlc_choices->toString());
+        }
+
+        return $rlc_choices;
+    }
+
+    /**
      * Exports the pending RLC applications into a CSV file.
      * Looks in $_REQUEST for which RLC to export.
      */

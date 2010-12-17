@@ -42,6 +42,7 @@ class SaveRlcCommand extends Command {
         }
 
         // Set all the fields
+        // TODO add appropriate sanity checking...
         $community->set_community_name($context->get('community_name'));
         $community->set_abbreviation($context->get('abbreviation'));
         $community->set_capacity($context->get('capacity'));

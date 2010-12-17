@@ -103,10 +103,20 @@ class HMS_RLC_Assignment{
         return TRUE;
     }
 
-    public function getRlcName(){
+    /**
+     * Returns the HMS_Learning_Community object for the community in this assignment.
+     */
+    public function getRlc()
+    {
         PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
-        $rlc = new HMS_Learning_Community($this->getRlcId());
-        return $rlc->get_community_name();
+        return new HMS_Learning_Community($this->getRlcId());
+    }
+
+    /**
+     * Convenience shortcut method to the name of the RLC for this assignment
+     */
+    public function getRlcName(){
+        return $this->getRlc()->get_community_name();
     }
 
     /******************
