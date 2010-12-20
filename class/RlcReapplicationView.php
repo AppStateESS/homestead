@@ -17,11 +17,14 @@ class RlcReapplicationView extends View {
 
     public function show()
     {
+        $this->setPageTitle('RLC Re-application Form');
+
         $form = new PHPWS_Form();
         $submitCmd = CommandFactory::getCommand('SubmitRLCReapplication');
         $submitCmd->initForm($form);
 
-        Layout::addPageTitle("RLC Re-application Form");
+        $form->addHidden('term', $this->term);
+
         javascript('jquery');
         javascript('jquery_ui');
 
