@@ -13,7 +13,7 @@
     <!-- END student_type -->
     <!-- BEGIN app_type -->
     <tr>
-      <td>Student Type:</td>
+      <td>Application Type:</td>
       <td>{APPLICATION_TYPE}</td>
     </tr>
     <!-- END app_type -->
