@@ -3,7 +3,7 @@ PHPWS_Core::initModClass('hms', 'View.php');
 PHPWS_Core::initModClass('hms', 'Term.php');
 
 class RlcApplicationReView extends View {
-    
+
     private $student;
     private $application;
 
@@ -14,7 +14,7 @@ class RlcApplicationReView extends View {
 
     public function show(){
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        
+
         if(UserStatus::isAdmin()){
             $menuCmd = CommandFactory::getCommand('ShowAssignRlcApplicants');
             $tags['MENU_LINK'] = $menuCmd->getLink('Return to RLC Applications');
@@ -26,10 +26,17 @@ class RlcApplicationReView extends View {
         $tags['FULL_NAME']    = $this->student->getFullName();
         $tags['STUDENT_TYPE'] = $this->student->getPrintableType();
 
+        $appType = $this->application->getApplicationType();
+        if($appType == RLC_APP_FRESHMEN){
+            $tags['APPLICATION_TYPE'] = 'Freshmen';
+        }else if($appType == RLC_APP_RETURNING){
+            $tags['APPLICATION_TYPE'] = 'Re-application';
+        }
+
         $tags['FIRST_CHOICE_LABEL'] = "First choice RLC is: ";
         $tags['SECOND_CHOICE_LABEL'] = "Second choice is: ";
         $tags['THIRD_CHOICE_LABEL'] =  "Third choice is: ";
-        
+
         $tags['WHY_SPECIFIC_LABEL'] = "Specific communities chosen because: ";
         $tags['STRENGTHS_AND_WEAKNESSES_LABEL'] = "Strengths and weaknesses: ";
         $tags['WHY_FIRST_CHOICE_LABEL'] = "First choice selected because: ";
@@ -41,13 +48,13 @@ class RlcApplicationReView extends View {
         $db->addColumn('id');
         $db->addColumn('community_name');
         $rlcs_raw = $db->select();
-        
+
         foreach($rlcs_raw as $rlc) {
             $rlcs[$rlc['id']] = $rlc['community_name'];
         }
 
         $tags['FIRST_CHOICE'] = $rlcs[$this->application->rlc_first_choice_id];
-        
+
         if(isset($this->application->rlc_second_choice_id)){
             $tags['SECOND_CHOICE'] = $rlcs[$this->application->rlc_second_choice_id];
         }else{
@@ -69,7 +76,7 @@ class RlcApplicationReView extends View {
         }else{
             $tags['WHY_SECOND_CHOICE'] = 'n/a';
         }
-        
+
         if(isset($this->application->rlc_second_choice_id)){
             $tags['WHY_THIRD_CHOICE'] = $this->application->rlc_question_2;
         }else{
