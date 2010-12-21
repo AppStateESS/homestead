@@ -12,7 +12,9 @@ class HMS_RLC_Assignment{
     public $id;
 
     public $rlc_id;
+    public $gender;
     public $assigned_by_user;
+    public $application_id;
 
     public $username; # For the DBPager join stuff to work right
     public $term; // For dbPager
@@ -262,6 +264,31 @@ class HMS_RLC_Assignment{
         $tags['EMAIL']     = "{$this->username}@appstate.edu";
 
         return $tags;
+    }
+
+    /*
+     * getAdminCsvRow
+     *
+     *  This function converts the output of the adminPagerTags function
+     * into something that the db pager's csv reporter understands.  It
+     * replaces the html name link with a plain text one to avoid it being
+     * squelched in the output and changes the case of the array indices
+     * so that the column names look like the html report.
+     */
+    public function getAdminCsvRow()
+    {
+        $input  = $this->getAdminPagerTags();
+        $output = array();
+
+        $student       = StudentFactory::getStudentByUsername($this->username, $this->term);
+        $input['NAME'] = $student->getFullName();
+
+        foreach($input as $key=>$value){
+            //upercase the first letter of every word, and remove underscores in the array key
+            $output[ucwords(strtolower(preg_replace('/_/', ' ', $key)))] = $value;
+        }
+
+        return $output;
     }
 
     //TODO move this!!
