@@ -99,7 +99,7 @@ CREATE TABLE hms_learning_communities (
     extra_info text,
     allowed_student_types varchar(16),
     allowed_reapplication_student_types character varying(16),
-    members_reapply,
+    members_reapply integer not null,
     primary key(id)
 );
 
@@ -213,6 +213,7 @@ CREATE TABLE hms_learning_community_applications (
     rlc_question_1                  character varying(4096),
     rlc_question_2                  character varying(4096),
     denied                          integer DEFAULT 0 NOT NULL,
+    application_type                character varying(32) NOT NULL,
     PRIMARY KEY(id)
 );
 

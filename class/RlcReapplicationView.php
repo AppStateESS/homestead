@@ -41,8 +41,9 @@ class RlcReapplicationView extends View {
             //TODO remove the RLC they're in from the $communities list, if it exists there
         }
 
-        $firstCommunity   = array_merge(array('select'=>'Select..'), $this->communities);
-        $otherCommunities = array_merge(array('none'=>'None'), $this->communities);
+        // Merge the arrays and preserve the keys ('+' operator works for that...)
+        $firstCommunity   = array('select'=>'Select..') + $this->communities;
+        $otherCommunities = array('none'=>'None') + $this->communities;
 
         $form->addDropBox('rlc_choice_1', $firstCommunity);
         $form->setLabel('rlc_choice_1', 'First choice:');

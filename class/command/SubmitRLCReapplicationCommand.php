@@ -85,7 +85,26 @@ class SubmitRLCReapplicationCommand extends Command {
             $formCmd->redirect();
         }
 
-        test($_REQUEST,1);
+        // Create the application, populate the values and save it
+        $app = new HMS_RLC_Application();
+
+        $app->setUsername($student->getUsername());
+        $app->setDateSubmitted(time());
+        $app->setFirstChoice($rlcChoice1);
+        $app->setSecondChoice($rlcChoice2);
+        $app->setThirdChoice($rlcChoice3);
+
+        $app->setWhySpecificCommunities($why);
+        $app->setStrengthsWeaknesses($contribute);
+
+        $app->setTerm($term);
+        $app->setApplicationType(RLC_APP_RETURNING);
+
+        $app->save();
+
+        // Redirect back to the main menu
+        NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Your Residential Learning Community Re-application was saved successfully.');
+        $menuCmd->redirect();
     }
 
 }
