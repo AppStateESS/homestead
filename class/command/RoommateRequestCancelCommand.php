@@ -52,7 +52,8 @@ class RoommateRequestCancelCommand extends Command
                                        $username);
 
         // Email both parties
-        $roommate->send_cancel_emails();
+        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
+        HMS_Email::send_cancel_emails($roommate);
 
         $name = $other->getFullName();
         NQ::Simple('hms', HMS_NOTIFICATION_SUCCESS, "You have cancelled your request for $name as a roommate.");
