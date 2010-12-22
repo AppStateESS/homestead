@@ -1581,13 +1581,15 @@ class HMS_Reports{
     }
 
     /**
-     * Report lists rooms in each residence hall that are still available, along with 
+     * Report lists rooms in each residence hall that are still available, along with
      * the available beds in the room.  Also, show the number of beds allocated to the
      * lotter for each residence hall.
      *
      */
     public static function reappAvailability()
     {
+        $term = Term::getSelectedTerm();
+
         // Available rooms in each residence hall.
         $db = new PHPWS_DB('hms_bed');
         $db->addJoin('LEFT', 'hms_bed', 'hms_room', 'room_id', 'id');
@@ -1599,7 +1601,6 @@ class HMS_Reports{
         $db->addWhere('hms_room.is_medical', 0);
         $db->addWhere('hms_room.is_reserved', 0);
         $db->addWhere('hms_room.is_online', 1);
-        $term = Term::getSelectedTerm();
         $db->addWhere('hms_bed.term', $term);
         $db->addColumn('hms_room.room_number');
         $db->addColumn('hms_bed.bed_letter', null, null, True);
@@ -1608,7 +1609,7 @@ class HMS_Reports{
         $db->addGroupBy('hms_room.room_number');
         $db->addOrder('hms_residence_hall.hall_name');
         $availRooms = $db->select();
-        
+
         // Allocated beds for lottery.
         $db = new PHPWS_DB('hms_bed');
         $db->addJoin('LEFT' , 'hms_bed', 'hms_room', 'room_id', 'id');
@@ -1643,7 +1644,7 @@ class HMS_Reports{
                 $currHall = $row['hall_name'];
             }
             // Add room to residence hall template block.
-            $tpl->setCurrentBlock('rooms');            
+            $tpl->setCurrentBlock('rooms');
             $tpl->setData(array('ROOM_NUM' => $row['room_number'],
                                 'BED_COUNT' => $row['count']));
             $tpl->parseCurrentBlock();
