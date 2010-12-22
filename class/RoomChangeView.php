@@ -261,9 +261,9 @@ class RoomChangeView extends View {
         Layout::addStyle('controlpanel');
         $panel = new PHPWS_Panel('room_change_panel');
         $tabs = array();
-        $tabs['approve']  = array('title'=>'Pending Approval', 'link'=>'index.php?module=hms&action=HousingRoomChange&tab=approve', 'link_title'=>'View Students Awaiting Approval');
-        $tabs['swap']     = array('title'=>'Swaps Pending Approval', 'link'=>'index.php?module=hms&action=HousingRoomChange&tab=swap', 'link_title'=>'View Swaps Awaiting Approval');
-        $tabs['complete'] = array('title'=>'Pending Completion', 'link'=>'index.php?module=hms&action=HousingRoomChange&tab=complete', 'link_title'=>'View Requests awaiting Completion');
+        $tabs['approve']  = array('title'=>'Change Approval', 'link'=>'index.php?module=hms&action=HousingRoomChange&tab=approve', 'link_title'=>'View Students Awaiting Approval');
+        $tabs['swap']     = array('title'=>'Swap Approval', 'link'=>'index.php?module=hms&action=HousingRoomChange&tab=swap', 'link_title'=>'View Swaps Awaiting Approval');
+        $tabs['complete'] = array('title'=>'Completion', 'link'=>'index.php?module=hms&action=HousingRoomChange&tab=complete', 'link_title'=>'View Requests awaiting Completion');
 
         PHPWS_Core::initCoreClass('DBPager.php');
         $pager = new DBPager('hms_room_change_request', 'RoomChangeRequest');
