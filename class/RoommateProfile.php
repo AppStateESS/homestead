@@ -231,8 +231,8 @@ class RoommateProfile{
         $rlc_assignment = HMS_RLC_Assignment::checkForAssignment($student->getUsername(), $student->getApplicationTerm());
         if($rlc_assignment != FALSE){
             // User is assigned to an RLC, only show results from other students in the same RLC
-            $pager->db->addJoin('LEFT OUTER', 'hms_student_profiles', 'hms_learning_community_applications', 'username', 'user_id');
-            $pager->db->addJoin('LEFT OUTER', 'hms_learning_community_applications', 'hms_learning_community_assignment', 'hms_assignment_id', 'id');
+            $pager->db->addJoin('LEFT OUTER', 'hms_student_profiles', 'hms_learning_community_applications', 'username', 'username');
+            $pager->db->addJoin('LEFT OUTER', 'hms_learning_community_assignment', 'hms_learning_community_applications', 'application_id', 'id');
             $pager->db->addWhere('hms_learning_community_assignment.rlc_id', $rlc_assignment['rlc_id']);
             //$pager->db->setTestMode();
         }
