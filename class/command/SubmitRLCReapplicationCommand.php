@@ -77,6 +77,14 @@ class SubmitRLCReapplicationCommand extends Command {
                 NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You cannot choose the same community twice.');
                 $formCmd->redirect();
             }
+
+            // Change any 'none's into null
+            if($rlcChoice2 == 'none'){
+                $rlcChoice2 = null;
+            }
+            if($rlcChoice3 == 'none'){
+                $rlcChoice3 = null;
+            }
         }
 
         // Check the short answer questions
