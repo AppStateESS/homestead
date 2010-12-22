@@ -1,17 +1,24 @@
 <?php
 
+/**
+ * SaveRlcCommand - Handles saving a new RLC or updating fields on an existing Learning Community
+ *
+ * @author Jeremy Booker <jbooker at tux dot appstate dot edu>
+ * @package hms
+ */
+
 PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
 
 class SaveRlcCommand extends Command {
 
-    public function getRequestVars(){
-        $vars = array();
+    private $id;
 
-        $vars['action']         = 'ShowAddRlc';
-        $vars['community_name'] = $this->community_name;
-        $vars['abbreviation']   = $this->abbreviation;
-        $vars['capacity']       = $this->capacity;
-        $vars['hide']           = $this->hide;
+    public function setId($id){
+        $this->id = $id;
+    }
+
+    public function getRequestVars(){
+        $vars = array('action'=>'SaveRlc');
 
         if(isset($this->id)){
             $vars['id'] = $this->id;
@@ -27,35 +34,36 @@ class SaveRlcCommand extends Command {
             throw new PermissionException('You do not have permission to edit learning communities.');
         }
 
-        $community = new HMS_Learning_Community();
-        $db = new PHPWS_DB('hms_learning_communities');
-
-        try{
-            $community->set_id($context->get('id'));
-
-            $result = $db->loadObject($community);
-
-            if(PHPWS_Error::logIfError($result)){
-                $community = new HMS_Learning_Community();
-            }
-        } catch (Exception $ignored) {
-            //pass;
+        // If we have an id, load the community with that id.. otherwise, create a new community
+        if(!is_null($context->get('id'))){
+            $community = new HMS_Learning_Community($context->get('id'));
+        }else{
+            $community = new HMS_Learning_Community();
         }
 
+        // Set all the fields
+        // TODO add appropriate sanity checking...
         $community->set_community_name($context->get('community_name'));
         $community->set_abbreviation($context->get('abbreviation'));
         $community->set_capacity($context->get('capacity'));
         $community->hide = is_null($context->get('hide')) ? 0 : $context->get('hide');
+        $community->setAllowedStudentTypes($context->get('student_types'));
+        $community->setAllowedReapplicationStudentTypes($context->get('reapplication_student_types'));
 
-        $result = $db->saveObject($community);
-
-        if(PHPWS_Error::logIfError($result)){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Could not save RLC.');
+        if(is_null($context->get('members_reapply'))){
+            $community->setMembersReapply(0);
+        }else{
+            $community->setMembersReapply(1);
         }
 
+        // Save it
+        $result = $community->save();
+
+        // View command for the RLC editt page
         $viewCommand = CommandFactory::getCommand('ShowEditRlc');
         $viewCommand->setId($community->id);
 
+        // Show a success message and redirect
         NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'The RLC was saved successfully.');
         $viewCommand->redirect();
     }

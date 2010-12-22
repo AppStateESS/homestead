@@ -1,16 +1,35 @@
 <?php
 
+/**
+ * Lottery Application - Model to represent a lottery re-application
+ * for continuing students.
+ *
+ * @author Jeremy Booker <jbooker at tux dot appstate dot edu>
+ * @package hms
+ */
+
 PHPWS_Core::initModClass('hms', 'HousingApplication.php');
 
 class LotteryApplication extends HousingApplication {
 
-    public $special_interest	= NULL;
     public $magic_winner        = 0;
     public $invite_expires_on   = NULL;
 
     public $waiting_list_hide   = 0;
 
-    public function __construct($id = 0, $term = NULL, $banner_id = NULL, $username = NULL, $gender = NULL, $student_type = NULL, $application_term = NULL, $cell_phone = NULL, $meal_plan = NULL, $physical_disability = NULL, $psych_disability = NULL, $gender_need = NULL, $medical_need = NULL, $international = NULL, $specialInterest = NULL, $magicWinner = 0)
+    // This variable is set to the name of the special interest group
+    // *IF AND ONLY IF* and student is approved for that group
+    public $special_interest	= NULL;
+
+    // These are preferences input by the student on the application form.
+    // They don't necessarily mean a student has been approved by a group.
+    public $sorority_pref;
+    public $tf_pref;
+    public $wg_pref;
+    public $honors_pref;
+    public $rlc_interest;
+
+    public function __construct($id = 0, $term = NULL, $banner_id = NULL, $username = NULL, $gender = NULL, $student_type = NULL, $application_term = NULL, $cell_phone = NULL, $meal_plan = NULL, $physical_disability = NULL, $psych_disability = NULL, $gender_need = NULL, $medical_need = NULL, $international = NULL, $specialInterest = NULL, $magicWinner = 0, $sororityPref = NULL, $tfPref = NULL, $wgPref = NULL, $honorsPref = NULL, $rlcInterest = NULL)
     {
         /**
          * If the id is non-zero, then we need to load the other member variables
@@ -28,6 +47,12 @@ class LotteryApplication extends HousingApplication {
 
         $this->special_interest = $specialInterest;
         $this->magic_winner = $magicWinner;
+
+        $this->sorority_pref  = $sororityPref;
+        $this->tf_pref        = $tfPref;
+        $this->wg_pref        = $wgPref;
+        $this->honors_pref    = $honorsPref;
+        $this->rlc_interest   = $rlcInterest;
     }
 
     /**

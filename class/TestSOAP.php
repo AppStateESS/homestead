@@ -18,7 +18,7 @@ class TestSOAP extends SOAP{
         }
 
         // Sanity checking on the term
-        if(empty($term) || is_null($term) || !isset($username)){
+        if(empty($term) || is_null($term) || !isset($term)){
             throw new InvalidArgumentException('Bad term');
         }
 
@@ -28,16 +28,16 @@ class TestSOAP extends SOAP{
         $student->first_name            = 'Jeremy';
         $student->middle_name           = 'Lee';
         $student->dob                   = '1986-09-05';
-        $student->gender                = 'M';
+        $student->gender                = 'F';
         $student->deposit_date          = '';
         $student->deposit_waived        = 'false';
 
         $student->international         = 'false';
         $student->student_level         = 'U';
 
-        $student->honors                = 'false';
-        $student->teaching_fellow       = 'false';
-        $student->watauga_member        = 'false';
+        $student->honors                = 'true';
+        $student->teaching_fellow       = 'true';
+        $student->watauga_member        = 'true';
 
 
 //   		$student->student_type          = 'T';

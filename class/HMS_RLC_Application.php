@@ -10,6 +10,10 @@
 
 define('RLC_RESPONSE_LIMIT', 4096); // max number of characters allowed in the text areas on the RLC application
 
+// RLC application types
+define('RLC_APP_FRESHMEN', 'freshmen');
+define('RLC_APP_RETURNING', 'returning');
+
 PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 PHPWS_Core::initModClass('hms', 'HMS_Item.php');
 
@@ -34,6 +38,8 @@ class HMS_RLC_Application extends HMS_Item {
     public $term = NULL;
 
     public $denied = 0;
+
+    public $application_type;
 
     /**
      * Constructor
@@ -165,7 +171,7 @@ class HMS_RLC_Application extends HMS_Item {
         $actions[] = $viewCmd->getLink('View Application');
 
         $assign = HMS_RLC_Assignment::getAssignmentByUsername($this->username, $this->term);
-        
+
         $rmCmd = CommandFactory::getCommand('RemoveRlcAssignment');
         $rmCmd->setAssignmentId($assign->id);
 
@@ -174,7 +180,7 @@ class HMS_RLC_Application extends HMS_Item {
         $tags['ACTION'] = implode(' | ', $actions);
         return $tags;
     }
-    
+
     public function report_by_rlc_pager_tags()
     {
         $student = StudentFactory::getStudentByUsername($this->username, $this->term);
@@ -261,7 +267,7 @@ class HMS_RLC_Application extends HMS_Item {
     }
 
     /**
-     * Get denied RLC applicants by term 
+     * Get denied RLC applicants by term
      * @return Array of Student objects
      */
     public static function getDeniedApplicantsByTerm($term)
@@ -271,7 +277,7 @@ class HMS_RLC_Application extends HMS_Item {
         $db->addWhere('denied',1);
         $db->addWhere('term', $term);
         $result = $db->select();
-        
+
         if(PHPWS_Error::logIfError($result)){
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
@@ -434,12 +440,36 @@ class HMS_RLC_Application extends HMS_Item {
         return $this->hms_assignment_id;
     }
 
+    /**
+     * @depreciated
+     * Use 'getTerm' instead.
+     */
     public function getEntryTerm(){
         return $this->term;
     }
 
+    /**
+     * @depreciated
+     * Use 'setTerm' instead.
+     */
     public function setEntryTerm($term){
         $this->term = $term;
+    }
+
+    public function getTerm(){
+        return $this->term;
+    }
+
+    public function setTerm($term){
+        $this->term = $term;
+    }
+
+    public function getApplicationType(){
+        return $this->application_type;
+    }
+
+    public function setApplicationType($type){
+        $this->application_type = $type;
     }
 }
 

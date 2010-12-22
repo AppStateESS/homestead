@@ -1,3 +1,7 @@
+.select-label {
+	float: left; width: 7em; padding-right: 20px; clear: left;
+}
+
 .hms-main-admin-menu-block{
 	background:#FAFAFA;
 	width:200px;

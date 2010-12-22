@@ -46,6 +46,14 @@
                             <!-- END music_checkbox_repeat -->
                             </td>
                         </tr>
+                        <tr>
+                          <td valign="top" width="50%">{LANGUAGE_CHECKBOX_QUESTION}<br />
+                            <!-- BEGIN language_checkbox_repeat -->
+                            {LANGUAGE_CHECKBOX}{LANGUAGE_CHECKBOX_LABEL}<br>
+                            <!-- END language_checkbox_repeat -->
+                          </td>
+                        </tr>
+
                     </table>
                 </td>
             </tr>
