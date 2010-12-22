@@ -40,6 +40,7 @@ class AutoassignPulse extends ScheduledPulse
 
         // TODO: Email the person that scheduled the autoassign.
         mail('jtickle@tux.appstate.edu', 'Autoassign Complete', $message);
+        mail('jbooker@tux.appstate.edu', 'Autoassign Complete', $message);
 
         return TRUE;
     }

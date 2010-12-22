@@ -27,6 +27,9 @@ abstract class HMS_Item {
     abstract public function getDb();
 
     public function save(){
+
+        $this->stamp();
+
         $db = $this->getDb();
         $result = $db->saveObject($this);
 
@@ -65,10 +68,10 @@ abstract class HMS_Item {
 
         if (!$this->id) {
             $this->added_on = & $now;
-            //$this->added_by = Current_User::getId();
+            $this->added_by = Current_User::getId();
         }
         $this->updated_on = & $now;
-        //$this->updated_by = Current_User::getId();
+        $this->updated_by = Current_User::getId();
     }
 
     public function delete()

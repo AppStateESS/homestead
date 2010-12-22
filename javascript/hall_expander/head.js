@@ -29,9 +29,13 @@ $(document).ready(function(){
                 return false;
             });
 
+	    //put up an AJAX spinner
+        $("#{DIV}").html('<img src="images/core/ajax-loader-big.gif" />');
+        
     $.post('index.php', {module: 'hms', action: 'ListAllowedHalls'},
         function(data){
-    	
+    		$("#{DIV}").empty();
+    		
     		if(data == ""){
     			$("#{DIV}").append("You do not have permission to message any residence halls. <br /><br />");
     			return;
@@ -46,7 +50,8 @@ $(document).ready(function(){
 
             var output = "<ul>";
             for(var i in halls){
-                output += '<li class="container expanded">'+halls[i].draw()+"</li>";
+                var tmp = halls[i].draw();
+                output += '<li class="container '+(halls[i].collapsed ? 'collapsed' : 'expanded' )+'">'+tmp+"</li>";
             }
             output += "</ul>";
             $("#{DIV}").empty();

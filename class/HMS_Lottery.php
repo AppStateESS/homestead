@@ -373,7 +373,7 @@ class HMS_Lottery {
             try{
             $entry = HousingApplication::getApplicationByUser($winning_username, $term);
             $entry->invite_expires_on = $expire_time;
-            
+
             $result = $entry->save();
             }catch(Exception $e){
                 $output[] = 'Error while trying to select a winning student. Exception: ' . $e->getMessage();
@@ -400,7 +400,7 @@ class HMS_Lottery {
             }else if($actual_class == CLASS_SOPHOMORE){
                 $soph_invites_sent++;
             }
-            
+
             $student = StudentFactory::getStudentByUsername($winning_username, $term);
 
             # Send them an invite
@@ -516,7 +516,7 @@ class HMS_Lottery {
     public function count_remaining_entries($term)
     {
         $now = mktime();
-        
+
         $sql = "SELECT count(*) FROM hms_new_application JOIN hms_lottery_application ON hms_new_application.id = hms_lottery_application.id
                 LEFT OUTER JOIN (SELECT asu_username FROM hms_assignment WHERE hms_assignment.term=$term) as foo ON hms_new_application.username = foo.asu_username
                 WHERE foo.asu_username IS NULL AND (hms_lottery_application.invite_expires_on < $now OR hms_lottery_application.invite_expires_on IS NULL)
@@ -526,7 +526,7 @@ class HMS_Lottery {
                 AND medical_need = 0
                 AND gender_need = 0
                 AND special_interest IS NULL";
-        
+
         $num_remaining_entries = PHPWS_DB::getOne($sql);
 
         if(PEAR::isError($num_remaining_entries)){
@@ -739,8 +739,8 @@ class HMS_Lottery {
 
         $query = "SELECT count(*) from hms_assignment
                     JOIN hms_new_application ON hms_assignment.asu_username = hms_new_application.username
-                    JOIN hms_lottery_application ON hms_new_application.id = hms_lottery_application.id 
-                    WHERE hms_assignment.term = $term 
+                    JOIN hms_lottery_application ON hms_new_application.id = hms_lottery_application.id
+                    WHERE hms_assignment.term = $term
                     AND hms_assignment.lottery = 1
                     AND hms_new_application.term = $term ";
 
@@ -820,7 +820,7 @@ class HMS_Lottery {
         foreach($result as $row){
             $student = StudentFactory::getStudentByUsername($row['asu_username'], $term);
             $requestor = StudentFactory::getStudentByUsername($row['requestor'], $term);
-            
+
             $bed = new HMS_Bed($row['bed_id']);
             $hall_room = $bed->where_am_i();
             HMS_Email::send_lottery_roommate_reminder($row['asu_username'], $student->getName(), $row['expires_on'], $requestor->getName(), $hall_room, $year);
@@ -911,7 +911,7 @@ class HMS_Lottery {
         if(HMS_Assignment::checkForAssignment($username, $term)){
             return E_ASSIGN_ALREADY_ASSIGNED;
         }
-        
+
         $student = StudentFactory::getStudentByUsername($username, $term);
         $requestor = StudentFactory::getStudentByUsername($invite['requestor'], $term);
 
@@ -943,184 +943,6 @@ class HMS_Lottery {
         }
 
 
-    }
-
-    public function run_monte_carlo($term, $num_iterations, $soph_invites, $jr_invites, $sr_invites)
-    {
-        # Declare an array for the final output
-        $output = array();
-
-        $num_two_beds = 930;
-        $num_four_beds = 492;
-
-        # Query the database for the set of entry application terms, and the application terms of their roommates
-        $db = new PHPWS_DB('hms_new_application');
-        $db->addJoin('left outer', 'hms_new_application', 'hms_lottery_application', 'id', 'id');
-        
-        $db->addColumn('application_term');
-        $db->addColumn('hms_lottery_application.roommate1_app_term');
-        $db->addColumn('hms_lottery_application.roommate2_app_term');
-        $db->addColumn('hms_lottery_application.roommate3_app_term');
-
-        $db->addWhere('term', $term); // Only for the specified term
-
-        $result = $db->select();
-
-        # Transform the 2D array of application terms into a 2D array of classes (i.e. 'SOPH', 'JR', 'SR')
-        $transformed_entries = HMS_Lottery::monte_carlo_translate_array($result, $term);
-
-        # Separate the entries into individual lists of soph, jr, senior entires
-        $soph_entries = $jr_entries = $sr_entries = array();
-
-        foreach($transformed_entries as $entry){
-            if($entry[0] == CLASS_SOPHOMORE){
-                $soph_entries[] = $entry;
-            }elseif($entry[0] == CLASS_JUNIOR){
-                $jr_entries[] = $entry;
-            }elseif($entry[0] == CLASS_SENIOR){
-                $sr_entries[] = $entry;
-            }
-        }
-
-        $soph_results   = array();
-        $jr_results     = array();
-        $sr_results     = array();
-
-        # Run the simulation the requested number of times
-        for($i = 0; $i < $num_iterations; $i++){
-            $result = HMS_Lottery::monte_carlo_interation($soph_entries, $jr_entries, $sr_entries, $soph_invites, $jr_invites, $sr_invites, $num_two_beds, $num_four_beds);
-
-            $soph_results[] = $result['soph'];
-            $jr_results[]   = $result['jr'];
-            $sr_results[]   = $result['sr'];
-        }
-
-        # Compute stats about the generated dataset
-        $output['soph_min'] = min($soph_results);
-        $output['soph_max'] = max($soph_results);
-        $output['soph_avg'] = floor(HMS_Lottery::mean($soph_results));
-        $output['soph_mode']= HMS_Lottery::mode($soph_results);
-
-        $output['jr_min']   = min($jr_results);
-        $output['jr_max']   = max($jr_results);
-        $output['jr_avg']   = floor(HMS_Lottery::mean($jr_results));
-        $output['jr_mode']  = HMS_Lottery::mode($jr_results);
-
-        $output['sr_min']   = min($sr_results);
-        $output['sr_max']   = max($sr_results);
-        $output['sr_avg']   = floor(HMS_Lottery::mean($sr_results));
-        $output['sr_mode']  = HMS_Lottery::mode($sr_results);
-
-        return $output;
-    }
-
-    public function monte_carlo_interation($soph_entries, $jr_entries, $sr_entries, $soph_invites, $jr_invites, $sr_invites, $num_two_beds, $num_four_beds)
-    {
-        $actual_soph = $actual_jr = $actual_sr = 0;
-
-        // Copy the value of these vars
-        $two_beds   = $num_two_beds;
-        $four_beds  = $num_four_beds;
-
-        # Randomize the arrays
-        shuffle($sr_entries);
-        shuffle($jr_entries);
-        shuffle($soph_entries);
-
-        $result = HMS_Lottery::monte_carlo_choose_entries($sr_entries, $sr_invites, $two_beds, $four_beds);
-        $actual_sr      += $result['sr'];
-        $actual_jr      += $result['jr'];
-        $actual_soph    += $result['soph'];
-
-        $result = HMS_Lottery::monte_carlo_choose_entries($jr_entries, $jr_invites, $two_beds, $four_beds);
-        $actual_sr      += $result['sr'];
-        $actual_jr      += $result['jr'];
-        $actual_soph    += $result['soph'];
-
-        $result = HMS_Lottery::monte_carlo_choose_entries($soph_entries, $soph_invites, $two_beds, $four_beds);
-        $actual_sr      += $result['sr'];
-        $actual_jr      += $result['jr'];
-        $actual_soph    += $result['soph'];
-
-        return array('soph'=>$actual_soph, 'jr'=>$actual_jr, 'sr'=>$actual_sr);
-    }
-
-    public function monte_carlo_choose_entries($entries, $num_invites, &$two_beds, &$four_beds)
-    {
-        $actual_sr = $actual_jr = $actual_soph = 0;
-
-        for($i = 0; $i < $num_invites && $i < count($entries); $i++){
-
-            # Get the entry at the current index
-            $entry = $entries[$i];
-
-            # Reset these flags
-            $use_two_beds   = FALSE;
-            $use_foure_beds = FALSE;
-
-            # Tally the number of each bed type used for this student
-            if($four_beds > 0){
-                $four_beds--;
-            }else if($two_beds > 0){
-                $two_beds--;
-            }else{
-                // We're out of beds, so quit before we actually count this student or his roommates
-                break;
-            }
-
-            # Tally the student who entered
-            if($entry[0] == CLASS_SENIOR){
-                $actual_sr++;
-            }elseif($entry[0] == CLASS_JUNIOR){
-                $actual_jr++;
-            }elseif($entry[0] == CLASS_SOPHOMORE){
-                $actual_soph++;
-            }
-
-            # For each of the other roommates
-            for($j = 1; $j < 4; $j++){
-
-                if(is_null($entry[$j])){
-                    continue;
-                }
-
-                // Tally the bed this student will occupy
-                if($four_beds > 0){
-                    $four_beds--;
-                }else if($two_beds > 0){
-                    $two_beds--;
-                }else{
-                    // We're out of beds, skip 'em and quit
-                    break;
-                }
-
-                // Tally the student's class
-                if($entry[$j] == CLASS_SENIOR){
-                    $actual_sr++;
-                }else if($entry[$j] == CLASS_JUNIOR){
-                    $actual_jr++;
-                }else if($entry[$j] == CLASS_SOPHOMORE){
-                    $actual_soph++;
-                }
-            }
-        }
-
-        return array('soph'=>$actual_soph, 'jr'=>$actual_jr, 'sr'=>$actual_sr);
-    }
-
-    public function monte_carlo_translate_array($array, $term)
-    {
-        $result = array();
-
-        foreach($array as $element){
-            $entry = array();
-            foreach($element as $entry_term){
-                $entry[] = HMS_Lottery::application_term_to_class($term, $entry_term);
-            }
-            $result[] = $entry;
-        }
-
-        return $result;
     }
 
     // Translates an application term into a class (fr, soph, etc) based on the term given
@@ -1166,34 +988,7 @@ class HMS_Lottery {
         }
     }
 
-    public function mean($array)
-    {
-        $sum = 0;
-
-        foreach($array as $value){
-            $sum += $value;
-        }
-
-        return $sum/count($array);
-    }
-
-    public function mode($array)
-    {
-        $counts = array();
-
-        foreach($array as $value){
-            if(isset($counts[$value])){
-                $counts[$value] = $counts[$value] + 1;
-            }else{
-                $counts[$value] = 1;
-            }
-        }
-
-        arsort($counts);
-        $keys = array_keys($counts);
-        return array($keys[0], $keys[1], $keys[2]);
-    }
-
+/*
     public function get_special_interest_groups()
     {
         $special_interests['none']              = 'None';
@@ -1221,6 +1016,20 @@ class HMS_Lottery {
         $special_interests['international']     = 'International Programs';
 
         return $special_interests;
+    }
+*/
+    public static function getSororities()
+    {
+        $sororities['sorority_adp']      = 'Alpha Delta Pi Sorority';
+        $sororities['sorority_ap']       = 'Aplha Phi Sorority';
+        $sororities['sorority_co']       = 'Chi Omega Sorority';
+        $sororities['sorority_dz']       = 'Delta Zeta Sorority';
+        $sororities['sorority_kd']       = 'Kappa Delta Sorority';
+        $sororities['sorority_pm']       = 'Phi Mu Sorority';
+        $sororities['sorority_sk']       = 'Sigma Kappa Sorority';
+        $sororities['sorority_aop']      = 'Alpha Omicron Pi Sorority';
+
+        return $sororities;
     }
 
 }

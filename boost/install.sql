@@ -98,6 +98,8 @@ CREATE TABLE hms_learning_communities (
     hide integer NOT NULL DEFAULT 0,
     extra_info text,
     allowed_student_types varchar(16),
+    allowed_reapplication_student_types character varying(16),
+    members_reapply integer not null,
     primary key(id)
 );
 
@@ -211,6 +213,7 @@ CREATE TABLE hms_learning_community_applications (
     rlc_question_1                  character varying(4096),
     rlc_question_2                  character varying(4096),
     denied                          integer DEFAULT 0 NOT NULL,
+    application_type                character varying(32) NOT NULL,
     PRIMARY KEY(id)
 );
 
@@ -289,16 +292,15 @@ CREATE TABLE hms_summer_application (
 
 CREATE TABLE hms_lottery_application (
     id                      integer NOT NULL REFERENCES hms_new_application(id),
-    roommate1_username      character varying(32),
-    roommate2_username      character varying(32),
-    roommate3_username      character varying(32),
-    roommate1_app_term      integer,
-    roommate2_app_term      integer,
-    roommate3_app_term      integer,
     special_interest        character varying(32),
     magic_winner            smallint NOT NULL default 0,
     invite_expires_on       integer,
     waiting_list_hide       smallint DEFAULT 0,
+    rlc_interest            smallint not null default 0,
+    sorority_pref           character varying(32),
+    tf_pref                 smallint NOT NULL default 0,
+    wg_pref                 smallint NOT NULL default 0,
+    honors_pref             smallint NOT NULL default 0,
     PRIMARY KEY(id)
 );
 
@@ -358,6 +360,7 @@ CREATE TABLE hms_student_profiles (
     beach smallint,
     bluegrass smallint,
     blues smallint,
+    christian smallint,
     classical smallint,
     classic_rock smallint,
     country smallint,
@@ -390,6 +393,27 @@ CREATE TABLE hms_student_profiles (
     loudness smallint,
     cleanliness smallint,
     free_time smallint,
+    arabic smallint,
+    bengali smallint,
+    chinese smallint,
+    english smallint,
+    french smallint,
+    german smallint,
+    hindi smallint,
+    italian smallint,
+    japanese smallint,
+    javanese smallint,
+    korean smallint,
+    malay smallint,
+    marathi smallint,
+    portuguese smallint,
+    punjabi smallint,
+    russian smallint,
+    spanish smallint,
+    tamil smallint,
+    telugu smallint,
+    vietnamese smallint,
+
     PRIMARY KEY(id)
 );
 

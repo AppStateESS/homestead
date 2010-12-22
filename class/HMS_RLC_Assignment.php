@@ -12,7 +12,9 @@ class HMS_RLC_Assignment{
     public $id;
 
     public $rlc_id;
+    public $gender;
     public $assigned_by_user;
+    public $application_id;
 
     public $username; # For the DBPager join stuff to work right
     public $term; // For dbPager
@@ -103,6 +105,22 @@ class HMS_RLC_Assignment{
         return TRUE;
     }
 
+    /**
+     * Returns the HMS_Learning_Community object for the community in this assignment.
+     */
+    public function getRlc()
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
+        return new HMS_Learning_Community($this->getRlcId());
+    }
+
+    /**
+     * Convenience shortcut method to the name of the RLC for this assignment
+     */
+    public function getRlcName(){
+        return $this->getRlc()->get_community_name();
+    }
+
     /******************
      * Static methods *
      */
@@ -158,8 +176,10 @@ class HMS_RLC_Assignment{
     }
 
     public static function getAssignmentByUsername($username, $term){
+        PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
+
         $app = HMS_RLC_Application::getApplicationByUsername($username, $term);
-       
+
         if(is_null($app)){
             return null;
         }
@@ -178,7 +198,7 @@ class HMS_RLC_Assignment{
         if(is_null($assignment->id)){
             return null;
         }
-        
+
         return $assignment;
     }
 
@@ -246,6 +266,31 @@ class HMS_RLC_Assignment{
         return $tags;
     }
 
+    /*
+     * getAdminCsvRow
+     *
+     *  This function converts the output of the adminPagerTags function
+     * into something that the db pager's csv reporter understands.  It
+     * replaces the html name link with a plain text one to avoid it being
+     * squelched in the output and changes the case of the array indices
+     * so that the column names look like the html report.
+     */
+    public function getAdminCsvRow()
+    {
+        $input  = $this->getAdminPagerTags();
+        $output = array();
+
+        $student       = StudentFactory::getStudentByUsername($this->username, $this->term);
+        $input['NAME'] = $student->getFullName();
+
+        foreach($input as $key=>$value){
+            //upercase the first letter of every word, and remove underscores in the array key
+            $output[ucwords(strtolower(preg_replace('/_/', ' ', $key)))] = $value;
+        }
+
+        return $output;
+    }
+
     //TODO move this!!
     public function view_by_rlc_pager($rlc_id)
     {
@@ -254,7 +299,7 @@ class HMS_RLC_Assignment{
         $db->addWhere('id', $rlc_id);
         $db->addColumn('community_name');
         $tags['TITLE'] = $db->select('one') . ' Assignments ' . Term::toString(Term::getSelectedTerm(), TRUE);
-         
+
         PHPWS_Core::initCoreClass('DBPager.php');
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
 
@@ -274,6 +319,10 @@ class HMS_RLC_Assignment{
 
         return $pager->get();
     }
+
+    /***********************
+     * Accessor / Mutators *
+     */
 
     public function setId($id) {
         $this->id = $id;

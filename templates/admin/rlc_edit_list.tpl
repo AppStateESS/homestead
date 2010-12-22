@@ -1,3 +1,6 @@
+<h2>Edit Learning Communities</h2>
+
+{ADD_LINK}
 <table>
     <tr>
         <th>Community Name</th>

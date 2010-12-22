@@ -63,7 +63,8 @@ class RoommateBreakCommand extends Command
                                        "CAPTCHA: $verified");
 
         // Email both parties
-        $roommate->send_break_emails($username);
+        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
+        HMS_Email::send_break_emails($roommate, $username);
 
         $name = $other->getFullName();
         NQ::Simple('hms', HMS_NOTIFICATION_SUCCESS, "You and $name are no longer marked as roommates.");

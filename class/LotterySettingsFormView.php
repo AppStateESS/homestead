@@ -1,7 +1,7 @@
 <?php
 
 class LotterySettingsFormView extends View {
-    
+
     public function show()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
@@ -9,13 +9,13 @@ class LotterySettingsFormView extends View {
         $tpl = array();
 
         $form = new PHPWS_Form();
-        
+
         $submitCmd = CommandFactory::getCommand('LotterySettingsSubmit');
         $submitCmd->initForm($form);
 
         $form->addDropBox('lottery_term', Term::getTermsAssoc());
         $form->setMatch('lottery_term', PHPWS_Settings::get('hms', 'lottery_term'));
-        
+
         //test(PHPWS_Settings::get('hms', 'lottery_term'),1);
 
         $form->addRadio('phase_radio', array('single_phase', 'multi_phase'));
@@ -64,14 +64,6 @@ class LotterySettingsFormView extends View {
         $max_soph = PHPWS_Settings::get('hms', 'lottery_max_soph');
         $max_jr   = PHPWS_Settings::get('hms', 'lottery_max_jr');
         $max_sr   = PHPWS_Settings::get('hms', 'lottery_max_sr');
-
-        if(isset($max_soph)){
-            $result = HMS_Lottery::run_monte_carlo(PHPWS_Settings::get('hms', 'lottery_term'), 1000, $max_soph, $max_jr, $max_sr);
-            $tpl = array_merge($result, $tpl);
-            $tpl['soph_mode'] = implode(', ', $tpl['soph_mode']);
-            $tpl['jr_mode'] = implode(', ', $tpl['jr_mode']);
-            $tpl['sr_mode'] = implode(', ', $tpl['sr_mode']);
-        }
 
         $form->addSubmit('submit');
 

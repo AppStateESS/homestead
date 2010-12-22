@@ -1103,6 +1103,7 @@ class HMS_Reports{
                 $state      = "";
                 $zip        = "";
                 $appTerm    = "";
+                continue;
             }
 
             $bannerId = $student->getBannerId();
@@ -1380,11 +1381,11 @@ class HMS_Reports{
     {
         $term = Term::getSelectedTerm();
 
-        $output = "Hall,Floor,Room,First Name,Last Name,Banner ID,Cell Phone Number, Email Address\n";
+        $output = "Last Name,First Name,Hall,Floor,Room,Banner ID,Cell Phone Number, Email Address\n";
 
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
 
-        $query = "SELECT hms_assignment.id, hms_assignment.asu_username, hms_new_application.cell_phone, hms_room.room_number, hms_floor.floor_number, hms_residence_hall.hall_name FROM hms_assignment LEFT JOIN (SELECT username, MAX(term) AS mterm FROM hms_new_application GROUP BY username) AS a ON hms_assignment.asu_username = a.username LEFT JOIN hms_new_application ON a.username = hms_new_application.username AND a.mterm = hms_new_application.term LEFT JOIN hms_bed ON hms_assignment.bed_id = hms_bed.id LEFT JOIN hms_room ON hms_bed.room_id = hms_room.id LEFT JOIN hms_floor ON hms_room.floor_id = hms_floor.id LEFT JOIN hms_residence_hall ON hms_floor.residence_hall_id = hms_residence_hall.id WHERE ( hms_assignment.term = $term) ORDER BY hms_residence_hall.id ASC";
+        $query = "SELECT hms_assignment.id, hms_assignment.asu_username, hms_new_application.cell_phone, hms_room.room_number, hms_floor.floor_number, hms_residence_hall.hall_name FROM hms_assignment LEFT JOIN (SELECT username, MAX(term) AS mterm FROM hms_new_application GROUP BY username) AS a ON hms_assignment.asu_username = a.username LEFT JOIN hms_new_application ON a.username = hms_new_application.username AND a.mterm = hms_new_application.term LEFT JOIN hms_bed ON hms_assignment.bed_id = hms_bed.id LEFT JOIN hms_room ON hms_bed.room_id = hms_room.id LEFT JOIN hms_floor ON hms_room.floor_id = hms_floor.id LEFT JOIN hms_residence_hall ON hms_floor.residence_hall_id = hms_residence_hall.id WHERE ( hms_assignment.term = $term ) order by asu_username ASC";
 
         $results = PHPWS_DB::getAll($query);
 
@@ -1401,7 +1402,7 @@ class HMS_Reports{
                 continue;
             }
 
-            $output .= "{$result['hall_name']},{$result['floor_number']},{$result['room_number']},{$student->getLastName()},{$student->getFirstName()},{$student->getBannerId()},{$result['cell_phone']},{$result['asu_username']}@appstate.edu\n";
+            $output .= "{$student->getLastName()},{$student->getFirstName()},{$result['hall_name']},{$result['floor_number']},{$result['room_number']},{$student->getBannerId()},{$result['cell_phone']},{$result['asu_username']}@appstate.edu\n";
         }
 
         header('Content-Type: application/octet-stream');
