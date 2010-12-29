@@ -20,6 +20,7 @@ class LotteryAdminCreateAppCommand extends Command {
 
         $viewCmd = CommandFactory::getCommand('ShowLotteryAdminEntry');
 
+        //TODO: use the lottery term setting here instead?
         $term = Term::getSelectedTerm();
 
         $username = $context->get('asu_username');
@@ -39,13 +40,8 @@ class LotteryAdminCreateAppCommand extends Command {
         $psychDisability    = $context->get('psych_disability');
         $genderNeed         = $context->get('gender_need');
         $medicalNeed        = $context->get('medical_need');
-        $specialInterest    = $context->get('special_interest');
 
-        if($specialInterest == 'none'){
-            $specialInterest = NULL;
-        }
-
-        $application = new LotteryApplication(0, $term, $student->getBannerId(), $student->getUsername(), $student->getGender(), $student->getType(), $student->getApplicationTerm(), null, BANNER_MEAL_STD, $physicalDisability, $psychDisability, $genderNeed, $medicalNeed, NULL, $specialInterest, 0);
+        $application = new LotteryApplication(0, $term, $student->getBannerId(), $student->getUsername(), $student->getGender(), $student->getType(), $student->getApplicationTerm(), null, BANNER_MEAL_STD, $physicalDisability, $psychDisability, $genderNeed, $medicalNeed, 0, NULL, 0, NULL, 0, 0, 0, 0);
 
         try{
             $application->save();
