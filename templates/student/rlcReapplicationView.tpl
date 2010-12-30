@@ -1,5 +1,5 @@
-<h1>{TERM} Learning Community Application</h1>
-<h3 style="margin-left: 200px;margin-top:0">for Upperclassmen</h3>
+<h1>Residential Learning Community Application</h1>
+<h3 style="margin-left: 6em;margin-top:0">for Upperclassmen - {TERM}</h3>
 
 {START_FORM}
 

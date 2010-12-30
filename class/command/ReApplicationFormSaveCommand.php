@@ -121,9 +121,15 @@ class ReApplicationFormSaveCommand extends Command {
         HMS_Email::send_lottery_application_confirmation($student, $year);
 
         # Show success message
-        #TODO: Redirect to RLC app if student is interested
         NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Your re-application was submitted successfully.');
-        $cmd = CommandFactory::getCommand('ShowStudentMenu');
+
+        # Redirect to the RLC Reapplication form is the student is interested in RLCs, otherwise, show the student menu
+        if($rlcInterest == 1){
+            $cmd = CommandFactory::getCommand('ShowRlcReapplication');
+            $cmd->setTerm($term);
+        }else{
+            $cmd = CommandFactory::getCommand('ShowStudentMenu');
+        }
         $cmd->redirect();
     }
 }

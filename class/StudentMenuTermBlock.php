@@ -29,7 +29,7 @@ class StudentMenuTermBlock {
 
 		// In case there are no features enabled for this term
 		if(empty($features)){
-		    $tpl['BLOCKS'][] = array('BLOCK'=>'No options are available for this term.');
+		    $tpl['BLOCKS'][] = array('BLOCK'=>'There are no options currently available to you for this term.');
 		}
 
 		foreach($features as $feat){

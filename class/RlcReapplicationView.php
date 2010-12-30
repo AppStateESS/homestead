@@ -36,7 +36,7 @@ class RlcReapplicationView extends View {
         if(!is_null($this->rlcAssignment) && (array_key_exists($this->rlcAssignment->getRlcId(), $this->communities) || $this->rlcAssignment->getRlc()->getMembersReapply() == 1)){
             $rlcName = $this->rlcAssignment->getRlcName();
             $form->addRadio('rlc_opt', array('continue', 'new'));
-            $form->setLabel('rlc_opt', array('Continue in ' . $rlcName . '.', 'Apply for a different community.'));
+            $form->setLabel('rlc_opt', array('I would like to continue in the ' . $rlcName . '.', 'I would like to apply for a different community.'));
 
             //TODO remove the RLC they're in from the $communities list, if it exists there
         }
