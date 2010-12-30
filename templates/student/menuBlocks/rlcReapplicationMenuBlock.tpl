@@ -1,7 +1,7 @@
 {ICON}
 
 <h3>
-<div class={STATUS}>Learning Community Re-Application</div>
+<div class={STATUS}>Residential Learning Community Re-Application</div>
 </h3>
 
 <div class="block-content">
