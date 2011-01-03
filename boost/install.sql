@@ -179,6 +179,9 @@ CREATE TABLE hms_assignment (
     primary key(id)
 );
 
+ALTER TABLE hms_assignment ADD CONSTRAINT hms_assignment_uniq_student_const UNIQUE (asu_username, term);
+ALTER TABLE hms_assignment ADD CONSTRAINT hms_assignment_uniq_bed_const UNIQUE (bed_id, term);
+
 CREATE TABLE hms_assignment_queue (
     id              integer NOT NULL,
     action          integer NOT NULL,
