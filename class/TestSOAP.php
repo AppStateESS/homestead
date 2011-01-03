@@ -35,7 +35,7 @@ class TestSOAP extends SOAP{
         $student->international         = 'false';
         $student->student_level         = 'U';
 
-        $student->honors                = 'false';
+        $student->honors                = 'true';
         $student->teaching_fellow       = 'false';
         $student->watauga_member        = 'false';
 
