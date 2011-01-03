@@ -200,7 +200,19 @@ class LotteryApplication extends HousingApplication {
         $pager->db->addJoin('left outer', 'hms_new_application', 'hms_lottery_application', 'id', 'id');
 
         $pager->addWhere('hms_new_application.term', $term);
-        $pager->addWhere('hms_lottery_application.special_interest', $group);
+
+        //$pager->addWhere('hms_lottery_application.special_interest', $group);
+
+        if($group == 'honors'){
+            $pager->addWhere('hms_lottery_application.honors_pref', 1);
+        }else if($group == 'watauga'){
+            $pager->addWhere('hms_lottery_application.wg_pref', 1);
+        }else if($group == 'tf'){
+            $pager->addWhere('hms_lottery_application.tf_pref', 1);
+        }else if($group == 'sorority'){
+            $pager->addWhere('hms_lottery_application.sorority_pref', 'NULL', '!=');
+        }
+
 
         $pager->setTemplate('admin/special_interest_pager.tpl');
         $pager->setEmptyMessage('No students found.');
