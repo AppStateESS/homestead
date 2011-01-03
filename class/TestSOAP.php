@@ -28,16 +28,16 @@ class TestSOAP extends SOAP{
         $student->first_name            = 'Jeremy';
         $student->middle_name           = 'Lee';
         $student->dob                   = '1986-09-05';
-        $student->gender                = 'F';
+        $student->gender                = 'M';
         $student->deposit_date          = '';
         $student->deposit_waived        = 'false';
 
         $student->international         = 'false';
         $student->student_level         = 'U';
 
-        $student->honors                = 'true';
-        $student->teaching_fellow       = 'true';
-        $student->watauga_member        = 'true';
+        $student->honors                = 'false';
+        $student->teaching_fellow       = 'false';
+        $student->watauga_member        = 'false';
 
 
 //   		$student->student_type          = 'T';
@@ -45,7 +45,7 @@ class TestSOAP extends SOAP{
 //   		$student->projected_class       = 'FR';
 
           $student->student_type          = 'F';
-          $student->application_term      = '201040';
+          $student->application_term      = '201110';
           $student->projected_class       = 'FR';
 
         $student->credhrs_completed     = 0;
