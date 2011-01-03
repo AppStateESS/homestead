@@ -52,7 +52,7 @@ class PhpSOAP extends SOAP
             return false;
         }
 
-		SOAP::logSoap('getUsername', 'success', $username, $term);
+		SOAP::logSoap('getUsername', 'success', $bannerId);
 
         return $response->GetUserNameResult;
     }
