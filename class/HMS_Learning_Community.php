@@ -86,7 +86,7 @@ class HMS_Learning_Community extends HMS_Item
     }
 
     public function setAllowedStudentTypes($types){
-        $this->allowd_student_types = $types;
+        $this->allowed_student_types = $types;
     }
 
     public function getAllowedReapplicationStudentTypes(){
