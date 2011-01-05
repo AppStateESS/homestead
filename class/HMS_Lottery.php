@@ -988,22 +988,12 @@ class HMS_Lottery {
         }
     }
 
-/*
-    public function get_special_interest_groups()
+    public function getSpecialInterestGroupsMap()
     {
         $special_interests['none']              = 'None';
         $special_interests['honors']            = 'Heltzer Honors Program';
         $special_interests['watauga_global']    = 'Watauga Global Community';
         $special_interests['teaching']          = 'Teaching Fellows';
-        $special_interests['servant_leaders']   = 'Community of Servant Leaders';
-        $special_interests['sciences']          = 'Academy of Sciences';
-        $special_interests['language']          = 'Language & Culture Community';
-        $special_interests['black_and_gold']    = 'Black & Gold Community';
-        $special_interests['sophomore']         = 'Sophomore Year Experience';
-        $special_interests['living_free']       = 'Living Free Community';
-        $special_interests['quite_study']       = 'Quiet Study Community';
-        $special_interests['educators']         = 'Community for Future Educators';
-        $special_interests['man_floor']         = 'The Man Floor';
         $special_interests['sorority_adp']      = 'Alpha Delta Pi Sorority';
         $special_interests['sorority_ap']       = 'Aplha Phi Sorority';
         $special_interests['sorority_co']       = 'Chi Omega Sorority';
@@ -1012,12 +1002,10 @@ class HMS_Lottery {
         $special_interests['sorority_pm']       = 'Phi Mu Sorority';
         $special_interests['sorority_sk']       = 'Sigma Kappa Sorority';
         $special_interests['sorority_aop']      = 'Alpha Omicron Pi Sorority';
-        $special_interests['ra']                = 'Resident Assistants';
-        $special_interests['international']     = 'International Programs';
 
         return $special_interests;
     }
-*/
+
     public static function getSororities()
     {
         $sororities['sorority_adp']      = 'Alpha Delta Pi Sorority';

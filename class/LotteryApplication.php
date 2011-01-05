@@ -171,7 +171,14 @@ class LotteryApplication extends HousingApplication {
         $tags['NAME']       = $student->getFullNameProfileLink();
         $tags['USER']       = $this->username;
         $tags['BANNER_ID']  = $student->getBannerId();
-        $tags['ACTION']     = PHPWS_Text::secureLink('Remove', 'hms', array('action'=>'RemoveSpecialInterest', 'asu_username'=>$this->username, 'group'=>$this->special_interest, 'id'=>$this->id));
+
+
+
+        $acceptCmd = CommandFactory::getCommand('AcceptSpecialInterest');
+        $acceptCmd->setId($this->id);
+        $acceptCmd->setGroup($_REQUEST['group']); // TODO: find a better way of doing this
+
+        $tags['ACTION']     = $acceptCmd->getLink('Accept');
 
         return $tags;
     }
@@ -200,17 +207,20 @@ class LotteryApplication extends HousingApplication {
         $pager->db->addJoin('left outer', 'hms_new_application', 'hms_lottery_application', 'id', 'id');
 
         $pager->addWhere('hms_new_application.term', $term);
-
-        //$pager->addWhere('hms_lottery_application.special_interest', $group);
+        $pager->db->addWhere('hms_lottery_application.special_interest', 'NULL');
 
         if($group == 'honors'){
             $pager->addWhere('hms_lottery_application.honors_pref', 1);
-        }else if($group == 'watauga'){
+        }else if($group == 'watauga_global'){
             $pager->addWhere('hms_lottery_application.wg_pref', 1);
-        }else if($group == 'tf'){
+        }else if($group == 'teaching'){
             $pager->addWhere('hms_lottery_application.tf_pref', 1);
-        }else if($group == 'sorority'){
-            $pager->addWhere('hms_lottery_application.sorority_pref', 'NULL', '!=');
+        }else if(substr($group, 0, 8) == 'sorority'){ // starts with 'sorority'
+            $pager->addWhere('hms_lottery_application.sorority_pref', $group);
+        }else{
+            // bad group
+            test($group,1);
+            throw new InvalidArgumentException('Invalid special interest group specified.');
         }
 
 
