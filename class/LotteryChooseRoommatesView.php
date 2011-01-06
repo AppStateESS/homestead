@@ -102,8 +102,9 @@ class LotteryChooseRoommatesView extends View {
             BANNER_MEAL_STD    =>_('Standard'),
             BANNER_MEAL_HIGH   =>_('High'),
             BANNER_MEAL_SUPER  =>_('Super')));
-            $form->setMatch('meal_plan', BANNER_MEAL_STD);
         }
+
+        $form->setMatch('meal_plan', $lotteryApplication->getMealPlan());
 
         $form->addSubmit('submit_form', 'Review Roommate & Room Selection');
 
