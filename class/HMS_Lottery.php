@@ -1002,6 +1002,7 @@ class HMS_Lottery {
         $special_interests['sorority_pm']       = 'Phi Mu Sorority';
         $special_interests['sorority_sk']       = 'Sigma Kappa Sorority';
         $special_interests['sorority_aop']      = 'Alpha Omicron Pi Sorority';
+        $special_interests['special_needs']     = 'Special Needs';
 
         return $special_interests;
     }

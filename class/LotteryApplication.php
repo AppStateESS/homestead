@@ -217,6 +217,11 @@ class LotteryApplication extends HousingApplication {
             $pager->addWhere('hms_lottery_application.tf_pref', 1);
         }else if(substr($group, 0, 8) == 'sorority'){ // starts with 'sorority'
             $pager->addWhere('hms_lottery_application.sorority_pref', $group);
+        }else if($group == 'special_needs'){
+            $pager->addWhere('hms_new_application.physical_disability', 1, '=', 'OR', 'blah');
+            $pager->addWhere('hms_new_application.psych_disability', 1, '=', 'OR', 'blah');
+            $pager->addWhere('hms_new_application.medical_need', 1, '=', 'OR', 'blah');
+            $pager->addWhere('hms_new_application.gender_need', 1, '=', 'OR', 'blah');
         }else{
             // bad group
             test($group,1);
