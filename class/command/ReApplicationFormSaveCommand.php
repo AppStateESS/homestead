@@ -95,11 +95,7 @@ class ReApplicationFormSaveCommand extends Command {
         $rlcInterest = isset($rlcInterest)?1:0;
 
         // International
-        if($student->isInternational()){
-            $international = 1;
-        }else{
-            $international = 0;
-        }
+        $international = $student->isInternational();
 
         $magicWinner = 0;
 

@@ -32,12 +32,12 @@ class TestSOAP extends SOAP{
         $student->deposit_date          = '';
         $student->deposit_waived        = 'false';
 
-        $student->international         = 'false';
+        $student->international         = TRUE;
         $student->student_level         = 'U';
 
-        $student->honors                = 'false';
-        $student->teaching_fellow       = 'false';
-        $student->watauga_member        = 'false';
+        $student->honors                = TRUE;
+        $student->teaching_fellow       = TRUE;
+        $student->watauga_member        = TRUE;
 
 
 //   		$student->student_type          = 'T';
