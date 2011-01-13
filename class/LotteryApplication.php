@@ -164,6 +164,8 @@ class LotteryApplication extends HousingApplication {
     public function specialInterestTags()
     {
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
+
+        $this->load($this->id);
         $student = StudentFactory::getStudentByUsername($this->username, $this->term);
 
         $tags = array();
@@ -172,13 +174,20 @@ class LotteryApplication extends HousingApplication {
         $tags['USER']       = $this->username;
         $tags['BANNER_ID']  = $student->getBannerId();
 
-
-
-        $acceptCmd = CommandFactory::getCommand('AcceptSpecialInterest');
-        $acceptCmd->setId($this->id);
-        $acceptCmd->setGroup($_REQUEST['group']); // TODO: find a better way of doing this
-
-        $tags['ACTION']     = $acceptCmd->getLink('Accept');
+        if(is_null($this->special_interest)){
+            // Student HAS NOT been accepted to group, show accept link.
+            $acceptCmd = CommandFactory::getCommand('AcceptSpecialInterest');
+            $acceptCmd->setId($this->id);
+            $acceptCmd->setGroup($_REQUEST['group']); // TODO: find a better way of doing this
+            $tags['ACTION']     = $acceptCmd->getLink('Accept');
+        }else{
+            // Student HAS been accepted, show remove link.
+            $removeCmd = CommandFactory::getCommand('RemoveSpecialInterest');
+            $removeCmd->setId($this->id);
+            $removeCmd->setGroup($_REQUEST['group']); // TODO: find a better way of doing this
+            $tags['ACTION'] = $removeCmd->getLink('Remove');
+            $tags['ROW_CLASS'] = 'accepted';
+        }
 
         return $tags;
     }
@@ -205,10 +214,15 @@ class LotteryApplication extends HousingApplication {
         $pager->addRowTags('specialInterestTags');
 
         $pager->db->addJoin('left outer', 'hms_new_application', 'hms_lottery_application', 'id', 'id');
-
+        // Gotta add column from hms_lottery_application so you can order by special_interest.
+        $pager->db->addColumn('hms_lottery_application.*');
         $pager->addWhere('hms_new_application.term', $term);
-        $pager->db->addWhere('hms_lottery_application.special_interest', 'NULL');
-
+        
+        // If student is in special interest group already then only show them in the list when their group
+        // is selected in the drop down. Or show them everywhere is they're not in a group.
+        $pager->addWhere('hms_lottery_application.special_interest', $group, '=', 'OR', 'in_group');
+        $pager->addWhere('hms_lottery_application.special_interest', 'NULL', '=', 'OR', 'in_group');
+        
         if($group == 'honors'){
             $pager->addWhere('hms_lottery_application.honors_pref', 1);
         }else if($group == 'watauga_global'){
@@ -228,7 +242,7 @@ class LotteryApplication extends HousingApplication {
             throw new InvalidArgumentException('Invalid special interest group specified.');
         }
 
-
+        $pager->setOrder('hms_lottery_application.special_interest', 'desc');
         $pager->setTemplate('admin/special_interest_pager.tpl');
         $pager->setEmptyMessage('No students found.');
         $pager->addToggle('class="toggle1"');

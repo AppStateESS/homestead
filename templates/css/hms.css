@@ -185,3 +185,8 @@ li.noexpand {
     list-style-image: none;
     list-style: none;
 }
+
+#special-interest-table .accepted {
+    background-color: #F4F4F4;
+    font-style: italic;
+}
