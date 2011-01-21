@@ -294,6 +294,28 @@ class HMS_Floor extends HMS_Item
         }
     }
 
+    public function getUsernames()
+    {
+        $db = new PHPWS_DB('hms_assignment');
+
+        $db->addColumn('asu_username');
+
+        $db->addJoin('LEFT OUTER', 'hms_assignment','hms_bed',            'bed_id',             'id');
+        $db->addJoin('LEFT OUTER', 'hms_bed',       'hms_room',           'room_id',            'id');
+        $db->addJoin('LEFT OUTER', 'hms_room',      'hms_floor',          'floor_id',           'id');
+
+        $db->addWhere('hms_floor.id', $this->id);
+
+        $result = $db->select('col');
+
+        if(PHPWS_Error::logIfError($result)){
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException($result->toString());
+        }
+
+        return $result;
+    }
+
     public function getFloorNumber(){
         return $this->floor_number;
     }

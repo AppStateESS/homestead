@@ -66,7 +66,7 @@ class SendNotificationEmailsCommand extends Command {
         }
 
         //Consider using a batch process instead of doing this this inline
-        
+
 
         // Log that this is happening
         if($anonymous){
@@ -120,12 +120,14 @@ class SendNotificationEmailsCommand extends Command {
 
         $permission = new HMS_Permission();
         foreach($floorObj as $floor){
-            if(!$permission->verify(Current_User::getUsername(), $floor, 'email') 
+            if(!$permission->verify(Current_User::getUsername(), $floor, 'email')
                && !$permission->verify(Current_User::getUsername(), $floor->get_parent(), 'email')
                && !Current_User::allow('hms', 'email_all')
                ){
                 continue;
             }
+
+            /**
             $rooms = $floor->get_rooms();
             foreach($rooms as $room){
                 $students = $room->get_assignees();
@@ -133,6 +135,12 @@ class SendNotificationEmailsCommand extends Command {
                     $people[] = $student->getUsername();
                     HMS_Email::send_email($student->getUsername() . '@appstate.edu', $from, $subject, $body);
                 }
+            }
+            */
+
+            $students = $floor->getUsernames();
+            foreach($students as $student){
+                HMS_Email::send_email($student . '@appstate.edu', $from, $subject, $body);
             }
 
             HMS_Activity_Log::log_activity(Current_User::getUsername(), ($anonymous ? ACTIVITY_FLOOR_NOTIFIED_ANONYMOUSLY : ACTIVITY_FLOOR_NOTIFIED), Current_User::getUsername(), $floor->where_am_i());
