@@ -359,6 +359,7 @@ class HousingApplication {
         PHPWS_Core::initModClass('hms', 'SummerApplication.php');
         PHPWS_Core::initModClass('hms', 'LotteryApplication.php');
         PHPWS_Core::initModClass('hms', 'WaitingListApplication.php');
+        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 
         $student = StudentFactory::getStudentByUsername($username, $term);
 
