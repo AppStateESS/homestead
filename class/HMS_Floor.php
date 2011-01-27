@@ -75,7 +75,7 @@ class HMS_Floor extends HMS_Item
      *
      * @return bool False if unsuccessful.
      */
-    public function copy($to_term, $hall_id, $assignments = FALSE)
+    public function copy($to_term, $hall_id, $assignments = FALSE, $roles = FALSE)
     {
         if (!$this->id) {
             return false;
@@ -97,6 +97,22 @@ class HMS_Floor extends HMS_Item
             $new_floor->save();
         }catch(Exception $e){
             throw $e;
+        }
+
+        // Copy any roles related to this floor.
+        if($roles){
+            PHPWS_Core::initModClass("hms", "HMS_Permission.php");
+            PHPWS_Core::initModClass("hms", "HMS_Role.php");
+            // Get memberships by object instance.
+            $membs = HMS_Permission::getMembership(null, $this);
+            // Add each user to new floor
+            foreach($membs as $m){
+                // Load role and add user to new instance
+                $role = new HMS_Role();
+                $role->id = $m['role_id'];
+                $role->load();
+                $role->addUser($m['username'], get_class($new_floor), $new_floor->id);
+            }
         }
 
         // Load all the rooms for this floor

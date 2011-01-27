@@ -2,7 +2,6 @@
   <div class="box">
     <div class="box-title"><h1>{TITLE}</h1></div>
     <div class="box-content">
- 
       <!-- BEGIN error_msg -->
       <div><span class="error">{ERROR_MSG}</span></div>
       <!-- END error_msg -->
@@ -23,8 +22,12 @@
           <td>{TERM_DROP}</td>
         </tr>
         <tr>
-          <td>{COPY_DROP_LABEL}</td>
-          <td>{COPY_DROP}</td>
+          <td>{COPY_PICK_LABEL}</td>
+          <td>
+            <span class="copy-pick">{COPY_PICK_1}{COPY_PICK_1_LABEL}<br/></span>
+            <span class="copy-pick-sub">{COPY_PICK_2}{COPY_PICK_2_LABEL}<br/></span>
+            <span class="copy-pick-sub">{COPY_PICK_3}{COPY_PICK_3_LABEL}<br/></span>
+          </td>
         </tr>
         <tr>
           <td colspan="2">{SUBMIT}</td>
