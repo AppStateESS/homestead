@@ -1005,6 +1005,27 @@ class HMS_Lottery {
         return $sororities;
     }
 
+    public static function getSizeOfOnCampusWaitList()
+    {
+        $term = PHPWS_Settings::get('hms', 'lottery_term');
+
+        # Get the list of user names still on the waiting list, sorted by ID (first come, first served)
+        $sql = "SELECT count(*) FROM hms_new_application JOIN hms_lottery_application ON hms_new_application.id = hms_lottery_application.id
+                LEFT OUTER JOIN (SELECT asu_username FROM hms_assignment WHERE hms_assignment.term=$term) as foo ON hms_new_application.username = foo.asu_username
+                WHERE foo.asu_username IS NULL
+                AND hms_new_application.term = $term
+                AND special_interest IS NULL
+                AND waiting_list_hide = 0";
+                
+        $count = PHPWS_DB::getOne($sql);
+
+        if(PHPWS_Error::logIfError($count)){
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException($count->toString());
+        }
+        
+        return $count;
+    }
 }
 
 ?>

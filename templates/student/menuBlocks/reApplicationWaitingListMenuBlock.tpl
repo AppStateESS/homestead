@@ -24,9 +24,11 @@ You have opted-out of the re-application waiting list.
 <!-- END opted_out -->
 
 <!-- BEGIN opt_out -->
-You have not been assigned to a room yet so we have automatically placed you on the on-campus housing waiting list. If you have found other off-campus housing, you may opt-out of this waiting list.
-<br /><br />
-{OUT_OUT_LINK}
+<p>You have been automatically placed you on the on-campus housing waiting list.</p>
+
+<p>You are number {POSITION} of {TOTAL} students on the waiting list. (This will be updated as students are assigned and/or opt-out of the waiting list.)</p>
+
+<p>If you have found other off-campus housing, you may {OPT_OUT_LINK}.</p>
 <!-- END opt_out -->
 </p>
 </div>

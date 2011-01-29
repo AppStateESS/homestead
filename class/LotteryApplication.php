@@ -140,6 +140,39 @@ class LotteryApplication extends HousingApplication {
         }
     }
 
+    /**
+     * @return integer position of this LotteryApplication in the on-campus waiting list.
+     */
+    public function getWaitListPosition()
+    {
+        $term = $this->getTerm();
+
+        # Get the list of user names still on the waiting list, sorted by ID (first come, first served)
+        $sql = "SELECT username FROM hms_new_application JOIN hms_lottery_application ON hms_new_application.id = hms_lottery_application.id
+                LEFT OUTER JOIN (SELECT asu_username FROM hms_assignment WHERE hms_assignment.term=$term) as foo ON hms_new_application.username = foo.asu_username
+                WHERE foo.asu_username IS NULL
+                AND hms_new_application.term = $term
+                AND special_interest IS NULL
+                AND waiting_list_hide = 0
+                ORDER BY hms_new_application.id ASC";
+                
+        $applications = PHPWS_DB::getCol($sql);
+
+        if(PHPWS_Error::logIfError($applications)){
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException($applications->toString());
+        }
+
+        $position = array_search($this->getUsername(), $applications);
+
+        if($position === FALSE){
+            return 'unknown';
+        }
+
+        // Fix the off-by-one indexing
+        return $position + 1;
+    }
+
     public function getRowTags(){
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
         $student = StudentFactory::getStudentByUsername($this->username, $this->term);
