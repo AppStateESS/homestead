@@ -18,14 +18,13 @@ class LotteryAdminSetWinnerCommand extends Command {
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 
         $username = $context->get('asu_username');
+        $term = Term::getSelectedTerm();
 
         //accept a banner id by looking up the username if we got a number
         if(is_numeric($username)){
             $stdt     = StudentFactory::getStudentByBannerId($username, $term);
             $username = $stdt->getUsername();
         }
-
-        $term = Term::getSelectedTerm();
 
         $viewCmd = CommandFactory::getCommand('ShowLotteryAutoWinners');
 
