@@ -60,6 +60,9 @@ class LotteryRoommateRequestView extends View {
         $submitCmd = CommandFactory::getCommand('LotteryShowConfirmRoommateRequest');
         $submitCmd->setRequestId($this->request['id']);
 
+        $denyCmd = CommandFactory::getCommand('LotteryShowDenyRoommateRequest');
+        $denyCmd->setRequestId($this->request['id']);
+
         $form = new PHPWS_Form();
         $submitCmd->initForm($form);
 
@@ -85,7 +88,10 @@ class LotteryRoommateRequestView extends View {
         $form->setMatch('meal_plan', $this->housingApplication->getMealPlan());
 
         $form->addSubmit('accept', 'Accept Roommate');
+
         $form->addButton('reject', 'Deny Roommate');
+
+        javascript('/modules/hms/buttonAction', array('ID'=>'phpws_form_reject', 'URI'=>$denyCmd->getURI()));
 
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();

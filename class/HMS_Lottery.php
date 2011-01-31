@@ -907,6 +907,24 @@ class HMS_Lottery {
         return E_SUCCESS;
     }
 
+    public static function denyRoommateRequest($username, $requestId)
+    {
+        # Get the roommate invite
+        $invite = HMS_Lottery::get_lottery_roommate_invite_by_id($requestId);
+
+        # Delete the invite
+        $db = new PHPWS_DB('hms_lottery_reservation');
+        $db->addWhere('id', $requestId);
+        $result = $db->delete();
+
+        if(PHPWS_Error::logIfError($result)){
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException($result->toString());
+        }
+
+        return true;
+    }
+
     /*
      * Returns TRUE if the student is assigned in the current term
      * or if the student has an eligibility waiver.
@@ -1016,14 +1034,14 @@ class HMS_Lottery {
                 AND hms_new_application.term = $term
                 AND special_interest IS NULL
                 AND waiting_list_hide = 0";
-                
+
         $count = PHPWS_DB::getOne($sql);
 
         if(PHPWS_Error::logIfError($count)){
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($count->toString());
         }
-        
+
         return $count;
     }
 }
