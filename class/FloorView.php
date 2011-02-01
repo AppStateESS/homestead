@@ -26,7 +26,7 @@ class FloorView extends View {
 
         $floor_num = $this->floor->getFloorNumber();
 
-        # Setup the title and color of the title bar
+        // Setup the title and color of the title bar
         $tpl['TITLE'] = HMS_Util::ordinal($floor_num). ' Floor - ' . $this->hall->getHallName() . ' - ' . Term::getPrintableSelectedTerm();
 
         $submitCmd = CommandFactory::getCommand('EditFloor');
@@ -118,8 +118,11 @@ class FloorView extends View {
 
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
-		javascript('modules/hms/role_editor');
-        $tpl['ROLE_EDITOR'] = PHPWS_Template::process(array('CLASS_NAME'=>"'HMS_Floor'", 'ID'=>$this->floor->id), 'hms', 'admin/role_editor.tpl');
+
+        if(Current_User::allow('edit_role_members')){
+            javascript('modules/hms/role_editor');
+            $tpl['ROLE_EDITOR'] = PHPWS_Template::process(array('CLASS_NAME'=>"'HMS_Floor'", 'ID'=>$this->floor->id), 'hms', 'admin/role_editor.tpl');
+        }
 
         Layout::addPageTitle("Edit Floor");
 
