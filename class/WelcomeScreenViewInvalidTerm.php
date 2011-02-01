@@ -14,7 +14,7 @@ class WelcomeScreenViewInvalidTerm extends View {
 	
 	public function show()
     {
-        $tpl = array('ENTRY_TERM'   => $this->term,
+        $tpl = array('ENTRY_TERM'   => Term::toString($this->term),
                      'CONTACT_LINK' => $this->cmd->getLink('click here'));
 
         Layout::addPageTitle("Welcome");

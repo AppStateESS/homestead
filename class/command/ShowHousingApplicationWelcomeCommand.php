@@ -21,7 +21,7 @@ class ShowHousingApplicationWelcomeCommand extends Command {
 
 		$term = $context->get('term');
 
-		$student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
+		$student   = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
 		$submitCmd = CommandFactory::getCommand('ShowHousingApplicationForm');
 		$submitCmd->setTerm($term);
 

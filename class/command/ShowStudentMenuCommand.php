@@ -11,7 +11,6 @@ class ShowStudentMenuCommand extends Command {
     }
 
     public function execute(CommandContext $context){
-
         $currentTerm = Term::getCurrentTerm();
         $username = UserStatus::getUsername();
 
@@ -102,7 +101,7 @@ class ShowStudentMenuCommand extends Command {
 
             # Make sure the user's application term exists in hms_term,
             # otherwise give a "too early" message
-            if(!Term::isValidTerm($applicationTerm)){
+            if(true || !Term::isValidTerm($applicationTerm)){
                 PHPWS_Core::initModClass('hms', 'WelcomeScreenViewInvalidTerm.php');
                 $view = new WelcomeScreenViewInvalidTerm($applicationTerm, $contactCmd);
                 $context->setContent($view->show());
