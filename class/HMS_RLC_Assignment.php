@@ -245,14 +245,16 @@ class HMS_RLC_Assignment{
         $tags['ROOMMATE']  = '';
 
         $addr = $student->getAddress();
-        $reflect = new ReflectionObject($addr);
-        $address = array();
+        if(!is_null($addr)){
+            $reflect = new ReflectionObject($addr);
+            $address = array();
 
-        foreach($reflect->getProperties() as $prop){
-            $address[] = $addr->{$prop->getName()};
+            foreach($reflect->getProperties() as $prop){
+                $address[] = $addr->{$prop->getName()};
+            }
+
+            $tags['ADDRESS']   = implode(", ", $address);
         }
-
-        $tags['ADDRESS']   = implode(", ", $address);
 
         $phones = $student->getPhoneNumberList();
         if(isset($phones) && !empty($phones)){
