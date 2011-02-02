@@ -28,10 +28,24 @@ class HousingApplicationConfirmCommand extends Command {
 
         PHPWS_Core::initModClass('hms', 'exception/InvalidTermException.php');
 
+        $agreedToTerms = $context->get('agreedToTerms');
+
+        // Not on my watch!
+        if(is_null($agreedToTerms)){
+            session_unset($_SESSION);
+            header('Location: index.php');
+        }
+
         $term = $context->get('term');
         $username = UserStatus::getUsername();
 
         $student = StudentFactory::getStudentByUsername($username, $term);
+
+        if($student->getType() != TYPE_FRESHMEN){
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Cannot fill out a freshman application as a non-freshman!');
+            $cmd = CommandFactory::getCommand('ShowContactForm');
+            $cmd->redirect();
+        }
 
         $sem = Term::getTermSem($term);
 
@@ -153,8 +167,8 @@ class HousingApplicationConfirmCommand extends Command {
         $rlcReg = new RLCApplicationRegistration();
 
         if(ApplicationFeature::isEnabledForStudent($rlcReg, $term, $student)
-        && HMS_RLC_Application::checkForApplication($student->getUsername(), $term) == FALSE
-        && $context->get('rlc_interest') == 1)
+           && HMS_RLC_Application::checkForApplication($student->getUsername(), $term) == FALSE
+           && $context->get('rlc_interest') == 1)
         {
             $rlcCmd = CommandFactory::getCommand('ShowRlcApplicationPage1View');
             $rlcCmd->setTerm($term);

@@ -17,6 +17,12 @@ class FreshmenApplicationReview extends View {
 
 	public function show()
 	{
+        if($this->student->getType() != TYPE_FRESHMEN){
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Cannot fill out a freshman application as a non-freshman!');
+            $cmd = CommandFactory::getCommand('ShowContactForm');
+            $cmd->redirect();
+        }
+
         $tpl = array();
         $tpl['REVIEW_MSG']      = ''; // set this to show the review message
 
@@ -71,7 +77,6 @@ class FreshmenApplicationReview extends View {
 
         $form->addSubmit('submit', 'Confirm & Continue');
         $form->setExtra('submit', 'class="hms-application-submit-button"');
-
 
         $redoCmd = CommandFactory::getCommand('ShowHousingApplicationForm');
         $redoCmd->setTerm($this->term);
