@@ -216,6 +216,17 @@ class Term
         return substr($term, 4, 2);
     }
 
+    public function isFall($term)
+    {
+        $sem = self::getTermSem($term);
+
+        if($sem == TERM_FALL){
+            return true;
+        }
+
+        return false;
+    }
+
     public static function getNextTerm($term)
     {
         # Grab the year

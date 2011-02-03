@@ -429,9 +429,15 @@ class HMS_Email{
     {
         PHPWS_Core::initModClass('hms', 'Term.php');
 
+        //Find the next fall term, if it is fall then we're done
+        $term = $to->getApplicationTerm();
+        while(Term::isValidTerm($term) && !Term::isFall()){
+            $term = Term::getNextTerm($term);
+        }
+
         $tpl = array();
         $tpl['NAME'] = $to->getName();
-        $tpl['TERM'] = Term::toString($to->getApplicationTerm());
+        $tpl['TERM'] = Term::toString($term);
 
         HMS_Email::send_template_message($to->getUsername() . TO_DOMAIN, 'Learning Community Application Rejected', 'email/rlc_application_rejection.tpl',$tpl);
     }
