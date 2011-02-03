@@ -425,15 +425,9 @@ class HMS_Email{
         HMS_Email::send_template_message($to->getUsername() . TO_DOMAIN, 'Learning Community Application Confirmation!', 'email/rlc_application_confirmation.tpl', $tpl);
     }
 
-    public function sendRlcApplicationRejected(Student $to)
+    public function sendRlcApplicationRejected(Student $to, $term)
     {
         PHPWS_Core::initModClass('hms', 'Term.php');
-
-        //Find the next fall term, if it is fall then we're done
-        $term = $to->getApplicationTerm();
-        while(Term::isValidTerm($term) && !Term::isFall()){
-            $term = Term::getNextTerm($term);
-        }
 
         $tpl = array();
         $tpl['NAME'] = $to->getName();
