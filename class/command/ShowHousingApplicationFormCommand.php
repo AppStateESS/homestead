@@ -55,6 +55,13 @@ class ShowHousingApplicationFormCommand extends Command {
 		}
 		
 		$student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
+
+        // Right now this form is only used for freshmen, so make sure the student is one
+        if($student->getType() != TYPE_FRESHMEN){
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Cannot fill out a freshman application as a non-freshman!');
+            $cmd = CommandFactory::getCommand('ShowContactForm');
+            $cmd->redirect();
+        }
 		
 		# Make sure the student agreed to the terms, if not, send them back to the terms & agreement command
 		$agreedToTerms = $context->get('agreedToTerms');
