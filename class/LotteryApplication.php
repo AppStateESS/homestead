@@ -154,8 +154,8 @@ class LotteryApplication extends HousingApplication {
                 AND hms_new_application.term = $term
                 AND special_interest IS NULL
                 AND waiting_list_hide = 0
-                ORDER BY hms_new_application.id ASC";
-                
+                ORDER BY application_term DESC, hms_new_application.id ASC";
+
         $applications = PHPWS_DB::getCol($sql);
 
         if(PHPWS_Error::logIfError($applications)){
@@ -283,11 +283,11 @@ class LotteryApplication extends HousingApplication {
         $pager->db->addWhere('hms_assignment.asu_username', 'NULL');
         $pager->db->addWhere('hms_new_application.term', $term);
         $pager->db->addWhere('hms_lottery_application.special_interest', 'NULL');
-        $pager->db->addWhere('physical_disability', 0);
-        $pager->db->addWhere('psych_disability', 0);
-        $pager->db->addWhere('medical_need', 0);
-        $pager->db->addWhere('gender_need', 0);
         $pager->db->addWhere('hms_lottery_application.waiting_list_hide', 0);
+
+        // Order by class, then by application ID in order to keep a fixed order
+        // This accounts for the 'you are x of y students' message on the student's menu
+        $pager->db->addOrder(array('application_term DESC', 'hms_new_application.id ASC'));
 
         $pager->setModule('hms');
         $pager->setTemplate('admin/lottery_wait_list_pager.tpl');

@@ -3,11 +3,11 @@
 <div align="right">{SEARCH}</div>
 <table>
     <tr>
-        <th>Name {ASU_USERNAME_SORT}</th>
+        <th>Name</th>
         <th>User Name</th>
         <th>Banner ID</th>
-        <th>Class{APPLICATION_TERM_SORT}</th>
-        <th>Gender{GENDER_SORT}</th>
+        <th>Class</th>
+        <th>Gender</th>
         <th>Cell Phone</th>
         <th>Action</th>
     </tr>
