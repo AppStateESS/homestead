@@ -993,7 +993,7 @@ class HMS_Lottery {
     public function getSpecialInterestGroupsMap()
     {
         $special_interests['none']              = 'None';
-        $special_interests['honors']            = 'Heltzer Honors Program';
+        $special_interests['honors']            = 'The Honors College';
         $special_interests['watauga_global']    = 'Watauga Global Community';
         $special_interests['teaching']          = 'Teaching Fellows';
         $special_interests['sorority_adp']      = 'Alpha Delta Pi Sorority';
