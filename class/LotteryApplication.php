@@ -200,7 +200,12 @@ class LotteryApplication extends HousingApplication {
         $acceptCmd->setId($this->id);
         $acceptCmd->setGroup($_REQUEST['group']); // TODO: find a better way of doing this
 
-        $tags['ACTION']     = $acceptCmd->getLink('Accept');
+        $denyCmd = CommandFactory::getCommand('DenySpecialInterest');
+        $denyCmd->setId($this->id);
+        $denyCmd->setGroup($_REQUEST['group']);
+
+        $tags['ACCEPT_ACTION']     = $acceptCmd->getLink('Accept');
+        $tags['DENY_ACTION']     = $denyCmd->getLink('Deny');
 
         return $tags;
     }
@@ -363,6 +368,41 @@ class LotteryApplication extends HousingApplication {
         }
 
         return $applications;
+    }
+    
+        /**
+     * Getters and setters.
+     */
+    public function getSororityPref(){
+        return $this->sorority_pref;
+    }
+
+    public function getTeachingFellowsPref(){
+        return $this->tf_pref;
+    }
+
+    public function getWataugaGlobalPref(){
+        return $this->wg_pref;
+    }
+
+    public function getHonorsPref(){
+        return $this->honors_pref;
+    }
+
+
+    public function setSororityPref($pref){
+        $this->sorority_pref = $pref;
+    }
+    public function setTeachingFellowsPref($pref){
+        $this->tf_pref = $pref;
+    }
+
+    public function setWataugaGlobalPref($pref){
+        $this->wg_pref = $pref;
+    }
+
+    public function setHonorsPref($pref){
+        $this->honors_pref = $pref;
     }
 }
 ?>
