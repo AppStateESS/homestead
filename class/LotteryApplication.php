@@ -29,6 +29,9 @@ class LotteryApplication extends HousingApplication {
     public $honors_pref;
     public $rlc_interest;
 
+    // Static variable for waiting list position calculation
+    private static $waitingList;
+
     public function __construct($id = 0, $term = NULL, $banner_id = NULL, $username = NULL, $gender = NULL, $student_type = NULL, $application_term = NULL, $cell_phone = NULL, $meal_plan = NULL, $physical_disability = NULL, $psych_disability = NULL, $gender_need = NULL, $medical_need = NULL, $international = NULL, $specialInterest = NULL, $magicWinner = 0, $sororityPref = NULL, $tfPref = NULL, $wgPref = NULL, $honorsPref = NULL, $rlcInterest = NULL)
     {
         /**
@@ -145,25 +148,11 @@ class LotteryApplication extends HousingApplication {
      */
     public function getWaitListPosition()
     {
-        $term = $this->getTerm();
-
-        # Get the list of user names still on the waiting list, sorted by ID (first come, first served)
-        $sql = "SELECT username FROM hms_new_application JOIN hms_lottery_application ON hms_new_application.id = hms_lottery_application.id
-                LEFT OUTER JOIN (SELECT asu_username FROM hms_assignment WHERE hms_assignment.term=$term) as foo ON hms_new_application.username = foo.asu_username
-                WHERE foo.asu_username IS NULL
-                AND hms_new_application.term = $term
-                AND special_interest IS NULL
-                AND waiting_list_hide = 0
-                ORDER BY application_term DESC, hms_new_application.id ASC";
-
-        $applications = PHPWS_DB::getCol($sql);
-
-        if(PHPWS_Error::logIfError($applications)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
-            throw new DatabaseException($applications->toString());
+        if(!isset(self::$waitingList)){
+            self::$waitingList = self::getRemainingWaitListApplications($term = $this->getTerm());
         }
 
-        $position = array_search($this->getUsername(), $applications);
+        $position = array_search($this->getUsername(), self::$waitingList);
 
         if($position === FALSE){
             return 'unknown';
@@ -229,7 +218,7 @@ class LotteryApplication extends HousingApplication {
         return $tags;
     }
 
-    public function specialInterestPager($group, $term)
+    public static function specialInterestPager($group, $term)
     {
         PHPWS_Core::initCoreClass('DBPager.php');
 
@@ -271,7 +260,7 @@ class LotteryApplication extends HousingApplication {
         return $pager->get();
     }
 
-    public function waitingListPager()
+    public static function waitingListPager()
     {
         PHPWS_Core::initCoreClass('DBPager.php');
 
@@ -310,6 +299,7 @@ class LotteryApplication extends HousingApplication {
 
         $tags = array();
 
+        $tags['POSITION']   = $this->getWaitListPosition();
         $tags['NAME']       = $student->getFullNameProfileLink();
         $tags['USER']       = $this->username;
         $tags['BANNER_ID']  = $student->getBannerId();
@@ -352,6 +342,27 @@ class LotteryApplication extends HousingApplication {
         }
 
         return $tags;
+    }
+
+    public static function getRemainingWaitListApplications($term)
+    {
+        # Get the list of user names still on the waiting list, sorted by ID (first come, first served)
+        $sql = "SELECT username FROM hms_new_application JOIN hms_lottery_application ON hms_new_application.id = hms_lottery_application.id
+                LEFT OUTER JOIN (SELECT asu_username FROM hms_assignment WHERE hms_assignment.term=$term) as foo ON hms_new_application.username = foo.asu_username
+                WHERE foo.asu_username IS NULL
+                AND hms_new_application.term = $term
+                AND special_interest IS NULL
+                AND waiting_list_hide = 0
+                ORDER BY application_term DESC, hms_new_application.id ASC";
+
+        $applications = PHPWS_DB::getCol($sql);
+
+        if(PHPWS_Error::logIfError($applications)){
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException($applications->toString());
+        }
+
+        return $applications;
     }
 }
 ?>

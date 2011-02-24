@@ -3,6 +3,7 @@
 <div align="right">{SEARCH}</div>
 <table>
     <tr>
+        <th>Position</th>
         <th>Name</th>
         <th>User Name</th>
         <th>Banner ID</th>
@@ -18,6 +19,7 @@
     <!-- END empty_table -->
     <!-- BEGIN listrows -->
     <tr>
+        <td>{POSITION}</td>
         <td>{NAME}</td>
         <td>{USER}</td>
         <td>{BANNER_ID}</td>
