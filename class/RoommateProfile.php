@@ -99,7 +99,7 @@ class RoommateProfile{
     public $free_time = 0;
 
     # Spoken languages
-    # Top 20 most spoken languages: 
+    # Top 20 most spoken languages:
     #     http://en.wikipedia.org/wiki/Ethnologue_list_of_most_spoken_languages
     public $arabic = 0;
     public $bengali = 0;
@@ -146,7 +146,7 @@ class RoommateProfile{
 
         $db = new PHPWS_DB('hms_student_profiles');
         $result = $db->loadObject($this);
-         
+
         if(PHPWS_Error::logIfError($result)){
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
@@ -162,7 +162,7 @@ class RoommateProfile{
         if($this->get_date_submitted() == NULL){
             $this->set_date_submitted();
         }
-        
+
         $result = $db->saveObject($this);
 
         if(PHPWS_Error::logIfError($result)){
@@ -189,7 +189,7 @@ class RoommateProfile{
     public static function checkForProfile($username, $term)
     {
         $db = new PHPWS_DB('hms_student_profiles');
-         
+
         $db->addWhere('username',$username,'ILIKE');
         $db->addWhere('term', $term);
         $result = $db->select('row');
@@ -198,7 +198,7 @@ class RoommateProfile{
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
-         
+
         if($result != NULL && sizeof($result > 0)){
             return $result['id'];
         }else{
@@ -211,7 +211,7 @@ class RoommateProfile{
         $profile = new RoommateProfile();
 
         $db = new PHPWS_DB('hms_student_profiles');
-         
+
         $db->addWhere('username',$username,'ILIKE');
         $db->addWhere('term', $term);
         $result = $db->loadObject($profile);
@@ -250,6 +250,8 @@ class RoommateProfile{
         $pageTags['ACTIONS']    = _('Action');
 
         $pager = new DBPager('hms_student_profiles','RoommateProfile');
+
+        $pager->db->addWhere('term', $student->getApplicationTerm());
 
         // Check to see if user is assigned to an RLC
         $rlc_assignment = HMS_RLC_Assignment::checkForAssignment($student->getUsername(), $student->getApplicationTerm());
@@ -829,7 +831,7 @@ class RoommateProfile{
         if($profile->get_writing()){
             $hobbies_matches[] = 'writing';
         }
-        
+
         if($profile->get_rotc()){
             $hobbies_matches[] = 'rotc';
         }
@@ -975,7 +977,7 @@ class RoommateProfile{
     public static function get_language_matches($profile)
     {
         $lang_match = array();
-        
+
         if($profile->get_arabic()){
             $lang_match[] = 'arabic';
         }
@@ -1476,11 +1478,11 @@ class RoommateProfile{
             return FALSE;
         }
     }
-    
+
     public function set_rotc($value = 1){
         $this->rotc = $value;
     }
-    
+
     public function get_rotc(){
         if($this->rotc == 1){
             return TRUE;
@@ -1906,7 +1908,7 @@ class RoommateProfile{
     public function get_vietnamese(){
         return $this->vietnamese == 1 ? TRUE : FALSE;
     }
-    
+
     public function set_arabic($value=1){
         $this->arabic = $value;
     }
