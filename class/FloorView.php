@@ -119,7 +119,7 @@ class FloorView extends View {
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
-        if(Current_User::allow('edit_role_members')){
+        if(Current_User::allow('hms', 'edit_role_members')){
             javascript('modules/hms/role_editor');
             $tpl['ROLE_EDITOR'] = PHPWS_Template::process(array('CLASS_NAME'=>"'HMS_Floor'", 'ID'=>$this->floor->id), 'hms', 'admin/role_editor.tpl');
         }
