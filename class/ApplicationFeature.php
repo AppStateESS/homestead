@@ -340,7 +340,6 @@ abstract class ApplicationFeature {
             }
 
             $className = $result['name'];
-
             $features[$reg->getPriority()] = new $className($result['id']);
         }
 

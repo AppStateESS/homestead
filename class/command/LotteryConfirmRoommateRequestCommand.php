@@ -49,6 +49,7 @@ class LotteryConfirmRoommateRequestCommand extends Command {
         try{
             $app->save();
         }catch(Exception $e){
+            PHPWS_Error::log('hms', $e->getMessage());
             NQ::simple('hms', HMS_NOTIFICATION_ERROR,'Sorry, there was an error confirming your roommate invitation. Please contact University Housing.');
             $errorCmd->redirect();
         }
@@ -58,6 +59,7 @@ class LotteryConfirmRoommateRequestCommand extends Command {
         try{
             $result = HMS_Lottery::confirm_roommate_request(UserStatus::getUsername(), $requestId, $mealPlan);
         }catch(Exception $e){
+            PHPWS_Error::log('hms', $e->getMessage());
             NQ::simple('hms', HMS_NOTIFICATION_ERROR,'Sorry, there was an error confirming your roommate invitation. Please contact University Housing.');
             $errorCmd->redirect();
         }

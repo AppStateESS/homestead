@@ -351,7 +351,7 @@ class HousingApplication {
      *
      */
     //TODO move this to the HousingApplicationFactory class, perhaps?
-    function getApplicationByUser($username, $term)
+    function getApplicationByUser($username, $term, $applicationType = NULL)
     {
         PHPWS_Core::initModClass('hms', 'HousingApplication.php');
         PHPWS_Core::initModClass('hms', 'FallApplication.php');
@@ -366,6 +366,10 @@ class HousingApplication {
         $db = new PHPWS_DB('hms_new_application');
         $db->addWhere('username', $username);
         $db->addWhere('term', $term);
+
+        if(!is_null($applicationType)){
+            $db->addWhere('application_type', $applicationType);
+        }
 
         $result = $db->select('row');
 
@@ -770,6 +774,14 @@ class HousingApplication {
 
     public function setWithdrawn($status){
         $this->withdrawn = $status;
+    }
+
+    public function getApplicationType(){
+        return $this->application_type;
+    }
+
+    public function setApplicationType($type){
+        $this->application_type = $type;
     }
 }
 ?>
