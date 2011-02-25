@@ -36,17 +36,20 @@ class RlcApplicationMenuView extends View {
             // The student can also delete their application if
             // they aren't already assigned
             PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
-            if(HMS_RLC_Application::checkForApplication(UserStatus::getUsername(), Term::getSelectedTerm()) &&
-               !HMS_RLC_Assignment::checkForAssignment(UserStatus::getUsername(), Term::getSelectedTerm())){
-                $delCmd = CommandFactory::getCommand('JSConfirm');
-                $delCmd->setLink('delete your application');
-                $delCmd->setTitle('delete your application');
-                $delCmd->setQuestion('Are you sure you want to delete your RLC Application?');
-                $delCmd->setOnConfirmCommand(CommandFactory::getCommand('DeleteRlcApplication'));
+            if(!HMS_RLC_Assignment::checkForAssignment(UserStatus::getUsername(), $this->term)){
+
+                $delCmd = CommandFactory::getCommand('DeleteRlcApplication');
+                $delCmd->setTerm($this->term);
+
+                $confCmd = CommandFactory::getCommand('JSConfirm');
+                $confCmd->setLink('delete your application');
+                $confCmd->setTitle('delete your application');
+                $confCmd->setQuestion('Are you sure you want to delete your RLC Application?');
+                $confCmd->setOnConfirmCommand();
                 $tpl['DELETE_TEXT'] = 'You may also ';
-                $tpl['DELETE_APP'] = $delCmd->getLink().'.';
+                $tpl['DELETE_APP'] = $confCmd->getLink().'.';
             }
-            
+
             if(time() < $this->editDate){
                 $newCmd = CommandFactory::getCommand('ShowRlcApplicationView');
                 $newCmd->setTerm($this->term);
@@ -54,7 +57,7 @@ class RlcApplicationMenuView extends View {
             }
         }else if(time() < $this->startDate){
             $tpl['ICON'] = FEATURE_LOCKED_ICON;
-            $tpl['BEGIN_DEADLINE'] = HMS_Util::getFriendlyDate($this->startDate); 
+            $tpl['BEGIN_DEADLINE'] = HMS_Util::getFriendlyDate($this->startDate);
         }else if (time() > $this->endDate){
             $tpl['ICON'] = FEATURE_LOCKED_ICON;
             // fade out header

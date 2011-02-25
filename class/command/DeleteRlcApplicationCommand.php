@@ -9,9 +9,16 @@
 
 class DeleteRlcApplicationCommand extends Command
 {
+    private $term;
+
     public function getRequestVars()
     {
-        return array('action' => 'DeleteRlcApplication');
+        return array('action' => 'DeleteRlcApplication', 'term'=>$this->term);
+    }
+
+    public function setTerm($term)
+    {
+        $this->term = $term;
     }
 
     public function setApplicationId($id)
@@ -24,15 +31,17 @@ class DeleteRlcApplicationCommand extends Command
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
 
+        $term = $context->get('term');
+
         // Application must exist
-        $app = HMS_RLC_Application::getApplicationByUsername(UserStatus::getUsername(), Term::getSelectedTerm());
+        $app = HMS_RLC_Application::getApplicationByUsername(UserStatus::getUsername(), $term);
         if(is_null($app)){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'No RLC application exists.');
             $context->goBack();
 
-        } 
+        }
         // Assignemnt must NOT exist
-        else if(!HMS_RLC_Assignment::checkForAssignment(UserStatus::getUsername(), Term::getSelectedTerm())){
+        else if(!HMS_RLC_Assignment::checkForAssignment(UserStatus::getUsername(), $term)){
             // Delete the app
             $app->delete();
             NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'RLC application deleted.');
