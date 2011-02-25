@@ -17,7 +17,7 @@ class CreateTermCommand extends Command {
 
         $successCmd = CommandFactory::getCommand('ShowEditTerm');
         $errorCmd = CommandFactory::getCommand('ShowCreateTerm');
-
+        
         $year = $context->get('year_drop');
         $sem = $context->get('term_drop');
 
@@ -52,7 +52,7 @@ class CreateTermCommand extends Command {
             $db->addWhere('term', $term->getTerm());
             $num = $db->count();
 
-            if(!is_null($num) && $count > 0){
+            if(!is_null($num) && $num > 0){
                 NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'One or more halls already exist for this term, so nothing can be copied.');
                 $viewCmd->redirect();
             }
@@ -60,20 +60,28 @@ class CreateTermCommand extends Command {
 
         $text = Term::toString($term->getTerm());
 
-        $copy = $context->get('copy_drop');
+        $copy            = $context->get('copy_pick');
+        $copyAssignments = false;
+        $copyRoles       = false;
 
-        if($copy == 'struct'){
-            // Only hall structure
-            $copyAssignments = false;
-        }else if($copy == 'struct_assign'){
-            // Hall structure and assignments
-            $copyAssignments = true;
+        // If you want to copy roles and/or assignments
+        // you must also copy the hall structure.
+        if(isset($copy['struct'])){
+            // Copy hall structure
+            if(isset($copy['assign'])){
+                // Copy assignments.
+                $copyAssignments = true;
+            }
+            if(isset($copy['role'])){
+                // Copy roles.
+                $copyRoles = true;
+            }
         }else{
             // either $copy == 'nothing', or the view didn't specify... either way, we're done
             NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, "$text term created successfully.");
             $successCmd->redirect();
         }
-
+        
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
         PHPWS_Core::initModClass('hms', 'HousingApplication.php');
 
@@ -86,13 +94,13 @@ class CreateTermCommand extends Command {
             set_time_limit(36000);
 
             foreach ($halls as $hall){
-                $hall->copy($term->getTerm(), $copyAssignments);
+                $hall->copy($term->getTerm(), $copyAssignments, $copyRoles);
             }
 
             $db->query('COMMIT');
 
         }catch(Exception $e){
-
+            
             $db->query('ROLLBACK');
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'There was an error copying the hall structure and/or assignments. The term was created, but nothing was copied.');
             $errorCmd->redirect();

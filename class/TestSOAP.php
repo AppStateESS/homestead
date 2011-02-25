@@ -18,7 +18,7 @@ class TestSOAP extends SOAP{
         }
 
         // Sanity checking on the term
-        if(empty($term) || is_null($term) || !isset($username)){
+        if(empty($term) || is_null($term) || !isset($term)){
             throw new InvalidArgumentException('Bad term');
         }
 
@@ -32,12 +32,12 @@ class TestSOAP extends SOAP{
         $student->deposit_date          = '';
         $student->deposit_waived        = 'false';
 
-        $student->international         = 'false';
+        $student->international         = TRUE;
         $student->student_level         = 'U';
 
-        $student->honors                = 'false';
-        $student->teaching_fellow       = 'false';
-        $student->watauga_member        = 'false';
+        $student->honors                = TRUE;
+        $student->teaching_fellow       = TRUE;
+        $student->watauga_member        = TRUE;
 
 
 //   		$student->student_type          = 'T';
@@ -99,7 +99,7 @@ class TestSOAP extends SOAP{
 
     public function isValidStudent($username, $term)
     {
-        return TRUE;
+        return true;
     }
 
     /**
@@ -108,8 +108,8 @@ class TestSOAP extends SOAP{
      */
     public function reportApplicationReceived($username, $term)
     {
-        //		return 1337; //error
-        return "0";
+        //		return false; //error
+        return true;
     }
 
     /**
@@ -117,8 +117,8 @@ class TestSOAP extends SOAP{
      */
     public function reportRoomAssignment($username, $term, $building_code, $room_code, $plan_code, $meal_code)
     {
-        //		return 1337; //error
-        return "0";
+        //		return false; //error
+        return true;
     }
 
     /**
@@ -127,8 +127,8 @@ class TestSOAP extends SOAP{
      */
     public function removeRoomAssignment($username, $term, $building, $room)
     {
-        //		return 1337; //error
-        return "0";
+        //		return false; //error
+        return true;
     }
 
     /**
@@ -152,7 +152,7 @@ class TestSOAP extends SOAP{
         $room_assign->status_code   = 'AC';
         $room_assign->status_date   = '2008-01-14';
 
-        // Asseble the meal_assign object
+        // Assemble the meal_assign object
         $meal_assign->plan_code     = 1;
         $meal_assign->status_code   = 'AC';
         $meal_assign->status_date   = '2007-11-20';

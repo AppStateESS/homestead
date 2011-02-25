@@ -7,7 +7,6 @@ class LocalCacheStudentFactory extends StudentDataFactory {
     
     public static function getStudentByUsername($username, $term)
     {
-        
         $student = new Student();
         $student->setUsername($username);
 
@@ -25,10 +24,10 @@ class LocalCacheStudentFactory extends StudentDataFactory {
     
     public static function getStudentByBannerId($bannerId, $term)
     {
-        $soap = SOAP::getInstance();
+        $soap     = SOAP::getInstance();
         $username = $soap->getUsername($bannerId);
         
-       if(!isset($username) || is_null($username) || empty($username)){
+        if(!isset($username) || is_null($username) || empty($username)){
             PHPWS_Core::initModClass('hms', 'exception/StudentNotFoundException.php');
             throw new StudentNotFoundException('No matching student found.');
         }

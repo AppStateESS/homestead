@@ -1,26 +1,38 @@
 <?php
 
+/**
+ * Lottery Application - Model to represent a lottery re-application
+ * for continuing students.
+ *
+ * @author Jeremy Booker <jbooker at tux dot appstate dot edu>
+ * @package hms
+ */
+
 PHPWS_Core::initModClass('hms', 'HousingApplication.php');
 
 class LotteryApplication extends HousingApplication {
 
-    # Fields for the student's preferred roommates
-    public $roommate1_username;
-    public $roommate2_username;
-    public $roommate3_username;
-
-    # Fields for the preferred roommates' application terms
-    public $roommate1_app_term;
-    public $roommate2_app_term;
-    public $roommate3_app_term;
-
-    public $special_interest	= NULL;
     public $magic_winner        = 0;
     public $invite_expires_on   = NULL;
 
     public $waiting_list_hide   = 0;
 
-    public function __construct($id = 0, $term = NULL, $banner_id = NULL, $username = NULL, $gender = NULL, $student_type = NULL, $application_term = NULL, $cell_phone = NULL, $meal_plan = NULL, $physical_disability = NULL, $psych_disability = NULL, $gender_need = NULL, $medical_need = NULL, $international = NULL, Array $roommates = NULL, $specialInterest = NULL, $magicWinner = 0)
+    // This variable is set to the name of the special interest group
+    // *IF AND ONLY IF* and student is approved for that group
+    public $special_interest	= NULL;
+
+    // These are preferences input by the student on the application form.
+    // They don't necessarily mean a student has been approved by a group.
+    public $sorority_pref;
+    public $tf_pref;
+    public $wg_pref;
+    public $honors_pref;
+    public $rlc_interest;
+
+    // Static variable for waiting list position calculation
+    private static $waitingList;
+
+    public function __construct($id = 0, $term = NULL, $banner_id = NULL, $username = NULL, $gender = NULL, $student_type = NULL, $application_term = NULL, $cell_phone = NULL, $meal_plan = NULL, $physical_disability = NULL, $psych_disability = NULL, $gender_need = NULL, $medical_need = NULL, $international = NULL, $specialInterest = NULL, $magicWinner = 0, $sororityPref = NULL, $tfPref = NULL, $wgPref = NULL, $honorsPref = NULL, $rlcInterest = NULL)
     {
         /**
          * If the id is non-zero, then we need to load the other member variables
@@ -36,23 +48,14 @@ class LotteryApplication extends HousingApplication {
 
         parent::__construct($term, $banner_id, $username, $gender, $student_type, $application_term, $cell_phone, $meal_plan, $physical_disability, $psych_disability, $gender_need, $medical_need, $international);
 
-        if(isset($roommates[0])){
-            $this->roommate1_username = $roommates[0]->getUsername();
-            $this->roommate1_app_term = $roommates[0]->getApplicationTerm();
-        }
-
-        if(isset($roommates[1])){
-            $this->roommate2_username = $roommates[1]->getUsername();
-            $this->roommate2_app_term = $roommates[1]->getApplicationTerm();
-        }
-
-        if(isset($roommates[2])){
-            $this->roommate3_username = $roommates[2]->getUsername();
-            $this->roommate3_app_term = $roommates[2]->getApplicationTerm();
-        }
-
         $this->special_interest = $specialInterest;
         $this->magic_winner = $magicWinner;
+
+        $this->sorority_pref  = $sororityPref;
+        $this->tf_pref        = $tfPref;
+        $this->wg_pref        = $wgPref;
+        $this->honors_pref    = $honorsPref;
+        $this->rlc_interest   = $rlcInterest;
     }
 
     /**
@@ -140,6 +143,25 @@ class LotteryApplication extends HousingApplication {
         }
     }
 
+    /**
+     * @return integer position of this LotteryApplication in the on-campus waiting list.
+     */
+    public function getWaitListPosition()
+    {
+        if(!isset(self::$waitingList)){
+            self::$waitingList = self::getRemainingWaitListApplications($term = $this->getTerm());
+        }
+
+        $position = array_search($this->getUsername(), self::$waitingList);
+
+        if($position === FALSE){
+            return 'unknown';
+        }
+
+        // Fix the off-by-one indexing
+        return $position + 1;
+    }
+
     public function getRowTags(){
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
         $student = StudentFactory::getStudentByUsername($this->username, $this->term);
@@ -164,6 +186,8 @@ class LotteryApplication extends HousingApplication {
     public function specialInterestTags()
     {
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
+
+        $this->load($this->id);
         $student = StudentFactory::getStudentByUsername($this->username, $this->term);
 
         $tags = array();
@@ -171,16 +195,22 @@ class LotteryApplication extends HousingApplication {
         $tags['NAME']       = $student->getFullNameProfileLink();
         $tags['USER']       = $this->username;
         $tags['BANNER_ID']  = $student->getBannerId();
-        if(!is_null($this->roommate1_username)){
-            $tags['ROOMMATE1']  = StudentFactory::getStudentByUsername($this->roommate1_username, $this->term)->getProfileLink();
+        
+        if(is_null($this->special_interest)){
+            // Student HAS NOT been accepted to group, show accept link.
+            $acceptCmd = CommandFactory::getCommand('AcceptSpecialInterest');
+            $acceptCmd->setId($this->id);
+            $acceptCmd->setGroup($_REQUEST['group']); // TODO: find a better way of doing this
+            $tags['ACTION']     = $acceptCmd->getLink('Accept');
+        }else{
+            // Student HAS been accepted, show remove link.
+            $removeCmd = CommandFactory::getCommand('RemoveSpecialInterest');
+            $removeCmd->setId($this->id);
+            $removeCmd->setGroup($_REQUEST['group']); // TODO: find a better way of doing this
+            $tags['ACTION'] = $removeCmd->getLink('Remove');
+            $tags['ROW_CLASS'] = 'accepted';
         }
-        if(!is_null($this->roommate2_username)){
-            $tags['ROOMMATE2']  = StudentFactory::getStudentByUsername($this->roommate2_username, $this->term)->getProfileLink();
-        }
-        if(!is_null($this->roommate3_username)){
-            $tags['ROOMMATE3']  = StudentFactory::getStudentByUsername($this->roommate3_username, $this->term)->getProfileLink();
-        }
-        $tags['ACTION']     = PHPWS_Text::secureLink('Remove', 'hms', array('action'=>'RemoveSpecialInterest', 'asu_username'=>$this->username, 'group'=>$this->special_interest, 'id'=>$this->id));
+
 
         return $tags;
     }
@@ -195,22 +225,10 @@ class LotteryApplication extends HousingApplication {
         $tags['USER']       = $this->username;
         $tags['BANNER_ID']  = $student->getBannerId();
 
-        if(!is_null($this->roommate1_username)){
-            $tags['ROOMMATE1']  = StudentFactory::getStudentByUsername($this->roommate1_username, $this->term)->getName();
-        }
-
-        if(!is_null($this->roommate2_username)){
-            $tags['ROOMMATE2']  = StudentFactory::getStudentByUsername($this->roommate2_username, $this->term)->getName();
-        }
-
-        if(!is_null($this->roommate3_username)){
-            $tags['ROOMMATE3']  = StudentFactory::getStudentByUsername($this->roommate3_username, $this->term)->getName();
-        }
-
         return $tags;
     }
 
-    public function specialInterestPager($group, $term)
+    public static function specialInterestPager($group, $term)
     {
         PHPWS_Core::initCoreClass('DBPager.php');
 
@@ -219,13 +237,35 @@ class LotteryApplication extends HousingApplication {
         $pager->addRowTags('specialInterestTags');
 
         $pager->db->addJoin('left outer', 'hms_new_application', 'hms_lottery_application', 'id', 'id');
-        $pager->joinResult('id', 'hms_lottery_application', 'id', 'roommate1_username');
-        $pager->joinResult('id', 'hms_lottery_application', 'id', 'roommate2_username');
-        $pager->joinResult('id', 'hms_lottery_application', 'id', 'roommate3_username');
-
+        // Gotta add column from hms_lottery_application so you can order by special_interest.
+        $pager->db->addColumn('hms_lottery_application.*');
         $pager->addWhere('hms_new_application.term', $term);
-        $pager->addWhere('hms_lottery_application.special_interest', $group);
+        
+        // If student is in special interest group already then only show them in the list when their group
+        // is selected in the drop down. Or show them everywhere is they're not in a group.
+        $pager->addWhere('hms_lottery_application.special_interest', $group, '=', 'OR', 'in_group');
+        $pager->addWhere('hms_lottery_application.special_interest', 'NULL', '=', 'OR', 'in_group');
+        
+        if($group == 'honors'){
+            $pager->addWhere('hms_lottery_application.honors_pref', 1);
+        }else if($group == 'watauga_global'){
+            $pager->addWhere('hms_lottery_application.wg_pref', 1);
+        }else if($group == 'teaching'){
+            $pager->addWhere('hms_lottery_application.tf_pref', 1);
+        }else if(substr($group, 0, 8) == 'sorority'){ // starts with 'sorority'
+            $pager->addWhere('hms_lottery_application.sorority_pref', $group);
+        }else if($group == 'special_needs'){
+            $pager->addWhere('hms_new_application.physical_disability', 1, '=', 'OR', 'blah');
+            $pager->addWhere('hms_new_application.psych_disability', 1, '=', 'OR', 'blah');
+            $pager->addWhere('hms_new_application.medical_need', 1, '=', 'OR', 'blah');
+            $pager->addWhere('hms_new_application.gender_need', 1, '=', 'OR', 'blah');
+        }else{
+            // bad group
+            test($group,1);
+            throw new InvalidArgumentException('Invalid special interest group specified.');
+        }
 
+        $pager->setOrder('hms_lottery_application.special_interest', 'desc');
         $pager->setTemplate('admin/special_interest_pager.tpl');
         $pager->setEmptyMessage('No students found.');
         $pager->addToggle('class="toggle1"');
@@ -235,7 +275,7 @@ class LotteryApplication extends HousingApplication {
         return $pager->get();
     }
 
-    public function waitingListPager()
+    public static function waitingListPager()
     {
         PHPWS_Core::initCoreClass('DBPager.php');
 
@@ -247,11 +287,11 @@ class LotteryApplication extends HousingApplication {
         $pager->db->addWhere('hms_assignment.asu_username', 'NULL');
         $pager->db->addWhere('hms_new_application.term', $term);
         $pager->db->addWhere('hms_lottery_application.special_interest', 'NULL');
-        $pager->db->addWhere('physical_disability', 0);
-        $pager->db->addWhere('psych_disability', 0);
-        $pager->db->addWhere('medical_need', 0);
-        $pager->db->addWhere('gender_need', 0);
         $pager->db->addWhere('hms_lottery_application.waiting_list_hide', 0);
+
+        // Order by class, then by application ID in order to keep a fixed order
+        // This accounts for the 'you are x of y students' message on the student's menu
+        $pager->db->addOrder(array('application_term DESC', 'hms_new_application.id ASC'));
 
         $pager->setModule('hms');
         $pager->setTemplate('admin/lottery_wait_list_pager.tpl');
@@ -274,6 +314,7 @@ class LotteryApplication extends HousingApplication {
 
         $tags = array();
 
+        $tags['POSITION']   = $this->getWaitListPosition();
         $tags['NAME']       = $student->getFullNameProfileLink();
         $tags['USER']       = $this->username;
         $tags['BANNER_ID']  = $student->getBannerId();
@@ -316,6 +357,62 @@ class LotteryApplication extends HousingApplication {
         }
 
         return $tags;
+    }
+
+    public static function getRemainingWaitListApplications($term)
+    {
+        # Get the list of user names still on the waiting list, sorted by ID (first come, first served)
+        $sql = "SELECT username FROM hms_new_application JOIN hms_lottery_application ON hms_new_application.id = hms_lottery_application.id
+                LEFT OUTER JOIN (SELECT asu_username FROM hms_assignment WHERE hms_assignment.term=$term) as foo ON hms_new_application.username = foo.asu_username
+                WHERE foo.asu_username IS NULL
+                AND hms_new_application.term = $term
+                AND special_interest IS NULL
+                AND waiting_list_hide = 0
+                ORDER BY application_term DESC, hms_new_application.id ASC";
+
+        $applications = PHPWS_DB::getCol($sql);
+
+        if(PHPWS_Error::logIfError($applications)){
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException($applications->toString());
+        }
+
+        return $applications;
+    }
+    
+        /**
+     * Getters and setters.
+     */
+    public function getSororityPref(){
+        return $this->sorority_pref;
+    }
+
+    public function getTeachingFellowsPref(){
+        return $this->tf_pref;
+    }
+
+    public function getWataugaGlobalPref(){
+        return $this->wg_pref;
+    }
+
+    public function getHonorsPref(){
+        return $this->honors_pref;
+    }
+
+
+    public function setSororityPref($pref){
+        $this->sorority_pref = $pref;
+    }
+    public function setTeachingFellowsPref($pref){
+        $this->tf_pref = $pref;
+    }
+
+    public function setWataugaGlobalPref($pref){
+        $this->wg_pref = $pref;
+    }
+
+    public function setHonorsPref($pref){
+        $this->honors_pref = $pref;
     }
 }
 ?>

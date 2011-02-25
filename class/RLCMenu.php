@@ -3,7 +3,7 @@
 PHPWS_Core::initModClass('hms', 'CommandMenu.php');
 
 class RLCMenu extends CommandMenu {
-	
+
 	public function __construct()
 	{
 		parent::__construct();
@@ -12,8 +12,7 @@ class RLCMenu extends CommandMenu {
         if(UserStatus::isAdmin()){
 
             if(Current_User::allow('hms', 'learning_community_maintenance')){
-                $this->addCommandByName('Add Learning Community', 'ShowAddRlc');
-                $this->addCommandByName('Edit Learning Community', 'ShowEditRlc');
+                $this->addCommandByName('Add/Edit Communities', 'ShowEditRlc');
             }
 
             if(Current_User::allow('hms', 'view_rlc_applications')){
@@ -38,7 +37,7 @@ class RLCMenu extends CommandMenu {
             }
         }
 	}
-	
+
 	public function show()
 	{
         if(empty($this->commands)){
@@ -46,7 +45,7 @@ class RLCMenu extends CommandMenu {
         }
 
         $tpl = array();
-		
+
         $tpl['MENU'] = parent::show();
 
         return PHPWS_Template::process($tpl, 'hms', 'admin/menus/RLCMenu.tpl');

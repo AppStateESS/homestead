@@ -32,19 +32,12 @@ class ShowAddRlcCommand extends Command {
             throw new PermissionException('You do not have permission to edit learning communities.');
         }
 
-        $community = new HMS_Learning_Community();
+        $communityId = $context->get('id');
 
-        try{
-            $community->set_id($context->get('id'));
-
-            $db = new PHPWS_DB('hms_learning_communities');
-            $result = $db->loadObject($community);
-
-            if(PHPWS_Error::logIfError($result)){
-                $community = new HMS_Learning_Community();
-            }
-        } catch (Exception $ignored) {
-            //pass;
+        if(isset($communityId)){
+            $community = new HMS_Learning_Community($communityId);
+        }else{
+            $community = null;
         }
 
         $view = new AddCommunityView($community);

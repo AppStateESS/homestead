@@ -5,21 +5,30 @@ PHPWS_Core::initModClass('hms', 'View.php');
 class SpecialInterestGroupView extends View {
     protected $group;
 
-    public function __construct($group='none')
+    public function __construct($group = NULL)
     {
-        $this->group = is_null($group) ? 'none' : $group;
+        $this->group = $group;
     }
 
     public function show()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
         PHPWS_Core::initModClass('hms', 'LotteryApplication.php');
+
+        $this->setPageTitle('Special Interest Group');
         javascript('jquery');
 
         $tpl = array();
 
-        $groups = HMS_Lottery::get_special_interest_groups();
+        $groups = HMS_Lottery::getSpecialInterestGroupsMap();
 
+        // If a group was selected
+        if(!is_null($this->group) && $this->group != 'none'){
+            $tpl['GROUP_PAGER'] = LotteryApplication::specialInterestPager($this->group, PHPWS_Settings::get('hms', 'lottery_term'));
+            $tpl['GROUP'] = $groups[$this->group];
+        }
+
+        // Show the drop down box of groups
         $form = new PHPWS_Form('special_interest');
         $form->setMethod('get');
         $form->addDropBox('group', $groups);
@@ -28,15 +37,9 @@ class SpecialInterestGroupView extends View {
 
         $cmd = CommandFactory::getCommand('ShowSpecialInterestGroupApproval');
         $cmd->initForm($form);
-        
-        $tpl = $form->getTemplate();
 
-        if($this->group != 'none' && !is_null($this->group)){
-            $tpl['GROUP_PAGER'] = LotteryApplication::specialInterestPager($this->group, PHPWS_Settings::get('hms', 'lottery_term'));
-            $tpl['GROUP'] = $groups[$this->group];
-        }
-        
-        Layout::addPageTitle("Special Interest Group");
+        $form->mergeTemplate($tpl);
+        $tpl = $form->getTemplate();
 
         return PHPWS_Template::process($tpl, 'hms', 'admin/special_interest_approval.tpl');
     }

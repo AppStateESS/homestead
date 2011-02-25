@@ -15,6 +15,16 @@ class PhpSOAP extends SOAP
 
     public function getStudentInfo($username, $term)
     {
+        // Sanity checking on the username
+        if(empty($username) || is_null($username) || !isset($username)){
+            throw new InvalidArgumentException('Bad username');
+        }
+
+        // Sanity checking on the term
+        if(empty($term) || is_null($term) || !isset($term)){
+            throw new InvalidArgumentException('Bad term');
+        }
+
         $params = array('StudentID'=>$username, 'TermCode'=>$term);
 
         try{
@@ -42,7 +52,7 @@ class PhpSOAP extends SOAP
             return false;
         }
 
-		SOAP::logSoap('getUsername', 'success', $username, $term);
+		SOAP::logSoap('getUsername', 'success', $bannerId);
 
         return $response->GetUserNameResult;
     }
@@ -149,7 +159,7 @@ class PhpSOAP extends SOAP
             throw new SOAPException($e->getMessage(), $e->getCode(), 'getHousMealRegister', $params);
             return false;
         }
-        
+
 	    SOAP::logSoap('getHousMealRegister', 'success', $username, $term, $opt);
         return $response->GetHousMealRegister;
     }

@@ -1,42 +1,31 @@
 <?php
 
-class RemoveSpecialInterestCommand extends Command {
-    protected $asuUsername;
-    protected $group;
+  /**
+   * RemoveSpecialInterest
+   *
+   * Un-accept a student from a special interest group.
+   *
+   * @author Robert Bost <bostrt at tux dot appstate dot edu>
+   */
 
-    public function getAsuUsername()
-    {
-        return $this->asuUsername;
-    }
 
-    public function setAsuUsername($username)
-    {
-        $this->asuUsername = $username;
-    }
+PHPWS_Core::initModClass('hms', 'Command.php');
 
-    public function getGroup()
-    {
-        return $this->group;
-    }
-
-    public function setGroup($group)
-    {
-        $this->group = $group;
-    }
+class RemoveSpecialInterestCommand extends Command
+{
+    private $group;
+    private $id;
 
     public function getRequestVars()
     {
-        $requestVars = array('action' => 'RemoveSpecialInterest',
-                             'group'  => $this->group);
-
-        return $requestVars;
+        return array('action' => 'RemoveSpecialInterest',
+                     'group' => $this->group, 
+                     'id' => $this->id);
     }
 
     public function execute(CommandContext $context)
     {
-        PHPWS_Core::initModClass('hms', 'LotteryApplication.php');
-
-        # Check permissions
+        // Check permissions
         if(!Current_User::allow('hms', 'special_interest_approval')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to approve special interest group requests.');
@@ -44,22 +33,32 @@ class RemoveSpecialInterestCommand extends Command {
 
         PHPWS_Core::initModClass('hms', 'LotteryApplication.php');
 
-        if( !is_null($context->get('id')) ){
-            $app = new LotteryApplication($context->get('id'));
-            $app->special_interest = NULL;
-            $result = $app->save();
-
-            if(PEAR::isError($result)){
-                NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Error removing {$this->asuUsername}");
-            }else{
-                NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, "Removed {$this->asuUsername}");
-            }
-        } else {
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'No id provided to remove!');
+        if(is_null($context->get('id'))){
+            throw new InvalidArgumentException('Missing application id.');
         }
+        
+        $app = new LotteryApplication($context->get('id'));
+        
+        $app->special_interest = null;
+        
+        $result = $app->save();
+        
+        NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, "Removed {$app->getUsername()}");
 
         $cmd = CommandFactory::getCommand('ShowSpecialInterestGroupApproval');
+        $cmd->setGroup($context->get('group'));
         $cmd->redirect();
     }
+
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+    public function setGroup($group)
+    {
+        $this->group = $group;
+    }
+
 }
+
 ?>

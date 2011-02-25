@@ -21,7 +21,7 @@ class ShowHousingApplicationWelcomeCommand extends Command {
 
 		$term = $context->get('term');
 
-		$student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
+		$student   = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
 		$submitCmd = CommandFactory::getCommand('ShowHousingApplicationForm');
 		$submitCmd->setTerm($term);
 
@@ -31,7 +31,7 @@ class ShowHousingApplicationWelcomeCommand extends Command {
 		$feature = ApplicationFeature::getInstanceByNameAndTerm('Application', $term);
 
 		// If there is no feature, or if we're not inside the feature's deadlines...
-		if(is_null($feature) || $feature->getStartDate() > time() || $feature->getEndDate() < time()){
+		if(is_null($feature) || $feature->getStartDate() > time() || $feature->getEndDate() < time() || !$feature->isEnabled()){
 		    PHPWS_Core::initModClass('hms', 'HousingApplicationNotAvailableView.php');
 		    $view = new HousingApplicationNotAvailableView($student, $feature, $term);
 		}else{
@@ -42,4 +42,4 @@ class ShowHousingApplicationWelcomeCommand extends Command {
 	}
 }
 
-?>
+//?>

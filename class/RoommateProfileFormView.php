@@ -49,6 +49,13 @@ class RoommateProfileFormView extends View {
             $profile_form->setMatch('music_checkbox',RoommateProfile::get_music_matches($this->profile));
         }
 
+        $profile_form->addCheck('language_checkbox',$language);
+        $profile_form->setLabel('language_checkbox',$language_labels);
+        $template['LANGUAGE_CHECKBOX_QUESTION'] = 'I can speak (check all that apply):';
+        if($profile_exists){
+            $profile_form->setMatch('language_checkbox',RoommateProfile::get_language_matches($this->profile));
+        }
+
         $profile_form->addDropBox('political_views_dropbox',$political_views);
         $profile_form->setLabel('political_views_dropbox','I consider myself: ');
         if($profile_exists){

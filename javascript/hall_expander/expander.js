@@ -26,7 +26,8 @@ var element = function(){
 
 /* Hall Class */
 var hall = function(){
-    this.children = new Array();
+    this.children  = new Array();
+    this.collapsed = false;
 }
 hall.prototype = new element();
 hall.prototype.constructor = hall;
@@ -37,13 +38,20 @@ hall.prototype.addChild = function(child){
 }
 
 hall.prototype.draw = function(){
-    var output = '<span id="hall_'+this.index+'" class="hall"><input type="checkbox" ref="'+this.index+'" objtype="'+this.type+'" '+(this.isEnabled() ? '' : 'disabled="true"')+' />'+this.getName();
-    output += '<span class="subtree"><ul>';
+    var collapsed = true;
 
+    var output = '<span id="hall_'+this.index+'" class="hall"><input type="checkbox" ref="'+this.index+'" objtype="'+this.type+'" '+(this.isEnabled() ? '' : 'disabled="true"')+' />'+this.getName();
+
+    output += '<span class="subtree"><ul>';
     for(var i in this.children){
+        if(this.children[i].enabled == false){
+            collapsed = false;
+        }
         output += '<li class="noexpand">'+this.children[i].draw()+'</li>';
     }
-    output +="</ul></span></span>";
+    output += "</ul></span></span>";
+
+    this.collapsed = collapsed;
 
     return output;
 }

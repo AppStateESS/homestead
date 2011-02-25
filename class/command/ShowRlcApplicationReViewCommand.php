@@ -36,7 +36,7 @@ class ShowRlcApplicationReViewCommand extends Command {
         }
 
         try{
-            $student = StudentFactory::getStudentByUsername($application->username, Term::getSelectedTerm());
+            $student = StudentFactory::getStudentByUsername($application->username, $application->term);
         }catch(StudentNotFoundException $e){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Unknown student.');
             $context->goBack();

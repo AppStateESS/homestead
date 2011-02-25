@@ -43,7 +43,7 @@ class HMS_Assignment extends HMS_Item
 		$new_ass->reset();
 		$new_ass->bed_id = (int)$bed_id;
 		$new_ass->term   = $to_term;
-		
+
 		try{
 		    $new_ass->save();
 		}catch(Exception $e){
@@ -80,7 +80,7 @@ class HMS_Assignment extends HMS_Item
 	{
 		PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
 		$bed = new HMS_Bed($this->bed_id);
-			
+
 
 		$this->_bed = &$bed;
 		return true;
@@ -239,9 +239,9 @@ class HMS_Assignment extends HMS_Item
 		$db->addWhere('asu_username', $asu_username, 'ILIKE');
 
 		$db->addWhere('term', $term);
-			
+
 		$result = $db->select('one');
-		
+
 		if (PHPWS_Error::logIfError($result)) {
 			PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
 			throw new DatabaseException($result->toString());
@@ -260,10 +260,14 @@ class HMS_Assignment extends HMS_Item
 	 */
 	public static function assignStudent(Student $student, $term, $room_id = NULL, $bed_id = NULL, $meal_plan, $notes="", $lottery = FALSE)
 	{
+	    /**
+	     * Can't check permissions here because there are some student-facing commands that needs to make assignments (e.g. the lottery/re-application code)
+	     *
         if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'assignment_maintenance')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You are not allowed to edit student assignments.');
         }
+        */
 
 		PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
 		PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
@@ -360,7 +364,7 @@ class HMS_Assignment extends HMS_Item
 		if (!$hall) {
 			throw new AssignmentException('Null hall object.');;
 		}
-			
+
 		if($meal_plan == BANNER_MEAL_NONE){
 			$meal_plan = NULL;
 		}
@@ -375,8 +379,7 @@ class HMS_Assignment extends HMS_Item
 		}
 
 		# Send this off to the queue for assignment in banner
-        $banner_success = BannerQueue::queueAssignment($student, $term, $hall, $vacant_bed, 'HOME', $meal_plan);
-
+	        $banner_success = BannerQueue::queueAssignment($student, $term, $hall, $vacant_bed, 'HOME', $meal_plan);
 		if($banner_success !== TRUE){
 			throw new AssignmentException('Error while adding the assignment to the Banner queue.');
 		}
@@ -420,7 +423,7 @@ class HMS_Assignment extends HMS_Item
 				if($roommate->getUsername() == $username){
 					continue;
 				}
-				$roommate_assign = HMS_Assignment::getAssignment($roommate->getUsername(),Term::getCurrentTerm());
+				$roommate_assign = HMS_Assignment::getAssignment($roommate->getUsername(),$term);
 				$roommate_assign->letter_printed = 0;
 				$roommate_assign->email_sent     = 0;
 

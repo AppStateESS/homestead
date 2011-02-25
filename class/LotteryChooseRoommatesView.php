@@ -30,53 +30,6 @@ class LotteryChooseRoommatesView extends View {
         # Grab all of their preferred roommates
         $lotteryApplication = HousingApplication::getApplicationByUser($this->student->getUsername(), $this->term);
 
-        # If all the roommate usernames are null, show the "no roommate specified" message
-        if(is_null($lotteryApplication->roommate1_username) && is_null($lotteryApplication->roommate1_username) && is_null($lotteryApplication->roommate1_username)){
-            $tpl['NO_ROOMMATES'] = "";
-        }else{
-            # Check each to the roommates for their status.
-            
-            $roommates = array();
-            
-            if(!is_null($lotteryApplication->roommate1_username)){
-                $roommates[] = $lotteryApplication->roommate1_username;
-            }
-            
-            if(!is_null($lotteryApplication->roommate2_username)){
-                $roommates[] = $lotteryApplication->roommate2_username;
-            }
-            
-            if(!is_null($lotteryApplication->roommate3_username)){
-                $roommates[] = $lotteryApplication->roommate3_username;
-            }
-            
-            foreach($roommates as $roommate)
-            {
-                # Skip null roommates
-                if(is_null($roommate)){
-                    continue;
-                }
-
-                $status = array();
-                
-                $roommateObj = StudentFactory::getStudentByUsername($roommate, $this->term);
-                $status['NAME'] = $roommateObj->getName();
-
-                if(HousingApplication::checkForApplication($roommate, $this->term) === FALSE){
-                    $status['STATUS'] = 'Did not enter lottery.';
-                    $status['COLOR'] = 'red';
-                }else if(!is_null(HMS_Assignment::getAssignment($roommate, $term))){
-                    $status['STATUS'] = 'Already assigned.';
-                    $status['COLOR'] = 'red';
-                }else{
-                    $status['STATUS'] = "<a href=\"\" onClick=\"choose_roommate('$roommate'); return false;\">Choose this roommate</a>";
-                    $status['COLOR'] = 'green';
-                }
-
-                $tpl['roommate_status'][] = $status;
-            }
-        }
-
         # List each bed in the room and if it's available, assigned, or reserved
         $room = new HMS_Room($this->roomId);
         $beds = $room->get_beds();
@@ -84,7 +37,7 @@ class LotteryChooseRoommatesView extends View {
         $tpl['ROOM'] = $room->where_am_i();
 
         $form = new PHPWS_Form();
-        
+
         $submitCmd = CommandFactory::getCommand('LotteryChooseRoommates');
         $submitCmd->setRoomId($this->roomId);
         $submitCmd->initForm($form);
@@ -149,11 +102,12 @@ class LotteryChooseRoommatesView extends View {
             BANNER_MEAL_STD    =>_('Standard'),
             BANNER_MEAL_HIGH   =>_('High'),
             BANNER_MEAL_SUPER  =>_('Super')));
-            $form->setMatch('meal_plan', BANNER_MEAL_STD);
         }
 
+        $form->setMatch('meal_plan', $lotteryApplication->getMealPlan());
+
         $form->addSubmit('submit_form', 'Review Roommate & Room Selection');
-         
+
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 

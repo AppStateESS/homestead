@@ -47,12 +47,15 @@ class LotteryConfirmCommand extends Command {
         $successCmd->setRoomId($roomId);
 
         PHPWS_Core::initCoreClass('Captcha.php');
-        $captcha = Captcha::verify(TRUE); // returns the words entered if correct, FALSE otherwise
+        //$captcha = Captcha::verify(TRUE); // returns the words entered if correct, FALSE otherwise
+        $captcha = TRUE;
         if($captcha === FALSE) {
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Sorry, the words you eneted were incorrect. Please try again.');
             $errorCmd->redirect();
         }
 
+
+        PHPWS_Core::initModClass('hms', 'HousingApplication.php');
         PHPWS_Core::initModClass('hms', 'HMS_Room.php');
         PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
@@ -127,6 +130,12 @@ class LotteryConfirmCommand extends Command {
         # Log the assignment
         HMS_Activity_Log::log_activity(UserStatus::getUsername(), ACTIVITY_LOTTERY_ROOM_CHOSEN, UserStatus::getUsername(), 'Captcha: ' . $captcha);
 
+        // Update the student's meal plan in the housing application, just for future reference
+        $app = HousingApplication::getApplicationByUser($student->getUsername(), $term);
+        $app->setMealPlan($mealPlan);
+        $app->save();
+
+        // Handle requesting roommates
         $requestor_name = $student->getName();
 
         foreach($roommates as $bed_id => $username){

@@ -11,6 +11,8 @@ class CreateTermView extends View {
             throw new PermissionException('You do not have permission to edit terms.');
         }
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
+        javascript('jquery');
+        javascript('/modules/hms/newTermCopyPick');
         
         $tpl['TITLE'] = 'Add a New Term';
 
@@ -21,7 +23,7 @@ class CreateTermView extends View {
         }
 
         $submitCmd = CommandFactory::getCommand('CreateTerm');
-        
+
         $form = new PHPWS_Form('new_term_form');
         $submitCmd->initForm($form);
 
@@ -31,9 +33,9 @@ class CreateTermView extends View {
         $form->addDropBox('term_drop',Term::getSemesterList());
         $form->setLabel('term_drop','Semester: ');
 
-        $form->addDropBox('copy_drop', array('struct' => 'Hall structure only', 'struct_assign' => 'Hall structure & assignments'));
-        $form->setLabel('copy_drop', 'What to copy: ');
-
+        $vars = array('struct' => 'Hall structure', 'assign' => 'Assignments', 'role' => 'Roles');
+        $form->addCheckAssoc('copy_pick', $vars);
+        $tpl['COPY_PICK_LABEL'] = 'What to copy:';
         $form->addSubmit('submit','Add Term');
 
         $form->mergeTemplate($tpl);

@@ -75,7 +75,7 @@ class HMS_Floor extends HMS_Item
      *
      * @return bool False if unsuccessful.
      */
-    public function copy($to_term, $hall_id, $assignments = FALSE)
+    public function copy($to_term, $hall_id, $assignments = FALSE, $roles = FALSE)
     {
         if (!$this->id) {
             return false;
@@ -97,6 +97,22 @@ class HMS_Floor extends HMS_Item
             $new_floor->save();
         }catch(Exception $e){
             throw $e;
+        }
+
+        // Copy any roles related to this floor.
+        if($roles){
+            PHPWS_Core::initModClass("hms", "HMS_Permission.php");
+            PHPWS_Core::initModClass("hms", "HMS_Role.php");
+            // Get memberships by object instance.
+            $membs = HMS_Permission::getMembership(null, $this);
+            // Add each user to new floor
+            foreach($membs as $m){
+                // Load role and add user to new instance
+                $role = new HMS_Role();
+                $role->id = $m['role_id'];
+                $role->load();
+                $role->addUser($m['username'], get_class($new_floor), $new_floor->id);
+            }
         }
 
         // Load all the rooms for this floor
@@ -292,6 +308,28 @@ class HMS_Floor extends HMS_Item
         }else{
             return true;
         }
+    }
+
+    public function getUsernames()
+    {
+        $db = new PHPWS_DB('hms_assignment');
+
+        $db->addColumn('asu_username');
+
+        $db->addJoin('LEFT OUTER', 'hms_assignment','hms_bed',            'bed_id',             'id');
+        $db->addJoin('LEFT OUTER', 'hms_bed',       'hms_room',           'room_id',            'id');
+        $db->addJoin('LEFT OUTER', 'hms_room',      'hms_floor',          'floor_id',           'id');
+
+        $db->addWhere('hms_floor.id', $this->id);
+
+        $result = $db->select('col');
+
+        if(PHPWS_Error::logIfError($result)){
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException($result->toString());
+        }
+
+        return $result;
     }
 
     public function getFloorNumber(){
