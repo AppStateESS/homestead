@@ -47,6 +47,7 @@ class SubmitRlcApplicationCommand extends Command {
         $application->setRLCQuestion1(is_null($context->get('rlc_question_1')) ? '' : $context->get('rlc_question_1'));
         $application->setRLCQuestion2(is_null($context->get('rlc_question_2')) ? '' : $context->get('rlc_question_2'));
         $application->setEntryTerm($context->get('term'));
+        $application->setApplicationType(RLC_APP_FRESHMEN);
         $result = $application->save();
 
         if(PEAR::isError($result)){

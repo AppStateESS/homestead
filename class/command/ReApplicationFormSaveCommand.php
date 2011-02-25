@@ -95,15 +95,15 @@ class ReApplicationFormSaveCommand extends Command {
         $rlcInterest = isset($rlcInterest)?1:0;
 
         // International
-        if($student->isInternational()){
-            $international = 1;
-        }else{
-            $international = 0;
-        }
+        $international = $student->isInternational();
 
         $magicWinner = 0;
 
-        $application = new LotteryApplication(0, $term, $student->getBannerId(), $student->getUsername(), $student->getGender(), $student->getType(), $student->getApplicationTerm(), $cellPhone, $mealPlan, $physicalDisability, $psychDisability, $genderNeed, $medicalNeed, $international, NULL, $magicWinner, $sororityPref, $tfPref, $wgPref, $honorsPref, $rlcInterest);
+        // The student's type should always be 'C' (continuing),
+        // even if thes student began in the Spring.
+        $studentType = 'C';
+
+        $application = new LotteryApplication(0, $term, $student->getBannerId(), $student->getUsername(), $student->getGender(), $studentType, $student->getApplicationTerm(), $cellPhone, $mealPlan, $physicalDisability, $psychDisability, $genderNeed, $medicalNeed, $international, NULL, $magicWinner, $sororityPref, $tfPref, $wgPref, $honorsPref, $rlcInterest);
 
         try{
             $application->save();
@@ -121,9 +121,15 @@ class ReApplicationFormSaveCommand extends Command {
         HMS_Email::send_lottery_application_confirmation($student, $year);
 
         # Show success message
-        #TODO: Redirect to RLC app if student is interested
         NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Your re-application was submitted successfully.');
-        $cmd = CommandFactory::getCommand('ShowStudentMenu');
+
+        # Redirect to the RLC Reapplication form is the student is interested in RLCs, otherwise, show the student menu
+        if($rlcInterest == 1){
+            $cmd = CommandFactory::getCommand('ShowRlcReapplication');
+            $cmd->setTerm($term);
+        }else{
+            $cmd = CommandFactory::getCommand('ShowStudentMenu');
+        }
         $cmd->redirect();
     }
 }

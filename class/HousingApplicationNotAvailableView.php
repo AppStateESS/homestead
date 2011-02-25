@@ -20,7 +20,10 @@ class HousingApplicationNotAvailableView extends View {
         
         $tpl['TERM'] = Term::toString($this->term);
 
-        if($this->feature->getStartDate() > time()){
+        if(is_null($this->feature) || !$this->feature->isEnabled()){
+            $tpl['DEADLINE'] = "\n";
+        }
+        else if($this->feature->getStartDate() > time()){
             $tpl['DEADLINE'] = 'It is too soon to complete your application. The On-campus Housing Application will be availble here on ' . HMS_Util::getFriendlyDate($this->feature->getStartDate());
         }else if($this->feature->getEndDate() < time()){
             $tpl['DEADLINE'] = 'The deadline to complete the On-campus Housing Application was ' . HMS_Util::getFriendlyDate($this->feature->getEndDate());

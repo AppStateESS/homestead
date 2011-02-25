@@ -17,12 +17,22 @@ class ListAllowedHallsCommand extends Command {
         $db->addWhere('term', $term);
         $results = $db->getObjects('HMS_Residence_Hall');;
 
-        if(PHPWS_Error::logIfError($results)){
+        if(PHPWS_Error::logIfError($results) || is_null($results)){
+            $errorMsg = array();
+            
+            if(is_null($results)){
+                $errorMsg['error'] = 'You do not have permission to message any halls, sorry.';
+            } else {
+                $errorMsg['error'] = 'There was a problem reading the database, please try reloading the page.  If the problem persists contact ESS.';
+            }
+
+            echo json_encode($errorMsg);
             exit;
         }
         $permission = new HMS_Permission();
 
         $data = array();
+        
         foreach($results as $hall){
             $somethingEnabled = false;
 

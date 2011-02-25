@@ -74,7 +74,6 @@ class HMS_Residence_Hall extends HMS_Item
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
-
         return true;
     }
 
@@ -88,7 +87,7 @@ class HMS_Residence_Hall extends HMS_Item
      *
      * @return bool False if unsuccessful.
      */
-    public function copy($to_term, $assignments = FALSE)
+    public function copy($to_term, $assignments = FALSE, $roles = FALSE)
     {
         if(!$this->id) {
             return false;
@@ -110,6 +109,22 @@ class HMS_Residence_Hall extends HMS_Item
             throw $e;
         }
 
+        // Copy any roles related to this residence hall.
+        if($roles){
+            PHPWS_Core::initModClass("hms", "HMS_Permission.php");
+            PHPWS_Core::initModClass("hms", "HMS_Role.php");
+            // Get memberships by object instance.
+            $membs = HMS_Permission::getMembership(null, $this);
+            // Add each user to new hall
+            foreach($membs as $m){
+                // Load role and add user to new instance
+                $role = new HMS_Role();
+                $role->id = $m['role_id'];
+                $role->load();
+                $role->addUser($m['username'], get_class($new_hall), $new_hall->id);
+            }
+        }
+
         // Save successful, create new floors
 
         // Load all floors for this hall
@@ -125,7 +140,7 @@ class HMS_Residence_Hall extends HMS_Item
         if (!empty($this->_floors)) {
             foreach ($this->_floors as $floor) {
                 try{
-                    $floor->copy($to_term, $new_hall->id, $assignments);
+                    $floor->copy($to_term, $new_hall->id, $assignments, $roles);
                 }catch(Exception $e){
                     throw $e;
                 }
@@ -340,7 +355,7 @@ class HMS_Residence_Hall extends HMS_Item
 
         $result = $db->select('count');
 
-        if(!$result || PHPWS_Error::logIfError($result)){
+        if(PHPWS_Error::logIfError($result)){
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }

@@ -260,10 +260,14 @@ class HMS_Assignment extends HMS_Item
 	 */
 	public static function assignStudent(Student $student, $term, $room_id = NULL, $bed_id = NULL, $meal_plan, $notes="", $lottery = FALSE)
 	{
+	    /**
+	     * Can't check permissions here because there are some student-facing commands that needs to make assignments (e.g. the lottery/re-application code)
+	     *
         if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'assignment_maintenance')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You are not allowed to edit student assignments.');
         }
+        */
 
 		PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
 		PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
@@ -419,7 +423,7 @@ class HMS_Assignment extends HMS_Item
 				if($roommate->getUsername() == $username){
 					continue;
 				}
-				$roommate_assign = HMS_Assignment::getAssignment($roommate->getUsername(),Term::getCurrentTerm());
+				$roommate_assign = HMS_Assignment::getAssignment($roommate->getUsername(),$term);
 				$roommate_assign->letter_printed = 0;
 				$roommate_assign->email_sent     = 0;
 

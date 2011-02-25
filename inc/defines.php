@@ -224,6 +224,8 @@ define('ACTIVITY_ROOM_CHANGE_DENIED', 62);
 define('ACTIVITY_FLOOR_NOTIFIED_ANONYMOUSLY',   63);
 define('ACTIVITY_FLOOR_NOTIFIED',               64);
 
+define('ACTIVITY_LOTTERY_ROOMMATE_DENIED',      65);
+
 /**
  * Errors
  */

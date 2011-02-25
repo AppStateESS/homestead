@@ -352,10 +352,7 @@ class Student {
     }
 
     public function isInternational(){
-        if($this->international == 'true'){
-            return true;
-        }
-        return false;
+        return $this->international;
     }
 
     public function setHonors($hon){
@@ -363,10 +360,7 @@ class Student {
     }
 
     public function isHonors(){
-        if($this->honors == "true"){
-            return true;
-        }
-        return false;
+        return $this->honors;
     }
 
     public function setTeachingFellow($teach){
@@ -374,10 +368,7 @@ class Student {
     }
 
     public function isTeachingFellow(){
-        if($this->teaching_fellow == "true"){
-            return true;
-        }
-        return false;
+        return $this->teaching_fellow;
     }
 
     public function setWataugaMember($member){
@@ -385,10 +376,7 @@ class Student {
     }
 
     public function isWataugaMember(){
-        if($this->watauga_member == "true"){
-            return true;
-        }
-        return false;
+        return $this->watauga_member;
     }
 
     public function getAddressList(){

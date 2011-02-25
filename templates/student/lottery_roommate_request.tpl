@@ -25,7 +25,8 @@
         <p>
             To confirm your choices, please continue to the next page by clicking the continue button below.
         </p>
-        {CONTINUE}
+        {ACCEPT}
+        {REJECT}
         {END_FORM}
     </div>
   </div>

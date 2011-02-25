@@ -249,8 +249,6 @@ class HMS_Email{
                 HMS_Email::send_template_message($to . TO_DOMAIN, 'Housing Assignment Notice!', 'email/assignment_notice.tpl', $tpl);
                 break;
         }
-
-
     }
 
     public function send_roommate_confirmation(Student $to, Student $roomie){
@@ -292,6 +290,130 @@ class HMS_Email{
         HMS_Email::send_template_message($to->getUsername() . TO_DOMAIN, 'On-campus Houisng Application Confirmation!', 'email/application_confirmation.tpl', $tpl);
     }
 
+    /********************
+     * Roommate Request *
+     ********************/
+    public function send_request_emails(HMS_Roommate $request)
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
+
+        $requestorStudent = StudentFactory::getStudentByUsername($request->requestor, $request->term);
+        $requesteeStudent = StudentFactory::getStudentByUsername($request->requestee, $request->term);
+
+        // set tags for the email to the person doing the requesting
+        $tags = array();
+        $tags['REQUESTOR_NAME'] = $requestorStudent->getFullName();
+        $tags['REQUESTEE_NAME'] = $requesteeStudent->getFullName();
+
+        HMS_Email::send_template_message($request->requestor . TO_DOMAIN, 'HMS Roommate Request',
+                                         'email/roommate_request_requestor.tpl', $tags);
+        
+        // Extra tags needed for email sent to requested roommmate
+        $expire_date = $request->calc_req_expiration_date();
+        $tags['EXPIRATION_DATE'] = date('l, F jS, Y', $expire_date);
+        $tags['EXPIRATION_TIME'] = date('g:i A', $expire_date);
+
+        HMS_Email::send_template_message($request->requestee . TO_DOMAIN, 'HMS Roommate Request',
+                                         'email/roommate_request_requestee.tpl', $tags);
+
+        return TRUE;
+    }
+
+    public function send_confirm_emails(HMS_Roommate $request)
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
+
+        $requestorStudent = StudentFactory::getStudentByUsername($request->requestor, $request->term);
+        $requesteeStudent = StudentFactory::getStudentByUsername($request->requestee, $request->term);
+
+        $tags = array();
+        $tags['REQUESTOR'] = $requestorStudent->getFullName();
+        $tags['REQUESTEE'] = $requesteeStudent->getFullName();
+
+        // to the requestor
+        HMS_Email::send_template_message($request->requestor . TO_DOMAIN, 'HMS Roommate Confirmed',
+                                         'email/roommate_confirmation_requestor.tpl', $tags);
+
+        // to the requestee
+        HMS_Email::send_template_message($request->requestee . TO_DOMAIN, 'HMS Roommate Confirmed',
+                                         'email/roommate_confirmation_requestee.tpl', $tags);      
+        
+        return TRUE;
+    }
+
+    public function send_reject_emails(HMS_Roommate $request)
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
+
+        $requestorStudent = StudentFactory::getStudentByUsername($request->requestor, $request->term);
+        $requesteeStudent = StudentFactory::getStudentByUsername($request->requestee, $request->term);
+
+        $tags = array();
+        $tags['REQUESTOR'] = $requestorStudent->getFullName();
+        $tags['REQUESTOR_FIRST'] = $requestorStudent->getFirstName();
+        $tags['REQUESTEE'] = $requesteeStudent->getFullName();
+        $tags['REQUESTEE_FIRST'] = $requesteeStudent->getFirstName();
+
+        // To requestor
+        HMS_Email::send_template_message($request->requestor . TO_DOMAIN, 'HMS Roommate Declined',
+                                         'email/roommate_reject_requestor.tpl', $tags);
+
+        // to the requestee
+        HMS_Email::send_template_message($request->requestee . TO_DOMAIN, 'HMS Roommate Declined',
+                                         'email/roommate_reject_requestee.tpl', $tags);
+
+        return TRUE;
+    }
+
+    public function send_break_emails(HMS_Roommate $request, $breaker)
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
+
+        $breakee = $request->get_other_guy($breaker);
+
+        $breakerStudent = StudentFactory::getStudentByUsername($breaker, $request->term);
+        $breakeeStudent = Studentfactory::getStudentByUsername($breakee, $request->term);
+        
+        $tags = array();
+        $tags['BREAKER'] = $breakerStudent->getFullName();
+        $tags['BREAKER_FIRST'] = $breakerStudent->getFirstName();
+        $tags['BREAKEE'] = $breakeeStudent->getFullName();
+
+        // to the breaker
+        HMS_Email::send_template_message($breaker . TO_DOMAIN, 'HMS Roommate Pairing Broken', 
+                                         'email/roommate_break_breaker.tpl', $tags);
+
+        // to the breakee
+        HMS_Email::send_template_message($breakee . TO_DOMAIN, 'HMS Roommate Pairing Broken',
+                                         'email/roommate_break_breakee.tpl', $tags);
+        return TRUE;
+    }
+
+    public function send_cancel_emails(HMS_Roommate $request)
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
+
+        $requestorStudent = StudentFactory::getStudentByUsername($request->requestor, $request->term);
+        $requesteeStudent = StudentFactory::getStudentByUsername($request->requestee, $request->term);
+
+        $tags = array('REQUESTOR' => $requestorStudent->getFullName(),
+                      'REQUESTOR_FIRST' => $requestorStudent->getFirstName(),
+                      'REQUESTEE' => $requesteeStudent->getFullName());
+
+        // to the requestor
+        HMS_Email::send_template_message($request->requestor . TO_DOMAIN, 'HMS Roommate Request Cancelled',
+                                         'email/roommate_request_cancel_requestor.tpl', $tags);
+
+        // to the requestee
+        HMS_Email::send_template_message($request->requestee . TO_DOMAIN, 'HMS Roommate Request Cancelled',
+                                         'email/roommate_request_cancel_requestee.tpl', $tags);
+        return TRUE;
+    }
+
+    
+    /*******
+     * RLC *
+     *******/
     public function send_rlc_application_confirmation(Student $to)
     {
         PHPWS_Core::initModClass('hms', 'Term.php');
@@ -303,13 +425,13 @@ class HMS_Email{
         HMS_Email::send_template_message($to->getUsername() . TO_DOMAIN, 'Learning Community Application Confirmation!', 'email/rlc_application_confirmation.tpl', $tpl);
     }
 
-    public function sendRlcApplicationRejected(Student $to)
+    public function sendRlcApplicationRejected(Student $to, $term)
     {
         PHPWS_Core::initModClass('hms', 'Term.php');
 
         $tpl = array();
         $tpl['NAME'] = $to->getName();
-        $tpl['TERM'] = Term::toString($to->getApplicationTerm());
+        $tpl['TERM'] = Term::toString($term);
 
         HMS_Email::send_template_message($to->getUsername() . TO_DOMAIN, 'Learning Community Application Rejected', 'email/rlc_application_rejection.tpl',$tpl);
     }

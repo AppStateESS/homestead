@@ -24,6 +24,8 @@ class LotteryConfirmRoommateRequestCommand extends Command {
 
     public function execute(CommandContext $context)
     {
+        PHPWS_Core::initModClass('hms', 'HousingApplication.php');
+
         $requestId = $context->get('requestId');
         $mealPlan = $context->get('mealPlan');
 
@@ -38,11 +40,26 @@ class LotteryConfirmRoommateRequestCommand extends Command {
             $errorCmd->redirect();
         }
 
+        # Update the meal plan field on the application
+        $term = PHPWS_Settings::get('hms', 'lottery_term');
+        $app = HousingApplication::getApplicationByUser(UserStatus::getUsername(), $term);
+
+        $app->setMealPlan($mealPlan);
+
+        try{
+            $app->save();
+        }catch(Exception $e){
+            PHPWS_Error::log('hms', $e->getMessage());
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR,'Sorry, there was an error confirming your roommate invitation. Please contact University Housing.');
+            $errorCmd->redirect();
+        }
+
         # Try to actually make the assignment
         PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
         try{
             $result = HMS_Lottery::confirm_roommate_request(UserStatus::getUsername(), $requestId, $mealPlan);
         }catch(Exception $e){
+            PHPWS_Error::log('hms', $e->getMessage());
             NQ::simple('hms', HMS_NOTIFICATION_ERROR,'Sorry, there was an error confirming your roommate invitation. Please contact University Housing.');
             $errorCmd->redirect();
         }

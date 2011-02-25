@@ -47,7 +47,7 @@ select that group in the box below. If you are approved by the
 group/program you apply for, then you will be administratively assigned
 and may not be able to choose your room.</p>
 <div>
-<fieldset style="width: 65%;"><legend>Learning
+<fieldset style="width: 65%;"><legend>Residential Learning
 Communities</legend> {RLC_INTEREST}{RLC_INTEREST_LABEL}</fieldset>
 </div>
 
@@ -81,7 +81,7 @@ Fellows</legend> {TF_PREF_1}{TF_PREF_1_LABEL}<br />
 
 <!-- BEGIN honors -->
 <div>
-<fieldset style="width: 65%;"><legend>Heltzer Honors
+<fieldset style="width: 65%;"><legend>The Honors College
 Program</legend> {HONORS_PREF_1}{HONORS_PREF_1_LABEL}<br />
 {HONORS_PREF_2}{HONORS_PREF_2_LABEL}</fieldset>
 </div>

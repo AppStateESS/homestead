@@ -20,6 +20,12 @@ class LotteryAdminSetWinnerCommand extends Command {
         $username = $context->get('asu_username');
         $term = Term::getSelectedTerm();
 
+        //accept a banner id by looking up the username if we got a number
+        if(is_numeric($username)){
+            $stdt     = StudentFactory::getStudentByBannerId($username, $term);
+            $username = $stdt->getUsername();
+        }
+
         $viewCmd = CommandFactory::getCommand('ShowLotteryAutoWinners');
 
         try{

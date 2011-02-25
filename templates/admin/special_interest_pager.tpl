@@ -1,4 +1,4 @@
-<table>
+<table id="special-interest-table">
     <tr>
         <th>Name {ASU_USERNAME_SORT}</th>
         <th>User Name</th>
@@ -11,11 +11,11 @@
     </tr>
     <!-- END empty_table-->
     <!-- BEGIN listrows -->
-    <tr>
+    <tr class="{ROW_CLASS}">
         <td>{NAME}</td>
         <td>{USER}</td>
         <td>{BANNER_ID}</td>
-        <td>{ACTION}</td>
+        <td>{ACCEPT_ACTION} | {DENY_ACTION}</td>
     </tr>
     <!-- END listrows -->
 </table>

@@ -25,7 +25,8 @@ class HMS_Reports{
                         'assigned_data_export'  => 'Assigned Student Data Export',
                         'full_roster_report'    => 'Package Desk Roster',
                         'over_twenty_five'      => 'Over 25 report',
-                        'single_vs_coed'        => 'Single gender vs. Co-ed report'
+                        'single_vs_coed'        => 'Single gender vs. Co-ed report',
+                        'reappAvailability'    => 'Re-application Availability Report'
                         );
                         /*                        'housing_asss' => 'Housing Assignments Made',*/
                         /*                        'unassd_rooms' => 'Currently Unassigned Rooms',*/
@@ -92,6 +93,8 @@ class HMS_Reports{
                 return HMS_Reports::over_twenty_five_report();
             case 'single_vs_coed':
                 return HMS_Reports::single_vs_coed();
+            case 'reappAvailability':
+                return HMS_Reports::reappAvailability();
             default:
                 $content .= "ugh";
                 break;
@@ -1100,6 +1103,7 @@ class HMS_Reports{
                 $state      = "";
                 $zip        = "";
                 $appTerm    = "";
+                continue;
             }
 
             $bannerId = $student->getBannerId();
@@ -1574,6 +1578,84 @@ class HMS_Reports{
         $tpl['TERM'] = Term::getPrintableSelectedTerm();
 
         return PHPWS_Template::process($tpl, 'hms', 'admin/reports/single_vs_coed.tpl');
+    }
+
+    /**
+     * Report lists rooms in each residence hall that are still available, along with
+     * the available beds in the room.  Also, show the number of beds allocated to the
+     * lotter for each residence hall.
+     *
+     */
+    public static function reappAvailability()
+    {
+        $term = Term::getSelectedTerm();
+
+        // Available rooms in each residence hall.
+        $db = new PHPWS_DB('hms_bed');
+        $db->addJoin('LEFT', 'hms_bed', 'hms_room', 'room_id', 'id');
+        $db->addJoin('LEFT', 'hms_room', 'hms_floor', 'floor_id', 'id');
+        $db->addJoin('LEFT', 'hms_floor', 'hms_residence_hall', 'residence_hall_id', 'id');
+        $db->addWhere('hms_bed.ra_bed', 0);
+        $db->addWhere('hms_room.private_room', 0);
+        $db->addWhere('hms_room.is_overflow', 0);
+        $db->addWhere('hms_room.is_medical', 0);
+        $db->addWhere('hms_room.is_reserved', 0);
+        $db->addWhere('hms_room.is_online', 1);
+        $db->addWhere('hms_bed.term', $term);
+        $db->addColumn('hms_room.room_number');
+        $db->addColumn('hms_bed.bed_letter', null, null, True);
+        $db->addColumn('hms_residence_hall.hall_name');
+        $db->addGroupBy('hms_residence_hall.hall_name');
+        $db->addGroupBy('hms_room.room_number');
+        $db->addOrder('hms_residence_hall.hall_name');
+        $availRooms = $db->select();
+
+        // Allocated beds for lottery.
+        $db = new PHPWS_DB('hms_bed');
+        $db->addJoin('LEFT' , 'hms_bed', 'hms_room', 'room_id', 'id');
+        $db->addJoin('LEFT' , 'hms_room', 'hms_floor', 'floor_id', 'id');
+        $db->addJoin('LEFT' , 'hms_floor', 'hms_residence_hall', 'residence_hall_id', 'id');
+        $db->addJoin('RIGHT', 'hms_bed', 'hms_lottery_reservation', 'id', 'bed_id');
+        $db->addWhere('hms_lottery_reservation.term', $term);
+        $db->addColumn('hms_residence_hall.hall_name');
+        $db->addColumn('hms_bed.id', null, null, True);
+        $db->addGroupBy('hms_residence_hall.hall_name');
+        $db->setIndexBy('hall_name');
+        $lotteryBeds = $db->select();
+
+        $tpl = new PHPWS_Template('hms');
+        $tpl->setFile('admin/reports/reapp_availability.tpl');
+
+        //
+        // "The parent row must be parsed after the child rows."
+
+        // Preload currHall with first residence hall name
+        $currHall = $availRooms[0]['hall_name'];
+        foreach($availRooms as $row){
+            // Change halls, create new block.
+            if($currHall != $row['hall_name'] || $currHall == null){
+                $tpl->setCurrentBlock('halls');
+                // Get allocated beds for the residence hall.
+                $lottCount = isset($lotteryBeds[$currHall]['count']) ? $lotteryBeds[$currHall]['count'] : 0;
+                $tpl->setData(array('HALL_NAME' => $currHall,
+                                    'LOTTERY_BEDS' => $lottCount));
+
+                $tpl->parseCurrentBlock();
+                $currHall = $row['hall_name'];
+            }
+            // Add room to residence hall template block.
+            $tpl->setCurrentBlock('rooms');
+            $tpl->setData(array('ROOM_NUM' => $row['room_number'],
+                                'BED_COUNT' => $row['count']));
+            $tpl->parseCurrentBlock();
+        }
+
+        // Get last residence hall. Can't parse parent before child with template class.
+        $tpl->setCurrentBlock('halls');
+        $tpl->setData(array('HALL_NAME' => $currHall));
+        $tpl->parseCurrentBlock();
+
+        return $tpl->get();
     }
 }
 ?>

@@ -16,6 +16,8 @@ class HMS_Learning_Community extends HMS_Item
     public $hide;
 
     public $allowed_student_types; //A string containing a character for each allowed student type, maxLen() == 16;
+    public $allowed_reapplication_student_types;
+    public $members_reapply; // Indicates whether current members of the community are always allowed to reapply, regardless of student type
     public $extra_info; // A text field, show to the student when the RLC is selected
 
     public function __construct($id = 0)
@@ -79,6 +81,30 @@ class HMS_Learning_Community extends HMS_Item
         return $this->capacity;
     }
 
+    public function getAllowedStudentTypes(){
+        return $this->allowed_student_types;
+    }
+
+    public function setAllowedStudentTypes($types){
+        $this->allowed_student_types = $types;
+    }
+
+    public function getAllowedReapplicationStudentTypes(){
+        return $this->allowed_reapplication_student_types;
+    }
+
+    public function setAllowedReapplicationStudentTypes($types){
+        $this->allowed_reapplication_student_types = $types;
+    }
+
+    public function getMembersReapply(){
+        return $this->members_reapply;
+    }
+
+    public function setMembersReapply($apply){
+        $this->members_reapply = $apply;
+    }
+
     public function set_variables()
     {
         if(isset($_REQUEST['id']) && $_REQUEST['id'] != NULL) $this->set_id($_REQUEST['id']);
@@ -128,7 +154,7 @@ class HMS_Learning_Community extends HMS_Item
         foreach( $result as $community ) {
             $communities[$community['id']] = $community['community_name'];
         }
-        
+
         return $communities;
     }
 
@@ -164,6 +190,32 @@ class HMS_Learning_Community extends HMS_Item
         $db->addColumn('community_name');
         if(!is_null($student_type) && strlen($student_type) == 1)
         $db->addWhere('allowed_student_types', "%{$student_type}%", 'ilike');
+
+        if($hidden === FALSE){
+            $db->addWhere('hide', 0);
+        }
+
+        $rlc_choices = $db->select('assoc');
+
+        if(PHPWS_Error::logIfError($rlc_choices)){
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException($rlc_choices->toString());
+        }
+
+        return $rlc_choices;
+    }
+
+    /**
+     * Returns an associative array containing the list of RLCs using their full names,
+     * keyed by their id, that a student is allowed to re-apply for.
+     */
+    public function getRLCListReapplication($hidden = NULL, $student_type = NULL)
+    {
+        $db = new PHPWS_DB('hms_learning_communities');
+        $db->addColumn('id');
+        $db->addColumn('community_name');
+        if(!is_null($student_type) && strlen($student_type) == 1)
+        $db->addWhere('allowed_reapplication_student_types', "%{$student_type}%", 'ilike');
 
         if($hidden === FALSE){
             $db->addWhere('hide', 0);

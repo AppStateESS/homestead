@@ -321,6 +321,7 @@ abstract class ApplicationFeature {
         $db = new PHPWS_DB('hms_application_feature');
         $db->addWhere('enabled', 1);
         $db->addWhere('term', $term);
+        $db->addWhere('enabled', 0, '!=');
 
         $results = $db->select();
 
@@ -339,7 +340,6 @@ abstract class ApplicationFeature {
             }
 
             $className = $result['name'];
-
             $features[$reg->getPriority()] = new $className($result['id']);
         }
 
