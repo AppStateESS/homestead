@@ -18,6 +18,7 @@ class FloorView extends View {
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You are not allowed to edit or view floors.');
         }
+
         PHPWS_Core::initModClass('hms', 'HMS_Movein_Time.php');
         PHPWS_Core::initModClass('hms', 'HMS_Room.php');
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
@@ -71,7 +72,7 @@ class FloorView extends View {
         }
 
         # Get a list of the RLCs indexed by id
-        PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
+            PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
         $learning_communities = HMS_Learning_Community::getRLCList();
         $learning_communities[0] = 'None';
 
@@ -102,19 +103,19 @@ class FloorView extends View {
         $tpl['STATIC_ROOM_PAGER'] = HMS_Room::room_pager_by_floor($this->floor->id);
         $tpl['DYNAMIC_ROOM_PAGER'] = HMS_Room::room_pager_by_floor($this->floor->id, true);
 
-        # if the user has permission to view the form but not edit it then
-        # disable it
+        // if the user has permission to view the form but not edit it then
+        // disable it
         if( Current_User::allow('hms', 'floor_view')
-        && !Current_User::allow('hms', 'floor_attributes')
-        && !Current_User::allow('hms', 'floor_structure'))
+            && !Current_User::allow('hms', 'floor_attributes')
+            && !Current_User::allow('hms', 'floor_structure'))
             {
-            $form_vars = get_object_vars($form);
-            $elements = $form_vars['_elements'];
+                $form_vars = get_object_vars($form);
+                $elements = $form_vars['_elements'];
 
-            foreach($elements as $element => $value){
-                $form->setDisabled($element);
+                foreach($elements as $element => $value){
+                    $form->setDisabled($element);
+                }
             }
-        }
 
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
@@ -130,4 +131,4 @@ class FloorView extends View {
     }
 }
 
-?>
+//?>

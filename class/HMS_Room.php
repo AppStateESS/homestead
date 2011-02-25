@@ -538,25 +538,27 @@ class HMS_Room extends HMS_Item
         //$tpl = $this->item_tags();
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
-        $tpl['ID']           = $this->id;
-        $tpl['ROOM_NUMBER']  = $this->getLink();
-        $tpl['GENDER_TYPE']  = HMS_Util::formatGender($this->gender_type);
-        $tpl['RA_ROOM']      = $this->ra_room      ? 'Yes' : 'No';
-        $tpl['PRIVATE_ROOM'] = $this->private_room ? 'Yes' : 'No';
-        $tpl['IS_OVERFLOW']  = $this->is_overflow  ? 'Yes' : 'No';
-        $tpl['IS_MEDICAL']   = $this->is_medical   ? 'Yes' : 'No';
-        $tpl['IS_RESERVED']  = $this->is_reserved  ? 'Yes' : 'No';
-        $tpl['IS_ONLINE']    = $this->is_online    ? 'Yes' : 'No';
+        $tpl['ID']             = $this->id;
+        $tpl['ROOM_NUMBER']    = $this->getLink();
+        $tpl['GENDER_TYPE']    = HMS_Util::formatGender($this->gender_type);
+        $tpl['DEFAULT_GENDER'] = HMS_Util::formatGender($this->default_gender);
+        $tpl['RA_ROOM']        = $this->ra_room      ? 'Yes' : 'No';
+        $tpl['PRIVATE_ROOM']   = $this->private_room ? 'Yes' : 'No';
+        $tpl['IS_OVERFLOW']    = $this->is_overflow  ? 'Yes' : 'No';
+        $tpl['IS_MEDICAL']     = $this->is_medical   ? 'Yes' : 'No';
+        $tpl['IS_RESERVED']    = $this->is_reserved  ? 'Yes' : 'No';
+        $tpl['IS_ONLINE']      = $this->is_online    ? 'Yes' : 'No';
+
         if(Current_User::allow('hms','room_structure') && $this->get_number_of_assignees() == 0) {
             $deleteRoomCmd = CommandFactory::getCommand('DeleteRoom');
             $deleteRoomCmd->setRoomId($this->id);
             $deleteRoomCmd->setFloorId($this->floor_id);
 
-            $confirm = array();
-            $confirm['QUESTION']    = 'Are you sure want to delete room ' .  $this->room_number . '?';
-            $confirm['ADDRESS']     = $deleteRoomCmd->getURI();
-            $confirm['LINK']        = 'Delete';
-            $tpl['DELETE']         = Layout::getJavascript('confirm', $confirm);
+            $confirm             = array();
+            $confirm['QUESTION'] = 'Are you sure want to delete room ' .  $this->room_number . '?';
+            $confirm['ADDRESS']  = $deleteRoomCmd->getURI();
+            $confirm['LINK']     = 'Delete';
+            $tpl['DELETE']       = Layout::getJavascript('confirm', $confirm);
         }
 
         return $tpl;
@@ -567,15 +569,35 @@ class HMS_Room extends HMS_Item
         javascript('jquery');
         $tpl = array();
         $tpl['ID']           = $this->id;
-        $tpl['ROOM_NUMBER']  = PHPWS_Text::secureLink($this->room_number, 'hms', array('type'=>'room', 'op'=>'show_edit_room', 'room'=>$this->id));
+        $tpl['ROOM_NUMBER']  = PHPWS_Text::secureLink($this->room_number, 'hms', array('action'=>'EditRoomView', 'room'=>$this->id));
+
+        if(Current_User::allow('hms','room_structure') && $this->get_number_of_assignees() == 0) {
+            $deleteRoomCmd = CommandFactory::getCommand('DeleteRoom');
+            $deleteRoomCmd->setRoomId($this->id);
+            $deleteRoomCmd->setFloorId($this->floor_id);
+
+            $confirm             = array();
+            $confirm['QUESTION'] = 'Are you sure want to delete room ' .  $this->room_number . '?';
+            $confirm['ADDRESS']  = $deleteRoomCmd->getURI();
+            $confirm['LINK']     = 'Delete';
+            $tpl['DELETE']       = Layout::getJavascript('confirm', $confirm);
+        }
 
         $form = new PHPWS_Form($this->id);
         $form->addSelect('gender_type', array(FEMALE => FEMALE_DESC,
-        MALE   => MALE_DESC,
-        COED   => COED_DESC)
-        );
+                                              MALE   => MALE_DESC,
+                                              COED   => COED_DESC
+                                              ));
+
         $form->setMatch('gender_type', $this->gender_type);
         $form->setExtra('gender_type', 'onChange="submit_form(this, true)"');
+
+        $form->addSelect('default_gender', array(FEMALE => FEMALE_DESC,
+                                              MALE   => MALE_DESC,
+                                              COED   => COED_DESC
+                                              ));
+        $form->setMatch('default_gender', $this->default_gender);
+        $form->setExtra('default_gender', 'onChange="submit_form(this, true)"');
 
         $form->addCheck('ra_room', 'yes');
         $form->setMatch('ra_room', $this->ra_room == 1 ? 'yes' : 0);
@@ -601,8 +623,7 @@ class HMS_Room extends HMS_Item
         $form->setMatch('is_online', $this->is_online == 1 ? 'yes' : 0);
         $form->setExtra('is_online', 'onChange="submit_form(this, false)"');
 
-        $form->addHidden('type', 'room');
-        $form->addHidden('op',   'edit_row');
+        $form->addHidden('action', 'UpdateRoomField');
         $form->addHidden('room', $this->id);
 
         $form->mergeTemplate($tpl);
@@ -659,16 +680,17 @@ class HMS_Room extends HMS_Item
         $pager->addWhere('hms_room.floor_id', $floor_id);
         $pager->db->addOrder('hms_room.room_number');
 
-        $page_tags['TABLE_TITLE']        = 'Rooms on this floor';
-        $page_tags['ROOM_NUM_LABEL']     = 'Room Number';
-        $page_tags['GENDER_TYPE_LABEL']  = 'Gender';
-        $page_tags['RA_LABEL']           = 'RA';
-        $page_tags['PRIVATE_LABEL']      = 'Private';
-        $page_tags['OVERFLOW_LABEL']     = 'Overflow';
-        $page_tags['MEDICAL_LABEL']      = 'Medical';
-        $page_tags['RESERVED_LABEL']     = 'Reserved';
-        $page_tags['ONLINE_LABEL']       = 'Online';
-        $page_tags['DELETE_LABEL']       = 'Delete';
+        $page_tags['TABLE_TITLE']          = 'Rooms on this floor';
+        $page_tags['ROOM_NUM_LABEL']       = 'Room Number';
+        $page_tags['GENDER_TYPE_LABEL']    = 'Gender';
+        $page_tags['DEFAULT_GENDER_LABEL'] = 'Default Gender';
+        $page_tags['RA_LABEL']             = 'RA';
+        $page_tags['PRIVATE_LABEL']        = 'Private';
+        $page_tags['OVERFLOW_LABEL']       = 'Overflow';
+        $page_tags['MEDICAL_LABEL']        = 'Medical';
+        $page_tags['RESERVED_LABEL']       = 'Reserved';
+        $page_tags['ONLINE_LABEL']         = 'Online';
+        $page_tags['DELETE_LABEL']         = 'Delete';
 
         if(Current_User::allow('hms', 'room_structure')){
             $addRoomCmd = CommandFactory::getCommand('ShowAddRoom');

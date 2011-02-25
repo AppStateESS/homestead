@@ -106,9 +106,10 @@ class HMS_Movein_Time
 
         $timestamps[0] = 'None';
 
-        foreach ($result as $movein){
+        if(!empty($result))
+           foreach ($result as $movein){
             $timestamps[$movein->id] = $movein->get_formatted_begin_end();
-        }
+           }
 
         return $timestamps;
     }
