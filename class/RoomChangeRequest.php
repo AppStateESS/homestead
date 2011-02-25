@@ -10,6 +10,7 @@ PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
 PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
 PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
 PHPWS_Core::initModClass('hms', 'HMS_Permission.php');
+PHPWS_Core::initModClass('hms', 'exception/RoomSwapException.php');
 
 define('ROOM_CHANGE_NEW',              0);
 define('ROOM_CHANGE_PENDING',          1);
@@ -259,7 +260,7 @@ class RoomChangeRequest extends HMS_Item {
             $this->state->sendNotification();
             return true;
         }
-        return false;
+        throw new RoomSwapException('Could not change state!');
     }
 
     protected function canChangeState($state){
@@ -374,7 +375,7 @@ class RoomChangeRequest extends HMS_Item {
         }
 
         $buddy = $this->search($this->switch_with);
-        if($buddy->change($newState)){
+        if($buddy->change($newState, true)){
             if($newState instanceof DeniedChangeRequest)
                 $buddy->denied_reason = "Other half of the swap was denied.";
 
@@ -570,6 +571,12 @@ class RDApprovedChangeRequest extends BaseRoomChangeState {
 
 class HousingApprovedChangeRequest extends BaseRoomChangeState {
 
+    private $isBuddy = false;
+
+    public function __construct($isBuddy=false){
+        $this->isBuddy = $isBuddy;
+    }
+
     public function getValidTransitions(){
         return array('CompletedChangeRequest', 'DeniedChangeRequest');
     }
@@ -577,23 +584,24 @@ class HousingApprovedChangeRequest extends BaseRoomChangeState {
     public function onEnter($from=NULL){
         $this->addParticipant('housing', EMAIL_ADDRESS, 'University Housing');
 
-        //if this is a move request
-        if(!$this->request->is_swap){
-            $curr_assignment = HMS_Assignment::getAssignment($this->request->username, Term::getSelectedTerm());
-            $bed = $curr_assignment->get_parent();
+        $curr_assignment = HMS_Assignment::getAssignment($this->request->username, Term::getSelectedTerm());
+        $bed = $curr_assignment->get_parent();
 
-            $newBed = new HMS_Bed;
-            $newBed->id = $this->request->requested_bed_id;
-            $newBed->load();
-            HMS_Activity_Log::log_activity($this->request->username, ACTIVITY_ROOM_CHANGE_APPROVED_HOUSING, UserStatus::getUsername(FALSE), "Approved Room Change to ".$newBed->where_am_i()." from ".$bed->where_am_i());
-        } else { //if it's a swap
-            /* Update our state in the db, don't touch this.  Trust me. */
+        $newBed = new HMS_Bed($this->request->requested_bed_id);
+
+        //if this is a move request
+        if($this->request->is_swap){
+
+            //so long as we aren't the pair... that leads to some non-finite recursion
+            if(!$this->isBuddy){
+                $this->request->updateBuddy(new HousingApprovedChangeRequest(true));
+            }
+            
             $this->request->save();
             $this->request->load();
-
-            //then approving the swap should also update it's pair
-            $this->request->updateBuddy(new HousingApprovedChangeRequest);
         }
+        
+        HMS_Activity_Log::log_activity($this->request->username, ACTIVITY_ROOM_CHANGE_APPROVED_HOUSING, UserStatus::getUsername(FALSE), "Approved Room Change to ".$newBed->where_am_i()." from ".$bed->where_am_i());
     }
 
     public function getType(){
@@ -721,6 +729,12 @@ class CompletedChangeRequest extends BaseRoomChangeState {
 
 class DeniedChangeRequest extends BaseRoomChangeState {
 
+    private $isBuddy = false;
+
+    public function __construct($isBuddy=false){
+        $this->isBuddy = $isBuddy;
+    }
+
     //state cannot change
 
     public function onEnter($from=NULL){
@@ -745,13 +759,15 @@ class DeniedChangeRequest extends BaseRoomChangeState {
         if(!is_null($other)
            && $from         instanceof PairedRoomChangeRequest
            && $other->state instanceof PairedRoomChangeRequest){
-            //Fixes recursion, don't touch it for now...
-            $this->request->save();
-            $this->request->load();
-
-            //deny the buddy too
-            $this->request->updateBuddy(new DeniedChangeRequest);
+            //deny the buddy too if we aren't the buddy
+            if(!$this->isBuddy){
+                $this->request->updateBuddy(new DeniedChangeRequest(true));
+            }
         }
+
+        //save the state change to the db
+        $this->request->save();
+        $this->request->load();
 
         HMS_Activity_Log::log_activity($this->request->username, ACTIVITY_ROOM_CHANGE_DENIED, UserStatus::getUsername(FALSE), $this->request->denied_reason);
     }
@@ -791,10 +807,15 @@ class WaitingForPairing extends BaseRoomChangeState {
         if(is_null($assignment)){
             throw new Exception('Requested swap partner is not assigned, cannot complete.');
         }
-
-        $this->requested_bed_id = $assignment->bed_id;
+        
+        $this->request->requested_bed_id = $assignment->bed_id;
         $this->request->save();
         $this->request->load();
+
+        $assignment = HMS_Assignment::getAssignment($this->request->username, Term::getSelectedTerm());
+        $bed = $assignment->get_parent();
+        
+        HMS_Activity_Log::log_activity($this->request->username, ACTIVITY_ROOM_CHANGE_APPROVED_RD, UserStatus::getUsername(FALSE), "Selected ".$bed->where_am_i());
     }
 
     public function attemptToPair()
@@ -811,7 +832,6 @@ class WaitingForPairing extends BaseRoomChangeState {
 
         if(!is_null($other) && $other->state instanceof WaitingForPairing){
             $this->request->change(new PairedRoomChangeRequest);
-            $this->request->updateBuddy(new PairedRoomChangeRequest);
         }
 
         return !is_null($other);
@@ -819,6 +839,11 @@ class WaitingForPairing extends BaseRoomChangeState {
 }
 
 class PairedRoomChangeRequest extends BaseRoomChangeState {
+    private $isBuddy = false;
+
+    public function __construct($isBuddy=false){
+        $this->isBuddy = $isBuddy;
+    }
 
     public function getValidTransitions(){
         return array('HousingApprovedChangeRequest', 'DeniedChangeRequest');
@@ -829,12 +854,13 @@ class PairedRoomChangeRequest extends BaseRoomChangeState {
     }
 
     public function onEnter($from=NULL){
-        /* Prevent recursion, TODO: cleanup
-           For now don't touch this. */
+        //if we are not the buddy then notify our buddy of the change, otherwise we're done here
+        if(!$this->isBuddy){
+            $this->request->updateBuddy(new PairedRoomChangeRequest(true));
+        }
+
         $this->request->save();
         $this->request->load();
-
-        $this->request->updateBuddy(new PairedRoomChangeRequest);
     }
 
     public function getOther(){
@@ -842,4 +868,4 @@ class PairedRoomChangeRequest extends BaseRoomChangeState {
     }
 }
 
-//?>
+?>

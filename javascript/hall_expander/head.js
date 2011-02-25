@@ -12,7 +12,14 @@ var submitHallList = function(e){
     );
 
     return true;
-}
+ };
+
+var autocollapse = function(){
+    $(".collapsed").each(function(e){
+            //simulates a click event to set up the initial state of the item
+            $(this).click();
+        });
+};
 
 $(document).ready(function(){
         $("#select_all").click(function(){
@@ -29,11 +36,15 @@ $(document).ready(function(){
                 return false;
             });
 
+	    //put up an AJAX spinner
+        $("#{DIV}").html('<img src="images/core/ajax-loader-big.gif" />');
+        
     $.post('index.php', {module: 'hms', action: 'ListAllowedHalls'},
         function(data){
-    	
-    		if(data == ""){
-    			$("#{DIV}").append("You do not have permission to message any residence halls. <br /><br />");
+    		$("#{DIV}").empty();
+    		
+    		if(data.error !== undefined){
+    			$("#{DIV}").append('<div class="hms-notification error">'+data.error+'</div>');
     			return;
     		}
     	
@@ -46,7 +57,8 @@ $(document).ready(function(){
 
             var output = "<ul>";
             for(var i in halls){
-                output += '<li class="container expanded">'+halls[i].draw()+"</li>";
+                var tmp = halls[i].draw();
+                output += '<li class="container '+(halls[i].collapsed ? 'collapsed' : 'expanded' )+'">'+tmp+"</li>";
             }
             output += "</ul>";
             $("#{DIV}").empty();
@@ -88,6 +100,8 @@ $(document).ready(function(){
                     this.flip++;
                 }
             );
+
+            autocollapse();
         },
         'json'
     );

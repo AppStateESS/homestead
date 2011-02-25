@@ -52,17 +52,17 @@ class StudentProfileView extends View {
         $tpl['CLASS'] = $this->student->getPrintableClass();
 
         $tpl['TYPE'] = $this->student->getPrintableType();
-        
+
         $tpl['STUDENT_LEVEL'] = $this->student->getPrintableLevel();
-        
-        $tpl['INTERNATIONAL'] = $this->student->isInternational() == 'true' ? 'Yes' : 'No';
-        
-        $tpl['HONORS'] = $this->student->isHonors() == 'true' ? 'Yes' : 'No';
-        
-        $tpl['TEACHING_FELLOW'] = $this->student->isTeachingFellow() == 'true' ? 'Yes' : 'No';
-        
-        $tpl['WATAUGA'] = $this->student->isWataugaMember() == 'true' ? 'Yes' : 'No';
-        
+
+        $tpl['INTERNATIONAL'] = $this->student->isInternational() ? 'Yes' : 'No';
+
+        $tpl['HONORS'] = $this->student->isHonors() ? 'Yes' : 'No';
+
+        $tpl['TEACHING_FELLOW'] = $this->student->isTeachingFellow() ? 'Yes' : 'No';
+
+        $tpl['WATAUGA'] = $this->student->isWataugaMember() ? 'Yes' : 'No';
+
         try {
             $tpl['APPLICATION_TERM'] = Term::toString($this->student->getApplicationTerm());
         } catch(InvalidTermException $e) {
@@ -132,7 +132,7 @@ class StudentProfileView extends View {
         }
 
         /*************
-         * Roommates 
+         * Roommates
          *************/
         if(isset($this->roommates) && !empty($this->roommates)){
             // Remember, student can only have one confirmed or pending request
@@ -146,7 +146,7 @@ class StudentProfileView extends View {
             // semi-error states
             else if(isset($this->roommates['NO_BED_AVAILABLE'])){
                 $tpl['error_status'][]['ROOMMATE'] = $this->roommates['NO_BED_AVAILABLE'];
-            } 
+            }
             else if(isset($this->roommates['MISMATCHED_ROOMS'])){
                 $tpl['error_status'][]['ROOMMATE'] = $this->roommates['MISMATCHED_ROOMS'];
             }
@@ -186,12 +186,32 @@ class StudentProfileView extends View {
         PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
         $reapplication = HousingApplication::getApplicationByUser($this->student->getUsername(), Term::getSelectedTerm());
 
+        # If this is a re-application, then check the special interest group status
+        # TODO: incorporate all this into the LotteryApplication class
         if($reapplication !== FALSE && ($reapplication instanceof LotteryApplication)){
             if(isset($reapplication->special_interest) && !is_null($reapplication->special_interest) && !empty($reapplication->special_interest)){
-                $special_interest_groups = HMS_Lottery::get_special_interest_groups();
-                $tpl['SPECIAL_INTEREST'] = $special_interest_groups[$reapplication->special_interest];
+                # Student has been approved for a special group
+                # TODO: format the name according to the specific group (sororities, etc)
+                $tpl['SPECIAL_INTEREST'] = $reapplication->special_interest . '(confirmed)';
+            }else{
+                # Check if the student selected a group on the application, but hasn't been approved
+                if(!is_null($reapplication->sorority_pref)){
+                    $tpl['SPECIAL_INTEREST'] = $reapplication->sorority_pref . ' (pending)';
+                }else if($reapplication->tf_pref == 1){
+                    $tpl['SPECIAL_INTEREST'] = 'Teaching Fellow (pending)';
+                }else if($reapplication->wg_pref == 1){
+                    $tpl['SPECIAL_INTEREST'] = 'Watauga Global (pending)';
+                }else if($reapplication->honors_pref == 1){
+                    $tpl['SPECIAL_INTEREST'] = 'Honors (pending)';
+                }else if($reapplication->rlc_interest == 1){
+                    $tpl['SPECIAL_INTEREST'] = 'RLC (pending)';
+                }else{
+                    # Student didn't select anything
+                    $tpl['SPECIAL_INTEREST'] = 'No';
+                }
             }
         }else{
+            # Not a re-application, so can't have a special group
             $tpl['SPECIAL_INTEREST'] = 'No';
         }
 
@@ -283,7 +303,7 @@ class StudentProfileView extends View {
         // TODO logs
 
         // TODO tabs
-        
+
         Layout::addPageTitle("Student Profile");
 
         return PHPWS_Template::process($tpl, 'hms', 'admin/fancy_student_info.tpl');

@@ -38,7 +38,7 @@ class HousingApplicationWelcomeView extends View {
             if(in_array($t['term'], $termsOnFile)) {
                 $completed = ' <span style="color: #0000AA">(Completed)</span>';
             }
-            	
+
             if(Term::getTermSem($t['term']) == TERM_FALL){
                 $tpl['REQUIRED_TERMS'][] = array('REQ_TERM'=>Term::toString($t['term']) . ' - ' . Term::toString(Term::getNextTerm($t['term'])),
                                                  'COMPLETED' => $completed);
@@ -71,7 +71,7 @@ class HousingApplicationWelcomeView extends View {
             return PHPWS_Template::process($tpl, 'hms', 'student/welcome_back_screen.tpl');
         }
 
-        if($studentType == TYPE_FRESHMEN || $studentType == TYPE_NONDEGREE || $this->student->isInternational() == 'true'){
+        if($studentType == TYPE_FRESHMEN || $studentType == TYPE_NONDEGREE || $this->student->isInternational()){
             return PHPWS_Template::process($tpl, 'hms', 'student/welcome_screen_freshmen.tpl');
         }else{
             return PHPWS_Template::process($tpl, 'hms', 'student/welcome_screen_transfer.tpl');

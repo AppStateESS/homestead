@@ -28,10 +28,25 @@ class HousingApplicationConfirmCommand extends Command {
 
         PHPWS_Core::initModClass('hms', 'exception/InvalidTermException.php');
 
+        $agreedToTerms = $context->get('agreedToTerms');
+
+        // Not on my watch!
+        if(is_null($agreedToTerms)){
+            session_unset($_SESSION);
+            header('Location: index.php');
+        }
+
         $term = $context->get('term');
         $username = UserStatus::getUsername();
 
         $student = StudentFactory::getStudentByUsername($username, $term);
+
+        // Sanity check to prevent 'continuing' students from completing this form
+        if($student->getType() == TYPE_CONTINUING || $student->getType() == TYPE_READMIT || $student->getApplicationTerm() <= Term::getCurrentTerm()){
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Sorry, as a non-freshman student, you cannot complete this application (which is for freshmen only). If you think you have reached this message in error, please contact University Housing using the form below.');
+            $cmd = CommandFactory::getCommand('ShowContactForm');
+            $cmd->redirect();
+        }
 
         $sem = Term::getTermSem($term);
 
@@ -67,7 +82,7 @@ class HousingApplicationConfirmCommand extends Command {
 
         $specialNeeds = $context->get('special_needs');
 
-        $international = ($student->isInternational()) == 'true'?1:0;
+        $international = $student->isInternational();
 
         # Create a new application from the request data and save it
         if($sem == TERM_SUMMER1 || $sem == TERM_SUMMER2){

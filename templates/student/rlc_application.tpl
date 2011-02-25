@@ -5,6 +5,18 @@
         <td>RLC Application for: &nbsp;&nbsp;&nbsp;&nbsp;</td>
         <td>{FULL_NAME}</td>
     </tr>
+    <!-- BEGIN student_type -->
+    <tr>
+      <td>Student Type:</td>
+      <td>{STUDENT_TYPE}</td>
+    </tr>
+    <!-- END student_type -->
+    <!-- BEGIN app_type -->
+    <tr>
+      <td>Application Type:</td>
+      <td>{APPLICATION_TYPE}</td>
+    </tr>
+    <!-- END app_type -->
     <tr>
         <td>{FIRST_CHOICE_LABEL}</td>
         <td>{FIRST_CHOICE}</td>
@@ -53,8 +65,3 @@
         <td>{WHY_THIRD_CHOICE}</td>
     </tr>
 </table>
-<br />
-{START_FORM}
-{APPROVE}{RLC_LIST}
-{END_FORM}
-{DENY_APP}

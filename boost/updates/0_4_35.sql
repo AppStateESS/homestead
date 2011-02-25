@@ -1,0 +1,23 @@
+-- Top 20 spoken languages
+START TRANSACTION;
+ALTER TABLE hms_student_profiles ADD COLUMN arabic SMALLINT;
+ALTER TABLE hms_student_profiles ADD COLUMN bengali SMALLINT;
+ALTER TABLE hms_student_profiles ADD COLUMN chinese SMALLINT;
+ALTER TABLE hms_student_profiles ADD COLUMN english SMALLINT;
+ALTER TABLE hms_student_profiles ADD COLUMN french SMALLINT;
+ALTER TABLE hms_student_profiles ADD COLUMN german SMALLINT;
+ALTER TABLE hms_student_profiles ADD COLUMN hindi SMALLINT;
+ALTER TABLE hms_student_profiles ADD COLUMN italian SMALLINT;
+ALTER TABLE hms_student_profiles ADD COLUMN japanese SMALLINT;
+ALTER TABLE hms_student_profiles ADD COLUMN javanese SMALLINT;
+ALTER TABLE hms_student_profiles ADD COLUMN korean SMALLINT;
+ALTER TABLE hms_student_profiles ADD COLUMN malay SMALLINT;
+ALTER TABLE hms_student_profiles ADD COLUMN marathi SMALLINT;
+ALTER TABLE hms_student_profiles ADD COLUMN portuguese SMALLINT;
+ALTER TABLE hms_student_profiles ADD COLUMN punjabi SMALLINT;
+ALTER TABLE hms_student_profiles ADD COLUMN russian SMALLINT;
+ALTER TABLE hms_student_profiles ADD COLUMN spanish SMALLINT;
+ALTER TABLE hms_student_profiles ADD COLUMN tamil SMALLINT;
+ALTER TABLE hms_student_profiles ADD COLUMN telugu SMALLINT;
+ALTER TABLE hms_student_profiles ADD COLUMN vietnamese SMALLINT;
+COMMIT;

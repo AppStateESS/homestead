@@ -22,7 +22,7 @@ class OffCampusWaitingListMenuBlockView extends View {
         $tpl['DATES'] = HMS_Util::getPrettyDateRange($this->startDate, $this->endDate);
         $tpl['STATUS'] = "";
 
-        if(!is_null($this->application)){
+        if(!is_null($this->application) && $this->application->getApplicationType() == 'offcampus_waiting_list'){
             $tpl['ICON'] = FEATURE_COMPLETED_ICON;
             $tpl['ALREADY_APPLIED'] = "";
         }else if(time() < $this->startDate){
@@ -40,8 +40,6 @@ class OffCampusWaitingListMenuBlockView extends View {
             $waitListCommand->setTerm($this->term);
             $tpl['WAIT_LIST_LINK'] = $waitListCommand->getLink('Apply to the waiting list');
         }
-
-        Layout::addPageTitle("Off Campus Waiting List");
 
         return PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/OffCampusWaitingListMenuBlock.tpl');
     }

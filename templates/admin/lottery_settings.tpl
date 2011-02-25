@@ -56,39 +56,6 @@ $(document).ready(function() {
                 <td>Max senior invites: </td><td align="left">{LOTTERY_MAX_SENIOR}</td>
             </tr>
         </table>
-        <table>
-            <tr>
-                <th colspan="5">Estimated Outcome</th>
-            </tr>
-            <tr>
-                <th>Class</th>
-                <th>Minimum</th>
-                <th>Average</th>
-                <th>Maximum</th>
-                <th>Most Frequent</th>
-            </tr>
-            <tr>
-                <td>Sophomores: </td>
-                <td>{soph_min}</td>
-                <td>{soph_avg}</td>
-                <td>{soph_max}</td>
-                <td>{soph_mode}</td>
-            </tr>
-            <tr>
-                <td>Juniors: </td>
-                <td>{jr_min}</td>
-                <td>{jr_avg}</td>
-                <td>{jr_max}</td>
-                <td>{jr_mode}</td>
-            </tr>
-            <tr>
-                <td>Seniors: </td>
-                <td>{sr_min}</td>
-                <td>{sr_avg}</td>
-                <td>{sr_max}</td>
-                <td>{sr_mode}</td>
-            </tr>
-        </table>
         <br />
         {SUBMIT}
         {END_FORM}

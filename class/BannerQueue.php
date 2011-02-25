@@ -20,7 +20,7 @@ class BannerQueue {
         if(BannerQueue::processImmediately($term)) {
             return $entry->process();
         }else{
-            $entry->save();
+            return $entry->save();
         }
     }
 
