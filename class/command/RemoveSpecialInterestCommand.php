@@ -1,31 +1,31 @@
 <?php
 
-class AcceptSpecialInterestCommand extends Command {
+  /**
+   * RemoveSpecialInterest
+   *
+   * Un-accept a student from a special interest group.
+   *
+   * @author Robert Bost <bostrt at tux dot appstate dot edu>
+   */
 
+
+PHPWS_Core::initModClass('hms', 'Command.php');
+
+class RemoveSpecialInterestCommand extends Command
+{
     private $group;
     private $id;
 
-    public function setGroup($group)
-    {
-        $this->group = $group;
-    }
-
-    public function setId($id){
-        $this->id = $id;
-    }
-
     public function getRequestVars()
     {
-        $requestVars = array('action' => 'AcceptSpecialInterest',
-                             'group'  => $this->group,
-                             'id'     => $this->id);
-
-        return $requestVars;
+        return array('action' => 'RemoveSpecialInterest',
+                     'group' => $this->group, 
+                     'id' => $this->id);
     }
 
     public function execute(CommandContext $context)
     {
-        # Check permissions
+        // Check permissions
         if(!Current_User::allow('hms', 'special_interest_approval')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to approve special interest group requests.');
@@ -36,17 +36,29 @@ class AcceptSpecialInterestCommand extends Command {
         if(is_null($context->get('id'))){
             throw new InvalidArgumentException('Missing application id.');
         }
-
+        
         $app = new LotteryApplication($context->get('id'));
-        $app->special_interest = $context->get('group');
-
+        
+        $app->special_interest = null;
+        
         $result = $app->save();
-
-        NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, "Accepted {$app->getUsername()}");
+        
+        NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, "Removed {$app->getUsername()}");
 
         $cmd = CommandFactory::getCommand('ShowSpecialInterestGroupApproval');
         $cmd->setGroup($context->get('group'));
         $cmd->redirect();
     }
+
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+    public function setGroup($group)
+    {
+        $this->group = $group;
+    }
+
 }
+
 ?>
