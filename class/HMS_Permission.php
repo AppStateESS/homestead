@@ -21,7 +21,7 @@ class HMS_Permission extends HMS_Item {
         $db->addJoin('left outer', 'hms_role_perm', 'hms_role', 'role', 'id');
         $db->addJoin('left outer', 'hms_role', 'hms_user_role', 'id', 'role');
         $db->addJoin('left outer', 'hms_user_role', 'users', 'user_id', 'id');
-
+        
         if(!is_null($permission))
         $db->addWhere('hms_permission.name', $permission);
         if(!is_null($username)){
@@ -44,6 +44,8 @@ class HMS_Permission extends HMS_Item {
         $db->addColumn('hms_user_role.class');
         $db->addColumn('hms_user_role.instance');
         $db->addColumn('hms_role.name');
+        $db->addColumn('hms_role.id', null, 'role_id');
+
         $result = $db->select();
 
         if(PHPWS_Error::logIfError($result)){

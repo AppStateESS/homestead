@@ -185,3 +185,7 @@ li.noexpand {
     list-style-image: none;
     list-style: none;
 }
+
+.copy-pick-sub {
+    margin-left: 15px;
+}
