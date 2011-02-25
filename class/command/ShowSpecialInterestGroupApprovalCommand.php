@@ -4,9 +4,19 @@ PHPWS_Core::initModClass('hms', 'SpecialInterestGroupView.php');
 
 class ShowSpecialInterestGroupApprovalCommand extends Command {
 
+    private $group;
+
+    public function setGroup($group){
+        $this->group = $group;
+    }
+
     public function getRequestVars()
     {
         $requestVars = array('action'=>'ShowSpecialInterestGroupApproval');
+
+        if(isset($this->group)){
+            $requestVars['group'] = $this->group;
+        }
 
         return $requestVars;
     }

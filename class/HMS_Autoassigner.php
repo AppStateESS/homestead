@@ -15,7 +15,7 @@ class HMS_Autoassigner
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
-        PHPWS_Core::initModClass('hms', 'BannerQueue.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Banner_Queue.php');
 
         $term = Term::get_selected_term();
 
@@ -337,7 +337,7 @@ class HMS_Autoassigner
         $meal_plan['plan'] = 'HOME';
         $meal_plan['meal'] = $app->meal_plan;
         
-        $error = BannerQueue::queueAssignment($user, $term,
+        $error = HMS_Banner_Queue::queue_create_assignment($user, $term,
             $bbc, $bid, $meal_plan['plan'], $meal_plan['meal']);
 
         if($error) {

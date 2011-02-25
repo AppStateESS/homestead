@@ -2,390 +2,398 @@
 
 class Student {
 
-	public $username;
-	public $banner_id;
+    public $username;
+    public $banner_id;
 
-	public $first_name;
-	public $middle_name;
-	public $last_name;
+    public $first_name;
+    public $middle_name;
+    public $last_name;
 
-	public $gender;
+    public $gender;
     public $dob;
 
-	public $application_term;
-	public $type;
-	public $class;
-	public $credit_hours;
+    public $application_term;
+    public $type;
+    public $class;
+    public $credit_hours;
 
-	public $deposit_date;
+    public $deposit_date;
 
-	public $student_level;
-	public $international;
+    public $student_level;
+    public $international;
 
-	public $honors;
-	public $teaching_fellow;
-	public $watauga_member;
+    public $honors;
+    public $teaching_fellow;
+    public $watauga_member;
 
-	public $addressList;
-	public $phoneNumberList;
+    public $addressList;
+    public $phoneNumberList;
 
-	public function __construct()
-	{
+    public function __construct()
+    {
 
-	}
+    }
 
-	public function getName()
-	{
-		return $this->getFirstName() . ' ' . $this->getLastName();
-	}
+    public function getName()
+    {
+        return $this->getFirstName() . ' ' . $this->getLastName();
+    }
 
-	public function getFullName(){
-		return $this->getFirstName() . ' ' . $this->getMiddleName() . ' ' . $this->getLastName();
-	}
+    public function getFullName(){
+        return $this->getFirstName() . ' ' . $this->getMiddleName() . ' ' . $this->getLastName();
+    }
 
-	public function getPrintableGender()
-	{
-		switch($this->getGender()){
-			case FEMALE:
-				return FEMALE_DESC;
-				break;
-			case MALE:
-				return MALE_DESC;
-				break;
-			default:
-				return 'Invalid gender';
-		}
-	}
+    public function getPrintableGender()
+    {
+        switch($this->getGender()){
+            case FEMALE:
+                return FEMALE_DESC;
+                break;
+            case MALE:
+                return MALE_DESC;
+                break;
+            default:
+                return 'Invalid gender';
+        }
+    }
 
-	public function getPrintableType()
-	{
-		switch($this->getType()){
-			case TYPE_FRESHMEN:
-				return 'Freshmen';
-				break;
-			case TYPE_TRANSFER:
-				return 'Transfer';
-				break;
-			case TYPE_CONTINUING:
-				return 'Continuing';
-				break;
-			case TYPE_RETURNING:
-				return 'Returning';
-				break;
-			case TYPE_READMIT:
-				return 'Re-admit';
-				break;
-			case TYPE_WITHDRAWN:
-				return 'Withdrawn';
-				break;
-			default:
-				return 'Unknown type: ' . $this->type;
-				break;
-		}
-	}
+    public function getPrintableType()
+    {
+        switch($this->getType()){
+            case TYPE_FRESHMEN:
+                return 'Freshmen';
+                break;
+            case TYPE_TRANSFER:
+                return 'Transfer';
+                break;
+            case TYPE_CONTINUING:
+                return 'Continuing';
+                break;
+            case TYPE_RETURNING:
+                return 'Returning';
+                break;
+            case TYPE_READMIT:
+                return 'Re-admit';
+                break;
+            case TYPE_WITHDRAWN:
+                return 'Withdrawn';
+                break;
+            case TYPE_NONDEGREE:
+                return 'New non-degree';
+                break;
+            case TYPE_GRADUATE:
+                return 'Graduate';
+                break;
+            default:
+                return 'Unknown type: ' . $this->type;
+                break;
+        }
+    }
 
-	public function getPrintableClass()
-	{
-		switch($this->getClass()){
-			case CLASS_FRESHMEN:
-				return 'Freshmen';
-				break;
-			case CLASS_SOPHOMORE:
-				return 'Sophomore';
-				break;
-			case CLASS_JUNIOR:
-				return 'Junior';
-				break;
-			case CLASS_SENIOR:
-				return 'Senior';
-				break;
-			default:
-				return 'Unknown class: ' . $this->getClass();
-		}
-	}
+    public function getPrintableClass()
+    {
+        switch($this->getClass()){
+            case CLASS_FRESHMEN:
+                return 'Freshmen';
+                break;
+            case CLASS_SOPHOMORE:
+                return 'Sophomore';
+                break;
+            case CLASS_JUNIOR:
+                return 'Junior';
+                break;
+            case CLASS_SENIOR:
+                return 'Senior';
+                break;
+            default:
+                return 'Unknown class: ' . $this->getClass();
+        }
+    }
 
-	public function getPrintableLevel()
-	{
-	    switch($this->getStudentLevel()){
-	        case LEVEL_UNDERGRAD:
-	            return 'Undergraduate';
-	            break;
-	        case LEVEL_GRAD:
-	            return 'Graduate';
-	            break;
-	        case LEVEL_GRAD2:
-	            return 'Graduate II';
-	            break;
-	        case LEVEL_DOCTORAL:
-	            return 'Doctoral';
-	            break;
-	        case LEVEL_SPECIALIST:
-	            return 'Specialist';
-	            break;
-	        case LEVEL_UNDECLARED:
-	            return 'Undeclared';
-	            break;
-	        default:
-	            return 'Unknown level ' . $this->getStudentLevel();
-	    }
-	}
+    public function getPrintableLevel()
+    {
+        switch($this->getStudentLevel()){
+            case LEVEL_UNDERGRAD:
+                return 'Undergraduate';
+                break;
+            case LEVEL_GRAD:
+                return 'Graduate';
+                break;
+            case LEVEL_GRAD2:
+                return 'Graduate II';
+                break;
+            case LEVEL_DOCTORAL:
+                return 'Doctoral';
+                break;
+            case LEVEL_SPECIALIST:
+                return 'Specialist';
+                break;
+            case LEVEL_UNDECLARED:
+                return 'Undeclared';
+                break;
+            default:
+                return 'Unknown level ' . $this->getStudentLevel();
+        }
+    }
 
-	public function getProfileLink()
-	{
-		$profileCmd = CommandFactory::getCommand('ShowStudentProfile');
-		$profileCmd->setUsername($this->getUsername());
-		return $profileCmd->getLink($this->getName());
-	}
+    public function getProfileLink()
+    {
+        $profileCmd = CommandFactory::getCommand('ShowStudentProfile');
+        $profileCmd->setUsername($this->getUsername());
+        return $profileCmd->getLink($this->getName());
+    }
 
-	public function getFullNameProfileLink()
-	{
-		$profileCmd = CommandFactory::getCommand('ShowStudentProfile');
-		$profileCmd->setUsername($this->getUsername());
-		return $profileCmd->getLink($this->getFullName());
-	}
+    public function getFullNameProfileLink()
+    {
+        $profileCmd = CommandFactory::getCommand('ShowStudentProfile');
+        $profileCmd->setUsername($this->getUsername());
+        return $profileCmd->getLink($this->getFullName());
+    }
 
     public function getEmailLink()
     {
         return '<a href="mailto:'.$this->getUsername().'@appstate.edu">'.$this->getUsername().'@appstate.edu</a>';
     }
 
-	/**
-	 * Returns an associate array with keys:
-	 * line1, line2, line3, city, county, state, zip
-	 * 'county' is a county code
-	 * 'state' is a two character abbrev.
-	 *
-	 * Passing a type of 'null' will cause a 'PR' address to
-	 * be returned, or a 'PS' addresses if no PR exists.
-	 *
-	 * Valid options for 'type' are the address types defined in inc/defines.php:
-	 * null (default, returns 'PR' if exists, otherwise 'PS')
-	 * ADDRESS_PRMT_RESIDENCE ('PR' - permanent residence)
-	 * ADDRESS_PRMT_STUDENT   ('PS' - permanent student)
-	 */
-	public function getAddress($type = ADDRESS_PRMT_RESIDENCE)
-	{
-		$pr_address = null;
-		$ps_address = null;
+    /**
+     * Returns an associate array with keys:
+     * line1, line2, line3, city, county, state, zip
+     * 'county' is a county code
+     * 'state' is a two character abbrev.
+     *
+     * Passing a type of 'null' will cause a 'PR' address to
+     * be returned, or a 'PS' addresses if no PR exists.
+     *
+     * Valid options for 'type' are the address types defined in inc/defines.php:
+     * null (default, returns 'PR' if exists, otherwise 'PS')
+     * ADDRESS_PRMT_RESIDENCE ('PR' - permanent residence)
+     * ADDRESS_PRMT_STUDENT   ('PS' - permanent student)
+     */
+    public function getAddress($type = ADDRESS_PRMT_RESIDENCE)
+    {
+        $pr_address = null;
+        $ps_address = null;
 
-		foreach($this->addressList as $address){
-			if(((string)$address->atyp_code) == ADDRESS_PRMT_RESIDENCE) {
-				$pr_address = $address;
-			}else if(((string)$address->atyp_code) == ADDRESS_PRMT_STUDENT){
-				$ps_address = $address;
-			}
-		}
+        foreach($this->addressList as $address){
+            if(((string)$address->atyp_code) == ADDRESS_PRMT_RESIDENCE) {
+                $pr_address = $address;
+            }else if(((string)$address->atyp_code) == ADDRESS_PRMT_STUDENT){
+                $ps_address = $address;
+            }
+        }
 
-		# Decide which address type to return, based on $type parameter
-		if(is_null($type)){
-			# Return the pr address, if it exists
-			if(!is_null($pr_address)){
-				return $pr_address;
-				# Since there was no ps address, return the ps address, if it exists
-			}else if(!is_null($ps_address)){
-				return $ps_address;
-			}else{
-				# No address found, return false
-				return false;
-			}
-		}else if($type == ADDRESS_PRMT_RESIDENCE && !is_null($pr_address)){
-			return $pr_address;
-		}else if($type == ADDRESS_PRMT_STUDENT && !is_null($ps_address)){
-			return $ps_address;
-		}else{
-			# Either a bad type was specified (i.e. not null and not PS or PR)
-			# or the specified type was not found
-			return false;
-		}
+        # Decide which address type to return, based on $type parameter
+        if(is_null($type)){
+            # Return the pr address, if it exists
+            if(!is_null($pr_address)){
+                return $pr_address;
+                # Since there was no ps address, return the ps address, if it exists
+            }else if(!is_null($ps_address)){
+                return $ps_address;
+            }else{
+                # No address found, return false
+                return false;
+            }
+        }else if($type == ADDRESS_PRMT_RESIDENCE && !is_null($pr_address)){
+            return $pr_address;
+        }else if($type == ADDRESS_PRMT_STUDENT && !is_null($ps_address)){
+            return $ps_address;
+        }else{
+            # Either a bad type was specified (i.e. not null and not PS or PR)
+            # or the specified type was not found
+            return false;
+        }
 
-		# Since we got here without finding the requested address, just return false
-		return false;
-	}
+        # Since we got here without finding the requested address, just return false
+        return false;
+    }
 
-	/**
-	 * Returns an address formatted as one line, like so:
-	 * "line1, (line 2, )(line 3, )city, state, zip"
-	 * Uses data returned from get_data.
-	 */
-	public function getAddressLine()
-	{
-		$addr = $this->getAaddress();
+    /**
+     * Returns an address formatted as one line, like so:
+     * "line1, (line 2, )(line 3, )city, state, zip"
+     * Uses data returned from get_data.
+     */
+    public function getAddressLine()
+    {
+        $addr = $this->getAaddress();
 
-		if(!$addr){
-			return false;
-		}
+        if(!$addr){
+            return false;
+        }
 
-		$line2 = ($addr->line2 != NULL && $addr->line2 != '') ? ($addr->line2 . ', ') : '';
-		$line3 = ($addr->line3 != NULL && $addr->line3 != '') ? ($addr->line3 . ', ') : '';
+        $line2 = ($addr->line2 != NULL && $addr->line2 != '') ? ($addr->line2 . ', ') : '';
+        $line3 = ($addr->line3 != NULL && $addr->line3 != '') ? ($addr->line3 . ', ') : '';
 
-		return "{$addr->line1}, $line2$line3{$addr->city}, {$addr->state} {$addr->zip}";
-	}
+        return "{$addr->line1}, $line2$line3{$addr->city}, {$addr->state} {$addr->zip}";
+    }
 
-	/***************************
-	 * Getter / Setter Methods *
-	 ***************************/
+    /***************************
+     * Getter / Setter Methods *
+     ***************************/
 
-	public function getUsername(){
-		return $this->username;
-	}
+    public function getUsername(){
+        return $this->username;
+    }
 
-	public function setUsername($username){
-		$this->username = $username;
-	}
+    public function setUsername($username){
+        $this->username = $username;
+    }
 
-	public function getBannerId(){
-		return $this->banner_id;
-	}
+    public function getBannerId(){
+        return $this->banner_id;
+    }
 
-	public function setBannerId($id){
-		$this->banner_id = $id;
-	}
+    public function setBannerId($id){
+        $this->banner_id = $id;
+    }
 
-	public function getFirstName(){
-		return $this->first_name;
-	}
+    public function getFirstName(){
+        return $this->first_name;
+    }
 
-	public function setFirstName($name){
-		$this->first_name = $name;
-	}
+    public function setFirstName($name){
+        $this->first_name = $name;
+    }
 
-	public function getMiddleName(){
-		return $this->middle_name;
-	}
+    public function getMiddleName(){
+        return $this->middle_name;
+    }
 
-	public function setMiddleName($name){
-		$this->middle_name = $name;
-	}
+    public function setMiddleName($name){
+        $this->middle_name = $name;
+    }
 
-	public function getLastName(){
-		return $this->last_name;
-	}
+    public function getLastName(){
+        return $this->last_name;
+    }
 
-	public function setLastName($name){
-		$this->last_name = $name;
-	}
+    public function setLastName($name){
+        $this->last_name = $name;
+    }
 
-	public function getGender()
-	{
-		return $this->gender;
-	}
+    public function getGender()
+    {
+        return $this->gender;
+    }
 
-	public function setGender($gender){
-		if($gender == 'M'){
-			$this->gender = MALE;
-			return;
-		}
+    public function setGender($gender){
+        if($gender == 'M'){
+            $this->gender = MALE;
+            return;
+        }
 
-		if($gender == 'F'){
-			$this->gender = FEMALE;
-			return;
-		}
+        if($gender == 'F'){
+            $this->gender = FEMALE;
+            return;
+        }
 
-		$this->gender = $gender;
-		return;
-	}
+        $this->gender = $gender;
+        return;
+    }
 
-	public function getDOB(){
-		return $this->dob;
-	}
+    public function getDOB(){
+        return $this->dob;
+    }
 
-	public function setDOB($dob){
-		$this->dob = $dob;
-	}
+    public function setDOB($dob){
+        $this->dob = $dob;
+    }
 
-	public function getApplicationTerm(){
-		return $this->application_term;
-	}
+    public function getApplicationTerm(){
+        return $this->application_term;
+    }
 
-	public function setApplicationTerm($term){
-		$this->application_term = $term;
-	}
+    public function setApplicationTerm($term){
+        $this->application_term = $term;
+    }
 
-	public function getType(){
-		return $this->type;
-	}
+    public function getType(){
+        return $this->type;
+    }
 
-	public function setType($type){
-		$this->type = $type;
-	}
+    public function setType($type){
+        $this->type = $type;
+    }
 
-	public function getClass(){
-		return $this->class;
-	}
+    public function getClass(){
+        return $this->class;
+    }
 
-	public function setClass($class){
-		$this->class = $class;
-	}
+    public function setClass($class){
+        $this->class = $class;
+    }
 
-	public function getCreditHours(){
-		return $this->credit_hours;
-	}
+    public function getCreditHours(){
+        return $this->credit_hours;
+    }
 
-	public function setStudentLevel($level){
-	    $this->student_level = $level;
-	}
+    public function setStudentLevel($level){
+        $this->student_level = $level;
+    }
 
-	public function getStudentLevel(){
-	    return $this->student_level;
-	}
+    public function getStudentLevel(){
+        return $this->student_level;
+    }
 
-	public function setCreditHours($hrs){
-		$this->credit_hours = $hrs;
-	}
+    public function setCreditHours($hrs){
+        $this->credit_hours = $hrs;
+    }
 
-	public function getDepositDate(){
-	    return $this->deposit_date;
-	}
+    public function getDepositDate(){
+        return $this->deposit_date;
+    }
 
-	public function setDepositDate($date){
-	    $this->deposit_date = $date;
-	}
+    public function setDepositDate($date){
+        $this->deposit_date = $date;
+    }
 
-	public function setInternational($intl){
-	    $this->international = $intl;
-	}
+    public function setInternational($intl){
+        $this->international = $intl;
+    }
 
-	public function isInternational(){
-	    return $this->international;
-	}
+    public function isInternational(){
+        return $this->international;
+    }
 
-	public function setHonors($hon){
-	    $this->honors = $hon;
-	}
+    public function setHonors($hon){
+        $this->honors = $hon;
+    }
 
-	public function isHonors(){
-	    return $this->honors;
-	}
+    public function isHonors(){
+        return $this->honors;
+    }
 
-	public function setTeachingFellow($teach){
-	    $this->teaching_fellow = $teach;
-	}
+    public function setTeachingFellow($teach){
+        $this->teaching_fellow = $teach;
+    }
 
-	public function isTeachingFellow(){
-	    return $this->teaching_fellow;
-	}
+    public function isTeachingFellow(){
+        return $this->teaching_fellow;
+    }
 
-	public function setWataugaMember($member){
-	    $this->watauga_member = $member;
-	}
+    public function setWataugaMember($member){
+        $this->watauga_member = $member;
+    }
 
-	public function isWataugaMember(){
-	    return $this->watauga_member;
-	}
+    public function isWataugaMember(){
+        return $this->watauga_member;
+    }
 
-	public function getAddressList(){
-		return $this->addressList;
-	}
+    public function getAddressList(){
+        return $this->addressList;
+    }
 
-	public function setAddressList(Array $list){
-		$this->addressList = $list;
-	}
+    public function setAddressList(Array $list){
+        $this->addressList = $list;
+    }
 
-	public function getPhoneNumberList(){
-		return $this->phoneNumberList;
-	}
+    public function getPhoneNumberList(){
+        return $this->phoneNumberList;
+    }
 
-	public function setPhoneNumberList(Array $list){
-		$this->phoneNumberList = $list;
-	}
+    public function setPhoneNumberList(Array $list){
+        $this->phoneNumberList = $list;
+    }
 }
+
+//?>

@@ -98,6 +98,8 @@ CREATE TABLE hms_learning_communities (
     hide integer NOT NULL DEFAULT 0,
     extra_info text,
     allowed_student_types varchar(16),
+    allowed_reapplication_student_types character varying(16),
+    members_reapply integer not null,
     primary key(id)
 );
 
@@ -177,6 +179,9 @@ CREATE TABLE hms_assignment (
     primary key(id)
 );
 
+ALTER TABLE hms_assignment ADD CONSTRAINT hms_assignment_uniq_student_const UNIQUE (asu_username, term);
+ALTER TABLE hms_assignment ADD CONSTRAINT hms_assignment_uniq_bed_const UNIQUE (bed_id, term);
+
 CREATE TABLE hms_assignment_queue (
     id              integer NOT NULL,
     action          integer NOT NULL,
@@ -211,6 +216,7 @@ CREATE TABLE hms_learning_community_applications (
     rlc_question_1                  character varying(4096),
     rlc_question_2                  character varying(4096),
     denied                          integer DEFAULT 0 NOT NULL,
+    application_type                character varying(32) NOT NULL,
     PRIMARY KEY(id)
 );
 
@@ -289,16 +295,15 @@ CREATE TABLE hms_summer_application (
 
 CREATE TABLE hms_lottery_application (
     id                      integer NOT NULL REFERENCES hms_new_application(id),
-    roommate1_username      character varying(32),
-    roommate2_username      character varying(32),
-    roommate3_username      character varying(32),
-    roommate1_app_term      integer,
-    roommate2_app_term      integer,
-    roommate3_app_term      integer,
     special_interest        character varying(32),
     magic_winner            smallint NOT NULL default 0,
     invite_expires_on       integer,
     waiting_list_hide       smallint DEFAULT 0,
+    rlc_interest            smallint not null default 0,
+    sorority_pref           character varying(32),
+    tf_pref                 smallint NOT NULL default 0,
+    wg_pref                 smallint NOT NULL default 0,
+    honors_pref             smallint NOT NULL default 0,
     PRIMARY KEY(id)
 );
 
@@ -358,6 +363,7 @@ CREATE TABLE hms_student_profiles (
     beach smallint,
     bluegrass smallint,
     blues smallint,
+    christian smallint,
     classical smallint,
     classic_rock smallint,
     country smallint,
@@ -390,6 +396,27 @@ CREATE TABLE hms_student_profiles (
     loudness smallint,
     cleanliness smallint,
     free_time smallint,
+    arabic smallint,
+    bengali smallint,
+    chinese smallint,
+    english smallint,
+    french smallint,
+    german smallint,
+    hindi smallint,
+    italian smallint,
+    japanese smallint,
+    javanese smallint,
+    korean smallint,
+    malay smallint,
+    marathi smallint,
+    portuguese smallint,
+    punjabi smallint,
+    russian smallint,
+    spanish smallint,
+    tamil smallint,
+    telugu smallint,
+    vietnamese smallint,
+
     PRIMARY KEY(id)
 );
 
@@ -524,6 +551,7 @@ CREATE TABLE hms_room_change_request (
     denied_reason       TEXT,
     denied_by           VARCHAR(32),
     updated_on          INTEGER,
+    switch_with         VARCHAR(32),
     is_swap             SMALLINT NOT NULL DEFAULT 0,
     PRIMARY KEY(id)
 );
@@ -548,7 +576,7 @@ CREATE TABLE hms_room_change_preferences (
 
 INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info) VALUES (3, 'Language & Culture Community', 'LCC', 50, 0, 'F', '');
 INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info) VALUES (20, 'Watauga Global Community', 'WG', 50, 0, 'F', '<p>Watauga Global Community is where classes meet general education requirements in interdisciplinary team-taught (multiple professor) core classes that blend fact, fiction, culture, philosophy, motion, art, music, myth, and religion.</p><p><strong>This community requires a separate application in addition to marking it as a housing preference.  For more information, go to the <a href="http://wataugaglobal.appstate.edu/pagesmith/4" target="_blank" style="color: blue;">Watauga Global Community Website</a>.</strong></p>');
-INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info) VALUES (21, 'Heltzer Honors Program', 'HN', 50, 0, 'F', '<p><strong>This community requires a separate application in addition to marking it as a housing preference.</strong></p><p>To apply for the Heltzer Honors Program, log into <a href="https://firstconnections.appstate.edu/ugaweb/" target="_blank" style="color: blue;">First Connections</a> and complete the on-line application accordingly.</p><p>For more information, go to the <a href="http://www.honors.appstate.edu/" target="_blank" style="color: blue;"> Heltzer Honors Program website</a>.</p>');
+INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info) VALUES (21, 'The Honors College', 'HN', 50, 0, 'F', '<p><strong>This community requires a separate application in addition to marking it as a housing preference.</strong></p><p>To apply for The Honors College, log into <a href="https://firstconnections.appstate.edu/ugaweb/" target="_blank" style="color: blue;">First Connections</a> and complete the on-line application accordingly.</p><p>For more information, go to <a href="http://www.honors.appstate.edu/" target="_blank" style="color: blue;">The Honors College website</a>.</p>');
 INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info) VALUES (2, 'Academy of Science', 'AS', 40, 0, 'F', '');
 INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info) VALUES (14, 'Art Haus', 'AC', 68, 0, 'F', '');
 INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info) VALUES (4, 'Black & Gold Community', 'BGC', 68, 0, 'F', '');
@@ -583,7 +611,7 @@ INSERT INTO hms_learning_community_questions (id, learning_community_id, questio
 INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (25, 6, 'What are your study goals and how will the quiet study community help you to reach them?');
 INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (26, 2, 'This National Science Foundation-supported scholarship provides mentoring and research in the math and science disciplines of chemistry, computer science, geology, mathematics, physics, and astronomy. Which of these areas are you most interested in and why?');
 INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (27, 20, 'Why are you interested in the Watauga Global Community?');
-INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (28, 21, 'Why are you interested in the Heltzer Honors Program?');
+INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (28, 21, 'Why are you interested in The Honors College?');
 
 CREATE SEQUENCE hms_learning_communities_seq;
 SELECT setval('hms_learning_communities_seq', max(hms_learning_communities.id)) FROM hms_learning_communities;

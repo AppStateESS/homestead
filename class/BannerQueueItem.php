@@ -7,16 +7,16 @@
 
 class BannerQueueItem {
 
-    public $id            = 0;
-    public $type          = 0;
-    public $asu_username  = null;
-    public $building_code = null;
-    public $bed_code      = null;
-    public $meal_plan     = 'HOME';
-    public $meal_code     = 0;
-    public $term          = 0;
-    public $queued_on     = 0;
-    public $queued_by     = null;
+    public $id;
+    public $type;
+    public $asu_username;
+    public $building_code;
+    public $bed_code;
+    public $meal_plan = 'HOME';
+    public $meal_code;
+    public $term;
+    public $queued_on;
+    public $queued_by;
 
     public function __construct($id = null, $type = null, Student $student = null, $term = null, HMS_Residence_Hall $hall = null, HMS_Bed $bed = null, $mealPlan = null, $mealCode = null)
     {

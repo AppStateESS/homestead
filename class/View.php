@@ -10,6 +10,13 @@
 
 abstract class View
 {
+    protected $pageTitle;
+
+    public function setPageTitle($title){
+        $this->pageTitle = $title;
+        Layout::addPageTitle($title);
+    }
+
     public abstract function show();
 }
 

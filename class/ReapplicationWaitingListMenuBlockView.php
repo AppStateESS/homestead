@@ -40,8 +40,13 @@ class ReapplicationWaitingListMenuBlockView extends View {
             $tpl['OPTED_OUT'] = " ";
         }else{
             $tpl['ICON'] = FEATURE_OPEN_ICON;
-            $optOutCmd = CommandFactory::getCommand('LotteryShowWaitingListOptOut');
-            $tpl['OUT_OUT_LINK'] = $optOutCmd->getLink('Click here to opt-out of the waiting list');
+
+            // Get this student's position on the wait list
+            $tpl['POSITION']    = $this->application->getWaitListPosition();
+            $tpl['TOTAL']       = HMS_Lottery::getSizeOfOnCampusWaitList();
+
+            $optOutCmd  = CommandFactory::getCommand('LotteryShowWaitingListOptOut');
+            $tpl['OPT_OUT_LINK'] = $optOutCmd->getLink('click here to opt-out of the waiting list');
         }
 
         Layout::addPageTitle("Re-Application Waiting List");

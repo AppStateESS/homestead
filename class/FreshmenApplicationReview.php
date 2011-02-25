@@ -4,19 +4,26 @@ PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
 class FreshmenApplicationReview extends View {
 
-	private $student;
-	private $term;
-	private $app;
+    private $student;
+    private $term;
+    private $app;
 
-	public function __construct(Student $student, $term, HousingApplication $app)
-	{
-		$this->student	= $student;
-		$this->term		= $term;
-		$this->app		= $app;
-	}
+    public function __construct(Student $student, $term, HousingApplication $app)
+    {
+        $this->student	= $student;
+        $this->term		= $term;
+        $this->app		= $app;
+    }
 
-	public function show()
-	{
+    public function show()
+    {
+        // Sanity check to prevent 'continuing' students from completing this form
+        if($student->getType() == TYPE_CONTINUING || $student->getType() == TYPE_READMIT || $student->getApplicationTerm() <= Term::getCurrentTerm()){
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Sorry, as a non-freshman student, you cannot complete this application (which is for freshmen only). If you think you have reached this message in error, please contact University Housing using the form below.');
+            $cmd = CommandFactory::getCommand('ShowContactForm');
+            $cmd->redirect();
+        }
+
         $tpl = array();
         $tpl['REVIEW_MSG']      = ''; // set this to show the review message
 
@@ -72,20 +79,19 @@ class FreshmenApplicationReview extends View {
         $form->addSubmit('submit', 'Confirm & Continue');
         $form->setExtra('submit', 'class="hms-application-submit-button"');
 
-
         $redoCmd = CommandFactory::getCommand('ShowHousingApplicationForm');
         $redoCmd->setTerm($this->term);
         $redoCmd->setAgreedToTerms(1);
         $redoCmd->setVars($_REQUEST);
 
-		$tpl['REDO_BUTTON'] = $redoCmd->getLink('modify your application');
+        $tpl['REDO_BUTTON'] = $redoCmd->getLink('modify your application');
 
         $form->mergeTemplate($tpl);
 
         $tpl = $form->getTemplate();
 
         return PHPWS_Template::process($tpl, 'hms', 'student/student_application.tpl');
-	}
+    }
 }
 
 ?>

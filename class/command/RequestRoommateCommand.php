@@ -69,7 +69,8 @@ class RequestRoommateCommand extends Command
         HMS_Activity_Log::log_activity($requestee, ACTIVITY_REQUESTED_AS_ROOMMATE, $requestor);
 
         // Email both parties
-        $request->send_request_emails();
+        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
+        HMS_Email::send_request_emails($request);
 
         // Notify
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');

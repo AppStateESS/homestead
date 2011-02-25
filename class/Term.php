@@ -231,6 +231,21 @@ class Term
         }
     }
 
+    public static function getPrevTerm($term)
+    {
+        # Grab the year
+        $year = substr($term, 0, 4);
+
+        # Grab the term
+        $sem = substr($term, 4, 2);
+
+        if($sem == TERM_SPRING){
+            return ($year - 1) . "40";
+        }else{
+            return "$year" . ($sem - 10);
+        }
+    }
+
     /**
      * Returns a list of all the terms currently available. Useful for making drop down boxes.
      * @return Array Associate array of terms and their textual representations.
@@ -262,7 +277,7 @@ class Term
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
-        
+
         return in_array($term, $result);
     }
 
@@ -277,14 +292,14 @@ class Term
     public static function getTermsAssoc()
     {
         $objs = self::getTerms();
-         
+
         $terms = array();
-         
+
         foreach($objs as $term) {
             $t = $term->term;
             $terms[$t] = Term::toString($t);
         }
-         
+
         return $terms;
     }
 

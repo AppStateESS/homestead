@@ -190,7 +190,7 @@ class HMS_Activity_Log{
         ACTIVITY_ROOMMATE_REQUESTS_UPDATED      => "Updated Roommate Requests",
         ACTIVITY_CHANGE_ACTIVE_TERM             => "Changed Active Term",
         ACTIVITY_ADD_NOTE                       => "Note",
-        ACTIVITY_LOTTERY_SIGNUP_INVITE          => "Invited to enter lottery",
+        ACTIVITY_LOTTERY_SIGNUP_INVITE          => "Invited to enter lottery", //depricated
         ACTIVITY_LOTTERY_ENTRY                  => "Lottery entry submitted",
         ACTIVITY_LOTTERY_INVITED                => "Lottery invitation sent",
         ACTIVITY_LOTTERY_REMINDED               => "Lottery invitation reminder sent",
@@ -205,11 +205,14 @@ class HMS_Activity_Log{
         ACTIVITY_HALL_NOTIFIED                  => "Email notification sent to hall",
         ACTIVITY_HALL_NOTIFIED_ANONYMOUSLY      => "Anonymous email notification sent to hall",
         ACTIVITY_LOTTERY_OPTOUT                 => "Opted-out of waiting list",
+        ACTIVITY_FLOOR_NOTIFIED_ANONYMOUSLY     => "Anonymous email notification sent to floor",
+        ACTIVITY_FLOOR_NOTIFIED                 => "Email notification sent to floor",
         ACTIVITY_ROOM_CHANGE_SUBMITTED          => "Submitted Room Change Request",
         ACTIVITY_ROOM_CHANGE_APPROVED_RD        => "RD Approved Room Change",
         ACTIVITY_ROOM_CHANGE_APPROVED_HOUSING   => "Housing Approved Room Change",
         ACTIVITY_ROOM_CHANGE_COMPLETED          => "Room Change Completed",
-        ACTIVITY_ROOM_CHANGE_DENIED             => "Room Change Denied");
+        ACTIVITY_ROOM_CHANGE_DENIED             => "Room Change Denied",
+        ACTIVITY_LOTTERY_ROOMMATE_DENIED        => "Denied lottery roommate invite");
     }
 
     /**

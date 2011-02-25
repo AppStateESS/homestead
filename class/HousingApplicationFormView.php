@@ -24,6 +24,9 @@ class HousingApplicationFormView extends View {
         PHPWS_Core::initCoreClass('Form.php');
         $form = new PHPWS_Form();
 
+        //the form is only constructed if they have agreed to the terms
+        $form->addHidden('agreedToTerms', true);
+
         $submitCmd = CommandFactory::getCommand('HousingApplicationFormSubmit');
         $submitCmd->setTerm($this->term);
 
@@ -43,8 +46,7 @@ class HousingApplicationFormView extends View {
 
         /**************
          * Cell Phone *
-         */
-
+         **************/
         $form->addText('area_code');
         $form->setSize('area_code', 3);
         $form->setMaxSize('area_code', 3);
@@ -90,7 +92,7 @@ class HousingApplicationFormView extends View {
 
             /***************
              * Meal Option *
-             */
+             ***************/
             # Don't show *low* meal option to freshmen
             if($this->student->getType() == TYPE_FRESHMEN){
                 $form->addDropBox('meal_option', array(BANNER_MEAL_STD=>_('Standard'),
@@ -229,5 +231,4 @@ class HousingApplicationFormView extends View {
         return PHPWS_Template::process($tpl,'hms','student/student_application.tpl');
     }
 }
-
-?>
+//?>

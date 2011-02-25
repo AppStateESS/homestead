@@ -64,7 +64,7 @@ class OffCampusWaitingListFormSaveCommand extends Command {
         $genderNeed         = isset($specialNeeds['gender_need'])?1: 0;
         $medicalNeed        = isset($specialNeeds['medical_need'])?1: 0;
 
-        $international = ($student->isInternational()) == 'true'?1:0;
+        $international = $student->isInternational();
 
         $application = new WaitingListApplication(0, $term, $student->getBannerId(), $student->getUsername(), $student->getGender(), $student->getType(), $student->getApplicationTerm(), $cellPhone, $mealPlan, $physicalDisability, $psychDisability, $genderNeed, $medicalNeed, $international);
 

@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Shows the re-application (lottery) form.
+ *
+ * @author jbooker
+ * @package hms
+ */
+
 class ReApplicationFormView extends View {
 
     private $student;
@@ -13,16 +20,26 @@ class ReApplicationFormView extends View {
 
     public function show()
     {
+        PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
+
+        javascript('jquery');
+        javascript('jquery_ui');
+
         $tpl = array();
 
-        $tpl['NAME'] = $this->student->getFullName();
         $tpl['TERM'] = Term::toString($this->term) . ' - ' . Term::toString(Term::getNextTerm($this->term));
 
+        /*
+         * onSubmit command
+         */
         $form = new PHPWS_Form();
         $submitCmd = CommandFactory::getCommand('ReApplicationFormSubmit');
         $submitCmd->setTerm($this->term);
         $submitCmd->initForm($form);
 
+        /*
+         * Contact info
+         */
         if(isset($_REQUEST['area_code'])){
             $form->addText('area_code', $_REQUEST['area_code']);
         }else{
@@ -49,39 +66,67 @@ class ReApplicationFormView extends View {
         $form->setMaxSize('number', 4);
         $form->addCheck('do_not_call', 1);
 
-
-        if(isset($_REQUEST['roommate1'])){
-            $form->addText('roommate1', $_REQUEST['roommate1']);
-        }else{
-            $form->addText('roommate1');
-        }
-
-        if(isset($_REQUEST['roommate2'])){
-            $form->addText('roommate2', $_REQUEST['roommate2']);
-        }else{
-            $form->addText('roommate2');
-        }
-
-        if(isset($_REQUEST['roommate3'])){
-            $form->addText('roommate3', $_REQUEST['roommate3']);
-        }else{
-            $form->addText('roommate3');
-        }
-
+        /*
+         * Meal Plan
+         */
         $mealPlans = array(BANNER_MEAL_LOW=>_('Low'),
-            BANNER_MEAL_STD=>_('Standard'),
-            BANNER_MEAL_HIGH=>_('High'),
-            BANNER_MEAL_SUPER=>_('Super'));
+        BANNER_MEAL_STD=>_('Standard'),
+        BANNER_MEAL_HIGH=>_('High'),
+        BANNER_MEAL_SUPER=>_('Super'));
         $form->addDropBox('meal_plan', $mealPlans);
         $form->setLabel('meal_plan', 'Meal plan: ');
         $form->setMatch('meal_plan', BANNER_MEAL_STD);
 
-        PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
-        $special_interests = HMS_Lottery::get_special_interest_groups();
+        /*
+         * Special interest stuff
+         */
+        /*
+         PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
+         $special_interests = HMS_Lottery::get_special_interest_groups();
 
-        $form->addDropBox('special_interest', $special_interests);
-        $form->setLabel('special_interest', 'Special interest group: ');
+         $form->addDropBox('special_interest', $special_interests);
+         $form->setLabel('special_interest', 'Special interest group: ');
+         */
 
+        // RLC
+        $form->addCheck('rlc_interest', array('rlc_interest'));
+        $form->setLabel('rlc_interest', "I'm interseted in applying for (or continuing in) a Residential Learning Community.");
+
+        // Sorority
+        if($this->student->getGender() == FEMALE){
+            $sororities = HMS_Lottery::getSororities();
+
+            $form->addCheck('sorority_check', array('sorority_check'));
+            $form->setLabel('sorority_check', "I'm a member of a sorority.");
+
+            $form->addDropBox('sorority_drop', array_merge(array('none'=>'Select...'), HMS_Lottery::getSororities()));
+            $form->setLabel('sorority_drop', 'Which sorority?');
+
+            $form->addRadioButton('sorority_pref', array('aph', 'on-campus'));
+            $form->setLabel('sorority_pref', array("I would like to live in the APH.", "I would like to live in a central-campus hall."));
+        }
+
+        // Teaching Fellows
+        if($this->student->isTeachingFellow()){
+            $form->addRadioButton('tf_pref', array('with_tf', 'not_tf'));
+            $form->setLabel('tf_pref', array("I would like to live with other Teaching Fellows.", "I would like to live elsewhere on-campus."));
+        }
+
+        // Watauga Global
+        if($this->student->isWataugaMember()){
+            $form->addRadioButton('wg_pref', array('with_wg', 'not_wg'));
+            $form->setLabel('wg_pref', array("I would like to live with other Watauga Global students.", "I would like to live elsewhere on-campus."));
+        }
+
+        // Honors
+        if($this->student->isHonors()){
+            $form->addRadioButton('honors_pref', array('with_honors', 'not_honors'));
+            $form->setLabel('honors_pref', array("I would like to live in Honors Housing.", "I would like to live elsewhere on campus."));
+        }
+
+        /*
+         * Special needs
+         */
         $form->addCheck('special_need', array('special_need'));
         $form->setLabel('special_need', array('Yes, I require special needs housing.'));
 
@@ -89,10 +134,14 @@ class ReApplicationFormView extends View {
             $form->setMatch('special_need', $_REQUEST['special_need']);
         }
 
+        /*
+         * Contract
+         */
         $form->addCheck('deposit_check', array('deposit_check'));
         $form->setLabel('deposit_check', 'I understand & acknowledge that if I cancel my License Contract my student account will be charged $250.  If I cancel my License Contract after July 1, I will be liable for the entire amount of the on-campus housing fees for the Fall semester.');
 
         $form->addSubmit('submit', 'Submit re-application');
+        //$form->setExtra('submit', 'class="hms-application-submit-button"');
 
         $form->mergeTemplate($tpl);
 

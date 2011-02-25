@@ -19,6 +19,8 @@ class SOAPDataProvider extends StudentDataProvider {
 
         SOAPDataProvider::plugSOAPData($student, $soapData);
 
+        SOAPDataProvider::applyExceptions($student);
+
         return $student;
     }
 
@@ -89,6 +91,14 @@ class SOAPDataProvider extends StudentDataProvider {
      */
     public function clearCache()
     {
+    }
+
+    private static function applyExceptions(&$student)
+    {
+        if($student->getUsername() == 'marshallkd'){
+            $student->setApplicationTerm(201040);
+        }
+
     }
 }
 
