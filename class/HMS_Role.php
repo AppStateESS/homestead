@@ -49,6 +49,8 @@ class HMS_Role extends HMS_Item {
      * access to the object of type $classname with the id $intance (none if
      * null).
      */
+    //TODO: Invalid documentation. No where does this function return false. It throws database
+    //  exceptions due to duplicate key violations......
     public function addUser($username, $classname, $instance=null){
         $db = new PHPWS_DB('users');
         $db->addWhere('username', $username);

@@ -114,14 +114,18 @@ class HMS_Residence_Hall extends HMS_Item
             PHPWS_Core::initModClass("hms", "HMS_Permission.php");
             PHPWS_Core::initModClass("hms", "HMS_Role.php");
             // Get memberships by object instance.
-            $membs = HMS_Permission::getMembership(null, $this);
+            $membs = HMS_Permission::getUserRolesForInstance($this);
+            //test($membs,1);
             // Add each user to new hall
             foreach($membs as $m){
+                // Lookup the username
+                $user = new PHPWS_User($m['user_id']);
+
                 // Load role and add user to new instance
                 $role = new HMS_Role();
-                $role->id = $m['role_id'];
+                $role->id = $m['role'];
                 $role->load();
-                $role->addUser($m['username'], get_class($new_hall), $new_hall->id);
+                $role->addUser($user->getUsername(), get_class($new_hall), $new_hall->id);
             }
         }
 
