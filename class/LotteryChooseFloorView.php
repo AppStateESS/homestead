@@ -24,7 +24,6 @@ class LotteryChooseFloorView extends View {
         $hall_rooms_used        = $hall->count_lottery_used_rooms();
 
         $tpl['HALL']            = $hall->hall_name;
-
         if(isset($hall->exterior_image_id)){
             $tpl['EXTERIOR_IMAGE']  = Cabinet::getTag($hall->exterior_image_id);
         }
@@ -80,4 +79,4 @@ class LotteryChooseFloorView extends View {
     }
 }
 
-?>
+//?>

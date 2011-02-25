@@ -177,14 +177,13 @@ class HMS_Floor extends HMS_Item
      */
     public function loadRooms()
     {
-
         $db = new PHPWS_DB('hms_room');
         $db->addWhere('floor_id', $this->id);
         $db->addOrder('room_number', 'ASC');
 
         $db->loadClass('hms', 'HMS_Room.php');
         $result = $db->getObjects('HMS_Room');
-        //test($result);
+        
         if (PHPWS_Error::logIfError($result)) {
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
