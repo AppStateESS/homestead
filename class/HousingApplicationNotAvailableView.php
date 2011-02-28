@@ -18,14 +18,14 @@ class HousingApplicationNotAvailableView extends View {
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
         $tpl = array();
 
-        $tpl['TERM'] = Term::toString($this->term);
-
         if(is_null($this->feature) || !$this->feature->isEnabled()){
             $tpl['ENTRY_TERM'] = Term::toString($this->term);
             $tpl['NO_FEATURE'] = ""; // dummy var
         }else if($this->feature->getStartDate() > time()){
+            $tpl['TERM'] = Term::toString($this->term);
             $tpl['DEADLINE'] = 'It is too soon to complete your application. The On-campus Housing Application will be availble here on ' . HMS_Util::getFriendlyDate($this->feature->getStartDate());
         }else if($this->feature->getEndDate() < time()){
+            $tpl['TERM'] = Term::toString($this->term);
             $tpl['DEADLINE'] = 'The deadline to complete the On-campus Housing Application was ' . HMS_Util::getFriendlyDate($this->feature->getEndDate());
         }
 
