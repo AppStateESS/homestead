@@ -17,7 +17,7 @@ class HMS_Movein_Time
      * Instance Methods *
      *******************/
     public function HMS_Movein_Time($id = NULL){
-        
+
         if(!isset($id) || is_null($id)){
             return;
         }
@@ -40,7 +40,7 @@ class HMS_Movein_Time
         }
         return true;
     }
-    
+
     public function delete()
     {
         $db = new PHPWS_DB('hms_movein_time');
@@ -91,7 +91,7 @@ class HMS_Movein_Time
             PHPWS_Core::initModClass('hms', 'Term.php');
             $term = Term::getSelectedTerm();
         }
-        
+
         $db = new PHPWS_DB('hms_movein_time');
 
         $db->addWhere('term', $term);
@@ -106,14 +106,15 @@ class HMS_Movein_Time
 
         $timestamps[0] = 'None';
 
-        if(!empty($result))
+        if(!empty($result)){
            foreach ($result as $movein){
             $timestamps[$movein->id] = $movein->get_formatted_begin_end();
            }
+        }
 
         return $timestamps;
     }
-    
+
     public function get_movein_times_pager(){
         PHPWS_Core::initCoreClass('DBPager.php');
 

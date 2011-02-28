@@ -83,9 +83,56 @@ class RlcApplicationReView extends View {
             $tags['WHY_THIRD_CHOICE'] = 'n/a';
         }
 
+        PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
+        PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Learing_Community.php');
+        
+        // Show options depending of status of application.
+        if(!$this->application->denied && !HMS_RLC_Assignment::checkForAssignment($this->student->getUsername(), Term::getSelectedTerm())){
+            
+            // Approve application for the community selected from dropdown
+            $approvalForm = $this->getApprovalForm();
+            $approvalForm->mergeTemplate($tags);
+            $tags = $approvalForm->getTemplate();
+            // Deny application
+            $tags['DENY_APP'] = $this->getDenialLink();
+        }
+
         Layout::addPageTitle("RLC Application Review");
 
         return PHPWS_Template::process($tags, 'hms', 'student/rlc_application.tpl');
+    }
+
+    /**
+     * Get the link for denying application.
+     */
+    private function getDenialLink()
+    {
+        $cmd = CommandFactory::getCommand('JSConfirm');
+        $cmd->setLink("<input type='button' value='Deny'></input>");
+        $cmd->setTitle('Deny RLC Application');
+        $cmd->setQuestion('Are you sure you want to deny this RLC Application?');
+        $denyCmd = CommandFactory::getCommand('DenyRlcApplication');
+        $denyCmd->setApplicationId($this->application->id);
+        $cmd->setOnConfirmCommand($denyCmd);
+ 
+        return $cmd->getLink();
+    }
+    
+    /**
+     * Get form for approving application for specific community.
+     */
+    private function getApprovalForm()
+    {
+        $approveForm = new PHPWS_Form('approve_form');
+        $approveForm->addSubmit('approve', 'Approve');
+        $approveCmd = CommandFactory::getCommand('AssignRlcApplicants');
+        $tpl['RLC_LIST'] = HMS_RLC_Application::generateRLCDropDown(HMS_Learning_Community::getRLCList(), 
+                                                                             $this->application->id);
+        $approveForm->mergeTemplate($tpl);
+
+        $approveCmd->initForm($approveForm);
+        return $approveForm;
     }
 }
 ?>

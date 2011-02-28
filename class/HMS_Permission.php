@@ -22,13 +22,16 @@ class HMS_Permission extends HMS_Item {
         $db->addJoin('left outer', 'hms_role', 'hms_user_role', 'id', 'role');
         $db->addJoin('left outer', 'hms_user_role', 'users', 'user_id', 'id');
         
-        if(!is_null($permission))
-        $db->addWhere('hms_permission.name', $permission);
+        if(!is_null($permission)){
+            $db->addWhere('hms_permission.name', $permission);
+        }
+
         if(!is_null($username)){
             $db->addWhere('users.username', $username);
         } else {
             $db->addWhere('users.username', NULL, '!=');
         }
+
         if(!is_null($object)){
             $db->addWhere('hms_user_role.class', strtolower(get_class($object)));
             $db->addWhere('hms_user_role.instance', $object->id);
@@ -45,6 +48,23 @@ class HMS_Permission extends HMS_Item {
         $db->addColumn('hms_user_role.instance');
         $db->addColumn('hms_role.name');
         $db->addColumn('hms_role.id', null, 'role_id');
+
+        $result = $db->select();
+
+        if(PHPWS_Error::logIfError($result)){
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException($result->toString());
+        }
+
+        return $result;
+    }
+
+    public function getUserRolesForInstance($instance)
+    {
+        $db = new PHPWS_DB('hms_user_role');
+
+        $db->addWhere('hms_user_role.class', strtolower(get_class($instance)));
+        $db->addWhere('hms_user_role.instance', $instance->id);
 
         $result = $db->select();
 

@@ -28,9 +28,27 @@ class RlcApplicationMenuView extends View {
 
         if(isset($this->application) && !is_null($this->application->id)) {
             $tpl['ICON'] = FEATURE_COMPLETED_ICON;
+            // Let student view their application
             $viewCmd = CommandFactory::getCommand('ShowRlcApplicationReView');
             $viewCmd->setAppId($this->application->getId());
             $tpl['VIEW_APP'] = $viewCmd->getLink('view your application');
+
+            // The student can also delete their application if
+            // they aren't already assigned
+            PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
+            if(!HMS_RLC_Assignment::checkForAssignment(UserStatus::getUsername(), $this->term)){
+
+                $delCmd = CommandFactory::getCommand('DeleteRlcApplication');
+                $delCmd->setTerm($this->term);
+
+                $confCmd = CommandFactory::getCommand('JSConfirm');
+                $confCmd->setLink('delete your application');
+                $confCmd->setTitle('delete your application');
+                $confCmd->setQuestion('Are you sure you want to delete your RLC Application?');
+                $confCmd->setOnConfirmCommand($delCmd);
+                $tpl['DELETE_TEXT'] = 'You may also ';
+                $tpl['DELETE_APP'] = $confCmd->getLink().'.';
+            }
 
             if(time() < $this->editDate){
                 $newCmd = CommandFactory::getCommand('ShowRlcApplicationView');
@@ -39,7 +57,7 @@ class RlcApplicationMenuView extends View {
             }
         }else if(time() < $this->startDate){
             $tpl['ICON'] = FEATURE_LOCKED_ICON;
-            $tpl['BEGIN_DEADLINE'] = HMS_Util::getFriendlyDate($this->startDate); 
+            $tpl['BEGIN_DEADLINE'] = HMS_Util::getFriendlyDate($this->startDate);
         }else if (time() > $this->endDate){
             $tpl['ICON'] = FEATURE_LOCKED_ICON;
             // fade out header
