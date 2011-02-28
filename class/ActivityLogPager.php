@@ -97,4 +97,4 @@ class ActivityLogPager extends View {
 	}
 }
 
-?>
+//?>

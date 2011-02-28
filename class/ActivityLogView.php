@@ -29,7 +29,7 @@ class ActivityLogView extends View {
 		$this->static		= $static;
 		$this->limit		= $limit;
 
-		$this->pager = new ActivityLogPager($actee, $actor, $notes, $exact, $begin, $end, $activities, $static, $limit);
+		$this->pager = new ActivityLogPager($actee, $actor, $notes, $exact, strtotime($begin), strtotime($end), $activities, $static, $limit);
 	}
 
 	public function show()
@@ -66,24 +66,6 @@ class ActivityLogView extends View {
 
 		$form->setMethod('get');
 
-
-		/*
-		 // Don't lose our place in any embedded menus
-		 if(isset($_REQUEST['type']))
-		 $form->addHidden('type', $_REQUEST['type']);
-		 else
-		 $form->addHidden('type', 'activity_log');
-		 if(isset($_REQUEST['op']))
-		 $form->addHidden('op', $_REQUEST['op']);
-		 else
-		 $form->addHidden('op', 'view');
-
-		 // Keep the activity log from losing tabs when filters are applied
-		 if(isset($_REQUEST['tab'])){
-			$form->addHidden('tab', $_REQUEST['tab']);
-			}
-			*/
-
 		$form->addText('actor');
 		$form->setLabel('actor', 'Action Performed By:');
 		if(isset($selection['actor']))
@@ -99,17 +81,11 @@ class ActivityLogView extends View {
 		$form->setMatch('exact','yes');
 		$form->setLabel('exact','Exact? ');
 
-		$begindate = null;
-		$enddate = null;
-		/*
-		 if(PHPWS_Form::testDate('begin'))
-		 $begindate = PHPWS_Form::getPostedDate('begin');
-		 $form->dateSelect('begin', $begindate, '%b', 10, 10);
-
-		 if(PHPWS_Form::testDate('end'))
-		 $enddate = PHPWS_Form::getPostedDate('end');
-		 $form->dateSelect('end', $enddate, '%b', 10, 10);
-		 */
+        $form->addText('begin', isset($selection['begin']) ? $selection['begin'] : '');
+        $form->setClass('begin', 'datepicker');
+        
+        $form->addText('end', isset($selection['end']) ? $selection['end'] : '');
+        $form->setClass('end', 'datepicker');
 
 		$form->addText('notes');
 		$form->setLabel('notes', 'Note:');
@@ -129,8 +105,12 @@ class ActivityLogView extends View {
 		$tpl = $form->getTemplate();
 		$tpl['BEGIN_LABEL'] = 'After:';
 		$tpl['END_LABEL'] = 'Before:';
+
+        javascript('jquery');
+        javascript('/modules/hms/activity_log');
+
 		return PHPWS_Template::process($tpl, 'hms', 'admin/activity_log_filters.tpl');
 	}
 }
 
-?>
+//?>
