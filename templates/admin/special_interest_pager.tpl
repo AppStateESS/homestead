@@ -15,7 +15,7 @@
         <td>{NAME}</td>
         <td>{USER}</td>
         <td>{BANNER_ID}</td>
-        <td>{ACCEPT_ACTION} | {DENY_ACTION}</td>
+        <td>{ACTION}</td>
     </tr>
     <!-- END listrows -->
 </table>

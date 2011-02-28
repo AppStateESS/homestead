@@ -211,7 +211,6 @@ class LotteryApplication extends HousingApplication {
             $tags['ROW_CLASS'] = 'accepted';
         }
 
-
         return $tags;
     }
 
@@ -261,7 +260,6 @@ class LotteryApplication extends HousingApplication {
             $pager->addWhere('hms_new_application.gender_need', 1, '=', 'OR', 'blah');
         }else{
             // bad group
-            test($group,1);
             throw new InvalidArgumentException('Invalid special interest group specified.');
         }
 
