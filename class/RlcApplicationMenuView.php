@@ -45,7 +45,7 @@ class RlcApplicationMenuView extends View {
                 $confCmd->setLink('delete your application');
                 $confCmd->setTitle('delete your application');
                 $confCmd->setQuestion('Are you sure you want to delete your RLC Application?');
-                $confCmd->setOnConfirmCommand();
+                $confCmd->setOnConfirmCommand($delCmd);
                 $tpl['DELETE_TEXT'] = 'You may also ';
                 $tpl['DELETE_APP'] = $confCmd->getLink().'.';
             }
