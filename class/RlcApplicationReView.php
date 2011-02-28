@@ -85,11 +85,10 @@ class RlcApplicationReView extends View {
 
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Learing_Community.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
         
         // Show options depending of status of application.
         if(!$this->application->denied && !HMS_RLC_Assignment::checkForAssignment($this->student->getUsername(), Term::getSelectedTerm())){
-            
             // Approve application for the community selected from dropdown
             $approvalForm = $this->getApprovalForm();
             $approvalForm->mergeTemplate($tags);
