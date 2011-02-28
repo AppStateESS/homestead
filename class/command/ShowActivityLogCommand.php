@@ -48,22 +48,12 @@ class ShowActivityLogCommand extends Command {
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
         PHPWS_Core::initModClass('hms', 'ActivityLogView.php');
 
-        $actee	= $context->get('actee');
-        $actor	= $context->get('actor');
-        $notes	= $context->get('notes');
-        $exact	= $context->get('exact');
-
-        if(PHPWS_Form::testDate('begin')){
-            $begin = PHPWS_Form::getPostedDate('begin');
-        }else{
-            $begin = null;
-        }
-
-        if(PHPWS_Form::testDate('end')){
-            $end = PHPWS_Form::getPostedDate('end');
-        }else{
-            $end = null;
-        }
+        $actee = $context->get('actee');
+        $actor = $context->get('actor');
+        $notes = $context->get('notes');
+        $exact = $context->get('exact');
+        $begin = $context->get('begin');
+        $end   = $context->get('end');
 
         if(!is_null($begin) && !is_null($end) && $end <= $begin) {
             unset($_REQUEST['begin_year'],
