@@ -230,7 +230,7 @@ class HousingApplication {
             case 'lottery':
                 return "Re-application";
                 break;
-            case 'offcampus_waitlist':
+            case 'offcampus_waiting_list':
                 return "Open Waiting-list";
                 break;
             default:
