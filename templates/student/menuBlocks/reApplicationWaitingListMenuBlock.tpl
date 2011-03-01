@@ -23,6 +23,11 @@ It is too late to opt-out of the waiting list. The deadline passed on {END_DEADL
 You have opted-out of the re-application waiting list.
 <!-- END opted_out -->
 
+<!-- BEGIN did_not_apply -->
+{DID_NOT_APPLY}
+You are not eligible for the on-campus waiting list.
+<!-- END did_not_apply -->
+
 <!-- BEGIN opt_out -->
 <p>You have been automatically placed you on the on-campus housing waiting list.</p>
 
