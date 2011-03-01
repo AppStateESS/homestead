@@ -450,6 +450,11 @@ class HMS_Bed extends HMS_Item {
 		}
 	}
 
+	public function getBannerId()
+	{
+	    return $this->banner_id;
+	}
+
 
 	/******************
 	 * Static Methods *
