@@ -245,15 +245,8 @@ class HMS_RLC_Assignment{
         $tags['ROOMMATE']  = '';
 
         $addr = $student->getAddress();
-        if(!is_null($addr)){
-            $reflect = new ReflectionObject($addr);
-            $address = array();
-
-            foreach($reflect->getProperties() as $prop){
-                $address[] = $addr->{$prop->getName()};
-            }
-
-            $tags['ADDRESS']   = implode(", ", $address);
+        if($addr !== FALSE && !is_null($addr)){
+            $tags['ADDRESS'] = $student->getAddressLine(null);
         }
 
         $phones = $student->getPhoneNumberList();

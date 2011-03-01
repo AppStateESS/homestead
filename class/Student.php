@@ -211,11 +211,11 @@ class Student {
     /**
      * Returns an address formatted as one line, like so:
      * "line1, (line 2, )(line 3, )city, state, zip"
-     * Uses data returned from get_data.
+     * @param $addrType String Two letter address type code, same as for getAddress()
      */
-    public function getAddressLine()
+    public function getAddressLine($addrType = null)
     {
-        $addr = $this->getAaddress();
+        $addr = $this->getAaddress($addrType);
 
         if(!$addr){
             return false;
