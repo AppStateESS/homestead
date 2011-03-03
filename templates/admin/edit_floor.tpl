@@ -36,7 +36,11 @@ function submit_form(form_element, dropdown){
             }
 
             var tablecell = $("#"+json.id+""+form_element.name).get(0);
-            $(tablecell).text(""+display_text);
+            if(tablecell == 'undefined'){
+                alert('Operation succeeded but could not update view!');
+            } else {
+                $(tablecell).text(""+display_text);
+            }
         } else {
             alert('Error updating the database, no changes were made.\n'+json.message);
         }
