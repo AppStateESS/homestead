@@ -30,6 +30,10 @@
           </td>
         </tr>
         <tr>
+            <td>{FROM_TERM_LABEL}</td>
+            <td>{FROM_TERM}</td>
+        </tr>
+        <tr>
           <td colspan="2">{SUBMIT}</td>
         </tr>
       </table>

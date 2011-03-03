@@ -17,7 +17,7 @@ class CreateTermCommand extends Command {
 
         $successCmd = CommandFactory::getCommand('ShowEditTerm');
         $errorCmd = CommandFactory::getCommand('ShowCreateTerm');
-        
+
         $year = $context->get('year_drop');
         $sem = $context->get('term_drop');
 
@@ -81,7 +81,13 @@ class CreateTermCommand extends Command {
             NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, "$text term created successfully.");
             $successCmd->redirect();
         }
-        
+
+        # Figure out which term we're copying from, if there isn't one then use the "current" term.
+        $fromTerm = $context->get('from_term');
+        if(is_null($fromTerm)){
+            $fromTerm = Term::getCurrentTerm();
+        }
+
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
         PHPWS_Core::initModClass('hms', 'HousingApplication.php');
 
@@ -90,7 +96,7 @@ class CreateTermCommand extends Command {
         try{
             $db->query('BEGIN');
             # Get the halls from the current term
-            $halls = HMS_Residence_Hall::get_halls(Term::getCurrentTerm());
+            $halls = HMS_Residence_Hall::get_halls($fromTerm);
             set_time_limit(36000);
 
             foreach ($halls as $hall){
@@ -100,7 +106,7 @@ class CreateTermCommand extends Command {
             $db->query('COMMIT');
 
         }catch(Exception $e){
-            
+
             $db->query('ROLLBACK');
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'There was an error copying the hall structure and/or assignments. The term was created, but nothing was copied.');
             $errorCmd->redirect();
