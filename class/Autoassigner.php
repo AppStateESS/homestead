@@ -58,7 +58,10 @@ class Autoassigner {
         echo "Pairs: " . count($this->pairs) . "\n";
 
         // Randomize the array of pairs
-        shuffle($this->pairs);
+        //shuffle($this->pairs);
+
+        // Sort the array of pairs by application date (use the earliest of the two application dates)
+        usort($this->pairs, array("Autoassigner", "pairSort"));
 
         $fp = fopen('/tmp/WTFISGOINGON', 'w');
 
@@ -101,6 +104,11 @@ class Autoassigner {
 
             }
         }
+    }
+
+    private static function pairSort($a, $b)
+    {
+        return ($a->getEarliestAppTimestamp() < $b->getEarliestAppTimestamp()) ? -1 : 1;
     }
 }
 
