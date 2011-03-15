@@ -29,9 +29,15 @@ abstract class StudentDataProvider {
             return self::$instance;
         }
 
+        PHPWS_Core::initModClass('hms', 'ApcDataProvider.php');
         PHPWS_Core::initModClass('hms', 'SOAPDataProvider.php');
         PHPWS_Core::initModClass('hms', 'LocalCacheDataProvider.php');
-        self::$instance = new LocalCacheDataProvider(new SOAPDataProvider(), 120);
+
+        if(extension_loaded('apc')){
+            self::$instance = new ApcDataProvider(new LocalCacheDataProvider(new SOAPDataProvider()));
+        }else{
+            self::$instance = new LocalCacheDataProvider(new SOAPDataProvider());
+        }
 
         return self::$instance;
     }
