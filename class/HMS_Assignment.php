@@ -493,6 +493,23 @@ class HMS_Assignment extends HMS_Item
 		# Log in the activity log
 		HMS_Activity_Log::log_activity($username, ACTIVITY_REMOVED, UserStatus::getUsername(), $term . ' ' . $banner_building_code . ' ' . $banner_bed_id . ' ' . $notes);
 
+		# Generate assignment notices for old roommates
+		$assignees = $room->get_assignees(); // get an array of student objects for those assigned to this room
+
+		if(sizeof($assignees) > 1){
+		    foreach($assignees as $roommate){
+		        // Skip this student
+		        if($roommate->getUsername() == $username){
+		            continue;
+		        }
+		        $roommate_assign = HMS_Assignment::getAssignment($roommate->getUsername(), Term::getSelectedTerm());
+		        $roommate_assign->letter_printed = 0;
+		        $roommate_assign->email_sent = 0;
+
+		        $result = $roommate_assign->save();
+		    }
+		}
+
 		# Show a success message
 		return true;
 	}
