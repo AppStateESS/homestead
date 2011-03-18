@@ -591,8 +591,27 @@ class HMS_Roommate
             return E_ROOMMATE_NO_APPLICATION;
         }
 
-        // Students can only request a student of the same type
+        // Students can only request a student of the same "type"
+        // This is based on the application term (because students starting
+        // in the summer will have different types). The students must have
+        // the same application term, unless either student's application
+        // term is a summer session of the same year
+
+        /*
         if($requestor_info->getType() != $requestee_info->getType()){
+            return E_ROOMMATE_TYPE_MISMATCH;
+        }*/
+
+        $aTerm = $requestor_info->getApplicationTerm();
+        $aYear = Term::getTermYear($aTerm);
+        $aSem  = Term::getTermSem($aTerm);
+
+        $bTerm = $requestee_info->getApplicationTerm();
+        $bYear = Term::getTermYear($bTerm);
+        $bSem  = Term::getTermSem($bTerm);
+
+        // There's a mismatch if the terms don't match && (the years match && (a's term is spring || b's term is spring))
+        if($aTerm != $bTerm && ($aYear == $bYear && ($aSem == TERM_SPRING || $bSem == TERM_SPRING))){
             return E_ROOMMATE_TYPE_MISMATCH;
         }
 
