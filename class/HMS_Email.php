@@ -307,7 +307,7 @@ class HMS_Email{
 
         HMS_Email::send_template_message($request->requestor . TO_DOMAIN, 'HMS Roommate Request',
                                          'email/roommate_request_requestor.tpl', $tags);
-        
+
         // Extra tags needed for email sent to requested roommmate
         $expire_date = $request->calc_req_expiration_date();
         $tags['EXPIRATION_DATE'] = date('l, F jS, Y', $expire_date);
@@ -336,8 +336,8 @@ class HMS_Email{
 
         // to the requestee
         HMS_Email::send_template_message($request->requestee . TO_DOMAIN, 'HMS Roommate Confirmed',
-                                         'email/roommate_confirmation_requestee.tpl', $tags);      
-        
+                                         'email/roommate_confirmation_requestee.tpl', $tags);
+
         return TRUE;
     }
 
@@ -373,14 +373,14 @@ class HMS_Email{
 
         $breakerStudent = StudentFactory::getStudentByUsername($breaker, $request->term);
         $breakeeStudent = Studentfactory::getStudentByUsername($breakee, $request->term);
-        
+
         $tags = array();
         $tags['BREAKER'] = $breakerStudent->getFullName();
         $tags['BREAKER_FIRST'] = $breakerStudent->getFirstName();
         $tags['BREAKEE'] = $breakeeStudent->getFullName();
 
         // to the breaker
-        HMS_Email::send_template_message($breaker . TO_DOMAIN, 'HMS Roommate Pairing Broken', 
+        HMS_Email::send_template_message($breaker . TO_DOMAIN, 'HMS Roommate Pairing Broken',
                                          'email/roommate_break_breaker.tpl', $tags);
 
         // to the breakee
@@ -410,7 +410,7 @@ class HMS_Email{
         return TRUE;
     }
 
-    
+
     /*******
      * RLC *
      *******/
