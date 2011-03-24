@@ -1,6 +1,7 @@
 <?php
 
 PHPWS_Core::initModClass('hms', 'StudentMenuTermBlock.php');
+PHPWS_Core::initModClass('hms', 'StudentMenuWithdrawnTermBlock.php');
 PHPWS_Core::initModClass('hms', 'HousingApplication.php');
 
 define('FEATURE_LOCKED_ICON',   '<img class="status-icon" src="images/mod/hms/tango/emblem-readonly.png" alt="Locked"/>');
@@ -20,10 +21,19 @@ class FreshmenMainMenuView extends View {
 	public function show()
 	{
 	    $terms = HousingApplication::getAvailableApplicationTermsForStudent($this->student);
+        $applications = HousingApplication::getAllApplicationsForStudent($this->student);
 
 	    foreach($terms as $t){
-            $termBlock = new StudentMenuTermBlock($this->student, $t['term']);
-            $tpl['TERMBLOCK'][] = array('TERMBLOCK_CONTENT'=>$termBlock->show());
+
+	        # If the student has a withdrawn application,
+	        # then show a message instead of the normal menu block.
+	        if(isset($applications[$t['term']]) && $applications[$t['term']]->isWithdrawn()){
+	            $termBlock = new StudentMenuWithdrawnTermBlock($this->student, $t['term']);
+	        }else{
+	            $termBlock = new StudentMenuTermBlock($this->student, $t['term']);
+	        }
+
+	        $tpl['TERMBLOCK'][] = array('TERMBLOCK_CONTENT'=>$termBlock->show());
         }
 
         Layout::addPageTitle("Main Menu");

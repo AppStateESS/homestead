@@ -410,6 +410,7 @@ class HousingApplication {
      * given student has completed. All parameters are optional.
      * Returns false if the request cannot be compelted for any reason.
      */
+    // TODO depricate this and do it better
     public static function getAllApplications($username = NULL, $banner_id = NULL, $term = NULL){
         PHPWS_Core::initModClass('hms', 'HousingApplicationFactory.php');
 
@@ -436,6 +437,45 @@ class HousingApplication {
         }
 
         return $apps;
+    }
+
+    /**
+     * Returns an array (indexed by term) of HousingApplication objects for the given student.
+     * It does *not* convert these into the child classes/sub-types. You just get
+     * the general HousingApplication type objects.
+     *
+     * @param Student $student
+     * @throws InvalidArgumentException
+     * @throws DatabaseException
+     * @return Array Array of HousingApplication objects for the given user.
+     */
+    public static function getAllApplicationsForStudent(Student $student)
+    {
+        $db = new PHPWS_DB('hms_new_application');
+
+        if(!isset($student) || empty($student) || is_null($student)){
+            throw new InvalidArgumentException('Missing/invalid student.');
+        }
+
+        $db->addWhere('banner_id', $student->getBannerId());
+
+        $result = $db->getObjects('HousingApplication');
+
+        if(PHPWS_Error::logIfError($result)){
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException($result->toString());
+        }
+
+
+        # Re-index the applications using the term as the key
+        $appsByTerm = array();
+        if(isset($result) && !is_null($result)){
+            foreach($result as $app) {
+                $appsByTerm[$app->getTerm()] = $app;
+            }
+        }
+
+        return $appsByTerm;
     }
 
     public static function getAllFreshmenApplications($term){
@@ -608,11 +648,13 @@ class HousingApplication {
     {
         $requiredTerms = self::getRequiredApplicationTermsForStudent($student);
 
+        $existingApplications = self::getAllApplicationsForStudent($student);
+
         $needToApplyFor = array();
 
         foreach($requiredTerms as $term){
             // Check if a housing application exists for this student in this term
-            if(!HousingApplication::checkForApplication($student->getUsername(), $term['term'])){
+            if(!isset($existingApplications[$term['term']])){
                 $needToApplyFor[] = $term['term'];
             }
         }
@@ -770,6 +812,14 @@ class HousingApplication {
 
     public function getWithdrawn(){
         return $this->withdrawn;
+    }
+
+    public function isWithdrawn(){
+        if($this->withdrawn == 1){
+            return true;
+        }else{
+            return false;
+        }
     }
 
     public function setWithdrawn($status){
