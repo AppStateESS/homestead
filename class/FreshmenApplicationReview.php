@@ -17,13 +17,6 @@ class FreshmenApplicationReview extends View {
 
     public function show()
     {
-        // Sanity check to prevent 'continuing' students from completing this form
-        if($this->student->getType() == TYPE_CONTINUING || $this->student->getType() == TYPE_READMIT || $this->student->getApplicationTerm() <= Term::getCurrentTerm()){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Sorry, as a non-freshman student, you cannot complete this application (which is for freshmen only). If you think you have reached this message in error, please contact University Housing using the form below.');
-            $cmd = CommandFactory::getCommand('ShowContactForm');
-            $cmd->redirect();
-        }
-
         $tpl = array();
         $tpl['REVIEW_MSG']      = ''; // set this to show the review message
 
