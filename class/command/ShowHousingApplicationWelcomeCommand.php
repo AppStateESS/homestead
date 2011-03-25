@@ -42,4 +42,4 @@ class ShowHousingApplicationWelcomeCommand extends Command {
 	}
 }
 
-//?>
+?>

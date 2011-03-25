@@ -31,14 +31,6 @@ class ShowFreshmenApplicationReviewCommand extends Command {
 
 	public function execute(CommandContext $context)
 	{
-        $agreedToTerms = $context->get('agreedToTerms');
-
-        // Not on my watch!
-        if(is_null($agreedToTerms)){
-            session_unset($_SESSION);
-            header('Location: index.php');
-        }
-
 		$term = $context->get('term');
 		$student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
 

@@ -395,5 +395,3 @@ class Student {
         $this->phoneNumberList = $list;
     }
 }
-
-//?>
