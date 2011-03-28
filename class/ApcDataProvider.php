@@ -38,12 +38,12 @@ class ApcDataProvider extends StudentDataProvider {
         // Look for a key using the banner id, which should be holding the username
         $key = $id . $term;
 
-        $username = apc_featch($key);
+        $username = apc_fetch($key);
 
         if($username !== FALSE){
             // If that key existed, then look for a key using the username, which should be holding the student object
             $key = $this->makeCacheKey($username, $term);
-            $student = apc_featch($key);
+            $student = apc_fetch($key);
             if($student !== FALSE){
                 return $student;
             }
