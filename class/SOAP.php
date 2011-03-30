@@ -84,56 +84,6 @@ abstract class SOAP {
 	 * Utility Functions *
 	 *********************/
 
-    protected static function checkResponse($resonse)
-    {
-        # Check for a SOAP fault
-        if($response instanceof SoapFault){
-            SOAP::logSoapFault($response, 'getStudentInfo', $username);
-
-			PHPWS_Core::initModClass('hms', 'exception/SOAPException.php');
-			throw new SOAPExcpetion($response->__toString());
-        }
-
-        # Check for a banner error
-		if(is_numeric($response) && $response > 0){
-			SOAP::logSoap('get_student_info', "Banner Error: $response", $username, $term);
-			SOAP::logSoapError('error code: ' . $response, 'get_student_info', $username);
-
-			PHPWS_Core::initModClass('hms', 'exception/BannerException.php');
-			throw new BannerException('Banner error', $response);
-		}
-    }
-
-	/**
-	 * Returns TRUE if an error object is of class 'soap_fault'
-     * @depricated - use CheckResponse() instead
-	 */
-	protected static function isSoapFault($object)
-	{
-		if(is_object($object) && is_a($object, 'soap_fault')){
-			return TRUE;
-		}else{
-			return FALSE;
-		}
-	}
-
-	/**
-	 * Uses the PHPWS_Core log public function to 'manually' log soap errors to soap_error.log.
-	 */
-	protected static function logSoapFault($soap_fault, $function, $extra_info)
-	{
-		$error_msg = $soap_fault->message . 'in public function: ' . $function . " Extra: " . $extra_info;
-		PHPWS_Core::log($error_msg, 'soap_error.log', _('Error'));
-	}
-
-	/**
-	 * Uses the PHPWS_Core log public function to 'manually' log soap erros to soap_error.log.
-	 */
-	protected static function logSoapError($message, $function, $extra)
-	{
-		PHPWS_Core::log('Banner error: ' . $message . ' in public function: ' . $function . ' Extra: ' . $extra, 'soap_error.log', 'Error');
-	}
-
 	/**
 	 * Uses the PHPWS_Core log public function to 'manually' log soap requests
 	 */
