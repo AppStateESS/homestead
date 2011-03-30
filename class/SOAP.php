@@ -14,8 +14,6 @@ abstract class SOAP {
 				PHPWS_Core::initModClass('hms', 'TestSOAP.php');
 				self::$instance = new TestSOAP();
 			}else{
-				//PHPWS_Core::initModClass('hms', 'BannerSOAP.php');
-				//self::$instance = new BannerSOAP();
 				PHPWS_Core::initModClass('hms', 'PhpSOAP.php');
 				self::$instance = new PhpSOAP();
 			}
@@ -39,7 +37,7 @@ abstract class SOAP {
 	 * @throws InvalidArgumentException, SOAPException
 	 */
 	public abstract function getUsername($banner_id);
-	
+
 	/**
 	 * Returns true if the given user name corresponds to a valid student for the given semester. Returns false otherwise.
 	 * @param String $username
