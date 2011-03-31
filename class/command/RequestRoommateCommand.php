@@ -35,7 +35,6 @@ class RequestRoommateCommand extends Command
         $term = $context->get('term');
         $requestee = $context->get('username');
         $requestor = UserStatus::getUsername();
-        $rlcConfirm = $context->get('rlcConfirm');
 
         if(empty($term)) {
             throw new InvalidArgumentException('Term was not specified.');

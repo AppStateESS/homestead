@@ -610,8 +610,9 @@ class HMS_Roommate
         $bYear = Term::getTermYear($bTerm);
         $bSem  = Term::getTermSem($bTerm);
 
-        // There's a mismatch if the terms don't match && (the years match && (a's term is spring || b's term is spring))
-        if($aTerm != $bTerm && ($aYear == $bYear && ($aSem == TERM_SPRING || $bSem == TERM_SPRING))){
+        // There's a mismatch if the year don't match OR (the years match AND (either student started in the Spring))
+        // This allows people with summer application terms to request each other
+        if($aYear != $bYear || ($aYear == $bYear && ($aSem == TERM_SPRING || $bSem == TERM_SPRING))){
             return E_ROOMMATE_TYPE_MISMATCH;
         }
 
