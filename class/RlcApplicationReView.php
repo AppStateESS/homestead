@@ -86,15 +86,17 @@ class RlcApplicationReView extends View {
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
         PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
-        
+
         // Show options depending of status of application.
-        if(!$this->application->denied && !HMS_RLC_Assignment::checkForAssignment($this->student->getUsername(), Term::getSelectedTerm())){
-            // Approve application for the community selected from dropdown
-            $approvalForm = $this->getApprovalForm();
-            $approvalForm->mergeTemplate($tags);
-            $tags = $approvalForm->getTemplate();
-            // Deny application
-            $tags['DENY_APP'] = $this->getDenialLink();
+        if(Current_User::allow('hms', 'approve_rlc_applications')){
+            if(!$this->application->denied && !HMS_RLC_Assignment::checkForAssignment($this->student->getUsername(), Term::getSelectedTerm())){
+                // Approve application for the community selected from dropdown
+                $approvalForm = $this->getApprovalForm();
+                $approvalForm->mergeTemplate($tags);
+                $tags = $approvalForm->getTemplate();
+                // Deny application
+                $tags['DENY_APP'] = $this->getDenialLink();
+            }
         }
 
         Layout::addPageTitle("RLC Application Review");
@@ -114,10 +116,10 @@ class RlcApplicationReView extends View {
         $denyCmd = CommandFactory::getCommand('DenyRlcApplication');
         $denyCmd->setApplicationId($this->application->id);
         $cmd->setOnConfirmCommand($denyCmd);
- 
+
         return $cmd->getLink();
     }
-    
+
     /**
      * Get form for approving application for specific community.
      */
@@ -126,7 +128,7 @@ class RlcApplicationReView extends View {
         $approveForm = new PHPWS_Form('approve_form');
         $approveForm->addSubmit('approve', 'Approve');
         $approveCmd = CommandFactory::getCommand('AssignRlcApplicants');
-        $tpl['RLC_LIST'] = HMS_RLC_Application::generateRLCDropDown(HMS_Learning_Community::getRLCList(), 
+        $tpl['RLC_LIST'] = HMS_RLC_Application::generateRLCDropDown(HMS_Learning_Community::getRLCList(),
                                                                              $this->application->id);
         $approveForm->mergeTemplate($tpl);
 
