@@ -18,7 +18,14 @@ class ShowRlcApplicationPage2ViewCommand extends Command {
 
     public function execute(CommandContext $context){
 
+        $term = $context->get('term');
+
+        if(!isset($term) || is_null($term) || empty($term)){
+            throw new IllegalArgumentException('Missing term.');
+        }
+
         $errorCmd = CommandFactory::getCommand('ShowRlcApplicationPage1View');
+        $errorCmd->setTerm($term);
 
         // Check input from the previous page
         $first = $context->get('rlc_first_choice');

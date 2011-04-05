@@ -13,10 +13,12 @@ class SubmitRlcApplicationCommand extends Command {
 
     public function execute(CommandContext $context){
 
+        $term = $context->get('term');
+
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), Term::getCurrentTerm());
 
         # Check for an existing application and delete it
-        $oldApp = HMS_RLC_Application::getApplicationByUsername($student->getUsername(), $context->get('term'));
+        $oldApp = HMS_RLC_Application::getApplicationByUsername($student->getUsername(), $term);
 
         if($oldApp->id != NULL){
             $result = $oldApp->delete();
@@ -30,8 +32,9 @@ class SubmitRlcApplicationCommand extends Command {
            || ($choice2->id != -1 && !$choice2->allowStudentType($student->getType()))
            || ($choice3->id != -1 && !$choice3->allowStudentType($student->getType()))
         ){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Sorry, you cannot apply for the selected RLC please contact University Housing if you believe this to be in error.');
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Sorry, you cannot apply for the selected RLC. Please contact University Housing if you believe this to be in error.');
             $cmd = CommandFactory::getCommand('ShowRlcApplicationView');
+            $cmd->setTerm($term);
             $cmd->redirect();
         }
 
@@ -53,6 +56,7 @@ class SubmitRlcApplicationCommand extends Command {
         if(PEAR::isError($result)){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Sorry, an error occured while attempting to submit your application.  If this problem persists please contact University Housing.');
             $cmd = CommandFactory::getCommand('ShowRlcApplicationView');
+            $cmd->setTerm($term);
             $cmd->redirect();
         } else {
             PHPWS_Core::initModClass('hms', 'HMS_Email.php');
