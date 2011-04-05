@@ -59,8 +59,15 @@ class SubmitRlcApplicationCommand extends Command {
             $cmd->setTerm($term);
             $cmd->redirect();
         } else {
+            # Log that this happened
+            PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
+            HMS_Activity_Log::log_activity($student->getUsername(), ACTIVITY_SUBMITTED_RLC_APPLICATION, $student->getUsername());
+
+            # Send the notification email
             PHPWS_Core::initModClass('hms', 'HMS_Email.php');
             HMS_Email::send_rlc_application_confirmation($student);
+
+            # Show a success message and redirect
             NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Your application has been submitted');
             $cmd = CommandFactory::getCommand('ShowStudentMenu');
             $cmd->redirect();
