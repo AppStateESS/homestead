@@ -81,7 +81,7 @@ abstract class HMS_Item {
         //$db->setTestMode();
         $result = $db->delete();
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'execption/DatabaseException.php');
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
