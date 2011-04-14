@@ -1381,7 +1381,7 @@ class HMS_Reports{
     {
         $term = Term::getSelectedTerm();
 
-        $output = "Last Name,First Name,Hall,Floor,Room,Banner ID,Cell Phone Number, Email Address\n";
+        $output = "Last Name,First Name,Hall,Floor,Room,Banner ID,Cell Phone Number, Email Address, Class\n";
 
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
 
@@ -1398,11 +1398,11 @@ class HMS_Reports{
             try{
                 $student = StudentFactory::getStudentByUsername($result['asu_username'], Term::getSelectedTerm());
             }catch(Exception $e){
-                $output .="{$result['hall_name']},{$result['floor_number']},{$result['room_number']},ERROR,ERROR,ERROR,{$result['cell_phone']},{$result['asu_username']}@appstate.edu\n";
+                $output .="{$result['hall_name']},{$result['floor_number']},{$result['room_number']},ERROR,ERROR,ERROR,{$result['cell_phone']},{$result['asu_username']}@appstate.edu,ERROR\n";
                 continue;
             }
 
-            $output .= "{$student->getLastName()},{$student->getFirstName()},{$result['hall_name']},{$result['floor_number']},{$result['room_number']},{$student->getBannerId()},{$result['cell_phone']},{$result['asu_username']}@appstate.edu\n";
+            $output .= "{$student->getLastName()},{$student->getFirstName()},{$result['hall_name']},{$result['floor_number']},{$result['room_number']},{$student->getBannerId()},{$result['cell_phone']},{$result['asu_username']}@appstate.edu,{$student->getClass()}\n";
         }
 
         header('Content-Type: application/octet-stream');
