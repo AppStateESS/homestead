@@ -29,7 +29,7 @@ class StudentProfile {
         PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
 
         $studentUsername = $this->student->getUsername();
-        $assignment = HMS_Assignment::getAssignment($studentUsername, $this->term);
+        $assignment = HMS_Assignment::getAssignmentByBannerId($this->student->getBannerId(), $this->term);
 
         $pendingRoommate = HMS_Roommate::get_pending_roommate($studentUsername, $this->term);
         $confirmedRoommate = HMS_Roommate::get_confirmed_roommate($studentUsername, $this->term);

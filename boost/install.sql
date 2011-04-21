@@ -165,6 +165,7 @@ CREATE TABLE hms_bed (
 CREATE TABLE hms_assignment (
     id              integer     NOT NULL,
     term            integer     NOT NULL REFERENCES hms_term(term),
+    banner_id       integer     NOT NULL,
     asu_username    character varying(32) NOT NULL,
     bed_id          integer     NOT NULL REFERENCES hms_bed(id),
     meal_option     smallint default 0,
