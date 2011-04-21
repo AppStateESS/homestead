@@ -1,4 +1,4 @@
-<script type="text/javascript" src="javascript/modules/hms/new_autosuggest/bsn.AutoSuggest_2.1.3.js" charset="utf-8"></script>
+<script type="text/javascript" src="mod/hms/javascript/new_autosuggest/bsn.AutoSuggest_2.1.3.js" charset="utf-8"></script>
 
 <script type="text/javascript">
 

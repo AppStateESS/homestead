@@ -1,4 +1,4 @@
-<script type="text/javascript" src="javascript/modules/hms/hall_expander/expander.js"></script>
+<script type="text/javascript" src="mod/hms/javascript/hall_expander/expander.js"></script>
 <script type="text/javascript">
 var submitHallList = function(e){
     var data = new Array();
