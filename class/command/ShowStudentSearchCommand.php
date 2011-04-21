@@ -42,10 +42,10 @@ class ShowStudentSearchCommand extends Command {
             $form->addText('username');
         }
 
-        javascript('/modules/hms/new_autosuggest', array('ELEMENT' => $form->getId('username')));
+        javascript('modules/hms/new_autosuggest', array('ELEMENT' => $form->getId('username')));
         Layout::addStyle('hms', 'css/autosuggest2.css');
 
-        javascript('/modules/hms/autoFocus', array('ELEMENT' => $form->getId('username')));
+        javascript('modules/hms/autoFocus', array('ELEMENT' => $form->getId('username')));
 
         $form->setExtra('username', 'autocomplete="off" ');
 

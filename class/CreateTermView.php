@@ -12,7 +12,7 @@ class CreateTermView extends View {
         }
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
         javascript('jquery');
-        javascript('/modules/hms/newTermCopyPick');
+        javascript('modules/hms/newTermCopyPick');
 
         $tpl['TITLE'] = 'Add a New Term';
 

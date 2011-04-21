@@ -68,7 +68,7 @@ class ShowRequestRoommateCommand extends Command {
         $form->addButton('cancel', 'Cancel');
         $form->setExtra('cancel', 'onClick="document.location=\'index.php\'"');
 
-        javascript('/modules/hms/autoFocus', array('ELEMENT' => $form->getId('username')));
+        javascript('modules/hms/autoFocus', array('ELEMENT' => $form->getId('username')));
 
         $tpl = $form->getTemplate();
 

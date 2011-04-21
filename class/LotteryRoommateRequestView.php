@@ -91,7 +91,7 @@ class LotteryRoommateRequestView extends View {
 
         $form->addButton('reject', 'Deny Roommate');
 
-        javascript('/modules/hms/buttonAction', array('ID'=>'phpws_form_reject', 'URI'=>$denyCmd->getURI()));
+        javascript('modules/hms/buttonAction', array('ID'=>'phpws_form_reject', 'URI'=>$denyCmd->getURI()));
 
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();

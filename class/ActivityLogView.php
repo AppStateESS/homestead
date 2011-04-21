@@ -42,7 +42,7 @@ class ActivityLogView extends View {
         Layout::addPageTitle("Activity Log");
 
         javascript('jquery_ui');
-        javascript('/modules/hms/note', array('LINK'=>'activity-log-note'));
+        javascript('modules/hms/note', array('LINK'=>'activity-log-note'));
 
 		return PHPWS_Template::Process($tags, 'hms', 'admin/activity_log_box.tpl');
 	}
@@ -83,7 +83,7 @@ class ActivityLogView extends View {
 
         $form->addText('begin', isset($selection['begin']) ? $selection['begin'] : '');
         $form->setClass('begin', 'datepicker');
-        
+
         $form->addText('end', isset($selection['end']) ? $selection['end'] : '');
         $form->setClass('end', 'datepicker');
 
@@ -107,7 +107,7 @@ class ActivityLogView extends View {
 		$tpl['END_LABEL'] = 'Before:';
 
         javascript('jquery');
-        javascript('/modules/hms/activity_log');
+        javascript('modules/hms/activity_log');
 
 		return PHPWS_Template::process($tpl, 'hms', 'admin/activity_log_filters.tpl');
 	}

@@ -24,24 +24,24 @@ class AssignStudentView extends View {
 		}
 
 		javascript('jquery');
-		javascript('/modules/hms/assign_student');
+		javascript('modules/hms/assign_student');
 		Layout::addStyle('hms', 'css/autosuggest2.css');
 
 		$tpl = array();
 		$tpl['TERM'] = Term::getPrintableSelectedTerm();
 
 		$form = new PHPWS_Form();
-		
+
 		$assignCmd = CommandFactory::getCommand('AssignStudent');
 		$assignCmd->initForm($form);
-		
+
 		$form->addText('username');
 		$form->setLabel('username', 'ASU Username: ');
 		if(isset($this->student)){
 			$form->setValue('username', $this->student->getUsername());
 		}
 
-        javascript('/modules/hms/autoFocus', array('ELEMENT' => $form->getId('username')));
+        javascript('modules/hms/autoFocus', array('ELEMENT' => $form->getId('username')));
 
 		$form->addTextarea('note');
 		$form->setLabel('note', 'Note: ');
@@ -62,7 +62,7 @@ class AssignStudentView extends View {
 		}else{
 			$pre_populate = false;
 		}
-			
+
 		$hallList = HMS_Residence_Hall::getHallsWithVacanciesArray(Term::getSelectedTerm());
 
 		$form->addDropBox('residence_hall', $hallList);
@@ -119,7 +119,7 @@ class AssignStudentView extends View {
 		$form->setLabel('meal_plan', 'Meal plan: ');
 
 		$form->addSubmit('submit', 'Assign Student');
-			
+
 		if($pre_populate){
 			$form->addHidden('use_bed', 'true');
 		}else{

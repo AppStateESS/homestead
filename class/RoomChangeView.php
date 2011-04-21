@@ -114,7 +114,7 @@ class RoomChangeView extends View {
 
         $halls = HMS_Residence_Hall::getHallsWithVacanciesArray(Term::getSelectedTerm());
         javascript('jquery');
-        javascript('/modules/hms/assign_student');
+        javascript('modules/hms/assign_student');
 
         $form = new PHPWS_Form();
         $form->addHidden('username', $student->getUsername());

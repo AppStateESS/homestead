@@ -4,7 +4,7 @@ PHPWS_Core::initModClass('hms', 'View.php');
 PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 
 class ContactFormView extends View {
-	
+
 	public function show()
 	{
         $username = UserStatus::getUsername();
@@ -22,7 +22,7 @@ class ContactFormView extends View {
 
         $form->addText('email');
         $form->setLabel('email', 'Email Address');
-        
+
         $form->addText('phone');
         $form->setLabel('phone', 'Phone number');
 
@@ -32,7 +32,7 @@ class ContactFormView extends View {
         $form->addTextArea('comments');
         $form->setLabel('comments', 'Comments and/or what you were trying to do');
 
-        javascript('/modules/hms/autoFocus', array('ELEMENT'=>$form->getId('name')));
+        javascript('modules/hms/autoFocus', array('ELEMENT'=>$form->getId('name')));
         $form->addSubmit('Submit');
 
         $form->mergeTemplate($tpl);

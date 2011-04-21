@@ -30,11 +30,11 @@ class ShowHallNotificationEditView extends View {
         $tpl = array();
 
         $tpl['HEADER'] = 'Email';
-        
+
         $submitCmd = CommandFactory::getCommand('ReviewHallNotificationMessage');
         $form = new PHPWS_Form('email_content');
         $submitCmd->initForm($form);
-        
+
         if(Current_User::allow('hms', 'anonymous_notifications')){
             $form->addCheck('anonymous');
             $form->setMatch('anonymous', $this->anonymous);
@@ -51,12 +51,12 @@ class ShowHallNotificationEditView extends View {
         if(!empty($this->halls)){
             $form->addHidden('hall', $this->halls);
         }
-        
+
 	    if(!empty($this->floors)){
             $form->addHidden('floor', $this->floors);
         }
 
-        javascript('/modules/hms/autoFocus', array('ELEMENT'=>$form->getId('subject')));
+        javascript('modules/hms/autoFocus', array('ELEMENT'=>$form->getId('subject')));
         $form->addSubmit('Submit');
 
         //After you ask "wtf?", check the last parameter on preg_replace (only removes the first two occurances)

@@ -22,7 +22,7 @@ class StudentProfileView extends View {
     {
         javascript('jquery');
         javascript('jquery_ui');
-        javascript('/modules/hms/student_info/');
+        javascript('modules/hms/student_info/');
 
         $tpl = array();
 

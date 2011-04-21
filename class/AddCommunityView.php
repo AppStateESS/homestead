@@ -39,7 +39,7 @@ class AddCommunityView extends View {
         }
 
         $var = array('ELEMENT' => $form->getId('community_name'));
-        javascript('/modules/hms/autoFocus', $var);
+        javascript('modules/hms/autoFocus', $var);
         $form->addSubmit('Save');
 
         $tpl = $form->getTemplate();

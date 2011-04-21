@@ -3,13 +3,13 @@
 PHPWS_Core::initModClass('hms', 'View.php');
 
 class ResidenceHallView extends View {
-	
+
 	private $hall;
-	
+
 	public function __construct(HMS_Residence_Hall $hall){
 		$this->hall = $hall;
 	}
-	
+
 	public function show()
 	{
         if(!UserStatus::isAdmin()){
@@ -20,21 +20,21 @@ class ResidenceHallView extends View {
 		PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
-        javascript('/jquery_ui/');
+        javascript('jquery_ui');
 
         # Setup the title and color of the title bar
         $tpl['TITLE'] = $this->hall->getHallName() . ' - ' . Term::getPrintableSelectedTerm();
-        
+
         $submitCmd = CommandFactory::getCommand('EditResidenceHall');
         $submitCmd->setHallId($this->hall->getId());
-        
+
         $form = new PHPWS_Form;
         $submitCmd->initForm($form);
 
         $form->addHidden('beds_per_room', $this->hall->count_beds_per_room()); // add a hidden field for beds per room
-        
+
         $form->addText('hall_name', $this->hall->hall_name);
-  
+
         $tpl['NUMBER_OF_FLOORS']        = $this->hall->get_number_of_floors();
         $tpl['NUMBER_OF_ROOMS']         = $this->hall->get_number_of_rooms();
         $tpl['NUMBER_OF_BEDS']          = $this->hall->get_number_of_beds();
@@ -46,10 +46,10 @@ class ResidenceHallView extends View {
 
         $form->addText('rooms_for_lottery', $this->hall->rooms_for_lottery);
         $form->setSize('rooms_for_lottery', 3, 3);
-        
+
         $form->addCheckBox('air_conditioned', 1);
         $form->setMatch('air_conditioned', $this->hall->air_conditioned);
-      
+
         $form->addCheckBox('is_online', 1);
         $form->setMatch('is_online', $this->hall->is_online);
 
@@ -107,10 +107,10 @@ class ResidenceHallView extends View {
         $form->addTplTag('ROOM_PLAN_IMG', $manager->get());
 
         $form->addSubmit('submit', _('Save Hall'));
-     
+
         # if the user has permission to view the form but not edit it then
         # disable it
-        if(    Current_User::allow('hms', 'hall_view') 
+        if(    Current_User::allow('hms', 'hall_view')
            && !Current_User::allow('hms', 'hall_attributes')
            && !Current_User::allow('hms', 'hall_structure'))
         {
@@ -121,7 +121,7 @@ class ResidenceHallView extends View {
                 $form->setDisabled($element);
             }
         }
-   
+
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
