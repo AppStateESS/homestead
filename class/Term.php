@@ -88,6 +88,11 @@ class Term
             throw new InvalidConfigurationException('No pdf contract file uploaded for ' . $this->term);
         }
 
+        if(!file_exists($this->pdf_terms)){
+            PHPWS_Core::initModClass('hms', 'exception/InvalidConfigurationException.php');
+            throw new InvalidConfigurationException('The specified pdf contract file uploaded for ' . $this->term . ' does not exist.');
+        }
+
         return $this->pdf_terms;
     }
 
@@ -101,6 +106,11 @@ class Term
         if(is_null($this->txt_terms) || empty($this->txt_terms)){
             PHPWS_Core::initModClass('hms', 'exception/InvalidConfigurationException.php');
             throw new InvalidConfigurationException('No text contract file uploaded for ' . $this->term);
+        }
+
+        if(!file_exists($this->txt_terms)){
+            PHPWS_Core::initModClass('hms', 'exception/InvalidConfigurationException.php');
+            throw new InvalidConfigurationException('The specified text contract file uploaded for ' . $this->term . ' does not exist.');
         }
 
         return $this->txt_terms;
