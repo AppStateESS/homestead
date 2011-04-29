@@ -8,6 +8,8 @@ PHPWS_Core::initModClass('hms', 'HMS_Item.php');
 
 class HMS_Bed extends HMS_Item {
 
+    public $id;
+    public $term;
     public $room_id              = 0;
 	public $bed_letter           = null;
 	public $banner_id            = null;
@@ -453,6 +455,11 @@ class HMS_Bed extends HMS_Item {
 	public function getBannerId()
 	{
 	    return $this->banner_id;
+	}
+
+	public function getTerm()
+	{
+	    return $this->term;
 	}
 
 

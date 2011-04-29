@@ -367,6 +367,11 @@ class HMS_Assignment extends HMS_Item
             throw new AssignmentException('No room nor bed specified.');
         }
 
+        # Double check that the bed is in the same term as we're being requested to assign for
+        if($vacant_bed->getTerm() != $term){
+            throw new AssignmentException('The bed\'s term and the assignment term do not match.');
+        }
+
         # Double check that the resulting bed is empty
         if($vacant_bed->get_number_of_assignees() > 0){
             throw new AssignmentException('The bed is not empty.');
