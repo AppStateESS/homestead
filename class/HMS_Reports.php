@@ -1267,7 +1267,7 @@ class HMS_Reports{
         $content .= "</ul>\n";
 
         $db->resetWhere();
-        $db->addWhere('term', $student);
+        $db->addWhere('term', $term);
         $db->addWhere('gender_need', 1);
         $results = $db->select();
         $count = count($results);
