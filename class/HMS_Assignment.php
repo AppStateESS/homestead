@@ -334,7 +334,7 @@ class HMS_Assignment extends HMS_Item
         if(isset($bed_id)){
             # A bed_id was given, so create that bed object
             $vacant_bed = new HMS_Bed($bed_id);
-            $vacant_bed->term = $term;
+
             if(!$vacant_bed){
                 throw new AssignmentException('Null bed object.');
             }
