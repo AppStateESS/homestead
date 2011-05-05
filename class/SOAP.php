@@ -36,8 +36,8 @@ abstract class SOAP {
      * Main public function for getting student info.
      * Used by the rest of the "get" public functions
      *
-     * @param String $username
-     * @param Integer $term
+     * @param String    $username
+     * @param Integer   $term
      * @return SOAP object
      * @throws InvalidArgumentException, SOAPException
      */
@@ -47,8 +47,8 @@ abstract class SOAP {
     /**
      * Returns the ASU Username for the given banner id
      *
-     * @param Integer $bannerId
-     * @return String Username corresponding to given Banner id.
+     * @param  Integer $bannerId
+     * @return String  Username corresponding to given Banner id.
      * @throws InvalidArgumentException, SOAPException
      */
     public abstract function getUsername($bannerId);
@@ -111,6 +111,7 @@ abstract class SOAP {
      * @param String $username
      * @param Integer $termcode
      * @param String $opt
+     * @return void
      * @throws InvalidArgumentException, SOAPException
      */
     public abstract function getHousMealRegister($username, $termcode, $opt);
@@ -124,6 +125,7 @@ abstract class SOAP {
      *
      * @param String $function The name of the function that's doing the logging.
      * @param String $result A string indicating the result of the function call. Could be anything (usually "success").
+     * @return void
      */
     protected static function logSoap($function, $result)
     {
