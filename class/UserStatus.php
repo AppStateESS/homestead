@@ -15,7 +15,12 @@ define('HMS_USERSTATUS_ADMIN', 'admin');
 class UserStatus
 {
 
-    private final function __construct() { }
+    /**
+     * Singleton constructor
+     */
+    private final function __construct() {
+        // Empty
+    }
 
     public static function isAdmin()
     {
