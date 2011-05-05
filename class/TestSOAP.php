@@ -92,7 +92,7 @@ class TestSOAP extends SOAP{
     /**
      * Returns the ASU Username for the given banner id
      */
-    public function getUsername($banner_id)
+    public function getUsername($bannerId)
     {
         return 'jb67803';
     }
