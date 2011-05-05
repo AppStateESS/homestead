@@ -1,6 +1,13 @@
 <?php
 
-abstract class SOAP {
+/**
+ * SOAP parent class. Defines the basic functions of the SOAP interface and handles some utility functions.
+ *
+ * @author jbooker
+ *
+ */
+abstract class SOAP
+{
 
     protected static $instance;
     protected static $cache;
@@ -8,7 +15,8 @@ abstract class SOAP {
     /**
      * Constructor
      */
-    protected function __construct(){
+    protected function __construct()
+    {
 
     }
 
@@ -19,11 +27,11 @@ abstract class SOAP {
      */
     public static function getInstance()
     {
-        if(empty(self::$instance)){
-            if(SOAP_INFO_TEST_FLAG){
+        if(empty(self::$instance)) {
+            if(SOAP_INFO_TEST_FLAG) {
                 PHPWS_Core::initModClass('hms', 'TestSOAP.php');
                 self::$instance = new TestSOAP();
-            }else{
+            } else {
                 PHPWS_Core::initModClass('hms', 'PhpSOAP.php');
                 self::$instance = new PhpSOAP();
             }
