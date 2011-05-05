@@ -736,103 +736,103 @@ class RoommateProfile{
     {
         $hobbies_matches = array();
 
-        if($profile->get_arts_and_crafts()){
+        if($profile->get_arts_and_crafts()) {
             $hobbies_matches[] = 'arts_and_crafts';
         }
 
-        if($profile->get_books_and_reading()){
+        if($profile->get_books_and_reading()) {
             $hobbies_matches[] = 'books_and_reading';
         }
 
-        if($profile->get_cars()){
+        if($profile->get_cars()) {
             $hobbies_matches[] = 'cars';
         }
 
-        if($profile->get_church_activities()){
+        if($profile->get_church_activities()) {
             $hobbies_matches[] = 'church_activities';
         }
 
-        if($profile->get_collecting()){
+        if($profile->get_collecting()) {
             $hobbies_matches[] = 'collecting';
         }
 
-        if($profile->get_computers_and_technology()){
+        if($profile->get_computers_and_technology()) {
             $hobbies_matches[] = 'computers_and_technology';
         }
 
-        if($profile->get_dancing()){
+        if($profile->get_dancing()) {
             $hobbies_matches[] = 'dancing';
         }
 
-        if($profile->get_fashion()){
+        if($profile->get_fashion()) {
             $hobbies_matches[] = 'fashion';
         }
 
-        if($profile->get_fine_arts()){
+        if($profile->get_fine_arts()) {
             $hobbies_matches[] = 'fine_arts';
         }
 
-        if($profile->get_gardening()){
+        if($profile->get_gardening()) {
             $hobbies_matches[] = 'gardening';
         }
 
-        if($profile->get_games()){
+        if($profile->get_games()) {
             $hobbies_matches[] = 'games';
         }
 
-        if($profile->get_humor()){
+        if($profile->get_humor()) {
             $hobbies_matches[] = 'humor';
         }
 
-        if($profile->get_investing_personal_finance()){
+        if($profile->get_investing_personal_finance()) {
             $hobbies_matches[] = 'investing_personal_finance';
         }
 
-        if($profile->get_movies()){
+        if($profile->get_movies()) {
             $hobbies_matches[] = 'movies';
         }
 
-        if($profile->get_music()){
+        if($profile->get_music()) {
             $hobbies_matches[] = 'music';
         }
 
-        if($profile->get_outdoor_activities()){
+        if($profile->get_outdoor_activities()) {
             $hobbies_matches[] = 'outdoor_activities';
         }
 
-        if($profile->get_pets_and_animals()){
+        if($profile->get_pets_and_animals()) {
             $hobbies_matches[] = 'pets_and_animals';
         }
 
-        if($profile->get_photography()){
+        if($profile->get_photography()) {
             $hobbies_matches[] = 'photography';
         }
 
-        if($profile->get_politics()){
+        if($profile->get_politics()) {
             $hobbies_matches[] = 'politics';
         }
 
-        if($profile->get_sports()){
+        if($profile->get_sports()) {
             $hobbies_matches[] = 'sports';
         }
 
-        if($profile->get_travel()){
+        if($profile->get_travel()) {
             $hobbies_matches[] = 'travel';
         }
 
-        if($profile->get_tv_shows()){
+        if($profile->get_tv_shows()) {
             $hobbies_matches[] = 'tv_shows';
         }
 
-        if($profile->get_volunteering()){
+        if($profile->get_volunteering()) {
             $hobbies_matches[] = 'volunteering';
         }
 
-        if($profile->get_writing()){
+        if($profile->get_writing()) {
             $hobbies_matches[] = 'writing';
         }
 
-        if($profile->get_rotc()){
+        if($profile->get_rotc()) {
             $hobbies_matches[] = 'rotc';
         }
 
@@ -848,99 +848,99 @@ class RoommateProfile{
     {
         $music_matches = array();
 
-        if($profile->get_alternative()){
+        if($profile->get_alternative()) {
             $music_matches[] = 'alternative';
         }
 
-        if($profile->get_ambient()){
+        if($profile->get_ambient()) {
             $music_matches[] = 'ambient';
         }
 
-        if($profile->get_beach()){
+        if($profile->get_beach()) {
             $music_matches[] = 'beach';
         }
 
-        if($profile->get_bluegrass()){
+        if($profile->get_bluegrass()) {
             $music_matches[] = 'bluegrass';
         }
 
-        if($profile->get_blues()){
+        if($profile->get_blues()) {
             $music_matches[] = 'blues';
         }
 
-        if($profile->get_christian()){
+        if($profile->get_christian()) {
             $music_matches[] = 'christian';
         }
 
-        if($profile->get_classical()){
+        if($profile->get_classical()) {
             $music_matches[] = 'classical';
         }
 
-        if($profile->get_classic_rock()){
+        if($profile->get_classic_rock()) {
             $music_matches[] = 'classic_rock';
         }
 
-        if($profile->get_country()){
+        if($profile->get_country()) {
             $music_matches[] = 'country';
         }
 
-        if($profile->get_electronic()){
+        if($profile->get_electronic()) {
             $music_matches[] = 'electronic';
         }
 
-        if($profile->get_folk()){
+        if($profile->get_folk()) {
             $music_matches[] = 'folk';
         }
 
-        if($profile->get_heavy_metal()){
+        if($profile->get_heavy_metal()) {
             $music_matches[] = 'heavy_metal';
         }
 
-        if($profile->get_hip_hop()){
+        if($profile->get_hip_hop()) {
             $music_matches[] = 'hip_hop';
         }
 
-        if($profile->get_house()){
+        if($profile->get_house()) {
             $music_matches[] = 'house';
         }
 
-        if($profile->get_industrial()){
+        if($profile->get_industrial()) {
             $music_matches[] = 'industrial';
         }
 
-        if($profile->get_jazz()){
+        if($profile->get_jazz()) {
             $music_matches[] = 'jazz';
         }
 
-        if($profile->get_popular_music()){
+        if($profile->get_popular_music()) {
             $music_matches[] = 'popular_music';
         }
 
-        if($profile->get_progressive()){
+        if($profile->get_progressive()) {
             $music_matches[] = 'progressive';
         }
 
-        if($profile->get_punk()){
+        if($profile->get_punk()) {
             $music_matches[] = 'punk';
         }
 
-        if($profile->get_r_and_b()){
+        if($profile->get_r_and_b()) {
             $music_matches[] = 'r_and_b';
         }
 
-        if($profile->get_rap()){
+        if($profile->get_rap()) {
             $music_matches[] = 'rap';
         }
 
-        if($profile->get_reggae()){
+        if($profile->get_reggae()) {
             $music_matches[] = 'reggae';
         }
 
-        if($profile->get_rock()){
+        if($profile->get_rock()) {
             $music_matches[] = 'rock';
         }
 
-        if($profile->get_world_music()){
+        if($profile->get_world_music()) {
             $music_matches[] = 'world_music';
         }
 
@@ -951,23 +951,23 @@ class RoommateProfile{
     {
         $study_matches = array();
 
-        if($profile->get_study_early_morning()){
+        if($profile->get_study_early_morning()) {
             $study_matches[] = 'study_early_morning';
         }
 
-        if($profile->get_study_morning_afternoon()){
+        if($profile->get_study_morning_afternoon()) {
             $study_matches[] = 'study_morning_afternoon';
         }
 
-        if($profile->get_study_afternoon_evening()){
+        if($profile->get_study_afternoon_evening()) {
             $study_matches[] = 'study_afternoon_evening';
         }
 
-        if($profile->get_study_evening()){
+        if($profile->get_study_evening()) {
             $study_matches[] = 'study_evening';
         }
 
-        if($profile->get_study_late_night()){
+        if($profile->get_study_late_night()) {
             $study_matches[] = 'study_late_night';
         }
 
@@ -978,64 +978,64 @@ class RoommateProfile{
     {
         $lang_match = array();
 
-        if($profile->get_arabic()){
+        if($profile->get_arabic()) {
             $lang_match[] = 'arabic';
         }
-        if($profile->get_bengali()){
+        if($profile->get_bengali()) {
             $lang_match[] = 'bengali';
         }
-        if($profile->get_chinese()){
+        if($profile->get_chinese()) {
             $lang_match[] = 'chinese';
         }
-        if($profile->get_english()){
+        if($profile->get_english()) {
             $lang_match[] = 'english';
         }
-        if($profile->get_french()){
+        if($profile->get_french()) {
             $lang_match[] = 'french';
         }
-        if($profile->get_german()){
+        if($profile->get_german()) {
             $lang_match[] = 'german';
         }
-        if($profile->get_hindi()){
+        if($profile->get_hindi()) {
             $lang_match[] = 'hindi';
         }
-        if($profile->get_italian()){
+        if($profile->get_italian()) {
             $lang_match[] = 'italian';
         }
-        if($profile->get_japanese()){
+        if($profile->get_japanese()) {
             $lang_match[] = 'japanese';
         }
-        if($profile->get_javanese()){
+        if($profile->get_javanese()) {
             $lang_match[] = 'javanese';
         }
-        if($profile->get_korean()){
+        if($profile->get_korean()) {
             $lang_match[] = 'korean';
         }
-        if($profile->get_malay()){
+        if($profile->get_malay()) {
             $lang_match[] = 'malay';
         }
-        if($profile->get_marathi()){
+        if($profile->get_marathi()) {
             $lang_match[] = 'marathi';
         }
-        if($profile->get_portuguese()){
+        if($profile->get_portuguese()) {
             $lang_match[] = 'portuguese';
         }
-        if($profile->get_punjabi()){
+        if($profile->get_punjabi()) {
             $lang_match[] = 'punjabi';
         }
-        if($profile->get_russian()){
+        if($profile->get_russian()) {
             $lang_match[] = 'russian';
         }
-        if($profile->get_spanish()){
+        if($profile->get_spanish()) {
             $lang_match[] = 'spanish';
         }
-        if($profile->get_tamil()){
+        if($profile->get_tamil()) {
             $lang_match[] = 'tamil';
         }
-        if($profile->get_telugu()){
+        if($profile->get_telugu()) {
             $lang_match[] = 'telugu';
         }
-        if($profile->get_vietnamese()){
+        if($profile->get_vietnamese()) {
             $lang_match[] = 'vietnamese';
         }
 
@@ -1047,143 +1047,177 @@ class RoommateProfile{
      * Accessor / Mutator Methods
      */
 
-    public function setID($id){
+    public function setID($id)
+    {
         $this->id = $id;
     }
 
-    public function getID(){
+    public function getID()
+    {
         return $this->id;
     }
 
-    public function setUsername($name){
+    public function setUsername($name)
+    {
         $this->username = $name;
     }
 
-    public function getUsername(){
+    public function getUsername()
+    {
         return $this->username;
     }
 
-    public function set_date_submitted($date = NULL){
-        if(isset($date)){
+    public function set_date_submitted($date = NULL)
+    {
+        if(isset($date)) {
             $this->date_submitted = $date;
         }else{
             $this->date_submitted = mktime();
         }
     }
 
-    public function get_date_submitted(){
+    public function get_date_submitted()
+    {
         return $this->date_submitted;
     }
 
-    public function setTerm($term){
+    public function setTerm($term)
+    {
         $this->term = $term;
     }
 
-    public function getTerm(){
+    public function getTerm()
+    {
         return $this->term;
     }
 
-    public function set_alternate_email($mail){
+    public function set_alternate_email($mail)
+    {
         $this->alternate_email = $mail;
     }
 
-    public function get_alternate_email(){
+    public function get_alternate_email()
+    {
         return $this->alternate_email;
     }
 
-    public function set_aim_sn($sn){
+    public function set_aim_sn($sn)
+    {
         $this->aim_sn = $sn;
     }
 
-    public function get_aim_sn(){
+    public function get_aim_sn()
+    {
         return $this->aim_sn;
     }
 
-    public function set_yahoo_sn($sn){
+    public function set_yahoo_sn($sn)
+    {
         $this->yahoo_sn = $sn;
     }
 
-    public function get_yahoo_sn(){
+    public function get_yahoo_sn()
+    {
         return $this->yahoo_sn;
     }
 
-    public function set_msn_sn($sn){
+    public function set_msn_sn($sn)
+    {
         $this->msn_sn = $sn;
     }
 
-    public function get_msn_sn(){
+    public function get_msn_sn()
+    {
         return $this->msn_sn;
     }
 
-    public function set_political_view($view){
+    public function set_political_view($view)
+    {
         $this->political_view = $view;
     }
 
-    public function get_political_view(){
+    public function get_political_view()
+    {
         return $this->political_view;
     }
 
-    public function set_major($major){
+    public function set_major($major)
+    {
         $this->major = $major;
     }
 
-    public function get_major(){
+    public function get_major()
+    {
         return $this->major;
     }
 
-    public function set_experience($exp){
+    public function set_experience($exp)
+    {
         $this->experience = $exp;
     }
 
-    public function get_experience(){
+    public function get_experience()
+    {
         return $this->experience;
     }
 
-    public function set_sleep_time($time){
+    public function set_sleep_time($time)
+    {
         $this->sleep_time = $time;
     }
 
-    public function get_sleep_time(){
+    public function get_sleep_time()
+    {
         return $this->sleep_time;
     }
 
-    public function set_wakeup_time($time){
+    public function set_wakeup_time($time)
+    {
         $this->wakeup_time = $time;
     }
 
-    public function get_wakeup_time(){
+    public function get_wakeup_time()
+    {
         return $this->wakeup_time;
     }
 
-    public function set_overnight_guests($guests){
+    public function set_overnight_guests($guests)
+    {
         $this->overnight_guests = $guests;
     }
 
-    public function get_overnight_guests(){
+    public function get_overnight_guests()
+    {
         return $this->overnight_guests;
     }
 
-    public function set_loudness($loudness){
+    public function set_loudness($loudness)
+    {
         $this->loudness = $loudness;
     }
 
-    public function get_loudness(){
+    public function get_loudness()
+    {
         return $this->loudness;
     }
 
-    public function set_cleanliness($clean){
+    public function set_cleanliness($clean)
+    {
         $this->cleanliness = $clean;
     }
 
-    public function get_cleanliness(){
+    public function get_cleanliness()
+    {
         return $this->cleanliness;
     }
 
-    public function set_free_time($time){
+    public function set_free_time($time)
+    {
         $this->free_time = $time;
     }
 
-    public function get_free_time(){
+    public function get_free_time()
+    {
         return $this->free_time;
     }
 
@@ -1191,300 +1225,350 @@ class RoommateProfile{
      * Hobbies check boxes
      */
 
-    public function set_arts_and_crafts($value = 1){
+    public function set_arts_and_crafts($value = 1)
+    {
         $this->arts_and_crafts = $value;
     }
 
-    public function get_arts_and_crafts(){
-        if($this->arts_and_crafts == 1){
+    public function get_arts_and_crafts()
+    {
+        if($this->arts_and_crafts == 1) {
             return TRUE;
         }else{
             return FALSE;
         }
     }
 
-    public function set_books_and_reading($value = 1){
+    public function set_books_and_reading($value = 1)
+    {
         $this->books_and_reading = $value;
     }
 
-    public function get_books_and_reading(){
-        if($this->books_and_reading == 1){
+    public function get_books_and_reading()
+    {
+        if($this->books_and_reading == 1) {
             return TRUE;
         }else{
             return FALSE;
         }
     }
 
-    public function set_cars($value = 1){
+    public function set_cars($value = 1)
+    {
         $this->cars = $value;
     }
 
-    public function get_cars(){
-        if($this->cars == 1){
+    public function get_cars()
+    {
+        if($this->cars == 1) {
             return TRUE;
         }else{
             return FALSE;
         }
     }
 
-    public function set_church_activities($value = 1){
+    public function set_church_activities($value = 1)
+    {
         $this->church_activities = $value;
     }
 
-    public function get_church_activities(){
-        if($this->church_activities == 1){
+    public function get_church_activities()
+    {
+        if($this->church_activities == 1) {
             return TRUE;
         }else{
             return FALSE;
         }
     }
 
-    public function set_collecting($value = 1){
+    public function set_collecting($value = 1)
+    {
         $this->collecting = $value;
     }
 
-    public function get_collecting(){
-        if($this->collecting == 1){
+    public function get_collecting()
+    {
+        if($this->collecting == 1) {
             return TRUE;
         }else{
             return FALSE;
         }
     }
 
-    public function set_computers_and_technology($value = 1){
+    public function set_computers_and_technology($value = 1)
+    {
         $this->computers_and_technology = $value;
     }
 
-    public function get_computers_and_technology(){
-        if($this->computers_and_technology == 1){
+    public function get_computers_and_technology()
+    {
+        if($this->computers_and_technology == 1) {
             return TRUE;
         }else{
             return FALSE;
         }
     }
 
-    public function set_dancing($value = 1){
+    public function set_dancing($value = 1)
+    {
         $this->dancing = $value;
     }
 
-    public function get_dancing(){
-        if($this->dancing == 1){
+    public function get_dancing()
+    {
+        if($this->dancing == 1) {
             return TRUE;
         }else{
             return FALSE;
         }
     }
 
-    public function set_fashion($value = 1){
+    public function set_fashion($value = 1)
+    {
         $this->fashion = $value;
     }
 
-    public function get_fashion(){
-        if($this->fashion == 1){
+    public function get_fashion()
+    {
+        if($this->fashion == 1) {
             return TRUE;
         }else{
             return FALSE;
         }
     }
 
-    public function set_fine_arts($value = 1){
+    public function set_fine_arts($value = 1)
+    {
         $this->fine_arts = $value;
     }
 
-    public function get_fine_arts(){
-        if($this->fine_arts == 1){
+    public function get_fine_arts()
+    {
+        if($this->fine_arts == 1) {
             return TRUE;
         }else{
             return FALSE;
         }
     }
 
-    public function set_gardening($value = 1){
+    public function set_gardening($value = 1)
+    {
         $this->gardening = $value;
     }
 
-    public function get_gardening(){
-        if($this->gardening == 1){
+    public function get_gardening()
+    {
+        if($this->gardening == 1) {
             return TRUE;
         }else{
             return FALSE;
         }
     }
 
-    public function set_games($value = 1){
+    public function set_games($value = 1)
+    {
         $this->games = $value;
     }
 
-    public function get_games(){
-        if($this->games == 1){
+    public function get_games()
+    {
+        if($this->games == 1) {
             return TRUE;
         }else{
             return FALSE;
         }
     }
 
-    public function set_humor($value = 1){
+    public function set_humor($value = 1)
+    {
         $this->humor = $value;
     }
 
-    public function get_humor(){
-        if($this->humor == 1){
+    public function get_humor()
+    {
+        if($this->humor == 1) {
             return TRUE;
         }else{
             return FALSE;
         }
     }
 
-    public function set_investing_personal_finance($value = 1){
+    public function set_investing_personal_finance($value = 1)
+    {
         $this->investing_personal_finance = $value;
     }
 
-    public function get_investing_personal_finance(){
-        if($this->investing_personal_finance == 1){
+    public function get_investing_personal_finance()
+    {
+        if($this->investing_personal_finance == 1) {
             return TRUE;
         }else{
             return FALSE;
         }
     }
 
-    public function set_movies($value = 1){
+    public function set_movies($value = 1)
+    {
         $this->movies = $value;
     }
 
-    public function get_movies(){
-        if($this->movies == 1){
+    public function get_movies()
+    {
+        if($this->movies == 1) {
             return TRUE;
         }else{
             return FALSE;
         }
     }
 
-    public function set_music($value = 1){
+    public function set_music($value = 1)
+    {
         $this->music = $value;
     }
 
-    public function get_music(){
-        if($this->music == 1){
+    public function get_music()
+    {
+        if($this->music == 1) {
             return TRUE;
         }else{
             return FALSE;
         }
     }
 
-    public function set_outdoor_activities($value = 1){
+    public function set_outdoor_activities($value = 1)
+    {
         $this->outdoor_activities = $value;
     }
 
-    public function get_outdoor_activities(){
-        if($this->outdoor_activities == 1){
+    public function get_outdoor_activities()
+    {
+        if($this->outdoor_activities == 1) {
             return TRUE;
         }else{
             return FALSE;
         }
     }
 
-    public function set_pets_and_animals($value = 1){
+    public function set_pets_and_animals($value = 1)
+    {
         $this->pets_and_animals = $value;
     }
 
-    public function get_pets_and_animals(){
-        if($this->pets_and_animals == 1){
+    public function get_pets_and_animals()
+    {
+        if($this->pets_and_animals == 1) {
             return TRUE;
         }else{
             return FALSE;
         }
     }
 
-    public function set_photography($value = 1){
+    public function set_photography($value = 1)
+    {
         $this->photography = $value;
     }
 
-    public function get_photography(){
-        if($this->photography == 1){
+    public function get_photography()
+    {
+        if($this->photography == 1) {
             return TRUE;
         }else{
             return FALSE;
         }
     }
 
-    public function set_politics($value = 1){
+    public function set_politics($value = 1)
+    {
         $this->politics = $value;
     }
 
-    public function get_politics(){
-        if($this->politics == 1){
+    public function get_politics()
+    {
+        if($this->politics == 1) {
             return TRUE;
         }else{
             return FALSE;
         }
     }
 
-    public function set_sports($value = 1){
+    public function set_sports($value = 1)
+    {
         $this->sports = $value;
     }
 
-    public function get_sports(){
-        if($this->sports == 1){
+    public function get_sports()
+    {
+        if($this->sports == 1) {
             return TRUE;
         }else{
             return FALSE;
         }
     }
 
-    public function set_travel($value = 1){
+    public function set_travel($value = 1)
+    {
         $this->travel = $value;
     }
 
-    public function get_travel(){
-        if($this->travel == 1){
+    public function get_travel()
+    {
+        if($this->travel == 1) {
             return TRUE;
         }else{
             return FALSE;
         }
     }
 
-    public function set_tv_shows($value = 1){
+    public function set_tv_shows($value = 1)
+    {
         $this->tv_shows = $value;
     }
 
-    public function get_tv_shows(){
-        if($this->tv_shows == 1){
+    public function get_tv_shows()
+    {
+        if($this->tv_shows == 1) {
             return TRUE;
         }else{
             return FALSE;
         }
     }
 
-    public function set_volunteering($value = 1){
+    public function set_volunteering($value = 1)
+    {
         $this->volunteering = $value;
     }
 
-    public function get_volunteering(){
-        if($this->volunteering == 1){
+    public function get_volunteering()
+    {
+        if($this->volunteering == 1) {
             return TRUE;
         }else{
             return FALSE;
         }
     }
 
-    public function set_writing($value = 1){
+    public function set_writing($value = 1)
+    {
         $this->writing = $value;
     }
 
-    public function get_writing(){
-        if($this->writing == 1){
+    public function get_writing()
+    {
+        if($this->writing == 1) {
             return TRUE;
         }else{
             return FALSE;
         }
     }
 
-    public function set_rotc($value = 1){
+    public function set_rotc($value = 1)
+    {
         $this->rotc = $value;
     }
 
-    public function get_rotc(){
-        if($this->rotc == 1){
+    public function get_rotc()
+    {
+        if($this->rotc == 1) {
             return TRUE;
         }else{
             return FALSE;
@@ -1495,72 +1579,84 @@ class RoommateProfile{
      * Music check boxes
      */
 
-    public function set_alternative($value = 1){
+    public function set_alternative($value = 1)
+    {
         $this->alternative = $value;
     }
 
-    public function get_alternative(){
-        if($this->alternative == 1){
+    public function get_alternative()
+    {
+        if($this->alternative == 1) {
             return TRUE;
         }else{
             return FALSE;
         }
     }
 
-    public function set_ambient($value = 1){
+    public function set_ambient($value = 1)
+    {
         $this->ambient = $value;
     }
 
-    public function get_ambient(){
-        if($this->ambient == 1){
+    public function get_ambient()
+    {
+        if($this->ambient == 1) {
             return TRUE;
         }else{
             return FALSE;
         }
     }
 
-    public function set_beach($value = 1){
+    public function set_beach($value = 1)
+    {
         $this->beach = $value;
     }
 
-    public function get_beach(){
-        if($this->beach == 1){
+    public function get_beach()
+    {
+        if($this->beach == 1) {
             return TRUE;
         }else{
             return FALSE;
         }
     }
 
-    public function set_bluegrass($value = 1){
+    public function set_bluegrass($value = 1)
+    {
         $this->bluegrass = $value;
     }
 
-    public function get_bluegrass(){
-        if($this->bluegrass == 1){
+    public function get_bluegrass()
+    {
+        if($this->bluegrass == 1) {
             return TRUE;
         }else{
             return FALSE;
         }
     }
 
-    public function set_blues($value = 1){
+    public function set_blues($value = 1)
+    {
         $this->blues = $value;
     }
 
-    public function get_blues(){
-        if($this->blues == 1){
+    public function get_blues()
+    {
+        if($this->blues == 1) {
             return TRUE;
         }else{
             return FALSE;
         }
     }
 
-    public function set_christian($value = 1){
+    public function set_christian($value = 1)
+    {
         $this->christian = $value;
     }
 
-    public function get_christian(){
-        if($this->christian == 1){
+    public function get_christian()
+    {
+        if($this->christian == 1) {
             return TRUE;
         }
         else{
@@ -1568,216 +1664,252 @@ class RoommateProfile{
         }
     }
 
-    public function set_classical($value = 1){
+    public function set_classical($value = 1)
+    {
         $this->classical = $value;
     }
 
-    public function get_classical(){
-        if($this->classical == 1){
+    public function get_classical()
+    {
+        if($this->classical == 1) {
             return TRUE;
         }else{
             return FALSE;
         }
     }
 
-    public function set_classic_rock($value = 1){
+    public function set_classic_rock($value = 1)
+    {
         $this->classic_rock = $value;
     }
 
-    public function get_classic_rock(){
-        if($this->classic_rock == 1){
+    public function get_classic_rock()
+    {
+        if($this->classic_rock == 1) {
             return TRUE;
         }else{
             return FALSE;
         }
     }
 
-    public function set_country($value = 1){
+    public function set_country($value = 1)
+    {
         $this->country = $value;
     }
 
-    public function get_country(){
-        if($this->country == 1){
+    public function get_country()
+    {
+        if($this->country == 1) {
             return TRUE;
         }else{
             return FALSE;
         }
     }
 
-    public function set_electronic($value = 1){
+    public function set_electronic($value = 1)
+    {
         $this->electronic = $value;
     }
 
-    public function get_electronic(){
-        if($this->electronic == 1){
+    public function get_electronic()
+    {
+        if($this->electronic == 1) {
             return TRUE;
         }else{
             return FALSE;
         }
     }
 
-    public function set_folk($value = 1){
+    public function set_folk($value = 1)
+    {
         $this->folk = $value;
     }
 
-    public function get_folk(){
-        if($this->folk == 1){
+    public function get_folk()
+    {
+        if($this->folk == 1) {
             return TRUE;
         }else{
             return FALSE;
         }
     }
 
-    public function set_heavy_metal($value = 1){
+    public function set_heavy_metal($value = 1)
+    {
         $this->heavy_metal = $value;
     }
 
-    public function get_heavy_metal(){
-        if($this->heavy_metal == 1){
+    public function get_heavy_metal()
+    {
+        if($this->heavy_metal == 1) {
             return TRUE;
         }else{
             return FALSE;
         }
     }
 
-    public function set_hip_hop($value = 1){
+    public function set_hip_hop($value = 1)
+    {
         $this->hip_hop = $value;
     }
 
-    public function get_hip_hop(){
-        if($this->hip_hop == 1){
+    public function get_hip_hop()
+    {
+        if($this->hip_hop == 1) {
             return TRUE;
         }else{
             return FALSE;
         }
     }
 
-    public function set_house($value = 1){
+    public function set_house($value = 1)
+    {
         $this->house = $value;
     }
 
-    public function get_house(){
-        if($this->house == 1){
+    public function get_house()
+    {
+        if($this->house == 1) {
             return TRUE;
         }else{
             return FALSE;
         }
     }
 
-    public function set_industrial($value = 1){
+    public function set_industrial($value = 1)
+    {
         $this->industrial = $value;
     }
 
-    public function get_industrial(){
-        if($this->industrial == 1){
+    public function get_industrial()
+    {
+        if($this->industrial == 1) {
             return TRUE;
         }else{
             return FALSE;
         }
     }
 
-    public function set_jazz($value = 1){
+    public function set_jazz($value = 1)
+    {
         $this->jazz = $value;
     }
 
-    public function get_jazz(){
-        if($this->jazz == 1){
+    public function get_jazz()
+    {
+        if($this->jazz == 1) {
             return TRUE;
         }else{
             return FALSE;
         }
     }
 
-    public function set_popular_music($value = 1){
+    public function set_popular_music($value = 1)
+    {
         $this->popular_music = $value;
     }
 
-    public function get_popular_music(){
-        if($this->popular_music == 1){
+    public function get_popular_music()
+    {
+        if($this->popular_music == 1) {
             return TRUE;
         }else{
             return FALSE;
         }
     }
 
-    public function set_progressive($value = 1){
+    public function set_progressive($value = 1)
+    {
         $this->progressive = $value;
     }
 
-    public function get_progressive(){
-        if($this->progressive == 1){
+    public function get_progressive()
+    {
+        if($this->progressive == 1) {
             return TRUE;
         }else{
             return FALSE;
         }
     }
 
-    public function set_punk($value = 1){
+    public function set_punk($value = 1)
+    {
         $this->punk = $value;
     }
 
-    public function get_punk(){
-        if($this->punk == 1){
+    public function get_punk()
+    {
+        if($this->punk == 1) {
             return TRUE;
         }else{
             return FALSE;
         }
     }
 
-    public function set_r_and_b($value = 1){
+    public function set_r_and_b($value = 1)
+    {
         $this->r_and_b = $value;
     }
 
-    public function get_r_and_b(){
-        if($this->r_and_b == 1){
+    public function get_r_and_b()
+    {
+        if($this->r_and_b == 1) {
             return TRUE;
         }else{
             return FALSE;
         }
     }
 
-    public function set_rap($value = 1){
+    public function set_rap($value = 1)
+    {
         $this->rap = $value;
     }
 
-    public function get_rap(){
-        if($this->rap == 1){
+    public function get_rap()
+    {
+        if($this->rap == 1) {
             return TRUE;
         }else{
             return FALSE;
         }
     }
 
-    public function set_reggae($value = 1){
+    public function set_reggae($value = 1)
+    {
         $this->reggae = $value;
     }
 
-    public function get_reggae(){
-        if($this->reggae == 1){
+    public function get_reggae()
+    {
+        if($this->reggae == 1) {
             return TRUE;
         }else{
             return FALSE;
         }
     }
 
-    public function set_rock($value = 1){
+    public function set_rock($value = 1)
+    {
         $this->rock = $value;
     }
 
-    public function get_rock(){
-        if($this->rock == 1){
+    public function get_rock()
+    {
+        if($this->rock == 1) {
             return TRUE;
         }else{
             return FALSE;
         }
     }
 
-    public function set_world_music($value = 1){
+    public function set_world_music($value = 1)
+    {
         $this->world_music = $value;
     }
 
-    public function get_world_music(){
-        if($this->world_music == 1){
+    public function get_world_music()
+    {
+        if($this->world_music == 1) {
             return TRUE;
         }else{
             return FALSE;
@@ -1787,60 +1919,70 @@ class RoommateProfile{
     /**
      * Study times check boxes
      */
-    public function set_study_early_morning($value = 1){
+    public function set_study_early_morning($value = 1)
+    {
         $this->study_early_morning = $value;
     }
 
-    public function get_study_early_morning(){
-        if($this->study_early_morning == 1){
+    public function get_study_early_morning()
+    {
+        if($this->study_early_morning == 1) {
             return TRUE;
         }else{
             return FALSE;
         }
     }
 
-    public function set_study_morning_afternoon($value = 1){
+    public function set_study_morning_afternoon($value = 1)
+    {
         $this->study_morning_afternoon = $value;
     }
 
-    public function get_study_morning_afternoon(){
-        if($this->study_morning_afternoon == 1){
+    public function get_study_morning_afternoon()
+    {
+        if($this->study_morning_afternoon == 1) {
             return TRUE;
         }else{
             return FALSE;
         }
     }
 
-    public function set_study_afternoon_evening($value = 1){
+    public function set_study_afternoon_evening($value = 1)
+    {
         $this->study_afternoon_evening = $value;
     }
 
-    public function get_study_afternoon_evening(){
-        if($this->study_afternoon_evening == 1){
+    public function get_study_afternoon_evening()
+    {
+        if($this->study_afternoon_evening == 1) {
             return TRUE;
         }else{
             return FALSE;
         }
     }
 
-    public function set_study_evening($value = 1){
+    public function set_study_evening($value = 1)
+    {
         $this->study_evening = $value;
     }
 
-    public function get_study_evening(){
-        if($this->study_evening == 1){
+    public function get_study_evening()
+    {
+        if($this->study_evening == 1) {
             return TRUE;
         }else{
             return FALSE;
         }
     }
 
-    public function set_study_late_night($value = 1){
+    public function set_study_late_night($value = 1)
+    {
         $this->study_late_night = $value;
     }
 
-    public function get_study_late_night(){
-        if($this->study_late_night == 1){
+    public function get_study_late_night()
+    {
+        if($this->study_late_night == 1) {
             return TRUE;
         }else{
             return FALSE;
@@ -1848,126 +1990,166 @@ class RoommateProfile{
     }
 
     # Spoken Languages
-    public function get_arabic(){
+    public function get_arabic()
+    {
         return $this->arabic == 1 ? TRUE : FALSE;
     }
-    public function get_bengali(){
+    public function get_bengali()
+    {
         return $this->bengali == 1 ? TRUE : FALSE;
     }
-    public function get_chinese(){
+    public function get_chinese()
+    {
         return $this->chinese == 1 ? TRUE : FALSE;
     }
-    public function get_english(){
+    public function get_english()
+    {
         return $this->english == 1 ? TRUE : FALSE;
     }
-    public function get_french(){
+    public function get_french()
+    {
         return $this->french == 1 ? TRUE : FALSE;
     }
-    public function get_german(){
+    public function get_german()
+    {
         return $this->german == 1 ? TRUE : FALSE;
     }
-    public function get_hindi(){
+    public function get_hindi()
+    {
         return $this->hindi == 1 ? TRUE : FALSE;
     }
-    public function get_italian(){
+    public function get_italian()
+    {
         return $this->italian == 1 ? TRUE : FALSE;
     }
-    public function get_japanese(){
+    public function get_japanese()
+    {
         return $this->japanese == 1 ? TRUE : FALSE;
     }
-    public function get_javanese(){
+    public function get_javanese()
+    {
         return $this->javanese == 1 ? TRUE : FALSE;
     }
-    public function get_korean(){
+    public function get_korean()
+    {
         return $this->korean == 1 ? TRUE : FALSE;
     }
-    public function get_malay(){
+    public function get_malay()
+    {
         return $this->malay == 1 ? TRUE : FALSE;
     }
-    public function get_marathi(){
+    public function get_marathi()
+    {
         return $this->marathi == 1 ? TRUE : FALSE;
     }
-    public function get_portuguese(){
+    public function get_portuguese()
+    {
         return $this->portuguese == 1 ? TRUE : FALSE;
     }
-    public function get_punjabi(){
+    public function get_punjabi()
+    {
         return $this->punjabi == 1 ? TRUE : FALSE;
     }
-    public function get_russian(){
+    public function get_russian()
+    {
         return $this->russian == 1 ? TRUE : FALSE;
     }
-    public function get_spanish(){
+    public function get_spanish()
+    {
         return $this->spanish == 1 ? TRUE : FALSE;
     }
-    public function get_tamil(){
+    public function get_tamil()
+    {
         return $this->tamil == 1 ? TRUE : FALSE;
     }
-    public function get_telugu(){
+    public function get_telugu()
+    {
         return $this->telugu == 1 ? TRUE : FALSE;
     }
-    public function get_vietnamese(){
+    public function get_vietnamese()
+    {
         return $this->vietnamese == 1 ? TRUE : FALSE;
     }
 
-    public function set_arabic($value=1){
+    public function set_arabic($value=1)
+    {
         $this->arabic = $value;
     }
-    public function set_bengali($value=1){
+    public function set_bengali($value=1)
+    {
         $this->bengali = $value;
     }
-    public function set_chinese($value=1){
+    public function set_chinese($value=1)
+    {
         $this->chinese = $value;
     }
-    public function set_english($value=1){
+    public function set_english($value=1)
+    {
         $this->english = $value;
     }
-    public function set_french($value=1){
+    public function set_french($value=1)
+    {
         $this->french = $value;
     }
-    public function set_german($value=1){
+    public function set_german($value=1)
+    {
         $this->german = $value;
     }
-    public function set_hindi($value=1){
+    public function set_hindi($value=1)
+    {
         $this->hindi = $value;
     }
-    public function set_italian($value=1){
+    public function set_italian($value=1)
+    {
         $this->italian = $value;
     }
-    public function set_japanese($value=1){
+    public function set_japanese($value=1)
+    {
         $this->japanese = $value;
     }
-    public function set_javanese($value=1){
+    public function set_javanese($value=1)
+    {
         $this->javanese = $value;
     }
-    public function set_korean($value=1){
+    public function set_korean($value=1)
+    {
         $this->korean = $value;
     }
-    public function set_malay($value=1){
+    public function set_malay($value=1)
+    {
         $this->malay = $value;
     }
-    public function set_marathi($value=1){
+    public function set_marathi($value=1)
+    {
         $this->marathi = $value;
     }
-    public function set_portuguese($value=1){
+    public function set_portuguese($value=1)
+    {
         $this->portuguese = $value;
     }
-    public function set_punjabi($value=1){
-         $this->punjabi = $value;
+    public function set_punjabi($value=1)
+    {
+        $this->punjabi = $value;
     }
-    public function set_russian($value=1){
-         $this->russian = $value;
+    public function set_russian($value=1)
+    {
+        $this->russian = $value;
     }
-    public function set_spanish($value=1){
-         $this->spanish = $value;
+    public function set_spanish($value=1)
+    {
+        $this->spanish = $value;
     }
-    public function set_tamil($value=1){
-         $this->tamil = $value;
+    public function set_tamil($value=1)
+    {
+        $this->tamil = $value;
     }
-    public function set_telugu($value=1){
-         $this->telugu = $value;
+    public function set_telugu($value=1)
+    {
+        $this->telugu = $value;
     }
-    public function set_vietnamese($value=1){
-         $this->vietnamese = $value;
+    public function set_vietnamese($value=1)
+    {
+        $this->vietnamese = $value;
     }
 };
 ?>
