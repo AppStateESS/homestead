@@ -14,6 +14,7 @@ abstract class SOAP {
 
     /**
      * Get an instance of the singleton.
+     *
      * @return SOAP - Instance of the SOAP class.
      */
     public static function getInstance()
@@ -34,6 +35,7 @@ abstract class SOAP {
     /**
      * Main public function for getting student info.
      * Used by the rest of the "get" public functions
+     *
      * @param String $username
      * @param Integer $term
      * @return SOAP object
@@ -44,6 +46,7 @@ abstract class SOAP {
 
     /**
      * Returns the ASU Username for the given banner id
+     *
      * @param Integer $bannerId
      * @return String Username corresponding to given Banner id.
      * @throws InvalidArgumentException, SOAPException
@@ -52,6 +55,7 @@ abstract class SOAP {
 
     /**
      * Returns true if the given user name corresponds to a valid student for the given semester. Returns false otherwise.
+     *
      * @param String $username
      * @param Integer $term
      * @return bool
@@ -61,6 +65,7 @@ abstract class SOAP {
     /**
      * Report that a housing application has been received.
      * Makes First Connections stop bugging the students.
+     *
      * @param String $username
      * @param Integer $term
      * @return boolean True if successful
@@ -70,6 +75,7 @@ abstract class SOAP {
 
     /**
      * Sends a room assignment to banner. Will cause students to be billed, etc.
+     *
      * @param String $username
      * @param Integer $term
      * @param String $building_code Banner building code
@@ -84,6 +90,7 @@ abstract class SOAP {
     /**
      * Remove the deletion of a room assignment to Banner.
      * Will cause students to be credited, etc.
+     *
      * @param String $username
      * @param Integer $term
      * @param String $building Banner building code
@@ -100,10 +107,11 @@ abstract class SOAP {
      *  'HousingApp'
      *  'RoomAssign'
      *  'MealAssign'
-     *  @param String $username
-     *  @param Integer $termcode
-     *  @param String $opt
-     *  @throws InvalidArgumentException, SOAPException
+     *
+     * @param String $username
+     * @param Integer $termcode
+     * @param String $opt
+     * @throws InvalidArgumentException, SOAPException
      */
     public abstract function getHousMealRegister($username, $termcode, $opt);
 
@@ -113,6 +121,7 @@ abstract class SOAP {
 
     /**
      * Uses the PHPWS_Core log public function to 'manually' log soap requests
+     *
      * @param String $function The name of the function that's doing the logging.
      * @param String $result A string indicating the result of the function call. Could be anything (usually "success").
      */
