@@ -77,7 +77,7 @@ class HMS_Room extends HMS_Item
         $db = new PHPWS_DB('hms_room');
         $result = $db->saveObject($this);
 
-        if (!$result || PHPWS_Error::logIfError($result)) {
+        if(!$result || PHPWS_Error::logIfError($result)) {
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
@@ -94,7 +94,7 @@ class HMS_Room extends HMS_Item
         $db->addWhere('id', $this->id);
         $result = $db->delete();
 
-        if (!$result || PHPWS_Error::logIfError($result)) {
+        if(!$result || PHPWS_Error::logIfError($result)) {
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
@@ -113,7 +113,7 @@ class HMS_Room extends HMS_Item
      */
     public function copy($to_term, $floor_id, $suite_id=NULL, $assignments = FALSE)
     {
-        if (!$this->id) {
+        if(!$this->id) {
             return false;
         }
 
@@ -154,7 +154,7 @@ class HMS_Room extends HMS_Item
         // Save successful, create new beds
 
         // Load all beds for this room
-        if (empty($this->_beds)) {
+        if(empty($this->_beds)) {
             try{
                 $this->loadBeds();
             }catch(Exception $e){
@@ -171,7 +171,7 @@ class HMS_Room extends HMS_Item
          *
          **/
 
-        if (!empty($this->_beds)) {
+        if(!empty($this->_beds)) {
             foreach ($this->_beds as $bed) {
                 try{
                     $bed->copy($to_term, $new_room->id, $assignments);
@@ -201,7 +201,7 @@ class HMS_Room extends HMS_Item
     {
         PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
         $result = new HMS_Floor($this->floor_id);
-        if (PHPWS_Error::logIfError($result)) {
+        if(PHPWS_Error::logIfError($result)) {
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
@@ -223,7 +223,7 @@ class HMS_Room extends HMS_Item
 
         $db->loadClass('hms', 'HMS_Bed.php');
         $result = $db->getObjects('HMS_Bed');
-        if (PHPWS_Error::logIfError($result)) {
+        if(PHPWS_Error::logIfError($result)) {
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         } else {
@@ -306,13 +306,13 @@ class HMS_Room extends HMS_Item
                 return false;
             }
 
-            if (!$this->loadFloor()) {
+            if(!$this->loadFloor()) {
                 // an error occurred loading the floor, check logs
                 return false;
             }
 
             // If the floor is not coed and the gt is not the target, return false
-            if ($this->_floor->gender_type != COED && $this->_floor->gender_type != $target_gender) {
+            if($this->_floor->gender_type != COED && $this->_floor->gender_type != $target_gender) {
                 return false;
             }
 
@@ -380,7 +380,7 @@ class HMS_Room extends HMS_Item
      */
     public function get_beds()
     {
-        if (!$this->loadBeds()) {
+        if(!$this->loadBeds()) {
             return false;
         }
 
@@ -412,7 +412,7 @@ class HMS_Room extends HMS_Item
      */
     public function get_assignees()
     {
-        if (!$this->loadBeds()) {
+        if(!$this->loadBeds()) {
             return false;
         }
 

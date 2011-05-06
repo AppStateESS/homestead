@@ -37,7 +37,7 @@ class HMS_Bed extends HMS_Item {
 
     public function copy($to_term, $room_id, $assignments)
     {
-        if (!$this->id) {
+        if(!$this->id) {
             return false;
         }
 
@@ -53,7 +53,7 @@ class HMS_Bed extends HMS_Item {
             throw $e;
         }
         // Copy assignment
-        if ($assignments) {
+        if($assignments) {
             //echo "loading assignments for this bed<br>";
             PHPWS_Core::initModClass('hms', 'HousingApplication.php');
             PHPWS_Core::initModClass('hms', 'Term.php');
@@ -66,7 +66,7 @@ class HMS_Bed extends HMS_Item {
                 throw $e;
             }
 
-            if (isset($this->_curr_assignment)) {
+            if(isset($this->_curr_assignment)) {
                 try{
                     try{
                         $student = StudentFactory::getStudentByUsername($this->_curr_assignment->asu_username,
@@ -184,7 +184,7 @@ class HMS_Bed extends HMS_Item {
 
         $db = new PHPWS_DB('hms_bed');
         $result = $db->saveObject($this);
-        if (!$result || PHPWS_Error::logIfError($result)) {
+        if(!$result || PHPWS_Error::logIfError($result)) {
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
@@ -202,7 +202,7 @@ class HMS_Bed extends HMS_Item {
         $db->addWhere('id', $this->id);
         $result = $db->delete();
 
-        if (!$result || PHPWS_Error::logIfError($result)) {
+        if(!$result || PHPWS_Error::logIfError($result)) {
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }

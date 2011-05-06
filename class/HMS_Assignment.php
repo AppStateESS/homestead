@@ -57,7 +57,7 @@ class HMS_Assignment extends HMS_Item
         $db = new PHPWS_DB('hms_assignment');
         $this->stamp();
         $result = $db->saveObject($this);
-        if (!$result || PHPWS_Error::logIfError($result)) {
+        if(!$result || PHPWS_Error::logIfError($result)) {
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
@@ -255,7 +255,7 @@ class HMS_Assignment extends HMS_Item
 
         $result = $db->select('one');
 
-        if (PHPWS_Error::logIfError($result)) {
+        if(PHPWS_Error::logIfError($result)) {
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
@@ -277,7 +277,7 @@ class HMS_Assignment extends HMS_Item
 
         $result = $db->loadObject($assignment);
 
-        if (PHPWS_Error::logIfError($result)) {
+        if(PHPWS_Error::logIfError($result)) {
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
@@ -401,7 +401,7 @@ class HMS_Assignment extends HMS_Item
 
         # Create the hall object
         $hall = $floor->get_parent();
-        if (!$hall) {
+        if(!$hall) {
             throw new AssignmentException('Null hall object.');;
         }
 

@@ -60,7 +60,7 @@ class HMS_Floor extends HMS_Item
 
         $result = $db->saveObject($this);
 
-        if (!$result || PHPWS_Error::logIfError($result)) {
+        if(!$result || PHPWS_Error::logIfError($result)) {
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
@@ -77,7 +77,7 @@ class HMS_Floor extends HMS_Item
      */
     public function copy($to_term, $hall_id, $assignments = FALSE, $roles = FALSE)
     {
-        if (!$this->id) {
+        if(!$this->id) {
             return false;
         }
 
@@ -166,7 +166,7 @@ class HMS_Floor extends HMS_Item
     {
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
         $result = new HMS_Residence_Hall($this->residence_hall_id);
-        if (PHPWS_Error::logIfError($result)) {
+        if(PHPWS_Error::logIfError($result)) {
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
@@ -188,7 +188,7 @@ class HMS_Floor extends HMS_Item
         $db->loadClass('hms', 'HMS_Room.php');
         $result = $db->getObjects('HMS_Room');
         //test($result);
-        if (PHPWS_Error::logIfError($result)) {
+        if(PHPWS_Error::logIfError($result)) {
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         } else {
@@ -421,7 +421,7 @@ class HMS_Floor extends HMS_Item
      */
     public function get_rooms()
     {
-        if (!$this->loadRooms()) {
+        if(!$this->loadRooms()) {
             return false;
         }
 
@@ -455,7 +455,7 @@ class HMS_Floor extends HMS_Item
     {
         $beds = array();
 
-        if (!$this->loadRooms()){
+        if(!$this->loadRooms()){
             return false;
         }
 
@@ -471,7 +471,7 @@ class HMS_Floor extends HMS_Item
      */
     public function get_assignees()
     {
-        if (!$this->loadRooms()) {
+        if(!$this->loadRooms()) {
             return false;
         }
 

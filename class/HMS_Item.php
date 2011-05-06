@@ -15,7 +15,7 @@ abstract class HMS_Item {
         if(!is_null($id) && is_numeric($id)){
             $this->id = $id;
 
-            if (!$this->load()) {
+            if(!$this->load()) {
                 $this->id = 0;
             }
         } else {
@@ -66,7 +66,7 @@ abstract class HMS_Item {
     {
         $now = mktime();
 
-        if (!$this->id) {
+        if(!$this->id) {
             $this->added_on = & $now;
             $this->added_by = Current_User::getId();
         }

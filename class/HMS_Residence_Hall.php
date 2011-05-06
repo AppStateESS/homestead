@@ -141,7 +141,7 @@ class HMS_Residence_Hall extends HMS_Item
         }
 
         // Floors exist, start making copies
-        if (!empty($this->_floors)) {
+        if(!empty($this->_floors)) {
             foreach ($this->_floors as $floor) {
                 try{
                     $floor->copy($to_term, $new_hall->id, $assignments, $roles);
@@ -159,7 +159,7 @@ class HMS_Residence_Hall extends HMS_Item
      */
     public function loadFloors()
     {
-        if (!$this->id) {
+        if(!$this->id) {
             $this->_floor = null;
             return null;
         }
@@ -184,7 +184,7 @@ class HMS_Residence_Hall extends HMS_Item
      */
     public function create_child_objects($num_floors, $rooms_per_floor, $beds_per_room)
     {
-        if (!$this->id) {
+        if(!$this->id) {
             return false;
         }
 
@@ -431,7 +431,7 @@ class HMS_Residence_Hall extends HMS_Item
      */
     public function &get_rooms()
     {
-        if (!$this->loadFloors()) {
+        if(!$this->loadFloors()) {
             return false;
         }
 
@@ -449,7 +449,7 @@ class HMS_Residence_Hall extends HMS_Item
      */
     public function &get_beds()
     {
-        if (!$this->loadFloors()) {
+        if(!$this->loadFloors()) {
             return false;
         }
 
@@ -672,7 +672,7 @@ class HMS_Residence_Hall extends HMS_Item
         $tags['BANNER_BUILDING_CODE'] = $this->banner_building_code;
 
         $is_online = $this->get_is_online();
-        if ($is_online == ONLINE) {
+        if($is_online == ONLINE) {
             $tags['IS_ONLINE'] = ONLINE_DESC;
         }else if($is_online == OFFLINE){
             $tags['IS_ONLINE'] = OFFLINE_DESC;
