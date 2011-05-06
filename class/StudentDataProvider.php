@@ -51,6 +51,16 @@ abstract class StudentDataProvider {
      */
     abstract public function clearCache();
 
+    public function clearAllCache()
+    {
+        $instance = self::getInstance();
+
+        # Loop over all the configured data providers, clearing the cache at each level
+        while(!is_null($instance)){
+            $instance->clearCache();
+            $instance = $instance->fallbackProvider;
+        }
+    }
 
     protected function getFallbackProvider()
     {

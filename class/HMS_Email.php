@@ -459,5 +459,13 @@ class HMS_Email{
         HMS_Email::send_template_message($student->getUsername() . TO_DOMAIN, 'On-campus Housing Waiting List Confirmation', 'email/waitingListConfirmation.tpl', $tpl);
     }
 
+    public function sendWithdrawnSearchOutput($text)
+    {
+        $to = array('jbooker@tux.appstate.edu', 'burlesonst@appstate.edu');
+        $subject = 'Withdrawn Student Search';
+
+        HMS_Email::send_email($to, null, $subject, $text);
+    }
+
 } // End HMS_Email class
 ?>

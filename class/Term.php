@@ -4,7 +4,9 @@
  * HMS Term
  * Maintains the "current" term, "active" term, and handles tasks related
  * to creating new terms.
+ *
  * @author Jeff Tickle <jtickle at tux dot appstate dot edu>
+ * @author Jeremy Booker <jbooker at tux dot appstate dot edu>
  */
 
 define('TERM_SPRING',   10);
@@ -25,7 +27,11 @@ class Term
     public $txt_terms;
     private $isNew = false;
 
-    public function __construct($term = NULL)
+    /**
+     * Constructor
+     * @param Integer $term Term to load. Can be null to create a new term.
+     */
+    public function __construct($term = null)
     {
         if(is_null($term)) {
             $this->isNew = true;
@@ -36,6 +42,9 @@ class Term
         $this->init();
     }
 
+    /**
+     * Loads this term object, if we have an id.
+     */
     public function init()
     {
         $db = new PHPWS_DB('hms_term');
@@ -48,12 +57,16 @@ class Term
         }
     }
 
+    /**
+     * Saves this term object.
+     */
     public function save()
     {
         $db = new PHPWS_DB('hms_term');
         // "where" breaks the save if creating new term
-        if(!$this->isNew)
+        if(!$this->isNew) {
             $db->addWhere('term', $this->term);
+        }
         $result = $db->saveObject($this);
 
         if(PHPWS_Error::logIfError($result)) {
@@ -62,7 +75,8 @@ class Term
         }
     }
 
-    public function getTerm(){
+    public function getTerm()
+    {
         return $this->term;
     }
 
@@ -81,14 +95,19 @@ class Term
         $this->banner_queue = $flag;
     }
 
+    /**
+     * Gets the path of the PDF file for the housing contract for this term.
+     * @return String path of housing contract PDF file
+     * @throws InvalidConfigurationException
+     */
     public function getPdfTerms()
     {
-        if(is_null($this->pdf_terms) || empty($this->pdf_terms)){
+        if(is_null($this->pdf_terms) || empty($this->pdf_terms)) {
             PHPWS_Core::initModClass('hms', 'exception/InvalidConfigurationException.php');
             throw new InvalidConfigurationException('No pdf contract file uploaded for ' . $this->term);
         }
 
-        if(!file_exists($this->pdf_terms)){
+        if(!file_exists($this->pdf_terms)) {
             PHPWS_Core::initModClass('hms', 'exception/InvalidConfigurationException.php');
             throw new InvalidConfigurationException('The specified pdf contract file uploaded for ' . $this->term . ' does not exist.');
         }
@@ -101,14 +120,19 @@ class Term
         $this->pdf_terms = $pdf_terms;
     }
 
+    /**
+     * Gets the path of the text file for the housing contract for this term.
+     * @return String Path of the housing contract txt file.
+     * @throws InvalidConfigurationException
+     */
     public function getTxtTerms()
     {
-        if(is_null($this->txt_terms) || empty($this->txt_terms)){
+        if(is_null($this->txt_terms) || empty($this->txt_terms)) {
             PHPWS_Core::initModClass('hms', 'exception/InvalidConfigurationException.php');
             throw new InvalidConfigurationException('No text contract file uploaded for ' . $this->term);
         }
 
-        if(!file_exists($this->txt_terms)){
+        if(!file_exists($this->txt_terms)) {
             PHPWS_Core::initModClass('hms', 'exception/InvalidConfigurationException.php');
             throw new InvalidConfigurationException('The specified text contract file uploaded for ' . $this->term . ' does not exist.');
         }
@@ -121,6 +145,11 @@ class Term
         $this->txt_terms = $txt_terms;
     }
 
+    /**
+     * Returns the number of items in the Banner queue for this term
+     * TODO: Move this to the BannerQueue class.
+     * @return Integer The number of items in the banner queue.
+     */
     public function getQueueCount()
     {
         $db = new PHPWS_DB('hms_banner_queue');
@@ -135,32 +164,38 @@ class Term
         return $result;
     }
 
-    public function toString($term = NULL, $concat = TRUE)
+    /**
+     * Returns a string representation of the integer form of a term.
+     * @param Integer $term
+     * @param Boolean $concat Whether or not to concatenate the year and term together (can return a array instead).
+     * @throws InvalidTermException
+     */
+    public function toString($term = null, $concat = true)
     {
         if(is_null($term)) {
             $term = $this->term;
         }
 
-        # Grab the year from the entry_term
+        // Grab the year from the entry_term
         $result['year'] = Term::getTermYear($term);
 
-        # Grab the term from the entry_term
+        // Grab the term from the entry_term
         $sem = Term::getTermSem($term);
 
-        if($sem == TERM_SPRING){
+        if($sem == TERM_SPRING) {
             $result['term'] = SPRING;
-        }else if($sem == TERM_SUMMER1){
+        }else if($sem == TERM_SUMMER1) {
             $result['term'] = SUMMER1;
-        }else if($sem == TERM_SUMMER2){
+        }else if($sem == TERM_SUMMER2) {
             $result['term'] = SUMMER2;
-        }else if($sem == TERM_FALL){
+        }else if($sem == TERM_FALL) {
             $result['term'] = FALL;
         }else{
-            PHPWS_Core::initModClass('hms','exception/InvalidTermException.php');
+            PHPWS_Core::initModClass('hms', 'exception/InvalidTermException.php');
             throw new InvalidTermException("Bad term: $term");
         }
 
-        if($concat){
+        if($concat) {
             return $result['term'] . ' ' . $result['year'];
         }else{
             return $result;
@@ -173,12 +208,12 @@ class Term
 
     public static function getCurrentTerm()
     {
-        return PHPWS_Settings::get('hms','current_term');
+        return PHPWS_Settings::get('hms', 'current_term');
     }
 
     public static function setCurrentTerm($term)
     {
-        PHPWS_Settings::set('hms','current_term',$term);
+        PHPWS_Settings::set('hms', 'current_term', $term);
         PHPWS_Settings::save('hms');
 
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
@@ -228,13 +263,13 @@ class Term
 
     public static function getNextTerm($term)
     {
-        # Grab the year
+        // Grab the year
         $year = substr($term, 0, 4);
 
-        # Grab the term
+        // Grab the term
         $sem = substr($term, 4, 2);
 
-        if($sem == TERM_FALL){
+        if($sem == TERM_FALL) {
             return ($year + 1) . "10";
         }else{
             return "$year" . ($sem + 10);
@@ -243,13 +278,13 @@ class Term
 
     public static function getPrevTerm($term)
     {
-        # Grab the year
+        // Grab the year
         $year = substr($term, 0, 4);
 
-        # Grab the term
+        // Grab the term
         $sem = substr($term, 4, 2);
 
-        if($sem == TERM_SPRING){
+        if($sem == TERM_SPRING) {
             return ($year - 1) . "40";
         }else{
             return "$year" . ($sem - 10);
@@ -258,6 +293,7 @@ class Term
 
     /**
      * Returns a list of all the terms currently available. Useful for making drop down boxes.
+     *
      * @return Array Associate array of terms and their textual representations.
      */
     public static function getTerms()
@@ -266,7 +302,7 @@ class Term
         $db->addOrder('term desc');
         $result = $db->getObjects('Term');
 
-        if(PHPWS_Error::logIfError($result)){
+        if(PHPWS_Error::logIfError($result)) {
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
@@ -275,15 +311,36 @@ class Term
     }
 
     /**
+     * Returns a simple array of term (in numeric form) of all terms after the 'current' term.
+     * @return Array Returns an array of all the terms after the current term.
+     */
+    public function getFutureTerms()
+    {
+        $objs = self::getTerms();
+        $currTerm = self::getCurrentTerm();
+
+        $terms = array();
+
+        foreach($objs as $t) {
+            if($t->term > $currTerm) {
+                $terms[] = $t->term;
+            }
+        }
+
+        return $terms;
+    }
+
+    /**
      * Checks a term to see if it really exists in the database.
-     * @return boolean True if it exists, False if it doesn't
+     *
+     * @return boolean True if the term exists, False if it doesn't
      */
     public static function isValidTerm($term)
     {
         $db = new PHPWS_DB('hms_term');
         $result = $db->select('col');
 
-        if(PHPWS_Error::logIfError($result)){
+        if(PHPWS_Error::logIfError($result)) {
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
@@ -319,7 +376,7 @@ class Term
             return dgettext('hms', 'Housing Management System');
         }
 
-        $terms = self::getTermsAssoc(TRUE);
+        $terms = self::getTermsAssoc(true);
 
         $current = self::getCurrentTerm();
         $terms[$current] .= ' (Current)';
@@ -340,6 +397,8 @@ class Term
     /**
      * Returns an array of the list of semesters. Useful for constructing
      * drop down menus. Array is keyed using the TERM_* defines.
+     *
+     * @return Array An array of possible semesters ("terms").
      */
     public static function getSemesterList()
     {

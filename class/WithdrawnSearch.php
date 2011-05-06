@@ -25,6 +25,9 @@ class WithdrawnSearch {
 
     public function doSearch()
     {
+        # Clear all the caches
+        StudentDataProvider::clearAllCache();
+
         $term = $this->term;
 
         $query = "select DISTINCT * FROM (select hms_new_application.username from hms_new_application WHERE term=$term AND withdrawn != 1 UNION select hms_assignment.asu_username from hms_assignment WHERE term=$term) as foo";
@@ -40,6 +43,7 @@ class WithdrawnSearch {
             try{
                 $student = StudentFactory::getStudentByUsername($username, $term);
             }catch(Exception $e){
+                $this->actions[$username][] = 'WARNING!! Unknown student!';
                 NQ::simple('hms', HMS_NOTIFICATION_WARNING, 'Unknown student: ' . $username);
                 continue;
             }
@@ -58,7 +62,6 @@ class WithdrawnSearch {
             $this->handleRlcApplication($student);
         }
 
-        $this->sendReport();
     }
 
     private function handleApplication(Student $student)
@@ -147,9 +150,15 @@ class WithdrawnSearch {
         }
     }
 
-    private function sendReport()
+    public function getTextView()
     {
-        #TODO
+        $tpl = new PHPWS_Template('hms');
+
+        if(!$tpl->setFile('admin/withdrawnSearchTextOutput.tpl')){
+            return 'Template error...';
+        }
+
+        return $this->doTemplateStuff($tpl);
     }
 
     public function getHTMLView()
@@ -159,6 +168,12 @@ class WithdrawnSearch {
         if(!$tpl->setFile('admin/withdrawnSearchOutput.tpl')){
             return 'Template error...';
         }
+
+        return $this->doTemplateStuff($tpl);
+    }
+
+    public function doTemplateStuff($tpl)
+    {
 
         $tpl->setData(array('DATE'=>date('F j, Y g:ia'), 'TERM'=>Term::toString($this->term)));
 
