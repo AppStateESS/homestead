@@ -7,6 +7,8 @@
  * @package hms
  */
 
+require_once(PHPWS_SOURCE_DIR . 'mod/hms/inc/defines.php');
+
 class WithdrawnSearchEmailCommand extends ScheduledPulse {
 
     /**
@@ -33,8 +35,9 @@ class WithdrawnSearchEmailCommand extends ScheduledPulse {
         $sp->save();
 
         // Load some classes
-        PHPWS_Core::initModClass('hms', 'Term.php');
+        PHPWS_Core::initModClass('hms', 'HMS.php');
         PHPWS_Core::initModClass('hms', 'WithdrawnSearch.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
 
         // The search is run over all future terms
         $terms = Term::getFutureTerms();
