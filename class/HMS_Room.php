@@ -312,7 +312,8 @@ class HMS_Room extends HMS_Item
             }
 
             // If the floor is not coed and the gt is not the target, return false
-            if($this->_floor->gender_type != COED && $this->_floor->gender_type != $target_gender) {
+            if($this->_floor->gender_type != COED &&
+               $this->_floor->gender_type != $target_gender) {
                 return false;
             }
 

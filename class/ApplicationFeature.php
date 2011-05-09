@@ -2,7 +2,16 @@
 
 define('APPLICATION_FEATURE_DIR', 'applicationFeature');
 
-abstract class ApplicationFeatureRegistration {
+
+/**
+ * A class to hold meta-data for ApplicationFeatures.
+ *
+ * @author jbooker
+ * @package hms
+ *
+ */
+abstract class ApplicationFeatureRegistration
+{
 
     protected $name;
     protected $description;
@@ -11,32 +20,68 @@ abstract class ApplicationFeatureRegistration {
     protected $endDateRequired;
     protected $priority;
 
+    /**
+     * Empty constructor
+     */
     abstract function __construct();
 
+    /**
+     * Returns the name of this feature.
+     * @return String The name of this feature.
+     */
     function getName(){
         return $this->name;
     }
 
+    /**
+     * Returns the description of this feature.
+     * @return String Feature description
+     */
     function getDescription(){
         return $this->description;
     }
 
+    /**
+     * Returns whether or not a start date is required
+     * @return boolean Start date required
+     */
     function requiresStartDate(){
         return $this->startDateRequired;
     }
 
+    /**
+     * Returns whether or not an edit date is required
+     * @return boolean edit date required
+     */
     function requiresEditDate() {
         return $this->editDateRequired;
     }
 
+    /**
+     * Returns whether or not an edit date is required.
+     * @return boolean end date required
+     */
     function requiresEndDate(){
         return $this->endDateRequired;
     }
 
+    /**
+     * Returns the priority of this feature. Determines the order in which they're displayed.
+     * NB: Feature priorities can conflict! Don't give two features the same priority!
+     * @returns Integer feature priority
+     */
     function getPriority(){
         return $this->priority;
     }
 
+    /**
+     * Determines whether or not to show a feature for a particular student.
+     *
+     * @abstract
+     * @param Student $student
+     * @param Integer $term
+     * @return boolean Wether or not to show this feature for a particular student
+     */
     public abstract function showForStudent(Student $student, $term);
 }
 
@@ -45,11 +90,11 @@ abstract class ApplicationFeatureRegistration {
  * for housing applications of a particular term.
  *
  * @author		Jeremy Booker <jbooker AT tux DOT appstate DOT edu>
- * @package		modules
- * @subpackage	hms
+ * @package	hms
+ *
  */
-
-abstract class ApplicationFeature {
+abstract class ApplicationFeature
+{
 
     public $id;
     public $term;
@@ -61,7 +106,7 @@ abstract class ApplicationFeature {
 
     /**
      * Constructor. Loads an application feature object from the database if ID is set.
-     * @param $id
+     * @param Integer $id
      */
     public function __construct($id = NULL)
     {

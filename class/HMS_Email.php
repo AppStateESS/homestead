@@ -459,6 +459,10 @@ class HMS_Email{
         HMS_Email::send_template_message($student->getUsername() . TO_DOMAIN, 'On-campus Housing Waiting List Confirmation', 'email/waitingListConfirmation.tpl', $tpl);
     }
 
+    /**
+     * Sends the email for the nightly withdrawn search output.
+     * @param String $text
+     */
     public function sendWithdrawnSearchOutput($text)
     {
         $to = array('jbooker@tux.appstate.edu', 'burlesonst@appstate.edu');
