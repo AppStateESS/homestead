@@ -1269,6 +1269,9 @@ function hms_update(&$content, $currentVersion)
                 return $result;
             }
         case version_compare($currentVersion, '0.4.43', '<'):
+            PHPWS_Core::initModClass('users', 'Permission.php');
+            Users_Permission::registerPermissions('hms', $content);
+
             $db = new PHPWS_DB;
             $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/0_4_43.sql');
             if(PEAR::isError($result)){
