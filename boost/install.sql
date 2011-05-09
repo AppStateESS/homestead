@@ -52,12 +52,6 @@ CREATE TABLE hms_student_phone_cache (
 
 CREATE INDEX hms_student_phone_cache_idx ON hms_student_phone_cache(banner_id);
 
-CREATE TABLE hms_pricing_tiers (
-    id          integer NOT NULL,
-    tier_value  numeric NOT NULL,
-    primary key(id)
-);
-
 CREATE TABLE hms_movein_time (
     id              integer NOT NULL,
     begin_timestamp   integer NOT NULL,
@@ -134,7 +128,6 @@ CREATE TABLE hms_room (
     private_room            smallint NOT NULL,
     is_overflow             smallint NOT NULL,
     phone_number            integer DEFAULT 0,
-    pricing_tier            smallint REFERENCES hms_pricing_tiers(id),
     is_medical              smallint DEFAULT (0)::smallint,
     is_reserved             smallint DEFAULT (0)::smallint,
     is_online               smallint DEFAULT (0)::smallint NOT NULL,
@@ -620,12 +613,4 @@ SELECT setval('hms_learning_communities_seq', max(hms_learning_communities.id)) 
 CREATE SEQUENCE hms_learning_community_questions_seq;
 SELECT setval('hms_learning_community_questions_seq', max(hms_learning_community_questions.id)) FROM hms_learning_community_questions;
 
-INSERT INTO hms_pricing_tiers VALUES (1, 3250.00);
-INSERT INTO hms_pricing_tiers VALUES (2, 3550.00);
-INSERT INTO hms_pricing_tiers VALUES (3, 3650.00);
-INSERT INTO hms_pricing_tiers VALUES (4, 4150.00);
-INSERT INTO hms_pricing_tiers VALUES (5, 4800.00);
-
-CREATE SEQUENCE hms_pricing_tiers_seq;
-SELECT setval('hms_pricing_tiers_seq', max(hms_pricing_tiers.id)) FROM hms_pricing_tiers;
 COMMIT;

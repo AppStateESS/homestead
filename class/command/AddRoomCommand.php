@@ -36,7 +36,7 @@ class AddRoomCommand extends Command {
         }
 
         $floor_id = $context->get('floor');
-        
+
         $room = new HMS_Room;
         $room->floor_id = $floor_id;
         $room->room_number = $context->get('room_number');
@@ -44,7 +44,6 @@ class AddRoomCommand extends Command {
         $room->ra_room = !is_null($context->get('ra_room')) ? $context->get('ra_room') : 0;
         $room->private_room = !is_null($context->get('private_room')) ? $context->get('private_room') : 0;
         $room->is_overflow = !is_null($context->get('is_overflow')) ? $context->get('is_overflow') : 0;
-        $room->pricing_tier = !is_null($context->get('pricing_tier')) ? $context->get('pricing_tier') : 0;
         $room->is_medical = !is_null($context->get('is_medical')) ? $context->get('is_medical') : 0;
         $room->is_reserved = !is_null($context->get('is_reserved')) ? $context->get('is_reserved') : 0;
         $room->is_online = !is_null($context->get('is_online')) ? $context->get('is_online') : 0;

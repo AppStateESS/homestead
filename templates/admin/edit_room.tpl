@@ -15,9 +15,6 @@
                 <th>Room Number: </th><td align="left">{ROOM_NUMBER}</td>
             </tr>
             <tr>
-                <th>Pricing Tier: </th><td>{PRICING_TIER}</td>
-            </tr>
-            <tr>
                 <th>Number of beds: </th><td>{NUMBER_OF_BEDS}</td>
             </tr>
             <tr>

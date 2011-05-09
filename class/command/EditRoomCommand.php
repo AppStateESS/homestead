@@ -71,7 +71,6 @@ class EditRoomCommand extends Command {
         //prevents null since only 1 is defined as a return value
         //test($_REQUEST['room_number']);
         $room->room_number    = $context->get('room_number');
-        $room->pricing_tier   = $context->get('pricing_tier');
         $room->gender_type    = $context->get('gender_type');
         $room->default_gender = $context->get('default_gender');
         $room->is_online      = $context->get('is_online')    == 1 ? 1 : 0;

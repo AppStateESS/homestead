@@ -33,7 +33,6 @@ class ShowAddRoomCommand extends Command {
         PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
         PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Pricing_Tier.php');
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
         PHPWS_Core::initModClass('hms', 'AddRoomView.php');
 

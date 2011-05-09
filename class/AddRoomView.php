@@ -32,8 +32,6 @@ class AddRoomView extends View {
         $form->addHidden('hall_id',$this->hall->id);
         $form->addHidden('floor_id',$this->floor->id);
 
-        $form->addDropBox('pricing_tier', HMS_Pricing_Tier::get_pricing_tiers_array());
-
         if($this->floor->gender_type == COED) {
             $form->addDropBox('gender_type', array(FEMALE=>FEMALE_DESC, MALE=>MALE_DESC));
             $form->setMatch('gender_type', HMS_Util::formatGender($this->floor->gender_type));

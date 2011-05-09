@@ -27,7 +27,6 @@ class BedView extends View {
 		PHPWS_Core::initModClass('hms', 'HMS_Room.php');
 		PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
 		PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-		PHPWS_Core::initModClass('hms', 'HMS_Pricing_Tier.php');
 		PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
 		$tpl['TITLE'] = $this->room->room_number . ' - ' . $this->bed->bedroom_label . $this->bed->bed_letter . ' - ' . $this->hall->hall_name;
@@ -41,7 +40,7 @@ class BedView extends View {
 
 		$submitCmd = CommandFactory::getCommand('EditBed');
 		$submitCmd->setBedId($this->bed->id);
-		
+
 		$form = new PHPWS_Form();
 		$submitCmd->initForm($form);
 

@@ -22,7 +22,6 @@ class HMS_Room extends HMS_Item
     public $ra_room                = false;
     public $private_room           = false;
     public $is_overflow            = false;
-    public $pricing_tier           = 0;
     public $is_medical             = false;
     public $is_reserved            = false;
     public $is_online              = false;
@@ -762,46 +761,6 @@ class HMS_Room extends HMS_Item
         }
 
         return true;
-    }
-
-    //TODO: make this into a static method to add a room, create a command to go with it, link to that command fromt he edit floor interface
-    public static function addRoom() {
-        PHPWS_Core::initModClass('hms','HMS_Floor.php');
-        PHPWS_Core::initModClass('hms','HMS_Residence_Hall.php');
-
-        if(!Current_User::allow('hms','room_structure')){
-            return HMS_Floor::show_edit_floor($_REQUEST['floor_id'], NULL, 'Error: You do not have permission to add rooms');
-        }
-        $floor = new HMS_Floor($_REQUEST['floor_id']);
-        $room  = new HMS_Room();
-
-        # Grab all the input from the form and save the room
-        //Changed from radio buttons to checkboxes, ternary
-        //prevents null since only 1 is defined as a return value
-        //test($_REQUEST['room_number']);
-        $room->floor_id       = $_REQUEST['floor_id'];
-        $room->hall_id        = $_REQUEST['hall_id'];
-        $room->room_number    = $_REQUEST['room_number'];
-        $room->pricing_tier   = $_REQUEST['pricing_tier'];
-        $room->gender_type    = $_REQUEST['gender_type'];
-        $room->default_gender = $_REQUEST['default_gender'];
-        $room->is_online      = isset($_REQUEST['is_online'])    ? 1 : 0;
-        $room->is_reserved    = isset($_REQUEST['is_reserved'])  ? 1 : 0;
-        $room->ra_room        = isset($_REQUEST['ra_room'])      ? 1 : 0;
-        $room->private_room   = isset($_REQUEST['private_room']) ? 1 : 0;
-        $room->is_medical     = isset($_REQUEST['is_medical'])   ? 1 : 0;
-        $room->is_overflow    = isset($_REQUEST['is_overflow'])  ? 1 : 0;
-        $room->term           = $floor->term;
-
-        $result = $room->save();
-
-        if(!$result || PHPWS_Error::logIfError($result)){
-            return HMS_Floor::show_edit_floor($room->floor_id, NULL, 'Error: There was a problem adding the room. No changes were made. Please contact ESS.');
-        }
-
-        return HMS_Floor::show_edit_floor($room->floor_id, 'Room added successfully.');
-
-
     }
 
     /**
