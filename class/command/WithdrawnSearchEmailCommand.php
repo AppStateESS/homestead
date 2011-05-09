@@ -2,20 +2,22 @@
 
 /**
  * Handles running the Withdrawn search process and emailing the results.
- *
- * @author jbooker
  * @package hms
+ * @author Jeremy Booker
+ *
  */
 
-require_once(PHPWS_SOURCE_DIR . 'mod/hms/inc/defines.php');
+require_once PHPWS_SOURCE_DIR . 'mod/hms/inc/defines.php';
 
-class WithdrawnSearchEmailCommand extends ScheduledPulse {
+class WithdrawnSearchEmailCommand extends ScheduledPulse
+{
 
     /**
      * Constructor - Sets up some variables needed by the parent class.
+     *
      * @param Integer $id - ID of an existing pulse to load
      */
-    public function __construct($id = NULL)
+    public function __construct($id = null)
     {
         $this->module = 'hms';
         $this->class_file = 'command/WithdrawnSearchEmailCommand.php';
@@ -44,7 +46,7 @@ class WithdrawnSearchEmailCommand extends ScheduledPulse {
 
         $text = "";
 
-        foreach($terms as $term){
+        foreach($terms as $term) {
             $search = new WithdrawnSearch($term);
             $search->doSearch();
             $text += "\n\n=========== " . Term::toString($term) . " ===========\n\n";

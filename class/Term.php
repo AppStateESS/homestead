@@ -7,6 +7,8 @@
  *
  * @author Jeff Tickle <jtickle at tux dot appstate dot edu>
  * @author Jeremy Booker <jbooker at tux dot appstate dot edu>
+ * @package hms
+ *
  */
 
 define('TERM_SPRING',   10);
@@ -184,20 +186,20 @@ class Term
 
         if($sem == TERM_SPRING) {
             $result['term'] = SPRING;
-        }else if($sem == TERM_SUMMER1) {
+        } else if($sem == TERM_SUMMER1) {
             $result['term'] = SUMMER1;
-        }else if($sem == TERM_SUMMER2) {
+        } else if($sem == TERM_SUMMER2) {
             $result['term'] = SUMMER2;
-        }else if($sem == TERM_FALL) {
+        } else if($sem == TERM_FALL) {
             $result['term'] = FALL;
-        }else{
+        } else {
             PHPWS_Core::initModClass('hms', 'exception/InvalidTermException.php');
             throw new InvalidTermException("Bad term: $term");
         }
 
         if($concat) {
             return $result['term'] . ' ' . $result['year'];
-        }else{
+        } else {
             return $result;
         }
     }
@@ -271,7 +273,7 @@ class Term
 
         if($sem == TERM_FALL) {
             return ($year + 1) . "10";
-        }else{
+        } else {
             return "$year" . ($sem + 10);
         }
     }
@@ -286,7 +288,7 @@ class Term
 
         if($sem == TERM_SPRING) {
             return ($year - 1) . "40";
-        }else{
+        } else {
             return "$year" . ($sem - 10);
         }
     }
