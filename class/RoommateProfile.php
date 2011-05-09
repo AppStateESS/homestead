@@ -21,13 +21,13 @@ class RoommateProfile{
     public $date_submitted;
     public $term;
 
-    # Alternate contact info
+    // Alternate contact info
     public $alternate_email = NULL;
     public $aim_sn = NULL;
     public $yahoo_sn = NULL;
     public $msn_sn = NULL;
 
-    # Hobby choices
+    // Hobby choices
     public $arts_and_crafts = 0;
     public $books_and_reading = 0;
     public $cars = 0;
@@ -54,7 +54,7 @@ class RoommateProfile{
     public $writing = 0;
     public $rotc = 0;
 
-    # music choices
+    // music choices
     public $alternative = 0;
     public $ambient = 0;
     public $beach = 0;
@@ -80,14 +80,14 @@ class RoommateProfile{
     public $rock = 0;
     public $world_music = 0;
 
-    # Study times
+    // Study times
     public $study_early_morning = 0;
     public $study_morning_afternoon = 0;
     public $study_afternoon_evening = 0;
     public $study_evening = 0;
     public $study_late_night = 0;
 
-    # drop downs
+    // drop downs
     public $political_view = 0;
     public $major = 0;
     public $experience = 0;
@@ -98,9 +98,9 @@ class RoommateProfile{
     public $cleanliness = 0;
     public $free_time = 0;
 
-    # Spoken languages
-    # Top 20 most spoken languages:
-    #     http://en.wikipedia.org/wiki/Ethnologue_list_of_most_spoken_languages
+    // Spoken languages
+    // Top 20 most spoken languages:
+    //     http://en.wikipedia.org/wiki/Ethnologue_list_of_most_spoken_languages
     public $arabic = 0;
     public $bengali = 0;
     public $chinese = 0;
@@ -128,26 +128,26 @@ class RoommateProfile{
      */
     public function __construct($id = NULL)
     {
-        if(!isset($id)){
+        if(!isset($id)) {
             return;
         }
 
         $this->setID($id);
 
-        # Initialize
+        // Initialize
         $result = $this->init();
     }
 
     public function init()
     {
-        if(!isset($this->id)){
-            return FALSE;
+        if(!isset($this->id)) {
+            return false;
         }
 
         $db = new PHPWS_DB('hms_student_profiles');
         $result = $db->loadObject($this);
 
-        if(PHPWS_Error::logIfError($result)){
+        if(PHPWS_Error::logIfError($result)) {
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
@@ -159,13 +159,13 @@ class RoommateProfile{
     {
         $db = new PHPWS_DB('hms_student_profiles');
 
-        if($this->get_date_submitted() == NULL){
+        if($this->get_date_submitted() == NULL) {
             $this->set_date_submitted();
         }
 
         $result = $db->saveObject($this);
 
-        if(PHPWS_Error::logIfError($result)){
+        if(PHPWS_Error::logIfError($result)) {
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
@@ -184,25 +184,25 @@ class RoommateProfile{
      * check_for_profile
      * Returns the id number of a profile, if it
      * exists for the given user name.
-     * Returns FALSE if no profile is found.
+     * Returns false if no profile is found.
      */
     public static function checkForProfile($username, $term)
     {
         $db = new PHPWS_DB('hms_student_profiles');
 
-        $db->addWhere('username',$username,'ILIKE');
+        $db->addWhere('username', $username, 'ILIKE');
         $db->addWhere('term', $term);
         $result = $db->select('row');
 
-        if(PHPWS_Error::logIfError($result)){
+        if(PHPWS_Error::logIfError($result)) {
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
-        if($result != NULL && sizeof($result > 0)){
+        if($result != NULL && sizeof($result > 0)) {
             return $result['id'];
         }else{
-            return FALSE;
+            return false;
         }
     }
 
@@ -212,16 +212,16 @@ class RoommateProfile{
 
         $db = new PHPWS_DB('hms_student_profiles');
 
-        $db->addWhere('username',$username,'ILIKE');
+        $db->addWhere('username', $username, 'ILIKE');
         $db->addWhere('term', $term);
         $result = $db->loadObject($profile);
 
-        if(PHPWS_Error::logIfError($result)){
+        if(PHPWS_Error::logIfError($result)) {
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
-        if(!is_null($profile->id)){
+        if(!is_null($profile->id)) {
             return $profile;
         }else{
             return NULL;
@@ -233,8 +233,8 @@ class RoommateProfile{
      */
     public static function profile_search_pager()
     {
-        # get the current student's gender
-        PHPWS_Core::initModClass('hms','HMS_RLC_Assignment.php');
+        // get the current student's gender
+        PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), Term::getCurrentTerm());
@@ -249,13 +249,13 @@ class RoommateProfile{
         $pageTags['LAST_NAME']  = _('Last Name');
         $pageTags['ACTIONS']    = _('Action');
 
-        $pager = new DBPager('hms_student_profiles','RoommateProfile');
+        $pager = new DBPager('hms_student_profiles', 'RoommateProfile');
 
         $pager->db->addWhere('term', $student->getApplicationTerm());
 
         // Check to see if user is assigned to an RLC
         $rlc_assignment = HMS_RLC_Assignment::checkForAssignment($student->getUsername(), $student->getApplicationTerm());
-        if($rlc_assignment != FALSE){
+        if($rlc_assignment != false) {
             // User is assigned to an RLC, only show results from other students in the same RLC
             $pager->db->addJoin('LEFT OUTER', 'hms_student_profiles', 'hms_learning_community_applications', 'username', 'username');
             $pager->db->addJoin('LEFT OUTER', 'hms_learning_community_assignment', 'hms_learning_community_applications', 'application_id', 'id');
@@ -263,434 +263,434 @@ class RoommateProfile{
             //$pager->db->setTestMode();
         }
 
-        # If an ASU username was entered, just use that. Otherwise, use the rest of the fields.
-        if(isset($_REQUEST['asu_username']) && $_REQUEST['asu_username'] != ''){
-            $pager->addWhere('hms_student_profiles.username',$_REQUEST['asu_username'],'ILIKE');
+        // If an ASU username was entered, just use that. Otherwise, use the rest of the fields.
+        if(isset($_REQUEST['asu_username']) && $_REQUEST['asu_username'] != '') {
+            $pager->addWhere('hms_student_profiles.username', $_REQUEST['asu_username'], 'ILIKE');
             $_SESSION['profile_search_asu_username'] = $_REQUEST['asu_username'];
         }else{
 
-            if(isset($_REQUEST['hobbies_checkbox']['arts_and_crafts'])){
-                $pager->addWhere('hms_student_profiles.arts_and_crafts',1,'=');
+            if(isset($_REQUEST['hobbies_checkbox']['arts_and_crafts'])) {
+                $pager->addWhere('hms_student_profiles.arts_and_crafts', 1, '=');
                 $_SESSION['hobbies_checkbox']['arts_and_crafts'] = 1;
             }
 
-            if(isset($_REQUEST['hobbies_checkbox']['books_and_reading'])){
-                $pager->addWhere('hms_student_profiles.books_and_reading',1,'=');
+            if(isset($_REQUEST['hobbies_checkbox']['books_and_reading'])) {
+                $pager->addWhere('hms_student_profiles.books_and_reading', 1, '=');
                 $_SESSION['hobbies_checkbox']['books_and_reading'] = 1;
             }
 
-            if(isset($_REQUEST['hobbies_checkbox']['cars'])){
-                $pager->addWhere('hms_student_profiles.cars',1,'=');
+            if(isset($_REQUEST['hobbies_checkbox']['cars'])) {
+                $pager->addWhere('hms_student_profiles.cars', 1, '=');
                 $_SESSION['hobbies_checkbox']['cars'] = 1;
             }
 
-            if(isset($_REQUEST['hobbies_checkbox']['church_activities'])){
-                $pager->addWhere('hms_student_profiles.church_activities',1,'=');
+            if(isset($_REQUEST['hobbies_checkbox']['church_activities'])) {
+                $pager->addWhere('hms_student_profiles.church_activities', 1, '=');
                 $_SESSION['hobbies_checkbox']['chrch_activities'] = 1;
             }
 
-            if(isset($_REQUEST['hobbies_checkbox']['collecting'])){
-                $pager->addWhere('hms_student_profiles.collecting',1,'=');
+            if(isset($_REQUEST['hobbies_checkbox']['collecting'])) {
+                $pager->addWhere('hms_student_profiles.collecting', 1, '=');
                 $_SESSION['hobbies_checkbox']['collecting'] = 1;
             }
 
-            if(isset($_REQUEST['hobbies_checkbox']['computers_and_technology'])){
-                $pager->addWhere('hms_student_profiles.computers_and_technology',1,'=');
+            if(isset($_REQUEST['hobbies_checkbox']['computers_and_technology'])) {
+                $pager->addWhere('hms_student_profiles.computers_and_technology', 1, '=');
                 $_SESSION['hobbies_checkbox']['computers_and_technology'] = 1;
             }
 
-            if(isset($_REQUEST['hobbies_checkbox']['dancing'])){
-                $pager->addWhere('hms_student_profiles.dancing',1,'=');
+            if(isset($_REQUEST['hobbies_checkbox']['dancing'])) {
+                $pager->addWhere('hms_student_profiles.dancing', 1, '=');
                 $_SESSION['hobbies_checkbox']['dancing'] = 1;
             }
 
-            if(isset($_REQUEST['hobbies_checkbox']['fashion'])){
-                $pager->addWhere('hms_student_profiles.fashion',1,'=');
+            if(isset($_REQUEST['hobbies_checkbox']['fashion'])) {
+                $pager->addWhere('hms_student_profiles.fashion', 1, '=');
                 $_SESSION['hobbies_checkbox']['fashion'] = 1;
             }
 
-            if(isset($_REQUEST['hobbies_checkbox']['fine_arts'])){
-                $pager->addWhere('hms_student_profiles.fine_arts',1,'=');
+            if(isset($_REQUEST['hobbies_checkbox']['fine_arts'])) {
+                $pager->addWhere('hms_student_profiles.fine_arts', 1, '=');
                 $_SESSION['hobbies_checkbox']['fine_arts'] = 1;
             }
 
-            if(isset($_REQUEST['hobbies_checkbox']['gardening'])){
-                $pager->addWhere('hms_student_profiles.gardening',1,'=');
+            if(isset($_REQUEST['hobbies_checkbox']['gardening'])) {
+                $pager->addWhere('hms_student_profiles.gardening', 1, '=');
                 $_SESSION['hobbies_checkbox']['gardening'] = 1;
             }
 
-            if(isset($_REQUEST['hobbies_checkbox']['games'])){
-                $pager->addWhere('hms_student_profiles.games',1,'=');
+            if(isset($_REQUEST['hobbies_checkbox']['games'])) {
+                $pager->addWhere('hms_student_profiles.games', 1, '=');
                 $_SESSION['hobbies_checkbox']['games'] = 1;
             }
 
-            if(isset($_REQUEST['hobbies_checkbox']['humor'])){
-                $pager->addWhere('hms_student_profiles.humor',1,'=');
+            if(isset($_REQUEST['hobbies_checkbox']['humor'])) {
+                $pager->addWhere('hms_student_profiles.humor', 1, '=');
                 $_SESSION['hobbies_checkbox']['humor'] = 1;
             }
 
-            if(isset($_REQUEST['hobbies_checkbox']['investing_personal_finance'])){
-                $pager->addWhere('hms_student_profiles.investing_personal_finance',1,'=');
+            if(isset($_REQUEST['hobbies_checkbox']['investing_personal_finance'])) {
+                $pager->addWhere('hms_student_profiles.investing_personal_finance', 1, '=');
                 $_SESSION['hobbies_checkbox']['intesting_personal_finance'] = 1;
             }
 
-            if(isset($_REQUEST['hobbies_checkbox']['movies'])){
-                $pager->addWhere('hms_student_profiles.movies',1,'=');
+            if(isset($_REQUEST['hobbies_checkbox']['movies'])) {
+                $pager->addWhere('hms_student_profiles.movies', 1, '=');
                 $_SESSION['hobbies_checkbox']['movies'] = 1;
             }
 
-            if(isset($_REQUEST['hobbies_checkbox']['music'])){
-                $pager->addWhere('hms_student_profiles.music',1,'=');
+            if(isset($_REQUEST['hobbies_checkbox']['music'])) {
+                $pager->addWhere('hms_student_profiles.music', 1, '=');
                 $_SESSION['hobbies_checkbox']['music'] = 1;
             }
 
-            if(isset($_REQUEST['hobbies_checkbox']['outdoor_activities'])){
-                $pager->addWhere('hms_student_profiles.outdoor_activities',1,'=');
+            if(isset($_REQUEST['hobbies_checkbox']['outdoor_activities'])) {
+                $pager->addWhere('hms_student_profiles.outdoor_activities', 1, '=');
                 $_SESSION['hobbies_checkbox']['outdoor_activities'] = 1;
             }
 
-            if(isset($_REQUEST['hobbies_checkbox']['pets_and_animals'])){
-                $pager->addWhere('hms_student_profiles.pets_and_animals',1,'=');
+            if(isset($_REQUEST['hobbies_checkbox']['pets_and_animals'])) {
+                $pager->addWhere('hms_student_profiles.pets_and_animals', 1, '=');
                 $_SESSION['hobbies_checkbox']['pets_and_animals'] = 1;
             }
 
-            if(isset($_REQUEST['hobbies_checkbox']['photography'])){
-                $pager->addWhere('hms_student_profiles.photography',1,'=');
+            if(isset($_REQUEST['hobbies_checkbox']['photography'])) {
+                $pager->addWhere('hms_student_profiles.photography', 1, '=');
                 $_SESSION['hobbies_checkbox']['photography'] = 1;
             }
 
-            if(isset($_REQUEST['hobbies_checkbox']['politics'])){
-                $pager->addWhere('hms_student_profiles.politics',1,'=');
+            if(isset($_REQUEST['hobbies_checkbox']['politics'])) {
+                $pager->addWhere('hms_student_profiles.politics', 1, '=');
                 $_SESSION['hobbies_checkbox']['politics'] = 1;
             }
 
-            if(isset($_REQUEST['hobbies_checkbox']['sports'])){
-                $pager->addWhere('hms_student_profiles.sports',1,'=');
+            if(isset($_REQUEST['hobbies_checkbox']['sports'])) {
+                $pager->addWhere('hms_student_profiles.sports', 1 ,'=');
                 $_SESSION['hobbies_checkbox']['sports'] = 1;
             }
 
-            if(isset($_REQUEST['hobbies_checkbox']['travel'])){
-                $pager->addWhere('hms_student_profiles.travel',1,'=');
+            if(isset($_REQUEST['hobbies_checkbox']['travel'])) {
+                $pager->addWhere('hms_student_profiles.travel', 1, '=');
                 $_SESSION['hobbies_checkbox']['travel'] = 1;
             }
 
-            if(isset($_REQUEST['hobbies_checkbox']['tv_shows'])){
-                $pager->addWhere('hms_student_profiles.tv_shows',1,'=');
+            if(isset($_REQUEST['hobbies_checkbox']['tv_shows'])) {
+                $pager->addWhere('hms_student_profiles.tv_shows', 1, '=');
                 $_SESSION['hobbies_checkbox']['tv_shows'] = 1;
             }
 
-            if(isset($_REQUEST['hobbies_checkbox']['volunteering'])){
-                $pager->addWhere('hms_student_profiles.volunteering',1,'=');
+            if(isset($_REQUEST['hobbies_checkbox']['volunteering'])) {
+                $pager->addWhere('hms_student_profiles.volunteering', 1, '=');
                 $_SESSION['hobbies_checkbox']['volunteering'] = 1;
             }
 
-            if(isset($_REQUEST['hobbies_checkbox']['writing'])){
-                $pager->addWhere('hms_student_profiles.writing',1,'=');
+            if(isset($_REQUEST['hobbies_checkbox']['writing'])) {
+                $pager->addWhere('hms_student_profiles.writing', 1, '=');
                 $_SESSION['hobbies_checkbox']['writing'] = 1;
             }
 
-            if(isset($_REQUEST['hobbies_checkbox']['rotc'])){
-                $pager->addWhere('hms_student_profiles.rotc',1,'=');
+            if(isset($_REQUEST['hobbies_checkbox']['rotc'])) {
+                $pager->addWhere('hms_student_profiles.rotc', 1, '=');
                 $_SESSION['hobbies_checkbox']['rotc'] = 1;
             }
 
-            # Music check boxes
-            if(isset($_REQUEST['music_checkbox']['alternative'])){
-                $pager->addWhere('hms_student_profiles.alternative',1,'=');
+            // Music check boxes
+            if(isset($_REQUEST['music_checkbox']['alternative'])) {
+                $pager->addWhere('hms_student_profiles.alternative', 1, '=');
                 $_SESSION['hobbies_checkbox']['alternative'] = 1;
             }
 
-            if(isset($_REQUEST['music_checkbox']['ambient'])){
-                $pager->addWhere('hms_student_profiles.ambient',1,'=');
+            if(isset($_REQUEST['music_checkbox']['ambient'])) {
+                $pager->addWhere('hms_student_profiles.ambient', 1, '=');
                 $_SESSION['hobbies_checkbox']['ambient'] = 1;
             }
 
-            if(isset($_REQUEST['music_checkbox']['beach'])){
-                $pager->addWhere('hms_student_profiles.beach',1,'=');
+            if(isset($_REQUEST['music_checkbox']['beach'])) {
+                $pager->addWhere('hms_student_profiles.beach', 1, '=');
                 $_SESSION['hobbies_checkbox']['beach'] = 1;
             }
 
-            if(isset($_REQUEST['music_checkbox']['bluegrass'])){
-                $pager->addWhere('hms_student_profiles.bluegrass',1,'=');
+            if(isset($_REQUEST['music_checkbox']['bluegrass'])) {
+                $pager->addWhere('hms_student_profiles.bluegrass', 1, '=');
                 $_SESSION['hobbies_checkbox']['bluegrass'] = 1;
             }
 
-            if(isset($_REQUEST['music_checkbox']['blues'])){
-                $pager->addWhere('hms_student_profiles.blues',1,'=');
+            if(isset($_REQUEST['music_checkbox']['blues'])) {
+                $pager->addWhere('hms_student_profiles.blues', 1, '=');
                 $_SESSION['hobbies_checkbox']['blues'] = 1;
             }
 
-            if(isset($_REQUEST['music_checkbox']['christian'])){
-                $pager->addWhere('hms_student_profiles.christian',1,'=');
+            if(isset($_REQUEST['music_checkbox']['christian'])) {
+                $pager->addWhere('hms_student_profiles.christian', 1, '=');
                 $_SESSION['hobbies_checkbox']['christian'] = 1;
             }
 
-            if(isset($_REQUEST['music_checkbox']['classical'])){
-                $pager->addWhere('hms_student_profiles.classical',1,'=');
+            if(isset($_REQUEST['music_checkbox']['classical'])) {
+                $pager->addWhere('hms_student_profiles.classical', 1, '=');
                 $_SESSION['hobbies_checkbox']['classical'] = 1;
             }
 
-            if(isset($_REQUEST['music_checkbox']['classic_rock'])){
-                $pager->addWhere('hms_student_profiles.classic_rock',1,'=');
+            if(isset($_REQUEST['music_checkbox']['classic_rock'])) {
+                $pager->addWhere('hms_student_profiles.classic_rock', 1, '=');
                 $_SESSION['hobbies_checkbox']['classic_rock'] = 1;
             }
 
-            if(isset($_REQUEST['music_checkbox']['country'])){
-                $pager->addWhere('hms_student_profiles.country',1,'=');
+            if(isset($_REQUEST['music_checkbox']['country'])) {
+                $pager->addWhere('hms_student_profiles.country', 1, '=');
                 $_SESSION['hobbies_checkbox']['country'] = 1;
             }
 
-            if(isset($_REQUEST['music_checkbox']['electronic'])){
-                $pager->addWhere('hms_student_profiles.electronic',1,'=');
+            if(isset($_REQUEST['music_checkbox']['electronic'])) {
+                $pager->addWhere('hms_student_profiles.electronic', 1, '=');
                 $_SESSION['hobbies_checkbox']['electronic'] = 1;
             }
 
-            if(isset($_REQUEST['music_checkbox']['folk'])){
-                $pager->addWhere('hms_student_profiles.folk',1,'=');
+            if(isset($_REQUEST['music_checkbox']['folk'])) {
+                $pager->addWhere('hms_student_profiles.folk', 1, '=');
                 $_SESSION['hobbies_checkbox']['folk'] = 1;
             }
 
-            if(isset($_REQUEST['music_checkbox']['heavy_metal'])){
-                $pager->addWhere('hms_student_profiles.heavy_metal',1,'=');
+            if(isset($_REQUEST['music_checkbox']['heavy_metal'])) {
+                $pager->addWhere('hms_student_profiles.heavy_metal', 1, '=');
                 $_SESSION['hobbies_checkbox']['heavy_metal'] = 1;
             }
 
-            if(isset($_REQUEST['music_checkbox']['hip_hop'])){
-                $pager->addWhere('hms_student_profiles.hip_hop',1,'=');
+            if(isset($_REQUEST['music_checkbox']['hip_hop'])) {
+                $pager->addWhere('hms_student_profiles.hip_hop', 1, '=');
                 $_SESSION['hobbies_checkbox']['hip_hop'] = 1;
             }
 
-            if(isset($_REQUEST['music_checkbox']['house'])){
-                $pager->addWhere('hms_student_profiles.house',1,'=');
+            if(isset($_REQUEST['music_checkbox']['house'])) {
+                $pager->addWhere('hms_student_profiles.house', 1, '=');
                 $_SESSION['hobbies_checkbox']['house'] = 1;
             }
 
-            if(isset($_REQUEST['music_checkbox']['industrial'])){
+            if(isset($_REQUEST['music_checkbox']['industrial'])) {
                 $_SESSION['hobbies_checkbox']['industrial'] = 1;
-                $pager->addWhere('hms_student_profiles.industrial',1,'=');
+                $pager->addWhere('hms_student_profiles.industrial', 1, '=');
             }
 
-            if(isset($_REQUEST['music_checkbox']['jazz'])){
+            if(isset($_REQUEST['music_checkbox']['jazz'])) {
                 $_SESSION['hobbies_checkbox']['jazz'] = 1;
                 $pager->addWhere('hms_student_profiles.jazz',1,'=');
             }
 
-            if(isset($_REQUEST['music_checkbox']['popular_music'])){
+            if(isset($_REQUEST['music_checkbox']['popular_music'])) {
                 $_SESSION['hobbies_checkbox']['popular_music'] = 1;
-                $pager->addWhere('hms_student_profiles.popular_music',1,'=');
+                $pager->addWhere('hms_student_profiles.popular_music', 1, '=');
             }
 
-            if(isset($_REQUEST['music_checkbox']['progressive'])){
+            if(isset($_REQUEST['music_checkbox']['progressive'])) {
                 $_SESSION['hobbies_checkbox']['progressive'] = 1;
-                $pager->addWhere('hms_student_profiles.progressive',1,'=');
+                $pager->addWhere('hms_student_profiles.progressive', 1, '=');
             }
 
-            if(isset($_REQUEST['music_checkbox']['punk'])){
+            if(isset($_REQUEST['music_checkbox']['punk'])) {
                 $_SESSION['hobbies_checkbox']['punk'] = 1;
-                $pager->addWhere('hms_student_profiles.punk',1,'=');
+                $pager->addWhere('hms_student_profiles.punk', 1, '=');
             }
 
-            if(isset($_REQUEST['music_checkbox']['r_and_b'])){
+            if(isset($_REQUEST['music_checkbox']['r_and_b'])) {
                 $_SESSION['hobbies_checkbox']['r_and_b'] = 1;
-                $pager->addWhere('hms_student_profiles.r_and_b',1,'=');
+                $pager->addWhere('hms_student_profiles.r_and_b', 1, '=');
             }
 
-            if(isset($_REQUEST['music_checkbox']['rap'])){
+            if(isset($_REQUEST['music_checkbox']['rap'])) {
                 $_SESSION['hobbies_checkbox']['rap'] = 1;
-                $pager->addWhere('hms_student_profiles.rap',1,'=');
+                $pager->addWhere('hms_student_profiles.rap', 1, '=');
             }
 
-            if(isset($_REQUEST['music_checkbox']['reggae'])){
-                $pager->addWhere('hms_student_profiles.reggae',1,'=');
+            if(isset($_REQUEST['music_checkbox']['reggae'])) {
+                $pager->addWhere('hms_student_profiles.reggae', 1, '=');
                 $_SESSION['hobbies_checkbox']['reggae'] = 1;
             }
 
-            if(isset($_REQUEST['music_checkbox']['alternative'])){
-                $pager->addWhere('hms_student_profiles.rock',1,'=');
+            if(isset($_REQUEST['music_checkbox']['alternative'])) {
+                $pager->addWhere('hms_student_profiles.rock', 1, '=');
                 $_SESSION['hobbies_checkbox']['alternative'] = 1;
             }
 
-            if(isset($_REQUEST['music_checkbox']['world_music'])){
-                $pager->addWhere('hms_student_profiles.world_music',1,'=');
+            if(isset($_REQUEST['music_checkbox']['world_music'])) {
+                $pager->addWhere('hms_student_profiles.world_music', 1, '=');
                 $_SESSION['hobbies_checkbox']['world_music'] = 1;
             }
 
-            # Study times
-            if(isset($_REQUEST['study_times']['study_early_morning'])){
-                $pager->addWhere('hms_student_profiles.study_early_morning',1,'=');
+            // Study times
+            if(isset($_REQUEST['study_times']['study_early_morning'])) {
+                $pager->addWhere('hms_student_profiles.study_early_morning', 1, '=');
                 $_SESSION['study_times']['study_early_morning'] = 1;
             }
 
-            if(isset($_REQUEST['study_times']['study_morning_afternoon'])){
-                $pager->addWhere('hms_student_profiles.study_morning_afternoon',1,'=');
+            if(isset($_REQUEST['study_times']['study_morning_afternoon'])) {
+                $pager->addWhere('hms_student_profiles.study_morning_afternoon', 1 ,'=');
                 $_SESSION['study_times']['study_morning_afternoon'] = 1;
             }
 
-            if(isset($_REQUEST['study_times']['study_afternoon_evening'])){
-                $pager->addWhere('hms_student_profiles.study_afternoon_evening',1,'=');
+            if(isset($_REQUEST['study_times']['study_afternoon_evening'])) {
+                $pager->addWhere('hms_student_profiles.study_afternoon_evening', 1 ,'=');
                 $_SESSION['study_times']['study_afternoon_evening'] = 1;
             }
 
-            if(isset($_REQUEST['study_times']['study_evening'])){
-                $pager->addWhere('hms_student_profiles.study_evening',1,'=');
+            if(isset($_REQUEST['study_times']['study_evening'])) {
+                $pager->addWhere('hms_student_profiles.study_evening', 1 ,'=');
                 $_SESSION['study_times']['study_evening'] = 1;
             }
 
-            if(isset($_REQUEST['study_times']['study_late_night'])){
-                $pager->addWhere('hms_student_profiles.study_late_night',1,'=');
+            if(isset($_REQUEST['study_times']['study_late_night'])) {
+                $pager->addWhere('hms_student_profiles.study_late_night', 1 ,'=');
                 $_SESSION['study_times']['study_late_night'] = 1;
             }
 
-            # Drop downs
-            if(isset($_REQUEST['political_views_dropbox']) && $_REQUEST['political_views_dropbox'] != 0){
-                $pager->addWhere('hms_student_profiles.political_view',$_REQUEST['political_views_dropbox'],'=');
+            // Drop downs
+            if(isset($_REQUEST['political_views_dropbox']) && $_REQUEST['political_views_dropbox'] != 0) {
+                $pager->addWhere('hms_student_profiles.political_view', $_REQUEST['political_views_dropbox'],'=');
                 $_SESSION['political_views_dropbox'] = $_REQUEST['political_views_dropbox'];
             }
 
-            if(isset($_REQUEST['intended_major']) && $_REQUEST['intended_major'] != 0){
-                $pager->addWhere('hms_student_profiles.major',$_REQUEST['intended_major'],'=');
+            if(isset($_REQUEST['intended_major']) && $_REQUEST['intended_major'] != 0) {
+                $pager->addWhere('hms_student_profiles.major', $_REQUEST['intended_major'],'=');
                 $_SESSION['intended_major'] = $_REQUEST['intended_major'];
             }
 
-            if(isset($_REQUEST['important_experience']) && $_REQUEST['important_experience'] != 0){
-                $pager->addWhere('hms_student_profiles.experience',$_REQUEST['important_experience'],'=');
+            if(isset($_REQUEST['important_experience']) && $_REQUEST['important_experience'] != 0) {
+                $pager->addWhere('hms_student_profiles.experience', $_REQUEST['important_experience'],'=');
                 $_SESSION['important_experience'] = $_REQUEST['important_experience'];
             }
 
-            if(isset($_REQUEST['sleep_time']) && $_REQUEST['sleep_time'] != 0){
-                $pager->addWhere('hms_student_profiles.sleep_time',$_REQUEST['sleep_time'],'=');
+            if(isset($_REQUEST['sleep_time']) && $_REQUEST['sleep_time'] != 0) {
+                $pager->addWhere('hms_student_profiles.sleep_time', $_REQUEST['sleep_time'],'=');
                 $_SESSION['sleep_time'] = $_REQUEST['sleep_time'];
             }
 
-            if(isset($_REQUEST['wakeup_time']) && $_REQUEST['wakeup_time'] != 0){
-                $pager->addWhere('hms_student_profiles.wakeup_time',$_REQUEST['wakeup_time'],'=');
+            if(isset($_REQUEST['wakeup_time']) && $_REQUEST['wakeup_time'] != 0) {
+                $pager->addWhere('hms_student_profiles.wakeup_time', $_REQUEST['wakeup_time'],'=');
                 $_SESSION['wakeup_time'] = $_REQUEST['wakeup_time'];
             }
 
-            if(isset($_REQUEST['overnight_guests']) && $_REQUEST['overnight_guests'] != 0){
-                $pager->addWhere('hms_student_profiles.overnight_guests',$_REQUEST['overnight_guests'],'=');
+            if(isset($_REQUEST['overnight_guests']) && $_REQUEST['overnight_guests'] != 0) {
+                $pager->addWhere('hms_student_profiles.overnight_guests', $_REQUEST['overnight_guests'],'=');
                 $_SESSION['overnight_guests'] = $_REQUEST['overnight_guests'];
             }
 
-            if(isset($_REQUEST['loudness']) && $_REQUEST['loudness'] != 0){
-                $pager->addWhere('hms_student_profiles.loudness',$_REQUEST['loudness'],'=');
+            if(isset($_REQUEST['loudness']) && $_REQUEST['loudness'] != 0) {
+                $pager->addWhere('hms_student_profiles.loudness', $_REQUEST['loudness'],'=');
                 $_SESSION['loudness'] = $_REQUEST['loudness'];
             }
 
-            if(isset($_REQUEST['cleanliness']) && $_REQUEST['cleanliness'] != 0){
-                $pager->addWhere('hms_student_profiles.cleanliness',$_REQUEST['cleanliness'],'=');
+            if(isset($_REQUEST['cleanliness']) && $_REQUEST['cleanliness'] != 0) {
+                $pager->addWhere('hms_student_profiles.cleanliness', $_REQUEST['cleanliness'],'=');
                 $_SESSION['cleanliness'] = $_REQUEST['cleanliness'];
             }
 
-            if(isset($_REQUEST['free_time']) && $_REQUEST['free_time'] != 0){
-                $pager->addWhere('hms_student_profiles.free_time',$_REQUEST['free_time'],'=');
+            if(isset($_REQUEST['free_time']) && $_REQUEST['free_time'] != 0) {
+                $pager->addWhere('hms_student_profiles.free_time', $_REQUEST['free_time'],'=');
                 $_SESSION['free_time'] = $_REQUEST['free_time'];
             }
 
-            # Spoken Languages
-            if(isset($_REQUEST['language_checkbox']['arabic'])){
+            // Spoken Languages
+            if(isset($_REQUEST['language_checkbox']['arabic'])) {
                 $pager->addWhere('hms_student_profiles.arabic', 1, '=');
                 $_SESSION['language_checkbox']['arabic'] = 1;
             }
 
-            if(isset($_REQUEST['language_checkbox']['bengali'])){
+            if(isset($_REQUEST['language_checkbox']['bengali'])) {
                 $pager->addWhere('hms_student_profiles.bengali', 1, '=');
                 $_SESSION['language_checkbox']['bengali'] = 1;
             }
 
-            if(isset($_REQUEST['language_checkbox']['english'])){
+            if(isset($_REQUEST['language_checkbox']['english'])) {
                 $pager->addWhere('hms_student_profiles.english', 1, '=');
                 $_SESSION['language_checkbox']['english'] = 1;
             }
 
-            if(isset($_REQUEST['language_checkbox']['french'])){
+            if(isset($_REQUEST['language_checkbox']['french'])) {
                 $pager->addWhere('hms_student_profiles.french', 1, '=');
                 $_SESSION['language_checkbox']['french'] = 1;
             }
 
-            if(isset($_REQUEST['language_checkbox']['german'])){
+            if(isset($_REQUEST['language_checkbox']['german'])) {
                 $pager->addWhere('hms_student_profiles.german', 1, '=');
                 $_SESSION['language_checkbox']['german'] = 1;
             }
 
-            if(isset($_REQUEST['language_checkbox']['hindi'])){
+            if(isset($_REQUEST['language_checkbox']['hindi'])) {
                 $pager->addWhere('hms_student_profiles.hindi', 1, '=');
                 $_SESSION['language_checkbox']['hindi'] = 1;
             }
 
-            if(isset($_REQUEST['language_checkbox']['italian'])){
+            if(isset($_REQUEST['language_checkbox']['italian'])) {
                 $pager->addWhere('hms_student_profiles.italian', 1, '=');
                 $_SESSION['language_checkbox']['italian'] = 1;
             }
 
-            if(isset($_REQUEST['language_checkbox']['japanese'])){
+            if(isset($_REQUEST['language_checkbox']['japanese'])) {
                 $pager->addWhere('hms_student_profiles.japanese', 1, '=');
                 $_SESSION['language_checkbox']['japanese'] = 1;
             }
 
-            if(isset($_REQUEST['language_checkbox']['javanese'])){
+            if(isset($_REQUEST['language_checkbox']['javanese'])) {
                 $pager->addWhere('hms_student_profiles.javanese', 1, '=');
                 $_SESSION['language_checkbox']['javanese'] = 1;
             }
 
-            if(isset($_REQUEST['language_checkbox']['korean'])){
+            if(isset($_REQUEST['language_checkbox']['korean'])) {
                 $pager->addWhere('hms_student_profiles.korean', 1, '=');
                 $_SESSION['language_checkbox']['korean'] = 1;
             }
 
-            if(isset($_REQUEST['language_checkbox']['malay'])){
+            if(isset($_REQUEST['language_checkbox']['malay'])) {
                 $pager->addWhere('hms_student_profiles.malay', 1, '=');
                 $_SESSION['language_checkbox']['malay'] = 1;
             }
 
-            if(isset($_REQUEST['language_checkbox']['marathi'])){
+            if(isset($_REQUEST['language_checkbox']['marathi'])) {
                 $pager->addWhere('hms_student_profiles.marathi', 1, '=');
                 $_SESSION['language_checkbox']['marathi'] = 1;
             }
 
-            if(isset($_REQUEST['language_checkbox']['portuguese'])){
+            if(isset($_REQUEST['language_checkbox']['portuguese'])) {
                 $pager->addWhere('hms_student_profiles.portuguese', 1, '=');
                 $_SESSION['language_checkbox']['portuguese'] = 1;
             }
 
-            if(isset($_REQUEST['language_checkbox']['punjabi'])){
+            if(isset($_REQUEST['language_checkbox']['punjabi'])) {
                 $pager->addWhere('hms_student_profiles.punjabi', 1, '=');
                 $_SESSION['language_checkbox']['punjabi'] = 1;
             }
 
-            if(isset($_REQUEST['language_checkbox']['russian'])){
+            if(isset($_REQUEST['language_checkbox']['russian'])) {
                 $pager->addWhere('hms_student_profiles.russian', 1, '=');
                 $_SESSION['language_checkbox']['russian'] = 1;
             }
 
-            if(isset($_REQUEST['language_checkbox']['spanish'])){
+            if(isset($_REQUEST['language_checkbox']['spanish'])) {
                 $pager->addWhere('hms_student_profiles.spanish', 1, '=');
                 $_SESSION['language_checkbox']['spanish'] = 1;
             }
 
-            if(isset($_REQUEST['language_checkbox']['tamil'])){
+            if(isset($_REQUEST['language_checkbox']['tamil'])) {
                 $pager->addWhere('hms_student_profiles.tamil', 1, '=');
                 $_SESSION['language_checkbox']['tamil'] = 1;
             }
 
-            if(isset($_REQUEST['language_checkbox']['telugu'])){
+            if(isset($_REQUEST['language_checkbox']['telugu'])) {
                 $pager->addWhere('hms_student_profiles.telugu', 1, '=');
                 $_SESSION['language_checkbox']['telugu'] = 1;
             }
 
-            if(isset($_REQUEST['language_checkbox']['vietnamese'])){
+            if(isset($_REQUEST['language_checkbox']['vietnamese'])) {
                 $pager->addWhere('hms_student_profiles.vietnamese', 1, '=');
                 $_SESSION['language_checkbox']['vietnamese'] = 1;
             }
         }
 
-        # Join with hms_application table on username to make sure genders match.
+        // Join with hms_application table on username to make sure genders match.
         $pager->db->addJoin('LEFT OUTER', 'hms_student_profiles', 'hms_new_application', 'username', 'username');
         //$pager->addWhere('hms_student_profiles.user_id','hms_application.asu_username','ILIKE');
-        $pager->addWhere('hms_new_application.gender',$gender,'=');
+        $pager->addWhere('hms_new_application.gender', $gender, '=');
 
-        # Don't list the current user as a match
-        $pager->addWhere('hms_student_profiles.username',UserStatus::getUsername(),'NOT LIKE');
+        // Don't list the current user as a match
+        $pager->addWhere('hms_student_profiles.username', UserStatus::getUsername(), 'NOT LIKE');
 
         $pager->db->addOrder('username','ASC');
 
@@ -1233,9 +1233,9 @@ class RoommateProfile{
     public function get_arts_and_crafts()
     {
         if($this->arts_and_crafts == 1) {
-            return TRUE;
+            return true;
         }else{
-            return FALSE;
+            return false;
         }
     }
 
@@ -1247,9 +1247,9 @@ class RoommateProfile{
     public function get_books_and_reading()
     {
         if($this->books_and_reading == 1) {
-            return TRUE;
+            return true;
         }else{
-            return FALSE;
+            return false;
         }
     }
 
@@ -1261,9 +1261,9 @@ class RoommateProfile{
     public function get_cars()
     {
         if($this->cars == 1) {
-            return TRUE;
+            return true;
         }else{
-            return FALSE;
+            return false;
         }
     }
 
@@ -1275,9 +1275,9 @@ class RoommateProfile{
     public function get_church_activities()
     {
         if($this->church_activities == 1) {
-            return TRUE;
+            return true;
         }else{
-            return FALSE;
+            return false;
         }
     }
 
@@ -1289,9 +1289,9 @@ class RoommateProfile{
     public function get_collecting()
     {
         if($this->collecting == 1) {
-            return TRUE;
+            return true;
         }else{
-            return FALSE;
+            return false;
         }
     }
 
@@ -1303,9 +1303,9 @@ class RoommateProfile{
     public function get_computers_and_technology()
     {
         if($this->computers_and_technology == 1) {
-            return TRUE;
+            return true;
         }else{
-            return FALSE;
+            return false;
         }
     }
 
@@ -1317,9 +1317,9 @@ class RoommateProfile{
     public function get_dancing()
     {
         if($this->dancing == 1) {
-            return TRUE;
+            return true;
         }else{
-            return FALSE;
+            return false;
         }
     }
 
@@ -1331,9 +1331,9 @@ class RoommateProfile{
     public function get_fashion()
     {
         if($this->fashion == 1) {
-            return TRUE;
+            return true;
         }else{
-            return FALSE;
+            return false;
         }
     }
 
@@ -1345,9 +1345,9 @@ class RoommateProfile{
     public function get_fine_arts()
     {
         if($this->fine_arts == 1) {
-            return TRUE;
+            return true;
         }else{
-            return FALSE;
+            return false;
         }
     }
 
@@ -1359,9 +1359,9 @@ class RoommateProfile{
     public function get_gardening()
     {
         if($this->gardening == 1) {
-            return TRUE;
+            return true;
         }else{
-            return FALSE;
+            return false;
         }
     }
 
@@ -1373,9 +1373,9 @@ class RoommateProfile{
     public function get_games()
     {
         if($this->games == 1) {
-            return TRUE;
+            return true;
         }else{
-            return FALSE;
+            return false;
         }
     }
 
@@ -1387,9 +1387,9 @@ class RoommateProfile{
     public function get_humor()
     {
         if($this->humor == 1) {
-            return TRUE;
+            return true;
         }else{
-            return FALSE;
+            return false;
         }
     }
 
@@ -1401,9 +1401,9 @@ class RoommateProfile{
     public function get_investing_personal_finance()
     {
         if($this->investing_personal_finance == 1) {
-            return TRUE;
+            return true;
         }else{
-            return FALSE;
+            return false;
         }
     }
 
@@ -1415,9 +1415,9 @@ class RoommateProfile{
     public function get_movies()
     {
         if($this->movies == 1) {
-            return TRUE;
+            return true;
         }else{
-            return FALSE;
+            return false;
         }
     }
 
@@ -1429,9 +1429,9 @@ class RoommateProfile{
     public function get_music()
     {
         if($this->music == 1) {
-            return TRUE;
+            return true;
         }else{
-            return FALSE;
+            return false;
         }
     }
 
@@ -1443,9 +1443,9 @@ class RoommateProfile{
     public function get_outdoor_activities()
     {
         if($this->outdoor_activities == 1) {
-            return TRUE;
+            return true;
         }else{
-            return FALSE;
+            return false;
         }
     }
 
@@ -1457,9 +1457,9 @@ class RoommateProfile{
     public function get_pets_and_animals()
     {
         if($this->pets_and_animals == 1) {
-            return TRUE;
+            return true;
         }else{
-            return FALSE;
+            return false;
         }
     }
 
@@ -1471,9 +1471,9 @@ class RoommateProfile{
     public function get_photography()
     {
         if($this->photography == 1) {
-            return TRUE;
+            return true;
         }else{
-            return FALSE;
+            return false;
         }
     }
 
@@ -1485,9 +1485,9 @@ class RoommateProfile{
     public function get_politics()
     {
         if($this->politics == 1) {
-            return TRUE;
+            return true;
         }else{
-            return FALSE;
+            return false;
         }
     }
 
@@ -1499,9 +1499,9 @@ class RoommateProfile{
     public function get_sports()
     {
         if($this->sports == 1) {
-            return TRUE;
+            return true;
         }else{
-            return FALSE;
+            return false;
         }
     }
 
@@ -1513,9 +1513,9 @@ class RoommateProfile{
     public function get_travel()
     {
         if($this->travel == 1) {
-            return TRUE;
+            return true;
         }else{
-            return FALSE;
+            return false;
         }
     }
 
@@ -1527,9 +1527,9 @@ class RoommateProfile{
     public function get_tv_shows()
     {
         if($this->tv_shows == 1) {
-            return TRUE;
+            return true;
         }else{
-            return FALSE;
+            return false;
         }
     }
 
@@ -1541,9 +1541,9 @@ class RoommateProfile{
     public function get_volunteering()
     {
         if($this->volunteering == 1) {
-            return TRUE;
+            return true;
         }else{
-            return FALSE;
+            return false;
         }
     }
 
@@ -1555,9 +1555,9 @@ class RoommateProfile{
     public function get_writing()
     {
         if($this->writing == 1) {
-            return TRUE;
+            return true;
         }else{
-            return FALSE;
+            return false;
         }
     }
 
@@ -1569,9 +1569,9 @@ class RoommateProfile{
     public function get_rotc()
     {
         if($this->rotc == 1) {
-            return TRUE;
+            return true;
         }else{
-            return FALSE;
+            return false;
         }
     }
 
@@ -1587,9 +1587,9 @@ class RoommateProfile{
     public function get_alternative()
     {
         if($this->alternative == 1) {
-            return TRUE;
+            return true;
         }else{
-            return FALSE;
+            return false;
         }
     }
 
@@ -1601,9 +1601,9 @@ class RoommateProfile{
     public function get_ambient()
     {
         if($this->ambient == 1) {
-            return TRUE;
+            return true;
         }else{
-            return FALSE;
+            return false;
         }
     }
 
@@ -1615,9 +1615,9 @@ class RoommateProfile{
     public function get_beach()
     {
         if($this->beach == 1) {
-            return TRUE;
+            return true;
         }else{
-            return FALSE;
+            return false;
         }
     }
 
@@ -1629,9 +1629,9 @@ class RoommateProfile{
     public function get_bluegrass()
     {
         if($this->bluegrass == 1) {
-            return TRUE;
+            return true;
         }else{
-            return FALSE;
+            return false;
         }
     }
 
@@ -1643,9 +1643,9 @@ class RoommateProfile{
     public function get_blues()
     {
         if($this->blues == 1) {
-            return TRUE;
+            return true;
         }else{
-            return FALSE;
+            return false;
         }
     }
 
@@ -1657,10 +1657,10 @@ class RoommateProfile{
     public function get_christian()
     {
         if($this->christian == 1) {
-            return TRUE;
+            return true;
         }
         else{
-            return FALSE;
+            return false;
         }
     }
 
@@ -1672,9 +1672,9 @@ class RoommateProfile{
     public function get_classical()
     {
         if($this->classical == 1) {
-            return TRUE;
+            return true;
         }else{
-            return FALSE;
+            return false;
         }
     }
 
@@ -1686,9 +1686,9 @@ class RoommateProfile{
     public function get_classic_rock()
     {
         if($this->classic_rock == 1) {
-            return TRUE;
+            return true;
         }else{
-            return FALSE;
+            return false;
         }
     }
 
@@ -1700,9 +1700,9 @@ class RoommateProfile{
     public function get_country()
     {
         if($this->country == 1) {
-            return TRUE;
+            return true;
         }else{
-            return FALSE;
+            return false;
         }
     }
 
@@ -1714,9 +1714,9 @@ class RoommateProfile{
     public function get_electronic()
     {
         if($this->electronic == 1) {
-            return TRUE;
+            return true;
         }else{
-            return FALSE;
+            return false;
         }
     }
 
@@ -1728,9 +1728,9 @@ class RoommateProfile{
     public function get_folk()
     {
         if($this->folk == 1) {
-            return TRUE;
+            return true;
         }else{
-            return FALSE;
+            return false;
         }
     }
 
@@ -1742,9 +1742,9 @@ class RoommateProfile{
     public function get_heavy_metal()
     {
         if($this->heavy_metal == 1) {
-            return TRUE;
+            return true;
         }else{
-            return FALSE;
+            return false;
         }
     }
 
@@ -1756,9 +1756,9 @@ class RoommateProfile{
     public function get_hip_hop()
     {
         if($this->hip_hop == 1) {
-            return TRUE;
+            return true;
         }else{
-            return FALSE;
+            return false;
         }
     }
 
@@ -1770,9 +1770,9 @@ class RoommateProfile{
     public function get_house()
     {
         if($this->house == 1) {
-            return TRUE;
+            return true;
         }else{
-            return FALSE;
+            return false;
         }
     }
 
@@ -1784,9 +1784,9 @@ class RoommateProfile{
     public function get_industrial()
     {
         if($this->industrial == 1) {
-            return TRUE;
+            return true;
         }else{
-            return FALSE;
+            return false;
         }
     }
 
@@ -1798,9 +1798,9 @@ class RoommateProfile{
     public function get_jazz()
     {
         if($this->jazz == 1) {
-            return TRUE;
+            return true;
         }else{
-            return FALSE;
+            return false;
         }
     }
 
@@ -1812,9 +1812,9 @@ class RoommateProfile{
     public function get_popular_music()
     {
         if($this->popular_music == 1) {
-            return TRUE;
+            return true;
         }else{
-            return FALSE;
+            return false;
         }
     }
 
@@ -1826,9 +1826,9 @@ class RoommateProfile{
     public function get_progressive()
     {
         if($this->progressive == 1) {
-            return TRUE;
+            return true;
         }else{
-            return FALSE;
+            return false;
         }
     }
 
@@ -1840,9 +1840,9 @@ class RoommateProfile{
     public function get_punk()
     {
         if($this->punk == 1) {
-            return TRUE;
+            return true;
         }else{
-            return FALSE;
+            return false;
         }
     }
 
@@ -1854,9 +1854,9 @@ class RoommateProfile{
     public function get_r_and_b()
     {
         if($this->r_and_b == 1) {
-            return TRUE;
+            return true;
         }else{
-            return FALSE;
+            return false;
         }
     }
 
@@ -1868,9 +1868,9 @@ class RoommateProfile{
     public function get_rap()
     {
         if($this->rap == 1) {
-            return TRUE;
+            return true;
         }else{
-            return FALSE;
+            return false;
         }
     }
 
@@ -1882,9 +1882,9 @@ class RoommateProfile{
     public function get_reggae()
     {
         if($this->reggae == 1) {
-            return TRUE;
+            return true;
         }else{
-            return FALSE;
+            return false;
         }
     }
 
@@ -1896,9 +1896,9 @@ class RoommateProfile{
     public function get_rock()
     {
         if($this->rock == 1) {
-            return TRUE;
+            return true;
         }else{
-            return FALSE;
+            return false;
         }
     }
 
@@ -1910,9 +1910,9 @@ class RoommateProfile{
     public function get_world_music()
     {
         if($this->world_music == 1) {
-            return TRUE;
+            return true;
         }else{
-            return FALSE;
+            return false;
         }
     }
 
@@ -1927,9 +1927,9 @@ class RoommateProfile{
     public function get_study_early_morning()
     {
         if($this->study_early_morning == 1) {
-            return TRUE;
+            return true;
         }else{
-            return FALSE;
+            return false;
         }
     }
 
@@ -1941,9 +1941,9 @@ class RoommateProfile{
     public function get_study_morning_afternoon()
     {
         if($this->study_morning_afternoon == 1) {
-            return TRUE;
+            return true;
         }else{
-            return FALSE;
+            return false;
         }
     }
 
@@ -1955,9 +1955,9 @@ class RoommateProfile{
     public function get_study_afternoon_evening()
     {
         if($this->study_afternoon_evening == 1) {
-            return TRUE;
+            return true;
         }else{
-            return FALSE;
+            return false;
         }
     }
 
@@ -1969,9 +1969,9 @@ class RoommateProfile{
     public function get_study_evening()
     {
         if($this->study_evening == 1) {
-            return TRUE;
+            return true;
         }else{
-            return FALSE;
+            return false;
         }
     }
 
@@ -1983,92 +1983,92 @@ class RoommateProfile{
     public function get_study_late_night()
     {
         if($this->study_late_night == 1) {
-            return TRUE;
+            return true;
         }else{
-            return FALSE;
+            return false;
         }
     }
 
-    # Spoken Languages
+    // Spoken Languages
     public function get_arabic()
     {
-        return $this->arabic == 1 ? TRUE : FALSE;
+        return $this->arabic == 1 ? true : false;
     }
     public function get_bengali()
     {
-        return $this->bengali == 1 ? TRUE : FALSE;
+        return $this->bengali == 1 ? true : false;
     }
     public function get_chinese()
     {
-        return $this->chinese == 1 ? TRUE : FALSE;
+        return $this->chinese == 1 ? true : false;
     }
     public function get_english()
     {
-        return $this->english == 1 ? TRUE : FALSE;
+        return $this->english == 1 ? true : false;
     }
     public function get_french()
     {
-        return $this->french == 1 ? TRUE : FALSE;
+        return $this->french == 1 ? true : false;
     }
     public function get_german()
     {
-        return $this->german == 1 ? TRUE : FALSE;
+        return $this->german == 1 ? true : false;
     }
     public function get_hindi()
     {
-        return $this->hindi == 1 ? TRUE : FALSE;
+        return $this->hindi == 1 ? true : false;
     }
     public function get_italian()
     {
-        return $this->italian == 1 ? TRUE : FALSE;
+        return $this->italian == 1 ? true : false;
     }
     public function get_japanese()
     {
-        return $this->japanese == 1 ? TRUE : FALSE;
+        return $this->japanese == 1 ? true : false;
     }
     public function get_javanese()
     {
-        return $this->javanese == 1 ? TRUE : FALSE;
+        return $this->javanese == 1 ? true : false;
     }
     public function get_korean()
     {
-        return $this->korean == 1 ? TRUE : FALSE;
+        return $this->korean == 1 ? true : false;
     }
     public function get_malay()
     {
-        return $this->malay == 1 ? TRUE : FALSE;
+        return $this->malay == 1 ? true : false;
     }
     public function get_marathi()
     {
-        return $this->marathi == 1 ? TRUE : FALSE;
+        return $this->marathi == 1 ? true : false;
     }
     public function get_portuguese()
     {
-        return $this->portuguese == 1 ? TRUE : FALSE;
+        return $this->portuguese == 1 ? true : false;
     }
     public function get_punjabi()
     {
-        return $this->punjabi == 1 ? TRUE : FALSE;
+        return $this->punjabi == 1 ? true : false;
     }
     public function get_russian()
     {
-        return $this->russian == 1 ? TRUE : FALSE;
+        return $this->russian == 1 ? true : false;
     }
     public function get_spanish()
     {
-        return $this->spanish == 1 ? TRUE : FALSE;
+        return $this->spanish == 1 ? true : false;
     }
     public function get_tamil()
     {
-        return $this->tamil == 1 ? TRUE : FALSE;
+        return $this->tamil == 1 ? true : false;
     }
     public function get_telugu()
     {
-        return $this->telugu == 1 ? TRUE : FALSE;
+        return $this->telugu == 1 ? true : false;
     }
     public function get_vietnamese()
     {
-        return $this->vietnamese == 1 ? TRUE : FALSE;
+        return $this->vietnamese == 1 ? true : false;
     }
 
     public function set_arabic($value=1)

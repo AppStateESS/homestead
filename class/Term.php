@@ -5,9 +5,9 @@
  * Maintains the "current" term, "active" term, and handles tasks related
  * to creating new terms.
  *
+ * @package hms
  * @author Jeff Tickle <jtickle at tux dot appstate dot edu>
  * @author Jeremy Booker <jbooker at tux dot appstate dot edu>
- * @package hms
  *
  */
 

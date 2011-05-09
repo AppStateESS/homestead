@@ -68,6 +68,7 @@ abstract class StudentDataProvider {
 
     /**
      * Gets the fallback provider for this DataProvider.
+     *
      * @return StudentDataProvider
      * @throws StudentNotFoundException
      */

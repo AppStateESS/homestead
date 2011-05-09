@@ -461,6 +461,7 @@ class HMS_Email{
 
     /**
      * Sends the email for the nightly withdrawn search output.
+     *
      * @param String $text
      */
     public function sendWithdrawnSearchOutput($text)

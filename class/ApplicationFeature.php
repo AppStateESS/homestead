@@ -6,8 +6,8 @@ define('APPLICATION_FEATURE_DIR', 'applicationFeature');
 /**
  * A class to hold meta-data for ApplicationFeatures.
  *
- * @author jbooker
  * @package hms
+ * @author Jeremy Booker
  *
  */
 abstract class ApplicationFeatureRegistration
@@ -29,7 +29,8 @@ abstract class ApplicationFeatureRegistration
      * Returns the name of this feature.
      * @return String The name of this feature.
      */
-    function getName(){
+    function getName()
+    {
         return $this->name;
     }
 
@@ -37,7 +38,8 @@ abstract class ApplicationFeatureRegistration
      * Returns the description of this feature.
      * @return String Feature description
      */
-    function getDescription(){
+    function getDescription(
+    {
         return $this->description;
     }
 
@@ -45,7 +47,8 @@ abstract class ApplicationFeatureRegistration
      * Returns whether or not a start date is required
      * @return boolean Start date required
      */
-    function requiresStartDate(){
+    function requiresStartDate()
+    {
         return $this->startDateRequired;
     }
 
@@ -53,7 +56,8 @@ abstract class ApplicationFeatureRegistration
      * Returns whether or not an edit date is required
      * @return boolean edit date required
      */
-    function requiresEditDate() {
+    function requiresEditDate()
+    {
         return $this->editDateRequired;
     }
 
@@ -61,7 +65,8 @@ abstract class ApplicationFeatureRegistration
      * Returns whether or not an edit date is required.
      * @return boolean end date required
      */
-    function requiresEndDate(){
+    function requiresEndDate()
+    {
         return $this->endDateRequired;
     }
 
@@ -70,7 +75,8 @@ abstract class ApplicationFeatureRegistration
      * NB: Feature priorities can conflict! Don't give two features the same priority!
      * @returns Integer feature priority
      */
-    function getPriority(){
+    function getPriority()
+    {
         return $this->priority;
     }
 
@@ -89,8 +95,8 @@ abstract class ApplicationFeatureRegistration
  * A class to represent each of the various "features" which can be enabled/disabled
  * for housing applications of a particular term.
  *
- * @author		Jeremy Booker <jbooker AT tux DOT appstate DOT edu>
  * @package	hms
+ * @author Jeremy Booker
  *
  */
 abstract class ApplicationFeature
@@ -108,14 +114,14 @@ abstract class ApplicationFeature
      * Constructor. Loads an application feature object from the database if ID is set.
      * @param Integer $id
      */
-    public function __construct($id = NULL)
+    public function __construct($id = null)
     {
         $this->id = $id;
 
-        if($id != 0){
+        if($id != 0) {
             $this->load();
         } else {
-        	$this->enabled = false;
+            $this->enabled = false;
         }
     }
 
@@ -128,7 +134,7 @@ abstract class ApplicationFeature
         $db->addWhere('id', $this->id);
         $result = $db->loadObject($this);
 
-        if(PHPWS_Error::logIfError($result)){
+        if(PHPWS_Error::logIfError($result)) {
             PHPWS_Core::initModclass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
@@ -139,20 +145,20 @@ abstract class ApplicationFeature
      */
     public function save()
     {
-    	if(!isset($this->name)) {
-    		$this->name = get_class($this);
-    	}
+        if(!isset($this->name)) {
+            $this->name = get_class($this);
+        }
 
-    	$missing = $this->validate();
-    	if(!empty($missing)) {
-    	    PHPWS_Core::initModClass('hms', 'exception/MissingDataException.php');
-    	    throw new MissingDataException('Missing required data.', $missing);
-    	}
+        $missing = $this->validate();
+        if(!empty($missing)) {
+            PHPWS_Core::initModClass('hms', 'exception/MissingDataException.php');
+            throw new MissingDataException('Missing required data.', $missing);
+        }
 
         $db = new PHPWS_DB('hms_application_feature');
         $result = $db->saveObject($this);
 
-        if(PHPWS_Error::logIfError($result)){
+        if(PHPWS_Error::logIfError($result)) {
             PHPWS_Core::initModclass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
@@ -164,7 +170,7 @@ abstract class ApplicationFeature
      */
     public function validate()
     {
-    	$reg = $this->getRegistration();
+        $reg = $this->getRegistration();
         $missing = array();
 
         if($reg->requiresStartDate() && !self::validateDate($this->start_date)) {
@@ -176,7 +182,7 @@ abstract class ApplicationFeature
         }
 
         if($reg->requiresEndDate() && !self::validateDate($this->end_date)) {
-        	$missing[] = 'end_date';
+            $missing[] = 'end_date';
         }
 
         return $missing;
@@ -184,11 +190,11 @@ abstract class ApplicationFeature
 
     private static function validateDate($date)
     {
-    	if(is_null($date) || empty($date)) {
-    		return FALSE;
-    	}
+        if(is_null($date) || empty($date)) {
+            return false;
+        }
 
-        return TRUE;
+        return true;
     }
 
     /**
@@ -196,14 +202,15 @@ abstract class ApplicationFeature
      */
     public function delete()
     {
-        if(!isset($this->id) || empty($this->id))
-        return;
+        if(!isset($this->id) || empty($this->id)) {
+            return;
+        }
 
         $db = new PHPWS_DB('hms_application_feature');
         $db->addWhere('id', $this->id);
         $result = $db->delete();
 
-        if(PHPWS_Error::logIfError($result)){
+        if(PHPWS_Error::logIfError($result)) {
             PHPWS_Core::initModclass('exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
@@ -214,8 +221,8 @@ abstract class ApplicationFeature
      */
     public function getRegistration()
     {
-    	$regClass = get_class($this) . 'Registration';
-    	return new $regClass();
+        $regClass = get_class($this) . 'Registration';
+        return new $regClass();
     }
 
     /**
@@ -229,60 +236,74 @@ abstract class ApplicationFeature
      * Getter / Setter methods
      */
 
-    public function getId() {
-    	return $this->id;
+    public function getId()
+    {
+        return $this->id;
     }
 
-    public function setId($id) {
-    	$this->id = $id;
+    public function setId($id)
+    {
+        $this->id = $id;
     }
 
-    public function getTerm(){
+    public function getTerm()
+    {
         return $this->term;
     }
 
-    public function setTerm($term) {
-    	$this->term = $term;
+    public function setTerm($term)
+    {
+        $this->term = $term;
     }
 
-    public function getName() {
-    	return $this->name;
+    public function getName()
+    {
+        return $this->name;
     }
 
-    public function setName($name) {
-    	$this->name = $name;
+    public function setName($name)
+    {
+        $this->name = $name;
     }
 
-    public function isEnabled() {
-    	return $this->enabled;
+    public function isEnabled()
+    {
+        return $this->enabled;
     }
 
-    public function setEnabled($enabled) {
-    	$this->enabled = $enabled;
+    public function setEnabled($enabled)
+    {
+        $this->enabled = $enabled;
     }
 
-    public function getStartDate(){
+    public function getStartDate()
+    {
         return $this->start_date;
     }
 
-    public function setStartDate($start_date) {
-    	$this->start_date = $start_date;
+    public function setStartDate($start_date)
+    {
+        $this->start_date = $start_date;
     }
 
-    public function getEditDate() {
+    public function getEditDate()
+    {
         return $this->edit_date;
     }
 
-    public function setEditDate($edit_date) {
+    public function setEditDate($edit_date)
+    {
         $this->edit_date = $edit_date;
     }
 
-    public function getEndDate(){
+    public function getEndDate()
+    {
         return $this->end_date;
     }
 
-    public function setEndDate($end_date) {
-    	$this->end_date = $end_date;
+    public function setEndDate($end_date)
+    {
+        $this->end_date = $end_date;
     }
 
     /******************
@@ -302,9 +323,11 @@ abstract class ApplicationFeature
 
         $files = scandir("{$dir}/");
 
-        foreach($files as $file){
+        foreach($files as $file) {
             $feature = preg_replace('/\.php$/', '', $file);
-            if($feature == $file) continue;
+            if($feature == $file) {
+                continue;
+            }
             PHPWS_Core::initModClass('hms', APPLICATION_FEATURE_DIR . '/' . $file);
 
             $registration = "{$feature}Registration";
@@ -324,32 +347,32 @@ abstract class ApplicationFeature
 
         $result = $db->select('row');
 
-        if(PHPWS_Error::logIfError($result)){
+        if(PHPWS_Error::logIfError($result)) {
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
-        if(empty($result) || is_null($result)){
-            return FALSE;
+        if(empty($result) || is_null($result)) {
+            return false;
         }
 
         if(!$feature->showForStudent($student, $term)) {
-        	return FALSE;
+            return false;
         }
 
-        if($result['enabled'] == 0){
-            return FALSE;
+        if($result['enabled'] == 0) {
+            return false;
         }
 
-        if(!is_null($result['start_date']) && time() < $result['start_date']){
-            return FALSE;
+        if(!is_null($result['start_date']) && time() < $result['start_date']) {
+            return false;
         }
 
-        if(!is_null($result['end_date']) && time() > $result['end_date']){
-            return FALSE;
+        if(!is_null($result['end_date']) && time() > $result['end_date']) {
+            return false;
         }
 
-        return TRUE;
+        return true;
     }
 
     /**
@@ -370,7 +393,7 @@ abstract class ApplicationFeature
         $results = $db->select();
 
         $features = array();
-        foreach($results as $result){
+        foreach($results as $result) {
 
             // Instanciate a registration object
             $path = 'applicationFeature/' . $result['name'] . '.php';
@@ -378,8 +401,8 @@ abstract class ApplicationFeature
             $regClass = $result['name'] . 'Registration';
             $reg = new $regClass;
 
-            # Check to see if this feature is allowed for this student
-            if(!$reg->showForStudent($student, $term)){
+            // Check to see if this feature is allowed for this student
+            if(!$reg->showForStudent($student, $term)) {
                 continue;
             }
 
@@ -394,9 +417,9 @@ abstract class ApplicationFeature
 
     public static function getInstanceById($id)
     {
-       $db = new PHPWS_DB('hms_application_feature');
-       $db->addWhere('id', $id);
-       $result = $db->select('row');
+        $db = new PHPWS_DB('hms_application_feature');
+        $db->addWhere('id', $id);
+        $result = $db->select('row');
 
         if(PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
@@ -407,48 +430,48 @@ abstract class ApplicationFeature
 
     public static function getInstanceByNameAndTerm($name, $term)
     {
-    	$db = new PHPWS_DB('hms_application_feature');
-    	$db->addWhere('name', $name);
-    	$db->addWhere('term', $term);
-    	$result = $db->select('one');
+        $db = new PHPWS_DB('hms_application_feature');
+        $db->addWhere('name', $name);
+        $db->addWhere('term', $term);
+        $result = $db->select('one');
 
         if(PHPWS_Error::logIfError($result)) {
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
-    	if(count($result) > 0) {
-    		return self::getInstanceById($result);
-    	}
+        if(count($result) > 0) {
+            return self::getInstanceById($result);
+        }
 
-    	/*
-    	$f = self::getInstanceByName($name);
-    	$f->setTerm($term);
-    	return $f;
-    	*/
+        /*
+         $f = self::getInstanceByName($name);
+         $f->setTerm($term);
+         return $f;
+         */
 
-    	return NULL;
+        return null;
     }
 
     public static function getInstanceByName($name)
     {
-    	PHPWS_Core::initModClass('hms', APPLICATION_FEATURE_DIR . "/$name.php");
+        PHPWS_Core::initModClass('hms', APPLICATION_FEATURE_DIR . "/$name.php");
         $f = new $name();
         return $f;
     }
 
     public static function plugInstance(array $data)
     {
-    	$f = self::getInstanceByName($data['name']);
-    	PHPWS_Core::plugObject($f, $data);
+        $f = self::getInstanceByName($data['name']);
+        PHPWS_Core::plugObject($f, $data);
         return $f;
     }
 
     public static function getAllForTerm($term)
     {
-    	$db = new PHPWS_DB('hms_application_feature');
-    	$db->addWhere('term', $term);
-    	$result = $db->select();
+        $db = new PHPWS_DB('hms_application_feature');
+        $db->addWhere('term', $term);
+        $result = $db->select();
 
         if(PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
@@ -457,8 +480,8 @@ abstract class ApplicationFeature
         $features = array();
         foreach($result as $feature)
         {
-        	$f = ApplicationFeature::plugInstance($feature);
-        	$features[$f->getName()] = $f;
+            $f = ApplicationFeature::plugInstance($feature);
+            $features[$f->getName()] = $f;
         }
 
         return $features;

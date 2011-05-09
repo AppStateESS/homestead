@@ -125,10 +125,10 @@ class WithdrawnSearch {
         $roommates = HMS_Roommate::get_all_roommates($student->getUsername(), $this->term);
         if(sizeof($roommates) > 0) {
             # Delete each roommate request
-            foreach($roommates as $rm){
-                try{
+            foreach($roommates as $rm) {
+                try {
                     $rm->delete();
-                }catch(Exception $e){
+                } catch(Exception $e) {
                     //TODO
                 }
 
@@ -210,6 +210,7 @@ class WithdrawnSearch {
     /**
      * Takes a PHPWS_Template object and plugs the various variables into it
      * @param PHPWS_Template $tpl
+     *
      * @return Array template tags
      */
     public function doTemplateStuff($tpl)

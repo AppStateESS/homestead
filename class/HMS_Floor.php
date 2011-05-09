@@ -51,7 +51,7 @@ class HMS_Floor extends HMS_Item
      * Instance Methods *
      *******************/
 
-    /*
+    /**
      * Saves a new or updated floor hall object
      */
     public function save()
@@ -66,7 +66,7 @@ class HMS_Floor extends HMS_Item
         }
     }
 
-    /*
+    /**
      * Copies this floor object to a new term, then calls copy on all
      * 'this' floor's rooms
      *
@@ -154,7 +154,7 @@ class HMS_Floor extends HMS_Item
         $floorCmd->setFloorId($this->id);
         if(!is_null($prependText)) {
             $text = $prependText . ' ' . $this->floor_number;
-        }else{
+        } else {
             $text = $this->floor_number;
         }
         return $floorCmd->getLink($text);
@@ -198,7 +198,7 @@ class HMS_Floor extends HMS_Item
         }
     }
 
-    /*
+    /**
      * Creates the rooms and beds for a new floor
      */
     public function create_child_objects($rooms_per_floor, $beds_per_room)
@@ -218,7 +218,7 @@ class HMS_Floor extends HMS_Item
         }
     }
 
-    /*
+    /**
      * Returns true or false.
      *
      * This public function uses the following logic:
@@ -240,49 +240,49 @@ class HMS_Floor extends HMS_Item
      */
     public function can_change_gender($target_gender, $ignore_upper = false)
     {
-        # Ignore upper is true, we're trying to change a hall's gender
+        // Ignore upper is true, we're trying to change a hall's gender
         if($ignore_upper) {
-            # If ignore upper is true and the target gender is coed, then
-            # we can always return true.
+            // If ignore upper is true and the target gender is coed, then
+            // we can always return true.
             if($target_gender == COED) {
                 return true;
             }
 
-            # Can only change to male/female if there are no rooms of the opposite sex on this hall
-            # TODO: This should check for rooms that are of the opposite sex AND not empty
+            // Can only change to male/female if there are no rooms of the opposite sex on this hall
+            // TODO: This should check for rooms that are of the opposite sex AND not empty
             if($target_gender == MALE) {
                 $check_for_gender = FEMALE;
-            }else{
+            } else {
                 $check_for_gender = MALE;
             }
 
-            # If a check for rooms of the opposite gender returns true, then return false
+            // If a check for rooms of the opposite gender returns true, then return false
             if($this->check_for_rooms_of_gender($check_for_gender)) {
                 return false;
             }
 
-        }else{
-            # Ignore upper is false, load the hall and compare
+        } else {
+            // Ignore upper is false, load the hall and compare
 
             if(!$this->loadHall()) {
                 // an error occured loading the hall
                 return false;
             }
 
-            # The target gender must match the hall's gender, unless the hall is COED
+            // The target gender must match the hall's gender, unless the hall is COED
             if($this->_hall->gender_type != COED && $this->_hall->gender_type != $target_gender) {
                 return false;
             }
 
-            # Additionally, we need to check for rooms of the oppsite sex, unless the target gender is COED
+            // Additionally, we need to check for rooms of the oppsite sex, unless the target gender is COED
             if($target_gender != COED) {
                 if($target_gender == MALE) {
                     $check_for_gender = FEMALE;
-                }else{
+                } else {
                     $check_for_gender = MALE;
                 }
 
-                # If a check for rooms of the opposite gender returns true, then return false
+                // If a check for rooms of the opposite gender returns true, then return false
                 if($this->check_for_rooms_of_gender($check_for_gender)) {
                     return false;
                 }
@@ -309,7 +309,7 @@ class HMS_Floor extends HMS_Item
 
         if($result == 0) {
             return false;
-        }else{
+        } else {
             return true;
         }
     }
@@ -430,7 +430,7 @@ class HMS_Floor extends HMS_Item
         return $this->_rooms;
     }
 
-    /*
+    /**
      * Returns an associative array where the keys are room ID's
      * and the values are the room numbers.
      */
@@ -451,7 +451,9 @@ class HMS_Floor extends HMS_Item
     }
 
     /**
-     * Returns an array of the beds on the current floor
+     * Returns an array of the bed on the current floor
+     *
+     * @return Array An array of HMS_Bed objects that exist on the current floor.
      */
     public function get_beds()
     {
@@ -489,6 +491,8 @@ class HMS_Floor extends HMS_Item
 
     /**
      * Returns true if this floor has vancancies, false otherwise
+     *
+     * @return bool True if the floor has vacancies, false otherwise.
      */
     public function has_vacancy()
     {
@@ -501,6 +505,8 @@ class HMS_Floor extends HMS_Item
 
     /**
      * Returns an array of room objects on this floor that have vacancies
+     *
+     * @return Array<HMS_Room> An array of HMS_Room objects which are vacant on this floor.
      */
     public function getRoomsWithVacancies()
     {
@@ -539,7 +545,7 @@ class HMS_Floor extends HMS_Item
     {
         $now = mktime();
 
-        # Calculate the number of non-full male/female rooms in this hall
+        // Calculate the number of non-full male/female rooms in this hall
         $query =   "SELECT DISTINCT COUNT(hms_room.id) FROM hms_room
                     JOIN hms_bed ON hms_bed.room_id = hms_room.id
                     JOIN hms_floor ON hms_room.floor_id = hms_floor.id
@@ -626,7 +632,7 @@ class HMS_Floor extends HMS_Item
     {
         $now = mktime();
 
-        # Get the number of rooms in this hall which have every bed either assigned or reserved through the lottery.
+        // Get the number of rooms in this hall which have every bed either assigned or reserved through the lottery.
         $query      = "SELECT count(hms_room.*) FROM hms_room
                        JOIN hms_floor ON hms_room.floor_id = hms_floor.id
                        AND hms_floor.id = {$this->id} AND
