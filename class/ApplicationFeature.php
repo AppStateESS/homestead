@@ -38,7 +38,7 @@ abstract class ApplicationFeatureRegistration
      * Returns the description of this feature.
      * @return String Feature description
      */
-    function getDescription(
+    function getDescription()
     {
         return $this->description;
     }
