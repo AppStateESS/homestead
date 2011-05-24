@@ -20,7 +20,6 @@ class RoomView extends View {
         PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
         PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Pricing_Tier.php');
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
         $tpl['TITLE'] = $this->room->room_number . ' ' . $this->hall->hall_name . ' - ' . Term::getPrintableSelectedTerm();
@@ -40,8 +39,6 @@ class RoomView extends View {
 
         $form->addText('room_number', $this->room->room_number);
 
-        $form->addDropBox('pricing_tier', HMS_Pricing_Tier::get_pricing_tiers_array());
-        $form->setMatch('pricing_tier', $this->room->pricing_tier);
 
         if($number_of_assignees == 0){
             # Room is empty, show the drop down so the user can change the gender
