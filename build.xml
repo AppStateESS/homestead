@@ -8,6 +8,11 @@
     <target name="prepare" depends="clean">
         <mkdir dir="${basedir}/.build/logs" />
         <mkdir dir="${basedir}/.build/docs" />
+        <mkdir dir="${basedir}/.build/rpm/BUILD" />
+        <mkdir dir="${basedir}/.build/rpm/RPMS/i686" />
+        <mkdir dir="${basedir}/.build/rpm/SOURCES" />
+        <mkdir dir="${basedir}/.build/rpm/SPECS" />
+        <mkdir dir="${basedir}/.build/rpm/SRPMS" />
     </target>
 
     <target name="phplint">
@@ -40,12 +45,7 @@
         </exec>
     </target>
 
-    <target name="rpmbuild" depends="phplint">
-        <mkdir dir="${basedir}/.build/rpm/BUILD" />
-        <mkdir dir="${basedir}/.build/rpm/RPMS/i686" />
-        <mkdir dir="${basedir}/.build/rpm/SOURCES" />
-        <mkdir dir="${basedir}/.build/rpm/SPECS" />
-        <mkdir dir="${basedir}/.build/rpm/SRPMS" />
+    <target name="rpmbuild" depends="prepare, phplint">
         <rpm specFile="${basedir}/hms.spec" topDir="${basedir}/.build/rpm" cleanBuildDir="true" failOnError="true" />
     </target>
 
