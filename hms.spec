@@ -13,7 +13,7 @@ Release: %{release}
 License: GPL
 Group:   Development/PHP
 URL:     http://phpwebsite.appstate.edu
-Source:  %{name}-%{version}-%{release}.tar.bz2
+Source:  %{name}.tar.bz2
 Source1: phpwebsite_%{phpws_ver}.tar.gz
 Requires: php >= 5.0.0, php-gd >= 5.0.0
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}

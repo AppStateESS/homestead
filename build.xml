@@ -47,7 +47,8 @@
 
     <target name="rpmbuild" depends="prepare, phplint">
         <tar destfile="${basedir}/.build/rpm/SOURCES/hms.tar.bz2" basedir="${basedir}" excludes=".*" compression="bzip2" failOnError="true" />
-        <copy file="${basedir}/hms.spec" todir="${basedir}/.build/rpm/SPECS/" failOnError="true" />
+        <get src="http://phpwebsite.appstate.edu/downloads/stable/phpwebsite_1_7_1.tar.gz" dest="${basedir}/.build/rpm/SOURCES/" />
+        <copy file="${basedir}/hms.spec" todir="${basedir}/.build/rpm/SPECS/" />
         <rpm specFile="hms.spec" topDir="${basedir}/.build/rpm" cleanBuildDir="true" failOnError="true" />
     </target>
 
