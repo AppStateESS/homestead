@@ -5,7 +5,7 @@
         <delete dir="${basedir}/.build" />
     </target>
 
-    <target name="prepare">
+    <target name="prepare" depends="clean">
         <mkdir dir="${basedir}/.build/logs" />
         <mkdir dir="${basedir}/.build/docs" />
     </target>
@@ -16,29 +16,38 @@
         </exec>
     </target>
 
-    <target name="docblox">
+    <target name="docblox" depends="prepare">
         <exec dir="${basedir}" executable="docblox" failonerror="false">
             <arg line="run -d class/ -t .build/docs/" />
         </exec>
     </target>
 
-    <target name="phpcpd">
+    <target name="phpcpd" depends="prepare">
         <exec dir="${basedir}" executable="phpcpd" failonerror="false">
             <arg line="--log-pmd .build/logs/pmd.xml class" />
         </exec>
     </target>
 
-    <target name="pdepend">
+    <target name="pdepend" depends="prepare">
         <exec dir="${basedir}" executable="pdepend" failonerror="true">
             <arg line="--jdepend-xml=.build/logs/jdepend.xml class" />
         </exec>
     </target>
 
-    <target name="phpcs">
+    <target name="phpcs" depends="prepare">
         <exec dir="${basedir}" executable="phpcs" output="${basedir}/.build/logs/checkstyle.xml" failonerror="false" timeout="300000">
             <arg line="--report=checkstyle class" />
         </exec>
     </target>
 
-    <target name="build" depends="clean, prepare, phplint, docblox, phpcpd, pdepend, phpcs" />
+    <target name="rpmbuild" depends="phplint">
+        <mkdir dir="${basedir}/.build/rpm/BUILD" />
+        <mkdir dir="${basedir}/.build/rpm/RPMS/i686" />
+        <mkdir dir="${basedir}/.build/rpm/SOURCES" />
+        <mkdir dir="${basedir}/.build/rpm/SPECS" />
+        <mkdir dir="${basedir}/.build/rpm/SRPMS" />
+        <rpm specFile="${basedir}/hms.spec" topDir="${basedir}/.build/rpm" cleanBuildDir="true" failOnError="true" />
+    </target>
+
+    <target name="build" depends="clean, prepare, phplint, docblox, phpcpd, pdepend, phpcs, rpmbuild" />
 </project>
