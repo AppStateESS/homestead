@@ -19,7 +19,7 @@ class SubmitRlcApplicationCommand extends Command
         $term = $context->get('term');
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), Term::getCurrentTerm());
 
-        $errorCmd = ommandFactory::getCommand('ShowRlcApplicationView');
+        $errorCmd = CommandFactory::getCommand('ShowRlcApplicationView');
         $errorCmd->setTerm($term);
 
         $choice1 = new HMS_Learning_Community($context->get('rlc_first_choice'));
