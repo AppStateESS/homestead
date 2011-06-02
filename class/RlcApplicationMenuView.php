@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Handles display of the RLC application menu block on the student main menu.
+ *
+ * @package HMS
+ * @author Jeremy Booker
+ */
+
 class RlcApplicationMenuView extends View {
 
     private $term;
@@ -8,8 +15,9 @@ class RlcApplicationMenuView extends View {
     private $editDate;
     private $endDate;
     private $application;
+    private $assignment;
 
-    public function __construct($term, Student $student, $startDate, $editDate, $endDate, HMS_RLC_Application $application = NULL)
+    public function __construct($term, Student $student, $startDate, $editDate, $endDate, HMS_RLC_Application $application = NULL, HMS_RLC_Assignment $assignment = NULL)
     {
         $this->term         = $term;
         $this->student      = $student;
@@ -17,6 +25,7 @@ class RlcApplicationMenuView extends View {
         $this->editDate     = $editDate;
         $this->endDate      = $endDate;
         $this->application  = $application;
+        $this->assignment   = $assignment;
     }
 
     public function show()
@@ -26,7 +35,12 @@ class RlcApplicationMenuView extends View {
         $tpl['DATES'] = HMS_Util::getPrettyDateRange($this->startDate, $this->endDate);
         $tpl['STATUS'] = "";
 
-        if(isset($this->application) && !is_null($this->application->id)) {
+        if(isset($this->application) && !is_null($this->application->id) && isset($this->assignment) && !is_null($this->assignment->id)) {
+            // Student has applied and been assigned/invited to a particular community. The student can no longer view/edit the application.
+            $tpl['ICON'] = FEATURE_COMPLETED_ICON;
+            $tpl['INVITED'] = ""; // dummy tag
+
+        }else if(isset($this->application) && !is_null($this->application->id)) {
             $tpl['ICON'] = FEATURE_COMPLETED_ICON;
             // Let student view their application
             $viewCmd = CommandFactory::getCommand('ShowRlcApplicationReView');
@@ -50,7 +64,7 @@ class RlcApplicationMenuView extends View {
                 $tpl['DELETE_APP'] = $confCmd->getLink().'.';
             }
 
-            if(time() < $this->editDate){
+            if(time() < $this->editDate) {
                 $newCmd = CommandFactory::getCommand('ShowRlcApplicationView');
                 $newCmd->setTerm($this->term);
                 $tpl['NEW_APP'] = $newCmd->getLink('submit a new application');
