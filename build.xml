@@ -46,8 +46,9 @@
     </target>
 
     <target name="rpmbuild" depends="prepare, phplint">
-        <rpm specFile="${basedir}/hms.spec" topDir="${basedir}/.build/rpm" cleanBuildDir="true" failOnError="true" />
+        <rpm specFile="hms.spec" topDir="${basedir}/.build/rpm" cleanBuildDir="true" failOnError="true" />
     </target>
 
+    <!-- NOTE: If you remove docblox, phpcpd, pdepend, phpcs, rpmbuild from this line (or this file for that matter) you will need to change Hudson configuration. -->
     <target name="build" depends="clean, prepare, phplint, docblox, phpcpd, pdepend, phpcs, rpmbuild" />
 </project>
