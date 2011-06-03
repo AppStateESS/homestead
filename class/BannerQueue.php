@@ -54,8 +54,8 @@ class BannerQueue {
         $db = new PHPWS_DB('hms_banner_queue');
         $db->addWhere('type',          BANNER_QUEUE_ASSIGNMENT);
         $db->addWhere('asu_username',  $student->getUsername());
-        $db->addWhere('building_code', $bldg);
-        $db->addWhere('bed_code',      $bed);
+        $db->addWhere('building_code', $hall->getBannerBuildingCode());
+        $db->addWhere('bed_code',      $bed->getBannerId());
         $db->addWhere('term',          $term);
         $result = $db->count();
 
