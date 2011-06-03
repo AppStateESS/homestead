@@ -1,6 +1,8 @@
 <!-- Since nothing in PHP is actually "built", this is to tell Hudson CI how to handle HMS documentation, testing, dependencies, etc. -->
 
 <project name="Housing Management system" default="build">
+    <property environment="env" />
+
     <target name="clean">
         <delete dir="${basedir}/.build" />
     </target>
@@ -45,7 +47,7 @@
         </exec>
     </target>
 
-    <target name="rpmbuild" depends="prepare, phplint">
+    <target name="rpmbuild">
         <tar destfile="${basedir}/.build/rpm/SOURCES/hms.tar.bz2" basedir="${basedir}" excludes="**/.*/**" compression="bzip2" />
         <get src="http://phpwebsite.appstate.edu/downloads/stable/phpwebsite_1_7_1.tar.gz" dest="${basedir}/.build/rpm/SOURCES/phpwebsite_1_7_1.tar.gz" />
         <copy file="${basedir}/hms.spec" todir="${basedir}/.build/rpm/SPECS/" />
@@ -53,5 +55,14 @@
     </target>
 
     <!-- NOTE: If you remove docblox, phpcpd, pdepend, phpcs, rpmbuild from this line (or this file for that matter) you will need to change Hudson configuration. -->
-    <target name="build" depends="clean, prepare, phplint, docblox, phpcpd, pdepend, phpcs, rpmbuild" />
+    <target name="build" depends="clean, prepare, phplint, docblox, phpcpd, pdepend, phpcs">
+        <echo message="If you want to build an RPM, please specify the 'rpmbuild' target." />
+    </target>
+
+    <target name="deploy">
+        <exec executable="sudo" failonerror="true">
+            <arg line="/opt/deployrpm" />
+            <arg value="${basedir}/.build/rpm/RPMS/i386" />
+        </exec>
+    </target>
 </project>
