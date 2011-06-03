@@ -36,23 +36,33 @@ class ShowAssignStudentCommand extends Command {
             throw new PermissionException('You do not have permission to assign students.');
         }
 
-         
+
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
         PHPWS_Core::initModClass('hms', 'AssignStudentView.php');
         PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
 
         $username	= $context->get('username');
-        
+
         $bedId		= $context->get('bedId');
-        
+
         if(isset($bedId) && !is_null($bedId) && !empty($bedId)){
             $bed = new HMS_Bed($bedId);
         }else{
             $bed = NULL;
         }
-        
+
         if(isset($username)){
-            $student = StudentFactory::getStudentByUsername($context->get('username'), Term::getSelectedTerm());
+            try{
+                $student = StudentFactory::getStudentByUsername($context->get('username'), Term::getSelectedTerm());
+            }catch (InvalidArgumentException $e){
+                NQ::simple('hms', HMS_NOTIFICATION_ERROR, $e->getMessage());
+                $cmd = CommandFactory::getCommand('ShowAssignStudent');
+                $cmd->redirect();
+            }catch (StudentNotFoundException $e){
+                NQ::simple('hms', HMS_NOTIFICATION_ERROR, $e->getMessage());
+                $cmd = CommandFactory::getCommand('ShowAssignStudent');
+                $cmd->redirect();
+            }
         }else{
             $student = NULL;
         }

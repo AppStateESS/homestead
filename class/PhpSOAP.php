@@ -52,6 +52,12 @@ class PhpSOAP extends SOAP
             return false;
         }
 
+        if(!isset($response->GetUserNameResult)){
+            PHPWS_Core::initModClass('hms', 'exception/StudentNotFoundException.php');
+            throw new StudentNotFoundException("No matching student found with Banner ID: $bannerId.");
+            return false;
+        }
+
 		SOAP::logSoap('getUsername', 'success', $bannerId);
 
         return $response->GetUserNameResult;
