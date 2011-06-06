@@ -161,7 +161,16 @@ class HMS_RLC_Application extends HMS_Item
 
     public function viewByRLCPagerTags()
     {
-        $student = StudentFactory::getStudentByUsername($this->username, Term::getSelectedTerm());
+        $tags = array();
+
+        try{
+            $student = StudentFactory::getStudentByUsername($this->username, Term::getSelectedTerm());
+        }catch(StudentNotFoundException $e){
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, "No student found with username: {$this->username}.");
+            $tags['USERNAME'] = $this->username;
+            $tags['NAME'] = 'UNKNOWN - INVALID';
+            return $tags;
+        }
 
         $tags['NAME']       = $student->getFulLNameProfileLink();
         $tags['GENDER']     = $student->getPrintableGender();
