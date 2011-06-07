@@ -611,8 +611,14 @@ class HMS_Roommate
         $bSem  = Term::getTermSem($bTerm);
 
         // There's a mismatch if the year don't match OR (the years match AND (either student started in the Spring))
-        // This allows people with summer application terms to request each other
+        // This allows people with summer application terms to request each other, but prevents continuing students from requesting each other
+        // (even if the one student started in the Spring and has a 'F' student type at the time the request is made)
         if($aYear != $bYear || ($aYear == $bYear && ($aSem == TERM_SPRING || $bSem == TERM_SPRING))){
+            return E_ROOMMATE_TYPE_MISMATCH;
+        }
+
+        // Transfer students can only request other transfers - Prevents freshmen from requesting transfers and vice versa
+        if(($requestor_info->getType() == TYPE_TRANSFER && $requestee_info->getType != TYPE_TRANSFER) || ($requestee_info->getType() == TYPE_TRANSFER && $requestor_info->getType != TYPE_TRANSFER)){
             return E_ROOMMATE_TYPE_MISMATCH;
         }
 
