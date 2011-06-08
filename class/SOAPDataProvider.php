@@ -95,6 +95,15 @@ class SOAPDataProvider extends StudentDataProvider {
 
     private static function applyExceptions(&$student)
     {
+        /*
+         * This is a hack to fix some freshmen students who have application terms in the future but are considered type 'C' by the registrar's office.
+         * See Trac #719
+         */
+        PHPWS_Core::initModClass('hms', 'Term.php');
+        if($student->getApplicationTerm() > Term::getCurrentTerm() && $student->getType() == TYPE_CONTINUING){
+            $student->setType(TYPE_FRESHMEN);
+        }
+
         if($student->getUsername() == 'marshallkd'){
             $student->setApplicationTerm(201040);
         }

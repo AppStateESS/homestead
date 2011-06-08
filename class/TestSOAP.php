@@ -40,9 +40,9 @@ class TestSOAP extends SOAP{
         $student->watauga_member        = TRUE;
 
 
-        $student->student_type          = 'T';
-        $student->application_term      = '201040';
-        $student->projected_class       = 'FR';
+        //$student->student_type          = 'T';
+        //$student->application_term      = '201040';
+        //$student->projected_class       = 'FR';
 
         $student->student_type          = 'F';
         $student->application_term      = '201140';
