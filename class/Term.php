@@ -172,12 +172,8 @@ class Term
      * @param Boolean $concat Whether or not to concatenate the year and term together (can return a array instead).
      * @throws InvalidTermException
      */
-    public function toString($term = null, $concat = true)
+    public function toString($term, $concat = true)
     {
-        if(is_null($term)) {
-            $term = $this->term;
-        }
-
         // Grab the year from the entry_term
         $result['year'] = Term::getTermYear($term);
 
