@@ -39,7 +39,6 @@ class TestSOAP extends SOAP{
         $student->teaching_fellow       = TRUE;
         $student->watauga_member        = TRUE;
 
-
         //$student->student_type          = 'T';
         //$student->application_term      = '201040';
         //$student->projected_class       = 'FR';
