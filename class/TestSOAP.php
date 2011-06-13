@@ -78,6 +78,19 @@ class TestSOAP extends SOAP{
 
         $student->address[] = $address;
 
+        // Setup an ASU P.O. Box address
+        $address = null;
+        $address->atyp_code = 'AB';
+        $address->line1     = 'ASU Box 32111';
+        $address->line2     = '';
+        $address->line3     = '';
+        $address->city      = 'Booone';
+        $address->county    = '095';
+        $address->state     = 'SC';
+        $address->zip       = '28608';
+
+        $student->address[] = $address;
+
         // Setup the phone number object
         $phone->area_code   = '123';
         $phone->number      = '4567890';
