@@ -166,13 +166,17 @@ class Term
         return $result;
     }
 
+    /*************************
+     * Static helper methods *
+     *************************/
+
     /**
      * Returns a string representation of the integer form of a term.
      * @param Integer $term
      * @param Boolean $concat Whether or not to concatenate the year and term together (can return a array instead).
      * @throws InvalidTermException
      */
-    public function toString($term, $concat = true)
+    public static function toString($term, $concat = true)
     {
         // Grab the year from the entry_term
         $result['year'] = Term::getTermYear($term);
@@ -199,10 +203,6 @@ class Term
             return $result;
         }
     }
-
-    /*************************
-     * Static helper methods *
-     *************************/
 
     public static function getCurrentTerm()
     {

@@ -40,7 +40,7 @@ class DisableBannerQueueCommand extends Command {
         } else {
             $term->setBannerQueue(FALSE);
             $term->save();
-            NQ::Simple('hms', HMS_NOTIFICATION_SUCCESS, 'Banner Queue has been disabled for ' . $term->toString($term->term) . '.');
+            NQ::Simple('hms', HMS_NOTIFICATION_SUCCESS, 'Banner Queue has been disabled for ' . Term::toString($term->term) . '.');
         }
 
         CommandContext::goBack();
