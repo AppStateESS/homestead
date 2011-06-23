@@ -40,6 +40,9 @@ class WithdrawnSearchEmailCommand extends ScheduledPulse
         PHPWS_Core::initModClass('hms', 'HMS.php');
         PHPWS_Core::initModClass('hms', 'WithdrawnSearch.php');
         PHPWS_Core::initModClass('hms', 'HMS_Email.php');
+        PHPWS_Core::initModClass('hms', 'UserStatus.php');
+
+        UserStatus::wearMask('HMS System');
 
         // The search is run over all future terms
         $terms = Term::getFutureTerms();
@@ -49,13 +52,15 @@ class WithdrawnSearchEmailCommand extends ScheduledPulse
         foreach($terms as $term) {
             $search = new WithdrawnSearch($term);
             $search->doSearch();
-            $text += "\n\n=========== " . Term::toString($term) . " ===========\n\n";
-            $text += $search->getTextView();
+            $text .= "\n\n=========== " . Term::toString($term) . " ===========\n\n";
+            $text .= $search->getTextView();
         }
 
         $text = $search->getTextView();
 
         HMS_Email::sendWithdrawnSearchOutput($text);
+
+        UserStatus::removeMask();
         HMS::quit();
     }
 }
