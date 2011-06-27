@@ -1,5 +1,7 @@
 <?php
 
+define('HMS_DEBUG', false);
+
 /**************
  * Login Link *
  **************/
