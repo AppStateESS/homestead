@@ -92,15 +92,15 @@ class Autoassigner {
 
         foreach($this->pairs as $pair) {
             if($pair->isAssigned()) {
-                echo $pair->student1->getUsername() . " is assigned to " . $pair->getBed1() . "\n";
-                echo $pair->student2->getUsername() . " is assigned to " . $pair->getBed2() . "\n\n";
+                echo $pair->getStudent1()->getUsername() . " is assigned to " . $pair->getBed1() . "\n";
+                echo $pair->getStudent2()->getUsername() . " is assigned to " . $pair->getBed2() . "\n\n";
             }
         }
 
         foreach($this->pairs as $pair) {
             if(!$pair->isAssigned()) {
-                echo $pair->student1->getUsername() . " did not get assigned.\n";
-                echo $pair->student2->getUsername() . " did not get assigned.\n\n";
+                echo $pair->getStudent1()->getUsername() . " did not get assigned.\n";
+                echo $pair->getStudent2()->getUsername() . " did not get assigned.\n\n";
 
             }
         }
