@@ -16,13 +16,14 @@ Roommates:
 Check-in Time: {MOVE_IN_TIME} 
 <!-- END movein_time -->
 
-Please go to Doughton Hall to check in. Failure to check in by 6pm on Monday, May 23, will result in assignment cancellation and you will be declared a No Show.  Please note that No Shows will be responsible for all related housing charges for the term if you are still enrolled for classes. 
+Move In is Tuesday, July 5th from noon to 6pm. Check in at the Doughton Hall Office.
 
-Should you have any questions, please feel free to contact our office at 828-262-6111. You may also visit our website at: http://housing.appstate.edu/ . 
+Should you have any questions, please feel free to contact our office at 828-262-6111 or 828-262-2278. You may also visit our website at: 
+http://housing.appstate.edu/ .
 
 Sincerely,
 
 Stacy R. Sears
 
 Associate Director
-University Housing 
+University Housing
