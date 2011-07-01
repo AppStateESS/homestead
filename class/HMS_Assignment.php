@@ -418,6 +418,41 @@ class HMS_Assignment extends HMS_Item
             $meal_plan = BANNER_MEAL_LOW;
         }
 
+        /*****************************
+         * Temporary Assignment HACK *
+         *****************************/
+
+        // Check for an assignment in the temp assignment table
+
+        $db = new PHPWS_DB('hms_temp_assignment');
+        $db->addWhere('banner_id', $student->getBannerId());
+        $result = $db->select();
+
+        if(PHPWS_Error::logIfError($result)){
+            throw new DatabaseException($result->toString());
+        }
+
+        if(sizeof($result) > 0){
+            // Queue an unassign for this student
+            $soap = SOAP::getInstance();
+            try{
+                $soap->removeRoomAssignment($student->getUsername(), $term, 'TMPR', $result[0]['room_number']);
+            }catch(Exception $e){
+                throw $e;
+            }
+
+            $db = new PHPWS_DB('hms_temp_assignment');
+            $db->addValue('banner_id', null);
+            $db->addWhere('room_number', $result[0]['room_number']);
+            $db->update();
+
+            if(PHPWS_Error::logIfError($result)){
+                throw new DatabaseException($result->toString());
+            }
+
+            NQ::simple('hms', HMS_NOTIFICATION_WARNING, 'Temporary assignment was removed.');
+        }
+
         # Send this off to the queue for assignment in banner
         $banner_success = BannerQueue::queueAssignment($student, $term, $hall, $vacant_bed, 'HOME', $meal_plan);
         if($banner_success !== TRUE){
