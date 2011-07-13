@@ -123,6 +123,16 @@ abstract class SOAP
      * @throws InvalidArgumentException, SOAPException
      */
     public abstract function getHousMealRegister($username, $termcode, $opt);
+    
+    /**
+     * Queries Banner for the BannerID of the student assigned to a given bed.
+     * Returns null if there is no student assigned to the bed.
+     * 
+     * @param String $building - The Banner building code (eg. 'AHR', 'EHR', etc)
+     * @param String $room - The Banner bed id number (eg. '01051')
+     * @param Integer $term - The term to query for
+     */
+    public abstract function getBannerIdByBuildingRoom($building, $room, $term);
 
     /*********************
      * Utility Functions *

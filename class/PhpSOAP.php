@@ -169,6 +169,27 @@ class PhpSOAP extends SOAP
 	    SOAP::logSoap('getHousMealRegister', 'success', $username, $term, $opt);
         return $response->GetHousMealRegister;
     }
+    
+    public function getBannerIdByBuildingRoom($building, $room, $term)
+    {
+    	$params = array(
+                        'BldgCode'=>$building,
+                        'RoomCode'=>$room,
+                        'TermCode'=>$term);
+    
+    	try{
+    		$response = $this->client->GetBannerIDbyBuildingRoom($params);
+    	}catch(SoapFault $e){
+    		throw new SOAPException($e->getMessage(), $e->getCode(), 'removeRoomAssignment', $params);
+    		return false;
+    	}
+    
+    	if(isset($response->GetBannerIDbyBuildingRoomResult)){
+    		return $response->GetBannerIDbyBuildingRoomResult;
+    	}else{
+    		return null;
+    	}
+    }
 }
 
 ?>
