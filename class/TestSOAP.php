@@ -38,6 +38,8 @@ class TestSOAP extends SOAP{
         $student->honors                = TRUE;
         $student->teaching_fellow       = TRUE;
         $student->watauga_member        = TRUE;
+        
+        $student->disabled_pin			= TRUE;
 
         //$student->student_type          = 'T';
         //$student->application_term      = '201040';
@@ -175,6 +177,11 @@ class TestSOAP extends SOAP{
         $hous_meal->meal_assign     = $meal_assign;
 
         return $hous_meal;
+    }
+    
+    public function getBannerIdByBuildingRoom($building, $room, $term)
+    {
+    	return null;
     }
 }
 

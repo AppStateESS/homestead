@@ -63,6 +63,10 @@ class StudentProfileView extends View {
 
         $tpl['WATAUGA'] = $this->student->isWataugaMember() ? 'Yes' : 'No';
 
+        if($this->student->pinDisabled()){
+        	NQ::simple('hms', HMS_NOTIFICATION_WARNING, "This student's PIN is disabled.");
+        }
+        
         try {
             $tpl['APPLICATION_TERM'] = Term::toString($this->student->getApplicationTerm());
         } catch(InvalidTermException $e) {

@@ -61,6 +61,8 @@ class SOAPDataProvider extends StudentDataProvider {
         $student->setHonors($soapData->honors);
         $student->setTeachingFellow($soapData->teaching_fellow);
         $student->setWataugaMember($soapData->watauga_member);
+        
+        $student->setPinDisabled($soapData->disabled_pin);
 
         $phoneNumbers = array();
 

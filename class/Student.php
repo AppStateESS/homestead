@@ -25,6 +25,8 @@ class Student {
     public $honors;
     public $teaching_fellow;
     public $watauga_member;
+    
+    public $disabled_pin;
 
     public $addressList;
     public $phoneNumberList;
@@ -379,6 +381,14 @@ class Student {
         return $this->watauga_member;
     }
 
+    public function pinDisabled(){
+    	return $this->disabled_pin;
+    }
+    
+    public function setPinDisabled($flag){
+    	$this->disabled_pin = $flag;
+    }
+    
     public function getAddressList(){
         return $this->addressList;
     }

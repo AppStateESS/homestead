@@ -1,0 +1,3 @@
+<h1>Your PIN is disabled</h1>
+<p>Your Personal Identification Number has been disabled in the University's computer system. You cannot apply for on-campus housing until your PIN has been re-enabled.<p>
+<p>To have your PIN re-enabled, you must call ASU Tech Support at <strong>(828)262-TECH (8324)</strong>, or contact ASU Tech Support using one of the other methods listed at: <a href="http://support.appstate.edu/contact">http://support.appstate.edu/contact</a>.

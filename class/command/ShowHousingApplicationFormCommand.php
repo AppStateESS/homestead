@@ -67,12 +67,16 @@ class ShowHousingApplicationFormCommand extends Command {
             $agreementCmd->redirect();
         }
 
-        //TODO add side thingie
-
+		// Check to see if the student's PIN is enabled. Don't let the student apply if the PIN is disabled.
+		if($student->pinDisabled()){
+			$pinCmd = CommandFactory::getCommand('ShowPinDisabled');
+			$pinCmd->redirect();
+		}
+        
         # Check to see if the user has an existing application for the term in question
         $existingApplication = HousingApplication::getApplicationByUser($student->getUsername(), $term);
 
-        # Check for an in-progress application on the context, ignore any exceptions (in case there isn't one)
+        # Check for an in-progress application on the context, ignore any exceptions (in case there isn't an application on the context)
         try {
             $contextApplication = HousingApplicationFactory::getApplicationFromContext($context, $term, $student);
         }catch(Exception $e){
