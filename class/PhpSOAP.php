@@ -180,7 +180,7 @@ class PhpSOAP extends SOAP
     	try{
     		$response = $this->client->GetBannerIDbyBuildingRoom($params);
     	}catch(SoapFault $e){
-    		throw new SOAPException($e->getMessage(), $e->getCode(), 'removeRoomAssignment', $params);
+    		throw new SOAPException($e->getMessage(), $e->getCode(), 'getBannerIdByBuildingRoom', $params);
     		return false;
     	}
     
