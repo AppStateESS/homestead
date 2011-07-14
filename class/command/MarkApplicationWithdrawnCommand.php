@@ -33,7 +33,7 @@ class MarkApplicationWithdrawnCommand extends Command {
         
         $app->save();
         
-        NQ::simple('Application successfully marked as withdrawn.');
+        NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Application successfully marked as withdrawn.');
         $context->goBack();
     }
 }
