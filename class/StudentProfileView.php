@@ -218,7 +218,17 @@ class StudentProfileView extends View {
             # Not a re-application, so can't have a special group
             $tpl['SPECIAL_INTEREST'] = 'No';
         }
+        
+        /******************
+         * Housing Waiver *
+         */
 
+       	$tpl['HOUSING_WAIVER'] = $this->student->housingApplicationWaived() ? 'Yes' : 'No';
+       	
+       	if($this->student->housingApplicationWaived()){
+       		NQ::simple('hms', HMS_NOTIFICATION_WARNING, "This student's housing application has been waived for this term.");
+       	}
+        
         /****************
          * Applications *
          */
