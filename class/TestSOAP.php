@@ -40,6 +40,7 @@ class TestSOAP extends SOAP{
         $student->watauga_member        = TRUE;
         
         $student->disabled_pin			= TRUE;
+        $student->housing_waiver		= FALSE;
 
         //$student->student_type          = 'T';
         //$student->application_term      = '201040';

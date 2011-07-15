@@ -27,6 +27,7 @@ class Student {
     public $watauga_member;
     
     public $disabled_pin;
+    public $housing_waiver; // Whether or not a freshmen's student on-campus housing has been waived (e.g., living close by with family)
 
     public $addressList;
     public $phoneNumberList;
@@ -387,6 +388,14 @@ class Student {
     
     public function setPinDisabled($flag){
     	$this->disabled_pin = $flag;
+    }
+    
+    public function housingApplicationWaived(){
+    	return $this->housing_waiver;
+    }
+    
+    public function setHousingWaiver($waiver){
+    	$this->housing_waiver = $waiver;
     }
     
     public function getAddressList(){
