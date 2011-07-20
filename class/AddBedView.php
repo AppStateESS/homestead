@@ -72,7 +72,13 @@ class AddBedView extends View {
             $form->addText('banner_id', $this->bannerId);
         }else{
             // try to guess a the banner ID
-            $form->addText('banner_id', '0' . $this->room->room_number . ($this->room->get_number_of_beds()+1));
+            
+        	// Strip any text out of the room number, just get the numbers
+        	$match = null;
+        	preg_match("/[0-9]*/", $this->room->room_number, $match);
+        	$roomNumber = $match[0];
+        	
+            $form->addText('banner_id', '0' . $roomNumber . ($this->room->get_number_of_beds()+1));
         }
 
         $form->addCheckBox('ra_bed', 1);
