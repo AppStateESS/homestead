@@ -20,8 +20,8 @@ class RecentStudentSearchList {
 	private function __construct()
 	{
 		// Load the global list from cache, if it exists
-		if(apc_exists(self::keyName)){
-			// Make we've loaded the Student class first
+		if(apc_fetch(self::keyName) !== FALSE){
+			// Make sure we've loaded the Student class first
 			PHPWS_Core::initModClass('hms', 'Student.php');
 			$this->globalSearchList = apc_fetch(self::keyName);
 		}else{
@@ -29,8 +29,8 @@ class RecentStudentSearchList {
 		}
 
 		// Load the user unique search list
-		if(apc_exists(self::keyName . UserStatus::getUsername())){
-			// Make we've loaded the Student class first
+		if(apc_fetch(self::keyName . UserStatus::getUsername()) !== FALSE){
+			// Make sure we've loaded the Student class first
 			PHPWS_Core::initModClass('hms', 'Student.php');
 			$this->searchList = apc_fetch(self::keyName . UserStatus::getUsername());
 		}else{
