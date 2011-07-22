@@ -184,6 +184,7 @@ class HMS_Activity_Log{
         ACTIVITY_USERNAME_UPDATED               => "Updated Username",
         ACTIVITY_APPLICATION_UPDATED            => "Updated Application",
         ACTIVITY_RLC_APPLICATION_UPDATED        => "Updated RLC Application",
+        ACTIVITY_RLC_APPLICATION_DELETED		=> "RLC Application Deleted",
         ACTIVITY_ASSIGNMENTS_UPDATED            => "Updated Assignments",
         ACTIVITY_BANNER_QUEUE_UPDATED           => "Updated Banner Queue",
         ACTIVITY_ROOMMATES_UPDATED              => "Updated Roommates",

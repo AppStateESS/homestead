@@ -226,6 +226,8 @@ define('ACTIVITY_FLOOR_NOTIFIED',               64);
 
 define('ACTIVITY_LOTTERY_ROOMMATE_DENIED',      65);
 
+define('ACTIVITY_RLC_APPLICATION_DELETED',		66);
+
 /**
  * Errors
  */
