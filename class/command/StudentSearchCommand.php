@@ -2,35 +2,35 @@
 
 class StudentSearchCommand extends Command {
 
-	function getRequestVars(){
-		return array('action'=>'StudentSearch');
-	}
+    function getRequestVars(){
+        return array('action'=>'StudentSearch');
+    }
 
-	function execute(CommandContext $context)
-	{
-		if(!Current_User::allow('hms', 'search')){
-			PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
-			throw new PermissionException('You do not have permission to search for students.');
-		}
+    function execute(CommandContext $context)
+    {
+        if(!Current_User::allow('hms', 'search')){
+            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
+            throw new PermissionException('You do not have permission to search for students.');
+        }
 
-		PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-		PHPWS_Core::initModClass('hms', 'StudentProfile.php');
+        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
+        PHPWS_Core::initModClass('hms', 'StudentProfile.php');
 
-		$userid = $context->get('username');
-		$userid = strtolower(trim($userid));
-		$term = Term::getSelectedTerm();
+        $userid = $context->get('username');
+        $userid = strtolower(trim($userid));
+        $term = Term::getSelectedTerm();
 
-		$profileCmd = CommandFactory::getCommand('ShowStudentProfile');
+        $profileCmd = CommandFactory::getCommand('ShowStudentProfile');
 
-		// Check to see if the user enterd a Banner ID or a user name
-		if(preg_match("/^[0-9]{9}/", $userid)){
-			// Looks like a banner ID
-			$profileCmd->setBannerId($userid);
-		} else {
-			// Must be a username
-			$profileCmd->setUsername($userid);
-		}
+        // Check to see if the user enterd a Banner ID or a user name
+        if(preg_match("/^[0-9]{9}/", $userid)){
+            // Looks like a banner ID
+            $profileCmd->setBannerId($userid);
+        } else {
+            // Must be a username
+            $profileCmd->setUsername($userid);
+        }
 
-		$profileCmd->redirect();
-	}
+        $profileCmd->redirect();
+    }
 }

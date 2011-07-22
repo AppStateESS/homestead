@@ -3,15 +3,15 @@
 PHPWS_Core::initModClass('hms', 'ApplicationFeature.php');
 
 class ApplicationRegistration extends ApplicationFeatureRegistration {
-	function __construct()
-	{
-		$this->name = 'Application';
-		$this->description = 'Application';
-		$this->startDateRequired = true;
+    function __construct()
+    {
+        $this->name = 'Application';
+        $this->description = 'Application';
+        $this->startDateRequired = true;
         $this->editDateRequired = true;
-		$this->endDateRequired = true;
-		$this->priority = 1;
-	}
+        $this->endDateRequired = true;
+        $this->priority = 1;
+    }
 
     public function showForStudent(Student $student, $term)
     {
@@ -32,14 +32,14 @@ class ApplicationRegistration extends ApplicationFeatureRegistration {
 
 class Application extends ApplicationFeature {
 
-	public function getMenuBlockView(Student $student)
-	{
-		PHPWS_Core::initModClass('hms', 'HousingApplication.php');
-		PHPWS_Core::initModClass('hms', 'ApplicationMenuBlockView.php');
+    public function getMenuBlockView(Student $student)
+    {
+        PHPWS_Core::initModClass('hms', 'HousingApplication.php');
+        PHPWS_Core::initModClass('hms', 'ApplicationMenuBlockView.php');
 
-		$application      = HousingApplication::getApplicationByUser($student->getUsername(), $this->term);
+        $application      = HousingApplication::getApplicationByUser($student->getUsername(), $this->term);
 
-		return new ApplicationMenuBlockView($this->term, $this->getStartDate(), $this->getEditDate(), $this->getEndDate(), $application);
-	}
+        return new ApplicationMenuBlockView($this->term, $this->getStartDate(), $this->getEditDate(), $this->getEndDate(), $application);
+    }
 }
 ?>

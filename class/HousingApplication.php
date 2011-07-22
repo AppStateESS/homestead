@@ -127,23 +127,23 @@ class HousingApplication {
         # Set the last modified time
         $this->setModifiedOn(time());
 
-        # Sets the 'last modified by' field according to who's logged in
-        $user = UserStatus::getUsername();
-        if(isset($user) && !is_null($user)){
-            $this->setModifiedBy(UserStatus::getUsername());
-        }else{
-            $this->setModifiedBy('hms');
-        }
+    # Sets the 'last modified by' field according to who's logged in
+    $user = UserStatus::getUsername();
+    if(isset($user) && !is_null($user)){
+        $this->setModifiedBy(UserStatus::getUsername());
+    }else{
+        $this->setModifiedBy('hms');
+    }
 
-        # If the object is new, set the 'created' fields
-        if($this->getId() == 0){
-            $this->setCreatedOn(time());
-            if(isset($user) && !is_null($user)){
-                $this->setCreatedBy(UserStatus::getUsername());
-            }else{
-                $this->setCreatedBy('hms');
-            }
+    # If the object is new, set the 'created' fields
+    if($this->getId() == 0){
+        $this->setCreatedOn(time());
+        if(isset($user) && !is_null($user)){
+            $this->setCreatedBy(UserStatus::getUsername());
+        }else{
+            $this->setCreatedBy('hms');
         }
+    }
     }
 
     /**
@@ -235,14 +235,14 @@ class HousingApplication {
                 break;
             default:
                 return "Unknown";
-                break;
+            break;
         }
     }
 
     /*
      * Returns the table row tags for the 'unassigned applications report' in
-     * HMS_Reports.php
-     */
+    * HMS_Reports.php
+    */
     public function unassignedApplicantsRows()
     {
         $tpl = array();
@@ -311,7 +311,7 @@ class HousingApplication {
 
     /******************
      * Static Methods *
-     ******************/
+    ******************/
 
     /**
      * Checks to see if a application already exists for the given username.
@@ -555,7 +555,7 @@ class HousingApplication {
                 break;
             default:
                 PHPWS_Core::initModClass('hms', 'exception/InvalidTermException.php');
-                throw new InvalidTermException($term);
+            throw new InvalidTermException($term);
         }
 
         if(PHPWS_Error::logIfError($result)){
@@ -664,7 +664,7 @@ class HousingApplication {
 
     /************************
      * Accessors & Mutators *
-     ************************/
+    ************************/
 
     public function getId(){
         return $this->id;

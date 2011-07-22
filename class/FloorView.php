@@ -72,7 +72,7 @@ class FloorView extends View {
         }
 
         # Get a list of the RLCs indexed by id
-            PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
         $learning_communities = HMS_Learning_Community::getRLCList();
         $learning_communities[0] = 'None';
 
@@ -106,16 +106,16 @@ class FloorView extends View {
         // if the user has permission to view the form but not edit it then
         // disable it
         if( Current_User::allow('hms', 'floor_view')
-            && !Current_User::allow('hms', 'floor_attributes')
-            && !Current_User::allow('hms', 'floor_structure'))
-            {
-                $form_vars = get_object_vars($form);
-                $elements = $form_vars['_elements'];
+        && !Current_User::allow('hms', 'floor_attributes')
+        && !Current_User::allow('hms', 'floor_structure'))
+        {
+            $form_vars = get_object_vars($form);
+            $elements = $form_vars['_elements'];
 
-                foreach($elements as $element => $value){
-                    $form->setDisabled($element);
-                }
+            foreach($elements as $element => $value){
+                $form->setDisabled($element);
             }
+        }
 
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();

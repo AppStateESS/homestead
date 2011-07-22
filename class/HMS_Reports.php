@@ -27,20 +27,20 @@ class HMS_Reports{
                         'over_twenty_five'      => 'Over 25 report',
                         'single_vs_coed'        => 'Single gender vs. Co-ed report',
                         'reappAvailability'    => 'Re-application Availability Report'
-                        );
-                        /*                        'housing_asss' => 'Housing Assignments Made',*/
-                        /*                        'unassd_rooms' => 'Currently Unassigned Rooms',*/
-                        /*                        'unassd_beds'  => 'Currently Unassigned Beds',*/
-                        /*                        'reqd_roommate'=> 'Unconfirmed Roommates',*/
-                        /*                        'assd_alpha'   => 'Assigned Students',*/
-                        /*                        'special'      => 'Special Circumstances',*/
-                        /*                        'hall_structs' => 'Hall Structures');*/
-                        /*                        'no_ban_data'  => 'Students Without Banner Data',*/
-                        /*                        'no_deposit'   => 'Assigned Students with No Deposit',*/
-                        /*                        'bad_type'     => 'Assigned Students Withdrawn or with Bad Type',*/
-                        /*                        'gender'       => 'Gender Mismatches');*/
+        );
+        /*                        'housing_asss' => 'Housing Assignments Made',*/
+        /*                        'unassd_rooms' => 'Currently Unassigned Rooms',*/
+        /*                        'unassd_beds'  => 'Currently Unassigned Beds',*/
+        /*                        'reqd_roommate'=> 'Unconfirmed Roommates',*/
+        /*                        'assd_alpha'   => 'Assigned Students',*/
+        /*                        'special'      => 'Special Circumstances',*/
+        /*                        'hall_structs' => 'Hall Structures');*/
+        /*                        'no_ban_data'  => 'Students Without Banner Data',*/
+        /*                        'no_deposit'   => 'Assigned Students with No Deposit',*/
+        /*                        'bad_type'     => 'Assigned Students Withdrawn or with Bad Type',*/
+        /*                        'gender'       => 'Gender Mismatches');*/
 
-                        return $reports;
+        return $reports;
     }
 
     public static function runReport($reportName)
@@ -97,7 +97,7 @@ class HMS_Reports{
                 return HMS_Reports::reappAvailability();
             default:
                 $content .= "ugh";
-                break;
+            break;
         }
 
         return $content;
@@ -114,272 +114,171 @@ class HMS_Reports{
         # Start the timer
         $start_time = microtime();
 
-        $problems = array();
+    $problems = array();
 
-        $total_other = 0; #Count all students with invalid data and lump
-        #them into their own column
+    $total_other = 0; #Count all students with invalid data and lump
+    #them into their own column
 
-        $term = Term::getSelectedTerm();
+    $term = Term::getSelectedTerm();
 
-        $building = array(); // Define an array to hold each building's summary
+    $building = array(); // Define an array to hold each building's summary
 
-        # Get a list of hall ID's and names
-        $db = new PHPWS_DB('hms_residence_hall');
-        $db->addColumn('id');
-        $db->addColumn('hall_name');
-        $db->addWhere('term', $term);
-        $db->addWhere('is_online', 1); // only get halls that are online
-        $db->addOrder('hall_name', 'asc');
-        $result = $db->select();
+    # Get a list of hall ID's and names
+    $db = new PHPWS_DB('hms_residence_hall');
+    $db->addColumn('id');
+    $db->addColumn('hall_name');
+    $db->addWhere('term', $term);
+    $db->addWhere('is_online', 1); // only get halls that are online
+    $db->addOrder('hall_name', 'asc');
+    $result = $db->select();
 
-        if(PHPWS_Error::logIfError($result)) {
+    if(PHPWS_Error::logIfError($result)) {
+        PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+        throw new DatabaseException($result->toString());
+    }
+
+    # For each hall, get every assignment in that hall and tally it up
+    foreach($result as $hall_row) {
+        $db = new PHPWS_DB('hms_assignment');
+        $db->addColumn('hms_assignment.asu_username');
+
+        # Just get "this" hall
+        $db->addWhere('hms_residence_hall.id', $hall_row['id']);
+
+        # Join the assignment all the way up to the hall
+        $db->addJoin('LEFT OUTER', 'hms_assignment',    'hms_bed',              'bed_id',               'id');
+        $db->addJoin('LEFT OUTER', 'hms_bed',           'hms_room',             'room_id',              'id');
+        $db->addJoin('LEFT OUTER', 'hms_room',          'hms_floor',            'floor_id',             'id');
+        $db->addJoin('LEFT OUTER', 'hms_floor',         'hms_residence_hall',   'residence_hall_id',    'id');
+
+        # Don't report on anything that's not online
+        $db->addWhere('hms_room.is_online',             1);
+        $db->addWhere('hms_floor.is_online',            1);
+        $db->addWhere('hms_residence_hall.is_online',   1);
+
+        $assignments = $db->select();
+
+        if(PHPWS_Error::logIfError($assignments)) {
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
-            throw new DatabaseException($result->toString());
+            throw new DatabaseException($assignments->toString());
         }
 
-        # For each hall, get every assignment in that hall and tally it up
-        foreach($result as $hall_row) {
-            $db = new PHPWS_DB('hms_assignment');
-            $db->addColumn('hms_assignment.asu_username');
-
-            # Just get "this" hall
-            $db->addWhere('hms_residence_hall.id', $hall_row['id']);
-
-            # Join the assignment all the way up to the hall
-            $db->addJoin('LEFT OUTER', 'hms_assignment',    'hms_bed',              'bed_id',               'id');
-            $db->addJoin('LEFT OUTER', 'hms_bed',           'hms_room',             'room_id',              'id');
-            $db->addJoin('LEFT OUTER', 'hms_room',          'hms_floor',            'floor_id',             'id');
-            $db->addJoin('LEFT OUTER', 'hms_floor',         'hms_residence_hall',   'residence_hall_id',    'id');
-
-            # Don't report on anything that's not online
-            $db->addWhere('hms_room.is_online',             1);
-            $db->addWhere('hms_floor.is_online',            1);
-            $db->addWhere('hms_residence_hall.is_online',   1);
-
-            $assignments = $db->select();
-
-            if(PHPWS_Error::logIfError($assignments)) {
-                PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
-                throw new DatabaseException($assignments->toString());
-            }
-
-            # Initalize this hall's summary
-            foreach(array(TYPE_FRESHMEN, TYPE_TRANSFER, TYPE_CONTINUING, TYPE_READMIT) as $init_type){
-                foreach(array(CLASS_FRESHMEN, CLASS_SOPHOMORE, CLASS_JUNIOR, CLASS_SENIOR) as $init_class){
-                    foreach(array(MALE, FEMALE) as $init_gender){
-                        $building[$hall_row['hall_name']][$init_type][$init_class][$init_gender] = 0;
-                    }
-                }
-            }
-
-            $otherByHall[$hall_row['hall_name']] = 0;
-
-            # For each assignment we found in this hall...
-            foreach($assignments as $assignment) {
-
-                # Create the student object
-                try{
-                    $student = StudentFactory::getStudentByUsername($assignment['asu_username'], $term);
-                }catch(StudentNotFoundException $e){
-                    $problems[] = $assignment['asu_username'] . ': Unknown student';
-                    continue;
-                }
-
-                # Get the gender (in numeric form) of the student for this assignment
-                $gender = $student->getGender();
-
-                # Check the gender for bad data
-                if(!isset($gender) || $gender === NULL || ($gender != MALE && $gender != FEMALE)) {
-                    $problems[] = $assignment['asu_username'] .': Gender is unrecognized ('. $gender .')';
-                    $otherByHall[$hall_row['hall_name']]++;
-                    $total_other++;
-                    continue;
-                }
-
-                # Get the class of the student for this assignment
-                $class = $student->getClass();
-
-                # Check the class for bad data
-                if(!isset($class) || $class === NULL ||
-                ($class != CLASS_FRESHMEN && $class != CLASS_SOPHOMORE &&
-                $class != CLASS_JUNIOR && $class != CLASS_SENIOR)) {
-                    $problems[] = $assignment['asu_username'] . ': Class is unrecognized ('. $class .')';
-                    $otherByHall[$hall_row['hall_name']]++;
-                    $total_other++;
-                    continue;
-                }
-
-                # Get the type of the student for this assignment
-                $type = $student->getType();
-
-                # Check the type for bad data
-                if(!isset($type) || $type === NULL ||
-                ($type != TYPE_FRESHMEN && $type != TYPE_TRANSFER && $type != TYPE_CONTINUING && $type != TYPE_READMIT)) {
-                    $problems[] = $assignment['asu_username'] . ': Type is unrecognized ('. $type .')';
-                    $otherByHall[$hall_row['hall_name']]++;
-                    $total_other++;
-                    continue;
-                }
-
-                $credit_hours = $student->getCreditHours();
-
-                # Check for a mis-matched type/class/hours situation
-                if( $type == TYPE_CONTINUING && $class == CLASS_FRESHMEN && $credit_hours == 0){
-                    $problems[] = $assignment['asu_username'] . ": Type is $type, class is $class, credit hours is $credit_hours";
-                    //$otherByHall[$hall_row['hall_name']]++;
-                    //$total_other++;
-                    //continue;
-                }
-
-                $building[$hall_row['hall_name']][$type][$class][$gender]++;
-            }
-        }
-
-        # Initalize a 3 dimensional table for summing up the totals
+        # Initalize this hall's summary
         foreach(array(TYPE_FRESHMEN, TYPE_TRANSFER, TYPE_CONTINUING, TYPE_READMIT) as $init_type){
             foreach(array(CLASS_FRESHMEN, CLASS_SOPHOMORE, CLASS_JUNIOR, CLASS_SENIOR) as $init_class){
                 foreach(array(MALE, FEMALE) as $init_gender){
-                    $total[$init_type][$init_class][$init_gender] = 0;
+                    $building[$hall_row['hall_name']][$init_type][$init_class][$init_gender] = 0;
                 }
             }
         }
 
-        $grandTotalMales = 0;
-        $grandTotalFemales = 0;
+        $otherByHall[$hall_row['hall_name']] = 0;
 
-        $content = '';
+        # For each assignment we found in this hall...
+        foreach($assignments as $assignment) {
 
-        # Print out the header
-        $termPrint = Term::getPrintableSelectedTerm();
-        $content .= '<br /><br />';
-        $content .= "$termPrint - Housing assignments by building, student type, class, and gender";
-        $content .= '<br /><br />';
-
-        # Show any problems that occured
-        if(isset($problems) && count($problems) > 0) {
-            $content .= '<font color="red"><b>Some problems were found while retrieving data from Banner:</b></font><br />';
-            foreach($problems as $problem) {
-                $content .= $problem . '<br />';
-            }
-            $content .= '<br /><br />';
+            # Create the student object
+            try{
+            $student = StudentFactory::getStudentByUsername($assignment['asu_username'], $term);
+        }catch(StudentNotFoundException $e){
+            $problems[] = $assignment['asu_username'] . ': Unknown student';
+            continue;
         }
 
-        foreach($building as $name=>$hall) {
-            ksort($hall);
-            # Generate our totals for later in the form
-            $total_males = 0;
-            $total_females = 0;
+        # Get the gender (in numeric form) of the student for this assignment
+        $gender = $student->getGender();
 
-            foreach($building[$name] as $type){
-                foreach($type as $year){
-                    $total_males   += $year[MALE];
-                    $total_females += $year[FEMALE];
-                }
-            }
-
-            $content .= '<table border="1">';
-            $content .= '<tr><th colspan="19"><h2 style="text-align: center">' . $name . '</h2></th></tr>';
-            $content .= '<tr>';
-            $content .= '<td rowspan="2"></td>';
-            $content .= '<th colspan="4">Freshmen (F)</th>';
-            $content .= '<th colspan="4">Continuing (C)</th>';
-            $content .= '<th colspan="4">Transfer (T)</th>';
-            $content .= '<th colspan="4">Readmit (Z)</th>';
-            $content .= '<th rowspan="2">Other (O)</th>';
-            $content .= '<th rowspan="2">Totals </th>';
-            $content .= '</tr><tr>';
-            $content .= '<th>FR</th><th>SO</th><th>JR</th><th>SR</th>';
-            $content .= '<th>FR</th><th>SO</th><th>JR</th><th>SR</th>';
-            $content .= '<th>FR</th><th>SO</th><th>JR</th><th>SR</th>';
-            $content .= '<th>FR</th><th>SO</th><th>JR</th><th>SR</th>';
-            $content .= '</tr><tr>';
-            $content .= '<th>Male</th>';
-            $content .= '<td>' . $building[$name]['F']['FR'][MALE]   . '</td>';
-            $content .= '<td>' . $building[$name]['F']['SO'][MALE]   . '</td>';
-            $content .= '<td>' . $building[$name]['F']['JR'][MALE]   . '</td>';
-            $content .= '<td>' . $building[$name]['F']['SR'][MALE]   . '</td>';
-            $content .= '<td>' . $building[$name]['C']['FR'][MALE]   . '</td>';
-            $content .= '<td>' . $building[$name]['C']['SO'][MALE]   . '</td>';
-            $content .= '<td>' . $building[$name]['C']['JR'][MALE]   . '</td>';
-            $content .= '<td>' . $building[$name]['C']['SR'][MALE]   . '</td>';
-            $content .= '<td>' . $building[$name]['T']['FR'][MALE]   . '</td>';
-            $content .= '<td>' . $building[$name]['T']['SO'][MALE]   . '</td>';
-            $content .= '<td>' . $building[$name]['T']['JR'][MALE]   . '</td>';
-            $content .= '<td>' . $building[$name]['T']['SR'][MALE]   . '</td>';
-            $content .= '<td>' . $building[$name]['Z']['FR'][MALE]   . '</td>';
-            $content .= '<td>' . $building[$name]['Z']['SO'][MALE]   . '</td>';
-            $content .= '<td>' . $building[$name]['Z']['JR'][MALE]   . '</td>';
-            $content .= '<td>' . $building[$name]['Z']['SR'][MALE]   . '</td>';
-            $content .= '<td rowspan="2">' . $otherByHall[$name]     . '</td>';
-            $content .= '<td>' . $total_males                        . '</td>';
-            $content .= '</tr><tr>';
-            $content .= '<th>Female</th>';
-            $content .= '<td>' . $building[$name]['F']['FR'][FEMALE]   . '</td>';
-            $content .= '<td>' . $building[$name]['F']['SO'][FEMALE]   . '</td>';
-            $content .= '<td>' . $building[$name]['F']['JR'][FEMALE]   . '</td>';
-            $content .= '<td>' . $building[$name]['F']['SR'][FEMALE]   . '</td>';
-            $content .= '<td>' . $building[$name]['C']['FR'][FEMALE]   . '</td>';
-            $content .= '<td>' . $building[$name]['C']['SO'][FEMALE]   . '</td>';
-            $content .= '<td>' . $building[$name]['C']['JR'][FEMALE]   . '</td>';
-            $content .= '<td>' . $building[$name]['C']['SR'][FEMALE]   . '</td>';
-            $content .= '<td>' . $building[$name]['T']['FR'][FEMALE]   . '</td>';
-            $content .= '<td>' . $building[$name]['T']['SO'][FEMALE]   . '</td>';
-            $content .= '<td>' . $building[$name]['T']['JR'][FEMALE]   . '</td>';
-            $content .= '<td>' . $building[$name]['T']['SR'][FEMALE]   . '</td>';
-            $content .= '<td>' . $building[$name]['Z']['FR'][FEMALE]   . '</td>';
-            $content .= '<td>' . $building[$name]['Z']['SO'][FEMALE]   . '</td>';
-            $content .= '<td>' . $building[$name]['Z']['JR'][FEMALE]   . '</td>';
-            $content .= '<td>' . $building[$name]['Z']['SR'][FEMALE]   . '</td>';
-            $content .= '<td>' . $total_females                        . '</td>';
-            $content .= '</tr><tr>';
-            $content .= '<th>Total</th>';
-            $content .= '<td colspan="17">  </td>';
-            $content .= '<td>' . ($total_males+$total_females+$otherByHall[$name] >= 0 ?
-            $total_males+$total_females+$otherByHall[$name] : '0') . '</td>';
-            $content .= '</tr></table><br /><br />';
-
-            $total['F']['FR'][MALE]  += $building[$name]['F']['FR'][MALE];
-            $total['F']['SO'][MALE]  += $building[$name]['F']['SO'][MALE];
-            $total['F']['JR'][MALE]  += $building[$name]['F']['JR'][MALE];
-            $total['F']['SR'][MALE]  += $building[$name]['F']['SR'][MALE];
-            $total['C']['FR'][MALE]  += $building[$name]['C']['FR'][MALE];
-            $total['C']['SO'][MALE]  += $building[$name]['C']['SO'][MALE];
-            $total['C']['JR'][MALE]  += $building[$name]['C']['JR'][MALE];
-            $total['C']['SR'][MALE]  += $building[$name]['C']['SR'][MALE];
-            $total['T']['FR'][MALE]  += $building[$name]['T']['FR'][MALE];
-            $total['T']['SO'][MALE]  += $building[$name]['T']['SO'][MALE];
-            $total['T']['JR'][MALE]  += $building[$name]['T']['JR'][MALE];
-            $total['T']['SR'][MALE]  += $building[$name]['T']['SR'][MALE];
-            $total['Z']['FR'][MALE]  += $building[$name]['Z']['FR'][MALE];
-            $total['Z']['SO'][MALE]  += $building[$name]['Z']['SO'][MALE];
-            $total['Z']['JR'][MALE]  += $building[$name]['Z']['JR'][MALE];
-            $total['Z']['SR'][MALE]  += $building[$name]['Z']['SR'][MALE];
-            $grandTotalMales         += $total_males;
-
-            $total['F']['FR'][FEMALE]  += $building[$name]['F']['FR'][FEMALE];
-            $total['F']['SO'][FEMALE]  += $building[$name]['F']['SO'][FEMALE];
-            $total['F']['JR'][FEMALE]  += $building[$name]['F']['JR'][FEMALE];
-            $total['F']['SR'][FEMALE]  += $building[$name]['F']['SR'][FEMALE];
-            $total['C']['FR'][FEMALE]  += $building[$name]['C']['FR'][FEMALE];
-            $total['C']['SO'][FEMALE]  += $building[$name]['C']['SO'][FEMALE];
-            $total['C']['JR'][FEMALE]  += $building[$name]['C']['JR'][FEMALE];
-            $total['C']['SR'][FEMALE]  += $building[$name]['C']['SR'][FEMALE];
-            $total['T']['FR'][FEMALE]  += $building[$name]['T']['FR'][FEMALE];
-            $total['T']['SO'][FEMALE]  += $building[$name]['T']['SO'][FEMALE];
-            $total['T']['JR'][FEMALE]  += $building[$name]['T']['JR'][FEMALE];
-            $total['T']['SR'][FEMALE]  += $building[$name]['T']['SR'][FEMALE];
-            $total['Z']['FR'][FEMALE]  += $building[$name]['Z']['FR'][FEMALE];
-            $total['Z']['SO'][FEMALE]  += $building[$name]['Z']['SO'][FEMALE];
-            $total['Z']['JR'][FEMALE]  += $building[$name]['Z']['JR'][FEMALE];
-            $total['Z']['SR'][FEMALE]  += $building[$name]['Z']['SR'][FEMALE];
-            $grandTotalFemales         += $total_females;
-
-            next($building);
+        # Check the gender for bad data
+        if(!isset($gender) || $gender === NULL || ($gender != MALE && $gender != FEMALE)) {
+            $problems[] = $assignment['asu_username'] .': Gender is unrecognized ('. $gender .')';
+            $otherByHall[$hall_row['hall_name']]++;
+            $total_other++;
+            continue;
         }
-        $content .= '======================================================';
+
+        # Get the class of the student for this assignment
+        $class = $student->getClass();
+
+        # Check the class for bad data
+        if(!isset($class) || $class === NULL ||
+        ($class != CLASS_FRESHMEN && $class != CLASS_SOPHOMORE &&
+        $class != CLASS_JUNIOR && $class != CLASS_SENIOR)) {
+            $problems[] = $assignment['asu_username'] . ': Class is unrecognized ('. $class .')';
+            $otherByHall[$hall_row['hall_name']]++;
+            $total_other++;
+            continue;
+        }
+
+        # Get the type of the student for this assignment
+        $type = $student->getType();
+
+        # Check the type for bad data
+        if(!isset($type) || $type === NULL ||
+        ($type != TYPE_FRESHMEN && $type != TYPE_TRANSFER && $type != TYPE_CONTINUING && $type != TYPE_READMIT)) {
+            $problems[] = $assignment['asu_username'] . ': Type is unrecognized ('. $type .')';
+            $otherByHall[$hall_row['hall_name']]++;
+            $total_other++;
+            continue;
+        }
+
+        $credit_hours = $student->getCreditHours();
+
+        # Check for a mis-matched type/class/hours situation
+        if( $type == TYPE_CONTINUING && $class == CLASS_FRESHMEN && $credit_hours == 0){
+            $problems[] = $assignment['asu_username'] . ": Type is $type, class is $class, credit hours is $credit_hours";
+            //$otherByHall[$hall_row['hall_name']]++;
+            //$total_other++;
+            //continue;
+        }
+
+        $building[$hall_row['hall_name']][$type][$class][$gender]++;
+        }
+    }
+
+    # Initalize a 3 dimensional table for summing up the totals
+    foreach(array(TYPE_FRESHMEN, TYPE_TRANSFER, TYPE_CONTINUING, TYPE_READMIT) as $init_type){
+        foreach(array(CLASS_FRESHMEN, CLASS_SOPHOMORE, CLASS_JUNIOR, CLASS_SENIOR) as $init_class){
+            foreach(array(MALE, FEMALE) as $init_gender){
+                $total[$init_type][$init_class][$init_gender] = 0;
+            }
+        }
+    }
+
+    $grandTotalMales = 0;
+    $grandTotalFemales = 0;
+
+    $content = '';
+
+    # Print out the header
+    $termPrint = Term::getPrintableSelectedTerm();
+    $content .= '<br /><br />';
+    $content .= "$termPrint - Housing assignments by building, student type, class, and gender";
+    $content .= '<br /><br />';
+
+    # Show any problems that occured
+    if(isset($problems) && count($problems) > 0) {
+        $content .= '<font color="red"><b>Some problems were found while retrieving data from Banner:</b></font><br />';
+        foreach($problems as $problem) {
+            $content .= $problem . '<br />';
+        }
+        $content .= '<br /><br />';
+    }
+
+    foreach($building as $name=>$hall) {
+        ksort($hall);
+        # Generate our totals for later in the form
+        $total_males = 0;
+        $total_females = 0;
+
+        foreach($building[$name] as $type){
+            foreach($type as $year){
+                $total_males   += $year[MALE];
+                $total_females += $year[FEMALE];
+            }
+        }
 
         $content .= '<table border="1">';
-        $content .= '<tr><th colspan="19" style="text-align: center"><h2>TOTALS</h2></th></tr>';
+        $content .= '<tr><th colspan="19"><h2 style="text-align: center">' . $name . '</h2></th></tr>';
         $content .= '<tr>';
         $content .= '<td rowspan="2"></td>';
         $content .= '<th colspan="4">Freshmen (F)</th>';
@@ -387,7 +286,7 @@ class HMS_Reports{
         $content .= '<th colspan="4">Transfer (T)</th>';
         $content .= '<th colspan="4">Readmit (Z)</th>';
         $content .= '<th rowspan="2">Other (O)</th>';
-        $content .= '<th rowspan="2">Totals</th>';
+        $content .= '<th rowspan="2">Totals </th>';
         $content .= '</tr><tr>';
         $content .= '<th>FR</th><th>SO</th><th>JR</th><th>SR</th>';
         $content .= '<th>FR</th><th>SO</th><th>JR</th><th>SR</th>';
@@ -395,137 +294,238 @@ class HMS_Reports{
         $content .= '<th>FR</th><th>SO</th><th>JR</th><th>SR</th>';
         $content .= '</tr><tr>';
         $content .= '<th>Male</th>';
-        $content .= '<td>' . $total['F']['FR'][MALE]   . '</td>';
-        $content .= '<td>' . $total['F']['SO'][MALE]   . '</td>';
-        $content .= '<td>' . $total['F']['JR'][MALE]   . '</td>';
-        $content .= '<td>' . $total['F']['SR'][MALE]   . '</td>';
-        $content .= '<td>' . $total['C']['FR'][MALE]   . '</td>';
-        $content .= '<td>' . $total['C']['SO'][MALE]   . '</td>';
-        $content .= '<td>' . $total['C']['JR'][MALE]   . '</td>';
-        $content .= '<td>' . $total['C']['SR'][MALE]   . '</td>';
-        $content .= '<td>' . $total['T']['FR'][MALE]   . '</td>';
-        $content .= '<td>' . $total['T']['SO'][MALE]   . '</td>';
-        $content .= '<td>' . $total['T']['JR'][MALE]   . '</td>';
-        $content .= '<td>' . $total['T']['SR'][MALE]   . '</td>';
-        $content .= '<td>' . $total['Z']['FR'][MALE]   . '</td>';
-        $content .= '<td>' . $total['Z']['SO'][MALE]   . '</td>';
-        $content .= '<td>' . $total['Z']['JR'][MALE]   . '</td>';
-        $content .= '<td>' . $total['Z']['SR'][MALE]   . '</td>';
-        $content .= '<td rowspan="2">' . $total_other  . '</td>';
-        $content .= '<td>' . $grandTotalMales          . '</td>';
+        $content .= '<td>' . $building[$name]['F']['FR'][MALE]   . '</td>';
+        $content .= '<td>' . $building[$name]['F']['SO'][MALE]   . '</td>';
+        $content .= '<td>' . $building[$name]['F']['JR'][MALE]   . '</td>';
+        $content .= '<td>' . $building[$name]['F']['SR'][MALE]   . '</td>';
+        $content .= '<td>' . $building[$name]['C']['FR'][MALE]   . '</td>';
+        $content .= '<td>' . $building[$name]['C']['SO'][MALE]   . '</td>';
+        $content .= '<td>' . $building[$name]['C']['JR'][MALE]   . '</td>';
+        $content .= '<td>' . $building[$name]['C']['SR'][MALE]   . '</td>';
+        $content .= '<td>' . $building[$name]['T']['FR'][MALE]   . '</td>';
+        $content .= '<td>' . $building[$name]['T']['SO'][MALE]   . '</td>';
+        $content .= '<td>' . $building[$name]['T']['JR'][MALE]   . '</td>';
+        $content .= '<td>' . $building[$name]['T']['SR'][MALE]   . '</td>';
+        $content .= '<td>' . $building[$name]['Z']['FR'][MALE]   . '</td>';
+        $content .= '<td>' . $building[$name]['Z']['SO'][MALE]   . '</td>';
+        $content .= '<td>' . $building[$name]['Z']['JR'][MALE]   . '</td>';
+        $content .= '<td>' . $building[$name]['Z']['SR'][MALE]   . '</td>';
+        $content .= '<td rowspan="2">' . $otherByHall[$name]     . '</td>';
+        $content .= '<td>' . $total_males                        . '</td>';
         $content .= '</tr><tr>';
         $content .= '<th>Female</th>';
-        $content .= '<td>' . $total['F']['FR'][FEMALE]   . '</td>';
-        $content .= '<td>' . $total['F']['SO'][FEMALE]   . '</td>';
-        $content .= '<td>' . $total['F']['JR'][FEMALE]   . '</td>';
-        $content .= '<td>' . $total['F']['SR'][FEMALE]   . '</td>';
-        $content .= '<td>' . $total['C']['FR'][FEMALE]   . '</td>';
-        $content .= '<td>' . $total['C']['SO'][FEMALE]   . '</td>';
-        $content .= '<td>' . $total['C']['JR'][FEMALE]   . '</td>';
-        $content .= '<td>' . $total['C']['SR'][FEMALE]   . '</td>';
-        $content .= '<td>' . $total['T']['FR'][FEMALE]   . '</td>';
-        $content .= '<td>' . $total['T']['SO'][FEMALE]   . '</td>';
-        $content .= '<td>' . $total['T']['JR'][FEMALE]   . '</td>';
-        $content .= '<td>' . $total['T']['SR'][FEMALE]   . '</td>';
-        $content .= '<td>' . $total['Z']['FR'][FEMALE]   . '</td>';
-        $content .= '<td>' . $total['Z']['SO'][FEMALE]   . '</td>';
-        $content .= '<td>' . $total['Z']['JR'][FEMALE]   . '</td>';
-        $content .= '<td>' . $total['Z']['SR'][FEMALE]   . '</td>';
-        $content .= '<td>' . $grandTotalFemales          . '</td>';
+        $content .= '<td>' . $building[$name]['F']['FR'][FEMALE]   . '</td>';
+        $content .= '<td>' . $building[$name]['F']['SO'][FEMALE]   . '</td>';
+        $content .= '<td>' . $building[$name]['F']['JR'][FEMALE]   . '</td>';
+        $content .= '<td>' . $building[$name]['F']['SR'][FEMALE]   . '</td>';
+        $content .= '<td>' . $building[$name]['C']['FR'][FEMALE]   . '</td>';
+        $content .= '<td>' . $building[$name]['C']['SO'][FEMALE]   . '</td>';
+        $content .= '<td>' . $building[$name]['C']['JR'][FEMALE]   . '</td>';
+        $content .= '<td>' . $building[$name]['C']['SR'][FEMALE]   . '</td>';
+        $content .= '<td>' . $building[$name]['T']['FR'][FEMALE]   . '</td>';
+        $content .= '<td>' . $building[$name]['T']['SO'][FEMALE]   . '</td>';
+        $content .= '<td>' . $building[$name]['T']['JR'][FEMALE]   . '</td>';
+        $content .= '<td>' . $building[$name]['T']['SR'][FEMALE]   . '</td>';
+        $content .= '<td>' . $building[$name]['Z']['FR'][FEMALE]   . '</td>';
+        $content .= '<td>' . $building[$name]['Z']['SO'][FEMALE]   . '</td>';
+        $content .= '<td>' . $building[$name]['Z']['JR'][FEMALE]   . '</td>';
+        $content .= '<td>' . $building[$name]['Z']['SR'][FEMALE]   . '</td>';
+        $content .= '<td>' . $total_females                        . '</td>';
         $content .= '</tr><tr>';
         $content .= '<th>Total</th>';
-        $content .= '<td colspan="17"></td>';
-        $content .= '<td>'. ($grandTotalMales+$grandTotalFemales+$total_other >= 0 ?
-        $grandTotalMales+$grandTotalFemales+$total_other : 0). '</td>';
+        $content .= '<td colspan="17">  </td>';
+        $content .= '<td>' . ($total_males+$total_females+$otherByHall[$name] >= 0 ?
+        $total_males+$total_females+$otherByHall[$name] : '0') . '</td>';
         $content .= '</tr></table><br /><br />';
-        $content .=  "<br /> ";
 
-        if(isset($problems) && count($problems) > 0) {
-            $content .= '<h2 style="color: red;">Errors:</h2>';
-            $content .=  '<span style="color: red; font-weight: bold;">Unknown Gender, Type, or Class: ' . count($problems) . '</span><br /> ';
-        }
-        $content .=  "<br /><br /> ";
+        $total['F']['FR'][MALE]  += $building[$name]['F']['FR'][MALE];
+        $total['F']['SO'][MALE]  += $building[$name]['F']['SO'][MALE];
+        $total['F']['JR'][MALE]  += $building[$name]['F']['JR'][MALE];
+        $total['F']['SR'][MALE]  += $building[$name]['F']['SR'][MALE];
+        $total['C']['FR'][MALE]  += $building[$name]['C']['FR'][MALE];
+        $total['C']['SO'][MALE]  += $building[$name]['C']['SO'][MALE];
+        $total['C']['JR'][MALE]  += $building[$name]['C']['JR'][MALE];
+        $total['C']['SR'][MALE]  += $building[$name]['C']['SR'][MALE];
+        $total['T']['FR'][MALE]  += $building[$name]['T']['FR'][MALE];
+        $total['T']['SO'][MALE]  += $building[$name]['T']['SO'][MALE];
+        $total['T']['JR'][MALE]  += $building[$name]['T']['JR'][MALE];
+        $total['T']['SR'][MALE]  += $building[$name]['T']['SR'][MALE];
+        $total['Z']['FR'][MALE]  += $building[$name]['Z']['FR'][MALE];
+        $total['Z']['SO'][MALE]  += $building[$name]['Z']['SO'][MALE];
+        $total['Z']['JR'][MALE]  += $building[$name]['Z']['JR'][MALE];
+        $total['Z']['SR'][MALE]  += $building[$name]['Z']['SR'][MALE];
+        $grandTotalMales         += $total_males;
 
-        # Stop the timer and compute elapsed time
-        $elapsed_time = microtime() - $start_time;
+        $total['F']['FR'][FEMALE]  += $building[$name]['F']['FR'][FEMALE];
+        $total['F']['SO'][FEMALE]  += $building[$name]['F']['SO'][FEMALE];
+        $total['F']['JR'][FEMALE]  += $building[$name]['F']['JR'][FEMALE];
+        $total['F']['SR'][FEMALE]  += $building[$name]['F']['SR'][FEMALE];
+        $total['C']['FR'][FEMALE]  += $building[$name]['C']['FR'][FEMALE];
+        $total['C']['SO'][FEMALE]  += $building[$name]['C']['SO'][FEMALE];
+        $total['C']['JR'][FEMALE]  += $building[$name]['C']['JR'][FEMALE];
+        $total['C']['SR'][FEMALE]  += $building[$name]['C']['SR'][FEMALE];
+        $total['T']['FR'][FEMALE]  += $building[$name]['T']['FR'][FEMALE];
+        $total['T']['SO'][FEMALE]  += $building[$name]['T']['SO'][FEMALE];
+        $total['T']['JR'][FEMALE]  += $building[$name]['T']['JR'][FEMALE];
+        $total['T']['SR'][FEMALE]  += $building[$name]['T']['SR'][FEMALE];
+        $total['Z']['FR'][FEMALE]  += $building[$name]['Z']['FR'][FEMALE];
+        $total['Z']['SO'][FEMALE]  += $building[$name]['Z']['SO'][FEMALE];
+        $total['Z']['JR'][FEMALE]  += $building[$name]['Z']['JR'][FEMALE];
+        $total['Z']['SR'][FEMALE]  += $building[$name]['Z']['SR'][FEMALE];
+        $grandTotalFemales         += $total_females;
 
-        $content .= "Elapsed time: $elapsed_time seconds<br /><br />";
+        next($building);
+    }
+    $content .= '======================================================';
 
-        return $content;
+    $content .= '<table border="1">';
+    $content .= '<tr><th colspan="19" style="text-align: center"><h2>TOTALS</h2></th></tr>';
+    $content .= '<tr>';
+    $content .= '<td rowspan="2"></td>';
+    $content .= '<th colspan="4">Freshmen (F)</th>';
+    $content .= '<th colspan="4">Continuing (C)</th>';
+    $content .= '<th colspan="4">Transfer (T)</th>';
+    $content .= '<th colspan="4">Readmit (Z)</th>';
+    $content .= '<th rowspan="2">Other (O)</th>';
+    $content .= '<th rowspan="2">Totals</th>';
+    $content .= '</tr><tr>';
+    $content .= '<th>FR</th><th>SO</th><th>JR</th><th>SR</th>';
+    $content .= '<th>FR</th><th>SO</th><th>JR</th><th>SR</th>';
+    $content .= '<th>FR</th><th>SO</th><th>JR</th><th>SR</th>';
+    $content .= '<th>FR</th><th>SO</th><th>JR</th><th>SR</th>';
+    $content .= '</tr><tr>';
+    $content .= '<th>Male</th>';
+    $content .= '<td>' . $total['F']['FR'][MALE]   . '</td>';
+    $content .= '<td>' . $total['F']['SO'][MALE]   . '</td>';
+    $content .= '<td>' . $total['F']['JR'][MALE]   . '</td>';
+    $content .= '<td>' . $total['F']['SR'][MALE]   . '</td>';
+    $content .= '<td>' . $total['C']['FR'][MALE]   . '</td>';
+    $content .= '<td>' . $total['C']['SO'][MALE]   . '</td>';
+    $content .= '<td>' . $total['C']['JR'][MALE]   . '</td>';
+    $content .= '<td>' . $total['C']['SR'][MALE]   . '</td>';
+    $content .= '<td>' . $total['T']['FR'][MALE]   . '</td>';
+    $content .= '<td>' . $total['T']['SO'][MALE]   . '</td>';
+    $content .= '<td>' . $total['T']['JR'][MALE]   . '</td>';
+    $content .= '<td>' . $total['T']['SR'][MALE]   . '</td>';
+    $content .= '<td>' . $total['Z']['FR'][MALE]   . '</td>';
+    $content .= '<td>' . $total['Z']['SO'][MALE]   . '</td>';
+    $content .= '<td>' . $total['Z']['JR'][MALE]   . '</td>';
+    $content .= '<td>' . $total['Z']['SR'][MALE]   . '</td>';
+    $content .= '<td rowspan="2">' . $total_other  . '</td>';
+    $content .= '<td>' . $grandTotalMales          . '</td>';
+    $content .= '</tr><tr>';
+    $content .= '<th>Female</th>';
+    $content .= '<td>' . $total['F']['FR'][FEMALE]   . '</td>';
+    $content .= '<td>' . $total['F']['SO'][FEMALE]   . '</td>';
+    $content .= '<td>' . $total['F']['JR'][FEMALE]   . '</td>';
+    $content .= '<td>' . $total['F']['SR'][FEMALE]   . '</td>';
+    $content .= '<td>' . $total['C']['FR'][FEMALE]   . '</td>';
+    $content .= '<td>' . $total['C']['SO'][FEMALE]   . '</td>';
+    $content .= '<td>' . $total['C']['JR'][FEMALE]   . '</td>';
+    $content .= '<td>' . $total['C']['SR'][FEMALE]   . '</td>';
+    $content .= '<td>' . $total['T']['FR'][FEMALE]   . '</td>';
+    $content .= '<td>' . $total['T']['SO'][FEMALE]   . '</td>';
+    $content .= '<td>' . $total['T']['JR'][FEMALE]   . '</td>';
+    $content .= '<td>' . $total['T']['SR'][FEMALE]   . '</td>';
+    $content .= '<td>' . $total['Z']['FR'][FEMALE]   . '</td>';
+    $content .= '<td>' . $total['Z']['SO'][FEMALE]   . '</td>';
+    $content .= '<td>' . $total['Z']['JR'][FEMALE]   . '</td>';
+    $content .= '<td>' . $total['Z']['SR'][FEMALE]   . '</td>';
+    $content .= '<td>' . $grandTotalFemales          . '</td>';
+    $content .= '</tr><tr>';
+    $content .= '<th>Total</th>';
+    $content .= '<td colspan="17"></td>';
+    $content .= '<td>'. ($grandTotalMales+$grandTotalFemales+$total_other >= 0 ?
+    $grandTotalMales+$grandTotalFemales+$total_other : 0). '</td>';
+    $content .= '</tr></table><br /><br />';
+    $content .=  "<br /> ";
+
+    if(isset($problems) && count($problems) > 0) {
+        $content .= '<h2 style="color: red;">Errors:</h2>';
+        $content .=  '<span style="color: red; font-weight: bold;">Unknown Gender, Type, or Class: ' . count($problems) . '</span><br /> ';
+    }
+    $content .=  "<br /><br /> ";
+
+    # Stop the timer and compute elapsed time
+    $elapsed_time = microtime() - $start_time;
+
+    $content .= "Elapsed time: $elapsed_time seconds<br /><br />";
+
+    return $content;
     }
 
     public static function run_applicant_demographics_report(){
         # Note the start time
         $start_time = microtime();
 
-        $term           = Term::getSelectedTerm();
-        $tpl['TERM']    = Term::getPrintableSelectedTerm();
+    $term           = Term::getSelectedTerm();
+    $tpl['TERM']    = Term::getPrintableSelectedTerm();
 
-        $sem = Term::getTermSem($term);
+    $sem = Term::getTermSem($term);
 
-        switch($sem){
-            case TERM_FALL:
-                $db = new PHPWS_DB('hms_fall_application');
-                $db->addJoin('LEFT OUTER', 'hms_fall_application', 'hms_new_application', 'id', 'id');
-                break;
-            case TERM_SPRING:
-                $db = new PHPWS_DB('hms_spring_application');
-                $db->addJoin('LEFT OUTER', 'hms_spring_application', 'hms_new_application', 'id', 'id');
-                break;
-            case TERM_SUMMER1:
-            case TERM_SUMMER2:
-                $db = new PHPWS_DB('hms_summer_application');
-                $db->addJoin('LEFT OUTER', 'hms_summer_application', 'hms_new_application', 'id', 'id');
-                break;
+    switch($sem){
+        case TERM_FALL:
+            $db = new PHPWS_DB('hms_fall_application');
+            $db->addJoin('LEFT OUTER', 'hms_fall_application', 'hms_new_application', 'id', 'id');
+            break;
+        case TERM_SPRING:
+            $db = new PHPWS_DB('hms_spring_application');
+            $db->addJoin('LEFT OUTER', 'hms_spring_application', 'hms_new_application', 'id', 'id');
+            break;
+        case TERM_SUMMER1:
+        case TERM_SUMMER2:
+            $db = new PHPWS_DB('hms_summer_application');
+            $db->addJoin('LEFT OUTER', 'hms_summer_application', 'hms_new_application', 'id', 'id');
+            break;
+    }
+
+    $db->addColumn('hms_new_application.*');
+    $db->addWhere('hms_new_application.term', $term);
+    $results = $db->select();
+
+    if(PHPWS_Error::logIfError($results)) {
+        PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+        throw new DatabaseException($results->toString());
+    }
+
+    $types      = array(TYPE_FRESHMEN, TYPE_TRANSFER, TYPE_CONTINUING, TYPE_READMIT, TYPE_RETURNING, TYPE_NONDEGREE, TYPE_WITHDRAWN);
+    $genders    = array(MALE, FEMALE);
+
+    # Initalize the array for totals
+    foreach($types as $init_type){
+        foreach($genders as $init_gender){
+            $application_totals[$init_type][$init_gender] = 0;
         }
+    }
 
-        $db->addColumn('hms_new_application.*');
-        $db->addWhere('hms_new_application.term', $term);
-        $results = $db->select();
+    # Calculate the totals
+    foreach($results as $application){
+        $application_totals[$application['student_type']][$application['gender']]++;
+    }
 
-        if(PHPWS_Error::logIfError($results)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
-            throw new DatabaseException($results->toString());
-        }
+    # Populate the template vars
+    $male_sum = 0;
+    foreach($types as $type){
+        $tpl['male_totals'][] = array('COUNT'=>$application_totals[$type][MALE]);
+        $male_sum += $application_totals[$type][MALE];
+    }
+    $tpl['MALE_SUM'] = $male_sum;
 
-        $types      = array(TYPE_FRESHMEN, TYPE_TRANSFER, TYPE_CONTINUING, TYPE_READMIT, TYPE_RETURNING, TYPE_NONDEGREE, TYPE_WITHDRAWN);
-        $genders    = array(MALE, FEMALE);
+    $female_sum = 0;
+    foreach($types as $type){
+        $tpl['female_totals'][] = array('COUNT'=>$application_totals[$type][FEMALE]);
+        $female_sum += $application_totals[$type][FEMALE];
+    }
+    $tpl['FEMALE_SUM'] = $female_sum;
 
-        # Initalize the array for totals
-        foreach($types as $init_type){
-            foreach($genders as $init_gender){
-                $application_totals[$init_type][$init_gender] = 0;
-            }
-        }
+    $tpl['ALL_TOTAL'] = $female_sum + $male_sum;
 
-        # Calculate the totals
-        foreach($results as $application){
-            $application_totals[$application['student_type']][$application['gender']]++;
-        }
+    $type_totals = array();
+    foreach($types as $type){
+        $tpl['type_totals'][] = array('COUNT'=>array_sum($application_totals[$type]));
+    }
 
-        # Populate the template vars
-        $male_sum = 0;
-        foreach($types as $type){
-            $tpl['male_totals'][] = array('COUNT'=>$application_totals[$type][MALE]);
-            $male_sum += $application_totals[$type][MALE];
-        }
-        $tpl['MALE_SUM'] = $male_sum;
-
-        $female_sum = 0;
-        foreach($types as $type){
-            $tpl['female_totals'][] = array('COUNT'=>$application_totals[$type][FEMALE]);
-            $female_sum += $application_totals[$type][FEMALE];
-        }
-        $tpl['FEMALE_SUM'] = $female_sum;
-
-        $tpl['ALL_TOTAL'] = $female_sum + $male_sum;
-
-        $type_totals = array();
-        foreach($types as $type){
-            $tpl['type_totals'][] = array('COUNT'=>array_sum($application_totals[$type]));
-        }
-
-        return PHPWS_Template::process($tpl, 'hms', 'admin/reports/application_demographics.tpl');
+    return PHPWS_Template::process($tpl, 'hms', 'admin/reports/application_demographics.tpl');
     }
 
     /**
@@ -640,7 +640,7 @@ class HMS_Reports{
 
     /*
      * TODO: finish this
-     */
+    */
     public static function run_hall_occupancy_report()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
@@ -1493,7 +1493,7 @@ class HMS_Reports{
 
         /*
          * Male Coed total
-         */
+        */
         $db = new PHPWS_DB('hms_new_application');
         $db->addJoin('left', 'hms_new_application', $table2, 'id', 'id');
         $db->addWhere($table2.'.lifestyle_option', COED);
@@ -1514,7 +1514,7 @@ class HMS_Reports{
 
         /*
          * Male Single Gender total
-         */
+        */
         $db = new PHPWS_DB('hms_new_application');
         $db->addJoin('left', 'hms_new_application', $table2, 'id', 'id');
         $db->addWhere($table2.'.lifestyle_option', COED, '<>'); // <> == '!=';
@@ -1535,7 +1535,7 @@ class HMS_Reports{
 
         /*
          * Female Coed total
-         */
+        */
         $db = new PHPWS_DB('hms_new_application');
         $db->addJoin('left', 'hms_new_application', $table2, 'id', 'id');
         $db->addWhere($table2.'.lifestyle_option', COED);
@@ -1556,7 +1556,7 @@ class HMS_Reports{
 
         /*
          * Female Single Gender
-         */
+        */
         $db = new PHPWS_DB('hms_new_application');
         $db->addJoin('left', 'hms_new_application', $table2, 'id', 'id');
         $db->addWhere($table2.'.lifestyle_option', COED, '<>'); // <> == '!=';
