@@ -17,10 +17,10 @@ class UserView extends HMSView
     {
         $this->sidebar[] = $side;
     }
-    
+
     public function addNotifications($n)
     {
-    	$this->notifications = $n;
+        $this->notifications = $n;
     }
 
     public function show()

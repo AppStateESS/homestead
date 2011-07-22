@@ -15,11 +15,11 @@ class EditFloorCommand extends Command {
     public function getRequestVars()
     {
         $vars = array('action'=>'EditFloor');
-        	
+         
         if(isset($this->floorId)){
             $vars['floorId'] = $this->floorId;
         }
-        	
+         
         return $vars;
     }
 
@@ -31,9 +31,9 @@ class EditFloorCommand extends Command {
         }
 
         PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
-        	
+         
         $floorId = $context->get('floorId');
-        	
+         
         $viewCmd = CommandFactory::getCommand('EditFloorView');
         $viewCmd->setFloorId($floorId);
 

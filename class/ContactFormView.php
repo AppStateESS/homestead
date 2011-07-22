@@ -5,12 +5,12 @@ PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 
 class ContactFormView extends View {
 
-	public function show()
-	{
+    public function show()
+    {
         $username = UserStatus::getUsername();
         $currentTerm = Term::getCurrentTerm();
-		$student = StudentFactory::getStudentByUsername($username, $currentTerm);
-		$applicationTerm = $student->getApplicationTerm();
+        $student = StudentFactory::getStudentByUsername($username, $currentTerm);
+        $applicationTerm = $student->getApplicationTerm();
 
         $tpl = array();
         $tpl['TITLE'] = 'Contact Form';
@@ -46,6 +46,6 @@ class ContactFormView extends View {
         $tpl = $form->getTemplate();
 
         return PHPWS_Template::process($tpl, 'hms', 'student/contact_page.tpl');
-	}
+    }
 }
 ?>

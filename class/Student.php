@@ -25,7 +25,7 @@ class Student {
     public $honors;
     public $teaching_fellow;
     public $watauga_member;
-    
+
     public $disabled_pin;
     public $housing_waiver; // Whether or not a freshmen's student on-campus housing has been waived (e.g., living close by with family)
 
@@ -89,7 +89,7 @@ class Student {
                 break;
             default:
                 return 'Unknown type: ' . $this->type;
-                break;
+            break;
         }
     }
 
@@ -189,14 +189,14 @@ class Student {
         if(is_null($type)){
             # Return the pr address, if it exists
             if(!is_null($pr_address)){
-                return $pr_address;
-                # Since there was no ps address, return the ps address, if it exists
-            }else if(!is_null($ps_address)){
-                return $ps_address;
-            }else{
-                # No address found, return false
-                return false;
-            }
+            return $pr_address;
+            # Since there was no ps address, return the ps address, if it exists
+        }else if(!is_null($ps_address)){
+            return $ps_address;
+        }else{
+            # No address found, return false
+            return false;
+        }
         }else if($type == ADDRESS_PRMT_RESIDENCE && !is_null($pr_address)){
             return $pr_address;
         }else if($type == ADDRESS_PRMT_STUDENT && !is_null($ps_address)){
@@ -232,7 +232,7 @@ class Student {
 
     /***************************
      * Getter / Setter Methods *
-     ***************************/
+    ***************************/
 
     public function getUsername(){
         return $this->username;
@@ -383,21 +383,21 @@ class Student {
     }
 
     public function pinDisabled(){
-    	return $this->disabled_pin;
+        return $this->disabled_pin;
     }
-    
+
     public function setPinDisabled($flag){
-    	$this->disabled_pin = $flag;
+        $this->disabled_pin = $flag;
     }
-    
+
     public function housingApplicationWaived(){
-    	return $this->housing_waiver;
+        return $this->housing_waiver;
     }
-    
+
     public function setHousingWaiver($waiver){
-    	$this->housing_waiver = $waiver;
+        $this->housing_waiver = $waiver;
     }
-    
+
     public function getAddressList(){
         return $this->addressList;
     }

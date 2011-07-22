@@ -2,7 +2,7 @@
 
 /**
  * Contoller to handle saving changes to a bed.
- * 
+ *
  * @author Jeremy Booker <jbooker AT tux DOT appstate DOT edu>
  * @package HMS
  */
@@ -43,10 +43,10 @@ class EditBedCommand extends Command {
         // Check that the Banner bed ID is valid (five digits)
         $bannerBedId = trim($context->get('banner_id'));
         if(!is_numeric($bannerBedId) || !preg_match("/\d{5}/",$bannerBedId)){
-        	NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Invalid Banner bed ID. No changes were saved.');
-        	$viewCmd->redirect();
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Invalid Banner bed ID. No changes were saved.');
+            $viewCmd->redirect();
         }
-        
+
         # Create the bed object given the bed_id
         $bed = new HMS_Bed($bedId);
         if(!$bed){

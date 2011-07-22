@@ -16,8 +16,8 @@ class HMS_Role extends HMS_Item {
 
     /*
      * Will return false on subsequent attempts to add a permission to a role.
-     * ie. you can only add it once.
-     */
+    * ie. you can only add it once.
+    */
     public function addPermission(HMS_Permission $permission){
         $db = new PHPWS_DB('hms_role_perm');
         $db->addValue('role', $this->id);
@@ -46,9 +46,9 @@ class HMS_Role extends HMS_Item {
 
     /*
      * Will return false if the user is already in this role.  User only has
-     * access to the object of type $classname with the id $intance (none if
-     * null).
-     */
+    * access to the object of type $classname with the id $intance (none if
+    * null).
+    */
     //TODO: Invalid documentation. No where does this function return false. It throws database
     //  exceptions due to duplicate key violations......
     public function addUser($username, $classname, $instance=null){
@@ -96,12 +96,12 @@ class HMS_Role extends HMS_Item {
         $db = new PHPWS_DB('hms_user_role');
         $db->addWhere('user_id', $user_id);
         $db->addWhere('role', $this->id);
-		if(!is_null($classname)){
-			$db->addWhere('class', strtolower($classname));
-		}
-		if(!is_null($instanceId)){
-			$db->addWhere('instance', $instanceId);
-		}
+        if(!is_null($classname)){
+            $db->addWhere('class', strtolower($classname));
+        }
+        if(!is_null($instanceId)){
+            $db->addWhere('instance', $instanceId);
+        }
         $result = $db->delete();
 
         if(PHPWS_Error::logIfError($result)){

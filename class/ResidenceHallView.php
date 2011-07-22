@@ -4,20 +4,20 @@ PHPWS_Core::initModClass('hms', 'View.php');
 
 class ResidenceHallView extends View {
 
-	private $hall;
+    private $hall;
 
-	public function __construct(HMS_Residence_Hall $hall){
-		$this->hall = $hall;
-	}
+    public function __construct(HMS_Residence_Hall $hall){
+        $this->hall = $hall;
+    }
 
-	public function show()
-	{
+    public function show()
+    {
         if(!UserStatus::isAdmin()){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You are not allowed to view residence halls');
         }
 
-		PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
         javascript('jquery_ui');
@@ -111,8 +111,8 @@ class ResidenceHallView extends View {
         # if the user has permission to view the form but not edit it then
         # disable it
         if(    Current_User::allow('hms', 'hall_view')
-           && !Current_User::allow('hms', 'hall_attributes')
-           && !Current_User::allow('hms', 'hall_structure'))
+        && !Current_User::allow('hms', 'hall_attributes')
+        && !Current_User::allow('hms', 'hall_structure'))
         {
             $form_vars = get_object_vars($form);
             $elements = $form_vars['_elements'];
@@ -126,13 +126,13 @@ class ResidenceHallView extends View {
         $tpl = $form->getTemplate();
 
         $tpl['FLOOR_PAGER'] = HMS_Floor::get_pager_by_hall($this->hall->getId());
-		javascript('modules/hms/role_editor');
+        javascript('modules/hms/role_editor');
         $tpl['ROLE_EDITOR'] = PHPWS_Template::process(array('CLASS_NAME'=>"'HMS_Residence_Hall'", 'ID'=>$this->hall->id), 'hms', 'admin/role_editor.tpl');
 
         Layout::addPageTitle("Edit Residence Hall");
 
         return PHPWS_Template::process($tpl, 'hms', 'admin/edit_residence_hall.tpl');
-	}
+    }
 }
 
 ?>

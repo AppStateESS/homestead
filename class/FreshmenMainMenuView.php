@@ -13,33 +13,33 @@ class FreshmenMainMenuView extends View {
 
     private $student;
 
-	public function __construct(Student $student)
-	{
-	    $this->student = $student;
-	}
+    public function __construct(Student $student)
+    {
+        $this->student = $student;
+    }
 
-	public function show()
-	{
-	    $terms = HousingApplication::getAvailableApplicationTermsForStudent($this->student);
+    public function show()
+    {
+        $terms = HousingApplication::getAvailableApplicationTermsForStudent($this->student);
         $applications = HousingApplication::getAllApplicationsForStudent($this->student);
 
-	    foreach($terms as $t){
+        foreach($terms as $t){
 
-	        # If the student has a withdrawn application,
-	        # then show a message instead of the normal menu block.
-	        if(isset($applications[$t['term']]) && $applications[$t['term']]->isWithdrawn()){
-	            $termBlock = new StudentMenuWithdrawnTermBlock($this->student, $t['term']);
-	        }else{
-	            $termBlock = new StudentMenuTermBlock($this->student, $t['term']);
-	        }
+            # If the student has a withdrawn application,
+            # then show a message instead of the normal menu block.
+            if(isset($applications[$t['term']]) && $applications[$t['term']]->isWithdrawn()){
+            $termBlock = new StudentMenuWithdrawnTermBlock($this->student, $t['term']);
+        }else{
+            $termBlock = new StudentMenuTermBlock($this->student, $t['term']);
+        }
 
-	        $tpl['TERMBLOCK'][] = array('TERMBLOCK_CONTENT'=>$termBlock->show());
+        $tpl['TERMBLOCK'][] = array('TERMBLOCK_CONTENT'=>$termBlock->show());
         }
 
         Layout::addPageTitle("Main Menu");
 
         return PHPWS_Template::process($tpl, 'hms', 'student/freshmenMenu.tpl');
-	}
+    }
 
 }
 
