@@ -23,6 +23,7 @@ class RecentStudentSearchList {
         if(apc_fetch(self::keyName) !== FALSE){
             // Make sure we've loaded the Student class first
             PHPWS_Core::initModClass('hms', 'Student.php');
+            PHPWS_Core::initModClass('hms', 'CachedStudent.php');
             $this->globalSearchList = apc_fetch(self::keyName);
         }else{
             $this->globalSearchList = array();
@@ -32,6 +33,7 @@ class RecentStudentSearchList {
         if(apc_fetch(self::keyName . UserStatus::getUsername()) !== FALSE){
             // Make sure we've loaded the Student class first
             PHPWS_Core::initModClass('hms', 'Student.php');
+            PHPWS_Core::initModClass('hms', 'CachedStudent.php');
             $this->searchList = apc_fetch(self::keyName . UserStatus::getUsername());
         }else{
             $this->searchList = array();
