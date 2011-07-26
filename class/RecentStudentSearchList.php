@@ -11,8 +11,8 @@
 class RecentStudentSearchList {
 
     private static $instance;
-    const keyName = 'StudentSearchList';
-    const cachTtl = 28800; // seconds to keep cache for (28,800 => 8 hrs)
+    const KEY_NAME = 'StudentSearchList';
+    const CACHE_TTL = 28800; // seconds to keep cache for (28,800 => 8 hrs)
 
     private $searchList;
     private $globalSearchList;
@@ -20,21 +20,21 @@ class RecentStudentSearchList {
     private function __construct()
     {
         // Load the global list from cache, if it exists
-        if(apc_fetch(self::keyName) !== FALSE){
+        if(apc_fetch(self::KEY_NAME) !== FALSE){
             // Make sure we've loaded the Student class first
             PHPWS_Core::initModClass('hms', 'Student.php');
             PHPWS_Core::initModClass('hms', 'CachedStudent.php');
-            $this->globalSearchList = apc_fetch(self::keyName);
+            $this->globalSearchList = apc_fetch(self::KEY_NAME);
         }else{
             $this->globalSearchList = array();
         }
 
         // Load the user unique search list
-        if(apc_fetch(self::keyName . UserStatus::getUsername()) !== FALSE){
+        if(apc_fetch(self::KEY_NAME . UserStatus::getUsername()) !== FALSE){
             // Make sure we've loaded the Student class first
             PHPWS_Core::initModClass('hms', 'Student.php');
             PHPWS_Core::initModClass('hms', 'CachedStudent.php');
-            $this->searchList = apc_fetch(self::keyName . UserStatus::getUsername());
+            $this->searchList = apc_fetch(self::KEY_NAME . UserStatus::getUsername());
         }else{
             $this->searchList = array();
         }
@@ -80,7 +80,7 @@ class RecentStudentSearchList {
         array_unshift($this->searchList, $student);
 
         // Save this list to the cache
-        apc_store(self::keyName . UserStatus::getUsername(), $this->searchList);
+        apc_store(self::KEY_NAME . UserStatus::getUsername(), $this->searchList);
 
         /*****
          * Global List
@@ -97,7 +97,7 @@ class RecentStudentSearchList {
         array_unshift($this->globalSearchList, $student);
 
         // Save this list to the cache
-        apc_store(self::keyName, $this->globalSearchList);
+        apc_store(self::KEY_NAME, $this->globalSearchList);
     }
 
     /**
