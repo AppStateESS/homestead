@@ -13,12 +13,14 @@ PHPWS_Core::initModClass('hms', 'Report.php');
 
 class ApplicantDemographics extends Report {
 
+    const friendlyName = 'Applicant Demographics';
+    
     public function __construct($id = 0){
         parent::__construct($id);
     }
 
     public function getFriendlyName(){
-        return "Applicant Demographics";
+        return self::friendlyName;
     }
 
     public function execute()

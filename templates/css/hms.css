@@ -1,6 +1,9 @@
 .hms-main-admin-menu-block{
+	border-radius:3px;
+	box-shadow: 1px 1px 4px #CFCFCF;
 	background:#FAFAFA;
 	width:200px;
+	margin-bottom:7px;
 }
 
 .hms-main-admin-menu-block legend img {
@@ -108,6 +111,7 @@ img.roommate_request_icon {
 
 .hms-sidebox {
     border: 1px solid #000;
+    border-radius: 4px;
     padding: 5px;
     margin-bottom: 5px;
 }

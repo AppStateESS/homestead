@@ -11,6 +11,11 @@
 abstract class View
 {
     public abstract function show();
+    
+    protected function setTitle($title)
+    {
+        Layout::addPageTitle($title);
+    }
 }
 
 abstract class HMSView extends View

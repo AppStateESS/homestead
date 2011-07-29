@@ -4,24 +4,25 @@
  * Report class - Abstract parent class for all reports in HMS.
  *
  * @author jbooker
- *
+ * @package HMS
  */
 
 abstract class Report {
 
     public $id;
 
-    public $report; // class name of the report
-    public $format; // eg. html, csv, pdf
+    public $class; // class name of the report
     public $from_term;
     public $to_term;
-    public $exec_timestamp; // execution start time, can be in the future for scheduled reports
-    public $exec_by_user_id;
-
-    public $content; // content/output of the report
+    public $created_by;
+    public $created_on;
+    public $scheduled_exec_time; // scheduled execution start time, can be in the future for scheduled reports
+    public $params;
+    public $began_timestamp; // actual execution start time
+    public $completed_timestamp; // execution finish time
 
     /**
-     *
+     * Constructor
      */
     public function __construct($id = 0)
     {
@@ -34,11 +35,11 @@ abstract class Report {
     }
 
     /**
-     * Loads this report (and all its outout, if any) from the database.
+     * Loads this report from the database.
      */
     public function load()
     {
-        $db = new PHPWS_DB('hms_report_exec');
+        $db = new PHPWS_DB('hms_report');
         $db->addWhere('id', $this->id);
         $result = $db->loadObject($this);
         if(PHPWS_Error::logIfError($result)) {
@@ -52,7 +53,7 @@ abstract class Report {
      */
     public function save()
     {
-        $db = new PHPWS_DB('hms_report_exec');
+        $db = new PHPWS_DB('hms_report');
 
         $this->stamp();
 
@@ -66,7 +67,7 @@ abstract class Report {
     }
 
     public function delete() {
-        $db = new PHPWS_DB('hms_report_exec');
+        $db = new PHPWS_DB('hms_report');
         $db->addWhere('id', $this->id);
         $result = $db->delete();
         if(PHPWS_Error::logIfError($result)) {
@@ -81,56 +82,19 @@ abstract class Report {
     public abstract function getFriendlyName();
 
     /**
-     * Returns the form or view necessary to configure this report.
-     * The form data (user input) will be made available to the execute function.
-     * Returns null if no setup view is necessary.
-     */
-    public abstract function getSetupView();
-
-    /**
      * Executes the report. Calculated values should be stored in
      * member variables unique to each report.
      */
     public abstract function execute();
-
-    /**
-     * Returns the view for this report's data.
-     */
-    public abstract function getReportView();
-
-    /**
-     * Finds/calculates and saves to the database any data
-     * that this report may need to record periodically in order
-     * to be processed/reported on later.
-     */
-    public abstract function savePeriodicData();
-
-    /**
-     * Schedules this report to be run at some point in the future.
-     * @param int $timestamp - unix timestamp of when this report should be run
-     */
-    public function schedule($timestamp = NULL)
-    {
-        if(is_null($timestamp)){
-            $timestamp = mktime();
-        }
-
-        //TODO
-    }
-
-    public function unSchedule()
-    {
-
-    }
 
     public function getLastExec()
     {
         $className = get_class($this);
         $obj = new $className;
 
-        $db = new PHPWS_DB('hms_report_exec');
+        $db = new PHPWS_DB('hms_report');
         $db->addWhere('report', $obj->report);
-        $db->addOrder('exec_timestamp DESC');
+        $db->addOrder('completed_timestamp DESC');
         $db->setLimit(1);
         $result = $db->loadObject($obj);
 
@@ -167,12 +131,17 @@ abstract class Report {
      * Getters and setters
      */
 
-    public function getExecTimestamp(){
-        return $this->exec_timestamp;
+    public function getId()
+    {
+        return $this->id;
+    }
+    
+    public function getCompletedTimestamp(){
+        return $this->completed_timestamp;
     }
 
-    public function getExecUserId(){
-        return $this->exec_by_user_id;
+    public function getCreatedBy(){
+        return $this->created_by;
     }
 }
 

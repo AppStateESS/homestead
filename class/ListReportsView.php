@@ -15,14 +15,16 @@ PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
 class ListReportsView extends View {
 
-    private $reports;
+    private $reportControllers;
 
-    public function __construct(Array $reports){
-        $this->reports = $reports;
+    public function __construct(Array $reportControllers){
+        $this->reportControllers = $reportControllers;
     }
 
 	public function show()
 	{
+	    $this->setTitle("Reports");
+	    
 		if(!Current_User::allow('hms', 'reports')){
 		    PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
 			throw new PermissionException('You do not have permission to run reports.');
@@ -31,37 +33,39 @@ class ListReportsView extends View {
 		$tpl = array();
         $tpl['REPORTS'] = array();
 
-		foreach($this->reports as $r) {
+		foreach($this->reportControllers as $rc) {
 
 		    $tags = array();
-            $tags['reportName'] = $r->getFriendlyName();
-            $lastExec = $r->getLastExec();
-            if(is_null($lastExec)){
-                $tags['lastRun'] = 'not yet run';
+		    $rc->loadLastExec();
+            $lastExec = $rc->getReport();
+            if(is_null($lastExec->getId())){
+                $tags['reportName'] = $rc->getFriendlyName();
+                $tags['lastRunTime'] = 'not yet run';
             }else{
-                $lastRunTime  = HMS_Util::relativeTime($lastExec->getExecTimestamp());
-                $lastUsername =
-                $tags['lastRun']    = HMS_Util::relativeTime($lastExec->getExecTimestamp());
-                $tags['lastRun']    = $lastExec->getExecUserId();
+                $tags['lastRunTime']    = HMS_Util::relativeTime($lastExec->getCompletedTimestamp());
 
                 // Create the view command
                 //TODO
+                //$tags['reportName'] = $viewCmd->getLink($r->getFriendlyName());
             }
 
+            /*
             // Create the command for the 'details' view
             $detailsCmd = CommandFactory::getCommand('ShowReportDetails');
-            $detailsCmd->setReportName(get_class($r));
+            //$detailsCmd->setReportName(get_class($r));
             $tags['detailsView'] = $detailsCmd->getLink('details');
-
-            // Create the command to schedule the report
-            $scheduleCmd = CommandFactory::getCommand('ShowScheduleReport');
-            $scheduleCmd->setReportName(get_class($r));
-            $tags['scheduleView'] = $scheduleCmd->getLink('run');
+			*/
+            
+            // Schedule a report
+            //$scheduleCmd = CommandFactory::getCommand('ShowScheduleReport');
+            
+            // Create the command to run the report now
+            //$scheduleCmd = CommandFactory::getCommand('ShowScheduleReport');
+            //$rc->setupRunNowCommand($runNowCmd);
+            //$tags['scheduleView'] = $scheduleCmd->getLink('run now');
 
             $tpl['REPORTS'][] = $tags;
 		}
-
-        Layout::addPageTitle("Reports");
 
 		$final = PHPWS_Template::process($tpl, 'hms', 'admin/display_reports.tpl');
 		return $final;

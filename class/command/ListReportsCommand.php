@@ -14,10 +14,10 @@ class ListReportsCommand extends Command {
             throw new PermissionException('You do not have permission to run/view reports.');
         }
 
-        PHPWS_Core::initModClass('hms', 'ReportManager.php');
+        PHPWS_Core::initModClass('hms', 'ReportFactory.php');
         PHPWS_Core::initModClass('hms', 'ListReportsView.php');
 
-        $reports = ReportManager::getReports();
+        $reports = ReportFactory::getAllReportControllers();
         $reportsList = new ListReportsView($reports);
 
         $context->setContent($reportsList->show());
