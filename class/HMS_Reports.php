@@ -1084,7 +1084,7 @@ class HMS_Reports{
 
         $filename = "hms_assignments-$term-" . date("Y-m-d") . '.csv';
 
-        $output = "user name, banner id, first name, middle name, last name, student type, assignment, address 1, address 2, address 3, city, state, zip, application term\n";
+        $output = "user name, banner id, first name, middle name, last name, student type, assignment, address 1, address 2, address 3, city, state, zip, application term, gender, birthday\n";
 
         foreach($results as $row){
             try{
@@ -1103,6 +1103,8 @@ class HMS_Reports{
                 $state      = "";
                 $zip        = "";
                 $appTerm    = "";
+                $gender     = "";
+                $birdthday  = "";
                 continue;
             }
 
@@ -1118,6 +1120,8 @@ class HMS_Reports{
             $last       = $student->getLastName();
             $type       = $student->getType();
             $appTerm    = $student->getApplicationTerm();
+            $gender     = $student->getPrintableGender();
+            $birthday   = $student->getDob();
 
             $room = $row['hall_name'] . ' ' . $row['room_number'];
 
@@ -1139,7 +1143,7 @@ class HMS_Reports{
                 $zip   = $address->zip;
             }
 
-            $output .= "$username,$bannerId,$first,$middle,$last,$type,$room,$line1,$line2,$line3,$city,$state,$zip,$appTerm\n";
+            $output .= "$username,$bannerId,$first,$middle,$last,$type,$room,$line1,$line2,$line3,$city,$state,$zip,$appTerm,$gender,$birthday\n";
         }
 
         header('Content-Type: application/octet-stream');
