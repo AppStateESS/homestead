@@ -36,6 +36,8 @@ class ListReportsView extends View {
 		foreach($this->reportControllers as $rc) {
 
 		    $tags = array();
+		    
+		    /*
 		    $rc->loadLastExec();
             $lastExec = $rc->getReport();
             if(is_null($lastExec->getId())){
@@ -48,7 +50,7 @@ class ListReportsView extends View {
                 //TODO
                 //$tags['reportName'] = $viewCmd->getLink($r->getFriendlyName());
             }
-
+			*/
             /*
             // Create the command for the 'details' view
             $detailsCmd = CommandFactory::getCommand('ShowReportDetails');
@@ -64,7 +66,7 @@ class ListReportsView extends View {
             //$rc->setupRunNowCommand($runNowCmd);
             //$tags['scheduleView'] = $scheduleCmd->getLink('run now');
 
-            $tpl['REPORTS'][] = $tags;
+            $tpl['REPORTS'][]['ITEM'] = $rc->getMenuItemView();
 		}
 
 		$final = PHPWS_Template::process($tpl, 'hms', 'admin/display_reports.tpl');

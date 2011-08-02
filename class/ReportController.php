@@ -36,6 +36,16 @@ abstract class ReportController {
         return $this->report->getFriendlyName();
     }
 
+    public function getMenuItemView()
+    {
+        $this->loadLastExec();
+        
+        PHPWS_Core::initModClass('hms', 'ReportMenuItemView.php');
+        $view = new ReportMenuItemView($this->report, $this->getReportClassName());
+        
+        return $view->show();
+    }
+    
     /**
      * Returns the form or view necessary to configure this report.
      * The form data (user input) will be made available to the execute function.
