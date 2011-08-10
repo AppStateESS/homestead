@@ -791,7 +791,8 @@ class HMS_Reports{
 
                 $floor_content = $floor->floor_number;
                 if($floor->rlc_id != null) {
-                    $floor_content .= ' (' . $rlcs[$floor->rlc_id] . ')';
+                    if ( isset($rlcs[$floor->rlc_id]) )
+                    	$floor_content .= ' (' . $rlcs[$floor->rlc_id] . ')';
                 }
 
                 $rooms = $floor->get_rooms();
