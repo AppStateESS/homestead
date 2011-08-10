@@ -547,7 +547,6 @@ CREATE TABLE hms_room_change_request (
     denied_reason       TEXT,
     denied_by           VARCHAR(32),
     updated_on          INTEGER,
-    switch_with         VARCHAR(32),
     is_swap             SMALLINT NOT NULL DEFAULT 0,
     PRIMARY KEY(id)
 );
@@ -570,25 +569,25 @@ CREATE TABLE hms_room_change_preferences (
     PRIMARY KEY(id)
 );
 
-INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info) VALUES (3, 'Language & Culture Community', 'LCC', 50, 0, 'F', '');
-INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info) VALUES (20, 'Watauga Global Community', 'WG', 50, 0, 'F', '<p>Watauga Global Community is where classes meet general education requirements in interdisciplinary team-taught (multiple professor) core classes that blend fact, fiction, culture, philosophy, motion, art, music, myth, and religion.</p><p><strong>This community requires a separate application in addition to marking it as a housing preference.  For more information, go to the <a href="http://wataugaglobal.appstate.edu/pagesmith/4" target="_blank" style="color: blue;">Watauga Global Community Website</a>.</strong></p>');
-INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info) VALUES (21, 'The Honors College', 'HN', 50, 0, 'F', '<p><strong>This community requires a separate application in addition to marking it as a housing preference.</strong></p><p>To apply for The Honors College, log into <a href="https://firstconnections.appstate.edu/ugaweb/" target="_blank" style="color: blue;">First Connections</a> and complete the on-line application accordingly.</p><p>For more information, go to <a href="http://www.honors.appstate.edu/" target="_blank" style="color: blue;">The Honors College website</a>.</p>');
-INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info) VALUES (2, 'Academy of Science', 'AS', 40, 0, 'F', '');
-INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info) VALUES (14, 'Art Haus', 'AC', 68, 0, 'F', '');
-INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info) VALUES (4, 'Black & Gold Community', 'BGC', 68, 0, 'F', '');
-INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info) VALUES (15, 'Brain Matters - A Psychology Community', 'PC', 41, 0, 'F', '');
-INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info) VALUES (8, 'Business Exploration', 'AE', 41, 0, 'F', '');
-INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info) VALUES (19, 'Cycling Community', 'CC', 28, 0, 'F', '');
-INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info) VALUES (5, 'Future Educators', 'FE', 38, 0, 'F', '');
-INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info) VALUES (7, 'Living Free Community', 'LF', 34, 0, 'F', '');
-INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info) VALUES (11, 'Living Green', 'LG', 38, 0, 'F', '');
-INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info) VALUES (1, 'Outdoor Community', 'OC', 42, 0, 'F', '');
-INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info) VALUES (6, 'Quiet Study Community', 'QS', 34, 0, 'F', '');
-INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info) VALUES (10, 'Service and Leadership Community', 'SL', 38, 0, 'F', '');
-INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info) VALUES (12, 'Sophomore Year Experience', 'SYE', 32, 0, 'C', '');
-INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info) VALUES (13, 'Transfer Teacher Educators Community', 'TE', 38, 0, 'T', '');
-INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info) VALUES (16, 'Sisterhood Experience', 'PC', 116, 0, 'F', '');
-INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info) VALUES (18, 'Band of Brothers Community for Men', 'MC', 114, 0, 'F', '');
+INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info, members_reapply) VALUES (3, 'Language & Culture Community', 'LCC', 50, 0, 'F', '', 0);
+INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info, members_reapply) VALUES (20, 'Watauga Global Community', 'WG', 50, 0, 'F', '<p>Watauga Global Community is where classes meet general education requirements in interdisciplinary team-taught (multiple professor) core classes that blend fact, fiction, culture, philosophy, motion, art, music, myth, and religion.</p><p><strong>This community requires a separate application in addition to marking it as a housing preference.  For more information, go to the <a href="http://wataugaglobal.appstate.edu/pagesmith/4" target="_blank" style="color: blue;">Watauga Global Community Website</a>.</strong></p>', 0);
+INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info, members_reapply) VALUES (21, 'The Honors College', 'HN', 50, 0, 'F', '<p><strong>This community requires a separate application in addition to marking it as a housing preference.</strong></p><p>To apply for The Honors College, log into <a href="https://firstconnections.appstate.edu/ugaweb/" target="_blank" style="color: blue;">First Connections</a> and complete the on-line application accordingly.</p><p>For more information, go to <a href="http://www.honors.appstate.edu/" target="_blank" style="color: blue;">The Honors College website</a>.</p>', 0);
+INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info, members_reapply) VALUES (2, 'Academy of Science', 'AS', 40, 0, 'F', '', 0);
+INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info, members_reapply) VALUES (14, 'Art Haus', 'AC', 68, 0, 'F', '', 0);
+INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info, members_reapply) VALUES (4, 'Black & Gold Community', 'BGC', 68, 0, 'F', '', 0);
+INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info, members_reapply) VALUES (15, 'Brain Matters - A Psychology Community', 'PC', 41, 0, 'F', '', 0);
+INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info, members_reapply) VALUES (8, 'Business Exploration', 'AE', 41, 0, 'F', '', 0);
+INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info, members_reapply) VALUES (19, 'Cycling Community', 'CC', 28, 0, 'F', '', 0);
+INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info, members_reapply) VALUES (5, 'Future Educators', 'FE', 38, 0, 'F', '', 0);
+INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info, members_reapply) VALUES (7, 'Living Free Community', 'LF', 34, 0, 'F', '', 0);
+INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info, members_reapply) VALUES (11, 'Living Green', 'LG', 38, 0, 'F', '', 0);
+INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info, members_reapply) VALUES (1, 'Outdoor Community', 'OC', 42, 0, 'F', '', 0);
+INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info, members_reapply) VALUES (6, 'Quiet Study Community', 'QS', 34, 0, 'F', '', 0);
+INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info, members_reapply) VALUES (10, 'Service and Leadership Community', 'SL', 38, 0, 'F', '', 0);
+INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info, members_reapply) VALUES (12, 'Sophomore Year Experience', 'SYE', 32, 0, 'C', '', 0);
+INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info, members_reapply) VALUES (13, 'Transfer Teacher Educators Community', 'TE', 38, 0, 'T', '', 0);
+INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info, members_reapply) VALUES (16, 'Sisterhood Experience', 'PC', 116, 0, 'F', '', 0);
+INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info, members_reapply) VALUES (18, 'Band of Brothers Community for Men', 'MC', 114, 0, 'F', '', 0);
 
 INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (11, 1, 'What role have outdoor adventure experiences played in your life and how do you see these continuing in your college years? Are there more experiences you want to have or contribute to, and skills or abilities you want to develop?');
 INSERT INTO hms_learning_community_questions (id, learning_community_id, question_text) VALUES (12, 10, 'What service and/or leadership experiences do you bring to the community and what do you hope to gain from involvement with service and/or leadership activities on campus?');
