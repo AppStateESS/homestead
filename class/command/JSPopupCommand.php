@@ -43,6 +43,8 @@ class JSPopupCommand extends Command {
 	{
 		$vars = $this->getRequestVars();
 
+		$this->setLabel($text);
+		
 		$js = array();
 		$js['width']       = $this->width;
 		$js['height']      = $this->height;

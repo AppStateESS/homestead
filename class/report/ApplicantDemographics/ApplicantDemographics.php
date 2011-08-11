@@ -9,26 +9,37 @@
  * @package hms
  */
 
-PHPWS_Core::initModClass('hms', 'Report.php');
-
 class ApplicantDemographics extends Report {
 
     const friendlyName = 'Applicant Demographics';
+    const shortName    = 'ApplicantDemographics';
     
+    private $term;
+    
+    private $applicationTotals;
+    
+    private $maleTotals;
+    private $maleSum;
+    
+    private $femaleTotals;
+    private $femaleSum;
+    
+    private $typeTotals;
+    private $total;
+
     public function __construct($id = 0){
         parent::__construct($id);
-    }
-
-    public function getFriendlyName(){
-        return self::friendlyName;
+        
+        $this->applicationTotals    = array();
+        $this->typeTotals           = array();
+        $this->maleSum              = 0;
+        $this->femaleSum            = 0;
+        $this->total                = 0;
     }
 
     public function execute()
     {
-        $term           = Term::getSelectedTerm();
-        $tpl['TERM']    = Term::getPrintableSelectedTerm();
-
-        $sem = Term::getTermSem($term);
+        $sem = Term::getTermSem($this->term);
 
         switch($sem){
             case TERM_FALL:
@@ -47,7 +58,7 @@ class ApplicantDemographics extends Report {
         }
 
         $db->addColumn('hms_new_application.*');
-        $db->addWhere('hms_new_application.term', $term);
+        $db->addWhere('hms_new_application.term', $this->term);
         $results = $db->select();
 
         if(PHPWS_Error::logIfError($results)) {
@@ -58,53 +69,69 @@ class ApplicantDemographics extends Report {
         $types      = array(TYPE_FRESHMEN, TYPE_TRANSFER, TYPE_CONTINUING, TYPE_READMIT, TYPE_RETURNING, TYPE_NONDEGREE, TYPE_WITHDRAWN);
         $genders    = array(MALE, FEMALE);
 
-        # Initalize the array for totals
-        foreach($types as $init_type){
-            foreach($genders as $init_gender){
-                $application_totals[$init_type][$init_gender] = 0;
+        // Initalize the array for totals
+        foreach($types as $t){
+            foreach($genders as $g){
+                $this->applicationTotals[$t][$g] = 0;
             }
         }
 
-        # Calculate the totals
+        // Calculate the totals
         foreach($results as $application){
-            $application_totals[$application['student_type']][$application['gender']]++;
+            $this->applicationTotals[$application['student_type']][$application['gender']]++;
         }
 
-        # Populate the template vars
-        $male_sum = 0;
+        // Male sum
         foreach($types as $type){
-            $tpl['male_totals'][] = array('COUNT'=>$application_totals[$type][MALE]);
-            $male_sum += $application_totals[$type][MALE];
+            $this->maleTotals[] = $this->applicationTotals[$type][MALE];
+            $this->maleSum += $this->applicationTotals[$type][MALE];
         }
-        $tpl['MALE_SUM'] = $male_sum;
 
-        $female_sum = 0;
+        // Female sum
         foreach($types as $type){
-            $tpl['female_totals'][] = array('COUNT'=>$application_totals[$type][FEMALE]);
-            $female_sum += $application_totals[$type][FEMALE];
+            $this->femaleTotals[] = $this->applicationTotals[$type][FEMALE];
+            $this->femaleSum += $this->applicationTotals[$type][FEMALE];
         }
-        $tpl['FEMALE_SUM'] = $female_sum;
 
-        $tpl['ALL_TOTAL'] = $female_sum + $male_sum;
-
-        $type_totals = array();
+        // Type sums
         foreach($types as $type){
-            $tpl['type_totals'][] = array('COUNT'=>array_sum($application_totals[$type]));
+            $this->typeTotals[$type] = array_sum($this->applicationTotals[$type]);
         }
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/reports/application_demographics.tpl');
+        $this->total = $this->femaleSum + $this->maleSum;
     }
-
-    public function getReportView()
-    {
-
+    
+    public function setTerm($term){
+        $this->term = $term;
     }
-
-    public function getSetupView(){
-        return null;
+    
+    public function getTerm(){
+        return $this->term;
     }
-
-    public function savePeriodicData(){}
+    
+    public function getMaleTotals(){
+        return $this->maleTotals;
+    }
+    
+    public function getFemaleTotals(){
+        return $this->femaleTotals;
+    }
+    
+    public function getMaleSum(){
+        return $this->maleSum;
+    }
+    
+    public function getFemaleSum(){
+        return $this->femaleSum;
+    }
+    
+    public function getTypeTotals(){
+        return $this->typeTotals;
+    }
+    
+    public function getTotal(){
+        return $this->total;
+    }
 }
 
 ?>

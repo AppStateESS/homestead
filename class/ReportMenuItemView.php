@@ -20,7 +20,8 @@ class ReportMenuItemView extends View {
         if(is_null($this->report->getId())){
             $tpl['LAST_EXEC'] = 'never';
         }else{
-            $tpl['LAST_EXEC']    = HMS_Util::relativeTime($this->report->getCompletedTimestamp());
+            $viewCmd = $this->report->getDefaultOutputViewCmd();
+            $tpl['LAST_EXEC']    = $viewCmd->getLink(HMS_Util::relativeTime($this->report->getCompletedTimestamp()));
         }
         
         $detailsCmd = CommandFactory::getCommand('ShowReportDetail');

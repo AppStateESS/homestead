@@ -23,3 +23,5 @@ class ListReportsCommand extends Command {
         $context->setContent($reportsList->show());
     }
 }
+
+?>

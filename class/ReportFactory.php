@@ -23,11 +23,41 @@ class ReportFactory {
         return new $className;
     }
     
+    //TODO (if necessary?)
     public static function getControllerInstanceByReport(Report $report)
     {
         // Look at the report's class field from the db
         
         // Instanciate the the proper controller and pass in the report
+    }
+    
+    public static function getReportById($reportId)
+    {
+        // Get the class of the requested report
+        $db = new PHPWS_DB('hms_report');
+        $db->addColumn('report');
+        $db->addWhere('id', $reportId);
+        $result = $db->select('one');
+
+        if(PHPWS_Error::logIfError($result)){
+            throw new DatabaseExecption($result->toString());
+        }
+        
+        if(is_null($result)){
+            throw new InvalidArgumentException('The given report ID does not exist.');
+        }
+        
+        self::loadReportClass($result);
+        
+        $report = new $result($reportId);
+        
+        return $report;
+    }
+    
+    public static function loadReportClass($name)
+    {
+        $dir = PHPWS_SOURCE_DIR . 'mod/hms/class/' . ReportFactory::$dir;
+        PHPWS_Core::initModClass('hms', ReportFactory::$dir . "/$name/$name.php");
     }
     
     /*

@@ -1,3 +1,7 @@
+<h1>{NAME} - {TERM}</h1>
+
+Executed on: {EXEC_DATE} by {EXEC_USER}<br />
+
 <table border="1" cellpadding="3">
     <tr>
         <td colspan="9" style="text-align: center">{TERM} - Housing Applications Received (by class and gender):</td>
@@ -14,21 +18,21 @@
         <th>Totals</th>
     </tr>
     <tr>
-        <th>Male</th>
+        <td>Male</td>
         <!-- BEGIN male_totals -->
         <td>{COUNT}</td>
         <!-- END male_totals -->
         <td>{MALE_SUM}</td>
     </tr>
     <tr>
-        <th>Female</th>
+        <td>Female</td>
         <!-- BEGIN female_totals -->
         <td>{COUNT}</td>
         <!-- END female_totals -->
         <td>{FEMALE_SUM}</td>
     </tr>
     <tr>
-        <th>Totals</th>
+        <td>Totals</td>
         <!-- BEGIN type_totals -->
         <td>{COUNT}</td>
         <!-- END type_totals -->

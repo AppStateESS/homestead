@@ -1,13 +1,17 @@
-.border-1px{
+.border-1px {
 	border: 1px solid #000;
 }
 
-.rounded{
+.rounded {
 	border-radius:3px;
 }
 
-.drop-shadow{
+.drop-shadow {
 	box-shadow: 1px 1px 4px #CFCFCF;
+}
+
+.bottom-margin {
+	margin-bottom: 10px;
 }
 
 .hms-main-admin-menu-block{

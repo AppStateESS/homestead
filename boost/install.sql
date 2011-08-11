@@ -519,14 +519,16 @@ CREATE TABLE hms_room_change_preferences (
     PRIMARY KEY(id)
 );
 
-CREATE TABLE hms_report_exec (
-    id              INTEGER NOT NULL,
-    report          character varying(255) NOT NULL,
-    format          character varying(255) NOT NULL,
-    from_term       INTEGER NOT NULL REFERENCES hms_term(term),
-    to_term         INTEGER NOT NULL REFERENCES hms_term(term),
-    exec_timestamp  INTEGER NOT NULL,
-    exec_by_user_id INTEGER NOT NULL,
+CREATE TABLE hms_report (
+    id                   INTEGER NOT NULL,
+    report               character varying(255) NOT NULL,
+    created_by           character varying(255) NOT NULL,
+    created_on           integer NOT NULL,
+    scheduled_exec_time  integer NOT NULL,
+    began_timestamp      integer,
+    completed_timestamp  integer,
+    html_output_filename character varying,
+    pdf_output_filename  character varying,
     PRIMARY KEY (id)
 );
 

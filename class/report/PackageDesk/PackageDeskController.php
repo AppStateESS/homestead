@@ -1,6 +1,6 @@
 <?php
 
-class ApplicantDemographicsController extends ReportController {
+class PackageDeskController extends ReportController {
 
     const allowSyncExec = true;
     const allowAsyncExec = true;
@@ -11,19 +11,15 @@ class ApplicantDemographicsController extends ReportController {
         $this->report->setTerm(Term::getSelectedTerm());
     }
 
-    /*
     public function getHtmlView()
     {
-        
+        return null;
     }
-	*/
-    
-    /*
+
     public function getPdfView()
     {
-
+        return null;
     }
-    */
 
     public function getCsvView()
     {
