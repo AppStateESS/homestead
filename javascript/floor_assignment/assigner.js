@@ -70,11 +70,12 @@ var AssignWidget = function(div, semaphore){
         var offset = $(this.div).offset();
         var height = $(this.div).height();
         var output = '<div id="overlay_'+this.bed+'" class="overlay" style="position: absolute; top: '+(offset.top+height)+'px; left: '+offset.left+'px;">';
-
+               
         output += '<table>';
         output += '<tr><th>Username</th><td><input id="username_'+this.bed+'" class="username-input" type="text" value="'+this.username+'" /></td></tr>';
         output += '<tr><th>Full Name</th><td><b id="fullname_'+this.bed+'">'+this.fullname+'</b></td></tr>';
         output += '<tr><th>Meal Plan</th><td>'+dropbox+'</td></tr>';
+        output += '<tr><th>Assignment Type</th><td>'+assignmentBox+'</td></tr>';
         output += '<tr><td></td><td style="text-align: right"><span id="status_'+this.bed+'" /><button id="accept_'+this.bed+'">Assign</button><button id="cancel_'+this.bed+'">Cancel</button></td></tr>';
         output += '</table>';
         output += '<div id="message_'+this.bed+'" />'; 
@@ -154,11 +155,12 @@ var AssignWidget = function(div, semaphore){
             this.username = $("#username_"+this.bed).val();
         }
         this.mealplan = $('#overlay_'+this.bed).children().find("#select_meal_plan").val();
+        this.assignmenttype = $('#overlay_'+this.bed).children().find("#select_assignment_type").val();
     }
 
     this.submitAssignment = function(){
         var me = this;
-        $.post('index.php', {module: 'hms', action: 'FloorAssignStudent', bed: this.bed, mealplan: this.mealplan, username: this.username},
+        $.post('index.php', {module: 'hms', action: 'FloorAssignStudent', bed: this.bed, mealplan: this.mealplan, username: this.username, assignmenttype: this.assignmenttype},
                function(data){
                    if(!data.success){
                        $("#message_"+me.bed).html('<div class="error"><img src="images/mod/hms/tango/dialog-error.png" />'+data.message+'</div>');

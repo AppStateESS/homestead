@@ -293,8 +293,9 @@ class HMS_Assignment extends HMS_Item
      * Does all the checks necessary to assign a student and makes the assignment
      * The $room_id and $bed_id fields are optional, but one or the other must be specificed
      */
-    public static function assignStudent(Student $student, $term, $room_id = NULL, $bed_id = NULL, $meal_plan, $notes="", $lottery = FALSE)
+    public static function assignStudent(Student $student, $term, $room_id = NULL, $bed_id = NULL, $meal_plan, $notes="", $lottery = FALSE, $reason = NULL)
     {
+
         /**
          * Can't check permissions here because there are some student-facing commands that needs to make assignments (e.g. the lottery/re-application code)
          *
@@ -473,10 +474,20 @@ class HMS_Assignment extends HMS_Item
         # If this was a lottery assignment, flag it as such
         if($lottery){
             $assignment->lottery = 1;
+            if ( !isset($reason) )
+            	# Automatically tag reason as lottery
+            	$assignment->reason = ASSIGN_LOTTERY;
         }else{
             $assignment->lottery = 0;
         }
-
+        
+        # If reason is not set, set default
+        if ( !isset($reason) ) {
+        	$assignment->reason = ASSIGN_NOREASON;
+        } else {
+        	$assignment->reason = $reason;
+        }
+        	
         $result = $assignment->save();
 
         if(!$result || PHPWS_Error::logIfError($result)){

@@ -21,8 +21,8 @@ class GetAssignmentTypeDropboxCommand extends Command {
         	ASSIGN_SPECIAL		=> 'Special Needs',
         	ASSIGN_AUTO			=> 'Auto-assigned');
         $form = new PHPWS_Form('select_assignment');
-        $form->addSelect('assignment_type', $options);
-        $form->setMatch('assignment_type', ASSIGN_ADMIN);
+        $form->addSelect('type', $options);
+        $form->setMatch('type', ASSIGN_ADMIN);
 
         echo implode($form->getTemplate());
         exit;

@@ -85,6 +85,26 @@ define('BANNER_MEAL_NONE', '-1');
 define('BANNER_MEAL_4WEEK', 'S4');
 define('BANNER_MEAL_5WEEK', 'S5');
 
+
+/**
+ * Assignment Types
+ */
+define('ASSIGN_ADMIN', 		'aadmin');
+define('ASSIGN_LOTTERY', 	'alottery');
+define('ASSIGN_FRESHMEN', 	'afreshmen');
+define('ASSIGN_MEDICAL', 	'amedical');
+define('ASSIGN_ATHLETICS', 	'aathletics');
+define('ASSIGN_HONORS', 	'ahonors');
+define('ASSIGN_WATAUGA', 	'awatuaga');
+define('ASSIGN_TEACHING', 	'ateaching');
+define('ASSIGN_RLC', 		'arlc');
+define('ASSIGN_SORORITY', 	'asorority');
+define('ASSIGN_SPECIAL', 	'aspecial');
+define('ASSIGN_AUTO', 		'aauto');
+define('ASSIGN_NOREASON',	'anone');
+
+
+
 /**
  * Address types
  */
