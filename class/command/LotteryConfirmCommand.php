@@ -119,7 +119,7 @@ class LotteryConfirmCommand extends Command {
         $bed_id = array_search(UserStatus::getUsername(), $roommates); // Find the bed id of the student who's logged in
 
         //try{
-            $result = HMS_Assignment::assignStudent($student, PHPWS_Settings::get('hms', 'lottery_term'), NULL, $bed_id, $mealPlan, 'Confirmed lottery invite', TRUE);
+            $result = HMS_Assignment::assignStudent($student, PHPWS_Settings::get('hms', 'lottery_term'), NULL, $bed_id, $mealPlan, 'Confirmed lottery invite', TRUE, ASSIGN_LOTTERY);
             /*
         }catch(Exception $e){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Sorry, there was an error creating your room assignment. Please try again or contact University Housing.');

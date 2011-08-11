@@ -904,7 +904,7 @@ class HMS_Lottery {
         $requestor = StudentFactory::getStudentByUsername($invite['requestor'], $term);
 
         // Actually make the assignment
-        $assign_result = HMS_Assignment::assignStudent($student, $term, null, $invite['bed_id'], $meal_plan, 'Confirmed roommate invite', true);
+        $assign_result = HMS_Assignment::assignStudent($student, $term, null, $invite['bed_id'], $meal_plan, 'Confirmed roommate invite', true, ASSIGN_LOTTERY);
 
         // return successfully
         HMS_Email::send_roommate_confirmation($student, $requestor);

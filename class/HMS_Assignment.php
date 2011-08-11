@@ -20,6 +20,7 @@ class HMS_Assignment extends HMS_Item
     public $meal_option    = 0;
     public $letter_printed = 0;
     public $email_sent     = 0;
+    public $reason		   = null;
     public $_gender        = 0;
     public $_bed           = null;
 
@@ -470,6 +471,7 @@ class HMS_Assignment extends HMS_Item
         $assignment->letter_printed = 0;
         $assignment->email_sent     = 0;
         $assignment->meal_option    = $meal_plan;
+        $assignment->reason 		= $reason;
 
         # If this was a lottery assignment, flag it as such
         if($lottery){
@@ -484,10 +486,8 @@ class HMS_Assignment extends HMS_Item
         # If reason is not set, set default
         if ( !isset($reason) ) {
         	$assignment->reason = ASSIGN_NOREASON;
-        } else {
-        	$assignment->reason = $reason;
         }
-        	
+        
         $result = $assignment->save();
 
         if(!$result || PHPWS_Error::logIfError($result)){

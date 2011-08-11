@@ -100,7 +100,9 @@ define('ASSIGN_TEACHING', 	'ateaching');
 define('ASSIGN_RLC', 		'arlc');
 define('ASSIGN_SORORITY', 	'asorority');
 define('ASSIGN_SPECIAL', 	'aspecial');
+define('ASSIGN_CHANGE', 	'achange'); // For room change requests
 define('ASSIGN_AUTO', 		'aauto');
+define('ASSIGN_COPY',		'acopy'); // For copying from previous term
 define('ASSIGN_NOREASON',	'anone');
 
 

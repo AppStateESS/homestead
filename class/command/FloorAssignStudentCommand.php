@@ -37,7 +37,6 @@ class FloorAssignStudentCommand extends Command {
             exit;
         }
 
-
         $bed = $context->get('bed');
         $plan = $context->get('mealplan');
         $reason = $context->get('assignmenttype');
