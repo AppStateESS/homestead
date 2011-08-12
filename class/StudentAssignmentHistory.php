@@ -53,7 +53,7 @@ class StudentAssignmentHistory extends ArrayObject{
 	 * @param AssignmentHistory|int $assignmentHistory an assignment history object or the id of one
 	 * @return boolean result of addition
 	 */
-	public addAssignment($assignmentHistory) {
+	public add($assignmentHistory) {
 		if ( is_int($assignmentHistory) ) { // if a history id was passed instead of the object
 			$id = $assignmentHistory;
 			$assignmentHistory = AssignmentHistory::getHistory($id);
@@ -76,7 +76,7 @@ class StudentAssignmentHistory extends ArrayObject{
 	 * @param AssignmentHistory|int $assignmentHistory an assignment history object or the id of one
 	 * @return boolean|AssignmentHistory false if failed or the removed assignment object if success
 	 */
-	public removeAssignment($assignmentHistory) {
+	public remove($assignmentHistory) {
 		if ( is_int($assignmentHistory) ) // if a history id was passed instead of the object
 			$id = $assignmentHistory;
 		else // object was passed, so use internal id
@@ -97,7 +97,7 @@ class StudentAssignmentHistory extends ArrayObject{
 	 * @param none
 	 * @return array Student's assignments
 	 */
-	public getAssignments {
+	public getAssignments() {
 		return $this;
 	}
 	
