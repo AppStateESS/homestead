@@ -5,14 +5,22 @@ PHPWS_Core::initModClass('hms', 'Term.php');
 
 class StudentAssignmentHistory extends ArrayObject{
 
+	private $theArray;
+	
 	// http://weierophinney.net/matthew/archives/131-Overloading-arrays-in-PHP-5.2.0.html
 	public function __construct($bannerID = null) {
-        if ( !is_null($bannerID) ) {
-        	init($bannerID);
+        $this->theArray = array();
+		
+		if ( !is_null($bannerID) ) {
+        	$this->init($bannerID);
         }
 
         // Allow accessing properties as either array keys or object properties:
-        parent::__construct(array(), ArrayObject::ARRAY_AS_PROPS);
+        //parent::__construct(array(), ArrayObject::ARRAY_AS_PROPS);
+    }
+    
+    public function get() {
+    	return $this->theArray;
     }
     
     /**
@@ -22,7 +30,7 @@ class StudentAssignmentHistory extends ArrayObject{
      * @param int $term term to be searching
      * @return boolean flag to signal if the initialization was a success
      */
-    private init ($bannerID=null, $term=null) {	
+    private function init ($bannerID=null, $term=null) {	
     	if ( is_null($bannerID) )
     		return false;
     	
@@ -41,7 +49,7 @@ class StudentAssignmentHistory extends ArrayObject{
         }
         
         // Push results onto StudentAssignmentHistory array
-        array_push($this, $result);
+        array_push($this->theArray, $result);
         
         return true;
     }
@@ -53,7 +61,7 @@ class StudentAssignmentHistory extends ArrayObject{
 	 * @param AssignmentHistory|int $assignmentHistory an assignment history object or the id of one
 	 * @return boolean result of addition
 	 */
-	public add($assignmentHistory) {
+	public function add($assignmentHistory) {
 		if ( is_int($assignmentHistory) ) { // if a history id was passed instead of the object
 			$id = $assignmentHistory;
 			$assignmentHistory = AssignmentHistory::getHistory($id);
@@ -63,7 +71,7 @@ class StudentAssignmentHistory extends ArrayObject{
 			$id = $assignmentHistory->getID();
 		
 		if ( !isset($this[$id]) ) {
-			$this[$id] = $assignmentHistory;
+			$this->theArray[$id] = $assignmentHistory;
 			return true;
 		}
 		
@@ -76,29 +84,19 @@ class StudentAssignmentHistory extends ArrayObject{
 	 * @param AssignmentHistory|int $assignmentHistory an assignment history object or the id of one
 	 * @return boolean|AssignmentHistory false if failed or the removed assignment object if success
 	 */
-	public remove($assignmentHistory) {
+	public function remove($assignmentHistory) {
 		if ( is_int($assignmentHistory) ) // if a history id was passed instead of the object
 			$id = $assignmentHistory;
 		else // object was passed, so use internal id
 			$id = $assignmentHistory->getID();
 		
-		if ( isset($this[$id]) ) {
-			$rObject = $this[$id];
-			unset($this[$id]);
+		if ( isset($this->theArray[$id]) ) {
+			$rObject = $this->theArray[$id];
+			unset($this->theArray[$id]);
 			return $rObject;
 		}
 		
 		return false;
-	}
-	
-	/**
-	 * get the student assignment history array object
-	 * 
-	 * @param none
-	 * @return array Student's assignments
-	 */
-	public getAssignments() {
-		return $this;
 	}
 	
 	/**
@@ -108,8 +106,9 @@ class StudentAssignmentHistory extends ArrayObject{
 	 * @param int $banner_id the student's banner ID
 	 * @return array assignments associated with student
 	 */
-	public static getAssignments($banner_id) {
-		return new StudentAssignmentHistory($banner_id);
+	public static function getAssignments($banner_id) {
+		$sah = new StudentAssignmentHistory($banner_id);
+		return $sah->get();
 	}
 }
 

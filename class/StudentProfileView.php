@@ -164,7 +164,7 @@ class StudentProfileView extends View {
 
         /**************
          * RLC Status *
-         */
+         *************/
         PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
@@ -221,7 +221,7 @@ class StudentProfileView extends View {
         
         /******************
          * Housing Waiver *
-         */
+         *************/
 
        	$tpl['HOUSING_WAIVER'] = $this->student->housingApplicationWaived() ? 'Yes' : 'No';
        	
@@ -231,7 +231,7 @@ class StudentProfileView extends View {
         
         /****************
          * Applications *
-         */
+         *************/
         # Show a row for each application
         if(isset($this->applications)){
             $app_rows = "";
@@ -275,6 +275,21 @@ class StudentProfileView extends View {
             $tpl['APPLICATIONS_EMPTY'] = 'No applications found.';
         }
 
+        /*********
+         * Assignment History *
+         *********/        
+        
+        PHPWS_Core::initModClass('hms', 'StudentAssignmentHistory.php');
+        
+        $historyArray = StudentAssignmentHistory::getAssignments($this->student->getBannerId());
+        
+        $tpl['HISTORY'] = array();
+        foreach($historyArray as $history) {
+        	$tpl['HISTORY'][] = $history;
+        }
+        
+        
+        
         /*********
          * Notes *
          *********/

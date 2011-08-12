@@ -6,7 +6,7 @@ PHPWS_Core::initModClass('hms', 'Term.php');
 
 class AssignmentHistory extends HMS_Item {
 	
-	private final $db_table = 'hms_assignment_history';
+	private $db_table = 'hms_assignment_history';
 	
 	public $id = null;
 	public $banner_id;
@@ -25,8 +25,8 @@ class AssignmentHistory extends HMS_Item {
 	 * @param none
 	 * @return Database object
 	 */
-	public getDb() {
-		return new PHPWS_DB($db_table);
+	public function getDb() {
+		return new PHPWS_DB($this->db_table);
 	}
 	
 	/**
@@ -35,7 +35,7 @@ class AssignmentHistory extends HMS_Item {
 	 * @param none
 	 * @return int id of this object
 	 */
-	public getID() {
+	public function getID() {
 		return $this->$id;
 	}
 	
@@ -45,7 +45,7 @@ class AssignmentHistory extends HMS_Item {
 	 * @param int $bannerID the banner ID of student
 	 * @return boolean flag to signal failure/success
 	 */
-	public setBanner($bannerID=null) {
+	public function setBanner($bannerID=null) {
 		if ( is_null($bannerID) )
 			return false;
 		
@@ -59,18 +59,23 @@ class AssignmentHistory extends HMS_Item {
 	 * @param String $room the room in which this history relates
 	 * @return boolean flag to signal failure/success
 	 */
-	public setRoom($room=null) {
+	public function setRoom($room=null) {
 		if ( is_null($room) )
 			return false;
 		
 		$this->room = $room;
 	}
 	
-	public setTerm($term=null) {
+	public function setTerm($term=null) {
 		if ( !is_null($term) )
 			$this->term = $term;
 		else
 			$this->term = Term::getCurrentTerm();
+	}
+	
+	private function getTimestamp() {
+		$date = new DateTime();
+		return $date->getTimestamp();
 	}
 	
 	/**
@@ -81,9 +86,9 @@ class AssignmentHistory extends HMS_Item {
 	 * @param int $assigned_on the timestamp (defaults to current time)
 	 * @return none
 	 */
-	public setAssign($assign_reason=ASSIGN_NOREASON, $assigned_by=null, $assigned_on=null) {
+	public function setAssign($assign_reason=ASSIGN_NOREASON, $assigned_by=null, $assigned_on=null) {
 		if ( is_null($assigned_on) ) // use current time
-			$this->assigned_on = DateTime::getTimestamp();
+			$this->assigned_on = $this->getTimestamp();
 		else
 			$this->assigned_on = $assigned_on;
 			
@@ -92,7 +97,7 @@ class AssignmentHistory extends HMS_Item {
 		else
 			$this->assigned_by = $assigned_by;	
 			
-		$this->assign_reason = $assign_reason;
+		$this->assigned_reason = $assign_reason;
 	}
 	
 	/**
@@ -103,9 +108,9 @@ class AssignmentHistory extends HMS_Item {
 	 * @param int $removed_on the timestamp (defaults to current time)
 	 * @return none
 	 */
-	public setRemove($removed_reason=UNASSIGN_NOREASON, $removed_by=null, $removed_on=null) {
+	public function setRemove($removed_reason=UNASSIGN_NOREASON, $removed_by=null, $removed_on=null) {
 		if ( is_null($removed_on) ) // use current time
-			$this->removed_on = DateTime::getTimestamp();
+			$this->removed_on = $this->getTimestamp();
 		else
 			$this->removed_on = $removed_on;
 			
@@ -123,14 +128,14 @@ class AssignmentHistory extends HMS_Item {
 	 * @param int $id AssignmentHistory id to pull from database
 	 * @return boolean flag to signal failure/success
 	 */
-	public init($id=null) {
+	public function init($id=null) {
 		if ( is_null($id) ) 
 			return false;
 		
 		// do a database call
 		$db = $this->getDb();
     	$db->addWhere('id', $id);
-        $result = $db->load($this);
+        $result = $db->loadObject($this);
 		
 		if(PHPWS_Error::logIfError($result)){
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
@@ -147,7 +152,7 @@ class AssignmentHistory extends HMS_Item {
 	 * @param int $id AssignmentHistory id to pull from database
 	 * @return AssignmentHistory an AssignmentHistory object with data pertaining to passed id
 	 */
-	public static getHistory($id) {
+	public static function getHistory($id) {
 		if (is_null($id))
 			return false;
 		
@@ -157,7 +162,7 @@ class AssignmentHistory extends HMS_Item {
         
     	// create an AssignmentHistory object with results
 	   	$rObject = new AssignmentHistory;
-        $result = $db->load($rObject);
+        $result = $db->loadObject($rObject);
 		
         if(PHPWS_Error::logIfError($result)){
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
@@ -176,7 +181,7 @@ class AssignmentHistory extends HMS_Item {
 	 * @param String $reason A defined reason for assignment if not wishing to use one in assignment (see definitions)
 	 * @return int|boolean the id of inserted AssignmentHistory, false if failure
 	 */
-	public static makeAssignmentHistory($assignment=null, $reason=null) {
+	public static function makeAssignmentHistory($assignment=null, $reason=null) {
 		if ( is_null($assignment) ) 
 			return false;
 		
@@ -186,11 +191,12 @@ class AssignmentHistory extends HMS_Item {
 		$ah = new AssignmentHistory();
 		$ah->setBanner($assignment->banner_id);
 		$ah->setRoom($assignment->where_am_i());
+		$ah->setTerm();
 		$ah->setAssign($reason); // set all the assignment data
 		$ah->save();
 	}
 	
-	public static makeUnassignmentHistory($assignment=null, $reason=UNASSIGN_NOREASON) {
+	public static function makeUnassignmentHistory($assignment=null, $reason=UNASSIGN_NOREASON) {
 		if ( is_null($assignment) ) 
 			return false;
 
@@ -200,7 +206,7 @@ class AssignmentHistory extends HMS_Item {
     	$db->addWhere('removed_on', 'NULL', 'IS');
     	
     	$tHistory = new AssignmentHistory();
-    	$result = $db->load($tHistory); // to discover ID
+    	$result = $db->loadObject($tHistory); // to discover ID
     	
 		if(PHPWS_Error::logIfError($result)){
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
@@ -219,7 +225,7 @@ class AssignmentHistory extends HMS_Item {
 	}
 	
 	// Locate correct ID
-	public static getHistoryID($assignment) {
+	public static function getHistoryID($assignment) {
 		if ( is_null($assignment) )
 			return false;
 			

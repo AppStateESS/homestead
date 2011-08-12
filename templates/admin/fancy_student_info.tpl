@@ -186,10 +186,27 @@
                 </td>
             </tr>
         </table>
-
+		<br /><br />
+        <table>
+            <tr>
+                <th><a id="history_toggle">[-]</a>Assignment History</th>
+            </tr>
+            <!-- BEGIN HISTORY -->
+            <tr>
+            	<td>{ROOM}</td>
+            	<td>{ASSIGNED_ON}</td>
+            	<td>{ASSIGNED_BY}</td>
+            	<td>{ASSIGNED_REASON}</td>
+            	<td>{REMOVED_ON}</td>
+            	<td>{REMOVED_BY}</td>
+            	<td>{REMOVED_REASON}</td>
+            </tr>
+            <!-- END HISTORY -->
+        </table>
         </div>
     </div>
 </div>
+
 <div id="note_dialog" title="Enter a note for: {FIRST_NAME} {MIDDLE_NAME} {LAST_NAME}">
 {START_FORM}
 {NOTE}
