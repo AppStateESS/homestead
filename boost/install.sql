@@ -176,6 +176,20 @@ CREATE TABLE hms_assignment (
     primary key(id)
 );
 
+CREATE TABLE hms_assignment_history (
+    id			integer 	NOT NULL,
+    banner_id		integer		NOT NULL,
+    room		character varying(15) NOT NULL,
+    assigned_on		integer		NOT NULL,
+    assigned_by		character varying(32) NOT NULL,
+    assigned_reason	character varying(20) default 'anone',
+    removed_on		integer,
+    removed_by		character varying(32),
+    removed_reason	character varying(20),
+    primary key(id)
+);
+    
+
 ALTER TABLE hms_assignment ADD CONSTRAINT hms_assignment_uniq_student_const UNIQUE (asu_username, term);
 ALTER TABLE hms_assignment ADD CONSTRAINT hms_assignment_uniq_bed_const UNIQUE (bed_id, term);
 

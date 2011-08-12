@@ -106,6 +106,14 @@ define('ASSIGN_COPY',		'acopy'); // For copying from previous term
 define('ASSIGN_NOREASON',	'anone');
 
 
+/**
+ * Unassignment Types
+ */
+define('UNASSIGN_ADMIN',	'uadmin');
+define('UNASSIGN_CHANGE',	'uchange'); // For room change requests
+define('UNASSIGN_WITHDRAWN','uwithdrawn');
+define('UNASSIGN_NOREASON',	'unone');
+
 
 /**
  * Address types
