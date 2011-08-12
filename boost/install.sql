@@ -172,6 +172,7 @@ CREATE TABLE hms_assignment (
     updated_on      integer     NOT NULL,
     letter_printed  smallint    NOT NULL DEFAULT 0,
     email_sent      smallint    NOT NULL DEFAULT 0,
+    reason          character varying(20) default 'anone',
     primary key(id)
 );
 
