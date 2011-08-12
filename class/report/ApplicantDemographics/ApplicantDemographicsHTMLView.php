@@ -1,11 +1,10 @@
 <?php
 
-class ApplicantDemographicsHTMLView extends ReportView {
+class ApplicantDemographicsHTMLView extends ReportHtmlView {
 
     protected function render()
     {
         parent::render();
-        
         $this->tpl['TERM'] = Term::toString($this->report->getTerm());
         
         // Males

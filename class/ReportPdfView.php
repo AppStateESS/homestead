@@ -2,33 +2,18 @@
 
 PHPWS_Core::initModClass('hms', 'WKPDF.php');
 
-class ReportPdfView {
+abstract class ReportPdfView extends ReportView{
 
-    private $report;
-    
-    private $pdf;
-    private $htmlView;
+    protected $pdf;
     
     public function __construct(Report $report)
     {
-        $this->report = $report;
-        $this->pdf = new WKPDF();
+        parent::__construct($report);
     }
     
-    public function setHtmlView(ReportView $htmlView){
-        $this->htmlView = $htmlView;
-    }
+    abstract function render();
     
-    public function render()
-    {
-        $this->pdf->set_html($this->htmlView->getWrappedHtml());
-        $this->pdf->render();
-    }
-    
-    public function getPdfContent()
-    {
-        return $this->pdf->output(WKPDF::$PDF_ASSTRING,'');
-    }
+    abstract public function getPdfContent();
 }
 
 ?>

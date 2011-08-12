@@ -7,12 +7,29 @@ define('HMS_REPORT_PATH', PHPWS_SOURCE_DIR . 'files/hms_reports/');
 
 PHPWS_Core::initModClass('hms', 'Report.php');
 
+interface iHtmlReportView {
+    public function getHtmlView();
+    public function saveHtmlOutput(ReportHtmlView $htmlView);
+}
+
+interface iPdfReportView {
+    public function getPdfView();
+    public function savePdfOutput(ReportPdfView $pdfView);
+}
+
+interface iCsvReportView {
+    public function getCsvView();
+    public function saveCsvOutput(ReportCsvView $csvView);
+}
+
 abstract class ReportController {
 
     protected $report;
     
     protected $fileName;
     protected $htmlView;
+    protected $pdfView;
+    protected $csvView;
     
     public function __construct(Report $report = null)
     {
@@ -138,17 +155,24 @@ abstract class ReportController {
          * Pass the report to each of the views, save the output
          */
         // HTML
-        $this->htmlView = $this->getHtmlView();
-
-        // Save the HTML output
-        $this->saveHtmlOutput($this->htmlView);
+        if($this instanceof iHtmlReportView){
+            $this->htmlView = $this->getHtmlView();
+            // Save the HTML output
+            $this->saveHtmlOutput($this->htmlView);
+        }
         
         // PDF
-        $this->pdfView = $this->getPdfView();
-        $this->savePdfOutput($this->pdfView);
+        if($this instanceof iPdfReportView){
+            $this->pdfView = $this->getPdfView();
+            // Save the PDF output
+            $this->savePdfOutput($this->pdfView);
+        }
         
         // CSV
-        //TODO
+        if($this instanceof iCsvReportView){
+            $this->csvView = $this->getCsvView();
+            $this->saveCsvOutput($this->csvView);
+        }
     }
 
     public function getFileName()
@@ -159,7 +183,7 @@ abstract class ReportController {
     
     public function getHtmlView()
     {
-        PHPWS_Core::initModClass('hms', 'ReportView.php');
+        PHPWS_Core::initModClass('hms', 'ReportHtmlView.php');
         
         $name = $this->getReportClassName();
         $className = $name . "HTMLView";
@@ -168,7 +192,7 @@ abstract class ReportController {
         return new $className($this->report);
     }
     
-    public function saveHtmlOutput(ReportView $htmlView)
+    public function saveHtmlOutput(ReportHtmlView $htmlView)
     {
         // Add the proper extension
         $fileName = $this->fileName . '.html';
@@ -186,10 +210,9 @@ abstract class ReportController {
     
     public function getPdfView()
     {
-        PHPWS_Core::initModClass('hms', 'ReportPdfView.php');
+        PHPWS_Core::initModClass('hms', 'ReportPdfViewFromHtml.php');
         
-        $pdfView = new ReportPdfView($this->report); 
-        $pdfView->setHtmlView($this->htmlView);
+        $pdfView = new ReportPdfViewFromHtml($this->report, $this->htmlView); 
         
         return $pdfView;
     }
@@ -208,7 +231,25 @@ abstract class ReportController {
         $this->report->save();
     }
 
-    public abstract function getCsvView();
+    public function getCsvView(){
+        PHPWS_Core::initModClass('hms', 'ReportCsvView.php');
+        
+        $csvView = new ReportCsvView($this->report);
+        
+        return $csvView;
+    }
+    
+    public function saveCsvOutput(ReportCsvView $csvView)
+    {
+        // Add the proper extension
+        $fileName = $this->fileName . '.csv';
+        
+        $fileResult = file_put_contents($fileName, $csvView->getOutput());
+        
+        // Save the file name to the report
+        $this->report->setCsvOutputFilename($fileName);
+        $this->report->save();
+    }
 
     public function getDefaultOutputViewCmd()
     {
@@ -219,6 +260,7 @@ abstract class ReportController {
     {
         $db = new PHPWS_DB('hms_report');
         $db->addWhere('report', $this->getReportClassName());
+        $db->addWhere('completed_timestamp', 'NULL', 'IS NOT');
         $db->addOrder('completed_timestamp DESC');
         $db->setLimit(1);
         $result = $db->loadObject($this->report);

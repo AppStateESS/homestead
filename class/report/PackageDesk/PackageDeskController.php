@@ -1,6 +1,6 @@
 <?php
 
-class PackageDeskController extends ReportController {
+class PackageDeskController extends ReportController implements iCsvReportView{
 
     const allowSyncExec = true;
     const allowAsyncExec = true;
@@ -9,21 +9,6 @@ class PackageDeskController extends ReportController {
     public function setParamsFromContext(CommandContext $context)
     {
         $this->report->setTerm(Term::getSelectedTerm());
-    }
-
-    public function getHtmlView()
-    {
-        return null;
-    }
-
-    public function getPdfView()
-    {
-        return null;
-    }
-
-    public function getCsvView()
-    {
-
     }
 }
 

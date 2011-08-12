@@ -2,6 +2,11 @@
 
 PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
+interface iCsvReport {
+    public function getCsvColumnsArray();
+    public function getCsvRowsArray();
+}
+
 /**
  * Report class - Abstract parent class for all reports in HMS.
  *
@@ -133,8 +138,9 @@ abstract class Report {
         }
         
         if(!is_null($this->csv_output_filename)){
-            //TODO csv view cmd
-            $tags['CSV'] = 'csv exists'; 
+            $csvCmd = CommandFactory::getCommand('ShowReportCsv');
+            $csvCmd->setReportId($this->id);
+            $tags['CSV'] = $csvCmd->getLink('csv');
         }
         
         $tags['ACTIONS'] = '';

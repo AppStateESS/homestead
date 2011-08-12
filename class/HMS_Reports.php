@@ -1303,7 +1303,7 @@ class HMS_Reports{
     {
         $term = Term::getSelectedTerm();
 
-        $output = "Hall,Floor,Room,First Name,Last Name,Banner ID,Cell Phone Number, Email Address\n";
+        $output = "\n";
 
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
 

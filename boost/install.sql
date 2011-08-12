@@ -529,6 +529,7 @@ CREATE TABLE hms_report (
     completed_timestamp  integer,
     html_output_filename character varying,
     pdf_output_filename  character varying,
+    csv_output_filename  character varying,
     PRIMARY KEY (id)
 );
 

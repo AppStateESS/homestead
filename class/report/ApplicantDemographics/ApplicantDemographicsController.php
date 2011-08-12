@@ -1,6 +1,6 @@
 <?php
 
-class ApplicantDemographicsController extends ReportController {
+class ApplicantDemographicsController extends ReportController implements iHtmlReportView, iPdfReportView {
 
     const allowSyncExec = true;
     const allowAsyncExec = true;
@@ -9,25 +9,6 @@ class ApplicantDemographicsController extends ReportController {
     public function setParamsFromContext(CommandContext $context)
     {
         $this->report->setTerm(Term::getSelectedTerm());
-    }
-
-    /*
-    public function getHtmlView()
-    {
-        
-    }
-	*/
-    
-    /*
-    public function getPdfView()
-    {
-
-    }
-    */
-
-    public function getCsvView()
-    {
-
     }
 }
 

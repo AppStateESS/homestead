@@ -13,6 +13,7 @@ class ReportDetailView extends View {
     
     public function show()
     {
+        $this->setTitle($this->reportCtrl->getFriendlyName() . ' Detail');
         $tpl = array();
         
         $tpl['NAME'] = $this->reportCtrl->getFriendlyName();
