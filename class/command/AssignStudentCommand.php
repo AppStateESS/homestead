@@ -165,7 +165,7 @@ class AssignStudentCommand extends Command {
         # then unassign the student first.
         if($moveNeeded){
             try{
-                HMS_Assignment::unassignStudent($student, $term, '(re-assign)');
+                HMS_Assignment::unassignStudent($student, $term, '(re-assign)', UNASSIGN_REASSIGN);
             }catch(Exception $e){
                 NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Error deleting current assignment. {$username} was not removed.");
                 $errorCmd->redirect();

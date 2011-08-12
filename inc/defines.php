@@ -112,6 +112,8 @@ define('ASSIGN_NOREASON',	'anone');
 define('UNASSIGN_ADMIN',	'uadmin');
 define('UNASSIGN_CHANGE',	'uchange'); // For room change requests
 define('UNASSIGN_WITHDRAWN','uwithdrawn');
+define('UNASSIGN_SWAP',		'uswap'); // For room swap
+define('UNASSIGN_REASSIGN', 'ureassign');
 define('UNASSIGN_NOREASON',	'unone');
 
 

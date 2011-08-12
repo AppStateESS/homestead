@@ -106,7 +106,7 @@ class WithdrawnSearch {
             $location = $assignment->where_am_i();
 
             try{
-                HMS_Assignment::unassignStudent($student, $this->term);
+                HMS_Assignment::unassignStudent($student, $this->term, '', UNASSIGN_WITHDRAWN);
             }catch(Exception $e){
                 //TODO
             }
