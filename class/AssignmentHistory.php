@@ -205,10 +205,14 @@ class AssignmentHistory extends HMS_Item {
 		if ( is_null($reason) )
 			$reason = $assignment->reason;
 			
+		// check if an open-ended assignment exists for the term sent.  If so, unassign with reason "AUTO"
+		if ( AssignmentHistory::historyExists($assignment) )
+			AssignmentHistory::makeUnassignmentHistory($assignment, ASSIGN_AUTO);
+			
 		$ah = new AssignmentHistory();
 		$ah->setBanner($assignment->banner_id);
 		$ah->setRoom($assignment->where_am_i());
-		$ah->setTerm();
+		$ah->setTerm($assignment->term);
 		$ah->setAssign($reason); // set all the assignment data
 		$ah->save();
 		
@@ -250,6 +254,30 @@ class AssignmentHistory extends HMS_Item {
         }
         
         return true;
+	}
+	
+	public static function historyExists($assignment) {
+		if ( is_null($assignment) ) 
+			return false;
+			
+		$db = new PHPWS_DB('hms_assignment_history');
+    	$db->addWhere('banner_id', 	$assignment->banner_id);
+    	$db->addWhere('term',		$assignment->term);
+    	$db->addWhere('removed_on', 'NULL', 'IS');
+    	
+    	$result = $db->select();
+    	
+		if(PHPWS_Error::logIfError($result)){
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException($result->toString());
+        }
+        
+        if ( sizeof($result) == 0 ) {
+        	return false;
+        }
+        
+        return true;
+    	
 	}
 }
 ?>

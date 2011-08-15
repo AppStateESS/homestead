@@ -45,9 +45,9 @@ class StudentAssignmentHistory extends ArrayObject{
  
     	$db = new PHPWS_DB('hms_assignment_history');
     	$db->addWhere('banner_id', $bannerID);
-    	$db->addWhere('term', $term);
         $db->loadClass('hms', 'AssignmentHistory.php');
-        $db->addOrder('term', 'DESC');
+		$db->addOrder('term', 'DESC');
+        $db->addOrder('assigned_on', 'DESC');
         $result = $db->getObjects('AssignmentHistory');
         
         if(PHPWS_Error::logIfError($result)){
@@ -55,18 +55,38 @@ class StudentAssignmentHistory extends ArrayObject{
             throw new DatabaseException($result->toString());
         }
         
-        foreach( $result as $ah ) {
-        	if ( defined($ah->assigned_reason) )
-        		$ah->assigned_reason = constant($ah->assigned_reason); // for pretty text purposes
-        	if ( defined($ah->removed_reason) )
-        		$ah->removed_reason = constant($ah->removed_reason); // for pretty text purposes
-        	
-        	if ( !is_null($ah->assigned_on) ) 
-        		$ah->assigned_on = date("M jS, Y", $ah->assigned_on);
-        	if ( !is_null($ah->removed_on) )
-        		$ah->removed_on = date("M jS, Y", $ah->removed_on);
-        		
-        	$this->theArray[] = (array) $ah;
+        if ( isset($result) ) {
+	        foreach( $result as $ah ) {
+	        	if ( defined($ah->assigned_reason) )
+	        		$ah->assigned_reason = constant($ah->assigned_reason); // for pretty text purposes
+	        	if ( defined($ah->removed_reason) )
+	        		$ah->removed_reason = constant($ah->removed_reason); // for pretty text purposes
+	        	
+	        	if ( !is_null($ah->assigned_on) ) 
+	        		$ah->assigned_on = date('M jS, Y \a\t g:ia', $ah->assigned_on);
+	        	if ( !is_null($ah->removed_on) )
+	        		$ah->removed_on = date('M jS, Y \a\t g:ia', $ah->removed_on);
+
+	        	if ( !is_null($ah->term) )
+	        		$ah->term = Term::toString($ah->term);
+	        		
+	        	// Combine for ease of view
+	        	if ( isset($ah->assigned_reason) ) {
+	        		$ah->assignments = 	'<font style="font-style:italic;">'.$ah->assigned_reason.'</font>'.
+	        							' by '.$ah->assigned_by.
+	        							'<br /><font style="font-size:11px;color:#7C7C7C;">on '.$ah->assigned_on.'</font>';
+	        	} else 
+	        		$ah->assignments = '<font style="font-style:italic;">No Assignment Record</font>';
+	        	
+	        	if ( isset($ah->removed_reason) ) {
+	        		$ah->unassignments = 	'<font style="font-style:italic;">'.$ah->removed_reason.'</font>'.
+	        								' by '.$ah->removed_by.
+	        								'<br /><font style="font-size:11px;color:#7C7C7C;">on '.$ah->removed_on.'</font>';
+	        	} else
+	        		$ah->unassignments = '<font style="font-style:italic;font-weight:bold;">No Unassignment Record</font>';
+	        		
+	        	$this->theArray[] = (array) $ah;
+	        }
         }
         
         return true;

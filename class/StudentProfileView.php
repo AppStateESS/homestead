@@ -286,7 +286,7 @@ class StudentProfileView extends View {
         $history_rows = array();
         $excess_rows = array();
         
-        $excess_limit = 3;
+        $excess_limit = 3; // Number of rows to show by default
         
         $count = 0;
         $tpl['HISTORY'] = array();

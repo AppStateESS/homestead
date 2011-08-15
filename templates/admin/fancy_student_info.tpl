@@ -185,33 +185,24 @@
         <table class="profileHeader" id="history">
             <tr>
             	<th>Room</th>
-            	<th>Assignment Date</th>
-            	<th>Assigned By</th>
-            	<th>Reason</th>
-            	<th>Unassignment Date</th>
-            	<th>Unassigned By</th>
-            	<th>Reason</th>
+            	<th>Term</th>
+            	<th>Assignment</th>
+            	<th>Unassignment</th>
             </tr>
             <!-- BEGIN HISTORY -->
             <tr>
             	<td>{room}</td>
-            	<td>{assigned_on}</td>
-            	<td>{assigned_by}</td>
-            	<td>{assigned_reason}</td>
-            	<td>{removed_on}</td>
-            	<td>{removed_by}</td>
-            	<td>{removed_reason}</td>
+            	<td>{term}</td>
+            	<td>{assignments}</td>
+            	<td>{unassignments}</td>
             </tr>
             <!-- END HISTORY -->
             <!-- BEGIN EXTRA_HISTORY -->
             <tr class="extraHistory" style="display:none;">
             	<td>{room}</td>
-            	<td>{assigned_on}</td>
-            	<td>{assigned_by}</td>
-            	<td>{assigned_reason}</td>
-            	<td>{removed_on}</td>
-            	<td>{removed_by}</td>
-            	<td>{removed_reason}</td>
+            	<td>{term}</td>
+            	<td>{assignments}</td>
+            	<td>{unassignments}</td>
             </tr>
             <!-- END EXTRA_HISTORY -->
         </table>
