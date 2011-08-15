@@ -203,8 +203,21 @@
             	<td>{removed_reason}</td>
             </tr>
             <!-- END HISTORY -->
-            </table>
+            <!-- BEGIN EXTRA_HISTORY -->
+            <tr class="extraHistory" style="display:none;">
+            	<td>{room}</td>
+            	<td>{assigned_on}</td>
+            	<td>{assigned_by}</td>
+            	<td>{assigned_reason}</td>
+            	<td>{removed_on}</td>
+            	<td>{removed_by}</td>
+            	<td>{removed_reason}</td>
+            </tr>
+            <!-- END EXTRA_HISTORY -->
         </table>
+        <div style="text-align:center;" id="showMoreDiv" class="profileHeader">
+        	{SHOW_MORE}
+        </div>
         </div>
     </div>
 </div>

@@ -47,13 +47,14 @@ class StudentAssignmentHistory extends ArrayObject{
     	$db->addWhere('banner_id', $bannerID);
     	$db->addWhere('term', $term);
         $db->loadClass('hms', 'AssignmentHistory.php');
+        $db->addOrder('term', 'DESC');
         $result = $db->getObjects('AssignmentHistory');
         
         if(PHPWS_Error::logIfError($result)){
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
-       
+        
         foreach( $result as $ah ) {
         	if ( defined($ah->assigned_reason) )
         		$ah->assigned_reason = constant($ah->assigned_reason); // for pretty text purposes
