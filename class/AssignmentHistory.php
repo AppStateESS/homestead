@@ -228,9 +228,10 @@ class AssignmentHistory extends HMS_Item {
 	public static function getHistoryID($assignment) {
 		if ( is_null($assignment) )
 			return false;
-			
-		
-    	
+	}
+	
+	// Print reason pretty (from defines)
+	public static function reasonAsText($code) {
 		
 	}
 	

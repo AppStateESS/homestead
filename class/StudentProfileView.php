@@ -283,12 +283,14 @@ class StudentProfileView extends View {
         
         $historyArray = StudentAssignmentHistory::getAssignments($this->student->getBannerId());
         
+        $history_rows = array();
+        
         $tpl['HISTORY'] = array();
         foreach($historyArray as $history) {
-        	$tpl['HISTORY'][] = $history;
+        	$history_rows[] = $history;
         }
         
-        
+ 		$tpl['HISTORY'] = $history_rows;
         
         /*********
          * Notes *
@@ -334,7 +336,7 @@ class StudentProfileView extends View {
         // TODO tabs
 
         Layout::addPageTitle("Student Profile");
-
+		Layout::addStyle('hms', 'css/studentInfo.css');
         return PHPWS_Template::process($tpl, 'hms', 'admin/fancy_student_info.tpl');
     }
 }

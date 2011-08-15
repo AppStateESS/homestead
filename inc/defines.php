@@ -117,6 +117,31 @@ define('UNASSIGN_REASSIGN', 'ureassign');
 define('UNASSIGN_NOREASON',	'unone');
 
 
+
+/**
+ * Pretty Names
+ */
+define('aadmin', 	'Administrative');
+define('alottery', 	'Lottery');
+define('afreshmen',	'Freshmen');
+define('amedical', 	'Medical');
+define('aathletics','Athletics');
+define('ahonors',	'Honors');
+define('awatauga',	'Watauga Global');
+define('ateaching',	'Teaching Fellows');
+define('arlc',		'RLC');
+define('asorority',	'Sorority');
+define('aspecial',	'Special Needs');
+define('aauto',		'Auto-Assigned');
+define('acopy',		'Term Copy');
+define('anone',		'Not Specified');
+define('uadmin',	'Administrative');
+define('uchange',	'Room Change');
+define('uwithdrawn','Withdrawn');
+define('uswap',		'Room Swap');
+define('ureassign',	'Reassignment');
+define('unone',		'Not Specified');
+
 /**
  * Address types
  */

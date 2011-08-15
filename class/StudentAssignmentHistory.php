@@ -47,9 +47,20 @@ class StudentAssignmentHistory extends ArrayObject{
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
-        
-        // Push results onto StudentAssignmentHistory array
-        array_push($this->theArray, $result);
+       
+        foreach( $result as $ah ) {
+        	if ( defined($ah->assigned_reason) )
+        		$ah->assigned_reason = constant($ah->assigned_reason); // for pretty text purposes
+        	if ( defined($ah->removed_reason) )
+        		$ah->removed_reason = constant($ah->removed_reason); // for pretty text purposes
+        	
+        	if ( !is_null($ah->assigned_on) ) 
+        		$ah->assigned_on = date("M jS, Y", $ah->assigned_on);
+        	if ( !is_null($ah->removed_on) )
+        		$ah->removed_on = date("M jS, Y", $ah->removed_on);
+        		
+        	$this->theArray[] = (array) $ah;
+        }
         
         return true;
     }
