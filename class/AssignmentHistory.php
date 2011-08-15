@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * AssignmentHistory.php
+ * 
+ * @author Adam D. Dixon
+ */
 PHPWS_Core::initModClass('hms', 'HMS_Item.php');
 PHPWS_Core::initModClass('hms', 'UserStatus.php');
 PHPWS_Core::initModClass('hms', 'Term.php');
@@ -66,6 +71,12 @@ class AssignmentHistory extends HMS_Item {
 		$this->room = $room;
 	}
 	
+	/**
+	 * Sets the term of this history object by passed or current if none
+	 * 
+	 * @param int $term The term to set in the object [optional]
+	 * @return none 
+	 */
 	public function setTerm($term=null) {
 		if ( !is_null($term) )
 			$this->term = $term;
@@ -73,6 +84,12 @@ class AssignmentHistory extends HMS_Item {
 			$this->term = Term::getCurrentTerm();
 	}
 	
+	/**
+	 * Helper function to ease the getting of a timestamp
+	 * 
+	 * @param none
+	 * @return none
+	 */
 	private function getTimestamp() {
 		$date = new DateTime();
 		return $date->getTimestamp();
@@ -174,12 +191,12 @@ class AssignmentHistory extends HMS_Item {
 	}
 	
 	/**
-	 * static method to enable an AssignmentHistory to be create by means of passing an
+	 * static method to enable an AssignmentHistory to be created by means of passing an
 	 * assignment and reason only
 	 * 
 	 * @param HMS_Assignment $assignment HMS_Assignment object from which to pull data
 	 * @param String $reason A defined reason for assignment if not wishing to use one in assignment (see definitions)
-	 * @return int|boolean the id of inserted AssignmentHistory, false if failure
+	 * @return boolean true if success, false if failure
 	 */
 	public static function makeAssignmentHistory($assignment=null, $reason=null) {
 		if ( is_null($assignment) ) 
@@ -194,15 +211,26 @@ class AssignmentHistory extends HMS_Item {
 		$ah->setTerm();
 		$ah->setAssign($reason); // set all the assignment data
 		$ah->save();
+		
+		return true;
 	}
 	
+	/**
+	 * static method to enable an UnassignmentHistory to be created by means of passing an
+	 * assignment and reason only
+	 * 
+	 * @param HMS_Assignment $assignment HMS_Assignment object from which to pull data
+	 * @param String $reason A defined reason for unassignment if not wishing to use one in assignment (see definitions)
+	 * @return boolean true if success, false if failure
+	 */
 	public static function makeUnassignmentHistory($assignment=null, $reason=UNASSIGN_NOREASON) {
 		if ( is_null($assignment) ) 
 			return false;
-
+			
 		$db = new PHPWS_DB('hms_assignment_history');
     	$db->addWhere('banner_id', 	$assignment->banner_id);
     	$db->addWhere('room', 		$assignment->where_am_i());
+    	$db->addWhere('term',		$assignment->term);
     	$db->addWhere('removed_on', 'NULL', 'IS');
     	
     	$tHistory = new AssignmentHistory();
@@ -223,17 +251,5 @@ class AssignmentHistory extends HMS_Item {
         
         return true;
 	}
-	
-	// Locate correct ID
-	public static function getHistoryID($assignment) {
-		if ( is_null($assignment) )
-			return false;
-	}
-	
-	// Print reason pretty (from defines)
-	public static function reasonAsText($code) {
-		
-	}
-	
 }
 ?>

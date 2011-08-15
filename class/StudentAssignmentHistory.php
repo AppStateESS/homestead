@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * StudentAssignmentHistory.php
+ * 
+ * @author Adam D. Dixon
+ */
+
 PHPWS_Core::initModClass('hms', 'AssignmentHistory.php');
 PHPWS_Core::initModClass('hms', 'Term.php');
 
