@@ -1,13 +1,33 @@
 <?php
 
+/**
+ * ShowReportPdfCommand
+ * 
+ * Command to show (download) a report's PDf output
+ * to the user's browser.
+ * 
+ * @author jbooker
+ * @package HMS
+ */
 class ShowReportPdfCommand extends Command{
     
-    private $reportId;
+    private $reportId; // ID of the report to show
     
+    /**
+     * Sets the report ID to show
+     * 
+     * @param int $id
+     */
     public function setReportId($id){
         $this->reportId = $id;
     }
     
+    /**
+     * Sets the request variables
+     * 
+     * @throws InvalidArgumentExection
+     * @return Array array of request variables
+     */
     public function getRequestVars()
     {
         if(!isset($this->reportId) || is_null($this->reportId)){
@@ -17,10 +37,17 @@ class ShowReportPdfCommand extends Command{
         return array('action'=>'ShowReportPdf', 'reportId'=>$this->reportId);
     }
     
+    /**
+     * Exec
+     * 
+     * @param CommandContext $context
+     * @throws InvalidArgumentExection
+     */
     public function execute(CommandContext $context)
     {
         $reportId = $context->get('reportId');
     
+        // Check to make sure a report ID was given
         if(!isset($reportId) || is_null($reportId)){
             throw new InvalidArgumentExection('Missing report id.');
         }
@@ -29,6 +56,7 @@ class ShowReportPdfCommand extends Command{
         PHPWS_Core::initModClass('hms', 'ReportFactory.php');
         $report = ReportFactory::getReportById($reportId);
     
+        // Check to make sure the file actually exsists
         if(!file_exists($report->getPdfOutputFilename())){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Could not open report file.');
             $reportCmd = CommandFactory::getCommand('ShowReportDetail');
@@ -38,6 +66,7 @@ class ShowReportPdfCommand extends Command{
         
         $pdf = file_get_contents($report->getPdfOutputFilename());
     
+        // Headers to show the PDf. Hopefully opens an embedded PDF viewer.
         header('Content-Type: application/pdf');
         header('Cache-Control: public, must-revalidate, max-age=0'); // HTTP/1.1
         header('Pragma: public');

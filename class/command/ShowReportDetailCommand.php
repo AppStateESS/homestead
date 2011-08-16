@@ -1,14 +1,34 @@
 <?php
 
+/**
+ * ShowReportDetailCommand
+ * 
+ * Shows the report detail interface for a particular report type.
+ * 
+ * @author jbooker
+ * @package HMS
+ */
+
 class ShowReportDetailCommand extends Command {
     
-    private $reportClass;
+    private $reportClass; // The class of the report to show
     
+    /**
+     * Sets the class of the report to show details for.
+     * 
+     * @param String $class
+     */
     public function setReportClass($class)
     {
         $this->reportClass = $class;
     }
     
+    /**
+     * Returns the array of request vars for this command.
+     * 
+     * @throws InvalidArgumentException
+     * @return Array Array of request vars.
+     */
     public function getRequestVars()
     {
         if(!isset($this->reportClass) || is_null($this->reportClass)){
@@ -18,6 +38,12 @@ class ShowReportDetailCommand extends Command {
         return array('action'=>'ShowReportDetail', 'reportClass'=>$this->reportClass);
     }
     
+    /**
+     * Executes, shows the details for the requested report class.
+     * 
+     * @param CommandContext $context
+     * @throws InvalidArgumentException
+     */
     public function execute(CommandContext $context)
     {
         $class = $context->get('reportClass');

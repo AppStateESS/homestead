@@ -2,8 +2,22 @@
 
 PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
+/**
+ * iCsvReport Interface
+ * Enforces the methods necessary for the ReportCsvView to retrieve the CSV data from the implementing report class.
+ * 
+ * @author jbooker
+ * @package HMS
+ */
 interface iCsvReport {
+    /**
+     * Returns an array of column names, used to make the csv file header line
+     */
     public function getCsvColumnsArray();
+    
+    /**
+     * Returns a two-dimensional array of data rows, each containing the columns values for that row
+     */
     public function getCsvRowsArray();
 }
 
@@ -13,19 +27,21 @@ interface iCsvReport {
  * @author jbooker
  * @package HMS
  */
-
-// Can't be abstract because the DB class must be able to instanciate it
 abstract class Report {
 
     public $id;
 
     public $report; // class name of the report
-    public $created_by;
-    public $created_on;
+    public $created_by; // string user name
+    public $created_on; // unix timestamp of creation time
     public $scheduled_exec_time; // scheduled execution start time, can be in the future for scheduled reports
     public $began_timestamp; // actual execution start time
     public $completed_timestamp; // execution finish time
     
+    /*
+     * Full path file names for the generated output,
+     * can be null if a format isn't used. 
+     */
     public $html_output_filename;
     public $pdf_output_filename;
     public $csv_output_filename;
@@ -47,16 +63,36 @@ abstract class Report {
         $this->report = get_class($this);
     }
     
+    /**
+     * Returns the "friendly" (long) name of the report.
+     * The constant 'const friendlyName = "name"' must be
+     * declared in the implementing class. This is shown to
+     * the user in lots of places.
+     * 
+     * @return String friendly name
+     */
     public static function getFriendlyName(){
         $c = get_called_class();
         return $c::friendlyName;
     }
     
+    /**
+    * Returns the "short" name of the report.
+    * The constant 'const friendlyName = "name"' must be
+    * declared in the implementing class. This is stored
+    * in the database and used filtering/selecting later.
+    * 
+    * @return String short name
+    */
     public static function getShortName(){
         $c = get_called_class();
         return $c::shortName;
     }
 
+    /**
+     * Returns the class name of this report.
+     * @return String class name of this report.
+     */
     public function getClass()
     {
         return get_class($this);
@@ -64,6 +100,8 @@ abstract class Report {
     
     /**
      * Loads this report from the database.
+     * 
+     * @throws DatabaseException
      */
     public function load()
     {
@@ -77,7 +115,9 @@ abstract class Report {
     }
 
     /**
-     * Save a report that has been executed to the database.
+     * Save a report to the database.
+     * 
+     * @throws DatabaseException
      */
     public function save()
     {
@@ -91,6 +131,11 @@ abstract class Report {
         return TRUE;
     }
 
+    /**
+     * Deletes a record.
+     * 
+     * @throws DatabaseException
+     */
     public function delete() {
         $db = new PHPWS_DB('hms_report');
         $db->addWhere('id', $this->id);
@@ -104,6 +149,10 @@ abstract class Report {
         return TRUE;
     }
     
+    /**
+     * Returns the filename for this report based on the 'shortName'
+     * field and the current date/time.
+     */
     public function getFileName()
     {
         return $this->getShortName() . '-'. date("Ymd-His",time());
@@ -111,10 +160,16 @@ abstract class Report {
 
     /**
      * Executes the report. Calculated values should be stored in
-     * member variables unique to each report.
+     * member variables unique to each report. Must be implemented
+     * by each report.
      */
     public abstract function execute();
 
+    /**
+     * Returns the DBPager tags used for showing each record on the ReportDetailView.
+     * 
+     * @return Array DBPager tags for this report
+     */
     public function historyPagerRowTags()
     {
         $tags = array();
@@ -148,6 +203,14 @@ abstract class Report {
         return $tags;
     }
     
+    /**
+     * Returns the Command object to use for the default viewing method
+     * for the generated output, setup with the appropriate params for 
+     * this report instance. Can be overwridden by individual reports
+     * to change this behavior.
+     * 
+     * @return Command Default command for viewing this report's output.
+     */
     public function getDefaultOutputViewCmd()
     {
         $cmd = CommandFactory::getCommand('ShowReportHtml');
@@ -158,7 +221,7 @@ abstract class Report {
 
     /*********
      * Getters and setters
-    */
+     */
 
     public function getId(){
         return $this->id;

@@ -1,13 +1,33 @@
 <?php
 
+/**
+ * ShowReportHtmlCommand
+ * 
+ * View controller that shows the HTML output of
+ * a particular report exec.
+ * 
+ * @author jbooker
+ * @package HMS
+ */
 class ShowReportHtmlCommand extends Command {
     
-    private $reportId;
+    private $reportId; // ID of the report to be shown
     
+    /**
+     * Sets the report ID to show
+     * 
+     * @param int $id ID of the report to show
+     */
     public function setReportId($id){
         $this->reportId = $id;
     }
     
+    /**
+     * Returns the array of request vars for this command.
+     * 
+     * @throws InvalidArgumentExection
+     * @return Array Array of request vars.
+     */
     public function getRequestVars()
     {
         if(!isset($this->reportId) || is_null($this->reportId)){
@@ -17,6 +37,12 @@ class ShowReportHtmlCommand extends Command {
         return array('action'=>'ShowReportHtml', 'reportId'=>$this->reportId);
     }
     
+    /**
+     * Shows the requested report's HTML output.
+     * 
+     * @param CommandContext $context
+     * @throws InvalidArgumentExection
+     */
     public function execute(CommandContext $context)
     {
         $reportId = $context->get('reportId');
