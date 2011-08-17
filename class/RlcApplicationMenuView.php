@@ -30,7 +30,9 @@ class RlcApplicationMenuView extends View {
 
     public function show()
     {
-        $tpl = array();
+		PHPWS_Core::initModClass('hms', 'HMS_Util.php');
+    	
+    	$tpl = array();
 
         $tpl['DATES'] = HMS_Util::getPrettyDateRange($this->startDate, $this->endDate);
         $tpl['STATUS'] = "";
