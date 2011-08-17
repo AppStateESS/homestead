@@ -218,7 +218,7 @@ class Student {
      */
     public function getAddressLine($addrType = null)
     {
-        $addr = $this->getAaddress($addrType);
+        $addr = $this->getAddress($addrType);
 
         if(!$addr){
             return false;
