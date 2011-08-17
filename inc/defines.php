@@ -82,7 +82,8 @@ define('BANNER_MEAL_SUPER', '8');
 define('BANNER_MEAL_NONE', '-1');
 
 // Summer Meal plan codes
-define('BANNER_MEAL_4WEEK', 'S4');
+// 4 Week Meal Plan Removed according to ticket #709
+//define('BANNER_MEAL_4WEEK', 'S4');
 define('BANNER_MEAL_5WEEK', 'S5');
 
 /**
