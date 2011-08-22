@@ -46,8 +46,6 @@ abstract class Report {
     public $pdf_output_filename;
     public $csv_output_filename;
 
-    private $params;
-
     /**
      * Constructor
      */

@@ -5,73 +5,8 @@
 // calculate the path dynamically that way.
 define('HMS_REPORT_PATH', PHPWS_SOURCE_DIR . 'files/hms_reports/');
 
+PHPWS_Core::initModClass('hms', 'ReportInterfaces.php');
 PHPWS_Core::initModClass('hms', 'Report.php');
-
-/**
- * iHtmlReportView interface - To be implemented by ReportControllers.
- * Requires implementation of methods necessary for retreiving and
- * saving HTML output.
- *
- * @author jbooker
- * @package HMS
- */
-interface iHtmlReportView {
-    /**
-     * Responsible for creating and initializing the ReportHtmlView
-     * @return ReportHtmlView
-     */
-    public function getHtmlView();
-
-    /**
-     * Responsible for saving the output in the ReportHtmlView to a file.
-     * @param ReportHtmlView $htmlView
-     */
-    public function saveHtmlOutput(ReportHtmlView $htmlView);
-}
-
-/**
- * iPdfReportView interface - To be implemented by ReportControllers.
- * Requires implementation of methods necessary for retreiving and
- * saving PDF output.
- *
- * @author jbooker
- * @package HMS
- */
-interface iPdfReportView {
-    /**
-     * Responsible for creating and initializing the ReportPdfView
-     * @return ReportPdfView
-     */
-    public function getPdfView();
-
-    /**
-     * Responsible for saving the output in the ReportPdfView to a file.
-     * @param ReportPdfView $pdfView
-     */
-    public function savePdfOutput(ReportPdfView $pdfView);
-}
-
-/**
- * iCsvReportView interface - To be implemented by ReportControllers.
- * Requires implementation of methods necessary for retreiving and
- * saving CSV output.
- *
- * @author jbooker
- * @package HMS
- */
-interface iCsvReportView {
-    /**
-     * Responsible for creating and initializing the ReportCsvView
-     * @return ReportCsvView
-     */
-    public function getCsvView();
-
-    /**
-     * Responsible for saving the output in the ReportCsvView to a file.
-     * @param ReportCsvView $csvView
-     */
-    public function saveCsvOutput(ReportCsvView $csvView);
-}
 
 /**
  * ReportController - Central report controller. Provides much of the functionality
@@ -137,6 +72,22 @@ abstract class ReportController {
     }
 
     /**
+    * Initalizes the report object we're wrapping. Sets creation dates/users.
+    *
+    * @param int $scheduledExecTime Unix timestamp of the time this report should be executed.
+    */
+    public function newReport($scheduledExecTime)
+    {
+        $this->report = $this->getReportInstance();
+    
+        $this->report->setCreatedBy(UserStatus::getUsername());
+        $this->report->setCreatedOn(time());
+        $this->report->setScheduledExecTime($scheduledExecTime);
+        $this->report->setBeganTimestamp(null);
+        $this->report->setCompletedTimestamp(null);
+    }
+    
+    /**
      * Returns the friendly name of the report we're wrapping. It's a shortcut
      * method for $this->report->getFriendlyName().
      *
@@ -164,62 +115,72 @@ abstract class ReportController {
         return $view;
     }
 
-    public static function allowSyncExec()
+    /**
+     * 
+     */
+    public function getSyncSetupView()
     {
-        $c = get_called_class();
-        return $c::allowSyncExec;
+        //TODO, and make the details view use this
     }
 
-    public static function allowAsyncExec()
+    public function getAsyncSetupView()
     {
-        $c = get_called_class();
-        return $c::allowAsyncExec;
+        PHPWS_Core::initModClass('hms', 'ReportSetupView.php');
+        
+        $name = $this->getReportClassName();
+        $className = $name . "SetupView";
+        PHPWS_Core::initModClass('hms', "report/$name/$className.php");
+        
+        return new $className($this->report);
     }
 
-    public static function allowScheduledExec()
+    public function getSchedSetupView()
     {
-        $c = get_called_class();
-        return $c::allowScheduleExec;
+        //TODO
     }
 
+    /**
+     * Default implementation for the iSyncReport interface.
+     * This can be overridden in a sub-class to provide a custom
+     * execution command. It must return a valid Command object
+     * to run the report synchronously.
+     *
+     * @see iSyncReport
+     * @return Command A Command object to run this report synchronously.
+     */
     public function getSyncExecCmd()
     {
-        if($this->allowSyncExec()){
-            $cmd = CommandFactory::getCommand('ExecReportSync');
-            $cmd->setReportClass($this->getReportClassName());
-        }else{
-            $cmd = null;
-        }
+        $cmd = CommandFactory::getCommand('ExecReportSync');
+        $cmd->setReportClass($this->getReportClassName());
 
         return $cmd;
     }
 
     /**
-     * Returns the view (probably containing a html form) necessary to configure this report.
-     * The form data (user input) will be made available to the execute function.
-     * Returns null if no setup view is necessary.
-     */
-    public function getSetupView(){
-        return null;
-    }
-
-    /**
-     * Initalizes the report object we're wrapping. Sets creation dates/users.
+     * Default implementation for the iAsyncReport interface.
+     * Uses the ExecReportAsync command. This can be overridden
+     * in a sub-class to provide a custom exectuion command. It
+     * must return a valid Command object to run the report
+     * Asynchronously.
      *
-     * @param int $scheduledExecTime Unix timestamp of the time this report should be executed.
+     * @see iAsyncReport
+     * @return Command A Command object to run this report asynchronously.
      */
-    public function newReport($scheduledExecTime)
+    public function getAsyncExecCmd()
     {
-        $this->report = $this->getReportInstance();
+        $cmd = CommandFactory::getCommand('ExecReportSync');
+        $cmd->setReportClass($this->getReportClassName());
 
-        $this->report->setCreatedBy(UserStatus::getUsername());
-        $this->report->setCreatedOn(time());
-        $this->report->setScheduledExecTime($scheduledExecTime);
-        $this->report->setBeganTimestamp(null);
-        $this->report->setCompletedTimestamp(null);
+        return $cmd;
     }
 
-    public abstract function setParamsFromContext(CommandContext $context);
+    public function getSchedExecCmd()
+    {
+        return $this->getAsyncExecCmd();
+    }
+
+    public abstract function setParams(Array $params);
+    public abstract function getParams();
 
     /**
      * Shortcut method to save the report object that this controller contains.
@@ -228,7 +189,7 @@ abstract class ReportController {
     {
         return $this->report->save();
     }
-    
+
     /**
      * Get's the file name from the Report this controller is wrapping and
      * prepends the configured filesystem path. The file name that's generated
@@ -240,18 +201,12 @@ abstract class ReportController {
         $this->fileName = HMS_REPORT_PATH . $this->report->getFileName();
     }
 
-    //TODO
-    public function scheduleForLater()
-    {
-
-    }
-
     /**
      * Responsible for starting the execution of this controller's
      * report, then getting and saving each of the implemented views.
-     * 
+     *
      * This is a default implementation, and could be overridden if necessary.
-     * 
+     *
      */
     public function generateReport()
     {
@@ -270,15 +225,15 @@ abstract class ReportController {
 
         /*
          * Generate the report's full pathname (with a file extension),
-         * so that each output file type will have the same file name.
-         */
+        * so that each output file type will have the same file name.
+        */
         $this->getFileName();
 
         /*
          * For each of the views we have, check to see if this controller
-         * implements the necessary interface. If so, call those methods
-         * to generate and save the view.
-         */
+        * implements the necessary interface. If so, call those methods
+        * to generate and save the view.
+        */
         // HTML
         if($this instanceof iHtmlReportView){
             $this->htmlView = $this->getHtmlView();
@@ -304,9 +259,10 @@ abstract class ReportController {
      * Default implementation of the iHtmlReportView interface. Returns
      * a HTML view based on the report's class name in the form of:
      * report/<reportName>/<reportName>HtmlView.php
-     * 
+     *
      * The generated class name must extend ReportHtmlView.
-     * 
+     *
+     * @see iHtmlReportView
      * @return ReportHtmlView
      */
     public function getHtmlView()
@@ -325,9 +281,10 @@ abstract class ReportController {
      * for appending a file extention to the file name, getting the output
      * from the provided view, saving that output to a file, and storing the
      * finished file name in the Report object.
-     * 
+     *
      * Can be overrriden if custom behavior is necessary.
-     * 
+     *
+     * @see iHtmlReportView
      * @param ReportHtmlView $htmlView
      */
     public function saveHtmlOutput(ReportHtmlView $htmlView)
@@ -349,19 +306,20 @@ abstract class ReportController {
     /**
      * Default implementation for the iPdfReportView interface. Responsible
      * for returning an object which extends the ReportPdfView class.
-     * 
+     *
      * This implementation expects a htmlView to exist and attempts to convert
      * it to PDF using the WKPDF class. Override this to provide your own ReportPdfView
      * implementation which generates a custom PDF for this controller's report.
-     * 
-     * @return 
+     *
+     * @see iHtmlReportView
+     * @return ReportPdfView
      */
     public function getPdfView()
     {
         PHPWS_Core::initModClass('hms', 'ReportPdfViewFromHtml.php');
 
         //TODO Check to make sure a HtmlView actually exists
-        
+
         $pdfView = new ReportPdfViewFromHtml($this->report, $this->htmlView);
 
         return $pdfView;
@@ -372,9 +330,10 @@ abstract class ReportController {
      * for appending a file extention to the file name, getting the output
      * from the provided view, saving that output to a file, and storing the
      * finished file name in the Report object.
-     * 
+     *
      * Can be overrriden if custom behavior is necessary.
-     * 
+     *
+     * @see iHtmlReportView
      * @param ReportPdfView $pdfView
      */
     public function savePdfOutput(ReportPdfView $pdfView)
@@ -394,12 +353,13 @@ abstract class ReportController {
     /**
      * Default implementation for the iCsvReportView interface. Responsible for
      * returning an object which extends the ReportCsvView class.
-     * 
+     *
      * By default, it returns an instance of ReportCsvView. This can be overridden
      * to return a custom view (but it must extend ReportCsvView). This view
      * provides a default implementation of the iCsvReport interface to convert
      * report data to the csv format from an array.
-     * 
+     *
+     * @see iHtmlCsvView
      * @return ReportCsvView
      */
     public function getCsvView(){
@@ -415,9 +375,10 @@ abstract class ReportController {
      * for appending a file extention to the file name, getting the output
      * from the provided view, saving that output to a file, and storing the
      * finished file name in the Report object.
-     * 
+     *
      * Can be overrriden if custom behavior is necessary.
-     * 
+     *
+     * @see iHtmlCsvView
      * @param ReportCsvView $csvView
      */
     public function saveCsvOutput(ReportCsvView $csvView)
@@ -437,7 +398,7 @@ abstract class ReportController {
      * viewing method for this report. This can be overridden
      * to provide custom behavior, or to overrride the report's
      * requested behavior.
-     * 
+     *
      * @return Command Default command for viewing this report's output
      */
     public function getDefaultOutputViewCmd()
@@ -449,7 +410,7 @@ abstract class ReportController {
      * Loads the report instance for the last execution performed.
      * The loaded object will contain a null ID if the report has
      * never been executed. Returns true/false on success/failure.
-     * 
+     *
      * @throws DatabaseException
      * @return boolean
      */
@@ -467,18 +428,47 @@ abstract class ReportController {
             throw new DatabaseException($result->toString());
             return false;
         }
-        
+
         return true;
     }
-    
+
     /**
-     * Returns the report instance that this controller is managing. 
-     * 
+     * Returns the report instance that this controller is managing.
+     *
      * @return Report
      */
     public function getReport()
     {
         return $this->report;
+    }
+    
+    public function saveParams()
+    {
+        $params = $this->getParams();
+
+        if(empty($params)){
+            return;
+        }
+        
+        $db = new PHPWS_DB('hms_report_param');
+        
+        foreach($params as $key=>$value){
+            $db->reset();
+            $db->addValue('report_id', $this->report->getId());
+            $db->addValue('param_name', $key);
+            $db->addValue('param_value', $value);
+            $result = $db->insert();
+            
+            if(PHPWS_Error::logIfError($result)){
+                PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+                throw new DatabaseException($result->toString());
+            }
+        }
+    }
+    
+    public function loadParams()
+    {
+        //TODO
     }
 }
 

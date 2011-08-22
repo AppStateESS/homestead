@@ -26,7 +26,7 @@ class ShowStudentSearchCommand extends Command {
         }
 
         javascript('jquery');
-        javascript('/modules/hms/new_autosuggest');
+        javascript('modules/hms/new_autosuggest');
         Layout::addStyle('hms', 'css/autosuggest2.css');
 
         $cmd = CommandFactory::getCommand('StudentSearch');
@@ -43,7 +43,7 @@ class ShowStudentSearchCommand extends Command {
             $form->addText('username');
         }
 
-        javascript('/modules/hms/autoFocus', array('ELEMENT' => $form->getId('username')));
+        javascript('modules/hms/autoFocus', array('ELEMENT' => $form->getId('username')));
 
         $form->setExtra('username', 'autocomplete="off" ');
 

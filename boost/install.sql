@@ -533,6 +533,14 @@ CREATE TABLE hms_report (
     PRIMARY KEY (id)
 );
 
+CREATE TABLE hms_report_param (
+    id                  INTEGER NOT NULL,
+    report_id           INTEGER NOT NULL,
+    param_name          character varying,
+    param_value         character varying,
+    PRIMARY KEY (id)
+);
+
 INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info) VALUES (3, 'Language & Culture Community', 'LCC', 50, 0, 'F', '');
 INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info) VALUES (20, 'Watauga Global Community', 'WG', 50, 0, 'F', '<p>Watauga Global Community is where classes meet general education requirements in interdisciplinary team-taught (multiple professor) core classes that blend fact, fiction, culture, philosophy, motion, art, music, myth, and religion.</p><p><strong>This community requires a separate application in addition to marking it as a housing preference.  For more information, go to the <a href="http://wataugaglobal.appstate.edu/pagesmith/4" target="_blank" style="color: blue;">Watauga Global Community Website</a>.</strong></p>');
 INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info) VALUES (21, 'Heltzer Honors Program', 'HN', 50, 0, 'F', '<p><strong>This community requires a separate application in addition to marking it as a housing preference.</strong></p><p>To apply for the Heltzer Honors Program, log into <a href="https://firstconnections.appstate.edu/ugaweb/" target="_blank" style="color: blue;">First Connections</a> and complete the on-line application accordingly.</p><p>For more information, go to the <a href="http://www.honors.appstate.edu/" target="_blank" style="color: blue;"> Heltzer Honors Program website</a>.</p>');

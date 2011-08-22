@@ -39,11 +39,25 @@ class ReportDetailView extends View {
         
         $tpl['RESULTS_PAGER'] = $resultsPager->get();
         
-        if($this->reportCtrl->allowSyncExec()){
+        if($this->reportCtrl instanceof iSyncReport){
             $runNowCmd = $this->reportCtrl->getSyncExecCmd();
             $tpl['RUN_NOW'] = $runNowCmd->getLink('Run now');
         }else{
             $tpl['RUN_NOW'] = '(run now not allowed)';
+        }
+        
+        if($this->reportCtrl instanceof iAsyncReport){
+            $bgSetupView = $this->reportCtrl->getAsyncSetupView();
+            $tpl['RUN_BACKGROUND'] = $bgSetupView->show();
+        }else{
+            $tpl['RUN_BACKGROUND'] = '(background execution not allowed)';
+        }
+        
+        if($this->reportCtrl instanceof iSchedReport){
+            $runSchedCmd = $this->reportCtrl->getSchedExecCmd();
+            $tpl['RUN_SCHEDULE'] = $runSchedCmd->getLink('Schedule');
+        }else{
+            $tpl['RUN_SCHEDULE'] = '(scheduled exection not allowed)';
         }
         
         return PHPWS_Template::process($tpl, 'hms', 'admin/reports/reportDetailView.tpl');

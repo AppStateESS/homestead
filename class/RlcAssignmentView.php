@@ -99,7 +99,7 @@ class RlcAssignmentView extends View {
     public function getDropDown()
     {
         javascript('jquery');
-        javascript('/modules/hms/page_refresh');
+        javascript('modules/hms/page_refresh');
         
         $communities = HMS_Learning_Community::getRlcsById();
         
