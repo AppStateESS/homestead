@@ -1,203 +1,273 @@
-.border-1px {
-	border: 1px solid #000;
+/* Nice rounded-corner boxes */
+.box {
+  border: 1px solid #D6D6D6;
+  border-radius: 10px;
+  margin-top: 2em;
 }
 
-.rounded {
-	border-radius:3px;
+.box .boxheader {
+  background: #EEE;
+  border-radius: inherit;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
 }
 
-.drop-shadow {
-	box-shadow: 1px 1px 4px #CFCFCF;
+.boxheader h2 {
+  margin: 0;
+  border-bottom: solid 1px #D6D6D6;
 }
 
-.bottom-margin {
-	margin-bottom: 10px;
+/* Text Styles */
+.disabledText {
+  color: #CCC;
+  font-style: italic;
 }
 
-.hms-main-admin-menu-block{
-	border-radius:3px;
-	box-shadow: 1px 1px 4px #CFCFCF;
-	background:#FAFAFA;
-	width:200px;
-	margin-bottom:7px;
+/* Row Highlighting */
+.row-bg-1 {
+  background: #FFF;
+}
+
+.row-bg-2 {
+  background: #F5F5F5;
+}
+
+/* A basic 2-col layout */
+#twocol-main {
+  float: left;
+  width: 450px;
+}
+
+#twocol-side {
+  float: right;
+  width: 220px;
+}
+
+#twocol-side .box h2 {
+  font-size: 1.25em;
+}
+
+/* 22px Icons */
+.rrze-awaiting-22 {
+  background: url('../../img/rrze/22x22/status/awaiting.png') no-repeat
+    8px 50%;
+  padding-left: 36px;
+  line-height: 32px;
+}
+
+.rrze-awaiting-plus-22 {
+  background: url('../../img/rrze/22x22/status/awaiting-plus.png')
+    no-repeat 8px 50%;
+  padding-left: 36px;
+  line-height: 32px;
+}
+
+.rrze-report-run-22 {
+  background: url('../../img/rrze/22x22/emblems/report-run.png') no-repeat
+    8px 50%;
+  padding-left: 36px;
+  line-height: 32px;
+}
+
+/* 32px Icons */
+.rrze-report-32 {
+  background: url('../../img/rrze/32x32/emblems/report.png') no-repeat 8px
+    50%;
+  padding-left: 46px;
+  line-height: 46px;
+}
+
+.rrze-download-32 {
+  background: url('../../img/rrze/32x32/actions/download.png') no-repeat
+    8px 50%;
+  padding-left: 46px;
+  line-height: 46px;
+}
+
+/* OLD STUFF */
+.hms-main-admin-menu-block {
+  border-radius: 5px;
+  box-shadow: 1px 1px 4px #CFCFCF;
+  background: #FAFAFA;
+  width: 200px;
+  margin-bottom: 7px;
 }
 
 .hms-main-admin-menu-block legend img {
-	vertical-align:middle;
-	width:25px;
-	height:25px;
-	padding-right:4px;
+  vertical-align: middle;
+  width: 25px;
+  height: 25px;
+  padding-right: 4px;
 }
 
 .hms-main-admin-menu-block li {
-	margin-left:7px;
-} 
+  margin-left: 7px;
+}
 
 .note {
-    color:black;
-    background:#ECEFF5;
-    padding:5px;
+  color: black;
+  background: #ECEFF5;
+  padding: 5px;
 }
 
 .unassigned_link a {
-    color:#0A0;
+  color: #0A0;
 }
 
 .rooms_list {
-    padding-left:10px;
+  padding-left: 10px;
 }
 
 .hms table {
-    border-collapse:separate;
-    border-spacing:2px;
+  border-collapse: separate;
+  border-spacing: 2px;
 }
 
 .hms td {
-    padding:3px;
+  padding: 3px;
 }
 
 .hms th {
-    padding:3px;
+  padding: 3px;
 }
 
 #hms-term {
-    float: left;
-    font-weight: bold;
+  float: left;
+  font-weight: bold;
 }
 
 #hms-user {
-    float: right;
+  float: right;
 }
 
 #hms-main {
-    clear: both;
-    padding: 1em 0;
+  clear: both;
+  padding: 1em 0;
 }
 
 #hms-guest-message {
-    margin-left: 5em;
+  margin-left: 5em;
 }
 
 #hms-guest-main {
-    display: block;
-    padding: 0 5em;
+  display: block;
+  padding: 0 5em;
 }
 
 #hms-user-main {
-	margin-left: 210px;
+  margin-left: 210px;
 }
 
 #hms-sidebar {
-	width: 200px;
-	float: left;
+  width: 200px;
+  float: left;
 }
 
 .hms-notification {
-	margin: 1em 0;
-	padding: 0.25em;
+  margin: 1em 0;
+  padding: 0.25em;
 }
 
 img.roommate_request_icon {
-    border: transparent;
-    background-color: transparent;
-    float:right;
-    width: 20px;
-    height: 20px;
+  border: transparent;
+  background-color: transparent;
+  float: right;
+  width: 20px;
+  height: 20px;
 }
 
 .error {
-    border: solid 1px #FF0000;
-    background: #FFCCCC;
+  border: solid 1px #FF0000;
+  background: #FFCCCC;
 }
 
 .warning {
-	border: solid 1px #FFFF00;
-	background: #FFFFCC;
+  border: solid 1px #FFFF00;
+  background: #FFFFCC;
 }
 
 .success {
-	border: solid 1px #00FF00;
-	background: #CCFFCC;
+  border: solid 1px #00FF00;
+  background: #CCFFCC;
 }
 
 .unknown {
-	border: solid 1px #0000FF;
-	background: #CCCCFF;
+  border: solid 1px #0000FF;
+  background: #CCCCFF;
 }
 
 .hms-sidebox {
-    border: 1px solid #000;
-    border-radius: 4px;
-    padding: 5px;
-    margin-bottom: 5px;
+  border: 1px solid #000;
+  border-radius: 5px;
+  padding: 5px;
+  margin-bottom: 5px;
 }
 
 .hms-sidebox li.active {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 .special-needs-text {
-	background:#F3F3F3;
-	margin-left: 35px;
-	margin-top: 15px;
-	padding: 4px;
+  background: #F3F3F3;
+  margin-left: 35px;
+  margin-top: 15px;
+  padding: 4px;
 }
 
 .hms-application-submit-button {
-	font-size: 1.3em;
-	padding: 7px;
-	-moz-box-shadow: 1px 1px 2px #000;
-    -webkit-box-shadow: 1px 1px 2px #000;
-    box-shadow: 1px 1px 2px #000;
+  font-size: 1.3em;
+  padding: 7px;
+  -moz-box-shadow: 1px 1px 2px #000;
+  -webkit-box-shadow: 1px 1px 2px #000;
+  box-shadow: 1px 1px 2px #000;
 }
 
 .hms-student-menu-term-block {
-	margin-left: 20px;
+  margin-left: 20px;
 }
 
 .overlay {
-    background: white;
-    border: solid thin black;
+  background: white;
+  border: solid thin black;
 }
 
 .hms-student-menu-term-block .status-icon {
-    float:left;
-    margin-right: 5px;
-    width: 20px;
-    height: 20px;
+  float: left;
+  margin-right: 5px;
+  width: 20px;
+  height: 20px;
 }
 
 .hms-student-menu-term-block h3 {
-    margin-bottom: 3px;
+  margin-bottom: 3px;
 }
 
-.hms-student-menu-term-block h3 .locked{
-    margin-bottom: 3px;
-    color: #888;
+.hms-student-menu-term-block h3 .locked {
+  margin-bottom: 3px;
+  color: #888;
 }
 
 .hms-student-menu-term-block .availability-dates {
-	margin-top: 0px;
-    font-style: italic;
-    font-weight: lighter;
-    font-size: smaller;
-    color: #696969;
+  margin-top: 0px;
+  font-style: italic;
+  font-weight: lighter;
+  font-size: smaller;
+  color: #696969;
 }
 
 .hms-student-menu-term-block .block-content {
-    margin-left: 25px;
+  margin-left: 25px;
 }
 
-
 li.expanded.container {
-    list-style-image: url("../../img/arrow_down.png");
+  list-style-image: url("../../img/arrow_down.png");
 }
 
 li.collapsed.container {
-    list-style-image: url("../../img/arrow_right.png");
+  list-style-image: url("../../img/arrow_right.png");
 }
 
 li.noexpand {
-    list-style-image: none;
-    list-style: none;
+  list-style-image: none;
+  list-style: none;
 }

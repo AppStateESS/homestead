@@ -201,6 +201,31 @@ abstract class Report {
         return $tags;
     }
     
+
+    /**
+     * Returns the DBPager tags used for showing scheduled execution records
+     * on the ReportDetailView.
+     * 
+     * @return Array DBPager tags for this report
+     */
+    public function schedulePagerRowTags()
+    {
+        $tags = array();
+        $tags['SCHEDULE_DATE'] = HMS_Util::get_long_date_time($this->getScheduledExecTime());
+        
+        
+        $actions = array();
+        
+        $cancelCmd = CommandFactory::getCommand('CancelReport');
+        $cancelCmd->setReportId($this->getId());
+        
+        $actions[] = $cancelCmd->getLink('cancel');
+        
+        $tags['ACTIONS'] = implode(' ', $actions);
+        
+        return $tags;
+    }
+    
     /**
      * Returns the Command object to use for the default viewing method
      * for the generated output, setup with the appropriate params for 

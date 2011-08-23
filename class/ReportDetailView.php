@@ -1,6 +1,7 @@
 <?php
 
 PHPWS_Core::initModClass('hms', 'ReportHistoryPager.php');
+PHPWS_Core::initModClass('hms', 'ReportSchedulePager.php');
 
 /**
  * ReportDetailView
@@ -36,28 +37,30 @@ class ReportDetailView extends View {
         $tpl['NAME'] = $this->reportCtrl->getFriendlyName();
         
         $resultsPager = new ReportHistoryPager($this->reportCtrl);
-        
         $tpl['RESULTS_PAGER'] = $resultsPager->get();
+        
+        $schedulePager = new ReportSchedulePager($this->reportCtrl);
+        $tpl['SCHEDULE_PAGER'] = $schedulePager->get();
         
         if($this->reportCtrl instanceof iSyncReport){
             $runNowCmd = $this->reportCtrl->getSyncExecCmd();
             $tpl['RUN_NOW'] = $runNowCmd->getLink('Run now');
         }else{
-            $tpl['RUN_NOW'] = '(run now not allowed)';
+            $tpl['RUN_NOW_DISABLED'] = ""; // dummy tag
         }
         
         if($this->reportCtrl instanceof iAsyncReport){
             $bgSetupView = $this->reportCtrl->getAsyncSetupView();
             $tpl['RUN_BACKGROUND'] = $bgSetupView->show();
         }else{
-            $tpl['RUN_BACKGROUND'] = '(background execution not allowed)';
+            $tpl['RUN_BACKGROUND_DISABLED'] = ""; // dummy tag
         }
         
         if($this->reportCtrl instanceof iSchedReport){
             $runSchedCmd = $this->reportCtrl->getSchedExecCmd();
             $tpl['RUN_SCHEDULE'] = $runSchedCmd->getLink('Schedule');
         }else{
-            $tpl['RUN_SCHEDULE'] = '(scheduled exection not allowed)';
+            $tpl['RUN_SCHEDULE_DISABLED'] = ""; // dummy tag
         }
         
         return PHPWS_Template::process($tpl, 'hms', 'admin/reports/reportDetailView.tpl');
