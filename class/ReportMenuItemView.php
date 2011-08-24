@@ -15,18 +15,17 @@ class ReportMenuItemView extends View {
     {
         $tpl = array();
 
-        $tpl['NAME'] = $this->report->getFriendlyName();
+        $detailsCmd = CommandFactory::getCommand('ShowReportDetail');
+        $detailsCmd->setReportClass($this->reportClassName);
+        
+        $tpl['NAME'] = $detailsCmd->getLink($this->report->getFriendlyName());
         
         if(is_null($this->report->getId())){
             $tpl['LAST_EXEC'] = 'never';
         }else{
             $viewCmd = $this->report->getDefaultOutputViewCmd();
-            $tpl['LAST_EXEC']    = $viewCmd->getLink(HMS_Util::relativeTime($this->report->getCompletedTimestamp()));
+            $tpl['LAST_EXEC']    = $viewCmd->getLink($this->report->getRelativeLastRun());
         }
-        
-        $detailsCmd = CommandFactory::getCommand('ShowReportDetail');
-        $detailsCmd->setReportClass($this->reportClassName);
-        $tpl['DETAILS_LINK'] = $detailsCmd->getLink('details');
         
         return PHPWS_Template::process($tpl, 'hms', 'admin/reports/reportMenuItem.tpl');
     }

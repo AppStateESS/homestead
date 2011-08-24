@@ -1,9 +1,18 @@
 <h1 class="rrze-report-32">{NAME}</h1>
 
-<div>Report details go here....</div>
+<div class="rounded-box">
+  <div class="boxheader emptyheader">&nbsp;</div>
+  <p>Report details go here....</p>
+  <!-- BEGIN last-run-relative -->
+  <p>Last executed {LAST_RUN_RELATIVE} by <span class="italic">{LAST_RUN_USER}</span>.</p>
+  <!-- END last-run-relative -->
+  <!-- BEGIN never-run -->{NEVER_RUN}
+  <p>This report has never been executed.</p>
+  <!-- END never-run -->
+</div>
 
 <div id="twocol-main">
-  <div class="box">
+  <div class="rounded-box">
     <div class="boxheader">
       <h2 class="rrze-download-32">Archived Results</h2>
     </div>
@@ -12,7 +21,7 @@
 </div>
 
 <div id="twocol-side">
-  <div class="box">
+  <div class="rounded-box">
     <div class="boxheader">
       <h2 class="rrze-report-run-22">Schedule & Execute</h2>
     </div>
@@ -43,7 +52,7 @@
     </ul>
   </div>
 
-  <div class="box">
+  <div class="rounded-box">
     <div class="boxheader">
       <h2 class="rrze-awaiting-22">Pending</h2>
     </div>

@@ -26,7 +26,7 @@ class ReportSchedulePager extends DBPager {
         $this->addWhere('report', $this->reportCtrl->getReportClassName());
         $this->addWhere('completed_timestamp', null, 'IS');
         
-        $this->setOrder('completed_timestamp', 'DESC', true);
+        $this->setOrder('scheduled_exec_time', 'ASC', true);
         
         $this->setModule('hms');
         $this->setTemplate('admin/reports/reportSchedulePager.tpl');

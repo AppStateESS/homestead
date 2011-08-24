@@ -178,7 +178,7 @@ class HMS_Util{
             $term = "day";
         }
 
-        if ($diff == 1){
+        if ($diff > 1){
             $term .= "s";
         }
 

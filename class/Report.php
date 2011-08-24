@@ -163,6 +163,16 @@ abstract class Report {
      */
     public abstract function execute();
 
+    
+    public function getRelativeLastRun()
+    {
+        return HMS_Util::relativeTime($this->getCompletedTimestamp());
+    }
+    
+    public function getLastRunUser(){
+        return $this->getCreatedBy();
+    }
+    
     /**
      * Returns the DBPager tags used for showing each record on the ReportDetailView.
      * 

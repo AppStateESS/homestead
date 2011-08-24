@@ -14,6 +14,7 @@ PHPWS_Core::initModClass('hms', 'ReportSchedulePager.php');
 class ReportDetailView extends View {
     
     private $reportCtrl; // ReportController for the report class requested
+    private $report;
     
     /**
      * Constructor
@@ -23,6 +24,9 @@ class ReportDetailView extends View {
     public function __construct(ReportController $reportCtrl)
     {
         $this->reportCtrl = $reportCtrl;
+        
+        $this->reportCtrl->loadLastExec();
+        $this->report = $reportCtrl->getReport();
     }
     
     /**
@@ -35,6 +39,14 @@ class ReportDetailView extends View {
         $tpl = array();
         
         $tpl['NAME'] = $this->reportCtrl->getFriendlyName();
+        
+        if(is_null($this->report->getId())){
+            $tpl['NEVER_RUN'] = ""; // dummy tag
+        }else{
+            $viewCmd = $this->report->getDefaultOutputViewCmd();
+            $tpl['LAST_RUN_RELATIVE'] = $viewCmd->getLink($this->report->getRelativeLastRun());
+            $tpl['LAST_RUN_USER'] = $this->report->getLastRunUser();
+        }
         
         $resultsPager = new ReportHistoryPager($this->reportCtrl);
         $tpl['RESULTS_PAGER'] = $resultsPager->get();
