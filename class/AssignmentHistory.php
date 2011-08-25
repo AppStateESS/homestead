@@ -77,11 +77,8 @@ class AssignmentHistory extends HMS_Item {
 	 * @param int $term The term to set in the object [optional]
 	 * @return none 
 	 */
-	public function setTerm($term=null) {
-		if ( !is_null($term) )
-			$this->term = $term;
-		else
-			$this->term = Term::getCurrentTerm();
+	public function setTerm($term) {
+        $this->term = $term;
 	}
 	
 	/**
@@ -198,10 +195,11 @@ class AssignmentHistory extends HMS_Item {
 	 * @param String $reason A defined reason for assignment if not wishing to use one in assignment (see definitions)
 	 * @return boolean true if success, false if failure
 	 */
-	public static function makeAssignmentHistory($assignment=null, $reason=null) {
-		if ( is_null($assignment) ) 
-			return false;
-		
+	public static function makeAssignmentHistory(HMS_Assignment $assignment, $reason=null) {
+		if(is_null($assignment)) {
+            throw new InvalidArgumentException('Missing HMS_Assignment object.');
+        }
+			
 		if ( is_null($reason) )
 			$reason = $assignment->reason;
 			

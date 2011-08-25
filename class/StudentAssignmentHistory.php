@@ -46,8 +46,8 @@ class StudentAssignmentHistory extends ArrayObject{
     	$db = new PHPWS_DB('hms_assignment_history');
     	$db->addWhere('banner_id', $bannerID);
         $db->loadClass('hms', 'AssignmentHistory.php');
-		$db->addOrder('term', 'DESC');
-        $db->addOrder('assigned_on', 'DESC');
+		//$db->addOrder('term', 'DESC');
+        $db->addOrder(array('term DESC', 'assigned_on DESC'));
         $result = $db->getObjects('AssignmentHistory');
         
         if(PHPWS_Error::logIfError($result)){
