@@ -14,23 +14,84 @@ class ReportFactory {
 
     public static $dir = 'report';
 
-    public static function getControllerInstance($name)
+    /**
+     * Returns the class name for the controller based on the report's class name.
+     * 
+     * @param String $reportName Class name of a report.
+     * @return String Class name of the given report's controller class.
+     */
+    private static function getControllerClassName($reportName)
     {
         $dir = PHPWS_SOURCE_DIR . 'mod/hms/class/' . self::$dir;
-        $className = $name . 'Controller';
-        PHPWS_Core::initModClass('hms', self::$dir . "/$name/$className.php");
-    
-        return new $className;
+        $className = $reportName . 'Controller';
+        
+        return $className;
     }
     
-    //TODO (if necessary?)
+    /**
+     * Loads the controller class for a given report.
+     * 
+     * @param String $reportName
+     * @param String $controllerName
+     */
+    private static function loadControllerClass($reportName, $controllerName)
+    {
+        PHPWS_Core::initModClass('hms', self::$dir . "/$reportName/$controllerName.php");
+    }
+    
+    /**
+     * Returns an instance of the corresponding ReportController given a report class name.
+     * 
+     * @param String $reportName Report class name.
+     * @return ReportContoller A ReportController object of the sub-class for the given report class.
+     */
+    public static function getControllerInstance($reportName)
+    {
+        $ctrlClassName = self::getControllerClassName($reportName);
+        self::loadControllerClass($reportName, $ctrlClassName);
+        
+        return new $ctrlClassName;
+    }
+    
+    /**
+     * Loads the proper ReportController sub-class, creates an instance
+     * of that controller class, and initializes the controller with the given report.
+     * 
+     * @param Report $report
+     * @return ReportController An instance of the proper ReportController sub-class, initialized with the given report object.
+     */
     public static function getControllerInstanceByReport(Report $report)
     {
-        // Look at the report's class field from the db
+        $ctrlClassName = self::getControllerClassName($report->getClass());
+        self::loadControllerClass($report->getClass(), $ctrlClassName);
         
-        // Instanciate the the proper controller and pass in the report
+        return new $ctrlClassName($report);
     }
     
+    /**
+     * Returns a ReportController object initialized with the Report object
+     * identified by the given id.
+     * 
+     * @param integer $reportId
+     * @return ReportController
+     */
+    public static function getControllerById($reportId)
+    {
+        // Get the report object by ID
+        $report = self::getReportById($reportId);
+        
+        // Instanciate the the proper controller
+        return self::getControllerInstanceByReport($report);
+    }
+    
+    /**
+     * Returns the Report object identified by the given id.
+     * 
+     * @param integer $reportId
+     * @return Report
+     * @throws DatabaseExecption
+     * @throws InvalidArgumentException
+     */
     public static function getReportById($reportId)
     {
         // Get the class of the requested report
@@ -54,14 +115,21 @@ class ReportFactory {
         return $report;
     }
     
+    /**
+     * Loads the class file for the given report class name.
+     * 
+     * @param String $name Report class name.
+     */
     public static function loadReportClass($name)
     {
         $dir = PHPWS_SOURCE_DIR . 'mod/hms/class/' . ReportFactory::$dir;
         PHPWS_Core::initModClass('hms', ReportFactory::$dir . "/$name/$name.php");
     }
     
-    /*
+    /**
      * Returns an array of Report objects
+     * 
+     * @return array An array of all available ReportController objects.
      */
     public static function getAllReportControllers()
     {

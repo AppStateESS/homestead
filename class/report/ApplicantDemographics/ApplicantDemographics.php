@@ -39,6 +39,10 @@ class ApplicantDemographics extends Report {
 
     public function execute()
     {
+        if(!isset($this->term) || is_null($this->term)){
+            throw new InvalidArgumentException('Missing term.');
+        }
+        
         $sem = Term::getTermSem($this->term);
 
         switch($sem){

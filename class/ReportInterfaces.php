@@ -103,11 +103,6 @@ interface iSyncReport {
  * @package HMS
  */
 interface iAsyncReport {
-    /**
-    * @see Command
-    * @return Command The command to run the implementing report synchronously.
-    */
-    public function getAsyncExecCmd();
     
     /**
      * @see ReportSetupView
@@ -125,7 +120,15 @@ interface iAsyncReport {
  * @package HMS
  */
 interface iSchedReport {
-
+    /**
+     * Returns the ReportSetupView for settings up this report at a scheduled time.
+     * The default implemntation just calls the getAsyncSetupView in iAsyncReport.
+     * 
+     * @see ReportSetupView
+     * @see iAsyncReort
+     * @return ReportSetupView The ReportSEtupView to use for setting up this report.
+     */
+    public function getSchedSetupView();
 }
 
 ?>

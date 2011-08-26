@@ -123,7 +123,25 @@ abstract class ReportController {
         //TODO, and make the details view use this
     }
 
-    public function getAsyncSetupView()
+    /**
+     * Returns the ReportSetupView to show the UI for running
+     * this report in the background.
+     * 
+     * The default implementation (for iSyncReport) expects a class named
+     * '<reportName>SetupView.php to be in the report's class
+     * directory. This functionality can be overridden by each report
+     * to return a different object, but it must return an object of type
+     * ReportSetupView
+     * 
+     * The optional $datePicker parameter (false by default) specifies
+     * whether or not the interface should provide a date picker for the user
+     * (because this interface shares so much with the scheduled report interface). 
+     * 
+     * @see iSyncReport
+     * @param bool $datePicker Whether or not the interface should show a date picker
+     * @return ReportSetupView The ReportSetupView responsible for showing the UI to run this report.
+     */
+    public function getAsyncSetupView($datePicker = false)
     {
         PHPWS_Core::initModClass('hms', 'ReportSetupView.php');
         
@@ -131,12 +149,22 @@ abstract class ReportController {
         $className = $name . "SetupView";
         PHPWS_Core::initModClass('hms', "report/$name/$className.php");
         
-        return new $className($this->report);
+        return new $className($this->report, $datePicker);
     }
 
+    /**
+     * Returns the ReportSetupView to show the UI for scheduling
+     * the report.
+     * 
+     * Default implementation just calls the getAsyncSetupView
+     * method with the datePicker = true parameter.
+     * 
+     * @see getAsyncSetupView
+     * @return ReportSetupView - ReportSetupView for scheudling this report.
+     */
     public function getSchedSetupView()
     {
-        //TODO
+        return $this->getAsyncSetupView(true);
     }
 
     /**
@@ -157,29 +185,18 @@ abstract class ReportController {
     }
 
     /**
-     * Default implementation for the iAsyncReport interface.
-     * Uses the ExecReportAsync command. This can be overridden
-     * in a sub-class to provide a custom exectuion command. It
-     * must return a valid Command object to run the report
-     * Asynchronously.
-     *
-     * @see iAsyncReport
-     * @return Command A Command object to run this report asynchronously.
+     * Sets the parameters for this report. Must be implemented
+     * by each controller. This method must take the values
+     * in the passed-in array and assign them to the proper
+     * member variables withthin the report.
+     * 
+     * @param array $params
      */
-    public function getAsyncExecCmd()
-    {
-        $cmd = CommandFactory::getCommand('ExecReportSync');
-        $cmd->setReportClass($this->getReportClassName());
-
-        return $cmd;
-    }
-
-    public function getSchedExecCmd()
-    {
-        return $this->getAsyncExecCmd();
-    }
-
     public abstract function setParams(Array $params);
+    
+    /**
+     * @return Array An Array of key=>value parameters for this report
+     */
     public abstract function getParams();
 
     /**
@@ -212,16 +229,12 @@ abstract class ReportController {
     {
         // Set the start time
         $this->report->setBeganTimestamp(time());
+        
+        // Save that timestamp
+        $this->report->save();
 
         // Execute the report
         $this->report->execute();
-
-        // Set the completion time (Maybe move this to the end of this function?)
-        $this->report->setCompletedTimestamp(time());
-
-        // Save the report so we're sure to save the timestamps
-        // Might remove this if report generation is stable
-        $this->report->save();
 
         /*
          * Generate the report's full pathname (with a file extension),
@@ -253,6 +266,12 @@ abstract class ReportController {
             $this->csvView = $this->getCsvView();
             $this->saveCsvOutput($this->csvView);
         }
+        
+        // Set the completion time
+        $this->report->setCompletedTimestamp(time());
+        
+        // Save the report to save the completed timestamp
+        $this->report->save();
     }
 
     /**
@@ -442,6 +461,11 @@ abstract class ReportController {
         return $this->report;
     }
     
+    /**
+     * Saves the parameters from this report to the database.
+     * 
+     * @throws DatabaseException
+     */
     public function saveParams()
     {
         $params = $this->getParams();
@@ -466,9 +490,35 @@ abstract class ReportController {
         }
     }
     
+    /**
+     * Loads the parameters for this report from the database.
+     * 
+     * @throws DatabaseException
+     */
     public function loadParams()
     {
-        //TODO
+        $db = new PHPWS_DB('hms_report_param');
+        $db->addWhere('report_id', $this->report->getId());
+        
+        $results = $db->select();
+        
+        if(PHPWS_Error::logIfError($results)){
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException($results->toString());
+        }
+
+        if(is_null($results) || empty($results)){
+            echo 'empty params!';
+            return;
+        }
+        
+        $params = array();
+        
+        foreach($results as $result){
+            $params[$result['param_name']] = $result['param_value'];
+        }
+        
+        $this->setParams($params);
     }
 }
 
