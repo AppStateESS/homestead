@@ -35,7 +35,26 @@ class ScheduleReportCommand extends Command {
         if(isset($runNow) && $runNow == "true"){
             $time = time();
         }else{
-            $time = 0; //TODO mktime
+            $timePicker = $context->get('timePicker');
+            $timeParts = explode(" ", $timePicker);
+            $meridian = $timeParts[1];
+            $timeParts = explode(":", $timeParts[0]);
+            
+            $hour = $timeParts[0];
+            
+            if($meridian == "PM"){
+                $hour += 12;
+            }
+            
+            $min  = $timeParts[1];
+            
+            $datePicker = $context->get('datePicker');
+            $dateParts = explode("/", $datePicker);
+            $month = $dateParts[0];
+            $day   = $dateParts[1];
+            $year  = $dateParts[2];
+            
+            $time = mktime($hour, $min, 0, $month, $day, $year);
         }
         
         // Set the exec time

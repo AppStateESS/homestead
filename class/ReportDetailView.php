@@ -69,8 +69,8 @@ class ReportDetailView extends View {
         }
         
         if($this->reportCtrl instanceof iSchedReport){
-            $runSchedCmd = $this->reportCtrl->getSchedExecCmd();
-            $tpl['RUN_SCHEDULE'] = $runSchedCmd->getLink('Schedule');
+            $schedSetupView = $this->reportCtrl->getSchedSetupView();
+            $tpl['RUN_SCHEDULE'] = $schedSetupView->show();
         }else{
             $tpl['RUN_SCHEDULE_DISABLED'] = ""; // dummy tag
         }

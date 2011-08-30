@@ -128,20 +128,21 @@ abstract class ReportController {
      * this report in the background.
      * 
      * The default implementation (for iSyncReport) expects a class named
-     * '<reportName>SetupView.php to be in the report's class
-     * directory. This functionality can be overridden by each report
-     * to return a different object, but it must return an object of type
-     * ReportSetupView
+     * '<reportName>SetupView.php, which extends ReportSetupView to be in
+     * the report's class directory. This functionality can be overridden
+     * by each report to return a different object, but it must return an
+     * object of type ReportSetupView.
      * 
      * The optional $datePicker parameter (false by default) specifies
      * whether or not the interface should provide a date picker for the user
      * (because this interface shares so much with the scheduled report interface). 
      * 
      * @see iSyncReport
+     * @see ReportSetupView
      * @param bool $datePicker Whether or not the interface should show a date picker
      * @return ReportSetupView The ReportSetupView responsible for showing the UI to run this report.
      */
-    public function getAsyncSetupView($datePicker = false)
+    public function getAsyncSetupView()
     {
         PHPWS_Core::initModClass('hms', 'ReportSetupView.php');
         
@@ -149,7 +150,13 @@ abstract class ReportController {
         $className = $name . "SetupView";
         PHPWS_Core::initModClass('hms', "report/$name/$className.php");
         
-        return new $className($this->report, $datePicker);
+        $view = new $className($this->report);
+        $view->setLinkText('Run in background');
+        $view->setDialogId('reportBgDialog');
+        $view->setRunNow(true);
+        $view->setFormId('report-setup-form-bg');
+        
+        return $view;
     }
 
     /**
@@ -164,7 +171,13 @@ abstract class ReportController {
      */
     public function getSchedSetupView()
     {
-        return $this->getAsyncSetupView(true);
+        $view = $this->getAsyncSetupView();
+        $view->setLinkText('Schedule run');
+        $view->setDialogId('reportSchedDialog');
+        $view->useDatePicker(true);
+        $view->setRunNow(false);
+        $view->setFormId('report-setup-form-sched');
+        return $view;
     }
 
     /**

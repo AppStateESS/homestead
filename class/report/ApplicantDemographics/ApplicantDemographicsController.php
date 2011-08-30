@@ -1,6 +1,6 @@
 <?php
 
-class ApplicantDemographicsController extends ReportController implements iSyncReport, iAsyncReport, iHtmlReportView, iPdfReportView {
+class ApplicantDemographicsController extends ReportController implements iSyncReport, iAsyncReport, iSchedReport, iHtmlReportView, iPdfReportView {
 
     public function setParams(Array $params)
     {
