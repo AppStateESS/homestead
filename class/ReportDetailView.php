@@ -40,6 +40,13 @@ class ReportDetailView extends View {
         
         $tpl['NAME'] = $this->reportCtrl->getFriendlyName();
         
+        $description = $this->reportCtrl->getDescription();
+        if(!is_null($description)){
+            $tpl['REPORT_DESC'] = $description;
+        }else{
+            $tpl['NO_DESC'] = ""; // dummy tag
+        }
+        
         if(is_null($this->report->getId())){
             $tpl['NEVER_RUN'] = ""; // dummy tag
         }else{

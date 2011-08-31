@@ -2,7 +2,13 @@
 
 <div class="rounded-box">
   <div class="boxheader emptyheader">&nbsp;</div>
-  <p>Report details go here....</p>
+  <!-- BEGIN reportDesc -->
+  <p>{REPORT_DESC}</p>
+  <!-- END reportDesc -->
+  <!-- BEGIN noDesc -->{NO_DESC}
+  <p class="disabledText">No description available.</p>
+  <!-- END noDesc -->
+  
   <!-- BEGIN last-run-relative -->
   <p>Last executed {LAST_RUN_RELATIVE} by <span class="italic">{LAST_RUN_USER}</span>.</p>
   <!-- END last-run-relative -->

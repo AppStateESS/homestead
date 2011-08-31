@@ -1,3 +1,0 @@
-{START_FORM}
-Term: {TERM}
-{END_FORM}

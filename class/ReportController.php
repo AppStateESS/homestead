@@ -116,6 +116,24 @@ abstract class ReportController {
     }
 
     /**
+     * Returns a string of HTML that describes the report (what it does, etc).
+     * 
+     * Default implementation looks for a file in hms/templates/admin/reports/<reportName>Desc.tpl
+     * 
+     * @return String String of HTML for report's description, or null if the default file wasn't found.
+     */
+    public function getDescription()
+    {
+        $fileName = PHPWS_SOURCE_DIR . 'mod/hms/templates/admin/reports/' . $this->getReportClassName() . 'Desc.tpl';
+        
+        if(file_exists($fileName)){
+            return file_get_contents($fileName);
+        }else{
+            return null;
+        }
+    }
+    
+    /**
      * 
      */
     public function getSyncSetupView()

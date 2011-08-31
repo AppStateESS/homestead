@@ -108,11 +108,18 @@
 
 /* OLD STUFF */
 .hms-main-admin-menu-block {
-  border-radius: 5px;
-  box-shadow: 1px 1px 4px #CFCFCF;
+  border: 1px solid #D6D6D6;
+  border-radius: 10px;
+  box-shadow: 1px 1px 1px #F0F0F0;
   background: #FAFAFA;
   width: 200px;
   margin-bottom: 7px;
+}
+
+.hms-main-admin-menu-block legend {
+  color:#000;
+  font-size:110%;
+  /*font-variant:small-caps;*/
 }
 
 .hms-main-admin-menu-block legend img {
