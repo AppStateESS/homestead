@@ -106,6 +106,28 @@
   line-height: 46px;
 }
 
+/******************************
+ * Table styles for reporting *
+ ******************************/
+.reportOutputTable  {
+  border: 1px solid;
+  border-collapse: collapse;
+  border-spacing: 0px;
+}
+
+.reportOutputTable th{
+  border-radius: 0px;
+  border:1px solid;
+}
+
+.reportOutputTable tr{
+  border:1px solid;
+}
+
+.reportOutputTable td{
+  border:1px solid;
+}
+
 /* OLD STUFF */
 .hms-main-admin-menu-block {
   border: 1px solid #D6D6D6;

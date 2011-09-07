@@ -27,7 +27,8 @@ class ApplicantDemographics extends Report {
     private $typeTotals;
     private $total;
 
-    public function __construct($id = 0){
+    public function __construct($id = 0)
+    {
         parent::__construct($id);
         
         $this->applicationTotals    = array();
@@ -104,6 +105,10 @@ class ApplicantDemographics extends Report {
 
         $this->total = $this->femaleSum + $this->maleSum;
     }
+    
+    /****************************
+     * Accessor/Mutator Methods *  
+     ****************************/
     
     public function setTerm($term){
         $this->term = $term;

@@ -1,6 +1,6 @@
 <?php
 
-class ApplicantDemographicsHTMLView extends ReportHtmlView {
+class ApplicantDemographicsHtmlView extends ReportHtmlView {
 
     protected function render()
     {
