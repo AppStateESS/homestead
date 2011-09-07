@@ -11,8 +11,6 @@ Executed on: {EXEC_DATE} by {EXEC_USER}<br />
         <th>Freshmen</th>
         <th>Transfer</th>
         <th>Continuing</th>
-        <th>Re-admit</th>
-        <th>Returning</th>
         <th>Non-degree</th>
         <th>Withdrawn</th>
         <th>Totals</th>
