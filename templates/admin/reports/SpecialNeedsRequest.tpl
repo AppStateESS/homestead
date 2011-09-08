@@ -23,7 +23,7 @@ Executed on: {EXEC_DATE} by {EXEC_USER}<br />
                 <td width="200px">{name}</td>
                 <td width="100px">{username}</td>
                 <td width="80px" style="text-align : center">{class}</td>
-                <td width="80px" style="text-align : center">{type}</td>
+                <td width="80px" style="text-align : center">{student_type}</td>
             </tr>
 <!-- END f -->
         </table>
@@ -40,7 +40,7 @@ Executed on: {EXEC_DATE} by {EXEC_USER}<br />
                 <td width="200px">{name}</td>
                 <td width="100px">{username}</td>
                 <td width="80px" style="text-align : center">{class}</td>
-                <td width="80px" style="text-align : center">{type}</td>
+                <td width="80px" style="text-align : center">{student_type}</td>
             </tr>
 <!-- END s -->
         </table>
@@ -57,7 +57,7 @@ Executed on: {EXEC_DATE} by {EXEC_USER}<br />
                 <td width="200px">{name}</td>
                 <td width="100px">{username}</td>
                 <td width="80px" style="text-align : center">{class}</td>
-                <td width="80px" style="text-align : center">{type}</td>
+                <td width="80px" style="text-align : center">{student_type}</td>
             </tr>
 <!-- END g -->
         </table>
@@ -74,7 +74,7 @@ Executed on: {EXEC_DATE} by {EXEC_USER}<br />
                 <td width="200px">{name}</td>
                 <td width="100px">{username}</td>
                 <td width="80px" style="text-align : center">{class}</td>
-                <td width="80px" style="text-align : center">{type}</td>
+                <td width="80px" style="text-align : center">{student_type}</td>
             </tr>
 <!-- END m -->
         </table>

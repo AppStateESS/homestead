@@ -9,7 +9,7 @@
 class SpecialNeedsRequestHtmlView extends ReportHtmlView {
     protected function render()
     {
-        $this->tpl = $this->report->getRows();
+        $this->tpl = $this->report->getSortedRows();
         parent::render();
 
         $this->tpl['f_total'] = $this->report->f_total;

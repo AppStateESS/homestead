@@ -5,7 +5,7 @@
  * @license http://opensource.org/licenses/gpl-3.0.html
  */
 
-class SpecialNeedsRequestController extends ReportController implements iSyncReport, iHtmlReportView {
+class SpecialNeedsRequestController extends ReportController implements iSyncReport, iHtmlReportView, iPdfReportView, iCsvReportView {
 
     public function setParams(Array $params)
     {

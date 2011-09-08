@@ -10,7 +10,8 @@ class SpecialNeedsRequest extends Report {
     const shortName = 'SpecialNeedsRequest';
 
     private $term;
-    private $rows;
+    private $sorted_rows;
+    private $all_rows;
     public $p_total = 0;
     public $s_total = 0;
     public $g_total = 0;
@@ -70,33 +71,43 @@ class SpecialNeedsRequest extends Report {
             $sf = StudentFactory::getStudentByBannerId($student['banner_id'], $term);
             $student['name'] = $sf->getFullName();
             $student['class'] = $sf->getClass();
-            $student['type'] = $sf->getType();
 
             if ($student['physical_disability']) {
-                $this->rows['f'][] = $student;
+                $this->sorted_rows['f'][] = $student;
                 $this->f_total++;
             }
 
             if ($student['psych_disability']) {
-                $this->rows['s'][] = $student;
+                $this->sorted_rows['s'][] = $student;
                 $this->s_total++;
             }
 
             if ($student['medical_need']) {
-                $this->rows['m'][] = $student;
+                $this->sorted_rows['m'][] = $student;
                 $this->m_total++;
             }
 
             if ($student['gender_need']) {
-                $this->rows['g'][] = $student;
+                $this->sorted_rows['g'][] = $student;
                 $this->g_total++;
             }
+            $this->all_rows[] = $student;
         }
     }
 
-    public function getRows()
+    public function getSortedRows()
     {
-        return $this->rows;
+        return $this->sorted_rows;
+    }
+
+    public function getCsvColumnsArray()
+    {
+         return array('Banner ID', 'Username', 'Student Type', 'Physical Need', 'Psychological Need', 'Medical Need', 'Gender-based Need', 'Name', 'Class Status');
+    }
+
+    public function getCsvRowsArray()
+    {
+        return $this->all_rows;
     }
 
 }
