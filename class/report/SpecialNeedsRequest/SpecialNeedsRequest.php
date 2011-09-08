@@ -10,12 +10,8 @@ class SpecialNeedsRequest extends Report {
     const shortName = 'SpecialNeedsRequest';
 
     private $term;
-    private $sorted_rows;
+    private $sorted_rows = array();
     private $all_rows;
-    public $p_total = 0;
-    public $s_total = 0;
-    public $g_total = 0;
-    public $m_total = 0;
 
     public function __construct($id = 0)
     {
@@ -34,6 +30,8 @@ class SpecialNeedsRequest extends Report {
 
     public function execute()
     {
+        $f_total = $s_total = $m_total = $g_total = 0;
+
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 
         if (!isset($this->term) || is_null($this->term)) {
@@ -71,28 +69,54 @@ class SpecialNeedsRequest extends Report {
             $sf = StudentFactory::getStudentByBannerId($student['banner_id'], $term);
             $student['name'] = $sf->getFullName();
             $student['class'] = $sf->getClass();
+            $student['style'] = 'nope';
 
             if ($student['physical_disability']) {
+                $student['f_word'] = $student['f_total'] = null;
                 $this->sorted_rows['f'][] = $student;
-                $this->f_total++;
+                $f_total++;
+                echo 1;
             }
 
             if ($student['psych_disability']) {
+                $student['s_word'] = $student['s_total'] = null;
                 $this->sorted_rows['s'][] = $student;
-                $this->s_total++;
+                $s_total++;
+                echo 2;
             }
 
             if ($student['medical_need']) {
+                $student['m_word'] = $student['m_total'] = null;
                 $this->sorted_rows['m'][] = $student;
-                $this->m_total++;
+                $m_total++;
+                echo 3;
             }
 
             if ($student['gender_need']) {
+                $student['g_word'] = $student['g_total'] = null;
                 $this->sorted_rows['g'][] = $student;
-                $this->g_total++;
+                $g_total++;
+                echo 4;
             }
+
             $this->all_rows[] = $student;
         }
+        $this->sorted_rows['f'][0]['f_word'] = 'Physical';
+        $this->sorted_rows['f'][0]['f_total'] = $f_total;
+
+        $this->sorted_rows['s'][0]['s_word'] = 'Psychological';
+        $this->sorted_rows['s'][0]['s_total'] = $s_total;
+
+        $this->sorted_rows['m'][0]['m_word'] = 'Medical';
+        $this->sorted_rows['m'][0]['m_total'] = $m_total;
+
+        $this->sorted_rows['g'][0]['g_word'] = 'Gender';
+        $this->sorted_rows['g'][0]['g_total'] = $g_total;
+
+        $this->sorted_rows['f'][0]['style'] = 'nope cat';
+        $this->sorted_rows['s'][0]['style'] = 'nope cat';
+        $this->sorted_rows['m'][0]['style'] = 'nope cat';
+        $this->sorted_rows['g'][0]['style'] = 'nope cat';
     }
 
     public function getSortedRows()
@@ -102,7 +126,7 @@ class SpecialNeedsRequest extends Report {
 
     public function getCsvColumnsArray()
     {
-         return array('Banner ID', 'Username', 'Student Type', 'Physical Need', 'Psychological Need', 'Medical Need', 'Gender-based Need', 'Name', 'Class Status');
+        return array('Banner ID', 'Username', 'Student Type', 'Physical Need', 'Psychological Need', 'Medical Need', 'Gender-based Need', 'Name', 'Class Status');
     }
 
     public function getCsvRowsArray()
