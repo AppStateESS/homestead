@@ -12,6 +12,7 @@ class SpecialNeedsRequest extends Report {
     private $term;
     private $sorted_rows = array();
     private $all_rows;
+    private $problems;
 
     public function __construct($id = 0)
     {
@@ -65,38 +66,38 @@ class SpecialNeedsRequest extends Report {
         }
 
         foreach ($results as $student) {
-
-            $sf = StudentFactory::getStudentByBannerId($student['banner_id'], $this->term);
-            $student['name'] = $sf->getFullName();
-            $student['class'] = $sf->getClass();
+            try {
+                $sf = StudentFactory::getStudentByBannerId($student['banner_id'], $this->term);
+                $student['name'] = $sf->getFullName();
+                $student['class'] = $sf->getClass();
+            } catch (Exception $e) {
+                $student['name'] = $student['class'] = null;
+                $this->problems[] = $student['banner_id'];
+            }
             $student['style'] = 'nope';
 
             if ($student['physical_disability']) {
                 $student['f_word'] = $student['f_total'] = null;
                 $this->sorted_rows['f'][] = $student;
                 $f_total++;
-                echo 1;
             }
 
             if ($student['psych_disability']) {
                 $student['s_word'] = $student['s_total'] = null;
                 $this->sorted_rows['s'][] = $student;
                 $s_total++;
-                echo 2;
             }
 
             if ($student['medical_need']) {
                 $student['m_word'] = $student['m_total'] = null;
                 $this->sorted_rows['m'][] = $student;
                 $m_total++;
-                echo 3;
             }
 
             if ($student['gender_need']) {
                 $student['g_word'] = $student['g_total'] = null;
                 $this->sorted_rows['g'][] = $student;
                 $g_total++;
-                echo 4;
             }
 
             $this->all_rows[] = $student;

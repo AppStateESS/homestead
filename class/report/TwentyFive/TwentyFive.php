@@ -12,6 +12,7 @@ class TwentyFive extends Report {
 
     private $term;
     private $all_rows;
+    private $problems;
 
     public function __construct($id = 0)
     {
@@ -58,13 +59,18 @@ class TwentyFive extends Report {
         $twenty_five_years_ago = date('Y-m-d', $tfyearsagomk);
 
         foreach ($results as $student) {
-            $sf = StudentFactory::getStudentByBannerId($student['banner_id'], $this->term);
-            $dob = $sf->getDOB();
-            if ($dob > $twenty_five_years_ago) {
-                continue;
+            try {
+                $sf = StudentFactory::getStudentByBannerId($student['banner_id'], $this->term);
+                $dob = $sf->getDOB();
+                if ($dob > $twenty_five_years_ago) {
+                    continue;
+                }
+                $student['dob'] = $dob;
+                $student['full_name'] = $sf->getFullName();
+            } catch (Exception $e) {
+                $student['dob'] = $student['full_name'] = null;
+                $this->problems[] = $student['banner_id'];
             }
-            $student['dob'] = $dob;
-            $student['full_name'] = $sf->getFullName();
             $this->all_rows[] = $student;
         }
     }
