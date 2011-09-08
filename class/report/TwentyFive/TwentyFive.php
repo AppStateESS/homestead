@@ -45,7 +45,7 @@ class TwentyFive extends Report {
         $db->addWhere('term', $this->term);
 
         //to debug
-        //$db->setLimit(10);
+        $db->setLimit(10);
 
         $results = $db->select();
         if (empty($results)) {
@@ -58,7 +58,7 @@ class TwentyFive extends Report {
         $twenty_five_years_ago = date('Y-m-d', $tfyearsagomk);
 
         foreach ($results as $student) {
-            $sf = StudentFactory::getStudentByBannerId($student['banner_id'], $term);
+            $sf = StudentFactory::getStudentByBannerId($student['banner_id'], $this->term);
             $dob = $sf->getDOB();
             if ($dob > $twenty_five_years_ago) {
                 continue;

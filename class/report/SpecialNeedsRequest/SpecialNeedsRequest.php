@@ -66,7 +66,7 @@ class SpecialNeedsRequest extends Report {
 
         foreach ($results as $student) {
 
-            $sf = StudentFactory::getStudentByBannerId($student['banner_id'], $term);
+            $sf = StudentFactory::getStudentByBannerId($student['banner_id'], $this->term);
             $student['name'] = $sf->getFullName();
             $student['class'] = $sf->getClass();
             $student['style'] = 'nope';
