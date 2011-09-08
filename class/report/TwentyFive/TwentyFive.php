@@ -7,7 +7,6 @@
  */
 
 class TwentyFive extends Report {
-
     const friendlyName = 'Students 25 and Older';
     const shortName = 'TwentyFive';
 
@@ -43,8 +42,10 @@ class TwentyFive extends Report {
 
         $db->addColumn('banner_id');
         $db->addColumn('username');
-$db->setLimit(10);
         $db->addWhere('term', $this->term);
+
+        //to debug
+        //$db->setLimit(10);
 
         $results = $db->select();
         if (empty($results)) {
@@ -53,32 +54,35 @@ $db->setLimit(10);
             throw new DatabaseException($results->toString());
         }
 
+        $tfyearsagomk = mktime(0, 0, 0, date('n'), date('j'), date('Y') - 25);
+        $twenty_five_years_ago = date('Y-m-d', $tfyearsagomk);
+
         foreach ($results as $student) {
             $sf = StudentFactory::getStudentByBannerId($student['banner_id'], $term);
-            $student['name'] = $sf->getFullName();
-            $student['dob'] = $sf->getDOB();
+            $dob = $sf->getDOB();
+            if ($dob > $twenty_five_years_ago) {
+                continue;
+            }
+            $student['dob'] = $dob;
+            $student['full_name'] = $sf->getFullName();
             $this->all_rows[] = $student;
         }
-
-        test($this->all_rows,1);
-        
     }
 
-    public function getSortedRows()
+    public function getRows()
     {
-        return $this->sorted_rows;
+        return $this->all_rows;
     }
 
     public function getCsvColumnsArray()
     {
-         return array('Banner ID', 'Username', 'Student Type', 'Physical Need', 'Psychological Need', 'Medical Need', 'Gender-based Need', 'Name', 'Class Status');
+        return array('Banner ID', 'Username', 'Date of Birth', 'Name');
     }
 
     public function getCsvRowsArray()
     {
         return $this->all_rows;
     }
-
 
 }
 
