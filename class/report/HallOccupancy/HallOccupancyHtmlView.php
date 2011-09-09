@@ -12,7 +12,7 @@ class HallOccupancyHtmlView extends ReportHtmlView {
     {
         $this->tpl['TERM'] = Term::toString($this->report->getTerm());
 
-        return PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/MoveInTimes.tpl');
+        return PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/HallOccupancy.tpl');
     }
 
 }
