@@ -2,7 +2,7 @@
 
 %define name hms
 %define version 0.4.46
-%define release 2
+%define release 3
 %define install_dir /var/www/hms
 %define phpws_ver 1_7_1
 
