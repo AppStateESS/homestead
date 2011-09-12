@@ -114,6 +114,14 @@ class SOAPDataProvider extends StudentDataProvider {
         if($student->getUsername() == 'weldoncr'){
             $student->setApplicationTerm(200840);
         }
+
+        if($student->getUsername() == 'ghoniema'){
+            $student->setType(TYPE_CONTINUING);
+        }
+    }
+}
+
+?>
     }
 }
 
