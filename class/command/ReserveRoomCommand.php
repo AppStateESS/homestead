@@ -16,7 +16,7 @@ class ReserveRoomCommand extends Command {
         $bed->loadAssignment();
 
         // Check if the bed is already reserved
-        if($is_null($context->get('clear')) && ($bed->_curr_assignment instanceof HMS_Assignment || $bed->room_change_reserved != 0)) {
+        if(is_null($context->get('clear')) && ($bed->_curr_assignment instanceof HMS_Assignment || $bed->room_change_reserved != 0)) {
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'That bed is unavailable!');
             $cmd = CommandFactory::getCommand($context->get('last_command'));
             return $cmd;
