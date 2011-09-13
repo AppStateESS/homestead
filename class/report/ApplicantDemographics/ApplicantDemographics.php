@@ -2,7 +2,7 @@
 
 /**
  * The Applicant Demographics report.
- * Gives a nice HTML table breaking down who's applied
+ * Calculates totals breaking down who's applied
  * by gender, studen type, and class.
  *
  * @author Jeremy Booker <jbooker at tux dot appstate dot edu>
