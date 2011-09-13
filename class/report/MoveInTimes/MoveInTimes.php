@@ -19,11 +19,6 @@ class MoveInTimes extends Report {
     private $rows;
     private $problems;
 
-    public function __construct($id=0)
-    {
-        parent::__construct($id);
-    }
-
     public function setTerm($term)
     {
         $this->term = $term;
