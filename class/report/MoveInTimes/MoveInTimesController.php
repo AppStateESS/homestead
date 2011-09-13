@@ -6,11 +6,6 @@
  * @license http://opensource.org/licenses/gpl-3.0.html
  */
 
-/**
- * Description of MoveInTimesController
- *
- * @author matt
- */
 class MoveInTimesController extends ReportController implements iSyncReport, iHtmlReportView, iPdfReportView {
 
     public function setParams(Array $params)
