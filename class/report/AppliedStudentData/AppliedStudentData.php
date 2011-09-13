@@ -72,11 +72,6 @@ class AppliedStudentData extends Report implements iCsvReport {
         }
     }
 
-    public function getCsvView()
-    {
-        return array('foo' => 'bar');
-    }
-
     public function getCsvColumnsArray()
     {
         return array('Username', 'Banner id', 'First name', 'Middle name',
@@ -86,7 +81,6 @@ class AppliedStudentData extends Report implements iCsvReport {
 
     public function getCsvRowsArray()
     {
-
         return $this->rows;
     }
 
