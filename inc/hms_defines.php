@@ -3,7 +3,7 @@
 /**************
  * Login Link *
  **************/
-define('LOGIN_TEST_FLAG', 'false'); 
+define('LOGIN_TEST_FLAG', 'false');
 //define('HMS_LOGIN_LINK', 'index.php?module=hms&action=show_fake_login');
 define('HMS_LOGIN_LINK', 'login');
 
@@ -38,4 +38,7 @@ ini_set('display_errors', 1);
 
 /* Memory limit */
 ini_set('memory_limit', '512M');
+
+define('HMS_DEBUG', true);
+
 ?>

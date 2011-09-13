@@ -2,7 +2,7 @@
 
 /**
  * The Applicant Demographics report.
- * Gives a nice HTML table breaking down who's applied
+ * Calculates totals breaking down who's applied
  * by gender, studen type, and class.
  *
  * @author Jeremy Booker <jbooker at tux dot appstate dot edu>
@@ -71,7 +71,7 @@ class ApplicantDemographics extends Report {
             throw new DatabaseException($results->toString());
         }
 
-        $types      = array(TYPE_FRESHMEN, TYPE_TRANSFER, TYPE_CONTINUING, TYPE_READMIT, TYPE_RETURNING, TYPE_NONDEGREE, TYPE_WITHDRAWN);
+        $types      = array(TYPE_FRESHMEN, TYPE_TRANSFER, TYPE_CONTINUING, TYPE_NONDEGREE, TYPE_WITHDRAWN);
         $genders    = array(MALE, FEMALE);
 
         // Initalize the array for totals
@@ -83,7 +83,13 @@ class ApplicantDemographics extends Report {
 
         // Calculate the totals
         foreach($results as $application){
-            $this->applicationTotals[$application['student_type']][$application['gender']]++;
+            // Adjust the student types to count 'readmit' and 'returning' as 'continuing' instead
+            if($application['student_type'] == TYPE_READMIT || $application['student_type'] == TYPE_RETURNING){
+                $studentType = TYPE_CONTINUING;
+            }else{
+                $studentType = $application['student_type'];
+            }
+            $this->applicationTotals[$studentType][$application['gender']]++;
         }
 
         // Male sum
