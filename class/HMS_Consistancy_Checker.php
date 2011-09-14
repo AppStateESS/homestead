@@ -1,4 +1,4 @@
-<?
+<?php
 /**
   * Checks to make sure that the genders of rooms and floors make sense with
   * respect to their parent floors and halls.

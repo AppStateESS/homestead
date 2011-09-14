@@ -5,6 +5,7 @@
         <th>Gender</th>
         <th>User name</th>
         <th>Action</th>
+        <th>Roommates</th>
     </tr>
     <!-- BEGIN empty_table -->
     <tr>
@@ -17,6 +18,7 @@
         <td>{GENDER}</td>
         <td>{USERNAME}</td>
         <td>{ACTION}</td>
+        <td>{ROOMMATES}</td>
     </tr>
     <!-- END listrows -->
 </table>

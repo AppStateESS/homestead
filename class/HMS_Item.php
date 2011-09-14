@@ -15,7 +15,7 @@ abstract class HMS_Item {
         if(!is_null($id) && is_numeric($id)){
             $this->id = $id;
 
-            if (!$this->load()) {
+            if(!$this->load()) {
                 $this->id = 0;
             }
         } else {
@@ -27,6 +27,9 @@ abstract class HMS_Item {
     abstract public function getDb();
 
     public function save(){
+
+        $this->stamp();
+
         $db = $this->getDb();
         $result = $db->saveObject($this);
 
@@ -63,12 +66,12 @@ abstract class HMS_Item {
     {
         $now = mktime();
 
-        if (!$this->id) {
+        if(!$this->id) {
             $this->added_on = & $now;
-            //$this->added_by = Current_User::getId();
+            $this->added_by = Current_User::getId();
         }
         $this->updated_on = & $now;
-        //$this->updated_by = Current_User::getId();
+        $this->updated_by = Current_User::getId();
     }
 
     public function delete()
@@ -78,7 +81,7 @@ abstract class HMS_Item {
         //$db->setTestMode();
         $result = $db->delete();
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'execption/DatabaseException.php');
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 

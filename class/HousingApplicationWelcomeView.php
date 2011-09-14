@@ -20,12 +20,13 @@ class HousingApplicationWelcomeView extends View {
         $tpl['ENTRY_TERM'] = Term::toString($this->student->getApplicationTerm());
         $tpl['REQUIRED_TERMS'] = array();
 
-        $appsOnFile = HousingApplication::getAllApplications($this->student->getUsername());
-        $termsOnFile = array();
+        $appsOnFile = HousingApplication::getAllApplicationsForStudent($this->student);
 
+        # Make a list of the terms the student has completed
+        $termsOnFile = array();
         if(isset($appsOnFile) && !is_null($appsOnFile)){
-            foreach($appsOnFile as $app) {
-                $termsOnFile[] = $app->getTerm();
+            foreach($appsOnFile as $term=>$app) {
+                $termsOnFile[] = $term;
             }
         }
 
@@ -38,7 +39,12 @@ class HousingApplicationWelcomeView extends View {
             if(in_array($t['term'], $termsOnFile)) {
                 $completed = ' <span style="color: #0000AA">(Completed)</span>';
             }
-            	
+
+            // If the application is withdrawn, overwrite the "complete" text with "withdrawn"
+            if(isset($appsOnFile[$t['term']]) && $appsOnFile[$t['term']]->isWithdrawn()){
+                $completed = ' <span style="color: #F00">(Withdrawn)</span>';
+            }
+
             if(Term::getTermSem($t['term']) == TERM_FALL){
                 $tpl['REQUIRED_TERMS'][] = array('REQ_TERM'=>Term::toString($t['term']) . ' - ' . Term::toString(Term::getNextTerm($t['term'])),
                                                  'COMPLETED' => $completed);
@@ -71,7 +77,7 @@ class HousingApplicationWelcomeView extends View {
             return PHPWS_Template::process($tpl, 'hms', 'student/welcome_back_screen.tpl');
         }
 
-        if($studentType == TYPE_FRESHMEN || $studentType == TYPE_NONDEGREE || $this->student->isInternational() == 'true'){
+        if($studentType == TYPE_FRESHMEN || $studentType == TYPE_NONDEGREE || $this->student->isInternational()){
             return PHPWS_Template::process($tpl, 'hms', 'student/welcome_screen_freshmen.tpl');
         }else{
             return PHPWS_Template::process($tpl, 'hms', 'student/welcome_screen_transfer.tpl');

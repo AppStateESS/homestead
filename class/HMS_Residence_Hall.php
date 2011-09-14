@@ -74,7 +74,6 @@ class HMS_Residence_Hall extends HMS_Item
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
-
         return true;
     }
 
@@ -88,7 +87,7 @@ class HMS_Residence_Hall extends HMS_Item
      *
      * @return bool False if unsuccessful.
      */
-    public function copy($to_term, $assignments = FALSE)
+    public function copy($to_term, $assignments = FALSE, $roles = FALSE)
     {
         if(!$this->id) {
             return false;
@@ -110,6 +109,26 @@ class HMS_Residence_Hall extends HMS_Item
             throw $e;
         }
 
+        // Copy any roles related to this residence hall.
+        if($roles){
+            PHPWS_Core::initModClass("hms", "HMS_Permission.php");
+            PHPWS_Core::initModClass("hms", "HMS_Role.php");
+            // Get memberships by object instance.
+            $membs = HMS_Permission::getUserRolesForInstance($this);
+            //test($membs,1);
+            // Add each user to new hall
+            foreach($membs as $m){
+                // Lookup the username
+                $user = new PHPWS_User($m['user_id']);
+
+                // Load role and add user to new instance
+                $role = new HMS_Role();
+                $role->id = $m['role'];
+                $role->load();
+                $role->addUser($user->getUsername(), get_class($new_hall), $new_hall->id);
+            }
+        }
+
         // Save successful, create new floors
 
         // Load all floors for this hall
@@ -122,10 +141,10 @@ class HMS_Residence_Hall extends HMS_Item
         }
 
         // Floors exist, start making copies
-        if (!empty($this->_floors)) {
+        if(!empty($this->_floors)) {
             foreach ($this->_floors as $floor) {
                 try{
-                    $floor->copy($to_term, $new_hall->id, $assignments);
+                    $floor->copy($to_term, $new_hall->id, $assignments, $roles);
                 }catch(Exception $e){
                     throw $e;
                 }
@@ -140,7 +159,7 @@ class HMS_Residence_Hall extends HMS_Item
      */
     public function loadFloors()
     {
-        if (!$this->id) {
+        if(!$this->id) {
             $this->_floor = null;
             return null;
         }
@@ -165,7 +184,7 @@ class HMS_Residence_Hall extends HMS_Item
      */
     public function create_child_objects($num_floors, $rooms_per_floor, $beds_per_room)
     {
-        if (!$this->id) {
+        if(!$this->id) {
             return false;
         }
 
@@ -340,7 +359,7 @@ class HMS_Residence_Hall extends HMS_Item
 
         $result = $db->select('count');
 
-        if(!$result || PHPWS_Error::logIfError($result)){
+        if(PHPWS_Error::logIfError($result)){
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
@@ -412,7 +431,7 @@ class HMS_Residence_Hall extends HMS_Item
      */
     public function &get_rooms()
     {
-        if (!$this->loadFloors()) {
+        if(!$this->loadFloors()) {
             return false;
         }
 
@@ -430,7 +449,7 @@ class HMS_Residence_Hall extends HMS_Item
      */
     public function &get_beds()
     {
-        if (!$this->loadFloors()) {
+        if(!$this->loadFloors()) {
             return false;
         }
 
@@ -653,7 +672,7 @@ class HMS_Residence_Hall extends HMS_Item
         $tags['BANNER_BUILDING_CODE'] = $this->banner_building_code;
 
         $is_online = $this->get_is_online();
-        if ($is_online == ONLINE) {
+        if($is_online == ONLINE) {
             $tags['IS_ONLINE'] = ONLINE_DESC;
         }else if($is_online == OFFLINE){
             $tags['IS_ONLINE'] = OFFLINE_DESC;

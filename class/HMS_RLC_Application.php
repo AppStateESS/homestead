@@ -5,15 +5,20 @@
  * Implements the RLC_Application object and methods to load/save
  * learning community applications from the database.
  *
- * @author Jeremy Booker <jbooker at tux dot appstate dot edu>
+ * @package HMS
+ * @author Jeremy Booker
  */
 
-define('RLC_RESPONSE_LIMIT', 4096); // max number of characters allowed in the text areas on the RLC application
+// RLC application types
+define('RLC_APP_FRESHMEN', 'freshmen');
+define('RLC_APP_RETURNING', 'returning');
 
 PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 PHPWS_Core::initModClass('hms', 'HMS_Item.php');
 
-class HMS_RLC_Application extends HMS_Item {
+class HMS_RLC_Application extends HMS_Item
+{
+    const RLC_RESPONSE_LIMIT = 4096; // max number of characters allowed in the text areas on the RLC application
 
     public $id;
 
@@ -31,9 +36,11 @@ class HMS_RLC_Application extends HMS_Item {
     public $rlc_question_1;
     public $rlc_question_2;
 
-    public $term = NULL;
+    public $term = null;
 
     public $denied = 0;
+
+    public $application_type;
 
     /**
      * Constructor
@@ -46,7 +53,8 @@ class HMS_RLC_Application extends HMS_Item {
         $this->construct($id);
     }
 
-    public function getDb(){
+    public function getDb()
+    {
         return new PHPWS_DB('hms_learning_community_applications');
     }
 
@@ -66,18 +74,18 @@ class HMS_RLC_Application extends HMS_Item {
         $rlcCmd = CommandFactory::getCommand('ShowRlcApplicationReView');
         $rlcCmd->setAppId($this->getId());
 
-        $tags['1ST_CHOICE']     = $rlcCmd->getLink($rlc_list[$this->getFirstChoice()],'_blank');
+        $tags['1ST_CHOICE']     = $rlcCmd->getLink($rlc_list[$this->getFirstChoice()], '_blank');
         if(isset($rlc_list[$this->getSecondChoice()]))
         $tags['2ND_CHOICE'] = $rlc_list[$this->getSecondChoice()];
         if(isset($rlc_list[$this->getThirdChoice()]))
         $tags['3RD_CHOICE'] = $rlc_list[$this->getThirdChoice()];
-        $tags['FINAL_RLC']      = HMS_RLC_Application::generateRLCDropDown($rlc_list,$this->getID());
+        $tags['FINAL_RLC']      = HMS_RLC_Application::generateRLCDropDown($rlc_list, $this->getID());
         $tags['CLASS']          = $student->getClass();
         //        $tags['SPECIAL_POP']    = ;
         //        $tags['MAJOR']          = ;
         //        $tags['HS_GPA']         = ;
         $tags['GENDER']         = $student->getPrintableGender();
-        $tags['DATE_SUBMITTED'] = date('d-M-y',$this->getDateSubmitted());
+        $tags['DATE_SUBMITTED'] = date('d-M-y', $this->getDateSubmitted());
 
         $denyCmd = CommandFactory::getCommand('DenyRlcApplication');
         $denyCmd->setApplicationId($this->getID());
@@ -98,11 +106,11 @@ class HMS_RLC_Application extends HMS_Item {
 
         $application_date = isset($this->date_submitted) ? HMS_Util::get_long_date($this->date_submitted) : 'Error with the submission date';
 
-        $roomie = NULL;
-        if(HMS_Roommate::has_confirmed_roommate($this->username, $term)){
+        $roomie = null;
+        if(HMS_Roommate::has_confirmed_roommate($this->username, $term)) {
             $roomie = HMS_Roommate::get_Confirmed_roommate($this->username, $term);
         }
-        elseif(HMS_Roommate::has_roommate_request($this->username, $term)){
+        elseif(HMS_Roommate::has_roommate_request($this->username, $term)) {
             $roomie = HMS_Roommate::get_unconfirmed_roommate($this->username, $term) . ' *pending* ';
         }
 
@@ -133,7 +141,7 @@ class HMS_RLC_Application extends HMS_Item {
         $rlcCmd = CommandFactory::getCommand('ShowRlcApplicationReView');
         $rlcCmd->setAppId($this->getId());
 
-        $tags['1ST_CHOICE']     = $rlcCmd->getLink($rlc_list[$this->getFirstChoice()],'_blank');
+        $tags['1ST_CHOICE']     = $rlcCmd->getLink($rlc_list[$this->getFirstChoice()], '_blank');
 
         if(isset($rlc_list[$this->getSecondChoice()]))
         $tags['2ND_CHOICE'] = $rlc_list[$this->getSecondChoice()];
@@ -153,7 +161,16 @@ class HMS_RLC_Application extends HMS_Item {
 
     public function viewByRLCPagerTags()
     {
-        $student = StudentFactory::getStudentByUsername($this->username, Term::getSelectedTerm());
+        $tags = array();
+
+        try{
+            $student = StudentFactory::getStudentByUsername($this->username, Term::getSelectedTerm());
+        }catch(StudentNotFoundException $e){
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, "No student found with username: {$this->username}.");
+            $tags['USERNAME'] = $this->username;
+            $tags['NAME'] = 'UNKNOWN - INVALID';
+            return $tags;
+        }
 
         $tags['NAME']       = $student->getFulLNameProfileLink();
         $tags['GENDER']     = $student->getPrintableGender();
@@ -165,16 +182,45 @@ class HMS_RLC_Application extends HMS_Item {
         $actions[] = $viewCmd->getLink('View Application');
 
         $assign = HMS_RLC_Assignment::getAssignmentByUsername($this->username, $this->term);
-        
+
         $rmCmd = CommandFactory::getCommand('RemoveRlcAssignment');
         $rmCmd->setAssignmentId($assign->id);
 
         $actions[] = $rmCmd->getLink('Remove');
 
+        // Remove and Deny macro command
+        $rmDenyCmd = CommandFactory::getCommand('RemoveDenyRlcAssignment');
+        $rmDenyCmd->setAppId($this->getId());
+        $rmDenyCmd->setAssignmentId($assign->id);
+
+        $actions[] = $rmDenyCmd->getLink('Remove & Deny');
+
         $tags['ACTION'] = implode(' | ', $actions);
+
+        // Show all possible roommates for this application
+        PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
+        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
+
+        $allRoommates = HMS_Roommate::get_all_roommates($this->username, $this->term);
+        $tags['ROOMMATES'] = 'N/A'; // Default text
+
+        if(sizeof($allRoommates) > 1) {
+            // Don't show all the roommates
+            $tags['ROOMMATES'] = "Multiple Requests";
+        }
+        elseif(sizeof($allRoommates) == 1) {
+            // Get other roommate
+            $otherGuy = StudentFactory::getStudentByUsername($allRoommates[0]->get_other_guy($this->username), $this->term);
+            $tags['ROOMMATES'] = $otherGuy->getFullNameProfileLink();
+            // If roommate is pending then show little status message
+            if(!$allRoommates[0]->confirmed) {
+                $tags['ROOMMATES'] .= " (Pending)";
+            }
+        }
+
         return $tags;
     }
-    
+
     public function report_by_rlc_pager_tags()
     {
         $student = StudentFactory::getStudentByUsername($this->username, $this->term);
@@ -191,33 +237,33 @@ class HMS_RLC_Application extends HMS_Item {
      *****************/
 
     /**
-     * Check to see if an application already exists for the specified user. Returns FALSE if no application exists.
+     * Check to see if an application already exists for the specified user. Returns false if no application exists.
      * If an application does exist, an associative array containing that row is returned. In the case of a db error, a PEAR
      * error object is returned.
      * @param include_denied Controls whether or not denied applications are returned
      */
-    public static function checkForApplication($username, $term, $include_denied = TRUE)
+    public static function checkForApplication($username, $term, $include_denied = true)
     {
         $db = new PHPWS_DB('hms_learning_community_applications');
 
-        $db->addWhere('username',$username,'ILIKE');
+        $db->addWhere('username', $username, 'ILIKE');
         $db->addWhere('term', $term);
 
-        if(!$include_denied){
+        if(!$include_denied) {
             $db->addWhere('denied', 0);
         }
 
         $result = $db->select('row');
 
-        if(PHPWS_Error::logIfError($result)){
+        if(PHPWS_Error::logIfError($result)) {
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
-        if(sizeof($result) > 1){
+        if(sizeof($result) > 1) {
             return $result;
         }else{
-            return FALSE;
+            return false;
         }
     }
 
@@ -232,19 +278,20 @@ class HMS_RLC_Application extends HMS_Item {
 
         $result = $db->loadObject($app);
 
-        if(PHPWS_Error::logIfError($result)){
+        if(PHPWS_Error::logIfError($result)) {
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
-        if($app->id == 0){
+        if($app->id == 0) {
             return null;
         }
 
         return $app;
     }
 
-    public static function getApplicationById($id){
+    public static function getApplicationById($id)
+    {
 
         $app = new HMS_RLC_Application();
 
@@ -252,7 +299,7 @@ class HMS_RLC_Application extends HMS_Item {
         $db->addWhere('id', $id);
         $result = $db->loadObject($app);
 
-        if(PHPWS_Error::logIfError($result)){
+        if(PHPWS_Error::logIfError($result)) {
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
@@ -261,25 +308,25 @@ class HMS_RLC_Application extends HMS_Item {
     }
 
     /**
-     * Get denied RLC applicants by term 
+     * Get denied RLC applicants by term
      * @return Array of Student objects
      */
     public static function getDeniedApplicantsByTerm($term)
     {
         // query DB
         $db = new PHPWS_DB('hms_learning_community_applications');
-        $db->addWhere('denied',1);
+        $db->addWhere('denied', 1);
         $db->addWhere('term', $term);
         $result = $db->select();
-        
-        if(PHPWS_Error::logIfError($result)){
+
+        if(PHPWS_Error::logIfError($result)) {
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
         // create student objects from the denied applications
         $students = array();
-        foreach($result as $app){
+        foreach($result as $app) {
             $students[] = StudentFactory::getStudentByUsername($app['username'], $term);
         }
 
@@ -315,13 +362,13 @@ class HMS_RLC_Application extends HMS_Item {
     /**
      * Generates a drop down menu using the RLC abbreviations
      */
-    public static function generateRLCDropDown($rlc_list,$application_id){
+    public static function generateRLCDropDown($rlc_list,$application_id) {
 
         $output = "<select name=\"final_rlc[$application_id]\">";
 
         $output .= '<option value="-1">None</option>';
 
-        foreach ($rlc_list as $id => $rlc_name){
+        foreach ($rlc_list as $id => $rlc_name) {
             $output .= "<option value=\"$id\">$rlc_name</option>";
         }
 
@@ -334,23 +381,28 @@ class HMS_RLC_Application extends HMS_Item {
      * Accessor & Mutator Methods
      ****************************/
 
-    public function setID($id){
+    public function setID($id)
+    {
         $this->id = $id;
     }
 
-    public function getID(){
+    public function getID()
+    {
         return $this->id;
     }
 
-    public function setUsername($username){
+    public function setUsername($username)
+    {
         $this->username = $username;
     }
 
-    public function getUsername(){
+    public function getUsername()
+    {
         return $this->username;
     }
 
-    public function setDateSubmitted($date = NULL){
+    public function setDateSubmitted($date = null)
+    {
         if(!isset($date)){
             $this->date_submitted = mktime();
         }else{
@@ -358,88 +410,137 @@ class HMS_RLC_Application extends HMS_Item {
         }
     }
 
-    public function getDateSubmitted(){
+    public function getDateSubmitted()
+    {
         return $this->date_submitted;
     }
 
-    public function setFirstChoice($choice){
+    public function setFirstChoice($choice)
+    {
         $this->rlc_first_choice_id = $choice;
     }
 
-    public function getFirstChoice(){
+    public function getFirstChoice()
+    {
         return $this->rlc_first_choice_id;
     }
 
-    public function setSecondChoice($choice){
+    public function setSecondChoice($choice)
+    {
         $this->rlc_second_choice_id = $choice;
     }
 
-    public function getSecondChoice(){
+    public function getSecondChoice()
+    {
         return $this->rlc_second_choice_id;
     }
 
-    public function setThirdChoice($choice){
+    public function setThirdChoice($choice)
+    {
         $this->rlc_third_choice_id = $choice;
     }
 
-    public function getThirdChoice(){
+    public function getThirdChoice()
+    {
         return $this->rlc_third_choice_id;
     }
 
-    public function setWhySpecificCommunities($why){
+    public function setWhySpecificCommunities($why)
+    {
         $this->why_specific_communities = $why;
     }
 
-    public function getWhySpecificCommunities(){
+    public function getWhySpecificCommunities()
+    {
         return $this->why_specific_communities;
     }
 
-    public function setStrengthsWeaknesses($strenghts){
+    public function setStrengthsWeaknesses($strenghts)
+    {
         $this->strengths_weaknesses = $strenghts;
     }
 
-    public function getStrengthsWeaknesses(){
+    public function getStrengthsWeaknesses()
+    {
         return $this->strengths_weaknesses;
     }
 
-    public function setRLCQuestion0($question){
+    public function setRLCQuestion0($question)
+    {
         $this->rlc_question_0 = $question;
     }
 
-    public function getRLCQuestion0(){
+    public function getRLCQuestion0()
+    {
         return $this->rlc_question_0;
     }
 
-    public function setRLCQuestion1($question){
+    public function setRLCQuestion1($question)
+    {
         $this->rlc_question_1 = $question;
     }
 
-    public function getRLCQuestion1(){
+    public function getRLCQuestion1()
+    {
         return $this->rlc_question_1;
     }
 
-    public function setRLCQuestion2($question){
+    public function setRLCQuestion2($question)
+    {
         $this->rlc_question_2 = $question;
     }
 
-    public function getRLCQuestion2(){
+    public function getRLCQuestion2()
+    {
         return $this->rlc_question_2;
     }
 
-    public function setAssignmentID($id){
+    public function setAssignmentID($id)
+    {
         $this->hms_assignment_id = $id;
     }
 
-    public function getAssignmentID(){
+    public function getAssignmentID()
+    {
         return $this->hms_assignment_id;
     }
 
-    public function getEntryTerm(){
+    /**
+     * @depreciated
+     * Use 'getTerm' instead.
+     */
+    public function getEntryTerm()
+    {
         return $this->term;
     }
 
-    public function setEntryTerm($term){
+    /**
+     * @depreciated
+     * Use 'setTerm' instead.
+     */
+    public function setEntryTerm($term)
+    {
         $this->term = $term;
+    }
+
+    public function getTerm()
+    {
+        return $this->term;
+    }
+
+    public function setTerm($term)
+    {
+        $this->term = $term;
+    }
+
+    public function getApplicationType()
+    {
+        return $this->application_type;
+    }
+
+    public function setApplicationType($type)
+    {
+        $this->application_type = $type;
     }
 }
 

@@ -18,7 +18,7 @@ class TestSOAP extends SOAP{
         }
 
         // Sanity checking on the term
-        if(empty($term) || is_null($term) || !isset($username)){
+        if(empty($term) || is_null($term) || !isset($term)){
             throw new InvalidArgumentException('Bad term');
         }
 
@@ -32,21 +32,23 @@ class TestSOAP extends SOAP{
         $student->deposit_date          = '';
         $student->deposit_waived        = 'false';
 
-        $student->international         = 'false';
+        $student->international         = false;
         $student->student_level         = 'U';
 
-        $student->honors                = 'false';
-        $student->teaching_fellow       = 'false';
-        $student->watauga_member        = 'false';
+        $student->honors                = true;
+        $student->teaching_fellow       = true;
+        $student->watauga_member        = true;
 
+        $student->disabled_pin			= false;
+        $student->housing_waiver		= false;
 
-//   		$student->student_type          = 'T';
-//   		$student->application_term      = '201040';
-//   		$student->projected_class       = 'FR';
+        //$student->student_type          = 'T';
+        //$student->application_term      = '201040';
+        //$student->projected_class       = 'FR';
 
-          $student->student_type          = 'F';
-          $student->application_term      = '201110';
-          $student->projected_class       = 'FR';
+        $student->student_type          = 'F';
+        $student->application_term      = '201140';
+        $student->projected_class       = 'FR';
 
         $student->credhrs_completed     = 0;
         $student->credhrs_for_term      = 15;
@@ -79,6 +81,19 @@ class TestSOAP extends SOAP{
 
         $student->address[] = $address;
 
+        // Setup an ASU P.O. Box address
+        $address = null;
+        $address->atyp_code = 'AB';
+        $address->line1     = 'ASU Box 32111';
+        $address->line2     = '';
+        $address->line3     = '';
+        $address->city      = 'Booone';
+        $address->county    = '095';
+        $address->state     = 'SC';
+        $address->zip       = '28608';
+
+        $student->address[] = $address;
+
         // Setup the phone number object
         $phone->area_code   = '123';
         $phone->number      = '4567890';
@@ -92,14 +107,14 @@ class TestSOAP extends SOAP{
     /**
      * Returns the ASU Username for the given banner id
      */
-    public function getUsername($banner_id)
+    public function getUsername($bannerId)
     {
         return 'jb67803';
     }
 
     public function isValidStudent($username, $term)
     {
-        return TRUE;
+        return true;
     }
 
     /**
@@ -108,8 +123,8 @@ class TestSOAP extends SOAP{
      */
     public function reportApplicationReceived($username, $term)
     {
-        //		return 1337; //error
-        return "0";
+        //		return false; //error
+        return true;
     }
 
     /**
@@ -117,8 +132,8 @@ class TestSOAP extends SOAP{
      */
     public function reportRoomAssignment($username, $term, $building_code, $room_code, $plan_code, $meal_code)
     {
-        //		return 1337; //error
-        return "0";
+        //		return false; //error
+        return true;
     }
 
     /**
@@ -127,8 +142,8 @@ class TestSOAP extends SOAP{
      */
     public function removeRoomAssignment($username, $term, $building, $room)
     {
-        //		return 1337; //error
-        return "0";
+        //		return false; //error
+        return true;
     }
 
     /**
@@ -152,7 +167,7 @@ class TestSOAP extends SOAP{
         $room_assign->status_code   = 'AC';
         $room_assign->status_date   = '2008-01-14';
 
-        // Asseble the meal_assign object
+        // Assemble the meal_assign object
         $meal_assign->plan_code     = 1;
         $meal_assign->status_code   = 'AC';
         $meal_assign->status_date   = '2007-11-20';
@@ -163,6 +178,11 @@ class TestSOAP extends SOAP{
         $hous_meal->meal_assign     = $meal_assign;
 
         return $hous_meal;
+    }
+
+    public function getBannerIdByBuildingRoom($building, $room, $term)
+    {
+        return null;
     }
 }
 

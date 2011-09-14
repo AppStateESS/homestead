@@ -16,11 +16,11 @@ class BannerQueue {
     public function queueAssignment(Student $student, $term, HMS_Residence_Hall $hall, HMS_Bed $bed, $mealPlan, $mealCode)
     {
         $entry = new BannerQueueItem(0, BANNER_QUEUE_ASSIGNMENT, $student, $term, $hall, $bed, $mealPlan, $mealCode);
-        
+
         if(BannerQueue::processImmediately($term)) {
             return $entry->process();
         }else{
-            $entry->save();
+            return $entry->save();
         }
     }
 
@@ -53,9 +53,9 @@ class BannerQueue {
         // Otherwise, look for an corresponding assignment
         $db = new PHPWS_DB('hms_banner_queue');
         $db->addWhere('type',          BANNER_QUEUE_ASSIGNMENT);
-        $db->addWhere('asu_username',  $username);
-        $db->addWhere('building_code', $bldg);
-        $db->addWhere('bed_code',      $bed);
+        $db->addWhere('asu_username',  $student->getUsername());
+        $db->addWhere('building_code', $hall->getBannerBuildingCode());
+        $db->addWhere('bed_code',      $bed->getBannerId());
         $db->addWhere('term',          $term);
         $result = $db->count();
 

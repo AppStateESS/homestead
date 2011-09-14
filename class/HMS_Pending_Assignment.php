@@ -103,7 +103,7 @@ class HMS_Pending_Assignment
                 return HMS_Autoassigner::auto_assign();
                 #return HMS_Pending_Assignment::doIt();
             default:
-                return $_REQUEST['op'];
+                    return $_REQUEST['op'];
         }
     }
 
@@ -134,73 +134,73 @@ class HMS_Pending_Assignment
         // Requested Roommates
         /*
         $sql = "
-            SELECT roommate_zero,
-                   roommate_one,
-                   zero.gender           AS zero_gender,
-                   one.gender            AS one_gender,
-                   zero.lifestyle_option AS zero_lifestyle_option,
-                   one.lifestyle_option  AS one_lifestyle_option,
-                   zero.meal_option      AS zero_meal_option,
-                   one.meal_option       AS one_meal_option,
-                   zero.student_status   AS zero_student_status,
-                   one.student_status    AS one_student_status
-            FROM hms_roommates,
-                 hms_application AS zero,
-                 hms_application AS one
-            WHERE hms_roommates.roommate_zero = zero.hms_student_id AND
-                  hms_roommates.roommate_one  = one.hms_student_id
+        SELECT roommate_zero,
+        roommate_one,
+        zero.gender           AS zero_gender,
+        one.gender            AS one_gender,
+        zero.lifestyle_option AS zero_lifestyle_option,
+        one.lifestyle_option  AS one_lifestyle_option,
+        zero.meal_option      AS zero_meal_option,
+        one.meal_option       AS one_meal_option,
+        zero.student_status   AS zero_student_status,
+        one.student_status    AS one_student_status
+        FROM hms_roommates,
+        hms_application AS zero,
+        hms_application AS one
+        WHERE hms_roommates.roommate_zero = zero.hms_student_id AND
+        hms_roommates.roommate_one  = one.hms_student_id
         ";
         $results = PHPWS_DB::getAll($sql);
 
         if(PHPWS_Error::isError($results)) {
-            test($results,1);
+        test($results,1);
         }
 
         foreach($results as $result) {
-            $zero['hms_student_id']   = $result['roommate_zero'];
-            $zero['gender']           = $result['zero_gender'];
-            $zero['lifestyle_option'] = $result['zero_lifestyle_option'];
-            $zero['meal_option']      = $result['zero_meal_option'];
-            $zero['student_status']   = $result['zero_student_status'];
-            $one['hms_student_id']    = $result['roommate_one'];
-            $one['gender']            = $result['one_gender'];
-            $one['lifestyle_option']  = $result['one_lifestyle_option'];
-            $one['meal_option']       = $result['one_meal_option'];
-            $one['student_status']    = $result['one_student_status'];
+        $zero['hms_student_id']   = $result['roommate_zero'];
+        $zero['gender']           = $result['zero_gender'];
+        $zero['lifestyle_option'] = $result['zero_lifestyle_option'];
+        $zero['meal_option']      = $result['zero_meal_option'];
+        $zero['student_status']   = $result['zero_student_status'];
+        $one['hms_student_id']    = $result['roommate_one'];
+        $one['gender']            = $result['one_gender'];
+        $one['lifestyle_option']  = $result['one_lifestyle_option'];
+        $one['meal_option']       = $result['one_meal_option'];
+        $one['student_status']    = $result['one_student_status'];
 
-            if(!HMS_Pending_Assignment::eligible_for_queue($zero['hms_student_id'])) {
-                continue;
-            }
+        if(!HMS_Pending_Assignment::eligible_for_queue($zero['hms_student_id'])) {
+        continue;
+        }
 
-            if(!HMS_Pending_Assignment::eligible_for_queue($one['hms_student_id'])) {
-                continue;
-            }
+        if(!HMS_Pending_Assignment::eligible_for_queue($one['hms_student_id'])) {
+        continue;
+        }
 
-            if($zero['student_status'] != 1 && $one['student_status'] != 1) {
-                continue;
-            }
+        if($zero['student_status'] != 1 && $one['student_status'] != 1) {
+        continue;
+        }
 
-            if($zero['student_status'] != 1 || $one['student_status'] != 1) {
-                $issues[] = '(' . $zero['hms_student_id'] . ') ' .
-                            HMS_SOAP::get_name($zero['hms_student_id']) .
-                            ' and ' .
-                            '(' . $one['hms_student_id'] . ') ' .
-                            HMS_SOAP::get_name($one['hms_student_id']) .
-                            ' are requested roommates, but one is a transfer student.  Skipping assignment.';
-                continue;
-            }
+        if($zero['student_status'] != 1 || $one['student_status'] != 1) {
+        $issues[] = '(' . $zero['hms_student_id'] . ') ' .
+        HMS_SOAP::get_name($zero['hms_student_id']) .
+        ' and ' .
+        '(' . $one['hms_student_id'] . ') ' .
+        HMS_SOAP::get_name($one['hms_student_id']) .
+        ' are requested roommates, but one is a transfer student.  Skipping assignment.';
+        continue;
+        }
 
-            if($zero['gender'] != $one['gender']) {
-                $issues[] = '(' . $zero['hms_student_id'] . ') ' .
-                            HMS_SOAP::get_name($zero['hms_student_id']) .
-                            ' and ' .
-                            '(' . $one['hms_student_id'] . ') ' .
-                            HMS_SOAP::get_name($one['hms_student_id']) .
-                            ' are requested roommates, but their genders are different.  Skipping assignment.';
-                continue;
-            }
+        if($zero['gender'] != $one['gender']) {
+        $issues[] = '(' . $zero['hms_student_id'] . ') ' .
+        HMS_SOAP::get_name($zero['hms_student_id']) .
+        ' and ' .
+        '(' . $one['hms_student_id'] . ') ' .
+        HMS_SOAP::get_name($one['hms_student_id']) .
+        ' are requested roommates, but their genders are different.  Skipping assignment.';
+        continue;
+        }
 
-            HMS_Pending_Assignment::add($zero,$one,TRUE);
+        HMS_Pending_Assignment::add($zero,$one,TRUE);
         }*/
 
         // We were going to disallow roommate selection for spring... and of course,
@@ -323,10 +323,10 @@ class HMS_Pending_Assignment
 
             if($zero['gender'] != $one['gender']) {
                 HMS_Pending_Assignment::add($zero,NULL,FALSE);
-                
+
                 $gender_no_roommate[$zero['gender']]++;
                 $issues[] = $zero['hms_student_id'] . ' has no roommate';
-                
+
                 $i++; $j++;
                 continue;
             }
@@ -370,7 +370,7 @@ class HMS_Pending_Assignment
         $ass->chosen        = $chosen?1:0;
         $ass->roommate_zero = $zero['hms_student_id'];
         $ass->meal_zero     = $zero['meal_option'];
-        
+
         if(!is_null($one)) {
             if($zero['gender'] != $one['gender']) {
                 test("Unforseen Gender Error ({$zero['hms_student_id']}, {$one['hms_student_id']}).  Please contact ESS immediately.",1);
@@ -378,7 +378,7 @@ class HMS_Pending_Assignment
             $ass->roommate_one  = $one['hms_student_id'];
             $ass->meal_one      = $one['meal_option'];
             if($zero['lifestyle_option'] == 1 ||
-               $one['lifestyle_option'] == 1) {
+            $one['lifestyle_option'] == 1) {
                 $ass->lifestyle_option = 1;
             } else {
                 $ass->lifestyle_option = 2;
@@ -409,27 +409,27 @@ class HMS_Pending_Assignment
         $content .= '<th>Roommate</th>';
 
         PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
-        
+
         foreach($results as $result) {
             $content .= '<tr><td>';
             $content .= '(' . $result['roommate_zero'] . ') ' .
-                HMS_SOAP::get_name($result['roommate_zero']) .
+            HMS_SOAP::get_name($result['roommate_zero']) .
                 '</td>';
             $content .= '<td>';
             if(!empty($result['roommate_one'])) {
                 $content .=
                     '(' . $result['roommate_one'] . ') ' .
-                    HMS_SOAP::get_name($result['roommate_one']);
+                HMS_SOAP::get_name($result['roommate_one']);
             }
             $content .= '</td>';
             $content .= '<td>' .
-                ($result['gender'] == 0 ? 'Female' : 'Male') .
+            ($result['gender'] == 0 ? 'Female' : 'Male') .
                 '</td>';
             $content .= '<td>' .
-                ($result['lifestyle_option'] == 1 ? 'Single Gender' :
+            ($result['lifestyle_option'] == 1 ? 'Single Gender' :
                 'Co-Ed') . '</td>';
             $content .= '<td>' .
-                ($result['chosen'] == 1 ? 'Requested' : 'Assigned') .
+            ($result['chosen'] == 1 ? 'Requested' : 'Assigned') .
                 '</td>';
             $content .= '</tr>';
         }
@@ -494,7 +494,7 @@ class HMS_Pending_Assignment
         if(PHPWS_Error::isError($pending_ce_m)) {
             test($pending_ce_m,1);
         }
-        
+
         // Beds for Butts
         $db = new PHPWS_DB('hms_beds');
         $db->addColumn('hms_beds.id');
@@ -536,14 +536,14 @@ class HMS_Pending_Assignment
             $bedroom = $bed['bedroom_id'];
             if(HMS_Assignment::is_bed_assigned($bed_id)) continue;
             if(!HMS_Bedroom::is_bedroom_empty($bedroom)) continue;
-           
+             
             if(HMS_Bedroom::static_get_number_beds($bedroom) != 2) continue;
             if(HMS_Bed::associated_objects_deleted($bed_id)) continue;
             if(!HMS_Bed::associated_objects_online($bed_id)) continue;
 
             $other_bed_id = HMS_Bedroom::get_other_bed($bedroom, $bed_id);
             if(HMS_Assignment::is_bed_assigned($other_bed_id)) continue;
-            
+
             $type   = HMS_Bedroom::determine_lifestyle_type($bedroom);
             $gender = HMS_Bedroom::determine_gender($bedroom);
 
@@ -639,36 +639,36 @@ class HMS_Pending_Assignment
         }
 
         $content = '<br /><h2>Could Not Be Auto-Assigned</h2>';
-        
+
         $content .= '<br /><h3>Female, Single-Gender</h3>';
         while($index_sg_f < count($pending_sg_f))
-            $content .= ($pending_sg_f[$index_sg_f]['chosen'] ? '(Requested) ' : '(Assigned) ') .
-                        $pending_sg_f[$index_sg_f]['roommate_zero'] . ', ' .
-                        $pending_sg_f[$index_sg_f++]['roommate_one'] . '<br />';
-        
+        $content .= ($pending_sg_f[$index_sg_f]['chosen'] ? '(Requested) ' : '(Assigned) ') .
+        $pending_sg_f[$index_sg_f]['roommate_zero'] . ', ' .
+        $pending_sg_f[$index_sg_f++]['roommate_one'] . '<br />';
+
         $content .= '<br /><h3>Female, Co-Ed</h3>';
         while($index_ce_f < count($pending_ce_f))
-            $content .= ($pending_ce_f[$index_ce_f]['chosen'] ? '(Requested) ' : '(Assigned) ') .
-                        $pending_ce_f[$index_ce_f]['roommate_zero'] . ', ' .
-                        $pending_ce_f[$index_ce_f++]['roommate_one'] . '<br />';
-        
+        $content .= ($pending_ce_f[$index_ce_f]['chosen'] ? '(Requested) ' : '(Assigned) ') .
+        $pending_ce_f[$index_ce_f]['roommate_zero'] . ', ' .
+        $pending_ce_f[$index_ce_f++]['roommate_one'] . '<br />';
+
         $content .= '<br /><h3>Male, Single-Gender</h3>';
         while($index_sg_m < count($pending_sg_m))
-            $content .= ($pending_sg_m[$index_sg_m]['chosen'] ? '(Requested) ' : '(Assigned) ') .
-                        $pending_sg_m[$index_sg_m]['roommate_zero'] . ', ' .
-                        $pending_sg_m[$index_sg_m++]['roommate_one'] . '<br />';
-        
+        $content .= ($pending_sg_m[$index_sg_m]['chosen'] ? '(Requested) ' : '(Assigned) ') .
+        $pending_sg_m[$index_sg_m]['roommate_zero'] . ', ' .
+        $pending_sg_m[$index_sg_m++]['roommate_one'] . '<br />';
+
         $content .= '<br /><h3>Male, Co-Ed</h3>';
         while($index_ce_m < count($pending_ce_m))
-            $content .= ($pending_ce_m[$index_ce_m]['chosen'] ? '(Requested) ' : '(Assigned) ') .
-                        $pending_ce_m[$index_ce_m]['roommate_zero'] . ', ' .
-                        $pending_ce_m[$index_ce_m++]['roommate_one'] . '<br />';
+        $content .= ($pending_ce_m[$index_ce_m]['chosen'] ? '(Requested) ' : '(Assigned) ') .
+        $pending_ce_m[$index_ce_m]['roommate_zero'] . ', ' .
+        $pending_ce_m[$index_ce_m++]['roommate_one'] . '<br />';
 
         $content .= '<br /><h2>Unclassified (Co-Ed) Rooms</h2>';
         foreach($badbeds as $bed) {
             $content .= $bed . '<br />';
         }
-        
+
         return $content;
     }
 }

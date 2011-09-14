@@ -1,6 +1,5 @@
 <?php
 
-
 class HousingApplication {
 
     public $id = 0;
@@ -128,23 +127,23 @@ class HousingApplication {
         # Set the last modified time
         $this->setModifiedOn(time());
 
-        # Sets the 'last modified by' field according to who's logged in
-        $user = UserStatus::getUsername();
-        if(isset($user) && !is_null($user)){
-            $this->setModifiedBy(UserStatus::getUsername());
-        }else{
-            $this->setModifiedBy('hms');
-        }
+    # Sets the 'last modified by' field according to who's logged in
+    $user = UserStatus::getUsername();
+    if(isset($user) && !is_null($user)){
+        $this->setModifiedBy(UserStatus::getUsername());
+    }else{
+        $this->setModifiedBy('hms');
+    }
 
-        # If the object is new, set the 'created' fields
-        if($this->getId() == 0){
-            $this->setCreatedOn(time());
-            if(isset($user) && !is_null($user)){
-                $this->setCreatedBy(UserStatus::getUsername());
-            }else{
-                $this->setCreatedBy('hms');
-            }
+    # If the object is new, set the 'created' fields
+    if($this->getId() == 0){
+        $this->setCreatedOn(time());
+        if(isset($user) && !is_null($user)){
+            $this->setCreatedBy(UserStatus::getUsername());
+        }else{
+            $this->setCreatedBy('hms');
         }
+    }
     }
 
     /**
@@ -231,19 +230,19 @@ class HousingApplication {
             case 'lottery':
                 return "Re-application";
                 break;
-            case 'offcampus_waitlist':
+            case 'offcampus_waiting_list':
                 return "Open Waiting-list";
                 break;
             default:
                 return "Unknown";
-                break;
+            break;
         }
     }
 
     /*
      * Returns the table row tags for the 'unassigned applications report' in
-     * HMS_Reports.php
-     */
+    * HMS_Reports.php
+    */
     public function unassignedApplicantsRows()
     {
         $tpl = array();
@@ -312,7 +311,7 @@ class HousingApplication {
 
     /******************
      * Static Methods *
-     ******************/
+    ******************/
 
     /**
      * Checks to see if a application already exists for the given username.
@@ -352,7 +351,7 @@ class HousingApplication {
      *
      */
     //TODO move this to the HousingApplicationFactory class, perhaps?
-    function getApplicationByUser($username, $term)
+    function getApplicationByUser($username, $term, $applicationType = NULL)
     {
         PHPWS_Core::initModClass('hms', 'HousingApplication.php');
         PHPWS_Core::initModClass('hms', 'FallApplication.php');
@@ -360,12 +359,17 @@ class HousingApplication {
         PHPWS_Core::initModClass('hms', 'SummerApplication.php');
         PHPWS_Core::initModClass('hms', 'LotteryApplication.php');
         PHPWS_Core::initModClass('hms', 'WaitingListApplication.php');
+        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 
         $student = StudentFactory::getStudentByUsername($username, $term);
 
         $db = new PHPWS_DB('hms_new_application');
         $db->addWhere('username', $username);
         $db->addWhere('term', $term);
+
+        if(!is_null($applicationType)){
+            $db->addWhere('application_type', $applicationType);
+        }
 
         $result = $db->select('row');
 
@@ -406,6 +410,7 @@ class HousingApplication {
      * given student has completed. All parameters are optional.
      * Returns false if the request cannot be compelted for any reason.
      */
+    // TODO depricate this and do it better
     public static function getAllApplications($username = NULL, $banner_id = NULL, $term = NULL){
         PHPWS_Core::initModClass('hms', 'HousingApplicationFactory.php');
 
@@ -432,6 +437,45 @@ class HousingApplication {
         }
 
         return $apps;
+    }
+
+    /**
+     * Returns an array (indexed by term) of HousingApplication objects for the given student.
+     * It does *not* convert these into the child classes/sub-types. You just get
+     * the general HousingApplication type objects.
+     *
+     * @param Student $student
+     * @throws InvalidArgumentException
+     * @throws DatabaseException
+     * @return Array Array of HousingApplication objects for the given user.
+     */
+    public static function getAllApplicationsForStudent(Student $student)
+    {
+        $db = new PHPWS_DB('hms_new_application');
+
+        if(!isset($student) || empty($student) || is_null($student)){
+            throw new InvalidArgumentException('Missing/invalid student.');
+        }
+
+        $db->addWhere('banner_id', $student->getBannerId());
+
+        $result = $db->getObjects('HousingApplication');
+
+        if(PHPWS_Error::logIfError($result)){
+            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+            throw new DatabaseException($result->toString());
+        }
+
+
+        # Re-index the applications using the term as the key
+        $appsByTerm = array();
+        if(isset($result) && !is_null($result)){
+            foreach($result as $app) {
+                $appsByTerm[$app->getTerm()] = $app;
+            }
+        }
+
+        return $appsByTerm;
     }
 
     public static function getAllFreshmenApplications($term){
@@ -511,7 +555,7 @@ class HousingApplication {
                 break;
             default:
                 PHPWS_Core::initModClass('hms', 'exception/InvalidTermException.php');
-                throw new InvalidTermException($term);
+            throw new InvalidTermException($term);
         }
 
         if(PHPWS_Error::logIfError($result)){
@@ -604,11 +648,13 @@ class HousingApplication {
     {
         $requiredTerms = self::getRequiredApplicationTermsForStudent($student);
 
+        $existingApplications = self::getAllApplicationsForStudent($student);
+
         $needToApplyFor = array();
 
         foreach($requiredTerms as $term){
             // Check if a housing application exists for this student in this term
-            if(!HousingApplication::checkForApplication($student->getUsername(), $term['term'])){
+            if(!isset($existingApplications[$term['term']])){
                 $needToApplyFor[] = $term['term'];
             }
         }
@@ -618,7 +664,7 @@ class HousingApplication {
 
     /************************
      * Accessors & Mutators *
-     ************************/
+    ************************/
 
     public function getId(){
         return $this->id;
@@ -768,8 +814,24 @@ class HousingApplication {
         return $this->withdrawn;
     }
 
+    public function isWithdrawn(){
+        if($this->withdrawn == 1){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     public function setWithdrawn($status){
         $this->withdrawn = $status;
+    }
+
+    public function getApplicationType(){
+        return $this->application_type;
+    }
+
+    public function setApplicationType($type){
+        $this->application_type = $type;
     }
 }
 ?>

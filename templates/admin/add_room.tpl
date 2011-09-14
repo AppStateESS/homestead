@@ -22,9 +22,6 @@
                 <th>Room Number: </th><td align="left">{ROOM_NUMBER}</td>
             </tr>
             <tr>
-                <th>Pricing Tier: </th><td>{PRICING_TIER}</td>
-            </tr>
-            <tr>
                 <th>Gender type: </th>
                 <!-- BEGIN gender_message -->
                 <td>{GENDER_MESSAGE}</td>

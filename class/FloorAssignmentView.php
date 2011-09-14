@@ -1,15 +1,13 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'View.php');
-PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
 PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
 PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
 class FloorAssignmentView extends View {
-    protected $floor;
+    private $floor;
 
-    public function __construct($floor=0){
-        $this->floor = new HMS_Floor($floor);
+    public function __construct(HMS_Floor $floor){
+        $this->floor = $floor;
     }
 
     public function show(){

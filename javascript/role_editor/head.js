@@ -1,1 +1,1 @@
-<script type="text/javascript" src="javascript/modules/hms/role_editor/editor.js"></script>
+<script type="text/javascript" src="mod/hms/javascript/role_editor/editor.js"></script>

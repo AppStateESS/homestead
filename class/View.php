@@ -10,12 +10,14 @@
 
 abstract class View
 {
-    public abstract function show();
-    
-    protected function setTitle($title)
-    {
+    protected $pageTitle;
+
+    public function setPageTitle($title){
+        $this->pageTitle = $title;
         Layout::addPageTitle($title);
     }
+
+    public abstract function show();
 }
 
 abstract class HMSView extends View

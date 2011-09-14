@@ -36,21 +36,21 @@ class ProcessBannerQueueCommand extends Command {
         $term = new Term($term);
 
         if(!$term->getBannerQueue()) {
-            NQ::Simple('hms', HMS_NOTIFICATION_ERROR, 'The Banner Queue is not enabled for ' . $term->toString() . '.');
+            NQ::Simple('hms', HMS_NOTIFICATION_ERROR, 'The Banner Queue is not enabled for ' . Term::toString($term->term) . '.');
         } else {
             if($term->getQueueCount() < 1) {
-                NQ::Simple('hms', HMS_NOTIFICATION_WARNING, 'The Banner Queue was already empty for ' . $term->toString() . '.');
+                NQ::Simple('hms', HMS_NOTIFICATION_WARNING, 'The Banner Queue was already empty for ' . Term::toString($term->term) . '.');
                 $term->setBannerQueue(FALSE);
                 $term->save();
-                NQ::Simple('hms', HMS_NOTIFICATION_SUCCESS, 'Banner Queue has been disabled for ' . $term->toString() . '.');
+                NQ::Simple('hms', HMS_NOTIFICATION_SUCCESS, 'Banner Queue has been disabled for ' . Term::toString($term->term) . '.');
             } else {
                 PHPWS_Core::initModClass('hms', 'BannerQueue.php');
                 $result = BannerQueue::processAll($term->term);
                 if($result === TRUE) {
-                    NQ::Simple('hms', HMS_NOTIFICATION_SUCCESS, 'Banner Queue has been processed for ' . $term->toString() . '.');
+                    NQ::Simple('hms', HMS_NOTIFICATION_SUCCESS, 'Banner Queue has been processed for ' . Term::toString($term->term) . '.');
                     $term->setBannerQueue(FALSE);
                     $term->save();
-                    NQ::Simple('hms', HMS_NOTIFICATION_SUCCESS, 'Banner Queue has been disabled for ' . $term->toString() . '.');
+                    NQ::Simple('hms', HMS_NOTIFICATION_SUCCESS, 'Banner Queue has been disabled for ' . Term::toString($term->term) . '.');
                 } else {
                     // TODO: This is just awful.
                     $text = 'The following failures occurred reporting to Banner:<br /><br /><ul>';

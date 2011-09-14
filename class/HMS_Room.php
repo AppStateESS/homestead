@@ -22,7 +22,6 @@ class HMS_Room extends HMS_Item
     public $ra_room                = false;
     public $private_room           = false;
     public $is_overflow            = false;
-    public $pricing_tier           = 0;
     public $is_medical             = false;
     public $is_reserved            = false;
     public $is_online              = false;
@@ -77,7 +76,7 @@ class HMS_Room extends HMS_Item
         $db = new PHPWS_DB('hms_room');
         $result = $db->saveObject($this);
 
-        if (!$result || PHPWS_Error::logIfError($result)) {
+        if(!$result || PHPWS_Error::logIfError($result)) {
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
@@ -94,7 +93,7 @@ class HMS_Room extends HMS_Item
         $db->addWhere('id', $this->id);
         $result = $db->delete();
 
-        if (!$result || PHPWS_Error::logIfError($result)) {
+        if(!$result || PHPWS_Error::logIfError($result)) {
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
@@ -113,7 +112,7 @@ class HMS_Room extends HMS_Item
      */
     public function copy($to_term, $floor_id, $suite_id=NULL, $assignments = FALSE)
     {
-        if (!$this->id) {
+        if(!$this->id) {
             return false;
         }
 
@@ -154,7 +153,7 @@ class HMS_Room extends HMS_Item
         // Save successful, create new beds
 
         // Load all beds for this room
-        if (empty($this->_beds)) {
+        if(empty($this->_beds)) {
             try{
                 $this->loadBeds();
             }catch(Exception $e){
@@ -171,7 +170,7 @@ class HMS_Room extends HMS_Item
          *
          **/
 
-        if (!empty($this->_beds)) {
+        if(!empty($this->_beds)) {
             foreach ($this->_beds as $bed) {
                 try{
                     $bed->copy($to_term, $new_room->id, $assignments);
@@ -201,7 +200,7 @@ class HMS_Room extends HMS_Item
     {
         PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
         $result = new HMS_Floor($this->floor_id);
-        if (PHPWS_Error::logIfError($result)) {
+        if(PHPWS_Error::logIfError($result)) {
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
@@ -223,7 +222,7 @@ class HMS_Room extends HMS_Item
 
         $db->loadClass('hms', 'HMS_Bed.php');
         $result = $db->getObjects('HMS_Bed');
-        if (PHPWS_Error::logIfError($result)) {
+        if(PHPWS_Error::logIfError($result)) {
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         } else {
@@ -306,13 +305,15 @@ class HMS_Room extends HMS_Item
                 return false;
             }
 
-            if (!$this->loadFloor()) {
+            if(!$this->loadFloor()) {
                 // an error occurred loading the floor, check logs
                 return false;
             }
 
             // If the floor is not coed and the gt is not the target, return false
-            if ($this->_floor->gender_type != COED && $this->_floor->gender_type != $target_gender) {
+            if($this->_floor->gender_type != COED &&
+                $this->_floor->gender_type != $target_gender
+                ) {
                 return false;
             }
 
@@ -380,7 +381,7 @@ class HMS_Room extends HMS_Item
      */
     public function get_beds()
     {
-        if (!$this->loadBeds()) {
+        if(!$this->loadBeds()) {
             return false;
         }
 
@@ -412,7 +413,7 @@ class HMS_Room extends HMS_Item
      */
     public function get_assignees()
     {
-        if (!$this->loadBeds()) {
+        if(!$this->loadBeds()) {
             return false;
         }
 
@@ -538,25 +539,27 @@ class HMS_Room extends HMS_Item
         //$tpl = $this->item_tags();
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
-        $tpl['ID']           = $this->id;
-        $tpl['ROOM_NUMBER']  = $this->getLink();
-        $tpl['GENDER_TYPE']  = HMS_Util::formatGender($this->gender_type);
-        $tpl['RA_ROOM']      = $this->ra_room      ? 'Yes' : 'No';
-        $tpl['PRIVATE_ROOM'] = $this->private_room ? 'Yes' : 'No';
-        $tpl['IS_OVERFLOW']  = $this->is_overflow  ? 'Yes' : 'No';
-        $tpl['IS_MEDICAL']   = $this->is_medical   ? 'Yes' : 'No';
-        $tpl['IS_RESERVED']  = $this->is_reserved  ? 'Yes' : 'No';
-        $tpl['IS_ONLINE']    = $this->is_online    ? 'Yes' : 'No';
+        $tpl['ID']             = $this->id;
+        $tpl['ROOM_NUMBER']    = $this->getLink();
+        $tpl['GENDER_TYPE']    = HMS_Util::formatGender($this->gender_type);
+        $tpl['DEFAULT_GENDER'] = HMS_Util::formatGender($this->default_gender);
+        $tpl['RA_ROOM']        = $this->ra_room      ? 'Yes' : 'No';
+        $tpl['PRIVATE_ROOM']   = $this->private_room ? 'Yes' : 'No';
+        $tpl['IS_OVERFLOW']    = $this->is_overflow  ? 'Yes' : 'No';
+        $tpl['IS_MEDICAL']     = $this->is_medical   ? 'Yes' : 'No';
+        $tpl['IS_RESERVED']    = $this->is_reserved  ? 'Yes' : 'No';
+        $tpl['IS_ONLINE']      = $this->is_online    ? 'Yes' : 'No';
+
         if(Current_User::allow('hms','room_structure') && $this->get_number_of_assignees() == 0) {
             $deleteRoomCmd = CommandFactory::getCommand('DeleteRoom');
             $deleteRoomCmd->setRoomId($this->id);
             $deleteRoomCmd->setFloorId($this->floor_id);
 
-            $confirm = array();
-            $confirm['QUESTION']    = 'Are you sure want to delete room ' .  $this->room_number . '?';
-            $confirm['ADDRESS']     = $deleteRoomCmd->getURI();
-            $confirm['LINK']        = 'Delete';
-            $tpl['DELETE']         = Layout::getJavascript('confirm', $confirm);
+            $confirm             = array();
+            $confirm['QUESTION'] = 'Are you sure want to delete room ' .  $this->room_number . '?';
+            $confirm['ADDRESS']  = $deleteRoomCmd->getURI();
+            $confirm['LINK']     = 'Delete';
+            $tpl['DELETE']       = Layout::getJavascript('confirm', $confirm);
         }
 
         return $tpl;
@@ -567,15 +570,35 @@ class HMS_Room extends HMS_Item
         javascript('jquery');
         $tpl = array();
         $tpl['ID']           = $this->id;
-        $tpl['ROOM_NUMBER']  = PHPWS_Text::secureLink($this->room_number, 'hms', array('type'=>'room', 'op'=>'show_edit_room', 'room'=>$this->id));
+        $tpl['ROOM_NUMBER']  = PHPWS_Text::secureLink($this->room_number, 'hms', array('action'=>'EditRoomView', 'room'=>$this->id));
+
+        if(Current_User::allow('hms','room_structure') && $this->get_number_of_assignees() == 0) {
+            $deleteRoomCmd = CommandFactory::getCommand('DeleteRoom');
+            $deleteRoomCmd->setRoomId($this->id);
+            $deleteRoomCmd->setFloorId($this->floor_id);
+
+            $confirm             = array();
+            $confirm['QUESTION'] = 'Are you sure want to delete room ' .  $this->room_number . '?';
+            $confirm['ADDRESS']  = $deleteRoomCmd->getURI();
+            $confirm['LINK']     = 'Delete';
+            $tpl['DELETE']       = Layout::getJavascript('confirm', $confirm);
+        }
 
         $form = new PHPWS_Form($this->id);
         $form->addSelect('gender_type', array(FEMALE => FEMALE_DESC,
-        MALE   => MALE_DESC,
-        COED   => COED_DESC)
-        );
+                                              MALE   => MALE_DESC,
+                                              COED   => COED_DESC
+                                              ));
+
         $form->setMatch('gender_type', $this->gender_type);
         $form->setExtra('gender_type', 'onChange="submit_form(this, true)"');
+
+        $form->addSelect('default_gender', array(FEMALE => FEMALE_DESC,
+                                              MALE   => MALE_DESC,
+                                              COED   => COED_DESC
+                                              ));
+        $form->setMatch('default_gender', $this->default_gender);
+        $form->setExtra('default_gender', 'onChange="submit_form(this, true)"');
 
         $form->addCheck('ra_room', 'yes');
         $form->setMatch('ra_room', $this->ra_room == 1 ? 'yes' : 0);
@@ -601,8 +624,7 @@ class HMS_Room extends HMS_Item
         $form->setMatch('is_online', $this->is_online == 1 ? 'yes' : 0);
         $form->setExtra('is_online', 'onChange="submit_form(this, false)"');
 
-        $form->addHidden('type', 'room');
-        $form->addHidden('op',   'edit_row');
+        $form->addHidden('action', 'UpdateRoomField');
         $form->addHidden('room', $this->id);
 
         $form->mergeTemplate($tpl);
@@ -659,16 +681,17 @@ class HMS_Room extends HMS_Item
         $pager->addWhere('hms_room.floor_id', $floor_id);
         $pager->db->addOrder('hms_room.room_number');
 
-        $page_tags['TABLE_TITLE']        = 'Rooms on this floor';
-        $page_tags['ROOM_NUM_LABEL']     = 'Room Number';
-        $page_tags['GENDER_TYPE_LABEL']  = 'Gender';
-        $page_tags['RA_LABEL']           = 'RA';
-        $page_tags['PRIVATE_LABEL']      = 'Private';
-        $page_tags['OVERFLOW_LABEL']     = 'Overflow';
-        $page_tags['MEDICAL_LABEL']      = 'Medical';
-        $page_tags['RESERVED_LABEL']     = 'Reserved';
-        $page_tags['ONLINE_LABEL']       = 'Online';
-        $page_tags['DELETE_LABEL']       = 'Delete';
+        $page_tags['TABLE_TITLE']          = 'Rooms on this floor';
+        $page_tags['ROOM_NUM_LABEL']       = 'Room Number';
+        $page_tags['GENDER_TYPE_LABEL']    = 'Gender';
+        $page_tags['DEFAULT_GENDER_LABEL'] = 'Default Gender';
+        $page_tags['RA_LABEL']             = 'RA';
+        $page_tags['PRIVATE_LABEL']        = 'Private';
+        $page_tags['OVERFLOW_LABEL']       = 'Overflow';
+        $page_tags['MEDICAL_LABEL']        = 'Medical';
+        $page_tags['RESERVED_LABEL']       = 'Reserved';
+        $page_tags['ONLINE_LABEL']         = 'Online';
+        $page_tags['DELETE_LABEL']         = 'Delete';
 
         if(Current_User::allow('hms', 'room_structure')){
             $addRoomCmd = CommandFactory::getCommand('ShowAddRoom');
@@ -739,46 +762,6 @@ class HMS_Room extends HMS_Item
         }
 
         return true;
-    }
-
-    //TODO: make this into a static method to add a room, create a command to go with it, link to that command fromt he edit floor interface
-    public static function addRoom() {
-        PHPWS_Core::initModClass('hms','HMS_Floor.php');
-        PHPWS_Core::initModClass('hms','HMS_Residence_Hall.php');
-
-        if(!Current_User::allow('hms','room_structure')){
-            return HMS_Floor::show_edit_floor($_REQUEST['floor_id'], NULL, 'Error: You do not have permission to add rooms');
-        }
-        $floor = new HMS_Floor($_REQUEST['floor_id']);
-        $room  = new HMS_Room();
-
-        # Grab all the input from the form and save the room
-        //Changed from radio buttons to checkboxes, ternary
-        //prevents null since only 1 is defined as a return value
-        //test($_REQUEST['room_number']);
-        $room->floor_id       = $_REQUEST['floor_id'];
-        $room->hall_id        = $_REQUEST['hall_id'];
-        $room->room_number    = $_REQUEST['room_number'];
-        $room->pricing_tier   = $_REQUEST['pricing_tier'];
-        $room->gender_type    = $_REQUEST['gender_type'];
-        $room->default_gender = $_REQUEST['default_gender'];
-        $room->is_online      = isset($_REQUEST['is_online'])    ? 1 : 0;
-        $room->is_reserved    = isset($_REQUEST['is_reserved'])  ? 1 : 0;
-        $room->ra_room        = isset($_REQUEST['ra_room'])      ? 1 : 0;
-        $room->private_room   = isset($_REQUEST['private_room']) ? 1 : 0;
-        $room->is_medical     = isset($_REQUEST['is_medical'])   ? 1 : 0;
-        $room->is_overflow    = isset($_REQUEST['is_overflow'])  ? 1 : 0;
-        $room->term           = $floor->term;
-
-        $result = $room->save();
-
-        if(!$result || PHPWS_Error::logIfError($result)){
-            return HMS_Floor::show_edit_floor($room->floor_id, NULL, 'Error: There was a problem adding the room. No changes were made. Please contact ESS.');
-        }
-
-        return HMS_Floor::show_edit_floor($room->floor_id, 'Room added successfully.');
-
-
     }
 
     /**

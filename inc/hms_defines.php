@@ -1,5 +1,7 @@
 <?php
 
+define('HMS_DEBUG', false);
+
 /**************
  * Login Link *
  **************/
@@ -38,7 +40,4 @@ ini_set('display_errors', 1);
 
 /* Memory limit */
 ini_set('memory_limit', '512M');
-
-define('HMS_DEBUG', true);
-
 ?>

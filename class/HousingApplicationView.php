@@ -37,12 +37,12 @@ class HousingApplicationView extends View {
         $student     = StudentFactory::getStudentByUsername($application->username, $application->term);
 
         $tpl = array();
-        
+
         //If the application has been submitted plug in the date it was created
         if(isset($application->created_on)){
             $tpl['RECEIVED_DATE']   = "Received on: " . date('d-F-Y h:i:s a', $application->created_on);
         }
-            
+
         if($application->withdrawn == 1){
             NQ::simple('hms', HMS_NOTIFICATION_WARNING, 'This application has been withdrawn.');
         }
@@ -59,30 +59,30 @@ class HousingApplicationView extends View {
         }else{
             $tpl['LIFESTYLE_OPTION']    = 'n/a';
         }
-        
+
         if(isset($application->preferred_bedtime)){
             $tpl['PREFERRED_BEDTIME']   = $application->preferred_bedtime == 1?'Early':'Late';
         }else{
             $tpl['PREFERRED_BEDTIME']   = 'n/a';
         }
-        
+
         if(isset($application->room_condition)){
             $tpl['ROOM_CONDITION']      = $application->room_condition == 1?'Neat':'Cluttered';
         }else{
             $tpl['ROOM_CONDITION']      = 'n/a';
         }
-        
+
         if(isset($application->room_type)){
             $tpl['ROOM_TYPE']           = $application->room_type == ROOM_TYPE_DOUBLE ? 'Double' : 'Private (if available)';
         }
-        
+
         $tpl['CELLPHONE'] = '';
         if(strlen($application->cell_phone) == 10){
             $tpl['CELLPHONE']   .= '('.substr($application->cell_phone, 0, 3).')';
             $tpl['CELLPHONE']   .= '-'.substr($application->cell_phone, 3, 3);
             $tpl['CELLPHONE']   .= '-'.substr($application->cell_phone, 6, 4);
         }
-        
+
         $special_needs = "";
         if($application->physical_disability == 1){
             $special_needs = 'Physical disability<br />';
@@ -102,14 +102,20 @@ class HousingApplicationView extends View {
         }
         $tpl['SPECIAL_NEEDS_RESULT'] = $special_needs;
 
-        if($application instanceof FallApplication ){
-            $tpl['RLC_INTEREST_1'] = $application->rlc_interest == 0?'No':'Yes';
+        if($application instanceof FallApplication){
+            PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
+            $rlcApp = HMS_RLC_Application::getApplicationByUsername($student->getUsername(), $application->getTerm());
+            if(!is_null($rlcApp)){
+                $tpl['RLC_INTEREST_1'] = 'Yes (Completed - Use the main menu to view/modify.)';
+            }else{
+                $tpl['RLC_INTEREST_1'] = $application->rlc_interest == 0?'No':'Yes';
+            }
         }
 
         if(Current_User::getUsername() == "hms_student"){
             $tpl['MENU_LINK'] = PHPWS_Text::secureLink('Back to main menu', 'hms', array('type'=>'student', 'op'=>'show_main_menu'));
         }
-        
+
         Layout::addPageTitle("Housing Application");
 
         return PHPWS_Template::process($tpl, 'hms', 'admin/student_application.tpl');

@@ -7,7 +7,7 @@
 
 /************************
  * Date & Time Functions *
- ************************/
+************************/
 
 class HMS_Util{
 
@@ -85,7 +85,7 @@ class HMS_Util{
     public function get_short_date($timestamp) {
         if(!isset($timestamp))
         $timestamp = mktime();
-
+         
         return date('j-n-y', $timestamp);
     }
 
@@ -132,7 +132,7 @@ class HMS_Util{
         if(!isset($timestamp)){
             $timestamp = mktime();
         }
-
+         
         return date('M jS, Y', $timestamp);
     }
 
@@ -156,33 +156,6 @@ class HMS_Util{
 
         return $avail;
 
-    }
-
-    function relativeTime($time, $now = NULL)
-    {
-        $time = (int) $time;
-        $curr = !is_null($now) ? $now : time();
-        $shift = $curr - $time;
-
-        if ($shift < 45){
-            $diff = $shift;
-            $term = "second";
-        }elseif ($shift < 2700){
-            $diff = round($shift / 60);
-            $term = "minute";
-        }elseif ($shift < 64800){
-            $diff = round($shift / 60 / 60);
-            $term = "hour";
-        }else{
-            $diff = round($shift / 60 / 60 / 24);
-            $term = "day";
-        }
-
-        if ($diff > 1){
-            $term .= "s";
-        }
-
-        return "$diff $term ago";
     }
 
     /**
@@ -209,7 +182,7 @@ class HMS_Util{
         switch ($gender) {
             case FEMALE:
                 return FEMALE_DESC;
-
+                 
             case MALE:
                 return MALE_DESC;
 
@@ -316,7 +289,7 @@ class HMS_Util{
 
                 default:
                     $suffix = "th";
-                    break;
+                break;
             }
         }
 

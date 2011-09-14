@@ -18,6 +18,7 @@ class FloorView extends View {
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You are not allowed to edit or view floors.');
         }
+
         PHPWS_Core::initModClass('hms', 'HMS_Movein_Time.php');
         PHPWS_Core::initModClass('hms', 'HMS_Room.php');
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
@@ -26,7 +27,7 @@ class FloorView extends View {
 
         $floor_num = $this->floor->getFloorNumber();
 
-        # Setup the title and color of the title bar
+        // Setup the title and color of the title bar
         $tpl['TITLE'] = HMS_Util::ordinal($floor_num). ' Floor - ' . $this->hall->getHallName() . ' - ' . Term::getPrintableSelectedTerm();
 
         $submitCmd = CommandFactory::getCommand('EditFloor');
@@ -102,12 +103,12 @@ class FloorView extends View {
         $tpl['STATIC_ROOM_PAGER'] = HMS_Room::room_pager_by_floor($this->floor->id);
         $tpl['DYNAMIC_ROOM_PAGER'] = HMS_Room::room_pager_by_floor($this->floor->id, true);
 
-        # if the user has permission to view the form but not edit it then
-        # disable it
+        // if the user has permission to view the form but not edit it then
+        // disable it
         if( Current_User::allow('hms', 'floor_view')
         && !Current_User::allow('hms', 'floor_attributes')
         && !Current_User::allow('hms', 'floor_structure'))
-            {
+        {
             $form_vars = get_object_vars($form);
             $elements = $form_vars['_elements'];
 
@@ -118,8 +119,11 @@ class FloorView extends View {
 
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
-		javascript('modules/hms/role_editor');
-        $tpl['ROLE_EDITOR'] = PHPWS_Template::process(array('CLASS_NAME'=>"'HMS_Floor'", 'ID'=>$this->floor->id), 'hms', 'admin/role_editor.tpl');
+
+        if(Current_User::allow('hms', 'edit_role_members')){
+            javascript('modules/hms/role_editor');
+            $tpl['ROLE_EDITOR'] = PHPWS_Template::process(array('CLASS_NAME'=>"'HMS_Floor'", 'ID'=>$this->floor->id), 'hms', 'admin/role_editor.tpl');
+        }
 
         Layout::addPageTitle("Edit Floor");
 
@@ -127,4 +131,4 @@ class FloorView extends View {
     }
 }
 
-?>
+//?>

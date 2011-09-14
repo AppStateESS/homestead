@@ -31,7 +31,7 @@ class RoommateProfileSearchForm extends View {
         $form->addText('asu_username');
         $form->setLabel('asu_username','ASU Username: ');
 
-        javascript('/modules/hms/autoFocus', array('ELEMENT' => $form->getId('asu_username')));
+        javascript('modules/hms/autoFocus', array('ELEMENT' => $form->getId('asu_username')));
 
         $form->addCheck('hobbies_checkbox',$hobbies);
         $form->setLabel('hobbies_checkbox',$hobbies_labels);
@@ -40,6 +40,10 @@ class RoommateProfileSearchForm extends View {
         $form->addCheck('music_checkbox',$music);
         $form->setLabel('music_checkbox',$music_labels);
         $tags['MUSIC_CHECKBOX_QUESTION'] = 'Music Preferences (check all that apply):';
+
+        $form->addCheck('language_checkbox', $language);
+        $form->setLabel('language_checkbox', $language_labels);
+        $tags['LANGUAGE_CHECKBOX_QUESTION'] = 'Spoken Languages (check all that apply):';
 
         $form->addDropBox('political_views_dropbox',$political_views);
         $form->setLabel('political_views_dropbox','His/her political view: ');

@@ -17,7 +17,7 @@ class HMS_Movein_Time
      * Instance Methods *
      *******************/
     public function HMS_Movein_Time($id = NULL){
-        
+
         if(!isset($id) || is_null($id)){
             return;
         }
@@ -40,7 +40,7 @@ class HMS_Movein_Time
         }
         return true;
     }
-    
+
     public function delete()
     {
         $db = new PHPWS_DB('hms_movein_time');
@@ -57,7 +57,15 @@ class HMS_Movein_Time
     public function get_formatted_begin_end()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
-        return HMS_Util::get_long_date_time($this->begin_timestamp) . ' - ' . date('gA',$this->end_timestamp);
+        // Check for multi-day move in time. If days-of-month aren't equal then it'multi-day move in.
+        if(date('d', $this->begin_timestamp) != date('d', $this->end_timestamp)){
+            // Multi-day move in time.
+            return HMS_Util::get_long_date_time($this->begin_timestamp) . ' through '
+                . HMS_Util::get_long_date_time($this->end_timestamp);
+        }else{
+            // Single day move in time.
+            return HMS_Util::get_long_date_time($this->begin_timestamp) . ' - ' . date('gA',$this->end_timestamp);
+        }
     }
 
     public function getRowTags()
@@ -79,18 +87,16 @@ class HMS_Movein_Time
 
     public function get_movein_times_array($term = NULL)
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
-
         if(!isset($term)){
             PHPWS_Core::initModClass('hms', 'Term.php');
             $term = Term::getSelectedTerm();
         }
-        
+
         $db = new PHPWS_DB('hms_movein_time');
 
         $db->addWhere('term', $term);
         $db->addOrder('begin_timestamp', 'ASC');
-        $result = $db->select();
+        $result = $db->getObjects('HMS_Movein_Time');
 
         if(PEAR::isError($result)){
             return false;
@@ -100,13 +106,15 @@ class HMS_Movein_Time
 
         $timestamps[0] = 'None';
 
-        foreach ($result as $row){
-            $timestamps[$row['id']] = HMS_Util::get_long_date_time($row['begin_timestamp']) . ' - ' . date('gA',$row['end_timestamp']);
+        if(!empty($result)){
+           foreach ($result as $movein){
+            $timestamps[$movein->id] = $movein->get_formatted_begin_end();
+           }
         }
 
         return $timestamps;
     }
-    
+
     public function get_movein_times_pager(){
         PHPWS_Core::initCoreClass('DBPager.php');
 

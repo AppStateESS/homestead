@@ -61,10 +61,10 @@
     /****************
      * Role editing *
      ****************/
-    $permission['edit_roles'] = _('Create/edit/delete roles');
-    $permission['edit_role_permissions']  = _('Add/remove permissions for roles');
-    $permission['view_role_members']  = _('See who is a member of a role');
-    $permission['edit_role_members'] = _('Edit who is a member of a role');
+    $permissions['edit_roles'] = _('Create/edit/delete roles');
+    $permissions['edit_role_permissions']  = _('Add/remove permissions for roles');
+    $permissions['view_role_members']  = _('See who is a member of a role');
+    $permissions['edit_role_members'] = _('Edit who is a member of a role');
 
     /*************
      * Roommates *

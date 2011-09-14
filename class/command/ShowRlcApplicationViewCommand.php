@@ -16,7 +16,12 @@ class ShowRlcApplicationViewCommand extends Command {
     }
 
     public function execute(CommandContext $context){
-        $view = new RlcApplicationView($context->get('term'));
+        $term = $context->get('term');
+        if(!isset($term) || is_null($term) || empty($term)){
+            throw new InvalidArgumentException('Missing term.');
+        }
+
+        $view = new RlcApplicationView($term);
 
         $context->setContent($view->show());
     }

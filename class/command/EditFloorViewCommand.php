@@ -30,7 +30,7 @@ class EditFloorViewCommand extends Command {
             throw new PermissionException('You do not have permission to edit floors.');
         }
 
-        // Check for a  hall ID
+        // Check for a hall ID
         $floorId = $context->get('floor');
         if(!isset($floorId)){
             throw new InvalidArgumentException('Missing floor ID.');

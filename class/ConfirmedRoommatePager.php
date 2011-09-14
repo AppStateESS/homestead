@@ -8,16 +8,16 @@ PHPWS_Core::initCoreClass('DBPager.php');
 
 class ConfirmedRoommatePager extends View {
 
-	public function __construct(){
-	}
+    public function __construct(){
+    }
 
-	public function show()
-	{
+    public function show()
+    {
         $pager = new DBPager('hms_roommate', 'HMS_Roommate');
-        
+
         $pager->db->addWhere('confirmed', 1);
         $pager->db->addWhere('term', Term::getSelectedTerm());
-        
+
         $pager->setModule('hms');
         $pager->setTemplate('admin/roommate_pager.tpl');
         $pager->addRowTags('get_roommate_pager_tags');
@@ -29,7 +29,7 @@ class ConfirmedRoommatePager extends View {
         $pager->setSearch('requestor', 'requestee');
 
         return $pager->get();
-	}
+    }
 }
 
 ?>

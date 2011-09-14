@@ -1,4 +1,4 @@
-<script type="text/javascript" src="javascript/modules/hms/jquery.selectboxes.js"></script>
+<script type="text/javascript" src="mod/hms/javascript/jquery.selectboxes.js"></script>
 
 
 <script type="text/javascript">

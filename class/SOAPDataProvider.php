@@ -19,6 +19,8 @@ class SOAPDataProvider extends StudentDataProvider {
 
         SOAPDataProvider::plugSOAPData($student, $soapData);
 
+        SOAPDataProvider::applyExceptions($student);
+
         return $student;
     }
 
@@ -59,6 +61,9 @@ class SOAPDataProvider extends StudentDataProvider {
         $student->setHonors($soapData->honors);
         $student->setTeachingFellow($soapData->teaching_fellow);
         $student->setWataugaMember($soapData->watauga_member);
+        
+        $student->setHousingWaiver($soapData->housing_waiver);
+        $student->setPinDisabled($soapData->disabled_pin);
 
         $phoneNumbers = array();
 
@@ -89,6 +94,34 @@ class SOAPDataProvider extends StudentDataProvider {
      */
     public function clearCache()
     {
+    }
+
+    private static function applyExceptions(&$student)
+    {
+        /*
+         * This is a hack to fix some freshmen students who have application terms in the future but are considered type 'C' by the registrar's office.
+         * See Trac #719
+         */
+        PHPWS_Core::initModClass('hms', 'Term.php');
+        if($student->getApplicationTerm() > Term::getCurrentTerm() && $student->getType() == TYPE_CONTINUING){
+            $student->setType(TYPE_FRESHMEN);
+        }
+
+        if($student->getUsername() == 'marshallkd'){
+            $student->setApplicationTerm(201040);
+        }
+
+        if($student->getUsername() == 'weldoncr'){
+            $student->setApplicationTerm(200840);
+        }
+
+        if($student->getUsername() == 'ghoniema'){
+            $student->setType(TYPE_CONTINUING);
+        }
+    }
+}
+
+?>
     }
 }
 

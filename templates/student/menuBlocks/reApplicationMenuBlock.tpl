@@ -27,7 +27,7 @@ Re-application for this term ended on {END_DEADLINE}.
 
 <!-- BEGIN applied -->
 {ALREADY_APPLIED}
-You have already re-applied for on-campus housing for this term. You will be notified by email if you are selected.<br />
+You have re-applied for on-campus housing for this term. You will be notified by email if you are selected.<br />
 <!-- END applied -->
 
 <!-- BEGIN select -->

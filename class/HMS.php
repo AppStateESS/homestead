@@ -84,14 +84,26 @@ abstract class HMS {
             echo "Referrer: (none)\n";
         }
         echo "Remote addr: {$_SERVER['REMOTE_ADDR']}\n\n";
-        echo "Here is CurrentUser:\n\n";
-        print_r(Current_User::getUserObj());
-        echo "\n\nHere is the exception:\n\n";
+
+        $user = Current_User::getUserObj();
+        if(isset($user) && !is_null($user)){
+            echo "User name: {$user->getUsername()}\n\n";
+        }else{
+            echo "User name: (none)\n\n";
+        }
+
+        echo "Here is the exception:\n\n";
         print_r($e);
+
         echo "\n\nHere is the CommandContext:\n\n";
         print_r($this->context);
+
         echo "\n\nHere is $_REQUEST:\n\n";
         print_r($_REQUEST);
+
+        echo "\n\nHere is CurrentUser:\n\n";
+        print_r(Current_User::getUserObj());
+
         $message = ob_get_contents();
         ob_end_clean();
 

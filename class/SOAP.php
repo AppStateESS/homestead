@@ -1,156 +1,157 @@
 <?php
 
-abstract class SOAP {
+/**
+ * SOAP parent class. Defines the basic functions of the SOAP interface and handles some utility functions.
+ *
+ * @author jbooker
+ *
+ */
+abstract class SOAP
+{
 
-	protected static $instance;
-	protected static $cache;
-
-	protected function __construct(){}
-
-	public static function getInstance()
-	{
-		if(empty(self::$instance)){
-			if(SOAP_INFO_TEST_FLAG){
-				PHPWS_Core::initModClass('hms', 'TestSOAP.php');
-				self::$instance = new TestSOAP();
-			}else{
-				//PHPWS_Core::initModClass('hms', 'BannerSOAP.php');
-				//self::$instance = new BannerSOAP();
-				PHPWS_Core::initModClass('hms', 'PhpSOAP.php');
-				self::$instance = new PhpSOAP();
-			}
-		}
-
-		return self::$instance;
-	}
-
-	/**
-	 * Main public function for getting student info.
-	 * Used by the rest of the "get" public functions
-	 * @return SOAP object
-	 * @throws InvalidArgumentException, SOAPException
-	 */
-	public abstract function getStudentInfo($username, $term);
-
-
-	/**
-	 * Returns the ASU Username for the given banner id
-	 * @return String Username corresponding to given Banner id.
-	 * @throws InvalidArgumentException, SOAPException
-	 */
-	public abstract function getUsername($banner_id);
-	
-	/**
-	 * Returns true if the given user name corresponds to a valid student for the given semester. Returns false otherwise.
-	 * @param String $username
-	 * @param int $term
-	 * @return bool
-	 */
-	public abstract function isValidStudent($username, $term);
-
-	/**
-	 * Report that a housing application has been received.
-	 * Makes First Connections stop bugging the students.
-	 * @return boolean True if successful
-	 * @throws InvalidArgumentException, SOAPException, BannerException
-	 */
-	public abstract function reportApplicationReceived($username, $term);
-
-	/**
-	 * Sends a room assignment to banner. Will cause students to be billed, etc.
-	 * @return boolean True if successful.
-	 * @throws InvalidArgumentException, SOAPException, BannerException
-	 */
-	public abstract function reportRoomAssignment($username, $term, $building_code, $room_code, $plan_code, $meal_code);
-
-	/**
-	 * Remove the deletion of a room assignment to Banner.
-	 * Will cause students to be credited, etc.
-	 * @return boolean True if successful
-	 * @throws InvalidArgumentException, SOAPException, BannerException
-	 */
-	public abstract function removeRoomAssignment($username, $term, $building, $room);
-
-	/**
-	 * Returns a student's current assignment information
-	 * $opt is one of:
-	 *  'All'
-	 *  'HousingApp'
-	 *  'RoomAssign'
-	 *  'MealAssign'
-	 *  @throws InvalidArgumentException, SOAPException
-	 */
-	public abstract function getHousMealRegister($username, $term, $opt);
-
-	/*********************
-	 * Utility Functions *
-	 *********************/
+    protected static $instance;
+    protected static $cache;
 
     /**
-     * @depricated
+     * Constructor
      */
-    protected static function checkResponse($resonse)
+    protected function __construct()
     {
-        # Check for a SOAP fault
-        if($response instanceof SoapFault){
-            SOAP::logSoapFault($response, 'getStudentInfo', $username);
 
-			PHPWS_Core::initModClass('hms', 'exception/SOAPException.php');
-			throw new SOAPExcpetion($response->__toString());
-        }
-
-        # Check for a banner error
-		if(is_numeric($response) && $response > 0){
-			SOAP::logSoap('get_student_info', "Banner Error: $response", $username, $term);
-			SOAP::logSoapError('error code: ' . $response, 'get_student_info', $username);
-
-			PHPWS_Core::initModClass('hms', 'exception/BannerException.php');
-			throw new BannerException('Banner error', $response);
-		}
     }
 
-	/**
-	 * Returns TRUE if an error object is of class 'soap_fault'
-     * @depricated - use CheckResponse() instead
-	 */
-	protected static function isSoapFault($object)
-	{
-		if(is_object($object) && is_a($object, 'soap_fault')){
-			return TRUE;
-		}else{
-			return FALSE;
-		}
-	}
+    /**
+     * Get an instance of the singleton.
+     *
+     * @return SOAP - Instance of the SOAP class.
+     */
+    public static function getInstance()
+    {
+        if(empty(self::$instance)) {
+            if(SOAP_INFO_TEST_FLAG) {
+                PHPWS_Core::initModClass('hms', 'TestSOAP.php');
+                self::$instance = new TestSOAP();
+            } else {
+                PHPWS_Core::initModClass('hms', 'PhpSOAP.php');
+                self::$instance = new PhpSOAP();
+            }
+        }
 
-	/**
-	 * Uses the PHPWS_Core log public function to 'manually' log soap errors to soap_error.log.
-     * @depricated
-	 */
-	protected static function logSoapFault($soap_fault, $function, $extra_info)
-	{
-		$error_msg = $soap_fault->message . 'in public function: ' . $function . " Extra: " . $extra_info;
-		PHPWS_Core::log($error_msg, 'soap_error.log', _('Error'));
-	}
+        return self::$instance;
+    }
 
-	/**
-	 * Uses the PHPWS_Core log public function to 'manually' log soap erros to soap_error.log.
-     * @depricated
-	 */
-	protected static function logSoapError($message, $function, $extra)
-	{
-		PHPWS_Core::log('Banner error: ' . $message . ' in public function: ' . $function . ' Extra: ' . $extra, 'soap_error.log', 'Error');
-	}
+    /**
+     * Main public function for getting student info.
+     * Used by the rest of the "get" public functions
+     *
+     * @param String    $username
+     * @param Integer   $term
+     * @return SOAP object
+     * @throws InvalidArgumentException, SOAPException
+     */
+    public abstract function getStudentInfo($username, $term);
 
-	/**
-	 * Uses the PHPWS_Core log public function to 'manually' log soap requests
-	 */
-	protected static function logSoap($function, $result)
-	{
-		$arglist = func_get_args();
-		$args = implode(', ', array_slice($arglist, 2));
-		$msg = "$function($args) result: $result";
-		PHPWS_Core::log($msg, 'soap.log', 'SOAP');
-	}
+
+    /**
+     * Returns the ASU Username for the given banner id
+     *
+     * @param  Integer $bannerId
+     * @return String  Username corresponding to given Banner id.
+     * @throws InvalidArgumentException, SOAPException
+     */
+    public abstract function getUsername($bannerId);
+
+    /**
+     * Returns true if the given user name corresponds to a valid student for the given semester. Returns false otherwise.
+     *
+     * @param String $username
+     * @param Integer $term
+     * @return bool
+     */
+    public abstract function isValidStudent($username, $term);
+
+    /**
+     * Report that a housing application has been received.
+     * Makes First Connections stop bugging the students.
+     *
+     * @param String $username
+     * @param Integer $term
+     * @return boolean True if successful
+     * @throws InvalidArgumentException, SOAPException, BannerException
+     */
+    public abstract function reportApplicationReceived($username, $term);
+
+    /**
+     * Sends a room assignment to banner. Will cause students to be billed, etc.
+     *
+     * @param String $username
+     * @param Integer $term
+     * @param String $building_code Banner building code
+     * @param Integer $room_code Banner bed Id.
+     * @param String $plan_code Banner plan code ('HOUSE' or 'HOME').
+     * @param Integer $meal_code Banner meal code (numeric code for meal plan level)
+     * @return boolean True if successful.
+     * @throws InvalidArgumentException, SOAPException, BannerException
+     */
+    public abstract function reportRoomAssignment($username, $term, $building_code, $room_code, $plan_code, $meal_code);
+
+    /**
+     * Remove the deletion of a room assignment to Banner.
+     * Will cause students to be credited, etc.
+     *
+     * @param String $username
+     * @param Integer $term
+     * @param String $building Banner building code
+     * @param Integer $room Banner bed code.
+     * @return boolean True if successful
+     * @throws InvalidArgumentException, SOAPException, BannerException
+     */
+    public abstract function removeRoomAssignment($username, $term, $building, $room);
+
+    /**
+     * Returns a student's current assignment information
+     * $opt is one of:
+     *  'All'
+     *  'HousingApp'
+     *  'RoomAssign'
+     *  'MealAssign'
+     *
+     * @param String $username
+     * @param Integer $termcode
+     * @param String $opt
+     * @return void
+     * @throws InvalidArgumentException, SOAPException
+     */
+    public abstract function getHousMealRegister($username, $termcode, $opt);
+    
+    /**
+     * Queries Banner for the BannerID of the student assigned to a given bed.
+     * Returns null if there is no student assigned to the bed.
+     * 
+     * @param String $building - The Banner building code (eg. 'AHR', 'EHR', etc)
+     * @param String $room - The Banner bed id number (eg. '01051')
+     * @param Integer $term - The term to query for
+     */
+    public abstract function getBannerIdByBuildingRoom($building, $room, $term);
+
+    /*********************
+     * Utility Functions *
+     *********************/
+
+    /**
+     * Uses the PHPWS_Core log public function to 'manually' log soap requests
+     *
+     * @param String $function The name of the function that's doing the logging.
+     * @param String $result A string indicating the result of the function call. Could be anything (usually "success").
+     * @return void
+     */
+    protected static function logSoap($function, $result)
+    {
+        $arglist = func_get_args();
+        $args = implode(', ', array_slice($arglist, 2));
+        $msg = "$function($args) result: $result";
+        PHPWS_Core::log($msg, 'soap.log', 'SOAP');
+    }
 }
 
 ?>

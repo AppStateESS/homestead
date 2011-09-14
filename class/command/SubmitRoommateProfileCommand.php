@@ -246,6 +246,12 @@ class SubmitRoommateProfileCommand extends Command {
             $profile->set_blues(0);
         }
 
+        if(isset($_REQUEST['music_checkbox']['christian'])){
+            $profile->set_christian();
+        }else{
+            $profile->set_christian(0);
+        }
+
         if(isset($_REQUEST['music_checkbox']['classical'])){
             $profile->set_classical();
         }else{
@@ -438,6 +444,127 @@ class SubmitRoommateProfileCommand extends Command {
             $profile->set_free_time($_REQUEST['free_time']);
         }else{
             $profile->set_free_time(0);
+        }
+
+        # Spoken Languages
+        if(isset($_REQUEST['language_checkbox']['arabic'])){
+            $profile->set_arabic();
+        }else{
+            $profile->set_arabic(0);
+        }
+
+        if(isset($_REQUEST['language_checkbox']['bengali'])){
+            $profile->set_bengali();
+        }else{
+            $profile->set_bengali(0);
+        }
+
+        if(isset($_REQUEST['language_checkbox']['chinese'])){
+            $profile->set_chinese();
+        }else{
+            $profile->set_chinese(0);
+        }
+
+        if(isset($_REQUEST['language_checkbox']['english'])){
+            $profile->set_english();
+        }else{
+            $profile->set_english(0);
+        }
+
+        if(isset($_REQUEST['language_checkbox']['french'])){
+            $profile->set_french();
+        }else{
+            $profile->set_french(0);
+        }
+
+        if(isset($_REQUEST['language_checkbox']['german'])){
+            $profile->set_german();
+        }else{
+            $profile->set_german(0);
+        }
+
+        if(isset($_REQUEST['language_checkbox']['hindi'])){
+            $profile->set_hindi();
+        }else{
+            $profile->set_hindi(0);
+        }
+
+        if(isset($_REQUEST['language_checkbox']['italian'])){
+            $profile->set_italian();
+        }else{
+            $profile->set_italian(0);
+        }
+
+        if(isset($_REQUEST['language_checkbox']['japanese'])){
+            $profile->set_japanese();
+        }else{
+            $profile->set_japanese(0);
+        }
+
+        if(isset($_REQUEST['language_checkbox']['javanese'])){
+            $profile->set_javanese();
+        }else{
+            $profile->set_javanese(0);
+        }
+
+        if(isset($_REQUEST['language_checkbox']['korean'])){
+            $profile->set_korean();
+        }else{
+            $profile->set_korean(0);
+        }
+
+        if(isset($_REQUEST['language_checkbox']['malay'])){
+            $profile->set_malay();
+        }else{
+            $profile->set_malay(0);
+        }
+
+        if(isset($_REQUEST['language_checkbox']['marathi'])){
+            $profile->set_marathi();
+        }else{
+            $profile->set_marathi(0);
+        }
+
+        if(isset($_REQUEST['language_checkbox']['portuguese'])){
+            $profile->set_portuguese();
+        }else{
+            $profile->set_portuguese(0);
+        }
+
+        if(isset($_REQUEST['language_checkbox']['punjabi'])){
+            $profile->set_punjabi();
+        }else{
+            $profile->set_punjabi(0);
+        }
+
+        if(isset($_REQUEST['language_checkbox']['russian'])){
+            $profile->set_russian();
+        }else{
+            $profile->set_russian(0);
+        }
+
+        if(isset($_REQUEST['language_checkbox']['spanish'])){
+            $profile->set_spanish();
+        }else{
+            $profile->set_spanish(0);
+        }
+
+        if(isset($_REQUEST['language_checkbox']['tamil'])){
+            $profile->set_tamil();
+        }else{
+            $profile->set_tamil(0);
+        }
+
+        if(isset($_REQUEST['language_checkbox']['telugu'])){
+            $profile->set_telugu();
+        }else{
+            $profile->set_telugu(0);
+        }
+
+        if(isset($_REQUEST['language_checkbox']['vietnamese'])){
+            $profile->set_vietnamese();
+        }else{
+            $profile->set_vietnamese(0);
         }
 
         $profile->save();

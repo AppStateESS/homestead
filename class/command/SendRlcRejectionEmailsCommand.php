@@ -34,7 +34,7 @@ class SendRlcRejectionEmailsCommand extends Command
         $email = new HMS_Email();
 
         foreach($deniedStudents as $student){
-            $email->sendRlcApplicationRejected($student);
+            $email->sendRlcApplicationRejected($student, $term);
         }
 
         NQ::Simple('hms', HMS_NOTIFICATION_SUCCESS, 'RLC rejection emails sent.');

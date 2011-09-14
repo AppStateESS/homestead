@@ -1,22 +1,8 @@
 <script type="text/javascript">
-function edit_toggle(){
-    $("#static_pager").toggle();
-    $("#dynamic_pager").toggle();
-    switch($("#edit").text()){
-        case 'Edit':
-            $("#edit").text('View');
-            break;
-        case 'View':
-            $("#edit").text('Edit');
-            break;
-        default:
-            break;
-    }
-}
-
 function submit_form(form_element, dropdown){
     var table_row = $(form_element).parent().parent().get(0);
     var form_element_value = 0;
+
     if(dropdown){
         form_element_value = $(form_element).val();
     } else {
@@ -50,7 +36,11 @@ function submit_form(form_element, dropdown){
             }
 
             var tablecell = $("#"+json.id+""+form_element.name).get(0);
-            $(tablecell).text(""+display_text);
+            if(tablecell == 'undefined'){
+                alert('Operation succeeded but could not update view!');
+            } else {
+                $(tablecell).text(""+display_text);
+            }
         } else {
             alert('Error updating the database, no changes were made.\n'+json.message);
         }
@@ -59,7 +49,7 @@ function submit_form(form_element, dropdown){
 }
 
 $(document).ready(function(){
-    $("#dynamic_pager").hide();
+    $("#room_edit").tabs();
 });
 </script>
 <div class="hms">
@@ -114,12 +104,23 @@ $(document).ready(function(){
         {SUBMIT_FORM}
         {END_FORM}
         <br /><br />
-        <a id="edit" onclick="edit_toggle()">Edit</a>
-        <div id="static_pager">
-        {STATIC_ROOM_PAGER}
-        </div>
-        <div id="dynamic_pager">
-        {DYNAMIC_ROOM_PAGER}
+
+        <div id="room_edit">
+          <ul>
+            <li>
+              <a href="#static_pager">View</a>
+            </li>
+            <li>
+              <a href="#dynamic_pager">Edit</a>
+            </li>
+          </ul>
+
+          <div id="static_pager">
+            {STATIC_ROOM_PAGER}
+          </div>
+          <div id="dynamic_pager">
+            {DYNAMIC_ROOM_PAGER}
+          </div>
         </div>
         <div id="roles">
         {ROLE_EDITOR}

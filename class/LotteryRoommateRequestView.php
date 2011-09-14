@@ -1,15 +1,17 @@
 <?php
 
 class LotteryRoommateRequestView extends View {
-    
+
     private $request;
     private $term;
-    
-    public function __construct($request, $term){
+    private $housingApplication;
+
+    public function __construct($request, $term, HousingApplication $app){
         $this->request = $request;
         $this->term = $term;
+        $this->housingApplication = $app;
     }
-    
+
     public function show()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
@@ -21,7 +23,7 @@ class LotteryRoommateRequestView extends View {
         $room = $bed->get_parent();
 
         $tpl = array();
-        
+
         $requestor = StudentFactory::getStudentByUsername($this->request['requestor'], $this->term);
 
         $tpl['REQUESTOR']      = $requestor->getName();
@@ -29,7 +31,7 @@ class LotteryRoommateRequestView extends View {
 
         # List all the students which will be assigned and their beds
         $beds = $room->get_beds();
-        
+
         foreach($beds as $bed){
             $bed_row = array();
 
@@ -37,7 +39,7 @@ class LotteryRoommateRequestView extends View {
             $bed->loadAssignment();
             # Check for a reservation
             $reservation = $bed->get_lottery_reservation_info();
-            
+
             $bed_row['BEDROOM_LETTER']  = $bed->bedroom_label;
 
             if($bed->_curr_assignment != NULL){
@@ -57,7 +59,10 @@ class LotteryRoommateRequestView extends View {
 
         $submitCmd = CommandFactory::getCommand('LotteryShowConfirmRoommateRequest');
         $submitCmd->setRequestId($this->request['id']);
-        
+
+        $denyCmd = CommandFactory::getCommand('LotteryShowDenyRoommateRequest');
+        $denyCmd->setRequestId($this->request['id']);
+
         $form = new PHPWS_Form();
         $submitCmd->initForm($form);
 
@@ -79,13 +84,20 @@ class LotteryRoommateRequestView extends View {
             $form->setMatch('meal_plan', BANNER_MEAL_STD);
         }
 
-        $form->addSubmit('continue', 'Continue');
+        // Set meal plan drop down default to what the student selected on the housing re-application.
+        $form->setMatch('meal_plan', $this->housingApplication->getMealPlan());
+
+        $form->addSubmit('accept', 'Accept Roommate');
+
+        $form->addButton('reject', 'Deny Roommate');
+
+        javascript('modules/hms/buttonAction', array('ID'=>'phpws_form_reject', 'URI'=>$denyCmd->getURI()));
 
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
-        
+
         Layout::addPageTitle("Lottery Request Roommate");
-        
+
         return PHPWS_Template::process($tpl, 'hms', 'student/lottery_roommate_request.tpl');
     }
 }

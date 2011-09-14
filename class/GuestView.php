@@ -35,7 +35,7 @@ class GuestView extends HMSView
         $tpl['MESSAGE'] = $this->getMessage();
         $tpl['NOTIFICATIONS'] = $this->notifications;
 
-        Layout::addPageTitle("Guest");
+        Layout::addPageTitle("Login");
 
         $this->showHMS(PHPWS_Template::process($tpl, 'hms', 'guest.tpl'));
     }

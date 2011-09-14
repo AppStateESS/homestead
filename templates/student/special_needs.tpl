@@ -17,7 +17,7 @@
             <tr>
                 <td>{SPECIAL_NEEDS_1}&nbsp;<strong>{SPECIAL_NEEDS_1_LABEL}</strong>
                     <div class="special-needs-text">
-                    Students with physical disabilities should contact <a href="http://www.gstudies.appstate.edu/dss" target="_blank">Disability Support Services</a>, who will then work with University Housing to determine whether or not special housing is warranted.
+                    Students with physical disabilities should contact the <a href="http://ods.appstate.edu/" target="_blank">Office of Disability Services</a>, who will then work with University Housing to determine whether or not special housing is warranted.
                     </div>
                 </td>
             </tr>

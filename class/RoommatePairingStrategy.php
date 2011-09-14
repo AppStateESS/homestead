@@ -19,7 +19,7 @@ abstract class RoommatePairingStrategy {
         return $requestor->gender == $requestee->gender;
     }
 
-    protected function createPairing($a, $b)
+    protected function createPairing(HousingApplication $a, HousingApplication $b)
     {
         // Determine lifestyle option
         $option = LO_COED;
@@ -41,8 +41,14 @@ abstract class RoommatePairingStrategy {
             return null;
         }
 
+        if($a->getCreatedOn() < $b->getCreatedOn()){
+            $earliestTime = $a->getCreatedOn();
+        }else{
+            $earliestTime = $b->getCreatedOn();
+        }
+
         // Looks like there is no problem here.
-        return new AssignmentPairing($studentA, $studentB, $option);
+        return new AssignmentPairing($studentA, $studentB, $option, $earliestTime);
     }
 }
 

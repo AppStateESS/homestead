@@ -1,5 +1,5 @@
-<script type="text/javascript" src="{source_http}mod/hms/javascript/new_autosuggest/bsn.AutoSuggest_2.1.3.js"></script>
-<script type="text/javascript" src="{source_http}mod/hms/javascript/floor_assignment/assigner.js"></script>
+<script type="text/javascript" src="mod/hms/javascript/new_autosuggest/bsn.AutoSuggest_2.1.3.js"></script>
+<script type="text/javascript" src="mod/hms/javascript/floor_assignment/assigner.js"></script>
 <script type="text/javascript">
     var dropbox = '';
     var semaphore = new Semaphore(1);

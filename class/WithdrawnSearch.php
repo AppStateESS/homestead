@@ -15,6 +15,10 @@ class WithdrawnSearch {
     private $withdrawnCount;
     private $actions;
 
+    /**
+     * Constructor
+     * @param Integer $term The term to run the search on.
+     */
     public function __construct($term)
     {
         $this->term = $term;
@@ -23,8 +27,14 @@ class WithdrawnSearch {
         $this->actions          = array();
     }
 
+    /**
+     * Main searching function. Does the database lookup and then checks each student though the various functions.
+     */
     public function doSearch()
     {
+        // Clear all the caches
+        StudentDataProvider::clearAllCache();
+
         $term = $this->term;
 
         $query = "select DISTINCT * FROM (select hms_new_application.username from hms_new_application WHERE term=$term AND withdrawn != 1 UNION select hms_assignment.asu_username from hms_assignment WHERE term=$term) as foo";
@@ -40,7 +50,9 @@ class WithdrawnSearch {
             try{
                 $student = StudentFactory::getStudentByUsername($username, $term);
             }catch(Exception $e){
-                NQ::simple('hms', HMS_NOTIFICATION_WARNING, 'Unknown student: ' . $username);
+                $this->actions[$username][] = 'WARNING!! Unknown student!';
+                // Commenting out the NQ line, since this doesn't work when the search is run from cron/Pulse
+                //NQ::simple('hms', HMS_NOTIFICATION_WARNING, 'Unknown student: ' . $username);
                 continue;
             }
 
@@ -58,14 +70,17 @@ class WithdrawnSearch {
             $this->handleRlcApplication($student);
         }
 
-        $this->sendReport();
     }
 
+    /**
+     * Handles looking up and withdrawing housing applications.
+     * @param Student $student
+     */
     private function handleApplication(Student $student)
     {
         // Get the application and mark it withdrawn
         $app = HousingApplication::getApplicationByUser($student->getUsername(), $this->term);
-        if(!is_null($app)){
+        if(!is_null($app)) {
             $app->setWithdrawn(1);
             $app->setStudentType(TYPE_WITHDRAWN);
             try{
@@ -79,11 +94,15 @@ class WithdrawnSearch {
         }
     }
 
+    /**
+     * Handles looking up and removing assignments
+     * @param Student $student
+     */
     private function handleAssignment(Student $student)
     {
         // Look for an assignment and delete it
         $assignment = HMS_Assignment::getAssignment($student->getUsername(), $this->term);
-        if(!is_null($assignment)){
+        if(!is_null($assignment)) {
             $location = $assignment->where_am_i();
 
             try{
@@ -97,16 +116,20 @@ class WithdrawnSearch {
         }
     }
 
+    /**
+     * Handles removing roommate requests
+     * @param Student $student
+     */
     private function handleRoommate(Student $student)
     {
         # check for and delete any roommate requests, perhaps let the other roommate know?
         $roommates = HMS_Roommate::get_all_roommates($student->getUsername(), $this->term);
-        if(sizeof($roommates) > 0){
+        if(sizeof($roommates) > 0) {
             # Delete each roommate request
-            foreach($roommates as $rm){
-                try{
+            foreach($roommates as $rm) {
+                try {
                     $rm->delete();
-                }catch(Exception $e){
+                } catch(Exception $e) {
                     //TODO
                 }
 
@@ -118,12 +141,16 @@ class WithdrawnSearch {
         }
     }
 
+    /**
+     * Handles removing RLC assignments.
+     * @param Student $student
+     */
     private function handleRlcAssignment(Student $student)
     {
         # Check for and delete any learning community assignments
         $rlcAssignment = HMS_RLC_Assignment::getAssignmentByUsername($student->getUsername(), $this->term);
 
-        if(!is_null($rlcAssignment)){
+        if(!is_null($rlcAssignment)) {
             $rlc = new HMS_Learning_Community($rlcAssignment->getRlcId());
 
             //TODO catch/handle exceptions
@@ -133,13 +160,17 @@ class WithdrawnSearch {
         }
     }
 
+    /**
+     * Handles removing RLC applications.
+     * @param Student $student
+     */
     private function handleRlcApplication(Student $student)
     {
-        # Mark any RLC applications as denied
+        // Mark any RLC applications as denied
         $rlcApp = HMS_RLC_Application::getApplicationByUsername($student->getUsername(), $this->term);
 
-        if(!is_null($rlcApp)){
-            # TODO catch/handle exceptions
+        if(!is_null($rlcApp)) {
+            // TODO catch/handle exceptions
             $rlcApp->delete();
             $this->actions[$student->getUsername()][] = 'Marked RLC application as denied.';
             HMS_Activity_Log::log_activity($student->getUsername(), ACTIVITY_WITHDRAWN_RLC_APP_DENIED, UserStatus::getUsername(), 'Withdrawn search');
@@ -147,25 +178,51 @@ class WithdrawnSearch {
         }
     }
 
-    private function sendReport()
+    /**
+     * Returns an array of template tags for a text view of the output.
+     * @return Array An array of template tages for a text view of the output.
+     */
+    public function getTextView()
     {
-        #TODO
+        $tpl = new PHPWS_Template('hms');
+
+        if(!$tpl->setFile('admin/withdrawnSearchTextOutput.tpl')) {
+            return 'Template error...';
+        }
+
+        return $this->doTemplateStuff($tpl);
     }
 
+    /**
+     * Returns an array of template tags for a HTML view of the output.
+     * @array Array array of template tags for a HTML view of the output.
+     */
     public function getHTMLView()
     {
         $tpl = new PHPWS_Template('hms');
 
-        if(!$tpl->setFile('admin/withdrawnSearchOutput.tpl')){
+        if(!$tpl->setFile('admin/withdrawnSearchOutput.tpl')) {
             return 'Template error...';
         }
 
+        return $this->doTemplateStuff($tpl);
+    }
+
+    /**
+     * Takes a PHPWS_Template object and plugs the various variables into it
+     * @param PHPWS_Template $tpl
+     *
+     * @return Array template tags
+     */
+    public function doTemplateStuff($tpl)
+    {
+
         $tpl->setData(array('DATE'=>date('F j, Y g:ia'), 'TERM'=>Term::toString($this->term)));
 
-        if(sizeof($this->actions) < 1){
+        if(sizeof($this->actions) < 1) {
             $tpl->setData(array('NORESULTS'=>'No withdrawn students found.'));
             return $tpl->get();
-        }else{
+        } else {
             $tpl->setData(array('COUNT'=>sizeof($this->actions)));
         }
 

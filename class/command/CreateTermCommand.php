@@ -52,7 +52,7 @@ class CreateTermCommand extends Command {
             $db->addWhere('term', $term->getTerm());
             $num = $db->count();
 
-            if(!is_null($num) && $count > 0){
+            if(!is_null($num) && $num > 0){
                 NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'One or more halls already exist for this term, so nothing can be copied.');
                 $viewCmd->redirect();
             }
@@ -60,18 +60,32 @@ class CreateTermCommand extends Command {
 
         $text = Term::toString($term->getTerm());
 
-        $copy = $context->get('copy_drop');
+        $copy            = $context->get('copy_pick');
+        $copyAssignments = false;
+        $copyRoles       = false;
 
-        if($copy == 'struct'){
-            // Only hall structure
-            $copyAssignments = false;
-        }else if($copy == 'struct_assign'){
-            // Hall structure and assignments
-            $copyAssignments = true;
+        // If you want to copy roles and/or assignments
+        // you must also copy the hall structure.
+        if(isset($copy['struct'])){
+            // Copy hall structure
+            if(isset($copy['assign'])){
+                // Copy assignments.
+                $copyAssignments = true;
+            }
+            if(isset($copy['role'])){
+                // Copy roles.
+                $copyRoles = true;
+            }
         }else{
             // either $copy == 'nothing', or the view didn't specify... either way, we're done
             NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, "$text term created successfully.");
             $successCmd->redirect();
+        }
+
+        # Figure out which term we're copying from, if there isn't one then use the "current" term.
+        $fromTerm = $context->get('from_term');
+        if(is_null($fromTerm)){
+            $fromTerm = Term::getCurrentTerm();
         }
 
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
@@ -82,11 +96,11 @@ class CreateTermCommand extends Command {
         try{
             $db->query('BEGIN');
             # Get the halls from the current term
-            $halls = HMS_Residence_Hall::get_halls(Term::getCurrentTerm());
+            $halls = HMS_Residence_Hall::get_halls($fromTerm);
             set_time_limit(36000);
 
             foreach ($halls as $hall){
-                $hall->copy($term->getTerm(), $copyAssignments);
+                $hall->copy($term->getTerm(), $copyAssignments, $copyRoles);
             }
 
             $db->query('COMMIT');

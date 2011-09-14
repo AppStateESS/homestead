@@ -3,7 +3,7 @@
 PHPWS_Core::initModClass('hms', 'View.php');
 
 class FrontPageView extends View {
-    
+
     public function show()
     {
         $values = array('ADDITIONAL'=>'The Housing Management System will <strong>not</strong> work without having your web browser\'s cookie features enabled.  Please read about <a href="http://www.google.com/cookies.html" target="_blank">how to enable cookies</a>.');
@@ -13,8 +13,6 @@ class FrontPageView extends View {
         //if(is_null($tpl['COOKIE_WARNING'])){
             $tpl['LOGIN_LINK'] = HMS_LOGIN_LINK; // a dummy tag to make the actual login content show
         //}
-
-        Layout::addPageTitle("Cookie Warning");
 
         return PHPWS_Template::process($tpl, 'hms', 'misc/login.tpl');
     }

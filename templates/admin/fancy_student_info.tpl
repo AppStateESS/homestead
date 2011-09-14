@@ -135,6 +135,10 @@
                         <th>Re-application Special Interest Group: </th>
                         <td>{SPECIAL_INTEREST}</td>
                     </tr>
+                    <tr>
+                    	<th>Freshmen Housing Waiver:</th>
+                    	<td>{HOUSING_WAIVER}</td>
+                    </tr>
                 </table>
                 </div>
                 </td>

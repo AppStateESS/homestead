@@ -5,9 +5,9 @@ PHPWS_Core::initModClass('hms', 'HMS_Permission.php');
 
 class AssignmentMenu extends CommandMenu {
 
-	public function __construct()
-	{
-		parent::__construct();
+    public function __construct()
+    {
+        parent::__construct();
         if(UserStatus::isAdmin()){
             if(Current_User::allow('hms', 'assignment_maintenance')){
                 $this->addCommandByName('Assign student', 'ShowAssignStudent');
@@ -60,19 +60,19 @@ class AssignmentMenu extends CommandMenu {
                 $this->addCommand('Room Change Approval (Admin)', $AdminRoomChangeCmd);
             }
         }
-	}
+    }
 
-	public function show()
-	{
+    public function show()
+    {
         if(empty($this->commands))
-            return "";
+        return "";
 
-		$tpl = array();
+        $tpl = array();
 
-		$tpl['MENU'] = parent::show();
+        $tpl['MENU'] = parent::show();
 
-		return PHPWS_Template::process($tpl, 'hms', 'admin/menus/AssignmentMenu.tpl');
-	}
+        return PHPWS_Template::process($tpl, 'hms', 'admin/menus/AssignmentMenu.tpl');
+    }
 }
 
 ?>

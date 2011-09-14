@@ -58,7 +58,10 @@ class Autoassigner {
         echo "Pairs: " . count($this->pairs) . "\n";
 
         // Randomize the array of pairs
-        shuffle($this->pairs);
+        //shuffle($this->pairs);
+
+        // Sort the array of pairs by application date (use the earliest of the two application dates)
+        usort($this->pairs, array("Autoassigner", "pairSort"));
 
         $fp = fopen('/tmp/WTFISGOINGON', 'w');
 
@@ -89,18 +92,23 @@ class Autoassigner {
 
         foreach($this->pairs as $pair) {
             if($pair->isAssigned()) {
-                echo $pair->student1->getUsername() . " is assigned to " . $pair->getBed1() . "\n";
-                echo $pair->student2->getUsername() . " is assigned to " . $pair->getBed2() . "\n\n";
+                echo $pair->getStudent1()->getUsername() . " is assigned to " . $pair->getBed1() . "\n";
+                echo $pair->getStudent2()->getUsername() . " is assigned to " . $pair->getBed2() . "\n\n";
             }
         }
 
         foreach($this->pairs as $pair) {
             if(!$pair->isAssigned()) {
-                echo $pair->student1->getUsername() . " did not get assigned.\n";
-                echo $pair->student2->getUsername() . " did not get assigned.\n\n";
+                echo $pair->getStudent1()->getUsername() . " did not get assigned.\n";
+                echo $pair->getStudent2()->getUsername() . " did not get assigned.\n\n";
 
             }
         }
+    }
+
+    private static function pairSort($a, $b)
+    {
+        return ($a->getEarliestAppTimestamp() < $b->getEarliestAppTimestamp()) ? -1 : 1;
     }
 }
 

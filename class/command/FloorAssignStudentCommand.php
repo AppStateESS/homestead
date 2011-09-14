@@ -1,4 +1,4 @@
-<?
+<?php
 
 /*
  * Ajax command that returns error codes and does not allow reassignment.
@@ -36,10 +36,10 @@ class FloorAssignStudentCommand extends Command {
             echo json_encode(array('success'=>false, 'message'=>$e->getMessage()));
             exit;
         }
-            
+
 
         $bed = $context->get('bed');
-        $plan = $context->get('meal_plan');
+        $plan = $context->get('mealplan');
 
         if(HMS_Assignment::checkForAssignment($student->getUsername(), $term)){
             echo json_encode(array('success'=>false,

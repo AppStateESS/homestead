@@ -15,43 +15,43 @@ PHPWS_Core::initModClass('hms', 'MessagingMenu.php');
 
 class AdminMaintenanceMenuView extends View {
 
-	public function show()
-	{
-		Layout::addStyle('hms', 'css/menu-grid.css');
-		
-		$tpl = array();
-		
-		$searchMenu = new StudentSearchMenu();
-		$tpl['STUDENT_SEARCH'] = $searchMenu->show();
-		
-		$hallMenu = new ResidenceHallMenu();
-		$tpl['RESIDENCE_HALL'] = $hallMenu->show();
-		
-		$assignMenu = new AssignmentMenu();
-		$tpl['ASSIGNMENT'] = $assignMenu->show();
-		
-		$termMenu = new TermMaintenanceMenu();
-		$tpl['TERM'] = $termMenu->show();
-		
-		$activityLogs = new ActivityLogMenu();
-		$tpl['LOGS'] = $activityLogs->show();
-		
-		$roommates = new RoommatesMenu();
-		$tpl['ROOMMATES'] = $roommates->show();
-		
-		$rlcs = new RLCMenu();
-		$tpl['RLCS'] = $rlcs->show();
-		
-		$reapp = new ReapplicationMaintenanceMenu();
-		$tpl['REAPP'] = $reapp->show();
-		
-		$messaging = new MessagingMenu();
-		$tpl['MESSAGING'] = $messaging->show();
+    public function show()
+    {
+        Layout::addStyle('hms', 'css/menu-grid.css');
+
+        $tpl = array();
+
+        $searchMenu = new StudentSearchMenu();
+        $tpl['STUDENT_SEARCH'] = $searchMenu->show();
+
+        $hallMenu = new ResidenceHallMenu();
+        $tpl['RESIDENCE_HALL'] = $hallMenu->show();
+
+        $assignMenu = new AssignmentMenu();
+        $tpl['ASSIGNMENT'] = $assignMenu->show();
+
+        $termMenu = new TermMaintenanceMenu();
+        $tpl['TERM'] = $termMenu->show();
+
+        $activityLogs = new ActivityLogMenu();
+        $tpl['LOGS'] = $activityLogs->show();
+
+        $roommates = new RoommatesMenu();
+        $tpl['ROOMMATES'] = $roommates->show();
+
+        $rlcs = new RLCMenu();
+        $tpl['RLCS'] = $rlcs->show();
+
+        $reapp = new ReapplicationMaintenanceMenu();
+        $tpl['REAPP'] = $reapp->show();
+
+        $messaging = new MessagingMenu();
+        $tpl['MESSAGING'] = $messaging->show();
 
         Layout::addPageTitle("Main Menu");
 
-		return PHPWS_Template::process($tpl, 'hms', 'AdminMaintenanceMenu.tpl');
-	}
+        return PHPWS_Template::process($tpl, 'hms', 'AdminMaintenanceMenu.tpl');
+    }
 }
 
 ?>

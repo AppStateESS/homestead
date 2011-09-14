@@ -1,4 +1,4 @@
-<script type="text/javascript" src="javascript/modules/hms/ajaxForm/jquery.ajaxForm.js"></script>
+<script type="text/javascript" src="mod/hms/javascript/ajaxForm/jquery.ajaxForm.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
 	$('{FORM_SELECT}').ajaxForm({

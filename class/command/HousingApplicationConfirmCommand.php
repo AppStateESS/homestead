@@ -67,7 +67,7 @@ class HousingApplicationConfirmCommand extends Command {
 
         $specialNeeds = $context->get('special_needs');
 
-        $international = ($student->isInternational()) == 'true'?1:0;
+        $international = $student->isInternational();
 
         # Create a new application from the request data and save it
         if($sem == TERM_SUMMER1 || $sem == TERM_SUMMER2){

@@ -53,7 +53,7 @@ class HMS_Autoassigner
                 $rlcs[] = "Skipping <strong>{$a->username}</strong>; assigned to an RLC.";
                 continue;
             }
-            
+
             $b = HousingApplication::getApplicationByUser($pair['requestee'], $term);
 
             if(in_array($b->username, $assigned)) {
@@ -117,7 +117,7 @@ class HMS_Autoassigner
 
             $bed_a_text = $room->_beds[0]->get_banner_building_code() . ' ' . $room->_beds[0]->banner_id;
             $bed_b_text = $room->_beds[1]->get_banner_building_code() . ' ' . $room->_beds[1]->banner_id;
-            
+
             if($test) {
                 $successes[] = HMS_Autoassigner::record_success('TEST Requested', $a, $b, $bed_a_text);
                 $successes[] = HMS_Autoassigner::record_success('TEST Requested', $b, $a, $bed_b_text);
@@ -129,7 +129,7 @@ class HMS_Autoassigner
                 } else {
                     $problems[] = $result;
                 }
-                
+
                 if(!is_null($b->id)) {
                     $result = HMS_Autoassigner::assign($b, $room->_beds[1], $term);
                     if($result === TRUE) {
@@ -332,11 +332,11 @@ class HMS_Autoassigner
         $bbc  = $bed->get_banner_building_code();
         $bid  = $bed->banner_id;
         $user = $app->username;
-        
+
         $meal_plan = array();
         $meal_plan['plan'] = 'HOME';
         $meal_plan['meal'] = $app->meal_plan;
-        
+
         $error = BannerQueue::queueAssignment($user, $term,
             $bbc, $bid, $meal_plan['plan'], $meal_plan['meal']);
 

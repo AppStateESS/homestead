@@ -125,7 +125,7 @@ class AssignStudentCommand extends Command {
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Invalid user name, no such student found.');
             $errorCmd->redirect();
         }
-        
+
         # Check age, issue a warning for over 25
         if(strtotime($student->getDOB()) < strtotime("-25 years")){
             NQ::simple('hms', HMS_NOTIFICATION_WARNING, 'Student is 25 years old or older!');
@@ -161,33 +161,15 @@ class AssignStudentCommand extends Command {
             }
         }
 
-        # This code is only run if the move was flagged as confirmed above
-        # The code was copied/adapted from the 'unassign_student' public function below
+        # If the user is attempting to re-assign and has confirmed the move,
+        # then unassign the student first.
         if($moveNeeded){
-            $assignment = HMS_Assignment::getAssignment($username, $term);
-
-            # Attempt to unassign the student in Banner though SOAP
-            $banner_result = BannerQueue::queueRemoveAssignment(
-            $username,
-            $term,
-            $assignment->get_banner_building_code(),
-            $assignment->get_banner_bed_id());
-
-            # Show an error and return if there was an error
-            if($banner_result != 0) {
-                NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Error deleting current assignment: Banner returned error code: $banner_result. Please contact ESS immediately. {$username} was not removed.");
+            try{
+                HMS_Assignment::unassignStudent($student, $term, '(re-assign)');
+            }catch(Exception $e){
+                NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Error deleting current assignment. {$username} was not removed.");
                 $errorCmd->redirect();
             }
-
-            # Attempt to delete the assignment in HMS
-            if(!$assignment->delete()){
-                # Show an error message
-                NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Error: {$username} was removed from Banner, but could not be removed from HMS. Pleease contact ESS immediately.");
-                $errorCmd->redirect();
-            }
-
-            # Log in the activity log
-            HMS_Activity_Log::log_activity($username, ACTIVITY_REMOVED, UserStatus::getUsername(), $term . ' ' . $assignment->get_banner_building_code() . ' ' . $assignment->get_banner_bed_id());
         }
 
         # Actually try to make the assignment, decide whether to use the room id or the bed id
@@ -209,7 +191,7 @@ class AssignStudentCommand extends Command {
         }else{
             NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Successfully assigned ' . $username . ' to ' . $hall->hall_name . ' room ' . $room->room_number);
         }
-        
+
         $successCmd = CommandFactory::getCommand('ShowAssignStudent');
         $successCmd->redirect();
     }

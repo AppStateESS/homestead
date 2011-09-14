@@ -5,36 +5,71 @@ PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
 PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 PHPWS_Core::initModClass('hms', 'CommandFactory.php');
 
-class SubmitRlcApplicationCommand extends Command {
+class SubmitRlcApplicationCommand extends Command
+{
 
-    public function getRequestVars(){
+    public function getRequestVars()
+    {
         return array('action'=>'SubmitRlcApplication');
     }
 
-    public function execute(CommandContext $context){
+    public function execute(CommandContext $context)
+    {
 
+        $term = $context->get('term');
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), Term::getCurrentTerm());
 
-        # Check for an existing application and delete it
-        $oldApp = HMS_RLC_Application::getApplicationByUsername($student->getUsername(), $context->get('term'));
-
-        if($oldApp->id != NULL){
-            $result = $oldApp->delete();
-        }
+        $errorCmd = CommandFactory::getCommand('ShowRlcApplicationView');
+        $errorCmd->setTerm($term);
 
         $choice1 = new HMS_Learning_Community($context->get('rlc_first_choice'));
         $choice2 = new HMS_Learning_Community($context->get('rlc_second_choice'));
         $choice3 = new HMS_Learning_Community($context->get('rlc_third_choice'));
 
         if(!$choice1->allowStudentType($student->getType())
-           || ($choice2->id != -1 && !$choice2->allowStudentType($student->getType()))
-           || ($choice3->id != -1 && !$choice3->allowStudentType($student->getType()))
+        || ($choice2->id != -1 && !$choice2->allowStudentType($student->getType()))
+        || ($choice3->id != -1 && !$choice3->allowStudentType($student->getType()))
         ){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Sorry, you cannot apply for the selected RLC please contact University Housing if you believe this to be in error.');
-            $cmd = CommandFactory::getCommand('ShowRlcApplicationView');
-            $cmd->redirect();
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Sorry, you cannot apply for the selected RLC. Please contact University Housing if you believe this to be in error.');
+            $errorCmd->redirect();
         }
 
+        // Check the lengths of the responses to the short answer questions
+        $question0 = $context->get('rlc_question_0');
+        $question1 = $context->get('rlc_question_1');
+        $question2 = $context->get('rlc_question_2');
+
+        if(strlen($question0) > HMS_RLC_Application::RLC_RESPONSE_LIMIT) {
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Your respose to the first question is too long. Please limit your response to ' . HMS_RLC_Application::RLC_RESPONSE_LIMIT .  ' characters (including spaces and punctuation).');
+            $errorCmd->redirect();
+        }
+
+        if(strlen($question1) > HMS_RLC_Application::RLC_RESPONSE_LIMIT) {
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Your respose to the second question is too long. Please limit your response to ' . HMS_RLC_Application::RLC_RESPONSE_LIMIT .  ' characters (including spaces and punctuation).');
+            $errorCmd->redirect();
+        }
+
+        if(strlen($question2) > HMS_RLC_Application::RLC_RESPONSE_LIMIT) {
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Your respose to the third question is too long. Please limit your response to ' . HMS_RLC_Application::RLC_RESPONSE_LIMIT .  ' characters (including spaces and punctuation).');
+            $errorCmd->redirect();
+        }
+
+        // Check for an existing application and delete it
+        $oldApp = HMS_RLC_Application::getApplicationByUsername($student->getUsername(), $term);
+
+        if($oldApp->id != NULL) {
+            //TODO check if the student has already been assigned to an RLC via the old application
+
+            // Delete the old application to make way for this one
+            try {
+                $oldApp->delete();
+            } catch(Exception $e){
+                NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Sorry, an error occured while attempting to replace your existing Residential Learning Community Application.  If this problem persists please contact University Housing.');
+                $errorCmd->redirect();
+            }
+        }
+
+        // Setup the new application
         $application = new HMS_RLC_Application();
         $application->setUsername($student->getUsername());
         $application->setDateSubmitted(mktime());
@@ -47,19 +82,27 @@ class SubmitRlcApplicationCommand extends Command {
         $application->setRLCQuestion1(is_null($context->get('rlc_question_1')) ? '' : $context->get('rlc_question_1'));
         $application->setRLCQuestion2(is_null($context->get('rlc_question_2')) ? '' : $context->get('rlc_question_2'));
         $application->setEntryTerm($context->get('term'));
-        $result = $application->save();
+        $application->setApplicationType(RLC_APP_FRESHMEN);
 
-        if(PEAR::isError($result)){
+        try {
+            $application->save();
+        }catch(Exception $e) {
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Sorry, an error occured while attempting to submit your application.  If this problem persists please contact University Housing.');
-            $cmd = CommandFactory::getCommand('ShowRlcApplicationView');
-            $cmd->redirect();
-        } else {
-            PHPWS_Core::initModClass('hms', 'HMS_Email.php');
-            HMS_Email::send_rlc_application_confirmation($student);
-            NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Your application has been submitted');
-            $cmd = CommandFactory::getCommand('ShowStudentMenu');
-            $cmd->redirect();
+            $errorCmd->redirect();
         }
+
+        # Log that this happened
+        PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
+        HMS_Activity_Log::log_activity($student->getUsername(), ACTIVITY_SUBMITTED_RLC_APPLICATION, $student->getUsername());
+
+        # Send the notification email
+        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
+        HMS_Email::send_rlc_application_confirmation($student);
+
+        # Show a success message and redirect
+        NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Your application has been submitted');
+        $cmd = CommandFactory::getCommand('ShowStudentMenu');
+        $cmd->redirect();
     }
 }
 

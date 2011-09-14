@@ -11,12 +11,16 @@ class AssignmentPairing {
     private $bed1;
     private $bed2;
 
-    public function __construct(Student $student1, Student $student2, $lifestyle)
+    private $earliestTime;
+
+    public function __construct(Student $student1, Student $student2, $lifestyle, $earliestTime)
     {
         $this->student1 = $student1;
         $this->student2 = $student2;
         $this->lifestyle = $lifestyle;
         $this->gender = $student1->getGender();
+
+        $this->earliestTime = $earliestTime;
     }
 
     public function getGender()
@@ -78,6 +82,10 @@ class AssignmentPairing {
     public function isAssigned()
     {
         return isset($bed1) || isset($bed2);
+    }
+
+    public function getEarliestAppTimestamp(){
+        return $this->earliestTime;
     }
 }
 

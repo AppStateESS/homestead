@@ -6,7 +6,7 @@
  */
 
 class CommandContext {
-	
+
     private $params = array();
     private $error = "";
     private $content = "";
@@ -17,19 +17,19 @@ class CommandContext {
     {
         foreach($_REQUEST as $key => $val) {
             if(!empty($val) || $val == "0" || $val == 0) {
-            //if(!empty($val)) {
+                //if(!empty($val)) {
                 $this->addParam($key, $val);
             }
         }
-        
+
         if(!isset($_SERVER['REDIRECT_URL'])) $this->rewritten = FALSE;
         else if(empty($_SERVER['QUERY_STRING'])) $this->rewritten = TRUE;
         else $this->rewritten = FALSE;
-        
+
         if($this->get('hms_goback')) {
             $this->loadLastContext();
         } else if($this->get('hms_load')) {
-        	$this->loadContext();
+            $this->loadContext();
         }
     }
 
@@ -41,7 +41,7 @@ class CommandContext {
     function get($key)
     {
         if(!isset($this->params[$key]))
-            return NULL;
+        return NULL;
 
         return $this->params[$key];
     }
@@ -57,21 +57,21 @@ class CommandContext {
         //TODO: Enumerating badness is bad, enumerate goodness instead
         return array_diff_key($this->params, array('module'=>'','action'=>''));
     }
-    
+
     public function unsetParam($key)
     {
         unset($this->params[$key]);
     }
-    
+
     function plugObject($obj)
     {
-    	return PHPWS_Core::plugObject($obj, $this->params);
+        return PHPWS_Core::plugObject($obj, $this->params);
     }
 
     function setDefault($key, $val)
     {
         if(!isset($this->params[$key]))
-            $this->params[$key] = $val;
+        $this->params[$key] = $val;
     }
 
     function setError($error)
@@ -93,10 +93,10 @@ class CommandContext {
     {
         return $this->content;
     }
-    
+
     function isRewritten()
     {
-    	return $this->rewritten;
+        return $this->rewritten;
     }
 
     function saveLastContext()
@@ -108,25 +108,25 @@ class CommandContext {
     {
         $this->params = $_SESSION['HMS_Last_Context'];
     }
-    
+
     function saveContext()
     {
-    	$_SESSION['HMS_Saved_Context'] = $this->params;
+        $_SESSION['HMS_Saved_Context'] = $this->params;
     }
-    
+
     function loadContext()
     {
-    	if(isset($_SESSION['HMS_Saved_Context']) && !empty($_SESSION['HMS_Saved_Context'])) {
-    	    $this->params = $_SESSION['HMS_Saved_Context'];
-    	}
+        if(isset($_SESSION['HMS_Saved_Context']) && !empty($_SESSION['HMS_Saved_Context'])) {
+            $this->params = $_SESSION['HMS_Saved_Context'];
+        }
     }
-    
+
     function redirectToSavedContext()
     {
-    	$path = $_SERVER['SCRIPT_NAME'].'?module=hms&hms_load=true';
-    	
-    	header('HTTP/1.1 303 See Other');
-    	header("Location: $path");
+        $path = $_SERVER['SCRIPT_NAME'].'?module=hms&hms_load=true';
+         
+        header('HTTP/1.1 303 See Other');
+        header("Location: $path");
         HMS::quit();
     }
 

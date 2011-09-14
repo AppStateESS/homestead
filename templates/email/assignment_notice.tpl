@@ -20,7 +20,9 @@ Roommates:
 Check-in Time: {MOVE_IN_TIME} 
 <!-- END movein_time -->
 
-Freshmen check-in times are Friday, August 20th, 2010, 9am-12pm and 1pm-4pm, depending upon your assignment (see above). Upperclassmen check-in is Saturday, August 21st, 2010, 9am-4pm. 
+Freshmen check-in times are Friday, August 19th, 2011, 9am-12pm and 1pm-4pm, depending upon your assignment (see above). Upperclassmen check-in is Saturday, August 20th, 2011, 9am-5pm.
+
+*Note*: If you receive more than one housing assignment notification, then a change has been made in some way to your assignment (room change, roommate change, etc.), and the new notification overrides all previous notifications.  
 
 Should you have any questions, please feel free to contact our office at 828-262-6111 or 828-262-2278. You may also visit our website at: http://housing.appstate.edu/ .
 

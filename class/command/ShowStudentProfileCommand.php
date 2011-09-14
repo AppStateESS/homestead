@@ -43,11 +43,34 @@ class ShowStudentProfileCommand extends Command {
         $bannerId = $context->get('bannerId');
         $term = Term::getSelectedTerm();
 
-        if(isset($bannerId)){
-            $student = StudentFactory::getStudentByBannerId($bannerId, $term);
-        } else {
-            $student = StudentFactory::getStudentByUsername($username, $term);
+        try{
+            if(isset($bannerId)){
+                $student = StudentFactory::getStudentByBannerId($bannerId, $term);
+            } else {
+                $student = StudentFactory::getStudentByUsername($username, $term);
+            }
+        }catch (InvalidArgumentException $e){
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, $e->getMessage());
+            /*
+             $cmd = CommandFactory::getCommand('ShowStudentSearch');
+            $cmd->setUsername($userid);
+            $cmd->redirect();
+            */
+            $context->goBack();
+        }catch (StudentNotFoundException $e){
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, $e->getMessage());
+            /*
+             $cmd = CommandFactory::getCommand('ShowStudentSearch');
+            $cmd->setUsername($userid);
+            $cmd->redirect();
+            */
+            $context->goBack();
         }
+
+        // Add the student object to the list of recent searches
+        PHPWS_Core::initModClass('hms', 'RecentStudentSearchList.php');
+        $searchList = RecentStudentSearchList::getInstance();
+        $searchList->add($student, $term);
 
         $profile = new StudentProfile($student, $term);
 
