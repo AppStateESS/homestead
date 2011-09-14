@@ -187,23 +187,19 @@ abstract class Report {
         if(!is_null($this->html_output_filename)){
             $htmlCmd = CommandFactory::getCommand('ShowReportHtml');
             $htmlCmd->setReportId($this->getId());
-            $tags['HTML'] = $htmlCmd->getLink('html');
-        }else{
-            $tags['HTML'] = '';
+            $tags['HTML'] = $htmlCmd->getURI();
         }
         
         if(!is_null($this->pdf_output_filename)){
             $pdfCmd = CommandFactory::getCommand('ShowReportPdf');
             $pdfCmd->setReportId($this->getId());
-            $tags['PDF'] = $pdfCmd->getLink('pdf');
-        }else{
-            $tags['PDF'] = '';
+            $tags['PDF'] = $pdfCmd->getURI();
         }
         
         if(!is_null($this->csv_output_filename)){
             $csvCmd = CommandFactory::getCommand('ShowReportCsv');
             $csvCmd->setReportId($this->id);
-            $tags['CSV'] = $csvCmd->getLink('csv');
+            $tags['CSV'] = $csvCmd->getURI();
         }
         
         $tags['ACTIONS'] = '';
