@@ -57,7 +57,11 @@ class ShowReportHtmlCommand extends Command {
 
         Layout::addPageTitle($report->getFriendlyName());
         
-        $content = file_get_contents($report->getHtmlOutputFilename());
+        $detailCmd = CommandFactory::getCommand('ShowReportDetail');
+        $detailCmd->setReportClass($report->getClass());
+        
+        $content = '<div> ' . $detailCmd->getLink('&laquo; back') . ' </div>';
+        $content .= file_get_contents($report->getHtmlOutputFilename());
         
         if($content === FALSE){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Could not open report file.');
