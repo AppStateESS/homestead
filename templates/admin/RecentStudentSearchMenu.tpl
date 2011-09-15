@@ -1,4 +1,5 @@
-<div id="recentSearches" class="hms-sidebox">
+<div id="recentSearches" class="rounded-box">
+    <div class="boxheader emptyheader">&nbsp;</div>
 	<div id="recentSearchesHeader">
 		<strong><img src="mod/hms/img/tango/system-search.png">Recent Searches</strong>
 	</div>
