@@ -45,6 +45,11 @@ class ShowReportHtmlCommand extends Command {
      */
     public function execute(CommandContext $context)
     {
+        if(!Current_User::allow('hms', 'reports')){
+            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
+            throw new PermissionException('You do no have permission to run reports.');
+        }
+        
         $reportId = $context->get('reportId');
         
         if(!isset($reportId) || is_null($reportId)){

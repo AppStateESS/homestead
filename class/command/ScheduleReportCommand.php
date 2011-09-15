@@ -19,7 +19,10 @@ class ScheduleReportCommand extends Command {
     
     public function execute(CommandContext $context)
     {
-        // TODO Check permissions
+        if(!Current_User::allow('hms', 'reports')){
+            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
+            throw new PermissionException('You do no have permission to run reports.');
+        }
 
         PHPWS_Core::initModClass('hms', 'ReportFactory.php');
         
