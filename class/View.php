@@ -12,7 +12,7 @@ abstract class View
 {
     protected $pageTitle;
 
-    public function setPageTitle($title){
+    public function setTitle($title){
         $this->pageTitle = $title;
         Layout::addPageTitle($title);
     }

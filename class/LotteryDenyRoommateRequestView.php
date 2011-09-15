@@ -33,7 +33,7 @@ class LotteryDenyRoommateRequestView extends View {
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
-        $this->setPageTitle('Deny Roommate Request');
+        $this->setTitle('Deny Roommate Request');
 
         return PHPWS_Template::process($tpl, 'hms', 'student/lottery_deny_roommate_request.tpl');
     }

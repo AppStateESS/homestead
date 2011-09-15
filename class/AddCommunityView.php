@@ -48,7 +48,7 @@ class AddCommunityView extends View {
         }
         $tpl['TITLE']     = 'Add/Edit a learning Community';
 
-        $this->setPageTitle("Add/Edit RLC");
+        $this->setTitle("Add/Edit RLC");
 
         return PHPWS_Template::process($tpl, 'hms', 'admin/display_learning_community_data.tpl');
     }

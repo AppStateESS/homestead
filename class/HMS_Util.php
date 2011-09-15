@@ -158,6 +158,33 @@ class HMS_Util{
 
     }
 
+    function relativeTime($time, $now = NULL)
+    {
+        $time = (int) $time;
+        $curr = !is_null($now) ? $now : time();
+        $shift = $curr - $time;
+    
+        if ($shift < 45){
+            $diff = $shift;
+            $term = "second";
+        }elseif ($shift < 2700){
+            $diff = round($shift / 60);
+            $term = "minute";
+        }elseif ($shift < 64800){
+            $diff = round($shift / 60 / 60);
+            $term = "hour";
+        }else{
+            $diff = round($shift / 60 / 60 / 24);
+            $term = "day";
+        }
+    
+        if ($diff > 1){
+            $term .= "s";
+        }
+    
+        return "$diff $term ago";
+    }
+    
     /**
      * Determines which color the title bar should be based on
      * the selected and current terms.

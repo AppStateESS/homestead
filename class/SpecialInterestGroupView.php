@@ -15,7 +15,7 @@ class SpecialInterestGroupView extends View {
         PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
         PHPWS_Core::initModClass('hms', 'LotteryApplication.php');
 
-        $this->setPageTitle('Special Interest Group');
+        $this->setTitle('Special Interest Group');
         javascript('jquery');
 
         $tpl = array();

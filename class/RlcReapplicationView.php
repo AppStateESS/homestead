@@ -17,7 +17,7 @@ class RlcReapplicationView extends View {
 
     public function show()
     {
-        $this->setPageTitle('RLC Re-application Form');
+        $this->setTitle('RLC Re-application Form');
 
         $form = new PHPWS_Form();
         $submitCmd = CommandFactory::getCommand('SubmitRLCReapplication');
