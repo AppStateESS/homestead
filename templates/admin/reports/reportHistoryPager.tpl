@@ -29,7 +29,7 @@
     <td>
       <!-- BEGIN csv -->
       <a href="{CSV}"><img src="mod/hms/img/rrze/22x22/emblems/office-excel.png" title="download Excel file"></a>
-      <!-- BEGIN csv -->
+      <!-- END csv -->
     </td>
   </tr>
   <!-- END listrows -->
