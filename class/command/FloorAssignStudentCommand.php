@@ -37,9 +37,9 @@ class FloorAssignStudentCommand extends Command {
             exit;
         }
 
-
         $bed = $context->get('bed');
         $plan = $context->get('mealplan');
+        $reason = $context->get('assignmenttype');
 
         if(HMS_Assignment::checkForAssignment($student->getUsername(), $term)){
             echo json_encode(array('success'=>false,
@@ -47,7 +47,7 @@ class FloorAssignStudentCommand extends Command {
             exit;
         }
         try{
-            $assign_result = HMS_Assignment::assignStudent($student, $term, NULL, $bed, $plan, '');
+            $assign_result = HMS_Assignment::assignStudent($student, $term, NULL, $bed, $plan, '', false, $reason);
         }catch(AssignmentException $e){
             echo json_encode(array('success'=>false,
                         'message'=>$e->getMessage()));

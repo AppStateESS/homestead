@@ -172,6 +172,21 @@ CREATE TABLE hms_assignment (
     updated_on      integer     NOT NULL,
     letter_printed  smallint    NOT NULL DEFAULT 0,
     email_sent      smallint    NOT NULL DEFAULT 0,
+    reason          character varying(20) default 'anone',
+    primary key(id)
+);
+
+CREATE TABLE hms_assignment_history (
+    id                  integer         NOT NULL,
+    banner_id           integer         NOT NULL,
+    room                character varying(50) NOT NULL,
+    assigned_on         integer         NOT NULL,
+    assigned_by         character varying(32) NOT NULL,
+    assigned_reason     character varying(20) default 'anone',
+    removed_on          integer,
+    removed_by          character varying(32),
+    removed_reason      character varying(20),
+    term                integer,
     primary key(id)
 );
 

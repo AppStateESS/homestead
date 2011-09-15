@@ -13,8 +13,10 @@
                 <th align="left">{RESIDENCE_HALL_LABEL}</th>
                 <td>{RESIDENCE_HALL}</td>
             </tr>
+            <tr>
                 <th align="left">{FLOOR_LABEL}</th>
                 <td>{FLOOR}</td>
+            </tr>
             <tr>
                 <th align="left">{ROOM_LABEL}</th>
                 <td>{ROOM}</td>
@@ -30,6 +32,10 @@
             <tr>
                 <th align="left">{MEAL_PLAN_LABEL}</th>
                 <td>{MEAL_PLAN}</td>
+            </tr>
+            <tr>
+            	<th align="left">{ASSIGNMENT_TYPE_LABEL}</th>
+            	<td>{ASSIGNMENT_TYPE}</td>
             </tr>
         </table>
         <p>Note: </p>

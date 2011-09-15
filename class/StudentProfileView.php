@@ -164,7 +164,7 @@ class StudentProfileView extends View {
 
         /**************
          * RLC Status *
-         */
+         *************/
         PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
@@ -221,7 +221,7 @@ class StudentProfileView extends View {
         
         /******************
          * Housing Waiver *
-         */
+         *************/
 
        	$tpl['HOUSING_WAIVER'] = $this->student->housingApplicationWaived() ? 'Yes' : 'No';
        	
@@ -231,7 +231,7 @@ class StudentProfileView extends View {
         
         /****************
          * Applications *
-         */
+         *************/
         # Show a row for each application
         if(isset($this->applications)){
             $app_rows = "";
@@ -276,6 +276,36 @@ class StudentProfileView extends View {
         }
 
         /*********
+         * Assignment History *
+         *********/        
+        
+        PHPWS_Core::initModClass('hms', 'StudentAssignmentHistory.php');
+        
+        $historyArray = StudentAssignmentHistory::getAssignments($this->student->getBannerId());
+        
+        $history_rows = array();
+        $excess_rows = array();
+        
+        $excess_limit = 3; // Number of rows to show by default
+        
+        $count = 0;
+        $tpl['HISTORY'] = array();
+        foreach($historyArray as $history) {
+        	if ( $count++ < $excess_limit ) {
+        		$history_rows[] = $history;
+        	} else {
+        		$excess_rows[] = $history;
+        	}
+        }
+        
+        if ( sizeof($historyArray) > $excess_limit ) {
+        	$tpl['SHOW_MORE'] = "[ <a id='showMoreLink'>show more</a> ]";
+        }
+        
+ 		$tpl['HISTORY'] = $history_rows;
+ 		$tpl['EXTRA_HISTORY'] = $excess_rows;
+        
+        /*********
          * Notes *
          *********/
         $addNoteCmd = CommandFactory::getCommand('AddNote');
@@ -319,7 +349,7 @@ class StudentProfileView extends View {
         // TODO tabs
 
         Layout::addPageTitle("Student Profile");
-
+		Layout::addStyle('hms', 'css/studentInfo.css');
         return PHPWS_Template::process($tpl, 'hms', 'admin/fancy_student_info.tpl');
     }
 }

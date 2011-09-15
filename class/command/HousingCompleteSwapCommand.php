@@ -55,14 +55,14 @@ class HousingCompleteSwapCommand extends Command {
         $student1    = StudentFactory::getStudentByUsername($rc1->username, Term::getSelectedTerm());
 
         //unassign the students
-        HMS_Assignment::unassignStudent($student0, Term::getSelectedTerm(), "Room Change Swap - Unassign first");
-        HMS_Assignment::unassignStudent($student1, Term::getSelectedTerm(), "Room Change Swap - Unassign first");
+        HMS_Assignment::unassignStudent($student0, Term::getSelectedTerm(), "Room Change Swap - Unassign first", UNASSIGN_SWAP);
+        HMS_Assignment::unassignStudent($student1, Term::getSelectedTerm(), "Room Change Swap - Unassign first", UNASSIGN_SWAP);
 
         //put the second student in the first student's former bed
-        HMS_Assignment::assignStudent($student1, Term::getSelectedTerm(), NULL, $assignment0->bed_id, $assignment1->meal_option, "Room Change Swap - Reassign second to first");
+        HMS_Assignment::assignStudent($student1, Term::getSelectedTerm(), NULL, $assignment0->bed_id, $assignment1->meal_option, "Room Change Swap - Reassign second to first", false, $assignment1->reason);
 
         //put the first student in the second's former bed
-        HMS_Assignment::assignStudent($student0, Term::getSelectedTerm(), NULL, $assignment1->bed_id, $assignment0->meal_option, "Room Change Swap - Reassign first to second");
+        HMS_Assignment::assignStudent($student0, Term::getSelectedTerm(), NULL, $assignment1->bed_id, $assignment0->meal_option, "Room Change Swap - Reassign first to second", false, $assignment0->reason);
 
         //update the state of the two requests
         if($rc0->change(new CompletedChangeRequest) && $rc0->save()

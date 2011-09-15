@@ -4,12 +4,11 @@
         <h1>{NAME} -- {BANNER_ID} -- {TERM}</h1>
         <h2>Login as this student [ {LOGIN_AS_STUDENT} ]</h2>
 
-        <table>
+        <table class="profileHeader">
             <tr>
-                <th><a id="demographics_toggle">[-]</a>Student Demographics</th>
+                <th><a id="demographics_toggle">[-]</a> Student Demographics</th>
             </tr>
-            <tr>
-            <td rowspan="6">
+           </table>
             <div id="student_demographics">
                 <table cellspacing="3" cellpadding="2">
                     <tr>
@@ -70,19 +69,16 @@
                             <!-- END addresses -->
                             </ul>
                         </td>
-                </div>
+                
                 </table>
-                </td>
+               </div>
+        <br />
+
+        <table  class="profileHeader">
+            <tr>
+                <th><a id="status_toggle">[-]</a> Housing Status</th>
             </tr>
         </table>
-        <br>
-
-        <table>
-            <tr>
-                <th><a id="status_toggle">[-]</a>Housing Status</th>
-            </tr>
-            <tr>
-                <td>
                 <div id="housing_status">
                 <table>
                     <tr>
@@ -141,55 +137,82 @@
                     </tr>
                 </table>
                 </div>
-                </td>
+                
+        <br />
+        <table class="profileHeader">
+            <tr>
+                <th><a id="application_toggle">[-]</a> Applications</th>
             </tr>
         </table>
-        <br /><br />
-        <table>
+        
+       
+		<div id="applications" >
+		<table class="profileHeader">
+			<tr>
+				<th>Term</th>
+				<th>Type</th>
+				<th>Cell phone #</th>
+				<th>Meal plan</th>
+				<th>Cleanliness</th>
+				<th>Bedtime</th>
+				<th>Actions</th>
+			</tr>
+            <!-- BEGIN APPLICATIONS -->
             <tr>
-                <th><a id="application_toggle">[-]</a>Applications</th>
+	            <td>{term}</td>
+	            <td>{type}</td>
+	            <td>{cell_phone}</td>
+	            <td>{meal_plan}</td>
+	            <td>{clean}</td>
+            	<td>{bedtime}</td>
+            	<td>{actions}</td>
             </tr>
+            <!-- END APPLICATIONS -->
+            <!-- BEGIN no_apps -->
             <tr>
-                <td>{REPORT_APPLICATION}</td>
+            	<td colspan="5">{APPLICATIONS_EMPTY}</td>
             </tr>
-            <tr>
-                <td>
-                    <div id="applications">
-                    <table>
-                        <tr>
-                            <th>Term</th>
-                            <th>Type</th>
-                            <th>Cell phone #</th>
-                            <th>Meal plan</th>
-                            <th>Cleanliness</th>
-                            <th>Bedtime</th>
-                            <th>Actions</th>
-                        </tr>
-                        <!-- BEGIN APPLICATIONS -->
-                        <tr>
-                            <td>{term}</td>
-                            <td>{type}</td>
-                            <td>{cell_phone}</td>
-                            <td>{meal_plan}</td>
-                            <td>{clean}</td>
-                            <td>{bedtime}</td>
-                            <td>{actions}</td>
-                        </tr>
-                        <!-- END APPLICATIONS -->
-                        <!-- BEGIN no_apps -->
-                        <tr>
-                            <td colspan="5">{APPLICATIONS_EMPTY}</td>
-                        </tr>
-                        <!-- END no_apps -->
-                    </table>
-                    </div>
-                </td>
-            </tr>
+        	<!-- END no_apps -->
         </table>
+        </div>
 
+		<br />
+        <table class="profileHeader">
+            <tr>
+                <th ><a id="history_toggle">[-]</a> Assignment History</th>
+            </tr>
+        </table>
+        <table class="profileHeader" id="history">
+            <tr>
+            	<th>Room</th>
+            	<th>Term</th>
+            	<th>Assignment</th>
+            	<th>Unassignment</th>
+            </tr>
+            <!-- BEGIN HISTORY -->
+            <tr>
+            	<td>{room}</td>
+            	<td>{term}</td>
+            	<td>{assignments}</td>
+            	<td>{unassignments}</td>
+            </tr>
+            <!-- END HISTORY -->
+            <!-- BEGIN EXTRA_HISTORY -->
+            <tr class="extraHistory" style="display:none;">
+            	<td>{room}</td>
+            	<td>{term}</td>
+            	<td>{assignments}</td>
+            	<td>{unassignments}</td>
+            </tr>
+            <!-- END EXTRA_HISTORY -->
+        </table>
+        <div style="text-align:center;" id="showMoreDiv" class="profileHeader">
+        	{SHOW_MORE}
+        </div>
         </div>
     </div>
 </div>
+
 <div id="note_dialog" title="Enter a note for: {FIRST_NAME} {MIDDLE_NAME} {LAST_NAME}">
 {START_FORM}
 {NOTE}
@@ -201,8 +224,8 @@
 <center>
 <h1>Recent Notes</h1>
 [<a id=add_note>Add a note</a>]
-{NOTE_PAGER}
+<div class="profileHeader">{NOTE_PAGER}</div>
 <h1>Student Log</h1>
-{LOG_PAGER}
+<div class="profileHeader">{LOG_PAGER}</div>
 </center>
 <!-- END notes -->

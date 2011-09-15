@@ -165,7 +165,7 @@ class AssignStudentCommand extends Command {
         # then unassign the student first.
         if($moveNeeded){
             try{
-                HMS_Assignment::unassignStudent($student, $term, '(re-assign)');
+                HMS_Assignment::unassignStudent($student, $term, '(re-assign)', UNASSIGN_REASSIGN);
             }catch(Exception $e){
                 NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Error deleting current assignment. {$username} was not removed.");
                 $errorCmd->redirect();
@@ -176,9 +176,9 @@ class AssignStudentCommand extends Command {
         $bed = $context->get('bed');
         try{
             if(isset($bed) && $bed != 0){
-                $assign_result = HMS_Assignment::assignStudent($student, $term, NULL, $bed, $context->get('meal_plan'), $context->get('note'));
+                $assign_result = HMS_Assignment::assignStudent($student, $term, NULL, $bed, $context->get('meal_plan'), $context->get('note'), false, $context->get('assignment_type'));
             }else{
-                $assign_result = HMS_Assignment::assignStudent($student, $term, $context->get('room'), NULL, $context->get('meal_plan'), $context->get('note'));
+                $assign_result = HMS_Assignment::assignStudent($student, $term, $context->get('room'), NULL, $context->get('meal_plan'), $context->get('note'), false, $context->get('assignment_type'));
             }
         }catch(AssignmentException $e){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Assignment error: ' . $e->getMessage());

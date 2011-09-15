@@ -85,6 +85,63 @@ define('BANNER_MEAL_NONE', '-1');
 define('BANNER_MEAL_4WEEK', 'S4');
 define('BANNER_MEAL_5WEEK', 'S5');
 
+
+/**
+ * Assignment Types
+ */
+define('ASSIGN_ADMIN', 		'aadmin');
+define('ASSIGN_LOTTERY', 	'alottery');
+define('ASSIGN_FRESHMEN', 	'afreshmen');
+define('ASSIGN_MEDICAL', 	'amedical');
+define('ASSIGN_ATHLETICS', 	'aathletics');
+define('ASSIGN_HONORS', 	'ahonors');
+define('ASSIGN_WATAUGA', 	'awatuaga');
+define('ASSIGN_TEACHING', 	'ateaching');
+define('ASSIGN_RLC', 		'arlc');
+define('ASSIGN_SORORITY', 	'asorority');
+define('ASSIGN_SPECIAL', 	'aspecial');
+define('ASSIGN_CHANGE', 	'achange'); // For room change requests
+define('ASSIGN_AUTO', 		'aauto');
+define('ASSIGN_COPY',		'acopy'); // For copying from previous term
+define('ASSIGN_NOREASON',	'anone');
+
+
+/**
+ * Unassignment Types
+ */
+define('UNASSIGN_ADMIN',	'uadmin');
+define('UNASSIGN_CHANGE',	'uchange'); // For room change requests
+define('UNASSIGN_WITHDRAWN','uwithdrawn');
+define('UNASSIGN_SWAP',		'uswap'); // For room swap
+define('UNASSIGN_REASSIGN', 'ureassign');
+define('UNASSIGN_NOREASON',	'unone');
+
+
+
+/**
+ * Pretty Names
+ */
+define('aadmin', 	'Administrative');
+define('alottery', 	'Lottery');
+define('afreshmen',	'Freshmen');
+define('amedical', 	'Medical');
+define('aathletics','Athletics');
+define('ahonors',	'Honors');
+define('awatauga',	'Watauga Global');
+define('ateaching',	'Teaching Fellows');
+define('arlc',		'RLC');
+define('asorority',	'Sorority');
+define('aspecial',	'Special Needs');
+define('aauto',		'Auto-Assigned');
+define('acopy',		'Term Copy');
+define('anone',		'Not Specified');
+define('uadmin',	'Administrative');
+define('uchange',	'Room Change');
+define('uwithdrawn','Withdrawn');
+define('uswap',		'Room Swap');
+define('ureassign',	'Reassignment');
+define('unone',		'Not Specified');
+
 /**
  * Address types
  */
