@@ -10,7 +10,6 @@ PHPWS_Core::initModClass('hms', 'report/FloorRoster/FloorRosterPdfView.php');
 
 class FloorRosterController extends ReportController implements iSyncReport, iPdfReportView {
 
-//put your code here
     public function setParams(Array $params)
     {
         $this->report->setTerm($params['term']);

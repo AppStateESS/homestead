@@ -1,6 +1,6 @@
 <!-- BEGIN hall-rows -->
 <h2>{HALL}</h2>
-<table width="100%" border="1" cellpadding="2" style="border-collapse : collapse;">
+<table width="100%" border="1" cellpadding="2" style="border-collapse:collapse;page-break-after:always">
     <tr>
         <th width="5%">Floor</th>
         <th width="10%">Room</th>

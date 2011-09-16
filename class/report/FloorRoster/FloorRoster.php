@@ -12,6 +12,7 @@ PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 class FloorRoster extends Report {
     const friendlyName = 'Floor Roster';
     const shortName = 'FloorRoster';
+    
     public $rows;
 
     public function setTerm($term)
@@ -78,6 +79,14 @@ EOF;
     public function getRows()
     {
         return $this->rows;
+    }
+    
+    public function getDefaultOutputViewCmd()
+    {
+        $cmd = CommandFactory::getCommand('ShowReportPdf');
+        $cmd->setReportId($this->id);
+    
+        return $cmd;
     }
 
 }
