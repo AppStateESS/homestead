@@ -15,7 +15,6 @@ class HallOccupancy extends Report {
     const friendlyName = 'Hall Occupancy';
     const shortName = 'HallOccupancy';
 
-    private $term;
     private $rows;
     private $problems;
 
@@ -40,32 +39,35 @@ class HallOccupancy extends Report {
             throw new InvalidArgumentException('Missing term.');
         }
 
-        $term = Term::getTermSem($this->term);
-
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
 
-        $halls = HMS_Residence_Hall::get_halls(Term::getSelectedTerm());
+        $halls = HMS_Residence_Hall::get_halls($this->term);
 
-        $total_beds = 0; // accumulator for counting beds
-        $vacant_beds = 0;
+        // accumulatrs for totaling beds across all halls
+        $totalBeds = 0;
+        $totalVacantBeds = 0;
 
+        $hallArray = array();
+        
         foreach ($halls as $hall) {
-
-            $beds_by_hall = 0;
-            $vacant_beds_by_hall = 0;
-
+            
+            $bedsByHall = 0;
+            $vacantBedsByHall = 0;
+            
+            $floorArray = array();
+            
             $floors = $hall->get_floors();
             if ($floors == NULL) {
                 continue;
             }
             foreach ($floors as $floor) {
-                $vacant_beds_by_floor = 0;
-                $total_beds_by_floor = 0;
+                $vacantBedsByFloor = 0;
+                $totalBedsByFloor = 0;
 
                 if ($floor->is_online == 0) {
-                    $floor_array[$floor->floor_number]['floor_number'] = $floor->floor_number . ' - Offline';
-                    $floor_array[$floor->floor_number]['vacancies_by_floor'] = null;
-                    $floor_array[$floor->floor_number]['total_beds_by_floor'] = null;
+                    $floorArray[$floor->floor_number]['floor_number'] = $floor->floor_number . ' - Offline';
+                    $floorArray[$floor->floor_number]['vacancies_by_floor'] = null;
+                    $floorArray[$floor->floor_number]['total_beds_by_floor'] = null;
                     continue;
                 }
 
@@ -81,28 +83,28 @@ class HallOccupancy extends Report {
                     $beds = $room->get_beds();
                     if (!empty($beds)) {
                         foreach ($beds as $bed) {
-                            $beds_by_hall++;
-                            $total_beds_by_floor++;
-                            $total_beds++;
+                            $bedsByHall++;
+                            $totalBedsByFloor++;
+                            $totalBeds++;
                             if ($bed->has_vacancy()) {
-                                $vacant_beds++;
-                                $vacant_beds_by_hall++;
-                                $vacant_beds_by_floor++;
+                                $totalVacantBeds++;
+                                $vacantBedsByHall++;
+                                $vacantBedsByFloor++;
                             }
                         }
                     }
                 }
-                $floor_array[$floor->floor_number]['floor_number'] = $floor->floor_number;
-                $floor_array[$floor->floor_number]['vacancies_by_floor'] = $vacant_beds_by_floor;
-                $floor_array[$floor->floor_number]['total_beds_by_floor'] = $total_beds_by_floor;
+                $floorArray[$floor->floor_number]['floor_number'] = $floor->floor_number;
+                $floorArray[$floor->floor_number]['vacancies_by_floor'] = $vacantBedsByFloor;
+                $floorArray[$floor->floor_number]['total_beds_by_floor'] = $totalBedsByFloor;
             }
-            $hall_array[$hall->hall_name]['hall_name'] = $hall->hall_name;
-            $hall_array[$hall->hall_name]['hall_vacancies'] = $vacant_beds_by_hall;
-            $hall_array[$hall->hall_name]['hall_total_beds'] = $beds_by_hall;
-            ksort($floor_array);
-            $hall_array[$hall->hall_name]['floor_rows'] = $floor_array;
+            $hallArray[$hall->hall_name]['hall_name'] = $hall->hall_name;
+            $hallArray[$hall->hall_name]['hall_vacancies'] = $vacantBedsByHall;
+            $hallArray[$hall->hall_name]['hall_total_beds'] = $bedsByHall;
+            ksort($floorArray);
+            $hallArray[$hall->hall_name]['floor_rows'] = $floorArray;
         }
-        $this->rows = array('total_beds' => $total_beds, 'vacant_beds' => $vacant_beds, 'hall_rows' => $hall_array);
+        $this->rows = array('total_beds' => $totalBeds, 'vacant_beds' => $vacantBeds, 'hall_rows' => $hallArray);
     }
 
     public function getRows()
