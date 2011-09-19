@@ -30,23 +30,19 @@ class AppliedStudentData extends Report implements iCsvReport {
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 
         $db = new PHPWS_DB('hms_new_application');
-        $db->addColumn('id');
         $db->addWhere('term', $this->term);
 
-        //remove
-        //$db->setLimit(50);
-        $result = $db->select('col');
-
+        $result = $db->select();
+        
         $apps = array();
 
-        foreach ($result as $id) {
-            $application = HousingApplicationFactory::getApplicationById($id);
+        foreach ($result as $app) {
 
-            $username   = $application->getUsername();
-            $bannerId   = $application->getBannerId();
-            $type       = $application->getStudentType();
+            $username   = $app['username'];
+            $bannerId   = $app['banner_id'];
+            $type       = $app['student_type'];
 
-            $assignment = HMS_Assignment::getAssignment($application->getUsername(), $this->term);
+            $assignment = HMS_Assignment::getAssignmentByBannerId($bannerId, $this->term);
 
             if(!is_null($assignment)){
                 $room = $assignment->where_am_i();
