@@ -1,6 +1,6 @@
 <?php
 
-class PackageDeskController extends ReportController implements iSyncReport, iCsvReportView{
+class PackageDeskController extends ReportController implements iSyncReport, iAsyncReport, iSchedReport, iCsvReportView{
 
     public function setParams(Array $params)
     {

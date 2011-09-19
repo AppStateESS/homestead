@@ -8,7 +8,7 @@
 PHPWS_Core::initModClass('hms', 'WKPDF.php');
 PHPWS_Core::initModClass('hms', 'report/FloorRoster/FloorRosterPdfView.php');
 
-class FloorRosterController extends ReportController implements iSyncReport, iPdfReportView {
+class FloorRosterController extends ReportController implements iSyncReport, iAsyncReport, iSchedReport, iPdfReportView {
 
     public function setParams(Array $params)
     {

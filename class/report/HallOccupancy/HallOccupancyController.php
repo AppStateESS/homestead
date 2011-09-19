@@ -11,7 +11,7 @@
  *
  * @author matt
  */
-class HallOccupancyController extends ReportController implements iSyncReport, iHtmlReportView, iPdfReportView {
+class HallOccupancyController extends ReportController implements iSyncReport, iAsyncReport, iSchedReport, iHtmlReportView, iPdfReportView {
   public function setParams(Array $params)
     {
         $this->report->setTerm($params['term']);

@@ -6,7 +6,7 @@
  * @license http://opensource.org/licenses/gpl-3.0.html
  */
 
-class AppliedStudentDataController extends ReportController implements iSyncReport, iCsvReportView {
+class AppliedStudentDataController extends ReportController implements iSyncReport, iAsyncReport, iSchedReport, iCsvReportView {
 
     public function setParams(Array $params)
     {
