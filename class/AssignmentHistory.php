@@ -152,7 +152,6 @@ class AssignmentHistory extends HMS_Item {
         $result = $db->loadObject($this);
 		
 		if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
         
@@ -179,7 +178,6 @@ class AssignmentHistory extends HMS_Item {
         $result = $db->loadObject($rObject);
 		
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
         
@@ -239,7 +237,6 @@ class AssignmentHistory extends HMS_Item {
     	$result = $db->loadObject($tHistory); // to discover ID
     	
 		if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 			
@@ -247,7 +244,6 @@ class AssignmentHistory extends HMS_Item {
 		$result = $tHistory->save();
 	
 		if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
         
@@ -266,7 +262,6 @@ class AssignmentHistory extends HMS_Item {
     	$result = $db->select();
     	
 		if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
         

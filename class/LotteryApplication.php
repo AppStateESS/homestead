@@ -77,7 +77,6 @@ class LotteryApplication extends HousingApplication {
 
         if(PHPWS_Error::logIfError($db->loadObject($this))){
             $this->id = 0;
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -111,7 +110,6 @@ class LotteryApplication extends HousingApplication {
         }
 
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -371,7 +369,6 @@ class LotteryApplication extends HousingApplication {
         $applications = PHPWS_DB::getCol($sql);
 
         if(PHPWS_Error::logIfError($applications)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($applications->toString());
         }
 

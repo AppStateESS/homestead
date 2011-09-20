@@ -67,7 +67,6 @@ class ApplicantDemographics extends Report {
         $results = $db->select();
 
         if(PHPWS_Error::logIfError($results)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($results->toString());
         }
 

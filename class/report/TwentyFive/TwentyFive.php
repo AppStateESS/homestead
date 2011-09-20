@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  *
  * @author Matthew McNaney <mcnaney at gmail dot com>
  * @license http://opensource.org/licenses/gpl-3.0.html
@@ -19,16 +19,6 @@ class TwentyFive extends Report {
         parent::__construct($id);
     }
 
-    public function setTerm($term)
-    {
-        $this->term = $term;
-    }
-
-    public function getTerm()
-    {
-        return $this->term;
-    }
-
     public function execute()
     {
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
@@ -37,16 +27,11 @@ class TwentyFive extends Report {
             throw new InvalidArgumentException('Missing term.');
         }
 
-        $term = Term::getTermSem($this->term);
-
         $db = new PHPWS_DB('hms_new_application');
 
         $db->addColumn('banner_id');
         $db->addColumn('username');
         $db->addWhere('term', $this->term);
-
-        //to debug
-        $db->setLimit(10);
 
         $results = $db->select();
         if (empty($results)) {
@@ -90,6 +75,15 @@ class TwentyFive extends Report {
         return $this->all_rows;
     }
 
+    public function setTerm($term)
+    {
+        $this->term = $term;
+    }
+    
+    public function getTerm()
+    {
+        return $this->term;
+    }
 }
 
 ?>

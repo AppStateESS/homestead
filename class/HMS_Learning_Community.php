@@ -134,7 +134,6 @@ class HMS_Learning_Community extends HMS_Item
             $result = $db->select();
 
             if(PHPWS_Error::logIfError($result)){
-                PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
                 throw new DatabaseException($result->toString());
             }
 
@@ -173,7 +172,6 @@ class HMS_Learning_Community extends HMS_Item
         $result = $db->select('assoc');
 
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -198,7 +196,6 @@ class HMS_Learning_Community extends HMS_Item
         $rlc_choices = $db->select('assoc');
 
         if(PHPWS_Error::logIfError($rlc_choices)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($rlc_choices->toString());
         }
 
@@ -224,7 +221,6 @@ class HMS_Learning_Community extends HMS_Item
         $rlc_choices = $db->select('assoc');
 
         if(PHPWS_Error::logIfError($rlc_choices)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($rlc_choices->toString());
         }
 

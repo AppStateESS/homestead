@@ -57,7 +57,6 @@ class SingleGenderVsCoedPref extends Report{
         $result = $db->select('row');
 
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -77,7 +76,6 @@ class SingleGenderVsCoedPref extends Report{
         $result = $db->select('row');
 
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -97,7 +95,6 @@ class SingleGenderVsCoedPref extends Report{
         $result = $db->select('row');
 
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -117,7 +114,6 @@ class SingleGenderVsCoedPref extends Report{
         $result = $db->select('row');
 
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 

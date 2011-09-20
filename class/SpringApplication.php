@@ -82,7 +82,6 @@ class SpringApplication extends HousingApplication{
         }
 
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 

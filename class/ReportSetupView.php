@@ -8,7 +8,7 @@
  *
  * @author jbooker
  */
-abstract class ReportSetupView extends View {
+class ReportSetupView extends View {
 
     protected $report;
     protected $datePicker;
@@ -28,8 +28,6 @@ abstract class ReportSetupView extends View {
         $this->useDatePicker = false;
         $this->runNow = false;
     }
-
-    protected abstract function getDialogContents();
 
     public function show()
     {
@@ -64,6 +62,11 @@ abstract class ReportSetupView extends View {
         return PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/SetupDialog.tpl') . $js;
     }
 
+    protected function getDialogContents()
+    {
+        return "";
+    }
+    
     public function setLinkText($text)
     {
         $this->linkText = $text;

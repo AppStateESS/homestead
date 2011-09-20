@@ -98,7 +98,6 @@ class HMS_RLC_Assignment{
         $result = $db->saveObject($this);
 
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -144,7 +143,6 @@ class HMS_RLC_Assignment{
         $result = $db->select('row');
 
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException("Could not check for assignment - $username $term " . $result->toString());
         }
 
@@ -164,7 +162,6 @@ class HMS_RLC_Assignment{
         $result = $db->loadObject($assignment);
 
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -191,7 +188,6 @@ class HMS_RLC_Assignment{
         $result = $db->loadObject($assignment);
 
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 

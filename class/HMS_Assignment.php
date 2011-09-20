@@ -59,7 +59,6 @@ class HMS_Assignment extends HMS_Item
         $this->stamp();
         $result = $db->saveObject($this);
         if(!$result || PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -239,7 +238,6 @@ class HMS_Assignment extends HMS_Item
         $result = $db->select('row');
 
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -257,7 +255,6 @@ class HMS_Assignment extends HMS_Item
         $result = $db->select('one');
 
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -279,7 +276,6 @@ class HMS_Assignment extends HMS_Item
         $result = $db->loadObject($assignment);
 
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -315,7 +311,6 @@ class HMS_Assignment extends HMS_Item
 		PHPWS_Core::initModClass('hms', 'AssignmentHistory.php');
         
         PHPWS_Core::initModClass('hms', 'exception/AssignmentException.php');
-        PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
 
         $username = $student->getUsername();
 
@@ -538,7 +533,6 @@ class HMS_Assignment extends HMS_Item
         PHPWS_Core::initModClass('hms', 'AssignmentHistory.php');
 
         PHPWS_Core::initModClass('hms', 'exception/AssignmentException.php');
-        PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
 
         $username = $student->getUsername();
 

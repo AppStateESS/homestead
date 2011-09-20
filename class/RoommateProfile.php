@@ -148,7 +148,6 @@ class RoommateProfile{
         $result = $db->loadObject($this);
 
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -166,7 +165,6 @@ class RoommateProfile{
         $result = $db->saveObject($this);
 
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -195,7 +193,6 @@ class RoommateProfile{
         $result = $db->select('row');
 
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -217,7 +214,6 @@ class RoommateProfile{
         $result = $db->loadObject($profile);
 
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 

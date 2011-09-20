@@ -20,7 +20,6 @@ class RequestedRoommatePairingStrategy extends RoommatePairingStrategy{
         $roommates = $db->select();
 
         if(PHPWS_Error::logIfError($roommates)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($roommates->toString());
         }
 

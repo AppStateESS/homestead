@@ -65,7 +65,6 @@ class HMS_Activity_Log{
         $result = $db->insert();
 
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModclass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }else{
             return TRUE;

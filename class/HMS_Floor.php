@@ -61,7 +61,6 @@ class HMS_Floor extends HMS_Item
         $result = $db->saveObject($this);
 
         if(!$result || PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
     }
@@ -168,7 +167,6 @@ class HMS_Floor extends HMS_Item
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
         $result = new HMS_Residence_Hall($this->residence_hall_id);
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
         $this->_hall = & $result;
@@ -190,7 +188,6 @@ class HMS_Floor extends HMS_Item
         $result = $db->getObjects('HMS_Room');
         //test($result);
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         } else {
             $this->_rooms = & $result;
@@ -303,7 +300,6 @@ class HMS_Floor extends HMS_Item
         $result = $db->select('count');
 
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -329,7 +325,6 @@ class HMS_Floor extends HMS_Item
         $result = $db->select('col');
 
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -354,7 +349,6 @@ class HMS_Floor extends HMS_Item
         $result = $db->select('count');
 
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -375,7 +369,6 @@ class HMS_Floor extends HMS_Item
         $result = $db->select('count');
 
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -402,7 +395,6 @@ class HMS_Floor extends HMS_Item
         }
 
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -562,7 +554,6 @@ class HMS_Floor extends HMS_Item
 
         $avail_rooms = PHPWS_DB::getOne($query);
         if(PHPWS_Error::logIfError($avail_rooms)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -590,7 +581,6 @@ class HMS_Floor extends HMS_Item
 
         $avail_rooms = PHPWS_DB::getAll($query);
         if(PHPWS_Error::logIfError($avail_rooms)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -621,7 +611,6 @@ class HMS_Floor extends HMS_Item
 
         $used_rooms = PHPWS_DB::getOne($query);
         if(PHPWS_Error::logIfError($used_rooms)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -645,7 +634,6 @@ class HMS_Floor extends HMS_Item
 
         $usedRooms = PHPWS_DB::getOne($query);
         if(PHPWS_Error::logIfError($usedRooms)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($usedRooms->toString());
         }
 

@@ -18,7 +18,6 @@ class PackageDesk extends Report implements iCsvReport{
         $results = PHPWS_DB::getAll($query);
 
         if(PHPWS_Error::logIfError($results)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($results->toString());
         }
 

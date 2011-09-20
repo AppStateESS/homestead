@@ -15,7 +15,6 @@ class SpecialAssignmentStrategy extends Assignmentstrategy
         $result = $db->getObjects('SpecialAssignment');
 
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->getMessage());
         }
 

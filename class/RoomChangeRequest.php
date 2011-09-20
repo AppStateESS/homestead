@@ -49,7 +49,6 @@ class RoomChangeRequest extends HMS_Item {
         $result = $db->getObjects('RoomChangeRequest');
 
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -61,7 +60,6 @@ class RoomChangeRequest extends HMS_Item {
             $result = $db->getObjects('RoomChangeRequest');
 
             if(PHPWS_Error::logIfError($result)){
-                PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
                 throw new DatabaseException($result->toString());
             }
 
@@ -142,7 +140,6 @@ class RoomChangeRequest extends HMS_Item {
         if(empty($this->participants)){
             $result = $db->delete();
             if(PHPWS_Error::logIfError($result)){
-                PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
                 throw new DatabaseException($result->toString());
             }
             return true;
@@ -152,7 +149,6 @@ class RoomChangeRequest extends HMS_Item {
         $results = $db->select();
 
         if(PHPWS_Error::logIfError($results)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($results->toString());
         }
 
@@ -174,7 +170,6 @@ class RoomChangeRequest extends HMS_Item {
             }
 
             if(PHPWS_Error::logIfError($result)){
-                PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
                 throw new DatabaseException($result->toString());
             }
         }
@@ -183,7 +178,6 @@ class RoomChangeRequest extends HMS_Item {
 
     public function load(){
         if(!parent::load()){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 

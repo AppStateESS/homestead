@@ -45,7 +45,6 @@ class BannerQueueItem {
         $db->addWhere('id', $this->id);
         $result = $db->loadObject($this);
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
     }
@@ -61,7 +60,6 @@ class BannerQueueItem {
 
         $result = $db->saveObject($this);
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
             return FALSE;
         }
@@ -76,7 +74,6 @@ class BannerQueueItem {
         $db->addWhere('id', $this->id);
         $result = $db->delete();
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
             return FALSE;
         }

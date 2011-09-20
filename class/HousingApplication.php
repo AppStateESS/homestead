@@ -88,7 +88,6 @@ class HousingApplication {
         $db = new PHPWS_DB('hms_new_application');
         $result = $db->loadObject($this);
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -110,7 +109,6 @@ class HousingApplication {
 
         $result = $db->saveObject($this);
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -169,7 +167,6 @@ class HousingApplication {
         $db->addWhere('id', $this->id);
         $result = $db->delete();
         if(!$result || PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -336,7 +333,6 @@ class HousingApplication {
         $result = $db->select('row');
 
         if(PEAR::isError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -374,7 +370,6 @@ class HousingApplication {
         $result = $db->select('row');
 
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -462,7 +457,6 @@ class HousingApplication {
         $result = $db->getObjects('HousingApplication');
 
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -559,7 +553,6 @@ class HousingApplication {
         }
 
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 

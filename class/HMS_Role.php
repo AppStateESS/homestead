@@ -57,7 +57,6 @@ class HMS_Role extends HMS_Item {
         $result = $db->select('row');
 
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -75,7 +74,6 @@ class HMS_Role extends HMS_Item {
         $result = $db->insert();
 
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -105,7 +103,6 @@ class HMS_Role extends HMS_Item {
         $result = $db->delete();
 
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 

@@ -256,7 +256,6 @@ class HMS_RLC_Application extends HMS_Item
         $result = $db->select('row');
 
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -279,7 +278,6 @@ class HMS_RLC_Application extends HMS_Item
         $result = $db->loadObject($app);
 
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -300,7 +298,6 @@ class HMS_RLC_Application extends HMS_Item
         $result = $db->loadObject($app);
 
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -320,7 +317,6 @@ class HMS_RLC_Application extends HMS_Item
         $result = $db->select();
 
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 

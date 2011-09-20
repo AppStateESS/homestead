@@ -150,10 +150,7 @@ abstract class ReportController {
      * the report's class directory. This functionality can be overridden
      * by each report to return a different object, but it must return an
      * object of type ReportSetupView.
-     * 
-     * The optional $datePicker parameter (false by default) specifies
-     * whether or not the interface should provide a date picker for the user
-     * (because this interface shares so much with the scheduled report interface). 
+     *  
      * 
      * @see iSyncReport
      * @see ReportSetupView
@@ -164,11 +161,7 @@ abstract class ReportController {
     {
         PHPWS_Core::initModClass('hms', 'ReportSetupView.php');
         
-        $name = $this->getReportClassName();
-        $className = $name . "SetupView";
-        PHPWS_Core::initModClass('hms', "report/$name/$className.php");
-        
-        $view = new $className($this->report);
+        $view = new ReportSetupView($this->report);
         $view->setLinkText('Run in background');
         $view->setDialogId('reportBgDialog');
         $view->setRunNow(true);
@@ -474,7 +467,6 @@ abstract class ReportController {
         $result = $db->loadObject($this->report);
 
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
             return false;
         }
@@ -515,7 +507,6 @@ abstract class ReportController {
             $result = $db->insert();
             
             if(PHPWS_Error::logIfError($result)){
-                PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
                 throw new DatabaseException($result->toString());
             }
         }
@@ -534,7 +525,6 @@ abstract class ReportController {
         $results = $db->select();
         
         if(PHPWS_Error::logIfError($results)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($results->toString());
         }
 

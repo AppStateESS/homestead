@@ -922,7 +922,6 @@ class HMS_Lottery {
         $result = $db->delete();
 
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -1043,7 +1042,6 @@ class HMS_Lottery {
         $count = PHPWS_DB::getOne($sql);
 
         if(PHPWS_Error::logIfError($count)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($count->toString());
         }
 

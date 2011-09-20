@@ -135,7 +135,6 @@ abstract class ApplicationFeature
         $result = $db->loadObject($this);
 
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModclass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
     }
@@ -159,7 +158,6 @@ abstract class ApplicationFeature
         $result = $db->saveObject($this);
 
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModclass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
     }
@@ -211,7 +209,6 @@ abstract class ApplicationFeature
         $result = $db->delete();
 
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModclass('exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
     }
@@ -348,7 +345,6 @@ abstract class ApplicationFeature
         $result = $db->select('row');
 
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -436,7 +432,6 @@ abstract class ApplicationFeature
         $result = $db->select('one');
 
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 

@@ -10,10 +10,11 @@ class TwentyFiveHtmlView extends ReportHtmlView {
 
     protected function render()
     {
+        parent::render();
+        
         $rows = $this->report->getRows();
 
-        $this->tpl = array('rows'=> $rows);
-        parent::render();
+        $this->tpl['rows'=> $rows;
 
         $this->tpl['TERM'] = Term::toString($this->report->getTerm());
 

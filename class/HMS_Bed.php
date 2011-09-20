@@ -122,7 +122,6 @@ class HMS_Bed extends HMS_Item {
         $result = $db->getObjects('HMS_Assignment');
 
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }else if($result == null){
             return true;
@@ -140,7 +139,6 @@ class HMS_Bed extends HMS_Item {
         PHPWS_Core::initModClass('hms', 'HMS_Room.php');
         $result = new HMS_Room($this->room_id);
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -185,7 +183,6 @@ class HMS_Bed extends HMS_Item {
         $db = new PHPWS_DB('hms_bed');
         $result = $db->saveObject($this);
         if(!$result || PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -203,7 +200,6 @@ class HMS_Bed extends HMS_Item {
         $result = $db->delete();
 
         if(!$result || PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -403,7 +399,6 @@ class HMS_Bed extends HMS_Item {
         $result = $db->select('count');
 
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -423,7 +418,6 @@ class HMS_Bed extends HMS_Item {
         $result = $db->select('row');
 
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -445,7 +439,6 @@ class HMS_Bed extends HMS_Item {
         $result = $db->insert();
 
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }else{
             return TRUE;
@@ -527,7 +520,6 @@ class HMS_Bed extends HMS_Item {
         if($banner) {
             $result = $db->select();
             if(PHPWS_Error::logIfError($result)){
-                PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
                 throw new DatabaseException($result->toString());
             }
 
@@ -538,7 +530,6 @@ class HMS_Bed extends HMS_Item {
 
         // In case of an error, log it and return it
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 

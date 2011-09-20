@@ -52,7 +52,6 @@ class FallApplication extends HousingApplication{
 
         if(PHPWS_Error::logIfError($db->loadObject($this))){
             $this->id = 0;
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -86,7 +85,6 @@ class FallApplication extends HousingApplication{
         }
 
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 

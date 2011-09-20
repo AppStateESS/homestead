@@ -38,7 +38,6 @@ class HMS_Roommate
         $db->addWhere('id', $this->id);
         $result = $db->loadObject($this);
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
         if($result === FALSE) {
@@ -82,7 +81,6 @@ class HMS_Roommate
         $db = new PHPWS_DB('hms_roommate');
         $result = $db->saveObject($this);
         if(!$result || PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
         return true;
@@ -96,7 +94,6 @@ class HMS_Roommate
         $result = $db->delete();
 
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -136,7 +133,6 @@ class HMS_Roommate
         $roommate = new HMS_Roommate();
         $result = $db->loadObject($roommate);
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -212,7 +208,6 @@ class HMS_Roommate
         $result = (int)$db->count();
 
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException('Unexpected error in has_roommate_request');
         }
 
@@ -242,7 +237,6 @@ class HMS_Roommate
         $result = $db->select('row');
 
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'DatabaseException.php');
             throw new DatabaseException("Could not select confirmed roommate for $asu_username $term");
         }
 
@@ -305,7 +299,6 @@ class HMS_Roommate
         $result = $db->count();
 
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException('Unexpected error in has_roommate_request');
         }
 
@@ -380,7 +373,6 @@ class HMS_Roommate
         $result = $db->getObjects('HMS_Roommate');
 
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -403,7 +395,6 @@ class HMS_Roommate
         $requests = $db->getObjects('HMS_Roommate');
 
         if(PHPWS_Error::logIfError($requests)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException('Could not remove outstanding requests');
         }
 

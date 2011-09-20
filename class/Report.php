@@ -107,7 +107,6 @@ abstract class Report {
         $db->addWhere('id', $this->id);
         $result = $db->loadObject($this);
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
     }
@@ -122,7 +121,6 @@ abstract class Report {
         $db = new PHPWS_DB('hms_report');
         $result = $db->saveObject($this);
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
             return FALSE;
         }
@@ -139,7 +137,6 @@ abstract class Report {
         $db->addWhere('id', $this->id);
         $result = $db->delete();
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
             return FALSE;
         }
