@@ -37,7 +37,12 @@ class CancelReportCommand extends Command {
         PHPWS_Core::initModClass('hms', 'ReportFactory.php');
         
         // Load the report to get its class
-        $report = ReportFactory::getReportById($reportId);
+        try{
+            $report = ReportFactory::getReportById($reportId);
+        } catch(InvalidArgumentException $e){
+            NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Report canceled.');
+            $context->goBack();
+        }
         
         $db = new PHPWS_DB('hms_report');
         $db->addWhere('id', $reportId);
