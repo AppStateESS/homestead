@@ -17,11 +17,25 @@ class TwentyOne extends Report implements iCsvReport {
     // Accumulator for output rows (sub-arrays)
     private $rows;
 
+    private $totalCurrOccupancy;
+    private $totalMales;
+    private $totalFemales;
+
+    private $totalMalePercent;
+    private $totalFemalePercent;
+
     public function __construct($id = 0)
     {
         parent::__construct($id);
 
         $this->rows = array();
+
+        $this->totalCurrOccupancy = 0;
+        $this->totalMales = 0;
+        $this->totalFemales = 0;
+
+        $this->totalMalePercent = 0;
+        $this->totalFemalePercent = 0;
     }
 
     public function execute()
@@ -43,6 +57,7 @@ class TwentyOne extends Report implements iCsvReport {
             $hallName = $hall->hall_name;
             $maxOccupancy = $hall->get_number_of_online_nonoverflow_beds();
             $currOccupancy = $hall->get_number_of_assignees();
+            $this->totalCurrOccupancy += $currOccupancy;
 
             $males = 0;
             $females = 0;
@@ -61,8 +76,10 @@ class TwentyOne extends Report implements iCsvReport {
                 if(strtotime($assign->getDob()) < $twentyOneYearsAgo){
                     if($assign->getGender() == MALE){
                         $males++;
+                        $this->totalMales++;
                     }else if($assign->getGender() == FEMALE){
                         $females++;
+                        $this->totalFemales++;
                     }
                 }
             }
@@ -87,6 +104,9 @@ class TwentyOne extends Report implements iCsvReport {
                             'females'        => $females,
                             'femalePercent'  => $femalePercent);
         }
+
+        $this->totalMalePercent = round(($this->totalMales / $this->totalCurrOccupancy) * 100,1);
+        $this->totalFemalePercent = round(($this->totalFemales / $this->totalCurrOccupancy) * 100,1);
     }
 
     public function setTerm($term)
@@ -104,6 +124,26 @@ class TwentyOne extends Report implements iCsvReport {
         return $this->rows;
     }
 
+    public function getTotalCurrOccupancy(){
+        return $this->totalCurrOccupancy;
+    }
+
+    public function getTotalMales(){
+        return $this->totalMales;
+    }
+
+    public function getTotalFemales(){
+        return $this->totalFemales;
+    }
+
+    public function getTotalMalePercent(){
+        return $this->totalMalePercent;
+    }
+
+    public function getTotalFemalePercent(){
+        return $this->totalFemalePercent;
+    }
+
     public function getCsvColumnsArray()
     {
         return array('Hall Name', 'Max Occupany', 'Current Occupancy', 'Males', 'Male %', 'Females', 'Female %');
@@ -111,7 +151,14 @@ class TwentyOne extends Report implements iCsvReport {
 
     public function getCsvRowsArray()
     {
-        return $this->rows;
+        $result = $this->rows;
+        $result[] = array('',
+        $this->getTotalCurrOccupancy(),
+        $this->getTotalMales(),
+        $this->getTotalMalePercent(),
+        $this->getTotalFemales(),
+        $this->getTotalFemalePercent());
+        return $result;
     }
 }
 
