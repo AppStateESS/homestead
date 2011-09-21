@@ -21,4 +21,12 @@
         <td>{femalePercent}</td>
     </tr>
 <!-- END rows -->
+    <tr>
+        <td><strong>Total</strong></td>
+        <td>{totalCurrOccupancy}</td>
+        <td>{totalMales}</td>
+        <td>{totalFemales}</td>
+        <td>{totalMalePercent}</td>
+        <td>{totalFemalePercent}</td>
+    </tr>
 </table>
