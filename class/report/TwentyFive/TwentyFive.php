@@ -6,7 +6,7 @@
  * @license http://opensource.org/licenses/gpl-3.0.html
  */
 
-class TwentyFive extends Report {
+class TwentyFive extends Report implements iCsvReport {
     const friendlyName = 'Students 25 and Older';
     const shortName = 'TwentyFive';
 
@@ -40,23 +40,22 @@ class TwentyFive extends Report {
             throw new DatabaseException($results->toString());
         }
 
-        $tfyearsagomk = mktime(0, 0, 0, date('n'), date('j'), date('Y') - 25);
-        $twenty_five_years_ago = date('Y-m-d', $tfyearsagomk);
-
+        $twentyFiveYearsAgo = strtotime("-25 years");
+        
         foreach ($results as $student) {
             try {
                 $sf = StudentFactory::getStudentByBannerId($student['banner_id'], $this->term);
                 $dob = $sf->getDOB();
-                if ($dob > $twenty_five_years_ago) {
+                if (strtotime($dob) > $twentyFiveYearsAgo) {
                     continue;
                 }
                 $student['dob'] = $dob;
                 $student['full_name'] = $sf->getFullName();
+                $this->all_rows[] = $student;
             } catch (Exception $e) {
                 $student['dob'] = $student['full_name'] = null;
                 $this->problems[] = $student['banner_id'];
             }
-            $this->all_rows[] = $student;
         }
     }
 
