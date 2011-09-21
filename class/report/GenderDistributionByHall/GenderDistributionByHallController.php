@@ -6,7 +6,7 @@
  * @package HMS
  */
 
-class TwentyOneController extends ReportController implements iSyncReport, iAsyncReport, iSchedReport, iHtmlReportView, iPdfReportView, iCsvReportView {
+class GenderDistributionByHallController extends ReportController implements iSyncReport, iHtmlReportView, iPdfReportView, iCsvReportView {
 
     public function setParams(Array $params)
     {
