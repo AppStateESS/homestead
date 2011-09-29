@@ -14,7 +14,7 @@ class HMS_Util{
     /**
      * Returns an array where the keys are numeric 1-12, values are text month names
      */
-    public function get_months()
+    public static function get_months()
     {
         $months = array('1'=>'January',
                         '2'=>'February',
@@ -35,7 +35,7 @@ class HMS_Util{
     /**
      * Returns an array of days of of the month (1-31), keys and values match.
      */
-    public function get_days()
+    public static function get_days()
     {
         for($d = 1; $d <= 31; $d++) {
             $days[$d] = $d;
@@ -47,14 +47,14 @@ class HMS_Util{
     /**
      * Returns an array of the current year and the next year. Keys and values match.
      */
-    public function get_years_2yr(){
+    public static function get_years_2yr(){
         return array(date('Y')=>date('Y'), date('Y') + 1=>date('Y') + 1);
     }
 
     /**
      * Returns an array of hours 12 hour format, indexed in 24 hour
      */
-    public function get_hours(){
+    public static function get_hours(){
         $hours = array();
 
         $hours[0] = '12 AM';
@@ -82,7 +82,7 @@ class HMS_Util{
      *
      * @param int $timestamp
      */
-    public function get_short_date($timestamp) {
+    public static function get_short_date($timestamp) {
         if(!isset($timestamp))
         $timestamp = mktime();
          
@@ -94,7 +94,7 @@ class HMS_Util{
      *
      * @param int $timestamp
      */
-    public function get_long_date($timestamp) {
+    public static function get_long_date($timestamp) {
         if(!isset($timestamp))
         $timestamp = mktime();
 
@@ -106,11 +106,20 @@ class HMS_Util{
      *
      * @param int $timestamp
      */
-    public function get_super_long_date($timestamp) {
+    public static function get_super_long_date($timestamp) {
         if(!isset($timestamp))
         $timestamp = mktime();
 
         return date('jS-M-Y', $timestamp);
+    }
+
+    public static function get_short_date_time($timestamp)
+    {
+        if(!isset($timestamp)){
+            $timestamp = mktime();
+        }
+
+        return date('m/d/y h:ia',$timestamp);
     }
 
     /**
@@ -118,7 +127,7 @@ class HMS_Util{
      *
      * @param int $timestamp
      */
-    public function get_long_date_time($timestamp)
+    public static function get_long_date_time($timestamp)
     {
         if(!isset($timestamp)){
             $timestamp = mktime();
@@ -127,7 +136,7 @@ class HMS_Util{
         return date('M jS, Y g:i A', $timestamp);
     }
 
-    public function getFriendlyDate($timestamp)
+    public static function getFriendlyDate($timestamp)
     {
         if(!isset($timestamp)){
             $timestamp = mktime();
@@ -136,7 +145,7 @@ class HMS_Util{
         return date('M jS, Y', $timestamp);
     }
 
-    public function getPrettyDateRange($startDate, $endDate)
+    public static function getPrettyDateRange($startDate, $endDate)
     {
         $avail = "";
 
@@ -158,12 +167,12 @@ class HMS_Util{
 
     }
 
-    function relativeTime($time, $now = NULL)
+    public static function relativeTime($time, $now = NULL)
     {
         $time = (int) $time;
         $curr = !is_null($now) ? $now : time();
         $shift = $curr - $time;
-    
+
         if ($shift < 45){
             $diff = $shift;
             $term = "second";
@@ -177,19 +186,19 @@ class HMS_Util{
             $diff = round($shift / 60 / 60 / 24);
             $term = "day";
         }
-    
+
         if ($diff > 1){
             $term .= "s";
         }
-    
+
         return "$diff $term ago";
     }
-    
+
     /**
      * Determines which color the title bar should be based on
      * the selected and current terms.
      */
-    public function get_title_class(){
+    public static function get_title_class(){
         $selected_term = Term::getSelectedTerm();
         $current_term = Term::getCurrentTerm();
 
@@ -204,7 +213,7 @@ class HMS_Util{
         }
     }
 
-    public function formatGender($gender)
+    public static function formatGender($gender)
     {
         switch ($gender) {
             case FEMALE:
@@ -221,7 +230,7 @@ class HMS_Util{
         }
     }
 
-    public function formatClass($class)
+    public static function formatClass($class)
     {
         switch($class){
             case CLASS_FRESHMEN:
@@ -237,7 +246,7 @@ class HMS_Util{
         }
     }
 
-    public function formatType($type)
+    public static function formatType($type)
     {
         switch($type){
             case TYPE_FRESHMEN:
@@ -251,7 +260,7 @@ class HMS_Util{
         }
     }
 
-    public function formatMealOption($meal)
+    public static function formatMealOption($meal)
     {
         if(is_null($meal)){
             return 'Unknown';
@@ -277,7 +286,7 @@ class HMS_Util{
         }
     }
 
-    public function formatCellPhone($number){
+    public static function formatCellPhone($number){
         $result = "";
 
         if(strlen($number) == 10){
@@ -289,10 +298,61 @@ class HMS_Util{
         return $result;
     }
 
+    /**
+     * Formats a lifestyle preference code into a human-readable string
+     *
+     * @param int $lifestyleOption
+     * @return String
+     */
+    public static function formatLifestyle($lifestyleOption)
+    {
+        switch($lifestyleOption){
+            case 1:
+                return 'Single Gender';
+            case 2:
+                return 'Co-ed';
+            default:
+                return 'Unknown';
+        }
+    }
+
+    /**
+     * Formats a bedtime code into a human-readable string
+     *
+     * @param int $bedtime
+     * @return String
+     */
+    public static function formatBedtime($bedtime){
+        switch($bedtime){
+            case 1:
+                return 'Early';
+            case 2:
+                return 'Late';
+            default:
+                return 'Unknown';
+        }
+    }
+
+    /**
+     * Formats a room cleanliness code into a human-readable string
+     *
+     * @param int $clean
+     * @return String
+     */
+    public function formatRoomCondition($clean){
+        switch($clean){
+            case 1:
+                return 'Clean';
+            case 2:
+                return 'Messy';
+            default:
+                return 'Unknown';
+        }
+    }
 
     // when fed a number, adds the English ordinal suffix. Works for any
     // number, even negatives
-    public function ordinal($number) {
+    public static function ordinal($number) {
         if ($number % 100 > 10 && $number %100 < 14){
             $suffix = "th";
         }else{

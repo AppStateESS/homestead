@@ -1,0 +1,27 @@
+<?php
+
+/**
+ * HTML View for Reapplication Overview report
+ *
+ * @author Jeremy Booker
+ * @package HMS
+ */
+
+class UnassignedFreshmenHtmlView extends ReportHtmlView {
+
+    protected function render()
+    {
+        parent::render();
+
+        $this->tpl['TERM'] = Term::toString($this->report->getTerm());
+        
+        // Copy results into the template
+        foreach($this->report->getData() as $row){
+            $this->tpl['rows'][] = $row;
+        }
+        
+        return PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/UnassignedFreshmen.tpl');
+    }
+}
+
+?>

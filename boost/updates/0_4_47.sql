@@ -35,3 +35,5 @@ CREATE TABLE hms_report_param (
     param_value         character varying,
     PRIMARY KEY (id)
 );
+
+alter table hms_new_application alter column banner_id TYPE integer USING CAST(trim(banner_id) AS integer);
