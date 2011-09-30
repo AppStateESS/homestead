@@ -14,6 +14,9 @@ class UnassignedFreshmenHtmlView extends ReportHtmlView {
         parent::render();
 
         $this->tpl['TERM'] = Term::toString($this->report->getTerm());
+        $this->tpl['TOTAL'] = $this->report->getTotal();
+        $this->tpl['MALE'] = $this->report->getMale();
+        $this->tpl['FEMALE'] = $this->report->getFemale();
         
         // Copy results into the template
         foreach($this->report->getData() as $row){

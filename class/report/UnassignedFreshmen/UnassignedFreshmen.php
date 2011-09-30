@@ -20,10 +20,19 @@ class UnassignedFreshmen extends Report implements iCsvReport {
     
     private $term;
     
+    // Counts
+    private $total;
+    private $male;
+    private $female;
+    
     private $data;
     
     public function __construct($id = 0){
         parent::__construct($id);
+        
+        $this->total = 0;
+        $this->male = 0;
+        $this->female = 0;
         
         $this->data = array();
     }
@@ -107,6 +116,15 @@ class UnassignedFreshmen extends Report implements iCsvReport {
         // Post-processing, cleanup, making it pretty
         foreach($results as $row){
             
+            // Updates counts
+            $this->total++;
+            
+            if($row['gender'] == MALE){
+                $this->male++;
+            }else if($row['gender'] == FEMALE){
+                $this->female++;
+            }
+            
             $row['application_term'] = Term::toString($row['application_term']);
             $row['gender'] = HMS_Util::formatGender($row['gender']);
             $row['created_on'] = HMS_Util::get_short_date_time($row['created_on']);
@@ -149,6 +167,18 @@ class UnassignedFreshmen extends Report implements iCsvReport {
     public function getTerm()
     {
         return $this->term;
+    }
+    
+    public function getTotal(){
+        return $this->total;
+    }
+    
+    public function getMale(){
+        return $this->male;
+    }
+    
+    public function getFemale(){
+        return $this->female;
     }
 }
 

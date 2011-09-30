@@ -2,6 +2,16 @@
 
 <p>Executed on: {EXEC_DATE} by {EXEC_USER}</p>
 
+<p>
+  <ul>
+    <li>{TOTAL} unassigned freshmen</li>
+    <ul>
+        <li>Male: {MALE}</li>
+        <li>Female: {FEMALE}</li> 
+    </ul>
+  </ul> 
+</p>
+
 <table id="needs" cellpadding="2" border="1" style="border-collapse : collapse">
     <tr>
         <th>Banner ID</th>
