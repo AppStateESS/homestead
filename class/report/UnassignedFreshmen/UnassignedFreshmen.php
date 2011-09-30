@@ -16,7 +16,7 @@
 class UnassignedFreshmen extends Report implements iCsvReport {
     
     const friendlyName = 'Unassigned Freshmen';
-    const shortName = 'Unassigned Freshmen';
+    const shortName = 'UnassignedFreshmen';
     
     private $term;
     
