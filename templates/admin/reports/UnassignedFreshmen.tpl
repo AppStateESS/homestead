@@ -27,7 +27,7 @@
         <td>{student_type}</td>
         <td>{meal_plan}</td>
         <td>{lifestyle_option}</td>
-        <td>{preferred_bedtiem}</td>
+        <td>{preferred_bedtime}</td>
         <td>{room_condition}</td>
         <td>{roommate}</td>
         <td>{roommate_banner_id}</td>
