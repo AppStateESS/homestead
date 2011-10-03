@@ -1,13 +1,13 @@
 <?php
 
 /**
- * Controller for the UnassignedFreshmen report.
+ * Controller for the UnassignedBeds report.
  * 
  * @author Jeremy Booker
  * @package HMS
  */
 
-class UnassignedFreshmenController extends ReportController implements iSyncReport, iAsyncReport, iSchedReport, iHtmlReportView, iPdfReportView, iCsvReportView {
+class UnassignedBedsController extends ReportController implements iSyncReport, iAsyncReport, iSchedReport, iHtmlReportView, iPdfReportView, iCsvReportView {
 
     public function setParams(Array $params)
     {

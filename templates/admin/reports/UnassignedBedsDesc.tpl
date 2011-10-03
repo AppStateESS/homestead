@@ -1,0 +1,1 @@
+<p>Lists all empty (unassigned) beds which are available for a new assignment. Excludes beds which are marked reserved, overflow, offline, private, or parlour.</p>
