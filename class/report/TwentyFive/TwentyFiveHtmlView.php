@@ -14,7 +14,7 @@ class TwentyFiveHtmlView extends ReportHtmlView {
         
         $rows = $this->report->getRows();
 
-        $this->tpl['rows'=> $rows;
+        $this->tpl['rows']=> $rows;
 
         $this->tpl['TERM'] = Term::toString($this->report->getTerm());
 
