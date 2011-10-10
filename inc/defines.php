@@ -89,31 +89,42 @@ define('BANNER_MEAL_5WEEK', 'S5');
 /**
  * Assignment Types
  */
-define('ASSIGN_ADMIN', 		'aadmin');
-define('ASSIGN_LOTTERY', 	'alottery');
+define('ASSIGN_ADMIN', 		'aadmin'); // general administrative
+
+// Processes
+define('ASSIGN_AUTO', 		'aauto'); // auto-assigner
+define('ASSIGN_LOTTERY', 	'alottery'); // re-application lottery
+define('ASSIGN_CHANGE', 	'achange'); // For room change requests
+define('ASSIGN_COPY',		'acopy'); // For copying from previous term
+
+// Administrative by student type
 define('ASSIGN_FRESHMEN', 	'afreshmen');
+define('ASSIGN_TRANSFER', 	'atransfer');
+define('ASSIGN_RETURNING', 	'areturning');
+
+// Special/medical needs needs
 define('ASSIGN_MEDICAL', 	'amedical');
+define('ASSIGN_SPECIAL', 	'aspecial');
+
+// Interest groups
 define('ASSIGN_ATHLETICS', 	'aathletics');
 define('ASSIGN_HONORS', 	'ahonors');
 define('ASSIGN_WATAUGA', 	'awatuaga');
 define('ASSIGN_TEACHING', 	'ateaching');
 define('ASSIGN_RLC', 		'arlc');
 define('ASSIGN_SORORITY', 	'asorority');
-define('ASSIGN_SPECIAL', 	'aspecial');
-define('ASSIGN_CHANGE', 	'achange'); // For room change requests
-define('ASSIGN_AUTO', 		'aauto');
-define('ASSIGN_COPY',		'acopy'); // For copying from previous term
+
 define('ASSIGN_NOREASON',	'anone');
 
 
 /**
  * Unassignment Types
  */
-define('UNASSIGN_ADMIN',	'uadmin');
+define('UNASSIGN_ADMIN',	'uadmin'); // General administrative
 define('UNASSIGN_CHANGE',	'uchange'); // For room change requests
-define('UNASSIGN_WITHDRAWN','uwithdrawn');
-define('UNASSIGN_SWAP',		'uswap'); // For room swap
-define('UNASSIGN_REASSIGN', 'ureassign');
+define('UNASSIGN_WITHDRAWN','uwithdrawn'); // Withdrawn
+define('UNASSIGN_INTENTNORETURN','uintentnoreturn'); // Intent not to return
+define('UNASSIGN_REASSIGN', 'ureassign'); // implicit removal for re-assign command
 define('UNASSIGN_NOREASON',	'unone');
 
 
@@ -122,23 +133,32 @@ define('UNASSIGN_NOREASON',	'unone');
  * Pretty Names
  */
 define('aadmin', 	'Administrative');
+
+define('aauto',		'Auto-Assigned');
 define('alottery', 	'Lottery');
+define('achange',   'Room Change');
+define('acopy',     'Term Rollover');
+
 define('afreshmen',	'Freshmen');
+define('atransfer', 'Transfer');
+define('areturning', 'Returning');
+
 define('amedical', 	'Medical');
+define('aspecial',	'Special Needs');
+
 define('aathletics','Athletics');
 define('ahonors',	'Honors');
 define('awatauga',	'Watauga Global');
 define('ateaching',	'Teaching Fellows');
 define('arlc',		'RLC');
 define('asorority',	'Sorority');
-define('aspecial',	'Special Needs');
-define('aauto',		'Auto-Assigned');
-define('acopy',		'Term Copy');
 define('anone',		'Not Specified');
+
+
 define('uadmin',	'Administrative');
 define('uchange',	'Room Change');
 define('uwithdrawn','Withdrawn');
-define('uswap',		'Room Swap');
+define('uintentnoreturn', 'Intent Not To Return');
 define('ureassign',	'Reassignment');
 define('unone',		'Not Specified');
 

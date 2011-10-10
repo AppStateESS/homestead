@@ -280,30 +280,11 @@ class StudentProfileView extends View {
          *********/        
         
         PHPWS_Core::initModClass('hms', 'StudentAssignmentHistory.php');
+        PHPWS_Core::initModClass('hms', 'StudentAssignmentHistoryView.php');
         
         $historyArray = StudentAssignmentHistory::getAssignments($this->student->getBannerId());
-        
-        $history_rows = array();
-        $excess_rows = array();
-        
-        $excess_limit = 3; // Number of rows to show by default
-        
-        $count = 0;
-        $tpl['HISTORY'] = array();
-        foreach($historyArray as $history) {
-        	if ( $count++ < $excess_limit ) {
-        		$history_rows[] = $history;
-        	} else {
-        		$excess_rows[] = $history;
-        	}
-        }
-        
-        if ( sizeof($historyArray) > $excess_limit ) {
-        	$tpl['SHOW_MORE'] = "[ <a id='showMoreLink'>show more</a> ]";
-        }
-        
- 		$tpl['HISTORY'] = $history_rows;
- 		$tpl['EXTRA_HISTORY'] = $excess_rows;
+        $historyView = new StudentAssignmentHistoryView($historyArray);
+        $tpl['HISTORY'] = $historyView->show();
         
         /*********
          * Notes *

@@ -124,15 +124,16 @@ class AssignStudentView extends View {
             ASSIGN_ADMIN        => 'Administrative',
             ASSIGN_LOTTERY	    => 'Lottery',
             ASSIGN_FRESHMEN	    => 'Freshmen',
+            ASSIGN_TRANSFER     => 'Transfer',
+            ASSIGN_RETURNING    => 'Returning',
             ASSIGN_MEDICAL      => 'Medical',
+            ASSIGN_SPECIAL      => 'Special Needs',
             ASSIGN_ATHLETICS    => 'Athletics',
             ASSIGN_HONORS       => 'Honors',
             ASSIGN_WATAUGA      => 'Watauga Global',
             ASSIGN_TEACHING     => 'Teaching Fellows',
             ASSIGN_RLC          => 'RLC',
-            ASSIGN_SORORITY     => 'Sorority',
-            ASSIGN_SPECIAL      => 'Special Needs',
-            ASSIGN_AUTO         => 'Auto-assigned'));
+            ASSIGN_SORORITY     => 'Sorority'));
         $form->setMatch('assignment_type', ASSIGN_ADMIN);
         $form->setLabel('assignment_type', 'Assignment Type: ');
         
