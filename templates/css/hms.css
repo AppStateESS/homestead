@@ -2,6 +2,7 @@
 .rounded-box {
   border: 1px solid #D6D6D6;
   border-radius: 10px;
+  -moz-border-radius: 10px;
   margin-top: 2em;
 }
 
@@ -10,6 +11,9 @@
   border-radius: inherit;
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
+  -moz-border-radius: inherit;
+  -moz-border-radius-bottomleft: 0;
+  -moz-border-radius-bottomright: 0;
 }
 
 .boxheader h2 {
@@ -139,6 +143,7 @@
 .hms-main-admin-menu-block {
   border: 1px solid #D6D6D6;
   border-radius: 10px;
+  -moz-border-radius: 10px;
   box-shadow: 1px 1px 1px #F0F0F0;
   background: #FAFAFA;
   width: 200px;
