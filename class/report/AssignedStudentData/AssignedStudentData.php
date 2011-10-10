@@ -6,6 +6,8 @@
  * @license http://opensource.org/licenses/gpl-3.0.html
  */
 
+PHPWS_Core::initModClass('hms', 'HMS_Util.php');
+
 class AssignedStudentData extends Report implements iCsvReport {
     const friendlyName = 'Assigned Student Data Export';
     const shortName = 'AssignedStudentData';
@@ -55,6 +57,8 @@ class AssignedStudentData extends Report implements iCsvReport {
                 $first = '';
                 $middle = '';
                 $last = '';
+                $gender = '';
+                $dob = '';
                 $type = '';
                 $line1 = "";
                 $line2 = "";
@@ -77,6 +81,9 @@ class AssignedStudentData extends Report implements iCsvReport {
             $last = $student->getLastName();
             $type = $student->getType();
             $appTerm = $student->getApplicationTerm();
+            
+            $gender = HMS_Util::formatGender($student->getGender());
+            $dob = $student->getDob();
 
             $room = $row['hall_name'] . ' ' . $row['room_number'];
 
@@ -98,7 +105,7 @@ class AssignedStudentData extends Report implements iCsvReport {
                 $zip = $address->zip;
             }
 
-            $this->rows[] = array($username,$bannerId,$first,$middle,$last,$type,$room,$line1,$line2,$line3,$city,$state,$zip,$appTerm);
+            $this->rows[] = array($username,$bannerId,$first,$middle,$last,$gender,$dob,$type,$room,$line1,$line2,$line3,$city,$state,$zip,$appTerm);
         }
     }
 
