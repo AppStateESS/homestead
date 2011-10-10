@@ -38,4 +38,4 @@ CREATE TABLE hms_report_param (
 
 alter table hms_new_application alter column banner_id TYPE integer USING CAST(trim(banner_id) AS integer);
 
-INSERT INTO hms_assignment_history (id, banner_id, assigned_on, assigned_by, assigned_reason, term, bed_id) select nextval('hms_assignment_history_seq'), banner_id, added_on, added_by, 'aadmin', term, bed_id from hms_assignment where term = 201140;
+INSERT INTO hms_assignment_history (id, banner_id, assigned_on, assigned_by, assigned_reason, term, bed_id) select nextval('hms_assignment_history_seq'), banner_id, added_on, 'jbooker', 'aadmin', term, bed_id from hms_assignment where term = 201140;
