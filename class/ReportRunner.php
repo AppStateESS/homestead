@@ -36,7 +36,7 @@ class ReportRunner extends ScheduledPulse
     {
         // Reschedule the next run of this process
         $sp = $this->makeClone();
-        $sp->execute_at = strtotime("tomorrow");
+        $sp->execute_at = strtotime("+1 minutes");
         $sp->save();
         
         // Load necessary classes
@@ -60,7 +60,7 @@ class ReportRunner extends ScheduledPulse
         // If there's nothing to do, quite nicely
         if(!isset($results) || is_null($results) || empty($results)){
             UserStatus::removeMask();
-            HMS::quit();
+            return;
         }
         
         // Run each report
@@ -88,7 +88,7 @@ class ReportRunner extends ScheduledPulse
         UserStatus::removeMask();
         
         // Exit cleanly
-        HMS::quit();
+        return;
     }
 }
 ?>
