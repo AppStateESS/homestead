@@ -75,7 +75,7 @@ class AssignmentDemographicsHtmlView extends ReportHtmlView {
             $tplRow['BLG_TOTAL_T'] = $byType[TYPE_TRANSFER];
             $tplRow['BLG_TOTAL_C'] = $byType[TYPE_CONTINUING];
 
-            $tplRow['BLG_TOTAL'] = $byGender[MALE] + $byGender[FEMALE];
+            $tplRow['BLG_TOTAL'] = $byType[TYPE_FRESHMEN] + $byType[TYPE_TRANSFER] + $byType[TYPE_CONTINUING] + $sum['OTHER'];
 
             $tplRow['BLG_OTHER'] = $sum['OTHER'];
 
