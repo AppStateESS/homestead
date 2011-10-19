@@ -41,6 +41,7 @@ class AppliedStudentData extends Report implements iCsvReport {
             $username   = $app['username'];
             $bannerId   = $app['banner_id'];
             $type       = $app['student_type'];
+            $cellPhone  = $app['cell_phone'];
 
             $assignment = HMS_Assignment::getAssignmentByBannerId($bannerId, $this->term);
 
@@ -61,7 +62,7 @@ class AppliedStudentData extends Report implements iCsvReport {
             $this->rows[] =
                     array(
                         $username, $bannerId, $first, $middle, $last,
-                        $type, $room, $address->line1, $address->line2,
+                        $type, $cellPhone, $room, $address->line1, $address->line2,
                         $address->line3, $address->city,
                         $address->state, $address->zip
                     );
@@ -71,7 +72,7 @@ class AppliedStudentData extends Report implements iCsvReport {
     public function getCsvColumnsArray()
     {
         return array('Username', 'Banner id', 'First name', 'Middle name',
-            'Last name', 'Student type', 'Assignment', 'Address 1',
+            'Last name', 'Student type', 'Cell Phone', 'Assignment', 'Address 1',
             'Address 2', 'Address 3', 'City', 'State', 'Zip');
     }
 
@@ -87,7 +88,5 @@ class AppliedStudentData extends Report implements iCsvReport {
 
         return $cmd;
     }
-
 }
-
 ?>
