@@ -7,6 +7,7 @@
  */
 
 PHPWS_Core::initModClass('hms', 'StudentFactory.php');
+PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
 
 class FloorRoster extends Report {
@@ -69,7 +70,7 @@ EOF;
             $row['name'] = $student->getFullName();
             $row['dob'] = $student->getDOB();
             $row['year'] = $student->getClass();
-            $row['gender'] = $student->getGender();
+            $row['gender'] = HMS_Util::formatGender($student->getGender());
 
             $final_rows[$hall_name][] = $row;
         }
