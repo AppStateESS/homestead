@@ -14,6 +14,8 @@ CREATE TABLE hms_assignment_history (
     primary key(id)
 );
 
+CREATE SEQUENCE hms_assignment_history_seq;
+
 CREATE TABLE hms_report (
     id                   INTEGER NOT NULL,
     report               character varying(255) NOT NULL,
