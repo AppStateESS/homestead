@@ -50,7 +50,7 @@
     <target name="rpmbuild">
         <tar destfile="${basedir}/.build/rpm/SOURCES/hms.tar.bz2" basedir="${basedir}" excludes="**/.*/**" compression="bzip2" />
         <exec executable="svn" failonerror="true">
-            <arg value="--export" />
+            <arg value="export" />
             <arg line="https://phpwebsite.appstate.edu/svn/fallout/trunk" />
             <arg line="${basedir}/.build/rpm/SOURCES/phpwebsite-hms" />
         </exec>
