@@ -65,10 +65,12 @@ class ReportRunner extends ScheduledPulse
         }
         
         // Run each report
-        foreach($results as $report){
+        foreach($results as $row){
+            $report = null;
+            
             try{
                 // Load the proper controller for this report
-                $reportCtrl = ReportFactory::getControllerById($report['id']);
+                $reportCtrl = ReportFactory::getControllerById($row['id']);
                 
                 // Load this report's params
                 $reportCtrl->loadParams();
@@ -76,6 +78,7 @@ class ReportRunner extends ScheduledPulse
                 // Generate the report
                 $reportCtrl->generateReport();
                 
+                $report = $reportCtrl->getReport();
             }catch(Exception $e){
                 // handle the exception nicely
                 HMS::emailError(HMS::formatException($e));
@@ -90,7 +93,6 @@ class ReportRunner extends ScheduledPulse
             
             HMS_Email::sendReportCompleteNotification($username, $report->getFriendlyName());
         }
-        
         
         // Remove the mask
         UserStatus::removeMask();
