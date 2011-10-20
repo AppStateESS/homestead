@@ -471,6 +471,17 @@ class HMS_Email{
 
         HMS_Email::send_email($to, null, $subject, $text);
     }
+    
+    public static function sendReportCompleteNotification($username, $reportName)
+    {
+        $to = $username . TO_DOMAIN;
+        $subject = '[hms] Report Complete: ' . $reportName;
+
+        $tpl = array();
+        $tpl['REPORT_NAME'] = $reportName;
+        
+        HMS_Email::send_template_message($to, $subject, 'email/ReportCompleteNotification.tpl', $tpl);
+    }
 
 } // End HMS_Email class
 ?>

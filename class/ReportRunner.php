@@ -43,6 +43,7 @@ class ReportRunner extends ScheduledPulse
         PHPWS_Core::initModClass('hms', 'HMS.php');
         PHPWS_Core::initModClass('hms', 'UserStatus.php');
         PHPWS_Core::initModClass('hms', 'ReportFactory.php');
+        PHPWS_Core::initModCLass('hms', 'HMS_Email.php');
         
         // Fake a user, in case we need that
         UserStatus::wearMask('HMS System');
@@ -80,6 +81,14 @@ class ReportRunner extends ScheduledPulse
                 HMS::emailError(HMS::formatException($e));
                 exit;
             }
+            
+            // Send success notification
+            $username = $report->getCreatedBy();
+            if($username == 'jbooker'){
+                $username = 'jb67803';
+            }
+            
+            HMS_Email::sendReportCompleteNotification($username, $report->getFriendlyName());
         }
         
         
