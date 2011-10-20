@@ -76,9 +76,8 @@ class ReportRunner extends ScheduledPulse
                 $reportCtrl->generateReport();
                 
             }catch(Exception $e){
-                // TODO handle the exception nicely
-                echo 'Exception!';
-                print_r($e);
+                // handle the exception nicely
+                HMS::emailError(HMS::formatException($e));
                 exit;
             }
         }

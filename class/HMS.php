@@ -54,7 +54,7 @@ abstract class HMS {
                 $cmd->execute($this->context);
             } catch(Exception $e) {
                 try {
-                    $message = $this->formatException($e);
+                    $message = self::formatException($e);
                     NQ::Simple('hms', HMS_NOTIFICATION_ERROR, 'An internal error has occurred, and the authorities have been notified.  We apologize for the inconvenience.');
                     self::emailError($message);
                     PHPWS_Core::initModClass('hms', 'HMSNotificationView.php');
@@ -62,7 +62,7 @@ abstract class HMS {
                     $nv->popNotifications();
                     Layout::add($nv->show());
                 } catch(Exception $e) {
-                    $message2 = $this->formatException($e);
+                    $message2 = self::formatException($e);
                     echo "HMS has experienced a major internal error.  Attempting to email an admin and then exit.";
                     $message = "Something terrible has happened, and the exception catch-all threw an exception.\n\nThe first exception was:\n\n$message\n\nThe second exception was:\n\n$message2";
                     mail('webmaster@tux.appstate.edu', 'A Major HMS Error Has Occurred', $message);
@@ -72,7 +72,7 @@ abstract class HMS {
         }
     }
 
-    private function formatException(Exception $e)
+    public static function formatException(Exception $e)
     {
         ob_start();
         echo "Ohes Noes!  HMS threw an exception that was not caught!\n\n";
@@ -110,7 +110,7 @@ abstract class HMS {
         return $message;
     }
 
-    private static function emailError($message)
+    public static function emailError($message)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Email.php');
         //$to = HMSSettings::getUberAdminEmail();
