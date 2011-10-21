@@ -53,8 +53,11 @@ mv "$RPM_BUILD_ROOT%{install_dir}/mod/hms/inc/shs0001.wsdl.prod"\
    "$RPM_BUILD_ROOT%{install_dir}/mod/hms/inc/shs0001.wsdl"
 
 # Install the cron job
-mv "$ROM_BUILD_ROOT%{install_dir}/mod/hms/inc/hms-cron"\
+mv "$RPM_BUILD_ROOT%{install_dir}/mod/hms/inc/hms-cron"\
    "$RPM_BUILD_ROOT/etc/cron.d/hms-cron"
+
+# Create directory for HMS Archived Reports
+mkdir "$RPM_BUILD_ROOT%{install_dir}/files/hms_reports"
 
 %clean
 rm -rf "$RPM_BUILD_ROOT%install_dir"
