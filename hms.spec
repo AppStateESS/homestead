@@ -62,7 +62,7 @@ mkdir "$RPM_BUILD_ROOT%{install_dir}/files/hms_reports"
 
 # Put the PDF generator in the right place
 mkdir -p "$RPM_BUILD_ROOT/opt"
-mv "$RPM_BUILD_ROOT%{install_dir}/inc/wkhtmltopdf-i386"\
+mv "$RPM_BUILD_ROOT%{install_dir}/mod/hms/inc/wkhtmltopdf-i386"\
    "$RPM_BUILD_ROOT/opt/wkhtmltopdf-i386"
 
 %clean
