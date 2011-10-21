@@ -5,6 +5,7 @@
 $GLOBALS['WKPDF_BASE_PATH'] = '/opt/';
 $GLOBALS['WKPDF_TEMP_PATH'] = '/tmp/';
 $GLOBALS['WKPDF_BASE_SITE']='http://'.$_SERVER['SERVER_NAME'].'/';
+$GLOBALS['CPU_TYPE'] = 'amd64';
 
 /**
  * @author Christian Sciberras
@@ -81,6 +82,10 @@ class WKPDF {
      * @return string CPU kind ('amd64' or 'i386').
      */
     private static function _getCPU(){
+        if(isset($GLOBALS['CPU_TYPE'])){
+            return $GLOBALS['CPU_TYPE'];
+        }
+        
         if(self::$cpu==''){
             if(`grep -i amd /proc/cpuinfo`!='')                     self::$cpu='amd64';
             elseif(`grep -i intel /proc/cpuinfo`!='')       self::$cpu='i386';
