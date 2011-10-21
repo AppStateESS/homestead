@@ -52,14 +52,23 @@ rm -f "$RPM_BUILD_ROOT%{install_dir}/mod/hms/hms.spec"
 mv "$RPM_BUILD_ROOT%{install_dir}/mod/hms/inc/shs0001.wsdl.prod"\
    "$RPM_BUILD_ROOT%{install_dir}/mod/hms/inc/shs0001.wsdl"
 
+# Install the cron job
+mv "$ROM_BUILD_ROOT%{install_dir}/mod/hms/inc/hms-cron"\
+   "$RPM_BUILD_ROOT/etc/cron.d/hms-cron"
+
 %clean
 rm -rf "$RPM_BUILD_ROOT%install_dir"
 
 %files
 %defattr(-,apache,apache)
 %{install_dir}
+%defattr(-,root,root)
+/etc/cron.d/hms-cron
 
 %changelog
+* Fri Oct 21 2011 Jeff Tickle <jtickle@tux.appstate.edu>
+- Made the phpwebsite install more robust, including the theme
+- Added Cron Job, but never tested it so it probably won't work
 * Thu Jun  2 2011 Jeff Tickle <jtickle@tux.appstate.edu>
 - Added build.xml and hms.spec to the repository, prevented these files from installing
 - Added some comments
