@@ -49,16 +49,7 @@
 
     <target name="rpmbuild">
         <tar destfile="${basedir}/.build/rpm/SOURCES/hms.tar.bz2" basedir="${basedir}" excludes="**/.*/**" compression="bzip2" />
-        <exec executable="svn" failonerror="true">
-            <arg value="export" />
-            <arg line="https://phpwebsite.appstate.edu/svn/fallout/trunk" />
-            <arg line="${basedir}/.build/rpm/SOURCES/phpwebsite-hms" />
-        </exec>
-        <move file="${basedir}/inc/pulse" todir="${basedir}/.build/rpm/SOURCES/phpwebsite-hms/mod/" />
-        <tar destfile="${basedir}/.build/rpm/SOURCES/phpwebsite-hms.tar.gz" basedir="${basedir}/.build/rpm/SOURCES/phpwebsite-hms" compression="gzip" />
-        <delete dir="${basedir}/.build/rpm/SOURCES/phpwebsite-hms" />
-        <get src="http://rockhopper.appstate.edu/convenience/asu_toptier_hms-latest.tar.bz2" dest="${basedir}/.build/rpm/SOURCES/asu_toptier_hms-latest.tar.bz2" />
-        <!--<get src="http://phpwebsite.appstate.edu/downloads/stable/phpwebsite_1_7_1.tar.gz" dest="${basedir}/.build/rpm/SOURCES/phpwebsite_1_7_1.tar.gz" />-->
+        <get src="http://rockhopper.appstate.edu/convenience/phpwebsite-hms-latest.tar.bz2" dest="${basedir}/.build/rpm/SOURCES/phpwebsite-hms-latest.tar.bz2" />
         <copy file="${basedir}/hms.spec" todir="${basedir}/.build/rpm/SPECS/" />
         <rpm specFile="hms.spec" topDir="${basedir}/.build/rpm" failOnError="true" />
     </target>

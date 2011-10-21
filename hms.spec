@@ -13,8 +13,7 @@ License: GPL
 Group:   Development/PHP
 URL:     http://phpwebsite.appstate.edu
 Source0: %{name}.tar.bz2
-Source1: phpwebsite_hms.tar.gz
-Source2: asu_toptier_hms-latest.tar.bz2
+Source1: phpwebsite-hms-latest.tar.bz2
 Requires: php >= 5.0.0, php-gd >= 5.0.0
 
 %description
@@ -23,7 +22,6 @@ The Housing Management System
 %prep
 %setup -T -n hms -c hms -a 0
 %setup -T -D -b 1 -n hms
-%setup -T -D -b 2 -n hms
 
 %post
 /sbin/service httpd restart
@@ -32,11 +30,8 @@ The Housing Management System
 cd '%{_builddir}'
 mkdir -p "$RPM_BUILD_ROOT%{install_dir}"
 # phpWebSite and HMS are very tightly coupled, so included the perscribed version of phpWebSite.
-mv phpwebsite_hms/* "$RPM_BUILD_ROOT%{install_dir}/"
-mv phpwebsite_hms/.htaccess "$RPM_BUILD_ROOT%{install_dir}/"
-
-# Move the theme into position
-mv asu_toptier_hms "$RPM_BUILD_ROOT%{install_dir}/themes/"
+mv phpwebsite-hms/* "$RPM_BUILD_ROOT%{install_dir}/"
+mv phpwebsite-hms/.htaccess "$RPM_BUILD_ROOT%{install_dir}/"
 
 # Install HMS under phpWebSite
 mkdir -p "$RPM_BUILD_ROOT%{install_dir}/mod/hms/"
