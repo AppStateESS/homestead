@@ -53,7 +53,7 @@ mv "$RPM_BUILD_ROOT%{install_dir}/mod/hms/inc/shs0001.wsdl.prod"\
    "$RPM_BUILD_ROOT%{install_dir}/mod/hms/inc/shs0001.wsdl"
 
 # Install the cron job
-mkdir -p $RPM_BUILD_ROOT/etc/cron.d
+mkdir -p "$RPM_BUILD_ROOT/etc/cron.d"
 mv "$RPM_BUILD_ROOT%{install_dir}/mod/hms/inc/hms-cron"\
    "$RPM_BUILD_ROOT/etc/cron.d/hms-cron"
 
@@ -61,7 +61,7 @@ mv "$RPM_BUILD_ROOT%{install_dir}/mod/hms/inc/hms-cron"\
 mkdir "$RPM_BUILD_ROOT%{install_dir}/files/hms_reports"
 
 # Put the PDF generator in the right place
-mkdir -p $RPM_BUILD_ROOT/opt
+mkdir -p "$RPM_BUILD_ROOT/opt"
 mv "$RPM_BUILD_ROOT%{install_dir}/inc/wkhtmltopdf-i386"\
    "$RPM_BUILD_ROOT/opt/wkhtmltopdf-i386"
 
