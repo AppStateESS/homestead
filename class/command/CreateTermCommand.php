@@ -23,12 +23,12 @@ class CreateTermCommand extends Command {
 
         if(!isset($year) || is_null($year) || empty($year)){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You must provide a year.');
-            $viewCmd->redirect();
+            $errorCmd->redirect();
         }
 
         if(!isset($sem) || is_null($sem) || empty($sem)){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You must provide a semester.');
-            $viewCmd->redirect();
+            $errorCmd->redirect();
         }
 
         // Check to see if the specified term already exists
@@ -41,7 +41,7 @@ class CreateTermCommand extends Command {
                 $term->save();
             }catch(DatabaseException $e){
                 NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'There was an error saving the term. Please try again or contact ESS.');
-                $viewCmd->redirect();
+                $errorCmd->redirect();
             }
         }else{
 
@@ -54,7 +54,7 @@ class CreateTermCommand extends Command {
 
             if(!is_null($num) && $num > 0){
                 NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'One or more halls already exist for this term, so nothing can be copied.');
-                $viewCmd->redirect();
+                $errorCmd->redirect();
             }
         }
 
