@@ -1,9 +1,9 @@
 <?php
 
 /**
- * ExecRpoertSycCommand
+ * ExecReportSycCommand
  *
- * Command class responsible for stating the
+ * Command class responsible for starting the
  * synchronous execution of the given report.
  *
  * Can be extended or replaced (using iSyncReport interface)
@@ -59,6 +59,8 @@ class ExecReportSyncCommand extends Command {
         */
         $params = $context->getParams();
         $params['term'] = Term::getSelectedTerm();
+        //test(Term::getSelectedTerm());
+        //test($params,1);
         $reportCtrl->setParams($params);
 
         // Save this report so it'll have an ID
