@@ -47,6 +47,7 @@ class UnassignedFreshmen extends Report implements iCsvReport {
         PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
         
         $term = $this->term;
+
         $sem = Term::getTermSem($term);
         $year = Term::getTermYear($term);
         
@@ -64,6 +65,7 @@ class UnassignedFreshmen extends Report implements iCsvReport {
                 $db->addJoin('', 'hms_new_application', 'hms_summer_application', 'id', 'id');
                 $db->addColumn('hms_summer_application.*');
                 $applicationTerms[] = $term;
+                $db->addWhere('application_type', 'summer');
                 break;
             case TERM_FALL:
                 $db->addJoin('', 'hms_new_application', 'hms_fall_application', 'id', 'id');
@@ -76,11 +78,15 @@ class UnassignedFreshmen extends Report implements iCsvReport {
                 $applicationTerms[] = $summer1;
                 $applicationTerms[] = $summer2;
                 $applicationTerms[] = $term;
+
+
+                $db->addWhere('application_type', 'fall');
                 break;
             case TERM_SPRING:
                 $db->addJoin('', 'hms_new_application', 'hms_spring_application', 'id', 'id');
                 $db->addColumn('hms_spring_application.*');
                 $applicationTerms[] = $term;
+                $db->addWhere('application_type', 'spring');
                 break;
             default:
                 // error
@@ -96,17 +102,13 @@ class UnassignedFreshmen extends Report implements iCsvReport {
         $db->addWhere('hms_new_application.withdrawn', 0);
         $db->addWhere('hms_new_application.student_type', 'W', '!=');
         
-        // Limit for freshmen-only
-        $db->addWhere('application_type', 'fall');
-        
         // Limit by application term
         foreach($applicationTerms as $t){
             $db->addWhere('application_term', $t, '=', 'OR', 'app_term_group');
         }
         
         // Sort by gender, then application date (earliest to latest)
-        $db->addOrder(array('gender ASC', 'created_on ASC'));
-
+        $db->addOrder(array('student_type ASC', 'gender ASC', 'created_on ASC'));
         $results = $db->select();
         
         if(PHPWS_Error::isError($results)){
