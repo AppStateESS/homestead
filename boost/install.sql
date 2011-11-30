@@ -337,7 +337,7 @@ CREATE TABLE hms_roommate (
 
 CREATE TABLE hms_student_profiles (
     id INTEGER NOT NULL,
-    username character varying(32) UNIQUE NOT NULL,
+    username character varying(32) NOT NULL,
     term            INTEGER NOT NULL REFERENCES hms_term(term),
     date_submitted INTEGER NOT NULL,
     alternate_email character varying(64) NULL,
@@ -427,9 +427,10 @@ CREATE TABLE hms_student_profiles (
     tamil smallint,
     telugu smallint,
     vietnamese smallint,
-
     PRIMARY KEY(id)
 );
+
+ALTER TABLE hms_student_profiles ADD CONSTRAINT hms_student_profile_user UNIQUE (username, term);
 
 CREATE TABLE hms_pending_assignment (
     id               INTEGER               NOT NULL,
