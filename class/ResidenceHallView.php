@@ -44,9 +44,6 @@ class ResidenceHallView extends View {
         $form->addDropBox('gender_type', array(FEMALE => FEMALE_DESC, MALE => MALE_DESC, COED => COED_DESC));
         $form->setMatch('gender_type', $this->hall->gender_type);
 
-        $form->addText('rooms_for_lottery', $this->hall->rooms_for_lottery);
-        $form->setSize('rooms_for_lottery', 3, 3);
-
         $form->addCheckBox('air_conditioned', 1);
         $form->setMatch('air_conditioned', $this->hall->air_conditioned);
 

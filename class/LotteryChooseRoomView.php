@@ -58,13 +58,6 @@ class LotteryChooseRoomView extends View {
                 $row['ROW_TEXT_COLOR']  = 'grey';
                 $row['AVAIL_BEDS']      = 0; // show 0 available beds since this room is unavailable to the user
             
-            }else if($used_rooms >= $hall->rooms_for_lottery && $num_avail_beds == $total_beds){
-                // Check for if we've reached the room cap, and this room isn't partially used
-                // Show a grayed out row and no link
-                $row['ROOM_NUM']        = $room->room_number;
-                $row['ROW_TEXT_COLOR']  = 'grey';
-                $row['AVAIL_BEDS']      = 0; // show 0 available beds since this room is unavailable to the user
-
             }else{
                 // Show the room number as a link
                 $roomCmd = CommandFactory::getCommand('LotteryChooseRoom');

@@ -8,7 +8,6 @@ class HMS_Lottery {
 
     public static function runLottery()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
         PHPWS_Core::initModClass('hms', 'Term.php');
         PHPWS_Core::initModClass('hms', 'HMS_Email.php');
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
@@ -18,7 +17,7 @@ class HMS_Lottery {
 
         /******************
          * Initialization *
-         ******************/
+        ******************/
         HMS_Activity_Log::log_activity('hms', ACTIVITY_LOTTERY_EXECUTED, 'hms');
 
         // One-time date/time calculations, setup for later on
@@ -32,7 +31,7 @@ class HMS_Lottery {
 
         /*******************
          * Reminder Emails *
-         *******************/
+        *******************/
         $output[] = "Lottery system invoked on " . date("d M, Y @ g:i:s", $now) . " ($now)";
 
         $output[] = "Sending invite reminder emails...";
@@ -43,7 +42,7 @@ class HMS_Lottery {
 
         /*****************
          * Invite totals *
-         *****************/
+        *****************/
         $output[] = 'Counting invites sent so far... ';
 
         try{
@@ -96,168 +95,13 @@ class HMS_Lottery {
         $output[] = "$outstanding_roommate_invites outstanding roommate invites";
 
 
-        /**************
-         * Bed Totals *
-         **************/
-
-        // Get the halls
-        $halls = HMS_Residence_Hall::get_halls($term);
-
-        $output[] = "Checking remaining rooms...";
-        $remaining_rooms        = 0;
-        $remaining_coed_rooms   = 0;
-        $remaining_male_rooms   = 0;
-        $remaining_female_rooms = 0;
-        // Foreach hall
-        foreach($halls as $hall) {
-            $output[] = "Checking $hall->hall_name";
-            // Get the number of rooms allowed for the lottery
-            $lottery_rooms = $hall->rooms_for_lottery;
-            $output[] = "$lottery_rooms rooms reserved for lottery";
-
-            // Get the number of totally full rooms in this hall
-            try{
-                $full_rooms = $hall->count_lottery_full_rooms();
-            }catch(Exception $e) {
-                $output[] = 'Error while counting full rooms. Exception: ' . $e->getMessage();
-                HMS_Lottery::lottery_complete('FAILED', $output);
-            }
-
-            $output[] = "$full_rooms full lottery rooms";
-
-            // Get the number of used rooms in this hall
-            try{
-                $used_rooms = $hall->count_lottery_used_rooms();
-            }catch(Exception $e) {
-                $output[] = 'Error while counting full rooms. Check the error logs. Exception: ' . $e->getMessage();
-                HMS_Lottery::lottery_complete('FAILED', $output);
-            }
-
-            $output[] = "$used_rooms lottery rooms used";
-
-            // Calculate the remaining number of rooms allowed for the lottery in this hall
-            $remaining_rooms_this_hall = $lottery_rooms - $full_rooms;
-
-            if($remaining_rooms_this_hall < 0) {
-                $remaining_rooms_this_hall = 0;
-            }
-
-            $output[] = "$remaining_rooms_this_hall remaining rooms available for lottery";
-
-            if($remaining_rooms_this_hall <= 0) {
-                continue;
-            }
-
-            // Count the number of non-full male/female rooms in this hall
-            try{
-                $female_rooms_this_hall = $hall->count_avail_lottery_rooms(FEMALE);
-            }catch(Exception $e) {
-                $output[] = 'Error counting non-full female rooms. Exception: ' . $e->getMessage();
-                HMS_Lottery::lottery_complete('FAILED', $output);
-            }
-
-            try{
-                $male_rooms_this_hall = $hall->count_avail_lottery_rooms(MALE);
-            }catch(Exception $e) {
-                $output[] = 'Error counting non-full male rooms. Exception: ' . $e->getMessage();;
-                HMS_Lottery::lottery_complete('FAILED', $output);
-            }
-
-            // Count the number of co-ed rooms
-            try{
-                $coed_rooms_this_hall = $hall->count_avail_lottery_rooms(COED);
-            }catch(Exception $e) {
-                $output[] = 'Error counting non-full co-ed rooms. Exception: ' . $e->getMessage();
-                HMS_Lottery::lottery_complete('FAILED', $output);
-            }
-
-            $output[] = "$coed_rooms_this_hall remaining coed rooms";
-            $output[] = "$male_rooms_this_hall remaining male rooms";
-            $output[] = "$female_rooms_this_hall remaining female rooms";
-
-            // Add that number to total number of lottery invites to send
-            $remaining_rooms += $remaining_rooms_this_hall;
-
-
-            $remaining_coed_rooms   += $coed_rooms_this_hall;
-            $remaining_male_rooms   += $male_rooms_this_hall;
-            $remaining_female_rooms += $female_rooms_this_hall;
-
-        }
-
-        $output[] = "$remaining_rooms remaining lottery rooms total";
-        $output[] = "$remaining_coed_rooms total remaining coed rooms";
-        $output[] = "$remaining_male_rooms total remaining male rooms";
-        $output[] = "$remaining_female_rooms total remaining female rooms";
-
-        // If there are no free rooms and no outstanding invites, then we're done
-        // This takes into account outstanding roommate invites, which if they fail would mean we'd need another lottery round
-        if($remaining_rooms <= 0 && $outstanding_invite_count <= 0 && $outstanding_roommate_invites <= 0) {
-            $output[] = 'No remaining rooms and no outstanding invites, done!';
-            HMS_Lottery::lottery_complete('SUCCESS', $output, true);
-        }
-
-        if($remaining_rooms <= 0) {
-            $output[] = 'No remaining rooms, but there are outstanding invites, quitting for now.';
-            HMS_Lottery::lottery_complete('SUCCESS', $output);
-        }
-
-        /*
-         // Calculate the number of new invites that can be sent
-         // If there are co-ed rooms, then only send as many invites as there are co-ed rooms.
-         // TODO: move this inside the for loop below
-         if($remaining_coed_rooms > 0) {
-         $invites_to_send = $remaining_coed_rooms - $outstanding_invite_count;
-         $co_ed_only = true;
-         $output[] = "Co-ed rooms remaining, can send $invites_to_send co-ed invites";
-         }else{
-         $invites_to_send = $remaining_rooms - $outstanding_invite_count;
-         $co_ed_only = false;
-
-         // Calculate the maximum number of male/female invites we can send
-         $male_invites_avail     = $remaining_male_rooms - $male_invites_outstanding;
-         $female_invites_avail   = $remaining_female_rooms - $female_invites_outstanding;
-
-         $output[] = "No co-ed rooms remaining, can send $invites_to_send invites";
-         $output[] = "$male_invites_avail male invites available";
-         $output[] = "$female_invites_avail female invites available";
-         }
-         */
-
-        // Calculate the maximum number of male/female/coed invites we can send
-        $male_invites_avail     = $remaining_male_rooms - $male_invites_outstanding;
-        $female_invites_avail   = $remaining_female_rooms - $female_invites_outstanding;
-        $coed_invites_avail     = $remaining_coed_rooms - $outstanding_invite_count;
-
-        if($male_invites_avail < $female_invites_avail) {
-            $invites_to_send = $male_invites_avail;
-        }else{
-            $invites_to_send = $female_invites_avail;
-        }
-
-        if($coed_invites_avail < 0) {
-            $coed_invites_avail = 0;
-        }
-
-        $invites_to_send += $coed_invites_avail;
-
-        // Make sure we're not sending out more invites than we have rooms
-        if($invites_to_send > ($remaining_rooms - $outstanding_invite_count)) {
-            $invites_to_send = $remaining_rooms - $outstanding_invite_count;
-        }
-
-        $output[] = "$male_invites_avail male invites available";
-        $output[] = "$female_invites_avail female invites available";
-        $output[] = "$coed_invites_avail  co-ed invites";
-        $output[] = "Could send $invites_to_send total invites";
-
         // Make sure we aren't sending more than our max at once
         if($invites_to_send > MAX_INVITES_PER_BATCH) {
             $invites_to_send = MAX_INVITES_PER_BATCH;
             $output[] = "Batch size limited to $invites_to_send";
         }
 
-        $output[] = "Sending up to $invites_to_send new invites";
+        $output[] = "Sending $invites_to_send new invites";
 
         if($invites_to_send <= 0) {
             $output[] = "Cannout send any new entries, quitting.";
@@ -273,9 +117,6 @@ class HMS_Lottery {
         }
 
         $output[] = "$remaining_entries lottery entries remaining";
-
-        // Setup the lottery type
-        $lottery_type = PHPWS_Settings::get('hms', 'lottery_type');
 
         // Setup the percentages for weighting by class
         $soph_percent   = PHPWS_Settings::get('hms', 'lottery_per_soph');
@@ -296,95 +137,28 @@ class HMS_Lottery {
                 HMS_Lottery::lottery_complete('SUCCESS', $output, true);
             }
 
-            $output[] = "$remaining_entries entries remaining";
-
             $winning_row = null;
 
             // Check to see if we have a 'magic winner first
             $winning_row = HMS_Lottery::check_magic_winner($term);
 
-            $j = 0;
-            // Loop until we have a winner, stop if we do this 200 times without a winner
-            while(is_null($winning_row) && $j < 200) {
 
-                // Decide which gender we need to invite
-                if($coed_invites_avail > 0) {
-                    $gender = COED;
-                }else{
-                    // Decide if we need to pick a male, female, or either
-                    if($male_invites_avail > 0 && $female_invites_avail > 0) {
-                        $gender = COED;
-                    }else if($male_invites_avail > 0) {
-                        $gender = MALE;
-                    }else if($female_invites_avail > 0) {
-                        $gender = FEMALE;
-                    }
-                }
+            // Decide which class we need to invite
 
-                // Decide which class we need to invite
-                if($lottery_type == 'single_phase') {
-                    // Using a single-phase lottery, so choose which application term to use based on class weights
-                    // Choose a random number
-                    $random_num = mt_rand(0, 100);
-
-                    if($random_num < $soph_percent) {
-                        $class = CLASS_SOPHOMORE;
-                    }else if($random_num >= $soph_percent && $random_num < ($soph_percent + $jr_percent)) {
-                        $class = CLASS_JUNIOR;
-                    }else{
-                        $class = CLASS_SENIOR;
-                    }
-                }else{
-                    // Using a multi-phase lottery, so determine which phase we're in
-                    if($senior_invites_sent < $senior_max_invites && HMS_Lottery::count_remaining_entries_by_class($term, CLASS_SENIOR) > 0) {
-                        $class = CLASS_SENIOR;
-                    }elseif($junior_invites_sent < $jr_max_invites && HMS_Lottery::count_remaining_entries_by_class($term, CLASS_JUNIOR) > 0) {
-                        // Choose a rising jr
-                        $class = CLASS_JUNIOR;
-                    }elseif($soph_invites_sent < $soph_max_invites && HMS_Lottery::count_remaining_entries_by_class($term, CLASS_SOPHOMORE) > 0) {
-                        // Choose a rising sophmore (summer 1 thru fall of the previous year, plus spring of the same year)
-                        $class = CLASS_SOPHOMORE;
-                    }else{
-                        // If this ever happens, it means we reached our invite caps for all calsses before all the available lottery rooms were filled
-                        $output[] = "All invite caps (by class) reached or out of students to invite, quitting.";
-                        HMS_Lottery::lottery_complete('SUCCESS', $output);
-                    }
-                }
-
-                // If we're in the first 100 iterations, don't allow a previous winner. After the first 100 iterations, allow previous winners.
-                if($j < 100) {
-                    $winning_row = HMS_Lottery::choose_winner($gender, $class, $term, false);
-                }else{
-                    $winning_row = HMS_Lottery::choose_winner($gender, $class, $term, true);
-                }
-
-                $j++;
-            }
-
-            if($j >= 200) {
-                $output[] = "Couldn't find a winner. Stopping.";
-                HMS_Lottery::lottery_complete('SUCCESS', $output);
-            }
+            $winning_row = HMS_Lottery::choose_winner($gender, $class, $term, false);
 
             $winning_username = $winning_row['username'];
             $output[] = "Inviting $winning_username";
 
             // Update the winning student's invite
             try{
-            $entry = HousingApplication::getApplicationByUser($winning_username, $term);
-            $entry->invite_expires_on = $expire_time;
+                $entry = HousingApplication::getApplicationByUser($winning_username, $term);
+                $entry->invite_expires_on = $expire_time;
 
-            $result = $entry->save();
+                $result = $entry->save();
             }catch(Exception $e) {
                 $output[] = 'Error while trying to select a winning student. Exception: ' . $e->getMessage();
                 HMS_Lottery::lottery_complete('FAILED', $output);
-            }
-
-            // Update the counts of male/female invites available
-            if($winning_row['gender'] == MALE) {
-                $male_invites_avail--;
-            }else if($winning_row['gender'] == FEMALE) {
-                $female_invites_avail--;
             }
 
             // Update the number of entries remaining
@@ -415,7 +189,7 @@ class HMS_Lottery {
 
     /*
      * Chooses a winner and returns that stuent's row from the hms_lottery_entry table
-     */
+    */
     public function choose_winner($gender, $class, $term, $allow_previous_winners)
     {
         $winning_student = null;
@@ -554,7 +328,7 @@ class HMS_Lottery {
 
     /*
      * Returns the number of outstanding *roommate* invites
-     */
+    */
     public function count_outstanding_roommate_invites($term)
     {
         $now = mktime();
@@ -576,7 +350,7 @@ class HMS_Lottery {
 
     /*
      * Returns the number of invites sent (confirmed or outstanding) for the given class
-     */
+    */
     public function count_invites_by_class($term, $class)
     {
         $now = mktime();
@@ -930,8 +704,8 @@ class HMS_Lottery {
 
     /*
      * Returns true if the student is assigned in the current term
-     * or if the student has an eligibility waiver.
-     */
+    * or if the student has an eligibility waiver.
+    */
     public function determineEligibility($username)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');

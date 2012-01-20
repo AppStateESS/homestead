@@ -20,7 +20,6 @@ class LotteryChooseFloorView extends View {
         PHPWS_Core::initModClass('filecabinet', 'Cabinet.php');
 
         $hall = new HMS_Residence_Hall($this->hallId);
-        $hall_rooms_for_lottery = $hall->rooms_for_lottery;
         $hall_rooms_used        = $hall->count_lottery_used_rooms();
 
         $tpl['HALL']            = $hall->hall_name;
@@ -58,12 +57,15 @@ class LotteryChooseFloorView extends View {
                 continue;
             }
 
+            /*
+             * Commented out due to removal of 'rooms_for_lottery' field.
             if($hall_rooms_used >= $hall_rooms_for_lottery && $full_rooms >= $used_rooms){
                 $row['FLOOR']           = HMS_Util::ordinal($floor->floor_number);
                 $row['ROW_TEXT_COLOR']  = 'grey';
                 $tpl['floor_list'][]    = $row;
                 continue;
             }
+            */
 
             $floorCmd = CommandFactory::getCommand('LotteryChooseFloor');
             $floorCmd->setFloorId($floor->id);

@@ -27,12 +27,6 @@ class LotteryChooseHallView extends View {
             $row['ROW_TEXT_COLOR']  = 'black';
 
             $rooms_used = $hall->count_lottery_full_rooms();
-            # If we've used up the number of allotted rooms, then remove this hall from the list
-            if($rooms_used >= $hall->rooms_for_lottery){
-                $row['ROW_TEXT_COLOR'] = 'grey';
-                $tpl['hall_list'][] = $row;
-                continue;
-            }
             
             # Make sure we have a room of the specified gender available in the hall (or a co-ed room)
             if($hall->count_avail_lottery_rooms($this->student->getGender()) <= 0 &&

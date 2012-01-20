@@ -1,0 +1,1 @@
+alter table hms_residence_hall drop column rooms_for_lottery;

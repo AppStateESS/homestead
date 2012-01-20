@@ -72,25 +72,6 @@ class EditResidenceHallCommand extends Command {
         $hall->meal_plan_required       = $context->get('meal_plan_required');
         $hall->assignment_notifications = $context->get('assignment_notifications');
 
-        $rooms_for_lottery = $context->get('rooms_for_lottery');
-
-        if(!isset($rooms_for_lottery) || $rooms_for_lottery == ''){
-            $rooms_for_lottery = 0;
-        }else if(!is_numeric($rooms_for_lottery)){
-            $rooms_for_lottery = 0;
-        }else if ($rooms_for_lottery < 0 || $rooms_for_lottery > 999){
-            $rooms_for_lottery = 0;
-        }
-
-        # Check to make sure this isn't greater than the number of rooms in the hall
-        if($rooms_for_lottery > $hall->get_number_of_rooms()){
-            $rooms_for_lottery = $hall->get_number_of_rooms();
-        }
-
-        # TODO: check to make sure this isn't greater than the number of non-medical, non-reserved, non-ra, etc...... rooms
-
-        $hall->rooms_for_lottery = $rooms_for_lottery;
-
         $hall->exterior_image_id    = $context->get('exterior_image_id');
         $hall->other_image_id       = $context->get('other_image_id');
         $hall->map_image_id         = $context->get('map_image_id');

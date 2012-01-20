@@ -71,7 +71,6 @@ CREATE TABLE hms_residence_hall (
     gender_type                 smallint NOT NULL,
     air_conditioned             smallint NOT NULL,
     is_online                   smallint NOT NULL,
-    rooms_for_lottery           integer DEFAULT 0 NOT NULL,
     meal_plan_required          smallint DEFAULT 0 NOT NULL,
     added_by                    smallint NOT NULL,
     added_on                    integer NOT NULL,

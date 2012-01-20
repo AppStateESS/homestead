@@ -21,7 +21,6 @@ class HMS_Residence_Hall extends HMS_Item
     public $air_conditioned            = 0;
     public $is_online                  = 0;
 
-    public $rooms_for_lottery          = 0;
     public $meal_plan_required         = 0;
     public $assignment_notifications   = 1;
 
@@ -806,11 +805,6 @@ class HMS_Residence_Hall extends HMS_Item
 
         foreach($halls as $hall){
             $rooms_used = $hall->count_lottery_used_rooms();
-
-            # If we've used up the number of allotted rooms, then remove this hall from the list
-            if($rooms_used >= $hall->rooms_for_lottery){
-                continue;
-            }
 
             # Make sure we have a room of the specified gender available in the hall (or a co-ed room)
             if($hall->count_avail_lottery_rooms($gender) <= 0 &&
