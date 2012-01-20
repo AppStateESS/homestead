@@ -86,11 +86,11 @@ Program</legend> {HONORS_PREF_1}{HONORS_PREF_1_LABEL}<br />
 <!-- END honors -->
 
 <h2>Special needs</h2>
-<p>{SPECIAL_NEED}&nbsp;{SPECIAL_NEED_LABEL}</p>
+<p>{SPECIAL_NEED}&nbsp;{SPECIAL_NEED_LABEL} (Includes physical, psychological, medical, and gender needs.)</p>
 
 <h2>Early Contract Release</h2>
 <p>Are you currently planning to apply for early contract release because you'll be leaving on-campus housing at the end of {FALL_TERM}?</p>
-<p>You may be released from the Housing Contract ealy, but only for an approved reason that's listed in the box below (e.g. graduation, student teaching, etc). This helps us in capacity planning; it <strong>does not</strong> commit you to leaving at the end of {FALL_TERM}. There is a separate approval process later in the semester to confirm.</p>
+<p>You may be released from the Housing Contract ealy, but only for an approved reason that's listed in the box below (e.g. graduation, student teaching, etc). This helps us in capacity planning; it <strong>does not</strong> commit you to leaving at the end of {FALL_TERM}, nor does it release you from the Contract. There is a separate approval process later in the semester to confirm.</p>
 <p>{EARLY_RELEASE_LABEL}&nbsp;{EARLY_RELEASE}</p>
 
 <h2>Terms & Conditions</h2>

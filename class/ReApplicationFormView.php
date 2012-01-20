@@ -138,8 +138,9 @@ class ReApplicationFormView extends View {
         /*
          * Early Release
          */
+        $nextTerm = Term::toString(Term::getNextTerm($this->term));
         $reasons = array();
-        $reasons['no']               = "No, I'll be staying though May 2012.";
+        $reasons['no']               = "No, I'll be staying through $nextTerm.";
         $reasons['grad']             = "Graduating in December";
         $reasons['student_teaching'] = "Student Teaching in Spring";
         $reasons['internship']       = "ASU-sponsored Internship";
@@ -158,7 +159,7 @@ class ReApplicationFormView extends View {
          * Contract
          */
         $form->addCheck('deposit_check', array('deposit_check'));
-        $form->setLabel('deposit_check', 'I understand & acknowledge that if I cancel my License Contract my student account will be charged $250.  If I cancel my License Contract after July 1, I will be liable for the entire amount of the on-campus housing fees for the Fall semester.');
+        $form->setLabel('deposit_check', 'I understand & acknowledge that if I cancel my License Contract my student account will be charged <strong>$250</strong>.  If I cancel my License Contract after July 1, I will be liable for the entire amount of the on-campus housing fees for the Fall semester.');
 
         $form->addSubmit('submit', 'Submit re-application');
         //$form->setExtra('submit', 'class="hms-application-submit-button"');

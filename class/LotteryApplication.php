@@ -28,11 +28,13 @@ class LotteryApplication extends HousingApplication {
     public $wg_pref;
     public $honors_pref;
     public $rlc_interest;
+    
+    public $early_release;
 
     // Static variable for waiting list position calculation
     private static $waitingList;
 
-    public function __construct($id = 0, $term = NULL, $banner_id = NULL, $username = NULL, $gender = NULL, $student_type = NULL, $application_term = NULL, $cell_phone = NULL, $meal_plan = NULL, $physical_disability = NULL, $psych_disability = NULL, $gender_need = NULL, $medical_need = NULL, $international = NULL, $specialInterest = NULL, $magicWinner = 0, $sororityPref = NULL, $tfPref = NULL, $wgPref = NULL, $honorsPref = NULL, $rlcInterest = NULL)
+    public function __construct($id = 0, $term = NULL, $banner_id = NULL, $username = NULL, $gender = NULL, $student_type = NULL, $application_term = NULL, $cell_phone = NULL, $meal_plan = NULL, $physical_disability = NULL, $psych_disability = NULL, $gender_need = NULL, $medical_need = NULL, $international = NULL, $specialInterest = NULL, $magicWinner = 0, $sororityPref = NULL, $tfPref = NULL, $wgPref = NULL, $honorsPref = NULL, $rlcInterest = NULL, $earlyRelease = NULL)
     {
         /**
          * If the id is non-zero, then we need to load the other member variables
@@ -56,6 +58,8 @@ class LotteryApplication extends HousingApplication {
         $this->wg_pref        = $wgPref;
         $this->honors_pref    = $honorsPref;
         $this->rlc_interest   = $rlcInterest;
+        
+        $this->early_release = $earlyRelease;
     }
 
     /**

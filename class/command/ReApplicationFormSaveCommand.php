@@ -94,6 +94,12 @@ class ReApplicationFormSaveCommand extends Command {
         $rlcInterest = $context->get('rlc_interest');
         $rlcInterest = isset($rlcInterest)?1:0;
 
+        // Contract early release
+        $earlyRelease = $context->get('early_release');
+        if($earlyRelease == 'no'){
+            $earlyRelease = NULL;
+        }
+        
         // International
         $international = $student->isInternational();
 
@@ -103,7 +109,7 @@ class ReApplicationFormSaveCommand extends Command {
         // even if thes student began in the Spring.
         $studentType = 'C';
 
-        $application = new LotteryApplication(0, $term, $student->getBannerId(), $student->getUsername(), $student->getGender(), $studentType, $student->getApplicationTerm(), $cellPhone, $mealPlan, $physicalDisability, $psychDisability, $genderNeed, $medicalNeed, $international, NULL, $magicWinner, $sororityPref, $tfPref, $wgPref, $honorsPref, $rlcInterest);
+        $application = new LotteryApplication(0, $term, $student->getBannerId(), $student->getUsername(), $student->getGender(), $studentType, $student->getApplicationTerm(), $cellPhone, $mealPlan, $physicalDisability, $psychDisability, $genderNeed, $medicalNeed, $international, NULL, $magicWinner, $sororityPref, $tfPref, $wgPref, $honorsPref, $rlcInterest, $earlyRelease);
 
         try{
             $application->save();
