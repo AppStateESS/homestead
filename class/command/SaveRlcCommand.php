@@ -45,7 +45,14 @@ class SaveRlcCommand extends Command {
         // TODO add appropriate sanity checking...
         $community->set_community_name($context->get('community_name'));
         $community->set_abbreviation($context->get('abbreviation'));
-        $community->set_capacity($context->get('capacity'));
+        
+        $capacity = $context->get('capacity');
+        if(!isset($capacity) || empty($capacity)){
+            $capacity = 0;
+            NQ::simple('hms', HMS_NOTIFICATION_WARNING, "The community's capacity was set to 0.");
+        }
+        $community->set_capacity($capacity);
+        
         $community->hide = is_null($context->get('hide')) ? 0 : $context->get('hide');
         $community->setAllowedStudentTypes($context->get('student_types'));
         $community->setAllowedReapplicationStudentTypes($context->get('reapplication_student_types'));
