@@ -19,6 +19,9 @@ class HMS_Learning_Community extends HMS_Item
     public $allowed_reapplication_student_types;
     public $members_reapply; // Indicates whether current members of the community are always allowed to reapply, regardless of student type
     public $extra_info; // A text field, show to the student when the RLC is selected
+    
+    public $freshmen_question;
+    public $returning_question;
 
     public function __construct($id = 0)
     {
@@ -105,6 +108,25 @@ class HMS_Learning_Community extends HMS_Item
         $this->members_reapply = $apply;
     }
 
+    public function getFreshmenQuestion()
+    {
+        return $this->freshmen_question;
+    }
+    
+    public function setFreshmenQuestion($question)
+    {
+        $this->freshmen_question = $question;
+    }
+    
+    public function getReturningQuestion()
+    {
+        return $this->returning_question;
+    }
+    
+    public function setReturningQuestion($question){
+        $this->returning_question = $question;
+    }
+    
     public function set_variables()
     {
         if(isset($_REQUEST['id']) && $_REQUEST['id'] != NULL) $this->set_id($_REQUEST['id']);

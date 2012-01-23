@@ -1,10 +1,9 @@
-<div class="box-title">
-<h1>{TITLE}</h1>
-</div>
+<h1>Add/Edit a learning Community</h1>
+
 <!-- BEGIN community -->
 <h2>{COMMUNITY}</h2>
 <!-- END community -->
-<div class="box-content">
+
 {START_FORM}
 <table>
 	<tr>
@@ -31,7 +30,14 @@
 	   <td>{MEMBERS_REAPPLY_LABEL}</td>
 	   <td>{MEMBERS_REAPPLY}</td>
 	</tr>
+    <tr>
+        <td>{FRESHMEN_QUESTION_LABEL}</td>
+        <td>{FRESHMEN_QUESTION}</td>
+    </tr>
+    <tr>
+        <td>{RETURNING_QUESTION_LABEL}</td>
+        <td>{RETURNING_QUESTION}</td>
+    </tr>
 </table>
 <br />
 {SUBMIT} {END_FORM}
-</div>

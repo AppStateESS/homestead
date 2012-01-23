@@ -63,6 +63,9 @@ class SaveRlcCommand extends Command {
             $community->setMembersReapply(1);
         }
 
+        $community->setFreshmenQuestion($context->get('freshmen_question'));
+        $community->setReturningQuestion($context->get('returning_question'));
+        
         // Save it
         $result = $community->save();
 
