@@ -1,9 +1,9 @@
 <?php
 
-class SubmitRLCReapplicationCommand extends Command {
+class SubmitRLCReapplicationPageOneCommand extends Command {
 
     public function getRequestVars(){
-        return array('action'=>'SubmitRLCReapplication');
+        return array('action'=>'SubmitRLCReapplicationPageOne');
     }
 
     public function execute(CommandContext $context)
@@ -22,28 +22,6 @@ class SubmitRLCReapplicationCommand extends Command {
         $formCmd->setTerm($term);
         $menuCmd = CommandFactory::getCommand('ShowStudentMenu');
 
-        // Double check the the student is eligible
-        $housingApp = HousingApplication::getApplicationByUser($student->getUsername(), $term);
-        if(!$housingApp instanceof LotteryApplication){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You are not eligible to re-apply for a Learning Community.');
-            $menuCmd->redirect();
-        }
-
-        // Make sure the user doesn't already have an application on file for this term
-        $app = HMS_RLC_Application::checkForApplication($student->getUsername(), $term);
-        if($app !== FALSE){
-            NQ::simple('hms', HMS_NOTIFICATION_WARNING, 'You have already re-applied for a Learning Community for that term.');
-            $menuCmd->redirect();
-        }
-
-        # Look up any existing RLC assignment (for the current term, should be the Spring term)
-        $rlcAssignment = HMS_RLC_Assignment::getAssignmentByUsername($student->getUsername(), Term::getPrevTerm(Term::getCurrentTerm()));
-
-        # Get the list of RLCs that the student is eligible for
-        # Note: hard coded to 'C' because we know they're continuing at this point.
-        # This accounts for freshmen addmitted in the spring, who will still have the 'F' type.
-        $communities = HMS_Learning_Community::getRLCListReapplication(false, 'C');
-
         // Pull in data for local use
         $rlcOpt        = $context->get('rlc_opt');
         $rlcChoice1    = $context->get('rlc_choice_1');
@@ -52,6 +30,11 @@ class SubmitRLCReapplicationCommand extends Command {
         $why           = $context->get('why_this_rlc');
         $contribute    = $context->get('contribute_gain');
 
+        # Get the list of RLCs that the student is eligible for
+        # Note: hard coded to 'C' because we know they're continuing at this point.
+        # This accounts for freshmen addmitted in the spring, who will still have the 'F' type.
+        $communities = HMS_Learning_Community::getRLCListReapplication(false, 'C');
+        
         // Sanity checking on user-supplied data
         // If the student is already in an RLC, and the student is eligible to reapply for that RLC (RLC always takes returners,
         // or the RLC is in the list of communities this student is eligible for), then check to make the user chose something for the re-apply option.
@@ -93,26 +76,11 @@ class SubmitRLCReapplicationCommand extends Command {
             $formCmd->redirect();
         }
 
-        // Create the application, populate the values and save it
-        $app = new HMS_RLC_Application();
-
-        $app->setUsername($student->getUsername());
-        $app->setDateSubmitted(time());
-        $app->setFirstChoice($rlcChoice1);
-        $app->setSecondChoice($rlcChoice2);
-        $app->setThirdChoice($rlcChoice3);
-
-        $app->setWhySpecificCommunities($why);
-        $app->setStrengthsWeaknesses($contribute);
-
-        $app->setTerm($term);
-        $app->setApplicationType(RLC_APP_RETURNING);
-
-        $app->save();
-
-        // Redirect back to the main menu
-        NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Your Residential Learning Community Re-application was saved successfully.');
-        $menuCmd->redirect();
+        // Redirect to the page 2 view command
+        $page2cmd = CommandFactory::getCommand('ShowRlcReapplicationPageTwo');
+        $page2cmd->setTerm($term);
+        $page2cmd->setVars($_REQUEST);
+        $page2cmd->redirect();
     }
 
 }
