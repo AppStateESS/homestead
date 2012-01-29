@@ -91,10 +91,13 @@ class SubmitRLCReapplicationPageOneCommand extends Command {
             $formCmd->redirect();
         }
 
+        $requestVars = $_REQUEST;
+        $requestVars['rlc_choice_1'] = $rlcChoice1;
+
         // Redirect to the page 2 view command
         $page2cmd = CommandFactory::getCommand('ShowRlcReapplicationPageTwo');
         $page2cmd->setTerm($term);
-        $page2cmd->setVars($_REQUEST);
+        $page2cmd->setVars($requestVars);
         $page2cmd->redirect();
     }
 
