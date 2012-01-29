@@ -4,14 +4,23 @@ class SubmitRLCReapplicationPage2Command extends Command {
     
     
     private $vars;
-    
+    private $term;
+
     public function setVars(Array $vars){
         $this->vars = $vars;
+    }
+
+    public function setTerm($term){
+        $this->term = $term;
     }
     
     public function getRequestVars()
     {
         $reqVars = $this->vars;
+        $reqVars['term'] = $this->term;
+        unset($reqVars['rlc_question_0']);
+        unset($reqVars['rlc_question_1']);
+        unset($reqVars['rlc_question_2']);
         unset($reqVars['module']);
         
         $reqVars['action'] = 'SubmitRLCReapplicationPage2';
@@ -57,9 +66,9 @@ class SubmitRLCReapplicationPage2Command extends Command {
         $why           = $context->get('why_this_rlc');
         $contribute    = $context->get('contribute_gain');
         
-        $question1 = $context->get('rlc_question_0');
-        $question2 = $context->get('rlc_question_1');
-        $question3 = $context->get('rlc_question_2');
+        $question0 = $context->get('rlc_question_0');
+        $question1 = $context->get('rlc_question_1');
+        $question2 = $context->get('rlc_question_2');
         
         // Sanity Checking
         if(!isset($rlcChoice1) || $rlcChoice1 == 'select'){
@@ -77,25 +86,41 @@ class SubmitRLCReapplicationPage2Command extends Command {
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Please respond to both of the short answer questions.');
             $errorCmd->redirect();
         }
-        
-        if(!isset($question1)){
+       
+        if(!isset($question0) || empty($question0)){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Please respond to all of the short answer questions.');
             $errorCmd->redirect();
         }
         
-        if(isset($rlcChoice2) && !isset($question2)){
+        if($rlcChoice2 != 'none' && (!isset($question1) || empty($question1))){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Please respond to all of the short answer questions.');
             $errorCmd->redirect();
         }
-        
-        if(isset($rlcChoice3) && !isset($question3)){
+      
+        if($rlcChoice3 != 'none' && (!isset($question2) || empty($question2))){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Please respond to all of the short answer questions.');
+            $errorCmd->redirect();
+        }
+
+        // Check response lengths
+        $wordLimit = 500;
+        if(str_word_count($question0) > $wordLimit){
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Your answer to question number one is too long. Please limit your response to 500 words or less.');
+            $errorCmd->redirect();
+        }
+
+        if($rlcChoice2 != 'none' && str_word_count($question1) > $wordLimit){
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Your answer to question number two is too long. Please limit your response to 500 words or less.');
+            $errorCmd->redirect();
+        }
+
+        if($rlcChoice3 != 'none' && str_word_count($question2) > $wordLimit){
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Your answer to question number three is too long. Please limit your response to 500 words or less.');
             $errorCmd->redirect();
         }
         
         // Create the application, populate the values and save it
-        /*
-         $app = new HMS_RLC_Application();
+        $app = new HMS_RLC_Application();
         
         $app->setUsername($student->getUsername());
         $app->setDateSubmitted(time());
@@ -105,7 +130,11 @@ class SubmitRLCReapplicationPage2Command extends Command {
         
         $app->setWhySpecificCommunities($why);
         $app->setStrengthsWeaknesses($contribute);
-        
+       
+        $app->setRLCQuestion0($question0);
+        $app->setRLCQuestion1($question1);
+        $app->setRLCQuestion2($question2);
+
         $app->setTerm($term);
         $app->setApplicationType(RLC_APP_RETURNING);
         
@@ -114,6 +143,5 @@ class SubmitRLCReapplicationPage2Command extends Command {
         // Redirect back to the main menu
         NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Your Residential Learning Community Re-application was saved successfully.');
         $menuCmd->redirect();
-        */
     }
 }

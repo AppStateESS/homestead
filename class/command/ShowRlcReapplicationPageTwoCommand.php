@@ -28,9 +28,9 @@ class ShowRlcReapplicationPageTwoCommand extends Command {
     {
         PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
         PHPWS_Core::initModClass('hms', 'RlcReapplicationPageTwoView.php');
-        
+
         $rlcs = array(new HMS_Learning_Community($context->get('rlc_choice_1')));
-        
+
         if($context->get('rlc_choice_2') != 'none'){
             $rlcs[] = new HMS_Learning_Community($context->get('rlc_choice_2'));
         }
@@ -38,7 +38,7 @@ class ShowRlcReapplicationPageTwoCommand extends Command {
         if($context->get('rlc_choice_3') != 'none'){
             $rlcs[] = new HMS_Learning_Community($context->get('rlc_choice_3'));
         }
-        
+
         $view = new RlcReapplicationPageTwoView($rlcs, $context->get('term'));
         
         $context->setContent($view->show());

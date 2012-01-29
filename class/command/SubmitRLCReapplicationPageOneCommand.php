@@ -35,6 +35,9 @@ class SubmitRLCReapplicationPageOneCommand extends Command {
         # This accounts for freshmen addmitted in the spring, who will still have the 'F' type.
         $communities = HMS_Learning_Community::getRLCListReapplication(false, 'C');
         
+        # Look up any existing RLC assignment (for the current term, should be the Spring term)
+        $rlcAssignment = HMS_RLC_Assignment::getAssignmentByUsername($student->getUsername(), Term::getPrevTerm(Term::getCurrentTerm()));
+
         // Sanity checking on user-supplied data
         // If the student is already in an RLC, and the student is eligible to reapply for that RLC (RLC always takes returners,
         // or the RLC is in the list of communities this student is eligible for), then check to make the user chose something for the re-apply option.
@@ -73,6 +76,18 @@ class SubmitRLCReapplicationPageOneCommand extends Command {
         // Check the short answer questions
         if(empty($why) || empty($contribute)){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Please respond to both of the short answer questions.');
+            $formCmd->redirect();
+        }
+
+        $wordLimit = 500;
+        if(str_word_count($why) > $wordLimit){
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Your answer to question number one is too long. Please limit your response to 500 words or less.');
+            $formCmd->redirect();
+        }
+
+        $wordLimit = 500;
+        if(str_word_count($why) > $wordLimit){
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Your answer to question number two is too long. Please limit your response to 500 words or less.');
             $formCmd->redirect();
         }
 

@@ -59,7 +59,7 @@ class RlcReapplicationView extends View {
         $form->addTextArea('why_this_rlc');
         $form->addTextArea('contribute_gain');
 
-        $form->addSubmit('submit', 'Submit Application');
+        $form->addSubmit('submit', 'Continue');
 
         $form->mergeTemplate($tpl);
 

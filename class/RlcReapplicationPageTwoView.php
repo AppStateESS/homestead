@@ -18,16 +18,20 @@ class RlcReapplicationPageTwoView extends View {
         
         $form = new PHPWS_Form('rlc_reapp');
         $submitCmd = CommandFactory::getCommand('SubmitRLCReapplicationPage2');
-        //$submitCmd->setTerm($this->term);
+        $submitCmd->setTerm($this->term);
         $submitCmd->setVars($_REQUEST);
         $submitCmd->initForm($form);
-        
+       
         foreach($this->rlcs as $i=>$rlc){
             $question = $this->rlcs[$i]->getReturningQuestion();
             if(!isset($question)){
-                continue;
+                throw new Exception("Missing returning question for {$this->rlcs[$i]->get_community_name()}");
             }
-            $form->addTextArea("rlc_question_$i");
+            if(isset($_REQUEST["rlc_question_$i"])){
+                $form->addTextArea("rlc_question_$i", $_REQUEST["rlc_question_$i"]);
+            }else{
+                $form->addTextArea("rlc_question_$i");
+            }
             $form->setLabel("rlc_question_$i", $this->rlcs[$i]->getReturningQuestion());
         }
         
@@ -36,7 +40,6 @@ class RlcReapplicationPageTwoView extends View {
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
-        //TODO
         return PHPWS_Template::process($tpl,'hms', 'student/RlcReapplicationPage2.tpl');
     }
 }
