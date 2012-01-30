@@ -26,6 +26,21 @@ class ShowRlcReapplicationCommand extends Command {
         $term = $context->get('term');
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
 
+        // Check deadlines
+        $feature = ApplicationFeature::getInstanceByNameAndTerm('RlcReapplication', $this->term);
+        if(is_null($feature) || !$feature->isEnabled()){
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Sorry, RLC re-applications are not avaialable for this term.");
+            $errorCmd->redirect();
+        }
+        
+        if( $feature->getStartDate() > mktime() ){
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Sorry, it is too soon to submit a RLC re-application.");
+            $errorCmd->redirect();
+        } else if( $feature->getEndDate() < mktime() ){
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Sorry, the RLC re-application deadline has already passed. Please contact University Housing if you are interested in applying for a RLC.");
+            $errorCmd->redirect();
+        }
+        
         # Double check the the student is eligible
         $housingApp = HousingApplication::getApplicationByUser($student->getUsername(), $term);
         if(!$housingApp instanceof LotteryApplication){
