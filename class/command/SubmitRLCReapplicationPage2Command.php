@@ -70,6 +70,15 @@ class SubmitRLCReapplicationPage2Command extends Command {
         $question1 = $context->get('rlc_question_1');
         $question2 = $context->get('rlc_question_2');
         
+        // Change 'none's to 'null's
+        if($rlcChoice2 == 'none'){
+            $rlcChoice2 = null;
+        }
+        
+        if($rlcChoice3 == 'none'){
+            $rlcChoice3 = null;
+        }
+        
         // Sanity Checking
         if(!isset($rlcChoice1) || $rlcChoice1 == 'select'){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You must choose a community as your "first choice".');
@@ -92,12 +101,12 @@ class SubmitRLCReapplicationPage2Command extends Command {
             $errorCmd->redirect();
         }
         
-        if($rlcChoice2 != 'none' && (!isset($question1) || empty($question1))){
+        if(!isset($rlcChoice2) && (!isset($question1) || empty($question1))){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Please respond to all of the short answer questions.');
             $errorCmd->redirect();
         }
       
-        if($rlcChoice3 != 'none' && (!isset($question2) || empty($question2))){
+        if(!isset($rlcChoice2) && (!isset($question2) || empty($question2))){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Please respond to all of the short answer questions.');
             $errorCmd->redirect();
         }
@@ -109,12 +118,12 @@ class SubmitRLCReapplicationPage2Command extends Command {
             $errorCmd->redirect();
         }
 
-        if($rlcChoice2 != 'none' && str_word_count($question1) > $wordLimit){
+        if(!isset($rlcChoice2) && str_word_count($question1) > $wordLimit){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Your answer to question number two is too long. Please limit your response to 500 words or less.');
             $errorCmd->redirect();
         }
 
-        if($rlcChoice3 != 'none' && str_word_count($question2) > $wordLimit){
+        if(!isset($rlcChoice3) && str_word_count($question2) > $wordLimit){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Your answer to question number three is too long. Please limit your response to 500 words or less.');
             $errorCmd->redirect();
         }
