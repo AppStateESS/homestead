@@ -27,7 +27,8 @@ class ShowRlcReapplicationCommand extends Command {
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
 
         // Check deadlines
-        $feature = ApplicationFeature::getInstanceByNameAndTerm('RlcReapplication', $this->term);
+        PHPWS_Core::initModClass('hms', 'ApplicationFeature.php');
+        $feature = ApplicationFeature::getInstanceByNameAndTerm('RlcReapplication', $term);
         if(is_null($feature) || !$feature->isEnabled()){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Sorry, RLC re-applications are not avaialable for this term.");
             $errorCmd->redirect();
