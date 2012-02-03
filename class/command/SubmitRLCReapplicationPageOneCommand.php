@@ -86,7 +86,7 @@ class SubmitRLCReapplicationPageOneCommand extends Command {
         }
 
         $wordLimit = 500;
-        if(str_word_count($why) > $wordLimit){
+        if(str_word_count($contribute) > $wordLimit){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Your answer to question number two is too long. Please limit your response to 500 words or less.');
             $formCmd->redirect();
         }
