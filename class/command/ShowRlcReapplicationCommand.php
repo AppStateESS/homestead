@@ -64,6 +64,16 @@ class ShowRlcReapplicationCommand extends Command {
         # This accounts for freshmen addmitted in the spring, who will still have the 'F' type.
         $communities = HMS_Learning_Community::getRLCListReapplication(false, 'C');
 
+        // If the student has an existing assignment, and that community always allows returning students, then make sure the community is in the list (if it's not already)
+        if(isset($rlcAssignment)){
+            // Load the RLC
+            $rlc = $rlcAssignment->getRlc();
+            // If members can always reapply, make sure community id exists as an array index
+            if($rlc->getMembersReapply() == 1 && !isset($communities[$rlc->get_id()])){
+                $communities[$rlc->get_id()] = $rlc->get_community_name();
+            }
+        }
+
         $view = new RlcReapplicationView($student, $term, $rlcAssignment, $communities);
 
         $context->setContent($view->show());
