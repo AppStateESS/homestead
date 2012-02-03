@@ -1,4 +1,3 @@
-<h2>{TABLE_TITLE}</h2>
 <table width="%70">
     <tr>
         <th>{BEDROOM_LABEL}</th>

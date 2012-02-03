@@ -1,68 +1,51 @@
-<div class="hms">
-  <div class="box">
-    <div class="{TITLE_CLASS}"> <h1>{TITLE}</h1> </div>
-    <div class="box-content">
-        <h2>Room Properties</h2>
-        {START_FORM}
-        <table>
-            <tr>
-                <th>Hall Name:</th><td align="left">{HALL_NAME}</td>
-            </tr>
-            <tr>
-                <th>Floor: </th><td align="left">{FLOOR_NUMBER}</td>
-            </tr>
-            <tr>
-                <th>Room Number: </th><td align="left">{ROOM_NUMBER}</td>
-            </tr>
-            <tr>
-                <th>Number of beds: </th><td>{NUMBER_OF_BEDS}</td>
-            </tr>
-            <tr>
-                <th>Number of occupants: </th><td>{NUMBER_OF_ASSIGNEES}</td>
-            </tr>
-            <tr>
-                <th>Gender type: </th>
-                <!-- BEGIN gender_message -->
-                <td>{GENDER_MESSAGE}</td>
-                <td>{GENDER_REASON}</td>
-                <!-- END gender_message -->
-                <!-- BEGIN gender_radio_buttons -->
-                <td align="left">{GENDER_TYPE}</td>
-                <!-- END gender_radio_button -->
-            </tr>
-            <tr>
-                <th>Default Gender: </th>
-                <td>{DEFAULT_GENDER}</td>
-            </tr>
-            <tr>
-                <th>Is online: </th>
-                <td align="left">{IS_ONLINE}</td> 
-            </tr>
-            <tr>
-                <th>Is reserved: </th>
-                <td align="left">{IS_RESERVED} {IS_RESERVED_LABEL}</td>
-            </tr>
-            <tr>
-                <th>Reserved for RA: </th>
-                <td>{RA_ROOM} {RA_ROOM_LABEL}</td>
-            </tr>
-            <tr>
-                <th>Private Room:</th>
-                <td>{PRIVATE_ROOM} {PRIVATE_ROOM_LABEL}</td>
-            </tr>
-            <tr>
-                <th>Is medical: </th>
-                <td align="left">{IS_MEDICAL} {IS_MEDICAL_LABEL}</td>
-            </tr>
-            <tr>
-                <th>Is an Overflow Room:</th>
-                <td>{IS_OVERFLOW} {IS_OVERFLOW_LABEL}</td>
-            </tr>
-        </table>
-        {SUBMIT}
-        {END_FORM}
-        <br /><br />
-        {BED_PAGER}
+<h3>{TERM} &raquo; {HALL_NAME} &raquo; {FLOOR_NUMBER}</h3>
+<!-- BEGIN room_num -->
+<h1>Room {ROOM}</h1>
+<!-- END room_num -->
+<!-- BEGIN new -->{NEW_ROOM}
+<h1>New Room</h1>
+<!-- END new -->
+  {START_FORM}
+
+  <div class="rounded-box" style="width: 300px;float:left;">
+    <div class="boxheader">
+      <h2 style="padding: 3px;">Settings</h2>
+    </div>
+    <div style="padding: 3px;">
+      Room Number: {ROOM_NUMBER}<br /> Gender:
+      <!-- BEGIN gender_message -->
+      {GENDER_MESSAGE} {GENDER_REASON}
+      <!-- END gender_message -->
+      {GENDER_TYPE} <br />
+      Default Gender: {DEFAULT_GENDER}
     </div>
   </div>
+  
+  <div class="rounded-box" style="width: 200px;float:left; margin-left: 50px;">
+    <div class="boxheader">
+      <h2 style="padding: 3px;">Status</h2>
+    </div>
+    <div style="padding: 3px;">
+      {OFFLINE} {OFFLINE_LABEL}<br /> {RESERVED} {RESERVED_LABEL}<br />
+      {RA} {RA_LABEL}<br /> {PRIVATE} {PRIVATE_LABEL}<br /> {OVERFLOW}
+      {OVERFLOW_LABEL}<br /> {PARLOR} {PARLOR_LABEL}<br /> <strong>Medical</strong>
+      <div style="margin-left: 15px;">
+        {ADA} {ADA_LABEL}<br /> {HEARING_IMPAIRED}
+        {HEARING_IMPAIRED_LABEL}<br /> {BATH_EN_SUITE}
+        {BATH_EN_SUITE_LABEL}<br />
+      </div>
+    </div>
+  </div>
+  
+<div class="clearfix" style="clear:both;"></div>
+  {SUBMIT} {END_FORM}
+
+<!-- BEGIN occupancy -->
+<div class="rounded-box" style="width: 400px; float: left;">
+  <div class="boxheader">
+    <h2 style="padding: 3px;">Beds</h2>
+  </div>
+  <div style="padding: 3px;">{NUMBER_OF_ASSIGNEES} of
+    {NUMBER_OF_BEDS} occupied {BED_PAGER}</div>
 </div>
+<!-- END occupancy -->

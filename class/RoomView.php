@@ -22,12 +22,13 @@ class RoomView extends View {
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
-        $tpl['TITLE'] = $this->room->room_number . ' ' . $this->hall->hall_name . ' - ' . Term::getPrintableSelectedTerm();
+        $tpl['ROOM'] = $this->room->getRoomNumber();
+        $tpl['TERM'] = Term::getPrintableSelectedTerm();
 
         $number_of_assignees    = $this->room->get_number_of_assignees();
 
         $tpl['HALL_NAME']           = $this->hall->getLink();
-        $tpl['FLOOR_NUMBER']        = $this->floor->getLink();
+        $tpl['FLOOR_NUMBER']        = $this->floor->getLink('Floor');
         $tpl['NUMBER_OF_BEDS']      = $this->room->get_number_of_beds();
         $tpl['NUMBER_OF_ASSIGNEES'] = $number_of_assignees;
 
@@ -37,7 +38,7 @@ class RoomView extends View {
         $submitCmd->setRoomId($this->room->id);
         $submitCmd->initForm($form);
 
-        $form->addText('room_number', $this->room->room_number);
+        $form->addText('room_number', $this->room->getRoomNumber());
 
 
         if($number_of_assignees == 0){
@@ -67,24 +68,45 @@ class RoomView extends View {
         $form->addDropBox('default_gender', array(FEMALE => FEMALE_DESC, MALE => MALE_DESC, COED => COED_DESC));
         $form->setMatch('default_gender', $this->room->default_gender);
 
-        $form->addCheck('is_online', 1);
-        $form->setMatch('is_online', $this->room->is_online);
+        $form->addCheck('offline', 1);
+        $form->setLabel('offline', 'Offline');
+        $form->setMatch('offline', $this->room->isOffline());
 
-        $form->addCheck('is_reserved', 1);
-        $form->setMatch('is_reserved', $this->room->is_reserved);
+        $form->addCheck('reserved', 1);
+        $form->setLabel('reserved','Reserved');
+        $form->setMatch('reserved', $this->room->isReserved());
 
-        $form->addCheck('ra_room', 1);
-        $form->setMatch('ra_room', $this->room->ra_room);
+        $form->addCheck('ra', 1);
+        $form->setLabel('ra','Reserved for RA');
+        $form->setMatch('ra', $this->room->isRa());
 
-        $form->addCheck('private_room', 1);
-        $form->setMatch('private_room', $this->room->private_room);
+        $form->addCheck('private', 1);
+        $form->setLabel('private','Private');
+        $form->setMatch('private', $this->room->isPrivate());
 
-        $form->addCheck('is_medical', 1);
-        $form->setMatch('is_medical', $this->room->is_medical);
+        //$form->addCheck('medical', 1);
+        //$form->setMatch('medical', $this->room->isMedical());
 
-        $form->addCheck('is_overflow', 1);
-        $form->setMatch('is_overflow', $this->room->is_overflow);
+        $form->addCheck('overflow', 1);
+        $form->setLabel('overflow','Overflow');
+        $form->setMatch('overflow', $this->room->isOverflow());
 
+        $form->addCheck('parlor', 1);
+        $form->setLabel('parlor','Parlor');
+        $form->setMatch('parlor', $this->room->isParlor());
+        
+        $form->addCheck('ada', 1);
+        $form->setLabel('ada', 'ADA');
+        $form->setMatch('ada', $this->room->isAda());
+        
+        $form->addCheck('hearing_impaired', 1);
+        $form->setLabel('hearing_impaired', 'Hearing Impaired');
+        $form->setMatch('hearing_impaired', $this->room->isHearingImpaired());
+        
+        $form->addCheck('bath_en_suite', 1);
+        $form->setLabel('bath_en_suite', 'Bath en Suite');
+        $form->setMatch('bath_en_suite', $this->room->bathEnSuite());
+        
         $form->addSubmit('submit', 'Submit');
 
         # TODO: add an assignment pager here
