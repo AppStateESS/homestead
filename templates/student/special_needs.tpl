@@ -17,37 +17,22 @@
             <tr>
                 <td>{SPECIAL_NEEDS_1}&nbsp;<strong>{SPECIAL_NEEDS_1_LABEL}</strong>
                     <div class="special-needs-text">
-                    Students with physical disabilities should contact the <a href="http://ods.appstate.edu/" target="_blank">Office of Disability Services</a>, who will then work with University Housing to determine whether or not special housing is warranted.
+                    Students with physical disabilities should contact the <a href="http://ods.appstate.edu/policies-and-procedures/housing-accommodation-request" target="_blank">Office of Disability Services</a>, who will then work with University Housing to determine whether or not special housing is warranted.
                     </div>
                 </td>
             </tr>
             <tr>
                 <td>{SPECIAL_NEEDS_2}&nbsp;<strong>{SPECIAL_NEEDS_2_LABEL}</strong>
-                <div class="special-needs-text">
-                Students with mental health needs may put their request in writing to the following address:<br />
-                <br />
-                University Housing<br />
-                Attn: Housing Assignments<br />
-                ASU PO Box 32111<br />
-                Boone, NC  28608<br />
-                <br />
-                Counseling & Psychological Services will then work with University Housing to determine whether or not special housing is warranted.  For further information, please visit the <a href="http://www.counseling.appstate.edu/" target="_blank">Counseling & Psychological Services</a> website.
-                </div>
+                    <div class="special-needs-text">
+                    Students with physical disabilities should contact the <a href="http://ods.appstate.edu/policies-and-procedures/housing-accommodation-request" target="_blank">Office of Disability Services</a>, who will then work with University Housing to determine whether or not special housing is warranted.
+                    </div>
                 </td>
             </tr>
             <tr>
                 <td>{SPECIAL_NEEDS_3}&nbsp;<strong>{SPECIAL_NEEDS_3_LABEL}</strong>
-                
-                <div class="special-needs-text">
-                Students with medical concerns should send documentation from their physician to University Housing.  This information may be faxed to (828)262-2945 or mailed to the following address:<br />
-                <br />
-                University Housing<br />
-                Attn: Housing Assignments<br />
-                ASU PO Box 32111<br />
-                Boone, NC  28608<br />
-                <br />
-                Health Services will then work with University Housing to determine whether or not special housing is warranted.  For further information, please visit the <a href="http://www.healthservices.appstate.edu/" target="_blank">Health Services</a> website.
-                </div>
+                    <div class="special-needs-text">
+                    Students with physical disabilities should contact the <a href="http://ods.appstate.edu/policies-and-procedures/housing-accommodation-request" target="_blank">Office of Disability Services</a>, who will then work with University Housing to determine whether or not special housing is warranted.
+                    </div>
                 </td>
             </tr>
             <tr>
