@@ -4,6 +4,8 @@
  * View for adding rooms.
  */
 
+//TODO combine this with 'RoomView.php' and figure out how to use one view for two different controllers.......
+
 PHPWS_Core::initModClass('hms', 'View.php');
 PHPWS_Core::initModClass('hms', 'CommandFactory.php');
 
@@ -19,8 +21,10 @@ class AddRoomView extends View {
 
     public function show()
     {
-        $tpl['HALL_NAME']           = PHPWS_Text::secureLink($this->hall->hall_name, 'hms', array('type'=>'hall', 'op'=>'show_edit_hall', 'hall'=>$this->hall->id));
-        $tpl['FLOOR_NUMBER']        = PHPWS_Text::secureLink($this->floor->floor_number, 'hms', array('type'=>'floor', 'op'=>'show_edit_floor', 'floor'=>$this->floor->id));
+        $tpl['HALL_NAME']           = $this->hall->getLink();
+        $tpl['FLOOR_NUMBER']        = $this->floor->getLink('Floor');
+        $tpl['TERM'] = Term::getPrintableSelectedTerm();
+        $tpl['NEW_ROOM'] = ""; // dummy var
 
         $cmd = CommandFactory::getCommand('AddRoom');
         $cmd->floor = $this->floor->id;
@@ -49,18 +53,32 @@ class AddRoomView extends View {
             $form->setMatch('default_gender', $this->floor->gender_type);
         }
 
-        $form->addCheck('is_online', 1);
-        $form->setExtra('is_online', 'checked');
+        $form->addCheck('offline', 1);
+        $form->setLabel('offline', 'Offline');
 
-        $form->addCheck('is_reserved', 1);
+        $form->addCheck('reserved', 1);
+        $form->setLabel('reserved','Reserved');
 
-        $form->addCheck('ra_room', 1);
+        $form->addCheck('ra', 1);
+        $form->setLabel('ra','Reserved for RA');
 
-        $form->addCheck('private_room', 1);
+        $form->addCheck('private', 1);
+        $form->setLabel('private','Private');
 
-        $form->addCheck('is_medical', 1);
+        $form->addCheck('overflow', 1);
+        $form->setLabel('overflow','Overflow');
 
-        $form->addCheck('is_overflow', 1);
+        $form->addCheck('parlor', 1);
+        $form->setLabel('parlor','Parlor');
+        
+        $form->addCheck('ada', 1);
+        $form->setLabel('ada', 'ADA');
+        
+        $form->addCheck('hearing_impaired', 1);
+        $form->setLabel('hearing_impaired', 'Hearing Impaired');
+        
+        $form->addCheck('bath_en_suite', 1);
+        $form->setLabel('bath_en_suite', 'Bath en Suite');
 
         $form->addSubmit('submit', 'Submit');
 
@@ -75,6 +93,6 @@ class AddRoomView extends View {
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/add_room.tpl');
+        return PHPWS_Template::process($tpl, 'hms', 'admin/edit_room.tpl');
     }
 }

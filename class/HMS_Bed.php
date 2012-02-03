@@ -653,7 +653,6 @@ class HMS_Bed extends HMS_Item {
         $pager->db->addOrder('hms_bed.bedroom_label');
         $pager->db->addOrder('hms_bed.bed_letter');
 
-        $page_tags['TABLE_TITLE']       = 'Beds in this room:';
         $page_tags['BEDROOM_LABEL']     = 'Bedroom';
         $page_tags['BED_LETTER_LABEL']  = 'Bed';
         $page_tags['ASSIGNED_TO_LABEL'] = 'Assigned to';

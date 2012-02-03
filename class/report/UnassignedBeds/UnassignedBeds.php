@@ -60,7 +60,7 @@ class UnassignedBeds extends Report implements iCsvReport {
                 $offline = '(Offline)';
             }
 
-            $query = "select * from hms_room JOIN (SELECT hms_room.id, count(*) as c FROM hms_residence_hall JOIN hms_floor ON hms_residence_hall.id = hms_floor.residence_hall_id JOIN hms_room ON hms_floor.id = hms_room.floor_id JOIN hms_bed ON hms_room.id = hms_bed.room_id LEFT OUTER JOIN hms_assignment ON hms_bed.id = hms_assignment.bed_id WHERE ( hms_assignment.id IS NULL AND hms_residence_hall.id = '{$hall->id}' AND hms_room.is_online = '1' AND hms_room.is_overflow = '0' AND hms_room.is_reserved = '0' AND hms_room.private_room = '0' AND hms_bed.room_change_reserved = 0) GROUP BY hms_room.id) as foo ON foo.id = hms_room.id ORDER BY hms_room.room_number";
+            $query = "select * from hms_room JOIN (SELECT hms_room.id, count(*) as c FROM hms_residence_hall JOIN hms_floor ON hms_residence_hall.id = hms_floor.residence_hall_id JOIN hms_room ON hms_floor.id = hms_room.floor_id JOIN hms_bed ON hms_room.id = hms_bed.room_id LEFT OUTER JOIN hms_assignment ON hms_bed.id = hms_assignment.bed_id WHERE ( hms_assignment.id IS NULL AND hms_residence_hall.id = '{$hall->id}' AND hms_room.offline = 0 AND hms_room.overflow = 0 AND hms_room.reserved = 0 AND hms_room.private = 0 AND hms_bed.room_change_reserved = 0) GROUP BY hms_room.id) as foo ON foo.id = hms_room.id ORDER BY hms_room.room_number";
 
             $results = PHPWS_DB::getAll($query);
 
