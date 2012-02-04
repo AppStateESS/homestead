@@ -24,7 +24,7 @@
     </div>
   </div>
     <br />
-    {SUBMIT} {END_FORM}
+    {SUBMIT}
 </div>
 
 <div class="rounded-box" style="width: 450px;float:left;">
@@ -40,7 +40,7 @@
     Default Gender: {DEFAULT_GENDER}
   </div>
 </div>
-
+{END_FORM}
 <!-- BEGIN occupancy -->
 <div class="rounded-box" style="width: 450px; float: left;">
   <div class="boxheader">
