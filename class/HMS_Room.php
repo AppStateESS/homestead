@@ -499,10 +499,9 @@ class HMS_Room extends HMS_Item
                     WHERE (hms_bed.id NOT IN (SELECT bed_id FROM hms_lottery_reservation WHERE term = {$this->term} AND expires_on > $now)
                     AND hms_bed.id NOT IN (SELECT bed_id FROM hms_assignment WHERE term = {$this->term}))
                     AND hms_room.id = {$this->id}
-                    AND hms_room.is_medical = 0
                     AND hms_room.reserved = 0
                     AND hms_room.offline = 0
-                    AND hms_room.private_room = 0
+                    AND hms_room.private = 0
                     AND hms_room.ra = 0
                     AND hms_room.overflow = 0";
 

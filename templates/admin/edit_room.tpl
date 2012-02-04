@@ -5,23 +5,10 @@
 <!-- BEGIN new -->{NEW_ROOM}
 <h1>New Room</h1>
 <!-- END new -->
-  {START_FORM}
+{START_FORM}
 
-  <div class="rounded-box" style="width: 300px;float:left;">
-    <div class="boxheader">
-      <h2 style="padding: 3px;">Settings</h2>
-    </div>
-    <div style="padding: 3px;">
-      Room Number: {ROOM_NUMBER}<br /> Gender:
-      <!-- BEGIN gender_message -->
-      {GENDER_MESSAGE} {GENDER_REASON}
-      <!-- END gender_message -->
-      {GENDER_TYPE} <br />
-      Default Gender: {DEFAULT_GENDER}
-    </div>
-  </div>
-  
-  <div class="rounded-box" style="width: 200px;float:left; margin-left: 50px;">
+<div style="width:200px; float:right;">
+  <div class="rounded-box">
     <div class="boxheader">
       <h2 style="padding: 3px;">Status</h2>
     </div>
@@ -36,12 +23,26 @@
       </div>
     </div>
   </div>
-  
-<div class="clearfix" style="clear:both;"></div>
-  {SUBMIT} {END_FORM}
+    <br />
+    {SUBMIT} {END_FORM}
+</div>
+
+<div class="rounded-box" style="width: 450px;float:left;">
+  <div class="boxheader">
+    <h2 style="padding: 3px;">Settings</h2>
+  </div>
+  <div style="padding: 3px;">
+    Room Number: {ROOM_NUMBER}<br /> Gender:
+    <!-- BEGIN gender_message -->
+    {GENDER_MESSAGE} {GENDER_REASON}
+    <!-- END gender_message -->
+    {GENDER_TYPE} <br />
+    Default Gender: {DEFAULT_GENDER}
+  </div>
+</div>
 
 <!-- BEGIN occupancy -->
-<div class="rounded-box" style="width: 400px; float: left;">
+<div class="rounded-box" style="width: 450px; float: left;">
   <div class="boxheader">
     <h2 style="padding: 3px;">Beds</h2>
   </div>

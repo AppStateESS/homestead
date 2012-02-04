@@ -64,7 +64,7 @@ class HallOccupancy extends Report {
                 $vacantBedsByFloor = 0;
                 $totalBedsByFloor = 0;
 
-                if ($floor->is_online == 0) {
+                if ($floor->offline == 1) {
                     $floorArray[$floor->floor_number]['floor_number'] = $floor->floor_number . ' - Offline';
                     $floorArray[$floor->floor_number]['vacancies_by_floor'] = null;
                     $floorArray[$floor->floor_number]['total_beds_by_floor'] = null;

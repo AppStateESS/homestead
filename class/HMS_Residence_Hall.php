@@ -347,8 +347,8 @@ class HMS_Residence_Hall extends HMS_Item
         $db->addJoin('LEFT OUTER', 'hms_floor',   'hms_residence_hall', 'residence_hall_id', 'id');
 
         $db->addWhere('hms_residence_hall.id', $this->id);
-        $db->addWhere('hms_room.is_online', 1);
-        $db->addWhere('hms_room.is_overflow', 0);
+        $db->addWhere('hms_room.offline', 0);
+        $db->addWhere('hms_room.overflow', 0);
 
         $result = $db->select('count');
 
@@ -576,12 +576,11 @@ class HMS_Residence_Hall extends HMS_Item
                     AND hms_bed.id NOT IN (SELECT bed_id FROM hms_assignment WHERE term = {$this->term}))
                     AND hms_residence_hall.id = {$this->id}
                     AND hms_room.gender_type = $gender
-                    AND hms_room.is_medical = 0
-                    AND hms_room.is_reserved = 0
-                    AND hms_room.is_online = 1
-                    AND hms_room.private_room = 0
-                    AND hms_room.ra_room = 0
-                    AND hms_room.is_overflow = 0
+                    AND hms_room.reserved = 0
+                    AND hms_room.offline = 0
+                    AND hms_room.private = 0
+                    AND hms_room.ra = 0
+                    AND hms_room.overflow = 0
                     AND hms_floor.rlc_id IS NULL";
 
         $avail_rooms = PHPWS_DB::getOne($query);

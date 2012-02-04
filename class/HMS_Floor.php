@@ -545,11 +545,11 @@ class HMS_Floor extends HMS_Item
                     AND hms_bed.id NOT IN (SELECT bed_id FROM hms_assignment WHERE term = {$this->term}))
                     AND hms_floor.id = {$this->id}
                     AND hms_room.gender_type = $gender
-                    AND hms_room.is_reserved = 0
-                    AND hms_room.is_online = 1
-                    AND hms_room.private_room = 0
-                    AND hms_room.ra_room = 0
-                    AND hms_room.is_overflow = 0
+                    AND hms_room.reserved = 0
+                    AND hms_room.offline = 0
+                    AND hms_room.private = 0
+                    AND hms_room.ra = 0
+                    AND hms_room.overflow = 0
                     AND hms_floor.rlc_id IS null";
 
         $avail_rooms = PHPWS_DB::getOne($query);
@@ -572,11 +572,11 @@ class HMS_Floor extends HMS_Item
                     WHERE (hms_bed.id NOT IN (SELECT bed_id FROM hms_lottery_reservation WHERE term = {$this->term} AND expires_on > $now)
                     AND hms_bed.id NOT IN (SELECT bed_id FROM hms_assignment WHERE term = {$this->term}))
                     AND hms_floor.id = {$this->id}
-                    AND hms_room.is_reserved = 0
-                    AND hms_room.is_online = 1
-                    AND hms_room.private_room = 0
-                    AND hms_room.ra_room = 0
-                    AND hms_room.is_overflow = 0
+                    AND hms_room.reserved = 0
+                    AND hms_room.offline = 0
+                    AND hms_room.private = 0
+                    AND hms_room.ra = 0
+                    AND hms_room.overflow = 0
                     AND hms_floor.rlc_id IS null";
 
         $avail_rooms = PHPWS_DB::getAll($query);

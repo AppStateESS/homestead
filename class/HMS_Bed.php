@@ -330,7 +330,7 @@ class HMS_Bed extends HMS_Item {
         $building   = $floor->get_parent();
 
         # Check if everything is online
-        if($room->is_online == 1)
+        if($room->offline == 0)
         return FALSE;
 
         if($floor->is_online == 1)
@@ -358,29 +358,25 @@ class HMS_Bed extends HMS_Item {
         $building   = $floor->get_parent();
 
         # Check if everything is online
-        if($room->is_online == 1)
+        if($room->offline == 1)
         return FALSE;
 
-        if($floor->is_online == 1)
+        if($floor->is_online == 0)
         return FALSE;
 
-        if($building->is_online == 1)
+        if($building->is_online == 0)
         return FALSE;
 
         # Make sure nothing is reserved
-        if($room->is_reserved == 1)
-        return FALSE;
-
-        # Make sure the room isn't medical reserved
-        if($room->is_medical == 1)
+        if($room->reserved == 1)
         return FALSE;
 
         # Make sure the room isn't a lobby
-        if($room->is_overflow == 1)
+        if($room->overflow == 1)
         return FALSE;
 
         # Make sure the room isn't private
-        if($room->private_room == 1)
+        if($room->private == 1)
         return FALSE;
 
         # Check if this bed is part of an RLC
@@ -490,22 +486,22 @@ class HMS_Bed extends HMS_Item {
         $db->addWhere('hms_room.gender_type', $gender);
 
         // Make sure everything is online
-        $db->addWhere('hms_room.is_online', 1);
+        $db->addWhere('hms_room.offline', 0);
         $db->addWhere('hms_floor.is_online', 1);
         $db->addWhere('hms_residence_hall.is_online', 1);
 
         // Make sure nothing is reserved
-        $db->addWhere('hms_room.is_reserved', 0);
-        $db->addWhere('hms_room.is_medical', 0);
+        $db->addWhere('hms_room.reserved', 0);
+        //$db->addWhere('hms_room.is_medical', 0);
 
         // Don't get RA beds
-        $db->addWhere('hms_room.ra_room', 0);
+        $db->addWhere('hms_room.ra', 0);
 
         // Don't get lobbies
-        $db->addWhere('hms_room.is_overflow', 0);
+        $db->addWhere('hms_room.overflow', 0);
 
         // Don't get private rooms
-        $db->addWhere('hms_room.private_room', 0);
+        $db->addWhere('hms_room.private', 0);
 
         // Don't get rooms on floors reserved for an RLC
         $db->addWhere('hms_floor.rlc_id', NULL);

@@ -31,7 +31,7 @@ class AjaxGetRoomsWithVacanciesCommand extends Command {
                 $text .= (' (' . HMS_Util::formatGender($room->gender_type) . ')');
             }
 
-            if($room->ra_room == 1){
+            if($room->ra == 1){
                 $text .= (' (RA)');
             }
 

@@ -352,7 +352,7 @@ class HMS_Assignment extends HMS_Item
             }
 
             # Make sure the room is not offline
-            if(!$room->is_online){
+            if($room->offline){
                 throw new AssignmentException('The room is offline');;
             }
 

@@ -145,11 +145,10 @@ class HMS_Reports{
         $db->addJoin('LEFT', 'hms_room', 'hms_floor', 'floor_id', 'id');
         $db->addJoin('LEFT', 'hms_floor', 'hms_residence_hall', 'residence_hall_id', 'id');
         $db->addWhere('hms_bed.ra_bed', 0);
-        $db->addWhere('hms_room.private_room', 0);
-        $db->addWhere('hms_room.is_overflow', 0);
-        $db->addWhere('hms_room.is_medical', 0);
-        $db->addWhere('hms_room.is_reserved', 0);
-        $db->addWhere('hms_room.is_online', 1);
+        $db->addWhere('hms_room.private', 0);
+        $db->addWhere('hms_room.overflow', 0);
+        $db->addWhere('hms_room.reserved', 0);
+        $db->addWhere('hms_room.offline', 0);
         $db->addWhere('hms_bed.term', $term);
         $db->addColumn('hms_room.room_number');
         $db->addColumn('hms_bed.bed_letter', null, null, True);

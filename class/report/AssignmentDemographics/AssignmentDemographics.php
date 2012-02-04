@@ -117,7 +117,7 @@ class AssignmentDemographics extends Report {
         $db->addJoin('LEFT OUTER', 'hms_floor',         'hms_residence_hall',   'residence_hall_id',    'id');
 
         // Don't report on anything that's not online
-        $db->addWhere('hms_room.is_online',             1);
+        $db->addWhere('hms_room.offline',               0);
         $db->addWhere('hms_floor.is_online',            1);
         $db->addWhere('hms_residence_hall.is_online',   1);
 

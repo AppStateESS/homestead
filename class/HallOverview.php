@@ -54,28 +54,28 @@ class HallOverview extends View {
             foreach($floor->_rooms as $room) {
                 $extra_attribs = '';
 
-                if($room->ra_room){
+                if($room->ra){
                     $extra_attribs .= 'RA ';
                 }
 
-                if($room->private_room){
+                if($room->private){
                     $extra_attribs .= 'Private ';
                 }
 
-                if($room->is_overflow){
+                if($room->overflow){
                     $extra_attribs .= 'Overflow ';
                 }
 
-                if($room->is_medical){
-                    $extra_attribs .= 'Medical ';
-                }
-
-                if($room->is_reserved){
+                if($room->reserved){
                     $extra_attribs .= 'Reserved ';
                 }
 
-                if(!$room->is_online){
+                if($room->offline){
                     $extra_attribs .= 'Offline ';
+                }
+
+                if($room->parlor){
+                    $extra_attribs .= 'Parlor ';
                 }
 
                 $room->loadBeds();
