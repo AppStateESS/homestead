@@ -65,7 +65,33 @@ class PhpSOAP extends SOAP
 
     public function isValidStudent($username, $term)
     {
-
+        // Sanity checking on the username
+        if(empty($username) || is_null($username) || !isset($username)){
+            throw new InvalidArgumentException('Bad username');
+        }
+        
+        // Sanity checking on the term
+        if(empty($term) || is_null($term) || !isset($term)){
+            throw new InvalidArgumentException('Bad term');
+        }
+        
+        $params = array('StudentID'=>$username, 'TermCode'=>$term);
+        
+        try{
+            $response = $this->client->GetStudentProfile($params);
+        }catch(SoapFault $e){
+            PHPWS_Core::initModClass('hms', 'exception/SOAPException.php');
+            throw new SOAPException($e->getMessage(), $e->getCode(), 'isValidStudent', $params);
+            return false;
+        }
+        
+        SOAP::logSoap('isValidStudent', 'success', $username, $term);
+        
+        if(isset($response->profile->banner_id)){
+            return true;
+        }else{
+            return false;
+        }
     }
 
     public function reportApplicationReceived($username, $term)
