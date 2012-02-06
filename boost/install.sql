@@ -144,14 +144,15 @@ CREATE TABLE hms_bed (
     room_id         integer NOT NULL REFERENCES hms_room(id),
     bed_letter      character(1) NOT NULL,
     bedroom_label   character varying(255),
-    ra_bed          smallint NOT NULL DEFAULT (0)::smallint,
+    ra_roommate     smallint NOT NULL DEFAULT 0,
     added_by        integer NOT NULL,
     added_on        integer NOT NULL,
     updated_by      integer NOT NULL,
     updated_on      integer NOT NULL,
     banner_id       character varying(15),
     phone_number    character(4),
-    room_change_reserved smallint NOT NULL DEFAULT(0)::smallint,
+    room_change_reserved smallint NOT NULL DEFAULT 0,
+    international_reserved smallint NOT NULL DEFAULT 0,
     PRIMARY KEY(id)
 );
 

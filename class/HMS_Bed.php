@@ -15,9 +15,11 @@ class HMS_Bed extends HMS_Item {
     public $banner_id            = null;
     public $phone_number         = null;
     public $bedroom_label        = null;
-    public $ra_bed               = null;
-    public $room_change_reserved = 0;
-    public $_curr_assignment     = null;
+    public $ra_roommate          = null;
+    public $international_reserved = 0;
+    public $room_change_reserved   = 0;
+    
+    public $_curr_assignment       = null;
 
     /**
      * Holds the parent room object of this bed.
