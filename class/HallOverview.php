@@ -57,11 +57,11 @@ class HallOverview extends View {
                 if($room->isOffline()){
                     $extra_attribs .= 'Offline ';
                 }
-                
+
                 if($room->isReserved()){
                     $extra_attribs .= 'Reserved ';
                 }
-                
+
                 if($room->isRa()){
                     $extra_attribs .= 'RA ';
                 }
@@ -81,18 +81,24 @@ class HallOverview extends View {
                 if($room->isADA()){
                     $extra_attribs .= 'ADA';
                 }
-                
+
                 if($room->isHearingImpaired()){
                     $extra_attribs .= 'Hearing Impaired';
                 }
-                
+
                 if($room->bathEnSuite()){
                     $extra_attribs .= 'Bath en Suite';
                 }
-                
+
                 $room->loadBeds();
                 $bed_labels = array();
 
+                if(empty($room->_beds)){
+                    $tpl->setCurrentBlock('room_repeat');
+                    $tpl->setData(array('EXTRA_ATTRIBS'=>$extra_attribs, 'ROOM_NUMBER'=>$room->getLink('Room')));
+                    $tpl->parseCurrentBlock();
+                    continue;
+                }
 
                 foreach($room->_beds as $bed) {
                     $bed->loadAssignment();
