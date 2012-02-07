@@ -77,7 +77,7 @@ class HallOccupancy extends Report {
                     continue;
                 }
                 foreach ($rooms as $room) {
-                    if (!$room->is_online == 1) {
+                    if ($room->offline == 1) {
                         continue;
                     }
                     $beds = $room->get_beds();
