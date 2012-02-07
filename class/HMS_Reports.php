@@ -144,7 +144,7 @@ class HMS_Reports{
         $db->addJoin('LEFT', 'hms_bed', 'hms_room', 'room_id', 'id');
         $db->addJoin('LEFT', 'hms_room', 'hms_floor', 'floor_id', 'id');
         $db->addJoin('LEFT', 'hms_floor', 'hms_residence_hall', 'residence_hall_id', 'id');
-        $db->addWhere('hms_bed.ra_bed', 0);
+        //$db->addWhere('hms_bed.ra_bed', 0);
         $db->addWhere('hms_room.private', 0);
         $db->addWhere('hms_room.overflow', 0);
         $db->addWhere('hms_room.reserved', 0);

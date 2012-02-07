@@ -58,7 +58,8 @@ class AddBedCommand extends Command {
             $errorCmd->redirect();
         }
 
-        $raBed = $context->get('ra_bed') == 1 ? 1 : 0;
+        $raRoommate = $context->get('ra_roommate') == 1 ? 1 : 0;
+        $intlReserved = $context->get('international_reserved') == 1 ? 1 : 0;
 
         $room = new HMS_Room($roomId);
 
@@ -71,7 +72,7 @@ class AddBedCommand extends Command {
 
         # Try to create the bed
         try{
-            HMS_Bed::addBed($roomId, $term, $bedLetter, $bedroomLabel, $phoneNumber, $bannerId, $raBed);
+            HMS_Bed::addBed($roomId, $term, $bedLetter, $bedroomLabel, $phoneNumber, $bannerId, $raRoommate, $intlReserved);
         }catch(Exception $e){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'There was an error creating the bed: ' . $e->getMessage());
             $errorCmd->redirect();

@@ -81,7 +81,8 @@ class AddBedView extends View {
             $form->addText('banner_id', '0' . $roomNumber . ($this->room->get_number_of_beds()+1));
         }
 
-        $form->addCheckBox('ra_bed', 1);
+        $form->addCheckBox('ra_roommate', 1);
+        $form->addCheckBox('international_reserved',1);
 
         $form->addSubmit('submit', 'Submit');
 

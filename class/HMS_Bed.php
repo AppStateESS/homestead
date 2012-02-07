@@ -298,7 +298,7 @@ class HMS_Bed extends HMS_Item {
         $tags['BEDROOM']        = $this->bedroom_label;
         $tags['BED_LETTER']     = $this->getLink();
         $tags['ASSIGNED_TO']    = $this->get_assigned_to_link();
-        $tags['RA']             = $this->ra_bed ? 'Yes' : 'No';
+        $tags['RA']             = $this->ra_roommate ? 'Yes' : 'No';
 
         $this->loadAssignment();
         if($this->_curr_assignment == NULL && Current_User::allow('hms', 'bed_structure') && UserStatus::isAdmin()){
@@ -573,7 +573,7 @@ class HMS_Bed extends HMS_Item {
      * The 'ra_bed' flag is expected to be either TRUE or FALSE.
      * @return TRUE for success, FALSE otherwise
      */
-    public static function addBed($roomId, $term, $bedLetter, $bedroomLabel, $phoneNumber, $bannerId, $raBed)
+    public static function addBed($roomId, $term, $bedLetter, $bedroomLabel, $phoneNumber, $bannerId, $raRoommate, $intlReserved)
     {
         # Check permissions
         if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'bed_structure')){
@@ -594,7 +594,8 @@ class HMS_Bed extends HMS_Item {
         $bed->bedroom_label = $bedroomLabel;
         $bed->banner_id     = $bannerId;
         $bed->phone_number  = $phoneNumber;
-        $bed->ra_bed		= $raBed;
+        $bed->ra_roommate   = $raRoommate;
+        $bed->international_reserved = $intlReserved;
 
         try{
             $result = $bed->save();
@@ -654,7 +655,7 @@ class HMS_Bed extends HMS_Item {
         $page_tags['BEDROOM_LABEL']     = 'Bedroom';
         $page_tags['BED_LETTER_LABEL']  = 'Bed';
         $page_tags['ASSIGNED_TO_LABEL'] = 'Assigned to';
-        $page_tags['RA_LABEL']          = 'RA bed';
+        $page_tags['RA_LABEL']          = 'RA Roommate bed';
 
         if(Current_User::allow('hms', 'bed_structure') && UserStatus::isAdmin()){
             $addBedCmd = CommandFactory::getCommand('ShowAddBed');

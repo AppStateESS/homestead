@@ -27,7 +27,10 @@
                 <th>Banner ID:</th><td>{BANNER_ID}</td>
             </tr>
             <tr>
-                <th>RA Bed: </th><td>{RA_BED}</td>
+                <th>RA Roommate Bed: </th><td>{RA_ROOMMATE}</td>
+            </tr>
+            <tr>
+                <th>International Reserved: </th><td>{INTERNATIONAL_RESERVED}</td>
             </tr>
             <tr>
                 <th>Assigned to:</th><td>{ASSIGNED_TO}</td>
