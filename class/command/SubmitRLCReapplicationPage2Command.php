@@ -101,12 +101,12 @@ class SubmitRLCReapplicationPage2Command extends Command {
             $errorCmd->redirect();
         }
         
-        if(!isset($rlcChoice2) && (!isset($question1) || empty($question1))){
+        if(isset($rlcChoice2) && (!isset($question1) || empty($question1))){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Please respond to all of the short answer questions.');
             $errorCmd->redirect();
         }
       
-        if(!isset($rlcChoice2) && (!isset($question2) || empty($question2))){
+        if(isset($rlcChoice2) && (!isset($question2) || empty($question2))){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Please respond to all of the short answer questions.');
             $errorCmd->redirect();
         }
