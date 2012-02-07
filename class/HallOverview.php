@@ -54,30 +54,42 @@ class HallOverview extends View {
             foreach($floor->_rooms as $room) {
                 $extra_attribs = '';
 
-                if($room->ra){
+                if($room->isOffline()){
+                    $extra_attribs .= 'Offline ';
+                }
+                
+                if($room->isReserved()){
+                    $extra_attribs .= 'Reserved ';
+                }
+                
+                if($room->isRa()){
                     $extra_attribs .= 'RA ';
                 }
 
-                if($room->private){
+                if($room->isPrivate()){
                     $extra_attribs .= 'Private ';
                 }
 
-                if($room->overflow){
+                if($room->isOverflow()){
                     $extra_attribs .= 'Overflow ';
                 }
 
-                if($room->reserved){
-                    $extra_attribs .= 'Reserved ';
-                }
-
-                if($room->offline){
-                    $extra_attribs .= 'Offline ';
-                }
-
-                if($room->parlor){
+                if($room->isParlor()){
                     $extra_attribs .= 'Parlor ';
                 }
 
+                if($room->isADA()){
+                    $extra_attribs .= 'ADA';
+                }
+                
+                if($room->isHearingImpaired()){
+                    $extra_attribs .= 'Hearing Impaired';
+                }
+                
+                if($room->bathEnSuite()){
+                    $extra_attribs .= 'Bath en Suite';
+                }
+                
                 $room->loadBeds();
                 $bed_labels = array();
 
