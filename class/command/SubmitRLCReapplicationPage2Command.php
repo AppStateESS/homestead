@@ -118,12 +118,12 @@ class SubmitRLCReapplicationPage2Command extends Command {
             $errorCmd->redirect();
         }
 
-        if(!isset($rlcChoice2) && str_word_count($question1) > $wordLimit){
+        if(isset($rlcChoice2) && str_word_count($question1) > $wordLimit){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Your answer to question number two is too long. Please limit your response to 500 words or less.');
             $errorCmd->redirect();
         }
 
-        if(!isset($rlcChoice3) && str_word_count($question2) > $wordLimit){
+        if(isset($rlcChoice3) && str_word_count($question2) > $wordLimit){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Your answer to question number three is too long. Please limit your response to 500 words or less.');
             $errorCmd->redirect();
         }
