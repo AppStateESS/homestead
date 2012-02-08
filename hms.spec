@@ -2,7 +2,7 @@
 
 %define name hms
 %define version 0.4.50
-%define release 1
+%define release 2
 %define install_dir /var/www/hms
 
 Summary: Housing Management System
