@@ -3,20 +3,14 @@
 class ShowRlcReapplicationPageTwoCommand extends Command {
     
     private $term;
-    private $vars;
     
     public function setTerm($term){
         $this->term = $term;
     }
     
-    public function setVars($vars){
-        $this->vars = $vars;
-    }
-    
     public function getRequestVars()
     {
-        $reqVars = $this->vars;
-        unset($reqVars['module']);
+        $reqVars = array();
         
         $reqVars['action'] = 'ShowRlcReapplicationPageTwo';
         $reqVars['term'] = $this->term;
@@ -28,18 +22,29 @@ class ShowRlcReapplicationPageTwoCommand extends Command {
     {
         PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
         PHPWS_Core::initModClass('hms', 'RlcReapplicationPageTwoView.php');
+        PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
 
-        $rlcs = array(new HMS_Learning_Community($context->get('rlc_choice_1')));
-
-        if($context->get('rlc_choice_2') != 'none'){
-            $rlcs[] = new HMS_Learning_Community($context->get('rlc_choice_2'));
+        session_write_close();
+        session_start();
+        
+        if(!isset($_SESSION['RLC_REAPP'])){
+            $errorCmd = CommandFactory::getCommand('ShowStudentMenu');
+            $errorCmd->redirect();
         }
         
-        if($context->get('rlc_choice_3') != 'none'){
-            $rlcs[] = new HMS_Learning_Community($context->get('rlc_choice_3'));
+        $reApp = $_SESSION['RLC_REAPP'];
+        
+        $rlcs = array(new HMS_Learning_Community($reApp->rlc_first_choice_id));
+
+        if(isset($reApp->rlc_second_choice_id) && !is_null($reApp->rlc_second_choice_id)){
+            $rlcs[] = new HMS_Learning_Community($reApp->rlc_second_choice_id);
+        }
+        
+        if(isset($reApp->rlc_third_choice_id) && !is_null($reApp->rlc_third_choice_id)){
+            $rlcs[] = new HMS_Learning_Community($reApp->rlc_third_choice_id);
         }
 
-        $view = new RlcReapplicationPageTwoView($rlcs, $context->get('term'));
+        $view = new RlcReapplicationPageTwoView($rlcs, $context->get('term'), $reApp);
         
         $context->setContent($view->show());
     }

@@ -74,7 +74,16 @@ class ShowRlcReapplicationCommand extends Command {
             }
         }
 
-        $view = new RlcReapplicationView($student, $term, $rlcAssignment, $communities);
+        session_write_close();
+        session_start();
+        
+        if(isset($_SESSION['RLC_REAPP'])){
+            $reApp = $_SESSION['RLC_REAPP'];
+        }else{
+            $reApp = null;
+        }
+        
+        $view = new RlcReapplicationView($student, $term, $rlcAssignment, $communities, $reApp);
 
         $context->setContent($view->show());
     }

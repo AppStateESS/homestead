@@ -4,11 +4,13 @@ class RlcReapplicationPageTwoView extends View {
     
     private $rlcs;
     private $term;
+    private $reApp;
     
-    public function __construct(Array $rlcs, $term)
+    public function __construct(Array $rlcs, $term, HMS_RLC_Application $reApp)
     {
         $this->rlcs = $rlcs;
         $this->term = $term;
+        $this->reApp = $reApp;
     }
     
     public function show(){
@@ -19,7 +21,6 @@ class RlcReapplicationPageTwoView extends View {
         $form = new PHPWS_Form('rlc_reapp');
         $submitCmd = CommandFactory::getCommand('SubmitRLCReapplicationPage2');
         $submitCmd->setTerm($this->term);
-        $submitCmd->setVars($_REQUEST);
         $submitCmd->initForm($form);
        
         foreach($this->rlcs as $i=>$rlc){
@@ -27,11 +28,12 @@ class RlcReapplicationPageTwoView extends View {
             if(!isset($question)){
                 throw new Exception("Missing returning question for {$this->rlcs[$i]->get_community_name()}");
             }
-            if(isset($_REQUEST["rlc_question_$i"])){
-                $form->addTextArea("rlc_question_$i", $_REQUEST["rlc_question_$i"]);
+            if(isset($this->reApp) && isset($this->reApp->{"rlc_question_$i"})){
+                $form->addTextArea("rlc_question_$i", $this->reApp->{"rlc_question_$i"});
             }else{
                 $form->addTextArea("rlc_question_$i");
             }
+            
             $form->setLabel("rlc_question_$i", $this->rlcs[$i]->getReturningQuestion());
         }
         

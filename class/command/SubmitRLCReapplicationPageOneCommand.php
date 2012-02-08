@@ -30,6 +30,26 @@ class SubmitRLCReapplicationPageOneCommand extends Command {
         $why           = $context->get('why_this_rlc');
         $contribute    = $context->get('contribute_gain');
 
+        // Change any 'none's into null
+        if($rlcChoice2 == 'none'){
+            $rlcChoice2 = null;
+        }
+        if($rlcChoice3 == 'none'){
+            $rlcChoice3 = null;
+        }
+        
+        $app = new HMS_RLC_Application();
+        
+        $app->setUsername($student->getUsername());
+        $app->setFirstChoice($rlcChoice1);
+        $app->setSecondChoice($rlcChoice2);
+        $app->setThirdChoice($rlcChoice3);
+        
+        $app->setWhySpecificCommunities($why);
+        $app->setStrengthsWeaknesses($contribute);
+        
+        $_SESSION['RLC_REAPP'] = $app;
+        
         # Get the list of RLCs that the student is eligible for
         # Note: hard coded to 'C' because we know they're continuing at this point.
         # This accounts for freshmen addmitted in the spring, who will still have the 'F' type.
@@ -59,17 +79,9 @@ class SubmitRLCReapplicationPageOneCommand extends Command {
                 $formCmd->redirect();
             }
 
-            if(($rlcChoice2 != 'none' && $rlcChoice1 == $rlcChoice2) || ($rlcChoice2 != 'none' && $rlcChoice3 != 'none' && $rlcChoice2 == $rlcChoice3) || ($rlcChoice3 != 'none' && $rlcChoice1 == $rlcChoice3)){
+            if((isset($rlcChoice2) && $rlcChoice1 == $rlcChoice2) || (isset($rlcChoice2) && isset($rlcChoice3) && $rlcChoice2 == $rlcChoice3) || (isset($rlcChoice3) && $rlcChoice1 == $rlcChoice3)){
                 NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You cannot choose the same community twice.');
                 $formCmd->redirect();
-            }
-
-            // Change any 'none's into null
-            if($rlcChoice2 == 'none'){
-                $rlcChoice2 = null;
-            }
-            if($rlcChoice3 == 'none'){
-                $rlcChoice3 = null;
             }
         }
 
@@ -91,13 +103,9 @@ class SubmitRLCReapplicationPageOneCommand extends Command {
             $formCmd->redirect();
         }
 
-        $requestVars = $_REQUEST;
-        $requestVars['rlc_choice_1'] = $rlcChoice1;
-
         // Redirect to the page 2 view command
         $page2cmd = CommandFactory::getCommand('ShowRlcReapplicationPageTwo');
         $page2cmd->setTerm($term);
-        $page2cmd->setVars($requestVars);
         $page2cmd->redirect();
     }
 
