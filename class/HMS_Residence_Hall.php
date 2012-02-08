@@ -307,6 +307,10 @@ class HMS_Residence_Hall extends HMS_Item
 
         $result = $db->select('count');
 
+        if($result == 0){
+            return 0;
+        }
+        
         if(!$result || PHPWS_Error::logIfError($result)){
             throw new DatabaseException($result->toString());
         }
@@ -330,6 +334,10 @@ class HMS_Residence_Hall extends HMS_Item
 
         $result = $db->select('count');
 
+        if($result == 0){
+            return 0;
+        }
+        
         if(!$result || PHPWS_Error::logIfError($result)){
             throw new DatabaseException($result);
         }
@@ -352,6 +360,10 @@ class HMS_Residence_Hall extends HMS_Item
 
         $result = $db->select('count');
 
+        if($result == 0){
+            return 0;
+        }
+        
         if(PHPWS_Error::logIfError($result)){
             throw new DatabaseException($result->toString());
         }
@@ -375,6 +387,10 @@ class HMS_Residence_Hall extends HMS_Item
 
         $result = $db->select('count');
 
+        if($result == 0){
+            return 0;
+        }
+        
         if(PHPWS_Error::logIfError($result)){
             throw new DatabaseException($result->toString());
         }
