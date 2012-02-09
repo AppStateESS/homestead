@@ -28,6 +28,7 @@
           <s:element minOccurs="1" maxOccurs="1" name="gender" nillable="true" type="s:NMTOKEN" />
           <s:element minOccurs="1" maxOccurs="1" name="deposit_date" nillable="true" type="s:date" />
           <s:element minOccurs="1" maxOccurs="1" name="housing_waiver" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="app_decision_code" type="s:NMTOKEN" />
           <s:element minOccurs="1" maxOccurs="1" name="student_type" nillable="true" type="s:NMTOKEN" />
           <s:element minOccurs="1" maxOccurs="1" name="application_term" nillable="true" type="s:NMTOKEN" />
           <s:element minOccurs="1" maxOccurs="1" name="disabled_pin" type="s:boolean" />
