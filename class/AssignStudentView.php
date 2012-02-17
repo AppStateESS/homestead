@@ -119,21 +119,29 @@ class AssignStudentView extends View {
         $form->setMatch('meal_plan', BANNER_MEAL_STD);
         $form->setLabel('meal_plan', 'Meal plan: ');
 
-        // Addition of "Assignment Type"
+        // "Assignment Type"
         $form->addDropBox('assignment_type', array(
             ASSIGN_ADMIN        => 'Administrative',
             ASSIGN_LOTTERY	    => 'Lottery',
-            ASSIGN_FRESHMEN	    => 'Freshmen',
+            ASSIGN_FR   	    => 'Freshmen',
             ASSIGN_TRANSFER     => 'Transfer',
-            ASSIGN_RETURNING    => 'Returning',
-            ASSIGN_MEDICAL      => 'Medical',
-            ASSIGN_SPECIAL      => 'Special Needs',
-            ASSIGN_ATHLETICS    => 'Athletics',
-            ASSIGN_HONORS       => 'Honors',
-            ASSIGN_WATAUGA      => 'Watauga Global',
-            ASSIGN_TEACHING     => 'Teaching Fellows',
-            ASSIGN_RLC          => 'RLC',
-            ASSIGN_SORORITY     => 'Sorority'));
+            ASSIGN_SORORITY     => 'Sorority',
+            ASSIGN_RLC_FRESHMEN   => 'RLC Freshmen',
+            ASSIGN_RLC_TRANSFER   => 'RLC Transfer',
+            ASSIGN_RLC_CONTINUING => 'RLC Continuing',
+            ASSIGN_HONORS_FRESHMEN => 'Honors Freshmen',
+            ASSIGN_HONORS_CONTINUING => 'Honors Continuing',
+            ASSIGN_LLC_FRESHMEN => 'LLC Freshmen',
+            ASSIGN_LLC_CONTINUING => 'LLC Continuing',
+            ASSIGN_INTL              => 'International',
+            ASSIGN_RA                => 'RA',
+            ASSIGN_RA_ROOMMATE       => 'RA Roommate',
+            ASSIGN_MEDICAL           => 'Medical',
+            ASSIGN_SPECIAL           => 'Special Needs',
+            ASSIGN_RHA               => 'RHA/NRHH',
+            ASSIGN_SCHOLARS          => 'Diversity &amp; Plemmons Scholars'
+        ));
+        
         $form->setMatch('assignment_type', ASSIGN_ADMIN);
         $form->setLabel('assignment_type', 'Assignment Type: ');
         

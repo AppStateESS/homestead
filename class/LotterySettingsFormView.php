@@ -18,16 +18,14 @@ class LotterySettingsFormView extends View {
         $form->setLabel('lottery_term', 'Lottery Term');
 
         $form->addText('hard_cap');
-        $form->setLabel('hard_cap', 'Max # Returning Students:');
+        $form->setLabel('hard_cap', 'Max # Returning Students (hard cap):');
         $form->setValue('hard_cap', PHPWS_Settings::get('hms', 'lottery_hard_cap'));
         
-        $form->addText('expected_yield');
-        $form->setLabel('expected_yield', 'Expected yield:');
-        $form->setValue('expected_yield', PHPWS_Settings::get('hms', 'lottery_expected_yield'));
-        
+        /*
         $form->addText('soph_goal');
         $form->setLabel('soph_goal', 'Sophomores:');
         $form->setValue('soph_goal', PHPWS_Settings::get('hms', 'lottery_soph_goal'));
+        */
         
         $form->addText('jr_goal');
         $form->setLabel('jr_goal', 'Juniors:');

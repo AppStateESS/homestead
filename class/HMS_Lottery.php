@@ -1,6 +1,6 @@
 <?php
 
-define('MAX_INVITES_PER_BATCH', 250);
+define('MAX_INVITES_PER_BATCH', 500);
 define('INVITE_TTL_HRS', 48);
 
 class HMS_Lottery {
@@ -93,7 +93,6 @@ class HMS_Lottery {
         }
 
         $output[] = "$outstanding_roommate_invites outstanding roommate invites";
-
 
         // Make sure we aren't sending more than our max at once
         if($invites_to_send > MAX_INVITES_PER_BATCH) {

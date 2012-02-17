@@ -89,32 +89,50 @@ define('BANNER_MEAL_5WEEK', 'S5');
 /**
  * Assignment Types
  */
-define('ASSIGN_ADMIN', 		'aadmin'); // general administrative
 
-// Processes
-define('ASSIGN_AUTO', 		'aauto'); // auto-assigner
-define('ASSIGN_LOTTERY', 	'alottery'); // re-application lottery
-define('ASSIGN_CHANGE', 	'achange'); // For room change requests
-define('ASSIGN_COPY',		'acopy'); // For copying from previous term
+// Default
+define('ASSIGN_ADMIN', 		'admin'); // general administrative
 
-// Administrative by student type
-define('ASSIGN_FRESHMEN', 	'afreshmen');
-define('ASSIGN_TRANSFER', 	'atransfer');
-define('ASSIGN_RETURNING', 	'areturning');
+// General Populations
+define('ASSIGN_LOTTERY',     'lottery');
+define('ASSIGN_FR_AUTO',     'auto_assign'); // auto-assigner
+define('ASSIGN_FR',          'freshmen');
+define('ASSIGN_TRANSFER', 	 'transfer');
+
+// Sororities
+define('ASSIGN_SORORITY', 	'sorority');
+
+// RLCs
+define('ASSIGN_RLC_FRESHMEN',   'rlc_freshmen');
+define('ASSIGN_RLC_TRANSFER',   'rlc_transfer');
+define('ASSIGN_RLC_CONTINUING', 'rlc_continuing');
+
+// Honors
+define('ASSIGN_HONORS_FRESHMEN',   'honors_freshmen');
+define('ASSIGN_HONORS_CONTINUING', 'honors_continuing');
+
+// LLC
+define('ASSIGN_LLC_FRESHMEN',   'llc_freshmen');
+define('ASSIGN_LLC_CONTINUING', 'llc_continuing');
+
+// International
+define('ASSIGN_INTL',       'international');
+
+// RAs
+define('ASSIGN_RA',          'ra');
+define('ASSIGN_RA_ROOMMATE', 'ra_roommate');
 
 // Special/medical needs needs
-define('ASSIGN_MEDICAL', 	'amedical');
-define('ASSIGN_SPECIAL', 	'aspecial');
+define('ASSIGN_MEDICAL', 	'medical');
+define('ASSIGN_SPECIAL', 	'special');
 
-// Interest groups
-define('ASSIGN_ATHLETICS', 	'aathletics');
-define('ASSIGN_HONORS', 	'ahonors');
-define('ASSIGN_WATAUGA', 	'awatuaga');
-define('ASSIGN_TEACHING', 	'ateaching');
-define('ASSIGN_RLC', 		'arlc');
-define('ASSIGN_SORORITY', 	'asorority');
+// RHA
+define('ASSIGN_RHA', 'rha');
+define('ASSIGN_SCHOLARS', 'scholars');
 
-define('ASSIGN_NOREASON',	'anone');
+// Processes - DEPRECATED
+define('ASSIGN_CHANGE', 	'achange'); // For room change requests
+define('ASSIGN_COPY',		'acopy'); // For copying from previous term
 
 
 /**

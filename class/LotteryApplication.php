@@ -13,7 +13,7 @@ PHPWS_Core::initModClass('hms', 'HousingApplication.php');
 class LotteryApplication extends HousingApplication {
 
     public $magic_winner        = 0;
-    public $invite_expires_on   = NULL;
+    public $invited_on          = NULL;
 
     public $waiting_list_hide   = 0;
 
@@ -138,7 +138,7 @@ class LotteryApplication extends HousingApplication {
 
     public function isWinner()
     {
-        if(!is_null($this->invite_expires_on) && $this->invite_expires_on >= time()){
+        if(!is_null($this->invited_on)){
             return true;
         }else{
             return false;

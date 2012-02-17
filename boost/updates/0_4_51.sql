@@ -1,0 +1,1 @@
+alter table hms_lottery_application add column invited_on integer;

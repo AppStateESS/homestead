@@ -7,7 +7,7 @@
 <div>{EXPECTED_YIELD_LABEL} {EXPECTED_YIELD}</div>
 
 <fieldset>
-  <legend>Target Goals by Class</legend>
+  <legend>Soft Caps by Class</legend>
   <div>{SOPH_GOAL_LABEL} {SOPH_GOAL}</div>
 
   <div>{JR_GOAL_LABEL} {JR_GOAL}</div>

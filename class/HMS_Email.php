@@ -151,34 +151,28 @@ class HMS_Email{
      * Lottery Messages *
      ********************/
 
-    public function send_lottery_invite($to, $name, $expires_on, $year)
+    public function send_lottery_invite($to, $name, $year)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
         $tpl = array();
 
         $tpl['NAME']        = $name;
-        $tpl['EXPIRES_ON']  = HMS_Util::get_long_date_time($expires_on);
         $tpl['YEAR']        = $year;
 
         HMS_Email::send_template_message($to . TO_DOMAIN, 'You Have Been Selected for On-campus Housing!', 'email/lottery_invite.tpl', $tpl);
     }
 
-    public function send_lottery_invite_reminder($to, $name, $expires_on, $year)
+    public function send_lottery_invite_reminder($to, $name, $year)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
         $tpl = array();
 
         $tpl['NAME']        = $name;
-        $tpl['EXPIRES_ON']  = HMS_Util::get_long_date_time($expires_on);
         $tpl['YEAR']        = $year;
-        $hours              = round(($expires_on - mktime()) / 3600);
 
-        // TODO:
-        //$hours =
-
-        HMS_Email::send_template_message($to . TO_DOMAIN, "On-Campus Housing Reminder: Only $hours hours left!", 'email/lottery_invite_reminder.tpl', $tpl);
+        HMS_Email::send_template_message($to . TO_DOMAIN, "On-Campus Housing Reminder", 'email/lottery_invite_reminder.tpl', $tpl);
     }
 
     public function send_lottery_roommate_invite(Student $to, Student $from, $expires_on, $hall_room, $year)
