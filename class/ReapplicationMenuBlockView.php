@@ -29,11 +29,13 @@ class ReapplicationMenuBlockView extends View {
         $tpl['DATES'] = HMS_Util::getPrettyDateRange($this->startDate, $this->endDate);
         $tpl['STATUS'] = "";
 
+        $hardCapReached = LotteryProcess::hardCapReached($this->term);
+
         if(!is_null($this->assignment)) {
             # Student has already been assigned.
             $tpl['ICON'] = FEATURE_COMPLETED_ICON;
             $tpl['ASSIGNED'] = $this->assignment->where_am_i();
-        }else if(LotteryProcess::hardCapReached($this->term)){
+        }else if($hardCapReached){
             // Hard cap has been reached
             $tpl['ICON'] = FEATURE_LOCKED_ICON;
             $tpl['HARD_CAP'] = ""; // dummy tag
@@ -74,15 +76,17 @@ class ReapplicationMenuBlockView extends View {
             }
         }
 
-        if($this->roommateRequests != FALSE && !is_null($this->roommateRequests) && $this->assignment != TRUE && !PEAR::isError($this->assignment)){
-            $tpl['roommates'] = array();
-            $tpl['ROOMMATE_REQUEST'] = ''; // dummy tag
-            foreach($this->roommateRequests as $invite){
-                $cmd = CommandFactory::getCommand('LotteryShowRoommateRequest');
-                $cmd->setRequestId($invite['id']);
-                $roommie = StudentFactory::getStudentByUsername($invite['requestor'], $this->term);
-                $tpl['roommates'][]['ROOMMATE_LINK'] = $cmd->getLink($roommie->getName());
-                //$tpl['roommates'][]['ROOMMATE_LINK'] = PHPWS_Text::secureLink(HMS_SOAP::get_name($invite['requestor']), 'hms', array('type'=>'student', 'op'=>'lottery_show_roommate_request', 'id'=>$invite['id']));
+        if(!$hardCapReached){
+            if($this->roommateRequests != FALSE && !is_null($this->roommateRequests) && $this->assignment != TRUE && !PEAR::isError($this->assignment)){
+                $tpl['roommates'] = array();
+                $tpl['ROOMMATE_REQUEST'] = ''; // dummy tag
+                foreach($this->roommateRequests as $invite){
+                    $cmd = CommandFactory::getCommand('LotteryShowRoommateRequest');
+                    $cmd->setRequestId($invite['id']);
+                    $roommie = StudentFactory::getStudentByUsername($invite['requestor'], $this->term);
+                    $tpl['roommates'][]['ROOMMATE_LINK'] = $cmd->getLink($roommie->getName());
+                    //$tpl['roommates'][]['ROOMMATE_LINK'] = PHPWS_Text::secureLink(HMS_SOAP::get_name($invite['requestor']), 'hms', array('type'=>'student', 'op'=>'lottery_show_roommate_request', 'id'=>$invite['id']));
+                }
             }
         }
 
