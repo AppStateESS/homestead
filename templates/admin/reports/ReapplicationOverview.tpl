@@ -61,22 +61,6 @@
     <th colspan="2">Outstanding Invites</th>
   </tr>
   <tr>
-    <td>Total outstanding :</td>
-    <td>{OUTSTANDING_INVITES}</td>
-  </tr>
-  <tr>
-    <td>Sophomore Invites:</td>
-    <td>{SOPH_OUTSTANDING}</td>
-    </td>
-  <tr>
-    <td>Junior Invites:</td>
-    <td>{JR_OUTSTANDING}</td>
-    </td>
-  <tr>
-    <td>Senior Invites:</td>
-    <td>{SR_OUTSTANDING}</td>
-    </td>
-  <tr>
     <td>Outstanding roommate invites:</td>
     <td>{ROOMMATE_INVITES}</td>
   </tr>
@@ -113,21 +97,41 @@
   <tr>
     <td>Remaining entries:</td>
     <td>{REMAINING_ENTRIES}</td>
-    </td>
+
   <tr>
     <td>Sophomore applications remaining:</td>
-    <td>{SOPH_ENTRIES_REMAIN}</td>
   </tr>
+  <tr>
+    <td>Male:</td>
+    <td>{SOPH_MALE_ENTRIES_REMAIN}</td>
+  </tr>
+   <tr>
+    <td>Female:</td>
+    <td>{SOPH_FEMALE_ENTRIES_REMAIN}</td>
+  </tr>
+
   <tr>
     <td>Junior applications remaining:</td>
-    <td>{JR_ENTRIES_REMAIN}</td>
   </tr>
+    <tr>
+    <td>Male:</td>
+    <td>{JR_MALE_ENTRIES_REMAIN}</td>
+  </tr>
+   <tr>
+    <td>Female:</td>
+    <td>{JR_FEMALE_ENTRIES_REMAIN}</td>
+  </tr>
+
   <tr>
     <td>Senior applications remaining:</td>
-    <td>{SR_ENTRIES_REMAIN}</td>
   </tr>
   <tr>
-    <td colspan="2">&nbsp;</td>
+    <td>Male:</td>
+    <td>{SR_MALE_ENTRIES_REMAIN}</td>
+  </tr>
+   <tr>
+    <td>Female:</td>
+    <td>{SR_FEMALE_ENTRIES_REMAIN}</td>
   </tr>
 
 </table>

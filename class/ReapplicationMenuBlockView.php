@@ -1,6 +1,7 @@
 <?php
 
 PHPWS_Core::initModClass('hms', 'HMS_Util.php');
+PHPWS_Core::initModClass('hms', 'LotteryProcess.php');
 
 class ReapplicationMenuBlockView extends View {
 
@@ -32,6 +33,10 @@ class ReapplicationMenuBlockView extends View {
             # Student has already been assigned.
             $tpl['ICON'] = FEATURE_COMPLETED_ICON;
             $tpl['ASSIGNED'] = $this->assignment->where_am_i();
+        }else if(LotteryProcess::hardCapReached($this->term)){
+            // Hard cap has been reached
+            $tpl['ICON'] = FEATURE_LOCKED_ICON;
+            $tpl['HARD_CAP'] = ""; // dummy tag
         }else if(!is_null($this->application) && $this->application->isWinner()){
             # Student has won, let them choose their room
             $tpl['ICON'] = FEATURE_OPEN_ICON;

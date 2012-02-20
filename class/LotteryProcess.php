@@ -8,8 +8,10 @@ PHPWS_Core::initModClass('hms', 'HMS_Email.php');
 PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
 PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
 
-define('MAX_INVITES_PER_BATCH', 500);
-define('INVITE_TTL_HRS', 48);
+if(!defined('MAX_INVITES_PER_BATCH')){
+    define('MAX_INVITES_PER_BATCH', 500);
+    define('INVITE_TTL_HRS', 48);
+}
 
 class LotteryProcess {
 
@@ -26,6 +28,8 @@ class LotteryProcess {
     private $expireTime;
 
     private $hardCap;
+    private $jrSoftCap;
+    private $srSoftCap;
 
     private $output;  // An array for holding the text output, one line per array element.
 
@@ -58,7 +62,8 @@ class LotteryProcess {
         $this->hardCap = LotteryProcess::getHardCap();
         
         // Soft caps
-        //TODO
+        $this->jrSoftCap = LotteryProcess::getJrSoftCap();
+        $this->srSoftCap = LotteryProcess::getSrSoftCap();
 
         // Invites Sent by this process so far this run
         $this->numInvitesSent['TOTAL']         = 0;
@@ -95,7 +100,18 @@ class LotteryProcess {
             $this->sendRoommateReminderEmails();
         }
         
-        //TODO check the jr/sr soft caps
+        // check the jr/sr soft caps
+        if(LotteryProcess::jrSoftCapReached($this->term)){
+            $this->inviteCounts[CLASS_JUNIOR][MALE] = 0;
+            $this->inviteCounts[CLASS_JUNIOR][FEMALE] = 0;
+        }
+
+        if(LotteryProcess::srSoftCapReached($this->term)){
+            $this->inviteCounts[CLASS_SENIOR][MALE] = 0;
+            $this->inviteCounts[CLASS_SENIOR][FEMALE] = 0;
+        }
+
+
         
         /******
          * Count the number of remaining entries
@@ -329,9 +345,41 @@ class LotteryProcess {
         return $count;
     }
     
-    public static function countLotteryAssignedByClassGender($term, $class, $gender)
+    public static function countLotteryAssignedByClassGender($term, $class, $gender = null)
     {
+        $query = "SELECT count(*) FROM hms_assignment WHERE term = $term and reason = 'lottery' ";
+       
+        if(isset($gender)){
+            $query .= "AND hms_new_application.gender = $gender ";
+        }
         
+        $term_year = Term::getTermYear($term);
+        if($class == CLASS_SOPHOMORE) {
+            // Choose a rising sophmore (summer 1 thru fall of the previous year, plus spring of the same year)
+            $query .= 'AND (application_term = ' . ($term_year - 1) . '20 ';
+            $query .=   'OR application_term = ' . ($term_year - 1) . '30 ';
+            $query .=   'OR application_term = ' . ($term_year - 1) . '40 ';
+            $query .=   'OR application_term = ' . $term_year . '10';
+            $query .= ') ';
+        }else if($class == CLASS_JUNIOR) {
+            // Choose a rising jr
+            $query .= 'AND (application_term = ' . ($term_year - 2) . '20 ';
+            $query .=   'OR application_term = ' . ($term_year - 2) . '30 ';
+            $query .=   'OR application_term = ' . ($term_year - 2) . '40 ';
+            $query .=   'OR application_term = ' . ($term_year - 1) . '10';
+            $query .= ') ';
+        }else{
+            // Choose a rising senior or beyond
+            $query .= 'AND application_term <= ' . ($term_year - 2) . '10 ';
+        }
+
+        $assignments = PHPWS_DB::getOne($query);
+        
+        if(PHPWS_Error::logIfError($assignments)) {
+            throw new DatabaseException($assignments->toString());
+        }
+        
+        return $assignments;
     }
     
     public static function hardCapReached($term)
@@ -344,6 +392,51 @@ class LotteryProcess {
         }
     
         return false;
+    }
+
+    public static function jrSoftCapReached($term)
+    {
+        $softCap = LotteryProcess::getJrSoftCap();
+        $assigned = LotteryProcess::countLotteryAssignedByClassGender($term, CLASS_JUNIOR);
+
+        if($assigned >= $softCap){
+            return true;
+        }
+
+        return false;
+    }
+
+    public static function srSoftCapReached($term)
+    {
+        $softCap = LotteryProcess::getSrSoftCap();
+        $assigned = LotteryProcess::countLotteryAssignedByClassGender($term, CLASS_SENIOR);
+
+        if($assigned >= $softCap){
+            return true;
+        }
+
+        return false;
+
+    }
+
+    public static function getJrSoftCap()
+    {
+        $softCap = PHPWS_Settings::get('hms', 'lottery_jr_goal');
+        if(!isset($softCap) || empty($softCap)){
+            throw new InvalidArgumentException('Junior soft cap not set!');
+        }
+        
+        return $softCap;
+    }
+
+    public static function getSrSoftCap()
+    {
+        $softCap = PHPWS_Settings::get('hms', 'lottery_sr_goal');
+        if(!isset($softCap) || empty($softCap)){
+            throw new InvalidArgumentException('Junior soft cap not set!');
+        }
+        
+        return $softCap;
     }
 
     public static function countInvitesByClassGender($term, $class, $gender = null)
@@ -391,7 +484,7 @@ class LotteryProcess {
     public static function countOutstandingRoommateInvites($term)
     {
         $query = "select count(*) FROM hms_lottery_reservation
-                                LEFT OUTER JOIN (SELECT asu_username FROM hms_assignment WHERE term={$this->term}) as foo ON hms_lottery_reservation.asu_username = foo.asu_username
+                                LEFT OUTER JOIN (SELECT asu_username FROM hms_assignment WHERE term={$term}) as foo ON hms_lottery_reservation.asu_username = foo.asu_username
                                 WHERE foo.asu_username IS NULL
                                 AND hms_lottery_reservation.expires_on > " . time();
         

@@ -104,7 +104,7 @@ class LotteryConfirmCommand extends Command {
 
             # Double check the students' elligibilities
             if(HMS_Lottery::determineEligibility($username) !== TRUE){
-                NQ::simple('hms', HMS_NOTIFICATION_ERROR, "$username is not eligibile for assignment.");
+                NQ::simple('hms', HMS_NOTIFICATION_ERROR, "$username is not eligible for assignment.");
                 $errorCmd->redirect();
             }
         }
