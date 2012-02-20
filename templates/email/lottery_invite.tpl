@@ -1,16 +1,21 @@
 Dear {NAME},
 
-Congratulations, you have been selected for on-campus housing for {YEAR}.
+Congratulations, you are being offered the opportunity to select an on-campus housing assignment for {YEAR}.  There are a limited number of spaces available to select from so you are encouraged to make your selection as soon as possible.  When all available spaces are selected, this invitation will no longer be valid.
 
-In order to finalize your selection, you must go to https://hms.appstate.edu/ and log in using your AppalNet username and password.  Once you have logged in follow the on-screen instructions for selecting your desired room and extending roommate invitations.
+In order to select an on-campus housing assignment, you must go to https://hms.appstate.edu/ and log in using your AppalNet username and password.  Once you have logged in, follow the on-screen instructions for selecting your desired room and extending roommate invitations. 
 
-***IMPORTANT***
-You *must* log in and select your desired room before {EXPIRES_ON} in order to qualify for housing for {YEAR}.  If you do not claim your room by {EXPIRES_ON} your invitation for on-campus housing will be canceled.
+Note: Roommate invitations will expire 48 hours after they are extended.
 
-If you have any questions about the re-application process, please refer to the housing FAQ: https://hms.appstate.edu/webpage/id/2
+Please be aware that by selecting an on-campus assignment, you are making a financial commitment to Appalachian State University for the Fall Semester 2012 and Spring Semester 2013.  If you are enrolled in classes during Fall 2012, you will be required to pay for the on-campus housing assignment you selected for the entire year unless you are not enrolled Spring 2013.
 
-We look forward to seeing you in {YEAR}!
+The contract cancellation penalty after you have selected your room during reapplication is as follows:
+
+ * You will be charged $250 on your student bill provided the Department of University Housing is notified *in writing* by July 1, 2012 of your intent not to live on-campus. 
+
+ * After July 1, 2012, students will be responsible for the entire amount at the rate for the room selected for both Fall and Spring semesters unless you are not enrolled for the Fall 2012 semester.
+
+If you have any questions about the re-application process, please refer to the housing FAQ at http://housing.appstate.edu/reapp.
 
 Sincerely,
 
-Housing Assignments
+University Housing

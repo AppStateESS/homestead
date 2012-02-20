@@ -230,6 +230,47 @@ class Student {
         return "{$addr->line1}, $line2$line3{$addr->city}, {$addr->state} {$addr->zip}";
     }
 
+    public function getComputedClass($baseTerm)
+    {
+
+        // Break up the term and year
+        $yr     = floor($this->application_term / 100);
+        $sem    = $this->application_term - ($yr * 100);
+
+        $curr_year = floor($baseTerm / 100);
+        $curr_sem  = $baseTerm - ($curr_year * 100);
+
+        if($curr_sem == 10) {
+            $curr_year -= 1;
+            $curr_sem   = 40;
+        }
+
+        if(is_null($this->application_term) || !isset($this->application_term)) {
+            throw new InvalidArgumentException('Missing application term!');
+        }else if($this->application_term >= $baseTerm) {
+            // The application term is greater than the current term, then they're certainly a freshmen
+            return CLASS_FRESHMEN;
+        }else if(
+        ($yr == $curr_year + 1 && $sem = 10) ||
+        ($yr == $curr_year && $sem >= 20 && $sem <= 40)) {
+            // freshmen
+            return CLASS_FRESHMEN;
+        }else if(
+        ($yr == $curr_year && $sem == 10) ||
+        ($yr + 1 == $curr_year && $sem >= 20 && $sem <= 40)) {
+            // soph
+            return CLASS_SOPHOMORE;
+        }else if(
+        ($yr + 1 == $curr_year && $sem == 10) ||
+        ($yr + 2 == $curr_year && $sem >= 20 && $sem <= 40)) {
+            // jr
+            return CLASS_JUNIOR;
+        }else{
+            // senior
+            return CLASS_SENIOR;
+        }
+    }
+
     /***************************
      * Getter / Setter Methods *
     ***************************/

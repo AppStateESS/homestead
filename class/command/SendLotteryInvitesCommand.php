@@ -9,7 +9,10 @@ class SendLotteryInvitesCommand extends Command {
     
     public function execute(CommandContext $context)
     {
-        
+
+        $reminders = $context->get('send_reminders');
+        $sendReminders = isset($reminders) ? true : false;
+
         $magic = $context->get('magic_flag');
         $sendMagic = isset($magic) ? true : false;
         
@@ -35,7 +38,7 @@ class SendLotteryInvitesCommand extends Command {
         $inviteCounts[CLASS_SOPHOMORE][MALE]   = $sophMale;
         $inviteCounts[CLASS_SOPHOMORE][FEMALE] = $sophFemale;
         
-        $lottery = new LotteryProcess($sendMagic, $inviteCounts);
+        $lottery = new LotteryProcess($sendMagic, $sendReminders, $inviteCounts);
         $lottery->sendInvites();
         
         test($lottery->getOutput(),1);

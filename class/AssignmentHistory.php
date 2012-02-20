@@ -22,6 +22,8 @@ class AssignmentHistory extends HMS_Item {
     public $removed_by;
     public $removed_reason;
     public $term;
+    public $application_term;
+    public $class;
 
     /**
      * returns the database initialized correctly
@@ -78,6 +80,14 @@ class AssignmentHistory extends HMS_Item {
      */
     public function setTerm($term) {
         $this->term = $term;
+    }
+
+    public function setApplicationTerm($term){
+        $this->application_term = $term;
+    }
+
+    public function setClass($class){
+        $this->class = $class;
     }
 
     /**
@@ -211,6 +221,8 @@ class AssignmentHistory extends HMS_Item {
         $ah->setBedId($assignment->bed_id);
         $ah->setTerm($assignment->term);
         $ah->setAssign($reason); // set all the assignment data
+        $ah->setApplicationTerm($assignment->application_term);
+        $ah->setClass($assignment->class);
         $ah->save();
 
         return true;

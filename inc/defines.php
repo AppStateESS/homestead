@@ -100,7 +100,7 @@ define('ASSIGN_FR',          'freshmen');
 define('ASSIGN_TRANSFER', 	 'transfer');
 
 // Sororities
-define('ASSIGN_SORORITY', 	'sorority');
+define('ASSIGN_APH', 	'aph');
 
 // RLCs
 define('ASSIGN_RLC_FRESHMEN',   'rlc_freshmen');
@@ -150,35 +150,49 @@ define('UNASSIGN_NOREASON',	'unone');
 /**
  * Pretty Names
  */
-define('aadmin', 	'Administrative');
+define('admin', 	'Administrative');
 
-define('aauto',		'Auto-Assigned');
-define('alottery', 	'Lottery');
+define('lottery', 	'Lottery');
+define('auto_assign',		'Auto-Assigned');
+define('freshmen',	'Freshmen');
+define('transfer', 'Transfer');
+
+define('aph', 'APH');
+
+define('rlc_freshmen', 'RLC Freshmen');
+define('rlc_transfer', 'RLC Transfer');
+define('rlc_continuing', 'RLC Continuing');
+
+define('honors_freshmen', 'Honors Freshmen');
+define('honors_continuing', 'Honors Continuing');
+
+define('llc_freshmen', 'LLC Freshmen');
+define('llc_continuing', 'LLC Continuing');
+
+define('international', 'International');
+
+define('ra', 'RA');
+define('ra_roommate', 'RA Roommate');
+
+
+define('medical', 	'Medical');
+define('special',	'Special Needs');
+
+define('rha', 'RHA');
+define('scholars', 'Plemmons & Diversity');
+
+// Deprecated
 define('achange',   'Room Change');
 define('acopy',     'Term Rollover');
 
-define('afreshmen',	'Freshmen');
-define('atransfer', 'Transfer');
-define('areturning', 'Returning');
-
-define('amedical', 	'Medical');
-define('aspecial',	'Special Needs');
-
-define('aathletics','Athletics');
-define('ahonors',	'Honors');
-define('awatauga',	'Watauga Global');
-define('ateaching',	'Teaching Fellows');
-define('arlc',		'RLC');
-define('asorority',	'Sorority');
-define('anone',		'Not Specified');
-
-
+// Removal Reasons
 define('uadmin',	'Administrative');
 define('uchange',	'Room Change');
 define('uwithdrawn','Withdrawn');
 define('uintentnoreturn', 'Intent Not To Return');
 define('ureassign',	'Reassignment');
 define('unone',		'Not Specified');
+
 
 /**
  * Address types

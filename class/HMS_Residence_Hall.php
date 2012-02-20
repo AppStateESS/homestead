@@ -597,6 +597,8 @@ class HMS_Residence_Hall extends HMS_Item
                     AND hms_room.private = 0
                     AND hms_room.ra = 0
                     AND hms_room.overflow = 0
+                    AND hms_room.parlor = 0
+                    AND hms_bed.international_reserved = 0
                     AND hms_floor.rlc_id IS NULL";
 
         $avail_rooms = PHPWS_DB::getOne($query);
@@ -607,6 +609,7 @@ class HMS_Residence_Hall extends HMS_Item
         return $avail_rooms;
     }
 
+/*
     public function count_lottery_used_rooms()
     {
         $now = mktime();
@@ -631,8 +634,9 @@ class HMS_Residence_Hall extends HMS_Item
         }
 
         return $used_rooms;
-    }
+    } */
 
+/*
     public function count_lottery_full_rooms()
     {
         $now = mktime();
@@ -657,7 +661,7 @@ class HMS_Residence_Hall extends HMS_Item
         }
 
         return $used_rooms;
-    }
+    }*/
 
     /**
      * Returns the pager tags for the db pager

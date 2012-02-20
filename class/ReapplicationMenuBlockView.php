@@ -35,7 +35,6 @@ class ReapplicationMenuBlockView extends View {
         }else if(!is_null($this->application) && $this->application->isWinner()){
             # Student has won, let them choose their room
             $tpl['ICON'] = FEATURE_OPEN_ICON;
-            $tpl['EXPIRE_DATE'] = HMS_Util::get_long_date_time($this->application->invite_expires_on);
             $chooseRoomCmd = CommandFactory::getCommand('LotteryShowChooseHall');
             $tpl['SELECT_LINK'] = $chooseRoomCmd->getLink('Click here to select your room');
         }else if(!is_null($this->application)){

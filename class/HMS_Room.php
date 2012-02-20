@@ -503,7 +503,9 @@ class HMS_Room extends HMS_Item
                     AND hms_room.offline = 0
                     AND hms_room.private = 0
                     AND hms_room.ra = 0
-                    AND hms_room.overflow = 0";
+                    AND hms_room.overflow = 0
+                    AND hms_room.parlor = 0
+                    AND hms_bed.international_reserved = 0";
 
         $avail_rooms = PHPWS_DB::getOne($query);
         if(PHPWS_Error::logIfError($avail_rooms)){

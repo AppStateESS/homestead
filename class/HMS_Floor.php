@@ -550,6 +550,8 @@ class HMS_Floor extends HMS_Item
                     AND hms_room.private = 0
                     AND hms_room.ra = 0
                     AND hms_room.overflow = 0
+                    AND hms_room.parlor = 0
+                    AND hms_bed.international_reserved = 0
                     AND hms_floor.rlc_id IS null";
 
         $avail_rooms = PHPWS_DB::getOne($query);
@@ -577,6 +579,8 @@ class HMS_Floor extends HMS_Item
                     AND hms_room.private = 0
                     AND hms_room.ra = 0
                     AND hms_room.overflow = 0
+                    AND hms_room.parlor = 0
+                    AND hms_bed.international_reserved = 0
                     AND hms_floor.rlc_id IS null";
 
         $avail_rooms = PHPWS_DB::getAll($query);
@@ -595,6 +599,7 @@ class HMS_Floor extends HMS_Item
         return $output_list;
     }
 
+/*
     public function count_lottery_used_rooms()
     {
         $now = mktime();
@@ -615,8 +620,9 @@ class HMS_Floor extends HMS_Item
         }
 
         return $used_rooms;
-    }
+    } */
 
+/*
     public function count_lottery_full_rooms()
     {
         $now = mktime();
@@ -639,7 +645,7 @@ class HMS_Floor extends HMS_Item
 
         return $usedRooms;
     }
-
+*/
     public function get_pager_by_hall_tags()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');

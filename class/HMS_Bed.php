@@ -453,6 +453,11 @@ class HMS_Bed extends HMS_Item {
         return $this->term;
     }
 
+    public function isInternationalReserved()
+    {
+        return $this->international_reserved;
+    }
+
 
     /******************
      * Static Methods *

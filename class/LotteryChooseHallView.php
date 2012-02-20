@@ -26,7 +26,7 @@ class LotteryChooseHallView extends View {
             $row['HALL_NAME']       = $hall->hall_name;
             $row['ROW_TEXT_COLOR']  = 'black';
 
-            $rooms_used = $hall->count_lottery_full_rooms();
+            //$rooms_used = $hall->count_lottery_full_rooms();
             
             # Make sure we have a room of the specified gender available in the hall (or a co-ed room)
             if($hall->count_avail_lottery_rooms($this->student->getGender()) <= 0 &&
@@ -42,7 +42,7 @@ class LotteryChooseHallView extends View {
             $tpl['hall_list'][] = $row;
         }
 
-        Layout::addPageTitle("Lottery Choose Hall");
+        Layout::addPageTitle("Choose Hall");
 
         return PHPWS_Template::process($tpl, 'hms', 'student/lottery_choose_hall.tpl');
     }

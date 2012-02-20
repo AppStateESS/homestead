@@ -20,7 +20,6 @@ class LotteryChooseFloorView extends View {
         PHPWS_Core::initModClass('filecabinet', 'Cabinet.php');
 
         $hall = new HMS_Residence_Hall($this->hallId);
-        $hall_rooms_used        = $hall->count_lottery_used_rooms();
 
         $tpl['HALL']            = $hall->hall_name;
         if(isset($hall->exterior_image_id)){
@@ -44,8 +43,8 @@ class LotteryChooseFloorView extends View {
         $floors = $hall->get_floors();
 
         foreach($floors as $floor){
-            $used_rooms = $floor->count_lottery_used_rooms();
-            $full_rooms = $floor->count_lottery_full_rooms();
+            //$used_rooms = $floor->count_lottery_used_rooms();
+            //$full_rooms = $floor->count_lottery_full_rooms();
 
             $row = array();
 
@@ -75,7 +74,7 @@ class LotteryChooseFloorView extends View {
             $tpl['floor_list'][]    = $row;
         }
 
-        Layout::addPageTitle("Lottery Choose Floor");
+        Layout::addPageTitle("Choose Floor");
         
         return PHPWS_Template::process($tpl, 'hms', 'student/lottery_choose_floor.tpl');
     }

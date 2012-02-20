@@ -20,8 +20,8 @@ class LotteryChooseRoomView extends View {
         $floor  = new HMS_Floor($this->floorId);
         $hall   = $floor->get_parent();
 
-        $full_rooms = $hall->count_lottery_full_rooms();
-        $used_rooms = $hall->count_lottery_used_rooms();
+        //$full_rooms = $hall->count_lottery_full_rooms();
+        //$used_rooms = $hall->count_lottery_used_rooms();
 
         $tpl['HALL_FLOOR'] = $floor->where_am_i();
 
@@ -51,7 +51,8 @@ class LotteryChooseRoomView extends View {
                 || $room->offline  == 1 
                 || $room->private  == 1 
                 || $room->ra       == 1 
-                || $room->overflow == 1){
+                || $room->overflow == 1
+                || $room->parlor   == 1){
         
                 // Show a grayed out row and no link
                 $row['ROOM_NUM']        = $room->room_number;

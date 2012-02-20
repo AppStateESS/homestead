@@ -14,6 +14,7 @@ define('INVITE_TTL_HRS', 48);
 class LotteryProcess {
 
     private $sendMagicWinners;
+    private $sendReminders;
     private $inviteCounts;
     
     private $applicationsRemaining;
@@ -31,7 +32,7 @@ class LotteryProcess {
     // Invites sent by the process so far this run, total and by class
     private $numInvitesSent;
 
-    public function __construct($sendMagicWinners, Array $inviteCounts){
+    public function __construct($sendMagicWinners, $sendReminders, Array $inviteCounts){
 
         //Gender and classes
         $this->genders = array(MALE, FEMALE);
@@ -39,6 +40,9 @@ class LotteryProcess {
         
         // Send magic winners?
         $this->sendMagicWinners = $sendMagicWinners;
+
+        // Send reminders?
+        $this->sendReminders = $sendReminders;
 
         // Invite counts to be sent
         $this->inviteCounts = $inviteCounts;
@@ -70,25 +74,26 @@ class LotteryProcess {
     public function sendInvites()
     {
         HMS_Activity_Log::log_activity('hms', ACTIVITY_LOTTERY_EXECUTED, 'hms');
+        $this->output[] = "Lottery system invoked on " . date("d M, Y @ g:i:s", $this->now) . " ($this->now)";
 
         /****
          * Check the hard cap. Don't do anything if it's been reached.
          */
-
         if(LotteryProcess::hardCapReached($this->term)){
             $this->output[] = 'Hard cap reached. Done!';
+            return;
         }
         
         /*******************
          * Reminder Emails *
          *******************/
-        $this->output[] = "Lottery system invoked on " . date("d M, Y @ g:i:s", $this->now) . " ($this->now)";
+        if($this->sendReminders){
+            $this->output[] = "Sending invite reminder emails...";
+            $this->sendWinningReminderEmails();
 
-        $this->output[] = "Sending invite reminder emails...";
-        $this->sendWinningReminderEmails();
-
-        $output[] = "Sending roommate invite reminder emails...";
-        $this->sendRoommateReminderEmails();
+            $output[] = "Sending roommate invite reminder emails...";
+            $this->sendRoommateReminderEmails();
+        }
         
         //TODO check the jr/sr soft caps
         
@@ -123,7 +128,6 @@ class LotteryProcess {
             while(($magicWinner = $this->getMagicWinner()) != null){
                 $student = StudentFactory::getStudentByBannerId($magicWinner['banner_id'], $this->term);
                 $this->sendInvite($student);
-                break;
             }
         }
         
@@ -194,8 +198,6 @@ class LotteryProcess {
         if(PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         }
-        
-        //$year = Term::toString($term) . ' - ' . Term::toString(Term::getNextTerm($term));
         
         foreach($result as $row) {
             $student = StudentFactory::getStudentByUsername($row['username'], $this->term);
@@ -346,7 +348,44 @@ class LotteryProcess {
 
     public static function countInvitesByClassGender($term, $class, $gender = null)
     {
-        //TODO
+        $now = mktime();
+        
+        $query = "SELECT count(*) FROM hms_new_application JOIN hms_lottery_application ON hms_new_application.id = hms_lottery_application.id
+                    WHERE hms_lottery_application.invited_on IS NOT NULL
+                    AND hms_new_application.term = $term ";
+        
+        if(isset($gender)){
+            $query .= "AND hms_new_application.gender = $gender ";
+        }
+        
+        $term_year = Term::getTermYear($term);
+        if($class == CLASS_SOPHOMORE) {
+            // Choose a rising sophmore (summer 1 thru fall of the previous year, plus spring of the same year)
+            $query .= 'AND (application_term = ' . ($term_year - 1) . '20 ';
+            $query .=   'OR application_term = ' . ($term_year - 1) . '30 ';
+            $query .=   'OR application_term = ' . ($term_year - 1) . '40 ';
+            $query .=   'OR application_term = ' . $term_year . '10';
+            $query .= ') ';
+        }else if($class == CLASS_JUNIOR) {
+            // Choose a rising jr
+            $query .= 'AND (application_term = ' . ($term_year - 2) . '20 ';
+            $query .=   'OR application_term = ' . ($term_year - 2) . '30 ';
+            $query .=   'OR application_term = ' . ($term_year - 2) . '40 ';
+            $query .=   'OR application_term = ' . ($term_year - 1) . '10';
+            $query .= ') ';
+        }else{
+            // Choose a rising senior or beyond
+            $query .= 'AND application_term <= ' . ($term_year - 2) . '10 ';
+        }
+        
+        $remainingApplications = PHPWS_DB::getOne($query);
+        
+        if(PHPWS_Error::logIfError($remainingApplications)) {
+            throw new DatabaseException($remainingApplications->toString());
+        }
+        
+        return $remainingApplications;
+
     }
     
     public static function countOutstandingRoommateInvites($term)

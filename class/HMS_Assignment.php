@@ -21,6 +21,9 @@ class HMS_Assignment extends HMS_Item
     public $letter_printed = 0;
     public $email_sent     = 0;
     public $reason		   = null;
+    public $application_term = null;
+    public $class          = null; 
+
     public $_gender        = 0;
     public $_bed           = null;
 
@@ -290,7 +293,7 @@ class HMS_Assignment extends HMS_Item
      * Does all the checks necessary to assign a student and makes the assignment
      * The $room_id and $bed_id fields are optional, but one or the other must be specificed
      */
-    public static function assignStudent(Student $student, $term, $room_id = NULL, $bed_id = NULL, $meal_plan, $notes="", $lottery = FALSE, $reason = NULL)
+    public static function assignStudent(Student $student, $term, $room_id = NULL, $bed_id = NULL, $meal_plan, $notes="", $lottery = FALSE, $reason)
     {
 
         /**
@@ -468,6 +471,8 @@ class HMS_Assignment extends HMS_Item
         $assignment->email_sent     = 0;
         $assignment->meal_option    = $meal_plan;
         $assignment->reason 		= $reason;
+        $assignment->application_term = $student->getApplicationTerm();
+        $assignment->class            = $student->getComputedClass($term);
 
         # If this was a lottery assignment, flag it as such
         if($lottery){
@@ -477,11 +482,6 @@ class HMS_Assignment extends HMS_Item
             	$assignment->reason = ASSIGN_LOTTERY;
         }else{
             $assignment->lottery = 0;
-        }
-        
-        # If reason is not set, set default
-        if ( !isset($reason) ) {
-        	$assignment->reason = ASSIGN_NOREASON;
         }
         
         $result = $assignment->save();
@@ -521,7 +521,7 @@ class HMS_Assignment extends HMS_Item
         return true;
     }
 
-    public static function unassignStudent(Student $student, $term, $notes="", $reason=UNASSIGN_NOREASON)
+    public static function unassignStudent(Student $student, $term, $notes="", $reason)
     {
         if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'assignment_maintenance')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');

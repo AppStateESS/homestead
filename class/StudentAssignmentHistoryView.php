@@ -31,10 +31,15 @@ class StudentAssignmentHistoryView extends View {
 
             if(defined($ah->assigned_reason)){
                 $assignedReason = constant($ah->assigned_reason); // for pretty text purposes
+            }else{
+                $assignedReason = $ah->assigned_reason;
             }
+
 
             if(defined($ah->removed_reason)){
                 $removedReason = constant($ah->removed_reason); // for pretty text purposes
+            }else{
+                $removedReason = $ah->removed_reason;
             }
 
             if(!is_null($ah->assigned_on)){
