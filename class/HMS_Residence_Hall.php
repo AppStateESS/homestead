@@ -59,11 +59,11 @@ class HMS_Residence_Hall extends HMS_Item
 
     /********************
      * Instance Methods *
-     *******************/
+    *******************/
 
     /*
      * Saves a new or updated residence hall object
-     */
+    */
     public function save()
     {
         $this->stamp();
@@ -78,13 +78,13 @@ class HMS_Residence_Hall extends HMS_Item
 
     /*
      * Copies this residence hall object to a new term, then calls copy
-     * on all 'this' room's floors.
-     *
-     * Setting $assignments to TRUE causes the copy public function to copy
-     * the current assignments as well as the hall structure.
-     *
-     * @return bool False if unsuccessful.
-     */
+    * on all 'this' room's floors.
+    *
+    * Setting $assignments to TRUE causes the copy public function to copy
+    * the current assignments as well as the hall structure.
+    *
+    * @return bool False if unsuccessful.
+    */
     public function copy($to_term, $assignments = FALSE, $roles = FALSE)
     {
         if(!$this->id) {
@@ -178,7 +178,7 @@ class HMS_Residence_Hall extends HMS_Item
 
     /*
      * Creates the floors, rooms, and beds for a new hall
-     */
+    */
     public function create_child_objects($num_floors, $rooms_per_floor, $beds_per_room)
     {
         if(!$this->id) {
@@ -203,41 +203,41 @@ class HMS_Residence_Hall extends HMS_Item
 
     /*
      * Returns TRUE or FALSE. The gender of a building can only be
-     * changed to the target gender if all floors can be changed
-     * to the target gender.
-     *
-     * This public function checks to make sure all floors can be changed,
-     * those floors in tern check all thier rooms, and so on.
-     */
+    * changed to the target gender if all floors can be changed
+    * to the target gender.
+    *
+    * This public function checks to make sure all floors can be changed,
+    * those floors in tern check all thier rooms, and so on.
+    */
     #TODO: rewrite this becase the behavior changed
     public function can_change_gender($target_gender)
     {
         # You can always change to a COED gender.
         if($target_gender == COED){
-            return true;
-
-        }
-
-        # We must be changing to either male or female if we make it here
-
-        # If there are any COED floors, then return false
-        if($this->check_for_floors_of_gender(COED)){
-            return false;
-        }
-
-        # Can only change gender if there are no floors of the opposite sex
-        if($target_gender == MALE){
-            $check_for_gender = FEMALE;
-        }else{
-            $check_for_gender = MALE;
-        }
-
-        # If a check for rooms of the opposite gender returns true, then return false
-        if($this->check_for_floors_of_gender($check_for_gender)){
-            return false;
-        }
-
         return true;
+
+    }
+
+    # We must be changing to either male or female if we make it here
+
+    # If there are any COED floors, then return false
+    if($this->check_for_floors_of_gender(COED)){
+        return false;
+    }
+
+    # Can only change gender if there are no floors of the opposite sex
+    if($target_gender == MALE){
+        $check_for_gender = FEMALE;
+    }else{
+        $check_for_gender = MALE;
+    }
+
+    # If a check for rooms of the opposite gender returns true, then return false
+    if($this->check_for_floors_of_gender($check_for_gender)){
+        return false;
+    }
+
+    return true;
     }
 
     public function check_for_floors_of_gender($gender_type)
@@ -277,7 +277,7 @@ class HMS_Residence_Hall extends HMS_Item
 
     /*
      * Returns the number of floors in the current hall
-     */
+    */
     public function get_number_of_floors()
     {
         $db = new PHPWS_DB('hms_floor');
@@ -295,7 +295,7 @@ class HMS_Residence_Hall extends HMS_Item
 
     /*
      * Returns the number of rooms in the current hall
-     */
+    */
     public function get_number_of_rooms()
     {
         $db = new PHPWS_DB('hms_room');
@@ -310,7 +310,7 @@ class HMS_Residence_Hall extends HMS_Item
         if($result == 0){
             return 0;
         }
-        
+
         if(!$result || PHPWS_Error::logIfError($result)){
             throw new DatabaseException($result->toString());
         }
@@ -321,7 +321,7 @@ class HMS_Residence_Hall extends HMS_Item
 
     /*
      * Returns the number of beds in the current hall
-     */
+    */
     public function get_number_of_beds()
     {
         $db = new PHPWS_DB('hms_bed');
@@ -337,7 +337,7 @@ class HMS_Residence_Hall extends HMS_Item
         if($result == 0){
             return 0;
         }
-        
+
         if(!$result || PHPWS_Error::logIfError($result)){
             throw new DatabaseException($result);
         }
@@ -363,7 +363,7 @@ class HMS_Residence_Hall extends HMS_Item
         if($result == 0){
             return 0;
         }
-        
+
         if(PHPWS_Error::logIfError($result)){
             throw new DatabaseException($result->toString());
         }
@@ -373,7 +373,7 @@ class HMS_Residence_Hall extends HMS_Item
 
     /*
      * Returns the number of students currently assigned to the current hall
-     */
+    */
     public function get_number_of_assignees()
     {
         $db = new PHPWS_DB('hms_assignment');
@@ -390,7 +390,7 @@ class HMS_Residence_Hall extends HMS_Item
         if($result == 0){
             return 0;
         }
-        
+
         if(PHPWS_Error::logIfError($result)){
             throw new DatabaseException($result->toString());
         }
@@ -404,7 +404,7 @@ class HMS_Residence_Hall extends HMS_Item
 
     /*
      * Returns an array of floor objects which are within the current hall.
-     */
+    */
     public function &get_floors()
     {
         if(!$this->loadFloors()) {
@@ -417,7 +417,7 @@ class HMS_Residence_Hall extends HMS_Item
 
     /*
      * Returns an array with the keys being floor ID's and the value being the floor number
-     */
+    */
     public function get_floors_array()
     {
         if(!$this->loadFloors()) {
@@ -435,7 +435,7 @@ class HMS_Residence_Hall extends HMS_Item
 
     /*
      * Returns an array of room objects which are in the current hall
-     */
+    */
     public function &get_rooms()
     {
         if(!$this->loadFloors()) {
@@ -453,7 +453,7 @@ class HMS_Residence_Hall extends HMS_Item
 
     /*
      * Returns an array of the bed objects which are in the current hall
-     */
+    */
     public function &get_beds()
     {
         if(!$this->loadFloors()) {
@@ -471,8 +471,8 @@ class HMS_Residence_Hall extends HMS_Item
 
     /*
      * Determines the number of beds per room in a hall.  Should the count vary
-     * it returns the count that applies to the majority of the rooms.
-     */
+    * it returns the count that applies to the majority of the rooms.
+    */
     public function count_beds_per_room()
     {
         $total = array(); //stores the number of rooms with that many beds
@@ -512,7 +512,8 @@ class HMS_Residence_Hall extends HMS_Item
 
         $top   = 0;
         foreach($total as $key => $value){
-            if(@$total[$key] > @$total[$top]){ // supress notices here, since usually there's an undefined index
+            if(@$total[$key] > @$total[$top]){
+                // supress notices here, since usually there's an undefined index
                 $top = $key;
             }
         }
@@ -522,7 +523,7 @@ class HMS_Residence_Hall extends HMS_Item
 
     /*
      * Returns an array of the student objects which are currently assigned to the current hall
-     */
+    */
     public function get_assignees()
     {
         if(!$this->loadFloors()) {
@@ -540,12 +541,12 @@ class HMS_Residence_Hall extends HMS_Item
 
     /*
      * Returns TRUE if the hall has vacant beds, false otherwise
-     */
+    */
     public function has_vacancy()
     {
         /*
-        if($this->get_number_of_assignees() < $this->get_number_of_beds()){
-            return TRUE;
+         if($this->get_number_of_assignees() < $this->get_number_of_beds()){
+        return TRUE;
         }
         */
 
@@ -651,7 +652,7 @@ class HMS_Residence_Hall extends HMS_Item
 
     /*********************
      * Getters & Setters *
-     */
+    */
     public function getBannerBuildingCode()
     {
         return $this->banner_building_code;
@@ -659,7 +660,7 @@ class HMS_Residence_Hall extends HMS_Item
 
     /******************
      * Static Methods *
-     *****************/
+    *****************/
 
     /**
      * Returns an array of hall objects for the given term. If no
