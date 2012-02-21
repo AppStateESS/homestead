@@ -592,7 +592,7 @@ class HMS_Residence_Hall extends HMS_Item
                     WHERE (hms_bed.id NOT IN (SELECT bed_id FROM hms_lottery_reservation WHERE term = {$this->term} AND expires_on > $now)
                     AND hms_bed.id NOT IN (SELECT bed_id FROM hms_assignment WHERE term = {$this->term}))
                     AND hms_residence_hall.id = {$this->id}
-        			AND hms_residence_hall.is_online = 1,
+        			AND hms_residence_hall.is_online = 1
         			AND hms_floor.is_online = 1
         			AND hms_floor.rlc_id IS NULL
                     AND hms_room.gender_type = $gender
