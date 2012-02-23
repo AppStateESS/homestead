@@ -49,6 +49,15 @@
   margin: 0 auto;
 }
 
+/* Indenting */
+.left-indent-15 {
+    padding-left: 15px;
+}
+
+.right-indent-15 {
+    padding-right: 15px;
+}
+
 /* Row Highlighting */
 .row-bg-1 {
   background: #FFF;

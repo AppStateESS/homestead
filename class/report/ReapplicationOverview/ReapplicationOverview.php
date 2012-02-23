@@ -30,21 +30,65 @@ class ReapplicationOverview extends Report implements iCsvReport {
         
         $lotteryTerm = PHPWS_Settings::get('hms', 'lottery_term');
         
-        // Number of entries total
-        $this->data['LOTTERY_APPLICATIONS']    = PHPWS_DB::getOne("SELECT count(*) FROM hms_new_application JOIN hms_lottery_application ON hms_new_application.id = hms_lottery_application.id WHERE (hms_new_application.term = $lotteryTerm)");
-       
-        // Number of entries by class/gender
-        $this->data['SR_MALE_APPS'] = LotteryProcess::
+        /*******************************
+         * Gross number of application *
+         *******************************/
+        $this->data['LOTTERY_APPS'] = LotteryProcess::countGrossApplicationsByClassGender($lotteryTerm);
+        
+        $this->data['SOPH_APPS']    = LotteryProcess::countGrossApplicationsByClassGender($lotteryTerm, CLASS_SOPHOMORE);
+        $this->data['SOPH_M_APPS']  = LotteryProcess::countGrossApplicationsByClassGender($lotteryTerm, CLASS_SOPHOMORE, MALE);
+        $this->data['SOPH_F_APPS']  = LotteryProcess::countGrossApplicationsByClassGender($lotteryTerm, CLASS_SOPHOMORE, FEMALE);
 
-        // Number of entries by gender
-        $this->data['LOTTERY_FEMALE_APPLICATIONS'] = PHPWS_DB::getOne("SELECT count(*) FROM hms_new_application JOIN hms_lottery_application ON hms_new_application.id = hms_lottery_application.id WHERE hms_new_application.term = $lotteryTerm AND gender = 1");
-        $this->data['LOTTERY_MALE_APPLICATIONS'] = PHPWS_DB::getOne("SELECT count(*) FROM hms_new_application JOIN hms_lottery_application ON hms_new_application.id = hms_lottery_application.id WHERE hms_new_application.term = $lotteryTerm AND gender = 0");
-        
-        // Number of entires by class
-        $this->data['SOPH_APPLICATIONS']       = HMS_Lottery::count_applications_by_class($lotteryTerm, CLASS_SOPHOMORE);
-        $this->data['JR_APPLICATIONS']         = HMS_Lottery::count_applications_by_class($lotteryTerm, CLASS_JUNIOR);
-        $this->data['SR_APPLICATIONS']         = HMS_Lottery::count_applications_by_class($lotteryTerm, CLASS_SENIOR);
-        
+        $this->data['JR_APPS']      = LotteryProcess::countGrossApplicationsByClassGender($lotteryTerm, CLASS_JUNIOR);
+        $this->data['JR_M_APPS']    = LotteryProcess::countGrossApplicationsByClassGender($lotteryTerm, CLASS_JUNIOR, MALE);
+        $this->data['JR_F_APPS']    = LotteryProcess::countGrossApplicationsByClassGender($lotteryTerm, CLASS_JUNIOR, FEMALE);
+
+        $this->data['SR_APPS']      = LotteryProcess::countGrossApplicationsByClassGender($lotteryTerm, CLASS_SENIOR);
+        $this->data['SR_M_APPS']    = LotteryProcess::countGrossApplicationsByClassGender($lotteryTerm, CLASS_SENIOR, MALE);
+        $this->data['SR_F_APPS']    = LotteryProcess::countGrossApplicationsByClassGender($lotteryTerm, CLASS_SENIOR, FEMALE);
+
+        $this->data['M_APPS']       = LotteryProcess::countGrossApplicationsByClassGender($lotteryTerm, null, MALE);
+        $this->data['F_APPS']       = LotteryProcess::countGrossApplicationsByClassGender($lotteryTerm, null, FEMALE);
+       
+        /********************
+         * Net Applications *
+         ********************/
+
+        $this->data['NET_APPS'] = LotteryProcess::countNetAppsByClassGender($lotteryTerm, null, null);
+
+        $this->data['NET_SO_APPS']   = LotteryProcess::countNetAppsByClassGender($lotteryTerm, CLASS_SOPHOMORE);
+        $this->data['NET_SO_M_APPS'] = LotteryProcess::countNetAppsByClassGender($lotteryTerm, CLASS_SOPHOMORE, MALE);
+        $this->data['NET_SO_F_APPS'] = LotteryProcess::countNetAppsByClassGender($lotteryTerm, CLASS_SOPHOMORE, FEMALE); 
+
+        $this->data['NET_JR_APPS']   =  LotteryProcess::countNetAppsByClassGender($lotteryTerm, CLASS_JUNIOR);
+        $this->data['NET_JR_M_APPS'] = LotteryProcess::countNetAppsByClassGender($lotteryTerm, CLASS_JUNIOR, MALE);
+        $this->data['NET_JR_F_APPS'] = LotteryProcess::countNetAppsByClassGender($lotteryTerm, CLASS_JUNIOR, FEMALE);
+
+        $this->data['NET_SR_APPS']   = LotteryProcess::countNetAppsByClassGender($lotteryTerm, CLASS_SENIOR);
+        $this->data['NET_SR_M_APPS'] = LotteryProcess::countNetAppsByClassGender($lotteryTerm, CLASS_SENIOR, MALE);
+        $this->data['NET_SR_F_APPS'] = LotteryProcess::countNetAppsByClassGender($lotteryTerm, CLASS_SENIOR, FEMALE);
+
+        $this->data['NET_M_APPS'] = LotteryProcess::countNetAppsByClassGender($lotteryTerm, null, MALE);
+        $this->data['NET_F_APPS'] = LotteryProcess::countNetAppsByClassGender($lotteryTerm, null, FEMALE);
+
+        /****************
+         * Invites Sent *
+         ****************/
+        $this->data['SO_INVITES']    = LotteryProcess::countInvitesByClassGender($lotteryTerm, CLASS_SOPHOMORE);
+        $this->data['SO_M_INVITES']  = LotteryProcess::countInvitesByClassGender($lotteryTerm, CLASS_SOPHOMORE, MALE);
+        $this->data['SO_F_INVITES']  = LotteryProcess::countInvitesByClassGender($lotteryTerm, CLASS_SOPHOMORE, FEMALE);
+
+
+        $this->data['JR_INVITES']    = LotteryProcess::countInvitesByClassGender($lotteryTerm, CLASS_JUNIOR);
+        $this->data['JR_M_INVITES']  = LotteryProcess::countInvitesByClassGender($lotteryTerm, CLASS_JUNIOR, MALE);
+        $this->data['JR_F_INVITES']  = LotteryProcess::countInvitesByClassGender($lotteryTerm, CLASS_JUNIOR, FEMALE);
+
+
+        $this->data['SR_INVITES']    = LotteryProcess::countInvitesByClassGender($lotteryTerm, CLASS_SENIOR);
+        $this->data['SR_M_INVITES']  = LotteryProcess::countInvitesByClassGender($lotteryTerm, CLASS_SENIOR, MALE);
+        $this->data['SR_F_INVITES']  = LotteryProcess::countInvitesByClassGender($lotteryTerm, CLASS_SENIOR, FEMALE);
+
+
         //TODO make this based on lottery assignment reason
         $db = new PHPWS_DB('hms_assignment');
         $db->addWhere('term', $lotteryTerm);
@@ -56,27 +100,37 @@ class ReapplicationOverview extends Report implements iCsvReport {
         
         // Assignments by class
         $this->data['SOPH_ASSIGNED']           = LotteryProcess::countLotteryAssignedByClassGender($lotteryTerm, CLASS_SOPHOMORE);
-        $this->data['JR_ASSIGNED']             = LotteryProcess::countLotteryAssignedByClassGender($lotteryTerm, CLASS_JUNIOR);
-        $this->data['SR_ASSIGNED']             = LotteryProcess::countLotteryAssignedByClassGender($lotteryTerm, CLASS_SENIOR);
+        $this->data['SOPH_MALE_ASSIGNED']      = LotteryProcess::countLotteryAssignedByClassGender($lotteryTerm, CLASS_SOPHOMORE, MALE);
+        $this->data['SOPH_FEMALE_ASSIGNED']    = LotteryProcess::countLotteryAssignedByClassGender($lotteryTerm, CLASS_SOPHOMORE, FEMALE);
 
-        // Invites sent
-        $this->data['SOPH_INVITES']            = LotteryProcess::countInvitesByClassGender($lotteryTerm, CLASS_SOPHOMORE);
-        $this->data['JR_INVITES']              = LotteryProcess::countInvitesByClassGender($lotteryTerm, CLASS_JUNIOR);
-        $this->data['SR_INVITES']              = LotteryProcess::countInvitesByClassGender($lotteryTerm, CLASS_SENIOR);
+        $this->data['JR_ASSIGNED']             = LotteryProcess::countLotteryAssignedByClassGender($lotteryTerm, CLASS_JUNIOR);
+        $this->data['JR_MALE_ASSIGNED']        = LotteryProcess::countLotteryAssignedByClassGender($lotteryTerm, CLASS_JUNIOR, MALE);
+        $this->data['JR_FEMALE_ASSIGNED']      = LotteryProcess::countLotteryAssignedByClassGender($lotteryTerm, CLASS_JUNIOR, FEMALE);
+
+        $this->data['SR_ASSIGNED']             = LotteryProcess::countLotteryAssignedByClassGender($lotteryTerm, CLASS_SENIOR);
+        $this->data['SR_MALE_ASSIGNED']        = LotteryProcess::countLotteryAssignedByClassGender($lotteryTerm, CLASS_SENIOR, MALE);
+        $this->data['SR_FEMALE_ASSIGNED']      = LotteryProcess::countLotteryAssignedByClassGender($lotteryTerm, CLASS_SENIOR, FEMALE);
+
+        
 
         $this->data['ROOMMATE_INVITES']        = LotteryProcess::countOutstandingRoommateInvites($lotteryTerm);
         
-        // Remaining applications
-        $this->data['SOPH_MALE_ENTRIES_REMAIN']   = LotteryProcess::countRemainingApplicationsByClassGender($lotteryTerm, CLASS_SOPHOMORE, FEMALE);
-        $this->data['SOPH_FEMALE_ENTRIES_REMAIN'] = LotteryProcess::countRemainingApplicationsByClassGender($lotteryTerm, CLASS_SOPHOMORE, MALE);
+        /***************************************
+         * Remaining unaffiliated applications *
+         ***************************************/
+        $this->data['SO_M_ENTRIES_REMAIN']   = LotteryProcess::countRemainingApplicationsByClassGender($lotteryTerm, CLASS_SOPHOMORE, MALE);
+        $this->data['SO_F_ENTRIES_REMAIN'] = LotteryProcess::countRemainingApplicationsByClassGender($lotteryTerm, CLASS_SOPHOMORE, FEMALE);
+        $this->data['SO_ENTRIES_REMAIN']        = $this->data['SO_M_ENTRIES_REMAIN'] + $this->data['SO_F_ENTRIES_REMAIN'];
 
-        $this->data['JR_MALE_ENTRIES_REMAIN']   = LotteryProcess::countRemainingApplicationsByClassGender($lotteryTerm, CLASS_JUNIOR, FEMALE);
-        $this->data['JR_FEMALE_ENTRIES_REMAIN'] = LotteryProcess::countRemainingApplicationsByClassGender($lotteryTerm, CLASS_JUNIOR, MALE);
+        $this->data['JR_M_ENTRIES_REMAIN']     = LotteryProcess::countRemainingApplicationsByClassGender($lotteryTerm, CLASS_JUNIOR, MALE);
+        $this->data['JR_F_ENTRIES_REMAIN']   = LotteryProcess::countRemainingApplicationsByClassGender($lotteryTerm, CLASS_JUNIOR, FEMALE);
+        $this->data['JR_ENTRIES_REMAIN']          = $this->data['JR_M_ENTRIES_REMAIN'] + $this->data['JR_F_ENTRIES_REMAIN'];
 
-        $this->data['SR_MALE_ENTRIES_REMAIN']   = LotteryProcess::countRemainingApplicationsByClassGender($lotteryTerm, CLASS_SENIOR, FEMALE);
-        $this->data['SR_FEMALE_ENTRIES_REMAIN'] = LotteryProcess::countRemainingApplicationsByClassGender($lotteryTerm, CLASS_SENIOR, MALE);
+        $this->data['SR_M_ENTRIES_REMAIN']     = LotteryProcess::countRemainingApplicationsByClassGender($lotteryTerm, CLASS_SENIOR, MALE);
+        $this->data['SR_F_ENTRIES_REMAIN']   = LotteryProcess::countRemainingApplicationsByClassGender($lotteryTerm, CLASS_SENIOR, FEMALE);
+        $this->data['SR_ENTRIES_REMAIN']          = $this->data['SR_M_ENTRIES_REMAIN'] + $this->data['SR_F_ENTRIES_REMAIN'];
         
-        $this->data['REMAINING_ENTRIES']       = LotteryProcess::countRemainingApplications($lotteryTerm);
+        $this->data['REMAINING_ENTRIES']          = LotteryProcess::countRemainingApplications($lotteryTerm);
     }
 
     public function getCsvColumnsArray()

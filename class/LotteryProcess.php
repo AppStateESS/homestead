@@ -347,7 +347,7 @@ class LotteryProcess {
     
     public static function countLotteryAssignedByClassGender($term, $class, $gender = null)
     {
-        $query = "SELECT count(*) FROM hms_assignment WHERE term = $term and reason = 'lottery' ";
+        $query = "SELECT count(*) FROM hms_assignment LEFT OUTER JOIN hms_new_application ON hms_assignment.banner_id = hms_new_application.banner_id WHERE hms_assignment.term = $term and reason = 'lottery' ";
        
         if(isset($gender)){
             $query .= "AND hms_new_application.gender = $gender ";
@@ -356,21 +356,21 @@ class LotteryProcess {
         $term_year = Term::getTermYear($term);
         if($class == CLASS_SOPHOMORE) {
             // Choose a rising sophmore (summer 1 thru fall of the previous year, plus spring of the same year)
-            $query .= 'AND (application_term = ' . ($term_year - 1) . '20 ';
-            $query .=   'OR application_term = ' . ($term_year - 1) . '30 ';
-            $query .=   'OR application_term = ' . ($term_year - 1) . '40 ';
-            $query .=   'OR application_term = ' . $term_year . '10';
+            $query .= 'AND (hms_assignment.application_term = ' . ($term_year - 1) . '20 ';
+            $query .=   'OR hms_assignment.application_term = ' . ($term_year - 1) . '30 ';
+            $query .=   'OR hms_assignment.application_term = ' . ($term_year - 1) . '40 ';
+            $query .=   'OR hms_assignment.application_term = ' . $term_year . '10';
             $query .= ') ';
         }else if($class == CLASS_JUNIOR) {
             // Choose a rising jr
-            $query .= 'AND (application_term = ' . ($term_year - 2) . '20 ';
-            $query .=   'OR application_term = ' . ($term_year - 2) . '30 ';
-            $query .=   'OR application_term = ' . ($term_year - 2) . '40 ';
-            $query .=   'OR application_term = ' . ($term_year - 1) . '10';
+            $query .= 'AND (hms_assignment.application_term = ' . ($term_year - 2) . '20 ';
+            $query .=   'OR hms_assignment.application_term = ' . ($term_year - 2) . '30 ';
+            $query .=   'OR hms_assignment.application_term = ' . ($term_year - 2) . '40 ';
+            $query .=   'OR hms_assignment.application_term = ' . ($term_year - 1) . '10';
             $query .= ') ';
         }else{
             // Choose a rising senior or beyond
-            $query .= 'AND application_term <= ' . ($term_year - 2) . '10 ';
+            $query .= 'AND hms_assignment.application_term <= ' . ($term_year - 2) . '10 ';
         }
 
         $assignments = PHPWS_DB::getOne($query);
@@ -515,7 +515,84 @@ class LotteryProcess {
         
         return $remainingApplications;
     }
-    
+   
+    /**********************
+     * Application Counts *
+     **********************/
+    public function countGrossApplicationsByClassGender($term, $class = null, $gender = null)
+    {
+
+        $term_year = Term::getTermYear($term);
+
+        $query = "SELECT count(*) from hms_new_application JOIN hms_lottery_application ON hms_new_application.id = hms_lottery_application.id
+                    WHERE term = $term ";
+
+        if(isset($gender)){
+            $query .= "AND hms_new_application.gender = $gender ";
+        }
+
+        if(isset($class) && $class == CLASS_SOPHOMORE) {
+            $query .= 'AND (application_term = ' . ($term_year - 1) . '20';
+            $query .= ' OR application_term = ' . ($term_year - 1) . '30';
+            $query .= ' OR application_term = ' . ($term_year - 1) . '40';
+            $query .= ' OR application_term = ' . ($term_year) . '10';
+            $query .= ')';
+        }else if(isset($class) && $class == CLASS_JUNIOR) {
+            $query .= 'AND (application_term = ' . ($term_year - 2) . '20';
+            $query .= ' OR application_term = ' . ($term_year - 2) . '30';
+            $query .= ' OR application_term = ' . ($term_year - 2) . '40';
+            $query .= ' OR application_term = ' . ($term_year - 1) . '10';
+            $query .= ')';
+        }else if (isset($class)){
+            $query .= 'AND application_term <= ' . ($term_year - 2) . '10';
+        }
+
+        $result = PHPWS_DB::getOne($query);
+
+        if(PHPWS_Error::logIfError($result)) {
+            throw new DatabaseException($result->toString());
+        }
+
+        return $result;
+    }
+
+    public function countNetAppsByClassGender($term, $class = null, $gender = null)
+    {
+
+        $term_year = Term::getTermYear($term);
+
+        $query = "SELECT count(*) from hms_new_application JOIN hms_lottery_application ON hms_new_application.id = hms_lottery_application.id
+                    WHERE term = $term AND special_interest IS NULL ";
+
+        if(isset($gender)){
+            $query .= "AND hms_new_application.gender = $gender ";
+        }
+
+        if(isset($class) && $class == CLASS_SOPHOMORE) {
+            $query .= 'AND (application_term = ' . ($term_year - 1) . '20';
+            $query .= ' OR application_term = ' . ($term_year - 1) . '30';
+            $query .= ' OR application_term = ' . ($term_year - 1) . '40';
+            $query .= ' OR application_term = ' . ($term_year) . '10';
+            $query .= ')';
+        }else if(isset($class) && $class == CLASS_JUNIOR) {
+            $query .= 'AND (application_term = ' . ($term_year - 2) . '20';
+            $query .= ' OR application_term = ' . ($term_year - 2) . '30';
+            $query .= ' OR application_term = ' . ($term_year - 2) . '40';
+            $query .= ' OR application_term = ' . ($term_year - 1) . '10';
+            $query .= ')';
+        }else if (isset($class)){
+            $query .= 'AND application_term <= ' . ($term_year - 2) . '10';
+        }
+
+        $result = PHPWS_DB::getOne($query);
+
+        if(PHPWS_Error::logIfError($result)) {
+            throw new DatabaseException($result->toString());
+        }
+
+        return $result;
+    }
+
     public static function countRemainingApplicationsByClassGender($term, $class, $gender = null)
     {
         $now = mktime();
