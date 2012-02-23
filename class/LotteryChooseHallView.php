@@ -29,8 +29,7 @@ class LotteryChooseHallView extends View {
             //$rooms_used = $hall->count_lottery_full_rooms();
             
             # Make sure we have a room of the specified gender available in the hall (or a co-ed room)
-            if($hall->count_avail_lottery_rooms($this->student->getGender()) <= 0 &&
-               $hall->count_avail_lottery_rooms(COED) <= 0){
+            if($hall->count_avail_lottery_rooms($this->student->getGender()) <= 0){
                 $row['ROW_TEXT_COLOR'] = 'grey';
                 $tpl['hall_list'][] = $row;
                 continue;

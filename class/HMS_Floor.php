@@ -546,7 +546,7 @@ class HMS_Floor extends HMS_Item
                     AND hms_floor.id = {$this->id}
         			AND hms_floor.rlc_id IS null
         			AND hms_floor.is_online = 1
-                    AND hms_room.gender_type = $gender
+                    AND hms_room.gender_type IN ($gender, 2)
                     AND hms_room.reserved = 0
                     AND hms_room.offline = 0
                     AND hms_room.private = 0
@@ -561,44 +561,6 @@ class HMS_Floor extends HMS_Item
         }
 
         return $avail_rooms;
-    }
-
-    public function get_avail_lottery_rooms()
-    {
-        PHPWS_Core::initModClass('hms', 'HMS_Room.php');
-
-        $now = mktime();
-
-        $query =   "SELECT DISTINCT hms_room.* FROM hms_room
-                    JOIN hms_bed ON hms_bed.room_id = hms_room.id
-                    JOIN hms_floor ON hms_room.floor_id = hms_floor.id
-                    WHERE (hms_bed.id NOT IN (SELECT bed_id FROM hms_lottery_reservation WHERE term = {$this->term} AND expires_on > $now)
-                    AND hms_bed.id NOT IN (SELECT bed_id FROM hms_assignment WHERE term = {$this->term}))
-                    AND hms_floor.id = {$this->id}
-        			AND hms_floor.is_online = 1
-        			AND hms_floor.rlc_id IS null
-                    AND hms_room.reserved = 0
-                    AND hms_room.offline = 0
-                    AND hms_room.private = 0
-                    AND hms_room.ra = 0
-                    AND hms_room.overflow = 0
-                    AND hms_room.parlor = 0
-                    AND hms_bed.international_reserved = 0";
-
-        $avail_rooms = PHPWS_DB::getAll($query);
-        if(PHPWS_Error::logIfError($avail_rooms)) {
-            throw new DatabaseException($result->toString());
-        }
-
-        $output_list = array();
-
-        foreach($avail_rooms as $room) {
-            $obj = new HMS_Room();
-            PHPWS_Core::plugObject($obj, $room);
-            $output_list[] = $obj;
-        }
-
-        return $output_list;
     }
 
     public function get_pager_by_hall_tags()
