@@ -582,6 +582,16 @@ CREATE TABLE hms_report_param (
     PRIMARY KEY (id)
 );
 
+CREATE INDEX hms_floor_residence_hall_id_idx ON hms_floor (residence_hall_id);
+
+CREATE INDEX hms_lottery_reservation_expiration_idx ON hms_lottery_reservation (expires_on);
+
+CREATE INDEX hms_assignment_term_idx ON hms_assignment (term);
+
+CREATE INDEX hms_room_crazy_idx ON hms_room (gender_type, reserved, offline, private, ra, overflow, parlor);
+
+CREATE INDEX hms_room_floor_id_idx ON hms_room (floor_id); 
+
 INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info, members_reapply) VALUES (3, 'Language & Culture Community', 'LCC', 50, 0, 'F', '', 0);
 INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info, members_reapply) VALUES (20, 'Watauga Global Community', 'WG', 50, 0, 'F', '<p>Watauga Global Community is where classes meet general education requirements in interdisciplinary team-taught (multiple professor) core classes that blend fact, fiction, culture, philosophy, motion, art, music, myth, and religion.</p><p><strong>This community requires a separate application in addition to marking it as a housing preference.  For more information, go to the <a href="http://wataugaglobal.appstate.edu/pagesmith/4" target="_blank" style="color: blue;">Watauga Global Community Website</a>.</strong></p>', 0);
 INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info, members_reapply) VALUES (21, 'The Honors College', 'HN', 50, 0, 'F', '<p><strong>This community requires a separate application in addition to marking it as a housing preference.</strong></p><p>To apply for The Honors College, log into <a href="https://firstconnections.appstate.edu/ugaweb/" target="_blank" style="color: blue;">First Connections</a> and complete the on-line application accordingly.</p><p>For more information, go to <a href="http://www.honors.appstate.edu/" target="_blank" style="color: blue;">The Honors College website</a>.</p>', 0);
