@@ -609,7 +609,7 @@ class HMS_Roommate
         }
 
         // Transfer students can only request other transfers - Prevents freshmen from requesting transfers and vice versa
-        if(($requestor_info->getType() == TYPE_TRANSFER && $requestee_info->getType != TYPE_TRANSFER) || ($requestee_info->getType() == TYPE_TRANSFER && $requestor_info->getType != TYPE_TRANSFER)){
+        if(($requestor_info->getType() == TYPE_TRANSFER && $requestee_info->getType() != TYPE_TRANSFER) || ($requestee_info->getType() == TYPE_TRANSFER && $requestor_info->getType() != TYPE_TRANSFER)){
             return E_ROOMMATE_TYPE_MISMATCH;
         }
 
