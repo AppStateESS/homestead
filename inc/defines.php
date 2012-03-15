@@ -138,12 +138,10 @@ define('ASSIGN_COPY',		'acopy'); // For copying from previous term
 /**
  * Unassignment Types
  */
-define('UNASSIGN_ADMIN',	'uadmin'); // General administrative
-define('UNASSIGN_CHANGE',	'uchange'); // For room change requests
-define('UNASSIGN_WITHDRAWN','uwithdrawn'); // Withdrawn
-define('UNASSIGN_INTENTNORETURN','uintentnoreturn'); // Intent not to return
-define('UNASSIGN_REASSIGN', 'ureassign'); // implicit removal for re-assign command
-define('UNASSIGN_NOREASON',	'unone');
+define('UNASSIGN_ADMIN',	'admin'); // General administrative
+define('UNASSIGN_CHANGE',	'change'); // For room change process - cannot be used manually
+define('UNASSIGN_REASSIGN', 'reassign'); // implicit removal for re-assign command
+define('UNASSIGN_CANCEL',   'cancel'); // Contract cancellation 
 
 
 
