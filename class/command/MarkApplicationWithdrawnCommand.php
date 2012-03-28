@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * MarkApplicationWithdrawnCommand -- Marks a housing application as withdrawn. Depricated. Use 'CancelHousingAppCommand' instead.
+ * 
+ * @deprecated
+ * @author jbooker
+ */
+
 class MarkApplicationWithdrawnCommand extends Command {
     
     private $appId;

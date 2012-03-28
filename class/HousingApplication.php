@@ -35,8 +35,15 @@ class HousingApplication {
 
     /**
      * Set to 'true' by the withdrawn search process. Should always be false by default.
+     * @deprecated Use 'cancel' member variable instead.
      */
     public $withdrawn;
+    
+    /* Contract Cancellation */
+    public $cancelled;
+    public $cancelled_reason;
+    public $cancelled_by;
+    public $cancelled_on;
 
     /**
      * Constructor for the abstract HousingApplication class. It can never be called directly. Instead,
@@ -68,7 +75,10 @@ class HousingApplication {
 
         $this->setInternational($international);
 
-        $this->setWithdrawn(false);
+        $this->setCancelled(false);
+        $this->setCancelledReason(null);
+        $this->setCancelledBy(null);
+        $this->setCancelledOn(null);
     }
 
     /**
@@ -208,6 +218,13 @@ class HousingApplication {
         HMS_Activity_Log::log_activity($this->getUsername(), ACTIVITY_APPLICATION_REPORTED, UserStatus::getUsername());
     }
 
+    public function getStudent()
+    {
+        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
+        
+        return StudentFactory::getStudentByBannerId($this->getBannerId(), $this->getTerm());
+    }
+    
     /**
      * Returns a nicely formatted string with the "type" of this application
      * @return String
@@ -304,6 +321,30 @@ class HousingApplication {
 
         return $tpl;
     }
+    
+    /**
+     * Marks an application as cancelled.
+     * 
+     * @param integer $reasonId
+     */
+    public function cancel($reasonKey)
+    {
+        $this->cancelled = 1;
+        $this->cancelled_by = Current_User::getUsername();
+        $this->cancelled_on = time();
+        
+        $reasons = self::getCancellationReasons();
+
+        if($reasonKey == "0" || !array_key_exists($reasonKey, $reasons)){
+            throw new InvalidArgumentException('Invalid cancellation reason key.');
+        }
+        
+        $this->cancelled_reason = $reasonKey;
+        
+        // Log that this happened
+        PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
+        HMS_Activity_Log::log_activity($this->getUsername(), ACTIVITY_CANCEL_HOUSING_APPLICATION, Current_User::getUsername(), Term::toString($this->getTerm()) . ': ' . $reasons[$reasonKey]);
+    }
 
 
     /******************
@@ -318,6 +359,8 @@ class HousingApplication {
      * The 'withdrawn' parameter is optional. If set to true, then this method will
      * return true for withdrawn applications. If false (default), then this method will
      * ignore withdrawn applications.
+     * 
+     * TODO: Respect the 'cancelled' flag instead of 'withdrawn'
      */
     public static function checkForApplication($username, $term, $withdrawn = FALSE)
     {
@@ -346,7 +389,8 @@ class HousingApplication {
     /**
      *
      */
-    //TODO move this to the HousingApplicationFactory class, perhaps?
+    // TODO move this to the HousingApplicationFactory class, perhaps?
+    // TODO make this static too
     function getApplicationByUser($username, $term, $applicationType = NULL)
     {
         PHPWS_Core::initModClass('hms', 'HousingApplication.php');
@@ -518,6 +562,7 @@ class HousingApplication {
         $db->addWhere('student_type', 'F');
         $db->addWhere('term', $term);
         $db->addWhere('withdrawn', 0);
+        $db->addWhere('cancelled', 0);
         //        $db->addWhere('gender', $gender);
 
         // Add join for extra application fields (sub-class fields)
@@ -802,21 +847,46 @@ class HousingApplication {
     public function setModifiedOn($timestamp){
         $this->modified_on = $timestamp;
     }
-
-    public function getWithdrawn(){
-        return $this->withdrawn;
+    
+    public function getCancelled()
+    {
+        return $this->cancelled;
     }
-
-    public function isWithdrawn(){
-        if($this->withdrawn == 1){
+    
+    public function setCancelled($status){
+        $this->cancelled = $status;
+    }
+    
+    public function isCancelled(){
+        if($this->getCancelled() == 1){
             return true;
         }else{
             return false;
         }
     }
-
-    public function setWithdrawn($status){
-        $this->withdrawn = $status;
+    
+    public function getCancelledReason(){
+        return $this->cancelled_reason;
+    }
+    
+    public function setCancelledReason($reason){
+        $this->cancelled_reason = $reason;
+    }
+    
+    public function getCancelledBy(){
+        return $this->cancelled_by;
+    }
+    
+    public function setCancelledBy($user){
+        $this->cancelled_by = $user;
+    }
+    
+    public function getCancelledOn(){
+        return $this->cancelled_on;
+    }
+    
+    public function setCancelledOn($time){
+        $this->cancelled_on = $time;
     }
 
     public function getApplicationType(){
@@ -825,6 +895,43 @@ class HousingApplication {
 
     public function setApplicationType($type){
         $this->application_type = $type;
+    }
+    
+    /**
+     * @deprecated
+     */
+    public function getWithdrawn(){
+        return $this->withdrawn;
+    }
+    
+    /**
+     * @deprecated
+     */
+    public function isWithdrawn(){
+        if($this->withdrawn == 1){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    
+    /**
+     * @deprecated
+     */
+    public function setWithdrawn($status){
+        $this->withdrawn = $status;
+    }
+    
+    // Cancellation reasons
+    public static function getCancellationReasons()
+    {
+        return array(
+                    CANCEL_BEFORE_JULY   => 'Cancel Before July',
+                    CANCEL_AFTER_JULY    => 'Cancel After July',
+                    CANCEL_WITHDRAWN     => 'Withdrawn',
+                    CANCEL_INTENT        => 'Intent Not to Return',
+                    CANCEL_BEFORE_ASSIGN => 'Cancel Before Assignment'
+                );
     }
 }
 ?>

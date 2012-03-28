@@ -232,48 +232,9 @@ class StudentProfileView extends View {
         /****************
          * Applications *
          *************/
-        # Show a row for each application
-        if(isset($this->applications)){
-            $app_rows = "";
-            foreach($this->applications as $app){
-                $term = Term::toString($app->getTerm());
-                $meal_plan = HMS_Util::formatMealOption($app->getMealPlan());
-                $phone = HMS_Util::formatCellPhone($app->getCellPhone());
-
-                $type = $app->getPrintableAppType();
-
-                if(isset($app->room_condition)){
-                    $clean = $app->room_condition == 1 ? 'Neat' : 'Cluttered';
-                }else{
-                    $clean = '';
-                }
-
-                if(isset($app->preferred_bedtime)){
-                    $bedtime = $app->preferred_bedtime == 1 ? 'Early' : 'Late';
-                }else{
-                    $bedtime = '';
-                }
-
-                $viewCmd = CommandFactory::getCommand('ShowApplicationView');
-                $viewCmd->setAppId($app->getId());
-
-                if($app->getWithdrawn() == 0){
-                    $withdrawCmd = CommandFactory::getCommand('MarkApplicationWithdrawn');
-                    $withdrawCmd->setAppId($app->getId());
-                    $withdrawn = '[' . $withdrawCmd->getLink('Withdraw') . ']';
-                }else{
-                    $withdrawn = '(widthdrawn)';
-                }
-
-                $actions = '[' . $viewCmd->getLink('View') . '] ' . $withdrawn;
-
-                $app_rows[] = array('term'=>$term, 'type'=>$type, 'meal_plan'=>$meal_plan, 'cell_phone'=>$phone, 'clean'=>$clean, 'bedtime'=>$bedtime, 'actions'=>$actions);
-            }
-
-            $tpl['APPLICATIONS'] = $app_rows;
-        }else{
-            $tpl['APPLICATIONS_EMPTY'] = 'No applications found.';
-        }
+        PHPWS_Core::initModClass('hms', 'ProfileHousingAppList.php');
+        $appList = new ProfileHousingAppList($this->applications);
+        $tpl['APPLICATIONS'] = $appList->show();
 
         /*********
          * Assignment History *

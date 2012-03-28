@@ -86,8 +86,8 @@ define('BANNER_MEAL_4WEEK', 'S4');
 define('BANNER_MEAL_5WEEK', 'S5');
 
 
-/**
- * Assignment Types
+/***
+ * Assignment Reasons
  */
 
 // Default
@@ -135,18 +135,16 @@ define('ASSIGN_CHANGE', 	'achange'); // For room change requests
 define('ASSIGN_COPY',		'acopy'); // For copying from previous term
 
 
-/**
- * Unassignment Types
+/***
+ * Unassignment Reasons
  */
 define('UNASSIGN_ADMIN',	'admin'); // General administrative
 define('UNASSIGN_CHANGE',	'change'); // For room change process - cannot be used manually
 define('UNASSIGN_REASSIGN', 'reassign'); // implicit removal for re-assign command
 define('UNASSIGN_CANCEL',   'cancel'); // Contract cancellation 
 
-
-
-/**
- * Pretty Names
+/***
+ * Pretty Names for Assign/Cancel Reasons
  */
 define('admin', 	'Administrative');
 
@@ -190,6 +188,16 @@ define('uwithdrawn','Withdrawn');
 define('uintentnoreturn', 'Intent Not To Return');
 define('ureassign',	'Reassignment');
 define('unone',		'Not Specified');
+
+
+/***
+ * Cancellation Reasons
+ */
+define('CANCEL_BEFORE_JULY', 'before_july');
+define('CANCEL_AFTER_JULY', 'after_july');
+define('CANCEL_WITHDRAWN', 'withdrawn');
+define('CANCEL_INTENT', 'intent_no_return');
+define('CANCEL_BEFORE_ASSIGN', 'before_assignment');
 
 
 /**
@@ -334,6 +342,8 @@ define('ACTIVITY_FLOOR_NOTIFIED',               64);
 define('ACTIVITY_LOTTERY_ROOMMATE_DENIED',      65);
 
 define('ACTIVITY_RLC_APPLICATION_DELETED',		66);
+
+define('ACTIVITY_CANCEL_HOUSING_APPLICATION',   67);
 
 /**
  * Errors

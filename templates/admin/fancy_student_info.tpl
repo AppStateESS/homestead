@@ -137,46 +137,10 @@
                     </tr>
                 </table>
                 </div>
-                
-        <br />
-        <table class="profileHeader">
-            <tr>
-                <th><a id="application_toggle">[-]</a> Applications</th>
-            </tr>
-        </table>
-        
-       
-		<div id="applications" >
-		<table class="profileHeader">
-			<tr>
-				<th>Term</th>
-				<th>Type</th>
-				<th>Cell phone #</th>
-				<th>Meal plan</th>
-				<th>Cleanliness</th>
-				<th>Bedtime</th>
-				<th>Actions</th>
-			</tr>
-            <!-- BEGIN APPLICATIONS -->
-            <tr>
-	            <td>{term}</td>
-	            <td>{type}</td>
-	            <td>{cell_phone}</td>
-	            <td>{meal_plan}</td>
-	            <td>{clean}</td>
-            	<td>{bedtime}</td>
-            	<td>{actions}</td>
-            </tr>
-            <!-- END APPLICATIONS -->
-            <!-- BEGIN no_apps -->
-            <tr>
-            	<td colspan="5">{APPLICATIONS_EMPTY}</td>
-            </tr>
-        	<!-- END no_apps -->
-        </table>
-        </div>
-
-		<br />
+        <h2>Applications</h2>
+        {APPLICATIONS}
+		
+        <h2>Assignments</h2>
         {HISTORY}
     </div>
 </div>

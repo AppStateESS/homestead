@@ -118,7 +118,7 @@ class StudentProfile {
             }
         }
 
-        $applications = HousingApplication::getAllApplications($this->student->getUsername());
+        $applications = HousingApplication::getAllApplicationsForStudent($this->student);
 
         return new StudentProfileView($this->student, $applications, $assignment, $this->roommates);
     }

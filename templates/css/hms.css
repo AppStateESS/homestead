@@ -37,7 +37,7 @@
 }
 
 .disabledText {
-  color: #CCC;
+  color: #999;
   font-style: italic;
 }
 
@@ -47,6 +47,10 @@
 
 .block-center {
   margin: 0 auto;
+}
+
+.strike {
+  text-decoration: line-through;
 }
 
 /* Indenting */

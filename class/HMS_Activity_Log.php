@@ -212,7 +212,8 @@ class HMS_Activity_Log{
         ACTIVITY_ROOM_CHANGE_APPROVED_HOUSING   => "Housing Approved Room Change",
         ACTIVITY_ROOM_CHANGE_COMPLETED          => "Room Change Completed",
         ACTIVITY_ROOM_CHANGE_DENIED             => "Room Change Denied",
-        ACTIVITY_LOTTERY_ROOMMATE_DENIED        => "Denied lottery roommate invite");
+        ACTIVITY_LOTTERY_ROOMMATE_DENIED        => "Denied lottery roommate invite",
+        ACTIVITY_CANCEL_HOUSING_APPLICATION     => "Housing Application Cancelled");
     }
 
     /**

@@ -273,11 +273,14 @@ CREATE TABLE hms_new_application (
     psych_disability                smallint,
     medical_need                    smallint,
     gender_need                     smallint,
-    withdrawn                       smallint NOT NULL default 0,
     created_on                      integer NOT NULL,
     created_by                      character varying(32) NOT NULL,
     modified_on                     integer NOT NULL,
     modified_by                     character varying(32) NOT NULL,
+    cancelled                       smallint not null default 0,
+    cancelled_reason                character varying(32),
+    cancelled_on                    integer,
+    cancelled_by                    character varying(32),
     PRIMARY KEY(id)
 );
 
