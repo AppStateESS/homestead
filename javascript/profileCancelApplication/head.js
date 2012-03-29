@@ -30,8 +30,8 @@ $(document).ready(function() {
                                           {text: "Cancel Application",
                                            id: "cancelDialogSubmitButton",
                                            click: function() {
-                                              $('{LINK_SELECT}').handleCancelButton();
-                                               }
+                                               $('{LINK_SELECT}').handleCancelButton();
+                                            }
                                           },
                                           {text: "Close",
                                            id: "cancelDialogCloseButton",
@@ -41,6 +41,6 @@ $(document).ready(function() {
                                           }
                                         ]
                               });
-	$('{LINK_SELECT}').linkPopup();
+	$('{LINK_SELECT}').cancelApplicationDialog();
 });
 </script>

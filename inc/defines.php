@@ -138,10 +138,10 @@ define('ASSIGN_COPY',		'acopy'); // For copying from previous term
 /***
  * Unassignment Reasons
  */
-define('UNASSIGN_ADMIN',	'admin'); // General administrative
-define('UNASSIGN_CHANGE',	'change'); // For room change process - cannot be used manually
-define('UNASSIGN_REASSIGN', 'reassign'); // implicit removal for re-assign command
-define('UNASSIGN_CANCEL',   'cancel'); // Contract cancellation 
+define('UNASSIGN_ADMIN',	'uadmin'); // General administrative
+define('UNASSIGN_CHANGE',	'uchange'); // For room change process - cannot be used manually
+define('UNASSIGN_REASSIGN', 'ureassign'); // implicit removal for re-assign command
+define('UNASSIGN_CANCEL',   'ucancel'); // Contract cancellation 
 
 /***
  * Pretty Names for Assign/Cancel Reasons
@@ -183,15 +183,18 @@ define('acopy',     'Term Rollover');
 
 // Removal Reasons
 define('uadmin',	'Administrative');
+define('ucancel', 'Contract Cancellation');
+define('ureassign',	'Reassignment');
 define('uchange',	'Room Change');
+
+// This section is depricated
 define('uwithdrawn','Withdrawn');
 define('uintentnoreturn', 'Intent Not To Return');
-define('ureassign',	'Reassignment');
 define('unone',		'Not Specified');
 
 
-/***
- * Cancellation Reasons
+/************************************
+ * Application Cancellation Reasons
  */
 define('CANCEL_BEFORE_JULY', 'before_july');
 define('CANCEL_AFTER_JULY', 'after_july');

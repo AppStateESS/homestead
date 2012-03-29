@@ -28,6 +28,9 @@ class ProfileHousingAppList extends View {
 
         $app_rows = "";
 
+        // Get the list of cancellation reasons
+        $reasons = HousingApplication::getCancellationReasons();
+        
         // Show a row for each application
         foreach($this->housingApps as $app){
             $term = Term::toString($app->getTerm());
@@ -51,18 +54,21 @@ class ProfileHousingAppList extends View {
             $viewCmd = CommandFactory::getCommand('ShowApplicationView');
             $viewCmd->setAppId($app->getId());
 
+            $rowStyle = "";
+            
             if($app->isCancelled()){
-                $cancelled = '(Cancelled)';
+                $cancelled = "({$reasons[$app->getCancelledReason()]})";
+                $rowStyle = 'disabledText';
             }else{
                 // Show Cancel Command
                 $cancelCmd = CommandFactory::getCommand('ShowCancelHousingApplication');
                 $cancelCmd->setHousingApp($app);
-                $cancelled = $cancelCmd->getLink('Cancel');
+                $cancelled = '[' . $cancelCmd->getLink('Cancel') . ']';
             }
 
             $actions = '[' . $viewCmd->getLink('View') . '] ' . $cancelled;
 
-            $app_rows[] = array('term'=>$term, 'type'=>$type, 'meal_plan'=>$mealPlan, 'cell_phone'=>$phone, 'clean'=>$clean, 'bedtime'=>$bedtime, 'actions'=>$actions);
+            $app_rows[] = array('term'=>$term, 'type'=>$type, 'meal_plan'=>$mealPlan, 'cell_phone'=>$phone, 'clean'=>$clean, 'bedtime'=>$bedtime, 'actions'=>$actions, 'row_style'=>$rowStyle);
         }
 
         $tpl['APPLICATIONS'] = $app_rows;

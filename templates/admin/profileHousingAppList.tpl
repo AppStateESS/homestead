@@ -11,7 +11,7 @@
       <th>Actions</th>
     </tr>
     <!-- BEGIN APPLICATIONS -->
-    <tr>
+    <tr class="{row_style}">
       <td>{term}</td>
       <td>{type}</td>
       <td>{cell_phone}</td>
