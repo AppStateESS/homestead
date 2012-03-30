@@ -49,6 +49,10 @@ class AddCommunityView extends View {
         $form->setLabel('returning_question', 'Returning Question:');
         $form->setValue('returning_question', $this->community->getReturningQuestion());
         
+        $form->addTextArea('terms_conditions');
+        $form->setLabel('terms_conditions', 'Terms &amp; Conditions:');
+        $form->setValue('terms_conditions', $this->community->getTermsConditions());
+        
         $form->addHidden('hide', 0);
 
         if(!is_null($this->community) && !is_null($this->community->get_id())){

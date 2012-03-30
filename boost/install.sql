@@ -95,6 +95,7 @@ CREATE TABLE hms_learning_communities (
     allowed_student_types varchar(16),
     allowed_reapplication_student_types character varying(16),
     members_reapply integer not null,
+    terms_conditions text,
     primary key(id)
 );
 

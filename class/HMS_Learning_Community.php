@@ -22,6 +22,8 @@ class HMS_Learning_Community extends HMS_Item
     
     public $freshmen_question;
     public $returning_question;
+    
+    public $terms_conditions;
 
     public function __construct($id = 0)
     {
@@ -121,6 +123,15 @@ class HMS_Learning_Community extends HMS_Item
     public function getReturningQuestion()
     {
         return $this->returning_question;
+    }
+    
+    public function getTermsConditions()
+    {
+        return $this->terms_conditions;
+    }
+    
+    public function setTermsConditions($text){
+        $this->terms_conditions = $text;
     }
     
     public function setReturningQuestion($question){

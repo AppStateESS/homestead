@@ -38,6 +38,10 @@
         <td>{RETURNING_QUESTION_LABEL}</td>
         <td>{RETURNING_QUESTION}</td>
     </tr>
+    <tr>
+        <td>{TERMS_CONDITIONS_LABEL}</td>
+        <td>{TERMS_CONDITIONS}</td>
+    </tr>
 </table>
 <br />
 {SUBMIT} {END_FORM}
