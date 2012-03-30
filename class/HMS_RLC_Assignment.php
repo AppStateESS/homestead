@@ -7,7 +7,7 @@
 
 PHPWS_Core::initModClass('hms','StudentFactory.php');
 
-class HMS_RLC_Assignment{
+class HMS_RLC_Assignment {
 
     public $id;
 
@@ -15,6 +15,8 @@ class HMS_RLC_Assignment{
     public $gender;
     public $assigned_by_user;
     public $application_id;
+    
+    public $assignmentState; // An RlcAssignmentState object
 
     public $username; # For the DBPager join stuff to work right
     public $term; // For dbPager

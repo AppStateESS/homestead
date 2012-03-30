@@ -14,7 +14,7 @@ class HMS_Learning_Community extends HMS_Item
     public $abbreviation;
     public $capacity;
     public $hide;
-
+    
     public $allowed_student_types; //A string containing a character for each allowed student type, maxLen() == 16;
     public $allowed_reapplication_student_types;
     public $members_reapply; // Indicates whether current members of the community are always allowed to reapply, regardless of student type
