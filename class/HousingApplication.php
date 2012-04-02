@@ -37,7 +37,7 @@ class HousingApplication {
      * Set to 'true' by the withdrawn search process. Should always be false by default.
      * @deprecated Use 'cancel' member variable instead.
      */
-    public $withdrawn;
+    public $withdrawn = 0;
     
     /* Contract Cancellation */
     public $cancelled;
