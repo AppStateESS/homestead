@@ -1,0 +1,1 @@
+alter table hms_learning_community_assignment add column state character varying;

@@ -12,6 +12,8 @@ PHPWS_Core::initModClass('hms', 'RlcAssignmentState.php');
  */
 class RlcAssignmentConfirmedState extends RlcAssignmentState {
     
+    protected $stateName = 'confirmed';
+    
     public function onEnter()
     {
         

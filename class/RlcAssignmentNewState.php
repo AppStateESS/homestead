@@ -12,6 +12,8 @@ PHPWS_Core::initModClass('hms', 'RlcAssignmentState.php');
  */
 class RlcAssignmentNewState extends RlcAssignmentState {
 
+    protected $stateName = 'new';
+    
     public function onEnter()
     {
     

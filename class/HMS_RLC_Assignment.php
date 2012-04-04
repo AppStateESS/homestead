@@ -3,6 +3,8 @@
 /**
  * The HMS_RLC_Assignment class
  *
+ * @author jbooker
+ * @package HMS
  */
 
 PHPWS_Core::initModClass('hms','StudentFactory.php');
@@ -16,6 +18,7 @@ class HMS_RLC_Assignment {
     public $assigned_by_user;
     public $application_id;
     
+    public $state;           // db text field for state name
     public $assignmentState; // An RlcAssignmentState object
 
     public $username; # For the DBPager join stuff to work right
@@ -122,6 +125,18 @@ class HMS_RLC_Assignment {
         return $this->getRlc()->get_community_name();
     }
 
+    public function getApplication()
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
+        $application = new HMS_RLC_Application($this->getApplicationId());
+        
+        if(!isset($application)){
+            throw Exception('Could not load RLC application.');
+        }
+        
+        return $application;
+    }
+    
     /******************
      * Static methods *
      */
@@ -313,6 +328,21 @@ class HMS_RLC_Assignment {
         return $pager->get();
     }
 
+    public function changeState(RlcAssignmentState $newState)
+    {
+        // Save the new state's name, catching any exceptions
+        $this->state = $newState->getStateName();
+        try{
+            $this->save();
+        }catch(Exception $e){
+            throw $e;
+            return;
+        }
+        
+        // If we made it this far, then do the onEnter stuff
+        $newState->onEnter();
+    }
+    
     /***********************
      * Accessor / Mutators *
      */
@@ -349,12 +379,20 @@ class HMS_RLC_Assignment {
         return $this->assigned_by_user;
     }
 
+    public function getApplicationId(){
+        return $this->application_id;
+    }
+    
     public function setAssignedByInitials($assigned_by_initials) {
         $this->assigned_by_initials = $assigned_by_initials;
     }
 
     public function getAssignedByInitials() {
         return $this->assigned_by_initials;
+    }
+    
+    public function getStateName(){
+        return $this->state;
     }
 }
 

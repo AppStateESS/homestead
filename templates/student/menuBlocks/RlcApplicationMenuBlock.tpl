@@ -26,15 +26,24 @@ You may {VIEW_APP}. {DELETE_TEXT} {DELETE_APP}
 If you would like to change your answers on your Learning Community application, you may {NEW_APP}.
 <!-- END new_app -->
 
-<!-- BEGIN accepted -->
-You've been invited to a Residential Learning Community! If you have not already, you should check your ASU email account and respond to the invitation.{INVITED}
-<!-- END accepted -->
+<!-- BEGIN confirmed -->
+You have accepted your invitiation to the {CONFIRMED_RLC_NAME} residential learning community. Please continue checking your Appalachian email account for more information!
+<!-- END confirmed -->
+
+<!-- BEGIN declined -->
+You have declined your learning community invitation. {DECLINED}
+<!-- END declined -->
+
+<!-- BEGIN invited -->
+You have been invited to join the <strong>{INVITED_COMMUNITY_NAME}</strong> residential learning community!<br /><br />
+Please <strong>{INVITED_CONFIRM_LINK}</strong> to the learning community.
+<!-- END invited -->
 
 <!-- BEGIN no_app -->
 You have not applied for a Residential Learning Community. There are a limited number of Learning Community spaces on campus. If you are interested in living in a Learning Community, please complete your application as soon as possible.
     {APP_NOW}
 <!-- END no_app -->
 </p>
-<p>For more infomration about Appalachian's Residential Learning Communities please visit the <a href="http://housing.appstate.edu/pagesmith/29" target="_blank">Residential Learning Communities Website</a>.</p>
+<p>For more infomration about Appalachian's Residential Learning Communities please visit the <a href="http://housing.appstate.edu/rlc" target="_blank">Residential Learning Communities Website</a>.</p>
 
 </div>

@@ -243,6 +243,7 @@ CREATE TABLE hms_learning_community_assignment (
     rlc_id              integer NOT NULL REFERENCES hms_learning_communities(id),
     gender              integer NOT NULL,
     assigned_by         character varying(32) NOT NULL,
+    state               character varying,
     PRIMARY KEY (id)
 );
 

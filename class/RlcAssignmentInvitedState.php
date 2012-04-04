@@ -12,9 +12,22 @@ PHPWS_Core::initModClass('hms', 'RlcAssignmentState.php');
  */
 class RlcAssignmentInvitedState extends RlcAssignmentState {
 
+    protected $stateName = 'invited';
+    
     public function onEnter()
     {
-    
+        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
+        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
+
+        $application = $this->rlcAssignment->getApplication();
+        
+        $term     = $application->getTerm();
+        $username = $application->getUsername();
+        $community = $this->rlcAssignment->getRlc();
+        
+        $student = StudentFactory::getStudentByUsername($username, $term);
+        
+        HMS_Email::sendRlcInviteEmail($student, $community, $term);
     }
 }
 

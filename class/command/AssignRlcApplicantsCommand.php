@@ -40,6 +40,7 @@ class AssignRlcApplicantsCommand extends Command {
             $assign->gender         = $student->getGender();
             $assign->assigned_by    = UserStatus::getUsername();
             $assign->application_id = $app->id;
+            $assign->state          = 'new';
             
             $assign->save();
             
