@@ -27,7 +27,7 @@ If you would like to change your answers on your Learning Community application,
 <!-- END new_app -->
 
 <!-- BEGIN confirmed -->
-You have accepted your invitiation to the {CONFIRMED_RLC_NAME} residential learning community. Please continue checking your Appalachian email account for more information!
+You have accepted your invitiation to the {CONFIRMED_RLC_NAME} Residential Learning Community. Please keep your RLC acceptance email and refer back to it with any questions you may have. Please continue checking your Appalachian email account for more information!
 <!-- END confirmed -->
 
 <!-- BEGIN declined -->

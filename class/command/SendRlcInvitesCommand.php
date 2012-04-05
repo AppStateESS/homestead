@@ -27,6 +27,13 @@ class SendRlcInvitesCommand extends Command {
             
         }
 
+        $dateParts = explode('/', $respondByDate);
+        $respondByTimestamp = mktime($hour, null, null, $dateParts[0], $dateParts[1], $dateParts[2]);
+        
+        test($respondByDate);
+        test($dateParts);
+        test($respondByTimestamp,1);
+        
         $term = Term::getSelectedTerm();
         
         PHPWS_Core::initModClass('hms', 'RlcAssignmentFactory.php');
@@ -40,7 +47,7 @@ class SendRlcInvitesCommand extends Command {
         }
         
         foreach($assignments as $assign){
-            $assign->changeState(new RlcAssignmentInvitedState($assign));
+            $assign->changeState(new RlcAssignmentInvitedState($assign, $respondByTimestamp));
         }
 
         NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Freshmen RLC invites sent.');
