@@ -20,6 +20,7 @@ class SendRlcInvitesCommand extends Command {
         $resultCmd = CommandFactory::getCommand('ShowSendRlcInvites');
         
         $respondByDate = $context->get('respond_by_date');
+        $respondByTime = $context->get('time');
         
         if(!isset($respondByDate) || $respondByDate == ''){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Please choose a \'respond by\' date.');
@@ -28,11 +29,7 @@ class SendRlcInvitesCommand extends Command {
         }
 
         $dateParts = explode('/', $respondByDate);
-        $respondByTimestamp = mktime($hour, null, null, $dateParts[0], $dateParts[1], $dateParts[2]);
-        
-        test($respondByDate);
-        test($dateParts);
-        test($respondByTimestamp,1);
+        $respondByTimestamp = mktime($respondByTime, null, null, $dateParts[0], $dateParts[1], $dateParts[2]);
         
         $term = Term::getSelectedTerm();
         

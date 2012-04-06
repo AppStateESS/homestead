@@ -2,6 +2,6 @@
 
 {START_FORM}
 
-Respond by date: {RESPOND_BY_DATE}<br /><br />
+Respond by date: {RESPOND_BY_DATE} Time: {TIME}<br /><br />
 {SUBMIT}
 {END_FORM}

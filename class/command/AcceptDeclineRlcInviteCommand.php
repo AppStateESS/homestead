@@ -16,11 +16,12 @@ class AcceptDeclineRlcInviteCommand extends Command {
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
         PHPWS_Core::initModClass('hms', 'RlcAssignmentConfirmedState.php');
         PHPWS_Core::initModClass('hms', 'RlcAssignmentDeclinedState.php');
-        
-        test($_REQUEST);
+        PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
+        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
         
         $rlcAssignment = HMS_RLC_Assignment::getAssignmentByUsername(UserStatus::getUsername(), $term);
         $rlcApplication = $rlcAssignment->getApplication();
+        $student = StudentFactory::getStudentByUsername($rlcApplication->getUsername(), $rlcApplication->getTerm());
         
         $acceptStatus = $context->get('acceptance');
         
@@ -37,8 +38,9 @@ class AcceptDeclineRlcInviteCommand extends Command {
             $rlcAssignment->changeState(new RlcAssignmentConfirmedState($rlcAssignment));
             
             NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'You have <strong>accepted</strong> your Residential Learning Community invitation.');
+            
             // Log this!
-            //TODO
+            HMS_Activity_Log::log_activity($student->getUsername(), ACTIVITY_ACCEPT_RLC_INVITE, UserStatus::getUsername(), $rlcAssignment->getRlcName());
             
             $successCmd = CommandFactory::getCommand('ShowStudentMenu');
             $successCmd->redirect();
@@ -47,9 +49,10 @@ class AcceptDeclineRlcInviteCommand extends Command {
             $rlcAssignment->changeState(new RlcAssignmentDeclinedState($rlcAssignment));
             
             NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'You have <strong>declined</strong> your Residential Learning Community invitation.');
+
             // Log this!
-            //TODO
-            
+            HMS_Activity_Log::log_activity($student->getUsername(), ACTIVITY_DECLINE_RLC_INVITE, UserStatus::getUsername(), $rlcAssignment->getRlcName());
+
             $successCmd = CommandFactory::getCommand('ShowStudentMenu');
             $successCmd->redirect();
         }else{

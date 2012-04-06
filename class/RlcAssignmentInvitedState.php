@@ -13,7 +13,15 @@ PHPWS_Core::initModClass('hms', 'RlcAssignmentState.php');
 class RlcAssignmentInvitedState extends RlcAssignmentState {
 
     protected $stateName = 'invited';
-    
+    private $respondByTimestamp;
+   
+    public function __construct(HMS_RLC_Assignment $rlcAssignment, $respondByTimestamp)
+    {
+        parent::__construct($rlcAssignment);
+
+        $this->respondByTimestamp = $respondByTimestamp;
+    }
+
     public function onEnter()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Email.php');
@@ -27,7 +35,7 @@ class RlcAssignmentInvitedState extends RlcAssignmentState {
         
         $student = StudentFactory::getStudentByUsername($username, $term);
         
-        HMS_Email::sendRlcInviteEmail($student, $community, $term);
+        HMS_Email::sendRlcInviteEmail($student, $community, $term, $this->respondByTimestamp);
     }
 }
 

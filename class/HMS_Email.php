@@ -475,7 +475,7 @@ class HMS_Email{
         HMS_Email::send_template_message($to, $subject, 'email/ReportCompleteNotification.tpl', $tpl);
     }
     
-    public static function sendRlcInviteEmail(Student $student, HMS_Learning_Community $community, $term)
+    public static function sendRlcInviteEmail(Student $student, HMS_Learning_Community $community, $term, $respondByTimestamp)
     {
         $to = $student->getUsername() . TO_DOMAIN;
         $subject = 'Response Needed: Residential Learning Community Invitation';
@@ -483,8 +483,9 @@ class HMS_Email{
         $tags = array();
         $tags['NAME'] = $student->getName();
         $tags['COMMUNITY_NAME'] = $community->get_community_name();
-        $tags['TERM'] = Term::toString($term);
+        $tags['TERM'] = Term::toString($term) . ' - ' . Term::toString(Term::getNextTerm($term));
         $tags['COMMUNITY_TERMS_CONDITIONS'] = $community->getTermsConditions();
+        $tags['RESPOND_BY'] = date("l, F jS, Y", $respondByTimestamp) . ' at ' . date("ga", $respondByTimestamp);
         
         HMS_Email::send_template_message($to, $subject, 'email/RlcInvite.tpl', $tags);
     }
