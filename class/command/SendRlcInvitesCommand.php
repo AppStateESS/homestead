@@ -24,7 +24,7 @@ class SendRlcInvitesCommand extends Command {
         
         if(!isset($respondByDate) || $respondByDate == ''){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Please choose a \'respond by\' date.');
-            $resultCmd->redirect();            
+            $resultCmd->redirect();
         }
 
         $dateParts = explode('/', $respondByDate);
