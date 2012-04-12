@@ -52,6 +52,12 @@ abstract class HMS {
         }else{
             try {
                 $cmd->execute($this->context);
+            } catch(PermissionException $p) {
+                NQ::Simple('hms', HMS_NOTIFICATION_ERROR, 'You do not have permission to perform that action. If you believe this is an error, please contact University Housing.');
+                PHPWS_Core::initModClass('hms', 'HMSNotificationView.php');
+                $nv = new HMSNotificationView();
+                $nv->popNotifications();
+                Layout::add($nv->show());
             } catch(Exception $e) {
                 try {
                     $message = $this->formatException($e);
