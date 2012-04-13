@@ -159,27 +159,69 @@ class HMS_RLC_Application extends HMS_Item
         return $tags;
     }
 
+    /**
+     * Pager tags for the RlcRosterPager (ShowViewByRlcCommand)
+     */
     public function viewByRLCPagerTags()
     {
+        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
+        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
+        
         $tags = array();
 
+        // Get the Student object
         try{
             $student = StudentFactory::getStudentByUsername($this->username, Term::getSelectedTerm());
         }catch(StudentNotFoundException $e){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, "No student found with username: {$this->username}.");
+            // Catch the StudentNotFound exception in the odd case that someone doesn't exist.
+            // Show a warning message and skip the rest of the method
+            NQ::simple('hms', HMS_NOTIFICATION_WARNING, "No student found with username: {$this->username}.");
             $tags['USERNAME'] = $this->username;
             $tags['NAME'] = 'UNKNOWN - INVALID';
             return $tags;
         }
 
-        $tags['NAME']       = $student->getFulLNameProfileLink();
-        $tags['GENDER']     = $student->getPrintableGender();
+        // Display demographic info
+        $tags['NAME']       = $student->getProfileLink();
+        $tags['BANNER_ID']  = $student->getBannerId();
+        $tags['GENDER']     = $student->getPrintableGenderAbbreviation();
         $tags['USERNAME']   = $this->username;
+        
+        // Check for/display room assignment
+        $roomAssign = HMS_Assignment::getAssignmentByBannerId($student->getBannerId(), Term::getSelectedTerm());
+        
+        if(isset($roomAssign)){
+            $tags['ROOM_ASSIGN'] = $roomAssign->where_am_i();
+        }else{
+            $tags['ROOM_ASSIGN'] = 'n/a';
+        }
 
+        /*** Roommates ***/
+        // Show all possible roommates for this application
+        PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
+        
+        $allRoommates = HMS_Roommate::get_all_roommates($this->username, $this->term);
+        $tags['ROOMMATES'] = 'N/A'; // Default text
+        
+        if(sizeof($allRoommates) > 1) {
+            // Don't show all the roommates
+            $tags['ROOMMATES'] = "Multiple Requests";
+        }
+        elseif(sizeof($allRoommates) == 1) {
+            // Get other roommate
+            $otherGuy = StudentFactory::getStudentByUsername($allRoommates[0]->get_other_guy($this->username), $this->term);
+            $tags['ROOMMATES'] = $otherGuy->getFullNameProfileLink();
+            // If roommate is pending then show little status message
+            if(!$allRoommates[0]->confirmed) {
+                $tags['ROOMMATES'] .= " (Pending)";
+            }
+        }
+        
+        /*** Other Actions ***/
         $viewCmd = CommandFactory::getCommand('ShowRlcApplicationReView');
         $viewCmd->setAppId($this->getId());
 
-        $actions[] = $viewCmd->getLink('View Application');
+        $actions[] = $viewCmd->getLink('App');
 
         $assign = HMS_RLC_Assignment::getAssignmentByUsername($this->username, $this->term);
 
@@ -196,27 +238,6 @@ class HMS_RLC_Application extends HMS_Item
         $actions[] = $rmDenyCmd->getLink('Remove & Deny');
 
         $tags['ACTION'] = implode(' | ', $actions);
-
-        // Show all possible roommates for this application
-        PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-
-        $allRoommates = HMS_Roommate::get_all_roommates($this->username, $this->term);
-        $tags['ROOMMATES'] = 'N/A'; // Default text
-
-        if(sizeof($allRoommates) > 1) {
-            // Don't show all the roommates
-            $tags['ROOMMATES'] = "Multiple Requests";
-        }
-        elseif(sizeof($allRoommates) == 1) {
-            // Get other roommate
-            $otherGuy = StudentFactory::getStudentByUsername($allRoommates[0]->get_other_guy($this->username), $this->term);
-            $tags['ROOMMATES'] = $otherGuy->getFullNameProfileLink();
-            // If roommate is pending then show little status message
-            if(!$allRoommates[0]->confirmed) {
-                $tags['ROOMMATES'] .= " (Pending)";
-            }
-        }
 
         return $tags;
     }

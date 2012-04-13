@@ -1,11 +1,14 @@
-<h2>{TITLE}</h2>
-<table width="%60">
+{BACK_LINK}
+<h1>{TITLE}</h1>
+<table>
     <tr>
         <th>Name</th>
+        <th>Banner Id</th>
         <th>Gender</th>
         <th>User name</th>
+        <th>Assignment</th>
+        <th>Roommate</th>
         <th>Action</th>
-        <th>Roommates</th>
     </tr>
     <!-- BEGIN empty_table -->
     <tr>
@@ -15,10 +18,12 @@
     <!-- BEGIN listrows -->
     <tr {TOGGLE}>
         <td>{NAME}</td>
-        <td>{GENDER}</td>
+        <td>{BANNER_ID}</td>
+        <td style="text-align:center;">{GENDER}</td>
         <td>{USERNAME}</td>
-        <td>{ACTION}</td>
+        <td>{ROOM_ASSIGN}</td>
         <td>{ROOMMATES}</td>
+        <td>{ACTION}</td>
     </tr>
     <!-- END listrows -->
 </table>

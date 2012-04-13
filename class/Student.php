@@ -60,6 +60,20 @@ class Student {
         }
     }
 
+    public function getPrintableGenderAbbreviation()
+    {
+    switch($this->getGender()){
+            case FEMALE:
+                return 'F';
+                break;
+            case MALE:
+                return 'M';
+                break;
+            default:
+                return 'Invalid gender';
+        }
+    }
+    
     public function getPrintableType()
     {
         switch($this->getType()){
