@@ -6,6 +6,7 @@
         <th>Banner Id</th>
         <th>Gender</th>
         <th>User name</th>
+        <th>Status</th>
         <th>Assignment</th>
         <th>Roommate</th>
         <th>Action</th>
@@ -21,6 +22,7 @@
         <td>{BANNER_ID}</td>
         <td style="text-align:center;">{GENDER}</td>
         <td>{USERNAME}</td>
+        <td>{STATE}</td>
         <td>{ROOM_ASSIGN}</td>
         <td>{ROOMMATES}</td>
         <td>{ACTION}</td>

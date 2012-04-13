@@ -38,7 +38,7 @@ class RlcRosterPager extends DBPager {
         $this->setEmptyMessage('There are no students assigned to this learning community.');
         $this->addPageTags($tags);
         $this->addRowTags('viewByRLCPagerTags');
-        $this->setReportRow('report_by_rlc_pager_tags');
+        $this->setReportRow('viewByRLCExportFields');
     }
 }
 
