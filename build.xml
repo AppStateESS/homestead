@@ -48,10 +48,10 @@
                 <modified />
             </fileset>
 
-            <fileset dir="${basedir}/tests">
+<!--            <fileset dir="${basedir}/tests">
                 <include name="**/*.php" />
                 <modified />
-            </fileset>
+            </fileset>-->
         </apply>
     </target>
 
@@ -78,7 +78,7 @@
         <exec executable="phpmd">
             <arg path="${basedir}" />
             <arg value="text" />
-            <arg value="${basedir}/build/phpmd.xml" />
+            <arg value="/etc/ess/phpmd.xml" />
         </exec>
     </target>
 
@@ -87,7 +87,7 @@
         <exec executable="phpmd">
             <arg path="${basedir}" />
             <arg value="xml" />
-            <arg value="${basedir}/build/phpmd.xml" />
+            <arg value="/etc/ess/phpmd.xml" />
             <arg value="--reportfile" />
             <arg value="${basedir}/build/logs/pmd.xml" />
         </exec>
@@ -96,7 +96,7 @@
     <target name="phpcs"
         description="Find coding standard violations using PHP_CodeSniffer and print human readable output. Intended for usage on the command line before committing.">
         <exec executable="phpcs">
-            <arg value="--standard=${basedir}/build/phpcs.xml" />
+            <arg value="--standard=/etc/ess/phpcs.xml" />
             <arg path="${basedir}" />
         </exec>
     </target>
@@ -106,7 +106,7 @@
         <exec executable="phpcs" output="/dev/null">
             <arg value="--report=checkstyle" />
             <arg value="--report-file=${basedir}/build/logs/checkstyle.xml" />
-            <arg value="--standard=${basedir}/build/phpcs.xml" />
+            <arg value="--standard=/etc/ess/phpcs.xml" />
             <arg path="${basedir}" />
         </exec>
     </target>
@@ -125,7 +125,7 @@
     </target>
 
     <target name="phpunit" description="Run unit tests with PHPUnit">
-        <exec executable="phpunit" failonerror="true"/>
+<!--        <exec executable="phpunit" failonerror="true"/>-->
     </target>
 
     <target name="phpcb"
