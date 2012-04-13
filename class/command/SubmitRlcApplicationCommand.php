@@ -100,7 +100,7 @@ class SubmitRlcApplicationCommand extends Command
         HMS_Email::send_rlc_application_confirmation($student);
 
         # Show a success message and redirect
-        NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Your application has been submitted');
+        NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Your Residential Learning Community application has been submitted. Please log in to your Appalachian email account for more details on the Residential Learning Community acceptance process.');
         $cmd = CommandFactory::getCommand('ShowStudentMenu');
         $cmd->redirect();
     }
