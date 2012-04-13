@@ -299,35 +299,6 @@ class HMS_RLC_Assignment {
         return $output;
     }
 
-    //TODO move this!!
-    public function view_by_rlc_pager($rlc_id)
-    {
-        // Get the community name for the title
-        $db = new PHPWS_DB('hms_learning_communities');
-        $db->addWhere('id', $rlc_id);
-        $db->addColumn('community_name');
-        $tags['TITLE'] = $db->select('one') . ' Assignments ' . Term::toString(Term::getSelectedTerm(), TRUE);
-
-        PHPWS_Core::initCoreClass('DBPager.php');
-        PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
-
-        $pager = new DBPager('hms_learning_community_applications', 'HMS_RLC_Application');
-        $pager->db->addJoin('LEFT OUTER', 'hms_learning_community_assignment', 'hms_learning_community_applications', 'application_id', 'id');
-        $pager->db->addWhere('hms_learning_community_applications.term', Term::getSelectedTerm());
-        $pager->db->addWhere('hms_learning_community_assignment.rlc_id', $rlc_id);
-
-        //$pager->joinResult('id','hms_learning_community_applications','hms_assignment_id','user_id', 'user_id');
-        $pager->setModule('hms');
-        $pager->setTemplate('admin/view_by_rlc_pager.tpl');
-        $pager->setLink('index.php?module=hms&action=ViewByRlc&rlc='.$rlc_id);
-        $pager->setEmptyMessage('There are no students assigned to this learning community.');
-        $pager->addPageTags($tags);
-        $pager->addRowTags('viewByRLCPagerTags');
-        $pager->setReportRow('report_by_rlc_pager_tags');
-
-        return $pager->get();
-    }
-
     public function changeState(RlcAssignmentState $newState)
     {
         // Save the new state's name, catching any exceptions

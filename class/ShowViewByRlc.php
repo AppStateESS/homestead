@@ -4,21 +4,22 @@ PHPWS_Core::initModClass('hms', 'View.php');
 PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
 
 class ShowViewByRlc extends View {
-    private $rlcId;
+    private $rlc;
 
-    public function __construct($id)
+    public function __construct(HMS_Learning_Community $rlc)
     {
-        $this->rlcId = $id;
+        $this->rlc = $rlc;
     }
 
     public function show()
     {
-        $tpl['RLC_PAGER'] = HMS_RLC_Assignment::view_by_rlc_pager($this->rlcId);
-        $tpl['MENU_LINK'] = PHPWS_Text::secureLink(_('Return to previous'), 'hms', array('action'=>'ShowSearchByRlc'));
-
         Layout::addPageTitle("View By RLC");
+        
+        PHPWS_Core::initModClass('hms', 'RlcRosterPager.php');
 
-        return PHPWS_Template::processTemplate($tpl, 'hms', 'admin/rlc_roster.tpl');
+        $rosterPager = new RlcRosterPager($this->rlc);
+        
+        return $rosterPager->get();
     }
 }
 ?>
