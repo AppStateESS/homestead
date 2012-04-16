@@ -47,11 +47,19 @@ class CancelHousingApplicationCommand extends Command {
         $reasons = HousingApplication::getCancellationReasons();
         
         // Check for an assignment and remove it
+        
+        // Decide which term to use - If this application is in a past fall term, then use the current term
+        if($term < Term::getCurrentTerm() && Term::getTermSem($term) == TERM_FALL){
+            $assignmentTerm = Term::getCurrentTerm();
+        }else{
+            $assignmentTerm = $term;
+        }
+        
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-        $assignment = HMS_Assignment::getAssignmentByBannerId($student->getBannerId(), $term);
+        $assignment = HMS_Assignment::getAssignmentByBannerId($student->getBannerId(), $assignmentTerm);
         
         if(isset($assignment)){
-            HMS_Assignment::unassignStudent($student, $term, 'Application cancellation: ' . $reasons[$cancelReason], UNASSIGN_CANCEL);
+            HMS_Assignment::unassignStudent($student, $assignmentTerm, 'Application cancellation: ' . $reasons[$cancelReason], UNASSIGN_CANCEL);
         }
         
         // Cancel the application

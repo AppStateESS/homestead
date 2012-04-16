@@ -1,18 +1,15 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'HousingApplication.php');
-PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-
 class HousingApplicationCancelView extends View {
     
     private $application;
     private $student;
     private $assignment;
     
-    public function __construct(HousingApplication $application){
+    public function __construct(Student $student, HousingApplication $application, HMS_Assignment $assignment = null){
         $this->application = $application;
-        $this->student = $application->getStudent();
-        $this->assignment = HMS_Assignment::getAssignmentByBannerId($this->student->getBannerId(), $this->application->getTerm());
+        $this->student = $student;
+        $this->assignment = $assignment;
     }
     
     public function show()
