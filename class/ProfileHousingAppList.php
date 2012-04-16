@@ -60,10 +60,14 @@ class ProfileHousingAppList extends View {
                 $cancelled = "({$reasons[$app->getCancelledReason()]})";
                 $rowStyle = 'disabledText';
             }else{
-                // Show Cancel Command
-                $cancelCmd = CommandFactory::getCommand('ShowCancelHousingApplication');
-                $cancelCmd->setHousingApp($app);
-                $cancelled = '[' . $cancelCmd->getLink('Cancel') . ']';
+                // Show Cancel Command, if user has permission to cancel apps
+                if(Current_User::allow('hms', 'cancel_housing_application')){
+                    $cancelCmd = CommandFactory::getCommand('ShowCancelHousingApplication');
+                    $cancelCmd->setHousingApp($app);
+                    $cancelled = '[' . $cancelCmd->getLink('Cancel') . ']';
+                }else{
+                    $cancelled = '';
+                }
             }
 
             $actions = '[' . $viewCmd->getLink('View') . '] ' . $cancelled;
