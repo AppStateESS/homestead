@@ -449,7 +449,20 @@ class HMS_Email{
         HMS_Email::send_template_message($to->getUsername() . TO_DOMAIN, 'Learning Community Application Rejected', 'email/rlc_application_rejection.tpl',$tpl);
     }
 
+    public static function sendRlcInviteEmail(Student $student, HMS_Learning_Community $community, $term, $respondByTimestamp)
+    {
+        $to = $student->getUsername() . TO_DOMAIN;
+        $subject = 'Response Needed: Residential Learning Community Invitation';
     
+        $tags = array();
+        $tags['NAME'] = $student->getName();
+        $tags['COMMUNITY_NAME'] = $community->get_community_name();
+        $tags['TERM'] = Term::toString($term) . ' - ' . Term::toString(Term::getNextTerm($term));
+        $tags['COMMUNITY_TERMS_CONDITIONS'] = $community->getTermsConditions();
+        $tags['RESPOND_BY'] = date("l, F jS, Y", $respondByTimestamp) . ' at ' . date("ga", $respondByTimestamp);
+    
+        HMS_Email::send_template_message($to, $subject, 'email/RlcInvite.tpl', $tags);
+    }
 
     /**
      * Sends the email for the nightly withdrawn search output.
@@ -475,20 +488,5 @@ class HMS_Email{
         HMS_Email::send_template_message($to, $subject, 'email/ReportCompleteNotification.tpl', $tpl);
     }
     
-    public static function sendRlcInviteEmail(Student $student, HMS_Learning_Community $community, $term, $respondByTimestamp)
-    {
-        $to = $student->getUsername() . TO_DOMAIN;
-        $subject = 'Response Needed: Residential Learning Community Invitation';
-        
-        $tags = array();
-        $tags['NAME'] = $student->getName();
-        $tags['COMMUNITY_NAME'] = $community->get_community_name();
-        $tags['TERM'] = Term::toString($term) . ' - ' . Term::toString(Term::getNextTerm($term));
-        $tags['COMMUNITY_TERMS_CONDITIONS'] = $community->getTermsConditions();
-        $tags['RESPOND_BY'] = date("l, F jS, Y", $respondByTimestamp) . ' at ' . date("ga", $respondByTimestamp);
-        
-        HMS_Email::send_template_message($to, $subject, 'email/RlcInvite.tpl', $tags);
-    }
-
 } // End HMS_Email class
 ?>
