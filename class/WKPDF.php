@@ -83,13 +83,13 @@ class WKPDF {
     private static function _getCPU(){
 
         if(self::$cpu == ''){
-            $arch = `uname -m`;
+            $arch = trim(`uname -m`);
             if($arch == 'x86_64'){
                 self::$cpu = 'amd64';
             }else if($arch == 'i686'){
                 self::$cpu = 'i386';
             }else{
-                throw new Exception('WKPDF couldn\'t determine CPU architecture ($arch).');
+                throw new Exception("WKPDF couldn't determine CPU architecture ($arch).");
             }
         }
         
