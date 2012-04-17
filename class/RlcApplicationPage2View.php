@@ -48,29 +48,27 @@ class RlcApplicationPage2View extends View
         $rlc_form2->addHidden('strengths_weaknesses', $context->get('strengths_weaknesses'));
         $rlc_form2->addHidden('term', $context->get('term'));
 
-        $choices = array($context->get('rlc_first_choice'), $context->get('rlc_second_choice'), $context->get('rlc_third_choice'));
-
-        $db = new PHPWS_DB('hms_learning_community_questions');
+        $rlcIds = array($context->get('rlc_first_choice'), $context->get('rlc_second_choice'), $context->get('rlc_third_choice'));
 
         for($i = 0; $i < 3; $i++) {
             # Skip the question lookup if "none" was selected
-            if($choices[$i] == -1) {
+            if($rlcIds[$i] == -1) {
                 continue;
             }
 
-            $db->reset();
-            $db->addWhere('learning_community_id', $choices[$i]);
-            $result = $db->select('row');
-
-
-            if(PEAR::isError($result)) {
+            $rlc = new HMS_Learning_Community($rlcIds[$i]);
+            
+            // If we're missing a question... send them back. We might could throw an exception here.
+            $question = $rlc->getFreshmenQuestion();
+            if(!isset($question)) {
               NQ::simple('hms', HMS_NOTIFICATION_ERROR, "There was an error looking up the community questions.");
-              $cmd = CommandFactory::getCommand('ShowRlcApplicationPage2');
+              $cmd = CommandFactory::getCommand('ShowRlcApplicationPage1View');
+              $cmd->setTerm($context->get('term'));
               $cmd->redirect();
             }
 
             $rlc_form2->addTextArea("rlc_question_$i");
-            $rlc_form2->setLabel("rlc_question_$i", $result['question_text']);
+            $rlc_form2->setLabel("rlc_question_$i", $rlc->getFreshmenQuestion());
             $rlc_form2->setMaxSize("rlc_question_$i", 4096);
         }
 

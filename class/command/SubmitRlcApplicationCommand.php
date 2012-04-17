@@ -39,18 +39,18 @@ class SubmitRlcApplicationCommand extends Command
         $question1 = $context->get('rlc_question_1');
         $question2 = $context->get('rlc_question_2');
 
-        if(strlen($question0) > HMS_RLC_Application::RLC_RESPONSE_LIMIT) {
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Your respose to the first question is too long. Please limit your response to ' . HMS_RLC_Application::RLC_RESPONSE_LIMIT .  ' characters (including spaces and punctuation).');
+        if(str_word_count($question0) > HMS_RLC_Application::RLC_RESPONSE_WORD_LIMIT) {
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Your respose to the first question is too long. Please limit your response to ' . HMS_RLC_Application::RLC_RESPONSE_WORD_LIMIT .  ' words.');
             $errorCmd->redirect();
         }
 
-        if(strlen($question1) > HMS_RLC_Application::RLC_RESPONSE_LIMIT) {
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Your respose to the second question is too long. Please limit your response to ' . HMS_RLC_Application::RLC_RESPONSE_LIMIT .  ' characters (including spaces and punctuation).');
+        if(str_word_count($question1) > HMS_RLC_Application::RLC_RESPONSE_WORD_LIMIT) {
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Your respose to the second question is too long. Please limit your response to ' . HMS_RLC_Application::RLC_RESPONSE_WORD_LIMIT .  ' words.');
             $errorCmd->redirect();
         }
 
-        if(strlen($question2) > HMS_RLC_Application::RLC_RESPONSE_LIMIT) {
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Your respose to the third question is too long. Please limit your response to ' . HMS_RLC_Application::RLC_RESPONSE_LIMIT .  ' characters (including spaces and punctuation).');
+        if(str_word_count($question2) > HMS_RLC_Application::RLC_RESPONSE_WORD_LIMIT) {
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Your respose to the third question is too long. Please limit your response to ' . HMS_RLC_Application::RLC_RESPONSE_WORD_LIMIT .  ' words.');
             $errorCmd->redirect();
         }
 
