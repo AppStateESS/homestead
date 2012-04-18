@@ -18,7 +18,17 @@ PHPWS_Core::initModClass('hms', 'HMS_Item.php');
 
 class HMS_RLC_Application extends HMS_Item
 {
+    /**
+     * @deprecated
+     */
     const RLC_RESPONSE_LIMIT = 4096; // max number of characters allowed in the text areas on the RLC application
+    
+    /**
+     * Word limit for RLC question responses.
+     * 
+     * @var integer
+     */
+    const RLC_RESPONSE_WORD_LIMIT = 500;
 
     public $id;
 
@@ -58,6 +68,20 @@ class HMS_RLC_Application extends HMS_Item
         return new PHPWS_DB('hms_learning_community_applications');
     }
 
+    /**
+     * Returns true if this RLC application has been flagged as denied, false otherwise.
+     * 
+     * @return boolean
+     */
+    public function isDenied()
+    {
+        if($this->denied == 1){
+            return true;
+        }
+        
+        return false;
+    }
+    
     public function getAdminPagerTags()
     {
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');

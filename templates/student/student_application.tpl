@@ -102,10 +102,10 @@
             </tr>
             <tr>
                 <td>
-                    <p>Are you interested in living in a <a href="http://housing.appstate.edu/pagesmith/29" target="_blank">Residential Learning Community</a> (RLC)?</p>                  
+                    <p>Are you interested in living in a <a href="http://housing.appstate.edu/rlc" target="_blank">Residential Learning Community</a> (RLC)?</p>                  
                     <p>RLCs afford students a unique opportunity for an academic learning experience outside of the classroom.  Students participating in a learning community live together on the same floor of a residence hall and are often required to enroll in one or more linked courses which emphasize the theme of each specific community.  In addition, research shows that students who participate in a residential learning community have a higher GPA and enjoy a better college experience.</p>
                     <p>Appalachian State University was ranked as a 2010 Best College for Learning Communities according to U.S. News & World Report. We offer 17 options for students to choose from, including those focused on particular majors, and others with a focus on a particular student interest.  One of the best ways to develop strong friendships and succeed in college is to join a residential learning community. </p>
-                    <p>For more information visit the <a href="http://housing.appstate.edu/pagesmith/29" target="_blank">Residential Learning Communities website.</a></p>
+                    <p>For more information visit the <a href="http://housing.appstate.edu/rlc" target="_blank">Residential Learning Communities website.</a></p>
                 </td>
                 <td align="left">{RLC_INTEREST_1} {RLC_INTEREST_1_LABEL}&nbsp;{RLC_INTEREST_2} {RLC_INTEREST_2_LABEL}</td>
             </tr>
@@ -118,7 +118,7 @@
             </tr>
             <tr>
                 <td>
-                    <p>Are you interested in living in a <a href="http://housing.appstate.edu/pagesmith/29" target="_blank">Residential Learning Community</a> (RLC)?</p>
+                    <p>Are you interested in living in a <a href="http://housing.appstate.edu/rlc" target="_blank">Residential Learning Community</a> (RLC)?</p>
                     <p>You have already submitted a separate Learning Community Application. Use the options on the main menu to view or edit your Learning Community Application.</p>                  
                 </td>
             </tr>

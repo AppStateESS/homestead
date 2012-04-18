@@ -1,7 +1,11 @@
 <?php
-PHPWS_Core::initModClass('hms', 'View.php');
-PHPWS_Core::initModClass('hms', 'Term.php');
 
+/**
+ * View class for displaying an existing RLC application.
+ * 
+ * @author jbooker
+ * @package HMS
+ */
 class RlcApplicationReView extends View {
 
     private $student;
@@ -13,18 +17,23 @@ class RlcApplicationReView extends View {
     }
 
     public function show(){
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-
+        PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
+        PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
+        PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
+        
+        Layout::addPageTitle("RLC Application Review");
+        
         if(UserStatus::isAdmin()){
             $menuCmd = CommandFactory::getCommand('ShowAssignRlcApplicants');
-            $tags['MENU_LINK'] = $menuCmd->getLink('Return to RLC Applications');
+            $tags['MENU_LINK'] = $menuCmd->getLink('&laquo; Return to RLC Applications');
         }else{
             $menuCmd = CommandFactory::getCommand('ShowStudentMenu');
-            $tags['MENU_LINK'] = $menuCmd->getLink('Return to Menu');
+            $tags['MENU_LINK'] = $menuCmd->getLink('&laquo; Return to Menu');
         }
 
         $tags['FULL_NAME']    = $this->student->getFullName();
         $tags['STUDENT_TYPE'] = $this->student->getPrintableType();
+        $tags['TERM']         = Term::toString($this->application->getTerm());
 
         $appType = $this->application->getApplicationType();
         if($appType == RLC_APP_FRESHMEN){
@@ -32,39 +41,17 @@ class RlcApplicationReView extends View {
         }else if($appType == RLC_APP_RETURNING){
             $tags['APPLICATION_TYPE'] = 'Re-application';
         }
-
-        $tags['FIRST_CHOICE_LABEL'] = "First choice RLC is: ";
-        $tags['SECOND_CHOICE_LABEL'] = "Second choice is: ";
-        $tags['THIRD_CHOICE_LABEL'] =  "Third choice is: ";
-
-        $tags['WHY_SPECIFIC_LABEL'] = "Specific communities chosen because: ";
-        $tags['STRENGTHS_AND_WEAKNESSES_LABEL'] = "Strengths and weaknesses: ";
-        $tags['WHY_FIRST_CHOICE_LABEL'] = "First choice selected because: ";
-        $tags['WHY_SECOND_CHOICE_LABEL'] = "Second choice selected because: ";
-        $tags['WHY_THIRD_CHOICE_LABEL'] = "Third choice selected because: ";
-
-        //TODO move this to a function in HMS_Learning_Communities
-        $db = new PHPWS_DB('hms_learning_communities');
-        $db->addColumn('id');
-        $db->addColumn('community_name');
-        $rlcs_raw = $db->select();
-
-        foreach($rlcs_raw as $rlc) {
-            $rlcs[$rlc['id']] = $rlc['community_name'];
-        }
-
+        
+        $rlcs = HMS_Learning_Community::getRlcsById();
+        
         $tags['FIRST_CHOICE'] = $rlcs[$this->application->rlc_first_choice_id];
 
         if(isset($this->application->rlc_second_choice_id)){
             $tags['SECOND_CHOICE'] = $rlcs[$this->application->rlc_second_choice_id];
-        }else{
-            $tags['SECOND_CHOICE'] = 'None';
         }
 
         if(isset($this->application->rlc_third_choice_id)){
             $tags['THIRD_CHOICE'] = $rlcs[$this->application->rlc_third_choice_id];
-        }else{
-            $tags['THIRD_CHOICE'] = 'None';
         }
 
         $tags['WHY_SPECIFIC'] = $this->application->why_specific_communities;
@@ -73,22 +60,19 @@ class RlcApplicationReView extends View {
 
         if(isset($this->application->rlc_second_choice_id)){
             $tags['WHY_SECOND_CHOICE'] = $this->application->rlc_question_1;
-        }else{
-            $tags['WHY_SECOND_CHOICE'] = 'n/a';
         }
 
         if(isset($this->application->rlc_second_choice_id)){
             $tags['WHY_THIRD_CHOICE'] = $this->application->rlc_question_2;
-        }else{
-            $tags['WHY_THIRD_CHOICE'] = 'n/a';
         }
 
-        PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
-        PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
-
+        // If this application is denied and the person logged in is an admin, show a warning
+        if($this->application->isDenied() && UserStatus::isAdmin()){
+            NQ::simple('hms', HMS_NOTIFICATION_WARNING, 'This application has been denied.');
+        }
+        
         // Show options depending of status of application.
-        if(Current_User::allow('hms', 'approve_rlc_applications')){
+        if(UserStatus::isAdmin() && Current_User::allow('hms', 'approve_rlc_applications')){
             if(!$this->application->denied && !HMS_RLC_Assignment::checkForAssignment($this->student->getUsername(), Term::getSelectedTerm())){
                 // Approve application for the community selected from dropdown
                 $approvalForm = $this->getApprovalForm();
@@ -98,8 +82,6 @@ class RlcApplicationReView extends View {
                 $tags['DENY_APP'] = $this->getDenialLink();
             }
         }
-
-        Layout::addPageTitle("RLC Application Review");
 
         return PHPWS_Template::process($tags, 'hms', 'student/rlc_application.tpl');
     }
@@ -126,7 +108,7 @@ class RlcApplicationReView extends View {
     private function getApprovalForm()
     {
         $approveForm = new PHPWS_Form('approve_form');
-        $approveForm->addSubmit('approve', 'Approve');
+        $approveForm->addSubmit('approve', 'Accept');
         $approveCmd = CommandFactory::getCommand('AssignRlcApplicants');
         $tpl['RLC_LIST'] = HMS_RLC_Application::generateRLCDropDown(HMS_Learning_Community::getRLCList(),
                                                                              $this->application->id);

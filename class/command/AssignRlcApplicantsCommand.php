@@ -49,6 +49,9 @@ class AssignRlcApplicantsCommand extends Command {
             HMS_Activity_Log::log_activity($app->username, ACTIVITY_ASSIGN_TO_RLC, UserStatus::getUsername(), "New Assignment");
         }
         
+        // Show a success message
+        NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Successfully assigned RLC applicant(s).');
+        
         $context->goBack();
     }
 }
