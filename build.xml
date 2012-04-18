@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <project name="hms" default="build">
+    <property environment="env" />
+
     <target name="build"
         depends="prepare,lint,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpdox,phpunit,phpcb" />
 
@@ -27,6 +29,7 @@
         <delete dir="${basedir}/build/coverage"/>
         <delete dir="${basedir}/build/logs"/>
         <delete dir="${basedir}/build/pdepend"/>
+        <delete dir="${basedir}/build/rpm" />
     </target>
 
     <target name="prepare" depends="clean"
@@ -37,6 +40,7 @@
         <mkdir dir="${basedir}/build/logs"/>
         <mkdir dir="${basedir}/build/pdepend"/>
         <mkdir dir="${basedir}/build/phpdox"/>
+        <mkdir dir="${basedir}/build/rpm" />
     </target>
 
     <target name="lint">
@@ -137,6 +141,46 @@
             <arg path="${basedir}" />
             <arg value="--output" />
             <arg path="${basedir}/build/code-browser" />
+        </exec>
+    </target>
+
+    <tarfileset id="hms-tarball" dir="${basedir}" prefix="hms/">
+        <exclude name=".hg/**" />
+        <exclude name="build/**" />
+        <exclude name="build.xml" />
+        <exclude name="hms.spec" />
+        <exclude name="phpdox.xml" />
+    </tarfileset>
+
+    <target name="tarball" depends="prepare" description="Tar it up">
+        <tar destfile="${basedir}/build/hms-${RELVERSION}.tar.bz2" compression="bzip2">
+            <tarfileset refid="hms-tarball" />
+        </tar>
+    </target>
+
+    <target name="rpm" depends="tarball" description="Build an RPM">
+        <copy file="/var/www/html/convenience/phpwebsite-hms-latest.tar.bz2"
+              todir="${basedir}/build" />
+        <exec executable="rpmbuild">
+            <arg value="--define" />
+            <arg value="_topdir ${basedir}/build/rpm" />
+            <arg value="--define" />
+            <arg value="_rpmdir %{_topdir}" />
+            <arg value="--define" />
+            <arg value="_srcrpmdir %{_topdir}" />
+            <arg value="--define" />
+            <arg value="_rpmfilename %%{NAME}-%%{VERSION}-%%{RELEASE}.%%{ARCH}.rpm" />
+            <arg value="--define" />
+            <arg value="_specdir %{_topdir}" />
+            <arg value="--define" />
+            <arg value="_sourcedir ${basedir}/build" />
+            <arg value="--define" />
+            <arg value="vendor ESS" />
+            <arg value="--define" />
+            <arg value="version ${RELVERSION}" />
+            <arg value="-bb" />
+            <arg value="--sign" />
+            <arg path="${basedir}/hms.spec" />
         </exec>
     </target>
 </project>
