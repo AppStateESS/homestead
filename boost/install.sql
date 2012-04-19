@@ -29,6 +29,7 @@ CREATE TABLE hms_student_cache (
     watauga_member      character varying(5) NOT NULL,
     disabled_pin		smallint NOT NULL DEFAULT 0,
     housing_waiver      smallint NOT NULL DEFAULT 0,
+    admissions_decision_code text,
     PRIMARY KEY (banner_id, term)
 );
 

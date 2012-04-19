@@ -29,6 +29,8 @@ class Student {
     public $disabled_pin;
     public $housing_waiver; // Whether or not a freshmen's student on-campus housing has been waived (e.g., living close by with family)
 
+    public $admissions_decision_code;
+    
     public $addressList;
     public $phoneNumberList;
 
@@ -453,6 +455,14 @@ class Student {
         $this->housing_waiver = $waiver;
     }
 
+    public function getAdmissionDecisionCode(){
+        return $this->admissions_decision_code;
+    }
+    
+    public function setAdmissionDecisionCode($code){
+        $this->admissions_decision_code = $code;
+    }
+    
     public function getAddressList(){
         return $this->addressList;
     }

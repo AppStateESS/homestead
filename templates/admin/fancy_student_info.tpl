@@ -45,6 +45,10 @@
                         <td>{STUDENT_LEVEL}</td>
                     </tr>
                     <tr>
+                        <th>Admissions Decision</th>
+                        <td>{ADMISSION_DECISION}</td>
+                    </tr>
+                    <tr>
                         <th>International</th>
                         <td>{INTERNATIONAL}</td>
                     </tr>
