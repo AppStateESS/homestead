@@ -55,7 +55,12 @@ class SOAPDataProvider extends StudentDataProvider {
 
         $student->setDepositDate($soapData->deposit_date);
 
-        $student->setStudentLevel($soapData->student_level);
+        if(isset($soapData->student_level)){
+            $student->setStudentLevel($soapData->student_level);
+        }else{
+            $student->setStudentLevel('');
+        }
+        
         $student->setInternational($soapData->international);
 
         $student->setHonors($soapData->honors);
