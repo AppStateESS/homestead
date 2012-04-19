@@ -184,6 +184,7 @@
             <arg value="_gpg_path /etc/ess/gnupg" />
             <arg value="--define" />
             <arg value="_gpg_name Electronic Student Services" />
+            <arg value="--define" />
             <arg value="_gpgbin /usr/bin/gpg" />
             <arg value="-bb" />
             <arg value="--sign" />
