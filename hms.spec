@@ -4,16 +4,17 @@
 %define release 1
 %define install_dir /var/www/hms
 
-Summary: Housing Management System
-Name:    %{name}
-Version: %{version}
-Release: %{release}
-License: GPL
-Group:   Development/PHP
-URL:     http://phpwebsite.appstate.edu
-Source0: %{name}-%{version}.tar.bz2
-Source1: phpwebsite-hms-latest.tar.bz2
-Requires: php >= 5.0.0, php-gd >= 5.0.0
+Summary:   Housing Management System
+Name:      %{name}
+Version:   %{version}
+Release:   %{release}
+License:   GPL
+Group:     Development/PHP
+URL:       http://phpwebsite.appstate.edu
+Source0:   %{name}-%{version}.tar.bz2
+Source1:   phpwebsite-hms-latest.tar.bz2
+Requires:  php >= 5.0.0, php-gd >= 5.0.0
+BuildArch: noarch
 
 %description
 The Housing Management System
