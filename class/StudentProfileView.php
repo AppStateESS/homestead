@@ -54,6 +54,8 @@ class StudentProfileView extends View {
         $tpl['TYPE'] = $this->student->getPrintableType();
 
         $tpl['STUDENT_LEVEL'] = $this->student->getPrintableLevel();
+        
+        $tpl['ADMISSION_DECISION'] = $this->student->getAdmissionDecisionCode();
 
         $tpl['INTERNATIONAL'] = $this->student->isInternational() ? 'Yes' : 'No';
 

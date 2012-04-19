@@ -1,0 +1,1 @@
+alter table hms_student_cache add column admissions_decision_code text;

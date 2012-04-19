@@ -64,6 +64,12 @@ class SOAPDataProvider extends StudentDataProvider {
         
         $student->setHousingWaiver($soapData->housing_waiver);
         $student->setPinDisabled($soapData->disabled_pin);
+        
+        if(isset($soapData->app_decision_code)){
+            $student->setAdmissionDecisionCode($soapData->app_decision_code);
+        }else{
+            $student->setAdmissionDecisionCode('');
+        }
 
         $phoneNumbers = array();
 

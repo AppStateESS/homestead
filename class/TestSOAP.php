@@ -34,6 +34,7 @@ class TestSOAP extends SOAP{
 
         $student->international         = false;
         $student->student_level         = 'U';
+        $student->app_decision_code     = '1*';
 
         $student->honors                = true;
         $student->teaching_fellow       = true;
