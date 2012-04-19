@@ -178,6 +178,13 @@
             <arg value="vendor ESS" />
             <arg value="--define" />
             <arg value="version ${RELVERSION}" />
+            <arg value="--define" />
+            <arg value="_signature gpg" />
+            <arg value="--define" />
+            <arg value="_gpg_path /etc/ess/gnupg" />
+            <arg value="--define" />
+            <arg value="_gpg_name Electronic Student Services" />
+            <arg value="_gpgbin /usr/bin/gpg" />
             <arg value="-bb" />
             <arg value="--sign" />
             <arg path="${basedir}/hms.spec" />
