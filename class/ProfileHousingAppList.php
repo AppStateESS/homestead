@@ -39,13 +39,14 @@ class ProfileHousingAppList extends View {
 
             $type = $app->getPrintableAppType();
 
-            if(isset($app->room_condition)){
+            // Clean/dirty and early/late preferences are only fields on the FallApplication
+            if($app instanceof FallApplication && isset($app->room_condition)){
                 $clean = $app->room_condition == 1 ? 'Neat' : 'Cluttered';
             }else{
                 $clean = '';
             }
 
-            if(isset($app->preferred_bedtime)){
+            if($app instanceof FallApplication && isset($app->preferred_bedtime)){
                 $bedtime = $app->preferred_bedtime == 1 ? 'Early' : 'Late';
             }else{
                 $bedtime = '';

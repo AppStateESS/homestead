@@ -26,6 +26,7 @@ class StudentProfile {
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
         PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
         PHPWS_Core::initModClass('hms', 'HousingApplication.php');
+        PHPWS_Core::initModClass('hms', 'HousingApplicationFactory.php');
         PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
 
         $studentUsername = $this->student->getUsername();
@@ -119,8 +120,14 @@ class StudentProfile {
         }
 
         $applications = HousingApplication::getAllApplicationsForStudent($this->student);
-
-        return new StudentProfileView($this->student, $applications, $assignment, $this->roommates);
+        $subTypeApps = array();
+        
+        // Convert each of the general HousingApplication objets to its specific sub type (e.g. FallApplication)
+        foreach($applications as $app){
+            $subTypeApps[] = HousingApplicationFactory::getApplicationById($app->id);
+        }
+        
+        return new StudentProfileView($this->student, $subTypeApps, $assignment, $this->roommates);
     }
 
 
