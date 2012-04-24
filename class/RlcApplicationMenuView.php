@@ -54,7 +54,7 @@ class RlcApplicationMenuView extends View {
             
             $acceptCmd = CommandFactory::getCommand('ShowAcceptRlcInvite');
             $acceptCmd->setTerm($this->term);
-            $tpl['INVITED_CONFIRM_LINK'] = $acceptCmd->getLink('accept your invitation');
+            $tpl['INVITED_CONFIRM_LINK'] = $acceptCmd->getLink('accept or decline your invitation');
             
         }else if(isset($this->application) && !is_null($this->application->id)) {
             $tpl['ICON'] = FEATURE_COMPLETED_ICON;
