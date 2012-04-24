@@ -215,7 +215,8 @@ class HMS_Activity_Log{
         ACTIVITY_LOTTERY_ROOMMATE_DENIED        => "Denied lottery roommate invite",
         ACTIVITY_CANCEL_HOUSING_APPLICATION     => "Housing Application Cancelled",
         ACTIVITY_ACCEPT_RLC_INVITE              => "Accepted RLC Invitation",
-        ACTIVITY_DECLINE_RLC_INVITE             => "Declined RLC Invitation");
+        ACTIVITY_DECLINE_RLC_INVITE             => "Declined RLC Invitation",
+        ACTIVITY_RLC_INVITE_SENT                => "RLC Invitation Sent");
     }
 
     /**

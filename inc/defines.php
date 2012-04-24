@@ -348,8 +348,9 @@ define('ACTIVITY_RLC_APPLICATION_DELETED',		66);
 
 define('ACTIVITY_CANCEL_HOUSING_APPLICATION',   67);
 
-define('ACTIVITY_ACCEPT_RLC_INVITE',   68);
-define('ACTIVITY_DECLINE_RLC_INVITE',   69);
+define('ACTIVITY_ACCEPT_RLC_INVITE',            68);
+define('ACTIVITY_DECLINE_RLC_INVITE',           69);
+define('ACTIVITY_RLC_INVITE_SENT',              70);
 
 /**
  * Errors

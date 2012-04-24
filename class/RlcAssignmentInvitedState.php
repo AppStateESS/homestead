@@ -26,6 +26,7 @@ class RlcAssignmentInvitedState extends RlcAssignmentState {
     {
         PHPWS_Core::initModClass('hms', 'HMS_Email.php');
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
 
         $application = $this->rlcAssignment->getApplication();
         
@@ -36,6 +37,8 @@ class RlcAssignmentInvitedState extends RlcAssignmentState {
         $student = StudentFactory::getStudentByUsername($username, $term);
         
         HMS_Email::sendRlcInviteEmail($student, $community, $term, $this->respondByTimestamp);
+        
+        HMS_Activity_Log::log_activity($student->getUsername(), ACTIVITY_RLC_INVITE_SENT, UserStatus::getUsername());
     }
 }
 
