@@ -1,7 +1,42 @@
 <h3>{TERM} &raquo; {HALL_NAME} &raquo; {FLOOR_NUMBER}</h3>
-<!-- BEGIN room_num -->
-<h1>Room {ROOM}</h1>
-<!-- END room_num -->
+<h1 style="display: inline; margin-right: 15px">Room {ROOM}</h1>
+
+<!-- BEGIN offline -->
+<h2 class="room-attribute offline-room-label">{OFFLINE_ATTRIB}</h2>
+<!-- END offline -->
+
+<!-- BEGIN reserved -->
+<h2 class="room-attribute reserved-room-label">{RESERVED_ATTRIB}</h2>
+<!-- END reserved -->
+
+<!-- BEGIN RA -->
+<h2 class="room-attribute ra-room-label">{RA_ATTRIB}</h2>
+<!-- END RA -->
+
+<!-- BEGIN private -->
+<h2 class="room-attribute private-room-label">{PRIVATE_ATTRIB}</h2>
+<!-- END private -->
+
+<!-- BEGIN overflow -->
+<h2 class="room-attribute overflow-room-label">{OVERFLOW_ATTRIB}</h2>
+<!-- END overflow -->
+
+<!-- BEGIN parlor -->
+<h2 class="room-attribute parlor-room-label">{PARLOR_ATTRIB}</h2>
+<!-- END parlor -->
+
+<!-- BEGIN ada -->
+<h2 class="room-attribute ada-room-label">{ADA_ATTRIB}</h2>
+<!-- END ada -->
+
+<!-- BEGIN hearing -->
+<h2 class="room-attribute hearing-impaired-room-label">{HEARING_ATTRIB}</h2>
+<!-- END hearing -->
+
+<!-- BEGIN bath -->
+<h2 class="room-attribute bath-en-suite-room-label">{BATHENSUITE_ATTRIB}</h2>
+<!-- END bath -->
+
 <!-- BEGIN new -->{NEW_ROOM}
 <h1>New Room</h1>
 <!-- END new -->

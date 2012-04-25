@@ -145,6 +145,50 @@
   border: 1px solid;
 }
 
+/****************************
+ * Hall Structure Interface *
+ ****************************/
+h2.room-attribute{
+  display:inline;
+  margin-right:5px;
+}
+
+.offline-room-label {
+  color: red;
+}
+
+.reserved-room-label {
+  color: red;
+}
+
+.ra-room-label {
+  color: red;
+}
+
+.private-room-label {
+  color: red;
+}
+
+.overflow-room-label {
+  color: red;
+}
+
+.parlor-room-label {
+  color: red;
+}
+
+.ada-room-label {
+  color: grey;
+}
+
+.hearing-impaired-room-label {
+  color: grey;
+}
+
+.bath-en-suite-room-label {
+  color: grey;
+}
+
 /* OLD STUFF */
 /*
 .select-label {

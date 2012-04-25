@@ -22,13 +22,53 @@ class RoomView extends View {
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
-        $tpl['ROOM'] = $this->room->getRoomNumber();
+        /*** Header Info ***/
         $tpl['TERM'] = Term::getPrintableSelectedTerm();
-
-        $number_of_assignees    = $this->room->get_number_of_assignees();
-
         $tpl['HALL_NAME']           = $this->hall->getLink();
         $tpl['FLOOR_NUMBER']        = $this->floor->getLink('Floor');
+        
+        /*** Page Title ***/
+        $tpl['ROOM'] = $this->room->getRoomNumber();
+        
+        /*** Room Attributes Labels ***/
+        if($this->room->isOffline()){
+            $tpl['OFFLINE_ATTRIB'] = 'Offline';
+        }
+        
+        if($this->room->isReserved()){
+            $tpl['RESERVED_ATTRIB'] = 'Reserved';
+        }
+        
+        if($this->room->isRa()){
+            $tpl['RA_ATTRIB'] = 'RA';
+        }
+        
+        if($this->room->isPrivate()){
+            $tpl['PRIVATE_ATTRIB'] = 'Private';
+        }
+        
+        if($this->room->isOverflow()){
+            $tpl['OVERFLOR_ATTRIB'] = 'Overflow';
+        }
+        
+        if($this->room->isParlor()){
+            $tpl['PARLOR_ATTRIB'] = 'Parlor';
+        }
+        
+        if($this->room->isADA()){
+            $tpl['ADA_ATTRIB'] = 'ADA';
+        }
+        
+        if($this->room->isHearingImpaired()){
+            $tpl['HEARING_ATTRIB'] = 'Hearing Impaired';
+        }
+        
+        if($this->room->bathEnSuite()){
+            $tpl['BATHENSUITE_ATTRIB'] = 'Bath en Suite';
+        }
+        
+        $number_of_assignees    = $this->room->get_number_of_assignees();
+
         $tpl['NUMBER_OF_BEDS']      = $this->room->get_number_of_beds();
         $tpl['NUMBER_OF_ASSIGNEES'] = $number_of_assignees;
 
@@ -83,9 +123,6 @@ class RoomView extends View {
         $form->addCheck('private', 1);
         $form->setLabel('private','Private');
         $form->setMatch('private', $this->room->isPrivate());
-
-        //$form->addCheck('medical', 1);
-        //$form->setMatch('medical', $this->room->isMedical());
 
         $form->addCheck('overflow', 1);
         $form->setLabel('overflow','Overflow');
