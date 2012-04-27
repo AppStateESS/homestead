@@ -253,75 +253,35 @@ class HousingApplication {
         }
     }
 
-    /*
-     * Returns the table row tags for the 'unassigned applications report' in
-    * HMS_Reports.php
-    */
-    public function unassignedApplicantsRows()
+    /**
+     * Returns the fields for this HousingApplication parent class. Usually called by overriding methods in subclasses (e.g. SummerApplication).
+     * 
+     * @return Array Array of fields for this HousingApplication.
+     */
+    protected function unassignedStudentsFields()
     {
-        $tpl = array();
-        $tpl['BANNER_ID']         = $this->getBannerId();
-        $tpl['USERNAME']          = $this->getUsername();
-        $tpl['GENDER']            = HMS_Util::formatGender($this->getGender());
-        $tpl['STUDENT_TYPE']      = HMS_Util::formatType($this->getStudentType());
-        $tpl['APP_TERM']          = Term::toString($this->getApplicationTerm(), TRUE);
-        $tpl['MEAL']              = HMS_Util::formatMealOption($this->getMealPlan());
-
-        if(is_null($this->lifestyle_option)){
-            $tpl['LIFESTYLE_OPTION']     = 'n/a';
-        }else{
-            $tpl['LIFESTYLE_OPTION']     = $this->lifestyle_option == 1 ? 'Single Gender' : 'Co-ed';
-        }
-
-        if(is_null($this->preferred_bedtime)){
-            $tpl['Preferred_BEDTIME'] = 'n/a';
-        }else{
-            $tpl['PREFERRED_BEDTIME'] = $this->preferred_bedtime == 1 ? 'Early' : 'Late';
-        }
+        $fields = array();
+        $fields['banner_id']         = $this->getBannerId();
+        $fields['username']          = $this->getUsername();
+        $fields['gender']            = HMS_Util::formatGender($this->getGender());
+        $fields['application_term']  = Term::toString($this->getApplicationTerm(), TRUE);
+        $fields['student_type']      = HMS_Util::formatType($this->getStudentType());
+        $fields['meal_plan']         = HMS_Util::formatMealOption($this->getMealPlan());
+        
+        $fields['created_on']        = HMS_Util::get_long_date($this->getCreatedOn());
 
         $roommate = HMS_Roommate::get_confirmed_roommate($this->getUsername(), $this->getTerm());
         if(!is_null($roommate)){
-            $tpl['ROOMMATE']    = $roommate->getFullName();
+            $fields['roommate'] = $roommate->getFullName();
+            $fields['roommate_id'] = $roommate->getBannerId();
+        }else{
+            $fields['roommate'] = '';
+            $fields['roommate_id'] = '';
         }
 
-        $assignCmd = CommandFactory::getCommand('ShowAssignStudent');
-        $assignCmd->setUsername($this->getUsername());
-
-        $tpl['ACTIONS']         = '[' . $assignCmd->getLink('Assign', '_blank') . ' ]';
-
-        return $tpl;
+        return $fields;
     }
 
-    public function unassignedApplicantsCSV()
-    {
-        $tpl = array();
-        $tpl['BANNER_ID']       = $this->getBannerId();
-        $tpl['USERNAME']        = $this->getUsername();
-        $tpl['GENDER']          = HMS_Util::formatGender($this->getGender());
-        $tpl['STUDENT_TYPE']    = HMS_Util::formatType($this->getStudentType());
-        $tpl['APP_TERM']        = Term::toString($this->getApplicationTerm(), TRUE);
-        $tpl['MEAL']            = HMS_Util::formatMealOption($this->getMealPlan());
-
-        $roommate = HMS_Roommate::get_confirmed_roommate($this->getUsername(), $this->getTerm());
-        if(!is_null($roommate)){
-            $tpl['ROOMMATE']    = $roommate->getFullName();
-        }
-
-        if(is_null($this->lifestyle_option)){
-            $tpl['LIFESTYLE_OPTION']     = 'n/a';
-        }else{
-            $tpl['LIFESTYLE_OPTION']     = $this->lifestyle_option == 1 ? 'Single Gender' : 'Co-ed';
-        }
-
-        if(is_null($this->preferred_bedtime)){
-            $tpl['PREFERRED_BEDTIME'] = 'n/a';
-        }else{
-            $tpl['PREFERRED_BEDTIME'] = $this->preferred_bedtime == 1 ? 'Early' : 'Late';
-        }
-
-        return $tpl;
-    }
-    
     /**
      * Marks an application as cancelled.
      * 

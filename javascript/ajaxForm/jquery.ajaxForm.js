@@ -60,7 +60,7 @@
 			}
 			
 			// Actually Submit
-			$this.bind('submit', {submitSelector:o.submitSelector}, function(e) {
+			$this.bind('submit', null, function(e) {
 				// TODO: Respect GET and POST
 				uri = $(this).attr('action');
 				$$this = $(this);
@@ -96,8 +96,8 @@
 						//	$$this.find('input[name="'+n+'"]').attr('value', data[n]);
 						//}
 						$$this.find('input').removeAttr('disabled');
-						if(e.data.submitSelector != '') {
-							$$this.find(e.data.submitSelector).hide('fast');
+						if(o.submitSelector != '') {
+							$$this.find(o.submitSelector).hide('fast');
 						}
 
                         // Remove 'term' and 'name', replace with 'featureId'
@@ -108,7 +108,7 @@
 					}
 				});
 				$(this).find('input').attr('disabled', 'disabled');
-				e.preventDefault()
+				e.preventDefault();
 				return false;
 			});
 		});

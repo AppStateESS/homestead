@@ -107,30 +107,20 @@ class FallApplication extends HousingApplication{
         return TRUE;
     }
 
-    /*
-     * Returns the table row tags for the 'unassigned applications report' in
-     * HMS_Reports.php
+    /**
+     * Returns the fields specific to the FallApplications (used in the UnassignedStudents Report).
+     * 
+     * @return Array Array of fields for this FallApplication.
      */
-    public function unassignedApplicantsRows()
+    public function unassignedStudentsFields()
     {
-        $tpl = parent::unassignedApplicantsRows();
+        $fields = parent::unassignedStudentsFields();
 
-        $tpl['LIFESTYLE']       = $this->getLifestyleOption()  == 1 ? 'Single gender' : 'Co-ed';
-        $tpl['BEDTIME']         = $this->getPreferredBedtime() == 1 ? 'Early'         : 'Late';
-        $tpl['ROOM_CONDITION']  = $this->getRoomCondition()    == 1 ? 'Neat'          : 'Cluttered';
+        $feilds['lifestyle']       = $this->getLifestyleOption()  == 1 ? 'Single gender' : 'Co-ed';
+        $fields['bedtime']         = $this->getPreferredBedtime() == 1 ? 'Early'         : 'Late';
+        $fields['room_condition']  = $this->getRoomCondition()    == 1 ? 'Neat'          : 'Cluttered';
 
-        return $tpl;
-    }
-
-    public function unassignedApplicantsCSV()
-    {
-        $tpl = parent::unassignedApplicantsCSV();
-
-        $tpl['LIFESTYLE']       = $this->getLifestyleOption()  == 1 ? 'Single gender' : 'Co-ed';
-        $tpl['BEDTIME']         = $this->getPreferredBedtime() == 1 ? 'Early'         : 'Late';
-        $tpl['ROOM_CONDITION']  = $this->getRoomCondition()    == 1 ? 'Neat'          : 'Cluttered';
-
-        return $tpl;
+        return $fields;
     }
 
     /************************

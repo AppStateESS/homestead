@@ -90,7 +90,7 @@ class HMS_Util{
     }
 
     /**
-     * Return a date in long format dd-mm-yyyy given a timestamp
+     * Return a date in long format mm/dd/yyyy given a timestamp
      *
      * @param int $timestamp
      */
@@ -98,7 +98,7 @@ class HMS_Util{
         if(!isset($timestamp))
         $timestamp = mktime();
 
-        return date('n-j-Y', $timestamp);
+        return date('n/j/Y', $timestamp);
     }
 
     /**

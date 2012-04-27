@@ -100,50 +100,28 @@ class SummerApplication extends HousingApplication{
         return TRUE;
     }
 
-    /*
-     * Returns the table row tags for the 'unassigned applications report' in
-     * HMS_Reports.php
+    /**
+     * Returns the fields specific to the SummerApplications (used in the UnassignedStudents Report).
+     * 
+     * @return Array Array of fields for this SummerApplication.
      */
-    public function unassignedApplicantsRows()
+    public function unassignedStudentsFields()
     {
-        $tpl = parent::unassignedApplicantsRows();
-
-        $tpl['ROOM_TYPE']  = $this->getRoomType();
+        $fields = parent::unassignedStudentsFields();
 
         switch($this->getRoomType()){
             case ROOM_TYPE_DOUBLE:
-                $tpl['ROOM_TYPE']   = 'Double';
+                $fields['room_type']   = 'Double';
                 break;
             case ROOM_TYPE_PRIVATE:
-                $tpl['ROOM_TYPE']   = 'Private';
+                $fields['room_type']   = 'Private';
                 break;
             default:
-                $tpl['ROOM_TYPE']   = 'Unknown';
+                $fields['room_type']   = 'Unknown';
                 break;
         }
 
-        return $tpl;
-    }
-
-    public function unassignedApplicantsCSV()
-    {
-        $tpl = parent::unassignedApplicantsCSV();
-
-        $tpl['ROOM_TYPE']  = $this->getRoomType();
-
-        switch($this->getRoomType()){
-            case ROOM_TYPE_DOUBLE:
-                $tpl['ROOM_TYPE']   = 'Double';
-                break;
-            case ROOM_TYPE_PRIVATE:
-                $tpl['ROOM_TYPE']   = 'Private';
-                break;
-            default:
-                $tpl['ROOM_TYPE']   = 'Unknown';
-                break;
-        }
-
-        return $tpl;
+        return $fields;
     }
 
     /************************
