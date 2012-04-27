@@ -7,8 +7,6 @@ class GetMealPlanDropboxCommand extends Command {
     }
 
     public function execute(CommandContext $context){
-		PHPWS_Core::initModClass('hms', 'Term.php');
-    	
     	$options = array(BANNER_MEAL_LOW   => 'Low',
                          BANNER_MEAL_STD   => 'Standard',
                          BANNER_MEAL_HIGH  => 'High',
