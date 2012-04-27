@@ -277,8 +277,9 @@ class HMS_Util{
                 return 'High';
             case BANNER_MEAL_SUPER:
                 return 'Super';
-            case BANNER_MEAL_4WEEK:
-                return 'Summer (4 weeks)';
+        	// 4 Week Meal Plan Removed according to ticket #709
+            //case BANNER_MEAL_4WEEK:
+            //    return 'Summer (4 weeks)';
             case BANNER_MEAL_5WEEK:
                 return 'Summer (5 weeks)';
             default:
