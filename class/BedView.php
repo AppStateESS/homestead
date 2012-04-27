@@ -52,10 +52,16 @@ class BedView extends View {
 
         $form->addText('banner_id', $this->bed->banner_id);
 
-        $form->addCheckBox('ra_bed', 1);
+        $form->addCheckBox('ra_roommate', 1);
 
-        if($this->bed->ra_bed == 1){
-            $form->setExtra('ra_bed', 'checked');
+        if($this->bed->ra_roommate == 1){
+            $form->setExtra('ra_roommate', 'checked');
+        }
+        
+        $form->addCheckBox('international_reserved');
+        
+        if($this->bed->international_reserved == 1){
+            $form->setExtra('international_reserved', 'checked');
         }
 
         $form->addSubmit('submit', 'Submit');

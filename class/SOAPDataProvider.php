@@ -55,7 +55,12 @@ class SOAPDataProvider extends StudentDataProvider {
 
         $student->setDepositDate($soapData->deposit_date);
 
-        $student->setStudentLevel($soapData->student_level);
+        if(isset($soapData->student_level)){
+            $student->setStudentLevel($soapData->student_level);
+        }else{
+            $student->setStudentLevel('');
+        }
+        
         $student->setInternational($soapData->international);
 
         $student->setHonors($soapData->honors);
@@ -64,6 +69,12 @@ class SOAPDataProvider extends StudentDataProvider {
         
         $student->setHousingWaiver($soapData->housing_waiver);
         $student->setPinDisabled($soapData->disabled_pin);
+        
+        if(isset($soapData->app_decision_code)){
+            $student->setAdmissionDecisionCode($soapData->app_decision_code);
+        }else{
+            $student->setAdmissionDecisionCode('');
+        }
 
         $phoneNumbers = array();
 
@@ -113,6 +124,14 @@ class SOAPDataProvider extends StudentDataProvider {
 
         if($student->getUsername() == 'weldoncr'){
             $student->setApplicationTerm(200840);
+        }
+
+        if($student->getUsername() == 'ghoniema'){
+            $student->setType(TYPE_CONTINUING);
+        }
+        
+        if($student->getUsername() == 'brannonpg'){
+            $student->setApplicationTerm(201210);
         }
     }
 }

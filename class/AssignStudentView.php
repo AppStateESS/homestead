@@ -108,16 +108,43 @@ class AssignStudentView extends View {
             $tpl['LINK_STYLE'] = '';
         }
 
-        $form->addDropBox('meal_plan', array(BANNER_MEAL_LOW   => 'Low',
-        BANNER_MEAL_STD   => 'Standard',
-        BANNER_MEAL_HIGH  => 'High',
-        BANNER_MEAL_SUPER => 'Super',
-        BANNER_MEAL_NONE  => 'None',
-        BANNER_MEAL_4WEEK => 'Summer (4 weeks)',
-        BANNER_MEAL_5WEEK => 'Summer (5 weeks)'));
+        $form->addDropBox('meal_plan', array(
+	        BANNER_MEAL_LOW   => 'Low',
+	        BANNER_MEAL_STD   => 'Standard',
+	        BANNER_MEAL_HIGH  => 'High',
+	        BANNER_MEAL_SUPER => 'Super',
+	        BANNER_MEAL_NONE  => 'None',
+	        BANNER_MEAL_4WEEK => 'Summer (4 weeks)',
+	        BANNER_MEAL_5WEEK => 'Summer (5 weeks)'));
         $form->setMatch('meal_plan', BANNER_MEAL_STD);
         $form->setLabel('meal_plan', 'Meal plan: ');
 
+        // "Assignment Type"
+        $form->addDropBox('assignment_type', array(
+            ASSIGN_ADMIN             => 'Administrative',
+            ASSIGN_LOTTERY	         => 'Lottery',
+            ASSIGN_FR   	         => 'Freshmen',
+            ASSIGN_TRANSFER          => 'Transfer',
+            ASSIGN_APH               => 'APH',
+            ASSIGN_RLC_FRESHMEN      => 'RLC Freshmen',
+            ASSIGN_RLC_TRANSFER      => 'RLC Transfer',
+            ASSIGN_RLC_CONTINUING    => 'RLC Continuing',
+            ASSIGN_HONORS_FRESHMEN   => 'Honors Freshmen',
+            ASSIGN_HONORS_CONTINUING => 'Honors Continuing',
+            ASSIGN_LLC_FRESHMEN      => 'LLC Freshmen',
+            ASSIGN_LLC_CONTINUING    => 'LLC Continuing',
+            ASSIGN_INTL              => 'International',
+            ASSIGN_RA                => 'RA',
+            ASSIGN_RA_ROOMMATE       => 'RA Roommate',
+            ASSIGN_MEDICAL           => 'Medical',
+            ASSIGN_SPECIAL           => 'Special Needs',
+            ASSIGN_RHA               => 'RHA/NRHH',
+            ASSIGN_SCHOLARS          => 'Diversity &amp; Plemmons Scholars'
+        ));
+        
+        $form->setMatch('assignment_type', ASSIGN_ADMIN);
+        $form->setLabel('assignment_type', 'Assignment Type: ');
+        
         $form->addSubmit('submit', 'Assign Student');
 
         if($pre_populate){

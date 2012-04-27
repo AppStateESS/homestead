@@ -33,7 +33,12 @@
      * Deadlines *
      *************/
     $permissions['deadlines']               = _('View and Change Deadlines');
-
+    
+    /************************
+     * Housing Applications *
+     ************************/
+    $permissions['cancel_housing_application'] = _('Cancel Housing Applications');
+    
     /******************
      * Hall Structure *
      ******************/

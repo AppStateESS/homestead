@@ -1,0 +1,1 @@
+Generates tables which break down the population of assigned students for a term by student type, class, and gender per hall, and provides cumulative data over all halls.

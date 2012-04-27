@@ -611,7 +611,6 @@ class HMS_Letter
         $result = $db->select();
 
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -688,7 +687,6 @@ class HMS_Letter
                 $rslt = $db->update();
 
                 if(PHPWS_Error::logIfError($rslt)){
-                    PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
                     throw new DatabaseException($result->toString());
                 }
             }

@@ -18,7 +18,17 @@ PHPWS_Core::initModClass('hms', 'HMS_Item.php');
 
 class HMS_RLC_Application extends HMS_Item
 {
+    /**
+     * @deprecated
+     */
     const RLC_RESPONSE_LIMIT = 4096; // max number of characters allowed in the text areas on the RLC application
+    
+    /**
+     * Word limit for RLC question responses.
+     * 
+     * @var integer
+     */
+    const RLC_RESPONSE_WORD_LIMIT = 500;
 
     public $id;
 
@@ -58,6 +68,20 @@ class HMS_RLC_Application extends HMS_Item
         return new PHPWS_DB('hms_learning_community_applications');
     }
 
+    /**
+     * Returns true if this RLC application has been flagged as denied, false otherwise.
+     * 
+     * @return boolean
+     */
+    public function isDenied()
+    {
+        if($this->denied == 1){
+            return true;
+        }
+        
+        return false;
+    }
+    
     public function getAdminPagerTags()
     {
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
@@ -159,29 +183,86 @@ class HMS_RLC_Application extends HMS_Item
         return $tags;
     }
 
+    /**
+     * Pager tags for the RlcRosterPager (ShowViewByRlcCommand)
+     */
     public function viewByRLCPagerTags()
     {
+        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
+        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
+        
         $tags = array();
 
+        // Get the Student object
         try{
             $student = StudentFactory::getStudentByUsername($this->username, Term::getSelectedTerm());
         }catch(StudentNotFoundException $e){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, "No student found with username: {$this->username}.");
+            // Catch the StudentNotFound exception in the odd case that someone doesn't exist.
+            // Show a warning message and skip the rest of the method
+            NQ::simple('hms', HMS_NOTIFICATION_WARNING, "No student found with username: {$this->username}.");
             $tags['USERNAME'] = $this->username;
             $tags['NAME'] = 'UNKNOWN - INVALID';
             return $tags;
         }
 
-        $tags['NAME']       = $student->getFulLNameProfileLink();
-        $tags['GENDER']     = $student->getPrintableGender();
+        // Display demographic info
+        $tags['NAME']       = $student->getProfileLink();
+        $tags['BANNER_ID']  = $student->getBannerId();
+        $tags['GENDER']     = $student->getPrintableGenderAbbreviation();
         $tags['USERNAME']   = $this->username;
+        
+        /*** Assignment Status/State ***/
+        // Lookup the assignmnet (used later as well)
+        $assign = HMS_RLC_Assignment::getAssignmentByUsername($this->username, $this->term);
+        $state = $assign->getStateName();
+        if($state == 'confirmed'){
+            $tags['STATE'] = '<span style="color:green">confirmed</span>';
+        }else if($state == 'declined'){
+            $tags['STATE'] = '<span style="color:red">declined</span>';
+        }else if($state == 'new'){
+            $tags['STATE'] = '<span class="disabledText">not invited</span>';
+        }else if($state == 'invited'){
+            $tags['STATE'] = '<span class="disabledText">pending</span>';
+        }else{
+            $tags['STATE'] = '';
+        }
+        
+        
+        // Check for/display room assignment
+        $roomAssign = HMS_Assignment::getAssignmentByBannerId($student->getBannerId(), Term::getSelectedTerm());
+        
+        if(isset($roomAssign)){
+            $tags['ROOM_ASSIGN'] = $roomAssign->where_am_i();
+        }else{
+            $tags['ROOM_ASSIGN'] = 'n/a';
+        }
 
+        /*** Roommates ***/
+        // Show all possible roommates for this application
+        PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
+        
+        $allRoommates = HMS_Roommate::get_all_roommates($this->username, $this->term);
+        $tags['ROOMMATES'] = 'N/A'; // Default text
+        
+        if(sizeof($allRoommates) > 1) {
+            // Don't show all the roommates
+            $tags['ROOMMATES'] = "Multiple Requests";
+        }
+        elseif(sizeof($allRoommates) == 1) {
+            // Get other roommate
+            $otherGuy = StudentFactory::getStudentByUsername($allRoommates[0]->get_other_guy($this->username), $this->term);
+            $tags['ROOMMATES'] = $otherGuy->getFullNameProfileLink();
+            // If roommate is pending then show little status message
+            if(!$allRoommates[0]->confirmed) {
+                $tags['ROOMMATES'] .= " (Pending)";
+            }
+        }
+        
+        /*** Other Actions ***/
         $viewCmd = CommandFactory::getCommand('ShowRlcApplicationReView');
         $viewCmd->setAppId($this->getId());
 
-        $actions[] = $viewCmd->getLink('View Application');
-
-        $assign = HMS_RLC_Assignment::getAssignmentByUsername($this->username, $this->term);
+        $actions[] = $viewCmd->getLink('App');
 
         $rmCmd = CommandFactory::getCommand('RemoveRlcAssignment');
         $rmCmd->setAssignmentId($assign->id);
@@ -197,37 +278,84 @@ class HMS_RLC_Application extends HMS_Item
 
         $tags['ACTION'] = implode(' | ', $actions);
 
+        return $tags;
+    }
+
+    /**
+     * Returns this rlc application (and assignment) as array of fields for CSV export
+     * 
+     * @return Array
+     */
+    public function viewByRLCExportFields()
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
+        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
+        
+        $row = array();
+        
+        // Get the Student object
+        try{
+            $student = StudentFactory::getStudentByUsername($this->username, Term::getSelectedTerm());
+        }catch(StudentNotFoundException $e){
+            // Catch the StudentNotFound exception in the odd case that someone doesn't exist.
+            // Show a warning message and skip the rest of the method
+            NQ::simple('hms', HMS_NOTIFICATION_WARNING, "No student found with username: {$this->username}.");
+            $row['username'] = $this->username;
+            $row['name'] = 'UNKNOWN - INVALID';
+            return $tags;
+        }
+        
+        $row['name']        = $student->getFullName();
+        $row['gender']      = $student->getPrintableGender();
+        $row['username']    = $student->getUsername();
+        $row['banner_id']   = $student->getBannerId();
+        
+        /*** Assignment Status/State ***/
+        // Lookup the assignmnet (used later as well)
+        $assign = HMS_RLC_Assignment::getAssignmentByUsername($this->username, $this->term);
+        $state = $assign->getStateName();
+        if($state == 'confirmed'){
+            $row['state'] = 'confirmed';
+        }else if($state == 'declined'){
+            $row['state'] = 'declined';
+        }else if($state == 'new'){
+            $row['state'] = 'not invited';
+        }else if($state == 'invited'){
+            $row['state'] = 'pending';
+        }else{
+            $row['state'] = '';
+        }
+        
+        
+        // Check for/display room assignment
+        $roomAssign = HMS_Assignment::getAssignmentByBannerId($student->getBannerId(), Term::getSelectedTerm());
+        
+        if(isset($roomAssign)){
+            $row['room_assignment'] = $roomAssign->where_am_i();
+        }else{
+            $row['room_assignment'] = 'n/a';
+        }
+        
+        /*** Roommates ***/
         // Show all possible roommates for this application
         PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-
+        
         $allRoommates = HMS_Roommate::get_all_roommates($this->username, $this->term);
-        $tags['ROOMMATES'] = 'N/A'; // Default text
-
+        $row['roommates'] = 'N/A'; // Default text
+        
         if(sizeof($allRoommates) > 1) {
             // Don't show all the roommates
-            $tags['ROOMMATES'] = "Multiple Requests";
+            $row['roommates'] = "Multiple Requests";
         }
         elseif(sizeof($allRoommates) == 1) {
             // Get other roommate
             $otherGuy = StudentFactory::getStudentByUsername($allRoommates[0]->get_other_guy($this->username), $this->term);
-            $tags['ROOMMATES'] = $otherGuy->getFullNameProfileLink();
+            $row['roommates'] = $otherGuy->getFullName();
             // If roommate is pending then show little status message
             if(!$allRoommates[0]->confirmed) {
-                $tags['ROOMMATES'] .= " (Pending)";
+                $row['roommates'] .= " (Pending)";
             }
         }
-
-        return $tags;
-    }
-
-    public function report_by_rlc_pager_tags()
-    {
-        $student = StudentFactory::getStudentByUsername($this->username, $this->term);
-
-        $row['name']        = $student->getFullName();
-        $row['gender']      = $student->getPrintableGender();
-        $row['username']    = $student->getUsername();
 
         return $row;
     }
@@ -256,7 +384,6 @@ class HMS_RLC_Application extends HMS_Item
         $result = $db->select('row');
 
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -279,7 +406,6 @@ class HMS_RLC_Application extends HMS_Item
         $result = $db->loadObject($app);
 
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -300,7 +426,6 @@ class HMS_RLC_Application extends HMS_Item
         $result = $db->loadObject($app);
 
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -320,7 +445,6 @@ class HMS_RLC_Application extends HMS_Item
         $result = $db->select();
 
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 

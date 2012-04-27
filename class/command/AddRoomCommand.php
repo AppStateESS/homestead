@@ -40,13 +40,20 @@ class AddRoomCommand extends Command {
         $room = new HMS_Room;
         $room->floor_id = $floor_id;
         $room->room_number = $context->get('room_number');
+        $room->gender_type = $context->get('gender_type');
         $room->default_gender = $context->get('default_gender');
-        $room->ra_room = !is_null($context->get('ra_room')) ? $context->get('ra_room') : 0;
-        $room->private_room = !is_null($context->get('private_room')) ? $context->get('private_room') : 0;
-        $room->is_overflow = !is_null($context->get('is_overflow')) ? $context->get('is_overflow') : 0;
-        $room->is_medical = !is_null($context->get('is_medical')) ? $context->get('is_medical') : 0;
-        $room->is_reserved = !is_null($context->get('is_reserved')) ? $context->get('is_reserved') : 0;
-        $room->is_online = !is_null($context->get('is_online')) ? $context->get('is_online') : 0;
+        
+        $room->ra       = !is_null($context->get('ra')) ? 1 : 0;
+        $room->private  = !is_null($context->get('private')) ? 1 : 0;
+        $room->overflow = !is_null($context->get('overflow')) ? 1 : 0;
+        $room->reserved = !is_null($context->get('reserved')) ? 1 : 0;
+        $room->offline  = !is_null($context->get('offline')) ? 1 : 0;
+        $room->parlor   = !is_null($context->get('parlor')) ? 1 : 0;
+        
+        $room->ada  = !is_null($context->get('ada')) ? 1 : 0;
+        $room->hearing_impaired  = !is_null($context->get('hearing_impaired')) ? 1 : 0;
+        $room->bath_en_suite  = !is_null($context->get('bath_en_suite')) ? 1 : 0;
+        
         $room->term = Term::getSelectedTerm();
 
         //get the building code

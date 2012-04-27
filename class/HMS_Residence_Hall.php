@@ -21,7 +21,6 @@ class HMS_Residence_Hall extends HMS_Item
     public $air_conditioned            = 0;
     public $is_online                  = 0;
 
-    public $rooms_for_lottery          = 0;
     public $meal_plan_required         = 0;
     public $assignment_notifications   = 1;
 
@@ -60,18 +59,17 @@ class HMS_Residence_Hall extends HMS_Item
 
     /********************
      * Instance Methods *
-     *******************/
+    *******************/
 
     /*
      * Saves a new or updated residence hall object
-     */
+    */
     public function save()
     {
         $this->stamp();
         $db = new PHPWS_DB('hms_residence_hall');
         $result = $db->saveObject($this);
         if(!$result || PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
         return true;
@@ -80,13 +78,13 @@ class HMS_Residence_Hall extends HMS_Item
 
     /*
      * Copies this residence hall object to a new term, then calls copy
-     * on all 'this' room's floors.
-     *
-     * Setting $assignments to TRUE causes the copy public function to copy
-     * the current assignments as well as the hall structure.
-     *
-     * @return bool False if unsuccessful.
-     */
+    * on all 'this' room's floors.
+    *
+    * Setting $assignments to TRUE causes the copy public function to copy
+    * the current assignments as well as the hall structure.
+    *
+    * @return bool False if unsuccessful.
+    */
     public function copy($to_term, $assignments = FALSE, $roles = FALSE)
     {
         if(!$this->id) {
@@ -171,7 +169,6 @@ class HMS_Residence_Hall extends HMS_Item
         $db->loadClass('hms', 'HMS_Floor.php');
         $result = $db->getObjects('HMS_Floor');
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -181,7 +178,7 @@ class HMS_Residence_Hall extends HMS_Item
 
     /*
      * Creates the floors, rooms, and beds for a new hall
-     */
+    */
     public function create_child_objects($num_floors, $rooms_per_floor, $beds_per_room)
     {
         if(!$this->id) {
@@ -206,41 +203,41 @@ class HMS_Residence_Hall extends HMS_Item
 
     /*
      * Returns TRUE or FALSE. The gender of a building can only be
-     * changed to the target gender if all floors can be changed
-     * to the target gender.
-     *
-     * This public function checks to make sure all floors can be changed,
-     * those floors in tern check all thier rooms, and so on.
-     */
+    * changed to the target gender if all floors can be changed
+    * to the target gender.
+    *
+    * This public function checks to make sure all floors can be changed,
+    * those floors in tern check all thier rooms, and so on.
+    */
     #TODO: rewrite this becase the behavior changed
     public function can_change_gender($target_gender)
     {
         # You can always change to a COED gender.
         if($target_gender == COED){
-            return true;
-
-        }
-
-        # We must be changing to either male or female if we make it here
-
-        # If there are any COED floors, then return false
-        if($this->check_for_floors_of_gender(COED)){
-            return false;
-        }
-
-        # Can only change gender if there are no floors of the opposite sex
-        if($target_gender == MALE){
-            $check_for_gender = FEMALE;
-        }else{
-            $check_for_gender = MALE;
-        }
-
-        # If a check for rooms of the opposite gender returns true, then return false
-        if($this->check_for_floors_of_gender($check_for_gender)){
-            return false;
-        }
-
         return true;
+
+    }
+
+    # We must be changing to either male or female if we make it here
+
+    # If there are any COED floors, then return false
+    if($this->check_for_floors_of_gender(COED)){
+        return false;
+    }
+
+    # Can only change gender if there are no floors of the opposite sex
+    if($target_gender == MALE){
+        $check_for_gender = FEMALE;
+    }else{
+        $check_for_gender = MALE;
+    }
+
+    # If a check for rooms of the opposite gender returns true, then return false
+    if($this->check_for_floors_of_gender($check_for_gender)){
+        return false;
+    }
+
+    return true;
     }
 
     public function check_for_floors_of_gender($gender_type)
@@ -253,7 +250,6 @@ class HMS_Residence_Hall extends HMS_Item
         $result = $db->select('count');
 
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -281,7 +277,7 @@ class HMS_Residence_Hall extends HMS_Item
 
     /*
      * Returns the number of floors in the current hall
-     */
+    */
     public function get_number_of_floors()
     {
         $db = new PHPWS_DB('hms_floor');
@@ -291,7 +287,6 @@ class HMS_Residence_Hall extends HMS_Item
         $result = $db->select('count');
 
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -300,7 +295,7 @@ class HMS_Residence_Hall extends HMS_Item
 
     /*
      * Returns the number of rooms in the current hall
-     */
+    */
     public function get_number_of_rooms()
     {
         $db = new PHPWS_DB('hms_room');
@@ -312,8 +307,11 @@ class HMS_Residence_Hall extends HMS_Item
 
         $result = $db->select('count');
 
+        if($result == 0){
+            return 0;
+        }
+
         if(!$result || PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -323,7 +321,7 @@ class HMS_Residence_Hall extends HMS_Item
 
     /*
      * Returns the number of beds in the current hall
-     */
+    */
     public function get_number_of_beds()
     {
         $db = new PHPWS_DB('hms_bed');
@@ -336,8 +334,11 @@ class HMS_Residence_Hall extends HMS_Item
 
         $result = $db->select('count');
 
+        if($result == 0){
+            return 0;
+        }
+
         if(!$result || PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result);
         }
 
@@ -354,13 +355,16 @@ class HMS_Residence_Hall extends HMS_Item
         $db->addJoin('LEFT OUTER', 'hms_floor',   'hms_residence_hall', 'residence_hall_id', 'id');
 
         $db->addWhere('hms_residence_hall.id', $this->id);
-        $db->addWhere('hms_room.is_online', 1);
-        $db->addWhere('hms_room.is_overflow', 0);
+        $db->addWhere('hms_room.offline', 0);
+        $db->addWhere('hms_room.overflow', 0);
 
         $result = $db->select('count');
 
+        if($result == 0){
+            return 0;
+        }
+
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -369,7 +373,7 @@ class HMS_Residence_Hall extends HMS_Item
 
     /*
      * Returns the number of students currently assigned to the current hall
-     */
+    */
     public function get_number_of_assignees()
     {
         $db = new PHPWS_DB('hms_assignment');
@@ -383,8 +387,11 @@ class HMS_Residence_Hall extends HMS_Item
 
         $result = $db->select('count');
 
+        if($result == 0){
+            return 0;
+        }
+
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -397,7 +404,7 @@ class HMS_Residence_Hall extends HMS_Item
 
     /*
      * Returns an array of floor objects which are within the current hall.
-     */
+    */
     public function &get_floors()
     {
         if(!$this->loadFloors()) {
@@ -410,7 +417,7 @@ class HMS_Residence_Hall extends HMS_Item
 
     /*
      * Returns an array with the keys being floor ID's and the value being the floor number
-     */
+    */
     public function get_floors_array()
     {
         if(!$this->loadFloors()) {
@@ -428,7 +435,7 @@ class HMS_Residence_Hall extends HMS_Item
 
     /*
      * Returns an array of room objects which are in the current hall
-     */
+    */
     public function &get_rooms()
     {
         if(!$this->loadFloors()) {
@@ -446,7 +453,7 @@ class HMS_Residence_Hall extends HMS_Item
 
     /*
      * Returns an array of the bed objects which are in the current hall
-     */
+    */
     public function &get_beds()
     {
         if(!$this->loadFloors()) {
@@ -464,8 +471,8 @@ class HMS_Residence_Hall extends HMS_Item
 
     /*
      * Determines the number of beds per room in a hall.  Should the count vary
-     * it returns the count that applies to the majority of the rooms.
-     */
+    * it returns the count that applies to the majority of the rooms.
+    */
     public function count_beds_per_room()
     {
         $total = array(); //stores the number of rooms with that many beds
@@ -481,7 +488,6 @@ class HMS_Residence_Hall extends HMS_Item
         $result = $rdb->select();
 
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -494,7 +500,6 @@ class HMS_Residence_Hall extends HMS_Item
             $result = $db->select('count');
 
             if(PHPWS_Error::logIfError($result)){
-                PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
                 throw new DatabaseException($result->toString());
             }
 
@@ -507,7 +512,8 @@ class HMS_Residence_Hall extends HMS_Item
 
         $top   = 0;
         foreach($total as $key => $value){
-            if(@$total[$key] > @$total[$top]){ // supress notices here, since usually there's an undefined index
+            if(@$total[$key] > @$total[$top]){
+                // supress notices here, since usually there's an undefined index
                 $top = $key;
             }
         }
@@ -517,7 +523,7 @@ class HMS_Residence_Hall extends HMS_Item
 
     /*
      * Returns an array of the student objects which are currently assigned to the current hall
-     */
+    */
     public function get_assignees()
     {
         if(!$this->loadFloors()) {
@@ -535,12 +541,12 @@ class HMS_Residence_Hall extends HMS_Item
 
     /*
      * Returns TRUE if the hall has vacant beds, false otherwise
-     */
+    */
     public function has_vacancy()
     {
         /*
-        if($this->get_number_of_assignees() < $this->get_number_of_beds()){
-            return TRUE;
+         if($this->get_number_of_assignees() < $this->get_number_of_beds()){
+        return TRUE;
         }
         */
 
@@ -586,76 +592,24 @@ class HMS_Residence_Hall extends HMS_Item
                     WHERE (hms_bed.id NOT IN (SELECT bed_id FROM hms_lottery_reservation WHERE term = {$this->term} AND expires_on > $now)
                     AND hms_bed.id NOT IN (SELECT bed_id FROM hms_assignment WHERE term = {$this->term}))
                     AND hms_residence_hall.id = {$this->id}
-                    AND hms_room.gender_type = $gender
-                    AND hms_room.is_medical = 0
-                    AND hms_room.is_reserved = 0
-                    AND hms_room.is_online = 1
-                    AND hms_room.private_room = 0
-                    AND hms_room.ra_room = 0
-                    AND hms_room.is_overflow = 0
-                    AND hms_floor.rlc_id IS NULL";
+        			AND hms_residence_hall.is_online = 1
+        			AND hms_floor.is_online = 1
+        			AND hms_floor.rlc_id IS NULL
+                    AND hms_room.gender_type IN ($gender,2)
+                    AND hms_room.reserved = 0
+                    AND hms_room.offline = 0
+                    AND hms_room.private = 0
+                    AND hms_room.ra = 0
+                    AND hms_room.overflow = 0
+                    AND hms_room.parlor = 0
+                    AND hms_bed.international_reserved = 0";
 
         $avail_rooms = PHPWS_DB::getOne($query);
         if(PHPWS_Error::logIfError($avail_rooms)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
         return $avail_rooms;
-    }
-
-    public function count_lottery_used_rooms()
-    {
-        $now = mktime();
-
-        $query = "SELECT count(hms_room.*) FROM hms_room
-                       JOIN hms_floor ON hms_room.floor_id = hms_floor.id
-                       JOIN hms_residence_hall ON hms_floor.residence_hall_id = hms_residence_hall.id
-                       AND hms_residence_hall.id = {$this->id} AND
-                       hms_room.id IN (SELECT DISTINCT hms_room.id FROM hms_room
-                       JOIN hms_bed ON hms_bed.room_id = hms_room.id
-                       JOIN hms_floor ON hms_room.floor_id = hms_floor.id
-                       JOIN hms_residence_hall ON hms_floor.residence_hall_id = hms_residence_hall.id
-                       WHERE (hms_bed.id IN (SELECT bed_id FROM hms_lottery_reservation WHERE term = {$this->term} AND expires_on > $now)
-                       OR hms_bed.id IN (SELECT bed_id FROM hms_assignment WHERE term = {$this->term} and lottery = 1))
-                       AND hms_residence_hall.id = {$this->id})";
-
-        //test(preg_replace("/\s+/", ' ',$query),1);
-
-        $used_rooms = PHPWS_DB::getOne($query);
-        if(PHPWS_Error::logIfError($used_rooms)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
-            throw new DatabaseException($used_rooms->toString());
-        }
-
-        return $used_rooms;
-    }
-
-    public function count_lottery_full_rooms()
-    {
-        $now = mktime();
-
-        # Get the number of rooms in this hall which have every bed either assigned or reserved through the lottery.
-        $query      = "SELECT count(hms_room.*) FROM hms_room
-                       JOIN hms_floor ON hms_room.floor_id = hms_floor.id
-                       JOIN hms_residence_hall ON hms_floor.residence_hall_id = hms_residence_hall.id
-                       WHERE
-                       hms_residence_hall.id = {$this->id} AND
-                       hms_room.id NOT IN (SELECT DISTINCT hms_room.id FROM hms_room
-                        JOIN hms_bed ON hms_bed.room_id = hms_room.id
-                        JOIN hms_floor ON hms_room.floor_id = hms_floor.id
-                        JOIN hms_residence_hall ON hms_floor.residence_hall_id = hms_residence_hall.id
-                        WHERE (hms_bed.id NOT IN (SELECT bed_id FROM hms_lottery_reservation WHERE term = {$this->term} AND expires_on > $now)
-                        AND hms_bed.id NOT IN (SELECT bed_id FROM hms_assignment WHERE term = {$this->term} and lottery = 1))
-                        AND hms_residence_hall.id = {$this->id})";
-
-        $used_rooms = PHPWS_DB::getOne($query);
-        if(PHPWS_Error::logIfError($used_rooms)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
-            throw new DatabaseException($result->toString());
-        }
-
-        return $used_rooms;
     }
 
     /**
@@ -698,7 +652,7 @@ class HMS_Residence_Hall extends HMS_Item
 
     /*********************
      * Getters & Setters *
-     */
+    */
     public function getBannerBuildingCode()
     {
         return $this->banner_building_code;
@@ -706,7 +660,7 @@ class HMS_Residence_Hall extends HMS_Item
 
     /******************
      * Static Methods *
-     *****************/
+    *****************/
 
     /**
      * Returns an array of hall objects for the given term. If no
@@ -727,7 +681,6 @@ class HMS_Residence_Hall extends HMS_Item
         $results = $db->select();
 
         if(PHPWS_Error::logIfError($results)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -820,11 +773,6 @@ class HMS_Residence_Hall extends HMS_Item
 
         foreach($halls as $hall){
             $rooms_used = $hall->count_lottery_used_rooms();
-
-            # If we've used up the number of allotted rooms, then remove this hall from the list
-            if($rooms_used >= $hall->rooms_for_lottery){
-                continue;
-            }
 
             # Make sure we have a room of the specified gender available in the hall (or a co-ed room)
             if($hall->count_avail_lottery_rooms($gender) <= 0 &&

@@ -54,6 +54,8 @@ class StudentProfileView extends View {
         $tpl['TYPE'] = $this->student->getPrintableType();
 
         $tpl['STUDENT_LEVEL'] = $this->student->getPrintableLevel();
+        
+        $tpl['ADMISSION_DECISION'] = $this->student->getAdmissionDecisionCode();
 
         $tpl['INTERNATIONAL'] = $this->student->isInternational() ? 'Yes' : 'No';
 
@@ -164,7 +166,7 @@ class StudentProfileView extends View {
 
         /**************
          * RLC Status *
-         */
+         *************/
         PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
@@ -221,7 +223,7 @@ class StudentProfileView extends View {
         
         /******************
          * Housing Waiver *
-         */
+         *************/
 
        	$tpl['HOUSING_WAIVER'] = $this->student->housingApplicationWaived() ? 'Yes' : 'No';
        	
@@ -231,50 +233,22 @@ class StudentProfileView extends View {
         
         /****************
          * Applications *
-         */
-        # Show a row for each application
-        if(isset($this->applications)){
-            $app_rows = "";
-            foreach($this->applications as $app){
-                $term = Term::toString($app->getTerm());
-                $meal_plan = HMS_Util::formatMealOption($app->getMealPlan());
-                $phone = HMS_Util::formatCellPhone($app->getCellPhone());
+         *************/
+        PHPWS_Core::initModClass('hms', 'ProfileHousingAppList.php');
+        $appList = new ProfileHousingAppList($this->applications);
+        $tpl['APPLICATIONS'] = $appList->show();
 
-                $type = $app->getPrintableAppType();
-
-                if(isset($app->room_condition)){
-                    $clean = $app->room_condition == 1 ? 'Neat' : 'Cluttered';
-                }else{
-                    $clean = '';
-                }
-
-                if(isset($app->preferred_bedtime)){
-                    $bedtime = $app->preferred_bedtime == 1 ? 'Early' : 'Late';
-                }else{
-                    $bedtime = '';
-                }
-
-                $viewCmd = CommandFactory::getCommand('ShowApplicationView');
-                $viewCmd->setAppId($app->getId());
-
-                if($app->getWithdrawn() == 0){
-                    $withdrawCmd = CommandFactory::getCommand('MarkApplicationWithdrawn');
-                    $withdrawCmd->setAppId($app->getId());
-                    $withdrawn = '[' . $withdrawCmd->getLink('Withdraw') . ']';
-                }else{
-                    $withdrawn = '(widthdrawn)';
-                }
-
-                $actions = '[' . $viewCmd->getLink('View') . '] ' . $withdrawn;
-
-                $app_rows[] = array('term'=>$term, 'type'=>$type, 'meal_plan'=>$meal_plan, 'cell_phone'=>$phone, 'clean'=>$clean, 'bedtime'=>$bedtime, 'actions'=>$actions);
-            }
-
-            $tpl['APPLICATIONS'] = $app_rows;
-        }else{
-            $tpl['APPLICATIONS_EMPTY'] = 'No applications found.';
-        }
-
+        /*********
+         * Assignment History *
+         *********/        
+        
+        PHPWS_Core::initModClass('hms', 'StudentAssignmentHistory.php');
+        PHPWS_Core::initModClass('hms', 'StudentAssignmentHistoryView.php');
+        
+        $historyArray = StudentAssignmentHistory::getAssignments($this->student->getBannerId());
+        $historyView = new StudentAssignmentHistoryView($historyArray);
+        $tpl['HISTORY'] = $historyView->show();
+        
         /*********
          * Notes *
          *********/
@@ -319,7 +293,7 @@ class StudentProfileView extends View {
         // TODO tabs
 
         Layout::addPageTitle("Student Profile");
-
+		Layout::addStyle('hms', 'css/studentInfo.css');
         return PHPWS_Template::process($tpl, 'hms', 'admin/fancy_student_info.tpl');
     }
 }

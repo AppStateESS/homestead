@@ -33,6 +33,15 @@ class UnassignStudentView extends View {
         $var = array('ELEMENT' => $form->getId('username'));
         javascript('modules/hms/autoFocus', $var);
 
+        // Addition of "Unassignment Type"
+        $form->addDropBox('unassignment_type', array(
+        	UNASSIGN_ADMIN      => 'Administrative',
+        	UNASSIGN_REASSIGN   => 'Re-assign',
+            UNASSIGN_CANCEL     => 'Contract Cancellation'));
+        	
+        $form->setMatch('unassignment_type', UNASSIGN_ADMIN);
+        $form->setLabel('unassignment_type', 'Unassignment Type: ');
+        
         $form->addTextarea('note');
         $form->setLabel('note', 'Note: ');
 

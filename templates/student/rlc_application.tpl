@@ -1,72 +1,74 @@
-{MENU_LINK}<br />
-<br />
+{MENU_LINK}
+<h1>Learning Community Application</h1>
+
+<!-- BEGIN rlc_list -->
+<div style="float: right;" class="rounded-box">
+  <div class="boxheader">
+    <h2 style="padding: 2px;">Assignment</h2>
+  </div>
+  <div style="padding: 3px;">
+    {START_FORM} {RLC_LIST}<br /> {APPROVE} &nbsp; {DENY_APP}
+    {END_FORM}
+  </div>
+</div>
+<!-- END rlc_list -->
+
+<h3>{FULL_NAME}</h3>
+
 <table>
-    <tr>
-        <td>RLC Application for: &nbsp;&nbsp;&nbsp;&nbsp;</td>
-        <td>{FULL_NAME}</td>
-    </tr>
-    <!-- BEGIN student_type -->
-    <tr>
-      <td>Student Type:</td>
-      <td>{STUDENT_TYPE}</td>
-    </tr>
-    <!-- END student_type -->
-    <!-- BEGIN app_type -->
-    <tr>
-      <td>Application Type:</td>
-      <td>{APPLICATION_TYPE}</td>
-    </tr>
-    <!-- END app_type -->
-    <tr>
-        <td>{FIRST_CHOICE_LABEL}</td>
-        <td>{FIRST_CHOICE}</td>
-    </tr>
-    <tr>
-        <td>{SECOND_CHOICE_LABEL}</td>
-        <td>{SECOND_CHOICE}</td>
-    </tr>
-    <tr>
-        <td>{THIRD_CHOICE_LABEL}</td>
-        <td>{THIRD_CHOICE}</td>
-    </tr>
-    <tr>
-        <td>&nbsp;</td><td></td>
-    </tr>
-    <tr>
-        <td>{WHY_SPECIFIC_LABEL}</td>
-        <td>{WHY_SPECIFIC}</td>
-    </tr>
-    <tr>
-        <td>&nbsp;</td><td></td>
-    </tr>
-    <tr>
-        <td>{STRENGTHS_AND_WEAKNESSES_LABEL}</td>
-        <td>{STRENGTHS_AND_WEAKNESSES}</td>
-    </tr>
-    <tr>
-        <td>&nbsp;</td><td></td>
-    </tr>
-    <tr>
-        <td>{WHY_FIRST_CHOICE_LABEL}</td>
-        <td>{WHY_FIRST_CHOICE}</td>
-    </tr>
-    <tr>
-        <td>&nbsp;</td><td></td>
-    </tr>
-    <tr>
-        <td>{WHY_SECOND_CHOICE_LABEL}</td>
-        <td>{WHY_SECOND_CHOICE}</td>
-    </tr>
-    <tr>
-        <td>&nbsp;</td><td></td>
-    </tr>
-    <tr>
-        <td>{WHY_THIRD_CHOICE_LABEL}</td>
-        <td>{WHY_THIRD_CHOICE}</td>
-    </tr>
+  <tr>
+    <td>Term:</td>
+    <td>{TERM}</td>
+  </tr>
+  <tr>
+    <td>Student Type:</td>
+    <td>{STUDENT_TYPE}</td>
+  </tr>
+  <tr>
+    <td>Application Type:</td>
+    <td>{APPLICATION_TYPE}</td>
+  </tr>
+  <tr>
+    <td>RLC Preferences:</td>
+    <td>
+      <ol style="margin-top: -10px;">
+        <li>{FIRST_CHOICE}</li>
+        <!-- BEGIN second_choice -->
+        <li>{SECOND_CHOICE}</li>
+        <!-- END second_choice -->
+        <!-- BEGIN third_choice -->
+        <li>{THIRD_CHOICE}</li>
+        <!-- END third_choice -->
+      </ol>
+    </td>
+  </tr>
 </table>
-<br />
-{START_FORM}
-{APPROVE}{RLC_LIST}
-{END_FORM}
-{DENY_APP}
+
+<div style="margin-top: 1em;">
+  <strong>Specific communites chosen because:</strong>
+</div>
+<div>{WHY_SPECIFIC}</div>
+
+<div style="margin-top: 1em;">
+  <strong>Strengths and weaknesses:</strong>
+</div>
+<div>{STRENGTHS_AND_WEAKNESSES}</div>
+
+<div style="margin-top: 1em;">
+  <strong>Chose {FIRST_CHOICE} because:</strong>
+</div>
+<div>{WHY_FIRST_CHOICE}</div>
+
+<!-- BEGIN second -->
+<div style="margin-top: 1em;">
+  <strong>Chose {SECOND_CHOICE} because:</strong>
+</div>
+<div>{WHY_SECOND_CHOICE}</div>
+<!-- END second -->
+
+<!-- BEGIN third -->
+<div style="margin-top: 1em;">
+  <strong>Chose {THIRD_CHOICE} because:</strong>
+</div>
+<div>{WHY_THIRD_CHOICE}</div>
+<!-- END third -->

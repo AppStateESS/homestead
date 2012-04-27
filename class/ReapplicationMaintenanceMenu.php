@@ -21,6 +21,7 @@ class ReapplicationMaintenanceMenu extends CommandMenu {
             }
 
             if(Current_User::allow('hms', 'lottery_admin')){
+                $this->addCommandByName('Send Lottery Invites', 'ShowSendLotteryInvites');
                 $this->addCommandByName('Re-Application waiting list', 'ShowLotteryWaitingList');
                 $this->addCommandByName('Open Waiting list', 'ShowOpenWaitingList');
             }

@@ -12,12 +12,21 @@ class AddCommunityView extends View {
 
     public function show()
     {
+        $tpl = array();
+
+        if(!is_null($this->community)){
+            $tpl['COMMUNITY'] = $this->community->get_community_name();
+        }
+        
         $form = new PHPWS_Form('add_learning_community');
 
         $submitCommand = CommandFactory::getCommand('SaveRlc');
         $submitCommand->initForm($form);
 
         $form->addText('community_name', !is_null($this->community)?$this->community->get_community_name():'');
+        $var = array('ELEMENT' => $form->getId('community_name'));
+        javascript('modules/hms/autoFocus', $var);
+        
         $form->addText('abbreviation', !is_null($this->community)?$this->community->get_abbreviation():'');
         $form->addText('capacity', !is_null($this->community)?$this->community->get_capacity():'');
         $form->setSize('capacity', 5);
@@ -32,25 +41,32 @@ class AddCommunityView extends View {
             $form->setMatch('members_reapply', 'reapply');
         }
 
+        $form->addTextArea('freshmen_question');
+        $form->setLabel('freshmen_question', 'Freshmen Question:');
+        $form->setValue('freshmen_question', $this->community->getFreshmenQuestion());
+        
+        $form->addTextArea('returning_question');
+        $form->setLabel('returning_question', 'Returning Question:');
+        $form->setValue('returning_question', $this->community->getReturningQuestion());
+        
+        $form->addTextArea('terms_conditions');
+        $form->setLabel('terms_conditions', 'Terms &amp; Conditions:');
+        $form->setValue('terms_conditions', $this->community->getTermsConditions());
+        
         $form->addHidden('hide', 0);
 
         if(!is_null($this->community) && !is_null($this->community->get_id())){
             $form->addHidden('id', $this->community->get_id());
         }
-
-        $var = array('ELEMENT' => $form->getId('community_name'));
-        javascript('modules/hms/autoFocus', $var);
+        
         $form->addSubmit('Save');
 
+        $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
-        if(!is_null($this->community)){
-            $tpl['COMMUNITY'] = $this->community->get_community_name();
-        }
-        $tpl['TITLE']     = 'Add/Edit a learning Community';
 
-        $this->setPageTitle("Add/Edit RLC");
+        $this->setTitle("Add/Edit RLC");
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/display_learning_community_data.tpl');
+        return PHPWS_Template::process($tpl, 'hms', 'admin/editLearningCommunity.tpl');
     }
 }
 ?>

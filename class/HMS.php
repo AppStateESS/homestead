@@ -52,11 +52,17 @@ abstract class HMS {
         }else{
             try {
                 $cmd->execute($this->context);
+            } catch(PermissionException $p) {
+                NQ::Simple('hms', HMS_NOTIFICATION_ERROR, 'You do not have permission to perform that action. If you believe this is an error, please contact University Housing.');
+                PHPWS_Core::initModClass('hms', 'HMSNotificationView.php');
+                $nv = new HMSNotificationView();
+                $nv->popNotifications();
+                Layout::add($nv->show());
             } catch(Exception $e) {
                 try {
                     $message = $this->formatException($e);
                     NQ::Simple('hms', HMS_NOTIFICATION_ERROR, 'An internal error has occurred, and the authorities have been notified.  We apologize for the inconvenience.');
-                    self::emailError($message);
+                    $this->emailError($message);
                     PHPWS_Core::initModClass('hms', 'HMSNotificationView.php');
                     $nv = new HMSNotificationView();
                     $nv->popNotifications();
@@ -110,7 +116,7 @@ abstract class HMS {
         return $message;
     }
 
-    private static function emailError($message)
+    private function emailError($message)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Email.php');
         //$to = HMSSettings::getUberAdminEmail();

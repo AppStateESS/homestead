@@ -54,7 +54,6 @@ class Term
         $result = $db->loadObject($this);
 
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
     }
@@ -72,7 +71,6 @@ class Term
         $result = $db->saveObject($this);
 
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
     }
@@ -159,7 +157,6 @@ class Term
         $result = $db->count();
 
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->__toString());
         }
 
@@ -301,7 +298,6 @@ class Term
         $result = $db->getObjects('Term');
 
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -339,7 +335,6 @@ class Term
         $result = $db->select('col');
 
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 

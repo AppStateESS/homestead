@@ -61,7 +61,7 @@ class EditRoomCommand extends Command {
             }
         }
 
-        if($room->get_number_of_assignees() > 0 && $context->get('is_online') != 1){
+        if($room->get_number_of_assignees() > 0 && $context->get('offline') == 1){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Error: Cannot take room offline while students are assigned to the room.  No changes were made.');
             $viewCmd->redirect();
         }
@@ -73,12 +73,17 @@ class EditRoomCommand extends Command {
         $room->room_number    = $context->get('room_number');
         $room->gender_type    = $context->get('gender_type');
         $room->default_gender = $context->get('default_gender');
-        $room->is_online      = $context->get('is_online')    == 1 ? 1 : 0;
-        $room->is_reserved    = $context->get('is_reserved')  == 1 ? 1 : 0;
-        $room->ra_room        = $context->get('ra_room')      == 1 ? 1 : 0;
-        $room->private_room   = $context->get('private_room') == 1 ? 1 : 0;
-        $room->is_medical     = $context->get('is_medical')   == 1 ? 1 : 0;
-        $room->is_overflow    = $context->get('is_overflow')  == 1 ? 1 : 0;
+        
+        $room->offline        = $context->get('offline')   == 1 ? 1 : 0;
+        $room->reserved       = $context->get('reserved')  == 1 ? 1 : 0;
+        $room->ra             = $context->get('ra')        == 1 ? 1 : 0;
+        $room->private        = $context->get('private')   == 1 ? 1 : 0;
+        $room->overflow       = $context->get('overflow')  == 1 ? 1 : 0;
+        $room->parlor         = $context->get('parlor')    == 1 ? 1 : 0;
+        
+        $room->ada              = $context->get('ada')              == 1 ? 1 : 0;
+        $room->hearing_impaired = $context->get('hearing_impaired') == 1 ? 1 : 0;
+        $room->bath_en_suite    = $context->get('bath_en_suite')    == 1 ? 1 : 0;
 
         $result = $room->save();
 

@@ -1,0 +1,1 @@
+Produces a spreadsheet for use by the Package Desks. Includes the student's first name, last name, Banner Id, cell phone number, email address, and room assignment (hall/floor/room).

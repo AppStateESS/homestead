@@ -27,9 +27,10 @@ class AjaxGetBedsWithVacanciesCommand extends Command {
 
             $text = strtoupper($bed->bedroom_label) . $bed->bed_letter;
 
+            /*
             if($bed->ra_bed == 1){
                 $text .= ' (RA)';
-            }
+            }*/
 
             $json_beds[$bed->id] = $text;
         }

@@ -1,68 +1,194 @@
-<!-- Since nothing in PHP is actually "built", this is to tell Hudson CI how to handle HMS documentation, testing, dependencies, etc. -->
+<?xml version="1.0" encoding="UTF-8"?>
 
-<project name="Housing Management system" default="build">
+<project name="hms" default="build">
     <property environment="env" />
 
-    <target name="clean">
-        <delete dir="${basedir}/.build" />
+    <target name="build"
+        depends="prepare,lint,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpdox,phpunit,phpcb" />
+
+    <target name="build-parallel"
+        depends="prepare,lint,tools-parallel,phpunit,phpcb" />
+
+    <target name="tools-parallel"
+        description="Run tools in parallel">
+        <parallel threadCount="2">
+            <sequential>
+                <antcall target="pdepend" />
+                <antcall target="phpmd-ci"/>
+            </sequential>
+            <antcall target="phpcpd" />
+            <antcall target="phpcs-ci" />
+            <antcall target="phploc" />
+            <antcall target="phpdox" />
+        </parallel>
     </target>
 
-    <target name="prepare" depends="clean">
-        <mkdir dir="${basedir}/.build/logs" />
-        <mkdir dir="${basedir}/.build/docs" />
-        <mkdir dir="${basedir}/.build/rpm/BUILD" />
-        <mkdir dir="${basedir}/.build/rpm/RPMS/i686" />
-        <mkdir dir="${basedir}/.build/rpm/SOURCES" />
-        <mkdir dir="${basedir}/.build/rpm/SPECS" />
-        <mkdir dir="${basedir}/.build/rpm/SRPMS" />
+    <target name="clean" description="Cleanup build artifacts">
+        <delete dir="${basedir}/build/api"/>
+        <delete dir="${basedir}/build/code-browser"/>
+        <delete dir="${basedir}/build/coverage"/>
+        <delete dir="${basedir}/build/logs"/>
+        <delete dir="${basedir}/build/pdepend"/>
+        <delete dir="${basedir}/build/rpm" />
     </target>
 
-    <target name="phplint">
-        <exec executable="/opt/phplint" failonerror="true">
-            <arg line="'${basedir}'" />
+    <target name="prepare" depends="clean"
+         description="Prepare for build">
+        <mkdir dir="${basedir}/build/api"/>
+        <mkdir dir="${basedir}/build/code-browser"/>
+        <mkdir dir="${basedir}/build/coverage"/>
+        <mkdir dir="${basedir}/build/logs"/>
+        <mkdir dir="${basedir}/build/pdepend"/>
+        <mkdir dir="${basedir}/build/phpdox"/>
+        <mkdir dir="${basedir}/build/rpm" />
+    </target>
+
+    <target name="lint">
+        <apply executable="php" failonerror="true">
+            <arg value="-l" />
+
+            <fileset dir="${basedir}">
+                <include name="**/*.php" />
+                <modified />
+            </fileset>
+
+<!--            <fileset dir="${basedir}/tests">
+                <include name="**/*.php" />
+                <modified />
+            </fileset>-->
+        </apply>
+    </target>
+
+    <target name="phploc" description="Measure project size using PHPLOC">
+        <exec executable="phploc">
+            <arg value="--log-csv" />
+            <arg value="${basedir}/build/logs/phploc.csv" />
+            <arg path="${basedir}" />
         </exec>
     </target>
 
-    <target name="docblox" depends="prepare">
-        <exec dir="${basedir}" executable="docblox" failonerror="false">
-            <arg line="run -d class/ -t .build/docs/" />
+    <target name="pdepend"
+        description="Calculate software metrics using PHP_Depend">
+        <exec executable="pdepend">
+            <arg value="--jdepend-xml=${basedir}/build/logs/jdepend.xml" />
+            <arg value="--jdepend-chart=${basedir}/build/pdepend/dependencies.svg" />
+            <arg value="--overview-pyramid=${basedir}/build/pdepend/overview-pyramid.svg" />
+            <arg path="${basedir}" />
         </exec>
     </target>
 
-    <target name="phpcpd" depends="prepare">
-        <exec dir="${basedir}" executable="phpcpd" failonerror="false">
-            <arg line="--log-pmd .build/logs/pmd.xml class" />
+    <target name="phpmd"
+        description="Perform project mess detection using PHPMD and print human readable output. Intended for usage on the command line before committing.">
+        <exec executable="phpmd">
+            <arg path="${basedir}" />
+            <arg value="text" />
+            <arg value="/etc/ess/phpmd.xml" />
         </exec>
     </target>
 
-    <target name="pdepend" depends="prepare">
-        <exec dir="${basedir}" executable="pdepend" failonerror="true">
-            <arg line="--jdepend-xml=.build/logs/jdepend.xml class" />
+    <target name="phpmd-ci"
+        description="Perform project mess detection using PHPMD creating a log file for the continuous integration server">
+        <exec executable="phpmd">
+            <arg path="${basedir}" />
+            <arg value="xml" />
+            <arg value="/etc/ess/phpmd.xml" />
+            <arg value="--reportfile" />
+            <arg value="${basedir}/build/logs/pmd.xml" />
         </exec>
     </target>
 
-    <target name="phpcs" depends="prepare">
-        <exec dir="${basedir}" executable="phpcs" output="${basedir}/.build/logs/checkstyle.xml" failonerror="false" timeout="300000">
-            <arg line="--report=checkstyle class" />
+    <target name="phpcs"
+        description="Find coding standard violations using PHP_CodeSniffer and print human readable output. Intended for usage on the command line before committing.">
+        <exec executable="phpcs">
+            <arg value="--standard=/etc/ess/phpcs.xml" />
+            <arg path="${basedir}" />
         </exec>
     </target>
 
-    <target name="rpmbuild">
-        <tar destfile="${basedir}/.build/rpm/SOURCES/hms.tar.bz2" basedir="${basedir}" excludes="**/.*/**" compression="bzip2" />
-        <get src="http://phpwebsite.appstate.edu/downloads/stable/phpwebsite_1_7_1.tar.gz" dest="${basedir}/.build/rpm/SOURCES/phpwebsite_1_7_1.tar.gz" />
-        <copy file="${basedir}/hms.spec" todir="${basedir}/.build/rpm/SPECS/" />
-        <rpm specFile="hms.spec" topDir="${basedir}/.build/rpm" failOnError="true" />
+    <target name="phpcs-ci"
+        description="Find coding standard violations using PHP_CodeSniffer creating a log file for the continuous integration server">
+        <exec executable="phpcs" output="/dev/null">
+            <arg value="--report=checkstyle" />
+            <arg value="--report-file=${basedir}/build/logs/checkstyle.xml" />
+            <arg value="--standard=/etc/ess/phpcs.xml" />
+            <arg path="${basedir}" />
+        </exec>
     </target>
 
-    <!-- NOTE: If you remove docblox, phpcpd, pdepend, phpcs, rpmbuild from this line (or this file for that matter) you will need to change Hudson configuration. -->
-    <target name="build" depends="clean, prepare, phplint, docblox, phpcpd, pdepend, phpcs">
-        <echo message="If you want to build an RPM, please specify the 'rpmbuild' target." />
+    <target name="phpcpd" description="Find duplicate code using PHPCPD">
+        <exec executable="phpcpd">
+            <arg value="--log-pmd" />
+            <arg value="${basedir}/build/logs/pmd-cpd.xml" />
+            <arg path="${basedir}" />
+        </exec>
     </target>
 
-    <target name="deploy">
-        <exec executable="sudo" failonerror="true">
-            <arg line="/opt/deployrpm" />
-            <arg value="${basedir}/.build/rpm/RPMS/i386" />
+    <target name="phpdox"
+        description="Generate API documentation using phpDox">
+        <exec executable="phpdox"/>
+    </target>
+
+    <target name="phpunit" description="Run unit tests with PHPUnit">
+<!--        <exec executable="phpunit" failonerror="true"/>-->
+    </target>
+
+    <target name="phpcb"
+    description="Aggregate tool output with PHP_CodeBrowser">
+        <exec executable="phpcb">
+            <arg value="--log" />
+            <arg path="${basedir}/build/logs" />
+            <arg value="--source" />
+            <arg path="${basedir}" />
+            <arg value="--output" />
+            <arg path="${basedir}/build/code-browser" />
+        </exec>
+    </target>
+
+    <tarfileset id="hms-tarball" dir="${basedir}" prefix="hms/">
+        <exclude name=".hg/**" />
+        <exclude name="build/**" />
+        <exclude name="build.xml" />
+        <exclude name="hms.spec" />
+        <exclude name="phpdox.xml" />
+    </tarfileset>
+
+    <target name="tarball" depends="prepare" description="Tar it up">
+        <tar destfile="${basedir}/build/hms-${RELVERSION}.tar.bz2" compression="bzip2">
+            <tarfileset refid="hms-tarball" />
+        </tar>
+    </target>
+
+    <target name="rpm" depends="tarball" description="Build an RPM">
+        <copy file="/var/www/html/convenience/phpwebsite-hms-latest.tar.bz2"
+              todir="${basedir}/build" />
+        <exec executable="rpmbuild">
+            <arg value="--define" />
+            <arg value="_topdir ${basedir}/build/rpm" />
+            <arg value="--define" />
+            <arg value="_rpmdir %{_topdir}" />
+            <arg value="--define" />
+            <arg value="_srcrpmdir %{_topdir}" />
+            <arg value="--define" />
+            <arg value="_rpmfilename %%{NAME}-%%{VERSION}-%%{RELEASE}.%%{ARCH}.rpm" />
+            <arg value="--define" />
+            <arg value="_specdir %{_topdir}" />
+            <arg value="--define" />
+            <arg value="_sourcedir ${basedir}/build" />
+            <arg value="--define" />
+            <arg value="vendor ESS" />
+            <arg value="--define" />
+            <arg value="version ${RELVERSION}" />
+            <arg value="--define" />
+            <arg value="_signature gpg" />
+            <arg value="--define" />
+            <arg value="_gpg_path /etc/ess/gnupg" />
+            <arg value="--define" />
+            <arg value="_gpg_name Electronic Student Services" />
+            <arg value="--define" />
+            <arg value="_gpgbin /usr/bin/gpg" />
+            <arg value="-bb" />
+            <arg value="--sign" />
+            <arg path="${basedir}/hms.spec" />
         </exec>
     </target>
 </project>

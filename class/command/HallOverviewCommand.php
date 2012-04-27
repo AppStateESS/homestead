@@ -41,13 +41,21 @@ class HallOverviewCommand extends Command {
         PHPWS_Core::initModClass('hms', 'HallOverview.php');
 
         $hallId = $context->get('hallId');
-
+        
         if(!isset($hallId)){
             throw new InvalidArgumentException('Missing hall ID.');
         }
 
         $hall = new HMS_Residence_Hall($hallId);
 
+        // Check for a hall/term mismatch, since halls are indexed by ID and not by name & term
+        if($hall->term != Term::getSelectedTerm()){
+            $hallOverviewCmd = CommandFactory::getCommand('SelectResidenceHall');
+            $hallOverviewCmd->setTitle('Edit a Residence Hall');
+            $hallOverviewCmd->setOnSelectCmd(CommandFactory::getCommand('HallOverview'));
+            $hallOverviewCmd->redirect();
+        }
+        
         $hallOverview = new HallOverview($hall);
         $context->setContent($hallOverview->show());
     }

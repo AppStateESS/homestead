@@ -34,7 +34,6 @@ abstract class HMS_Item {
         $result = $db->saveObject($this);
 
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -50,7 +49,6 @@ abstract class HMS_Item {
         $result = $db->loadObject($this);
 
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -81,7 +79,6 @@ abstract class HMS_Item {
         //$db->setTestMode();
         $result = $db->delete();
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 

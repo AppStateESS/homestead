@@ -15,9 +15,11 @@ class HMS_Bed extends HMS_Item {
     public $banner_id            = null;
     public $phone_number         = null;
     public $bedroom_label        = null;
-    public $ra_bed               = null;
-    public $room_change_reserved = 0;
-    public $_curr_assignment     = null;
+    public $ra_roommate          = null;
+    public $international_reserved = 0;
+    public $room_change_reserved   = 0;
+    
+    public $_curr_assignment       = null;
 
     /**
      * Holds the parent room object of this bed.
@@ -83,7 +85,7 @@ class HMS_Bed extends HMS_Item {
                         $meal_option = $app->getMealPlan();
                     }
                     $note = "Assignment copied from ".Term::getPrintableCurrentTerm()." to ".Term::toString($to_term);
-                    HMS_Assignment::assignStudent($student, $to_term, null, $new_bed->id, $meal_option, $note);
+                    HMS_Assignment::assignStudent($student, $to_term, null, $new_bed->id, $meal_option, $note, false, ASSIGN_COPY);
                 }catch(Exception $e){
                     throw $e;
                 }
@@ -122,7 +124,6 @@ class HMS_Bed extends HMS_Item {
         $result = $db->getObjects('HMS_Assignment');
 
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }else if($result == null){
             return true;
@@ -140,7 +141,6 @@ class HMS_Bed extends HMS_Item {
         PHPWS_Core::initModClass('hms', 'HMS_Room.php');
         $result = new HMS_Room($this->room_id);
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -185,7 +185,6 @@ class HMS_Bed extends HMS_Item {
         $db = new PHPWS_DB('hms_bed');
         $result = $db->saveObject($this);
         if(!$result || PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -203,7 +202,6 @@ class HMS_Bed extends HMS_Item {
         $result = $db->delete();
 
         if(!$result || PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -300,7 +298,7 @@ class HMS_Bed extends HMS_Item {
         $tags['BEDROOM']        = $this->bedroom_label;
         $tags['BED_LETTER']     = $this->getLink();
         $tags['ASSIGNED_TO']    = $this->get_assigned_to_link();
-        $tags['RA']             = $this->ra_bed ? 'Yes' : 'No';
+        $tags['RA']             = $this->ra_roommate ? 'Yes' : 'No';
 
         $this->loadAssignment();
         if($this->_curr_assignment == NULL && Current_User::allow('hms', 'bed_structure') && UserStatus::isAdmin()){
@@ -334,7 +332,7 @@ class HMS_Bed extends HMS_Item {
         $building   = $floor->get_parent();
 
         # Check if everything is online
-        if($room->is_online == 1)
+        if($room->offline == 0)
         return FALSE;
 
         if($floor->is_online == 1)
@@ -362,29 +360,25 @@ class HMS_Bed extends HMS_Item {
         $building   = $floor->get_parent();
 
         # Check if everything is online
-        if($room->is_online == 1)
+        if($room->offline == 1)
         return FALSE;
 
-        if($floor->is_online == 1)
+        if($floor->is_online == 0)
         return FALSE;
 
-        if($building->is_online == 1)
+        if($building->is_online == 0)
         return FALSE;
 
         # Make sure nothing is reserved
-        if($room->is_reserved == 1)
-        return FALSE;
-
-        # Make sure the room isn't medical reserved
-        if($room->is_medical == 1)
+        if($room->reserved == 1)
         return FALSE;
 
         # Make sure the room isn't a lobby
-        if($room->is_overflow == 1)
+        if($room->overflow == 1)
         return FALSE;
 
         # Make sure the room isn't private
-        if($room->private_room == 1)
+        if($room->private == 1)
         return FALSE;
 
         # Check if this bed is part of an RLC
@@ -403,7 +397,6 @@ class HMS_Bed extends HMS_Item {
         $result = $db->select('count');
 
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -423,7 +416,6 @@ class HMS_Bed extends HMS_Item {
         $result = $db->select('row');
 
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -445,7 +437,6 @@ class HMS_Bed extends HMS_Item {
         $result = $db->insert();
 
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }else{
             return TRUE;
@@ -460,6 +451,11 @@ class HMS_Bed extends HMS_Item {
     public function getTerm()
     {
         return $this->term;
+    }
+
+    public function isInternationalReserved()
+    {
+        return $this->international_reserved;
     }
 
 
@@ -497,22 +493,22 @@ class HMS_Bed extends HMS_Item {
         $db->addWhere('hms_room.gender_type', $gender);
 
         // Make sure everything is online
-        $db->addWhere('hms_room.is_online', 1);
+        $db->addWhere('hms_room.offline', 0);
         $db->addWhere('hms_floor.is_online', 1);
         $db->addWhere('hms_residence_hall.is_online', 1);
 
         // Make sure nothing is reserved
-        $db->addWhere('hms_room.is_reserved', 0);
-        $db->addWhere('hms_room.is_medical', 0);
+        $db->addWhere('hms_room.reserved', 0);
+        //$db->addWhere('hms_room.is_medical', 0);
 
         // Don't get RA beds
-        $db->addWhere('hms_room.ra_room', 0);
+        $db->addWhere('hms_room.ra', 0);
 
         // Don't get lobbies
-        $db->addWhere('hms_room.is_overflow', 0);
+        $db->addWhere('hms_room.overflow', 0);
 
         // Don't get private rooms
-        $db->addWhere('hms_room.private_room', 0);
+        $db->addWhere('hms_room.private', 0);
 
         // Don't get rooms on floors reserved for an RLC
         $db->addWhere('hms_floor.rlc_id', NULL);
@@ -527,7 +523,6 @@ class HMS_Bed extends HMS_Item {
         if($banner) {
             $result = $db->select();
             if(PHPWS_Error::logIfError($result)){
-                PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
                 throw new DatabaseException($result->toString());
             }
 
@@ -538,7 +533,6 @@ class HMS_Bed extends HMS_Item {
 
         // In case of an error, log it and return it
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -584,7 +578,7 @@ class HMS_Bed extends HMS_Item {
      * The 'ra_bed' flag is expected to be either TRUE or FALSE.
      * @return TRUE for success, FALSE otherwise
      */
-    public static function addBed($roomId, $term, $bedLetter, $bedroomLabel, $phoneNumber, $bannerId, $raBed)
+    public static function addBed($roomId, $term, $bedLetter, $bedroomLabel, $phoneNumber, $bannerId, $raRoommate, $intlReserved)
     {
         # Check permissions
         if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'bed_structure')){
@@ -605,7 +599,8 @@ class HMS_Bed extends HMS_Item {
         $bed->bedroom_label = $bedroomLabel;
         $bed->banner_id     = $bannerId;
         $bed->phone_number  = $phoneNumber;
-        $bed->ra_bed		= $raBed;
+        $bed->ra_roommate   = $raRoommate;
+        $bed->international_reserved = $intlReserved;
 
         try{
             $result = $bed->save();
@@ -662,11 +657,10 @@ class HMS_Bed extends HMS_Item {
         $pager->db->addOrder('hms_bed.bedroom_label');
         $pager->db->addOrder('hms_bed.bed_letter');
 
-        $page_tags['TABLE_TITLE']       = 'Beds in this room:';
         $page_tags['BEDROOM_LABEL']     = 'Bedroom';
         $page_tags['BED_LETTER_LABEL']  = 'Bed';
         $page_tags['ASSIGNED_TO_LABEL'] = 'Assigned to';
-        $page_tags['RA_LABEL']          = 'RA bed';
+        $page_tags['RA_LABEL']          = 'RA Roommate bed';
 
         if(Current_User::allow('hms', 'bed_structure') && UserStatus::isAdmin()){
             $addBedCmd = CommandFactory::getCommand('ShowAddBed');

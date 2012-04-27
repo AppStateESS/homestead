@@ -35,6 +35,11 @@ You have been selected for re-application. You have until {EXPIRE_DATE} to confi
 {SELECT_LINK}
 <!-- END select -->
 
+<!-- BEGIN hard_cap -->
+Sorry, re-application is now closed. 
+{HARD_CAP}
+<!-- END hard_cap -->
+
 <!-- BEGIN assigned -->
 You have been assigned to {ASSIGNED}.<br />
 <!-- END assigned -->

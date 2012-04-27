@@ -20,8 +20,8 @@ class LotteryChooseRoomView extends View {
         $floor  = new HMS_Floor($this->floorId);
         $hall   = $floor->get_parent();
 
-        $full_rooms = $hall->count_lottery_full_rooms();
-        $used_rooms = $hall->count_lottery_used_rooms();
+        //$full_rooms = $hall->count_lottery_full_rooms();
+        //$used_rooms = $hall->count_lottery_used_rooms();
 
         $tpl['HALL_FLOOR'] = $floor->where_am_i();
 
@@ -47,24 +47,18 @@ class LotteryChooseRoomView extends View {
             // so decide whether to "gray out" this row in the room list or not
             if(($room->gender_type != $this->student->getGender() && $room->gender_type != COED)
                 || $num_avail_beds     == 0 
-                || $room->is_reserved  == 1 
-                || $room->is_online    == 0 
-                || $room->private_room == 1 
-                || $room->ra_room      == 1 
-                || $room->is_overflow  == 1){
+                || $room->reserved == 1 
+                || $room->offline  == 1 
+                || $room->private  == 1 
+                || $room->ra       == 1 
+                || $room->overflow == 1
+                || $room->parlor   == 1){
         
                 // Show a grayed out row and no link
                 $row['ROOM_NUM']        = $room->room_number;
                 $row['ROW_TEXT_COLOR']  = 'grey';
                 $row['AVAIL_BEDS']      = 0; // show 0 available beds since this room is unavailable to the user
             
-            }else if($used_rooms >= $hall->rooms_for_lottery && $num_avail_beds == $total_beds){
-                // Check for if we've reached the room cap, and this room isn't partially used
-                // Show a grayed out row and no link
-                $row['ROOM_NUM']        = $room->room_number;
-                $row['ROW_TEXT_COLOR']  = 'grey';
-                $row['AVAIL_BEDS']      = 0; // show 0 available beds since this room is unavailable to the user
-
             }else{
                 // Show the room number as a link
                 $roomCmd = CommandFactory::getCommand('LotteryChooseRoom');

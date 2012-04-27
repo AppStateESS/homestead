@@ -34,6 +34,7 @@ class TestSOAP extends SOAP{
 
         $student->international         = false;
         $student->student_level         = 'U';
+        $student->app_decision_code     = '1*';
 
         $student->honors                = true;
         $student->teaching_fellow       = true;
@@ -47,7 +48,7 @@ class TestSOAP extends SOAP{
         //$student->projected_class       = 'FR';
 
         $student->student_type          = 'F';
-        $student->application_term      = '201140';
+        $student->application_term      = '201220';
         $student->projected_class       = 'FR';
 
         $student->credhrs_completed     = 0;

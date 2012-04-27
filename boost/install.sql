@@ -29,6 +29,7 @@ CREATE TABLE hms_student_cache (
     watauga_member      character varying(5) NOT NULL,
     disabled_pin		smallint NOT NULL DEFAULT 0,
     housing_waiver      smallint NOT NULL DEFAULT 0,
+    admissions_decision_code text,
     PRIMARY KEY (banner_id, term)
 );
 
@@ -71,7 +72,6 @@ CREATE TABLE hms_residence_hall (
     gender_type                 smallint NOT NULL,
     air_conditioned             smallint NOT NULL,
     is_online                   smallint NOT NULL,
-    rooms_for_lottery           integer DEFAULT 0 NOT NULL,
     meal_plan_required          smallint DEFAULT 0 NOT NULL,
     added_by                    smallint NOT NULL,
     added_on                    integer NOT NULL,
@@ -96,6 +96,7 @@ CREATE TABLE hms_learning_communities (
     allowed_student_types varchar(16),
     allowed_reapplication_student_types character varying(16),
     members_reapply integer not null,
+    terms_conditions text,
     primary key(id)
 );
 
@@ -126,13 +127,12 @@ CREATE TABLE hms_room (
     floor_id                integer NOT NULL REFERENCES hms_floor(id),
     gender_type             smallint NOT NULL,
     default_gender          smallint NOT NULL,
-    ra_room                 smallint NOT NULL,
-    private_room            smallint NOT NULL,
-    is_overflow             smallint NOT NULL,
-    phone_number            integer DEFAULT 0,
-    is_medical              smallint DEFAULT (0)::smallint,
-    is_reserved             smallint DEFAULT (0)::smallint,
-    is_online               smallint DEFAULT (0)::smallint NOT NULL,
+    ra                      smallint NOT NULL,
+    private                 smallint NOT NULL,
+    overflow                smallint NOT NULL,
+    reserved                smallint NOT NULL DEFAULT 0,
+    offline                 smallint NOT NULL DEFAULT 0,
+    parlor                  smallint NOT NULL DEFAULT 0,
     added_by                smallint NOT NULL,
     added_on                integer NOT NULL,
     updated_by              smallint,
@@ -146,14 +146,15 @@ CREATE TABLE hms_bed (
     room_id         integer NOT NULL REFERENCES hms_room(id),
     bed_letter      character(1) NOT NULL,
     bedroom_label   character varying(255),
-    ra_bed          smallint NOT NULL DEFAULT (0)::smallint,
+    ra_roommate     smallint NOT NULL DEFAULT 0,
     added_by        integer NOT NULL,
     added_on        integer NOT NULL,
     updated_by      integer NOT NULL,
     updated_on      integer NOT NULL,
     banner_id       character varying(15),
     phone_number    character(4),
-    room_change_reserved smallint NOT NULL DEFAULT(0)::smallint,
+    room_change_reserved smallint NOT NULL DEFAULT 0,
+    international_reserved smallint NOT NULL DEFAULT 0,
     PRIMARY KEY(id)
 );
 
@@ -172,6 +173,25 @@ CREATE TABLE hms_assignment (
     updated_on      integer     NOT NULL,
     letter_printed  smallint    NOT NULL DEFAULT 0,
     email_sent      smallint    NOT NULL DEFAULT 0,
+    reason          character varying(20),
+    application_term integer,
+    class           character(2),
+    primary key(id)
+);
+
+CREATE TABLE hms_assignment_history (
+    id                  integer         NOT NULL,
+    banner_id           integer         NOT NULL,
+    room                character varying(50) NOT NULL,
+    assigned_on         integer         NOT NULL,
+    assigned_by         character varying(32) NOT NULL,
+    assigned_reason     character varying(20) default 'anone',
+    removed_on          integer,
+    removed_by          character varying(32),
+    removed_reason      character varying(20),
+    term                integer,
+    application_term    integer,
+    class               character(2),
     primary key(id)
 );
 
@@ -224,6 +244,7 @@ CREATE TABLE hms_learning_community_assignment (
     rlc_id              integer NOT NULL REFERENCES hms_learning_communities(id),
     gender              integer NOT NULL,
     assigned_by         character varying(32) NOT NULL,
+    state               character varying,
     PRIMARY KEY (id)
 );
 
@@ -255,11 +276,14 @@ CREATE TABLE hms_new_application (
     psych_disability                smallint,
     medical_need                    smallint,
     gender_need                     smallint,
-    withdrawn                       smallint NOT NULL default 0,
     created_on                      integer NOT NULL,
     created_by                      character varying(32) NOT NULL,
     modified_on                     integer NOT NULL,
     modified_by                     character varying(32) NOT NULL,
+    cancelled                       smallint not null default 0,
+    cancelled_reason                character varying(32),
+    cancelled_on                    integer,
+    cancelled_by                    character varying(32),
     PRIMARY KEY(id)
 );
 
@@ -322,13 +346,13 @@ CREATE TABLE hms_roommate (
 
 CREATE TABLE hms_student_profiles (
     id INTEGER NOT NULL,
-    username character varying(32) UNIQUE NOT NULL,
+    username character varying(32) NOT NULL,
     term            INTEGER NOT NULL REFERENCES hms_term(term),
     date_submitted INTEGER NOT NULL,
-    alternate_email character varying(64) NULL,
-    aim_sn character varying(32) NULL,
-    yahoo_sn character varying(32) NULL,
-    msn_sn character varying(32) NULL,
+    alternate_email character varying(128) NULL,
+    aim_sn character varying(128) NULL,
+    yahoo_sn character varying(128) NULL,
+    msn_sn character varying(128) NULL,
     arts_and_crafts smallint,
     books_and_reading smallint,
     cars smallint,
@@ -412,37 +436,10 @@ CREATE TABLE hms_student_profiles (
     tamil smallint,
     telugu smallint,
     vietnamese smallint,
-
     PRIMARY KEY(id)
 );
 
-CREATE TABLE hms_cached_student_info (
-    id              INTEGER                NOT NULL,
-    asu_username    CHARACTER VARYING(32)  NOT NULL,
-    room_number     CHARACTER VARYING(10)  NOT NULL,
-    hall_name       CHARACTER VARYING(64)  NOT NULL,
-    first_name      CHARACTER VARYING(64)  NOT NULL,
-    middle_name     CHARACTER VARYING(64),
-    last_name       CHARACTER VARYING(64)  NOT NULL,
-    address1        CHARACTER VARYING(128),
-    address2        CHARACTER VARYING(128),
-    address3        CHARACTER VARYING(128),
-    city            CHARACTER VARYING(64),
-    state           CHARACTER VARYING(5),
-    zip             CHARACtER VARYING(11),
-    roommate_name   CHARACTER VARYING(172),
-    roommate_user   CHARACTER VARYING(32),
-    room_phone      CHARACTER VARYING(20),
-    phone_number    CHARACTER VARYING(20),
-    gender          CHARACTER(1),
-    student_type    CHARACTER(5),
-    class           CHARACTER(5),
-    credit_hours    INTEGER,
-    deposit_date    CHARACTER(10),
-    deposit_waived  CHARACTER(5),
-    movein_time     CHARACTER VARYING(64),
-    PRIMARY KEY (id)
-);
+ALTER TABLE hms_student_profiles ADD CONSTRAINT hms_student_profile_user UNIQUE (username, term);
 
 CREATE TABLE hms_pending_assignment (
     id               INTEGER               NOT NULL,
@@ -568,6 +565,38 @@ CREATE TABLE hms_room_change_preferences (
     building            INTEGER NOT NULL REFERENCES hms_residence_hall(id),
     PRIMARY KEY(id)
 );
+
+CREATE TABLE hms_report (
+    id                   INTEGER NOT NULL,
+    report               character varying(255) NOT NULL,
+    created_by           character varying(255) NOT NULL,
+    created_on           integer NOT NULL,
+    scheduled_exec_time  integer NOT NULL,
+    began_timestamp      integer,
+    completed_timestamp  integer,
+    html_output_filename character varying,
+    pdf_output_filename  character varying,
+    csv_output_filename  character varying,
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE hms_report_param (
+    id                  INTEGER NOT NULL,
+    report_id           INTEGER NOT NULL,
+    param_name          character varying,
+    param_value         character varying,
+    PRIMARY KEY (id)
+);
+
+CREATE INDEX hms_floor_residence_hall_id_idx ON hms_floor (residence_hall_id);
+
+CREATE INDEX hms_lottery_reservation_expiration_idx ON hms_lottery_reservation (expires_on);
+
+CREATE INDEX hms_assignment_term_idx ON hms_assignment (term);
+
+CREATE INDEX hms_room_crazy_idx ON hms_room (gender_type, reserved, offline, private, ra, overflow, parlor);
+
+CREATE INDEX hms_room_floor_id_idx ON hms_room (floor_id); 
 
 INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info, members_reapply) VALUES (3, 'Language & Culture Community', 'LCC', 50, 0, 'F', '', 0);
 INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info, members_reapply) VALUES (20, 'Watauga Global Community', 'WG', 50, 0, 'F', '<p>Watauga Global Community is where classes meet general education requirements in interdisciplinary team-taught (multiple professor) core classes that blend fact, fiction, culture, philosophy, motion, art, music, myth, and religion.</p><p><strong>This community requires a separate application in addition to marking it as a housing preference.  For more information, go to the <a href="http://wataugaglobal.appstate.edu/pagesmith/4" target="_blank" style="color: blue;">Watauga Global Community Website</a>.</strong></p>', 0);

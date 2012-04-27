@@ -1,0 +1,1 @@
+<p>Lists all empty (unassigned) beds which are available for a new assignment. Excludes beds in rooms which are marked reserved, overflow, offline, private, parlour, or RA. Also excludes beds marked as 'ra roommate', international reservations, and beds with a pending room change request.</p>

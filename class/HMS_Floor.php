@@ -61,7 +61,6 @@ class HMS_Floor extends HMS_Item
         $result = $db->saveObject($this);
 
         if(!$result || PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
     }
@@ -168,7 +167,6 @@ class HMS_Floor extends HMS_Item
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
         $result = new HMS_Residence_Hall($this->residence_hall_id);
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
         $this->_hall = & $result;
@@ -190,7 +188,6 @@ class HMS_Floor extends HMS_Item
         $result = $db->getObjects('HMS_Room');
         //test($result);
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         } else {
             $this->_rooms = & $result;
@@ -303,7 +300,6 @@ class HMS_Floor extends HMS_Item
         $result = $db->select('count');
 
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -329,7 +325,6 @@ class HMS_Floor extends HMS_Item
         $result = $db->select('col');
 
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -354,7 +349,6 @@ class HMS_Floor extends HMS_Item
         $result = $db->select('count');
 
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -375,7 +369,6 @@ class HMS_Floor extends HMS_Item
         $result = $db->select('count');
 
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -402,7 +395,6 @@ class HMS_Floor extends HMS_Item
         }
 
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -552,104 +544,23 @@ class HMS_Floor extends HMS_Item
                     WHERE (hms_bed.id NOT IN (SELECT bed_id FROM hms_lottery_reservation WHERE term = {$this->term} AND expires_on > $now)
                     AND hms_bed.id NOT IN (SELECT bed_id FROM hms_assignment WHERE term = {$this->term}))
                     AND hms_floor.id = {$this->id}
-                    AND hms_room.gender_type = $gender
-                    AND hms_room.is_reserved = 0
-                    AND hms_room.is_online = 1
-                    AND hms_room.private_room = 0
-                    AND hms_room.ra_room = 0
-                    AND hms_room.is_overflow = 0
-                    AND hms_floor.rlc_id IS null";
+        			AND hms_floor.rlc_id IS null
+        			AND hms_floor.is_online = 1
+                    AND hms_room.gender_type IN ($gender, 2)
+                    AND hms_room.reserved = 0
+                    AND hms_room.offline = 0
+                    AND hms_room.private = 0
+                    AND hms_room.ra = 0
+                    AND hms_room.overflow = 0
+                    AND hms_room.parlor = 0
+                    AND hms_bed.international_reserved = 0";
 
         $avail_rooms = PHPWS_DB::getOne($query);
         if(PHPWS_Error::logIfError($avail_rooms)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
         return $avail_rooms;
-    }
-
-    public function get_avail_lottery_rooms()
-    {
-        PHPWS_Core::initModClass('hms', 'HMS_Room.php');
-
-        $now = mktime();
-
-        $query =   "SELECT DISTINCT hms_room.* FROM hms_room
-                    JOIN hms_bed ON hms_bed.room_id = hms_room.id
-                    JOIN hms_floor ON hms_room.floor_id = hms_floor.id
-                    WHERE (hms_bed.id NOT IN (SELECT bed_id FROM hms_lottery_reservation WHERE term = {$this->term} AND expires_on > $now)
-                    AND hms_bed.id NOT IN (SELECT bed_id FROM hms_assignment WHERE term = {$this->term}))
-                    AND hms_floor.id = {$this->id}
-                    AND hms_room.is_reserved = 0
-                    AND hms_room.is_online = 1
-                    AND hms_room.private_room = 0
-                    AND hms_room.ra_room = 0
-                    AND hms_room.is_overflow = 0
-                    AND hms_floor.rlc_id IS null";
-
-        $avail_rooms = PHPWS_DB::getAll($query);
-        if(PHPWS_Error::logIfError($avail_rooms)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
-            throw new DatabaseException($result->toString());
-        }
-
-        $output_list = array();
-
-        foreach($avail_rooms as $room) {
-            $obj = new HMS_Room();
-            PHPWS_Core::plugObject($obj, $room);
-            $output_list[] = $obj;
-        }
-
-        return $output_list;
-    }
-
-    public function count_lottery_used_rooms()
-    {
-        $now = mktime();
-
-        $query = "SELECT count(hms_room.*) FROM hms_room
-                       JOIN hms_floor ON hms_room.floor_id = hms_floor.id
-                       AND hms_floor.id = {$this->id} AND
-                       hms_room.id IN (SELECT DISTINCT hms_room.id FROM hms_room
-                       JOIN hms_bed ON hms_bed.room_id = hms_room.id
-                       JOIN hms_floor ON hms_room.floor_id = hms_floor.id
-                       WHERE (hms_bed.id IN (SELECT bed_id FROM hms_lottery_reservation WHERE term = {$this->term} AND expires_on > $now)
-                       OR hms_bed.id IN (SELECT bed_id FROM hms_assignment WHERE term = {$this->term} and lottery = 1))
-                       AND hms_floor.id = {$this->id})";
-
-        $used_rooms = PHPWS_DB::getOne($query);
-        if(PHPWS_Error::logIfError($used_rooms)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
-            throw new DatabaseException($result->toString());
-        }
-
-        return $used_rooms;
-    }
-
-    public function count_lottery_full_rooms()
-    {
-        $now = mktime();
-
-        // Get the number of rooms in this hall which have every bed either assigned or reserved through the lottery.
-        $query      = "SELECT count(hms_room.*) FROM hms_room
-                       JOIN hms_floor ON hms_room.floor_id = hms_floor.id
-                       AND hms_floor.id = {$this->id} AND
-                       hms_room.id NOT IN (SELECT DISTINCT hms_room.id FROM hms_room
-                       JOIN hms_bed ON hms_bed.room_id = hms_room.id
-                       JOIN hms_floor ON hms_room.floor_id = hms_floor.id
-                       WHERE (hms_bed.id NOT IN (SELECT bed_id FROM hms_lottery_reservation WHERE term = {$this->term} AND expires_on > $now)
-                       AND hms_bed.id NOT IN (SELECT bed_id FROM hms_assignment WHERE term = {$this->term} and lottery = 1))
-                       AND hms_floor.id = {$this->id})";
-
-        $usedRooms = PHPWS_DB::getOne($query);
-        if(PHPWS_Error::logIfError($usedRooms)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
-            throw new DatabaseException($usedRooms->toString());
-        }
-
-        return $usedRooms;
     }
 
     public function get_pager_by_hall_tags()

@@ -1,7 +1,7 @@
-<div id="recentSearches" class="hms-sidebox">
-	<div id="recentSearchesHeader">
-		<strong><img src="mod/hms/img/tango/system-search.png">Recent Searches</strong>
-	</div>
+<div id="recentSearches" class="rounded-box">
+    <div class="boxheader">
+        <h2 class="rrze-report-run-22">Recent Searches</h2>
+    </div>
 
 	<div id="recentSearchTabs">
 		<ul>

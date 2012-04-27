@@ -14,11 +14,16 @@ class HMS_Learning_Community extends HMS_Item
     public $abbreviation;
     public $capacity;
     public $hide;
-
+    
     public $allowed_student_types; //A string containing a character for each allowed student type, maxLen() == 16;
     public $allowed_reapplication_student_types;
     public $members_reapply; // Indicates whether current members of the community are always allowed to reapply, regardless of student type
     public $extra_info; // A text field, show to the student when the RLC is selected
+    
+    public $freshmen_question;
+    public $returning_question;
+    
+    public $terms_conditions;
 
     public function __construct($id = 0)
     {
@@ -105,6 +110,34 @@ class HMS_Learning_Community extends HMS_Item
         $this->members_reapply = $apply;
     }
 
+    public function getFreshmenQuestion()
+    {
+        return $this->freshmen_question;
+    }
+    
+    public function setFreshmenQuestion($question)
+    {
+        $this->freshmen_question = $question;
+    }
+    
+    public function getReturningQuestion()
+    {
+        return $this->returning_question;
+    }
+    
+    public function getTermsConditions()
+    {
+        return $this->terms_conditions;
+    }
+    
+    public function setTermsConditions($text){
+        $this->terms_conditions = $text;
+    }
+    
+    public function setReturningQuestion($question){
+        $this->returning_question = $question;
+    }
+    
     public function set_variables()
     {
         if(isset($_REQUEST['id']) && $_REQUEST['id'] != NULL) $this->set_id($_REQUEST['id']);
@@ -134,7 +167,6 @@ class HMS_Learning_Community extends HMS_Item
             $result = $db->select();
 
             if(PHPWS_Error::logIfError($result)){
-                PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
                 throw new DatabaseException($result->toString());
             }
 
@@ -173,7 +205,6 @@ class HMS_Learning_Community extends HMS_Item
         $result = $db->select('assoc');
 
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -198,7 +229,6 @@ class HMS_Learning_Community extends HMS_Item
         $rlc_choices = $db->select('assoc');
 
         if(PHPWS_Error::logIfError($rlc_choices)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($rlc_choices->toString());
         }
 
@@ -224,7 +254,6 @@ class HMS_Learning_Community extends HMS_Item
         $rlc_choices = $db->select('assoc');
 
         if(PHPWS_Error::logIfError($rlc_choices)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($rlc_choices->toString());
         }
 

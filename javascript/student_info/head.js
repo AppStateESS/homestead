@@ -1,6 +1,11 @@
 <script type="text/javascript">
 $(document).ready(function(){
-    function hideMe(actor, actee){
+    function toggleHistories() {
+    	$('#showMoreDiv').html('');
+    	$('.extraHistory').toggle();
+    }
+	
+	function hideMe(actor, actee){
         actee.hide('normal');
     }
 
@@ -52,6 +57,7 @@ $(document).ready(function(){
     var demographicsToggle = new hideOther("demographics_toggle", "student_demographics", false);
     var statusToggle       = new hideOther("status_toggle",       "housing_status",       false);
     var applicationToggle  = new hideOther("application_toggle",  "applications",         false);
+    var historyToggly	   = new hideOther("history_toggle", 	  "history",			  false);
     
     $("#note_dialog").dialog(
             { 
@@ -63,6 +69,10 @@ $(document).ready(function(){
     
     $("#add_note").click(function(){
         $("#note_dialog").dialog('open');
+    });
+    
+    $("#showMoreLink").click(function() {
+    	toggleHistories();
     });
 });
 </script>

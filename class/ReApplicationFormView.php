@@ -28,6 +28,7 @@ class ReApplicationFormView extends View {
         $tpl = array();
 
         $tpl['TERM'] = Term::toString($this->term) . ' - ' . Term::toString(Term::getNextTerm($this->term));
+        $tpl['FALL_TERM'] = Term::toString($this->term);
 
         /*
          * onSubmit command
@@ -133,12 +134,32 @@ class ReApplicationFormView extends View {
         if(isset($_REQUEST['special_need'])){
             $form->setMatch('special_need', $_REQUEST['special_need']);
         }
+        
+        /*
+         * Early Release
+         */
+        $nextTerm = Term::toString(Term::getNextTerm($this->term));
+        $reasons = array();
+        $reasons['no']               = "No, I'll be staying through $nextTerm.";
+        $reasons['grad']             = "Graduating in December";
+        $reasons['student_teaching'] = "Student Teaching in Spring";
+        $reasons['internship']       = "ASU-sponsored Internship";
+        $reasons['transfer']         = "Transferring to other University";
+        $reasons['withdraw']         = "Withdrawing";
+        $reasons['marriage']         = "Getting married";
+        $reasons['study_abroad']     = "Study Abroad for Spring";
+        $reasons['intl_exchagne']    = "International exchange ending";
+        
+        $form->addDropBox('early_release', $reasons);
+        $form->setLabel('early_release', 'Will you apply for early release?');
+        $form->setMatch('early_release', 'no');
+        
 
         /*
          * Contract
          */
         $form->addCheck('deposit_check', array('deposit_check'));
-        $form->setLabel('deposit_check', 'I understand & acknowledge that if I cancel my License Contract my student account will be charged $250.  If I cancel my License Contract after July 1, I will be liable for the entire amount of the on-campus housing fees for the Fall semester.');
+        $form->setLabel('deposit_check', 'I understand & acknowledge that if I cancel my License Contract my student account will be charged <strong>$250</strong>.  If I cancel my License Contract after July 1, I will be liable for the entire amount of the on-campus housing fees for the Fall semester.');
 
         $form->addSubmit('submit', 'Submit re-application');
         //$form->setExtra('submit', 'class="hms-application-submit-button"');

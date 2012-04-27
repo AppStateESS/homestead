@@ -3,7 +3,6 @@
 PHPWS_Core::initModClass('hms', 'Command.php');
 PHPWS_Core::initModClass('hms', 'RoomChangeView.php');
 PHPWS_Core::initModClass('hms', 'RoomChangeRequest.php');
-PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
 
 class StudentRoomChangeCommand extends Command {
 

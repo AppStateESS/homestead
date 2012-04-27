@@ -151,34 +151,28 @@ class HMS_Email{
      * Lottery Messages *
      ********************/
 
-    public function send_lottery_invite($to, $name, $expires_on, $year)
+    public function send_lottery_invite($to, $name, $year)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
         $tpl = array();
 
         $tpl['NAME']        = $name;
-        $tpl['EXPIRES_ON']  = HMS_Util::get_long_date_time($expires_on);
         $tpl['YEAR']        = $year;
 
-        HMS_Email::send_template_message($to . TO_DOMAIN, 'You Have Been Selected for On-campus Housing!', 'email/lottery_invite.tpl', $tpl);
+        HMS_Email::send_template_message($to . TO_DOMAIN, 'Offer for On-Campus Housing', 'email/lottery_invite.tpl', $tpl);
     }
 
-    public function send_lottery_invite_reminder($to, $name, $expires_on, $year)
+    public function send_lottery_invite_reminder($to, $name, $year)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
         $tpl = array();
 
         $tpl['NAME']        = $name;
-        $tpl['EXPIRES_ON']  = HMS_Util::get_long_date_time($expires_on);
         $tpl['YEAR']        = $year;
-        $hours              = round(($expires_on - mktime()) / 3600);
 
-        // TODO:
-        //$hours =
-
-        HMS_Email::send_template_message($to . TO_DOMAIN, "On-Campus Housing Reminder: Only $hours hours left!", 'email/lottery_invite_reminder.tpl', $tpl);
+        HMS_Email::send_template_message($to . TO_DOMAIN, "Reminder Offer for On-Campus Housing", 'email/lottery_invite_reminder.tpl', $tpl);
     }
 
     public function send_lottery_roommate_invite(Student $to, Student $from, $expires_on, $hall_room, $year)
@@ -191,7 +185,7 @@ class HMS_Email{
         $tpl['REQUESTOR']   = $from->getName();
         $tpl['HALL_ROOM']   = $hall_room;
 
-        HMS_Email::send_template_message($to->getUsername() . TO_DOMAIN, 'Roommate Invitation for On-campus Housing!', 'email/lottery_roommate_invite.tpl', $tpl);
+        HMS_Email::send_template_message($to->getUsername() . TO_DOMAIN, 'Roommate Invitation for On-campus Housing', 'email/lottery_roommate_invite.tpl', $tpl);
     }
 
     public function send_lottery_roommate_reminder($to, $name, $expires_on, $requestor_name, $hall_room, $year)
@@ -208,9 +202,40 @@ class HMS_Email{
         HMS_Email::send_template_message($to . TO_DOMAIN, "Roommate Invitation Reminder: Only $hours hours left!", 'email/lottery_roommate_invite_reminder.tpl', $tpl);
     }
 
-    public function send_lottery_status_report($status, $log)
+    public function send_lottery_application_confirmation(Student $student, $year)
     {
-        HMS_Email::send_email(HMS_Email::get_tech_contacts(), NULL, "HMS Lottery results: $status", $log);
+        PHPWS_Core::initModClass('hms', 'Term.php');
+
+        $tpl = array();
+
+        $tpl['NAME'] = $student->getName();
+
+        $tpl['TERM'] = $year;
+
+        HMS_Email::send_template_message($student->getUsername() . TO_DOMAIN, 'On-campus Housing Re-application Confirmation!', 'email/lottery_confirmation.tpl', $tpl);
+    }
+
+    public function send_lottery_assignment_confirmation(Student $to, $location, $term)
+    {
+        PHPWS_Core::initModClass('hms', 'Term.php');
+        $tpl = array();
+
+        $tpl['NAME']     = $to->getName();
+
+        $tpl['TERM']     = Term::toString($term);
+        $tpl['LOCATION'] = $location;
+
+        HMS_Email::send_template_message($to->getUsername() . TO_DOMAIN, 'On-campus Housing Re-assignment Confirmation!', 'email/lottery_self_assignment_confirmation.tpl', $tpl);
+    }
+
+    public function sendWaitListApplicationConfirmation(Student $student, $year)
+    {
+        $tpl = array();
+
+        $tpl['NAME'] = $student->getName();
+        $tpl['YEAR'] = $year;
+
+        HMS_Email::send_template_message($student->getUsername() . TO_DOMAIN, 'On-campus Housing Waiting List Confirmation', 'email/waitingListConfirmation.tpl', $tpl);
     }
 
     public function send_assignment_email($to, $name, $term, $location, $roommates, $movein_time, $type, $returning){
@@ -260,19 +285,7 @@ class HMS_Email{
         HMS_Email::send_template_message($to->getUsername() . TO_DOMAIN, 'Roommate Confirmation!', 'email/roommate_confirmation.tpl', $tpl);
     }
 
-    public function send_lottery_application_confirmation(Student $student, $year)
-    {
-        PHPWS_Core::initModClass('hms', 'Term.php');
-
-        $tpl = array();
-
-        $tpl['NAME'] = $student->getName();
-
-        $tpl['TERM'] = $year;
-
-        HMS_Email::send_template_message($student->getUsername() . TO_DOMAIN, 'On-campus Housing Re-application Confirmation!', 'email/lottery_confirmation.tpl', $tpl);
-    }
-
+    
     /**
      * Sends an email to the specified student to confirm submission of a housing application for a particular term
      * @param $to Student object representing the student to send this email too
@@ -436,27 +449,19 @@ class HMS_Email{
         HMS_Email::send_template_message($to->getUsername() . TO_DOMAIN, 'Learning Community Application Rejected', 'email/rlc_application_rejection.tpl',$tpl);
     }
 
-    public function send_lottery_assignment_confirmation(Student $to, $location, $term)
+    public static function sendRlcInviteEmail(Student $student, HMS_Learning_Community $community, $term, $respondByTimestamp)
     {
-        PHPWS_Core::initModClass('hms', 'Term.php');
-        $tpl = array();
-
-        $tpl['NAME']     = $to->getName();
-
-        $tpl['TERM']     = Term::toString($term);
-        $tpl['LOCATION'] = $location;
-
-        HMS_Email::send_template_message($to->getUsername() . TO_DOMAIN, 'On-campus Housing Re-assignment Confirmation!', 'email/lottery_self_assignment_confirmation.tpl', $tpl);
-    }
-
-    public function sendWaitListApplicationConfirmation(Student $student, $year)
-    {
-        $tpl = array();
-
-        $tpl['NAME'] = $student->getName();
-        $tpl['YEAR'] = $year;
-
-        HMS_Email::send_template_message($student->getUsername() . TO_DOMAIN, 'On-campus Housing Waiting List Confirmation', 'email/waitingListConfirmation.tpl', $tpl);
+        $to = $student->getUsername() . TO_DOMAIN;
+        $subject = 'Response Needed: Residential Learning Community Invitation';
+    
+        $tags = array();
+        $tags['NAME'] = $student->getName();
+        $tags['COMMUNITY_NAME'] = $community->get_community_name();
+        $tags['TERM'] = Term::toString($term) . ' - ' . Term::toString(Term::getNextTerm($term));
+        $tags['COMMUNITY_TERMS_CONDITIONS'] = $community->getTermsConditions();
+        $tags['RESPOND_BY'] = date("l, F jS, Y", $respondByTimestamp) . ' at ' . date("ga", $respondByTimestamp);
+    
+        HMS_Email::send_template_message($to, $subject, 'email/RlcInvite.tpl', $tags);
     }
 
     /**
@@ -471,6 +476,17 @@ class HMS_Email{
 
         HMS_Email::send_email($to, null, $subject, $text);
     }
+    
+    public static function sendReportCompleteNotification($username, $reportName)
+    {
+        $to = $username . TO_DOMAIN;
+        $subject = '[hms] Report Complete: ' . $reportName;
 
+        $tpl = array();
+        $tpl['REPORT_NAME'] = $reportName;
+        
+        HMS_Email::send_template_message($to, $subject, 'email/ReportCompleteNotification.tpl', $tpl);
+    }
+    
 } // End HMS_Email class
 ?>

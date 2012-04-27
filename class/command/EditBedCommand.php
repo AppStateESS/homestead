@@ -58,7 +58,8 @@ class EditBedCommand extends Command {
         $bed->phone_number  = $context->get('phone_number');
         $bed->banner_id     = $context->get('banner_id');
 
-        $context->get('ra_bed') == 1 ? $bed->ra_bed = 1 : $bed->ra_bed = 0;
+        $context->get('ra_roommate') == 1 ? $bed->ra_roommate = 1 : $bed->ra_roommate = 0;
+        $context->get('international_reserved') == 1 ? $bed->international_reserved = 1 : $bed->international_reserved = 0;
 
         $result = $bed->save();
 

@@ -1,0 +1,1 @@
+* * * * * apache curl "https://hms.appstate.edu/index.php?module=pulse&action=Pulse" 2>&1 > /dev/null

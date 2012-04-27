@@ -85,6 +85,124 @@ define('BANNER_MEAL_NONE', '-1');
 define('BANNER_MEAL_4WEEK', 'S4');
 define('BANNER_MEAL_5WEEK', 'S5');
 
+
+/***
+ * Assignment Reasons
+ */
+
+// Default
+define('ASSIGN_ADMIN', 		'admin'); // general administrative
+
+// General Populations
+define('ASSIGN_LOTTERY',     'lottery');
+define('ASSIGN_FR_AUTO',     'auto_assign'); // auto-assigner
+define('ASSIGN_FR',          'freshmen');
+define('ASSIGN_TRANSFER', 	 'transfer');
+
+// Sororities
+define('ASSIGN_APH', 	'aph');
+
+// RLCs
+define('ASSIGN_RLC_FRESHMEN',   'rlc_freshmen');
+define('ASSIGN_RLC_TRANSFER',   'rlc_transfer');
+define('ASSIGN_RLC_CONTINUING', 'rlc_continuing');
+
+// Honors
+define('ASSIGN_HONORS_FRESHMEN',   'honors_freshmen');
+define('ASSIGN_HONORS_CONTINUING', 'honors_continuing');
+
+// LLC
+define('ASSIGN_LLC_FRESHMEN',   'llc_freshmen');
+define('ASSIGN_LLC_CONTINUING', 'llc_continuing');
+
+// International
+define('ASSIGN_INTL',       'international');
+
+// RAs
+define('ASSIGN_RA',          'ra');
+define('ASSIGN_RA_ROOMMATE', 'ra_roommate');
+
+// Special/medical needs needs
+define('ASSIGN_MEDICAL', 	'medical');
+define('ASSIGN_SPECIAL', 	'special');
+
+// RHA
+define('ASSIGN_RHA', 'rha');
+define('ASSIGN_SCHOLARS', 'scholars');
+
+// Processes - DEPRECATED
+define('ASSIGN_CHANGE', 	'achange'); // For room change requests
+define('ASSIGN_COPY',		'acopy'); // For copying from previous term
+
+
+/***
+ * Unassignment Reasons
+ */
+define('UNASSIGN_ADMIN',	'uadmin'); // General administrative
+define('UNASSIGN_CHANGE',	'uchange'); // For room change process - cannot be used manually
+define('UNASSIGN_REASSIGN', 'ureassign'); // implicit removal for re-assign command
+define('UNASSIGN_CANCEL',   'ucancel'); // Contract cancellation 
+
+/***
+ * Pretty Names for Assign/Cancel Reasons
+ */
+define('admin', 	'Administrative');
+
+define('lottery', 	'Lottery');
+define('auto_assign',		'Auto-Assigned');
+define('freshmen',	'Freshmen');
+define('transfer', 'Transfer');
+
+define('aph', 'APH');
+
+define('rlc_freshmen', 'RLC Freshmen');
+define('rlc_transfer', 'RLC Transfer');
+define('rlc_continuing', 'RLC Continuing');
+
+define('honors_freshmen', 'Honors Freshmen');
+define('honors_continuing', 'Honors Continuing');
+
+define('llc_freshmen', 'LLC Freshmen');
+define('llc_continuing', 'LLC Continuing');
+
+define('international', 'International');
+
+define('ra', 'RA');
+define('ra_roommate', 'RA Roommate');
+
+
+define('medical', 	'Medical');
+define('special',	'Special Needs');
+
+define('rha', 'RHA');
+define('scholars', 'Plemmons & Diversity');
+
+// Deprecated
+define('achange',   'Room Change');
+define('acopy',     'Term Rollover');
+
+// Removal Reasons
+define('uadmin',	'Administrative');
+define('ucancel', 'Contract Cancellation');
+define('ureassign',	'Reassignment');
+define('uchange',	'Room Change');
+
+// This section is depricated
+define('uwithdrawn','Withdrawn');
+define('uintentnoreturn', 'Intent Not To Return');
+define('unone',		'Not Specified');
+
+
+/************************************
+ * Application Cancellation Reasons
+ */
+define('CANCEL_BEFORE_JULY', 'before_july');
+define('CANCEL_AFTER_JULY', 'after_july');
+define('CANCEL_WITHDRAWN', 'withdrawn');
+define('CANCEL_INTENT', 'intent_no_return');
+define('CANCEL_BEFORE_ASSIGN', 'before_assignment');
+
+
 /**
  * Address types
  */
@@ -227,6 +345,12 @@ define('ACTIVITY_FLOOR_NOTIFIED',               64);
 define('ACTIVITY_LOTTERY_ROOMMATE_DENIED',      65);
 
 define('ACTIVITY_RLC_APPLICATION_DELETED',		66);
+
+define('ACTIVITY_CANCEL_HOUSING_APPLICATION',   67);
+
+define('ACTIVITY_ACCEPT_RLC_INVITE',            68);
+define('ACTIVITY_DECLINE_RLC_INVITE',           69);
+define('ACTIVITY_RLC_INVITE_SENT',              70);
 
 /**
  * Errors

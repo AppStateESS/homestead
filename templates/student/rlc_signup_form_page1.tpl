@@ -3,11 +3,9 @@
     <div class="box-title"> <h1>Residential Learning Community Application</h1> </div>
     <div class="box-content">
     
-    <p>This is an additional application for Residential Learning Communities. To learn more about the different options available to you please visit the <a href="http://housing.appstate.edu/pagesmith/29" target="_blank">Residential Learning Communities website</a>.</p> 
+    <p>This is an additional application for Residential Learning Communities. To learn more about the different options available to you please visit the <a href="http://housing.appstate.edu/rlc" target="_blank">Residential Learning Communities website</a>.</p> 
 
-    <p>Those students interested in The Honors College, Watauga Global Community, or the Academy of Science please note your interest below.  In addition to this application, you must also fill out a separate application for these communities.  Please apply for membership to any of these programs -- <a href="http://www.honors.appstate.edu/" target="_blank">The Honors College</a>, <a href="http://wataugaglobal.appstate.edu/" target="_blank">Watauga Global Community</a>, or the <a href="http://housing.appstate.edu/pagesmith/34" target="_blank">Academy of Science</a> -- on their websites.</p> 
-
-    <p>Students interested in the Academy of Science will automatically qualify for a scholarship upon acceptance into the community.  However, applications to both the Academy's RLC and the Academy of Science Scholarship program must be completed before a student is considered for membership.</p>
+    <p>If you are interested in The Honors College or Watauga Global Community please note your interest below.  In addition to this application, you must also submit a separate application for these communities.  Please apply for membership to any of these programs -- <a href="http://www.honors.appstate.edu/" target="_blank">The Honors College</a> or <a href="http://wataugaglobal.appstate.edu/" target="_blank">Watauga Global Community</a> -- on their websites.</p> 
 
     <p style="border: 1px solid red; padding: 3px; background: #F5F5F5"><strong>Note:</strong> You cannot be accepted into a learning community with a pre-chosen roommate who does not apply to the same community.  In addition, once you apply, you can no longer choose roommates who have not applied to the same community.</p>
     

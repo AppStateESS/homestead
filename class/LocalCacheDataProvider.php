@@ -117,7 +117,6 @@ class LocalCacheDataProvider extends StudentDataProvider {
         $result = $db->select();
 
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -148,7 +147,6 @@ class LocalCacheDataProvider extends StudentDataProvider {
         $result = $db->select();
 
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -210,7 +208,6 @@ class LocalCacheDataProvider extends StudentDataProvider {
         $result = $db->delete();
 
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -218,7 +215,6 @@ class LocalCacheDataProvider extends StudentDataProvider {
         $result = $db->delete();
 
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -226,7 +222,6 @@ class LocalCacheDataProvider extends StudentDataProvider {
         $result = $db->delete();
 
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
     }

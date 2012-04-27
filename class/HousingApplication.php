@@ -35,8 +35,15 @@ class HousingApplication {
 
     /**
      * Set to 'true' by the withdrawn search process. Should always be false by default.
+     * @deprecated Use 'cancel' member variable instead.
      */
-    public $withdrawn;
+    public $withdrawn = 0;
+    
+    /* Contract Cancellation */
+    public $cancelled;
+    public $cancelled_reason;
+    public $cancelled_by;
+    public $cancelled_on;
 
     /**
      * Constructor for the abstract HousingApplication class. It can never be called directly. Instead,
@@ -68,7 +75,10 @@ class HousingApplication {
 
         $this->setInternational($international);
 
-        $this->setWithdrawn(false);
+        $this->setCancelled(false);
+        $this->setCancelledReason(null);
+        $this->setCancelledBy(null);
+        $this->setCancelledOn(null);
     }
 
     /**
@@ -88,7 +98,6 @@ class HousingApplication {
         $db = new PHPWS_DB('hms_new_application');
         $result = $db->loadObject($this);
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -110,7 +119,6 @@ class HousingApplication {
 
         $result = $db->saveObject($this);
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -169,7 +177,6 @@ class HousingApplication {
         $db->addWhere('id', $this->id);
         $result = $db->delete();
         if(!$result || PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -211,6 +218,13 @@ class HousingApplication {
         HMS_Activity_Log::log_activity($this->getUsername(), ACTIVITY_APPLICATION_REPORTED, UserStatus::getUsername());
     }
 
+    public function getStudent()
+    {
+        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
+        
+        return StudentFactory::getStudentByBannerId($this->getBannerId(), $this->getTerm());
+    }
+    
     /**
      * Returns a nicely formatted string with the "type" of this application
      * @return String
@@ -239,73 +253,57 @@ class HousingApplication {
         }
     }
 
-    /*
-     * Returns the table row tags for the 'unassigned applications report' in
-    * HMS_Reports.php
-    */
-    public function unassignedApplicantsRows()
+    /**
+     * Returns the fields for this HousingApplication parent class. Usually called by overriding methods in subclasses (e.g. SummerApplication).
+     * 
+     * @return Array Array of fields for this HousingApplication.
+     */
+    protected function unassignedStudentsFields()
     {
-        $tpl = array();
-        $tpl['BANNER_ID']         = $this->getBannerId();
-        $tpl['USERNAME']          = $this->getUsername();
-        $tpl['GENDER']            = HMS_Util::formatGender($this->getGender());
-        $tpl['STUDENT_TYPE']      = HMS_Util::formatType($this->getStudentType());
-        $tpl['APP_TERM']          = Term::toString($this->getApplicationTerm(), TRUE);
-        $tpl['MEAL']              = HMS_Util::formatMealOption($this->getMealPlan());
-
-        if(is_null($this->lifestyle_option)){
-            $tpl['LIFESTYLE_OPTION']     = 'n/a';
-        }else{
-            $tpl['LIFESTYLE_OPTION']     = $this->lifestyle_option == 1 ? 'Single Gender' : 'Co-ed';
-        }
-
-        if(is_null($this->preferred_bedtime)){
-            $tpl['Preferred_BEDTIME'] = 'n/a';
-        }else{
-            $tpl['PREFERRED_BEDTIME'] = $this->preferred_bedtime == 1 ? 'Early' : 'Late';
-        }
+        $fields = array();
+        $fields['banner_id']         = $this->getBannerId();
+        $fields['username']          = $this->getUsername();
+        $fields['gender']            = HMS_Util::formatGender($this->getGender());
+        $fields['application_term']  = Term::toString($this->getApplicationTerm(), TRUE);
+        $fields['student_type']      = HMS_Util::formatType($this->getStudentType());
+        $fields['meal_plan']         = HMS_Util::formatMealOption($this->getMealPlan());
+        
+        $fields['created_on']        = HMS_Util::get_long_date($this->getCreatedOn());
 
         $roommate = HMS_Roommate::get_confirmed_roommate($this->getUsername(), $this->getTerm());
         if(!is_null($roommate)){
-            $tpl['ROOMMATE']    = $roommate->getFullName();
+            $fields['roommate'] = $roommate->getFullName();
+            $fields['roommate_id'] = $roommate->getBannerId();
+        }else{
+            $fields['roommate'] = '';
+            $fields['roommate_id'] = '';
         }
 
-        $assignCmd = CommandFactory::getCommand('ShowAssignStudent');
-        $assignCmd->setUsername($this->getUsername());
-
-        $tpl['ACTIONS']         = '[' . $assignCmd->getLink('Assign', '_blank') . ' ]';
-
-        return $tpl;
+        return $fields;
     }
 
-    public function unassignedApplicantsCSV()
+    /**
+     * Marks an application as cancelled.
+     * 
+     * @param integer $reasonId
+     */
+    public function cancel($reasonKey)
     {
-        $tpl = array();
-        $tpl['BANNER_ID']       = $this->getBannerId();
-        $tpl['USERNAME']        = $this->getUsername();
-        $tpl['GENDER']          = HMS_Util::formatGender($this->getGender());
-        $tpl['STUDENT_TYPE']    = HMS_Util::formatType($this->getStudentType());
-        $tpl['APP_TERM']        = Term::toString($this->getApplicationTerm(), TRUE);
-        $tpl['MEAL']            = HMS_Util::formatMealOption($this->getMealPlan());
+        $this->cancelled = 1;
+        $this->cancelled_by = Current_User::getUsername();
+        $this->cancelled_on = time();
+        
+        $reasons = self::getCancellationReasons();
 
-        $roommate = HMS_Roommate::get_confirmed_roommate($this->getUsername(), $this->getTerm());
-        if(!is_null($roommate)){
-            $tpl['ROOMMATE']    = $roommate->getFullName();
+        if($reasonKey == "0" || !array_key_exists($reasonKey, $reasons)){
+            throw new InvalidArgumentException('Invalid cancellation reason key.');
         }
-
-        if(is_null($this->lifestyle_option)){
-            $tpl['LIFESTYLE_OPTION']     = 'n/a';
-        }else{
-            $tpl['LIFESTYLE_OPTION']     = $this->lifestyle_option == 1 ? 'Single Gender' : 'Co-ed';
-        }
-
-        if(is_null($this->preferred_bedtime)){
-            $tpl['PREFERRED_BEDTIME'] = 'n/a';
-        }else{
-            $tpl['PREFERRED_BEDTIME'] = $this->preferred_bedtime == 1 ? 'Early' : 'Late';
-        }
-
-        return $tpl;
+        
+        $this->cancelled_reason = $reasonKey;
+        
+        // Log that this happened
+        PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
+        HMS_Activity_Log::log_activity($this->getUsername(), ACTIVITY_CANCEL_HOUSING_APPLICATION, Current_User::getUsername(), Term::toString($this->getTerm()) . ': ' . $reasons[$reasonKey]);
     }
 
 
@@ -321,6 +319,8 @@ class HousingApplication {
      * The 'withdrawn' parameter is optional. If set to true, then this method will
      * return true for withdrawn applications. If false (default), then this method will
      * ignore withdrawn applications.
+     * 
+     * TODO: Respect the 'cancelled' flag instead of 'withdrawn'
      */
     public static function checkForApplication($username, $term, $withdrawn = FALSE)
     {
@@ -336,7 +336,6 @@ class HousingApplication {
         $result = $db->select('row');
 
         if(PEAR::isError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -350,7 +349,8 @@ class HousingApplication {
     /**
      *
      */
-    //TODO move this to the HousingApplicationFactory class, perhaps?
+    // TODO move this to the HousingApplicationFactory class, perhaps?
+    // TODO make this static too
     function getApplicationByUser($username, $term, $applicationType = NULL)
     {
         PHPWS_Core::initModClass('hms', 'HousingApplication.php');
@@ -374,7 +374,6 @@ class HousingApplication {
         $result = $db->select('row');
 
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -462,7 +461,6 @@ class HousingApplication {
         $result = $db->getObjects('HousingApplication');
 
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -524,6 +522,7 @@ class HousingApplication {
         $db->addWhere('student_type', 'F');
         $db->addWhere('term', $term);
         $db->addWhere('withdrawn', 0);
+        $db->addWhere('cancelled', 0);
         //        $db->addWhere('gender', $gender);
 
         // Add join for extra application fields (sub-class fields)
@@ -559,7 +558,6 @@ class HousingApplication {
         }
 
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -809,21 +807,46 @@ class HousingApplication {
     public function setModifiedOn($timestamp){
         $this->modified_on = $timestamp;
     }
-
-    public function getWithdrawn(){
-        return $this->withdrawn;
+    
+    public function getCancelled()
+    {
+        return $this->cancelled;
     }
-
-    public function isWithdrawn(){
-        if($this->withdrawn == 1){
+    
+    public function setCancelled($status){
+        $this->cancelled = $status;
+    }
+    
+    public function isCancelled(){
+        if($this->getCancelled() == 1){
             return true;
         }else{
             return false;
         }
     }
-
-    public function setWithdrawn($status){
-        $this->withdrawn = $status;
+    
+    public function getCancelledReason(){
+        return $this->cancelled_reason;
+    }
+    
+    public function setCancelledReason($reason){
+        $this->cancelled_reason = $reason;
+    }
+    
+    public function getCancelledBy(){
+        return $this->cancelled_by;
+    }
+    
+    public function setCancelledBy($user){
+        $this->cancelled_by = $user;
+    }
+    
+    public function getCancelledOn(){
+        return $this->cancelled_on;
+    }
+    
+    public function setCancelledOn($time){
+        $this->cancelled_on = $time;
     }
 
     public function getApplicationType(){
@@ -832,6 +855,43 @@ class HousingApplication {
 
     public function setApplicationType($type){
         $this->application_type = $type;
+    }
+    
+    /**
+     * @deprecated
+     */
+    public function getWithdrawn(){
+        return $this->withdrawn;
+    }
+    
+    /**
+     * @deprecated
+     */
+    public function isWithdrawn(){
+        if($this->withdrawn == 1){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    
+    /**
+     * @deprecated
+     */
+    public function setWithdrawn($status){
+        $this->withdrawn = $status;
+    }
+    
+    // Cancellation reasons
+    public static function getCancellationReasons()
+    {
+        return array(
+                    CANCEL_BEFORE_JULY   => 'Cancel Before July',
+                    CANCEL_AFTER_JULY    => 'Cancel After July',
+                    CANCEL_WITHDRAWN     => 'Withdrawn',
+                    CANCEL_INTENT        => 'Intent Not to Return',
+                    CANCEL_BEFORE_ASSIGN => 'Cancel Before Assignment'
+                );
     }
 }
 ?>

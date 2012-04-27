@@ -39,18 +39,18 @@ class SubmitRlcApplicationCommand extends Command
         $question1 = $context->get('rlc_question_1');
         $question2 = $context->get('rlc_question_2');
 
-        if(strlen($question0) > HMS_RLC_Application::RLC_RESPONSE_LIMIT) {
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Your respose to the first question is too long. Please limit your response to ' . HMS_RLC_Application::RLC_RESPONSE_LIMIT .  ' characters (including spaces and punctuation).');
+        if(str_word_count($question0) > HMS_RLC_Application::RLC_RESPONSE_WORD_LIMIT) {
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Your respose to the first question is too long. Please limit your response to ' . HMS_RLC_Application::RLC_RESPONSE_WORD_LIMIT .  ' words.');
             $errorCmd->redirect();
         }
 
-        if(strlen($question1) > HMS_RLC_Application::RLC_RESPONSE_LIMIT) {
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Your respose to the second question is too long. Please limit your response to ' . HMS_RLC_Application::RLC_RESPONSE_LIMIT .  ' characters (including spaces and punctuation).');
+        if(str_word_count($question1) > HMS_RLC_Application::RLC_RESPONSE_WORD_LIMIT) {
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Your respose to the second question is too long. Please limit your response to ' . HMS_RLC_Application::RLC_RESPONSE_WORD_LIMIT .  ' words.');
             $errorCmd->redirect();
         }
 
-        if(strlen($question2) > HMS_RLC_Application::RLC_RESPONSE_LIMIT) {
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Your respose to the third question is too long. Please limit your response to ' . HMS_RLC_Application::RLC_RESPONSE_LIMIT .  ' characters (including spaces and punctuation).');
+        if(str_word_count($question2) > HMS_RLC_Application::RLC_RESPONSE_WORD_LIMIT) {
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Your respose to the third question is too long. Please limit your response to ' . HMS_RLC_Application::RLC_RESPONSE_WORD_LIMIT .  ' words.');
             $errorCmd->redirect();
         }
 
@@ -100,7 +100,7 @@ class SubmitRlcApplicationCommand extends Command
         HMS_Email::send_rlc_application_confirmation($student);
 
         # Show a success message and redirect
-        NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Your application has been submitted');
+        NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Your Residential Learning Community (RLC) application has been successfully submitted. You should receive a confirmation email (sent to your Appalachian State email account) soon. Notification of your acceptance into an RLC will also be sent to your Appalachian State email account.  Please continue to check your ASU email account regularly.  For more information on the RLC acceptance timeline or frequently asked questions, please visit <a href="http://housing.appstate.edu/rlc" target="_blank">housing.appstate.edu/rlc</a>.');
         $cmd = CommandFactory::getCommand('ShowStudentMenu');
         $cmd->redirect();
     }

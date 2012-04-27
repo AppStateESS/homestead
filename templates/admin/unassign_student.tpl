@@ -10,10 +10,12 @@
             </tr>
         </table>
         <br />
+        Reason: {UNASSIGNMENT_TYPE}
+        <br /><br />
         Note: 
-        <br>
+        <br />
         {NOTE}
-        <br>
+        <br />
         {SUBMIT}
     </div>
   </div>

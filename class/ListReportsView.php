@@ -1,44 +1,61 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'View.php');
-PHPWS_Core::initModClass('hms', 'HMS_Reports.php');
+PHPWS_Core::initModClass('hms', 'HMS_Util.php');
+
+/**
+ * List Reports View
+ *
+ * Shows a list of all the available reports and
+ * the associated actions for each report. Complies the 
+ * list of menu items for each report by calling the ReportController's
+ * getMenuItemView method.
+ *
+ * @author Jeremy Booker <jbooker at tux dot appstate dot edu>
+ * @package HMS
+ */
 
 class ListReportsView extends View {
 
-    public function show()
-    {
-        if(!Current_User::allow('hms', 'reports')){
-            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
-        }
+    private $reportControllers; // Array of ReportController objects
 
-        $tpl = array();
+    /**
+     * Constructor
+     * 
+     * @param Array $reportControllers The Array of report controller objets representing possible reports.
+     */
+    public function __construct(Array $reportControllers){
+        $this->reportControllers = $reportControllers;
+    }
 
-        $reports = HMS_Reports::getReports();
+    /**
+     * Show method overridden from parent View class.
+     *
+     * @return String $final HTML for this output
+     * @throws PermissionException
+     */
+	public function show()
+	{
+	    $this->setTitle("Reports");
+	    
+		if(!Current_User::allow('hms', 'reports')){
+		    PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
+			throw new PermissionException('You do not have permission to run reports.');
+		}
 
+		$tpl = array();
         $tpl['REPORTS'] = array();
 
-        foreach($reports as $code=>$name) {
+		foreach($this->reportControllers as $rc) {
 
-            $reportCmd = CommandFactory::getCommand('RunReport');
-            $reportCmd->setReport($code);
+		    $tags = array();
+		    
+		    $itemView = $rc->getMenuItemView();
+            $tpl['REPORTS'][]['ITEM'] = $itemView->show();
+		}
 
-            $cmd = CommandFactory::getCommand('JSPopup');
-            $cmd->setViewCommand($reportCmd);
-
-            $cmd->setWidth(800);
-            $cmd->setHeight(600);
-            $cmd->setLabel($name);
-            $cmd->setTitle("Run '$name' Report");
-            $cmd->setWindowName('hms_report');
-
-            $tpl['REPORTS'][]['REPORT_LINK'] =  $cmd->getLink($name);
-        }
-
-        Layout::addPageTitle("Reports");
-
-        $final = PHPWS_Template::process($tpl, 'hms', 'admin/display_reports.tpl');
-        return $final;
-    }
+		$final = PHPWS_Template::process($tpl, 'hms', 'admin/display_reports.tpl');
+		return $final;
+	}
 }
 
 ?>

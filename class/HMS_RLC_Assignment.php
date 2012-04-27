@@ -3,11 +3,13 @@
 /**
  * The HMS_RLC_Assignment class
  *
+ * @author jbooker
+ * @package HMS
  */
 
 PHPWS_Core::initModClass('hms','StudentFactory.php');
 
-class HMS_RLC_Assignment{
+class HMS_RLC_Assignment {
 
     public $id;
 
@@ -15,6 +17,9 @@ class HMS_RLC_Assignment{
     public $gender;
     public $assigned_by_user;
     public $application_id;
+    
+    public $state;           // db text field for state name
+    public $assignmentState; // An RlcAssignmentState object
 
     public $username; # For the DBPager join stuff to work right
     public $term; // For dbPager
@@ -98,7 +103,6 @@ class HMS_RLC_Assignment{
         $result = $db->saveObject($this);
 
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -121,6 +125,18 @@ class HMS_RLC_Assignment{
         return $this->getRlc()->get_community_name();
     }
 
+    public function getApplication()
+    {
+        PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
+        $application = new HMS_RLC_Application($this->getApplicationId());
+        
+        if(!isset($application)){
+            throw Exception('Could not load RLC application.');
+        }
+        
+        return $application;
+    }
+    
     /******************
      * Static methods *
      */
@@ -144,7 +160,6 @@ class HMS_RLC_Assignment{
         $result = $db->select('row');
 
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException("Could not check for assignment - $username $term " . $result->toString());
         }
 
@@ -164,7 +179,6 @@ class HMS_RLC_Assignment{
         $result = $db->loadObject($assignment);
 
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -191,7 +205,6 @@ class HMS_RLC_Assignment{
         $result = $db->loadObject($assignment);
 
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -286,35 +299,21 @@ class HMS_RLC_Assignment{
         return $output;
     }
 
-    //TODO move this!!
-    public function view_by_rlc_pager($rlc_id)
+    public function changeState(RlcAssignmentState $newState)
     {
-        // Get the community name for the title
-        $db = new PHPWS_DB('hms_learning_communities');
-        $db->addWhere('id', $rlc_id);
-        $db->addColumn('community_name');
-        $tags['TITLE'] = $db->select('one') . ' Assignments ' . Term::toString(Term::getSelectedTerm(), TRUE);
-
-        PHPWS_Core::initCoreClass('DBPager.php');
-        PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
-
-        $pager = new DBPager('hms_learning_community_applications', 'HMS_RLC_Application');
-        $pager->db->addJoin('LEFT OUTER', 'hms_learning_community_assignment', 'hms_learning_community_applications', 'application_id', 'id');
-        $pager->db->addWhere('hms_learning_community_applications.term', Term::getSelectedTerm());
-        $pager->db->addWhere('hms_learning_community_assignment.rlc_id', $rlc_id);
-
-        //$pager->joinResult('id','hms_learning_community_applications','hms_assignment_id','user_id', 'user_id');
-        $pager->setModule('hms');
-        $pager->setTemplate('admin/view_by_rlc_pager.tpl');
-        $pager->setLink('index.php?module=hms&action=ViewByRlc&rlc='.$rlc_id);
-        $pager->setEmptyMessage('There are no students assigned to this learning community.');
-        $pager->addPageTags($tags);
-        $pager->addRowTags('viewByRLCPagerTags');
-        $pager->setReportRow('report_by_rlc_pager_tags');
-
-        return $pager->get();
+        // Save the new state's name, catching any exceptions
+        $this->state = $newState->getStateName();
+        try{
+            $this->save();
+        }catch(Exception $e){
+            throw $e;
+            return;
+        }
+        
+        // If we made it this far, then do the onEnter stuff
+        $newState->onEnter();
     }
-
+    
     /***********************
      * Accessor / Mutators *
      */
@@ -351,12 +350,20 @@ class HMS_RLC_Assignment{
         return $this->assigned_by_user;
     }
 
+    public function getApplicationId(){
+        return $this->application_id;
+    }
+    
     public function setAssignedByInitials($assigned_by_initials) {
         $this->assigned_by_initials = $assigned_by_initials;
     }
 
     public function getAssignedByInitials() {
         return $this->assigned_by_initials;
+    }
+    
+    public function getStateName(){
+        return $this->state;
     }
 }
 

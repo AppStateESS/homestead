@@ -20,6 +20,10 @@ class HMS_Assignment extends HMS_Item
     public $meal_option    = 0;
     public $letter_printed = 0;
     public $email_sent     = 0;
+    public $reason		   = null;
+    public $application_term = null;
+    public $class          = null; 
+
     public $_gender        = 0;
     public $_bed           = null;
 
@@ -58,7 +62,6 @@ class HMS_Assignment extends HMS_Item
         $this->stamp();
         $result = $db->saveObject($this);
         if(!$result || PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -238,7 +241,6 @@ class HMS_Assignment extends HMS_Item
         $result = $db->select('row');
 
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -256,7 +258,6 @@ class HMS_Assignment extends HMS_Item
         $result = $db->select('one');
 
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -278,7 +279,6 @@ class HMS_Assignment extends HMS_Item
         $result = $db->loadObject($assignment);
 
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -293,8 +293,9 @@ class HMS_Assignment extends HMS_Item
      * Does all the checks necessary to assign a student and makes the assignment
      * The $room_id and $bed_id fields are optional, but one or the other must be specificed
      */
-    public static function assignStudent(Student $student, $term, $room_id = NULL, $bed_id = NULL, $meal_plan, $notes="", $lottery = FALSE)
+    public static function assignStudent(Student $student, $term, $room_id = NULL, $bed_id = NULL, $meal_plan, $notes="", $lottery = FALSE, $reason)
     {
+
         /**
          * Can't check permissions here because there are some student-facing commands that needs to make assignments (e.g. the lottery/re-application code)
          *
@@ -310,9 +311,9 @@ class HMS_Assignment extends HMS_Item
         PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
         PHPWS_Core::initModClass('hms', 'BannerQueue.php');
-
+		PHPWS_Core::initModClass('hms', 'AssignmentHistory.php');
+        
         PHPWS_Core::initModClass('hms', 'exception/AssignmentException.php');
-        PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
 
         $username = $student->getUsername();
 
@@ -354,7 +355,7 @@ class HMS_Assignment extends HMS_Item
             }
 
             # Make sure the room is not offline
-            if(!$room->is_online){
+            if($room->offline){
                 throw new AssignmentException('The room is offline');;
             }
 
@@ -469,14 +470,20 @@ class HMS_Assignment extends HMS_Item
         $assignment->letter_printed = 0;
         $assignment->email_sent     = 0;
         $assignment->meal_option    = $meal_plan;
+        $assignment->reason 		= $reason;
+        $assignment->application_term = $student->getApplicationTerm();
+        $assignment->class            = $student->getComputedClass($term);
 
         # If this was a lottery assignment, flag it as such
         if($lottery){
             $assignment->lottery = 1;
+            if ( !isset($reason) )
+            	# Automatically tag reason as lottery
+            	$assignment->reason = ASSIGN_LOTTERY;
         }else{
             $assignment->lottery = 0;
         }
-
+        
         $result = $assignment->save();
 
         if(!$result || PHPWS_Error::logIfError($result)){
@@ -486,6 +493,9 @@ class HMS_Assignment extends HMS_Item
         # Log the assignment
         HMS_Activity_Log::log_activity($username, ACTIVITY_ASSIGNED, UserStatus::getUsername(), $term . ' ' . $hall->hall_name . ' ' . $room->room_number . ' ' . $notes);
 
+        # Insert assignment into History table
+        AssignmentHistory::makeAssignmentHistory($assignment);
+        
         # Look for roommates and flag their assignments as needing a new letter
         $room_id = $assignment->get_room_id();
         $room = new HMS_Room($room_id);
@@ -511,7 +521,7 @@ class HMS_Assignment extends HMS_Item
         return true;
     }
 
-    public static function unassignStudent(Student $student, $term, $notes="")
+    public static function unassignStudent(Student $student, $term, $notes="", $reason)
     {
         if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'assignment_maintenance')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
@@ -520,9 +530,9 @@ class HMS_Assignment extends HMS_Item
 
         PHPWS_Core::initModClass('hms', 'BannerQueue.php');
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
+        PHPWS_Core::initModClass('hms', 'AssignmentHistory.php');
 
         PHPWS_Core::initModClass('hms', 'exception/AssignmentException.php');
-        PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
 
         $username = $student->getUsername();
 
@@ -569,6 +579,9 @@ class HMS_Assignment extends HMS_Item
         # Log in the activity log
         HMS_Activity_Log::log_activity($username, ACTIVITY_REMOVED, UserStatus::getUsername(), $term . ' ' . $banner_building_code . ' ' . $banner_bed_id . ' ' . $notes);
 
+        # Insert into history table
+        AssignmentHistory::makeUnassignmentHistory($assignment, $reason);
+        
         # Generate assignment notices for old roommates
         $assignees = $room->get_assignees(); // get an array of student objects for those assigned to this room
 

@@ -19,6 +19,10 @@ class RLCMenu extends CommandMenu {
                 $this->addCommandByName('Assign Applicants to RLCs', 'ShowAssignRlcApplicants');
                 $this->addCommandByName('View Denied Applications', 'ShowDeniedRlcApplicants');
             }
+            
+            if(Current_User::allow('hms', 'learning_community_maintenance')){
+                $this->addCommandByName('Send Freshmen Invites', 'ShowSendRlcInvites');
+            }
 
             if(Current_User::allow('hms' ,'view_rlc_members')){
                 $this->addCommandByName('View RLC Members by RLC', 'ShowSearchByRlc');

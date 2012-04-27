@@ -3,6 +3,7 @@
 PHPWS_Core::initModClass('hms', 'UserStatus.php');
 PHPWS_Core::initModClass('hms', 'Command.php');
 PHPWS_Core::initModClass('hms', 'View.php');
+PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
 
 class HMSFactory
 {

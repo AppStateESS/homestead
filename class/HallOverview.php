@@ -54,33 +54,51 @@ class HallOverview extends View {
             foreach($floor->_rooms as $room) {
                 $extra_attribs = '';
 
-                if($room->ra_room){
-                    $extra_attribs .= 'RA ';
+                if($room->isOffline()){
+                    $extra_attribs .= 'Offline ';
                 }
 
-                if($room->private_room){
-                    $extra_attribs .= 'Private ';
-                }
-
-                if($room->is_overflow){
-                    $extra_attribs .= 'Overflow ';
-                }
-
-                if($room->is_medical){
-                    $extra_attribs .= 'Medical ';
-                }
-
-                if($room->is_reserved){
+                if($room->isReserved()){
                     $extra_attribs .= 'Reserved ';
                 }
 
-                if(!$room->is_online){
-                    $extra_attribs .= 'Offline ';
+                if($room->isRa()){
+                    $extra_attribs .= 'RA ';
+                }
+
+                if($room->isPrivate()){
+                    $extra_attribs .= 'Private ';
+                }
+
+                if($room->isOverflow()){
+                    $extra_attribs .= 'Overflow ';
+                }
+
+                if($room->isParlor()){
+                    $extra_attribs .= 'Parlor ';
+                }
+
+                if($room->isADA()){
+                    $extra_attribs .= 'ADA';
+                }
+
+                if($room->isHearingImpaired()){
+                    $extra_attribs .= 'Hearing Impaired';
+                }
+
+                if($room->bathEnSuite()){
+                    $extra_attribs .= 'Bath en Suite';
                 }
 
                 $room->loadBeds();
                 $bed_labels = array();
 
+                if(empty($room->_beds)){
+                    $tpl->setCurrentBlock('room_repeat');
+                    $tpl->setData(array('EXTRA_ATTRIBS'=>$extra_attribs, 'ROOM_NUMBER'=>$room->getLink('Room')));
+                    $tpl->parseCurrentBlock();
+                    continue;
+                }
 
                 foreach($room->_beds as $bed) {
                     $bed->loadAssignment();

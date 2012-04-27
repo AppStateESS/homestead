@@ -1,5 +1,6 @@
 <?php
 
+PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
 PHPWS_Core::initModClass('hms', 'ShowViewByRlc.php');
 
 class ShowViewByRlcCommand extends Command {
@@ -31,7 +32,15 @@ class ShowViewByRlcCommand extends Command {
             throw new PermissionException('You do not have permission to view RLC members.');
         }
 
-        $view = new ShowViewByRlc($context->get('rlc'));
+        $rlcId = $context->get('rlc');
+        
+        if(!isset($rlcId)){
+            throw new InvalidArgumentException('Missing RLC id.');
+        }
+        
+        $rlc = new HMS_Learning_Community($rlcId);
+        
+        $view = new ShowViewByRlc($rlc);
 
         $context->setContent($view->show());
     }

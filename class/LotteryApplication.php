@@ -13,7 +13,7 @@ PHPWS_Core::initModClass('hms', 'HousingApplication.php');
 class LotteryApplication extends HousingApplication {
 
     public $magic_winner        = 0;
-    public $invite_expires_on   = NULL;
+    public $invited_on          = NULL;
 
     public $waiting_list_hide   = 0;
 
@@ -28,11 +28,13 @@ class LotteryApplication extends HousingApplication {
     public $wg_pref;
     public $honors_pref;
     public $rlc_interest;
+    
+    public $early_release;
 
     // Static variable for waiting list position calculation
     private static $waitingList;
 
-    public function __construct($id = 0, $term = NULL, $banner_id = NULL, $username = NULL, $gender = NULL, $student_type = NULL, $application_term = NULL, $cell_phone = NULL, $meal_plan = NULL, $physical_disability = NULL, $psych_disability = NULL, $gender_need = NULL, $medical_need = NULL, $international = NULL, $specialInterest = NULL, $magicWinner = 0, $sororityPref = NULL, $tfPref = NULL, $wgPref = NULL, $honorsPref = NULL, $rlcInterest = NULL)
+    public function __construct($id = 0, $term = NULL, $banner_id = NULL, $username = NULL, $gender = NULL, $student_type = NULL, $application_term = NULL, $cell_phone = NULL, $meal_plan = NULL, $physical_disability = NULL, $psych_disability = NULL, $gender_need = NULL, $medical_need = NULL, $international = NULL, $specialInterest = NULL, $magicWinner = 0, $sororityPref = NULL, $tfPref = NULL, $wgPref = NULL, $honorsPref = NULL, $rlcInterest = NULL, $earlyRelease = NULL)
     {
         /**
          * If the id is non-zero, then we need to load the other member variables
@@ -56,6 +58,8 @@ class LotteryApplication extends HousingApplication {
         $this->wg_pref        = $wgPref;
         $this->honors_pref    = $honorsPref;
         $this->rlc_interest   = $rlcInterest;
+        
+        $this->early_release = $earlyRelease;
     }
 
     /**
@@ -77,7 +81,6 @@ class LotteryApplication extends HousingApplication {
 
         if(PHPWS_Error::logIfError($db->loadObject($this))){
             $this->id = 0;
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -111,7 +114,6 @@ class LotteryApplication extends HousingApplication {
         }
 
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -136,7 +138,7 @@ class LotteryApplication extends HousingApplication {
 
     public function isWinner()
     {
-        if(!is_null($this->invite_expires_on) && $this->invite_expires_on >= time()){
+        if(!is_null($this->invited_on)){
             return true;
         }else{
             return false;
@@ -371,7 +373,6 @@ class LotteryApplication extends HousingApplication {
         $applications = PHPWS_DB::getCol($sql);
 
         if(PHPWS_Error::logIfError($applications)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($applications->toString());
         }
 

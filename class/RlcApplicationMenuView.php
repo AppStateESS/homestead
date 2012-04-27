@@ -30,16 +30,32 @@ class RlcApplicationMenuView extends View {
 
     public function show()
     {
+        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
+         
         $tpl = array();
 
         $tpl['DATES'] = HMS_Util::getPrettyDateRange($this->startDate, $this->endDate);
         $tpl['STATUS'] = "";
 
-        if(isset($this->application) && !is_null($this->application->id) && isset($this->assignment) && !is_null($this->assignment->id)) {
-            // Student has applied and been assigned/invited to a particular community. The student can no longer view/edit the application.
+        if(isset($this->assignment) && $this->assignment->getStateName() == 'declined'){
+            // Student declined the invite
+            $tpl['ICON'] = FEATURE_LOCKED_ICON;
+            $tpl['DECLINED'] = ""; //dummy tag
+        }else if(isset($this->application) && !is_null($this->application->id) && isset($this->assignment) && $this->assignment->getStateName() == 'confirmed') {
+            // Student has applied, been accepted, been invited, and confirmed that invitation to a particular community. The student can no longer view/edit the application.
             $tpl['ICON'] = FEATURE_COMPLETED_ICON;
-            $tpl['INVITED'] = ""; // dummy tag
+            $tpl['CONFIRMED_RLC_NAME'] = $this->assignment->getRlcName();
 
+        }else if(isset($this->assignment) && $this->assignment->getStateName() == 'invited'){
+            // Studnet has applied, been assigned, and been sent an invite email
+            $tpl['ICON'] = FEATURE_COMPLETED_ICON;
+            
+            $tpl['INVITED_COMMUNITY_NAME'] = $this->assignment->getRlcName();
+            
+            $acceptCmd = CommandFactory::getCommand('ShowAcceptRlcInvite');
+            $acceptCmd->setTerm($this->term);
+            $tpl['INVITED_CONFIRM_LINK'] = $acceptCmd->getLink('accept or decline your invitation');
+            
         }else if(isset($this->application) && !is_null($this->application->id)) {
             $tpl['ICON'] = FEATURE_COMPLETED_ICON;
             // Let student view their application

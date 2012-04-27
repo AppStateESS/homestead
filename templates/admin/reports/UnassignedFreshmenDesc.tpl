@@ -1,0 +1,1 @@
+Lists all unassigned freshmen (based on the student's 'application term' as compared to the selected term), and gives totals by gender. The list is sorted by gender, then by application date (earliest to latest). Other sorting orders can be used with Excel export.

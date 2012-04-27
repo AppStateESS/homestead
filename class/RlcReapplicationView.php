@@ -6,21 +6,23 @@ class RlcReapplicationView extends View {
     private $term;
     private $rlcAssignment;
     private $communities;
+    private $reApp;
 
-    public function __construct(Student $student, $term, HMS_RLC_Assignment $rlcAssignment = NULL, Array $communities)
+    public function __construct(Student $student, $term, HMS_RLC_Assignment $rlcAssignment = NULL, Array $communities, HMS_RLC_Application $reApp = null)
     {
         $this->student        = $student;
         $this->term           = $term;
         $this->rlcAssignment  = $rlcAssignment;
         $this->communities    = $communities;
+        $this->reApp          = $reApp;
     }
 
     public function show()
     {
-        $this->setPageTitle('RLC Re-application Form');
+        $this->setTitle('RLC Re-application Form');
 
         $form = new PHPWS_Form();
-        $submitCmd = CommandFactory::getCommand('SubmitRLCReapplication');
+        $submitCmd = CommandFactory::getCommand('SubmitRLCReapplicationPageOne');
         $submitCmd->initForm($form);
 
         $form->addHidden('term', $this->term);
@@ -48,7 +50,7 @@ class RlcReapplicationView extends View {
         $form->addDropBox('rlc_choice_1', $firstCommunity);
         $form->setLabel('rlc_choice_1', 'First choice:');
         $form->setExtra('rlc_choice_1', 'margin-left: 20px;"');
-
+        
         $form->addDropBox('rlc_choice_2', $otherCommunities);
         $form->setLabel('rlc_choice_2', 'Second choice:');
         $form->setExtra('rlc_choice_2', 'margin-left: 20px;"');
@@ -58,8 +60,14 @@ class RlcReapplicationView extends View {
 
         $form->addTextArea('why_this_rlc');
         $form->addTextArea('contribute_gain');
+        
+        // Set values if they exist on the session
+        if(isset($this->reApp)){
+            $form->grab('why_this_rlc')->setValue($this->reApp->why_specific_communities);
+            $form->grab('contribute_gain')->setValue($this->reApp->strengths_weaknesses);
+        }
 
-        $form->addSubmit('submit', 'Submit Application');
+        $form->addSubmit('submit', 'Continue');
 
         $form->mergeTemplate($tpl);
 

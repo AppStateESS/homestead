@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Command to show the view for an existing RLC application.
+ * 
+ * @author jbooker
+ * @package HMS
+ */
 class ShowRlcApplicationReViewCommand extends Command {
 
     private $appId;

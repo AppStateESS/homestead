@@ -23,7 +23,7 @@ class EditRlcView extends View {
 
         $pager->addPageTags($pageTags);
 
-        $this->setPageTitle('Edit Learning Communities');
+        $this->setTitle('Edit Learning Communities');
 
         return $pager->get();
     }

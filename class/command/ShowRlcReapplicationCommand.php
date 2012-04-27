@@ -26,6 +26,22 @@ class ShowRlcReapplicationCommand extends Command {
         $term = $context->get('term');
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
 
+        // Check deadlines
+        PHPWS_Core::initModClass('hms', 'ApplicationFeature.php');
+        $feature = ApplicationFeature::getInstanceByNameAndTerm('RlcReapplication', $term);
+        if(is_null($feature) || !$feature->isEnabled()){
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Sorry, RLC re-applications are not avaialable for this term.");
+            $errorCmd->redirect();
+        }
+        
+        if($feature->getStartDate() > mktime()){
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Sorry, it is too soon to submit a RLC re-application.");
+            $errorCmd->redirect();
+        }else if($feature->getEndDate() < mktime()){
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Sorry, the RLC re-application deadline has already passed. Please contact University Housing if you are interested in applying for a RLC.");
+            $errorCmd->redirect();
+        }
+        
         # Double check the the student is eligible
         $housingApp = HousingApplication::getApplicationByUser($student->getUsername(), $term);
         if(!$housingApp instanceof LotteryApplication){
@@ -48,7 +64,26 @@ class ShowRlcReapplicationCommand extends Command {
         # This accounts for freshmen addmitted in the spring, who will still have the 'F' type.
         $communities = HMS_Learning_Community::getRLCListReapplication(false, 'C');
 
-        $view = new RlcReapplicationView($student, $term, $rlcAssignment, $communities);
+        // If the student has an existing assignment, and that community always allows returning students, then make sure the community is in the list (if it's not already)
+        if(isset($rlcAssignment)){
+            // Load the RLC
+            $rlc = $rlcAssignment->getRlc();
+            // If members can always reapply, make sure community id exists as an array index
+            if($rlc->getMembersReapply() == 1 && !isset($communities[$rlc->get_id()])){
+                $communities[$rlc->get_id()] = $rlc->get_community_name();
+            }
+        }
+
+        session_write_close();
+        session_start();
+        
+        if(isset($_SESSION['RLC_REAPP'])){
+            $reApp = $_SESSION['RLC_REAPP'];
+        }else{
+            $reApp = null;
+        }
+        
+        $view = new RlcReapplicationView($student, $term, $rlcAssignment, $communities, $reApp);
 
         $context->setContent($view->show());
     }

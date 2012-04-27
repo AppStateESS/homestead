@@ -14,21 +14,31 @@ PHPWS_Core::initModClass('hms', 'HMS_Item.php');
 class HMS_Room extends HMS_Item
 {
 
+    public $term;
     public $floor_id               = 0;
     public $room_number            = 0;
 
+    // Gender
     public $gender_type            = 0;
     public $default_gender         = 0;
-    public $ra_room                = false;
-    public $private_room           = false;
-    public $is_overflow            = false;
-    public $is_medical             = false;
-    public $is_reserved            = false;
-    public $is_online              = false;
-    public $term;
 
+    // Reservations
+    public $reserved               = false;
+    public $offline                = false;
+    public $ra                     = false;
+    public $private                = false;
+    public $overflow               = false;
+    public $parlor                 = false;
+
+    // Medical flags
+    public $ada                    = false;
+    public $hearing_impaired       = false;
+    public $bath_en_suite          = false;
+
+    /****************************************************
+     * Following fields are not present in the database *
+    ****************************************************/
     public $banner_building_code;
-
 
     /**
      * Listing of beds associated with this room
@@ -61,15 +71,15 @@ class HMS_Room extends HMS_Item
 
     /********************
      * Instance Methods *
-     *******************/
+    *******************/
 
     /*
      * Saves a new or updated floor hall object
-     * New room ids are inserted into the id variable.
-     * Save errors are logged.
-     *
-     * @return bool True is successful, false otherwise.
-     */
+    * New room ids are inserted into the id variable.
+    * Save errors are logged.
+    *
+    * @return bool True is successful, false otherwise.
+    */
     public function save()
     {
         $this->stamp();
@@ -77,7 +87,6 @@ class HMS_Room extends HMS_Item
         $result = $db->saveObject($this);
 
         if(!$result || PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
         return true;
@@ -94,7 +103,6 @@ class HMS_Room extends HMS_Item
         $result = $db->delete();
 
         if(!$result || PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -103,13 +111,13 @@ class HMS_Room extends HMS_Item
 
     /*
      * Copies this room object to a new term, then calls copy on all
-     * 'this' room's beds.
-     *
-     * Setting $assignments to TRUE causes the copy public function to copy
-     * the c<urrent assignments as well as the hall structure.
-     *
-     * @return bool False if unsuccessful.
-     */
+    * 'this' room's beds.
+    *
+    * Setting $assignments to TRUE causes the copy public function to copy
+    * the c<urrent assignments as well as the hall structure.
+    *
+    * @return bool False if unsuccessful.
+    */
     public function copy($to_term, $floor_id, $suite_id=NULL, $assignments = FALSE)
     {
         if(!$this->id) {
@@ -201,7 +209,6 @@ class HMS_Room extends HMS_Item
         PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
         $result = new HMS_Floor($this->floor_id);
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
         $this->_floor = & $result;
@@ -223,7 +230,6 @@ class HMS_Room extends HMS_Item
         $db->loadClass('hms', 'HMS_Bed.php');
         $result = $db->getObjects('HMS_Bed');
         if(PHPWS_Error::logIfError($result)) {
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         } else {
             $this->_beds = & $result;
@@ -233,10 +239,10 @@ class HMS_Room extends HMS_Item
 
     /*
      * Creates beds for a new room
-     * Initial values for beds should be set in the declaration.
-     * Assuming gender_type is carried over.
-     * added and updated variables need to be set in the bed save public function.
-     */
+    * Initial values for beds should be set in the declaration.
+    * Assuming gender_type is carried over.
+    * added and updated variables need to be set in the bed save public function.
+    */
     public function create_child_objects($beds_per_room)
     {
         for ($i = 0; $i < $bedroooms_per_room; $i++) {
@@ -250,57 +256,48 @@ class HMS_Room extends HMS_Item
 
     /*
      * Returns TRUE or FALSE.
-     *
-     * This public function uses the following logic:
-     *
-     * When ignore_upper = TRUE (a floor is trying to see if this room could be changed to a target gender):
-     *      If the target gender is COED: then we can always return true (even though a room can never be COED).
-     *      If the target gender is MALE: then return false if the room is female AND not empty
-     *      If the target gender is FEMALE: then return false if the room is male AND not empty
-     *      If all those checks pass, then return true
-     *
-     * When ignore_upper = FALSE (we're trying to change *this* room to a target gender):
-     *      If the target gender is COED: always return false (rooms can't be COED)
-     *      If the target gender is MALE: return false if the floor is female
-     *      If the target gender is FEMALE: return false if the floor is male
-     *
-     * @param int  target_gender
-     * @param bool ignore_upper In the case that we're attempting to change
-     *                          the gender of just 'this' room, set $ignore_upper
-     *                          to TRUE to avoid checking the parent hall's gender.
-     * @return bool
-     */
+    *
+    * This public function uses the following logic:
+    *
+    * When ignore_upper = TRUE (a floor is trying to see if this room could be changed to a target gender):
+    *      If the target gender is COED: then we can always return true (even though a room can never be COED).
+    *      If the target gender is MALE: then return false if the room is female AND not empty
+    *      If the target gender is FEMALE: then return false if the room is male AND not empty
+    *      If all those checks pass, then return true
+    *
+    * When ignore_upper = FALSE (we're trying to change *this* room to a target gender):
+    *      If the target gender is COED: always return false (rooms can't be COED)
+    *      If the target gender is MALE: return false if the floor is female
+    *      If the target gender is FEMALE: return false if the floor is male
+    *
+    * @param int  target_gender
+    * @param bool ignore_upper In the case that we're attempting to change
+    *                          the gender of just 'this' room, set $ignore_upper
+    *                          to TRUE to avoid checking the parent hall's gender.
+    * @return bool
+    */
     public function can_change_gender($target_gender, $ignore_upper = FALSE)
     {
-        # Ignore upper is true, we're trying to change a hall/floor
+        // Ignore upper is true, we're trying to change a hall/floor
         if($ignore_upper){
-            # If ignore upper is true and the target gender coed, then we
-            # can always return true.
+            // If ignore upper is true and the target gender coed, then we
+            // can always return true.
             if($target_gender == COED){
                 return true;
             }
 
-            # If the target gender is not the same, and someone is assigned
-            # here, then the gender can't be changed (i.e. return false)
+            // If the target gender is not the same, and someone is assigned
+            // here, then the gender can't be changed (i.e. return false)
             if(($target_gender != $this->gender_type) && ($this->get_number_of_assignees() != 0)){
                 return false;
             }
 
             return true;
         }else{
-            # Ignore upper is FALSE, load the floor and compare
+            // Ignore upper is FALSE, load the floor and compare
 
-            # Since we can't have coed rooms, we can never change to a
-            # target of COED.
-            /*
-             * Just kidding, we can have co-ed rooms
-             if($target_gender == COED){
-             return false;
-             }
-             */
-
-            # If the target gender is not the same, and someone is assigned
-            # here, then the gender can't be changed (i.e. return false)
+            // If the target gender is not the same, and someone is assigned
+            // here, then the gender can't be changed (i.e. return false)
             if(($target_gender != $this->gender_type) && ($this->get_number_of_assignees() != 0)){
                 return false;
             }
@@ -312,8 +309,8 @@ class HMS_Room extends HMS_Item
 
             // If the floor is not coed and the gt is not the target, return false
             if($this->_floor->gender_type != COED &&
-                $this->_floor->gender_type != $target_gender
-                ) {
+            $this->_floor->gender_type != $target_gender
+            ) {
                 return false;
             }
 
@@ -323,7 +320,7 @@ class HMS_Room extends HMS_Item
 
     /*
      * Returns the number of beds within the current room
-     */
+    */
     public function get_number_of_beds()
     {
         $db = new PHPWS_DB('hms_bed');
@@ -335,17 +332,15 @@ class HMS_Room extends HMS_Item
         $result = $db->select('count');
 
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
         return $result;
-
     }
 
     /*
      * Returns the number of students assigned to the current room
-     */
+    */
     public function get_number_of_assignees()
     {
         $db = new PHPWS_DB('hms_assignment');
@@ -359,17 +354,15 @@ class HMS_Room extends HMS_Item
         $result = $db->select('count');
 
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
         return $result;
-
     }
 
     /*
      * Returns the parent floor object of this room
-     */
+    */
     public function get_parent()
     {
         $this->loadFloor();
@@ -378,7 +371,7 @@ class HMS_Room extends HMS_Item
 
     /*
      * Returns an array of beds within the current room
-     */
+    */
     public function get_beds()
     {
         if(!$this->loadBeds()) {
@@ -409,8 +402,8 @@ class HMS_Room extends HMS_Item
 
     /*
      * Returns an array of HMS_Student objects which are currently
-     * assigned to 'this' room.
-     */
+    * assigned to 'this' room.
+    */
     public function get_assignees()
     {
         if(!$this->loadBeds()) {
@@ -436,7 +429,7 @@ class HMS_Room extends HMS_Item
     {
         $num_assigned = $this->get_number_of_assignees();
 
-        # If this is a private room, then this room is full if one person is assigned
+        // If this is a private room, then this room is full if one person is assigned
         if($this->isPrivate() && $num_assigned >= 1){
             return FALSE;
         }
@@ -466,12 +459,10 @@ class HMS_Room extends HMS_Item
             return FALSE;
         }
 
-        #test($this->_beds, 1);
-
         $vacant_beds = array();
 
-        # Search for vacant beds in this room's set of beds, only if this room
-        # has a vacancy according to 'has_vacancy()'. This accounts for private rooms.
+        // Search for vacant beds in this room's set of beds, only if this room
+        // has a vacancy according to 'has_vacancy()'. This accounts for private rooms.
         if($this->has_vacancy()){
 
             foreach($this->_beds as $bed){
@@ -498,36 +489,26 @@ class HMS_Room extends HMS_Item
         }
     }
 
-    public function isPrivate()
-    {
-
-        if($this->private_room == true){
-            return true;
-        }else{
-            return false;
-        }
-    }
-
     public function count_avail_lottery_beds()
     {
         $now = mktime();
 
-        # Count the number of beds which are free in this room
+        // Count the number of beds which are free in this room
         $query =   "SELECT DISTINCT COUNT(hms_bed.id) FROM hms_bed
                     JOIN hms_room ON hms_bed.room_id = hms_room.id
                     WHERE (hms_bed.id NOT IN (SELECT bed_id FROM hms_lottery_reservation WHERE term = {$this->term} AND expires_on > $now)
                     AND hms_bed.id NOT IN (SELECT bed_id FROM hms_assignment WHERE term = {$this->term}))
                     AND hms_room.id = {$this->id}
-                    AND hms_room.is_medical = 0
-                    AND hms_room.is_reserved = 0
-                    AND hms_room.is_online = 1
-                    AND hms_room.private_room = 0
-                    AND hms_room.ra_room = 0
-                    AND hms_room.is_overflow = 0";
+                    AND hms_room.reserved = 0
+                    AND hms_room.offline = 0
+                    AND hms_room.private = 0
+                    AND hms_room.ra = 0
+                    AND hms_room.overflow = 0
+                    AND hms_room.parlor = 0
+                    AND hms_bed.international_reserved = 0";
 
         $avail_rooms = PHPWS_DB::getOne($query);
         if(PHPWS_Error::logIfError($avail_rooms)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
@@ -543,12 +524,11 @@ class HMS_Room extends HMS_Item
         $tpl['ROOM_NUMBER']    = $this->getLink();
         $tpl['GENDER_TYPE']    = HMS_Util::formatGender($this->gender_type);
         $tpl['DEFAULT_GENDER'] = HMS_Util::formatGender($this->default_gender);
-        $tpl['RA_ROOM']        = $this->ra_room      ? 'Yes' : 'No';
-        $tpl['PRIVATE_ROOM']   = $this->private_room ? 'Yes' : 'No';
-        $tpl['IS_OVERFLOW']    = $this->is_overflow  ? 'Yes' : 'No';
-        $tpl['IS_MEDICAL']     = $this->is_medical   ? 'Yes' : 'No';
-        $tpl['IS_RESERVED']    = $this->is_reserved  ? 'Yes' : 'No';
-        $tpl['IS_ONLINE']      = $this->is_online    ? 'Yes' : 'No';
+        $tpl['RA_ROOM']        = $this->ra        ? 'Yes' : 'No';
+        $tpl['PRIVATE_ROOM']   = $this->private   ? 'Yes' : 'No';
+        $tpl['IS_OVERFLOW']    = $this->overflow  ? 'Yes' : 'No';
+        $tpl['IS_RESERVED']    = $this->reserved  ? 'Yes' : 'No';
+        $tpl['OFFLINE']        = $this->offline   ? 'Yes' : 'No';
 
         if(Current_User::allow('hms','room_structure') && $this->get_number_of_assignees() == 0) {
             $deleteRoomCmd = CommandFactory::getCommand('DeleteRoom');
@@ -586,43 +566,44 @@ class HMS_Room extends HMS_Item
 
         $form = new PHPWS_Form($this->id);
         $form->addSelect('gender_type', array(FEMALE => FEMALE_DESC,
-                                              MALE   => MALE_DESC,
-                                              COED   => COED_DESC
-                                              ));
+        MALE   => MALE_DESC,
+        COED   => COED_DESC
+        ));
 
         $form->setMatch('gender_type', $this->gender_type);
         $form->setExtra('gender_type', 'onChange="submit_form(this, true)"');
 
         $form->addSelect('default_gender', array(FEMALE => FEMALE_DESC,
-                                              MALE   => MALE_DESC,
-                                              COED   => COED_DESC
-                                              ));
+        MALE   => MALE_DESC,
+        COED   => COED_DESC
+        ));
         $form->setMatch('default_gender', $this->default_gender);
         $form->setExtra('default_gender', 'onChange="submit_form(this, true)"');
 
-        $form->addCheck('ra_room', 'yes');
-        $form->setMatch('ra_room', $this->ra_room == 1 ? 'yes' : 0);
-        $form->setExtra('ra_room', 'onChange="submit_form(this, false)"');
+        $form->addCheck('offline', 'yes');
+        $form->setLabel('offline', 'Offline');
+        $form->setMatch('offline', $this->offline == 1 ? 'yes' : 0);
+        $form->setExtra('offline', 'onChange="submit_form(this, false)"');
+        
+        $form->addCheck('reserved', 'yes');
+        $form->setLabel('reserved', 'Reserved');
+        $form->setMatch('reserved', $this->reserved == 1 ? 'yes' : 0);
+        $form->setExtra('reserved', 'onChange="submit_form(this, false)"');
+        
+        $form->addCheck('ra', 'yes');
+        $form->setLabel('ra', 'Reserved for RA:');
+        $form->setMatch('ra', $this->ra == 1 ? 'yes' : 0);
+        $form->setExtra('ra', 'onChange="submit_form(this, false)"');
 
-        $form->addCheck('private_room', 'yes');
-        $form->setMatch('private_room', $this->private_room == 1 ? 'yes' : 0);
-        $form->setExtra('private_room', 'onChange="submit_form(this, false)"');
+        $form->addCheck('private', 'yes');
+        $form->setLabel('private', 'Private');
+        $form->setMatch('private', $this->private == 1 ? 'yes' : 0);
+        $form->setExtra('private', 'onChange="submit_form(this, false)"');
 
-        $form->addCheck('is_overflow', 'yes');
-        $form->setMatch('is_overflow', $this->is_overflow == 1 ? 'yes' : 0);
-        $form->setExtra('is_overflow', 'onChange="submit_form(this, false)"');
-
-        $form->addCheck('is_medical', 'yes');
-        $form->setMatch('is_medical', $this->is_medical == 1 ? 'yes' : 0);
-        $form->setExtra('is_medical', 'onChange="submit_form(this, false)"');
-
-        $form->addCheck('is_reserved', 'yes');
-        $form->setMatch('is_reserved', $this->is_reserved == 1 ? 'yes' : 0);
-        $form->setExtra('is_reserved', 'onChange="submit_form(this, false)"');
-
-        $form->addCheck('is_online', 'yes');
-        $form->setMatch('is_online', $this->is_online == 1 ? 'yes' : 0);
-        $form->setExtra('is_online', 'onChange="submit_form(this, false)"');
+        $form->addCheck('overflow', 'yes');
+        $form->setLabel('overflow', '');
+        $form->setMatch('overflow', $this->overflow == 1 ? 'yes' : 0);
+        $form->setExtra('overflow', 'onChange="submit_form(this, false)"');
 
         $form->addHidden('action', 'UpdateRoomField');
         $form->addHidden('room', $this->id);
@@ -668,9 +649,62 @@ class HMS_Room extends HMS_Item
         return $room;
     }
 
+    /******************************
+     * Accessor / Mutator Methods * 
+     ******************************/
+    
+    public function getRoomNumber()
+    {
+        return $this->room_number;
+    }
+    
+    public function isOffline()
+    {
+        return $this->offline == 1 ? true : false;
+    }
+    
+    public function isReserved()
+    {
+        return $this->reserved == 1 ? true : false;
+    }
+    
+    public function isRa()
+    {
+        return $this->ra == 1 ? true : false;
+    }
+    
+    public function isPrivate()
+    {
+        return $this->private == 1 ? true : false;
+    }
+    
+    public function isOverflow()
+    {
+        return $this->overflow == 1 ? true : false;
+    }
+    
+    public function isADA()
+    {
+        return $this->ada == 1 ? true : false;
+    }
+    
+    public function isHearingImpaired()
+    {
+        return $this->hearing_impaired == 1 ? true : false;
+    }
+    
+    public function bathEnSuite()
+    {
+        return $this->bath_en_suite == 1 ? true : false;
+    }
+    
+    public function isParlor()
+    {
+        return $this->parlor == 1 ? true : false;
+    }
     /******************
      * Static Methods *
-     *****************/
+    *****************/
 
     public static function room_pager_by_floor($floor_id, $editable=false)
     {
@@ -690,7 +724,7 @@ class HMS_Room extends HMS_Item
         $page_tags['OVERFLOW_LABEL']       = 'Overflow';
         $page_tags['MEDICAL_LABEL']        = 'Medical';
         $page_tags['RESERVED_LABEL']       = 'Reserved';
-        $page_tags['ONLINE_LABEL']         = 'Online';
+        $page_tags['ONLINE_LABEL']         = 'Offline';
         $page_tags['DELETE_LABEL']         = 'Delete';
 
         if(Current_User::allow('hms', 'room_structure')){
@@ -720,9 +754,9 @@ class HMS_Room extends HMS_Item
 
     /*
      * Deletes a room and any beds in it.  Returns true
-     * if we're successful, false if not (or if there
-     * is an assignment)
-     */
+    * if we're successful, false if not (or if there
+    * is an assignment)
+    */
     public static function deleteRoom($roomId)
     {
 
@@ -768,7 +802,7 @@ class HMS_Room extends HMS_Item
      * Returns the ID of an empty room (which can be auto-assigned)
      * Returns FALSE if there are no more free rooms
      */
-    # TODO: finish this, see Trac #156
+    // TODO: finish this, see Trac #156
     public static function get_free_room($term, $gender, $randomize = FALSE)
     {
         $db = new PHPWS_DB('hms_room');
@@ -802,22 +836,21 @@ class HMS_Room extends HMS_Item
         $db->addOrder('hms_residence_hall.gender_type ASC');
 
         // Make sure everything is online
-        $db->addWhere('hms_room.is_online', 1);
+        $db->addWhere('hms_room.offline', 0);
         $db->addWhere('hms_floor.is_online', 1);
         $db->addWhere('hms_residence_hall.is_online', 1);
 
         // Make sure nothing is reserved
-        $db->addWhere('hms_room.is_reserved', 0);
-        $db->addWhere('hms_room.is_medical', 0);
+        $db->addWhere('hms_room.reserved', 0);
 
         // Don't get RA beds
-        $db->addWhere('hms_room.ra_room', 0);
+        $db->addWhere('hms_room.ra', 0);
 
         // Don't get lobbies
-        $db->addWhere('hms_room.is_overflow', 0);
+        $db->addWhere('hms_room.overflow', 0);
 
         // Don't get private rooms
-        $db->addWhere('hms_room.private_room', 0);
+        $db->addWhere('hms_room.private', 0);
 
         // Don't get rooms on floors reserved for an RLC
         $db->addWhere('hms_floor.rlc_id', NULL);
@@ -850,16 +883,19 @@ class HMS_Room extends HMS_Item
         $result = $db->select('col');
 
         if(PHPWS_Error::logIfError($result)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
 
         // If not two-bedroom, toss it out
-        if(count($result) != 2) { return FALSE; }
+        if(count($result) != 2) {
+            return FALSE;
+        }
 
         foreach($result as $r) {
             // If anyone is assigned, toss it out
-            if($r != NULL) { return FALSE; }
+            if($r != NULL) {
+                return FALSE;
+            }
         }
 
         // Looks like we're good.
