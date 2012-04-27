@@ -185,7 +185,9 @@
             <arg value="--define" />
             <arg value="_gpg_name Electronic Student Services" />
             <arg value="--define" />
-            <arg value="_gpgbin /usr/bin/gpg" />
+            <arg value="_gpgbin /usr/bin/gpg" />            
+            <arg value="--define" />
+            <arg value="_binaries_in_noarch_packages_terminate_build 0" />
             <arg value="-bb" />
             <arg value="--sign" />
             <arg path="${basedir}/hms.spec" />
