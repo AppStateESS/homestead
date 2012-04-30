@@ -426,6 +426,14 @@ abstract class ApplicationFeature
 
     public static function getInstanceByNameAndTerm($name, $term)
     {
+        if(!isset($name)){
+            throw new InvalidArgumentException('Missing feature name.');
+        }
+        
+        if(!isset($term)){
+            throw new InvalidArgumentException('Missing term.');
+        }
+        
         $db = new PHPWS_DB('hms_application_feature');
         $db->addWhere('name', $name);
         $db->addWhere('term', $term);

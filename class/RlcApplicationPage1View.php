@@ -1,7 +1,4 @@
 <?php
-PHPWS_Core::initModClass('hms', 'View.php');
-PHPWS_Core::initModClass('hms', 'Student.php');
-PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 
 /*
  * ShowRlcApplicationPage1View
@@ -14,10 +11,12 @@ PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 class RlcApplicationPage1View extends View
 {
     protected $context;
+    private $student;
 
-    public function __construct(CommandContext $context)
+    public function __construct(CommandContext $context, Student $student)
     {
         $this->context = $context;
+        $this->student = $student;
     }
 
     public function setContext(CommandContext $context)
@@ -30,11 +29,8 @@ class RlcApplicationPage1View extends View
         $jsVars = array('ELEMENTS_TO_BIND'=>'"#phpws_form_rlc_first_choice","#phpws_form_rlc_second_choice","#phpws_form_rlc_third_choice"', 'ACTION'=>'AjaxGetRLCExtraInfo');
         javascript('modules/hms/formDialog', $jsVars);
 
-        //Seriously php?  Can't resolve context without this?  Fail.
         $context = $this->context;
         PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
-
-        $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), Term::getCurrentTerm());
 
         $template = array();
 
@@ -43,18 +39,10 @@ class RlcApplicationPage1View extends View
         $page2Cmd->setTerm($context->get('term'));
         $page2Cmd->initForm($rlc_form);
 
-
-        // Make sure the user is eligible for an RLC
-        if($student->getCreditHours() > 15) {
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Sorry, you are not eligible for a Residential Learning Community for Underclassmen. Please visit the <a href="http://housing.appstate.edu/index.php?module=pagemaster&PAGE_user_op=view_page&PAGE_id=293" target="_blank">Residential Learning Communities for Upperclassmen website</a> for information on applying for Residential Learning Communities for Upperclassmen.');
-            $cmd     = CommandFactory::getCommand('ShowRlcApplicationPage1View');
-            $cmd->redirect();
-        }
-
         // 1. About You Section
-        $name  = $student->getName();
+        $name  = $this->student->getName();
 
-        $template['APPLENET_USERNAME']       = $student->getUsername();
+        $template['APPLENET_USERNAME']       = $this->student->getUsername();
         $template['APPLENET_USERNAME_LABEL'] = 'Applenet User Name: ';
 
         $template['NAME']        = $name;
@@ -63,7 +51,7 @@ class RlcApplicationPage1View extends View
         // 2. Rank Your RLC Choices
 
         // Get the list of RLCs from the database that this student is allowed to apply for and which are not hidden
-        $rlc_choices = HMS_Learning_Community::getRLCList(false, $student->getType());
+        $rlc_choices = HMS_Learning_Community::getRLCList(false, $this->student->getType());
 
         // Add an inital element to the list.
         $rlc_choices[-1] = "Select";
