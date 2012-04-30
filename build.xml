@@ -4,10 +4,12 @@
     <property environment="env" />
 
     <target name="build"
-        depends="prepare,lint,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpdox,phpunit,phpcb" />
+        depends="prepare,lint" />
 
     <target name="build-parallel"
         depends="prepare,lint,tools-parallel,phpunit,phpcb" />
+    
+    <target name="metrics" depends="build,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpdox,phpunit,phpcb" />
 
     <target name="tools-parallel"
         description="Run tools in parallel">
@@ -185,7 +187,9 @@
             <arg value="--define" />
             <arg value="_gpg_name Electronic Student Services" />
             <arg value="--define" />
-            <arg value="_gpgbin /usr/bin/gpg" />
+            <arg value="_gpgbin /usr/bin/gpg" />            
+            <arg value="--define" />
+            <arg value="_binaries_in_noarch_packages_terminate_build 0" />
             <arg value="-bb" />
             <arg value="--sign" />
             <arg path="${basedir}/hms.spec" />
