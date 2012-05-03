@@ -9,7 +9,7 @@
     <target name="build-parallel"
         depends="prepare,lint,tools-parallel,phpunit,phpcb" />
     
-    <target name="metrics" depends="build,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpdox,phpunit,phpcb" />
+    <target name="metrics" depends="phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpdox,phpunit,phpcb" />
 
     <target name="tools-parallel"
         description="Run tools in parallel">
@@ -152,9 +152,10 @@
         <exclude name="build.xml" />
         <exclude name="hms.spec" />
         <exclude name="phpdox.xml" />
+        <exclude name="cache.properties" />
     </tarfileset>
 
-    <target name="tarball" depends="prepare" description="Tar it up">
+    <target name="tarball" depends="build" description="Tar it up">
         <tar destfile="${basedir}/build/hms-${RELVERSION}.tar.bz2" compression="bzip2">
             <tarfileset refid="hms-tarball" />
         </tar>
