@@ -104,9 +104,16 @@ class WaitingListApplication extends HousingApplication {
 
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 
-        $student = StudentFactory::getStudentByUsername($this->username, $this->term);
-
         $tags = array();
+        
+        try{
+            $student = StudentFactory::getStudentByUsername($this->username, $this->term);
+        }catch(StudentNotFoundException $e){
+            $tags['NAME'] = 'UNKNOWN';
+            $tags['USER']       = $this->username;
+            $tags['BANNER_ID']  = $student->getBannerId();
+            return $tags;
+        }
 
         $tags['NAME']       = $student->getFullNameProfileLink();
         $tags['USER']       = $this->username;
@@ -134,9 +141,16 @@ class WaitingListApplication extends HousingApplication {
     {
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 
-        $student = StudentFactory::getStudentByUsername($this->username, $this->term);
-
         $tags = array();
+        
+        try{
+            $student = StudentFactory::getStudentByUsername($this->username, $this->term);
+        }catch(StudentNotFoundException $e){
+            $tags['NAME'] = 'UNKNOWN';
+            $tags['USER']       = $this->username;
+            $tags['BANNER_ID']  = $student->getBannerId();
+            return $tags;
+        }
 
         $tags['NAME']       = $student->getFulLName();
         $tags['USER']       = $this->username;
