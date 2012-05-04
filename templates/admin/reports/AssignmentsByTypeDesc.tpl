@@ -1,0 +1,1 @@
+Provides a breakdown of all assignments by assignment reason for the selected term. 
