@@ -30,7 +30,7 @@ class AssignmentsByType extends Report {
     {
         $db = new PHPWS_DB('hms_assignment');
         
-        $this->typeCounts = PHPWS_DB::getAssoc("select reason, count(*) from hms_assignment where term = {$this->term} group by reason");
+        $this->typeCounts = PHPWS_DB::getAssoc("select reason, count(*) from hms_assignment where term = {$this->term} group by reason order by reason");
         
         if(PHPWS_Error::isError($this->typeCounts)){
             throw new DatabaseException($this->typeCounts->toString());
