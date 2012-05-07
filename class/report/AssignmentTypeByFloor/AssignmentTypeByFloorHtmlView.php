@@ -24,7 +24,7 @@ class AssignmentTypeByFloorHtmlView extends ReportHtmlView {
             foreach($hallCounts as $key=>$count){
                 $myTpl->setCurrentBlock('hall_totals');
                 $myTpl->setData(array('HALL_TOTAL_TYPE'=>constant($key), 'HALL_TOTAL_COUNT'=>$count));
-                //$myTpl->parseCurrentBlock();
+                $myTpl->parseCurrentBlock();
             }
             
             $floors = $hall->get_floors();
