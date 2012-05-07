@@ -4,7 +4,7 @@
     <property environment="env" />
 
     <target name="build"
-        depends="prepare,lint" />
+        depends="prepare,lint,tarball" />
 
     <target name="build-parallel"
         depends="prepare,lint,tools-parallel,phpunit,phpcb" />
