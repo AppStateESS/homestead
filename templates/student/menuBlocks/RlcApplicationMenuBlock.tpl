@@ -27,7 +27,7 @@ If you would like to change your answers on your Learning Community application,
 <!-- END new_app -->
 
 <!-- BEGIN confirmed -->
-You have accepted your invitiation to the {CONFIRMED_RLC_NAME} Residential Learning Community. Please keep your RLC acceptance email and refer back to it with any questions you may have. Please continue checking your Appalachian email account for more information!
+You have accepted and confirmed your invitation to the {CONFIRMED_RLC_NAME} Residential Learning Community. Please keep your RLC acceptance email and refer back to it with any questions you may have. Please continue checking your Appalachian email account for more information!
 <!-- END confirmed -->
 
 <!-- BEGIN declined -->
@@ -44,6 +44,6 @@ You have not applied for a Residential Learning Community. There are a limited n
     {APP_NOW}
 <!-- END no_app -->
 </p>
-<p>For more infomration about Appalachian's Residential Learning Communities please visit the <a href="http://housing.appstate.edu/rlc" target="_blank">Residential Learning Communities Website</a>.</p>
+<p>For more information about Appalachian's Residential Learning Communities please visit the <a href="http://housing.appstate.edu/rlc" target="_blank">Residential Learning Communities Website</a>.</p>
 
 </div>
