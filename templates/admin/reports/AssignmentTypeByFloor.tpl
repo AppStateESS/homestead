@@ -17,6 +17,7 @@ Executed on: {EXEC_DATE} by {EXEC_USER}
     <!-- END hall_totals -->
   </table>
 </div>
+
 <div>
   <table>
     <!-- BEGIN floors -->
