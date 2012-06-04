@@ -8,11 +8,12 @@ Executed on: {EXEC_DATE} by {EXEC_USER}<br />
     </tr>
     <tr>
         <td>&nbsp;</td>
-        <th>Freshmen</th>
-        <th>Transfer</th>
-        <th>Continuing</th>
-        <th>Non-degree</th>
-        <th>Withdrawn</th>
+        <th>Freshmen (F)</th>
+        <th>Transfer (T)</th>
+        <th>Returning (R)</th>
+        <th>Non-degree (NU)</th>
+        <th>Sub-Totals</th>
+        <th>Cancelled</th>
         <th>Totals</th>
     </tr>
     <tr>
@@ -20,20 +21,26 @@ Executed on: {EXEC_DATE} by {EXEC_USER}<br />
         <!-- BEGIN male_totals -->
         <td>{COUNT}</td>
         <!-- END male_totals -->
-        <td>{MALE_SUM}</td>
+        <td><strong>{MALE_SUB}</strong></td>
+        <td>{MALE_CANCELLED}</td>
+        <td>{MALE_TOTAL}</td>
     </tr>
     <tr>
         <td>Female</td>
         <!-- BEGIN female_totals -->
         <td>{COUNT}</td>
         <!-- END female_totals -->
-        <td>{FEMALE_SUM}</td>
+        <td><strong>{FEMALE_SUB}</strong></td>
+        <td>{FEMALE_CANCELLED}</td>
+        <td>{FEMALE_TOTAL}</td>
     </tr>
     <tr>
         <td>Totals</td>
         <!-- BEGIN type_totals -->
         <td>{COUNT}</td>
         <!-- END type_totals -->
+        <td><strong>{SUB_TOTAL}</strong></td>
+        <td>{CANCELLED_SUB}</td>
         <td>{ALL_TOTAL}</td>
     </tr>
 </table>

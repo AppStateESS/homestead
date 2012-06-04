@@ -11,7 +11,7 @@
 
 class ApplicantDemographics extends Report {
 
-    const friendlyName = 'Freshmen Applicant Demographics';
+    const friendlyName = 'Freshmen/Transfer Applicant Demographics';
     const shortName    = 'ApplicantDemographics';
     
     private $term;
@@ -19,12 +19,20 @@ class ApplicantDemographics extends Report {
     private $applicationTotals;
     
     private $maleTotals;
-    private $maleSum;
+    private $maleSubTotal;
     
     private $femaleTotals;
-    private $femaleSum;
-    
+    private $femaleSubTotal;
+
     private $typeTotals;
+    private $subTotal;
+    
+    private $cancelledTotals;
+    private $cancelledSubTotal;
+    
+    private $femaleGrandTotal;
+    private $maleGrandTotal;
+    
     private $total;
 
     public function __construct($id = 0)
@@ -33,8 +41,16 @@ class ApplicantDemographics extends Report {
         
         $this->applicationTotals    = array();
         $this->typeTotals           = array();
-        $this->maleSum              = 0;
-        $this->femaleSum            = 0;
+        
+        $this->maleSubTotal         = 0;
+        $this->femaleSubTotal       = 0;
+        
+        $this->cancelledTotals      = array();
+        $this->cancelledSubTotal    = 0;
+        
+        $this->femaleGrandTotal     = 0;
+        $this->maleGrandTotal       = 0;
+        
         $this->total                = 0;
     }
 
@@ -63,14 +79,20 @@ class ApplicantDemographics extends Report {
         }
 
         $db->addColumn('hms_new_application.*');
+        
+        // Only applications for the selected term
         $db->addWhere('hms_new_application.term', $this->term);
+        
+        // Only non-cancelled applications
+        $db->addWhere('hms_new_application.cancelled', 0);
+        
         $results = $db->select();
 
         if(PHPWS_Error::logIfError($results)) {
             throw new DatabaseException($results->toString());
         }
 
-        $types      = array(TYPE_FRESHMEN, TYPE_TRANSFER, TYPE_CONTINUING, TYPE_NONDEGREE, TYPE_WITHDRAWN);
+        $types      = array(TYPE_FRESHMEN, TYPE_TRANSFER, TYPE_CONTINUING, TYPE_NONDEGREE);
         $genders    = array(MALE, FEMALE);
 
         // Initalize the array for totals
@@ -79,8 +101,12 @@ class ApplicantDemographics extends Report {
                 $this->applicationTotals[$t][$g] = 0;
             }
         }
+        
+        foreach($genders as $g){
+            $this->cancelledTotals[$g] = 0;
+        }
 
-        // Calculate the totals
+        // Calculate the sub-totals
         foreach($results as $application){
             // Adjust the student types to count 'readmit' and 'returning' as 'continuing' instead
             if($application['student_type'] == TYPE_READMIT || $application['student_type'] == TYPE_RETURNING){
@@ -91,24 +117,54 @@ class ApplicantDemographics extends Report {
             $this->applicationTotals[$studentType][$application['gender']]++;
         }
 
-        // Male sum
+        // Male sub-total
         foreach($types as $type){
             $this->maleTotals[] = $this->applicationTotals[$type][MALE];
-            $this->maleSum += $this->applicationTotals[$type][MALE];
+            $this->maleSubTotal += $this->applicationTotals[$type][MALE];
         }
-
-        // Female sum
+        
+        // Female sub-total
         foreach($types as $type){
             $this->femaleTotals[] = $this->applicationTotals[$type][FEMALE];
-            $this->femaleSum += $this->applicationTotals[$type][FEMALE];
+            $this->femaleSubTotal += $this->applicationTotals[$type][FEMALE];
         }
-
+        
         // Type sums
         foreach($types as $type){
             $this->typeTotals[$type] = array_sum($this->applicationTotals[$type]);
         }
-
-        $this->total = $this->femaleSum + $this->maleSum;
+        
+        // Sub-total
+        $this->subTotal = $this->femaleSubTotal + $this->maleSubTotal;
+        
+        /****
+         * Count the cancelled applications
+         */
+        $db->resetWhere();
+        // Only applications for the selected term
+        $db->addWhere('hms_new_application.term', $this->term);
+        
+        // Only cancelled applications
+        $db->addWhere('hms_new_application.cancelled', 1);
+        
+        $results = $db->select();
+        if(PHPWS_Error::logIfError($results)) {
+            throw new DatabaseException($results->toString());
+        }
+        
+        foreach($results as $application){
+            $this->cancelledTotals[$application['gender']]++;
+        }
+        
+        // Cancelled sub-total
+        $this->cancelledSubTotal = $this->cancelledTotals[FEMALE] + $this->cancelledTotals[MALE];
+        
+        // Gender totals
+        $this->maleGrandTotal   = $this->maleSubTotal   + $this->cancelledTotals[MALE];
+        $this->femaleGrandTotal = $this->femaleSubTotal + $this->cancelledTotals[FEMALE];
+        
+        // Grand total
+        $this->total = $this->subTotal + $this->cancelledSubTotal;
     }
     
     /****************************
@@ -131,16 +187,36 @@ class ApplicantDemographics extends Report {
         return $this->femaleTotals;
     }
     
-    public function getMaleSum(){
-        return $this->maleSum;
+    public function getMaleSubTotal(){
+        return $this->maleSubTotal;
     }
     
-    public function getFemaleSum(){
-        return $this->femaleSum;
+    public function getFemaleSubTotal(){
+        return $this->femaleSubTotal;
     }
     
     public function getTypeTotals(){
         return $this->typeTotals;
+    }
+    
+    public function getCancelledTotals(){
+        return $this->cancelledTotals;
+    }
+    
+    public function getCancelledSubTotal(){
+        return $this->cancelledSubTotal;
+    }
+    
+    public function getSubTotal(){
+        return $this->subTotal;
+    }
+    
+    public function getFemaleGrandTotal(){
+        return $this->femaleGrandTotal;
+    }
+    
+    public function getMaleGrandTotal(){
+        return $this->maleGrandTotal;
     }
     
     public function getTotal(){
