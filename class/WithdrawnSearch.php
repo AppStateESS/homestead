@@ -37,11 +37,11 @@ class WithdrawnSearch {
 
         $term = $this->term;
 
-        $query = "select DISTINCT * FROM (select hms_new_application.username from hms_new_application WHERE term=$term AND withdrawn != 1 UNION select hms_assignment.asu_username from hms_assignment WHERE term=$term) as foo";
+        $query = "select DISTINCT * FROM (select hms_new_application.username from hms_new_application WHERE term=$term AND cancelled != 1 UNION select hms_assignment.asu_username from hms_assignment WHERE term=$term) as foo";
         $result = PHPWS_DB::getCol($query);
 
         if(PHPWS_Error::logIfError($result)){
-            //TODO
+            throw new Exception($result->toString());
         }
 
         foreach($result as $username){
@@ -60,7 +60,7 @@ class WithdrawnSearch {
                 continue;
             }
 
-            $this->actions[$username][] = 'Found withdrawn student: ' . $student->getUsername() . ' ' . $student->getBannerId();
+            $this->actions[$username][] = $student->getBannerId() . ' (' . $student->getUsername() . ') Type: ' . $student->getType() . ' App Term: ' . Term::toString($student->getApplicationTerm());
             $this->withdrawnCount++;
 
             $this->handleApplication($student);
@@ -81,16 +81,17 @@ class WithdrawnSearch {
         // Get the application and mark it withdrawn
         $app = HousingApplication::getApplicationByUser($student->getUsername(), $this->term);
         if(!is_null($app)) {
-            $app->setWithdrawn(1);
-            $app->setStudentType(TYPE_WITHDRAWN);
+            //$app->setWithdrawn(1);
+            //$app->setStudentType(TYPE_WITHDRAWN);
+            $app->cancel(CANCEL_WITHDRAWN);
             try{
                 $app->save();
             }catch(Exception $e){
                 // TODO
             }
 
-            $this->actions[$student->getUsername()][] = 'Marked application as withdrawn, updated student type to W.';
-            HMS_Activity_Log::log_activity($student->getUsername(), ACTIVITY_WITHDRAWN_APP, UserStatus::getUsername(), 'Withdrawn search');
+            $this->actions[$student->getUsername()][] = 'Marked application as cancelled (reason: withdrawn)';
+            HMS_Activity_Log::log_activity($student->getUsername(), ACTIVITY_CANCEL_HOUSING_APPLICATION, UserStatus::getUsername(), 'Application automatically cancelled by Withdrawn Search');
         }
     }
 
@@ -106,7 +107,7 @@ class WithdrawnSearch {
             $location = $assignment->where_am_i();
 
             try{
-                HMS_Assignment::unassignStudent($student, $this->term, '', UNASSIGN_WITHDRAWN);
+                HMS_Assignment::unassignStudent($student, $this->term, 'Automatically removed by Withdrawn Search', UNASSIGN_CANCEL);
             }catch(Exception $e){
                 //TODO
             }

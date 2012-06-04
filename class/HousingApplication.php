@@ -285,7 +285,10 @@ class HousingApplication {
     /**
      * Marks an application as cancelled.
      * 
-     * @param integer $reasonId
+     * Valid values for $reasonKey are defined in defines.php,
+     * and listed in HousingApplication::getCancellationReasons().
+     * 
+     * @param integer $reasonKey
      */
     public function cancel($reasonKey)
     {

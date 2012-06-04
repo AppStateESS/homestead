@@ -521,6 +521,20 @@ class HMS_Assignment extends HMS_Item
         return true;
     }
 
+    /**
+     * Removes/unassignes a student
+     * 
+     * Valid values for $reason are defined in defines.php.
+     * 
+     * @param Student $student Student to un-assign.
+     * @param String $term The term of the assignment to remove.
+     * @param String $notes Additional notes for the ActivityLog.
+     * @param String $reason Reason string, defined in defines.php
+     * @throws PermissionException
+     * @throws InvalidArgumentException
+     * @throws AssignmentException
+     * @throws DatabaseException
+     */
     public static function unassignStudent(Student $student, $term, $notes="", $reason)
     {
         if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'assignment_maintenance')){
