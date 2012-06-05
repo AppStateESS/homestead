@@ -98,9 +98,9 @@ class UnassignedFreshmen extends Report implements iCsvReport {
         $db->addWhere('hms_assignment.banner_id', 'NULL');
         $db->addWhere('hms_new_application.term', $term);
         
-        // Don't show students who are type 'W' or have cancelled applications
-        $db->addWhere('hms_new_application.withdrawn', 0);
-        $db->addWhere('hms_new_application.student_type', 'W', '!=');
+        // Don't show students who have cancelled applications
+        $db->addWhere('hms_new_application.cancelled', 0);
+        //$db->addWhere('hms_new_application.student_type', 'W', '!=');
         
         // Limit by application term
         foreach($applicationTerms as $t){

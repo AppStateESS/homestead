@@ -101,7 +101,7 @@ class LotteryChooseRoommatesCommand extends Command {
                 $errorCmd->redirect();
             }
 
-            # Make sure every student entered the lottery
+            # Make sure every student entered the lottery and has a valid application (not cancelled)
             if(HousingApplication::checkForApplication($roommate, $term) === FALSE){
                 NQ::simple('hms', HMS_NOTIFICATION_ERROR, "$roommate did not re-apply for housing. Please select a different roommate.");
                 $errorCmd->redirect();

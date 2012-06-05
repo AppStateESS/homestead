@@ -40,9 +40,9 @@ class HousingApplicationWelcomeView extends View {
                 $completed = ' <span style="color: #0000AA">(Completed)</span>';
             }
 
-            // If the application is withdrawn, overwrite the "complete" text with "withdrawn"
-            if(isset($appsOnFile[$t['term']]) && $appsOnFile[$t['term']]->isWithdrawn()){
-                $completed = ' <span style="color: #F00">(Withdrawn)</span>';
+            // If the application is cancelled, overwrite the "complete" text with "cancelled"
+            if(isset($appsOnFile[$t['term']]) && $appsOnFile[$t['term']]->isCancelled()){
+                $completed = ' <span style="color: #F00">(Cancelled)</span>';
             }
 
             if(Term::getTermSem($t['term']) == TERM_FALL){

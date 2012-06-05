@@ -27,7 +27,7 @@ class FreshmenMainMenuView extends View {
 
             # If the student has a withdrawn application,
             # then show a message instead of the normal menu block.
-            if(isset($applications[$t['term']]) && $applications[$t['term']]->isWithdrawn()){
+            if(isset($applications[$t['term']]) && $applications[$t['term']]->isCancelled()){
             $termBlock = new StudentMenuWithdrawnTermBlock($this->student, $t['term']);
         }else{
             $termBlock = new StudentMenuTermBlock($this->student, $t['term']);

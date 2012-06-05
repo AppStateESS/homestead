@@ -25,7 +25,7 @@ class StudentMenuWithdrawnTermBlock {
         $contactFormLink = CommandFactory::getCommand('ShowContactForm')->getLink('contact University Housing');
 
         // In case there are no features enabled for this term
-        $tpl['BLOCKS'][] = array('BLOCK'=>'Your application has been withdrawn for this term. If this is an error please ' . $contactFormLink . '.');
+        $tpl['BLOCKS'][] = array('BLOCK'=>'Your application has been cancelled for this term. If this is an error please ' . $contactFormLink . '.');
 
         return PHPWS_Template::process($tpl, 'hms', 'student/studentMenuTermBlock.tpl');
     }

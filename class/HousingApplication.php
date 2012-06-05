@@ -35,7 +35,7 @@ class HousingApplication {
 
     /**
      * Set to 'true' by the withdrawn search process. Should always be false by default.
-     * @deprecated Use 'cancel' member variable instead.
+     * @deprecated Use 'cancelled' member variable instead.
      */
     public $withdrawn = 0;
     
@@ -319,21 +319,20 @@ class HousingApplication {
      * If so, it returns the true, otherwise it returns false.
      * If no term is given, then the "current term" is used.
      *
-     * The 'withdrawn' parameter is optional. If set to true, then this method will
-     * return true for withdrawn applications. If false (default), then this method will
-     * ignore withdrawn applications.
+     * The 'cancelled' parameter is optional. If set to true, then this method will
+     * return true for cancelled applications. If false (default), then this method will
+     * ignore cancelled applications.
      * 
-     * TODO: Respect the 'cancelled' flag instead of 'withdrawn'
      */
-    public static function checkForApplication($username, $term, $withdrawn = FALSE)
+    public static function checkForApplication($username, $term, $cancelled = FALSE)
     {
         $db = new PHPWS_DB('hms_new_application');
         $db->addWhere('username',$username,'ILIKE');
 
         $db->addWhere('term', $term);
 
-        if(!$withdrawn){
-            $db->addWhere('withdrawn', 0);
+        if(!$cancelled){
+            $db->addWhere('cancelled', 0);
         }
 
         $result = $db->select('row');
