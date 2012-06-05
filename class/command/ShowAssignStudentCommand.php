@@ -40,20 +40,22 @@ class ShowAssignStudentCommand extends Command {
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
         PHPWS_Core::initModClass('hms', 'AssignStudentView.php');
         PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
+        PHPWS_Core::initModClass('hms', 'HousingApplicationFactory.php');
 
-        $username	= $context->get('username');
+        $username = $context->get('username');
+        $bedId = $context->get('bedId');
 
-        $bedId		= $context->get('bedId');
-
+        $term = Term::getSelectedTerm();
+        
         if(isset($bedId) && !is_null($bedId) && !empty($bedId)){
             $bed = new HMS_Bed($bedId);
         }else{
-            $bed = NULL;
+            $bed = null;
         }
 
         if(isset($username)){
             try{
-                $student = StudentFactory::getStudentByUsername($context->get('username'), Term::getSelectedTerm());
+                $student = StudentFactory::getStudentByUsername($context->get('username'), $term);
             }catch (InvalidArgumentException $e){
                 NQ::simple('hms', HMS_NOTIFICATION_ERROR, $e->getMessage());
                 $cmd = CommandFactory::getCommand('ShowAssignStudent');
@@ -63,11 +65,14 @@ class ShowAssignStudentCommand extends Command {
                 $cmd = CommandFactory::getCommand('ShowAssignStudent');
                 $cmd->redirect();
             }
+            
+            $application = HousingApplicationFactory::getAppByStudent($student, $term);
         }else{
-            $student = NULL;
+            $student     = null;
+            $application = null;
         }
 
-        $assignView = new AssignStudentView($student, $bed);
+        $assignView = new AssignStudentView($student, $bed, $application);
 
         $context->setContent($assignView->show());
     }

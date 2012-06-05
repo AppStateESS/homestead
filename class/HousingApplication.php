@@ -348,12 +348,20 @@ class HousingApplication {
         }
     }
 
-    /**
-     *
-     */
     // TODO move this to the HousingApplicationFactory class, perhaps?
     // TODO make this static too
-    function getApplicationByUser($username, $term, $applicationType = NULL)
+    /**
+     * Returns a HousingApplication for the given user name.
+     * 
+     * @deprecated
+     * @see HousingApplicationFactory::getAppByStudent()
+     * @param unknown_type $username
+     * @param unknown_type $term
+     * @param unknown_type $applicationType
+     * @throws DatabaseException
+     * @throws InvalidArgumentException
+     */
+    public function getApplicationByUser($username, $term, $applicationType = NULL)
     {
         PHPWS_Core::initModClass('hms', 'HousingApplication.php');
         PHPWS_Core::initModClass('hms', 'FallApplication.php');

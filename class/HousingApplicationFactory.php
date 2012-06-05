@@ -187,6 +187,68 @@ class HousingApplicationFactory {
         return $app;
     }
 
+    /**
+     * Returns the HousingApplication object (of a specific child type) for the given term,
+     * or null if no Housing Application exists.
+     * 
+     * Uses BannerIDs to lookup students.
+     * Replaces HousingApplication::getApplicationByUser()
+     * 
+     * @param Student $student
+     * @param string $term
+     * @param string $applicationType
+     * @throws DatabaseException
+     * @throws InvalidArgumentException
+     */
+    public static function getAppByStudent(Student $student, $term, $applicationType = NULL)
+    {
+        PHPWS_Core::initModClass('hms', 'HousingApplication.php');
+        PHPWS_Core::initModClass('hms', 'FallApplication.php');
+        PHPWS_Core::initModClass('hms', 'SpringApplication.php');
+        PHPWS_Core::initModClass('hms', 'SummerApplication.php');
+        PHPWS_Core::initModClass('hms', 'LotteryApplication.php');
+        PHPWS_Core::initModClass('hms', 'WaitingListApplication.php');
+    
+        $db = new PHPWS_DB('hms_new_application');
+        $db->addWhere('banner_id', $student->getBannerId());
+        $db->addWhere('term', $term);
+    
+        if(!is_null($applicationType)){
+            $db->addWhere('application_type', $applicationType);
+        }
+    
+        $result = $db->select('row');
+    
+        if(PHPWS_Error::logIfError($result)){
+            throw new DatabaseException($result->toString());
+        }
+    
+        if($result == NULL){
+            return NULL;
+        }
+    
+        switch($result['application_type']){
+            case 'fall':
+                $app = new FallApplication($result['id']);
+                break;
+            case 'spring':
+                $app = new SpringApplication($result['id']);
+                break;
+            case 'summer':
+                $app = new SummerApplication($result['id']);
+                break;
+            case 'lottery':
+                $app = new LotteryApplication($result['id']);
+                break;
+            case 'offcampus_waiting_list':
+                $app = new WaitingListApplication($result['id']);
+                break;
+            default:
+                throw new InvalidArgumentException('Unknown application type: ' . $result['application_type']);
+        }
+    
+        return $app;
+    }
 }
 
 ?>

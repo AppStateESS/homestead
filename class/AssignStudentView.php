@@ -3,13 +3,16 @@
 PHPWS_Core::initModClass('hms', 'View.php');
 
 class AssignStudentView extends View {
+    
     private $student;
     private $bed;
+    private $application;
 
-    public function __construct(Student $student = NULL, HMS_Bed $bed = NULL){
+    public function __construct(Student $student = null, HMS_Bed $bed = null, HousingApplication $application = null){
 
-        $this->student	= $student;
-        $this->bed		= $bed;
+        $this->student     = $student;
+        $this->bed         = $bed;
+        $this->application = $application;
     }
 
     public function show()
@@ -117,9 +120,17 @@ class AssignStudentView extends View {
             // 4 Week Meal Plan Removed according to ticket #709
             // BANNER_MEAL_4WEEK => 'Summer (4 weeks)',
 	        BANNER_MEAL_5WEEK => 'Summer (5 weeks)'));
-        $form->setMatch('meal_plan', BANNER_MEAL_STD);
         $form->setLabel('meal_plan', 'Meal plan: ');
-
+        
+        // If the username was passed in, and that student has a meal plan
+        // pre-select the student's chosen meal plan
+        if(isset($this->application)){
+            $form->setMatch('meal_plan', $this->application->getMealPlan());
+        }else{
+            // Otherwise, select 'standard' meal plan
+            $form->setMatch('meal_plan', BANNER_MEAL_STD);
+        }
+        
         // "Assignment Type"
         $form->addDropBox('assignment_type', array(
             ASSIGN_ADMIN             => 'Administrative',
