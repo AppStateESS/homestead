@@ -1,6 +1,6 @@
 <?php
-PHPWS_Core::initModClass('hms', 'Command.php');
-PHPWS_Core::initModClass('hms', 'CommandContext.php');
+
+PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 PHPWS_Core::initModClass('hms', 'RlcApplicationPage1View.php');
 
 class ShowRlcApplicationPage1ViewCommand extends Command {
@@ -24,7 +24,9 @@ class ShowRlcApplicationPage1ViewCommand extends Command {
             throw new InvalidArgumentException('Missing term.');
         }
 
-        $view = new RlcApplicationPage1View($context);
+        $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
+        
+        $view = new RlcApplicationPage1View($context, $student);
 
         $context->setContent($view->show());
     }
