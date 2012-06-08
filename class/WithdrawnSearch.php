@@ -60,7 +60,7 @@ class WithdrawnSearch {
                 continue;
             }
 
-            $this->actions[$username][] = $student->getBannerId() . ' (' . $student->getUsername() . ') Type: ' . $student->getType() . ' App Term: ' . Term::toString($student->getApplicationTerm());
+            $this->actions[$username][] = $student->getBannerId() . ' (' . $student->getUsername() . ')';
             $this->withdrawnCount++;
 
             $this->handleApplication($student);
@@ -90,6 +90,7 @@ class WithdrawnSearch {
                 // TODO
             }
 
+            $this->actions[$student->getUsername()][] = 'Found Housing Application; Student Type: ' . $app->getStudentType() . ' App Term: ' . $app->getApplicationTerm();
             $this->actions[$student->getUsername()][] = 'Marked application as cancelled (reason: withdrawn)';
             HMS_Activity_Log::log_activity($student->getUsername(), ACTIVITY_CANCEL_HOUSING_APPLICATION, UserStatus::getUsername(), 'Application automatically cancelled by Withdrawn Search');
         }
