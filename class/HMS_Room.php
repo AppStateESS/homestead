@@ -574,8 +574,9 @@ class HMS_Room extends HMS_Item
         $form->setExtra('gender_type', 'onChange="submit_form(this, true)"');
 
         $form->addSelect('default_gender', array(FEMALE => FEMALE_DESC,
-        MALE   => MALE_DESC,
-        COED   => COED_DESC
+                MALE   => MALE_DESC,
+                COED   => COED_DESC,
+                AUTO   => AUTO_DESC
         ));
         $form->setMatch('default_gender', $this->default_gender);
         $form->setExtra('default_gender', 'onChange="submit_form(this, true)"');
@@ -702,6 +703,11 @@ class HMS_Room extends HMS_Item
     {
         return $this->parlor == 1 ? true : false;
     }
+    
+    public function getGender(){
+        return $this->gender_type;
+    }
+    
     /******************
      * Static Methods *
     *****************/

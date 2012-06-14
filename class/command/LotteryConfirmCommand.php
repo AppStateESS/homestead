@@ -96,8 +96,8 @@ class LotteryConfirmCommand extends Command {
                 $errorCmd->redirect();
             }
 
-            # Double check the genders are the same as the room (as long as the room isn't COED)
-            if($room->gender_type != COED && $roommate->getGender() != $room->gender_type){
+            # Double check the genders are the same as the room (as long as the room isn't AUTO)
+            if($room->gender_type != AUTO && $roommate->getGender() != $room->gender_type){
                 NQ::simple('hms', HMS_NOTIFICATION_ERROR, "$username is a different gender. Please choose a roommate of the same gender.");
                 $errorCmd->redirect();
             }
@@ -109,8 +109,8 @@ class LotteryConfirmCommand extends Command {
             }
         }
 
-        # If the room's gender is 'COED' and no one is assigned to it yet, switch it to the student's gender
-        if($room->gender_type == COED && $room->get_number_of_assignees() == 0){
+        # If the room's gender is 'AUTO' and no one is assigned to it yet, switch it to the student's gender
+        if($room->gender_type == AUTO && $room->get_number_of_assignees() == 0){
             $room->gender_type = $student->getGender();
             $room->save();
         }

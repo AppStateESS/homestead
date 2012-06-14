@@ -273,14 +273,9 @@ class HMS_Floor extends HMS_Item
 
             // Additionally, we need to check for rooms of the oppsite sex, unless the target gender is COED
             if($target_gender != COED) {
-                if($target_gender == MALE) {
-                    $check_for_gender = FEMALE;
-                } else {
-                    $check_for_gender = MALE;
-                }
-
                 // If a check for rooms of the opposite gender returns true, then return false
-                if($this->check_for_rooms_of_gender($check_for_gender)) {
+                test($target_gender);
+                if($this->checkForOtherRoomGenders($target_gender)) {
                     return false;
                 }
             }
@@ -307,6 +302,35 @@ class HMS_Floor extends HMS_Item
             return false;
         } else {
             return true;
+        }
+    }
+    
+    /**
+     * Returns true if there are any rooms on this floor set to a gender
+     * *other than* the specificed gender. 
+     * 
+     * @param Integer $gender
+     * @return boolean
+     * @throws DatabaseException
+     */
+    public function checkForOtherRoomGenders($gender)
+    {
+        $db = new PHPWS_DB('hms_room');
+        
+        $db->addJoin('LEFT OUTER', 'hms_room', 'hms_floor', 'floor_id', 'id');
+        $db->addWhere('hms_room.gender_type', $gender, '!=');
+        $db->addWhere('hms_floor.id', $this->id);
+        
+        $result = $db->select('count');
+        
+        if(PHPWS_Error::logIfError($result)) {
+            throw new DatabaseException($result->toString());
+        }
+        
+        if($result > 0) {
+            return true;
+        } else {
+            return false;
         }
     }
 

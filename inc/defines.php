@@ -30,10 +30,12 @@ define("OFFLINE_DESC",  'Offline');
 define('FEMALE',    0);
 define('MALE',      1);
 define('COED',      2);
+define('AUTO',      3);
 
 define('FEMALE_DESC',   'Female');
 define('MALE_DESC',     'Male');
-define('COED_DESC',     'Coed');
+define('COED_DESC',     'Co-ed');
+define('AUTO_DESC',     'Auto');
 
 /**
  * Student Classes

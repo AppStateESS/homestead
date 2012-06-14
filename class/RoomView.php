@@ -83,21 +83,15 @@ class RoomView extends View {
 
         if($number_of_assignees == 0){
             # Room is empty, show the drop down so the user can change the gender
-            $form->addDropBox('gender_type', array(FEMALE => FEMALE_DESC, MALE => MALE_DESC, COED=>COED_DESC));
+            $form->addDropBox('gender_type', array(FEMALE => FEMALE_DESC, MALE => MALE_DESC, COED=>COED_DESC, AUTO=>AUTO_DESC));
             $form->setMatch('gender_type', $this->room->gender_type);
         }else{
             # Room is not empty so just show the gender (no drop down)
-            if($this->room->gender_type == FEMALE){
-                $tpl['GENDER_MESSAGE'] = "Female";
-            }else if($this->room->gender_type == MALE){
-                $tpl['GENDER_MESSAGE'] = "Male";
-            }else if($this->room->gender_type == COED){
-                $tpl['GENDER_MESSAGE'] = "Coed";
-            }else{
-                $tpl['GENDER_MESSAGE'] = "Error: Undefined gender";
-            }
+            $tpl['GENDER_MESSAGE'] = HMS_Util::formatGender($this->room->getGender());
+        
             # Add a hidden variable for 'gender_type' so it will be defined upon submission
             $form->addHidden('gender_type', $this->room->gender_type);
+        
             # Show the reason the gender could not be changed.
             if($number_of_assignees != 0){
                 $tpl['GENDER_REASON'] = 'Remove occupants to change room gender.';
@@ -105,7 +99,7 @@ class RoomView extends View {
         }
 
         //Always show the option to set the default gender
-        $form->addDropBox('default_gender', array(FEMALE => FEMALE_DESC, MALE => MALE_DESC, COED => COED_DESC));
+        $form->addDropBox('default_gender', array(FEMALE => FEMALE_DESC, MALE => MALE_DESC, AUTO => AUTO_DESC));
         $form->setMatch('default_gender', $this->room->default_gender);
 
         $form->addCheck('offline', 1);

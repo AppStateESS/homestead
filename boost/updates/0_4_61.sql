@@ -1,0 +1,1 @@
+update hms_room SET default_gender = 3 where default_gender = 2;

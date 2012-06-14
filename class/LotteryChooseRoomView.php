@@ -45,7 +45,7 @@ class LotteryChooseRoomView extends View {
 
             // We list the room dispite whether it's actually available to choose or not,
             // so decide whether to "gray out" this row in the room list or not
-            if(($room->gender_type != $this->student->getGender() && $room->gender_type != COED)
+            if(($room->gender_type != $this->student->getGender() && $room->gender_type != AUTO)
                 || $num_avail_beds     == 0 
                 || $room->reserved == 1 
                 || $room->offline  == 1 
