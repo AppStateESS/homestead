@@ -291,7 +291,21 @@ class HMS_Assignment extends HMS_Item
 
     /**
      * Does all the checks necessary to assign a student and makes the assignment
+     * 
      * The $room_id and $bed_id fields are optional, but one or the other must be specificed
+     * 
+     * @param Student $student
+     * @param Integer $term
+     * @param Integer $room_id
+     * @param Integer $bed_id
+     * @param Integer $meal_plan
+     * @param String $notes
+     * @param boolean $lottery
+     * @param string $reason
+     * @throws InvalidArgumentException
+     * @throws AssignmentException
+     * @throws DatabaseException
+     * @throws Exception
      */
     public static function assignStudent(Student $student, $term, $room_id = NULL, $bed_id = NULL, $meal_plan, $notes="", $lottery = FALSE, $reason)
     {
@@ -317,7 +331,7 @@ class HMS_Assignment extends HMS_Item
 
         $username = $student->getUsername();
 
-        # Make sure a username was entered
+        // Make sure a username was entered
         if(!isset($username) || $username == ''){
             throw new InvalidArgumentException('Bad username.');
         }
@@ -333,74 +347,82 @@ class HMS_Assignment extends HMS_Item
         }
 
         if(isset($bed_id)){
-            # A bed_id was given, so create that bed object
+            // A bed_id was given, so create that bed object
             $vacant_bed = new HMS_Bed($bed_id);
 
             if(!$vacant_bed){
                 throw new AssignmentException('Null bed object.');
             }
-            # Get the room that this bed is in
+            // Get the room that this bed is in
             $room = $vacant_bed->get_parent();
 
         }else if(isset($room_id)){
-            # A room_id was given, so create that room object
+            // A room_id was given, so create that room object
             $room = new HMS_Room($room_id);
             if(!$room) {
                 throw new AssignmentException('Null room object.');
             }
 
-            # Make sure the room has a vacancy
+            // Make sure the room has a vacancy
             if(!$room->has_vacancy()){
                 throw new AssignmentException('The room is full.');
             }
 
-            # Make sure the room is not offline
+            // Make sure the room is not offline
             if($room->offline){
                 throw new AssignmentException('The room is offline');;
             }
 
-            # And find a vacant bed in that room
+            // And find a vacant bed in that room
             $beds = $room->getBedsWithVacancies();
             $vacant_bed = $beds[0];
 
         }else{
-            # Both the bed and room IDs were null, so return an error
+            // Both the bed and room IDs were null, so return an error
             throw new AssignmentException('No room nor bed specified.');
         }
 
-        # Double check that the bed is in the same term as we're being requested to assign for
+        // Double check that the bed is in the same term as we're being requested to assign for
         if($vacant_bed->getTerm() != $term){
             throw new AssignmentException('The bed\'s term and the assignment term do not match.');
         }
 
-        # Double check that the resulting bed is empty
+        // Double check that the resulting bed is empty
         if($vacant_bed->get_number_of_assignees() > 0){
             throw new AssignmentException('The bed is not empty.');
         }
 
-        # Issue a warning if the bed was reserved for room change
+        // Issue a warning if the bed was reserved for room change
         if($vacant_bed->room_change_reserved != 0){
             NQ::simple('hms', HMS_NOTIFICATION_WARNING, 'Room was reserved for room change');
         }
 
-        # Check that the room's gender and the student's gender match
+        // Check that the room's gender and the student's gender match
         $student_gender = $student->getGender();
 
         if(is_null($student_gender)){
             throw new AssignmentException('Student gender is null.');
         }
 
-        if($room->gender_type != $student_gender){
+        // Genders must match unless the room is COED
+        if($room->getGender() != $student_gender && $room->getGender() != COED){
             throw new AssignmentException('Room gender does not match the student\'s gender.');
         }
+        
+        // We probably shouldn't check permissions inside this method, since sometimes this can be 
+        // called from student-facing interfaces.. But, since I want to be really careful with co-ed rooms,
+        // I'm going to take the extra step of making sure no students are putting themselves in co-ed rooms.
+        if(!Current_User::allow('hms', 'coed_assignment')){
+            throw new AssignmentException('You do not have permission to make assignments for Co-ed rooms.');
+        }
 
-        # Create the floor object
+        // Create the floor object
         $floor = $room->get_parent();
         if(!$floor){
             throw new AssignmentException('Null floor object.');
         }
 
-        # Create the hall object
+        // Create the hall object
         $hall = $floor->get_parent();
         if(!$hall) {
             throw new AssignmentException('Null hall object.');;
@@ -410,7 +432,7 @@ class HMS_Assignment extends HMS_Item
             $meal_plan = NULL;
         }
 
-        # Determine which meal plan to use
+        // Determine which meal plan to use
         // If this is a freshmen student and they've somehow selected none or low, give them standard
         if($student->getType() == TYPE_FRESHMEN && ($meal_plan == BANNER_MEAL_NONE || $meal_plan == BANNER_MEAL_LOW)){
             $meal_plan = BANNER_MEAL_STD;
@@ -454,13 +476,13 @@ class HMS_Assignment extends HMS_Item
             NQ::simple('hms', HMS_NOTIFICATION_WARNING, 'Temporary assignment was removed.');
         }
 
-        # Send this off to the queue for assignment in banner
+        // Send this off to the queue for assignment in banner
         $banner_success = BannerQueue::queueAssignment($student, $term, $hall, $vacant_bed, 'HOME', $meal_plan);
         if($banner_success !== TRUE){
             throw new AssignmentException('Error while adding the assignment to the Banner queue.');
         }
 
-        # Make the assignment in HMS
+        // Make the assignment in HMS
         $assignment = new HMS_Assignment();
 
         $assignment->setBannerId($student->getBannerId());
@@ -474,11 +496,11 @@ class HMS_Assignment extends HMS_Item
         $assignment->application_term = $student->getApplicationTerm();
         $assignment->class            = $student->getComputedClass($term);
 
-        # If this was a lottery assignment, flag it as such
+        // If this was a lottery assignment, flag it as such
         if($lottery){
             $assignment->lottery = 1;
             if ( !isset($reason) )
-            	# Automatically tag reason as lottery
+            	// Automatically tag reason as lottery
             	$assignment->reason = ASSIGN_LOTTERY;
         }else{
             $assignment->lottery = 0;
@@ -490,17 +512,17 @@ class HMS_Assignment extends HMS_Item
             throw new DatabaseException($result->toString());
         }
 
-        # Log the assignment
+        // Log the assignment
         HMS_Activity_Log::log_activity($username, ACTIVITY_ASSIGNED, UserStatus::getUsername(), $term . ' ' . $hall->hall_name . ' ' . $room->room_number . ' ' . $notes);
 
-        # Insert assignment into History table
+        // Insert assignment into History table
         AssignmentHistory::makeAssignmentHistory($assignment);
         
-        # Look for roommates and flag their assignments as needing a new letter
+        // Look for roommates and flag their assignments as needing a new letter
         $room_id = $assignment->get_room_id();
         $room = new HMS_Room($room_id);
 
-        # Go to the room level to get all the roommates
+        // Go to the room level to get all the roommates
         $assignees = $room->get_assignees(); // get an array of student objects for those assigned to this room
 
         if(sizeof($assignees) > 1){
@@ -517,7 +539,7 @@ class HMS_Assignment extends HMS_Item
             }
         }
 
-        # Return Sucess
+        // Return Sucess
         return true;
     }
 
@@ -550,14 +572,14 @@ class HMS_Assignment extends HMS_Item
 
         $username = $student->getUsername();
 
-        # Make sure a username was entered
+        // Make sure a username was entered
         if(!isset($username) || $username == ''){
             throw new InvalidArgumentException('Bad username.');
         }
 
         $username = strtolower($username);
 
-        # Make sure the requested username is actually assigned
+        // Make sure the requested username is actually assigned
         if(!HMS_Assignment::checkForAssignment($username, $term)) {
             throw new AssignmentException('Student is not assigned.');
         }
@@ -572,31 +594,31 @@ class HMS_Assignment extends HMS_Item
         $floor = $room->get_parent();
         $building = $floor->get_parent();
 
-        # Attempt to unassign the student in Banner though SOAP
+        // Attempt to unassign the student in Banner though SOAP
         $banner_result = BannerQueue::queueRemoveAssignment($student,$term,$building,$bed);
 
-        # Show an error and return if there was an error
+        // Show an error and return if there was an error
         if($banner_result !== TRUE) {
             throw new AssignmentException('Error while adding the assignment removal to the Banner queue.');
         }
 
-        # Record this before we delete from the db
+        // Record this before we delete from the db
         $banner_bed_id          = $bed->getBannerId();
         $banner_building_code   = $building->getBannerBuildingCode();
 
-        # Attempt to delete the assignment in HMS
+        // Attempt to delete the assignment in HMS
         $result = $assignment->delete();
         if(!$result){
             throw new DatabaseException($result->toString());
         }
 
-        # Log in the activity log
+        // Log in the activity log
         HMS_Activity_Log::log_activity($username, ACTIVITY_REMOVED, UserStatus::getUsername(), $term . ' ' . $banner_building_code . ' ' . $banner_bed_id . ' ' . $notes);
 
-        # Insert into history table
+        // Insert into history table
         AssignmentHistory::makeUnassignmentHistory($assignment, $reason);
         
-        # Generate assignment notices for old roommates
+        // Generate assignment notices for old roommates
         $assignees = $room->get_assignees(); // get an array of student objects for those assigned to this room
 
         if(sizeof($assignees) > 1){
@@ -613,7 +635,7 @@ class HMS_Assignment extends HMS_Item
             }
         }
 
-        # Show a success message
+        // Show a success message
         return true;
     }
 

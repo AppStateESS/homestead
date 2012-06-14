@@ -708,6 +708,10 @@ class HMS_Room extends HMS_Item
         return $this->gender_type;
     }
     
+    public function setGender($gender){
+        $this->gender_type = $gender;
+    }
+    
     /******************
      * Static Methods *
     *****************/

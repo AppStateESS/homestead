@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Controller responsible for handling a request to assign a student
+ * 
+ * @author jbooker
+ * @package HMS
+ */
 class AssignStudentCommand extends Command {
 
     private $username;
@@ -63,7 +69,6 @@ class AssignStudentCommand extends Command {
             throw new PermissionException('You do not have permission to assign students.');
         }
 
-
         PHPWS_Core::initModClass('hms', 'HousingApplication.php');
         PHPWS_Core::initModClass('hms', 'FallApplication.php');
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
@@ -91,25 +96,25 @@ class AssignStudentCommand extends Command {
             $errorCmd->redirect();
         }
 
-        # Check to make sure the student has an application on file
+        // Check to make sure the student has an application on file
         $applicationStatus = HousingApplication::checkForApplication($username, $term);
 
         if($applicationStatus == FALSE){
             NQ::simple('hms', HMS_NOTIFICATION_WARNING, 'Warning: No housing application found for this student in this term.');
         }else{
-            # Create application object (it doesn't really matter that we always create a fall application)
+            // Create application object (it doesn't really matter that we always create a fall application)
             $application = new HousingApplication($applicationStatus['id']);
         }
 
-        # If the student is already assigned, redirect to the confirmation screen. If the student is already assigned
-        # and the confirmation flag is true, then set a flag and proceed.
+        // If the student is already assigned, redirect to the confirmation screen. If the student is already assigned
+        // and the confirmation flag is true, then set a flag and proceed.
         $moveNeeded = FALSE;
         if(HMS_Assignment::checkForAssignment($username, $term)){
             if($context->get('moveConfirmed') == 'true'){
-                # Move has been confirmed
+                // Move has been confirmed
                 $moveNeeded = true;
             }else{
-                # Redirect to the move confirmation interface
+                // Redirect to the move confirmation interface
                 $moveConfirmCmd = CommandFactory::getCommand('ShowAssignmentMoveConfirmation');
                 $moveConfirmCmd->setUsername($username);
                 $moveConfirmCmd->setRoom($context->get('room'));
@@ -126,7 +131,7 @@ class AssignStudentCommand extends Command {
             $errorCmd->redirect();
         }
 
-        # Check age, issue a warning for over 25
+        // Check age, issue a warning for over 25
         if(strtotime($student->getDOB()) < strtotime("-25 years")){
             NQ::simple('hms', HMS_NOTIFICATION_WARNING, 'Student is 25 years old or older!');
         }
@@ -137,22 +142,28 @@ class AssignStudentCommand extends Command {
             throw new InvalidArgumentException('Missing student gender.');
         }
 
-        # Create the room object so we can check gender
+        // Create the room object so we can check gender
         $room = new HMS_Room($roomId);
         if(!$room){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Error creating the room object.');
             $errorCmd->redirect();
         }
 
-        # Create the hall object for later
+        // Create the hall object for later
         $floor  = $room->get_parent();
         $hall   = $floor->get_parent();
 
-        # Make sure the student's gender matches the gender of the room.
-        if($room->gender_type != $gender){
+        // If the room is Co-ed, make sure the user has permission to assign to co-ed rooms
+        if($room->getGender() == COED && !Current_User::allow('hms', 'coed_assignment')){
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Error: You do not have permission to assign students to co-ed rooms.');
+            $errorCmd->redirect();
+        }
+        
+        // Make sure the student's gender matches the gender of the room, unless the room is co-ed.
+        if($room->getGender() != $gender && $room->getGender != COED){
             // Room gender does not match student's gender, so check if we can change it
             if($room->can_change_gender($gender) && Current_User::allow('hms', 'room_attributes')){
-                $room->gender_type = $gender;
+                $room->setGender($gender);
                 $room->save();
                 NQ::simple('hms', HMS_NOTIFICATION_WARNING, 'Warning: Changing room gender.');
             }else{
@@ -161,8 +172,8 @@ class AssignStudentCommand extends Command {
             }
         }
 
-        # If the user is attempting to re-assign and has confirmed the move,
-        # then unassign the student first.
+        // If the user is attempting to re-assign and has confirmed the move,
+        // then unassign the student first.
         if($moveNeeded){
             try{
                 HMS_Assignment::unassignStudent($student, $term, '(re-assign)', UNASSIGN_REASSIGN);
@@ -172,7 +183,7 @@ class AssignStudentCommand extends Command {
             }
         }
 
-        # Actually try to make the assignment, decide whether to use the room id or the bed id
+        // Actually try to make the assignment, decide whether to use the room id or the bed id
         $bed = $context->get('bed');
         try{
             if(isset($bed) && $bed != 0){
@@ -185,7 +196,7 @@ class AssignStudentCommand extends Command {
             $errorCmd->redirect();
         }
 
-        # Show a success message
+        // Show a success message
         if($context->get('moveConfirmed') == 'true'){
             NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Successfully moved ' . $username . ' to ' . $hall->hall_name . ' room ' . $room->room_number);
         }else{
