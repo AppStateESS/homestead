@@ -2,18 +2,34 @@
 
 PHPWS_Core::initModClass('hms', 'View.php');
 
+/**
+ * View class responsible for showing the 'Edit Room' interface
+ * 
+ * @author jbooker
+ * @package HMS
+ */
 class RoomView extends View {
 
     private $hall;
     private $floor;
     private $room;
 
+    /**
+     * Constructor
+     * 
+     * @param HMS_Residence_Hall $hall
+     * @param HMS_Floor $floor
+     * @param HMS_Room $room
+     */
     public function __construct(HMS_Residence_Hall $hall, HMS_Floor $floor, HMS_Room $room){
         $this->hall		= $hall;
         $this->floor	= $floor;
         $this->room		= $room;
     }
 
+    /**
+     * @see View::show()
+     */
     public function show()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
@@ -80,19 +96,26 @@ class RoomView extends View {
 
         $form->addText('room_number', $this->room->getRoomNumber());
 
-
+        /*** Room Gender ***/
         if($number_of_assignees == 0){
-            # Room is empty, show the drop down so the user can change the gender
-            $form->addDropBox('gender_type', array(FEMALE => FEMALE_DESC, MALE => MALE_DESC, COED=>COED_DESC, AUTO=>AUTO_DESC));
+            // Room is empty, show the drop down so the user can change the gender
+            $roomGenders = array(FEMALE => FEMALE_DESC, MALE => MALE_DESC, AUTO=>AUTO_DESC);
+            
+            // Check if the user is allowed to set rooms to co-ed, if so add Co-ed to the drop down
+            if(Current_User::allow('hms', 'coed_rooms')){
+                $roomGenders[COED] = COED_DESC;
+            }
+            
+            $form->addDropBox('gender_type', $roomGenders);
             $form->setMatch('gender_type', $this->room->gender_type);
         }else{
-            # Room is not empty so just show the gender (no drop down)
+            // Room is not empty so just show the gender (no drop down)
             $tpl['GENDER_MESSAGE'] = HMS_Util::formatGender($this->room->getGender());
         
-            # Add a hidden variable for 'gender_type' so it will be defined upon submission
+            // Add a hidden variable for 'gender_type' so it will be defined upon submission
             $form->addHidden('gender_type', $this->room->gender_type);
         
-            # Show the reason the gender could not be changed.
+            // Show the reason the gender could not be changed.
             if($number_of_assignees != 0){
                 $tpl['GENDER_REASON'] = 'Remove occupants to change room gender.';
             }
@@ -140,11 +163,11 @@ class RoomView extends View {
         
         $form->addSubmit('submit', 'Submit');
 
-        # TODO: add an assignment pager here
+        // Assignment pagers
         $tpl['BED_PAGER'] = HMS_Bed::bed_pager_by_room($this->room->id);
 
-        # if the user has permission to view the form but not edit it then
-        # disable it
+        // if the user has permission to view the form but not edit it then
+        // disable it
         if(    Current_User::allow('hms', 'room_view')
         && !Current_User::allow('hms', 'room_attributes')
         && !Current_User::allow('hms', 'room_structure'))

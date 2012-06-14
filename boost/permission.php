@@ -57,6 +57,7 @@
     $permissions['room_structure']      = _('Add and delete rooms');
     $permissions['room_attributes']     = _('Edit room attributes');
     $permissions['room_view']           = _('View rooms');
+    $permissions['coed_rooms']          = _('Set Co-ed Room Genders');
 
     # Bed tasks
     $permissions['bed_structure']       = _('Add and delete beds');
@@ -83,6 +84,7 @@
     $permissions['autoassign']              = _('Run the auto-assigner');
     $permissions['assignment_notify']       = _('Send assignment notifications');
     $permissions['assign_by_floor']         = _('Assign Students by Floor');
+    $permissions['coed_assignment']         = _('Assign to Co-ed rooms');
 
     /*************
      * RLC tasks *

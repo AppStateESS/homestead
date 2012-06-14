@@ -1,9 +1,13 @@
 <?php
 
 /**
+ * EditRoomCommand
+ * 
+ * Controller responsible for saving changes to room attributes.
+ * 
  * @author Jeremy Booker <jbooker AT tux DOT appstate DOT edu>
+ * @package HMS
  */
-
 class EditRoomCommand extends Command {
 
     private $roomId;
@@ -37,15 +41,24 @@ class EditRoomCommand extends Command {
         $viewCmd = CommandFactory::getCommand('EditRoomView');
         $viewCmd->setRoomId($roomId);
 
-        # Create the room object given the room_id
+        // Create the room object given the room_id
         $room = new HMS_Room($roomId);
         if(!$room){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Invalid room.');
             $viewCmd->redirect();
         }
 
-        # Compare the room's gender and the gender the user selected
-        # If they're not equal, call 'can_change_gender' public function
+        // Check if the user is trying to change a room's gender to co-ed.
+        // If so, make sure the user has the permission to do so.
+        if($room->getGender() != $context->get('gender_type') && $context->get('gender_type') == COED){
+            if(!Current_User::allow('hms', 'coed_rooms')){
+                NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Error: You do not have permission to change the room gender to co-ed. No changes were made.');
+                $viewCmd->redirect();
+            }
+        }
+        
+        // Compare the room's gender and the gender the user selected
+        // If they're not equal, call 'can_change_gender' public function
         if($room->gender_type != $context->get('gender_type')){
             if(!$room->can_change_gender($context->get('gender_type'))){
                 NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Error: Incompatible genders detected. No changes were made.');
@@ -53,7 +66,7 @@ class EditRoomCommand extends Command {
             }
         }
 
-        # Check the default gender in the same way
+        // Check the default gender in the same way
         if($room->default_gender != $context->get('default_gender')){
             if(!$room->can_change_gender($context->get('default_gender'))){
                 NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Error: Default gender incompatable. No changes were made.');
@@ -66,7 +79,7 @@ class EditRoomCommand extends Command {
             $viewCmd->redirect();
         }
 
-        # Grab all the input from the form and save the room
+        // Grab all the input from the form and save the room
         //Changed from radio buttons to checkboxes, ternary
         //prevents null since only 1 is defined as a return value
         //test($_REQUEST['room_number']);
