@@ -57,7 +57,7 @@ class SubmitRlcApplicationCommand extends Command
         // Check for an existing application and delete it
         $oldApp = HMS_RLC_Application::getApplicationByUsername($student->getUsername(), $term);
 
-        if($oldApp->id != NULL) {
+        if(isset($oldApp) && $oldApp->id != NULL) {
             //TODO check if the student has already been assigned to an RLC via the old application
 
             // Delete the old application to make way for this one
