@@ -604,10 +604,10 @@
   <wsdl:service name="ws_shs0001">
     <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Electronic Student (Web) Services for Student Housing - Registration</wsdl:documentation>
     <wsdl:port name="ws_shs0001Soap" binding="tns:ws_shs0001Soap">
-      <soap:address location="http://banservice.appstate.edu:8081/shs0001.asmx" />
+      <soap:address location="http://bansrvtest.its.appstate.edu:8081/shs0001.asmx" />
     </wsdl:port>
     <wsdl:port name="ws_shs0001Soap12" binding="tns:ws_shs0001Soap12">
-      <soap12:address location="http://banservice.appstate.edu:8081/shs0001.asmx" />
+      <soap12:address location="http://bansrvtest.its.appstate.edu:8081/shs0001.asmx" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>
