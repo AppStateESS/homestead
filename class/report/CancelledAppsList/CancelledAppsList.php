@@ -70,5 +70,13 @@ class CancelledAppsList extends Report implements iCsvReport{
     {
         return $this->rows;
     }
+
+    public function getDefaultOutputViewCmd()
+    {
+        $cmd = CommandFactory::getCommand('ShowReportCsv');
+        $cmd->setReportId($this->id);
+
+        return $cmd;
+    }
 }
 ?>
