@@ -160,7 +160,7 @@ class AssignStudentCommand extends Command {
         }
         
         // Make sure the student's gender matches the gender of the room, unless the room is co-ed.
-        if($room->getGender() != $gender && $room->getGender != COED){
+        if($room->getGender() != $gender && $room->getGender() != COED){
             // Room gender does not match student's gender, so check if we can change it
             if($room->can_change_gender($gender) && Current_User::allow('hms', 'room_attributes')){
                 $room->setGender($gender);
