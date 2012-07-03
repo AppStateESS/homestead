@@ -412,7 +412,7 @@ class HMS_Assignment extends HMS_Item
         // We probably shouldn't check permissions inside this method, since sometimes this can be 
         // called from student-facing interfaces.. But, since I want to be really careful with co-ed rooms,
         // I'm going to take the extra step of making sure no students are putting themselves in co-ed rooms.
-        if(!Current_User::allow('hms', 'coed_assignment')){
+        if($room->getGender() == COED && !Current_User::allow('hms', 'coed_assignment')){
             throw new AssignmentException('You do not have permission to make assignments for Co-ed rooms.');
         }
 
