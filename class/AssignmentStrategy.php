@@ -47,7 +47,7 @@ abstract class AssignmentStrategy {
             }else{
                 $student1MealPlan = $application->getMealPlan();
             }
-            HMS_Assignment::assignStudent($pair->getStudent1(), $this->term, $room->id, NULL, $student1MealPlan, 'Auto-assigned', false, ASSIGN_AUTO);
+            HMS_Assignment::assignStudent($pair->getStudent1(), $this->term, $room->id, NULL, $student1MealPlan, 'Auto-assigned', false, ASSIGN_FR_AUTO);
         }catch(Exception $e){
             echo "Could not assign '{$pair->getStudent1()->getUsername()}': {get_class($e)}: {$e->getMessage()}<br />\n";
         }
@@ -62,7 +62,7 @@ abstract class AssignmentStrategy {
             }else{
                 $student2MealPlan = $application->getMealPlan();
             }
-            HMS_Assignment::assignStudent($pair->getStudent2(), $this->term, $room->id, NULL, $student2MealPlan, 'Auto-assigned', false, ASSIGN_AUTO);
+            HMS_Assignment::assignStudent($pair->getStudent2(), $this->term, $room->id, NULL, $student2MealPlan, 'Auto-assigned', false, ASSIGN_FR_AUTO);
         }catch(Exception $e){
             echo "Could not assign '{$pair->getStudent2()->getUsername()}': " . get_class($e) . ": {$e->getMessage()}<br />\n";
         }
