@@ -1,14 +1,13 @@
 <?php
 
+PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
+
 /**
  * SaveRlcCommand - Handles saving a new RLC or updating fields on an existing Learning Community
  *
  * @author Jeremy Booker <jbooker at tux dot appstate dot edu>
- * @package hms
+ * @package HMS
  */
-
-PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
-
 class SaveRlcCommand extends Command {
 
     private $id;
@@ -41,8 +40,9 @@ class SaveRlcCommand extends Command {
             $community = new HMS_Learning_Community();
         }
 
-        // Set all the fields
         // TODO add appropriate sanity checking...
+        
+        /*** General Settings ***/
         $community->set_community_name($context->get('community_name'));
         $community->set_abbreviation($context->get('abbreviation'));
         
@@ -53,6 +53,32 @@ class SaveRlcCommand extends Command {
         }
         $community->set_capacity($capacity);
         
+        /*** RLC-specific move-in times ***/
+        // Freshmen
+        $fMoveinTime = $context->get('f_movein_time');
+        if($fMoveinTime == 0){
+            $community->setFreshmenMoveinTime(null);
+        }else{
+            $community->setFreshmenMoveinTime($fMoveinTime);
+        }
+        
+        // Transfer
+        $tMoveinTime = $context->get('t_movein_time');
+        if($tMoveinTime == 0){
+            $community->setTransferMoveinTime(null);
+        }else{
+            $community->setTransferMoveinTime($tMoveinTime);
+        }
+        
+        // Continuing
+        $cMoveinTime = $context->get('c_movein_time');
+        if($cMoveinTime == 0){
+            $community->setContinuingMoveinTime(null);
+        }else{
+            $community->setContinuingMoveinTime($cMoveinTime);
+        }
+        
+        /*** Student Types Allowed to Apply ***/
         $community->hide = is_null($context->get('hide')) ? 0 : $context->get('hide');
         $community->setAllowedStudentTypes($context->get('student_types'));
         $community->setAllowedReapplicationStudentTypes($context->get('reapplication_student_types'));
@@ -63,17 +89,20 @@ class SaveRlcCommand extends Command {
             $community->setMembersReapply(1);
         }
 
+        /*** Application Questions ***/
         $community->setFreshmenQuestion($context->get('freshmen_question'));
         $community->setReturningQuestion($context->get('returning_question'));
         
+        /*** Terms & Conditions ***/
         $community->setTermsConditions($context->get('terms_conditions'));
+        
         
         // Save it
         $result = $community->save();
 
         // View command for the RLC editt page
-        $viewCommand = CommandFactory::getCommand('ShowEditRlc');
-        $viewCommand->setId($community->id);
+        $viewCommand = CommandFactory::getCommand('ShowAddRlc');
+        $viewCommand->setId($community->getId());
 
         // Show a success message and redirect
         NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'The RLC was saved successfully.');

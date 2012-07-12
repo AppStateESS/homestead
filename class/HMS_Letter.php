@@ -588,6 +588,14 @@ class HMS_Letter
         return $message;
     }
 
+    /**
+     * Old method for sending notification emails. Depricated.
+     * 
+     * @deprecated
+     * @see SendAssignmentNotificationCommand
+     * @throws DatabaseException
+     * @return multitype:NULL
+     */
     public function email()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Email.php');

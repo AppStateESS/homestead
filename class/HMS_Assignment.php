@@ -150,7 +150,8 @@ class HMS_Assignment extends HMS_Item
 
     /**
      * Returns the phone number of the bed for this assignment.
-     * Useful when called from outside classes....
+     * 
+     * @depricated
      */
     public function get_phone_number()
     {
@@ -208,7 +209,7 @@ class HMS_Assignment extends HMS_Item
 
         return $room->id;
     }
-
+    
     /******************************
      * Accessor / Mutator Methods *
      *****************************/
@@ -219,6 +220,16 @@ class HMS_Assignment extends HMS_Item
 
     public function setBannerId($id){
         $this->banner_id = $id;
+    }
+    
+    public function getUsername()
+    {
+        return $this->asu_username;
+    }
+    
+    public function getBedId()
+    {
+        return $this->bed_id;
     }
 
     /******************

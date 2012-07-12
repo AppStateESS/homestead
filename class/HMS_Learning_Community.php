@@ -20,6 +20,11 @@ class HMS_Learning_Community extends HMS_Item
     public $members_reapply; // Indicates whether current members of the community are always allowed to reapply, regardless of student type
     public $extra_info; // A text field, show to the student when the RLC is selected
     
+    // Move-in time IDs specific to this community (used in assignment notifications)
+    public $f_movein_time_id;
+    public $t_movein_time_id;
+    public $c_movein_time_id; 
+    
     public $freshmen_question;
     public $returning_question;
     
@@ -46,11 +51,26 @@ class HMS_Learning_Community extends HMS_Item
         return true;
     }
 
+    public function getId()
+    {
+        return $this->id;
+    }
+    
+    public function setId(){
+        $this->id = $id;
+    }
+    
+    /**
+     * @deprecated
+     */
     public function set_id($id)
     {
         $this->id = $id;
     }
 
+    /**
+     * @deprecated
+     */
     public function get_id()
     {
         return $this->id;
@@ -138,6 +158,31 @@ class HMS_Learning_Community extends HMS_Item
         $this->returning_question = $question;
     }
     
+    public function getFreshmenMoveinTime(){
+        return $this->f_movein_time_id;
+    }
+    
+    public function setFreshmenMoveinTime($movein_time){
+        $this->f_movein_time_id = $movein_time;
+    }
+    
+    public function getContinuingMoveinTime(){
+        return $this->c_movein_time_id;
+    }
+    
+    public function setContinuingMoveinTime($movein_time){
+        $this->c_movein_time_id = $movein_time;
+    }
+    
+    public function getTransferMoveinTime(){
+        return $this->t_movein_time_id;
+    }
+    
+    public function setTransferMoveinTime($movein_time){
+        $this->t_movein_time_id = $movein_time;
+    }
+    
+    //TODO depricate this crap
     public function set_variables()
     {
         if(isset($_REQUEST['id']) && $_REQUEST['id'] != NULL) $this->set_id($_REQUEST['id']);

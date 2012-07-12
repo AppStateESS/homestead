@@ -238,16 +238,26 @@ class HMS_Email{
         HMS_Email::send_template_message($student->getUsername() . TO_DOMAIN, 'On-campus Housing Waiting List Confirmation', 'email/waitingListConfirmation.tpl', $tpl);
     }
 
-    public function send_assignment_email($to, $name, $term, $location, $roommates, $movein_time, $type, $returning){
+    /**
+     * Sends an individual assignment notice message.
+     * 
+     * @param String $to ASU username
+     * @param String $name Student's first and last name
+     * @param String $term
+     * @param String $location
+     * @param Array $roommates
+     * @param String $moveinTime
+     */
+    public function sendAssignmentNotice($to, $name, $term, $location, Array $roommates, $moveinTime){
         $tpl = array();
 
         $tpl['NAME']            = $name;
         $tpl['TERM']            = Term::toString($term);
         $tpl['LOCATION']        = $location;
-        $tpl['MOVE_IN_TIME']    = $movein_time;
+        $tpl['MOVE_IN_TIME']    = $moveinTime;
         $tpl['DATE']            = strftime("%B %d, %Y");
 
-        if(!is_null($roommates)){
+        if(!empty($roommates)){
             foreach($roommates as $roommate){
                 $tpl['roommates'][] = array('ROOMMATE' => $roommate);
             }

@@ -21,7 +21,7 @@ class HMS_RLC_Assignment {
     public $state;           // db text field for state name
     public $assignmentState; // An RlcAssignmentState object
 
-    public $username; # For the DBPager join stuff to work right
+    public $username; // For the DBPager join stuff to work right
     public $term; // For dbPager
 
     /**
@@ -135,6 +135,21 @@ class HMS_RLC_Assignment {
         }
         
         return $application;
+    }
+    
+    public function changeState(RlcAssignmentState $newState)
+    {
+        // Save the new state's name, catching any exceptions
+        $this->state = $newState->getStateName();
+        try{
+            $this->save();
+        }catch(Exception $e){
+            throw $e;
+            return;
+        }
+    
+        // If we made it this far, then do the onEnter stuff
+        $newState->onEnter();
     }
     
     /******************
@@ -297,21 +312,6 @@ class HMS_RLC_Assignment {
         }
 
         return $output;
-    }
-
-    public function changeState(RlcAssignmentState $newState)
-    {
-        // Save the new state's name, catching any exceptions
-        $this->state = $newState->getStateName();
-        try{
-            $this->save();
-        }catch(Exception $e){
-            throw $e;
-            return;
-        }
-        
-        // If we made it this far, then do the onEnter stuff
-        $newState->onEnter();
     }
     
     /***********************

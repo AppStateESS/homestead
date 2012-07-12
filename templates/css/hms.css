@@ -31,6 +31,11 @@
   margin-bottom: 5px;
 }
 
+fieldset {
+    border: 1px solid #D6D6D6;
+    border-radius: 5px;
+}
+
 /* Text Styles */
 .italic {
   font-style: italic;

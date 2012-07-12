@@ -2,14 +2,31 @@
 
 PHPWS_Core::initModClass('hms', 'View.php');
 PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
+PHPWS_Core::initModClass('hms', 'HMS_Movein_Time.php');
 
+/**
+ * View for showing/editing Learning Communities
+ * (despite the poor name, it *can* edit an existing community too)
+ * 
+ * @author jbooker
+ * @package HMS
+ */
 class AddCommunityView extends View {
     private $community;
 
+    /**
+     * Constructor
+     * 
+     * @param HMS_Learning_Community $rlc
+     */
     public function __construct(HMS_Learning_Community $rlc = NULL){
         $this->community = $rlc;
     }
 
+    /**
+     * 
+     * @see View::show()
+     */
     public function show()
     {
         $tpl = array();
@@ -31,6 +48,21 @@ class AddCommunityView extends View {
         $form->addText('capacity', !is_null($this->community)?$this->community->get_capacity():'');
         $form->setSize('capacity', 5);
 
+        /*** Move-in Times ***/
+        $moveinTimes = HMS_Movein_Time::get_movein_times_array(Term::getSelectedTerm());
+        
+        $form->addDropBox('f_movein_time', $moveinTimes);
+        $form->setLabel('f_movein_time', 'Freshmen Move-in Time');
+        $form->setMatch('f_movein_time', $this->community->getFreshmenMoveinTime());
+        
+        $form->addDropBox('t_movein_time', $moveinTimes);
+        $form->setLabel('t_movein_time', 'Transfer Move-in Time');
+        $form->setMatch('t_movein_time', $this->community->getTransferMoveinTime());
+        
+        $form->addDropBox('c_movein_time', $moveinTimes);
+        $form->setLabel('c_movein_time', 'Continuing Move-in Time');
+        $form->setMatch('c_movein_time', $this->community->getContinuingMoveinTime());
+        
         $form->addText('student_types', !is_null($this->community)?$this->community->getAllowedStudentTypes():'');
         $form->addText('reapplication_student_types', !is_null($this->community)?$this->community->getAllowedReApplicationStudentTypes():'');
 

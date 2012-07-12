@@ -4,6 +4,7 @@
  * HMS Move-in Time class
  *
  * @author Jeremy Booker <jbooker at tux dot appstate dot edu>
+ * @package HMS
  */
 
 class HMS_Movein_Time

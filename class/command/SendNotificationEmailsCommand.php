@@ -2,11 +2,10 @@
 /**
  * SendNotificationEmailsCommand
  *
- *  Sends the hall notification emails.
+ *  Sends emails from RAs/RDs by halls/floor.
  *
  * @author Daniel West <lw77517 at appstate dot edu>
- * @package mod
- * @subpackage hms
+ * @package HMS
  */
 //PHPWS_Core::initModClass('hms', 'SendNotificationEmailsView.php');
 
