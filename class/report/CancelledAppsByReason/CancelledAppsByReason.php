@@ -32,7 +32,7 @@ class CancelledAppsByReason extends Report {
         
         $db->addGroupBy('cancelled_reason');
         
-        $this->reasonCounts = $db->select();
+        $this->reasonCounts = $db->select('assoc');
     }
     
     public function getReasonCounts()

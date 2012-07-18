@@ -14,7 +14,7 @@ class CancelledAppsByReasonHtmlView extends ReportHtmlView {
         parent::render();
         
         $this->tpl['TERM'] = Term::toString($this->report->getTerm());
-        
+
         $rows = array();
         
         $totalCancellations = 0;
