@@ -254,6 +254,12 @@ class HMS_Util{
                 return 'Transfer';
             case TYPE_CONTINUING:
                 return 'Continuing';
+            case TYPE_NONDEGREE:
+                return 'Non-degree';
+            case TYPE_RETURNING:
+                return 'Returning';
+            case TYPE_READMIT:
+                return 'Re-admit';
             default:
                 return "Unrecognized: $type";
         }
