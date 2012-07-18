@@ -255,7 +255,7 @@ class HMS_Util{
             case TYPE_CONTINUING:
                 return 'Continuing';
             default:
-                return 'Unknown';
+                return "Unrecognized: $type";
         }
     }
 

@@ -24,7 +24,6 @@ class CancelledAppsByReason extends Report {
         
         $db = new PHPWS_DB('hms_new_application');
         
-        //$db->addColumn('cancelled_reason');
         $db->addColumn('cancelled_reason');
         $db->addColumn('id', null, 'myCount', true);
         $db->addWhere('term', $this->getTerm());

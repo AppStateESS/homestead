@@ -1,0 +1,1 @@
+Lists the totals number of cancelled housing applications broken down by student type. 
