@@ -6,7 +6,7 @@
  * for a selected term.
  *
  * @author Jeremy Booker
- @ package HMS
+ * @package HMS
  */
 class CancelledAppsList extends Report implements iCsvReport{
 
