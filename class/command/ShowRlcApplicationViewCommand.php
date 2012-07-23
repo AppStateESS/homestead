@@ -44,13 +44,6 @@ class ShowRlcApplicationViewCommand extends Command {
         // Get the Student object
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), Term::getCurrentTerm());
         
-        // Make sure the student is eligible for an RLC
-        if($student->getCreditHours() > 15) {
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Sorry, you are not eligible for a Residential Learning Community for Underclassmen. Please visit the <a href="http://housing.appstate.edu/index.php?module=pagemaster&PAGE_user_op=view_page&PAGE_id=293" target="_blank">Residential Learning Communities for Upperclassmen website</a> for information on applying for Residential Learning Communities for Upperclassmen.');
-            $cmd = CommandFactory::getCommand('ShowStudentMenu');
-            $cmd->redirect();
-        }
-        
         $view = new RlcApplicationPage1View($context, $student);
 
         $context->setContent($view->show());
