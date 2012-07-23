@@ -12,7 +12,8 @@ function submit_form(form_element, dropdown){
     form_element.disabled=true;
 
     $.getJSON('index.php', {'module': 'hms', 'action': 'UpdateRoomField', 'id': table_row.id, 'field': form_element.name, 'value': form_element_value}, function(json){
-        if(json.value != false){
+        
+        if(json != false){
             var display_text;
             switch(form_element_value){
                 case "0":
@@ -22,7 +23,7 @@ function submit_form(form_element, dropdown){
                     display_text = 'Male';
                     break;
                 case "2":
-                    display_text = 'COED';
+                    display_text = 'Co-ed';
                     break;
                 case 0:
                     display_text = 'No';

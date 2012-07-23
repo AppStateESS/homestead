@@ -515,20 +515,25 @@ class HMS_Room extends HMS_Item
         return $avail_rooms;
     }
 
+    /**
+     * DBPager row method for the floor view
+     * 
+     * @return Array
+     */
     public function get_row_tags()
     {
-        //$tpl = $this->item_tags();
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
         $tpl['ID']             = $this->id;
         $tpl['ROOM_NUMBER']    = $this->getLink();
         $tpl['GENDER_TYPE']    = HMS_Util::formatGender($this->gender_type);
         $tpl['DEFAULT_GENDER'] = HMS_Util::formatGender($this->default_gender);
-        $tpl['RA_ROOM']        = $this->ra        ? 'Yes' : 'No';
-        $tpl['PRIVATE_ROOM']   = $this->private   ? 'Yes' : 'No';
-        $tpl['IS_OVERFLOW']    = $this->overflow  ? 'Yes' : 'No';
-        $tpl['IS_RESERVED']    = $this->reserved  ? 'Yes' : 'No';
-        $tpl['OFFLINE']        = $this->offline   ? 'Yes' : 'No';
+        $tpl['RA']             = $this->isRa()        ? 'Yes' : 'No';
+        $tpl['PRIVATE']        = $this->isPrivate()   ? 'Yes' : 'No';
+        $tpl['OVERFLOW']       = $this->isOverflow()  ? 'Yes' : 'No';
+        $tpl['RESERVED']       = $this->isReserved()  ? 'Yes' : 'No';
+        $tpl['OFFLINE']        = $this->isOffline()   ? 'Yes' : 'No';
+        $tpl['ADA']            = $this->isADA()       ? 'Yes' : 'No';   
 
         if(Current_User::allow('hms','room_structure') && $this->get_number_of_assignees() == 0) {
             $deleteRoomCmd = CommandFactory::getCommand('DeleteRoom');
@@ -539,13 +544,16 @@ class HMS_Room extends HMS_Item
             $confirm['QUESTION'] = 'Are you sure want to delete room ' .  $this->room_number . '?';
             $confirm['ADDRESS']  = $deleteRoomCmd->getURI();
             $confirm['LINK']     = 'Delete';
-            $tpl['DELETE']       = Layout::getJavascript('confirm', $confirm);
         }
 
         return $tpl;
     }
 
-    // TODO: move this
+    /**
+     * DBPager row method for the floor edit pager.
+     * 
+     * @return Array
+     */
     public function get_row_edit(){
         javascript('jquery');
         $tpl = array();
@@ -567,7 +575,8 @@ class HMS_Room extends HMS_Item
         $form = new PHPWS_Form($this->id);
         $form->addSelect('gender_type', array(FEMALE => FEMALE_DESC,
         MALE   => MALE_DESC,
-        COED   => COED_DESC
+        COED   => COED_DESC,
+        AUTO   => AUTO_DESC
         ));
 
         $form->setMatch('gender_type', $this->gender_type);
@@ -575,79 +584,43 @@ class HMS_Room extends HMS_Item
 
         $form->addSelect('default_gender', array(FEMALE => FEMALE_DESC,
                 MALE   => MALE_DESC,
-                COED   => COED_DESC,
                 AUTO   => AUTO_DESC
         ));
         $form->setMatch('default_gender', $this->default_gender);
         $form->setExtra('default_gender', 'onChange="submit_form(this, true)"');
 
         $form->addCheck('offline', 'yes');
-        $form->setLabel('offline', 'Offline');
         $form->setMatch('offline', $this->offline == 1 ? 'yes' : 0);
         $form->setExtra('offline', 'onChange="submit_form(this, false)"');
         
         $form->addCheck('reserved', 'yes');
-        $form->setLabel('reserved', 'Reserved');
         $form->setMatch('reserved', $this->reserved == 1 ? 'yes' : 0);
         $form->setExtra('reserved', 'onChange="submit_form(this, false)"');
         
         $form->addCheck('ra', 'yes');
-        $form->setLabel('ra', 'Reserved for RA:');
         $form->setMatch('ra', $this->ra == 1 ? 'yes' : 0);
         $form->setExtra('ra', 'onChange="submit_form(this, false)"');
 
         $form->addCheck('private', 'yes');
-        $form->setLabel('private', 'Private');
         $form->setMatch('private', $this->private == 1 ? 'yes' : 0);
         $form->setExtra('private', 'onChange="submit_form(this, false)"');
 
         $form->addCheck('overflow', 'yes');
-        $form->setLabel('overflow', '');
         $form->setMatch('overflow', $this->overflow == 1 ? 'yes' : 0);
         $form->setExtra('overflow', 'onChange="submit_form(this, false)"');
+        
+        $form->addCheck('ada', 'yes');
+        $form->setMatch('ada', $this->isAda() ? 'yes' : 0);
+        $form->setExtra('ada', 'onChange="submit_form(this, false)"');
 
         $form->addHidden('action', 'UpdateRoomField');
         $form->addHidden('room', $this->id);
 
         $form->mergeTemplate($tpl);
 
+        //test($form->getTemplate(),1);
+        
         return $form->getTemplate();
-    }
-
-    //TODO: move this
-    public static function update_row($id, $element, $value){
-        if(!Current_User::allow('hms', 'room_attributes')){
-            return 'bad permissions';
-        }
-
-        if($element == 'gender_type'){
-            $r = new HMS_Room($id);
-            if($r->get_number_of_assignees() > 0){
-                $r->value   = false;
-                $r->message = 'Cannot change the gender of a room while it contains students.';
-                return $r;
-            }
-        }
-
-        if(in_array($element, array_keys(get_class_vars('HMS_Room')))){
-            if(!is_numeric($value)){
-                $value = $value == 'yes' ? 1 : 0;
-            }
-
-            //Update the database by hand instead of loading and saving an
-            //object to avoid possible race conditions.
-            $db = new PHPWS_DB('hms_room');
-            $db->addWhere('id', $id);
-            $db->addValue($element, $value);
-            $result = $db->update();
-
-            $room = new HMS_Room($id);
-            $room->value = true;
-            return $room;
-        }
-        $room = new HMS_Room($id);
-        $room->value = false;
-        return $room;
     }
 
     /******************************
@@ -664,9 +637,17 @@ class HMS_Room extends HMS_Item
         return $this->offline == 1 ? true : false;
     }
     
+    public function setOffline($value){
+        $this->offline = $value;
+    }
+    
     public function isReserved()
     {
         return $this->reserved == 1 ? true : false;
+    }
+    
+    public function setReserved($value){
+        $this->reserved = $value;
     }
     
     public function isRa()
@@ -674,9 +655,17 @@ class HMS_Room extends HMS_Item
         return $this->ra == 1 ? true : false;
     }
     
+    public function setRa($value){
+        $this->ra = $value;
+    }
+    
     public function isPrivate()
     {
         return $this->private == 1 ? true : false;
+    }
+    
+    public function setPrivate($value){
+        $this->private = $value;
     }
     
     public function isOverflow()
@@ -684,9 +673,17 @@ class HMS_Room extends HMS_Item
         return $this->overflow == 1 ? true : false;
     }
     
+    public function setOverflow($value){
+        $this->overflow = $value;
+    }
+    
     public function isADA()
     {
         return $this->ada == 1 ? true : false;
+    }
+    
+    public function setADA($value){
+        $this->ada = $value;
     }
     
     public function isHearingImpaired()
@@ -694,14 +691,26 @@ class HMS_Room extends HMS_Item
         return $this->hearing_impaired == 1 ? true : false;
     }
     
+    public function setHearingImpaired(){
+        $this->hearing_impaired = $value;
+    }
+    
     public function bathEnSuite()
     {
         return $this->bath_en_suite == 1 ? true : false;
     }
     
+    public function setBathEnSuite($value){
+        $this->bath_en_suite = $value;
+    }
+    
     public function isParlor()
     {
         return $this->parlor == 1 ? true : false;
+    }
+    
+    public function setParlor($value){
+        $this->parlor = $value;
     }
     
     public function getGender(){
@@ -710,6 +719,14 @@ class HMS_Room extends HMS_Item
     
     public function setGender($gender){
         $this->gender_type = $gender;
+    }
+    
+    public function getDefaultGender(){
+        return $this->default_gender;
+    }
+    
+    public function setDefaultGender($gender){
+        $this->default_gender = $gender;
     }
     
     /******************
@@ -726,16 +743,6 @@ class HMS_Room extends HMS_Item
         $pager->db->addOrder('hms_room.room_number');
 
         $page_tags['TABLE_TITLE']          = 'Rooms on this floor';
-        $page_tags['ROOM_NUM_LABEL']       = 'Room Number';
-        $page_tags['GENDER_TYPE_LABEL']    = 'Gender';
-        $page_tags['DEFAULT_GENDER_LABEL'] = 'Default Gender';
-        $page_tags['RA_LABEL']             = 'RA';
-        $page_tags['PRIVATE_LABEL']        = 'Private';
-        $page_tags['OVERFLOW_LABEL']       = 'Overflow';
-        $page_tags['MEDICAL_LABEL']        = 'Medical';
-        $page_tags['RESERVED_LABEL']       = 'Reserved';
-        $page_tags['ONLINE_LABEL']         = 'Offline';
-        $page_tags['DELETE_LABEL']         = 'Delete';
 
         if(Current_User::allow('hms', 'room_structure')){
             $addRoomCmd = CommandFactory::getCommand('ShowAddRoom');
