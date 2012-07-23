@@ -39,7 +39,7 @@ class DeleteRoommateGroupCommand extends Command {
         }
 
         // Log the success
-        $noetes = "{$roommate->getRequestor()} requested {$roommate->getRequestee()}";
+        $notes = "{$roommate->getRequestor()} requested {$roommate->getRequestee()}";
         HMS_Activity_Log::log_activity($roommate->getRequestor(), ACTIVITY_ADMIN_REMOVED_ROOMMATE, UserStatus::getUsername(), $notes);
         HMS_Activity_Log::log_activity($roommate->getRequestee(), ACTIVITY_ADMIN_REMOVED_ROOMMATE, UserStatus::getUsername(), $notes);
         
