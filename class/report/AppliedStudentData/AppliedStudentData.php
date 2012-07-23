@@ -58,13 +58,19 @@ class AppliedStudentData extends Report implements iCsvReport {
 
             $address = $student->getAddress(NULL);
 
-            $this->rows[] =
-                    array(
+            if(!is_null($address) && $address !== false){
+                $this->rows[] =
+                array(
                         $username, $bannerId, $first, $middle, $last,
                         $type, $cellPhone, $room, $address->line1, $address->line2,
                         $address->line3, $address->city,
                         $address->state, $address->zip
-                    );
+                );
+            }else{
+                $this->rows[] =
+                array($username, $bannerId, $first, $middle, $last,
+                      $type, $cellPhone, $room, '', '', '', '', '', '');
+            }
         }
     }
 
