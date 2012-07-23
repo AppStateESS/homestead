@@ -21,7 +21,7 @@ class RLCMenu extends CommandMenu {
             }
             
             if(Current_User::allow('hms', 'learning_community_maintenance')){
-                $this->addCommandByName('Send Freshmen Invites', 'ShowSendRlcInvites');
+                $this->addCommandByName('Send RLC Email Invites', 'ShowSendRlcInvites');
             }
 
             if(Current_User::allow('hms' ,'view_rlc_members')){
