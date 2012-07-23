@@ -219,22 +219,6 @@ class HMS_Learning_Community extends HMS_Item
         }
     }
 
-    public static function getRlcsById(){
-        $db = new PHPWS_DB('hms_learning_communities');
-        $result = $db->select();
-
-        if( PHPWS_Error::logIfError($result) ) {
-            return $result;
-        }
-
-        $communities = array();
-        foreach( $result as $community ) {
-            $communities[$community['id']] = $community['community_name'];
-        }
-
-        return $communities;
-    }
-
     /**
      * Returns an associative array containing the list of RLC abbreviations keyed by their id.
      */
@@ -259,7 +243,7 @@ class HMS_Learning_Community extends HMS_Item
     /**
      * Returns an associative array containing the list of RLCs using their full names, keyed by their id.
      */
-    public function getRLCList($hidden = NULL, $student_type = NULL)
+    public function getRlcList($hidden = NULL, $student_type = NULL)
     {
         $db = new PHPWS_DB('hms_learning_communities');
         $db->addColumn('id');
@@ -270,6 +254,8 @@ class HMS_Learning_Community extends HMS_Item
         if($hidden === FALSE){
             $db->addWhere('hide', 0);
         }
+        
+        $db->addOrder('community_name ASC');
 
         $rlc_choices = $db->select('assoc');
 

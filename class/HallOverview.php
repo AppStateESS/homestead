@@ -24,7 +24,7 @@ class HallOverview extends View {
             return 'Template error.';
         }
 
-        $rlcs       = HMS_Learning_Community::getRLCList();
+        $rlcs       = HMS_Learning_Community::getRlcList();
         $rlcs_abbr  = HMS_Learning_Community::getRLCListAbbr();
 
         $tpl->setData(array('HALL'=>$this->hall->hall_name, 'TERM'=>Term::getPrintableSelectedTerm()));

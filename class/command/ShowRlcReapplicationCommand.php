@@ -62,7 +62,7 @@ class ShowRlcReapplicationCommand extends Command {
         # Get the list of RLCs that the student is eligible for
         # Note: hard coded to 'C' because we know they're continuing at this point.
         # This accounts for freshmen addmitted in the spring, who will still have the 'F' type.
-        $communities = HMS_Learning_Community::getRLCListReapplication(false, 'C');
+        $communities = HMS_Learning_Community::getRlcListReapplication(false, 'C');
 
         // If the student has an existing assignment, and that community always allows returning students, then make sure the community is in the list (if it's not already)
         if(isset($rlcAssignment)){

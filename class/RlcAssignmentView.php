@@ -23,7 +23,7 @@ class RlcAssignmentView extends View {
         $exportCmd = CommandFactory::getCommand('ExportRlcApps');
         $exportCmd->initForm($export_form);
 
-        $export_form->addDropBox('rlc_list',HMS_Learning_Community::getRLCList());
+        $export_form->addDropBox('rlc_list', HMS_Learning_Community::getRlcList());
         $export_form->addSubmit('submit');
 
         $export_form->mergeTemplate($tags);
@@ -101,7 +101,7 @@ class RlcAssignmentView extends View {
         javascript('jquery');
         javascript('modules/hms/page_refresh');
 
-        $communities = HMS_Learning_Community::getRlcsById();
+        $communities = HMS_Learning_Community::getRlcList();
 
         $dropList = array('0'=>'All');
 

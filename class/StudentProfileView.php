@@ -171,7 +171,7 @@ class StudentProfileView extends View {
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
 
-        $rlc_names = HMS_Learning_Community::getRLCList();
+        $rlc_names = HMS_Learning_Community::getRlcList();
 
         $rlc_assignment     = HMS_RLC_Assignment::getAssignmentByUsername($this->student->getUsername(), Term::getSelectedTerm());
         $rlc_application    = HMS_RLC_Application::getApplicationByUsername($this->student->getUsername(), Term::getSelectedTerm(), FALSE);

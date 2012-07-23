@@ -89,7 +89,7 @@ class HMS_RLC_Application extends HMS_Item
 
         $student = StudentFactory::getStudentByUsername($this->username, Term::getCurrentTerm());
 
-        $rlc_list = HMS_Learning_Community::getRLCList();
+        $rlc_list = HMS_Learning_Community::getRlcList();
 
         $tags = array();
 
@@ -158,7 +158,7 @@ class HMS_RLC_Application extends HMS_Item
         $student = StudentFactory::getStudentByUsername($this->username, $this->term);
 
         $tags = array();
-        $rlc_list = HMS_Learning_Community::getRLCList();
+        $rlc_list = HMS_Learning_Community::getRlcList();
 
         $tags['NAME']           = $student->getProfileLink();
 

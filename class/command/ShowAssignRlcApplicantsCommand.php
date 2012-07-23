@@ -2,6 +2,12 @@
 
 PHPWS_Core::initModClass('hms', 'RlcAssignmentView.php');
 
+/**
+ * Command/controller for showing the view where an admin can assign students to RLCs.
+ * 
+ * @author jbooker
+ * @package HMS
+ */
 class ShowAssignRlcApplicantsCommand extends Command {
 
     public function getRequestVars()

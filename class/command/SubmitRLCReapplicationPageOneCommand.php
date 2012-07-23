@@ -53,7 +53,7 @@ class SubmitRLCReapplicationPageOneCommand extends Command {
         # Get the list of RLCs that the student is eligible for
         # Note: hard coded to 'C' because we know they're continuing at this point.
         # This accounts for freshmen addmitted in the spring, who will still have the 'F' type.
-        $communities = HMS_Learning_Community::getRLCListReapplication(false, 'C');
+        $communities = HMS_Learning_Community::getRlcListReapplication(false, 'C');
         
         # Look up any existing RLC assignment (for the current term, should be the Spring term)
         $rlcAssignment = HMS_RLC_Assignment::getAssignmentByUsername($student->getUsername(), Term::getPrevTerm(Term::getCurrentTerm()));

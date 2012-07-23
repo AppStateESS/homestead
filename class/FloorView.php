@@ -73,7 +73,7 @@ class FloorView extends View {
 
         # Get a list of the RLCs indexed by id
         PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
-        $learning_communities = HMS_Learning_Community::getRLCList();
+        $learning_communities = HMS_Learning_Community::getRlcList();
         $learning_communities[0] = 'None';
 
         $form->addDropBox('floor_rlc_id', $learning_communities);

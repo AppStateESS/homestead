@@ -42,7 +42,7 @@ class RlcApplicationReView extends View {
             $tags['APPLICATION_TYPE'] = 'Re-application';
         }
         
-        $rlcs = HMS_Learning_Community::getRlcsById();
+        $rlcs = HMS_Learning_Community::getRlcList();
         
         $tags['FIRST_CHOICE'] = $rlcs[$this->application->rlc_first_choice_id];
 
@@ -110,7 +110,7 @@ class RlcApplicationReView extends View {
         $approveForm = new PHPWS_Form('approve_form');
         $approveForm->addSubmit('approve', 'Accept');
         $approveCmd = CommandFactory::getCommand('AssignRlcApplicants');
-        $tpl['RLC_LIST'] = HMS_RLC_Application::generateRLCDropDown(HMS_Learning_Community::getRLCList(),
+        $tpl['RLC_LIST'] = HMS_RLC_Application::generateRLCDropDown(HMS_Learning_Community::getRlcList(),
                                                                              $this->application->id);
         $approveForm->mergeTemplate($tpl);
 

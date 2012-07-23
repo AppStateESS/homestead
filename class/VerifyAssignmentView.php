@@ -72,7 +72,7 @@ class VerifyAssignmentView extends View
         if($rlc_assignment == NULL || $rlc_assignment === FALSE){
             $tpl['RLC'] = "You have not been accepted to an RLC.";
         }else{
-            $rlc_list = HMS_Learning_Community::getRLCList();
+            $rlc_list = HMS_Learning_Community::getRlcList();
             $tpl['RLC'] = 'You have been assigned to the ' . $rlc_list[$rlc_assignment['rlc_id']];
         }
 
