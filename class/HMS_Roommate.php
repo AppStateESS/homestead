@@ -113,6 +113,14 @@ class HMS_Roommate
         throw new RoommateException("$username is not in roommate pairing " . $this->id);
     }
 
+    public function getRequestor(){
+        return $this->requestor;
+    }
+    
+    public function getRequestee(){
+        return $this->requestee;
+    }
+    
     /******************
      * Static Methods *
      ******************/
