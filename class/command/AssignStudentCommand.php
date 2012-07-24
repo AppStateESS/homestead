@@ -13,6 +13,8 @@ class AssignStudentCommand extends Command {
     private $bed;
     private $mealPlan;
     private $moveConfirmed;
+    private $assignmentType;
+    private $notes;
 
     public function setUsername($username)
     {
@@ -33,6 +35,14 @@ class AssignStudentCommand extends Command {
 
     public function setMoveConfirmed($move){
         $this->moveConfirmed = $move;
+    }
+    
+    public function setAssignmentType($type){
+        $this->assignmentType = $type;
+    }
+    
+    public function setNotes($notes){
+        $this->notes = $notes;
     }
 
     public function getRequestVars()
@@ -59,6 +69,14 @@ class AssignStudentCommand extends Command {
             $vars['moveConfirmed'] = $this->moveConfirmed;
         }
 
+        if(isset($this->assignmentType)){
+            $vars['assignment_type'] = $this->assignmentType;
+        }
+        
+        if(isset($this->notes)){
+            $vars['note'] = $this->notes;
+        }
+        
         return $vars;
     }
 
@@ -75,27 +93,40 @@ class AssignStudentCommand extends Command {
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
         PHPWS_Core::initModClass('hms', 'HMS_Room.php');
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-
         PHPWS_Core::initModClass('hms', 'BannerQueue.php');
 
+        // NB: Username must be all lowercase
         $username = strtolower(trim($context->get('username')));
         $term = Term::getSelectedTerm();
 
+        // Setup command to redirect to in case of error
         $errorCmd = CommandFactory::getCommand('ShowAssignStudent');
         $errorCmd->setUsername($username);
 
+        /***
+         * Input Sanity Checking
+         */
+        
+        // Must supply a user name
         if(is_null($username)){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Invalid or missing username.');
             $errorCmd->redirect();
         }
 
+        // Must supply at least a room ID
         $roomId = $context->get('room');
-
         if(is_null($roomId) || $roomId == 0){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You must select a room.');
             $errorCmd->redirect();
         }
 
+        // Must choose an assignment type
+        $assignmentType = $context->get('assignment_type');
+        if(!isset($assignmentType) || is_null($assignmentType) || $assignmentType < 0){
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You must choose an assignment type.');
+            $errorCmd->redirect();
+        }
+        
         // Check to make sure the student has an application on file
         $applicationStatus = HousingApplication::checkForApplication($username, $term);
 
@@ -120,6 +151,8 @@ class AssignStudentCommand extends Command {
                 $moveConfirmCmd->setRoom($context->get('room'));
                 $moveConfirmCmd->setBed($context->get('bed'));
                 $moveConfirmCmd->setMealPlan($context->get('meal_plan'));
+                $moveConfirmCmd->setAssignmentType($assignmentType);
+                $moveConfirmCmd->setNotes($context->get('note'));
                 $moveConfirmCmd->redirect();
             }
         }

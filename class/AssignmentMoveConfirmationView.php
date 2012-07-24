@@ -10,8 +10,10 @@ class AssignmentMoveConfirmationView extends View {
     private $room;
     private $bed;
     private $mealPlan;
+    private $assignmentType;
+    private $notes;
 
-    public function __construct(Student $student, HMS_Assignment $assignment, $residenceHall, $room, $bed, $mealPlan)
+    public function __construct(Student $student, HMS_Assignment $assignment, $residenceHall, $room, $bed, $mealPlan, $assignmentType, $notes)
     {
         $this->student			= $student;
         $this->assignment		= $assignment;
@@ -19,6 +21,8 @@ class AssignmentMoveConfirmationView extends View {
         $this->room 			= $room;
         $this->bed 				= $bed;
         $this->mealPlan 		= $mealPlan;
+        $this->assignmentType   = $assignmentType;
+        $this->notes            = $notes;
     }
 
     public function show()
@@ -36,6 +40,8 @@ class AssignmentMoveConfirmationView extends View {
         $submitCmd->setBed($this->bed);
         $submitCmd->setMealPlan($this->mealPlan);
         $submitCmd->setMoveConfirmed("true");
+        $submitCmd->setAssignmentType($this->assignmentType);
+        $submitCmd->setNotes($this->notes);
 
         $form = new PHPWS_Form();
         $submitCmd->initForm($form);

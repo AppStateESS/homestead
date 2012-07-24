@@ -133,6 +133,7 @@ class AssignStudentView extends View {
         
         // "Assignment Type"
         $form->addDropBox('assignment_type', array(
+            -1                       => 'Choose assignment type...',
             ASSIGN_ADMIN             => 'Administrative',
             ASSIGN_LOTTERY	         => 'Lottery',
             ASSIGN_FR   	         => 'Freshmen',
@@ -154,7 +155,7 @@ class AssignStudentView extends View {
             ASSIGN_SCHOLARS          => 'Diversity &amp; Plemmons Scholars'
         ));
         
-        $form->setMatch('assignment_type', ASSIGN_ADMIN);
+        $form->setMatch('assignment_type', -1);
         $form->setLabel('assignment_type', 'Assignment Type: ');
         
         $form->addSubmit('submit', 'Assign Student');

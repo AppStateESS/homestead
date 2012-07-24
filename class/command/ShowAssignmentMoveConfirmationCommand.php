@@ -8,6 +8,8 @@ class ShowAssignmentMoveConfirmationCommand extends Command {
     private $room;
     private $bed;
     private $mealPlan;
+    private $assignmentType;
+    private $notes;
 
     public function setUsername($username)
     {
@@ -24,6 +26,14 @@ class ShowAssignmentMoveConfirmationCommand extends Command {
 
     public function setMealPlan($plan){
         $this->mealPlan = $plan;
+    }
+    
+    public function setAssignmentType($type){
+        $this->assignmentType = $type;
+    }
+    
+    public function setNotes($notes){
+        $this->notes = $notes;
     }
 
     public function getRequestVars()
@@ -44,6 +54,14 @@ class ShowAssignmentMoveConfirmationCommand extends Command {
 
         if(isset($this->mealPlan)){
             $vars['meal_plan'] = $this->mealPlan;
+        }
+        
+        if(isset($this->assignmentType)){
+            $vars['assignment_type'] = $this->assignmentType;
+        }
+        
+        if(isset($this->notes)){
+            $vars['notes'] = $this->notes;
         }
 
         return $vars;
@@ -68,7 +86,9 @@ class ShowAssignmentMoveConfirmationCommand extends Command {
         $context->get('residence_hall'),
         $context->get('room'),
         $context->get('bed'),
-        $context->get('meal_plan'));
+        $context->get('meal_plan'),
+        $context->get('assignment_type'),
+        $context->get('notes'));
 
         $context->setContent($moveConfirmView->show());
     }
