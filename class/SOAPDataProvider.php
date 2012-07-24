@@ -90,12 +90,15 @@ class SOAPDataProvider extends StudentDataProvider {
         $phoneNumbers = array_unique($phoneNumbers);
         $student->setPhoneNumberList($phoneNumbers);
 
-        if(is_array($soapData->address) && count($soapData->address) > 0){
+        if(isset($soapData->address) && is_array($soapData->address) && count($soapData->address) > 0){
             // Array of address objects given, just pass the array on to the new Student object
             $student->setAddressList($soapData->address);
-        }else{
-            // Only one address object give, make it into an array
+        }else if(isset($soapData->address)){
+            // Only one address object given, make it into an array
             $student->setAddressList(array($soapData->address));
+        }else{
+            // $soapData->address property probably wasn't defined, so set addressList to empty array
+            $student->setAddressList(array());
         }
     }
 
