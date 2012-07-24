@@ -10,7 +10,7 @@ License:   GPL
 Group:     Development/PHP
 URL:       http://phpwebsite.appstate.edu
 Source0:   %{name}-%{version}.tar.bz2
-Source1:   phpwebsite-hms-latest.tar.bz2
+Source1:   phpwebsite-latest.tar.bz2
 Requires:  php >= 5.0.0, php-gd >= 5.0.0
 BuildArch: noarch
 
@@ -37,7 +37,7 @@ fi
 cd hms
 mkdir -p "$RPM_BUILD_ROOT%{install_dir}"
 # phpWebSite and HMS are very tightly coupled, so included the perscribed version of phpWebSite.
-mv phpwebsite-hms/* phpwebsite-hms/.htaccess "$RPM_BUILD_ROOT%{install_dir}/"
+mv phpwebsite/* phpwebsite/.htaccess "$RPM_BUILD_ROOT%{install_dir}/"
 
 # Install HMS under phpWebSite
 mkdir -p "$RPM_BUILD_ROOT%{install_dir}/mod/hms/"
