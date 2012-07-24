@@ -157,8 +157,8 @@
     </target>
 
     <target name="rpm" depends="tarball" description="Build an RPM">
-        <copy file="/var/www/html/convenience/phpwebsite-hms-latest.tar.bz2"
-              todir="${basedir}/build" />
+        <move file="${basedir}/phpwebsite-*.tar.bz2"
+            tofile="${basedir}/build/phpwebsite-latest.tar.bz2" />
         <exec executable="rpmbuild">
             <arg value="--define" />
             <arg value="_topdir ${basedir}/build/rpm" />
