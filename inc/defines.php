@@ -88,6 +88,11 @@ define('BANNER_MEAL_NONE', '-1');
 //define('BANNER_MEAL_4WEEK', 'S4');
 define('BANNER_MEAL_5WEEK', 'S5');
 
+/****
+ * Admissions Admit Codes
+ */
+define('ADMISSION_WITHDRAWN_PAID', 'WP');
+define('ADMISSION_RESCIND',        'RE');
 
 /***
  * Assignment Reasons

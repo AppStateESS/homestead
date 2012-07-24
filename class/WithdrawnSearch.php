@@ -56,7 +56,7 @@ class WithdrawnSearch {
                 continue;
             }
 
-            if($student->getType() != TYPE_WITHDRAWN){
+            if($student->getType() != TYPE_WITHDRAWN && $student->getAdmissionDecisionCode() != ADMISSION_WITHDRAWN_PAID && $student->getAdmissionDecisionCode() != ADMISSION_RESCIND){
                 continue;
             }
 
