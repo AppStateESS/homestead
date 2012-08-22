@@ -57,7 +57,6 @@ cp -r * "$RPM_BUILD_ROOT%{install_dir}"
 
 %clean
 rm -rf "$RPM_BUILD_ROOT%{install_dir}"
-rm -f "$RPM_BUILD_ROOT/phpws_dir/mod/usrs/scripts/hms-cosign.php"
 rm -f "$RPM_BUILD_ROOT/etc/cron.d/hms-cron"
 rmdir -f "$RPM_BUILD_ROOT%{phpws_dir}/files/hms_reports"
 rm -f "$RPM_BUILD_ROOT/opt/wkhtmltopdf-i386"
@@ -65,7 +64,6 @@ rm -f "$RPM_BUILD_ROOT/opt/wkhtmltopdf-i386"
 %files
 %defattr(-,root,root)
 %{install_dir}
-%{phpws_dir}/mod/users/scripts/hms-cosign.php"
 %attr(-,apache,apache) %{phpws_dir}/files/hms_reports
 #/etc/cron.d/hms-cron
 %attr(0755,root,root) /opt/wkhtmltopdf-i386
