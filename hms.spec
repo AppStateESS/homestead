@@ -33,10 +33,6 @@ rm -f "inc/shs0001.wsdl.testing"
 rm -f "build.xml"
 rm -f "hms.spec"
 
-# Install HMS Cosign script to phpWebSite
-mv "inc/cosign.php" \
-   "$RPM_BUILD_ROOT%{phpws_dir}/mod/users/scripts/hms-cosign.php"
-
 # Install the production Banner WSDL file
 mv "inc/shs0001.wsdl.prod"\
    "$RPM_BUILD_ROOT%{install_dir}/inc/shs0001.wsdl"
