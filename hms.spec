@@ -1,6 +1,6 @@
 %define name hms
-%define release 1
-%define install_dir /var/www/hms
+%define phpws_dir /var/www/phpwebsite
+%define install_dir %{phpws_dir}/mod/hms
 
 Summary:   Housing Management System
 Name:      %{name}
@@ -9,7 +9,7 @@ Release:   %{release}
 License:   GPL
 Group:     Development/PHP
 URL:       http://phpwebsite.appstate.edu
-Source0:   %{name}-%{version}.tar.bz2
+Source0:   %{name}-%{version}-%{release}.tar.bz2
 Source1:   phpwebsite-latest.tar.bz2
 Requires:  php >= 5.0.0, php-gd >= 5.0.0
 BuildArch: noarch
@@ -18,70 +18,65 @@ BuildArch: noarch
 The Housing Management System
 
 %prep
-rm -rf hms
-mkdir hms
-cd hms
-bzip2 -dc %{SOURCE0} | tar -xvvf -
-if [ $? -ne 0 ]; then
-  exit $?
-fi
-bzip2 -dc %{SOURCE1} | tar -xvvf -
-if [ $? -ne 0 ]; then
-  exit $?
-fi
+%setup -n hms
 
 %post
-/sbin/service httpd restart
+/usr/bin/curl -L http://127.0.0.1/apc/clear
 
 %install
-cd hms
 mkdir -p "$RPM_BUILD_ROOT%{install_dir}"
-# phpWebSite and HMS are very tightly coupled, so included the perscribed version of phpWebSite.
-mv phpwebsite/* phpwebsite/.htaccess "$RPM_BUILD_ROOT%{install_dir}/"
 
-# Install HMS under phpWebSite
-mkdir -p "$RPM_BUILD_ROOT%{install_dir}/mod/hms/"
-cp -r hms/* "$RPM_BUILD_ROOT%{install_dir}/mod/hms/"
+# Clean up crap from the repo that doesn't need to be in production
+rm -Rf "hms/util"
+rm -f "hms/inc/shs0001.wsdl"
+rm -f "hms/inc/shs0001.wsdl.testing"
+rm -f "hms/build.xml"
+rm -f "hms/hms.spec"
 
 # Install HMS Cosign script to phpWebSite
-mv "$RPM_BUILD_ROOT%{install_dir}/mod/hms/inc/cosign.php"\
-   "$RPM_BUILD_ROOT%{install_dir}/mod/users/scripts/hms-cosign.php"
-
-# Clean up crap from the repo tht doesn't need to be in production
-rm -Rf "$RPM_BUILD_ROOT%{install_dir}/mod/hms/util"
-rm -f "$RPM_BUILD_ROOT%{install_dir}/mod/hms/inc/shs0001.wsdl"
-rm -f "$RPM_BUILD_ROOT%{install_dir}/hmd/hms/inc/shs0001.wsdl.testing"
-rm -f "$RPM_BUILD_ROOT%{install_dir}/mod/hms/build.xml"
-rm -f "$RPM_BUILD_ROOT%{install_dir}/mod/hms/hms.spec"
+mv "hms/inc/cosign.php" \
+   "$RPM_BUILD_ROOT%{phpws_dir}/mod/users/scripts/hms-cosign.php"
 
 # Install the production Banner WSDL file
-mv "$RPM_BUILD_ROOT%{install_dir}/mod/hms/inc/shs0001.wsdl.prod"\
-   "$RPM_BUILD_ROOT%{install_dir}/mod/hms/inc/shs0001.wsdl"
+mv "hms/inc/shs0001.wsdl.prod"\
+   "$RPM_BUILD_ROOT%{install_dir}/inc/shs0001.wsdl"
 
 # Install the cron job
-mkdir -p "$RPM_BUILD_ROOT/etc/cron.d"
-mv "$RPM_BUILD_ROOT%{install_dir}/mod/hms/inc/hms-cron"\
-   "$RPM_BUILD_ROOT/etc/cron.d/hms-cron"
+#mkdir -p "$RPM_BUILD_ROOT/etc/cron.d"
+#mv "$RPM_BUILD_ROOT%{install_dir}/inc/hms-cron"\
+#   "$RPM_BUILD_ROOT/etc/cron.d/hms-cron"
+rm -f "$RPM_BUILD_ROOT%{install_dir}/inc/hms-cron"
 
 # Create directory for HMS Archived Reports
-mkdir "$RPM_BUILD_ROOT%{install_dir}/files/hms_reports"
+mkdir "$RPM_BUILD_ROOT%{phpws_dir}/files/hms_reports"
 
 # Put the PDF generator in the right place
 mkdir -p "$RPM_BUILD_ROOT/opt"
-mv "$RPM_BUILD_ROOT%{install_dir}/mod/hms/inc/wkhtmltopdf-i386"\
+mv "hms/inc/wkhtmltopdf-i386"\
    "$RPM_BUILD_ROOT/opt/wkhtmltopdf-i386"
 
+# What's left is HMS, copy it to its module directory
+cp -r hms/* "$RPM_BUILD_ROOT%{install_dir}"
+
+
 %clean
-rm -rf "$RPM_BUILD_ROOT%install_dir"
+rm -rf "$RPM_BUILD_ROOT%{install_dir}"
+rm -f "$RPM_BUILD_ROOT/phpws_dir/mod/usrs/scripts/hms-cosign.php"
+rm -f "$RPM_BUILD_ROOT/etc/cron.d/hms-cron"
+rmdir -f "$RPM_BUILD_ROOT%{phpws_dir}/files/hms_reports"
+rm -f "$RPM_BUILD_ROOT/opt/wkhtmltopdf-i386"
 
 %files
-%defattr(-,apache,apache)
-%{install_dir}
 %defattr(-,root,root)
-/etc/cron.d/hms-cron
-%attr(0755,-,-) /opt/wkhtmltopdf-i386
+%{install_dir}
+%{phpws_dir}/mod/users/scripts/hms-cosign.php"
+%attr(-,apache,apache) %{phpws_dir}/files/hms_reports
+#/etc/cron.d/hms-cron
+%attr(0755,root,root) /opt/wkhtmltopdf-i386
 
 %changelog
+* Wed Oct 22 2012 Jeff Tickle <jtickle@tux.appstate.edu>
+- Works better with Continuous Integration
 * Fri Oct 21 2011 Jeff Tickle <jtickle@tux.appstate.edu>
 - Made the phpwebsite install more robust, including the theme
 - Added Cron Job, but never tested it so it probably won't work

@@ -9,7 +9,7 @@
     <target name="build-parallel"
         depends="prepare,lint,tools-parallel,phpunit,phpcb" />
     
-    <target name="metrics" depends="phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpdox,phpunit,phpcb" />
+    <target name="post-rpm" depends="phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpdox,phpunit,phpcb" />
 
     <target name="tools-parallel"
         description="Run tools in parallel">
@@ -38,6 +38,7 @@
         <mkdir dir="${basedir}/build/pdepend"/>
         <mkdir dir="${basedir}/build/phpdox"/>
         <mkdir dir="${basedir}/build/rpm" />
+        <mkdir dir="${basedir}/build/bin" />
     </target>
 
     <target name="lint">
@@ -149,46 +150,4 @@
         <exclude name="phpdox.xml" />
         <exclude name="cache.properties" />
     </tarfileset>
-
-    <target name="tarball" depends="build" description="Tar it up">
-        <tar destfile="${basedir}/build/hms-${RELVERSION}.tar.bz2" compression="bzip2">
-            <tarfileset refid="hms-tarball" />
-        </tar>
-    </target>
-
-    <target name="rpm" depends="tarball" description="Build an RPM">
-        <move file="${basedir}/phpwebsite-*.tar.bz2"
-            tofile="${basedir}/build/phpwebsite-latest.tar.bz2" />
-        <exec executable="rpmbuild">
-            <arg value="--define" />
-            <arg value="_topdir ${basedir}/build/rpm" />
-            <arg value="--define" />
-            <arg value="_rpmdir %{_topdir}" />
-            <arg value="--define" />
-            <arg value="_srcrpmdir %{_topdir}" />
-            <arg value="--define" />
-            <arg value="_rpmfilename %%{NAME}-%%{VERSION}-%%{RELEASE}.%%{ARCH}.rpm" />
-            <arg value="--define" />
-            <arg value="_specdir %{_topdir}" />
-            <arg value="--define" />
-            <arg value="_sourcedir ${basedir}/build" />
-            <arg value="--define" />
-            <arg value="vendor ESS" />
-            <arg value="--define" />
-            <arg value="version ${RELVERSION}" />
-            <arg value="--define" />
-            <arg value="_signature gpg" />
-            <arg value="--define" />
-            <arg value="_gpg_path /etc/ess/gnupg" />
-            <arg value="--define" />
-            <arg value="_gpg_name Electronic Student Services" />
-            <arg value="--define" />
-            <arg value="_gpgbin /usr/bin/gpg" />            
-            <arg value="--define" />
-            <arg value="_binaries_in_noarch_packages_terminate_build 0" />
-            <arg value="-bb" />
-            <arg value="--sign" />
-            <arg path="${basedir}/hms.spec" />
-        </exec>
-    </target>
 </project>
