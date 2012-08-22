@@ -58,7 +58,8 @@ cp -r * "$RPM_BUILD_ROOT%{install_dir}"
 %clean
 rm -rf "$RPM_BUILD_ROOT%{install_dir}"
 rm -f "$RPM_BUILD_ROOT/etc/cron.d/hms-cron"
-rmdir -f "$RPM_BUILD_ROOT%{phpws_dir}/files/hms_reports"
+rmdir "$RPM_BUILD_ROOT%{phpws_dir}/files/hms_reports"
+rmdir "$RPM_BUILD_ROOT%{phpws_dir}/files"
 rm -f "$RPM_BUILD_ROOT/opt/wkhtmltopdf-i386"
 
 %files
