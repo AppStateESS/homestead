@@ -27,18 +27,18 @@ The Housing Management System
 mkdir -p "$RPM_BUILD_ROOT%{install_dir}"
 
 # Clean up crap from the repo that doesn't need to be in production
-rm -Rf "hms/util"
-rm -f "hms/inc/shs0001.wsdl"
-rm -f "hms/inc/shs0001.wsdl.testing"
-rm -f "hms/build.xml"
-rm -f "hms/hms.spec"
+rm -Rf "util"
+rm -f "inc/shs0001.wsdl"
+rm -f "inc/shs0001.wsdl.testing"
+rm -f "build.xml"
+rm -f "hms.spec"
 
 # Install HMS Cosign script to phpWebSite
-mv "hms/inc/cosign.php" \
+mv "inc/cosign.php" \
    "$RPM_BUILD_ROOT%{phpws_dir}/mod/users/scripts/hms-cosign.php"
 
 # Install the production Banner WSDL file
-mv "hms/inc/shs0001.wsdl.prod"\
+mv "inc/shs0001.wsdl.prod"\
    "$RPM_BUILD_ROOT%{install_dir}/inc/shs0001.wsdl"
 
 # Install the cron job
@@ -52,11 +52,11 @@ mkdir "$RPM_BUILD_ROOT%{phpws_dir}/files/hms_reports"
 
 # Put the PDF generator in the right place
 mkdir -p "$RPM_BUILD_ROOT/opt"
-mv "hms/inc/wkhtmltopdf-i386"\
+mv "inc/wkhtmltopdf-i386"\
    "$RPM_BUILD_ROOT/opt/wkhtmltopdf-i386"
 
 # What's left is HMS, copy it to its module directory
-cp -r hms/* "$RPM_BUILD_ROOT%{install_dir}"
+cp -r * "$RPM_BUILD_ROOT%{install_dir}"
 
 
 %clean
