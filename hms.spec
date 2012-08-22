@@ -34,17 +34,18 @@ rm -f "build.xml"
 rm -f "hms.spec"
 
 # Install the production Banner WSDL file
+mkdir -p "$RPM_BUILD_ROOT%{install_dir}/inc"
 mv "inc/shs0001.wsdl.prod"\
    "$RPM_BUILD_ROOT%{install_dir}/inc/shs0001.wsdl"
 
 # Install the cron job
 #mkdir -p "$RPM_BUILD_ROOT/etc/cron.d"
-#mv "$RPM_BUILD_ROOT%{install_dir}/inc/hms-cron"\
+#mv "inc/hms-cron"\
 #   "$RPM_BUILD_ROOT/etc/cron.d/hms-cron"
-rm -f "$RPM_BUILD_ROOT%{install_dir}/inc/hms-cron"
+rm -f "inc/hms-cron"
 
 # Create directory for HMS Archived Reports
-mkdir "$RPM_BUILD_ROOT%{phpws_dir}/files/hms_reports"
+mkdir -p "$RPM_BUILD_ROOT%{phpws_dir}/files/hms_reports"
 
 # Put the PDF generator in the right place
 mkdir -p "$RPM_BUILD_ROOT/opt"
@@ -53,7 +54,6 @@ mv "inc/wkhtmltopdf-i386"\
 
 # What's left is HMS, copy it to its module directory
 cp -r * "$RPM_BUILD_ROOT%{install_dir}"
-
 
 %clean
 rm -rf "$RPM_BUILD_ROOT%{install_dir}"
