@@ -18,42 +18,50 @@ BuildArch: noarch
 The Housing Management System
 
 %prep
-%setup -n hms
+%setup -n %{name}-%{version}-%{release}
 
 %post
 /usr/bin/curl -L -k http://127.0.0.1/apc/clear
 
 %install
 mkdir -p "$RPM_BUILD_ROOT%{install_dir}"
+cp -r * "$RPM_BUILD_ROOT%{install_dir}"
+
+# Default Deletes for clean RPM
+
+rm -Rf "$RPM_BUILD_ROOT%{install_dir}/docs/"
+rm -Rf "$RPM_BUILD_ROOT%{install_dir}/.hg/"
+rm -f "$RPM_BUILD_ROOT%{install_dir}/.hgtags"
+rm -f "$RPM_BUILD_ROOT%{install_dir}/build.xml"
+rm -f "$RPM_BUILD_ROOT%{install_dir}/faxmaster.spec"
+rm -f "$RPM_BUILD_ROOT%{install_dir}/phpdox.xml"
+rm -f "$RPM_BUILD_ROOT%{install_dir}/cache.properties"
 
 # Clean up crap from the repo that doesn't need to be in production
-rm -Rf "util"
-rm -f "inc/shs0001.wsdl"
-rm -f "inc/shs0001.wsdl.testing"
-rm -f "build.xml"
-rm -f "hms.spec"
+rm -Rf "$RPM_BUILD_ROOT%{install_dir}util"
+rm -f "$RPM_BUILD_ROOT%{install_dir}inc/shs0001.wsdl"
+rm -f "$RPM_BUILD_ROOT%{install_dir}inc/shs0001.wsdl.testing"
+rm -f "$RPM_BUILD_ROOT%{install_dir}build.xml"
+rm -f "$RPM_BUILD_ROOT%{install_dir}hms.spec"
 
 # Install the production Banner WSDL file
 mkdir -p "$RPM_BUILD_ROOT%{install_dir}/inc"
-mv "inc/shs0001.wsdl.prod"\
+mv "$RPM_BUILD_ROOT%{install_dir}inc/shs0001.wsdl.prod"\
    "$RPM_BUILD_ROOT%{install_dir}/inc/shs0001.wsdl"
 
 # Install the cron job
 #mkdir -p "$RPM_BUILD_ROOT/etc/cron.d"
-#mv "inc/hms-cron"\
+#mv "$RPM_BUILD_ROOT%{install_dir}/inc/hms-cron"\
 #   "$RPM_BUILD_ROOT/etc/cron.d/hms-cron"
-rm -f "inc/hms-cron"
+rm -f "$RPM_BUILD_ROOT%{install_dir}/inc/hms-cron"
 
 # Create directory for HMS Archived Reports
 mkdir -p "$RPM_BUILD_ROOT%{phpws_dir}/files/hms_reports"
 
 # Put the PDF generator in the right place
 mkdir -p "$RPM_BUILD_ROOT/opt"
-mv "inc/wkhtmltopdf-i386"\
+mv "$RPM_BUILD_ROOT%{install_dir}inc/wkhtmltopdf-i386"\
    "$RPM_BUILD_ROOT/opt/wkhtmltopdf-i386"
-
-# What's left is HMS, copy it to its module directory
-cp -r * "$RPM_BUILD_ROOT%{install_dir}"
 
 %clean
 rm -rf "$RPM_BUILD_ROOT%{install_dir}"
