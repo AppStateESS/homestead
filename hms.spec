@@ -38,15 +38,15 @@ rm -f "$RPM_BUILD_ROOT%{install_dir}/phpdox.xml"
 rm -f "$RPM_BUILD_ROOT%{install_dir}/cache.properties"
 
 # Clean up crap from the repo that doesn't need to be in production
-rm -Rf "$RPM_BUILD_ROOT%{install_dir}util"
-rm -f "$RPM_BUILD_ROOT%{install_dir}inc/shs0001.wsdl"
-rm -f "$RPM_BUILD_ROOT%{install_dir}inc/shs0001.wsdl.testing"
-rm -f "$RPM_BUILD_ROOT%{install_dir}build.xml"
-rm -f "$RPM_BUILD_ROOT%{install_dir}hms.spec"
+rm -Rf "$RPM_BUILD_ROOT%{install_dir}/util"
+rm -f "$RPM_BUILD_ROOT%{install_dir}/inc/shs0001.wsdl"
+rm -f "$RPM_BUILD_ROOT%{install_dir}/inc/shs0001.wsdl.testing"
+rm -f "$RPM_BUILD_ROOT%{install_dir}/build.xml"
+rm -f "$RPM_BUILD_ROOT%{install_dir}/hms.spec"
 
 # Install the production Banner WSDL file
 mkdir -p "$RPM_BUILD_ROOT%{install_dir}/inc"
-mv "$RPM_BUILD_ROOT%{install_dir}inc/shs0001.wsdl.prod"\
+mv "$RPM_BUILD_ROOT%{install_dir}/inc/shs0001.wsdl.prod"\
    "$RPM_BUILD_ROOT%{install_dir}/inc/shs0001.wsdl"
 
 # Install the cron job
@@ -60,7 +60,7 @@ mkdir -p "$RPM_BUILD_ROOT%{phpws_dir}/files/hms_reports"
 
 # Put the PDF generator in the right place
 mkdir -p "$RPM_BUILD_ROOT/opt"
-mv "$RPM_BUILD_ROOT%{install_dir}inc/wkhtmltopdf-i386"\
+mv "$RPM_BUILD_ROOT%{install_dir}/inc/wkhtmltopdf-i386"\
    "$RPM_BUILD_ROOT/opt/wkhtmltopdf-i386"
 
 %clean
