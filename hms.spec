@@ -21,7 +21,7 @@ The Housing Management System
 %setup -n hms
 
 %post
-/usr/bin/curl -L http://127.0.0.1/apc/clear
+/usr/bin/curl -L -k http://127.0.0.1/apc/clear
 
 %install
 mkdir -p "$RPM_BUILD_ROOT%{install_dir}"
