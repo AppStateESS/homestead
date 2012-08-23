@@ -9,7 +9,9 @@
     <target name="build-parallel"
         depends="prepare,lint,tools-parallel,phpunit,phpcb" />
     
-    <target name="post-rpm" depends="phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpdox,phpunit,phpcb" />
+    <target name="metrics" depends="phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpdox,phpunit,phpcb" />
+
+    <target name="post-rpm" depends="metrics" />
 
     <target name="tools-parallel"
         description="Run tools in parallel">
@@ -141,13 +143,4 @@
             <arg path="${basedir}/build/code-browser" />
         </exec>
     </target>
-
-    <tarfileset id="hms-tarball" dir="${basedir}" prefix="hms/">
-        <exclude name=".hg/**" />
-        <exclude name="build/**" />
-        <exclude name="build.xml" />
-        <exclude name="hms.spec" />
-        <exclude name="phpdox.xml" />
-        <exclude name="cache.properties" />
-    </tarfileset>
 </project>
