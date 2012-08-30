@@ -110,14 +110,14 @@ class AssignedStudentData extends Report implements iCsvReport {
                 $zip = $address->zip;
             }
 
-            $this->rows[] = array($username,$bannerId,$first,$middle,$last,$type,$appTerm,$cellPhone,$room,$dob,$line1,$line2,$line3,$city,$state,$zip);
+            $this->rows[] = array($username,$bannerId,$first,$middle,$last,$gender,$dob,$type,$appTerm,$cellPhone,$room,$line1,$line2,$line3,$city,$state,$zip);
         }
     }
 
     public function getCsvColumnsArray()
     {
-        return array('Username', 'Banner id', 'First name', 'Middle name',
-            'Last name', 'Student type', 'Application Term', 'Cell Phone', 'Assignment', 'Birthday', 'Address 1',
+        return array('Username', 'Banner id', 'First name', 'Middle name', 'Gender', 'Birthday',
+            'Last name', 'Student type', 'Application Term', 'Cell Phone', 'Assignment', 'Address 1',
             'Address 2', 'Address 3', 'City', 'State', 'Zip');
     }
 
