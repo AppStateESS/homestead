@@ -63,6 +63,7 @@ class ShowReportCsvCommand extends Command{
         // Check to make sure the file exists
         if(!file_exists($report->getCsvOutputFilename())){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Could not open report file.');
+            PHPWS_Error::log('Could not open report file ' . $report->getCsvOutputFilename(), 'hms');
             $reportCmd = CommandFactory::getCommand('ShowReportDetail');
             $reportCmd->setReportClass($report->getClass());
             $reportCmd->redirect();

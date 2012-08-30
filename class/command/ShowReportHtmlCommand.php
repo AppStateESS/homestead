@@ -70,6 +70,7 @@ class ShowReportHtmlCommand extends Command {
         
         if($content === FALSE){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Could not open report file.');
+            PHPWS_Error::log('Could not open report file ' . $report->getCsvOutputFilename(), 'hms');
             $reportCmd = CommandFactory::getCommand('ShowReportDetail');
             $reportCmd->setReportClass($report->getClass());
             $reportCmd->redirect();
