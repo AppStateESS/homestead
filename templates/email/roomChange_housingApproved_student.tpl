@@ -9,7 +9,7 @@ Please be sure to complete the following steps within 48 hours of receiving this
 
 1. PRINT this room change confirmation email - You must present this printed document to hall staff or you will not be allowed to change rooms.
 
-2. Go to your new residence hall and find a RA or hall supervisor (There is an RA on duty nightly from 7pm-11pm). Present this document, complete your new Resident Information Card, and receive your new room key.
+2. Go to your new residence hall and find a RA or hall supervisor (After 5pm the phone number for the RA on Duty is posted at the RA office in your hall. There is an RA in the hall office nightly from 8pm-Midnight). Present this document, complete your new Resident Information Card, and receive your new room key.
 
 3. Move your belongings to your new assignment.
 
