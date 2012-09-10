@@ -357,6 +357,7 @@ class HMS_Residence_Hall extends HMS_Item
         $db->addWhere('hms_residence_hall.id', $this->id);
         $db->addWhere('hms_room.offline', 0);
         $db->addWhere('hms_room.overflow', 0);
+        $db->addWhere('hms_room.parlor', 0);
 
         $result = $db->select('count');
 

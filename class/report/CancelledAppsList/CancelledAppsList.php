@@ -51,6 +51,7 @@ class CancelledAppsList extends Report implements iCsvReport{
 
             $row['bannerId']            = $app['banner_id'];
             $row['username']            = $app['username'];
+            $row['gender']              = HMS_Util::formatGender($app['gender']);
             $row['application_term']    = $app['application_term'];
             $row['student_type']        = $app['student_type'];
             $row['cancelled_reason']    = $reasons[$app['cancelled_reason']];
@@ -63,7 +64,7 @@ class CancelledAppsList extends Report implements iCsvReport{
 
     public function getCsvColumnsArray()
     {
-        return array('Banner Id', 'Username', 'Application Term', 'Student Type', 'Cancellation Reason', 'Cancellation Date', 'Cancelled By');
+        return array('Banner Id', 'Username', 'Gender', 'Application Term', 'Student Type', 'Cancellation Reason', 'Cancellation Date', 'Cancelled By');
     }
 
     public function getCsvRowsArray()
