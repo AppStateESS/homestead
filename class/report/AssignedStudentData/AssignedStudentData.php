@@ -116,8 +116,8 @@ class AssignedStudentData extends Report implements iCsvReport {
 
     public function getCsvColumnsArray()
     {
-        return array('Username', 'Banner id', 'First name', 'Middle name', 'Gender', 'Birthday',
-            'Last name', 'Student type', 'Application Term', 'Cell Phone', 'Assignment', 'Address 1',
+        return array('Username', 'Banner id', 'First name', 'Middle name', 'Last Name', 'Gender', 'Birthday',
+            'Student type', 'Application Term', 'Cell Phone', 'Assignment', 'Address 1',
             'Address 2', 'Address 3', 'City', 'State', 'Zip');
     }
 
