@@ -471,7 +471,7 @@ CREATE TABLE hms_activity_log (
     timestamp   INTEGER                 NOT NULL,
     activity    INTEGER                 NOT NULL,
     actor       CHARACTER VARYING(32)   NOT NULL,
-    notes       CHARACTER VARYING(512)
+    notes       CHARACTER VARYING
 );
 
 CREATE TABLE hms_lottery_reservation (
