@@ -83,7 +83,7 @@ class HMS_Bed extends HMS_Item {
                     $meal_option = BANNER_MEAL_STD;
                     if(!is_null($app)){
                         $meal_option = $app->getMealPlan();
-                    }
+                    } 
                     $note = "Assignment copied from ".Term::getPrintableCurrentTerm()." to ".Term::toString($to_term);
                     HMS_Assignment::assignStudent($student, $to_term, null, $new_bed->id, $meal_option, $note, false, $this->_curr_assignment->getReason());
                 }catch(Exception $e){
