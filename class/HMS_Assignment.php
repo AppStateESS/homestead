@@ -231,6 +231,11 @@ class HMS_Assignment extends HMS_Item
     {
         return $this->bed_id;
     }
+    
+    public function getReason()
+    {
+        return $this->reason;
+    }
 
     /******************
      * Static Methods *
