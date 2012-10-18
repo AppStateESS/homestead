@@ -120,6 +120,13 @@ class SOAPDataProvider extends StudentDataProvider {
         if($student->getApplicationTerm() > Term::getCurrentTerm() && $student->getType() == TYPE_CONTINUING){
             $student->setType(TYPE_FRESHMEN);
         }
+        
+        // This is a hack to fix the student type for international grad students
+        $type = $student->getType();
+        if((!isset($type) || $type == '') && $student->getStudentLevel() == LEVEL_GRAD && $student->isInternational() == 1){
+            $student->setType(TYPE_GRADUATE);
+            $student->setClass(CLASS_SENIOR);
+        }
 
         if($student->getUsername() == 'marshallkd'){
             $student->setApplicationTerm(201040);
