@@ -37,7 +37,9 @@ class UnassignStudentView extends View {
         $form->addDropBox('unassignment_type', array(
         	UNASSIGN_ADMIN      => 'Administrative',
         	UNASSIGN_REASSIGN   => 'Re-assign',
-            UNASSIGN_CANCEL     => 'Contract Cancellation'));
+            UNASSIGN_CANCEL     => 'Contract Cancellation',
+            UNASSIGN_PRE_SPRING => 'Pre-spring room change',
+            UNASSIGN_RELEASE    => 'Contract Release'));
         	
         $form->setMatch('unassignment_type', UNASSIGN_ADMIN);
         $form->setLabel('unassignment_type', 'Unassignment Type: ');

@@ -146,10 +146,12 @@ define('ASSIGN_COPY',		'acopy'); // For copying from previous term
 /***
  * Unassignment Reasons
  */
-define('UNASSIGN_ADMIN',	'uadmin'); // General administrative
-define('UNASSIGN_CHANGE',	'uchange'); // For room change process - cannot be used manually
-define('UNASSIGN_REASSIGN', 'ureassign'); // implicit removal for re-assign command
-define('UNASSIGN_CANCEL',   'ucancel'); // Contract cancellation 
+define('UNASSIGN_ADMIN',	  'uadmin'); // General administrative
+define('UNASSIGN_CHANGE',	  'uchange'); // For room change process - cannot be used manually
+define('UNASSIGN_REASSIGN',   'ureassign'); // implicit removal for re-assign command
+define('UNASSIGN_CANCEL',     'ucancel'); // Contract cancellation 
+define('UNASSIGN_PRE_SPRING', 'uprespring'); // Pre-spring room change
+define('UNASSIGN_RELEASE',    'urelease'); // Contract release
 
 /***
  * Pretty Names for Assign/Cancel Reasons
@@ -194,6 +196,8 @@ define('uadmin',	'Administrative');
 define('ucancel', 'Contract Cancellation');
 define('ureassign',	'Reassignment');
 define('uchange',	'Room Change');
+define('uprespring', 'Pre-spring Room Change');
+define('urelease', 'Contract Release');
 
 // This section is depricated
 define('uwithdrawn','Withdrawn');
