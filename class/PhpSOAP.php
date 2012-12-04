@@ -1,91 +1,144 @@
 <?php
 
 PHPWS_Core::initModClass('hms', 'SOAP.php');
+PHPWS_Core::initModClass('hms', 'exception/SOAPException.php');
+PHPWS_Core::initModClass('hms', 'exception/BannerException.php');
+PHPWS_Core::initModClass('hms', 'exception/StudentNotFoundException.php');
 
+/**
+ * PhpSOAP Class - Singleton implementation of SOAP class.
+ * Implements methods for access to Banner Housing Web Service via SOAP.
+ *
+ * @author Jeremy Booker
+ * @package hms
+ */
 class PhpSOAP extends SOAP
 {
     private $client; // SOAP client object
 
-    protected function __construct()
+    /**
+     * Constcutor
+     *
+     * @param string $username Username of the currently logged in user
+     * @param string $userType Type of user logged in. Valid values defined as class constants in SOAP.php
+     */
+    protected function __construct($username, $userType)
     {
-        parent::__construct();
+        parent::__construct($username,$userType);
         ini_set('soap.wsdl_cache_enabled', 0);
         $this->client = new SoapClient('file://' . PHPWS_SOURCE_DIR . 'mod/hms/inc/shs0001.wsdl', array('trace'=>true));
+        
+        test($this->client->__getFunctions());
+        test($this->client->__getTypes());
+
+        //TODO test $this->getParentAccess()
     }
 
-    public function getStudentInfo($username, $term)
+    public function getStudentProfile($bannerId, $term)
     {
-        // Sanity checking on the username
-        if(empty($username) || is_null($username) || !isset($username)){
-            throw new InvalidArgumentException('Bad username');
+
+        // Sanity checking on Banner Id
+        if(empty($bannerId) || is_null($bannerId) || !isset($bannerId)){
+            throw new InvalidArgumentException('Missing Banner Id.');
         }
 
         // Sanity checking on the term
         if(empty($term) || is_null($term) || !isset($term)){
-            throw new InvalidArgumentException('Bad term');
+            throw new InvalidArgumentException('Missing term.');
         }
 
-        $params = array('StudentID'=>$username, 'TermCode'=>$term);
+        $params = array('User'      => $this->currentUser,
+                        'BannerID'  => $bannerId,
+                        'TermCode'  => $term,
+                        'UserType'  => $this->userType);
 
         try{
             $response = $this->client->GetStudentProfile($params);
         }catch(SoapFault $e){
-            PHPWS_Core::initModClass('hms', 'exception/SOAPException.php');
-            throw new SOAPException($e->getMessage(), $e->getCode(), 'getStudentInfo', $params);
+            throw new SOAPException($e->getMessage(), $e->getCode(), 'getStudentProfile', $params);
             return false;
         }
 
-        SOAP::logSoap('getStudentInfo', 'success', $username, $term);
+        SOAP::logSoap('getStudentProfile', 'success', $params);
 
         return $response->profile;
     }
 
     public function getUsername($bannerId)
     {
-        $params = array('BannerID'=>$bannerId);
+        // Sanity checking on Banner Id
+        if(empty($bannerId) || is_null($bannerId) || !isset($bannerId)){
+            throw new InvalidArgumentException('Missing Banner Id.');
+        }
+
+        $params = array('User'=>$this->currentUser, 'BannerID'=>$bannerId);
 
         try{
             $response = $this->client->getUserName($params);
         }catch(SoapFault $e){
-            PHPWS_Core::initModClass('hms', 'exception/SOAPException.php');
             throw new SOAPException($e->getMessage(), $e->getCode(), 'getUsername', $params);
             return false;
         }
 
         if(!isset($response->GetUserNameResult)){
-            PHPWS_Core::initModClass('hms', 'exception/StudentNotFoundException.php');
-            throw new StudentNotFoundException("No matching student found with Banner ID: $bannerId.");
+            //throw new StudentNotFoundException("No matching student found with Banner ID: $bannerId.");
             return false;
         }
 
-        SOAP::logSoap('getUsername', 'success', $bannerId);
+        SOAP::logSoap('getUsername', 'success', $params);
 
         return $response->GetUserNameResult;
     }
 
+    public function getBannerId($username)
+    {
+        if(empty($username) || is_null($username) || !isset($username)){
+            throw new InvalidArgumentException('Missing username');
+        }
+
+        $params = array('User'      => $this->currentUser,
+                        'UserName'  => $username);
+
+        try{
+            $response = $this->client->GetBannerID($params);
+        }catch(SoapFault $e){
+            throw new SOAPException($e->getMessage(), $e->getCode(), 'getUsername', $params);
+            return false;
+        }
+      
+        SOAP::logSoap('getBannerId', 'success', $params);
+
+        return $response->GetBannerIDResult;
+    }
+
     public function isValidStudent($username, $term)
     {
-        // Sanity checking on the username
-        if(empty($username) || is_null($username) || !isset($username)){
-            throw new InvalidArgumentException('Bad username');
-        }
+        // Sanity checking on the Banner Id
+        /*
+        if(empty($bannerId) || is_null($bannerId) || !isset($bannerId)){
+            throw new InvalidArgumentException('Missing Banner Id.');
+        }*/
         
         // Sanity checking on the term
         if(empty($term) || is_null($term) || !isset($term)){
-            throw new InvalidArgumentException('Bad term');
+            throw new InvalidArgumentException('Missing term.');
         }
-        
-        $params = array('StudentID'=>$username, 'TermCode'=>$term);
+       
+        $bannerId = $this->getBannerId($username);
+
+        $params = array('User'      => $this->currentUser,
+                        'BannerID'  => $bannerId,
+                        'TermCode'  => $term,
+                        'UserType'  => $this->userType);
         
         try{
             $response = $this->client->GetStudentProfile($params);
         }catch(SoapFault $e){
-            PHPWS_Core::initModClass('hms', 'exception/SOAPException.php');
             throw new SOAPException($e->getMessage(), $e->getCode(), 'isValidStudent', $params);
             return false;
         }
         
-        SOAP::logSoap('isValidStudent', 'success', $username, $term);
+        SOAP::logSoap('isValidStudent', 'success', $params);
         
         if(isset($response->profile->banner_id)){
             return true;
@@ -94,114 +147,197 @@ class PhpSOAP extends SOAP
         }
     }
 
-    public function reportApplicationReceived($username, $term)
+    public function hasParentPin($bannerId)
     {
-        // meal plan code and meal code don't matter here
+        if(empty($bannerId) || is_null($bannerId) || !isset($bannerId)){
+            throw new InvalidArgumentException('Missing Banner Id.');
+        }
+
+        $params = array('User'       => $this->currentUser,
+                        'BannerID'   => $bannerId);
+
+        try {
+            $response = $this->client->HasParentPin($params);
+        }catch(SoapFault $e){
+            throw new SOAPException($e->getMessage(), $e->getCode(), 'isValidStudent', $params);
+            return false;
+        }
+
+        // If the response is empty, or has a numeric result, then there must have been some error
+        if(!isset($response->HasParentPinResult) || is_numeric($response->HasParentPinResult)){
+            throw new BannerException("Error while checking for parent PIN: {$response->HasParentPinResult}");
+        }
+
+        SOAP::logSoap('hasParentPin', 'success', $params);
+
+        // Expecting a 'Y' or an 'N' as valid response values. Anything else is an exception.
+        if($response->HasParentPinResult == 'Y'){
+            return true;
+        }else if($response->HasParentPinResult == 'N'){
+            return false;
+        }else {
+            throw new BannerException("Unexpected result while checking for parent PIN: {$response->HasParentPinResult}");
+            return false;
+        }
+    }
+
+    public function getParentAccess($bannerId, $parentPin)
+    {
+        if(empty($bannerId) || is_null($bannerId) || !isset($bannerId)){
+            throw new InvalidArgumentException('Missing Banner Id.');
+        }
+
+        if(empty($parentPin) || is_null($parentPin) || !isset($parentPin)){
+            throw new InvalidArgumentException('Missing parent PIN.');
+        }
+
+        $params = array('User'      => $this->currentUser,
+                        'BannerID'  => $bannerId,
+                        'ParentPin' => $parentPin);
+
+        try {
+            $response = $this->client->getParentAccess($params);
+        }catch(SoapFault $e){
+            throw new SOAPException($e->getMessage(), $e->getCode(), 'isValidStudent', $params);
+            return false;
+        }
+
+        SOAP::logSoap('getParentAccess', 'success', $params);
+
+        test($response,1);
+
+        //TODO
+    }
+
+    public function createHousingApp($bannerId, $term)
+    {
+        if(empty($bannerId) || is_null($bannerId) || !isset($bannerId)){
+            throw new InvalidArgumentException('Missing BannerID');
+        }
+
+        if(empty($term) || is_null($term) || !isset($term)){
+            throw new InvalidArgumentException('Missing term.');
+        }
+
         $params = array(
-                        'StudentID' => $username,
+                        'User'      => $this->currentUser,
+                        'BannerId'  => $bannerId,
                         'TermCode'  => $term,
-                        'PlanCode'  => 'HOME',
-                        'MealCode'  => 1);
+                        'PlanCode'  => 'HOME', // Hard-coded, magic numbers... but we really should need to pass these
+                        'MealCode'  => 1, // same here
+                        'UserType'  => $this->userType);
 
         try{
             $response = $this->client->CreateHousingApp($params);
         }catch(SoapFault $e){
-            PHPWS_Core::initModClass('hms', 'exception/SOAPException.php');
-            throw new SOAPException($e->getMessage(), $e->getCode(), 'reportApplicationReceived', $params);
+            throw new SOAPException($e->getMessage(), $e->getCode(), 'createHousingApp', $params);
             return false;
         }
 
+        // Check for a Banner error code
         if($response->CreateHousingAppResult != "0"){
-            SOAP::logSoap('reportApplicationReceived', 'failed', $username, $term);
-            PHPWS_Core::initModClass('hms', 'exception/BannerException.php');
+            SOAP::logSoap('createHousingApp', 'failed', $params);
             throw new BannerException('Error while reporting application to Banner.', $response->CreateHousingAppResult, 'reportApplicationReceived', $params);
             return false;
         }
 
-        SOAP::logSoap('reportApplicationReceived', 'success', $username, $term);
+        SOAP::logSoap('createHousingApp', 'success', $params);
+
         return true;
     }
-
-    public function reportRoomAssignment($username, $term, $building, $room, $plan = 'HOME', $meal)
+   
+    public function createRoomAssignment($bannerId, $term, $building, $bannerBedId, $plan = 'HOME', $meal)
     {
         $params = array(
-                        'StudentID'=>$username,
-                        'TermCode'=>$term,
-                        'BldgCode'=>$building,
-                        'RoomCode'=>$room,
-                        'PlanCode'=>$plan,
-                        'MealCode'=>$meal);
+                        'User'      => $this->currentUser,
+                        'BannerID'  => $bannerId,
+                        'TermCode'  => $term,
+                        'BldgCode'  => $building,
+                        'RoomCode'  => $room,
+                        'PlanCode'  => $plan,
+                        'MealCode'  => $meal,
+                        'UserType'  => $this->userType);
         try{
             $response = $this->client->CreateRoomAssignment($params);
         }catch(SoapFault $e){
-            PHPWS_Core::initModClass('hms', 'exception/SOAPException.php');
-            throw new SOAPException($e->getMessage(), $e->getCode(), 'reportRoomAssignment', $params);
+            throw new SOAPException($e->getMessage(), $e->getCode(), 'createRoomAssignment', $params);
             return false;
         }
 
         if($response->CreateRoomAssignmentResult != "0"){
-            SOAP::logSoap('reportRoomAssignment', 'failed', $username, $term, $building, $room, $meal);
-            PHPWS_Core::initModClass('hms', 'exception/BannerException.php');
-            throw new BannerException('Error while reporting assignment to Banner.', $response->CreateRoomAssignmentResult, 'reportRoomAssignment', $params);
+            SOAP::logSoap('createRoomAssignment', 'failed', $params);
+            throw new BannerException('Error while reporting assignment to Banner.', $response->CreateRoomAssignmentResult, 'createRoomAssignment', $params);
             return FALSE;
         }
 
-        SOAP::logSoap('reportRoomAssignment', 'success', $username, $term, $building, $room, $meal);
+        SOAP::logSoap('createRoomAssignment', 'success', $params);
+
         return true;
     }
 
-    public function removeRoomAssignment($username, $term, $building, $room)
+    /**
+     * Create a room assignment in Banner. Really just a wrapper for createRoomAssignment() now.
+     * @deprecated
+     * @see createRoomAssignment()
+     */
+    public function reportRoomAssignment($username, $term, $building, $room, $plan = 'HOME', $meal)
+    {
+        $bannerId = $this->getBannerId($username);
+        return $this->createRoomAssignment($bannerId, $term, $building, $room, $plan, $meal);
+    }
+
+    public function removeRoomAssignment($bannerId, $term, $building, $bannerBedId)
     {
         $params = array(
-                        'StudentID'=>$username,
-                        'TermCode'=>$term,
-                        'BldgCode'=>$building,
-                        'RoomCode'=>$room);
+                        'User'      => $this->currentUser,
+                        'BannerId'  => $bannerId,
+                        'TermCode'  => $term,
+                        'BldgCode'  => $building,
+                        'RoomCode'  => $bannerBedId);
 
         try{
             $response = $this->client->RemoveRoomAssignment($params);
         }catch(SoapFault $e){
-            PHPWS_Core::initModClass('hms', 'exception/SOAPException.php');
             throw new SOAPException($e->getMessage(), $e->getCode(), 'removeRoomAssignment', $params);
             return false;
         }
 
         if($response->RemoveRoomAssignmentResult != "0"){
             SOAP::logSoap('removeRoomAssignment', 'failed (' . $response->RemoveRoomAssignmentResult . ')', $username, $term, $building, $room);
-            PHPWS_Core::initModClass('hms', 'exception/BannerException.php');
             throw new BannerException('Error while reporting removal to Banner.', $response->RemoveRoomAssignmentResult, 'removeRoomAssignment', $params);
             return false;
         }
 
-        SOAP::logSoap('removeRoomAssignment', 'success', $username, $term, $building, $room);
+        SOAP::logSoap('removeRoomAssignment', 'success', $params);
         return TRUE;
     }
 
-    public function getHousMealRegister($username, $term, $opt)
+    public function getHousMealRegister($bannerId, $term, $opt)
     {
         $params = array(
-                        'StudentID'=>$username,
-                        'TermCode'=>$term,
-                        'Option'=>$opt);
+                        'User'      => $this->currentUser,
+                        'BannerID'  => $bannerId,
+                        'TermCode'  => $term,
+                        'Option'    => $opt);
 
         try{
             $response = $this->client->GetHousMealRegister($params);
         }catch(SoapFault $e){
-            PHPWS_Core::initModClass('hms', 'exception/SOAPException.php');
             throw new SOAPException($e->getMessage(), $e->getCode(), 'getHousMealRegister', $params);
             return false;
         }
 
-        SOAP::logSoap('getHousMealRegister', 'success', $username, $term, $opt);
+        SOAP::logSoap('getHousMealRegister', 'success', $params);
         return $response->GetHousMealRegister;
     }
 
     public function getBannerIdByBuildingRoom($building, $room, $term)
     {
         $params = array(
-                        'BldgCode'=>$building,
-                        'RoomCode'=>$room,
-                        'TermCode'=>$term);
+                        'User'      => $this->currentUser,
+                        'BldgCode'  => $building,
+                        'RoomCode'  => $room,
+                        'TermCode'  => $term);
 
         try{
             $response = $this->client->GetBannerIDbyBuildingRoom($params);
@@ -210,7 +346,7 @@ class PhpSOAP extends SOAP
             return false;
         }
 
-        SOAP::logSoap('getBannerIdByBuildingRoom', 'success', $building, $room, $term);
+        SOAP::logSoap('getBannerIdByBuildingRoom', 'success', $params);
 
         if(isset($response->GetBannerIDbyBuildingRoomResult)){
             return $response->GetBannerIDbyBuildingRoomResult;
@@ -219,11 +355,12 @@ class PhpSOAP extends SOAP
         }
     }
 
-    public function setHousingWaiver($username, $term)
+    public function setHousingWaiver($bannerId, $term)
     {
         $params = array(
-                            'StudentID'=>$username,
-                            'TermCode'=>$term);
+                        'User'      => $this->currentUser,
+                        'BannerID'  => $bannerId,
+                        'TermCode'  => $term);
 
         try{
             $response = $this->client->SetHousingWaiver($params);
@@ -237,16 +374,17 @@ class PhpSOAP extends SOAP
             return false;
         }
 
-        SOAP::logSoap('setHousingWaiver', 'success', $username, $term);
+        SOAP::logSoap('setHousingWaiver', 'success', $params);
 
         return true;
     }
 
-    public function clearHousingWaiver($username, $term)
+    public function clearHousingWaiver($bannerId, $term)
     {
         $params = array(
-                            'StudentID'=>$username,
-                            'TermCode'=>$term);
+                        'User'      => $this->currentUser,
+                        'BannerID'  => $bannerId,
+                        'TermCode'  => $term);
 
         try{
             $response = $this->client->ClearHousingWaiver($params);
@@ -260,7 +398,7 @@ class PhpSOAP extends SOAP
             return false;
         }
 
-        SOAP::logSoap('clearHousingWaiver', 'success', $username, $term);
+        SOAP::logSoap('clearHousingWaiver', 'success', $params);
 
         return true;
     }

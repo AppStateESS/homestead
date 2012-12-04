@@ -6,15 +6,29 @@ class SOAPDataProvider extends StudentDataProvider {
 
     public function getStudentByUsername($username, $term)
     {
-        $student = new Student();
-        $student->setUsername($username);
+        $soap = SOAP::getInstance(UserStatus::getUsername(), UserStatus::isAdmin()?(SOAP::ADMIN_USER):(SOAP::STUDENT_USER));
+        $id = $soap->getBannerId($username);
 
-        $soap = SOAP::getInstance();
-        $soapData = $soap->getStudentInfo($username, $term);
-
-        if(!isset($soapData->banner_id) || is_null($soapData->banner_id) || empty($soapData->banner_id)){
+        if(!isset($id) || is_null($id) || empty($id)){
             PHPWS_Core::initModClass('hms', 'exception/StudentNotFoundException.php');
             throw new StudentNotFoundException('No matching student found.');
+        }
+
+        return SOAPDataProvider::getStudentById($id, $term);
+    }
+
+    public function getStudentById($id, $term)
+    {
+        $student = new Student();
+
+        $soap = SOAP::getInstance(UserStatus::getUsername(), UserStatus::isAdmin()?(SOAP::ADMIN_USER):(SOAP::STUDENT_USER));
+        $soapData = $soap->getStudentProfile($id, $term);
+
+        if($soapData->error_num == 1101 && $soapData->error_desc == 'LookupStudentID'){
+            PHPWS_Core::initModClass('hms', 'exception/StudentNotFoundException.php');
+            throw new StudentNotFoundException('No matching student found.');
+        }elseif (isset($soapData->error_num) && $soapData->error_num > 0){
+            throw new SOAPException("Error while accessing SOAP interface: {$soapData->errorDesc} ({$soapData->error_num})");
         }
 
         SOAPDataProvider::plugSOAPData($student, $soapData);
@@ -24,22 +38,10 @@ class SOAPDataProvider extends StudentDataProvider {
         return $student;
     }
 
-    public function getStudentById($id, $term)
-    {
-        $soap = SOAP::getInstance();
-        $username = $soap->getUsername($id);
-
-        if(!isset($username) || is_null($username) || empty($username)){
-            PHPWS_Core::initModClass('hms', 'exception/StudentNotFoundException.php');
-            throw new StudentNotFoundException('No matching student found.');
-        }
-
-        return SOAPDataProvider::getStudentByUsername($username, $term);
-    }
-
     private static function plugSOAPData(&$student, $soapData)
     {
         $student->setBannerId($soapData->banner_id);
+        $student->setUsername($soapData->user_name);
 
         $student->setFirstName($soapData->first_name);
         $student->setMiddleName($soapData->middle_name);

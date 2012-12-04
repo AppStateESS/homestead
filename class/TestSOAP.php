@@ -10,7 +10,7 @@ class TestSOAP extends SOAP{
      * @return SOAP object
      * @throws InvalidArgumentException, SOAPException
      */
-    public function getStudentInfo($username, $term)
+    public function getStudentProfile($username, $term)
     {
         // Sanity checking on the username
         if(empty($username) || is_null($username) || !isset($username)){
@@ -48,7 +48,7 @@ class TestSOAP extends SOAP{
         //$student->projected_class       = 'FR';
 
         $student->student_type          = 'F';
-        $student->application_term      = '201220';
+        $student->application_term      = '201240';
         $student->projected_class       = 'FR';
 
         $student->credhrs_completed     = 0;

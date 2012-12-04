@@ -9,31 +9,44 @@
 abstract class SOAP
 {
 
+    // User types
+    const ADMIN_USER    = 'A';
+    const STUDENT_USER  = 'S';
+
     protected static $instance;
     protected static $cache;
 
+    protected static $currentUser; // User name for the currently logged in user
+    protected static $userType; // User type (one of 'S' (student), or 'A' (admin staff)
+
     /**
      * Constructor
+     *
+     * @param string $username Username of the currently logged in user
+     * @param string $userType The user type of the currently logged in user (one of 'S' (student), or 'A' (admin staff)
      */
-    protected function __construct()
+    protected function __construct($username, $userType)
     {
-
+        $this->currentUser  = $username;
+        $this->userType     = $userType;
     }
 
     /**
      * Get an instance of the singleton.
      *
+     * @param string $username User name of the currently logged in user
+     * @param enum   $userType Type of user, as set in defines
      * @return SOAP - Instance of the SOAP class.
      */
-    public static function getInstance()
+    public static function getInstance($username, $userType)
     {
         if(empty(self::$instance)) {
             if(SOAP_INFO_TEST_FLAG) {
                 PHPWS_Core::initModClass('hms', 'TestSOAP.php');
-                self::$instance = new TestSOAP();
+                self::$instance = new TestSOAP($username, $userType);
             } else {
                 PHPWS_Core::initModClass('hms', 'PhpSOAP.php');
-                self::$instance = new PhpSOAP();
+                self::$instance = new PhpSOAP($username, $userType);
             }
         }
 
@@ -41,16 +54,39 @@ abstract class SOAP
     }
 
     /**
-     * Main public function for getting student info.
-     * Used by the rest of the "get" public functions
+     * Main public function for getting student info. Returns a Profile object from
+     * SOAP representing the requested student's pfofile data, or an empty object
+     * if no student exists with the requested banner id.
      *
+     * @param   string    $bannerId
+     * @param   Integer   $term
+     * @return  SOAP object
+     * @throws  InvalidArgumentException, SOAPException
+     */
+    public abstract function getStudentProfile($bannerId, $term);
+
+    /**
+     * Returns a Profile object from SOAP representing the requested student, or an empty object
+     * if the requested user name doesn't exist.
+     *
+     * Deprecated in favor of getStudentProfile()
+     *
+     * @deprecated
+     * @see getStudentProfile()
      * @param String    $username
      * @param Integer   $term
      * @return SOAP object
-     * @throws InvalidArgumentException, SOAPException
+     * @throws InvalidArgumentException
      */
-    public abstract function getStudentInfo($username, $term);
+    public function getStudentInfo($username, $term){
+        $bannerId = $this->getBannerId($username);
 
+        if(!isset($bannerId) || $bannerId == ''){
+            throw new InvalidArgumentException('No user found with username: ' . $username);
+        }
+
+        return $this->getStudentProfile($bannerId, $term);
+    }
 
     /**
      * Returns the ASU Username for the given banner id
@@ -62,7 +98,16 @@ abstract class SOAP
     public abstract function getUsername($bannerId);
 
     /**
-     * Returns true if the given user name corresponds to a valid student for the given semester. Returns false otherwise.
+     * Returns the Banner ID for the given username
+     * 
+     * @param string $username
+     * @return string banner id corresponding ot given user name
+     * @throws InvalidArgumentException, SOAPException
+     */
+    public abstract function getBannerId($username);
+   
+    /**
+     * Returns true if the given username corresponds to a valid student for the given semester. Returns false otherwise.
      *
      * @param String $username
      * @param Integer $term
@@ -71,19 +116,76 @@ abstract class SOAP
     public abstract function isValidStudent($username, $term);
 
     /**
+     * Returns true if the student with the given Banner ID has established a parent PIN in Banner, false otherwise.
+     *
+     * @param string $bannerId\
+     * @return boolean
+     * @throws InvalidArgumentException, BannerException
+     */
+    public abstract function hasParentPin($bannerId);
+
+    /**
+     * Returns a Array/Object (??) of parent access information for the student with
+     * the given Banner Id if the given parent PIN is correct (as set in Banner by the student).
+     *
+     * @param string $bannerId
+     * @param string $parentPin
+     * @return Mixed $parentAccess
+     * @throws InvalidArgumentException, BannerException
+     */
+    public abstract function getParentAccess($bannerId, $parentPin);
+
+    /**
      * Report that a housing application has been received.
      * Makes First Connections stop bugging the students.
-     *
+     * 
+     * @deprecated
+     * @see createHousingApp()
      * @param String $username
      * @param Integer $term
      * @return boolean True if successful
      * @throws InvalidArgumentException, SOAPException, BannerException
      */
-    public abstract function reportApplicationReceived($username, $term);
+    public function reportApplicationReceived($username, $term)
+    {
+        $bannerId = $this->getBannerId($username);
+
+        if(!isset($bannerId) || $bannerId == ''){
+            throw new InvalidArgumentException('No user found with username: ' . $username);
+        }
+
+        return $this->createHousingApp($bannerId, $term);
+    }
+
+    /**
+     * Create a housing application in Banner.
+     * Makes admissions software stop bugging students.
+     *
+     * @param string $bannerId The student's banner ID
+     * @param string $term The term for which the application should be created
+     * @throws InvalidArgumentException, SOAPException, BannerException
+     */
+    public abstract function createHousingApp($bannerId, $term);
+
+    /**
+     * Creates a room assignment in Banner. Will cause students to be billed, etc.
+     *
+     * @param String $bannerId
+     * @param Integer $term
+     * @param String $building Banner building code
+     * @param Integer $bannerBedId Banner bed Id.
+     * @param String $plan Banner plan code ('HOUSE' or 'HOME', defaults to 'HOME').
+     * @param Integer $meal Banner meal code (numeric code for meal plan level)
+     * @return boolean True if successful.
+     * @throws InvalidArgumentException, SOAPException, BannerException
+     */
+    public abstract function createRoomAssignment($bannerId, $term, $building, $bannerBedId, $plan = 'HOME', $meal);
 
     /**
      * Sends a room assignment to banner. Will cause students to be billed, etc.
      *
+     * @deprecated
+     * @see createRoomAssignment()
      * @param String $username
      * @param Integer $term
      * @param String $building_code Banner building code
@@ -96,17 +198,39 @@ abstract class SOAP
     public abstract function reportRoomAssignment($username, $term, $building_code, $room_code, $plan_code, $meal_code);
 
     /**
-     * Remove the deletion of a room assignment to Banner.
+     * Remove a room assignment in Banner.
      * Will cause students to be credited, etc.
      *
-     * @param String $username
+     * @param String $bannerId
      * @param Integer $term
      * @param String $building Banner building code
-     * @param Integer $room Banner bed code.
+     * @param Integer $bannerBedId Banner bed id.
      * @return boolean True if successful
      * @throws InvalidArgumentException, SOAPException, BannerException
      */
-    public abstract function removeRoomAssignment($username, $term, $building, $room);
+    public abstract function removeRoomAssignment($bannerId, $term, $building, $bannerBedId);
+
+    /**
+     * Sets the flag in Banner that says this student is exempt from
+     * the freshmen on-campus living requirement.
+     *
+     * @param string $bannerId
+     * @param string $term
+     * @return boolean True if successful, false otherwise
+     * @throws InvalidArgumentException, SOAPException, BannerException
+     */
+    public abstract function setHousingWaiver($bannerId, $term);
+
+    /**
+     * Sets the flag in Banner that says this student is exempt from
+     * the freshmen on-campus living requirement.
+     *
+     * @param string $bannerId
+     * @param string $term
+     * @return boolean True if successful, false otherwise
+     * @throws InvalidArgumentException, SOAPException, BannerException
+     */
+    public abstract function clearHousingWaiver($bannerId, $term);
 
     /**
      * Returns a student's current assignment information
@@ -116,13 +240,13 @@ abstract class SOAP
      *  'RoomAssign'
      *  'MealAssign'
      *
-     * @param String $username
-     * @param Integer $termcode
+     * @param String $bannerId
+     * @param Integer $term
      * @param String $opt
      * @return void
      * @throws InvalidArgumentException, SOAPException
      */
-    public abstract function getHousMealRegister($username, $termcode, $opt);
+    public abstract function getHousMealRegister($bannerId, $term, $opt);
     
     /**
      * Queries Banner for the BannerID of the student assigned to a given bed.
@@ -133,6 +257,8 @@ abstract class SOAP
      * @param Integer $term - The term to query for
      */
     public abstract function getBannerIdByBuildingRoom($building, $room, $term);
+
+
 
     /*********************
      * Utility Functions *
@@ -145,10 +271,9 @@ abstract class SOAP
      * @param String $result A string indicating the result of the function call. Could be anything (usually "success").
      * @return void
      */
-    protected static function logSoap($function, $result)
+    protected static function logSoap($function, $result, Array $params)
     {
-        $arglist = func_get_args();
-        $args = implode(', ', array_slice($arglist, 2));
+        $args = implode(', ', $params);
         $msg = "$function($args) result: $result";
         PHPWS_Core::log($msg, 'soap.log', 'SOAP');
     }

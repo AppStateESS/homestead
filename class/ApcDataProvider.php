@@ -11,47 +11,52 @@
 
 class ApcDataProvider extends StudentDataProvider {
 
-    private function makeCacheKey($username, $term)
+    private function makeCacheKey($bannerId, $term)
+    {
+        return $bannerId . $term;
+    }
+
+    /**
+     * Returns a key to use for looking up a banner ID by username.
+     */
+    private function makeUsernameKey($username, $term)
     {
         return $username . $term;
     }
 
     public function getStudentByUsername($username, $term)
     {
-        $key = $this->makeCacheKey($username, $term);
 
-        $val = apc_fetch($key);
-        if($val !== FALSE){
-            return $val;
-        }else{
-            $provider = $this->getFallbackProvider();
-            $result   = $provider->getStudentByUsername($username, $term);
-
-            $this->refreshCache($result,$term);
-
-            return $result;
+        // Since we use BannerID to store the actual student object, check for a key holding username => banner id
+        $bannerId = apc_fetch($this->makeCacheKey($username, $term));
+        if($bannerId !== FALSE){
+           // If that key existed, then it should hold the Banner ID, so do a second lookup with the banner id
+           $key = $this->makeCacheKey($bannerId, $term);
+           $student = apc_fetch($key);
+           if($student !== FALSE){
+               return $student;
+           }
         }
+
+        // If we didn't find a cahce hit already, it means one key or the other wasn't in the cache, so fallback to next cache level
+        $provider = $this->getFallbackProvider();
+        $result   = $provider->getStudentByUsername($username, $term);
+
+        $this->refreshCache($result,$term);
+
+        return $result;
     }
 
-    public function getStudentById($id, $term)
+    public function getStudentById($bannerId, $term)
     {
-        // Look for a key using the banner id, which should be holding the username
-        $key = $id . $term;
-
-        $username = apc_fetch($key);
-
-        if($username !== FALSE){
-            // If that key existed, then look for a key using the username, which should be holding the student object
-            $key = $this->makeCacheKey($username, $term);
-            $student = apc_fetch($key);
-            if($student !== FALSE){
-                return $student;
-            }
+        $key = $this->makeCacheKey($bannerId, $term);
+        $student = apc_fetch($key);
+        if($student !== FALSE){
+            return $student;
         }
 
-        // If we didn't return already, it means one key or the other wasn't in the cache
         $provider = $this->getFallbackProvider();
-        $result   = $provider->getStudentById($id, $term);
+        $result   = $provider->getStudentById($bannerId, $term);
 
         $this->refreshCache($result,$term);
 
@@ -64,12 +69,12 @@ class ApcDataProvider extends StudentDataProvider {
         // HMS takes a TTL of zero to mean "don't cache it at all"
         if($this->ttl > 0){
             // Store the actual user object
-            $key = $this->makeCacheKey($student->getUsername(), $term);
+            $key = $this->makeCacheKey($student->getBannerId(), $term);
             apc_store($key, $student, $this->ttl);
 
-            // Store a secondary key for bannerID->username lookup
-            $key = $student->getBannerId() . $term;
-            apc_store($key, $student->getUsername(), $this->ttl);
+            // Store a secondary key for username->BannerId lookup
+            $key = $student->getUsername() . $term;
+            apc_store($key, $student->getBannerId(), $this->ttl);
         }
     }
 

@@ -2,6 +2,7 @@
 
 class Student {
 
+    // TODO make these all private and make sure nothing breaks
     public $username;
     public $banner_id;
 

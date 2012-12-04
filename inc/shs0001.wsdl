@@ -6,8 +6,10 @@
       <s:element name="GetStudentProfile">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="0" maxOccurs="1" name="StudentID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="User" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="BannerID" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="TermCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="UserType" type="s:string" />
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -20,18 +22,22 @@
       </s:element>
       <s:complexType name="Profile">
         <s:sequence>
-          <s:element minOccurs="1" maxOccurs="1" name="banner_id" nillable="true" type="s:token" />
+          <s:element minOccurs="1" maxOccurs="1" name="user_name" nillable="true" type="s:token" />
           <s:element minOccurs="1" maxOccurs="1" name="last_name" nillable="true" type="s:token" />
           <s:element minOccurs="1" maxOccurs="1" name="first_name" nillable="true" type="s:token" />
           <s:element minOccurs="1" maxOccurs="1" name="middle_name" nillable="true" type="s:token" />
+          <s:element minOccurs="1" maxOccurs="1" name="pref_name" nillable="true" type="s:token" />
           <s:element minOccurs="1" maxOccurs="1" name="dob" nillable="true" type="s:date" />
           <s:element minOccurs="1" maxOccurs="1" name="gender" nillable="true" type="s:NMTOKEN" />
+          <s:element minOccurs="1" maxOccurs="1" name="confid" nillable="true" type="s:NMTOKEN" />
           <s:element minOccurs="1" maxOccurs="1" name="deposit_date" nillable="true" type="s:date" />
           <s:element minOccurs="1" maxOccurs="1" name="housing_waiver" type="s:boolean" />
           <s:element minOccurs="0" maxOccurs="1" name="app_decision_code" type="s:NMTOKEN" />
+          <s:element minOccurs="0" maxOccurs="1" name="app_decision_desc" type="s:NMTOKEN" />
           <s:element minOccurs="1" maxOccurs="1" name="student_type" nillable="true" type="s:NMTOKEN" />
           <s:element minOccurs="1" maxOccurs="1" name="application_term" nillable="true" type="s:NMTOKEN" />
           <s:element minOccurs="1" maxOccurs="1" name="disabled_pin" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="greek" nillable="true" type="s:NMTOKEN" />
           <s:element minOccurs="1" maxOccurs="1" name="projected_class" nillable="true" type="s:NMTOKEN" />
           <s:element minOccurs="1" maxOccurs="1" name="credhrs_completed" type="s:short" />
           <s:element minOccurs="1" maxOccurs="1" name="credhrs_for_term" type="s:short" />
@@ -45,7 +51,7 @@
           <s:element minOccurs="0" maxOccurs="unbounded" name="phone" nillable="true" type="tns:Phone" />
           <s:element minOccurs="0" maxOccurs="unbounded" name="disability" nillable="true" type="tns:Disability" />
         </s:sequence>
-        <s:attribute name="student_id" type="s:NMTOKEN" />
+        <s:attribute name="banner_id" type="s:NMTOKEN" />
         <s:attribute name="term_code" type="s:NMTOKEN" />
         <s:attribute name="error_num" type="s:int" use="required" />
         <s:attribute name="error_desc" type="s:string" />
@@ -69,6 +75,7 @@
           <s:element minOccurs="1" maxOccurs="1" name="area_code" nillable="true" type="s:token" />
           <s:element minOccurs="1" maxOccurs="1" name="number" nillable="true" type="s:token" />
           <s:element minOccurs="1" maxOccurs="1" name="ext" nillable="true" type="s:token" />
+          <s:element minOccurs="1" maxOccurs="1" name="unlisted" nillable="true" type="s:token" />
         </s:sequence>
         <s:attribute name="type_code" type="s:NMTOKEN" />
         <s:attribute name="seqno" type="s:short" use="required" />
@@ -80,10 +87,12 @@
       <s:element name="CreateHousingApp">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="0" maxOccurs="1" name="StudentID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="User" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="BannerID" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="TermCode" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="PlanCode" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="MealCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="UserType" type="s:string" />
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -97,7 +106,8 @@
       <s:element name="GetHousMealRegister">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="0" maxOccurs="1" name="StudentID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="User" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="BannerID" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="TermCode" type="s:string" />
             <s:element minOccurs="1" maxOccurs="1" name="Option" type="tns:HousMealLookupOpt" />
           </s:sequence>
@@ -155,7 +165,8 @@
       <s:element name="SetHousingWaiver">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="0" maxOccurs="1" name="StudentID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="User" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="BannerID" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="TermCode" type="s:string" />
           </s:sequence>
         </s:complexType>
@@ -170,7 +181,8 @@
       <s:element name="ClearHousingWaiver">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="0" maxOccurs="1" name="StudentID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="User" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="BannerID" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="TermCode" type="s:string" />
           </s:sequence>
         </s:complexType>
@@ -185,6 +197,7 @@
       <s:element name="GetBannerIDbyBuildingRoom">
         <s:complexType>
           <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="User" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="BldgCode" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="RoomCode" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="TermCode" type="s:string" />
@@ -198,9 +211,70 @@
           </s:sequence>
         </s:complexType>
       </s:element>
+      <s:element name="GetParentAccess">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="User" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="BannerID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ParentPin" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetParentAccessResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="GetParentAccessResult" type="tns:Parent" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="Parent">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="pin_correct" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="parent_one_name" nillable="true" type="s:NMTOKEN" />
+          <s:element minOccurs="1" maxOccurs="1" name="parent_two_name" nillable="true" type="s:NMTOKEN" />
+          <s:element minOccurs="1" maxOccurs="1" name="parent_one_email" nillable="true" type="s:NMTOKEN" />
+          <s:element minOccurs="1" maxOccurs="1" name="parent_two_email" nillable="true" type="s:NMTOKEN" />
+          <s:element minOccurs="1" maxOccurs="1" name="student_account_ind" nillable="true" type="s:NMTOKEN" />
+          <s:element minOccurs="1" maxOccurs="1" name="housing_ind" nillable="true" type="s:NMTOKEN" />
+        </s:sequence>
+        <s:attribute name="banner_id" type="s:NMTOKEN" />
+        <s:attribute name="error_num" type="s:int" use="required" />
+        <s:attribute name="error_desc" type="s:string" />
+      </s:complexType>
+      <s:element name="HasParentPin">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="User" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="BannerID" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="HasParentPinResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="HasParentPinResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetBannerID">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="User" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="UserName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetBannerIDResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetBannerIDResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
       <s:element name="GetUserName">
         <s:complexType>
           <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="User" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="BannerID" type="s:string" />
           </s:sequence>
         </s:complexType>
@@ -215,12 +289,14 @@
       <s:element name="CreateRoomAssignment">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="0" maxOccurs="1" name="StudentID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="User" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="BannerID" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="TermCode" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="BldgCode" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="RoomCode" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="PlanCode" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="MealCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="UserType" type="s:string" />
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -234,7 +310,8 @@
       <s:element name="RemoveRoomAssignment">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="0" maxOccurs="1" name="StudentID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="User" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="BannerID" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="TermCode" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="BldgCode" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="RoomCode" type="s:string" />
@@ -248,29 +325,11 @@
           </s:sequence>
         </s:complexType>
       </s:element>
-      <s:element name="MoveRoomAssignment">
-        <s:complexType>
-          <s:sequence>
-            <s:element minOccurs="0" maxOccurs="1" name="StudentID" type="s:string" />
-            <s:element minOccurs="0" maxOccurs="1" name="TermCode" type="s:string" />
-            <s:element minOccurs="0" maxOccurs="1" name="CurBldgCode" type="s:string" />
-            <s:element minOccurs="0" maxOccurs="1" name="CurRoomCode" type="s:string" />
-            <s:element minOccurs="0" maxOccurs="1" name="NewBldgCode" type="s:string" />
-            <s:element minOccurs="0" maxOccurs="1" name="NewRoomCode" type="s:string" />
-          </s:sequence>
-        </s:complexType>
-      </s:element>
-      <s:element name="MoveRoomAssignmentResponse">
-        <s:complexType>
-          <s:sequence>
-            <s:element minOccurs="1" maxOccurs="1" name="MoveRoomAssignmentResult" type="s:int" />
-          </s:sequence>
-        </s:complexType>
-      </s:element>
       <s:element name="RemoveMealAssignment">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="0" maxOccurs="1" name="StudentID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="User" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="BannerID" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="TermCode" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="MealCode" type="s:string" />
           </s:sequence>
@@ -321,6 +380,24 @@
   <wsdl:message name="GetBannerIDbyBuildingRoomSoapOut">
     <wsdl:part name="parameters" element="tns:GetBannerIDbyBuildingRoomResponse" />
   </wsdl:message>
+  <wsdl:message name="GetParentAccessSoapIn">
+    <wsdl:part name="parameters" element="tns:GetParentAccess" />
+  </wsdl:message>
+  <wsdl:message name="GetParentAccessSoapOut">
+    <wsdl:part name="parameters" element="tns:GetParentAccessResponse" />
+  </wsdl:message>
+  <wsdl:message name="HasParentPinSoapIn">
+    <wsdl:part name="parameters" element="tns:HasParentPin" />
+  </wsdl:message>
+  <wsdl:message name="HasParentPinSoapOut">
+    <wsdl:part name="parameters" element="tns:HasParentPinResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetBannerIDSoapIn">
+    <wsdl:part name="parameters" element="tns:GetBannerID" />
+  </wsdl:message>
+  <wsdl:message name="GetBannerIDSoapOut">
+    <wsdl:part name="parameters" element="tns:GetBannerIDResponse" />
+  </wsdl:message>
   <wsdl:message name="GetUserNameSoapIn">
     <wsdl:part name="parameters" element="tns:GetUserName" />
   </wsdl:message>
@@ -338,12 +415,6 @@
   </wsdl:message>
   <wsdl:message name="RemoveRoomAssignmentSoapOut">
     <wsdl:part name="parameters" element="tns:RemoveRoomAssignmentResponse" />
-  </wsdl:message>
-  <wsdl:message name="MoveRoomAssignmentSoapIn">
-    <wsdl:part name="parameters" element="tns:MoveRoomAssignment" />
-  </wsdl:message>
-  <wsdl:message name="MoveRoomAssignmentSoapOut">
-    <wsdl:part name="parameters" element="tns:MoveRoomAssignmentResponse" />
   </wsdl:message>
   <wsdl:message name="RemoveMealAssignmentSoapIn">
     <wsdl:part name="parameters" element="tns:RemoveMealAssignment" />
@@ -376,6 +447,18 @@
       <wsdl:input message="tns:GetBannerIDbyBuildingRoomSoapIn" />
       <wsdl:output message="tns:GetBannerIDbyBuildingRoomSoapOut" />
     </wsdl:operation>
+    <wsdl:operation name="GetParentAccess">
+      <wsdl:input message="tns:GetParentAccessSoapIn" />
+      <wsdl:output message="tns:GetParentAccessSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="HasParentPin">
+      <wsdl:input message="tns:HasParentPinSoapIn" />
+      <wsdl:output message="tns:HasParentPinSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBannerID">
+      <wsdl:input message="tns:GetBannerIDSoapIn" />
+      <wsdl:output message="tns:GetBannerIDSoapOut" />
+    </wsdl:operation>
     <wsdl:operation name="GetUserName">
       <wsdl:input message="tns:GetUserNameSoapIn" />
       <wsdl:output message="tns:GetUserNameSoapOut" />
@@ -387,10 +470,6 @@
     <wsdl:operation name="RemoveRoomAssignment">
       <wsdl:input message="tns:RemoveRoomAssignmentSoapIn" />
       <wsdl:output message="tns:RemoveRoomAssignmentSoapOut" />
-    </wsdl:operation>
-    <wsdl:operation name="MoveRoomAssignment">
-      <wsdl:input message="tns:MoveRoomAssignmentSoapIn" />
-      <wsdl:output message="tns:MoveRoomAssignmentSoapOut" />
     </wsdl:operation>
     <wsdl:operation name="RemoveMealAssignment">
       <wsdl:input message="tns:RemoveMealAssignmentSoapIn" />
@@ -453,6 +532,33 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="GetParentAccess">
+      <soap:operation soapAction="http://its.appstate.edu/xml/ess/shs/GetParentAccess" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="HasParentPin">
+      <soap:operation soapAction="http://its.appstate.edu/xml/ess/shs/HasParentPin" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBannerID">
+      <soap:operation soapAction="http://its.appstate.edu/xml/ess/shs/GetBannerID" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="GetUserName">
       <soap:operation soapAction="http://its.appstate.edu/xml/ess/shs/GetUserName" style="document" />
       <wsdl:input>
@@ -473,15 +579,6 @@
     </wsdl:operation>
     <wsdl:operation name="RemoveRoomAssignment">
       <soap:operation soapAction="http://its.appstate.edu/xml/ess/shs/RemoveRoomAssignment" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="MoveRoomAssignment">
-      <soap:operation soapAction="http://its.appstate.edu/xml/ess/shs/MoveRoomAssignment" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -555,6 +652,33 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="GetParentAccess">
+      <soap12:operation soapAction="http://its.appstate.edu/xml/ess/shs/GetParentAccess" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="HasParentPin">
+      <soap12:operation soapAction="http://its.appstate.edu/xml/ess/shs/HasParentPin" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBannerID">
+      <soap12:operation soapAction="http://its.appstate.edu/xml/ess/shs/GetBannerID" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="GetUserName">
       <soap12:operation soapAction="http://its.appstate.edu/xml/ess/shs/GetUserName" style="document" />
       <wsdl:input>
@@ -575,15 +699,6 @@
     </wsdl:operation>
     <wsdl:operation name="RemoveRoomAssignment">
       <soap12:operation soapAction="http://its.appstate.edu/xml/ess/shs/RemoveRoomAssignment" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="MoveRoomAssignment">
-      <soap12:operation soapAction="http://its.appstate.edu/xml/ess/shs/MoveRoomAssignment" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
