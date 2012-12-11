@@ -34,6 +34,7 @@ class ApcDataProvider extends StudentDataProvider {
            $key = $this->makeCacheKey($bannerId, $term);
            $student = apc_fetch($key);
            if($student !== FALSE){
+               $student->setDataSource(get_class($this));
                return $student;
            }
         }
@@ -52,6 +53,7 @@ class ApcDataProvider extends StudentDataProvider {
         $key = $this->makeCacheKey($bannerId, $term);
         $student = apc_fetch($key);
         if($student !== FALSE){
+            $student->setDataSource(get_class($this));
             return $student;
         }
 

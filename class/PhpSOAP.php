@@ -26,12 +26,7 @@ class PhpSOAP extends SOAP
     {
         parent::__construct($username,$userType);
         ini_set('soap.wsdl_cache_enabled', 0);
-        $this->client = new SoapClient('file://' . PHPWS_SOURCE_DIR . 'mod/hms/inc/shs0001.wsdl', array('trace'=>true));
-        
-        test($this->client->__getFunctions());
-        test($this->client->__getTypes());
-
-        //TODO test $this->getParentAccess()
+        $this->client = new SoapClient('file://' . PHPWS_SOURCE_DIR . 'mod/hms/inc/' . WSDL_FILE_NAME, array('trace'=>true));
     }
 
     public function getStudentProfile($bannerId, $term)
@@ -198,15 +193,13 @@ class PhpSOAP extends SOAP
         try {
             $response = $this->client->getParentAccess($params);
         }catch(SoapFault $e){
-            throw new SOAPException($e->getMessage(), $e->getCode(), 'isValidStudent', $params);
+            throw new SOAPException($e->getMessage(), $e->getCode(), 'getParentAccess', $params);
             return false;
         }
 
         SOAP::logSoap('getParentAccess', 'success', $params);
 
-        test($response,1);
-
-        //TODO
+        return $response->GetParentAccessResult;
     }
 
     public function createHousingApp($bannerId, $term)
