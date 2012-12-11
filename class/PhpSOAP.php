@@ -47,6 +47,8 @@ class PhpSOAP extends SOAP
                         'TermCode'  => $term,
                         'UserType'  => $this->userType);
 
+        test($params,1);
+
         try{
             $response = $this->client->GetStudentProfile($params);
         }catch(SoapFault $e){
@@ -66,7 +68,9 @@ class PhpSOAP extends SOAP
             throw new InvalidArgumentException('Missing Banner Id.');
         }
 
-        $params = array('User'=>$this->currentUser, 'BannerID'=>$bannerId);
+        $params = array('User'=>$this->currentUser,
+                        'BannerID'=>$bannerId,
+                        'UserType'  => $this->userType);
 
         try{
             $response = $this->client->getUserName($params);
@@ -92,7 +96,8 @@ class PhpSOAP extends SOAP
         }
 
         $params = array('User'      => $this->currentUser,
-                        'UserName'  => $username);
+                        'UserName'  => $username,
+                        'UserType'  => $this->userType);
 
         try{
             $response = $this->client->GetBannerID($params);
@@ -100,12 +105,13 @@ class PhpSOAP extends SOAP
             throw new SOAPException($e->getMessage(), $e->getCode(), 'getUsername', $params);
             return false;
         }
-      
+
         SOAP::logSoap('getBannerId', 'success', $params);
 
         return $response->GetBannerIDResult;
     }
 
+    // TODO Update this or get rid of it
     public function isValidStudent($username, $term)
     {
         // Sanity checking on the Banner Id

@@ -21,6 +21,9 @@ class SOAPDataProvider extends StudentDataProvider {
     {
         $student = new Student();
 
+        test(UserStatus::getUsername());
+        test(UserStatus::isAdmin());
+
         $soap = SOAP::getInstance(UserStatus::getUsername(), UserStatus::isAdmin()?(SOAP::ADMIN_USER):(SOAP::STUDENT_USER));
         $soapData = $soap->getStudentProfile($id, $term);
 
@@ -28,7 +31,8 @@ class SOAPDataProvider extends StudentDataProvider {
             PHPWS_Core::initModClass('hms', 'exception/StudentNotFoundException.php');
             throw new StudentNotFoundException('No matching student found.');
         }elseif (isset($soapData->error_num) && $soapData->error_num > 0){
-            throw new SOAPException("Error while accessing SOAP interface: {$soapData->errorDesc} ({$soapData->error_num})");
+            //test($soapData,1);
+            throw new SOAPException("Error while accessing SOAP interface: {$soapData->error_desc} ({$soapData->error_num})", $soapData->error_num, 'getStudentProfile', array($id, $term));
         }
 
         SOAPDataProvider::plugSOAPData($student, $soapData);
