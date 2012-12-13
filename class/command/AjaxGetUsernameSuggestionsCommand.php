@@ -20,7 +20,7 @@ class AjaxGetUsernameSuggestionsCommand extends Command {
 
         $db->addColumn('username');
         $db->addColumn('banner_id');
-        $db->addWhere('term', Term::getSelectedTerm());
+        $db->addWhere('term', Term::getCurrentTerm(), '>=');
         $db->addWhere('username', '%' . $username . '%', 'ILIKE');
         $db->addOrder('username', 'ASC');
         $db->setLimit(10);
