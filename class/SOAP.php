@@ -195,7 +195,11 @@ abstract class SOAP
      * @return boolean True if successful.
      * @throws InvalidArgumentException, SOAPException, BannerException
      */
-    public abstract function reportRoomAssignment($username, $term, $building_code, $room_code, $plan_code, $meal_code);
+    public function reportRoomAssignment($username, $term, $building_code, $room_code, $plan_code, $meal_code)
+    {
+    	$bannerId = $this->getBannerId($username);
+    	return $this->createRoomAssignment($bannerId, $term, $building, $room, $plan, $meal);
+    }
 
     /**
      * Remove a room assignment in Banner.

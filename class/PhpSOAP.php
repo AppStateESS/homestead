@@ -274,17 +274,6 @@ class PhpSOAP extends SOAP
         return true;
     }
 
-    /**
-     * Create a room assignment in Banner. Really just a wrapper for createRoomAssignment() now.
-     * @deprecated
-     * @see createRoomAssignment()
-     */
-    public function reportRoomAssignment($username, $term, $building, $room, $plan = 'HOME', $meal)
-    {
-        $bannerId = $this->getBannerId($username);
-        return $this->createRoomAssignment($bannerId, $term, $building, $room, $plan, $meal);
-    }
-
     public function removeRoomAssignment($bannerId, $term, $building, $bannerBedId)
     {
         $params = array(

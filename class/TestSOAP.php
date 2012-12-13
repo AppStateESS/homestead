@@ -7,57 +7,69 @@ class TestSOAP extends SOAP{
     /**
      * Main public function for getting student info.
      * Used by the rest of the "get" public functions
-     * @return SOAP object
+     * @return SOAP response object
      * @throws InvalidArgumentException, SOAPException
      */
-    public function getStudentProfile($username, $term)
+    public function getStudentProfile($bannerId, $term)
     {
         // Sanity checking on the username
-        if(empty($username) || is_null($username) || !isset($username)){
-            throw new InvalidArgumentException('Bad username');
+        if(empty($bannerId) || is_null($bannerId) || !isset($bannerId)){
+            throw new InvalidArgumentException('Bad BannerId.');
         }
 
         // Sanity checking on the term
         if(empty($term) || is_null($term) || !isset($term)){
             throw new InvalidArgumentException('Bad term');
         }
+        
+        $response = new stdClass();
 
-        //$student->banner_id             = 900325006;
-        $student->banner_id             = 900325007;
-        $student->last_name             = 'Booker';
-        $student->first_name            = 'Jeremy';
-        $student->middle_name           = 'Lee';
-        $student->dob                   = '1986-09-05';
-        $student->gender                = 'M';
-        $student->deposit_date          = '';
-        $student->deposit_waived        = 'false';
+        //$response->banner_id             = 900325006;
+        $response->banner_id             = 900325007;
+        $response->user_name				= 'jb67803';
+        $response->last_name             = 'Booker';
+        $response->first_name            = 'Jeremy';
+        $response->middle_name           = 'Lee';
+        $response->pref_name				= 'JerMe';
+        $response->dob                   = '1986-09-05';
+        $response->gender                = 'M';
+        $response->deposit_date          = '';
+        $response->deposit_waived        = 'false';
+        
+        $response->confid				= 'Y'; // TODO double check this value
 
-        $student->international         = false;
-        $student->student_level         = 'U';
-        $student->app_decision_code     = '1*';
+        $response->international         = false;
+        $response->student_level         = 'U';
+        $response->app_decision_code     = '1*';
 
-        $student->honors                = true;
-        $student->teaching_fellow       = true;
-        $student->watauga_member        = true;
+        $response->honors                = true;
+        $response->teaching_fellow       = true;
+        $response->watauga_member        = true;
+        $response->greek					= 'Y'; //TODO double check this value
 
-        $student->disabled_pin			= false;
-        $student->housing_waiver		= false;
+        $response->disabled_pin			= false;
+        $response->housing_waiver		= false;
 
-        //$student->student_type          = 'T';
-        //$student->application_term      = '201040';
-        //$student->projected_class       = 'FR';
+        //$response->student_type          = 'T';
+        //$response->application_term      = '201040';
+        //$response->projected_class       = 'FR';
 
-        $student->student_type          = 'F';
-        $student->application_term      = '201240';
-        $student->projected_class       = 'FR';
+        $response->student_type          = 'F';
+        $response->application_term      = '201240';
+        $response->projected_class       = 'FR';
 
-        $student->credhrs_completed     = 0;
-        $student->credhrs_for_term      = 15;
-        $student->on_campus             = 'false';
+        $response->credhrs_completed     = 0;
+        $response->credhrs_for_term      = 15;
+        $response->on_campus             = 'false';
 
-        $student->address = array();
+        $response->address = array();
+        
+        // Error fields
+        $response->error_num = 0;
+        $response->error_desc = null;
 
         // Setup the address object
+        $address = new stdClass();
         $address->atyp_code = 'PS';
         $address->line1     = '123 Rivers St. - PS Address';
         $address->line2     = 'c/o Electronic Student Services';
@@ -67,10 +79,10 @@ class TestSOAP extends SOAP{
         $address->state     = 'NC';
         $address->zip       = '28608';
 
-        $student->address[] = $address;
+        $response->address[] = $address;
 
         // Setup a second address object
-        $address = null;
+        $address = new stdClass();
         $address->atyp_code = 'PR';
         $address->line1     = '123 Rivers Street - PR Address';
         $address->line2     = 'Electronic Student Services';
@@ -80,10 +92,10 @@ class TestSOAP extends SOAP{
         $address->state     = 'SC';
         $address->zip       = '28607';
 
-        $student->address[] = $address;
+        $response->address[] = $address;
 
         // Setup an ASU P.O. Box address
-        $address = null;
+        $address = new stdClass();
         $address->atyp_code = 'AB';
         $address->line1     = 'ASU Box 32111';
         $address->line2     = '';
@@ -93,16 +105,17 @@ class TestSOAP extends SOAP{
         $address->state     = 'SC';
         $address->zip       = '28608';
 
-        $student->address[] = $address;
+        $response->address[] = $address;
 
         // Setup the phone number object
+        $phone = new stdClass();
         $phone->area_code   = '123';
         $phone->number      = '4567890';
         $phone->ext         = '1337';
 
-        $student->phone[] = $phone;
+        $response->phone[] = $phone;
 
-        return $student;
+        return $response;
     }
 
     /**
@@ -112,17 +125,34 @@ class TestSOAP extends SOAP{
     {
         return 'jb67803';
     }
+    
+    public function getBannerId($username)
+    {
+    	return '900325006';
+    }
 
     public function isValidStudent($username, $term)
     {
         return true;
     }
 
+    
+    public function hasParentPin($bannerId)
+    {
+    	//TODO
+    	return true;
+    }
+    
+    public function getParentAccess($bannerId, $parentPin)
+    {
+    	// TODO	
+    }
+    
     /**
      * Report that a housing application has been received.
      * Makes First Connections stop bugging the students.
      */
-    public function reportApplicationReceived($username, $term)
+    public function createHousingApp($bannerId, $term)
     {
         //		return false; //error
         return true;
@@ -131,7 +161,7 @@ class TestSOAP extends SOAP{
     /**
      * Sends a room assignment to banner. Will cause students to be billed, etc.
      */
-    public function reportRoomAssignment($username, $term, $building_code, $room_code, $plan_code, $meal_code)
+    public function createRoomAssignment($bannerId, $term, $building, $bannerBedId, $plan, $meal)
     {
         //		return false; //error
         return true;
@@ -141,12 +171,23 @@ class TestSOAP extends SOAP{
      * Remove the deletion of a room assignment to Banner.
      * Will cause students to be credited, etc.
      */
-    public function removeRoomAssignment($username, $term, $building, $room)
+    public function removeRoomAssignment($bannerId, $term, $building, $bannerBedId)
     {
         //		return false; //error
         return true;
     }
+    
 
+    public function setHousingWaiver($bannerId, $term)
+    {
+    	return true;
+    }
+    
+    public function clearHousingWaiver($bannerId, $term)
+    {
+		return true;    	
+    }
+    
     /**
      * Returns a student's current assignment information
      * $opt is one of:
