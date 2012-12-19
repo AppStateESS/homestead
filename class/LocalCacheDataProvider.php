@@ -194,6 +194,7 @@ class LocalCacheDataProvider extends StudentDataProvider {
 
         foreach($phoneList as $number){
             $db->reset();
+            $obj = new stdClass();
             $obj->number = $number;
             $obj->banner_id = $student->getBannerId();
             $result = $db->saveObject($obj);

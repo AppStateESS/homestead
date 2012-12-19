@@ -57,7 +57,7 @@ class FallApplication extends HousingApplication{
 
         return true;
     }
-
+    
     /**
      * Saves this object
      */
@@ -158,5 +158,10 @@ class FallApplication extends HousingApplication{
     public function setRlcInterest($interest){
         $this->rlc_interest = $interest;
     }
+}
+
+class RestoredFallApplication extends FallApplication {
+	public function __construct(){} // Empty constructor
+	
 }
 ?>

@@ -11,6 +11,15 @@ class ShowReturningStudentMenuCommand extends Command {
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 
         $lotteryTerm = PHPWS_Settings::get('hms', 'lottery_term');
+        
+        if(is_null($lotteryTerm)){
+        	throw new InvalidConfigurationException('Lottery term is not configured.');
+        }
+        
+        if($lotteryTerm < Term::getCurrentTerm()){
+        	throw new InvalidConfigurationException('Lottery term must be in the future. You probably forgot to update it.');
+        }
+        
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $lotteryTerm);
 
         PHPWS_Core::initModClass('hms', 'ReturningMainMenuView.php');

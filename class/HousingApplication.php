@@ -16,10 +16,21 @@ class HousingApplication {
     public $application_term; // The term the student started school
     public $cell_phone;
     public $meal_plan;
+    
+    /* Emergency Contact Info */
+    public $emergency_contact_name;
+    public $emergency_contact_relationship;
+    public $emergency_contact_phone;
+    public $emergency_contact_email;
+    public $emergency_medical_condition;
+    
+    /* Missing Persons Information */
+    public $missing_person_name;
+    public $missing_person_relationship;
+    public $missing_person_phone;
+    public $missing_person_email;
 
-    /**
-     * Special needs flags
-     */
+    /* Special needs flags */
     public $physical_disability;
     public $psych_disability;
     public $medical_need;
@@ -867,6 +878,84 @@ class HousingApplication {
         $this->application_type = $type;
     }
     
+    
+    /*******
+     * Emergency Contact Info 
+     */
+    
+    public function getEmergencyContactName(){
+    	return $this->emergency_contact_name;
+    }
+    
+    public function setEmergencyContactName($name){
+    	$this->emergency_contact_name = $name;
+    }
+    
+    public function getEmergencyContactRelationship(){
+    	return $this->emergency_contact_relationship;
+    }
+    
+    public function setEmergencyContactRelationship($relation){
+    	$this->emergency_contact_relationship = $relation;
+    }
+    
+    public function getEmergencyContactPhone(){
+    	return $this->emergency_contact_phone;
+    }
+    
+    public function setEmergencyContactPhone($phone){
+    	$this->emergency_contact_phone = $phone;
+    }
+    
+    public function getEmergencyContactEmail(){
+    	return $this->emergency_contact_email;
+    }
+    
+    public function setEmergencyContactEmail($email){
+    	$this->emergency_contact_email = $email;
+    }
+    
+    public function getEmergencyMedicalCondition(){
+    	return $this->emergency_medical_condition;
+    }
+    
+    public function setEmergencyMedicalCondition($cond){
+    	$this->emergency_medical_condition = $cond;
+    }
+    
+    public function getMissingPersonName(){
+    	return $this->missing_person_name;
+    }
+    
+    public function setMissingPersonName($name){
+    	$this->missing_person_name = $name;
+    }
+    
+    public function getMissingPersonRelationship(){
+    	return $this->missing_person_relationship;
+    }
+    
+    public function setMissingPersonRelationship($relation){
+    	$this->missing_person_relationship = $relation;
+    }
+    
+    public function getMissingPersonPhone(){
+    	return $this->missing_person_phone;
+    }
+    
+    public function setMissingPersonPhone($phone){
+    	$this->missing_person_phone = $phone;
+    }
+    
+    public function getMissingPersonEmail(){
+    	return $this->missing_person_email;
+    }
+    
+    public function setMissingPersonEmail($email){
+    	$this->missing_person_email = $email;
+    }
+    
+
     /**
      * @deprecated
      */

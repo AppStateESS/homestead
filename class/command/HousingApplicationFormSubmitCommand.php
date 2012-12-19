@@ -24,7 +24,7 @@ class HousingApplicationFormSubmitCommand extends Command {
         $errorCmd->setTerm($term);
         $errorCmd->setAgreedToTerms(1);
 
-        // Data sanity checking
+        /* Phone number sanity checking */
         $doNotCall  = $context->get('do_not_call');
         $areaCode 	= $context->get('area_code');
         $exchange 	= $context->get('exchange');
@@ -38,7 +38,15 @@ class HousingApplicationFormSubmitCommand extends Command {
             }
         }
 
-        // TODO: this, right
+        /* Emergency Contact Sanity Checking */
+        //TODO
+        
+        /* Missing Persons Sanity Checking */
+        //TODO
+        
+        
+        /* Meal plan, lifestyle, preferred bedtime, room condition error checking */
+        // TODO: this, correctly (should be inside of a sub-class since it's term specific)
         $sem = substr($term, 4, 2);
         if($sem == 10 || $sem == 40) {
 
@@ -53,6 +61,7 @@ class HousingApplicationFormSubmitCommand extends Command {
                 $errorCmd->redirect();
             }
         } else if($sem == 20 || $sem == 30) {
+        	/* Private/double room sanity checking for Summer terms */
             $roomType = $context->get('room_type');
 
             if(!is_numeric($roomType)) {
@@ -61,14 +70,13 @@ class HousingApplicationFormSubmitCommand extends Command {
             }
         }
 
-        //TODO add side thingie
-
         $specialNeed = $context->get('special_need');
 
         if(!isset($specialNeed)) {
             unset($_REQUEST['special_needs']);
         }
 
+        // NB: This command grabs the current context and passes the data forward
         $reviewCmd = CommandFactory::getCommand('ShowFreshmenApplicationReview');
         $reviewCmd->setTerm($term);
 

@@ -9,14 +9,12 @@ class HousingApplicationFormView extends View {
     private $student;
     private $existingApplication;
     private $term;
-    private $contextApplication;
 
-    public function __construct(Student $student, $term, HousingApplication $existingApplication = NULL, HousingApplication $contextApplication = NULL)
+    public function __construct(Student $student, $term, HousingApplication $existingApplication = NULL)
     {
         $this->student				= $student;
         $this->term					= $term;
         $this->existingApplication	= $existingApplication;
-        $this->contextApplication	= $contextApplication;
     }
 
     public function show()
@@ -49,9 +47,7 @@ class HousingApplicationFormView extends View {
         $form->setSize('area_code', 3);
         $form->setMaxSize('area_code', 3);
 
-        if(!is_null($this->contextApplication)){
-            $form->setValue('area_code', substr($this->contextApplication->getCellPhone(), 0, 3));
-        }else if(!is_null($this->existingApplication)){
+        if(!is_null($this->existingApplication)){
             $form->setValue('area_code', substr($this->existingApplication->getCellPhone(), 0, 3));
         }
 
@@ -59,9 +55,7 @@ class HousingApplicationFormView extends View {
         $form->setSize('exchange', 3);
         $form->setMaxSize('exchange', 3);
 
-        if(!is_null($this->contextApplication)){
-            $form->setValue('exchange', substr($this->contextApplication->getCellPhone(), 3, 3));
-        }else if(!is_null($this->existingApplication)){
+        if(!is_null($this->existingApplication)){
             $form->setValue('exchange', substr($this->existingApplication->getCellPhone(), 3, 3));
         }
 
@@ -70,16 +64,12 @@ class HousingApplicationFormView extends View {
         $form->setSize('number', 4);
         $form->setMaxSize('number', 4);
 
-        if(!is_null($this->contextApplication)){
-            $form->setValue('number', substr($this->contextApplication->getCellPhone(), 6));
-        }else if(!is_null($this->existingApplication)){
+        if(!is_null($this->existingApplication)){
             $form->setValue('number', substr($this->existingApplication->getCellPhone(), 6));
         }
 
         $form->addCheck('do_not_call', 1);
-        if(!is_null($this->contextApplication) && is_null($this->contextApplication->getCellPhone())){
-            $form->setMatch('do_not_call', 1);
-        }else if(!is_null($this->existingApplication) && is_null($this->existingApplication->getCellPhone())){
+        if(!is_null($this->existingApplication) && is_null($this->existingApplication->getCellPhone())){
             $form->setMatch('do_not_call', 1);
         }
 
@@ -105,9 +95,7 @@ class HousingApplicationFormView extends View {
 
             $form->setMatch('meal_option', BANNER_MEAL_STD);
 
-            if(!is_null($this->contextApplication)){
-                $form->setMatch('meal_option',$this->contextApplication->getMealPlan());
-            }elseif(!is_null($this->existingApplication)){
+            if(!is_null($this->existingApplication)){
                 $form->setMatch('meal_option',$this->existingApplication->getMealPlan());
             }else{
                 $form->setMatch('meal_option', BANNER_MEAL_STD);
@@ -119,9 +107,7 @@ class HousingApplicationFormView extends View {
             # TODO: get rid of the magic numbers!!!
             $form->addDropBox('lifestyle_option', array('1'=>_('Single Gender Building'),
                                                         '2'=>_('Co-Ed Building')));
-            if(!is_null($this->contextApplication)){
-                $form->setMatch('lifestyle_option',$this->contextApplication->getLifestyleOption());
-            }else if(!is_null($this->existingApplication)){
+            if(!is_null($this->existingApplication)){
                 $form->setMatch('lifestyle_option',$this->existingApplication->getLifestyleOption());
             }else{
                 $form->setMatch('lifestyle_option', '1');
@@ -133,9 +119,7 @@ class HousingApplicationFormView extends View {
             # TODO: magic numbers
             $form->addDropBox('preferred_bedtime', array('1'=>_('Early'),
                                                          '2'=>_('Late')));
-            if(!is_null($this->contextApplication)){
-                $form->setMatch('preferred_bedtime',$this->contextApplication->getPreferredBedtime());
-            }else if(!is_null($this->existingApplication)){
+            if(!is_null($this->existingApplication)){
                 $form->setMatch('preferred_bedtime',$this->existingApplication->getPreferredBedtime());
             }else{
                 $form->setMatch('preferred_bedtime', '1');
@@ -147,26 +131,56 @@ class HousingApplicationFormView extends View {
             #TODO: magic numbers
             $form->addDropBox('room_condition', array('1'=>_('Neat'),
                                                       '2'=>_('Cluttered')));
-            if(!is_null($this->contextApplication)){
-                $form->setMatch('room_condition',$this->contextApplication->getRoomCondition());
-            }else if(!is_null($this->existingApplication)){
+            if(!is_null($this->existingApplication)){
                 $form->setMatch('room_condition',$this->existingApplication->getRoomCondition());
             }else{
                 $form->setMatch('room_condition', '1');
             }
 
         } else if($sem == TERM_SUMMER1 || $sem == TERM_SUMMER2) {
+        	/* Private room option for Summer terms */
             $form->addDropBox('room_type', array(ROOM_TYPE_DOUBLE=>'Two person', ROOM_TYPE_PRIVATE=>'Private (if available)'));
 
-            if(!is_null($this->contextApplication)) {
-                $form->setMatch('room_type', $this->contextApplication->getRoomType());
-            } else if(!is_null($this->existingApplication)) {
+            if(!is_null($this->existingApplication)) {
                 $form->setMatch('room_type', $this->existingApplication->getRoomType());
             } else {
                 $form->setMatch('room_type', '0');
             }
         }
-
+        
+        /*********************
+         * Emergency Contact *
+         *********************/
+        $form->addText('emergency_contact_name');
+        $form->addText('emergency_contact_relationship');
+        $form->addText('emergency_contact_phone');
+        $form->addText('emergency_contact_email');
+        $form->addTextArea('emergency_medical_condition');
+        
+        if(!is_null($this->existingApplication)){
+        	$form->setValue('emergency_contact_name', $this->existingApplication->getEmergencyContactName());
+        	$form->setValue('emergency_contact_relationship', $this->existingApplication->getEmergencyContactRelationship());
+        	$form->setValue('emergency_contact_phone', $this->existingApplication->getEmergencyContactPhone());
+        	$form->setValue('emergency_contact_email', $this->existingApplication->getEmergencyContactEmail());
+        	$form->setValue('emergency_medical_condition', $this->existingApplication->getEmergencyMedicalCondition());
+        }
+        
+        /******************
+         * Missing Person *
+         ******************/
+        
+        $form->addText('missing_person_name');
+        $form->addText('missing_person_relationship');
+        $form->addText('missing_person_phone');
+        $form->addText('missing_person_email');
+        
+        if(!is_null($this->existingApplication)){
+        	$form->setValue('missing_person_name', $this->existingApplication->getMissingPersonName());
+        	$form->setValue('missing_person_relationship', $this->existingApplication->getMissingPersonRelationship());
+        	$form->setValue('missing_person_phone', $this->existingApplication->getMissingPersonPhone());
+        	$form->setValue('missing_person_email', $this->existingApplication->getMissingPersonEmail());
+        }
+        
         /*****************
          * Special needs *
          *****************/
@@ -174,14 +188,7 @@ class HousingApplicationFormView extends View {
         $form->addCheck('special_need', array('special_need'));
         $form->setLabel('special_need', array('Yes, I require special needs housing.'));
 
-        if(!is_null($this->contextApplication)){
-            if(!is_null($this->contextApplication->physical_disability) ||
-            !is_null($this->contextApplication->psych_disability) ||
-            !is_null($this->contextApplication->medical_need) ||
-            !is_null($this->contextApplication->gender_need)){
-                $form->setMatch('special_need', 'special_need');
-            }
-        }else if(isset($this->existingApplication)){
+        if(isset($this->existingApplication)){
             if((!is_null($this->existingApplication->physical_disability) && $this->existingApplication->physical_disability != "0") ||
             (!is_null($this->existingApplication->psych_disability) && $this->existingApplication->psych_disability != "0") ||
             (!is_null($this->existingApplication->medical_need) && $this->existingApplication->medical_need != "0") ||
@@ -208,7 +215,7 @@ class HousingApplicationFormView extends View {
             $form->addRadio('rlc_interest', array(0, 1));
             $form->setLabel('rlc_interest', array(_("No"), _("Yes")));
             	
-            if(!is_null($this->contextApplication) && !is_null($this->contextApplication->getRLCInterest())){
+            if(!is_null($this->existingApplication) && !is_null($this->existingApplication->getRLCInterest())){
                 $form->setMatch('rlc_interest', 'rlc_interest');
             }else{
                 $form->setMatch('rlc_interest', '0');
@@ -225,7 +232,7 @@ class HousingApplicationFormView extends View {
         $tpl = $form->getTemplate();
 
         Layout::addPageTitle("Housing Application Form");
-
+        
         return PHPWS_Template::process($tpl,'hms','student/student_application.tpl');
     }
 }

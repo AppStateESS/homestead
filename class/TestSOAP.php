@@ -22,6 +22,8 @@ class TestSOAP extends SOAP{
             throw new InvalidArgumentException('Bad term');
         }
 
+        $student = new stdClass();
+        
         //$student->banner_id             = 900325006;
         $student->banner_id             = 900325007;
         $student->last_name             = 'Booker';
@@ -58,6 +60,7 @@ class TestSOAP extends SOAP{
         $student->address = array();
 
         // Setup the address object
+        $address = new stdClass();;
         $address->atyp_code = 'PS';
         $address->line1     = '123 Rivers St. - PS Address';
         $address->line2     = 'c/o Electronic Student Services';
@@ -70,7 +73,7 @@ class TestSOAP extends SOAP{
         $student->address[] = $address;
 
         // Setup a second address object
-        $address = null;
+        $address = new stdClass();
         $address->atyp_code = 'PR';
         $address->line1     = '123 Rivers Street - PR Address';
         $address->line2     = 'Electronic Student Services';
@@ -83,7 +86,7 @@ class TestSOAP extends SOAP{
         $student->address[] = $address;
 
         // Setup an ASU P.O. Box address
-        $address = null;
+        $address = new stdClass();
         $address->atyp_code = 'AB';
         $address->line1     = 'ASU Box 32111';
         $address->line2     = '';
@@ -96,6 +99,7 @@ class TestSOAP extends SOAP{
         $student->address[] = $address;
 
         // Setup the phone number object
+        $phone = new stdClass();;
         $phone->area_code   = '123';
         $phone->number      = '4567890';
         $phone->ext         = '1337';
@@ -158,17 +162,20 @@ class TestSOAP extends SOAP{
     public function getHousMealRegister($username, $term, $opt)
     {
         // Assemble the housing_app object
+        $housing_app = new stdClass();
         $housing_app->plan_code     = 'HOME';
         $housing_app->status_code   = 'AC';
         $housing_app->status_date   = '2007-02-20';
 
         // Assemble the room_assign object
+        $room_assign = new stdClass();
         $room_assign->bldg_code     = 'JTR';
         $room_assign->room_code     = 02322;
         $room_assign->status_code   = 'AC';
         $room_assign->status_date   = '2008-01-14';
 
         // Assemble the meal_assign object
+        $meal_assign = new stdClass();
         $meal_assign->plan_code     = 1;
         $meal_assign->status_code   = 'AC';
         $meal_assign->status_date   = '2007-11-20';

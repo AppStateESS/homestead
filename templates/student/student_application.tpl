@@ -74,6 +74,54 @@
                 <td>Preferred Room Type: </td><td align="left">{ROOM_TYPE}</td>
             </tr>
             <!-- END room_type -->
+            
+            <tr>
+            	<th colspan="2">Emergency Contact Information</th>
+            <tr>
+            <tr>
+            	<td>Emergency Contact Person Name:</td>
+            	<td>{EMERGENCY_CONTACT_NAME}</td>
+            </tr>
+            <tr>
+            	<td>Relationship:</td>
+            	<td>{EMERGENCY_CONTACT_RELATIONSHIP}</td>
+            </tr>
+            <tr>
+            	<td>Phone Number:</td>
+            	<td>{EMERGENCY_CONTACT_PHONE}</td>
+            </tr>
+            <tr>
+            	<td>Email:</td>
+            	<td>{EMERGENCY_CONTACT_EMAIL}</td>
+            </tr>
+            <tr>
+            	<td colspan="2">Are there any medical conditions you have which our staff should be aware of? (This infomration will be kept confidential and will only be shared with the staff in your residence hall. However, this information <strong>may</strong> be disclosed to medical/emergency personnel in case of an emergency.)</td>
+            </tr>
+            <tr>
+            	<td colspan="2">{EMERGENCY_MEDICAL_CONDITION}</td>
+            <tr>
+            	<th colspan="2">Missing Person Information</th>
+            </tr>
+            <tr>
+            	<td colspan="2">According to the recent update of the Higher Education Act, all schools are required to ask students who they wish the University to contact should they become missing. Please list your contact person's information below:</td>
+            </tr>
+            <tr>
+            	<td>Contact Person Name:</td>
+            	<td>{MISSING_PERSON_NAME}</td>
+            </tr>
+            <tr>
+            	<td>Relationship:</td>
+            	<td>{MISSING_PERSON_RELATIONSHIP}</td>
+            </tr>
+            <tr>
+            	<td>Phone Number:</td>
+            	<td>{MISSING_PERSON_PHONE}</td>
+            </tr>
+            <tr>
+            	<td>Email:</td>
+            	<td>{MISSING_PERSON_EMAIL}</td>
+            </tr>
+            
             <tr>
                 <th colspan="2">Special Needs Housing</th>
             </tr>

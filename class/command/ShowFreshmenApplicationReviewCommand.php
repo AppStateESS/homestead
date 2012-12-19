@@ -38,14 +38,28 @@ class ShowFreshmenApplicationReviewCommand extends Command {
         $errorCmd->setTerm($term);
         $errorCmd->setAgreedToTerms(1);
 
+        // Determine the application type, based on the term
+        $sem = Term::getTermSem($term);
+        
+        switch ($sem){
+        	case TERM_FALL:
+        		$appType = 'fall';
+        		break;
+        	case TERM_SPRING:
+        		$appType = 'spring';
+        		break;
+        	case TERM_SUMMER1:
+        	case TERM_SUMMER2:
+        		$appType = 'summer';
+        		break;
+        }
+        
         try{
-            $application = HousingApplicationFactory::getApplicationFromContext($context, $term, $student);
+            $application = HousingApplicationFactory::getApplicationFromContext($context, $term, $student, $appType);
         }catch(Exception $e){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, $e->getMessage());
             $errorCmd->redirect();
         }
-
-        //TODO side thingie
 
         PHPWS_Core::initModClass('hms', 'FreshmenApplicationReview.php');
         $view = new FreshmenApplicationReview($student, $term, $application);
