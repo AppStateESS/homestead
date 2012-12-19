@@ -99,7 +99,7 @@ class BannerQueueItem {
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
         PHPWS_Core::initModClass('hms', 'SOAP.php');
 
-        $soap = SOAP::getInstance();
+        $soap = SOAP::getInstance(UserStatus::getUsername(), UserStatus::isAdmin()?(SOAP::ADMIN_USER):(SOAP::STUDENT_USER));
 
         $result = null;
 
@@ -125,8 +125,12 @@ class BannerQueueItem {
                 }
                 break;
             case BANNER_QUEUE_REMOVAL:
+                // Get the Banner ID from the user name
+                // TODO fix this to use BannerID directly
+                $bannerId = $soap->getBannerId($this->asu_username);
+
                 $result = $soap->removeRoomAssignment(
-                $this->asu_username,
+                $bannerId,
                 $this->term,
                 $this->building_code,
                 $this->bed_code);

@@ -40,6 +40,14 @@ abstract class SOAP
      */
     public static function getInstance($username, $userType)
     {
+        if(!isset($username) || is_null($username)){
+            throw new InvalidArgumentException('Missing Username.');
+        }
+
+        if(!isset($userType) || is_null($userType)){
+            throw new InvalidArgumentException('Missing user type.');
+        }
+
         if(empty(self::$instance)) {
             if(SOAP_INFO_TEST_FLAG) {
                 PHPWS_Core::initModClass('hms', 'TestSOAP.php');
@@ -195,7 +203,11 @@ abstract class SOAP
      * @return boolean True if successful.
      * @throws InvalidArgumentException, SOAPException, BannerException
      */
-    public abstract function reportRoomAssignment($username, $term, $building_code, $room_code, $plan_code, $meal_code);
+    public function reportRoomAssignment($username, $term, $building_code, $room_code, $plan_code, $meal_code)
+    {
+        $bannerId = $this->getBannerId($username);
+        return $this->createRoomAssignment($bannerId, $term, $building, $room, $plan, $meal);
+    }
 
     /**
      * Remove a room assignment in Banner.

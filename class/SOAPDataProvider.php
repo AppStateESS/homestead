@@ -21,9 +21,6 @@ class SOAPDataProvider extends StudentDataProvider {
     {
         $student = new Student();
 
-        test(UserStatus::getUsername());
-        test(UserStatus::isAdmin());
-
         $soap = SOAP::getInstance(UserStatus::getUsername(), UserStatus::isAdmin()?(SOAP::ADMIN_USER):(SOAP::STUDENT_USER));
         $soapData = $soap->getStudentProfile($id, $term);
 

@@ -21,7 +21,7 @@ class CreateWaiverCommand extends Command {
 
         $usernames = split("\n", $context->get('usernames'));
         $term = PHPWS_Settings::get('hms', 'lottery_term');
-        $soap = SOAP::getInstance();
+        $soap = SOAP::getInstance(UserStatus::getUsername(), UserStatus::isAdmin()?(SOAP::ADMIN_USER):(SOAP::STUDENT_USER));
 
         $error = false;
         foreach($usernames as $user){
