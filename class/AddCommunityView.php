@@ -53,19 +53,22 @@ class AddCommunityView extends View {
         
         $form->addDropBox('f_movein_time', $moveinTimes);
         $form->setLabel('f_movein_time', 'Freshmen Move-in Time');
-        $form->setMatch('f_movein_time', $this->community->getFreshmenMoveinTime());
         
         $form->addDropBox('t_movein_time', $moveinTimes);
         $form->setLabel('t_movein_time', 'Transfer Move-in Time');
-        $form->setMatch('t_movein_time', $this->community->getTransferMoveinTime());
         
         $form->addDropBox('c_movein_time', $moveinTimes);
         $form->setLabel('c_movein_time', 'Continuing Move-in Time');
-        $form->setMatch('c_movein_time', $this->community->getContinuingMoveinTime());
         
+        if(!is_null($this->community)){
+            $form->setMatch('f_movein_time', $this->community->getFreshmenMoveinTime());
+            $form->setMatch('t_movein_time', $this->community->getTransferMoveinTime());
+            $form->setMatch('c_movein_time', $this->community->getContinuingMoveinTime());
+        }
+
         $form->addText('student_types', !is_null($this->community)?$this->community->getAllowedStudentTypes():'');
         $form->addText('reapplication_student_types', !is_null($this->community)?$this->community->getAllowedReApplicationStudentTypes():'');
-
+    
         $form->addCheckAssoc('members_reapply', array('reapply'=>'Current Members Can Always Re-apply:'));
 
         // Set match on the members_reapply checkbox
@@ -75,16 +78,19 @@ class AddCommunityView extends View {
 
         $form->addTextArea('freshmen_question');
         $form->setLabel('freshmen_question', 'Freshmen Question:');
-        $form->setValue('freshmen_question', $this->community->getFreshmenQuestion());
         
         $form->addTextArea('returning_question');
         $form->setLabel('returning_question', 'Returning Question:');
-        $form->setValue('returning_question', $this->community->getReturningQuestion());
         
         $form->addTextArea('terms_conditions');
         $form->setLabel('terms_conditions', 'Terms &amp; Conditions:');
-        $form->setValue('terms_conditions', $this->community->getTermsConditions());
-        
+
+        if(!is_null($this->community)){
+            $form->setValue('freshmen_question', $this->community->getFreshmenQuestion());
+            $form->setValue('returning_question', $this->community->getReturningQuestion());
+            $form->setValue('terms_conditions', $this->community->getTermsConditions());
+        }
+
         $form->addHidden('hide', 0);
 
         if(!is_null($this->community) && !is_null($this->community->get_id())){
