@@ -131,13 +131,8 @@ class HousingApplicationConfirmCommand extends Command {
             PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
             HMS_Activity_Log::log_activity($username, ACTIVITY_SUBMITTED_APPLICATION, $username);
 
-            try{
-                # report the application to banner;
-                $application->reportToBanner();
-            }catch(Exception $e){
-                // ignore any errors reporting this to banner, they'll be logged and admins notified
-                // we've saved the student's application locally, so it's ok if this doesn't work
-            }
+            # report the application to banner;
+            $application->reportToBanner();
 
             # Send the email confirmation
             PHPWS_Core::initModClass('hms', 'HMS_Email.php');
