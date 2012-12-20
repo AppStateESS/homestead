@@ -134,7 +134,12 @@ class FallContextApplicationFactory extends ContextApplicationFactory {
 		$this->app->setPreferredBedtime($preferredBedtime);
 		$this->app->setRoomCondition($roomCondition);
 		
-		$this->app->setRlcInterest($this->context->get('rlc_interest'));
+		$rlcInterest = $this->context->get('rlc_interest');
+		if(isset($rlcInterest)){
+			$this->app->setRlcInterest($this->context->get('rlc_interest'));
+		}else{
+			$this->app->setRlcInterest(0);
+		}
 		
 		$this->app->setApplicationType('fall');
 	}
