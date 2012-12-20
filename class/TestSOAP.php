@@ -50,7 +50,7 @@ class TestSOAP extends SOAP{
         //$student->projected_class       = 'FR';
 
         $student->student_type          = 'F';
-        $student->application_term      = '201220';
+        $student->application_term      = '201340';
         $student->projected_class       = 'FR';
 
         $student->credhrs_completed     = 0;

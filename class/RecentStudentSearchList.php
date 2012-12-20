@@ -19,6 +19,10 @@ class RecentStudentSearchList {
 
     private function __construct()
     {
+    	if(!extension_loaded('apc')){
+    		return;
+    	}
+    	
         // Load the global list from cache, if it exists
         if(apc_fetch(self::KEY_NAME) !== FALSE){
             // Make sure we've loaded the Student class first
@@ -57,6 +61,10 @@ class RecentStudentSearchList {
      */
     public function add(Student $student)
     {
+    	if(!extension_loaded('apc')){
+    		return;
+    	}
+    	
         // Sanity checking on params
         if(!isset($student)){
             throw new InvalidArgumentException('Missing student object');
@@ -105,11 +113,18 @@ class RecentStudentSearchList {
      */
     public function getList()
     {
+    	if(!extension_loaded('apc')){
+    		return array();
+    	}
+    	
         return $this->searchList;
     }
 
     public function getGlobalList()
     {
+    	if(!extension_loaded('apc')){
+    		return array();
+    	}
         return $this->globalSearchList;
     }
 }

@@ -124,7 +124,7 @@ class LocalCacheDataProvider extends StudentDataProvider {
 
         foreach($result as $addr){
 
-            $obj = null;
+            $obj = new stdClass();
 
             $obj->atyp_code = $addr['atyp_code'];
             $obj->line1     = $addr['line1'];

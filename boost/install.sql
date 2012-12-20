@@ -284,6 +284,15 @@ CREATE TABLE hms_new_application (
     cancelled_reason                character varying(32),
     cancelled_on                    integer,
     cancelled_by                    character varying(32),
+    emergency_contact_name 			varchar,
+    emergency_contact_relationship 	varchar,
+    emergency_contact_phone 		varchar,
+    emergency_contact_email 		varchar,
+    emergency_medical_condition 	varchar,
+    missing_person_name 			varchar,
+    missing_person_relationship 	varchar,
+    missing_person_phone 			varchar,
+    missing_person_email 			varchar,
     PRIMARY KEY(id)
 );
 
