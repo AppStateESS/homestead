@@ -24,8 +24,8 @@ class TestSOAP extends SOAP{
 
         $student = new stdClass();
         
-        //$student->banner_id             = 900325006;
-        $student->banner_id             = 900325007;
+        $student->banner_id             = 900325006;
+        //$student->banner_id             = 900325007;
         $student->last_name             = 'Booker';
         $student->first_name            = 'Jeremy';
         $student->middle_name           = 'Lee';

@@ -182,10 +182,10 @@ CREATE TABLE hms_assignment (
 CREATE TABLE hms_assignment_history (
     id                  integer         NOT NULL,
     banner_id           integer         NOT NULL,
-    room                character varying(50) NOT NULL,
+    bed_id              integer		    NOT NULL,
     assigned_on         integer         NOT NULL,
     assigned_by         character varying(32) NOT NULL,
-    assigned_reason     character varying(20) default 'anone',
+    assigned_reason     character varying(20) NOT NULL,
     removed_on          integer,
     removed_by          character varying(32),
     removed_reason      character varying(20),
@@ -595,6 +595,12 @@ CREATE TABLE hms_report_param (
     param_name          character varying,
     param_value         character varying,
     PRIMARY KEY (id)
+);
+
+create table hms_temp_assignment (
+	room_number character(5) NOT NULL,
+	banner_id integer,
+	PRIMARY KEY(room_number)
 );
 
 CREATE INDEX hms_floor_residence_hall_id_idx ON hms_floor (residence_hall_id);

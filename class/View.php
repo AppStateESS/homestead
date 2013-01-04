@@ -47,6 +47,7 @@ abstract class HMSView extends View
         $tpl['USER'] = UserStatus::getDisplay();
 
         Layout::addStyle('hms', 'css/hms.css');
+        Layout::addStyle('hms', 'css/tango-icons.css');
         Layout::add(PHPWS_Template::process($tpl, 'hms', 'hms.tpl'));
     }
 }
