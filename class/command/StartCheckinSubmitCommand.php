@@ -51,7 +51,7 @@ class StartCheckinSubmitCommand extends Command {
 			$errorCmd->redirect();
 		}
 		
-		// Make sure the assignment matches the hall the user selected
+		// Make sure the student's assignment matches the hall the user selected
 		$bed	= $assignment->get_parent();
 		$room	= $bed->get_parent();
 		$floor	= $room->get_parent();
