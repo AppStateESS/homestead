@@ -5,7 +5,7 @@
 University Housing would like to welcome you to Appalachian State University and let you know we are preparing for your arrival.
 
 Room Assignment Notification
-                                        {TERM} 
+                                        {TERM}
 Assignment: {LOCATION}
 <!-- BEGIN roommate_text -->
 Roommates:
@@ -18,11 +18,11 @@ Roommates:
 Check-in Time: {MOVE_IN_TIME}
 <!-- END movein_time -->
 
-Freshmen check-in is January 5th, 2pm-7pm. Transfer check-in is January 4th, 2-5pm. See above for your scheduled time. Freshmen and transfer students should go to the Newland Hall office to pick up their room keys.
+Freshmen check-in is January 9th, 2pm-5pm. Transfer check-in is January 8th, 2-5pm. See above for your scheduled time. Freshmen and transfer students should go to their assigned residence hall office to pick up their room keys. If you have a conflict, you can check in anytime after your scheduled time until 6pm on January 14th. Failure to check in by 6pm January 14th will result in assignment cancellation (see pages 15-16 of the Residence Hall License Contract).
 
-Returning student check-in is January 7, 2-7pm.  If you are a returning on-campus resident and the assignment listed above is the same as your Fall assignment, this letter is notifying you of your new roommate(s) and you must check in by 6pm on January 11th.
 
-If you have a conflict, you can check in anytime after your scheduled time until 6pm on January 11th. Failure to check in by 6pm January 11th will result in assignment cancellation (see pages 15-16 of the Residence Hall License Contract booklet).
+Returning students may move in beginning at 10am, January 10th, through 6pm, January 14. If you are a returning student, this is confirmation of your assignment for {TERM}. Please note any changes to your assignment or assigned roommate(s).
+
 
 Should you have any questions, please feel free to contact our office at 828-262-6111. You may also visit our website at: http://housing.appstate.edu/ .
 
