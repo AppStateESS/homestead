@@ -44,29 +44,11 @@ class StartCheckinSubmitCommand extends Command {
 			$errorCmd->redirect();
 		}
 		
-		// Make sure the student is assigned in the current term
-		$assignment = HMS_Assignment::getAssignmentByBannerId($bannerId, $term);
-		if(!isset($assignment) || is_null($assignment)){
-			NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'The student is not assigned for ' . Term::toString($term));
-			$errorCmd->redirect();
-		}
-		
-		// Make sure the student's assignment matches the hall the user selected
-		$bed	= $assignment->get_parent();
-		$room	= $bed->get_parent();
-		$floor	= $room->get_parent();
-		$hall 	= $floor->get_parent();
-		
-		if($hallId != $hall->getId()){
-			NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Wrong hall! ' . $student->getName() . ' is assigned to ' . $assignment->where_am_i());
-			$errorCmd->redirect();
-		}
-		
-		// Make sure the student isn't already checked in
-		// TODO
-		
-		
-		$context->setContent('got here');
+	    // Everything checks out, so redirect to the form
+	    $cmd = CommandFactory::getCommand('ShowCheckinForm');
+        $cmd->setBannerId($bannerId);
+        $cmd->setHallId($hallId);
+		$cmd->redirect();
 	}
 }
 
