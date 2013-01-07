@@ -448,6 +448,11 @@ class HMS_Bed extends HMS_Item {
             return TRUE;
         }
     }
+    
+    public function getId()
+    {
+    	return $this->id;
+    }
 
     public function getBannerId()
     {

@@ -32,9 +32,28 @@ class Checkin {
         $this->setBannerId($student->getBannerId());
         $this->setBedId($bed->getId());
         $this->setTerm($term);
-        $this->setRoomId($bed->getParent()->getId());
+        $this->setRoomId($bed->get_parent()->getId());
+        $this->setCheckinDate(time());
         $this->setCheckinby($checkinBy);
         $this->setKeyCode($keyCode);
+    }
+    
+    public function save()
+    {
+    	$db = new PHPWS_DB('hms_checkin');
+    	
+    	try {
+    		$result = $db->saveObject($this);
+    	} catch (Exception $e) {
+    		// rethrow any exceptions
+    		throw $e;
+    	}
+    	
+    	if (PHPWS_Error::logIfError($result)) {
+    		throw new Exception($result->toString());
+    	}
+    	
+    	return $this->id;
     }
 
     /***********************
@@ -44,6 +63,10 @@ class Checkin {
         return $this->id;
     }
 
+    public function getBannerId(){
+    	return $this->banner_id;
+    }
+    
     private function setBannerId($bannerId){
         $this->banner_id = $bannerId;
     }
@@ -60,6 +83,10 @@ class Checkin {
         $this->room_id = $roomId;
     }
 
+    private function setCheckinDate($timestamp){
+    	$this->checkin_date = $timestamp;
+    }
+    
     private function setCheckinBy($checkinBy){
         $this->checkin_by = $checkinBy;
     }
