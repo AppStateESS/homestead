@@ -91,6 +91,10 @@ class Checkin {
         $this->checkin_by = $checkinBy;
     }
 
+    public function getKeyCode(){
+    	return $this->key_code;
+    }
+    
     private function setKeyCode($keyCode){
         $this->key_code = $keyCode;
     }
