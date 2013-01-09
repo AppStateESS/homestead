@@ -78,6 +78,7 @@ class CheckinFormSubmitCommand extends Command {
 			$app->setStudentType($student->getType());
 			$app->setApplicationTerm($student->getApplicationTerm());
 			$app->setCancelled(0);
+			$app->setMealPlan(BANNER_MEAL_STD);
 		}
 		
 		// Update student's housing app
