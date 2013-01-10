@@ -56,11 +56,17 @@ class CheckinFormSubmitCommand extends Command {
 					$app = new RestoredFallApplication();
 					$appType = 'fall';
 					$app->setLifestyleOption(0);
+                    $app->setPreferredBedtime(0);
+                    $app->setRoomCondition(0);
+                    $app->setRlcPreference(0);
 					break;
 				case TERM_SPRING:
 					$app = new RestoredSpringApplication();
 					$appType = 'spring';
 					$app->setLifestyleOption(0);
+                    $app->setPreferredBedtime(0);
+                    $app->setRoomCondition(0);
+                    $app->setRlcPreference(0);
 					break;
 				case TERM_SUMMER1:
 				case TERM_SUMMER2:
@@ -79,6 +85,7 @@ class CheckinFormSubmitCommand extends Command {
 			$app->setApplicationTerm($student->getApplicationTerm());
 			$app->setCancelled(0);
 			$app->setMealPlan(BANNER_MEAL_STD);
+            $app->setInternational($student->isInternational());
 		}
 		
 		// Update student's housing app
