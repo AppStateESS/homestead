@@ -64,6 +64,10 @@ class RecentStudentSearchList {
      */
     public function add(Student $student)
     {
+    	if(!extension_loaded('apc')){
+    		return;
+    	}
+    	
         // Sanity checking on params
         if(!isset($student)){
             throw new InvalidArgumentException('Missing student object');
@@ -117,11 +121,18 @@ class RecentStudentSearchList {
      */
     public function getList()
     {
+    	if(!extension_loaded('apc')){
+    		return array();
+    	}
+    	
         return $this->searchList;
     }
 
     public function getGlobalList()
     {
+    	if(!extension_loaded('apc')){
+    		return array();
+    	}
         return $this->globalSearchList;
     }
 }

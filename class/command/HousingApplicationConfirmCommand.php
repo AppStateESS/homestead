@@ -21,10 +21,7 @@ class HousingApplicationConfirmCommand extends Command {
     public function execute(CommandContext $context)
     {
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        PHPWS_Core::initModClass('hms', 'HousingApplication.php');
-        PHPWS_Core::initModClass('hms', 'SpringApplication.php');
-        PHPWS_Core::initModClass('hms', 'SummerApplication.php');
-        PHPWS_Core::initModClass('hms', 'FallApplication.php');
+        PHPWS_Core::initModClass('hms', 'HousingApplicationFactory.php');
 
         PHPWS_Core::initModClass('hms', 'exception/InvalidTermException.php');
 
@@ -35,7 +32,7 @@ class HousingApplicationConfirmCommand extends Command {
 
         $sem = Term::getTermSem($term);
 
-        # Check for an existing application and delete it
+        // Check for an existing application and delete it
         $app_result = HousingApplication::checkForApplication($username, $term);
         if($app_result !== FALSE){
             switch($sem){
@@ -57,84 +54,49 @@ class HousingApplicationConfirmCommand extends Command {
             $application->delete();
         }
 
+        switch ($sem){
+        	case TERM_FALL:
+        		$appType = 'fall';
+        		break;
+        	case TERM_SPRING:
+        		$appType = 'spring';
+        		break;
+        	case TERM_SUMMER1:
+        	case TERM_SUMMER2:
+        		$appType = 'summer';
+        		break;
+        }
+        
+        $application = HousingApplicationFactory::getApplicationFromContext($context, $term, $student, $appType);
+
+        $application->setCancelled(0);
+        
         // Hard code a summer meal option for all summer applications.
         // Application for other terms use whatever the student selected
         if($sem == TERM_SUMMER1 || $sem == TERM_SUMMER2){
-            $mealPlan = BANNER_MEAL_5WEEK;
+        	$application->setMealPlan(BANNER_MEAL_5WEEK);
         }else{
-            $mealPlan = $context->get('meal_option');
+        	$application->setMealPlan($context->get('meal_option'));
         }
-
-        $specialNeeds = $context->get('special_needs');
-
-        $international = $student->isInternational();
-
-        # Create a new application from the request data and save it
-        if($sem == TERM_SUMMER1 || $sem == TERM_SUMMER2){
-            $application = new SummerApplication(0, $term, $student->getBannerId(), $username,
-            $student->getGender(),
-            $student->getType(),
-            $student->getApplicationTerm(),
-            $context->get('area_code') . $context->get('exchange') . $context->get('number'),
-            $mealPlan,
-            isset($specialNeeds['physical_disability']) ? 1 : 0,
-            isset($specialNeeds['psych_disability']) ? 1 : 0,
-            isset($specialNeeds['gender_need']) ? 1 : 0,
-            isset($specialNeeds['medical_need']) ? 1 : 0,
-            $international,
-            $context->get('room_type'));
-        }else if ($sem == TERM_SPRING){
-            $application = new SpringApplication(0, $term, $student->getBannerId(), $username,
-            $student->getGender(),
-            $student->getType(),
-            $student->getApplicationTerm(),
-            $context->get('area_code') . $context->get('exchange') . $context->get('number'),
-            $mealPlan,
-            isset($specialNeeds['physical_disability']) ? 1 : 0,
-            isset($specialNeeds['psych_disability']) ? 1 : 0,
-            isset($specialNeeds['gender_need']) ? 1 : 0,
-            isset($specialNeeds['medical_need']) ? 1 : 0,
-            $international,
-            $context->get('lifestyle_option'),
-            $context->get('preferred_bedtime'),
-            $context->get('room_condition'));
-        }else if ($sem == TERM_FALL){
-            $application = new FallApplication(0, $term, $student->getBannerId(), $username,
-            $student->getGender(),
-            $student->getType(),
-            $student->getApplicationTerm(),
-            $context->get('area_code') . $context->get('exchange') . $context->get('number'),
-            $mealPlan,
-            isset($specialNeeds['physical_disability']) ? 1 : 0,
-            isset($specialNeeds['psych_disability']) ? 1 : 0,
-            isset($specialNeeds['gender_need']) ? 1 : 0,
-            isset($specialNeeds['medical_need']) ? 1 : 0,
-            $international,
-            $context->get('lifestyle_option'),
-            $context->get('preferred_bedtime'),
-            $context->get('room_condition'),
-            $context->get('rlc_interest'));
-
-            // TODO this is a hack fix this when we fix RLCs
-            $application->rlc_interest = 0;
-        }else{
-            // Error because of invalid semester
-            throw new InvalidTermException('Invalid term specified.');
-        }
-
+        
         $result = $application->save();
-
+        
         $tpl = array();
 
         if($result == TRUE){
-            # Log the fact that the application was submitted
+            // Log the fact that the application was submitted
             PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
             HMS_Activity_Log::log_activity($username, ACTIVITY_SUBMITTED_APPLICATION, $username);
 
-            # report the application to banner;
-            $application->reportToBanner();
+            try{
+                // report the application to banner;
+                $application->reportToBanner();
+            }catch(Exception $e){
+                // ignore any errors reporting this to banner, they'll be logged and admins notified
+                // we've saved the student's application locally, so it's ok if this doesn't work
+            }
 
-            # Send the email confirmation
+            // Send the email confirmation
             PHPWS_Core::initModClass('hms', 'HMS_Email.php');
             HMS_Email::send_hms_application_confirmation($student, $application->getTerm());
 

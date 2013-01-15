@@ -622,6 +622,10 @@ class HMS_Room extends HMS_Item
         
         return $form->getTemplate();
     }
+    
+    public function getId(){
+    	return $this->id;
+    }
 
     /******************************
      * Accessor / Mutator Methods * 

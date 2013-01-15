@@ -9,6 +9,7 @@
 		{LOGS}
 		{ROOMMATES}
 		{MESSAGING}
+		{SERVICE_DESK}
 	</div>
 	<div class="span-2">
 		{RLCS}

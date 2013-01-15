@@ -692,6 +692,9 @@ class HMS_Residence_Hall extends HMS_Item
     /**
      * Returns an array of hall objects for the given term. If no
      * term is provided, then the current term is used.
+     * 
+     * @deprecated
+     * @see ResidenceHallFactory
      */
     public static function get_halls($term)
     {
@@ -720,6 +723,9 @@ class HMS_Residence_Hall extends HMS_Item
 
     /**
      * Returns an array with the hall id as the key and the hall name as the value
+     * 
+     * @deprecated
+     * @see ResidenceHallFactory
      */
     public static function get_halls_array($term = NULL)
     {

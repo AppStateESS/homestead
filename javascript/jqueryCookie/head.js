@@ -1,0 +1,1 @@
+<script type="text/javascript" src="{source_http}mod/hms/javascript/jqueryCookie/jquery.cookie.js"></script>

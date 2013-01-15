@@ -37,9 +37,25 @@ class FreshmenApplicationReview extends View {
             $tpl['ROOM_TYPE'] = $this->app->getRoomType() == 0?'Two person':'Private (if available)';
         }
 
+        /* Cell Phone */
         $tpl['CELLPHONE']   = is_null($this->app->getCellPhone())?"(not provided)":$this->app->getCellPhone();
 
-        //Special Needs
+        /* Emergency Contact */
+        $tpl['EMERGENCY_CONTACT_NAME'] 			= $this->app->getEmergencyContactName();
+        $tpl['EMERGENCY_CONTACT_RELATIONSHIP']	= $this->app->getEmergencyContactRelationship();
+        $tpl['EMERGENCY_CONTACT_PHONE'] 		= $this->app->getEmergencyContactPhone();
+        $tpl['EMERGENCY_CONTACT_EMAIL'] 		= $this->app->getEmergencyContactEmail();
+        
+        $tpl['EMERGENCY_MEDICAL_CONDITION'] = $this->app->getEmergencyMedicalCondition();
+        
+        /* Missing Person */
+        $tpl['MISSING_PERSON_NAME'] 		= $this->app->getMissingPersonName();
+        $tpl['MISSING_PERSON_RELATIONSHIP']	= $this->app->getMissingPersonRelationship();
+        $tpl['MISSING_PERSON_PHONE'] 		= $this->app->getMissingPersonPhone();
+        $tpl['MISSING_PERSON_EMAIL'] 		= $this->app->getMissingPersonEmail();
+        
+        
+        /* Special Needs */
         $special_needs = "";
         if(isset($this->app->physical_disability)){
             $special_needs = 'Physical disability<br />';
@@ -59,6 +75,7 @@ class FreshmenApplicationReview extends View {
         }
         $tpl['SPECIAL_NEEDS_RESULT'] = $special_needs;
 
+        /* RLC Interest */
         if(Term::getTermSem($this->term) == TERM_FALL){
             $tpl['RLC_REVIEW'] = $this->app->rlc_interest == 0?'No':'Yes';
         }

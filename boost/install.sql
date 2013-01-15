@@ -59,6 +59,48 @@ CREATE TABLE hms_student_phone_cache (
 
 CREATE INDEX hms_student_phone_cache_idx ON hms_student_phone_cache(banner_id);
 
+create table hms_checkin (
+    id                  integer NOT NULL,
+    banner_id           integer NOT NULL,
+    term                integer NOT NULL REFERENCES hms_term(term),
+    bed_id              integer NOT NULL REFERENCES hms_bed(id),
+    room_id             integer NOT NULL REFERENCES hms_room(id),
+    checkin_date        integer NOT NULL,
+    checkin_by          character varying,
+    key_code            character varying,
+    checkout_date       integer,
+    checkout_by         character varying,
+    express_checkout    smallint,
+    improper_checkout   smallint,
+    PRIMARY KEY (id)
+);
+
+create index hms_checkin_banner_id_idx ON hms_checkin(banner_id);
+
+create table hms_student_autocomplete (
+    banner_id           integer NOT NULL,
+    username            character varying,
+    first_name          character varying,
+    middle_name         character varying,
+    last_name           character varying,
+    first_name_meta     character varying,
+    middle_name_meta    character varying,
+    last_name_meta      character varying,
+    start_term          integer,
+    end_term            integer,
+    PRIMARY KEY(banner_id)
+);
+
+create index hms_student_autocomplete_banner_id_index on hms_student_autocomplete (banner_id);
+create index hms_student_autocomplete_username on hms_student_autocomplete (username);
+
+create index hms_student_autocomplete_start_term on hms_student_autocomplete (start_term);
+create index hms_student_autocomplete_end_term on hms_student_autocomplete (end_term);
+
+create index hms_student_autocomplete_first_meta on hms_student_autocomplete (first_name_meta);
+create index hms_student_autocomplete_middle_meta on hms_student_autocomplete (middle_name_meta);
+create index hms_student_autocomplete_last_meta on hms_student_autocomplete (last_name_meta);
+
 CREATE TABLE hms_movein_time (
     id              integer NOT NULL,
     begin_timestamp   integer NOT NULL,
@@ -186,10 +228,10 @@ CREATE TABLE hms_assignment (
 CREATE TABLE hms_assignment_history (
     id                  integer         NOT NULL,
     banner_id           integer         NOT NULL,
-    room                character varying(50) NOT NULL,
+    bed_id              integer		    NOT NULL,
     assigned_on         integer         NOT NULL,
     assigned_by         character varying(32) NOT NULL,
-    assigned_reason     character varying(20) default 'anone',
+    assigned_reason     character varying(20) NOT NULL,
     removed_on          integer,
     removed_by          character varying(32),
     removed_reason      character varying(20),
@@ -274,8 +316,8 @@ CREATE TABLE hms_new_application (
     student_type                    character(1)            NOT NULL,
     application_term                integer                 NOT NULL,
     application_type                character varying(255)  NOT NULL,
-    cell_phone                      character varying(10),
-    meal_plan                       character varying(3),
+    cell_phone                      character varying,
+    meal_plan                       character varying(3)	NOT NULL,
     physical_disability             smallint,
     psych_disability                smallint,
     medical_need                    smallint,
@@ -288,6 +330,16 @@ CREATE TABLE hms_new_application (
     cancelled_reason                character varying(32),
     cancelled_on                    integer,
     cancelled_by                    character varying(32),
+    international					smallint NOT NULL default 0,
+    emergency_contact_name 			varchar,
+    emergency_contact_relationship 	varchar,
+    emergency_contact_phone 		varchar,
+    emergency_contact_email 		varchar,
+    emergency_medical_condition 	varchar,
+    missing_person_name 			varchar,
+    missing_person_relationship 	varchar,
+    missing_person_phone 			varchar,
+    missing_person_email 			varchar,
     PRIMARY KEY(id)
 );
 
@@ -590,6 +642,12 @@ CREATE TABLE hms_report_param (
     param_name          character varying,
     param_value         character varying,
     PRIMARY KEY (id)
+);
+
+create table hms_temp_assignment (
+	room_number character(5) NOT NULL,
+	banner_id integer,
+	PRIMARY KEY(room_number)
 );
 
 CREATE INDEX hms_floor_residence_hall_id_idx ON hms_floor (residence_hall_id);

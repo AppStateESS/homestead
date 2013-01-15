@@ -11,6 +11,7 @@ PHPWS_Core::initModClass('hms', 'RoommatesMenu.php');
 PHPWS_Core::initModClass('hms', 'RLCMenu.php');
 PHPWS_Core::initModClass('hms', 'ReapplicationMaintenanceMenu.php');
 PHPWS_Core::initModClass('hms', 'MessagingMenu.php');
+PHPWS_Core::initModClass('hms', 'ServiceDeskMenu.php');
 
 
 class AdminMaintenanceMenuView extends View {
@@ -18,7 +19,6 @@ class AdminMaintenanceMenuView extends View {
     public function show()
     {
         Layout::addStyle('hms', 'css/menu-grid.css');
-
         $tpl = array();
 
         $searchMenu = new StudentSearchMenu();
@@ -47,6 +47,9 @@ class AdminMaintenanceMenuView extends View {
 
         $messaging = new MessagingMenu();
         $tpl['MESSAGING'] = $messaging->show();
+        
+        $serviceDesk = new ServiceDeskMenu();
+        $tpl['SERVICE_DESK'] = $serviceDesk->show();
 
         Layout::addPageTitle("Main Menu");
 

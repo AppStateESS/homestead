@@ -85,7 +85,22 @@ class HousingApplicationView extends View {
             $tpl['CELLPHONE']   .= '-'.substr($application->cell_phone, 3, 3);
             $tpl['CELLPHONE']   .= '-'.substr($application->cell_phone, 6, 4);
         }
+        
+        /* Emergency Contact */
+        $tpl['EMERGENCY_CONTACT_NAME'] 			= $application->getEmergencyContactName();
+        $tpl['EMERGENCY_CONTACT_RELATIONSHIP']	= $application->getEmergencyContactRelationship();
+        $tpl['EMERGENCY_CONTACT_PHONE'] 		= $application->getEmergencyContactPhone();
+        $tpl['EMERGENCY_CONTACT_EMAIL'] 		= $application->getEmergencyContactEmail();
+        
+        $tpl['EMERGENCY_MEDICAL_CONDITION'] = $application->getEmergencyMedicalCondition();
+        
+        /* Missing Person */
+        $tpl['MISSING_PERSON_NAME'] 		= $application->getMissingPersonName();
+        $tpl['MISSING_PERSON_RELATIONSHIP']	= $application->getMissingPersonRelationship();
+        $tpl['MISSING_PERSON_PHONE'] 		= $application->getMissingPersonPhone();
+        $tpl['MISSING_PERSON_EMAIL'] 		= $application->getMissingPersonEmail();
 
+        /* Special Needs */
         $special_needs = "";
         if($application->physical_disability == 1){
             $special_needs = 'Physical disability<br />';

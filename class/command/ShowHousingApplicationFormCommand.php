@@ -47,19 +47,35 @@ class ShowHousingApplicationFormCommand extends Command {
         PHPWS_Core::initModClass('hms', 'HousingApplicationFactory.php');
         PHPWS_Core::initModClass('hms', 'HousingApplicationFormView.php');
 
-        # Make sure we have a valid term
+        // Make sure we have a valid term
         $term = $context->get('term');
 
         if(is_null($term) || !isset($term)){
             throw new InvalidArgumentException('Missing term.');
         }
 
+        // Determine the application type, based on the term
+        $sem = Term::getTermSem($term);
+        
+    	switch ($sem){
+    		case TERM_FALL:
+    			$appType = 'fall';
+    			break;
+    		case TERM_SPRING:
+    			$appType = 'spring';
+    			break;
+    		case TERM_SUMMER1:
+    		case TERM_SUMMER2:
+    			$appType = 'summer';
+    			break;
+    	}
+        
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
 
-        # Make sure the student agreed to the terms, if not, send them back to the terms & agreement command
+        // Make sure the student agreed to the terms, if not, send them back to the terms & agreement command
         $agreedToTerms = $context->get('agreedToTerms');
 
-        # If they haven't agreed, redirect to the agreement
+        // If they haven't agreed, redirect to the agreement
         if(is_null($agreedToTerms) || !isset($agreedToTerms) || $agreedToTerms != 1){
             $agreementCmd = CommandFactory::getCommand('ShowTermsAgreement');
             $agreementCmd->setTerm($term);
@@ -73,18 +89,20 @@ class ShowHousingApplicationFormCommand extends Command {
 			$pinCmd->redirect();
 		}
         
-        # Check to see if the user has an existing application for the term in question
+        // Check to see if the user has an existing application for the term in question
         $existingApplication = HousingApplication::getApplicationByUser($student->getUsername(), $term);
 
-        # Check for an in-progress application on the context, ignore any exceptions (in case there isn't an application on the context)
+        
+        // Check for an in-progress application on the context, ignore any exceptions (in case there isn't an application on the context)
         try {
-            $contextApplication = HousingApplicationFactory::getApplicationFromContext($context, $term, $student);
+        	//TODO check to see if it looks like there might be something on the context before trying this
+            $existingApplication = HousingApplicationFactory::getApplicationFromContext($context, $term, $student, $appType);
         }catch(Exception $e){
             // ignored
             $contextApplication = NULL;
         }
 
-        $appView = new HousingApplicationFormView($student, $term, $existingApplication, $contextApplication);
+        $appView = new HousingApplicationFormView($student, $term, $existingApplication);
 
         $context->setContent($appView->show());
     }

@@ -49,6 +49,8 @@ class HMS_Bed extends HMS_Item {
         $new_bed->reset();
         $new_bed->term    = $to_term;
         $new_bed->room_id = $room_id;
+        $new_bed->setRoomChangeReserved(0);
+
         try{
             $new_bed->save();
         }catch(Exception $e){
@@ -273,7 +275,11 @@ class HMS_Bed extends HMS_Item {
                 $link_un = $unAssignCmd->getLink('(Un-assign)');
             }
 
-            $student = StudentFactory::getStudentByUsername($this->_curr_assignment->asu_username, Term::getSelectedTerm());
+            try {
+                $student = StudentFactory::getStudentByUsername($this->_curr_assignment->asu_username, Term::getSelectedTerm());
+            }catch (StudentNotFoundException $e){
+                return 'Unknown student: ' . $this->_curr_assignment->getBannerId();
+            }
 
             return $student->getProfileLink() . ' ' . $link_re . ' ' . $link_un;
         }else{
@@ -442,6 +448,11 @@ class HMS_Bed extends HMS_Item {
             return TRUE;
         }
     }
+    
+    public function getId()
+    {
+    	return $this->id;
+    }
 
     public function getBannerId()
     {
@@ -456,6 +467,14 @@ class HMS_Bed extends HMS_Item {
     public function isInternationalReserved()
     {
         return $this->international_reserved;
+    }
+
+    public function getRoomChangeReserved(){
+        return $this->room_change_reserved;
+    }
+
+    public function setRoomChangeReserved($reserved){
+        $this->room_change_reserved = $reserved;
     }
 
 

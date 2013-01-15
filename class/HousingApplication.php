@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Main model class to represent a Housing Application.
+ *
+ * @author jbooker
+ * @package hms
+ */
 class HousingApplication {
 
     public $id = 0;
@@ -17,9 +23,20 @@ class HousingApplication {
     public $cell_phone;
     public $meal_plan;
 
-    /**
-     * Special needs flags
-     */
+    /* Emergency Contact Info */
+    public $emergency_contact_name;
+    public $emergency_contact_relationship;
+    public $emergency_contact_phone;
+    public $emergency_contact_email;
+    public $emergency_medical_condition;
+
+    /* Missing Persons Information */
+    public $missing_person_name;
+    public $missing_person_relationship;
+    public $missing_person_phone;
+    public $missing_person_email;
+
+    /* Special needs flags */
     public $physical_disability;
     public $psych_disability;
     public $medical_need;
@@ -38,7 +55,7 @@ class HousingApplication {
      * @deprecated Use 'cancelled' member variable instead.
      */
     public $withdrawn = 0;
-    
+
     /* Contract Cancellation */
     public $cancelled;
     public $cancelled_reason;
@@ -56,8 +73,23 @@ class HousingApplication {
      * remaining parameters are required
      * and this method will handle initializing the values of the core application member variables defined in
      * this class
+     *
+     * @param string $term
+     * @param string $banner_id
+     * @param string $username
+     * @param string $gender
+     * @param string $student_type
+     * @param string $application_term
+     * @param string $cell_phone
+     * @param string $meal_plan
+     * @param string $physical_disability
+     * @param string $psych_disability
+     * @param string $gender_need
+     * @param string $medical_need
+     * @param string $international
      */
-    public function __construct($term = NULL, $banner_id = NULL, $username = NULL, $gender = NULL, $student_type = NULL, $application_term = NULL, $cell_phone = NULL, $meal_plan = NULL, $physical_disability = NULL, $psych_disability = NULL, $gender_need = NULL, $medical_need = NULL, $international = NULL){
+    public function __construct($term = null, $banner_id = null, $username = null, $gender = null, $student_type = null, $application_term = null, $cell_phone = null, $meal_plan = null, $physical_disability = null, $psych_disability = null, $gender_need = null, $medical_need = null, $international = null)
+    {
 
         $this->setTerm($term);
         $this->setBannerId($banner_id);
@@ -91,13 +123,13 @@ class HousingApplication {
      */
     protected function load()
     {
-        if($this->id == 0){
+        if($this->id == 0) {
             return;
         }
 
         $db = new PHPWS_DB('hms_new_application');
         $result = $db->loadObject($this);
-        if(PHPWS_Error::logIfError($result)){
+        if(PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         }
 
@@ -118,7 +150,7 @@ class HousingApplication {
         $db = new PHPWS_DB('hms_new_application');
 
         $result = $db->saveObject($this);
-        if(PHPWS_Error::logIfError($result)){
+        if(PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         }
 
@@ -131,27 +163,28 @@ class HousingApplication {
     /**
      * Sets the last modified by/on fields and, if necessary, the created by/on fields
      */
-    public function stamp(){
-        # Set the last modified time
+    public function stamp()
+    {
+        // Set the last modified time
         $this->setModifiedOn(time());
 
-    # Sets the 'last modified by' field according to who's logged in
-    $user = UserStatus::getUsername();
-    if(isset($user) && !is_null($user)){
-        $this->setModifiedBy(UserStatus::getUsername());
-    }else{
-        $this->setModifiedBy('hms');
-    }
-
-    # If the object is new, set the 'created' fields
-    if($this->getId() == 0){
-        $this->setCreatedOn(time());
-        if(isset($user) && !is_null($user)){
-            $this->setCreatedBy(UserStatus::getUsername());
+        // Sets the 'last modified by' field according to who's logged in
+        $user = UserStatus::getUsername();
+        if(isset($user) && !is_null($user)) {
+            $this->setModifiedBy(UserStatus::getUsername());
         }else{
-            $this->setCreatedBy('hms');
+            $this->setModifiedBy('hms');
         }
-    }
+
+        // If the object is new, set the 'created' fields
+        if($this->getId() == 0) {
+            $this->setCreatedOn(time());
+            if(isset($user) && !is_null($user)) {
+                $this->setCreatedBy(UserStatus::getUsername());
+            }else{
+                $this->setCreatedBy('hms');
+            }
+        }
     }
 
     /**
@@ -161,22 +194,28 @@ class HousingApplication {
     {
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
 
-        # Determine which user name to use as the current user
+        // Determine which user name to use as the current user
         $username = UserStatus::getUsername();
 
-        if(isset($username) && !is_null($username)){
+        if(isset($username) && !is_null($username)) {
             HMS_Activity_Log::log_activity($this->getUsername(), ACTIVITY_SUBMITTED_APPLICATION, $username, 'Term: ' . $this->getTerm());
-        }else{
+        } else {
             HMS_Activity_Log::log_activity($this->getUsername(), ACTIVITY_SUBMITTED_APPLICATION, 'hms', 'Term: ' . $this->getTerm());
         }
     }
 
+    /**
+     * Delets this application from the database.
+     *
+     * @throws DatabaseException
+     * @return boolean
+     */
     public function delete()
     {
         $db = new PHPWS_DB('hms_new_application');
         $db->addWhere('id', $this->id);
         $result = $db->delete();
-        if(!$result || PHPWS_Error::logIfError($result)){
+        if(!$result || PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         }
 
@@ -213,25 +252,30 @@ class HousingApplication {
             throw $e; // rethrow the exception it
         }
 
-        # Log the fact that the application was sent to banner
+        // Log the fact that the application was sent to banner
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
         HMS_Activity_Log::log_activity($this->getUsername(), ACTIVITY_APPLICATION_REPORTED, UserStatus::getUsername());
     }
 
+    /**
+     * Returns the Student object who this appllication is for
+     * @return Student
+     */
     public function getStudent()
     {
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        
+
         return StudentFactory::getStudentByBannerId($this->getBannerId(), $this->getTerm());
     }
-    
+
     /**
      * Returns a nicely formatted string with the "type" of this application
+     *
      * @return String
      */
     public function getPrintableAppType()
     {
-        switch($this->application_type){
+        switch($this->application_type) {
             case 'fall':
                 return "Fall";
                 break;
@@ -249,13 +293,13 @@ class HousingApplication {
                 break;
             default:
                 return "Unknown";
-            break;
+                break;
         }
     }
 
     /**
      * Returns the fields for this HousingApplication parent class. Usually called by overriding methods in subclasses (e.g. SummerApplication).
-     * 
+     *
      * @return Array Array of fields for this HousingApplication.
      */
     protected function unassignedStudentsFields()
@@ -267,14 +311,14 @@ class HousingApplication {
         $fields['application_term']  = Term::toString($this->getApplicationTerm(), TRUE);
         $fields['student_type']      = HMS_Util::formatType($this->getStudentType());
         $fields['meal_plan']         = HMS_Util::formatMealOption($this->getMealPlan());
-        
+
         $fields['created_on']        = HMS_Util::get_long_date($this->getCreatedOn());
 
         $roommate = HMS_Roommate::get_confirmed_roommate($this->getUsername(), $this->getTerm());
-        if(!is_null($roommate)){
+        if(!is_null($roommate)) {
             $fields['roommate'] = $roommate->getFullName();
             $fields['roommate_id'] = $roommate->getBannerId();
-        }else{
+        } else {
             $fields['roommate'] = '';
             $fields['roommate_id'] = '';
         }
@@ -284,10 +328,10 @@ class HousingApplication {
 
     /**
      * Marks an application as cancelled.
-     * 
+     *
      * Valid values for $reasonKey are defined in defines.php,
      * and listed in HousingApplication::getCancellationReasons().
-     * 
+     *
      * @param integer $reasonKey
      */
     public function cancel($reasonKey)
@@ -295,15 +339,15 @@ class HousingApplication {
         $this->cancelled = 1;
         $this->cancelled_by = Current_User::getUsername();
         $this->cancelled_on = time();
-        
+
         $reasons = self::getCancellationReasons();
 
-        if($reasonKey == "0" || !array_key_exists($reasonKey, $reasons)){
+        if($reasonKey == "0" || !array_key_exists($reasonKey, $reasons)) {
             throw new InvalidArgumentException('Invalid cancellation reason key.');
         }
-        
+
         $this->cancelled_reason = $reasonKey;
-        
+
         // Log that this happened
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
         HMS_Activity_Log::log_activity($this->getUsername(), ACTIVITY_CANCEL_HOUSING_APPLICATION, Current_User::getUsername(), Term::toString($this->getTerm()) . ': ' . $reasons[$reasonKey]);
@@ -322,26 +366,26 @@ class HousingApplication {
      * The 'cancelled' parameter is optional. If set to true, then this method will
      * return true for cancelled applications. If false (default), then this method will
      * ignore cancelled applications.
-     * 
+     *
      */
     public static function checkForApplication($username, $term, $cancelled = FALSE)
     {
         $db = new PHPWS_DB('hms_new_application');
-        $db->addWhere('username',$username,'ILIKE');
+        $db->addWhere('username', $username, 'ILIKE');
 
         $db->addWhere('term', $term);
 
-        if(!$cancelled){
+        if(!$cancelled) {
             $db->addWhere('cancelled', 0);
         }
 
         $result = $db->select('row');
 
-        if(PEAR::isError($result)){
+        if(PEAR::isError($result)) {
             throw new DatabaseException($result->toString());
         }
 
-        if(sizeof($result) > 0){
+        if(sizeof($result) > 0) {
             return $result;
         }else{
             return FALSE;
@@ -352,7 +396,7 @@ class HousingApplication {
     // TODO make this static too
     /**
      * Returns a HousingApplication for the given user name.
-     * 
+     *
      * @deprecated
      * @see HousingApplicationFactory::getAppByStudent()
      * @param unknown_type $username
@@ -361,7 +405,7 @@ class HousingApplication {
      * @throws DatabaseException
      * @throws InvalidArgumentException
      */
-    public function getApplicationByUser($username, $term, $applicationType = NULL)
+    public function getApplicationByUser($username, $term, $applicationType = null)
     {
         PHPWS_Core::initModClass('hms', 'HousingApplication.php');
         PHPWS_Core::initModClass('hms', 'FallApplication.php');
@@ -377,21 +421,21 @@ class HousingApplication {
         $db->addWhere('username', $username);
         $db->addWhere('term', $term);
 
-        if(!is_null($applicationType)){
+        if(!is_null($applicationType)) {
             $db->addWhere('application_type', $applicationType);
         }
 
         $result = $db->select('row');
 
-        if(PHPWS_Error::logIfError($result)){
+        if(PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         }
 
-        if($result == NULL){
-            return NULL;
+        if($result == null) {
+            return null;
         }
 
-        switch($result['application_type']){
+        switch($result['application_type']) {
             case 'fall':
                 $app = new FallApplication($result['id']);
                 break;
@@ -418,22 +462,29 @@ class HousingApplication {
      * Returns an array of HousingApplication objects, one object for each application the
      * given student has completed. All parameters are optional.
      * Returns false if the request cannot be compelted for any reason.
+     *
+     * TODO depricate this and do it better
+     *
+     * @param string $username
+     * @param string $banner_id
+     * @param string $term
+     * @return multitype:Ambigous <NULL, FallApplication>
      */
-    // TODO depricate this and do it better
-    public static function getAllApplications($username = NULL, $banner_id = NULL, $term = NULL){
+    public static function getAllApplications($username = null, $banner_id = null, $term = null)
+    {
         PHPWS_Core::initModClass('hms', 'HousingApplicationFactory.php');
 
         $db = new PHPWS_DB('hms_new_application');
 
-        if(!is_null($banner_id)){
+        if(!is_null($banner_id)) {
             $db->addWhere('banner_id', $banner_id);
         }
 
-        if(!is_null($username)){
+        if(!is_null($username)) {
             $db->addWhere('username', $username, 'ILIKE');
         }
 
-        if(!is_null($term)){
+        if(!is_null($term)) {
             $db->addWhere('term', $term);
         }
 
@@ -441,7 +492,7 @@ class HousingApplication {
 
         $apps = array();
 
-        foreach($result as $app){
+        foreach($result as $app) {
             $apps[] = HousingApplicationFactory::getApplicationById($app['id']);
         }
 
@@ -462,7 +513,7 @@ class HousingApplication {
     {
         $db = new PHPWS_DB('hms_new_application');
 
-        if(!isset($student) || empty($student) || is_null($student)){
+        if(!isset($student) || empty($student) || is_null($student)) {
             throw new InvalidArgumentException('Missing/invalid student.');
         }
 
@@ -470,14 +521,14 @@ class HousingApplication {
 
         $result = $db->getObjects('HousingApplication');
 
-        if(PHPWS_Error::logIfError($result)){
+        if(PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         }
 
 
-        # Re-index the applications using the term as the key
+        // Re-index the applications using the term as the key
         $appsByTerm = array();
-        if(isset($result) && !is_null($result)){
+        if(isset($result) && !is_null($result)) {
             foreach($result as $app) {
                 $appsByTerm[$app->getTerm()] = $app;
             }
@@ -486,7 +537,14 @@ class HousingApplication {
         return $appsByTerm;
     }
 
-    public static function getAllFreshmenApplications($term){
+    /**
+     * Returns all freshmen application for the given term.
+     *
+     * @param unknown $term
+     * @return boolean|unknown
+     */
+    public static function getAllFreshmenApplications($term)
+    {
         PHPWS_Core::initModClass('hms', 'HousingApplication.php');
         PHPWS_Core::initModClass('hms', 'FallApplication.php');
         PHPWS_Core::initModClass('hms', 'SpringApplication.php');
@@ -496,27 +554,27 @@ class HousingApplication {
 
         $db = new PHPWS_DB('hms_new_application');
 
-        # Add 'where' clause for term and student type
+        // Add 'where' clause for term and student type
         $db->addWhere('term', $term);
         $db->addWhere('student_type', TYPE_FRESHMEN);
 
-        for($i = 1; $i < func_num_args(); $i++){
+        for($i = 1; $i < func_num_args(); $i++) {
             $db->addOrder(func_get_arg($i));
         }
 
-        # Add the appropriate join, based on the term
-        if($sem == TERM_FALL){
+        // Add the appropriate join, based on the term
+        if($sem == TERM_FALL) {
             $db->addJoin('LEFT OUTER', 'hms_new_application', 'hms_fall_application', 'id', 'id');
             $result = $db->getObjects('FallApplication');
-        }else if($term == TERM_SPRING){
+        } else if($term == TERM_SPRING) {
             $db->addJoin('LEFT OUTER', 'hms_new_application', 'hms_spring_application', 'id', 'id');
             $result = $db->getObjects('SpringApplication');
-        }else if($term == TERM_SUMMER1 || $term == TERM_SUMMER2){
+        } else if($term == TERM_SUMMER1 || $term == TERM_SUMMER2) {
             $db->addJoin('LEFT OUTER', 'hms_new_application', 'hms_summer_application', 'id', 'id');
             $result = $db->getObjects('SummerApplication');
         }
 
-        if(PEAR::isError($result)){
+        if(PEAR::isError($result)) {
             return FALSE;
         }
 
@@ -524,6 +582,15 @@ class HousingApplication {
 
     }
 
+    /**
+     * Returns applications for all unassigned freshmen.
+     *
+     * @param unknown $term
+     * @param unknown $gender
+     * @throws InvalidTermException
+     * @throws DatabaseException
+     * @return multitype:unknown
+     */
     public static function getUnassignedFreshmenApplications($term, $gender)
     {
         PHPWS_Core::initModClass('hms', 'Term.php');
@@ -536,7 +603,7 @@ class HousingApplication {
         //        $db->addWhere('gender', $gender);
 
         // Add join for extra application fields (sub-class fields)
-        switch(Term::getTermSem($term)){
+        switch(Term::getTermSem($term)) {
             case TERM_SUMMER1:
             case TERM_SUMMER2:
                 PHPWS_Core::initModClass('hms', 'SummerApplication.php');
@@ -564,10 +631,10 @@ class HousingApplication {
                 break;
             default:
                 PHPWS_Core::initModClass('hms', 'exception/InvalidTermException.php');
-            throw new InvalidTermException($term);
+                throw new InvalidTermException($term);
         }
 
-        if(PHPWS_Error::logIfError($result)){
+        if(PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         }
 
@@ -593,13 +660,20 @@ class HousingApplication {
         return $newresult;
     }
 
-    public static function getAvailableApplicationTermsForStudent(Student $student){
+    /**
+     * Returns an array of the terms which this student can potentially apply for.
+     *
+     * @param Student $student
+     * @return multitype:multitype:number unknown  multitype:number string
+     */
+    public static function getAvailableApplicationTermsForStudent(Student $student)
+    {
         $availableTerms = array();
 
         $applicationTerm = $student->getApplicationTerm();
         $sem = Term::getTermSem($applicationTerm);
 
-        switch($sem){
+        switch($sem) {
             case TERM_SPRING:
             case TERM_FALL:
                 $availableTerms[] = array('term'=>$applicationTerm, 'required'=>1);
@@ -621,10 +695,16 @@ class HousingApplication {
         return $availableTerms;
     }
 
+    /**
+     * Returns an array of term which the student *must* apply for.
+     *
+     * @param Student $student
+     * @return multitype:|multitype:Ambigous <multitype:multitype:number, multitype:multitype:number unknown  multitype:number string  >
+     */
     public static function getRequiredApplicationTermsForStudent(Student $student)
     {
         // Special case for Transfer students: They're not required to apply for any term
-        if($student->getType() == TYPE_TRANSFER){
+        if($student->getType() == TYPE_TRANSFER) {
             return array();
         }
 
@@ -632,8 +712,8 @@ class HousingApplication {
 
         $requiredTerms = array();
 
-        foreach($availableTerms as $term){
-            if($term['required'] == 1){
+        foreach($availableTerms as $term) {
+            if($term['required'] == 1) {
                 $requiredTerms[] = $term;
             }
         }
@@ -660,9 +740,9 @@ class HousingApplication {
 
         $needToApplyFor = array();
 
-        foreach($requiredTerms as $term){
+        foreach($requiredTerms as $term) {
             // Check if a housing application exists for this student in this term
-            if(!isset($existingApplications[$term['term']])){
+            if(!isset($existingApplications[$term['term']])) {
                 $needToApplyFor[] = $term['term'];
             }
         }
@@ -674,234 +754,389 @@ class HousingApplication {
      * Accessors & Mutators *
     ************************/
 
-    public function getId(){
+    public function getId()
+    {
         return $this->id;
     }
 
-    public function setId($id){
+    public function setId($id)
+    {
         $this->id = $id;
     }
 
-    public function getTerm(){
+    public function getTerm()
+    {
         return $this->term;
     }
 
-    public function setTerm($term){
+    public function setTerm($term)
+    {
         $this->term = $term;
     }
 
-    public function getBannerId(){
+    public function getBannerId()
+    {
         return $this->banner_id;
     }
 
-    public function setBannerId($id){
+    public function setBannerId($id)
+    {
         $this->banner_id = $id;
     }
 
-    public function getUsername(){
+    public function getUsername()
+    {
         return $this->username;
     }
 
-    public function setUsername($username){
+    public function setUsername($username)
+    {
         $this->username = $username;
     }
 
-    public function getGender(){
+    public function getGender()
+    {
         return $this->gender;
     }
 
-    public function setGender($gender){
+    public function setGender($gender)
+    {
         $this->gender = $gender;
     }
 
-    public function getStudentType(){
+    public function getStudentType()
+    {
         return $this->student_type;
     }
 
-    public function setStudentType($type){
+    public function setStudentType($type)
+    {
         $this->student_type = $type;
     }
 
-    public function getApplicationTerm(){
+    public function getApplicationTerm()
+    {
         return $this->application_term;
     }
 
-    public function setApplicationTerm($term){
+    public function setApplicationTerm($term)
+    {
         $this->application_term = $term;
     }
 
-    public function getCellPhone(){
+    public function getCellPhone()
+    {
         return $this->cell_phone;
     }
 
-    public function setCellPhone($phone){
+    public function setCellPhone($phone)
+    {
         $this->cell_phone = $phone;
     }
 
-    public function getMealPlan(){
+    public function getMealPlan()
+    {
         return $this->meal_plan;
     }
 
-    public function setMealPlan($plan){
+    public function setMealPlan($plan)
+    {
         $this->meal_plan = $plan;
     }
 
-    public function getPhysicalDisability(){
+    public function getPhysicalDisability()
+    {
         return $this->physical_disability;
     }
 
-    public function setPhysicalDisability($physical){
+    public function setPhysicalDisability($physical)
+    {
         $this->physical_disability = $physical;
     }
 
-    public function getPsychDisability(){
+    public function getPsychDisability()
+    {
         return $this->psych_disability;
     }
 
-    public function setPsychDisability($psych){
+    public function setPsychDisability($psych)
+    {
         $this->psych_disability = $psych;
     }
 
-    public function getMedicalNeed(){
+    public function getMedicalNeed()
+    {
         return $this->medical_need;
     }
 
-    public function setMedicalNeed($medical){
+    public function setMedicalNeed($medical)
+    {
         $this->medical_need = $medical;
     }
 
-    public function getGenderNeed($gender){
+    public function getGenderNeed($gender)
+    {
         return $this->gender_need;
     }
 
-    public function setGenderNeed($gender){
+    public function setGenderNeed($gender)
+    {
         $this->gender_need = $gender;
     }
 
-    public function getInternational(){
+    public function getInternational()
+    {
         return $this->international;
     }
 
-    public function setInternational($intl){
+    public function setInternational($intl)
+    {
         $this->international = $intl;
     }
 
-    public function setCreatedOn($timestamp){
+    public function setCreatedOn($timestamp)
+    {
         $this->created_on = $timestamp;
     }
 
-    public function getCreatedOn(){
+    public function getCreatedOn()
+    {
         return $this->created_on;
     }
 
-    public function getCreatedBy(){
+    public function getCreatedBy()
+    {
         return $this->created_by;
     }
 
-    public function setCreatedBy($username){
+    public function setCreatedBy($username)
+    {
         $this->created_by = $username;
     }
 
-    public function getModifiedBy(){
+    public function getModifiedBy()
+    {
         return $this->modified_by;
     }
 
-    public function setModifiedBy($username){
+    public function setModifiedBy($username)
+    {
         $this->modified_by = $username;
     }
 
-    public function getModifiedOn(){
+    public function getModifiedOn()
+    {
         return $this->modified_on;
     }
 
-    public function setModifiedOn($timestamp){
+    public function setModifiedOn($timestamp)
+    {
         $this->modified_on = $timestamp;
     }
-    
+
     public function getCancelled()
     {
         return $this->cancelled;
     }
-    
-    public function setCancelled($status){
+
+    public function setCancelled($status)
+    {
         $this->cancelled = $status;
     }
-    
-    public function isCancelled(){
-        if($this->getCancelled() == 1){
+
+    public function isCancelled()
+    {
+        if($this->getCancelled() == 1) {
             return true;
         }else{
             return false;
         }
     }
-    
-    public function getCancelledReason(){
+
+    public function getCancelledReason()
+    {
         return $this->cancelled_reason;
     }
-    
-    public function setCancelledReason($reason){
+
+    public function setCancelledReason($reason)
+    {
         $this->cancelled_reason = $reason;
     }
-    
-    public function getCancelledBy(){
+
+    public function getCancelledBy()
+    {
         return $this->cancelled_by;
     }
-    
-    public function setCancelledBy($user){
+
+    public function setCancelledBy($user)
+    {
         $this->cancelled_by = $user;
     }
-    
-    public function getCancelledOn(){
+
+    public function getCancelledOn()
+    {
         return $this->cancelled_on;
     }
-    
-    public function setCancelledOn($time){
+
+    public function setCancelledOn($time)
+    {
         $this->cancelled_on = $time;
     }
 
-    public function getApplicationType(){
+    public function getApplicationType()
+    {
         return $this->application_type;
     }
 
-    public function setApplicationType($type){
+    public function setApplicationType($type)
+    {
         $this->application_type = $type;
     }
-    
+
+
+    /*******
+     * Emergency Contact Info
+    */
+
+    public function getEmergencyContactName()
+    {
+        return $this->emergency_contact_name;
+    }
+
+    public function setEmergencyContactName($name)
+    {
+        $this->emergency_contact_name = $name;
+    }
+
+    public function getEmergencyContactRelationship()
+    {
+        return $this->emergency_contact_relationship;
+    }
+
+    public function setEmergencyContactRelationship($relation)
+    {
+        $this->emergency_contact_relationship = $relation;
+    }
+
+    public function getEmergencyContactPhone()
+    {
+        return $this->emergency_contact_phone;
+    }
+
+    public function setEmergencyContactPhone($phone)
+    {
+        $this->emergency_contact_phone = $phone;
+    }
+
+    public function getEmergencyContactEmail()
+    {
+        return $this->emergency_contact_email;
+    }
+
+    public function setEmergencyContactEmail($email)
+    {
+        $this->emergency_contact_email = $email;
+    }
+
+    public function getEmergencyMedicalCondition()
+    {
+        return $this->emergency_medical_condition;
+    }
+
+    public function setEmergencyMedicalCondition($cond)
+    {
+        $this->emergency_medical_condition = $cond;
+    }
+
+    public function getMissingPersonName()
+    {
+        return $this->missing_person_name;
+    }
+
+    public function setMissingPersonName($name)
+    {
+        $this->missing_person_name = $name;
+    }
+
+    public function getMissingPersonRelationship()
+    {
+        return $this->missing_person_relationship;
+    }
+
+    public function setMissingPersonRelationship($relation)
+    {
+        $this->missing_person_relationship = $relation;
+    }
+
+    public function getMissingPersonPhone()
+    {
+        return $this->missing_person_phone;
+    }
+
+    public function setMissingPersonPhone($phone)
+    {
+        $this->missing_person_phone = $phone;
+    }
+
+    public function getMissingPersonEmail()
+    {
+        return $this->missing_person_email;
+    }
+
+    public function setMissingPersonEmail($email)
+    {
+        $this->missing_person_email = $email;
+    }
+
+
     /**
+     * Returns the withdrawn flag.
+     *
      * @deprecated
      */
-    public function getWithdrawn(){
+    public function getWithdrawn()
+    {
         return $this->withdrawn;
     }
-    
+
     /**
+     * Returns boolean based on the withdrawn flag.
+     *
      * @deprecated
      */
-    public function isWithdrawn(){
-        if($this->withdrawn == 1){
+    public function isWithdrawn()
+    {
+        if($this->withdrawn == 1) {
             return true;
         }else{
             return false;
         }
     }
-    
+
     /**
+     * Sets the withdrawn flag.
+     *
      * @deprecated
      */
-    public function setWithdrawn($status){
+    public function setWithdrawn($status)
+    {
         $this->withdrawn = $status;
     }
-    
-    // Cancellation reasons
+
+    /**
+     * Returns an associative array of cancellation reasons to string descriptions.
+     *
+     * @return multitype:string
+     */
     public static function getCancellationReasons()
     {
         return array(
-                    CANCEL_BEFORE_JULY   => 'Cancel Before July',
-                    CANCEL_AFTER_JULY    => 'Cancel After July',
-                    CANCEL_WITHDRAWN     => 'Withdrawn',
-                    CANCEL_INTENT        => 'Intent Not to Return',
-                    CANCEL_BEFORE_ASSIGN => 'Cancel Before Assignment'
-                );
+                CANCEL_BEFORE_JULY   => 'Cancel Before July',
+                CANCEL_AFTER_JULY    => 'Cancel After July',
+                CANCEL_WITHDRAWN     => 'Withdrawn',
+                CANCEL_INTENT        => 'Intent Not to Return',
+                CANCEL_BEFORE_ASSIGN => 'Cancel Before Assignment'
+        );
     }
 }
 ?>

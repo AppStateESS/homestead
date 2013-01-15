@@ -108,6 +108,8 @@ class SendAssignmentNotificationCommand extends Command {
             }
 
             // If the RLC didn't set a movein time, set it according to the floor
+			// TODO: Find continuing students by checking the student's application term
+			// against the term we're wending assignment notices for            
             if(is_null($moveinTimeId)){
                 if($type == TYPE_CONTINUING){
                     $moveinTimeId = $assignment->get_rt_movein_time_id();

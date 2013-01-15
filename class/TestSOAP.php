@@ -24,6 +24,7 @@ class TestSOAP extends SOAP{
         
         $response = new stdClass();
 
+        $student = new stdClass();
         //$response->banner_id             = 900325006;
         $response->banner_id             = 900325007;
         $response->user_name				= 'jb67803';
@@ -36,6 +37,15 @@ class TestSOAP extends SOAP{
         $response->deposit_date          = '';
         $response->deposit_waived        = 'false';
         
+        $student->banner_id             = 900325006;
+        //$student->banner_id             = 900325007;
+        $student->last_name             = 'Booker';
+        $student->first_name            = 'Jeremy';
+        $student->middle_name           = 'Lee';
+        $student->dob                   = '1986-09-05';
+        $student->gender                = 'M';
+        $student->deposit_date          = '';
+        $student->deposit_waived        = 'false';
         $response->confid				= 'Y'; // TODO double check this value
 
         $response->international         = false;
@@ -54,9 +64,9 @@ class TestSOAP extends SOAP{
         //$response->application_term      = '201040';
         //$response->projected_class       = 'FR';
 
-        $response->student_type          = 'F';
-        $response->application_term      = '201240';
-        $response->projected_class       = 'FR';
+        $student->student_type          = 'F';
+        $student->application_term      = '201310';
+        $student->projected_class       = 'FR';
 
         $response->credhrs_completed     = 0;
         $response->credhrs_for_term      = 15;
@@ -69,7 +79,7 @@ class TestSOAP extends SOAP{
         $response->error_desc = null;
 
         // Setup the address object
-        $address = new stdClass();
+        $address = new stdClass();;
         $address->atyp_code = 'PS';
         $address->line1     = '123 Rivers St. - PS Address';
         $address->line2     = 'c/o Electronic Student Services';
@@ -199,17 +209,20 @@ class TestSOAP extends SOAP{
     public function getHousMealRegister($username, $term, $opt)
     {
         // Assemble the housing_app object
+        $housing_app = new stdClass();
         $housing_app->plan_code     = 'HOME';
         $housing_app->status_code   = 'AC';
         $housing_app->status_date   = '2007-02-20';
 
         // Assemble the room_assign object
+        $room_assign = new stdClass();
         $room_assign->bldg_code     = 'JTR';
         $room_assign->room_code     = 02322;
         $room_assign->status_code   = 'AC';
         $room_assign->status_date   = '2008-01-14';
 
         // Assemble the meal_assign object
+        $meal_assign = new stdClass();
         $meal_assign->plan_code     = 1;
         $meal_assign->status_code   = 'AC';
         $meal_assign->status_date   = '2007-11-20';

@@ -21,6 +21,11 @@ class StudentSearchMenu extends CommandMenu {
 
         $tpl = array();
         $tpl['MENU'] = parent::show();
+        //$tpl['LEGEND_TITLE'] = 'Search Students';
+        //$tpl['ICON_CLASS']   = 'tango-system-search';
+        
+        
+        //return PHPWS_Template::process($tpl, 'hms', 'admin/menus/AdminMenuBlock.tpl');
         return PHPWS_Template::process($tpl, 'hms', 'admin/menus/StudentSearchMenu.tpl');
     }
 }

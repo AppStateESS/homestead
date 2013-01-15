@@ -141,5 +141,6 @@
     /***************************
      * Room change permissions *
      **************************/
+    $permissions['checkin'] = _('Check-in');
     $permissions['admin_approve_room_change'] = _('Can approve room change requests');
 ?>
