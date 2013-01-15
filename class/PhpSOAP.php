@@ -106,8 +106,13 @@ class PhpSOAP extends SOAP
             return false;
         }
 
+        if(!isset($response->GetBannerIDResult)){
+            return null;
+        }
+
         if(!is_numeric($response->GetBannerIDResult)){
-            throw new BannerException($response->GetBannerIDResult, null, 'getBannerId', $params);
+            //throw new BannerException($response->GetBannerIDResult, null, 'getBannerId', $params);
+            return null;
         }
 
         SOAP::logSoap('getBannerId', 'success', $params);
