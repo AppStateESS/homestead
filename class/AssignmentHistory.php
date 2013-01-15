@@ -213,7 +213,7 @@ class AssignmentHistory extends HMS_Item {
         	
         // check if an open-ended assignment exists for the term sent.  If so, unassign with reason "AUTO"
         if(AssignmentHistory::historyExists($assignment)){
-            AssignmentHistory::makeUnassignmentHistory($assignment, UNASSIGN_NOREASON);
+            AssignmentHistory::makeUnassignmentHistory($assignment, UNASSIGN_REASSIGN);
         }
 
         $ah = new AssignmentHistory();

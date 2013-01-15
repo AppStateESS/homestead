@@ -256,7 +256,7 @@ class PhpSOAP extends SOAP
                         'BannerID'  => $bannerId,
                         'TermCode'  => $term,
                         'BldgCode'  => $building,
-                        'RoomCode'  => $room,
+                        'RoomCode'  => $bannerBedId,
                         'PlanCode'  => $plan,
                         'MealCode'  => $meal,
                         'UserType'  => $this->userType);
@@ -295,7 +295,7 @@ class PhpSOAP extends SOAP
         }
 
         if($response->RemoveRoomAssignmentResult != "0"){
-            SOAP::logSoap('removeRoomAssignment', 'failed (' . $response->RemoveRoomAssignmentResult . ')', $username, $term, $building, $room);
+            SOAP::logSoap('removeRoomAssignment', 'failed', $params);
             throw new BannerException('Error while reporting removal to Banner.', $response->RemoveRoomAssignmentResult, 'removeRoomAssignment', $params);
             return false;
         }

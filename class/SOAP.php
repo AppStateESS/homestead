@@ -206,7 +206,7 @@ abstract class SOAP
     public function reportRoomAssignment($username, $term, $building_code, $room_code, $plan_code, $meal_code)
     {
         $bannerId = $this->getBannerId($username);
-        return $this->createRoomAssignment($bannerId, $term, $building, $room, $plan, $meal);
+        return $this->createRoomAssignment($bannerId, $term, $building_code, $room_code, $plan_code, $meal_code);
     }
 
     /**
