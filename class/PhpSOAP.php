@@ -47,7 +47,7 @@ class PhpSOAP extends SOAP
                         'TermCode'  => $term,
                         'UserType'  => $this->userType);
 
-        test($params,1);
+        //test($params,1);
 
         try{
             $response = $this->client->GetStudentProfile($params);
@@ -104,6 +104,10 @@ class PhpSOAP extends SOAP
         }catch(SoapFault $e){
             throw new SOAPException($e->getMessage(), $e->getCode(), 'getUsername', $params);
             return false;
+        }
+
+        if(!is_numeric($response->GetBannerIDResult)){
+            throw new BannerException($response->GetBannerIDResult, null, 'getBannerId', $params);
         }
 
         SOAP::logSoap('getBannerId', 'success', $params);
@@ -220,7 +224,7 @@ class PhpSOAP extends SOAP
 
         $params = array(
                         'User'      => $this->currentUser,
-                        'BannerId'  => $bannerId,
+                        'BannerID'  => $bannerId,
                         'TermCode'  => $term,
                         'PlanCode'  => 'HOME', // Hard-coded, magic numbers... but we really should need to pass these
                         'MealCode'  => 1, // same here
@@ -244,6 +248,39 @@ class PhpSOAP extends SOAP
 
         return true;
     }
+   
+    public function createRoomAssignment($bannerId, $term, $building, $bannerBedId, $plan = 'HOME', $meal)
+    {
+        $params = array(
+                        'User'      => $this->currentUser,
+                        'BannerID'  => $bannerId,
+                        'TermCode'  => $term,
+                        'BldgCode'  => $building,
+                        'RoomCode'  => $bannerBedId,
+                        'PlanCode'  => $plan,
+                        'MealCode'  => $meal,
+                        'UserType'  => $this->userType);
+        try{
+            $response = $this->client->CreateRoomAssignment($params);
+        }catch(SoapFault $e){
+            throw new SOAPException($e->getMessage(), $e->getCode(), 'createRoomAssignment', $params);
+            return false;
+        }
+
+        test($params);
+        test($response,1);
+
+        if($response->CreateRoomAssignmentResult != "0"){
+            SOAP::logSoap('createRoomAssignment', 'failed', $params);
+            throw new BannerException('Error while reporting assignment to Banner.', $response->CreateRoomAssignmentResult, 'createRoomAssignment', $params);
+            return FALSE;
+        }
+
+        SOAP::logSoap('createRoomAssignment', 'success', $params);
+
+        return true;
+    }
+
    
     public function createRoomAssignment($bannerId, $term, $building, $bannerBedId, $plan = 'HOME', $meal)
     {
@@ -278,7 +315,7 @@ class PhpSOAP extends SOAP
     {
         $params = array(
                         'User'      => $this->currentUser,
-                        'BannerId'  => $bannerId,
+                        'BannerID'  => $bannerId,
                         'TermCode'  => $term,
                         'BldgCode'  => $building,
                         'RoomCode'  => $bannerBedId);
