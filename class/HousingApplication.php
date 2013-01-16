@@ -229,10 +229,10 @@ class HousingApplication {
     {
         PHPWS_Core::initModClass('hms', 'SOAP.php');
 
-        try {
-            $soap = SOAP::getInstance();
-            $result = $soap->reportApplicationReceived($this->getUsername(), $this->getTerm());
-        }catch(Exception $e) {
+        try{
+            $soap = SOAP::getInstance(UserStatus::getUsername(), UserStatus::isAdmin()?(SOAP::ADMIN_USER):(SOAP::STUDENT_USER));
+            $result = $soap->createHousingApp($this->getBannerId(), $this->getTerm());
+        }catch(Exception $e){
             // Send an email notification
             PHPWS_Core::initCoreClass('Mail.php');
             $send_to = array();

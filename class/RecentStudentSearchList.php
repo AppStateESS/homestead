@@ -19,7 +19,10 @@ class RecentStudentSearchList {
 
     private function __construct()
     {
+    	// Check if APC is available
     	if(!extension_loaded('apc')){
+    		$this->searchList = array();
+    		$this->globalSearchList = array();
     		return;
     	}
     	
@@ -68,6 +71,11 @@ class RecentStudentSearchList {
         // Sanity checking on params
         if(!isset($student)){
             throw new InvalidArgumentException('Missing student object');
+        }
+        
+        // Check if APC is available
+        if(!extension_loaded('apc')){
+        	return;
         }
 
         /*****

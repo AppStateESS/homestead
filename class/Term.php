@@ -372,7 +372,9 @@ class Term
         $terms = self::getTermsAssoc(true);
 
         $current = self::getCurrentTerm();
-        $terms[$current] .= ' (Current)';
+        if(isset($terms[$current])){
+        	$terms[$current] .= ' (Current)';
+        }
 
         $form = new PHPWS_Form('term_selector');
 

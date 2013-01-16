@@ -473,9 +473,9 @@ class HMS_Assignment extends HMS_Item
 
         if(sizeof($result) > 0){
             // Queue an unassign for this student
-            $soap = SOAP::getInstance();
+            $soap = SOAP::getInstance(UserStatus::getUsername(), UserStatus::isAdmin()?(SOAP::ADMIN_USER):(SOAP::STUDENT_USER));
             try{
-                $soap->removeRoomAssignment($student->getUsername(), $term, 'TMPR', $result[0]['room_number']);
+                $soap->removeRoomAssignment($student->getBannerId(), $term, 'TMPR', $result[0]['room_number']);
             }catch(Exception $e){
                 throw $e;
             }

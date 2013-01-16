@@ -2,37 +2,46 @@
 
 class Student {
 
+    // TODO make these all private and make sure nothing breaks
     public $username;
     public $banner_id;
 
     public $first_name;
     public $middle_name;
     public $last_name;
+    public $preferred_name;
 
-    public $gender;
     public $dob;
+    public $gender;
+
+    public $confidential; // This student is super secret
 
     public $application_term;
     public $type;
     public $class;
     public $credit_hours;
 
-    public $deposit_date;
-
     public $student_level;
     public $international;
+    
+    public $admissions_decision_code;
+    public $admissions_decision_desc;
 
     public $honors;
     public $teaching_fellow;
     public $watauga_member;
+    public $greek;
 
     public $disabled_pin;
     public $housing_waiver; // Whether or not a freshmen's student on-campus housing has been waived (e.g., living close by with family)
 
-    public $admissions_decision_code;
-    
     public $addressList;
     public $phoneNumberList;
+
+
+    // Data Source - Not saved to the DB.
+    // Used to determine the class name that provided the data.
+    private $dataSource;
 
     public function __construct()
     {
@@ -331,6 +340,22 @@ class Student {
         $this->last_name = $name;
     }
 
+    public function getPreferredName(){
+        return $this->preferred_name;
+    }
+
+    public function setPreferredName($name){
+        $this->preferred_name = $name;
+    }
+
+    public function getDOB(){
+        return $this->dob;
+    }
+
+    public function setDOB($dob){
+        $this->dob = $dob;
+    }
+    
     public function getGender()
     {
         return $this->gender;
@@ -351,12 +376,12 @@ class Student {
         return;
     }
 
-    public function getDOB(){
-        return $this->dob;
+    public function getConfiential(){
+        return $this->confidential;
     }
 
-    public function setDOB($dob){
-        $this->dob = $dob;
+    public function setConfidential($conf){
+        $this->confidential = $conf;
     }
 
     public function getApplicationTerm(){
@@ -399,14 +424,6 @@ class Student {
         $this->credit_hours = $hrs;
     }
 
-    public function getDepositDate(){
-        return $this->deposit_date;
-    }
-
-    public function setDepositDate($date){
-        $this->deposit_date = $date;
-    }
-
     public function setInternational($intl){
         $this->international = $intl;
     }
@@ -439,6 +456,14 @@ class Student {
         return $this->watauga_member;
     }
 
+    public function setGreek($greek){
+        $this->greek = $greek;
+    }
+
+    public function isGreek(){
+        return $this->greek;
+    }
+
     public function pinDisabled(){
         return $this->disabled_pin;
     }
@@ -462,6 +487,14 @@ class Student {
     public function setAdmissionDecisionCode($code){
         $this->admissions_decision_code = $code;
     }
+
+    public function getAdmissionDecisionDesc(){
+        return $this->admissions_decision_desc;
+    }
+
+    public function setAdmissionDecisionDesc($desc){
+        $this->admissions_decision_desc = $desc;
+    }
     
     public function getAddressList(){
         return $this->addressList;
@@ -477,5 +510,13 @@ class Student {
 
     public function setPhoneNumberList(Array $list){
         $this->phoneNumberList = $list;
+    }
+
+    public function getDataSource(){
+        return $this->dataSource;
+    }
+
+    public function setDataSource($source){
+        $this->dataSource = $source;
     }
 }

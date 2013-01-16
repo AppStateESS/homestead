@@ -6,54 +6,60 @@ class SOAPDataProvider extends StudentDataProvider {
 
     public function getStudentByUsername($username, $term)
     {
-        $student = new Student();
-        $student->setUsername($username);
+        $soap = SOAP::getInstance(UserStatus::getUsername(), UserStatus::isAdmin()?(SOAP::ADMIN_USER):(SOAP::STUDENT_USER));
+        $id = $soap->getBannerId($username);
 
-        $soap = SOAP::getInstance();
-        $soapData = $soap->getStudentInfo($username, $term);
-
-        if(!isset($soapData->banner_id) || is_null($soapData->banner_id) || empty($soapData->banner_id)){
+        if(!isset($id) || is_null($id) || empty($id)){
             PHPWS_Core::initModClass('hms', 'exception/StudentNotFoundException.php');
             throw new StudentNotFoundException('No matching student found.');
+        }
+
+        return SOAPDataProvider::getStudentById($id, $term);
+    }
+
+    public function getStudentById($id, $term)
+    {
+        $student = new Student();
+
+        $soap = SOAP::getInstance(UserStatus::getUsername(), UserStatus::isAdmin()?(SOAP::ADMIN_USER):(SOAP::STUDENT_USER));
+        $soapData = $soap->getStudentProfile($id, $term);
+
+        if($soapData->error_num == 1101 && $soapData->error_desc == 'LookupStudentID'){
+            PHPWS_Core::initModClass('hms', 'exception/StudentNotFoundException.php');
+            throw new StudentNotFoundException('No matching student found.');
+        }elseif (isset($soapData->error_num) && $soapData->error_num > 0){
+            //test($soapData,1);
+            throw new SOAPException("Error while accessing SOAP interface: {$soapData->error_desc} ({$soapData->error_num})", $soapData->error_num, 'getStudentProfile', array($id, $term));
         }
 
         SOAPDataProvider::plugSOAPData($student, $soapData);
 
         SOAPDataProvider::applyExceptions($student);
 
+        $student->setDataSource(get_class($this));
+
         return $student;
-    }
-
-    public function getStudentById($id, $term)
-    {
-        $soap = SOAP::getInstance();
-        $username = $soap->getUsername($id);
-
-        if(!isset($username) || is_null($username) || empty($username)){
-            PHPWS_Core::initModClass('hms', 'exception/StudentNotFoundException.php');
-            throw new StudentNotFoundException('No matching student found.');
-        }
-
-        return SOAPDataProvider::getStudentByUsername($username, $term);
     }
 
     private static function plugSOAPData(&$student, $soapData)
     {
         $student->setBannerId($soapData->banner_id);
+        $student->setUsername($soapData->user_name);
 
         $student->setFirstName($soapData->first_name);
         $student->setMiddleName($soapData->middle_name);
         $student->setLastName($soapData->last_name);
+        $student->setPreferredName($soapData->pref_name);
 
-        $student->setGender($soapData->gender);
         $student->setDOB($soapData->dob);
+        $student->setGender($soapData->gender);
+
+        $student->setConfidential($soapData->confid);
 
         $student->setApplicationTerm($soapData->application_term);
         $student->setType($soapData->student_type);
         $student->setClass($soapData->projected_class);
         $student->setCreditHours($soapData->credhrs_completed);
-
-        $student->setDepositDate($soapData->deposit_date);
 
         if(isset($soapData->student_level)){
             $student->setStudentLevel($soapData->student_level);
@@ -66,9 +72,10 @@ class SOAPDataProvider extends StudentDataProvider {
         $student->setHonors($soapData->honors);
         $student->setTeachingFellow($soapData->teaching_fellow);
         $student->setWataugaMember($soapData->watauga_member);
+        $student->setGreek($soapData->greek);
         
-        $student->setHousingWaiver($soapData->housing_waiver);
         $student->setPinDisabled($soapData->disabled_pin);
+        $student->setHousingWaiver($soapData->housing_waiver);
         
         if(isset($soapData->app_decision_code)){
             $student->setAdmissionDecisionCode($soapData->app_decision_code);
@@ -76,6 +83,16 @@ class SOAPDataProvider extends StudentDataProvider {
             $student->setAdmissionDecisionCode('');
         }
 
+        if(isset($soapData->app_decision_desc)){
+            $student->setAdmissionDecisionDesc($soapData->app_decision_desc);
+        }else{
+            $student->setAdmissionDecisionDesc('');
+        }
+
+        /*****************
+         * Phone Numbers *
+         *****************/
+         //TODO improve this so we're getting the other phone number fields
         $phoneNumbers = array();
 
         if(isset($soapData->phone) && is_array($soapData->phone)){
@@ -90,6 +107,9 @@ class SOAPDataProvider extends StudentDataProvider {
         $phoneNumbers = array_unique($phoneNumbers);
         $student->setPhoneNumberList($phoneNumbers);
 
+        /*************
+         * Addresses *
+         *************/
         if(isset($soapData->address) && is_array($soapData->address) && count($soapData->address) > 0){
             // Array of address objects given, just pass the array on to the new Student object
             $student->setAddressList($soapData->address);
@@ -128,6 +148,10 @@ class SOAPDataProvider extends StudentDataProvider {
             $student->setClass(CLASS_SENIOR);
         }
 
+        if($student->getBannerId() == '900325006'){
+            $student->setClass(CLASS_SENIOR);
+        }
+    
         if($student->getUsername() == 'marshallkd'){
             $student->setApplicationTerm(201040);
         }
