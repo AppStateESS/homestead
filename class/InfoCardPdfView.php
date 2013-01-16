@@ -18,7 +18,7 @@ class InfoCardPdfView {
 
     /**
      * Constructor
-     * 
+     *
      * @param Student $student
      * @param HMS_Residence_Hall $hall
      * @param HMS_Room $room
@@ -42,7 +42,7 @@ class InfoCardPdfView {
 
     /**
      * Returns the FPDI object representing the PDF document.
-     * 
+     *
      * @return FPDI
      */
     public function getPdf()
