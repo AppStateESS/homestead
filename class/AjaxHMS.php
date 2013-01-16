@@ -14,6 +14,7 @@ class AjaxHMS extends HMS
         parent::process();
 
         echo $this->context->getContent();
+        
         HMS::quit();
     }
 }

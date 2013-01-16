@@ -3,8 +3,8 @@
 /**
  * Main model class to represent a Housing Application.
  *
- * @author jbooker
- * @package hms
+ * @package Hms
+ * @author Jeremy Booker
  */
 class HousingApplication {
 
@@ -259,6 +259,7 @@ class HousingApplication {
 
     /**
      * Returns the Student object who this appllication is for
+     * 
      * @return Student
      */
     public function getStudent()
@@ -366,7 +367,13 @@ class HousingApplication {
      * The 'cancelled' parameter is optional. If set to true, then this method will
      * return true for cancelled applications. If false (default), then this method will
      * ignore cancelled applications.
-     *
+     * 
+     * @param unknown    $username
+     * @param unknown    $term
+     * @param string     $cancelled
+     * 
+     * @throws DatabaseException
+     * @return unknown|boolean
      */
     public static function checkForApplication($username, $term, $cancelled = FALSE)
     {
@@ -399,9 +406,11 @@ class HousingApplication {
      *
      * @deprecated
      * @see HousingApplicationFactory::getAppByStudent()
+     * 
      * @param unknown_type $username
      * @param unknown_type $term
      * @param unknown_type $applicationType
+     * 
      * @throws DatabaseException
      * @throws InvalidArgumentException
      */
@@ -468,6 +477,7 @@ class HousingApplication {
      * @param string $username
      * @param string $banner_id
      * @param string $term
+     * 
      * @return multitype:Ambigous <NULL, FallApplication>
      */
     public static function getAllApplications($username = null, $banner_id = null, $term = null)
@@ -505,6 +515,7 @@ class HousingApplication {
      * the general HousingApplication type objects.
      *
      * @param Student $student
+     * 
      * @throws InvalidArgumentException
      * @throws DatabaseException
      * @return Array Array of HousingApplication objects for the given user.
@@ -541,6 +552,7 @@ class HousingApplication {
      * Returns all freshmen application for the given term.
      *
      * @param unknown $term
+     * 
      * @return boolean|unknown
      */
     public static function getAllFreshmenApplications($term)
@@ -587,6 +599,7 @@ class HousingApplication {
      *
      * @param unknown $term
      * @param unknown $gender
+     * 
      * @throws InvalidTermException
      * @throws DatabaseException
      * @return multitype:unknown
@@ -664,6 +677,7 @@ class HousingApplication {
      * Returns an array of the terms which this student can potentially apply for.
      *
      * @param Student $student
+     * 
      * @return multitype:multitype:number unknown  multitype:number string
      */
     public static function getAvailableApplicationTermsForStudent(Student $student)
@@ -699,6 +713,7 @@ class HousingApplication {
      * Returns an array of term which the student *must* apply for.
      *
      * @param Student $student
+     * 
      * @return multitype:|multitype:Ambigous <multitype:multitype:number, multitype:multitype:number unknown  multitype:number string  >
      */
     public static function getRequiredApplicationTermsForStudent(Student $student)
@@ -730,6 +745,7 @@ class HousingApplication {
      * the returned array will be empty.
      *
      * @param Student $student
+     * 
      * @return Array list of terms which the student still needs to apply for
      */
     public static function checkAppliedForAllRequiredTerms(Student $student)
@@ -752,7 +768,7 @@ class HousingApplication {
 
     /************************
      * Accessors & Mutators *
-    ************************/
+     ************************/
 
     public function getId()
     {
@@ -996,7 +1012,7 @@ class HousingApplication {
 
     /*******
      * Emergency Contact Info
-    */
+     */
 
     public function getEmergencyContactName()
     {
@@ -1115,6 +1131,8 @@ class HousingApplication {
 
     /**
      * Sets the withdrawn flag.
+     *
+     * @param bool $status
      *
      * @deprecated
      */
