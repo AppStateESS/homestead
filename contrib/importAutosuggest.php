@@ -64,9 +64,9 @@ while(($line = fgetcsv($inputFile, 0, '|')) !== FALSE) {
     $lastLower   = strtolower($lastName);
 
     $startTerm = $line[4];
-    $endTerm   = isset($line[5])?$line[5]:'';
+    $endTerm   = isset($line[5])&&!empty($line[5])?$line[5]:'NULL';
 
-    $sql = "INSERT INTO hms_student_autocomplete (banner_id, username, first_name, middle_name, last_name, first_name_meta, middle_name_meta, last_name_meta, first_name_lower, middle_name_lower, last_name_lower, start_term, end_term) VALUES ($bannerId, '$username', '$firstName', '$middleName', '$lastName', METAPHONE('$firstName', 4), METAPHONE('$middleName', 4), METAPHONE('$lastName', 4), '$firstLower', '$middleLower', '$lastLower', '$startTerm', '$endTerm')";
+    $sql = "INSERT INTO hms_student_autocomplete (banner_id, username, first_name, middle_name, last_name, first_name_meta, middle_name_meta, last_name_meta, first_name_lower, middle_name_lower, last_name_lower, start_term, end_term) VALUES ($bannerId, '$username', '$firstName', '$middleName', '$lastName', METAPHONE('$firstName', 4), METAPHONE('$middleName', 4), METAPHONE('$lastName', 4), '$firstLower', '$middleLower', '$lastLower', $startTerm, $endTerm)";
 
 
     $result = pg_query($sql);
