@@ -22,22 +22,11 @@ if($inputFile === FALSE){
     exit;
 }
 
-echo "Database name: ";
-system('stty -echo');
-$dbname = trim(fgets(STDIN));
-system('stty echo');
-// add a new line since the users CR didn't echo
-echo "\n";
+$dbname = trim(readline("Database name: "));
 
+$dbuser = trim(readline("User name: "));
 
-echo "Database Username: ";
-system('stty -echo');
-$dbuser = trim(fgets(STDIN));
-system('stty echo');
-// add a new line since the users CR didn't echo
-echo "\n";
-
-
+// A bit of hackery here to avoid echoing the password
 echo "Database Password: ";
 system('stty -echo');
 $dbpasswd = trim(fgets(STDIN));
@@ -63,11 +52,23 @@ while(($line = fgetcsv($inputFile, 0, '|')) !== FALSE) {
         $line[$key] = pg_escape_string($element);
     }
 
-    if(isset($line[5]) && $line[5] != ''){
-        $sql = "INSERT INTO hms_student_autocomplete VALUES ({$line[0]},'','{$line[2]}', '{$line[3]}', '{$line[1]}', METAPHONE('{$line[2]}', 4), METAPHONE('{$line[3]}', 4), METAPHONE('{$line[1]}', 4), {$line[4]}, {$line[5]})";
-    } else {
-        $sql = "INSERT INTO hms_student_autocomplete VALUES ({$line[0]},'','{$line[2]}', '{$line[3]}', '{$line[1]}', METAPHONE('{$line[2]}', 4), METAPHONE('{$line[3]}', 4), METAPHONE('{$line[1]}', 4), {$line[4]})";
-    }
+    $bannerId = $line[0];
+    $username = ''; //TODO
+
+    $firstName  = $line[2];
+    $middleName = $line[3];
+    $lastName   = $line[1];
+
+    $firstLower  = strtolower($firstName);
+    $middleLower = strtolower($middleName);
+    $lastLower   = strtolower($lastName);
+
+    $startTerm = $line[4];
+    $endTerm   = isset($line[5])?$line[5]:'';
+
+    $sql = "INSERT INTO hms_student_autocomplete (banner_id, username, first_name, middle_name, last_name, first_name_meta, middle_name_meta, last_name_meta, first_name_lower, middle_name_lower, last_name_lower, start_term, end_term) VALUES ($bannerId, '$username', '$firstName', '$middleName', '$lastName', METAPHONE('$firstName', 4), METAPHONE('$middleName', 4), METAPHONE('$lastName', 4), '$firstLower', '$middleLower', '$lastLower', '$startTerm', '$endTerm')";
+
+
     $result = pg_query($sql);
 }
 
