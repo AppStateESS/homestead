@@ -2,20 +2,8 @@
 
 class ShowStudentSearchCommand extends Command {
 
-    private $username;
-
-    public function setUsername($username){
-        $this->username = $username;
-    }
-
     function getRequestVars(){
-        $vars = array('action'=>'ShowStudentSearch');
-
-        if(isset($this->username)){
-            $vars['username'] = $this->username;
-        }
-
-        return $vars;
+        return array('action'=>'ShowStudentSearch');
     }
 
     function execute(CommandContext $context)
@@ -26,7 +14,10 @@ class ShowStudentSearchCommand extends Command {
         }
 
         javascript('jquery');
-
+        javascript('jquery_ui');
+        
+        javascriptMod('hms', 'appCardSwipe');
+        javascriptMod('hms', 'fuzzyAutocomplete');
 
         $cmd = CommandFactory::getCommand('StudentSearch');
 
@@ -35,26 +26,24 @@ class ShowStudentSearchCommand extends Command {
 
         $form->setMethod('get');
 
-        $username = $context->get('username');
-        if(isset($username)){
-            $form->addText('username', $username);
-        }else{
-            $form->addText('username');
-        }
+        //javascript('modules/hms/new_autosuggest', array('ELEMENT' => $form->getId('username')));
+        //Layout::addStyle('hms', 'css/autosuggest2.css');
 
-        javascript('modules/hms/new_autosuggest', array('ELEMENT' => $form->getId('username')));
-        Layout::addStyle('hms', 'css/autosuggest2.css');
+        //javascript('modules/hms/autoFocus', array('ELEMENT' => $form->getId('username')));
 
-        javascript('modules/hms/autoFocus', array('ELEMENT' => $form->getId('username')));
+        //$form->setExtra('username', 'autocomplete="off" ');
 
-        $form->setExtra('username', 'autocomplete="off" ');
-
-        $form->addSubmit('submit_button', _('Submit'));
+        $form->addText('banner_id');
+		$form->setExtra('banner_id', 'placeholder = "Swipe AppCard or type Name/Email/Banner ID"');
+		$form->setClass('banner_id', 'checkin-search-box');
+		
+		$form->addSubmit('Search');
+		$form->setClass('submit', 'btn btn-primary');
 
         $tpl = $form->getTemplate();
 
         Layout::addPageTitle("Student Search");
 
-        $context->setContent(PHPWS_Template::process($tpl, 'hms', 'admin/get_single_username.tpl'));
+        $context->setContent(PHPWS_Template::process($tpl, 'hms', 'admin/student_search.tpl'));
     }
 }
