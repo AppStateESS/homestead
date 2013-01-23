@@ -71,7 +71,7 @@ class AjaxGetUsernameSuggestionsCommand extends Command {
         //test($results,1);
         
         if(is_null($results)){
-            echo json_encode(array());
+            echo json_encode();
             exit;
         }
         
