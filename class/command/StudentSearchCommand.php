@@ -16,7 +16,7 @@ class StudentSearchCommand extends Command {
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
         PHPWS_Core::initModClass('hms', 'StudentProfile.php');
 
-        $userid = $context->get('username');
+        $userid = $context->get('banner_id');
         $userid = strtolower(trim($userid));
         $term = Term::getSelectedTerm();
 
