@@ -27,11 +27,11 @@ class ShowAssignmentMoveConfirmationCommand extends Command {
     public function setMealPlan($plan){
         $this->mealPlan = $plan;
     }
-    
+
     public function setAssignmentType($type){
         $this->assignmentType = $type;
     }
-    
+
     public function setNotes($notes){
         $this->notes = $notes;
     }
@@ -55,11 +55,11 @@ class ShowAssignmentMoveConfirmationCommand extends Command {
         if(isset($this->mealPlan)){
             $vars['meal_plan'] = $this->mealPlan;
         }
-        
+
         if(isset($this->assignmentType)){
             $vars['assignment_type'] = $this->assignmentType;
         }
-        
+
         if(isset($this->notes)){
             $vars['notes'] = $this->notes;
         }
@@ -77,18 +77,18 @@ class ShowAssignmentMoveConfirmationCommand extends Command {
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
         PHPWS_Core::initModClass('hms', 'AssignmentMoveConfirmationView.php');
-        	
+         
         $student = StudentFactory::getStudentByUsername($context->get('username'), Term::getSelectedTerm());
         $assignment = HMS_Assignment::getAssignment($student->getUsername(), Term::getSelectedTerm());
 
         $moveConfirmView = new AssignmentMoveConfirmationView($student,
-        $assignment,
-        $context->get('residence_hall'),
-        $context->get('room'),
-        $context->get('bed'),
-        $context->get('meal_plan'),
-        $context->get('assignment_type'),
-        $context->get('notes'));
+                $assignment,
+                $context->get('residence_hall'),
+                $context->get('room'),
+                $context->get('bed'),
+                $context->get('meal_plan'),
+                $context->get('assignment_type'),
+                $context->get('notes'));
 
         $context->setContent($moveConfirmView->show());
     }

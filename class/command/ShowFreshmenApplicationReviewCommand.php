@@ -40,20 +40,20 @@ class ShowFreshmenApplicationReviewCommand extends Command {
 
         // Determine the application type, based on the term
         $sem = Term::getTermSem($term);
-        
+
         switch ($sem){
-        	case TERM_FALL:
-        		$appType = 'fall';
-        		break;
-        	case TERM_SPRING:
-        		$appType = 'spring';
-        		break;
-        	case TERM_SUMMER1:
-        	case TERM_SUMMER2:
-        		$appType = 'summer';
-        		break;
+            case TERM_FALL:
+                $appType = 'fall';
+                break;
+            case TERM_SPRING:
+                $appType = 'spring';
+                break;
+            case TERM_SUMMER1:
+            case TERM_SUMMER2:
+                $appType = 'summer';
+                break;
         }
-        
+
         try{
             $application = HousingApplicationFactory::getApplicationFromContext($context, $term, $student, $appType);
         }catch(Exception $e){

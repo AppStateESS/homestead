@@ -20,11 +20,11 @@ class SelectRoomCommand extends Command {
     function getRequestVars()
     {
         $vars = array('action'=>'SelectRoom', 'title'=>$this->title);
-        	
+         
         if(!isset($this->onSelectCmd)){
             return $vars;
         }
-        	
+         
         // Get the action to do on select
         $onSelectVars = $this->onSelectCmd->getRequestVars();
         $onSelectAction = $onSelectVars['action'];

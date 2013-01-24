@@ -101,15 +101,15 @@ class SendAssignmentNotificationCommand extends Command {
                     $moveinTimeId = $rlc->getFreshmenMoveinTime();
                 }
             }
-            
+
             // If there's a non-null move-in time ID at this point, then we know the RLC must have set it
             if(!is_null($moveinTimeId)){
                 $rlcSetMoveinTime = true;
             }
 
             // If the RLC didn't set a movein time, set it according to the floor
-			// TODO: Find continuing students by checking the student's application term
-			// against the term we're wending assignment notices for            
+            // TODO: Find continuing students by checking the student's application term
+            // against the term we're wending assignment notices for
             if(is_null($moveinTimeId)){
                 if($type == TYPE_CONTINUING){
                     $moveinTimeId = $assignment->get_rt_movein_time_id();
@@ -138,9 +138,9 @@ class SendAssignmentNotificationCommand extends Command {
 
             // Add a bit of text if the move-in time was for an RLC
             if($rlcSetMoveinTime){
-                $movein_time .= ' (for the ' . $rlc->get_community_name() . ' Residential Learning Community)'; 
+                $movein_time .= ' (for the ' . $rlc->get_community_name() . ' Residential Learning Community)';
             }
-            
+
             //get the list of roommates
             $roommates = array();
 

@@ -18,8 +18,8 @@ class UnassignStudentCommand extends Command {
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
 
         $username = $context->get('username');
-		$unassign_reason = $context->get('unassignment_type');
-        
+        $unassign_reason = $context->get('unassignment_type');
+
         $cmd = CommandFactory::getCommand('ShowUnassignStudent');
         $cmd->setUsername($username);
 
@@ -31,7 +31,7 @@ class UnassignStudentCommand extends Command {
         $term = Term::getSelectedTerm();
         $student = StudentFactory::getStudentByUsername($username, $term);
         $notes = $context->get('note');
-        
+
         try{
             $result = HMS_Assignment::unassignStudent($student, $term, $notes, $unassign_reason);
         }catch(Exception $e){

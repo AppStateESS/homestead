@@ -55,32 +55,32 @@ class HousingApplicationConfirmCommand extends Command {
         }
 
         switch ($sem){
-        	case TERM_FALL:
-        		$appType = 'fall';
-        		break;
-        	case TERM_SPRING:
-        		$appType = 'spring';
-        		break;
-        	case TERM_SUMMER1:
-        	case TERM_SUMMER2:
-        		$appType = 'summer';
-        		break;
+            case TERM_FALL:
+                $appType = 'fall';
+                break;
+            case TERM_SPRING:
+                $appType = 'spring';
+                break;
+            case TERM_SUMMER1:
+            case TERM_SUMMER2:
+                $appType = 'summer';
+                break;
         }
-        
+
         $application = HousingApplicationFactory::getApplicationFromContext($context, $term, $student, $appType);
 
         $application->setCancelled(0);
-        
+
         // Hard code a summer meal option for all summer applications.
         // Application for other terms use whatever the student selected
         if($sem == TERM_SUMMER1 || $sem == TERM_SUMMER2){
-        	$application->setMealPlan(BANNER_MEAL_5WEEK);
+            $application->setMealPlan(BANNER_MEAL_5WEEK);
         }else{
-        	$application->setMealPlan($context->get('meal_option'));
+            $application->setMealPlan($context->get('meal_option'));
         }
-        
+
         $result = $application->save();
-        
+
         $tpl = array();
 
         if($result == TRUE){
@@ -110,8 +110,8 @@ class HousingApplicationConfirmCommand extends Command {
         $rlcReg = new RLCApplicationRegistration();
 
         if(ApplicationFeature::isEnabledForStudent($rlcReg, $term, $student)
-        && HMS_RLC_Application::checkForApplication($student->getUsername(), $term) == FALSE
-        && $context->get('rlc_interest') == 1)
+                && HMS_RLC_Application::checkForApplication($student->getUsername(), $term) == FALSE
+                && $context->get('rlc_interest') == 1)
         {
             $rlcCmd = CommandFactory::getCommand('ShowRlcApplicationPage1View');
             $rlcCmd->setTerm($term);

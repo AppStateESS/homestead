@@ -15,7 +15,7 @@ class ShowStudentSearchCommand extends Command {
 
         javascript('jquery');
         javascript('jquery_ui');
-        
+
         javascriptMod('hms', 'appCardSwipe');
         javascriptMod('hms', 'fuzzyAutocomplete');
 
@@ -34,11 +34,11 @@ class ShowStudentSearchCommand extends Command {
         //$form->setExtra('username', 'autocomplete="off" ');
 
         $form->addText('banner_id');
-		$form->setExtra('banner_id', 'placeholder = "Swipe AppCard or type Name/Email/Banner ID"');
-		$form->setClass('banner_id', 'checkin-search-box');
-		
-		$form->addSubmit('Search');
-		$form->setClass('submit', 'btn btn-primary');
+        $form->setExtra('banner_id', 'placeholder = "Swipe AppCard or type Name/Email/Banner ID"');
+        $form->setClass('banner_id', 'checkin-search-box');
+
+        $form->addSubmit('Search');
+        $form->setClass('submit', 'btn btn-primary');
 
         $tpl = $form->getTemplate();
 

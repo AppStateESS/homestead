@@ -18,8 +18,8 @@ class RoleRemoveUserCommand extends Command {
 
         $username = $context->get('username');
         $rolename = $context->get('role');
-		$class    = $context->get('className');
-		$instance = $context->get('instance');
+        $class    = $context->get('className');
+        $instance = $context->get('instance');
 
         if(is_null($username) || is_null($rolename)){
             echo json_encode(false);

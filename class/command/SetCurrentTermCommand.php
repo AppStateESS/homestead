@@ -36,7 +36,7 @@ class SetCurrentTermCommand extends Command {
         Term::setCurrentTerm($this->term);
 
         NQ::simple('hms', HMS_NOTIFICATION_SUCCESS,
-		    'The Current Term has been set to ' .
+        'The Current Term has been set to ' .
         Term::getPrintableCurrentTerm());
 
         $cmd = CommandFactory::getCommand('ShowEditTerm');

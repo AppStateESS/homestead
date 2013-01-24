@@ -40,11 +40,11 @@ class HousingApplicationFormSubmitCommand extends Command {
 
         /* Emergency Contact Sanity Checking */
         //TODO
-        
+
         /* Missing Persons Sanity Checking */
         //TODO
-        
-        
+
+
         /* Meal plan, lifestyle, preferred bedtime, room condition error checking */
         // TODO: this, correctly (should be inside of a sub-class since it's term specific)
         $sem = substr($term, 4, 2);
@@ -61,7 +61,7 @@ class HousingApplicationFormSubmitCommand extends Command {
                 $errorCmd->redirect();
             }
         } else if($sem == 20 || $sem == 30) {
-        	/* Private/double room sanity checking for Summer terms */
+            /* Private/double room sanity checking for Summer terms */
             $roomType = $context->get('room_type');
 
             if(!is_numeric($roomType)) {
