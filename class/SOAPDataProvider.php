@@ -9,7 +9,7 @@ class SOAPDataProvider extends StudentDataProvider {
         $soap = SOAP::getInstance(UserStatus::getUsername(), UserStatus::isAdmin()?(SOAP::ADMIN_USER):(SOAP::STUDENT_USER));
         $id = $soap->getBannerId($username);
 
-        if(!isset($id) || is_null($id) || empty($id)){
+        if(!isset($id) || is_null($id) || empty($id)) {
             PHPWS_Core::initModClass('hms', 'exception/StudentNotFoundException.php');
             throw new StudentNotFoundException('No matching student found.');
         }
@@ -19,6 +19,17 @@ class SOAPDataProvider extends StudentDataProvider {
 
     public function getStudentById($id, $term)
     {
+        // Sanity checking on the Banner ID
+        $id = trim($id);
+        
+        if(!isset($id) || empty($id) || $id == '') {
+            throw new InvalidArgumentException('Missing Banner id. Please enter a valid Banner ID (nine digits).');
+        }
+        
+        if(strlen($id) > 9 || strlen($id) < 9 || !preg_match("/^[0-9]{9}$/", $id)){
+            throw new InvalidArgumentException('That was not a valid Banner ID. Please enter a valid Banner ID (nine digits).');
+        }
+        
         $student = new Student();
 
         $soap = SOAP::getInstance(UserStatus::getUsername(), UserStatus::isAdmin()?(SOAP::ADMIN_USER):(SOAP::STUDENT_USER));

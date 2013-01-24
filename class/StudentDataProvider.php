@@ -12,11 +12,12 @@ abstract class StudentDataProvider {
     protected $fallbackProvider;
     protected $ttl;
 
-    protected function __construct(StudentDataProvider $fallbackProvider = NULL, $ttl = NULL){
+    protected function __construct(StudentDataProvider $fallbackProvider = NULL, $ttl = NULL)
+    {
 
-        if(is_null($ttl)){
+        if (is_null($ttl)) {
             $this->ttl = self::$defaultTtl;
-        }else{
+        } else {
             $this->ttl = $ttl;
         }
 
@@ -25,7 +26,7 @@ abstract class StudentDataProvider {
 
     public static function getInstance()
     {
-        if(!is_null(self::$instance)) {
+        if (!is_null(self::$instance)) {
             return self::$instance;
         }
 
@@ -33,9 +34,9 @@ abstract class StudentDataProvider {
         PHPWS_Core::initModClass('hms', 'SOAPDataProvider.php');
         PHPWS_Core::initModClass('hms', 'LocalCacheDataProvider.php');
 
-        if(extension_loaded('apc')) {
+        if (extension_loaded('apc')) {
             self::$instance = new ApcDataProvider(new LocalCacheDataProvider(new SOAPDataProvider()));
-        }else{
+        } else {
             self::$instance = new LocalCacheDataProvider(new SOAPDataProvider());
         }
 
@@ -74,11 +75,11 @@ abstract class StudentDataProvider {
      */
     protected function getFallbackProvider()
     {
-        if(!isset($this->fallbackProvider) || is_null($this->fallbackProvider)) {
+        if (!isset($this->fallbackProvider) || is_null($this->fallbackProvider)) {
             // No fallback provider is set, so throw an exception
             PHPWS_Core::initModClass('hms', 'exception/StudentNotFoundException.php');
             throw new StudentNotFoundException();
-        }else{
+        } else {
             return $this->fallbackProvider;
         }
     }
