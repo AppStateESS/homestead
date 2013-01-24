@@ -69,7 +69,7 @@ class HMS_Residence_Hall extends HMS_Item
         $this->stamp();
         $db = new PHPWS_DB('hms_residence_hall');
         $result = $db->saveObject($this);
-        if(!$result || PHPWS_Error::logIfError($result)){
+        if(!$result || PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         }
         return true;
@@ -102,20 +102,20 @@ class HMS_Residence_Hall extends HMS_Item
 
         try{
             $new_hall->save();
-        }catch(Exception $e){
+        }catch(Exception $e) {
             // rethrow it to the top level
             throw $e;
         }
 
         // Copy any roles related to this residence hall.
-        if($roles){
+        if($roles) {
             PHPWS_Core::initModClass("hms", "HMS_Permission.php");
             PHPWS_Core::initModClass("hms", "HMS_Role.php");
             // Get memberships by object instance.
             $membs = HMS_Permission::getUserRolesForInstance($this);
             //test($membs,1);
             // Add each user to new hall
-            foreach($membs as $m){
+            foreach($membs as $m) {
                 // Lookup the username
                 $user = new PHPWS_User($m['user_id']);
 
@@ -133,7 +133,7 @@ class HMS_Residence_Hall extends HMS_Item
         if(empty($this->_floors)) {
             try{
                 $this->loadFloors();
-            }catch(Exception $e){
+            }catch(Exception $e) {
                 throw $e;
             }
         }
@@ -143,7 +143,7 @@ class HMS_Residence_Hall extends HMS_Item
             foreach ($this->_floors as $floor) {
                 try{
                     $floor->copy($to_term, $new_hall->id, $assignments, $roles);
-                }catch(Exception $e){
+                }catch(Exception $e) {
                     throw $e;
                 }
             }
@@ -192,7 +192,7 @@ class HMS_Residence_Hall extends HMS_Item
             $floor->term                = $this->term;
             $floor->gender_type         = $this->gender_type;
 
-            if($floor->save()){
+            if($floor->save()) {
                 $floor->create_child_objects($rooms_per_floor, $beds_per_room);
             } else {
                 // Decide on bed result.
@@ -213,7 +213,7 @@ class HMS_Residence_Hall extends HMS_Item
     public function can_change_gender($target_gender)
     {
         # You can always change to a COED gender.
-        if($target_gender == COED){
+        if($target_gender == COED) {
         return true;
 
     }
@@ -221,19 +221,19 @@ class HMS_Residence_Hall extends HMS_Item
     # We must be changing to either male or female if we make it here
 
     # If there are any COED floors, then return false
-    if($this->check_for_floors_of_gender(COED)){
+    if($this->check_for_floors_of_gender(COED)) {
         return false;
     }
 
     # Can only change gender if there are no floors of the opposite sex
-    if($target_gender == MALE){
+    if($target_gender == MALE) {
         $check_for_gender = FEMALE;
     }else{
         $check_for_gender = MALE;
     }
 
     # If a check for rooms of the opposite gender returns true, then return false
-    if($this->check_for_floors_of_gender($check_for_gender)){
+    if($this->check_for_floors_of_gender($check_for_gender)) {
         return false;
     }
 
@@ -249,22 +249,22 @@ class HMS_Residence_Hall extends HMS_Item
 
         $result = $db->select('count');
 
-        if(PHPWS_Error::logIfError($result)){
+        if(PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         }
 
-        if($result == 0){
+        if($result == 0) {
             return false;
         }else{
             return true;
         }
     }
 
-    public function getId(){
+    public function getId() {
         return $this->id;
     }
 
-    public function getHallName(){
+    public function getHallName() {
         return $this->hall_name;
     }
 
@@ -286,7 +286,7 @@ class HMS_Residence_Hall extends HMS_Item
 
         $result = $db->select('count');
 
-        if(PHPWS_Error::logIfError($result)){
+        if(PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         }
 
@@ -307,11 +307,11 @@ class HMS_Residence_Hall extends HMS_Item
 
         $result = $db->select('count');
 
-        if($result == 0){
+        if($result == 0) {
             return 0;
         }
 
-        if(!$result || PHPWS_Error::logIfError($result)){
+        if(!$result || PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         }
 
@@ -334,11 +334,11 @@ class HMS_Residence_Hall extends HMS_Item
 
         $result = $db->select('count');
 
-        if($result == 0){
+        if($result == 0) {
             return 0;
         }
 
-        if(!$result || PHPWS_Error::logIfError($result)){
+        if(!$result || PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result);
         }
 
@@ -361,11 +361,11 @@ class HMS_Residence_Hall extends HMS_Item
 
         $result = $db->select('count');
 
-        if($result == 0){
+        if($result == 0) {
             return 0;
         }
 
-        if(PHPWS_Error::logIfError($result)){
+        if(PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         }
 
@@ -387,11 +387,11 @@ class HMS_Residence_Hall extends HMS_Item
         
         $result = $db->select('count');
         
-        if($result == 0){
+        if($result == 0) {
             return 0;
         }
         
-        if(PHPWS_Error::logIfError($result)){
+        if(PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         }
         
@@ -414,15 +414,15 @@ class HMS_Residence_Hall extends HMS_Item
 
         $result = $db->select('count');
 
-        if($result == 0){
+        if($result == 0) {
             return 0;
         }
 
-        if(PHPWS_Error::logIfError($result)){
+        if(PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         }
 
-        if($result == 0){
+        if($result == 0) {
             return $result;
         }
 
@@ -453,7 +453,7 @@ class HMS_Residence_Hall extends HMS_Item
 
         $floors = array();
 
-        foreach($this->_floors as $floor){
+        foreach($this->_floors as $floor) {
             $floors[$floor->id] = $floor->floor_number;
         }
 
@@ -471,7 +471,7 @@ class HMS_Residence_Hall extends HMS_Item
 
         $rooms = array();
 
-        foreach($this->_floors as $floor){
+        foreach($this->_floors as $floor) {
             $floor_rooms = $floor->get_rooms();
             $rooms = array_merge($rooms, $floor_rooms);
         }
@@ -489,7 +489,7 @@ class HMS_Residence_Hall extends HMS_Item
 
         $beds = array();
 
-        foreach($this->_floors as $floor){
+        foreach($this->_floors as $floor) {
             $floor_beds = $floor->get_beds();
             $beds = array_merge($rooms, $floor_beds);
         }
@@ -514,32 +514,32 @@ class HMS_Residence_Hall extends HMS_Item
 
         $result = $rdb->select();
 
-        if(PHPWS_Error::logIfError($result)){
+        if(PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         }
 
         //and for each room get a list of the beds
-        foreach($result as $room){
+        foreach($result as $room) {
             $db = new PHPWS_DB('hms_bed');
             $db->addJoin('LEFT OUTER', 'hms_bed', 'hms_room', 'room_id', 'id');
             $db->addWhere('hms_room.id',           $room['id']);
 
             $result = $db->select('count');
 
-            if(PHPWS_Error::logIfError($result)){
+            if(PHPWS_Error::logIfError($result)) {
                 throw new DatabaseException($result->toString());
             }
 
             //and increment the count of the number of rooms with that many
             //beds in this hall
-            if($result){
+            if($result) {
                 $total[$result] = empty($total[$result]) ? 1 : $total[$result]+1;
             }
         }
 
         $top   = 0;
-        foreach($total as $key => $value){
-            if(@$total[$key] > @$total[$top]){
+        foreach($total as $key => $value) {
+            if(@$total[$key] > @$total[$top]) {
                 // supress notices here, since usually there's an undefined index
                 $top = $key;
             }
@@ -559,7 +559,7 @@ class HMS_Residence_Hall extends HMS_Item
 
         $assignees = array();
 
-        foreach($this->_floors as $floor){
+        foreach($this->_floors as $floor) {
             $floor_assignees = $floor->get_assignees();
             $assignees = array_merge($assignees, $floor_assignees);
         }
@@ -572,7 +572,7 @@ class HMS_Residence_Hall extends HMS_Item
     public function has_vacancy()
     {
         /*
-         if($this->get_number_of_assignees() < $this->get_number_of_beds()){
+         if($this->get_number_of_assignees() < $this->get_number_of_beds()) {
         return TRUE;
         }
         */
@@ -598,8 +598,8 @@ class HMS_Residence_Hall extends HMS_Item
 
         $vacant_floors = array();
 
-        foreach($this->_floors as $floor){
-            if($floor->has_vacancy()){
+        foreach($this->_floors as $floor) {
+            if($floor->has_vacancy()) {
                 $vacant_floors[] = $floor;
             }
         }
@@ -632,7 +632,7 @@ class HMS_Residence_Hall extends HMS_Item
                     AND hms_bed.international_reserved = 0";
 
         $avail_rooms = PHPWS_DB::getOne($query);
-        if(PHPWS_Error::logIfError($avail_rooms)){
+        if(PHPWS_Error::logIfError($avail_rooms)) {
             throw new DatabaseException($result->toString());
         }
 
@@ -655,7 +655,7 @@ class HMS_Residence_Hall extends HMS_Item
         $is_online = $this->get_is_online();
         if($is_online == ONLINE) {
             $tags['IS_ONLINE'] = ONLINE_DESC;
-        }else if($is_online == OFFLINE){
+        }else if($is_online == OFFLINE) {
             $tags['IS_ONLINE'] = OFFLINE_DESC;
         }else{
             $tags['IS_ONLINE'] = 'Error: Unknown status';
@@ -704,17 +704,17 @@ class HMS_Residence_Hall extends HMS_Item
         $db->addColumn('id');
         $db->addOrder('hall_name', 'DESC');
 
-        if(isset($term)){
+        if(isset($term)) {
             $db->addWhere('term', $term);
         }
 
         $results = $db->select();
 
-        if(PHPWS_Error::logIfError($results)){
+        if(PHPWS_Error::logIfError($results)) {
             throw new DatabaseException($result->toString());
         }
 
-        foreach($results as $result){
+        foreach($results as $result) {
             $halls[] = new HMS_Residence_Hall($result['id']);
         }
 
@@ -733,7 +733,7 @@ class HMS_Residence_Hall extends HMS_Item
 
         $halls = HMS_Residence_Hall::get_halls($term);
 
-        foreach ($halls as $hall){
+        foreach ($halls as $hall) {
             $hall_array[$hall->id] = $hall->hall_name;
         }
 
@@ -748,7 +748,7 @@ class HMS_Residence_Hall extends HMS_Item
 
         $hall_array[0] = 'Select...';
 
-        foreach ($halls as $hall){
+        foreach ($halls as $hall) {
             $hall_array[$hall->id] = $hall->hall_name;
         }
 
@@ -764,8 +764,8 @@ class HMS_Residence_Hall extends HMS_Item
 
         $halls = HMS_Residence_Hall::get_halls($term);
 
-        foreach($halls as $hall){
-            if($hall->has_vacancy()){
+        foreach($halls as $hall) {
+            if($hall->has_vacancy()) {
                 $vacant_halls[] = $hall;
             }
         }
@@ -784,7 +784,7 @@ class HMS_Residence_Hall extends HMS_Item
 
         $halls = HMS_Residence_Hall::getHallsWithVacancies($term);
 
-        foreach ($halls as $hall){
+        foreach ($halls as $hall) {
             $hallArray[$hall->id] = $hall->hall_name;
         }
 
@@ -804,12 +804,12 @@ class HMS_Residence_Hall extends HMS_Item
 
         $output_list = array();
 
-        foreach($halls as $hall){
+        foreach($halls as $hall) {
             $rooms_used = $hall->count_lottery_used_rooms();
 
             # Make sure we have a room of the specified gender available in the hall (or a co-ed room)
             if($hall->count_avail_lottery_rooms($gender) <= 0 &&
-            $hall->count_avail_lottery_rooms(COED) <= 0){
+            $hall->count_avail_lottery_rooms(COED) <= 0) {
                 continue;
             }
 
