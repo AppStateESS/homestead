@@ -9,7 +9,7 @@ class SOAPDataProvider extends StudentDataProvider {
         $soap = SOAP::getInstance(UserStatus::getUsername(), UserStatus::isAdmin()?(SOAP::ADMIN_USER):(SOAP::STUDENT_USER));
         $id = $soap->getBannerId($username);
 
-        if(!isset($id) || is_null($id) || empty($id)) {
+        if (!isset($id) || is_null($id) || empty($id)) {
             PHPWS_Core::initModClass('hms', 'exception/StudentNotFoundException.php');
             throw new StudentNotFoundException('No matching student found.');
         }
@@ -22,11 +22,11 @@ class SOAPDataProvider extends StudentDataProvider {
         // Sanity checking on the Banner ID
         $id = trim($id);
         
-        if(!isset($id) || empty($id) || $id == '') {
+        if (!isset($id) || empty($id) || $id == '') {
             throw new InvalidArgumentException('Missing Banner id. Please enter a valid Banner ID (nine digits).');
         }
         
-        if(strlen($id) > 9 || strlen($id) < 9 || !preg_match("/^[0-9]{9}$/", $id)){
+        if (strlen($id) > 9 || strlen($id) < 9 || !preg_match("/^[0-9]{9}$/", $id)) {
             throw new InvalidArgumentException('That was not a valid Banner ID. Please enter a valid Banner ID (nine digits).');
         }
         
@@ -35,10 +35,10 @@ class SOAPDataProvider extends StudentDataProvider {
         $soap = SOAP::getInstance(UserStatus::getUsername(), UserStatus::isAdmin()?(SOAP::ADMIN_USER):(SOAP::STUDENT_USER));
         $soapData = $soap->getStudentProfile($id, $term);
 
-        if($soapData->error_num == 1101 && $soapData->error_desc == 'LookupStudentID'){
+        if ($soapData->error_num == 1101 && $soapData->error_desc == 'LookupStudentID') {
             PHPWS_Core::initModClass('hms', 'exception/StudentNotFoundException.php');
             throw new StudentNotFoundException('No matching student found.');
-        }elseif (isset($soapData->error_num) && $soapData->error_num > 0){
+        }elseif (isset($soapData->error_num) && $soapData->error_num > 0) {
             //test($soapData,1);
             throw new SOAPException("Error while accessing SOAP interface: {$soapData->error_desc} ({$soapData->error_num})", $soapData->error_num, 'getStudentProfile', array($id, $term));
         }
@@ -72,9 +72,9 @@ class SOAPDataProvider extends StudentDataProvider {
         $student->setClass($soapData->projected_class);
         $student->setCreditHours($soapData->credhrs_completed);
 
-        if(isset($soapData->student_level)){
+        if (isset($soapData->student_level)) {
             $student->setStudentLevel($soapData->student_level);
-        }else{
+        } else {
             $student->setStudentLevel('');
         }
         
@@ -88,15 +88,15 @@ class SOAPDataProvider extends StudentDataProvider {
         $student->setPinDisabled($soapData->disabled_pin);
         $student->setHousingWaiver($soapData->housing_waiver);
         
-        if(isset($soapData->app_decision_code)){
+        if (isset($soapData->app_decision_code)) {
             $student->setAdmissionDecisionCode($soapData->app_decision_code);
-        }else{
+        } else {
             $student->setAdmissionDecisionCode('');
         }
 
-        if(isset($soapData->app_decision_desc)){
+        if (isset($soapData->app_decision_desc)) {
             $student->setAdmissionDecisionDesc($soapData->app_decision_desc);
-        }else{
+        } else {
             $student->setAdmissionDecisionDesc('');
         }
 
@@ -106,11 +106,11 @@ class SOAPDataProvider extends StudentDataProvider {
          //TODO improve this so we're getting the other phone number fields
         $phoneNumbers = array();
 
-        if(isset($soapData->phone) && is_array($soapData->phone)){
-            foreach($soapData->phone as $phone_number){
+        if (isset($soapData->phone) && is_array($soapData->phone)) {
+            foreach($soapData->phone as $phone_number) {
                 $phoneNumbers[] = '('.$phone_number->area_code.') '.$phone_number->number . (!empty($phone_number->ext) ? ' ext. '.$phone_number->ext : '');
             }
-        }elseif (isset($soapData->phone)){
+        } elseif (isset($soapData->phone)) {
             $phone_number = $soapData->phone;
             $phoneNumbers[] = '('.$phone_number->area_code.') '.$phone_number->number . (!empty($phone_number->ext) ? ' ext. '.$phone_number->ext : '');
         }
@@ -121,13 +121,13 @@ class SOAPDataProvider extends StudentDataProvider {
         /*************
          * Addresses *
          *************/
-        if(isset($soapData->address) && is_array($soapData->address) && count($soapData->address) > 0){
+        if (isset($soapData->address) && is_array($soapData->address) && count($soapData->address) > 0) {
             // Array of address objects given, just pass the array on to the new Student object
             $student->setAddressList($soapData->address);
-        }else if(isset($soapData->address)){
+        } else if (isset($soapData->address)) {
             // Only one address object given, make it into an array
             $student->setAddressList(array($soapData->address));
-        }else{
+        } else {
             // $soapData->address property probably wasn't defined, so set addressList to empty array
             $student->setAddressList(array());
         }
@@ -148,34 +148,34 @@ class SOAPDataProvider extends StudentDataProvider {
          * See Trac #719
          */
         PHPWS_Core::initModClass('hms', 'Term.php');
-        if($student->getApplicationTerm() > Term::getCurrentTerm() && $student->getType() == TYPE_CONTINUING){
+        if ($student->getApplicationTerm() > Term::getCurrentTerm() && $student->getType() == TYPE_CONTINUING) {
             $student->setType(TYPE_FRESHMEN);
         }
         
         // This is a hack to fix the student type for international grad students
         $type = $student->getType();
-        if((!isset($type) || $type == '') && $student->getStudentLevel() == LEVEL_GRAD && $student->isInternational() == 1){
+        if ((!isset($type) || $type == '') && $student->getStudentLevel() == LEVEL_GRAD && $student->isInternational() == 1) {
             $student->setType(TYPE_GRADUATE);
             $student->setClass(CLASS_SENIOR);
         }
 
-        if($student->getBannerId() == '900325006'){
+        if ($student->getBannerId() == '900325006') {
             $student->setClass(CLASS_SENIOR);
         }
     
-        if($student->getUsername() == 'marshallkd'){
+        if ($student->getUsername() == 'marshallkd') {
             $student->setApplicationTerm(201040);
         }
 
-        if($student->getUsername() == 'weldoncr'){
+        if ($student->getUsername() == 'weldoncr') {
             $student->setApplicationTerm(200840);
         }
 
-        if($student->getUsername() == 'ghoniema'){
+        if ($student->getUsername() == 'ghoniema') {
             $student->setType(TYPE_CONTINUING);
         }
         
-        if($student->getUsername() == 'brannonpg'){
+        if ($student->getUsername() == 'brannonpg') {
             $student->setApplicationTerm(201210);
         }
     }
