@@ -39,6 +39,8 @@ class ShowStudentSearchCommand extends Command {
 
         $form->addSubmit('Search');
         $form->setClass('submit', 'btn btn-primary');
+        
+        $form->setProtected(false);
 
         $tpl = $form->getTemplate();
 
