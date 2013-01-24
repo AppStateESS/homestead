@@ -25,9 +25,9 @@ class SubmitRoommateProfileCommand extends Command {
         # Otherwise, create a new profile.
         $id = RoommateProfile::checkForProfile(UserStatus::getUsername(), $term);
 
-        if($id !== FALSE){
+        if ($id !== FALSE){
             $profile = new RoommateProfile($id);
-        }else{
+        } else {
             $profile = new RoommateProfile();
             $profile->setUsername(UserStatus::getUsername());
             $profile->set_date_submitted();
@@ -40,530 +40,530 @@ class SubmitRoommateProfileCommand extends Command {
          */
 
         # Alternate contact info
-        if(isset($_REQUEST['alternate_email']) && $_REQUEST['alternate_email'] != ''){
+        if (isset($_REQUEST['alternate_email']) && $_REQUEST['alternate_email'] != ''){
             $profile->set_alternate_email($_REQUEST['alternate_email']);
-        }else{
+        } else {
             $profile->set_alternate_email('');
         }
 
-        if(isset($_REQUEST['aim_sn']) && $_REQUEST['aim_sn'] != ''){
+        if (isset($_REQUEST['aim_sn']) && $_REQUEST['aim_sn'] != ''){
             $profile->set_aim_sn($_REQUEST['aim_sn']);
-        }else{
+        } else {
             $profile->set_aim_sn('');
         }
 
-        if(isset($_REQUEST['yahoo_sn']) && $_REQUEST['yahoo_sn'] != ''){
+        if (isset($_REQUEST['yahoo_sn']) && $_REQUEST['yahoo_sn'] != ''){
             $profile->set_yahoo_sn($_REQUEST['yahoo_sn']);
-        }else{
+        } else {
             $profile->set_yahoo_sn('');
         }
 
-        if(isset($_REQUEST['msn_sn']) && $_REQUEST['msn_sn'] != ''){
+        if (isset($_REQUEST['msn_sn']) && $_REQUEST['msn_sn'] != ''){
             $profile->set_msn_sn($_REQUEST['msn_sn']);
-        }else{
+        } else {
             $profile->set_msn_sn('');
         }
 
         # Hobbies check boxes
-        if(isset($_REQUEST['hobbies_checkbox']['arts_and_crafts'])){
+        if (isset($_REQUEST['hobbies_checkbox']['arts_and_crafts'])){
             $profile->set_arts_and_crafts();
-        }else{
+        } else {
             $profile->set_arts_and_crafts(0);
         }
 
-        if(isset($_REQUEST['hobbies_checkbox']['books_and_reading'])){
+        if (isset($_REQUEST['hobbies_checkbox']['books_and_reading'])){
             $profile->set_books_and_reading();
-        }else{
+        } else {
             $profile->set_books_and_reading(0);
         }
 
-        if(isset($_REQUEST['hobbies_checkbox']['cars'])){
+        if (isset($_REQUEST['hobbies_checkbox']['cars'])){
             $profile->set_cars();
-        }else{
+        } else {
             $profile->set_cars(0);
         }
 
-        if(isset($_REQUEST['hobbies_checkbox']['church_activities'])){
+        if (isset($_REQUEST['hobbies_checkbox']['church_activities'])){
             $profile->set_church_activities();
-        }else{
+        } else {
             $profile->set_church_activities(0);
         }
 
-        if(isset($_REQUEST['hobbies_checkbox']['collecting'])){
+        if (isset($_REQUEST['hobbies_checkbox']['collecting'])){
             $profile->set_collecting();
-        }else{
+        } else {
             $profile->set_collecting(0);
         }
 
-        if(isset($_REQUEST['hobbies_checkbox']['computers_and_technology'])){
+        if (isset($_REQUEST['hobbies_checkbox']['computers_and_technology'])){
             $profile->set_computers_and_technology();
-        }else{
+        } else {
             $profile->set_computers_and_technology(0);
         }
 
-        if(isset($_REQUEST['hobbies_checkbox']['dancing'])){
+        if (isset($_REQUEST['hobbies_checkbox']['dancing'])){
             $profile->set_dancing();
-        }else{
+        } else {
             $profile->set_dancing(0);
         }
 
-        if(isset($_REQUEST['hobbies_checkbox']['fashion'])){
+        if (isset($_REQUEST['hobbies_checkbox']['fashion'])){
             $profile->set_fashion();
-        }else{
+        } else {
             $profile->set_fashion(0);
         }
 
-        if(isset($_REQUEST['hobbies_checkbox']['fine_arts'])){
+        if (isset($_REQUEST['hobbies_checkbox']['fine_arts'])){
             $profile->set_fine_arts();
-        }else{
+        } else {
             $profile->set_fine_arts(0);
         }
 
-        if(isset($_REQUEST['hobbies_checkbox']['gardening'])){
+        if (isset($_REQUEST['hobbies_checkbox']['gardening'])){
             $profile->set_gardening();
-        }else{
+        } else {
             $profile->set_gardening(0);
         }
 
-        if(isset($_REQUEST['hobbies_checkbox']['games'])){
+        if (isset($_REQUEST['hobbies_checkbox']['games'])){
             $profile->set_games();
-        }else{
+        } else {
             $profile->set_games(0);
         }
 
-        if(isset($_REQUEST['hobbies_checkbox']['humor'])){
+        if (isset($_REQUEST['hobbies_checkbox']['humor'])){
             $profile->set_humor();
-        }else{
+        } else {
             $profile->set_humor(0);
         }
 
-        if(isset($_REQUEST['hobbies_checkbox']['investing_personal_finance'])){
+        if (isset($_REQUEST['hobbies_checkbox']['investing_personal_finance'])){
             $profile->set_investing_personal_finance();
-        }else{
+        } else {
             $profile->set_investing_personal_finance(0);
         }
 
-        if(isset($_REQUEST['hobbies_checkbox']['movies'])){
+        if (isset($_REQUEST['hobbies_checkbox']['movies'])){
             $profile->set_movies();
-        }else{
+        } else {
             $profile->set_movies(0);
         }
 
-        if(isset($_REQUEST['hobbies_checkbox']['music'])){
+        if (isset($_REQUEST['hobbies_checkbox']['music'])){
             $profile->set_music();
-        }else{
+        } else {
             $profile->set_music(0);
         }
 
-        if(isset($_REQUEST['hobbies_checkbox']['outdoor_activities'])){
+        if (isset($_REQUEST['hobbies_checkbox']['outdoor_activities'])){
             $profile->set_outdoor_activities();
-        }else{
+        } else {
             $profile->set_outdoor_activities(0);
         }
 
-        if(isset($_REQUEST['hobbies_checkbox']['pets_and_animals'])){
+        if (isset($_REQUEST['hobbies_checkbox']['pets_and_animals'])){
             $profile->set_pets_and_animals();
-        }else{
+        } else {
             $profile->set_pets_and_animals(0);
         }
 
-        if(isset($_REQUEST['hobbies_checkbox']['photography'])){
+        if (isset($_REQUEST['hobbies_checkbox']['photography'])){
             $profile->set_photography();
-        }else{
+        } else {
             $profile->set_photography(0);
         }
 
-        if(isset($_REQUEST['hobbies_checkbox']['politics'])){
+        if (isset($_REQUEST['hobbies_checkbox']['politics'])){
             $profile->set_politics();
-        }else{
+        } else {
             $profile->set_politics(0);
         }
 
-        if(isset($_REQUEST['hobbies_checkbox']['sports'])){
+        if (isset($_REQUEST['hobbies_checkbox']['sports'])){
             $profile->set_sports();
-        }else{
+        } else {
             $profile->set_sports(0);
         }
 
-        if(isset($_REQUEST['hobbies_checkbox']['travel'])){
+        if (isset($_REQUEST['hobbies_checkbox']['travel'])){
             $profile->set_travel();
-        }else{
+        } else {
             $profile->set_travel(0);
         }
 
-        if(isset($_REQUEST['hobbies_checkbox']['tv_shows'])){
+        if (isset($_REQUEST['hobbies_checkbox']['tv_shows'])){
             $profile->set_tv_shows();
-        }else{
+        } else {
             $profile->set_tv_shows(0);
         }
 
-        if(isset($_REQUEST['hobbies_checkbox']['volunteering'])){
+        if (isset($_REQUEST['hobbies_checkbox']['volunteering'])){
             $profile->set_volunteering();
-        }else{
+        } else {
             $profile->set_volunteering(0);
         }
 
-        if(isset($_REQUEST['hobbies_checkbox']['writing'])){
+        if (isset($_REQUEST['hobbies_checkbox']['writing'])){
             $profile->set_writing();
-        }else{
+        } else {
             $profile->set_writing(0);
         }
 
-        if(isset($_REQUEST['hobbies_checkbox']['rotc'])){
+        if (isset($_REQUEST['hobbies_checkbox']['rotc'])){
             $profile->set_rotc();
-        }else{
+        } else {
             $profile->set_rotc(0);
         }
 
         # Music check boxes
-        if(isset($_REQUEST['music_checkbox']['alternative'])){
+        if (isset($_REQUEST['music_checkbox']['alternative'])){
             $profile->set_alternative();
-        }else{
+        } else {
             $profile->set_alternative(0);
         }
 
-        if(isset($_REQUEST['music_checkbox']['ambient'])){
+        if (isset($_REQUEST['music_checkbox']['ambient'])){
             $profile->set_ambient();
-        }else{
+        } else {
             $profile->set_ambient(0);
         }
 
-        if(isset($_REQUEST['music_checkbox']['beach'])){
+        if (isset($_REQUEST['music_checkbox']['beach'])){
             $profile->set_beach();
-        }else{
+        } else {
             $profile->set_beach(0);
         }
 
-        if(isset($_REQUEST['music_checkbox']['bluegrass'])){
+        if (isset($_REQUEST['music_checkbox']['bluegrass'])){
             $profile->set_bluegrass();
-        }else{
+        } else {
             $profile->set_bluegrass(0);
         }
 
-        if(isset($_REQUEST['music_checkbox']['blues'])){
+        if (isset($_REQUEST['music_checkbox']['blues'])){
             $profile->set_blues();
-        }else{
+        } else {
             $profile->set_blues(0);
         }
 
-        if(isset($_REQUEST['music_checkbox']['christian'])){
+        if (isset($_REQUEST['music_checkbox']['christian'])){
             $profile->set_christian();
-        }else{
+        } else {
             $profile->set_christian(0);
         }
 
-        if(isset($_REQUEST['music_checkbox']['classical'])){
+        if (isset($_REQUEST['music_checkbox']['classical'])){
             $profile->set_classical();
-        }else{
+        } else {
             $profile->set_classical(0);
         }
 
-        if(isset($_REQUEST['music_checkbox']['classic_rock'])){
+        if (isset($_REQUEST['music_checkbox']['classic_rock'])){
             $profile->set_classic_rock();
-        }else{
+        } else {
             $profile->set_classic_rock(0);
         }
 
-        if(isset($_REQUEST['music_checkbox']['country'])){
+        if (isset($_REQUEST['music_checkbox']['country'])){
             $profile->set_country();
-        }else{
+        } else {
             $profile->set_country(0);
         }
 
-        if(isset($_REQUEST['music_checkbox']['electronic'])){
+        if (isset($_REQUEST['music_checkbox']['electronic'])){
             $profile->set_electronic();
-        }else{
+        } else {
             $profile->set_electronic(0);
         }
 
-        if(isset($_REQUEST['music_checkbox']['folk'])){
+        if (isset($_REQUEST['music_checkbox']['folk'])){
             $profile->set_folk();
-        }else{
+        } else {
             $profile->set_folk(0);
         }
 
-        if(isset($_REQUEST['music_checkbox']['heavy_metal'])){
+        if (isset($_REQUEST['music_checkbox']['heavy_metal'])){
             $profile->set_heavy_metal();
-        }else{
+        } else {
             $profile->set_heavy_metal(0);
         }
 
-        if(isset($_REQUEST['music_checkbox']['hip_hop'])){
+        if (isset($_REQUEST['music_checkbox']['hip_hop'])){
             $profile->set_hip_hop();
-        }else{
+        } else {
             $profile->set_hip_hop(0);
         }
 
-        if(isset($_REQUEST['music_checkbox']['house'])){
+        if (isset($_REQUEST['music_checkbox']['house'])){
             $profile->set_house();
-        }else{
+        } else {
             $profile->set_house(0);
         }
 
-        if(isset($_REQUEST['music_checkbox']['industrial'])){
+        if (isset($_REQUEST['music_checkbox']['industrial'])){
             $profile->set_industrial();
-        }else{
+        } else {
             $profile->set_industrial(0);
         }
 
-        if(isset($_REQUEST['music_checkbox']['jazz'])){
+        if (isset($_REQUEST['music_checkbox']['jazz'])){
             $profile->set_jazz();
-        }else{
+        } else {
             $profile->set_jazz(0);
         }
 
-        if(isset($_REQUEST['music_checkbox']['popular_music'])){
+        if (isset($_REQUEST['music_checkbox']['popular_music'])){
             $profile->set_popular_music();
-        }else{
+        } else {
             $profile->set_popular_music(0);
         }
 
-        if(isset($_REQUEST['music_checkbox']['progressive'])){
+        if (isset($_REQUEST['music_checkbox']['progressive'])){
             $profile->set_progressive();
-        }else{
+        } else {
             $profile->set_progressive(0);
         }
 
-        if(isset($_REQUEST['music_checkbox']['punk'])){
+        if (isset($_REQUEST['music_checkbox']['punk'])){
             $profile->set_punk();
-        }else{
+        } else {
             $profile->set_punk(0);
         }
 
-        if(isset($_REQUEST['music_checkbox']['r_and_b'])){
+        if (isset($_REQUEST['music_checkbox']['r_and_b'])){
             $profile->set_r_and_b();
-        }else{
+        } else {
             $profile->set_r_and_b(0);
         }
 
-        if(isset($_REQUEST['music_checkbox']['rap'])){
+        if (isset($_REQUEST['music_checkbox']['rap'])){
             $profile->set_rap();
-        }else{
+        } else {
             $profile->set_rap(0);
         }
 
-        if(isset($_REQUEST['music_checkbox']['reggae'])){
+        if (isset($_REQUEST['music_checkbox']['reggae'])){
             $profile->set_reggae();
-        }else{
+        } else {
             $profile->set_reggae(0);
         }
 
-        if(isset($_REQUEST['music_checkbox']['alternative'])){
+        if (isset($_REQUEST['music_checkbox']['alternative'])){
             $profile->set_rock();
-        }else{
+        } else {
             $profile->set_rock(0);
         }
 
-        if(isset($_REQUEST['music_checkbox']['world_music'])){
+        if (isset($_REQUEST['music_checkbox']['world_music'])){
             $profile->set_world_music();
-        }else{
+        } else {
             $profile->set_world_music(0);
         }
 
         # Study times
-        if(isset($_REQUEST['study_times']['study_early_morning'])){
+        if (isset($_REQUEST['study_times']['study_early_morning'])){
             $profile->set_study_early_morning();
-        }else{
+        } else {
             $profile->set_study_early_morning(0);
         }
 
-        if(isset($_REQUEST['study_times']['study_morning_afternoon'])){
+        if (isset($_REQUEST['study_times']['study_morning_afternoon'])){
             $profile->set_study_morning_afternoon();
-        }else{
+        } else {
             $profile->set_study_morning_afternoon(0);
         }
 
-        if(isset($_REQUEST['study_times']['study_afternoon_evening'])){
+        if (isset($_REQUEST['study_times']['study_afternoon_evening'])){
             $profile->set_study_afternoon_evening();
-        }else{
+        } else {
             $profile->set_study_afternoon_evening(0);
         }
 
-        if(isset($_REQUEST['study_times']['study_evening'])){
+        if (isset($_REQUEST['study_times']['study_evening'])){
             $profile->set_study_evening();
-        }else{
+        } else {
             $profile->set_study_evening(0);
         }
 
-        if(isset($_REQUEST['study_times']['study_late_night'])){
+        if (isset($_REQUEST['study_times']['study_late_night'])){
             $profile->set_study_late_night();
-        }else{
+        } else {
             $profile->set_study_late_night(0);
         }
 
         # Drop downs
-        if(isset($_REQUEST['political_views_dropbox']) && $_REQUEST['political_views_dropbox'] != 0){
+        if (isset($_REQUEST['political_views_dropbox']) && $_REQUEST['political_views_dropbox'] != 0){
             $profile->set_political_view($_REQUEST['political_views_dropbox']);
-        }else{
+        } else {
             $profile->set_political_view(0);
         }
 
-        if(isset($_REQUEST['intended_major']) && $_REQUEST['intended_major'] != 0){
+        if (isset($_REQUEST['intended_major']) && $_REQUEST['intended_major'] != 0){
             $profile->set_major($_REQUEST['intended_major']);
-        }else{
+        } else {
             $profile->set_major(0);
         }
 
-        if(isset($_REQUEST['important_experience']) && $_REQUEST['important_experience'] != 0){
+        if (isset($_REQUEST['important_experience']) && $_REQUEST['important_experience'] != 0){
             $profile->set_experience($_REQUEST['important_experience']);
-        }else{
+        } else {
             $profile->set_experience(0);
         }
 
-        if(isset($_REQUEST['sleep_time']) && $_REQUEST['sleep_time'] != 0){
+        if (isset($_REQUEST['sleep_time']) && $_REQUEST['sleep_time'] != 0){
             $profile->set_sleep_time($_REQUEST['sleep_time']);
-        }else{
+        } else {
             $profile->set_sleep_time(0);
         }
 
-        if(isset($_REQUEST['wakeup_time']) && $_REQUEST['wakeup_time'] != 0){
+        if (isset($_REQUEST['wakeup_time']) && $_REQUEST['wakeup_time'] != 0){
             $profile->set_wakeup_time($_REQUEST['wakeup_time']);
-        }else{
+        } else {
             $profile->set_wakeup_time(0);
         }
 
-        if(isset($_REQUEST['overnight_guests']) && $_REQUEST['overnight_guests'] != 0){
+        if (isset($_REQUEST['overnight_guests']) && $_REQUEST['overnight_guests'] != 0){
             $profile->set_overnight_guests($_REQUEST['overnight_guests']);
-        }else{
+        } else {
             $profile->set_overnight_guests(0);
         }
 
-        if(isset($_REQUEST['loudness']) && $_REQUEST['loudness'] != 0){
+        if (isset($_REQUEST['loudness']) && $_REQUEST['loudness'] != 0){
             $profile->set_loudness($_REQUEST['loudness']);
-        }else{
+        } else {
             $profile->set_loudness(0);
         }
 
-        if(isset($_REQUEST['cleanliness']) && $_REQUEST['cleanliness'] != 0){
+        if (isset($_REQUEST['cleanliness']) && $_REQUEST['cleanliness'] != 0){
             $profile->set_cleanliness($_REQUEST['cleanliness']);
-        }else{
+        } else {
             $profile->set_cleanliness(0);
         }
 
-        if(isset($_REQUEST['free_time']) && $_REQUEST['free_time'] != 0){
+        if (isset($_REQUEST['free_time']) && $_REQUEST['free_time'] != 0){
             $profile->set_free_time($_REQUEST['free_time']);
-        }else{
+        } else {
             $profile->set_free_time(0);
         }
 
         # Spoken Languages
-        if(isset($_REQUEST['language_checkbox']['arabic'])){
+        if (isset($_REQUEST['language_checkbox']['arabic'])){
             $profile->set_arabic();
-        }else{
+        } else {
             $profile->set_arabic(0);
         }
 
-        if(isset($_REQUEST['language_checkbox']['bengali'])){
+        if (isset($_REQUEST['language_checkbox']['bengali'])){
             $profile->set_bengali();
-        }else{
+        } else {
             $profile->set_bengali(0);
         }
 
-        if(isset($_REQUEST['language_checkbox']['chinese'])){
+        if (isset($_REQUEST['language_checkbox']['chinese'])){
             $profile->set_chinese();
-        }else{
+        } else {
             $profile->set_chinese(0);
         }
 
-        if(isset($_REQUEST['language_checkbox']['english'])){
+        if (isset($_REQUEST['language_checkbox']['english'])){
             $profile->set_english();
-        }else{
+        } else {
             $profile->set_english(0);
         }
 
-        if(isset($_REQUEST['language_checkbox']['french'])){
+        if (isset($_REQUEST['language_checkbox']['french'])){
             $profile->set_french();
-        }else{
+        } else {
             $profile->set_french(0);
         }
 
-        if(isset($_REQUEST['language_checkbox']['german'])){
+        if (isset($_REQUEST['language_checkbox']['german'])){
             $profile->set_german();
-        }else{
+        } else {
             $profile->set_german(0);
         }
 
-        if(isset($_REQUEST['language_checkbox']['hindi'])){
+        if (isset($_REQUEST['language_checkbox']['hindi'])){
             $profile->set_hindi();
-        }else{
+        } else {
             $profile->set_hindi(0);
         }
 
-        if(isset($_REQUEST['language_checkbox']['italian'])){
+        if (isset($_REQUEST['language_checkbox']['italian'])){
             $profile->set_italian();
-        }else{
+        } else {
             $profile->set_italian(0);
         }
 
-        if(isset($_REQUEST['language_checkbox']['japanese'])){
+        if (isset($_REQUEST['language_checkbox']['japanese'])){
             $profile->set_japanese();
-        }else{
+        } else {
             $profile->set_japanese(0);
         }
 
-        if(isset($_REQUEST['language_checkbox']['javanese'])){
+        if (isset($_REQUEST['language_checkbox']['javanese'])){
             $profile->set_javanese();
-        }else{
+        } else {
             $profile->set_javanese(0);
         }
 
-        if(isset($_REQUEST['language_checkbox']['korean'])){
+        if (isset($_REQUEST['language_checkbox']['korean'])){
             $profile->set_korean();
-        }else{
+        } else {
             $profile->set_korean(0);
         }
 
-        if(isset($_REQUEST['language_checkbox']['malay'])){
+        if (isset($_REQUEST['language_checkbox']['malay'])){
             $profile->set_malay();
-        }else{
+        } else {
             $profile->set_malay(0);
         }
 
-        if(isset($_REQUEST['language_checkbox']['marathi'])){
+        if (isset($_REQUEST['language_checkbox']['marathi'])){
             $profile->set_marathi();
-        }else{
+        } else {
             $profile->set_marathi(0);
         }
 
-        if(isset($_REQUEST['language_checkbox']['portuguese'])){
+        if (isset($_REQUEST['language_checkbox']['portuguese'])){
             $profile->set_portuguese();
-        }else{
+        } else {
             $profile->set_portuguese(0);
         }
 
-        if(isset($_REQUEST['language_checkbox']['punjabi'])){
+        if (isset($_REQUEST['language_checkbox']['punjabi'])){
             $profile->set_punjabi();
-        }else{
+        } else {
             $profile->set_punjabi(0);
         }
 
-        if(isset($_REQUEST['language_checkbox']['russian'])){
+        if (isset($_REQUEST['language_checkbox']['russian'])){
             $profile->set_russian();
-        }else{
+        } else {
             $profile->set_russian(0);
         }
 
-        if(isset($_REQUEST['language_checkbox']['spanish'])){
+        if (isset($_REQUEST['language_checkbox']['spanish'])){
             $profile->set_spanish();
-        }else{
+        } else {
             $profile->set_spanish(0);
         }
 
-        if(isset($_REQUEST['language_checkbox']['tamil'])){
+        if (isset($_REQUEST['language_checkbox']['tamil'])){
             $profile->set_tamil();
-        }else{
+        } else {
             $profile->set_tamil(0);
         }
 
-        if(isset($_REQUEST['language_checkbox']['telugu'])){
+        if (isset($_REQUEST['language_checkbox']['telugu'])){
             $profile->set_telugu();
-        }else{
+        } else {
             $profile->set_telugu(0);
         }
 
-        if(isset($_REQUEST['language_checkbox']['vietnamese'])){
+        if (isset($_REQUEST['language_checkbox']['vietnamese'])){
             $profile->set_vietnamese();
-        }else{
+        } else {
             $profile->set_vietnamese(0);
         }
 
