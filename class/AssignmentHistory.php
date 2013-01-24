@@ -53,7 +53,7 @@ class AssignmentHistory extends HMS_Item {
      */
     public function setBanner($bannerID=null) {
         if ( is_null($bannerID) )
-        return false;
+            return false;
 
         $this->banner_id = $bannerID;
         return true;
@@ -71,7 +71,7 @@ class AssignmentHistory extends HMS_Item {
     public function getBedId(){
         return $this->bed_id;
     }
-    
+
     /**
      * Sets the term of this history object by passed or current if none
      *
@@ -111,15 +111,15 @@ class AssignmentHistory extends HMS_Item {
      */
     public function setAssign($assign_reason=ASSIGN_NOREASON, $assigned_by=null, $assigned_on=null) {
         if ( is_null($assigned_on) ) // use current time
-        $this->assigned_on = $this->getTimestamp();
+            $this->assigned_on = $this->getTimestamp();
         else
-        $this->assigned_on = $assigned_on;
-        	
+            $this->assigned_on = $assigned_on;
+         
         if ( is_null($assigned_by) ) // use current user
-        $this->assigned_by = UserStatus::getUsername();
+            $this->assigned_by = UserStatus::getUsername();
         else
-        $this->assigned_by = $assigned_by;
-        	
+            $this->assigned_by = $assigned_by;
+         
         $this->assigned_reason = $assign_reason;
     }
 
@@ -133,14 +133,14 @@ class AssignmentHistory extends HMS_Item {
      */
     public function setRemove($removed_reason=UNASSIGN_NOREASON, $removed_by=null, $removed_on=null) {
         if ( is_null($removed_on) ) // use current time
-        $this->removed_on = $this->getTimestamp();
+            $this->removed_on = $this->getTimestamp();
         else
-        $this->removed_on = $removed_on;
-        	
+            $this->removed_on = $removed_on;
+         
         if ( is_null($removed_by) ) // use current user
-        $this->removed_by = UserStatus::getUsername();
+            $this->removed_by = UserStatus::getUsername();
         else
-        $this->removed_by = $removed_by;
+            $this->removed_by = $removed_by;
 
         $this->removed_reason = $removed_reason;
     }
@@ -153,7 +153,7 @@ class AssignmentHistory extends HMS_Item {
      */
     public function init($id=null) {
         if ( is_null($id) )
-        return false;
+            return false;
 
         // do a database call
         $db = $this->getDb();
@@ -176,7 +176,7 @@ class AssignmentHistory extends HMS_Item {
      */
     public static function getHistory($id) {
         if (is_null($id))
-        return false;
+            return false;
 
         // do a database call
         $db = new PHPWS_DB('hms_assignment_history');
@@ -206,11 +206,11 @@ class AssignmentHistory extends HMS_Item {
         if(is_null($assignment)) {
             throw new InvalidArgumentException('Missing HMS_Assignment object.');
         }
-        	
+         
         if(is_null($reason)){
             $reason = $assignment->reason;
         }
-        	
+         
         // check if an open-ended assignment exists for the term sent.  If so, unassign with reason "AUTO"
         if(AssignmentHistory::historyExists($assignment)){
             AssignmentHistory::makeUnassignmentHistory($assignment, UNASSIGN_REASSIGN);
@@ -238,8 +238,8 @@ class AssignmentHistory extends HMS_Item {
      */
     public static function makeUnassignmentHistory($assignment=null, $reason=UNASSIGN_NOREASON) {
         if ( is_null($assignment) )
-        return false;
-        	
+            return false;
+         
         $db = new PHPWS_DB('hms_assignment_history');
         $db->addWhere('banner_id', 	$assignment->banner_id);
         $db->addWhere('bed_id',     $assignment->bed_id);
@@ -252,7 +252,7 @@ class AssignmentHistory extends HMS_Item {
         if(PHPWS_Error::logIfError($result)){
             throw new DatabaseException($result->toString());
         }
-        	
+         
         $tHistory->setRemove($reason);
         $result = $tHistory->save();
 
@@ -265,8 +265,8 @@ class AssignmentHistory extends HMS_Item {
 
     public static function historyExists($assignment) {
         if ( is_null($assignment) )
-        return false;
-        	
+            return false;
+         
         $db = new PHPWS_DB('hms_assignment_history');
         $db->addWhere('banner_id', 	$assignment->banner_id);
         $db->addWhere('term',		$assignment->term);

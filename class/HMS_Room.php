@@ -137,7 +137,7 @@ class HMS_Room extends HMS_Item
         //coed and the genders don't match.
         $new_room->loadFloor();
         if($new_room->_floor->gender_type != COED
-        && $new_room->default_gender != $new_room->_floor->gender_type)
+                && $new_room->default_gender != $new_room->_floor->gender_type)
         {
             $new_room->default_gender = $new_room->_floor->gender_type;
         }
@@ -309,7 +309,7 @@ class HMS_Room extends HMS_Item
 
             // If the floor is not coed and the gt is not the target, return false
             if($this->_floor->gender_type != COED &&
-            $this->_floor->gender_type != $target_gender
+                    $this->_floor->gender_type != $target_gender
             ) {
                 return false;
             }
@@ -495,17 +495,17 @@ class HMS_Room extends HMS_Item
 
         // Count the number of beds which are free in this room
         $query =   "SELECT DISTINCT COUNT(hms_bed.id) FROM hms_bed
-                    JOIN hms_room ON hms_bed.room_id = hms_room.id
-                    WHERE (hms_bed.id NOT IN (SELECT bed_id FROM hms_lottery_reservation WHERE term = {$this->term} AND expires_on > $now)
-                    AND hms_bed.id NOT IN (SELECT bed_id FROM hms_assignment WHERE term = {$this->term}))
-                    AND hms_room.id = {$this->id}
-                    AND hms_room.reserved = 0
-                    AND hms_room.offline = 0
-                    AND hms_room.private = 0
-                    AND hms_room.ra = 0
-                    AND hms_room.overflow = 0
-                    AND hms_room.parlor = 0
-                    AND hms_bed.international_reserved = 0";
+        JOIN hms_room ON hms_bed.room_id = hms_room.id
+        WHERE (hms_bed.id NOT IN (SELECT bed_id FROM hms_lottery_reservation WHERE term = {$this->term} AND expires_on > $now)
+        AND hms_bed.id NOT IN (SELECT bed_id FROM hms_assignment WHERE term = {$this->term}))
+        AND hms_room.id = {$this->id}
+        AND hms_room.reserved = 0
+        AND hms_room.offline = 0
+        AND hms_room.private = 0
+        AND hms_room.ra = 0
+        AND hms_room.overflow = 0
+        AND hms_room.parlor = 0
+        AND hms_bed.international_reserved = 0";
 
         $avail_rooms = PHPWS_DB::getOne($query);
         if(PHPWS_Error::logIfError($avail_rooms)){
@@ -517,7 +517,7 @@ class HMS_Room extends HMS_Item
 
     /**
      * DBPager row method for the floor view
-     * 
+     *
      * @return Array
      */
     public function get_row_tags()
@@ -533,7 +533,7 @@ class HMS_Room extends HMS_Item
         $tpl['OVERFLOW']       = $this->isOverflow()  ? 'Yes' : 'No';
         $tpl['RESERVED']       = $this->isReserved()  ? 'Yes' : 'No';
         $tpl['OFFLINE']        = $this->isOffline()   ? 'Yes' : 'No';
-        $tpl['ADA']            = $this->isADA()       ? 'Yes' : 'No';   
+        $tpl['ADA']            = $this->isADA()       ? 'Yes' : 'No';
 
         if(Current_User::allow('hms','room_structure') && $this->get_number_of_assignees() == 0) {
             $deleteRoomCmd = CommandFactory::getCommand('DeleteRoom');
@@ -551,7 +551,7 @@ class HMS_Room extends HMS_Item
 
     /**
      * DBPager row method for the floor edit pager.
-     * 
+     *
      * @return Array
      */
     public function get_row_edit(){
@@ -574,9 +574,9 @@ class HMS_Room extends HMS_Item
 
         $form = new PHPWS_Form($this->id);
         $form->addSelect('gender_type', array(FEMALE => FEMALE_DESC,
-        MALE   => MALE_DESC,
-        COED   => COED_DESC,
-        AUTO   => AUTO_DESC
+                MALE   => MALE_DESC,
+                COED   => COED_DESC,
+                AUTO   => AUTO_DESC
         ));
 
         $form->setMatch('gender_type', $this->gender_type);
@@ -592,11 +592,11 @@ class HMS_Room extends HMS_Item
         $form->addCheck('offline', 'yes');
         $form->setMatch('offline', $this->offline == 1 ? 'yes' : 0);
         $form->setExtra('offline', 'onChange="submit_form(this, false)"');
-        
+
         $form->addCheck('reserved', 'yes');
         $form->setMatch('reserved', $this->reserved == 1 ? 'yes' : 0);
         $form->setExtra('reserved', 'onChange="submit_form(this, false)"');
-        
+
         $form->addCheck('ra', 'yes');
         $form->setMatch('ra', $this->ra == 1 ? 'yes' : 0);
         $form->setExtra('ra', 'onChange="submit_form(this, false)"');
@@ -608,7 +608,7 @@ class HMS_Room extends HMS_Item
         $form->addCheck('overflow', 'yes');
         $form->setMatch('overflow', $this->overflow == 1 ? 'yes' : 0);
         $form->setExtra('overflow', 'onChange="submit_form(this, false)"');
-        
+
         $form->addCheck('ada', 'yes');
         $form->setMatch('ada', $this->isAda() ? 'yes' : 0);
         $form->setExtra('ada', 'onChange="submit_form(this, false)"');
@@ -619,120 +619,120 @@ class HMS_Room extends HMS_Item
         $form->mergeTemplate($tpl);
 
         //test($form->getTemplate(),1);
-        
+
         return $form->getTemplate();
     }
-    
+
     public function getId(){
-    	return $this->id;
+        return $this->id;
     }
 
     /******************************
-     * Accessor / Mutator Methods * 
-     ******************************/
-    
+     * Accessor / Mutator Methods *
+    ******************************/
+
     public function getRoomNumber()
     {
         return $this->room_number;
     }
-    
+
     public function isOffline()
     {
         return $this->offline == 1 ? true : false;
     }
-    
+
     public function setOffline($value){
         $this->offline = $value;
     }
-    
+
     public function isReserved()
     {
         return $this->reserved == 1 ? true : false;
     }
-    
+
     public function setReserved($value){
         $this->reserved = $value;
     }
-    
+
     public function isRa()
     {
         return $this->ra == 1 ? true : false;
     }
-    
+
     public function setRa($value){
         $this->ra = $value;
     }
-    
+
     public function isPrivate()
     {
         return $this->private == 1 ? true : false;
     }
-    
+
     public function setPrivate($value){
         $this->private = $value;
     }
-    
+
     public function isOverflow()
     {
         return $this->overflow == 1 ? true : false;
     }
-    
+
     public function setOverflow($value){
         $this->overflow = $value;
     }
-    
+
     public function isADA()
     {
         return $this->ada == 1 ? true : false;
     }
-    
+
     public function setADA($value){
         $this->ada = $value;
     }
-    
+
     public function isHearingImpaired()
     {
         return $this->hearing_impaired == 1 ? true : false;
     }
-    
+
     public function setHearingImpaired(){
         $this->hearing_impaired = $value;
     }
-    
+
     public function bathEnSuite()
     {
         return $this->bath_en_suite == 1 ? true : false;
     }
-    
+
     public function setBathEnSuite($value){
         $this->bath_en_suite = $value;
     }
-    
+
     public function isParlor()
     {
         return $this->parlor == 1 ? true : false;
     }
-    
+
     public function setParlor($value){
         $this->parlor = $value;
     }
-    
+
     public function getGender(){
         return $this->gender_type;
     }
-    
+
     public function setGender($gender){
         $this->gender_type = $gender;
     }
-    
+
     public function getDefaultGender(){
         return $this->default_gender;
     }
-    
+
     public function setDefaultGender($gender){
         $this->default_gender = $gender;
     }
-    
+
     /******************
      * Static Methods *
     *****************/
@@ -776,7 +776,7 @@ class HMS_Room extends HMS_Item
     /*
      * Deletes a room and any beds in it.  Returns true
     * if we're successful, false if not (or if there
-    * is an assignment)
+            * is an assignment)
     */
     public static function deleteRoom($roomId)
     {
@@ -885,7 +885,7 @@ class HMS_Room extends HMS_Item
 
         // Make sure each room is empty and has only two beds
         $ret = array_values(array_filter($result,
-        array('HMS_Room', 'check_two_bed_and_empty_by_id')));
+                array('HMS_Room', 'check_two_bed_and_empty_by_id')));
 
         if($randomize) {
             shuffle($ret);

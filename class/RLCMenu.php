@@ -4,9 +4,9 @@ PHPWS_Core::initModClass('hms', 'CommandMenu.php');
 
 class RLCMenu extends CommandMenu {
 
-	public function __construct()
-	{
-		parent::__construct();
+    public function __construct()
+    {
+        parent::__construct();
 
         // Check permissions
         if(UserStatus::isAdmin()){
@@ -19,7 +19,7 @@ class RLCMenu extends CommandMenu {
                 $this->addCommandByName('Assign Applicants to RLCs', 'ShowAssignRlcApplicants');
                 $this->addCommandByName('View Denied Applications', 'ShowDeniedRlcApplicants');
             }
-            
+
             if(Current_User::allow('hms', 'learning_community_maintenance')){
                 $this->addCommandByName('Send RLC Email Invites', 'ShowSendRlcInvites');
             }
@@ -40,10 +40,10 @@ class RLCMenu extends CommandMenu {
                 $this->addCommand('Send RLC Rejection Emails', $cmd);
             }
         }
-	}
+    }
 
-	public function show()
-	{
+    public function show()
+    {
         if(empty($this->commands)){
             return "";
         }
@@ -53,6 +53,6 @@ class RLCMenu extends CommandMenu {
         $tpl['MENU'] = parent::show();
 
         return PHPWS_Template::process($tpl, 'hms', 'admin/menus/RLCMenu.tpl');
-	}
+    }
 }
 ?>

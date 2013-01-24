@@ -6,13 +6,13 @@ PHPWS_Core::initModClass('hms', 'HMS_Util.php');
  * List Reports View
  *
  * Shows a list of all the available reports and
- * the associated actions for each report. Complies the 
+ * the associated actions for each report. Complies the
  * list of menu items for each report by calling the ReportController's
  * getMenuItemView method.
  *
  * @author Jeremy Booker <jbooker at tux dot appstate dot edu>
  * @package HMS
- */
+*/
 
 class ListReportsView extends View {
 
@@ -20,7 +20,7 @@ class ListReportsView extends View {
 
     /**
      * Constructor
-     * 
+     *
      * @param Array $reportControllers The Array of report controller objets representing possible reports.
      */
     public function __construct(Array $reportControllers){
@@ -33,29 +33,29 @@ class ListReportsView extends View {
      * @return String $final HTML for this output
      * @throws PermissionException
      */
-	public function show()
-	{
-	    $this->setTitle("Reports");
-	    
-		if(!Current_User::allow('hms', 'reports')){
-		    PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
-			throw new PermissionException('You do not have permission to run reports.');
-		}
+    public function show()
+    {
+        $this->setTitle("Reports");
+         
+        if(!Current_User::allow('hms', 'reports')){
+            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
+            throw new PermissionException('You do not have permission to run reports.');
+        }
 
-		$tpl = array();
+        $tpl = array();
         $tpl['REPORTS'] = array();
 
-		foreach($this->reportControllers as $rc) {
+        foreach($this->reportControllers as $rc) {
 
-		    $tags = array();
-		    
-		    $itemView = $rc->getMenuItemView();
+            $tags = array();
+
+            $itemView = $rc->getMenuItemView();
             $tpl['REPORTS'][]['ITEM'] = $itemView->show();
-		}
+        }
 
-		$final = PHPWS_Template::process($tpl, 'hms', 'admin/display_reports.tpl');
-		return $final;
-	}
+        $final = PHPWS_Template::process($tpl, 'hms', 'admin/display_reports.tpl');
+        return $final;
+    }
 }
 
 ?>

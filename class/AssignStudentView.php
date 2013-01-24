@@ -3,7 +3,7 @@
 PHPWS_Core::initModClass('hms', 'View.php');
 
 class AssignStudentView extends View {
-    
+
     private $student;
     private $bed;
     private $application;
@@ -112,16 +112,16 @@ class AssignStudentView extends View {
         }
 
         $form->addDropBox('meal_plan', array(
-	        BANNER_MEAL_LOW   => 'Low',
-	        BANNER_MEAL_STD   => 'Standard',
-	        BANNER_MEAL_HIGH  => 'High',
-	        BANNER_MEAL_SUPER => 'Super',
-	        BANNER_MEAL_NONE  => 'None',
-            // 4 Week Meal Plan Removed according to ticket #709
-            // BANNER_MEAL_4WEEK => 'Summer (4 weeks)',
-	        BANNER_MEAL_5WEEK => 'Summer (5 weeks)'));
+                BANNER_MEAL_LOW   => 'Low',
+                BANNER_MEAL_STD   => 'Standard',
+                BANNER_MEAL_HIGH  => 'High',
+                BANNER_MEAL_SUPER => 'Super',
+                BANNER_MEAL_NONE  => 'None',
+                // 4 Week Meal Plan Removed according to ticket #709
+                // BANNER_MEAL_4WEEK => 'Summer (4 weeks)',
+                BANNER_MEAL_5WEEK => 'Summer (5 weeks)'));
         $form->setLabel('meal_plan', 'Meal plan: ');
-        
+
         // If the username was passed in, and that student has a meal plan
         // pre-select the student's chosen meal plan
         if(isset($this->application)){
@@ -130,34 +130,34 @@ class AssignStudentView extends View {
             // Otherwise, select 'standard' meal plan
             $form->setMatch('meal_plan', BANNER_MEAL_STD);
         }
-        
+
         // "Assignment Type"
         $form->addDropBox('assignment_type', array(
-            -1                       => 'Choose assignment type...',
-            ASSIGN_ADMIN             => 'Administrative',
-            ASSIGN_LOTTERY	         => 'Lottery',
-            ASSIGN_FR   	         => 'Freshmen',
-            ASSIGN_TRANSFER          => 'Transfer',
-            ASSIGN_APH               => 'APH',
-            ASSIGN_RLC_FRESHMEN      => 'RLC Freshmen',
-            ASSIGN_RLC_TRANSFER      => 'RLC Transfer',
-            ASSIGN_RLC_CONTINUING    => 'RLC Continuing',
-            ASSIGN_HONORS_FRESHMEN   => 'Honors Freshmen',
-            ASSIGN_HONORS_CONTINUING => 'Honors Continuing',
-            ASSIGN_LLC_FRESHMEN      => 'LLC Freshmen',
-            ASSIGN_LLC_CONTINUING    => 'LLC Continuing',
-            ASSIGN_INTL              => 'International',
-            ASSIGN_RA                => 'RA',
-            ASSIGN_RA_ROOMMATE       => 'RA Roommate',
-            ASSIGN_MEDICAL           => 'Medical',
-            ASSIGN_SPECIAL           => 'Special Needs',
-            ASSIGN_RHA               => 'RHA/NRHH',
-            ASSIGN_SCHOLARS          => 'Diversity &amp; Plemmons Scholars'
-        ));
-        
+                -1                       => 'Choose assignment type...',
+                ASSIGN_ADMIN             => 'Administrative',
+                ASSIGN_LOTTERY	         => 'Lottery',
+                ASSIGN_FR   	         => 'Freshmen',
+                ASSIGN_TRANSFER          => 'Transfer',
+                ASSIGN_APH               => 'APH',
+                ASSIGN_RLC_FRESHMEN      => 'RLC Freshmen',
+                ASSIGN_RLC_TRANSFER      => 'RLC Transfer',
+                ASSIGN_RLC_CONTINUING    => 'RLC Continuing',
+                ASSIGN_HONORS_FRESHMEN   => 'Honors Freshmen',
+                ASSIGN_HONORS_CONTINUING => 'Honors Continuing',
+                ASSIGN_LLC_FRESHMEN      => 'LLC Freshmen',
+                ASSIGN_LLC_CONTINUING    => 'LLC Continuing',
+                ASSIGN_INTL              => 'International',
+                ASSIGN_RA                => 'RA',
+                ASSIGN_RA_ROOMMATE       => 'RA Roommate',
+                ASSIGN_MEDICAL           => 'Medical',
+                ASSIGN_SPECIAL           => 'Special Needs',
+                ASSIGN_RHA               => 'RHA/NRHH',
+                ASSIGN_SCHOLARS          => 'Diversity &amp; Plemmons Scholars'
+                        ));
+
         $form->setMatch('assignment_type', -1);
         $form->setLabel('assignment_type', 'Assignment Type: ');
-        
+
         $form->addSubmit('submit', 'Assign Student');
 
         if($pre_populate){

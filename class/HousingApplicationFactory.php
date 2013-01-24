@@ -10,10 +10,10 @@ PHPWS_Core::initModClass('hms', 'ContextApplicationFactory.php');
 
 class HousingApplicationFactory {
 
-	public static function getApplicationFromContext(CommandContext $context, $term, Student $student, $applicationType)
-	{
-		return ContextApplicationFactory::getApplicationFromContext($context, $term, $student, $applicationType);
-	}
+    public static function getApplicationFromContext(CommandContext $context, $term, Student $student, $applicationType)
+    {
+        return ContextApplicationFactory::getApplicationFromContext($context, $term, $student, $applicationType);
+    }
 
     public static function getApplicationById($id)
     {
@@ -64,10 +64,10 @@ class HousingApplicationFactory {
     /**
      * Returns the HousingApplication object (of a specific child type) for the given term,
      * or null if no Housing Application exists.
-     * 
+     *
      * Uses BannerIDs to lookup students.
      * Replaces HousingApplication::getApplicationByUser()
-     * 
+     *
      * @param Student $student
      * @param string $term
      * @param string $applicationType
@@ -82,25 +82,25 @@ class HousingApplicationFactory {
         PHPWS_Core::initModClass('hms', 'SummerApplication.php');
         PHPWS_Core::initModClass('hms', 'LotteryApplication.php');
         PHPWS_Core::initModClass('hms', 'WaitingListApplication.php');
-    
+
         $db = new PHPWS_DB('hms_new_application');
         $db->addWhere('banner_id', $student->getBannerId());
         $db->addWhere('term', $term);
-    
+
         if(!is_null($applicationType)){
             $db->addWhere('application_type', $applicationType);
         }
-    
+
         $result = $db->select('row');
-    
+
         if(PHPWS_Error::logIfError($result)){
             throw new DatabaseException($result->toString());
         }
-    
+
         if($result == NULL){
             return NULL;
         }
-    
+
         switch($result['application_type']){
             case 'fall':
                 $app = new FallApplication($result['id']);
@@ -120,7 +120,7 @@ class HousingApplicationFactory {
             default:
                 throw new InvalidArgumentException('Unknown application type: ' . $result['application_type']);
         }
-    
+
         return $app;
     }
 }

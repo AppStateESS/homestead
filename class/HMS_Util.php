@@ -2,7 +2,7 @@
 
 /**
  * HMS Utility class for various public functions that don't fit anywhere else
- * @author Jeremy Booker <jbooker at tux dot appstate dot edu>
+     * @author Jeremy Booker <jbooker at tux dot appstate dot edu>
  */
 
 /************************
@@ -17,17 +17,17 @@ class HMS_Util{
     public static function get_months()
     {
         $months = array('1'=>'January',
-                        '2'=>'February',
-                        '3'=>'March',
-                        '4'=>'April',
-                        '5'=>'May',
-                        '6'=>'June',
-                        '7'=>'July',
-                        '8'=>'August',
-                        '9'=>'September',
-                        '10'=>'October',
-                        '11'=>'November',
-                        '12'=>'December');
+                '2'=>'February',
+                '3'=>'March',
+                '4'=>'April',
+                '5'=>'May',
+                '6'=>'June',
+                '7'=>'July',
+                '8'=>'August',
+                '9'=>'September',
+                '10'=>'October',
+                '11'=>'November',
+                '12'=>'December');
 
         return $months;
     }
@@ -84,7 +84,7 @@ class HMS_Util{
      */
     public static function get_short_date($timestamp) {
         if(!isset($timestamp))
-        $timestamp = mktime();
+            $timestamp = mktime();
          
         return date('j-n-y', $timestamp);
     }
@@ -96,7 +96,7 @@ class HMS_Util{
      */
     public static function get_long_date($timestamp) {
         if(!isset($timestamp))
-        $timestamp = mktime();
+            $timestamp = mktime();
 
         return date('n/j/Y', $timestamp);
     }
@@ -108,7 +108,7 @@ class HMS_Util{
      */
     public static function get_super_long_date($timestamp) {
         if(!isset($timestamp))
-        $timestamp = mktime();
+            $timestamp = mktime();
 
         return date('jS-M-Y', $timestamp);
     }
@@ -282,13 +282,13 @@ class HMS_Util{
                 return 'High';
             case BANNER_MEAL_SUPER:
                 return 'Super';
-        	// 4 Week Meal Plan Removed according to ticket #709
-            //case BANNER_MEAL_4WEEK:
-            //    return 'Summer (4 weeks)';
-            case BANNER_MEAL_5WEEK:
-                return 'Summer (5 weeks)';
-            default:
-                return 'Unknown';
+                // 4 Week Meal Plan Removed according to ticket #709
+                //case BANNER_MEAL_4WEEK:
+                //    return 'Summer (4 weeks)';
+                case BANNER_MEAL_5WEEK:
+                    return 'Summer (5 weeks)';
+                default:
+                    return 'Unknown';
         }
     }
 
@@ -382,7 +382,7 @@ class HMS_Util{
 
                 default:
                     $suffix = "th";
-                break;
+                    break;
             }
         }
 

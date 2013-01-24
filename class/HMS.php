@@ -124,7 +124,7 @@ abstract class HMS {
 
         $tags = array('MESSAGE' => $message);
         HMS_Email::send_template_message($to, 'Uncaught Exception',
-		    'email/UncaughtException.tpl', $tags);
+        'email/UncaughtException.tpl', $tags);
     }
 
     protected function saveState()

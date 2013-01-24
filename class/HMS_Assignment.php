@@ -22,14 +22,14 @@ class HMS_Assignment extends HMS_Item
     public $email_sent     = 0;
     public $reason		   = null;
     public $application_term = null;
-    public $class          = null; 
+    public $class          = null;
 
     public $_gender        = 0;
     public $_bed           = null;
 
     /********************
      * Instance Methods *
-     *******************/
+    *******************/
     public function HMS_Assignment($id = 0)
     {
         $this->construct($id, 'hms_assignment');
@@ -70,7 +70,7 @@ class HMS_Assignment extends HMS_Item
 
     /*
      * Returns the parent floor object of this room
-     */
+    */
     public function get_parent()
     {
         $this->loadBed();
@@ -79,7 +79,7 @@ class HMS_Assignment extends HMS_Item
 
     /*
      * Loads the parent bed object of this room
-     */
+    */
     public function loadBed()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
@@ -92,7 +92,7 @@ class HMS_Assignment extends HMS_Item
 
     /*
      * Returns the banner building code that is associated with this bed
-     */
+    */
     public function get_banner_building_code()
     {
         if(!$this->loadBed()){
@@ -109,7 +109,7 @@ class HMS_Assignment extends HMS_Item
 
     /*
      * Returns the banner bed id associated with this bed
-     */
+    */
     public function get_banner_bed_id(){
         if(!$this->loadBed()){
             return null;
@@ -150,7 +150,7 @@ class HMS_Assignment extends HMS_Item
 
     /**
      * Returns the phone number of the bed for this assignment.
-     * 
+     *
      * @depricated
      */
     public function get_phone_number()
@@ -209,10 +209,10 @@ class HMS_Assignment extends HMS_Item
 
         return $room->id;
     }
-    
+
     /******************************
      * Accessor / Mutator Methods *
-     *****************************/
+    *****************************/
 
     public function getBannerId(){
         return $this->banner_id;
@@ -221,17 +221,17 @@ class HMS_Assignment extends HMS_Item
     public function setBannerId($id){
         $this->banner_id = $id;
     }
-    
+
     public function getUsername()
     {
         return $this->asu_username;
     }
-    
+
     public function getBedId()
     {
         return $this->bed_id;
     }
-    
+
     public function getReason()
     {
         return $this->reason;
@@ -239,7 +239,7 @@ class HMS_Assignment extends HMS_Item
 
     /******************
      * Static Methods *
-     *****************/
+    *****************/
 
     /**
      * Returns TRUE if the username exists in hms_assignment,
@@ -307,9 +307,9 @@ class HMS_Assignment extends HMS_Item
 
     /**
      * Does all the checks necessary to assign a student and makes the assignment
-     * 
+     *
      * The $room_id and $bed_id fields are optional, but one or the other must be specificed
-     * 
+     *
      * @param Student $student
      * @param Integer $term
      * @param Integer $room_id
@@ -341,8 +341,8 @@ class HMS_Assignment extends HMS_Item
         PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
         PHPWS_Core::initModClass('hms', 'BannerQueue.php');
-		PHPWS_Core::initModClass('hms', 'AssignmentHistory.php');
-        
+        PHPWS_Core::initModClass('hms', 'AssignmentHistory.php');
+
         PHPWS_Core::initModClass('hms', 'exception/AssignmentException.php');
 
         $username = $student->getUsername();
@@ -424,8 +424,8 @@ class HMS_Assignment extends HMS_Item
         if($room->getGender() != $student_gender && $room->getGender() != COED){
             throw new AssignmentException('Room gender does not match the student\'s gender.');
         }
-        
-        // We probably shouldn't check permissions inside this method, since sometimes this can be 
+
+        // We probably shouldn't check permissions inside this method, since sometimes this can be
         // called from student-facing interfaces.. But, since I want to be really careful with co-ed rooms,
         // I'm going to take the extra step of making sure no students are putting themselves in co-ed rooms.
         if($room->getGender() == COED && !Current_User::allow('hms', 'coed_assignment')){
@@ -459,7 +459,7 @@ class HMS_Assignment extends HMS_Item
 
         /*****************************
          * Temporary Assignment HACK *
-         *****************************/
+        *****************************/
 
         // Check for an assignment in the temp assignment table
 
@@ -516,12 +516,12 @@ class HMS_Assignment extends HMS_Item
         if($lottery){
             $assignment->lottery = 1;
             if ( !isset($reason) )
-            	// Automatically tag reason as lottery
-            	$assignment->reason = ASSIGN_LOTTERY;
+                // Automatically tag reason as lottery
+                $assignment->reason = ASSIGN_LOTTERY;
         }else{
             $assignment->lottery = 0;
         }
-        
+
         $result = $assignment->save();
 
         if(!$result || PHPWS_Error::logIfError($result)){
@@ -533,7 +533,7 @@ class HMS_Assignment extends HMS_Item
 
         // Insert assignment into History table
         AssignmentHistory::makeAssignmentHistory($assignment);
-        
+
         // Look for roommates and flag their assignments as needing a new letter
         $room_id = $assignment->get_room_id();
         $room = new HMS_Room($room_id);
@@ -561,9 +561,9 @@ class HMS_Assignment extends HMS_Item
 
     /**
      * Removes/unassignes a student
-     * 
+     *
      * Valid values for $reason are defined in defines.php.
-     * 
+     *
      * @param Student $student Student to un-assign.
      * @param String $term The term of the assignment to remove.
      * @param String $notes Additional notes for the ActivityLog.
@@ -633,7 +633,7 @@ class HMS_Assignment extends HMS_Item
 
         // Insert into history table
         AssignmentHistory::makeUnassignmentHistory($assignment, $reason);
-        
+
         // Generate assignment notices for old roommates
         $assignees = $room->get_assignees(); // get an array of student objects for those assigned to this room
 

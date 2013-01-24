@@ -165,7 +165,7 @@ class Term
 
     /*************************
      * Static helper methods *
-     *************************/
+    *************************/
 
     /**
      * Returns a string representation of the integer form of a term.
@@ -373,7 +373,7 @@ class Term
 
         $current = self::getCurrentTerm();
         if(isset($terms[$current])){
-        	$terms[$current] .= ' (Current)';
+            $terms[$current] .= ' (Current)';
         }
 
         $form = new PHPWS_Form('term_selector');

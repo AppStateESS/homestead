@@ -26,16 +26,16 @@ class TermEditView extends View {
         $tpl['CURRENT_TERM_LEGEND'] = dgettext('hms', 'Current Term');
         if(Term::isCurrentTermSelected()) {
             $tpl['CURRENT_TERM_TEXT'] = dgettext('hms',
-     	        'This term is the <strong>active term</strong>.  To make another term active, please select it from the list at the top-left.');
+                    'This term is the <strong>active term</strong>.  To make another term active, please select it from the list at the top-left.');
         } else {
             $tpl['CURRENT_TERM_TEXT'] = dgettext('hms',
-			    'This term is <strong>not</strong> the active term.');
-            	
+                    'This term is <strong>not</strong> the active term.');
+             
             if(Current_User::allow('hms', 'activate_term')) {
                 $cmd = CommandFactory::getCommand('SetCurrentTerm');
                 $cmd->setTerm(Term::getSelectedTerm());
                 $tpl['CURRENT_TERM_LINK'] = sprintf(
-                $cmd->getLink('Make <strong>%s</strong> the Current Term.'), $printable);
+                        $cmd->getLink('Make <strong>%s</strong> the Current Term.'), $printable);
             }
         }
 

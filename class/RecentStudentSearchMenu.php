@@ -37,10 +37,10 @@ class RecentStudentSearchMenu {
             $profileCmd->setBannerId($list[$i]->getBannerId());
 
             $tpl['searchListItemRepeat'][] = array('NAME'=>$list[$i]->getName(),
-															'BANNER_ID'	 => $list[$i]->getBannerId(),
-															'USERNAME' 	 => $list[$i]->getUsername(),
-															'PROFILE_URI'=> $profileCmd->getURI(),
-															'BG_CLASS'	 => 'bg'. ($i%2));
+                    'BANNER_ID'	 => $list[$i]->getBannerId(),
+                    'USERNAME' 	 => $list[$i]->getUsername(),
+                    'PROFILE_URI'=> $profileCmd->getURI(),
+                    'BG_CLASS'	 => 'bg'. ($i%2));
         }
 
         return PHPWS_Template::process($tpl, 'hms', 'admin/RecentStudentSearchList.tpl');

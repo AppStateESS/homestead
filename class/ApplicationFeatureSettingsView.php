@@ -31,7 +31,7 @@ class ApplicationFeatureSettingsView extends View
         // TODO: Command Business
         $form->addCheck('enabled');
         if($f->isEnabled())
-        $form->setMatch('enabled', true);
+            $form->setMatch('enabled', true);
         $form->setLabel('enabled', $reg->getDescription());
 
         if($reg->requiresStartDate()) {
@@ -67,9 +67,9 @@ class ApplicationFeatureSettingsView extends View
         javascript('datepicker');
 
         $vars = array('FORM_SELECT'   => '.app-feature-setting form',
-		              'ENABLE_SELECT' => 'input[name="enabled"]',
-		              'HIDDEN_SELECT' => '.app-feature-setting-hidable',
-		              'SUBMIT_SELECT' => '.app-feature-setting-submit'); 
+                'ENABLE_SELECT' => 'input[name="enabled"]',
+                'HIDDEN_SELECT' => '.app-feature-setting-hidable',
+                'SUBMIT_SELECT' => '.app-feature-setting-submit');
         javascript('modules/hms/ajaxForm', $vars);
 
         $tpl = $form->getTemplate();

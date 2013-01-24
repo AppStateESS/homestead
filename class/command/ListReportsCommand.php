@@ -2,9 +2,9 @@
 
 /**
  * ListReportsCommand
- * 
+ *
  * Shows the interface listing all available reports.
- * 
+ *
  * @author jbooker
  * @package HMS
  */
@@ -13,7 +13,7 @@ class ListReportsCommand extends Command {
 
     /**
      * Returns the aray of request vars
-     * 
+     *
      * @return Array Array of request vars
      */
     public function getRequestVars()
@@ -23,7 +23,7 @@ class ListReportsCommand extends Command {
 
     /**
      * Exec
-     * 
+     *
      * @param CommandContext $context
      * @throws PermissionException
      */

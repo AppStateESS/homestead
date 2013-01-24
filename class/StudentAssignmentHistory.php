@@ -22,7 +22,7 @@ class StudentAssignmentHistory extends ArrayObject{
         }else{
             $this->bannerId = $bannerId;
         }
-        
+
         $this->assignmentHistory = array();
 
         $this->init();

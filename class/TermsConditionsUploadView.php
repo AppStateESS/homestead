@@ -38,9 +38,9 @@ class TermsConditionsUploadView extends View
         $tpl = $form->getTemplate();
 
         $tpl['INSTRUCTIONS'] = 'Please choose a ' .
-        ($type == 'txt' ? 'Plain Text' :
-        ($type == 'pdf' ? 'PDF' : 'SOMETHING WENT WRONG')) .
-		    ' file to upload.';
+                ($type == 'txt' ? 'Plain Text' :
+                        ($type == 'pdf' ? 'PDF' : 'SOMETHING WENT WRONG')) .
+                        ' file to upload.';
 
         return PHPWS_Template::process($tpl, 'hms', 'admin/TermsConditionsUploadView.tpl');
     }

@@ -18,7 +18,7 @@ class HMS_Bed extends HMS_Item {
     public $ra_roommate          = null;
     public $international_reserved = 0;
     public $room_change_reserved   = 0;
-    
+
     public $_curr_assignment       = null;
 
     /**
@@ -74,9 +74,9 @@ class HMS_Bed extends HMS_Item {
                 try{
                     try{
                         $student = StudentFactory::getStudentByUsername($this->_curr_assignment->asu_username,
-                        Term::getCurrentTerm());
+                                Term::getCurrentTerm());
                         $app = HousingApplication::getApplicationByUser($this->_curr_assignment->asu_username,
-                        Term::getCurrentTerm());
+                                Term::getCurrentTerm());
                     }catch(StudentNotFoundException $e){
                         NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Could not copy assignment for ' . $this->_curr_assignment->asu_username);
                         return;
@@ -85,7 +85,7 @@ class HMS_Bed extends HMS_Item {
                     $meal_option = BANNER_MEAL_STD;
                     if(!is_null($app)){
                         $meal_option = $app->getMealPlan();
-                    } 
+                    }
                     $note = "Assignment copied from ".Term::getPrintableCurrentTerm()." to ".Term::toString($to_term);
                     HMS_Assignment::assignStudent($student, $to_term, null, $new_bed->id, $meal_option, $note, false, $this->_curr_assignment->getReason());
                 }catch(Exception $e){
@@ -330,7 +330,7 @@ class HMS_Bed extends HMS_Item {
         # Make sure this bed isn't already assigned
         $this->loadAssignment();
         if($this->_curr_assignment != NULL && $this->_curr_assignment > 0)
-        return FALSE;
+            return FALSE;
 
         # Get all of the parent objects
         $room       = $this->get_parent();
@@ -339,13 +339,13 @@ class HMS_Bed extends HMS_Item {
 
         # Check if everything is online
         if($room->offline == 0)
-        return FALSE;
+            return FALSE;
 
         if($floor->is_online == 1)
-        return FALSE;
+            return FALSE;
 
         if($building->is_online == 1)
-        return FALSE;
+            return FALSE;
 
         return TRUE;
     }
@@ -358,7 +358,7 @@ class HMS_Bed extends HMS_Item {
         # Make sure this bed isn't already assigned
         $this->loadAssignment();
         if($this->_curr_assignment != NULL && $this->_curr_assignment > 0)
-        return FALSE;
+            return FALSE;
 
         # Get all of the parent objects
         $room       = $this->get_parent();
@@ -367,29 +367,29 @@ class HMS_Bed extends HMS_Item {
 
         # Check if everything is online
         if($room->offline == 1)
-        return FALSE;
+            return FALSE;
 
         if($floor->is_online == 0)
-        return FALSE;
+            return FALSE;
 
         if($building->is_online == 0)
-        return FALSE;
+            return FALSE;
 
         # Make sure nothing is reserved
         if($room->reserved == 1)
-        return FALSE;
+            return FALSE;
 
         # Make sure the room isn't a lobby
         if($room->overflow == 1)
-        return FALSE;
+            return FALSE;
 
         # Make sure the room isn't private
         if($room->private == 1)
-        return FALSE;
+            return FALSE;
 
         # Check if this bed is part of an RLC
         if($floor->rlc_id != NULL)
-        return FALSE;
+            return FALSE;
 
         return TRUE;
     }
@@ -448,10 +448,10 @@ class HMS_Bed extends HMS_Item {
             return TRUE;
         }
     }
-    
+
     public function getId()
     {
-    	return $this->id;
+        return $this->id;
     }
 
     public function getBannerId()
@@ -480,7 +480,7 @@ class HMS_Bed extends HMS_Item {
 
     /******************
      * Static Methods *
-     ******************/
+    ******************/
 
     /**
      * Returns an array of IDs of free beds (which can be auto_assigned)
@@ -593,10 +593,10 @@ class HMS_Bed extends HMS_Item {
 
     /*
      * Adds a new bed to the specified room_id
-     *
-     * The 'ra_bed' flag is expected to be either TRUE or FALSE.
-     * @return TRUE for success, FALSE otherwise
-     */
+    *
+    * The 'ra_bed' flag is expected to be either TRUE or FALSE.
+    * @return TRUE for success, FALSE otherwise
+    */
     public static function addBed($roomId, $term, $bedLetter, $bedroomLabel, $phoneNumber, $bannerId, $raRoommate, $intlReserved)
     {
         # Check permissions
@@ -664,7 +664,7 @@ class HMS_Bed extends HMS_Item {
 
     /*********************
      * Static UI Methods *
-     *********************/
+    *********************/
     public static function bed_pager_by_room($room_id)
     {
         PHPWS_Core::initCoreClass('DBPager.php');

@@ -52,7 +52,7 @@ class ShowHallNotificationEditView extends View {
             $form->addHidden('hall', $this->halls);
         }
 
-	    if(!empty($this->floors)){
+        if(!empty($this->floors)){
             $form->addHidden('floor', $this->floors);
         }
 

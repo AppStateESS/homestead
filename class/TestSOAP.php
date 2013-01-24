@@ -21,7 +21,7 @@ class TestSOAP extends SOAP{
         if(empty($term) || is_null($term) || !isset($term)){
             throw new InvalidArgumentException('Bad term');
         }
-        
+
         $response = new stdClass();
 
         $student = new stdClass();
@@ -35,7 +35,7 @@ class TestSOAP extends SOAP{
         $response->gender                = 'M';
         $response->deposit_date          = '';
         $response->deposit_waived        = 'false';
-        
+
         $response->confid				= 'Y'; // TODO double check this value
 
         $response->international         = false;
@@ -63,7 +63,7 @@ class TestSOAP extends SOAP{
         $response->on_campus             = 'false';
 
         $response->address = array();
-        
+
         // Error fields
         $response->error_num = 0;
         $response->error_desc = null;
@@ -125,10 +125,10 @@ class TestSOAP extends SOAP{
     {
         return 'jb67803';
     }
-    
+
     public function getBannerId($username)
     {
-    	return '900325006';
+        return '900325006';
     }
 
     public function isValidStudent($username, $term)
@@ -136,18 +136,18 @@ class TestSOAP extends SOAP{
         return true;
     }
 
-    
+
     public function hasParentPin($bannerId)
     {
-    	//TODO
-    	return true;
+        //TODO
+        return true;
     }
-    
+
     public function getParentAccess($bannerId, $parentPin)
     {
-    	// TODO	
+        // TODO
     }
-    
+
     /**
      * Report that a housing application has been received.
      * Makes First Connections stop bugging the students.
@@ -176,18 +176,18 @@ class TestSOAP extends SOAP{
         //		return false; //error
         return true;
     }
-    
+
 
     public function setHousingWaiver($bannerId, $term)
     {
-    	return true;
+        return true;
     }
-    
+
     public function clearHousingWaiver($bannerId, $term)
     {
-		return true;    	
+        return true;
     }
-    
+
     /**
      * Returns a student's current assignment information
      * $opt is one of:

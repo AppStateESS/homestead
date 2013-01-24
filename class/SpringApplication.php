@@ -72,9 +72,9 @@ class SpringApplication extends HousingApplication{
 
         /* If this is a new object, call saveObject with the third parameter as 'false' so
          * the database class will insert the object with the ID set by the parent::save() call.
-         * Otherwise, call save object as normal so that the database class will detect the ID and
-         * update the object.
-         */
+        * Otherwise, call save object as normal so that the database class will detect the ID and
+        * update the object.
+        */
         if($is_new){
             $result = $db->saveObject($this, false, false);
         }else{
@@ -106,7 +106,7 @@ class SpringApplication extends HousingApplication{
 
     /**
      * Returns the fields specific to the SpringApplications (used in the UnassignedStudents Report).
-     * 
+     *
      * @return Array Array of fields for this SpringApplication.
      */
     public function unassignedStudentsFields()
@@ -122,7 +122,7 @@ class SpringApplication extends HousingApplication{
 
     /************************
      * Accessors & Mutators *
-     ************************/
+    ************************/
 
     public function getLifestyleOption(){
         return $this->lifestyle_option;
@@ -150,6 +150,7 @@ class SpringApplication extends HousingApplication{
 }
 
 class RestoredSpringApplication extends SpringApplication {
-	public function __construct(){} // Empty constructor
+    public function __construct(){
+    } // Empty constructor
 }
 ?>

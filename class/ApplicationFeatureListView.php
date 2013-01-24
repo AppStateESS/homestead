@@ -25,20 +25,20 @@ class ApplicationFeatureListView extends View
         foreach($this->features as $feature) {
             $tpl = array();
             $tpl['DESCRIPTION'] = $feature->getDescription();
-            	
+             
             $class = $feature->getName();
             if(!isset($termFeatures[$class])) {
                 $f = new $class();
                 $f->setTerm($this->term);
                 $termFeatures[$class] = $f;
             }
-            	
+             
             $view = new ApplicationFeatureSettingsView($termFeatures[$class]);
             $content[] = $view->show();
         }
 
         return '<p>Note: both "Start Date" and "End Date" imply 12:00 AM on those dates.  Effectively, this means that the feature will be available all day on the selected "Start Date", but will not be available at all on the "End Date".</p>'
-        .implode($content);
+                .implode($content);
     }
 }
 

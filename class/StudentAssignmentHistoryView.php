@@ -25,7 +25,7 @@ class StudentAssignmentHistoryView extends View {
         $excessRows = array();
 
         $historyArray = $this->assignmentHistory->getHistory();
-        
+
         foreach($historyArray as $ah){
             $row = array();
 
@@ -51,7 +51,7 @@ class StudentAssignmentHistoryView extends View {
             }
 
             $bed = new HMS_Bed($ah->getBedId());
-            
+
             $row['room'] = $bed->where_am_i();
             $row['term'] = Term::toString($ah->term);
              
@@ -66,8 +66,8 @@ class StudentAssignmentHistoryView extends View {
 
             if(isset($ah->removed_reason)){
                 $row['unassignments'] = '<span class="italic">'.$removedReason.'</span>'.
-        	        								' by '.$ah->removed_by.
-        	        								'<br /><span style="font-size:11px;color:#7C7C7C;">on '.$removedOn.'</span>';
+                        ' by '.$ah->removed_by.
+                        '<br /><span style="font-size:11px;color:#7C7C7C;">on '.$removedOn.'</span>';
             }else{
                 $row['unassignments'] = '<span class="disabledText">None</span>';
             }
@@ -78,14 +78,14 @@ class StudentAssignmentHistoryView extends View {
                 $excessRows[] = $row;
             }
         }
-        
+
         $tpl['HISTORY'] = $historyRows;
         $tpl['EXTRA_HISTORY'] = $excessRows;
-        
+
         if(sizeof($historyArray) > $excess_limit){
             $tpl['SHOW_MORE'] = "[ <a id='showMoreLink'>show more</a> ]";
         }
-        
+
         return PHPWS_Template::process($tpl, 'hms', 'admin/StudentAssignmentHistoryView.tpl');
     }
 }

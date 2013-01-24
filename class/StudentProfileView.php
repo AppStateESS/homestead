@@ -54,7 +54,7 @@ class StudentProfileView extends View {
         $tpl['TYPE'] = $this->student->getPrintableType();
 
         $tpl['STUDENT_LEVEL'] = $this->student->getPrintableLevel();
-        
+
         $tpl['ADMISSION_DECISION'] = $this->student->getAdmissionDecisionCode();
 
         $tpl['INTERNATIONAL'] = $this->student->isInternational() ? 'Yes' : 'No';
@@ -66,9 +66,9 @@ class StudentProfileView extends View {
         $tpl['WATAUGA'] = $this->student->isWataugaMember() ? 'Yes' : 'No';
 
         if($this->student->pinDisabled()){
-        	NQ::simple('hms', HMS_NOTIFICATION_WARNING, "This student's PIN is disabled.");
+            NQ::simple('hms', HMS_NOTIFICATION_WARNING, "This student's PIN is disabled.");
         }
-        
+
         try {
             $tpl['APPLICATION_TERM'] = Term::toString($this->student->getApplicationTerm());
         } catch(InvalidTermException $e) {
@@ -78,7 +78,7 @@ class StudentProfileView extends View {
 
         /*****************
          * Phone Numbers *
-         *****************/
+        *****************/
         $phoneNumberList = $this->student->getPhoneNumberList();
         if(isset($phoneNumberList) && !is_null($phoneNumberList)){
             foreach($this->student->getPhoneNumberList() as $phone_number){
@@ -88,7 +88,7 @@ class StudentProfileView extends View {
 
         /*************
          * Addresses *
-         *************/
+        *************/
         foreach($this->student->getAddressList() as $address){
             //If it's not a PS or PR address, skip it
             if($address->atyp_code != 'PR' && $address->atyp_code != 'PS'){
@@ -110,9 +110,9 @@ class StudentProfileView extends View {
             $addr_array['ADDR_TYPE']	= $addr_type;
             $addr_array['ADDRESS_L1']	= $address->line1;
             if(isset($address->line2))
-            $addr_array['ADDRESS_L2']	= $address->line2;
+                $addr_array['ADDRESS_L2']	= $address->line2;
             if(isset($address->line3))
-            $addr_array['ADDRESS_L3']	= $address->line3;
+                $addr_array['ADDRESS_L3']	= $address->line3;
             $addr_array['CITY']			= $address->city;
             $addr_array['STATE']		= $address->state;
             $addr_array['ZIP']			= $address->zip;
@@ -122,7 +122,7 @@ class StudentProfileView extends View {
 
         /**************
          * Assignment *
-         **************/
+        **************/
         if(!is_null($this->assignment)){
             $reassignCmd = CommandFactory::getCommand('ShowAssignStudent');
             $reassignCmd->setUsername($this->student->getUsername());
@@ -139,7 +139,7 @@ class StudentProfileView extends View {
 
         /*************
          * Roommates
-         *************/
+        *************/
         if(isset($this->roommates) && !empty($this->roommates)){
             // Remember, student can only have one confirmed or pending request
             // but multiple assigned roommates
@@ -166,7 +166,7 @@ class StudentProfileView extends View {
 
         /**************
          * RLC Status *
-         *************/
+        *************/
         PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
@@ -188,7 +188,7 @@ class StudentProfileView extends View {
 
         /*************************
          * Re-application status *
-         *************************/
+        *************************/
         PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
         $reapplication = HousingApplication::getApplicationByUser($this->student->getUsername(), Term::getSelectedTerm());
 
@@ -220,38 +220,38 @@ class StudentProfileView extends View {
             # Not a re-application, so can't have a special group
             $tpl['SPECIAL_INTEREST'] = 'No';
         }
-        
+
         /******************
          * Housing Waiver *
-         *************/
+        *************/
 
        	$tpl['HOUSING_WAIVER'] = $this->student->housingApplicationWaived() ? 'Yes' : 'No';
-       	
+
        	if($this->student->housingApplicationWaived()){
-       		NQ::simple('hms', HMS_NOTIFICATION_WARNING, "This student's housing application has been waived for this term.");
+       	    NQ::simple('hms', HMS_NOTIFICATION_WARNING, "This student's housing application has been waived for this term.");
        	}
-        
+
         /****************
          * Applications *
-         *************/
+        *************/
         PHPWS_Core::initModClass('hms', 'ProfileHousingAppList.php');
         $appList = new ProfileHousingAppList($this->applications);
         $tpl['APPLICATIONS'] = $appList->show();
 
         /*********
          * Assignment History *
-         *********/        
-        
+        *********/
+
         PHPWS_Core::initModClass('hms', 'StudentAssignmentHistory.php');
         PHPWS_Core::initModClass('hms', 'StudentAssignmentHistoryView.php');
-        
+
         $historyArray = StudentAssignmentHistory::getAssignments($this->student->getBannerId());
         $historyView = new StudentAssignmentHistoryView($historyArray);
         $tpl['HISTORY'] = $historyView->show();
-        
+
         /*********
          * Notes *
-         *********/
+        *********/
         $addNoteCmd = CommandFactory::getCommand('AddNote');
         $addNoteCmd->setUsername($this->student->getUsername());
 
@@ -263,7 +263,7 @@ class StudentProfileView extends View {
 
         /********
          * Logs *
-         ********/
+        ********/
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
         $everything_but_notes = HMS_Activity_Log::get_activity_list();
         unset($everything_but_notes[array_search(ACTIVITY_ADD_NOTE, $everything_but_notes)]);
@@ -293,7 +293,7 @@ class StudentProfileView extends View {
         // TODO tabs
 
         Layout::addPageTitle("Student Profile");
-		Layout::addStyle('hms', 'css/studentInfo.css');
+        Layout::addStyle('hms', 'css/studentInfo.css');
         return PHPWS_Template::process($tpl, 'hms', 'admin/fancy_student_info.tpl');
     }
 }

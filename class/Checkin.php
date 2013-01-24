@@ -2,7 +2,7 @@
 
 /**
  * Checkin - Model class for representing checkins and checkouts
- * 
+ *
  * @author Jeremy Booker
  * @package hms
  */
@@ -13,7 +13,7 @@ class Checkin {
     public $banner_id;
     public $term;
     public $bed_id;
-    
+
     public $room_id; // Just for convenience
 
     public $checkin_date;
@@ -37,36 +37,36 @@ class Checkin {
         $this->setCheckinby($checkinBy);
         $this->setKeyCode($keyCode);
     }
-    
+
     public function save()
     {
-    	$db = new PHPWS_DB('hms_checkin');
-    	
-    	try {
-    		$result = $db->saveObject($this);
-    	} catch (Exception $e) {
-    		// rethrow any exceptions
-    		throw $e;
-    	}
-    	
-    	if (PHPWS_Error::logIfError($result)) {
-    		throw new Exception($result->toString());
-    	}
-    	
-    	return $this->id;
+        $db = new PHPWS_DB('hms_checkin');
+         
+        try {
+            $result = $db->saveObject($this);
+        } catch (Exception $e) {
+            // rethrow any exceptions
+            throw $e;
+        }
+         
+        if (PHPWS_Error::logIfError($result)) {
+            throw new Exception($result->toString());
+        }
+         
+        return $this->id;
     }
 
     /***********************
      * Acessors / Mutators *
-     ***********************/
+    ***********************/
     public function getId(){
         return $this->id;
     }
 
     public function getBannerId(){
-    	return $this->banner_id;
+        return $this->banner_id;
     }
-    
+
     private function setBannerId($bannerId){
         $this->banner_id = $bannerId;
     }
@@ -84,23 +84,24 @@ class Checkin {
     }
 
     private function setCheckinDate($timestamp){
-    	$this->checkin_date = $timestamp;
+        $this->checkin_date = $timestamp;
     }
-    
+
     private function setCheckinBy($checkinBy){
         $this->checkin_by = $checkinBy;
     }
 
     public function getKeyCode(){
-    	return $this->key_code;
+        return $this->key_code;
     }
-    
+
     private function setKeyCode($keyCode){
         $this->key_code = $keyCode;
     }
 }
 
 class RestoredCheckin extends Checkin {
-    public function __construct(){} // Empty constructor for resotring state
+    public function __construct(){
+    } // Empty constructor for resotring state
 }
 ?>
