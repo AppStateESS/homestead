@@ -38,18 +38,7 @@ class SubmitRLCReapplicationPageOneCommand extends Command {
             $rlcChoice3 = null;
         }
         
-        $app = new HMS_RLC_Application();
-        
-        $app->setUsername($student->getUsername());
-        $app->setFirstChoice($rlcChoice1);
-        $app->setSecondChoice($rlcChoice2);
-        $app->setThirdChoice($rlcChoice3);
-        
-        $app->setWhySpecificCommunities($why);
-        $app->setStrengthsWeaknesses($contribute);
-        
-        $_SESSION['RLC_REAPP'] = $app;
-        
+                
         # Get the list of RLCs that the student is eligible for
         # Note: hard coded to 'C' because we know they're continuing at this point.
         # This accounts for freshmen addmitted in the spring, who will still have the 'F' type.
@@ -102,6 +91,18 @@ class SubmitRLCReapplicationPageOneCommand extends Command {
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Your answer to question number two is too long. Please limit your response to 500 words or less.');
             $formCmd->redirect();
         }
+        
+        $app = new HMS_RLC_Application();
+        
+        $app->setUsername($student->getUsername());
+        $app->setFirstChoice($rlcChoice1);
+        $app->setSecondChoice($rlcChoice2);
+        $app->setThirdChoice($rlcChoice3);
+        
+        $app->setWhySpecificCommunities($why);
+        $app->setStrengthsWeaknesses($contribute);
+        
+        $_SESSION['RLC_REAPP'] = $app;
 
         // Redirect to the page 2 view command
         $page2cmd = CommandFactory::getCommand('ShowRlcReapplicationPageTwo');

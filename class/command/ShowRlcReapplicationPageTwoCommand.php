@@ -33,7 +33,7 @@ class ShowRlcReapplicationPageTwoCommand extends Command {
         }
         
         $reApp = $_SESSION['RLC_REAPP'];
-        
+
         $rlcs = array(new HMS_Learning_Community($reApp->rlc_first_choice_id));
 
         if(isset($reApp->rlc_second_choice_id) && !is_null($reApp->rlc_second_choice_id)){

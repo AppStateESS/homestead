@@ -22,7 +22,7 @@ class RlcReapplicationPageTwoView extends View {
         $submitCmd = CommandFactory::getCommand('SubmitRLCReapplicationPage2');
         $submitCmd->setTerm($this->term);
         $submitCmd->initForm($form);
-       
+
         foreach($this->rlcs as $i=>$rlc){
             $question = $this->rlcs[$i]->getReturningQuestion();
             if(!isset($question)){
