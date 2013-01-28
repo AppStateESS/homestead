@@ -78,33 +78,10 @@ class HousingApplicationFormView extends View {
         $sem = Term::getTermSem($this->term);
         if($sem == TERM_SPRING || $sem == TERM_FALL) {
 
-            /***************
-             * Meal Option *
-            */
-            # Don't show *low* meal option to freshmen
-            if($this->student->getType() == TYPE_FRESHMEN){
-                $form->addDropBox('meal_option', array(BANNER_MEAL_STD=>_('Standard'),
-                        BANNER_MEAL_HIGH=>_('High'),
-                        BANNER_MEAL_SUPER=>_('Super')));
-            }else{
-                $form->addDropBox('meal_option', array(BANNER_MEAL_LOW=>_('Low'),
-                        BANNER_MEAL_STD=>_('Standard'),
-                        BANNER_MEAL_HIGH=>_('High'),
-                        BANNER_MEAL_SUPER=>_('Super')));
-            }
-
-            $form->setMatch('meal_option', BANNER_MEAL_STD);
-
-            if(!is_null($this->existingApplication)){
-                $form->setMatch('meal_option',$this->existingApplication->getMealPlan());
-            }else{
-                $form->setMatch('meal_option', BANNER_MEAL_STD);
-            }
-
             /*************
              * Lifestyle *
             *************/
-            # TODO: get rid of the magic numbers!!!
+            // TODO: get rid of the magic numbers!!!
             $form->addDropBox('lifestyle_option', array('1'=>_('Single Gender Building'),
             '2'=>_('Co-Ed Building')));
             if(!is_null($this->existingApplication)){
@@ -116,7 +93,7 @@ class HousingApplicationFormView extends View {
             /************
              * Bed time *
             ************/
-            # TODO: magic numbers
+            // TODO: magic numbers
             $form->addDropBox('preferred_bedtime', array('1'=>_('Early'),
             '2'=>_('Late')));
             if(!is_null($this->existingApplication)){
@@ -128,7 +105,7 @@ class HousingApplicationFormView extends View {
             /******************
              * Room condition *
             ******************/
-            #TODO: magic numbers
+            //TODO: magic numbers
             $form->addDropBox('room_condition', array('1'=>_('Neat'),
             '2'=>_('Cluttered')));
             if(!is_null($this->existingApplication)){
@@ -146,6 +123,28 @@ class HousingApplicationFormView extends View {
             } else {
                 $form->setMatch('room_type', '0');
             }
+        }
+        
+        /***************
+         * Meal Option *
+        */
+        if ($sem == TERM_FALL || $sem == TERM_SPRING) {
+            if($this->student->getType() == TYPE_FRESHMEN){
+                $mealOptions = array(BANNER_MEAL_STD=>'Standard', BANNER_MEAL_HIGH=>'High', BANNER_MEAL_SUPER=>'Super');
+            } else {
+                $mealOptions = array(BANNER_MEAL_LOW=>_('Low'), BANNER_MEAL_STD=>_('Standard'), BANNER_MEAL_HIGH=>_('High'), BANNER_MEAL_SUPER=>_('Super'));
+            }
+        } else if ($sem == TERM_SUMMER1 || $sem == TERM_SUMMER2) {
+            $mealOptions = array(BANNER_MEAL_5WEEK=>'Summer 5-Week Plan');
+        }
+
+        $form->addDropBox('meal_option', $mealOptions);
+        $form->setMatch('meal_option', BANNER_MEAL_STD);
+        
+        if(!is_null($this->existingApplication)){
+            $form->setMatch('meal_option',$this->existingApplication->getMealPlan());
+        }else{
+            $form->setMatch('meal_option', BANNER_MEAL_STD);
         }
 
         /*********************

@@ -79,9 +79,9 @@ abstract class ContextApplicationFactory {
 
         /* Meal Plan */
         $mealOption = $this->context->get('meal_option');
-        if(!is_numeric($mealOption))
+        if(!isset($mealOption))
         {
-            throw new InvalidArgumentException('Invalid option from context. Please try again.');
+            throw new InvalidArgumentException('Missing meal option from context.');
         }
 
         $this->app->setMealPlan($mealOption);
