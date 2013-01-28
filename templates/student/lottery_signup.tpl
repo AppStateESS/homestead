@@ -34,6 +34,22 @@ anyone else.</p>
 {DO_NOT_CALL}<sub>Check here if you do not have a cell phone or do
 not wish to provide your cell phone number.</sub></p>
 
+<h2>Emergency Information</h2>
+Emergency Contact Person Name: {EMERGENCY_CONTACT_NAME}<br />
+Relationship: {EMERGENCY_CONTACT_RELATIONSHIP}<br />
+Phone Number: {EMERGENCY_CONTACT_PHONE}<br />
+Email: {EMERGENCY_CONTACT_EMAIL}<br />
+
+<p>Are there any medical conditions you have which our staff should be aware of? (This infomration will be kept confidential and will only be shared with the staff in your residence hall. However, this information <strong>may</strong> be disclosed to medical/emergency personnel in case of an emergency.)</p>
+{EMERGENCY_MEDICAL_CONDITION}
+
+<h2>Missing Person Information</h2>
+<p>According to the recent update of the Higher Education Act, all schools are required to ask students who they wish the University to contact should they become missing. Please list your contact person's information below:</p>
+Contact Person Name: {MISSING_PERSON_NAME}<br />
+Relationship: {MISSING_PERSON_RELATIONSHIP}<br />
+Phone Number: {MISSING_PERSON_PHONE}<br />
+Email: {MISSING_PERSON_EMAIL}<br />
+
 <h2>Meal Plan</h2>
 <p>Please choose a meal plan. You'll have the opportunity to change
 this again later (after you choose your room).</p>

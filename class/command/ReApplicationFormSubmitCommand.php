@@ -47,7 +47,7 @@ class ReApplicationFormSubmitCommand extends Command {
             }
         }
 
-        //$mealOption = $context->get('meal_option');
+        //$mealPlan = $context->get('meal_plan');
 
         // Sorority stuff
         if(!is_null($context->get('sorority_check'))){

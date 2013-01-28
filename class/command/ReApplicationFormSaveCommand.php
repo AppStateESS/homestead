@@ -109,7 +109,23 @@ class ReApplicationFormSaveCommand extends Command {
         // even if thes student began in the Spring.
         $studentType = 'C';
 
+        /**************************
+         * Emergency Contact Info *
+         */
+
         $application = new LotteryApplication(0, $term, $student->getBannerId(), $student->getUsername(), $student->getGender(), $studentType, $student->getApplicationTerm(), $cellPhone, $mealPlan, $physicalDisability, $psychDisability, $genderNeed, $medicalNeed, $international, NULL, $magicWinner, $sororityPref, $tfPref, $wgPref, $honorsPref, $rlcInterest, $earlyRelease);
+
+        $application->setEmergencyContactName($context->get('emergency_contact_name'));
+        $application->setEmergencyContactRelationship($context->get('emergency_contact_relationship'));
+        $application->setEmergencyContactPhone($context->get('emergency_contact_phone'));
+        $application->setEmergencyContactEmail($context->get('emergency_contact_email'));
+
+        $application->setEmergencyMedicalCondition($context->get('emergency_medical_condition'));
+
+        $application->setMissingPersonName($context->get('missing_person_name'));
+        $application->setMissingPersonRelationship($context->get('missing_person_relationship'));
+        $application->setMissingPersonPhone($context->get('missing_person_phone'));
+        $application->setMissingPersonEmail($context->get('missing_person_email'));
 
         try{
             $application->save();

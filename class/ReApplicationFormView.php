@@ -67,13 +67,47 @@ class ReApplicationFormView extends View {
         $form->setMaxSize('number', 4);
         $form->addCheck('do_not_call', 1);
 
+        /*********************
+         * Emergency Contact *
+         *********************/
+        $form->addText('emergency_contact_name');
+        $form->addText('emergency_contact_relationship');
+        $form->addText('emergency_contact_phone');
+        $form->addText('emergency_contact_email');
+        $form->addTextArea('emergency_medical_condition');
+
+/*
+        if(!is_null($this->existingApplication)){
+            $form->setValue('emergency_contact_name', $this->existingApplication->getEmergencyContactName());
+            $form->setValue('emergency_contact_relationship', $this->existingApplication->getEmergencyContactRelationship());
+            $form->setValue('emergency_contact_phone', $this->existingApplication->getEmergencyContactPhone());
+            $form->setValue('emergency_contact_email', $this->existingApplication->getEmergencyContactEmail());
+            $form->setValue('emergency_medical_condition', $this->existingApplication->getEmergencyMedicalCondition());
+        }
+*/
+        /******************
+         * Missing Person *
+        ******************/
+
+        $form->addText('missing_person_name');
+        $form->addText('missing_person_relationship');
+        $form->addText('missing_person_phone');
+        $form->addText('missing_person_email');
+/*
+        if(!is_null($this->existingApplication)){
+            $form->setValue('missing_person_name', $this->existingApplication->getMissingPersonName());
+            $form->setValue('missing_person_relationship', $this->existingApplication->getMissingPersonRelationship());
+            $form->setValue('missing_person_phone', $this->existingApplication->getMissingPersonPhone());
+            $form->setValue('missing_person_email', $this->existingApplication->getMissingPersonEmail());
+        }
+*/
         /*
          * Meal Plan
          */
         $mealPlans = array(BANNER_MEAL_LOW=>_('Low'),
-        BANNER_MEAL_STD=>_('Standard'),
-        BANNER_MEAL_HIGH=>_('High'),
-        BANNER_MEAL_SUPER=>_('Super'));
+                            BANNER_MEAL_STD=>_('Standard'),
+                            BANNER_MEAL_HIGH=>_('High'),
+                            BANNER_MEAL_SUPER=>_('Super'));
         $form->addDropBox('meal_plan', $mealPlans);
         $form->setLabel('meal_plan', 'Meal plan: ');
         $form->setMatch('meal_plan', BANNER_MEAL_STD);
@@ -81,14 +115,6 @@ class ReApplicationFormView extends View {
         /*
          * Special interest stuff
          */
-        /*
-         PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
-         $special_interests = HMS_Lottery::get_special_interest_groups();
-
-         $form->addDropBox('special_interest', $special_interests);
-         $form->setLabel('special_interest', 'Special interest group: ');
-         */
-
         // RLC
         $form->addCheck('rlc_interest', array('rlc_interest'));
         $form->setLabel('rlc_interest', "I'm interseted in applying for (or continuing in) a Residential Learning Community.");

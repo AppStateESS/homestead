@@ -26,7 +26,7 @@ class TestSOAP extends SOAP{
 
         $student = new stdClass();
         $response->banner_id             = 900325006;
-        $response->user_name				= 'jb67803';
+        $response->user_name			 = 'jb67803';
         $response->last_name             = 'Booker';
         $response->first_name            = 'Jeremy';
         $response->middle_name           = 'Lee';
@@ -36,7 +36,7 @@ class TestSOAP extends SOAP{
         $response->deposit_date          = '';
         $response->deposit_waived        = 'false';
 
-        $response->confid				= 'Y'; // TODO double check this value
+        $response->confid				 = 'Y'; // TODO double check this value
 
         $response->international         = false;
         $response->student_level         = 'U';
@@ -45,17 +45,17 @@ class TestSOAP extends SOAP{
         $response->honors                = true;
         $response->teaching_fellow       = true;
         $response->watauga_member        = true;
-        $response->greek					= 'Y'; //TODO double check this value
+        $response->greek                 = 'Y'; //TODO double check this value
 
-        $response->disabled_pin			= false;
-        $response->housing_waiver		= false;
+        $response->disabled_pin          = false;
+        $response->housing_waiver        = false;
 
         //$response->student_type          = 'T';
         //$response->application_term      = '201040';
         //$response->projected_class       = 'FR';
 
         $response->student_type          = 'F';
-        $response->application_term      = '201310';
+        $response->application_term      = '201240';
         $response->projected_class       = 'FR';
 
         $response->credhrs_completed     = 0;
