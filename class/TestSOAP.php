@@ -30,7 +30,7 @@ class TestSOAP extends SOAP{
         $response->last_name             = 'Booker';
         $response->first_name            = 'Jeremy';
         $response->middle_name           = 'Lee';
-        $response->pref_name				= 'JerMe';
+        $response->pref_name		     = 'JerMe';
         $response->dob                   = '1986-09-05';
         $response->gender                = 'M';
         $response->deposit_date          = '';
@@ -47,8 +47,8 @@ class TestSOAP extends SOAP{
         $response->watauga_member        = true;
         $response->greek                 = 'Y'; //TODO double check this value
 
-        $response->disabled_pin          = false;
-        $response->housing_waiver        = false;
+        $response->disabled_pin			 = false;
+        $response->housing_waiver		 = false;
 
         //$response->student_type          = 'T';
         //$response->application_term      = '201040';

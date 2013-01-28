@@ -136,4 +136,9 @@ class SummerApplication extends HousingApplication{
         $this->room_type = $type;
     }
 }
+
+class RestoredSummerApplication extends SummerApplication {
+    public function __construct(){}
+}
+
 ?>
