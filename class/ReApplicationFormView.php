@@ -117,7 +117,7 @@ class ReApplicationFormView extends View {
          */
         // RLC
         $form->addCheck('rlc_interest', array('rlc_interest'));
-        $form->setLabel('rlc_interest', "I'm interseted in applying for (or continuing in) a Residential Learning Community.");
+        $form->setLabel('rlc_interest', "I'm interested in applying for (or continuing in) a Residential Learning Community.");
 
         // Sorority
         if($this->student->getGender() == FEMALE){
