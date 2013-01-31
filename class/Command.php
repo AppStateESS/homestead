@@ -80,9 +80,9 @@ abstract class Command
         foreach($this->getRequestVars() as $key=>$val) {
             if(is_array($val)) {
                 foreach($val as $key2=>$val2)
-                $uri .= "&$key" . "[$key2]=$val2";
+                    $uri .= "&$key" . "[$key2]=" . rawurlencode($val2);
             }else{
-                $uri .= "&$key=$val";
+                $uri .= "&$key=" . rawurlencode($val);
             }
         }
 
