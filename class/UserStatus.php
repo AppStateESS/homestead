@@ -43,7 +43,7 @@ class UserStatus
 
     public static function isMasquerading()
     {
-        return isset($_SESSION['hms_masquerade_username']);
+        return isset($_SESSION['hms_masquerade_username']) || isset($_SESSION['hms_masquerade_as_self']);
     }
 
     public static function getUsername($respectMask = TRUE)
@@ -65,19 +65,51 @@ class UserStatus
         unset($_SESSION['hms_masquerade_username']);
     }
 
+
+    // For masquerading as self
+    public static function wearMaskAsSelf()
+    {
+        self::wearMask(UserStatus::getUsername());
+        $_SESSION['hms_masquerade_as_self'] = UserStatus::getUsername();
+
+    }
+
+    public static function removeMaskAsSelf()
+    {
+        self::removeMask();
+        unset($_SESSION['hms_masquerade_as_self']);
+    }
+
+    public static function isMasqueradingAsSelf()
+    {
+        return isset($_SESSION['hms_masquerade_as_self']);
+    }
+
     public static function getDisplay()
     {
         $vars = array();
         $user = Current_User::getDisplayName();
 
-        if(UserStatus::isGuest()) {
+        if (UserStatus::isGuest()) {
+            // Guest logged in
             $vars['LOGGED_IN_AS'] = dgettext('hms', 'Viewing as Guest');
             $vars['LOGIN_LINK']   = '<a href="/login"><img src="images/mod/hms/tango-icons/actions/edit-redo.png" style="height: 16px; width: 16px; vertical-align: middle;" />ASU WebLogin</a>';
-        } else if(UserStatus::isMasquerading()) {
+        } else if (UserStatus::isMasquerading() && UserStatus::isMasqueradingAsSelf()) {
+            // Masquerading as student version of self
+            $vars['LOGGED_IN_AS'] = sprintf(dgettext('sdr', 'Student view for %s'), self::getUsername());
+            $vars['OTHERCLASS'] = 'masquerading';
+            $cmd = CommandFactory::getCommand('RemoveMaskAsSelf');
+            $vars['LOGOUT_LINK'] = $cmd->getLink('Return to Admin View');
+        } else if (UserStatus::isMasquerading()) {
+            // Masquerading as someone else
             $vars['LOGGED_IN_AS'] = sprintf(dgettext('sdr', 'Masquerading as %s'), self::getUsername());
             $vars['OTHERCLASS'] = 'masquerading';
             $cmd = CommandFactory::getCommand('RemoveMask');
             $vars['LOGOUT_LINK'] = $cmd->getLink('Return to Admin');
+        }else if (Current_User::allow('hms', 'ra_login_as_self')) {
+            // Allowed to masquerade as self
+            $cmd = CommandFactory::getCommand('RaMasqueradeAsSelf');
+            $vars['LOGGED_IN_AS'] = sprintf(dgettext('hms', 'Welcome, %s!'), $user) . ' | '. $cmd->getLink('Swtich to Student View');
         } else {
             $vars['LOGGED_IN_AS'] = sprintf(dgettext('hms', 'Welcome, %s!'), $user);
             $vars['LOGOUT_LINK']  = UserStatus::getLogoutLink();
