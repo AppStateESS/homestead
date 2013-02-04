@@ -134,10 +134,12 @@ class ReApplicationFormView extends View {
         }
 
         // Teaching Fellows
+        /*
         if($this->student->isTeachingFellow()){
             $form->addRadioButton('tf_pref', array('with_tf', 'not_tf'));
             $form->setLabel('tf_pref', array("I would like to live with other Teaching Fellows.", "I would like to live elsewhere on-campus."));
         }
+        */
 
         // Watauga Global
         if($this->student->isWataugaMember()){
