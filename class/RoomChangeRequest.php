@@ -109,7 +109,7 @@ class RoomChangeRequest extends HMS_Item {
         if(empty($this->preferences)) {
             $result = $db->delete();
             if(PHPWS_Error::logIfError($result))
-            throw new DatabaseException($result->toString());
+                throw new DatabaseException($result->toString());
             return true;
         }
 
@@ -328,7 +328,7 @@ class RoomChangeRequest extends HMS_Item {
     public function rdRowFunction()
     {
         //try{
-            $this->load();
+        $this->load();
         //} catch(Exception $e) {
         //}
 
@@ -573,7 +573,7 @@ class RDApprovedChangeRequest extends BaseRoomChangeState {
         $bed->id = $this->request->requested_bed_id;
         $bed->load();
 
-        HMS_Activity_Log::log_activity($this->request->username, ACTIVITY_ROOM_CHANGE_APPROVED_RD, UserStatus::getUsername(FALSE), "Selected ".$bed->where_am_i());
+        HMS_Activity_Log::log_activity($this->request->username, ACTIVITY_ROOM_CHANGE_APPROVED_RD, UserStatus::getUsername(false), "Selected ".$bed->where_am_i());
     }
 
     public function getType()
@@ -630,12 +630,12 @@ class HousingApprovedChangeRequest extends BaseRoomChangeState {
             if(!$this->isBuddy) {
                 $this->request->updateBuddy(new HousingApprovedChangeRequest(true));
             }
-            
+
             $this->request->save();
             $this->request->load();
         }
-        
-        HMS_Activity_Log::log_activity($this->request->username, ACTIVITY_ROOM_CHANGE_APPROVED_HOUSING, UserStatus::getUsername(FALSE), "Approved Room Change to ".$newBed->where_am_i()." from ".$bed->where_am_i());
+
+        HMS_Activity_Log::log_activity($this->request->username, ACTIVITY_ROOM_CHANGE_APPROVED_HOUSING, UserStatus::getUsername(false), "Approved Room Change to ".$newBed->where_am_i()." from ".$bed->where_am_i());
     }
 
     public function getType()
@@ -731,7 +731,7 @@ class CompletedChangeRequest extends BaseRoomChangeState {
 
         //log
         $newBed = new HMS_Bed($this->request->requested_bed_id);
-        HMS_Activity_Log::log_activity($this->request->username, ACTIVITY_ROOM_CHANGE_COMPLETED, UserStatus::getUsername(FALSE), "Completed Room change to ".$newBed->where_am_i());
+        HMS_Activity_Log::log_activity($this->request->username, ACTIVITY_ROOM_CHANGE_COMPLETED, UserStatus::getUsername(false), "Completed Room change to ".$newBed->where_am_i());
     }
 
     public function getType()
@@ -796,8 +796,8 @@ class DeniedChangeRequest extends BaseRoomChangeState {
 
         //if it's a swap and the requests were paired
         if(!is_null($other)
-           && $from         instanceof PairedRoomChangeRequest
-           && $other->state instanceof PairedRoomChangeRequest) {
+                && $from         instanceof PairedRoomChangeRequest
+                && $other->state instanceof PairedRoomChangeRequest) {
             //deny the buddy too if we aren't the buddy
             if(!$this->isBuddy) {
                 $this->request->updateBuddy(new DeniedChangeRequest(true));
@@ -808,7 +808,7 @@ class DeniedChangeRequest extends BaseRoomChangeState {
         $this->request->save();
         $this->request->load();
 
-        HMS_Activity_Log::log_activity($this->request->username, ACTIVITY_ROOM_CHANGE_DENIED, UserStatus::getUsername(FALSE), $this->request->denied_reason);
+        HMS_Activity_Log::log_activity($this->request->username, ACTIVITY_ROOM_CHANGE_DENIED, UserStatus::getUsername(false), $this->request->denied_reason);
     }
 
     public function getType()
@@ -847,15 +847,15 @@ class WaitingForPairing extends BaseRoomChangeState {
         if(is_null($assignment)) {
             throw new Exception('Requested swap partner is not assigned, cannot complete.');
         }
-        
+
         $this->request->requested_bed_id = $assignment->bed_id;
         $this->request->save();
         $this->request->load();
 
         $assignment = HMS_Assignment::getAssignment($this->request->username, Term::getSelectedTerm());
         $bed = $assignment->get_parent();
-        
-        HMS_Activity_Log::log_activity($this->request->username, ACTIVITY_ROOM_CHANGE_APPROVED_RD, UserStatus::getUsername(FALSE), "Selected ".$bed->where_am_i());
+
+        HMS_Activity_Log::log_activity($this->request->username, ACTIVITY_ROOM_CHANGE_APPROVED_RD, UserStatus::getUsername(false), "Selected ".$bed->where_am_i());
     }
 
     public function attemptToPair()

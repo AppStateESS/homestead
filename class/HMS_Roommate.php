@@ -13,6 +13,11 @@ define('ROOMMATE_REQ_TIMEOUT', 259200); // 259200 = 72 hours
 PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 PHPWS_Core::initModClass('hms', 'exception/RoommateException.php');
 
+/**
+ * HMS Roommate Class - Represents a freshmen roommate request object
+ * @author Jeremy Booker
+ * @package Hms
+ */
 class HMS_Roommate
 {
 
@@ -29,7 +34,7 @@ class HMS_Roommate
      */
     public function HMS_Roommate($id = 0)
     {
-        if(!$id) {
+        if (!$id) {
             return;
         }
 
@@ -37,10 +42,10 @@ class HMS_Roommate
         $db = new PHPWS_DB('HMS_Roommate');
         $db->addWhere('id', $this->id);
         $result = $db->loadObject($this);
-        if(PHPWS_Error::logIfError($result)) {
+        if (PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         }
-        if($result === FALSE) {
+        if ($result === false) {
             $this->id = 0;
         }
     }
@@ -54,7 +59,7 @@ class HMS_Roommate
         $this->requested_on = mktime();
 
         $result = $this->is_request_valid();
-        if($result != E_SUCCESS) {
+        if ($result != E_SUCCESS) {
             PHPWS_Core::initModClass('hms', 'exception/RoommateCompatibilityException.php');
             throw new RoommateCompatibilityException($result);
         }
@@ -65,7 +70,7 @@ class HMS_Roommate
     public function confirm()
     {
         $result = $this->can_live_together();
-        if($result != E_SUCCESS) {
+        if ($result != E_SUCCESS) {
             PHPWS_Core::initModClass('hms', 'exception/RoommateCompatibilityException.php');
             throw new RoommateCompatibilityException($result);
         }
@@ -80,7 +85,7 @@ class HMS_Roommate
     {
         $db = new PHPWS_DB('hms_roommate');
         $result = $db->saveObject($this);
-        if(!$result || PHPWS_Error::logIfError($result)) {
+        if (!$result || PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         }
         return true;
@@ -93,31 +98,33 @@ class HMS_Roommate
         $db->addWhere('id', $this->id);
         $result = $db->delete();
 
-        if(PHPWS_Error::logIfError($result)) {
+        if (PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         }
 
         $this->id = 0;
 
-        return TRUE;
+        return true;
     }
 
     public function get_other_guy($username)
     {
-        if(trim($this->requestor) == trim($username)) {
+        if (trim($this->requestor) == trim($username)) {
             return $this->requestee;
-        } else if(trim($this->requestee) == trim($username)) {
+        } else if (trim($this->requestee) == trim($username)) {
             return $this->requestor;
         }
 
         throw new RoommateException("$username is not in roommate pairing " . $this->id);
     }
 
-    public function getRequestor(){
+    public function getRequestor()
+    {
         return $this->requestor;
     }
     
-    public function getRequestee(){
+    public function getRequestee()
+    {
         return $this->requestee;
     }
     
@@ -140,31 +147,31 @@ class HMS_Roommate
 
         $roommate = new HMS_Roommate();
         $result = $db->loadObject($roommate);
-        if(PHPWS_Error::logIfError($result)) {
+        if (PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         }
 
         return $roommate;
     }
 
-    public function get_all_confirmed_roommates($term = NULL, $random = FALSE)
+    public function get_all_confirmed_roommates($term = NULL, $random = false)
     {
-        if(is_null($term)) {
+        if (is_null($term)) {
             $term = Term::getSelectedTerm();
         }
 
         $db = new PHPWS_DB('hms_roommate');
         $db->addWhere('term', $term);
         $db->addWhere('confirmed', 1);
-        if($random) {
+        if ($random) {
             $db->addOrder('random');
         }
         $db->addColumn('requestor');
         $db->addColumn('requestee');
         $result = $db->select();
 
-        if(PHPWS_Error::logIfError($result)) {
-            return FALSE;
+        if (PHPWS_Error::logIfError($result)) {
+            return false;
         }
 
         return $result;
@@ -173,7 +180,7 @@ class HMS_Roommate
     /**
      * Checks whether a given pair are involved in a roommate request already.
      *
-     * @returns TRUE if so, FALSE if not
+     * @returns true if so, false if not
      *
      * @param a A user to check on
      * @param b Another user to check on
@@ -191,19 +198,19 @@ class HMS_Roommate
         $db->setGroupConj('ab', 'AND');
         $db->setGroupConj('ba', 'OR');
 
-        $db->groupIn('ab','ba');
+        $db->groupIn('ab', 'ba');
 
         $result = $db->count();
 
-        if($result > 1) {
+        if ($result > 1) {
             // TODO: Log Weird Situation
         }
 
-        return ($result > 0 ? TRUE : FALSE);
+        return ($result > 0 ? true : false);
     }
 
     /*
-     * Returns TRUE if the student has a confirmed roommate, FALSE otherwise
+     * Returns true if the student has a confirmed roommate, false otherwise
      */
     public function has_confirmed_roommate($asu_username, $term)
     {
@@ -215,19 +222,19 @@ class HMS_Roommate
         $db->addWhere('confirmed', 1);
         $result = (int)$db->count();
 
-        if(PHPWS_Error::logIfError($result)) {
+        if (PHPWS_Error::logIfError($result)) {
             throw new DatabaseException('Unexpected error in has_roommate_request');
         }
 
-        if($result > 1) {
+        if ($result > 1) {
             // TODO: Log Weird Situation
         }
 
-        return ($result > 0 ? TRUE : FALSE);
+        return ($result > 0 ? true : false);
     }
 
     /*
-     * Returns the given user's confirmed roommate or FALSE if the roommate is unconfirmed
+     * Returns the given user's confirmed roommate or false if the roommate is unconfirmed
      */
     public function get_confirmed_roommate($asu_username, $term)
     {
@@ -244,19 +251,19 @@ class HMS_Roommate
 
         $result = $db->select('row');
 
-        if(PHPWS_Error::logIfError($result)) {
+        if (PHPWS_Error::logIfError($result)) {
             throw new DatabaseException("Could not select confirmed roommate for $asu_username $term");
         }
 
-        if(count($result) > 1) {
+        if (count($result) > 1) {
             // TODO: Log Weird Situation
         }
 
-        if(count($result) == 0){
+        if (count($result) == 0) {
             return null;
         }
 
-        if(trim($result['requestor']) == trim($asu_username)) {
+        if (trim($result['requestor']) == trim($asu_username)) {
             return StudentFactory::getStudentByUsername($result['requestee'], $term);
         }
 
@@ -276,14 +283,14 @@ class HMS_Roommate
         $db->addColumn('requestee');
         $result = $db->select('row');
 
-        if(count($result) > 1) {
+        if (count($result) > 1) {
             // TODO: Log Weird Situation
         }
 
-        if(count($result) == 0)
+        if (count($result) == 0)
         return null;
 
-        if(trim($result['requestor']) == trim($asu_username)) {
+        if (trim($result['requestor']) == trim($asu_username)) {
             return StudentFactory::getStudentByUsername($result['requestee'], $term);
         }
 
@@ -293,7 +300,7 @@ class HMS_Roommate
     /**
      * Checks whether a given user has made a roommate request which is still pending.
      *
-     * @returns TRUE if so, FALSE if not
+     * @returns true if so, false if not
      *
      * @param username The user to check on
      */
@@ -306,11 +313,11 @@ class HMS_Roommate
         $db->addWhere('term', $term);
         $result = $db->count();
 
-        if(PHPWS_Error::logIfError($result)) {
+        if (PHPWS_Error::logIfError($result)) {
             throw new DatabaseException('Unexpected error in has_roommate_request');
         }
 
-        return ($result > 0 ? TRUE : FALSE);
+        return ($result > 0 ? true : false);
     }
 
     /**
@@ -327,11 +334,11 @@ class HMS_Roommate
         $db->addColumn('requestee');
         $result = $db->select('col');
 
-        if(count($result) > 1) {
+        if (count($result) > 1) {
             // TODO: Log Weird Situation
         }
 
-        if(!isset($result[0])){
+        if (!isset($result[0])) {
             return null;
         }else{
             return $result[0];
@@ -380,7 +387,7 @@ class HMS_Roommate
         $db->addWhere('term', $term);
         $result = $db->getObjects('HMS_Roommate');
 
-        if(PHPWS_Error::logIfError($result)){
+        if (PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         }
 
@@ -402,12 +409,12 @@ class HMS_Roommate
         $db->addWhere('term', $term);
         $requests = $db->getObjects('HMS_Roommate');
 
-        if(PHPWS_Error::logIfError($requests)) {
+        if (PHPWS_Error::logIfError($requests)) {
             throw new DatabaseException('Could not remove outstanding requests');
         }
 
-        if($requests == null)
-        return TRUE;
+        if ($requests == null)
+        return true;
 
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
         foreach($requests as $request) {
@@ -416,24 +423,24 @@ class HMS_Roommate
             $request->delete();
         }
 
-        return TRUE;
+        return true;
     }
 
     // Depricated per ticket #530
     public function check_rlc_applications()
     {
-        PHPWS_Core::initModClass('hms','HMS_RLC_Application.php');
-        $result  = HMS_RLC_Application::checkForApplication($this->requestor, $this->term, FALSE);
-        $resultb = HMS_RLC_Application::checkForApplication($this->requestee, $this->term, FALSE);
+        PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
+        $result  = HMS_RLC_Application::checkForApplication($this->requestor, $this->term, false);
+        $resultb = HMS_RLC_Application::checkForApplication($this->requestee, $this->term, false);
 
-        if($result === FALSE && $resultb === FALSE)
-        return TRUE;
+        if ($result === false && $resultb === false)
+        return true;
 
-        if($result === FALSE || $resultb === FALSE)
-        return FALSE;
+        if ($result === false || $resultb === false)
+        return false;
 
         // Check to see if any of a's choices match any of b's choices
-        if($result['rlc_first_choice_id']  == $resultb['rlc_first_choice_id'] ||
+        if ($result['rlc_first_choice_id']  == $resultb['rlc_first_choice_id'] ||
         $result['rlc_first_choice_id']  == $resultb['rlc_second_choice_id'] ||
         $result['rlc_first_choice_id']  == $resultb['rlc_third_choice_id'] ||
         $result['rlc_second_choice_id'] == $resultb['rlc_first_choice_id'] ||
@@ -441,31 +448,31 @@ class HMS_Roommate
         $result['rlc_second_choice_id'] == $resultb['rlc_third_choice_id'] ||
         $result['rlc_third_choice_id']  == $resultb['rlc_first_choice_id'] ||
         $result['rlc_third_choice_id']  == $resultb['rlc_second_choice_id'] ||
-        $result['rlc_third_choice_id']  == $resultb['rrlc_third_choice_id']){
-            return TRUE;
+        $result['rlc_third_choice_id']  == $resultb['rrlc_third_choice_id']) {
+            return true;
         }
 
-        return FALSE;
+        return false;
     }
 
     // Depricated per ticket #530
     public function check_rlc_assignments()
     {
-        PHPWS_Core::initModClass('hms','HMS_RLC_Assignment.php');
+        PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
         $resulta = HMS_RLC_Assignment::checkForAssignment($this->requestor, $this->term);
         $resultb = HMS_RLC_Assignment::checkForAssignment($this->requestee, $this->term);
 
-        if($resulta === FALSE && $resultb === FALSE) {
-            return TRUE;
+        if ($resulta === false && $resultb === false) {
+            return true;
         }
 
-        if($resulta !== FALSE && $resultb !== FALSE) {
-            if($resulta['rlc_id'] == $resultb['rlc_id']) {
-                return TRUE;
+        if ($resulta !== false && $resultb !== false) {
+            if ($resulta['rlc_id'] == $resultb['rlc_id']) {
+                return true;
             }
         }
 
-        return FALSE;
+        return false;
     }
 
     /**
@@ -482,7 +489,7 @@ class HMS_Roommate
         $tpl['NAME'] = $cmd->getLink($name);
 
         $expires = floor(($this->calc_req_expiration_date() - mktime()) / 60 / 60);
-        if($expires == 0) {
+        if ($expires == 0) {
             $expires = floor(($this->calc_req_expiration_date() - mktime()) / 60);
             $tpl['EXPIRES'] = $expires . ' minute' . ($expires > 1 ? 's' : '');
         } else {
@@ -491,13 +498,14 @@ class HMS_Roommate
         return $tpl;
     }
 
-    public function get_roommate_pager_tags(){
+    public function get_roommate_pager_tags()
+    {
         $tags = array();
 
         $term = Term::getSelectedTerm();
 
-        $requestor = StudentFactory::getStudentByUsername($this->requestor,$term);
-        $requestee = StudentFactory::getStudentByUsername($this->requestee,$term);
+        $requestor = StudentFactory::getStudentByUsername($this->requestor, $term);
+        $requestee = StudentFactory::getStudentByUsername($this->requestee, $term);
 
         $deleteCmd = CommandFactory::getCommand('DeleteRoommateGroup');
         $deleteCmd->setId($this->id);
@@ -515,7 +523,7 @@ class HMS_Roommate
      * Checks to see if two people hypothetically could live together based on
      * our rules.
      *
-     * @returns TRUE if so, FALSE if not
+     * @returns true if so, false if not
      *
      * @param requestor The person requesting a roommate
      * @param requestee The person requested as a roommate
@@ -527,26 +535,26 @@ class HMS_Roommate
         $term = $this->term;
 
         // Sanity Checking
-        if(is_null($requestor)) {
+        if (is_null($requestor)) {
             return E_ROOMMATE_MALFORMED_USERNAME;
         }
 
-        if(is_null($requestee)) {
+        if (is_null($requestee)) {
             return E_ROOMMATE_MALFORMED_USERNAME;
         }
 
         // Make sure requestor didn't request self
-        if($requestor == $requestee) {
+        if ($requestor == $requestee) {
             return E_ROOMMATE_REQUESTED_SELF;
         }
 
         // Make sure requestor and requestee are not requesting each other
-        if(HMS_Roommate::have_requested_each_other($requestor, $requestee, $term)) {
+        if (HMS_Roommate::have_requested_each_other($requestor, $requestee, $term)) {
             return E_ROOMMATE_ALREADY_REQUESTED;
         }
 
         // Make sure requestor does not have a pending roommate request
-        if(HMS_Roommate::has_roommate_request($requestor,$term)) {
+        if (HMS_Roommate::has_roommate_request($requestor, $term)) {
             return E_ROOMMATE_PENDING_REQUEST;
         }
 
@@ -560,12 +568,12 @@ class HMS_Roommate
         $term = $this->term;
 
         // Check if the requestor has a confirmed roommate
-        if(HMS_Roommate::has_confirmed_roommate($requestor, $term)){
+        if (HMS_Roommate::has_confirmed_roommate($requestor, $term)) {
             return E_ROOMMATE_ALREADY_CONFIRMED;
         }
 
         // Check if the requestee has a confirmed roommate
-        if(HMS_Roommate::has_confirmed_roommate($requestee, $term)){
+        if (HMS_Roommate::has_confirmed_roommate($requestee, $term)) {
             return E_ROOMMATE_REQUESTED_CONFIRMED;
         }
 
@@ -580,13 +588,13 @@ class HMS_Roommate
         }
 
         // Make sure we have compatible genders
-        if($requestor_info->getGender() != $requestee_info->getGender()) {
+        if ($requestor_info->getGender() != $requestee_info->getGender()) {
             return E_ROOMMATE_GENDER_MISMATCH;
         }
 
         PHPWS_Core::initModClass('hms', 'HousingApplication.php');
         // Make sure the requestee has filled out an application
-        if(HousingApplication::checkForApplication($requestee, $term) === FALSE) {
+        if (HousingApplication::checkForApplication($requestee, $term) === false) {
             return E_ROOMMATE_NO_APPLICATION;
         }
 
@@ -597,7 +605,7 @@ class HMS_Roommate
         // term is a summer session of the same year
 
         /*
-        if($requestor_info->getType() != $requestee_info->getType()){
+        if ($requestor_info->getType() != $requestee_info->getType()) {
             return E_ROOMMATE_TYPE_MISMATCH;
         }*/
 
@@ -612,23 +620,23 @@ class HMS_Roommate
         // There's a mismatch if the years don't match OR (the years match AND (either student started in the Spring))
         // This allows people with summer application terms to request each other, but prevents continuing students from requesting each other
         // (even if the one student started in the Spring and has a 'F' student type at the time the request is made)
-        if($aYear != $bYear || ($aYear == $bYear && (($aSem == TERM_SPRING && $bSem != TERM_SPRING) || ($bSem == TERM_SPRING && $aSem != TERM_SPRING)))){
+        if ($aYear != $bYear || ($aYear == $bYear && (($aSem == TERM_SPRING && $bSem != TERM_SPRING) || ($bSem == TERM_SPRING && $aSem != TERM_SPRING)))) {
             return E_ROOMMATE_TYPE_MISMATCH;
         }
 
         // Transfer students can only request other transfers - Prevents freshmen from requesting transfers and vice versa
-        if(($requestor_info->getType() == TYPE_TRANSFER && $requestee_info->getType() != TYPE_TRANSFER) || ($requestee_info->getType() == TYPE_TRANSFER && $requestor_info->getType() != TYPE_TRANSFER)){
+        if (($requestor_info->getType() == TYPE_TRANSFER && $requestee_info->getType() != TYPE_TRANSFER) || ($requestee_info->getType() == TYPE_TRANSFER && $requestor_info->getType() != TYPE_TRANSFER)) {
             return E_ROOMMATE_TYPE_MISMATCH;
         }
 
         /*
          // Make sure RLC Applications are compatible
-         if(!$this->check_rlc_applications()) {
+         if (!$this->check_rlc_applications()) {
          return E_ROOMMATE_RLC_APPLICATION;
          }
 
          // If either student is assigned to an RLC, do not allow the request
-         if(!$this->check_rlc_assignments()) {
+         if (!$this->check_rlc_assignments()) {
          return E_ROOMMATE_RLC_ASSIGNMENT;
          }
          */
@@ -640,45 +648,46 @@ class HMS_Roommate
      * Performs all the checks necessary before allowing an administrator to
      * create a roommate pairing
      */
-    public function canLiveTogetherAdmin(Student $roommate1, Student $roommate2, $term){
+    public function canLiveTogetherAdmin(Student $roommate1, Student $roommate2, $term)
+    {
 
-        # Sanity Checking
-        if(is_null($roommate1)) {
+        // Sanity Checking
+        if (is_null($roommate1)) {
             throw new RoommateException('Null student object for roommate 1.');
         }
 
-        if(is_null($roommate2)) {
+        if (is_null($roommate2)) {
             throw new RoommateException('Null student object for roommate 1.');
         }
 
-        # Check that the two user names aren't the same
-        if($roommate1->getUsername() == $roommate2->getUsername()){
+        // Check that the two user names aren't the same
+        if ($roommate1->getUsername() == $roommate2->getUsername()) {
             throw new RoommateException('Roommate user names must be unique.');
         }
 
-        # Use SOAP for the following checks
-        # Make that both roommate have some sort of soap info
+        // Use SOAP for the following checks
+        // Make that both roommate have some sort of soap info
         $name = $roommate1->getLastName();
-        if(empty($name)) {
+        if (empty($name)) {
             throw new RoommateException('No banner information for first roommate.');
         }
 
         $name = $roommate2->getLastName();
-        if(empty($name)) {
+        if (empty($name)) {
             throw new RoommateException('No banner information for second roommate.');
         }
 
-        # Make sure the genders match
-        if($roommate1->getGender() != $roommate2->getGender()){
+        // Make sure the genders match
+        if ($roommate1->getGender() != $roommate2->getGender()) {
             throw new RoommateException('Roommate genders do not match.');
         }
 
-        # Check if either has a confirmed roommate
-        if(HMS_Roommate::has_confirmed_roommate($roommate1->getUsername(), $term)){
+        // Check if either has a confirmed roommate
+        if (HMS_Roommate::has_confirmed_roommate($roommate1->getUsername(), $term)) {
             throw new RoommateException('The first roommate already has a confirmed roommate.');
         }
 
-        if(HMS_Roommate::has_confirmed_roommate($roommate2->getUsername(), $term)){
+        if (HMS_Roommate::has_confirmed_roommate($roommate2->getUsername(), $term)) {
             throw new RoommateException('The second roommate already has a confirmed roommate.');
         }
 
@@ -737,7 +746,7 @@ class HMS_Roommate
         $pager->addToggle('class="toggle1"');
         $pager->addToggle('class="toggle2"');
 
-        # Setup searching on the requestor and requestee columns
+        // Setup searching on the requestor and requestee columns
         $pager->setSearch('requestor', 'requestee');
 
         return $pager->get();

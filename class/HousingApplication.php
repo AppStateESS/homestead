@@ -4,7 +4,9 @@
  * Main model class to represent a Housing Application.
  *
  * @package Hms
- * @author Jeremy Booker
+ * @category StudentDev
+ * @author  Jeremy Booker
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 class HousingApplication {
 
@@ -123,13 +125,13 @@ class HousingApplication {
      */
     protected function load()
     {
-        if($this->id == 0) {
+        if ($this->id == 0) {
             return;
         }
 
         $db = new PHPWS_DB('hms_new_application');
         $result = $db->loadObject($this);
-        if(PHPWS_Error::logIfError($result)) {
+        if (PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         }
 
@@ -150,7 +152,7 @@ class HousingApplication {
         $db = new PHPWS_DB('hms_new_application');
 
         $result = $db->saveObject($this);
-        if(PHPWS_Error::logIfError($result)) {
+        if (PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         }
 
@@ -170,18 +172,18 @@ class HousingApplication {
 
         // Sets the 'last modified by' field according to who's logged in
         $user = UserStatus::getUsername();
-        if(isset($user) && !is_null($user)) {
+        if (isset($user) && !is_null($user)) {
             $this->setModifiedBy(UserStatus::getUsername());
-        }else{
+        } else {
             $this->setModifiedBy('hms');
         }
 
         // If the object is new, set the 'created' fields
-        if($this->getId() == 0) {
+        if ($this->getId() == 0) {
             $this->setCreatedOn(time());
-            if(isset($user) && !is_null($user)) {
+            if (isset($user) && !is_null($user)) {
                 $this->setCreatedBy(UserStatus::getUsername());
-            }else{
+            } else {
                 $this->setCreatedBy('hms');
             }
         }
@@ -197,7 +199,7 @@ class HousingApplication {
         // Determine which user name to use as the current user
         $username = UserStatus::getUsername();
 
-        if(isset($username) && !is_null($username)) {
+        if (isset($username) && !is_null($username)) {
             HMS_Activity_Log::log_activity($this->getUsername(), ACTIVITY_SUBMITTED_APPLICATION, $username, 'Term: ' . $this->getTerm());
         } else {
             HMS_Activity_Log::log_activity($this->getUsername(), ACTIVITY_SUBMITTED_APPLICATION, 'hms', 'Term: ' . $this->getTerm());
@@ -215,11 +217,11 @@ class HousingApplication {
         $db = new PHPWS_DB('hms_new_application');
         $db->addWhere('id', $this->id);
         $result = $db->delete();
-        if(!$result || PHPWS_Error::logIfError($result)) {
+        if (!$result || PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         }
 
-        return TRUE;
+        return true;
     }
 
     /**
@@ -229,10 +231,10 @@ class HousingApplication {
     {
         PHPWS_Core::initModClass('hms', 'SOAP.php');
 
-        try{
+        try {
             $soap = SOAP::getInstance(UserStatus::getUsername(), UserStatus::isAdmin()?(SOAP::ADMIN_USER):(SOAP::STUDENT_USER));
             $result = $soap->createHousingApp($this->getBannerId(), $this->getTerm());
-        }catch(Exception $e){
+        } catch(Exception $e) {
             // Send an email notification
             PHPWS_Core::initCoreClass('Mail.php');
             $send_to = array();
@@ -259,7 +261,7 @@ class HousingApplication {
 
     /**
      * Returns the Student object who this appllication is for
-     * 
+     *
      * @return Student
      */
     public function getStudent()
@@ -309,14 +311,14 @@ class HousingApplication {
         $fields['banner_id']         = $this->getBannerId();
         $fields['username']          = $this->getUsername();
         $fields['gender']            = HMS_Util::formatGender($this->getGender());
-        $fields['application_term']  = Term::toString($this->getApplicationTerm(), TRUE);
+        $fields['application_term']  = Term::toString($this->getApplicationTerm(), true);
         $fields['student_type']      = HMS_Util::formatType($this->getStudentType());
         $fields['meal_plan']         = HMS_Util::formatMealOption($this->getMealPlan());
 
         $fields['created_on']        = HMS_Util::get_long_date($this->getCreatedOn());
 
         $roommate = HMS_Roommate::get_confirmed_roommate($this->getUsername(), $this->getTerm());
-        if(!is_null($roommate)) {
+        if (!is_null($roommate)) {
             $fields['roommate'] = $roommate->getFullName();
             $fields['roommate_id'] = $roommate->getBannerId();
         } else {
@@ -343,7 +345,7 @@ class HousingApplication {
 
         $reasons = self::getCancellationReasons();
 
-        if($reasonKey == "0" || !array_key_exists($reasonKey, $reasons)) {
+        if ($reasonKey == "0" || !array_key_exists($reasonKey, $reasons)) {
             throw new InvalidArgumentException('Invalid cancellation reason key.');
         }
 
@@ -367,53 +369,51 @@ class HousingApplication {
      * The 'cancelled' parameter is optional. If set to true, then this method will
      * return true for cancelled applications. If false (default), then this method will
      * ignore cancelled applications.
-     * 
+     *
      * @param unknown    $username
      * @param unknown    $term
      * @param string     $cancelled
-     * 
+     *
      * @throws DatabaseException
      * @return unknown|boolean
      */
-    public static function checkForApplication($username, $term, $cancelled = FALSE)
+    public static function checkForApplication($username, $term, $cancelled = false)
     {
         $db = new PHPWS_DB('hms_new_application');
         $db->addWhere('username', $username, 'ILIKE');
 
         $db->addWhere('term', $term);
 
-        if(!$cancelled) {
+        if (!$cancelled) {
             $db->addWhere('cancelled', 0);
         }
 
         $result = $db->select('row');
 
-        if(PEAR::isError($result)) {
+        if (PEAR::isError($result)) {
             throw new DatabaseException($result->toString());
         }
 
-        if(sizeof($result) > 0) {
+        if (sizeof($result) > 0) {
             return $result;
-        }else{
-            return FALSE;
+        } else {
+            return false;
         }
     }
 
     // TODO move this to the HousingApplicationFactory class, perhaps?
     // TODO make this static too
     /**
-     * Returns a HousingApplication for the given user name.
-     *
-     * @deprecated
-     * @see HousingApplicationFactory::getAppByStudent()
-     * 
-     * @param unknown_type $username
-     * @param unknown_type $term
-     * @param unknown_type $applicationType
-     * 
-     * @throws DatabaseException
-     * @throws InvalidArgumentException
-     */
+    * Returns a HousingApplication for the given user name.
+    *
+    * @deprecated
+    * @param unknown_type $username
+    * @param unknown_type $term
+    * @param unknown_type $applicationType
+    * @throws DatabaseException
+    * @throws InvalidArgumentException
+    * @see HousingApplicationFactory::getAppByStudent()
+    */
     public function getApplicationByUser($username, $term, $applicationType = null)
     {
         PHPWS_Core::initModClass('hms', 'HousingApplication.php');
@@ -430,17 +430,17 @@ class HousingApplication {
         $db->addWhere('username', $username);
         $db->addWhere('term', $term);
 
-        if(!is_null($applicationType)) {
+        if (!is_null($applicationType)) {
             $db->addWhere('application_type', $applicationType);
         }
 
         $result = $db->select('row');
 
-        if(PHPWS_Error::logIfError($result)) {
+        if (PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         }
 
-        if($result == null) {
+        if ($result == null) {
             return null;
         }
 
@@ -477,7 +477,7 @@ class HousingApplication {
      * @param string $username
      * @param string $banner_id
      * @param string $term
-     * 
+     *
      * @return multitype:Ambigous <NULL, FallApplication>
      */
     public static function getAllApplications($username = null, $banner_id = null, $term = null)
@@ -486,15 +486,15 @@ class HousingApplication {
 
         $db = new PHPWS_DB('hms_new_application');
 
-        if(!is_null($banner_id)) {
+        if (!is_null($banner_id)) {
             $db->addWhere('banner_id', $banner_id);
         }
 
-        if(!is_null($username)) {
+        if (!is_null($username)) {
             $db->addWhere('username', $username, 'ILIKE');
         }
 
-        if(!is_null($term)) {
+        if (!is_null($term)) {
             $db->addWhere('term', $term);
         }
 
@@ -515,7 +515,7 @@ class HousingApplication {
      * the general HousingApplication type objects.
      *
      * @param Student $student
-     * 
+     *
      * @throws InvalidArgumentException
      * @throws DatabaseException
      * @return Array Array of HousingApplication objects for the given user.
@@ -524,7 +524,7 @@ class HousingApplication {
     {
         $db = new PHPWS_DB('hms_new_application');
 
-        if(!isset($student) || empty($student) || is_null($student)) {
+        if (!isset($student) || empty($student) || is_null($student)) {
             throw new InvalidArgumentException('Missing/invalid student.');
         }
 
@@ -532,14 +532,14 @@ class HousingApplication {
 
         $result = $db->getObjects('HousingApplication');
 
-        if(PHPWS_Error::logIfError($result)) {
+        if (PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         }
 
 
         // Re-index the applications using the term as the key
         $appsByTerm = array();
-        if(isset($result) && !is_null($result)) {
+        if (isset($result) && !is_null($result)) {
             foreach($result as $app) {
                 $appsByTerm[$app->getTerm()] = $app;
             }
@@ -552,7 +552,7 @@ class HousingApplication {
      * Returns all freshmen application for the given term.
      *
      * @param unknown $term
-     * 
+     *
      * @return boolean|unknown
      */
     public static function getAllFreshmenApplications($term)
@@ -575,19 +575,19 @@ class HousingApplication {
         }
 
         // Add the appropriate join, based on the term
-        if($sem == TERM_FALL) {
+        if ($sem == TERM_FALL) {
             $db->addJoin('LEFT OUTER', 'hms_new_application', 'hms_fall_application', 'id', 'id');
             $result = $db->getObjects('FallApplication');
-        } else if($term == TERM_SPRING) {
+        } else if ($term == TERM_SPRING) {
             $db->addJoin('LEFT OUTER', 'hms_new_application', 'hms_spring_application', 'id', 'id');
             $result = $db->getObjects('SpringApplication');
-        } else if($term == TERM_SUMMER1 || $term == TERM_SUMMER2) {
+        } else if ($term == TERM_SUMMER1 || $term == TERM_SUMMER2) {
             $db->addJoin('LEFT OUTER', 'hms_new_application', 'hms_summer_application', 'id', 'id');
             $result = $db->getObjects('SummerApplication');
         }
 
-        if(PEAR::isError($result)) {
-            return FALSE;
+        if (PEAR::isError($result)) {
+            return false;
         }
 
         return $result;
@@ -599,7 +599,7 @@ class HousingApplication {
      *
      * @param unknown $term
      * @param unknown $gender
-     * 
+     *
      * @throws InvalidTermException
      * @throws DatabaseException
      * @return multitype:unknown
@@ -647,7 +647,7 @@ class HousingApplication {
                 throw new InvalidTermException($term);
         }
 
-        if(PHPWS_Error::logIfError($result)) {
+        if (PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         }
 
@@ -664,7 +664,7 @@ class HousingApplication {
 
         for($count = 0; $count < count($result); $count++) {
             $app = $result[$count];
-            if(!in_array($app->username, $assignments)) {
+            if (!in_array($app->username, $assignments)) {
                 //unset($result[$count]);
                 $newresult[$app->username] = $app;
             }
@@ -677,7 +677,7 @@ class HousingApplication {
      * Returns an array of the terms which this student can potentially apply for.
      *
      * @param Student $student
-     * 
+     *
      * @return multitype:multitype:number unknown  multitype:number string
      */
     public static function getAvailableApplicationTermsForStudent(Student $student)
@@ -713,13 +713,13 @@ class HousingApplication {
      * Returns an array of term which the student *must* apply for.
      *
      * @param Student $student
-     * 
+     *
      * @return multitype:|multitype:Ambigous <multitype:multitype:number, multitype:multitype:number unknown  multitype:number string  >
      */
     public static function getRequiredApplicationTermsForStudent(Student $student)
     {
         // Special case for Transfer students: They're not required to apply for any term
-        if($student->getType() == TYPE_TRANSFER) {
+        if ($student->getType() == TYPE_TRANSFER) {
             return array();
         }
 
@@ -728,7 +728,7 @@ class HousingApplication {
         $requiredTerms = array();
 
         foreach($availableTerms as $term) {
-            if($term['required'] == 1) {
+            if ($term['required'] == 1) {
                 $requiredTerms[] = $term;
             }
         }
@@ -745,7 +745,7 @@ class HousingApplication {
      * the returned array will be empty.
      *
      * @param Student $student
-     * 
+     *
      * @return Array list of terms which the student still needs to apply for
      */
     public static function checkAppliedForAllRequiredTerms(Student $student)
@@ -758,7 +758,7 @@ class HousingApplication {
 
         foreach($requiredTerms as $term) {
             // Check if a housing application exists for this student in this term
-            if(!isset($existingApplications[$term['term']])) {
+            if (!isset($existingApplications[$term['term']])) {
                 $needToApplyFor[] = $term['term'];
             }
         }
@@ -768,7 +768,7 @@ class HousingApplication {
 
     /************************
      * Accessors & Mutators *
-     ************************/
+    ************************/
 
     public function getId()
     {
@@ -962,9 +962,9 @@ class HousingApplication {
 
     public function isCancelled()
     {
-        if($this->getCancelled() == 1) {
+        if ($this->getCancelled() == 1) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
@@ -1010,9 +1010,9 @@ class HousingApplication {
     }
 
 
-    /*******
-     * Emergency Contact Info
-     */
+    /**************************
+     * Emergency Contact Info *
+     **************************/
 
     public function getEmergencyContactName()
     {
@@ -1122,9 +1122,9 @@ class HousingApplication {
      */
     public function isWithdrawn()
     {
-        if($this->withdrawn == 1) {
+        if ($this->withdrawn == 1) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
