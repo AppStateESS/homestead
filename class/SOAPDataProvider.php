@@ -178,10 +178,6 @@ class SOAPDataProvider extends StudentDataProvider {
         if ($student->getUsername() == 'brannonpg') {
             $student->setApplicationTerm(201210);
         }
-        
-        if ($student->getBannerId() == '900536880') {
-            $student->setApplicationTerm(201340);
-        }
     }
 }
 
