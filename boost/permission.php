@@ -113,6 +113,7 @@
     $permissions['reports']                         =_('Execute and view reports');
 
     $permissions['login_as_student']                =_('Login as a student');
+    $permissions['ra_login_as_self']                =_('RAs login as student version of themselves');
 
     /********************
      * Lottery Settings *

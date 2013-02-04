@@ -34,7 +34,7 @@ class ShowStudentSearchCommand extends Command {
         //$form->setExtra('username', 'autocomplete="off" ');
 
         $form->addText('banner_id');
-        $form->setExtra('banner_id', 'placeholder = "Swipe AppCard or type Name/Email/Banner ID"');
+        $form->setExtra('banner_id', 'placeholder = "Swipe AppCard or type Name/Email/Banner ID" autofocus');
         $form->setClass('banner_id', 'checkin-search-box');
 
         $form->addSubmit('Search');
@@ -49,3 +49,4 @@ class ShowStudentSearchCommand extends Command {
         $context->setContent(PHPWS_Template::process($tpl, 'hms', 'admin/student_search.tpl'));
     }
 }
+?>

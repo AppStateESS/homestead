@@ -117,7 +117,7 @@ class ReApplicationFormView extends View {
          */
         // RLC
         $form->addCheck('rlc_interest', array('rlc_interest'));
-        $form->setLabel('rlc_interest', "I'm interseted in applying for (or continuing in) a Residential Learning Community.");
+        $form->setLabel('rlc_interest', "I'm interested in applying for (or continuing in) a Residential Learning Community.");
 
         // Sorority
         if($this->student->getGender() == FEMALE){
@@ -134,10 +134,12 @@ class ReApplicationFormView extends View {
         }
 
         // Teaching Fellows
+        /*
         if($this->student->isTeachingFellow()){
             $form->addRadioButton('tf_pref', array('with_tf', 'not_tf'));
             $form->setLabel('tf_pref', array("I would like to live with other Teaching Fellows.", "I would like to live elsewhere on-campus."));
         }
+        */
 
         // Watauga Global
         if($this->student->isWataugaMember()){

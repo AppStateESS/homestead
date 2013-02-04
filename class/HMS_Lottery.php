@@ -537,6 +537,7 @@ class HMS_Lottery {
         $special_interests['sorority_pm']       = 'Phi Mu Sorority';
         $special_interests['sorority_sk']       = 'Sigma Kappa Sorority';
         $special_interests['sorority_aop']      = 'Alpha Omicron Pi Sorority';
+        $special_interests['sorority_zta']      = 'Zeta Tau Alpha';
         $special_interests['special_needs']     = 'Special Needs';
 
         return $special_interests;
@@ -552,6 +553,7 @@ class HMS_Lottery {
         $sororities['sorority_pm']       = 'Phi Mu Sorority';
         $sororities['sorority_sk']       = 'Sigma Kappa Sorority';
         $sororities['sorority_aop']      = 'Alpha Omicron Pi Sorority';
+        $sororities['sorority_zta']      = 'Zeta Tau Alpha';
 
         return $sororities;
     }

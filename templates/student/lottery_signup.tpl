@@ -77,14 +77,6 @@ Organizations</legend> {SORORITY_CHECK}{SORORITY_CHECK_LABEL}
 </div>
 <!-- END greek -->
 
-<!-- BEGIN teaching -->
-<div>
-<fieldset style="width: 65%;"><legend>Teaching
-Fellows</legend> {TF_PREF_1}{TF_PREF_1_LABEL}<br />
-{TF_PREF_2}{TF_PREF_2_LABEL}</fieldset>
-</div>
-<!-- END teaching -->
-
 <!-- BEGIN watauga -->
 <div>
 <fieldset style="width: 65%;"><legend>Watauga Global</legend>
