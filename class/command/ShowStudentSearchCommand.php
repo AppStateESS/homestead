@@ -49,3 +49,4 @@ class ShowStudentSearchCommand extends Command {
         $context->setContent(PHPWS_Template::process($tpl, 'hms', 'admin/student_search.tpl'));
     }
 }
+?>
