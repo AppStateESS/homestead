@@ -86,7 +86,7 @@ class ReApplicationFormSaveCommand extends Command {
         }
 
         // Teaching Fellows, Watauga Global, and Honors
-        $tfPref = ($context->get('tf_pref') == 'with_tf')?1:0;
+        //$tfPref = ($context->get('tf_pref') == 'with_tf')?1:0;
         $wgPref = ($context->get('wg_pref') == 'with_wg')?1:0;
         $honorsPref = ($context->get('honors_pref') == 'with_honors')?1:0;
 
@@ -113,7 +113,7 @@ class ReApplicationFormSaveCommand extends Command {
          * Emergency Contact Info *
          */
 
-        $application = new LotteryApplication(0, $term, $student->getBannerId(), $student->getUsername(), $student->getGender(), $studentType, $student->getApplicationTerm(), $cellPhone, $mealPlan, $physicalDisability, $psychDisability, $genderNeed, $medicalNeed, $international, NULL, $magicWinner, $sororityPref, $tfPref, $wgPref, $honorsPref, $rlcInterest, $earlyRelease);
+        $application = new LotteryApplication(0, $term, $student->getBannerId(), $student->getUsername(), $student->getGender(), $studentType, $student->getApplicationTerm(), $cellPhone, $mealPlan, $physicalDisability, $psychDisability, $genderNeed, $medicalNeed, $international, NULL, $magicWinner, $sororityPref, $wgPref, $honorsPref, $rlcInterest, $earlyRelease);
 
         $application->setEmergencyContactName($context->get('emergency_contact_name'));
         $application->setEmergencyContactRelationship($context->get('emergency_contact_relationship'));

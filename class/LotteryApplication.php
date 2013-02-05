@@ -24,7 +24,7 @@ class LotteryApplication extends HousingApplication {
     // These are preferences input by the student on the application form.
     // They don't necessarily mean a student has been approved by a group.
     public $sorority_pref;
-    public $tf_pref;
+    //public $tf_pref;
     public $wg_pref;
     public $honors_pref;
     public $rlc_interest;
@@ -34,7 +34,7 @@ class LotteryApplication extends HousingApplication {
     // Static variable for waiting list position calculation
     private static $waitingList;
 
-    public function __construct($id = 0, $term = NULL, $banner_id = NULL, $username = NULL, $gender = NULL, $student_type = NULL, $application_term = NULL, $cell_phone = NULL, $meal_plan = NULL, $physical_disability = NULL, $psych_disability = NULL, $gender_need = NULL, $medical_need = NULL, $international = NULL, $specialInterest = NULL, $magicWinner = 0, $sororityPref = NULL, $tfPref = NULL, $wgPref = NULL, $honorsPref = NULL, $rlcInterest = NULL, $earlyRelease = NULL)
+    public function __construct($id = 0, $term = NULL, $banner_id = NULL, $username = NULL, $gender = NULL, $student_type = NULL, $application_term = NULL, $cell_phone = NULL, $meal_plan = NULL, $physical_disability = NULL, $psych_disability = NULL, $gender_need = NULL, $medical_need = NULL, $international = NULL, $specialInterest = NULL, $magicWinner = 0, $sororityPref = NULL, $wgPref = NULL, $honorsPref = NULL, $rlcInterest = NULL, $earlyRelease = NULL)
     {
         /**
          * If the id is non-zero, then we need to load the other member variables
@@ -54,7 +54,7 @@ class LotteryApplication extends HousingApplication {
         $this->magic_winner = $magicWinner;
 
         $this->sorority_pref  = $sororityPref;
-        $this->tf_pref        = $tfPref;
+        //$this->tf_pref        = $tfPref;
         $this->wg_pref        = $wgPref;
         $this->honors_pref    = $honorsPref;
         $this->rlc_interest   = $rlcInterest;

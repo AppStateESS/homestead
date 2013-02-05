@@ -65,10 +65,12 @@ class ReApplicationFormSubmitCommand extends Command {
         }
 
         // Teaching Fellows check
+        /*
         if($student->isTeachingFellow() && is_null($context->get('tf_pref'))){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Please indicate your preference for Teaching Fellow housing.');
             $errorCmd->redirect();
         }
+        */
 
         // Watauga Global check
         if($student->isWataugaMember() && is_null($context->get('wg_pref'))){
