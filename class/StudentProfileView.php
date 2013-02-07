@@ -203,8 +203,8 @@ class StudentProfileView extends View {
                 # Check if the student selected a group on the application, but hasn't been approved
                 if(!is_null($reapplication->sorority_pref)){
                     $tpl['SPECIAL_INTEREST'] = $reapplication->sorority_pref . ' (pending)';
-                }else if($reapplication->tf_pref == 1){
-                    $tpl['SPECIAL_INTEREST'] = 'Teaching Fellow (pending)';
+                //}else if($reapplication->tf_pref == 1){
+                    //$tpl['SPECIAL_INTEREST'] = 'Teaching Fellow (pending)';
                 }else if($reapplication->wg_pref == 1){
                     $tpl['SPECIAL_INTEREST'] = 'Watauga Global (pending)';
                 }else if($reapplication->honors_pref == 1){
