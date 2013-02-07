@@ -1,37 +1,63 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
+
+PHPWS_Core::initModClass('hms', 'RlcFactory.php');
 PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
 
+/**
+ * RlcAssignmentView - View class for assigning students to LearningCommunitites.
+ *
+ * @author Jeremy Booker
+ * @package hms
+*/
 class RlcAssignmentView extends View {
 
-    private $rlcId; // the rlc ID to limit this view to
+    private $term; // The terms we're looking at applications for.
+    private $rlc; // the rlc to limit this view to
+    private $studentType; // The student type to limit this view to
 
-    public function __construct($rlcId = NULL){
-        $this->rlcId = $rlcId;
+    /**
+     * Constructor
+     * @param int $term
+     * @param HMS_Learning_Community $rlc
+     */
+    public function __construct($term, HMS_Learning_Community $rlc = null, $studentType = null)
+    {
+        $this->term           = $term;
+        $this->rlc            = $rlc;
+        $this->studentType    = $studentType;
     }
 
-    public function show(){
-
+    /**
+     * @see View::show()
+     */
+    public function show()
+    {
         $tags = array();
-        $tags['TITLE']             = 'RLC Assignments - ' . Term::toString(Term::getSelectedTerm());
-        $tags['SUMMARY']           = self::display_rlc_assignment_summary();
-        $tags['DROPDOWN']          = PHPWS_Template::process(self::getDropDown(), 'hms', 'admin/dropdown_template.tpl');
-        $tags['ASSIGNMENTS_PAGER'] = self::rlc_application_admin_pager();
+        $tags['TERM']              = Term::toString(Term::getSelectedTerm());
+        $tags['SUMMARY']           = $this->display_rlc_assignment_summary(); // TODO: Deprecated, remove this
+        $tags['FILTERS']           = $this->getFilters();
+        $tags['ASSIGNMENTS_PAGER'] = $this->rlcApplicationPager();
 
-        $export_form = new PHPWS_Form('export_form');
+        $exportForm = new PHPWS_Form('export_form');
         $exportCmd = CommandFactory::getCommand('ExportRlcApps');
-        $exportCmd->initForm($export_form);
+        $exportCmd->initForm($exportForm);
 
-        $export_form->addDropBox('rlc_list', HMS_Learning_Community::getRlcList());
-        $export_form->addSubmit('submit');
+        $exportForm->addDropBox('rlc_list', HMS_Learning_Community::getRlcList());
+        $exportForm->addSubmit('submit');
 
-        $export_form->mergeTemplate($tags);
-        $tags = $export_form->getTemplate();
+        $exportForm->mergeTemplate($tags);
+        $tags = $exportForm->getTemplate();
 
         return PHPWS_Template::process($tags, 'hms', 'admin/make_new_rlc_assignments.tpl');
     }
 
+    /**
+     * Generates a summary of the number of students assigned to each RLC.
+     *
+     * @deprecated
+     * @return string HTML for summary table
+     */
     public function display_rlc_assignment_summary()
     {
         $template = array();
@@ -95,40 +121,54 @@ class RlcAssignmentView extends View {
 
     /**
      * Generates a template for the rlc sort dropdown box
+     * 
+     * @return string HTML for community selector drop down
      */
-    public function getDropDown()
+    public function getFilters()
     {
         javascript('jquery');
         javascript('modules/hms/page_refresh');
 
-        $communities = HMS_Learning_Community::getRlcList();
+        // Get the list of communities
+        $communities = RlcFactory::getRlcList($this->term);
 
-        $dropList = array('0'=>'All');
+        $communityList = array('0'=>'All');
 
         foreach($communities as $key=>$val){
-            $dropList[$key] = $val;
+            $communityList[$key] = $val;
         }
 
+        // Initialize form and submit command
         $submitCmd = CommandFactory::getCommand('ShowAssignRlcApplicants');
-
         $form = new PHPWS_Form('dropdown_selector');
         $submitCmd->initForm($form);
-
         $form->setMethod('get');
-        $form->addSelect('rlc', $dropList);
-
-        if( isset($this->rlcId) && !is_null($this->rlcId)) {
-            $form->setMatch('rlc', $this->rlcId);
+        
+        
+        // Community drop down
+        $form->addSelect('rlc', $communityList);
+        if (isset($this->rlc) && !is_null($this->rlc)) {
+            $form->setMatch('rlc', $this->rlc->getId());
         }
         $form->setExtra('rlc', 'onChange="refresh_page(\'dropdown_selector\')"');
 
-        return $form->getTemplate();
+        
+        // Student Type drop down
+        $form->addSelect('student_type', array(0 => 'All', TYPE_CONTINUING => 'Continuing', TYPE_FRESHMEN => 'Freshmen'));
+        if (isset($this->studentType)) {
+            $form->setMatch('student_type', $this->studentType);
+        }
+        $form->setExtra('student_type', 'onChange="refresh_page(\'dropdown_selector\')"');
+
+        return PHPWS_Template::process($form->getTemplate(), 'hms', 'admin/rlcApplicationListFilters.tpl');
     }
 
     /**
      * RLC Application pager for the RLC admin panel
+     * 
+     * @return string HTML for application pager
      */
-    public function rlc_application_admin_pager()
+    public function rlcApplicationPager()
     {
         PHPWS_Core::initCoreClass('DBPager.php');
 
@@ -140,19 +180,26 @@ class RlcAssignmentView extends View {
 
         $pager = new DBPager('hms_learning_community_applications','HMS_RLC_Application');
         $pager->db->addColumn('hms_learning_community_applications.*');
-        // The 'addOrder' calls must not be used in order for the sort order buttons on the pager to work
-        #$pager->db->addOrder('hms_learning_communities.abbreviation','ASC');
-        #$pager->db->addOrder('hms_learning_community_applications.date_submitted', 'ASC');
-        //$pager->db->addOrder('user_id','ASC');
 
         $pager->db->addJoin('LEFT OUTER', 'hms_learning_community_applications', 'hms_learning_community_assignment', 'id', 'application_id');
         $pager->db->addWhere('hms_learning_community_assignment.application_id', 'NULL', '=');
-        $pager->db->addWhere('term', Term::getSelectedTerm());
+        $pager->db->addWhere('term', $this->term);
         $pager->db->addWhere('denied', 0); // Only show non-denied applications in this pager
 
 
-        if(isset($this->rlcId) && !is_null($this->rlcId) && $this->rlcId > 0){
-            $pager->db->addWhere('hms_learning_community_applications.rlc_first_choice_id', $this->rlcId ,'=');
+        // If community filter is set, use it
+        if(isset($this->rlc)){
+            $pager->db->addWhere('hms_learning_community_applications.rlc_first_choice_id', $this->rlc->getId() ,'=');
+        }
+        
+        // If student type filter is set, use it
+        if(isset($this->studentType)){
+            if ($this->studentType == TYPE_FRESHMEN) {
+                $pager->db->addWhere('hms_learning_community_applications.application_type', 'freshmen');
+            } else if ($this->studentType == TYPE_CONTINUING) {
+                // TODO fix this so 'returning' is consistent with 'continuing'.. really just use student types
+                $pager->db->addWhere('hms_learning_community_applications.application_type', 'returning');
+            }
         }
 
         $pager->setModule('hms');

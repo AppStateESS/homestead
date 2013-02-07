@@ -242,6 +242,8 @@ class HMS_Learning_Community extends HMS_Item
 
     /**
      * Returns an associative array containing the list of RLCs using their full names, keyed by their id.
+     * @deprecated
+     * @see RlcFactory
      */
     public function getRlcList($hidden = NULL, $student_type = NULL)
     {
@@ -349,5 +351,15 @@ class HMS_Learning_Community extends HMS_Item
         echo $buffer;
         die();
     }
+}
+
+/**
+ * Empty constructor child class for restoring RLC objects from the database.
+ * 
+ * @author Jeremy Booker
+ * @package hms
+ */
+class RestoredRlc extends HMS_Learning_Community {
+    public function __construct(){}
 }
 ?>
