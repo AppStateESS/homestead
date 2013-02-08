@@ -11,9 +11,10 @@ PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
 /**
  * RlcFactory - Factory class for loading Rlc objects.
  *
- * @author jbooker
- * @package hms
-*/
+ * @package  Hms
+ * @author   Jeremy Booker
+ * @license  http://opensource.org/licenses/gpl-3.0.html GNU GPLv3
+ */
 class RlcFactory {
 
     /**

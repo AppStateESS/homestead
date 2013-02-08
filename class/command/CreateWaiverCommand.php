@@ -2,6 +2,12 @@
 
 PHPWS_Core::initModClass('hms', 'Command.php');
 
+/**
+ * Controller for creating an eligibility waiver for re-application.
+ * 
+ * @package Hms
+ * @author  Jeremy Booker
+ */
 class CreateWaiverCommand extends Command {
 
     public function getRequestVars()
@@ -25,10 +31,22 @@ class CreateWaiverCommand extends Command {
 
         $error = false;
         foreach($usernames as $user){
+            
+            $trimmed = trim($user);
+            
+            // Check for blank lines and skip them
+            if ($trimmed == '') {
+                continue;
+            }
+            
             // Remove everything after '@'.
-            $splode = explode('@', $user);
+            $splode = explode('@', $trimmed);
             $user = trim($splode[0]); # Username is at [0]
 
+            if ($user == '') {
+                continue;
+            }
+            
             if(!$soap->isValidStudent($user, $term)){
                 NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Invalid username: $user"  );
                 $error = true;
