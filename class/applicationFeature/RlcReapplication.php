@@ -33,6 +33,7 @@ class RlcReapplication extends ApplicationFeature {
         PHPWS_Core::initModClass('hms', 'HousingApplication.php');
         PHPWS_Core::initModClass('hms', 'RlcReapplicationMenuBlockView.php');
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
+        PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
 
         $application = HousingApplication::getApplicationByUser($student->getUsername(), $this->term);
         if(!$application instanceof LotteryApplication){
@@ -44,7 +45,10 @@ class RlcReapplication extends ApplicationFeature {
             $rlcApp = null;
         }
 
-        return new RlcReapplicationMenuBlockView($this->term, $this->getStartDate(), $this->getEndDate(), $application, $rlcApp);
+        // Check for an assignment
+        $assignment = HMS_RLC_Assignment::getAssignmentByUsername($student->getUsername(), $this->getTerm());
+
+        return new RlcReapplicationMenuBlockView($this->term, $this->getStartDate(), $this->getEndDate(), $application, $rlcApp, $assignment);
     }
 }
 

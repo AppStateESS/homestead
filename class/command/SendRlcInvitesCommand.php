@@ -31,11 +31,18 @@ class SendRlcInvitesCommand extends Command {
         $respondByTimestamp = mktime($respondByTime, null, null, $dateParts[0], $dateParts[1], $dateParts[2]);
         
         $term = Term::getSelectedTerm();
-        
+
+        $studentType = $context->get('type');
+
+        if(!isset($studentType)){
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Please choose a student type.');
+            $resultCmd->redirect();
+        }
+
         PHPWS_Core::initModClass('hms', 'RlcAssignmentFactory.php');
         PHPWS_Core::initModClass('hms', 'RlcAssignmentInvitedState.php');
         
-        $assignments = RlcAssignmentFactory::getAssignmentsByTermStateType($term, 'new', 'freshmen');
+        $assignments = RlcAssignmentFactory::getAssignmentsByTermStateType($term, 'new', $studentType);
         
         if(sizeof($assignments) == 0){
             NQ::simple('hms', HMS_NOTIFICATION_WARNING, 'No invites needed to be sent.');
