@@ -26,6 +26,8 @@ class SendRlcInvitesView extends View {
         $form->addDropBox('time', HMS_Util::get_hours());
         $form->setMatch('time', '17');
 
+        $form->addRadioAssoc('type', array('freshmen'=>'Freshmen', 'returning'=>'Continuing'));
+
         $form->addSubmit('submit', 'Send Invites');
 
         $form->mergeTemplate($tpl);
