@@ -3,7 +3,7 @@
 PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
 
 PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-PHPWS_Core::initModClass('hms', 'HousingApplication.php');
+PHPWS_Core::initModClass('hms', 'HousingApplicationFactory.php');
 PHPWS_Core::initModClass('hms', 'HMS_Email.php');
 PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
 PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
@@ -182,7 +182,7 @@ class LotteryProcess {
         
         // Update the winning student's invite
         try{
-            $entry = HousingApplication::getApplicationByUser($student->getUsername(), $this->term);
+            $entry = HousingApplicationFactory::getAppByStudent($student, $this->term, 'lottery');
             $entry->invited_on = $this->now;
         
             $result = $entry->save();
