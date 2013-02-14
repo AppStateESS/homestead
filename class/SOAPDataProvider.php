@@ -6,6 +6,9 @@ class SOAPDataProvider extends StudentDataProvider {
 
     public function getStudentByUsername($username, $term)
     {
+        // Force username to lowercase (SOAP is case sensitive)
+        $username = strtolower($username);
+        
         $soap = SOAP::getInstance(UserStatus::getUsername(), UserStatus::isAdmin()?(SOAP::ADMIN_USER):(SOAP::STUDENT_USER));
         $id = $soap->getBannerId($username);
 
