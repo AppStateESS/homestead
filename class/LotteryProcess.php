@@ -203,11 +203,17 @@ class LotteryProcess {
     
     private function sendWinningReminderEmails()
     {
+        $ttl = INVITE_TTL_HRS * 3600;
+        
         // Get a list of lottery winners who have not chosen a room yet, send them reminder emails
-        $query = "select hms_new_application.username FROM hms_new_application JOIN hms_lottery_application ON hms_new_application.id = hms_lottery_application.id
-                        LEFT OUTER JOIN (SELECT asu_username FROM hms_assignment WHERE term={$this->term}) as foo ON hms_new_application.username = foo.asu_username
-                        WHERE foo.asu_username IS NULL
-                        AND hms_lottery_application.invited_on IS NOT NULL";
+        $query = "select username from hms_new_application
+                    JOIN hms_lottery_application ON hms_new_application.id = hms_lottery_application.id
+                    LEFT OUTER JOIN (select * from hms_assignment where term = {$this->term}) AS foo ON hms_new_application.username = foo.asu_username
+                    WHERE foo.asu_username IS NULL
+                    AND hms_new_application.term = {$this->term}
+                    AND application_type = 'lottery'
+                    AND invited_on IS NOT NULL
+                    AND (hms_lottery_application.invited_on + $ttl) > {$this->now}";
         
         $result = PHPWS_DB::getAll($query);
         
@@ -228,6 +234,7 @@ class LotteryProcess {
         $query = "select hms_lottery_reservation.* FROM hms_lottery_reservation
                         LEFT OUTER JOIN (SELECT asu_username FROM hms_assignment WHERE term={$this->term}) as foo ON hms_lottery_reservation.asu_username = foo.asu_username
                         WHERE foo.asu_username IS NULL
+                        AND hms_lottery_reservation.term = {$this->term}
                         AND hms_lottery_reservation.expires_on > " . $this->now;
         
         $result = PHPWS_DB::getAll($query);
