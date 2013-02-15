@@ -570,7 +570,7 @@ class HMS_Floor extends HMS_Item
                     AND hms_floor.id = {$this->id}
         			AND hms_floor.rlc_id IS null
         			AND hms_floor.is_online = 1
-                    AND hms_room.gender_type IN ($gender, 2)
+                    AND hms_room.gender_type IN ($gender, 3)
                     AND hms_room.reserved = 0
                     AND hms_room.offline = 0
                     AND hms_room.private = 0
