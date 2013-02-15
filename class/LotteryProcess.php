@@ -184,7 +184,7 @@ class LotteryProcess {
         try{
             $entry = HousingApplicationFactory::getAppByStudent($student, $this->term, 'lottery');
             $entry->invited_on = $this->now;
-        
+
             $result = $entry->save();
         }catch(Exception $e) {
             $this->output[] = 'Error while trying to select a winning student. Exception: ' . $e->getMessage();
