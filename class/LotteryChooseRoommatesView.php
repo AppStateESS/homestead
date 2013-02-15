@@ -69,7 +69,7 @@ class LotteryChooseRoommatesView extends View {
                 # Bed is reserved
                 $reservedStudent = StudentFactory::getStudentByUsername($reservation['asu_username'], $this->term);
                 $bed_row['TEXT'] = $reservedStudent->getName() . ' (unconfirmed invitation)';
-            }else if($bed->isInternationalReserved()){
+            }else if($bed->isInternationalReserved() || $bed->isRaRoommateReserved()){
                 $bed_row['TEXT'] = 'Reserved';
             }else{
                 # Bed is empty, so decide what we should do with it

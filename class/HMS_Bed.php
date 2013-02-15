@@ -468,6 +468,11 @@ class HMS_Bed extends HMS_Item {
     {
         return $this->international_reserved;
     }
+    
+    public function isRaRoommateReserved()
+    {
+        return $this->ra_roommate;
+    }
 
     public function getRoomChangeReserved() {
         return $this->room_change_reserved;
