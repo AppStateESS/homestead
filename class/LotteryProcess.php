@@ -354,7 +354,7 @@ class LotteryProcess {
     
     public static function countLotteryAssignedByClassGender($term, $class, $gender = null)
     {
-        $query = "SELECT count(*) FROM hms_assignment LEFT OUTER JOIN hms_new_application ON hms_assignment.banner_id = hms_new_application.banner_id WHERE hms_assignment.term = $term and reason = 'lottery' ";
+        $query = "SELECT count(*) FROM hms_assignment LEFT OUTER JOIN hms_new_application ON (hms_assignment.banner_id = hms_new_application.banner_id  AND hms_assignment.term = hms_new_application.term )WHERE hms_assignment.term = $term and reason = 'lottery' ";
        
         if(isset($gender)){
             $query .= "AND hms_new_application.gender = $gender ";
