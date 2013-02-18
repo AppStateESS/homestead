@@ -525,6 +525,8 @@ class LotteryProcess {
             $query .= 'AND hms_new_application.application_term <= ' . ($term_year - 2) . '10 ';
         }
         
+        //test($query,1);
+        
         $remainingApplications = PHPWS_DB::getOne($query);
         
         if(PHPWS_Error::logIfError($remainingApplications)) {
