@@ -8,6 +8,8 @@
 
 require_once(PHPWS_SOURCE_DIR . 'mod/hms/inc/defines.php');
 
+PHPWS_Core::initModClass('hms', 'HMS_Util.php');
+
 class HMS_Email{
 
     public function get_tech_contacts()
