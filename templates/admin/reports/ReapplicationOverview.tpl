@@ -144,6 +144,21 @@
     <th colspan="2">Outstanding Invites</th>
   </tr>
   <tr>
+  	<td>Sophomore Invites:</td>
+  	<td>{PENDING_SOPH_INVITES}</td>
+  </tr>
+  <tr>
+  	<td>Junior Invites:</td>
+  	<td>{PENDING_JR_INVITES}</td>
+  </tr>
+  <tr>
+  	<td>Senior Invites:</td>
+  	<td>{PENDING_SR_INVITES}</td>
+  </tr>
+  <tr>
+  	<th colspan="2">Roommates</th>
+  </tr>
+  <tr>
     <td>Outstanding roommate invites:</td>
     <td>{ROOMMATE_INVITES}</td>
   </tr>

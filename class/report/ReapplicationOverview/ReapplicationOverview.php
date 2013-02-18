@@ -49,7 +49,7 @@ class ReapplicationOverview extends Report implements iCsvReport {
 
         $this->data['M_APPS']       = LotteryProcess::countGrossApplicationsByClassGender($lotteryTerm, null, MALE);
         $this->data['F_APPS']       = LotteryProcess::countGrossApplicationsByClassGender($lotteryTerm, null, FEMALE);
-       
+
         /********************
          * Net Applications *
          ********************/
@@ -94,6 +94,16 @@ class ReapplicationOverview extends Report implements iCsvReport {
         $db->addWhere('term', $lotteryTerm);
         $db->addWhere('reason', 'lottery');
         $numLotteryAssigned = $db->select('count');
+
+        
+        /***********************
+         * Outstanding Invites *
+         */
+        $this->data['ROOMMATE_INVITES']        = LotteryProcess::countOutstandingRoommateInvites($lotteryTerm);
+        
+        $this->data['PENDING_SOPH_INVITES']    = LotteryProcess::countOutstandingInvites($lotteryTerm, CLASS_SOPH);
+        $this->data['PENDING_JR_INVITES']      = LotteryProcess::countOutstandingInvites($lotteryTerm, CLASS_JR);
+        $this->data['PENDING_SR_INVITES']      = LotteryProcess::countOutstandingInvites($lotteryTerm, CLASS_SR);
         
         // Assignments
         $this->data['LOTTERY_ASSIGNED']        = $numLotteryAssigned;
@@ -111,10 +121,6 @@ class ReapplicationOverview extends Report implements iCsvReport {
         $this->data['SR_MALE_ASSIGNED']        = LotteryProcess::countLotteryAssignedByClassGender($lotteryTerm, CLASS_SENIOR, MALE);
         $this->data['SR_FEMALE_ASSIGNED']      = LotteryProcess::countLotteryAssignedByClassGender($lotteryTerm, CLASS_SENIOR, FEMALE);
 
-        
-
-        $this->data['ROOMMATE_INVITES']        = LotteryProcess::countOutstandingRoommateInvites($lotteryTerm);
-        
         /***************************************
          * Remaining unaffiliated applications *
          ***************************************/

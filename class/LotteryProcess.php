@@ -485,9 +485,61 @@ class LotteryProcess {
         }
         
         return $remainingApplications;
-
     }
     
+    
+    public function countOutstandingInvites($term, $class, $gender = null)
+    {
+        $now = mktime();
+        $ttl = INVITE_TTL_HRS * 3600;
+        
+        $query = "SELECT count(*) FROM hms_new_application
+        JOIN hms_lottery_application ON hms_new_application.id = hms_lottery_application.id
+        LEFT OUTER JOIN hms_assignment ON (hms_new_application.banner_id = hms_assignment.banner_id AND hms_new_application.term = hms_assignment.term)
+        WHERE hms_assignment.banner_id IS NULL
+        AND hms_lottery_application.invited_on IS NOT NULL
+        AND hms_new_application.term = $term
+        AND (hms_lottery_application.invited_on + $ttl) > $now";
+        
+        if(isset($gender)){
+            $query .= "AND hms_new_application.gender = $gender ";
+        }
+        
+        $term_year = Term::getTermYear($term);
+        if($class == CLASS_SOPHOMORE) {
+            // Choose a rising sophmore (summer 1 thru fall of the previous year, plus spring of the same year)
+            $query .= 'AND (hms_new_application.application_term = ' . ($term_year - 1) . '20 ';
+            $query .=   'OR hms_new_application.application_term = ' . ($term_year - 1) . '30 ';
+            $query .=   'OR hms_new_application.application_term = ' . ($term_year - 1) . '40 ';
+            $query .=   'OR hms_new_application.application_term = ' . $term_year . '10';
+            $query .= ') ';
+        }else if($class == CLASS_JUNIOR) {
+            // Choose a rising jr
+            $query .= 'AND (hms_new_application.application_term = ' . ($term_year - 2) . '20 ';
+            $query .=   'OR hms_new_application.application_term = ' . ($term_year - 2) . '30 ';
+            $query .=   'OR hms_new_application.application_term = ' . ($term_year - 2) . '40 ';
+            $query .=   'OR hms_new_application.application_term = ' . ($term_year - 1) . '10';
+            $query .= ') ';
+        }else{
+            // Choose a rising senior or beyond
+            $query .= 'AND hms_new_application.application_term <= ' . ($term_year - 2) . '10 ';
+        }
+        
+        $remainingApplications = PHPWS_DB::getOne($query);
+        
+        if(PHPWS_Error::logIfError($remainingApplications)) {
+            throw new DatabaseException($remainingApplications->toString());
+        }
+        
+        return $remainingApplications;
+    }
+    
+    /**
+     * Returns the number of outstanding roommate invites.
+     * @param int $term
+     * @throws DatabaseException
+     * @return int Number of outstanding roommate invites.
+     */
     public static function countOutstandingRoommateInvites($term)
     {
         $query = "select count(*) FROM hms_lottery_reservation
@@ -502,25 +554,6 @@ class LotteryProcess {
         }
         
         return $result;
-    }
-    
-    public static function countRemainingApplications($term)
-    {
-        $now = mktime();
-        
-        $query = "SELECT count(*) FROM hms_new_application JOIN hms_lottery_application ON hms_new_application.id = hms_lottery_application.id
-                            LEFT OUTER JOIN (SELECT asu_username FROM hms_assignment WHERE hms_assignment.term=$term) as foo ON hms_new_application.username = foo.asu_username
-                            WHERE foo.asu_username IS NULL AND hms_lottery_application.invited_on IS NULL
-                            AND hms_new_application.term = $term
-                            AND special_interest IS NULL";
-        
-        $remainingApplications = PHPWS_DB::getOne($query);
-        
-        if(PHPWS_Error::logIfError($remainingApplications)) {
-            throw new DatabaseException($remainingApplications->toString());
-        }
-        
-        return $remainingApplications;
     }
    
     /**********************
@@ -600,6 +633,25 @@ class LotteryProcess {
         return $result;
     }
 
+    public static function countRemainingApplications($term)
+    {
+        $now = mktime();
+    
+        $query = "SELECT count(*) FROM hms_new_application JOIN hms_lottery_application ON hms_new_application.id = hms_lottery_application.id
+        LEFT OUTER JOIN (SELECT asu_username FROM hms_assignment WHERE hms_assignment.term=$term) as foo ON hms_new_application.username = foo.asu_username
+        WHERE foo.asu_username IS NULL AND hms_lottery_application.invited_on IS NULL
+        AND hms_new_application.term = $term
+        AND special_interest IS NULL";
+    
+        $remainingApplications = PHPWS_DB::getOne($query);
+    
+        if(PHPWS_Error::logIfError($remainingApplications)) {
+        throw new DatabaseException($remainingApplications->toString());
+        }
+    
+        return $remainingApplications;
+        }
+    
     public static function countRemainingApplicationsByClassGender($term, $class, $gender = null)
     {
         $now = mktime();
