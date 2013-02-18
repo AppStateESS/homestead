@@ -101,10 +101,10 @@ class ReapplicationOverview extends Report implements iCsvReport {
          */
         $this->data['ROOMMATE_INVITES']        = LotteryProcess::countOutstandingRoommateInvites($lotteryTerm);
         
-        $this->data['PENDING_SOPH_INVITES']    = LotteryProcess::countOutstandingInvites($lotteryTerm, CLASS_SOPH);
-        $this->data['PENDING_JR_INVITES']      = LotteryProcess::countOutstandingInvites($lotteryTerm, CLASS_JR);
-        $this->data['PENDING_SR_INVITES']      = LotteryProcess::countOutstandingInvites($lotteryTerm, CLASS_SR);
-        
+        $this->data['PENDING_SOPH_INVITES']    = LotteryProcess::countOutstandingInvites($lotteryTerm, CLASS_SOPHOMORE);
+        $this->data['PENDING_JR_INVITES']      = LotteryProcess::countOutstandingInvites($lotteryTerm, CLASS_JUNIOR);
+        $this->data['PENDING_SR_INVITES']      = LotteryProcess::countOutstandingInvites($lotteryTerm, CLASS_SENIOR);
+
         // Assignments
         $this->data['LOTTERY_ASSIGNED']        = $numLotteryAssigned;
         
