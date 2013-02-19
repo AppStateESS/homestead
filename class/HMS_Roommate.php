@@ -187,20 +187,11 @@ class HMS_Roommate
      */
     public function have_requested_each_other($a, $b, $term)
     {
-        $db = new PHPWS_DB('hms_roommate');
-        $db->addWhere('term', $term);
-        $db->addWhere('confirmed', 0, NULL, 'AND');
-        $db->addWhere('requested_on', mktime() - ROOMMATE_REQ_TIMEOUT, '>=');
-        $db->addWhere('requestor', $a, 'ILIKE', 'AND', 'ab');
-        $db->addWhere('requestee', $b, 'ILIKE', 'AND', 'ab');
-        $db->addWhere('requestor', $b, 'ILIKE', 'AND', 'ba');
-        $db->addWhere('requestee', $a, 'ILIKE', 'AND', 'ba');
-        $db->setGroupConj('ab', 'AND');
-        $db->setGroupConj('ba', 'OR');
+        $ttl = time() - ROOMMATE_REQ_TIMEOUT;
 
-        $db->groupIn('ab', 'ba');
+        $query = "SELECT COUNT(*) FROM hms_roommate WHERE hms_roommate.term = $term AND hms_roommate.confirmed = 0 AND hms_roommate.requested_on >= $ttl AND ((hms_roommate.requestor ILIKE '$a' AND hms_roommate.requestee ILIKE '$b') OR (hms_roommate.requestor ILIKE '$b' AND hms_roommate.requestee ILIKE '$a'))";
 
-        $result = $db->count();
+        $result = PHPWS_DB::getOne($query);
 
         if ($result > 1) {
             // TODO: Log Weird Situation
