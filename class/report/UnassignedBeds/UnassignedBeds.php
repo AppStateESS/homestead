@@ -87,7 +87,7 @@ class UnassignedBeds extends Report implements iCsvReport {
                     $femaleRoomList[] = $roomNum;
                     $this->female += $room['c'];
                     $this->totalBeds += $room['c'];
-                }else if($room['gender_type'] == COED){
+                }else if($room['gender_type'] == COED || $room['gender_type'] == AUTO){
                     $coedRoomList[] = $roomNum;
                     $this->coed += $room['c'];
                     $this->totalBeds += $room['c'];
