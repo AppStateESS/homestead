@@ -46,6 +46,9 @@
                 <th>Assignment Notifications: </th><td align="left">{ASSIGNMENT_NOTIFICATIONS}</td>
             </tr>
             <tr>
+                <th>Package Desk: </th><td align="left">{PACKAGE_DESK}</td>
+            </tr>
+            <tr>
                 <th>Exterior image: </th><td align"left">{EXTERIOR_IMG}</td>
             </tr>
             <tr>

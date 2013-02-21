@@ -29,6 +29,10 @@ class HMS_Residence_Hall extends HMS_Item
     public $other_image_id;
     public $map_image_id;
     public $room_plan_image_id;
+    
+    // Package desk id
+    public $package_desk;
+    
 
     /**
      * Listing of floors associated with this room
@@ -685,6 +689,25 @@ class HMS_Residence_Hall extends HMS_Item
         return $this->banner_building_code;
     }
 
+    /**
+     * Returns the ID of this hall's package desk
+     * @return int
+     */
+    public function getPackageDeskId()
+    {
+        return $this->package_desk;
+    }
+    
+    /**
+     * Sets the package desk ID for this hall. Id must appear in
+     * the 'hms_package_desk' table.
+     * @param int $id
+     */
+    public function setPackageDeskId($id)
+    {
+        $this->package_desk = $id;
+    }
+    
     /******************
      * Static Methods *
     *****************/
