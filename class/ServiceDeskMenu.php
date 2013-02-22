@@ -20,6 +20,10 @@ class ServiceDeskMenu extends CommandMenu {
             $this->addCommandByName('Check-out', 'ShowCheckoutStart');
             }
             */
+            
+            if(Current_User::allow('hms', 'package_desk')){
+                $this->addCommandByName('Package Desk', 'ShowPackageDeskMenu');
+            }
         }
     }
 
