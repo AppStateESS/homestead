@@ -138,7 +138,10 @@ class LotteryApplication extends HousingApplication {
 
     public function isWinner()
     {
-        if(!is_null($this->invited_on)){
+        PHPWS_Core::initModClass('hms', 'LotteryProcess.php');
+        $ttl = INVITE_TTL_HRS * 3600;
+        
+        if(!is_null($this->invited_on) && ($this->invited_on + $ttl) > time()){
             return true;
         }else{
             return false;
