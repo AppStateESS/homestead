@@ -25,32 +25,34 @@ class ReapplicationWaitingListMenuBlockView extends View {
         $tpl['DATES'] = HMS_Util::getPrettyDateRange($this->startDate, $this->endDate);
         $tpl['STATUS'] = "";
 
-        if($this->startDate > $now){
+        if ($this->startDate > $now) {
             // Too early!
             $tpl['ICON'] = FEATURE_NOTYET_ICON;
             $tpl['BEGIN_DEADLINE'] = HMS_Util::get_long_date_time($this->startDate);
-        }else if($this->endDate < $now){
+        } else if ($this->endDate < $now) {
             // Too late
             $tpl['ICON'] = FEATURE_LOCKED_ICON;
             // fade out header
             $tpl['STATUS'] = "locked";
             $tpl['END_DEADLINE'] = HMS_Util::get_long_date_time($this->endDate);
-        }else if(isset($this->application) && $this->application->waiting_list_hide == 1){
-            $tpl['ICON'] = FEATURE_COMPLETED_ICON;
-            $tpl['OPTED_OUT'] = " ";
-        }else if(!is_null($this->application)){
-            $tpl['ICON'] = FEATURE_OPEN_ICON;
-
-            // Get this student's position on the wait list
-            $tpl['POSITION']    = $this->application->getWaitListPosition();
-            $tpl['TOTAL']       = HMS_Lottery::getSizeOfOnCampusWaitList();
-
-            $optOutCmd  = CommandFactory::getCommand('LotteryShowWaitingListOptOut');
-            $tpl['OPT_OUT_LINK'] = $optOutCmd->getLink('click here to opt-out of the waiting list');
-        }else{
+        } else if (!isset($this->application)) {
             $tpl['ICON'] = FEATURE_LOCKED_ICON;
             $tpl['STATUS'] = "locked";
             $tpl['DID_NOT_APPLY'] = "";
+        } else if (isset($this->application) && isset($this->application->waiting_list_date)){
+            $tpl['ICON'] = FEATURE_COMPLETED_ICON;
+            
+            // Get this student's position on the wait list
+            $tpl['POSITION']    = $this->application->getWaitListPosition();
+            $tpl['TOTAL']       = count(LotteryApplication::getRemainingWaitListApplications($this->term));
+            
+        } else if (isset($this->application)) {
+            $tpl['ICON'] = FEATURE_OPEN_ICON;
+            $cmd = CommandFactory::getCommand('ShowWaitingListSignup');
+            $cmd->setTerm($this->term);
+            $tpl['APPLY_LINK'] = $cmd->getLink("apply to the On-campus Housing Waiting List");
+        } else {
+            
         }
 
         Layout::addPageTitle("Re-Application Waiting List");

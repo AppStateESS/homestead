@@ -558,6 +558,11 @@ class HMS_Lottery {
         return $sororities;
     }
 
+    /**
+     * @deprecated
+     * @throws DatabaseException
+     * @return unknown
+     */
     public static function getSizeOfOnCampusWaitList()
     {
         $term = PHPWS_Settings::get('hms', 'lottery_term');

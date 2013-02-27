@@ -9,7 +9,7 @@ class RlcReapplicationRegistration extends ApplicationFeatureRegistration {
         $this->description = 'RLC Re-application';
         $this->startDateRequired = true;
         $this->endDateRequired = true;
-        $this->priority = 2;
+        $this->priority = 3;
     }
 
     public function showForStudent(Student $student, $term)

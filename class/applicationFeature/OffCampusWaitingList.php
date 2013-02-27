@@ -10,7 +10,7 @@ class OffCampusWaitingListRegistration extends ApplicationFeatureRegistration {
         $this->description = 'Open Waiting List';
         $this->startDateRequired = true;
         $this->endDateRequired = true;
-        $this->priority = 3;
+        $this->priority = 4;
     }
 
     public function showForStudent(Student $student, $term)
@@ -22,10 +22,10 @@ class OffCampusWaitingListRegistration extends ApplicationFeatureRegistration {
             return false;
         }
 
-        $app = HousingApplication::getApplicationByUser($student->getUsername(), $term, 'lottery');
+        $app = HousingApplicationFactory::getAppByStudent($student, $term);
 
         // Must be a returning student and either have not re-applied or have re-applied to the waiting list already
-        if($student->getApplicationTerm() <= Term::getCurrentTerm() && (is_null($app) || (!is_null($app) && $app->application_type == 'lottery' && $app->waiting_list_hide == 1) || (!is_null($app) && $app->application_type == 'offcampus_waiting_list'))){
+        if(($student->getApplicationTerm() <= Term::getCurrentTerm() && (is_null($app)) || (!is_null($app) && $app->application_type == 'offcampus_waiting_list'))){
             return true;
         }
 
@@ -40,7 +40,7 @@ class OffCampusWaitingList extends ApplicationFeature {
         PHPWS_Core::initModClass('hms', 'HousingApplication.php');
         PHPWS_Core::initModClass('hms', 'OffCampusWaitingListMenuBlockView.php');
 
-        $application = HousingApplication::getApplicationByUser($student->getUsername(), $this->term, 'offcampus_waiting_list');
+        $application = HousingApplicationFactory::getAppByStudent($student, $this->term);
 
         return new OffCampusWaitingListMenuBlockView($this->term, $this->getStartDate(), $this->getEndDate(), $application);
     }

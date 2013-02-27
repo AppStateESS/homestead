@@ -387,7 +387,7 @@ abstract class ApplicationFeature
         $db->addWhere('term', $term);
 
         $results = $db->select();
-
+        
         $features = array();
         foreach($results as $result) {
 
@@ -403,11 +403,18 @@ abstract class ApplicationFeature
             }
 
             $className = $result['name'];
+            
+            // Check for conflicting priorities in the array, make sure we don't overwrite
+            // an existing key
+            if(array_key_exists($reg->getPriority(), $features)){
+                throw new Exception("Conflicting menu item priorities: {$result['name']}, $term");
+            }
+            
             $features[$reg->getPriority()] = new $className($result['id']);
         }
 
         ksort($features);
-
+        
         return $features;
     }
 
