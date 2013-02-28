@@ -134,18 +134,18 @@ class ReApplicationFormSaveCommand extends Command {
             $errorCmd->redirect();
         }
 
-        # Log the fact that the entry was saved
+        // Log the fact that the entry was saved
         HMS_Activity_Log::log_activity(UserStatus::getUsername(), ACTIVITY_LOTTERY_ENTRY, UserStatus::getUsername());
 
-        # Send email confirmation
+        // Send email confirmation
         PHPWS_Core::initModClass('hms', 'HMS_Email.php');
         $year = Term::toString($term) . ' - ' . Term::toString(Term::getNextTerm($term));
         HMS_Email::send_lottery_application_confirmation($student, $year);
 
-        # Show success message
+        // Show success message
         NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Your re-application was submitted successfully.');
 
-        # Redirect to the RLC Reapplication form is the student is interested in RLCs, otherwise, show the student menu
+        // Redirect to the RLC Reapplication form is the student is interested in RLCs, otherwise, show the student menu
         if($rlcInterest == 1){
             $cmd = CommandFactory::getCommand('ShowRlcReapplication');
             $cmd->setTerm($term);

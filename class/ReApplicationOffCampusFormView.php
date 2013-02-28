@@ -2,16 +2,16 @@
 
 
 class ReApplicationOffCampusFormView extends View {
-    
+
     private $student;
     private $term;
-    
+
     public function __construct(Student $student, $term)
     {
         $this->student = $student;
         $this->term = $term;
     }
-    
+
     public function show()
     {
         $tpl = array();
@@ -50,10 +50,46 @@ class ReApplicationOffCampusFormView extends View {
         $form->setMaxSize('number', 4);
         $form->addCheck('do_not_call', 1);
 
+
+        /*********************
+         * Emergency Contact *
+        *********************/
+        $form->addText('emergency_contact_name');
+        $form->addText('emergency_contact_relationship');
+        $form->addText('emergency_contact_phone');
+        $form->addText('emergency_contact_email');
+        $form->addTextArea('emergency_medical_condition');
+
+        /*
+         if(!is_null($this->existingApplication)){
+        $form->setValue('emergency_contact_name', $this->existingApplication->getEmergencyContactName());
+        $form->setValue('emergency_contact_relationship', $this->existingApplication->getEmergencyContactRelationship());
+        $form->setValue('emergency_contact_phone', $this->existingApplication->getEmergencyContactPhone());
+        $form->setValue('emergency_contact_email', $this->existingApplication->getEmergencyContactEmail());
+        $form->setValue('emergency_medical_condition', $this->existingApplication->getEmergencyMedicalCondition());
+        }
+        */
+        /******************
+         * Missing Person *
+        ******************/
+
+        $form->addText('missing_person_name');
+        $form->addText('missing_person_relationship');
+        $form->addText('missing_person_phone');
+        $form->addText('missing_person_email');
+        /*
+         if(!is_null($this->existingApplication)){
+        $form->setValue('missing_person_name', $this->existingApplication->getMissingPersonName());
+        $form->setValue('missing_person_relationship', $this->existingApplication->getMissingPersonRelationship());
+        $form->setValue('missing_person_phone', $this->existingApplication->getMissingPersonPhone());
+        $form->setValue('missing_person_email', $this->existingApplication->getMissingPersonEmail());
+        }
+        */
+
         $mealPlans = array(BANNER_MEAL_LOW=>_('Low'),
-            BANNER_MEAL_STD=>_('Standard'),
-            BANNER_MEAL_HIGH=>_('High'),
-            BANNER_MEAL_SUPER=>_('Super'));
+                BANNER_MEAL_STD=>_('Standard'),
+                BANNER_MEAL_HIGH=>_('High'),
+                BANNER_MEAL_SUPER=>_('Super'));
         $form->addDropBox('meal_plan', $mealPlans);
         $form->setLabel('meal_plan', 'Meal plan: ');
         $form->setMatch('meal_plan', BANNER_MEAL_STD);
@@ -74,5 +110,5 @@ class ReApplicationOffCampusFormView extends View {
 
         return PHPWS_Template::process($form->getTemplate(), 'hms', 'student/reapplicationOffcampus.tpl');
     }
-    
+
 }

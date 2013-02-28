@@ -65,9 +65,21 @@ class OffCampusWaitingListFormSaveCommand extends Command {
         $medicalNeed        = isset($specialNeeds['medical_need'])?1: 0;
 
         $international = $student->isInternational();
-
+        
         $application = new WaitingListApplication(0, $term, $student->getBannerId(), $student->getUsername(), $student->getGender(), $student->getType(), $student->getApplicationTerm(), $cellPhone, $mealPlan, $physicalDisability, $psychDisability, $genderNeed, $medicalNeed, $international);
 
+        $application->setEmergencyContactName($context->get('emergency_contact_name'));
+        $application->setEmergencyContactRelationship($context->get('emergency_contact_relationship'));
+        $application->setEmergencyContactPhone($context->get('emergency_contact_phone'));
+        $application->setEmergencyContactEmail($context->get('emergency_contact_email'));
+        
+        $application->setEmergencyMedicalCondition($context->get('emergency_medical_condition'));
+        
+        $application->setMissingPersonName($context->get('missing_person_name'));
+        $application->setMissingPersonRelationship($context->get('missing_person_relationship'));
+        $application->setMissingPersonPhone($context->get('missing_person_phone'));
+        $application->setMissingPersonEmail($context->get('missing_person_email'));
+        
         try{
             $application->save();
         }catch(Exception $e){
@@ -75,12 +87,14 @@ class OffCampusWaitingListFormSaveCommand extends Command {
             $errorCmd->redirect();
         }
 
-        # Log the fact that the entry was saved
+        // Log the fact that the entry was saved
         HMS_Activity_Log::log_activity(UserStatus::getUsername(), ACTIVITY_LOTTERY_ENTRY, UserStatus::getUsername());
 
+        // Send a confirmation email
         $year = Term::toString($term) . ' - ' . Term::toString(Term::getNextTerm($term));
         HMS_Email::sendWaitListApplicationConfirmation($student, $year);
 
+        // Show a sucess message and redirect to the main menu
         NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Your application to the Open Waiting List was submitted successfully.');
         $cmd = CommandFactory::getCommand('ShowStudentMenu');
         $cmd->redirect();

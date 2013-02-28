@@ -388,7 +388,6 @@ CREATE TABLE hms_lottery_application (
 
 create table hms_waitlist_application (
     id integer NOT NULL references hms_new_application (id),
-    waiting_list_hide integer NOT NULL default 0,
     PRIMARY KEY(id)
 );
 

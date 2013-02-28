@@ -4,8 +4,6 @@ PHPWS_Core::initModClass('hms', 'HousingApplication.php');
 
 class WaitingListApplication extends HousingApplication {
 
-    public $waiting_list_hide = 0;
-
     public function __construct($id = 0, $term = NULL, $banner_id = NULL, $username = NULL, $gender = NULL, $student_type = NULL, $application_term = NULL, $cell_phone = NULL, $meal_plan = NULL, $physical_disability = NULL, $psych_disability = NULL, $gender_need = NULL, $medical_need = NULL, $international = NULL)
     {
         /**
@@ -178,7 +176,8 @@ class WaitingListApplication extends HousingApplication {
         $term = PHPWS_Settings::get('hms', 'lottery_term');
 
         $pager = new DBPager('hms_new_application', 'WaitingListApplication');
-        $pager->db->addJoin('LEFT OUTER', 'hms_new_application', 'hms_waitlist_application', 'id', 'id');
+        
+        $pager->db->addJoin('LEFT', 'hms_new_application', 'hms_waitlist_application', 'id', 'id');
         $pager->db->addJoin('LEFT OUTER', 'hms_new_application', 'hms_assignment', 'username', 'asu_username AND hms_new_application.term = hms_assignment.term');
         $pager->db->addWhere('hms_assignment.asu_username', 'NULL');
         $pager->db->addWhere('hms_new_application.term', $term);
@@ -187,8 +186,10 @@ class WaitingListApplication extends HousingApplication {
         $pager->db->addWhere('hms_new_application.psych_disability', 0);
         $pager->db->addWhere('hms_new_application.medical_need', 0);
         $pager->db->addWhere('hms_new_application.gender_need', 0);
-        $pager->db->addWhere('hms_waitlist_application.waiting_list_hide', 0);
-
+        
+        //$query = "select username from hms_new_application UNION ALL select asu_username from hms_assignment";
+        //$pager->db->setSQLQuery($query);
+        
         $pager->setModule('hms');
         $pager->setTemplate('admin/lottery_wait_list_pager.tpl');
         $pager->setEmptyMessage('No students found.');
@@ -201,6 +202,7 @@ class WaitingListApplication extends HousingApplication {
 
         return $pager->get();
     }
+
 }
 
 ?>

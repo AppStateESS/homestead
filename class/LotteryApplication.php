@@ -463,7 +463,7 @@ class LotteryApplication extends HousingApplication {
         $term = PHPWS_Settings::get('hms', 'lottery_term');
 
         $pager = new DBPager('hms_new_application', 'LotteryApplication');
-        $pager->db->addJoin('LEFT OUTER', 'hms_new_application', 'hms_lottery_application', 'id', 'id');
+        $pager->db->addJoin('LEFT', 'hms_new_application', 'hms_lottery_application', 'id', 'id');
         $pager->db->addJoin('LEFT OUTER', 'hms_new_application', 'hms_assignment', 'username', 'asu_username AND hms_new_application.term = hms_assignment.term');
         $pager->db->addWhere('hms_assignment.asu_username', 'NULL');
         $pager->db->addWhere('hms_new_application.term', $term);
