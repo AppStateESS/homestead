@@ -16,7 +16,7 @@ class OffCampusWaitingListRegistration extends ApplicationFeatureRegistration {
     public function showForStudent(Student $student, $term)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
-        PHPWS_Core::initModClass('hms', 'HousingApplication.php');
+        PHPWS_Core::initModClass('hms', 'HousingApplicationFactory.php');
 
         if($student->getApplicationTerm() > Term::getCurrentTerm()){
             return false;
@@ -37,7 +37,7 @@ class OffCampusWaitingList extends ApplicationFeature {
 
     public function getMenuBlockView(Student $student)
     {
-        PHPWS_Core::initModClass('hms', 'HousingApplication.php');
+        PHPWS_Core::initModClass('hms', 'HousingApplicationFactory.php');
         PHPWS_Core::initModClass('hms', 'OffCampusWaitingListMenuBlockView.php');
 
         $application = HousingApplicationFactory::getAppByStudent($student, $this->term);
