@@ -21,13 +21,13 @@ PHPWS_Core::initModClass('hms', 'exception/RoommateException.php');
 class HMS_Roommate
 {
 
-    var $id           = 0;
-    var $term         = null;
-    var $requestor    = null;
-    var $requestee    = null;
-    var $confirmed    = 0;
-    var $requested_on = 0;
-    var $confirmed_on = null;
+    public $id           = 0;
+    public $term         = null;
+    public $requestor    = null;
+    public $requestee    = null;
+    public $confirmed    = 0;
+    public $requested_on = 0;
+    public $confirmed_on = null;
 
     /**
      * Constructor
@@ -134,24 +134,18 @@ class HMS_Roommate
 
     public static function getByUsernames($a, $b, $term)
     {
-        $db = new PHPWS_DB('hms_roommate');
-        $db->addWhere('term', $term);
-        $db->addWhere('requestor', $a, 'ILIKE', 'AND', 'ab');
-        $db->addWhere('requestee', $b, 'ILIKE', 'AND', 'ab');
-        $db->addWhere('requestor', $b, 'ILIKE', 'AND', 'ba');
-        $db->addWhere('requestee', $a, 'ILIKE', 'AND', 'ba');
-        $db->setGroupConj('ab', 'AND');
-        $db->setGroupConj('ba', 'OR');
-
-        $db->groupIn('ab', 'ba');
-
-        $roommate = new HMS_Roommate();
-        $result = $db->loadObject($roommate);
-        if (PHPWS_Error::logIfError($result)) {
-            throw new DatabaseException($result->toString());
-        }
-
-        return $roommate;
+        PHPWS_Core::initCoreClass('PdoFactory.php');
+        $db = PdoFactory::getInstance()->getPdo();
+        
+        $query = $db->prepare("SELECT * FROM hms_roommate WHERE term = :term AND ((requestor ILIKE :usera AND requestee ILIKE :userb) OR (requestor ILIKE :userb AND requestee ILIKE :usera))");
+        $query->bindParam(':term', $term);
+        $query->bindParam(':usera', $a);
+        $query->bindParam(':userb', $b);
+        
+        $query->execute();
+        $results = $query->fetchAll(PDO::FETCH_CLASS, "HMS_Roommate");
+        
+        return $results[0];
     }
 
     public function get_all_confirmed_roommates($term = NULL, $random = false)
@@ -205,18 +199,16 @@ class HMS_Roommate
      */
     public function has_confirmed_roommate($asu_username, $term)
     {
-        $db = new PHPWS_DB('hms_roommate');
-        $db->addwhere('term', $term);
-        $db->addWhere('requestor', $asu_username, 'ILIKE', 'OR', 'grp');
-        $db->addwhere('requestee', $asu_username, 'ILIKE', 'OR', 'grp');
-        $db->setGroupConj('grp', 'AND');
-        $db->addWhere('confirmed', 1);
-        $result = (int)$db->count();
+        PHPWS_Core::initCoreClass('PdoFactory.php');
+        $db = PdoFactory::getInstance()->getPdo();
+        
+        $query = $db->prepare("SELECT COUNT(*) FROM hms_roommate WHERE term = :term AND (requestor ILIKE :user OR requestee ILIKE :user) AND confirmed = 1");
+        $query->bindParam(':term', $term);
+        $query->bindParam(':user', $asu_username);
 
-        if (PHPWS_Error::logIfError($result)) {
-            throw new DatabaseException('Unexpected error in has_roommate_request');
-        }
-
+        $query->execute();
+        $result = $query->fetchColumn();
+        
         if ($result > 1) {
             // TODO: Log Weird Situation
         }
@@ -224,11 +216,16 @@ class HMS_Roommate
         return ($result > 0 ? true : false);
     }
 
-    /*
+    /**
      * Returns the given user's confirmed roommate or false if the roommate is unconfirmed
+     * 
+     * @param string $asu_username
+     * @param string $term
+     * @return Student
      */
     public function get_confirmed_roommate($asu_username, $term)
     {
+        /*
         $db = new PHPWS_DB('hms_roommate');
         $db->addWhere('requestor', $asu_username, 'ILIKE', 'OR', 'grp');
         $db->addWhere('requestee', $asu_username, 'ILIKE', 'OR', 'grp');
@@ -237,15 +234,18 @@ class HMS_Roommate
         $db->addWhere('term', $term);
         $db->addColumn('requestor');
         $db->addColumn('requestee');
+        */
 
-        //$db->setTestMode();
-
-        $result = $db->select('row');
-
-        if (PHPWS_Error::logIfError($result)) {
-            throw new DatabaseException("Could not select confirmed roommate for $asu_username $term");
-        }
-
+        PHPWS_Core::initCoreClass('PdoFactory.php');
+        $db = PdoFactory::getInstance()->getPdo();
+        
+        $stmt = $db->prepare("SELECT * FROM hms_roommate WHERE (requestor ILIKE :user OR requestee ILIKE :user) AND term = :term AND confirmed = 1");
+        $stmt->bindParam(':user', $asu_username);
+        $stmt->bindParam(':term', $term);
+        
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
         if (count($result) > 1) {
             // TODO: Log Weird Situation
         }
@@ -254,15 +254,16 @@ class HMS_Roommate
             return null;
         }
 
-        if (trim($result['requestor']) == trim($asu_username)) {
-            return StudentFactory::getStudentByUsername($result['requestee'], $term);
+        if (trim($result[0]['requestor']) == trim($asu_username)) {
+            return StudentFactory::getStudentByUsername($result[0]['requestee'], $term);
         }
 
-        return StudentFactory::getStudentByUsername($result['requestor'], $term);
+        return StudentFactory::getStudentByUsername($result[0]['requestor'], $term);
     }
 
     public function get_pending_roommate($asu_username, $term)
     {
+        /*
         $db = new PHPWS_DB('hms_roommate');
         $db->addWhere('requestor', $asu_username, 'ILIKE', 'OR', 'grp');
         $db->addWhere('requestee', $asu_username, 'ILIKE', 'OR', 'grp');
@@ -273,7 +274,19 @@ class HMS_Roommate
         $db->addColumn('requestor');
         $db->addColumn('requestee');
         $result = $db->select('row');
+        */
 
+        PHPWS_Core::initCoreClass('PdoFactory.php');
+        $db = PdoFactory::getInstance()->getPdo();
+        
+        $stmt = $db->prepare("SELECT * FROM hms_roommate WHERE (requestor ILIKE :user OR requestee ILIKE :user) AND term = :term AND confirmed = 0 and requested_on >= :ttl");
+        $stmt->bindParam(':user', $asu_username);
+        $stmt->bindParam(':term', $term);
+        $stmt->bindParam(':ttl', mktime() - ROOMMATE_REQ_TIMEOUT);
+        
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
         if (count($result) > 1) {
             // TODO: Log Weird Situation
         }
@@ -281,6 +294,8 @@ class HMS_Roommate
         if (count($result) == 0)
         return null;
 
+        $result = $result[0];
+        
         if (trim($result['requestor']) == trim($asu_username)) {
             return StudentFactory::getStudentByUsername($result['requestee'], $term);
         }
@@ -303,7 +318,7 @@ class HMS_Roommate
         $db->addWhere('requested_on', mktime() - ROOMMATE_REQ_TIMEOUT, '>=');
         $db->addWhere('term', $term);
         $result = $db->count();
-
+        
         if (PHPWS_Error::logIfError($result)) {
             throw new DatabaseException('Unexpected error in has_roommate_request');
         }
@@ -371,6 +386,7 @@ class HMS_Roommate
      */
     public function get_all_roommates($asu_username, $term)
     {
+        /*
         $db = new PHPWS_DB('hms_roommate');
         $db->addWhere('requestor', $asu_username, 'ILIKE', 'OR', 'grp');
         $db->addWhere('requestee', $asu_username, 'ILIKE', 'OR', 'grp');
@@ -381,8 +397,17 @@ class HMS_Roommate
         if (PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         }
-
-        return $result;
+        */
+        
+        PHPWS_Core::initCoreClass('PdoFactory.php');
+        $db = PdoFactory::getInstance()->getPdo();
+        
+        $stmt = $db->prepare("SELECT * FROM hms_roommate WHERE (requestor ILIKE :user OR requestee ILIKE :user) AND term = :term");
+        $stmt->bindParam(':user', $asu_username);
+        $stmt->bindParam(':term', $term);
+        
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**
@@ -391,6 +416,7 @@ class HMS_Roommate
      */
     public function removeOutstandingRequests($asu_username, $term)
     {
+        /*
         $db = new PHPWS_DB('hms_roommate');
         $db->addWhere('requestee', $asu_username, 'ILIKE', NULL, 'username_group');
         $db->addWhere('requestor', $asu_username, 'ILIKE', 'OR', 'username_group');
@@ -403,12 +429,24 @@ class HMS_Roommate
         if (PHPWS_Error::logIfError($requests)) {
             throw new DatabaseException('Could not remove outstanding requests');
         }
+        */
+        
+        PHPWS_Core::initCoreClass('PdoFactory.php');
+        $db = PdoFactory::getInstance()->getPdo();
+        
+        $query = $db->prepare("SELECT * FROM hms_roommate WHERE (requestee ILIKE :user OR requestor ILIKE :user) AND term = :term AND confirmed = 0");
+        $query->bindParam(':term', $term);
+        $query->bindParam(':user', $asu_username);
+        
+        $query->execute();
+        $requests = $query->fetchAll(PDO::FETCH_CLASS, "HMS_Roommate");
 
-        if ($requests == null)
-        return true;
+        if ($requests == null) {
+            return true;
+        }
 
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-        foreach($requests as $request) {
+        foreach ($requests as $request) {
             HMS_Activity_Log::log_activity($request->requestor, ACTIVITY_AUTO_CANCEL_ROOMMATE_REQ, UserStatus::getUsername(), "$request->requestee: Due to confirmed roommate");
             HMS_Activity_Log::log_activity($request->requestee, ACTIVITY_AUTO_CANCEL_ROOMMATE_REQ, UserStatus::getUsername(), "$request->requestor: Due to confirmed roommate");
             $request->delete();
@@ -417,7 +455,10 @@ class HMS_Roommate
         return true;
     }
 
-    // Depricated per ticket #530
+    /**
+     * Depricated per ticket #530
+     * @deprecated
+     */
     public function check_rlc_applications()
     {
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
@@ -446,7 +487,10 @@ class HMS_Roommate
         return false;
     }
 
-    // Depricated per ticket #530
+    /**
+     * Depricated per ticket #530
+     * @deprecated
+     */
     public function check_rlc_assignments()
     {
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
