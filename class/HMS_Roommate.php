@@ -282,7 +282,9 @@ class HMS_Roommate
         $stmt = $db->prepare("SELECT * FROM hms_roommate WHERE (requestor ILIKE :user OR requestee ILIKE :user) AND term = :term AND confirmed = 0 and requested_on >= :ttl");
         $stmt->bindParam(':user', $asu_username);
         $stmt->bindParam(':term', $term);
-        $stmt->bindParam(':ttl', mktime() - ROOMMATE_REQ_TIMEOUT);
+        
+        $ttl = mktime() - ROOMMATE_REQ_TIMEOUT;
+        $stmt->bindParam(':ttl', $ttl);
         
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
