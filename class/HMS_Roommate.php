@@ -409,7 +409,7 @@ class HMS_Roommate
         $stmt->bindParam(':term', $term);
         
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $stmt->fetchAll(PDO::FETCH_CLASS, "HMS_Roommate");
     }
 
     /**
