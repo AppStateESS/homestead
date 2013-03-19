@@ -12,7 +12,7 @@
     <!-- BEGIN login -->
     <div style="margin-top: 75px; font-size: 14px;">
     <strong><a href="{LOGIN_LINK}"><img align="center" src="images/mod/hms/tango/edit-redo.png"></a><a href="{LOGIN_LINK}">Log In</a></strong></div>
-    <em style="font-size: 10px;">Use your AppalNet user name and password,<br /><strong>NOT</strong> your First Connections password.</em>
+    <em style="font-size: 10px;">Use your AppalNet user name and password,<br /><strong>NOT</strong> your myApp password.</em>
     </div>
     <!-- END login -->
 
