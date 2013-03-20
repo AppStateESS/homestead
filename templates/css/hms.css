@@ -451,7 +451,7 @@ img.roommate_request_icon {
   margin-left: 20px;
 }
 
-.overlay {
+.floor_overlay {
   background: white;
   border: solid thin black;
 }

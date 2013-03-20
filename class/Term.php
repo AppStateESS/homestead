@@ -406,6 +406,20 @@ class Term
 
         return $terms;
     }
+    
+    /**
+     * Returns the term code for the same term in the previous year.
+     * 
+     * @param integer $term
+     * @return string
+     */
+    public static function getPreviousYear($term)
+    {
+        $year = self::getTermYear($term);
+        $sem  = self::getTermSem($term);
+        
+        return ($year - 1) . $sem;
+    }
 }
 
 ?>

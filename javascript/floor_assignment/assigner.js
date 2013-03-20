@@ -69,7 +69,7 @@ var AssignWidget = function(div, semaphore){
     this.getOverlay = function(){
         var offset = $(this.div).offset();
         var height = $(this.div).height();
-        var output = '<div id="overlay_'+this.bed+'" class="overlay" style="position: absolute; top: '+(offset.top+height)+'px; left: '+offset.left+'px;">';
+        var output = '<div id="floor_overlay_'+this.bed+'" class="overlay" style="position: absolute; top: '+(offset.top+height)+'px; left: '+offset.left+'px;">';
                
         output += '<table>';
         output += '<tr><th>Username</th><td><input id="username_'+this.bed+'" class="username-input" type="text" value="'+this.username+'" /></td></tr>';
