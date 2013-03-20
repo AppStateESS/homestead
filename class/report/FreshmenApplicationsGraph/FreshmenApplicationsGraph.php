@@ -35,14 +35,13 @@ class FreshmenApplicationsGraph extends Report {
     {
         $this->lastTerm = Term::getPreviousYear($this->term);
         
-        $thisTermData     = $this->getCumulativeCountsByTerm($this->term);
-        test($thisTermData,1);
+        $thisTermDate     = $this->getCumulativeCountsByTerm($this->term);
         
         $previousTermData = $this->getCumulativeCountsByTerm($this->lastTerm);
         
         // Subtract a year's worth of seconds from this year's records to make them line up on the graph with last year's
         $newArray = array();
-        foreach($thisTermData as $point) {
+        foreach($thisTermDate as $point) {
             $newArray[] = array('date'=>($point['date'] - 31536000), 'running_total'=>$point['running_total']);
         }
         
@@ -102,8 +101,6 @@ class FreshmenApplicationsGraph extends Report {
                 AND student_type = 'F'
                 GROUP BY date
                 ORDER BY date";
-        
-        test($query,1);
         
         $stmt = $db->prepare($query);
         $stmt->bindParam(':term', $term);
