@@ -1,13 +1,23 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'View.php');
-
+/**
+ * View for showing the Assign Student interface.
+ * 
+ * @author jbooker
+ * @package hms
+ */
 class AssignStudentView extends View {
 
     private $student;
     private $bed;
     private $application;
 
+    /**
+     * 
+     * @param Student $student
+     * @param HMS_Bed $bed
+     * @param HousingApplication $application
+     */
     public function __construct(Student $student = null, HMS_Bed $bed = null, HousingApplication $application = null){
 
         $this->student     = $student;
@@ -15,13 +25,17 @@ class AssignStudentView extends View {
         $this->application = $application;
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see View::show()
+     */
     public function show()
     {
         PHPWS_Core::initCoreClass('Form.php');
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
         PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
 
-        if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'assignment_maintenance')){
+        if (!UserStatus::isAdmin() || !Current_User::allow('hms', 'assignment_maintenance')) {
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to unassign students.');
         }
@@ -40,7 +54,7 @@ class AssignStudentView extends View {
 
         $form->addText('username');
         $form->setLabel('username', 'ASU Username: ');
-        if(isset($this->student)){
+        if (isset($this->student)) {
             $form->setValue('username', $this->student->getUsername());
         }
 
@@ -56,13 +70,13 @@ class AssignStudentView extends View {
         # the drop downs.
         unset($pre_populate);
 
-        if(isset($this->bed)){
+        if (isset($this->bed)) {
             $pre_populate = true;
 
             $room = $this->bed->get_parent();
             $floor = $room->get_parent();
             $hall = $floor->get_parent();
-        }else{
+        } else {
             $pre_populate = false;
         }
 
@@ -70,43 +84,43 @@ class AssignStudentView extends View {
 
         $form->addDropBox('residence_hall', $hallList);
 
-        if($pre_populate){
+        if ($pre_populate){
             $form->setMatch('residence_hall', $hall->id);
-        }else{
+        } else {
             $form->setMatch('residence_hall', 0);
         }
         $form->setLabel('residence_hall', 'Residence hall: ');
 
-        if($pre_populate){
+        if ($pre_populate) {
             $form->addDropBox('floor', $hall->get_floors_array());
             $form->setMatch('floor', $floor->id);
-        }else{
+        } else {
             $form->addDropBox('floor', array(0 => ''));
         }
         $form->setLabel('floor', 'Floor: ');
 
-        if($pre_populate){
+        if ($pre_populate) {
             $form->addDropBox('room', $floor->get_rooms_array());
             $form->setMatch('room', $room->id);
-        }else{
+        } else {
             $form->addDropBox('room', array(0 => ''));
         }
         $form->setLabel('room', 'Room: ');
 
-        if($pre_populate){
+        if ($pre_populate) {
             $form->addDropBox('bed', $room->get_beds_array());
             $form->setMatch('bed', $this->bed->id);
             $show_bed_drop = true;
-        }else{
+        } else {
             $form->addDropBox('bed', array(0 => ''));
             $show_bed_drop = false;
         }
         $form->setLabel('bed', 'Bed: ');
 
-        if($show_bed_drop){
+        if ($show_bed_drop) {
             $tpl['BED_STYLE'] = '';
             $tpl['LINK_STYLE'] = 'display: none';
-        }else{
+        } else {
             $tpl['BED_STYLE'] = 'display: none';
             $tpl['LINK_STYLE'] = '';
         }
@@ -124,17 +138,18 @@ class AssignStudentView extends View {
 
         // If the username was passed in, and that student has a meal plan
         // pre-select the student's chosen meal plan
-        if(isset($this->application)){
+        if (isset($this->application)) {
             $form->setMatch('meal_plan', $this->application->getMealPlan());
-        }else{
+        } else {
             // Otherwise, select 'standard' meal plan
             $form->setMatch('meal_plan', BANNER_MEAL_STD);
         }
 
-        // "Assignment Type"
+        // "Assignment Type", see defines.php for declarations
         $form->addDropBox('assignment_type', array(
                 -1                       => 'Choose assignment type...',
                 ASSIGN_ADMIN             => 'Administrative',
+                ASSIGN_APPEALS           => 'Appeals',
                 ASSIGN_LOTTERY	         => 'Lottery',
                 ASSIGN_FR   	         => 'Freshmen',
                 ASSIGN_TRANSFER          => 'Transfer',
@@ -160,9 +175,9 @@ class AssignStudentView extends View {
 
         $form->addSubmit('submit', 'Assign Student');
 
-        if($pre_populate){
+        if ($pre_populate) {
             $form->addHidden('use_bed', 'true');
-        }else{
+        } else {
             $form->addHidden('use_bed', 'false');
         }
 

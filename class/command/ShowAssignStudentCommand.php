@@ -1,37 +1,62 @@
 <?php
 
+/**
+ * Controller for showing the Assign Student view. 
+ * 
+ * @author jbooker
+ * @package hms
+ */
 class ShowAssignStudentCommand extends Command {
 
     private $username;
     private $bedId;
 
-    function setUsername($username){
+    /**
+     * Sets the default username to pre-populate the assignment interface with.
+     * @param string $username
+     */
+    function setUsername($username)
+    {
         $this->username = $username;
     }
 
-    function setBedId($id){
+    /**
+     * Sets the bed ID to pre-populate the assignment interface with.
+     * @param unknown $id
+     */
+    function setBedId($id)
+    {
         $this->bedId = $id;
     }
 
-    function getRequestVars(){
+    /**
+     * (non-PHPdoc)
+     * @see Command::getRequestVars()
+     */
+    function getRequestVars()
+    {
         $vars = array();
 
         $vars['action'] = 'ShowAssignStudent';
 
-        if(isset($this->username)){
+        if (isset($this->username)) {
             $vars['username'] = $this->username;
         }
 
-        if(isset($this->bedId)){
+        if (isset($this->bedId)) {
             $vars['bedId'] = $this->bedId;
         }
 
         return $vars;
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see Command::execute()
+     */
     function execute(CommandContext $context)
     {
-        if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'assignment_maintenance')){
+        if (!UserStatus::isAdmin() || !Current_User::allow('hms', 'assignment_maintenance')) {
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to assign students.');
         }
@@ -47,27 +72,27 @@ class ShowAssignStudentCommand extends Command {
 
         $term = Term::getSelectedTerm();
         
-        if(isset($bedId) && !is_null($bedId) && !empty($bedId)){
+        if (isset($bedId) && !is_null($bedId) && !empty($bedId)) {
             $bed = new HMS_Bed($bedId);
-        }else{
+        } else {
             $bed = null;
         }
 
-        if(isset($username)){
-            try{
+        if (isset($username)) {
+            try {
                 $student = StudentFactory::getStudentByUsername($context->get('username'), $term);
-            }catch (InvalidArgumentException $e){
+            } catch (InvalidArgumentException $e) {
                 NQ::simple('hms', HMS_NOTIFICATION_ERROR, $e->getMessage());
                 $cmd = CommandFactory::getCommand('ShowAssignStudent');
                 $cmd->redirect();
-            }catch (StudentNotFoundException $e){
+            } catch (StudentNotFoundException $e) {
                 NQ::simple('hms', HMS_NOTIFICATION_ERROR, $e->getMessage());
                 $cmd = CommandFactory::getCommand('ShowAssignStudent');
                 $cmd->redirect();
             }
             
             $application = HousingApplicationFactory::getAppByStudent($student, $term);
-        }else{
+        } else {
             $student     = null;
             $application = null;
         }

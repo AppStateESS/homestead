@@ -100,6 +100,7 @@ define('ADMISSION_RESCIND',        'RE');
 
 // Default
 define('ASSIGN_ADMIN', 		'admin'); // general administrative
+define('ASSIGN_APPEALS',    'appeals'); // Appeal (waiting list, etc)
 
 // General Populations
 define('ASSIGN_LOTTERY',     'lottery');
@@ -157,6 +158,7 @@ define('UNASSIGN_RELEASE',    'urelease'); // Contract release
  * Pretty Names for Assign/Cancel Reasons
  */
 define('admin', 	'Administrative');
+define('appeals',   'Appeals');
 
 define('lottery', 	'Lottery');
 define('auto_assign',		'Auto-Assigned');
