@@ -23,7 +23,7 @@ class Student {
 
     public $student_level;
     public $international;
-    
+
     public $admissions_decision_code;
     public $admissions_decision_desc;
 
@@ -61,31 +61,38 @@ class Student {
     {
         $gender = $this->getGender();
 
-        // NB: Must use '===' operator, because == operator will match an empty string for FEMALE (0)
-        if ($gender === FEMALE) {
+        if ($gender == '' || is_null($gender)) {
+            throw new InvalidArgumentException('Missing gender.');
+        }
+
+        if ($gender == FEMALE) {
             return FEMALE_DESC;
-        } else if ($gender === MALE) {
+        } else if ($gender == MALE) {
             return MALE_DESC;
         }
-        
+
         // If we make it here, there's a big problem.
-        throw new InvalidArgumentException('Missing or invalid gender.');
+        throw new InvalidArgumentException('Invalid gender.');
     }
 
     public function getPrintableGenderAbbreviation()
     {
-    switch($this->getGender()){
-            case FEMALE:
-                return 'F';
-                break;
-            case MALE:
-                return 'M';
-                break;
-            default:
-                return 'Invalid gender';
+        $gender = $this->getGender();
+
+        if ($gender == '' || is_null($gender)) {
+            throw new InvalidArgumentException('Missing gender.');
         }
+
+        if ($gender == FEMALE) {
+            return 'F';
+        } else if ($gender == MALE) {
+            return 'M';
+        }
+
+        // If we make it here, there's a big problem.
+        throw new InvalidArgumentException('Invalid gender.');
     }
-    
+
     public function getPrintableType()
     {
         switch($this->getType()){
@@ -115,7 +122,7 @@ class Student {
                 break;
             default:
                 return 'Unknown type: ' . $this->type;
-            break;
+                break;
         }
     }
 
@@ -215,14 +222,14 @@ class Student {
         if(is_null($type)){
             # Return the pr address, if it exists
             if(!is_null($pr_address)){
-            return $pr_address;
-            # Since there was no ps address, return the ps address, if it exists
-        }else if(!is_null($ps_address)){
-            return $ps_address;
-        }else{
-            # No address found, return false
-            return false;
-        }
+                return $pr_address;
+                # Since there was no ps address, return the ps address, if it exists
+            }else if(!is_null($ps_address)){
+                return $ps_address;
+            }else{
+                # No address found, return false
+                return false;
+            }
         }else if($type == ADDRESS_PRMT_RESIDENCE && !is_null($pr_address)){
             return $pr_address;
         }else if($type == ADDRESS_PRMT_STUDENT && !is_null($ps_address)){
@@ -277,18 +284,18 @@ class Student {
             // The application term is greater than the current term, then they're certainly a freshmen
             return CLASS_FRESHMEN;
         }else if(
-        ($yr == $curr_year + 1 && $sem = 10) ||
-        ($yr == $curr_year && $sem >= 20 && $sem <= 40)) {
+                ($yr == $curr_year + 1 && $sem = 10) ||
+                ($yr == $curr_year && $sem >= 20 && $sem <= 40)) {
             // freshmen
             return CLASS_FRESHMEN;
         }else if(
-        ($yr == $curr_year && $sem == 10) ||
-        ($yr + 1 == $curr_year && $sem >= 20 && $sem <= 40)) {
+                ($yr == $curr_year && $sem == 10) ||
+                ($yr + 1 == $curr_year && $sem >= 20 && $sem <= 40)) {
             // soph
             return CLASS_SOPHOMORE;
         }else if(
-        ($yr + 1 == $curr_year && $sem == 10) ||
-        ($yr + 2 == $curr_year && $sem >= 20 && $sem <= 40)) {
+                ($yr + 1 == $curr_year && $sem == 10) ||
+                ($yr + 2 == $curr_year && $sem >= 20 && $sem <= 40)) {
             // jr
             return CLASS_JUNIOR;
         }else{
@@ -356,7 +363,7 @@ class Student {
     public function setDOB($dob){
         $this->dob = $dob;
     }
-    
+
     public function getGender()
     {
         return $this->gender;
@@ -484,7 +491,7 @@ class Student {
     public function getAdmissionDecisionCode(){
         return $this->admissions_decision_code;
     }
-    
+
     public function setAdmissionDecisionCode($code){
         $this->admissions_decision_code = $code;
     }
@@ -496,7 +503,7 @@ class Student {
     public function setAdmissionDecisionDesc($desc){
         $this->admissions_decision_desc = $desc;
     }
-    
+
     public function getAddressList(){
         return $this->addressList;
     }
