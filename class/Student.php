@@ -59,16 +59,17 @@ class Student {
 
     public function getPrintableGender()
     {
-        switch($this->getGender()){
-            case FEMALE:
-                return FEMALE_DESC;
-                break;
-            case MALE:
-                return MALE_DESC;
-                break;
-            default:
-                return 'Invalid gender';
+        $gender = $this->getGender();
+
+        // NB: Must use '===' operator, because == operator will match an empty string for FEMALE (0)
+        if ($gender === FEMALE) {
+            return FEMALE_DESC;
+        } else if ($gender === MALE) {
+            return MALE_DESC;
         }
+        
+        // If we make it here, there's a big problem.
+        throw new InvalidArgumentException('Missing or invalid gender.');
     }
 
     public function getPrintableGenderAbbreviation()
