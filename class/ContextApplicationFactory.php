@@ -161,7 +161,7 @@ class SummerContextApplicationFactory extends ContextApplicationFactory {
     public function populateApplicationSpecificFields()
     {
         $this->app->setApplicationType('summer');
-        //TODO single/double room
+        $this->app->setRoomType($this->context->get('room_type'));
     }
 }
 
