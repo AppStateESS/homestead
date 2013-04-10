@@ -79,7 +79,7 @@ class Student {
     {
         $gender = $this->getGender();
 
-        if ($gender == '' || is_null($gender)) {
+        if ($gender === '' || is_null($gender)) {
             throw new InvalidArgumentException('Missing gender.');
         }
 
