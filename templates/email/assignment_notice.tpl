@@ -1,34 +1,23 @@
 {DATE}
 
-{NAME},
+Dear {NAME},
 
-University Housing would like to welcome you to Appalachian State University and let you know we are preparing for your arrival.
+University Housing would like to welcome you to on-campus housing for the {TERM} academic school year. Our department is preparing for the upcoming school year and we look forward to having you on campus as a resident. Included are some important dates and information regarding the Residence Hall License Contract and a timeline for you to follow if adjustments need to be made.
+ 
+According to our records you have been assigned to the following residence hall:
 
-You will find your housing assignment for {TERM} listed below. You may access additional information about living in the residence halls online at http://housing.appstate.edu/assignmentinfo .
+{LOCATION}
 
-Room Assignment Information
----------------------------
-Assignment: {LOCATION}
-<!-- BEGIN roommate_text -->
-Roommates:
-<!-- BEGIN roommates -->
-            {ROOMMATE}
-<!-- END roommates -->
-<!-- END roommate_text -->
+If you are a new, incoming freshman receiving this notification, you have been assigned and are obligated to the terms and conditions of the University Housing Residence Hall License Contract.
 
-<!-- BEGIN movein_time -->
-Check-in Time: {MOVE_IN_TIME} 
-<!-- END movein_time -->
-
-Freshmen check-in times are Friday, August 19th, 2011, 9am-12pm and 1pm-4pm, depending upon your assignment (see above). Upperclassmen check-in is Saturday, August 20th, 2011, 9am-5pm.
-
-*Note*: If you receive more than one housing assignment notification, then a change has been made in some way to your assignment (room change, roommate change, etc.), and the new notification overrides all previous notifications.  
-
-Should you have any questions, please feel free to contact our office at 828-262-6111 or 828-262-2278. You may also visit our website at: http://housing.appstate.edu/ .
+According to Page 2, Section C in the Residence Hall License Contract, University Housing reserves the right to make consolidations and changes to room assignments if needed between now and July. Your official assignment will be sent to your ASU email address mid-July.
+ 
+As an upper classman, if you find that you do not need on-campus housing for the upcoming year, please contact our department in writing by sending an email to uha@appstate.edu. Non-freshman students who cancel their contract between now and June 30, 2013 will be charged a non-refundable $250 administration fee. Non-freshman students who cancel their housing contract AFTER June 30, 2013 will be charged the FULL semester amount of the residence hall rate to their student account.
+ 
+Please feel free to contact our office by email with any questions. You may view your assignment and checklist by visiting http://hms.appstate.edu.  We encourage you to check your ASU email and visit the Appalachian State University Housing Facebook page often for updated information from our department.
 
 Sincerely,
 
-Stacy R. Sears
-
-Associate Director
+Assignments 
 University Housing
+828.262.6111
