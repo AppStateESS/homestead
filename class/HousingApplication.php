@@ -1153,7 +1153,8 @@ class HousingApplication {
                 CANCEL_AFTER_JULY    => 'Cancel After July',
                 CANCEL_WITHDRAWN     => 'Withdrawn',
                 CANCEL_INTENT        => 'Intent Not to Return',
-                CANCEL_BEFORE_ASSIGN => 'Cancel Before Assignment'
+                CANCEL_BEFORE_ASSIGN => 'Cancel Before Assignment',
+                CANCEL_OFFER_MADE    => 'Offer Made, No Response'
         );
     }
 }

@@ -65,9 +65,9 @@ class AssignStudentView extends View {
 
         $form->addHidden('term', Term::getSelectedTerm());
 
-        # Check to see if a bed_id was passed in, this means
-        # the user clicked an 'unassigned' link. We need to pre-populate
-        # the drop downs.
+        // Check to see if a bed_id was passed in, this means
+        // the user clicked an 'unassigned' link. We need to pre-populate
+        // the drop downs.
         unset($pre_populate);
 
         if (isset($this->bed)) {
@@ -84,7 +84,7 @@ class AssignStudentView extends View {
 
         $form->addDropBox('residence_hall', $hallList);
 
-        if ($pre_populate){
+        if ($pre_populate) {
             $form->setMatch('residence_hall', $hall->id);
         } else {
             $form->setMatch('residence_hall', 0);

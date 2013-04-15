@@ -215,6 +215,7 @@ define('CANCEL_AFTER_JULY', 'after_july');
 define('CANCEL_WITHDRAWN', 'withdrawn');
 define('CANCEL_INTENT', 'intent_no_return');
 define('CANCEL_BEFORE_ASSIGN', 'before_assignment');
+define('CANCEL_OFFER_MADE', 'offer_made');
 
 
 /**
