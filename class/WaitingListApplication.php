@@ -186,6 +186,7 @@ class WaitingListApplication extends HousingApplication {
         $pager->db->addWhere('hms_new_application.psych_disability', 0);
         $pager->db->addWhere('hms_new_application.medical_need', 0);
         $pager->db->addWhere('hms_new_application.gender_need', 0);
+        $pager->db->addWhere('hms_new_application.cancelled', 0);
         
         //$query = "select username from hms_new_application UNION ALL select asu_username from hms_assignment";
         //$pager->db->setSQLQuery($query);

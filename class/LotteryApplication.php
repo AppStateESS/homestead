@@ -467,6 +467,7 @@ class LotteryApplication extends HousingApplication {
         $pager->db->addJoin('LEFT OUTER', 'hms_new_application', 'hms_assignment', 'username', 'asu_username AND hms_new_application.term = hms_assignment.term');
         $pager->db->addWhere('hms_assignment.asu_username', 'NULL');
         $pager->db->addWhere('hms_new_application.term', $term);
+        $pager->db->addWhere('hms_new_application.cancelled', 0);
         $pager->db->addWhere('hms_lottery_application.special_interest', 'NULL');
         $pager->db->addWhere('hms_lottery_application.waiting_list_date', 'NULL', '!=');
 
@@ -483,7 +484,7 @@ class LotteryApplication extends HousingApplication {
         $pager->addRowTags('waitingListTags');
         $pager->setReportRow('waitingListCsvTags');
         $pager->setSearch('hms_new_application.username', 'hms_new_application.banner_id');
-
+        
         return $pager->get();
     }
 
