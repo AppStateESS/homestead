@@ -48,8 +48,8 @@ class TwentyOne extends Report implements iCsvReport {
         }
 
         // Calculate the timestamp from 21 years ago
-        $twentyOneYearsAgo = strtotime("-25 years");
-
+        $twentyOneYearsAgo = strtotime("-21 years");
+        
         // Get all of the residence halls for this term
         $halls = HMS_Residence_Hall::get_halls($this->term);
 
