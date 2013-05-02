@@ -312,7 +312,7 @@ class HMS_Email{
 
         $tpl['TERM'] = Term::toString($term);
 
-        HMS_Email::send_template_message($to->getUsername() . TO_DOMAIN, 'On-campus Houisng Application Confirmation!', 'email/application_confirmation.tpl', $tpl);
+        HMS_Email::send_template_message($to->getUsername() . TO_DOMAIN, 'On-campus Housing Application Confirmation!', 'email/application_confirmation.tpl', $tpl);
     }
 
     /********************

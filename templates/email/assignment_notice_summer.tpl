@@ -25,7 +25,7 @@ Roommates:
 Check-in Time: {MOVE_IN_TIME} 
 <!-- END movein_time -->
 
-Move In is Thursday, June 28th from noon to 5pm. Check in at the Doughton Hall Office.
+Move In is Sunday, May 19th from noon to 5pm. Check in at the Cone Hall Office.
 
 Should you have any questions, please feel free to contact our office at 828-262-6111 or 828-262-2278. You may also visit our website at: 
 http://housing.appstate.edu/ .
