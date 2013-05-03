@@ -27,6 +27,8 @@ Check-in Time: {MOVE_IN_TIME}
 
 Move In is Sunday, May 19th from noon to 5pm. Check in at the Cone Hall Office.
 
+Please Check your Student Account. Charges for Housing and Meal plans for summer session 1 are now posted to your account for payment.
+
 Should you have any questions, please feel free to contact our office at 828-262-6111 or 828-262-2278. You may also visit our website at: 
 http://housing.appstate.edu/ .
 
