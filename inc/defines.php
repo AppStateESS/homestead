@@ -131,9 +131,15 @@ define('ASSIGN_INTL',       'international');
 define('ASSIGN_RA',          'ra');
 define('ASSIGN_RA_ROOMMATE', 'ra_roommate');
 
-// Special/medical needs needs
-define('ASSIGN_MEDICAL', 	'medical');
-define('ASSIGN_SPECIAL', 	'special');
+// Medical
+define('ASSIGN_MEDICAL_FRESHMEN','medical_freshmen');
+define('ASSIGN_MEDICAL_CONTINUING', 'medical_continuing');
+define('ASSIGN_MEDICAL', 	'medical'); // Deprecated
+
+// Special Needs
+define('ASSIGN_SPECIAL_FRESHMEN', 'special_freshmen');
+define('ASSIGN_SEPCIAL_CONTINUING', 'special_continuing');
+define('ASSIGN_SPECIAL', 	'special'); // Deprecated
 
 // RHA
 define('ASSIGN_RHA', 'rha');
@@ -182,9 +188,16 @@ define('international', 'International');
 define('ra', 'RA');
 define('ra_roommate', 'RA Roommate');
 
+// Medical
+define('medical_freshmen', 'Medical Freshmen');
+define('medical_continuing', 'Medical Continuing');
 
-define('medical', 	'Medical');
-define('special',	'Special Needs');
+// Special Needs
+define('special_freshmen', 'Special Needs Freshmen');
+define('special_continuing', 'Special Needs Continuing');
+
+define('medical', 	'Medical (general)'); // Deprecated
+define('special',	'Special Needs (general)'); // Deprecated
 
 define('rha', 'RHA');
 define('scholars', 'Plemmons & Diversity');
