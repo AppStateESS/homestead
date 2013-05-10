@@ -14,7 +14,6 @@
         <tr>
           <th>Name {USER_ID_SORT}</th>
           <th>Final RLC {RLC_ID_SORT}</th>
-          <th>Roommate</th>
           <th>Address</th>
           <th>Phone/Email</th>
         </tr>
@@ -27,7 +26,6 @@
         <tr {TOGGLE}>
           <td>{NAME}</td>
           <td>{FINAL_RLC}</td>
-          <td>{ROOMMATE}</td>
           <td>{ADDRESS}</td>
           <td>{PHONE}<br />{EMAIL}</td>
         </tr>

@@ -17,7 +17,7 @@ class HMS_RLC_Assignment {
     public $gender;
     public $assigned_by_user;
     public $application_id;
-    
+
     public $state;           // db text field for state name
     public $assignmentState; // An RlcAssignmentState object
 
@@ -129,14 +129,14 @@ class HMS_RLC_Assignment {
     {
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
         $application = new HMS_RLC_Application($this->getApplicationId());
-        
+
         if(!isset($application)){
             throw Exception('Could not load RLC application.');
         }
-        
+
         return $application;
     }
-    
+
     public function changeState(RlcAssignmentState $newState)
     {
         // Save the new state's name, catching any exceptions
@@ -147,14 +147,14 @@ class HMS_RLC_Assignment {
             throw $e;
             return;
         }
-    
+
         // If we made it this far, then do the onEnter stuff
         $newState->onEnter();
     }
-    
+
     /******************
      * Static methods *
-     */
+    */
 
     /**
      * Check to see if an assignment already exists for the specified user.  Returns FALSE if no assignment
@@ -270,11 +270,13 @@ class HMS_RLC_Assignment {
 
         $tags['NAME']      = $student->getFullNameProfileLink();
         $tags['FINAL_RLC'] = $rlc_list[$this->getRlcId()];
-        $tags['ROOMMATE']  = '';
+
+        // Not sure why this line was here but was always empty, so I commented it out for now
+        //$tags['ROOMMATE']  = '';
 
         $addr = $student->getAddress();
         if($addr !== FALSE && !is_null($addr)){
-            $tags['ADDRESS'] = $student->getAddressLine(null);
+            $tags['ADDRESS'] = $student->getAddressLine();
         }
 
         $phones = $student->getPhoneNumberList();
@@ -289,7 +291,7 @@ class HMS_RLC_Assignment {
         return $tags;
     }
 
-    /*
+    /**
      * getAdminCsvRow
      *
      *  This function converts the output of the adminPagerTags function
@@ -300,23 +302,67 @@ class HMS_RLC_Assignment {
      */
     public function getAdminCsvRow()
     {
-        $input  = $this->getAdminPagerTags();
-        $output = array();
+        PHPWS_Core::initModClass('hms','HMS_Learning_Community.php');
+        PHPWS_Core::initModClass('hms', 'HousingApplicationFactory.php');
 
-        $student       = StudentFactory::getStudentByUsername($this->username, $this->term);
-        $input['NAME'] = $student->getFullName();
+        $row = array();
 
-        foreach($input as $key=>$value){
-            //upercase the first letter of every word, and remove underscores in the array key
-            $output[ucwords(strtolower(preg_replace('/_/', ' ', $key)))] = $value;
+        // Get the RLC Application
+        $rlcApp = $this->getApplication();
+
+        // Get list of RLC names
+        $rlcList = HMS_Learning_Community::getRLCListAbbr();
+
+        // Get the student object
+        $student = StudentFactory::getStudentByUsername($this->username, $this->term);
+
+        // Get Housing App object
+        $housingApp = HousingApplicationFactory::getAppByStudent($student, $rlcApp->getTerm());
+
+        // Student info
+        $row['name']         = $student->getFullName();
+        $row['banner_id']    = $student->getBannerId();
+        $row['email']        = $student->getUsername();
+        $row['gender']       = $student->getPrintableGender();
+
+        // RLC info
+        $row['rlc']    = $rlcList[$this->getRlcId()];
+
+        // Address columns
+        $addressObj = $student->getAddress();
+        if (isset($addressObj) && !is_null($addressObj)) {
+            $address = (Array) $addressObj;
+            unset($address['county']); // Remove the county column, don't want it
+            unset($address['atyp_code']); // Remove the address type column
+            $row += $address;
+        } else {
+            // Provide empty columns so the alignment of the csv file doesn't get screwed up
+            $row['line1'] = '';
+            $row['line2'] = '';
+            $row['city'] = '';
+            $row['state'] = '';
+            $row['zip'] = '';
         }
 
-        return $output;
+        // Phone number
+        if ($cellPhone instanceof HousingApplication) {
+            $cellPhone = $housingApp->getCellPhone();
+            if (isset($cellPhone) && $cellPhone != '') {
+                $row['cell_phone'] = $cellPhone;
+            } else {
+                // Provide empty columns so the alignment of the csv file doesn't get screwed up
+                $row['cell_phone'] = '';
+            }
+        } else {
+            $row['cell_phone'] = '';
+        }
+
+        return $row;
     }
-    
+
     /***********************
      * Accessor / Mutators *
-     */
+    */
 
     public function setId($id) {
         $this->id = $id;
@@ -353,7 +399,7 @@ class HMS_RLC_Assignment {
     public function getApplicationId(){
         return $this->application_id;
     }
-    
+
     public function setAssignedByInitials($assigned_by_initials) {
         $this->assigned_by_initials = $assigned_by_initials;
     }
@@ -361,7 +407,7 @@ class HMS_RLC_Assignment {
     public function getAssignedByInitials() {
         return $this->assigned_by_initials;
     }
-    
+
     public function getStateName(){
         return $this->state;
     }
