@@ -28,7 +28,7 @@ class CheckinStartView extends View {
         $submitCmd->initForm($form);
 
         if(count($this->halls) > 1){
-            $form->addDropbox('residence_hall', array(0 => "Select a hall..") + $this->halls);
+            $form->addDropbox('residence_hall', array(0 => 'Select a hall..') + $this->halls);
             $form->setLabel('residence_hall', 'Residence Hall');
             $form->addHidden('residence_hall_hidden');
         }else{

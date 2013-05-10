@@ -113,6 +113,32 @@ CREATE TABLE hms_movein_time (
 );
 ALTER TABLE hms_movein_time ADD CONSTRAINT unique_time UNIQUE (begin_timestamp, end_timestamp, term);
 
+CREATE TABLE hms_package_desk (
+    id          integer NOT NULL,
+    name        character varying,
+    location    character varying,
+    street      character varying,
+    city        character varying,
+    state       character varying,
+    zip         character varying,
+    PRIMARY KEY(id)
+);
+
+CREATE TABLE hms_package (
+    id                  integer NOT NULL,
+    carrier             character varying,
+    tacking_number      character varying,
+    addressed_to        character varying,
+    addressed_phone     character varying,
+    recipient_banner_id integer NOT NULL,
+    received_on         integer NOT NULL,
+    received_by         character varying,
+    package_desk        integer NOT NULL references hms_package_desk(id),
+    pickedup_on         integer,
+    released_by         character varying,
+    PRIMARY KEY(id)
+);
+
 CREATE TABLE hms_residence_hall (
     id                          integer NOT NULL,
     term                        integer NOT NULL REFERENCES hms_term(term),
@@ -131,6 +157,7 @@ CREATE TABLE hms_residence_hall (
     map_image_id                integer DEFAULT 0,
     room_plan_image_id          integer DEFAULT 0,
     assignment_notifications    integer NOT NULL DEFAULT 1,
+    package_desk				integer NOT NULL REFERENCES hms_package_desk(id),
     primary key(id)
 );
 
