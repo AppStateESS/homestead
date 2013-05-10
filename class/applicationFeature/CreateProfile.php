@@ -29,7 +29,7 @@ class CreateProfile extends ApplicationFeature {
     public function getMenuBlockView(Student $student)
     {
         PHPWS_Core::initModClass('hms', 'RoommateProfile.php');
-        $profile = RoommateProfile::getProfile($student->getUsername(), $student->getApplicationTerm());
+        $profile = RoommateProfile::getProfile($student->getUsername(), $this->term);
         
         PHPWS_Core::initModClass('hms', 'StudentMenuProfileView.php');
         return new StudentMenuProfileView($student, $this->getStartDate(), $this->getEndDate(), $this->term, $profile);

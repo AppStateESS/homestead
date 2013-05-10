@@ -26,20 +26,20 @@ class StudentMenuProfileView extends View {
         $tpl['DATES'] = HMS_Util::getPrettyDateRange($this->startDate, $this->endDate);
         $tpl['STATUS'] = "";
         
-        if(isset($this->profile) && !is_null($this->profile)){
+        if (isset($this->profile) && !is_null($this->profile)) {
             $tpl['ICON'] = FEATURE_COMPLETED_ICON;
             $editCmd = CommandFactory::getCommand('ShowRoommateProfileForm');
             $editCmd->setTerm($this->term);
             $tpl['EDIT_PROFILE'] = $editCmd->getLink('view and edit your profile');
-        } else if(time() < $this->startDate){
+        } else if (time() < $this->startDate) {
             $tpl['ICON'] = FEATURE_LOCKED_ICON;
             $tpl['BEGIN_DEADLINE'] = HMS_Util::getFriendlyDate($this->startDate);
-        }else if(time() > $this->endDate){
+        } else if (time() > $this->endDate) {
             $tpl['END_DEADLINE'] = HMS_Util::getFriendlyDate($this->endDate);
             // fade out header
             $tpl['STATUS'] = "locked";
             $tpl['ICON'] = FEATURE_LOCKED_ICON;
-        }else{
+        } else {
             $tpl['ICON'] = FEATURE_OPEN_ICON;
             $createCmd = CommandFactory::getCommand('ShowRoommateProfileForm');
             $createCmd->setTerm($this->term);
