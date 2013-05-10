@@ -205,7 +205,7 @@ class Student {
      * ADDRESS_PRMT_RESIDENCE ('PR' - permanent residence)
      * ADDRESS_PRMT_STUDENT   ('PS' - permanent student)
      */
-    public function getAddress($type = ADDRESS_PRMT_RESIDENCE)
+    public function getAddress($type = null)
     {
         $pr_address = null;
         $ps_address = null;
@@ -249,9 +249,9 @@ class Student {
      * "line1, (line 2, )(line 3, )city, state, zip"
      * @param $addrType String Two letter address type code, same as for getAddress()
      */
-    public function getAddressLine($addrType = null)
+    public function getAddressLine()
     {
-        $addr = $this->getAddress($addrType);
+        $addr = $this->getAddress();
 
         if(!$addr){
             return false;
