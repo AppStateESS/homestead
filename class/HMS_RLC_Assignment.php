@@ -276,7 +276,7 @@ class HMS_RLC_Assignment {
 
         $addr = $student->getAddress();
         if($addr !== FALSE && !is_null($addr)){
-            $tags['ADDRESS'] = $student->getAddress();
+            $tags['ADDRESS'] = $student->getAddressLine();
         }
 
         $phones = $student->getPhoneNumberList();
