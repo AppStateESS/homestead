@@ -131,10 +131,9 @@ class HMS_RLC_Application extends HMS_Item
         $application_date = isset($this->date_submitted) ? HMS_Util::get_long_date($this->date_submitted) : 'Error with the submission date';
 
         $roomie = null;
-        if(HMS_Roommate::has_confirmed_roommate($this->username, $term)) {
+        if (HMS_Roommate::has_confirmed_roommate($this->username, $term)) {
             $roomie = HMS_Roommate::get_Confirmed_roommate($this->username, $term);
-        }
-        elseif(HMS_Roommate::has_roommate_request($this->username, $term)) {
+        } elseif(HMS_Roommate::has_roommate_request($this->username, $term)) {
             $roomie = HMS_Roommate::get_unconfirmed_roommate($this->username, $term) . ' *pending* ';
         }
 
@@ -142,7 +141,13 @@ class HMS_RLC_Application extends HMS_Item
         $row['first_name']          = $student->getFirstName();
         $row['middle_name']         = $student->getMiddleName();
         $row['gender']              = $student->getGender();
-        $row['roommate']            = $roomie;
+        
+        if ($roomie instanceof Student) {
+            $row['roommate']        = $roomie->getUsername();
+        } else {
+            $row['roommate']        = '';
+        }
+        
         $row['email']               = $student->getUsername() . '@appstate.edu';
         $row['second_choice']       = $this->getSecondChoice();
         $row['third_choice']        = $this->getThirdChoice();
