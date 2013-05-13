@@ -2,15 +2,24 @@
 
 class ShowRoommateProfileSearchCommand extends Command {
     
+    private $term;
+    
+    public function setTerm($term)
+    {
+        $this->term = $term;
+    }
+    
     public function getRequestVars()
     {
-        return array('action'=>'ShowRoommateProfileSearch');
+        return array('action' => 'ShowRoommateProfileSearch',
+                     'term'   => $this->term);
     }
     
     public function execute(CommandContext $context)
     {
         PHPWS_Core::initModClass('hms', 'RoommateProfileSearchForm.php');
-        $view = new RoommateProfileSearchForm();
+        $term = $context->get('term');
+        $view = new RoommateProfileSearchForm($term);
         
         $context->setContent($view->show());
     }

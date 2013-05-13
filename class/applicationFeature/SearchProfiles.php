@@ -33,7 +33,7 @@ class SearchProfiles extends ApplicationFeature {
         
         $profile = RoommateProfile::getProfile($student->getUsername(), $this->term);
         
-        return new SearchProfilesMenuBlockView($student, $this->getStartDate(), $this->getEndDate(), $profile);
+        return new SearchProfilesMenuBlockView($student, $this->getStartDate(), $this->getEndDate(), $profile, $this->term);
     }
 
 }

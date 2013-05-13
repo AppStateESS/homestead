@@ -227,7 +227,7 @@ class RoommateProfile{
     /*
      * Sets up the pager object for searching questionnairs.
      */
-    public static function profile_search_pager()
+    public static function profile_search_pager($term)
     {
         // get the current student's gender
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
@@ -247,7 +247,7 @@ class RoommateProfile{
 
         $pager = new DBPager('hms_student_profiles', 'RoommateProfile');
 
-        $pager->db->addWhere('term', $student->getApplicationTerm());
+        $pager->db->addWhere('term', $term);
 
         // Check to see if user is assigned to an RLC
         $rlc_assignment = HMS_RLC_Assignment::checkForAssignment($student->getUsername(), $student->getApplicationTerm());

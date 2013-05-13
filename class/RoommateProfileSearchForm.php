@@ -2,6 +2,13 @@
 
 class RoommateProfileSearchForm extends View {
 
+    private $term;
+    
+    public function __construct($term)
+    {
+        $this->term = $term;
+    }
+    
     public function show()
     {
         $_SESSION['profile_search_use_session'] = FALSE;
@@ -22,12 +29,13 @@ class RoommateProfileSearchForm extends View {
         $tags = array();
 
         $submitCmd = CommandFactory::getCommand('RoommateProfileSearch');
+        $submitCmd->setTerm($this->term);
 
         $form = new PHPWS_Form();
         $submitCmd->initForm($form);
         $form->setMethod('get');
         $form->useRowRepeat();
-
+        
         $form->addText('asu_username');
         $form->setLabel('asu_username','ASU Username: ');
 

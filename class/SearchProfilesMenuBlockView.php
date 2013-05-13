@@ -6,13 +6,15 @@ class SearchProfilesMenuBlockView extends View {
     private $startDate;
     private $endDate;
     private $profile;
+    private $term;
 
-    public function __construct(Student $student, $startDate, $endDate, $profile = NULL)
+    public function __construct(Student $student, $startDate, $endDate, $profile = NULL, $term)
     {
         $this->student = $student;
         $this->startDate = $startDate;
         $this->endDate = $endDate;
         $this->profile = $profile;
+        $this->term    = $term;
     }
 
     public function show()
@@ -36,6 +38,7 @@ class SearchProfilesMenuBlockView extends View {
         }else{
             $tpl['ICON'] = FEATURE_COMPLETED_ICON;
             $searchCmd = CommandFactory::getCommand('ShowRoommateProfileSearch');
+            $searchCmd->setTerm($this->term);
             $tpl['SEARCH_ROOMMATES'] = $searchCmd->getLink('Search roommate profiles.');
         }
 
