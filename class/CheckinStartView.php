@@ -34,6 +34,8 @@ class CheckinStartView extends View {
         }else{
             $keys = array_keys($this->halls);
             $form->addHidden('residence_hall_hidden', $keys[0]);
+            setcookie('hms-checkin-hall-id', $keys[0]); // Force the hall selection cookie to the one hall this user has
+            setcookie('hms-checkin-hall-name', $this->halls[$keys[0]]);
         }
 
         $form->addText('banner_id');
@@ -46,7 +48,7 @@ class CheckinStartView extends View {
 
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
-
+        
         return PHPWS_Template::process($tpl, 'hms', 'admin/checkinStart.tpl');
     }
 }

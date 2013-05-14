@@ -4,7 +4,7 @@
 
 	$().ready(function(){
 		
-		//console.log($.cookie("hms-checkin-hall-id"));
+		console.log($.cookie("hms-checkin-hall-id"));
 		
 		// Check if a hall has been saved in a cookie
 		var hallId = $.cookie("hms-checkin-hall-id");
@@ -82,8 +82,6 @@
 		// Save the selection to a cookie
 		$.cookie("hms-checkin-hall-id", hallId, 180);
 		$.cookie("hms-checkin-hall-name", hallName, 180);
-		
-		console.log($.cookie("hms-checkin-hall-id"));
 		
 		selectHall(hallId, hallName);
 	}

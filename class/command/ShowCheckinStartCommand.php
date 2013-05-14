@@ -29,6 +29,11 @@ class ShowCheckinStartCommand extends Command {
         PHPWS_Core::initModClass('hms', 'ResidenceHallFactory.php');
         $halls = ResidenceHallFactory::getHallNamesAssoc($term);
 
+        if (!isset($halls) || count($halls) < 1) {
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'No residence halls are setup for this term, so the check-in cannot be accessed.');
+            $context->goBack(); 
+        }
+        
         PHPWS_Core::initModClass('hms', 'CheckinStartView.php');
         $view = new CheckinStartView($halls, $term);
 

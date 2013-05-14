@@ -13,8 +13,9 @@
 
 <div id="searchBoxDiv" style="margin: auto; text-align: center">
 	{BANNER_ID_LABEL}: {BANNER_ID}
-	<br /><br />
-	{SUBMIT}
+	<div style="text-align:right;">
+	  {SUBMIT}
+	</div>
 </div>
 
 {END_FORM}

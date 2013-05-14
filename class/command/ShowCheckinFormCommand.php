@@ -60,7 +60,7 @@ class ShowCheckinFormCommand extends Command {
         // Make sure the student is assigned in the current term
         $assignment = HMS_Assignment::getAssignmentByBannerId($bannerId, $term);
         if(!isset($assignment) || is_null($assignment)){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'The student is not assigned for ' . Term::toString($term));
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, $student->getName() . ' is not assigned for ' . Term::toString($term) . '. Please contact the University Housing Assignments Office at 828-262-6111.');
             $errorCmd->redirect();
         }
 
