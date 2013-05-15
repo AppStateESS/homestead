@@ -34,9 +34,9 @@ class AjaxGetUsernameSuggestionsCommand extends Command {
 
         // Strip any non-alphanumeric characters, escape slashes
         $this->searchString = pg_escape_string($this->searchString);
-        
+
         // Check for a direct banner ID match
-        if(preg_match("/[0-9]+/", $this->searchString)) {
+        if(preg_match("/^[0-9]+/", $this->searchString)) {
             // String is all-numeric, probably a Banner ID
             // If the seach string is exactly 9 digits, then try to find a match
             if(preg_match("/[0-9]{9}/", $this->searchString)){
