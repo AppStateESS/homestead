@@ -27,11 +27,11 @@ class CheckinStartView extends View {
         $submitCmd = CommandFactory::getCommand('StartCheckinSubmit');
         $submitCmd->initForm($form);
 
-        if(count($this->halls) > 1){
-            $form->addDropbox('residence_hall', array(0 => 'Select a hall..') + $this->halls);
-            $form->setLabel('residence_hall', 'Residence Hall');
-            $form->addHidden('residence_hall_hidden');
-        }else{
+        $form->addDropbox('residence_hall', array(0 => 'Select a hall..') + $this->halls);
+        $form->setLabel('residence_hall', 'Residence Hall');
+        $form->addHidden('residence_hall_hidden');
+            
+        if(count($this->halls) == 1){
             $keys = array_keys($this->halls);
             $form->addHidden('residence_hall_hidden', $keys[0]);
             setcookie('hms-checkin-hall-id', $keys[0]); // Force the hall selection cookie to the one hall this user has

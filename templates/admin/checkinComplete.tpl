@@ -1,4 +1,4 @@
-<h1>Chekin Complete</h1>
+<h1>Check-in Complete</h1>
 
 <h2>{NAME} has been checked into to {ASSIGNMENT}</h2>
 
