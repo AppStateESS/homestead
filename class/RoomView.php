@@ -13,18 +13,23 @@ class RoomView extends View {
     private $hall;
     private $floor;
     private $room;
+    
+    private $damageTypes;
 
     /**
      * Constructor
      * 
-     * @param HMS_Residence_Hall $hall
-     * @param HMS_Floor $floor
-     * @param HMS_Room $room
+     * @param HMS_Residence_Hall    $hall
+     * @param HMS_Floor             $floor
+     * @param HMS_Room              $room
+     * @param Array                 $damageTypes
      */
-    public function __construct(HMS_Residence_Hall $hall, HMS_Floor $floor, HMS_Room $room){
+    public function __construct(HMS_Residence_Hall $hall, HMS_Floor $floor, HMS_Room $room, Array $damageTypes){
         $this->hall		= $hall;
         $this->floor	= $floor;
         $this->room		= $room;
+        
+        $this->damageTypes = $damageTypes;
     }
 
     /**
@@ -37,6 +42,7 @@ class RoomView extends View {
         PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
+        PHPWS_Core::initModClass('hms', 'RoomDamage.php');
 
         /*** Header Info ***/
         $tpl['TERM'] = Term::getPrintableSelectedTerm();
@@ -184,8 +190,34 @@ class RoomView extends View {
         $tpl = $form->getTemplate();
 
         Layout::addPageTitle("Edit Room");
+        
+        $tpl['ROOM_DAMAGE_LIST'] = $this->roomDamagePager();
 
         return PHPWS_Template::process($tpl, 'hms', 'admin/edit_room.tpl');
+    }
+    
+    private function roomDamagePager()
+    {
+        PHPWS_Core::initCoreClass('DBPager.php');
+
+        $pager = new DBPager('hms_room_damage', 'RoomDamageDb');
+        $pager->db->addJoin('LEFT OUTER', 'hms_room_damage', 'hms_damage_type', 'damage_type', 'id');
+
+        
+        $pager->addWhere('hms_room_damage.room_persistent_id', $this->room->getPersistentId());
+        $pager->addWhere('hms_room_damage.repaired', 0); // Only non-repaired damages
+        
+
+        $pager->setModule('hms');
+        $pager->setTemplate('admin/roomDamagesPager.tpl');
+        $pager->setLink('index.php?module=hms');
+        $pager->setEmptyMessage("No damages found.");
+        $pager->addToggle('class="toggle1"');
+        $pager->addToggle('class="toggle2"');
+        $pager->addRowTags('getRowTags');
+        //$pager->addPageTags($page_tags);
+
+        return $pager->get();
     }
 }
 

@@ -36,12 +36,16 @@ class EditRoomViewCommand extends Command {
         if(!isset($roomId)){
             throw new InvalidArgumentException('Missing room ID.');
         }
-         
+        
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
         PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
         PHPWS_Core::initModClass('hms', 'HMS_Room.php');
         PHPWS_Core::initModClass('hms', 'RoomView.php');
-         
+        
+        PHPWS_Core::initModClass('hms', 'DamageTypeFactory.php');
+        //PHPWS_Core::intiModClass('hms', 'RoomDamageFactory.php');
+        
+        // Load the room
         $room = new HMS_Room($roomId);
 
         if($room->term != Term::getSelectedTerm()){
@@ -51,10 +55,14 @@ class EditRoomViewCommand extends Command {
             $roomCmd->redirect();
         }
 
+        // Load the floor/hall
         $floor = $room->get_parent();
         $hall = $floor->get_parent();
-         
-        $roomView = new RoomView($hall, $floor, $room);
+
+        // Load the room damages and damage types
+        $damageTypes = DamageTypeFactory::getDamageTypeAssoc();
+        
+        $roomView = new RoomView($hall, $floor, $room, $damageTypes);
          
         $context->setContent($roomView->show());
     }

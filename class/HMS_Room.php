@@ -34,6 +34,9 @@ class HMS_Room extends HMS_Item
     public $ada                    = false;
     public $hearing_impaired       = false;
     public $bath_en_suite          = false;
+    
+    // Persistent ID for identifying this room across semesters
+    public $persistent_id;
 
     /****************************************************
      * Following fields are not present in the database *
@@ -623,14 +626,20 @@ class HMS_Room extends HMS_Item
         return $form->getTemplate();
     }
 
-    public function getId() {
-        return $this->id;
-    }
-
     /******************************
      * Accessor / Mutator Methods *
     ******************************/
+    
+    public function getId()
+    {
+        return $this->id;
+    }
 
+    public function getPersistentId()
+    {
+        return $this->persistent_id;
+    }
+    
     public function getRoomNumber()
     {
         return $this->room_number;
@@ -641,7 +650,8 @@ class HMS_Room extends HMS_Item
         return $this->offline == 1 ? true : false;
     }
 
-    public function setOffline($value) {
+    public function setOffline($value)
+    {
         $this->offline = $value;
     }
 

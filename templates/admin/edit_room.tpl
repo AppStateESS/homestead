@@ -85,3 +85,14 @@
     {NUMBER_OF_BEDS} occupied {BED_PAGER}</div>
 </div>
 <!-- END occupancy -->
+
+<div style="clear: both;"></div>
+
+<div class="rounded-box" style="width:450px;">
+	<div class="boxheader">
+		<h2 style="padding: 3px;">Damages</h2>
+	</div>
+	<div style="padding: 3px;">
+	  {ROOM_DAMAGE_LIST}
+	</div>
+</div>
