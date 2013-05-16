@@ -101,7 +101,7 @@ class InfoCardPdfView {
         //TODO
 
         // Date of Birth
-        $dob = split('-', $this->student->getDOB());
+        $dob = explode('-', $this->student->getDOB());
         $this->pdf->setXY(25, 41);
         $this->pdf->cell(50, 5, $dob[1]); // Month
 
