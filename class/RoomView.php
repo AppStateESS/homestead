@@ -44,6 +44,12 @@ class RoomView extends View {
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
         PHPWS_Core::initModClass('hms', 'RoomDamage.php');
 
+        $jsParams = array('LINK_SELECT'=>'#addDamageLink');
+        javascript('addRoomDamage', $jsParams, 'mod/hms/');
+        
+        // Drop down enhancements for room damage dialog
+        javascript('chosen', null, 'mod/hms/');
+        
         /*** Header Info ***/
         $tpl['TERM'] = Term::getPrintableSelectedTerm();
         $tpl['HALL_NAME']           = $this->hall->getLink();
@@ -192,6 +198,10 @@ class RoomView extends View {
         Layout::addPageTitle("Edit Room");
         
         $tpl['ROOM_DAMAGE_LIST'] = $this->roomDamagePager();
+        
+        $dmgCmd = CommandFactory::getCommand('ShowAddRoomDamage');
+        $dmgCmd->setRoom($this->room);
+        $tpl['ADD_DAMAGE_LINK']  = $dmgCmd->getLink('Add Damage');
 
         return PHPWS_Template::process($tpl, 'hms', 'admin/edit_room.tpl');
     }

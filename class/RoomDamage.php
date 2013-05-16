@@ -37,9 +37,12 @@ class RoomDamage {
     {
         $this->id                    = null;
         $this->room_persistent_id    = $room->getPersistentId();
+        $this->term                  = $room->getTerm();
         $this->damage_type           = $damageType;
         $this->repaired              = false;
         $this->note                  = $note;
+        $this->reported_by           = Current_User::getUsername();
+        $this->reported_on           = time();
     }
     
     public function getRowTags()

@@ -635,6 +635,11 @@ class HMS_Room extends HMS_Item
         return $this->id;
     }
 
+    public function getTerm()
+    {
+        return $this->term;
+    }
+    
     public function getPersistentId()
     {
         return $this->persistent_id;

@@ -18,6 +18,8 @@ class DamageTypeFactory {
     {
         $db = new PHPWS_DB('hms_damage_type');
         
+        $db->addOrder('category');
+        
         $result = $db->select('assoc');
         
         if(PHPWS_Error::logIfError($result)){

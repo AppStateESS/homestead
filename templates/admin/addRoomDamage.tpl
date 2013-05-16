@@ -1,0 +1,6 @@
+{START_FORM}
+
+Damage Type:
+{DAMAGE_TYPE}
+
+{END_FORM}

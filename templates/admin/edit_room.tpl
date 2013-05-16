@@ -80,9 +80,11 @@
 <div class="rounded-box" style="width: 450px; float: left;">
   <div class="boxheader">
     <h2 style="padding: 3px;">Beds</h2>
+    <span style="float:right;">{NUMBER_OF_ASSIGNEES} of {NUMBER_OF_BEDS} occupied</span>
   </div>
-  <div style="padding: 3px;">{NUMBER_OF_ASSIGNEES} of
-    {NUMBER_OF_BEDS} occupied {BED_PAGER}</div>
+  <div style="padding: 3px;">
+    {BED_PAGER}
+  </div>
 </div>
 <!-- END occupancy -->
 
@@ -91,8 +93,21 @@
 <div class="rounded-box" style="width:450px;">
 	<div class="boxheader">
 		<h2 style="padding: 3px;">Damages</h2>
+		<span style="float:right;">{ADD_DAMAGE_LINK}</span>
 	</div>
 	<div style="padding: 3px;">
 	  {ROOM_DAMAGE_LIST}
 	</div>
 </div>
+
+<div style="clear:both;">
+&nbsp;
+</div>
+
+<div id="addDamageDialog">
+
+</div>
+
+<script type="text/javascript">
+
+</script>
