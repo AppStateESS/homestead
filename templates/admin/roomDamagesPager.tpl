@@ -2,6 +2,7 @@
     <tr>
         <th>Category</th>
         <th>Description</th>
+        <th>Side</th>
         <th>Term</th>
         <th>Reported On</th>
     </tr>
@@ -14,6 +15,7 @@
     <tr {TOGGLE}>
         <td>{CATEGORY}</td>
         <td>{DESCRIPTION}</td>
+        <td>{SIDE}</td>
         <td>{TERM}</td>
         <td>{REPORTED_ON}</td>
     </tr>

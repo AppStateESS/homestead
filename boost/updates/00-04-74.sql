@@ -1,0 +1,1 @@
+alter table hms_room_damage add column side character varying not null;

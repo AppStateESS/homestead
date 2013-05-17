@@ -250,6 +250,7 @@ create table hms_room_damage(
     room_persistent_id  character varying not null,
     term                integer not null REFERENCES hms_term(term),
     damage_type         integer not null REFERENCES hms_damage_type(id),
+    side                character varying not null,
     note                character varying,
     repaired            smallint not null default 0,
     reported_by         character varying not null,

@@ -30,6 +30,8 @@ class AddRoomDamageView extends View {
         
         $form->addDropBox('damage_type', $types);
         
+        $form->addDropBox('side', array('Both'=>'Both', 'Left'=>'Left', 'Right'=>'Right'));
+        
         $tags = $form->getTemplate();
         
         return PHPWS_Template::process($tags, 'hms', 'admin/addRoomDamage.tpl');

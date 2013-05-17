@@ -15,6 +15,7 @@ class RoomDamage {
     public $term;               // The term the damage occured in
     
     public $damage_type; // Reference to the damage type table
+    public $side;
     public $note;        // Notes, further description
     
     public $repaired;    // True if the damage has been fixed
@@ -33,12 +34,13 @@ class RoomDamage {
      * @param integer $damageType
      * @param string $note
      */
-    public function __construct(HMS_Room $room, $damageType, $note)
+    public function __construct(HMS_Room $room, $damageType, $side, $note)
     {
         $this->id                    = null;
         $this->room_persistent_id    = $room->getPersistentId();
         $this->term                  = $room->getTerm();
         $this->damage_type           = $damageType;
+        $this->side                  = $side;
         $this->repaired              = false;
         $this->note                  = $note;
         $this->reported_by           = Current_User::getUsername();
@@ -57,6 +59,7 @@ class RoomDamage {
         
         $row['CATEGORY']    = $row['DAMAGE_TYPE'] = self::$damageTypes[$this->getDamageType()]['category'];
         $row['DESCRIPTION'] = self::$damageTypes[$this->getDamageType()]['description'];
+        $row['SIDE']        = $this->getSide();
         $row['TERM']        = Term::toString($this->getTerm());
         $row['REPORTED_ON'] = HMS_Util::get_long_date($this->getReportedOn());
         
@@ -84,6 +87,11 @@ class RoomDamage {
     public function getDamageType()
     {
         return $this->damage_type;
+    }
+    
+    public function getSide()
+    {
+        return $this->side;
     }
     
     public function isRepaired()
