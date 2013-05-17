@@ -21,6 +21,7 @@ class GenerateInfoCardCommand extends Command {
         PHPWS_COre::initModClass('hms', 'StudentFactory.php');
         PHPWS_COre::initModClass('hms', 'HousingApplicationFactory.php');
         PHPWS_COre::initModClass('hms', 'HMS_Assignment.php');
+        PHPWS_COre::initModClass('hms', 'RoomDamageFactory.php');
 
         $bannerId = $context->get('bannerId');
         $term = Term::getCurrentTerm();
@@ -35,8 +36,13 @@ class GenerateInfoCardCommand extends Command {
         $room = $bed->get_parent();
         $floor = $room->get_parent();
         $hall = $floor->get_parent();
-
-        $view = new InfoCardPdfView($student, $hall, $room, $application, $checkin);
+        
+        $damages = RoomDamageFactory::getDamagesByRoom($room);
+        if(!isset($damages) || is_null($damages)){
+            $damages = array();
+        }
+        
+        $view = new InfoCardPdfView($student, $hall, $room, $application, $checkin, $damages);
         $pdf = $view->getPdf();
         $pdf->output();
         exit;

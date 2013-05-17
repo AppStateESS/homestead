@@ -13,6 +13,7 @@ class InfoCardPdfView {
     private $room;
     private $checkin;
     private $application;
+    private $damages;
 
     private $pdf;
 
@@ -25,14 +26,15 @@ class InfoCardPdfView {
      * @param HousingApplication $application
      * @param Checkin $checkin
      */
-    public function __construct(Student $student, HMS_Residence_Hall $hall, HMS_Room $room, HousingApplication $application, Checkin $checkin)
+    public function __construct(Student $student, HMS_Residence_Hall $hall, HMS_Room $room, HousingApplication $application, Checkin $checkin, Array $damages)
     {
         $this->student		= $student;
         $this->hall			= $hall;
         $this->room			= $room;
         $this->application	= $application;
         $this->checkin		= $checkin;
-
+        $this->damages      = $damages;
+        
         require_once PHPWS_SOURCE_DIR . 'mod/hms/pdf/fpdf.php';
         require_once PHPWS_SOURCE_DIR . 'mod/hms/pdf/fpdi.php';
 
@@ -179,6 +181,27 @@ class InfoCardPdfView {
         */
         $this->pdf->setXY(160, 122);
         $this->pdf->cell(50, 5, $this->checkin->getKeyCode());
+        
+        
+        /*************
+         * Damages   *
+         */
+        if (isset($this->damages) && count($this->damages) > 0) {
+            // Turn the font size down
+            $this->pdf->setFont('Times', null, 9);
+            
+            $damageTypes = DamageTypeFactory::getDamageTypeAssoc();
+            
+            $xOffset = 110;
+            $yOffset = 138; // Distance down the page, we'll increment this as we go
+            
+            foreach ($this->damages as $dmg) {
+                $this->pdf->setXY($xOffset, $yOffset);
+            
+                $this->pdf->cell(50, 5, '(' . $dmg->getSide() . ') ' . $damageTypes[$dmg->getDamageType()]['category'] . ' ' . $damageTypes[$dmg->getDamageType()]['description']);
+                $yOffset += 6;
+            }
+        }
     }
 }
 

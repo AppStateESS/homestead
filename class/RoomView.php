@@ -1,7 +1,5 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'View.php');
-
 /**
  * View class responsible for showing the 'Edit Room' interface
  * 
