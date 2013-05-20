@@ -9,11 +9,11 @@ class ServiceDeskMenu extends CommandMenu {
     {
         parent::__construct();
 
+        if(Current_User::allow('hms', 'checkin')){
+            $this->addCommandByName('Check-in', 'ShowCheckinStart');
+        }
+        
         if(UserStatus::isAdmin()){
-            if(Current_User::allow('hms', 'checkin')){
-                $this->addCommandByName('Check-in', 'ShowCheckinStart');
-            }
-            	
             /*
              * TODO
             if(Current_User::allow('hms', 'checkout')){
@@ -21,9 +21,11 @@ class ServiceDeskMenu extends CommandMenu {
             }
             */
             
+            /*
             if(Current_User::allow('hms', 'package_desk')){
                 $this->addCommandByName('Package Desk', 'ShowPackageDeskMenu');
             }
+            */
         }
     }
 
