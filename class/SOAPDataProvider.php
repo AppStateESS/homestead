@@ -162,24 +162,8 @@ class SOAPDataProvider extends StudentDataProvider {
             $student->setClass(CLASS_SENIOR);
         }
 
-        if ($student->getBannerId() == '900325006') {
-            $student->setClass(CLASS_SENIOR);
-        }
-    
-        if ($student->getUsername() == 'marshallkd') {
-            $student->setApplicationTerm(201040);
-        }
-
-        if ($student->getUsername() == 'weldoncr') {
-            $student->setApplicationTerm(200840);
-        }
-
-        if ($student->getUsername() == 'ghoniema') {
-            $student->setType(TYPE_CONTINUING);
-        }
-        
-        if ($student->getUsername() == 'brannonpg') {
-            $student->setApplicationTerm(201210);
+        if ($student->getBannerId() == '900532551') {
+            $student->setApplicationTerm(201340);
         }
     }
 }
