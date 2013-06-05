@@ -25,7 +25,7 @@ Roommates:
 Check-in Time: {MOVE_IN_TIME} 
 <!-- END movein_time -->
 
-Move In is Sunday, May 19th from noon to 5pm. Check in at the Cone Hall Office.
+Move In is Thursday, June 27th from noon to 5pm. Check in at the Cone Hall Office.
 
 Please Check your Student Account. Charges for Housing and Meal plans for summer session 1 are now posted to your account for payment.
 
