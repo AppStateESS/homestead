@@ -99,6 +99,7 @@ class FreshmenApplicationsGraph extends Report {
                 WHERE term = :term
                 AND ($termClause)
                 AND student_type = 'F'
+                AND cancelled = 0
                 GROUP BY date
                 ORDER BY date";
         
