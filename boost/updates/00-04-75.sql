@@ -1,0 +1,1 @@
+alter table hms_checkin add column key_not_returned smallint default 0;

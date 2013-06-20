@@ -20,8 +20,8 @@ class CheckinFormSubmitCommand extends Command {
 
     public function getRequestVars(){
         return array('action'	=> 'CheckinFormSubmit',
-                'bannerId'	=> $this->bannerId,
-                'hallId'   => $this->hallId);
+                     'bannerId'	=> $this->bannerId,
+                     'hallId'   => $this->hallId);
     }
 
     public function execute(CommandContext $context)

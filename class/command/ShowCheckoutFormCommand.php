@@ -1,6 +1,6 @@
 <?php
 
-class ShowCheckinFormCommand extends Command {
+class ShowCheckoutFormCommand extends Command {
 
     private $bannerId;
     private $hallId;
@@ -15,7 +15,7 @@ class ShowCheckinFormCommand extends Command {
 
     public function getRequestVars()
     {
-        return array('action'   => 'ShowCheckinForm',
+        return array('action'   => 'ShowCheckoutForm',
                 'bannerId' => $this->bannerId,
                 'hallId'   => $this->hallId);
     }
@@ -24,14 +24,15 @@ class ShowCheckinFormCommand extends Command {
     {
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-        PHPWS_Core::initModClass('hms', 'HousingApplicationFactory.php');
+        PHPWS_Core::initModClass('hms', 'CheckinFactory.php');
+        PHPWS_Core::initModClass('hms', 'RoomDamageFactory.php');
 
         $term = Term::getCurrentTerm();
 
         $bannerId = $context->get('bannerId');
         $hallId   = $context->get('hallId');
 
-        $errorCmd = CommandFactory::getCommand('ShowCheckinStart');
+        $errorCmd = CommandFactory::getCommand('ShowCheckoutStart');
 
         if(!isset($bannerId) || is_null($bannerId) || $bannerId == ''){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Missing Banner ID.');
@@ -75,20 +76,23 @@ class ShowCheckinFormCommand extends Command {
             $errorCmd->redirect();
         }
 
-        // Make sure the student isn't already checked in
-        //TODO allow checkins for 48 hours
+        // Make sure the student isn't already checked out
+        /*
         PHPWS_Core::initModClass('hms', 'CheckinFactory.php');
         $checkin = CheckinFactory::getCheckinByBannerId($bannerId, $term);
         if(!is_null($checkin)){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, $student->getName() . ' has already checked in to ' . $assignment->where_am_i());
             $errorCmd->redirect();
-        }
+        }*/
 
-        // Find the student's housing application, can be null
-        $app = HousingApplicationFactory::getAppByStudent($student, $term);
-
-        PHPWS_Core::initModClass('hms', 'CheckinFormView.php');
-        $view = new CheckinFormView($student, $assignment, $app, $hall, $floor, $room);
+        // Get the damages for this student's room
+        $damages = RoomDamageFactory::getDamagesByRoom($room);
+        
+        // Get the checkin object
+        $checkin = CheckinFactory::getCheckinByBannerId($student->getBannerId(), $term);
+        
+        PHPWS_Core::initModClass('hms', 'CheckoutFormView.php');
+        $view = new CheckoutFormView($student, $assignment, $hall, $floor, $room, $damages, $checkin);
 
         $context->setContent($view->show());
     }

@@ -1,10 +1,10 @@
 <?php 
 
-class StartCheckinSubmitCommand extends Command {
+class StartCheckoutSubmitCommand extends Command {
 
     public function getRequestVars()
     {
-        return array('action'=>'StartCheckinSubmit');
+        return array('action'=>'StartCheckoutSubmit');
     }
 
     public function execute(CommandContext $context)
@@ -18,7 +18,7 @@ class StartCheckinSubmitCommand extends Command {
         $hallId   = $context->get('residence_hall_hidden');
 
 
-        $errorCmd = CommandFactory::getCommand('ShowCheckinStart');
+        $errorCmd = CommandFactory::getCommand('ShowCheckoutStart'); // TODO
 
         if(!isset($bannerId) || is_null($bannerId) || $bannerId == ''){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Missing Banner ID.');
@@ -30,10 +30,12 @@ class StartCheckinSubmitCommand extends Command {
             $errorCmd->redirect();
         }
 
+        // Check the Banner ID
         if(preg_match("/[\d]{9}/", $bannerId) == false){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Sorry, that didn't look like a valid ID number. Please try again.");
             $errorCmd->redirect();
         }
+        
 
         // Try to lookup the student in Banner
         try {
@@ -44,7 +46,7 @@ class StartCheckinSubmitCommand extends Command {
         }
 
         // Everything checks out, so redirect to the form
-        $cmd = CommandFactory::getCommand('ShowCheckinForm');
+        $cmd = CommandFactory::getCommand('ShowCheckoutForm'); //TODO
         $cmd->setBannerId($bannerId);
         $cmd->setHallId($hallId);
         $cmd->redirect();

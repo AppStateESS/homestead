@@ -26,6 +26,7 @@ class Checkin {
 
     public $express_checkout;
     public $improper_checkout;
+    public $key_not_returned;
 
     public function __construct(Student $student, HMS_Bed $bed, $term, $checkinBy, $keyCode)
     {
@@ -97,6 +98,26 @@ class Checkin {
 
     private function setKeyCode($keyCode){
         $this->key_code = $keyCode;
+    }
+    
+    public function setCheckoutDate($date)
+    {
+        $this->checkout_date = $date;
+    }
+    
+    public function setCheckoutBy($user)
+    {
+        $this->checkout_by = $user;
+    }
+    
+    public function setImproperCheckout($improper)
+    {
+        $this->improper_checkout = $improper;
+    }
+    
+    public function setKeyNotReturned($key)
+    {
+        $this->key_not_returned = $key;
     }
 }
 

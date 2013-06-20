@@ -5,5 +5,8 @@ Damage Type:
 <br /><br />
 Side of Room:
 {SIDE}
+<br /><br />
+Description:
+{NOTE}
 
 {END_FORM}

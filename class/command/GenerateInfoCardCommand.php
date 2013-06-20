@@ -17,11 +17,11 @@ class GenerateInfoCardCommand extends Command {
     {
 
         PHPWS_Core::initModClass('hms', 'InfoCardPdfView.php');
-        PHPWS_COre::initModClass('hms', 'CheckinFactory.php');
-        PHPWS_COre::initModClass('hms', 'StudentFactory.php');
-        PHPWS_COre::initModClass('hms', 'HousingApplicationFactory.php');
-        PHPWS_COre::initModClass('hms', 'HMS_Assignment.php');
-        PHPWS_COre::initModClass('hms', 'RoomDamageFactory.php');
+        PHPWS_Core::initModClass('hms', 'CheckinFactory.php');
+        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
+        PHPWS_Core::initModClass('hms', 'HousingApplicationFactory.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
+        PHPWS_Core::initModClass('hms', 'RoomDamageFactory.php');
 
         $bannerId = $context->get('bannerId');
         $term = Term::getCurrentTerm();

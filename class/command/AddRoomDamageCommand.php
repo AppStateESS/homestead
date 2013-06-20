@@ -25,8 +25,7 @@ class AddRoomDamageCommand extends Command {
         $damageType = $context->get('damage_type');
         $term = $context->get('term');
         $side = $context->get('side');
-        
-        $note = ''; //TODO
+        $note = $context->get('note');
         
         $room = RoomFactory::getRoomByPersistentId($roomId, $term);
 

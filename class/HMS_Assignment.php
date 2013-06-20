@@ -214,11 +214,18 @@ class HMS_Assignment extends HMS_Item
      * Accessor / Mutator Methods *
     *****************************/
 
-    public function getBannerId() {
+    public function getId() 
+    {
+        return $this->id;
+    }
+    
+    public function getBannerId()
+    {
         return $this->banner_id;
     }
 
-    public function setBannerId($id) {
+    public function setBannerId($id)
+    {
         $this->banner_id = $id;
     }
 

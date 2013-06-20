@@ -107,7 +107,3 @@
 <div id="addDamageDialog">
 
 </div>
-
-<script type="text/javascript">
-
-</script>
