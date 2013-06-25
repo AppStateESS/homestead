@@ -8,8 +8,9 @@ class CheckinFormView extends View {
     private $hall;
     private $floor;
     private $room;
+    private $checkin;
 
-    public function __construct(Student $student, HMS_Assignment $assignment, HousingApplication $application = null, HMS_Residence_Hall $hall, HMS_Floor $floor, HMS_Room $room)
+    public function __construct(Student $student, HMS_Assignment $assignment, HousingApplication $application = null, HMS_Residence_Hall $hall, HMS_Floor $floor, HMS_Room $room, Checkin $checkin = null)
     {
         $this->student      = $student;
         $this->assignment   = $assignment;
@@ -17,6 +18,7 @@ class CheckinFormView extends View {
         $this->hall         = $hall;
         $this->floor        = $floor;
         $this->room         = $room;
+        $this->checkin      = $checkin;
     }
 
     public function show()
@@ -88,6 +90,10 @@ class CheckinFormView extends View {
         // Key code
         $form->addText('key_code');
         $form->setLabel('key_code', 'Key Code &#35;');
+        
+        if (!is_null($this->checkin)) {
+            $form->setValue('key_code', $this->checkin->getKeyCode());
+        }
 
         $form->addSubmit('submit', 'Continue');
         $form->setClass('submit', 'btn btn-primary');

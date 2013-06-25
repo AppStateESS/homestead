@@ -75,11 +75,13 @@ class ShowCheckinFormCommand extends Command {
             $errorCmd->redirect();
         }
 
-        // Make sure the student isn't already checked in
-        //TODO allow checkins for 48 hours
+        // Load any existing check-in
         PHPWS_Core::initModClass('hms', 'CheckinFactory.php');
         $checkin = CheckinFactory::getCheckinByBannerId($bannerId, $term);
-        if(!is_null($checkin)){
+        
+        // If there is a checkin, and the difference between the current time and the checkin time is
+        // greater than 48 hours, then show an error.
+        if(!is_null($checkin) && (time() - $checkin->getCheckinDate()) > Checkin::CHECKIN_TIMEOUT){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, $student->getName() . ' has already checked in to ' . $assignment->where_am_i());
             $errorCmd->redirect();
         }
@@ -88,11 +90,10 @@ class ShowCheckinFormCommand extends Command {
         $app = HousingApplicationFactory::getAppByStudent($student, $term);
 
         PHPWS_Core::initModClass('hms', 'CheckinFormView.php');
-        $view = new CheckinFormView($student, $assignment, $app, $hall, $floor, $room);
+        $view = new CheckinFormView($student, $assignment, $app, $hall, $floor, $room, $checkin);
 
         $context->setContent($view->show());
     }
 
 }
-
 ?>

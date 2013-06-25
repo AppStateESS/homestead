@@ -3,6 +3,7 @@
 PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 PHPWS_Core::initModClass('hms', 'HousingApplicationFactory.php');
 PHPWS_Core::initModClass('hms', 'Checkin.php');
+PHPWS_Core::initModClass('hms', 'CheckinFactory.php');
 PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
 
 class CheckinFormSubmitCommand extends Command {
@@ -106,16 +107,29 @@ class CheckinFormSubmitCommand extends Command {
         /* Medical Conditions */
         $app->setEmergencyMedicalCondition($context->get('emergency_medical_condition'));
 
+        // Save the updated application
         $app->save();
 
 
-        // Create the actual check-in and save it
+        // Get the student's current assignment
         $assignment = HMS_Assignment::getAssignmentByBannerId($bannerId, $term);
         $bed		= $assignment->get_parent();
 
+        // Get the currently logged in user
         $currUser = Current_User::getUsername();
 
-        $checkin = new Checkin($student, $bed, $term, $currUser, $keyCode);
+        //Check for an existing Check-in
+        $checkin = CheckinFactory::getCheckinByBed($student, $bed, $term);
+        
+        // If there's not already a checkin for this bed, create a new one
+        if(is_null($checkin)) {
+            $checkin = new Checkin($student, $bed, $term, $currUser, $keyCode);
+        } else {
+            // Otherwise, update the existing checkin
+            $checkin->setCheckoutBy($currUser);
+            $checkin->setCheckinDate(time());
+            $checkin->setKeyCode($keyCode);
+        }
 
         $checkin->save();
 

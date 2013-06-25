@@ -27,6 +27,8 @@ class Checkin {
     public $express_checkout;
     public $improper_checkout;
     public $key_not_returned;
+    
+    const CHECKIN_TIMEOUT = 172800; // Allow max 48 hours between checkins 
 
     public function __construct(Student $student, HMS_Bed $bed, $term, $checkinBy, $keyCode)
     {
@@ -84,7 +86,12 @@ class Checkin {
         $this->room_id = $roomId;
     }
 
-    private function setCheckinDate($timestamp){
+    public function getCheckinDate()
+    {
+        return $this->checkin_date;
+    }
+    
+    public function setCheckinDate($timestamp){
         $this->checkin_date = $timestamp;
     }
 
@@ -96,7 +103,7 @@ class Checkin {
         return $this->key_code;
     }
 
-    private function setKeyCode($keyCode){
+    public function setKeyCode($keyCode){
         $this->key_code = $keyCode;
     }
     
