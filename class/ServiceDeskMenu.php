@@ -15,7 +15,7 @@ class ServiceDeskMenu extends CommandMenu {
         }
 
         // Check-out
-        if(Current_User::allow('hms', 'checkout')){
+        if(Current_User::allow('hms', 'checkin')){
             $this->addCommandByName('Check-out', 'ShowCheckoutStart');
         }
         
