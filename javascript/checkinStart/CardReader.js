@@ -4,6 +4,8 @@
  *
  * Copyright @ 2009-2010 Jonathan Stoppani (http://garetjax.info/)
  * Licensed under the MIT license (see LICENSE for details)
+ * http://garetjax.info/blog/articles/2010/01/magnetic-card-jquery/
+ * https://github.com/garetjax/CardReader
  */
 
 var CardReader = function (error_start, track_start, track_end, timeout) {
@@ -40,7 +42,7 @@ CardReader.prototype = {
 
 		if (this.isDispatching) {
 			if (isError) {
-				console.log("Immediate error!");
+				//console.log("Immediate error!");
 				return;
 			} else {
 				clearTimeout(this.isDispatching);
@@ -50,7 +52,7 @@ CardReader.prototype = {
 		reader = this;
 
 		this.isDispatching = setTimeout(function () {
-			console.log("Error timeout cleared");
+			//console.log("Error timeout cleared");
 			reader.isDispatching = false;
 		}, 200);
 

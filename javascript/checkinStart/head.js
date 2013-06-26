@@ -4,8 +4,6 @@
 
 	$().ready(function(){
 		
-		console.log($.cookie("hms-checkin-hall-id"));
-		
 		// Check if a hall has been saved in a cookie
 		var hallId = $.cookie("hms-checkin-hall-id");
 		var hallName = $.cookie("hms-checkin-hall-name");
@@ -32,12 +30,36 @@
 		var cardReader = new CardReader();
 		cardReader.observe(document);
 		
+		cardReader.validate(function (value) {
+			// Tests if value is not equal to 'E'.
+			if(value == 'E'){
+				return false;
+			}
+			
+			// Tests if value is not equal to 'E+E'.
+			if(value == 'E+E'){
+				return false;
+			}
+			
+			if(value == '+E?'){
+				return false;
+			}
+
+			if(value.indexOf('E') >= 0 ){
+				return false;
+			}
+
+			return true;
+		});
+		
+		// Event handler for card read errors
 		cardReader.cardError(function(){
-			alert('An error occurred while reading the card. Please try again.');
+			$("#cardswipe-error").show();
+			$("#cardswipe-error").delay(2500).fadeOut('fast');
 		});
 		
 		cardReader.cardRead(function(value){
-			//alert(value);
+			console.log(value);
 			var bannerParts = value.split("=");
 			$('#checkin_form_banner_id').val(bannerParts[0]);
 			$('#checkin_form').submit();
@@ -50,8 +72,6 @@
 			delay: 500,
 			minLength: 3,
 			focus: function( event, ui ) {
-				console.log(ui.item);
-				console.log($("#checkin_form_banner_id"));
 				event.preventDefault();  // NB: Makes moving the focus with the keyboard work
 				$("#checkin_form_banner_id").val(ui.item.banner_id);
 			},

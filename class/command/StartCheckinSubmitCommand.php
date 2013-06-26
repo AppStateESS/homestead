@@ -29,8 +29,8 @@ class StartCheckinSubmitCommand extends Command {
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Missing residence hall ID.');
             $errorCmd->redirect();
         }
-
-        if(preg_match("/[\d]{9}/", $bannerId) == false){
+        
+        if(preg_match("/^[\d]{9}$/", $bannerId) == false){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Sorry, that didn't look like a valid ID number. Please try again.");
             $errorCmd->redirect();
         }
