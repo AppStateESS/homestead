@@ -126,11 +126,14 @@ class CheckinFormSubmitCommand extends Command {
             $checkin = new Checkin($student, $bed, $term, $currUser, $keyCode);
         } else {
             // Otherwise, update the existing checkin
-            $checkin->setCheckoutBy($currUser);
-            $checkin->setCheckinDate(time());
-            $checkin->setKeyCode($keyCode);
+            $updatedCheckin = new Checkin($student, $bed, $term, $currUser, $keyCode);
+            $updatedCheckin->substitueForExistingCheckin($checkin); // Use the old checkin to replace this one
+            $checkin = $updatedCheckin;
+            //$checkin->setCheckoutBy($currUser);
+            //$checkin->setCheckinDate(time());
+            //$checkin->setKeyCode($keyCode);
         }
-
+        
         $checkin->save();
 
         NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Checkin successful.');

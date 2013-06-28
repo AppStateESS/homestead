@@ -59,6 +59,16 @@ class Checkin {
         return $this->id;
     }
 
+    /**
+     * Causes this check-in to take the ID of the passed-in checkin. When saved,
+     * this will effectively overwrite the passed in checkin.
+     * @param Checkin $checkin
+     */
+    public function substitueForExistingCheckin(Checkin $checkin)
+    {
+        $this->setId($checkin->getId());
+    }
+    
     /***********************
      * Acessors / Mutators *
     ***********************/
