@@ -382,19 +382,6 @@ class HMS_Assignment extends HMS_Item
         }else if(isset($room_id)) {
             // A room_id was given, so create that room object
             $room = new HMS_Room($room_id);
-            if(!$room) {
-                throw new AssignmentException('Null room object.');
-            }
-
-            // Make sure the room has a vacancy
-            if(!$room->has_vacancy()) {
-                throw new AssignmentException('The room is full.');
-            }
-
-            // Make sure the room is not offline
-            if($room->offline) {
-                throw new AssignmentException('The room is offline');;
-            }
 
             // And find a vacant bed in that room
             $beds = $room->getBedsWithVacancies();
@@ -405,6 +392,20 @@ class HMS_Assignment extends HMS_Item
             throw new AssignmentException('No room nor bed specified.');
         }
 
+        if(!$room) {
+            throw new AssignmentException('Null room object.');
+        }
+        
+        // Make sure the room has a vacancy
+        if(!$room->has_vacancy()) {
+            throw new AssignmentException('The room is full.');
+        }
+        
+        // Make sure the room is not offline
+        if($room->offline) {
+            throw new AssignmentException('The room is offline');;
+        }
+        
         // Double check that the bed is in the same term as we're being requested to assign for
         if($vacant_bed->getTerm() != $term) {
             throw new AssignmentException('The bed\'s term and the assignment term do not match.');
