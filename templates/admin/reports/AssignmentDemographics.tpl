@@ -49,7 +49,7 @@ Executed on: {EXEC_DATE} by {EXEC_USER}
     <td>{BLG_TOTAL_MALES}</td>
   </tr>
   <tr>
-    <th>Feale</th>
+    <th>Female</th>
     <td>{BLG_F_FR_FEMALE}</td>
     
     <td>{BLG_T_FR_FEMALE}</td>
@@ -64,7 +64,14 @@ Executed on: {EXEC_DATE} by {EXEC_USER}
     
     <td>{BLG_TOTAL_FEMALES}</td>
   </tr>
-  
+  <tr>
+    <th>Other</th>
+    <td></td>
+    <td colspan="4"></td>
+    <td colspan="4"></td>
+    <td></td>
+    <td>{BLG_OTHER}</td>
+  </tr>
   <tr>
     <th>Total</th>
     <td>{BLG_TOTAL_F}</td>
@@ -138,7 +145,14 @@ Executed on: {EXEC_DATE} by {EXEC_USER}
     
     <td>{TOTAL_TOTAL_FEMALES}</td>
   </tr>
-  
+  <tr>
+    <th>Other</th>
+    <td></td>
+    <td colspan="4"></td>
+    <td colspan="4"></td>
+    <td></td>
+    <td>{TOTAL_OTHER}</td>
+  </tr>
   <tr>
     <th>Total</th>
     <td>{TOTAL_TOTAL_F}</td>
