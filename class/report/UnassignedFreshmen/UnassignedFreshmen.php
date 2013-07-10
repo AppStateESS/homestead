@@ -111,10 +111,10 @@ class UnassignedFreshmen extends Report implements iCsvReport {
         $db->addJoin('LEFT OUTER', 'hms_new_application', 'hms_assignment', 'banner_id', 'banner_id AND hms_new_application.term = hms_assignment.term');
         $db->addWhere('hms_assignment.banner_id', 'NULL');
         $db->addWhere('hms_new_application.term', $term);
+        $db->addWhere('hms_new_application.student_type', 'F');
         
         // Don't show students who have cancelled applications
         $db->addWhere('hms_new_application.cancelled', 0);
-        //$db->addWhere('hms_new_application.student_type', 'W', '!=');
         
         // Limit by application term
         foreach($applicationTerms as $t){
@@ -122,7 +122,7 @@ class UnassignedFreshmen extends Report implements iCsvReport {
         }
         
         // Sort by gender, then application date (earliest to latest)
-        $db->addOrder(array('student_type ASC', 'gender ASC', 'created_on ASC'));
+        $db->addOrder(array('gender ASC', 'created_on ASC'));
         $results = $db->select();
         
         if(PHPWS_Error::isError($results)){
