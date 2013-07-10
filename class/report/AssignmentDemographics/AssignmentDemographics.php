@@ -105,7 +105,7 @@ class AssignmentDemographics extends Report {
     private function getAssignmentsByHall($hallId)
     {
         $db = new PHPWS_DB('hms_assignment');
-        $db->addColumn('hms_assignment.asu_username');
+        $db->addColumn('hms_assignment.banner_id');
 
         // Limit to just the requested hall id
         $db->addWhere('hms_residence_hall.id', $hallId);
@@ -155,9 +155,9 @@ class AssignmentDemographics extends Report {
             // Create the student object
             //TODO use banner IDs
             try{
-                $student = StudentFactory::getStudentByUsername($assign['asu_username'], $this->term);
-            }catch(StudentNotFoundException $e){
-                $this->problems[] = $assign['asu_username'] . ': Unknown student';
+                $student = StudentFactory::getStudentByBannerId($assign['banner_id'], $this->term);
+            }catch(Exception $e){
+                $this->problems[] = $assign['banner_id'] . ': Unknown student';
                 continue;
             }
 

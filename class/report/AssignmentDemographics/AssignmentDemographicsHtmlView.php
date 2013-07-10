@@ -132,7 +132,11 @@ class AssignmentDemographicsHtmlView extends ReportHtmlView {
         $this->tpl['TOTAL_TOTAL'] = $genderTotals[MALE] + $genderTotals[FEMALE] + $typeTotals['OTHER'];
         
         // Problems....
-        $this->tpl['PROBLEMS'] = $this->report->getProblems();
+        $problems = $this->report->getProblemsList();
+        foreach($problems as $prob) {
+        	$row = array('DESC' => $prob);
+        	$this->tpl['problems'][] = $row;
+        }
         
         return PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/AssignmentDemographics.tpl');
     }

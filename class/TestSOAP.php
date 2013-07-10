@@ -54,7 +54,7 @@ class TestSOAP extends SOAP{
         //$response->application_term      = '201040';
         //$response->projected_class       = 'FR';
 
-        $response->student_type          = 'F';
+        $response->student_type          = '';
         $response->application_term      = '201320';
         $response->projected_class       = 'FR';
 

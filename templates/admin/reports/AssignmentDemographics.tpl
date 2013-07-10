@@ -149,6 +149,8 @@ Executed on: {EXEC_DATE} by {EXEC_USER}
   </tr>
 </table>
 
+<pre>
 <!-- BEGIN problems -->
-{PROBLEMS}
+{DESC}
 <!-- END problems -->
+</pre>
