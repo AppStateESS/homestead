@@ -148,3 +148,7 @@ Executed on: {EXEC_DATE} by {EXEC_USER}
     <td>{TOTAL_TOTAL}</td>
   </tr>
 </table>
+
+<!-- BEGIN problems -->
+{PROBLEMS}
+<!-- END problems -->

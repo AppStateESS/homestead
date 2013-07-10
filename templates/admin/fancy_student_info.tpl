@@ -146,6 +146,9 @@
 		
         <h2>Assignments</h2>
         {HISTORY}
+        
+        <h2>Check-in / Check-out</h2>
+        {CHECKINS}
     </div>
 </div>
 

@@ -1,16 +1,19 @@
 <?php 
 
+require_once PHPWS_SOURCE_DIR . 'mod/hms/pdf/fpdf.php';
+require_once PHPWS_SOURCE_DIR . 'mod/hms/pdf/fpdi.php';
+
 class GenerateInfoCardCommand extends Command {
 
-    private $bannerId;
+    private $checkinId;
 
-    public function setBannerId($bannerId){
-        $this->bannerId = $bannerId;
+    public function setCheckinId($checkinID){
+        $this->checkinId = $checkinID;
     }
 
     public function getRequestVars(){
-        return array('action' 	=> 'GenerateInfoCard',
-                'bannerId'	=> $this->bannerId);
+        return array('action' 	 => 'GenerateInfoCard',
+                     'checkinId' => $this->checkinId);
     }
 
     public function execute(CommandContext $context)
@@ -23,11 +26,13 @@ class GenerateInfoCardCommand extends Command {
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
         PHPWS_Core::initModClass('hms', 'RoomDamageFactory.php');
 
-        $bannerId = $context->get('bannerId');
-        $term = Term::getCurrentTerm();
+        $checkinId = $context->get('checkinId');
 
-        $checkin = CheckinFactory::getCheckinByBannerId($bannerId, $term);
+        $checkin = CheckinFactory::getCheckinById($checkinId);
 
+        $bannerId = $checkin->getBannerId();
+        $term = $checkin->getTerm();
+        
         $student = StudentFactory::getStudentByBannerId($bannerId, $term);
         $assignment = HMS_Assignment::getAssignmentByBannerId($bannerId, $term);
         $application = HousingApplicationFactory::getAppByStudent($student, $term);
@@ -42,7 +47,9 @@ class GenerateInfoCardCommand extends Command {
             $damages = array();
         }
         
-        $view = new InfoCardPdfView($student, $hall, $room, $application, $checkin, $damages);
+        $fpdf = new FPDF('L', 'mm', 'Letter');
+        
+        $view = new InfoCardPdfView($fpdf, $student, $hall, $room, $application, $checkin, $damages);
         $pdf = $view->getPdf();
         $pdf->output();
         exit;

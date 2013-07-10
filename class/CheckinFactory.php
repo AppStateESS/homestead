@@ -24,6 +24,24 @@ class CheckinFactory {
         return $checkin;
     }
 
+    public static function getCheckinsForStudent(Student $student)
+    {
+        $db = new PHPWS_DB('hms_checkin');
+        $db->addWhere('banner_id', $student->getBannerId());
+
+        $result = $db->getObjects('RestoredCheckin');
+
+        if(PHPWS_Error::logIfError($result)){
+            throw new DatabaseException($result->toString());
+        }
+        
+        if(sizeof($result) <= 0){
+            return array();
+        }
+        
+        return $result;
+    }
+    
     public static function getCheckinByBed(Student $student, HMS_Bed $bed, $term)
     {
         $db = new PHPWS_DB('hms_checkin');
@@ -42,6 +60,25 @@ class CheckinFactory {
             return null;
         }
         
+        return $checkin;
+    }
+    
+    public static function getCheckinById($checkinId)
+    {
+        $db = new PHPWS_DB('hms_checkin');
+        $db->addWhere('id', $checkinId);
+    
+        $checkin = new RestoredCheckin();
+        $result = $db->loadObject($checkin);
+    
+        if(PHPWS_Error::logIfError($result)){
+            throw new DatabaseException($result->toString());
+        }
+    
+        if($checkin->getId() == null){
+            return null;
+        }
+    
         return $checkin;
     }
 }

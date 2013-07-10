@@ -30,7 +30,7 @@ class TestSOAP extends SOAP{
         $response->last_name             = 'Booker';
         $response->first_name            = 'Jeremy';
         $response->middle_name           = 'Lee';
-        $response->pref_name		     = 'JerMe';
+        $response->pref_name		     = 'J-dogg';
         $response->dob                   = '1986-09-05';
         $response->gender                = 'M';
         $response->deposit_date          = '';

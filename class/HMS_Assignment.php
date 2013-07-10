@@ -403,7 +403,7 @@ class HMS_Assignment extends HMS_Item
         
         // Make sure the room is not offline
         if($room->offline) {
-            throw new AssignmentException('The room is offline');;
+            throw new AssignmentException('The room is offline');
         }
         
         // Double check that the bed is in the same term as we're being requested to assign for

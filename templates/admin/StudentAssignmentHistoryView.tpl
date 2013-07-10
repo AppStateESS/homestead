@@ -1,8 +1,3 @@
-<table class="profileHeader">
-  <tr>
-    <th><a id="history_toggle">[-]</a> Assignment History</th>
-  </tr>
-</table>
 <table class="profileHeader" id="history">
   <tr>
     <th>Room</th>

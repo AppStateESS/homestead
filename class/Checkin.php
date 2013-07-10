@@ -75,6 +75,10 @@ class Checkin {
     public function getId(){
         return $this->id;
     }
+    
+    private function setId($id){
+        $this->id = $id;
+    }
 
     public function getBannerId(){
         return $this->banner_id;
@@ -84,10 +88,18 @@ class Checkin {
         $this->banner_id = $bannerId;
     }
 
+    public function getBedId(){
+        return $this->bed_id;
+    }
+    
     private function setBedId($bedId){
         $this->bed_id = $bedId;
     }
 
+    public function getTerm(){
+        return $this->term;
+    }
+    
     private function setTerm($term){
         $this->term = $term;
     }
@@ -117,23 +129,23 @@ class Checkin {
         $this->key_code = $keyCode;
     }
     
-    public function setCheckoutDate($date)
-    {
+    public function getCheckoutDate(){
+        return $this->checkout_date;
+    }
+    
+    public function setCheckoutDate($date){
         $this->checkout_date = $date;
     }
     
-    public function setCheckoutBy($user)
-    {
+    public function setCheckoutBy($user){
         $this->checkout_by = $user;
     }
     
-    public function setImproperCheckout($improper)
-    {
+    public function setImproperCheckout($improper){
         $this->improper_checkout = $improper;
     }
     
-    public function setKeyNotReturned($key)
-    {
+    public function setKeyNotReturned($key){
         $this->key_not_returned = $key;
     }
 }

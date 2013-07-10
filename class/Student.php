@@ -57,6 +57,11 @@ class Student {
         return $this->getFirstName() . ' ' . $this->getMiddleName() . ' ' . $this->getLastName();
     }
 
+    public function getFullNameInverted()
+    {
+        return $this->getLastName() . ', ' . $this->getFirstName() . ' ' . $this->getMiddleName();
+    }
+    
     public function getPrintableGender()
     {
         $gender = $this->getGender();

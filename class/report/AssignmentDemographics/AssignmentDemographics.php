@@ -258,6 +258,10 @@ class AssignmentDemographics extends Report {
     public function getGrandTotalsByGender(){
         return $this->grandTotalsByGender;
     }
+    
+    public function getProblemsList(){
+    	return $this->problems;
+    }
 }
 
 ?>

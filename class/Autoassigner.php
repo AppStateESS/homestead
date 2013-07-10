@@ -50,7 +50,8 @@ class Autoassigner {
     {
         echo "Apps:  " . count($this->applications) . "\n";
         echo "Pairs: " . count($this->pairs) . "\n";
-        # Run each pairing strategy
+        
+        // Run each pairing strategy
         foreach($this->pairingStrategies as $strategy){
             $strategy->doPairing($this->applications, $this->pairs);
         }
@@ -65,7 +66,7 @@ class Autoassigner {
 
         $fp = fopen('/tmp/WTFISGOINGON', 'w');
 
-        # Run each assignment strategy
+        // Run each assignment strategy
         foreach($this->assignmentStrategies as $strategy) {
             $paircount = 0;
             $pairtotal = count($this->pairs);
