@@ -380,6 +380,10 @@ define('ACTIVITY_ACCEPT_RLC_INVITE',            68);
 define('ACTIVITY_DECLINE_RLC_INVITE',           69);
 define('ACTIVITY_RLC_INVITE_SENT',              70);
 
+
+// Emergency Contact and Missin Person changes
+define('ACTIVITY_EMERGENCY_CONTACT_UPDATED',    71);
+
 /**
  * Errors
  */
