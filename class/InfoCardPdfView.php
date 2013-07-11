@@ -22,42 +22,26 @@ class InfoCardPdfView {
 
     /**
      * Constructor
-     *
-     * @param Student $student
-     * @param HMS_Residence_Hall $hall
-     * @param HMS_Room $room
-     * @param HousingApplication $application
-     * @param Checkin $checkin
+     * 
+     * @param FPDF $fpdf Reference to an FPDF object. This info card will be added as a new page to this PDF object.
+     * @param InfoCard The info card model object to view
      */
-    public function __construct(FPDF &$fpdf, Student $student, HMS_Residence_Hall $hall, HMS_Room $room, HousingApplication $application, Checkin $checkin, Array $damages)
+    public function __construct(FPDF &$fpdf, InfoCard $infoCard)
     {
         $this->pdf = $fpdf;
         
-        $this->student		= $student;
-        $this->hall			= $hall;
-        $this->room			= $room;
-        $this->application	= $application;
-        $this->checkin		= $checkin;
-        $this->damages      = $damages;
-        
-        $this->generatePdf();
+        $this->student		= $infoCard->getStudent();
+        $this->hall			= $infoCard->getHall();
+        $this->room			= $infoCard->getRoom();
+        $this->application	= $infoCard->getApplication();
+        $this->checkin		= $infoCard->getCheckin();
+        $this->damages      = $infoCard->getDamages();
     }
 
-
-    /**
-     * Returns the FPDI object representing the PDF document.
-     *
-     * @return FPDI
-     */
-    public function getPdf()
-    {
-        return $this->pdf;
-    }
-
-    /**
+	/**
      * Does the actual work of generating the PDF.
      */
-    private function generatePdf()
+    public function addInfoCard()
     {
         //$this->pdf = new FPDI('L', 'mm', 'Letter');
 
