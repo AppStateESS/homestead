@@ -315,6 +315,27 @@ class HMS_Email{
         HMS_Email::send_template_message($to->getUsername() . TO_DOMAIN, 'On-campus Housing Application Confirmation!', 'email/application_confirmation.tpl', $tpl);
     }
 
+    /**************************************
+     * Emergency Contact & Missing Person *
+     **************************************/
+
+    /**
+     * Sends an email to the specified student to confirm any updates to their
+     * emergency contact and missing person information for a particular term.
+     *
+     * @param $to Student object representing the student to send this email to
+     * @param $term The term the emergency contact info was updated for
+     */
+    public function send_emergency_contact_updated_confirmation(Student $to, $term) {
+        PHPWS_Core::initModClass('hms', 'Term.php');
+        
+        $tpl = array();
+        $tpl['NAME'] = $to->getName();
+        $tpl['TERM'] = Term::toString($term);
+
+        HMS_Email::send_template_message($to->getUsername() . TO_DOMAIN, 'Emergency Contact Information Updated!', 'email/emergency_contact_update_confirmation.tpl', $tpl);
+    }
+
     /********************
      * Roommate Request *
      ********************/
