@@ -7,11 +7,13 @@ class GenerateInfoCardCommand extends Command {
 
     private $checkinId;
 
-    public function setCheckinId($checkinID){
+    public function setCheckinId($checkinID)
+    {
         $this->checkinId = $checkinID;
     }
 
-    public function getRequestVars(){
+    public function getRequestVars()
+    {
         return array('action' 	 => 'GenerateInfoCard',
                      'checkinId' => $this->checkinId);
     }
