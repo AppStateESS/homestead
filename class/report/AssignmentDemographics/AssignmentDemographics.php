@@ -158,6 +158,7 @@ class AssignmentDemographics extends Report {
                 $student = StudentFactory::getStudentByBannerId($assign['banner_id'], $this->term);
             }catch(Exception $e){
                 $this->problems[] = $assign['banner_id'] . ': Unknown student';
+                $summary['OTHER']++;
                 continue;
             }
 
@@ -178,7 +179,7 @@ class AssignmentDemographics extends Report {
             if(!isset($class) || $class === NULL ||
             ($class != CLASS_FRESHMEN && $class != CLASS_SOPHOMORE &&
             $class != CLASS_JUNIOR && $class != CLASS_SENIOR)) {
-                $this->problems[] = $assign['asu_username'] . ': Class is unrecognized ('. $class .')';
+                //$this->problems[] = $assign['asu_username'] . ': Class is unrecognized ('. $class .')';
                 $summary['OTHER']++;
                 continue;
             }
@@ -189,7 +190,7 @@ class AssignmentDemographics extends Report {
             // Check the type for bad data
             if(!isset($type) || $type === NULL ||
             ($type != TYPE_FRESHMEN && $type != TYPE_TRANSFER && $type != TYPE_CONTINUING && $type != TYPE_READMIT && $type != TYPE_RETURNING)) {
-                $this->problems[] = $assign['asu_username'] . ': Type is unrecognized ('. $type .')';
+                //$this->problems[] = $assign['asu_username'] . ': Type is unrecognized ('. $type .')';
                 $summary['OTHER']++;
                 continue;
             }
