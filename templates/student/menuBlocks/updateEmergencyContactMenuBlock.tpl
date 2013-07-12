@@ -18,7 +18,7 @@
         <!-- END too_late -->
 
         <!-- BEGIN new -->
-        You may {UPDATE_CONTACT} for this term.
+        In case of an emergency, it's important for us to have your most up to date contact information. Help us keep you safe and {UPDATE_CONTACT} for this term.
         <!-- END new -->
     </p>
 </div>

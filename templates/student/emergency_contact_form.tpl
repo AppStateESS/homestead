@@ -45,7 +45,7 @@
             	<th colspan="2">Missing Person Information</th>
             </tr>
             <tr>
-            	<td colspan="2">According to the recent update of the Higher Education Act, all schools are required to ask students who they wish the University to contact should they become missing. Please list your contact person's information below:</td>
+            	<td colspan="2">Federal law requires that we ask you to confidentially identify a person whom the University should contact if you are reported missing for more than 24 hours. Please list your contact person's information below:</td>
             </tr>
             <tr>
             	<td>Contact Person Name:</td>

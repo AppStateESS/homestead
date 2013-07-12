@@ -44,7 +44,7 @@ Email: {EMERGENCY_CONTACT_EMAIL}<br />
 {EMERGENCY_MEDICAL_CONDITION}
 
 <h2>Missing Person Information</h2>
-<p>According to the recent update of the Higher Education Act, all schools are required to ask students who they wish the University to contact should they become missing. Please list your contact person's information below:</p>
+<p>Federal law requires that we ask you to confidentially identify a person whom the University should contact if you are reported missing for more than 24 hours. Please list your contact person's information below:</p>
 Contact Person Name: {MISSING_PERSON_NAME}<br />
 Relationship: {MISSING_PERSON_RELATIONSHIP}<br />
 Phone Number: {MISSING_PERSON_PHONE}<br />
