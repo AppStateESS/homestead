@@ -4,7 +4,7 @@
 
 University Housing welcomes you to Appalachian State University; we are preparing for your arrival. We look forward to having you as a resident on campus!
 
-Your on-campus housing assignment for {TERM} is listed below. More information about living in the residence halls may be found online at http://housing.appstate.edu/assignmentinfo .
+Your on-campus housing assignment for {TERM} is listed below. More information about living in the residence halls may be found online at http://housing.appstate.edu/ .
 
 
 On-campus Housing Assignment Information
