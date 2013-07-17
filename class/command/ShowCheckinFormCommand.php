@@ -86,11 +86,8 @@ class ShowCheckinFormCommand extends Command {
             $errorCmd->redirect();
         }
 
-        // Find the student's housing application, can be null
-        $app = HousingApplicationFactory::getAppByStudent($student, $term);
-
         PHPWS_Core::initModClass('hms', 'CheckinFormView.php');
-        $view = new CheckinFormView($student, $assignment, $app, $hall, $floor, $room, $checkin);
+        $view = new CheckinFormView($student, $assignment, $hall, $floor, $room, $checkin);
 
         $context->setContent($view->show());
     }
