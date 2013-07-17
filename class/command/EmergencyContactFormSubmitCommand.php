@@ -30,8 +30,12 @@ class EmergencyContactFormSubmitCommand extends Command {
         //TODO
 
         // This command grabs the current context and passes the data forward
-        $reviewCmd = CommandFactory::getCommand('ShowEmergencyContactReview');
-        $reviewCmd->setTerm($term);
+        //$reviewCmd = CommandFactory::getCommand('ShowEmergencyContactReview');
+        //$reviewCmd->setTerm($term);
+
+        // Don't show a confirmation page, just jump to saving the new data
+        $reviewCmd = CommandFactory::getCommand('EmergencyContactConfirm');
+        $reviewCmd->setVars($_REQUEST);
         $reviewCmd->redirect();
     }
 }
