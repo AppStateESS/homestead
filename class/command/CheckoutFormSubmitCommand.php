@@ -1,40 +1,54 @@
 <?php
-
 PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 PHPWS_Core::initModClass('hms', 'HousingApplicationFactory.php');
 PHPWS_Core::initModClass('hms', 'CheckinFactory.php');
 PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
 PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
 
+
 class CheckoutFormSubmitCommand extends Command {
 
     private $bannerId;
+
     private $hallId;
+
     private $assignmentId;
 
-    public function setBannerId($bannerId){
+    public function setBannerId($bannerId)
+    {
         $this->bannerId = $bannerId;
     }
 
-    public function setHallId($hallId){
+    public function setHallId($hallId)
+    {
         $this->hallId = $hallId;
     }
 
-    public function setAssignmentId($assignId){
+    public function setAssignmentId($assignId)
+    {
         $this->assignmentId = $assignId;
     }
 
-    public function getRequestVars(){
-        return array('action'	    => 'CheckoutFormSubmit',
-                     'bannerId'	    => $this->bannerId,
-                     'hallId'       => $this->hallId,
-                     'assignmentId' => $this->assignmentId);
+    public function getRequestVars()
+    {
+        return array (
+                'action' => 'CheckoutFormSubmit',
+                'bannerId' => $this->bannerId,
+                'hallId' => $this->hallId,
+                'assignmentId' => $this->assignmentId
+        );
     }
 
     public function execute(CommandContext $context)
     {
-        $bannerId 	= $context->get('bannerId');
-        $hallId		= $context->get('hallId');
+        // Check permissions
+        if (!Current_User::allow('hms', 'checkin')) {
+            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
+            throw new PermissionException('You do not have permission to checkin students.');
+        }
+
+        $bannerId = $context->get('bannerId');
+        $hallId = $context->get('hallId');
 
         // Check for key code
         $keyCode = $context->get('key_code');
@@ -57,7 +71,7 @@ class CheckoutFormSubmitCommand extends Command {
 
         // Create the actual check-in and save it
         $assignment = HMS_Assignment::getAssignmentByBannerId($bannerId, $term);
-        $bed		= $assignment->get_parent();
+        $bed = $assignment->get_parent();
 
         $currUser = Current_User::getUsername();
 
@@ -74,7 +88,7 @@ class CheckoutFormSubmitCommand extends Command {
         }
 
         // Make sure the checkin we're working with was for the same hall/room we're checking out of
-        //TODO
+        // TODO
 
         // Set checkout date and user
         $checkin->setCheckoutDate(time());
@@ -104,9 +118,7 @@ class CheckoutFormSubmitCommand extends Command {
         // Redirect to start of checkout process
         $cmd = CommandFactory::getCommand('ShowCheckoutStart');
 
-
         $cmd->redirect();
     }
-
 }
 ?>

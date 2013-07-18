@@ -34,6 +34,12 @@ class CheckinFormSubmitCommand extends Command {
 
     public function execute(CommandContext $context)
     {
+        // Check permissions
+        if (!Current_User::allow('hms', 'checkin')) {
+            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
+            throw new PermissionException('You do not have permission to checkin students.');
+        }
+
         $bannerId = $context->get('bannerId');
         $hallId = $context->get('hallId');
 
