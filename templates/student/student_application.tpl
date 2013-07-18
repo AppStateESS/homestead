@@ -79,19 +79,19 @@
             	<th colspan="2">Emergency Contact Information</th>
             <tr>
             <tr>
-            	<td>Emergency Contact Person Name:</td>
+            	<td>Emergency Contact Person Name<span class="required">*</span>:</td>
             	<td>{EMERGENCY_CONTACT_NAME}</td>
             </tr>
             <tr>
-            	<td>Relationship:</td>
+            	<td>Relationship<span class="required">*</span>:</td>
             	<td>{EMERGENCY_CONTACT_RELATIONSHIP}</td>
             </tr>
             <tr>
-            	<td>Phone Number:</td>
+            	<td>Phone Number<span class="required">*</span>:</td>
             	<td>{EMERGENCY_CONTACT_PHONE}</td>
             </tr>
             <tr>
-            	<td>Email:</td>
+            	<td>Email<span class="required">*</span>:</td>
             	<td>{EMERGENCY_CONTACT_EMAIL}</td>
             </tr>
             <tr>
@@ -106,19 +106,19 @@
             	<td colspan="2">Federal law requires that we ask you to confidentially identify a person whom the University should contact if you are reported missing for more than 24 hours. Please list your contact person's information below:</td>
             </tr>
             <tr>
-            	<td>Contact Person Name:</td>
+            	<td>Contact Person Name<span class="required">*</span>:</td>
             	<td>{MISSING_PERSON_NAME}</td>
             </tr>
             <tr>
-            	<td>Relationship:</td>
+            	<td>Relationship<span class="required">*</span>:</td>
             	<td>{MISSING_PERSON_RELATIONSHIP}</td>
             </tr>
             <tr>
-            	<td>Phone Number:</td>
+            	<td>Phone Number<span class="required">*</span>:</td>
             	<td>{MISSING_PERSON_PHONE}</td>
             </tr>
             <tr>
-            	<td>Email:</td>
+            	<td>Email<span class="required">*</span>:</td>
             	<td>{MISSING_PERSON_EMAIL}</td>
             </tr>
             

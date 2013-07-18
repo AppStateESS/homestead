@@ -35,20 +35,20 @@ anyone else.</p>
 not wish to provide your cell phone number.</sub></p>
 
 <h2>Emergency Information</h2>
-Emergency Contact Person Name: {EMERGENCY_CONTACT_NAME}<br />
-Relationship: {EMERGENCY_CONTACT_RELATIONSHIP}<br />
-Phone Number: {EMERGENCY_CONTACT_PHONE}<br />
-Email: {EMERGENCY_CONTACT_EMAIL}<br />
+Emergency Contact Person Name<span class="required">*</span>: {EMERGENCY_CONTACT_NAME}<br />
+Relationship<span class="required">*</span>: {EMERGENCY_CONTACT_RELATIONSHIP}<br />
+Phone Number<span class="required">*</span>: {EMERGENCY_CONTACT_PHONE}<br />
+Email<span class="required">*</span>: {EMERGENCY_CONTACT_EMAIL}<br />
 
 <p>Are there any medical conditions you have which our staff should be aware of? (This infomration will be kept confidential and will only be shared with the staff in your residence hall. However, this information <strong>may</strong> be disclosed to medical/emergency personnel in case of an emergency.)</p>
 {EMERGENCY_MEDICAL_CONDITION}
 
 <h2>Missing Person Information</h2>
 <p>Federal law requires that we ask you to confidentially identify a person whom the University should contact if you are reported missing for more than 24 hours. Please list your contact person's information below:</p>
-Contact Person Name: {MISSING_PERSON_NAME}<br />
-Relationship: {MISSING_PERSON_RELATIONSHIP}<br />
-Phone Number: {MISSING_PERSON_PHONE}<br />
-Email: {MISSING_PERSON_EMAIL}<br />
+Contact Person Name<span class="required">*</span>: {MISSING_PERSON_NAME}<br />
+Relationship<span class="required">*</span>: {MISSING_PERSON_RELATIONSHIP}<br />
+Phone Number<span class="required">*</span>: {MISSING_PERSON_PHONE}<br />
+Email<span class="required">*</span>: {MISSING_PERSON_EMAIL}<br />
 
 <h2>Meal Plan</h2>
 <p>Please choose a meal plan. You'll have the opportunity to change

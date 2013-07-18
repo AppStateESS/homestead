@@ -91,6 +91,12 @@ fieldset {
   font-size: 1.25em;
 }
 
+/* Required Field Label */
+.required {
+	color: #F00;
+	font-weight: bold;
+}
+
 /* 22px Icons */
 .rrze-awaiting-22 {
   background: url('../../img/rrze/22x22/status/awaiting.png') no-repeat

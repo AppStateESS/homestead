@@ -49,6 +49,29 @@ class ReApplicationFormSubmitCommand extends Command {
 
         //$mealPlan = $context->get('meal_plan');
 
+        /* Emergency Contact Sanity Checking */
+        $emergencyName = $context->get('emergency_contact_name');
+        $emergencyRelationship = $context->get('emergency_contact_relationship');
+        $emergencyPhone = $context->get('emergency_contact_phone');
+        $emergencyEmail = $context->get('emergency_contact_email');
+
+        if (empty($emergencyName) || empty($emergencyRelationship) || empty($emergencyPhone) || empty($emergencyEmail)) {
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Please complete all of the emergency contact person information.');
+            $errorCmd->redirect();
+        }
+
+
+        /* Missing Persons Sanity Checking */
+        $missingPersonName = $context->get('missing_person_name');
+        $missingPersonRelationship = $context->get('missing_person_relationship');
+        $missingPersonPhone = $context->get('missing_person_phone');
+        $missingPersonEmail = $context->get('missing_person_email');
+
+        if (empty($missingPersonName) || empty($missingPersonRelationship) || empty($missingPersonPhone) || empty($missingPersonEmail)) {
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Please complete all of the missing persons contact information.');
+            $errorCmd->redirect();
+        }
+
         // Sorority stuff
         if(!is_null($context->get('sorority_check'))){
             $sorority = $context->get('sorority_drop');
