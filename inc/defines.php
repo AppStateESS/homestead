@@ -156,7 +156,7 @@ define('ASSIGN_COPY',		'acopy'); // For copying from previous term
 define('UNASSIGN_ADMIN',	  'uadmin'); // General administrative
 define('UNASSIGN_CHANGE',	  'uchange'); // For room change process - cannot be used manually
 define('UNASSIGN_REASSIGN',   'ureassign'); // implicit removal for re-assign command
-define('UNASSIGN_CANCEL',     'ucancel'); // Contract cancellation 
+define('UNASSIGN_CANCEL',     'ucancel'); // Contract cancellation
 define('UNASSIGN_PRE_SPRING', 'uprespring'); // Pre-spring room change
 define('UNASSIGN_RELEASE',    'urelease'); // Contract release
 
@@ -380,9 +380,12 @@ define('ACTIVITY_ACCEPT_RLC_INVITE',            68);
 define('ACTIVITY_DECLINE_RLC_INVITE',           69);
 define('ACTIVITY_RLC_INVITE_SENT',              70);
 
-
 // Emergency Contact and Missin Person changes
 define('ACTIVITY_EMERGENCY_CONTACT_UPDATED',    71);
+
+// Check-in & check-out permissions
+define('ACTIVITY_CHECK_IN',                     72);
+define('ACTIVITY_CHECK_OUT',                    73);
 
 /**
  * Errors

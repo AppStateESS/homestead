@@ -1,7 +1,7 @@
 <?php
-
 PHPWS_Core::initModClass('hms', 'CommandMenu.php');
 PHPWS_Core::initModClass('hms', 'HMS_Permission.php');
+
 
 class ServiceDeskMenu extends CommandMenu {
 
@@ -10,17 +10,17 @@ class ServiceDeskMenu extends CommandMenu {
         parent::__construct();
 
         // Check-in
-        if(Current_User::allow('hms', 'checkin')){
+        if (Current_User::allow('hms', 'checkin')) {
             $this->addCommandByName('Check-in', 'ShowCheckinStart');
         }
 
         // Check-out
-        if(Current_User::allow('hms', 'checkin')){
+        if (Current_User::allow('hms', 'checkin')) {
             $this->addCommandByName('Check-out', 'ShowCheckoutStart');
         }
-        
-        if(UserStatus::isAdmin()){
-            
+
+        if (UserStatus::isAdmin()) {
+
             /*
             if(Current_User::allow('hms', 'package_desk')){
                 $this->addCommandByName('Package Desk', 'ShowPackageDeskMenu');
@@ -31,15 +31,15 @@ class ServiceDeskMenu extends CommandMenu {
 
     public function show()
     {
-        if(empty($this->commands)){
+        if (empty($this->commands)) {
             return '';
         }
 
-        $tpl = array();
+        $tpl = array ();
 
         $tpl['MENU'] = parent::show();
         $tpl['LEGEND_TITLE'] = 'Service Desk';
-        $tpl['ICON_CLASS']   = 'tango-edit-paste';
+        $tpl['ICON_CLASS'] = 'tango-edit-paste';
 
         return PHPWS_Template::process($tpl, 'hms', 'admin/menus/AdminMenuBlock.tpl');
     }

@@ -1,5 +1,6 @@
 <?php
 
+
 /**
  * ShowCheckinStartCommand - Shows the iniital interface for beginning a checkin
  *
@@ -10,13 +11,15 @@ class ShowCheckinStartCommand extends Command {
 
     public function getRequestVars()
     {
-        return array('action'=>'ShowCheckinStart');
+        return array (
+                'action' => 'ShowCheckinStart'
+        );
     }
 
     public function execute(CommandContext $context)
     {
         // Check permissions
-        if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'checkin')){
+        if (!Current_User::allow('hms', 'checkin')) {
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to checkin students.');
         }
@@ -24,22 +27,21 @@ class ShowCheckinStartCommand extends Command {
         $term = Term::getCurrentTerm();
 
         // Check role-based permissions for list of hall or all halls
-        //TODO (for now just listing all halls)
+        // TODO (for now just listing all halls)
 
         PHPWS_Core::initModClass('hms', 'ResidenceHallFactory.php');
         $halls = ResidenceHallFactory::getHallNamesAssoc($term);
 
         if (!isset($halls) || count($halls) < 1) {
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'No residence halls are setup for this term, so the check-in cannot be accessed.');
-            $context->goBack(); 
+            $context->goBack();
         }
-        
+
         PHPWS_Core::initModClass('hms', 'CheckinStartView.php');
         $view = new CheckinStartView($halls, $term);
 
         $context->setContent($view->show());
     }
-
 }
 
 ?>
