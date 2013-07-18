@@ -74,11 +74,12 @@ class HMS_Activity_Log{
     /**
      * Turns an integer activity into text
      */
-    public function get_text_activity($num = -1)
+    public function get_text_activity($num = null)
     {
         $activities = HMS_Activity_Log::getActivityMapping();
-        if($num > -1)
-        return $activities[$num];
+        if (!is_null($num)) {
+            return $activities[$num];
+        }
 
         return $activities[$this->get_activity()];
     }
@@ -217,7 +218,9 @@ class HMS_Activity_Log{
         ACTIVITY_ACCEPT_RLC_INVITE              => "Accepted RLC Invitation",
         ACTIVITY_DECLINE_RLC_INVITE             => "Declined RLC Invitation",
         ACTIVITY_RLC_INVITE_SENT                => "RLC Invitation Sent",
-        ACTIVITY_EMERGENCY_CONTACT_UPDATED      => "Emergency Contact & Missing Person information updated");
+        ACTIVITY_EMERGENCY_CONTACT_UPDATED      => "Emergency Contact & Missing Person information updated",
+        ACTIVITY_CHECK_IN                       => 'Checked-in',
+        ACTIVITY_CHECK_OUT                      => 'Checked-out');
     }
 
     /**
