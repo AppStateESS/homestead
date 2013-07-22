@@ -37,7 +37,8 @@ class CheckinFormView extends View {
         // Key code
         $form->addText('key_code');
         $form->setLabel('key_code', 'Key Code &#35;');
-        
+        $form->setExtra('key_code', 'autofocus');
+
         if (!is_null($this->checkin)) {
             $form->setValue('key_code', $this->checkin->getKeyCode());
         }
