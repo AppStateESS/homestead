@@ -2,7 +2,7 @@
 
 /**
  * View class responsible for showing the 'Edit Room' interface
- * 
+ *
  * @author jbooker
  * @package HMS
  */
@@ -11,12 +11,12 @@ class RoomView extends View {
     private $hall;
     private $floor;
     private $room;
-    
+
     private $damageTypes;
 
     /**
      * Constructor
-     * 
+     *
      * @param HMS_Residence_Hall    $hall
      * @param HMS_Floor             $floor
      * @param HMS_Room              $room
@@ -26,7 +26,7 @@ class RoomView extends View {
         $this->hall		= $hall;
         $this->floor	= $floor;
         $this->room		= $room;
-        
+
         $this->damageTypes = $damageTypes;
     }
 
@@ -44,55 +44,55 @@ class RoomView extends View {
 
         $jsParams = array('LINK_SELECT'=>'#addDamageLink');
         javascript('addRoomDamage', $jsParams, 'mod/hms/');
-        
+
         // Drop down enhancements for room damage dialog
         javascript('chosen', null, 'mod/hms/');
-        
+
         /*** Header Info ***/
         $tpl['TERM'] = Term::getPrintableSelectedTerm();
         $tpl['HALL_NAME']           = $this->hall->getLink();
         $tpl['FLOOR_NUMBER']        = $this->floor->getLink('Floor');
-        
+
         /*** Page Title ***/
         $tpl['ROOM'] = $this->room->getRoomNumber();
-        
+
         /*** Room Attributes Labels ***/
         if($this->room->isOffline()){
             $tpl['OFFLINE_ATTRIB'] = 'Offline';
         }
-        
+
         if($this->room->isReserved()){
             $tpl['RESERVED_ATTRIB'] = 'Reserved';
         }
-        
+
         if($this->room->isRa()){
             $tpl['RA_ATTRIB'] = 'RA';
         }
-        
+
         if($this->room->isPrivate()){
             $tpl['PRIVATE_ATTRIB'] = 'Private';
         }
-        
+
         if($this->room->isOverflow()){
             $tpl['OVERFLOR_ATTRIB'] = 'Overflow';
         }
-        
+
         if($this->room->isParlor()){
             $tpl['PARLOR_ATTRIB'] = 'Parlor';
         }
-        
+
         if($this->room->isADA()){
             $tpl['ADA_ATTRIB'] = 'ADA';
         }
-        
+
         if($this->room->isHearingImpaired()){
             $tpl['HEARING_ATTRIB'] = 'Hearing Impaired';
         }
-        
+
         if($this->room->bathEnSuite()){
             $tpl['BATHENSUITE_ATTRIB'] = 'Bath en Suite';
         }
-        
+
         $number_of_assignees    = $this->room->get_number_of_assignees();
 
         $tpl['NUMBER_OF_BEDS']      = $this->room->get_number_of_beds();
@@ -110,21 +110,21 @@ class RoomView extends View {
         if($number_of_assignees == 0){
             // Room is empty, show the drop down so the user can change the gender
             $roomGenders = array(FEMALE => FEMALE_DESC, MALE => MALE_DESC, AUTO=>AUTO_DESC);
-            
+
             // Check if the user is allowed to set rooms to co-ed, if so add Co-ed to the drop down
             if(Current_User::allow('hms', 'coed_rooms')){
                 $roomGenders[COED] = COED_DESC;
             }
-            
+
             $form->addDropBox('gender_type', $roomGenders);
             $form->setMatch('gender_type', $this->room->gender_type);
         }else{
             // Room is not empty so just show the gender (no drop down)
             $tpl['GENDER_MESSAGE'] = HMS_Util::formatGender($this->room->getGender());
-        
+
             // Add a hidden variable for 'gender_type' so it will be defined upon submission
             $form->addHidden('gender_type', $this->room->gender_type);
-        
+
             // Show the reason the gender could not be changed.
             if($number_of_assignees != 0){
                 $tpl['GENDER_REASON'] = 'Remove occupants to change room gender.';
@@ -158,19 +158,19 @@ class RoomView extends View {
         $form->addCheck('parlor', 1);
         $form->setLabel('parlor','Parlor');
         $form->setMatch('parlor', $this->room->isParlor());
-        
+
         $form->addCheck('ada', 1);
         $form->setLabel('ada', 'ADA');
         $form->setMatch('ada', $this->room->isAda());
-        
+
         $form->addCheck('hearing_impaired', 1);
         $form->setLabel('hearing_impaired', 'Hearing Impaired');
         $form->setMatch('hearing_impaired', $this->room->isHearingImpaired());
-        
+
         $form->addCheck('bath_en_suite', 1);
         $form->setLabel('bath_en_suite', 'Bath en Suite');
         $form->setMatch('bath_en_suite', $this->room->bathEnSuite());
-        
+
         $form->addSubmit('submit', 'Submit');
 
         // Assignment pagers
@@ -194,16 +194,16 @@ class RoomView extends View {
         $tpl = $form->getTemplate();
 
         Layout::addPageTitle("Edit Room");
-        
+
         $tpl['ROOM_DAMAGE_LIST'] = $this->roomDamagePager();
-        
+
         $dmgCmd = CommandFactory::getCommand('ShowAddRoomDamage');
         $dmgCmd->setRoom($this->room);
         $tpl['ADD_DAMAGE_LINK']  = $dmgCmd->getLink('Add Damage');
 
         return PHPWS_Template::process($tpl, 'hms', 'admin/edit_room.tpl');
     }
-    
+
     private function roomDamagePager()
     {
         PHPWS_Core::initCoreClass('DBPager.php');
@@ -211,10 +211,10 @@ class RoomView extends View {
         $pager = new DBPager('hms_room_damage', 'RoomDamageDb');
         $pager->db->addJoin('LEFT OUTER', 'hms_room_damage', 'hms_damage_type', 'damage_type', 'id');
 
-        
+
         $pager->addWhere('hms_room_damage.room_persistent_id', $this->room->getPersistentId());
         $pager->addWhere('hms_room_damage.repaired', 0); // Only non-repaired damages
-        
+
 
         $pager->setModule('hms');
         $pager->setTemplate('admin/roomDamagesPager.tpl');

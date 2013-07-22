@@ -61,6 +61,7 @@
 	    if(data != 'success'){
 	        //TODO improve this
 	        alert('There was an error!');
+	        //console.log(data);
 	    }
         
 	    // Refresh the page
