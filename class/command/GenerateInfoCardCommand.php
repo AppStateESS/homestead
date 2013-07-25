@@ -1,7 +1,4 @@
-<?php 
-
-require_once PHPWS_SOURCE_DIR . 'mod/hms/pdf/fpdf.php';
-require_once PHPWS_SOURCE_DIR . 'mod/hms/pdf/fpdi.php';
+<?php
 
 class GenerateInfoCardCommand extends Command {
 
@@ -29,14 +26,12 @@ class GenerateInfoCardCommand extends Command {
 
         $checkin = CheckinFactory::getCheckinById($checkinId);
 
-        $pdf = new FPDF('L', 'mm', 'Letter');
-        
         $infoCard = new InfoCard($checkin);
-			
-		$view = new InfoCardPdfView($pdf, $infoCard);
-		$view->addInfoCard();
-		
-        $pdf->output();
+
+		$view = new InfoCardPdfView();
+		$view->addInfoCard($infoCard);
+
+        $view->getPdf()->output();
         exit;
     }
 }

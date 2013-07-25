@@ -113,6 +113,36 @@ class CheckoutFormSubmitCommand extends Command {
         // Add this to the activity log
         HMS_Activity_Log::log_activity($student->getUsername(), ACTIVITY_CHECK_OUT, UserStatus::getUsername(), $assignment->where_am_i());
 
+        // Generate the RIC
+        PHPWS_Core::initModClass('hms', 'InfoCard.php');
+        PHPWS_Core::initModClass('hms', 'InfoCardPdfView.php');
+        $infoCard = new InfoCard($checkin);
+
+        $view = new InfoCardPdfView();
+        $view->addInfoCard($infoCard);
+
+        // Email the RIC form to the student
+        //TODO: Refactor this into an actual messageing system where messages extend from a common parent class
+        require_once PHPWS_SOURCE_DIR . 'mod/hms/lib/SwiftMailer/swift_required.php';
+
+        $message = Swift_Message::newInstance();
+
+        $message->setSubject('Check-out Confirmation');
+        $message->setFrom(array('uha@appstate.edu' => 'University Housing'));
+        $message->setTo(array(($student->getUsername() . '@appstate.edu') => $student->getName()));
+        $message->setBody('ohhh hai');
+        $message->addPart('<em>Here is the html part</em>', 'text/html');
+
+        // Attach info card
+        $attachment = Swift_Attachment::newInstance($view->getPdf()->output('my-pdf-file.pdf', 'S'), 'my-file.pdf', 'application/pdf');
+        $message->attach($attachment);
+
+        $transport = Swift_SmtpTransport::newInstance('localhost');
+        $mailer = Swift_Mailer::newInstance($transport);
+
+        $mailer->send($message);
+
+
         NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Checkout successful.');
 
         // Redirect to start of checkout process
