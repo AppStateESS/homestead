@@ -31,14 +31,14 @@ class SubmitContactFormCommand extends Command {
     public function execute(CommandContext $context)
     {
         $send_to = array();
-        $send_to[] = 'brian@tux.appstate.edu';
-        $send_to[] = 'jtickle@tux.appstate.edu';
-        $send_to[] = 'jbooker@tux.appstate.edu';
+        $send_to[] = 'brownbw@appstate.edu';
+        $send_to[] = 'ticklejw@appstate.edu';
+        $send_to[] = 'jb67803@appstate.edu';
         $send_to[] = 'searssr@appstate.edu';
         $send_to[] = 'braswelldl@appstate.edu';
         $send_to[] = 'burlesonst@appstate.edu';
 
-        $from    = 'hms@tux.appstate.edu';
+        $from    = 'uha@appstate.edu';
         $subject = 'HMS Contact Form';
 
         $body  = "Username: ".$context->get('asu_username')."\n";

@@ -16,8 +16,8 @@ class HMS_Email{
     {
         $contacts = array();
 
-        $contacts[] = 'jtickle@tux.appstate.edu';
-        $contacts[] = 'jbooker@tux.appstate.edu';
+        $contacts[] = 'ticklejw@appstate.edu';
+        $contacts[] = 'jb67803@appstate.edu';
 
         return $contacts;
     }
@@ -242,7 +242,7 @@ class HMS_Email{
 
     /**
      * Sends an individual assignment notice message.
-     * 
+     *
      * @param String $to ASU username
      * @param String $name Student's first and last name
      * @param String $term
@@ -297,7 +297,7 @@ class HMS_Email{
         HMS_Email::send_template_message($to->getUsername() . TO_DOMAIN, 'Roommate Confirmation!', 'email/roommate_confirmation.tpl', $tpl);
     }
 
-    
+
     /**
      * Sends an email to the specified student to confirm submission of a housing application for a particular term
      * @param $to Student object representing the student to send this email too
@@ -328,7 +328,7 @@ class HMS_Email{
      */
     public function send_emergency_contact_updated_confirmation(Student $to, $term) {
         PHPWS_Core::initModClass('hms', 'Term.php');
-        
+
         $tpl = array();
         $tpl['NAME'] = $to->getName();
         $tpl['TERM'] = Term::toString($term);
@@ -486,14 +486,14 @@ class HMS_Email{
     {
         $to = $student->getUsername() . TO_DOMAIN;
         $subject = 'Response Needed: Residential Learning Community Invitation';
-    
+
         $tags = array();
         $tags['NAME'] = $student->getName();
         $tags['COMMUNITY_NAME'] = $community->get_community_name();
         $tags['TERM'] = Term::toString($term) . ' - ' . Term::toString(Term::getNextTerm($term));
         $tags['COMMUNITY_TERMS_CONDITIONS'] = $community->getTermsConditions();
         $tags['RESPOND_BY'] = date("l, F jS, Y", $respondByTimestamp) . ' at ' . date("ga", $respondByTimestamp);
-    
+
         HMS_Email::send_template_message($to, $subject, 'email/RlcInvite.tpl', $tags);
     }
 
@@ -504,12 +504,12 @@ class HMS_Email{
      */
     public function sendWithdrawnSearchOutput($text)
     {
-        $to = array('jbooker@tux.appstate.edu', 'burlesonst@appstate.edu');
+        $to = array('jb67803@appstate.edu', 'burlesonst@appstate.edu');
         $subject = 'Withdrawn Student Search';
 
         HMS_Email::send_email($to, null, $subject, $text);
     }
-    
+
     public static function sendReportCompleteNotification($username, $reportName)
     {
         $to = $username . TO_DOMAIN;
@@ -517,9 +517,9 @@ class HMS_Email{
 
         $tpl = array();
         $tpl['REPORT_NAME'] = $reportName;
-        
+
         HMS_Email::send_template_message($to, $subject, 'email/ReportCompleteNotification.tpl', $tpl);
     }
-    
+
 } // End HMS_Email class
 ?>

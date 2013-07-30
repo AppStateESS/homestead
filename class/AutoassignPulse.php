@@ -39,8 +39,8 @@ class AutoassignPulse extends ScheduledPulse
         ob_end_clean();
 
         // TODO: Email the person that scheduled the autoassign.
-        mail('jtickle@tux.appstate.edu', 'Autoassign Complete', $message);
-        mail('jbooker@tux.appstate.edu', 'Autoassign Complete', $message);
+        mail('ticklejw@appstate.edu', 'Autoassign Complete', $message);
+        mail('jb67803@appstate.edu', 'Autoassign Complete', $message);
 
         return TRUE;
     }

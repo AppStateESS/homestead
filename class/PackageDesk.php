@@ -3,7 +3,7 @@
 /**
  * Represents a package desk where students can pickup a package.
  *
- * @author Jeremy Booker <jbooker@tux.appstate.edu>
+ * @author Jeremy Booker <jb67803@appstate.edu>
  * @package hms
  */
 class PackageDesk {
@@ -58,7 +58,7 @@ class PackageDesk {
     {
         $this->id = $id;
     }
-    
+
     /**
      * Returns the name of the package desk
      * @return string

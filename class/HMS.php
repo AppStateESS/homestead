@@ -71,7 +71,7 @@ abstract class HMS {
                     $message2 = $this->formatException($e);
                     echo "HMS has experienced a major internal error.  Attempting to email an admin and then exit.";
                     $message = "Something terrible has happened, and the exception catch-all threw an exception.\n\nThe first exception was:\n\n$message\n\nThe second exception was:\n\n$message2";
-                    mail('webmaster@tux.appstate.edu', 'A Major HMS Error Has Occurred', $message);
+                    mail('uha@appstate.edu', 'A Major HMS Error Has Occurred', $message);
                     exit();
                 }
             }

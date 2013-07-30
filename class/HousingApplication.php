@@ -238,13 +238,13 @@ class HousingApplication {
             // Send an email notification
             PHPWS_Core::initCoreClass('Mail.php');
             $send_to = array();
-            $send_to[] = 'jbooker@tux.appstate.edu';
-            $send_to[] = 'jtickle@tux.appstate.edu';
+            $send_to[] = 'jb67803@appstate.edu';
+            $send_to[] = 'ticklejw@appstate.edu';
 
             $mail = new PHPWS_Mail;
 
             $mail->addSendTo($send_to);
-            $mail->setFrom('hms@tux.appstate.edu');
+            $mail->setFrom('uha@appstate.edu');
             $mail->setSubject('HMS Application Error!');
 
             $body = "Username: {$this->getUsername()}\n";
