@@ -9,7 +9,7 @@ require_once(PHPWS_SOURCE_DIR . 'inc/hms_defines.php');
 /**
  * Name & Email address info - Used for sending out emails
  */
-define('SYSTEM_NAME', 'ASU Housing Management System'); // Used as "from" name in emails
+define('SYSTEM_NAME', 'University Housing'); // Used as "from" name in emails
 define('EMAIL_ADDRESS', 'uha'); // user name of email account to send email from
 define('DOMAIN_NAME', 'appstate.edu'); // domain name to send email from
 define('FROM_ADDRESS', EMAIL_ADDRESS . '@' . DOMAIN_NAME); // fully qualified "from" address

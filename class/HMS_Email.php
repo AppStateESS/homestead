@@ -1,5 +1,7 @@
 <?php
 
+require_once PHPWS_SOURCE_DIR . 'mod/hms/lib/SwiftMailer/swift_required.php';
+
 /**
  * HMS_Email class - A class which handles the various Email delevery needs of HMS.
  *
@@ -519,6 +521,33 @@ class HMS_Email{
         $tpl['REPORT_NAME'] = $reportName;
 
         HMS_Email::send_template_message($to, $subject, 'email/ReportCompleteNotification.tpl', $tpl);
+    }
+
+    public static function sendCheckinConfirmation(Student $student, InfoCard $infoCard, InfoCardPdfView $infoCardView){
+
+        $tags['NAME']       = $student->getName();
+        $tags['HALL_NAME']  = $infoCard->getHall()->getHallName();
+        $tags['ASSIGNMENT'] = $infoCard->getAssignment()->where_am_i();
+
+        $content = PHPWS_Template::process($tags, 'hms', 'email/checkinConfirmation.tpl');
+
+        $message = Swift_Message::newInstance();
+
+        $message->setSubject('Check-in Confirmation');
+        $message->setFrom(array(FROM_ADDRESS => SYSTEM_NAME));
+        $message->setTo(array(($student->getUsername() . TO_DOMAIN) => $student->getName()));
+
+        $message->setBody($content);
+        $message->addPart($content, 'text/html');
+
+        // Attach info card
+        $attachment = Swift_Attachment::newInstance($infoCardView->getPdf()->output('my-pdf-file.pdf', 'S'), 'ResidentInfoCard.pdf', 'application/pdf');
+        $message->attach($attachment);
+
+        $transport = Swift_SmtpTransport::newInstance('localhost');
+        $mailer = Swift_Mailer::newInstance($transport);
+
+        $mailer->send($message);
     }
 
 } // End HMS_Email class

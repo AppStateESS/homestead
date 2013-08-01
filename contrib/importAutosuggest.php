@@ -54,6 +54,10 @@ while(($line = fgetcsv($inputFile, 0, '|')) !== FALSE) {
 
     $bannerId = $line[0];
 
+    if($bannerId == ''){
+        continue;
+    }
+
     $firstName  = $line[2];
     $middleName = $line[3];
     $lastName   = $line[1];
@@ -70,6 +74,11 @@ while(($line = fgetcsv($inputFile, 0, '|')) !== FALSE) {
 
 
     $result = pg_query($sql);
+
+    if($result === false){
+        echo $sql . "\n\n";
+        echo pg_last_error() . "\n\n";
+    }
 }
 
 pg_close($db);

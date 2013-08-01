@@ -76,6 +76,11 @@ class InfoCard {
 		return $this->room;
 	}
 
+	public function getAssignment()
+	{
+	    return $this->assignment;
+	}
+
 	public function getApplication(){
 		return $this->application;
 	}

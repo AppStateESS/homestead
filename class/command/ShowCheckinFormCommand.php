@@ -38,7 +38,7 @@ class ShowCheckinFormCommand extends Command {
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
         PHPWS_Core::initModClass('hms', 'HousingApplicationFactory.php');
 
-        $term = Term::getCurrentTerm();
+        $term = Term::getSelectedTerm();
 
         $bannerId = $context->get('bannerId');
         $hallId = $context->get('hallId');
