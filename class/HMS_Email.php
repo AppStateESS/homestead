@@ -1,6 +1,9 @@
 <?php
 
 require_once PHPWS_SOURCE_DIR . 'mod/hms/lib/SwiftMailer/swift_required.php';
+require_once PHPWS_SOURCE_DIR . 'mod/hms/lib/PhpMarkdown/Markdown.php';
+
+use \Michelf\Markdown;
 
 /**
  * HMS_Email class - A class which handles the various Email delevery needs of HMS.
@@ -531,6 +534,8 @@ class HMS_Email{
 
         $content = PHPWS_Template::process($tags, 'hms', 'email/checkinConfirmation.tpl');
 
+        $htmlContent = Markdown::defaultTransform($content);
+
         $message = Swift_Message::newInstance();
 
         $message->setSubject('Check-in Confirmation');
@@ -538,7 +543,33 @@ class HMS_Email{
         $message->setTo(array(($student->getUsername() . TO_DOMAIN) => $student->getName()));
 
         $message->setBody($content);
-        $message->addPart($content, 'text/html');
+        $message->addPart($htmlContent, 'text/html');
+
+        // Attach info card
+        $attachment = Swift_Attachment::newInstance($infoCardView->getPdf()->output('my-pdf-file.pdf', 'S'), 'ResidentInfoCard.pdf', 'application/pdf');
+        $message->attach($attachment);
+
+        $transport = Swift_SmtpTransport::newInstance('localhost');
+        $mailer = Swift_Mailer::newInstance($transport);
+
+        $mailer->send($message);
+    }
+
+    public static function sendCheckoutConfirmation(Student $student, InfoCard $infoCard, InfoCardPdfView $infoCardView){
+        $tags['NAME']       = $student->getName();
+        $tags['ASSIGNMENT'] = $infoCard->getAssignment()->where_am_i();
+
+        $content = PHPWS_Template::process($tags, 'hms', 'email/checkoutConfirmation.tpl');
+        $htmlContent = Markdown::defaultTransform($content);
+
+        $message = Swift_Message::newInstance();
+
+        $message->setSubject('Check-out Confirmation');
+        $message->setFrom(array(FROM_ADDRESS => SYSTEM_NAME));
+        $message->setTo(array(($student->getUsername() . TO_DOMAIN) => $student->getName()));
+
+        $message->setBody($content);
+        $message->addPart($htmlContent, 'text/html');
 
         // Attach info card
         $attachment = Swift_Attachment::newInstance($infoCardView->getPdf()->output('my-pdf-file.pdf', 'S'), 'ResidentInfoCard.pdf', 'application/pdf');
