@@ -59,7 +59,7 @@
 		});
 		
 		cardReader.cardRead(function(value){
-			console.log(value);
+			//console.log(value);
 			var bannerParts = value.split("=");
 			$('#checkin_form_banner_id').val(bannerParts[0]);
 			$('#checkin_form').submit();

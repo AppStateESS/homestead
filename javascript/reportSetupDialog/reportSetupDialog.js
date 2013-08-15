@@ -46,7 +46,7 @@ $.fn.reportSetupDialog = function(settings) {
         
         function backgroundSchedule()
         {
-            console.log($("#"+opts.formId));
+            //console.log($("#"+opts.formId));
             $.ajax({
                 url: "index.php?module=hms&action=ScheduleReport",
                 success:bgScheduleSuccess,

@@ -73,7 +73,7 @@
 	}
 	
 	function handleCancelError(jqXHR, textStatus, errorThrown){
-	    console.log(data);
+	    //console.log(data);
         alert('error!');
 	}
 })(jQuery);

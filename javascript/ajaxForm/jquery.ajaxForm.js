@@ -68,7 +68,7 @@
 					try {
 						data = eval('(' + data + ')');
 					} catch(e) {
-                        console.log(data);
+                        //console.log(data);
 						alert("We're sorry... something went wrong and what you just did wasn't saved.  Check the logs.");
 						return;
 					}
@@ -79,7 +79,7 @@
 							alert("We're sorry... something went wrong and what you just did wasn't saved.  Check the logs.");
 							return;
 						} else {
-                            console.log(data);
+                            //console.log(data);
                             var err = "";
                             if(data.message != undefined) {
                                 err += data.message + "\n\n";

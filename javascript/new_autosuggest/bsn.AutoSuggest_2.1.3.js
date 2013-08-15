@@ -708,7 +708,7 @@ _b.Ajax.prototype.processReqChange = function()
 		{
 			this.onComplete( this.req );
 		} else {
-            console.log(this.req);
+            //console.log(this.req);
 			this.onError( this.req.status );
 		}
 	}

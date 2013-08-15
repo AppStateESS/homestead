@@ -29,7 +29,7 @@ var NoteLink = function(link){
     $("#note-link-dialog").dialog({modal: true, autoOpen: false, width: 350, height: 250 });
 
     $(this.link).click(function(){
-            console.log(me);
+            //console.log(me);
             me.showDialog();
         });
 }
