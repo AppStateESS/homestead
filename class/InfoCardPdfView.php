@@ -243,7 +243,9 @@ class InfoCardPdfView {
         $this->pdf->setXY(10, 130);
         $this->pdf->cell(50, 5, 'Existing Room Damages:');
 
-        if ($infoCard->getDamages() !== null && count($infoCard->getDamages()) > 0) {
+        $damageList = $infoCard->getDamages();
+
+        if ($damageList !== null && count($damageList) > 0) {
             // Turn the font size down
             $this->pdf->setFont('Times', null, 9);
 
@@ -252,7 +254,7 @@ class InfoCardPdfView {
             $xOffset = 10;
             $yOffset = 140; // Distance down the page, we'll increment this as we go
 
-            foreach ($this->damages as $dmg) {
+            foreach ($damageList as $dmg) {
                 $this->pdf->setXY($xOffset, $yOffset);
 
                 $this->pdf->cell(50, 5, '(' . $dmg->getSide() . ') ' . $damageTypes[$dmg->getDamageType()]['category'] . ' ' . $damageTypes[$dmg->getDamageType()]['description']);

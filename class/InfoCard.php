@@ -55,7 +55,7 @@ class InfoCard {
 		$this->hall = $this->floor->get_parent();
 
 		$this->damages = RoomDamageFactory::getDamagesByRoom($this->room);
-		if(!isset($damages) || is_null($damages)){
+		if(sizeof($this->damages) <= 0){
 			$this->damages = array();
 		}
 	}
