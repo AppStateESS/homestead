@@ -197,9 +197,12 @@ class RoomView extends View {
 
         $tpl['ROOM_DAMAGE_LIST'] = $this->roomDamagePager();
 
-        $dmgCmd = CommandFactory::getCommand('ShowAddRoomDamage');
-        $dmgCmd->setRoom($this->room);
-        $tpl['ADD_DAMAGE_LINK']  = $dmgCmd->getLink('Add Damage');
+
+        if(Current_User::allow('hms', 'add_room_dmg')){
+            $dmgCmd = CommandFactory::getCommand('ShowAddRoomDamage');
+            $dmgCmd->setRoom($this->room);
+            $tpl['ADD_DAMAGE_LINK']  = $dmgCmd->getLink('Add Damage');
+        }
 
         return PHPWS_Template::process($tpl, 'hms', 'admin/edit_room.tpl');
     }
