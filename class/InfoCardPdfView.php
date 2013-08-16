@@ -212,14 +212,12 @@ class InfoCardPdfView {
         // Verticle Line
         $this->pdf->line(145, 105, 145, 200);
 
-        // Check-in
+        /*******************
+         * Check-in Column *
+         */
         $this->pdf->setFont('Times', null, 16);
         $this->pdf->setXY(10, 108);
         $this->pdf->cell(50, 5, 'Check-in');
-
-        // Check-out
-        $this->pdf->setXY(150, 108);
-        $this->pdf->cell(50, 5, 'Check-out');
         $this->pdf->setFont('Times', null, 14);
 
         // Check-in Date/time
@@ -236,8 +234,8 @@ class InfoCardPdfView {
         $this->pdf->cell(50, 5, $infoCard->getCheckin()->getKeyCode());
 
 
-        /*************
-         * Damages   *
+        /**********************
+         * Check-in Damages   *
          */
 
         $this->pdf->setXY(10, 130);
@@ -261,6 +259,27 @@ class InfoCardPdfView {
                 $yOffset += 6;
             }
         }
+
+        /********************
+         * Check-out Column *
+         */
+        // Check-out
+        $this->pdf->setFont('Times', null, 16);
+        $this->pdf->setXY(150, 108);
+        $this->pdf->cell(50, 5, 'Check-out');
+        $this->pdf->setFont('Times', null, 14);
+
+        // Check-out Date/time
+        $this->pdf->setXY(210, 108);
+        $this->pdf->cell(50, 5, date('j M, Y @ g:ia', $infoCard->getCheckin()->getCheckoutDate()));
+
+        // Key code at check-out
+        $this->pdf->setXY(150, 118);
+        $this->pdf->cell(50, 5, 'Key Code:');
+
+        $this->pdf->setXY(173, 118);
+        //$this->pdf->cell(50, 5, $this->pdf->cell(50, 5, $infoCard->getCheckin()->getCheckoutKeyCode()));
+
     }
 }
 
