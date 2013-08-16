@@ -38,7 +38,14 @@
 	    // Disable the buttons to prevent double-submissions
 	    $("#cancelDialogSubmitButton").button("disable");
 	    $("#cancelDialogCloseButton").button("disable");
-        
+	    
+	    if($("#phpws-form-damage-type").val() == '') {
+	    	alert('Please choose a damage type from the drop down box.');
+	    	$("#cancelDialogSubmitButton").button("enable");
+		    $("#cancelDialogCloseButton").button("enable");
+		    return;
+	    }
+	    
         // Submit the form
         var data = $("#addDamageForm").serialize();
         
