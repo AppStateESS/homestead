@@ -8,7 +8,7 @@ class SOAPDataProvider extends StudentDataProvider {
     {
         // Force username to lowercase (SOAP is case sensitive)
         $username = strtolower($username);
-        
+
         $soap = SOAP::getInstance(UserStatus::getUsername(), UserStatus::isAdmin()?(SOAP::ADMIN_USER):(SOAP::STUDENT_USER));
         $id = $soap->getBannerId($username);
 
@@ -24,15 +24,15 @@ class SOAPDataProvider extends StudentDataProvider {
     {
         // Sanity checking on the Banner ID
         $id = trim($id);
-        
+
         if (!isset($id) || empty($id) || $id == '') {
             throw new InvalidArgumentException('Missing Banner id. Please enter a valid Banner ID (nine digits).');
         }
-        
+
         if (strlen($id) > 9 || strlen($id) < 9 || !preg_match("/^[0-9]{9}$/", $id)) {
             throw new InvalidArgumentException('That was not a valid Banner ID. Please enter a valid Banner ID (nine digits).');
         }
-        
+
         $student = new Student();
 
         $soap = SOAP::getInstance(UserStatus::getUsername(), UserStatus::isAdmin()?(SOAP::ADMIN_USER):(SOAP::STUDENT_USER));
@@ -80,17 +80,17 @@ class SOAPDataProvider extends StudentDataProvider {
         } else {
             $student->setStudentLevel('');
         }
-        
+
         $student->setInternational($soapData->international);
 
         $student->setHonors($soapData->honors);
         $student->setTeachingFellow($soapData->teaching_fellow);
         $student->setWataugaMember($soapData->watauga_member);
         $student->setGreek($soapData->greek);
-        
+
         $student->setPinDisabled($soapData->disabled_pin);
         $student->setHousingWaiver($soapData->housing_waiver);
-        
+
         if (isset($soapData->app_decision_code)) {
             $student->setAdmissionDecisionCode($soapData->app_decision_code);
         } else {
@@ -154,7 +154,7 @@ class SOAPDataProvider extends StudentDataProvider {
         if ($student->getApplicationTerm() > Term::getCurrentTerm() && $student->getType() == TYPE_CONTINUING) {
             $student->setType(TYPE_FRESHMEN);
         }
-        
+
         // This is a hack to fix the student type for international grad students
         $type = $student->getType();
         if ((!isset($type) || $type == '') && $student->getStudentLevel() == LEVEL_GRAD && $student->isInternational() == 1) {
@@ -163,6 +163,11 @@ class SOAPDataProvider extends StudentDataProvider {
         }
 
         if ($student->getBannerId() == '900532551') {
+            $student->setApplicationTerm(201340);
+        }
+
+        if ($student->getBannerId() == '900514082') {
+            $student->setType(TYPE_FRESHMEN);
             $student->setApplicationTerm(201340);
         }
     }
