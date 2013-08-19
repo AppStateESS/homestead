@@ -12,7 +12,7 @@
 
 class CheckinsByHall extends Report {
 
-    const friendlyName = 'Checkins By Hall';
+    const friendlyName = 'Check-ins By Hall';
     const shortName    = 'CheckinsByHall';
 
     private $term;
