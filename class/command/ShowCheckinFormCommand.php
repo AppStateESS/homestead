@@ -91,9 +91,9 @@ class ShowCheckinFormCommand extends Command {
         PHPWS_Core::initModClass('hms', 'CheckinFactory.php');
         $checkin = CheckinFactory::getCheckinByBannerId($bannerId, $term);
 
-        // If there is a checkin, and the difference between the current time and the checkin time is
+        // If there is a checkin for the same bed, and the difference between the current time and the checkin time is
         // greater than 48 hours, then show an error.
-        if (!is_null($checkin) && (time() - $checkin->getCheckinDate()) > Checkin::CHECKIN_TIMEOUT) {
+        if (!is_null($checkin) && $checkin->getBedId() == $bed->getId() && (time() - $checkin->getCheckinDate()) > Checkin::CHECKIN_TIMEOUT) {
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, $student->getName() . ' has already checked in to ' . $assignment->where_am_i());
             $errorCmd->redirect();
         }
