@@ -110,5 +110,38 @@ class CheckinFactory {
 
     	return $results;
     }
+
+    /**
+     * Returns the earliest check-in for the given student, in the given hall, which the student
+     * has not checked out of yet.
+     */
+    public static function getPendingCheckoutForStudentByHall(Student $student, HMS_Residence_Hall $hall)
+    {
+        $db = new PHPWS_DB('hms_checkin');
+
+        // Join the hall structure
+        $db->addJoin('', 'hms_checkin', 'hms_hall_structure', 'bed_id', 'bedid');
+
+        $db->addWhere('banner_id', $student->getBannerId());
+        $db->addWhere('term', $hall->getTerm());
+
+        // Checkin bed ID must be in the request hall
+        $db->addWhere('hms_hall_structure.hallid', $hall->getId());
+
+        $db->addOrder(array('hms_checkin.checkin_date ASC')); // Earliest checkin first
+
+        $checkin = new RestoredCheckin();
+        $result = $db->loadObject($checkin);
+
+        if(PHPWS_Error::logIfError($result)){
+            throw new DatabaseException($result->toString());
+        }
+
+        if($checkin->getId() == null){
+            return null;
+        }
+
+        return $checkin;
+    }
 }
 ?>

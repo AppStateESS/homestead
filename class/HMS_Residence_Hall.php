@@ -29,10 +29,10 @@ class HMS_Residence_Hall extends HMS_Item
     public $other_image_id;
     public $map_image_id;
     public $room_plan_image_id;
-    
+
     // Package desk id
     public $package_desk;
-    
+
 
     /**
      * Listing of floors associated with this room
@@ -268,6 +268,11 @@ class HMS_Residence_Hall extends HMS_Item
         return $this->id;
     }
 
+    public function getTerm()
+    {
+        return $this->term;
+    }
+
     public function getHallName() {
         return $this->hall_name;
     }
@@ -379,29 +384,29 @@ class HMS_Residence_Hall extends HMS_Item
     public function countNominalBeds()
     {
         $db = new PHPWS_DB('hms_bed');
-        
+
         $db->addJoin('LEFT OUTER', 'hms_bed',     'hms_room',           'room_id',        'id');
         $db->addJoin('LEFT OUTER', 'hms_room',    'hms_floor',          'floor_id',          'id');
         $db->addJoin('LEFT OUTER', 'hms_floor',   'hms_residence_hall', 'residence_hall_id', 'id');
-        
+
         $db->addWhere('hms_residence_hall.id', $this->id);
         $db->addWhere('hms_room.offline', 0);
         $db->addWhere('hms_room.overflow', 0);
         $db->addWhere('hms_room.parlor', 0);
-        
+
         $result = $db->select('count');
-        
+
         if($result == 0) {
             return 0;
         }
-        
+
         if(PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         }
-        
+
         return $result;
     }
-    
+
     /*
      * Returns the number of students currently assigned to the current hall
     */
@@ -697,7 +702,7 @@ class HMS_Residence_Hall extends HMS_Item
     {
         return $this->package_desk;
     }
-    
+
     /**
      * Sets the package desk ID for this hall. Id must appear in
      * the 'hms_package_desk' table.
@@ -707,7 +712,7 @@ class HMS_Residence_Hall extends HMS_Item
     {
         $this->package_desk = $id;
     }
-    
+
     /******************
      * Static Methods *
     *****************/
@@ -715,7 +720,7 @@ class HMS_Residence_Hall extends HMS_Item
     /**
      * Returns an array of hall objects for the given term. If no
      * term is provided, then the current term is used.
-     * 
+     *
      * @deprecated
      * @see ResidenceHallFactory
      */
@@ -746,7 +751,7 @@ class HMS_Residence_Hall extends HMS_Item
 
     /**
      * Returns an array with the hall id as the key and the hall name as the value
-     * 
+     *
      * @deprecated
      * @see ResidenceHallFactory
      */

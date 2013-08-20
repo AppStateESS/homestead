@@ -32,6 +32,8 @@ class ShowCheckoutFormCommand extends Command {
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
         PHPWS_Core::initModClass('hms', 'CheckinFactory.php');
         PHPWS_Core::initModClass('hms', 'RoomDamageFactory.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
 
         $term = Term::getCurrentTerm();
 
@@ -64,32 +66,17 @@ class ShowCheckoutFormCommand extends Command {
             $errorCmd->redirect();
         }
 
-        // Make sure the student is assigned in the current term
-        $assignment = HMS_Assignment::getAssignmentByBannerId($bannerId, $term);
-        if (!isset($assignment) || is_null($assignment)) {
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, $student->getName() . ' is not assigned for ' . Term::toString($term) . '. Please contact the University Housing Assignments Office at 828-262-6111.');
+        // Find the earliest checkin that matches hall the user selected
+        $hall = new HMS_Residence_Hall($hallId);
+        $checkin = CheckinFactory::getPendingCheckoutForStudentByHall($student, $hall);
+
+        if(!isset($checkin)){
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Sorry, we couldn't find a matching check-in at {$hall->getHallName()} for this student to check-out of.");
             $errorCmd->redirect();
         }
 
-        // Make sure the student's assignment matches the hall the user selected
-        $bed = $assignment->get_parent();
+        $bed = new HMS_Bed($checkin->getBedId());
         $room = $bed->get_parent();
-        $floor = $room->get_parent();
-        $hall = $floor->get_parent();
-
-        if ($hallId != $hall->getId()) {
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Wrong hall! ' . $student->getName() . ' is assigned to ' . $assignment->where_am_i());
-            $errorCmd->redirect();
-        }
-
-        // Make sure the student isn't already checked out
-        /*
-        PHPWS_Core::initModClass('hms', 'CheckinFactory.php');
-        $checkin = CheckinFactory::getCheckinByBannerId($bannerId, $term);
-        if(!is_null($checkin)){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, $student->getName() . ' has already checked in to ' . $assignment->where_am_i());
-            $errorCmd->redirect();
-        }*/
 
         // Get the damages for this student's room
         $damages = RoomDamageFactory::getDamagesByRoom($room);
@@ -98,7 +85,7 @@ class ShowCheckoutFormCommand extends Command {
         $checkin = CheckinFactory::getCheckinByBannerId($student->getBannerId(), $term);
 
         PHPWS_Core::initModClass('hms', 'CheckoutFormView.php');
-        $view = new CheckoutFormView($student, $assignment, $hall, $floor, $room, $damages, $checkin);
+        $view = new CheckoutFormView($student, $hall, $room, $bed, $damages, $checkin);
 
         $context->setContent($view->show());
     }

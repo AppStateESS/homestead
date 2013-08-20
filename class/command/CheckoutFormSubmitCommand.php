@@ -2,7 +2,7 @@
 PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 PHPWS_Core::initModClass('hms', 'HousingApplicationFactory.php');
 PHPWS_Core::initModClass('hms', 'CheckinFactory.php');
-PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
+PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
 PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
 
 
@@ -10,32 +10,24 @@ class CheckoutFormSubmitCommand extends Command {
 
     private $bannerId;
 
-    private $hallId;
-
-    private $assignmentId;
+    private $checkinId;
 
     public function setBannerId($bannerId)
     {
         $this->bannerId = $bannerId;
     }
 
-    public function setHallId($hallId)
+    public function setCheckinId($checkinId)
     {
-        $this->hallId = $hallId;
-    }
-
-    public function setAssignmentId($assignId)
-    {
-        $this->assignmentId = $assignId;
+        $this->checkinId = $checkinId;
     }
 
     public function getRequestVars()
     {
         return array (
-                'action' => 'CheckoutFormSubmit',
-                'bannerId' => $this->bannerId,
-                'hallId' => $this->hallId,
-                'assignmentId' => $this->assignmentId
+                'action'    => 'CheckoutFormSubmit',
+                'bannerId'  => $this->bannerId,
+                'checkinId' => $this->checkinId
         );
     }
 
@@ -48,7 +40,7 @@ class CheckoutFormSubmitCommand extends Command {
         }
 
         $bannerId = $context->get('bannerId');
-        $hallId = $context->get('hallId');
+        $checkinId = $context->get('checkinId');
 
         // Check for key code
         $keyCode = $context->get('key_code');
@@ -70,13 +62,10 @@ class CheckoutFormSubmitCommand extends Command {
         $student = StudentFactory::getStudentByBannerId($bannerId, $term);
 
         // Create the actual check-in and save it
-        $assignment = HMS_Assignment::getAssignmentByBannerId($bannerId, $term);
-        $bed = $assignment->get_parent();
-
         $currUser = Current_User::getUsername();
 
         // Get the existing check-in
-        $checkin = CheckinFactory::getCheckinByBed($student, $bed, $term);
+        $checkin = CheckinFactory::getCheckinById($checkinId);
 
         // Make sure we found a check-in
         if (is_null($checkin)) {
@@ -86,9 +75,6 @@ class CheckoutFormSubmitCommand extends Command {
             $errorCmd->setHallId($hallId);
             $errorCmd->redirect();
         }
-
-        // Make sure the checkin we're working with was for the same hall/room we're checking out of
-        // TODO
 
         // Set checkout date and user
         $checkin->setCheckoutDate(time());
@@ -110,8 +96,11 @@ class CheckoutFormSubmitCommand extends Command {
         // Save the check-in
         $checkin->save();
 
+        // Create the bed
+        $bed = new HMS_Bed($checkin->getBedId());
+
         // Add this to the activity log
-        HMS_Activity_Log::log_activity($student->getUsername(), ACTIVITY_CHECK_OUT, UserStatus::getUsername(), $assignment->where_am_i());
+        HMS_Activity_Log::log_activity($student->getUsername(), ACTIVITY_CHECK_OUT, UserStatus::getUsername(), $bed->where_am_i());
 
         // Generate the RIC
         PHPWS_Core::initModClass('hms', 'InfoCard.php');
