@@ -1,30 +1,26 @@
 <?php
-
 PHPWS_Core::initModClass('hms', 'CheckinFactory.php');
 
 /**
- * Controller for showing the Check-in successful page
+ * Controller for showing the "Check-out successful page"
  *
  * @author jbooker
  * @package hms
  */
-class ShowCheckinDocumentCommand extends Command {
-
-    private $bannerId;
+class ShowCheckoutDocumentCommand extends Command {
     private $checkinId;
 
-    public function setBannerId($bannerId){
-        $this->bannerId = $bannerId;
+    public function setCheckinId($id)
+    {
+        $this->checkinId = $id;
     }
 
-    public function setCheckinId($checkinId){
-        $this->checkinId = $checkinId;
-    }
-
-    public function getRequestVars(){
-        return array('action'		=> 'ShowCheckinDocument',
-                'bannerId' 	=> $this->bannerId,
-                'checkinId'	=> $this->checkinId);
+    public function getRequestVars()
+    {
+        return array(
+                'action' => 'ShowCheckoutDocument',
+                'checkinId' => $this->checkinId
+        );
     }
 
     public function execute(CommandContext $context)
@@ -42,8 +38,8 @@ class ShowCheckinDocumentCommand extends Command {
             $errCmd->redirect();
         }
 
-        PHPWS_Core::initModClass('hms', 'CheckinDocumentView.php');
-        $view = new CheckinDocumentView($checkin);
+        PHPWS_Core::initModClass('hms', 'CheckoutDocumentView.php');
+        $view = new CheckoutDocumentView($checkin);
 
         $context->setContent($view->show());
     }

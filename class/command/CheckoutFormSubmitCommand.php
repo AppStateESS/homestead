@@ -117,7 +117,9 @@ class CheckoutFormSubmitCommand extends Command {
         NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Checkout successful.');
 
         // Redirect to start of checkout process
-        $cmd = CommandFactory::getCommand('ShowCheckoutStart');
+        //$cmd = CommandFactory::getCommand('ShowCheckoutStart');
+        $cmd = CommandFactory::getCommand('ShowCheckoutDocument');
+        $cmd->setCheckinId($checkin->getId());
         $cmd->redirect();
     }
 }

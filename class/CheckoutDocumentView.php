@@ -4,8 +4,8 @@ PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
 PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
 
-class CheckinDocumentView extends View {
-
+class CheckoutDocumentView extends View
+{
     private $checkin;
 
     public function __construct(Checkin $checkin)
@@ -30,7 +30,7 @@ class CheckinDocumentView extends View {
 
         $tpl['INFO_CARD_LINK'] = $pdfCmd->getLink('Resident Information Card');
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/checkinComplete.tpl');
+        return PHPWS_Template::process($tpl, 'hms', 'admin/checkoutComplete.tpl');
     }
 }
 

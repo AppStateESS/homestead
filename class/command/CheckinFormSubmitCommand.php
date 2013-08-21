@@ -102,8 +102,10 @@ class CheckinFormSubmitCommand extends Command {
 
         NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Checkin successful.');
 
-        // Redirect to Checkin-PDF document
-        $cmd = CommandFactory::getCommand('ShowCheckinStart');
+        // Redirect to success page with option to print check-in document.
+        $cmd = CommandFactory::getCommand('ShowCheckinDocument');
+        $cmd->setBannerId($student->getBannerId());
+        $cmd->setCheckinId($checkin->getId());
         $cmd->redirect();
     }
 }

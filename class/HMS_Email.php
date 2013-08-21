@@ -530,7 +530,7 @@ class HMS_Email{
 
         $tags['NAME']       = $student->getName();
         $tags['HALL_NAME']  = $infoCard->getHall()->getHallName();
-        $tags['ASSIGNMENT'] = $infoCard->getAssignment()->where_am_i();
+        $tags['ASSIGNMENT'] = $infoCard->getRoom()->where_am_i();
 
         $content = PHPWS_Template::process($tags, 'hms', 'email/checkinConfirmation.tpl');
 
