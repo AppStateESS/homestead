@@ -1,19 +1,15 @@
 <?php
-
 define('MAX_INVITES_PER_BATCH', 500);
 define('INVITE_TTL_HRS', 48);
 
+
 class HMS_Lottery {
 
-
-    
-   
     /**
      * Looks for an entry with the 'magic_winner' flag set and returns it, otherwise it returns null
      */
     public function check_magic_winner($term)
     {
-
         $now = mktime();
 
         $query = "SELECT * FROM hms_new_application JOIN hms_lottery_application ON hms_new_application.id = hms_lottery_application.id
@@ -24,20 +20,21 @@ class HMS_Lottery {
 
         $result = PHPWS_DB::getRow($query);
 
-        if(PEAR::isError($result)) {
+        if (PEAR::isError($result)) {
             PHPWS_Error::log($result);
             return null;
         }
 
-        if(!isset($result) || empty($result)) {
+        if (!isset($result) || empty($result)) {
             return null;
-        }else{
+        } else {
             return $result;
         }
     }
 
     /**
-     * Returns the number of lottery entries currently outstanding (i.e. non-winners)
+     * Returns the number of lottery entries currently outstanding (i.e.
+     * non-winners)
      */
     public function count_remaining_entries($term)
     {
@@ -51,7 +48,7 @@ class HMS_Lottery {
 
         $num_remaining_entries = PHPWS_DB::getOne($sql);
 
-        if(PEAR::isError($num_remaining_entries)) {
+        if (PEAR::isError($num_remaining_entries)) {
             PHPWS_Error::log($num_remaining_entries);
             return false;
         }
@@ -67,16 +64,16 @@ class HMS_Lottery {
                 WHERE foo.asu_username IS NULL
                 AND hms_lottery_application.invite_expires_on > $now
                 AND hms_new_application.term = $term";
-        if(isset($gender)) {
+        if (isset($gender)) {
             $query .= ' AND hms_new_application.gender = ' . $gender;
         }
 
         $result = PHPWS_DB::getOne($query);
 
-        if(PEAR::isError($result)) {
+        if (PEAR::isError($result)) {
             PHPWS_Error::log($result);
             return false;
-        }else{
+        } else {
             return $result;
         }
     }
@@ -95,10 +92,10 @@ class HMS_Lottery {
 
         $result = PHPWS_DB::getOne($query);
 
-        if(PEAR::isError($result)) {
+        if (PEAR::isError($result)) {
             PHPWS_Error::log($result);
             return false;
-        }else{
+        } else {
             return $result;
         }
     }
@@ -116,28 +113,28 @@ class HMS_Lottery {
                 WHERE ((foo.asu_username IS NULL AND hms_lottery_application.invite_expires_on > $now) OR (foo.asu_username IS NOT NULL AND hms_lottery_application.invite_expires_on IS NOT NULL))
                 AND hms_new_application.term = $term ";
 
-        if($class == CLASS_SOPHOMORE) {
+        if ($class == CLASS_SOPHOMORE) {
             $query .= 'AND (application_term = ' . ($term_year - 1) . '20';
             $query .= ' OR application_term = ' . ($term_year - 1) . '30';
             $query .= ' OR application_term = ' . ($term_year - 1) . '40';
             $query .= ' OR application_term = ' . ($term_year) . '10';
             $query .= ')';
-        }else if($class == CLASS_JUNIOR) {
+        } else if ($class == CLASS_JUNIOR) {
             $query .= 'AND (application_term = ' . ($term_year - 2) . '20';
             $query .= ' OR application_term = ' . ($term_year - 2) . '30';
             $query .= ' OR application_term = ' . ($term_year - 2) . '40';
             $query .= ' OR application_term = ' . ($term_year - 1) . '10';
             $query .= ')';
-        }else{
+        } else {
             $query .= 'AND application_term <= ' . ($term_year - 2) . '10';
         }
 
         $result = PHPWS_DB::getOne($query);
 
-        if(PEAR::isError($result)) {
+        if (PEAR::isError($result)) {
             PHPWS_Error::log($result);
             return false;
-        }else{
+        } else {
             return $result;
         }
     }
@@ -153,28 +150,28 @@ class HMS_Lottery {
                     AND hms_new_application.term = $term
                     AND special_interest IS NULL ";
 
-        if($class == CLASS_SOPHOMORE) {
+        if ($class == CLASS_SOPHOMORE) {
             $query .= 'AND (application_term = ' . ($term_year - 1) . '20';
             $query .= ' OR application_term = ' . ($term_year - 1) . '30';
             $query .= ' OR application_term = ' . ($term_year - 1) . '40';
             $query .= ' OR application_term = ' . ($term_year) . '10';
             $query .= ')';
-        }else if($class == CLASS_JUNIOR) {
+        } else if ($class == CLASS_JUNIOR) {
             $query .= 'AND (application_term = ' . ($term_year - 2) . '20';
             $query .= ' OR application_term = ' . ($term_year - 2) . '30';
             $query .= ' OR application_term = ' . ($term_year - 2) . '40';
             $query .= ' OR application_term = ' . ($term_year - 1) . '10';
             $query .= ')';
-        }else{
+        } else {
             $query .= 'AND application_term <= ' . ($term_year - 2) . '10';
         }
 
         $result = PHPWS_DB::getOne($query);
 
-        if(PEAR::isError($result)) {
+        if (PEAR::isError($result)) {
             PHPWS_Error::log($result);
             return false;
-        }else{
+        } else {
             return $result;
         }
     }
@@ -190,28 +187,28 @@ class HMS_Lottery {
                     AND hms_lottery_application.invite_expires_on > $now
                     AND hms_new_application.term = $term ";
 
-        if($class == CLASS_SOPHOMORE) {
+        if ($class == CLASS_SOPHOMORE) {
             $query .= 'AND (application_term = ' . ($term_year - 1) . '20';
             $query .= ' OR application_term = ' . ($term_year - 1) . '30';
             $query .= ' OR application_term = ' . ($term_year - 1) . '40';
             $query .= ' OR application_term = ' . ($term_year) . '10';
             $query .= ')';
-        }else if($class == CLASS_JUNIOR) {
+        } else if ($class == CLASS_JUNIOR) {
             $query .= 'AND (application_term = ' . ($term_year - 2) . '20';
             $query .= ' OR application_term = ' . ($term_year - 2) . '30';
             $query .= ' OR application_term = ' . ($term_year - 2) . '40';
             $query .= ' OR application_term = ' . ($term_year - 1) . '10';
             $query .= ')';
-        }else{
+        } else {
             $query .= 'AND application_term <= ' . ($term_year - 2) . '10';
         }
 
         $result = PHPWS_DB::getOne($query);
 
-        if(PEAR::isError($result)) {
+        if (PEAR::isError($result)) {
             PHPWS_Error::log($result);
             return false;
-        }else{
+        } else {
             return $result;
         }
     }
@@ -224,28 +221,28 @@ class HMS_Lottery {
                     WHERE term = $term
                     AND special_interest IS NULL ";
 
-        if($class == CLASS_SOPHOMORE) {
+        if ($class == CLASS_SOPHOMORE) {
             $query .= 'AND (application_term = ' . ($term_year - 1) . '20';
             $query .= ' OR application_term = ' . ($term_year - 1) . '30';
             $query .= ' OR application_term = ' . ($term_year - 1) . '40';
             $query .= ' OR application_term = ' . ($term_year) . '10';
             $query .= ')';
-        }else if($class == CLASS_JUNIOR) {
+        } else if ($class == CLASS_JUNIOR) {
             $query .= 'AND (application_term = ' . ($term_year - 2) . '20';
             $query .= ' OR application_term = ' . ($term_year - 2) . '30';
             $query .= ' OR application_term = ' . ($term_year - 2) . '40';
             $query .= ' OR application_term = ' . ($term_year - 1) . '10';
             $query .= ')';
-        }else{
+        } else {
             $query .= 'AND application_term <= ' . ($term_year - 2) . '10';
         }
 
         $result = PHPWS_DB::getOne($query);
 
-        if(PEAR::isError($result)) {
+        if (PEAR::isError($result)) {
             PHPWS_Error::log($result);
             return false;
-        }else{
+        } else {
             return $result;
         }
     }
@@ -261,28 +258,28 @@ class HMS_Lottery {
                     AND hms_assignment.lottery = 1
                     AND hms_new_application.term = $term ";
 
-        if($class == CLASS_SOPHOMORE) {
+        if ($class == CLASS_SOPHOMORE) {
             $query .= 'AND (application_term = ' . ($term_year - 1) . '20';
             $query .= ' OR application_term = ' . ($term_year - 1) . '30';
             $query .= ' OR application_term = ' . ($term_year - 1) . '40';
             $query .= ' OR application_term = ' . ($term_year) . '10';
             $query .= ')';
-        }else if($class == CLASS_JUNIOR) {
+        } else if ($class == CLASS_JUNIOR) {
             $query .= 'AND (application_term = ' . ($term_year - 2) . '20';
             $query .= ' OR application_term = ' . ($term_year - 2) . '30';
             $query .= ' OR application_term = ' . ($term_year - 2) . '40';
             $query .= ' OR application_term = ' . ($term_year - 1) . '10';
             $query .= ')';
-        }else{
+        } else {
             $query .= 'AND application_term <= ' . ($term_year - 2) . '10';
         }
 
         $result = PHPWS_DB::getOne($query);
 
-        if(PEAR::isError($result)) {
+        if (PEAR::isError($result)) {
             PHPWS_Error::log($result);
             return false;
-        }else{
+        } else {
             return $result;
         }
     }
@@ -301,14 +298,14 @@ class HMS_Lottery {
 
         $result = PHPWS_DB::getAll($query);
 
-        if(PEAR::isError($result)) {
+        if (PEAR::isError($result)) {
             PHPWS_Error::log($result);
             test($result, 1);
         }
 
         $year = Term::toString($term) . ' - ' . Term::toString(Term::getNextTerm($term));
 
-        foreach($result as $row) {
+        foreach ($result as $row) {
             $student = StudentFactory::getStudentByUsername($row['username'], $term);
             HMS_Email::send_lottery_invite_reminder($row['username'], $student->getName(), $row['invite_expires_on'], $year);
             HMS_Activity_Log::log_activity($row['username'], ACTIVITY_LOTTERY_REMINDED, 'hms');
@@ -327,14 +324,14 @@ class HMS_Lottery {
                 AND hms_lottery_reservation.expires_on > " . mktime();
 
         $result = PHPWS_DB::getAll($query);
-        if(PEAR::isError($result)) {
+        if (PEAR::isError($result)) {
             PHPWS_Error::log($result);
             test($result, 1);
         }
 
         $year = Term::toString($term) . ' - ' . Term::toString(Term::getNextTerm($term));
 
-        foreach($result as $row) {
+        foreach ($result as $row) {
             $student = StudentFactory::getStudentByUsername($row['asu_username'], $term);
             $requestor = StudentFactory::getStudentByUsername($row['requestor'], $term);
 
@@ -352,7 +349,7 @@ class HMS_Lottery {
         $email = "";
 
         // Output the logging info, transform for email
-        foreach($log as $line) {
+        foreach ($log as $line) {
             echo $line . "<br />\n";
             $email .= $line . "\n";
         }
@@ -360,9 +357,8 @@ class HMS_Lottery {
         // TODO: unschedule from pulse here, if true
 
         HMS_Email::send_lottery_status_report($status, $email);
-        exit;
+        exit();
     }
-
 
     /**
      * Retuns an array of lottery roommate invites
@@ -377,7 +373,7 @@ class HMS_Lottery {
 
         $result = $db->select();
 
-        if(!$result || PHPWS_Error::logIfError($result)) {
+        if (!$result || PHPWS_Error::logIfError($result)) {
             return false;
         }
 
@@ -393,7 +389,7 @@ class HMS_Lottery {
 
         $result = $db->select('row');
 
-        if(!$result || PHPWS_Error::logIfError($result)) {
+        if (!$result || PHPWS_Error::logIfError($result)) {
             return false;
         }
 
@@ -414,18 +410,18 @@ class HMS_Lottery {
         $invite = HMS_Lottery::get_lottery_roommate_invite_by_id($requestId);
 
         // If the invite wasn't found, show an error
-        if($invite === false) {
+        if ($invite === false) {
             return E_LOTTERY_ROOMMATE_INVITE_NOT_FOUND;
         }
 
         // Check that the reserved bed is still empty
         $bed = new HMS_Bed($invite['bed_id']);
-        if(!$bed->has_vacancy()) {
+        if (!$bed->has_vacancy()) {
             return E_ASSIGN_BED_NOT_EMPTY;
         }
 
         // Make sure the student isn't assigned anywhere else
-        if(HMS_Assignment::checkForAssignment($username, $term)) {
+        if (HMS_Assignment::checkForAssignment($username, $term)) {
             return E_ASSIGN_ALREADY_ASSIGNED;
         }
 
@@ -450,7 +446,7 @@ class HMS_Lottery {
         $db->addWhere('id', $requestId);
         $result = $db->delete();
 
-        if(PHPWS_Error::logIfError($result)) {
+        if (PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         }
 
@@ -467,17 +463,15 @@ class HMS_Lottery {
         PHPWS_Core::initModClass('hms', 'HMS_Eligibility_Waiver.php');
 
         // First, check for an assignment in the current term
-        if(HMS_Assignment::checkForAssignment($username, Term::getCurrentTerm())) {
+        if (HMS_Assignment::checkForAssignment($username, Term::getCurrentTerm())) {
             return true;
             // If that didn't work, check for a waiver in the lottery term
-        }elseif(HMS_Eligibility_Waiver::checkForWaiver($username, PHPWS_Settings::get('hms', 'lottery_term'))) {
+        } elseif (HMS_Eligibility_Waiver::checkForWaiver($username, PHPWS_Settings::get('hms', 'lottery_term'))) {
             return true;
             // If that didn't work either, then the student is not elibible, so return false
-        }else{
+        } else {
             return false;
         }
-
-
     }
 
     // Translates an application term into a class (fr, soph, etc) based on the term given
@@ -485,39 +479,33 @@ class HMS_Lottery {
     {
 
         // Break up the term and year
-        $yr     = floor($application_term / 100);
-        $sem    = $application_term - ($yr * 100);
+        $yr = floor($application_term / 100);
+        $sem = $application_term - ($yr * 100);
 
         $curr_year = floor($curr_term / 100);
-        $curr_sem  = $curr_term - ($curr_year * 100);
+        $curr_sem = $curr_term - ($curr_year * 100);
 
-        if($curr_sem == 10) {
+        if ($curr_sem == 10) {
             $curr_year -= 1;
-            $curr_sem   = 40;
+            $curr_sem = 40;
         }
 
-        if(is_null($application_term) || !isset($application_term)) {
+        if (is_null($application_term) || !isset($application_term)) {
             // If there's no application term, just return null
             return null;
-        }else if($application_term >= $curr_term) {
+        } else if ($application_term >= $curr_term) {
             // The application term is greater than the current term, then they're certainly a freshmen
             return CLASS_FRESHMEN;
-        }else if(
-        ($yr == $curr_year + 1 && $sem = 10) ||
-        ($yr == $curr_year && $sem >= 20 && $sem <= 40)) {
+        } else if (($yr == $curr_year + 1 && $sem = 10) || ($yr == $curr_year && $sem >= 20 && $sem <= 40)) {
             // freshmen
             return CLASS_FRESHMEN;
-        }else if(
-        ($yr == $curr_year && $sem == 10) ||
-        ($yr + 1 == $curr_year && $sem >= 20 && $sem <= 40)) {
+        } else if (($yr == $curr_year && $sem == 10) || ($yr + 1 == $curr_year && $sem >= 20 && $sem <= 40)) {
             // soph
             return CLASS_SOPHOMORE;
-        }else if(
-        ($yr + 1 == $curr_year && $sem == 10) ||
-        ($yr + 2 == $curr_year && $sem >= 20 && $sem <= 40)) {
+        } else if (($yr + 1 == $curr_year && $sem == 10) || ($yr + 2 == $curr_year && $sem >= 20 && $sem <= 40)) {
             // jr
             return CLASS_JUNIOR;
-        }else{
+        } else {
             // senior
             return CLASS_SENIOR;
         }
@@ -525,41 +513,43 @@ class HMS_Lottery {
 
     public function getSpecialInterestGroupsMap()
     {
-        $special_interests['none']              = 'None';
-        $special_interests['honors']            = 'The Honors College';
-        $special_interests['watauga_global']    = 'Watauga Global Community';
-        $special_interests['teaching']          = 'Teaching Fellows';
-        $special_interests['sorority_adp']      = 'Alpha Delta Pi Sorority';
-        $special_interests['sorority_ap']       = 'Aplha Phi Sorority';
-        $special_interests['sorority_co']       = 'Chi Omega Sorority';
-        $special_interests['sorority_dz']       = 'Delta Zeta Sorority';
-        $special_interests['sorority_kd']       = 'Kappa Delta Sorority';
-        $special_interests['sorority_pm']       = 'Phi Mu Sorority';
-        $special_interests['sorority_sk']       = 'Sigma Kappa Sorority';
-        $special_interests['sorority_aop']      = 'Alpha Omicron Pi Sorority';
-        $special_interests['sorority_zta']      = 'Zeta Tau Alpha';
-        $special_interests['special_needs']     = 'Special Needs';
+        $special_interests['none'] = 'None';
+        $special_interests['honors'] = 'The Honors College';
+        $special_interests['watauga_global'] = 'Watauga Global Community';
+        $special_interests['teaching'] = 'Teaching Fellows';
+        $special_interests['sorority_adp'] = 'Alpha Delta Pi Sorority';
+        $special_interests['sorority_ap'] = 'Aplha Phi Sorority';
+        $special_interests['sorority_co'] = 'Chi Omega Sorority';
+        $special_interests['sorority_dz'] = 'Delta Zeta Sorority';
+        $special_interests['sorority_kd'] = 'Kappa Delta Sorority';
+        $special_interests['sorority_pm'] = 'Phi Mu Sorority';
+        $special_interests['sorority_sk'] = 'Sigma Kappa Sorority';
+        $special_interests['sorority_aop'] = 'Alpha Omicron Pi Sorority';
+        $special_interests['sorority_zta'] = 'Zeta Tau Alpha';
+        $special_interests['special_needs'] = 'Special Needs';
 
         return $special_interests;
     }
 
     public static function getSororities()
     {
-        $sororities['sorority_adp']      = 'Alpha Delta Pi Sorority';
-        $sororities['sorority_ap']       = 'Aplha Phi Sorority';
-        $sororities['sorority_co']       = 'Chi Omega Sorority';
-        $sororities['sorority_dz']       = 'Delta Zeta Sorority';
-        $sororities['sorority_kd']       = 'Kappa Delta Sorority';
-        $sororities['sorority_pm']       = 'Phi Mu Sorority';
-        $sororities['sorority_sk']       = 'Sigma Kappa Sorority';
-        $sororities['sorority_aop']      = 'Alpha Omicron Pi Sorority';
-        $sororities['sorority_zta']      = 'Zeta Tau Alpha';
+        $sororities['sorority_adp'] = 'Alpha Delta Pi Sorority';
+        $sororities['sorority_ap'] = 'Aplha Phi Sorority';
+        $sororities['sorority_co'] = 'Chi Omega Sorority';
+        $sororities['sorority_dz'] = 'Delta Zeta Sorority';
+        $sororities['sorority_kd'] = 'Kappa Delta Sorority';
+        $sororities['sorority_pm'] = 'Phi Mu Sorority';
+        $sororities['sorority_sk'] = 'Sigma Kappa Sorority';
+        $sororities['sorority_aop'] = 'Alpha Omicron Pi Sorority';
+        $sororities['sorority_zta'] = 'Zeta Tau Alpha';
 
         return $sororities;
     }
 
     /**
+     *
      * @deprecated
+     *
      * @throws DatabaseException
      * @return unknown
      */
@@ -577,7 +567,7 @@ class HMS_Lottery {
 
         $count = PHPWS_DB::getOne($sql);
 
-        if(PHPWS_Error::logIfError($count)) {
+        if (PHPWS_Error::logIfError($count)) {
             throw new DatabaseException($count->toString());
         }
 
