@@ -18,7 +18,6 @@ class InfoCard {
 	private $bannerId;
 	private $term;
 	private $student;
-	private $assignment;
 	private $application;
 
 	private $bed;
@@ -40,7 +39,7 @@ class InfoCard {
 		$this->term = $this->checkin->getTerm();
 
 		$this->student = StudentFactory::getStudentByBannerId($this->bannerId, $this->term);
-		$this->assignment = HMS_Assignment::getAssignmentByBannerId($this->bannerId, $this->term);
+		$this->bed = new HMS_Bed($this->checkin->getBedId());
 
 		$this->application = HousingApplicationFactory::getAppByStudent($this->student, $this->term);
 
@@ -49,7 +48,6 @@ class InfoCard {
 		    $this->application = new HousingApplication();
 		}
 
-		$this->bed = $this->assignment->get_parent();
 		$this->room = $this->bed->get_parent();
 		$this->floor = $this->room->get_parent();
 		$this->hall = $this->floor->get_parent();
@@ -74,11 +72,6 @@ class InfoCard {
 
 	public function getRoom(){
 		return $this->room;
-	}
-
-	public function getAssignment()
-	{
-	    return $this->assignment;
 	}
 
 	public function getApplication(){

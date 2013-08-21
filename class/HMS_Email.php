@@ -557,7 +557,7 @@ class HMS_Email{
 
     public static function sendCheckoutConfirmation(Student $student, InfoCard $infoCard, InfoCardPdfView $infoCardView){
         $tags['NAME']       = $student->getName();
-        $tags['ASSIGNMENT'] = $infoCard->getAssignment()->where_am_i();
+        $tags['ASSIGNMENT'] = $infoCard->getRoom()->where_am_i();
 
         $content = PHPWS_Template::process($tags, 'hms', 'email/checkoutConfirmation.tpl');
         $htmlContent = Markdown::defaultTransform($content);
