@@ -57,6 +57,7 @@ class CheckoutFormView extends View {
 
         $submitCmd = CommandFactory::getCommand('CheckoutFormSubmit');
         $submitCmd->setBannerId($this->student->getBannerId());
+
         $submitCmd->setCheckinId($this->checkin->getId());
         $submitCmd->initForm($form);
 

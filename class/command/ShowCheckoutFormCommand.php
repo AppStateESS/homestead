@@ -81,9 +81,6 @@ class ShowCheckoutFormCommand extends Command {
         // Get the damages for this student's room
         $damages = RoomDamageFactory::getDamagesByRoom($room);
 
-        // Get the checkin object
-        $checkin = CheckinFactory::getCheckinByBannerId($student->getBannerId(), $term);
-
         PHPWS_Core::initModClass('hms', 'CheckoutFormView.php');
         $view = new CheckoutFormView($student, $hall, $room, $bed, $damages, $checkin);
 
