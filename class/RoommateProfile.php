@@ -1,5 +1,6 @@
 <?php
 
+
 /**
  * The HMS_Student_Profile class
  * Implements the Student_profile object and methods to load/save
@@ -12,11 +13,8 @@
  * Includes the defines file used for the values of the fields
  * throughout this class.
  */
-
-class RoommateProfile{
-
+class RoommateProfile {
     public $id;
-
     public $username;
     public $date_submitted;
     public $term;
@@ -100,7 +98,7 @@ class RoommateProfile{
 
     // Spoken languages
     // Top 20 most spoken languages:
-    //     http://en.wikipedia.org/wiki/Ethnologue_list_of_most_spoken_languages
+    // http://en.wikipedia.org/wiki/Ethnologue_list_of_most_spoken_languages
     public $arabic = 0;
     public $bengali = 0;
     public $chinese = 0;
@@ -174,15 +172,22 @@ class RoommateProfile{
         return $result;
     }
 
-    /****************
+    /**
+     * **************
      * Static methods
-     ****************/
+     * **************
+     */
 
     /**
      * check_for_profile
      * Returns the id number of a profile, if it
      * exists for the given user name.
      * Returns false if no profile is found.
+     *
+     * @param $username string Student's Username
+     * @param $term
+     * @throws DatabaseException
+     * @return integer|boolean Returns integer id of profile object, or false if no profile exists.
      */
     public static function checkForProfile($username, $term)
     {
@@ -203,6 +208,14 @@ class RoommateProfile{
         }
     }
 
+    /**
+     * Returns a RoommateProfile object if one is found, false otherwise.
+     *
+     * @param String $username
+     * @param integer $term
+     * @throws DatabaseException
+     * @return RoommateProfile|NULL
+     */
     public static function getProfile($username, $term)
     {
         $profile = new RoommateProfile();
@@ -224,8 +237,10 @@ class RoommateProfile{
         }
     }
 
-    /*
+    /**
      * Sets up the pager object for searching questionnairs.
+     *
+     * @return String HTML output
      */
     public static function profile_search_pager($term)
     {
@@ -240,10 +255,10 @@ class RoommateProfile{
 
         PHPWS_Core::initCoreClass('DBPager.php');
 
-        $pageTags['USERNAME']   = _('Email');
+        $pageTags['USERNAME'] = _('Email');
         $pageTags['FIRST_NAME'] = _('First Name');
-        $pageTags['LAST_NAME']  = _('Last Name');
-        $pageTags['ACTIONS']    = _('Action');
+        $pageTags['LAST_NAME'] = _('Last Name');
+        $pageTags['ACTIONS'] = _('Action');
 
         $pager = new DBPager('hms_student_profiles', 'RoommateProfile');
 
@@ -256,7 +271,7 @@ class RoommateProfile{
             $pager->db->addJoin('LEFT OUTER', 'hms_student_profiles', 'hms_learning_community_applications', 'username', 'username');
             $pager->db->addJoin('LEFT OUTER', 'hms_learning_community_assignment', 'hms_learning_community_applications', 'application_id', 'id');
             $pager->db->addWhere('hms_learning_community_assignment.rlc_id', $rlc_assignment['rlc_id']);
-            //$pager->db->setTestMode();
+            // $pager->db->setTestMode();
         }
 
         // If an ASU username was entered, just use that. Otherwise, use the rest of the fields.
@@ -361,7 +376,7 @@ class RoommateProfile{
             }
 
             if (isset($_REQUEST['hobbies_checkbox']['sports'])) {
-                $pager->addWhere('hms_student_profiles.sports', 1 ,'=');
+                $pager->addWhere('hms_student_profiles.sports', 1, '=');
                 $_SESSION['hobbies_checkbox']['sports'] = 1;
             }
 
@@ -468,7 +483,7 @@ class RoommateProfile{
 
             if (isset($_REQUEST['music_checkbox']['jazz'])) {
                 $_SESSION['hobbies_checkbox']['jazz'] = 1;
-                $pager->addWhere('hms_student_profiles.jazz',1,'=');
+                $pager->addWhere('hms_student_profiles.jazz', 1, '=');
             }
 
             if (isset($_REQUEST['music_checkbox']['popular_music'])) {
@@ -518,68 +533,68 @@ class RoommateProfile{
             }
 
             if (isset($_REQUEST['study_times']['study_morning_afternoon'])) {
-                $pager->addWhere('hms_student_profiles.study_morning_afternoon', 1 ,'=');
+                $pager->addWhere('hms_student_profiles.study_morning_afternoon', 1, '=');
                 $_SESSION['study_times']['study_morning_afternoon'] = 1;
             }
 
             if (isset($_REQUEST['study_times']['study_afternoon_evening'])) {
-                $pager->addWhere('hms_student_profiles.study_afternoon_evening', 1 ,'=');
+                $pager->addWhere('hms_student_profiles.study_afternoon_evening', 1, '=');
                 $_SESSION['study_times']['study_afternoon_evening'] = 1;
             }
 
             if (isset($_REQUEST['study_times']['study_evening'])) {
-                $pager->addWhere('hms_student_profiles.study_evening', 1 ,'=');
+                $pager->addWhere('hms_student_profiles.study_evening', 1, '=');
                 $_SESSION['study_times']['study_evening'] = 1;
             }
 
             if (isset($_REQUEST['study_times']['study_late_night'])) {
-                $pager->addWhere('hms_student_profiles.study_late_night', 1 ,'=');
+                $pager->addWhere('hms_student_profiles.study_late_night', 1, '=');
                 $_SESSION['study_times']['study_late_night'] = 1;
             }
 
             // Drop downs
             if (isset($_REQUEST['political_views_dropbox']) && $_REQUEST['political_views_dropbox'] != 0) {
-                $pager->addWhere('hms_student_profiles.political_view', $_REQUEST['political_views_dropbox'],'=');
+                $pager->addWhere('hms_student_profiles.political_view', $_REQUEST['political_views_dropbox'], '=');
                 $_SESSION['political_views_dropbox'] = $_REQUEST['political_views_dropbox'];
             }
 
             if (isset($_REQUEST['intended_major']) && $_REQUEST['intended_major'] != 0) {
-                $pager->addWhere('hms_student_profiles.major', $_REQUEST['intended_major'],'=');
+                $pager->addWhere('hms_student_profiles.major', $_REQUEST['intended_major'], '=');
                 $_SESSION['intended_major'] = $_REQUEST['intended_major'];
             }
 
             if (isset($_REQUEST['important_experience']) && $_REQUEST['important_experience'] != 0) {
-                $pager->addWhere('hms_student_profiles.experience', $_REQUEST['important_experience'],'=');
+                $pager->addWhere('hms_student_profiles.experience', $_REQUEST['important_experience'], '=');
                 $_SESSION['important_experience'] = $_REQUEST['important_experience'];
             }
 
             if (isset($_REQUEST['sleep_time']) && $_REQUEST['sleep_time'] != 0) {
-                $pager->addWhere('hms_student_profiles.sleep_time', $_REQUEST['sleep_time'],'=');
+                $pager->addWhere('hms_student_profiles.sleep_time', $_REQUEST['sleep_time'], '=');
                 $_SESSION['sleep_time'] = $_REQUEST['sleep_time'];
             }
 
             if (isset($_REQUEST['wakeup_time']) && $_REQUEST['wakeup_time'] != 0) {
-                $pager->addWhere('hms_student_profiles.wakeup_time', $_REQUEST['wakeup_time'],'=');
+                $pager->addWhere('hms_student_profiles.wakeup_time', $_REQUEST['wakeup_time'], '=');
                 $_SESSION['wakeup_time'] = $_REQUEST['wakeup_time'];
             }
 
             if (isset($_REQUEST['overnight_guests']) && $_REQUEST['overnight_guests'] != 0) {
-                $pager->addWhere('hms_student_profiles.overnight_guests', $_REQUEST['overnight_guests'],'=');
+                $pager->addWhere('hms_student_profiles.overnight_guests', $_REQUEST['overnight_guests'], '=');
                 $_SESSION['overnight_guests'] = $_REQUEST['overnight_guests'];
             }
 
             if (isset($_REQUEST['loudness']) && $_REQUEST['loudness'] != 0) {
-                $pager->addWhere('hms_student_profiles.loudness', $_REQUEST['loudness'],'=');
+                $pager->addWhere('hms_student_profiles.loudness', $_REQUEST['loudness'], '=');
                 $_SESSION['loudness'] = $_REQUEST['loudness'];
             }
 
             if (isset($_REQUEST['cleanliness']) && $_REQUEST['cleanliness'] != 0) {
-                $pager->addWhere('hms_student_profiles.cleanliness', $_REQUEST['cleanliness'],'=');
+                $pager->addWhere('hms_student_profiles.cleanliness', $_REQUEST['cleanliness'], '=');
                 $_SESSION['cleanliness'] = $_REQUEST['cleanliness'];
             }
 
             if (isset($_REQUEST['free_time']) && $_REQUEST['free_time'] != 0) {
-                $pager->addWhere('hms_student_profiles.free_time', $_REQUEST['free_time'],'=');
+                $pager->addWhere('hms_student_profiles.free_time', $_REQUEST['free_time'], '=');
                 $_SESSION['free_time'] = $_REQUEST['free_time'];
             }
 
@@ -682,13 +697,13 @@ class RoommateProfile{
 
         // Join with hms_application table on username to make sure genders match.
         $pager->db->addJoin('LEFT OUTER', 'hms_student_profiles', 'hms_new_application', 'username', 'username');
-        //$pager->addWhere('hms_student_profiles.user_id','hms_application.asu_username','ILIKE');
+        // $pager->addWhere('hms_student_profiles.user_id','hms_application.asu_username','ILIKE');
         $pager->addWhere('hms_new_application.gender', $gender, '=');
 
         // Don't list the current user as a match
         $pager->addWhere('hms_student_profiles.username', UserStatus::getUsername(), 'NOT LIKE');
 
-        $pager->db->addOrder('username','ASC');
+        $pager->db->addOrder('username', 'ASC');
 
         $pager->setModule('hms');
         $pager->setTemplate('student/profile_search_pager.tpl');
@@ -702,12 +717,13 @@ class RoommateProfile{
         return $pager->get();
     }
 
-    /*
-     *Sets up the row tags for the pager
+    /**
+     * Sets up the row tags for the pager
+     *
+     * @return Array Array of template tags.
      */
     public function getPagerTags()
     {
-
         $student = StudentFactory::getStudentByUsername($this->username, $this->term);
 
         $tags['STUDENT_ID'] = $student->getUsername() . "@appstate.edu";
@@ -726,7 +742,11 @@ class RoommateProfile{
     /**
      * Function to determine which hobbies check boxes need to be checked
      * Takes a Student_Profile object and returns an array of the checkbox names
-     * which should be checked. (Used as input to the setMatch public function).
+     * which should be checked.
+     * (Used as input to the setMatch public function).
+     *
+     * @param RoommateProfile
+     * @return Array
      */
     public static function get_hobbies_matches($profile)
     {
@@ -838,7 +858,11 @@ class RoommateProfile{
     /**
      * Function to determine which music check boxes need to be checked
      * Takes a Student_Profile object and returns an array of the checkbox names
-     * which should be checked. (Used as input to the setMatch public function).
+     * which should be checked.
+     * (Used as input to the setMatch public function).
+     *
+     * @param RoommateProfile
+     * @return Array
      */
     public static function get_music_matches($profile)
     {
@@ -943,6 +967,12 @@ class RoommateProfile{
         return $music_matches;
     }
 
+    /**
+     * Returns study time matches
+     *
+     * @param RoommateProfile $profile
+     * @return Array
+     */
     public static function get_study_matches($profile)
     {
         $study_matches = array();
@@ -970,6 +1000,12 @@ class RoommateProfile{
         return $study_matches;
     }
 
+    /**
+     * Returns language matches
+     *
+     * @param RoommateProfile $profile
+     * @return Array
+     */
     public static function get_language_matches($profile)
     {
         $lang_match = array();
@@ -1038,16 +1074,25 @@ class RoommateProfile{
         return $lang_match;
     }
 
-
-    /**
+    /*
      * Accessor / Mutator Methods
      */
 
+    /**
+     * Sets the profile's id.
+     *
+     * @param integer $id
+     */
     public function setID($id)
     {
         $this->id = $id;
     }
 
+    /**
+     * Returns this profile's id.
+     *
+     * @return integer profile id
+     */
     public function getID()
     {
         return $this->id;
@@ -1220,7 +1265,6 @@ class RoommateProfile{
     /**
      * Hobbies check boxes
      */
-
     public function set_arts_and_crafts($value = 1)
     {
         $this->arts_and_crafts = $value;
@@ -1574,7 +1618,6 @@ class RoommateProfile{
     /**
      * Music check boxes
      */
-
     public function set_alternative($value = 1)
     {
         $this->alternative = $value;
@@ -1654,8 +1697,7 @@ class RoommateProfile{
     {
         if ($this->christian == 1) {
             return true;
-        }
-        else{
+        } else {
             return false;
         }
     }
@@ -1990,162 +2032,201 @@ class RoommateProfile{
     {
         return $this->arabic == 1 ? true : false;
     }
+
     public function get_bengali()
     {
         return $this->bengali == 1 ? true : false;
     }
+
     public function get_chinese()
     {
         return $this->chinese == 1 ? true : false;
     }
+
     public function get_english()
     {
         return $this->english == 1 ? true : false;
     }
+
     public function get_french()
     {
         return $this->french == 1 ? true : false;
     }
+
     public function get_german()
     {
         return $this->german == 1 ? true : false;
     }
+
     public function get_hindi()
     {
         return $this->hindi == 1 ? true : false;
     }
+
     public function get_italian()
     {
         return $this->italian == 1 ? true : false;
     }
+
     public function get_japanese()
     {
         return $this->japanese == 1 ? true : false;
     }
+
     public function get_javanese()
     {
         return $this->javanese == 1 ? true : false;
     }
+
     public function get_korean()
     {
         return $this->korean == 1 ? true : false;
     }
+
     public function get_malay()
     {
         return $this->malay == 1 ? true : false;
     }
+
     public function get_marathi()
     {
         return $this->marathi == 1 ? true : false;
     }
+
     public function get_portuguese()
     {
         return $this->portuguese == 1 ? true : false;
     }
+
     public function get_punjabi()
     {
         return $this->punjabi == 1 ? true : false;
     }
+
     public function get_russian()
     {
         return $this->russian == 1 ? true : false;
     }
+
     public function get_spanish()
     {
         return $this->spanish == 1 ? true : false;
     }
+
     public function get_tamil()
     {
         return $this->tamil == 1 ? true : false;
     }
+
     public function get_telugu()
     {
         return $this->telugu == 1 ? true : false;
     }
+
     public function get_vietnamese()
     {
         return $this->vietnamese == 1 ? true : false;
     }
 
-    public function set_arabic($value=1)
+    public function set_arabic($value = 1)
     {
         $this->arabic = $value;
     }
-    public function set_bengali($value=1)
+
+    public function set_bengali($value = 1)
     {
         $this->bengali = $value;
     }
-    public function set_chinese($value=1)
+
+    public function set_chinese($value = 1)
     {
         $this->chinese = $value;
     }
-    public function set_english($value=1)
+
+    public function set_english($value = 1)
     {
         $this->english = $value;
     }
-    public function set_french($value=1)
+
+    public function set_french($value = 1)
     {
         $this->french = $value;
     }
-    public function set_german($value=1)
+
+    public function set_german($value = 1)
     {
         $this->german = $value;
     }
-    public function set_hindi($value=1)
+
+    public function set_hindi($value = 1)
     {
         $this->hindi = $value;
     }
-    public function set_italian($value=1)
+
+    public function set_italian($value = 1)
     {
         $this->italian = $value;
     }
-    public function set_japanese($value=1)
+
+    public function set_japanese($value = 1)
     {
         $this->japanese = $value;
     }
-    public function set_javanese($value=1)
+
+    public function set_javanese($value = 1)
     {
         $this->javanese = $value;
     }
-    public function set_korean($value=1)
+
+    public function set_korean($value = 1)
     {
         $this->korean = $value;
     }
-    public function set_malay($value=1)
+
+    public function set_malay($value = 1)
     {
         $this->malay = $value;
     }
-    public function set_marathi($value=1)
+
+    public function set_marathi($value = 1)
     {
         $this->marathi = $value;
     }
-    public function set_portuguese($value=1)
+
+    public function set_portuguese($value = 1)
     {
         $this->portuguese = $value;
     }
-    public function set_punjabi($value=1)
+
+    public function set_punjabi($value = 1)
     {
         $this->punjabi = $value;
     }
-    public function set_russian($value=1)
+
+    public function set_russian($value = 1)
     {
         $this->russian = $value;
     }
-    public function set_spanish($value=1)
+
+    public function set_spanish($value = 1)
     {
         $this->spanish = $value;
     }
-    public function set_tamil($value=1)
+
+    public function set_tamil($value = 1)
     {
         $this->tamil = $value;
     }
-    public function set_telugu($value=1)
+
+    public function set_telugu($value = 1)
     {
         $this->telugu = $value;
     }
-    public function set_vietnamese($value=1)
+
+    public function set_vietnamese($value = 1)
     {
         $this->vietnamese = $value;
     }
-};
+}
+;
 ?>
