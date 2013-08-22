@@ -3,7 +3,7 @@
 <p>Executed on: {EXEC_DATE} by {EXEC_USER}</p>
 
   <ul>
-    <li>{TOTAL} total check-ins</li>
+    <li>{TOTAL} total no-shows</li>
   </ul>
 
 <table id="needs" border="1" style="border-collapse : collapse">
