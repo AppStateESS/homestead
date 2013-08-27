@@ -269,9 +269,14 @@ class InfoCardPdfView {
         $this->pdf->cell(50, 5, 'Check-out');
         $this->pdf->setFont('Times', null, 14);
 
-        // Check-out Date/time
-        $this->pdf->setXY(210, 108);
-        $this->pdf->cell(50, 5, date('j M, Y @ g:ia', $infoCard->getCheckin()->getCheckoutDate()));
+
+        // If the checkout timestamp is set, show it as a nice date
+        $checkoutTimestamp = $infoCard->getCheckin()->getCheckoutDate();
+        if (!is_null($checkoutTimestamp)) {
+            // Check-out Date/time
+            $this->pdf->setXY(210, 108);
+            $this->pdf->cell(50, 5, date('j M, Y @ g:ia', $checkoutTimestamp));
+        }
 
         // Key code at check-out
         $this->pdf->setXY(150, 118);
