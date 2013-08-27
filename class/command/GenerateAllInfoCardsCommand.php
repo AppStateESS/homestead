@@ -1,7 +1,7 @@
 <?php
-
 require_once PHPWS_SOURCE_DIR . 'mod/hms/pdf/fpdf.php';
 require_once PHPWS_SOURCE_DIR . 'mod/hms/pdf/fpdi.php';
+
 
 /**
  * Controller/command for generating the entire set of RIC forms for a semester.
@@ -12,32 +12,40 @@ require_once PHPWS_SOURCE_DIR . 'mod/hms/pdf/fpdi.php';
  */
 class GenerateAllInfoCardsCommand extends Command {
 
-	public function getRequestVars()
-	{
-		return array('action' => 'GenerateAllInfoCards');
-	}
+    public function getRequestVars()
+    {
+        return array(
+                'action' => 'GenerateAllInfoCards'
+        );
+    }
 
-	public function execute(CommandContext $context)
-	{
-		PHPWS_Core::initModClass('hms', 'CheckinFactory.php');
-		PHPWS_Core::initModClass('hms', 'InfoCard.php');
-		PHPWS_Core::initModClass('hms', 'InfoCardPdfView.php');
+    public function execute(CommandContext $context)
+    {
+        PHPWS_Core::initModClass('hms', 'CheckinFactory.php');
+        PHPWS_Core::initModClass('hms', 'InfoCard.php');
+        PHPWS_Core::initModClass('hms', 'InfoCardPdfView.php');
 
-		$term = Term::getSelectedTerm();
+        $term = Term::getSelectedTerm();
 
-		$checkins = CheckinFactory::getCheckinsOrderedByRoom($term);
+        $checkins = CheckinFactory::getCheckinsOrderedByHallAlpha($term);
 
-		$view = new InfoCardPdfView($pdf, $infoCard);
+        if (!isset($checkins) || count($checkins) <= 0) {
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'No check-ins were found for the selected term.');
+            $cmd = CommandFactory::getCommand('ShowAdminMaintenanceMenu');
+            $cmd->redirect();
+        }
 
-		foreach($checkins as $checkin) {
-			$infoCard = new InfoCard($checkin);
+        $view = new InfoCardPdfView();
 
-			$view->addInfoCard($infoCard);
-		}
+        foreach ($checkins as $checkin) {
+            $infoCard = new InfoCard($checkin);
 
-		$view->getPdf()->output();
-		exit;
-	}
+            $view->addInfoCard($infoCard);
+        }
+
+        $view->getPdf()->output();
+        exit();
+    }
 }
 
 ?>

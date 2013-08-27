@@ -112,6 +112,34 @@ class CheckinFactory {
     }
 
     /**
+     * Returns an array of Checkin objects order by hall, and room
+     * @param unknown $term
+     */
+    public static function getCheckinsOrderedByHallAlpha($term)
+    {
+        $db = new PHPWS_DB('hms_checkin');
+        $db->addWhere('term', $term);
+
+        $db->addWhere('checkout_date', 'NULL');
+
+        $db->addJoin('', 'hms_checkin', 'hms_bed', 'bed_id', 'id');
+        $db->addJoin('', 'hms_bed', 'hms_room', 'room_id', 'id');
+        $db->addJoin('', 'hms_room', 'hms_floor', 'floor_id', 'id');
+        $db->addJoin('', 'hms_floor', 'hms_residence_hall', 'residence_hall_id', 'id');
+        $db->addJoin('', 'hms_checkin', 'hms_assignment', 'banner_id', 'banner_id AND hms_checkin.term = hms_assignment.term');
+
+        $db->addOrder(array('hms_residence_hall.hall_name ASC', 'hms_assignment.asu_username ASC'));
+
+        $results = $db->getObjects('RestoredCheckin');
+
+        if(PHPWS_Error::logIfError($results)){
+            throw new DatabaseException($results->toString());
+        }
+
+        return $results;
+    }
+
+    /**
      * Returns the earliest check-in for the given student, in the given hall, which the student
      * has not checked out of yet.
      */
