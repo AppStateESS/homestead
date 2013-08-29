@@ -6,7 +6,7 @@
     <li>{TOTAL} total check-ins</li>
   </ul>
 
-<table id="needs" cellpadding="2" border="1" style="border-collapse : collapse">
+<table>
     <tr>
         <th>Banner ID</th>
         <th>Hall</th>
