@@ -26,9 +26,11 @@ class Checkin {
 
     public $express_checkout;
     public $improper_checkout;
+
+    public $checkout_key_code;
     public $key_not_returned;
-    
-    const CHECKIN_TIMEOUT = 172800; // Allow max 48 hours between checkins 
+
+    const CHECKIN_TIMEOUT = 172800; // Allow max 48 hours between checkins
 
     public function __construct(Student $student, HMS_Bed $bed, $term, $checkinBy, $keyCode)
     {
@@ -44,18 +46,18 @@ class Checkin {
     public function save()
     {
         $db = new PHPWS_DB('hms_checkin');
-         
+
         try {
             $result = $db->saveObject($this);
         } catch (Exception $e) {
             // rethrow any exceptions
             throw $e;
         }
-         
+
         if (PHPWS_Error::logIfError($result)) {
             throw new Exception($result->toString());
         }
-         
+
         return $this->id;
     }
 
@@ -68,14 +70,14 @@ class Checkin {
     {
         $this->setId($checkin->getId());
     }
-    
+
     /***********************
      * Acessors / Mutators *
     ***********************/
     public function getId(){
         return $this->id;
     }
-    
+
     private function setId($id){
         $this->id = $id;
     }
@@ -91,7 +93,7 @@ class Checkin {
     public function getBedId(){
         return $this->bed_id;
     }
-    
+
     private function setBedId($bedId){
         $this->bed_id = $bedId;
     }
@@ -99,7 +101,7 @@ class Checkin {
     public function getTerm(){
         return $this->term;
     }
-    
+
     private function setTerm($term){
         $this->term = $term;
     }
@@ -112,7 +114,7 @@ class Checkin {
     {
         return $this->checkin_date;
     }
-    
+
     public function setCheckinDate($timestamp){
         $this->checkin_date = $timestamp;
     }
@@ -128,23 +130,23 @@ class Checkin {
     public function setKeyCode($keyCode){
         $this->key_code = $keyCode;
     }
-    
+
     public function getCheckoutDate(){
         return $this->checkout_date;
     }
-    
+
     public function setCheckoutDate($date){
         $this->checkout_date = $date;
     }
-    
+
     public function setCheckoutBy($user){
         $this->checkout_by = $user;
     }
-    
+
     public function setImproperCheckout($improper){
         $this->improper_checkout = $improper;
     }
-    
+
     public function setKeyNotReturned($key){
         $this->key_not_returned = $key;
     }

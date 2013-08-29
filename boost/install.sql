@@ -231,6 +231,8 @@ create table hms_checkin (
     checkout_by         character varying,
     express_checkout    smallint,
     improper_checkout   smallint,
+    checkout_key_code   character varying,
+    key_not_returned    smallint,
     PRIMARY KEY (id)
 );
 

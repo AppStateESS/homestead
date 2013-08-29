@@ -1,0 +1,1 @@
+alter table hms_checkin add column checkout_key_code character varying;
