@@ -283,7 +283,7 @@ class InfoCardPdfView {
         $this->pdf->cell(50, 5, 'Key Code:');
 
         $this->pdf->setXY(173, 118);
-        //$this->pdf->cell(50, 5, $this->pdf->cell(50, 5, $infoCard->getCheckin()->getCheckoutKeyCode()));
+        $this->pdf->cell(50, 5, $this->pdf->cell(50, 5, $infoCard->getCheckin()->getCheckoutKeyCode()));
 
     }
 }

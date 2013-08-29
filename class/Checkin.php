@@ -167,7 +167,7 @@ class Checkin {
 
     public function getCheckoutKeyCode()
     {
-        return $this->chckout_key_coode;
+        return $this->checkout_key_code;
     }
 
     public function setKeyNotReturned($key)
