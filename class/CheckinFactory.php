@@ -156,6 +156,8 @@ class CheckinFactory {
         // Checkin bed ID must be in the request hall
         $db->addWhere('hms_hall_structure.hallid', $hall->getId());
 
+        $db->addWhere('checkout_date', null, 'IS NULL');
+
         $db->addOrder(array('hms_checkin.checkin_date ASC')); // Earliest checkin first
 
         $checkin = new RestoredCheckin();
