@@ -80,6 +80,9 @@ class CheckoutFormSubmitCommand extends Command {
         $checkin->setCheckoutDate(time());
         $checkin->setCheckoutBy($currUser);
 
+        // Set the checkout code code, if any
+        $checkin->setCheckoutKeyCode($keyCode);
+
         // Improper checkout handling
         if (isset($improperCheckout)) {
             $checkin->setImproperCheckout(true);

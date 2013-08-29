@@ -1,5 +1,6 @@
 <?php
 
+
 /**
  * Checkin - Model class for representing checkins and checkouts
  *
@@ -7,31 +8,22 @@
  * @package hms
  */
 class Checkin {
-
     public $id;
-
     public $banner_id;
     public $term;
     public $bed_id;
-
     public $room_id; // Just for convenience
-
     public $checkin_date;
     public $checkin_by;
-
     public $key_code;
-
     public $checkout_date;
     public $checkout_by;
-
     public $express_checkout;
     public $improper_checkout;
-
     public $checkout_key_code;
     public $key_not_returned;
 
     const CHECKIN_TIMEOUT = 172800; // Allow max 48 hours between checkins
-
     public function __construct(Student $student, HMS_Bed $bed, $term, $checkinBy, $keyCode)
     {
         $this->setBannerId($student->getBannerId());
@@ -62,8 +54,10 @@ class Checkin {
     }
 
     /**
-     * Causes this check-in to take the ID of the passed-in checkin. When saved,
+     * Causes this check-in to take the ID of the passed-in checkin.
+     * When saved,
      * this will effectively overwrite the passed in checkin.
+     *
      * @param Checkin $checkin
      */
     public function substitueForExistingCheckin(Checkin $checkin)
@@ -71,42 +65,53 @@ class Checkin {
         $this->setId($checkin->getId());
     }
 
-    /***********************
+    /**
+     * *********************
      * Acessors / Mutators *
-    ***********************/
-    public function getId(){
+     * *********************
+     */
+    public function getId()
+    {
         return $this->id;
     }
 
-    private function setId($id){
+    private function setId($id)
+    {
         $this->id = $id;
     }
 
-    public function getBannerId(){
+    public function getBannerId()
+    {
         return $this->banner_id;
     }
 
-    private function setBannerId($bannerId){
+    private function setBannerId($bannerId)
+    {
         $this->banner_id = $bannerId;
     }
 
-    public function getBedId(){
+    public function getBedId()
+    {
         return $this->bed_id;
     }
 
-    private function setBedId($bedId){
+    private function setBedId($bedId)
+    {
         $this->bed_id = $bedId;
     }
 
-    public function getTerm(){
+    public function getTerm()
+    {
         return $this->term;
     }
 
-    private function setTerm($term){
+    private function setTerm($term)
+    {
         $this->term = $term;
     }
 
-    private function setRoomId($roomId){
+    private function setRoomId($roomId)
+    {
         $this->room_id = $roomId;
     }
 
@@ -115,45 +120,67 @@ class Checkin {
         return $this->checkin_date;
     }
 
-    public function setCheckinDate($timestamp){
+    public function setCheckinDate($timestamp)
+    {
         $this->checkin_date = $timestamp;
     }
 
-    private function setCheckinBy($checkinBy){
+    private function setCheckinBy($checkinBy)
+    {
         $this->checkin_by = $checkinBy;
     }
 
-    public function getKeyCode(){
+    public function getKeyCode()
+    {
         return $this->key_code;
     }
 
-    public function setKeyCode($keyCode){
+    public function setKeyCode($keyCode)
+    {
         $this->key_code = $keyCode;
     }
 
-    public function getCheckoutDate(){
+    public function getCheckoutDate()
+    {
         return $this->checkout_date;
     }
 
-    public function setCheckoutDate($date){
+    public function setCheckoutDate($date)
+    {
         $this->checkout_date = $date;
     }
 
-    public function setCheckoutBy($user){
+    public function setCheckoutBy($user)
+    {
         $this->checkout_by = $user;
     }
 
-    public function setImproperCheckout($improper){
+    public function setImproperCheckout($improper)
+    {
         $this->improper_checkout = $improper;
     }
 
-    public function setKeyNotReturned($key){
+    public function setCheckoutKeyCode($code)
+    {
+        $this->checkout_key_code = $code;
+    }
+
+    public function getCheckoutKeyCode()
+    {
+        return $this->chckout_key_coode;
+    }
+
+    public function setKeyNotReturned($key)
+    {
         $this->key_not_returned = $key;
     }
 }
 
+
 class RestoredCheckin extends Checkin {
-    public function __construct(){
-    } // Empty constructor for resotring state
+
+    public function __construct()
+    { // Empty constructor for resotring state
+    }
 }
 ?>
