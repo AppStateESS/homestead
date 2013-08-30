@@ -763,81 +763,64 @@ SELECT setval('hms_learning_communities_seq', max(hms_learning_communities.id)) 
 CREATE SEQUENCE hms_learning_community_questions_seq;
 SELECT setval('hms_learning_community_questions_seq', max(hms_learning_community_questions.id)) FROM hms_learning_community_questions;
 
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Cleaning','Entire Room (Traditional Hall)',50);
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Cleaning','Entire Suite/Apartment',125);
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Cleaning','Bathroom/Shower',30);
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Cleaning','Carpet',30);
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Cleaning','Microfridge',25);
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Cleaning','Microwave',20);
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Cleaning','Oven',30);
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Cleaning','Refrigerator',30);
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Cleaning','Sink (kitchen or bathroom)',25);
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Cleaning','Tile Floor',25);
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Cleaning','Vacuum',25);
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Cleaning','Trash Removal',25);
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Cleaning','Trash - Cinder Block Removal',25);
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Cleaning','Trash - Furniture Removal',15);
-
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Furnishings','Bed - Frame Damaged/Reassemble/Replace',25);
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Furnishings','Bed - Un-bunking',20);
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Furnishings','Bed - Mattress - Clean/Replace',20);
-
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Furnishings','Scratched/Stained/Carved',25);
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Furnishings','Desk/Dresser & Drawers',20);
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Furnishings','Desk/Dresser - Tape Residue',10);
-
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Furnishings','Chair - Missing/Cracked/Refinish',25);
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Furnishings','Bar Stool - Broken Rung',25);
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Furnishings','Bar Stool - Replace',110);
-
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Furnishings','Cabinet',25);
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Furnishings','Shelves - Broken/Scratched/Missing',15);
-
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Furnishings','Mirror',15);
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Furnishings','Shower Curtain - Missing/Torn/Hooks',20);
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Furnishings','Towel Bar - Broken/Missing',25);
-
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Furnishings','Air Conditioning Unit',10);
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Furnishings','Microwave - Broken/Missing Parts',30);
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Furnishings','Microfridge - Broken/Missing Parts',35);
-
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Walls','Cracks/Scratches/Scuffs/Pin holes',15);
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Walls','Hole (other than pin/nail holes)',30);
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Walls','Tape residue (per wall)',10);
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Walls','Paint',40);
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Walls','Outlet Cover - damaged/missing',15);
-
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Door','Nails / Nail Holes',25);
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Door','Peep Hole - missing/damaged',10);
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Door','Replace - broken/writing',150);
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Door','Scratches',25);
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Door','Tape Residue (per side)',20);
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Door','Writing on Door',50);
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Door','Hinges',25);
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Door','Door Stop - Missing/Broken',20);
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Door','Door Closer - Missing/disassembled',50);
-
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Window','Blinds - Broken/Missing Fins',20);
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Window','Glass - Broken/Cracked',75);
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Window','Glass - Tape Residue',10);
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Window','Screen - Dirty/Damaged/Bent/Replace/Reinstall',50);
-
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Floors','Carpet - holes/replacement',.00);
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Floors','Tile - missing/damaged',10);
-
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Ceiling','Light Cover',25);
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Ceiling','Tape residue',35);
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Ceiling','Tear or Scratches',35);
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Ceiling','Tile Replacement',10);
-
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Closet','Door - broken/split/missing',125);
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Closet','Door - remount',32);
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Closet','Paint',20);
-
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Keys','Apartment / Suite',45);
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Keys','Traditional Residence Hall',45);
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'Keys','App. Heights/LLC',45);
-
-INSERT INTO hms_damage_type VALUES (nextval('hms_damage_type_seq'),'DSL Equipment','Modem/Phone/Ethernet/Hub (Justice)',60);
+INSERT INTO hms_damage_type VALUES (1, 'Ceiling', 'Light Cover- Cracked/Missing', 25);
+INSERT INTO hms_damage_type VALUES (10, 'Cleaning', 'Bathroom/Shower (suite-style buildings)', 30);
+INSERT INTO hms_damage_type VALUES (14, 'Cleaning', 'Microfridge', 25);
+INSERT INTO hms_damage_type VALUES (15, 'Cleaning', 'Student Moving a Microfridge', 25);
+INSERT INTO hms_damage_type VALUES (16, 'Cleaning', 'Microwave', 20);
+INSERT INTO hms_damage_type VALUES (17, 'Cleaning', 'Oven', 30);
+INSERT INTO hms_damage_type VALUES (18, 'Cleaning', 'Refrigerator', 30);
+INSERT INTO hms_damage_type VALUES (20, 'Cleaning', 'Sink (kitchen or bathroom)', 25);
+INSERT INTO hms_damage_type VALUES (21, 'Cleaning', 'Tile Floor', 25);
+INSERT INTO hms_damage_type VALUES (22, 'Cleaning', 'Vacuum', 25);
+INSERT INTO hms_damage_type VALUES (23, 'Cleaning', 'Housekeeping Labor Charges (per hour)', 20);
+INSERT INTO hms_damage_type VALUES (38, 'Door', 'Tape Residue (per side)', 20);
+INSERT INTO hms_damage_type VALUES (77, 'Furnishings', 'Scratched / Stained / Carved', 25);
+INSERT INTO hms_damage_type VALUES (78, 'Keys', 'Apartment / Suite', 45);
+INSERT INTO hms_damage_type VALUES (79, 'Keys', 'Traditional Residence Hall', 45);
+INSERT INTO hms_damage_type VALUES (100, 'Walls', 'Paint (per wall)', 40);
+INSERT INTO hms_damage_type VALUES (103, 'Walls', 'Tape residue (per wall)', 10);
+INSERT INTO hms_damage_type VALUES (2, 'Ceiling', 'Tape residue', 35);
+INSERT INTO hms_damage_type VALUES (8, 'Ceiling', 'Tile replacement / holes', 10);
+INSERT INTO hms_damage_type VALUES (19, 'Cleaning', 'Entire Room (Traditional Hall)', 50);
+INSERT INTO hms_damage_type VALUES (9, 'Cleaning', 'Entire Suite/Apartment', 125);
+INSERT INTO hms_damage_type VALUES (11, 'Cleaning', 'Carpet (Traditional Hall)', 30);
+INSERT INTO hms_damage_type VALUES (12, 'Cleaning', 'Carpet (Suite/Apartment)', 80);
+INSERT INTO hms_damage_type VALUES (82, 'Cleaning', 'Furniture Removal', 15);
+INSERT INTO hms_damage_type VALUES (83, 'Cleaning', 'Trash Removal', 25);
+INSERT INTO hms_damage_type VALUES (42, 'Furnishings', 'Air Conditioning Unit', 10);
+INSERT INTO hms_damage_type VALUES (45, 'Furnishings', 'Bed - Frame Damaged/Reassemble/Replace', 25);
+INSERT INTO hms_damage_type VALUES (60, 'Furnishings', 'Bed - Mattress - Clean/Replace', 0);
+INSERT INTO hms_damage_type VALUES (50, 'Furnishings', 'Chair - Missing/Cracked/Refinish', 25);
+INSERT INTO hms_damage_type VALUES (49, 'Furnishings', 'Cabinet', 25);
+INSERT INTO hms_damage_type VALUES (69, 'Furnishings', 'Shelves - Broken/Scratched/Missing', 15);
+INSERT INTO hms_damage_type VALUES (68, 'Furnishings', 'Mirror', 10);
+INSERT INTO hms_damage_type VALUES (72, 'Furnishings', 'Shower Curtain - Missing/Torn/Hooks', 20);
+INSERT INTO hms_damage_type VALUES (74, 'Furnishings', 'Towel Bar - Dented/Broken/Missing', 25);
+INSERT INTO hms_damage_type VALUES (55, 'Furnishings', 'Desk/Dresser & Drawers', 20);
+INSERT INTO hms_damage_type VALUES (57, 'Furnishings', 'Desk/Dresser - Tape Residue', 10);
+INSERT INTO hms_damage_type VALUES (65, 'Furnishings', 'Microfridge - Broken/Missing Parts', 10);
+INSERT INTO hms_damage_type VALUES (58, 'Furnishings', 'Microwave - Broken/Missing Parts', 50);
+INSERT INTO hms_damage_type VALUES (94, 'Walls', 'Cracks/Scratches/Scuffs/Pin holes', 15);
+INSERT INTO hms_damage_type VALUES (98, 'Walls', 'Hole (other than pin/nail holes)', 30);
+INSERT INTO hms_damage_type VALUES (99, 'Walls', 'Outlet Cover - Damaged/missing', 15);
+INSERT INTO hms_damage_type VALUES (39, 'Door', 'Writing on Door', 50);
+INSERT INTO hms_damage_type VALUES (31, 'Door', 'Peep Hole - Missing/damaged', 10);
+INSERT INTO hms_damage_type VALUES (37, 'Door', 'Door Closer - Missing/Disassembled', 50);
+INSERT INTO hms_damage_type VALUES (28, 'Door', 'Hinges', 25);
+INSERT INTO hms_damage_type VALUES (34, 'Door', 'Scratches/Holes', 70);
+INSERT INTO hms_damage_type VALUES (32, 'Door', 'Replace - Broken/scratches/writing', 150);
+INSERT INTO hms_damage_type VALUES (84, 'Window', 'Blinds - Broken/Missing Fins', 20);
+INSERT INTO hms_damage_type VALUES (88, 'Window', 'Glass - Broken/Cracked', 75);
+INSERT INTO hms_damage_type VALUES (90, 'Window', 'Glass - Tape Residue', 10);
+INSERT INTO hms_damage_type VALUES (91, 'Window', 'Screen - Dirty/Damaged/Bent/Replace/Reinstall', 20);
+INSERT INTO hms_damage_type VALUES (40, 'Floors', 'Carpet - Holes/replacement', 0);
+INSERT INTO hms_damage_type VALUES (41, 'Floors', 'Tile - Missing/damaged', 10);
+INSERT INTO hms_damage_type VALUES (5, 'Ceiling', 'Tear/Scratches', 35);
+INSERT INTO hms_damage_type VALUES (25, 'Closet', 'Door - Broken/Split/Missing', 125);
+INSERT INTO hms_damage_type VALUES (26, 'Closet', 'Door - Remount', 32);
+INSERT INTO hms_damage_type VALUES (27, 'Closet', 'Paint', 20);
+INSERT INTO hms_damage_type VALUES (80, 'Keys', 'App. Heights/LLC', 45);
+INSERT INTO hms_damage_type VALUES (104, 'DSL Equipment', 'Modem/Hub/Power Adapters/Cables (Justice)', 10);
 
 COMMIT;
