@@ -18,7 +18,7 @@ class DamageTypeFactory {
     {
         $db = new PHPWS_DB('hms_damage_type');
 
-        $db->addOrder('id');
+        $db->addOrder(array('category ASC', 'description ASC'));
 
         $result = $db->select('assoc');
 
