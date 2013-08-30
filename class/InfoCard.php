@@ -59,7 +59,7 @@ class InfoCard {
         $this->hall = $this->floor->get_parent();
 
         // Get the damages at check-in time
-        $this->checkinDamages = RoomDamageFactory::getDamagesByRoom($this->room);
+        $this->checkinDamages = RoomDamageFactory::getDamagesBefore($this->room, ($this->checkin->getCheckinDate() + Checkin::CHECKIN_TIMEOUT));
         if (sizeof($this->checkinDamages) <= 0) {
             $this->checkinDamages = array();
         }
