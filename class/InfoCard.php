@@ -1,10 +1,10 @@
 <?php
-
 PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 PHPWS_Core::initModClass('hms', 'HousingApplicationFactory.php');
 PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
 PHPWS_Core::initModClass('hms', 'RoomDamageFactory.php');
 PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
+
 
 /**
  * Model class for representing InfoCards
@@ -13,79 +13,103 @@ PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
  * @package hms
  */
 class InfoCard {
+    private $checkin;
+    private $term;
 
-	private $checkin;
+    private $bannerId;
+    private $student;
 
-	private $bannerId;
-	private $term;
-	private $student;
-	private $application;
+    private $application;
 
-	private $bed;
-	private $room;
-	private $floor;
-	private $hall;
+    private $bed;
+    private $room;
+    private $floor;
+    private $hall;
 
-	private $damages;
+    private $checkinDamages;
+    private $checkoutDamages;
 
-	/**
-	 * Constructor. Requires a Checkin object to get started.
-	 * @param Checkin $checkin
-	 */
-	public function __construct(Checkin $checkin)
-	{
-		$this->checkin = $checkin;
+    /**
+     * Constructor.
+     * Requires a Checkin object to get started.
+     *
+     * @param Checkin $checkin
+     */
+    public function __construct(Checkin $checkin)
+    {
+        $this->checkin = $checkin;
 
-		$this->bannerId = $this->checkin->getBannerId();
-		$this->term = $this->checkin->getTerm();
+        $this->bannerId = $this->checkin->getBannerId();
+        $this->term = $this->checkin->getTerm();
 
-		$this->student = StudentFactory::getStudentByBannerId($this->bannerId, $this->term);
-		$this->bed = new HMS_Bed($this->checkin->getBedId());
+        $this->student = StudentFactory::getStudentByBannerId($this->bannerId, $this->term);
 
-		$this->application = HousingApplicationFactory::getAppByStudent($this->student, $this->term);
+        // Lookup the student's housing application
+        $this->application = HousingApplicationFactory::getAppByStudent($this->student, $this->term);
 
-		// Create a dummy application if a real one doesn't exist
-		if(!isset($this->application)) {
-		    $this->application = new HousingApplication();
-		}
+        // Create a dummy application if a real one doesn't exist
+        if (!isset($this->application)) {
+            $this->application = new HousingApplication();
+        }
 
-		$this->room = $this->bed->get_parent();
-		$this->floor = $this->room->get_parent();
-		$this->hall = $this->floor->get_parent();
+        // Get the hall, floor, and room from the checkin's bed
+        $this->bed = new HMS_Bed($this->checkin->getBedId());
+        $this->room = $this->bed->get_parent();
+        $this->floor = $this->room->get_parent();
+        $this->hall = $this->floor->get_parent();
 
-		$this->damages = RoomDamageFactory::getDamagesByRoom($this->room);
-		if(sizeof($this->damages) <= 0){
-			$this->damages = array();
-		}
-	}
+        // Get the damages at check-in time
+        $this->checkinDamages = RoomDamageFactory::getDamagesByRoom($this->room);
+        if (sizeof($this->checkinDamages) <= 0) {
+            $this->checkinDamages = array();
+        }
 
-	public function getStudent(){
-		return $this->student;
-	}
+        // Get the damages at check-out time
+        $this->checkoutDamages = RoomDamageFactory::getDamagesByRoom($this->room);
+        if(sizeof($this->checkoutDamages) <= 0){
+            $this->checkoutDamages = array();
+        }
+    }
 
-	public function getHall(){
-		return $this->hall;
-	}
+    public function getStudent()
+    {
+        return $this->student;
+    }
 
-	public function getFloor(){
-		return $this->floor;
-	}
+    public function getHall()
+    {
+        return $this->hall;
+    }
 
-	public function getRoom(){
-		return $this->room;
-	}
+    public function getFloor()
+    {
+        return $this->floor;
+    }
 
-	public function getApplication(){
-		return $this->application;
-	}
+    public function getRoom()
+    {
+        return $this->room;
+    }
 
-	public function getCheckin(){
-		return $this->checkin;
-	}
+    public function getApplication()
+    {
+        return $this->application;
+    }
 
-	public function getDamages(){
-		return $this->damages;
-	}
+    public function getCheckin()
+    {
+        return $this->checkin;
+    }
+
+    public function getCheckinDamages()
+    {
+        return $this->checkinDamages;
+    }
+
+    public function getCheckoutDamages()
+    {
+        return $this->checkoutDamages;
+    }
 }
 
 ?>
