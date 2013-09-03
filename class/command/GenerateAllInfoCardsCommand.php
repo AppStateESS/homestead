@@ -27,7 +27,7 @@ class GenerateAllInfoCardsCommand extends Command {
 
         $term = Term::getSelectedTerm();
 
-        $checkins = CheckinFactory::getCheckinsOrderedByHallAlpha($term);
+        $checkins = CheckinFactory::getCheckinsOrderedByRoom($term);
 
         if (!isset($checkins) || count($checkins) <= 0) {
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'No check-ins were found for the selected term.');
