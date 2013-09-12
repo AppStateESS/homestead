@@ -14,14 +14,6 @@ class RoomChangeRegistration extends ApplicationFeatureRegistration {
 
     public function showForStudent(Student $student, $term)
     {
-        /*
-        // Freshmen only
-        if($student->getApplicationTerm() > Term::getCurrentTerm())
-        {
-            return true;
-        }
-        */
-
         return true;
     }
 }
@@ -32,13 +24,13 @@ class RoomChange extends ApplicationFeature {
     {
         PHPWS_Core::initModClass('hms', 'RoomChangeMenuBlockView.php');
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-        PHPWS_Core::initModClass('hms', 'RoomChangeRequest.php');
+        PHPWS_Core::initModClass('hms', 'RoomChangeRequestFactory.php');
 
         $assignment = HMS_Assignment::getAssignment($student->getUsername(), $this->term);
 
-        $changeReq = RoomChangeRequest::search($student->getUsername());
+        $request = RoomChangeRequestFactory::getPendingByStudent($student, $this->term);
 
-        return new RoomChangeMenuBlockView($student, $this->getStartDate(), $this->getEndDate(), $assignment, $changeReq);
+        return new RoomChangeMenuBlockView($student, $this->getStartDate(), $this->getEndDate(), $assignment, $request);
     }
 }
 

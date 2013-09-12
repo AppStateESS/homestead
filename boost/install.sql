@@ -682,6 +682,41 @@ create table hms_room_change_participant_state (
     PRIMARY KEY(participant_id, effective_date)
 );
 
+CREATE VIEW hms_room_change_curr_request AS
+    SELECT * FROM hms_room_change_request
+    JOIN hms_room_change_request_state ON hms_room_change_request.id = hms_room_change_request_state.request_id
+    WHERE 
+        effective_date < extract(epoch from now()) AND
+        effective_until_date IS NULL;
+
+CREATE VIEW hms_room_change_curr_participant AS
+    SELECT * FROM hms_room_change_participant
+    JOIN hms_room_change_participant_state ON hms_room_change_participant.id = hms_room_change_participant_state.participant_id
+    WHERE 
+        effective_date < extract(epoch from now()) AND
+        effective_until_date IS NULL;
+
+CREATE VIEW hms_room_change_curr_request_participants AS 
+    SELECT
+        hms_room_change_curr_request.id,
+        hms_room_change_curr_request.term,
+        hms_room_change_curr_request.reason,
+        hms_room_change_curr_request.denied_reason_public,
+        hms_room_change_curr_request.denied_reason_private,
+        hms_room_change_curr_request.state,
+        hms_room_change_curr_request.effective_date,
+        hms_room_change_curr_request.effective_until_date,
+        hms_room_change_curr_request.committed_by,
+        hms_room_change_curr_participant.id AS participant_id,
+        hms_room_change_curr_participant.banner_id,
+        hms_room_change_curr_participant.from_bed,
+        hms_room_change_curr_participant.to_bed,
+        hms_room_change_curr_participant.state AS participant_state,
+        hms_room_change_curr_participant.effective_date AS participant_effective_date,
+        hms_room_change_curr_participant.effective_until_date AS participant_effective_until_date
+    FROM hms_room_change_curr_request
+    JOIN hms_room_change_curr_participant ON hms_room_change_curr_request.id = hms_room_change_curr_participant.request_id;
+
 CREATE TABLE hms_report (
     id                   INTEGER NOT NULL,
     report               character varying(255) NOT NULL,
