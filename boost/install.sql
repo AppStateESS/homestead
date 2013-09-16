@@ -670,6 +670,7 @@ create table hms_room_change_participant (
     to_bed          INTEGER,
     hall_pref1      INTEGER,
     hall_pref2      INTEGER,
+    cell_phone      character varying,
     PRIMARY KEY(id)
 );
 

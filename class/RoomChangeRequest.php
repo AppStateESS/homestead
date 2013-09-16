@@ -1,20 +1,12 @@
 <?php
-PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-PHPWS_Core::initModClass('hms', 'UserStatus.php');
-PHPWS_Core::initModClass('hms', 'Term.php');
-PHPWS_Core::initModClass('hms', 'HMS_Email.php');
-PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
-PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
-PHPWS_Core::initModClass('hms', 'HMS_Permission.php');
-PHPWS_Core::initModClass('hms', 'exception/RoomSwapException.php');
+PHPWS_Core::initModClass('hms', 'RoomChangeRequestState.php');
 
 
 /**
  * Room change types
  *
  * @deprecated
+ *
  */
 /*
 define('ROOM_CHANGE_NEW', 0);
@@ -29,226 +21,115 @@ define('ROOM_CHANGE_PAIRED', 7);
 define('MAX_PREFERENCES', 2);
 */
 
-
+/**
+ *
+ * @author jbooker
+ * @package hms
+ */
 class RoomChangeRequest {
 
-    public $id;
+    private $id;
 
-    public $term;
+    private $term;
 
     // Student's reason for requesting change
-    public $reason;
+    private $reason;
 
     // Reason this request was denied, will be sent to students
-    public $denied_reason_public;
+    private $deniedReasonPublic;
 
     // Reason this request was denied, will not be shown to students
-    public $denied_reason_private;
+    private $deniedReasonPrivate;
+
+    private $stateChanged; // true if the state has been updated
 
     /**
      * Constructor
      */
-    public function __construct()
+    public function __construct($term, $reason)
     {
-    }
+        $this->id = 0;
 
-    public function getDb()
-    {
-        return new PHPWS_DB('hms_room_change_request');
+        $this->term = $term;
+        $this->reason = $reason;
+
+        // Set initial state
+        $this->setState(new RoomChangeStateNew($this, time(), null, UserStatus::getUsername()));
     }
 
     public function save()
     {
-        // convert bool to int for db
-        $this->is_swap = ($this->is_swap ? 1 : 0);
+        $db = PdoFactory::getPdoInstance();
 
-        $this->stamp();
+        // Begin a new transaction
+        $db->beginTransaction();
 
-        $db = $this->getDb();
-        $result = $db->saveObject($this);
+        $params = array(
+                'term' => $this->getTerm(),
+                'reason' => $this->getReason(),
+                'deniedReasonPublic' => $this->getDeniedReasonPublic(),
+                'deniedReasonPrivate' => $this->getDeniedReasonPrivate()
+        );
 
-        if (PHPWS_Error::logIfError($result)) {
-            throw new DatabaseException($result->toString());
+        if ($this->id == 0) {
+            // Insert for new record
+            $query = "INSERT INTO hms_room_change_request (id, term, reason, denied_reason_public, denied_reason_private) VALUES (nextval('hms_room_change_request_seq'), :term, :reason, :deniedReasonPublic, :deniedReasonPrivate)";
+        } else {
+            throw new Exception('Not yet implemented');
+            // Update for existing record
+            $query = "";
+            $params[id] = $this->getId();
         }
 
-        // $this->savePreferences();
-        // $this->saveParticipants();
+
+        $stmt = $db->prepare($query);
+        $stmt->execute($params);
+
+        // If this request doesn't have an ID, then save the ID of the row inserted
+        if ($this->id == 0) {
+            $this->id = $db->lastInsertId('hms_room_change_request_seq');
+        }
+
+        // If state changed, save the new state
+        if ($this->stateChanged()) {
+            $this->state->save();
+        }
+
+        // Close the transaction
+        $db->commit();
 
         return true; // will throw an exception on failure, only returns true for backwards compatability
     }
 
-    public function load()
+    public function getId()
     {
-        if (!parent::load()) {
-            throw new DatabaseException($result->toString());
-        }
-
-        /*
-        //load preferences
-        $db = new PHPWS_DB('hms_room_change_preferences');
-        $db->addWhere('request', $this->id);
-        $results = $db->select();
-
-        if(PHPWS_Error::logIfError($results)) {
-            throw new DatabaseException('Error loading preferences');
-        }
-
-        $this->preferences = $results;
-        */
-
-        /*
-        //load participants
-        $db = new PHPWS_DB('hms_room_change_participants');
-        $db->addWhere('request', $this->id);
-        $results = $db->select();
-
-        if(PHPWS_Error::logIfError($results)) {
-            throw new DatabaseException('Error loading participants');
-        }
-
-        $this->participants = $results;
-        */
-
-        $this->is_swap = $this->is_swap != 0;
-
-        // TODO Create a RoomChangeStateFactory
-        switch ($this->state) {
-            case 0 :
-                $this->state = new NewRoomChangeRequest();
-                break;
-            case 1 :
-                $this->state = new PendingRoomChangeRequest();
-                break;
-            case 2 :
-                $this->state = new RDApprovedChangeRequest();
-                break;
-            case 3 :
-                $this->state = new HousingApprovedChangeRequest();
-                break;
-            case 4 :
-                $this->state = new CompletedChangeRequest();
-                break;
-            case 5 :
-                $this->state = new DeniedChangeRequest();
-                break;
-            case 6 :
-                $this->state = new WaitingForPairing();
-                break;
-            case 7 :
-                $this->state = new PairedRoomChangeRequest();
-                break;
-        }
+        return $this->id;
     }
 
-    public function addPreference($id)
+    public function getTerm()
     {
-        if (in_array($id, HMS_Residence_Hall::get_halls_array(Term::getSelectedTerm()))) {
-            return false;
-        }
-        $this->preferences[] = $id;
+        return $this->term;
     }
 
-    /*
-    public function savePreferences()
+    public function getReason()
     {
-        $db = new PHPWS_DB('hms_room_change_preferences');
-        $db->addWhere('request', $this->id);
-        //clear if the array is empty
-        if(empty($this->preferences)) {
-            $result = $db->delete();
-            if(PHPWS_Error::logIfError($result))
-                throw new DatabaseException($result->toString());
-            return true;
-        }
-
-        $results = $db->select();
-
-        if(PHPWS_Error::logIfError($results)) {
-            throw new DatabaseException('Database Error');
-        }
-
-        if(sizeof($results) > MAX_PREFERENCES) {
-            throw new DatabaseException("You aren't allowed to prefer that many things!");
-        }
-
-        foreach($this->preferences as $preference) {
-            $db->reset();
-            if(is_array($preference) && isset($preference['id']))
-                $db->addValue('id', $preference['id']);
-            $db->addValue('request', $this->id);
-            $db->addValue('building', is_array($preference) ? $preference['building'] : $preference);
-            if(is_array($preference) && isset($preference['id']))
-                $result = $db->update();
-            else
-                $result = $db->insert();
-        }
-        return true;
+        return $this->reason;
     }
-    */
 
-    /*
-    public function saveParticipants()
+    public function getDeniedReasonPublic()
     {
-        $db = new PHPWS_DB('hms_room_change_participants');
-        $db->addWhere('request', $this->id);
-
-        //delete participants from table if the participants array is empty
-        if(empty($this->participants)) {
-            $result = $db->delete();
-            if(PHPWS_Error::logIfError($result)) {
-                throw new DatabaseException($result->toString());
-            }
-            return true;
-        }
-
-        // Otherwise, get the list of participants
-        $results = $db->select();
-
-        if(PHPWS_Error::logIfError($results)) {
-            throw new DatabaseException($results->toString());
-        }
-
-        foreach($this->participants as $participant) {
-            $db->reset();
-            if(isset($participant['id']))
-                $db->addWhere('id', $participant['id']);
-            $db->addValue('request', $this->id);
-            $db->addValue('role', $participant['role']);
-            $db->addValue('username', $participant['username']);
-            $db->addValue('name', $participant['name']);
-            $db->addValue('updated_on', time());
-
-            if(isset($participant['id'])) {
-                $result = $db->update();
-            }else{
-                $db->addValue('added_on', time());
-                $result = $db->insert();
-            }
-
-            if(PHPWS_Error::logIfError($result)) {
-                throw new DatabaseException($result->toString());
-            }
-        }
-        return true;
+        return $this->deniedReasonPublic;
     }
-    */
 
-    public function setState(RoomChangeState $toState)
+    public function getDeniedReasonPrivate()
     {
-        if ($this->canChangeState($toState)) {
-            // only used by denied
-            $prev = $this->state;
+        return $this->deniedReasonPrivate;
+    }
 
-            $this->state->onExit();
-            $this->state = $state; // Set new state
-            $this->state->request = $this;
-            $this->onChange(); // Call onChange
-            $this->state->onEnter($prev);
-            $this->state->sendNotification();
-            return true;
-        }
-
-        throw new RoomSwapException('Could not change state!');
+    private function setState(RoomChangeRequestState $state)
+    {
+        $this->state = $state;
+        $this->stateChanged = true;
     }
 
     public function getState()
@@ -256,28 +137,36 @@ class RoomChangeRequest {
         return $this->state;
     }
 
-    /*
-     * TODO: Integrate these status descriptions into each state
-    public function getStatus()
+    public function stateChanged()
     {
-        if($this->state instanceof PendingRoomChangeRequest) {
-            return 'Awaiting RD Approval';
-        } elseif($this->state instanceof RDApprovedChangeRequest) {
-            return 'Awaiting University Housing Approval';
-        } elseif($this->state instanceof HousingApprovedChangeRequest) {
-            return 'Awaiting Completion';
-        } elseif($this->state instanceof CompletedChangeRequest) {
-            return 'Completed';
-        } elseif($this->state instanceof DeniedChangeRequest) {
-            return 'Denied';
-        } elseif($this->state instanceof WaitingForPairing) {
-            return 'Awaiting Room Swap Pairing';
-        } elseif($this->state instanceof PairedRoomChangeRequest) {
-            return 'Confirmed swap between '.$this->username.' and '.$this->switch_with;
+        if($this->stateChanged){
+            return true;
         }
-        return 'Unknown';
+
+        return false;
     }
-    */
+
+    /**
+     * *********** OLD CODE BELOW **********************
+     */
+    public function transitionTo(RoomChangeRequestState $state)
+    {
+        if ($this->state->canChangeState($toState)) {
+
+            $this->state->onExit();
+            $this->setState($toState); // Set new state
+
+            // $this->onChange(); // Call onChange
+                                       // $this->state->onEnter($prev);
+                                       // $this->state->sendNotification();
+
+            return true;
+        } else {
+            throw new RoomChangeException('Could not change state!');
+        }
+    }
+
+    /*
     public function addParticipant($role, $username, $name = '')
     {
         $this->participants[] = array(
@@ -286,7 +175,9 @@ class RoomChangeRequest {
                 'name' => $name
         );
     }
+    */
 
+    /*
     public function rdRowFunction()
     {
         $this->load();
@@ -302,7 +193,9 @@ class RoomChangeRequest {
         $template['ACTIONS'] = $cmd->getLink($this->state->getType() == ROOM_CHANGE_PENDING ? 'Manage' : 'View');
         return $template;
     }
+    */
 
+    /*
     public function housingRowFunction()
     {
         try {
@@ -327,7 +220,7 @@ class RoomChangeRequest {
             $actions[] = $cmd->getLink('Complete');
         }
 
-        /* might be cleaner as a ternary + append... */
+        // might be cleaner as a ternary + append...
         if ($this->is_swap)
             $template['USERNAME'] = $this->username . ' and ' . $this->switch_with;
         else
@@ -337,7 +230,9 @@ class RoomChangeRequest {
         $template['ACTIONS'] = implode($actions, ',');
         return $template;
     }
+    */
 }
+
 
 /**
  * Subclass for resotring RoomChange objects form the database
@@ -347,9 +242,12 @@ class RoomChangeRequest {
  *
  */
 class RoomChangeRequestRestored extends RoomChangeRequest {
+
     /**
      * Emptry constructor to override parent
      */
-    public function __construct(){}
+    public function __construct()
+    {
+    }
 }
 ?>

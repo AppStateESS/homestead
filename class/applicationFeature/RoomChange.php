@@ -30,7 +30,7 @@ class RoomChange extends ApplicationFeature {
 
         $request = RoomChangeRequestFactory::getPendingByStudent($student, $this->term);
 
-        return new RoomChangeMenuBlockView($student, $this->getStartDate(), $this->getEndDate(), $assignment, $request);
+        return new RoomChangeMenuBlockView($student, $this->term, $this->getStartDate(), $this->getEndDate(), $assignment, $request);
     }
 }
 

@@ -8,9 +8,10 @@ class RoomChangeMenuBlockView extends View {
     private $assignment;
     private $changeRequest;
 
-    public function __construct(Student $student, $startDate, $endDate, HMS_Assignment $assignment = null, RoomChangeRequest $request = null)
+    public function __construct(Student $student, $term, $startDate, $endDate, HMS_Assignment $assignment = null, RoomChangeRequest $request = null)
     {
         $this->student          = $student;
+        $this->term             = $term;
         $this->startDate        = $startDate;
         $this->endDate          = $endDate;
         $this->assignment       = $assignment;
@@ -39,6 +40,7 @@ class RoomChangeMenuBlockView extends View {
         } else {
             $tpl['ICON'] = FEATURE_OPEN_ICON;
             $changeReqCmd = CommandFactory::getCommand('ShowRoomChangeRequestForm');
+
             $tpl['NEW_REQUEST'] = $changeReqCmd->getLink('request a room change');
         }
 

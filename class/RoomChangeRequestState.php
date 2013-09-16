@@ -1,14 +1,70 @@
 <?php
 
 
-abstract class RoomChangeState {
-    private $request;
+abstract class RoomChangeRequestState {
 
-    public function __construct($request)
+    const STATE_NAME = 'ParentState'; // Text state name
+
+    private $request; // Reference fo the request object
+
+    private $effectiveDate; // Unix timestamp where object enetered this state
+    private $effectiveUntilDate; // Unix timestamp where object left this state
+    private $committedBy; // User who changed to this state
+
+    /**
+     * Constructor
+     * @param RoomChangeRequest $request
+     * @param unknown $effectiveDate
+     * @param unknown $effectiveUntilDate
+     * @param unknown $committedBy
+     */
+    public function __construct(RoomChangeRequest $request, $effectiveDate, $effectiveUntilDate = null, $committedBy)
     {
         $this->request = $request;
+        $this->effectiveDate = $effectiveDate;
+        $this->effectiveUntilDate = $effectiveUntilDate;
+        $this->committedBy = $committedBy;
     }
 
+    public function save()
+    {
+        $db = PdoFactory::getPdoInstance();
+
+        $query = "INSERT INTO hms_room_change_request_state (request_id, state, effective_date, effective_until_date, committed_by) VALUES (:requestId, :state, :effectiveDate, :effectiveUntilDate, :committedBy)";
+        $stmt = $db->prepare($query);
+
+        $params = array(
+                'requestId' => $this->request->getId(),
+                'state' => $this->getStateName(),
+                'effectiveDate' => $this->getEffectiveDate(),
+                'effectiveUntilDate' => $this->getEffectiveUntilDate(),
+                'committedBy' => $this->getCommittedBy()
+        );
+
+        $stmt->execute($params);
+    }
+
+    public function getStateName()
+    {
+        return self::STATE_NAME;
+    }
+
+    public function getEffectiveDate()
+    {
+        return $this->effectiveDate;
+    }
+
+    public function getEffectiveUntilDate()
+    {
+        return $this->effectiveUntilDate;
+    }
+
+    public function getCommittedBy()
+    {
+        return $this->committedBy;
+    }
+
+    /*
     public function getValidTransitions()
     {
         return array();
@@ -28,7 +84,9 @@ abstract class RoomChangeState {
     {
         // pass;
     }
+    */
 
+    /*
     // TODO Move this out of here
     public function reserveRoom($last_command)
     {
@@ -41,7 +99,9 @@ abstract class RoomChangeState {
 
         return $cmd;
     }
+    */
 
+    /*
     // TODO move this out of here
     public function clearReservedFlag($last_command)
     {
@@ -60,14 +120,23 @@ abstract class RoomChangeState {
 
         return $cmd;
     }
+    */
 
+    /*
     public function sendNotification()
     {
         // By default, don't send any notifications.
     }
+    */
 }
 
 
+class RoomChangeStateNew extends RoomChangeRequestState {
+
+    const STATE_NAME = 'New'; // Text state name
+}
+
+/*
 class NewRoomChangeRequest extends RoomChangeState {
 
     public function getValidTransitions()
@@ -82,8 +151,9 @@ class NewRoomChangeRequest extends RoomChangeState {
         // only students
     }
 }
+*/
 
-
+/*
 class PendingRoomChangeRequest extends RoomChangeState {
 
     public function getValidTransitions()
@@ -130,7 +200,9 @@ class PendingRoomChangeRequest extends RoomChangeState {
         }
     }
 }
+*/
 
+/*
 
 class RDApprovedChangeRequest extends RoomChangeState {
 
@@ -188,9 +260,11 @@ class RDApprovedChangeRequest extends RoomChangeState {
         HMS_Email::send_template_message(EMAIL_ADDRESS . '@' . DOMAIN_NAME, 'Room Change Pending Approval', 'email/roomChange_rdApproved_housing.tpl', $tpl);
     }
 }
+*/
 
-
+/*
 class HousingApprovedChangeRequest extends RoomChangeState {
+
     private $isBuddy = false;
 
     public function __construct($isBuddy = false)
@@ -226,8 +300,7 @@ class HousingApprovedChangeRequest extends RoomChangeState {
             $this->request->save();
             $this->request->load();
         }
-
-        HMS_Activity_Log::log_activity($this->request->username, ACTIVITY_ROOM_CHANGE_APPROVED_HOUSING, UserStatus::getUsername(false), "Approved Room Change to " . $newBed->where_am_i() . " from " . $bed->where_am_i());
+ HMS_Activity_Log::log_activity($this->request->username, ACTIVITY_ROOM_CHANGE_APPROVED_HOUSING, UserStatus::getUsername(false), "Approved Room Change to " . $newBed->where_am_i() . " from " . $bed->where_am_i());
     }
 
     public function getType()
@@ -288,8 +361,9 @@ class HousingApprovedChangeRequest extends RoomChangeState {
         }
     }
 }
+*/
 
-
+/*
 class CompletedChangeRequest extends RoomChangeState {
 
     // state cannot change
@@ -355,9 +429,12 @@ class CompletedChangeRequest extends RoomChangeState {
         }
     }
 }
+*/
 
+/*
 
 class DeniedChangeRequest extends RoomChangeState {
+
     private $isBuddy = false;
 
     public function __construct($isBuddy = false)
@@ -414,98 +491,6 @@ class DeniedChangeRequest extends RoomChangeState {
         HMS_Email::send_template_message($student->getUsername() . TO_DOMAIN, 'Room Change Denied', 'email/roomChange_denied_housing.tpl', $tpl);
     }
 }
+*/
 
-
-class WaitingForPairing extends RoomChangeState {
-
-    public function getValidTransitions()
-    {
-        return array(
-                'PairedRoomChangeRequest',
-                'DeniedChangeRequest'
-        );
-    }
-
-    public function getType()
-    {
-        return ROOM_CHANGE_PAIRING;
-    }
-
-    public function onEnter($from = NULL)
-    {
-        $student = StudentFactory::getStudentByUsername($this->request->switch_with, Term::getSelectedTerm());
-        $assignment = HMS_Assignment::getAssignment($student->getUsername(), Term::getSelectedTerm());
-
-        if (is_null($assignment)) {
-            throw new Exception('Requested swap partner is not assigned, cannot complete.');
-        }
-
-        $this->request->requested_bed_id = $assignment->bed_id;
-        $this->request->save();
-        $this->request->load();
-
-        $assignment = HMS_Assignment::getAssignment($this->request->username, Term::getSelectedTerm());
-        $bed = $assignment->get_parent();
-
-        HMS_Activity_Log::log_activity($this->request->username, ACTIVITY_ROOM_CHANGE_APPROVED_RD, UserStatus::getUsername(false), "Selected " . $bed->where_am_i());
-    }
-
-    public function attemptToPair()
-    {
-        $other = NULL;
-        try {
-            $other = $this->request->search($this->request->switch_with);
-            if (!is_null($other)) {
-                $other->load();
-            }
-        } catch (DatabaseException $e) {
-            // pass; broken database is equivalent to NULL here
-        }
-
-        if (!is_null($other) && $other->state instanceof WaitingForPairing) {
-            $this->request->change(new PairedRoomChangeRequest());
-        }
-
-        return !is_null($other);
-    }
-}
-
-
-class PairedRoomChangeRequest extends RoomChangeState {
-    private $isBuddy = false;
-
-    public function __construct($isBuddy = false)
-    {
-        $this->isBuddy = $isBuddy;
-    }
-
-    public function getValidTransitions()
-    {
-        return array(
-                'HousingApprovedChangeRequest',
-                'DeniedChangeRequest'
-        );
-    }
-
-    public function getType()
-    {
-        return ROOM_CHANGE_PAIRED;
-    }
-
-    public function onEnter($from = NULL)
-    {
-        // if we are not the buddy then notify our buddy of the change, otherwise we're done here
-        if (!$this->isBuddy) {
-            $this->request->updateBuddy(new PairedRoomChangeRequest(true));
-        }
-
-        $this->request->save();
-        $this->request->load();
-    }
-
-    public function getOther()
-    {
-        return $other = $this->request->search($this->request->switch_with);
-    }
-}
 ?>
