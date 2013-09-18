@@ -37,8 +37,8 @@ class RoomChangeRequestFactory {
 
         $stmt = $db->prepare($query);
         $stmt->execute(array(
-                'term' => $term,
-                'bannerId' => $student->getBannerId()
+                'term'      => $term,
+                'bannerId'  => $student->getBannerId()
         ));
 
         $results = $stmt->fetchAll(PDO::FETCH_CLASS, 'RoomChangeRequestRestored');

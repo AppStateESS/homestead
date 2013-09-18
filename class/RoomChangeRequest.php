@@ -41,10 +41,14 @@ class RoomChangeRequest {
     // Reason this request was denied, will not be shown to students
     private $deniedReasonPrivate;
 
+    private $state;
     private $stateChanged; // true if the state has been updated
 
     /**
-     * Constructor
+     * Create a new RoomChangeReuqest.
+     *
+     * @param integer $term
+     * @param String $reason
      */
     public function __construct($term, $reason)
     {
@@ -54,7 +58,7 @@ class RoomChangeRequest {
         $this->reason = $reason;
 
         // Set initial state
-        $this->setState(new RoomChangeStateNew($this, time(), null, UserStatus::getUsername()));
+        $this->setState(new RoomChangeStatePending($this, time(), null, UserStatus::getUsername()));
     }
 
     public function save()
@@ -146,25 +150,28 @@ class RoomChangeRequest {
         return false;
     }
 
+    public function transitionTo(RoomChangeRequestState $toState)
+    {
+        if (!$this->state->canChangeState($toState)) {
+            throw new InvalidArgumentException("Invalid state change from: {$this->state->getName()} to {$toState->getName()}.");
+        }
+
+        // Set the end date on the current state
+        $this->state->setEffectiveUntilDate(time());
+        $this->state->update(); // Save changes to current state
+
+        // Set the new state as the current state
+        $this->setState($toState);
+
+        $this->state->save(); // Save the new state
+
+        // Send notifications
+        $this->state->sendNotification();
+    }
+
     /**
      * *********** OLD CODE BELOW **********************
      */
-    public function transitionTo(RoomChangeRequestState $state)
-    {
-        if ($this->state->canChangeState($toState)) {
-
-            $this->state->onExit();
-            $this->setState($toState); // Set new state
-
-            // $this->onChange(); // Call onChange
-                                       // $this->state->onEnter($prev);
-                                       // $this->state->sendNotification();
-
-            return true;
-        } else {
-            throw new RoomChangeException('Could not change state!');
-        }
-    }
 
     /*
     public function addParticipant($role, $username, $name = '')
@@ -248,6 +255,7 @@ class RoomChangeRequestRestored extends RoomChangeRequest {
      */
     public function __construct()
     {
+        //TODO Use the RoomChangeRequestStateFactory to load this room change's current state
     }
 }
 ?>

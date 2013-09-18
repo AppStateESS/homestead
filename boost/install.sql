@@ -659,7 +659,7 @@ create table hms_room_change_request_state (
     effective_date          INTEGER NOT NULL,
     effective_until_date    INTEGER,
     committed_by            character varying,
-    PRIMARY KEY(request_id, effective_date)
+    PRIMARY KEY(request_id, state)
 );
 
 create table hms_room_change_participant (
@@ -674,13 +674,15 @@ create table hms_room_change_participant (
     PRIMARY KEY(id)
 );
 
+create sequence hms_room_change_participant_seq;
+
 create table hms_room_change_participant_state (
     participant_id          INTEGER NOT NULL REFERENCES hms_room_change_participant(id),
     state                   character varying,
     effective_date          INTEGER NOT NULL,
     effective_until_date    INTEGER,
     committed_by            character varying,
-    PRIMARY KEY(participant_id, effective_date)
+    PRIMARY KEY(participant_id, state)
 );
 
 CREATE VIEW hms_room_change_curr_request AS

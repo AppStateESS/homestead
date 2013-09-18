@@ -35,7 +35,7 @@ abstract class RoomChangeRequestState {
 
         $params = array(
                 'requestId' => $this->request->getId(),
-                'state' => $this->getStateName(),
+                'state' => $this->getName(),
                 'effectiveDate' => $this->getEffectiveDate(),
                 'effectiveUntilDate' => $this->getEffectiveUntilDate(),
                 'committedBy' => $this->getCommittedBy()
@@ -44,9 +44,26 @@ abstract class RoomChangeRequestState {
         $stmt->execute($params);
     }
 
-    public function getStateName()
+    public function update()
     {
-        return self::STATE_NAME;
+        $db = PdoFactory::getPdoInstance();
+
+        $query = "UPDATE hms_room_change_request_state SET effective_until_date = :effectiveUntilDate WHERE request_id = :requestId AND state = :state AND effective_date = :effectiveDate";
+        $stmt = $db->prepare($query);
+
+        $params = array(
+                'requestId'         => $this->request->getId(),
+                'state'                 => $this->getName(),
+                'effectiveDate'         => $this->getEffectiveDate(),
+                'effectiveUntilDate'    => $this->getEffectiveUntilDate(),
+        );
+
+        $stmt->execute($params);
+    }
+
+    public function getName()
+    {
+        return static::STATE_NAME;
     }
 
     public function getEffectiveDate()
@@ -64,77 +81,89 @@ abstract class RoomChangeRequestState {
         return $this->committedBy;
     }
 
-    /*
+    public function sendNotification()
+    {
+        // By default, don't send any notifications.
+    }
+
+    public function getValidTransitions()
+    {
+        throw new Exception('No transitions implemented.');
+    }
+
+    public function canTransition(RoomChangeRequestState $toState)
+    {
+        return in_array(get_class($toState), $this->getValidTransitions());
+    }
+}
+
+
+class RoomChangeStatePending extends RoomChangeRequestState {
+
+    const STATE_NAME = 'Pending'; // Text state name
+
+    public function getValidTransitions()
+    {
+        return array(
+                'RoomChangeStateHold',
+                'RoomChangeStateApproved'
+        );
+    }
+}
+
+class RoomChangeStateApproved extends RoomChangeRequestState {
+
+    const STATE_NAME = 'Approved';
+
     public function getValidTransitions()
     {
         return array();
     }
 
-    public function canTransition(RoomChangeState $toState)
+    // TODO Send approval notifiction to student/RDs
+}
+
+class RoomChangeStateComplete extends RoomChangeRequestState {
+
+    const STATE_NAME = 'Complete';
+
+    public function getValidTransitions()
     {
-        return in_array(get_class($toState), $this->getValidTransitions());
+        return array();
     }
+}
 
-    public function onEnter($from = NULL)
+class RoomChangeStateHold extends RoomChangeRequestState {
+
+    const STATE_NAME = 'Hold';
+
+    public function getValidTransitions()
     {
-        // pass;
+        return array();
     }
+}
 
-    public function onExit()
+class RoomChangeStateDenied extends RoomChangeRequestState {
+
+    const STATE_NAME = 'Denied';
+
+    public function getValidTransitions()
     {
-        // pass;
+        return array();
     }
-    */
+}
 
-    /*
-    // TODO Move this out of here
-    public function reserveRoom($last_command)
+class RoomChangeStateCancelled extends RoomChangeRequestState {
+
+    const STATE_NAME = 'Cancelled';
+
+    public function getValidTransitions()
     {
-        $params = new CommandContext();
-        $params->addParam('last_command', $last_command);
-        $params->addParam('username', $this->request->username);
-        $params->addParam('bed', $this->request->requested_bed_id);
-        $cmd = CommandFactory::getCommand('ReserveRoom');
-        $cmd = $cmd->execute($params);
-
-        return $cmd;
+        return array();
     }
-    */
-
-    /*
-    // TODO move this out of here
-    public function clearReservedFlag($last_command)
-    {
-        // clear reserved flag
-        if (!isset($this->request->requested_bed_id) || is_null($this->request->requested_bed_id)) {
-            return;
-        }
-
-        $params = new CommandContext();
-        $params->addParam('last_command', $last_command);
-        $params->addParam('username', $this->request->username);
-        $params->addParam('bed', $this->request->requested_bed_id);
-        $params->addParam('clear', true);
-        $cmd = CommandFactory::getCommand('ReserveRoom');
-        $cmd = $cmd->execute($params);
-
-        return $cmd;
-    }
-    */
-
-    /*
-    public function sendNotification()
-    {
-        // By default, don't send any notifications.
-    }
-    */
 }
 
 
-class RoomChangeStateNew extends RoomChangeRequestState {
-
-    const STATE_NAME = 'New'; // Text state name
-}
 
 /*
 class NewRoomChangeRequest extends RoomChangeState {
@@ -490,6 +519,42 @@ class DeniedChangeRequest extends RoomChangeState {
 
         HMS_Email::send_template_message($student->getUsername() . TO_DOMAIN, 'Room Change Denied', 'email/roomChange_denied_housing.tpl', $tpl);
     }
+}
+*/
+
+/*
+ // TODO Move this out of here
+public function reserveRoom($last_command)
+{
+$params = new CommandContext();
+$params->addParam('last_command', $last_command);
+$params->addParam('username', $this->request->username);
+$params->addParam('bed', $this->request->requested_bed_id);
+$cmd = CommandFactory::getCommand('ReserveRoom');
+$cmd = $cmd->execute($params);
+
+return $cmd;
+}
+*/
+
+/*
+ // TODO move this out of here
+public function clearReservedFlag($last_command)
+{
+// clear reserved flag
+if (!isset($this->request->requested_bed_id) || is_null($this->request->requested_bed_id)) {
+return;
+}
+
+$params = new CommandContext();
+$params->addParam('last_command', $last_command);
+$params->addParam('username', $this->request->username);
+$params->addParam('bed', $this->request->requested_bed_id);
+$params->addParam('clear', true);
+$cmd = CommandFactory::getCommand('ReserveRoom');
+$cmd = $cmd->execute($params);
+
+return $cmd;
 }
 */
 
