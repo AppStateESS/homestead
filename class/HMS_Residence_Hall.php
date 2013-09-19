@@ -444,6 +444,12 @@ class HMS_Residence_Hall extends HMS_Item {
         return $this->_floors;
     }
 
+    public function getFloors()
+    {
+        $this->loadFloors();
+        return $this->_floors;
+    }
+
     /*
      * Returns an array with the keys being floor ID's and the value being the floor number
     */

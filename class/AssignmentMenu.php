@@ -51,7 +51,7 @@ class AssignmentMenu extends CommandMenu {
 
             $memberships = HMS_Permission::getMembership('room_change_approve', NULL, UserStatus::getUsername());
             if(!empty($memberships)){
-                $RDRoomChangeCmd = CommandFactory::getCommand('RDRoomChange');
+                $RDRoomChangeCmd = CommandFactory::getCommand('ShowRDRoomChangeList');
                 $this->addCommand('Room Change Approval (RD)', $RDRoomChangeCmd);
             }
 
