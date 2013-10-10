@@ -16,7 +16,6 @@ class SubmitRoomChangeRequestCommand extends Command {
         $formCmd = CommandFactory::getCommand('ShowRoomChangeRequestForm');
         $menuCmd = CommandFactory::getCommand('ShowStudentMenu');
 
-
         // Get input
         $cellNum = $context->get('cell_num');
         $optOut  = $context->get('cell_opt_out');

@@ -28,21 +28,21 @@ define('MAX_PREFERENCES', 2);
  */
 class RoomChangeRequest {
 
-    private $id;
+    protected $id;
 
-    private $term;
+    protected $term;
 
     // Student's reason for requesting change
-    private $reason;
+    protected $reason;
 
     // Reason this request was denied, will be sent to students
-    private $deniedReasonPublic;
+    protected $deniedReasonPublic;
 
     // Reason this request was denied, will not be shown to students
-    private $deniedReasonPrivate;
+    protected $deniedReasonPrivate;
 
-    private $state;
-    private $stateChanged; // true if the state has been updated
+    protected $state;
+    protected $stateChanged; // true if the state has been updated
 
     /**
      * Create a new RoomChangeReuqest.
@@ -120,6 +120,17 @@ class RoomChangeRequest {
         return $this->reason;
     }
 
+    public function isDenied()
+    {
+        $state = $this->getState();
+
+        if ($state == 'Denied') {
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     public function getDeniedReasonPublic()
     {
         return $this->deniedReasonPublic;
@@ -167,6 +178,13 @@ class RoomChangeRequest {
 
         // Send notifications
         $this->state->sendNotification();
+    }
+
+    public function getParticipants()
+    {
+        PHPWS_Core::initModClass('hms', 'RoomChangeParticipantFactory.php');
+
+        return RoomChangeParticipantFactory::getParticipantsByRequest($this);
     }
 
     /**

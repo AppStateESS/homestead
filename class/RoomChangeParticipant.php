@@ -9,21 +9,21 @@ PHPWS_Core::initModClass('hms', 'RoomChangeParticipantState.php');
  */
 class RoomChangeParticipant {
 
-    private $id;
+    protected $id;
 
-    private $requestId;
-    private $bannerId;
+    protected $request_id;
+    protected $banner_id;
 
-    private $fromBed;
-    private $toBed;
+    protected $from_bed;
+    protected $to_bed;
 
-    private $hallPref1;
-    private $hallPref2;
-    private $cellPhone;
+    protected $hall_pref1;
+    protected $hall_pref2;
+    protected $cell_phone;
 
     // Stored in a separate DB table
-    private $state;
-    private $stateChanged;
+    protected $state;
+    protected $stateChanged;
 
     /**
      * Create a new RoomChangeParticipant
@@ -35,9 +35,9 @@ class RoomChangeParticipant {
     public function __construct(RoomChangeRequest $request, Student $student, HMS_Bed $fromBed)
     {
         $this->id = 0;
-        $this->requestId    = $request->getId();
-        $this->bannerId     = $student->getBannerId();
-        $this->fromBed      = $fromBed->getId();
+        $this->request_id    = $request->getId();
+        $this->banner_id     = $student->getBannerId();
+        $this->from_bed      = $fromBed->getId();
 
         // Set initial state
         $this->setState(new ParticipantStateNew($this, time(), null, UserStatus::getUsername()));
@@ -135,59 +135,61 @@ class RoomChangeParticipant {
 
     public function getRequestId()
     {
-        return $this->requestId;
+        return $this->request_id;
     }
 
     public function getBannerId()
     {
-        return $this->bannerId;
+        return $this->banner_id;
     }
 
     public function getFromBed()
     {
-        return $this->fromBed;
+        return $this->from_bed;
     }
 
     public function getToBed()
     {
-        return $this->toBed;
+        return $this->to_bed;
     }
 
     public function setToBed(HMS_Bed $bed)
     {
-        $this->toBed = $bed->getId();
+        $this->to_bed = $bed->getId();
     }
 
     public function getHallPref1()
     {
-        return $this->hallPref1;
+        return $this->hall_pref1;
     }
 
     public function setHallPref1(HMS_Residence_Hall $hall)
     {
-        $this->hallPref1 = $hall->getId();
+        $this->hall_pref1 = $hall->getId();
     }
 
     public function getHallPref2()
     {
-        return $this->hallPref2;
+        return $this->hall_pref2;
     }
 
     public function setHallPref2(HMS_Residence_Hall $hall)
     {
-        $this->hallPref2 = $hall->getId();
+        $this->hall_pref2 = $hall->getId();
     }
 
     public function getCellPhone()
     {
-        return $this->cellPhone;
+        return $this->cell_phone;
     }
 
     public function setCellPhone($cell)
     {
-        $this->cellPhone = $cell;
+        $this->cell_phone = $cell;
     }
 }
 
-
+class RoomChangeParticipantRestored extends RoomChangeParticipant {
+    public function __construct(){}
+}
 ?>

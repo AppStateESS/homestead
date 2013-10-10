@@ -1,7 +1,7 @@
 <?php
 
 PHPWS_Core::initModClass('hms', 'RoomChangeRequestFactory.php');
-PHPWS_Core::initModClass('hms', 'RoomChangeApprovalListView.php');
+PHPWS_Core::initModClass('hms', 'RoomChangeApprovalView.php');
 PHPWS_Core::initModClass('hms', 'HMS_Permission.php');
 
 PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
@@ -15,6 +15,8 @@ class ShowRDRoomChangeListCommand extends Command {
 
     public function execute(CommandContext $context){
 
+        $term = Term::getCurrentTerm();
+
         // Get the list of role memberships this user has
         $memberships = HMS_Permission::getMembership('room_change_approve', NULL, UserStatus::getUsername());
 
@@ -23,7 +25,7 @@ class ShowRDRoomChangeListCommand extends Command {
             throw new PermissionException("Your account does not have the 'RD' role on any residence halls or floors.");
         }
 
-        // Use the rols to instantiate a list of floors this user has access to
+        // Use the roles to instantiate a list of floors this user has access to
         $floors = array();
 
         foreach ($memberships as $member) {
@@ -39,15 +41,23 @@ class ShowRDRoomChangeListCommand extends Command {
 
 
         // Remove duplicate floors
-        //TODO
-
-        test($floors,1);
+        $uniqueFloors = array();
+        foreach($floors as $floor){
+            $uniqueFloors[$floor->getId()] = $floor;
+        }
 
         // Use the list of floors to get a unique list of hall names
         $hallNames = array();
-        //TODO
+        foreach($uniqueFloors as $floor){
+            $hall = $floor->get_parent();
+            $hallNames[$hall->getId()] = $hall->getHallName();
+        }
 
-        $view = new RoomChangeApprovalListView();
+        // Get the set of room changes which are not complete based on the floor list
+        $roomChanges = RoomChangeRequestFactory::getRoomChangesByFloorList($term, $uniqueFloors, array('Pending'));
+
+        $view = new RoomChangeApprovalView($roomChanges, $hallNames, $term);
+
         $context->setContent($view->show());
     }
 }

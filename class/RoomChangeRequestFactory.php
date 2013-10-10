@@ -12,6 +12,23 @@ PHPWS_Core::initModClass('hms', 'RoomChangeRequest.php');
  */
 class RoomChangeRequestFactory {
 
+    public static function getRequestById($id)
+    {
+        if (!isset($id) || is_null($id)) {
+            throw new InvalidArgumentException('Missing request id.');
+        }
+
+        $db = PdoFactory::getPdoInstance();
+
+        $query = "SELECT * FROM hms_room_change_curr_request where id = :requestId";
+
+        $stmt = $db->prepare($query);
+        $stmt->execute(array('requestId' => $id));
+        $stmt->setFetchMode(PDO::FETCH_CLASS, 'RoomChangeRequestRestored');
+
+        return $stmt->fetch();
+    }
+
     /**
      * Returns a RoomChangeReuqest object corresponding to any
      * pending requests a student might have open, or null otherwise.
@@ -51,6 +68,61 @@ class RoomChangeRequestFactory {
         } else {
             return $results[0];
         }
+    }
+
+    /**
+     * Returns a set of RoomChangeRequest objects which are in the given state
+     * for a given array of HMS_Floor objects. Useful for showing RDs / Coordinators their pending requests.
+     *
+     * @param integer $term
+     * @param array<HMS_Floor> $floorList
+     * @param arary<string> $stateList
+     */
+    public static function getRoomChangesByFloorList($term, Array $floorList, Array $stateList)
+    {
+        $db = PdoFactory::getPdoInstance();
+
+        $floorPlaceholders = array();
+        $floorParams = array();
+        foreach($floorList as $floor){
+            $placeholder = "floor_id_" . $floor->getId(); // piece together a placeholder name
+
+            $floorPlaceholders[] = ':' . $placeholder; // Add it to the list of placeholders for PDO
+            $floorParams[$placeholder] = $floor->getId(); // Add the value for this placeholder, to be passed to execute()
+        }
+
+        $floorQuery = implode(',', $floorPlaceholders); // Collapse the array of placeholders into a comma separated list
+
+        $statePlaceholders = array();
+        $stateParams = array();
+        foreach($stateList as $state){
+            $placeholder = "state_name_$state";
+
+            $statePlaceholders[] = ':' . $placeholder;
+            $stateParams[$placeholder] = $state;
+        }
+
+        $stateQuery = implode(',', $statePlaceholders);
+
+        $query = "SELECT hms_room_change_curr_request.* FROM hms_room_change_curr_request
+                    JOIN hms_room_change_curr_participant ON hms_room_change_curr_request.id = hms_room_change_curr_participant.request_id
+                    JOIN hms_hall_structure ON from_bed = hms_hall_structure.bedid
+                    WHERE
+                    term = :term AND
+                    hms_room_change_curr_request.state IN ($stateQuery) and
+                    hms_hall_structure.floorid IN ($floorQuery)";
+
+        $stmt = $db->prepare($query);
+
+        $params = array(
+                'term'      => $term,
+        );
+
+        $params = array_merge($params, $floorParams, $stateParams);
+
+        $stmt->execute($params);
+
+        return $stmt->fetchAll(PDO::FETCH_CLASS, 'RoomChangeRequestRestored');
     }
 }
 
