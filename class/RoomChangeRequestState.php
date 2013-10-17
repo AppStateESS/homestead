@@ -30,7 +30,7 @@ abstract class RoomChangeRequestState {
     {
         $db = PdoFactory::getPdoInstance();
 
-        $query = "INSERT INTO hms_room_change_request_state (request_id, state, effective_date, effective_until_date, committed_by) VALUES (:requestId, :state, :effectiveDate, :effectiveUntilDate, :committedBy)";
+        $query = "INSERT INTO hms_room_change_request_state (request_id, state_name, effective_date, effective_until_date, committed_by) VALUES (:requestId, :state, :effectiveDate, :effectiveUntilDate, :committedBy)";
         $stmt = $db->prepare($query);
 
         $params = array(
@@ -48,7 +48,7 @@ abstract class RoomChangeRequestState {
     {
         $db = PdoFactory::getPdoInstance();
 
-        $query = "UPDATE hms_room_change_request_state SET effective_until_date = :effectiveUntilDate WHERE request_id = :requestId AND state = :state AND effective_date = :effectiveDate";
+        $query = "UPDATE hms_room_change_request_state SET effective_until_date = :effectiveUntilDate WHERE request_id = :requestId AND state_name = :state AND effective_date = :effectiveDate";
         $stmt = $db->prepare($query);
 
         $params = array(

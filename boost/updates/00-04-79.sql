@@ -13,11 +13,11 @@ create table hms_room_change_request (
 
 create table hms_room_change_request_state (
     request_id              INTEGER NOT NULL REFERENCES hms_room_change_request(id),
-    state                   character varying,
+    state_name              character varying,
     effective_date          INTEGER NOT NULL,
     effective_until_date    INTEGER,
     committed_by            character varying,
-    PRIMARY KEY(request_id, state)
+    PRIMARY KEY(request_id, state_name)
 );
 
 create table hms_room_change_participant (
@@ -36,11 +36,11 @@ create sequence hms_room_change_participant_seq;
 
 create table hms_room_change_participant_state (
     participant_id          INTEGER NOT NULL REFERENCES hms_room_change_participant(id),
-    state                   character varying,
+    state_name              character varying,
     effective_date          INTEGER NOT NULL,
     effective_until_date    INTEGER,
     committed_by            character varying,
-    PRIMARY KEY(participant_id, state)
+    PRIMARY KEY(participant_id, state_name)
 );
 
 CREATE VIEW hms_room_change_curr_request AS
@@ -64,7 +64,7 @@ CREATE VIEW hms_room_change_curr_request_participants AS
         hms_room_change_curr_request.reason,
         hms_room_change_curr_request.denied_reason_public,
         hms_room_change_curr_request.denied_reason_private,
-        hms_room_change_curr_request.state,
+        hms_room_change_curr_request.state_name,
         hms_room_change_curr_request.effective_date,
         hms_room_change_curr_request.effective_until_date,
         hms_room_change_curr_request.committed_by,
@@ -72,7 +72,7 @@ CREATE VIEW hms_room_change_curr_request_participants AS
         hms_room_change_curr_participant.banner_id,
         hms_room_change_curr_participant.from_bed,
         hms_room_change_curr_participant.to_bed,
-        hms_room_change_curr_participant.state AS participant_state,
+        hms_room_change_curr_participant.state_name AS participant_state_name,
         hms_room_change_curr_participant.effective_date AS participant_effective_date,
         hms_room_change_curr_participant.effective_until_date AS participant_effective_until_date
     FROM hms_room_change_curr_request

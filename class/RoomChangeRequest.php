@@ -105,6 +105,18 @@ class RoomChangeRequest {
         return true; // will throw an exception on failure, only returns true for backwards compatability
     }
 
+    public function getState()
+    {
+        PHPWS_Core::initModClass('hms', 'RoomChangeRequestStateFactory.php');
+
+        $this->state = RoomChangeRequestStateFactory::getCurrentState($this);
+        return $this->state;
+    }
+
+    /*********************
+     * Get / Set Methods *
+     *********************/
+
     public function getId()
     {
         return $this->id;
@@ -145,11 +157,6 @@ class RoomChangeRequest {
     {
         $this->state = $state;
         $this->stateChanged = true;
-    }
-
-    public function getState()
-    {
-        return $this->state;
     }
 
     public function stateChanged()

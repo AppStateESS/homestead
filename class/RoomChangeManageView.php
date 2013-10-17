@@ -20,11 +20,11 @@ class RoomChangeManageView extends View {
 
         $tpl = array();
 
-        $tpl['REQUEST_STATUS'] = $this->request->getState();
+        $tpl['REQUEST_STATUS'] = $this->request->getState()->getName();
 
         // Make a ParticipantView for each participant and add it to the row repeat
         foreach ($this->participants as $participant) {
-            $participantView = new RoomChangeParticipantView($participant);
+            $participantView = new RoomChangeParticipantView($participant, $this->request, $this->participants);
             $tpl['PARTICIPANT'][]['ROW'] = $participantView->show();
         }
 
@@ -34,13 +34,6 @@ class RoomChangeManageView extends View {
             $tpl['DENIED_REASON_PUBLIC'] = $this->request->getDeniedReasonPublic();
             $tpl['DENIED_REASON_PRIVATE'] = $this->request->getDeniedReasonPrivate();
         }
-
-        // Bed selection form
-        $form = new PHPWS_Form('bedSelection');
-        $form->addDropBox('halls', array('12'=>'blah'));
-
-        $form->mergeTemplate($tpl);
-        $tpl = $form->getTemplate();
 
         return PHPWS_Template::process($tpl, 'hms', 'admin/roomChangeManageView.tpl');
     }

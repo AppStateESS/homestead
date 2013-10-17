@@ -4,8 +4,9 @@ class RoomChangeParticipantState {
 
     const STATE_NAME = 'ParentState'; // Text state name
 
-    private $request; // Reference fo the request object
+    //private $request; // Reference fo the request object
 
+    private $participantId; // Id of participant. We don't keep a reference to the Participant object to avoid circular references
     private $effectiveDate; // Unix timestamp where object enetered this state
     private $effectiveUntilDate; // Unix timestamp where object left this state
     private $committedBy; // User who changed to this state
@@ -19,7 +20,7 @@ class RoomChangeParticipantState {
      */
     public function __construct(RoomChangeParticipant $participant, $effectiveDate, $effectiveUntilDate = null, $committedBy)
     {
-        $this->participant          = $participant;
+        $this->participantId        = $participant->getId();
         $this->effectiveDate        = $effectiveDate;
         $this->effectiveUntilDate   = $effectiveUntilDate;
         $this->committedBy          = $committedBy;
@@ -29,11 +30,11 @@ class RoomChangeParticipantState {
     {
         $db = PdoFactory::getPdoInstance();
 
-        $query = "INSERT INTO hms_room_change_participant_state (participant_id, state, effective_date, effective_until_date, committed_by) VALUES (:participantId, :state, :effectiveDate, :effectiveUntilDate, :committedBy)";
+        $query = "INSERT INTO hms_room_change_participant_state (participant_id, state_name, effective_date, effective_until_date, committed_by) VALUES (:participantId, :state, :effectiveDate, :effectiveUntilDate, :committedBy)";
         $stmt = $db->prepare($query);
 
         $params = array(
-                'participantId'         => $this->participant->getId(),
+                'participantId'         => $this->getParticipantId(),
                 'state'                 => $this->getName(),
                 'effectiveDate'         => $this->getEffectiveDate(),
                 'effectiveUntilDate'    => $this->getEffectiveUntilDate(),
@@ -47,11 +48,11 @@ class RoomChangeParticipantState {
     {
         $db = PdoFactory::getPdoInstance();
 
-        $query = "UPDATE hms_room_change_participant_state SET effective_until_date = :effectiveUntilDate WHERE participant_id = :participantId AND state = :state AND effective_date = :effectiveDate";
+        $query = "UPDATE hms_room_change_participant_state SET effective_until_date = :effectiveUntilDate WHERE participant_id = :participantId AND state_name = :state AND effective_date = :effectiveDate";
         $stmt = $db->prepare($query);
 
         $params = array(
-                'participantId'         => $this->participant->getId(),
+                'participantId'         => $this->getParticipantId(),
                 'state'                 => $this->getName(),
                 'effectiveDate'         => $this->getEffectiveDate(),
                 'effectiveUntilDate'    => $this->getEffectiveUntilDate(),
@@ -73,6 +74,11 @@ class RoomChangeParticipantState {
     public function getName()
     {
         return static::STATE_NAME;
+    }
+
+    public function getParticipantId()
+    {
+        return $this->participantId;
     }
 
     public function getEffectiveDate()
@@ -116,7 +122,7 @@ class ParticipantStateStudentApproved extends RoomChangeParticipantState {
 
     public function getValidTransitions()
     {
-        return array();
+        return array('ParticipantStateCurrRdApproved');
     }
 
     //TODO Send notification to current RD
@@ -127,7 +133,7 @@ class ParticipantStateCurrRdApproved extends RoomChangeParticipantState {
 
     public function getValidTransitions()
     {
-        return array();
+        return array('ParticipantStateFutureRdApproved');
     }
 
     // TODO send notification to future RD

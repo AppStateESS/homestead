@@ -2,6 +2,12 @@
 
 <h2>Status: {REQUEST_STATUS}</h2>
 
+<div style="float: right;">
+    <button>Hold</button>
+    <button>Deny</button>
+    <button>Cancel</button>
+</div>
+
 <h2>Participants</h2>
 
 <!-- BEGIN PARTICIPANT -->
@@ -20,30 +26,29 @@
 <p>{DENIED_REASON_PRIVATE}</p>
 <!-- END denied_reason -->
 
-<div id="selectBedDialog">
-</div>
-
 <script type="text/javascript">
 	$(document).ready(function() {
-		$("#selectBedDialog").dialog({
-			modal : true,
-			autoOpen : false,
-			title : "Choose a Bed",
-			buttons : {
-				"Done" : saveSelectedBed,
-				"Cancel" : function() {
-					$(this).dialog('close');
-				}
-			}
-		});
-
-		$(".showSelectBed").click(function(event) {
-			event.preventDefault();
-			$("#selectBedDialog").load('index.php?module=hms&action=RoomChnageListAvailableBeds').dialog('open');
-		});
+		$.get('index.php?module=hms&action=RoomChnageListAvailableBeds', bedListCallback, 'json');
 	});
 
-	function saveSelectedBed() {
-		//TODO
+	function bedListCallback(data)
+	{
+		$("#participant_form_bed_select").html('');
+		
+		// Check for no available beds
+		if(data.length == 0){
+			$("#participant_form_bed_select").html("<p>No available beds found. Please contact the Housing Assignments Office.</p>");
+			return;
+		}
+
+		var html = '<option value="-1">Select destination..</option>';
+		
+	    // Loop over each bed and add it to the list
+		for(i = 0; i < data.length; i++){
+			html += '<option value="' + data[i].bedid + '">' + data[i].hall_name + ' ' + data[i].room_number + '</option>';
+		}
+		
+		$("#participant_form_bed_select").append(html);
+	    
 	}
 </script>

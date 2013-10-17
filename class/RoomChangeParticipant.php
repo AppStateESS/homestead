@@ -21,7 +21,7 @@ class RoomChangeParticipant {
     protected $hall_pref2;
     protected $cell_phone;
 
-    // Stored in a separate DB table
+    // Stored in a separate DB table, lazy loaded
     protected $state;
     protected $stateChanged;
 
@@ -50,24 +50,29 @@ class RoomChangeParticipant {
         // Begin a new transaction
         $db->beginTransaction();
 
-        $params = array(
-                'request_id' => $this->getRequestId(),
-                'banner_id' => $this->getBannerId(),
-                'from_bed' => $this->getFromBed(),
-                'to_bed' => $this->getToBed(),
-                'hall_pref1' => $this->getHallPref1(),
-                'hall_pref2' => $this->getHallPref2(),
-                'cell_phone' => $this->getCellPhone()
-        );
-
         if ($this->id == 0) {
             // Insert for new record
+            $params = array(
+                    'request_id' => $this->getRequestId(),
+                    'banner_id' => $this->getBannerId(),
+                    'from_bed' => $this->getFromBed(),
+                    'to_bed' => $this->getToBed(),
+                    'hall_pref1' => $this->getHallPref1(),
+                    'hall_pref2' => $this->getHallPref2(),
+                    'cell_phone' => $this->getCellPhone()
+            );
+
             $query = "INSERT INTO hms_room_change_participant (id, request_id, banner_id, from_bed, to_bed, hall_pref1, hall_pref2, cell_phone) VALUES (nextval('hms_room_change_participant_seq'), :request_id, :banner_id, :from_bed, :to_bed, :hall_pref1, :hall_pref2, :cell_phone)";
         } else {
-            throw new Exception('Not yet implemented');
             // Update for existing record
-            $query = "";
-            $params[id] = $this->getId();
+            $params = array(
+                    'id'     => $this->getId(),
+                    'to_bed' => $this->getToBed(),
+                    'hall_pref1' => $this->getHallPref1(),
+                    'hall_pref2' => $this->getHallPref2(),
+                    'cell_phone' => $this->getCellPhone()
+            );
+            $query = "UPDATE hms_room_change_participant SET (to_bed, hall_pref1, hall_pref2, cell_phone) = (:to_bed, :hall_pref1, :hall_pref2, :cell_phone) WHERE id = :id";
         }
 
 
@@ -93,6 +98,11 @@ class RoomChangeParticipant {
 
     public function transitionTo(RoomChangeParticipantState $toState)
     {
+        // Be sure we have the latest state
+        if(is_null($this->state)){
+            $this->getState();
+        }
+
         if (!$this->state->canTransition($toState)) {
             throw new InvalidArgumentException("Invalid state change from: {$this->state->getName()} to {$toState->getName()}.");
         }
@@ -114,6 +124,15 @@ class RoomChangeParticipant {
     {
         $this->state = $toState;
         $this->stateChanged = true;
+    }
+
+    public function getState()
+    {
+        PHPWS_Core::initModClass('hms', 'RoomChangeParticipantStateFactory.php');
+
+        $this->state = RoomChangeParticipantStateFactory::getCurrentStateForParticipant($this);
+
+        return $this->state;
     }
 
     public function stateChanged()

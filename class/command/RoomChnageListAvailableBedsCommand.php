@@ -20,7 +20,7 @@ class RoomChnageListAvailableBedsCommand extends Command {
 
         $db = PdoFactory::getPdoInstance();
 
-        $query = "select hall_name, room_number
+        $query = "select bedid, hall_name, room_number
                 FROM hms_hall_structure
                 LEFT OUTER JOIN hms_assignment ON hms_assignment.bed_id = hms_hall_structure.bedid
                 WHERE
@@ -40,7 +40,7 @@ class RoomChnageListAvailableBedsCommand extends Command {
 
         $stmt->execute($params);
 
-        echo json_encode($stmt->fetchAll());
+        echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
         exit;
     }
 }

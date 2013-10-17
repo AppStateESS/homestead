@@ -49,8 +49,8 @@ class RoomChangeRequestFactory {
                     WHERE
                         term = :term AND
                         banner_id = :bannerId AND
-                        hms_room_change_curr_request.state NOT IN ('Cancelled', 'Denied', 'Complete', 'Approved') AND
-                        hms_room_change_curr_participant.state NOT IN ('Cancelled', 'Checkedout', 'Declined', 'Denied')";
+                        hms_room_change_curr_request.state_name NOT IN ('Cancelled', 'Denied', 'Complete', 'Approved') AND
+                        hms_room_change_curr_participant.state_name NOT IN ('Cancelled', 'Checkedout', 'Declined', 'Denied')";
 
         $stmt = $db->prepare($query);
         $stmt->execute(array(
@@ -109,7 +109,7 @@ class RoomChangeRequestFactory {
                     JOIN hms_hall_structure ON from_bed = hms_hall_structure.bedid
                     WHERE
                     term = :term AND
-                    hms_room_change_curr_request.state IN ($stateQuery) and
+                    hms_room_change_curr_request.state_name IN ($stateQuery) and
                     hms_hall_structure.floorid IN ($floorQuery)";
 
         $stmt = $db->prepare($query);
