@@ -475,6 +475,15 @@ class HMS_Bed extends HMS_Item {
         return $this->room_change_reserved;
     }
 
+    public function isRoomChangeReserved()
+    {
+        if($this->room_change_reserved == 1){
+            return true;
+        }
+
+        return false;
+    }
+
     public function setRoomChangeReserved($reserved)
     {
         $this->room_change_reserved = $reserved;

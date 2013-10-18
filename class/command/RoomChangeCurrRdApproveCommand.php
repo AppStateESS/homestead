@@ -46,13 +46,17 @@ class RoomChangeCurrRdApproveCommand extends Command {
         $cmd = CommandFactory::getCommand('ShowManageRoomChange');
         $cmd->setRequestId($requestId);
 
-
         // Load the request
         $request = RoomChangeRequestFactory::getRequestById($requestId);
 
         // Load the participant
         $participant = RoomChangeParticipantFactory::getParticipantById($participantId);
 
+        // Check permissions. Must be an RD for current bed, or an admin
+        $rds = $participant->getCurrentRdList();
+        if (!in_array(UserStatus::getUsername(), $rds) && !UserStatus::isDeity()) {
+            throw new PermissionException('You do not have permission to approve this room change.');
+        }
 
         // Check that a destination bed has already been set, or that the RD
         // has just selected a bed
@@ -65,6 +69,16 @@ class RoomChangeCurrRdApproveCommand extends Command {
         // Set the selected bed, if needed
         if (is_null($toBedId) && $toBedSelected != '-1') {
             $bed = new HMS_Bed($toBedSelected);
+
+            // Check that the bed isn't already reserved for a room change
+            if($bed->isRoomChangeReserved()){
+                NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'The bed you selected is already reserved for a room change. Please choose a different bed.');
+                $cmd->redirect();
+            }
+
+            // Reserve the bed for room change
+
+            // Save the bed to this participant
             $participant->setToBed($bed);
         }
 
@@ -72,6 +86,9 @@ class RoomChangeCurrRdApproveCommand extends Command {
 
         // Transition to CurrRdApproved
         $participant->transitionTo(new ParticipantStateCurrRdApproved($participant, time(), null, UserStatus::getUsername()));
+
+        // If the future RD is the same as the current user Logged in, then go ahead and transition to FutureRdApproved too.
+        //TODO
 
         // Redirect to the manage request page
         $cmd->redirect();

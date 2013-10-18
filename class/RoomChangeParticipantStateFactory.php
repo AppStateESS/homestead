@@ -1,6 +1,6 @@
 <?php
-
 PHPWS_Core::initModClass('hms', 'RoomChangeParticipantState.php');
+
 
 class RoomChangeParticipantStateFactory {
 
@@ -11,7 +11,9 @@ class RoomChangeParticipantStateFactory {
         $query = "SELECT * FROM hms_room_change_curr_participant WHERE participant_id = :participantId";
 
         $stmt = $db->prepare($query);
-        $stmt->execute(array('participantId' => $participant->getId()));
+        $stmt->execute(array(
+                'participantId' => $participant->getId()
+        ));
 
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -22,7 +24,29 @@ class RoomChangeParticipantStateFactory {
 
     public static function getStateHistory(RoomChangeParticipant $participant)
     {
-        //TODO
+        $db = PdoFactory::getPdoInstance();
+
+        $query = "SELECT * FROM hms_room_change_participant_state WHERE participant_id = :participantId ORDER BY effective_date ASC";
+        $stmt = $db->prepare($query);
+        $stmt->execute(array(
+                'participantId' => $participant->getId()
+        ));
+
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // If no results, just return here
+        if (sizeof($results) <= 0) {
+            return null;
+        }
+
+        // Create a ParticipantState object for each result
+        $states = array();
+        foreach ($results as $row) {
+            $className = 'ParticipantState' . $row['state_name'];
+            $states[] = new $className($participant, $row['effective_date'], $row['effective_until_date'], $row['committed_by']);
+        }
+
+        return $states;
     }
 }
 

@@ -3,6 +3,7 @@
 class RoomChangeParticipantState {
 
     const STATE_NAME = 'ParentState'; // Text state name
+    const FRIENDLY_NAME = 'Parent State'; // Friendly (user-readable) state name
 
     //private $request; // Reference fo the request object
 
@@ -76,6 +77,11 @@ class RoomChangeParticipantState {
         return static::STATE_NAME;
     }
 
+    public function getFriendlyName()
+    {
+        return static::FRIENDLY_NAME;
+    }
+
     public function getParticipantId()
     {
         return $this->participantId;
@@ -110,19 +116,21 @@ class RoomChangeParticipantState {
 
 class ParticipantStateNew extends RoomChangeParticipantState {
     const STATE_NAME = 'New';
+    const FRIENDLY_NAME = 'Created';
 
     public function getValidTransitions()
     {
-        return array('ParticipantStateStudentApproved');
+        return array('ParticipantStateStudentApproved', 'ParticipantStateDenied', 'ParticipantStateDeclined', 'ParticipantStateCancelled');
     }
 }
 
 class ParticipantStateStudentApproved extends RoomChangeParticipantState {
     const STATE_NAME = 'StudentApproved';
+    const FRIENDLY_NAME = 'Student Approved';
 
     public function getValidTransitions()
     {
-        return array('ParticipantStateCurrRdApproved');
+        return array('ParticipantStateCurrRdApproved', 'ParticipantStateDenied', 'ParticipantStateCancelled');
     }
 
     //TODO Send notification to current RD
@@ -130,10 +138,11 @@ class ParticipantStateStudentApproved extends RoomChangeParticipantState {
 
 class ParticipantStateCurrRdApproved extends RoomChangeParticipantState {
     const STATE_NAME = 'CurrRdApproved';
+    const FRIENDLY_NAME = 'Current RD Approved';
 
     public function getValidTransitions()
     {
-        return array('ParticipantStateFutureRdApproved');
+        return array('ParticipantStateFutureRdApproved', 'ParticipantStateDenied', 'ParticipantStateCancelled');
     }
 
     // TODO send notification to future RD
@@ -141,37 +150,29 @@ class ParticipantStateCurrRdApproved extends RoomChangeParticipantState {
 
 class ParticipantStateFutureRdApproved extends RoomChangeParticipantState {
     const STATE_NAME = 'FutureRdApproved';
+    const FRIENDLY_NAME = 'Future RD Approved';
 
     public function getValidTransitions()
     {
-        return array();
+        return array('ParticipantStateInProcess', 'ParticipantStateDenied', 'ParticipantStateCancelled');
     }
 
-    // TODO If all participants are approved, send notification to Housing
-}
-
-class ParticipantStateHousingApproved extends RoomChangeParticipantState {
-    const STATE_NAME = 'HousingApproved';
-
-    public function getValidTransitions()
-    {
-        return array();
-    }
-
-    // TODO If all participants are in HousingApproved, move Request to Approved (which will notify everyone)
+    // TODO If all participants are FutureRdApproved, send notification to Housing
 }
 
 class ParticipantStateInProcess extends RoomChangeParticipantState {
     const STATE_NAME = 'InProcess';
+    const FRIENDLY_NAME = 'Approved - Move in Progress';
 
     public function getValidTransitions()
     {
-        return array();
+        return array('ParticipantStateCheckedOut', 'ParticipantStateCancelled');
     }
 }
 
 class ParticipantStateCheckedOut extends RoomChangeParticipantState {
     const STATE_NAME = 'CheckedOut';
+    const FRIENDLY_NAME = 'Checked-out of Old Room';
 
     public function getValidTransitions()
     {
@@ -179,10 +180,12 @@ class ParticipantStateCheckedOut extends RoomChangeParticipantState {
     }
 
     // TODO Notify "old" RD and Housing
+    // TODO If all participants checked out, move request to Complete
 }
 
 class ParticipantStateDeclined extends RoomChangeParticipantState {
     const STATE_NAME = 'Declined';
+    const FRIENDLY_NAME = 'Declined';
 
     public function getValidTransitions()
     {
@@ -194,6 +197,7 @@ class ParticipantStateDeclined extends RoomChangeParticipantState {
 
 class ParticipantStateDenied extends RoomChangeParticipantState {
     const STATE_NAME = 'Denied';
+    const FRIENDLY_NAME = 'Denied';
 
     public function getValidTransitions()
     {
@@ -205,6 +209,7 @@ class ParticipantStateDenied extends RoomChangeParticipantState {
 
 class ParticipantStateCancelled extends RoomChangeParticipantState {
     const STATE_NAME = 'Cancelled';
+    const FRIENDLY_NAME = 'Cancelled';
 
     public function getValidTransitions()
     {

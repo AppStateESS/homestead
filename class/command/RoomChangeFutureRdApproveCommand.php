@@ -54,6 +54,12 @@ class RoomChangeFutureRdApproveCommand extends Command {
         // Load the participant
         $participant = RoomChangeParticipantFactory::getParticipantById($participantId);
 
+        // Check permissions. Must be an RD for current bed, or an admin
+        $rds = $participant->getFutureRdList();
+        if (!in_array(UserStatus::getUsername(), $rds) && !UserStatus::isDeity()) {
+            throw new PermissionException('You do not have permission to approve this room change.');
+        }
+
         // Transition to CurrRdApproved
         $participant->transitionTo(new ParticipantStateFutureRdApproved($participant, time(), null, UserStatus::getUsername()));
 

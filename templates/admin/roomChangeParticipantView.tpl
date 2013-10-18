@@ -9,13 +9,14 @@
     <!-- END hall_pref -->
   </p>
   
-  <strong>From</strong> {FROM_ROOM}<br />
-  
-  {START_FORM}
+  <strong>From</strong> {FROM_ROOM}
   <!-- BEGIN to_room -->
-  <strong>To</strong> {TO_ROOM}<br />
+  <strong>To</strong> {TO_ROOM}
   <!-- END to_room -->
   
+  <br />
+  
+  {START_FORM}
   <!-- BEGIN to_select -->
   <strong>To</strong> {BED_SELECT}
   <!-- END to_select -->
@@ -26,5 +27,13 @@
   <!-- END approve_btn -->
   
   {END_FORM}
+</div>
+<div style="margin-top:1em;">
+<strong>Approval History</strong><br />
+<ul>
+<!-- BEGIN history_rows -->
+<li>{STATE_NAME} on {EFFECTIVE_DATE}</li>
+<!-- END history_rows -->
+</ul>
 </div>
 <hr>

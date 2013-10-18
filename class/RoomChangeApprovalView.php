@@ -12,13 +12,19 @@ PHPWS_Core::initModClass('hms', 'RoomChangeListView.php');
  */
 class RoomChangeApprovalView extends View {
 
-    private $roomChanges;
+    private $needsApproval;
+    private $allPending;
+    private $inactive;
+
     private $hallNames;
     private $term;
 
-    public function __construct(Array $roomChangeRequests, Array $hallNames, $term)
+    public function __construct(Array $needsApprovalRequests, Array $allPendingRequests, Array $inactiveRequests, Array $hallNames, $term)
     {
-        $this->roomChanges = $roomChangeRequests;
+        $this->needsApproval = $needsApprovalRequests;
+        $this->allPending = $allPendingRequests;
+        $this->inactive = $inactiveRequests;
+
         $this->hallNames = $hallNames;
         $this->term = $term;
     }
@@ -29,14 +35,14 @@ class RoomChangeApprovalView extends View {
 
         $tpl['HALL_NAMES'] = implode(', ', $this->hallNames);
 
-        $needsActionList = new RoomChangeListView($this->roomChanges, $this->term);
+        $needsActionList = new RoomChangeListView($this->needsApproval, $this->term);
         $tpl['NEEDS_ACTION'] = $needsActionList->show();
 
 
-        $pendingList = new RoomChangeListView(array(), $this->term); //TODO
+        $pendingList = new RoomChangeListView($this->allPending, $this->term); //TODO
         $tpl['PENDING'] = $pendingList->show();
 
-        $inactiveList = new RoomChangeListView(array(), $this->term); //TODO
+        $inactiveList = new RoomChangeListView($this->inactive, $this->term); //TODO
         $tpl['INACTIVE'] = $inactiveList->show();
 
         return PHPWS_Template::process($tpl, 'hms', 'admin/RoomChangeApprovalView.tpl');

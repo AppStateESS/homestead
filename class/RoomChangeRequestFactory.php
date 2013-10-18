@@ -23,7 +23,9 @@ class RoomChangeRequestFactory {
         $query = "SELECT * FROM hms_room_change_curr_request where id = :requestId";
 
         $stmt = $db->prepare($query);
-        $stmt->execute(array('requestId' => $id));
+        $stmt->execute(array(
+                'requestId' => $id
+        ));
         $stmt->setFetchMode(PDO::FETCH_CLASS, 'RoomChangeRequestRestored');
 
         return $stmt->fetch();
@@ -54,8 +56,8 @@ class RoomChangeRequestFactory {
 
         $stmt = $db->prepare($query);
         $stmt->execute(array(
-                'term'      => $term,
-                'bannerId'  => $student->getBannerId()
+                'term' => $term,
+                'bannerId' => $student->getBannerId()
         ));
 
         $results = $stmt->fetchAll(PDO::FETCH_CLASS, 'RoomChangeRequestRestored');
@@ -70,21 +72,23 @@ class RoomChangeRequestFactory {
         }
     }
 
+
     /**
      * Returns a set of RoomChangeRequest objects which are in the given state
-     * for a given array of HMS_Floor objects. Useful for showing RDs / Coordinators their pending requests.
+     * for a given array of HMS_Floor objects.
+     * Useful for showing RDs / Coordinators their pending requests.
      *
      * @param integer $term
      * @param array<HMS_Floor> $floorList
      * @param arary<string> $stateList
      */
-    public static function getRoomChangesByFloorList($term, Array $floorList, Array $stateList)
+    public static function getRoomChangesByFloor($term, Array $floorList, Array $stateList)
     {
         $db = PdoFactory::getPdoInstance();
 
         $floorPlaceholders = array();
         $floorParams = array();
-        foreach($floorList as $floor){
+        foreach ($floorList as $floor) {
             $placeholder = "floor_id_" . $floor->getId(); // piece together a placeholder name
 
             $floorPlaceholders[] = ':' . $placeholder; // Add it to the list of placeholders for PDO
@@ -95,7 +99,7 @@ class RoomChangeRequestFactory {
 
         $statePlaceholders = array();
         $stateParams = array();
-        foreach($stateList as $state){
+        foreach ($stateList as $state) {
             $placeholder = "state_name_$state";
 
             $statePlaceholders[] = ':' . $placeholder;
@@ -104,21 +108,108 @@ class RoomChangeRequestFactory {
 
         $stateQuery = implode(',', $statePlaceholders);
 
+        /*
+         * Get any requests in the 'Pending' or 'Hold' states where the request is
+         * coming from a Participant currently living on one of the listed floor
+         * (from_bed is on a floor in list) and the participant status is
+         * 'StudentAproved' (i.e. this request is waiting on the currnt RDs approval)
+         *
+         * Union that with any Pending/Held request that has a to_bed set and that bed
+         * is on one of the floors in the list, and the participant's status is
+         * 'CurrRdApproved' (i.e. the request is waiting on the future RD's approval).
+         *
+         * The union is important because the 'to_bed' field does not always have to be
+         * set. A combined JOIN (as opposed to UNION) would not include results where
+         * to_bed field is empty.
+         */
         $query = "SELECT hms_room_change_curr_request.* FROM hms_room_change_curr_request
                     JOIN hms_room_change_curr_participant ON hms_room_change_curr_request.id = hms_room_change_curr_participant.request_id
                     JOIN hms_hall_structure ON from_bed = hms_hall_structure.bedid
-                    WHERE
-                    term = :term AND
-                    hms_room_change_curr_request.state_name IN ($stateQuery) and
-                    hms_hall_structure.floorid IN ($floorQuery)";
+                  WHERE
+                      term = :term AND
+                      hms_room_change_curr_request.state_name IN ($stateQuery) AND
+                      hms_hall_structure.floorid IN ($floorQuery)
+                  UNION
+
+                  SELECT hms_room_change_curr_request.* FROM hms_room_change_curr_request
+                      JOIN hms_room_change_curr_participant ON hms_room_change_curr_request.id = hms_room_change_curr_participant.request_id
+                      JOIN hms_hall_structure ON to_bed = hms_hall_structure.bedid
+                  WHERE
+                      term = :term AND
+                      hms_room_change_curr_request.state_name IN ($stateQuery) AND
+                      hms_hall_structure.floorid IN ($floorQuery)";
 
         $stmt = $db->prepare($query);
 
-        $params = array(
-                'term'      => $term,
-        );
+        $params = array_merge(array(
+                'term' => $term
+        ), $floorParams, $stateParams);
 
-        $params = array_merge($params, $floorParams, $stateParams);
+        $stmt->execute($params);
+
+        return $stmt->fetchAll(PDO::FETCH_CLASS, 'RoomChangeRequestRestored');
+    }
+
+    /**
+     * Returns a set of RoomChangeRequest objects which are in the given state
+     * for a given array of HMS_Floor objects.
+     * Useful for showing RDs / Coordinators their pending requests.
+     *
+     * @param integer $term
+     * @param array<HMS_Floor> $floorList
+     * @param arary<string> $stateList
+     */
+    public static function getRoomChangesNeedsApproval($term, Array $floorList)
+    {
+        $db = PdoFactory::getPdoInstance();
+
+        $floorPlaceholders = array();
+        $floorParams = array();
+        foreach ($floorList as $floor) {
+            $placeholder = "floor_id_" . $floor->getId(); // piece together a placeholder name
+
+            $floorPlaceholders[] = ':' . $placeholder; // Add it to the list of placeholders for PDO
+            $floorParams[$placeholder] = $floor->getId(); // Add the value for this placeholder, to be passed to execute()
+        }
+
+        $floorQuery = implode(',', $floorPlaceholders); // Collapse the array of placeholders into a comma separated list
+
+        /*
+         * Get any requests in the 'Pending' or 'Hold' states where the request is
+         * coming from a Participant currently living on one of the listed floor
+         * (from_bed is on a floor in list) and the participant status is
+         * 'StudentAproved' (i.e. this request is waiting on the currnt RDs approval)
+         *
+         * Union that with any Pending/Held request that has a to_bed set and that bed
+         * is on one of the floors in the list, and the participant's status is
+         * 'CurrRdApproved' (i.e. the request is waiting on the future RD's approval).
+         *
+         * The union is important because the 'to_bed' field does not always have to be
+         * set. A combined JOIN (as opposed to UNION) would not include results where
+         * to_bed field is empty.
+         */
+        $query = "SELECT hms_room_change_curr_request.* FROM hms_room_change_curr_request
+                    JOIN hms_room_change_curr_participant ON hms_room_change_curr_request.id = hms_room_change_curr_participant.request_id
+                    JOIN hms_hall_structure ON from_bed = hms_hall_structure.bedid
+                  WHERE
+                      term = :term AND
+                      hms_room_change_curr_request.state_name IN ('Pending', 'Hold') AND
+                      hms_hall_structure.floorid IN ($floorQuery) AND hms_room_change_curr_participant.state_name IN ('StudentApproved')
+                  UNION
+
+                  SELECT hms_room_change_curr_request.* FROM hms_room_change_curr_request
+                      JOIN hms_room_change_curr_participant ON hms_room_change_curr_request.id = hms_room_change_curr_participant.request_id
+                      JOIN hms_hall_structure ON to_bed = hms_hall_structure.bedid
+                  WHERE
+                      term = :term AND
+                      hms_room_change_curr_request.state_name IN ('Pending', 'Hold') AND
+                      hms_hall_structure.floorid IN ($floorQuery) AND hms_room_change_curr_participant.state_name IN ('CurrRdApproved')";
+
+        $stmt = $db->prepare($query);
+
+        $params = array_merge(array(
+                'term' => $term
+        ), $floorParams);
 
         $stmt->execute($params);
 

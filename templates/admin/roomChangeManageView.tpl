@@ -1,15 +1,15 @@
 <h1>Manage Room Change Request</h1>
 
-<h2>Status: {REQUEST_STATUS}</h2>
-
 <div style="float: right;">
     <button>Hold</button>
     <button>Deny</button>
     <button>Cancel</button>
 </div>
 
-<h2>Participants</h2>
+<h2>Status: {REQUEST_STATUS}</h2>
 
+<hr style="clear: right;"/>
+<h2>Participants</h2>
 <!-- BEGIN PARTICIPANT -->
 {ROW}
 <!-- END PARTICIPANT -->

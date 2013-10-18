@@ -29,8 +29,10 @@ class RoomChnageListAvailableBedsCommand extends Command {
                     offline = 0 and
                     overflow = 0 and
                     parlor = 0 and
-                    ra = 0 and
-                    private = 0";
+                    ra_roommate = 0 and
+                    private = 0 and
+                    reserved = 0 and
+                    room_change_reserved = 0";
 
         $stmt = $db->prepare($query);
 

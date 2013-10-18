@@ -1,6 +1,7 @@
 <?php
 
 PHPWS_Core::initModClass('hms', 'RoomChangeParticipantState.php');
+PHPWS_Core::initModClass('hms', 'HMS_Permission.php');
 
 /**
  * Model class to represent a student participating in a room change request.
@@ -133,6 +134,47 @@ class RoomChangeParticipant {
         $this->state = RoomChangeParticipantStateFactory::getCurrentStateForParticipant($this);
 
         return $this->state;
+    }
+
+    public function getCurrentRdList()
+    {
+        return $this->getApproverList($this->getFromBed());
+    }
+
+    public function getFutureRdList()
+    {
+        $toBed = $this->getToBed();
+
+        if(!isset($toBed) || is_null($toBed)){
+            throw new InvalidArgumentException('No destination bed set.');
+        }
+
+        return $this->getApproverList($toBed);
+    }
+
+    private function getApproverList($bedId)
+    {
+        $bed = new HMS_Bed($bedId);
+        $room = $bed->get_parent();
+        $floor = $room->get_parent();
+        $hall = $floor->get_parent();
+
+        $hallMembers = HMS_Permission::getMembership('room_change_approve', $hall);
+        $floorMembers = HMS_Permission::getMembership('room_change_approve', $hall);
+
+        $hallMembers = array_merge($hallMembers, $floorMembers);
+
+        $users = array();
+
+        if(sizeof($hallMembers) <= 0){
+            return $users;
+        }
+
+        foreach($hallMembers as $member){
+            $users[] = $member['username'];
+        }
+
+        return array_unique($users);
     }
 
     public function stateChanged()
