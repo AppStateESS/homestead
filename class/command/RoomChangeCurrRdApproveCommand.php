@@ -77,12 +77,14 @@ class RoomChangeCurrRdApproveCommand extends Command {
             }
 
             // Reserve the bed for room change
+            $bed->setRoomChangeReserved();
+
+            $bed->save();
 
             // Save the bed to this participant
             $participant->setToBed($bed);
+            $participant->save();
         }
-
-        $participant->save();
 
         // Transition to CurrRdApproved
         $participant->transitionTo(new ParticipantStateCurrRdApproved($participant, time(), null, UserStatus::getUsername()));

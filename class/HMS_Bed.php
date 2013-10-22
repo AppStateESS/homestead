@@ -484,9 +484,9 @@ class HMS_Bed extends HMS_Item {
         return false;
     }
 
-    public function setRoomChangeReserved($reserved)
+    public function setRoomChangeReserved()
     {
-        $this->room_change_reserved = $reserved;
+        $this->room_change_reserved = 1;
     }
 
     /**

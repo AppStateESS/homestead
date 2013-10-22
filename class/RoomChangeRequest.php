@@ -113,6 +113,32 @@ class RoomChangeRequest {
         return $this->state;
     }
 
+    public function getAllPotentialApprovers()
+    {
+        $participants = $this->getParticipants();
+
+        $approvers = array();
+        foreach ($participants as $p) {
+            $approvers = array_merge($approvers, $p->getCurrentRdList());
+            $approvers = array_merge($approvers, $p->getFutureRdList());
+        }
+
+        return array_unique($approvers);
+    }
+
+    public function getParticipantUsernames()
+    {
+        $participants = $this->getParticipants();
+
+        $users = array();
+        foreach ($participants as $p) {
+            $student = StudentFactory::getStudentByBannerId($p->getBannerId(), $this->getTerm());
+            $users[] = $student->getUsername();
+        }
+
+        return $users;
+    }
+
     /*********************
      * Get / Set Methods *
      *********************/
@@ -193,76 +219,6 @@ class RoomChangeRequest {
 
         return RoomChangeParticipantFactory::getParticipantsByRequest($this);
     }
-
-    /**
-     * *********** OLD CODE BELOW **********************
-     */
-
-    /*
-    public function addParticipant($role, $username, $name = '')
-    {
-        $this->participants[] = array(
-                'role' => $role,
-                'username' => $username,
-                'name' => $name
-        );
-    }
-    */
-
-    /*
-    public function rdRowFunction()
-    {
-        $this->load();
-
-        $cmd = CommandFactory::getCommand('RDRoomChange');
-        $cmd->username = $this->username;
-
-        $student = StudentFactory::getStudentByUsername($this->username, Term::getCurrentTerm());
-
-        $template['NAME'] = $student->getFullName();
-        $template['USERNAME'] = $this->username;
-        $template['STATUS'] = $this->getStatus();
-        $template['ACTIONS'] = $cmd->getLink($this->state->getType() == ROOM_CHANGE_PENDING ? 'Manage' : 'View');
-        return $template;
-    }
-    */
-
-    /*
-    public function housingRowFunction()
-    {
-        try {
-            $this->load();
-        } catch (Exception $e) {
-        }
-
-        $actions = array();
-
-        $cmd = CommandFactory::getCommand('HousingRoomChange');
-        $cmd->username = $this->username;
-        $actions[] = $cmd->getLink($this->state->getType() == ROOM_CHANGE_RD_APPROVED ? 'Manage' : 'View');
-
-        if ($this->state->getType() == ROOM_CHANGE_HOUSING_APPROVED) {
-            // if it's a room swap our strategy changes completely
-            if (!$this->is_swap)
-                $cmd = CommandFactory::getCommand('HousingCompleteChange');
-            else
-                $cmd = CommandFactory::getCommand('HousingCompleteSwap');
-
-            $cmd->username = $this->username;
-            $actions[] = $cmd->getLink('Complete');
-        }
-
-        // might be cleaner as a ternary + append...
-        if ($this->is_swap)
-            $template['USERNAME'] = $this->username . ' and ' . $this->switch_with;
-        else
-            $template['USERNAME'] = $this->username;
-
-        $template['STATUS'] = $this->getStatus();
-        $template['ACTIONS'] = implode($actions, ',');
-        return $template;
-    }
-    */
 }
 
 

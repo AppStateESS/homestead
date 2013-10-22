@@ -1,9 +1,37 @@
 <h1>Manage Room Change Request</h1>
 
 <div style="float: right;">
-    <button>Hold</button>
-    <button>Deny</button>
-    <button>Cancel</button>
+    <!-- BEGIN approve_btn -->
+    {APPROVE_BTN}
+    <form action="index.php?module=hms&action=RoomChangeApprove" method="post">
+        <input type="hidden" name="requestId" value="{REQUEST_ID}">
+        <button type="submit">Approve</button>
+    </form>
+    <!-- END approve_btn -->
+    
+    <!-- BEGIN hold_btn -->
+    {HOLD_BTN}
+    <form action="index.php?module=hms&action=RoomChangeHold" method="post">
+        <input type="hidden" name="requestId" value="{REQUEST_ID}">
+        <button type="submit">Hold</button>
+    </form>
+    <!-- END hold_btn -->
+    
+    <!-- BEGIN deny_btn -->
+    {DENY_BTN}
+    <form action="index.php?module=hms&action=RoomChangeDeny" method="post">
+        <input type="hidden" name="requestId" value="{REQUEST_ID}">
+        <button type="submit">Deny</button>
+    </form>
+    <!-- END deny_btn -->
+    
+    <!-- BEGIN cancel_btn -->
+    {CANCEL_BTN}    
+    <form action="index.php?module=hms&action=RoomChangeCancel" method="post">
+        <input type="hidden" name="requestId" value="{REQUEST_ID}">
+        <button type="submit">Cancel</button>
+    </form>
+    <!-- END cancel_btn -->
 </div>
 
 <h2>Status: {REQUEST_STATUS}</h2>

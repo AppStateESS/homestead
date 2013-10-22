@@ -2,6 +2,7 @@
 
 PHPWS_Core::initModClass('hms', 'RoomChangeParticipantState.php');
 PHPWS_Core::initModClass('hms', 'HMS_Permission.php');
+PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
 
 /**
  * Model class to represent a student participating in a room change request.
