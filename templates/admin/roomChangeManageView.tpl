@@ -2,39 +2,53 @@
 
 <div style="float: right;">
     <!-- BEGIN approve_btn -->
-    {APPROVE_BTN}
     <form action="index.php?module=hms&action=RoomChangeApprove" method="post">
-        <input type="hidden" name="requestId" value="{REQUEST_ID}">
+        <input type="hidden" name="requestId" value="{REQUEST_ID_APPROVE}">
         <button type="submit">Approve</button>
     </form>
     <!-- END approve_btn -->
     
     <!-- BEGIN hold_btn -->
-    {HOLD_BTN}
     <form action="index.php?module=hms&action=RoomChangeHold" method="post">
-        <input type="hidden" name="requestId" value="{REQUEST_ID}">
+        <input type="hidden" name="requestId" value="{REQUEST_ID_HOLD}">
         <button type="submit">Hold</button>
     </form>
     <!-- END hold_btn -->
     
     <!-- BEGIN deny_btn -->
-    {DENY_BTN}
     <form action="index.php?module=hms&action=RoomChangeDeny" method="post">
-        <input type="hidden" name="requestId" value="{REQUEST_ID}">
+        <input type="hidden" name="requestId" value="{REQUEST_ID_DENY}">
         <button type="submit">Deny</button>
     </form>
     <!-- END deny_btn -->
     
-    <!-- BEGIN cancel_btn -->
-    {CANCEL_BTN}    
-    <form action="index.php?module=hms&action=RoomChangeCancel" method="post">
-        <input type="hidden" name="requestId" value="{REQUEST_ID}">
-        <button type="submit">Cancel</button>
-    </form>
-    <!-- END cancel_btn -->
+    <!-- BEGIN cancel2 -->
+        <button type="button" id="cancel-btn" class="btn btn-default" data-request-id="{REQUEST_ID_CANCEL_BTN}">Cancel</button>
+    <!-- END cancel2 -->
 </div>
 
 <h2>Status: {REQUEST_STATUS}</h2>
+
+<div id="cancel-form">
+  <form action="index.php?module=hms&action=RoomChangeCancel&requestId={REQUEST_ID_CANCEL}" method="post">
+    <textarea name="cancel-reason" style="width:300px;" placeholder="Enter a cancellation reason..."></textarea><br />
+    <button class="btn" type="submit">Cancel Request</button>
+  </form>
+</div>
+
+<!-- BEGIN cancellation -->
+<h3>Cancellation/Denial Reason:</h3>
+<p>
+{CANCELLED_REASON_PUBLIC}
+</p>
+<!-- END cancellation -->
+
+<!-- BEGIN cancellation_private -->
+<h3>Private Cancellation/Denial Reason:</h3>
+<p>
+{CANCELLED_REASON_PRIVATE}
+</p>
+<!-- END cancellation_private -->
 
 <hr style="clear: right;"/>
 <h2>Participants</h2>
@@ -56,7 +70,15 @@
 
 <script type="text/javascript">
 	$(document).ready(function() {
-		$.get('index.php?module=hms&action=RoomChnageListAvailableBeds', bedListCallback, 'json');
+		$.get('index.php?module=hms&action=RoomChnageListAvailableBeds',{gender: $("#participant_form_gender").val()}, bedListCallback, 'json');
+		
+		$("#cancel-form").hide();
+		
+		// Cancel dialog
+		$("#cancel-btn").click(function(event){
+			console.log('click');
+			$("#cancel-form").show();
+		});
 	});
 
 	function bedListCallback(data)
@@ -79,4 +101,5 @@
 		$("#participant_form_bed_select").append(html);
 	    
 	}
+	
 </script>

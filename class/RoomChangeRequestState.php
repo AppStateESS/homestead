@@ -76,6 +76,11 @@ abstract class RoomChangeRequestState {
         return $this->effectiveUntilDate;
     }
 
+    public function setEffectiveUntilDate($date)
+    {
+        $this->effectiveUntilDate = $date;
+    }
+
     public function getCommittedBy()
     {
         return $this->committedBy;
@@ -117,7 +122,7 @@ class RoomChangeStateApproved extends RoomChangeRequestState {
 
     public function getValidTransitions()
     {
-        return array();
+        return array('RoomChangeStateCancelled');
     }
 
     // TODO Send approval notifiction to student/RDs
@@ -139,7 +144,9 @@ class RoomChangeStateHold extends RoomChangeRequestState {
 
     public function getValidTransitions()
     {
-        return array();
+        return array('RoomChangeStateApproved',
+                     'RoomChangeStateCancelled',
+                     'RoomChangeStateDenied');
     }
 }
 

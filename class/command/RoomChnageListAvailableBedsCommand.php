@@ -16,7 +16,13 @@ class RoomChnageListAvailableBedsCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        $term = 201340;
+        $term = Term::getCurrentTerm();
+
+        $gender = $context->get('gender');
+
+        if(!isset($gender)){
+            echo "Missing gender!";
+        }
 
         $db = PdoFactory::getPdoInstance();
 
@@ -26,6 +32,7 @@ class RoomChnageListAvailableBedsCommand extends Command {
                 WHERE
                     bed_term = :term and
                     hms_assignment.bed_id IS NULL and
+                    (room_gender = :gender OR room_gender = 2) and
                     offline = 0 and
                     overflow = 0 and
                     parlor = 0 and
@@ -37,7 +44,8 @@ class RoomChnageListAvailableBedsCommand extends Command {
         $stmt = $db->prepare($query);
 
         $params = array(
-            'term' => $term
+            'term' => $term,
+            'gender' => $gender
         );
 
         $stmt->execute($params);

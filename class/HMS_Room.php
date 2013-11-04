@@ -34,7 +34,7 @@ class HMS_Room extends HMS_Item
     public $ada                    = false;
     public $hearing_impaired       = false;
     public $bath_en_suite          = false;
-    
+
     // Persistent ID for identifying this room across semesters
     public $persistent_id;
 
@@ -438,12 +438,11 @@ class HMS_Room extends HMS_Item
         }
 
         if ($num_assigned < $this->get_number_of_beds()) {
-            //make sure the rooms aren't all reserved
             $this->loadBeds();
             $vacant = false;
             foreach($this->_beds as $bed) {
                 $bed->loadAssignment();
-                if (is_null($bed->_curr_assignment) && $bed->room_change_reserved == 0) {
+                if (is_null($bed->_curr_assignment)) {
                     $vacant = true;
                 }
             }
@@ -629,7 +628,7 @@ class HMS_Room extends HMS_Item
     /******************************
      * Accessor / Mutator Methods *
     ******************************/
-    
+
     public function getId()
     {
         return $this->id;
@@ -639,12 +638,12 @@ class HMS_Room extends HMS_Item
     {
         return $this->term;
     }
-    
+
     public function getPersistentId()
     {
         return $this->persistent_id;
     }
-    
+
     public function getRoomNumber()
     {
         return $this->room_number;

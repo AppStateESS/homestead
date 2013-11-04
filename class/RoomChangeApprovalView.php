@@ -4,7 +4,7 @@ PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 PHPWS_Core::initModClass('hms', 'RoomChangeListView.php');
 
 /**
- * Named poorly, but shows an overview of all pending and inactive requests
+ * Shows an overview of all pending and inactive requests
  * for a given RD/coordinator/admin's residents.
  *
  * @author jbooker
@@ -39,10 +39,10 @@ class RoomChangeApprovalView extends View {
         $tpl['NEEDS_ACTION'] = $needsActionList->show();
 
 
-        $pendingList = new RoomChangeListView($this->allPending, $this->term); //TODO
+        $pendingList = new RoomChangeListView($this->allPending, $this->term);
         $tpl['PENDING'] = $pendingList->show();
 
-        $inactiveList = new RoomChangeListView($this->inactive, $this->term); //TODO
+        $inactiveList = new RoomChangeListView($this->inactive, $this->term);
         $tpl['INACTIVE'] = $inactiveList->show();
 
         return PHPWS_Template::process($tpl, 'hms', 'admin/RoomChangeApprovalView.tpl');

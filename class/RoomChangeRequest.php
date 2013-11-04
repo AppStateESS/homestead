@@ -105,6 +105,31 @@ class RoomChangeRequest {
         return true; // will throw an exception on failure, only returns true for backwards compatability
     }
 
+    public function transitionTo(RoomChangeRequestState $toState)
+    {
+
+        // Be sure we have the latest state
+        if(is_null($this->state)){
+            $this->getState();
+        }
+
+        if (!$this->state->canTransition($toState)) {
+            throw new InvalidArgumentException("Invalid state change from: {$this->state->getName()} to {$toState->getName()}.");
+        }
+
+        // Set the end date on the current state
+        $this->state->setEffectiveUntilDate(time());
+        $this->state->update(); // Save changes to current state
+
+        // Set the new state as the current state
+        $this->setState($toState);
+
+        $this->state->save(); // Save the new state
+
+        // Send notifications
+        $this->state->sendNotification();
+    }
+
     public function getState()
     {
         PHPWS_Core::initModClass('hms', 'RoomChangeRequestStateFactory.php');
@@ -119,11 +144,24 @@ class RoomChangeRequest {
 
         $approvers = array();
         foreach ($participants as $p) {
+            // Get approvers for current bed
             $approvers = array_merge($approvers, $p->getCurrentRdList());
-            $approvers = array_merge($approvers, $p->getFutureRdList());
+
+            // If there's a destination bed set, merge its approvers in
+            $destinationBedId = $p->getToBed();
+            if (isset($destinationBedId)) {
+                $approvers = array_merge($approvers, $p->getFutureRdList());
+            }
         }
 
         return array_unique($approvers);
+    }
+
+    public function getParticipants()
+    {
+        PHPWS_Core::initModClass('hms', 'RoomChangeParticipantFactory.php');
+
+        return RoomChangeParticipantFactory::getParticipantsByRequest($this);
     }
 
     public function getParticipantUsernames()
@@ -174,9 +212,19 @@ class RoomChangeRequest {
         return $this->deniedReasonPublic;
     }
 
+    public function setDeniedReasonPublic($reason)
+    {
+        $this->deniedReasonPublic = $reason;
+    }
+
     public function getDeniedReasonPrivate()
     {
         return $this->deniedReasonPrivate;
+    }
+
+    public function setDeniedReasonPrivate($reason)
+    {
+        $this->deniedReasonPrivate = $reason;
     }
 
     private function setState(RoomChangeRequestState $state)
@@ -192,32 +240,6 @@ class RoomChangeRequest {
         }
 
         return false;
-    }
-
-    public function transitionTo(RoomChangeRequestState $toState)
-    {
-        if (!$this->state->canChangeState($toState)) {
-            throw new InvalidArgumentException("Invalid state change from: {$this->state->getName()} to {$toState->getName()}.");
-        }
-
-        // Set the end date on the current state
-        $this->state->setEffectiveUntilDate(time());
-        $this->state->update(); // Save changes to current state
-
-        // Set the new state as the current state
-        $this->setState($toState);
-
-        $this->state->save(); // Save the new state
-
-        // Send notifications
-        $this->state->sendNotification();
-    }
-
-    public function getParticipants()
-    {
-        PHPWS_Core::initModClass('hms', 'RoomChangeParticipantFactory.php');
-
-        return RoomChangeParticipantFactory::getParticipantsByRequest($this);
     }
 }
 

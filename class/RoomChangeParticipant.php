@@ -137,11 +137,21 @@ class RoomChangeParticipant {
         return $this->state;
     }
 
+    /**
+     * Returns an array of user names who have permission to approve room changes
+     * for this participants current hall and floor
+     */
     public function getCurrentRdList()
     {
         return $this->getApproverList($this->getFromBed());
     }
 
+    /**
+     * Returns an array of user names who have permission to approve room changes
+     * for this participants destination hall and floor.
+     *
+     * @throws InvalidArgumentException
+     */
     public function getFutureRdList()
     {
         $toBed = $this->getToBed();
@@ -153,6 +163,13 @@ class RoomChangeParticipant {
         return $this->getApproverList($toBed);
     }
 
+    /**
+     * Returns an array of users names who have access to approve room changes for the
+     * given bed id.
+     *
+     * @param int $bedId
+     * @return multitype:array
+     */
     private function getApproverList($bedId)
     {
         $bed = new HMS_Bed($bedId);

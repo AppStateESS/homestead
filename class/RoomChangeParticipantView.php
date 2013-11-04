@@ -91,7 +91,7 @@ class RoomChangeParticipantView extends View {
             $rds = $this->participant->getCurrentRdList();
 
                 // If current user is an RD for the "from bed" or an admin
-            if (in_array(UserStatus::getUsername(), $rds) || UserStatus::isDeity()) {
+            if (in_array(UserStatus::getUsername(), $rds) || Current_User::allow('hms', 'admin_approve_room_change')) {
 
                 if (!isset($toBedId) && count($this->participants) == 1) {
                     /*
@@ -105,6 +105,7 @@ class RoomChangeParticipantView extends View {
                     $form->addDropBox('bed_select', array(
                             '-1' => 'Loading...'
                     ));
+                    $form->addHidden('gender', $this->student->getGender());
                 }
 
                 $approveCmd = CommandFactory::getCommand('RoomChangeCurrRdApprove');
@@ -125,7 +126,7 @@ class RoomChangeParticipantView extends View {
             $rds = $this->participant->getFutureRdList();
 
             // Only future RDs and admins can approve
-            if (in_array(UserStatus::getUsername(), $rds) || UserStatus::isDeity()) {
+            if (in_array(UserStatus::getUsername(), $rds) || Current_User::allow('hms', 'admin_approve_room_change')) {
 
                 $approveCmd = CommandFactory::getCommand('RoomChangeFutureRdApprove');
                 $approveCmd->setParticipantId($this->participant->getId());

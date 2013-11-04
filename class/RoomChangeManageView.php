@@ -1,5 +1,7 @@
 <?php
 
+PHPWS_Core::initModClass('hms', 'RoomChangeParticipantView.php');
+
 class RoomChangeManageView extends View {
 
     private $request;
@@ -16,16 +18,13 @@ class RoomChangeManageView extends View {
 
     public function show()
     {
-        PHPWS_Core::initModClass('hms', 'RoomChangeParticipantView.php');
-
-
         // Get a username list of all participants
         $participantUsernames = $this->request->getParticipantUsernames();
 
         // Get a list of all potential approvers
         $potentialApprovers = $this->request->getAllPotentialApprovers();
 
-        // TODO Check permissions
+        // Check permissions
         // Only admins, curr/future RDs, and participants can even see this
         if(!Current_User::allow('hms', 'admin_approve_room_change') &&
             !in_array(UserStatus::getUsername(), $participantUsernames) &&
@@ -37,6 +36,7 @@ class RoomChangeManageView extends View {
         $tpl = array();
 
         $tpl['REQUEST_ID'] = $this->request->getId(); // Used in hidden values
+        $requestId = $this->request->getId();
 
         $tpl['REQUEST_STATUS'] = $this->request->getState()->getName();
 
@@ -48,26 +48,29 @@ class RoomChangeManageView extends View {
 
             // For current/future RDs, Show hold, cancel, and deny buttons
             if (in_array(Current_User::getUsername(), $potentialApprovers)) {
-                $tpl['HOLD_BTN'] = '';
-                $tpl['CANCEL_BTN'] = '';
-                $tpl['DENY_BTN'] = '';
+                $tpl['REQUEST_ID_HOLD'] = $requestId;
+                $tpl['REQUEST_ID_CANCEL'] = $requestId;
+                $tpl['REQUEST_ID_CANCEL_BTN'] = $requestId;
+                $tpl['REQUEST_ID_DENY'] = $requestId;
             }
 
             // For admins, always show hold, cancel, deny
             if (Current_User::allow('hms', 'admin_approve_room_change')) {
-                $tpl['HOLD_BTN'] = '';
-                $tpl['CANCEL_BTN'] = '';
-                $tpl['DENY_BTN'] = '';
+                $tpl['REQUEST_ID_HOLD'] = $requestId;
+                $tpl['REQUEST_ID_CANCEL'] = $requestId;
+                $tpl['REQUEST_ID_CANCEL_BTN'] = $requestId;
+                $tpl['REQUEST_ID_DENY'] = $requestId;
             }
 
             // For participants, show cancel button
             if(in_array(UserStatus::getUsername(), $participantUsernames)) {
-                $tpl['CANCEL_BTN'] = '';
+                $tpl['REQUEST_ID_CANCEL'] = $requestId;
+                $tpl['REQUEST_ID_CANCEL_BTN'] = $requestId;
             }
 
             // If all participants are approved, and user has permission, show housing approve button
             if($this->allParticipantsApproved() && Current_User::allow('hms', 'admin_approve_room_change')){
-                $tpl['APPROVE_BTN'] = '';
+                $tpl['REQUEST_ID_APPROVE'] = $requestId;
             }
 
         } else if($requestState instanceof RoomChangeStateApproved) {
@@ -75,7 +78,8 @@ class RoomChangeManageView extends View {
 
             // Show Cancel button
             if (Current_User::allow('hms', 'admin_approve_room_change')) {
-                $tpl['CANCEL_BTN'] = '';
+                $tpl['REQUEST_ID_CANCEL'] = $requestId;
+                $tpl['REQUEST_ID_CANCEL_BTN'] = $requestId;
             }
 
         } else if($requestState instanceof RoomChangeStateComplete) {
@@ -86,33 +90,45 @@ class RoomChangeManageView extends View {
 
             // Show deny, cancel buttons for Current/future RDs
             if (in_array(Current_User::getUsername(), $this->request->getAllPotentialApprovers())) {
-                $tpl['CANCEL_BTN'] = '';
-                $tpl['DENY_BTN'] = '';
+                $tpl['REQUEST_ID_CANCEL'] = $requestId;
+                $tpl['REQUEST_ID_CANCEL_BTN'] = $requestId;
+                $tpl['REQUEST_ID_DENY'] = $requestId;
             }
 
             // For admins, always show, cancel, deny
             if (Current_User::allow('hms', 'admin_approve_room_change')) {
-                $tpl['CANCEL_BTN'] = '';
-                $tpl['DENY_BTN'] = '';
+                $tpl['REQUEST_ID_CANCEL'] = $requestId;
+                $tpl['REQUEST_ID_CANCEL_BTN'] = $requestId;
+                $tpl['REQUEST_ID_DENY'] = $requestId;
             }
 
             // For participants, show cancel button
             if(in_array(UserStatus::getUsername(), $this->request->getParticipantUsernames())) {
-                $tpl['CANCEL_BTN'] = '';
+                $tpl['REQUEST_ID_CANCEL'] = $requestId;
+                $tpl['REQUEST_ID_CANCEL_BTN'] = $requestId;
             }
 
             // If all participants are approved, and user has permission, show housing approve button
             if($this->allParticipantsApproved() && Current_User::allow('hms', 'admin_approve_room_change')){
-                $tpl['APPROVE_BTN'] = '';
+                $tpl['REQUEST_ID_APPROVE'] = $requestId;
             }
 
         } else if($requestState instanceof RoomChangeStateCancelled) {
             // Show cancellation/denial reason
-            //TODO
+            $tpl['CANCELLED_REASON_PUBLIC'] = $this->request->getDeniedReasonPublic();
+
+            // Show the private reason for admins / RDs
+            if (Current_User::allow('hms', 'admin_approve_room_change') || in_array(UserStatus::getUsername(), $potentialApprovers)) {
+                $tpl['CANCELLED_REASON_PRIVATE'] = $this->request->getDeniedReasonPrivate();
+            }
 
         } else if($requestState instanceof RoomChangeStateDenied) {
             // Show cancellation/denial reason
-            // TODO
+            //TODO This if statement is a little redundant. Is there a need for isDenied()?
+            if ($this->request->isDenied()) {
+                $tpl['DENIED_REASON_PUBLIC'] = $this->request->getDeniedReasonPublic();
+                $tpl['DENIED_REASON_PRIVATE'] = $this->request->getDeniedReasonPrivate();
+            }
         }
 
         // Make a ParticipantView for each participant and add it to the row repeat
@@ -123,10 +139,6 @@ class RoomChangeManageView extends View {
 
         $tpl['REQUEST_REASON'] = $this->request->getReason();
 
-        if ($this->request->isDenied()) {
-            $tpl['DENIED_REASON_PUBLIC'] = $this->request->getDeniedReasonPublic();
-            $tpl['DENIED_REASON_PRIVATE'] = $this->request->getDeniedReasonPrivate();
-        }
 
         return PHPWS_Template::process($tpl, 'hms', 'admin/roomChangeManageView.tpl');
     }

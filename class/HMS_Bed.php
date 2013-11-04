@@ -489,6 +489,11 @@ class HMS_Bed extends HMS_Item {
         $this->room_change_reserved = 1;
     }
 
+    public function clearRoomChangeReserved()
+    {
+        $this->room_change_reserved = 0;
+    }
+
     /**
      * ****************
      * Static Methods *
