@@ -61,6 +61,7 @@ class RoomChangeCurrRdApproveCommand extends Command {
         // Check that a destination bed has already been set, or that the RD
         // has just selected a bed
         $toBedId = $participant->getToBed();
+
         if (is_null($toBedId) && $toBedSelected == '-1') {
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Please select a destination bed.');
             $cmd->redirect();

@@ -41,6 +41,7 @@ class SubmitRoomChangeRequestCommand extends Command {
 
         // Get the HMS_Bed object corresponding to the student's current assignment
         $bed = $assignment->get_parent();
+        $room = $bed->get_parent();
 
         // Check for an existing room change request
         $changeReq = RoomChangeRequestFactory::getPendingByStudent($student, $term);
@@ -69,16 +70,52 @@ class SubmitRoomChangeRequestCommand extends Command {
             $formCmd->redirect();
         }
 
+        $type = $context->get('type');
+
+        // Extra sanity checks if we're doing a switch
+        if ($type == 'swap') {
+
+            $switchUsername = $context->get('swap_with');
+
+            // Can't switch with yourself
+            if($student->getUsername() == $switchUsername) {
+                NQ::simple('hms', HMS_NOTIFICATION_ERROR, "You can't swtich rooms with yourself. Please choose someone other than yourself.");
+                $formCmd->redirect();
+            }
+
+            // Load the other student
+            $swapStudent = StudentFactory::getStudentByUsername($switchUsername, $term);
+
+            // Make sure the student is assigned
+            $swapAssignment = HMS_Assignment::getAssignmentByBannerId($swapStudent->getBannerId(), $term);
+            if (is_null($swapAssignment)) {
+                NQ::simple('hms', HMS_NOTIFICATION_ERROR, "{$swapStudent->getName()} is not currently assigned. Please choose another student to switch rooms with.");
+                $menuCmd->redirect();
+            }
+
+            // Make sure the other student's room is the same gender as this room
+            $swapBed = $swapAssignment->get_parent();
+            $swapRoom = $swapBed->get_parent();
+
+            if ($swapRoom->getGender() != $room->getGender()) {
+                NQ::simple('hms', HMS_NOTIFICATION_ERROR, "{$swapStudent->getName()} is assigned to a room of a different gender than you. Please choose student of the same gender as yourself to switch rooms with.");
+                $menuCmd->redirect();
+            }
+        }
+
         //create the request object
         $request = new RoomChangeRequest($term, $reason);
         $request->save();
 
-        $type = $context->get('type');
+        // Main participant
+        $participant = new RoomChangeParticipant($request, $student, $bed);
 
-        // Switching to a different room
+        if (isset($cellNum)) {
+            $participant->setCellPhone($cellNum);
+        }
+
+        // Switching to a different room, so set params on main participant
         if($type == 'switch') {
-
-            $participant = new RoomChangeParticipant($request, $student, $bed);
 
             // preferences
             if (!empty($firstHallPref)) {
@@ -95,41 +132,27 @@ class SubmitRoomChangeRequestCommand extends Command {
                 }
             }
 
-            if (isset($cellNum)) {
-                $participant->setCellPhone($cellNum);
-            }
+        } else if($type == 'swap') {
+            // Swapping with another student, so handle the other particpant
 
-            // Save this participant and its state
-            $participant->save();
+            // Set main participant's toBed to other student's bed
+            $participant->setToBed($swapBed);
 
-            // Immediately transition to the StudentApproved state.
-            $participant->transitionTo(new ParticipantStateStudentApproved($participant, time(), null, UserStatus::getUsername()));
+            // Create the other participant
+            $swapParticipant = new RoomChangeParticipant($request, $swapStudent, $swapBed);
 
-            //TODO Send "request submitted" confirmation email
-
-        // Swapping with another student
-        } else if ($type == 'swap') {
-            // TODO
-            /*
-            // swap - make sure the other person has an assignment
-            if(!empty($swap) && !is_null(HMS_Assignment::getAssignment($swap, Term::getSelectedTerm()))){
-            }else{
-                NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'The user name you supplied was invalid or the student is not currently assigned to a room. (Hint: Don\'t include the "@appstate.edu" portion of the email address.)');
-                $cmd->redirect();
-            }
-
-             //sanity check
-            if($request->is_swap && $request->switch_with == $request->username){
-                NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Please select someone other than yourself to switch rooms with.");
-                $cmd->redirect();
-            }
-            */
+            // Set other student's toBed to main participant's bed
+            $swapParticipant->setToBed($bed);
+            $swapParticipant->save();
 
             //TODO send "request needs your approval" to other students
         }
 
-        //$request->change(new PendingRoomChangeRequest); // This triggers emails to be sent, so don't do it until as late as possible
+        // Save the main participant and its state
+        $participant->save();
 
+        // Immediately transition to the StudentApproved state.
+        $participant->transitionTo(new ParticipantStateStudentApproved($participant, time(), null, UserStatus::getUsername()));
 
         HMS_Activity_Log::log_activity(UserStatus::getUsername(), ACTIVITY_ROOM_CHANGE_SUBMITTED, UserStatus::getUsername(FALSE), $reason);
 

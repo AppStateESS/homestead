@@ -64,7 +64,7 @@ class RoomChangeRequestFactory {
 
         // If more than one pending request is found, throw an exception
         if (sizeof($results) > 1) {
-            throw new InvalidArgumentExcpetion('More than one pending room change detected.');
+            throw new InvalidArgumentException('More than one pending room change detected.');
         } else if (sizeof($results) == 0) {
             return null;
         } else {

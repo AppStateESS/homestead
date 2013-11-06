@@ -84,8 +84,26 @@ class RoomChangeParticipantView extends View {
 
         $form = new PHPWS_Form('participant_form');
 
-        // Participant is in StudentApproved state
-        if ($particpantState instanceof ParticipantStateStudentApproved) {
+        if ($particpantState instanceof ParticipantStateNew) {
+            // Particpant is in new state, waiting on this student'a approval
+
+            // If the student is logged in, or the user is an admin, show the approve button
+            if(UserStatus::getUsername() == $this->student->getUsername()
+                || Current_User::allow('hms', 'admin_approve_room_change')) {
+
+                $approveCmd = CommandFactory::getCommand('RoomChangeStudentApprove');
+                $approveCmd->setParticipantId($this->participant->getId());
+                $approveCmd->setRequestId($this->request->getId());
+                $approveCmd->initForm($form);
+
+                $form->mergeTemplate($tpl);
+                $tpl = $form->getTemplate();
+
+                $tpl['APPROVE_BTN'] = ''; // dummy tag for approve button
+            }
+
+        } else if ($particpantState instanceof ParticipantStateStudentApproved) {
+            // Participant is in StudentApproved state
 
             // Get current list of RDs for this participant
             $rds = $this->participant->getCurrentRdList();
