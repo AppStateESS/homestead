@@ -2,17 +2,19 @@
 
 PHPWS_Core::initModClass('hms', 'RoomChangeRequestFactory.php');
 
-class RoomChangeCancelCommand extends Command {
+class RoomChangeDenyCommand extends Command {
 
     public function getRequestVars()
     {
-        return array('action'=>'RoomChangeCancel');
+        return array('action' => 'RoomChangeDeny');
     }
 
     public function execute(CommandContext $context)
     {
         $requestId = $context->get('requestId');
-        $reason = $context->get('cancel-reason');
+
+        $publicReason   = $context->get('deny-reason-public');
+        $privateReason  = $context->get('deny-reason-private');
 
         // Load the request
         $request = RoomChangeRequestFactory::getRequestById($requestId);
@@ -25,25 +27,26 @@ class RoomChangeCancelCommand extends Command {
         $cmd->setRequestId($request->getId());
 
         // Make sure user gave a reason
-        if(!isset($reason) or $reason == ''){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Please enter a cancellation reason.');
+        if(!isset($publicReason) or $publicReason == ''){
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Please enter a denial reason.');
             $cmd->redirect();
         }
 
 
         // Set the denied reason
-        $request->setDeniedReasonPublic($reason);
+        $request->setDeniedReasonPublic($publicReason);
+        $request->setDeniedReasonPrivate($privateReason);
         $request->save();
 
         // Transition request to cancelled status
-        $request->transitionTo(new RoomChangeStateCancelled($request, time(), null, UserStatus::getUsername()));
+        $request->transitionTo(new RoomChangeStateDenied($request, time(), null, UserStatus::getUsername()));
 
         // Transition all participants to cancelled
         // TODO... Do this in the cancelled transition?
         $participants = $request->getParticipants();
 
         foreach ($participants as $p) {
-            $p->transitionTo(new ParticipantStateCancelled($p, time(), null, UserStatus::getUsername()));
+            $p->transitionTo(new ParticipantStateDenied($p, time(), null, UserStatus::getUsername()));
         }
 
         //TODO send notifications?

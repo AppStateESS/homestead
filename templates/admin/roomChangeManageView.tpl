@@ -4,22 +4,16 @@
     <!-- BEGIN approve_btn -->
     <form action="index.php?module=hms&action=RoomChangeApprove" method="post">
         <input type="hidden" name="requestId" value="{REQUEST_ID_APPROVE}">
-        <button type="submit">Approve</button>
+        <button type="submit" class="btn btn-primary">Approve</button>
     </form>
     <!-- END approve_btn -->
     
     <!-- BEGIN hold_btn -->
-    <form action="index.php?module=hms&action=RoomChangeHold" method="post">
-        <input type="hidden" name="requestId" value="{REQUEST_ID_HOLD}">
-        <button type="submit">Hold</button>
-    </form>
+        <button type="button" class="btn btn-default">Hold</button>
     <!-- END hold_btn -->
     
     <!-- BEGIN deny_btn -->
-    <form action="index.php?module=hms&action=RoomChangeDeny" method="post">
-        <input type="hidden" name="requestId" value="{REQUEST_ID_DENY}">
-        <button type="submit">Deny</button>
-    </form>
+        <button type="button" id="deny-btn" class="btn btn-default" data-request-id="{REQUEST_ID_DENY_BTN}">Deny</button>
     <!-- END deny_btn -->
     
     <!-- BEGIN cancel2 -->
@@ -31,17 +25,21 @@
 
 <div id="cancel-form">
   <form action="index.php?module=hms&action=RoomChangeCancel&requestId={REQUEST_ID_CANCEL}" method="post">
+    <p>Please give a reason for cancelling this request. The reason will be available to all participants.</p>
     <textarea name="cancel-reason" style="width:300px;" placeholder="Enter a cancellation reason..."></textarea><br />
     <button class="btn" type="submit">Cancel Request</button>
   </form>
 </div>
 
-<!-- BEGIN cancellation -->
-<h3>Cancellation/Denial Reason:</h3>
-<p>
-{CANCELLED_REASON_PUBLIC}
-</p>
-<!-- END cancellation -->
+<div id="deny-form">
+  <form action="index.php?module=hms&action=RoomChangeDeny&requestId={REQUEST_ID_DENY}" method="post">
+    <p>Please give a reason for denying this request. The reason will be available to all participants.</p>
+    <textarea name="deny-reason-public" style="width:300px;" placeholder="Enter a denial reason..."></textarea><br />
+    <p>Private reason for denying this request. This reason will only be available to staff members.</p>
+    <textarea name="deny-reason-private" style="width:300px;" placeholder="Enter a private denial reason..."></textarea><br />
+    <button class="btn" type="submit">Deny Request</button>
+  </form>
+</div>
 
 <!-- BEGIN cancellation_private -->
 <h3>Private Cancellation/Denial Reason:</h3>
@@ -59,6 +57,13 @@
 <h2>Reason</h2>
 <p>{REQUEST_REASON}</p>
 
+<!-- BEGIN cancellation -->
+<h3>Cancellation/Denial Reason:</h3>
+<p>
+{CANCELLED_REASON_PUBLIC}
+</p>
+<!-- END cancellation -->
+
 <!-- BEGIN denied_reason -->
 <h2>Denied Reason</h2>
 <h3>Public</h3>
@@ -72,13 +77,20 @@
 	$(document).ready(function() {
 		$.get('index.php?module=hms&action=RoomChnageListAvailableBeds',{gender: $("#participant_form_gender").val()}, bedListCallback, 'json');
 		
-		$("#cancel-form").hide();
 		
-		// Cancel dialog
+		// Cancel Form
+		$("#cancel-form").hide();
 		$("#cancel-btn").click(function(event){
 			console.log('click');
 			$("#cancel-form").show();
 		});
+		
+		// Deny Form
+		$("#deny-form").hide();
+        $("#deny-btn").click(function(event){
+            console.log('click');
+            $("#deny-form").show();
+        });
 	});
 
 	function bedListCallback(data)

@@ -87,6 +87,11 @@ class RoomChangeParticipantState {
         return $this->participantId;
     }
 
+    public function setParticipantId($id)
+    {
+        $this->participantId = $id;
+    }
+
     public function getEffectiveDate()
     {
         return $this->effectiveDate;

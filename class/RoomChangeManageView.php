@@ -52,6 +52,7 @@ class RoomChangeManageView extends View {
                 $tpl['REQUEST_ID_CANCEL'] = $requestId;
                 $tpl['REQUEST_ID_CANCEL_BTN'] = $requestId;
                 $tpl['REQUEST_ID_DENY'] = $requestId;
+                $tpl['REQUEST_ID_DENY_BTN'] = $requestId;
             }
 
             // For admins, always show hold, cancel, deny
@@ -60,6 +61,7 @@ class RoomChangeManageView extends View {
                 $tpl['REQUEST_ID_CANCEL'] = $requestId;
                 $tpl['REQUEST_ID_CANCEL_BTN'] = $requestId;
                 $tpl['REQUEST_ID_DENY'] = $requestId;
+                $tpl['REQUEST_ID_DENY_BTN'] = $requestId;
             }
 
             // For participants, show cancel button
@@ -93,6 +95,7 @@ class RoomChangeManageView extends View {
                 $tpl['REQUEST_ID_CANCEL'] = $requestId;
                 $tpl['REQUEST_ID_CANCEL_BTN'] = $requestId;
                 $tpl['REQUEST_ID_DENY'] = $requestId;
+                $tpl['REQUEST_ID_DENY_BTN'] = $requestId;
             }
 
             // For admins, always show, cancel, deny
@@ -100,6 +103,7 @@ class RoomChangeManageView extends View {
                 $tpl['REQUEST_ID_CANCEL'] = $requestId;
                 $tpl['REQUEST_ID_CANCEL_BTN'] = $requestId;
                 $tpl['REQUEST_ID_DENY'] = $requestId;
+                $tpl['REQUEST_ID_DENY_BTN'] = $requestId;
             }
 
             // For participants, show cancel button
@@ -124,11 +128,8 @@ class RoomChangeManageView extends View {
 
         } else if($requestState instanceof RoomChangeStateDenied) {
             // Show cancellation/denial reason
-            //TODO This if statement is a little redundant. Is there a need for isDenied()?
-            if ($this->request->isDenied()) {
-                $tpl['DENIED_REASON_PUBLIC'] = $this->request->getDeniedReasonPublic();
-                $tpl['DENIED_REASON_PRIVATE'] = $this->request->getDeniedReasonPrivate();
-            }
+            $tpl['DENIED_REASON_PUBLIC']  = $this->request->getDeniedReasonPublic();
+            $tpl['DENIED_REASON_PRIVATE'] = $this->request->getDeniedReasonPrivate();
         }
 
         // Make a ParticipantView for each participant and add it to the row repeat

@@ -111,7 +111,9 @@ class RoomChangeStatePending extends RoomChangeRequestState {
     {
         return array(
                 'RoomChangeStateHold',
-                'RoomChangeStateApproved'
+                'RoomChangeStateApproved',
+                'RoomChangeStateDenied',
+                'RoomChangeStateCancelled'
         );
     }
 }

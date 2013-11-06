@@ -36,10 +36,10 @@ class RoomChangeRequest {
     protected $reason;
 
     // Reason this request was denied, will be sent to students
-    protected $deniedReasonPublic;
+    protected $denied_reason_public;
 
     // Reason this request was denied, will not be shown to students
-    protected $deniedReasonPrivate;
+    protected $denied_reason_private;
 
     protected $state;
     protected $stateChanged; // true if the state has been updated
@@ -68,21 +68,26 @@ class RoomChangeRequest {
         // Begin a new transaction
         $db->beginTransaction();
 
-        $params = array(
-                'term' => $this->getTerm(),
-                'reason' => $this->getReason(),
-                'deniedReasonPublic' => $this->getDeniedReasonPublic(),
-                'deniedReasonPrivate' => $this->getDeniedReasonPrivate()
-        );
-
         if ($this->id == 0) {
+            $params = array(
+                    'term' => $this->getTerm(),
+                    'reason' => $this->getReason(),
+                    'deniedReasonPublic' => $this->getDeniedReasonPublic(),
+                    'deniedReasonPrivate' => $this->getDeniedReasonPrivate()
+            );
+
             // Insert for new record
             $query = "INSERT INTO hms_room_change_request (id, term, reason, denied_reason_public, denied_reason_private) VALUES (nextval('hms_room_change_request_seq'), :term, :reason, :deniedReasonPublic, :deniedReasonPrivate)";
         } else {
-            throw new Exception('Not yet implemented');
+
+            $params = array(
+                    'id'                    => $this->getId(),
+                    'deniedReasonPublic'    => $this->getDeniedReasonPublic(),
+                    'deniedReasonPrivate'   => $this->getDeniedReasonPrivate()
+            );
+
             // Update for existing record
-            $query = "";
-            $params[id] = $this->getId();
+            $query = "UPDATE hms_room_change_request SET (denied_reason_public, denied_reason_private) = (:deniedReasonPublic, :deniedReasonPrivate) WHERE id = :id";
         }
 
 
@@ -196,35 +201,24 @@ class RoomChangeRequest {
         return $this->reason;
     }
 
-    public function isDenied()
-    {
-        $state = $this->getState();
-
-        if ($state == 'Denied') {
-            return true;
-        }else{
-            return false;
-        }
-    }
-
     public function getDeniedReasonPublic()
     {
-        return $this->deniedReasonPublic;
+        return $this->denied_reason_public;
     }
 
     public function setDeniedReasonPublic($reason)
     {
-        $this->deniedReasonPublic = $reason;
+        $this->denied_reason_public = $reason;
     }
 
     public function getDeniedReasonPrivate()
     {
-        return $this->deniedReasonPrivate;
+        return $this->denied_reason_private;
     }
 
     public function setDeniedReasonPrivate($reason)
     {
-        $this->deniedReasonPrivate = $reason;
+        $this->denied_reason_private = $reason;
     }
 
     private function setState(RoomChangeRequestState $state)

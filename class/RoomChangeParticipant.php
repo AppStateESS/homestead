@@ -84,6 +84,7 @@ class RoomChangeParticipant {
         // If this request doesn't have an ID, then save the ID of the row inserted
         if ($this->id == 0) {
             $this->id = $db->lastInsertId('hms_room_change_participant_seq');
+            $this->state->setParticipantId($this->id);
         }
 
         // If state changed, save the new state
