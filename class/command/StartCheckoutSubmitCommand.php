@@ -38,19 +38,27 @@ class StartCheckoutSubmitCommand extends Command {
             $errorCmd->redirect();
         }
 
-        // Check the Banner ID
-        if (preg_match("/[\d]{9}/", $bannerId) == false) {
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Sorry, that didn't look like a valid ID number. Please try again.");
+        /*
+
+        // If search string is all numeric, make sure it looks like a valid Banner ID
+        if (is_numeric($bannerId) && preg_match("/[\d]{9}/", $bannerId) == false) {
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Sorry, that didn't look like a valid student ID number. Please try again.");
             $errorCmd->redirect();
         }
 
         // Try to lookup the student in Banner
         try {
-            $student = StudentFactory::getStudentByBannerId($bannerId, $term);
+            if (is_numeric($bannerId)) {
+                $student = StudentFactory::getStudentByBannerId($bannerId, $term);
+            } else {
+                $student = StudentFactory::getStudentByUsername($bannerId, $term);
+            }
         } catch (StudentNotFoundException $e) {
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Could not locate a student with that Banner ID.');
             $errorCmd->redirect();
         }
+
+        */
 
         // Everything checks out, so redirect to the form
         $cmd = CommandFactory::getCommand('ShowCheckoutForm'); // TODO

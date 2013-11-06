@@ -43,7 +43,7 @@ class ShowCheckoutFormCommand extends Command {
         $errorCmd = CommandFactory::getCommand('ShowCheckoutStart');
 
         if (!isset($bannerId) || is_null($bannerId) || $bannerId == '') {
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Missing Banner ID.');
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Missing student ID.');
             $errorCmd->redirect();
         }
 
@@ -52,15 +52,20 @@ class ShowCheckoutFormCommand extends Command {
             $errorCmd->redirect();
         }
 
-        // Check the Banner ID
-        if (preg_match("/[\d]{9}/", $bannerId) == false) {
+        // If search string is all numeric, make sure it looks like a valid Banner ID
+        if (is_numeric($bannerId) && preg_match("/[\d]{9}/", $bannerId) == false) {
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Imporperly formatted Banner ID.');
             $errorCmd->redirect();
         }
 
         // Try to lookup the student in Banner
         try {
-            $student = StudentFactory::getStudentByBannerId($bannerId, $term);
+            // If it's all numeric assume it's a student ID, otherwise assume it's a username
+            if (is_numeric($bannerId)) {
+                $student = StudentFactory::getStudentByBannerId($bannerId, $term);
+            } else {
+                $student = StudentFactory::getStudentByUsername($bannerId, $term);
+            }
         } catch (StudentNotFoundException $e) {
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Could not locate a student with that Banner ID.');
             $errorCmd->redirect();
