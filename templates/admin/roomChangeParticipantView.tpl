@@ -32,7 +32,7 @@
 <strong>Approval History</strong><br />
 <ul>
 <!-- BEGIN history_rows -->
-<li>{STATE_NAME} on {EFFECTIVE_DATE}</li>
+<li>{STATE_NAME} on {EFFECTIVE_DATE} by {COMMITTED_BY}</li>
 <!-- END history_rows -->
 </ul>
 </div>

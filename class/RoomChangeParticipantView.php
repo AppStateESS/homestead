@@ -151,7 +151,8 @@ class RoomChangeParticipantView extends View {
             foreach ($states as $historyState) {
                 $stateRows[] = array(
                         'STATE_NAME' => $historyState->getFriendlyName(),
-                        'EFFECTIVE_DATE' => date('M j, Y g:ia', $historyState->getEffectiveDate())
+                        'EFFECTIVE_DATE' => date('M j, Y g:ia', $historyState->getEffectiveDate()),
+                        'COMMITTED_BY' => $historyState->getCommittedBy()
                 );
             }
         }
