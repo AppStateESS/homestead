@@ -2,18 +2,15 @@
 
 
 /**
- * The HMS_Student_Profile class
- * Implements the Student_profile object and methods to load/save
- * student profiles from the database.
+ * The RoommateProfile class
+ * Implements the RoommateProfile object and methods to load/save
+ * roommate profiles from the database.
  *
  * @author Jeremy Booker <jbooker at tux dot appstate dot edu>
- */
-
-/**
- * Includes the defines file used for the values of the fields
- * throughout this class.
+ * @package hms
  */
 class RoommateProfile {
+
     public $id;
     public $username;
     public $date_submitted;
