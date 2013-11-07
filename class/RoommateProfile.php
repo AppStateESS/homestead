@@ -12,109 +12,193 @@
 class RoommateProfile {
 
     public $id;
+
     public $username;
+
     public $date_submitted;
+
     public $term;
 
     // Alternate contact info
     public $alternate_email = NULL;
+
     public $aim_sn = NULL;
+
     public $yahoo_sn = NULL;
+
     public $msn_sn = NULL;
 
     // Hobby choices
     public $arts_and_crafts = 0;
+
     public $books_and_reading = 0;
+
     public $cars = 0;
+
     public $church_activities = 0;
+
     public $collecting = 0;
+
     public $computers_and_technology = 0;
+
     public $dancing = 0;
+
     public $fashion = 0;
+
     public $fine_arts = 0;
+
     public $gardening = 0;
+
     public $games = 0;
+
     public $humor = 0;
+
     public $investing_personal_finance = 0;
+
     public $movies = 0;
+
     public $music = 0;
+
     public $outdoor_activities = 0;
+
     public $pets_and_animals = 0;
+
     public $photography = 0;
+
     public $politics = 0;
+
     public $sports = 0;
+
     public $travel = 0;
+
     public $tv_shows = 0;
+
     public $volunteering = 0;
+
     public $writing = 0;
+
     public $rotc = 0;
 
     // music choices
     public $alternative = 0;
+
     public $ambient = 0;
+
     public $beach = 0;
+
     public $bluegrass = 0;
+
     public $blues = 0;
+
     public $christian = 0;
+
     public $classical = 0;
+
     public $classic_rock = 0;
+
     public $country = 0;
+
     public $electronic = 0;
+
     public $folk = 0;
+
     public $heavy_metal = 0;
+
     public $hip_hop = 0;
+
     public $house = 0;
+
     public $industrial = 0;
+
     public $jazz = 0;
+
     public $popular_music = 0;
+
     public $progressive = 0;
+
     public $punk = 0;
+
     public $r_and_b = 0;
+
     public $rap = 0;
+
     public $reggae = 0;
+
     public $rock = 0;
+
     public $world_music = 0;
 
     // Study times
     public $study_early_morning = 0;
+
     public $study_morning_afternoon = 0;
+
     public $study_afternoon_evening = 0;
+
     public $study_evening = 0;
+
     public $study_late_night = 0;
 
     // drop downs
     public $political_view = 0;
+
     public $major = 0;
+
     public $experience = 0;
+
     public $sleep_time = 0;
+
     public $wakeup_time = 0;
+
     public $overnight_guests = 0;
+
     public $loudness = 0;
+
     public $cleanliness = 0;
+
     public $free_time = 0;
 
     // Spoken languages
     // Top 20 most spoken languages:
     // http://en.wikipedia.org/wiki/Ethnologue_list_of_most_spoken_languages
     public $arabic = 0;
+
     public $bengali = 0;
+
     public $chinese = 0;
+
     public $english = 0;
+
     public $french = 0;
+
     public $german = 0;
+
     public $hindi = 0;
+
     public $italian = 0;
+
     public $japanese = 0;
+
     public $javanese = 0;
+
     public $korean = 0;
+
     public $malay = 0;
+
     public $marathi = 0;
+
     public $portuguese = 0;
+
     public $punjabi = 0;
+
     public $russian = 0;
+
     public $spanish = 0;
+
     public $tamil = 0;
+
     public $telugu = 0;
+
     public $vietnamese = 0;
 
     /**
@@ -184,7 +268,7 @@ class RoommateProfile {
      * @param $username string Student's Username
      * @param $term
      * @throws DatabaseException
-     * @return integer|boolean Returns integer id of profile object, or false if no profile exists.
+     * @return integer boolean integer id of profile object, or false if no profile exists.
      */
     public static function checkForProfile($username, $term)
     {
@@ -211,7 +295,7 @@ class RoommateProfile {
      * @param String $username
      * @param integer $term
      * @throws DatabaseException
-     * @return RoommateProfile|NULL
+     * @return RoommateProfile NULL
      */
     public static function getProfile($username, $term)
     {
