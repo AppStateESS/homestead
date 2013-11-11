@@ -103,7 +103,7 @@ class HMS_Floor extends HMS_Item
             PHPWS_Core::initModClass("hms", "HMS_Permission.php");
             PHPWS_Core::initModClass("hms", "HMS_Role.php");
             // Get memberships by object instance.
-            $membs = HMS_Permission::getUserRolesForInstance(null, $this);
+            $membs = HMS_Permission::getUserRolesForInstance($this);
             // Add each user to new floor
             foreach($membs as $m) {
                 // Lookup the username
@@ -304,11 +304,11 @@ class HMS_Floor extends HMS_Item
             return true;
         }
     }
-    
+
     /**
      * Returns true if there are any rooms on this floor set to a gender
-     * *other than* the specificed gender. 
-     * 
+     * *other than* the specificed gender.
+     *
      * @param Integer $gender
      * @return boolean
      * @throws DatabaseException
@@ -316,17 +316,17 @@ class HMS_Floor extends HMS_Item
     public function checkForOtherRoomGenders($gender)
     {
         $db = new PHPWS_DB('hms_room');
-        
+
         $db->addJoin('LEFT OUTER', 'hms_room', 'hms_floor', 'floor_id', 'id');
         $db->addWhere('hms_room.gender_type', $gender, '!=');
         $db->addWhere('hms_floor.id', $this->id);
-        
+
         $result = $db->select('count');
-        
+
         if(PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         }
-        
+
         if($result > 0) {
             return true;
         } else {
