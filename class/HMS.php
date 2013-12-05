@@ -78,7 +78,7 @@ abstract class HMS {
         }
     }
 
-    private function formatException(Exception $e)
+    protected function formatException(Exception $e)
     {
         ob_start();
         echo "Ohes Noes!  HMS threw an exception that was not caught!\n\n";
@@ -116,7 +116,7 @@ abstract class HMS {
         return $message;
     }
 
-    private function emailError($message)
+    protected function emailError($message)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Email.php');
         //$to = HMSSettings::getUberAdminEmail();

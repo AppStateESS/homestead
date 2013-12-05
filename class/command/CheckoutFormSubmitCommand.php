@@ -4,31 +4,18 @@ PHPWS_Core::initModClass('hms', 'HousingApplicationFactory.php');
 PHPWS_Core::initModClass('hms', 'CheckinFactory.php');
 PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
 PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
+PHPWS_Core::initModClass('hms', 'RoomDamageFactory.php');
+PHPWS_Core::initModClass('hms', 'RoomDamageResponsibilityFactory.php');
 
 
 class CheckoutFormSubmitCommand extends Command {
 
-    private $bannerId;
-
-    private $checkinId;
-
-    public function setBannerId($bannerId)
-    {
-        $this->bannerId = $bannerId;
-    }
-
-    public function setCheckinId($checkinId)
-    {
-        $this->checkinId = $checkinId;
-    }
+    private $term;
 
     public function getRequestVars()
     {
-        return array (
-                'action'    => 'CheckoutFormSubmit',
-                'bannerId'  => $this->bannerId,
-                'checkinId' => $this->checkinId
-        );
+        // Handeled by Angular, so we don't need anything here
+        return array ();
     }
 
     public function execute(CommandContext $context)
@@ -39,68 +26,102 @@ class CheckoutFormSubmitCommand extends Command {
             throw new PermissionException('You do not have permission to checkin students.');
         }
 
-        $bannerId = $context->get('bannerId');
-        $checkinId = $context->get('checkinId');
+        // Grab data from JSON source
+        $data = $context->getJsonData();
 
-        // Check for key code
-        $keyCode = $context->get('key_code');
-        $keyNotReturned = $context->get('key_not_returned');
+        $bannerId = $data['bannerId'];
+        $checkinId = $data['checkinId'];
 
-        if (!isset($keyNotReturned) && (!isset($keyCode) || $keyCode == '')) {
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Please enter a key code.');
-            $errorCmd = CommandFactory::getCommand('ShowCheckoutForm');
-            $errorCmd->setBannerId($bannerId);
-            $errorCmd->setHallId($hallId);
-            $errorCmd->redirect();
+        if (!isset($bannerId) || $bannerId == '') {
+            throw new InvalidArgumentException('Missing banner id.');
         }
 
-        $improperCheckout = $context->get('improper_checkout');
+        if (!isset($checkinId) || $checkinId == '') {
+            throw new InvalidArgumentException('Missing checkin id.');
+        }
+
+        // Check for key code
+        $keyCode = $data['keyCode'];
+        $keyNotReturned = $data['keyNotReturned'];
+
+        if (!isset($keyNotReturned) || !isset($keyCode)) {
+            throw new InvalidArgumentException('Missing key code.');
+        }
+
+        if (!$keyNotReturned && $keyCode == '') {
+            throw new InvalidArgumentException('Missing key code 2.');
+        }
+
+        $improperCheckout = $data['improperCheckout'];
 
         $term = Term::getCurrentTerm();
+        $this->term = $term;
 
         // Lookup the student
         $student = StudentFactory::getStudentByBannerId($bannerId, $term);
-
-        // Create the actual check-in and save it
-        $currUser = Current_User::getUsername();
 
         // Get the existing check-in
         $checkin = CheckinFactory::getCheckinById($checkinId);
 
         // Make sure we found a check-in
         if (is_null($checkin)) {
+            /*
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Sorry, we couldn't find a corresponding check-in for this check-out.");
             $errorCmd = CommandFactory::getCommand('ShowCheckoutForm');
             $errorCmd->setBannerId($bannerId);
             $errorCmd->setHallId($hallId);
             $errorCmd->redirect();
+            */
+
+            throw new Exception('Could not find a corresponding checkin.');
         }
+
+        // Create the bed
+        $bed = new HMS_Bed($checkin->getBedId());
+
+        // Get the room
+        $room = $bed->get_parent();
+
+
+        /*****
+         * Add new damages
+         */
+
+        $newDamages = $data['newDamages'];
+
+        if (!empty($newDamages)) {
+            foreach ($newDamages as $dmg) {
+                $this->addDamage($dmg, $room);
+            }
+        }
+
+        /******
+         * Complete the Checkout
+         */
 
         // Set checkout date and user
         $checkin->setCheckoutDate(time());
-        $checkin->setCheckoutBy($currUser);
+        $checkin->setCheckoutBy(Current_User::getUsername());
 
         // Set the checkout code code, if any
         $checkin->setCheckoutKeyCode($keyCode);
 
         // Improper checkout handling
-        if (isset($improperCheckout)) {
+        if ($improperCheckout) {
             $checkin->setImproperCheckout(true);
         } else {
             $checkin->setImproperCheckout(false);
         }
 
-        if (isset($keyNotReturned)) {
+        if ($keyNotReturned) {
             $checkin->setKeyNotReturned(true);
         } else {
             $checkin->setKeyNotReturned(false);
         }
 
-        // Save the check-in
-        $checkin->save();
 
-        // Create the bed
-        $bed = new HMS_Bed($checkin->getBedId());
+        // Save the check-in
+        $checkin->save(); //TODO uncomment this before production
 
         // Add this to the activity log
         HMS_Activity_Log::log_activity($student->getUsername(), ACTIVITY_CHECK_OUT, UserStatus::getUsername(), $bed->where_am_i());
@@ -124,6 +145,31 @@ class CheckoutFormSubmitCommand extends Command {
         $cmd = CommandFactory::getCommand('ShowCheckoutDocument');
         $cmd->setCheckinId($checkin->getId());
         $cmd->redirect();
+    }
+
+    private function addDamage(Array $dmg, HMS_Room $room)
+    {
+        // Create the damage
+        $damage = new RoomDamage($room, $dmg['type'], $dmg['side'], $dmg['details']);
+
+        // Save the damage
+        RoomDamageFactory::save($damage);
+
+        // Determine the residents which were responsible
+
+        // For each resident submitted
+        foreach ($dmg['residents'] as $resident) {
+
+            // If the resident was selected as being responsible for this damage
+            if($resident['selected']){
+                // Create the student
+                $student = StudentFactory::getStudentByBannerId($resident['studentId'], $this->term);
+
+                // Create the responsibility
+                $resp = new RoomDamageResponsibility($student, $damage);
+                RoomDamageResponsibilityFactory::save($resp);
+            }
+        }
     }
 }
 ?>

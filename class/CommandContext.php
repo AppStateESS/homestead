@@ -13,6 +13,8 @@ class CommandContext {
     private $successCommand = null;
     private $rewritten = FALSE;
 
+    private $postdata = null;
+
     function __construct()
     {
         foreach($_REQUEST as $key => $val) {
@@ -31,6 +33,9 @@ class CommandContext {
         } else if($this->get('hms_load')) {
             $this->loadContext();
         }
+
+        // Load raw postdata
+        $this->postdata = file_get_contents('php://input');
     }
 
     function addParam($key, $val)
@@ -99,6 +104,16 @@ class CommandContext {
         return $this->rewritten;
     }
 
+    public function getPostData()
+    {
+        return $this->postdata;
+    }
+
+    public function getJsonData()
+    {
+        return json_decode($this->postdata, true);
+    }
+
     function saveLastContext()
     {
         $_SESSION['HMS_Last_Context'] = $this->params;
@@ -124,7 +139,7 @@ class CommandContext {
     function redirectToSavedContext()
     {
         $path = $_SERVER['SCRIPT_NAME'].'?module=hms&hms_load=true';
-         
+
         header('HTTP/1.1 303 See Other');
         header("Location: $path");
         HMS::quit();

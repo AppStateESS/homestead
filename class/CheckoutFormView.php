@@ -21,6 +21,46 @@ class CheckoutFormView extends View {
 
     public function show()
     {
+        $term = $this->checkin->getTerm();
+
+        $assignment = HMS_Assignment::getAssignmentByBannerId($this->student->getBannerId(), $term);
+
+        $residentStudents = $this->room->get_assignees();
+
+        $residents = array();
+
+        foreach ($residentStudents as $s) {
+            $residents[] = array('studentId' => $s->getBannerId(), 'name' => $s->getName());
+        }
+
+        $vars = array();
+
+        $vars['DAMAGE_TYPES'] = json_encode(DamageTypeFactory::getDamageTypeAssoc());
+        $vars['ASSIGNMENT'] = json_encode(array(
+                                        'id'        => $assignment->getId(),
+                                        'studentId' => $this->student->getBannerId(),
+                                        'hallName'  => $this->hall->getHallName(),
+                                        'roomNumber'=> $this->room->getRoomNumber()
+                                        ));
+        $vars['RESIDENTS'] = json_encode($residents);
+        $vars['STUDENT']   = json_encode(array('studentId' => $this->student->getBannerId(), 'name' => $this->student->getName()));
+
+        $vars['CHECKIN'] = json_encode($this->checkin);
+
+        $http = array_key_exists('HTTPS', $_SERVER) && $_SERVER['HTTPS'] ? 'https:' : 'http:';
+        $vars['JAVASCRIPT_BASE'] = PHPWS_SOURCE_HTTP . 'mod/hms/javascript';
+
+        javascript('jquery');
+
+        // Load header for Angular Frontend
+        javascriptMod('hms', 'AngularFrontend', $vars);
+
+        $rawfile = PHPWS_SOURCE_HTTP . 'mod/hms/templates/Angular/checkout.html';
+        return '<div data-ng-app="hmsAngularApp"><div ng-controller="CheckoutCtrl"><div data-ng-include="\''.$rawfile.'\'"></div></div></div>';
+    }
+
+    public function oldShow()
+    {
         $dmgTypes = DamageTypeFactory::getDamageTypeAssoc();
 
         $tpl = array();

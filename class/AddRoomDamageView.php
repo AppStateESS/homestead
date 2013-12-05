@@ -2,6 +2,11 @@
 PHPWS_Core::initModClass('hms', 'DamageTypeFactory.php');
 
 
+/**
+ *
+ * @author jbooker
+ * @deprecated
+ */
 class AddRoomDamageView extends View {
 
     private $room;
