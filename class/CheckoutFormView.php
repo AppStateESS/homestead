@@ -56,7 +56,7 @@ class CheckoutFormView extends View {
         javascriptMod('hms', 'AngularFrontend', $vars);
 
         $rawfile = PHPWS_SOURCE_HTTP . 'mod/hms/templates/Angular/checkout.html';
-        return '<div data-ng-app="hmsAngularApp"><div ng-controller="CheckoutCtrl"><div data-ng-include="\''.$rawfile.'\'"></div></div></div>';
+        return '<div data-ng-app="hmsAngularApp"><div data-ng-include="\''.$rawfile.'\'"></div></div>';
     }
 
     public function oldShow()
