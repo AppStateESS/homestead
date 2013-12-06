@@ -42,17 +42,17 @@ class CheckoutFormSubmitCommand extends Command {
 
         // Check for key code
         $keyCode = $data['keyCode'];
-        $keyNotReturned = $data['keyNotReturned'];
+        $keyReturned = $data['keyReturned'];
 
-        if (!isset($keyNotReturned) || !isset($keyCode)) {
+        if (!isset($keyReturned) || !isset($keyCode)) {
             throw new InvalidArgumentException('Missing key code.');
         }
 
-        if (!$keyNotReturned && $keyCode == '') {
+        if ($keyReturned == "0" && $keyCode == '') {
             throw new InvalidArgumentException('Missing key code 2.');
         }
 
-        $improperCheckout = $data['improperCheckout'];
+        $properCheckout = $data['properCheckout'];
 
         $term = Term::getCurrentTerm();
         $this->term = $term;
@@ -107,16 +107,16 @@ class CheckoutFormSubmitCommand extends Command {
         $checkin->setCheckoutKeyCode($keyCode);
 
         // Improper checkout handling
-        if ($improperCheckout) {
-            $checkin->setImproperCheckout(true);
-        } else {
+        if ($properCheckout == "1") {
             $checkin->setImproperCheckout(false);
+        } else {
+            $checkin->setImproperCheckout(true);
         }
 
-        if ($keyNotReturned) {
-            $checkin->setKeyNotReturned(true);
-        } else {
+        if ($keyReturned == "1") {
             $checkin->setKeyNotReturned(false);
+        } else {
+            $checkin->setKeyNotReturned(true);
         }
 
 
