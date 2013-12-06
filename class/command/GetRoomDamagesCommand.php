@@ -22,6 +22,12 @@ class GetRoomDamagesCommand extends Command {
         // Get the damages for this student's room
         $damages = RoomDamageFactory::getDamagesByRoom($room);
 
+        if($damages == null)
+        {
+            $context->setContent(json_encode(array()));
+            return;
+        }
+
         $context->setContent(json_encode($damages));
     }
 }
