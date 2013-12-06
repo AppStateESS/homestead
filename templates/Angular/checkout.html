@@ -6,7 +6,7 @@
         <h1>{{assignment.hallName}} {{assignment.roomNumber}}</h1>
       </div>
 
-      <form class="phpws-form form-protected" id="checkout_form" name="checkout_form">
+      <form class="phpws-form form-protected" id="checkout_form" name="checkout_form" novalidate="">
       
         <input type="hidden" name="module" id="module" value="hms">
         <input type="hidden" name="action" id="action" value="CheckoutFormSubmit">
@@ -15,8 +15,23 @@
 
         <hr>
         
-        <label for="checkin-form-keyCode">Key Code</label> <input type="text" name="keyCode" id="checkin-form-keyCode" ng-model="data.keyCode" title="Key Code" value="" autofocus="" placeholder="Enter key code..."> <br>
-        <input type="checkbox" name="keyNotReturned" id="checkin-form-keyNotReturned" ng-model="data.keyNotReturned" value="keyNotReturned" title="keyNotReturned">&nbsp;<label for="checkin-form-keyNotReturned">Key not returned</label>
+        <label>
+          <input type="radio" ng-model="data.keyReturned" name="keyReturned" id="keyReturnedYes" value="1">
+          Key Returned
+        </label>
+        <input type="text" name="keyCode" id="checkin-form-keyCode" ng-model="data.keyCode" title="Key Code" value="" placeholder="Enter key code..." data-ng-disabled="data.keyReturned < 1" data-ng-required="">
+        <span class="error" data-ng-show="(triedSubmit || checkout_form.keyCode.$dirty) && !checkout_form.keyCode.$valid">
+            A key code is required becuase you specified that a key was returned.
+        </span>
+        <br>
+        <label>
+          <input type="radio" ng-model="data.keyReturned" name="keyReturned" id="keyReturnedNo" value="0">
+          Key Not Returned
+        </label>
+        <br>
+        <span class="error" data-ng-show="(triedSubmit || checkout_form.keyReturned.$dirty) && !checkout_form.keyReturned.$valid">
+            Specify whether or not a key was returned, and its code if so.
+        </span>
         <hr>
 
         <h3>Existing Room Damages</h3>
@@ -82,9 +97,11 @@
 
         <button type="button" class="btn btn-default" ng-click="addDamage()">Add Damage</button>
         <hr>
+
+        <label><input type="radio" name="properCheckout" data-ng-model="data.properCheckout" id="properCheckoutYes" title="Proper Check-out" value="1"> Proper Check-out</label><br>
+        <label><input type="radio" name="properCheckout" data-ng-model="data.properCheckout" id="properCheckoutNo" title="Improper Check-out" value="0"> Improper Check-out</label><br>
+        <span class="error" data-ng-show="(triedSubmit || checkout_form.properCheckout.$dirty) && !checkout_form.properCheckout.$valid">Specify whether or not the checkout process was proper.</span>
         
-        <input type="checkbox" name="improper_checkout[improper_checkout]" ng-model="data.improperCheckout" id="improper-checkout" title="Improper Check-out" value="improper-checkout">
-        <label class="checkbox-label" for="improper-checkout">Improper Check-out</label>
         <hr>
 
         <br> <button type="submit" class="btn btn-primary" ng-click="submitHandler();">Complete Checkout</button>
