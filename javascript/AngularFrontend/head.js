@@ -10,7 +10,7 @@
 		angular.module('roomDamages')
 			.config(function(roomDamageBrokerProvider){
 				roomDamageBrokerProvider.setDamageTypes({DAMAGE_TYPES});
-				roomDamageBrokerProvider.setLocation('http://localhost/hms/phpwebsite/index.php');
+				roomDamageBrokerProvider.setLocation('index.php');
 			});
 	})();
 	
