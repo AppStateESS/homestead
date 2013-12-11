@@ -48,7 +48,7 @@ class CheckoutFormSubmitCommand extends Command {
             throw new InvalidArgumentException('Missing key code.');
         }
 
-        if ($keyReturned == "0" && $keyCode == '') {
+        if ($keyReturned == "1" && $keyCode == '') {
             throw new InvalidArgumentException('Missing key code 2.');
         }
 
