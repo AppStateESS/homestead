@@ -23,8 +23,6 @@ class CheckoutFormView extends View {
     {
         $term = $this->checkin->getTerm();
 
-        $assignment = HMS_Assignment::getAssignmentByBannerId($this->student->getBannerId(), $term);
-
         $residentStudents = $this->room->get_assignees();
 
         $residents = array();
@@ -37,7 +35,6 @@ class CheckoutFormView extends View {
 
         $vars['DAMAGE_TYPES'] = json_encode(DamageTypeFactory::getDamageTypeAssoc());
         $vars['ASSIGNMENT'] = json_encode(array(
-                                        'id'        => $assignment->getId(),
                                         'studentId' => $this->student->getBannerId(),
                                         'hallName'  => $this->hall->getHallName(),
                                         'roomNumber'=> $this->room->getRoomNumber()
