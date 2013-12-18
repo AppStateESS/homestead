@@ -19,6 +19,11 @@ class ServiceDeskMenu extends CommandMenu {
             $this->addCommandByName('Check-out', 'ShowCheckoutStart');
         }
 
+        // Room Damage Assessment
+        if (Current_User::allow('hms', 'damage_assessment')) {
+            $this->addCommandByName('Damage Assessment', 'ShowDamageAssessment');
+        }
+
         if (UserStatus::isAdmin()) {
 
             /*

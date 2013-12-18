@@ -59,6 +59,7 @@
     $permissions['room_view']           = _('View rooms');
     $permissions['coed_rooms']          = _('Set Co-ed Room Genders');
     $permissions['add_room_dmg']        = _('Add Room Damages');
+    $permissions['damage_assessment']   = _('Room Damage Assessment');
 
     # Bed tasks
     $permissions['bed_structure']       = _('Add and delete beds');
