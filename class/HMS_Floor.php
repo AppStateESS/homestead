@@ -142,11 +142,6 @@ class HMS_Floor extends HMS_Item
         }
     }
 
-    public function getId()
-    {
-        return $this->id;
-    }
-
     public function getLink($prependText = null)
     {
         $floorCmd = CommandFactory::getCommand('EditFloorView');
@@ -597,6 +592,22 @@ class HMS_Floor extends HMS_Item
 
         return $tpl;
     }
+
+    /******************************
+     * Accessor / Mutator Methods *
+     */
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function getTerm()
+    {
+        return $this->term;
+    }
+
+    //TODO lots more here
 
     /******************
      * Static Methods *

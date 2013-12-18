@@ -67,6 +67,34 @@ class RoomDamageFactory {
         return $result;
     }
 
+    /**
+     * Returns an array of RoomDamage objects which have pending ('new') responsibilities
+     * which need to be assessed. These are filtered by the array of floor objects passed in.
+     *
+     * @param array $floorList Array of HMS_Floor objects
+     */
+    public static function getDamagesToAssessByFloor(Array $floorList, $term)
+    {
+        $floorIdList = array();
+        foreacH($floorList as $floor)
+        {
+            $floorIdList[] = $floor->getId();
+        }
+
+        $floorIn = implode($floorIdList, ', ');
+
+        $query = "select distinct hms_room_damage.* from hms_room_damage JOIN hms_room_damage_responsibility ON hms_room_damage.id = hms_room_damage_responsibility.damage_id JOIN hms_room ON hms_room_damage.room_persistent_id = hms_room.persistent_id JOIN hms_floor ON hms_room.floor_id = hms_floor.id WHERE hms_room_damage.term = :term AND hms_room.term = :term and hms_floor.id IN ($floorIn) and hms_room_damage_responsibility.state = 'new'";
+
+        $db = PdoFactory::getPdoInstance();
+        $stmt = $db->prepare($query);
+
+        $params = array('term' => $term);
+
+        $stmt->execute($params);
+
+        return $stmt->fetchAll(PDO::FETCH_CLASS, 'RoomDamageDb');
+    }
+
     public function save(RoomDamage $dmg)
     {
         $db = PdoFactory::getPdoInstance();

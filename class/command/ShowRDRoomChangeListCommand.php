@@ -18,11 +18,12 @@ class ShowRDRoomChangeListCommand extends Command {
         $term = Term::getCurrentTerm();
 
         // Get the list of role memberships this user has
+        // TODO For which term? This gets memberships for all terms?
         $memberships = HMS_Permission::getMembership('room_change_approve', NULL, UserStatus::getUsername());
 
         if(empty($memberships)){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
-            throw new PermissionException("Your account does not have the 'RD' role on any residence halls or floors.");
+            throw new PermissionException("You do not have the 'RD' role on any residence halls or floors.");
         }
 
         // Use the roles to instantiate a list of floors this user has access to

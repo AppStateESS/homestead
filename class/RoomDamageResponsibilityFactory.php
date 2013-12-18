@@ -4,6 +4,20 @@ PHPWS_Core::initModClass('hms', 'RoomDamageResponsibility.php');
 
 class RoomDamageResponsibilityFactory {
 
+    public static function getResponsibilitiesByDmg(RoomDamage $damage)
+    {
+        $query = "select * from hms_room_damage_responsibility where damage_id = :damageId";
+
+        $db = PdoFactory::getPdoInstance();
+        $stmt = $db->prepare($query);
+
+        $params = array('damageId' => $damage->getId());
+
+        $stmt->execute($params);
+
+        return $stmt->fetchAll(PDO::FETCH_CLASS, 'RoomDamageResponsibilityRestored');
+    }
+
     public static function save(RoomDamageResponsibility $resp)
     {
         $db = PdoFactory::getPdoInstance();

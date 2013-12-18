@@ -2,17 +2,17 @@
 
 class RoomDamageResponsibility {
 
-    private $id;
+    public $id;
 
-    private $bannerId;
-    private $damageId;
-    private $state;
-    private $amount;
+    public $banner_id;
+    public $damage_id;
+    public $state;
+    public $amount;
 
     public function __construct(Student $student, RoomDamage $damage)
     {
-        $this->bannerId = $student->getBannerId();
-        $this->damageId = $damage->getId();
+        $this->banner_id = $student->getBannerId();
+        $this->damage_id = $damage->getId();
 
         $this->state = 'new';
         $this->amount = null;
@@ -30,12 +30,12 @@ class RoomDamageResponsibility {
 
     public function getDamageId()
     {
-        return $this->damageId;
+        return $this->damage_id;
     }
 
     public function getBannerId()
     {
-        return $this->bannerId;
+        return $this->banner_id;
     }
 
     public function getState()
@@ -47,5 +47,9 @@ class RoomDamageResponsibility {
     {
         return $this->amount;
     }
+}
+
+class RoomDamageResponsibilityRestored extends RoomDamageResponsibility {
+    public function __construct(){}
 }
 ?>
