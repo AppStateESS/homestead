@@ -8,6 +8,8 @@ class RoomDamageResponsibility {
     public $damage_id;
     public $state;
     public $amount;
+    public $assessed_on;
+    public $assessed_by;
 
     public function __construct(Student $student, RoomDamage $damage)
     {
