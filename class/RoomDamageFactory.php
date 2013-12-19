@@ -83,6 +83,7 @@ class RoomDamageFactory {
 
         $floorIn = implode($floorIdList, ', ');
 
+        //TODO: find a good way to order this damage list by hall and room number
         $query = "select distinct hms_room_damage.* from hms_room_damage JOIN hms_room_damage_responsibility ON hms_room_damage.id = hms_room_damage_responsibility.damage_id JOIN hms_room ON hms_room_damage.room_persistent_id = hms_room.persistent_id JOIN hms_floor ON hms_room.floor_id = hms_floor.id WHERE hms_room_damage.term = :term AND hms_room.term = :term and hms_floor.id IN ($floorIn) and hms_room_damage_responsibility.state = 'new'";
 
         $db = PdoFactory::getPdoInstance();
