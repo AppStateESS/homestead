@@ -18,6 +18,8 @@ class RoomDamageAssessmentView extends View {
         $http = array_key_exists('HTTPS', $_SERVER) && $_SERVER['HTTPS'] ? 'https:' : 'http:';
         $vars['JAVASCRIPT_BASE'] = PHPWS_SOURCE_HTTP . 'mod/hms/javascript';
 
+        $vars['TERM'] = Term::getSelectedTerm();
+
         javascript('jquery');
 
         // Load header for Angular Frontend

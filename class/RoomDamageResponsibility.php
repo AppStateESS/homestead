@@ -65,7 +65,7 @@ class RoomDamageResponsibility {
         return $this->assessed_on;
     }
 
-    public function setAssessedOn($tiemstamp)
+    public function setAssessedOn($timestamp)
     {
         $this->assessed_on = $timestamp;
     }

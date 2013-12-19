@@ -1,5 +1,6 @@
 <?php
 
+PHPWS_Core::initModClass('hms', 'RoomDamageResponsibilityFactory.php');
 
 /**
  * Controller class to handle POST request from angular front end
@@ -9,7 +10,7 @@
  * @author jbooker
  * @package hms
  */
-class AssessRoomDamgeCommand extends Command {
+class AssessRoomDamageCommand extends Command {
 
     public function getRequestVars()
     {
@@ -27,12 +28,15 @@ class AssessRoomDamgeCommand extends Command {
         // Grab data from JSON source
         $data = $context->getJsonData();
 
+        $data = $data['responsibilities'];
+
         // For each responsibility object submitted
         foreach ($data as $row) {
 
             // Load it from the database
             $resp = RoomDamageResponsibilityFactory::getResponsibilityById($row['id']);
-            $resp->setAmount($row['amount']);
+
+            $resp->setAmount(round($row['amount']));
             $resp->setState('assessed');
             $resp->setAssessedOn(time());
             $resp->setAssessedBy(UserStatus::getUsername());

@@ -2,14 +2,13 @@
 
 <script src="{JAVASCRIPT_BASE}/AngularFrontend/scripts/20bdd8fe.plugins.js"></script>
 <script src="{JAVASCRIPT_BASE}/AngularFrontend/scripts/34dfa171.modules.js"></script>
-<script src="{JAVASCRIPT_BASE}/AngularFrontend/scripts/b6475afb.scripts.js"></script>
+<script src="{JAVASCRIPT_BASE}/AngularFrontend/scripts/1c7be9a3.scripts.js"></script>
 
 <script type="text/javascript">
 
 	(function() {
 		angular.module('roomDamages')
 			.config(function(roomDamageBrokerProvider){
-				roomDamageBrokerProvider.setDamageTypes({DAMAGE_TYPES});
 				roomDamageBrokerProvider.setLocation('index.php');
 			});
 	})();
@@ -22,5 +21,16 @@
 				roomDamageResidentProvider.setStudent({STUDENT});
 				roomDamageResidentProvider.setCheckin({CHECKIN});
 			});
+		
+		angular.module('roomDamages')
+		.config(function(roomDamageTypeProvider){
+			roomDamageTypeProvider.setDamageTypes({DAMAGE_TYPES});
+		});
+		
+		angular.module('roomDamages')
+		.config(function(roomDamageAssessmentProvider){
+			roomDamageAssessmentProvider.setTerm({TERM});
+			roomDamageAssessmentProvider.setLocation('index.php');
+		});
 	})();
 </script>

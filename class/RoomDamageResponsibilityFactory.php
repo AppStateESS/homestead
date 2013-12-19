@@ -28,8 +28,9 @@ class RoomDamageResponsibilityFactory {
         $params = array('id' => $id);
 
         $stmt->execute($params);
+        $stmt->setFetchMode(PDO::FETCH_CLASS, 'RoomDamageResponsibilityRestored');
 
-        return $stmt->fetchAll(PDO::FETCH_CLASS, 'RoomDamageResponsibilityRestored');
+        return $stmt->fetch();
     }
 
     public static function save(RoomDamageResponsibility $resp)
