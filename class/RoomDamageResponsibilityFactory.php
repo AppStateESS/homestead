@@ -18,6 +18,20 @@ class RoomDamageResponsibilityFactory {
         return $stmt->fetchAll(PDO::FETCH_CLASS, 'RoomDamageResponsibilityRestored');
     }
 
+    public static function getResponsibilityById($id)
+    {
+        $query = "select * from hms_room_damage_responsibility where id = :id";
+
+        $db = PdoFactory::getPdoInstance();
+        $stmt = $db->prepare($query);
+
+        $params = array('id' => $id);
+
+        $stmt->execute($params);
+
+        return $stmt->fetchAll(PDO::FETCH_CLASS, 'RoomDamageResponsibilityRestored');
+    }
+
     public static function save(RoomDamageResponsibility $resp)
     {
         $db = PdoFactory::getPdoInstance();
@@ -25,12 +39,17 @@ class RoomDamageResponsibilityFactory {
         $id = $resp->getId();
 
         if (isset($id)) {
-            // Update
-            // TODO
-            throw new Exception('Not yet implemented.');
+            $query = "UPDATE hms_room_damage_responsibility SET (state, amount, assessed_on, assessed_by) = (:state, :amount, :assessedOn, :assessedBy) WHERE id = :id and damage_id = :damageId and banner_id = :bannerId";
 
-            $query = "";
-            $params = array();
+            $params = array(
+                        'id' => $resp->getId(),
+                        'damageId'      => $resp->getDamageId(),
+                        'bannerId'      => $resp->getBannerId(),
+                        'state'         => $resp->getState(),
+                        'amount'        => $resp->getAmount(),
+                        'assessedBy'    => $resp->getAssessedBy(),
+                        'assessedOn'    => $resp->getAssessedOn()
+            );
 
         }else{
             // Insert
