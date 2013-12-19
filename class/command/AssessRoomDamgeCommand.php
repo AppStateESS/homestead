@@ -18,6 +18,23 @@ class AssessRoomDamgeCommand extends Command {
 
     public function execute(CommandContext $context)
     {
+        // Check permissions
+        if(!Current_User::allow('hms', 'damage_assessment')){
+            throw new PermissionException('You do not have permission to perform room damage assessment.');
+        }
 
+        // Grab data from JSON source
+        $data = $context->getJsonData();
+
+        // For each responsibility object submitted
+        foreach($data as $row){
+
+            // Load it from the database
+            $resp = RoomDamageResponsibilityFactory::getResponsibilityById($row['id']);
+            $resp->setAmount($row['amount']);
+            $resp->setState('assessed');
+            $resp->setAssessedOn(time());
+            $resp->setAssessedBy(UserStatus::getUsername());
+        }
     }
 }

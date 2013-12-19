@@ -45,9 +45,39 @@ class RoomDamageResponsibility {
         return $this->state;
     }
 
+    public function setState($name)
+    {
+        $this->state = $name;
+    }
+
     public function getAmount()
     {
         return $this->amount;
+    }
+
+    public function setAmount($amount)
+    {
+        $this->amount = $amount;
+    }
+
+    public function getAssessedOn()
+    {
+        return $this->assessed_on;
+    }
+
+    public function setAssessedOn($tiemstamp)
+    {
+        $this->assessed_on = $timestamp;
+    }
+
+    public function getAssessedBy()
+    {
+        return $this->assessed_by;
+    }
+
+    public function setAssessedBy($username)
+    {
+        $this->assessed_by = $username;
     }
 }
 
