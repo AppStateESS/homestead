@@ -27,7 +27,7 @@ class GetRoomDamagesToAssessCommand extends Command {
 
         // Get the list of floors which the current user has permission to assess
 
-        // The the list of role memberships this user has
+        // Get the list of role memberships this user has
         $memberships = HMS_Permission::getMembership('assess_damage', NULL, UserStatus::getUsername());
 
         if (empty($memberships)) {

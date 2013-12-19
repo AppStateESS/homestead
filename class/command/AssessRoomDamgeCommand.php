@@ -1,5 +1,6 @@
 <?php
 
+
 /**
  * Controller class to handle POST request from angular front end
  * for submitting a list of room damage responsibilities and the
@@ -13,13 +14,13 @@ class AssessRoomDamgeCommand extends Command {
     public function getRequestVars()
     {
         // Handeled by Angular, so we don't need anything here
-        return array ();
+        return array();
     }
 
     public function execute(CommandContext $context)
     {
         // Check permissions
-        if(!Current_User::allow('hms', 'damage_assessment')){
+        if (!Current_User::allow('hms', 'damage_assessment')) {
             throw new PermissionException('You do not have permission to perform room damage assessment.');
         }
 
@@ -27,7 +28,7 @@ class AssessRoomDamgeCommand extends Command {
         $data = $context->getJsonData();
 
         // For each responsibility object submitted
-        foreach($data as $row){
+        foreach ($data as $row) {
 
             // Load it from the database
             $resp = RoomDamageResponsibilityFactory::getResponsibilityById($row['id']);
@@ -35,6 +36,10 @@ class AssessRoomDamgeCommand extends Command {
             $resp->setState('assessed');
             $resp->setAssessedOn(time());
             $resp->setAssessedBy(UserStatus::getUsername());
+
+            RoomDamageResponsibilityFactory::save($resp);
         }
+
+        header('HTTP/1.1 200 Ok');
     }
 }

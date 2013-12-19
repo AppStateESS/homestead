@@ -150,7 +150,6 @@ class CheckoutFormSubmitCommand extends Command {
         header('HTTP/1.1 201 Created');
         $path = $cmd->getURI();
         header("Location: $path");
-
     }
 
     private function addDamage(Array $dmg, HMS_Room $room)
