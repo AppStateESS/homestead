@@ -23,17 +23,16 @@
 }
 </style>
 
-<div ng-controller="RoomDamageAssessmentCtrl">
 <div style="margin: auto; text-align: center">
   <h1>
-    Damage Charges
+    Damage Assessment
   </h1>
 </div>
 <hr>
 <ul class="assessment-rooms">
-  <li data-ng-repeat="room in assessment.rooms">
+  <li data-ng-repeat="room in assessment.rooms | orderBy:[hallName,room_number]">
     <div data-ng-hide="room.submitted == 'success'">
-      <h2>Room {{room.room_number}}</h2>
+      <h2>{{room.hallName}} {{room.room_number}}</h2>
       <form name="roomForm">
         <ul class="assessment-damages">
           <li data-ng-repeat="damage in room.damages">
@@ -65,4 +64,3 @@
     </div>
   </li>
 </ul>
-</div>
