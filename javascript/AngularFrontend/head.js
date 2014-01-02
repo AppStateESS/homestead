@@ -2,7 +2,7 @@
 
 <script src="{JAVASCRIPT_BASE}/AngularFrontend/scripts/20bdd8fe.plugins.js"></script>
 <script src="{JAVASCRIPT_BASE}/AngularFrontend/scripts/34dfa171.modules.js"></script>
-<script src="{JAVASCRIPT_BASE}/AngularFrontend/scripts/1c7be9a3.scripts.js"></script>
+<script src="{JAVASCRIPT_BASE}/AngularFrontend/scripts/ed8f3e03.scripts.js"></script>
 
 <script type="text/javascript">
 
