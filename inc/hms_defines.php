@@ -12,7 +12,7 @@ define('HMS_LOGIN_LINK', 'secure');
  * SOAP Testing Flags *
  **********************/
 
- /**
+/**
  * SOAP Info test flag
  * Set to true to use canned student info (no SOAP connection
  * will ever be made).
@@ -20,12 +20,22 @@ define('HMS_LOGIN_LINK', 'secure');
 define('SOAP_INFO_TEST_FLAG', false);
 
 /**
+ * WSDL File Path
+ * If the SOAP_INFO_TEST_FLAG above is FALSE,
+ * then this is the location of the WSDL file
+ * we'll try to use. It is relative to the
+ * phpWebsite installation directory.
+ */
+define('WSDL_FILE_PATH', 'inc/shs0001.wsdl.prod'); 
+
+/**
  * WSDL File Name
  * If the SOAP_INFO_TEST_FLAG above is FALSE,
  * then this is the WSDL file we'll try to use
  * to contact a web server somewhere.
+ * @deprecated in favor of WSDL_FILE_PATH
  */
-define('WSDL_FILE_NAME', 'shs0001.wsdl.prod');
+//define('WSDL_FILE_NAME', 'shs0001.wsdl.prod');
 
 /**
  * SOAP Reporting test flag

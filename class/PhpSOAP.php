@@ -26,7 +26,7 @@ class PhpSOAP extends SOAP
     {
         parent::__construct($username,$userType);
         ini_set('soap.wsdl_cache_enabled', 0);
-        $this->client = new SoapClient('file://' . PHPWS_SOURCE_DIR . 'mod/hms/inc/' . WSDL_FILE_NAME, array('trace'=>true, 'connection_timeout'=>30));
+        $this->client = new SoapClient('file://' . PHPWS_SOURCE_DIR . WSDL_FILE_PATH, array('trace'=>true, 'connection_timeout'=>30));
     }
 
     public function getStudentProfile($bannerId, $term)
