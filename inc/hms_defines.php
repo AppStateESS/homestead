@@ -29,6 +29,14 @@ define('SOAP_INFO_TEST_FLAG', false);
 define('WSDL_FILE_PATH', 'inc/shs0001.wsdl.prod'); 
 
 /**
+ * SOAP Data Override Class Path
+ * Path to the SOAPDataOverride class. This
+ * class allows you to override data for
+ * students.
+ */
+define('SOAP_DATA_OVERRIDE_PATH', 'inc/SOAPDataOverride.php');
+
+/**
  * WSDL File Name
  * If the SOAP_INFO_TEST_FLAG above is FALSE,
  * then this is the WSDL file we'll try to use

@@ -48,7 +48,10 @@ class SOAPDataProvider extends StudentDataProvider {
 
         SOAPDataProvider::plugSOAPData($student, $soapData);
 
-        SOAPDataProvider::applyExceptions($student);
+        //SOAPDataProvider::applyExceptions($student);
+        require_once(PHPWS_SOURCE_DIR . SOAP_DATA_OVERRIDE_PATH);
+        $dataOverride = new SOAPDataOverride();
+        $dataOverride->applyExceptions($student);
 
         $student->setDataSource(get_class($this));
 
@@ -142,34 +145,6 @@ class SOAPDataProvider extends StudentDataProvider {
      */
     public function clearCache()
     {
-    }
-
-    private static function applyExceptions(&$student)
-    {
-        /*
-         * This is a hack to fix some freshmen students who have application terms in the future but are considered type 'C' by the registrar's office.
-         * See Trac #719
-         */
-        PHPWS_Core::initModClass('hms', 'Term.php');
-        if ($student->getApplicationTerm() > Term::getCurrentTerm() && $student->getType() == TYPE_CONTINUING) {
-            $student->setType(TYPE_FRESHMEN);
-        }
-
-        // This is a hack to fix the student type for international grad students
-        $type = $student->getType();
-        if ((!isset($type) || $type == '') && $student->getStudentLevel() == LEVEL_GRAD && $student->isInternational() == 1) {
-            $student->setType(TYPE_GRADUATE);
-            $student->setClass(CLASS_SENIOR);
-        }
-
-        if ($student->getBannerId() == '900532551') {
-            $student->setApplicationTerm(201340);
-        }
-
-        if ($student->getBannerId() == '900514082') {
-            $student->setType(TYPE_FRESHMEN);
-            $student->setApplicationTerm(201340);
-        }
     }
 }
 
