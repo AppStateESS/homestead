@@ -125,6 +125,11 @@ class Checkin {
         $this->checkin_date = $timestamp;
     }
 
+    public function getCheckinBy()
+    {
+        return $this->checkin_by;
+    }
+
     private function setCheckinBy($checkinBy)
     {
         $this->checkin_by = $checkinBy;
@@ -148,6 +153,11 @@ class Checkin {
     public function setCheckoutDate($date)
     {
         $this->checkout_date = $date;
+    }
+
+    public function getCheckoutBy()
+    {
+        return $this->checkout_by;
     }
 
     public function setCheckoutBy($user)

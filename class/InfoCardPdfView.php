@@ -197,8 +197,12 @@ class InfoCardPdfView {
         $this->pdf->setFont('Times', null, 14);
 
         // Check-in Date/time
-        $this->pdf->setXY(80, 108);
+        $this->pdf->setXY(40, 108);
         $this->pdf->cell(50, 5, date('j M, Y @ g:ia', $infoCard->getCheckin()->getCheckinDate()));
+
+        // Check-in By
+        $this->pdf->setXY(95, 108);
+        $this->pdf->cell(50, 5, 'By: ' . $infoCard->getCheckin()->getCheckinBy());
 
         /************
          * Key Code *
@@ -251,6 +255,10 @@ class InfoCardPdfView {
             $this->pdf->setXY(210, 108);
             $this->pdf->cell(50, 5, date('j M, Y @ g:ia', $checkoutTimestamp));
         }
+
+        // Check-out By
+        $this->pdf->setXY(95, 108);
+        $this->pdf->cell(50, 5, 'By: ' . $infoCard->getCheckin()->getCheckoutBy());
 
         // Key code at check-out
         $this->pdf->setXY(150, 118);
