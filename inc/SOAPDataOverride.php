@@ -2,7 +2,7 @@
 
 class SOAPDataOverride {
 
-    private static function applyExceptions(&$student)
+    public function applyExceptions(&$student)
     {
         /*
          * This is a hack to fix some freshmen students who have application terms in the future but are considered type 'C' by the registrar's office.
