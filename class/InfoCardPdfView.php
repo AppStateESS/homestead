@@ -139,36 +139,6 @@ class InfoCardPdfView {
         $this->pdf->setXY(75, 62);
         $this->pdf->cell(50, 5, $infoCard->getApplication()->getEmergencyContactEmail());
 
-        /*******************
-         * Missing Persons *
-         */
-
-        // Background Box
-        $this->pdf->setXY(145, 45);
-        $this->pdf->setFillColor(250,250,250);
-        $this->pdf->setDrawColor(150, 150, 150);
-        $this->pdf->cell(125, 25, ' ', 1, 0, 'L', 1);
-
-        // Box Header
-        $this->pdf->setXY(146, 46);
-        $this->pdf->setFont('Times', null, 16);
-        $this->pdf->cell(50, 5, 'Missing Person Contact');
-
-
-        $this->pdf->setXY(146, 54);
-        $this->pdf->setFont('Times', null, 14);
-        $this->pdf->cell(50, 5, $infoCard->getApplication()->getMissingPersonName());
-
-        $this->pdf->setXY(210, 54);
-        $this->pdf->cell(50, 5, 'Relation: ' . $infoCard->getApplication()->getMissingPersonRelationship());
-
-        $this->pdf->setXY(146, 62);
-        $this->pdf->cell(50, 5, 'Phone: ' . $infoCard->getApplication()->getMissingPersonPhone());
-
-        $this->pdf->setXY(210, 62);
-        $this->pdf->cell(50, 5, $infoCard->getApplication()->getMissingPersonEmail());
-
-
         /************
          * Medical Stuff
          */
