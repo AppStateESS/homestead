@@ -1,8 +1,8 @@
 #!/usr/bin/php
 <?php
 
-//require_once('SOAP.php');
 require_once('cliCommon.php');
+require_once('dbConnect.php');
 
 ini_set('display_errors', 1);
 ini_set('ERROR_REPORTING', E_WARNING);
@@ -22,29 +22,11 @@ if($inputFile === FALSE){
     exit;
 }
 
-$dbname = trim(readline("Database name: "));
-
-$dbuser = trim(readline("User name: "));
-
-// A bit of hackery here to avoid echoing the password
-echo "Database Password: ";
-system('stty -echo');
-$dbpasswd = trim(fgets(STDIN));
-system('stty echo');
-// add a new line since the users CR didn't echo
-echo "\n";
-
-
-// Connect to the database
-//$db = pg_connect("host=$host dbname=$database user=$dbuser password=$dbpasswd");
-$db = pg_connect("user=$dbuser password=$dbpasswd dbname=$dbname");
+$db = connectToDb();
 
 if(!$db){
     die('Could not connect to database.\n');
 }
-
-// Get an instance of SOAP
-//$soap = new PhpSOAP();
 
 // Parse CSV input into fields line by line
 while(($line = fgetcsv($inputFile, 0, '|')) !== FALSE) {
