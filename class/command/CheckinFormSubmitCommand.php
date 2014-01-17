@@ -67,6 +67,7 @@ class CheckinFormSubmitCommand extends Command {
         $currUser = Current_User::getUsername();
 
         // Check for an existing Check-in
+        //TODO by persistent bed id
         $checkin = CheckinFactory::getCheckinByBed($student, $bed, $term);
 
         // If there's not already a checkin for this bed, create a new one

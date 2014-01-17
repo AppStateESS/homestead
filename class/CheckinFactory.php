@@ -49,7 +49,8 @@ class CheckinFactory {
         $db = new PHPWS_DB('hms_checkin');
         $db->addWhere('banner_id', $student->getBannerId());
         $db->addWhere('term', $term);
-        $db->addWhere('bed_id', $bed->getId());
+        //$db->addWhere('bed_id', $bed->getId());
+        $db->addWhere('bed_persistent_id', $bed->getPersistentId());
 
         $checkin = new RestoredCheckin();
         $result = $db->loadObject($checkin);
@@ -87,6 +88,7 @@ class CheckinFactory {
     /**
      * Returns an array of Checkin objects order by hall, and room
      * @param unknown $term
+     * //TODO update for persistent ID
      */
     public static function getCheckinsOrderedByRoom($term)
     {
@@ -114,6 +116,7 @@ class CheckinFactory {
     /**
      * Returns an array of Checkin objects order by hall, and room
      * @param unknown $term
+     * //TODO update for persistent ID
      */
     public static function getCheckinsOrderedByHallAlpha($term)
     {
@@ -142,6 +145,7 @@ class CheckinFactory {
     /**
      * Returns the earliest check-in for the given student, in the given hall, which the student
      * has not checked out of yet.
+     * //TODO update for persistent ID
      */
     public static function getPendingCheckoutForStudentByHall(Student $student, HMS_Residence_Hall $hall)
     {
@@ -151,10 +155,10 @@ class CheckinFactory {
         $db->addJoin('', 'hms_checkin', 'hms_hall_structure', 'bed_id', 'bedid');
 
         $db->addWhere('banner_id', $student->getBannerId());
-        $db->addWhere('term', $hall->getTerm());
+        //$db->addWhere('term', $hall->getTerm());
 
         // Checkin bed ID must be in the request hall
-        $db->addWhere('hms_hall_structure.hallid', $hall->getId());
+        //$db->addWhere('hms_hall_structure.hallid', $hall->getId());
 
         $db->addWhere('checkout_date', null, 'IS NULL');
 

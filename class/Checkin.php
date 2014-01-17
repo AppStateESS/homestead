@@ -8,9 +8,14 @@
  * @package hms
  */
 class Checkin {
+
     public $id;
     public $banner_id;
     public $term;
+
+    // Bed's persistent ID. For keeping track of check-ins across semesters.
+    public $bed_persistent_id;
+
     public $bed_id;
     public $room_id; // Just for convenience
     public $checkin_date;
@@ -24,9 +29,11 @@ class Checkin {
     public $key_not_returned;
 
     const CHECKIN_TIMEOUT = 172800; // Allow max 48 hours between checkins
+
     public function __construct(Student $student, HMS_Bed $bed, $term, $checkinBy, $keyCode)
     {
         $this->setBannerId($student->getBannerId());
+        $this->setBedPersistentId($bed->getPersistentId());
         $this->setBedId($bed->getId());
         $this->setTerm($term);
         $this->setRoomId($bed->get_parent()->getId());
@@ -108,6 +115,16 @@ class Checkin {
     private function setTerm($term)
     {
         $this->term = $term;
+    }
+
+    public function getBedPersistentId()
+    {
+        return $this->bed_persistent_id;
+    }
+
+    public function setBedPersistentId($id)
+    {
+        $this->bed_persistent_id = $id;
     }
 
     private function setRoomId($roomId)

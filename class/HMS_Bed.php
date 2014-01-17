@@ -20,6 +20,8 @@ class HMS_Bed extends HMS_Item {
     public $room_change_reserved = 0;
     public $_curr_assignment = null;
 
+    public $persistent_id = null;
+
     /**
      * Holds the parent room object of this bed.
      */
@@ -492,6 +494,11 @@ class HMS_Bed extends HMS_Item {
     public function clearRoomChangeReserved()
     {
         $this->room_change_reserved = 0;
+    }
+
+    public function getPersistentId()
+    {
+        return $this->persistent_id;
     }
 
     /**
