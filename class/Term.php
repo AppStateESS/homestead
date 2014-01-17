@@ -385,6 +385,7 @@ class Term
         $form->setMatch('term', self::getSelectedTerm());
 
         $tags = $form->getTemplate();
+        javascriptMod('hms', 'jqueryCookie');
         javascript('modules/hms/SelectTerm');
         return PHPWS_Template::process($tags, 'hms', 'admin/SelectTerm.tpl');
     }
@@ -406,10 +407,10 @@ class Term
 
         return $terms;
     }
-    
+
     /**
      * Returns the term code for the same term in the previous year.
-     * 
+     *
      * @param integer $term
      * @return string
      */
@@ -417,7 +418,7 @@ class Term
     {
         $year = self::getTermYear($term);
         $sem  = self::getTermSem($term);
-        
+
         return ($year - 1) . $sem;
     }
 }
