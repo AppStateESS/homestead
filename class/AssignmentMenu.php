@@ -56,8 +56,8 @@ class AssignmentMenu extends CommandMenu {
             }
 
             if(Current_User::allow('hms', 'admin_approve_room_change')){
-                $AdminRoomChangeCmd = CommandFactory::getcommand('HousingRoomChange');
-                $this->addCommand('Room Change Approval (Admin)', $AdminRoomChangeCmd);
+                $adminRoomChangeCmd = CommandFactory::getCommand('ShowAdminRoomChangeList');
+                $this->addCommand('Room Change Approval (Admin)', $adminRoomChangeCmd);
             }
         }
     }

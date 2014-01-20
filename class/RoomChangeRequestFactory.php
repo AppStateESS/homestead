@@ -157,7 +157,6 @@ class RoomChangeRequestFactory {
      *
      * @param integer $term
      * @param array<HMS_Floor> $floorList
-     * @param arary<string> $stateList
      */
     public static function getRoomChangesNeedsApproval($term, Array $floorList)
     {
@@ -213,6 +212,76 @@ class RoomChangeRequestFactory {
 
         $stmt->execute($params);
 
+        return $stmt->fetchAll(PDO::FETCH_CLASS, 'RoomChangeRequestRestored');
+    }
+
+    /**
+     * Returns a set of RoomChangeRequest objects which are in the given state.
+     * Useful for showing Assignments Office their pending requests.
+     *
+     * @param integer $term
+     */
+    public static function getAllRoomChangesNeedsApproval($term)
+    {
+        $db = PdoFactory::getPdoInstance();
+
+        /*
+         * Get any requests in the 'Pending' or 'Hold' states and the participant status is
+         * 'FutureRdAproved' (i.e. this request is waiting on assignment office approval)
+         */
+        $query = "SELECT hms_room_change_curr_request.* FROM hms_room_change_curr_request
+                    JOIN hms_room_change_curr_participant ON hms_room_change_curr_request.id = hms_room_change_curr_participant.request_id
+                  WHERE
+                      term = :term AND
+                      hms_room_change_curr_request.state_name IN ('Pending', 'Hold') AND
+                      hms_room_change_curr_participant.state_name IN ('FutureRdApproved')";
+
+
+        $stmt = $db->prepare($query);
+
+        $params = array(
+                'term' => $term);
+
+        $stmt->execute($params);
+
+        return $stmt->fetchAll(PDO::FETCH_CLASS, 'RoomChangeRequestRestored');
+    }
+
+    /**
+     * Returns a set of RoomChangeRequest objects which are in the given state
+     * Useful for showing assignment office their pending requests.
+     *
+     * @param integer $term
+     * @param arary<string> $stateList
+     */
+    public static function getAllRoomChangesByState($term, Array $stateList)
+    {
+        $db = PdoFactory::getPdoInstance();
+
+        $statePlaceholders = array();
+        $stateParams = array();
+        foreach ($stateList as $state) {
+            $placeholder = "state_name_$state";
+
+            $statePlaceholders[] = ':' . $placeholder;
+            $stateParams[$placeholder] = $state;
+        }
+
+        $stateQuery = implode(',', $statePlaceholders);
+
+        /*
+         * Get any requests in the given states
+         */
+        $query = "SELECT hms_room_change_curr_request.* FROM hms_room_change_curr_request
+                  WHERE
+                      term = :term AND
+                      hms_room_change_curr_request.state_name IN ($stateQuery)";
+        $stmt = $db->prepare($query);
+
+        $params = array_merge(array('term' => $term), $stateParams);
+
+        $stmt->execute($params);
+        
         return $stmt->fetchAll(PDO::FETCH_CLASS, 'RoomChangeRequestRestored');
     }
 }
