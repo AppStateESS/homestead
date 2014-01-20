@@ -126,7 +126,7 @@ class SubmitRoomChangeRequestCommand extends Command {
             }
 
             if (!empty($secondHallPref)) {
-                $hall = new HMS_Residence_Hall($firstHallPref);
+                $hall = new HMS_Residence_Hall($secondHallPref);
                 if (!is_null($hall->getId())) {
                     $participant->setHallPref2($hall);
                 }
