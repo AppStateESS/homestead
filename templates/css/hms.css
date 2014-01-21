@@ -58,6 +58,11 @@ fieldset {
   text-decoration: line-through;
 }
 
+/*** REMOVE THIS ONCE HMS IS BOOTSTRAPPED ***/
+.table>tr.success {
+    color: #dff0d8;
+}
+
 /* Indenting */
 .left-indent-15 {
     padding-left: 15px;

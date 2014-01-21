@@ -387,6 +387,10 @@ define('ACTIVITY_EMERGENCY_CONTACT_UPDATED',    71);
 define('ACTIVITY_CHECK_IN',                     72);
 define('ACTIVITY_CHECK_OUT',                    73);
 
+// More room-change
+define('ACTIVITY_ROOM_CHANGE_AGREED',           74);
+define('ACTIVITY_ROOM_CHANGE_DECLINE',          75);
+
 /**
  * Errors
  */
