@@ -28,7 +28,7 @@ class RoomChangeParticipantFactory {
     {
         $db = PdoFactory::getPdoInstance();
 
-        $query = "SELECT * FROM hms_room_change_curr_participant WHERE request_id = :request_id";
+        $query = "SELECT * FROM hms_room_change_curr_participant WHERE request_id = :request_id ORDER BY banner_id ASC";
 
         $stmt = $db->prepare($query);
 

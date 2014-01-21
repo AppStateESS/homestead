@@ -90,7 +90,7 @@ class SubmitRoomChangeRequestCommand extends Command {
             $swapAssignment = HMS_Assignment::getAssignmentByBannerId($swapStudent->getBannerId(), $term);
             if (is_null($swapAssignment)) {
                 NQ::simple('hms', HMS_NOTIFICATION_ERROR, "{$swapStudent->getName()} is not currently assigned. Please choose another student to switch rooms with.");
-                $menuCmd->redirect();
+                $formCmd->redirect();
             }
 
             // Make sure the other student's room is the same gender as this room
@@ -99,7 +99,7 @@ class SubmitRoomChangeRequestCommand extends Command {
 
             if ($swapRoom->getGender() != $room->getGender()) {
                 NQ::simple('hms', HMS_NOTIFICATION_ERROR, "{$swapStudent->getName()} is assigned to a room of a different gender than you. Please choose student of the same gender as yourself to switch rooms with.");
-                $menuCmd->redirect();
+                $formCmd->redirect();
             }
         }
 
@@ -170,7 +170,11 @@ class SubmitRoomChangeRequestCommand extends Command {
             HMS_Email::sendRoomChangeParticipantNotice($swapStudent, $requestor);
         }
 
-        NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Your room change request has been received and is pending approval. You will be contacted by your Residence Director (RD) in the next 24-48 hours regarding your request.');
+        if ($type == 'switch') {
+            NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Your room change request has been received and is pending approval. You will be contacted by your Residence Director (RD) in the next 24-48 hours regarding your request.');
+        } else {
+            NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Your room change request has been received. The student(s) you selected to swap with must sign-in and agree to the request. It will then be forwarded to your Residence Director and the Housing Assignments Office for approval.');
+        }
         $menuCmd->redirect();
     }
 }

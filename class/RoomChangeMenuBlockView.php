@@ -20,10 +20,7 @@ class RoomChangeMenuBlockView extends View {
 
     public function show()
     {
-        //var_dump($this->changeRequest);
         PHPWS_Core::initModClass('hms', 'RoomChangeParticipantFactory.php');
-        $participants = RoomChangeParticipantFactory::getParticipantsByRequest($this->changeRequest);
-        //var_dump($participants);
 
 
         $tpl = array();
@@ -41,7 +38,7 @@ class RoomChangeMenuBlockView extends View {
             $tpl['ICON'] = FEATURE_NOTYET_ICON;
             $tpl['NOT_ASSIGNED'] = "";
         } else if (!is_null($this->changeRequest) && !($this->changeRequest->getState() instanceof CompletedChangeRequest) && !($this->changeRequest->getState() instanceof DeniedChangeRequest)){ // has pending request
-            // Currently has a request open, so check to see if this student has approved id
+            // Currently has a request open, so check to see if this student has approved it
             $participant = RoomChangeParticipantFactory::getParticipantByRequestStudent($this->changeRequest, $this->student);
             $state = $participant->getState();
 

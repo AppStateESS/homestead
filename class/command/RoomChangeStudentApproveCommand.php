@@ -51,6 +51,21 @@ class RoomChangeStudentApproveCommand extends Command {
             throw new PermissionException('You do not have permission to appove this room change.');
         }
 
+        // Check for CAPTCHA if this is the student; admins don't need a CAPTCHA
+        $captchaResult = Captcha::verify(true);
+        if (UserStatus::getUsername() == $student->getUsername() && $captchaResult === false) {
+            // Failed the captcha
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, "You didn't type the magic words correctly. Please try again.");
+            $cmd = CommandFactory::getCommand('ShowRoomChangeRequestApproval');
+            $cmd->redirect();
+        }
+
+
+        // If there was a captcha, then log the activity
+        if($captchaResult !== false){
+            HMS_Activity_Log::log_activity(UserStatus::getUsername(), ACTIVITY_ROOM_CHANGE_AGREED, UserStatus::getUsername(FALSE), 'Request id: ' . $requestId . ' Captcha: ' . $captchaResult);
+        }
+
         // Transition to StudentApproved state
         $participant->transitionTo(new ParticipantStateStudentApproved($participant, time(), null, UserStatus::getUsername()));
 
@@ -63,7 +78,14 @@ class RoomChangeStudentApproveCommand extends Command {
             }
         }
 
-        $cmd->redirect();
+        // If the student is logged in, redirect to the main menu, other wise go back to the room change management view
+        if(UserStatus::getUsername() == $student->getUsername()) {
+            NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'You have agreed to the room change request. You will be notified by email when the reqeust is approved or denied.');
+            $menuCmd = CommandFactory::getCommand('ShowStudentMenu');
+            $menuCmd->redirect();
+        }else{
+            $cmd->redirect();
+        }
     }
 }
 

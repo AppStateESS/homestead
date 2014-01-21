@@ -129,7 +129,11 @@ class RoomChangeManageView extends View {
         } else if($requestState instanceof RoomChangeStateDenied) {
             // Show cancellation/denial reason
             $tpl['DENIED_REASON_PUBLIC']  = $this->request->getDeniedReasonPublic();
-            $tpl['DENIED_REASON_PRIVATE'] = $this->request->getDeniedReasonPrivate();
+            
+            // Show the private reason for admins / RDs
+            if (Current_User::allow('hms', 'admin_approve_room_change') || in_array(UserStatus::getUsername(), $potentialApprovers)) {
+                $tpl['DENIED_REASON_PRIVATE'] = $this->request->getDeniedReasonPrivate();
+            }
         }
 
         // Make a ParticipantView for each participant and add it to the row repeat
