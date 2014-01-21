@@ -79,6 +79,12 @@ class RoomChangeApproveCommand extends Command {
             // TODO: Send notifications
         }
 
+        // Notify everyone that they can do the move
+        foreach($participants as $participant) {
+            HMS_Email::sendRoomChangeInProcessNotice(RoomChangeParticipant $p,
+                RoomChangeRequest $r);
+        }
+
         // Return the user to the room change request page
         $cmd = CommandFactory::getCommand('ShowManageRoomChange');
         $cmd->setRequestId($requestId);

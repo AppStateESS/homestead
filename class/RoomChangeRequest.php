@@ -182,6 +182,32 @@ class RoomChangeRequest {
         return $users;
     }
 
+    protected function hasParticipantInState(array $states)
+    {
+        foreach($this->getParticipants() as $p) {
+            if(in_array($p->getState()->getName(), $states)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function isApprovedByAllParticipants()
+    {
+        return !$this->hasParticipantInState(array('New'));
+    }
+
+    public function isApprovedByAllCurrentRDs()
+    {
+        return !$this->hasParticipantInState(array('New', 'StudentApproved'));
+    }
+
+    public function isApprovedByAllFutureRDs()
+    {
+        return !$this->hasParticipantInState(array('New', 'StudentApproved', 'CurrRdApproved'));
+    }
+
     /*********************
      * Get / Set Methods *
      *********************/

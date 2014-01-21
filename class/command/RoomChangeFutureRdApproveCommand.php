@@ -64,6 +64,9 @@ class RoomChangeFutureRdApproveCommand extends Command {
         $participant->transitionTo(new ParticipantStateFutureRdApproved($participant, time(), null, UserStatus::getUsername()));
 
         //TODO If all participants are approved, send notification to Housing
+        if($request->isApprovedByAllFutureRDs()) {
+            HMS_Email::sendRoomChangeAdministratorNotice($request);
+        }
 
         // Redirect to the manage request page
         $cmd->redirect();

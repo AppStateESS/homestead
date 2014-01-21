@@ -93,6 +93,15 @@ class RoomChangeCurrRdApproveCommand extends Command {
         // If the future RD is the same as the current user Logged in, then go ahead and transition to FutureRdApproved too.
         //TODO
 
+        // If all Current RDs have approved, notify Future RDs
+        if($request->isApprovedByAllCurrentRDs()) {
+            foreach($request->getParticipants() as $p) {
+                foreach($p->getFutureRdList() as $rd) {
+                    HMS_Email::sendRoomChangeFutureRDNotice($rd, $p);
+                }
+            }
+        }
+
         // Redirect to the manage request page
         $cmd->redirect();
     }

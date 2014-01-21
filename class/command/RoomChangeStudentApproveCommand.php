@@ -54,7 +54,14 @@ class RoomChangeStudentApproveCommand extends Command {
         // Transition to StudentApproved state
         $participant->transitionTo(new ParticipantStateStudentApproved($participant, time(), null, UserStatus::getUsername()));
 
-        // TODO If all students have approved, notify RDs
+        // If all students have approved, notify RDs
+        if($request->isApprovedByAllParticipants()) {
+            foreach($request->getParticipants() as $p) {
+                foreach($p->getCurrentRdList() as $rd) {
+                    HMS_Email::sendRoomChangeCurrRDNotice($rd, $p);
+                }
+            }
+        }
 
         $cmd->redirect();
     }
