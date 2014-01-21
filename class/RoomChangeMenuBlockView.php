@@ -20,6 +20,12 @@ class RoomChangeMenuBlockView extends View {
 
     public function show()
     {
+        //var_dump($this->changeRequest);
+        PHPWS_Core::initModClass('hms', 'RoomChangeParticipantFactory.php');
+        $participants = RoomChangeParticipantFactory::getParticipantsByRequest($this->changeRequest);
+        //var_dump($participants);
+
+
         $tpl = array();
 
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
@@ -35,8 +41,20 @@ class RoomChangeMenuBlockView extends View {
             $tpl['ICON'] = FEATURE_NOTYET_ICON;
             $tpl['NOT_ASSIGNED'] = "";
         } else if (!is_null($this->changeRequest) && !($this->changeRequest->getState() instanceof CompletedChangeRequest) && !($this->changeRequest->getState() instanceof DeniedChangeRequest)){ // has pending request
-            $tpl['ICON'] = FEATURE_OPEN_ICON;
+            // Currently has a request open, so check to see if this student has approved id
+            $participant = RoomChangeParticipantFactory::getParticipantByRequestStudent($this->changeRequest, $this->student);
+            $state = $participant->getState();
+
+            // If this student needs to approve their part of this request
+            if($state instanceof ParticipantStateNew) {
+                $approvalCmd = CommandFactory::getCommand('ShowRoomChangeRequestApproval');
+                $tpl['APPROVAL_CMD'] = $approvalCmd->getLink('View the request');
+            } else {
+                // Request if pending, but this student doesn't need to do anything
             $tpl['PENDING'] = "";
+
+            }
+            $tpl['ICON'] = FEATURE_OPEN_ICON;
         } else {
             $tpl['ICON'] = FEATURE_OPEN_ICON;
             $changeReqCmd = CommandFactory::getCommand('ShowRoomChangeRequestForm');

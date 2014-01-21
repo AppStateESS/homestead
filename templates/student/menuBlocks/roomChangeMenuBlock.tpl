@@ -25,6 +25,10 @@ It's too late to request a room change. The deadline passed on {END_DEADLINE}.
 Your room change request is pending approval. {PENDING}
 <!-- END pending -->
 
+<!-- BEGIN approval -->
+You have a room change request that needs your approval. {APPROVAL_CMD}
+<!-- END approval -->
+
 <!-- BEGIN new -->
 You may {NEW_REQUEST}.
 <!-- END new -->

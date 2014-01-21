@@ -40,6 +40,25 @@ class RoomChangeParticipantFactory {
 
         return $stmt->fetchAll(PDO::FETCH_CLASS, 'RoomChangeParticipantRestored');
     }
+
+    public static function getParticipantByRequestStudent(RoomChangeRequest $request, Student $student)
+    {
+        $db = PdoFactory::getPdoInstance();
+
+        $query = "SELECT * FROM hms_room_change_curr_participant WHERE request_id = :request_id and banner_id = :bannerId";
+
+        $stmt = $db->prepare($query);
+
+        $params = array(
+            'request_id' => $request->getId(),
+            'bannerId'   => $student->getBannerId()
+        );
+
+        $stmt->execute($params);
+
+        $stmt->setFetchMode(PDO::FETCH_CLASS, 'RoomChangeParticipantRestored');
+        return $stmt->fetch();
+    }
 }
 
 ?>
