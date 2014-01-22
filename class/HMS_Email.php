@@ -774,7 +774,7 @@ class HMS_Email{
         $template = 'email/roomChangeAdministratorNotice.tpl';
 
         $tags = array(
-            'PARTICIPANTS' => array();
+            'PARTICIPANTS' => array()
         );
 
         foreach($r->getParticipants() as $p) {
@@ -799,7 +799,7 @@ class HMS_Email{
      * @param $dest
      * @param $r RoomChangeRequest The Room Change Request that is in process
      */
-    public static function sendRoomChangeInProcessNotice(RoomChangeParticipant $p)
+    //public static function sendRoomChangeInProcessNotice(RoomChangeParticipant $p)
 
 } // End HMS_Email class
 ?>
