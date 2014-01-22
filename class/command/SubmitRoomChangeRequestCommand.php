@@ -3,6 +3,7 @@
 PHPWS_Core::initModClass('hms', 'RoomChangeRequestFactory.php');
 PHPWS_Core::initModClass('hms', 'RoomChangeParticipant.php');
 PHPWS_Core::initModClass('hms', 'StudentFactory.php');
+PHPWS_Core::initModClass('hms', 'HMS_Email.php');
 
 class SubmitRoomChangeRequestCommand extends Command {
 
@@ -155,6 +156,20 @@ class SubmitRoomChangeRequestCommand extends Command {
         $participant->transitionTo(new ParticipantStateStudentApproved($participant, time(), null, UserStatus::getUsername()));
 
         HMS_Activity_Log::log_activity(UserStatus::getUsername(), ACTIVITY_ROOM_CHANGE_SUBMITTED, UserStatus::getUsername(FALSE), $reason);
+
+        // Make a Student object for Requestor, used by email below
+        $requestor = StudentFactory::getStudentByUsername(
+            UserStatus::getUsername(), Term::getCurrentTerm());
+
+        // Email sender with acknowledgment
+        HMS_Email::sendRoomChangeRequestAcknowledgment($requestor);
+
+        // Email other participants
+        // TODO: When you add the ability to have many people on this request, you will
+        //       need to put a foreach loop here or something.
+        if($type == 'swap') {
+            HMS_Email::sendRoomChangeParticipantNotice($swapStudent, $requestor);
+        }
 
         if ($type == 'switch') {
             NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Your room change request has been received and is pending approval. You will be contacted by your Residence Director (RD) in the next 24-48 hours regarding your request.');

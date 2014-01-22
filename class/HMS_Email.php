@@ -581,5 +581,258 @@ class HMS_Email{
         $mailer->send($message);
     }
 
+    /**
+     * makeSwiftmailMessage
+     *
+     * I saw some copypasta and decided to wrap this up in a useful function.  This
+     * makes a new SwiftMail message from the system, to the provided recipient.
+     *
+     * The recipient can be a Student object, or the SwiftMail style array notation.
+     *
+     * Note that this function just makes the message, to which you can add further
+     * attachments or otherwise change how you please.  To send it, I recommend
+     * @see HMS_Email::sendSwiftmailMessage()
+     *
+     * @param $to Student The student to which you want to send a message
+     * @param $subject string The subject line
+     * @param $tags Array The template tags to replace
+     * @param $tpl string The template file (module 'hms' is implied)
+     * @return Swift_Message An instance of Swift_Message with text and html parts,
+     *                        from, to, and subject already set up
+     */
+    public static function makeSwiftmailMessage($to, $subject, $tags, $tpl)
+    {
+        if($to instanceof Student) {
+            $to = array(($to->getUsername() . TO_DOMAIN) => $to->getName());
+        }
+
+        $content = PHPWS_Template::process($tags, 'hms', $tpl);
+        $htmlContent = Markdown::defaultTransform($content);
+
+        $message = Swift_Message::newInstance();
+
+        $message->setSubject($subject);
+        $message->setFrom(array(FROM_ADDRESS => SYSTEM_NAME));
+
+        if(!is_null($to)) {
+            $message->setTo($to);
+        }
+
+        $message->setBody($content);
+        $message->addPart($htmlContent, 'text/html');
+
+        return $message;
+    }
+
+    /**
+     * sendSwiftmailMessage
+     *
+     * Sets up transports so you don't have to; a convenience function to use a sensible
+     * transport to send a Swift_Message object.
+     *
+     * You can either make a Swift_Message manually or use
+     * @see HMS_Email::makeSwiftmailMessageFromSystemToStudent()
+     *
+     * @param $message Swift_Message The message to send
+     * @return mixed Whatever comes back from Swift_Mailer::send()
+     */
+    public static function sendSwiftmailMessage(Swift_Message $message)
+    {
+        $transport = Swift_SmtpTransport::newInstance('localhost');
+        $mailer = Swift_Mailer::newInstance($transport);
+
+        return $mailer->send($message);
+    }
+
+    /**
+     * Sends an acknowledgment to the person who just submitted a room change request.
+     *
+     * Template Tags:
+     * {STUDENT_NAME}
+     *
+     * @param $student Student The student who submitted the request
+     */
+    public static function sendRoomChangeRequestAcknowledgment(Student $student)
+    {
+        $subject = 'Room Change Request Received';
+        $template = 'email/roomChangeRequestAcknowledgment.tpl';
+
+        $tags = array(
+            'STUDENT_NAME' => $student->getName()
+        );
+
+        self::sendSwiftmailMessage(
+            self::makeSwiftmailMessage(
+                $student, $subject, $tags, $template
+            )
+        );
+    }
+
+    /**
+     * Sends a notification to anyone (other than the submitter) involved in a room
+     * change request.
+     *
+     * Template Tags:
+     * {REQUESTEE_NAME}
+     * {REQUESTOR_NAME}
+     *
+     * @param $requestee Student A person involved in a room change request
+     * @param $requestor Student The person who invoked the room change request
+     */
+    public static function sendRoomChangeParticipantNotice(Student $requestee, Student $requestor)
+    {
+        $subject = 'Room Change Requested';
+        $template = 'email/roomChangeParticipantNotice.tpl';
+
+        $tags = array(
+            'REQUESTEE_NAME' => $requestee->getName(),
+            'REQUESTOR_NAME' => $requestor->getName()
+        );
+
+        self::sendSwiftmailMessage(
+            self::makeSwiftmailMessage(
+                $requestee, $subject, $tags, $template
+            )
+        );
+    }
+
+    /**
+     * Sends a notification to the Current RD involved in a room change request
+     * letting them know they need to log in and approve
+     *
+     * Template Tags:
+     * {STUDENT_NAME}
+     * {CURRENT_ASSIGNMENT}
+     * {CELL_PHONE}
+     *
+     * @param $rd string The username of the RD
+     * @param $participant RoomChangeParticipant The Participant object involved
+     */
+    public static function sendRoomChangeCurrRDNotice($rd, RoomChangeParticipant $p)
+    {
+        $subject = 'Room Change Approval Required';
+        $template = 'email/roomChangeCurrRDNotice.tpl';
+
+        $bid = $p->getBannerId();
+        $term = Term::getCurrentTerm();
+
+        $student = StudentFactory::getStudentByBannerID($bid, $term);
+        $assign = HMS_Assignment::getAssignmentByBannerID($bid, $term);
+
+        $tags = array(
+            'STUDENT_NAME'       => $student->getName(),
+            'CURRENT_ASSIGNMENT' => $assign->where_am_i(),
+            'CELL_PHONE'         => $p->getCellPhone()
+        );
+    }
+
+    /**
+     * Sends a notification to the Future RD involved in a room change request
+     * letting them know they need to log in and approve
+     *
+     * Template Tags:
+     * {STUDENT_NAME}
+     * {FUTURE_ASSIGNMENT}
+     * {CELL_PHONE}
+     *
+     * @param $rd string The username of the RD
+     * @param $participant RoomChangeParticipant The Participant object involved
+     */
+    public static function sendRoomChangeFutureRDNotice($rd, RoomChangeParticipant $p)
+    {
+        $subject = 'Room Change Approval Required';
+        $template = 'email/roomChangeFutureRDNotice.tpl';
+
+        $bid = $p->getBannerId();
+        $term = Term::getCurrentTerm();
+
+        $student = StudentFactory::getStudentByBannerID($bid, $term);
+        $bed     = new HMS_Bed($p->getToBed());
+
+        $tags = array(
+            'STUDENT_NAME'      => $student->getName(),
+            'FUTURE_ASSIGNMENT' => $bed->where_am_i(),
+            'CELL_PHONE'        => $p->getCellPhone()
+        );
+
+        self::sendSwiftmailMessage(
+            self::makeSwiftmailMessage(
+                $rd . TO_DOMAIN, $subject, $tags, $template
+            )
+        );
+    }
+
+    /**
+     * Sends a notification to the HMS Room Change Administrator for final approval
+     * of a room change request
+     *
+     * Template Tags:
+     * PARTICIPANTS row repeat with value {NAME}
+     *
+     * @param $request RoomChangeRequest The Room Change Request needing approval
+     * TODO: Add Banner IDs and to/from beds
+     */
+    public static function sendRoomChangeAdministratorNotice(RoomChangeRequest $r)
+    {
+        $subject = 'Room Change Approval Required';
+        $template = 'email/roomChangeAdministratorNotice.tpl';
+
+        $tags = array(
+            'PARTICIPANTS' => array()
+        );
+
+        foreach($r->getParticipants() as $p) {
+            $student = StudentFactory::getStudentByBannerID($p->getBannerId());
+            $tags['PARTICIPANTS'][] = array(
+                'NAME' => $student->getName()
+            );
+        }
+
+        self::sendSwiftmailMessage(
+            self::makeSwiftmailMessage(
+                $rd . TO_DOMAIN, $subject, $tags, $template
+            )
+        );
+    }
+
+    /**
+     * Sends everyone involved in a room change notice when it is fully approved and
+     * can happen in the real world.  Note this is a little different than the other
+     * ones because it does the looping itself and sends multiple messages.
+     *
+     * @param $dest
+     * @param $r RoomChangeRequest The Room Change Request that is in process
+     * TODO: Add to/from bed for each participant
+     */
+    public static function sendRoomChangeInProcessNotice(RoomChangeRequest $r)
+    {
+        $subject = 'Room Change Approved!';
+        $template = 'email/roomChangeApprovalNotice.tpl';
+
+        $tags = array(
+            'PARTICIPANTS' => array()
+        );
+
+        $recipients = array();
+
+        foreach($r->getParticipants() as $p) {
+            $student = Studentfactory::getStudentByBannerID($p->getBannerID());
+            $recipients[] = $student;
+            $tags['PARTICIPANTS'][] = array(
+                'NAME' => $student->getName()
+            );
+        }
+
+        foreach($r->getAllPotentialApprovers() as $a) {
+            $recipients[] = array($a . TO_DOMAIN => '');
+        }
+
+        $message = self::makeSwiftmailMessage(null, $subject, $tags, $template);
+        foreach($recipient as $r) {
+            $message->setTo($r);
+            self::sendSwiftmailMessage($r);
+        }
+    }
+
 } // End HMS_Email class
 ?>
