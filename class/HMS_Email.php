@@ -603,7 +603,7 @@ class HMS_Email{
     public static function makeSwiftmailMessage($to, $subject, $tags, $tpl)
     {
         if($to instanceof Student) {
-            $to = array(($to->getUsername() . TO_DOMAIN) => $student->getName());
+            $to = array(($to->getUsername() . TO_DOMAIN) => $to->getName());
         }
 
         $content = PHPWS_Template::process($tags, 'hms', $tpl);
@@ -770,6 +770,7 @@ class HMS_Email{
      * PARTICIPANTS row repeat with value {NAME}
      *
      * @param $request RoomChangeRequest The Room Change Request needing approval
+     * TODO: Add Banner IDs and to/from beds
      */
     public static function sendRoomChangeAdministratorNotice(RoomChangeRequest $r)
     {
@@ -801,11 +802,12 @@ class HMS_Email{
      *
      * @param $dest
      * @param $r RoomChangeRequest The Room Change Request that is in process
+     * TODO: Add to/from bed for each participant
      */
     public static function sendRoomChangeInProcessNotice(RoomChangeRequest $r)
     {
         $subject = 'Room Change Approved!';
-        $template = 'email/roomChangeInProcessNotice.tpl';
+        $template = 'email/roomChangeApprovalNotice.tpl';
 
         $tags = array(
             'PARTICIPANTS' => array()

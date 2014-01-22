@@ -3,6 +3,7 @@
 PHPWS_Core::initModClass('hms', 'RoomChangeRequestFactory.php');
 PHPWS_Core::initModClass('hms', 'RoomChangeParticipant.php');
 PHPWS_Core::initModClass('hms', 'StudentFactory.php');
+PHPWS_Core::initModClass('hms', 'HMS_Email.php');
 
 class SubmitRoomChangeRequestCommand extends Command {
 
