@@ -710,6 +710,7 @@ class HMS_Email{
      */
     public static function sendRoomChangeCurrRDNotice($rd, RoomChangeParticipant $p)
     {
+        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
 
         $subject = 'Room Change Approval Required';
@@ -742,6 +743,8 @@ class HMS_Email{
      */
     public static function sendRoomChangeFutureRDNotice($rd, RoomChangeParticipant $p)
     {
+        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
+
         $subject = 'Room Change Approval Required';
         $template = 'email/roomChangeFutureRDNotice.tpl';
 
@@ -776,6 +779,8 @@ class HMS_Email{
      */
     public static function sendRoomChangeAdministratorNotice(RoomChangeRequest $r)
     {
+        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
+
         $subject = 'Room Change Approval Required';
         $template = 'email/roomChangeAdministratorNotice.tpl';
 
@@ -808,6 +813,8 @@ class HMS_Email{
      */
     public static function sendRoomChangeInProcessNotice(RoomChangeRequest $r)
     {
+        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
+
         $subject = 'Room Change Approved!';
         $template = 'email/roomChangeApprovalNotice.tpl';
 
