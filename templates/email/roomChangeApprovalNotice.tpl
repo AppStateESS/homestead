@@ -2,8 +2,6 @@
 
 Your room change request has been approved.
 
-Moving from: {OLD_ROOM}
-Moving to: {NEW_ROOM}
 
 Please be sure to complete the following steps within 48 hours of receiving this confirmation.
 

@@ -2,9 +2,9 @@ Hello,
 
 The following room change is now pending University Housing approval:
 
-Name: {NAME}
-User name: {USERNAME}
-Banner Id: {BANNER_ID}
+<!-- BEGIN PARTICIPANTS -->
+{NAME}
+<!-- END PARTICIPANTS -->
 
 Assignments Office
 University Housing

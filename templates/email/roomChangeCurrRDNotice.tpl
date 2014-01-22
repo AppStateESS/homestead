@@ -2,10 +2,10 @@ Hello,
 
 A new room change request has been submitted by:
 
-{NAME}
+{STUDENT_NAME}
 
-Current assignment: {CURR_ASSIGN}
-Phone Number: {PHONE_NUM}
+Current assignment: {CURRENT_ASSIGNMENT}
+Phone Number: {CELL_PHONE}
 
 Assignments Office
 University Housing
