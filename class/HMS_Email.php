@@ -613,7 +613,10 @@ class HMS_Email{
 
         $message->setSubject($subject);
         $message->setFrom(array(FROM_ADDRESS => SYSTEM_NAME));
-        $message->setTo($to);
+
+        if(!is_null($to)) {
+            $message->setTo($to);
+        }
 
         $message->setBody($content);
         $message->addPart($htmlContent, 'text/html');
@@ -794,12 +797,40 @@ class HMS_Email{
     /**
      * Sends everyone involved in a room change notice when it is fully approved and
      * can happen in the real world.  Note this is a little different than the other
-     * ones because it does the looping itself.
+     * ones because it does the looping itself and sends multiple messages.
      *
      * @param $dest
      * @param $r RoomChangeRequest The Room Change Request that is in process
      */
-    //public static function sendRoomChangeInProcessNotice(RoomChangeParticipant $p)
+    public static function sendRoomChangeInProcessNotice(RoomChangeRequest $r)
+    {
+        $subject = 'Room Change Approved!';
+        $template = 'email/roomChangeInProcessNotice.tpl';
+
+        $tags = array(
+            'PARTICIPANTS' => array()
+        );
+
+        $recipients = array();
+
+        foreach($r->getParticipants() as $p) {
+            $student = Studentfactory::getStudentByBannerID($p->getBannerID());
+            $recipients[] = $student;
+            $tags['PARTICIPANTS'][] = array(
+                'NAME' => $student->getName()
+            );
+        }
+
+        foreach($r->getAllPotentialApprovers() as $a) {
+            $recipients[] = array($a . TO_DOMAIN => '');
+        }
+
+        $message = self::makeSwiftmailMessage(null, $subject, $tags, $template);
+        foreach($recipient as $r) {
+            $message->setTo($r);
+            self::sendSwiftmailMessage($r);
+        }
+    }
 
 } // End HMS_Email class
 ?>
