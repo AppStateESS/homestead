@@ -710,6 +710,8 @@ class HMS_Email{
      */
     public static function sendRoomChangeCurrRDNotice($rd, RoomChangeParticipant $p)
     {
+        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
+
         $subject = 'Room Change Approval Required';
         $template = 'email/roomChangeCurrRDNotice.tpl';
 

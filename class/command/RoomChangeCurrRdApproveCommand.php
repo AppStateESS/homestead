@@ -3,6 +3,7 @@
 PHPWS_Core::initModClass('hms', 'RoomChangeRequestFactory.php');
 PHPWS_Core::initModClass('hms', 'RoomChangeParticipantFactory.php');
 PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
+PHPWS_Core::initModClass('hms', 'HMS_Email.php');
 
 /**
  * Command for currnet RD Approval of a room change participant.

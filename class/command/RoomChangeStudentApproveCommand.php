@@ -3,6 +3,9 @@
 PHPWS_Core::initModClass('hms', 'RoomChangeRequestFactory.php');
 PHPWS_Core::initModClass('hms', 'RoomChangeParticipantFactory.php');
 PHPWS_Core::initModClass('hms', 'StudentFactory.php');
+PHPWS_Core::initModClass('hms', 'HMS_Email.php');
+
+PHPWS_Core::initCoreClass('Captcha.php');
 
 class RoomChangeStudentApproveCommand extends Command {
 

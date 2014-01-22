@@ -2,6 +2,7 @@
 
 PHPWS_Core::initModClass('hms', 'RoomChangeRequestFactory.php');
 PHPWS_Core::initModClass('hms', 'RoomChangeParticipantFactory.php');
+PHPWS_Core::initModClass('hms', 'HMS_Email.php');
 
 /**
  * Command for future RD approval of a room change participant.
