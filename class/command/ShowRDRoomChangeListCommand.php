@@ -18,13 +18,10 @@ class ShowRDRoomChangeListCommand extends Command {
         $term = Term::getCurrentTerm();
 
         // Get the list of role memberships this user has
-        // TODO For which term? This gets memberships for all terms?
+        // NB: This gets memberships for all terms.. must filter later
         $memberships = HMS_Permission::getMembership('room_change_approve', NULL, UserStatus::getUsername());
 
-        if(empty($memberships)){
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
-            throw new PermissionException("You do not have the 'RD' role on any residence halls or floors.");
-        }
+        
 
         // Use the roles to instantiate a list of floors this user has access to
         $floors = array();
@@ -32,14 +29,35 @@ class ShowRDRoomChangeListCommand extends Command {
         foreach ($memberships as $member) {
             if ($member['class'] == 'hms_residence_hall') {
                 $hall = new HMS_Residence_Hall($member['instance']);
+
+                // Filter out halls that aren't in the current term
+                if($hall->getTerm() != $term) {
+                    continue;
+                }
+
                 $floors = array_merge($floors, $hall->getFloors());
+
             } else if ($member['class'] == 'hms_floor') {
-                $floors[] = new HMS_Floor($member['instance']);
+                $f = new HMS_Floor($member['instance']);
+               
+                // Filter out floors that aren't in the current term
+                if($f->getTerm() != $term) {
+                    continue;
+                }
+
+                $floors[] = $f;
+
             } else {
                 throw new Exception('Unknown object type.');
             }
         }
 
+        if(empty($floors)){
+            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, "You do not have the 'RD' role on any residence halls or floors.");
+            $cmd = CommandFactory::getCommand('ShowAdminMaintenanceMenu');
+            $cmd->redirect();
+        }
 
         // Remove duplicate floors
         $uniqueFloors = array();
