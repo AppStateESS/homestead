@@ -4,6 +4,7 @@ PHPWS_Core::initModClass('hms', 'RoomChangeRequestFactory.php');
 PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
 PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
+PHPWS_Core::initModClass('hms', 'HMS_Email.php');
 
 /**
  * Controller for approving a room change requests.
