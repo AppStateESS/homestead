@@ -85,7 +85,12 @@ class SubmitRoomChangeRequestCommand extends Command {
             }
 
             // Load the other student
-            $swapStudent = StudentFactory::getStudentByUsername($switchUsername, $term);
+            try {
+                $swapStudent = StudentFactory::getStudentByUsername($switchUsername, $term);
+            } catch(StudentNotFoundException $e) {
+                NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Sorry, we could not find a student with the user name '$switchUsername'. Please double-check the user name of the student you would like to switch places with.");
+                $formCmd->redirect();
+            }
 
             // Make sure the student is assigned
             $swapAssignment = HMS_Assignment::getAssignmentByBannerId($swapStudent->getBannerId(), $term);
