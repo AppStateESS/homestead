@@ -796,9 +796,7 @@ class HMS_Email{
         }
 
         self::sendSwiftmailMessage(
-            self::makeSwiftmailMessage(
-                $rd . TO_DOMAIN, $subject, $tags, $template
-            )
+            self::makeSwiftmailMessage(FROM_ADDRESS, $subject, $tags, $template)
         );
     }
 
