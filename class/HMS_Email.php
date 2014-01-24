@@ -14,6 +14,7 @@ use \Michelf\Markdown;
 require_once(PHPWS_SOURCE_DIR . 'mod/hms/inc/defines.php');
 
 PHPWS_Core::initModClass('hms', 'HMS_Util.php');
+PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 
 class HMS_Email{
 
@@ -909,7 +910,7 @@ class HMS_Email{
         $recipients = array();
 
         foreach($r->getParticipants() as $p) {
-            $student = Studentfactory::getStudentByBannerID($p->getBannerID());
+            $student = Studentfactory::getStudentByBannerID($p->getBannerID(), $r->getTerm());
             $current = new HMS_Bed($p->getFromBed());
             $future = new HMS_Bed($p->getToBed());
 
@@ -927,9 +928,13 @@ class HMS_Email{
         }
 
         $message = self::makeSwiftmailMessage(null, $subject, $tags, $template);
-        foreach($recipient as $r) {
-            $message->setTo($r);
-            self::sendSwiftmailMessage($r);
+        foreach($recipients as $r) {
+            if ($r instanceof Student) {
+                $message->setTo($r->getUsername() . TO_DOMAIN);
+            }else {
+                $message->setTo($r);
+            }
+            self::sendSwiftmailMessage($message);
         }
     }
 
@@ -954,14 +959,14 @@ class HMS_Email{
             $tags['CANCELLER'] = $canceller->getName();
         }
 
-        $reason = $r->getDeniedPublicReason();
+        $reason = $r->getDeniedReasonPublic();
         if(!is_null($reason) && !empty($reason)) {
             $tags['REASON'] = $reason;
         }
 
         // Add information about participants, also add each participant to recipients
         foreach($r->getParticipants() as $p) {
-            $student = StudentFactory::getStudentByBannerID($p->getBannerID());
+            $student = StudentFactory::getStudentByBannerID($p->getBannerID(), $r->getTerm());
 
             $recipients[] = $student;
 
@@ -977,9 +982,13 @@ class HMS_Email{
 
         // Send a message per recipient
         $message = self::makeSwiftmailMessage(null, $subject, $tags, $template);
-        foreach($recipient as $r) {
-            $message->setTo($r);
-            self::sendSwiftmailMessage($r);
+        foreach($recipients as $r) {
+            if ($r instanceof Student) {
+                $message->setTo($r->getUsername() . TO_DOMAIN);
+            }else {
+                $message->setTo($r);
+            }
+            self::sendSwiftmailMessage($message);
         }
     }
 
@@ -999,14 +1008,14 @@ class HMS_Email{
             'PARTICIPANTS' => array()
         );
 
-        $reason = $r->getDeniedPublicReason();
+        $reason = $r->getDeniedReasonPublic();
         if(!is_null($reason) && !empty($reason)) {
             $tags['REASON'] = $reason;
         }
 
         // Add information about participants, also add each participant to recipients
         foreach($r->getParticipants() as $p) {
-            $student = StudentFactory::getStudentByBannerID($p->getBannerID());
+            $student = StudentFactory::getStudentByBannerID($p->getBannerID(), $r->getTerm());
 
             $recipients[] = $student;
 
@@ -1022,9 +1031,13 @@ class HMS_Email{
 
         // Send a message per recipient
         $message = self::makeSwiftmailMessage(null, $subject, $tags, $template);
-        foreach($recipient as $r) {
-            $message->setTo($r);
-            self::sendSwiftmailMessage($r);
+        foreach($recipients as $r) {
+            if ($r instanceof Student) {
+                $message->setTo($r->getUsername() . TO_DOMAIN);
+            }else {
+                $message->setTo($r);
+            }
+            self::sendSwiftmailMessage($message);
         }
     }
 

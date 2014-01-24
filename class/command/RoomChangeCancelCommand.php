@@ -49,10 +49,11 @@ class RoomChangeCancelCommand extends Command {
         // Notify everyone involved
         try {
             PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-            $student = StudentFactory::getStudentByUsername(UserStatus::getUsername());
+            $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $request->getTerm());
         } catch(StudentNotFoundException $e) {
             $student = null;
         }
+        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
         HMS_Email::sendRoomChangeCancelledNotice($request, $student);
 
         $cmd->redirect();

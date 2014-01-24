@@ -50,6 +50,7 @@ class RoomChangeDenyCommand extends Command {
         }
 
         // Notify everyone involved
+        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
         HMS_Email::sendRoomChangeDeniedNotice($request);
 
         $cmd->redirect();
