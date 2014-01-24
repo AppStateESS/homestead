@@ -182,7 +182,7 @@ class RoomChangeRequest {
         return $users;
     }
 
-    protected function hasParticipantInState(array $states)
+    public function hasParticipantInState(array $states)
     {
         foreach($this->getParticipants() as $p) {
             if(in_array($p->getState()->getName(), $states)) {

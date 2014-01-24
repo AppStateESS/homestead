@@ -94,11 +94,24 @@ class RoomChangeCurrRdApproveCommand extends Command {
         // If the future RD is the same as the current user Logged in, then go ahead and transition to FutureRdApproved too.
         //TODO
 
-        // If all Current RDs have approved, notify Future RDs
         if($request->isApprovedByAllCurrentRDs()) {
+            PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
+            // If all Current RDs have approved, notify Future RDs
             foreach($request->getParticipants() as $p) {
                 foreach($p->getFutureRdList() as $rd) {
                     HMS_Email::sendRoomChangeFutureRDNotice($rd, $p);
+                }
+            }
+
+            // If all Current RDs have approved, notify future roommates
+            foreach($request->getParticipants() as $p) {
+                $bed = new HMS_Bed($p->getToBed());
+                $room = $bed->get_parent();
+
+                foreach($room->get_assignees() as $a) {
+                    if($a instanceof Student && $a->getBannerID() != $p->getBannerID()) {
+                        HMS_Email::sendRoomChangePreliminaryRoommateNotice($a);
+                    }
                 }
             }
         }

@@ -83,6 +83,30 @@ class RoomChangeApproveCommand extends Command {
         // Notify everyone that they can do the move
         HMS_Email::sendRoomChangeInProcessNotice($r);
 
+        // Notify roommates that their circumstances are going to change
+        foreach($request->getParticipants() as $p) {
+            $student = $this->students[$participant->getBannerId()];
+
+            // New Roommate
+            $newbed = new HMS_Bed($p->getToBed());
+            $newroom = $newbed->get_parent();
+
+            foreach($newroom->get_assignees() as $a) {
+                if($a instanceof Student && $a->getBannerID() != $p->getBannerID()) {
+                    HMS_Email::sendRoomChangeApprovedNewRoommateNotice($a, $student);
+                }
+            }
+
+            // Old Roommate
+            $oldbed = new HMS_Bed($p->getFromBed());
+            $oldroom = $oldbed->get_parent();
+            foreach($oldroom->get_assignees() as $a) {
+                if($a instanceof Student && $a->getBannerID() != $p->getBannerID()) {
+                    HMS_Email::sendRoomChangeApprovedOldRoommateNotice($a, $student);
+                }
+            }
+        }
+
         // Return the user to the room change request page
         $cmd = CommandFactory::getCommand('ShowManageRoomChange');
         $cmd->setRequestId($requestId);

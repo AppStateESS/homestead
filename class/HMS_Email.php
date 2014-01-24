@@ -727,6 +727,89 @@ class HMS_Email{
             'CURRENT_ASSIGNMENT' => $assign->where_am_i(),
             'CELL_PHONE'         => $p->getCellPhone()
         );
+
+        self::sendSwiftmailMessage(
+            self::makeSwiftmailMessage(
+                $rd . TO_DOMAIN, $subject, $tags, $template
+            )
+        );
+    }
+
+    /**
+     * Sends a notification to the future roommate that they should make sure
+     * the other side of the room is welcoming to a POTENTIAL BUT UNCONFIRMED
+     * new friend.
+     *
+     * Template Tags:
+     * {ROOMMATE} (the name of the person receiving the email)
+     *
+     * @param $student Student The person to notify
+     */
+    public static function sendRoomChangePreliminaryRoommateNotice(Student $student)
+    {
+        $subject = 'Roommate Notice';
+        $template = 'email/roomChangePreliminaryRoommateNotice.tpl';
+
+        $tags = array(
+            'ROOMMATE' => $student->getName()
+        );
+        
+        self::sendSwiftmailMessage(
+            self::makeSwiftmailMessage(
+                $student, $subject, $tags, $template
+            )
+        );
+    }
+
+    /**
+     * Sends a notification to the future roommate that this is confirmed.
+     *
+     * Template Tags:
+     * {ROOMMATE} (the name of the person already in a room)
+     * {NAME} (the name of the person moving in)
+     *
+     * @param $student Student The person to notify
+     * @param $newRoomie Student The person moving in
+     */
+    public static function sendRoomChangeApprovedNewRoomnateNotice(Student $student, Student $newRoomie)
+    {
+        $subject = 'Roommate Confirmation';
+        $template = 'email/roomChangeApprovedNewRoommateNotice.tpl';
+
+        $tags = array(
+            'ROOMMATE' => $student->getName(),
+            'NAME' => $newRoomie->getName()
+        );
+
+        self::sendSwiftmailMessage(
+            self::makeSwiftmailMessage(
+                $student, $subject, $tags, $template
+            )
+        );
+    }
+
+    /**
+     * Sends a notification to the old roommate that this is confirmed.
+     *
+     * Template Tags:
+     * {ROOMMATE} (the name of the person who is NOT moving)
+     * {NAME} (the name of the person who IS moving)
+     */
+    public static function sendRoomChangeApprovedOldRoommateNotice(Student $student, Student $oldRoomie)
+    {
+        $subject = 'Roommate Change Notice';
+        $template = 'email/roomChangeApprovedOldRoommateNotice.tpl';
+
+        $tags = array(
+            'ROOMMATE' => $student->getName(),
+            'NAME' => $oldRoomie->getName()
+        );
+
+        self::sendSwiftmailMessage(
+            self::makeSwiftmailMessage(
+                $student, $subject, $tags, $template
+            )
+        );
     }
 
     /**
@@ -744,6 +827,8 @@ class HMS_Email{
     public static function sendRoomChangeFutureRDNotice($rd, RoomChangeParticipant $p)
     {
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
 
         $subject = 'Room Change Approval Required';
         $template = 'email/roomChangeFutureRDNotice.tpl';
@@ -752,12 +837,14 @@ class HMS_Email{
         $term = Term::getCurrentTerm();
 
         $student = StudentFactory::getStudentByBannerID($bid, $term);
+        $assign  = HMS_Assignment::getAssignmentByBannerID($bid, $term);
         $bed     = new HMS_Bed($p->getToBed());
 
         $tags = array(
-            'STUDENT_NAME'      => $student->getName(),
-            'FUTURE_ASSIGNMENT' => $bed->where_am_i(),
-            'CELL_PHONE'        => $p->getCellPhone()
+            'STUDENT_NAME'       => $student->getName(),
+            'CURRENT_ASSIGNMENT' => $assign->where_am_i(),
+            'FUTURE_ASSIGNMENT'  => $bed->where_am_i(),
+            'CELL_PHONE'         => $p->getCellPhone()
         );
 
         self::sendSwiftmailMessage(
@@ -797,7 +884,7 @@ class HMS_Email{
 
         self::sendSwiftmailMessage(
             self::makeSwiftmailMessage(
-                $rd . TO_DOMAIN, $subject, $tags, $template
+                FROM_ADDRESS, $subject, $tags, $template
             )
         );
     }
@@ -807,7 +894,6 @@ class HMS_Email{
      * can happen in the real world.  Note this is a little different than the other
      * ones because it does the looping itself and sends multiple messages.
      *
-     * @param $dest
      * @param $r RoomChangeRequest The Room Change Request that is in process
      * TODO: Add to/from bed for each participant
      */
@@ -826,9 +912,15 @@ class HMS_Email{
 
         foreach($r->getParticipants() as $p) {
             $student = Studentfactory::getStudentByBannerID($p->getBannerID());
+            $current = new HMS_Bed($p->getFromBed());
+            $future = new HMS_Bed($p->getToBed());
+
             $recipients[] = $student;
+
             $tags['PARTICIPANTS'][] = array(
-                'NAME' => $student->getName()
+                'NAME' => $student->getName(),
+                'CURRENT_LOCATION' => $current->where_am_i(),
+                'FUTURE_LOCATION' => $future->where_am_i()
             );
         }
 
@@ -836,6 +928,101 @@ class HMS_Email{
             $recipients[] = array($a . TO_DOMAIN => '');
         }
 
+        $message = self::makeSwiftmailMessage(null, $subject, $tags, $template);
+        foreach($recipient as $r) {
+            $message->setTo($r);
+            self::sendSwiftmailMessage($r);
+        }
+    }
+
+    /**
+     * Sends the appropriate emails for a student-cancelled room change request.
+     *
+     * @param $r RoomChangeRequest The Room Change Request that has been cancelled
+     * @param $canceller Student|null The student who cancelled the request
+     */
+    public static function sendRoomChangeCancelledNotice(RoomChangeRequest $r, Student $canceller = null)
+    {
+        $subject = 'Room Change Cancelled';
+        $template = 'email/roomChangeCancelledNotice.tpl';
+
+        $recipients = array();
+
+        $tags = array(
+            'PARTICIPANTS' => array()
+        );
+
+        if($canceller instanceof Student) {
+            $tags['CANCELLER'] = $canceller->getName();
+        }
+
+        $reason = $r->getDeniedPublicReason();
+        if(!is_null($reason) && !empty($reason)) {
+            $tags['REASON'] = $reason;
+        }
+
+        // Add information about participants, also add each participant to recipients
+        foreach($r->getParticipants() as $p) {
+            $student = StudentFactory::getStudentByBannerID($p->getBannerID());
+
+            $recipients[] = $student;
+
+            $tags['PARTICIPANTS'][] = array(
+                'NAME' => $student->getName()
+            );
+        }
+
+        // Add any approvers that may have seen the previous email to recipients
+        foreach($r->getAllPotentialApprovers() as $a) {
+            $recipients[] = array($a . TO_DOMAIN => '');
+        }
+
+        // Send a message per recipient
+        $message = self::makeSwiftmailMessage(null, $subject, $tags, $template);
+        foreach($recipient as $r) {
+            $message->setTo($r);
+            self::sendSwiftmailMessage($r);
+        }
+    }
+
+    /**
+     * Sends the appropriate emails for an officially denied room change request.
+     *
+     * @param $r RoomChangeRequest The Room Change Request that has been denied
+     */
+    public static function sendRoomChangeDeniedNotice(RoomChangeRequest $r)
+    {
+        $subject = 'Room Change Denied';
+        $template = 'email/roomChangeDeniedNotice.tpl';
+
+        $recipients = array();
+
+        $tags = array(
+            'PARTICIPANTS' => array()
+        );
+
+        $reason = $r->getDeniedPublicReason();
+        if(!is_null($reason) && !empty($reason)) {
+            $tags['REASON'] = $reason;
+        }
+
+        // Add information about participants, also add each participant to recipients
+        foreach($r->getParticipants() as $p) {
+            $student = StudentFactory::getStudentByBannerID($p->getBannerID());
+
+            $recipients[] = $student;
+
+            $tags['PARTICIPANTS'][] = array(
+                'NAME' => $student->getName()
+            );
+        }
+
+        // Add any approvers that may have seen the previous email to recipients
+        foreach($r->getAllPotentialApprovers() as $a) {
+            $recipients[] = array($a . TO_DOMAIN => '');
+        }
+
+        // Send a message per recipient
         $message = self::makeSwiftmailMessage(null, $subject, $tags, $template);
         foreach($recipient as $r) {
             $message->setTo($r);

@@ -4,7 +4,8 @@ A new room change request has been submitted by:
 
 {STUDENT_NAME}
 
-Destination assignment: {FUTURE_ASSIGNMENT}
+Current Assignment: {CURRENT_ASSIGNMENT}
+Destination Assignment: {FUTURE_ASSIGNMENT}
 Phone Number: {CELL_PHONE}
 
 Assignments Office

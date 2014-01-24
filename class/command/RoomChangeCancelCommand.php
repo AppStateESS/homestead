@@ -46,7 +46,14 @@ class RoomChangeCancelCommand extends Command {
             $p->transitionTo(new ParticipantStateCancelled($p, time(), null, UserStatus::getUsername()));
         }
 
-        //TODO send notifications?
+        // Notify everyone involved
+        try {
+            PHPWS_Core::initModClass('hms', 'StudentFactory.php');
+            $student = StudentFactory::getStudentByUsername(UserStatus::getUsername());
+        } catch(StudentNotFoundException $e) {
+            $student = null;
+        }
+        HMS_Email::sendRoomChangeCancelledNotice($request, $student);
 
         $cmd->redirect();
     }

@@ -49,7 +49,8 @@ class RoomChangeDenyCommand extends Command {
             $p->transitionTo(new ParticipantStateDenied($p, time(), null, UserStatus::getUsername()));
         }
 
-        //TODO send notifications?
+        // Notify everyone involved
+        HMS_Email::sendRoomChangeDeniedNotice($request);
 
         $cmd->redirect();
     }
