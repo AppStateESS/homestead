@@ -772,7 +772,7 @@ class HMS_Email{
      * @param $student Student The person to notify
      * @param $newRoomie Student The person moving in
      */
-    public static function sendRoomChangeApprovedNewRoomnateNotice(Student $student, Student $newRoomie)
+    public static function sendRoomChangeApprovedNewRoommateNotice(Student $student, Student $newRoomie)
     {
         $subject = 'Roommate Confirmation';
         $template = 'email/roomChangeApprovedNewRoommateNotice.tpl';
