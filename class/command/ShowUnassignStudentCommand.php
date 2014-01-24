@@ -32,8 +32,8 @@ class ShowUnassignStudentCommand extends Command {
 
         $username = $context->get('username');
 
-        if(isset($username)){
-            $student = StudentFactory::getStudentByUsername($context->get('username'), Term::getSelectedTerm());
+        if(isset($username) && !is_null($username) && $username != ''){
+            $student = StudentFactory::getStudentByUsername($username, Term::getSelectedTerm());
         }else{
             $student = NULL;
         }

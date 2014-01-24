@@ -124,7 +124,7 @@ class RoomChangeStateApproved extends RoomChangeRequestState {
 
     public function getValidTransitions()
     {
-        return array('RoomChangeStateCancelled');
+        return array('RoomChangeStateComplete', 'RoomChangeStateCancelled');
     }
 
     // TODO Send approval notifiction to student/RDs
