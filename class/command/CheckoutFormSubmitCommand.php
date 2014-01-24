@@ -121,7 +121,7 @@ class CheckoutFormSubmitCommand extends Command {
 
 
         // Save the check-in
-        $checkin->save(); //TODO uncomment this before production
+        $checkin->save();
 
         // Add this to the activity log
         HMS_Activity_Log::log_activity($student->getUsername(), ACTIVITY_CHECK_OUT, UserStatus::getUsername(), $bed->where_am_i());
@@ -138,10 +138,29 @@ class CheckoutFormSubmitCommand extends Command {
         PHPWS_Core::initModClass('hms', 'HMS_Email.php');
         HMS_Email::sendCheckoutConfirmation($student, $infoCard, $infoCardView);
 
-        NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Checkout successful.');
+        /***** Room Change Request Handling *******/
 
-        // Redirect to start of checkout process
-        //$cmd = CommandFactory::getCommand('ShowCheckoutStart');
+        // Check if this checkout was part of a room change request
+        PHPWS_Core::initModClass('hms', 'RoomChangeRequestFactory.php');
+        PHPWS_Core::initModClass('hms', 'RoomChangeParticipantFactory.php');
+        $request = RoomChangeRequestFactory::getRequestPendingCheckout($student, $term);
+
+        if (!is_null($request)) {
+            $participant = RoomChangeParticipantFactory::getParticipantByRequestStudent($request, $student);
+
+            // Transition to StudentApproved state
+            $participant->transitionTo(new ParticipantStateCheckedOut($participant, time(), null, UserStatus::getUsername()));
+           
+            // If all the participants are in CheckedOut state, then this room change is complete, so transition it
+            if($request->allParticipantsInState('CheckedOut')) {
+                $request->transitionTo(new RoomChangeStateComplete($request, time(), null, UserStatus::getUsername()));
+            }
+        }
+
+
+        // Cleanup and redirect
+
+        NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Checkout successful.');
 
         $cmd = CommandFactory::getCommand('ShowCheckoutDocument');
         $cmd->setCheckinId($checkin->getId());

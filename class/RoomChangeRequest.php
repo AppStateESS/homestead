@@ -208,6 +208,17 @@ class RoomChangeRequest {
         return !$this->hasParticipantInState(array('New', 'StudentApproved', 'CurrRdApproved'));
     }
 
+    public function allParticipantsInState($stateName)
+    {
+        foreach($this->getParticipants() as $p) {
+            if($p->getState()->getName() != $stateName) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     /*********************
      * Get / Set Methods *
      *********************/

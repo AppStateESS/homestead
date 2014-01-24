@@ -284,6 +284,37 @@ class RoomChangeRequestFactory {
         
         return $stmt->fetchAll(PDO::FETCH_CLASS, 'RoomChangeRequestRestored');
     }
+
+    public static function getRequestPendingCheckout(Student $student, $term)
+    {
+        $db = PdoFactory::getPdoInstance();
+
+        $query = "SELECT hms_room_change_curr_request.* FROM hms_room_change_curr_request
+                    JOIN hms_room_change_curr_participant ON hms_room_change_curr_request.id = hms_room_change_curr_participant.request_id
+                    WHERE
+                        term = :term AND
+                        banner_id = :bannerId AND
+                        hms_room_change_curr_request.state_name = 'Approved' AND
+                        hms_room_change_curr_participant.state_name = 'InProcess'";
+
+        $stmt = $db->prepare($query);
+        $stmt->execute(array(
+                'term' => $term,
+                'bannerId' => $student->getBannerId()
+        ));
+
+        $results = $stmt->fetchAll(PDO::FETCH_CLASS, 'RoomChangeRequestRestored');
+
+        // If more than one pending request is found, throw an exception
+        if (sizeof($results) > 1) {
+            throw new InvalidArgumentException('More than one pending room change detected.');
+        } else if (sizeof($results) == 0) {
+            return null;
+        } else {
+            return $results[0];
+        }
+
+    }
 }
 
 ?>
