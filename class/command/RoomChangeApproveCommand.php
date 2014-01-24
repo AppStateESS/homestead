@@ -81,7 +81,7 @@ class RoomChangeApproveCommand extends Command {
         }
 
         // Notify everyone that they can do the move
-        HMS_Email::sendRoomChangeInProcessNotice($r);
+        HMS_Email::sendRoomChangeInProcessNotice($request);
 
         // Notify roommates that their circumstances are going to change
         foreach($request->getParticipants() as $p) {
