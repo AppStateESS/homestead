@@ -883,7 +883,7 @@ class HMS_Email{
         }
 
         self::sendSwiftmailMessage(
-            self::makeSwiftmailMessage(FROM_ADDRESS, $subject, $tags, $template);
+            self::makeSwiftmailMessage(FROM_ADDRESS, $subject, $tags, $template)
         );
     }
 
