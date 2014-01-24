@@ -252,12 +252,12 @@ class InfoCardPdfView {
         $checkoutTimestamp = $infoCard->getCheckin()->getCheckoutDate();
         if (!is_null($checkoutTimestamp)) {
             // Check-out Date/time
-            $this->pdf->setXY(210, 108);
+            $this->pdf->setXY(180, 108);
             $this->pdf->cell(50, 5, date('j M, Y @ g:ia', $checkoutTimestamp));
         }
 
         // Check-out By
-        $this->pdf->setXY(95, 108);
+        $this->pdf->setXY(235, 108);
         $this->pdf->cell(50, 5, 'By: ' . $infoCard->getCheckin()->getCheckoutBy());
 
         // Key code at check-out

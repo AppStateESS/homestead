@@ -789,16 +789,14 @@ class HMS_Email{
         );
 
         foreach($r->getParticipants() as $p) {
-            $student = StudentFactory::getStudentByBannerID($p->getBannerId());
+            $student = StudentFactory::getStudentByBannerID($p->getBannerId(), $r->getTerm());
             $tags['PARTICIPANTS'][] = array(
                 'NAME' => $student->getName()
             );
         }
 
         self::sendSwiftmailMessage(
-            self::makeSwiftmailMessage(
-                $rd . TO_DOMAIN, $subject, $tags, $template
-            )
+            self::makeSwiftmailMessage(FROM_ADDRESS, $subject, $tags, $template)
         );
     }
 
