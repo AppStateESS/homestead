@@ -404,7 +404,7 @@ class HMS_Room extends HMS_Item
     }
 
     /*
-     * Returns an array of HMS_Student objects which are currently
+     * Returns an array of Student objects which are currently
     * assigned to 'this' room.
     */
     public function get_assignees()
