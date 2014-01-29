@@ -128,10 +128,61 @@ class HMS_Email{
 
         fprintf($fd, "From: %s\n", $message->from_address);
         fprintf($fd, "Subject: %s\n", $message->subject_line);
+        fprintf($fd, "Date: %s\n", date('Y-m-d H:i:s'));
         fprintf($fd, "Content: \n");
         fprintf($fd, "%s\n\n", $message->message_body);
 
         fclose($fd);
+    }
+
+    /**
+     * Log a Swift_Message object to a text file
+     */
+    public static function logSwiftmailMessageLong(Swift_Message $message)
+    {
+        $fd = fopen(PHPWS_SOURCE_DIR . 'logs/email.log', 'a');
+        fprintf($fd, "=======================\n");
+
+        foreach($message->getFrom() as $address => $name) {
+            fprintf($fd, "From: %s <%s>\n", $name, $address);
+        }
+
+        foreach($message->getTo() as $address => $name) {
+            fprintf($fd, "To: %s <%s>\n", $name, $address);
+        }
+
+        foreach($message->getCc() as $address => $name) {
+            fprintf($fd, "Cc: %s <%s>\n", $name, $address);
+        }
+
+        foreach($message->getBcc() as $address => $name) {
+            fprintf($fd, "Bcc: %s <%s>\n", $name, $address);
+        }
+
+        fprintf($fd, "Sender: %s\n", $message->getSender());
+        fprintf($fd, "Subject: %s\n", $message->getSubject());
+        fprintf($fd, "Date: %s\n", date('Y-m-d H:i:s'));
+        fprintf($fd, "Content: \n");
+        fprintf($fd, "%s\n\n", $message->toString());
+    }
+
+    /**
+     * PHPWS_Email has a built-in simple logging function.  This replicates
+     * the functionality of that function for SwiftMail.
+     */
+    public static function logSwiftmailMessage(Swift_Message $message)
+    {
+        $id      = 'id:'       . $message->getId();
+        $from    = 'from:'     . $message->getSender();
+        $to      = 'to:'       . implode(',', array_keys($message->getTo()));
+        $cc      = 'cc:'       . implode(',', array_keys($message->getCc()));
+        $bcc     = 'bcc:'      . implode(',', array_keys($message->getBcc()));
+        $replyto = 'reply-to:' . implode(',', array_keys($message->getReplyTo()));
+        $subject = 'subject:'  . $message->getSubject();
+        $module  = 'module:'   . PHPWS_Core::getCurrentModule();
+        $user    = 'user:'     . (Current_User::isLogged() ? Current_User::getUsername() : '');
+
+        PHPWS_Core::log("$id $module $user $subject $from $to $cc $bcc $replyto", 'phpws-mail.log', 'mail');
     }
 
     /**********************
@@ -639,10 +690,15 @@ class HMS_Email{
      */
     public static function sendSwiftmailMessage(Swift_Message $message)
     {
-        $transport = Swift_SmtpTransport::newInstance('localhost');
-        $mailer = Swift_Mailer::newInstance($transport);
+        if(EMAIL_TEST_FLAG) {
+            self::logSwiftmailMessageLong($message);
+        } else {
+            $transport = Swift_SmtpTransport::newInstance('localhost');
+            $mailer = Swift_Mailer::newInstance($transport);
 
-        return $mailer->send($message);
+            self::logSwiftmailMessage($message);
+            return $mailer->send($message);
+        }
     }
 
     /**
