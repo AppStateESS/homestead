@@ -39,7 +39,8 @@ class RoomChnageListAvailableBedsCommand extends Command {
                     ra_roommate = 0 and
                     private = 0 and
                     reserved = 0 and
-                    room_change_reserved = 0";
+                    room_change_reserved = 0
+                ORDER BY hall_name, room_number";
 
         $stmt = $db->prepare($query);
 

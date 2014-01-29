@@ -38,7 +38,7 @@ class RoomChangeParticipantView extends View {
         $tpl = array();
 
         // Student info
-        $tpl['NAME'] = $this->student->getName();
+        $tpl['NAME'] = $this->student->getProfileLink();
         $tpl['BANNER_ID'] = $this->student->getBannerId();
 
         // Participant ID
