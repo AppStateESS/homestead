@@ -413,4 +413,8 @@ class HMS_RLC_Assignment {
     }
 }
 
+class RlcMembershipRestored extends HMS_RLC_Assignment {
+    public function __construct(){}
+}
+
 ?>

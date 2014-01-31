@@ -22,10 +22,10 @@ class HMS_RLC_Application extends HMS_Item
      * @deprecated
      */
     const RLC_RESPONSE_LIMIT = 4096; // max number of characters allowed in the text areas on the RLC application
-    
+
     /**
      * Word limit for RLC question responses.
-     * 
+     *
      * @var integer
      */
     const RLC_RESPONSE_WORD_LIMIT = 500;
@@ -70,7 +70,7 @@ class HMS_RLC_Application extends HMS_Item
 
     /**
      * Returns true if this RLC application has been flagged as denied, false otherwise.
-     * 
+     *
      * @return boolean
      */
     public function isDenied()
@@ -78,10 +78,10 @@ class HMS_RLC_Application extends HMS_Item
         if($this->denied == 1){
             return true;
         }
-        
+
         return false;
     }
-    
+
     public function getAdminPagerTags()
     {
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
@@ -141,13 +141,13 @@ class HMS_RLC_Application extends HMS_Item
         $row['first_name']          = $student->getFirstName();
         $row['middle_name']         = $student->getMiddleName();
         $row['gender']              = $student->getGender();
-        
+
         if ($roomie instanceof Student) {
             $row['roommate']        = $roomie->getUsername();
         } else {
             $row['roommate']        = '';
         }
-        
+
         $row['email']               = $student->getUsername() . '@appstate.edu';
         $row['second_choice']       = $this->getSecondChoice();
         $row['third_choice']        = $this->getThirdChoice();
@@ -195,7 +195,7 @@ class HMS_RLC_Application extends HMS_Item
     {
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        
+
         $tags = array();
 
         // Get the Student object
@@ -215,7 +215,7 @@ class HMS_RLC_Application extends HMS_Item
         $tags['BANNER_ID']  = $student->getBannerId();
         $tags['GENDER']     = $student->getPrintableGenderAbbreviation();
         $tags['USERNAME']   = $this->username;
-        
+
         /*** Assignment Status/State ***/
         // Lookup the assignmnet (used later as well)
         $assign = HMS_RLC_Assignment::getAssignmentByUsername($this->username, $this->term);
@@ -231,11 +231,11 @@ class HMS_RLC_Application extends HMS_Item
         }else{
             $tags['STATE'] = '';
         }
-        
-        
+
+
         // Check for/display room assignment
         $roomAssign = HMS_Assignment::getAssignmentByBannerId($student->getBannerId(), Term::getSelectedTerm());
-        
+
         if(isset($roomAssign)){
             $tags['ROOM_ASSIGN'] = $roomAssign->where_am_i();
         }else{
@@ -245,10 +245,10 @@ class HMS_RLC_Application extends HMS_Item
         /*** Roommates ***/
         // Show all possible roommates for this application
         PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
-        
+
         $allRoommates = HMS_Roommate::get_all_roommates($this->username, $this->term);
         $tags['ROOMMATES'] = 'N/A'; // Default text
-        
+
         if(sizeof($allRoommates) > 1) {
             // Don't show all the roommates
             $tags['ROOMMATES'] = "Multiple Requests";
@@ -262,7 +262,7 @@ class HMS_RLC_Application extends HMS_Item
                 $tags['ROOMMATES'] .= " (Pending)";
             }
         }
-        
+
         /*** Other Actions ***/
         $viewCmd = CommandFactory::getCommand('ShowRlcApplicationReView');
         $viewCmd->setAppId($this->getId());
@@ -288,16 +288,16 @@ class HMS_RLC_Application extends HMS_Item
 
     /**
      * Returns this rlc application (and assignment) as array of fields for CSV export
-     * 
+     *
      * @return Array
      */
     public function viewByRLCExportFields()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        
+
         $row = array();
-        
+
         // Get the Student object
         try{
             $student = StudentFactory::getStudentByUsername($this->username, Term::getSelectedTerm());
@@ -309,12 +309,12 @@ class HMS_RLC_Application extends HMS_Item
             $row['name'] = 'UNKNOWN - INVALID';
             return $tags;
         }
-        
+
         $row['name']        = $student->getFullName();
         $row['gender']      = $student->getPrintableGender();
         $row['username']    = $student->getUsername();
         $row['banner_id']   = $student->getBannerId();
-        
+
         /*** Assignment Status/State ***/
         // Lookup the assignmnet (used later as well)
         $assign = HMS_RLC_Assignment::getAssignmentByUsername($this->username, $this->term);
@@ -330,24 +330,24 @@ class HMS_RLC_Application extends HMS_Item
         }else{
             $row['state'] = '';
         }
-        
-        
+
+
         // Check for/display room assignment
         $roomAssign = HMS_Assignment::getAssignmentByBannerId($student->getBannerId(), Term::getSelectedTerm());
-        
+
         if(isset($roomAssign)){
             $row['room_assignment'] = $roomAssign->where_am_i();
         }else{
             $row['room_assignment'] = 'n/a';
         }
-        
+
         /*** Roommates ***/
         // Show all possible roommates for this application
         PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
-        
+
         $allRoommates = HMS_Roommate::get_all_roommates($this->username, $this->term);
         $row['roommates'] = 'N/A'; // Default text
-        
+
         if(sizeof($allRoommates) > 1) {
             // Don't show all the roommates
             $row['roommates'] = "Multiple Requests";
@@ -671,6 +671,10 @@ class HMS_RLC_Application extends HMS_Item
     {
         $this->application_type = $type;
     }
+}
+
+class RlcApplicationRestored extends HMS_RLC_Application {
+    public function __construct(){}
 }
 
 ?>

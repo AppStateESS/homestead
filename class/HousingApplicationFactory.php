@@ -93,12 +93,12 @@ class HousingApplicationFactory {
 
         $result = $db->select('row');
 
-        if(PHPWS_Error::logIfError($result)){
+        if (PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         }
 
-        if($result == NULL){
-            return NULL;
+        if ($result == null) {
+            return null;
         }
 
         switch($result['application_type']){

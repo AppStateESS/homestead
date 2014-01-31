@@ -14,20 +14,20 @@ class HMS_Learning_Community extends HMS_Item
     public $abbreviation;
     public $capacity;
     public $hide;
-    
+
     public $allowed_student_types; //A string containing a character for each allowed student type, maxLen() == 16;
     public $allowed_reapplication_student_types;
     public $members_reapply; // Indicates whether current members of the community are always allowed to reapply, regardless of student type
     public $extra_info; // A text field, show to the student when the RLC is selected
-    
+
     // Move-in time IDs specific to this community (used in assignment notifications)
     public $f_movein_time_id;
     public $t_movein_time_id;
-    public $c_movein_time_id; 
-    
+    public $c_movein_time_id;
+
     public $freshmen_question;
     public $returning_question;
-    
+
     public $terms_conditions;
 
     public function __construct($id = 0)
@@ -55,11 +55,11 @@ class HMS_Learning_Community extends HMS_Item
     {
         return $this->id;
     }
-    
+
     public function setId(){
         $this->id = $id;
     }
-    
+
     /**
      * @deprecated
      */
@@ -81,9 +81,14 @@ class HMS_Learning_Community extends HMS_Item
         $this->community_name = $name;
     }
 
-    public function get_community_name()
+    public function getName()
     {
         return $this->community_name;
+    }
+
+    public function get_community_name()
+    {
+        return $this->getName();
     }
 
     public function set_abbreviation($abb)
@@ -134,54 +139,54 @@ class HMS_Learning_Community extends HMS_Item
     {
         return $this->freshmen_question;
     }
-    
+
     public function setFreshmenQuestion($question)
     {
         $this->freshmen_question = $question;
     }
-    
+
     public function getReturningQuestion()
     {
         return $this->returning_question;
     }
-    
+
     public function getTermsConditions()
     {
         return $this->terms_conditions;
     }
-    
+
     public function setTermsConditions($text){
         $this->terms_conditions = $text;
     }
-    
+
     public function setReturningQuestion($question){
         $this->returning_question = $question;
     }
-    
+
     public function getFreshmenMoveinTime(){
         return $this->f_movein_time_id;
     }
-    
+
     public function setFreshmenMoveinTime($movein_time){
         $this->f_movein_time_id = $movein_time;
     }
-    
+
     public function getContinuingMoveinTime(){
         return $this->c_movein_time_id;
     }
-    
+
     public function setContinuingMoveinTime($movein_time){
         $this->c_movein_time_id = $movein_time;
     }
-    
+
     public function getTransferMoveinTime(){
         return $this->t_movein_time_id;
     }
-    
+
     public function setTransferMoveinTime($movein_time){
         $this->t_movein_time_id = $movein_time;
     }
-    
+
     //TODO depricate this crap
     public function set_variables()
     {
@@ -256,7 +261,7 @@ class HMS_Learning_Community extends HMS_Item
         if($hidden === FALSE){
             $db->addWhere('hide', 0);
         }
-        
+
         $db->addOrder('community_name ASC');
 
         $rlc_choices = $db->select('assoc');
@@ -355,7 +360,7 @@ class HMS_Learning_Community extends HMS_Item
 
 /**
  * Empty constructor child class for restoring RLC objects from the database.
- * 
+ *
  * @author Jeremy Booker
  * @package hms
  */

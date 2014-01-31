@@ -14,7 +14,7 @@ class SOAPDataProvider extends StudentDataProvider {
 
         if (!isset($id) || is_null($id) || empty($id)) {
             PHPWS_Core::initModClass('hms', 'exception/StudentNotFoundException.php');
-            throw new StudentNotFoundException('No matching student found.');
+            throw new StudentNotFoundException('No matching student found.', 0, $id);
         }
 
         return SOAPDataProvider::getStudentById($id, $term);

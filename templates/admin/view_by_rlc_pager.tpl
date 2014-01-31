@@ -1,5 +1,8 @@
 {BACK_LINK}
 <h1>{TITLE}</h1>
+
+<p><a href="{ADD_URI}" class="btn btn-primary">Add Member(s)</a></p>
+
 <table>
     <tr>
         <th>Name</th>
