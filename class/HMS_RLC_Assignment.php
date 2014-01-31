@@ -154,12 +154,15 @@ class HMS_RLC_Assignment {
 
     /******************
      * Static methods *
-    */
+     */
 
     /**
      * Check to see if an assignment already exists for the specified user.  Returns FALSE if no assignment
      * exists.  If an assignment does exist, a db object containing that row is returned.  In the case of a db
      * error, a PEAR error object is returned.
+     * TODO: Deprecate this and/or move to RlcMembershipFactory
+     * @see RlcMembershipFactory
+     *
      */
     public static function checkForAssignment($username, $term)
     {
@@ -185,6 +188,14 @@ class HMS_RLC_Assignment {
         }
     }
 
+    /**
+     * TODO: Deprecate this and/or move to RlcMembershipFactory
+     * @see RlcMembershipFactory
+     *
+     * @param unknown $id
+     * @throws DatabaseException
+     * @return NULL|HMS_RLC_Assignment
+     */
     public static function getAssignmentById($id){
         $assignment = new HMS_RLC_Assignment();
 
@@ -204,6 +215,15 @@ class HMS_RLC_Assignment {
         return $assignment;
     }
 
+    /**
+     * TODO: Deprecate this and/or move to RlcMembershipFactory
+     * @see RlcMembershipFactory
+     *
+     * @param unknown $username
+     * @param unknown $term
+     * @throws DatabaseException
+     * @return NULL|HMS_RLC_Assignment
+     */
     public static function getAssignmentByUsername($username, $term){
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
 

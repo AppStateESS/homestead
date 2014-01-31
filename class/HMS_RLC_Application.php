@@ -374,6 +374,8 @@ class HMS_RLC_Application extends HMS_Item
      * If an application does exist, an associative array containing that row is returned. In the case of a db error, a PEAR
      * error object is returned.
      * @param include_denied Controls whether or not denied applications are returned
+     * TODO: Deprecate this and/or move to RlcApplicationFactory
+     * @see RlcApplicationFactory
      */
     public static function checkForApplication($username, $term, $include_denied = true)
     {
@@ -399,6 +401,12 @@ class HMS_RLC_Application extends HMS_Item
         }
     }
 
+    /**
+     * TODO: Deprecate this and/or move to RlcApplicationFactory
+     * @see RlcApplicationFactory
+     * @throws DatabaseException
+     * @return NULL|HMS_RLC_Application
+     */
     public static function getApplicationByUsername($username, $term)
     {
         $app = new HMS_RLC_Application();
@@ -421,6 +429,12 @@ class HMS_RLC_Application extends HMS_Item
         return $app;
     }
 
+    /**
+     * TODO: Deprecate this and/or move to RlcApplicationFactory
+     * @see RlcApplicationFactory
+     * @throws DatabaseException
+     * @return HMS_RLC_Application
+     */
     public static function getApplicationById($id)
     {
 
@@ -438,8 +452,12 @@ class HMS_RLC_Application extends HMS_Item
     }
 
     /**
+     * TODO: Deprecate this and/or move to RlcApplicationFactory
+     * @see RlcApplicationFactory
+     *
      * Get denied RLC applicants by term
      * @return Array of Student objects
+     *
      */
     public static function getDeniedApplicantsByTerm($term)
     {
@@ -490,6 +508,8 @@ class HMS_RLC_Application extends HMS_Item
 
     /**
      * Generates a drop down menu using the RLC abbreviations
+     * TODO: Deprecate this and/or move to RlcApplicationFactory
+     * @see RlcApplicationFactory
      */
     public static function generateRLCDropDown($rlc_list,$application_id) {
 
