@@ -51,7 +51,7 @@ class RoomChangeRequestFactory {
                     WHERE
                         term = :term AND
                         banner_id = :bannerId AND
-                        hms_room_change_curr_request.state_name NOT IN ('Cancelled', 'Denied', 'Complete', 'Approved') AND
+                        hms_room_change_curr_request.state_name NOT IN ('Cancelled', 'Denied', 'Complete') AND
                         hms_room_change_curr_participant.state_name NOT IN ('Cancelled', 'Checkedout', 'Declined', 'Denied')";
 
         $stmt = $db->prepare($query);

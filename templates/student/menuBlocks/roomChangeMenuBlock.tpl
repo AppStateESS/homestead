@@ -22,7 +22,7 @@ It's too late to request a room change. The deadline passed on {END_DEADLINE}.
 <!-- END too_late -->
 
 <!-- BEGIN pending -->
-Your room change request is pending approval. {PENDING}
+Your room change request has been submitted. Once it is approved, you will be notified via an email to your ASU email account. {PENDING}
 <!-- END pending -->
 
 <!-- BEGIN approval -->
