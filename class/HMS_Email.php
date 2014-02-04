@@ -178,7 +178,9 @@ class HMS_Email{
         $cc      = 'cc:'       . implode(',', array_keys($message->getCc()));
         $bcc     = 'bcc:'      . implode(',', array_keys($message->getBcc()));
 
-        if(!empty($message->getReplyTo())){
+        $replyToList = $message->getReplyTo();
+
+        if(!empty($replyToList)){
             $replyto = 'reply-to:' . implode(',', array_keys($message->getReplyTo()));
         }
 
