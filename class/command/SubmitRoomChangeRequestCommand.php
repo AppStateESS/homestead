@@ -107,6 +107,13 @@ class SubmitRoomChangeRequestCommand extends Command {
                 NQ::simple('hms', HMS_NOTIFICATION_ERROR, "{$swapStudent->getName()} is assigned to a room of a different gender than you. Please choose student of the same gender as yourself to switch rooms with.");
                 $formCmd->redirect();
             }
+
+            // Check to see if the other student is already involved in a room change request
+            $swapStudentReq = RoomChangeRequestFactory::getPendingByStudent($swapStudent, $term);
+            if(!is_null($swapStudentReq)){ // has pending request
+                NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'The student you are requesting to swap with already has a pending room change request. You cannot request to swap with him/her until the pending request is processed.');
+                $menuCmd->redirect();
+            }
         }
 
         //create the request object
