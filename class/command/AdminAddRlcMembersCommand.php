@@ -66,10 +66,13 @@ class AdminAddRlcMembersCommand extends Command {
             }
 
             // Get the student
-            try{
+            try {
                 $student = StudentFactory::getStudentByBannerId($banner, $term);
-            }catch(StudentNotFoundException $e){
-                NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Invalid Banner ID: {$e->getRequestedId()}");
+            } catch (StudentNotFoundException $e) {
+                NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Couldn't find a student with ID: {$e->getRequestedId()}");
+                continue;
+            } catch (InvalidArgumentException $e) {
+                NQ::simple('hms', HMS_NOTIFICATION_ERROR, "This doesn't look like a banner ID: {$e->getRequestedId()}");
                 continue;
             }
 
