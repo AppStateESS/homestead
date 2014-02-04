@@ -177,7 +177,11 @@ class HMS_Email{
         $to      = 'to:'       . implode(',', array_keys($message->getTo()));
         $cc      = 'cc:'       . implode(',', array_keys($message->getCc()));
         $bcc     = 'bcc:'      . implode(',', array_keys($message->getBcc()));
-        $replyto = 'reply-to:' . implode(',', array_keys($message->getReplyTo()));
+
+        if(!empty($message->getReplyTo())){
+            $replyto = 'reply-to:' . implode(',', array_keys($message->getReplyTo()));
+        }
+
         $subject = 'subject:'  . $message->getSubject();
         $module  = 'module:'   . PHPWS_Core::getCurrentModule();
         $user    = 'user:'     . (Current_User::isLogged() ? Current_User::getUsername() : '');
@@ -810,7 +814,7 @@ class HMS_Email{
         $tags = array(
             'ROOMMATE' => $student->getName()
         );
-        
+
         self::sendSwiftmailMessage(
             self::makeSwiftmailMessage(
                 $student, $subject, $tags, $template
