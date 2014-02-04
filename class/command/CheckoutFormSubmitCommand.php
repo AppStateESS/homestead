@@ -150,7 +150,7 @@ class CheckoutFormSubmitCommand extends Command {
 
             // Transition to StudentApproved state
             $participant->transitionTo(new ParticipantStateCheckedOut($participant, time(), null, UserStatus::getUsername()));
-           
+
             // If all the participants are in CheckedOut state, then this room change is complete, so transition it
             if($request->allParticipantsInState('CheckedOut')) {
                 $request->transitionTo(new RoomChangeStateComplete($request, time(), null, UserStatus::getUsername()));
@@ -185,7 +185,7 @@ class CheckoutFormSubmitCommand extends Command {
         foreach ($dmg['residents'] as $resident) {
 
             // If the resident was selected as being responsible for this damage
-            if($resident['selected']){
+            if(isset($resident['selected']) && $resident['selected']){
                 // Create the student
                 $student = StudentFactory::getStudentByBannerId($resident['studentId'], $this->term);
 
