@@ -1,0 +1,1 @@
+alter table hms_bed add column ra smallint not null default 0;
