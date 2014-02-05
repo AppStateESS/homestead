@@ -1,43 +1,37 @@
-<div class="hms">
-  <div class="box">
-    <div class="{TITLE_CLASS}"> <h1>{TITLE}</h1> </div>
-    <div class="box-content">
-		<h2>Bed Properties</h2>
-        {START_FORM}
-        <table>
-            <tr>
-                <th>Hall Name:</th><td align="left">{HALL_NAME}</td>
-            </tr>
-            <tr>
-                <th>Floor: </th><td align="left">{FLOOR_NUMBER}</td>
-            </tr>
-            <tr>
-                <th>Room Number: </th><td align="left">{ROOM_NUMBER}</td>
-            </tr>
-            <tr>
-                <th>Bedroom Label: </th><td>{BEDROOM_LABEL}</td>
-            </tr>
-            <tr>
-                <th>Bed Letter: </th><td>{BED_LETTER}</td>
-            </tr>
-            <tr>
-                <th>Phone Number: </th><td>828-266-{PHONE_NUMBER}</td>
-            </tr>
-            <tr>
-                <th>Banner ID:</th><td>{BANNER_ID}</td>
-            </tr>
-            <tr>
-                <th>RA Roommate Bed: </th><td>{RA_ROOMMATE}</td>
-            </tr>
-            <tr>
-                <th>International Reserved: </th><td>{INTERNATIONAL_RESERVED}</td>
-            </tr>
-            <tr>
-                <th>Assigned to:</th><td>{ASSIGNED_TO}</td>
-            </tr>
-        </table>
-        {SUBMIT}
-        {END_FORM}
-    </div>
-  </div>
-</div>
+<h3>{TERM} &raquo; {HALL_NAME} &raquo; {FLOOR_NUMBER} &raquo; {ROOM_NUMBER_LINK}</h3>
+
+<h1>Room {ROOM_NUMBER} Bed {BED_LABEL}</h1>
+
+{START_FORM}
+<table>
+
+  <tr>
+    <td>Bedroom Label:</td>
+    <td>{BEDROOM_LABEL}</td>
+  </tr>
+  <tr>
+    <td>Phone Number:</td>
+    <td>828-266-{PHONE_NUMBER}</td>
+  </tr>
+  <tr>
+    <td>Banner bed ID:</td>
+    <td>{HALL_ABBR} {BANNER_ID}</td>
+  </tr>
+  <tr>
+    <td>Reserved for RA</td>
+    <td>{RA}</td>
+  </tr>
+  <tr>
+    <td>Hold Empty for RA Roommate</td>
+    <td>{RA_ROOMMATE}</td>
+  </tr>
+  <tr>
+    <td>International Reserved</t\d>
+    <td>{INTERNATIONAL_RESERVED}</td>
+  </tr>
+  <tr>
+    <td>Assigned to</td>
+    <td>{ASSIGNED_TO}</td>
+  </tr>
+</table>
+{SUBMIT} {END_FORM}

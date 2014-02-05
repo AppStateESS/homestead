@@ -29,14 +29,16 @@ class BedView extends View {
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
-        $tpl['TITLE'] = $this->room->room_number . ' - ' . $this->bed->bedroom_label . $this->bed->bed_letter . ' - ' . $this->hall->hall_name;
-
+        $tpl['TERM']                = Term::toString($this->bed->getTerm());
         $tpl['HALL_NAME']           = $this->hall->getLink();
-        $tpl['FLOOR_NUMBER']        = $this->floor->getLink();
-        $tpl['ROOM_NUMBER']         = $this->room->getLink();
-        $tpl['BED_LETTER']          = $this->bed->bed_letter;
+        $tpl['FLOOR_NUMBER']        = $this->floor->getLink('Floor');
+        $tpl['ROOM_NUMBER_LINK']    = $this->room->getLink();
+        $tpl['ROOM_NUMBER']         = $this->room->getRoomNumber();
+        $tpl['BED_LABEL']           = $this->bed->getBedroomLabel() . ' ' . $this->bed->getLetter();
 
         $tpl['ASSIGNED_TO'] = $this->bed->get_assigned_to_link();
+
+        $tpl['HALL_ABBR'] = $this->hall->getBannerBuildingCode();
 
         $submitCmd = CommandFactory::getCommand('EditBed');
         $submitCmd->setBedId($this->bed->id);
@@ -52,14 +54,19 @@ class BedView extends View {
 
         $form->addText('banner_id', $this->bed->banner_id);
 
+        $form->addCheckBox('ra', 1);
+        if($this->bed->isRa()){
+            $form->SetExtra('ra', 'checked');
+        }
+
         $form->addCheckBox('ra_roommate', 1);
 
         if($this->bed->ra_roommate == 1){
             $form->setExtra('ra_roommate', 'checked');
         }
-        
+
         $form->addCheckBox('international_reserved');
-        
+
         if($this->bed->international_reserved == 1){
             $form->setExtra('international_reserved', 'checked');
         }

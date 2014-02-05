@@ -8,6 +8,7 @@ PHPWS_Core::initModClass('hms', 'HMS_Item.php');
 
 
 class HMS_Bed extends HMS_Item {
+
     public $id;
     public $term;
     public $room_id = 0;
@@ -21,6 +22,7 @@ class HMS_Bed extends HMS_Item {
     public $_curr_assignment = null;
 
     public $persistent_id = null;
+    public $ra = 0;
 
     /**
      * Holds the parent room object of this bed.
@@ -499,6 +501,30 @@ class HMS_Bed extends HMS_Item {
     public function getPersistentId()
     {
         return $this->persistent_id;
+    }
+
+    public function isRa()
+    {
+        if($this->ra == 1){
+            return true;
+        }
+
+        return false;
+    }
+
+    public function setRa($raFlag)
+    {
+        $this->ra = $raFlag;
+    }
+
+    public function getBedroomLabel()
+    {
+        return $this->bedroom_label;
+    }
+
+    public function getLetter()
+    {
+        return $this->bed_letter;
     }
 
     /**

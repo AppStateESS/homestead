@@ -213,8 +213,10 @@ CREATE TABLE hms_bed (
     updated_on      integer NOT NULL,
     banner_id       character varying(15),
     phone_number    character(4),
-    room_change_reserved smallint NOT NULL DEFAULT 0,
-    international_reserved smallint NOT NULL DEFAULT 0,
+    room_change_reserved    smallint NOT NULL DEFAULT 0,
+    international_reserved  smallint NOT NULL DEFAULT 0,
+    persistent_id           character varying,
+    ra                      smallint NOT NULL DEFAULT 0
     PRIMARY KEY(id)
 );
 

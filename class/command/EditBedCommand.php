@@ -60,6 +60,7 @@ class EditBedCommand extends Command {
 
         $context->get('ra_roommate') == 1 ? $bed->ra_roommate = 1 : $bed->ra_roommate = 0;
         $context->get('international_reserved') == 1 ? $bed->international_reserved = 1 : $bed->international_reserved = 0;
+        $context->get('ra') == 1 ? $bed->ra = 1 : $bed->ra = 0;
 
         $result = $bed->save();
 
