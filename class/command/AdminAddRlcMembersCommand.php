@@ -72,7 +72,7 @@ class AdminAddRlcMembersCommand extends Command {
                 NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Couldn't find a student with ID: {$e->getRequestedId()}");
                 continue;
             } catch (InvalidArgumentException $e) {
-                NQ::simple('hms', HMS_NOTIFICATION_ERROR, "This doesn't look like a banner ID: {$e->getRequestedId()}");
+                NQ::simple('hms', HMS_NOTIFICATION_ERROR, "This doesn't look like a banner ID: $banner");
                 continue;
             }
 
