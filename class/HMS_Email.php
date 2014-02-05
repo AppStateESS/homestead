@@ -175,14 +175,10 @@ class HMS_Email{
         $id      = 'id:'       . $message->getId();
         $from    = 'from:'     . $message->getSender();
         $to      = 'to:'       . implode(',', array_keys($message->getTo()));
-        $cc      = 'cc:'       . implode(',', array_keys($message->getCc()));
-        $bcc     = 'bcc:'      . implode(',', array_keys($message->getBcc()));
 
-        $replyToList = $message->getReplyTo();
-
-        if(!empty($replyToList)){
-            $replyto = 'reply-to:' . implode(',', array_keys($message->getReplyTo()));
-        }
+        // Optional fields
+        $cc      = $message->getCc() != null ? ('cc:'       . implode(',', array_keys($message->getCc()))) : '';
+        $replyto = $message->getReplyTo() != null ? ('reply-to:' . implode(',', array_keys($message->getReplyTo()))) : '';
 
         $subject = 'subject:'  . $message->getSubject();
         $module  = 'module:'   . PHPWS_Core::getCurrentModule();
