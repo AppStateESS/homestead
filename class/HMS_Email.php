@@ -176,9 +176,10 @@ class HMS_Email{
         $from    = 'from:'     . $message->getSender();
         $to      = 'to:'       . implode(',', array_keys($message->getTo()));
 
-        // Optional fields
-        $cc      = $message->getCc() != null ? ('cc:'       . implode(',', array_keys($message->getCc()))) : '';
-        $replyto = $message->getReplyTo() != null ? ('reply-to:' . implode(',', array_keys($message->getReplyTo()))) : '';
+        // Optional fields, If the message has them, implode the arrays to simple strings.
+        $cc      = $message->getCc()        != null ? ('cc:'       . implode(',', array_keys($message->getCc()))) : '';
+        $bcc     = $message->getBcc()       != null ? ('bcc:'      . implode(',', array_keys($message->getBcc()))) : '';
+        $replyto = $message->getReplyTo()   != null ? ('reply-to:' . implode(',', array_keys($message->getReplyTo()))) : '';
 
         $subject = 'subject:'  . $message->getSubject();
         $module  = 'module:'   . PHPWS_Core::getCurrentModule();
