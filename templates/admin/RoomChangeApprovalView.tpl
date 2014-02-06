@@ -5,8 +5,14 @@
 <h2>Waiting for your Approval</h2>
 {NEEDS_ACTION}
 
-<h2>Pending</h2>
+<h2>Approved - In Progress</h2>
+{APPROVED}
+
+<h2>Waiting for Approval</h2>
 {PENDING}
 
-<h2>Inactive</h2>
+<h2>Completed</h2>
+{COMPLETED}
+
+<h2>Cancelled/Denied</h2>
 {INACTIVE}

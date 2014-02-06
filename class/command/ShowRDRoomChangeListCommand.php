@@ -75,12 +75,16 @@ class ShowRDRoomChangeListCommand extends Command {
         // Get the set of room changes which are not complete based on the floor list
         $needsApprovalChanges = RoomChangeRequestFactory::getRoomChangesNeedsApproval($term, $uniqueFloors);
 
-        $allPendingChanges = RoomChangeRequestFactory::getRoomChangesByFloor($term, $uniqueFloors, array('Pending', 'Hold', 'Approved'));
+        $approvedChanges = RoomChangeRequestFactory::getRoomChangesByFloor($term, $uniqueFloors, array('Approved'));
+
+        $allPendingChanges = RoomChangeRequestFactory::getRoomChangesByFloor($term, $uniqueFloors, array('Pending', 'Hold'));
+
+        $completedChanges = RoomChangeRequestFactory::getRoomChangesByFloor($term, $uniqueFloors, array('Complete'));
 
         $inactiveChanges = RoomChangeRequestFactory::getRoomChangesByFloor($term, $uniqueFloors, array('Cancelled', 'Denied'));
 
 
-        $view = new RoomChangeApprovalView($needsApprovalChanges, $allPendingChanges, $inactiveChanges, $hallNames, $term);
+        $view = new RoomChangeApprovalView($needsApprovalChanges, $approvedChanges, $allPendingChanges, $completedChanges, $inactiveChanges, $hallNames, $term);
 
         $context->setContent($view->show());
     }
