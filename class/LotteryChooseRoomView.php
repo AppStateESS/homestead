@@ -50,7 +50,6 @@ class LotteryChooseRoomView extends View {
                 || $room->reserved == 1 
                 || $room->offline  == 1 
                 || $room->private  == 1 
-                || $room->ra       == 1 
                 || $room->overflow == 1
                 || $room->parlor   == 1){
         
