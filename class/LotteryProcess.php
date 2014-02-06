@@ -291,7 +291,8 @@ class LotteryProcess {
                     AND hms_new_application.term = {$this->term}
                     AND hms_lottery_application.magic_winner = 0
                     AND hms_lottery_application.special_interest IS NULL
-                    AND hms_new_application.gender = $gender ";
+                    AND hms_new_application.gender = $gender 
+                    AND hms_new_application.username NOT IN (SELECT username FROM hms_learning_community_applications JOIN hms_learning_community_assignment ON hms_learning_community_applications.id = hms_learning_community_assignment.application_id WHERE term = $term) ";
 
         $term_year = Term::getTermYear($this->term);
         if ($class == CLASS_SOPHOMORE) {
