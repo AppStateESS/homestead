@@ -615,7 +615,7 @@ class LotteryProcess {
         $term_year = Term::getTermYear($term);
 
         $query = "SELECT count(*) from hms_new_application JOIN hms_lottery_application ON hms_new_application.id = hms_lottery_application.id
-                    WHERE term = $term AND special_interest IS NULL ";
+                    WHERE term = $term AND special_interest IS NULL AND hms_new_application.username NOT IN (SELECT username FROM hms_learning_community_applications JOIN hms_learning_community_assignment ON hms_learning_community_applications.id = hms_learning_community_assignment.application_id WHERE term = $term)";
 
         if (isset($gender)) {
             $query .= "AND hms_new_application.gender = $gender ";
@@ -654,7 +654,8 @@ class LotteryProcess {
         LEFT OUTER JOIN (SELECT asu_username FROM hms_assignment WHERE hms_assignment.term=$term) as foo ON hms_new_application.username = foo.asu_username
         WHERE foo.asu_username IS NULL AND hms_lottery_application.invited_on IS NULL
         AND hms_new_application.term = $term
-        AND special_interest IS NULL";
+        AND special_interest IS NULL
+        AND hms_new_application.username NOT IN (SELECT username FROM hms_learning_community_applications JOIN hms_learning_community_assignment ON hms_learning_community_applications.id = hms_learning_community_assignment.application_id WHERE term = $term)";
 
         $remainingApplications = PHPWS_DB::getOne($query);
 
@@ -673,7 +674,8 @@ class LotteryProcess {
                     LEFT OUTER JOIN (SELECT asu_username FROM hms_assignment WHERE hms_assignment.term=$term) as foo ON hms_new_application.username = foo.asu_username
                     WHERE foo.asu_username IS NULL AND hms_lottery_application.invited_on IS NULL
                     AND hms_new_application.term = $term
-                    AND special_interest IS NULL ";
+                    AND special_interest IS NULL
+                    AND hms_new_application.username NOT IN (SELECT username FROM hms_learning_community_applications JOIN hms_learning_community_assignment ON hms_learning_community_applications.id = hms_learning_community_assignment.application_id WHERE term = $term) ";
 
         if (isset($gender)) {
             $query .= "AND hms_new_application.gender = $gender ";
