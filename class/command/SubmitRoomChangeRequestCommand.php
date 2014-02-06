@@ -145,10 +145,8 @@ class SubmitRoomChangeRequestCommand extends Command {
                 }
             }
 
-            // Email the RDs
-            foreach($participant->getCurrentRdList() as $rd) {
-                HMS_Email::sendRoomChangeCurrRDNotice($rd, $participant);
-            }
+            // No further approval is required so we skip a step
+            HMS_Email::sendRoomChangeCurrRDNotice($request);
 
         } else if($type == 'swap') {
             // Swapping with another student, so handle the other particpant
@@ -166,7 +164,7 @@ class SubmitRoomChangeRequestCommand extends Command {
             // Send "request needs your approval" to other students
             // TODO: When you add the ability to have many people on this request, you will
             //       need to put a foreach loop here or something.
-            HMS_Email::sendRoomChangeParticipantNotice($swapStudent, $student);
+            HMS_Email::sendRoomChangeParticipantNotice($participant, $swapParticipant);
         }
 
         // Save the main participant and its state
@@ -178,7 +176,7 @@ class SubmitRoomChangeRequestCommand extends Command {
         HMS_Activity_Log::log_activity(UserStatus::getUsername(), ACTIVITY_ROOM_CHANGE_SUBMITTED, UserStatus::getUsername(FALSE), $reason);
 
         // Email sender with acknowledgment
-        HMS_Email::sendRoomChangeRequestAcknowledgment($student);
+        HMS_Email::sendRoomChangeRequestReceivedConfirmation($student);
 
         if ($type == 'switch') {
             NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Your room change request has been received and is pending approval. You will be contacted by your Residence Director (RD) in the next 24-48 hours regarding your request.');

@@ -95,13 +95,8 @@ class RoomChangeCurrRdApproveCommand extends Command {
         //TODO
 
         if($request->isApprovedByAllCurrentRDs()) {
-            PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
             // If all Current RDs have approved, notify Future RDs
-            foreach($request->getParticipants() as $p) {
-                foreach($p->getFutureRdList() as $rd) {
-                    HMS_Email::sendRoomChangeFutureRDNotice($rd, $p);
-                }
-            }
+            HMS_Email::sendRoomChangeFutureRDNotice($request);
 
             // If all Current RDs have approved, notify future roommates
             foreach($request->getParticipants() as $p) {

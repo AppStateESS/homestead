@@ -74,11 +74,7 @@ class RoomChangeStudentApproveCommand extends Command {
 
         // If all students have approved, notify RDs
         if($request->isApprovedByAllParticipants()) {
-            foreach($request->getParticipants() as $p) {
-                foreach($p->getCurrentRdList() as $rd) {
-                    HMS_Email::sendRoomChangeCurrRDNotice($rd, $p);
-                }
-            }
+            HMS_Email::sendRoomChangeCurrRDNotice($rd, $p);
         }
 
         // If the student is logged in, redirect to the main menu, other wise go back to the room change management view
