@@ -1,7 +1,11 @@
-{NAME},
+Hello,
 
 Your room change request has been approved.
 
+The following movements will take place:
+<!-- BEGIN PARTICIPANTS -->
+* {NAME} will move from {CURRENT_LOCATION} to {FUTURE_LOCATION}.
+<!-- END PARTICIPANTS -->
 
 Please be sure to complete the following steps within 48 hours of receiving this confirmation.
 
