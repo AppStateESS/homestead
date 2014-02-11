@@ -8,7 +8,7 @@ ini_set('display_errors', 1);
 ini_set('ERROR_REPORTING', E_WARNING);
 error_reporting(E_ALL);
 
-$args = array('input_file' => '', 
+$args = array('input_file' => '',
               'term' => '',
               'group_name' => '');
 $switches = array();
@@ -48,6 +48,5 @@ foreach($bannerIds as $bId) {
 }
 
 pg_close($db);
-fclose($inputFile);
 
 ?>
