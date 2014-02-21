@@ -10,7 +10,7 @@
 
 <p>
 <!-- BEGIN eligible -->
-You are eligible to enter your name on the Open Waiting List. Students are selected from this list as space in the residence halls becomes available. Enrolling yourself on the waiting list does not guarantee you will be offered on-campus housing.
+You are eligible to apply for the Open Waiting List. Students are selected from this list as space in the residence halls becomes available. Enrolling yourself on the waiting list does not guarantee you will be offered on-campus housing.
 {WAIT_LIST_LINK}
 <!-- END eligible -->
 

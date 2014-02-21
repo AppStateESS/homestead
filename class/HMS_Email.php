@@ -739,10 +739,10 @@ class HMS_Email{
      *   {CURRENT}
      *   {DESTINATION}
      *
-     * @param $requestor Participant The person who invoked the room change request
-     * @param $requestee Participant A person involved in a room change request
+     * @param $requestor RoomChangeParticipant The person who invoked the room change request
+     * @param $requestee RoomChangeParticipant A person involved in a room change request
      */
-    public static function sendRoomChangeParticipantNotice(Participant $requestor, Participant $requestee)
+    public static function sendRoomChangeParticipantNotice(RoomChangeParticipant $requestor, RoomChangeParticipant $requestee)
     {
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
@@ -780,7 +780,7 @@ class HMS_Email{
 
         self::sendSwiftmailMessage(
             self::makeSwiftmailMessage(
-                $requestee, $subject, $tags, $template
+                $requesteeStudent, $subject, $tags, $template
             )
         );
     }
@@ -957,7 +957,7 @@ class HMS_Email{
             $bid = $p->getBannerId();
             $student = StudentFactory::getStudentByBannerID($bid, $term);
             $assign = HMS_Assignment::getAssignmentByBannerID($bid, $term);
-            $future = new HMS_Bed($p->getBannerId());
+            $future = new HMS_Bed($p->getToBed());
 
             $participantTags = array(
                 'BANNER_ID'   => $student->getBannerId(),
