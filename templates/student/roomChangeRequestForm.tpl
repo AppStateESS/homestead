@@ -38,7 +38,7 @@
 
 <h3>{TYPE_2}{TYPE_2_LABEL}</h3>
 <div id="roomSwap" style="margin-left:30px;">
-    <p>Enter the ASU user name (first part of email address) of the student you would like to switch rooms with. <strong>The person you want to switch with must also complete this form separetely, requesting to switch with you (using your ASU user name).</strong></p>
+    <p>Enter the ASU user name (first part of email address) of the student you would like to switch rooms with. <strong>The person you want to switch will be sent an email asking them to sign in and confirm your request.</strong></p>
     <p>
     {SWAP_WITH_LABEL}:
     {SWAP_WITH}<strong>@appstate.edu</strong>
