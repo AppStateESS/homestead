@@ -2,6 +2,7 @@
 PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
 PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
+PHPWS_Core::initModClass('hms', 'CheckinFactory.php');
 
 
 /**
@@ -75,6 +76,13 @@ class RoomChangeParticipantView extends View {
             $tpl['TO_ROOM'] = $toBed->where_am_i();
         }
 
+        /**
+         * Check that the participant is current checked into their current assignment
+         */
+        $checkin = CheckinFactory::getCheckinByBed($this->student, $fromBed, Term::getSelectedTerm());
+        if($checkin == null) {
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, "{$this->student->getName()} is not checked-in at his/her current assignment. This must be fixed before this room change can be given final approval.");
+        }
 
         /**
          * **

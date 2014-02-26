@@ -5,6 +5,7 @@ PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
 PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
 PHPWS_Core::initModClass('hms', 'HMS_Email.php');
+PHPWS_Core::initModClass('hms', 'CheckinFactory.php');
 
 /**
  * Controller for approving a room change requests.
@@ -39,6 +40,17 @@ class RoomChangeApproveCommand extends Command {
         // Load the participants
         $participants = $request->getParticipants();
 
+        // Make sure everyone is checked into their current assignments
+        if (!$request->allParticipantsCheckedIn()) {
+            // Return the user to the room change request page
+            // NB, don't need an error message here because it should already be printed
+            // by the RoomChangeParticipantView.
+            $cmd = CommandFactory::getCommand('ShowManageRoomChange');
+            $cmd->setRequestId($requestId);
+            $cmd->redirect();
+        }
+
+
         // Transition the request to 'Approved'
         $request->transitionTo(new RoomChangeStateApproved($request, time(), null, UserStatus::getUsername()));
 
@@ -54,6 +66,8 @@ class RoomChangeApproveCommand extends Command {
 
             // Save student's current assignment reason for later re-use
             $assignment = HMS_Assignment::getAssignmentByBannerId($bannerId, $term);
+            //TODO - Student might not be assigned!!
+
             $this->assignmentReasons[$bannerId] = $assignment->getReason();
 
             // Remove existing assignment

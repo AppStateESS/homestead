@@ -4,6 +4,8 @@ PHPWS_Core::initModClass('hms', 'Checkin.php');
 
 class CheckinFactory {
 
+    //TODO.. This only gets a single checkin.. There coule be multiple, so which checkin this returns in undefined.
+    // Find the places it's used and correct them.
     public static function getCheckinByBannerId($bannerId, $term)
     {
         $db = new PHPWS_DB('hms_checkin');

@@ -219,6 +219,26 @@ class RoomChangeRequest {
         return true;
     }
 
+    public function allParticipantsCheckedIn()
+    {
+        // Make sure each participant is checked-into his/her current assignment
+        foreach($this->getParticipants() as $participant){
+            // Load the 'from' Bed object
+            $bed = new HMS_Bed($participant->getFromBed());
+
+            // Load the student
+            $student = StudentFactory::getStudentByBannerId($participant->getBannerId(), Term::getSelectedTerm());
+
+            // Search for the check-in
+            $checkin = CheckinFactory::getCheckinByBed($student, $bed, Term::getSelectedTerm());
+            if($checkin == null) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     /*********************
      * Get / Set Methods *
      *********************/

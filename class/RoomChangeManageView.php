@@ -70,8 +70,8 @@ class RoomChangeManageView extends View {
                 $tpl['REQUEST_ID_CANCEL_BTN'] = $requestId;
             }
 
-            // If all participants are approved, and user has permission, show housing approve button
-            if($this->allParticipantsApproved() && Current_User::allow('hms', 'admin_approve_room_change')){
+            // If all participants are approved and checked into their current assignments, and user has permission, then show housing approve button
+            if($this->allParticipantsApproved() && Current_User::allow('hms', 'admin_approve_room_change') && $this->request->allParticipantsCheckedIn()){
                 $tpl['REQUEST_ID_APPROVE'] = $requestId;
             }
 
@@ -129,7 +129,7 @@ class RoomChangeManageView extends View {
         } else if($requestState instanceof RoomChangeStateDenied) {
             // Show cancellation/denial reason
             $tpl['DENIED_REASON_PUBLIC']  = $this->request->getDeniedReasonPublic();
-            
+
             // Show the private reason for admins / RDs
             if (Current_User::allow('hms', 'admin_approve_room_change') || in_array(UserStatus::getUsername(), $potentialApprovers)) {
                 $tpl['DENIED_REASON_PRIVATE'] = $this->request->getDeniedReasonPrivate();
