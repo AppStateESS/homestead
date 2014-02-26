@@ -166,7 +166,7 @@ $study_times_labels = array(
             'In the afternoon and early evening',
             'In the evening',
             'Late at night');
-            
+
 $political_views = array(
             0 => 'Prefer not to say',
             1 => 'Very liberal',
@@ -210,6 +210,7 @@ $majors = array(
 				31 => 'Geography',
 				32 => 'Geology',
 				33 => 'Geology, Secondary Education',
+                75 => 'Global Studies',
 				34 => 'Graphic Design',
 				35 => 'Graphics Arts and Imaging Technology',
 				36 => 'Health Care Management',
