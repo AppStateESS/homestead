@@ -1,4 +1,4 @@
-<h1>Room Change Approval</h1>
+<h1>Room Change Management</h1>
 
 <p>Showing room change requests for floors in: {HALL_NAMES}</p>
 
