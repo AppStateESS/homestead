@@ -40,6 +40,11 @@ class RoomChangeManageView extends View {
 
         $tpl['REQUEST_STATUS'] = $this->request->getState()->getName();
 
+        $tpl['last_updated_timestamp'] = $this->request->getLastUpdatedTimestamp();
+        $tpl['last_updated_date'] = date("M j @ g:ia", $this->request->getLastUpdatedTimestamp());
+
+        javascriptMod('hms', 'livestamp');
+
         $requestState = $this->request->getState();
 
         if ($requestState instanceof RoomChangeStatePending) {

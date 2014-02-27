@@ -23,6 +23,8 @@
 
 <h2>Status: {REQUEST_STATUS}</h2>
 
+<span>Last updated <span data-livestamp="{last_updated_timestamp}"></span> ({last_updated_date})</span>
+
 <div id="cancel-form">
   <form action="index.php?module=hms&action=RoomChangeCancel&requestId={REQUEST_ID_CANCEL}" method="post">
     <p>Please give a reason for cancelling this request. The reason will be available to all participants.</p>
