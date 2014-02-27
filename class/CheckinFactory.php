@@ -157,7 +157,19 @@ class CheckinFactory {
         $db->addJoin('', 'hms_checkin', 'hms_hall_structure', 'bed_id', 'bedid');
 
         $db->addWhere('banner_id', $student->getBannerId());
-        //$db->addWhere('term', $hall->getTerm());
+
+
+
+        // Smarter term logic: If it's Spring or Summer 2 then we can also look in the previous term
+        $term = $hall->getTerm();
+        $sem = Term::getTermSem($term);
+
+        if ($sem == TERM_SPRING || $sem == TERM_SUMMER2) {
+            $db->addWhere('term', $term, '=', 'OR', 'term_group');
+            $db->addWhere('term', Term::getPrevTerm($term), '=', 'OR', 'term_group');
+        } else {
+            $db->addWhere('term', $term);
+        }
 
         // Checkin bed ID must be in the request hall
         //$db->addWhere('hms_hall_structure.hallid', $hall->getId());
