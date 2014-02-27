@@ -1,4 +1,4 @@
-<h1>Manage Room Change Request</h1>
+<a class="header-back" href="index.php?module=hms&action=ShowAdminRoomChangeList"><span style="display:inline-block; text-decoration:none; font-size: 32px; font-weight: bold;"></span></a><h1>Manage Room Change Request</h1>
 
 <div style="float: right;">
     <!-- BEGIN approve_btn -->

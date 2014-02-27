@@ -58,6 +58,28 @@ fieldset {
   text-decoration: line-through;
 }
 
+a.header-back {
+	float:left;
+	color: #CCC;
+	margin-right: 25px;
+	margin-top: 5px;
+}
+
+a.header-back:hover {
+	color: #4183c4;
+}
+
+a.header-back span {
+	display:inline-block;
+	text-decoration:none;
+	font-size: 32px;
+	font-weight: bold;
+}
+
+a.header-back span:before{
+	content: '\003c';
+}
+
 /*** REMOVE THIS ONCE HMS IS BOOTSTRAPPED ***/
 .table>tr.success {
     color: #dff0d8;
