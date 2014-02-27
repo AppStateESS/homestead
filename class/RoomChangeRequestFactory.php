@@ -109,14 +109,12 @@ class RoomChangeRequestFactory {
         $stateQuery = implode(',', $statePlaceholders);
 
         /*
-         * Get any requests in the 'Pending' or 'Hold' states where the request is
+         * Get any requests in the given states where the request is
          * coming from a Participant currently living on one of the listed floor
-         * (from_bed is on a floor in list) and the participant status is
-         * 'StudentAproved' (i.e. this request is waiting on the currnt RDs approval)
+         * (from_bed is on a floor in list)
          *
-         * Union that with any Pending/Held request that has a to_bed set and that bed
-         * is on one of the floors in the list, and the participant's status is
-         * 'CurrRdApproved' (i.e. the request is waiting on the future RD's approval).
+         * Union that with any requests in the given states, where the request
+         * has a to_bed set and that bed is on one of the floors in the list
          *
          * The union is important because the 'to_bed' field does not always have to be
          * set. A combined JOIN (as opposed to UNION) would not include results where
@@ -281,7 +279,7 @@ class RoomChangeRequestFactory {
         $params = array_merge(array('term' => $term), $stateParams);
 
         $stmt->execute($params);
-        
+
         return $stmt->fetchAll(PDO::FETCH_CLASS, 'RoomChangeRequestRestored');
     }
 

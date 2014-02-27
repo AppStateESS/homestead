@@ -239,6 +239,28 @@ class RoomChangeRequest {
         return true;
     }
 
+    /**
+     * Returns the *latest* timestamp of a state change on this,
+     * or on any of its participants
+     */
+
+    public function getLastUpdatedTimestamp()
+    {
+        $db = PdoFactory::getPdoInstance();
+
+        $query = "select effective_date from hms_room_change_curr_participant where request_id = :requestId order by effective_date DESC LIMIT 1";
+
+        $stmt = $db->prepare($query);
+        $stmt->execute(array(
+                'requestId' => $this->getId()
+        ));
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+
+        $value = $stmt->fetch();
+
+        return $value['effective_date'];
+    }
+
     /*********************
      * Get / Set Methods *
      *********************/

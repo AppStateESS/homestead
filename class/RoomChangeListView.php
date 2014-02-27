@@ -19,6 +19,8 @@ class RoomChangeListView extends View {
             return PHPWS_Template::process($tpl, 'hms', 'admin/roomChangeListView.tpl');
         }
 
+        javascriptMod('hms', 'livestamp');
+
         $tpl['REQUESTS'] = array();
         foreach($this->requests as $request){
             $row = array();
@@ -36,6 +38,8 @@ class RoomChangeListView extends View {
             $mgmtCmd->setRequestId($request->getId());
 
             $row['manage'] = $mgmtCmd->getLink('manage');
+            $row['last_updated_timestamp'] = $request->getLastUpdatedTimestamp();
+            $row['last_updated_date'] = date("M j @ g:ia", $request->getLastUpdatedTimestamp());
 
             $tpl['REQUESTS'][] = $row;
         }
