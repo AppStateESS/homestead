@@ -33,6 +33,7 @@ class HousingApplicationView extends View {
     //public abstract function getTemplate();
 
     public function show(){
+        // TODO: Load application in controller and pass it to HousingApplicationView constructor.
         $application = HousingApplicationFactory::getApplicationById($this->id);
         $student     = StudentFactory::getStudentByUsername($application->username, $application->term);
 
@@ -42,6 +43,11 @@ class HousingApplicationView extends View {
         if(isset($application->created_on)){
             $tpl['RECEIVED_DATE']   = "Received on: " . date('d-F-Y h:i:s a', $application->created_on);
         }
+
+        if($application instanceof LotteryApplication && $application->getWaitingListDate() != null){
+            $tpl['WAITING_LIST_DATE'] = date("d-F-y h:i:sa", $application->getWaitingListDate());
+        }
+
 
         // Check if the application has been cancelled
         // isWithdrawn() has been depricated, but I'm leaving it here just for historical sake

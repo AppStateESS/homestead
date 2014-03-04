@@ -1,6 +1,10 @@
 <div class="hms">
   <div class="box">
-    <div class="title"> <h1>{TERM} On-campus Housing Application</h1><p>{RECEIVED_DATE}</p> </div>
+    <div class="title"> <h1>{TERM} On-campus Housing Application</h1></div>
+    <p>{RECEIVED_DATE}</p>
+    <!-- BEGIN waiting_list -->
+    <p>Added to waiting list on: {WAITING_LIST_DATE}</p>
+    <!-- END waiting_list -->
     <div class="box-content">
         
         <!-- BEGIN withdrawn -->
