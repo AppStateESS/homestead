@@ -20,3 +20,7 @@ Please be sure to complete the following steps within 48 hours of receiving this
 
 Assignments Office
 University Housing
+
+
+Want to help us improve our room change process?
+Take a two question survey: https://www.surveymonkey.com/s/RDCZSM6
