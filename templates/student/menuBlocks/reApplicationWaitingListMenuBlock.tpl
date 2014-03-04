@@ -25,9 +25,7 @@
 
 <!-- BEGIN signed_up -->
 {SIGNED_UP}
-<p>You have applied for the On-campus Housing Re-application Waiting List.</p>
-
-<p>You are number {POSITION} of {TOTAL} students on the waiting list. This will be updated as other students are added and removed from the waiting list, so you can come back to check your place on the list. We will notify you by mid-March whether on-campus housing has become available or not.</p>
+<p>You have applied for the On-campus Housing Re-application Waiting List. We will notify you by mid-March whether on-campus housing has become available or not.</p>
 <!-- END signed_up -->
 
 <!-- BEGIN apply -->
