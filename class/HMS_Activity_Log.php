@@ -222,7 +222,8 @@ class HMS_Activity_Log{
         ACTIVITY_RLC_INVITE_SENT                => "RLC Invitation Sent",
         ACTIVITY_EMERGENCY_CONTACT_UPDATED      => "Emergency Contact & Missing Person information updated",
         ACTIVITY_CHECK_IN                       => 'Checked-in',
-        ACTIVITY_CHECK_OUT                      => 'Checked-out');
+        ACTIVITY_CHECK_OUT                      => 'Checked-out',
+        ACTIVITY_REAPP_WAITINGLIST_APPLY        => 'Applied for Re-application Waiting List');
     }
 
     /**
