@@ -41,10 +41,7 @@ class ReapplicationWaitingListMenuBlockView extends View {
             $tpl['DID_NOT_APPLY'] = "";
         } else if (isset($this->application) && isset($this->application->waiting_list_date)){
             $tpl['ICON'] = FEATURE_COMPLETED_ICON;
-            
-            // Get this student's position on the wait list
-            $tpl['POSITION']    = $this->application->getWaitListPosition();
-            $tpl['TOTAL']       = count(LotteryApplication::getRemainingWaitListApplications($this->term));
+            $tpl['SIGNED_UP'] = "";
             
         } else if (isset($this->application)) {
             $tpl['ICON'] = FEATURE_OPEN_ICON;
