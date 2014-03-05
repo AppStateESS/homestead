@@ -35,7 +35,7 @@ class LotteryApplication extends HousingApplication {
     private static $waitingList;
 
     /**
-     * Constructor 
+     * Constructor
      * @param number $id
      * @param string $term
      * @param string $banner_id
@@ -167,7 +167,7 @@ class LotteryApplication extends HousingApplication {
     /**
      * Returns true is this LotteryApplication has received an invite
      * and that invite hasn't expired.
-     * 
+     *
      * @return boolean
      */
     public function isWinner()
@@ -203,7 +203,7 @@ class LotteryApplication extends HousingApplication {
 
     /**
      * Row tags for waiting list pager.
-     * 
+     *
      * @return Array Array of row tags for this LotteryApplication.
      */
     public function getRowTags(){
@@ -286,33 +286,33 @@ class LotteryApplication extends HousingApplication {
     public function waitingListTags()
     {
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-    
+
         $student = StudentFactory::getStudentByUsername($this->username, $this->term);
-    
+
         $tags = array();
-    
+
         $tags['POSITION']   = $this->getWaitListPosition();
         $tags['NAME']       = $student->getFullNameProfileLink();
         $tags['USER']       = $this->username;
         $tags['BANNER_ID']  = $student->getBannerId();
         $tags['CLASS']      = $student->getPrintableClass();
-    
+
         if(isset($this->cell_phone) && !is_null($this->cell_phone) && $this->cell_phone != ''){
             $tags['PHONE']      = '('.substr($this->cell_phone, 0, 3).')';
             $tags['PHONE']      .= substr($this->cell_phone, 3, 3);
             $tags['PHONE']      .= '-'.substr($this->cell_phone, 6, 4);
         }
-    
+
         $tags['GENDER']     = $student->getPrintableGender();
-    
-    
+
+
         $assign_link = PHPWS_Text::secureLink('[Assign]','hms', array('module'=>'hms', 'action'=>'ShowAssignStudent', 'username'=>$this->username));
         $remove_link = PHPWS_Text::secureLink('[Remove]','hms', array('module'=>'hms', 'action'=>'WaitingListRemove', 'username'=>$this->username));
         $tags['ACTION']     = "$assign_link $remove_link";
-    
+
         return $tags;
     }
-    
+
     /**
      * Returns array tags for waiting list DBPager csv export.
      * @return Array
@@ -320,60 +320,63 @@ class LotteryApplication extends HousingApplication {
     public function waitingListCsvTags()
     {
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-    
+
         $student = StudentFactory::getStudentByUsername($this->username, $this->term);
-    
+
         $tags = array();
-    
+
         $tags['NAME']       = $student->getFulLName();
         $tags['USER']       = $this->username;
         $tags['BANNER_ID']  = $student->getBannerId();
         $tags['CLASS']      = $student->getPrintableClass();
         $tags['GENDER']     = $student->getPrintableGender();
-    
+        $tags['APPLICATION_TERM'] = $student->getApplicationTerm();
+        $tags['APPLICATION_DATE'] = date("n/j/Y h:ia", $this->getCreatedOn());
+        $tags['WAITINGLIST_DATE'] = date("n/j/Y h:ia", $this->getWaitingListDate());
+
         if(isset($this->cell_phone) && !is_null($this->cell_phone) && $this->cell_phone != ''){
             $tags['PHONE']      = '('.substr($this->cell_phone, 0, 3).')';
             $tags['PHONE']      .= substr($this->cell_phone, 3, 3);
             $tags['PHONE']      .= '-'.substr($this->cell_phone, 6, 4);
         }
-    
+
         return $tags;
     }
-    
+
     /*****
      * Getters and setters.
      */
     public function getSororityPref(){
         return $this->sorority_pref;
     }
-    
+
     public function getTeachingFellowsPref(){
         return $this->tf_pref;
     }
-    
+
     public function getWataugaGlobalPref(){
         return $this->wg_pref;
     }
-    
+
     public function getHonorsPref(){
         return $this->honors_pref;
     }
-    
+
     public function setSororityPref($pref){
         $this->sorority_pref = $pref;
     }
     public function setTeachingFellowsPref($pref){
         $this->tf_pref = $pref;
     }
-    
+
     public function setWataugaGlobalPref($pref){
         $this->wg_pref = $pref;
     }
-    
+
     public function setHonorsPref($pref){
         $this->honors_pref = $pref;
     }
-    
+
     /**
      * @return integer Unixtimestamp that the student opted into the waiting list
      */
@@ -381,7 +384,7 @@ class LotteryApplication extends HousingApplication {
     {
         return $this->waiting_list_date;
     }
-    
+
     /**
      * Sets the date (unix timestamp) that the student opted into the waiting list
      *
@@ -391,17 +394,17 @@ class LotteryApplication extends HousingApplication {
     {
         $this->waiting_list_date = $timestamp;
     }
-    
-    
-    
-    
+
+
+
+
     /******************
      * Static Methods *
      */
-    
+
     /**
      * Special Interest Group DBPager for lottery
-     * 
+     *
      * @param unknown $group
      * @param unknown $term
      * @throws InvalidArgumentException
@@ -463,6 +466,8 @@ class LotteryApplication extends HousingApplication {
         $term = PHPWS_Settings::get('hms', 'lottery_term');
 
         $pager = new DBPager('hms_new_application', 'LotteryApplication');
+        $pager->db->addColumn('hms_new_application.*');
+        $pager->db->addColumn('hms_lottery_application.*');
         $pager->db->addJoin('LEFT', 'hms_new_application', 'hms_lottery_application', 'id', 'id');
         $pager->db->addJoin('LEFT OUTER', 'hms_new_application', 'hms_assignment', 'username', 'asu_username AND hms_new_application.term = hms_assignment.term');
         $pager->db->addWhere('hms_assignment.asu_username', 'NULL');
@@ -484,14 +489,14 @@ class LotteryApplication extends HousingApplication {
         $pager->addRowTags('waitingListTags');
         $pager->setReportRow('waitingListCsvTags');
         $pager->setSearch('hms_new_application.username', 'hms_new_application.banner_id');
-        
+
         return $pager->get();
     }
 
     /**
      * Returns a list of usernames which are currently on the waiting list
      * (has a valid housing application, not assigned)
-     * 
+     *
      * @param unknown $term
      * @throws DatabaseException
      * @return unknown
