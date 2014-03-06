@@ -216,7 +216,7 @@ CREATE TABLE hms_bed (
     room_change_reserved    smallint NOT NULL DEFAULT 0,
     international_reserved  smallint NOT NULL DEFAULT 0,
     persistent_id           character varying,
-    ra                      smallint NOT NULL DEFAULT 0
+    ra                      smallint NOT NULL DEFAULT 0,
     PRIMARY KEY(id)
 );
 
