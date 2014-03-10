@@ -50,7 +50,7 @@ class CheckinFactory {
     {
         $db = new PHPWS_DB('hms_checkin');
         $db->addWhere('banner_id', $student->getBannerId());
-        $db->addWhere('term', $term);
+        //$db->addWhere('term', $term);
         //$db->addWhere('bed_id', $bed->getId());
         $db->addWhere('bed_persistent_id', $bed->getPersistentId());
 
