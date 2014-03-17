@@ -231,7 +231,7 @@ class RoomChangeRequest {
 
             // Search for the check-in
             $checkin = CheckinFactory::getCheckinByBed($student, $bed, Term::getSelectedTerm());
-            if($checkin == null) {
+            if($checkin == null || ($checkin != null && $checkin->getCheckoutDate() != null)) {
                 return false;
             }
         }

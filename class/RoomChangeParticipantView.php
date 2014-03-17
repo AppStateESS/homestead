@@ -77,10 +77,10 @@ class RoomChangeParticipantView extends View {
         }
 
         /**
-         * Check that the participant is current checked into their current assignment
+         * Check that the participant is checked into their current assignment
          */
         $checkin = CheckinFactory::getCheckinByBed($this->student, $fromBed, Term::getSelectedTerm());
-        if($checkin == null) {
+        if($checkin == null || ($checkin != null && $checkin->getCheckoutDate() != null)) {
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, "{$this->student->getName()} is not checked-in at his/her current assignment. This must be fixed before this room change can be given final approval.");
         }
 
