@@ -44,6 +44,14 @@ class RoomChangeCancelCommand extends Command {
 
         foreach ($participants as $p) {
             $p->transitionTo(new ParticipantStateCancelled($p, time(), null, UserStatus::getUsername()));
+
+            //Release the bed reservation, if any
+            $bedId = $p->getToBed();
+            if ($bedId != null) {
+                $bed = new HMS_Bed($bedId);
+                $bed->clearRoomChangeReserved();
+                $bed->save();
+            }
         }
 
         // Notify everyone involved

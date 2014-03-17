@@ -1,6 +1,7 @@
 <?php
 
 PHPWS_Core::initModClass('hms', 'RoomChangeRequestFactory.php');
+PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
 
 class RoomChangeDenyCommand extends Command {
 
@@ -46,7 +47,16 @@ class RoomChangeDenyCommand extends Command {
         $participants = $request->getParticipants();
 
         foreach ($participants as $p) {
+            // Transition this participant to the denied state
             $p->transitionTo(new ParticipantStateDenied($p, time(), null, UserStatus::getUsername()));
+
+            //Release the bed reservation, if any
+            $bedId = $p->getToBed();
+            if ($bedId != null) {
+                $bed = new HMS_Bed($bedId);
+                $bed->clearRoomChangeReserved();
+                $bed->save();
+            }
         }
 
         // Notify everyone involved
