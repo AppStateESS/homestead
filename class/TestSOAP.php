@@ -171,7 +171,7 @@ class TestSOAP extends SOAP{
      * Remove the deletion of a room assignment to Banner.
      * Will cause students to be credited, etc.
      */
-    public function removeRoomAssignment($bannerId, $term, $building, $bannerBedId)
+    public function removeRoomAssignment($bannerId, $term, $building, $bannerBedId, $percentRefund)
     {
         //		return false; //error
         return true;

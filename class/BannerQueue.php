@@ -37,17 +37,12 @@ class BannerQueue {
      * commits are enabled, the it will be sent straight to Banner,
      * and so the force_queue flag will be ignored.
      */
-    public function queueRemoveAssignment(Student $student, $term, HMS_Residence_Hall $hall, HMS_Bed $bed, $forceQueue = FALSE)
+    public function queueRemoveAssignment(Student $student, $term, HMS_Residence_Hall $hall, HMS_Bed $bed, $refund)
     {
-        $entry = new BannerQueueItem(0, BANNER_QUEUE_REMOVAL, $student, $term, $hall, $bed, null, null);
+        $entry = new BannerQueueItem(0, BANNER_QUEUE_REMOVAL, $student, $term, $hall, $bed, null, null, $refund);
 
         if(BannerQueue::processImmediately($term)) {
             return $entry->process();
-        }
-
-        // If we're forced to save it, then save and be done
-        if($forceQueue === TRUE) {
-            return $entry->save();
         }
 
         // Otherwise, look for an corresponding assignment

@@ -581,12 +581,13 @@ class HMS_Assignment extends HMS_Item {
      * @param String $term The term of the assignment to remove.
      * @param String $notes Additional notes for the ActivityLog.
      * @param String $reason Reason string, defined in defines.php
+     * @param Integer $refund Percentage of original charges student should be refunded
      * @throws PermissionException
      * @throws InvalidArgumentException
      * @throws AssignmentException
      * @throws DatabaseException
      */
-    public static function unassignStudent(Student $student, $term, $notes = "", $reason)
+    public static function unassignStudent(Student $student, $term, $notes = "", $reason, $refund)
     {
         if (!UserStatus::isAdmin() || !Current_User::allow('hms', 'assignment_maintenance')) {
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
@@ -607,6 +608,16 @@ class HMS_Assignment extends HMS_Item {
         }
 
         $username = strtolower($username);
+        
+        // Check refund field, required field
+        if(!isset($refund) || $refund == '') {
+            throw new InvalidArgumentException('Please enter a refund percentage.');
+        }
+
+        // Refund must be numeric
+        if(!is_numeric($refund) || $refund < 0 || $refund > 100) {
+            throw new InvalidArgumentException('The refund percentage must be between 0 and 100 percent.');
+        }
 
         // Make sure the requested username is actually assigned
         if (!HMS_Assignment::checkForAssignment($username, $term)) {
@@ -624,7 +635,7 @@ class HMS_Assignment extends HMS_Item {
         $building = $floor->get_parent();
 
         // Attempt to unassign the student in Banner though SOAP
-        $banner_result = BannerQueue::queueRemoveAssignment($student, $term, $building, $bed);
+        $banner_result = BannerQueue::queueRemoveAssignment($student, $term, $building, $bed, $refund);
 
         // Show an error and return if there was an error
         if ($banner_result !== TRUE) {
@@ -642,7 +653,7 @@ class HMS_Assignment extends HMS_Item {
         }
 
         // Log in the activity log
-        HMS_Activity_Log::log_activity($username, ACTIVITY_REMOVED, UserStatus::getUsername(), $term . ' ' . $banner_building_code . ' ' . $banner_bed_id . ' ' . $notes);
+        HMS_Activity_Log::log_activity($username, ACTIVITY_REMOVED, UserStatus::getUsername(), $term . ' ' . $banner_building_code . ' ' . $banner_bed_id . ' ' . $notes . 'Refund: ' . $refund);
 
         // Insert into history table
         AssignmentHistory::makeUnassignmentHistory($assignment, $reason);

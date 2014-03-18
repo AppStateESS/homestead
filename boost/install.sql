@@ -594,6 +594,7 @@ CREATE TABLE hms_banner_queue (
     meal_plan character varying(5),
     meal_code smallint DEFAULT 0,
     term integer NOT NULL,
+    percent_refund integer,
     queued_on integer NOT NULL,
     queued_by integer NOT NULL
 );
