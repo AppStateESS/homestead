@@ -619,6 +619,11 @@ class HMS_Assignment extends HMS_Item {
             throw new InvalidArgumentException('The refund percentage must be between 0 and 100 percent.');
         }
 
+        // Must be whole number
+        if (is_float($refund)) {
+            throw new InvalidArgumentException('Only whole number refund percentages are supported, no decimal place is allowed.');
+        }
+
         // Make sure the requested username is actually assigned
         if (!HMS_Assignment::checkForAssignment($username, $term)) {
             throw new AssignmentException('Student is not assigned.');

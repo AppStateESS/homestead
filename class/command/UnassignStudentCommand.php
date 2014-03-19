@@ -67,6 +67,13 @@ class UnassignStudentCommand extends Command {
             $cmd->redirect();
         }
 
+        // Must be whole number
+        if (is_float($refund)) {
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Only whole number refund percentages are supported, no decimal place is allowed.');
+            $cmd->redirect();
+        }
+            
+
         $term = Term::getSelectedTerm();
         $student = StudentFactory::getStudentByUsername($username, $term);
         $notes = $context->get('note');
