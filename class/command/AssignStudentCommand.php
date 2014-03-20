@@ -209,7 +209,8 @@ class AssignStudentCommand extends Command {
         // then unassign the student first.
         if($moveNeeded){
             try{
-                HMS_Assignment::unassignStudent($student, $term, '(re-assign)', UNASSIGN_REASSIGN);
+                //TODO don't hard-code refund percentage to 100%
+                HMS_Assignment::unassignStudent($student, $term, '(re-assign)', UNASSIGN_REASSIGN, 100);
             }catch(Exception $e){
                 NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Error deleting current assignment. {$username} was not removed.");
                 $errorCmd->redirect();

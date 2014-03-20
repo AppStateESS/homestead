@@ -59,7 +59,8 @@ class CancelHousingApplicationCommand extends Command {
         $assignment = HMS_Assignment::getAssignmentByBannerId($student->getBannerId(), $assignmentTerm);
         
         if(isset($assignment)){
-            HMS_Assignment::unassignStudent($student, $assignmentTerm, 'Application cancellation: ' . $reasons[$cancelReason], UNASSIGN_CANCEL);
+            // TODO: Don't hard code cancellation refund percentage
+            HMS_Assignment::unassignStudent($student, $assignmentTerm, 'Application cancellation: ' . $reasons[$cancelReason], UNASSIGN_CANCEL, 100);
         }
         
         // Cancel the application
