@@ -37,6 +37,7 @@ class ApplicationFeatureListView extends View
             $content[] = $view->show();
         }
 
+        // TODO.. put the HTML in a template
         return '<p>Note: both "Start Date" and "End Date" imply 12:00 AM on those dates.  Effectively, this means that the feature will be available all day on the selected "Start Date", but will not be available at all on the "End Date".</p>'
                 .implode('', $content);
     }

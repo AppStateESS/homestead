@@ -109,7 +109,7 @@ class BannerQueue {
             }
 
             if($result === TRUE){
-                $r = $item->delete();
+                $item->delete();
             }
         }
 
