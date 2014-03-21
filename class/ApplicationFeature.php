@@ -380,14 +380,12 @@ abstract class ApplicationFeature
      */
     public static function getEnabledFeaturesForStudent(Student $student, $term)
     {
-        $features = array();
-
         $db = new PHPWS_DB('hms_application_feature');
         $db->addWhere('enabled', 1);
         $db->addWhere('term', $term);
 
         $results = $db->select();
-        
+
         $features = array();
         foreach($results as $result) {
 
@@ -403,18 +401,18 @@ abstract class ApplicationFeature
             }
 
             $className = $result['name'];
-            
+
             // Check for conflicting priorities in the array, make sure we don't overwrite
             // an existing key
             if(array_key_exists($reg->getPriority(), $features)){
                 throw new Exception("Conflicting menu item priorities: {$result['name']}, $term");
             }
-            
+
             $features[$reg->getPriority()] = new $className($result['id']);
         }
 
         ksort($features);
-        
+
         return $features;
     }
 
@@ -436,11 +434,11 @@ abstract class ApplicationFeature
         if(!isset($name)){
             throw new InvalidArgumentException('Missing feature name.');
         }
-        
+
         if(!isset($term)){
             throw new InvalidArgumentException('Missing term.');
         }
-        
+
         $db = new PHPWS_DB('hms_application_feature');
         $db->addWhere('name', $name);
         $db->addWhere('term', $term);
