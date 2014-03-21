@@ -40,7 +40,7 @@ class AcceptSpecialInterestCommand extends Command {
         $app = new LotteryApplication($context->get('id'));
         $app->special_interest = $context->get('group');
 
-        $result = $app->save();
+        $app->save();
 
         NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, "Accepted {$app->getUsername()}");
 
