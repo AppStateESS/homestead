@@ -6,6 +6,8 @@
  */
 function hms_update(&$content, $currentVersion)
 {
+    $files = array();
+
     switch ($currentVersion) {
         case version_compare($currentVersion, '0.1.2', '<') :
             $db = & new PHPWS_DB();
@@ -14,7 +16,6 @@ function hms_update(&$content, $currentVersion)
                 return $result;
             }
 
-            $files = array();
             $files[] = 'templates/student/rlc_signup_form_page2.tmp';
 
             PHPWS_Boost::updateFiles($files, 'hms');
@@ -23,7 +24,6 @@ function hms_update(&$content, $currentVersion)
             $content[] = _('+ RLC application table');
 
         case version_compare($currentVersion, '0.1.3', '<') :
-            $files = array();
             $files[] = 'templates/student/rlc_signup_confirmation.tpl';
             PHPWS_Boost::updateFiles($files, 'hms');
 
@@ -36,7 +36,6 @@ function hms_update(&$content, $currentVersion)
                 return $result;
             }
 
-            $files = array();
             $files[] = 'templates/admin/display_final_rlc_assignments.tpl';
             $files[] = 'templates/admin/display_rlc_student_detail_form_questions.tpl';
             $files[] = 'templates/admin/make_new_rlc_assignments.tpl';
@@ -57,7 +56,6 @@ function hms_update(&$content, $currentVersion)
                 return $result;
             }
 
-            $files = array();
             $files[] = 'templates/admin/deadlines.tpl';
             $files[] = 'templates/admin/statistics.tpl';
             $files[] = 'templates/student/application_search.tpl';
@@ -87,7 +85,6 @@ function hms_update(&$content, $currentVersion)
                 return $result;
             }
 
-            $files = array();
             $files[] = 'templates/admin/maintenance.tpl';
             $files[] = 'templates/misc/login.tpl';
 
@@ -103,7 +100,6 @@ function hms_update(&$content, $currentVersion)
                 return $result;
             }
 
-            $files = array();
             $files[] = 'templates/admin/make_new_rlc_assignments_summary.tpl';
             $files[] = 'templates/admin/rlc_assignments_page.tpl';
             $files[] = 'templates/admin/add_floor.tpl';
@@ -126,7 +122,6 @@ function hms_update(&$content, $currentVersion)
                 return $result;
             }
 
-            $files = array();
             $files[] = 'templates/admin/display_learning_community_data.tpl';
             $files[] = 'templates/admin/maintenance.tpl';
             $files[] = 'templates/admin/display_hall_data.tpl';
@@ -154,7 +149,6 @@ function hms_update(&$content, $currentVersion)
                 return $result;
             }
 
-            $files = array();
             $files[] = 'templates/admin/maintenance.tpl';
 
             PHPWS_Boost::updateFiles($files, 'hms');
@@ -162,7 +156,6 @@ function hms_update(&$content, $currentVersion)
             $content[] = '+ Sync\'d with the current live release.';
 
         case version_compare($currentVersion, '0.1.10', '<') :
-            $files = array();
             $files[] = 'templates/admin/assign_floor.tpl';
             $files[] = 'templates/admin/bed_and_id.tpl';
             $files[] = 'templates/admin/get_hall_floor.tpl';
@@ -187,7 +180,6 @@ function hms_update(&$content, $currentVersion)
             $content[] = '+ Fixed minor glitch where assignment by room range was pulling rooms incorrectly (did not take floor number into account)';
 
         case version_compare($currentVersion, '0.1.12', '<') :
-            $files = array();
             $files[] = 'templates/student/contract.tpl';
 
             PHPWS_Boost::updateFiles($files, 'hms');
@@ -204,7 +196,6 @@ function hms_update(&$content, $currentVersion)
                 return $result;
             }
 
-            $files = array();
             $files[] = 'templates/admin/maintenance.tpl';
             $files[] = 'templates/admin/bed_and_id.tpl';
             $files[] = 'templates/misc/side_thingie.tpl';
@@ -230,7 +221,6 @@ function hms_update(&$content, $currentVersion)
                 return $result;
             }
 
-            $files = array();
             $files[] = 'templates/student/profile_form.tpl';
 
             PHPWS_Boost::updateFiles($files, 'hms');
@@ -244,7 +234,6 @@ function hms_update(&$content, $currentVersion)
                 return $result;
             }
 
-            $files = array();
             $files[] = 'templates/student/student_success_failure_message.tpl';
             $files[] = 'templates/admin/deadlines.tpl';
             $files[] = 'templates/admin/maintenance.tpl';
@@ -273,7 +262,6 @@ function hms_update(&$content, $currentVersion)
                 return $result;
             }
 
-            $files = array();
             $files[] = 'templates/student/profile_form.tpl';
 
             PHPWS_Boost::updateFiles($files, 'hms');
@@ -286,7 +274,6 @@ function hms_update(&$content, $currentVersion)
             $content[] = '+ Added profile editing!';
 
         case version_compare($currentVersion, '0.1.18', '<') :
-            $files = array();
             $files[] = 'templates/admin/maintenance.tpl';
             $files[] = 'templates/student/profile_form.tpl';
             $files[] = 'templates/profile_search.tpl';
@@ -304,7 +291,6 @@ function hms_update(&$content, $currentVersion)
             $content[] = '+ Improved "Side Thingie" to show roomate status/deadlines';
 
         case version_compare($currentVersion, '0.1.19', '<') :
-            $files = array();
             $files[] = 'templates/admin/rlc_assignments_pager.tpl';
             $files[] = 'templates/admin/make_new_rlc_assignments.tpl';
             $files[] = 'templates/student/show_student_info.tpl';
@@ -327,7 +313,6 @@ function hms_update(&$content, $currentVersion)
                 return $result;
             }
 
-            $files = array();
             $files[] = 'templates/student/rlc_application.tpl';
             PHPWS_Boost::updateFiles($files, 'hms');
 
@@ -393,7 +378,6 @@ function hms_update(&$content, $currentVersion)
                 return $result;
             }
 
-            $files = array();
             $files[] = 'templates/admin/display_room_data.tpl';
             $files[] = 'templates/student/profile_search_pager.tpl';
             PHPWS_Boost::updateFiles($files, 'hms');
@@ -422,7 +406,6 @@ function hms_update(&$content, $currentVersion)
                 return $result;
             }
 
-            $files = array();
             $files[] = 'templates/student/show_student_info.tpl';
             $files[] = 'templates/admin/add_floor.tpl';
             $files[] = 'templates/admin/display_floor_data.tpl';
@@ -451,7 +434,6 @@ function hms_update(&$content, $currentVersion)
                 return $result;
             }
 
-            $files = array();
             $files[] = 'templates/admin/full_name_gender_email.tpl';
             $files[] = 'templates/admin/rlc_roster_table.tpl';
             $files[] = 'templates/admin/maintenance.tpl';
@@ -475,14 +457,12 @@ function hms_update(&$content, $currentVersion)
             $content[] = '+ Letters are ready!';
 
         case version_compare($currentVersion, '0.1.27', '<') :
-            $files = array();
             $files[] = 'templates/student/show_student_info.tpl';
             PHPWS_Boost::updateFiles($files, 'hms');
 
             $content[] = '+ Added ability to change meal plans to student search screen';
 
         case version_compare($currentVersion, '0.1.28', '<') :
-            $files = array();
             $files[] = 'templates/admin/display_floor_Data.tpl';
             PHPWS_Boost::updateFiles($files, 'hms');
 
