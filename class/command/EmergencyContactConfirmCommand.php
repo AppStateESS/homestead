@@ -35,7 +35,7 @@ class EmergencyContactConfirmCommand extends Command {
         // Check for an existing application and load it
         $application = NULL;
         $app_result = HousingApplication::checkForApplication($username, $term);
-        
+
         if($app_result !== FALSE){
             switch($sem){
                 case TERM_SPRING:
@@ -69,7 +69,7 @@ class EmergencyContactConfirmCommand extends Command {
 
         /* Emergency Medical Condition */
         $application->setEmergencyMedicalCondition($context->get('emergency_medical_condition'));
-        
+
         /* Missing Person */
         $application->setMissingPersonName($context->get('missing_person_name'));
         $application->setMissingPersonRelationship($context->get('missing_person_relationship'));
@@ -78,8 +78,6 @@ class EmergencyContactConfirmCommand extends Command {
 
         // Save the modified application
         $result = $application->save();
-
-        $tpl = array();
 
         if($result == TRUE){
             // Log the fact that the application updated
