@@ -21,11 +21,6 @@ class DeleteRlcApplicationCommand extends Command
         $this->term = $term;
     }
 
-    public function setApplicationId($id)
-    {
-        $this->applicationId = $id;
-    }
-
     public function execute(CommandContext $context)
     {
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
@@ -44,11 +39,11 @@ class DeleteRlcApplicationCommand extends Command
         else if(!HMS_RLC_Assignment::checkForAssignment(UserStatus::getUsername(), $term)){
             // Delete the app
             $app->delete();
-            
+
             // Log it
             PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
             HMS_Activity_Log::log_activity(UserStatus::getUsername(), ACTIVITY_RLC_APPLICATION_DELETED, UserStatus::getUsername());
-            
+
             // Show a notification and go back
             NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'RLC application deleted.');
             $context->goBack();
