@@ -17,11 +17,10 @@ class EmergencyContactFormSubmitCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        $term		= $context->get('term');
-        $student	= StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
+        //$term		= $context->get('term');
 
-        $errorCmd = CommandFactory::getCommand('ShowEmergencyContactForm');
-        $errorCmd->setTerm($term);
+        //$errorCmd = CommandFactory::getCommand('ShowEmergencyContactForm');
+        //$errorCmd->setTerm($term);
 
         /* Emergency Contact Sanity Checking */
         //TODO
