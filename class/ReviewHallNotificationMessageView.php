@@ -45,7 +45,7 @@ class ReviewHallNotificationMessageView extends View {
             $tpl['halls'][$floor->_hall->getHallName()][] = 'Floor '.$floor->getFloorNumber();
         }
         
-        $tpl['FROM']    = ($this->anonymous && Current_User::allow('hms', 'anonymous_notifications')) ? FROM_ADDRESS : Current_User::getEmail();
+        $tpl['FROM']    = ($this->anonymous && Current_User::allow('hms', 'anonymous_notifications')) ? FROM_ADDRESS : (Current_User::getUsername() . '@' . DOMAIN_NAME);
         $tpl['SUBJECT'] = $this->subject;
         $tpl['BODY']    = preg_replace('/\n/', '<br />', $this->body);
 

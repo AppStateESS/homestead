@@ -48,7 +48,7 @@ class SendNotificationEmailsCommand extends Command {
         $subject   = $context->get('subject');
         $body      = $context->get('body');
         $anonymous = (!is_null($context->get('anonymous')) && $context->get('anonymous')) ? true : false;
-        $from      = ($anonymous && Current_User::allow('hms', 'anonymous_notifications')) ? FROM_ADDRESS : Current_User::getEmail();
+        $from      = ($anonymous && Current_User::allow('hms', 'anonymous_notifications')) ? FROM_ADDRESS : Current_User::getUsername() . '@' . DOMAIN_NAME;
         $halls     = $context->get('hall');
         $floors    = $context->get('floor');
 
@@ -139,7 +139,7 @@ class SendNotificationEmailsCommand extends Command {
 
             $students = $floor->getUsernames();
             foreach($students as $student){
-                HMS_Email::send_email($student . '@appstate.edu', $from, $subject, $body);
+                HMS_Email::send_email($student . '@' . DOMAIN_NAME, $from, $subject, $body);
             }
 
             HMS_Activity_Log::log_activity(Current_User::getUsername(), ($anonymous ? ACTIVITY_FLOOR_NOTIFIED_ANONYMOUSLY : ACTIVITY_FLOOR_NOTIFIED), Current_User::getUsername(), $floor->where_am_i());
