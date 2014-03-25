@@ -1,5 +1,5 @@
 <?php
-
+namespace hms;
 /**
  * HMS View
  * Handles the very basic HMS view.  This has a top-bar to show login status
@@ -20,8 +20,7 @@ abstract class View
     public abstract function show();
 }
 
-abstract class HMSView extends View
-{
+abstract class HMSView extends View{
     private $main;
 
     public function setMain($content)
@@ -44,11 +43,11 @@ abstract class HMSView extends View
         $tpl = array();
         $tpl['MAIN'] = $content;
         $tpl['TERM'] = self::getTerm();
-        $tpl['USER'] = UserStatus::getDisplay();
+        $tpl['USER'] = \UserStatus::getDisplay();
 
-        Layout::addStyle('hms', 'css/hms.css');
-        Layout::addStyle('hms', 'css/tango-icons.css');
-        Layout::add(PHPWS_Template::process($tpl, 'hms', 'hms.tpl'));
+        \Layout::addStyle('hms', 'css/hms.css');
+        \Layout::addStyle('hms', 'css/tango-icons.css');
+        \Layout::add(\PHPWS_Template::process($tpl, 'hms', 'hms.tpl'));
     }
 }
 

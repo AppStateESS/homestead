@@ -2,7 +2,7 @@
 
 PHPWS_Core::initModClass('hms', 'View.php');
 
-class SelectFloorView extends View {
+class SelectFloorView extends hms\View{
 
     private $title;
     private $term;

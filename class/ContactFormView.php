@@ -3,7 +3,7 @@
 PHPWS_Core::initModClass('hms', 'View.php');
 PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 
-class ContactFormView extends View {
+class ContactFormView extends hms\View{
 
     public function show()
     {

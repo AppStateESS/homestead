@@ -3,7 +3,7 @@
 PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 PHPWS_Core::initModClass('hms', 'LotteryProcess.php');
 
-class ReapplicationMenuBlockView extends View {
+class ReapplicationMenuBlockView extends hms\View{
 
     private $term;
     private $startDate;

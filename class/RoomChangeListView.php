@@ -1,6 +1,6 @@
 <?php
 
-class RoomChangeListView extends View {
+class RoomChangeListView extends hms\View{
 
     private $requests;
     private $term;

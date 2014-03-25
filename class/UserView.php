@@ -8,8 +8,7 @@
 
 PHPWS_Core::initModClass('hms', 'View.php');
 
-class UserView extends HMSView
-{
+class UserView extends hms\HMSView{
     var $sidebar = array();
     var $notifications;
 
