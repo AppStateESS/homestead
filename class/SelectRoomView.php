@@ -1,8 +1,6 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'View.php');
-
-class SelectRoomView extends homestead\View {
+class SelectRoomView extends hms\View{
 
     private $title;
     private $term;

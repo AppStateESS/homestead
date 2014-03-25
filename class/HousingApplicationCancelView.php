@@ -1,6 +1,6 @@
 <?php
 
-class HousingApplicationCancelView extends homestead\View {
+class HousingApplicationCancelView extends hms\View{
     
     private $application;
     private $student;

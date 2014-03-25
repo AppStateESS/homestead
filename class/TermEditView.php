@@ -1,8 +1,7 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'View.php');
+class TermEditView extends hms\View{
 
-class TermEditView extends homestead\View {
     private $term;
 
     public function __construct($term) {

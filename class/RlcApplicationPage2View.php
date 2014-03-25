@@ -1,5 +1,4 @@
 <?php
-PHPWS_Core::initModClass('hms', 'View.php');
 PHPWS_Core::initModClass('hms', 'Student.php');
 PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 
@@ -11,8 +10,8 @@ PHPWS_Core::initModClass('hms', 'StudentFactory.php');
  *
  */
 
-class RlcApplicationPage2View extends homestead\View
-{
+class RlcApplicationPage2View extends hms\View{
+
     protected $context;
 
     public function __construct(CommandContext $context)

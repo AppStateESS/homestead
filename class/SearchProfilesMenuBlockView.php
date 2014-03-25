@@ -1,6 +1,6 @@
 <?php
 
-class SearchProfilesMenuBlockView extends homestead\View {
+class SearchProfilesMenuBlockView extends hms\View{
 
     private $student;
     private $startDate;

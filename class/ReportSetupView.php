@@ -8,7 +8,7 @@
  *
  * @author jbooker
  */
-class ReportSetupView extends homestead\View {
+class ReportSetupView extends hms\View{
 
     protected $report;
     protected $datePicker;

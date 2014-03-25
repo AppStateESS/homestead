@@ -2,7 +2,7 @@
 
 PHPWS_Core::initModClass('hms', 'DamageTypeFactory.php');
 
-class RoomDamageAssessmentView extends homestead\View {
+class RoomDamageAssessmentView extends hms\View{
 
     public function __construct()
     {

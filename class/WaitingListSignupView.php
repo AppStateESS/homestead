@@ -1,6 +1,6 @@
 <?php
 
-class WaitingListSignupView extends homestead\View {
+class WaitingListSignupView extends hms\View{
     
     private $term;
     

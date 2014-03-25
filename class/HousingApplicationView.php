@@ -13,12 +13,12 @@ PHPWS_Core::initModClass('hms', 'FallApplication.php');
 PHPWS_Core::initModClass('hms', 'SpringApplication.php');
 PHPWS_Core::initModClass('hms', 'SummerApplication.php');
 
-PHPWS_Core::initModClass('hms', 'View.php');
 PHPWS_Core::initModClass('hms', 'HousingApplicationFactory.php');
 PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
-class HousingApplicationView extends homestead\View {
+class HousingApplicationView extends hms\View{
+
     protected $id;
 
     public function __construct($id){

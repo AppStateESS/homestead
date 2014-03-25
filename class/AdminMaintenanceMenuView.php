@@ -1,7 +1,5 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'View.php');
-
 PHPWS_Core::initModClass('hms', 'StudentSearchMenu.php');
 PHPWS_Core::initModClass('hms', 'AssignmentMenu.php');
 PHPWS_Core::initModClass('hms', 'ResidenceHallMenu.php');
@@ -14,7 +12,7 @@ PHPWS_Core::initModClass('hms', 'MessagingMenu.php');
 PHPWS_Core::initModClass('hms', 'ServiceDeskMenu.php');
 
 
-class AdminMaintenanceMenuView extends homestead\View {
+class AdminMaintenanceMenuView extends hms\View{
 
     public function show()
     {

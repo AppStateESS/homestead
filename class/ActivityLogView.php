@@ -1,9 +1,8 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'View.php');
 PHPWS_Core::initModClass('hms', 'ActivityLogPager.php');
 
-class ActivityLogView extends homestead\View {
+class ActivityLogView extends hms\View{
 
     private $actee;
     private $actor;

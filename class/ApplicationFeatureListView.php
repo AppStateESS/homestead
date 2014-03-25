@@ -1,9 +1,7 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'View.php');
+class ApplicationFeatureListView extends hms\View{
 
-class ApplicationFeatureListView extends homestead\View
-{
     public static $dir = 'applicationFeature';
     private $features;
     private $term;

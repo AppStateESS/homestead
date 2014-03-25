@@ -1,6 +1,6 @@
 <?php
 
-class StatsView extends homestead\View {
+class StatsView extends hms\View{
 
     public function show()
     {

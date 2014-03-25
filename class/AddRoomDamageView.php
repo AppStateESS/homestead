@@ -7,7 +7,7 @@ PHPWS_Core::initModClass('hms', 'DamageTypeFactory.php');
  * @author jbooker
  * @deprecated
  */
-class AddRoomDamageView extends homestead\View {
+class AddRoomDamageView extends hms\View{
 
     private $room;
 

@@ -13,8 +13,7 @@ PHPWS_Core::initModClass('hms', 'HMS_Util.php');
  * @author Jeremy Booker <jbooker at tux dot appstate dot edu>
  * @package HMS
 */
-
-class ListReportsView extends homestead\View {
+class ListReportsView extends hms\View{
 
     private $reportControllers; // Array of ReportController objects
 

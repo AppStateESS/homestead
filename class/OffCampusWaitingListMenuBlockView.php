@@ -1,6 +1,6 @@
 <?php
 
-class OffCampusWaitingListMenuBlockView extends homestead\View {
+class OffCampusWaitingListMenuBlockView extends hms\View{
 
     private $term;
     private $startDate;

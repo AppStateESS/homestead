@@ -6,10 +6,8 @@
  * @author Jeff Tickle <jtickle at tux dot appstate dot edu>
  */
 
-PHPWS_Core::initModClass('hms', 'View.php');
+class GuestView extends hms\HMSView{
 
-class GuestView extends homestead\HMSView
-{
     private $message;
     var $notifications;
 

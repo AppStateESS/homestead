@@ -3,7 +3,7 @@
 PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 PHPWS_Core::initModClass('hms', 'ApplicationFeature.php');
 
-class EmergencyContactFormView extends homestead\View {
+class EmergencyContactFormView extends hms\View{
 
     private $student;
     private $application;

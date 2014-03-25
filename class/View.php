@@ -1,5 +1,5 @@
 <?php
-namespace homestead;
+namespace hms;
 
 /**
  * HMS View
@@ -21,8 +21,7 @@ abstract class View
     public abstract function show();
 }
 
-abstract class HMSView extends View
-{
+abstract class HMSView extends View{
     private $main;
 
     public function setMain($content)

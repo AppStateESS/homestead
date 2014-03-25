@@ -4,8 +4,7 @@ PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
 PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
 
-class CheckoutDocumentView extends homestead\View
-{
+class CheckoutDocumentView extends hms\View{
     private $checkin;
 
     public function __construct(Checkin $checkin)
