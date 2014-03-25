@@ -10,15 +10,17 @@ class BannerQueueItem {
     public $id;
     public $type;
     public $asu_username;
+    public $term;
     public $building_code;
     public $bed_code;
     public $meal_plan = 'HOME';
     public $meal_code;
-    public $term;
+    public $percent_refund;
+
     public $queued_on;
     public $queued_by;
 
-    public function __construct($id = null, $type = null, Student $student = null, $term = null, HMS_Residence_Hall $hall = null, HMS_Bed $bed = null, $mealPlan = null, $mealCode = null)
+    public function __construct($id = null, $type = null, Student $student = null, $term = null, HMS_Residence_Hall $hall = null, HMS_Bed $bed = null, $mealPlan = null, $mealCode = null, $percentRefund = null)
     {
         if(!is_null($id) && $id != 0) {
             $this->load();
@@ -29,13 +31,14 @@ class BannerQueueItem {
             return;
         }
 
-        $this->type          = $type;
-        $this->asu_username  = strtolower($student->getUsername());
-        $this->building_code = $hall->getBannerBuildingCode();
-        $this->bed_code      = $bed->getBannerId();
-        $this->meal_plan     = $mealPlan;
-        $this->meal_code     = $mealCode;
-        $this->term          = $term;
+        $this->type             = $type;
+        $this->asu_username     = strtolower($student->getUsername());
+        $this->term             = $term;
+        $this->building_code    = $hall->getBannerBuildingCode();
+        $this->bed_code         = $bed->getBannerId();
+        $this->meal_plan        = $mealPlan;
+        $this->meal_code        = $mealCode;
+        $this->percent_refund   = $percentRefund;
 
     }
 
@@ -130,10 +133,12 @@ class BannerQueueItem {
                 $bannerId = $soap->getBannerId($this->asu_username);
 
                 $result = $soap->removeRoomAssignment(
-                $bannerId,
-                $this->term,
-                $this->building_code,
-                $this->bed_code);
+                                    $bannerId,
+                                    $this->term,
+                                    $this->building_code,
+                                    $this->bed_code,
+                                    $this->percent_refund);
+
                 if($result === TRUE) {
                     HMS_Activity_Log::log_activity(
                     $this->asu_username,
