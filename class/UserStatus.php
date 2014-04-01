@@ -110,7 +110,8 @@ class UserStatus
             // Allowed to masquerade as self
             $cmd = CommandFactory::getCommand('RaMasqueradeAsSelf');
             $vars['LOGGED_IN_AS'] = sprintf(dgettext('hms', 'Welcome, %s!'), $user) . ' | '. $cmd->getLink('Swtich to Student View');
-            $vars['LOGOUT_LINK']  = UserStatus::getLogoutLink();
+            $hms_status = new UserStatus();
+            $vars['LOGOUT_LINK']  = $hms_status->getLogoutLink();
         } else {
             $vars['LOGGED_IN_AS'] = sprintf(dgettext('hms', 'Welcome, %s!'), $user);
             $vars['LOGOUT_LINK']  = UserStatus::getLogoutLink();
