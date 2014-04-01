@@ -354,10 +354,11 @@ class Term
         $objs = self::getTerms();
 
         $terms = array();
-
-        foreach($objs as $term) {
-            $t = $term->term;
-            $terms[$t] = Term::toString($t);
+        if (is_array($objs) || $objs instanceof Traversable){
+            foreach($objs as $term) {
+                $t = $term->term;
+                $terms[$t] = Term::toString($t);
+            }
         }
 
         return $terms;

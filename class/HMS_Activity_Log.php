@@ -139,7 +139,7 @@ class HMS_Activity_Log{
             $notes .= " Admin: " . UserStatus::getUsername(FALSE); // get the *real* username
         }
 
-        $activity_log = new HMS_Activity_Log(NULL, $userid, mktime(), $activity, $actor, $notes);
+        $activity_log = new HMS_Activity_Log(NULL, $userid, time(), $activity, $actor, $notes);
         $result = $activity_log->save();
     }
 

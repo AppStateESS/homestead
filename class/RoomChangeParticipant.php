@@ -178,8 +178,9 @@ class RoomChangeParticipant {
         $floor = $room->get_parent();
         $hall = $floor->get_parent();
 
-        $hallMembers = HMS_Permission::getMembership('room_change_approve', $hall);
-        $floorMembers = HMS_Permission::getMembership('room_change_approve', $floor);
+        $hms_perm = new HMS_Permission();
+        $hallMembers = $hms_perm->getMembership('room_change_approve', $hall);
+        $floorMembers = $hms_perm->getMembership('room_change_approve', $floor);
 
         $hallMembers = array_merge($hallMembers, $floorMembers);
 

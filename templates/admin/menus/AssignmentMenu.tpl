@@ -1,4 +1,4 @@
 <fieldset class="hms-main-admin-menu-block">
-<legend><img src="images/mod/hms/tango/preferences-system.png" />Assignment Maintenance</legend>
+<legend><img src="mod/hms/img/tango/preferences-system.png" />Assignment Maintenance</legend>
 {MENU}
 </fieldset>

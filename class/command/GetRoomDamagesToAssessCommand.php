@@ -28,7 +28,8 @@ class GetRoomDamagesToAssessCommand extends Command {
         // Get the list of floors which the current user has permission to assess
 
         // Get the list of role memberships this user has
-        $memberships = HMS_Permission::getMembership('assess_damage', NULL, UserStatus::getUsername());
+        $hms_perm = new HMS_Permission();
+        $memberships = $hms_perm->getMembership('assess_damage', NULL, UserStatus::getUsername());
 
         if (empty($memberships)) {
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
