@@ -8,6 +8,7 @@
         <th>Name</th>
         <th>Banner Id</th>
         <th>Gender</th>
+        <th>Student Type</th>
         <th>User name</th>
         <th>Status</th>
         <th>Assignment</th>
@@ -24,6 +25,7 @@
         <td>{NAME}</td>
         <td>{BANNER_ID}</td>
         <td style="text-align:center;">{GENDER}</td>
+        <td>{STUDENT_TYPE}</td>
         <td>{USERNAME}</td>
         <td>{STATE}</td>
         <td>{ROOM_ASSIGN}</td>

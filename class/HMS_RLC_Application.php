@@ -211,10 +211,11 @@ class HMS_RLC_Application extends HMS_Item
         }
 
         // Display demographic info
-        $tags['NAME']       = $student->getProfileLink();
-        $tags['BANNER_ID']  = $student->getBannerId();
-        $tags['GENDER']     = $student->getPrintableGenderAbbreviation();
-        $tags['USERNAME']   = $this->username;
+        $tags['NAME']           = $student->getProfileLink();
+        $tags['BANNER_ID']      = $student->getBannerId();
+        $tags['GENDER']         = $student->getPrintableGenderAbbreviation();
+        $tags['STUDENT_TYPE']   = $student->getPrintableType();
+        $tags['USERNAME']       = $this->username;
 
         /*** Assignment Status/State ***/
         // Lookup the assignmnet (used later as well)
@@ -310,10 +311,11 @@ class HMS_RLC_Application extends HMS_Item
             return $tags;
         }
 
-        $row['name']        = $student->getFullName();
-        $row['gender']      = $student->getPrintableGender();
-        $row['username']    = $student->getUsername();
-        $row['banner_id']   = $student->getBannerId();
+        $row['name']            = $student->getFullName();
+        $row['gender']          = $student->getPrintableGender();
+        $row['student_type']    = $student->getPrintableType();
+        $row['username']        = $student->getUsername();
+        $row['banner_id']       = $student->getBannerId();
 
         /*** Assignment Status/State ***/
         // Lookup the assignmnet (used later as well)
