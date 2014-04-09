@@ -272,14 +272,15 @@ class PhpSOAP extends SOAP
         return true;
     }
 
-    public function removeRoomAssignment($bannerId, $term, $building, $bannerBedId)
+    public function removeRoomAssignment($bannerId, $term, $building, $bannerBedId, $percentRefund)
     {
         $params = array(
-                        'User'      => $this->currentUser,
-                        'BannerID'  => $bannerId,
-                        'TermCode'  => $term,
-                        'BldgCode'  => $building,
-                        'RoomCode'  => $bannerBedId);
+                        'User'          => $this->currentUser,
+                        'BannerID'      => $bannerId,
+                        'TermCode'      => $term,
+                        'BldgCode'      => $building,
+                        'RoomCode'      => $bannerBedId,
+                        'PercentRefund' => $percentRefund);
 
         try{
             $response = $this->client->RemoveRoomAssignment($params);

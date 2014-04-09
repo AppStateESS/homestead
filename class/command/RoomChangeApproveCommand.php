@@ -71,7 +71,8 @@ class RoomChangeApproveCommand extends Command {
             $this->assignmentReasons[$bannerId] = $assignment->getReason();
 
             // Remove existing assignment
-            HMS_Assignment::unassignStudent($student, $term, 'Room Change Request Approved', UNASSIGN_CHANGE);
+            // TODO: Don't hard code refund percentage
+            HMS_Assignment::unassignStudent($student, $term, 'Room Change Request Approved', UNASSIGN_CHANGE, 100);
         }
 
         // Create new assignments for each participant

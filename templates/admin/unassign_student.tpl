@@ -12,6 +12,8 @@
         <br />
         Reason: {UNASSIGNMENT_TYPE}
         <br /><br />
+        {REFUND_LABEL}{REFUND}%
+        <br /><br />
         Note: 
         <br />
         {NOTE}

@@ -217,10 +217,11 @@ abstract class SOAP
      * @param Integer $term
      * @param String $building Banner building code
      * @param Integer $bannerBedId Banner bed id.
+     * @param Integer $percentRefund Percent of original charges student should be refunded.
      * @return boolean True if successful
      * @throws InvalidArgumentException, SOAPException, BannerException
      */
-    public abstract function removeRoomAssignment($bannerId, $term, $building, $bannerBedId);
+    public abstract function removeRoomAssignment($bannerId, $term, $building, $bannerBedId, $percentRefund);
 
     /**
      * Sets the flag in Banner that says this student is exempt from

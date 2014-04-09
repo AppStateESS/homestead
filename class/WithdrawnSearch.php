@@ -108,7 +108,8 @@ class WithdrawnSearch {
             $location = $assignment->where_am_i();
 
             try{
-                HMS_Assignment::unassignStudent($student, $this->term, 'Automatically removed by Withdrawn Search', UNASSIGN_CANCEL);
+                //TODO Don't hard-code refund percentage
+                HMS_Assignment::unassignStudent($student, $this->term, 'Automatically removed by Withdrawn Search', UNASSIGN_CANCEL, 100);
             }catch(Exception $e){
                 //TODO
             }

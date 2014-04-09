@@ -52,12 +52,34 @@ class UnassignStudentCommand extends Command {
             $cmd->redirect();
         }
 
+        // Check refund percentage field
+        $refund = $context->get('refund');
+
+        // Is a required field
+        if(!isset($refund) || $refund == '') {
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Please enter a refund percentage.');
+            $cmd->redirect();
+        }
+
+        // Must be numeric
+        if(!is_numeric($refund) || $refund < 0 || $refund > 100) {
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'The refund percentage must be between 0 and 100 percent.');
+            $cmd->redirect();
+        }
+
+        // Must be whole number
+        if (is_float($refund)) {
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Only whole number refund percentages are supported, no decimal place is allowed.');
+            $cmd->redirect();
+        }
+            
+
         $term = Term::getSelectedTerm();
         $student = StudentFactory::getStudentByUsername($username, $term);
         $notes = $context->get('note');
 
         try {
-            $result = HMS_Assignment::unassignStudent($student, $term, $notes, $unassignReason);
+            $result = HMS_Assignment::unassignStudent($student, $term, $notes, $unassignReason, $refund);
         } catch (Exception $e) {
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Error: ' . $e->getMessage());
             $cmd->setUsername($username);

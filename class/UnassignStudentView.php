@@ -45,6 +45,11 @@ class UnassignStudentView extends View {
         //$form->setMatch('unassignment_type', UNASSIGN_ADMIN);
         $form->setLabel('unassignment_type', 'Unassignment Type: ');
 
+        $form->addText('refund');
+        $form->setLabel('refund', 'Refund Percentage');
+        $form->setSize('refund', 4);
+        $form->setMaxSize('refund', 3);
+
         $form->addTextarea('note');
         $form->setLabel('note', 'Note: ');
 
