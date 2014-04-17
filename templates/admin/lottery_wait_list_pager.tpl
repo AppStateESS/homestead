@@ -9,6 +9,7 @@
         <th>Banner ID</th>
         <th>Class</th>
         <th>Gender</th>
+        <th>Date</th>
         <th>Cell Phone</th>
         <th>Action</th>
     </tr>
@@ -25,6 +26,7 @@
         <td>{BANNER_ID}</td>
         <td>{CLASS}</td>
         <td>{GENDER}</td>
+        <td>{APP_DATE}</td>
         <td>{PHONE}</td>
         <td>{ACTION}</td>
     </tr>

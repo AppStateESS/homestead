@@ -126,6 +126,7 @@ class WaitingListApplication extends HousingApplication {
 
         $tags['GENDER']     = $student->getPrintableGender();
 
+        $tags['APP_DATE']       = date("m/j/Y g:ia", $this->getCreatedOn());
 
         // TODO.. fix these - they should actually instanciate the command objects
         $assign_link = PHPWS_Text::secureLink('[Assign]','hms', array('module'=>'hms', 'action'=>'ShowAssignStudent', 'username'=>$this->username));
@@ -155,6 +156,7 @@ class WaitingListApplication extends HousingApplication {
         $tags['BANNER_ID']  = $student->getBannerId();
         $tags['CLASS']      = $student->getPrintableClass();
         $tags['GENDER']     = $student->getPrintableGender();
+        $tags['APP_DATE']   = date("m/j/Y g:ia", $this->getCreatedOn());
 
         if(isset($this->cell_phone) && !is_null($this->cell_phone) && $this->cell_phone != ''){
             $tags['PHONE']      = '('.substr($this->cell_phone, 0, 3).')';
@@ -187,6 +189,8 @@ class WaitingListApplication extends HousingApplication {
         $pager->db->addWhere('hms_new_application.medical_need', 0);
         $pager->db->addWhere('hms_new_application.gender_need', 0);
         $pager->db->addWhere('hms_new_application.cancelled', 0);
+
+        $pager->db->addOrder('hms_new_application.created_on ASC');
         
         //$query = "select username from hms_new_application UNION ALL select asu_username from hms_assignment";
         //$pager->db->setSQLQuery($query);

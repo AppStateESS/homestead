@@ -304,7 +304,7 @@ class LotteryApplication extends HousingApplication {
         }
 
         $tags['GENDER']     = $student->getPrintableGender();
-
+        $tags['APP_DATE'] = date("n/j/Y h:ia", $this->getWaitingListDate());
 
         $assign_link = PHPWS_Text::secureLink('[Assign]','hms', array('module'=>'hms', 'action'=>'ShowAssignStudent', 'username'=>$this->username));
         $remove_link = PHPWS_Text::secureLink('[Remove]','hms', array('module'=>'hms', 'action'=>'WaitingListRemove', 'username'=>$this->username));
