@@ -35,7 +35,7 @@ abstract class HMSView extends View{
 
     public function getTerm()
     {
-        return 'Housing Management System';
+        return 'Homestead';
     }
 
     public function showHMS($content)
@@ -44,6 +44,8 @@ abstract class HMSView extends View{
         $tpl['MAIN'] = $content;
         $tpl['TERM'] = self::getTerm();
         $tpl['USER'] = \UserStatus::getDisplay();
+        $tpl['MENUBAR'] = '';
+
 
         \Layout::addStyle('hms', 'css/hms.css');
         \Layout::addStyle('hms', 'css/tango-icons.css');
