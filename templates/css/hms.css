@@ -569,7 +569,7 @@ div .ui-tabs .ui-tabs-panel {
   padding: 0px;
 }
 
-#recentSearchEmpty {
+.recentSearchEmpty {
   color: #777;
   font-style: italic;
 }
