@@ -5,9 +5,9 @@ On-campus Housing Management
 
 # Mr. Developer:
 
-*To you, who has been tasked with finishing this bootstrap, here are some tips:*
+**To you, who has been tasked with finishing this bootstrap, here are some tips:**
 
- * The main template file is `templates/hms.tpl` **duh**
+ * The main template file is `templates/hms.tpl` *duh*
 
  * I think you will need to bootstrap all 10 million template files. I made a menu and bootstrapped the first page.
 
