@@ -15,3 +15,10 @@ ul.nav li.dropdown:hover > ul.dropdown-menu {
 	top: 0;
 	right: -100%;
 }
+
+#hms-user-main {
+	margin: 0;
+}
+.panel-body ul{
+	padding-left: 10px;
+}
