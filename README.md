@@ -11,6 +11,8 @@ On-campus Housing Management
 
  * I think you will need to bootstrap all 10 million template files. I made a menu and bootstrapped the first page.
 
+ * You get to go through and find all of the unused CSS. What luck!
+
 
 
 
