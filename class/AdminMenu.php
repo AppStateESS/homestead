@@ -7,9 +7,9 @@
  * @author Jeff Tickle <jtickle at tux dot appstate dot edu>
  */
 
-PHPWS_Core::initModClass('hms', 'CommandMenu.php');
+PHPWS_Core::initModClass('hms', 'CommandMenuMenubar.php');
 
-class AdminMenu extends CommandMenu
+class AdminMenu extends CommandMenuMenubar
 {
     public function __construct()
     {

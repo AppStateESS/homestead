@@ -1,2 +1,3 @@
-TERM
-<div style="margin-left:10px">{FORM}</div>
+<ul class="dropdown-menu">
+	<li><div style="margin-left:10px">{FORM}</div></li>
+</ul>
