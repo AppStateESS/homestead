@@ -1,3 +1,17 @@
+.nav .caret.caret-right {
+	border-right: 0;
+	border-left: 4px solid black;
+	border-top: 4px solid transparent;
+	border-bottom: 4px solid transparent;
+	content: "";
+}
 .nav > li > a {
 	display: inline-block;
+}
+ul.nav li.dropdown:hover > ul.dropdown-menu {
+    display: block;    
+}
+.dropdown-menu.pull-right {
+	top: 0;
+	right: -100%;
 }

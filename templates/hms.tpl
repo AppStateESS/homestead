@@ -1,4 +1,4 @@
-<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+<div class="navbar navbar-default navbar-static-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -11,9 +11,20 @@
     </div>
     <div class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
-        <li><a href="#">{TERMBAR}</a></li>
-        <li><a href="#">{MENUBAR}</a></li>
-        <li><a href="#search">{SEARCHBAR}</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Term <b class="caret"></b></a>
+            {TERMBAR}
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin <b class="caret"></b></a>
+            {MENUBAR}
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Recent Searches <b class="caret"></b></a>
+            {SEARCHBAR}
+        </li>
+      </ul>
+      <ul class="nav navbar-nav pull-right">
         <li id="hms-user" class="hms-userstatus"><a href ="#contact">{USER} {MENU}</a></li>
       </ul>
     </div><!--/.nav-collapse -->
