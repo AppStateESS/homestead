@@ -30,6 +30,7 @@ class AppliedStudentData extends Report implements iCsvReport {
 
         $db = new PHPWS_DB('hms_new_application');
         $db->addWhere('term', $this->term);
+        $db->addWhere('cancelled', 0);
 
         $result = $db->select();
         
@@ -41,6 +42,7 @@ class AppliedStudentData extends Report implements iCsvReport {
             $bannerId   = $app['banner_id'];
             $type       = $app['student_type'];
             $cellPhone  = $app['cell_phone'];
+            $date       = date('n/j/Y', $app['created_on']);
 
             $assignment = HMS_Assignment::getAssignmentByBannerId($bannerId, $this->term);
 
@@ -50,7 +52,7 @@ class AppliedStudentData extends Report implements iCsvReport {
                 $room = '';
             }
 
-            $student = StudentFactory::getStudentByUsername($username, $this->term);
+            $student = StudentFactory::getStudentByBannerId($bannerId, $this->term);
 
             $first  = $student->getFirstName($username);
             $middle = $student->getMiddleName($username);
@@ -62,14 +64,14 @@ class AppliedStudentData extends Report implements iCsvReport {
                 $this->rows[] =
                 array(
                         $username, $bannerId, $first, $middle, $last,
-                        $type, $cellPhone, $room, $address->line1, $address->line2,
+                        $type, $cellPhone, $room, $date, $address->line1, $address->line2,
                         $address->line3, $address->city,
                         $address->state, $address->zip
-                );
+                     );
             }else{
                 $this->rows[] =
                 array($username, $bannerId, $first, $middle, $last,
-                      $type, $cellPhone, $room, '', '', '', '', '', '');
+                      $type, $cellPhone, $room, $date, '', '', '', '', '', '');
             }
         }
     }
@@ -77,7 +79,7 @@ class AppliedStudentData extends Report implements iCsvReport {
     public function getCsvColumnsArray()
     {
         return array('Username', 'Banner id', 'First name', 'Middle name',
-            'Last name', 'Student type', 'Cell Phone', 'Assignment', 'Address 1',
+            'Last name', 'Student type', 'Cell Phone', 'Assignment', 'Date Applied', 'Address 1',
             'Address 2', 'Address 3', 'City', 'State', 'Zip');
     }
 
