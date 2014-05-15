@@ -25,16 +25,14 @@ Roommates:
 Check-in Time: {MOVE_IN_TIME} 
 <!-- END movein_time -->
 
-Move In is Thursday, June 27th from noon to 5pm. Check in at the Cone Hall Office.
-
-Please Check your Student Account. Charges for Housing and Meal plans for summer session 1 are now posted to your account for payment.
+Move In is Sunday, May 25th from noon to 5pm. Check-in at the Doughton Hall Office. Please have your AppCard with you to check-in.
 
 Should you have any questions, please feel free to contact our office at 828-262-6111 or 828-262-2278. You may also visit our website at: 
 http://housing.appstate.edu/ .
 
 Sincerely,
 
-Stacy R. Sears
+Sheila Burleson
 
-Associate Director
+Housing Coordinator
 University Housing
