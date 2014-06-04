@@ -126,6 +126,8 @@ class HMS_RLC_Application extends HMS_Item
 
         $term = Term::getSelectedTerm();
 
+        $rlc_list = HMS_Learning_Community::getRlcList();
+
         $student = StudentFactory::getStudentByUsername($this->username, $this->term);
 
         $application_date = isset($this->date_submitted) ? HMS_Util::get_long_date($this->date_submitted) : 'Error with the submission date';
@@ -140,7 +142,7 @@ class HMS_RLC_Application extends HMS_Item
         $row['last_name']           = $student->getLastName();
         $row['first_name']          = $student->getFirstName();
         $row['middle_name']         = $student->getMiddleName();
-        $row['gender']              = $student->getGender();
+        $row['gender']              = $student->getPrintableGender();
 
         if ($roomie instanceof Student) {
             $row['roommate']        = $roomie->getUsername();
@@ -149,10 +151,11 @@ class HMS_RLC_Application extends HMS_Item
         }
 
         $row['email']               = $student->getUsername() . '@appstate.edu';
-        $row['second_choice']       = $this->getSecondChoice();
-        $row['third_choice']        = $this->getThirdChoice();
+        $row['first_chocie']        = $rlc_list[$this->getFirstChoice()];
+        $row['second_choice']       = $rlc_list[$this->getSecondChoice()];
+        $row['third_choice']        = $rlc_list[$this->getThirdChoice()];
         $row['application_date']    = $application_date;
-        $row['denied']              = (isset($this->denied) && $this->denied == 0) ? 'yes' : 'no';
+        $row['denied']              = (isset($this->denied) && $this->denied == 0) ? 'no' : 'yes';
 
         return $row;
     }
