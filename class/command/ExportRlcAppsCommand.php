@@ -58,8 +58,7 @@ class ExportRlcAppsCommand extends Command {
             $buffer .= '"' . $student->getPrintableGender() . '",';
             
             if($roomie != NULL) {
-                $roommate = StudentFactory::getStudentByUsername($roomie, Term::getSelectedTerm());
-                $buffer .= '"' . $roommate->getFullName() . '",';
+                $buffer .= '"' . $roomie->getFullName() . '",';
             } else {
                 $buffer .= '"",';
             }
