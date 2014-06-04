@@ -40,7 +40,7 @@ Relationship<span class="required">*</span>: {EMERGENCY_CONTACT_RELATIONSHIP}<br
 Phone Number<span class="required">*</span>: {EMERGENCY_CONTACT_PHONE}<br />
 Email<span class="required">*</span>: {EMERGENCY_CONTACT_EMAIL}<br />
 
-<p>Are there any medical conditions you have which our staff should be aware of? (This infomration will be kept confidential and will only be shared with the staff in your residence hall. However, this information <strong>may</strong> be disclosed to medical/emergency personnel in case of an emergency.)</p>
+<p>Are there any medical conditions you have which our staff should be aware of? (This information will be kept confidential and will only be shared with the staff in your residence hall. However, this information <strong>may</strong> be disclosed to medical/emergency personnel in case of an emergency.)</p>
 {EMERGENCY_MEDICAL_CONDITION}
 
 <h2>Missing Person Information</h2>

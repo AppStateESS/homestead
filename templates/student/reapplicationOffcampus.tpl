@@ -27,7 +27,7 @@ Email: {EMERGENCY_CONTACT_EMAIL}
 
 <p>
 	Are there any medical conditions you have which our staff should be
-	aware of? (This infomration will be kept confidential and will only be
+	aware of? (This information will be kept confidential and will only be
 	shared with the staff in your residence hall. However, this information
 	<strong>may</strong> be disclosed to medical/emergency personnel in
 	case of an emergency.)
