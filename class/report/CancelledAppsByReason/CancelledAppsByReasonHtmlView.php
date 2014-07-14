@@ -14,13 +14,13 @@ class CancelledAppsByReasonHtmlView extends ReportHtmlView {
         parent::render();
         
         $this->tpl['TERM'] = Term::toString($this->report->getTerm());
+        $reasons = $this->report->getReasons();
 
+        // All Students
         $rows = array();
         
         $totalCancellations = 0;
-        
-        $reasons = $this->report->getReasons();
-        
+
         foreach($this->report->getReasonCounts() as $reason=>$count){
             $row = array();
             
@@ -35,7 +35,41 @@ class CancelledAppsByReasonHtmlView extends ReportHtmlView {
         $this->tpl['TABLE_ROWS'] = $rows;
         
         $this->tpl['TOTAL_CANCELLATIONS'] = $totalCancellations;
+
         
+        // Freshmen
+        $freshmenRows = array();
+        $freshmenCancellations = 0;
+
+        foreach($this->report->getFreshmenReasonCounts() as $reason=>$count){
+            $row = array();
+            $row['REASON'] = $reasons[$reason];
+            $row['COUNT'] = $count;
+
+            $freshmenRows[] = $row;
+            $freshmenCancellations += $count;
+        }
+
+        $this->tpl['FRESHMEN_ROWS'] = $freshmenRows;
+        $this->tpl['FRESHMEN_TOTAL'] = $freshmenCancellations;
+
+
+        // Countinuing
+        $continuingRows = array();
+        $continuingCancellations = 0;
+
+        foreach($this->report->getContinuingReasonCounts() as $reason=>$count){
+            $row = array();
+            $row['REASON'] = $reasons[$reason];
+            $row['COUNT'] = $count;
+
+            $continuingRows[] = $row;
+            $continuingCancellations += $count;
+        }
+
+        $this->tpl['CONTINUING_ROWS'] = $continuingRows;
+        $this->tpl['CONTINUING_TOTAL'] = $continuingCancellations;
+
         return PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/CancelledAppsByReason.tpl');
     }
 }
