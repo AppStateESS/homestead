@@ -234,10 +234,13 @@ class HMS_Roommate
         $db->addWhere('term', $term);
         $db->addColumn('requestor');
         $db->addColumn('requestee');
-        */
 
         PHPWS_Core::initModClass('hms', 'PdoFactory.php');
         $db = PdoFactory::getInstance()->getPdo();
+	*/
+
+	$db = \Database::newDB();
+        $db = $db->getPdo();
         
         $stmt = $db->prepare("SELECT * FROM hms_roommate WHERE (requestor ILIKE :user OR requestee ILIKE :user) AND term = :term AND confirmed = 1");
         $stmt->bindParam(':user', $asu_username);
@@ -274,10 +277,13 @@ class HMS_Roommate
         $db->addColumn('requestor');
         $db->addColumn('requestee');
         $result = $db->select('row');
-        */
 
         PHPWS_Core::initModClass('hms', 'PdoFactory.php');
         $db = PdoFactory::getInstance()->getPdo();
+	*/
+
+        $db = \Database::newDB();
+	$db = $db->getPdo();
         
         $stmt = $db->prepare("SELECT * FROM hms_roommate WHERE (requestor ILIKE :user OR requestee ILIKE :user) AND term = :term AND confirmed = 0 and requested_on >= :ttl");
         $stmt->bindParam(':user', $asu_username);

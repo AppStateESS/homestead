@@ -8,13 +8,7 @@
 
 class UserView extends hms\HMSView{
 
-    var $sidebar = array();
-    var $notifications;
-
-    public function addToSidebar($side)
-    {
-        $this->sidebar[] = $side;
-    }
+    public $notifications;
 
     public function addNotifications($n)
     {

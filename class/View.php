@@ -23,12 +23,18 @@ abstract class View
 
 abstract class HMSView extends View{
     private $main;
+    public $sidebar = array();
 
     public function setMain($content)
     {
         $this->main = $content;
     }
 
+    public function addToSidebar($side)
+    {
+        $this->sidebar[] = $side;
+    }
+    
     public function getMain()
     {
         return $this->main;
@@ -45,9 +51,13 @@ abstract class HMSView extends View{
         $tpl['MAIN'] = $content;
         $tpl['TERM'] = self::getTerm();
         $tpl['USER'] = \UserStatus::getDisplay();
-        $tpl['TERMBAR'] = $this->sidebar[0];
-        $tpl['MENUBAR'] = $this->sidebar[1];
-        $tpl['SEARCHBAR'] = $this->sidebar[2];
+
+		if(sizeof($this->sidebar) > 0) 
+		{
+	    	$tpl['TERMBAR'] = $this->sidebar[0];
+			$tpl['MENUBAR'] = $this->sidebar[1];
+			$tpl['SEARCHBAR'] = $this->sidebar[2];
+		}
 
         \Layout::addStyle('hms', 'css/hms.css');
         \Layout::addStyle('hms', 'css/tango-icons.css');
