@@ -223,7 +223,7 @@ class HMS_Roommate
      * @param string $term
      * @return Student
      */
-    public function get_confirmed_roommate($asu_username, $term)
+    public static function get_confirmed_roommate($asu_username, $term)
     {
         /*
         $db = new PHPWS_DB('hms_roommate');
@@ -234,10 +234,13 @@ class HMS_Roommate
         $db->addWhere('term', $term);
         $db->addColumn('requestor');
         $db->addColumn('requestee');
-        */
 
         PHPWS_Core::initCoreClass('PdoFactory.php');
         $db = PdoFactory::getInstance()->getPdo();
+	*/
+
+	$db = \Database::newDB();
+        $db = $db->getPdo();
         
         $stmt = $db->prepare("SELECT * FROM hms_roommate WHERE (requestor ILIKE :user OR requestee ILIKE :user) AND term = :term AND confirmed = 1");
         $stmt->bindParam(':user', $asu_username);
@@ -261,7 +264,7 @@ class HMS_Roommate
         return StudentFactory::getStudentByUsername($result[0]['requestor'], $term);
     }
 
-    public function get_pending_roommate($asu_username, $term)
+    public static function get_pending_roommate($asu_username, $term)
     {
         /*
         $db = new PHPWS_DB('hms_roommate');
@@ -274,16 +277,19 @@ class HMS_Roommate
         $db->addColumn('requestor');
         $db->addColumn('requestee');
         $result = $db->select('row');
-        */
 
         PHPWS_Core::initCoreClass('PdoFactory.php');
         $db = PdoFactory::getInstance()->getPdo();
+	*/
+
+        $db = \Database::newDB();
+	$db = $db->getPdo();
         
         $stmt = $db->prepare("SELECT * FROM hms_roommate WHERE (requestor ILIKE :user OR requestee ILIKE :user) AND term = :term AND confirmed = 0 and requested_on >= :ttl");
         $stmt->bindParam(':user', $asu_username);
         $stmt->bindParam(':term', $term);
         
-        $ttl = mktime() - ROOMMATE_REQ_TIMEOUT;
+        $ttl = time() - ROOMMATE_REQ_TIMEOUT;
         $stmt->bindParam(':ttl', $ttl);
         
         $stmt->execute();
