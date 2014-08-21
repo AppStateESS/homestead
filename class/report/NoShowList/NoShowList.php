@@ -34,7 +34,7 @@ class NoShowList extends Report implements iCsvReport {
         $term = $this->term;
 
 
-        $results = PHPWS_DB::getAll("select hms_assignment.banner_id, asu_username, reason, class, hall_name, room_number from hms_assignment JOIN hms_hall_structure ON hms_assignment.bed_id = hms_hall_structure.bedid where term = 201340 and hms_assignment.banner_id NOT IN (select banner_id from hms_checkin WHERE term = $term and checkout_date IS NULL) order by hall_name, room_number;");
+        $results = PHPWS_DB::getAll("select hms_assignment.banner_id, asu_username, reason, class, hall_name, room_number from hms_assignment JOIN hms_hall_structure ON hms_assignment.bed_id = hms_hall_structure.bedid where term = $term and hms_assignment.banner_id NOT IN (select banner_id from hms_checkin WHERE term = $term and checkout_date IS NULL) order by hall_name, room_number;");
 
         if(PHPWS_Error::isError($results)){
             throw new DatabaseException($results->toString());
