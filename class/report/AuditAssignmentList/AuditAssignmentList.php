@@ -28,7 +28,7 @@ class AuditAssignmentList extends Report implements iCsvReport {
 
         $db = PdoFactory::getInstance()->getPdo();
 
-        $query = "SELECT hms_assignment.term, hms_assignment.banner_id, hms_hall_structure.banner_building_code, hms_hall_structure.banner_id, hms_new_application.meal_plan FROM hms_assignment JOIN hms_hall_structure ON hms_assignment.bed_id = hms_hall_structure.bedid LEFT OUTER JOIN hms_new_application ON (hms_assignment.banner_id = hms_new_application.banner_id AND hms_assignment.term = hms_new_application.term) WHERE hms_assignment.term IN (:term) ORDER BY hms_assignment.term";
+        $query = "SELECT hms_assignment.term, hms_assignment.banner_id, hms_hall_structure.banner_building_code, hms_hall_structure.banner_id as bed_code, hms_new_application.meal_plan FROM hms_assignment JOIN hms_hall_structure ON hms_assignment.bed_id = hms_hall_structure.bedid LEFT OUTER JOIN hms_new_application ON (hms_assignment.banner_id = hms_new_application.banner_id AND hms_assignment.term = hms_new_application.term) WHERE hms_assignment.term IN (:term) ORDER BY hms_assignment.term";
 
         $stmt = $db->prepare($query);
         $stmt->execute(array('term'=>$this->term));
