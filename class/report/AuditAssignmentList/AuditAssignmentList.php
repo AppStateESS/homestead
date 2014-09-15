@@ -5,7 +5,7 @@
  * @author Jeremy Booker
  */
 
-class AuditAssignmetnList extends Report implements iCsvReport {
+class AuditAssignmentList extends Report implements iCsvReport {
     const friendlyName = 'Audit Assignment List';
     const shortName = 'AuditAssignmentList';
 
