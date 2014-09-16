@@ -96,6 +96,7 @@
             <tr>
             	<td colspan="2">{EMERGENCY_MEDICAL_CONDITION}</td>
             <tr>
+            <!-- BEGIN missing_person -->
             	<th colspan="2">Missing Person Information</th>
             </tr>
             <tr>
@@ -117,6 +118,7 @@
             	<td>Email:</td>
             	<td>{MISSING_PERSON_EMAIL}</td>
             </tr>
+            <!-- END missing_person -->
             <tr>
                 <th colspan="2">Special Needs Housing</th>
             </tr>

@@ -101,10 +101,12 @@ class HousingApplicationView extends View {
         $tpl['EMERGENCY_MEDICAL_CONDITION'] = $application->getEmergencyMedicalCondition();
         
         /* Missing Person */
-        $tpl['MISSING_PERSON_NAME'] 		= $application->getMissingPersonName();
-        $tpl['MISSING_PERSON_RELATIONSHIP']	= $application->getMissingPersonRelationship();
-        $tpl['MISSING_PERSON_PHONE'] 		= $application->getMissingPersonPhone();
-        $tpl['MISSING_PERSON_EMAIL'] 		= $application->getMissingPersonEmail();
+        if(Current_User::allow('hms', 'view_missing_person_info')) {
+            $tpl['MISSING_PERSON_NAME'] 		= $application->getMissingPersonName();
+            $tpl['MISSING_PERSON_RELATIONSHIP']	= $application->getMissingPersonRelationship();
+            $tpl['MISSING_PERSON_PHONE'] 		= $application->getMissingPersonPhone();
+            $tpl['MISSING_PERSON_EMAIL'] 		= $application->getMissingPersonEmail();
+        }
 
         /* Special Needs */
         $special_needs = "";

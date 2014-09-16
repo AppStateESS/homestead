@@ -38,6 +38,7 @@
      * Housing Applications *
      ************************/
     $permissions['cancel_housing_application'] = _('Cancel Housing Applications');
+    $permissions['view_missing_person_info']   = _('View Missing Person Info');
 
     /******************
      * Hall Structure *
