@@ -144,6 +144,9 @@ class SubmitRoomChangeRequestCommand extends Command {
                     $participant->setHallPref2($hall);
                 }
             }
+        
+            // Save the main participant and its state
+            $participant->save();
 
             // No further approval is required so we skip a step
             HMS_Email::sendRoomChangeCurrRDNotice($request);
@@ -161,14 +164,15 @@ class SubmitRoomChangeRequestCommand extends Command {
             $swapParticipant->setToBed($bed);
             $swapParticipant->save();
 
+
+            // Save the main participant and its state
+            $participant->save();
+
             // Send "request needs your approval" to other students
             // TODO: When you add the ability to have many people on this request, you will
             //       need to put a foreach loop here or something.
             HMS_Email::sendRoomChangeParticipantNotice($participant, $swapParticipant);
         }
-
-        // Save the main participant and its state
-        $participant->save();
 
         // Immediately transition to the StudentApproved state.
         $participant->transitionTo(new ParticipantStateStudentApproved($participant, time(), null, UserStatus::getUsername()));
