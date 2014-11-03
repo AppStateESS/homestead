@@ -108,6 +108,7 @@ class CreateTermCommand extends Command {
         }catch(Exception $e){
 
             $db->query('ROLLBACK');
+            PHPWS_Error::log(print_r($e, true), 'hms');
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'There was an error copying the hall structure and/or assignments. The term was created, but nothing was copied.');
             $errorCmd->redirect();
         }
