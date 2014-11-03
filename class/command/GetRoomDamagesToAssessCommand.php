@@ -41,14 +41,20 @@ class GetRoomDamagesToAssessCommand extends Command {
         foreach ($memberships as $member) {
             if ($member['class'] == 'hms_residence_hall') {
                 $hall = new HMS_Residence_Hall($member['instance']);
-                $floors = array_merge($floors, $hall->getFloors());
+                if(!is_array($floors)){
+                    $floors = array();
+                }
+                $hallFloors = $hall->getFloors();
+                if(!is_array($hallFloors)){
+                    $hallFloors = array();
+                }
+                $floors = array_merge($floors, $hallFloors);
             } else if ($member['class'] == 'hms_floor') {
                 $floors[] = new HMS_Floor($member['instance']);
             } else {
                 throw new Exception('Unknown object type.');
             }
         }
-
 
         // Remove duplicate floors
         $uniqueFloors = array();
