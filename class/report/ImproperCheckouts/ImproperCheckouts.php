@@ -42,9 +42,11 @@ class ImproperCheckouts extends Report implements iCsvReport {
 
                 $row['first_name'] = $student->getFirstName();
                 $row['last_name']  = $student->getLastName();
+                $row['email']      = $student->getUsername();
             } catch (StudentNotFoundException $e) {
                 $row['first_name'] = 'NOT FOUND';
                 $row['last_name']  = 'NOT FOUND';
+                $row['email']      = 'NOT FOUND';
             }
 
             $this->rows[] = $row;
