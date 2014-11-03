@@ -127,16 +127,20 @@ class CheckoutFormSubmitCommand extends Command {
         HMS_Activity_Log::log_activity($student->getUsername(), ACTIVITY_CHECK_OUT, UserStatus::getUsername(), $bed->where_am_i());
 
         // Generate the RIC
+        
         PHPWS_Core::initModClass('hms', 'InfoCard.php');
         PHPWS_Core::initModClass('hms', 'InfoCardPdfView.php');
         $infoCard = new InfoCard($checkin);
-
+        
+        /*
+         * Info card removed per #..
         $infoCardView = new InfoCardPdfView();
         $infoCardView->addInfoCard($infoCard);
-
+        */
+        
         // Send confirmation Email with the RIC form to the student
         PHPWS_Core::initModClass('hms', 'HMS_Email.php');
-        HMS_Email::sendCheckoutConfirmation($student, $infoCard, $infoCardView);
+        HMS_Email::sendCheckoutConfirmation($student, $infoCard);
 
         /***** Room Change Request Handling *******/
 

@@ -610,7 +610,7 @@ class HMS_Email{
         $mailer->send($message);
     }
 
-    public static function sendCheckoutConfirmation(Student $student, InfoCard $infoCard, InfoCardPdfView $infoCardView){
+    public static function sendCheckoutConfirmation(Student $student, InfoCard $infoCard) {
         $tags['NAME']       = $student->getName();
         $tags['ASSIGNMENT'] = $infoCard->getRoom()->where_am_i();
 
@@ -627,8 +627,8 @@ class HMS_Email{
         $message->addPart($htmlContent, 'text/html');
 
         // Attach info card
-        $attachment = Swift_Attachment::newInstance($infoCardView->getPdf()->output('my-pdf-file.pdf', 'S'), 'ResidentInfoCard.pdf', 'application/pdf');
-        $message->attach($attachment);
+        //$attachment = Swift_Attachment::newInstance($infoCardView->getPdf()->output('my-pdf-file.pdf', 'S'), 'ResidentInfoCard.pdf', 'application/pdf');
+        //$message->attach($attachment);
 
         $transport = Swift_SmtpTransport::newInstance('localhost');
         $mailer = Swift_Mailer::newInstance($transport);
