@@ -133,7 +133,7 @@ class CheckoutFormSubmitCommand extends Command {
         $infoCard = new InfoCard($checkin);
         
         /*
-         * Info card removed per #..
+         * Info card removed per #869
         $infoCardView = new InfoCardPdfView();
         $infoCardView->addInfoCard($infoCard);
         */
