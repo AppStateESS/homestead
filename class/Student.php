@@ -50,16 +50,33 @@ class Student {
 
     public function getName()
     {
+        if(isset($this->preferred_name) && $this->preferred_name != '') {
+        	return $this->getPreferredName() . ' ' . $this->getLastName();
+        }
+        
         return $this->getFirstName() . ' ' . $this->getLastName();
     }
 
     public function getFullName(){
-        return $this->getFirstName() . ' ' . $this->getMiddleName() . ' ' . $this->getLastName();
+        
+        if(isset($this->preferred_name) && $this->preferred_name != '') {
+            $firstName = $this->getPreferredName();
+        } else {
+        	$firstName = $this->getFirstName();
+        }
+        
+        return $firstName . ' ' . $this->getMiddleName() . ' ' . $this->getLastName();
     }
 
     public function getFullNameInverted()
     {
-        return $this->getLastName() . ', ' . $this->getFirstName() . ' ' . $this->getMiddleName();
+        if(isset($this->preferred_name) && $this->preferred_name != '') {
+            $firstName = $this->getPreferredName();
+        } else {
+            $firstName = $this->getFirstName();
+        }
+        
+        return $this->getLastName() . ', ' . $firstName . ' ' . $this->getMiddleName();
     }
     
     public function getPrintableGender()
@@ -184,11 +201,13 @@ class Student {
         return $profileCmd->getLink($this->getName());
     }
 
+    /**
+     * @deprecated 0.4.87 - Nov 3, 2014
+     * @see getProfileLink()
+     */
     public function getFullNameProfileLink()
     {
-        $profileCmd = CommandFactory::getCommand('ShowStudentProfile');
-        $profileCmd->setUsername($this->getUsername());
-        return $profileCmd->getLink($this->getFullName());
+        return $this->getProfileLink();
     }
 
     public function getEmailLink()

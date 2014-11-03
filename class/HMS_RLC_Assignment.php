@@ -288,7 +288,7 @@ class HMS_RLC_Assignment {
 
         $tags = array();
 
-        $tags['NAME']      = $student->getFullNameProfileLink();
+        $tags['NAME']      = $student->getProfileLink();
         $tags['FINAL_RLC'] = $rlc_list[$this->getRlcId()];
 
         // Not sure why this line was here but was always empty, so I commented it out for now

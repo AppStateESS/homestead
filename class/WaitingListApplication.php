@@ -113,7 +113,7 @@ class WaitingListApplication extends HousingApplication {
             return $tags;
         }
 
-        $tags['NAME']       = $student->getFullNameProfileLink();
+        $tags['NAME']       = $student->getProfileLink();
         $tags['USER']       = $this->username;
         $tags['BANNER_ID']  = $student->getBannerId();
         $tags['CLASS']      = $student->getPrintableClass();

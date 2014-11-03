@@ -132,7 +132,7 @@ class HallOverview extends View {
                         if(is_null($student)){
                             $tpl->setData(array('BED_LABEL'=>$bed->bedroom_label,'BED'=>$bed_link,'NAME'=>'UNKNOWN', 'USERNAME'=>$username, 'BANNER_ID'=>'', 'TOGGLE'=>$class, 'RLC_ABBR'=>$rlc_abbr));
                         }else{
-                            $tpl->setData(array('BED_LABEL'=>$bed->bedroom_label,'BED'=>$bed_link,'NAME'=>$student->getFullNameProfileLink(), 'USERNAME'=>$student->getUsername(), 'BANNER_ID'=>$student->getBannerId(), 'TOGGLE'=>$class, 'RLC_ABBR'=>$rlc_abbr));
+                            $tpl->setData(array('BED_LABEL'=>$bed->bedroom_label,'BED'=>$bed_link,'NAME'=>$student->getProfileLink(), 'USERNAME'=>$student->getUsername(), 'BANNER_ID'=>$student->getBannerId(), 'TOGGLE'=>$class, 'RLC_ABBR'=>$rlc_abbr));
                         }
                     }else{
                         $tpl->setData(array('BED_LABEL'=>$bed->bedroom_label,'BED'=>$bed_link,'NAME'=>$bed->get_assigned_to_link(), 'TOGGLE'=>'vacant'));

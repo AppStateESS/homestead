@@ -26,7 +26,7 @@ class GetBedAssignmentInfoCommand extends Command {
                 $student = StudentFactory::getStudentByUsername($bed->_curr_assignment->asu_username, Term::getSelectedTerm());
                 $output = array('username'=>$student->getUsername(),
                              'fullname'=>$student->getFullName(),
-                             'profile_link'=>$student->getFullNameProfileLink()
+                             'profile_link'=>$student->getProfileLink()
                             );
             }
         } catch(Exception $e){

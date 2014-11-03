@@ -93,7 +93,7 @@ class HMS_RLC_Application extends HMS_Item
 
         $tags = array();
 
-        $tags['NAME']           = $student->getFullNameProfileLink();
+        $tags['NAME']           = $student->getProfileLink();
 
         $rlcCmd = CommandFactory::getCommand('ShowRlcApplicationReView');
         $rlcCmd->setAppId($this->getId());
@@ -260,7 +260,7 @@ class HMS_RLC_Application extends HMS_Item
         elseif(sizeof($allRoommates) == 1) {
             // Get other roommate
             $otherGuy = StudentFactory::getStudentByUsername($allRoommates[0]->get_other_guy($this->username), $this->term);
-            $tags['ROOMMATES'] = $otherGuy->getFullNameProfileLink();
+            $tags['ROOMMATES'] = $otherGuy->getProfileLink();
             // If roommate is pending then show little status message
             if(!$allRoommates[0]->confirmed) {
                 $tags['ROOMMATES'] .= " (Pending)";

@@ -547,8 +547,8 @@ class HMS_Roommate
         $deleteCmd = CommandFactory::getCommand('DeleteRoommateGroup');
         $deleteCmd->setId($this->id);
 
-        $tags['REQUESTOR']      = $requestor->getFullNameProfileLink();
-        $tags['REQUESTEE']      = $requestee->getFullNameProfileLink();
+        $tags['REQUESTOR']      = $requestor->getProfileLink();
+        $tags['REQUESTEE']      = $requestee->getProfileLink();
         $tags['REQUESTED_ON']   = HMS_Util::get_long_date_time($this->requested_on);
         $tags['CONFIRMED_ON']   = HMS_Util::get_long_date_time($this->confirmed_on);
         $tags['ACTION']         = $deleteCmd->getLink('Delete');

@@ -102,7 +102,7 @@ class HMS_Activity_Log{
         if(is_null($student)){
             $tpl['ACTEE'] = 'UNKNOWN';
         }else{
-            $tpl['ACTEE'] = $student->getFullNameProfileLink();
+            $tpl['ACTEE'] = $student->getProfileLink();
         }
 
         if(strcmp($this->get_user_id(),$this->get_actor()) == 0)

@@ -52,7 +52,7 @@ class StudentProfile {
                             // Get student object and room link
                             $roomLink = $this->getRoommateRoomLink($roomie->getUsername());
                             // if $roomie was assigned but not requested
-                            $this->roommates['ASSIGNED'][] = $roomie->getFullNameProfileLink() . " - $roomLink";
+                            $this->roommates['ASSIGNED'][] = $roomie->getProfileLink() . " - $roomLink";
                         }
                     }
                 }
@@ -148,26 +148,26 @@ class StudentProfile {
 
         if($status_extra == "no_bed_available"){
             if($status == "confirmed"){
-                $this->roommates['NO_BED_AVAILABLE'] = $roomie->getFullNameProfileLink() . $roomLink . " (Confirmed | No Bed Available)";
+                $this->roommates['NO_BED_AVAILABLE'] = $roomie->getProfileLink() . $roomLink . " (Confirmed | No Bed Available)";
             }
             else if($status == "pending"){
-                $this->roommates['NO_BED_AVAILABLE'] = $roomie->getFullNameProfileLink() . $roomLink . " (Pending | No Bed Available)";
+                $this->roommates['NO_BED_AVAILABLE'] = $roomie->getProfileLink() . $roomLink . " (Pending | No Bed Available)";
             }
         }
         else if($status_extra == "mismatched_rooms"){
             if($status == "confirmed"){
-                $this->roommates['MISMATCHED_ROOMS'] = $roomie->getFullNameProfileLink() . $roomLink . " (Confirmed | Mismatched)";
+                $this->roommates['MISMATCHED_ROOMS'] = $roomie->getProfileLink() . $roomLink . " (Confirmed | Mismatched)";
             }
             else if($status == "pending"){
-                $this->roommates['MISMATCHED_ROOMS'] = $roomie->getFullNameProfileLink() . $roomLink . " (Pending | Mismatched)";
+                $this->roommates['MISMATCHED_ROOMS'] = $roomie->getProfileLink() . $roomLink . " (Pending | Mismatched)";
             }
         }
         else {
             if($status == "confirmed"){
-                $this->roommates['CONFIRMED'] = $roomie->getFullNameProfileLink() . $roomLink . " (Confirmed)";
+                $this->roommates['CONFIRMED'] = $roomie->getProfileLink() . $roomLink . " (Confirmed)";
             }
             else if($status == "pending"){
-                $this->roommates['PENDING'] = $roomie->getFullNameProfileLink() . $roomLink . " (Pending)";
+                $this->roommates['PENDING'] = $roomie->getProfileLink() . $roomLink . " (Pending)";
             }
         }
     }
