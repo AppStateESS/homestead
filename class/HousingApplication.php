@@ -414,7 +414,7 @@ class HousingApplication {
     * @throws InvalidArgumentException
     * @see HousingApplicationFactory::getAppByStudent()
     */
-    public function getApplicationByUser($username, $term, $applicationType = null)
+    public static function getApplicationByUser($username, $term, $applicationType = null)
     {
         PHPWS_Core::initModClass('hms', 'HousingApplication.php');
         PHPWS_Core::initModClass('hms', 'FallApplication.php');

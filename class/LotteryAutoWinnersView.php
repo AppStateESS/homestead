@@ -1,6 +1,6 @@
 <?php
 
-class LotteryAutoWinnersView extends View {
+class LotteryAutoWinnersView extends hms\View{
 
     public function show() {
 

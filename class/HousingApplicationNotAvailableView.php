@@ -1,6 +1,6 @@
 <?php
 
-class HousingApplicationNotAvailableView extends View {
+class HousingApplicationNotAvailableView extends hms\View{
 
     private $student;
     private $feature;

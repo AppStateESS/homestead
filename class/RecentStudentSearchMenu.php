@@ -13,7 +13,7 @@ class RecentStudentSearchMenu {
 
     public function show()
     {
-        javascript('jquery_ui');
+        //javascript('jquery_ui');
 
         $tpl = array();
 

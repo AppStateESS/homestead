@@ -16,8 +16,8 @@ abstract class SOAP
     protected static $instance;
     protected static $cache;
 
-    protected static $currentUser; // User name for the currently logged in user
-    protected static $userType; // User type (one of 'S' (student), or 'A' (admin staff)
+    protected $currentUser; // User name for the currently logged in user
+    protected $userType; // User type (one of 'S' (student), or 'A' (admin staff)
 
     /**
      * Constructor

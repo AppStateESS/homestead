@@ -1,6 +1,6 @@
 <?php
 
-class ReapplicationWaitingListMenuBlockView extends View {
+class ReapplicationWaitingListMenuBlockView extends hms\View{
 
     private $term;
     private $startDate;

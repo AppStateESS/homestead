@@ -1,6 +1,6 @@
 <?php
 
-class HousingApplicationWelcomeView extends View {
+class HousingApplicationWelcomeView extends hms\View{
 
     private $student;
     private $submitCmd;

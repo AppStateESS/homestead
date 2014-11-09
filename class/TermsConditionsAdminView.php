@@ -2,8 +2,7 @@
 
 PHPWS_Core::initModClass('hms', 'View.php');
 
-class TermsConditionsAdminView extends View
-{
+class TermsConditionsAdminView extends hms\View{
     private $term;
 
     public function __construct($term)

@@ -1,5 +1,5 @@
 <?php
-
+namespace hms;
 /**
  * HMS View
  * Handles the very basic HMS view.  This has a top-bar to show login status
@@ -20,15 +20,20 @@ abstract class View
     public abstract function show();
 }
 
-abstract class HMSView extends View
-{
+abstract class HMSView extends View{
     private $main;
+    public $sidebar = array();
 
     public function setMain($content)
     {
         $this->main = $content;
     }
 
+    public function addToSidebar($side)
+    {
+        $this->sidebar[] = $side;
+    }
+    
     public function getMain()
     {
         return $this->main;
@@ -36,7 +41,7 @@ abstract class HMSView extends View
 
     public function getTerm()
     {
-        return 'Housing Management System';
+        return 'Homestead';
     }
 
     public function showHMS($content)
@@ -44,11 +49,19 @@ abstract class HMSView extends View
         $tpl = array();
         $tpl['MAIN'] = $content;
         $tpl['TERM'] = self::getTerm();
-        $tpl['USER'] = UserStatus::getDisplay();
+        $tpl['USER'] = \UserStatus::getDisplay();
 
-        Layout::addStyle('hms', 'css/hms.css');
-        Layout::addStyle('hms', 'css/tango-icons.css');
-        Layout::add(PHPWS_Template::process($tpl, 'hms', 'hms.tpl'));
+		if(sizeof($this->sidebar) > 0) 
+		{
+	    	$tpl['TERMBAR'] = $this->sidebar[0];
+			$tpl['MENUBAR'] = $this->sidebar[1];
+			$tpl['SEARCHBAR'] = $this->sidebar[2];
+		}
+
+        \Layout::addStyle('hms', 'css/hms.css');
+        \Layout::addStyle('hms', 'css/tango-icons.css');
+        \Layout::addStyle('hms', 'css/bootstrap.css');
+        \Layout::add(\PHPWS_Template::process($tpl, 'hms', 'hms.tpl'));
     }
 }
 

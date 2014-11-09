@@ -14,7 +14,7 @@ PHPWS_Core::initModClass('hms', 'HMS_Util.php');
  * @package HMS
 */
 
-class ListReportsView extends View {
+class ListReportsView extends hms\View{
 
     private $reportControllers; // Array of ReportController objects
 

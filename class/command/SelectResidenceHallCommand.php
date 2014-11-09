@@ -38,7 +38,7 @@ class SelectResidenceHallCommand extends Command {
         return array_merge($vars, $onSelectVars);
     }
 
-    public function getLink($text){
+    public function getLink($text, $target = null, $cssClass = null, $title = null){
         return $this->onSelectCmd->getSubLink($text, $this->getRequestVars());
     }
 

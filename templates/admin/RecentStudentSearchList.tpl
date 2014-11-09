@@ -1,5 +1,5 @@
 <!-- BEGIN EMPTY -->
-<span id="recentSearchEmpty">{EMPTY_MSG}</span>
+<span class="recentSearchEmpty">{EMPTY_MSG}</span>
 <!-- END EMPTY -->
 
 <!-- BEGIN searchListItemRepeat -->

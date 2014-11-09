@@ -1,6 +1,6 @@
 <?php
 
-class VerifyAssignmentMenuBlockView extends View {
+class VerifyAssignmentMenuBlockView extends hms\View{
 
     private $student;
     private $startDate;
