@@ -1,6 +1,6 @@
 <?php
 
-class BadBannerDataView extends View {
+class BadBannerDataView extends hms\View{
 
     public function __construct()
     {

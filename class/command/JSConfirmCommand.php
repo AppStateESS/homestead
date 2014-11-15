@@ -29,7 +29,7 @@ class JSConfirmCommand extends Command {
         return $this->onConfirmCommand->getRequestVars();
     }
     
-    public function getLink()
+    public function getLink($text, $target = null, $cssClass = null, $title = null)
     {
         $vars = $this->getRequestVars();
 

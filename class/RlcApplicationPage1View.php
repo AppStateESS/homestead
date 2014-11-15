@@ -8,8 +8,7 @@
  *
  */
 
-class RlcApplicationPage1View extends View
-{
+class RlcApplicationPage1View extends hms\View{
     protected $context;
     private $student;
 

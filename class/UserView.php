@@ -8,8 +8,7 @@
 
 PHPWS_Core::initModClass('hms', 'View.php');
 
-class UserView extends HMSView
-{
+class UserView extends hms\HMSView{
     var $sidebar = array();
     var $notifications;
 
@@ -26,11 +25,6 @@ class UserView extends HMSView
     public function show()
     {
         $tpl = array();
-
-        foreach($this->sidebar as $side) {
-            $tpl['SIDEBAR'][]['SIDE_ITEM'] = $side;
-        }
-
         $tpl['NOTIFICATIONS'] = $this->notifications;
         $tpl['MAIN'] = $this->getMain();
 

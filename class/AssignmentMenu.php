@@ -48,8 +48,8 @@ class AssignmentMenu extends CommandMenu {
                 $withdrawnSearchCmd->setOnConfirmCommand(CommandFactory::getCommand('WithdrawnSearch'));
                 $this->addCommand('Withdrawn search', $withdrawnSearchCmd);
             }
-
-            $memberships = HMS_Permission::getMembership('room_change_approve', NULL, UserStatus::getUsername());
+            $hms_perm = new HMS_Permission();
+            $memberships = $hms_perm->getMembership('room_change_approve', NULL, UserStatus::getUsername());
             if(!empty($memberships)){
                 $RDRoomChangeCmd = CommandFactory::getCommand('ShowRDRoomChangeList');
                 $this->addCommand('Room Change Approval (RD)', $RDRoomChangeCmd);

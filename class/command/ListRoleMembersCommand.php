@@ -30,7 +30,8 @@ class ListRoleMembersCommand extends Command {
 
         $class     = new $class;
         $class->id = $instance;
-        $members = HMS_Permission::getMembership('email', $class, null, true);
+        $hms_perm = new HMS_Permission();
+        $members = $hms_perm->getMembership('email', $class, null, true);
 
         echo json_encode($members);
         exit();

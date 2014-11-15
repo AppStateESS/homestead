@@ -1,9 +1,4 @@
-<div id="hms-sidebar">
-<!-- BEGIN SIDEBAR -->
-{SIDE_ITEM}
-<!-- END SIDEBAR -->
-</div>
-<div id="hms-user-main">
+<div id="hms-user-main" class="container">
 {NOTIFICATIONS}
 {MAIN}
 </div>

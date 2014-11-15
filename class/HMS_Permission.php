@@ -15,8 +15,8 @@ class HMS_Permission extends HMS_Item {
         $this->full_name = $full_name;
     }
 
-    public static function getMembership($permission=null, $object=null, $username=null, $display_name=false){
-        $db = HMS_Permission::getDb();
+    public function getMembership($permission=null, $object=null, $username=null, $display_name=false){
+        $db = $this->getDb();
         $db->addJoin('left outer', 'hms_permission', 'hms_role_perm', 'id', 'permission');
         $db->addJoin('left outer', 'hms_role_perm', 'hms_role', 'role', 'id');
         $db->addJoin('left outer', 'hms_role', 'hms_user_role', 'id', 'role');

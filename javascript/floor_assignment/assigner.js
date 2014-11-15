@@ -163,7 +163,7 @@ var AssignWidget = function(div, semaphore){
         $.post('index.php', {module: 'hms', action: 'FloorAssignStudent', bed: this.bed, mealplan: this.mealplan, username: this.username, assignmenttype: this.assignmenttype},
                function(data){
                    if(!data.success){
-                       $("#message_"+me.bed).html('<div class="error"><img src="images/mod/hms/tango/dialog-error.png" />'+data.message+'</div>');
+                       $("#message_"+me.bed).html('<div class="error"><img src="mod/hms/img/tango/dialog-error.png" />'+data.message+'</div>');
                        $("#status_"+me.bed).html('');
                    } else {
                        $("#message_"+me.bed).html('<div class="success"><img src="images/mod/hms/icons/check.png" />Student Assigned!</div>');

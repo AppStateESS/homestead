@@ -7,7 +7,7 @@
  * @author Jeremy Booker
  */
 
-class RlcApplicationMenuView extends View {
+class RlcApplicationMenuView extends hms\View{
 
     private $term;
     private $student;
