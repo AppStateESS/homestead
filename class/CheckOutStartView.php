@@ -1,6 +1,6 @@
 <?php 
 
-class CheckoutStartView extends View {
+class CheckoutStartView extends hms\View{
 
     private $halls;
     private $term;

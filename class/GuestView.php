@@ -8,8 +8,7 @@
 
 PHPWS_Core::initModClass('hms', 'View.php');
 
-class GuestView extends HMSView
-{
+class GuestView extends hms\HMSView{
     private $message;
     var $notifications;
 

@@ -11,7 +11,7 @@
     
     <!-- BEGIN login -->
     <div style="margin-top: 75px; font-size: 14px;">
-    <strong><a href="{LOGIN_LINK}"><img align="center" src="images/mod/hms/tango/edit-redo.png"></a><a href="{LOGIN_LINK}">Log In</a></strong></div>
+    <strong><a href="{LOGIN_LINK}"><img align="center" src="mod/hms/img/tango/edit-redo.png"></a><a href="{LOGIN_LINK}">Log In</a></strong></div>
     <em style="font-size: 10px;">Use your AppalNet or myApp user name and password.</em>
     <!-- END login -->
     

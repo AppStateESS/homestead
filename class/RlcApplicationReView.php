@@ -6,7 +6,7 @@
  * @author jbooker
  * @package HMS
  */
-class RlcApplicationReView extends View {
+class RlcApplicationReView extends hms\View{
 
     private $student;
     private $application;

@@ -354,10 +354,11 @@ class Term
         $objs = self::getTerms();
 
         $terms = array();
-
-        foreach($objs as $term) {
-            $t = $term->term;
-            $terms[$t] = Term::toString($t);
+        if (is_array($objs) || $objs instanceof Traversable){
+            foreach($objs as $term) {
+                $t = $term->term;
+                $terms[$t] = Term::toString($t);
+            }
         }
 
         return $terms;
@@ -385,6 +386,7 @@ class Term
         $form->setMatch('term', self::getSelectedTerm());
 
         $tags = $form->getTemplate();
+        javascript('jquery');
         javascriptMod('hms', 'jqueryCookie');
         javascript('modules/hms/SelectTerm');
         return PHPWS_Template::process($tags, 'hms', 'admin/SelectTerm.tpl');

@@ -1,6 +1,6 @@
 <?php
 
-class CheckinFormView extends View {
+class CheckinFormView extends hms\View{
 
     private $student;
     private $assignment;

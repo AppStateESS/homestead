@@ -2,7 +2,7 @@
 
 PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
 
-class RlcAssignmentsView extends View {
+class RlcAssignmentsView extends hms\View{
 
     public function show(){
         PHPWS_Core::initCoreClass('DBPager.php');

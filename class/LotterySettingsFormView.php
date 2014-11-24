@@ -1,6 +1,6 @@
 <?php
 
-class LotterySettingsFormView extends View {
+class LotterySettingsFormView extends hms\View{
 
     public function show()
     {

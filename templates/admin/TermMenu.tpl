@@ -1,4 +1,3 @@
-<div class="rounded-box">
-  <div class="boxheader emptyheader">&nbsp;</div>
-  <div style="margin-left:10px">{FORM}</div>
-</div>
+<ul class="dropdown-menu">
+	<li><div style="margin-left:10px">{FORM}</div></li>
+</ul>

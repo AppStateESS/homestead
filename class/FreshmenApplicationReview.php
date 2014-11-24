@@ -2,7 +2,7 @@
 
 PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
-class FreshmenApplicationReview extends View {
+class FreshmenApplicationReview extends hms\View{
 
     private $student;
     private $term;
