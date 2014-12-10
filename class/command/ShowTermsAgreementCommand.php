@@ -40,8 +40,6 @@ class ShowTermsAgreementCommand extends Command {
 
         $term = $context->get('term');
 
-        //TODO add teh side thingie to the sidebar
-
         // Recreate the agreedToCommand
         $agreedCmd = CommandFactory::getCommand($context->get('onAgreeAction'));
         $agreedCmd->setTerm($term);
