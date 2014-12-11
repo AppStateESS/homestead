@@ -8,7 +8,7 @@
  * @author Jeff Tickle <jtickle at tux dot appstate dot edu>
  */
 
-abstract class View
+abstract class HMSBaseView
 {
     protected $pageTitle;
 
@@ -20,7 +20,7 @@ abstract class View
     public abstract function show();
 }
 
-abstract class HMSView extends View
+abstract class HMSView extends HMSBaseView
 {
     private $main;
 
