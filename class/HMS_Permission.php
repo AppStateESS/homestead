@@ -6,17 +6,17 @@ class HMS_Permission extends HMS_Item {
     public $name;
     public $full_name;
 
-    public function getDb(){
-        return new PHPWS_DB('hms_permission');
-    }
-
     public function __construct($name='', $full_name=''){
         $this->name = $name;
         $this->full_name = $full_name;
     }
+    
+    public static function getDb(){
+        return new PHPWS_DB('hms_permission');
+    }
 
     public static function getMembership($permission=null, $object=null, $username=null, $display_name=false){
-        $db = HMS_Permission::getDb();
+        $db = self::getDb();
         $db->addJoin('left outer', 'hms_permission', 'hms_role_perm', 'id', 'permission');
         $db->addJoin('left outer', 'hms_role_perm', 'hms_role', 'role', 'id');
         $db->addJoin('left outer', 'hms_role', 'hms_user_role', 'id', 'role');
