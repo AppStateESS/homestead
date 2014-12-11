@@ -1,6 +1,6 @@
 <?php
 
-class EmergencyContactReview extends View {
+class EmergencyContactReview extends homestead\View {
 
     private $student;
     private $term;

@@ -2,7 +2,7 @@
 
 PHPWS_Core::initModClass('hms', 'View.php');
 
-class UnassignStudentView extends View {
+class UnassignStudentView extends homestead\View {
 
     private $student;
 

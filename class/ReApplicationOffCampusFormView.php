@@ -1,7 +1,7 @@
 <?php
 
 
-class ReApplicationOffCampusFormView extends View {
+class ReApplicationOffCampusFormView extends homestead\View {
 
     private $student;
     private $term;

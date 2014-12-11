@@ -11,7 +11,7 @@ PHPWS_Core::initModClass('hms', 'StudentFactory.php');
  *
  */
 
-class RlcApplicationPage2View extends View
+class RlcApplicationPage2View extends homestead\View
 {
     protected $context;
 

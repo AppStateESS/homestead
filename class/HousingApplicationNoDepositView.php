@@ -1,6 +1,6 @@
 <?php
 
-class HousingApplicationNoDepositView extends View {
+class HousingApplicationNoDepositView extends homestead\View {
 
     private $student;
     private $requiredTerms;

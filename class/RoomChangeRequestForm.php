@@ -2,7 +2,7 @@
 
 PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
 
-class RoomChangeRequestForm extends View {
+class RoomChangeRequestForm extends homestead\View {
 
     private $student;
 

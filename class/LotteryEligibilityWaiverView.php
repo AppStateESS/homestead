@@ -3,7 +3,7 @@
 PHPWS_Core::initModClass('hms', 'View.php');
 PHPWS_Core::initModClass('hms', 'CommandFactory.php');
 
-class LotteryEligibilityWaiverView extends View {
+class LotteryEligibilityWaiverView extends homestead\View {
 
     public function show(){
         $form = new PHPWS_Form('waiver');

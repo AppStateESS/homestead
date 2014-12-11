@@ -2,7 +2,7 @@
 
 PHPWS_Core::initModClass('hms', 'View.php');
 
-class SpecialInterestGroupView extends View {
+class SpecialInterestGroupView extends homestead\View {
     protected $group;
 
     public function __construct($group = NULL)

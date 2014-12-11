@@ -2,7 +2,7 @@
 
 PHPWS_Core::initModClass('hms', 'WaitingListApplication.php');
 
-class OpenWaitingListView extends View {
+class OpenWaitingListView extends homestead\View {
 
     public function show()
     {

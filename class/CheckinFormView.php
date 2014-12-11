@@ -1,6 +1,6 @@
 <?php
 
-class CheckinFormView extends View {
+class CheckinFormView extends homestead\View {
 
     private $student;
     private $assignment;

@@ -11,7 +11,7 @@
 
 PHPWS_Core::initModClass('hms', 'View.php');
 
-class ShowHallNotificationEditView extends View {
+class ShowHallNotificationEditView extends homestead\View {
     private $subject;
     private $body;
     private $anonymous;

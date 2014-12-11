@@ -5,7 +5,7 @@
  *
  * @author jbooker
  */
-class ProfileHousingAppList extends View {
+class ProfileHousingAppList extends homestead\View {
 
     private $housingApps;
 

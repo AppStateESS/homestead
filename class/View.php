@@ -1,4 +1,5 @@
 <?php
+namespace homestead;
 
 /**
  * HMS View
@@ -8,7 +9,7 @@
  * @author Jeff Tickle <jtickle at tux dot appstate dot edu>
  */
 
-abstract class HMSBaseView
+abstract class View
 {
     protected $pageTitle;
 
@@ -20,7 +21,7 @@ abstract class HMSBaseView
     public abstract function show();
 }
 
-abstract class HMSView extends HMSBaseView
+abstract class HMSView extends View
 {
     private $main;
 
@@ -46,9 +47,9 @@ abstract class HMSView extends HMSBaseView
         $tpl['TERM'] = self::getTerm();
         $tpl['USER'] = UserStatus::getDisplay();
 
-        Layout::addStyle('hms', 'css/hms.css');
-        Layout::addStyle('hms', 'css/tango-icons.css');
-        Layout::add(PHPWS_Template::process($tpl, 'hms', 'hms.tpl'));
+        \Layout::addStyle('hms', 'css/hms.css');
+        \Layout::addStyle('hms', 'css/tango-icons.css');
+        \Layout::add(PHPWS_Template::process($tpl, 'hms', 'hms.tpl'));
     }
 }
 

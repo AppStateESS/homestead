@@ -1,6 +1,6 @@
 <?php
 
-class ReportMenuItemView extends View {
+class ReportMenuItemView extends homestead\View {
 
     private $report;
     private $reportClassName;

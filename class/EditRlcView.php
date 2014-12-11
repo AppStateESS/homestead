@@ -4,7 +4,7 @@ PHPWS_Core::initModClass('hms', 'View.php');
 PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
 PHPWS_Core::initCoreClass('DBPager.php');
 
-class EditRlcView extends View {
+class EditRlcView extends homestead\View {
 
     function show(){
         $pager = new DBPager('hms_learning_communities', 'HMS_Learning_Community');

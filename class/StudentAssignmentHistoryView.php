@@ -6,7 +6,7 @@
  * @author jbooker
  * @package HMS
  */
-class StudentAssignmentHistoryView extends View {
+class StudentAssignmentHistoryView extends homestead\View {
 
     private $assignmentHistory;
 

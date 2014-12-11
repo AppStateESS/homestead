@@ -1,6 +1,6 @@
 <?php
 
-class LotteryChooseRoomView extends View {
+class LotteryChooseRoomView extends homestead\View {
     
     public $student;
     public $term;

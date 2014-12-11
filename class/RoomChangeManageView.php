@@ -2,7 +2,7 @@
 
 PHPWS_Core::initModClass('hms', 'RoomChangeParticipantView.php');
 
-class RoomChangeManageView extends View {
+class RoomChangeManageView extends homestead\View {
 
     private $request;
 

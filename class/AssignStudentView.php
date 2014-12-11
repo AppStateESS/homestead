@@ -6,7 +6,7 @@
  * @author jbooker
  * @package hms
  */
-class AssignStudentView extends View {
+class AssignStudentView extends homestead\View {
 
     private $student;
     private $bed;

@@ -1,6 +1,6 @@
 <?php 
 
-class CheckinStartView extends View {
+class CheckinStartView extends homestead\View {
 
     private $halls;
     private $term;

@@ -1,6 +1,6 @@
 <?php
 
-class ResidenceHallView extends View {
+class ResidenceHallView extends homestead\View {
 
     private $hall;
 

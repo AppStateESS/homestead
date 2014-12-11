@@ -1,6 +1,6 @@
 <?php
 
-class LotteryConfirmedRoommateThanksView extends View {
+class LotteryConfirmedRoommateThanksView extends homestead\View {
     
     private $invite;
     private $bed;

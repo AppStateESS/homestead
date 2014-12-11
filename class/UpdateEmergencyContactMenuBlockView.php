@@ -1,6 +1,6 @@
 <?php
 
-class UpdateEmergencyContactMenuBlockView extends View {
+class UpdateEmergencyContactMenuBlockView extends homestead\View {
 
     private $student;
     private $startDate;

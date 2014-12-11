@@ -1,6 +1,6 @@
 <?php
 
-class BadBannerDataView extends View {
+class BadBannerDataView extends homestead\View {
 
     public function __construct()
     {

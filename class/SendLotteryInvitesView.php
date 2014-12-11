@@ -1,6 +1,6 @@
 <?php
 
-class SendLotteryInvitesView extends View {
+class SendLotteryInvitesView extends homestead\View {
     
     public function __construct()
     {

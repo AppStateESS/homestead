@@ -8,7 +8,7 @@
  *
  */
 
-class RlcApplicationPage1View extends View
+class RlcApplicationPage1View extends homestead\View
 {
     protected $context;
     private $student;
