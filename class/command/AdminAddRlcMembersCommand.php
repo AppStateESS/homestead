@@ -92,7 +92,7 @@ class AdminAddRlcMembersCommand extends Command {
                 // Create a new learning community application
                 $rlcApp = new HMS_RLC_Application();
                 $rlcApp->setUsername($student->getUsername());
-                $rlcApp->setDateSubmitted(mktime());
+                $rlcApp->setDateSubmitted(time());
                 $rlcApp->setFirstChoice($community->getId());
                 $rlcApp->setSecondChoice(null);
                 $rlcApp->setThirdChoice(null);

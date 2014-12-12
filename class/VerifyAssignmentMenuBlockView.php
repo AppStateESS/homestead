@@ -20,7 +20,7 @@ class VerifyAssignmentMenuBlockView extends homestead\View {
         $tpl['DATES'] = HMS_Util::getPrettyDateRange($this->startDate, $this->endDate);
 
         // Don't show the app-feature if it's not time
-        if($this->startDate <= mktime()){
+        if($this->startDate <= time()){
             $cmd = CommandFactory::getCommand('ShowVerifyAssignment');
             $cmd->setUsername($this->student->getUsername());
             $tpl['VIEW_APP'] = $cmd->getLink('here');

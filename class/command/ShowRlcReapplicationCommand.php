@@ -34,10 +34,10 @@ class ShowRlcReapplicationCommand extends Command {
             $errorCmd->redirect();
         }
         
-        if($feature->getStartDate() > mktime()){
+        if($feature->getStartDate() > time()){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Sorry, it is too soon to submit a RLC re-application.");
             $errorCmd->redirect();
-        }else if($feature->getEndDate() < mktime()){
+        }else if($feature->getEndDate() < time()){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Sorry, the RLC re-application deadline has already passed. Please contact University Housing if you are interested in applying for a RLC.");
             $errorCmd->redirect();
         }

@@ -56,7 +56,7 @@ class HMS_Roommate
         $this->requestor    = strToLower($requestor);
         $this->requestee    = strToLower($requestee);
         $this->confirmed    = 0;
-        $this->requested_on = mktime();
+        $this->requested_on = time();
 
         $result = $this->is_request_valid();
         if ($result != E_SUCCESS) {
@@ -76,7 +76,7 @@ class HMS_Roommate
         }
 
         $this->confirmed    = 1;
-        $this->confirmed_on = mktime();
+        $this->confirmed_on = time();
 
         return true;
     }
@@ -270,7 +270,7 @@ class HMS_Roommate
         $db->setGroupConj('grp', 'AND');
         $db->addWhere('confirmed', 0);
         $db->addWhere('term', $term);
-        $db->addWhere('requested_on', mktime() - ROOMMATE_REQ_TIMEOUT, '>=');
+        $db->addWhere('requested_on', time() - ROOMMATE_REQ_TIMEOUT, '>=');
         $db->addColumn('requestor');
         $db->addColumn('requestee');
         $result = $db->select('row');
@@ -283,7 +283,7 @@ class HMS_Roommate
         $stmt->bindParam(':user', $asu_username);
         $stmt->bindParam(':term', $term);
         
-        $ttl = mktime() - ROOMMATE_REQ_TIMEOUT;
+        $ttl = time() - ROOMMATE_REQ_TIMEOUT;
         $stmt->bindParam(':ttl', $ttl);
         
         $stmt->execute();
@@ -317,7 +317,7 @@ class HMS_Roommate
         $db = new PHPWS_DB('hms_roommate');
         $db->addWhere('requestor', $username, 'ILIKE');
         $db->addWhere('confirmed', 0);
-        $db->addWhere('requested_on', mktime() - ROOMMATE_REQ_TIMEOUT, '>=');
+        $db->addWhere('requested_on', time() - ROOMMATE_REQ_TIMEOUT, '>=');
         $db->addWhere('term', $term);
         $result = $db->count();
         
@@ -338,7 +338,7 @@ class HMS_Roommate
         $db->addWhere('requestor', $asu_username, 'ILIKE');
         $db->addWhere('confirmed', 0);
         $db->addWhere('term', $term);
-        $db->addWhere('requested_on', mktime() - ROOMMATE_REQ_TIMEOUT, '>=');
+        $db->addWhere('requested_on', time() - ROOMMATE_REQ_TIMEOUT, '>=');
         $db->addColumn('requestee');
         $result = $db->select('col');
 
@@ -362,7 +362,7 @@ class HMS_Roommate
         $db->addWhere('requestee', $asu_username, 'ILIKE');
         $db->addWhere('term', $term);
         $db->addWhere('confirmed', 0);
-        $db->addWhere('requested_on', mktime() - ROOMMATE_REQ_TIMEOUT, '>=');
+        $db->addWhere('requested_on', time() - ROOMMATE_REQ_TIMEOUT, '>=');
         $result = $db->getObjects('HMS_Roommate');
 
         return $result;
@@ -377,7 +377,7 @@ class HMS_Roommate
         $db->addWhere('requestee', $asu_username, 'ILIKE');
         $db->addWhere('confirmed', 0);
         $db->addWhere('term', $term);
-        $db->addWhere('requested_on', mktime() - ROOMMATE_REQ_TIMEOUT, '>=');
+        $db->addWhere('requested_on', time() - ROOMMATE_REQ_TIMEOUT, '>=');
         $result = $db->count();
 
         return $result;
@@ -525,9 +525,9 @@ class HMS_Roommate
         $cmd->setRoommateId($this->id);
         $tpl['NAME'] = $cmd->getLink($name);
 
-        $expires = floor(($this->calc_req_expiration_date() - mktime()) / 60 / 60);
+        $expires = floor(($this->calc_req_expiration_date() - time()) / 60 / 60);
         if ($expires == 0) {
-            $expires = floor(($this->calc_req_expiration_date() - mktime()) / 60);
+            $expires = floor(($this->calc_req_expiration_date() - time()) / 60);
             $tpl['EXPIRES'] = $expires . ' minute' . ($expires > 1 ? 's' : '');
         } else {
             $tpl['EXPIRES'] = $expires . ' hour' . ($expires > 1 ? 's' : '');
@@ -760,7 +760,7 @@ class HMS_Roommate
         $pager->db->addWhere('requestee', $asu_username, 'ILIKE');
         $pager->db->addWhere('confirmed', 0);
         $pager->db->addWhere('term', $term);
-        $pager->db->addWhere('requested_on', mktime() - ROOMMATE_REQ_TIMEOUT, '>=');
+        $pager->db->addWhere('requested_on', time() - ROOMMATE_REQ_TIMEOUT, '>=');
         return $pager->get();
     }
 

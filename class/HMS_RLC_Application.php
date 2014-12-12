@@ -558,7 +558,7 @@ class HMS_RLC_Application extends HMS_Item
     public function setDateSubmitted($date = null)
     {
         if(!isset($date)){
-            $this->date_submitted = mktime();
+            $this->date_submitted = time();
         }else{
             $this->date_submitted = $date;
         }

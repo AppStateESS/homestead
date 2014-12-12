@@ -1194,7 +1194,7 @@ class RoommateProfile {
         if (isset($date)) {
             $this->date_submitted = $date;
         } else {
-            $this->date_submitted = mktime();
+            $this->date_submitted = time();
         }
     }
 

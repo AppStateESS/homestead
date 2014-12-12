@@ -58,7 +58,7 @@ class LotteryProcess {
         $this->term = PHPWS_Settings::get('hms', 'lottery_term');
         $this->year = Term::getTermYear($this->term);
         $this->academicYear = Term::toString($this->term) . ' - ' . Term::toString(Term::getNextTerm($this->term));
-        $this->now = mktime();
+        $this->now = time();
         $this->expireTime = $this->now + (INVITE_TTL_HRS * 3600);
 
         // Hard Cap
@@ -265,7 +265,7 @@ class LotteryProcess {
 
     private function getMagicWinner()
     {
-        $now = mktime();
+        $now = time();
 
         $query = "SELECT * FROM hms_new_application JOIN hms_lottery_application ON hms_new_application.id = hms_lottery_application.id
                             LEFT OUTER JOIN (SELECT asu_username FROM hms_assignment WHERE term = {$this->term}) as foo ON hms_new_application.username = foo.asu_username
@@ -460,7 +460,7 @@ class LotteryProcess {
 
     public static function countInvitesByClassGender($term, $class, $gender = null)
     {
-        $now = mktime();
+        $now = time();
 
         $query = "SELECT count(*) FROM hms_new_application JOIN hms_lottery_application ON hms_new_application.id = hms_lottery_application.id
                     WHERE hms_lottery_application.invited_on IS NOT NULL
@@ -501,7 +501,7 @@ class LotteryProcess {
 
     public function countOutstandingInvites($term, $class, $gender = null)
     {
-        $now = mktime();
+        $now = time();
         $ttl = INVITE_TTL_HRS * 3600;
 
         $query = "SELECT count(*) FROM hms_new_application
@@ -649,7 +649,7 @@ class LotteryProcess {
 
     public static function countRemainingApplications($term)
     {
-        $now = mktime();
+        $now = time();
 
         $query = "SELECT count(*) FROM hms_new_application JOIN hms_lottery_application ON hms_new_application.id = hms_lottery_application.id
         LEFT OUTER JOIN (SELECT asu_username FROM hms_assignment WHERE hms_assignment.term=$term) as foo ON hms_new_application.username = foo.asu_username
@@ -669,7 +669,7 @@ class LotteryProcess {
 
     public static function countRemainingApplicationsByClassGender($term, $class, $gender = null)
     {
-        $now = mktime();
+        $now = time();
 
         $query = "SELECT count(*) FROM hms_new_application JOIN hms_lottery_application ON hms_new_application.id = hms_lottery_application.id
                     LEFT OUTER JOIN (SELECT asu_username FROM hms_assignment WHERE hms_assignment.term=$term) as foo ON hms_new_application.username = foo.asu_username

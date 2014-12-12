@@ -10,7 +10,7 @@ class HMS_Lottery {
      */
     public function check_magic_winner($term)
     {
-        $now = mktime();
+        $now = time();
 
         $query = "SELECT * FROM hms_new_application JOIN hms_lottery_application ON hms_new_application.id = hms_lottery_application.id
                     LEFT OUTER JOIN (SELECT asu_username FROM hms_assignment WHERE term=$term) as foo ON hms_new_application.username = foo.asu_username
@@ -38,7 +38,7 @@ class HMS_Lottery {
      */
     public function count_remaining_entries($term)
     {
-        $now = mktime();
+        $now = time();
 
         $sql = "SELECT count(*) FROM hms_new_application JOIN hms_lottery_application ON hms_new_application.id = hms_lottery_application.id
                 LEFT OUTER JOIN (SELECT asu_username FROM hms_assignment WHERE hms_assignment.term=$term) as foo ON hms_new_application.username = foo.asu_username
@@ -58,7 +58,7 @@ class HMS_Lottery {
 
     public function count_outstanding_invites($term, $gender = null)
     {
-        $now = mktime();
+        $now = time();
         $query = "select count(*) FROM hms_new_application JOIN hms_lottery_application ON hms_new_application.id = hms_lottery_application.id
                 LEFT OUTER JOIN (SELECT asu_username FROM hms_assignment WHERE term=$term AND lottery = 1) as foo ON hms_new_application.username = foo.asu_username
                 WHERE foo.asu_username IS NULL
@@ -83,7 +83,7 @@ class HMS_Lottery {
     */
     public function count_outstanding_roommate_invites($term)
     {
-        $now = mktime();
+        $now = time();
         $query = "select count(*) FROM hms_lottery_reservation
                 LEFT OUTER JOIN (SELECT asu_username FROM hms_assignment WHERE term=$term AND lottery = 1) as foo ON hms_lottery_reservation.asu_username = foo.asu_username
                 WHERE foo.asu_username IS NULL
@@ -105,7 +105,7 @@ class HMS_Lottery {
     */
     public function count_invites_by_class($term, $class)
     {
-        $now = mktime();
+        $now = time();
         $term_year = Term::getTermYear($term);
 
         $query = "SELECT count(*) FROM hms_new_application JOIN hms_lottery_application ON hms_new_application.id = hms_lottery_application.id
@@ -141,7 +141,7 @@ class HMS_Lottery {
 
     public function count_remaining_entries_by_class($term, $class)
     {
-        $now = mktime();
+        $now = time();
         $term_year = Term::getTermYear($term);
 
         $query = "SELECT count(*) FROM hms_new_application JOIN hms_lottery_application ON hms_new_application.id = hms_lottery_application.id
@@ -178,7 +178,7 @@ class HMS_Lottery {
 
     function count_outstanding_invites_by_class($term, $class)
     {
-        $now = mktime();
+        $now = time();
         $term_year = Term::getTermYear($term);
 
         $query = "SELECT count(*) from hms_new_application JOIN hms_lottery_application ON hms_new_application.id = hms_lottery_application.id
@@ -294,7 +294,7 @@ class HMS_Lottery {
         $query = "select hms_new_application.username, hms_lottery_application.invite_expires_on FROM hms_new_application JOIN hms_lottery_application ON hms_new_application.id = hms_lottery_application.id
                 LEFT OUTER JOIN (SELECT asu_username FROM hms_assignment WHERE term=$term AND lottery = 1) as foo ON hms_new_application.username = foo.asu_username
                 WHERE foo.asu_username IS NULL
-                AND hms_lottery_application.invite_expires_on > " . mktime();
+                AND hms_lottery_application.invite_expires_on > " . time();
 
         $result = PHPWS_DB::getAll($query);
 
@@ -321,7 +321,7 @@ class HMS_Lottery {
         $query = "select hms_lottery_reservation.* FROM hms_lottery_reservation
                 LEFT OUTER JOIN (SELECT asu_username FROM hms_assignment WHERE term=$term AND lottery = 1) as foo ON hms_lottery_reservation.asu_username = foo.asu_username
                 WHERE foo.asu_username IS NULL
-                AND hms_lottery_reservation.expires_on > " . mktime();
+                AND hms_lottery_reservation.expires_on > " . time();
 
         $result = PHPWS_DB::getAll($query);
         if (PEAR::isError($result)) {
@@ -369,7 +369,7 @@ class HMS_Lottery {
 
         $db->addWhere('asu_username', $username);
         $db->addWhere('term', $term);
-        $db->addWhere('expires_on', mktime(), '>'); // make sure the request hasn't expired
+        $db->addWhere('expires_on', time(), '>'); // make sure the request hasn't expired
 
         $result = $db->select();
 
@@ -384,7 +384,7 @@ class HMS_Lottery {
     {
         $db = new PHPWS_DB('hms_lottery_reservation');
 
-        $db->addWhere('expires_on', mktime(), '>'); // make sure the request hasn't expired
+        $db->addWhere('expires_on', time(), '>'); // make sure the request hasn't expired
         $db->addWhere('id', $id);
 
         $result = $db->select('row');

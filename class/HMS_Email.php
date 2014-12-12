@@ -259,7 +259,7 @@ class HMS_Email{
         $tpl['YEAR']        = $year;
         $tpl['REQUESTOR']   = $requestor_name;
         $tpl['HALL_ROOM']   = $hall_room;
-        $hours              = round(($expires_on - mktime()) / 3600);
+        $hours              = round(($expires_on - time()) / 3600);
 
         HMS_Email::send_template_message($to . TO_DOMAIN, "Roommate Invitation Reminder: Only $hours hours left!", 'email/lottery_roommate_invite_reminder.tpl', $tpl);
     }

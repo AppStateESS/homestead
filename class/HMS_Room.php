@@ -493,7 +493,7 @@ class HMS_Room extends HMS_Item
 
     public function count_avail_lottery_beds()
     {
-        $now = mktime();
+        $now = time();
 
         // Count the number of beds which are free in this room
         $query =   "SELECT DISTINCT COUNT(hms_bed.id) FROM hms_bed

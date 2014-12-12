@@ -554,7 +554,7 @@ class HMS_Floor extends HMS_Item
 
     public function count_avail_lottery_rooms($gender)
     {
-        $now = mktime();
+        $now = time();
 
         // Calculate the number of non-full male/female rooms in this hall
         $query =   "SELECT DISTINCT COUNT(hms_room.id) FROM hms_room

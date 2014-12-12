@@ -84,7 +84,7 @@ class HMS_Util{
      */
     public static function get_short_date($timestamp) {
         if(!isset($timestamp))
-            $timestamp = mktime();
+            $timestamp = time();
          
         return date('j-n-y', $timestamp);
     }
@@ -96,7 +96,7 @@ class HMS_Util{
      */
     public static function get_long_date($timestamp) {
         if(!isset($timestamp))
-            $timestamp = mktime();
+            $timestamp = time();
 
         return date('n/j/Y', $timestamp);
     }
@@ -108,7 +108,7 @@ class HMS_Util{
      */
     public static function get_super_long_date($timestamp) {
         if(!isset($timestamp))
-            $timestamp = mktime();
+            $timestamp = time();
 
         return date('jS-M-Y', $timestamp);
     }
@@ -116,7 +116,7 @@ class HMS_Util{
     public static function get_short_date_time($timestamp)
     {
         if(!isset($timestamp)){
-            $timestamp = mktime();
+            $timestamp = time();
         }
 
         return date('m/d/y h:ia',$timestamp);
@@ -130,7 +130,7 @@ class HMS_Util{
     public static function get_long_date_time($timestamp)
     {
         if(!isset($timestamp)){
-            $timestamp = mktime();
+            $timestamp = time();
         }
 
         return date('M jS, Y g:i A', $timestamp);
@@ -139,7 +139,7 @@ class HMS_Util{
     public static function getFriendlyDate($timestamp)
     {
         if(!isset($timestamp)){
-            $timestamp = mktime();
+            $timestamp = time();
         }
          
         return date('M jS, Y', $timestamp);

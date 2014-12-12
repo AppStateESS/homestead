@@ -62,7 +62,7 @@ abstract class HMS_Item {
 
     public function stamp()
     {
-        $now = mktime();
+        $now = time();
 
         if(!$this->id) {
             $this->added_on = & $now;

@@ -78,8 +78,8 @@ class CreateRoommateGroupCommand extends Command {
         $roommate_group->requestor      = $roommate1;
         $roommate_group->requestee      = $roommate2;
         $roommate_group->confirmed      = 1;
-        $roommate_group->requested_on   = mktime();
-        $roommate_group->confirmed_on   = mktime();
+        $roommate_group->requested_on   = time();
+        $roommate_group->confirmed_on   = time();
 
         $result = $roommate_group->save();
 

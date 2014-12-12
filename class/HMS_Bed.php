@@ -399,7 +399,7 @@ class HMS_Bed extends HMS_Item {
         $db = new PHPWS_DB('hms_lottery_reservation');
         $db->addWhere('bed_id', $this->id);
         $db->addWhere('term', $this->term);
-        $db->addWhere('expires_on', mktime(), '>');
+        $db->addWhere('expires_on', time(), '>');
         $result = $db->select('count');
 
         if (PHPWS_Error::logIfError($result)) {
@@ -418,7 +418,7 @@ class HMS_Bed extends HMS_Item {
         $db = new PHPWS_DB('hms_lottery_reservation');
         $db->addWhere('bed_id', $this->id);
         $db->addWhere('term', $this->term);
-        $db->addWhere('expires_on', mktime(), '>');
+        $db->addWhere('expires_on', time(), '>');
         $result = $db->select('row');
 
         if (PHPWS_Error::logIfError($result)) {

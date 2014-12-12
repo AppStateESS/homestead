@@ -89,7 +89,7 @@ class BannerQueueItem {
      */
     public function stamp()
     {
-        $this->queued_on = mktime();
+        $this->queued_on = time();
         $this->queued_by = Current_User::getId();
     }
 
