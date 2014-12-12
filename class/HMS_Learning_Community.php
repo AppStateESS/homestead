@@ -227,7 +227,7 @@ class HMS_Learning_Community extends HMS_Item
     /**
      * Returns an associative array containing the list of RLC abbreviations keyed by their id.
      */
-    public function getRLCListAbbr($student_type = NULL)
+    public static function getRLCListAbbr($student_type = NULL)
     {
         $db = new PHPWS_DB('hms_learning_communities');
 
@@ -250,7 +250,7 @@ class HMS_Learning_Community extends HMS_Item
      * @deprecated
      * @see RlcFactory
      */
-    public function getRlcList($hidden = NULL, $student_type = NULL)
+    public static function getRlcList($hidden = NULL, $student_type = NULL)
     {
         $db = new PHPWS_DB('hms_learning_communities');
         $db->addColumn('id');
