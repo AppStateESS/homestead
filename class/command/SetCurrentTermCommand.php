@@ -26,7 +26,7 @@ class SetCurrentTermCommand extends Command {
         PHPWS_Core::initModClass('hms', 'TermEditView.php');
 
         if(!isset($this->term)) {
-            $this->term = $context->get($term);
+            $this->term = $context->get('term');
             if(is_null($this->term)) {
                 // Fall back to the selected term
                 $this->term = Term::getSelectedTerm();
