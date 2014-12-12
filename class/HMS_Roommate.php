@@ -261,7 +261,7 @@ class HMS_Roommate
         return StudentFactory::getStudentByUsername($result[0]['requestor'], $term);
     }
 
-    public function get_pending_roommate($asu_username, $term)
+    public static function get_pending_roommate($asu_username, $term)
     {
         /*
         $db = new PHPWS_DB('hms_roommate');
@@ -276,7 +276,7 @@ class HMS_Roommate
         $result = $db->select('row');
         */
 
-        PHPWS_Core::initCoreClass('PdoFactory.php');
+        PHPWS_Core::initModClass('hms', 'PdoFactory.php');
         $db = PdoFactory::getInstance()->getPdo();
         
         $stmt = $db->prepare("SELECT * FROM hms_roommate WHERE (requestor ILIKE :user OR requestee ILIKE :user) AND term = :term AND confirmed = 0 and requested_on >= :ttl");
