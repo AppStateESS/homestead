@@ -45,11 +45,11 @@ abstract class HMSView extends View
         $tpl = array();
         $tpl['MAIN'] = $content;
         $tpl['TERM'] = self::getTerm();
-        $tpl['USER'] = UserStatus::getDisplay();
+        $tpl['USER'] = \UserStatus::getDisplay();
 
         \Layout::addStyle('hms', 'css/hms.css');
         \Layout::addStyle('hms', 'css/tango-icons.css');
-        \Layout::add(PHPWS_Template::process($tpl, 'hms', 'hms.tpl'));
+        \Layout::add(\PHPWS_Template::process($tpl, 'hms', 'hms.tpl'));
     }
 }
 
