@@ -38,7 +38,6 @@ class PdoFactory {
     private function __construct()
     {
         $phpwsDSN = PHPWS_DSN;
-        var_dump($phpwsDSN);
         
         if (!isset($phpwsDSN)) {
             throw new Exception('Database connection DSN is not set.');
