@@ -197,7 +197,7 @@ class HMS_Roommate
     /*
      * Returns true if the student has a confirmed roommate, false otherwise
      */
-    public function has_confirmed_roommate($asu_username, $term)
+    public static function has_confirmed_roommate($asu_username, $term)
     {
         PHPWS_Core::initCoreClass('PdoFactory.php');
         $db = PdoFactory::getInstance()->getPdo();
@@ -223,7 +223,7 @@ class HMS_Roommate
      * @param string $term
      * @return Student
      */
-    public function get_confirmed_roommate($asu_username, $term)
+    public static function get_confirmed_roommate($asu_username, $term)
     {
         /*
         $db = new PHPWS_DB('hms_roommate');
