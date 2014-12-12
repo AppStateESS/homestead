@@ -135,7 +135,7 @@ class UserStatus
         return PHPWS_Template::process($vars, 'hms', 'UserBigLogin.tpl');
     }
 
-    public function getLogoutLink()
+    public static function getLogoutLink()
     {
         $auth = Current_User::getAuthorization();
         return '<a href="'.$auth->logout_link.'">Logout</a>';
