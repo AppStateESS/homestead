@@ -19,14 +19,14 @@
 				hidden = $this.find(o.hiddenSelector);
 				
 				// Initial hiding
-				if(!check.attr('checked')) {
+				if(!check.prop('checked')) {
 					hidden.hide();
 				}
 				
 				// Event for showing and hiding
 				check.bind('change', {hidden:hidden}, function(e) {
 					h = e.data.hidden;
-					if($(this).attr('checked')) {
+					if($(this).prop('checked')) {
 						h.show('fast');
 					} else {
 						h.hide('fast');
@@ -37,7 +37,7 @@
 				$this.find(':reset').bind('click', {hidden:hidden, check:check}, function(e) {
 					h = e.data.hidden;
 					
-					if($(e.data.check).attr('checked')) {
+					if($(e.data.check).prop('checked')) {
 						h.show('fast');
 					} else {
 						h.hide('fast');
@@ -62,7 +62,7 @@
 			// Actually Submit
 			$this.bind('submit', null, function(e) {
 				// TODO: Respect GET and POST
-				uri = $(this).attr('action');
+				uri = $(this).prop('action');
 				$$this = $(this);
 				$.post(uri, $(this).serialize(), function(data) {
 					try {
@@ -107,7 +107,7 @@
                         par.append('<input type="hidden" name="featureId" value="'+data.id+'" />');
 					}
 				});
-				$(this).find('input').attr('disabled', 'disabled');
+				$(this).find('input').prop('disabled', 'disabled');
 				e.preventDefault();
 				return false;
 			});
