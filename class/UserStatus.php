@@ -93,7 +93,7 @@ class UserStatus
         if (UserStatus::isGuest()) {
             // Guest logged in
             $vars['LOGGED_IN_AS'] = dgettext('hms', 'Viewing as Guest');
-            $vars['LOGIN_LINK']   = '<a href="/login"><img src="images/mod/hms/tango-icons/actions/edit-redo.png" style="height: 16px; width: 16px; vertical-align: middle;" />ASU WebLogin</a>';
+            $vars['LOGIN_LINK']   = '<a href="/login"><img src="mod/hms/img/tango-icons/actions/edit-redo.png" style="height: 16px; width: 16px; vertical-align: middle;" />ASU WebLogin</a>';
         } else if (UserStatus::isMasquerading() && UserStatus::isMasqueradingAsSelf()) {
             // Masquerading as student version of self
             $vars['LOGGED_IN_AS'] = sprintf(dgettext('sdr', 'Student view for %s'), self::getUsername());
@@ -130,7 +130,7 @@ class UserStatus
         if(!is_null($message))
         $vars['MESSAGE'] = $message;
 
-        $vars['LINK'] = '<a href="/login"><h2><img src="images/mod/hms/tango-icons/actions/edit-redo.png" style="vertical-align: middle" />Log In to HMS</h2></img></a>';
+        $vars['LINK'] = '<a href="/login"><h2><img src="mod/hms/img/tango-icons/actions/edit-redo.png" style="vertical-align: middle" />Log In to HMS</h2></img></a>';
 
         return PHPWS_Template::process($vars, 'hms', 'UserBigLogin.tpl');
     }

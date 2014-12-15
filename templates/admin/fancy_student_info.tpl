@@ -93,17 +93,17 @@
                         <th>Roommate(s):</th>
                         <!-- BEGIN confirmed -->
                             <td class="success">
-                            {ROOMMATE}<img class="roommate_request_icon" src="images/mod/hms/icons/check.png" />
+                            {ROOMMATE}<img class="roommate_request_icon" src="mod/hms/img/icons/check.png" />
                             </td>
                         <!-- END confirmed -->
                         <!-- BEGIN pending -->
                             <td class="warning">
-                            {ROOMMATE}<img class="roommate_request_icon" src="images/mod/hms/icons/warning.png" />
+                            {ROOMMATE}<img class="roommate_request_icon" src="mod/hms/img/icons/warning.png" />
                             </td>
                         <!-- END pending -->
                         <!-- BEGIN error_status -->
                             <td class="error">
-                            {ROOMMATE}<img class="roommate_request_icon" src="images/mod/hms/icons/warning.png" />
+                            {ROOMMATE}<img class="roommate_request_icon" src="mod/hms/img/icons/warning.png" />
                             </td>
                         <!-- END error_status -->
                     </tr>
