@@ -22,17 +22,15 @@ Check-in Time: {MOVE_IN_TIME}
 <!-- END movein_time -->
 
 
-Freshmen check-in time is Wednesday, January 7, 2015 beginning at 9am.
-Check-in at your hall office.
+Freshmen check in time is Wednesday, January 7, 2015 beginning at 9am. Check in at your hall office.
 
-Transfer check-in time is Tuesday, January 6, 2015 at 9am. Check-in
-at your hall office.
+Transfer check in time is Tuesday, January 6, 2015 at 9am. Check in at your hall office.
 
-Returning Student check-in time begins Thursday, January 8, 2015 at 9am. Check-in at the hall
+Returning Student check-in time begins Thursday, January 8, 2015 at 9am. Check in at the hall
 office of your new residence hall. 
 
 
-You must be checked-in to your assignment no later than 6pm, Monday,
+You must be checked in to your assignment no later than 6pm, Monday,
 January 12th in order to avoid losing your assignment. 
 
 
@@ -46,6 +44,5 @@ http://housing.appstate.edu/ .
 
 Sincerely,
 
-Sheila Burleson
-Assignments Coordinator
+Assignments Coordinators
 University Housing
