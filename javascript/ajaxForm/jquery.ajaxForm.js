@@ -62,7 +62,7 @@
 			// Actually Submit
 			$this.bind('submit', null, function(e) {
 				// TODO: Respect GET and POST
-				uri = $(this).prop('action');
+				uri = $(this).attr('action');
 				$$this = $(this);
 				$.post(uri, $(this).serialize(), function(data) {
 					try {
