@@ -57,20 +57,21 @@ class AppliedStudentData extends Report implements iCsvReport {
             $first  = $student->getFirstName($username);
             $middle = $student->getMiddleName($username);
             $last   = $student->getLastName($username);
+            $gender = $student->getPrintableGender();
 
             $address = $student->getAddress(NULL);
 
             if(!is_null($address) && $address !== false){
                 $this->rows[] =
                 array(
-                        $username, $bannerId, $first, $middle, $last,
+                        $username, $bannerId, $first, $middle, $last, $gender,
                         $type, $cellPhone, $room, $date, $address->line1, $address->line2,
                         $address->line3, $address->city,
                         $address->state, $address->zip
                      );
             }else{
                 $this->rows[] =
-                array($username, $bannerId, $first, $middle, $last,
+                array($username, $bannerId, $first, $middle, $last, '',
                       $type, $cellPhone, $room, $date, '', '', '', '', '', '');
             }
         }
@@ -79,7 +80,7 @@ class AppliedStudentData extends Report implements iCsvReport {
     public function getCsvColumnsArray()
     {
         return array('Username', 'Banner id', 'First name', 'Middle name',
-            'Last name', 'Student type', 'Cell Phone', 'Assignment', 'Date Applied', 'Address 1',
+            'Last name', 'Gender', 'Student type', 'Cell Phone', 'Assignment', 'Date Applied', 'Address 1',
             'Address 2', 'Address 3', 'City', 'State', 'Zip');
     }
 
