@@ -21,6 +21,6 @@
 
 <script>
 	$(function() {
-		$( "#recentSearchTabs" ).tabs();
+		//$('#recentSearchTabs').tabs();
 	});
 </script>

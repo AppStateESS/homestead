@@ -6,56 +6,32 @@ class TermsConditionsAdminView extends homestead\View
 {
     private $term;
 
-    public function __construct($term)
+    public function __construct(Term $term)
     {
-        if(is_a($term, 'Term')) {
-            $this->term = $term;
-        } else {
-            $this->term = new Term($term);
-        }
+        $this->term = $term;
     }
 
     public function show()
     {
         $vars = array();
 
-        try{
-            $pdf = $this->term->getPdfTerms();
-        }catch(InvalidConfigurationException $e){
-            $pdf = null;
-            // It's ok to throw these away here
+        $submitCmd = CommandFactory::getCommand('SaveTermSettings');
+        
+        $form = new PHPWS_Form('docusign');
+        $submitCmd->initForm($form);
+        
+        $existingTemplate = '';
+        
+        try {
+        	$existingTemplate = $this->term->getDocusignTemplate();
+        } catch (InvalidConfigurationException $e) {
+        	// TODO: show a warning
         }
         
-        try{
-            $txt = $this->term->getTxtTerms();
-        }catch(InvalidConfigurationException $e){
-            $txt = null;
-            // It's ok to throw these away here
-        }
+        $form->addText('template', $existingTemplate);
+        $form->addSubmit('Save');
+        $tpl = $form->getTemplate();
         
-        if(!isset($pdf) || is_null($pdf) || empty($pdf)) {
-            $tpl['PDF'] = 'No PDF has been uploaded.';
-        } else {
-            $tpl['PDF'] = '<a href="'.$pdf.'">View PDF</a>';
-        }
-
-        if(!isset($txt) || is_null($txt) || empty($txt)) {
-            $tpl['TXT'] = 'No Plain Text has been uploaded.';
-        } else {
-            $tpl['TXT'] = '<a href="'.$txt.'">View Plain Text</a>';
-        }
-
-        $cmd = CommandFactory::getCommand('ShowUploadTermsConditions');
-        $cmd->setTerm($this->term->term);
-        $cmd->setType('pdf');
-        $tpl['PDF_UPLOAD'] = $cmd->getLink('Upload PDF', NULL, 'popup-link', 'Upload PDF');
-
-        $cmd->setType('txt');
-        $tpl['TXT_UPLOAD'] = $cmd->getLink('Upload Plain Text', NULL, 'popup-link', 'Upload Plain Text');
-
-        $vars=array('LINK_SELECT' => 'a.popup-link');
-        javascript('modules/hms/linkPopup', $vars);
-
         return PHPWS_Template::process($tpl, 'hms', 'admin/TermsConditionsAdminView.tpl');
     }
 }
