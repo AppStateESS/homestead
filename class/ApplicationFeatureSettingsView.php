@@ -36,7 +36,7 @@ class ApplicationFeatureSettingsView extends homestead\View
 
         if($reg->requiresStartDate()) {
             $form->addText('start_date');
-            $form->addCssClass('start_date', 'datepicker');
+            $form->setExtra('start_date', 'class="datepicker"');
             if(!is_null($f->getStartDate())) {
                 $form->setValue('start_date', strftime('%m/%d/%Y', $f->getStartDate()));
             }
@@ -45,7 +45,7 @@ class ApplicationFeatureSettingsView extends homestead\View
 
         if($reg->requiresEditDate()) {
             $form->addText('edit_date');
-            $form->addCssClass('edit_date', 'datepicker');
+            $form->setExtra('edit_date', 'class="datepicker"');
             if(!is_null($f->getEditDate())) {
                 $form->setValue('edit_date', strftime('%m/%d/%Y', $f->getEditDate()));
             }
@@ -54,7 +54,7 @@ class ApplicationFeatureSettingsView extends homestead\View
 
         if($reg->requiresEndDate()) {
             $form->addText('end_date');
-            $form->addCssClass('end_date', 'datepicker');
+            $form->setExtra('end_date', 'class="datepicker"');
             if(!is_null($f->getEndDate())) {
                 $form->setValue('end_date', strftime('%m/%d/%Y', $f->getEndDate()));
             }
