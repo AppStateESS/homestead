@@ -70,11 +70,6 @@ class TermEditView extends homestead\View {
         $tcav = new TermsConditionsAdminView($this->term);
         $tpl['TERMS_CONDITIONS_CONTENT'] = $tcav->show();
         
-        // Docusign
-        $docusignForm = new PHPWS_Form('docusign');
-        $docusignForm->addText('docusign_template_id');
-        $docusignForm->setLabel('docusign_template_id', 'Template ID');
-        
         // Features and Deadlines
         $tpl['FEATURES_DEADLINES_LEGEND'] = dgettext('hms', 'Important Dates and Deadlines');
         PHPWS_Core::initModClass('hms', 'ApplicationFeatureListView.php');
