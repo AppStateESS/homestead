@@ -44,12 +44,17 @@ class ShowTermsAgreementCommand extends Command {
         $agreedCmd = CommandFactory::getCommand($context->get('onAgreeAction'));
         $agreedCmd->setTerm($term);
 
-        $submitCmd = CommandFactory::getCommand('AgreeToTerms');
-        $submitCmd->setTerm($term);
-        $submitCmd->setAgreedCmd($agreedCmd);
+        //$submitCmd = CommandFactory::getCommand('AgreeToTerms');
+        //$submitCmd->setTerm($term);
+        //$submitCmd->setAgreedCmd($agreedCmd);
+        
+        $docusignCmd = CommandFactory::getCommand('BeginDocusign');
+        $docusignCmd->setTerm($term);
+        $docusignCmd->setReturnCmd($agreedCmd);
+        
 
         PHPWS_Core::initModClass('hms', 'TermsAgreementView.php');
-        $agreementView = new TermsAgreementView($term, $submitCmd);
+        $agreementView = new TermsAgreementView($term, $docusignCmd);
 
         $context->setContent($agreementView->show());
     }

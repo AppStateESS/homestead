@@ -67,6 +67,11 @@ class Student {
         
         return $firstName . ' ' . $this->getMiddleName() . ' ' . $this->getLastName();
     }
+    
+    public function getLegalName()
+    {
+    	return $this->getFirstName() . ' ' . $this->getMiddleName() . ' ' . $this->getLastName();
+    }
 
     public function getFullNameInverted()
     {
@@ -213,6 +218,12 @@ class Student {
     public function getEmailLink()
     {
         return '<a href="mailto:'.$this->getUsername().'@appstate.edu">'.$this->getUsername().'@appstate.edu</a>';
+    }
+    
+    public function getEmailAddress()
+    {
+        //TODO make the domain configurable
+    	return $this->getUsername() . '@appstate.edu';
     }
 
     /**

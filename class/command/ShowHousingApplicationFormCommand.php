@@ -73,16 +73,19 @@ class ShowHousingApplicationFormCommand extends Command {
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
 
         // Make sure the student agreed to the terms, if not, send them back to the terms & agreement command
-        $agreedToTerms = $context->get('agreedToTerms');
+        //$agreedToTerms = $context->get('agreedToTerms');
+        $event = $context->get('event');
 
         // If they haven't agreed, redirect to the agreement
-        if(is_null($agreedToTerms) || !isset($agreedToTerms) || $agreedToTerms != 1){
+        //if(is_null($agreedToTerms) || !isset($agreedToTerms) || $agreedToTerms != 1){
+        // TODO: actually check via docusign API
+        if(is_null($event) || !isset($event) || $event != 'signing_complete'){
             $agreementCmd = CommandFactory::getCommand('ShowTermsAgreement');
             $agreementCmd->setTerm($term);
             $agreementCmd->setAgreedCommand(CommandFactory::getCommand('ShowHousingApplicationForm'));
             $agreementCmd->redirect();
         }
-
+        
         // Check to see if the student's PIN is enabled. Don't let the student apply if the PIN is disabled.
         if($student->pinDisabled()){
             $pinCmd = CommandFactory::getCommand('ShowPinDisabled');

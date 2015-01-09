@@ -6,6 +6,14 @@ CREATE TABLE hms_term (
     primary key(term)
 );
 
+create table hms_contract (
+	id 			integer not null,
+	banner_id 	integer not null,
+	term 		integer not null REFERENCES hms_term(term),
+	envelope_id integer,
+	PRIMARY KEY(id)
+);
+
 CREATE TABLE hms_student_cache (
     banner_id           integer NOT NULL,
     term                integer NOT NULL,
