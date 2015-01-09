@@ -32,7 +32,22 @@ class EnvelopeFactory {
     }
 
 	static function getEnvelopeById(Client $client, $envelopeId) {
-
+        $http = new \Guzzle\Http\Client();
+        try {
+            $request = $http->createRequest('GET', $client->getBaseUrl() . '/envelopes/' . $envelopeId);
+            $request->setHeader('Content-Type', 'application/json');
+            $request->setHeader('Accept', 'application/json');
+            $request->setHeader('X-DocuSign-Authentication', $client->getAuthHeader());
+            $response = $http->send($request);   
+        } catch (\GuzzleHttp\Exception\RequestException $e) {
+            var_dump($e);
+            var_dump($e->getRequest());
+            exit;
+        }
+        $result = $response->json();
+        
+        $envelope = new Envelope($result['envelopeId'], '/envelopes/' . $envelopeId, $result['statusChangedDateTime'], $result['status']);
+        return $envelope;
 	}
 }
 ?>

@@ -10,9 +10,11 @@ create table hms_contract (
 	id 			integer not null,
 	banner_id 	integer not null,
 	term 		integer not null REFERENCES hms_term(term),
-	envelope_id integer,
+	envelope_id character varying not null,
 	PRIMARY KEY(id)
 );
+
+create sequence hms_contract_seq;
 
 CREATE TABLE hms_student_cache (
     banner_id           integer NOT NULL,

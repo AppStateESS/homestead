@@ -1,17 +1,43 @@
 <?php
-namespace Homestead;
-
 class Contract {
 	
-    private $bannerId;
-    private $term;
-    private $envelopeId;
+    protected $id;
+    protected $banner_id;
+    protected $term;
+    protected $envelope_id;
     
-    public function __construct($bannerId, $term, $envelopeId)
+    // TODO: make first parameter an instance of $student
+    public function __construct($student, $term, $envelopeId)
     {
-    	$this->bannerId = $bannerId;
+    	$this->banner_id = $student->getBannerId();
         $this->term = $term;
-        $this->envelopeId = $envelopeId;
+        $this->envelope_id = $envelopeId;
+    }
+    
+    public function getId()
+    {
+    	return $this->id;
+    }
+    
+    public function setId($id)
+    {
+    	$this->id = $id;
+    }
+    
+    
+    public function getBannerId()
+    {
+    	return $this->banner_id;
+    }
+    
+    public function getTerm()
+    {
+    	return $this->term;
+    }
+    
+    public function getEnvelopeId()
+    {
+    	return $this->envelope_id;
     }
 }
 

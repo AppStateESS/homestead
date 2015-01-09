@@ -79,7 +79,7 @@ class ShowHousingApplicationFormCommand extends Command {
         // If they haven't agreed, redirect to the agreement
         //if(is_null($agreedToTerms) || !isset($agreedToTerms) || $agreedToTerms != 1){
         // TODO: actually check via docusign API
-        if(is_null($event) || !isset($event) || $event != 'signing_complete'){
+        if(is_null($event) || !isset($event) || ($event != 'signing_complete' && $event != 'viewing_complete')){
             $agreementCmd = CommandFactory::getCommand('ShowTermsAgreement');
             $agreementCmd->setTerm($term);
             $agreementCmd->setAgreedCommand(CommandFactory::getCommand('ShowHousingApplicationForm'));

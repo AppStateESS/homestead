@@ -1,5 +1,7 @@
 <?php
 
+\PHPWS_Core::initModClass('hms', 'ContractFactory.php');
+
 class BeginDocusignCommand extends Command {
 	
     public function setTerm($term){
@@ -73,14 +75,22 @@ class BeginDocusignCommand extends Command {
                                 "clientUserId" => $student->getBannerId()
                             )
                          );
-                         
-        $envelope = Docusign\EnvelopeFactory::createEnvelopeFromTemplate($docusignClient, $templateId, 'University Housing Contract', $templateRoles, 'sent');
-        //var_dump($envelope);
-        //exit;
+
+
+        // Check for an existing contract
+        $contract = ContractFactory::getContractByStudentTerm($student, $term);
         
-        // TODO Save the envelope ID
-        
-        // TODO, if there's already an envelope ID and it isn't signed, then use it instead
+        if($contract === false) {
+            // Create a new envelope and save it
+            $envelope = Docusign\EnvelopeFactory::createEnvelopeFromTemplate($docusignClient, $templateId, 'University Housing Contract', $templateRoles, 'sent');
+
+            // Create a new contract to save the envelope ID        
+            $contract = new Contract($student, $term, $envelope->getEnvelopeId());
+            ContractFactory::save($contract);        	
+        }else{
+        	// Use the existing envelope id
+            $envelope = Docusign\EnvelopeFactory::getEnvelopeById($docusignClient, $contract->getEnvelopeId());
+        }
         
         $recipientView = new Docusign\RecipientView($docusignClient, $envelope, $student->getBannerId(), $student->getLegalName());
         
