@@ -96,7 +96,7 @@ class BeginDocusignCommand extends Command {
             $envelope = Docusign\EnvelopeFactory::getEnvelopeById($docusignClient, $contract->getEnvelopeId());
         }
         
-        $recipientView = new Docusign\RecipientView($docusignClient, $envelope, $student->getBannerId(), $student->getLegalName());
+        $recipientView = new Docusign\RecipientView($docusignClient, $envelope, $student->getBannerId(), $student->getLegalName(), $student->getEmailAddress());
         
         $returnCmd = CommandFactory::getCommand($context->get('onAgreeAction'));
         $returnCmd->setTerm($term);

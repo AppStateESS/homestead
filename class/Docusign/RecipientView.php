@@ -7,25 +7,29 @@ class RecipientView {
     private $client;
     private $envelope;
     private $clientUserId;
-    private $name;
+    private $studentName;
+    private $studentEmail;
     
-    public function __construct(Client $client, Envelope $envelope, $clientUserId, $name)
+    public function __construct(Client $client, Envelope $envelope, $clientUserId, $studentName, $studentEmail)
     {
     	$this->client = $client;
         $this->envelope = $envelope;
         $this->clientUserId = $clientUserId;
-        $this->name = $name;
+        $this->studentName = $studentName;
+        $this->studentEmail = $studentEmail;
     }
     
     public function getRecipientViewUrl($returnUrl)
     {
         $data = array (
-            "email" => $this->client->getCreds()->getEmail(),
+            "email" => $this->studentEmail,
             "returnUrl" => $returnUrl,
             "authenticationMethod" => "None",
-            "username" => $this->name,
+            "userName" => $this->studentName,
             "clientUserId" => $this->clientUserId
         );
+
+        var_dump($data);
         
     	$http = new \Guzzle\Http\Client();
         try {
@@ -36,10 +40,12 @@ class RecipientView {
             $request->setHeader('Accept', 'application/json');
             $request->setHeader('X-DocuSign-Authentication', $this->client->getAuthHeader());
             $response = $http->send($request);   
-        } catch (\GuzzleHttp\Exception\RequestException $e) {
-            var_dump($e);
-            var_dump($e->getRequest());
-            exit;
+        } catch (\Guzzle\Http\Exception\ClientErrorResponseException $e) {
+            //var_dump($e->getResponse()->json());
+            //var_dump($e);
+            //var_dump($e->getRequest());
+            //exit;
+            throw $e;
         }
         $result = $response->json();
         //var_dump($result);exit;        
