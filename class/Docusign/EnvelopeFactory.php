@@ -1,6 +1,8 @@
 <?php
 namespace Docusign;
 
+\PHPWS_Core::initModClass('hms', 'Docusign/Envelope.php');
+
 class EnvelopeFactory {
 
 	static function createEnvelopeFromTemplate(Client $client, $templateId, $emailSubject, Array $templateRoles, $status) {
@@ -13,19 +15,14 @@ class EnvelopeFactory {
 		);
         
         $http = new \Guzzle\Http\Client();
-        try {
-            //$request = $http->createRequest('POST', $client->getBaseUrl() . '/envelopes', ['body' => json_encode($data)]);
-            $request = $http->createRequest('POST', $client->getBaseUrl() . '/envelopes');
-            $request->setBody(json_encode($data), 'application/json');
-            $request->setHeader('Content-Type', 'application/json');
-            $request->setHeader('Accept', 'application/json');
-            $request->setHeader('X-DocuSign-Authentication', $client->getAuthHeader());
-            $response = $http->send($request);   
-        } catch (\GuzzleHttp\Exception\RequestException $e) {
-            var_dump($e);
-            var_dump($e->getRequest());
-            exit;
-        }
+        //$request = $http->createRequest('POST', $client->getBaseUrl() . '/envelopes', ['body' => json_encode($data)]);
+        $request = $http->createRequest('POST', $client->getBaseUrl() . '/envelopes');
+        $request->setBody(json_encode($data), 'application/json');
+        $request->setHeader('Content-Type', 'application/json');
+        $request->setHeader('Accept', 'application/json');
+        $request->setHeader('X-DocuSign-Authentication', $client->getAuthHeader());
+        $response = $http->send($request);   
+
         $result = $response->json();
         
         return new Envelope($result['envelopeId'], $result['uri'], $result['statusDateTime'], $result['status']);

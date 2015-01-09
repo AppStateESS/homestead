@@ -1,6 +1,10 @@
 <?php
 
-\PHPWS_Core::initModClass('hms', 'ContractFactory.php');
+PHPWS_Core::initModClass('hms', 'ContractFactory.php');
+PHPWS_Core::initModClass('hms', 'StudentFactory.php');
+PHPWS_Core::initModClass('hms', 'Docusign/Client.php');
+PHPWS_Core::initModClass('hms', 'Docusign/EnvelopeFactory.php');
+PHPWS_Core::initModClass('hms', 'Docusign/RecipientView.php');
 
 class BeginDocusignCommand extends Command {
 	

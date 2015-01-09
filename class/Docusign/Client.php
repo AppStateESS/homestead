@@ -1,7 +1,8 @@
 <?php
 namespace Docusign;
 
-require_once PHPWS_SOURCE_DIR . '/mod/hms/vendor/autoload.php';
+\PHPWS_Core::initModClass('hms', 'Docusign/Creds.php');
+require_once PHPWS_SOURCE_DIR . 'mod/hms/vendor/autoload.php';
 
 /*
  * Copyright 2013 DocuSign Inc.
