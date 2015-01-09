@@ -74,7 +74,7 @@ class Client {
     public function authenticate() {
         $url = $this->getAPIUrl() .  '/login_information';
         
-        $http = new \GuzzleHttp\Client();
+        $http = new \Guzzle\Http\Client();
         try {
             $request = $http->createRequest('GET', $url);
             $request->setHeader('Content-Type', 'application/json');

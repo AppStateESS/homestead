@@ -75,8 +75,8 @@ class BeginDocusignCommand extends Command {
                          );
                          
         $envelope = Docusign\EnvelopeFactory::createEnvelopeFromTemplate($docusignClient, $templateId, 'University Housing Contract', $templateRoles, 'sent');
-        var_dump($envelope);
-        exit;
+        //var_dump($envelope);
+        //exit;
         
         // TODO Save the envelope ID
         

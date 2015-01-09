@@ -12,9 +12,11 @@ class EnvelopeFactory {
 			"status" => $status
 		);
         
-        $http = new \GuzzleHttp\Client();
+        $http = new \Guzzle\Http\Client();
         try {
-            $request = $http->createRequest('POST', $client->getBaseUrl() . '/envelopes', ['body' => json_encode($data)]);
+            //$request = $http->createRequest('POST', $client->getBaseUrl() . '/envelopes', ['body' => json_encode($data)]);
+            $request = $http->createRequest('POST', $client->getBaseUrl() . '/envelopes');
+            $request->setBody(json_encode($data), 'application/json');
             $request->setHeader('Content-Type', 'application/json');
             $request->setHeader('Accept', 'application/json');
             $request->setHeader('X-DocuSign-Authentication', $client->getAuthHeader());

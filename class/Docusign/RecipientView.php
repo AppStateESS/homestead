@@ -27,9 +27,11 @@ class RecipientView {
             "clientUserId" => $this->clientUserId
         );
         
-    	$http = new \GuzzleHttp\Client();
+    	$http = new \Guzzle\Http\Client();
         try {
-            $request = $http->createRequest('POST', $this->client->getBaseUrl() . $this->envelope->getUri() . '/views/recipient', ['body' => json_encode($data)]);
+            //$request = $http->createRequest('POST', $this->client->getBaseUrl() . $this->envelope->getUri() . '/views/recipient', ['body' => json_encode($data)]);
+            $request = $http->createRequest('POST', $this->client->getBaseUrl() . $this->envelope->getUri() . '/views/recipient');
+            $request->setBody(json_encode($data), 'application/json');
             $request->setHeader('Content-Type', 'application/json');
             $request->setHeader('Accept', 'application/json');
             $request->setHeader('X-DocuSign-Authentication', $this->client->getAuthHeader());
