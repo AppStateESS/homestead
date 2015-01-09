@@ -29,6 +29,7 @@ class TermsConditionsAdminView extends homestead\View
         }
         
         $form->addText('template', $existingTemplate);
+        $form->setSize('termplate', 33);
         $form->addSubmit('Save');
         $tpl = $form->getTemplate();
         
