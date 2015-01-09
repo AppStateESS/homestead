@@ -67,9 +67,9 @@ class TermEditView extends homestead\View {
         // Terms and Conditions
         $tpl['TERMS_CONDITIONS_LEGEND'] = dgettext('hms', 'Terms and Conditions');
         PHPWS_Core::initModClass('hms', 'TermsConditionsAdminView.php');
-        $tcav = new TermsConditionsAdminView(Term::getSelectedTerm());
+        $tcav = new TermsConditionsAdminView($this->term);
         $tpl['TERMS_CONDITIONS_CONTENT'] = $tcav->show();
-
+        
         // Features and Deadlines
         $tpl['FEATURES_DEADLINES_LEGEND'] = dgettext('hms', 'Important Dates and Deadlines');
         PHPWS_Core::initModClass('hms', 'ApplicationFeatureListView.php');

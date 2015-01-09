@@ -1,4 +1,7 @@
 <div class="TermsConditionsAdminView">
-<p>{PDF} | {PDF_UPLOAD}</p>
-<p>{TXT} | {TXT_UPLOAD}</p>
+	{START_FORM}
+	<label for="docusign_template">DocuSign Template ID<label>
+	{TEMPLATE}
+	{SUBMIT}
+	{END_FORM}
 </div>

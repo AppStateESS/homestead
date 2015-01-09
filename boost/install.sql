@@ -2,10 +2,19 @@ BEGIN;
 CREATE TABLE hms_term (
     term    integer NOT NULL,
     banner_queue smallint NOT NULL,
-    pdf_terms character varying(255),
-    txt_terms character varying(255),
+    docusign_template_id character varying,
     primary key(term)
 );
+
+create table hms_contract (
+	id 			integer not null,
+	banner_id 	integer not null,
+	term 		integer not null REFERENCES hms_term(term),
+	envelope_id character varying not null,
+	PRIMARY KEY(id)
+);
+
+create sequence hms_contract_seq;
 
 CREATE TABLE hms_student_cache (
     banner_id           integer NOT NULL,
