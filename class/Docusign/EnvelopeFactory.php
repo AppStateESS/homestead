@@ -37,9 +37,10 @@ class EnvelopeFactory {
             $request->setHeader('X-DocuSign-Authentication', $client->getAuthHeader());
             $response = $http->send($request);   
         } catch (\GuzzleHttp\Exception\RequestException $e) {
-            var_dump($e);
-            var_dump($e->getRequest());
-            exit;
+            //var_dump($e);
+            //var_dump($e->getRequest());
+            //exit;
+            throw $e;
         }
         $result = $response->json();
         

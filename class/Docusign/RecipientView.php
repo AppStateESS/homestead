@@ -40,7 +40,7 @@ class RecipientView {
             $request->setHeader('Accept', 'application/json');
             $request->setHeader('X-DocuSign-Authentication', $this->client->getAuthHeader());
             $response = $http->send($request);   
-        } catch (\Guzzle\Http\Exception\ClientErrorResponseException $e) {
+        } catch (\Guzzle\Http\Exception\RequestException $e) {
             //var_dump($e->getResponse()->json());
             //var_dump($e);
             //var_dump($e->getRequest());
