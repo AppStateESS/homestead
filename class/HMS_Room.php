@@ -29,6 +29,7 @@ class HMS_Room extends HMS_Item
     public $private                = false;
     public $overflow               = false;
     public $parlor                 = false;
+    public $reserved_rlc_id;
 
     // Medical flags
     public $ada                    = false;
@@ -730,6 +731,16 @@ class HMS_Room extends HMS_Item
 
     public function setParlor($value) {
         $this->parlor = $value;
+    }
+    
+    public function getReservedRlcId()
+    {
+    	return $this->reserved_rlc_id;
+    }
+    
+    public function setReservedRlcId($id) 
+    {
+    	$this->reserved_rlc_id = $id;
     }
 
     public function getGender() {
