@@ -66,13 +66,14 @@
   <div class="boxheader">
     <h2 style="padding: 3px;">Settings</h2>
   </div>
-  <div style="padding: 3px;">
+  <div style="padding: 4px;">
     Room Number: {ROOM_NUMBER}<br /> Gender:
     <!-- BEGIN gender_message -->
     {GENDER_MESSAGE} {GENDER_REASON}
     <!-- END gender_message -->
     {GENDER_TYPE} <br />
-    Default Gender: {DEFAULT_GENDER}
+    Default Gender: {DEFAULT_GENDER}<br />
+    RLC Reserved: {RLC_RESERVED}
   </div>
 </div>
 {END_FORM}

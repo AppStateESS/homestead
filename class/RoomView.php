@@ -41,6 +41,7 @@ class RoomView extends homestead\View {
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
         PHPWS_Core::initModClass('hms', 'RoomDamage.php');
+        PHPWS_Core::initModClass('hms', 'RlcFactory.php');
 
         $jsParams = array('LINK_SELECT'=>'#addDamageLink');
         javascript('addRoomDamage', $jsParams, 'mod/hms/');
@@ -134,6 +135,10 @@ class RoomView extends homestead\View {
         //Always show the option to set the default gender
         $form->addDropBox('default_gender', array(FEMALE => FEMALE_DESC, MALE => MALE_DESC, AUTO => AUTO_DESC));
         $form->setMatch('default_gender', $this->room->default_gender);
+        
+        $form->addDropBox('rlc_reserved', array("0"=>"Choose RLC") + RlcFactory::getRlcList($this->room->getTerm()));
+        $form->setLabel('rlc_reserved', 'Reserved for RLC');
+        $form->setMatch('rlc_reserved', $this->room->getReservedRlcId());
 
         $form->addCheck('offline', 1);
         $form->setLabel('offline', 'Offline');
@@ -170,7 +175,7 @@ class RoomView extends homestead\View {
         $form->addCheck('bath_en_suite', 1);
         $form->setLabel('bath_en_suite', 'Bath en Suite');
         $form->setMatch('bath_en_suite', $this->room->bathEnSuite());
-
+        
         $form->addSubmit('submit', 'Submit');
 
         // Assignment pagers
