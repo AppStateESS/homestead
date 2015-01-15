@@ -404,6 +404,9 @@ class HMS_RLC_Assignment {
         $this->course_ok = $course_ok;
     }
 
+    /**
+     * @depricated?
+     */
     public function getCourseOk() {
         return $this->course_ok;
     }
@@ -420,6 +423,9 @@ class HMS_RLC_Assignment {
         return $this->application_id;
     }
 
+    /**
+     * @depricated?
+     */
     public function setAssignedByInitials($assigned_by_initials) {
         $this->assigned_by_initials = $assigned_by_initials;
     }
