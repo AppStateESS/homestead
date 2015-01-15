@@ -10,6 +10,7 @@
  */
 
 PHPWS_Core::initModClass('hms', 'HMS_Item.php');
+PHPWS_Core::initModClass('hms', 'RlcFactory.php');
 
 class HMS_Room extends HMS_Item
 {
@@ -592,6 +593,10 @@ class HMS_Room extends HMS_Item
         ));
         $form->setMatch('default_gender', $this->default_gender);
         $form->setExtra('default_gender', 'onChange="submit_form(this, true)"');
+
+        $form->addSelect('rlc_reserved', array('-1'=>'Select RLC') + RlcFactory::getRlcList($this->term));
+        $form->setMatch('rlc_reserved', $this->getReservedRlcId());
+        $form->setExtra('rlc_reserved', 'onChange="submit_form(this, true)"');
 
         $form->addCheck('offline', 'yes');
         $form->setMatch('offline', $this->offline == 1 ? 'yes' : 0);
