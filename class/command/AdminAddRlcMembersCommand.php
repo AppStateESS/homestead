@@ -79,10 +79,9 @@ class AdminAddRlcMembersCommand extends Command {
             // Check for an existing housing application
             $housingApp = HousingApplicationFactory::getAppByStudent($student, $term);
 
-            // If no housing app, then skip to next student
+            // If no housing app, show a warning
             if (is_null($housingApp)) {
-                NQ::simple('hms', HMS_NOTIFICATION_ERROR, "No housing application found for: {$student->getName()}({$student->getBannerID()})");
-                continue;
+                NQ::simple('hms', HMS_NOTIFICATION_WARNING, "No housing application found for: {$student->getName()}({$student->getBannerID()})");
             }
 
             // Check for an existing learning community application
