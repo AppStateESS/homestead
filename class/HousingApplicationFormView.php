@@ -41,7 +41,7 @@ class HousingApplicationFormView extends homestead\View {
 
         /**************
          * Cell Phone *
-        */
+         */
 
         $form->addText('area_code');
         $form->setSize('area_code', 3);

@@ -27,7 +27,6 @@ class RlcSelfSelection extends ApplicationFeature {
 	
     public function getMenuBlockView(Student $student)
     {
-        PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
     	PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
         PHPWS_Core::initModClass('hms', 'RlcSelfSelectionMenuBlockView.php');

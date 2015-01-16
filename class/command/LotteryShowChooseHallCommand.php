@@ -23,6 +23,9 @@ class LotteryShowChooseHalLCommand extends Command {
         
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
         
+        $rlcAssignment = RlcMembershipFactory::getMembership($student, $term);
+        
+        
         $view = new LotteryChooseHallView($student, $term);
         
         $context->setContent($view->show());

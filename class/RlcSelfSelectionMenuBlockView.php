@@ -55,7 +55,9 @@ class RlcSelfSelectionMenuBlockView extends homestead\View {
             $rlcId = $this->rlcAssignment->getRlcId();
             $rlcList = RlcFactory::getRlcList($this->term);
             $tpl['INVITED_COMMUNITY_NAME'] = $rlcList[$rlcId];
-            $tpl['SELECT_LINK'] = 'confirm membership and select a room';
+            $cmd = CommandFactory::getCommand('RlcSelfAssignStart');
+            $cmd->setTerm($this->term);
+            $tpl['SELECT_LINK'] = $cmd->getLink('accept the invitation and select a room');
             
         } else {
         	// Deadlines are open, but student isn't eligible
