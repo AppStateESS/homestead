@@ -21,6 +21,7 @@ class LotteryChooseHallView extends homestead\View {
         
         $halls = HMS_Residence_Hall::get_halls($this->term);
 
+        //TODO!!!! - Check State of RLC assignment!!!
         if($this->rlcAssignment != null) {
         	$rlcId = $this->rlcAssignment->getRlc()->getId();
         } else {
