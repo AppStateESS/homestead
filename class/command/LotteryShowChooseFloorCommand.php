@@ -18,6 +18,7 @@ class LotteryShowChooseFloorCommand extends Command {
     {
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
         PHPWS_Core::initModClass('hms', 'LotteryChooseFloorView.php');
+        PHPWS_Core::initModClass('hms', 'RlcMembershipFactory.php');
         
         $hallId = $context->get('hallId');
         
@@ -29,7 +30,9 @@ class LotteryShowChooseFloorCommand extends Command {
         
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
         
-        $view = new LotteryChooseFloorView($student, $term, $hallId);
+        $rlcAssignment = RlcMembershipFactory::getMembership($student, $term);
+        
+        $view = new LotteryChooseFloorView($student, $term, $hallId, $rlcAssignment);
         
         $context->setContent($view->show());
     }
