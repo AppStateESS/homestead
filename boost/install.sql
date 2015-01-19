@@ -606,7 +606,8 @@ CREATE TABLE hms_banner_queue (
     term integer NOT NULL,
     percent_refund integer,
     queued_on integer NOT NULL,
-    queued_by integer NOT NULL
+    queued_by integer NOT NULL,
+    PRIMARY KEY (id)
 );
 
 CREATE TABLE hms_activity_log (
