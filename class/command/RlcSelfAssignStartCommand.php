@@ -3,15 +3,27 @@
 class RlcSelfAssignStartCommand extends Command {
 	
     private $term;
+    private $roomateRequestId;
     
     public function setTerm($term)
     {
     	$this->term = $term;
     }
     
+    public function setRoommateRequestId($requestId)
+    {
+    	$this->roommateRequestId = $requestId;
+    }
+    
     public function getRequestVars()
     {
-    	return array('action'=>'RlcSelfAssignStart', 'term'=>$this->term);
+    	$vars = array('action'=>'RlcSelfAssignStart', 'term'=>$this->term);
+        
+        if(isset($this->roommateRequestId) && $this->roommateRequestId != null) {
+        	$vars['roommateRequestId'] = $this->roommateRequestId;
+        }
+        
+        return $vars;
     }
     
     public function execute(CommandContext $context)
@@ -41,7 +53,9 @@ class RlcSelfAssignStartCommand extends Command {
             $errorCmd->redirect();
         }
         
-    	$view = new RlcSelfAssignStartView($student, $term, $rlcAssignment, $housingApp);
+        $roommateRequestId = $context->get('roommateRequestId');
+        
+    	$view = new RlcSelfAssignStartView($student, $term, $rlcAssignment, $housingApp, $roommateRequestId);
         $context->setContent($view->show());
     }
 }

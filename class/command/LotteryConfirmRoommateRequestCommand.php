@@ -31,8 +31,9 @@ class LotteryConfirmRoommateRequestCommand extends Command {
 
         $errorCmd = CommandFactory::getCommand('LotteryShowConfirmRoommateRequest');
         $errorCmd->setRequestId($requestId);
+        $errorCmd->setMealPlan($mealPlan);
 
-        # Confirm the captcha
+        // Confirm the captcha
         PHPWS_Core::initCoreClass('Captcha.php');
         $captcha = Captcha::verify(TRUE);
         if($captcha === FALSE){
@@ -40,7 +41,13 @@ class LotteryConfirmRoommateRequestCommand extends Command {
             $errorCmd->redirect();
         }
 
-        # Update the meal plan field on the application
+        // Check for a meal plan
+        if(!isset($mealPlan) || $mealPlan == '') {
+        	NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Please choose a meal plan.');
+            $errorCmd->redirect();
+        }
+
+        // Update the meal plan field on the application
         $term = PHPWS_Settings::get('hms', 'lottery_term');
         $app = HousingApplication::getApplicationByUser(UserStatus::getUsername(), $term);
 
@@ -54,7 +61,7 @@ class LotteryConfirmRoommateRequestCommand extends Command {
             $errorCmd->redirect();
         }
 
-        # Try to actually make the assignment
+        // Try to actually make the assignment
         PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
         try{
             $result = HMS_Lottery::confirm_roommate_request(UserStatus::getUsername(), $requestId, $mealPlan);

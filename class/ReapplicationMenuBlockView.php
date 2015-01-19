@@ -32,7 +32,7 @@ class ReapplicationMenuBlockView extends homestead\View {
         $hardCapReached = LotteryProcess::hardCapReached($this->term);
 
         if(!is_null($this->assignment)) {
-            # Student has already been assigned.
+            // Student has already been assigned.
             $tpl['ICON'] = FEATURE_COMPLETED_ICON;
             $tpl['ASSIGNED'] = $this->assignment->where_am_i();
         }else if($hardCapReached){
@@ -40,12 +40,12 @@ class ReapplicationMenuBlockView extends homestead\View {
             $tpl['ICON'] = FEATURE_LOCKED_ICON;
             $tpl['HARD_CAP'] = ""; // dummy tag
         }else if(!is_null($this->application) && $this->application->isWinner()){
-            # Student has won, let them choose their room
+            // Student has won, let them choose their room
             $tpl['ICON'] = FEATURE_OPEN_ICON;
             $chooseRoomCmd = CommandFactory::getCommand('LotteryShowChooseHall');
             $tpl['SELECT_LINK'] = $chooseRoomCmd->getLink('Click here to select your room');
         }else if(!is_null($this->application)){
-            # Student has already re-applied
+            // Student has already re-applied
             $tpl['ICON'] = FEATURE_COMPLETED_ICON;
             $tpl['ALREADY_APPLIED'] = ""; // dummy tag, text is in template
         }else if(time() < $this->startDate){
@@ -76,7 +76,7 @@ class ReapplicationMenuBlockView extends homestead\View {
             }
         }
 
-        if(!$hardCapReached){
+        if(!$hardCapReached && time() > $this->startDate){
             if($this->roommateRequests != FALSE && !is_null($this->roommateRequests) && $this->assignment != TRUE && !PEAR::isError($this->assignment)){
                 $tpl['roommates'] = array();
                 $tpl['ROOMMATE_REQUEST'] = ''; // dummy tag

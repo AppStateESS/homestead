@@ -100,8 +100,14 @@ class BeginDocusignCommand extends Command {
         
         $returnCmd = CommandFactory::getCommand($context->get('onAgreeAction'));
         $returnCmd->setTerm($term);
+        
+        $roommateRequestId = $context->get('roommateRequestId');
+        if(isset($roommateRequestId) && $roommateRequestId != null) {
+            $returnCmd->setRoommateRequestId($roommateRequestId);
+        }
+        
         $returnUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https://' : 'http://') . $_SERVER['SERVER_NAME'] . $returnCmd->getURI();
-        //var_dump($returnUrl);
+        //var_dump($returnUrl);exit;
         $url = $recipientView->getRecipientViewUrl($returnUrl);
         //var_dump($url);exit;
         PHPWS_Core::reroute($url);

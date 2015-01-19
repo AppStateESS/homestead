@@ -5,11 +5,13 @@ class LotteryRoommateRequestView extends homestead\View {
     private $request;
     private $term;
     private $housingApplication;
+    private $rlcAssignment;
 
-    public function __construct($request, $term, HousingApplication $app){
+    public function __construct($request, $term, HousingApplication $app = null, HMS_RLC_Assignment $rlcAssignment = null){
         $this->request = $request;
         $this->term = $term;
         $this->housingApplication = $app;
+        $this->rlcAssignment = $rlcAssignment;
     }
 
     public function show()
@@ -57,8 +59,17 @@ class LotteryRoommateRequestView extends homestead\View {
             $tpl['beds'][] = $bed_row;
         }
 
-        $submitCmd = CommandFactory::getCommand('LotteryShowConfirmRoommateRequest');
-        $submitCmd->setRequestId($this->request['id']);
+        // Check if the student has already completed a housing application
+        if($this->housingApplication != null) {
+            // Housing application complete, go straight to confirming roommate
+            $submitCmd = CommandFactory::getCommand('LotteryShowConfirmRoommateRequest');
+            $submitCmd->setRequestId($this->request['id']);
+        } else {
+        	// No housing application, goto self-select start page for contract and emg contact
+            $submitCmd = CommandFactory::getCommand('RlcSelfAssignStart');
+            $submitCmd->setTerm($this->term);
+            $submitCmd->setRoommateRequestId($this->request['id']);
+        }
 
         $denyCmd = CommandFactory::getCommand('LotteryShowDenyRoommateRequest');
         $denyCmd->setRequestId($this->request['id']);
@@ -85,7 +96,9 @@ class LotteryRoommateRequestView extends homestead\View {
         }
 
         // Set meal plan drop down default to what the student selected on the housing re-application.
-        $form->setMatch('meal_plan', $this->housingApplication->getMealPlan());
+        if($this->housingApplication != null) {
+            $form->setMatch('meal_plan', $this->housingApplication->getMealPlan());
+        }
 
         $form->addSubmit('accept', 'Accept Roommate');
 

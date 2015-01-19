@@ -8,15 +8,27 @@ PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
 class RlcSelfSelectInviteSaveCommand extends Command {
 	
     private $term;
+    private $roommateRequestId;
     
     public function setTerm($term)
     {
     	$this->term = $term;
     }
     
+    public function setRoommateRequestId($requestId)
+    {
+    	$this->roommateRequestId = $requestId;
+    }
+    
     public function getRequestVars()
     {
-    	return array('action'=>'RlcSelfSelectInviteSave', 'term'=>$this->term);
+    	$vars = array('action'=>'RlcSelfSelectInviteSave', 'term'=>$this->term);
+        
+        if($this->roommateRequestId != null) {
+        	$vars['roommateRequestId'] = $this->roommateRequestId;
+        }
+        
+        return $vars;
     }
     
     public function execute(CommandContext $context)
@@ -24,10 +36,17 @@ class RlcSelfSelectInviteSaveCommand extends Command {
         // Check to see if the user is coming back from DocuSign contract
         $event = $context->get('event');
         if(isset($event) && $event != null && ($event == 'signing_complete' || $event == 'viewing_complete')) {
-        	$hallCmd = CommandFactory::getCommand('LotteryShowChooseHall');
-            $hallCmd->redirect();
+            $roommateRequestId = $context->get('roommateRequestId');
+        	if(isset($roommateRequestId) && $roommateRequestId != null) {
+                $roommateCmd = CommandFactory::getCommand('LotteryShowRoommateRequest');
+                $roommateCmd->setRequestId($roommateRequestId);
+                $roommateCmd->redirect();
+            } else{
+                $hallCmd = CommandFactory::getCommand('LotteryShowChooseHall');
+                $hallCmd->redirect();
+            }
         }
-        
+     
         $term = $context->get('term');
         
         $errorCmd = CommandFactory::getCommand('RlcSelfAssignStart');
@@ -127,6 +146,12 @@ class RlcSelfSelectInviteSaveCommand extends Command {
         
         $returnCmd = CommandFactory::getCommand('RlcSelfSelectInviteSave');
         $returnCmd->setTerm($term);
+
+        // If we're confirming a roommate request, then set the ID on the return command
+        $roommateRequestId = $context->get('roommateRequestId');
+        if(isset($roommateRequestId) && $roommateRequestId != null){
+        	$returnCmd->setRoommateRequestId($roommateRequestId);
+        }
         
         $agreementCmd = CommandFactory::getCommand('ShowTermsAgreement');
         $agreementCmd->setTerm($term);

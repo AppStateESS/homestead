@@ -10,9 +10,10 @@ class RlcSelfSelectionMenuBlockView extends homestead\View {
     
     private $rlcAssignment;
     private $roomAssignment;
+    private $roommateRequests;
     
     
-    public function __construct($term, $startDate, $endDate, HMS_RLC_Assignment $rlcAssignment = null, HMS_Assignment $roomAssignment = null)
+    public function __construct($term, $startDate, $endDate, HMS_RLC_Assignment $rlcAssignment = null, HMS_Assignment $roomAssignment = null, $roommateRequests)
     {
     	$this->term = $term;
         $this->startDate = $startDate;
@@ -20,6 +21,7 @@ class RlcSelfSelectionMenuBlockView extends homestead\View {
         
         $this->rlcAssignment = $rlcAssignment;
         $this->roomAssignment = $roomAssignment;
+        $this->roommateRequests = $roommateRequests;
     }
     
     public function show()
@@ -54,6 +56,7 @@ class RlcSelfSelectionMenuBlockView extends homestead\View {
             
         } else if ($this->rlcAssignment->getStateName() == 'selfselect-invite') {
         	// Student has a pending invite to self-select a room
+            $tpl['ICON'] = FEATURE_OPEN_ICON;
             $rlcId = $this->rlcAssignment->getRlcId();
             $rlcList = RlcFactory::getRlcList($this->term);
             $tpl['INVITED_COMMUNITY_NAME'] = $rlcList[$rlcId];
@@ -65,6 +68,19 @@ class RlcSelfSelectionMenuBlockView extends homestead\View {
         	// Deadlines are open, but student isn't eligible
             $tpl['ICON'] = FEATURE_LOCKED_ICON;
             $tpl['NOT_ELIGIBLE']      = ""; //dummy tag, text is in template
+        }
+        
+        // Show roommate requests, if any
+        if(time() > $this->startDate && $this->roommateRequests != FALSE && !is_null($this->roommateRequests) && $this->roomAssignment != TRUE && !PEAR::isError($this->roomAssignment)){
+            $tpl['roommates'] = array();
+            $tpl['ROOMMATE_REQUEST'] = ''; // dummy tag
+            foreach($this->roommateRequests as $invite){
+                $cmd = CommandFactory::getCommand('LotteryShowRoommateRequest');
+                $cmd->setRequestId($invite['id']);
+                
+                $roommie = StudentFactory::getStudentByUsername($invite['requestor'], $this->term);
+                $tpl['roommates'][]['ROOMMATE_LINK'] = $cmd->getLink($roommie->getName());
+            }
         }
         
         return PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/rlcSelfSelection.tpl');

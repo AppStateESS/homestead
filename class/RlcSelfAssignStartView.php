@@ -6,13 +6,15 @@ class RlcSelfAssignStartView extends Homestead\View {
     private $term;
     private $rlcAssignment;
     private $housingApp;
+    private $roommateRequestId;
 	
-    public function __construct(Student $student, $term, HMS_RLC_Assignment $rlcAssignment, HousingApplication $housingApp = null)
+    public function __construct(Student $student, $term, HMS_RLC_Assignment $rlcAssignment, HousingApplication $housingApp = null, $roommateRequestId = null)
     {
     	$this->student = $student;
         $this->term = $term;
         $this->rlcAssignment = $rlcAssignment;
         $this->housingApp = $housingApp;
+        $this->roommateRequestId = $roommateRequestId;
     }
     
     public function show()
@@ -26,6 +28,12 @@ class RlcSelfAssignStartView extends Homestead\View {
         
         $submitCmd = CommandFactory::getCommand('RlcSelfSelectInviteSave');
         $submitCmd->setTerm($this->term);
+        
+        if(isset($this->roommateRequestId) && $this->roommateRequestId != null)
+        {
+        	$submitCmd->setRoommateRequestId($this->roommateRequestId);
+        }
+        
         $submitCmd->initForm($form);
         
         $form->addCheck('terms_cond', array('true'));
