@@ -552,7 +552,7 @@ class HMS_Floor extends HMS_Item
         }
     }
 
-    public function count_avail_lottery_rooms($gender)
+    public function count_avail_lottery_rooms($gender, $rlcId = null)
     {
         $now = time();
 
@@ -571,6 +571,7 @@ class HMS_Floor extends HMS_Item
                     AND hms_room.private = 0
                     AND hms_room.overflow = 0
                     AND hms_room.parlor = 0
+                    AND hms_room.reserved_rlc_id = $rlcId
                     AND hms_bed.international_reserved = 0
                     AND hms_bed.ra = 0
                     AND hms_bed.ra_roommate = 0";

@@ -3,14 +3,20 @@
 class LotteryShowConfirmRoommateRequestCommand extends Command {
     
     private $requestId;
+    private $mealPlan;
     
     public function setRequestId($id){
         $this->requestId = $id;
     }
     
+    public function setMealPlan($plan){
+        $this->mealPlan = $plan;
+    }
+    
     public function getRequestVars(){
         $vars = array('action'=>'LotteryShowConfirmRoommateRequest');
         $vars['requestId'] = $this->requestId;
+        $vars['mealPlan']   = $this->mealPlan;
         
         return $vars;
     }
