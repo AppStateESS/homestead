@@ -25,6 +25,9 @@ class LotteryConfirmRoommateRequestCommand extends Command {
     public function execute(CommandContext $context)
     {
         PHPWS_Core::initModClass('hms', 'HousingApplication.php');
+        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
+        PHPWS_Core::initModClass('hms', 'RlcMembershipFactory.php');
+        PHPWS_Core::initModClass('hms', 'RlcAssignmentSelfAssignedState.php');
 
         $requestId = $context->get('requestId');
         $mealPlan = $context->get('mealPlan');
@@ -47,8 +50,11 @@ class LotteryConfirmRoommateRequestCommand extends Command {
             $errorCmd->redirect();
         }
 
-        // Update the meal plan field on the application
         $term = PHPWS_Settings::get('hms', 'lottery_term');
+        
+        $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
+        
+        // Update the meal plan field on the application
         $app = HousingApplication::getApplicationByUser(UserStatus::getUsername(), $term);
 
         $app->setMealPlan($mealPlan);
@@ -73,6 +79,14 @@ class LotteryConfirmRoommateRequestCommand extends Command {
 
         # Log the fact that the roommate was accepted and successfully assigned
         HMS_Activity_Log::log_activity(UserStatus::getUsername(), ACTIVITY_LOTTERY_CONFIRMED_ROOMMATE,UserStatus::getUsername(), "Captcha: \"$captcha\"");
+
+        
+        // Check for an RLC membership and update status if necessary
+        // If this student was an RLC self-select, update the RLC memberhsip state
+        $rlcAssignment = RlcMembershipFactory::getMembership($student, $term);
+        if($rlcAssignment != null && $rlcAssignment->getStateName() == 'selfselect-invite') {
+            $rlcAssignment->changeState(new RlcAssignmentSelfAssignedState($rlcAssignment));
+        }
 
         $invite = HMS_Lottery::get_lottery_roommate_invite_by_id($requestId);
         $bed = new HMS_Bed($invite['bed_id']);
