@@ -31,7 +31,9 @@ class RlcSelfSelectionMenuBlockView extends homestead\View {
         
         if(!is_null($this->roomAssignment)){
             // Student is already assigned
-        	$tpl['ASSIGNED'] = $this->assignemnt->whereAmI();
+            $tpl['ICON'] = FEATURE_COMPLETED_ICON;
+        	$tpl['ASSIGNMENT'] = $this->roomAssignment->where_am_i();
+            $tpl['ASSIGNED_COMMUNITY_NAME'] = $this->rlcAssignment->getRlcName();
             
         } else if(time() < $this->startDate) {
             // To early
