@@ -52,7 +52,7 @@ class HMS_Bed extends HMS_Item {
         $new_bed->reset();
         $new_bed->term = $to_term;
         $new_bed->room_id = $room_id;
-        $new_bed->setRoomChangeReserved(0);
+        $new_bed->clearRoomChangeReserved();
 
         try {
             $new_bed->save();
