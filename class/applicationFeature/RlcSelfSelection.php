@@ -10,7 +10,7 @@ class RlcSelfSelectionRegistration extends ApplicationFeatureRegistration {
         $this->description = 'RLC Self-selection';
         $this->startDateRequired = true;
         $this->endDateRequired = true;
-        $this->priority = 4;
+        $this->priority = 5;
     }
     
     public function showForStudent(Student $student, $term)
