@@ -18,6 +18,7 @@ class LotteryChooseRoommatesCommand extends Command {
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
         PHPWS_Core::initModClass('hms', 'HousingApplication.php');
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
+        PHPWS_Core::initModClass('hms', 'RlcMembershipFactory.php');
         
         $roommates = $context->get('roommates');
         $mealPlan = $context->get('meal_plan');
