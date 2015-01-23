@@ -3,6 +3,7 @@
 PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
 PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
+PHPWS_Core::initModClass('hms', 'HousingApplicationFactory.php');
 
 
 class RlcSelfSelectInviteSaveCommand extends Command {
