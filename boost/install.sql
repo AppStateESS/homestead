@@ -3,6 +3,7 @@ CREATE TABLE hms_term (
     term    integer NOT NULL,
     banner_queue smallint NOT NULL,
     docusign_template_id character varying,
+    docusign_under18_template_id character varying,
     primary key(term)
 );
 
