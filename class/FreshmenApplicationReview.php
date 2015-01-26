@@ -92,7 +92,6 @@ class FreshmenApplicationReview extends homestead\View {
 
         $redoCmd = CommandFactory::getCommand('ShowHousingApplicationForm');
         $redoCmd->setTerm($this->term);
-        $redoCmd->setAgreedToTerms(1);
         $redoCmd->setVars($_REQUEST);
 
         $tpl['REDO_BUTTON'] = $redoCmd->getLink('modify your application');

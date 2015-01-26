@@ -80,6 +80,8 @@ class BeginDocusignCommand extends Command {
                             )
                          );
 
+        //var_dump($templateRoles);
+        
 
         // Check for an existing contract
         $contract = ContractFactory::getContractByStudentTerm($student, $term);

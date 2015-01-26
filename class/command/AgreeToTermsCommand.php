@@ -15,7 +15,7 @@ class AgreeToTermsCommand extends Command {
 
     public function getRequestVars()
     {
-        $vars = array('action'=>'AgreeToTerms', 'agreedToTerms'=>1, 'term'=>$this->term);
+        $vars = array('action'=>'AgreeToTerms', 'term'=>$this->term);
 
         if(!isset($this->agreedCommand)){
             return $vars;
@@ -49,7 +49,6 @@ class AgreeToTermsCommand extends Command {
         if(isset($action)){
             $cmd = CommandFactory::getCommand(($action));
             $cmd->setTerm($context->get('term'));
-            $cmd->setAgreedToTerms(1);
             $cmd->redirect();
         }else{
             throw new InvalidArgumentException('No action set.');

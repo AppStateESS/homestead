@@ -55,7 +55,6 @@ class ApplicationMenuBlockView extends homestead\View {
             if(time() < $this->editDate){
                 $tpl['ICON'] = FEATURE_COMPLETED_ICON;
                 $newApp = CommandFactory::getCommand('ShowHousingApplicationForm');
-                $newApp->setAgreedToTerms(1);
                 $newApp->setTerm($this->term);
                 $tpl['NEW_APP'] = $newApp->getLink('submit a new application');
             }

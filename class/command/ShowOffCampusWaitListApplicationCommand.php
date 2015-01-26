@@ -9,7 +9,6 @@
 class ShowOffCampusWaitListApplicationCommand extends Command {
 
     private $term;
-    private $agreedToTerms;
 
     /**
      * @param integer $term
@@ -20,24 +19,12 @@ class ShowOffCampusWaitListApplicationCommand extends Command {
     }
 
     /**
-     * @param integer $terms
-     */
-    public function setAgreedToTerms($terms)
-    {
-        $this->agreedToTerms = $terms;
-    }
-
-    /**
      * (non-PHPdoc)
      * @see Command::getRequestVars()
      */
     public function getRequestVars()
     {
         $vars = array('action'=>'ShowOffCampusWaitListApplication', 'term'=>$this->term);
-
-        if (isset($this->agreedToTerms)) {
-            $vars['agreedToTerms'] = $this->agreedToTerms;
-        }
 
         return $vars;
     }
@@ -66,6 +53,7 @@ class ShowOffCampusWaitListApplicationCommand extends Command {
         $agreedToTerms = $context->get('agreedToTerms');
 
         // If they haven't agreed, redirect to the agreement
+        //TODO Update for DocuSign
         if (is_null($agreedToTerms) || !isset($agreedToTerms) || $agreedToTerms != 1) {
             $onAgree = CommandFactory::getCommand('ShowOffCampusWaitListApplication');
             $onAgree->setTerm($term);
