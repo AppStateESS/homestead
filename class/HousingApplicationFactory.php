@@ -14,6 +14,14 @@ class HousingApplicationFactory {
     {
         return ContextApplicationFactory::getApplicationFromContext($context, $term, $student, $applicationType);
     }
+    
+    public static function getApplicationFromSession(Array $sessionData, $term, Student $student, $applicationType)
+    {
+        $context = new CommandContext();
+        $context->clearParams();
+        $context->setParams($sessionData);
+    	return ContextApplicationFactory::getApplicationFromContext($context, $term, $student, $applicationType);
+    }
 
     public static function getApplicationById($id)
     {

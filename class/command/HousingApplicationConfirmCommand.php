@@ -67,7 +67,7 @@ class HousingApplicationConfirmCommand extends Command {
                 break;
         }
 
-        $application = HousingApplicationFactory::getApplicationFromContext($context, $term, $student, $appType);
+        $application = HousingApplicationFactory::getApplicationFromSession($_SESSION['application_data'], $term, $student, $appType);
 
         $application->setCancelled(0);
 
@@ -75,8 +75,6 @@ class HousingApplicationConfirmCommand extends Command {
         // Application for other terms use whatever the student selected
         if($sem == TERM_SUMMER1 || $sem == TERM_SUMMER2){
             $application->setMealPlan(BANNER_MEAL_5WEEK);
-        }else{
-            $application->setMealPlan($context->get('meal_option'));
         }
 
         $result = $application->save();

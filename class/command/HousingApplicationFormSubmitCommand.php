@@ -95,7 +95,7 @@ class HousingApplicationFormSubmitCommand extends Command {
         }
 
         // Session the current application data
-        $_SESSION['application_date'] = $_REQUEST;
+        $_SESSION['application_data'] = $_REQUEST;
 
         // NB: This command grabs the current context and passes the data forward
         $reviewCmd = CommandFactory::getCommand('ShowFreshmenApplicationReview');

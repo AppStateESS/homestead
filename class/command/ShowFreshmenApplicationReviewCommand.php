@@ -69,12 +69,13 @@ class ShowFreshmenApplicationReviewCommand extends Command {
         }
 
         try{
-            $application = HousingApplicationFactory::getApplicationFromContext($_SESSION['application_data'], $term, $student, $appType);
+            $application = HousingApplicationFactory::getApplicationFromSession($_SESSION['application_data'], $term, $student, $appType);
         }catch(Exception $e){
+            //var_dump($_SESSION['application_data']);
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, $e->getMessage());
             $errorCmd->redirect();
         }
-
+        
         PHPWS_Core::initModClass('hms', 'FreshmenApplicationReview.php');
         $view = new FreshmenApplicationReview($student, $term, $application);
         $context->setContent($view->show());
