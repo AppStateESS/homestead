@@ -29,7 +29,8 @@ class RecipientView {
             "clientUserId" => $this->clientUserId
         );
 
-        var_dump($data);
+        //var_dump($data);
+        //exit;
         
     	$http = new \Guzzle\Http\Client();
         try {
@@ -45,7 +46,7 @@ class RecipientView {
             //var_dump($e);
             //var_dump($e->getRequest());
             //exit;
-            throw $e;
+            throw new Exception($e->getResponse()->json());
         }
         $result = $response->json();
         //var_dump($result);exit;        

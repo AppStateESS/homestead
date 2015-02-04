@@ -38,17 +38,30 @@ class CommandContext {
         $this->postdata = file_get_contents('php://input');
     }
 
-    function addParam($key, $val)
+    public function addParam($key, $val)
     {
         $this->params[$key] = $val;
     }
 
-    function get($key)
+    public function get($key)
     {
         if(!isset($this->params[$key]))
         return NULL;
 
         return $this->params[$key];
+    }
+
+    public function setParams(Array $params)
+    {
+    	foreach($params as $key => $value)
+        {
+        	$this->addParam($key, $value);
+        }
+    }
+    
+    public function clearParams()
+    {
+    	$this->params = array();
     }
 
     /**

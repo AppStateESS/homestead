@@ -27,6 +27,7 @@ class Term
     public $banner_queue;
     
     public $docusign_template_id;
+    public $docusign_under18_template_id;
     
     private $isNew = false;
 
@@ -109,6 +110,21 @@ class Term
     public function setDocusignTemplate($template)
     {
     	$this->docusign_template_id = $template;
+    }
+    
+    public function getDocusignUnder18Template()
+    {
+    	if(is_null($this->docusign_under18_template_id) || $this->docusign_under18_template_id == '') {
+            PHPWS_Core::initModClass('hms', 'exception/InvalidConfigurationException.php');
+            throw new InvalidConfigurationException('No Docusign under 18 template set for ' . $this->term);
+        }
+        
+        return $this->docusign_under18_template_id;
+    }
+    
+    public function setDocusignUnder18Template($template)
+    {
+    	$this->docusign_under18_template_id = $template;
     }
 
     /**

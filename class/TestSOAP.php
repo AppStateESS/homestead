@@ -25,14 +25,14 @@ class TestSOAP extends SOAP{
         $response = new stdClass();
 
         $student = new stdClass();
-        $response->banner_id             = 900123456;
-        $response->user_name			 = 'ticklejw';
+        $response->banner_id             = 900325006;
+        $response->user_name			 = 'jb67803';
         $response->last_name             = 'Booker';
         $response->first_name            = 'Jeremy';
         $response->middle_name           = 'Lee';
         $response->pref_name		     = 'J-dogg';
-        $response->dob                   = '1986-09-05';
-        $response->gender                = 'F';
+        $response->dob                   = '1997-09-05';
+        $response->gender                = 'M';
         $response->deposit_date          = '';
         $response->deposit_waived        = 'false';
 
@@ -54,8 +54,8 @@ class TestSOAP extends SOAP{
         //$response->application_term      = '201040';
         //$response->projected_class       = 'FR';
 
-        $response->student_type          = 'C';
-        $response->application_term      = '201440';
+        $response->student_type          = 'F';
+        $response->application_term      = '201540';
         $response->projected_class       = 'FR';
 
         $response->credhrs_completed     = 0;

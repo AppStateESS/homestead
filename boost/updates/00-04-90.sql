@@ -1,0 +1,1 @@
+alter table hms_term add column docusign_under18_template_id character varying;

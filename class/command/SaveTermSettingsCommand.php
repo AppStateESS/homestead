@@ -12,6 +12,7 @@ class SaveTermSettingsCommand extends Command {
     	$term = new Term(Term::getSelectedTerm());
         
         $term->setDocusignTemplate($context->get('template'));
+        $term->setDocusignUnder18Template($context->get('under18_template'));
         
         $term->save();
         

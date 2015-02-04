@@ -40,7 +40,6 @@ class ReApplicationFormSaveCommand extends Command {
 
         $errorCmd = CommandFactory::getCommand('ShowReApplication');
         $errorCmd->setTerm($term);
-        $errorCmd->setAgreedToTerms(true);
 
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
 

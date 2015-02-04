@@ -31,7 +31,6 @@ class OffCampusWaitingListFormSaveCommand extends Command {
 
         $errorCmd = CommandFactory::getCommand('ShowOffCampusWaitListApplication');
         $errorCmd->setTerm($term);
-        $errorCmd->setAgreedToTerms(true);
 
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
 
