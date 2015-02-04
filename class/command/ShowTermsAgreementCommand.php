@@ -80,7 +80,7 @@ class ShowTermsAgreementCommand extends Command {
         
 
         PHPWS_Core::initModClass('hms', 'TermsAgreementView.php');
-        $agreementView = new TermsAgreementView($term, $docusignCmd);
+        $agreementView = new TermsAgreementView($term, $docusignCmd, $student);
 
         $context->setContent($agreementView->show());
     }

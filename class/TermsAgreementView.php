@@ -5,11 +5,13 @@ class TermsAgreementView extends homestead\View {
 
     private $term;
     private $submitCommand;
+    private $student;
 
-    public function __construct($term, Command $submitCommand)
+    public function __construct($term, Command $submitCommand, Student $student)
     {
         $this->term = $term;
         $this->submitCommand = $submitCommand;
+        $this->student = $student;
     }
 
     public function show()
@@ -24,6 +26,11 @@ class TermsAgreementView extends homestead\View {
 
         $tpl['TERM'] = Term::toString($this->term);
         $tpl['DOCUSIGN_BEGIN_CMD'] = $this->submitCommand->getURI();
+        
+        if($this->student->isUnder18()){
+        	$tpl['UNDER_18'] = '';
+        }
+        
         javascript('jquery');
         Layout::addPageTitle("License Agreement");
 
