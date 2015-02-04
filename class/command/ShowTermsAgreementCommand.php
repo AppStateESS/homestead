@@ -37,8 +37,8 @@ class ShowTermsAgreementCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-
         $term = $context->get('term');
+        $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
 
         // Recreate the agreedToCommand
         $agreedCmd = CommandFactory::getCommand($context->get('onAgreeAction'));
@@ -53,9 +53,28 @@ class ShowTermsAgreementCommand extends Command {
         //$submitCmd->setTerm($term);
         //$submitCmd->setAgreedCmd($agreedCmd);
         
+        $sem = Term::getTermSem($term);
+        
+        switch ($sem){
+            case TERM_FALL:
+                $appType = 'fall';
+                break;
+            case TERM_SPRING:
+                $appType = 'spring';
+                break;
+            case TERM_SUMMER1:
+            case TERM_SUMMER2:
+                $appType = 'summer';
+                break;
+        }
+
+        $application = HousingApplicationFactory::getApplicationFromSession($_SESSION['application_data'], $term, $student, $appType);
+        
         $docusignCmd = CommandFactory::getCommand('BeginDocusign');
         $docusignCmd->setTerm($term);
         $docusignCmd->setReturnCmd($agreedCmd);
+        $docusignCmd->setParentName($application->getEmergencyContactName());
+        $docusignCmd->setParentEmail($application->getEmergencyContactEmail());
         
 
         PHPWS_Core::initModClass('hms', 'TermsAgreementView.php');

@@ -8,6 +8,11 @@ PHPWS_Core::initModClass('hms', 'Docusign/RecipientView.php');
 
 class BeginDocusignCommand extends Command {
 	
+    private $term;
+    private $agreedCommand;
+    private $parentName;
+    private $parentEmail;
+    
     public function setTerm($term){
         $this->term = $term;
     }
@@ -16,9 +21,22 @@ class BeginDocusignCommand extends Command {
         $this->agreedCommand = $cmd;
     }
 
+    public function setParentName($name){
+    	$this->parentName = $name;
+    }
+    
+    public function setParentEmail($email){
+    	$this->parentEmail = $email;
+    }
+
     public function getRequestVars()
     {
         $vars = array('action'=>'BeginDocusign', 'term'=>$this->term);
+        
+        // In case we need parent signatures, these should be set. If they're not set,
+        // we'll get null values and know how to handle those in execute()
+        $vars['parentName']  = $this->parentName;
+        $vars['parentEmail'] = $this->parentEmail;
 
         if(!isset($this->agreedCommand)){
             return $vars;
@@ -65,9 +83,14 @@ class BeginDocusignCommand extends Command {
         
         $term = $context->get('term');
         $termObj = new Term($term);
+        
+        // Get Docusign Template IDs for this term
         $templateId = $termObj->getDocusignTemplate();
+        $under18TemplateId = $termObj->getDocusignUnder18Template();
         
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
+
+        $under18 = $student->isUnder18();
         
         $docusignClient = new Docusign\Client($docusignKey, $docusignUsername, $docusignPassword, $docusignEnv);
         
@@ -80,6 +103,19 @@ class BeginDocusignCommand extends Command {
                             )
                          );
 
+        // If student is under 18, then add parent role to list of signers                         
+        if($under18){
+            $parentName = $context->get('parentName');
+            $parentEmail = $context->get('parentEmail');
+            
+        	$templateRoles[] = array(
+                                "roleName" => 'Parent',
+                                "email" => $parentEmail,
+                                "name" => $parentName
+                                //"clientUserId" => $student->getBannerId()
+                            );
+        }
+
         //var_dump($templateRoles);
         
 
@@ -88,11 +124,17 @@ class BeginDocusignCommand extends Command {
         
         if($contract === false) {
             // Create a new envelope and save it
-            $envelope = Docusign\EnvelopeFactory::createEnvelopeFromTemplate($docusignClient, $templateId, 'University Housing Contract', $templateRoles, 'sent');
+            if($under18) {
+                // If student is under 18, use the template with parent signatures
+            	$envelope = Docusign\EnvelopeFactory::createEnvelopeFromTemplate($docusignClient, $under18TemplateId, 'University Housing Contract', $templateRoles, 'sent');
+            } else {
+                // Student is over 18, so use the 1-signature template (without a parent signature)
+                $envelope = Docusign\EnvelopeFactory::createEnvelopeFromTemplate($docusignClient, $templateId, 'University Housing Contract', $templateRoles, 'sent');
+            }
 
             // Create a new contract to save the envelope ID        
             $contract = new Contract($student, $term, $envelope->getEnvelopeId());
-            ContractFactory::save($contract);        	
+            ContractFactory::save($contract);
         }else{
         	// Use the existing envelope id
             $envelope = Docusign\EnvelopeFactory::getEnvelopeById($docusignClient, $contract->getEnvelopeId());
