@@ -1,6 +1,7 @@
 <?php
 
 PHPWS_Core::initModClass('hms', 'StudentFactory.php');
+PHPWS_Core::initModClass('hms', 'HousingApplicationFactory.php');
 
 class ShowTermsAgreementCommand extends Command {
 
