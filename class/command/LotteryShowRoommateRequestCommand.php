@@ -32,6 +32,10 @@ class LotteryShowRoommateRequestCommand extends Command {
         
         // Check for a self-select RLC membership for the logged-in student
         $rlcAssign = RlcMembershipFactory::getMembership($student, $term);
+        
+        if($rlcAssign == false) {
+        	$rlcAssign = null;
+        }
 
         $view = new LotteryRoommateRequestView($request, $term, $housingApp, $rlcAssign);
         $context->setContent($view->show());
