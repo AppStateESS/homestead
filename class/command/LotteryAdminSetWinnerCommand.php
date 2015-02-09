@@ -14,47 +14,43 @@ class LotteryAdminSetWinnerCommand extends Command {
             throw new PermissionException('You do not have permission to administer re-application features.');
         }
 
-        PHPWS_Core::initModClass('hms', 'HousingApplication.php');
+        PHPWS_Core::initModClass('hms', 'HousingApplicationFactory.php');
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 
-        $username = $context->get('asu_username');
+        $bannerIds = $context->get('banner_ids');
         $term = Term::getSelectedTerm();
+        
+        $bannerIds = explode("\n", $bannerIds);
 
-        //accept a banner id by looking up the username if we got a number
-        if(is_numeric($username)){
-            $stdt     = StudentFactory::getStudentByBannerId($username, $term);
-            $username = $stdt->getUsername();
+        foreach($bannerIds as $bannerId) {
+        	$student = StudentFactory::getStudentByBannerId($bannerId, $term);
+            
+            try{
+                $application = HousingApplicationFactory::getAppByStudent($student, $term);
+            }catch(StudentNotFoundException $e){
+                NQ::simple('hms', HMS_NOTIFICATION_ERROR, "No matching student was found for: {$bannerId}");
+                continue;
+            }
+            
+            if(is_null($application)){
+                NQ::simple('hms', HMS_NOTIFICATION_ERROR, "No housing application for: {$bannerId}");
+                continue;
+            }
+        
+            $application->magic_winner = 1;
+            
+            try{
+                $application->save();
+            }catch(Exception $e){
+                NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Error setting flag for: {$bannerId}");
+                continue;
+            }
+            
+            NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, "Magic flag set for: {$bannerId}");
         }
 
         $viewCmd = CommandFactory::getCommand('ShowLotteryAutoWinners');
 
-        try{
-            $application = HousingApplication::getApplicationByUser($username, $term);
-        }catch(StudentNotFoundException $e){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'No matching student was found.');
-            $viewCmd->redirect();
-        }
-
-        if(is_null($application)){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'The requested student has not completed a re-application.');
-            $viewCmd->redirect();
-        }
-
-        $winner = $context->get('magic');
-        if(is_null($winner)){
-            $application->magic_winner = 0;
-        }else{
-            $application->magic_winner = 1;
-        }
-
-        try{
-            $application->save();
-        }catch(Exception $e){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'There was an error saving the student\'s application.');
-            $viewCmd->redirect();
-        }
-
-        NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'The student\'s application was updated successfully.');
         $viewCmd->redirect();
     }
 }

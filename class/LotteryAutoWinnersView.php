@@ -9,16 +9,7 @@ class LotteryAutoWinnersView extends homestead\View {
         $form = new PHPWS_Form('magic_form');
         $submitCmd->initForm($form);
 
-        $form->addText('asu_username');
-        $form->setLabel('asu_username', 'Banner ID Or User name: ');
-
-        $form->addCheck('magic', array('enabled'));
-        $form->setLabel('magic', array('Magic Flag: '));
-
-        javascript('jquery_ui');
-        javascript('modules/hms/autoFocus', array('ELEMENT' => $form->getId('asu_username')));
-        javascript('modules/hms/new_autosuggest', array('ELEMENT' => $form->getId('asu_username')));
-        Layout::addStyle('hms', 'css/autosuggest2.css');
+        $form->addTextArea('banner_ids');
 
         $form->addSubmit('Submit');
 

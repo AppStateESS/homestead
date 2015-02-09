@@ -1,13 +1,13 @@
-<h2>Add/Remove Automatic Winners</h2>
+<h2>Add Automatic Winners</h2>
 
 {START_FORM}
 <div>
-{ASU_USERNAME_LABEL} {ASU_USERNAME}
+<p>
+To add 'magic flag' winners, enter their Banner IDs, one per line:
+</p>
+{BANNER_IDS}
 </div>
 
-<div>
-{MAGIC_LABEL} {MAGIC}
-</div>
 <br />
 {SUBMIT}
 
