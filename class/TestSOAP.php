@@ -54,8 +54,8 @@ class TestSOAP extends SOAP{
         //$response->application_term      = '201040';
         //$response->projected_class       = 'FR';
 
-        $response->student_type          = 'F';
-        $response->application_term      = '201520';
+        $response->student_type          = 'C';
+        $response->application_term      = '201420';
         $response->projected_class       = 'FR';
 
         $response->credhrs_completed     = 0;

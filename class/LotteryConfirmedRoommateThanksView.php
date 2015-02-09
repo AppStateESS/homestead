@@ -22,6 +22,6 @@ class LotteryConfirmedRoommateThanksView extends homestead\View {
         
         Layout::addPageTitle("Thank you");
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/student_success_failure_message.tpl');
+        return PHPWS_Template::process($tpl, 'hms', 'student/lottery_confirm_roommate_thanks.tpl');
     }
 }

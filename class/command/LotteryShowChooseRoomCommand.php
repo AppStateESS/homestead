@@ -32,6 +32,10 @@ class LotteryShowChooseRoomCommand extends Command {
         
         $rlcAssignment = RlcMembershipFactory::getMembership($student, $term);
         
+        if($rlcAssignment == false) {
+        	$rlcAssignment = null;
+        }
+        
         $view = new LotteryChooseRoomView($student, $term, $floorId, $rlcAssignment);
         
         $context->setContent($view->show());

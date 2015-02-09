@@ -41,7 +41,8 @@ class SendLotteryInvitesCommand extends Command {
         $lottery = new LotteryProcess($sendMagic, $sendReminders, $inviteCounts);
         $lottery->sendInvites();
         
-        test($lottery->getOutput(),1);
+        var_dump($lottery->getOutput());
+        exit;
         
         $_SESSION['LOTTERY_OUTPUT'] = $lottery->getOutput();
         
