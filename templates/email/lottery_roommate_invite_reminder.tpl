@@ -2,7 +2,7 @@ Dear {NAME},
 
 *** REMINDER ***
 
-Congratulations, you have been invited as a roommate for on-campus housing for {YEAR}.
+Congratulations, you have been invited as a roommate for on-campus housing for {YEAR}. This invitation will expire after 48 hours, or when all available space is taken.
 
 {REQUESTOR} has invited you as a roommate for the following room:
 

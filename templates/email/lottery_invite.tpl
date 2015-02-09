@@ -1,6 +1,6 @@
 Dear {NAME},
 
-Congratulations, you are being offered the opportunity to select an on-campus housing assignment for {YEAR}.  There are a limited number of spaces available to select from so you are encouraged to make your selection as soon as possible. This invitation expires after 48 hours.
+Congratulations, you are being offered the opportunity to select an on-campus housing assignment for {YEAR}.  There are a limited number of spaces available to select from so you are encouraged to make your selection as soon as possible. This invitation expires after 48 hours. When all available spaces are selected, this invitation will no longer be valid.
 
 In order to select an on-campus housing assignment, you must go to https://hms.appstate.edu/ and log in using your AppalNet username and password.  Once you have logged in, follow the on-screen instructions for selecting your desired room and extending roommate invitations. 
 
