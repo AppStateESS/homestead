@@ -1,8 +1,10 @@
-<h1>Congratulations</h1>
+<h1>{PAGE_TITLE}</h1>
+
 <p>
-  You have been assigned to {LOCATION}. The roommate(s) you requested have each been sent an email with instructions on how to confirm your request, which they must do in the next 24 hours.
-  <br /><br />
-</p>
+<!-- BEGIN success -->
+<span class="success">{SUCCESS}</span><br/>
+<!-- END success -->
+      
 
 <h2>How was that?</h2>
 <p style="">
