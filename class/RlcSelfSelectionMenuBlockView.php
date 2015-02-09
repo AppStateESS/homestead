@@ -31,7 +31,7 @@ class RlcSelfSelectionMenuBlockView extends homestead\View {
         $tpl['DATES'] = HMS_Util::getPrettyDateRange($this->startDate, $this->endDate);
         $tpl['STATUS'] = "";
         
-        if(!is_null($this->roomAssignment)){
+        if(!is_null($this->rlcAssignment) && !is_null($this->roomAssignment)){
             // Student is already assigned
             $tpl['ICON'] = FEATURE_COMPLETED_ICON;
         	$tpl['ASSIGNMENT'] = $this->roomAssignment->where_am_i();
