@@ -23,6 +23,15 @@ class LotteryAdminSetWinnerCommand extends Command {
         $bannerIds = explode("\n", $bannerIds);
 
         foreach($bannerIds as $bannerId) {
+            
+            // Trim any excess whitespace
+            $bannerId = trim($bannerId);
+            
+            // Skip blank lines
+            if($bannerId == '') {
+            	continue;
+            }
+            
         	$student = StudentFactory::getStudentByBannerId($bannerId, $term);
             
             try{
