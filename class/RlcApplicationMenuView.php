@@ -77,7 +77,7 @@ class RlcApplicationMenuView extends homestead\View {
                 $confCmd->setQuestion('Are you sure you want to delete your RLC Application?');
                 $confCmd->setOnConfirmCommand($delCmd);
                 $tpl['DELETE_TEXT'] = 'You may also ';
-                $tpl['DELETE_APP'] = $confCmd->getLink().'.';
+                $tpl['DELETE_APP'] = $confCmd->getLink('delete your application').'.';
             }
 
             if(time() < $this->editDate) {
