@@ -36,6 +36,9 @@ class ReportHistoryPager extends DBPager {
         $this->addToggle('class="row-bg-1"');
         $this->addToggle('class="row-bg-2"');
         $this->addRowTags('historyPagerRowTags');
+        
+        // Increase this limit because, by default, the DBPager limit is too small
+        $this->limit = 100;
     }
 }
 
