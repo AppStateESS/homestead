@@ -104,7 +104,7 @@ class HallOccupancy extends Report {
             ksort($floorArray);
             $hallArray[$hall->hall_name]['floor_rows'] = $floorArray;
         }
-        $this->rows = array('total_beds' => $totalBeds, 'vacant_beds' => $vacantBeds, 'hall_rows' => $hallArray);
+        $this->rows = array('total_beds' => $totalBeds, 'vacant_beds' => $totalVacantBeds, 'hall_rows' => $hallArray);
     }
 
     public function getRows()
