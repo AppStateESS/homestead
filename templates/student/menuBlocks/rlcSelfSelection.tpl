@@ -21,7 +21,8 @@
     <!-- END select_room -->
     
     <!-- BEGIN assigned -->
-    You have been assigned to {ASSIGNMENT} with {ASSIGNED_COMMUNITY_NAME}.
+    You have been assigned to {ASSIGNMENT} with {ASSIGNED_COMMUNITY_NAME}.<br />
+    Please note this assignment is subject to change at anytime.  Your final room assignment will be sent to your Appalachian email in July.
     <!-- END assigned -->
   </p>
   
