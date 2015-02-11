@@ -6,6 +6,6 @@ php:
     - hhvm
 
 script:
-    - ".travis-bild/phplint ."
+    - ".travis-build/phplint ."
 
 notifications:
