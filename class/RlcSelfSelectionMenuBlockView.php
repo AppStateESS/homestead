@@ -71,7 +71,7 @@ class RlcSelfSelectionMenuBlockView extends homestead\View {
         }
         
         // Show roommate requests, if any
-        if(time() > $this->startDate && $this->roommateRequests != FALSE && !is_null($this->roommateRequests) && $this->roomAssignment != TRUE && !PEAR::isError($this->roomAssignment)){
+        if(time() > $this->startDate && $this->roommateRequests != false && !is_null($this->roommateRequests) && $this->roomAssignment != true && !PEAR::isError($this->roomAssignment)){
             $tpl['roommates'] = array();
             $tpl['ROOMMATE_REQUEST'] = ''; // dummy tag
             foreach($this->roommateRequests as $invite){
