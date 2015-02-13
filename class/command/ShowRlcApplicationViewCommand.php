@@ -40,7 +40,7 @@ class ShowRlcApplicationViewCommand extends Command {
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Sorry, the RLC application deadline has already passed. Please contact University Housing if you are interested in applying for a RLC.");
             $cmd->redirect();
         }
-
+        
         // Get the Student object
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), Term::getCurrentTerm());
         

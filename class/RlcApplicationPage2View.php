@@ -69,6 +69,8 @@ class RlcApplicationPage2View extends hms\View{
             $rlc_form2->addTextArea("rlc_question_$i");
             $rlc_form2->setLabel("rlc_question_$i", $rlc->getFreshmenQuestion());
             $rlc_form2->setMaxSize("rlc_question_$i", 4096);
+            $rlc_form2->setCols("rlc_question_$i", 50);
+            $rlc_form2->setRows("rlc_question_$i", 15);
         }
 
         $rlc_form2->addSubmit('submit', 'Submit Application');
@@ -80,7 +82,7 @@ class RlcApplicationPage2View extends hms\View{
         $template = $rlc_form2->getTemplate();
 
         Layout::addPageTitle("RLC Application");
-
+		javascript('jquery');
         return PHPWS_Template::process($template, 'hms', 'student/rlc_signup_form_page2.tpl');
     }
 }

@@ -95,6 +95,8 @@ class RlcApplicationPage1View extends hms\View{
         $rlc_form->setLabel('why_specific_communities',
                             'Why are you interested in the specific communities you have chosen?');
         $rlc_form->setMaxSize('why_specific_communities',4096);
+        $rlc_form->setCols("why_specific_communities", 50);
+        $rlc_form->setRows("why_specific_communities", 15);
 
         if(!is_null($context->get('strengths_weaknesses'))) {
             $rlc_form->addTextarea('strengths_weaknesses', $context->get('strengths_weaknesses'));
@@ -104,6 +106,8 @@ class RlcApplicationPage1View extends hms\View{
         $rlc_form->setLabel('strengths_weaknesses',
                             'What are your strengths and in what areas would you like to improve?');
         $rlc_form->setMaxSize('strengths_weaknesses',4096);
+        $rlc_form->setCols("strengths_weaknesses", 50);
+        $rlc_form->setRows("strengths_weaknesses", 15);
 
         $rlc_form->addButton('cancel','Cancel');
         $rlc_form->setExtra('cancel','onClick="document.location=\'index.php?module=hms&action=ShowStudentMenu\'"');
@@ -114,9 +118,8 @@ class RlcApplicationPage1View extends hms\View{
         $template = $rlc_form->getTemplate();
 
         Layout::addPageTitle("RLC Application");
-
+		javascript('jquery');
         return PHPWS_Template::process($template,'hms','student/rlc_signup_form_page1.tpl');
     }
 }
-
 ?>

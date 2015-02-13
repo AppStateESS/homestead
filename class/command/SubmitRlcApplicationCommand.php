@@ -38,9 +38,23 @@ class SubmitRlcApplicationCommand extends Command
         $question0 = $context->get('rlc_question_0');
         $question1 = $context->get('rlc_question_1');
         $question2 = $context->get('rlc_question_2');
+        $whySpecific = $context->get('why_specific_communities');
+        $strengthsWeaknesses = $context->get('strengths_weaknesses');
+        
+        if(str_word_count($whySpecific) > 2)
+        {
+        NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Your respose to the question is too long. Please limit your response to ' . HMS_RLC_Application::RLC_RESPONSE_WORD_LIMIT .  ' words.' . str_word_count($whySpecific));
+            $errorCmd->redirect();
+        }
+        
+        if(str_word_count($strengthsWeaknesses) > HMS_RLC_Application::RLC_RESPONSE_WORD_LIMIT)
+        {
+        NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Your respose to the question is too long. Please limit your response to ' . HMS_RLC_Application::RLC_RESPONSE_WORD_LIMIT .  ' words.' . str_word_count($question0));
+            $errorCmd->redirect();
+        }
 
         if(str_word_count($question0) > HMS_RLC_Application::RLC_RESPONSE_WORD_LIMIT) {
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Your respose to the first question is too long. Please limit your response to ' . HMS_RLC_Application::RLC_RESPONSE_WORD_LIMIT .  ' words.');
+            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Your respose to the first question is too long. Please limit your response to ' . HMS_RLC_Application::RLC_RESPONSE_WORD_LIMIT .  ' words.' . str_word_count($question0));
             $errorCmd->redirect();
         }
 
