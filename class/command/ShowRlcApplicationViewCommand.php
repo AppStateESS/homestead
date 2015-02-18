@@ -33,10 +33,10 @@ class ShowRlcApplicationViewCommand extends Command {
         }
 
         // Check feature's deadlines
-        if( $feature->getStartDate() > mktime() ){
+        if( $feature->getStartDate() > time() ){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Sorry, it is too soon to fill out an RLC application.");
             $cmd->redirect();
-        } else if( $feature->getEndDate() < mktime() ){
+        } else if( $feature->getEndDate() < time() ){
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Sorry, the RLC application deadline has already passed. Please contact University Housing if you are interested in applying for a RLC.");
             $cmd->redirect();
         }

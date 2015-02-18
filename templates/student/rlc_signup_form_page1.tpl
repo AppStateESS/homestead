@@ -1,3 +1,91 @@
+<script>
+function CountWordsSpecific (this_field) 
+{
+      var char_count = this_field.prop('value').length;
+      var fullStr = this_field.prop('value') + " ";
+      var initial_whitespace_rExp = /^[^A-Za-z0-9]+/gi;
+      var left_trimmedStr = fullStr.replace(initial_whitespace_rExp, "");
+      var non_alphanumerics_rExp = rExp = /[^A-Za-z0-9]+/gi;
+      var cleanedStr = left_trimmedStr.replace(non_alphanumerics_rExp, " ");
+      var splitString = cleanedStr.split(" ");
+      var word_count = splitString.length -1;
+      var words_left = 500 - (splitString.length - 1);
+      if (fullStr.length <1) {
+            word_count = 0;
+      }
+      if (words_left == 1)
+      {
+      	wordOrWords = " word ";
+      }
+      else 
+      {
+      	wordOrWords = " words ";
+      }
+      str_words_left = String(words_left)
+
+      if (words_left < 0)
+      {
+      	var formatted = "<span style='color:#ff0000'>" + str_words_left + "</span>";
+      }
+      else
+      {
+      	var formatted = str_words_left;
+      }
+      var retstring = formatted + wordOrWords + "remaining."
+      document.getElementById('specific').innerHTML=retstring;
+      
+}
+$().ready(function (){
+	CountWordsSpecific($("#phpws_form_why_specific_communities"));
+	$("#phpws_form_why_specific_communities").keydown(function(){
+		CountWordsSpecific($("#phpws_form_why_specific_communities"));
+	});
+});
+
+function CountWordsStrengths (this_field) 
+{
+      var char_count = this_field.prop('value').length;
+      var fullStr = this_field.prop('value') + " ";
+      var initial_whitespace_rExp = /^[^A-Za-z0-9]+/gi;
+      var left_trimmedStr = fullStr.replace(initial_whitespace_rExp, "");
+      var non_alphanumerics_rExp = rExp = /[^A-Za-z0-9]+/gi;
+      var cleanedStr = left_trimmedStr.replace(non_alphanumerics_rExp, " ");
+      var splitString = cleanedStr.split(" ");
+      var word_count = splitString.length -1;
+      var words_left = 500 - (splitString.length - 1);
+      if (fullStr.length <1) {
+            word_count = 0;
+      }
+      if (words_left == 1)
+      {
+      	wordOrWords = " word ";
+      }
+      else 
+      {
+      	wordOrWords = " words ";
+      }
+      str_words_left = String(words_left)
+
+      if (words_left < 0)
+      {
+      	var formatted = "<span style='color:#ff0000'>" + str_words_left + "</span>";
+      }
+      else
+      {
+      	var formatted = str_words_left;
+      }
+      var retstring = formatted + wordOrWords + "remaining."
+      document.getElementById('strengths').innerHTML=retstring;
+      
+}
+$().ready(function (){
+	CountWordsStrengths($("#phpws_form_strengths_weaknesses"));
+	$("#phpws_form_strengths_weaknesses").keydown(function(){
+		CountWordsStrengths($("#phpws_form_strengths_weaknesses"));
+	});
+});
+</script>
+
 <div class="hms">
   <div class="box">
     <div class="box-title"> <h1>Residential Learning Community Application</h1> </div>
@@ -43,11 +131,11 @@
             </tr>
             <tr>
                 <td>{WHY_SPECIFIC_COMMUNITIES_LABEL}</td>
-                <td>{WHY_SPECIFIC_COMMUNITIES}</td>
+                <td><div id="specific"></div>{WHY_SPECIFIC_COMMUNITIES}</td>
             </tr>
             <tr>
                 <td>{STRENGTHS_WEAKNESSES_LABEL}</td>
-                <td>{STRENGTHS_WEAKNESSES}</td>
+                <td><div id="strengths"></div>{STRENGTHS_WEAKNESSES}</td>
             </tr>
             <tr>
         <tr>
