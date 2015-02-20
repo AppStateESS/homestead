@@ -26,35 +26,59 @@ class RoommateProfileView extends hms\View{
         $tpl['EMAIL_ADDRESS'] = "<a href=\"mailto:{$this->student->getUsername()}@appstate.edu\">{$this->student->getUsername()}@appstate.edu</a>";
 
         $tpl['ALTERNATE_EMAIL_LABEL'] = 'Alternate email: ';
-        $alt_email = $this->profile->get_alternate_email();
+        $alt_email = $this->profile->get_text('alternate_email');
         if(!empty($alt_email)){
             $tpl['ALTERNATE_EMAIL'] = "<a href=\"mailto:$alt_email\">$alt_email</a>";
         }else{
             $tpl['ALTERNATE_EMAIL'] = $none_given;
         }
-
-        $tpl['AIM_SN_LABEL'] = 'AIM screen name: ';
-        $aim_sn = $this->profile->get_aim_sn();
-        if(!empty($aim_sn)){
-            $tpl['AIM_SN'] = $aim_sn;
+        
+        $tpl['FB_LINK_LABEL'] = 'Facebook link: ';
+        $fb_link = $this->profile->get_text('fb_link');
+        if(!empty($fb_link)){
+        	$tpl['FB_LINK'] = $fb_link;
         }else{
-            $tpl['AIM_SN'] = $none_given;
+        	$tpl['FB_LINK'] = $none_given;
         }
         
-        $tpl['YAHOO_SN_LABEL'] = 'Yahoo! screen name: ';
-        $yahoo_sn = $this->profile->get_yahoo_sn();
-        if(!empty($yahoo_sn)){
-            $tpl['YAHOO_SN'] = $yahoo_sn;
+        $tpl['INSTAGRAM_SN_LABEL'] = 'Instagram username: ';
+        $instagram_sn = $this->profile->get_text('instagram_sn');
+        if(!empty($instagram_sn)){
+            $tpl['INSTAGRAM_SN'] = $instagram_sn;
         }else{
-            $tpl['YAHOO_SN'] = $none_given;
+            $tpl['INSTAGRAM_SN'] = $none_given;
         }
 
-        $tpl['MSN_SN_LABEL'] = 'MSN screen name: ';
-        $msn_sn = $this->profile->get_msn_sn();
-        if(!empty($msn_sn)){
-            $tpl['MSN_SN'] = $msn_sn;
+        $tpl['TWITTER_SN_LABEL'] = 'Twitter username: ';
+        $twitter_sn = $this->profile->get_text('twitter_sn');
+        if(!empty($twitter_sn)){
+            $tpl['TWITTER_SN'] = $twitter_sn;
         }else{
-            $tpl['MSN_SN'] = $none_given;
+            $tpl['TWITTER_SN'] = $none_given;
+        }
+        
+        $tpl['TUMBLR_SN_LABEL'] = 'Tumblr username: ';
+        $tumblr_sn = $this->profile->get_text('tumblr_sn');
+        if(!empty($tumblr_sn)){
+            $tpl['TUMBLR_SN'] = $tumblr_sn;
+        }else{
+            $tpl['TUMBLR_SN'] = $none_given;
+        }
+        
+        $tpl['KIK_SN_LABEL'] = 'Kik username: ';
+        $kik_sn = $this->profile->get_text('kik_sn');
+        if(!empty($kik_sn)){
+        	$tpl['KIK_SN'] = $kik_sn;
+        }else{
+        	$tpl['KIK_SN'] = $none_given;
+        }
+        
+        $tpl['ABOUT_ME_LABEL'] = '4. Additional information: ';
+        $about_me = $this->profile->get_text('about_me');
+        if(!empty($about_me)){
+        	$tpl['ABOUT_ME'] = $about_me;
+        }else{
+        	$tpl['ABOUT_ME'] = $none_given;
         }
 
         /***** About Me *****/
@@ -64,7 +88,7 @@ class RoommateProfileView extends hms\View{
         $tpl['HOBBIES_CHECKBOX_QUESTION'] = 'My Hobbies and Interests: ';
 
         # set matches on hobby check boxes
-        $hobbies_matches = RoommateProfile::get_hobbies_matches($this->profile);
+        $hobbies_matches = RoommateProfileFactory::get_hobbies_matches($this->profile);
         $profile_form->setMatch('hobbies_checkbox',$hobbies_matches);
 
         $profile_form->addCheck('music_checkbox',$music);
@@ -73,44 +97,54 @@ class RoommateProfileView extends hms\View{
         $tpl['MUSIC_CHECKBOX_QUESTION'] = 'My Music Preferences: ';
 
         # set matches on music check boxes
-        $music_matches = RoommateProfile::get_music_matches($this->profile);
+        $music_matches = RoommateProfileFactory::get_music_matches($this->profile);
         $profile_form->setMatch('music_checkbox',$music_matches);
+        
+        $profile_form->addCheck('language_checkbox',$language);
+        $profile_form->setLabel('language_checkbox',$language_labels);
+        $profile_form->setDisabled('language_checkbox');
+        $tpl['LANGUAGE_CHECKBOX_QUESTION'] = 'Languages I speak: ';
 
-        $tpl['POLITICAL_VIEWS_DROPBOX_LABEL'] = 'Political views: ';
-        $tpl['POLITICAL_VIEWS_DROPBOX'] = $political_views[$this->profile->get_political_view()];
+        # set matches on language check boxes
+        $language_matches = RoommateProfileFactory::get_language_matches($this->profile);
+        $profile_form->setMatch('language_checkbox',$language_matches);
+
+        $tpl['POLITICAL_VIEWS_LABEL'] = 'Political views: ';
+        $tpl['POLITICAL_VIEWS'] = $political_views[$this->profile->get_text('political_views')];
 
         /***** College Life *****/
-        $tpl['INTENDED_MAJOR_LABEL'] = 'Intended major: ';
-        $tpl['INTENDED_MAJOR'] = $majors[$this->profile->get_major()];
+        $tpl['MAJOR_LABEL'] = 'Intended major: ';
+        $tpl['MAJOR'] = $majors[$this->profile->get_text('major')];
 
-        $tpl['IMPORTANT_EXPERIENCE_LABEL'] = 'I fee the most important part of my college experience is: ';
-        $tpl['IMPORTANT_EXPERIENCE'] = $experiences[$this->profile->get_experience()];
+        $tpl['EXPERIENCE_LABEL'] = 'I feel the most important part of my college experience is: ';
+        $tpl['EXPERIENCE'] = $experiences[$this->profile->get_text('experience')];
 
         /***** Daily Life *****/
         $tpl['SLEEP_TIME_LABEL']       = 'I generally go to sleep: ';
-        $tpl['SLEEP_TIME']             = $sleep_times[$this->profile->get_sleep_time()];
+        $tpl['SLEEP_TIME']             = $sleep_times[$this->profile->get_text('sleep_time')];
         $tpl['WAKEUP_TIME_LABEL']      = 'I generally wake up: ';
-        $tpl['WAKEUP_TIME']            = $wakeup_times[$this->profile->get_wakeup_time()];
+        $tpl['WAKEUP_TIME']            = $wakeup_times[$this->profile->get_text('wakeup_time')];
         $tpl['OVERNIGHT_GUESTS_LABEL'] = 'I plan on hosting overnight guests: ';
-        $tpl['OVERNIGHT_GUESTS']       = $overnight_guests[$this->profile->get_overnight_guests()];
+        $tpl['OVERNIGHT_GUESTS']       = $overnight_guests[$this->profile->get_text('overnight_guests')];
         $tpl['LOUDNESS_LABEL']         = 'In my daily activities: ';
-        $tpl['LOUDNESS']               = $loudness[$this->profile->get_loudness()];
+        $tpl['LOUDNESS']               = $loudness[$this->profile->get_text('loudness')];
         $tpl['CLEANLINESS_LABEL']      = 'I would describe myself as: ';
-        $tpl['CLEANLINESS']            = $cleanliness[$this->profile->get_cleanliness()];
+        $tpl['CLEANLINESS']            = $cleanliness[$this->profile->get_text('cleanliness')];
         $tpl['FREE_TIME_LABEL']        = 'If I have free time I would rather: ';
-        $tpl['FREE_TIME']              = $free_time[$this->profile->get_free_time()];
+        $tpl['FREE_TIME']              = $free_time[$this->profile->get_text('free_time')];
 
         $profile_form->addCheck('study_times',$study_times);
         $profile_form->setLabel('study_times',$study_times_labels);
         $profile_form->setDisabled('study_times');
         $tpl['STUDY_TIMES_QUESTION'] = 'I prefer to study: ';
         # set matches on study times check boxes here, set disabled
-        $study_matches = RoommateProfile::get_study_matches($this->profile);
+        $study_matches = RoommateProfileFactory::get_study_matches($this->profile);
         $profile_form->setMatch('study_times',$study_matches);
-
+        
         $profile_form->mergeTemplate($tpl);
         $tpl = $profile_form->getTemplate();
-
+		
+		
         Layout::addPageTitle("Roommate Profile");
 
         return PHPWS_Template::process($tpl,'hms','student/profile_form.tpl');

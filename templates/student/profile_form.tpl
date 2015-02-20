@@ -1,3 +1,48 @@
+<script>
+function CountWords (this_field) 
+{
+      var char_count = this_field.prop('value').length;
+      var fullStr = this_field.prop('value') + " ";
+      var initial_whitespace_rExp = /^[^A-Za-z0-9]+/gi;
+      var left_trimmedStr = fullStr.replace(initial_whitespace_rExp, "");
+      var non_alphanumerics_rExp = rExp = /[^A-Za-z0-9]+/gi;
+      var cleanedStr = left_trimmedStr.replace(non_alphanumerics_rExp, " ");
+      var splitString = cleanedStr.split(" ");
+      var word_count = splitString.length -1;
+      var words_left = 500 - (splitString.length - 1);
+      if (fullStr.length <1) {
+            word_count = 0;
+      }
+      if (words_left == 1)
+      {
+      	wordOrWords = " word ";
+      }
+      else 
+      {
+      	wordOrWords = " words ";
+      }
+      str_words_left = String(words_left)
+
+      if (words_left < 0)
+      {
+      	var formatted = "<span style='color:#ff0000'>" + str_words_left + "</span>";
+      }
+      else
+      {
+      	var formatted = str_words_left;
+      }
+      var retstring = formatted + wordOrWords + "remaining."
+      document.getElementById('wrdcnt').innerHTML=retstring;
+      
+}
+$().ready(function (){
+	CountWords($("#profile_form_about_me"));
+	$("#profile_form_about_me").keydown(function(){
+		CountWords($("#profile_form_about_me"));
+	});
+});
+</script>
+
 <div class="hms">
   <div class="box">
     <div class="box-title"><h1>{TITLE}</h1></div>
@@ -36,35 +81,43 @@
                 </td>
             </tr>
             <tr valign="top">
-                <td>{POLITICAL_VIEWS_DROPBOX_LABEL}</td>
-                <td>{POLITICAL_VIEWS_DROPBOX}<br />&nbsp;</td>
+                <td>{POLITICAL_VIEWS_LABEL}</td>
+                <td>{POLITICAL_VIEWS}<br />&nbsp;</td>
             </tr>
             <tr>
                 <th colspan="2">2. College Life</th>
             </tr>
             <tr valign="top">
-                <td>{INTENDED_MAJOR_LABEL}</td>
-                <td>{INTENDED_MAJOR}<br />&nbsp;</td>
+                <td>{MAJOR_LABEL}</td>
+                <td>{MAJOR}<br />&nbsp;</td>
             </tr>
             <tr valign="top">
-                <td>{IMPORTANT_EXPERIENCE_LABEL}</td>
-                <td>{IMPORTANT_EXPERIENCE}<br />&nbsp;</td>
+                <td>{EXPERIENCE_LABEL}</td>
+                <td>{EXPERIENCE}<br />&nbsp;</td>
             </tr>
             <tr valign="top">
                 <td>{ALTERNATE_EMAIL_LABEL}</td>
                 <td>{ALTERNATE_EMAIL}<br />&nbsp;</td>
             </tr>
             <tr valign="top">
-                <td>{AIM_SN_LABEL}</td>
-                <td>{AIM_SN}<br />&nbsp;</td>
+            	<td>{FB_LINK_LABEL}</td>
+                <td>{FB_LINK}<br />&nbsp;</td>
             </tr>
             <tr valign="top">
-                <td>{YAHOO_SN_LABEL}</td>
-                <td>{YAHOO_SN}<br />&nbsp;</td>
+                <td>{INSTAGRAM_SN_LABEL}</td>
+                <td>{INSTAGRAM_SN}<br />&nbsp;</td>
             </tr>
             <tr valign="top">
-                <td>{MSN_SN_LABEL}</td>
-                <td>{MSN_SN}<br />&nbsp;</td>
+                <td>{TWITTER_SN_LABEL}</td>
+                <td>{TWITTER_SN}<br />&nbsp;</td>
+            </tr>
+            <tr valign="top">
+                <td>{TUMBLR_SN_LABEL}</td>
+                <td>{TUMBLR_SN}<br />&nbsp;</td>
+            </tr>
+            <tr valign="top">
+                <td>{KIK_SN_LABEL}</td>
+                <td>{KIK_SN}<br />&nbsp;</td>
             </tr>
             <tr>
                 <th colspan="2">3. My Daily Life</th>
@@ -102,6 +155,10 @@
                 <td>{FREE_TIME_LABEL}</td>
                 <td>{FREE_TIME}<br />&nbsp;</td>
             </tr>
+            <tr valign="top">
+                <td>{ABOUT_ME_LABEL}</td>
+                <td><div id="wrdcnt"></div>{ABOUT_ME}</td>
+            </tr>
             <tr>
                 <td colspan="2">{SUBMIT}</td>
             </tr>
@@ -111,3 +168,4 @@
     </div>
   </div>
 </div>
+
