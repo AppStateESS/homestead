@@ -50,11 +50,10 @@ class ShowOffCampusWaitListApplicationCommand extends Command {
         }
 
         // Make sure the student agreed to the terms, if not, send them back to the terms & agreement command
-        $agreedToTerms = $context->get('agreedToTerms');
+        $event = $context->get('event');
 
         // If they haven't agreed, redirect to the agreement
-        //TODO Update for DocuSign
-        if (is_null($agreedToTerms) || !isset($agreedToTerms) || $agreedToTerms != 1) {
+        if(is_null($event) || !isset($event) || ($event != 'signing_complete' && $event != 'viewing_complete')){
             $onAgree = CommandFactory::getCommand('ShowOffCampusWaitListApplication');
             $onAgree->setTerm($term);
 
