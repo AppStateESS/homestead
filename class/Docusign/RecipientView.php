@@ -46,7 +46,7 @@ class RecipientView {
             //var_dump($e);
             //var_dump($e->getRequest());
             //exit;
-            throw new Exception($e->getResponse()->json());
+            throw $e;
         }
         $result = $response->json();
         //var_dump($result);exit;        
