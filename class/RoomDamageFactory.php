@@ -96,7 +96,7 @@ class RoomDamageFactory {
         return $stmt->fetchAll(PDO::FETCH_CLASS, 'RoomDamageDb');
     }
 
-    public function save(RoomDamage $dmg)
+    public static function save(RoomDamage $dmg)
     {
         $db = PdoFactory::getPdoInstance();
 
