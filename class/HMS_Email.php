@@ -151,12 +151,16 @@ class HMS_Email{
             fprintf($fd, "To: %s <%s>\n", $name, $address);
         }
 
-        foreach($message->getCc() as $address => $name) {
-            fprintf($fd, "Cc: %s <%s>\n", $name, $address);
+        if(!empty($message->getCc())){
+            foreach($message->getCc() as $address => $name) {
+                fprintf($fd, "Cc: %s <%s>\n", $name, $address);
+            }
         }
 
-        foreach($message->getBcc() as $address => $name) {
-            fprintf($fd, "Bcc: %s <%s>\n", $name, $address);
+        if(!empty($message->getBcc())){
+            foreach($message->getBcc() as $address => $name) {
+                fprintf($fd, "Bcc: %s <%s>\n", $name, $address);
+            }
         }
 
         fprintf($fd, "Sender: %s\n", $message->getSender());
@@ -603,6 +607,11 @@ class HMS_Email{
         // Attach info card
         $attachment = Swift_Attachment::newInstance($infoCardView->getPdf()->output('my-pdf-file.pdf', 'S'), 'ResidentInfoCard.pdf', 'application/pdf');
         $message->attach($attachment);
+        
+        if(EMAIL_TEST_FLAG) {
+        	self::logSwiftmailMessageLong($message);
+            return;
+        }
 
         $transport = Swift_SmtpTransport::newInstance('localhost');
         $mailer = Swift_Mailer::newInstance($transport);
@@ -629,6 +638,11 @@ class HMS_Email{
         // Attach info card
         //$attachment = Swift_Attachment::newInstance($infoCardView->getPdf()->output('my-pdf-file.pdf', 'S'), 'ResidentInfoCard.pdf', 'application/pdf');
         //$message->attach($attachment);
+        
+        if(EMAIL_TEST_FLAG) {
+            self::logSwiftmailMessageLong($message);
+            return;
+        }
 
         $transport = Swift_SmtpTransport::newInstance('localhost');
         $mailer = Swift_Mailer::newInstance($transport);
