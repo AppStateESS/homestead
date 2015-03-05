@@ -111,12 +111,22 @@ class CheckoutFormSubmitCommand extends Command {
             $checkin->setImproperCheckout(false);
         } else {
             $checkin->setImproperCheckout(true);
+            
+            // Add damage for improper checkout
+            // TODO: Find a better way to handle the magic number for dmg type
+            $dmg = array('type'=>105, 'side'=>'Both', 'details'=>'Improper Checkout', 'residents' => array('studentId'=> $student->getBannerId(), 'selected'=>'1')); 
+            $this->addDamage($dmg, $room);
         }
 
         if ($keyReturned == "1") {
             $checkin->setKeyNotReturned(false);
         } else {
             $checkin->setKeyNotReturned(true);
+            
+            // Add a damage record for key not returned
+            // TODO: Find a better way to handle the magic number for dmg type
+            $dmg = array('type'=>79, 'side'=>'Both', 'details'=>'Key not returned.', 'residents' => array('studentId'=> $student->getBannerId(), 'selected'=>'1'));
+            $this->addDamage($dmg, $room);
         }
 
 
