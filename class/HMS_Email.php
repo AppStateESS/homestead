@@ -151,14 +151,16 @@ class HMS_Email{
             fprintf($fd, "To: %s <%s>\n", $name, $address);
         }
 
-        if(!empty($message->getCc())){
-            foreach($message->getCc() as $address => $name) {
+        $cc = $message->getCc();
+        if(!empty($cc)){
+            foreach($cc() as $address => $name) {
                 fprintf($fd, "Cc: %s <%s>\n", $name, $address);
             }
         }
 
-        if(!empty($message->getBcc())){
-            foreach($message->getBcc() as $address => $name) {
+        $bcc = $message->getBcc();
+        if(!empty($bcc)){
+            foreach($bcc as $address => $name) {
                 fprintf($fd, "Bcc: %s <%s>\n", $name, $address);
             }
         }
