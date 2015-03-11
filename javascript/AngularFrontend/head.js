@@ -1,8 +1,8 @@
 <script src="{JAVASCRIPT_BASE}/AngularFrontend/angular.min.js"></script>
 
-<script src="{JAVASCRIPT_BASE}/AngularFrontend/scripts/20bdd8fe.plugins.js"></script>
-<script src="{JAVASCRIPT_BASE}/AngularFrontend/scripts/34dfa171.modules.js"></script>
-<script src="{JAVASCRIPT_BASE}/AngularFrontend/scripts/ed8f3e03.scripts.js"></script>
+<script src="{JAVASCRIPT_BASE}/AngularFrontend/scripts/c6b52431.plugins.js"></script>
+<script src="{JAVASCRIPT_BASE}/AngularFrontend/scripts/e46852d5.modules.js"></script>
+<script src="{JAVASCRIPT_BASE}/AngularFrontend/scripts/1db537ad.scripts.js"></script>
 
 <script type="text/javascript">
 

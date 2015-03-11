@@ -116,6 +116,9 @@ class CheckoutFormSubmitCommand extends Command {
             // TODO: Find a better way to handle the magic number for dmg type
             $dmg = array('type'=>105, 'side'=>'Both', 'details'=>'Improper Checkout', 'residents' => array('studentId'=> $student->getBannerId(), 'selected'=>'1')); 
             $this->addDamage($dmg, $room);
+            
+            // Add the improper checkout note
+            $checkin->setImproperCheckoutNote($data['improperCheckoutNote']);
         }
 
         if ($keyReturned == "1") {

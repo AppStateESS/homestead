@@ -246,7 +246,8 @@ create table hms_checkin (
     improper_checkout   smallint,
     checkout_key_code   character varying,
     key_not_returned    smallint,
-    bed_persistent_id character varying,
+    bed_persistent_id 	character varying,
+    improper_checkout_note	character varying,
     PRIMARY KEY (id)
 );
 
