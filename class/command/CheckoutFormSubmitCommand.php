@@ -114,7 +114,7 @@ class CheckoutFormSubmitCommand extends Command {
             
             // Add damage for improper checkout
             // TODO: Find a better way to handle the magic number for dmg type
-            $dmg = array('type'=>105, 'side'=>'Both', 'details'=>'Improper Checkout', 'residents' => array('studentId'=> $student->getBannerId(), 'selected'=>'1')); 
+            $dmg = array('type'=>105, 'side'=>'both', 'details'=>$data['improperCheckoutNote'], 'residents' => array(array('studentId'=> $student->getBannerId(), 'selected'=>true))); 
             $this->addDamage($dmg, $room);
             
             // Add the improper checkout note
@@ -128,10 +128,9 @@ class CheckoutFormSubmitCommand extends Command {
             
             // Add a damage record for key not returned
             // TODO: Find a better way to handle the magic number for dmg type
-            $dmg = array('type'=>79, 'side'=>'Both', 'details'=>'Key not returned.', 'residents' => array('studentId'=> $student->getBannerId(), 'selected'=>'1'));
+            $dmg = array('type'=>79, 'side'=>'both', 'details'=>'Key not returned.', 'residents' => array(array('studentId'=> $student->getBannerId(), 'selected'=>true)));
             $this->addDamage($dmg, $room);
         }
-
 
         // Save the check-in
         $checkin->save();
@@ -197,7 +196,6 @@ class CheckoutFormSubmitCommand extends Command {
         RoomDamageFactory::save($damage);
 
         // Determine the residents which were responsible
-
         // For each resident submitted
         foreach ($dmg['residents'] as $resident) {
 
