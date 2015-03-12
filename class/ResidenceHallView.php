@@ -29,7 +29,8 @@ class ResidenceHallView extends homestead\View {
         $form = new PHPWS_Form;
         $submitCmd->initForm($form);
 
-        $form->addHidden('beds_per_room', $this->hall->count_beds_per_room()); // add a hidden field for beds per room
+        // This is unused, as far as I can tell, so comment it out for now.
+        //$form->addHidden('beds_per_room', $this->hall->count_beds_per_room()); // add a hidden field for beds per room
 
         $form->addText('hall_name', $this->hall->hall_name);
 

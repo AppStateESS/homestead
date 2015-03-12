@@ -504,10 +504,12 @@ class HMS_Residence_Hall extends HMS_Item {
         return $beds;
     }
 
-    /*
-     * Determines the number of beds per room in a hall.  Should the count vary
-    * it returns the count that applies to the majority of the rooms.
-    */
+    /**
+     * Determines the number of beds per room in a hall.  If the count varies for some rooms,
+     * then return the count that applies to the majority of the rooms.
+     * @deprecated -- Unused as far as I can tell
+     * 
+     */
     public function count_beds_per_room()
     {
         $total = array(); // stores the number of rooms with that many beds
@@ -545,15 +547,13 @@ class HMS_Residence_Hall extends HMS_Item {
             }
         }
 
-        $top = 0;
-        foreach ($total as $key => $value) {
-            if (@$total[$key] > @$total[$top]) {
-                // supress notices here, since usually there's an undefined index
-                $top = $key;
-            }
+        asort($total); // Sort the bed totals by the number of rooms that have each total
+        
+        if(!end($total)){  // Jump to the end of the array, return false if array is empty
+        	return key($total); // return the last key (the greatest number of beds)
+        } else {
+        	return null; // There aren't any beds, so we can't find the max
         }
-
-        return $top;
     }
 
     /*
