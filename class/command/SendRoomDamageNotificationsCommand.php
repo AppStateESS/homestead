@@ -18,7 +18,11 @@ class SendRoomDamageNotificationsCommand extends Command {
     
     public function execute(CommandContext $context)
     {
-    	$context->setContent('room damage notifications...');
+        
+        
+    	NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Room damage noties sent.');
+        $cmd = CommandFactory::getCommand('ShowAdminMaintenanceMenu');
+        $cmd->redirect();
     }
 }
 ?>
