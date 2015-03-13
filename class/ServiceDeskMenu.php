@@ -23,6 +23,11 @@ class ServiceDeskMenu extends CommandMenu {
         if (Current_User::allow('hms', 'damage_assessment')) {
             $this->addCommandByName('Damage Assessment', 'ShowDamageAssessment');
         }
+        
+        // Room Damage Notifications
+        if (Current_User::allow('hms', 'damage_notification')) {
+            $this->addCommandByName('Send Room Damage Notices', 'SendRoomDamageNotifications');
+        }
 
         if (UserStatus::isAdmin()) {
 
