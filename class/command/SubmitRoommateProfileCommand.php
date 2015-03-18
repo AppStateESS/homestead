@@ -23,13 +23,18 @@ class SubmitRoommateProfileCommand extends Command {
         # If so, pass the profile's id to the Student_Profile constructor
         # so it will load the current profile, and then update it.
         # Otherwise, create a new profile.
-        $id = RoommateProfileFactory::checkForProfile(UserStatus::getUsername(), $term);
+
+        //use student object to get student by logged in username, then get banner id associated with username, then check for profile with that banner id
+        $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
+        $banner = $student->getBannerID();
+        $id = RoommateProfileFactory::checkForProfile($banner, $term);
 
         if ($id !== FALSE){
             $profile = new RoommateProfile($id);
         } else {
             $profile = new RoommateProfile();
             $profile->setUsername(UserStatus::getUsername());
+            $profile->setBannerID($banner);
             $profile->set_date_submitted();
             $profile->setTerm($term);
         }
