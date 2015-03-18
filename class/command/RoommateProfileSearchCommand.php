@@ -22,7 +22,7 @@ class RoommateProfileSearchCommand extends Command {
         $term = $context->get('term');
         
         $tags = array();
-        $tags['RESULTS'] = RoommateProfile::profile_search_pager($term);
+        $tags['RESULTS'] = RoommateProfileSearchView::profile_search_pager($term);
         
         $context->setContent(PHPWS_Template::process($tags, 'hms', 'student/profile_search_results.tpl'));
     }

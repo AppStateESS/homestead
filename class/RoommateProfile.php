@@ -14,6 +14,8 @@ class RoommateProfile {
 
     public $username;
 
+    public $bannerid;
+
     public $date_submitted;
 
     public $term;
@@ -284,14 +286,14 @@ class RoommateProfile {
      */
     public function getPagerTags()
     {
-        $student = StudentFactory::getStudentByUsername($this->username, $this->term);
+        $student = StudentFactory::getStudentByBannerID($this->bannerid, $this->term);
 
         $tags['STUDENT_ID'] = $student->getUsername() . "@appstate.edu";
         $tags['FIRST_NAME'] = $student->getFirstName();
         $tags['LAST_NAME'] = $student->getLastName();
 
         $viewProfileCmd = CommandFactory::getCommand('ShowRoommateProfile');
-        $viewProfileCmd->setUsername($student->getUsername());
+        $viewProfileCmd->setBannerid($student->getBannerid());
         $viewProfileCmd->setTerm($this->term);
 
         $tags['ACTIONS'] = $viewProfileCmd->getLink('[View Profile]');
@@ -332,6 +334,16 @@ class RoommateProfile {
     public function getUsername()
     {
         return $this->username;
+    }
+
+    public function setBannerid($id)
+    {
+        $this->bannerid = $id;
+    }
+
+    public function getBannerid()
+    {
+        return $this->bannerid;
     }
 
     public function set_date_submitted($date = NULL)

@@ -14,14 +14,14 @@ class StudentFactory {
         return $provider->getStudentByUsername($username, $term);
     }
 
-    public static function getStudentByBannerId($bannerId, $term, $provider = NULL)
+    public static function getStudentByBannerID($bannerID, $term, $provider = NULL)
     {
         if(is_null($provider)){
             $provider = StudentDataProvider::getInstance();
         }
 
         $provider = StudentDataProvider::getInstance();
-        return $provider->getStudentById($bannerId, $term);
+        return $provider->getStudentById($bannerID, $term);
     }
 }
 

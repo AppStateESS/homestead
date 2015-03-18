@@ -43,7 +43,7 @@ class UserStatus
 
     public static function isMasquerading()
     {
-        return isset($_SESSION['hms_masquerade_username']) || isset($_SESSION['hms_masquerade_as_self']);
+        return isset($_SESSION['hms_masquerade_username']) || isset($_SESSION['hms_masquerade_as_self']) || isset($_SESSION['hms_masquerade_bannerid']);
     }
 
     public static function getUsername($respectMask = TRUE)
@@ -55,14 +55,27 @@ class UserStatus
         return Current_User::getUsername();
     }
 
+    /*public static function getBannerID($respectMask = TRUE)
+    {
+        if(self::isMasquerading() && $respectMask) {
+            //return $_SESSION['hms_masquerade_bannerid'];
+            return 111111111;
+        }
+
+        //return Current_User::getBannerID();
+        return 333333333;
+    }*/
+
     public static function wearMask($username)
     {
         $_SESSION['hms_masquerade_username'] = $username;
+        //$_SESSION['hms_masquerade_bannerid'] = $bannerid;
     }
 
     public static function removeMask()
     {
         unset($_SESSION['hms_masquerade_username']);
+        unset($_SESSION['hms_masquerade_bannerid']);
     }
 
 

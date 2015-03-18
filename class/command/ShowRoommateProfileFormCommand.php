@@ -21,8 +21,10 @@ class ShowRoommateProfileFormCommand extends Command {
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
         
         $term = $context->get('term');
-        
-        $profile = RoommateProfile::getProfile(UserStatus::getUsername(), $term);
+        $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
+        $banner = $student->getBannerID();
+
+        $profile = RoommateProfileFactory::getProfile($banner, $term);
         
         $view = new RoommateProfileFormView($profile, $term);
         $context->setContent($view->show());
