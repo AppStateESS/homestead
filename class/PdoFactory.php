@@ -15,8 +15,8 @@ class PdoFactory {
     private $pdo;
     
     /**
-     * Returns a PDO object that is connected to the database
-     * @return $pdo PDO A connected PDO database object
+     * Returns a PdoFactory object 
+     * @return $pdo An instance of PdoFactory
      */
     public static function getInstance()
     {
@@ -27,6 +27,10 @@ class PdoFactory {
         return self::$factory;
     }
    
+    /**
+     * Returns a PDO object, connected to the database
+     * @return $pdo A PDO instance, connected to the current DB
+     */
     public static function getPdoInstance()
     {
         $pdoFactory = self::getInstance();

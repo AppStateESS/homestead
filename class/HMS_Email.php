@@ -1189,7 +1189,7 @@ class HMS_Email{
      * @param string $term
      * @param integer $billedAmount
      */
-    public static function sendDamageNotification(Student $student, $term, $billedAmount)
+    public static function sendDamageNotification(Student $student, $term, $billedAmount, $coordinatorName, $coordinatorEmail)
     {
     	$subject = 'University Housing Room Damages Billed';
         $template = 'email/roomDamageNotice.tpl';
@@ -1198,6 +1198,8 @@ class HMS_Email{
         $tags['NAME'] = $student->getName();
         $tags['AMOUNT'] = $billedAmount;
         $tags['TERM'] = $term;
+        $tags['COORDINATOR_NAME'] = $coordinatorName;
+        $tags['COORDINATOR_EMAIL'] = $coordinatorEmail;
         
         self::sendSwiftmailMessage(
             self::makeSwiftmailMessage(

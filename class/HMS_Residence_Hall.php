@@ -688,6 +688,17 @@ class HMS_Residence_Hall extends HMS_Item {
         $tags['ACTIONS'] = 'View Delete'; // ODO
         return $tags;
     }
+    
+    /**
+     * Returns an array where each element is an associative sub-array of info for
+     * the coordinators of this halll. Returns null if there is no coordinator.
+     * NB: There may be multiple people with the coordinator role. This will return
+     * the array of all of them.
+     */
+    public function getCoordinators()
+    {
+    	return HMS_Permission::getUsersInRoleForInstance('Coordinator', $this);
+    }
 
     /**
      * *******************
