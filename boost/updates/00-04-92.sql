@@ -1,0 +1,1 @@
+insert into hms_role VALUES (6, 'Coordinator');
