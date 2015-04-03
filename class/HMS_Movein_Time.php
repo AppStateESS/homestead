@@ -86,7 +86,7 @@ class HMS_Movein_Time
      * Static Methods *
      *****************/
 
-    public function get_movein_times_array($term = NULL)
+    public static function get_movein_times_array($term = NULL)
     {
         if(!isset($term)){
             PHPWS_Core::initModClass('hms', 'Term.php');
