@@ -55,6 +55,7 @@ class UnassignedBeds extends Report implements iCsvReport {
             $maxOccupancy = $hall->get_number_of_online_nonoverflow_beds();
             $currOccupancy = $hall->get_number_of_assignees();
 
+            $offline = "";
             // If the hall is offline, make a note of that
             if($hall->is_online == 0){
                 $offline = '(Offline)';
@@ -96,7 +97,7 @@ class UnassignedBeds extends Report implements iCsvReport {
                 }
             }
 
-            $hallRow[] = array('hallName'=>$hallName, 'maxOccupancy'=>$maxOccupancy, 'currOccupancy'=>$currOccupancy, 'maleRooms'=>implode(", ", $maleRoomList), 'femaleRooms'=>implode(", ", $femaleRoomList), 'coedRooms'=>implode(", ", $coedRoomList));
+            $hallRow[] = array('hallName'=>$hallName . $offline, 'maxOccupancy'=>$maxOccupancy, 'currOccupancy'=>$currOccupancy, 'maleRooms'=>implode(", ", $maleRoomList), 'femaleRooms'=>implode(", ", $femaleRoomList), 'coedRooms'=>implode(", ", $coedRoomList));
         }
 
         $this->data = $hallRow;
