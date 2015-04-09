@@ -1,0 +1,6 @@
+{
+    "require": {
+        "guzzlehttp/guzzle": "3.8",
+        "swiftmailer/swiftmailer": "5.0.1"
+    }
+}
