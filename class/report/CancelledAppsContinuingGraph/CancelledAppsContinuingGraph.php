@@ -62,7 +62,7 @@ class CancelledAppsContinuingGraph extends Report {
             $applicationTerm = Term::getPrevTerm($term);
         }
         
-        PHPWS_Core::initModClass('hms', 'PdoFactory.php');;
+        PHPWS_Core::initModClass('hms', 'PdoFactory.php');
         $db = PdoFactory::getInstance()->getPdo();
         
         $query ="SELECT
