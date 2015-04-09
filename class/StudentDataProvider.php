@@ -45,7 +45,7 @@ abstract class StudentDataProvider {
 
     abstract public function getStudentByUsername($username, $term);
 
-    abstract public function getStudentById($id, $term);
+    abstract public function getStudentByID($id, $term);
 
     /**
      * Clears any cached results this DataProvider may be storing

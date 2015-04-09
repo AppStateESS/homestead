@@ -546,10 +546,14 @@ class HMS_Residence_Hall extends HMS_Item {
         }
 
         $top = 0;
-        foreach ($total as $key => $value) {
-            if (@$total[$key] > @$total[$top]) {
-                // supress notices here, since usually there's an undefined index
-                $top = $key;
+        foreach ($total as $key => $value) 
+        {
+            if (isset($total[$key]) and isset($total[$top])) 
+            {
+                if ($total[$key] > $total[$top]) 
+                {
+                    $top = $key;
+                }
             }
         }
 

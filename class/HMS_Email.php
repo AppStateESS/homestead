@@ -38,7 +38,7 @@ class HMS_Email{
         return $contacts;
     }
 
-    public function send_template_message($to, $subject, $tpl, $tags)
+    public static function send_template_message($to, $subject, $tpl, $tags)
     {
         $content = PHPWS_Template::process($tags, 'hms', $tpl);
 
@@ -49,7 +49,7 @@ class HMS_Email{
      * This is the central message sending public function for HMS.
      * Returns true or false.
      */
-    public function send_email($to, $from, $subject, $content, $cc = NULL, $bcc = NULL)
+    public static function send_email($to, $from, $subject, $content, $cc = NULL, $bcc = NULL)
     {
         # Sanity checking
         if(!isset($to) || is_null($to)){
@@ -363,7 +363,7 @@ class HMS_Email{
      * @param $to Student object representing the student to send this email too
      * @param $term The term the housing application was submitted for.
      */
-    public function send_hms_application_confirmation(Student $to, $term)
+    public static function send_hms_application_confirmation(Student $to, $term)
     {
         PHPWS_Core::initModClass('hms', 'Term.php');
 
