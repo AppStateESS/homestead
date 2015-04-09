@@ -1,7 +1,5 @@
 <?php
 
-//require_once PHPWS_SOURCE_DIR . 'mod/hms/lib/SwiftMailer/swift_required.php';
-//require_once PHPWS_SOURCE_DIR . 'mod/hms/lib/PhpMarkdown/Markdown.php';
 require_once PHPWS_SOURCE_DIR . 'mod/hms/vendor/autoload.php';
 
 use \Michelf\Markdown;
