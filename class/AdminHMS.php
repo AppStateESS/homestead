@@ -1,7 +1,5 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'HMS.php');
-
 class AdminHMS extends HMS
 {
     public function process()
@@ -10,7 +8,7 @@ class AdminHMS extends HMS
         parent::process();
 
         PHPWS_Core::initModClass('hms', 'UserView.php');
-        $view = new UserView();
+        $view = new Homestead\UserView();
         $view->setMain($this->context->getContent());
 
         PHPWS_Core::initModClass('hms', 'TermMenu.php');

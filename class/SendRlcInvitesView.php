@@ -8,7 +8,7 @@
  * @author jbooker
  * @package HMS
  */
-class SendRlcInvitesView extends hms\View{
+class SendRlcInvitesView extends Homestead\View{
     
     public function show()
     {

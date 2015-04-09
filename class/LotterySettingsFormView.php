@@ -1,6 +1,6 @@
 <?php
 
-class LotterySettingsFormView extends hms\View{
+class LotterySettingsFormView extends Homestead\View{
 
     public function show()
     {

@@ -1,6 +1,6 @@
 <?php
 
-class RlcReapplicationView extends hms\View{
+class RlcReapplicationView extends Homestead\View{
 
     private $student;
     private $term;

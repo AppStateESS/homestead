@@ -2,7 +2,7 @@
 
 PHPWS_Core::initModClass('hms', 'View.php');
 
-class HallOverview extends hms\View{
+class HallOverview extends Homestead\View{
 
     private $hall;
     private $nakedDisplay;

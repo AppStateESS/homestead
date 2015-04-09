@@ -1,6 +1,6 @@
 <?php
 
-class LotteryConfirmView extends hms\View{
+class LotteryConfirmView extends Homestead\View{
 
     private $roomId;
     private $mealPlan;

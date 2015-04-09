@@ -8,7 +8,7 @@
  * @author Jeff Tickle <jtickle at tux dot appstate dot edu>
  */
 
-class CommandMenuMenubar extends hms\View{
+class CommandMenuMenubar extends Homestead\View{
     protected $context;
     protected $commands;
 

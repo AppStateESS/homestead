@@ -9,7 +9,7 @@
 PHPWS_Core::initModClass('hms', 'View.php');
 PHPWS_Core::initModClass('hms', 'CommandFactory.php');
 
-class AddRoomView extends hms\View{
+class AddRoomView extends Homestead\View{
 
     private $hall;
     private $floor;

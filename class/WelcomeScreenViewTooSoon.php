@@ -2,7 +2,7 @@
 
 PHPWS_Core::initModClass('hms', 'View.php');
 
-class WelcomeScreenViewTooSoon extends hms\View{
+class WelcomeScreenViewTooSoon extends Homestead\View{
 
     public function show()
     {

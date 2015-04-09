@@ -10,7 +10,7 @@ PHPWS_Core::initModClass('hms', 'RoomChangeListView.php');
  * @author jbooker
  * @package hms
  */
-class RoomChangeApprovalView extends hms\View{
+class RoomChangeApprovalView extends Homestead\View{
 
     private $needsApproval;
     private $approved;

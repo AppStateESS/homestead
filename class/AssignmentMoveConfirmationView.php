@@ -2,7 +2,7 @@
 
 PHPWS_Core::initModClass('hms', 'View.php');
 
-class AssignmentMoveConfirmationView extends hms\View{
+class AssignmentMoveConfirmationView extends Homestead\View{
 
     private $student;
     private $assignment;

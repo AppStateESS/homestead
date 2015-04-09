@@ -1,7 +1,7 @@
 <?php
 PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
 
-class LotteryAdminEntryView extends hms\View{
+class LotteryAdminEntryView extends Homestead\View{
 
     public function __construct()
     {

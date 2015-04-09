@@ -2,7 +2,7 @@
 
 PHPWS_Core::initModClass('hms', 'View.php');
 
-class WelcomeScreenViewInvalidTerm extends hms\View{
+class WelcomeScreenViewInvalidTerm extends Homestead\View{
     private $term;
     private $cmd;
 

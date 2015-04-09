@@ -2,7 +2,7 @@
 
 PHPWS_Core::initModClass('hms', 'View.php');
 
-class SelectHallView extends hms\View{
+class SelectHallView extends Homestead\View{
 
     private $title;
     private $term;
