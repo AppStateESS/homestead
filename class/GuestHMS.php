@@ -16,7 +16,7 @@ class GuestHMS extends HMS
         parent::process();
 
         PHPWS_Core::initModClass('hms', 'GuestView.php');
-        $view = new GuestView();
+        $view = new Homestead\GuestView();
         $view->setMain($this->context->getContent());
         
         PHPWS_Core::initModClass('hms', 'HMSNotificationView.php');
