@@ -5,7 +5,7 @@
  * @author jbooker
  * @package hms
  */
-class CheckinHistoryView extends hms\View{
+class CheckinHistoryView extends Homestead\View{
 
     private $checkins;
 

@@ -12,7 +12,7 @@ PHPWS_Core::initModClass('hms', 'CheckinFactory.php');
  * @author jbooker
  * @package hms
  */
-class RoomChangeParticipantView extends hms\View{
+class RoomChangeParticipantView extends Homestead\View{
 
     private $participant; // The single partticpant this view is for
     private $request; // The parent request that this particpant is a part of

@@ -9,7 +9,7 @@
  * @package HMS
  */
 
-class PinDisabledView extends hms\View{
+class PinDisabledView extends Homestead\View{
 
     public function show()
     {

@@ -2,7 +2,7 @@
 
 PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
 
-class SearchByRlcView extends hms\View{
+class SearchByRlcView extends Homestead\View{
 
     public function show(){
         PHPWS_Core::initCoreClass('Form.php');

@@ -6,7 +6,7 @@
  * @author jbooker
  * @package HMS
  */
-class RoomView extends hms\View{
+class RoomView extends Homestead\View{
 
     private $hall;
     private $floor;

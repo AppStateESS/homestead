@@ -1,6 +1,6 @@
 <?php
 
-class RoomChangeMenuBlockView extends hms\View{
+class RoomChangeMenuBlockView extends Homestead\View{
 
     private $student;
     private $startDate;

@@ -1,4 +1,5 @@
 <?php
+namespace Homestead;
 
 /**
  * HMS User View
@@ -6,23 +7,14 @@
  * @author Jeff Tickle <jtickle at tux dot appstate dot edu>
  */
 
-class UserView extends hms\HMSView{
-
-    public $notifications;
-
-    public function addNotifications($n)
-    {
-        $this->notifications = $n;
-    }
-
+class UserView extends HomesteadView {
+    
     public function show()
     {
         $tpl = array();
         $tpl['NOTIFICATIONS'] = $this->notifications;
         $tpl['MAIN'] = $this->getMain();
 
-        $this->showHMS(PHPWS_Template::process($tpl, 'hms', 'user.tpl'));
+        $this->showHMS(\PHPWS_Template::process($tpl, 'hms', 'user.tpl'));
     }
 }
-
-?>

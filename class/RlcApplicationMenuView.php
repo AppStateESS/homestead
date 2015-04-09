@@ -7,7 +7,7 @@
  * @author Jeremy Booker
  */
 
-class RlcApplicationMenuView extends hms\View{
+class RlcApplicationMenuView extends Homestead\View{
 
     private $term;
     private $student;

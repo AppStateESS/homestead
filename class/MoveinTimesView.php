@@ -11,7 +11,7 @@ PHPWS_Core::initModClass('hms', 'HMS_Movein_Time.php');
  */
 
 
-class MoveinTimesView extends hms\View{
+class MoveinTimesView extends Homestead\View{
     
     public function show(){
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');

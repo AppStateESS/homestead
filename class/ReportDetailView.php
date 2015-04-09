@@ -11,7 +11,7 @@ PHPWS_Core::initModClass('hms', 'ReportSchedulePager.php');
  * @author jbooker
  * @package HMS
  */
-class ReportDetailView extends hms\View{
+class ReportDetailView extends Homestead\View{
     
     private $reportCtrl; // ReportController for the report class requested
     private $report;

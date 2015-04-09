@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 /**
  * HMS Guest View
  * Shows them a friendly message and then mostly the login page
@@ -9,7 +11,6 @@
 class GuestView extends hms\HMSView{
 
     private $message;
-    var $notifications;
 
     public function setMessage($message)
     {
@@ -19,11 +20,6 @@ class GuestView extends hms\HMSView{
     public function getMessage()
     {
         return $this->message;
-    }
-
-    public function addNotifications($n)
-    {
-        $this->notifications = $n;
     }
 
     public function show()
@@ -37,6 +33,10 @@ class GuestView extends hms\HMSView{
 
         $this->showHMS(PHPWS_Template::process($tpl, 'hms', 'guest.tpl'));
     }
+<<<<<<< HEAD
 }
 
 ?>
+=======
+}
+>>>>>>> Rename namespace to 'Homestead' instead of 'hms'.

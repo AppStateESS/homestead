@@ -7,7 +7,7 @@
  * @package hms
  */
 
-class ReApplicationFormView extends hms\View{
+class ReApplicationFormView extends Homestead\View{
 
     private $student;
     private $term;

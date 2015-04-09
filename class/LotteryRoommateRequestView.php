@@ -1,6 +1,6 @@
 <?php
 
-class LotteryRoommateRequestView extends hms\View{
+class LotteryRoommateRequestView extends Homestead\View{
 
     private $request;
     private $term;

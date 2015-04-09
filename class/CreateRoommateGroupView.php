@@ -4,7 +4,7 @@
  * The UI for administratively creating a roommate group
  */
 
-class CreateRoommateGroupView extends hms\View{
+class CreateRoommateGroupView extends Homestead\View{
 
     private $roommate1;
     private $roommate2;

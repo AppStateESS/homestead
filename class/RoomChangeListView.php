@@ -1,6 +1,6 @@
 <?php
 
-class RoomChangeListView extends hms\View{
+class RoomChangeListView extends Homestead\View{
 
     private $requests;
     private $term;
