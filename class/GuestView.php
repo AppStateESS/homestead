@@ -8,8 +8,8 @@ namespace hms;
  * @author Jeff Tickle <jtickle at tux dot appstate dot edu>
  */
 
-class GuestView extends hms\HMSView{
-
+class GuestView extends HomesteadView {
+    
     private $message;
 
     public function setMessage($message)
@@ -33,10 +33,4 @@ class GuestView extends hms\HMSView{
 
         $this->showHMS(\PHPWS_Template::process($tpl, 'hms', 'guest.tpl'));
     }
-<<<<<<< HEAD
 }
-
-?>
-=======
-}
->>>>>>> Rename namespace to 'Homestead' instead of 'hms'.

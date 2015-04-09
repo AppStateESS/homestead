@@ -1,6 +1,5 @@
 <?php
 
-
 class TermsAgreementView extends hms\View {
 
     private $term;

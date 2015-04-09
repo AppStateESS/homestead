@@ -9,7 +9,6 @@ PHPWS_Core::initModClass('hms', 'StudentFactory.php');
  * function by the same name.
  *
  */
-
 class RlcApplicationPage2View extends hms\View{
 
     protected $context;

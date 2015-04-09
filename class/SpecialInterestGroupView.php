@@ -1,6 +1,7 @@
 <?php
 
 class SpecialInterestGroupView extends hms\View{
+    
     protected $group;
 
     public function __construct($group = NULL)
