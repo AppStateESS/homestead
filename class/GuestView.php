@@ -29,8 +29,8 @@ class GuestView extends HomesteadView {
         $tpl['MESSAGE'] = $this->getMessage();
         $tpl['NOTIFICATIONS'] = $this->notifications;
 
-        Layout::addPageTitle("Login");
+        \Layout::addPageTitle("Login");
 
-        $this->showHMS(PHPWS_Template::process($tpl, 'hms', 'guest.tpl'));
+        $this->showHMS(\PHPWS_Template::process($tpl, 'hms', 'guest.tpl'));
     }
 }
