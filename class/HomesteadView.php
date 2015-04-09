@@ -23,6 +23,7 @@ abstract class HomesteadView extends View {
         return $this->main;
     }
 
+
     public function showHMS($content)
     {
         $tpl = array();
@@ -37,6 +38,7 @@ abstract class HomesteadView extends View {
         \Layout::addStyle('hms', 'css/hms.css');
         \Layout::addStyle('hms', 'css/tango-icons.css');
         //\Layout::addStyle('hms', 'css/bootstrap.css');
+
         \Layout::add(\PHPWS_Template::process($tpl, 'hms', 'hms.tpl'));
     }
 }
