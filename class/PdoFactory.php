@@ -15,8 +15,8 @@ class PdoFactory {
     private $pdo;
     
     /**
-     * Returns a PdoFactory object 
-     * @return $pdo An instance of PdoFactory
+     * Returns a PdoFactory instance
+     * @return PdoFactory $pdo A PdoInstance object
      */
     public static function getInstance()
     {
@@ -28,7 +28,7 @@ class PdoFactory {
     }
    
     /**
-     * Returns a PDO object, connected to the database
+     * Returns a PDO object which is connected to the current database
      * @return $pdo A PDO instance, connected to the current DB
      */
     public static function getPdoInstance()
