@@ -20,7 +20,7 @@ class ShowRDRoomChangeListCommand extends Command {
         // Get the list of role memberships this user has
         // NB: This gets memberships for all terms.. must filter later
         $hms_perm = new HMS_Permission();
-        $memberships = $hms_perm->HMS_Permission::getMembership('room_change_approve', NULL, UserStatus::getUsername());
+        $memberships = $hms_perm->getMembership('room_change_approve', NULL, UserStatus::getUsername());
 
         
 
