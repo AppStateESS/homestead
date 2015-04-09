@@ -1,16 +1,16 @@
 <?php
 
+namespace Homestead;
+
 /**
  * HMS Guest View
  * Shows them a friendly message and then mostly the login page
  * @author Jeff Tickle <jtickle at tux dot appstate dot edu>
  */
 
-PHPWS_Core::initModClass('hms', 'View.php');
-
-class GuestView extends hms\HMSView{
+class GuestView extends HomesteadView {
+    
     private $message;
-    var $notifications;
 
     public function setMessage($message)
     {
@@ -20,11 +20,6 @@ class GuestView extends hms\HMSView{
     public function getMessage()
     {
         return $this->message;
-    }
-
-    public function addNotifications($n)
-    {
-        $this->notifications = $n;
     }
 
     public function show()
@@ -39,5 +34,3 @@ class GuestView extends hms\HMSView{
         $this->showHMS(PHPWS_Template::process($tpl, 'hms', 'guest.tpl'));
     }
 }
-
-?>

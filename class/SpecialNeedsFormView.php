@@ -1,6 +1,6 @@
 <?php
 
-class SpecialNeedsFormView extends hms\View{
+class SpecialNeedsFormView extends Homestead\View{
 
     private $term;
 

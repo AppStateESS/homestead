@@ -6,7 +6,7 @@
  * @author jbooker
  * @package HMS
  */
-class RlcApplicationReView extends hms\View{
+class RlcApplicationReView extends Homestead\View{
 
     private $student;
     private $application;

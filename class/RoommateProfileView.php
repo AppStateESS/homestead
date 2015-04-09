@@ -1,6 +1,6 @@
 <?php
 
-class RoommateProfileView extends hms\View{
+class RoommateProfileView extends Homestead\View{
 
     private $student;
     private $profile;

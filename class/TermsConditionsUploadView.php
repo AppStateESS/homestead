@@ -2,7 +2,7 @@
 
 PHPWS_Core::initModClass('hms', 'View.php');
 
-class TermsConditionsUploadView extends hms\View{
+class TermsConditionsUploadView extends Homestead\View{
     private $term;
     private $type;
 

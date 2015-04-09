@@ -18,7 +18,7 @@ PHPWS_Core::initModClass('hms', 'HousingApplicationFactory.php');
 PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
-class HousingApplicationView extends hms\View{
+class HousingApplicationView extends Homestead\View{
     protected $id;
 
     public function __construct($id){

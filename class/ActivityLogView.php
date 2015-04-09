@@ -3,7 +3,7 @@
 PHPWS_Core::initModClass('hms', 'View.php');
 PHPWS_Core::initModClass('hms', 'ActivityLogPager.php');
 
-class ActivityLogView extends hms\View{
+class ActivityLogView extends Homestead\View{
 
     private $actee;
     private $actor;

@@ -1,6 +1,6 @@
 <?php
 
-class AcceptRlcInviteView extends hms\View{
+class AcceptRlcInviteView extends Homestead\View{
     
     private $rlcApplication;
     private $rlcAssignment;

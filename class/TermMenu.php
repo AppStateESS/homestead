@@ -2,7 +2,7 @@
 
 PHPWS_Core::initModClass('hms', 'View.php');
 
-class TermMenu extends hms\View{
+class TermMenu extends Homestead\View{
 
     public function __construct()
     {

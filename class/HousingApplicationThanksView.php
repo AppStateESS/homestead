@@ -2,7 +2,7 @@
 
 //TODO update/convert this view
 
-class HousingApplicationThanksView extends hms\View{
+class HousingApplicationThanksView extends Homestead\View{
 
     public function __construct()
     {

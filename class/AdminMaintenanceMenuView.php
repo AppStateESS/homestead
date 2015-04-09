@@ -14,7 +14,7 @@ PHPWS_Core::initModClass('hms', 'MessagingMenu.php');
 PHPWS_Core::initModClass('hms', 'ServiceDeskMenu.php');
 
 
-class AdminMaintenanceMenuView extends hms\View{
+class AdminMaintenanceMenuView extends Homestead\View{
 
     public function show()
     {
