@@ -89,7 +89,7 @@ class FreshmenApplicationsGraph extends Report {
         ORDER BY date";
         */
         
-        PHPWS_Core::initCoreClass('PdoFactory.php');
+        PHPWS_Core::initModClass('hms', 'PdoFactory.php');
         $db = PdoFactory::getInstance()->getPdo();
         
         $query ="SELECT

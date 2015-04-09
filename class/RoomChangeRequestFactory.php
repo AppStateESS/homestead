@@ -1,5 +1,5 @@
 <?php
-PHPWS_Core::initCoreClass('PdoFactory.php');
+PHPWS_Core::initModClass('hms', 'PdoFactory.php');
 PHPWS_Core::initModClass('hms', 'RoomChangeRequest.php');
 
 

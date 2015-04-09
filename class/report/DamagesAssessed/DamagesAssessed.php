@@ -24,7 +24,7 @@ class DamagesAssessed extends Report implements iCsvReport {
 
     public function execute()
     {
-        PHPWS_Core::initCoreClass('PdoFactory.php');
+        PHPWS_Core::initModClass('hms', 'PdoFactory.php');
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 
         $db = PdoFactory::getInstance()->getPdo();

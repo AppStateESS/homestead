@@ -1,6 +1,6 @@
 <?php
 
-PHPWS_Core::initCoreClass('PdoFactory.php');
+PHPWS_Core::initModClass('hms', 'PdoFactory.php');
 PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
 
 class RlcApplicationFactory {

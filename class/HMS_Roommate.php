@@ -134,7 +134,7 @@ class HMS_Roommate
 
     public static function getByUsernames($a, $b, $term)
     {
-        PHPWS_Core::initCoreClass('PdoFactory.php');
+        PHPWS_Core::initModClass('hms', 'PdoFactory.php');
         $db = PdoFactory::getInstance()->getPdo();
         
         $query = $db->prepare("SELECT * FROM hms_roommate WHERE term = :term AND ((requestor ILIKE :usera AND requestee ILIKE :userb) OR (requestor ILIKE :userb AND requestee ILIKE :usera))");
@@ -199,7 +199,7 @@ class HMS_Roommate
      */
     public function has_confirmed_roommate($asu_username, $term)
     {
-        PHPWS_Core::initCoreClass('PdoFactory.php');
+        PHPWS_Core::initModClass('hms', 'PdoFactory.php');
         $db = PdoFactory::getInstance()->getPdo();
         
         $query = $db->prepare("SELECT COUNT(*) FROM hms_roommate WHERE term = :term AND (requestor ILIKE :user OR requestee ILIKE :user) AND confirmed = 1");
@@ -235,7 +235,7 @@ class HMS_Roommate
         $db->addColumn('requestor');
         $db->addColumn('requestee');
 
-        PHPWS_Core::initCoreClass('PdoFactory.php');
+        PHPWS_Core::initModClass('hms', 'PdoFactory.php');
         $db = PdoFactory::getInstance()->getPdo();
 	*/
 
@@ -278,7 +278,7 @@ class HMS_Roommate
         $db->addColumn('requestee');
         $result = $db->select('row');
 
-        PHPWS_Core::initCoreClass('PdoFactory.php');
+        PHPWS_Core::initModClass('hms', 'PdoFactory.php');
         $db = PdoFactory::getInstance()->getPdo();
 	*/
 
@@ -407,7 +407,7 @@ class HMS_Roommate
         }
         */
         
-        PHPWS_Core::initCoreClass('PdoFactory.php');
+        PHPWS_Core::initModClass('hms', 'PdoFactory.php');
         $db = PdoFactory::getInstance()->getPdo();
         
         $stmt = $db->prepare("SELECT * FROM hms_roommate WHERE (requestor ILIKE :user OR requestee ILIKE :user) AND term = :term");
@@ -439,7 +439,7 @@ class HMS_Roommate
         }
         */
         
-        PHPWS_Core::initCoreClass('PdoFactory.php');
+        PHPWS_Core::initModClass('hms', 'PdoFactory.php');
         $db = PdoFactory::getInstance()->getPdo();
         
         $query = $db->prepare("SELECT * FROM hms_roommate WHERE (requestee ILIKE :user OR requestor ILIKE :user) AND term = :term AND confirmed = 0");
