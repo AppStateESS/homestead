@@ -175,83 +175,20 @@ $political_views = array(
             4 => 'Somewhat conservative',
             5 => 'Very conservative');
 
-$majors = array(
-                0  => 'Prefer not to say',
-                1  => 'Accounting',
-				2  => 'Anthropology',
-				3  => 'Apparel and Textiles',
-				4  => 'Appropriate Technology',
-				5  => 'Art',
-				6  => 'Athletic Training',
-				7  => 'Biology',
-				8  => 'Building Sciences',
-				9  => 'Business Education',
-				10  => 'Chemistry',
-				11 => 'Chemistry, Secondary Education',
-				12 => 'Child Development',
-				13 => 'Clinical Laboratory Sciences',
-				14 => 'Communication',
-				15 => 'Communication Disorders',
-				16 => 'Community and Regional Planning',
-				17 => 'Computer Information Systems',
-				18 => 'Computer Science',
-				19 => 'Criminal Justice',
-				20 => 'Dance Studies',
-				21 => 'Economics',
-				22 => 'Elementary Education',
-				23 => 'English',
-				24 => 'English, Secondary Education',
-				25 => 'Exercise Science',
-				26 => 'Family and Consumer Sciences, Secondary Education',
-				27 => 'Finance and Banking',
-				28 => 'Foods and Nutrition',
-				29 => 'French',
-				30 => 'French, Education',
-				31 => 'Geography',
-				32 => 'Geology',
-				33 => 'Geology, Secondary Education',
-                75 => 'Global Studies',
-				34 => 'Graphic Design',
-				35 => 'Graphics Arts and Imaging Technology',
-				36 => 'Health Care Management',
-				37 => 'Health Education',
-				38 => 'Health Education, Secondary Education',
-				39 => 'Health Promotion',
-				40 => 'History',
-				41 => 'History, Secondary Education',
-				42 => 'Hospitality and Tourism Management',
-				43 => 'Industrial Design',
-				44 => 'Interdisciplinary Studies',
-				45 => 'Interior Design',
-				46 => 'International Business',
-				47 => 'Management',
-				48 => 'Marketing',
-				49 => 'Mathematics',
-				50 => 'Mathematics, Secondary Education',
-				51 => 'Middle Grades Education',
-				52 => 'Music Education',
-				53 => 'Music Industry Studies',
-				54 => 'Music Performance',
-				55 => 'Music Therapy',
-				56 => 'Philosophy and Religion',
-				57 => 'Physical Education',
-				58 => 'Physics',
-				59 => 'Political Science',
-				60 => 'Psychology',
-				61 => 'Recreation Management',
-				62 => 'Risk & Insurance',
-				63 => 'Social Work',
-				64 => 'Sociology',
-				65 => 'Spanish',
-				66 => 'Spanish, Education',
-				67 => 'Social Sciences, Education',
-				68 => 'Special Education',
-				69 => 'Studio Art',
-				70 => 'Teaching Theater Arts, K-12',
-				71 => 'Technical Photography',
-				72 => 'Technology Education',
-				73 => 'Theater Arts',
-				74 => 'Undecided');
+$url = "https://www.kimonolabs.com/api/5nbvbr2u?apikey=bM1oqBrFJ3lQG45Re7LMEU08lJHwvPnb";
+$json = file_get_contents($url);
+$results = json_decode($json, TRUE);
+
+$majors[] = 'Prefer not to say';
+foreach($results['results']['Major List'] as $item) 
+{
+  if(stristr($item['Major']['text'], 'see ') === FALSE)
+  {
+    $majors[] = $item['Major']['text'];
+  }
+}
+$majors[] = 'Undecided';
+
 $experiences = array(
                 0 => 'Prefer not to say',
 				1 => 'My academic studies and intellectual growth',
