@@ -1,5 +1,6 @@
 <?php
 PHPWS_Core::initModClass('hms', 'RoomDamage.php');
+PHPWS_Core::initModClass('hms', 'PdoFactory.php');
 
 
 /**
