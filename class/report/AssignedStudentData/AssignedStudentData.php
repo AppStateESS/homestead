@@ -86,6 +86,7 @@ class AssignedStudentData extends Report implements iCsvReport {
             $type = $student->getType();
             $appTerm = $student->getApplicationTerm();
             $cellPhone= $row['cell_phone'];
+            $assignmentType = $row['reason'];
             
             $gender = HMS_Util::formatGender($student->getGender());
             $dob = $student->getDob();
@@ -110,14 +111,14 @@ class AssignedStudentData extends Report implements iCsvReport {
                 $zip = $address->zip;
             }
 
-            $this->rows[] = array($username,$bannerId,$first,$middle,$last,$gender,$dob,$type,$appTerm,$cellPhone,$room,$line1,$line2,$line3,$city,$state,$zip);
+            $this->rows[] = array($username,$bannerId,$first,$middle,$last,$gender,$dob,$type,$appTerm,$cellPhone,$assignmentTyp,$room,$line1,$line2,$line3,$city,$state,$zip);
         }
     }
 
     public function getCsvColumnsArray()
     {
         return array('Username', 'Banner id', 'First name', 'Middle name', 'Last Name', 'Gender', 'Birthday',
-            'Student type', 'Application Term', 'Cell Phone', 'Assignment', 'Address 1',
+            'Student type', 'Application Term', 'Cell Phone', 'Assignment Type','Assignment', 'Address 1',
             'Address 2', 'Address 3', 'City', 'State', 'Zip');
     }
 
