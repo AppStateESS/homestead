@@ -111,7 +111,7 @@ class AssignedStudentData extends Report implements iCsvReport {
                 $zip = $address->zip;
             }
 
-            $this->rows[] = array($username,$bannerId,$first,$middle,$last,$gender,$dob,$type,$appTerm,$cellPhone,$assignmentTyp,$room,$line1,$line2,$line3,$city,$state,$zip);
+            $this->rows[] = array($username,$bannerId,$first,$middle,$last,$gender,$dob,$type,$appTerm,$cellPhone,$assignmentType,$room,$line1,$line2,$line3,$city,$state,$zip);
         }
     }
 
