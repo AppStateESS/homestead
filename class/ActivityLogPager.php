@@ -3,7 +3,7 @@
 PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 PHPWS_Core::initCoreClass('DBPager.php');
 
-class ActivityLogPager extends Homestead\View{
+class ActivityLogPager extends hms\View {
 
     private $actee;
     private $actor;

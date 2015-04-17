@@ -346,34 +346,6 @@ class Term
         return $terms;
     }
 
-    public static function getTermSelector()
-    {
-        if(UserStatus::isGuest()) {
-            return dgettext('hms', 'Housing Management System');
-        }
-
-        $terms = self::getTermsAssoc(true);
-
-        $current = self::getCurrentTerm();
-        if(isset($terms[$current])){
-            $terms[$current] .= ' (Current)';
-        }
-
-        $form = new PHPWS_Form('term_selector');
-
-        $cmd = CommandFactory::getCommand('SelectTerm');
-        $cmd->initForm($form);
-
-        $form->addDropBox('term', $terms);
-        $form->setMatch('term', self::getSelectedTerm());
-
-        $tags = $form->getTemplate();
-        javascript('jquery');
-        javascriptMod('hms', 'jqueryCookie');
-        javascript('modules/hms/SelectTerm');
-        return PHPWS_Template::process($tags, 'hms', 'admin/SelectTerm.tpl');
-    }
-
     /**
      * Returns an array of the list of semesters. Useful for constructing
      * drop down menus. Array is keyed using the TERM_* defines.

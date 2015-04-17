@@ -12,11 +12,10 @@ PHPWS_Core::initModClass('hms', 'MessagingMenu.php');
 PHPWS_Core::initModClass('hms', 'ServiceDeskMenu.php');
 
 
-class AdminMaintenanceMenuView extends Homestead\View{
+class AdminMaintenanceMenuView extends hms\View {
 
     public function show()
     {
-        Layout::addStyle('hms', 'css/menu-grid.css');
         $tpl = array();
 
         $searchMenu = new StudentSearchMenu();

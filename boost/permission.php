@@ -24,10 +24,13 @@
     /*********
      * Terms *
      *********/
+    $permissions['edit_terms']              = _('Create and delete terms');
     $permissions['select_term']             = _('Select past/future terms');
     $permissions['activate_term']           = _('Set active term');
-    $permissions['edit_terms']              = _('Create and delete terms');
     $permissions['banner_queue']            = _('Enable/disable banner queue');
+    
+    // Application features on student menues
+    $permissions['edit_features']           = _('Can edit the application features per term');
 
     /*************
      * Deadlines *
@@ -44,9 +47,9 @@
      * Hall Structure *
      ******************/
     # Residence hall tasks
-    $permissions['hall_structure']      = _('Add and delete halls');
-    $permissions['hall_attributes']     = _('Edit hall attributes');
     $permissions['hall_view']           = _('View halls');
+    $permissions['hall_attributes']     = _('Edit hall attributes');
+    $permissions['hall_structure']      = _('Add and delete halls');
     $permissions['run_hall_overview']   = _('Run the Hall Overview');
 
     # Floor tasks
@@ -131,11 +134,6 @@
      ****************/
     $permissions['view_activity_log']               =_('Can view the global Activity Log');
     $permissions['view_student_log']                =_('Can view student logs');
-
-    /*****************
-     * Edit Features *
-     ****************/
-    $permissions['edit_features'] = _('Can edit the application features per term');
 
     /*******************************
      * Email Messaging permissions *

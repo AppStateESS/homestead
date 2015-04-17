@@ -2,7 +2,7 @@
 
 PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 
-class ContactFormView extends Homestead\View{
+class ContactFormView extends hms\View {
 
     public function show()
     {

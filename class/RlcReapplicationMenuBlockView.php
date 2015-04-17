@@ -2,7 +2,7 @@
 
 PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
-class RlcReapplicationMenuBlockView extends Homestead\View{
+class RlcReapplicationMenuBlockView extends hms\View {
 
     private $term;
     private $startDate;

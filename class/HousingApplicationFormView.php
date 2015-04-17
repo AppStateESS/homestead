@@ -4,7 +4,7 @@ PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 PHPWS_Core::initModClass('hms', 'ApplicationFeature.php');
 PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
 
-class HousingApplicationFormView extends Homestead\View{
+class HousingApplicationFormView extends hms\View {
 
     private $student;
     private $existingApplication;

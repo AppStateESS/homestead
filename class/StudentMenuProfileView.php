@@ -1,6 +1,6 @@
 <?php
 
-class StudentMenuProfileView extends Homestead\View{
+class StudentMenuProfileView extends hms\View {
     
     private $student;
     private $profile;

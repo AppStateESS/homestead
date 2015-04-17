@@ -1,6 +1,6 @@
 <?php
 
-class RoommateProfileSearchForm extends Homestead\View{
+class RoommateProfileSearchForm extends hms\View {
 
     private $term;
     

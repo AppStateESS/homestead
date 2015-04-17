@@ -1,5 +1,5 @@
 <?php
-namespace Homestead;
+namespace hms;
 
 /**
  * HMS User View

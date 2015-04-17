@@ -7,7 +7,7 @@ define('FEATURE_NOTYET_ICON',   '<img class="status-icon" src="mod/hms/img/tango
 define('FEATURE_OPEN_ICON',     '<img class="status-icon" src="mod/hms/img/tango/go-next.png" alt="Open"/>');
 define('FEATURE_COMPLETED_ICON','<img class="status-icon" src="images/mod/hms/icons/check.png" alt="Completed"/>');
 
-class ReturningMainMenuView extends Homestead\View{
+class ReturningMainMenuView extends hms\View {
 
     private $student;
     private $lotteryTerm;

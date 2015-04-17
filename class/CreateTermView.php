@@ -1,6 +1,6 @@
 <?php
 
-class CreateTermView extends Homestead\View{
+class CreateTermView extends hms\View {
 
     public function __construct(){}
 

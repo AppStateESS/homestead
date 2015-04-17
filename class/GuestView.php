@@ -1,6 +1,6 @@
 <?php
 
-namespace Homestead;
+namespace hms;
 
 /**
  * HMS Guest View
