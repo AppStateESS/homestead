@@ -3,7 +3,6 @@
 PHPWS_Core::initModClass('hms', 'StudentSearchMenu.php');
 PHPWS_Core::initModClass('hms', 'AssignmentMenu.php');
 PHPWS_Core::initModClass('hms', 'ResidenceHallMenu.php');
-PHPWS_Core::initModClass('hms', 'ActivityLogMenu.php');
 PHPWS_Core::initModClass('hms', 'RoommatesMenu.php');
 PHPWS_Core::initModClass('hms', 'RLCMenu.php');
 PHPWS_Core::initModClass('hms', 'ReapplicationMaintenanceMenu.php');
@@ -25,9 +24,6 @@ class AdminMaintenanceMenuView extends hms\View {
 
         $assignMenu = new AssignmentMenu();
         $tpl['ASSIGNMENT'] = $assignMenu->show();
-
-        $activityLogs = new ActivityLogMenu();
-        $tpl['LOGS'] = $activityLogs->show();
 
         $roommates = new RoommatesMenu();
         $tpl['ROOMMATES'] = $roommates->show();
