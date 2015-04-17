@@ -34,7 +34,7 @@ abstract class HomesteadView extends View {
         $tpl['NAVBAR'] = $navbar->show();
 
 
-        \Layout::addStyle('hms', 'css/hms.css');
+        //\Layout::addStyle('hms', 'css/hms.css');
         \Layout::addStyle('hms', 'css/tango-icons.css');
         //\Layout::addStyle('hms', 'css/bootstrap.css');
 
