@@ -19,4 +19,3 @@ abstract class View
 
     public abstract function show();
 }
-
