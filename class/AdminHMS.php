@@ -7,19 +7,10 @@ class AdminHMS extends HMS
         $this->context->setDefault('action', 'ShowAdminMaintenanceMenu');
         parent::process();
 
-        PHPWS_Core::initModClass('hms', 'UserView.php');
-        $view = new Homestead\UserView();
+        $view = new hms\UserView();
         $view->setMain($this->context->getContent());
 
-        PHPWS_Core::initModClass('hms', 'TermMenu.php');
-        $termMenu = new TermMenu();
-        $view->addToSidebar($termMenu->show());
-
-        PHPWS_Core::initModClass('hms', 'AdminMenu.php');
-        $menu = new AdminMenu();
-        $menu->setContext($this->context);
-        $view->addToSidebar($menu->show());
-
+/*
         // Check permissions. Must be able to search for students in order to see the recent menu
         if(Current_User::allow('hms','search')){
             PHPWS_Core::initModClass('hms', 'RecentStudentSearchList.php');
@@ -27,6 +18,7 @@ class AdminHMS extends HMS
             $recent = new RecentStudentSearchMenu(RecentStudentSearchList::getInstance());
             $view->addToSidebar($recent->show());
         }
+*/
 
         PHPWS_Core::initModClass('hms', 'HMSNotificationView.php');
         $nv = new HMSNotificationView();

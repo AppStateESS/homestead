@@ -2,7 +2,7 @@
 
 PHPWS_Core::initModClass('hms', 'View.php');
 
-class DeniedRlcApplicantView extends Homestead\View{
+class DeniedRlcApplicantView extends hms\View {
 
     public function show(){
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');

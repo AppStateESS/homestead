@@ -6,16 +6,9 @@
  * @author Jeremy Booker <jbooker at tux dot appstate dot edu>
  */
 
-PHPWS_Core::initModClass('hms', 'Term.php');
-PHPWS_Core::initModClass('hms', 'UserStatus.php');
-PHPWS_Core::initModClass('hms', 'Command.php');
-PHPWS_Core::initModClass('hms', 'CommandContext.php');
-PHPWS_Core::initModClass('hms', 'CommandFactory.php');
-PHPWS_Core::initModClass('hms', 'HMSNotificationView.php');
-PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-
 abstract class HMS {
-    var $context;
+    
+    protected $context;
 
     public function __construct()
     {
@@ -32,7 +25,6 @@ abstract class HMS {
         // This hack is the most awful hack ever.  Fix phpWebSite so that
         // user logins are logged separately.
         if(Current_User::isLogged() && !isset($_SESSION['HMS_LOGGED_THE_LOGIN'])) {
-            PHPWS_Core::initModClass('hms','HMS_Activity_Log.php');
             $username = strtolower(Current_User::getUsername());
             HMS_Activity_Log::log_activity($username,ACTIVITY_LOGIN, $username, NULL);
             $_SESSION['HMS_LOGGED_THE_LOGIN'] = $username;
@@ -54,7 +46,6 @@ abstract class HMS {
                 $cmd->execute($this->context);
             } catch(PermissionException $p) {
                 NQ::Simple('hms', HMS_NOTIFICATION_ERROR, 'You do not have permission to perform that action. If you believe this is an error, please contact University Housing.');
-                PHPWS_Core::initModClass('hms', 'HMSNotificationView.php');
                 $nv = new HMSNotificationView();
                 $nv->popNotifications();
                 Layout::add($nv->show());
@@ -63,7 +54,6 @@ abstract class HMS {
                     $message = $this->formatException($e);
                     NQ::Simple('hms', HMS_NOTIFICATION_ERROR, 'An internal error has occurred, and the authorities have been notified.  We apologize for the inconvenience.');
                     $this->emailError($message);
-                    PHPWS_Core::initModClass('hms', 'HMSNotificationView.php');
                     $nv = new HMSNotificationView();
                     $nv->popNotifications();
                     Layout::add($nv->show());

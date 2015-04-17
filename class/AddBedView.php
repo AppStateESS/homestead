@@ -2,7 +2,7 @@
 
 PHPWS_Core::initModClass('hms', 'View.php');
 
-class AddBedView extends Homestead\View{
+class AddBedView extends hms\View {
 
     private $hall;
     private $floor;

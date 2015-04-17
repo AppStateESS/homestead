@@ -1,6 +1,6 @@
 <?php
 
-class RlcReapplicationPageTwoView extends Homestead\View{
+class RlcReapplicationPageTwoView extends hms\View {
     
     private $rlcs;
     private $term;

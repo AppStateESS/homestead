@@ -2,7 +2,7 @@
 
 PHPWS_Core::initModClass('hms', 'View.php');
 
-class ContactFormThankYouView extends Homestead\View{
+class ContactFormThankYouView extends hms\View {
 
     public function show(){
         $tpl = array();
