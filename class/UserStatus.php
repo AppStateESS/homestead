@@ -54,6 +54,15 @@ class UserStatus
 
         return Current_User::getUsername();
     }
+    
+    public static function getDisplayName()
+    {
+    	if(self::isGuest()){
+    		return null;
+    	}
+        
+        return Current_User::getDisplayName();
+    }
 
     /*public static function getBannerID($respectMask = TRUE)
     {
@@ -122,7 +131,7 @@ class UserStatus
         }else if (Current_User::allow('hms', 'ra_login_as_self')) {
             // Allowed to masquerade as self
             $cmd = CommandFactory::getCommand('RaMasqueradeAsSelf');
-            $vars['LOGGED_IN_AS'] = sprintf(dgettext('hms', 'Welcome, %s!'), $user) . $cmd->getLink('Swtich to Student View');
+            $vars['LOGGED_IN_AS'] = sprintf(dgettext('hms', 'Welcome, %s!'), $user) . $cmd->getLink('Switch to Student View');
             $hms_status = new UserStatus();
             $vars['LOGOUT_LINK']  = $hms_status->getLogoutLink();
         } else {
@@ -153,6 +162,11 @@ class UserStatus
     {
         $auth = Current_User::getAuthorization();
         return '<a href="'.$auth->logout_link.'">Logout</a>';
+    }
+    
+    public static function getLogoutURI()
+    {
+    	return Current_User::getAuthorization()->logout_link;
     }
 }
 

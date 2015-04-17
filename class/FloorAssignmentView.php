@@ -3,7 +3,7 @@
 PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
 PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
-class FloorAssignmentView extends Homestead\View{
+class FloorAssignmentView extends hms\View {
     private $floor;
 
     public function __construct(HMS_Floor $floor){

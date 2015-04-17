@@ -1,13 +1,11 @@
 <?php
-namespace Homestead;
+namespace hms;
 
 /**
  * HMS User View
  * All Non-Admin Authenticated Users.
  * @author Jeff Tickle <jtickle at tux dot appstate dot edu>
  */
-
-\PHPWS_Core::initModClass('hms', 'HomesteadView.php');
 
 class UserView extends HomesteadView {
     

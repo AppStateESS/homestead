@@ -6,7 +6,7 @@ PHPWS_Core::initModClass('hms', 'View.php');
  * The UI for administratively creating a roommate group
  */
 
-class CreateRoommateGroupView extends Homestead\View{
+class CreateRoommateGroupView extends hms\View {
 
     private $roommate1;
     private $roommate2;

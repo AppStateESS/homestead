@@ -3,7 +3,7 @@
 PHPWS_Core::initModClass('hms', 'View.php');
 PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
 
-class ShowViewByRlc extends Homestead\View{
+class ShowViewByRlc extends hms\View {
     private $rlc;
 
     public function __construct(HMS_Learning_Community $rlc)

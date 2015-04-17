@@ -11,7 +11,7 @@
 
 PHPWS_Core::initModClass('hms', 'View.php');
 
-class ShowHallNotificationSelectView extends Homestead\View{
+class ShowHallNotificationSelectView extends hms\View {
 
     public function show(){
         /*
