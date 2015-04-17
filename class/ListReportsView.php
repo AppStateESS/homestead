@@ -57,5 +57,3 @@ class ListReportsView extends hms\View {
         return $final;
     }
 }
-
-?>
