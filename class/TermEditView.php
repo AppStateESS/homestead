@@ -1,7 +1,13 @@
 <?php
 
-class TermEditView extends hms\View{
-
+/**
+ * TermEditView - View class for editing terms
+ * 
+ * @package Homestead
+ * @author jbooker
+ */
+class TermEditView extends hms\View {
+    
     private $term;
 
     public function __construct($term) {
@@ -20,6 +26,9 @@ class TermEditView extends hms\View{
 
         $tpl = array();
         $tpl['TITLE'] = dgettext('hms', 'Term settings for ') . $printable;
+
+        $newTermCmd = CommandFactory::getCommand('ShowCreateTerm');
+        $tpl['NEW_TERM_URI'] = $newTermCmd->getURI(); 
 
         // Is this the Current Term?
         $tpl['CURRENT_TERM_LEGEND'] = dgettext('hms', 'Current Term');
