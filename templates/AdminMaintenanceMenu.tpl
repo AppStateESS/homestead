@@ -5,7 +5,6 @@
 		{ASSIGNMENT}
 	</div>
 	<div class="col-xs-12 col-sm-4">
-		{TERM}
 		{LOGS}
 		{ROOMMATES}
 		{MESSAGING}

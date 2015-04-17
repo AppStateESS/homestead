@@ -3,6 +3,9 @@
         <h1>{TITLE}</h1>
     </div>
 </div>
+
+<a class="btn btn-primary" href="{NEW_TERM_URI}"><i class="fa fa-plus"></i> Add New Term</a>
+
 <div class="row">
 	<div class="col-md-3">
 		<fieldset>
