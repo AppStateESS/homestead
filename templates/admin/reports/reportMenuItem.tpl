@@ -1,1 +1,1 @@
-<li><strong>{NAME}</strong> ({LAST_EXEC})</li>
+<a href="{REPORT_DETAIL_URI}" class="list-group-item"><p class="list-group-item-text"><strong>{NAME}</strong> ({LAST_EXEC})</p></a>
