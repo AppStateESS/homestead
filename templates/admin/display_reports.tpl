@@ -1,10 +1,11 @@
-<h1 class="rrze-report-32">Reports</h1>
+<h1><i class="fa fa-bar-chart"></i> Reports</h1>
 
-<div class="rounded-box">
-  <div class="boxheader emptyheader">&nbsp;</div>
-  <ul>
-    <!-- BEGIN REPORTS -->
-    {ITEM}
-    <!-- END REPORTS -->
-  </ul>
+<div class="row">
+  <div class="col-md-8">
+    <div class="list-group">
+      <!-- BEGIN REPORTS -->
+      {ITEM}
+      <!-- END REPORTS -->
+    </div>
+  </div>
 </div>
