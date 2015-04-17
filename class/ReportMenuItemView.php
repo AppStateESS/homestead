@@ -18,13 +18,15 @@ class ReportMenuItemView extends hms\View {
         $detailsCmd = CommandFactory::getCommand('ShowReportDetail');
         $detailsCmd->setReportClass($this->reportClassName);
         
-        $tpl['NAME'] = $detailsCmd->getLink($this->report->getFriendlyName());
+        $tpl['NAME'] = $this->report->getFriendlyName();
+        $tpl['REPORT_DETAIL_URI'] = $detailsCmd->getURI();
         
         if(is_null($this->report->getId())){
             $tpl['LAST_EXEC'] = 'never';
         }else{
-            $viewCmd = $this->report->getDefaultOutputViewCmd();
-            $tpl['LAST_EXEC']    = $viewCmd->getLink($this->report->getRelativeLastRun());
+            //$viewCmd = $this->report->getDefaultOutputViewCmd();
+            //$tpl['LAST_EXEC']    = $viewCmd->getLink($this->report->getRelativeLastRun());
+            $tpl['LAST_EXEC']    = $this->report->getRelativeLastRun();
         }
         
         return PHPWS_Template::process($tpl, 'hms', 'admin/reports/reportMenuItem.tpl');
