@@ -23,7 +23,6 @@ abstract class HomesteadView extends View {
         return $this->main;
     }
 
-
     public function showHMS($content)
     {
         $tpl = array();

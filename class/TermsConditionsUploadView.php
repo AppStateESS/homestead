@@ -1,6 +1,7 @@
 <?php
 
 class TermsConditionsUploadView extends hms\View{
+
     private $term;
     private $type;
 

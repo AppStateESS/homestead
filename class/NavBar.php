@@ -84,7 +84,6 @@ class NavBar extends View {
             $this->tpl['STUDENT_SEARCH'] = '';
             javascript('jquery');
             javascriptMod('hms', 'studentSearch');
-            //TODO - Expand this into an actual working search box
         }
     }
     
@@ -114,4 +113,3 @@ class NavBar extends View {
     	}
     }
 }
-?>
