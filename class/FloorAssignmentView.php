@@ -18,7 +18,6 @@ class FloorAssignmentView extends hms\View{
 
         javascript('jquery_ui');
         javascript('modules/hms/floor_assignment');
-        Layout::addStyle('hms', 'css/autosuggest2.css');
 
         $this->floor->loadHall();
         $hall = $this->floor->_hall;

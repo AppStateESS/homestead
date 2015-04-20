@@ -15,7 +15,6 @@ class UnassignStudentView extends hms\View{
 
         javascript('jquery');
         javascript('modules/hms/assign_student');
-        Layout::addStyle('hms', 'css/autosuggest2.css');
 
 
         $unassignCmd = CommandFactory::getCommand('UnassignStudent');
