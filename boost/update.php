@@ -631,7 +631,6 @@ function hms_update(&$content, $currentVersion)
             $files[] = 'javascript/autosuggest/autosuggest.js';
             $files[] = 'javascript/autosuggest/head.js';
             $files[] = 'javascript/autosuggest/zxml.js';
-            $files[] = 'templates/css/autosuggest.css';
             $files[] = '/templates/admin/maintenance.tpl';
 
             PHPWS_Boost::updatefiles($files, 'hms');
