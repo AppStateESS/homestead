@@ -33,8 +33,6 @@ class ReportSchedulePager extends DBPager {
         $this->setLink('index.php?module=hms');
         $this->setEmptyMessage('No scheduled reports found.');
         
-        $this->addToggle('class="row-bg-1"');
-        $this->addToggle('class="row-bg-2"');
         $this->addRowTags('schedulePagerRowTags');
     }
 }
