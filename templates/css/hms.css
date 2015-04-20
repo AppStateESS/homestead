@@ -124,42 +124,6 @@ a.header-back span:before{
 	font-weight: bold;
 }
 
-/* 22px Icons */
-.rrze-awaiting-22 {
-  background: url('../../img/rrze/22x22/status/awaiting.png') no-repeat
-    8px 50%;
-  padding-left: 36px;
-  line-height: 32px;
-}
-
-.rrze-awaiting-plus-22 {
-  background: url('../../img/rrze/22x22/status/awaiting-plus.png')
-    no-repeat 8px 50%;
-  padding-left: 36px;
-  line-height: 32px;
-}
-
-.rrze-report-run-22 {
-  background: url('../../img/rrze/22x22/emblems/report-run.png') no-repeat
-    8px 50%;
-  padding-left: 36px;
-  line-height: 32px;
-}
-
-/* 32px Icons */
-.rrze-report-32 {
-  background: url('../../img/rrze/32x32/emblems/report.png') no-repeat 8px
-    50%;
-  padding-left: 46px;
-  line-height: 46px;
-}
-
-.rrze-download-32 {
-  background: url('../../img/rrze/32x32/actions/download.png') no-repeat
-    8px 50%;
-  padding-left: 46px;
-  line-height: 46px;
-}
 
 /******************************
  * Table styles for reporting *
