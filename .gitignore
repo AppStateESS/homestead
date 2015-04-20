@@ -40,3 +40,4 @@ Thumbs.db
 
 vendor/
 composer.phar
+bower_components
