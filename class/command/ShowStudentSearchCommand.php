@@ -26,8 +26,6 @@ class ShowStudentSearchCommand extends Command {
 
         $form->setMethod('get');
 
-        //javascript('modules/hms/autoFocus', array('ELEMENT' => $form->getId('username')));
-
         $form->addText('banner_id');
         $form->setExtra('banner_id', 'placeholder = "Swipe AppCard or type Name/Email/Banner ID" autofocus');
         $form->setClass('banner_id', 'checkin-search-box');
