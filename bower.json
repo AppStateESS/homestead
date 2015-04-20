@@ -1,0 +1,28 @@
+{
+  "name": "homestead",
+  "version": "0.4.91",
+  "homepage": "https://github.com/AppStateESS/homestead",
+  "authors": [
+    "Jeremy Booker <jeremy.booker@gmail.com>"
+  ],
+  "description": "On-campus Housing Management",
+  "main": "index.php",
+  "moduleType": [
+    "es6"
+  ],
+  "keywords": [
+    "on-campus",
+    "housing"
+  ],
+  "license": "GPLv2",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "typeahead.js": "~0.10.5"
+  }
+}
