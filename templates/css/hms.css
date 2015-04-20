@@ -94,14 +94,6 @@ a.header-back span:before{
     padding-right: 15px;
 }
 
-/* Row Highlighting */
-.row-bg-1 {
-  background: #FFF;
-}
-
-.row-bg-2 {
-  background: #F5F5F5;
-}
 
 /* A basic 2-col layout */
 #twocol-main {
