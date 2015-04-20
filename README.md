@@ -8,6 +8,9 @@ Homestead
 Homestead is a web-application for managing on-campus student housing.
 
 ## Development Setup
-* Composer
-* npm
-* bower
+* Install [Composer](https://getcomposer.org/doc/00-intro.md)
+* Install dependencies with Composer: `./composer.phar install`
+* Install [Node.js](https://nodejs.org/download/) (comes with npm)
+* Bower
+ * Use npm to install Bower: `sudo npm install -g bower`
+ * Use Bower to install dependencies: `bower install`
