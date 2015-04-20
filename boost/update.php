@@ -913,7 +913,6 @@ function hms_update(&$content, $currentVersion)
 
         case version_compare($currentVersion, '0.2.42', '<') :
             $files[] = 'templates/admin/maintenance.tpl';
-            $files[] = 'templates/css/maintenance.css';
             PHPWS_Boost::updatefiles($files, 'hms');
 
             $db = &new PHPWS_Db();
