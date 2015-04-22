@@ -14,3 +14,7 @@ Homestead is a web-application for managing on-campus student housing.
 * Bower
  * Use npm to install Bower: `sudo npm install -g bower`
  * Use Bower to install dependencies: `bower install`
+* Postgresql Fuzzy Search Extensions:
+ * `sudo yum install postgresql-contrib`
+ * From the psql command line on the Homestead database: `create extension FUZZYSTRMATCH;`
+ * See docs at: http://www.postgresql.org/docs/9.1/static/fuzzystrmatch.html
