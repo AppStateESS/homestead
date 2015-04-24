@@ -82,6 +82,8 @@ class NavBar extends View {
     {
     	if(\Current_User::allow('hms','search')) {
             $this->tpl['STUDENT_SEARCH'] = '';
+            javascript('jquery');
+            javascriptMod('hms', 'studentSearch');
             //TODO - Expand this into an actual working search box
         }
     }

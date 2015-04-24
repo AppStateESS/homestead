@@ -23,7 +23,7 @@
       {STUDENT_SEARCH}
       <form class="navbar-form navbar-left" role="search">
         <div class="form-group">
-          <input type="text" class="form-control" placeholder="Search">
+          <input type="text" id="studentSearch" class="form-control typeahead" name="studentSearchQuery" placeholder="Search" autocomplete="off">
         </div>
       </form>
       <!-- END student_search -->
