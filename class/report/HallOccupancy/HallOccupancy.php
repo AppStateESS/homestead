@@ -53,7 +53,7 @@ class HallOccupancy extends Report {
             
             $bedsByHall = 0;
             $vacantBedsByHall = 0;
-            
+                                                                                                                                                                                                                               
             $floorArray = array();
             
             $floors = $hall->get_floors();
