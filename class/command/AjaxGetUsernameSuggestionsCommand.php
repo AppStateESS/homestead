@@ -22,7 +22,7 @@ class AjaxGetUsernameSuggestionsCommand extends Command {
     public function execute(CommandContext $context)
     {
 
-        $this->searchString = $context->get('term'); // NB: this is the *search term*, not the semester
+        $this->searchString = $context->get('studentSearchQuery'); // NB: this is the *search term*, not the semester
         
         $this->hmsTerm = Term::getCurrentTerm();
         

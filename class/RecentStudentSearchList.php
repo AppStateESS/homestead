@@ -19,6 +19,8 @@ class RecentStudentSearchList {
 
     private function __construct()
     {
+        var_dump(extension_loaded('apc'));exit;
+        
         // Check if APC is available
         if(!extension_loaded('apc')){
             $this->searchList = array();
