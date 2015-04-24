@@ -2,6 +2,7 @@
 <script type="text/javascript">
 
 $(function() {
+<<<<<<< HEAD
 	
 	// If our local storage key for recent searches is empty, then initialize it with an empty array
 	if(localStorage.getItem('recentSearches') == null) {
