@@ -58,7 +58,7 @@ class HMS_Permission extends HMS_Item {
         return $result;
     }
 
-    public function getUserRolesForInstance($instance)
+    public static function getUserRolesForInstance($instance)
     {
         $db = new PHPWS_DB('hms_user_role');
 
@@ -72,6 +72,36 @@ class HMS_Permission extends HMS_Item {
         }
 
         return $result;
+    }
+    
+    public static function getUsersInRoleForInstance($roleName, $instance)
+    {
+    	PHPWS_Core::initModClass('hms', 'PdoFactory.php');
+        
+        $pdo = PdoFactory::getPdoInstance();
+        
+        $query = "SELECT user_id FROM hms_user_role JOIN hms_role ON hms_user_role.role = hms_role.id WHERE hms_role.name = :roleName AND class = :className AND instance = :instanceId";
+        
+        $stmt = $pdo->prepare($query);
+        
+        $params = array('roleName' => $roleName,
+                        'className' => strtolower(get_class($instance)),
+                        'instanceId' => $instance->getId()
+                        );
+        $stmt->execute($params);
+        
+        $userIds = $stmt->fetchAll(PDO::FETCH_COLUMN, 'user_id');
+        
+        if(sizeof($userIds) <= 0){
+        	return null;
+        }
+        
+        $users = array();
+        foreach ($userIds as $id) {
+        	$users[] = new PHPWS_User($id);
+        }
+        
+        return $users;
     }
 
     public function verify($username, $object, $otherPermission=null){

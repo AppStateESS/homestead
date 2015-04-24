@@ -1,5 +1,6 @@
 <?php
 PHPWS_Core::initModClass('hms', 'RoomDamage.php');
+PHPWS_Core::initModClass('hms', 'PdoFactory.php');
 
 
 /**
@@ -132,6 +133,20 @@ class RoomDamageFactory {
         if (!isset($id)) {
             $dmg->setId($db->lastInsertId('hms_room_damage_seq'));
         }
+    }
+    
+    public static function getAssessedDamagesStudentTotals($term)
+    {
+    	$db = PdoFactory::getPdoInstance();
+        
+        $query = "select banner_id, sum(amount) from hms_room_damage JOIN hms_room_damage_responsibility ON hms_room_damage.id = hms_room_damage_responsibility.damage_id where term = :term and state = 'assessed' group by banner_id";
+        
+        $params = array('term' => $term);
+        
+        $stmt = $db->prepare($query);
+        $stmt->execute($params);
+        
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
 

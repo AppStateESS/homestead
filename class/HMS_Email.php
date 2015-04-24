@@ -1181,6 +1181,32 @@ class HMS_Email{
             self::sendSwiftmailMessage($message);
         }
     }
+    
+    /**
+     * Send notice to student about assessed damage amount.
+     * 
+     * @param Student $student
+     * @param string $term
+     * @param integer $billedAmount
+     */
+    public static function sendDamageNotification(Student $student, $term, $billedAmount, $coordinatorName, $coordinatorEmail)
+    {
+    	$subject = 'University Housing Room Damages Billed';
+        $template = 'email/roomDamageNotice.tpl';
+        
+        $tags = array();
+        $tags['NAME'] = $student->getName();
+        $tags['AMOUNT'] = $billedAmount;
+        $tags['TERM'] = $term;
+        $tags['COORDINATOR_NAME'] = $coordinatorName;
+        $tags['COORDINATOR_EMAIL'] = $coordinatorEmail;
+        
+        self::sendSwiftmailMessage(
+            self::makeSwiftmailMessage(
+                $student, $subject, $tags, $template
+            )
+        );
+    }
 
 } // End HMS_Email class
 ?>

@@ -191,5 +191,27 @@ class CheckinFactory {
 
         return $checkin;
     }
+    
+    public static function getLastCheckoutForStudent(Student $student)
+    {
+        $db = new PHPWS_DB('hms_checkin');
+        $db->addWhere('banner_id', $student->getBannerId());
+        
+        $db->addWhere('checkout_date', null, '!=');
+
+        $db->addOrder(array('term DESC', 'checkout_date DESC'));
+
+        $result = $db->getObjects('RestoredCheckin');
+
+        if(PHPWS_Error::logIfError($result)){
+            throw new DatabaseException($result->toString());
+        }
+
+        if(sizeof($result) <= 0){
+            return array();
+        }
+
+        return array_shift($result);
+    }
 }
 ?>

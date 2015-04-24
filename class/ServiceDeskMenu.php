@@ -23,6 +23,20 @@ class ServiceDeskMenu extends CommandMenu {
         if (Current_User::allow('hms', 'damage_assessment')) {
             $this->addCommandByName('Damage Assessment', 'ShowDamageAssessment');
         }
+        
+        // Room Damage Notifications
+        if (Current_User::allow('hms', 'damage_notification')) {
+            $this->addCommandByName('Send Room Damage Notices', 'SendRoomDamageNotifications');
+            
+            $cmd = CommandFactory::getCommand('JSConfirm');
+            $cmd->setLink('Send Room Damage Notices');
+            $cmd->setTitle('Send Room Damage Notices');
+            $cmd->setQuestion('Send room damage notification emails for the selected term?');
+
+            $cmd->setOnConfirmCommand(CommandFactory::getCommand('SendRoomDamageNotifications'));
+
+            $this->addCommand('Send Room Damage Notices', $cmd);
+        }
 
         if (UserStatus::isAdmin()) {
 

@@ -190,7 +190,7 @@ class CheckoutFormSubmitCommand extends Command {
     private function addDamage(Array $dmg, HMS_Room $room)
     {
         // Create the damage
-        $damage = new RoomDamage($room, $dmg['type'], $dmg['side'], $dmg['details']);
+        $damage = new RoomDamage($room, $this->term, $dmg['type'], $dmg['side'], $dmg['details']);
 
         // Save the damage
         RoomDamageFactory::save($damage);
