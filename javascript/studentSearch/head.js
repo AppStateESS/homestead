@@ -25,14 +25,12 @@ $(function() {
 		limit: 5,
 		local: function (){
 			local = localStorage.getItem('recentSearches');
-			console.log(local);
 			if(local == null){
 				return [];
 			}else{
 				return JSON.parse(local);
 			}
 		},
-		matcher: function(){console.log('called matcher');return true;},
 		datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
 		queryTokenizer: Bloodhound.tokenizers.whitespace,
 	});
@@ -82,9 +80,7 @@ $(function() {
 			localStorage.setItem('recentSearches', JSON.stringify(searchList));
 		}
 		
-		//location.href = 'index.php?module=hms&action=StudentSearch&banner_id=' + datum.banner_id;
-		
-		//TODO add spinner
+		location.href = 'index.php?module=hms&action=StudentSearch&banner_id=' + datum.banner_id;
 	});
 	
 	// If the search bar gains focus, and there's nothing entered in the text box,
@@ -96,7 +92,10 @@ $(function() {
 	});
 	
 	// TODO:
+	// * Recent searches should show *all* results, not just ones that match
 	// * Add event handler to capture return, and submit form even if no suggestion was selected
 	// * Add a search icon that submits the form when clicked.
+	// * Add spinner to let the user know the search is in progress
+	// * Add 'empty' template, to show something if no suggestions found.
 });
 </script
