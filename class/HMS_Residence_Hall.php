@@ -8,6 +8,7 @@
  * @author Kevin Wilcox <kevin at tux dot appstate dot edu>
  */
 PHPWS_Core::initModClass('hms', 'HMS_Item.php');
+PHPWS_Core::initModClass('hms', 'HMS_Permission.php');
 
 
 class HMS_Residence_Hall extends HMS_Item {
