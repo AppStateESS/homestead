@@ -4,8 +4,7 @@ class RemoveRlcAssignmentCommand extends Command{
     
     private $assignmentId;
     
-    public function setAssignmentId($id)
-    {
+    public function setAssignmentId($id){
         $this->assignmentId = $id;
     }
     
@@ -29,6 +28,11 @@ class RemoveRlcAssignmentCommand extends Command{
         }else{
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Could not find an RLC assignment with that id.');
         }
+
+        PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
+        HMS_Activity_Log::log_activity(Current_User::getUsername(), ACTIVITY_RLC_APPLICATION_DELETED, Current_User::getUsername(), 'Assignment Removed');
+
+        NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Assignment deleted.');
 
         $context->goBack();
     }
