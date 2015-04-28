@@ -22,7 +22,6 @@ class HMS_Email{
     {
         $contacts = array();
 
-        $contacts[] = 'ticklejw@appstate.edu';
         $contacts[] = 'jb67803@appstate.edu';
 
         return $contacts;
