@@ -239,7 +239,6 @@ class HousingApplication {
             PHPWS_Core::initCoreClass('Mail.php');
             $send_to = array();
             $send_to[] = 'jb67803@appstate.edu';
-            $send_to[] = 'ticklejw@appstate.edu';
 
             $mail = new PHPWS_Mail;
 
