@@ -23,6 +23,6 @@
     "tests"
   ],
   "dependencies": {
-    "typeahead.js": "~0.10.5"
+    "typeahead.js": "0.11.*"
   }
 }
