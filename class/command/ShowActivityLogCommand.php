@@ -65,7 +65,7 @@ class ShowActivityLogCommand extends Command {
             $begin = null;
             $end = null;
 
-            NQ::simple('hms', HMS_NOTIFICATION_WARNING, 'Invalid date range. The search results will not be filtered by date.');
+            NQ::simple('hms', hms\NotificationView::WARNING, 'Invalid date range. The search results will not be filtered by date.');
         }
 
         $activityMap = HMS_Activity_Log::getActivityMapping();

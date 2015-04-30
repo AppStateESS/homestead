@@ -66,7 +66,7 @@ class CheckoutFormSubmitCommand extends Command {
         // Make sure we found a check-in
         if (is_null($checkin)) {
             /*
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Sorry, we couldn't find a corresponding check-in for this check-out.");
+            NQ::simple('hms', hms\NotificationView::ERROR, "Sorry, we couldn't find a corresponding check-in for this check-out.");
             $errorCmd = CommandFactory::getCommand('ShowCheckoutForm');
             $errorCmd->setBannerId($bannerId);
             $errorCmd->setHallId($hallId);
@@ -176,7 +176,7 @@ class CheckoutFormSubmitCommand extends Command {
 
         // Cleanup and redirect
 
-        NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Checkout successful.');
+        NQ::simple('hms', hms\NotificationView::SUCCESS, 'Checkout successful.');
 
         $cmd = CommandFactory::getCommand('ShowCheckoutDocument');
         $cmd->setCheckinId($checkin->getId());

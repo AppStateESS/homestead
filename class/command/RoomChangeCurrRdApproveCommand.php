@@ -64,7 +64,7 @@ class RoomChangeCurrRdApproveCommand extends Command {
         $toBedId = $participant->getToBed();
 
         if (is_null($toBedId) && $toBedSelected == '-1') {
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Please select a destination bed.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'Please select a destination bed.');
             $cmd->redirect();
         }
 
@@ -74,7 +74,7 @@ class RoomChangeCurrRdApproveCommand extends Command {
 
             // Check that the bed isn't already reserved for a room change
             if($bed->isRoomChangeReserved()){
-                NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'The bed you selected is already reserved for a room change. Please choose a different bed.');
+                NQ::simple('hms', hms\NotificationView::ERROR, 'The bed you selected is already reserved for a room change. Please choose a different bed.');
                 $cmd->redirect();
             }
 

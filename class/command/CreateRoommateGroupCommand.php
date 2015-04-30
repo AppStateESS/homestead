@@ -32,7 +32,7 @@ class CreateRoommateGroupCommand extends Command {
         $viewCmd->setRoommate2($roommate2);
 
         if(is_null($roommate1) || empty($roommate1) || is_null($roommate2) || empty($roommate2)){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Invalid user names.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'Invalid user names.');
             $viewCmd->redirect();
         }
 
@@ -40,7 +40,7 @@ class CreateRoommateGroupCommand extends Command {
             $student1 = StudentFactory::getStudentByUsername($roommate1, $term);
             $student2 = StudentFactory::getStudentByUsername($roommate2, $term);
         } catch (StudentNotFoundException $e) {
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, $e->getMessage());
+            NQ::simple('hms', hms\NotificationView::ERROR, $e->getMessage());
             $viewCmd->redirect();
         }
 
@@ -49,26 +49,26 @@ class CreateRoommateGroupCommand extends Command {
             # Check if these two can live together
             $result = HMS_Roommate::canLiveTogetherAdmin($student1, $student2, $term);
         }catch(Exception $e){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Could not create roommate group: ' . $e->getMessage());
+            NQ::simple('hms', hms\NotificationView::ERROR, 'Could not create roommate group: ' . $e->getMessage());
             $viewCmd->redirect();
         }
 
         # Check for pending requests for either roommate and break them
         if(HMS_Roommate::countPendingRequests($roommate1, $term) > 0){
-            NQ::simple('hms', HMS_NOTIFICATION_WARNING, "Warning: Pending roommate requests for $roommate1 were deleted.");
+            NQ::simple('hms', hms\NotificationView::WARNING, "Warning: Pending roommate requests for $roommate1 were deleted.");
         }
         $result = HMS_Roommate::removeOutstandingRequests($roommate1, $term);
         if(!$result){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Error removing pending requests for $roommate1, roommate group was not created.");
+            NQ::simple('hms', hms\NotificationView::ERROR, "Error removing pending requests for $roommate1, roommate group was not created.");
             $viewCmd->redirect();
         }
 
         if(HMS_Roommate::countPendingRequests($roommate2, $term) > 0){
-            NQ::simple('hms', HMS_NOTIFICATION_WARNING, "Warning: Pending roommate requests for $roommate2 were deleted.");
+            NQ::simple('hms', hms\NotificationView::WARNING, "Warning: Pending roommate requests for $roommate2 were deleted.");
         }
         $result = HMS_Roommate::removeOutstandingRequests($roommate2, $term);
         if(!$result){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Error removing pending requests for $roommate2, roommate group was not created.");
+            NQ::simple('hms', hms\NotificationView::ERROR, "Error removing pending requests for $roommate2, roommate group was not created.");
             $viewCmd->redirect();
         }
 
@@ -84,14 +84,14 @@ class CreateRoommateGroupCommand extends Command {
         $result = $roommate_group->save();
 
         if(!$result){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Error saving roommate group.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'Error saving roommate group.');
             $viewCmd->redirect();
         }else{
             PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
             HMS_Activity_Log::log_activity($roommate1, ACTIVITY_ADMIN_ASSIGNED_ROOMMATE, UserStatus::getUsername(), $roommate2);
             HMS_Activity_Log::log_activity($roommate2, ACTIVITY_ADMIN_ASSIGNED_ROOMMATE, UserStatus::getUsername(), $roommate1);
 
-            NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Roommate group created successfully.');
+            NQ::simple('hms', hms\NotificationView::SUCCESS, 'Roommate group created successfully.');
             $viewCmd->redirect();
         }
     }

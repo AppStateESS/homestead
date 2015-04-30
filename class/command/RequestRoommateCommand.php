@@ -44,12 +44,12 @@ class RequestRoommateCommand extends Command
         $err->setTerm($term);
 
         if(empty($requestee)) {
-            NQ::simple('hms', HMS_NOTIFICATION_WARNING, 'You did not enter a username.');
+            NQ::simple('hms', hms\NotificationView::WARNING, 'You did not enter a username.');
             $err->redirect();
         }
 
         if(!PHPWS_Text::isValidInput($requestee)) {
-            NQ::simple('hms', HMS_NOTIFICATION_WARNING, 'You entered an invalid username.  Please use letters and numbers only.');
+            NQ::simple('hms', hms\NotificationView::WARNING, 'You entered an invalid username.  Please use letters and numbers only.');
             $err->redirect();
         }
 
@@ -59,7 +59,7 @@ class RequestRoommateCommand extends Command
         try {
             $request->request($requestor, $requestee, $term);
         } catch (RoommateCompatibilityException $rre) {
-            NQ::simple('hms', HMS_NOTIFICATION_WARNING, $rre->getMessage());
+            NQ::simple('hms', hms\NotificationView::WARNING, $rre->getMessage());
             $err->redirect();
         }
 
@@ -76,7 +76,7 @@ class RequestRoommateCommand extends Command
         $student = StudentFactory::getStudentByUsername($requestee, $term);
         $name = $student->getName();
         $fname = $student->getFirstName();
-        NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, "You have requested $name to be your roommate.  $fname has been emailed, and will need to log into HMS and approve your roommate request.");
+        NQ::simple('hms', hms\NotificationView::SUCCESS, "You have requested $name to be your roommate.  $fname has been emailed, and will need to log into HMS and approve your roommate request.");
 
         $cmd = CommandFactory::getCommand('ShowStudentMenu');
         $cmd->redirect();

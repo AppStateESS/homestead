@@ -47,7 +47,7 @@ class CheckinFormSubmitCommand extends Command {
         $keyCode = $context->get('key_code');
 
         if (!isset($keyCode) || $keyCode == '') {
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Please enter a key code.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'Please enter a key code.');
             $errorCmd = CommandFactory::getCommand('ShowCheckinForm');
             $errorCmd->setBannerId($bannerId);
             $errorCmd->setHallId($hallId);
@@ -101,7 +101,7 @@ class CheckinFormSubmitCommand extends Command {
         PHPWS_Core::initModClass('hms', 'HMS_Email.php');
         HMS_Email::sendCheckinConfirmation($student, $infoCard, $infoCardView);
 
-        NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Checkin successful.');
+        NQ::simple('hms', hms\NotificationView::SUCCESS, 'Checkin successful.');
 
         // Redirect to success page with option to print check-in document.
         $cmd = CommandFactory::getCommand('ShowCheckinDocument');

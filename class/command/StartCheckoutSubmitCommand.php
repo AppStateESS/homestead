@@ -29,12 +29,12 @@ class StartCheckoutSubmitCommand extends Command {
         $errorCmd = CommandFactory::getCommand('ShowCheckoutStart'); // TODO
 
         if (!isset($bannerId) || is_null($bannerId) || $bannerId == '') {
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Missing Banner ID.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'Missing Banner ID.');
             $errorCmd->redirect();
         }
 
         if (!isset($hallId)) {
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Missing residence hall ID.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'Missing residence hall ID.');
             $errorCmd->redirect();
         }
 

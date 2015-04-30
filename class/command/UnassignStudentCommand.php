@@ -41,13 +41,13 @@ class UnassignStudentCommand extends Command {
         // $cmd->setUsername($username);
 
         if (!isset($username) || is_null($username)) {
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Invalid or missing username.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'Invalid or missing username.');
             $cmd->redirect();
         }
 
         // Make sure a valid reason was chosen
         if (!isset($unassignReason) || $unassignReason == -1) {
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Please choose a valid reason.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'Please choose a valid reason.');
             $cmd->setUsername($username);
             $cmd->redirect();
         }
@@ -57,19 +57,19 @@ class UnassignStudentCommand extends Command {
 
         // Is a required field
         if(!isset($refund) || $refund == '') {
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Please enter a refund percentage.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'Please enter a refund percentage.');
             $cmd->redirect();
         }
 
         // Must be numeric
         if(!is_numeric($refund) || $refund < 0 || $refund > 100) {
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'The refund percentage must be between 0 and 100 percent.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'The refund percentage must be between 0 and 100 percent.');
             $cmd->redirect();
         }
 
         // Must be whole number
         if (is_float($refund)) {
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Only whole number refund percentages are supported, no decimal place is allowed.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'Only whole number refund percentages are supported, no decimal place is allowed.');
             $cmd->redirect();
         }
             
@@ -81,12 +81,12 @@ class UnassignStudentCommand extends Command {
         try {
             $result = HMS_Assignment::unassignStudent($student, $term, $notes, $unassignReason, $refund);
         } catch (Exception $e) {
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Error: ' . $e->getMessage());
+            NQ::simple('hms', hms\NotificationView::ERROR, 'Error: ' . $e->getMessage());
             $cmd->setUsername($username);
             $cmd->redirect();
         }
 
-        NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Successfully unassigned ' . $student->getFullName());
+        NQ::simple('hms', hms\NotificationView::SUCCESS, 'Successfully unassigned ' . $student->getFullName());
         $cmd->redirect();
     }
 }

@@ -43,7 +43,7 @@ class OffCampusWaitingListFormSaveCommand extends Command {
         if(is_null($doNotCall)){
             // do not call checkbox was not selected, so check the number
             if(is_null($areaCode) || is_null($exchange) || is_null($number)){
-                NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Please provide a cell-phone number or click the checkbox stating that you do not wish to share your number with us.');
+                NQ::simple('hms', hms\NotificationView::ERROR, 'Please provide a cell-phone number or click the checkbox stating that you do not wish to share your number with us.');
                 $errorCmd->redirect();
             }
         }
@@ -82,7 +82,7 @@ class OffCampusWaitingListFormSaveCommand extends Command {
         try{
             $application->save();
         }catch(Exception $e){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'There was an error saving your application. Please try again or contact the Department of University Housing.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'There was an error saving your application. Please try again or contact the Department of University Housing.');
             $errorCmd->redirect();
         }
 
@@ -94,7 +94,7 @@ class OffCampusWaitingListFormSaveCommand extends Command {
         HMS_Email::sendWaitListApplicationConfirmation($student, $year);
 
         // Show a sucess message and redirect to the main menu
-        NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Your application to the Open Waiting List was submitted successfully.');
+        NQ::simple('hms', hms\NotificationView::SUCCESS, 'Your application to the Open Waiting List was submitted successfully.');
         $cmd = CommandFactory::getCommand('ShowStudentMenu');
         $cmd->redirect();
     }

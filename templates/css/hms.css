@@ -364,11 +364,6 @@ h2.room-attribute{
   padding: 0 5em;
 }
 
-.hms-notification {
-  margin: 1em 0;
-  padding: 0.25em;
-}
-
 img.roommate_request_icon {
   border: transparent;
   background-color: transparent;
@@ -376,27 +371,6 @@ img.roommate_request_icon {
   width: 20px;
   height: 20px;
 }
-
-.error {
-  border: solid 1px #FF0000;
-  background: #FFCCCC;
-}
-
-.warning {
-  border: solid 1px #FFFF00;
-  background: #FFFFCC;
-}
-
-.success {
-  border: solid 1px #00FF00;
-  background: #CCFFCC;
-}
-
-.unknown {
-  border: solid 1px #0000FF;
-  background: #CCCCFF;
-}
-
 
 .special-needs-text {
   background: #F3F3F3;

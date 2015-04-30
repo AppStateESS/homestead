@@ -27,7 +27,7 @@ class ReApplicationWaitingListFormSubmitCommand extends Command {
         $depositAgreed = $context->get('deposit_check');
 
         if(is_null($depositAgreed)){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You must check the box indicating you understand the License Contract deposit fees.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'You must check the box indicating you understand the License Contract deposit fees.');
             $errorCmd->redirect();
         }
 
@@ -40,7 +40,7 @@ class ReApplicationWaitingListFormSubmitCommand extends Command {
         if(is_null($doNotCall)){
             // do not call checkbox was not selected, so check the number
             if(empty($areaCode) || empty($exchange) || empty($number)){
-                NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Please provide a cell-phone number or click the checkbox stating that you do not wish to share your number with us.');
+                NQ::simple('hms', hms\NotificationView::ERROR, 'Please provide a cell-phone number or click the checkbox stating that you do not wish to share your number with us.');
                 $errorCmd->redirect();
             }
         }

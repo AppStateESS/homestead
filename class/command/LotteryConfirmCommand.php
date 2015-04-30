@@ -50,7 +50,7 @@ class LotteryConfirmCommand extends Command {
         $captcha = Captcha::verify(TRUE); // returns the words entered if correct, FALSE otherwise
         //$captcha = TRUE;
         if($captcha === FALSE) {
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Sorry, the words you eneted were incorrect. Please try again.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'Sorry, the words you eneted were incorrect. Please try again.');
             $errorCmd->redirect();
         }
 
@@ -78,7 +78,7 @@ class LotteryConfirmCommand extends Command {
             try{
                 $roommate = StudentFactory::getStudentByUsername($username, $term);
             }catch(StudentNotFoundException $e){
-                NQ::simple('hms', HMS_NOTIFICATION_ERROR, "$username is not a valid student. Please choose a different roommate.");
+                NQ::simple('hms', hms\NotificationView::ERROR, "$username is not a valid student. Please choose a different roommate.");
                 $errorCmd->redirect();
             }
 
@@ -86,31 +86,31 @@ class LotteryConfirmCommand extends Command {
             $bed = new HMS_Bed($bed_id);
 
             if($bed->has_vacancy() != TRUE){
-                NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'One or more of the beds in the room you selected is no longer available. Please try again.');
+                NQ::simple('hms', hms\NotificationView::ERROR, 'One or more of the beds in the room you selected is no longer available. Please try again.');
                 $errorCmd->redirect();
             }
 
             // Make sure none of the needed beds are reserved
             if($bed->is_lottery_reserved()){
-                NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'One or more of the beds in the room you selected is no longer available. Please try again.');
+                NQ::simple('hms', hms\NotificationView::ERROR, 'One or more of the beds in the room you selected is no longer available. Please try again.');
                 $errorCmd->redirect();
             }
 
             // Double check the genders are all the same as the person logged in
             if($student->getGender() != $roommate->getGender()){
-                NQ::simple('hms', HMS_NOTIFICATION_ERROR, "$username is a different gender. Please choose a roommate of the same gender.");
+                NQ::simple('hms', hms\NotificationView::ERROR, "$username is a different gender. Please choose a roommate of the same gender.");
                 $errorCmd->redirect();
             }
 
             // Double check the genders are the same as the room (as long as the room isn't AUTO)
             if($room->gender_type != AUTO && $roommate->getGender() != $room->gender_type){
-                NQ::simple('hms', HMS_NOTIFICATION_ERROR, "$username is a different gender. Please choose a roommate of the same gender.");
+                NQ::simple('hms', hms\NotificationView::ERROR, "$username is a different gender. Please choose a roommate of the same gender.");
                 $errorCmd->redirect();
             }
 
             // Double check the students' elligibilities
             if(HMS_Lottery::determineEligibility($username) !== TRUE){
-                NQ::simple('hms', HMS_NOTIFICATION_ERROR, "$username is not eligible for assignment.");
+                NQ::simple('hms', hms\NotificationView::ERROR, "$username is not eligible for assignment.");
                 $errorCmd->redirect();
             }
             
@@ -138,7 +138,7 @@ class LotteryConfirmCommand extends Command {
             $result = HMS_Assignment::assignStudent($student, PHPWS_Settings::get('hms', 'lottery_term'), NULL, $bed_id, $mealPlan, 'Confirmed lottery invite', TRUE, ASSIGN_LOTTERY);
             /*
         }catch(Exception $e){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Sorry, there was an error creating your room assignment. Please try again or contact University Housing.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'Sorry, there was an error creating your room assignment. Please try again or contact University Housing.');
             $errorCmd->redirect();
         }
         */
@@ -169,7 +169,7 @@ class LotteryConfirmCommand extends Command {
             $expires_on = time() + (INVITE_TTL_HRS * 3600);
             $bed = new HMS_Bed($bed_id);
             if(!$bed->lottery_reserve($username, $student->getUsername(), $expires_on)){
-                NQ::smiple('hms', HMS_NOTIFICATION_WARNING, "You were assigned, but there was a problem reserving space for your roommates. Please contact University Housing.");
+                NQ::smiple('hms', hms\NotificationView::WARNING, "You were assigned, but there was a problem reserving space for your roommates. Please contact University Housing.");
                 $successCmd->redirect();
             }
 

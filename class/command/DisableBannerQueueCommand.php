@@ -36,11 +36,11 @@ class DisableBannerQueueCommand extends Command {
         $term = new Term($term);
 
         if($term->getQueueCount() > 0) {
-            NQ::Simple('hms', HMS_NOTIFICATION_ERROR, 'You must process the Banner Queue before it can be disabled.');
+            NQ::Simple('hms', hms\NotificationView::ERROR, 'You must process the Banner Queue before it can be disabled.');
         } else {
             $term->setBannerQueue(FALSE);
             $term->save();
-            NQ::Simple('hms', HMS_NOTIFICATION_SUCCESS, 'Banner Queue has been disabled for ' . Term::toString($term->term) . '.');
+            NQ::Simple('hms', hms\NotificationView::SUCCESS, 'Banner Queue has been disabled for ' . Term::toString($term->term) . '.');
         }
 
         CommandContext::goBack();

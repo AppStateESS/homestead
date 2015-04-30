@@ -95,7 +95,7 @@ class HMS_Activity_Log{
         try {
             $student = StudentFactory::getStudentByUsername($this->get_user_id(), Term::getSelectedTerm());
         }catch(StudentNotFoundException $e){
-            NQ::simple('hms', HMS_NOTIFICATION_WARNING, "Could not find data for student: {$this->get_user_id()}");
+            NQ::simple('hms', hms\NotificationView::WARNING, "Could not find data for student: {$this->get_user_id()}");
             $student = null;
         }
 

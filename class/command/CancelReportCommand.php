@@ -40,7 +40,7 @@ class CancelReportCommand extends Command {
         try{
             $report = ReportFactory::getReportById($reportId);
         } catch(InvalidArgumentException $e){
-            NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Report canceled.');
+            NQ::simple('hms', hms\NotificationView::SUCCESS, 'Report canceled.');
             $context->goBack();
         }
         
@@ -52,7 +52,7 @@ class CancelReportCommand extends Command {
             throw new DatabaseException($result->toString());
         }
         
-        NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Report canceled.');
+        NQ::simple('hms', hms\NotificationView::SUCCESS, 'Report canceled.');
         
         $cmd = CommandFactory::getCommand('ShowReportDetail');
         $cmd->setReportClass($report->getClass());

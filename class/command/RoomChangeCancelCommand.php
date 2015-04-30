@@ -26,7 +26,7 @@ class RoomChangeCancelCommand extends Command {
 
         // Make sure user gave a reason
         if(!isset($reason) or $reason == ''){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Please enter a cancellation reason.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'Please enter a cancellation reason.');
             $cmd->redirect();
         }
 

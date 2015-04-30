@@ -69,10 +69,10 @@ class AdminAddRlcMembersCommand extends Command {
             try {
                 $student = StudentFactory::getStudentByBannerId($banner, $term);
             } catch (StudentNotFoundException $e) {
-                NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Couldn't find a student with ID: {$e->getRequestedId()}");
+                NQ::simple('hms', hms\NotificationView::ERROR, "Couldn't find a student with ID: {$e->getRequestedId()}");
                 continue;
             } catch (InvalidArgumentException $e) {
-                NQ::simple('hms', HMS_NOTIFICATION_ERROR, "This doesn't look like a banner ID: $banner");
+                NQ::simple('hms', hms\NotificationView::ERROR, "This doesn't look like a banner ID: $banner");
                 continue;
             }
 
@@ -81,7 +81,8 @@ class AdminAddRlcMembersCommand extends Command {
 
             // If no housing app, show a warning
             if (is_null($housingApp)) {
-                NQ::simple('hms', HMS_NOTIFICATION_WARNING, "No housing application found for: {$student->getName()}({$student->getBannerID()})");
+                NQ::simple('hms', hms\NotificationView::ERROR, "No housing application found for: {$student->getName()}({$student->getBannerID()})");
+                continue;
             }
 
             // Check for an existing learning community application
@@ -111,14 +112,14 @@ class AdminAddRlcMembersCommand extends Command {
 
             } else {
                 // RLC application already exists
-                NQ::simple('hms', HMS_NOTIFICATION_WARNING, "RLC application already exists for {$student->getName()}({$student->getBannerID()})");
+                NQ::simple('hms', hms\NotificationView::WARNING, "RLC application already exists for {$student->getName()}({$student->getBannerID()})");
             }
 
             // Check for RLC membership
             $membership = RlcMembershipFactory::getMembership($student, $term);
 
             if($membership !== false){
-                NQ::simple('hms', HMS_NOTIFICATION_ERROR, "RLC membership already exists for {$student->getName()}({$student->getBannerID()})");
+                NQ::simple('hms', hms\NotificationView::ERROR, "RLC membership already exists for {$student->getName()}({$student->getBannerID()})");
                 continue;
             }
 

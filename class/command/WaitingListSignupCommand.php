@@ -47,7 +47,7 @@ class WaitingListSignupCommand extends Command {
         // Check to make sure the date isn't already set
         $time = $application->getWaitingListDate();
         if (isset($time)) {
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You have already applied for the waiting list.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'You have already applied for the waiting list.');
             $cmd = CommandFactory::getCommand('ShowStudentMenu');
             $cmd->redirect();
         }

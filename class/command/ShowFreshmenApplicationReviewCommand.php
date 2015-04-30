@@ -71,8 +71,7 @@ class ShowFreshmenApplicationReviewCommand extends Command {
         try{
             $application = HousingApplicationFactory::getApplicationFromSession($_SESSION['application_data'], $term, $student, $appType);
         }catch(Exception $e){
-            //var_dump($_SESSION['application_data']);
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, $e->getMessage());
+            NQ::simple('hms', hms\NotificationView::ERROR, $e->getMessage());
             $errorCmd->redirect();
         }
         

@@ -52,7 +52,7 @@ class WithdrawnSearch {
             }catch(Exception $e){
                 $this->actions[$username][] = 'WARNING!! Unknown student!';
                 // Commenting out the NQ line, since this doesn't work when the search is run from cron/Pulse
-                //NQ::simple('hms', HMS_NOTIFICATION_WARNING, 'Unknown student: ' . $username);
+                //NQ::simple('hms', hms\NotificationView::WARNING, 'Unknown student: ' . $username);
                 continue;
             }
 

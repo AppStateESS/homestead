@@ -53,7 +53,7 @@ class HousingApplicationView extends hms\View {
         // isWithdrawn() has been depricated, but I'm leaving it here just for historical sake
         // on the off-chance that it catches an older application that's withdrawn but not cancelled.
         if($application->isCancelled() || $application->isWithdrawn()){
-            NQ::simple('hms', HMS_NOTIFICATION_WARNING, 'This application has been cancelled.');
+            NQ::simple('hms', hms\NotificationView::WARNING, 'This application has been cancelled.');
         }
 
         $tpl['STUDENT_NAME']                = $student->getFullName();

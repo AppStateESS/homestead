@@ -59,7 +59,6 @@ class LotteryAdminSetWinnerCommand extends Command {
         }
 
         $viewCmd = CommandFactory::getCommand('ShowLotteryAutoWinners');
-
         $viewCmd->redirect();
     }
 }

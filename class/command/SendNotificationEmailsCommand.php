@@ -40,7 +40,7 @@ class SendNotificationEmailsCommand extends Command {
 
         // Sanity checks
         if(is_null($context->get('hall')) && is_null($context->get('floor')) ){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You must select a hall or floor to continue!');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'You must select a hall or floor to continue!');
             $cmd = CommandFactory::getCommand('ShowHallNotificationSelect');
             $cmd->redirect();
         }
@@ -53,12 +53,12 @@ class SendNotificationEmailsCommand extends Command {
         $floors    = $context->get('floor');
 
         if(empty($subject)){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You must fill in the subject line of the email.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'You must fill in the subject line of the email.');
             $cmd = CommandFactory::getCommand('ShowHallNotificationEdit');
             $cmd->loadContext($context);
             $cmd->redirect();
         } else if(empty($body)){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You must fill in the message to be sent.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'You must fill in the message to be sent.');
             $cmd = CommandFactory::getCommand('ShowHallNotificationEdit');
             $cmd->loadContext($context);
             $cmd->redirect();
@@ -145,7 +145,7 @@ class SendNotificationEmailsCommand extends Command {
             HMS_Activity_Log::log_activity(Current_User::getUsername(), ($anonymous ? ACTIVITY_FLOOR_NOTIFIED_ANONYMOUSLY : ACTIVITY_FLOOR_NOTIFIED), Current_User::getUsername(), $floor->where_am_i());
         }
 
-        NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Emails sent successfully!');
+        NQ::simple('hms', hms\NotificationView::SUCCESS, 'Emails sent successfully!');
         $cmd = CommandFactory::getCommand('ShowAdminMaintenanceMenu');
         $cmd->redirect();
     }

@@ -31,7 +31,7 @@ abstract class HMS {
         }
 
         if(!Current_User::isLogged() && $this->context->get('action') != 'ShowFrontPage'){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You must be logged in to do that.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'You must be logged in to do that.');
             $action = 'ShowFrontPage';
         }else{
             $action = $this->context->get('action');
@@ -45,16 +45,16 @@ abstract class HMS {
             try {
                 $cmd->execute($this->context);
             } catch(PermissionException $p) {
-                NQ::Simple('hms', HMS_NOTIFICATION_ERROR, 'You do not have permission to perform that action. If you believe this is an error, please contact University Housing.');
-                $nv = new HMSNotificationView();
+                NQ::Simple('hms', hms\NotificationView::ERROR, 'You do not have permission to perform that action. If you believe this is an error, please contact University Housing.');
+                $nv = new hms\NotificationView();
                 $nv->popNotifications();
                 Layout::add($nv->show());
             } catch(Exception $e) {
                 try {
                     $message = $this->formatException($e);
-                    NQ::Simple('hms', HMS_NOTIFICATION_ERROR, 'An internal error has occurred, and the authorities have been notified.  We apologize for the inconvenience.');
+                    NQ::Simple('hms', hms\NotificationView::ERROR, 'An internal error has occurred, and the authorities have been notified.  We apologize for the inconvenience.');
                     $this->emailError($message);
-                    $nv = new HMSNotificationView();
+                    $nv = new hms\NotificationView();
                     $nv->popNotifications();
                     Layout::add($nv->show());
                 } catch(Exception $e) {

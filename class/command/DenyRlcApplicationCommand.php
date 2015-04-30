@@ -28,7 +28,7 @@ class DenyRlcApplicationCommand extends Command {
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
         HMS_Activity_Log::log_activity($app->username, 28, Current_User::getUsername(), 'Application Denied');
 
-        NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Application denied.');
+        NQ::simple('hms', hms\NotificationView::SUCCESS, 'Application denied.');
         
         $context->goBack();
     }

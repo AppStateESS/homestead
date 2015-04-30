@@ -33,7 +33,7 @@ class SendAssignmentNotificationCommand extends Command {
         // If the array of move-in times ONLY has the zero-th element ['None'] then it's no good
         // Or, of course, if the array is null or emtpy it is no good
         if(count($moveinTimes) <= 1 || is_null($moveinTimes) || empty($moveinTimes)){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'There are no move-in times set for '.Term::getPrintableSelectedTerm());
+            NQ::simple('hms', hms\NotificationView::ERROR, 'There are no move-in times set for '.Term::getPrintableSelectedTerm());
             $context->goBack();
         }
 
@@ -172,14 +172,14 @@ class SendAssignmentNotificationCommand extends Command {
         // Check for floors with missing move-in times.
         if(empty($missingMovein) || is_null($missingMovein)){
             // Ther are none, so show a success message
-            NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, "Assignment notifications sent.");
+            NQ::simple('hms', hms\NotificationView::SUCCESS, "Assignment notifications sent.");
         }
         else {
             // Show a warning for each floor that was missing a move-in time
             foreach($missingMovein as $floor){
                 $hall = $floor->get_parent();
                 $text = $floor->getLink($hall->getHallName()." floor ") . " move-in times not set.";
-                NQ::simple('hms', HMS_NOTIFICATION_WARNING, $text);
+                NQ::simple('hms', hms\NotificationView::WARNING, $text);
             }
         }
 

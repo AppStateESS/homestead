@@ -73,7 +73,7 @@ class DenySpecialInterestCommand extends Command
         // Save, notify, and buh-bye
         $app->save();
 
-        NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, "Denied {$app->getUsername()}");
+        NQ::simple('hms', hms\NotificationView::SUCCESS, "Denied {$app->getUsername()}");
 
         $cmd = CommandFactory::getCommand('ShowSpecialInterestGroupApproval');
         $cmd->setGroup($context->get('group'));

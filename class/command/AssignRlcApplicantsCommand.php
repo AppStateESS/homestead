@@ -48,7 +48,7 @@ class AssignRlcApplicantsCommand extends Command {
         }
 
         // Show a success message
-        NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Successfully assigned RLC applicant(s).');
+        NQ::simple('hms', hms\NotificationView::SUCCESS, 'Successfully assigned RLC applicant(s).');
 
         $context->goBack();
     }

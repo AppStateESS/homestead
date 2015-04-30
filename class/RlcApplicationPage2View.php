@@ -59,7 +59,7 @@ class RlcApplicationPage2View extends hms\View{
             // If we're missing a question... send them back. We might could throw an exception here.
             $question = $rlc->getFreshmenQuestion();
             if(!isset($question)) {
-              NQ::simple('hms', HMS_NOTIFICATION_ERROR, "There was an error looking up the community questions.");
+              NQ::simple('hms', hms\NotificationView::ERROR, "There was an error looking up the community questions.");
               $cmd = CommandFactory::getCommand('ShowRlcApplicationPage1View');
               $cmd->setTerm($context->get('term'));
               $cmd->redirect();

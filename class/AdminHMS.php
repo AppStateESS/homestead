@@ -20,8 +20,7 @@ class AdminHMS extends HMS
         }
 */
 
-        PHPWS_Core::initModClass('hms', 'HMSNotificationView.php');
-        $nv = new HMSNotificationView();
+        $nv = new hms\NotificationView();
         $nv->popNotifications();
         $view->addNotifications($nv->show());
 

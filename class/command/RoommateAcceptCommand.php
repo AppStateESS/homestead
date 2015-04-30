@@ -49,14 +49,14 @@ class RoommateAcceptCommand extends Command
         PHPWS_Core::initCoreClass('Captcha.php');
         $verified = Captcha::verify(TRUE);
         if($verified === FALSE || is_null($verified)) {
-            NQ::Simple('hms', HMS_NOTIFICATION_ERROR, 'Sorry, please try again.');
+            NQ::Simple('hms', hms\NotificationView::ERROR, 'Sorry, please try again.');
             $err->redirect();
         }
 
         try {
             $roommate->confirm();
         } catch(RoommateCompatibilityException $rce) {
-            NQ::simple('hms', HMS_NOTIFICATION_WARNING, $rce->getMessage());
+            NQ::simple('hms', hms\NotificationView::WARNING, $rce->getMessage());
             $err->redirect();
         }
 
@@ -79,7 +79,7 @@ class RoommateAcceptCommand extends Command
 
         $requestor = StudentFactory::getStudentByUsername($roommate->requestor, $roommate->term);
         $name = $requestor->getFullName();
-        NQ::Simple('hms', HMS_NOTIFICATION_SUCCESS, "You and $name are confirmed as roommates.");
+        NQ::Simple('hms', hms\NotificationView::SUCCESS, "You and $name are confirmed as roommates.");
 
         $cmd = CommandFactory::getCommand('ShowStudentMenu');
         $cmd->redirect();

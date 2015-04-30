@@ -51,7 +51,7 @@ class RoomChangeStudentDeclineCommand extends Command {
         $captchaResult = Captcha::verify(true);
         if ($captchaResult === false) {
             // Failed the captcha
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, "You didn't type the magic words correctly. Please try again.");
+            NQ::simple('hms', hms\NotificationView::ERROR, "You didn't type the magic words correctly. Please try again.");
             $cmd = CommandFactory::getCommand('ShowRoomChangeRequestApproval');
             $cmd->redirect();
         }
@@ -72,7 +72,7 @@ class RoomChangeStudentDeclineCommand extends Command {
 
         // TODO Notify everyone that the request was cancelled
 
-        NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'You have declined the room change request.');
+        NQ::simple('hms', hms\NotificationView::SUCCESS, 'You have declined the room change request.');
         $menuCmd = CommandFactory::getCommand('ShowStudentMenu');
         $menuCmd->redirect();
     }

@@ -101,7 +101,7 @@ class HousingApplicationConfirmCommand extends Command {
         }
 
         $friendly_term = Term::toString($application->getTerm());
-        NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, "Your application for $friendly_term was successfully processed!  You will receive an email confirmation in the next 24 hours.");
+        NQ::simple('hms', hms\NotificationView::SUCCESS, "Your application for $friendly_term was successfully processed!  You will receive an email confirmation in the next 24 hours.");
 
         PHPWS_Core::initModClass('hms', 'applicationFeature/RlcApplication.php');
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');

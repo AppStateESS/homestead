@@ -27,7 +27,7 @@ class ReviewHallNotificationMessageCommand extends Command {
         }
         */
         if(is_null($context->get('hall')) && is_null($context->get('floor'))){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You must select a hall to continue!');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'You must select a hall to continue!');
             $cmd = CommandFactory::getCommand('ShowHallNotificationSelect');
             $cmd->redirect();
         }
@@ -40,11 +40,11 @@ class ReviewHallNotificationMessageCommand extends Command {
 
         $cmd = CommandFactory::getCommand('ShowHallNotificationEdit');
         if(empty($subject)){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You must fill in the subject line of the email.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'You must fill in the subject line of the email.');
             $cmd->loadContext($context);
             $cmd->redirect();
         } else if(empty($body)){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You must fill in the message to be sent.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'You must fill in the message to be sent.');
             $cmd->loadContext($context);
             $cmd->redirect();
         }

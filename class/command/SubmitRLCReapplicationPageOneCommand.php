@@ -51,7 +51,7 @@ class SubmitRLCReapplicationPageOneCommand extends Command {
         // If the student is already in an RLC, and the student is eligible to reapply for that RLC (RLC always takes returners,
         // or the RLC is in the list of communities this student is eligible for), then check to make the user chose something for the re-apply option.
         if(!is_null($rlcAssignment) && (array_key_exists($rlcAssignment->getRlcId(), $communities) || $rlcAssignment->getRlc()->getMembersReapply() == 1) && is_null($rlcOpt)){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Please choose whether you would like to continue in your currnet RLC, or apply for a different community.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'Please choose whether you would like to continue in your currnet RLC, or apply for a different community.');
             $formCmd->redirect();
         }
 
@@ -64,31 +64,31 @@ class SubmitRLCReapplicationPageOneCommand extends Command {
             // User either can't 'continue' or didn't want to. Check that the user supplied rankings isstead.
             // Make sure a first choice was made
             if($rlcChoice1 == 'select'){
-                NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You must choose a community as your "first choice".');
+                NQ::simple('hms', hms\NotificationView::ERROR, 'You must choose a community as your "first choice".');
                 $formCmd->redirect();
             }
 
             if((isset($rlcChoice2) && $rlcChoice1 == $rlcChoice2) || (isset($rlcChoice2) && isset($rlcChoice3) && $rlcChoice2 == $rlcChoice3) || (isset($rlcChoice3) && $rlcChoice1 == $rlcChoice3)){
-                NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You cannot choose the same community twice.');
+                NQ::simple('hms', hms\NotificationView::ERROR, 'You cannot choose the same community twice.');
                 $formCmd->redirect();
             }
         }
 
         // Check the short answer questions
         if(empty($why) || empty($contribute)){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Please respond to both of the short answer questions.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'Please respond to both of the short answer questions.');
             $formCmd->redirect();
         }
 
         $wordLimit = 500;
         if(str_word_count($why) > $wordLimit){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Your answer to question number one is too long. Please limit your response to 500 words or less.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'Your answer to question number one is too long. Please limit your response to 500 words or less.');
             $formCmd->redirect();
         }
 
         $wordLimit = 500;
         if(str_word_count($contribute) > $wordLimit){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Your answer to question number two is too long. Please limit your response to 500 words or less.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'Your answer to question number two is too long. Please limit your response to 500 words or less.');
             $formCmd->redirect();
         }
         

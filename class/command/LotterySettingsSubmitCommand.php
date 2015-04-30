@@ -30,7 +30,7 @@ class LotterySettingsSubmitCommand extends Command {
 
         PHPWS_Settings::save('hms');
 
-        NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Lottery settings saved.');
+        NQ::simple('hms', hms\NotificationView::SUCCESS, 'Lottery settings saved.');
         $viewCmd->redirect();
     }
 }

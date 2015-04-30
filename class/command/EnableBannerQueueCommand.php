@@ -39,7 +39,7 @@ class EnableBannerQueueCommand extends Command {
 
         $term->setBannerQueue(TRUE);
         $term->save();
-        NQ::Simple('hms', HMS_NOTIFICATION_SUCCESS, 'Banner Queue has been enabled for ' . Term::toString($term->term) . '.');
+        NQ::Simple('hms', hms\NotificationView::SUCCESS, 'Banner Queue has been enabled for ' . Term::toString($term->term) . '.');
 
         CommandContext::goBack();
     }

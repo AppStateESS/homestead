@@ -55,7 +55,7 @@ class SubmitContactFormCommand extends Command {
 
         if( !HMS_Email::send_email($send_to, $from, $subject, $body) ){
             //Maybe we shouldn't say anything...
-            //NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Error sending email!');
+            //NQ::simple('hms', hms\NotificationView::ERROR, 'Error sending email!');
         }
 
         $view = new ContactFormThankYouView();

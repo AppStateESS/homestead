@@ -23,7 +23,7 @@ class SendRlcInvitesCommand extends Command {
         $respondByTime = $context->get('time');
 
         if(!isset($respondByDate) || $respondByDate == ''){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Please choose a \'respond by\' date.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'Please choose a \'respond by\' date.');
             $resultCmd->redirect();
         }
 
@@ -35,7 +35,7 @@ class SendRlcInvitesCommand extends Command {
         $studentType = $context->get('type');
 
         if(!isset($studentType)){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Please choose a student type.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'Please choose a student type.');
             $resultCmd->redirect();
         }
 
@@ -45,7 +45,7 @@ class SendRlcInvitesCommand extends Command {
         $assignments = RlcAssignmentFactory::getAssignmentsByTermStateType($term, 'new', $studentType);
 
         if(sizeof($assignments) == 0){
-            NQ::simple('hms', HMS_NOTIFICATION_WARNING, 'No invites needed to be sent.');
+            NQ::simple('hms', hms\NotificationView::WARNING, 'No invites needed to be sent.');
             $resultCmd->redirect();
         }
 
@@ -53,7 +53,7 @@ class SendRlcInvitesCommand extends Command {
             $assign->changeState(new RlcAssignmentInvitedState($assign, $respondByTimestamp));
         }
 
-        NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Learning community invites sent.');
+        NQ::simple('hms', hms\NotificationView::SUCCESS, 'Learning community invites sent.');
         $resultCmd->redirect();
     }
 }

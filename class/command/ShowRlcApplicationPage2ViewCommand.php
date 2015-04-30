@@ -37,12 +37,12 @@ class ShowRlcApplicationPage2ViewCommand extends Command
         $third = $context->get('rlc_third_choice');
 
         if($first == -1) {
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, "You must choose a community as your 'first choice'.");
+            NQ::simple('hms', hms\NotificationView::ERROR, "You must choose a community as your 'first choice'.");
             $errorCmd->redirect();
         }
 
         if($first == $second || ($second != -1 && $third != -1 && $second == $third) || ($first == $third)) {
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You cannot choose the same community twice.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'You cannot choose the same community twice.');
             $errorCmd->redirect();
         }
 
@@ -51,22 +51,22 @@ class ShowRlcApplicationPage2ViewCommand extends Command
 
         // Check lengths of questions responses. Must be > 0, but < HMS_RLC_Application::RLC_RESPONSE_LIMIT
         if(!isset($whySpecific) || is_null($whySpecific) || empty($whySpecific)) {
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You must respond to the question regarding your interest in the communities you chose.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'You must respond to the question regarding your interest in the communities you chose.');
             $errorCmd->redirect();
         }
 
         if(strlen($whySpecific) > HMS_RLC_Application::RLC_RESPONSE_LIMIT) {
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Your respose to the question regarding your community choices is too long. Please limit your response to ' . HMS_RLC_Application::RLC_RESPONSE_LIMIT .  ' characters (including spaces and punctuation).');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'Your respose to the question regarding your community choices is too long. Please limit your response to ' . HMS_RLC_Application::RLC_RESPONSE_LIMIT .  ' characters (including spaces and punctuation).');
             $errorCmd->redirect();
         }
 
         if(!isset($strengths) || is_null($strengths) || empty($strengths)) {
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You must respond to the question regarding your strengths and weaknesses.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'You must respond to the question regarding your strengths and weaknesses.');
             $errorCmd->redirect();
         }
 
         if(strlen($strengths) > HMS_RLC_Application::RLC_RESPONSE_LIMIT) {
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Your respose to the question regarding your strengths and weaknesses is too long. Please limit your response to ' . HMS_RLC_Application::RLC_RESPONSE_LIMIT .  ' characters (including spaces and punctuation).');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'Your respose to the question regarding your strengths and weaknesses is too long. Please limit your response to ' . HMS_RLC_Application::RLC_RESPONSE_LIMIT .  ' characters (including spaces and punctuation).');
             $errorCmd->redirect();
         }
 

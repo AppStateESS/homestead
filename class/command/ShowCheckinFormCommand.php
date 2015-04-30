@@ -46,18 +46,18 @@ class ShowCheckinFormCommand extends Command {
         $errorCmd = CommandFactory::getCommand('ShowCheckinStart');
 
         if (!isset($bannerId) || is_null($bannerId) || $bannerId == '') {
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Missing Banner ID.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'Missing Banner ID.');
             $errorCmd->redirect();
         }
 
         if (!isset($hallId)) {
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Missing residence hall ID.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'Missing residence hall ID.');
             $errorCmd->redirect();
         }
 
         // Check the Banner ID
         if (preg_match("/[\d]{9}/", $bannerId) == false) {
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Imporperly formatted Banner ID.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'Imporperly formatted Banner ID.');
             $errorCmd->redirect();
         }
 
@@ -65,14 +65,14 @@ class ShowCheckinFormCommand extends Command {
         try {
             $student = StudentFactory::getStudentByBannerId($bannerId, $term);
         } catch (StudentNotFoundException $e) {
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Could not locate a student with that Banner ID.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'Could not locate a student with that Banner ID.');
             $errorCmd->redirect();
         }
 
         // Make sure the student is assigned in the current term
         $assignment = HMS_Assignment::getAssignmentByBannerId($bannerId, $term);
         if (!isset($assignment) || is_null($assignment)) {
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, $student->getName() . ' is not assigned for ' . Term::toString($term) . '. Please contact the University Housing Assignments Office at 828-262-6111.');
+            NQ::simple('hms', hms\NotificationView::ERROR, $student->getName() . ' is not assigned for ' . Term::toString($term) . '. Please contact the University Housing Assignments Office at 828-262-6111.');
             $errorCmd->redirect();
         }
 
@@ -83,7 +83,7 @@ class ShowCheckinFormCommand extends Command {
         $hall = $floor->get_parent();
 
         if ($hallId != $hall->getId()) {
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Wrong hall! ' . $student->getName() . ' is assigned to ' . $assignment->where_am_i());
+            NQ::simple('hms', hms\NotificationView::ERROR, 'Wrong hall! ' . $student->getName() . ' is assigned to ' . $assignment->where_am_i());
             $errorCmd->redirect();
         }
 
@@ -94,7 +94,7 @@ class ShowCheckinFormCommand extends Command {
         // If there is a checkin for the same bed, and the difference between the current time and the checkin time is
         // greater than 48 hours, then show an error.
         if (!is_null($checkin) && $checkin->getBedId() == $bed->getId() && (time() - $checkin->getCheckinDate()) > Checkin::CHECKIN_TIMEOUT) {
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, $student->getName() . ' has already checked in to ' . $assignment->where_am_i());
+            NQ::simple('hms', hms\NotificationView::ERROR, $student->getName() . ' has already checked in to ' . $assignment->where_am_i());
             $errorCmd->redirect();
         }
 

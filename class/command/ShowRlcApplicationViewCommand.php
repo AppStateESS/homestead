@@ -28,16 +28,16 @@ class ShowRlcApplicationViewCommand extends Command {
 
         // Make sure the RLC application feature is enabled
         if( is_null($feature) || !$feature->isEnabled() ) {
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Sorry, RLC applications are not avaialable for this term.");
+            NQ::simple('hms', hms\NotificationView::ERROR, "Sorry, RLC applications are not avaialable for this term.");
             $cmd->redirect();
         }
 
         // Check feature's deadlines
         if( $feature->getStartDate() > time() ){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Sorry, it is too soon to fill out an RLC application.");
+            NQ::simple('hms', hms\NotificationView::ERROR, "Sorry, it is too soon to fill out an RLC application.");
             $cmd->redirect();
         } else if( $feature->getEndDate() < time() ){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Sorry, the RLC application deadline has already passed. Please contact University Housing if you are interested in applying for a RLC.");
+            NQ::simple('hms', hms\NotificationView::ERROR, "Sorry, the RLC application deadline has already passed. Please contact University Housing if you are interested in applying for a RLC.");
             $cmd->redirect();
         }
         

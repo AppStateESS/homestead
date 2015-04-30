@@ -37,7 +37,7 @@ class ShowCheckinDocumentCommand extends Command {
         $checkin = CheckinFactory::getCheckinById($checkinId);
 
         if(!isset($checkin) || is_null($checkin)){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'There was an error while looking up this checkin. Please contact ESS.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'There was an error while looking up this checkin. Please contact ESS.');
             $errCmd = CommandFactory::getCommand('ShowAdminMainMenu');
             $errCmd->redirect();
         }

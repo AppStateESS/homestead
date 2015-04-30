@@ -99,7 +99,7 @@ class EmergencyContactConfirmCommand extends Command {
 
         // Notify user of success
         //$friendly_term = Term::toString($application->getTerm());
-        //NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, "Your Emergency Contact & Missing Person information for $friendly_term was successfully modified! You will receive an email confirmation in the next 24 hours.");
+        //NQ::simple('hms', hms\NotificationView::SUCCESS, "Your Emergency Contact & Missing Person information for $friendly_term was successfully modified! You will receive an email confirmation in the next 24 hours.");
 
         // Redirect to the student menu
         $successCmd = CommandFactory::getCommand('ShowStudentMenu');
