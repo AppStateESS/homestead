@@ -486,7 +486,7 @@ class HMS_RLC_Application extends HMS_Item
     }
 
     //TODO move this!!
-    public function denied_pager()
+    public static function denied_pager()
     {
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
         PHPWS_Core::initCoreClass('DBPager.php');

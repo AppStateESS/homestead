@@ -392,7 +392,7 @@ class HMS_Roommate
     /**
      * Gets all Roommate objects in which this user is involved
      */
-    public function get_all_roommates($asu_username, $term)
+    public static function get_all_roommates($asu_username, $term)
     {
         /*
         $db = new PHPWS_DB('hms_roommate');

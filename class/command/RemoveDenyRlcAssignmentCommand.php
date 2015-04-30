@@ -39,14 +39,17 @@ class RemoveDenyRlcAssignmentCommand extends Command
 
         // Remove assignment
         $assignment = HMS_RLC_Assignment::getAssignmentById($context->get('assignId'));
-        
-        if(!is_null($assignment)){
+
+        //Remove assignment
+         if(!is_null($assignment)){
             $assignment->delete();
-            NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Deleted RLC assignment.');
         }else{
             NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Could not find an RLC assignment with that id.');
-            return;
         }
+
+        PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
+        HMS_Activity_Log::log_activity(Current_User::getUsername(), ACTIVITY_RLC_APPLICATION_DELETED, Current_User::getUsername(), 'Assignment Removed');
+        NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Assignment deleted.');
 
         // Deny application
         $app = HMS_RLC_Application::getApplicationById($context->get('appId'));
@@ -57,7 +60,7 @@ class RemoveDenyRlcAssignmentCommand extends Command
         $app->denied = 1;
         $app->save();
 
-        NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Denied RLC application.');
+        NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Application denied.');
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
         HMS_Activity_Log::log_activity($app->username, 28, Current_User::getUsername(), 'Application Denied');
 

@@ -519,7 +519,7 @@ class HMS_Email{
     /*******
      * RLC *
      *******/
-    public function send_rlc_application_confirmation(Student $to)
+    public static function send_rlc_application_confirmation(Student $to)
     {
         PHPWS_Core::initModClass('hms', 'Term.php');
 
