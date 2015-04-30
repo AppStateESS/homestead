@@ -13,7 +13,7 @@ class BannerQueue {
     /**
      * Queues a Create Assignment
      */
-    public function queueAssignment(Student $student, $term, HMS_Residence_Hall $hall, HMS_Bed $bed, $mealPlan, $mealCode)
+    public static function queueAssignment(Student $student, $term, HMS_Residence_Hall $hall, HMS_Bed $bed, $mealPlan, $mealCode)
     {
         $entry = new BannerQueueItem(0, BANNER_QUEUE_ASSIGNMENT, $student, $term, $hall, $bed, $mealPlan, $mealCode);
 
@@ -37,7 +37,7 @@ class BannerQueue {
      * commits are enabled, the it will be sent straight to Banner,
      * and so the force_queue flag will be ignored.
      */
-    public function queueRemoveAssignment(Student $student, $term, HMS_Residence_Hall $hall, HMS_Bed $bed, $refund)
+    public static function queueRemoveAssignment(Student $student, $term, HMS_Residence_Hall $hall, HMS_Bed $bed, $refund)
     {
         $entry = new BannerQueueItem(0, BANNER_QUEUE_REMOVAL, $student, $term, $hall, $bed, null, null, $refund);
 
@@ -70,7 +70,7 @@ class BannerQueue {
      * Returns TRUE if an action should be processed immediately (queue is disabled)
      * or FALSE if an action should be queued
      */
-    public function processImmediately($termCode) {
+    public static function processImmediately($termCode) {
         $term = new Term($termCode);
         $queue = $term->getBannerQueue();
         return $queue == 0;
