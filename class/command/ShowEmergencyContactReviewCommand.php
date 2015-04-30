@@ -68,7 +68,7 @@ class ShowEmergencyContactReviewCommand extends Command {
             $application->setMissingPersonEmail($context->get('missing_person_email'));
 
         }catch(Exception $e){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, $e->getMessage());
+            NQ::simple('hms', hms\NotificationView::ERROR, $e->getMessage());
             $errorCmd->redirect();
         }
 

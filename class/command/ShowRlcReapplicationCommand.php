@@ -30,29 +30,29 @@ class ShowRlcReapplicationCommand extends Command {
         PHPWS_Core::initModClass('hms', 'ApplicationFeature.php');
         $feature = ApplicationFeature::getInstanceByNameAndTerm('RlcReapplication', $term);
         if(is_null($feature) || !$feature->isEnabled()){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Sorry, RLC re-applications are not avaialable for this term.");
+            NQ::simple('hms', hms\NotificationView::ERROR, "Sorry, RLC re-applications are not avaialable for this term.");
             $errorCmd->redirect();
         }
         
         if($feature->getStartDate() > mktime()){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Sorry, it is too soon to submit a RLC re-application.");
+            NQ::simple('hms', hms\NotificationView::ERROR, "Sorry, it is too soon to submit a RLC re-application.");
             $errorCmd->redirect();
         }else if($feature->getEndDate() < mktime()){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Sorry, the RLC re-application deadline has already passed. Please contact University Housing if you are interested in applying for a RLC.");
+            NQ::simple('hms', hms\NotificationView::ERROR, "Sorry, the RLC re-application deadline has already passed. Please contact University Housing if you are interested in applying for a RLC.");
             $errorCmd->redirect();
         }
         
         // Double check the the student is eligible
         $housingApp = HousingApplication::getApplicationByUser($student->getUsername(), $term);
         if(!$housingApp instanceof LotteryApplication){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You are not eligible to re-apply for a Residential Learning Community.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'You are not eligible to re-apply for a Residential Learning Community.');
             $errorCmd->redirect();
         }
 
         // Make sure that the student has not already applied for this term
         $rlcApp = HMS_RLC_Application::getApplicationByUsername($student->getUsername(), $term);
         if(!is_null($rlcApp)){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You have already re-applied for a Residential Learning Community for this term.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'You have already re-applied for a Residential Learning Community for this term.');
             $errorCmd->redirect();
         }
 

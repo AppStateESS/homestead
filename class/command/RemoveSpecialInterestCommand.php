@@ -43,7 +43,7 @@ class RemoveSpecialInterestCommand extends Command
         
         $result = $app->save();
         
-        NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, "Removed {$app->getUsername()}");
+        NQ::simple('hms', hms\NotificationView::SUCCESS, "Removed {$app->getUsername()}");
 
         $cmd = CommandFactory::getCommand('ShowSpecialInterestGroupApproval');
         $cmd->setGroup($context->get('group'));

@@ -22,7 +22,7 @@ class SelectFloorView extends hms\View {
         $tpl = array();
 
         if($this->halls == NULL){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'There are no halls available for the selected term.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'There are no halls available for the selected term.');
             $cmd = CommandFactory::getCommand('ShowAdminMaintenanceMenu');
             $cmd->redirect();
         }

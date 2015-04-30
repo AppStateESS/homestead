@@ -82,11 +82,11 @@ class ShowAssignStudentCommand extends Command {
             try {
                 $student = StudentFactory::getStudentByUsername($context->get('username'), $term);
             } catch (InvalidArgumentException $e) {
-                NQ::simple('hms', HMS_NOTIFICATION_ERROR, $e->getMessage());
+                NQ::simple('hms', hms\NotificationView::ERROR, $e->getMessage());
                 $cmd = CommandFactory::getCommand('ShowAssignStudent');
                 $cmd->redirect();
             } catch (StudentNotFoundException $e) {
-                NQ::simple('hms', HMS_NOTIFICATION_ERROR, $e->getMessage());
+                NQ::simple('hms', hms\NotificationView::ERROR, $e->getMessage());
                 $cmd = CommandFactory::getCommand('ShowAssignStudent');
                 $cmd->redirect();
             }

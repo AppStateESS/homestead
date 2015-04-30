@@ -45,14 +45,14 @@ class ShowRequestRoommateCommand extends Command {
         // Make sure the user doesn't already have a request pending
         $result = HMS_Roommate::has_roommate_request($username, $term);
         if($result === TRUE) {
-            NQ::simple('hms', HMS_NOTIFICATION_WARNING, 'You have a pending roommate request. You can not request another roommate request until your current request is either denied or expires.');
+            NQ::simple('hms', hms\NotificationView::WARNING, 'You have a pending roommate request. You can not request another roommate request until your current request is either denied or expires.');
             $err->redirect();
         }
 
         // Make sure the user doesn't already have a confirmed roommate
         $result = HMS_Roommate::has_confirmed_roommate($username, $term);
         if($result === TRUE) {
-            NQ::simple('hms', HMS_NOTIFICATION_WARNING, 'You already have a confirmed roommate.');
+            NQ::simple('hms', hms\NotificationView::WARNING, 'You already have a confirmed roommate.');
             $err->redirect();
         }
 

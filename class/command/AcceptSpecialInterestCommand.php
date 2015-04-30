@@ -42,7 +42,7 @@ class AcceptSpecialInterestCommand extends Command {
 
         $app->save();
 
-        NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, "Accepted {$app->getUsername()}");
+        NQ::simple('hms', hms\NotificationView::SUCCESS, "Accepted {$app->getUsername()}");
 
         $cmd = CommandFactory::getCommand('ShowSpecialInterestGroupApproval');
         $cmd->setGroup($context->get('group'));

@@ -50,7 +50,7 @@ class ShowStudentProfileCommand extends Command {
                 $student = StudentFactory::getStudentByUsername($username, $term);
             }
         }catch (InvalidArgumentException $e){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, $e->getMessage());
+            NQ::simple('hms', hms\NotificationView::ERROR, $e->getMessage());
             /*
              $cmd = CommandFactory::getCommand('ShowStudentSearch');
             $cmd->setUsername($userid);
@@ -58,7 +58,7 @@ class ShowStudentProfileCommand extends Command {
             */
             $context->goBack();
         }catch (StudentNotFoundException $e){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, $e->getMessage());
+            NQ::simple('hms', hms\NotificationView::ERROR, $e->getMessage());
             /*
              $cmd = CommandFactory::getCommand('ShowStudentSearch');
             $cmd->setUsername($userid);

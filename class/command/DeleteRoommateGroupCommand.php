@@ -34,7 +34,7 @@ class DeleteRoommateGroupCommand extends Command {
             $roommate = new HMS_Roommate($id);
             $roommate->delete();
         }catch(Exception $e){
-            NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Error deleting roommate group: ' . $e->getMessage());
+            NQ::simple('hms', hms\NotificationView::SUCCESS, 'Error deleting roommate group: ' . $e->getMessage());
             $viewCmd->redirect();
         }
 
@@ -43,7 +43,7 @@ class DeleteRoommateGroupCommand extends Command {
         HMS_Activity_Log::log_activity($roommate->getRequestor(), ACTIVITY_ADMIN_REMOVED_ROOMMATE, UserStatus::getUsername(), $notes);
         HMS_Activity_Log::log_activity($roommate->getRequestee(), ACTIVITY_ADMIN_REMOVED_ROOMMATE, UserStatus::getUsername(), $notes);
         
-        NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Roommate group successfully deleted.');
+        NQ::simple('hms', hms\NotificationView::SUCCESS, 'Roommate group successfully deleted.');
         $viewCmd->redirect();
     }
 }

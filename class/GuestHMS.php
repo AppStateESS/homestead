@@ -19,8 +19,7 @@ class GuestHMS extends HMS
         $view = new hms\GuestView();
         $view->setMain($this->context->getContent());
         
-        PHPWS_Core::initModClass('hms', 'HMSNotificationView.php');
-        $nv = new HMSNotificationView();
+        $nv = new hms\NotificationView();
         $nv->popNotifications();
         $view->addNotifications($nv->show());
         

@@ -45,7 +45,7 @@ class UploadTermsConditionsCommand extends Command {
         }
          
         if(empty($_FILES['tc_file']['name'])) {
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Please provide a file to upload.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'Please provide a file to upload.');
         }
          
         $term = $this->term;
@@ -60,13 +60,13 @@ class UploadTermsConditionsCommand extends Command {
         if(!$document->importPost('tc_file', false, true)) {
             if(isset($document->_errors)) {
                 foreach($document->_errors as $oError) {
-                    NQ::simple('hms', HMS_NOTIFICATION_ERROR, $oError->getMessage());
+                    NQ::simple('hms', hms\NotificationView::ERROR, $oError->getMessage());
                 }
             }
         } elseif($document->file_name) {
             // Check Extension (lame)
             if($document->getExtension() != $type) {
-                NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You did not provide a file of type ' . $type);
+                NQ::simple('hms', hms\NotificationView::ERROR, 'You did not provide a file of type ' . $type);
             } else {
                 // Check for and delete an existing file of the same name
                 if(is_file(TERMS_CONDITIONS_DIR . $term . '.' . $type)) {
@@ -77,7 +77,7 @@ class UploadTermsConditionsCommand extends Command {
 
                 $result = $document->write();
                 if(PHPWS_Error::logIfError($result)) {
-                    NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'There was a problem saving the Terms and Conditions file.');
+                    NQ::simple('hms', hms\NotificationView::ERROR, 'There was a problem saving the Terms and Conditions file.');
                 } else {
                     if($type == 'pdf') {
                         $termInstance->setPdfTerms($document->getPath());

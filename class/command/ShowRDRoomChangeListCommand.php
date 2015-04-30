@@ -55,7 +55,7 @@ class ShowRDRoomChangeListCommand extends Command {
 
         if(empty($floors)){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, "You do not have the 'RD' role on any residence halls or floors.");
+            NQ::simple('hms', hms\NotificationView::ERROR, "You do not have the 'RD' role on any residence halls or floors.");
             $cmd = CommandFactory::getCommand('ShowAdminMaintenanceMenu');
             $cmd->redirect();
         }

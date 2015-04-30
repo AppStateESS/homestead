@@ -49,7 +49,7 @@ class SaveRlcCommand extends Command {
         $capacity = $context->get('capacity');
         if(!isset($capacity) || empty($capacity)){
             $capacity = 0;
-            NQ::simple('hms', HMS_NOTIFICATION_WARNING, "The community's capacity was set to 0.");
+            NQ::simple('hms', hms\NotificationView::WARNING, "The community's capacity was set to 0.");
         }
         $community->set_capacity($capacity);
         
@@ -105,7 +105,7 @@ class SaveRlcCommand extends Command {
         $viewCommand->setId($community->getId());
 
         // Show a success message and redirect
-        NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'The RLC was saved successfully.');
+        NQ::simple('hms', hms\NotificationView::SUCCESS, 'The RLC was saved successfully.');
         $viewCommand->redirect();
     }
 }

@@ -40,7 +40,7 @@ class EditFloorCommand extends Command {
         # Create the floor object gien the floor id
         $floor = new HMS_Floor($floorId);
         if(!$floor){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Invalid floor.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'Invalid floor.');
             $viewCmd->redirect();
         }
 
@@ -48,7 +48,7 @@ class EditFloorCommand extends Command {
         # If they're not equal, call 'can_change_gender' public function
         if($floor->gender_type != $context->get('gender_type')){
             if(!$floor->can_change_gender($context->get('gender_type'))){
-                NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Incompatible gender detected. No changes were made.');
+                NQ::simple('hms', hms\NotificationView::ERROR, 'Incompatible gender detected. No changes were made.');
                 $viewCmd->redirect();
             }
         }
@@ -88,11 +88,11 @@ class EditFloorCommand extends Command {
         try{
             $floor->save();
         }catch(DatabaseException $e){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'There was a problem saving the floor data. No changes were made.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'There was a problem saving the floor data. No changes were made.');
             $viewCmd->redirect();
         }
 
-        NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'The floor was updated successfully.');
+        NQ::simple('hms', hms\NotificationView::SUCCESS, 'The floor was updated successfully.');
         $viewCmd->redirect();
     }
 }

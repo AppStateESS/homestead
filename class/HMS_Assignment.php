@@ -419,7 +419,7 @@ class HMS_Assignment extends HMS_Item {
         //TODO Move this to the room change view
         /*
         if ($vacant_bed->room_change_reserved != 0) {
-            NQ::simple('hms', HMS_NOTIFICATION_WARNING, 'Room was reserved for room change');
+            NQ::simple('hms', hms\NotificationView::WARNING, 'Room was reserved for room change');
         }
         */
 
@@ -502,7 +502,7 @@ class HMS_Assignment extends HMS_Item {
                 throw new DatabaseException($result->toString());
             }
 
-            NQ::simple('hms', HMS_NOTIFICATION_WARNING, 'Temporary assignment was removed.');
+            NQ::simple('hms', hms\NotificationView::WARNING, 'Temporary assignment was removed.');
         }
 
         // Send this off to the queue for assignment in banner

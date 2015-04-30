@@ -34,12 +34,12 @@ class DeleteRoomCommand extends Command {
         $roomId = $context->get('roomId');
 
         if(!isset($roomId)){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Missing room ID.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'Missing room ID.');
             $viewCmd->redirect();
         }
 
         if(!isset($floorId)){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Missing floor ID.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'Missing floor ID.');
             $viewCmd->redirect();
         }
 
@@ -47,11 +47,11 @@ class DeleteRoomCommand extends Command {
         try{
             HMS_Room::deleteRoom($roomId);
         }catch(Exception $e){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'There was an error deleting the room. Some (but not all) beds may have been deleted. : ' . $e->getMessage());
+            NQ::simple('hms', hms\NotificationView::ERROR, 'There was an error deleting the room. Some (but not all) beds may have been deleted. : ' . $e->getMessage());
             $viewCmd->redirect();
         }
 
-        NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Room successfully deleted.');
+        NQ::simple('hms', hms\NotificationView::SUCCESS, 'Room successfully deleted.');
         $viewCmd->redirect();
     }
 }

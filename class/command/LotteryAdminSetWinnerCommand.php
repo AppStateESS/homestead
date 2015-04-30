@@ -31,12 +31,12 @@ class LotteryAdminSetWinnerCommand extends Command {
         try{
             $application = HousingApplication::getApplicationByUser($username, $term);
         }catch(StudentNotFoundException $e){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'No matching student was found.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'No matching student was found.');
             $viewCmd->redirect();
         }
 
         if(is_null($application)){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'The requested student has not completed a re-application.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'The requested student has not completed a re-application.');
             $viewCmd->redirect();
         }
 
@@ -50,11 +50,11 @@ class LotteryAdminSetWinnerCommand extends Command {
         try{
             $application->save();
         }catch(Exception $e){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'There was an error saving the student\'s application.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'There was an error saving the student\'s application.');
             $viewCmd->redirect();
         }
 
-        NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'The student\'s application was updated successfully.');
+        NQ::simple('hms', hms\NotificationView::SUCCESS, 'The student\'s application was updated successfully.');
         $viewCmd->redirect();
     }
 }

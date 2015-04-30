@@ -56,7 +56,7 @@ class RoommateRequestCancelCommand extends Command
         HMS_Email::send_cancel_emails($roommate);
 
         $name = $other->getFullName();
-        NQ::Simple('hms', HMS_NOTIFICATION_SUCCESS, "You have cancelled your request for $name as a roommate.");
+        NQ::Simple('hms', hms\NotificationView::SUCCESS, "You have cancelled your request for $name as a roommate.");
 
         $cmd = CommandFactory::getCommand('ShowStudentMenu');
         $cmd->redirect();

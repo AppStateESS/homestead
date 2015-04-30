@@ -25,14 +25,14 @@ class LotteryAdminCreateAppCommand extends Command {
 
         $username = $context->get('asu_username');
         if(!isset($username) || empty($username)){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You must enter a valid user name.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'You must enter a valid user name.');
             $viewCmd->redirect();
         }
 
         try{
             $student = StudentFactory::getStudentByUsername($context->get('asu_username'), $term);
         }catch(StudentNotFoundException $e){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Inavlid user name. No student with that user name could be found.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'Inavlid user name. No student with that user name could be found.');
             $viewCmd->redirect();
         }
 
@@ -46,11 +46,11 @@ class LotteryAdminCreateAppCommand extends Command {
         try{
             $application->save();
         }catch(Exception $e){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR,'There was a problem saving the application.');
+            NQ::simple('hms', hms\NotificationView::ERROR,'There was a problem saving the application.');
             $viewCmd->redirect();
         }
 
-        NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'The lottery application was created successfully.');
+        NQ::simple('hms', hms\NotificationView::SUCCESS, 'The lottery application was created successfully.');
         $viewCmd->redirect();
     }
 }

@@ -49,7 +49,7 @@ class RoommateBreakCommand extends Command
         PHPWS_Core::initCoreClass('Captcha.php');
         $verified = Captcha::verify(TRUE);
         if($verified === FALSE || is_null($verified)) {
-            NQ::Simple('hms', HMS_NOTIFICATION_ERROR, 'Sorry, please try again.');
+            NQ::Simple('hms', hms\NotificationView::ERROR, 'Sorry, please try again.');
             $err->redirect();
         }
 
@@ -67,7 +67,7 @@ class RoommateBreakCommand extends Command
         HMS_Email::send_break_emails($roommate, $username);
 
         $name = $other->getFullName();
-        NQ::Simple('hms', HMS_NOTIFICATION_SUCCESS, "You and $name are no longer marked as roommates.");
+        NQ::Simple('hms', hms\NotificationView::SUCCESS, "You and $name are no longer marked as roommates.");
 
         $cmd = CommandFactory::getCommand('ShowStudentMenu');
         $cmd->redirect();

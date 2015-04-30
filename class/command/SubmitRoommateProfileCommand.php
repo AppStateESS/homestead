@@ -139,7 +139,7 @@ class SubmitRoommateProfileCommand extends Command {
 		
         $profile->save();
 
-        NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Your roommate profile was successfully created/updated.');
+        NQ::simple('hms', hms\NotificationView::SUCCESS, 'Your roommate profile was successfully created/updated.');
         $successCmd = CommandFactory::getCommand('ShowStudentMenu');
         $successCmd->redirect();
     }

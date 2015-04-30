@@ -46,7 +46,7 @@ class StudentProfileView extends hms\View {
         $tpl['DOB'] = $this->student->getDOB();
 
         if(strtotime($this->student->getDOB()) < strtotime("-25 years")){
-            NQ::simple('hms', HMS_NOTIFICATION_WARNING, 'Student is 25 years old or older!');
+            NQ::simple('hms', hms\NotificationView::WARNING, 'Student is 25 years old or older!');
         }
 
         $tpl['CLASS'] = $this->student->getPrintableClass();
@@ -66,13 +66,13 @@ class StudentProfileView extends hms\View {
         $tpl['WATAUGA'] = $this->student->isWataugaMember() ? 'Yes' : 'No';
 
         if($this->student->pinDisabled()){
-            NQ::simple('hms', HMS_NOTIFICATION_WARNING, "This student's PIN is disabled.");
+            NQ::simple('hms', hms\NotificationView::WARNING, "This student's PIN is disabled.");
         }
 
         try {
             $tpl['APPLICATION_TERM'] = Term::toString($this->student->getApplicationTerm());
         } catch(InvalidTermException $e) {
-            NQ::simple('hms', HMS_NOTIFICATION_WARNING, 'Application term is bad or missing.');
+            NQ::simple('hms', hms\NotificationView::WARNING, 'Application term is bad or missing.');
             $tpl['APPLICATION_TERM'] = 'WARNING: Application Term is bad or missing: "'.$this->student->getApplicationTerm().'"';
         }
 
@@ -228,7 +228,7 @@ class StudentProfileView extends hms\View {
        	$tpl['HOUSING_WAIVER'] = $this->student->housingApplicationWaived() ? 'Yes' : 'No';
 
        	if($this->student->housingApplicationWaived()){
-       	    NQ::simple('hms', HMS_NOTIFICATION_WARNING, "This student's housing application has been waived for this term.");
+       	    NQ::simple('hms', hms\NotificationView::WARNING, "This student's housing application has been waived for this term.");
        	}
 
         /****************

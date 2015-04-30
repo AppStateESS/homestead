@@ -32,7 +32,7 @@ class ReApplicationFormSaveCommand extends Command {
 
         # Double check that the student is eligible
         if(!HMS_Lottery::determineEligibility(UserStatus::getUsername())){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You are not eligible to re-apply for on-campus housing for this semester.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'You are not eligible to re-apply for on-campus housing for this semester.');
             $menuCmd = CommandFactory::getCommand('ShowStudentMenu');
             $menuCmd->redirect();
         }
@@ -53,7 +53,7 @@ class ReApplicationFormSaveCommand extends Command {
         if(is_null($doNotCall)){
             // do not call checkbox was not selected, so check the number
             if(is_null($areaCode) || is_null($exchange) || is_null($number)){
-                NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Please provide a cell-phone number or click the checkbox stating that you do not wish to share your number with us.');
+                NQ::simple('hms', hms\NotificationView::ERROR, 'Please provide a cell-phone number or click the checkbox stating that you do not wish to share your number with us.');
                 $errorCmd->redirect();
             }
         }
@@ -130,7 +130,7 @@ class ReApplicationFormSaveCommand extends Command {
         try{
             $application->save();
         }catch(Exception $e){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'There was an error saving your re-application. Please try again or contact the Department of University Housing.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'There was an error saving your re-application. Please try again or contact the Department of University Housing.');
             $errorCmd->redirect();
         }
 
@@ -143,7 +143,7 @@ class ReApplicationFormSaveCommand extends Command {
         HMS_Email::send_lottery_application_confirmation($student, $year);
 
         // Show success message
-        NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Your re-application was submitted successfully.');
+        NQ::simple('hms', hms\NotificationView::SUCCESS, 'Your re-application was submitted successfully.');
 
         // Redirect to the RLC Reapplication form is the student is interested in RLCs, otherwise, show the student menu
         if($rlcInterest == 1){

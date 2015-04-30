@@ -207,7 +207,7 @@ class HMS_RLC_Application extends HMS_Item
         }catch(StudentNotFoundException $e){
             // Catch the StudentNotFound exception in the odd case that someone doesn't exist.
             // Show a warning message and skip the rest of the method
-            NQ::simple('hms', HMS_NOTIFICATION_WARNING, "No student found with username: {$this->username}.");
+            NQ::simple('hms', hms\NotificationView::WARNING, "No student found with username: {$this->username}.");
             $tags['USERNAME'] = $this->username;
             $tags['NAME'] = 'UNKNOWN - INVALID';
             return $tags;
@@ -308,7 +308,7 @@ class HMS_RLC_Application extends HMS_Item
         }catch(StudentNotFoundException $e){
             // Catch the StudentNotFound exception in the odd case that someone doesn't exist.
             // Show a warning message and skip the rest of the method
-            NQ::simple('hms', HMS_NOTIFICATION_WARNING, "No student found with username: {$this->username}.");
+            NQ::simple('hms', hms\NotificationView::WARNING, "No student found with username: {$this->username}.");
             $row['username'] = $this->username;
             $row['name'] = 'UNKNOWN - INVALID';
             return $tags;

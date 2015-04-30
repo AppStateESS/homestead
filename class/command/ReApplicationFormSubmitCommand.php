@@ -29,7 +29,7 @@ class ReApplicationFormSubmitCommand extends Command {
         $depositAgreed = $context->get('deposit_check');
 
         if(is_null($depositAgreed)){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You must check the box indicating you understand the License Contract deposit fees.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'You must check the box indicating you understand the License Contract deposit fees.');
             $errorCmd->redirect();
         }
 
@@ -42,7 +42,7 @@ class ReApplicationFormSubmitCommand extends Command {
         if(is_null($doNotCall)){
             // do not call checkbox was not selected, so check the number
             if(is_null($areaCode) || is_null($exchange) || is_null($number)){
-                NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Please provide a cell-phone number or click the checkbox stating that you do not wish to share your number with us.');
+                NQ::simple('hms', hms\NotificationView::ERROR, 'Please provide a cell-phone number or click the checkbox stating that you do not wish to share your number with us.');
                 $errorCmd->redirect();
             }
         }
@@ -56,7 +56,7 @@ class ReApplicationFormSubmitCommand extends Command {
         $emergencyEmail = $context->get('emergency_contact_email');
 
         if (empty($emergencyName) || empty($emergencyRelationship) || empty($emergencyPhone) || empty($emergencyEmail)) {
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Please complete all of the emergency contact person information.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'Please complete all of the emergency contact person information.');
             $errorCmd->redirect();
         }
 
@@ -68,7 +68,7 @@ class ReApplicationFormSubmitCommand extends Command {
         $missingPersonEmail = $context->get('missing_person_email');
 
         if (empty($missingPersonName) || empty($missingPersonRelationship) || empty($missingPersonPhone) || empty($missingPersonEmail)) {
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Please complete all of the missing persons contact information.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'Please complete all of the missing persons contact information.');
             $errorCmd->redirect();
         }
 
@@ -76,13 +76,13 @@ class ReApplicationFormSubmitCommand extends Command {
         if(!is_null($context->get('sorority_check'))){
             $sorority = $context->get('sorority_drop');
             if($sorority == 'none'){
-                NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Please select your sorority from the drop down menu.');
+                NQ::simple('hms', hms\NotificationView::ERROR, 'Please select your sorority from the drop down menu.');
                 $errorCmd->redirect();
             }
 
             $sororityPref = $context->get('sorority_pref');
             if(is_null($sororityPref)){
-                NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Please indicate your preference for APH or central-campus housing.');
+                NQ::simple('hms', hms\NotificationView::ERROR, 'Please indicate your preference for APH or central-campus housing.');
                 $errorCmd->redirect();
             }
         }
@@ -90,20 +90,20 @@ class ReApplicationFormSubmitCommand extends Command {
         // Teaching Fellows check
         /*
         if($student->isTeachingFellow() && is_null($context->get('tf_pref'))){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Please indicate your preference for Teaching Fellow housing.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'Please indicate your preference for Teaching Fellow housing.');
             $errorCmd->redirect();
         }
         */
 
         // Watauga Global check
         if($student->isWataugaMember() && is_null($context->get('wg_pref'))){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Please indicate your preference for Watauga Global housing.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'Please indicate your preference for Watauga Global housing.');
             $errorCmd->redirect();
         }
 
         // Honors check
         if($student->isHonors() & is_null($context->get('honors_pref'))){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Please indicate your preference for Honors housing.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'Please indicate your preference for Honors housing.');
             $errorCmd->redirect();
         }
 

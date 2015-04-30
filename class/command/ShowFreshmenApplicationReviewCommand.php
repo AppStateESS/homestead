@@ -57,7 +57,7 @@ class ShowFreshmenApplicationReviewCommand extends Command {
         try{
             $application = HousingApplicationFactory::getApplicationFromContext($context, $term, $student, $appType);
         }catch(Exception $e){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, $e->getMessage());
+            NQ::simple('hms', hms\NotificationView::ERROR, $e->getMessage());
             $errorCmd->redirect();
         }
 

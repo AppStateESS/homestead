@@ -57,7 +57,7 @@ class ShowOffCampusWaitListApplicationCommand extends Command {
         $app = HousingApplication::getApplicationByUser(UserStatus::getUsername(), $term);
 
         if (isset($result) && $result->getApplicationType == 'offcampus_waiting_list') {
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You have already enrolled on the on-campus housing Open Waiting List for this term.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'You have already enrolled on the on-campus housing Open Waiting List for this term.');
             $menuCmd = CommandFactory::getCommand('ShowStudentMenu');
             $menuCmd->redirect();
         }

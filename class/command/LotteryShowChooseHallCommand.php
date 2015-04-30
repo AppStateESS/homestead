@@ -16,7 +16,7 @@ class LotteryShowChooseHalLCommand extends Command {
         
         // Check the hard cap!
         if(LotteryProcess::hardCapReached($term)){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Sorry, re-application is now closed.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'Sorry, re-application is now closed.');
             $errorCmd = CommandFactory::getCommand('ShowStudentMenu');
             $errorCmd->redirect();
         }

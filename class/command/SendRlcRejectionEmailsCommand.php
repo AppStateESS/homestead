@@ -37,7 +37,7 @@ class SendRlcRejectionEmailsCommand extends Command
             $email->sendRlcApplicationRejected($student, $term);
         }
 
-        NQ::Simple('hms', HMS_NOTIFICATION_SUCCESS, 'RLC rejection emails sent.');
+        NQ::Simple('hms', hms\NotificationView::SUCCESS, 'RLC rejection emails sent.');
         $context->goBack();
     }
 

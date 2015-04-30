@@ -1,21 +1,21 @@
 <!-- BEGIN NOTIFICATIONS -->
 <!-- BEGIN ERROR -->
-<div class="hms-notification error">
+<div class="alert alert-danger" role="alert">
     {ERROR}
 </div>
 <!-- END ERROR -->
 <!-- BEGIN WARNING -->
-<div class="hms-notification warning">
+<div class="alert alert-warning" role="alert">
     {WARNING}
 </div>
 <!-- END WARNING -->
 <!-- BEGIN SUCCESS -->
-<div class="hms-notification success">
+<div class="alert alert-success" role="alert">
     {SUCCESS}
 </div>
 <!-- END SUCCESS -->
 <!-- BEGIN UNKNOWN -->
-<div class="hms-notification unknown">
+<div class="alert alert-info" role="alert">
     {UNKNOWN}
 </div>
 <!-- END UNKNOWN -->

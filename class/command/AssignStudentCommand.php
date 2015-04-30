@@ -109,21 +109,21 @@ class AssignStudentCommand extends Command {
         
         // Must supply a user name
         if(is_null($username)){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Invalid or missing username.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'Invalid or missing username.');
             $errorCmd->redirect();
         }
 
         // Must supply at least a room ID
         $roomId = $context->get('room');
         if(is_null($roomId) || $roomId == 0){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You must select a room.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'You must select a room.');
             $errorCmd->redirect();
         }
 
         // Must choose an assignment type
         $assignmentType = $context->get('assignment_type');
         if(!isset($assignmentType) || is_null($assignmentType) || $assignmentType < 0){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You must choose an assignment type.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'You must choose an assignment type.');
             $errorCmd->redirect();
         }
         
@@ -131,7 +131,7 @@ class AssignStudentCommand extends Command {
         $applicationStatus = HousingApplication::checkForApplication($username, $term);
 
         if($applicationStatus == FALSE){
-            NQ::simple('hms', HMS_NOTIFICATION_WARNING, 'Warning: No housing application found for this student in this term.');
+            NQ::simple('hms', hms\NotificationView::WARNING, 'Warning: No housing application found for this student in this term.');
         }else{
             // Create application object (it doesn't really matter that we always create a fall application)
             $application = new HousingApplication($applicationStatus['id']);
@@ -160,13 +160,13 @@ class AssignStudentCommand extends Command {
         try{
             $student = StudentFactory::getStudentByUsername($username, $term);
         }catch(StudentNotFoundException $e){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Invalid user name, no such student found.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'Invalid user name, no such student found.');
             $errorCmd->redirect();
         }
 
         // Check age, issue a warning for over 25
         if(strtotime($student->getDOB()) < strtotime("-25 years")){
-            NQ::simple('hms', HMS_NOTIFICATION_WARNING, 'Student is 25 years old or older!');
+            NQ::simple('hms', hms\NotificationView::WARNING, 'Student is 25 years old or older!');
         }
 
         $gender = $student->getGender();
@@ -178,7 +178,7 @@ class AssignStudentCommand extends Command {
         // Create the room object so we can check gender
         $room = new HMS_Room($roomId);
         if(!$room){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Error creating the room object.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'Error creating the room object.');
             $errorCmd->redirect();
         }
 
@@ -188,7 +188,7 @@ class AssignStudentCommand extends Command {
 
         // If the room is Co-ed, make sure the user has permission to assign to co-ed rooms
         if($room->getGender() == COED && !Current_User::allow('hms', 'coed_assignment')){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Error: You do not have permission to assign students to co-ed rooms.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'Error: You do not have permission to assign students to co-ed rooms.');
             $errorCmd->redirect();
         }
         
@@ -198,9 +198,9 @@ class AssignStudentCommand extends Command {
             if($room->can_change_gender($gender) && Current_User::allow('hms', 'room_attributes')){
                 $room->setGender($gender);
                 $room->save();
-                NQ::simple('hms', HMS_NOTIFICATION_WARNING, 'Warning: Changing room gender.');
+                NQ::simple('hms', hms\NotificationView::WARNING, 'Warning: Changing room gender.');
             }else{
-                NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Error: The student\'s gender and the room\'s gender do not match and the room could not be changed.');
+                NQ::simple('hms', hms\NotificationView::ERROR, 'Error: The student\'s gender and the room\'s gender do not match and the room could not be changed.');
                 $errorCmd->redirect();
             }
         }
@@ -212,7 +212,7 @@ class AssignStudentCommand extends Command {
                 //TODO don't hard-code refund percentage to 100%
                 HMS_Assignment::unassignStudent($student, $term, '(re-assign)', UNASSIGN_REASSIGN, 100);
             }catch(Exception $e){
-                NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Error deleting current assignment. {$username} was not removed.");
+                NQ::simple('hms', hms\NotificationView::ERROR, "Error deleting current assignment. {$username} was not removed.");
                 $errorCmd->redirect();
             }
         }
@@ -226,15 +226,15 @@ class AssignStudentCommand extends Command {
                 $assign_result = HMS_Assignment::assignStudent($student, $term, $context->get('room'), NULL, $context->get('meal_plan'), $context->get('note'), false, $context->get('assignment_type'));
             }
         }catch(AssignmentException $e){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Assignment error: ' . $e->getMessage());
+            NQ::simple('hms', hms\NotificationView::ERROR, 'Assignment error: ' . $e->getMessage());
             $errorCmd->redirect();
         }
 
         // Show a success message
         if($context->get('moveConfirmed') == 'true'){
-            NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Successfully moved ' . $username . ' to ' . $hall->hall_name . ' room ' . $room->room_number);
+            NQ::simple('hms', hms\NotificationView::SUCCESS, 'Successfully moved ' . $username . ' to ' . $hall->hall_name . ' room ' . $room->room_number);
         }else{
-            NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Successfully assigned ' . $username . ' to ' . $hall->hall_name . ' room ' . $room->room_number);
+            NQ::simple('hms', hms\NotificationView::SUCCESS, 'Successfully assigned ' . $username . ' to ' . $hall->hall_name . ' room ' . $room->room_number);
         }
 
         $successCmd = CommandFactory::getCommand('ShowAssignStudent');

@@ -26,11 +26,11 @@ class WaitingListRemoveCommand extends Command {
             $result = $app->save();
 
             if(!PHPWS_Error::logIfError($result)){
-                NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, "$username removed from the waiting list!");
+                NQ::simple('hms', hms\NotificationView::SUCCESS, "$username removed from the waiting list!");
                 $cmd->redirect();
             }
         }
-        NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, "Unable to remove $username from the waiting list!");
+        NQ::simple('hms', hms\NotificationView::SUCCESS, "Unable to remove $username from the waiting list!");
         $cmd->redirect();
     }
 }

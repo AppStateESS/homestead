@@ -112,7 +112,7 @@ class HallOverview extends hms\View {
                             $student = StudentFactory::getStudentByUsername($username, $this->hall->term);
                         }catch(StudentNotFoundException $e){
                             $student = null;
-                            NQ::simple('hms', HMS_NOTIFICATION_WARNING, "Could not find data for: $username");
+                            NQ::simple('hms', hms\NotificationView::WARNING, "Could not find data for: $username");
                         }
 
                         $assign_rlc  = HMS_RLC_Assignment::checkForAssignment($username, $this->hall->term); //false or index

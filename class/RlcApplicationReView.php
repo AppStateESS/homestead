@@ -68,7 +68,7 @@ class RlcApplicationReView extends hms\View {
 
         // If this application is denied and the person logged in is an admin, show a warning
         if($this->application->isDenied() && UserStatus::isAdmin()){
-            NQ::simple('hms', HMS_NOTIFICATION_WARNING, 'This application has been denied.');
+            NQ::simple('hms', hms\NotificationView::WARNING, 'This application has been denied.');
         }
         
         // Show options depending of status of application.

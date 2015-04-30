@@ -28,7 +28,7 @@ class UnDenyRlcApplicationCommand extends Command {
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
         HMS_Activity_Log::log_activity($app->username, 29, UserStatus::getUsername(), "Application un-denied");
 
-        NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Application un-denied.');
+        NQ::simple('hms', hms\NotificationView::SUCCESS, 'Application un-denied.');
 
         $successCmd = CommandFactory::getCommand('ShowDeniedRlcApplicants');
         $successCmd->redirect();

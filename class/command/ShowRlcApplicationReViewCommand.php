@@ -31,7 +31,7 @@ class ShowRlcApplicationReViewCommand extends Command {
         $application = new HMS_RLC_Application($context->get('appId'));
 
         if(is_null($application->username)){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'There is no RLC application available with that id.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'There is no RLC application available with that id.');
             $context->goBack();
         }
 
@@ -44,7 +44,7 @@ class ShowRlcApplicationReViewCommand extends Command {
         try{
             $student = StudentFactory::getStudentByUsername($application->username, $application->term);
         }catch(StudentNotFoundException $e){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Unknown student.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'Unknown student.');
             $context->goBack();
         }
 

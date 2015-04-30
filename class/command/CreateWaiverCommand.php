@@ -48,20 +48,20 @@ class CreateWaiverCommand extends Command {
             }
             
             if(!$soap->isValidStudent($user, $term)){
-                NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Invalid username: $user"  );
+                NQ::simple('hms', hms\NotificationView::ERROR, "Invalid username: $user"  );
                 $error = true;
             }else{
                 $waiver = new HMS_Eligibility_Waiver($user,$term);
                 $result = $waiver->save();
                 if(!$result){
-                    NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Error creating waiver for: ' . $user );
+                    NQ::simple('hms', hms\NotificationView::ERROR, 'Error creating waiver for: ' . $user );
                     $error = true;
                 }
             }
         }
 
         if(!$error){
-            NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'Waivers created successfully.');
+            NQ::simple('hms', hms\NotificationView::SUCCESS, 'Waivers created successfully.');
         }
 
         $cmd = CommandFactory::getCommand('ShowLotteryEligibilityWaiver');

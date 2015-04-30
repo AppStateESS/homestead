@@ -31,7 +31,7 @@ class ShowRoomChangeRequestApprovalCommand extends Command {
         // If this particpant is not in the New state, then it must have already been approved or there's a problem
         // So redirect back to the main menu
         if (!$thisParticipant->getState() instanceof ParticipantStateNew) {
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You cannot approve that room change request.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'You cannot approve that room change request.');
             $cmd = CommandFactory::getCommand('ShowStudentMenu');
             $cmd->redirect();
         }

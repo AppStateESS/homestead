@@ -22,12 +22,12 @@ class CreateTermCommand extends Command {
         $sem = $context->get('term_drop');
 
         if(!isset($year) || is_null($year) || empty($year)){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You must provide a year.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'You must provide a year.');
             $errorCmd->redirect();
         }
 
         if(!isset($sem) || is_null($sem) || empty($sem)){
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'You must provide a semester.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'You must provide a semester.');
             $errorCmd->redirect();
         }
 
@@ -40,7 +40,7 @@ class CreateTermCommand extends Command {
             try{
                 $term->save();
             }catch(DatabaseException $e){
-                NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'There was an error saving the term. Please try again or contact ESS.');
+                NQ::simple('hms', hms\NotificationView::ERROR, 'There was an error saving the term. Please try again or contact ESS.');
                 $errorCmd->redirect();
             }
         }else{
@@ -53,7 +53,7 @@ class CreateTermCommand extends Command {
             $num = $db->count();
 
             if(!is_null($num) && $num > 0){
-                NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'One or more halls already exist for this term, so nothing can be copied.');
+                NQ::simple('hms', hms\NotificationView::ERROR, 'One or more halls already exist for this term, so nothing can be copied.');
                 $errorCmd->redirect();
             }
         }
@@ -78,7 +78,7 @@ class CreateTermCommand extends Command {
             }
         }else{
             // either $copy == 'nothing', or the view didn't specify... either way, we're done
-            NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, "$text term created successfully.");
+            NQ::simple('hms', hms\NotificationView::SUCCESS, "$text term created successfully.");
             $successCmd->redirect();
         }
 
@@ -109,14 +109,14 @@ class CreateTermCommand extends Command {
 
             $db->query('ROLLBACK');
             PHPWS_Error::log(print_r($e, true), 'hms');
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'There was an error copying the hall structure and/or assignments. The term was created, but nothing was copied.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'There was an error copying the hall structure and/or assignments. The term was created, but nothing was copied.');
             $errorCmd->redirect();
         }
 
         if($copyAssignments){
-            NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, "$text term created successfully. The hall structure and assignments were copied successfully.");
+            NQ::simple('hms', hms\NotificationView::SUCCESS, "$text term created successfully. The hall structure and assignments were copied successfully.");
         }else{
-            NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, "$text term created successfully and hall structure copied successfully.");
+            NQ::simple('hms', hms\NotificationView::SUCCESS, "$text term created successfully and hall structure copied successfully.");
         }
         Term::setSelectedTerm($term->getTerm());
         $successCmd->redirect();
