@@ -18,11 +18,14 @@ class GenderDistributionByHall extends Report implements iCsvReport {
     private $rows;
     
     private $totalCurrOccupancy;
+    
     private $totalMales;
     private $totalFemales;
+    private $totalCoed;
     
     private $totalMalePercent;
     private $totalFemalePercent;
+    private $totalCoedPercent;
     
     public function __construct($id = 0)
     {
@@ -58,6 +61,7 @@ class GenderDistributionByHall extends Report implements iCsvReport {
             
             $males = 0;
             $females = 0;
+            $coed = 0;
             
             // Get all the assignments for this hall, joined up to the
             // room level so we can determine gender, and joined up to the
@@ -91,6 +95,11 @@ class GenderDistributionByHall extends Report implements iCsvReport {
                     $females++;
                     $this->totalFemales++;
                 }
+                else if($assign['gender_type']  == COED)
+                {
+                    $coed++;
+                    $this->totalCoed++;
+                }
             }
             
             if($males == 0){
@@ -104,6 +113,12 @@ class GenderDistributionByHall extends Report implements iCsvReport {
             }else{
                 $femalePercent = round(($females / $currOccupancy) * 100, 1);
             }
+
+             if($coed == 0){
+                $coedPercent = 0;
+            }else{
+                $coedPercent = round(($coed / $currOccupancy) * 100, 1);
+            }
             
             $this->rows[] = array('hallName'       => $hallName,
                             'maxOccupancy'   => $maxOccupancy,
@@ -111,11 +126,15 @@ class GenderDistributionByHall extends Report implements iCsvReport {
                             'males'          => $males,
                             'malePercent'    => $malePercent,
                             'females'        => $females,
-                            'femalePercent'  => $femalePercent);
+                            'femalePercent'  => $femalePercent,
+                            'coed'           => $coed,
+                            'coedPercent'    => $coedPercent);  
+            ;
         }
         
         $this->totalMalePercent = round(($this->totalMales / $this->totalCurrOccupancy) * 100,1);
         $this->totalFemalePercent = round(($this->totalFemales / $this->totalCurrOccupancy) * 100,1);
+        $this->totalCoedPercent = round(($this->totalCoed / $this->totalCurrOccupancy) * 100,1);
     }
     
     public function setTerm($term)
@@ -144,6 +163,11 @@ class GenderDistributionByHall extends Report implements iCsvReport {
     public function getTotalFemales(){
         return $this->totalFemales;
     }
+
+    public function getTotalCoed()
+    {
+        return $this->totalCoed;
+    }
     
     public function getTotalMalePercent(){
         return $this->totalMalePercent;
@@ -151,6 +175,10 @@ class GenderDistributionByHall extends Report implements iCsvReport {
     
     public function getTotalFemalePercent(){
         return $this->totalFemalePercent;
+    }
+
+    public function getTotalCoedPercent(){
+        return $this->totalCoedPercent;
     }
     
     public function getCsvColumnsArray(){
