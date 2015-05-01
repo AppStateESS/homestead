@@ -1,10 +1,6 @@
 <?php
 namespace hms;
 
-define('hms\NotificationView::ERROR',   9);
-define('hms\NotificationView::WARNING', 8);
-define('hms\NotificationView::SUCCESS', 7);
-
 \PHPWS_Core::initModClass('notification', 'NQ.php');
 
 class NotificationView
