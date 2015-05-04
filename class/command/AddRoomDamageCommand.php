@@ -29,7 +29,7 @@ class AddRoomDamageCommand extends Command {
 
         $room = RoomFactory::getRoomByPersistentId($roomId, $term);
 
-        $damage = new RoomDamage($room, $damageType, $side, $note);
+        $damage = new RoomDamage($room, $term, $damageType, $side, $note);
 
         $db = new PHPWS_DB('hms_room_damage');
         $result = $db->saveObject($damage);
