@@ -46,7 +46,7 @@ class LotteryConfirmRoommateRequestCommand extends Command {
 
         // Check for a meal plan
         if(!isset($mealPlan) || $mealPlan == '') {
-        	NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Please choose a meal plan.');
+        	NQ::simple('hms', hms\NotificationView::ERROR, 'Please choose a meal plan.');
             $errorCmd->redirect();
         }
 

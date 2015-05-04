@@ -111,13 +111,13 @@ class LotteryChooseRoommatesCommand extends Command {
                 $roommateRlcAssign = RlcMembershipFactory::getMembership($studentObj, $term);
                 // Make sure the roommate is a member of the same RLC and is eligible for self-selection
                 if($roommateRlcAssign == null || $roommateRlcAssign->getStateName() != 'selfselect-invite' || $rlcAssignment->getRlc()->getId() != $roommateRlcAssign->getRlc()->getId()) {
-                    NQ::simple('hms', HMS_NOTIFICATION_ERROR, "$roommate must be a member of the same learning community as you, and must also be eligible for self-selction.");
+                    NQ::simple('hms', hms\NotificationView::ERROR, "$roommate must be a member of the same learning community as you, and must also be eligible for self-selction.");
                     $errorCmd->redirect();
                 }
                 
             // Otherwise (if not RLC members), make sure each roommate entered the lottery and has a valid application (not cancelled)
             }else if(HousingApplication::checkForApplication($roommate, $term) === FALSE){
-                NQ::simple('hms', HMS_NOTIFICATION_ERROR, "$roommate did not re-apply for housing. Please select a different roommate.");
+                NQ::simple('hms', hms\NotificationView::ERROR, "$roommate did not re-apply for housing. Please select a different roommate.");
                 $errorCmd->redirect();
             }
 

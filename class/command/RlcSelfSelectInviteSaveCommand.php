@@ -62,7 +62,7 @@ class RlcSelfSelectInviteSaveCommand extends Command {
         // Check for accept or decline status
         $acceptance = $context->get('acceptance');
         if(!isset($acceptance) || $acceptance == null) {
-        	NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Please indicate whether you accept or decline this invitation.');
+        	NQ::simple('hms', hms\NotificationView::ERROR, 'Please indicate whether you accept or decline this invitation.');
             $errorCmd->redirect();
         }
 
@@ -71,7 +71,7 @@ class RlcSelfSelectInviteSaveCommand extends Command {
         	// student declined
             $rlcAssignment->changeState(new RlcAssignmentDeclinedState($rlcAssignment));
             
-            NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, 'You have <strong>declined</strong> your Residential Learning Community invitation.');
+            NQ::simple('hms', hms\NotificationView::SUCCESS, 'You have <strong>declined</strong> your Residential Learning Community invitation.');
 
             // Log this!
             HMS_Activity_Log::log_activity($student->getUsername(), ACTIVITY_DECLINE_RLC_INVITE, UserStatus::getUsername(), $rlcAssignment->getRlcName());
@@ -85,7 +85,7 @@ class RlcSelfSelectInviteSaveCommand extends Command {
         // Make sure student accepted the terms
         if($acceptance == 'accept' && !isset($termsCheck)){
             // Student accepted the invite, but didn't check the terms/conditions box
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Please check the box indicating that you agree to the learning communitiy terms and conditions.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'Please check the box indicating that you agree to the learning communitiy terms and conditions.');
             $errorCmd->redirect();
         }
         
@@ -94,7 +94,7 @@ class RlcSelfSelectInviteSaveCommand extends Command {
         $cellPhone = $context->get('cellphone');
         $doNotCall = $context->get('do_not_call');
         if(is_null($doNotCall) && (!isset($cellPhone) || $cellPhone == '')){
-        	NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Please enter your cell phone number, or check the box to indicate you do not want to give a phone number.');
+        	NQ::simple('hms', hms\NotificationView::ERROR, 'Please enter your cell phone number, or check the box to indicate you do not want to give a phone number.');
             $errorCmd->redirect();
         }
         
@@ -105,7 +105,7 @@ class RlcSelfSelectInviteSaveCommand extends Command {
         $emergencyEmail = $context->get('emergency_contact_email');
 
         if (empty($emergencyName) || empty($emergencyRelationship) || empty($emergencyPhone) || empty($emergencyEmail)) {
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Please complete all of the emergency contact person information.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'Please complete all of the emergency contact person information.');
             $errorCmd->redirect();
         }
 
@@ -117,7 +117,7 @@ class RlcSelfSelectInviteSaveCommand extends Command {
         $missingPersonEmail = $context->get('missing_person_email');
 
         if (empty($missingPersonName) || empty($missingPersonRelationship) || empty($missingPersonPhone) || empty($missingPersonEmail)) {
-            NQ::simple('hms', HMS_NOTIFICATION_ERROR, 'Please complete all of the missing persons contact information.');
+            NQ::simple('hms', hms\NotificationView::ERROR, 'Please complete all of the missing persons contact information.');
             $errorCmd->redirect();
         }
         

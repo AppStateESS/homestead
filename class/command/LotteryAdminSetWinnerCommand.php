@@ -37,12 +37,12 @@ class LotteryAdminSetWinnerCommand extends Command {
             try{
                 $application = HousingApplicationFactory::getAppByStudent($student, $term);
             }catch(StudentNotFoundException $e){
-                NQ::simple('hms', HMS_NOTIFICATION_ERROR, "No matching student was found for: {$bannerId}");
+                NQ::simple('hms', hms\NotificationView::ERROR, "No matching student was found for: {$bannerId}");
                 continue;
             }
             
             if(is_null($application)){
-                NQ::simple('hms', HMS_NOTIFICATION_ERROR, "No housing application for: {$bannerId}");
+                NQ::simple('hms', hms\NotificationView::ERROR, "No housing application for: {$bannerId}");
                 continue;
             }
         
@@ -51,11 +51,11 @@ class LotteryAdminSetWinnerCommand extends Command {
             try{
                 $application->save();
             }catch(Exception $e){
-                NQ::simple('hms', HMS_NOTIFICATION_ERROR, "Error setting flag for: {$bannerId}");
+                NQ::simple('hms', hms\NotificationView::ERROR, "Error setting flag for: {$bannerId}");
                 continue;
             }
             
-            NQ::simple('hms', HMS_NOTIFICATION_SUCCESS, "Magic flag set for: {$bannerId}");
+            NQ::simple('hms', hms\NotificationView::SUCCESS, "Magic flag set for: {$bannerId}");
         }
 
         $viewCmd = CommandFactory::getCommand('ShowLotteryAutoWinners');

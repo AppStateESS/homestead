@@ -119,7 +119,7 @@ class LotteryConfirmCommand extends Command {
             {
             	$roommateRlcAssign = RlcMembershipFactory::getMembership($roommate, $term);
                 if($roommateRlcAssign == null || $roommateRlcAssign->getStateName() != 'selfselect-invite' || $rlcAssignment->getRlc()->getId() != $roommateRlcAssign->getRlc()->getId()) {
-                	NQ::simple('hms', HMS_NOTIFICATION_ERROR, "$username must be a member of the same learning community as you, and must also be eligible for self-selction.");
+                	NQ::simple('hms', hms\NotificationView::ERROR, "$username must be a member of the same learning community as you, and must also be eligible for self-selction.");
                     $errorCmd->redirect();
                 }
             }

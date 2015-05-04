@@ -25,7 +25,7 @@ class TermsConditionsAdminView extends hms\View{
         try {
         	$existingTemplate = $this->term->getDocusignTemplate();
         } catch (InvalidConfigurationException $e) {
-        	NQ::simple('hms', HMS_NOTIFICATION_WARNING, 'No DocuSign template id has been set for students over 18.');
+        	NQ::simple('hms', hms\NotificationView::WARNING, 'No DocuSign template id has been set for students over 18.');
         }
         
         $form->addText('template', $existingTemplate);
@@ -38,7 +38,7 @@ class TermsConditionsAdminView extends hms\View{
         try{
         	$under18Template = $this->term->getDocusignUnder18Template();
         } catch (InvalidConfigurationException $e) {
-            NQ::simple('hms', HMS_NOTIFICATION_WARNING, 'No DocuSign template id has been set for students under 18.');
+            NQ::simple('hms', hms\NotificationView::WARNING, 'No DocuSign template id has been set for students under 18.');
         }
         
         $form->addText('under18_template', $under18Template);
