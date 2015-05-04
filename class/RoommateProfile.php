@@ -394,4 +394,3 @@ class RoommateProfile {
         $this->$item = $value;
     }
 }
-?>
