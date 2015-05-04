@@ -1,8 +1,6 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'View.php');
-
-class FloorView extends hms\View {
+class FloorView extends hms\View{
 
     private $hall;
     private $floor;

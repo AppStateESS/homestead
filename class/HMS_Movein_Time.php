@@ -116,7 +116,7 @@ class HMS_Movein_Time
         return $timestamps;
     }
 
-    public function get_movein_times_pager(){
+    public static function get_movein_times_pager(){
         PHPWS_Core::initCoreClass('DBPager.php');
 
         $pager = new DBPager('hms_movein_time', 'HMS_Movein_Time');

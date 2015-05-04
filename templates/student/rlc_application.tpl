@@ -45,7 +45,7 @@
 </table>
 
 <div style="margin-top: 1em;">
-  <strong>Specific communites chosen because:</strong>
+  <strong>Specific communities chosen because:</strong>
 </div>
 <div>{WHY_SPECIFIC}</div>
 

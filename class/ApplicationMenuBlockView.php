@@ -37,12 +37,9 @@ class ApplicationMenuBlockView extends hms\View {
             $tpl['END_DEADLINE'] = HMS_Util::getFriendlyDate($this->endDate);
         } else if( is_null($this->application) ){
             $tpl['ICON'] = FEATURE_OPEN_ICON;
-            $appCommand = CommandFactory::getCommand('ShowTermsAgreement');
-            $appCommand->setTerm($this->term);
             $cmd = CommandFactory::getCommand('ShowHousingApplicationForm');
             $cmd->setTerm($this->term);
-            $appCommand->setAgreedCommand($cmd);
-            $tpl['APP_NOW'] = $appCommand->getLink('Apply now!');
+            $tpl['APP_NOW'] = $cmd->getLink('Apply now!');
         } else {
             $appCommand = CommandFactory::getCommand('ShowApplicationView');
             if(!is_null($this->application)){
@@ -55,7 +52,6 @@ class ApplicationMenuBlockView extends hms\View {
             if(time() < $this->editDate){
                 $tpl['ICON'] = FEATURE_COMPLETED_ICON;
                 $newApp = CommandFactory::getCommand('ShowHousingApplicationForm');
-                $newApp->setAgreedToTerms(1);
                 $newApp->setTerm($this->term);
                 $tpl['NEW_APP'] = $newApp->getLink('submit a new application');
             }

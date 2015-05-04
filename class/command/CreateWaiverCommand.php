@@ -25,7 +25,7 @@ class CreateWaiverCommand extends Command {
         PHPWS_Core::initModClass('hms', 'HMS_Eligibility_Waiver.php');
         PHPWS_Core::initModClass('hms', 'SOAP.php');
 
-        $usernames = split("\n", $context->get('usernames'));
+        $usernames = explode("\n", $context->get('usernames'));
         $term = PHPWS_Settings::get('hms', 'lottery_term');
         $soap = SOAP::getInstance(UserStatus::getUsername(), UserStatus::isAdmin()?(SOAP::ADMIN_USER):(SOAP::STUDENT_USER));
 

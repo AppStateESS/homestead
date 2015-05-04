@@ -1,8 +1,6 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'View.php');
-
-class HallOverview extends hms\View {
+class HallOverview extends hms\View{
 
     private $hall;
     private $nakedDisplay;

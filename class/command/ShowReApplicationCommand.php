@@ -3,14 +3,9 @@
 class ShowReApplicationCommand extends Command {
 
     private $term;
-    private $agreedToTerms;
 
     public function setTerm($term){
         $this->term = $term;
-    }
-
-    public function setAgreedToTerms($terms){
-        $this->agreedToTerms = $terms;
     }
 
     public function getRequestVars()
@@ -18,10 +13,6 @@ class ShowReApplicationCommand extends Command {
         $vars = array('action'=>'ShowReApplication');
 
         $vars['term'] = $this->term;
-
-        if(isset($this->agreedToTerms)){
-            $vars['agreedToTerms'] = $this->agreedToTerms;
-        }
 
         return $vars;
     }
@@ -51,10 +42,12 @@ class ShowReApplicationCommand extends Command {
         }
 
         # Make sure the student agreed to the terms, if not, send them back to the terms & agreement command
-        $agreedToTerms = $context->get('agreedToTerms');
+        $event = $context->get('event');
+
+        $_SESSION['application_data'] = array();
 
         # If they haven't agreed, redirect to the agreement
-        if(is_null($agreedToTerms) || !isset($agreedToTerms) || $agreedToTerms != 1){
+        if(is_null($event) || !isset($event) || ($event != 'signing_complete' && $event != 'viewing_complete')){
             $onAgree = CommandFactory::getCommand('ShowReApplication');
             $onAgree->setTerm($term);
 

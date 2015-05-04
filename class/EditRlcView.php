@@ -1,6 +1,5 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'View.php');
 PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
 PHPWS_Core::initCoreClass('DBPager.php');
 

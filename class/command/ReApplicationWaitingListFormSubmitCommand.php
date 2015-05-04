@@ -23,7 +23,6 @@ class ReApplicationWaitingListFormSubmitCommand extends Command {
 
         $errorCmd = CommandFactory::getCommand('ShowOffCampusWaitListApplication');
         $errorCmd->setTerm($term);
-        $errorCmd->setAgreedToTerms(1);
 
         $depositAgreed = $context->get('deposit_check');
 

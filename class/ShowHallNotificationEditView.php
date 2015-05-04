@@ -9,9 +9,8 @@
  * @subpackage hms
  */
 
-PHPWS_Core::initModClass('hms', 'View.php');
+class ShowHallNotificationEditView extends hms\View{
 
-class ShowHallNotificationEditView extends hms\View {
     private $subject;
     private $body;
     private $anonymous;

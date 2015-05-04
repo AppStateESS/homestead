@@ -5,12 +5,14 @@ class LotteryChooseRoomView extends hms\View {
     public $student;
     public $term;
     public $floorId;
+    private $rlcAssignment;
     
-    public function __construct(Student $student, $term, $floorId)
+    public function __construct(Student $student, $term, $floorId, HMS_RLC_Assignment $rlcAssignment = null)
     {
         $this->student = $student;
         $this->term = $term;
         $this->floorId = $floorId;
+        $this->rlcAssignment = $rlcAssignment;
     }
     
     public function show()
@@ -33,6 +35,12 @@ class LotteryChooseRoomView extends hms\View {
                 $tpl['FLOOR_PLAN_IMAGE'] = $file->parentLinked();
         }
 
+        if($this->rlcAssignment != null) {
+            $rlcId = $this->rlcAssignment->getRlc()->getId();
+        } else {
+            $rlcId = null;
+        }
+
         $rooms = $floor->get_rooms();
 
         $tpl['room_list'] = array();
@@ -51,7 +59,8 @@ class LotteryChooseRoomView extends hms\View {
                 || $room->offline  == 1 
                 || $room->private  == 1 
                 || $room->overflow == 1
-                || $room->parlor   == 1){
+                || $room->parlor   == 1
+                || $room->getReservedRlcId() != $rlcId){
         
                 // Show a grayed out row and no link
                 $row['ROOM_NUM']        = $room->room_number;

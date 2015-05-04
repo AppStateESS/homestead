@@ -87,6 +87,11 @@ class EditRoomCommand extends Command {
         $room->gender_type    = $context->get('gender_type');
         $room->default_gender = $context->get('default_gender');
         
+        $rlcReserved = $context->get('rlc_reserved');
+        if($rlcReserved != 0) {
+        	$room->setReservedRlcId($rlcReserved);
+        }
+        
         $room->offline        = $context->get('offline')   == 1 ? 1 : 0;
         $room->reserved       = $context->get('reserved')  == 1 ? 1 : 0;
         $room->ra             = $context->get('ra')        == 1 ? 1 : 0;

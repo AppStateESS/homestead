@@ -1,0 +1,1 @@
+alter table hms_room add column reserved_rlc_id integer NULL REFERENCES hms_learning_communities(id);

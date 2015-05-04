@@ -34,6 +34,9 @@ class ReportHistoryPager extends DBPager {
         $this->setEmptyMessage('No previous reports found.');
         
         $this->addRowTags('historyPagerRowTags');
+        
+        // Increase this limit because, by default, the DBPager limit is too small
+        $this->limit = 100;
     }
 }
 

@@ -1,0 +1,1 @@
+alter table hms_checkin add column improper_checkout_note character varying;

@@ -5,11 +5,13 @@ class LotteryChooseFloorView extends hms\View {
     private $student;
     private $term;
     private $hallId;
+    private $rlcAssignment;
     
-    public function __construct(Student $student, $term, $hallId){
+    public function __construct(Student $student, $term, $hallId, HMS_RLC_Assignment $rlcAssignment = null){
         $this->student = $student;
         $this->term = $term;
         $this->hallId = $hallId;
+        $this->rlcAssignment = $rlcAssignment;
     }
     
     public function show()
@@ -28,7 +30,7 @@ class LotteryChooseFloorView extends hms\View {
 
         if(isset($hall->room_plan_image_id)){
             $file = Cabinet::getFile($hall->room_plan_image_id);
-            $tpl['ROOM_PLAN_IMAGE'] = $file->parentLinked();
+            //$tpl['ROOM_PLAN_IMAGE'] = $file->parentLinked();
         }
 
         if(isset($hall->map_image_id)){
@@ -37,7 +39,13 @@ class LotteryChooseFloorView extends hms\View {
 
         if(isset($hall->other_image_id) && $hall->other_image_id != 0 && $hall->other_image_id != '0'){
             $file = Cabinet::getFile($hall->other_image_id);
-            $tpl['OTHER_IMAGE'] = $file->parentLinked();
+            //$tpl['OTHER_IMAGE'] = $file->parentLinked();
+        }
+
+        if($this->rlcAssignment != null) {
+            $rlcId = $this->rlcAssignment->getRlc()->getId();
+        } else {
+            $rlcId = null;
         }
 
         $floors = $hall->get_floors();
@@ -45,7 +53,7 @@ class LotteryChooseFloorView extends hms\View {
         foreach($floors as $floor){
             $row = array();
 
-            if($floor->count_avail_lottery_rooms($this->student->getGender()) <= 0){
+            if($floor->count_avail_lottery_rooms($this->student->getGender(), $rlcId) <= 0){
                 $row['FLOOR']           = HMS_Util::ordinal($floor->floor_number);
                 $row['ROW_TEXT_COLOR']  = 'grey';
                 $tpl['floor_list'][]    = $row;

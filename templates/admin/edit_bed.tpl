@@ -10,6 +10,10 @@
     <td>{BEDROOM_LABEL}</td>
   </tr>
   <tr>
+    <td>Bed letter:</td>
+    <td>{BED_LETTER}</td>
+  </tr>
+  <tr>
     <td>Phone Number:</td>
     <td>828-266-{PHONE_NUMBER}</td>
   </tr>

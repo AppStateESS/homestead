@@ -13,7 +13,7 @@ class PackageDesk extends Report implements iCsvReport{
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
         $this->data = array();
         
-        $query = "SELECT hms_assignment.id, hms_assignment.asu_username, hms_new_application.cell_phone, hms_room.room_number, hms_floor.floor_number, hms_residence_hall.hall_name FROM hms_assignment LEFT JOIN (SELECT username, MAX(term) AS mterm FROM hms_new_application GROUP BY username) AS a ON hms_assignment.asu_username = a.username LEFT JOIN hms_new_application ON a.username = hms_new_application.username AND a.mterm = hms_new_application.term LEFT JOIN hms_bed ON hms_assignment.bed_id = hms_bed.id LEFT JOIN hms_room ON hms_bed.room_id = hms_room.id LEFT JOIN hms_floor ON hms_room.floor_id = hms_floor.id LEFT JOIN hms_residence_hall ON hms_floor.residence_hall_id = hms_residence_hall.id WHERE ( hms_assignment.term = $this->term) ORDER BY hms_residence_hall.id ASC";
+        $query = "SELECT hms_assignment.id, hms_assignment.banner_id, hms_assignment.asu_username, hms_new_application.cell_phone, hms_room.room_number, hms_floor.floor_number, hms_residence_hall.hall_name FROM hms_assignment LEFT JOIN (SELECT username, MAX(term) AS mterm FROM hms_new_application GROUP BY username) AS a ON hms_assignment.asu_username = a.username LEFT JOIN hms_new_application ON a.username = hms_new_application.username AND a.mterm = hms_new_application.term LEFT JOIN hms_bed ON hms_assignment.bed_id = hms_bed.id LEFT JOIN hms_room ON hms_bed.room_id = hms_room.id LEFT JOIN hms_floor ON hms_room.floor_id = hms_floor.id LEFT JOIN hms_residence_hall ON hms_floor.residence_hall_id = hms_residence_hall.id WHERE ( hms_assignment.term = $this->term) ORDER BY hms_residence_hall.id ASC";
 
         $results = PHPWS_DB::getAll($query);
 
@@ -23,13 +23,13 @@ class PackageDesk extends Report implements iCsvReport{
 
         foreach($results as $result){
             try{
-                $student = StudentFactory::getStudentByUsername($result['asu_username'], $this->term);
+                $student = StudentFactory::getStudentByBannerId($result['banner_id'], $this->term);
             }catch(Exception $e){
-                $this->data[] = array($result['hall_name'],$result['floor_number'],$result['room_number'],ERROR,ERROR,ERROR,$result['cell_phone'],$result['asu_username']."@appstate.edu");
+                $this->data[] = array($result['hall_name'],$result['floor_number'],$result['room_number'],'ERROR','ERROR','ERROR',$result['cell_phone'],$result['asu_username']."@appstate.edu");
                 continue;
             }
 
-            $this->data[] = array($result['hall_name'],$result['floor_number'],$result['room_number'],$student->getLastName(),$student->getFirstName(),$student->getBannerId(),$result['cell_phone'],$result['asu_username'] . "@appstate.edu");
+            $this->data[] = array($result['hall_name'],$result['floor_number'],$result['room_number'],$student->getLastName(),$student->getFirstName(),$result['banner_id'],$result['cell_phone'],$result['asu_username'] . "@appstate.edu");
         }
     }
     

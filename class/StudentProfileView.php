@@ -1,6 +1,5 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'View.php');
 PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 PHPWS_Core::initModClass('hms', 'ActivityLogView.php');
 

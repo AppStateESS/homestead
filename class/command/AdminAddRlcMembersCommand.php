@@ -79,7 +79,7 @@ class AdminAddRlcMembersCommand extends Command {
             // Check for an existing housing application
             $housingApp = HousingApplicationFactory::getAppByStudent($student, $term);
 
-            // If no housing app, then skip to next student
+            // If no housing app, show a warning
             if (is_null($housingApp)) {
                 NQ::simple('hms', hms\NotificationView::ERROR, "No housing application found for: {$student->getName()}({$student->getBannerID()})");
                 continue;
@@ -92,7 +92,7 @@ class AdminAddRlcMembersCommand extends Command {
                 // Create a new learning community application
                 $rlcApp = new HMS_RLC_Application();
                 $rlcApp->setUsername($student->getUsername());
-                $rlcApp->setDateSubmitted(mktime());
+                $rlcApp->setDateSubmitted(time());
                 $rlcApp->setFirstChoice($community->getId());
                 $rlcApp->setSecondChoice(null);
                 $rlcApp->setThirdChoice(null);

@@ -9,14 +9,7 @@ class LotteryAutoWinnersView extends hms\View {
         $form = new PHPWS_Form('magic_form');
         $submitCmd->initForm($form);
 
-        $form->addText('asu_username');
-        $form->setLabel('asu_username', 'Banner ID Or User name: ');
-
-        $form->addCheck('magic', array('enabled'));
-        $form->setLabel('magic', array('Magic Flag: '));
-
-        javascript('jquery_ui');
-        javascript('modules/hms/autoFocus', array('ELEMENT' => $form->getId('asu_username')));
+        $form->addTextArea('banner_ids');
 
         $form->addSubmit('Submit');
 

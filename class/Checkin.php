@@ -25,6 +25,7 @@ class Checkin {
     public $checkout_by;
     public $express_checkout;
     public $improper_checkout;
+    public $improper_checkout_note;
     public $checkout_key_code;
     public $key_not_returned;
 
@@ -185,6 +186,11 @@ class Checkin {
     public function setImproperCheckout($improper)
     {
         $this->improper_checkout = $improper;
+    }
+    
+    public function setImproperCheckoutNote($note)
+    {
+    	$this->improper_checkout_note = $note;
     }
 
     public function setCheckoutKeyCode($code)

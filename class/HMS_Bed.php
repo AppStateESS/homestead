@@ -52,7 +52,7 @@ class HMS_Bed extends HMS_Item {
         $new_bed->reset();
         $new_bed->term = $to_term;
         $new_bed->room_id = $room_id;
-        $new_bed->setRoomChangeReserved(0);
+        $new_bed->clearRoomChangeReserved();
 
         try {
             $new_bed->save();
@@ -399,7 +399,7 @@ class HMS_Bed extends HMS_Item {
         $db = new PHPWS_DB('hms_lottery_reservation');
         $db->addWhere('bed_id', $this->id);
         $db->addWhere('term', $this->term);
-        $db->addWhere('expires_on', mktime(), '>');
+        $db->addWhere('expires_on', time(), '>');
         $result = $db->select('count');
 
         if (PHPWS_Error::logIfError($result)) {
@@ -418,7 +418,7 @@ class HMS_Bed extends HMS_Item {
         $db = new PHPWS_DB('hms_lottery_reservation');
         $db->addWhere('bed_id', $this->id);
         $db->addWhere('term', $this->term);
-        $db->addWhere('expires_on', mktime(), '>');
+        $db->addWhere('expires_on', time(), '>');
         $result = $db->select('row');
 
         if (PHPWS_Error::logIfError($result)) {
@@ -648,7 +648,7 @@ class HMS_Bed extends HMS_Item {
     * The 'ra_bed' flag is expected to be either TRUE or FALSE.
     * @return TRUE for success, FALSE otherwise
     */
-    public static function addBed($roomId, $term, $bedLetter, $bedroomLabel, $phoneNumber, $bannerId, $raRoommate, $intlReserved)
+    public static function addBed($roomId, $term, $bedLetter, $bedroomLabel, $phoneNumber, $bannerId, $raRoommate, $intlReserved, $raBed)
     {
         // Check permissions
         if (!UserStatus::isAdmin() || !Current_User::allow('hms', 'bed_structure')) {
@@ -669,6 +669,7 @@ class HMS_Bed extends HMS_Item {
         $bed->bedroom_label = $bedroomLabel;
         $bed->banner_id = $bannerId;
         $bed->phone_number = $phoneNumber;
+        $bed->ra = $raBed;
         $bed->ra_roommate = $raRoommate;
         $bed->international_reserved = $intlReserved;
 

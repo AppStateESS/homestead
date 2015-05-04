@@ -13,7 +13,7 @@ class HMS_Eligibility_Waiver{
 
         $this->asu_username = $asu_username;
         $this->term = $term;
-        $this->created_on = mktime();
+        $this->created_on = time();
         $this->created_by = Current_User::getUsername();
     }
 
@@ -43,7 +43,7 @@ class HMS_Eligibility_Waiver{
      * Static methods *
      ******************/
     
-    public function checkForWaiver($username, $term = NULL)
+    public static function checkForWaiver($username, $term = NULL)
     {
         $db = new PHPWS_DB('hms_eligibility_waiver');
         $db->addWhere('asu_username', $username);

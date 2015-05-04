@@ -89,6 +89,15 @@ class UpdateRoomFieldCommand extends Command {
                 die();
             }
         }
+        
+        /* RLC Reservation */
+        if($element == 'rlc_reserved') {
+            if($value <= 0) {
+            	$room->setReservedRlcId(null);
+            } else {
+        	   $room->setReservedRlcId($value);
+            }
+        }
 
         // A switch statement for all the check boxes
         switch($element){

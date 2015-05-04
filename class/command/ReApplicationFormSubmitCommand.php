@@ -24,7 +24,6 @@ class ReApplicationFormSubmitCommand extends Command {
 
         $errorCmd = CommandFactory::getCommand('ShowReApplication');
         $errorCmd->setTerm($term);
-        $errorCmd->setAgreedToTerms(1);
 
         $depositAgreed = $context->get('deposit_check');
 

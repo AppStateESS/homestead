@@ -1,8 +1,6 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'View.php');
-
-class WelcomeScreenViewTooSoon extends hms\View {
+class WelcomeScreenViewTooSoon extends hms\View{
 
     public function show()
     {

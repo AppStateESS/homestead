@@ -26,10 +26,10 @@ class PdoFactory {
         
         return self::$factory;
     }
-
+  
     /**
      * Returns a PDO object which is connected to the current database
-     * @return PDO A PDO instance
+     * @return $pdo A PDO instance, connected to the current DB
      */
     public static function getPdoInstance()
     {

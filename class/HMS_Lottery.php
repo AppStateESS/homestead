@@ -8,9 +8,9 @@ class HMS_Lottery {
     /**
      * Looks for an entry with the 'magic_winner' flag set and returns it, otherwise it returns null
      */
-    public function check_magic_winner($term)
+    public static function check_magic_winner($term)
     {
-        $now = mktime();
+        $now = time();
 
         $query = "SELECT * FROM hms_new_application JOIN hms_lottery_application ON hms_new_application.id = hms_lottery_application.id
                     LEFT OUTER JOIN (SELECT asu_username FROM hms_assignment WHERE term=$term) as foo ON hms_new_application.username = foo.asu_username
@@ -36,9 +36,9 @@ class HMS_Lottery {
      * Returns the number of lottery entries currently outstanding (i.e.
      * non-winners)
      */
-    public function count_remaining_entries($term)
+    public static function count_remaining_entries($term)
     {
-        $now = mktime();
+        $now = time();
 
         $sql = "SELECT count(*) FROM hms_new_application JOIN hms_lottery_application ON hms_new_application.id = hms_lottery_application.id
                 LEFT OUTER JOIN (SELECT asu_username FROM hms_assignment WHERE hms_assignment.term=$term) as foo ON hms_new_application.username = foo.asu_username
@@ -56,9 +56,9 @@ class HMS_Lottery {
         return $num_remaining_entries;
     }
 
-    public function count_outstanding_invites($term, $gender = null)
+    public static function count_outstanding_invites($term, $gender = null)
     {
-        $now = mktime();
+        $now = time();
         $query = "select count(*) FROM hms_new_application JOIN hms_lottery_application ON hms_new_application.id = hms_lottery_application.id
                 LEFT OUTER JOIN (SELECT asu_username FROM hms_assignment WHERE term=$term AND lottery = 1) as foo ON hms_new_application.username = foo.asu_username
                 WHERE foo.asu_username IS NULL
@@ -81,9 +81,9 @@ class HMS_Lottery {
     /*
      * Returns the number of outstanding *roommate* invites
     */
-    public function count_outstanding_roommate_invites($term)
+    public static function count_outstanding_roommate_invites($term)
     {
-        $now = mktime();
+        $now = time();
         $query = "select count(*) FROM hms_lottery_reservation
                 LEFT OUTER JOIN (SELECT asu_username FROM hms_assignment WHERE term=$term AND lottery = 1) as foo ON hms_lottery_reservation.asu_username = foo.asu_username
                 WHERE foo.asu_username IS NULL
@@ -103,9 +103,9 @@ class HMS_Lottery {
     /*
      * Returns the number of invites sent (confirmed or outstanding) for the given class
     */
-    public function count_invites_by_class($term, $class)
+    public static function count_invites_by_class($term, $class)
     {
-        $now = mktime();
+        $now = time();
         $term_year = Term::getTermYear($term);
 
         $query = "SELECT count(*) FROM hms_new_application JOIN hms_lottery_application ON hms_new_application.id = hms_lottery_application.id
@@ -139,9 +139,9 @@ class HMS_Lottery {
         }
     }
 
-    public function count_remaining_entries_by_class($term, $class)
+    public static function count_remaining_entries_by_class($term, $class)
     {
-        $now = mktime();
+        $now = time();
         $term_year = Term::getTermYear($term);
 
         $query = "SELECT count(*) FROM hms_new_application JOIN hms_lottery_application ON hms_new_application.id = hms_lottery_application.id
@@ -176,9 +176,9 @@ class HMS_Lottery {
         }
     }
 
-    function count_outstanding_invites_by_class($term, $class)
+    public static function count_outstanding_invites_by_class($term, $class)
     {
-        $now = mktime();
+        $now = time();
         $term_year = Term::getTermYear($term);
 
         $query = "SELECT count(*) from hms_new_application JOIN hms_lottery_application ON hms_new_application.id = hms_lottery_application.id
@@ -213,7 +213,7 @@ class HMS_Lottery {
         }
     }
 
-    function count_applications_by_class($term, $class)
+    public static function count_applications_by_class($term, $class)
     {
         $term_year = Term::getTermYear($term);
 
@@ -247,7 +247,7 @@ class HMS_Lottery {
         }
     }
 
-    function count_assignments_by_class($term, $class)
+    public static function count_assignments_by_class($term, $class)
     {
         $term_year = Term::getTermYear($term);
 
@@ -284,7 +284,7 @@ class HMS_Lottery {
         }
     }
 
-    public function send_winning_reminder_emails($term)
+    public static function send_winning_reminder_emails($term)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Email.php');
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
@@ -294,7 +294,7 @@ class HMS_Lottery {
         $query = "select hms_new_application.username, hms_lottery_application.invite_expires_on FROM hms_new_application JOIN hms_lottery_application ON hms_new_application.id = hms_lottery_application.id
                 LEFT OUTER JOIN (SELECT asu_username FROM hms_assignment WHERE term=$term AND lottery = 1) as foo ON hms_new_application.username = foo.asu_username
                 WHERE foo.asu_username IS NULL
-                AND hms_lottery_application.invite_expires_on > " . mktime();
+                AND hms_lottery_application.invite_expires_on > " . time();
 
         $result = PHPWS_DB::getAll($query);
 
@@ -312,7 +312,7 @@ class HMS_Lottery {
         }
     }
 
-    public function send_roommate_reminder_emails($term)
+    public static function send_roommate_reminder_emails($term)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
         PHPWS_Core::initModclass('hms', 'StudentFactory.php');
@@ -321,7 +321,7 @@ class HMS_Lottery {
         $query = "select hms_lottery_reservation.* FROM hms_lottery_reservation
                 LEFT OUTER JOIN (SELECT asu_username FROM hms_assignment WHERE term=$term AND lottery = 1) as foo ON hms_lottery_reservation.asu_username = foo.asu_username
                 WHERE foo.asu_username IS NULL
-                AND hms_lottery_reservation.expires_on > " . mktime();
+                AND hms_lottery_reservation.expires_on > " . time();
 
         $result = PHPWS_DB::getAll($query);
         if (PEAR::isError($result)) {
@@ -342,7 +342,7 @@ class HMS_Lottery {
         }
     }
 
-    public function lottery_complete($status, $log, $unschedule = false)
+    public static function lottery_complete($status, $log, $unschedule = false)
     {
         echo "Lottery complete, status: $status<br />\n";
 
@@ -363,13 +363,13 @@ class HMS_Lottery {
     /**
      * Retuns an array of lottery roommate invites
      */
-    public function get_lottery_roommate_invites($username, $term)
+    public static function get_lottery_roommate_invites($username, $term)
     {
         $db = new PHPWS_DB('hms_lottery_reservation');
 
         $db->addWhere('asu_username', $username);
         $db->addWhere('term', $term);
-        $db->addWhere('expires_on', mktime(), '>'); // make sure the request hasn't expired
+        $db->addWhere('expires_on', time(), '>'); // make sure the request hasn't expired
 
         $result = $db->select();
 
@@ -380,11 +380,11 @@ class HMS_Lottery {
         return $result;
     }
 
-    public function get_lottery_roommate_invite_by_id($id)
+    public static function get_lottery_roommate_invite_by_id($id)
     {
         $db = new PHPWS_DB('hms_lottery_reservation');
 
-        $db->addWhere('expires_on', mktime(), '>'); // make sure the request hasn't expired
+        $db->addWhere('expires_on', time(), '>'); // make sure the request hasn't expired
         $db->addWhere('id', $id);
 
         $result = $db->select('row');
@@ -396,7 +396,7 @@ class HMS_Lottery {
         return $result;
     }
 
-    public function confirm_roommate_request($username, $requestId, $meal_plan)
+    public static function confirm_roommate_request($username, $requestId, $meal_plan)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
@@ -457,7 +457,7 @@ class HMS_Lottery {
      * Returns true if the student is assigned in the current term
     * or if the student has an eligibility waiver.
     */
-    public function determineEligibility($username)
+    public static function determineEligibility($username)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
         PHPWS_Core::initModClass('hms', 'HMS_Eligibility_Waiver.php');
@@ -475,7 +475,7 @@ class HMS_Lottery {
     }
 
     // Translates an application term into a class (fr, soph, etc) based on the term given
-    public function application_term_to_class($curr_term, $application_term)
+    public static function application_term_to_class($curr_term, $application_term)
     {
 
         // Break up the term and year
@@ -511,7 +511,7 @@ class HMS_Lottery {
         }
     }
 
-    public function getSpecialInterestGroupsMap()
+    public static function getSpecialInterestGroupsMap()
     {
         $special_interests['none'] = 'None';
         $special_interests['honors'] = 'The Honors College';

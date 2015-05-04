@@ -60,7 +60,7 @@ class BannerQueueItem {
         $db = new PHPWS_DB('hms_banner_queue');
 
         $this->stamp();
-
+        
         $result = $db->saveObject($this);
         if(PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
@@ -89,7 +89,7 @@ class BannerQueueItem {
      */
     public function stamp()
     {
-        $this->queued_on = mktime();
+        $this->queued_on = time();
         $this->queued_by = Current_User::getId();
     }
 

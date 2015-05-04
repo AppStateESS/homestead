@@ -1,8 +1,6 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'View.php');
-
-class AddBedView extends hms\View {
+class AddBedView extends hms\View{
 
     private $hall;
     private $floor;
@@ -80,6 +78,8 @@ class AddBedView extends hms\View {
              
             $form->addText('banner_id', '0' . $roomNumber . ($this->room->get_number_of_beds()+1));
         }
+        
+        $form->addCheckBox('ra', 1);
 
         $form->addCheckBox('ra_roommate', 1);
         $form->addCheckBox('international_reserved',1);

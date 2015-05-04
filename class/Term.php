@@ -25,8 +25,10 @@ class Term
 {
     public $term;
     public $banner_queue;
-    public $pdf_terms;
-    public $txt_terms;
+    
+    public $docusign_template_id;
+    public $docusign_under18_template_id;
+    
     private $isNew = false;
 
     /**
@@ -95,54 +97,34 @@ class Term
         $this->banner_queue = $flag;
     }
 
-    /**
-     * Gets the path of the PDF file for the housing contract for this term.
-     * @return String path of housing contract PDF file
-     * @throws InvalidConfigurationException
-     */
-    public function getPdfTerms()
+    public function getDocusignTemplate()
     {
-        if(is_null($this->pdf_terms) || empty($this->pdf_terms)) {
+        if(is_null($this->docusign_template_id) || $this->docusign_template_id == '') {
             PHPWS_Core::initModClass('hms', 'exception/InvalidConfigurationException.php');
-            throw new InvalidConfigurationException('No pdf contract file uploaded for ' . $this->term);
+            throw new InvalidConfigurationException('No Docusign template set for ' . $this->term);
         }
-
-        if(!file_exists($this->pdf_terms)) {
-            PHPWS_Core::initModClass('hms', 'exception/InvalidConfigurationException.php');
-            throw new InvalidConfigurationException('The specified pdf contract file uploaded for ' . $this->term . ' does not exist.');
-        }
-
-        return $this->pdf_terms;
+        
+        return $this->docusign_template_id;
     }
-
-    public function setPdfTerms($pdf_terms)
+    
+    public function setDocusignTemplate($template)
     {
-        $this->pdf_terms = $pdf_terms;
+    	$this->docusign_template_id = $template;
     }
-
-    /**
-     * Gets the path of the text file for the housing contract for this term.
-     * @return String Path of the housing contract txt file.
-     * @throws InvalidConfigurationException
-     */
-    public function getTxtTerms()
+    
+    public function getDocusignUnder18Template()
     {
-        if(is_null($this->txt_terms) || empty($this->txt_terms)) {
+    	if(is_null($this->docusign_under18_template_id) || $this->docusign_under18_template_id == '') {
             PHPWS_Core::initModClass('hms', 'exception/InvalidConfigurationException.php');
-            throw new InvalidConfigurationException('No text contract file uploaded for ' . $this->term);
+            throw new InvalidConfigurationException('No Docusign under 18 template set for ' . $this->term);
         }
-
-        if(!file_exists($this->txt_terms)) {
-            PHPWS_Core::initModClass('hms', 'exception/InvalidConfigurationException.php');
-            throw new InvalidConfigurationException('The specified text contract file uploaded for ' . $this->term . ' does not exist.');
-        }
-
-        return $this->txt_terms;
+        
+        return $this->docusign_under18_template_id;
     }
-
-    public function setTxtTerms($txt_terms)
+    
+    public function setDocusignUnder18Template($template)
     {
-        $this->txt_terms = $txt_terms;
+    	$this->docusign_under18_template_id = $template;
     }
 
     /**

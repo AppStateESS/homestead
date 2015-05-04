@@ -1,6 +1,5 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'View.php');
 PHPWS_Core::initModClass('hms', 'CommandFactory.php');
 
 class LotteryEligibilityWaiverView extends hms\View {

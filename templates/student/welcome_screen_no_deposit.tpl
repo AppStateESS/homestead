@@ -19,7 +19,7 @@
         <br />
         
         <div style="border: 2px solid #F00; background-color: #F0F0F0; padding: 3px">
-            <div style="margin-left: 10px; margin-top: 10px; margin-right: 10px; float: left"><img src="images/mod/hms/icons/alert.png"></div>
+            <div style="margin-left: 10px; margin-top: 10px; margin-right: 10px; float: left"><img src="mod/hms/img/icons/alert.png"></div>
             <div><strong>Our records indicate you have not paid your acceptance deposit to the Office of Admissions. You are required to pay this deposit before you will be allowed to apply for on-campus housing. It may take up to twenty-four hours for your payment to be processed.</strong></div>
         </div>
         

@@ -2,10 +2,20 @@ BEGIN;
 CREATE TABLE hms_term (
     term    integer NOT NULL,
     banner_queue smallint NOT NULL,
-    pdf_terms character varying(255),
-    txt_terms character varying(255),
+    docusign_template_id character varying,
+    docusign_under18_template_id character varying,
     primary key(term)
 );
+
+create table hms_contract (
+	id 			integer not null,
+	banner_id 	integer not null,
+	term 		integer not null REFERENCES hms_term(term),
+	envelope_id character varying not null,
+	PRIMARY KEY(id)
+);
+
+create sequence hms_contract_seq;
 
 CREATE TABLE hms_student_cache (
     banner_id           integer NOT NULL,
@@ -193,6 +203,7 @@ CREATE TABLE hms_room (
     reserved                smallint NOT NULL DEFAULT 0,
     offline                 smallint NOT NULL DEFAULT 0,
     parlor                  smallint NOT NULL DEFAULT 0,
+    reserved_rlc_id			integer NULL REFERENCES hms_learning_communities(id),
     added_by                smallint NOT NULL,
     added_on                integer NOT NULL,
     updated_by              smallint,
@@ -235,6 +246,8 @@ create table hms_checkin (
     improper_checkout   smallint,
     checkout_key_code   character varying,
     key_not_returned    smallint,
+    bed_persistent_id 	character varying,
+    improper_checkout_note	character varying,
     PRIMARY KEY (id)
 );
 
@@ -596,7 +609,8 @@ CREATE TABLE hms_banner_queue (
     term integer NOT NULL,
     percent_refund integer,
     queued_on integer NOT NULL,
-    queued_by integer NOT NULL
+    queued_by integer NOT NULL,
+    PRIMARY KEY (id)
 );
 
 CREATE TABLE hms_activity_log (

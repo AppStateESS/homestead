@@ -1,8 +1,6 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'View.php');
-
-class FrontPageView extends hms\View {
+class FrontPageView extends hms\View{
 
     public function show()
     {

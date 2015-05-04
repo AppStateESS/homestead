@@ -1,5 +1,4 @@
 <?php
-PHPWS_Core::initModClass('hms', 'View.php');
 PHPWS_Core::initModClass('hms', 'HMS_Movein_Time.php');
 
 /*

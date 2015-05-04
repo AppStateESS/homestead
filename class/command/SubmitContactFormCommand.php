@@ -32,10 +32,11 @@ class SubmitContactFormCommand extends Command {
     {
         $send_to = array();
         $send_to[] = 'brownbw@appstate.edu';
-        $send_to[] = 'ticklejw@appstate.edu';
         $send_to[] = 'jb67803@appstate.edu';
         $send_to[] = 'braswelldl@appstate.edu';
         $send_to[] = 'burlesonst@appstate.edu';
+        $send_to[] = 'berrybm@appstate.edu';
+        $send_to[] = 'jaworskimi@appstate.edu';
 
         $from    = 'uha@appstate.edu';
         $subject = 'HMS Contact Form';

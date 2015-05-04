@@ -1,8 +1,7 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'View.php');
+class ApplicationFeatureSettingsView extends hms\View{
 
-class ApplicationFeatureSettingsView extends hms\View {
     private $feature;
 
     public function __construct(ApplicationFeature $feature)

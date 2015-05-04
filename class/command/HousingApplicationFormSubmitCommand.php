@@ -26,7 +26,6 @@ class HousingApplicationFormSubmitCommand extends Command {
 
         $errorCmd = CommandFactory::getCommand('ShowHousingApplicationForm');
         $errorCmd->setTerm($term);
-        $errorCmd->setAgreedToTerms(1);
 
         /* Phone number sanity checking */
         $doNotCall = $context->get('do_not_call');
@@ -94,6 +93,9 @@ class HousingApplicationFormSubmitCommand extends Command {
         if (!isset($specialNeed)) {
             unset($_REQUEST['special_needs']);
         }
+
+        // Session the current application data
+        $_SESSION['application_data'] = $_REQUEST;
 
         // NB: This command grabs the current context and passes the data forward
         $reviewCmd = CommandFactory::getCommand('ShowFreshmenApplicationReview');

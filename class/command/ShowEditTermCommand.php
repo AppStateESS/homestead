@@ -17,7 +17,9 @@ class ShowEditTermCommand extends Command {
          
         PHPWS_Core::initModClass('hms', 'TermEditView.php');
 
-        $termView = new TermEditView(Term::getSelectedTerm());
+        $term = new Term(Term::getSelectedTerm());
+
+        $termView = new TermEditView($term);
         $context->setContent($termView->show());
     }
 }

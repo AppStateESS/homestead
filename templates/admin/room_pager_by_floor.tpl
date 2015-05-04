@@ -4,6 +4,7 @@
         <th>Room Number</th>
         <th>Gender Type</th>
         <th>Default Gender</th>
+        <th>RLC Reservation</th>
         <th>RA</th>
         <th>Private</th>
         <th>Overflow</th>
@@ -23,6 +24,7 @@
         <td id="{ID}room_number">{ROOM_NUMBER}</td>
         <td id="{ID}gender_type">{GENDER_TYPE}</td>
         <td id="{ID}default_gender">{DEFAULT_GENDER}</td>
+        <td id="{ID}rlc_reserved">{RLC_RESERVED}</td>
         <td id="{ID}ra_room">{RA}</td>
         <td id="{ID}private_room">{PRIVATE}</td>
         <td id="{ID}is_overflow">{OVERFLOW}</td>

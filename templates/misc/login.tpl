@@ -2,7 +2,7 @@
     <h2>Welcome to the Appalachian State University Housing Management System</h2>
     
     <div style="float: left; margin-right: 20px">
-        <img src="images/mod/hms/ahext02.jpg">
+        <img src="mod/hms/img/ahext02.jpg">
     </div>
     
     <!-- BEGIN cookie_warning -->

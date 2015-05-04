@@ -1,6 +1,5 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'View.php');
 PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
 PHPWS_Core::initModClass('hms', 'HMS_Movein_Time.php');
 
@@ -12,6 +11,7 @@ PHPWS_Core::initModClass('hms', 'HMS_Movein_Time.php');
  * @package HMS
  */
 class AddCommunityView extends hms\View {
+
     private $community;
 
     /**

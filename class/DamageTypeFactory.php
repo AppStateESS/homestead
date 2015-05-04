@@ -16,17 +16,24 @@ class DamageTypeFactory {
      */
     public static function getDamageTypeAssoc()
     {
-        $db = new PHPWS_DB('hms_damage_type');
-
-        $db->addOrder(array('category ASC', 'description ASC'));
-
-        $result = $db->select('assoc');
-
-        if(PHPWS_Error::logIfError($result)){
-            throw new DatabaseException($result->toString());
+        PHPWS_Core::initModClass('hms', 'PdoFactory.php');
+        $db = PdoFactory::getPdoInstance();
+        
+        $query = "SELECT * FROM hms_damage_type ORDER BY category ASC, description ASC";
+        
+        $stmt = $db->prepare($query);
+        
+        $stmt->execute();
+        
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        $resultById = array();
+        
+        foreach($result as $row){
+        	$resultById[$row['id']] = $row;
         }
-
-        return $result;
+        
+        return $resultById;
     }
 }
 

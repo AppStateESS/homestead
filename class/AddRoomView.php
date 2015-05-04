@@ -6,7 +6,6 @@
 
 //TODO combine this with 'RoomView.php' and figure out how to use one view for two different controllers.......
 
-PHPWS_Core::initModClass('hms', 'View.php');
 PHPWS_Core::initModClass('hms', 'CommandFactory.php');
 
 class AddRoomView extends hms\View {

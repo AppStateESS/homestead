@@ -166,7 +166,7 @@ var AssignWidget = function(div, semaphore){
                        $("#message_"+me.bed).html('<div class="error"><img src="mod/hms/img/tango/dialog-error.png" />'+data.message+'</div>');
                        $("#status_"+me.bed).html('');
                    } else {
-                       $("#message_"+me.bed).html('<div class="success"><img src="images/mod/hms/icons/check.png" />Student Assigned!</div>');
+                       $("#message_"+me.bed).html('<div class="success"><img src="mod/hms/img/icons/check.png" />Student Assigned!</div>');
                        $("#status_"+me.bed).html('');
                        setTimeout(function(){
                                var func = me.toggleOverlayFunc();

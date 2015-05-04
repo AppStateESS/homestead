@@ -76,12 +76,7 @@ class BannerQueue {
         return $queue == 0;
     }
 
-
-
-    /********************
-     * Static Functions *
-     ********************/
-    public function processAll($term)
+    public static function processAll($term)
     {
         $db = new PHPWS_DB('hms_banner_queue');
         $db->addWhere('term', $term);

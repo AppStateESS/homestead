@@ -1,7 +1,5 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'View.php');
-
 PHPWS_Core::initModClass('hms', 'StudentSearchMenu.php');
 PHPWS_Core::initModClass('hms', 'AssignmentMenu.php');
 PHPWS_Core::initModClass('hms', 'ResidenceHallMenu.php');

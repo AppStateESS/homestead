@@ -1,7 +1,5 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'View.php');
-
 /**
  * The UI for administratively creating a roommate group
  */

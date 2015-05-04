@@ -24,7 +24,7 @@ abstract class HMS_Item {
     }
 
     //Override this to return a db object pointing at your table
-    abstract public function getDb();
+    //abstract public function getDb();
 
     public function save(){
 

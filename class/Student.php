@@ -67,6 +67,11 @@ class Student {
         
         return $firstName . ' ' . $this->getMiddleName() . ' ' . $this->getLastName();
     }
+    
+    public function getLegalName()
+    {
+    	return $this->getFirstName() . ' ' . $this->getMiddleName() . ' ' . $this->getLastName();
+    }
 
     public function getFullNameInverted()
     {
@@ -214,6 +219,12 @@ class Student {
     {
         return '<a href="mailto:'.$this->getUsername().'@appstate.edu">'.$this->getUsername().'@appstate.edu</a>';
     }
+    
+    public function getEmailAddress()
+    {
+        //TODO make the domain configurable
+    	return $this->getUsername() . '@appstate.edu';
+    }
 
     /**
      * Returns an associate array with keys:
@@ -327,6 +338,35 @@ class Student {
             return CLASS_SENIOR;
         }
     }
+    
+    /**
+     * Returns this student's date of birth as a DateTime object
+     */
+    public function getDobDateTime()
+    {
+        return DateTime::createFromFormat('!Y-m-d', $this->getDob(), new DateTimeZone('America/New_York'));
+    }
+    
+    /**
+     * Returns true if the student is under 18 at the time this method is called.
+     */
+    public function isUnder18() {
+        // Get DOB as a DateTime object
+    	$dob = $this->getDobDateTime();
+        
+        // Add 18 years
+        $dob->add(new DateInterval('P18Y'));
+
+        // Format as Unix timestamp
+        $timestamp = $dob->format('U');
+
+        // If dob timestamp is in the future (greater than now), student is under 18
+        if($timestamp > time()){
+        	return true;
+        }
+        
+        return false;
+    }
 
     /***************************
      * Getter / Setter Methods *
@@ -383,7 +423,7 @@ class Student {
     public function getDOB(){
         return $this->dob;
     }
-
+    
     public function setDOB($dob){
         $this->dob = $dob;
     }
