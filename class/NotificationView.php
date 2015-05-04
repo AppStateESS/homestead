@@ -41,11 +41,11 @@ class NotificationView
     protected function resolveType(\Notification $notification)
     {
         switch($notification->getType()) {
-            case hms\NotificationView::ERROR:
+            case NotificationView::ERROR:
                 return 'ERROR';
-            case hms\NotificationView::WARNING:
+            case NotificationView::WARNING:
                 return 'WARNING';
-            case hms\NotificationView::SUCCESS:
+            case NotificationView::SUCCESS:
                 return 'SUCCESS';
             default:
                 return 'UNKNOWN';
