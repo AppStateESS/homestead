@@ -5,7 +5,7 @@ require_once PHPWS_SOURCE_DIR . 'mod/hms/vendor/autoload.php';
 use \Michelf\Markdown;
 
 /**
- * HMS_Email class - A class which handles the various Email delevery needs of HMS.
+ * HMS_Email class - A class which handles the various Email delivery needs of HMS.
  *
  * @author Jeremy Booker <jbooker at tux dot appstate dot edu>
  */
