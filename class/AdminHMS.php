@@ -10,16 +10,6 @@ class AdminHMS extends HMS
         $view = new hms\UserView();
         $view->setMain($this->context->getContent());
 
-/*
-        // Check permissions. Must be able to search for students in order to see the recent menu
-        if(Current_User::allow('hms','search')){
-            PHPWS_Core::initModClass('hms', 'RecentStudentSearchList.php');
-            PHPWS_Core::initModClass('hms', 'RecentStudentSearchMenu.php');
-            $recent = new RecentStudentSearchMenu(RecentStudentSearchList::getInstance());
-            $view->addToSidebar($recent->show());
-        }
-*/
-
         $nv = new hms\NotificationView();
         $nv->popNotifications();
         $view->addNotifications($nv->show());

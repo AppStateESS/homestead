@@ -67,11 +67,6 @@ class ShowStudentProfileCommand extends Command {
             $context->goBack();
         }
 
-        // Add the student object to the list of recent searches
-        PHPWS_Core::initModClass('hms', 'RecentStudentSearchList.php');
-        $searchList = RecentStudentSearchList::getInstance();
-        $searchList->add($student, $term);
-
         $profile = new StudentProfile($student, $term);
 
         $context->setContent($profile->getProfileView()->show());
