@@ -1,6 +1,5 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'StudentSearchMenu.php');
 PHPWS_Core::initModClass('hms', 'AssignmentMenu.php');
 PHPWS_Core::initModClass('hms', 'ResidenceHallMenu.php');
 PHPWS_Core::initModClass('hms', 'RoommatesMenu.php');
@@ -15,9 +14,6 @@ class AdminMaintenanceMenuView extends hms\View {
     public function show()
     {
         $tpl = array();
-
-        $searchMenu = new StudentSearchMenu();
-        $tpl['STUDENT_SEARCH'] = $searchMenu->show();
 
         $hallMenu = new ResidenceHallMenu();
         $tpl['RESIDENCE_HALL'] = $hallMenu->show();
