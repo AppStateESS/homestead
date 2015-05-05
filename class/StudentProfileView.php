@@ -21,18 +21,17 @@ class StudentProfileView extends hms\View {
     {
         javascript('jquery');
         javascript('jquery_ui');
-        javascript('modules/hms/student_info/');
+        javascriptMod('hms', 'StudentProfile');
 
         $tpl = array();
 
-        $tpl['TITLE'] = "Search Results - " . Term::getPrintableSelectedTerm();
         $tpl['USERNAME'] = $this->student->getUsername();
 
         if( Current_User::allow('hms', 'login_as_student') ) {
             $loginAsStudent = CommandFactory::getCommand('LoginAsStudent');
             $loginAsStudent->setUsername($this->student->getUsername());
 
-            $tpl['LOGIN_AS_STUDENT'] = $loginAsStudent->getLink('Login as student');
+            $tpl['LOGIN_AS_STUDENT_URI'] = $loginAsStudent->getURI();
         }
 
         $tpl['BANNER_ID']   = $this->student->getBannerId();
@@ -304,8 +303,7 @@ class StudentProfileView extends hms\View {
         // TODO tabs
 
         Layout::addPageTitle("Student Profile");
-        Layout::addStyle('hms', 'css/studentInfo.css');
-        return PHPWS_Template::process($tpl, 'hms', 'admin/fancy_student_info.tpl');
+        return PHPWS_Template::process($tpl, 'hms', 'admin/StudentProfile.tpl');
     }
 }
 

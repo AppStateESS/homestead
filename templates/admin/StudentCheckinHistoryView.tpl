@@ -1,4 +1,4 @@
-<table class="profileHeader" id="history">
+<table class="table table-striped" id="history">
   <tr>
     <th>Room</th>
     <th>Term</th>

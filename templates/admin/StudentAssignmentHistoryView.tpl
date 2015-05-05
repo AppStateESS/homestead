@@ -1,4 +1,4 @@
-<table class="profileHeader" id="history">
+<table class="table table-striped" id="history">
   <tr>
     <th>Room</th>
     <th>Term</th>
@@ -22,5 +22,9 @@
   </tr>
   <!-- END EXTRA_HISTORY -->
 </table>
-<div style="text-align: center;" id="showMoreDiv" class="profileHeader">
-  {SHOW_MORE}</div>
+
+<div id="showMoreDiv">
+  <p class="text-center">
+    {SHOW_MORE}
+  </p>
+</div>

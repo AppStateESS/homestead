@@ -1,6 +1,7 @@
 <div id="cancelDialog"></div>
+
 <div id="applications">
-  <table class="profileHeader">
+  <table class="table table-striped">
     <tr>
       <th>Term</th>
       <th>Type</th>

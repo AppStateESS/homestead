@@ -1,5 +1,5 @@
 <!-- BEGIN table -->
-<table cellpadding="4" cellspacing="1" width="99%">
+<table class="table">
     <tr>
         <th>User {USER_ID_SORT}</th>
         <th>Activity</th>
@@ -15,7 +15,7 @@
 <!-- BEGIN listrows -->
     <tr {TOGGLE}>
         <td>{ACTEE} <!-- BEGIN by -->(<strong>By:</strong> {ACTOR})<!-- END by --></td>
-        <td style="font-weight: bold;">{ACTIVITY}</td>
+        <td><strong>{ACTIVITY}</strong></td>
         <td>{DATE} at {TIME}</td>
     </tr>
 <!-- BEGIN notes -->
