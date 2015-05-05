@@ -25,14 +25,13 @@ Roommates:
 Check-in Time: {MOVE_IN_TIME} 
 <!-- END movein_time -->
 
-Move In is Sunday, June 29th, from noon to 5pm. Check-in at the Doughton Hall Office. Please have your AppCard with you to check-in.
+Move In is Sunday, May 24th, from noon to 5pm. Check-in at the White Hall Office. Please have your AppCard with you to check-in.
 
 Should you have any questions, please feel free to contact our office at 828-262-6111 or 828-262-2278. You may also visit our website at: 
 http://housing.appstate.edu/ .
 
 Sincerely,
 
-Sheila Burleson
+Assignments Group
 
-Housing Coordinator
 University Housing
