@@ -22,9 +22,8 @@ class ShowRoommateProfileFormCommand extends Command {
         
         $term = $context->get('term');
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
-        $banner = $student->getBannerID();
 
-        $profile = RoommateProfileFactory::getProfile($banner, $term);
+        $profile = RoommateProfileFactory::getProfile($student->getBannerID(), $term);
         
         $view = new RoommateProfileFormView($profile, $term);
         $context->setContent($view->show());

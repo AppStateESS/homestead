@@ -1,0 +1,1 @@
+alter table hms_student_profiles add column banner_id integer;

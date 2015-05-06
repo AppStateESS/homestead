@@ -1476,7 +1476,12 @@ function hms_update(&$content, $currentVersion)
             if (PEAR::isError($result)) {
                 return $result;
             }
-            
+        case version_compare($currentVersion, '0.5.0', '<') :
+            $db = new PHPWS_DB();
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/00-05-00.sql');
+            if (PEAR::isError($result)) {
+                return $result;
+            }
     }
 
     return TRUE;

@@ -14,11 +14,11 @@
      */
     
     //public static function checkForProfile($username, $term)
-    public static function checkForProfile($bannerid, $term)
+    public static function checkForProfile($bannerId, $term)
     {
         $db = new PHPWS_DB('hms_student_profiles');
 
-        $db->addWhere('bannerid', $bannerid);
+        $db->addWhere('banner_id', $bannerId);
         $db->addWhere('term', $term);
         $result = $db->select('row');
 
@@ -43,13 +43,13 @@
      */
 
     //public static function getProfile($username, $term)
-    public static function getProfile($bannerid, $term)
+    public static function getProfile($bannerId, $term)
     {
         $profile = new RoommateProfile();
 
         $db = new PHPWS_DB('hms_student_profiles');
 
-        $db->addWhere('bannerid', $bannerid);
+        $db->addWhere('banner_id', $bannerId);
         $db->addWhere('term', $term);
         $result = $db->loadObject($profile);
 
