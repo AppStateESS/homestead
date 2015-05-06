@@ -119,7 +119,7 @@ class NavBar extends View {
     
     private function addSettings()
     {
-        $this->tpl['DROPDOWN'] = '';
+        //$this->tpl['DROPDOWN'] = '';
         //$this->tpl['SETTINGS'][] = array('LINK' => $ctrlPanel->getLink('Control Panel'));
         
         if(\Current_User::allow('hms', 'edit_terms')) {
