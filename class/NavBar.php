@@ -20,7 +20,7 @@ class NavBar extends View {
     {
         $this->addSignInOut();
         
-        $this->addUserFullName();
+        $this->addUserStatus();
         
     	if(\UserStatus::isAdmin())
         {
@@ -45,13 +45,43 @@ class NavBar extends View {
         }
     }
     
-    private function addUserFullName()
+    private function addUserStatus()
     {
+        // If the user is not logged in, then we have nothing to do here
     	if(\UserStatus::isGuest()){
     		return;
     	}
         
-        $this->tpl['FULL_NAME'] = \UserStatus::getDisplayName();
+        $userTpl['FULL_NAME'] = \UserStatus::getDisplayName();
+        $useDropdown = false;
+        
+        if (\UserStatus::isMasquerading() && \UserStatus::isMasqueradingAsSelf()) {
+            // User is masquerading as student version of self
+            $useDropdown = true;
+            $userTpl['FULL_NAME'] = \UserStatus::getDisplayName() . ' (student)';
+            $cmd = \CommandFactory::getCommand('RemoveMaskAsSelf');
+            $userTpl['STUDENT_SELF_RETURN'] = $cmd->getURI(); // Link to return to admin version of self
+        } else if (\UserStatus::isMasquerading()) {
+            // User is masquerading as a student
+            $useDropdown = true;
+            $cmd = \CommandFactory::getCommand('RemoveMask');
+            $userTpl['REMOVE_MASK'] = $cmd->getURI();
+            $userTpl['FULL_NAME'] = '<strong class="text-danger">' . \UserStatus::getDisplayName() . '</strong>';
+        } else if (\Current_User::allow('hms', 'ra_login_as_self')) {
+            // User is not masquerading, but do have permission to change to student self-view
+            $useDropdown = true;
+            $studentViewCmd = \CommandFactory::getCommand('RaMasqueradeAsSelf');
+            $userTpl['STUDENT_VIEW_URI'] = $studentViewCmd->getURI();
+        }
+        
+        if($useDropdown){
+            // Other options available, so we'll render a drop down
+            $this->tpl['USER_STATUS_DROPDOWN'] = \PHPWS_Template::process($userTpl, 'hms', 'UserStatus.tpl');
+        	
+        }else{
+            // No other options, so the user status is just the display name
+        	$this->tpl['DISPLAY_NAME'] = \UserStatus::getDisplayName();
+        }
     }
     
     private function addTermSelector()
@@ -100,11 +130,6 @@ class NavBar extends View {
         if(\Current_User::allow('hms', 'view_activity_log')) {
             $termCmd = \CommandFactory::getCommand('ShowActivityLog');
             $this->tpl['ACTIVITY_LOG_URI'] = $termCmd->getURI();
-        }
-        
-        if (\Current_User::allow('hms', 'ra_login_as_self')) {
-        	$studentViewCmd = \CommandFactory::getCommand('RaMasqueradeAsSelf');
-            $this->tpl['STUDENT_VIEW_URI'] = $studentViewCmd->getURI();
         }
         
     	if(\Current_User::isDeity()) {

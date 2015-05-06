@@ -27,9 +27,7 @@ abstract class HomesteadView extends View {
     {
         $tpl = array();
         $tpl['MAIN'] = $content;
-        $tpl['USER'] = \UserStatus::getDisplay();
         
-        \PHPWS_Core::initModClass('hms', 'NavBar.php');
         $navbar = new NavBar();
         $tpl['NAVBAR'] = $navbar->show();
 

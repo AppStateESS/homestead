@@ -17,7 +17,7 @@ class UserHMS extends HMS
         parent::process();
 
         PHPWS_Core::initModClass('hms', 'UserView.php');
-        $view = new UserView();
+        $view = new hms\UserView();
         $view->setMain($this->context->getContent());
 
         $nv = new hms\NotificationView();

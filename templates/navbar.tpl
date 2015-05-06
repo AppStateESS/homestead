@@ -57,9 +57,6 @@
             <li><a href="{ACTIVITY_LOG_URI}"><i class="fa fa-list-ul"></i> Activity Log</a></li>
             <!-- END activitylog -->
             
-            <li class="divider"></li>
-            <li><a href="{STUDENT_VIEW_URI}"><i class="fa fa-user"></i> Switch to Student View</a></li> 
-            
             <!-- BEGIN ctrlpanel -->
             <li class="divider"></li>
             <li><a href="{CTRL_PANEL_URI}"><i class="fa fa-wrench"></i> Control Panel</a></li>
@@ -68,9 +65,13 @@
         </li>
         <!-- END dropdown -->
         
-        <!-- BEGIN fullname -->
-        <li><a href="#">{FULL_NAME}</a></li>
-        <!-- END fullname -->
+        <!-- BEGIN userstatus -->
+        {USER_STATUS_DROPDOWN}
+        <!-- END userstatus -->
+        
+        <!-- BEGIN display_name -->
+        <li><a href="#">{DISPLAY_NAME}</a></li>
+        <!-- END display_name -->
         
         <!-- BEGIN signin -->
         <li><a href="{SIGNIN_URL}"><i class="fa fa-sign-in"></i> Sign in</a></li>
