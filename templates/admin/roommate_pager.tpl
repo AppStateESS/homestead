@@ -1,5 +1,5 @@
 <h2>{TABLE_TITLE}</h2>
-<table width="%90">
+<table class="table table-striped">
     <tr>
         <th>Requestor</th>
         <th>Requestee</th>
@@ -9,11 +9,11 @@
     </tr>
     <!-- BEGIN empty_table -->
     <tr>
-        <td colspan="2">{EMPTY_MESSAGE}</td>
+        <td colspan="5">{EMPTY_MESSAGE}</td>
     </tr>
     <!-- END empty_table -->
     <!-- BEGIN listrows -->
-    <tr {TOGGLE}>
+    <tr>
         <td>{REQUESTOR}</td>
         <td>{REQUESTEE}</td>
         <td>{REQUESTED_ON}</td>
@@ -24,17 +24,17 @@
 </table>
 <br />
 <!-- BEGIN page_label -->
-<div align="center">
-Rooms: {TOTAL_ROWS}
+<div class="text-center">
+Requests: {TOTAL_ROWS}
 </div>
 <!-- END page_label -->
 <!-- BEGIN pages -->
-<div align="center">
+<div class="text-center">
 {PAGE_LABEL}: {PAGES}
 </div>
 <!-- END pages -->
 <!-- BEGIN limits -->
-<div align="center">
+<div class="text-center">
 {LIMIT_LABEL}: {LIMITS}
 </div>
 <!-- END limits -->

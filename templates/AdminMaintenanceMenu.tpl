@@ -4,7 +4,6 @@
 		{ASSIGNMENT}
 	</div>
 	<div class="col-xs-12 col-sm-4">
-		{ROOMMATES}
 		{MESSAGING}
 		{SERVICE_DESK}
 	</div>

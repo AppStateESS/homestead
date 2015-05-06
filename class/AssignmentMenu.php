@@ -29,6 +29,10 @@ class AssignmentMenu extends CommandMenu {
                 $this->addCommand('Assign students by floor', $floorAssignCmd);
             }
 
+            if(UserStatus::isAdmin() && Current_User::allow('hms', 'roommate_maintenance')){
+                $this->addCommandByName('Edit freshmen roommate requests', 'EditRoommateGroupsView');
+            }
+
             if(Current_User::allow('hms', 'autoassign')) {
                 $autoAssignCmd = CommandFactory::getCommand('JSConfirm');
                 $autoAssignCmd->setLink('Auto-assign');

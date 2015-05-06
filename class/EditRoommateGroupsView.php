@@ -20,6 +20,9 @@ class EditRoommateGroupsView extends hms\View {
 
         $tpl['PAGER']       = $this->roommatePager->show();
         $tpl['TERM']        = Term::getPrintableSelectedTerm();
+        
+        $createCmd = CommandFactory::getCommand('CreateRoommateGroupView');
+        $tpl['CREATE_REQUEST_URI'] = $createCmd->getURI();
 
         Layout::addPageTitle("Edit Roommate Group");
 
