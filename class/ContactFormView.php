@@ -29,9 +29,8 @@ class ContactFormView extends hms\View {
         $form->setLabel('stype', 'Classification');
 
         $form->addTextArea('comments');
-        $form->setLabel('comments', 'Comments and/or what you were trying to do');
+        $form->setLabel('comments', 'Question, Comments, or Description of the Problem');
 
-        javascript('modules/hms/autoFocus', array('ELEMENT'=>$form->getId('name')));
         $form->addSubmit('Submit');
 
         $form->mergeTemplate($tpl);
@@ -43,8 +42,8 @@ class ContactFormView extends hms\View {
         $cmd->initForm($form);
 
         $tpl = $form->getTemplate();
+        //var_dump($tpl);exit;
 
         return PHPWS_Template::process($tpl, 'hms', 'student/contact_page.tpl');
     }
 }
-?>
