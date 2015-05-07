@@ -1,12 +1,7 @@
-{ICON}
-
-<h3>
-<div class={STATUS}>Search Roommate Profiles</div>
-</h3>
+<h3>{ICON} <span class={STATUS}>Search Roommate Profiles</span></h3>
 
 <div class="block-content">
-
-<div class="availability-dates">Available: {DATES}</div>
+    <div class="text-muted">Available: {DATES}</div>
 
 <p>
 <!-- BEGIN too_soon -->

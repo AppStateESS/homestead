@@ -1,12 +1,8 @@
-{ICON}
-
-<h3>
-<div class={STATUS}>Your Roommate Profile</div>
-</h3>
+<h3>{ICON} <span class={STATUS}>Your Roommate Profile</span></h3>
 
 <div class="block-content">
 
-<div class="availability-dates">Available: {DATES}</div>
+    <div class="text-muted">Available: {DATES}</div>
 
 <p>The Roommate Profile is optional and can be used to help you find a roommate who shares your hobbies and interests. Once you complete your profile, you will be able to search for other students who share your interests based on their profiles.</p>
 

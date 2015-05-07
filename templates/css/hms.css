@@ -1,13 +1,9 @@
-/* Twitter Typeahead Styling */
+/*****************************
+ * Twitter Typeahead Styling *
+ *****************************/
 .tt-hint {
   color: #999;
 }
-
-/*
-.tt-highlight {
-	color: red;
-}
-*/
 
 .tt-menu {
   width: 422px;
@@ -38,7 +34,12 @@
   background-color: #0097cf;
 
 }
+/***** End Typeahead Styles *****/
 
+/* Override vertical space on a h3 inside panel headings */
+.panel-heading h3 {
+  margin-top: 10px;
+}
 
 /* Nice rounded-corner boxes */
 .rounded-box {
@@ -318,28 +319,10 @@ img.roommate_request_icon {
   border: solid thin black;
 }
 
-.hms-student-menu-term-block .status-icon {
-  float: left;
-  margin-right: 5px;
-  width: 20px;
-  height: 20px;
-}
-
-.hms-student-menu-term-block h3 {
-  margin-bottom: 3px;
-}
 
 .hms-student-menu-term-block h3 .locked {
   margin-bottom: 3px;
   color: #888;
-}
-
-.hms-student-menu-term-block .availability-dates {
-  margin-top: 0px;
-  font-style: italic;
-  font-weight: lighter;
-  font-size: smaller;
-  color: #777;
 }
 
 .hms-student-menu-term-block .block-content {

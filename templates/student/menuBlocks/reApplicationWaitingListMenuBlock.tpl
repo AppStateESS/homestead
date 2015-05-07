@@ -1,13 +1,8 @@
-{ICON}
-
-
-<h3>
-<div class={STATUS}>Waiting List</div>
-</h3>
+<h3>{ICON} <span class={STATUS}>Waiting List</span></h3>
 
 <div class="block-content">
 
-<div class="availability-dates">Available: {DATES}</div>
+    <div class="text-muted">Available: {DATES}</div>
 
 
 <!-- BEGIN too_soon -->

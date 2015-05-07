@@ -1,8 +1,6 @@
-<h2>On-campus Housing Applications</h2>
+<h1>On-campus Housing Applications</h1>
 
 
 <!-- BEGIN TERMBLOCK -->
-<div class="hms-studentmenu-termblock">
-    {TERMBLOCK_CONTENT}
-</div>
+{TERMBLOCK_CONTENT}
 <!-- END TERMBLOCK -->

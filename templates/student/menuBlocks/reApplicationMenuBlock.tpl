@@ -1,12 +1,8 @@
-{ICON}
-
-<h3>
-<div class={STATUS}>Re-Application</div>
-</h3>
+<h3>{ICON} <span class={STATUS}>Re-Application</span></h3>
 
 <div class="block-content">
 
-<div class="availability-dates">Available: {DATES}</div>
+    <div class="text-muted">Available: {DATES}</div>
 
 <p>
 <!-- BEGIN eligible -->

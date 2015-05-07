@@ -1,15 +1,11 @@
-{ICON}
 
-
-<h3>
-<div class={STATUS}>Application</div>
-</h3>
+<h3>{ICON} <span class={STATUS}>Application</span></h3>
 
 
 <div class="block-content">
 
-<div class="availability-dates">Available: {DATES}</div>
-<p>
+    <div class="text-muted">Available: {DATES}</div>
+    <p>
 <!-- BEGIN too_soon -->
 The application for this term will be available on {BEGIN_DEADLINE}.
 <!-- END too_soon -->
@@ -30,5 +26,5 @@ If you'd like to change your preferences, you may {NEW_APP}.
 You have not applied for this term yet.
     {APP_NOW}
 <!-- END no_app -->
-</p>
+    </p>
 </div>

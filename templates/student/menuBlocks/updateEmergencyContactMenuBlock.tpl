@@ -1,9 +1,7 @@
-{ICON}
-
-<h3><div class={STATUS}>Update Emergency & Missing Persons Contact Info</div></h3>
+<h3>{ICON} <span class={STATUS}>Update Emergency & Missing Persons Contact Info</span></h3>
 
 <div class="block-content">
-    <div class="availability-dates">Available: {DATES}</div>
+    <div class="text-muted">Available: {DATES}</div>
     <p>
         <!-- BEGIN no_app -->
         You have not applied for housing for this term, so you may not update your emergency contact and missing persons info. {NOT_APP}

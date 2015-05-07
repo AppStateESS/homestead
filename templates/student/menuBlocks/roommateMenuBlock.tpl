@@ -1,12 +1,7 @@
-{ICON}
-
-<h3>
-<div class={STATUS}>Roommate Selection</div>
-</h3>
+<h3>{ICON} <span class={STATUS}>Roommate Selection</span></h3>
 
 <div class="block-content">
-
-<div class="availability-dates">Available: {DATES}</div>
+    <div class="text-muted">Available: {DATES}</div>
 
 <p>
 Once you've had a chance to communicate with your desired roommate and you have both agreed that you would like to room together, either of you can use the menu below to initiate an electronic handshake to confirm your desire to be roommates.
