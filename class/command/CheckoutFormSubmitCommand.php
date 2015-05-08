@@ -6,6 +6,7 @@ PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
 PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
 PHPWS_Core::initModClass('hms', 'RoomDamageFactory.php');
 PHPWS_Core::initModClass('hms', 'RoomDamageResponsibilityFactory.php');
+PHPWS_Core::initModClass('hms', 'BedFactory.php');
 
 
 class CheckoutFormSubmitCommand extends Command {
@@ -77,7 +78,7 @@ class CheckoutFormSubmitCommand extends Command {
         }
 
         // Create the bed
-        $bed = new HMS_Bed($checkin->getBedId());
+        $bed = BedFactory::getBedByPersistentId($checkin->getBedPersistentId(), $term);
 
         // Get the room
         $room = $bed->get_parent();
