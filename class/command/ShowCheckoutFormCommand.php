@@ -34,6 +34,7 @@ class ShowCheckoutFormCommand extends Command {
         PHPWS_Core::initModClass('hms', 'RoomDamageFactory.php');
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
         PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
+        PHPWS_Core::initModClass('hms', 'BedFactory.php');
 
         $term = Term::getCurrentTerm();
 
@@ -80,7 +81,8 @@ class ShowCheckoutFormCommand extends Command {
             $errorCmd->redirect();
         }
 
-        $bed = new HMS_Bed($checkin->getBedId());
+        $bed = BedFactory::getBedByPersistentId($checkin->getBedPersistentId(), $term);
+
         $room = $bed->get_parent();
 
         // Get the damages for this student's room
