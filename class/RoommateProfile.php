@@ -20,7 +20,9 @@ class RoommateProfile {
 
     public $term;
 
-    // Alternate contact info
+    /******
+     * Alternate contact info
+     */
     public $alternate_email = NULL;
     
     public $fb_link = NULL;
@@ -28,12 +30,13 @@ class RoommateProfile {
     public $instagram_sn = NULL;
 
     public $twitter_sn = NULL;
-    
+
     public $tumblr_sn = NULL;
-    
+
     public $kik_sn = NULL;
-    
+
     public $about_me = NULL;
+
 
     // Hobby choices
     public $arts_and_crafts = 0;
@@ -85,10 +88,10 @@ class RoommateProfile {
     public $writing = 0;
 
     public $rotc = 0;
-    
-    public $hobbies_array = array("arts_and_crafts", "books_and_reading", "cars", "church_activities", 
-		    "collecting", "computers_and_technology", "dancing", "fashion", "fine_arts", "gardening", 
-		    "games", "humor", "investing_personal_finance", "movies", "music", "outdoor_activities", 
+
+    public $hobbies_array = array("arts_and_crafts", "books_and_reading", "cars", "church_activities",
+		    "collecting", "computers_and_technology", "dancing", "fashion", "fine_arts", "gardening",
+		    "games", "humor", "investing_personal_finance", "movies", "music", "outdoor_activities",
 		    "pets_and_animals", "photography", "politics", "sports", "travel", "tv_shows", "volunteering", "writing", "rotc");
 
     // music choices
@@ -139,9 +142,9 @@ class RoommateProfile {
     public $rock = 0;
 
     public $world_music = 0;
-        
-    public $music_array = array("alternative", "ambient", "beach", "bluegrass", "blues", "christian", "classical", 
-    		"classic_rock", "country", "electronic", "folk", "heavy_metal", "hip_hop", "house", "industrial", "jazz", 
+
+    public $music_array = array("alternative", "ambient", "beach", "bluegrass", "blues", "christian", "classical",
+    		"classic_rock", "country", "electronic", "folk", "heavy_metal", "hip_hop", "house", "industrial", "jazz",
     		"popular_music", "progressive", "punk", "r_and_b", "rap", "reggae", "rock", "world_music");
 
     // Study times
@@ -154,8 +157,8 @@ class RoommateProfile {
     public $study_evening = 0;
 
     public $study_late_night = 0;
-    
-    public $study_array = array("study_early_morning", "study_morning_afternoon", 
+
+    public $study_array = array("study_early_morning", "study_morning_afternoon",
     		"study_afternoon_evening", "study_evening", "study_late_night");
 
     // drop downs
@@ -176,8 +179,8 @@ class RoommateProfile {
     public $cleanliness = 0;
 
     public $free_time = 0;
-    
-    public $drop_down_array = array("political_views", "major", "experience", 
+
+    public $drop_down_array = array("political_views", "major", "experience",
    			"sleep_time", "wakeup_time", "overnight_guests", "loudness", "cleanliness", "free_time");
 
     // Spoken languages
@@ -222,9 +225,9 @@ class RoommateProfile {
     public $telugu = 0;
 
     public $vietnamese = 0;
-    
-    public $lang_array = array("arabic" , "bengali" , "chinese" , "english" , "french" , "german" , "hindi" , 
-        	"italian" , "japanese" , "javanese" , "korean" , "malay" , "marathi" , "portuguese" , "punjabi" , 
+
+    public $lang_array = array("arabic" , "bengali" , "chinese" , "english" , "french" , "german" , "hindi" ,
+        	"italian" , "japanese" , "javanese" , "korean" , "malay" , "marathi" , "portuguese" , "punjabi" ,
         	"russian" , "tamil" , "telugu" , "vietnamese");
 
     /**
@@ -310,7 +313,7 @@ class RoommateProfile {
      *
      * @param integer $id
      */
-     
+
     public function setID($id)
     {
         $this->id = $id;

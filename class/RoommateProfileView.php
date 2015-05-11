@@ -4,23 +4,25 @@ class RoommateProfileView extends hms\View {
 
     private $student;
     private $profile;
-    
+
     public function __construct(Student $student, RoommateProfile $profile = NULL)
     {
         $this->student = $student;
         $this->profile = $profile;
     }
-    
+
     public function show()
     {
         require(PHPWS_SOURCE_DIR . 'mod/hms/inc/profile_options.php');
+
+        $majors = hms\MajorFactory::getMajorsList();
 
         $tpl = array();
         $profile_form = new PHPWS_Form('profile_form');
         $profile_form->useRowRepeat();
 
         $none_given = '<span style="color:#CCC;">none given</span>';
-         
+
         /***** Contact Info *****/
         $tpl['TITLE'] = $this->student->getName() . '\'s Profile';
         $tpl['EMAIL_ADDRESS'] = "<a href=\"mailto:{$this->student->getUsername()}@appstate.edu\">{$this->student->getUsername()}@appstate.edu</a>";
@@ -32,7 +34,7 @@ class RoommateProfileView extends hms\View {
         }else{
             $tpl['ALTERNATE_EMAIL'] = $none_given;
         }
-        
+
         $tpl['FB_LINK_LABEL'] = 'Facebook link: ';
         $fb_link = $this->profile->get_text('fb_link');
         if(!empty($fb_link)){
@@ -40,7 +42,7 @@ class RoommateProfileView extends hms\View {
         }else{
         	$tpl['FB_LINK'] = $none_given;
         }
-        
+
         $tpl['INSTAGRAM_SN_LABEL'] = 'Instagram username: ';
         $instagram_sn = $this->profile->get_text('instagram_sn');
         if(!empty($instagram_sn)){
@@ -56,7 +58,7 @@ class RoommateProfileView extends hms\View {
         }else{
             $tpl['TWITTER_SN'] = $none_given;
         }
-        
+
         $tpl['TUMBLR_SN_LABEL'] = 'Tumblr username: ';
         $tumblr_sn = $this->profile->get_text('tumblr_sn');
         if(!empty($tumblr_sn)){
@@ -64,7 +66,7 @@ class RoommateProfileView extends hms\View {
         }else{
             $tpl['TUMBLR_SN'] = $none_given;
         }
-        
+
         $tpl['KIK_SN_LABEL'] = 'Kik username: ';
         $kik_sn = $this->profile->get_text('kik_sn');
         if(!empty($kik_sn)){
@@ -72,7 +74,7 @@ class RoommateProfileView extends hms\View {
         }else{
         	$tpl['KIK_SN'] = $none_given;
         }
-        
+
         $tpl['ABOUT_ME_LABEL'] = '4. Additional information: ';
         $about_me = $this->profile->get_text('about_me');
         if(!empty($about_me)){
@@ -99,7 +101,7 @@ class RoommateProfileView extends hms\View {
         # set matches on music check boxes
         $music_matches = RoommateProfileFactory::get_music_matches($this->profile);
         $profile_form->setMatch('music_checkbox',$music_matches);
-        
+
         $profile_form->addCheck('language_checkbox',$language);
         $profile_form->setLabel('language_checkbox',$language_labels);
         $profile_form->setDisabled('language_checkbox');
@@ -140,11 +142,11 @@ class RoommateProfileView extends hms\View {
         # set matches on study times check boxes here, set disabled
         $study_matches = RoommateProfileFactory::get_study_matches($this->profile);
         $profile_form->setMatch('study_times',$study_matches);
-        
+
         $profile_form->mergeTemplate($tpl);
         $tpl = $profile_form->getTemplate();
-		
-		
+
+
         Layout::addPageTitle("Roommate Profile");
 
         return PHPWS_Template::process($tpl,'hms','student/profile_form.tpl');

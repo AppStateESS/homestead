@@ -4,7 +4,7 @@ class RoommateProfileFormView extends hms\View {
 
     private $profile;
     private $term;
-    
+
     public function __construct(RoommateProfile $profile = NULL, $term){
         $this->profile  = $profile;
         $this->term     = $term;
@@ -24,13 +24,13 @@ class RoommateProfileFormView extends hms\View {
         }else{
             $profile_exists = FALSE;
         }
-        
+
         $submitCmd = CommandFactory::getCommand('SubmitRoommateProfile');
         $submitCmd->setTerm($this->term);
-        
+
         $profile_form = new PHPWS_Form('profile_form');
         $profile_form->useRowRepeat();
-        
+
         $submitCmd->initForm($profile_form);
 
         /***** About Me *****/
@@ -67,7 +67,7 @@ class RoommateProfileFormView extends hms\View {
         if($profile_exists){
             $profile_form->setValue('alternate_email',$this->profile->get_text('alternate_email'));
         }
-        
+
         $profile_form->addText('fb_link');
         $profile_form->setLabel('fb_link','Facebook link:');
         if($profile_exists) {
@@ -85,19 +85,19 @@ class RoommateProfileFormView extends hms\View {
         if($profile_exists){
             $profile_form->setValue('twitter_sn',$this->profile->get_text('twitter_sn'));
         }
-        
+
         $profile_form->addText('tumblr_sn');
         $profile_form->setLabel('tumblr_sn','Tumblr username:');
         if($profile_exists){
             $profile_form->setValue('tumblr_sn',$this->profile->get_text('tumblr_sn'));
         }
-        
+
         $profile_form->addText('kik_sn');
         $profile_form->setLabel('kik_sn','Kik username:');
         if($profile_exists){
             $profile_form->setValue('kik_sn',$this->profile->get_text('kik_sn'));
         }
-        
+
         $profile_form->addTextArea('about_me');
         $profile_form->setLabel('about_me','4. Additional information: ');
         $profile_form->setCols('about_me',50);
@@ -108,7 +108,7 @@ class RoommateProfileFormView extends hms\View {
         }
 
         /***** College Life *****/
-        $profile_form->addDropBox('major',$majors);
+        $profile_form->addDropBox('major', hms\MajorFactory::getMajorsList());
         $profile_form->setLabel('major','My intended academic major: ');
         if($profile_exists){
             $profile_form->setMatch('major',$this->profile->get_text('major'));

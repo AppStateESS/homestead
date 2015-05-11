@@ -44,7 +44,7 @@
             $_SESSION['profile_search_asu_username'] = $_REQUEST['asu_username'];
         } else {
             $m = new RoommateProfile;
-            
+
             // Hobby check boxes
             for ($x = 0; $x < count($m->hobbies_array); $x++)
             {
@@ -52,7 +52,7 @@
                     $pager->addWhere('hms_student_profiles.' . $m->hobbies_array[$x], 1, '=');
                     $_SESSION['hobbies_checkbox'][$m->hobbies_array[$x]] = 1;
                 }
-            }       
+            }
 
             // Music check boxes
             for ($x = 0; $x < count($m->music_array); $x++)
@@ -70,7 +70,7 @@
                     $pager->addWhere('hms_student_profiles.' . $m->study_array[$x], 1, '=');
                     $_SESSION['study_times'][$m->study_array[$x]] = 1;
                 }
-            }   
+            }
 
             // Drop downs
             for ($x = 0; $x < count($m->drop_down_array); $x++)
@@ -79,7 +79,7 @@
                     $pager->addWhere('hms_student.profiles.' . $m->drop_down_array[$x], '=');
                     $_SESSION[$m->drop_down_array[$x]] = $_REQUEST[$m->drop_down_array[$x]];
                 }
-                
+
             }
 
             // Spoken Languages

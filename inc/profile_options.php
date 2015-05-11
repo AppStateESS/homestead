@@ -175,20 +175,6 @@ $political_views = array(
             4 => 'Somewhat conservative',
             5 => 'Very conservative');
 
-$url = "https://www.kimonolabs.com/api/5nbvbr2u?apikey=bM1oqBrFJ3lQG45Re7LMEU08lJHwvPnb";
-$json = file_get_contents($url);
-$results = json_decode($json, TRUE);
-
-$majors[] = 'Prefer not to say';
-foreach($results['results']['Major List'] as $item) 
-{
-  if(stristr($item['Major']['text'], 'see ') === FALSE)
-  {
-    $majors[] = $item['Major']['text'];
-  }
-}
-$majors[] = 'Undecided';
-
 $experiences = array(
                 0 => 'Prefer not to say',
 				1 => 'My academic studies and intellectual growth',
