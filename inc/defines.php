@@ -320,7 +320,7 @@ define('ACTIVITY_APPLICATION_REPORTED',         27);
 define('ACTIVITY_DENIED_RLC_APPLICATION',       28);
 define('ACTIVITY_UNDENIED_RLC_APPLICATION',     29);
 define('ACTIVITY_ASSIGN_TO_RLC',                30);
-define('ACTIVITY_RLC_APP_SUBMITTED',            31);
+define('ACTIVITY_RLC_UNASSIGN',                 31); //DUPLICATE of ACTIVITY_SUBMITTED_RLC_APPLICATION (#3)
 
 // Activities for updating a username
 define('ACTIVITY_USERNAME_UPDATED',             32);

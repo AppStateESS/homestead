@@ -3,7 +3,7 @@
   /**
    * RemoveDenyRlcAssignment
    *
-   * This is basically a macro command for RemoveRlcAssignmentCommand 
+   * This is basically a macro command for RemoveRlcAssignmentCommand
    * and DenyRlcApplicationCommand.
    *
    * @author Robert Bost <bostrt at tux dot appstate dot edu>
@@ -40,29 +40,25 @@ class RemoveDenyRlcAssignmentCommand extends Command
         // Remove assignment
         $assignment = HMS_RLC_Assignment::getAssignmentById($context->get('assignId'));
 
-        //Remove assignment
-         if(!is_null($assignment)){
+        $rlcName = $assignment->getRlcName();
+
+        $rlcApp = $assignment->getApplication();
+
+        if(!is_null($assignment)){
             $assignment->delete();
-        }else{
+        } else {
             NQ::simple('hms', hms\NotificationView::ERROR, 'Could not find an RLC assignment with that id.');
         }
 
-        PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-        HMS_Activity_Log::log_activity(Current_User::getUsername(), ACTIVITY_RLC_APPLICATION_DELETED, Current_User::getUsername(), 'Assignment Removed');
-        NQ::simple('hms', hms\NotificationView::SUCCESS, 'Assignment deleted.');
+        HMS_Activity_Log::log_activity($rlcApp->getUsername(), ACTIVITY_RLC_UNASSIGN, Current_User::getUsername(), "Removed from $rlcName");
+        NQ::simple('hms', hms\NotificationView::SUCCESS, 'Removed from RLC');
 
         // Deny application
-        $app = HMS_RLC_Application::getApplicationById($context->get('appId'));
-        if(is_null($app)){
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Could not find an RLC application with that id.');
-            return;
-        }
-        $app->denied = 1;
-        $app->save();
+        $rlcApp->denied = 1;
+        $rlcApp->save();
 
-        NQ::simple('hms', hms\NotificationView::SUCCESS, 'Application denied.');
-        PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-        HMS_Activity_Log::log_activity($app->username, 28, Current_User::getUsername(), 'Application Denied');
+        NQ::simple('hms', hms\NotificationView::SUCCESS, 'RLC Application denied');
+        HMS_Activity_Log::log_activity($rlcApp->getUsername(), ACTIVITY_DENIED_RLC_APPLICATION, Current_User::getUsername(), 'RLC Application Denied');
 
         $context->goBack();
     }
