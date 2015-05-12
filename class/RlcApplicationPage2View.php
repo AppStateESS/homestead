@@ -1,6 +1,4 @@
 <?php
-PHPWS_Core::initModClass('hms', 'Student.php');
-PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 
 /*
  * ShowRlcApplicationPage2View
@@ -55,7 +53,7 @@ class RlcApplicationPage2View extends hms\View{
             }
 
             $rlc = new HMS_Learning_Community($rlcIds[$i]);
-            
+
             // If we're missing a question... send them back. We might could throw an exception here.
             $question = $rlc->getFreshmenQuestion();
             if(!isset($question)) {
@@ -67,15 +65,8 @@ class RlcApplicationPage2View extends hms\View{
 
             $rlc_form2->addTextArea("rlc_question_$i");
             $rlc_form2->setLabel("rlc_question_$i", $rlc->getFreshmenQuestion());
-            $rlc_form2->setMaxSize("rlc_question_$i", 4096);
-            $rlc_form2->setCols("rlc_question_$i", 50);
-            $rlc_form2->setRows("rlc_question_$i", 15);
+            $rlc_form2->addCssClass("rlc_question_$i", 'form-control');
         }
-
-        $rlc_form2->addSubmit('submit', 'Submit Application');
-
-        $rlc_form2->addButton('cancel', 'Cancel');
-        $rlc_form2->setExtra('cancel', 'onClick="document.location=\'index.php?module=hms&type=student&op=show_main_menu\'"');
 
         $rlc_form2->mergeTemplate($template);
         $template = $rlc_form2->getTemplate();
@@ -85,4 +76,3 @@ class RlcApplicationPage2View extends hms\View{
         return PHPWS_Template::process($template, 'hms', 'student/rlc_signup_form_page2.tpl');
     }
 }
-?>

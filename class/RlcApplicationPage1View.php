@@ -37,7 +37,6 @@ class RlcApplicationPage1View extends hms\View{
         $template = array();
 
         $rlc_form = new PHPWS_Form();
-        $rlc_form->useRowRepeat();
         $page2Cmd = CommandFactory::getCommand('ShowRlcApplicationPage2View');
         $page2Cmd->setTerm($context->get('term'));
         $page2Cmd->initForm($rlc_form);
@@ -99,15 +98,9 @@ class RlcApplicationPage1View extends hms\View{
         $rlc_form->setLabel('strengths_weaknesses',
                             'What are your strengths and in what areas would you like to improve?');
 
-        $rlc_form->addButton('cancel','Cancel');
-        $rlc_form->setExtra('cancel','onClick="document.location=\'index.php?module=hms&action=ShowStudentMenu\'"');
-
-        $rlc_form->addSubmit('submit', 'Continue');
-
         $rlc_form->mergeTemplate($template);
         $template = $rlc_form->getTemplate();
 
         return PHPWS_Template::process($template,'hms','student/rlc_signup_form_page1.tpl');
     }
 }
-?>
