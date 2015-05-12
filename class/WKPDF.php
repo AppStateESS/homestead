@@ -2,7 +2,8 @@
 
 // Automated configuration. Modify these if they fail. (they shouldn't ;) )
 //$GLOBALS['WKPDF_BASE_PATH']=str_replace(str_replace('\\','/',getcwd().'/'),'',dirname(str_replace('\\','/',__FILE__))).'/';
-$GLOBALS['WKPDF_BASE_PATH'] = '/opt/';
+//$GLOBALS['WKPDF_BASE_PATH'] = '/opt/';
+$GLOBALS['WKPDF_BASE_PATH'] = PHPWS_SOURCE_DIR . 'mod/hms/vendor/ioki/wkhtmltopdf-amd64-centos6/bin/';
 $GLOBALS['WKPDF_TEMP_PATH'] = '/tmp/';
 $GLOBALS['WKPDF_BASE_SITE']='http://'.$_SERVER['SERVER_NAME'].'/';
 
@@ -130,7 +131,7 @@ class WKPDF {
      * Constructor: initialize command line and reserve temporary file.
      */
     public function __construct(){
-        $this->cmd=$GLOBALS['WKPDF_BASE_PATH'].'wkhtmltopdf-'.self::_getCPU();
+        $this->cmd=$GLOBALS['WKPDF_BASE_PATH'].'wkhtmltopdf-'.self::_getCPU().'-centos6';
         if(!file_exists($this->cmd))throw new Exception('WKPDF static executable "'.htmlspecialchars($this->cmd,ENT_QUOTES).'" was not found.');
         do{
             $this->tmp=$GLOBALS['WKPDF_TEMP_PATH'].mt_rand().'.html';
