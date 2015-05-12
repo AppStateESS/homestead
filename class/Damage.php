@@ -1,4 +1,4 @@
-<?
+<?php
 
 /**
  * Damage - Model class for representing Room Damages.
@@ -9,14 +9,14 @@
 class Damage {
 
     public $id; // Unique id for the hms_damage table
-    
+
     public $room_id; // The room ID where this damage happened
-    
+
     public $damage_type; // Foreign key to the hms_damage_type table
 
     // Checkout Info
     public $checkout_id; // Optional foreign key to the checkin-checkout table
-    
+
     // Student data
     public $banner_id; // Optional banner ID of the student who caused the damage
     public $split_with_roommate; // Indicates that this damage was split with the person's roommate
@@ -31,7 +31,7 @@ class Damage {
     public $cost_set_date;
 
     public $charged; // Whether or not the student's account has been charged the cost yet (i.e. charges reported to Banner)
-    public $charged_by; 
+    public $charged_by;
     public $charged_date;
 
     // Workorder info
