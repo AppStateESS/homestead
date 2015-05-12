@@ -31,7 +31,8 @@ class CreateRoommateGroupView extends hms\View {
             $form->addText('roommate1');
         }
 
-        javascript('modules/hms/autoFocus', array('ELEMENT' => $form->getId('roommate1')));
+        //javascript('modules/hms/autoFocus', array('ELEMENT' => $form->getId('roommate1')));
+        $form->setExtra('roommate1', 'autoFocus');
 
         if(isset($this->roommate1)){
             $form->addText('roommate2', $this->roommate2);
