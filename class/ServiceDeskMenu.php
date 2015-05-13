@@ -23,11 +23,11 @@ class ServiceDeskMenu extends CommandMenu {
         if (Current_User::allow('hms', 'damage_assessment')) {
             $this->addCommandByName('Damage Assessment', 'ShowDamageAssessment');
         }
-        
+
         // Room Damage Notifications
         if (Current_User::allow('hms', 'damage_notification')) {
             $this->addCommandByName('Send Room Damage Notices', 'SendRoomDamageNotifications');
-            
+
             $cmd = CommandFactory::getCommand('JSConfirm');
             $cmd->setLink('Send Room Damage Notices');
             $cmd->setTitle('Send Room Damage Notices');
@@ -38,14 +38,14 @@ class ServiceDeskMenu extends CommandMenu {
             $this->addCommand('Send Room Damage Notices', $cmd);
         }
 
+        /*
         if (UserStatus::isAdmin()) {
 
-            /*
             if(Current_User::allow('hms', 'package_desk')){
                 $this->addCommandByName('Package Desk', 'ShowPackageDeskMenu');
             }
-            */
         }
+        */
     }
 
     public function show()
@@ -58,7 +58,6 @@ class ServiceDeskMenu extends CommandMenu {
 
         $tpl['MENU'] = parent::show();
         $tpl['LEGEND_TITLE'] = 'Service Desk';
-        $tpl['ICON_CLASS'] = 'tango-edit-paste';
 
         return PHPWS_Template::process($tpl, 'hms', 'admin/menus/AdminMenuBlock.tpl');
     }
