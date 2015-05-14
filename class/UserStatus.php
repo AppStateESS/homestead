@@ -54,13 +54,13 @@ class UserStatus
 
         return Current_User::getUsername();
     }
-    
+
     public static function getDisplayName($respectMask = true)
     {
     	if(self::isGuest()){
     		return null;
     	}
-        
+
         if(self::isMasquerading() && $respectMask) {
             //TODO: Fix the users class so we don't have to query this ourselves....
             $db = new \PHPWS_DB('users');
@@ -68,7 +68,7 @@ class UserStatus
             $result = $db->select('row');
             return $result['display_name'];
         }
-        
+
         return Current_User::getDisplayName();
     }
 
@@ -102,28 +102,12 @@ class UserStatus
         return isset($_SESSION['hms_masquerade_as_self']);
     }
 
-    public static function getBigLogin($message = NULL)
-    {
-        if(!UserStatus::isGuest()) {
-            return;
-        }
-
-        $vars = array();
-
-        if(!is_null($message))
-        $vars['MESSAGE'] = $message;
-
-        $vars['LINK'] = '<a href="/login"><h2><img src="mod/hms/img/tango-icons/actions/edit-redo.png" style="vertical-align: middle" />Log In to HMS</h2></img></a>';
-
-        return PHPWS_Template::process($vars, 'hms', 'UserBigLogin.tpl');
-    }
-
     public static function getLogoutLink()
     {
         $auth = Current_User::getAuthorization();
         return '<a href="'.$auth->logout_link.'">Logout</a>';
     }
-    
+
     public static function getLogoutURI()
     {
     	return Current_User::getAuthorization()->logout_link;

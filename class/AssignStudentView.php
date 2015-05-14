@@ -2,7 +2,7 @@
 
 /**
  * View for showing the Assign Student interface.
- * 
+ *
  * @author jbooker
  * @package hms
  */
@@ -13,7 +13,7 @@ class AssignStudentView extends hms\View {
     private $application;
 
     /**
-     * 
+     *
      * @param Student $student
      * @param HMS_Bed $bed
      * @param HousingApplication $application
@@ -51,18 +51,16 @@ class AssignStudentView extends hms\View {
         $assignCmd = CommandFactory::getCommand('AssignStudent');
         $assignCmd->initForm($form);
 
+        $form->addHidden('term', Term::getSelectedTerm());
+
         $form->addText('username');
         $form->setLabel('username', 'ASU Username: ');
         if (isset($this->student)) {
             $form->setValue('username', $this->student->getUsername());
         }
+        $form->addCssClass('username', 'form-control');
 
         javascript('modules/hms/autoFocus', array('ELEMENT' => $form->getId('username')));
-
-        $form->addTextarea('note');
-        $form->setLabel('note', 'Note: ');
-
-        $form->addHidden('term', Term::getSelectedTerm());
 
         // Check to see if a bed_id was passed in, this means
         // the user clicked an 'unassigned' link. We need to pre-populate
@@ -89,6 +87,7 @@ class AssignStudentView extends hms\View {
             $form->setMatch('residence_hall', 0);
         }
         $form->setLabel('residence_hall', 'Residence hall: ');
+        $form->addCssClass('residence_hall', 'form-control');
 
         if ($pre_populate) {
             $form->addDropBox('floor', $hall->get_floors_array());
@@ -97,6 +96,7 @@ class AssignStudentView extends hms\View {
             $form->addDropBox('floor', array(0 => ''));
         }
         $form->setLabel('floor', 'Floor: ');
+        $form->addCssClass('floor', 'form-control');
 
         if ($pre_populate) {
             $form->addDropBox('room', $floor->get_rooms_array());
@@ -105,6 +105,7 @@ class AssignStudentView extends hms\View {
             $form->addDropBox('room', array(0 => ''));
         }
         $form->setLabel('room', 'Room: ');
+        $form->addCssClass('room', 'form-control');
 
         if ($pre_populate) {
             $form->addDropBox('bed', $room->get_beds_array());
@@ -115,6 +116,7 @@ class AssignStudentView extends hms\View {
             $show_bed_drop = false;
         }
         $form->setLabel('bed', 'Bed: ');
+        $form->addCssClass('bed', 'form-control');
 
         if ($show_bed_drop) {
             $tpl['BED_STYLE'] = '';
@@ -134,6 +136,7 @@ class AssignStudentView extends hms\View {
                 // BANNER_MEAL_4WEEK => 'Summer (4 weeks)',
                 BANNER_MEAL_5WEEK => 'Summer (5 weeks)'));
         $form->setLabel('meal_plan', 'Meal plan: ');
+        $form->addCssClass('meal_plan', 'form-control');
 
         // If the username was passed in, and that student has a meal plan
         // pre-select the student's chosen meal plan
@@ -175,8 +178,7 @@ class AssignStudentView extends hms\View {
 
         $form->setMatch('assignment_type', -1);
         $form->setLabel('assignment_type', 'Assignment Type: ');
-
-        $form->addSubmit('submit', 'Assign Student');
+        $form->addCssClass('assignment_type', 'form-control');
 
         if ($pre_populate) {
             $form->addHidden('use_bed', 'true');
@@ -184,12 +186,15 @@ class AssignStudentView extends hms\View {
             $form->addHidden('use_bed', 'false');
         }
 
-        $form->mergeTemplate($tpl);
+        $form->addTextarea('note');
+        $form->setLabel('note', 'Note: ');
+        $form->addCssClass('note', 'form-control');
 
+        $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
         Layout::addPageTitle("Assign Student");
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/assign_student.tpl');
+        return PHPWS_Template::process($tpl, 'hms', 'admin/assignStudent.tpl');
     }
 }
