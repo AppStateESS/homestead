@@ -1,7 +1,7 @@
 {DROPDOWN}
 {START_FORM}
 <!-- BEGIN table -->
-<table cellpadding="3" cellspacing="1" width="850px">
+<table class='table table-striped'>
     <tr>
         <th>Name </th>
         <th>1st {RLC_FIRST_CHOICE_ID_SORT}</th>
@@ -32,10 +32,10 @@
     </tr>
 <!-- END listrows -->
 </table>
-<div class="align-center">
-    {TOTAL_ROWS}<br />
-    {PAGE_LABEL} {PAGES}<br />
-    {LIMIT_LABEL} {LIMITS}<br />
+<div class="text-center">
+    {PAGES}
+    <p>{TOTAL_ROWS}</p>
+    <p>{LIMIT_LABEL} {LIMITS}</p>
     {CSV_REPORT}
 </div>
 <!-- END table -->
