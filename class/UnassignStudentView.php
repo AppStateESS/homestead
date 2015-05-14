@@ -26,6 +26,7 @@ class UnassignStudentView extends hms\View{
         if(!is_null($this->student)) {
             $form->setValue('username', $this->student->getUsername());
         }
+        $form->addCssClass('username', 'form-control');
 
         $var = array('ELEMENT' => $form->getId('username'));
         javascript('modules/hms/autoFocus', $var);
@@ -41,16 +42,17 @@ class UnassignStudentView extends hms\View{
 
         //$form->setMatch('unassignment_type', UNASSIGN_ADMIN);
         $form->setLabel('unassignment_type', 'Unassignment Type: ');
+        $form->addCssClass('unassignment_type', 'form-control');
 
         $form->addText('refund');
         $form->setLabel('refund', 'Refund Percentage');
         $form->setSize('refund', 4);
         $form->setMaxSize('refund', 3);
+        $form->addCssClass('refund', 'form-control');
 
         $form->addTextarea('note');
         $form->setLabel('note', 'Note: ');
-
-        $form->addSubmit('submit', _('Unassign Student'));
+        $form->addCssClass('note', 'form-control');
 
         $tpl = $form->getTemplate();
 
@@ -58,7 +60,7 @@ class UnassignStudentView extends hms\View{
 
         Layout::addPageTitle("Unassign Student");
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/unassign_student.tpl');
+        return PHPWS_Template::process($tpl, 'hms', 'admin/unassignStudent.tpl');
     }
 
 }

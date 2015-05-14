@@ -8,7 +8,7 @@
         <label for="{USERNAME_ID}">ASU Email:</label>
         <div class="input-group">
             {USERNAME}
-            <span class="input-group-addon" id="basic-addon2">@appstate.edu</span>
+            <span class="input-group-addon">@appstate.edu</span>
         </div>
 
         <div class="form-group">
