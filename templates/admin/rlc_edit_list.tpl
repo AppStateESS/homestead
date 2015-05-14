@@ -1,19 +1,19 @@
 <h2>Edit Learning Communities</h2>
 
 {ADD_LINK}
-<table>
+<table class='table table-striped'>
     <tr>
+        <th>&nbsp;</th>
         <th>Community Name</th>
         <th>Abbreviation</th>
         <th>Capacity</th>
-        <th>Action(s)</th>
     </tr>
     <!-- BEGIN listrows -->
     <tr>
+        <td>{ACTIONS}</td>
         <td>{COMMUNITY_NAME}</td>
         <td>{ABBREVIATION}</td>
         <td>{CAPACITY}</td>
-        <td>{ACTIONS}</td>
     </tr>
     <!-- END listrows -->
 </table>

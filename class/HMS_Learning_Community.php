@@ -197,7 +197,7 @@ class HMS_Learning_Community extends HMS_Item
     }
 
     public function rowTags(){
-        return array('ACTIONS' => "<a href=\"index.php?module=hms&action=ShowAddRlc&id={$this->id}\">Edit</a>");
+        return array('ACTIONS' => "<a class='btn btn-primary btn-sm' href=\"index.php?module=hms&action=ShowAddRlc&id={$this->id}\"><i class='fa fa-edit'></i> Edit</a>");
     }
 
     /**

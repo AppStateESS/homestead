@@ -10,15 +10,13 @@ class EditRlcView extends hms\View {
         $pager->db->addOrder('community_name ASC');
         $pager->setModule('hms');
         $pager->setTemplate('admin/rlc_edit_list.tpl');
-        $pager->addToggle('class="toggle1"');
-        $pager->addToggle('class="toggle2"');
         $pager->addRowTags('rowTags');
 
         $addCmd = CommandFactory::getCommand('ShowAddRlc');
 
         $pageTags = array();
 
-        $pageTags['ADD_LINK'] = '['.$addCmd->getLink('Add a Community').']';
+        $pageTags['ADD_LINK'] = $addCmd->getLink('<i class="fa fa-plus"></i> Add a Community', null, 'btn btn-success');
 
         $pager->addPageTags($pageTags);
 
