@@ -16,10 +16,12 @@ class LotterySettingsFormView extends hms\View {
         $form->addDropBox('lottery_term', Term::getTermsAssoc());
         $form->setMatch('lottery_term', PHPWS_Settings::get('hms', 'lottery_term'));
         $form->setLabel('lottery_term', 'Lottery Term');
+        $form->setClass('lottery_term', 'form-control');
 
         $form->addText('hard_cap');
         $form->setLabel('hard_cap', 'Max # Returning Students (hard cap):');
         $form->setValue('hard_cap', PHPWS_Settings::get('hms', 'lottery_hard_cap'));
+        $form->setClass('hard_cap', 'form-control');
         
         /*
         $form->addText('soph_goal');
@@ -30,10 +32,12 @@ class LotterySettingsFormView extends hms\View {
         $form->addText('jr_goal');
         $form->setLabel('jr_goal', 'Juniors:');
         $form->setValue('jr_goal', PHPWS_Settings::get('hms', 'lottery_jr_goal'));
+        $form->setClass('jr_goal', 'form-control');
         
         $form->addText('sr_goal');
         $form->setLabel('sr_goal', 'Senior:');
         $form->setValue('sr_goal', PHPWS_Settings::get('hms', 'lottery_sr_goal'));
+        $form->setClass('sr_goal', 'form-control');
 
         $form->addSubmit('submit', 'Save');
 

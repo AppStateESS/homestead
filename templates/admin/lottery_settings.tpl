@@ -1,18 +1,26 @@
-<h1>Lottery Settings</h1>
+<h2>Lottery Settings</h2>
 
 {START_FORM}
+<div class="row">
+    <div class="form-group col-sm-6">
+        {LOTTERY_TERM_LABEL}
+        {LOTTERY_TERM}
+    </div>
+    <div class="form-group col-sm-6">
+        {HARD_CAP_LABEL}
+        {HARD_CAP}
+    </div>
+</div>
 
-<div>{LOTTERY_TERM_LABEL} {LOTTERY_TERM}</div>
-<div>{HARD_CAP_LABEL} {HARD_CAP}</div>
-<div>{EXPECTED_YIELD_LABEL} {EXPECTED_YIELD}</div>
+<h3>Soft Caps by Class</h3>
+<div class="row">
+    <div class="form-group col-sm-6">
+        {JR_GOAL_LABEL} {JR_GOAL}
+    </div>
+    <div class="form-group col-sm-6">
+        {SR_GOAL_LABEL} {SR_GOAL}
+    </div>
+</div>
 
-<fieldset>
-  <legend>Soft Caps by Class</legend>
-  <div>{SOPH_GOAL_LABEL} {SOPH_GOAL}</div>
-
-  <div>{JR_GOAL_LABEL} {JR_GOAL}</div>
-
-  <div>{SR_GOAL_LABEL} {SR_GOAL}</div>
-</fieldset>
-
-{SUBMIT} {END_FORM}
+{SUBMIT}
+{END_FORM}
