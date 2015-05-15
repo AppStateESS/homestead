@@ -132,8 +132,6 @@ class HMS_Movein_Time
         $pager->setTemplate('admin/movein_time_pager.tpl');
         $pager->setLink('index.php?module=hms');
         $pager->setEmptyMessage("No move-in times found.");
-        $pager->addToggle('class="toggle1"');
-        $pager->addToggle('class="toggle2"');
         $pager->addRowTags('getRowTags');
         $pager->addPageTags($pager_tags);
 
