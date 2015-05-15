@@ -1,4 +1,4 @@
-<table id="special-interest-table">
+<table id="special-interest-table" class="table table-striped">
     <tr>
         <th>Name {ASU_USERNAME_SORT}</th>
         <th>User Name</th>
@@ -19,9 +19,9 @@
     </tr>
     <!-- END listrows -->
 </table>
-<div class="align-center">
-    {TOTAL_ROWS}<br />
-    {PAGE_LABEL} {PAGES}<br />
-    {LIMIT_LABEL} {LIMITS}<br />
+<div class="text-center">
+     {PAGES}
+     <p>{TOTAL_ROWS}</p>
+     <p>{LIMIT_LABEL} {LIMITS}</p>
     {CSV_REPORT}
 </div>

@@ -1,22 +1,23 @@
 <script type="text/javascript">
 
-$(document).ready(function() {
-    $('#special_interest_group').bind('change', function(){
-        $('#special_interest').submit();
+    $(document).ready(function() {
+        $('#special_interest_group').bind('change', function() {
+            $('#special_interest').submit();
+        });
     });
-});
 
 </script>
 
-<div class="hms">
-  <div class="box">
-    <div class="box-title"><h1>Special Interest Group Approval</h1></div>
-    <div class="box-content">
-        {START_FORM}
-        Group: {GROUP}
-        {END_FORM}
-        <br /><br />
-        {GROUP_PAGER}
+<h2>Special Interest Group Approval</h2>
+{START_FORM}
+<div class="form-group row">
+    <div class="col-sm-1">
+        <label for="special_interest_group">Group:</label>
     </div>
-  </div>
+    <div class="col-sm-6">
+        {GROUP}
+    </div>
 </div>
+{END_FORM}
+<br /><br />
+{GROUP_PAGER}

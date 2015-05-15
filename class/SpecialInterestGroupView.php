@@ -31,6 +31,7 @@ class SpecialInterestGroupView extends hms\View{
         $form = new PHPWS_Form('special_interest');
         $form->setMethod('get');
         $form->addDropBox('group', $groups);
+        $form->setClass('group', 'form-control');
 
         $form->setMatch('group', $this->group);
 
