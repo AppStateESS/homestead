@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @author jbooker
+ * @package hms
+ */
 class SelectHallView extends hms\View{
 
     private $title;
@@ -33,6 +37,7 @@ class SelectHallView extends hms\View{
 
         $form->setMethod('get');
         $form->addDropBox('hallId', $this->halls);
+        $form->addCssClass('hallId', 'form-control');
 
         $form->addSubmit('submit', _('Select Hall'));
 
@@ -44,5 +49,3 @@ class SelectHallView extends hms\View{
         return PHPWS_Template::process($tpl, 'hms', 'admin/select_residence_hall.tpl');
     }
 }
-
-?>

@@ -1,4 +1,8 @@
 <?php
+/**
+ * @author jbooker
+ * @package hms
+ */
 
 class HallOverviewCommand extends Command {
 
@@ -41,7 +45,7 @@ class HallOverviewCommand extends Command {
         PHPWS_Core::initModClass('hms', 'HallOverview.php');
 
         $hallId = $context->get('hallId');
-        
+
         if(!isset($hallId)){
             throw new InvalidArgumentException('Missing hall ID.');
         }
@@ -55,7 +59,7 @@ class HallOverviewCommand extends Command {
             $hallOverviewCmd->setOnSelectCmd(CommandFactory::getCommand('HallOverview'));
             $hallOverviewCmd->redirect();
         }
-        
+
         $hallOverview = new HallOverview($hall);
         $context->setContent($hallOverview->show());
     }
