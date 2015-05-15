@@ -2,6 +2,7 @@
 
 /**
  * @author Jeremy Booker <jbooker AT tux DOT appstate DOT edu>
+ * @package hms
  */
 
 class SelectResidenceHallCommand extends Command {
@@ -47,15 +48,13 @@ class SelectResidenceHallCommand extends Command {
     {
         PHPWS_Core::initModClass('hms', 'SelectHallView.php');
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
-         
+
         $term = Term::getSelectedTerm();
         $halls = HMS_Residence_Hall::get_halls_array($term);
-         
+
         $onSelectCmd = CommandFactory::getCommand($context->get('onSelectAction'));
-         
+
         $hallView = new SelectHallView($onSelectCmd, $halls, $context->get('title'), $term);
         $context->setContent($hallView->show());
     }
 }
-
-?>

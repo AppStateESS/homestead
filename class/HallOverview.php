@@ -1,4 +1,8 @@
 <?php
+/**
+ * @author jbooker
+ * @package hms
+ */
 
 class HallOverview extends hms\View{
 
@@ -12,10 +16,6 @@ class HallOverview extends hms\View{
 
     public function show()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-
         $tpl = new PHPWS_Template('hms');
 
         if(!$tpl->setFile('admin/reports/hall_overview.tpl')){
@@ -133,7 +133,7 @@ class HallOverview extends hms\View{
                             $tpl->setData(array('BED_LABEL'=>$bed->bedroom_label,'BED'=>$bed_link,'NAME'=>$student->getProfileLink(), 'USERNAME'=>$student->getUsername(), 'BANNER_ID'=>$student->getBannerId(), 'TOGGLE'=>$class, 'RLC_ABBR'=>$rlc_abbr));
                         }
                     }else{
-                        $tpl->setData(array('BED_LABEL'=>$bed->bedroom_label,'BED'=>$bed_link,'NAME'=>$bed->get_assigned_to_link(), 'TOGGLE'=>'vacant'));
+                        $tpl->setData(array('BED_LABEL'=>$bed->bedroom_label,'BED'=>$bed_link,'NAME'=>$bed->get_assigned_to_link(), 'VACANT'=>''));
                     }
 
                     $tpl->parseCurrentBlock();

@@ -85,7 +85,7 @@ class HMS_Util{
     public static function get_short_date($timestamp) {
         if(!isset($timestamp))
             $timestamp = time();
-         
+
         return date('j-n-y', $timestamp);
     }
 
@@ -141,7 +141,7 @@ class HMS_Util{
         if(!isset($timestamp)){
             $timestamp = time();
         }
-         
+
         return date('M jS, Y', $timestamp);
     }
 
@@ -192,25 +192,6 @@ class HMS_Util{
         }
 
         return "$diff $term ago";
-    }
-
-    /**
-     * Determines which color the title bar should be based on
-     * the selected and current terms.
-     */
-    public static function get_title_class(){
-        $selected_term = Term::getSelectedTerm();
-        $current_term = Term::getCurrentTerm();
-
-        if($selected_term < $current_term){
-            return "box-title-red";
-        }else if($selected_term == $current_term){
-            return "box-title-green";
-        }else if($selected_term > $current_term){
-            return "box-title-blue";
-        }else{
-            return "box-title";
-        }
     }
 
     public static function formatGender($gender)

@@ -1,53 +1,64 @@
-<div class="hms">
-  <div class="box">
-    <div class="{TITLE_CLASS}"> <h1>{TITLE}</h1> </div>
-    <div class="box-content">
-        <!-- BEGIN error_msg -->
-        <span class="error">{ERROR_MSG}<br /></span>
-        <!-- END error_msg -->
-        
-        <!-- BEGIN success_msg -->
-        <span class="success">{SUCCESS_MSG}<br /></span>
-        <!-- END success_msg -->
-        <h2>Create Move-in Time</h2>
-        {START_FORM}
-        <table>
-            <tr>
-              <th colspan="2">Begin Date & Time</th>
-              <th colspan="2">End Date & Time</th>
-            </tr>
-            <tr>
-                <td>Month</td>
-                <td>{BEGIN_MONTH}</td>
-                <td>Month</td>
-                <td>{END_MONTH}</td>
-            </tr>
-            <tr>
-                <td>Day</td>
-                <td>{BEGIN_DAY}</td>
-                <td>Day</td>
-                <td>{END_DAY}</td>
-            </tr>
-            <tr>
-                <td>Year</td>
-                <td>{BEGIN_YEAR}</td>
-                <td>Year</td>
-                <td>{END_YEAR}</td>
-            </tr>
-            <tr>
-                <td>Hour</td>
-                <td>{BEGIN_HOUR}</td>
-                <td>Hour</td>
-                <td>{END_HOUR}</td>
-            </tr>
-            <tr>
-                <td colspan="2">{SUBMIT}</td>
-            </tr>
-        </table>
-        {END_FORM}
-        <br />
-        <h2>Existing Move-in Times</h2>
-        {MOVEIN_TIME_PAGER}
+<h1>{TITLE}</h1>
+
+<h2>Create Move-in Time</h2>
+
+{START_FORM}
+
+<div class="row">
+    <div class="col-md-3">
+        <h3>Begin Date &amp; Time</h3>
+        <div class="form-group">
+            <label for="{BEGIN_MONTH_ID}">Month</label>
+            {BEGIN_MONTH}
+        </div>
+        <div class="form-group">
+            <label for="{BEGIN_DAY_ID}">Day</label>
+            {BEGIN_DAY}
+        </div>
+
+        <div class="form-group">
+            <label for="{BEGIN_YEAR_ID}">Year</label>
+            {BEGIN_YEAR}
+        </div>
+
+        <div class="form-group">
+            <label for="{BEGIN_HOUR_ID}">Hour</label>
+            {BEGIN_HOUR}
+        </div>
     </div>
-  </div>
+
+    <div class="col-md-3 col-md-offset-1">
+        <h3>End Date &amp; Time</h3>
+        <div class="form-group">
+            <label for="{END_MONTH_ID}">Month</label>
+            {END_MONTH}
+        </div>
+
+        <div class="form-group">
+            <label for="{END_DAY_ID}">Day</label>
+            {END_DAY}
+        </div>
+
+
+        <div class="form-group">
+            <label for="{END_YEAR_ID}">Year</label>
+            {END_YEAR}
+        </div>
+
+        <div class="form-group">
+            <label for="{END_HOUR_ID}">Hour</label>
+            {END_HOUR}
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-success pull-right"><i class="fa fa-plus"></i> Create Move-in Time</button>
+        </div>
+    </div>
 </div>
+
+{END_FORM}
+
+<hr>
+
+<h2>Existing Move-in Times</h2>
+{MOVEIN_TIME_PAGER}
