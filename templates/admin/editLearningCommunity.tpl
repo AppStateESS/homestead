@@ -1,84 +1,72 @@
-<h1>Add/Edit a Learning Community</h1>
+<h2>Add/Edit a Learning Community</h2>
 
 <!-- BEGIN community -->
-<h2>{COMMUNITY}</h2>
+<h3>{COMMUNITY}</h3>
 <!-- END community -->
 
 {START_FORM}
-<fieldset>
-  <legend>General Settings</legend>
-  <table>
-    <tr>
-      <td>Community Name:&nbsp;</td>
-      <td>{COMMUNITY_NAME}</td>
-    </tr>
-    <tr>
-      <td>Abbreviation:</td>
-      <td>{ABBREVIATION}</td>
-    </tr>
-    <tr>
-      <td>Capacity:</td>
-      <td>{CAPACITY}</td>
-    </tr>
-  </table>
-</fieldset>
 
-<br />
+<div class="row">
+    <div class="col-sm-6 col-lg-4">
+        <h3>General Settings</h3>
+        <div class='form-group'>
+            <label for="add_learning_community_community_name">Community Name</label>
+            {COMMUNITY_NAME}
+        </div>
+        <div class='form-group'>
+            <label for="add_learning_community_abbreviation">Abbreviation</label>
+            {ABBREVIATION}
+        </div>
+        <div class='form-group'>
+            <label for="add_learning_community_capacity">Capacity</label>
+            {CAPACITY}
+        </div>
+    </div>
+    <div class="col-sm-6 col-lg-4">
+        <h3>Move-in Times</h3>
+        <div class='form-group'>
+            <label for="add_learning_community_f_movein_time">{F_MOVEIN_TIME_LABEL}</label>
+            {F_MOVEIN_TIME}
+        </div>
+        <div class='form-group'>
+            <label for="add_learning_community_t_movein_time">{T_MOVEIN_TIME_LABEL}</label>
+            {T_MOVEIN_TIME}
+        </div>
+        <div class='form-group'>
+            <label for="add_learning_community_c_movein_time">{C_MOVEIN_TIME_LABEL}</label>
+            {C_MOVEIN_TIME}
+        </div>
+    </div>
+    <div class="col-sm-12 col-lg-4">
+        <h3>Student Types Allowed</h3>
+        <div class='form-group'>
+            <label>First-time Application Allowed Student Types</label> <small>(comma separated list, i.e.: 'F,C,T')</small>
+            {STUDENT_TYPES}
+        </div>
+        <div class='form-group'>
+            <label>Re-application Allowed Student Types</label> <small>(comma separated list, i.e.: 'F,C,T')</small>
+            {REAPPLICATION_STUDENT_TYPES} 
+        </div>
+        <div class='form-group'>
+            {MEMBERS_REAPPLY} {MEMBERS_REAPPLY_LABEL}
+        </div>
+    </div>
+</div>
 
-<fieldset>
-  <legend>Move-in Times</legend>
-  <div>{F_MOVEIN_TIME_LABEL}: {F_MOVEIN_TIME}</div>
-  <div>{T_MOVEIN_TIME_LABEL}: {T_MOVEIN_TIME}</div>
-  <div>{C_MOVEIN_TIME_LABEL}: {C_MOVEIN_TIME}</div>
-</fieldset>
 
-<br />
 
-<fieldset>
-  <legend>Student Types Allowed</legend>
-  <table>
-    <tr>
-      <td>First-time Application Allowed Student Types:</td>
-      <td>{STUDENT_TYPES} (comma separated list, i.e.: 'F,C,T')</td>
-    </tr>
-    <tr>
-      <td>Re-application Allowed Student Types:</td>
-      <td>{REAPPLICATION_STUDENT_TYPES} (comma separated list,
-        i.e.: 'F,C,T')</td>
-    </tr>
-    <tr>
-      <td>{MEMBERS_REAPPLY_LABEL}</td>
-      <td>{MEMBERS_REAPPLY}</td>
-    </tr>
-  </table>
-</fieldset>
+<h3>Application Questions</h3>
+<div class='form-group'>
+    {FRESHMEN_QUESTION_LABEL}
+    {FRESHMEN_QUESTION}
+</div>
+<div class='form-group'>
+    {RETURNING_QUESTION_LABEL}
+    {RETURNING_QUESTION}
+</div>
 
-<br />
+<h3>Terms &amp; Conditions</h3>
+<p>This text will be included in the invitation email sent to accepted students.</p>
+{TERMS_CONDITIONS}
 
-<fieldset>
-  <legend>Application Questions</legend>
-  <table>
-    <tr>
-      <td>{FRESHMEN_QUESTION_LABEL}</td>
-      <td>{FRESHMEN_QUESTION}</td>
-    </tr>
-    <tr>
-      <td>{RETURNING_QUESTION_LABEL}</td>
-      <td>{RETURNING_QUESTION}</td>
-    </tr>
-  </table>
-</fieldset>
-
-<br />
-
-<fieldset>
-  <legend>Terms &amp; Conditions</legend>
-  <table>
-    <tr>
-      <p>This text will be included in the invitation email sent to accepted students.</p>
-      <td>{TERMS_CONDITIONS}</td>
-    </tr>
-  </table>
-</fieldset>
-<br />
 {SUBMIT} {END_FORM}
