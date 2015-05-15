@@ -8,9 +8,11 @@ class SearchByRlcView extends hms\View {
         PHPWS_Core::initCoreClass('Form.php');
         $form = new PHPWS_Form;
         $form->addDropBox('rlc', HMS_Learning_Community::getRlcList());
+        $form->setClass('rlc', 'form-control');
         $form->addHidden('module', 'hms');
         $form->addHidden('action', 'ShowSearchByRlc');
-        $form->addSubmit('submit', _('Search!'));
+        $form->addSubmit('submit', _('Search'));
+        $form->setClass('submit', 'btn btn-primary');
 
         $tags = $form->getTemplate();
         $tags['TITLE'] = "RLC Search";
