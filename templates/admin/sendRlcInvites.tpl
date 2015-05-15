@@ -1,12 +1,24 @@
-<h1>Send RLC Invites for {TERM}</h1>
+<h2>Send RLC Invites for {TERM}</h2>
 
 {START_FORM}
 
-Respond by date: {RESPOND_BY_DATE} Time: {TIME}<br /><br />
+<div class="row">
+    <div class="col-md-4">
+        <div class="form-group">
+            <label for="respond_by_date">Respond by date:</label> {RESPOND_BY_DATE}
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label for="phpws_form_time">Time:</label>{TIME}
+        </div>
+    </div>
+    <div class="col-md-4">
+        <strong>Student Type:</strong><br />
+        {TYPE_1} {TYPE_1_LABEL}<br />
+        {TYPE_2} {TYPE_2_LABEL}<br /><br />
+    </div>
+</div>
 
-<strong>Student Type:</strong><br />
-{TYPE_1} {TYPE_1_LABEL}<br />
-{TYPE_2} {TYPE_2_LABEL}<br /><br />
-
-{SUBMIT}
+<button class="btn btn-primary"><i class="fa fa-envelope-o"></i> Send Invites</button>
 {END_FORM}

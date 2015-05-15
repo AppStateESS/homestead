@@ -25,14 +25,16 @@ class SendRlcInvitesView extends hms\View {
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
         $form->addDropBox('time', HMS_Util::get_hours());
         $form->setMatch('time', '17');
+        $form->setClass('time', 'form-control');
 
         $form->addRadioAssoc('type', array('freshmen'=>'Freshmen', 'returning'=>'Continuing'));
+        $form->setClass('form-control');
 
         $form->addSubmit('submit', 'Send Invites');
+        $form->setClass('submit', 'btn btn-primary');
 
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
-        
         return PHPWS_Template::process($tpl, 'hms', 'admin/sendRlcInvites.tpl');
     }
 }
