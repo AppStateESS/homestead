@@ -504,8 +504,6 @@ class HMS_RLC_Application extends HMS_Item
         $pager->setModule('hms');
         $pager->setTemplate('admin/denied_rlc_app_pager.tpl');
         $pager->setEmptyMessage("No denied RLC applications exist.");
-        $pager->addToggle('class="toggle1"');
-        $pager->addToggle('class="toggle1"');
         $pager->addRowTags('getDeniedPagerTags');
 
         return $pager->get();
