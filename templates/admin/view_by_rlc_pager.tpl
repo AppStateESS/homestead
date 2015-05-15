@@ -1,9 +1,9 @@
 {BACK_LINK}
-<h1>{TITLE}</h1>
+<h2>{TITLE}</h2>
 
-<p><a href="{ADD_URI}" class="btn btn-primary">Add Member(s)</a></p>
+<p><a href="{ADD_URI}" class="btn btn-success"><i class="fa fa-plus"></i> Add Member(s)</a></p>
 
-<table>
+<table class="table table-striped">
     <tr>
         <th>Name</th>
         <th>Banner Id</th>
@@ -21,7 +21,7 @@
     </tr>
     <!-- END empty_table -->
     <!-- BEGIN listrows -->
-    <tr {TOGGLE}>
+    <tr>
         <td>{NAME}</td>
         <td>{BANNER_ID}</td>
         <td style="text-align:center;">{GENDER}</td>
@@ -34,22 +34,13 @@
     </tr>
     <!-- END listrows -->
 </table>
-<br />
 <!-- BEGIN page_label -->
 <div align="center">
 Assignments: {TOTAL_ROWS}
 </div>
 <!-- END page_label -->
-<!-- BEGIN pages -->
-<div align="center">
-{PAGE_LABEL}: {PAGES}
-</div>
-<!-- END pages -->
-<!-- BEGIN limits -->
-<div align="center">
-{LIMIT_LABEL}: {LIMITS}
-</div>
-<!-- END limits -->
-<!-- BEGIN csv -->
+<div class="text-center">
+{PAGES}
+<p>{LIMIT_LABEL}: {LIMITS}</p>
 {CSV_REPORT}
-<!-- END csv -->
+</div>

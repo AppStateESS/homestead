@@ -25,7 +25,7 @@ class RlcRosterPager extends DBPager {
         $tags['TITLE'] = $this->rlc->get_community_name() . ' Assignments ' . Term::toString(Term::getSelectedTerm());
 
         $backCmd = CommandFactory::getCommand('ShowSearchByRlc');
-        $tags['BACK_LINK'] = $backCmd->getLink('&laquo; RLC List');
+        $tags['BACK_LINK'] = $backCmd->getLink('<i class="fa fa-arrow-left"></i> RLC List', null, 'btn btn-info');
 
         $adminAddCmd = CommandFactory::getCommand('ShowAdminAddRlcMember');
         $adminAddCmd->setCommunity($this->rlc);
