@@ -40,7 +40,6 @@ class ShowAddRoomCommand extends Command {
 
         # Setup the title and color of the title bar
         $tpl['TITLE']       = 'Add Room';
-        $tpl['TITLE_CLASS'] = HMS_Util::get_title_class();
 
         # Check to make sure we have a floor and hall.
         $floor = new HMS_Floor($floor_id);
