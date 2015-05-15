@@ -24,21 +24,27 @@ class SendLotteryInvitesView extends hms\View {
         
         $form->addText('sr_male', 0);
         $form->setLabel('sr_male', 'Male:');
+        $form->setClass('sr_male', 'form-control');
         
         $form->addText('sr_female', 0);
         $form->setLabel('sr_female', 'Female:');
+        $form->setClass('sr_female', 'form-control');
         
         $form->addText('jr_male', 0);
         $form->setLabel('jr_male', 'Male:');
+        $form->setClass('jr_male', 'form-control');
         
         $form->addText('jr_female', 0);
         $form->setLabel('jr_female', 'Female:');
+        $form->setClass('jr_female', 'form-control');
         
         $form->addText('soph_male', 0);
         $form->setLabel('soph_male', 'Male:');
+        $form->setClass('soph_male', 'form-control');
         
         $form->addText('soph_female', 0);
         $form->setLabel('soph_female', 'Female:');
+        $form->setClass('soph_female', 'form-control');
         
         $form->addSubmit('submit', 'Send Invites');
         
