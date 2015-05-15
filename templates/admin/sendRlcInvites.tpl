@@ -5,7 +5,8 @@
 <div class="row">
     <div class="col-md-4">
         <div class="form-group">
-            <label for="respond_by_date">Respond by date:</label> {RESPOND_BY_DATE}
+            <label for="respond_by_date">Respond by date:</label><br />
+            {RESPOND_BY_DATE}
         </div>
     </div>
     <div class="col-md-4">
