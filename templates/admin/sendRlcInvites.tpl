@@ -15,9 +15,17 @@
         </div>
     </div>
     <div class="col-md-4">
-        <strong>Student Type:</strong><br />
-        {TYPE_1} {TYPE_1_LABEL}<br />
-        {TYPE_2} {TYPE_2_LABEL}<br /><br />
+        <strong>Student Type:</strong>
+        <div class="radio">
+            <label>
+                {TYPE_1} {TYPE_1_LABEL}
+            </label>
+        </div>
+        <div class="radio">
+            <label>
+                {TYPE_2} {TYPE_2_LABEL}
+            </label>
+        </div>
     </div>
 </div>
 
