@@ -1,7 +1,7 @@
 <h2>{TITLE}</h2>
 
-<div align="right">{SEARCH}</div>
-<table>
+<div class="pull-right form-group">{SEARCH}</div>
+<table class="table table-striped table-hover">
     <tr>
         <th>Position</th>
         <th>Name</th>
@@ -15,7 +15,7 @@
     </tr>
     <!-- BEGIN empty_table -->
     <tr>
-        <td colspan="5">{EMPTY_MESSAGE}</td>
+        <td colspan="9">{EMPTY_MESSAGE}</td>
     </tr>
     <!-- END empty_table -->
     <!-- BEGIN listrows -->
@@ -32,7 +32,7 @@
     </tr>
     <!-- END listrows -->
 </table>
-<div class="align-center">
+<div class="text-center">
     {TOTAL_ROWS}<br />
     {PAGE_LABEL} {PAGES}<br />
     {LIMIT_LABEL} {LIMITS}<br />
