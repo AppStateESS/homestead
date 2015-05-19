@@ -1,21 +1,37 @@
-<h1 class="tango32 tango-edit-paste">Check-out</h1>
+<h1>
+  <i class="fa fa-check-square"></i>
+  Check-out
+</h1>
 
 {START_FORM}
-<div id="hallSelector" style="margin: auto; text-align: center;">
-  <!-- BEGIN hall_list_label -->
-  {RESIDENCE_HALL_LABEL}: {RESIDENCE_HALL}
-  <!-- END hall_list_label -->
-</div>
 
-<div id="hallDiv" style="margin: auto; text-align: center; margin-bottom: 30px;">
-  <span id="hallName" style="font-size:2em;"></span>&nbsp;<a id="changeLink" href="#">Change Hall</a>
-</div>
-
-<div id="searchBoxDiv" style="margin: auto; text-align: center">
-    {BANNER_ID_LABEL}: {BANNER_ID}
-    <div style="text-align:right;">
-      {SUBMIT}
+<div class="col-md-6 col-md-offset-3">
+  <div class="form-group">
+    <span id="hallName" style="font-size:2em;"></span>
+    &nbsp;
+    <a id="changeLink" href="#">Change Hall</a>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <div id="hallSelector" class="form-group">
+      <!-- BEGIN hall_list_label -->
+      {RESIDENCE_HALL_LABEL}: {RESIDENCE_HALL}
+      <!-- END hall_list_label -->
+      </div>
     </div>
+  </div>
+  <div id="searchBoxDiv" class="form-group">
+    {BANNER_ID_LABEL}: {BANNER_ID}
+    <div id="cardswipe-error" class="alert alert-warning" role="alert" hidden>
+      The card reader didn't read the student's ID. Please try swiping the card again.
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div id ="checkInButtonDiv" class="col-md-1 col-md-offset-8">
+    {SUBMIT}
+  </div>
 </div>
 
 {END_FORM}
