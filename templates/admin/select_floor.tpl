@@ -1,22 +1,13 @@
-<div class="hms">
-  <div class="box">
-    <div class="{TITLE_CLASS}"><h1>{TITLE}</h1></div>
-    <div class="box-content">
-        Please select a floor: <br />
-        {START_FORM}
-        <table>
-            <tr>
-                <th align="left">{RESIDENCE_HALL_LABEL}</th>
-                <td>{RESIDENCE_HALL}</td>
-            </tr>
-            <tr>
-                <th align="left">{FLOOR_LABEL}</th>
-                <td>{FLOOR}</td>
-            </tr>
-        </table>
-        <br />
-        {SUBMIT_BUTTON}
-        {END_FORM}
-    </div>
-  </div>
+<h2>{TITLE}</h2>
+<h3>Please select a floor:</h3>
+{START_FORM}
+<div class="row form-group">
+    <div class="col-sm-2">{RESIDENCE_HALL_LABEL}</div>
+    <div class="col-sm-10">{RESIDENCE_HALL}</div>
 </div>
+<div class="row form-group">
+    <div class="col-sm-2">{FLOOR_LABEL}</div>
+    <div class="col-sm-10">{FLOOR}</div>
+</div>
+{SUBMIT_BUTTON}
+{END_FORM}
