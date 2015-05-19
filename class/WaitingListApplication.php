@@ -171,7 +171,7 @@ class WaitingListApplication extends HousingApplication {
      *  Static functions *
      */
 
-    public function waitingListPager()
+    public static function waitingListPager()
     {
         PHPWS_Core::initCoreClass('DBPager.php');
 
