@@ -9,5 +9,5 @@
     <div class="col-sm-2">{FLOOR_LABEL}</div>
     <div class="col-sm-10">{FLOOR}</div>
 </div>
-{SUBMIT_BUTTON}
+<button class="btn btn-primary">Choose floor</button>
 {END_FORM}
