@@ -31,6 +31,8 @@ class CreateRoommateGroupView extends hms\View {
             $form->addText('roommate1');
         }
 
+        $form->addCssClass('roommate1', 'form-control');
+
         javascript('modules/hms/autoFocus', array('ELEMENT' => $form->getId('roommate1')));
 
         if(isset($this->roommate1)){
@@ -39,15 +41,13 @@ class CreateRoommateGroupView extends hms\View {
             $form->addText('roommate2');
         }
 
-        $form->addSubmit('submit', 'Create Group');
+        $form->addCssClass('roommate2', 'form-control');
 
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
         Layout::addPageTitle("Create Roommate Group");
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/create_roommate_group.tpl');
+        return PHPWS_Template::process($tpl, 'hms', 'admin/createRoommateGroup.tpl');
     }
 }
-
-?>
