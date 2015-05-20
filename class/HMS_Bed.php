@@ -734,10 +734,12 @@ class HMS_Bed extends HMS_Item {
         $page_tags['ASSIGNED_TO_LABEL'] = 'Assigned to';
         $page_tags['RA_LABEL'] = 'RA Roommate bed';
 
+        $pager->setDefaultLimit(50);
+
         if (Current_User::allow('hms', 'bed_structure') && UserStatus::isAdmin()) {
             $addBedCmd = CommandFactory::getCommand('ShowAddBed');
             $addBedCmd->setRoomId($room_id);
-            $page_tags['ADD_BED_LINK'] = $addBedCmd->getLink('Add bed');
+            $page_tags['ADD_BED_URI'] = $addBedCmd->getURI();
         }
 
         $pager->setModule('hms');

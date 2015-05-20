@@ -35,14 +35,6 @@ class RoomView extends hms\View {
      */
     public function show()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
-        PHPWS_Core::initModClass('hms', 'RoomDamage.php');
-        PHPWS_Core::initModClass('hms', 'RlcFactory.php');
-
         $jsParams = array('LINK_SELECT'=>'#addDamageLink');
         javascript('addRoomDamage', $jsParams, 'mod/hms/');
 
@@ -75,7 +67,7 @@ class RoomView extends hms\View {
         }
 
         if($this->room->isOverflow()){
-            $tpl['OVERFLOR_ATTRIB'] = 'Overflow';
+            $tpl['OVERFLOW_ATTRIB'] = 'Overflow';
         }
 
         if($this->room->isParlor()){
@@ -106,6 +98,8 @@ class RoomView extends hms\View {
         $submitCmd->initForm($form);
 
         $form->addText('room_number', $this->room->getRoomNumber());
+        $form->setLabel('room_number', 'Room Number');
+        $form->addCssClass('room_number', 'form-control');
 
         /*** Room Gender ***/
         if($number_of_assignees == 0){
@@ -119,6 +113,7 @@ class RoomView extends hms\View {
 
             $form->addDropBox('gender_type', $roomGenders);
             $form->setMatch('gender_type', $this->room->gender_type);
+            $form->addCssClass('gender_type', 'form-control');
         }else{
             // Room is not empty so just show the gender (no drop down)
             $tpl['GENDER_MESSAGE'] = HMS_Util::formatGender($this->room->getGender());
@@ -134,11 +129,14 @@ class RoomView extends hms\View {
 
         //Always show the option to set the default gender
         $form->addDropBox('default_gender', array(FEMALE => FEMALE_DESC, MALE => MALE_DESC, AUTO => AUTO_DESC));
+        $form->setLabel('default_gender', 'Default Gender');
         $form->setMatch('default_gender', $this->room->default_gender);
-        
+        $form->addCssClass('default_gender', 'form-control');
+
         $form->addDropBox('rlc_reserved', array("0"=>"Choose RLC") + RlcFactory::getRlcList($this->room->getTerm()));
         $form->setLabel('rlc_reserved', 'Reserved for RLC');
         $form->setMatch('rlc_reserved', $this->room->getReservedRlcId());
+        $form->addCssClass('rlc_reserved', 'form-control');
 
         $form->addCheck('offline', 1);
         $form->setLabel('offline', 'Offline');
@@ -175,7 +173,7 @@ class RoomView extends hms\View {
         $form->addCheck('bath_en_suite', 1);
         $form->setLabel('bath_en_suite', 'Bath en Suite');
         $form->setMatch('bath_en_suite', $this->room->bathEnSuite());
-        
+
         $form->addSubmit('submit', 'Submit');
 
         // Assignment pagers
@@ -206,7 +204,7 @@ class RoomView extends hms\View {
         if(Current_User::allow('hms', 'add_room_dmg')){
             $dmgCmd = CommandFactory::getCommand('ShowAddRoomDamage');
             $dmgCmd->setRoom($this->room);
-            $tpl['ADD_DAMAGE_LINK']  = $dmgCmd->getLink('Add Damage');
+            $tpl['ADD_DAMAGE_URI']  = $dmgCmd->getURI();
         }
 
         return PHPWS_Template::process($tpl, 'hms', 'admin/edit_room.tpl');
@@ -215,6 +213,7 @@ class RoomView extends hms\View {
     private function roomDamagePager()
     {
         PHPWS_Core::initCoreClass('DBPager.php');
+        PHPWS_Core::initModClass('hms', 'RoomDamage.php');
 
         $pager = new DBPager('hms_room_damage', 'RoomDamageDb');
         $pager->db->addJoin('LEFT OUTER', 'hms_room_damage', 'hms_damage_type', 'damage_type', 'id');
@@ -228,13 +227,8 @@ class RoomView extends hms\View {
         $pager->setTemplate('admin/roomDamagesPager.tpl');
         $pager->setLink('index.php?module=hms');
         $pager->setEmptyMessage("No damages found.");
-        $pager->addToggle('class="toggle1"');
-        $pager->addToggle('class="toggle2"');
         $pager->addRowTags('getRowTags');
-        //$pager->addPageTags($page_tags);
 
         return $pager->get();
     }
 }
-
-?>

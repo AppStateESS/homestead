@@ -1,4 +1,4 @@
-<table width="100%">
+<table class="table table-striped table-hover">
 	<tr>
 		<th>{BEDROOM_LABEL}</th>
 		<th>{BED_LETTER_LABEL}</th>
@@ -8,11 +8,11 @@
 	</tr>
 	<!-- BEGIN empty_table -->
 	<tr>
-		<td colspan="2">{EMPTY_MESSAGE}</td>
+		<td colspan="5">{EMPTY_MESSAGE}</td>
 	</tr>
 	<!-- END empty_table -->
 	<!-- BEGIN listrows -->
-	<tr{TOGGLE}>
+	<tr>
 		<td>{BEDROOM}</td>
 		<td>{BED_LETTER}</td>
 		<td>{ASSIGNED_TO}</td>
@@ -21,13 +21,5 @@
 	</tr>
 	<!-- END listrows -->
 </table>
-{ADD_BED_LINK}
-<!-- BEGIN page_label -->
-<div align="center">Assignments: {TOTAL_ROWS}</div>
-<!-- END page_label -->
-<!-- BEGIN pages -->
-<div align="center">{PAGE_LABEL}: {PAGES}</div>
-<!-- END pages -->
-<!-- BEGIN limits -->
-<div align="center">{LIMIT_LABEL}: {LIMITS}</div>
-<!-- END limits -->
+
+<a href="{ADD_BED_URI}" class="btn btn-sm btn-success"><i class="fa fa-plus"></i> Add a new Bed</a>
