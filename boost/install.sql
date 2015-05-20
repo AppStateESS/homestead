@@ -688,6 +688,8 @@ create table hms_room_change_request (
     PRIMARY KEY(id)
 );
 
+create sequence hms_room_change_request_seq;
+
 create table hms_room_change_request_state (
     request_id              INTEGER NOT NULL REFERENCES hms_room_change_request(id),
     state_name              character varying,

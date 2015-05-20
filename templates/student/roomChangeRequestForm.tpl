@@ -64,9 +64,9 @@ $(document).ready(function(){
 
     $("#roomSwap").hide();
     $("#roomSwitch").hide();
-    
+
     $("#room_change_request_type_switch").change(function(){
-        if($(this).attr('checked')){
+        if($(this).attr('checked', 'checked')){
             //$("#roomSwap").hide();
             //$("#roomSwitch").show();
             $("#roomSwap").slideUp();
@@ -75,10 +75,10 @@ $(document).ready(function(){
     });
 
     $("#room_change_request_type_swap").change(function(){
-        if($(this).attr('checked')){
+        if($(this).attr('checked', 'checked')){
             //$("#roomSwitch").hide();
             //$("#roomSwap").show();
-        	$("#roomSwitch").slideUp();
+        	  $("#roomSwitch").slideUp();
             $("#roomSwap").slideDown();
         }
     });
