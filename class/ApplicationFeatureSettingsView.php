@@ -39,24 +39,28 @@ class ApplicationFeatureSettingsView extends hms\View{
                 $form->setValue('start_date', strftime('%m/%d/%Y', $f->getStartDate()));
             }
             $form->setLabel('start_date', dgettext('hms', 'Start Date:'));
+            $form->addCssClass('start_date', 'form-control');
+            $form->addCssClass('start_date','datepicker');
         }
 
         if($reg->requiresEditDate()) {
             $form->addText('edit_date');
-            $form->setExtra('edit_date', 'class="datepicker"');
             if(!is_null($f->getEditDate())) {
                 $form->setValue('edit_date', strftime('%m/%d/%Y', $f->getEditDate()));
             }
             $form->setLabel('edit_date', dgettext('hms', 'Edit Date:'));
+            $form->addCssClass('edit_date', 'form-control');
+            $form->addCssClass('edit_date','datepicker');
         }
 
         if($reg->requiresEndDate()) {
             $form->addText('end_date');
-            $form->setExtra('end_date', 'class="datepicker"');
             if(!is_null($f->getEndDate())) {
                 $form->setValue('end_date', strftime('%m/%d/%Y', $f->getEndDate()));
             }
             $form->setLabel('end_date', dgettext('hms', 'End Date:'));
+            $form->addCssClass('end_date', 'form-control');
+            $form->addCssClass('end_date','datepicker');
         }
 
         $form->addSubmit('Save');

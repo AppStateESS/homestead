@@ -2,12 +2,12 @@
 
 /**
  * TermEditView - View class for editing terms
- * 
+ *
  * @package Homestead
  * @author jbooker
  */
 class TermEditView extends hms\View {
-    
+
     private $term;
 
     public function __construct($term) {
@@ -28,58 +28,52 @@ class TermEditView extends hms\View {
         $tpl['TITLE'] = dgettext('hms', 'Term settings for ') . $printable;
 
         $newTermCmd = CommandFactory::getCommand('ShowCreateTerm');
-        $tpl['NEW_TERM_URI'] = $newTermCmd->getURI(); 
+        $tpl['NEW_TERM_URI'] = $newTermCmd->getURI();
 
         // Is this the Current Term?
-        $tpl['CURRENT_TERM_LEGEND'] = dgettext('hms', 'Current Term');
         if(Term::isCurrentTermSelected()) {
             $tpl['CURRENT_TERM_TEXT'] = dgettext('hms',
                     'This term is the <strong>active term</strong>.  To make another term active, please select it from the list at the top-left.');
         } else {
             $tpl['CURRENT_TERM_TEXT'] = dgettext('hms',
                     'This term is <strong>not</strong> the active term.');
-             
+
             if(Current_User::allow('hms', 'activate_term')) {
                 $cmd = CommandFactory::getCommand('SetCurrentTerm');
                 $cmd->setTerm(Term::getSelectedTerm());
-                $tpl['CURRENT_TERM_LINK'] = sprintf(
-                        $cmd->getLink('Make <strong>%s</strong> the Current Term.'), $printable);
+                $tpl['SET_TERM_URI'] = $cmd->getURI();
+                $tpl['SET_TERM_TEXT'] = "Make <strong>$printable</strong> the Current Term";
             }
         }
 
         // What's with the Banner Queue?
-        $tpl['BANNER_QUEUE_LEGEND'] = dgettext('hms', 'Banner Queue');
-        $qtext = dgettext('hms', 'The Banner Queue for this term is <strong>%s</strong>.');
-        $qcount = dgettext('hms', 'There are %d items currently queued for reporting to Banner.');
         $term = new Term(Term::getSelectedTerm());
         if($term->getBannerQueue()) {
-            $tpl['BANNER_QUEUE_TEXT'] = sprintf($qtext, dgettext('hms', 'enabled'));
+            $tpl['QUEUE_ENABLED'] = '';
             $count = $term->getQueueCount();
-            $tpl['BANNER_QUEUE_COUNT'] = sprintf($qcount, $count);
+            $tpl['BANNER_QUEUE_COUNT'] = $count;
             if($count > 0) {
                 $cmd = CommandFactory::getCommand('ProcessBannerQueue');
                 $cmd->setTerm(Term::getSelectedTerm());
-                $tpl['BANNER_QUEUE_PROCESS'] = $cmd->getLink('Process and Disable');
+                $tpl['BANNER_QUEUE_PROCESS_URI'] = $cmd->getURI();
             } else {
                 $cmd = CommandFactory::getCommand('DisableBannerQueue');
                 $cmd->setTerm(Term::getSelectedTerm());
                 $tpl['BANNER_QUEUE_LINK'] = $cmd->getLink('Disable');
             }
         } else {
-            $tpl['BANNER_QUEUE_TEXT'] = sprintf($qtext, dgettext('hms', 'disabled'));
+            $tpl['QUEUE_DISABLED'] = '';
             $cmd = CommandFactory::getCommand('EnableBannerQueue');
             $cmd->setTerm(Term::getSelectedTerm());
             $tpl['BANNER_QUEUE_LINK'] = $cmd->getLink('Enable');
         }
 
         // Terms and Conditions
-        $tpl['TERMS_CONDITIONS_LEGEND'] = dgettext('hms', 'Terms and Conditions');
         PHPWS_Core::initModClass('hms', 'TermsConditionsAdminView.php');
         $tcav = new TermsConditionsAdminView($this->term);
         $tpl['TERMS_CONDITIONS_CONTENT'] = $tcav->show();
-        
+
         // Features and Deadlines
-        $tpl['FEATURES_DEADLINES_LEGEND'] = dgettext('hms', 'Important Dates and Deadlines');
         PHPWS_Core::initModClass('hms', 'ApplicationFeatureListView.php');
         $aflv = new ApplicationFeatureListView(Term::getSelectedTerm());
         $tpl['FEATURES_DEADLINES_CONTENT'] = $aflv->show();
@@ -89,4 +83,3 @@ class TermEditView extends hms\View {
         return PHPWS_Template::process($tpl, 'hms', 'admin/TermEditView.tpl');
     }
 }
-?>

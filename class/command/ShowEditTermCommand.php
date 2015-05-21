@@ -14,7 +14,7 @@ class ShowEditTermCommand extends Command {
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to edit terms.');
         }
-         
+
         PHPWS_Core::initModClass('hms', 'TermEditView.php');
 
         $term = new Term(Term::getSelectedTerm());
@@ -23,5 +23,3 @@ class ShowEditTermCommand extends Command {
         $context->setContent($termView->show());
     }
 }
-
-?>
