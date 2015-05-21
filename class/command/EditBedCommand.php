@@ -73,5 +73,3 @@ class EditBedCommand extends Command {
         $viewCmd->redirect();
     }
 }
-
-?>

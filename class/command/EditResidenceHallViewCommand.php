@@ -8,18 +8,18 @@ class EditResidenceHallViewCommand extends Command {
 
     private $hallId;
 
-    function setHallId($id){
+    public function setHallId($id){
         $this->hallId = $id;
     }
 
-    function getRequestVars()
+    public function getRequestVars()
     {
         $vars = array('action'=>'EditResidenceHallView');
-         
+
         if(isset($this->hallId)){
             $vars['hallId'] = $this->hallId;
         }
-         
+
         return $vars;
     }
 
@@ -27,9 +27,9 @@ class EditResidenceHallViewCommand extends Command {
         return PHPWS_Text::moduleLink(dgettext('hms', $text), 'hms', $parentVars);
     }
 
-    function execute(CommandContext $context)
+    public function execute(CommandContext $context)
     {
-         
+
         if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'hall_view') ){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to edit halls.');
@@ -43,7 +43,7 @@ class EditResidenceHallViewCommand extends Command {
 
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
         PHPWS_Core::initModClass('hms', 'ResidenceHallView.php');
-         
+
         $hall = new HMS_Residence_Hall($hallId);
 
         // Check for a hall/term mismatch, since halls are indexed by ID and not by name & term
@@ -55,9 +55,7 @@ class EditResidenceHallViewCommand extends Command {
         }
 
         $hallView = new ResidenceHallView($hall);
-         
+
         $context->setContent($hallView->show());
     }
 }
-
-?>

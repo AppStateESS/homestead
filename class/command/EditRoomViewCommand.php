@@ -9,11 +9,11 @@ class EditRoomViewCommand extends Command {
 
     private $roomId;
 
-    function setRoomId($id){
+    public function setRoomId($id){
         $this->roomId = $id;
     }
 
-    function getRequestVars()
+    public function getRequestVars()
     {
         $vars = array('action'=>'EditRoomView');
 
@@ -24,7 +24,7 @@ class EditRoomViewCommand extends Command {
         return $vars;
     }
 
-    function execute(CommandContext $context)
+    public function execute(CommandContext $context)
     {
         if( !Current_User::allow('hms', 'room_view') ){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
@@ -56,7 +56,7 @@ class EditRoomViewCommand extends Command {
         $damageTypes = DamageTypeFactory::getDamageTypeAssoc();
 
         $roomView = new RoomView($hall, $floor, $room, $damageTypes);
-         
+
         $context->setContent($roomView->show());
     }
 }

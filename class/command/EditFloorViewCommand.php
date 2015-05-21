@@ -8,22 +8,22 @@ class EditFloorViewCommand extends Command {
 
     private $floorId;
 
-    function setFloorId($id){
+    public function setFloorId($id){
         $this->floorId = $id;
     }
 
-    function getRequestVars()
+    public function getRequestVars()
     {
         $vars = array('action'=>'EditFloorView');
-         
+
         if(isset($this->floorId)){
             $vars['floor'] = $this->floorId;
         }
-         
+
         return $vars;
     }
 
-    function execute(CommandContext $context)
+    public function execute(CommandContext $context)
     {
         if(!UserStatus::isAdmin() ||  !Current_User::allow('hms', 'floor_view') ){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
@@ -35,11 +35,11 @@ class EditFloorViewCommand extends Command {
         if(!isset($floorId)){
             throw new InvalidArgumentException('Missing floor ID.');
         }
-         
+
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
         PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
         PHPWS_Core::initModClass('hms', 'FloorView.php');
-         
+
         $floor = new HMS_Floor($floorId);
 
         if($floor->term != Term::getSelectedTerm()){
@@ -51,7 +51,7 @@ class EditFloorViewCommand extends Command {
 
         $hall = $floor->get_parent();
         $floorView = new FloorView($hall, $floor);
-         
+
         $context->setContent($floorView->show());
     }
 }

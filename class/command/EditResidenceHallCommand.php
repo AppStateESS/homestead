@@ -2,7 +2,7 @@
 
 /**
  * Controller for saving the attributes of a ResidenceHall object to the database.
- * 
+ *
  * @author Jeremy Booker <jbooker AT tux DOT appstate DOT edu>
  * @package hms
  */
@@ -14,40 +14,40 @@ class EditResidenceHallCommand extends Command {
      * Sets the hall ID to pass to this command
      * @param int $id
      */
-    function setHallId($id){
+     public function setHallId($id){
         $this->hallId = $id;
     }
 
     /**
      * @see Command::getRequestVars()
      */
-    function getRequestVars()
+     public function getRequestVars()
     {
         $vars = array('action'=>'EditResidenceHall');
-         
+
         if(isset($this->hallId)){
             $vars['hallId'] = $this->hallId;
         }
-         
+
         return $vars;
     }
 
     /**
      * @see Command::execute()
      */
-    function execute(CommandContext $context)
+     public function execute(CommandContext $context)
     {
         if (!UserStatus::isAdmin() || !Current_User::allow('hms', 'hall_attributes') ) {
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to edit halls.');
         }
-         
+
         // Make sure a hall ID was set
         $hallId = $context->get('hallId');
         if (is_null($hallId)) {
             throw new InvalidArgumentException('Missing hall ID.');
         }
-         
+
         $viewCmd = CommandFactory::getCommand('EditResidenceHallView');
         $viewCmd->setHallId($hallId);
 
@@ -83,7 +83,7 @@ class EditResidenceHallCommand extends Command {
         $hall->is_online                = $context->get('is_online');
         $hall->meal_plan_required       = $context->get('meal_plan_required');
         $hall->assignment_notifications = $context->get('assignment_notifications');
-        
+
         $hall->setPackageDeskId($context->get('package_desk'));
 
         $hall->exterior_image_id    = $context->get('exterior_image_id');
@@ -102,5 +102,3 @@ class EditResidenceHallCommand extends Command {
         $viewCmd->redirect();
     }
 }
-
-?>

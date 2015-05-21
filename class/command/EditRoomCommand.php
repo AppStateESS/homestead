@@ -2,9 +2,9 @@
 
 /**
  * EditRoomCommand
- * 
+ *
  * Controller responsible for saving changes to room attributes.
- * 
+ *
  * @author Jeremy Booker <jbooker AT tux DOT appstate DOT edu>
  * @package HMS
  */
@@ -56,7 +56,7 @@ class EditRoomCommand extends Command {
                 $viewCmd->redirect();
             }
         }
-        
+
         // Compare the room's gender and the gender the user selected
         // If they're not equal, call 'can_change_gender' public function
         if($room->gender_type != $context->get('gender_type')){
@@ -86,19 +86,19 @@ class EditRoomCommand extends Command {
         $room->room_number    = $context->get('room_number');
         $room->gender_type    = $context->get('gender_type');
         $room->default_gender = $context->get('default_gender');
-        
+
         $rlcReserved = $context->get('rlc_reserved');
         if($rlcReserved != 0) {
         	$room->setReservedRlcId($rlcReserved);
         }
-        
+
         $room->offline        = $context->get('offline')   == 1 ? 1 : 0;
         $room->reserved       = $context->get('reserved')  == 1 ? 1 : 0;
         $room->ra             = $context->get('ra')        == 1 ? 1 : 0;
         $room->private        = $context->get('private')   == 1 ? 1 : 0;
         $room->overflow       = $context->get('overflow')  == 1 ? 1 : 0;
         $room->parlor         = $context->get('parlor')    == 1 ? 1 : 0;
-        
+
         $room->ada              = $context->get('ada')              == 1 ? 1 : 0;
         $room->hearing_impaired = $context->get('hearing_impaired') == 1 ? 1 : 0;
         $room->bath_en_suite    = $context->get('bath_en_suite')    == 1 ? 1 : 0;
@@ -114,5 +114,3 @@ class EditRoomCommand extends Command {
         $viewCmd->redirect();
     }
 }
-
-?>
