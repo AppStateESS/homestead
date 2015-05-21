@@ -62,9 +62,6 @@ class HousingApplicationWelcomeView extends hms\View {
         $form = new PHPWS_Form;
         $this->submitCmd->initForm($form);
 
-        $form->addSubmit('submit', 'Continue');
-        $form->setExtra('submit', 'class="hms-application-submit-button"');
-
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
