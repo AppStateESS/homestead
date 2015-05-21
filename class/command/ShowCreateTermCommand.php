@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * @author Jeremy Booker
+ * @package hms
+ */
 class ShowCreateTermCommand extends Command {
 
     function getRequestVars() {
@@ -15,10 +18,7 @@ class ShowCreateTermCommand extends Command {
             throw new PermissionException('You do not have permission to edit terms.');
         }
 
-        PHPWS_Core::initModClass('hms', 'CreateTermView.php');
         $view = new CreateTermView();
         $context->setContent($view->show());
     }
 }
-
-?>

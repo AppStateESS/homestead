@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * @author Jeremy Booker
+ * @package hms
+ */
 class CreateTermView extends hms\View {
 
     public function __construct(){}
@@ -29,16 +32,22 @@ class CreateTermView extends hms\View {
 
         $form->addDropBox('from_term', Term::getTermsAssoc());
         $form->setLabel('from_term', 'Copy from:');
+        $form->addCssClass('from_term', 'form-control');
 
         $form->addDropBox('year_drop',HMS_Util::get_years_2yr());
         $form->setLabel('year_drop','Year: ');
+        $form->addCssClass('year_drop', 'form-control');
 
         $form->addDropBox('term_drop',Term::getSemesterList());
         $form->setLabel('term_drop','Semester: ');
+        $form->addCssClass('term_drop', 'form-control');
 
         $vars = array('struct' => 'Hall structure', 'assign' => 'Assignments', 'role' => 'Roles');
         $form->addCheckAssoc('copy_pick', $vars);
+        $form->addCssClass('', 'form-control');
         $tpl['COPY_PICK_LABEL'] = 'What to copy:';
+
+
         $form->addSubmit('submit','Add Term');
 
         $form->mergeTemplate($tpl);
@@ -49,5 +58,3 @@ class CreateTermView extends hms\View {
         return PHPWS_Template::process($tpl, 'hms', 'admin/add_term.tpl');
     }
 }
-
-?>
