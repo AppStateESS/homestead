@@ -123,7 +123,7 @@
 		// Show the search box
 		$('#searchBoxDiv').show();
 
-		// Show the check in submit button
+		// Show the check in/out submit button
 		$('#checkInButtonDiv').show();
 
 		// Set the event handler for the 'change hall' link
@@ -141,7 +141,7 @@
 		// Hide the search box until a hall is selected
 		$('#searchBoxDiv').hide();
 
-		// Hide the check in submit button until a hall is selected
+		// Hide the check in/out submit button until a hall is selected
 		$('#checkInButtonDiv').hide();
 
 		// Show the hall selector
