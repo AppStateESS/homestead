@@ -37,7 +37,7 @@ class RoomChangeListView extends hms\View {
             $mgmtCmd = CommandFactory::getCommand('ShowManageRoomChange');
             $mgmtCmd->setRequestId($request->getId());
 
-            $row['manage'] = $mgmtCmd->getLink('manage');
+            $row['manage'] = $mgmtCmd->getURI();
             $row['last_updated_timestamp'] = $request->getLastUpdatedTimestamp();
             $row['last_updated_date'] = date("M j @ g:ia", $request->getLastUpdatedTimestamp());
 
