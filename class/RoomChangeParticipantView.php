@@ -77,11 +77,18 @@ class RoomChangeParticipantView extends hms\View {
         }
 
         /**
-         * Check that the participant is checked into their current assignment
-         */
-        $checkin = CheckinFactory::getCheckinByBed($this->student, $fromBed, Term::getSelectedTerm());
-        if($checkin == null || ($checkin != null && $checkin->getCheckoutDate() != null)) {
-            NQ::simple('hms', hms\NotificationView::ERROR, "{$this->student->getName()} is not checked-in at his/her current assignment. This must be fixed before this room change can be given final approval.");
+          * Check to see if the state is already approved or completed
+          */
+        $requestState = $this->request->getState();
+        if($requestState instanceof RoomChangeStatePending || $requestState instanceof RoomChangeStateHold)
+        {
+          /**
+            * Check that the participant is checked into their current assignment
+            */
+            $checkin = CheckinFactory::getCheckinByBed($this->student, $fromBed, Term::getSelectedTerm());
+            if($checkin == null || ($checkin != null && $checkin->getCheckoutDate() != null)) {
+                NQ::simple('hms', hms\NotificationView::ERROR, "{$this->student->getName()} is not checked-in at his/her current assignment. This must be fixed before this room change can be given final approval.");
+            }
         }
 
         /**
