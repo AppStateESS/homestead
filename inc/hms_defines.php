@@ -20,6 +20,13 @@ define('HMS_LOGIN_LINK', 'secure');
 define('SOAP_INFO_TEST_FLAG', false);
 
 /**
+ * Name of the SOAP override file. Only used if SOAP_INFO_TEST_FLAG is true
+ */
+//define('SOAP_OVERRIDE_FILE', 'FakeSoapTable.php');
+define('SOAP_OVERRIDE_FILE', 'TestSOAP.php');
+
+
+/**
  * WSDL File Path
  * If the SOAP_INFO_TEST_FLAG above is FALSE,
  * then this is the location of the WSDL file

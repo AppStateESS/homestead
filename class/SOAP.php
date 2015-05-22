@@ -6,6 +6,11 @@
  * @author jbooker
  *
  */
+
+if (!defined('SOAP_OVERRIDE_FILE')) {
+    define('SOAP_OVERRIDE_FILE', 'TestSOAP.php');
+}
+
 abstract class SOAP
 {
 
@@ -39,7 +44,7 @@ abstract class SOAP
      * @return SOAP - Instance of the SOAP class.
      */
     public static function getInstance($username, $userType)
-    {
+    {        
         if(!isset($username) || is_null($username)){
             throw new InvalidArgumentException('Missing Username.');
         }
@@ -50,7 +55,7 @@ abstract class SOAP
 
         if(empty(self::$instance)) {
             if(SOAP_INFO_TEST_FLAG) {
-                PHPWS_Core::initModClass('hms', 'TestSOAP.php');
+                PHPWS_Core::initModClass('hms', SOAP_OVERRIDE_FILE);
                 self::$instance = new TestSOAP($username, $userType);
             } else {
                 PHPWS_Core::initModClass('hms', 'PhpSOAP.php');

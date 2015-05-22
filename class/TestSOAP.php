@@ -18,7 +18,7 @@ class TestSOAP extends SOAP{
         }
 
         // Sanity checking on the term
-        if(empty($term) || is_null($term) || !isset($term)){
+        if(empty($term) || is_null($term) || !isset($term)) {
             throw new InvalidArgumentException('Bad term');
         }
 
@@ -26,21 +26,21 @@ class TestSOAP extends SOAP{
 
         $student = new stdClass();
         $response->banner_id             = 900325006;
-        $response->user_name			 = 'jb67803';
+        $response->user_name		 = 'jb67803';
         $response->last_name             = 'Booker';
         $response->first_name            = 'Jeremy';
         $response->middle_name           = 'Lee';
-        $response->pref_name		     = 'J-dogg';
-        //$response->dob                   = '1986-09-05';
+        $response->pref_name		 = 'J-dogg';
+        //$response->dob                 = '1986-09-05';
         $response->dob                   = '1997-09-05';
         $response->gender                = 'M';
-        $response->deposit_date          = '';
-        $response->deposit_waived        = 'false';
+        $response->deposit_date          = ''; // unused but present
+        $response->deposit_waived        = 'false'; // unused but present
 
-        $response->confid				 = 'Y'; // TODO double check this value
+        $response->confid		 = 'Y'; // TODO double check this value, cannot confirm attendence. low frequency
 
         $response->international         = false;
-        $response->student_level         = 'U';
+        $response->student_level         = 'U'; // U-undergrad, G-Graduate
         $response->app_decision_code     = '1*';
 
         $response->honors                = true;
@@ -48,20 +48,20 @@ class TestSOAP extends SOAP{
         $response->watauga_member        = true;
         $response->greek                 = 'Y'; //TODO double check this value
 
-        $response->disabled_pin			 = false;
-        $response->housing_waiver		 = false;
+        $response->disabled_pin		 = false;
+        $response->housing_waiver	 = false;
 
         //$response->student_type          = 'T';
         //$response->application_term      = '201040';
         //$response->projected_class       = 'FR';
 
-        $response->student_type          = 'F';
+        $response->student_type          = 'F'; // @see hms/inc/defines
         $response->application_term      = '201540';
-        $response->projected_class       = 'FR';
+        $response->projected_class       = 'FR'; // @see hms/inc/defines
 
         $response->credhrs_completed     = 0;
         $response->credhrs_for_term      = 15;
-        $response->on_campus             = 'false';
+        $response->on_campus             = 'false'; // unused
 
         $response->address = array();
 
