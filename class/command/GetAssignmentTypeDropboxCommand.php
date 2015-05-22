@@ -31,9 +31,10 @@ class GetAssignmentTypeDropboxCommand extends Command {
         $form = new PHPWS_Form('select_assignment');
         $form->addSelect('type', $options);
         $form->setMatch('type', ASSIGN_ADMIN);
-
-        echo implode($form->getTemplate());
-        exit;
+        $form->setClass('type', 'form-control');
+        $template = $form->getTemplate();
+        echo \PHPWS_Template::process($template, 'hms', 'admin/assignment_type_dropbox.tpl');
+        exit();
     }
 }
 ?>

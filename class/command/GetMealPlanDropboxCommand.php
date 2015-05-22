@@ -15,19 +15,21 @@ class GetMealPlanDropboxCommand extends Command {
                 BANNER_MEAL_NONE  => 'None'
         );
         $form = new PHPWS_Form('select_meal');
-        $form->addSelect('plan', $options);
+        $form->addSelect('mealplan', $options);
 
 
         // If summer term, set default as Summer 5Week
         $term = Term::getSelectedTerm();
         if ( (strlen($term) >= 2) &&
                 ( (substr($term, -2) == TERM_SUMMER1) || (substr($term, -2) == TERM_SUMMER2) ) ) {
-            $form->setMatch('plan', BANNER_MEAL_5WEEK);
+            $form->setMatch('mealplan', BANNER_MEAL_5WEEK);
         } else {
-            $form->setMatch('plan', BANNER_MEAL_STD);
+            $form->setMatch('mealplan', BANNER_MEAL_STD);
         }
+        $form->setClass('mealplan', 'form-control');
 
-        echo implode($form->getTemplate());
+        $template = $form->getTemplate();
+        echo \PHPWS_Template::process($template, 'hms', 'admin/get_meal_plan_dropbox.tpl');
         exit;
     }
 }
