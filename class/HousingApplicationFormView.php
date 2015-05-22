@@ -47,6 +47,7 @@ class HousingApplicationFormView extends hms\View
         $form->setMaxSize('number', 10);
         $form->addCssClass('number', 'form-control');
 
+
         if (!is_null($this->existingApplication)) {
             $form->setValue('number', substr($this->existingApplication->getCellPhone(), 0));
         }
@@ -72,6 +73,7 @@ class HousingApplicationFormView extends hms\View
             } else {
                 $form->setMatch('lifestyle_option', '1');
             }
+            $form->addCssClass('lifestyle_option', 'form-control');
 
             $form->addCssClass('lifestyle_option', 'form-control');
 
@@ -100,6 +102,7 @@ class HousingApplicationFormView extends hms\View
             } else {
                 $form->setMatch('room_condition', '1');
             }
+            $form->addCssClass('room_condition', 'form-control');
 
             $form->addCssClass('room_condition', 'form-control');
         } else if ($sem == TERM_SUMMER1 || $sem == TERM_SUMMER2) {
@@ -116,9 +119,9 @@ class HousingApplicationFormView extends hms\View
         }
 
 
-        /**
-         * Meal Option
-         */
+        /***************
+         * Meal Option *
+        */
         if ($sem == TERM_FALL || $sem == TERM_SPRING) {
             if ($this->student->getType() == TYPE_FRESHMEN) {
                 $mealOptions = array(BANNER_MEAL_STD => 'Standard', BANNER_MEAL_HIGH => 'High', BANNER_MEAL_SUPER => 'Super');
@@ -135,9 +138,9 @@ class HousingApplicationFormView extends hms\View
 
         $form->addCssClass('meal_option', 'form-control');
 
-        if (!is_null($this->existingApplication)) {
-            $form->setMatch('meal_option', $this->existingApplication->getMealPlan());
-        } else {
+        if(!is_null($this->existingApplication)){
+            $form->setMatch('meal_option',$this->existingApplication->getMealPlan());
+        }else{
             $form->setMatch('meal_option', BANNER_MEAL_STD);
         }
 
@@ -193,8 +196,11 @@ class HousingApplicationFormView extends hms\View
 
 
 
-        if (isset($this->existingApplication)) {
-            if ((!is_null($this->existingApplication->physical_disability) && $this->existingApplication->physical_disability != "0") || (!is_null($this->existingApplication->psych_disability) && $this->existingApplication->psych_disability != "0") || (!is_null($this->existingApplication->medical_need) && $this->existingApplication->medical_need != "0") || (!is_null($this->existingApplication->gender_need) && $this->existingApplication->gender_need != "0")) {
+        if(isset($this->existingApplication)){
+            if((!is_null($this->existingApplication->physical_disability) && $this->existingApplication->physical_disability != "0") ||
+                    (!is_null($this->existingApplication->psych_disability) && $this->existingApplication->psych_disability != "0") ||
+                    (!is_null($this->existingApplication->medical_need) && $this->existingApplication->medical_need != "0") ||
+                    (!is_null($this->existingApplication->gender_need) && $this->existingApplication->gender_need != "0")) {
                 $form->setMatch('special_need', 'special_need');
             }
         }
@@ -204,9 +210,10 @@ class HousingApplicationFormView extends hms\View
         }
 
 
-        /**
-         * RLC
-         */
+
+        /*******
+         * RLC *
+        *******/
         PHPWS_Core::initModClass('hms', 'applicationFeature/RlcApplication.php');
         $rlcReg = new RLCApplicationRegistration();
         if (HMS_RLC_Application::checkForApplication($this->student->getUsername(), $this->term) == TRUE) {
@@ -219,15 +226,17 @@ class HousingApplicationFormView extends hms\View
 
             $form->setLabel('rlc_interest', array(_("No"), _("Yes")));
 
-            if (!is_null($this->existingApplication) && !is_null($this->existingApplication->getRLCInterest())) {
+            if(!is_null($this->existingApplication) && !is_null($this->existingApplication->getRLCInterest())){
                 $form->setMatch('rlc_interest', 'rlc_interest');
             } else {
                 $form->setMatch('rlc_interest', '0');
             }
-        } else {
+
+        }else{
             // Feature is not enabled
             $form->addHidden('rlc_interest', 0);
         }
+
 
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
