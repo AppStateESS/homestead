@@ -122,12 +122,12 @@ class HMS_Roommate
     {
         return $this->requestor;
     }
-    
+
     public function getRequestee()
     {
         return $this->requestee;
     }
-    
+
     /******************
      * Static Methods *
      ******************/
@@ -136,15 +136,15 @@ class HMS_Roommate
     {
         PHPWS_Core::initModClass('hms', 'PdoFactory.php');
         $db = PdoFactory::getInstance()->getPdo();
-        
+
         $query = $db->prepare("SELECT * FROM hms_roommate WHERE term = :term AND ((requestor ILIKE :usera AND requestee ILIKE :userb) OR (requestor ILIKE :userb AND requestee ILIKE :usera))");
         $query->bindParam(':term', $term);
         $query->bindParam(':usera', $a);
         $query->bindParam(':userb', $b);
-        
+
         $query->execute();
         $results = $query->fetchAll(PDO::FETCH_CLASS, "HMS_Roommate");
-        
+
         return $results[0];
     }
 
@@ -201,14 +201,14 @@ class HMS_Roommate
     {
         PHPWS_Core::initModClass('hms', 'PdoFactory.php');
         $db = PdoFactory::getInstance()->getPdo();
-        
+
         $query = $db->prepare("SELECT COUNT(*) FROM hms_roommate WHERE term = :term AND (requestor ILIKE :user OR requestee ILIKE :user) AND confirmed = 1");
         $query->bindParam(':term', $term);
         $query->bindParam(':user', $asu_username);
 
         $query->execute();
         $result = $query->fetchColumn();
-        
+
         if ($result > 1) {
             // TODO: Log Weird Situation
         }
@@ -218,7 +218,7 @@ class HMS_Roommate
 
     /**
      * Returns the given user's confirmed roommate or false if the roommate is unconfirmed
-     * 
+     *
      * @param string $asu_username
      * @param string $term
      * @return Student
@@ -241,14 +241,14 @@ class HMS_Roommate
 
 	$db = \Database::newDB();
         $db = $db->getPdo();
-        
+
         $stmt = $db->prepare("SELECT * FROM hms_roommate WHERE (requestor ILIKE :user OR requestee ILIKE :user) AND term = :term AND confirmed = 1");
         $stmt->bindParam(':user', $asu_username);
         $stmt->bindParam(':term', $term);
-        
+
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        
+
         if (count($result) > 1) {
             // TODO: Log Weird Situation
         }
@@ -284,17 +284,17 @@ class HMS_Roommate
 
         $db = \Database::newDB();
 	$db = $db->getPdo();
-        
+
         $stmt = $db->prepare("SELECT * FROM hms_roommate WHERE (requestor ILIKE :user OR requestee ILIKE :user) AND term = :term AND confirmed = 0 and requested_on >= :ttl");
         $stmt->bindParam(':user', $asu_username);
         $stmt->bindParam(':term', $term);
-        
+
         $ttl = time() - ROOMMATE_REQ_TIMEOUT;
         $stmt->bindParam(':ttl', $ttl);
-        
+
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        
+
         if (count($result) > 1) {
             // TODO: Log Weird Situation
         }
@@ -303,7 +303,7 @@ class HMS_Roommate
         return null;
 
         $result = $result[0];
-        
+
         if (trim($result['requestor']) == trim($asu_username)) {
             return StudentFactory::getStudentByUsername($result['requestee'], $term);
         }
@@ -318,7 +318,7 @@ class HMS_Roommate
      *
      * @param username The user to check on
      */
-    public function has_roommate_request($username,$term)
+    public static function has_roommate_request($username,$term)
     {
         $db = new PHPWS_DB('hms_roommate');
         $db->addWhere('requestor', $username, 'ILIKE');
@@ -326,7 +326,7 @@ class HMS_Roommate
         $db->addWhere('requested_on', time() - ROOMMATE_REQ_TIMEOUT, '>=');
         $db->addWhere('term', $term);
         $result = $db->count();
-        
+
         if (PHPWS_Error::logIfError($result)) {
             throw new DatabaseException('Unexpected error in has_roommate_request');
         }
@@ -377,7 +377,7 @@ class HMS_Roommate
     /**
      * Returns a count of pending requests
      */
-    public function countPendingRequests($asu_username,$term)
+    public static function countPendingRequests($asu_username,$term)
     {
         $db = new PHPWS_DB('hms_roommate');
         $db->addWhere('requestee', $asu_username, 'ILIKE');
@@ -406,14 +406,14 @@ class HMS_Roommate
             throw new DatabaseException($result->toString());
         }
         */
-        
+
         PHPWS_Core::initModClass('hms', 'PdoFactory.php');
         $db = PdoFactory::getInstance()->getPdo();
-        
+
         $stmt = $db->prepare("SELECT * FROM hms_roommate WHERE (requestor ILIKE :user OR requestee ILIKE :user) AND term = :term");
         $stmt->bindParam(':user', $asu_username);
         $stmt->bindParam(':term', $term);
-        
+
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_CLASS, "HMS_Roommate");
     }
@@ -438,14 +438,14 @@ class HMS_Roommate
             throw new DatabaseException('Could not remove outstanding requests');
         }
         */
-        
+
         PHPWS_Core::initModClass('hms', 'PdoFactory.php');
         $db = PdoFactory::getInstance()->getPdo();
-        
+
         $query = $db->prepare("SELECT * FROM hms_roommate WHERE (requestee ILIKE :user OR requestor ILIKE :user) AND term = :term AND confirmed = 0");
         $query->bindParam(':term', $term);
         $query->bindParam(':user', $asu_username);
-        
+
         $query->execute();
         $requests = $query->fetchAll(PDO::FETCH_CLASS, "HMS_Roommate");
 

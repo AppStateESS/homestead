@@ -1,4 +1,5 @@
-<div class="title"> <h1>{TERM} On-campus Housing Application</h1><p>{RECEIVED_DATE}</p> </div>
+<h2>{TERM} On-campus Housing Application</h2>
+<p>{RECEIVED_DATE}</p>
 
 <!-- BEGIN withdrawn -->
 <div class="alert alert-danger">{WITHDRAWN}</div>
@@ -27,7 +28,7 @@ Please review the information you entered. If you need to go back and make chang
     </tr>
     <!-- BEGIN form -->
     <tr>
-        <th>Cell Phone Number:</th><td><div class="form-inline">({AREA_CODE})-{EXCHANGE}-{NUMBER}</div> {DO_NOT_CALL} <label style="display:inline" class="small" for="phpws_form_do_not_call">Check here if you do not have or do not wish to provide your cellphone number.</label></td>
+        <th>Cell Phone Number:</th><td><div style="width:120px">{NUMBER}</div> {DO_NOT_CALL} <label style="display:inline" class="small" for="phpws_form_do_not_call">Check here if you do not have or do not wish to provide your cellphone number.</label></td>
     </tr>
     <!-- END form -->
     <!-- BEGIN review -->
