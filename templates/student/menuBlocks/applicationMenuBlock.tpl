@@ -6,25 +6,25 @@
 
     <div class="text-muted">Available: {DATES}</div>
     <p>
-<!-- BEGIN too_soon -->
-The application for this term will be available on {BEGIN_DEADLINE}.
-<!-- END too_soon -->
+        <!-- BEGIN too_soon -->
+    <p>The application for this term will be available on {BEGIN_DEADLINE}.</p>
+    <!-- END too_soon -->
 
-<!-- BEGIN too_late -->
-The deadline to apply for this term was {END_DEADLINE}.
-<!-- END too_late -->
+    <!-- BEGIN too_late -->
+    <p>The deadline to apply for this term was {END_DEADLINE}.</p>
+    <!-- END too_late -->
 
-<!-- BEGIN review_app -->
-You have applied for on-campus housing for this term. You may {VIEW_APP}.
-<!-- END review_app -->
+    <!-- BEGIN review_app -->
+    <p>You have applied for on-campus housing for this term. You may {VIEW_APP}.</p>
+    <!-- END review_app -->
 
-<!-- BEGIN edit_app -->
-If you'd like to change your preferences, you may {NEW_APP}.
-<!-- END edit_app -->
+    <!-- BEGIN edit_app -->
+    <p>If you'd like to change your preferences, you may {NEW_APP}.</p>
+    <!-- END edit_app -->
 
-<!-- BEGIN no_app -->
-You have not applied for this term yet.
+    <!-- BEGIN no_app -->
+    <p>You have not applied for this term yet.</p>
     {APP_NOW}
-<!-- END no_app -->
-    </p>
+    <!-- END no_app -->
+</p>
 </div>
