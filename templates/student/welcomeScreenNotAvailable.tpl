@@ -16,5 +16,5 @@ However, we are not accepting housing applications for {ENTRY_TERM} yet. Please 
 <br /><br />
 <!-- END no_term -->
 
-If you believe the term listed above is incorrect, please {CONTACT_LINK} to contact us.
+If you believe the term listed above is incorrect, please {CONTACT_LINK}.
 </div>
