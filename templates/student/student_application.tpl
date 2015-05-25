@@ -99,19 +99,19 @@ Please review the information you entered. If you need to go back and make chang
         <td colspan="2">Federal law requires that we ask you to confidentially identify a person whom the University should contact if you are reported missing for more than 24 hours. Please list your contact person's information below:</td>
     </tr>
     <tr>
-        <td class="col-sm-5">Contact Person Name<span class="required">*</span>:</td>
+        <th class="col-sm-5"><label for="phpws_form_missing_person_name">Contact Person Name</label><span class="required">*</span>:</th>
         <td>{MISSING_PERSON_NAME}</td>
     </tr>
     <tr>
-        <td>Relationship<span class="required">*</span>:</td>
+        <th><label for="phpws_form_missing_person_relationship">Relationship</label><span class="required">*</span>:</th>
         <td>{MISSING_PERSON_RELATIONSHIP}</td>
     </tr>
     <tr>
-        <td>Phone Number<span class="required">*</span>:</td>
+        <th><label for="phpws_form_missing_person_phone">Phone Number</label><span class="required">*</span>:</th>
         <td>{MISSING_PERSON_PHONE}</td>
     </tr>
     <tr>
-        <td>Email<span class="required">*</span>:</td>
+        <th><label for="phpws_form_missing_person_email">Email</label><span class="required">*</span>:</th>
         <td>{MISSING_PERSON_EMAIL}</td>
     </tr>
 </table>
