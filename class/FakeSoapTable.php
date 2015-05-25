@@ -24,9 +24,6 @@ class TestSOAP extends SOAP
         }
         
         $response = new stdClass();
-
-        // this term is hardwired for now. It uses the same logic as the creator
-        $term = strftime('%Y', time()) . '40';
         
         $db = \Database::newDB();
         $soap_tbl = $db->addTable('fake_soap');
@@ -34,11 +31,11 @@ class TestSOAP extends SOAP
             throw \Exception('fake_soap table does not exist');
         }
         
-        // not searching on the term yet since it is hard-coded
         $soap_tbl->addFieldConditional('banner_id', $bannerId);
         $student_array = $db->selectOneRow();
         if  (empty($student_array)) {
-            throw new \Exception('User not found');
+            require_once PHPWS_SOURCE_DIR . 'mod/hms/class/exception/StudentNotFoundException.php';
+            throw new StudentNotFoundException('User not found', 0, $bannerId);
         }
         extract($student_array);
         $student = new stdClass();
