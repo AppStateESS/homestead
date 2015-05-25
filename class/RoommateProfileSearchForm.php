@@ -3,12 +3,12 @@
 class RoommateProfileSearchForm extends hms\View {
 
     private $term;
-    
+
     public function __construct($term)
     {
         $this->term = $term;
     }
-    
+
     public function show()
     {
         $_SESSION['profile_search_use_session'] = FALSE;
@@ -35,15 +35,17 @@ class RoommateProfileSearchForm extends hms\View {
         $submitCmd->initForm($form);
         $form->setMethod('get');
         $form->useRowRepeat();
-        
+
         $form->addText('asu_username');
         $form->setLabel('asu_username','ASU Username: ');
+        $form->addCssClass('asu_username', 'form-control');
 
         javascript('modules/hms/autoFocus', array('ELEMENT' => $form->getId('asu_username')));
 
         $form->addCheck('hobbies_checkbox',$hobbies);
         $form->setLabel('hobbies_checkbox',$hobbies_labels);
         $tags['HOBBIES_CHECKBOX_QUESTION'] = 'Hobbies and Interests (check all that apply):';
+
 
         $form->addCheck('music_checkbox',$music);
         $form->setLabel('music_checkbox',$music_labels);
@@ -55,29 +57,37 @@ class RoommateProfileSearchForm extends hms\View {
 
         $form->addDropBox('political_views_dropbox',$political_views);
         $form->setLabel('political_views_dropbox','His/her political view: ');
+        $form->addCssClass('political_views_dropbox', 'form-control');
 
         /***** College Life *****/
         $form->addDropBox('intended_major',$majors);
         $form->setLabel('intended_major','His/her academic major: ');
+        $form->addCssClass('intended_major', 'form-control');
 
         $form->addDropBox('important_experience',$experiences);
         $form->setLabel('important_experience','The following is the most important part of his/her college experience: ');
+        $form->addCssClass('important_experience', 'form-control');
 
         /***** Daily Life *****/
         $form->addDropBox('sleep_time',$sleep_times);
         $form->setLabel('sleep_time','He/she generally goes to sleep: ');
+        $form->addCssClass('sleep_time', 'form-control');
 
         $form->addDropBox('wakeup_time',$wakeup_times);
         $form->setLabel('wakeup_time','He/she generally wakes up: ');
+        $form->addCssClass('wakeup_time', 'form-control');
 
         $form->addDropBox('overnight_guests',$overnight_guests);
         $form->setLabel('overnight_guests','He/she plans on hosting overnight guests: ');
+        $form->addCssClass('overnight_guests', 'form-control');
 
         $form->addDropBox('loudness',$loudness);
         $form->setLabel('loudness','In his/her daily activities (music, conversations, etc.): ');
+        $form->addCssClass('loudness', 'form-control');
 
         $form->addDropBox('cleanliness',$cleanliness);
         $form->setLabel('cleanliness','He/she could be described as: ');
+        $form->addCssClass('cleanliness', 'form-control');
 
         $tags['STUDY_TIMES_QUESTION'] = 'He/she prefers to study (check all that apply):';
         $form->addCheck('study_times',$study_times);
@@ -85,6 +95,7 @@ class RoommateProfileSearchForm extends hms\View {
 
         $form->addDropBox('free_time',$free_time);
         $form->setLabel('free_time','If he/she has free time he/she would rather: ');
+        $form->addCssClass('free_time', 'form-control');
 
         $form->addSubmit('Search');
 
