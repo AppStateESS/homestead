@@ -5,7 +5,7 @@
  * @author Matthew McNaney <mcnaney at gmail dot com>
  */
 //completion table don't forget
-define('NUMBER_OF_STUDENTS', 100);
+define('NUMBER_OF_STUDENTS', 20);
 
 define('NICKNAME_CHANCE', 15); // out of 100
 define('INTERNATIONAL_CHANCE', 3);
@@ -34,15 +34,17 @@ echo "\n";
 function process($arguments)
 {
     $dump_data = false;
-
-    if (!isset($_SERVER["argv"][1]) || $_SERVER["argv"][1] == "-h" || $_SERVER["argv"][1] == "--help") {
-        print_help();
-        exit;
-    }
-
+    $term = get_term_default();
+    
     array_shift($arguments);
+    if (!isset($arguments[0])) {
+        $arguments[0] = '-h';
+    }
     for ($i = 0; $i < count($arguments); $i++) {
-        if ($arguments[$i] == '-f') {
+        if ($arguments[$i] == '-h') {
+            print_help();
+            exit;
+        } elseif ($arguments[$i] == '-f') {
             $i++;
             if (!isset($arguments[$i])) {
                 exit("Configuration file not included.\n");
@@ -56,6 +58,12 @@ function process($arguments)
             $number_of_students = $arguments[$i];
         } elseif ($arguments[$i] == '-x') {
             $dump_data = true;
+        } elseif ($arguments[$i] == '-t') {
+            $i++;
+            if (!isset($arguments[$i])) {
+                exit("Term is missing.\n");
+            }
+            $term = $arguments[$i];
         } else {
             exit("Unknown command\n");
         }
@@ -67,13 +75,24 @@ function process($arguments)
 
     include_database_file($file_directory);
     if ($dump_data) {
-        reset_tables();
+        $response = readline("Are you sure you want to reset ALL your student tables? (y/N):");
+        if ($response == 'y') {
+            reset_tables();
+        } else {
+            echo "Ending script.\n\n";
+            exit;
+        }
+        echo "\nReset complete.\n------------------------------------\n\n";
     }
     build_table();
     echo TABLE_NAME . " table created.\n";
-    echo "Creating $number_of_students students.\n";
-    insert_rows($number_of_students);
-    echo "------------------------------------\nStudent creation complete.\n";
+    echo "------------------------------------\n\n";
+    echo "Creating $number_of_students students.\n\n";
+    insert_rows($number_of_students, $term);
+    echo "------------------------------------\nStudent creation complete.\n\n";
+    
+    echo "Make sure your inc/hms_defines.php file contains the following setting:
+define('SOAP_OVERRIDE_FILE', 'FakeSoapTable.php');\n";
 }
 
 function reset_tables()
@@ -81,10 +100,49 @@ function reset_tables()
     $pdo = get_connection();
     echo 'Dropping ' . TABLE_NAME . " table.\n";
     $pdo->exec('drop table if exists ' . TABLE_NAME);
-    echo "Flushing hms_student_autocomplete table.\n";
+    echo "Flushing autocompletion.\n";
     $pdo->exec('truncate hms_student_autocomplete');
-    echo "Flushing hms_student_cache table.\n";
+
+    echo "Flushing student cache.\n";
     $pdo->exec('truncate hms_student_cache');
+    echo "Flushing student phone cache.\n";
+    $pdo->exec('truncate hms_student_phone_cache');
+    echo "Flushing student address cache.\n";
+    $pdo->exec('truncate hms_student_address_cache');
+
+    echo "Flushing student profiles.\n";
+    $pdo->exec('truncate hms_student_profiles');
+
+    echo "Flushing activity log.\n";
+    $pdo->exec('truncate hms_activity_log');
+
+    echo "Flushing assignments.\n";
+    $pdo->exec('truncate hms_assignment');
+    echo "Flushing temporary assignments.\n";
+    $pdo->exec('truncate hms_temp_assignment');
+    echo "Flushing assignment history.\n";
+    $pdo->exec('truncate hms_assignment_history');
+    echo "Flushing assignment queue.\n";
+    $pdo->exec('truncate hms_assignment_queue');
+    echo "Flushing learning community assignments and applications.\n";
+    $pdo->exec('truncate hms_learning_community_applications, hms_learning_community_assignment');
+
+    echo "Flushing lottery reservations.\n";
+    $pdo->exec('truncate hms_lottery_reservation');
+
+    echo "Flushing applications.\n";
+    $pdo->exec('truncate hms_new_application, hms_fall_application, hms_spring_application, hms_summer_application, hms_lottery_application, hms_waitlist_application');
+
+    echo "Flushing packages.\n";
+    $pdo->exec('truncate hms_package');
+
+    echo "Flushing room change requests.\n";
+    $pdo->exec('truncate hms_room_change_participant,hms_room_change_participant_state,hms_room_change_request, hms_room_change_request_state');
+
+    echo "Flushing roommate requests.\n";
+    $pdo->exec('truncate hms_roommate');
+    echo "Flushing special assignments.\n";
+    $pdo->exec('truncate hms_special_assignment');
 }
 
 function build_table()
@@ -226,8 +284,15 @@ function include_database_file($file_directory)
     }
 }
 
+function get_term_default()
+{
+    return strftime('%Y', time()) . '40';
+}
+
 function print_help()
 {
+    $student_default = NUMBER_OF_STUDENTS;
+    $term_default = get_term_default();
     echo <<<EOF
 Creates a table for the fake_soap script.
     
@@ -236,19 +301,28 @@ Usage: createfakestudents.php -f directory/to/phpwebsite/config/file
     
 Commands:
 -f      Path to phpWebSite installation's database configuration file.
--n      Number of student records to create. Records are cumilative per script run.
+-n      Number of student records to create. Records are cumulative per script run.
+        Defaults to $student_default students.
+-t      Term assigned to all students.
+        Format: YYYYTT
+        Terms:
+            - 10 Spring
+            - 20 Summer 1
+            - 30 Summer 2
+            - 40 Fall
+        Example for Spring 2012: 201210
+        Defaults to the Fall semester of the current year: $term_default
 -x      Drop the SOAP table and flush the autocomplete table.
-
-
+\n
 EOF;
 }
 
-function insert_rows($number_of_students)
+function insert_rows($number_of_students, $term)
 {
     $db = get_connection();
 
     for ($i = 0; $i < $number_of_students; $i++) {
-        $row = get_row();
+        $row = get_row($term);
         $query = create_soap_query($row);
         $db->exec($query);
         if (!empty($row['pref_name']) && $row['first_name'] != $row['pref_name']) {
@@ -259,8 +333,10 @@ function insert_rows($number_of_students)
         $first_name = $row['first_name'];
         $last_name = $row['last_name'];
         $middle_name = $row['middle_name'];
+        $banner_id = $row['banner_id'];
+        $username = $row['username'];
         echo <<<EOF
-$first_name $nickname$middle_name $last_name\n
+$first_name $nickname$middle_name $last_name - $username - $banner_id - $term\n
 EOF;
         $ac_query = create_autocomplete_query($row);
         $db->exec($ac_query);
@@ -326,15 +402,14 @@ EOF;
     return $query;
 }
 
-function get_row()
+function get_row($application_term)
 {
     $first_name = first_name();
-    $middle_name = middle_name();
+    $middle_name = middle_name($first_name);
     $last_name = last_name();
     $student_level = bool_chance(GRADUATE_CHANCE, 'G', 'U');
     $student_type = student_type($student_level);
     $projected_class = projected_class($student_type);
-    $application_term = strftime('%Y', time()) . '40';
 
     $row = array(
         'banner_id' => banner_id(),
@@ -606,12 +681,17 @@ function pref_name($first_name)
     }
 }
 
-function middle_name()
+function middle_name($first_name)
 {
     if (mt_rand(1, 100) == 1) {
         return 'Danger';
     } else {
-        return first_name();
+        $middle_name = first_name();
+        if ($middle_name == $first_name) {
+            return middle_name($first_name);
+        } else {
+            return $middle_name;
+        }
     }
 }
 
@@ -635,6 +715,7 @@ function first_name()
         'Abigail',
         'Adina',
         'Adriana',
+        'Aiken',
         'Akilah',
         'Alexander',
         'Alexander',
@@ -642,6 +723,7 @@ function first_name()
         'Alfonzo',
         'Annalisa',
         'Annis',
+        'Archer',
         'Arielle',
         'Arnold',
         'Ava',
@@ -649,6 +731,8 @@ function first_name()
         'Ayanna',
         'Barb',
         'Barbie',
+        'Bart',
+        'Bort',
         'Belkis',
         'Bong',
         'Branden',
@@ -687,6 +771,7 @@ function first_name()
         'Gregoria',
         'Herta',
         'Jose',
+        'Homer',
         'Hwa',
         'Idell',
         'Irma',
@@ -719,6 +804,7 @@ function first_name()
         'Liam',
         'Liam',
         'Linnie',
+        'Lisa',
         'Lloyd',
         'Loreta',
         'Luella',
@@ -727,6 +813,7 @@ function first_name()
         'Madison',
         'Madison',
         'Marcela',
+        'Marge',
         'Mariah',
         'Mariella',
         'Martine',
@@ -742,6 +829,7 @@ function first_name()
         'Michael',
         'Michael',
         'Modesto',
+        'Moses',
         'Natalie',
         'Nicolasa',
         'Noah',
@@ -781,6 +869,7 @@ function first_name()
         'Tyra',
         'Ulrike',
         'Ute',
+        'Valdemare',
         'Wan',
         'Will',
         'William',
@@ -806,8 +895,10 @@ function last_name()
         'Anderson',
         'Anderson',
         'Arguelles',
+        'Bacon',
         'Balentine',
         'Bancroft',
+        'Banks',
         'Batten',
         'Beauford',
         'Boehm',
@@ -858,6 +949,7 @@ function last_name()
         'Hosea',
         'Hussey',
         'Jared',
+        'Jefferson',
         'Johnson',
         'Johnson',
         'Johnson',
@@ -866,10 +958,12 @@ function last_name()
         'Jones',
         'Jones',
         'Kettler',
+        'Kruger',
         'Kung',
         'Lapointe',
         'Lapp',
         'Larabee',
+        'Lincoln',
         'Locklear',
         'Lozoya',
         'Lucchesi',
@@ -880,6 +974,7 @@ function last_name()
         'McGarr',
         'McGuinness',
         'McMath',
+        'McNair',
         'McQuire',
         'Mei',
         'Miller',
@@ -909,6 +1004,7 @@ function last_name()
         'Searcy',
         'Sells',
         'Shen',
+        'Simpson',
         'Siers',
         'Smith',
         'Smith',
@@ -931,7 +1027,9 @@ function last_name()
         'Va Damme',
         'Vento',
         'Vo',
+        'Vorhese',
         'Waggoner',
+        'Washington',
         'Waye',
         'Whiteford',
         'Whitton',
@@ -969,7 +1067,7 @@ function nickname($first_name)
     if (isset($shortened[$first_name])) {
         return $shortened[$first_name];
     }
-
+    // 30 character limit!
     $nicknames = array(
         'Stubby',
         'The Knife',
@@ -980,7 +1078,6 @@ function nickname($first_name)
         'LL',
         'Trey',
         'Mr. Fabulous',
-        'The Student Formally Known as Bob',
         'Pickles',
         'Cthulu',
         'Mork',
@@ -1033,7 +1130,9 @@ function nickname($first_name)
         'Peanut',
         'Sloopy',
         'The Cable Guy',
-        'Sarge'
+        'Sarge',
+        'Salty Dog',
+        'Pumpkinhead'
     );
     $idx = mt_rand(0, count($nicknames) - 1);
     return $nicknames[$idx];
