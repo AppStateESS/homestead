@@ -1,5 +1,267 @@
+<h1>{TITLE}</h1>
+
+    {MENU_LINK}
+
+<font color="red">
+  <i>
+    {MESSAGE}
+  </i>
+</font>
+
+<!-- BEGIN rlc_form -->
+
+{START_FORM}
+
+
+<div class="row">
+  <div class="col-md-10">
+    <div class="row">
+      <h3>
+        About Me
+      </h3>
+    </div>
+
+    <div class="row">
+      <label class="col-md-4">
+        {HOBBIES_CHECKBOX_QUESTION}
+      </label>
+    </div>
+
+    <div class="checkbox col-md-offset-1">
+      <!-- BEGIN hobbies_checkbox_repeat -->
+        <div class="row">
+          {HOBBIES_CHECKBOX}{HOBBIES_CHECKBOX_LABEL}
+        </div>
+      <!-- END hobbies_checkbox_repeat -->
+    </div>
+
+    <div class="row">
+      <label class="col-md-4">
+        {MUSIC_CHECKBOX_QUESTION}
+      </label>
+    </div>
+
+    <div class="checkbox col-md-offset-1">
+      <!-- BEGIN music_checkbox_repeat -->
+        <div class="row">
+          {MUSIC_CHECKBOX}{MUSIC_CHECKBOX_LABEL}
+        </div>
+      <!-- END music_checkbox_repeat -->
+    </div>
+
+    <div class="row">
+      <label class="col-md-4">
+        {LANGUAGE_CHECKBOX_QUESTION}
+      </label>
+    </div>
+
+    <div class="checkbox col-md-offset-1">
+      <!-- BEGIN language_checkbox_repeat -->
+        <div class="row">
+          {LANGUAGE_CHECKBOX}{LANGUAGE_CHECKBOX_LABEL}
+        </div>
+      <!-- END language_checkbox_repeat -->
+    </div>
+
+    <div class="row">
+      <label class="col-md-3">
+        {POLITICAL_VIEWS_LABEL}
+      </label>
+      <div class="col-md-4 col-md-offset-3">
+        {POLITICAL_VIEWS}
+      </div>
+    </div>
+
+    <div class="row">
+      <h3>
+        College Life
+      </h3>
+    </div>
+
+    <div class="row">
+      <label class="col-md-3">
+        {MAJOR_LABEL}
+      </label>
+      <div class="col-md-4 col-md-offset-3">
+        {MAJOR}
+      </div>
+    </div>
+
+    <div class="row">
+      <label class="col-md-3">
+        {EXPERIENCE_LABEL}
+      </label>
+      <div class="col-md-4 col-md-offset-3">
+        {EXPERIENCE}
+      </div>
+    </div>
+
+    <div class="row">
+      <label class="col-md-3">
+        {ALTERNATE_EMAIL_LABEL}
+      </label>
+      <div class="col-md-4 col-md-offset-3">
+        {ALTERNATE_EMAIL}
+      </div>
+    </div>
+
+    <div class="row">
+      <label class="col-md-3">
+        {FB_LINK_LABEL}
+      </label>
+      <div class="col-md-4 col-md-offset-3">
+        {FB_LINK}
+      </div>
+    </div>
+
+    <div class="row">
+      <label class="col-md-3">
+        {INSTAGRAM_SN_LABEL}
+      </label>
+      <div class="col-md-4 col-md-offset-3">
+        {INSTAGRAM_SN}
+      </div>
+    </div>
+
+    <div class="row">
+      <label class="col-md-3">
+        {TWITTER_SN_LABEL}
+      </label>
+      <div class="col-md-4 col-md-offset-3">
+        {TWITTER_SN}
+      </div>
+    </div>
+
+    <div class="row">
+      <label class="col-md-3">
+        {TUMBLR_SN_LABEL}
+      </label>
+      <div class="col-md-4 col-md-offset-3">
+        {TUMBLR_SN}
+      </div>
+    </div>
+
+    <div class="row">
+      <label class="col-md-3">
+        {KIK_SN_LABEL}
+      </label>
+      <div class="col-md-4 col-md-offset-3">
+        {KIK_SN}
+      </div>
+    </div>
+
+    <div class="row">
+      <h3>
+        My Daily Life
+      </h3>
+    </div>
+
+    <div class="row">
+      <label class="col-md-3">
+        {SLEEP_TIME_LABEL}
+      </label>
+      <div class="col-md-4 col-md-offset-3">
+        {SLEEP_TIME}
+      </div>
+    </div>
+
+    <div class="row">
+      <label class="col-md-3">
+        {WAKEUP_TIME_LABEL}
+      </label>
+      <div class="col-md-4 col-md-offset-3">
+        {WAKEUP_TIME}
+      </div>
+    </div>
+
+    <div class="row">
+      <label class="col-md-3">
+        {OVERNIGHT_GUESTS_LABEL}
+      </label>
+      <div class="col-md-4 col-md-offset-3">
+        {OVERNIGHT_GUESTS}
+      </div>
+    </div>
+
+    <div class="row">
+      <label class="col-md-3">
+        {LOUDNESS_LABEL}
+      </label>
+      <div class="col-md-4 col-md-offset-3">
+        {LOUDNESS}
+      </div>
+    </div>
+
+    <div class="row">
+      <label class="col-md-3">
+        {CLEANLINESS_LABEL}
+      </label>
+      <div class="col-md-4 col-md-offset-3">
+        {CLEANLINESS}
+      </div>
+    </div>
+
+    <div class="row">
+      <label class="col-md-3">
+        {STUDY_TIMES_QUESTION}
+      </label>
+    </div>
+
+    <div class="row">
+      <div class="checkbox col-md-4 col-md-offset-1">
+        <!-- BEGIN study_times_repeat -->
+          <div class="row">
+            {STUDY_TIMES}{STUDY_TIMES_LABEL}
+          </div>
+        <!-- END study_times_repeat -->
+      </div>
+    </div>
+
+    <div class="row">
+      <label class="col-md-3">
+        {FREE_TIME_LABEL}
+      </label>
+      <div class="col-md-4 col-md-offset-3">
+        {FREE_TIME}
+      </div>
+    </div>
+
+    <div class="row">
+      <label class="col-md-3">
+        {ABOUT_ME_LABEL}
+      </label>
+    </div>
+
+    <div class="row">
+      <div id="wrdcnt" class="col-md-3"></div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-9">
+        {ABOUT_ME}
+      </div>
+    </div>
+
+    <p></p>
+
+  </div>
+</div>
+
+
+
+<div class="row">
+  <button type="submit" class="btn btn-success btn-lg col-md-1">
+    Submit
+  </button>
+</div>
+
+
+{END_FORM}
+
+<!-- END rlc_form -->
+
 <script>
-function CountWords (this_field) 
+function CountWords (this_field)
 {
       var char_count = this_field.prop('value').length;
       var fullStr = this_field.prop('value') + " ";
@@ -17,7 +279,7 @@ function CountWords (this_field)
       {
       	wordOrWords = " word ";
       }
-      else 
+      else
       {
       	wordOrWords = " words ";
       }
@@ -33,7 +295,7 @@ function CountWords (this_field)
       }
       var retstring = formatted + wordOrWords + "remaining."
       document.getElementById('wrdcnt').innerHTML=retstring;
-      
+
 }
 $().ready(function (){
 	CountWords($("#profile_form_about_me"));
@@ -42,130 +304,3 @@ $().ready(function (){
 	});
 });
 </script>
-
-<div class="hms">
-  <div class="box">
-    <div class="box-title"><h1>{TITLE}</h1></div>
-    <div class="box-content">
-    {MENU_LINK}
-        <font color="red"><i>{MESSAGE}</i></font><br>
-        <!-- BEGIN rlc_form -->
-        {START_FORM}
-        <table cellspacing="2" cellpadding="3">
-            <tr>
-                <th colspan="2">1. About Me</th>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <table width="100%" cellspacing="2" cellpadding="3" rows="1" cols="2">
-                        <tr>
-                            <td valign="top" width="50%">{HOBBIES_CHECKBOX_QUESTION}<br />
-                            <!-- BEGIN hobbies_checkbox_repeat -->
-                              {HOBBIES_CHECKBOX}{HOBBIES_CHECKBOX_LABEL}<br>
-                            <!-- END hobbies_checkbox_repeat -->
-                            </td>
-                            <td valign="top" width="50%">{MUSIC_CHECKBOX_QUESTION}<br />
-                            <!-- BEGIN music_checkbox_repeat -->
-                              {MUSIC_CHECKBOX}{MUSIC_CHECKBOX_LABEL}<br>
-                            <!-- END music_checkbox_repeat -->
-                            </td>
-                        </tr>
-                        <tr>
-                          <td valign="top" width="50%">{LANGUAGE_CHECKBOX_QUESTION}<br />
-                            <!-- BEGIN language_checkbox_repeat -->
-                            {LANGUAGE_CHECKBOX}{LANGUAGE_CHECKBOX_LABEL}<br>
-                            <!-- END language_checkbox_repeat -->
-                          </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-            <tr valign="top">
-                <td>{POLITICAL_VIEWS_LABEL}</td>
-                <td>{POLITICAL_VIEWS}<br />&nbsp;</td>
-            </tr>
-            <tr>
-                <th colspan="2">2. College Life</th>
-            </tr>
-            <tr valign="top">
-                <td>{MAJOR_LABEL}</td>
-                <td>{MAJOR}<br />&nbsp;</td>
-            </tr>
-            <tr valign="top">
-                <td>{EXPERIENCE_LABEL}</td>
-                <td>{EXPERIENCE}<br />&nbsp;</td>
-            </tr>
-            <tr valign="top">
-                <td>{ALTERNATE_EMAIL_LABEL}</td>
-                <td>{ALTERNATE_EMAIL}<br />&nbsp;</td>
-            </tr>
-            <tr valign="top">
-            	<td>{FB_LINK_LABEL}</td>
-                <td>{FB_LINK}<br />&nbsp;</td>
-            </tr>
-            <tr valign="top">
-                <td>{INSTAGRAM_SN_LABEL}</td>
-                <td>{INSTAGRAM_SN}<br />&nbsp;</td>
-            </tr>
-            <tr valign="top">
-                <td>{TWITTER_SN_LABEL}</td>
-                <td>{TWITTER_SN}<br />&nbsp;</td>
-            </tr>
-            <tr valign="top">
-                <td>{TUMBLR_SN_LABEL}</td>
-                <td>{TUMBLR_SN}<br />&nbsp;</td>
-            </tr>
-            <tr valign="top">
-                <td>{KIK_SN_LABEL}</td>
-                <td>{KIK_SN}<br />&nbsp;</td>
-            </tr>
-            <tr>
-                <th colspan="2">3. My Daily Life</th>
-            </tr>
-            <tr valign="top">
-                <td>{SLEEP_TIME_LABEL}</td>
-                <td>{SLEEP_TIME}<br />&nbsp;</td>
-            </tr>
-            <tr valign="top">
-                <td>{WAKEUP_TIME_LABEL}</td>
-                <td>{WAKEUP_TIME}<br />&nbsp;</td>
-            </tr>
-            <tr valign="top">
-                <td>{OVERNIGHT_GUESTS_LABEL}</td>
-                <td>{OVERNIGHT_GUESTS}<br />&nbsp;</td>
-            </tr>
-            <tr valign="top">
-                <td>{LOUDNESS_LABEL}</td>
-                <td>{LOUDNESS}<br />&nbsp;</td>
-            </tr>
-            <tr valign="top">
-                <td>{CLEANLINESS_LABEL}</td>
-                <td>{CLEANLINESS}<br />&nbsp;</td>
-            </tr>
-            <tr valign="top">
-                <td>{STUDY_TIMES_QUESTION}</td>
-                <td>
-                <!-- BEGIN study_times_repeat -->
-                  {STUDY_TIMES}{STUDY_TIMES_LABEL}<br />
-                <!-- END study_times_repeat -->
-                &nbsp;
-                </td>
-            </tr>
-            <tr valign="top">
-                <td>{FREE_TIME_LABEL}</td>
-                <td>{FREE_TIME}<br />&nbsp;</td>
-            </tr>
-            <tr valign="top">
-                <td>{ABOUT_ME_LABEL}</td>
-                <td><div id="wrdcnt"></div>{ABOUT_ME}</td>
-            </tr>
-            <tr>
-                <td colspan="2">{SUBMIT}</td>
-            </tr>
-        </table>
-        {END_FORM}
-        <!-- END rlc_form -->
-    </div>
-  </div>
-</div>
-

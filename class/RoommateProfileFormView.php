@@ -61,51 +61,59 @@ class RoommateProfileFormView extends hms\View {
         if($profile_exists){
             $profile_form->setMatch('political_views',$this->profile->get_text('political_views'));
         }
+        $profile_form->addCssClass('political_views', 'form-control');
 
         $profile_form->addText('alternate_email');
         $profile_form->setLabel('alternate_email','Alternate email: ');
         if($profile_exists){
             $profile_form->setValue('alternate_email',$this->profile->get_text('alternate_email'));
         }
+        $profile_form->addCssClass('alternate_email', 'form-control');
 
         $profile_form->addText('fb_link');
         $profile_form->setLabel('fb_link','Facebook link:');
         if($profile_exists) {
         	$profile_form->setValue('fb_link',$this->profile->get_text('fb_link'));
         }
+        $profile_form->addCssClass('fb_link', 'form-control');
 
         $profile_form->addText('instagram_sn');
         $profile_form->setLabel('instagram_sn','Instagram username: ');
         if($profile_exists){
             $profile_form->setValue('instagram_sn',$this->profile->get_text('instagram_sn'));
         }
+        $profile_form->addCssClass('instagram_sn', 'form-control');
 
         $profile_form->addText('twitter_sn');
         $profile_form->setLabel('twitter_sn','Twitter username:');
         if($profile_exists){
             $profile_form->setValue('twitter_sn',$this->profile->get_text('twitter_sn'));
         }
+        $profile_form->addCssClass('twitter_sn', 'form-control');
 
         $profile_form->addText('tumblr_sn');
         $profile_form->setLabel('tumblr_sn','Tumblr username:');
         if($profile_exists){
             $profile_form->setValue('tumblr_sn',$this->profile->get_text('tumblr_sn'));
         }
+        $profile_form->addCssClass('tumblr_sn', 'form-control');
 
         $profile_form->addText('kik_sn');
         $profile_form->setLabel('kik_sn','Kik username:');
         if($profile_exists){
             $profile_form->setValue('kik_sn',$this->profile->get_text('kik_sn'));
         }
+        $profile_form->addCssClass('kik_sn', 'form-control');
 
         $profile_form->addTextArea('about_me');
-        $profile_form->setLabel('about_me','4. Additional information: ');
+        $profile_form->setLabel('about_me','Additional information: ');
         $profile_form->setCols('about_me',50);
         $profile_form->setRows('about_me',15);
    		//$profile_form->setMaxSize('about_me',4096);
         if($profile_exists){
             $profile_form->setValue('about_me',$this->profile->get_text('about_me'));
         }
+        $profile_form->addCssClass('about_me', 'form-control');
 
         /***** College Life *****/
         $profile_form->addDropBox('major', hms\MajorFactory::getMajorsList());
@@ -113,12 +121,14 @@ class RoommateProfileFormView extends hms\View {
         if($profile_exists){
             $profile_form->setMatch('major',$this->profile->get_text('major'));
         }
+        $profile_form->addCssClass('major', 'form-control');
 
         $profile_form->addDropBox('experience',$experiences);
         $profile_form->setLabel('experience','I feel the following is the most important part of my college experience: ');
         if($profile_exists){
             $profile_form->setMatch('experience',$this->profile->get_text('experience'));
         }
+        $profile_form->addCssClass('experience', 'form-control');
 
         /***** My Daily Life *****/
         $profile_form->addDropBox('sleep_time',$sleep_times);
@@ -126,30 +136,35 @@ class RoommateProfileFormView extends hms\View {
         if($profile_exists){
             $profile_form->setMatch('sleep_time',$this->profile->get_text('sleep_time'));
         }
+        $profile_form->addCssClass('sleep_time', 'form-control');
 
         $profile_form->addDropBox('wakeup_time',$wakeup_times);
         $profile_form->setLabel('wakeup_time','I generally wake up: ');
         if($profile_exists){
             $profile_form->setMatch('wakeup_time',$this->profile->get_text('wakeup_time'));
         }
+        $profile_form->addCssClass('wakeup_time', 'form-control');
 
         $profile_form->addDropBox('overnight_guests',$overnight_guests);
         $profile_form->setLabel('overnight_guests','I plan on hosting overnight guests: ');
         if($profile_exists){
             $profile_form->setMatch('overnight_guests',$this->profile->get_text('overnight_guests'));
         }
+        $profile_form->addCssClass('overnight_guests', 'form-control');
 
         $profile_form->addDropBox('loudness',$loudness);
         $profile_form->setLabel('loudness','In my daily activities (music, conversations, etc.): ');
         if($profile_exists){
             $profile_form->setMatch('loudness',$this->profile->get_text('loudness'));
         }
+        $profile_form->addCssClass('loudness', 'form-control');
 
         $profile_form->addDropBox('cleanliness',$cleanliness);
         $profile_form->setLabel('cleanliness','I would describe myself as: ');
         if($profile_exists){
             $profile_form->setMatch('cleanliness',$this->profile->get_text('cleanliness'));
         }
+        $profile_form->addCssClass('cleanliness', 'form-control');
 
         $profile_form->addCheck('study_times',$study_times);
         $profile_form->setLabel('study_times',$study_times_labels);
@@ -158,11 +173,13 @@ class RoommateProfileFormView extends hms\View {
             $profile_form->setMatch('study_times',RoommateProfileFactory::get_study_matches($this->profile));
         }
 
+
         $profile_form->addDropBox('free_time',$free_time);
         $profile_form->setLabel('free_time','If I have free time I would rather: ');
         if($profile_exists){
             $profile_form->setMatch('free_time', $this->profile->get_text('free_time'));
         }
+        $profile_form->addCssClass('free_time', 'form-control');
 
         $profile_form->addSubmit('Submit');
 
