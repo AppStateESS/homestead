@@ -1,3 +1,41 @@
+<h1>Residential Learning Community Application</h1>
+
+{START_FORM}
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="form-group">
+            {RLC_QUESTION_0_LABEL}
+            <span class="help-block"></span>
+            {RLC_QUESTION_0}
+        </div>
+
+        <div class="form-group">
+            {RLC_QUESTION_1_LABEL}
+            <span class="help-block"></span>
+            {RLC_QUESTION_1}
+        </div>
+
+        <div class="form-group">
+            {RLC_QUESTION_2_LABEL}
+            <span class="help-block"></span>
+            {RLC_QUESTION_2}
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-success btn-lg pull-right">
+              Submit Application
+            </button>
+            <a href="index.php" class="btn btn-danger btn-lg">
+              <i class="fa fa-chevron-left"></i>
+              Cancel
+            </a>
+        </div>
+    </div>
+</div>
+
+{END_FORM}
+
 <script>
 
 function CountWords (this_field)
@@ -50,34 +88,3 @@ $().ready(function (){
 });
 
 </script>
-
-<h1>Residential Learning Community Application</h1>
-{START_FORM}
-
-<div class="row">
-    <div class="col-md-7">
-        <div class="form-group">
-            {RLC_QUESTION_0_LABEL}
-            <span class="help-block"></span>
-            {RLC_QUESTION_0}
-        </div>
-
-        <div class="form-group">
-            {RLC_QUESTION_1_LABEL}
-            <span class="help-block"></span>
-            {RLC_QUESTION_1}
-        </div>
-
-        <div class="form-group">
-            {RLC_QUESTION_2_LABEL}
-            <span class="help-block"></span>
-            {RLC_QUESTION_2}
-        </div>
-
-        <div class="form-group">
-            <button type="submit" class="btn btn-success btn-lg pull-right">Submit Application</button>
-            <a href="index.php" class="btn btn-default">Cancel</a>
-        </div>
-    </div>
-</div>
-{END_FORM}
