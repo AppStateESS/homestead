@@ -1,4 +1,6 @@
-<table cellpadding="4" cellspacing="1" width="100%">
+
+
+<table class="table table-striped">
     <tr>
         <th>{FIRST_NAME}</th>
         <th>{LAST_NAME}</th>
@@ -7,7 +9,7 @@
     </tr>
 
     <!-- BEGIN empty_table -->
-    <td colspan="4">
+    <td colspan="11">
         {EMPTY_MESSAGE}
     </td>
     <!-- END empty_table -->
@@ -21,20 +23,9 @@
     <!-- END listrows -->
 </table>
 
-<!-- BEGIN page_label -->
-<div align="center">
-    Results: {TOTAL_ROWS}
+<div class="text-center">
+  {PAGES}
+  <p>{TOTAL_ROWS}</p>
+  <p>{LIMIT_LABEL} {LIMITS}</p>
+  {CSV_REPORT}
 </div>
-<!-- END page_label -->
-
-<!-- BEGIN pages -->
-<div align="center">
-    {PAGE_LABEL}: {PAGES}
-</div>
-<!-- END pages -->
-
-<!-- BEGIN limits -->
-<div align="center">
-    {LIMIT_LABEL}: {LIMITS}
-</div>
-<!-- END limits -->
