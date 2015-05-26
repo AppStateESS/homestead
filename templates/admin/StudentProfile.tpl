@@ -1,4 +1,4 @@
-<h1>{NAME} - {BANNER_ID} <small class="text-muted">{TERM}</small></h1>
+<h2>{NAME} - {BANNER_ID} <small class="text-muted">{TERM}</small></h2>
 
 <div class="row">
     <div class="col-md-2">
@@ -89,7 +89,7 @@
         <table class="table">
             <tr>
                 <th>Assigned:</th>
-                <td>{ASSIGNMENT}</td>
+                <td><span class="text-danger" style="margin-top : 5px">Not assigned</span> <a href="{ASSIGNMENT}" class="btn btn-sm btn-success"><i class="fa fa-plus"></i> Assign Student</a></td>
             </tr>
             <tr>
                 <th>Roommate(s):</th>
