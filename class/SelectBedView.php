@@ -53,6 +53,7 @@ class SelectBedView extends hms\View{
         $form->setClass('bed', 'form-control');
 
         $form->addSubmit('submit_button', 'Select');
+        $form->setClass('submit_button', 'btn btn-primary');
 
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
