@@ -2,19 +2,6 @@
 
 <div class="col-md-9">
 
-  <!-- BEGIN error_msg -->
-    <div class="error">
-      <img style="vertical-align:middle;" src="mod/hms/img/tango/process-stop.png">
-        {ERROR_MSG}
-    </div>
-  <!-- END error_msg -->
-
-  <!-- BEGIN success_msg -->
-    <span class="success">
-      {SUCCESS_MSG}
-    </span>
-  <!-- END success_msg -->
-
   <div class="row">
     <p>
       To request a roommate please provide his/her Appalachian State University
