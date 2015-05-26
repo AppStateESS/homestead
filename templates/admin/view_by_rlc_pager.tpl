@@ -1,4 +1,4 @@
-{BACK_LINK}
+<a href="{BACK_LINK}" class="btn btn-info"><i class="fa fa-arrow-left"></i> RLC List</a>
 <h2>{TITLE}</h2>
 
 <p><a href="{ADD_URI}" class="btn btn-success"><i class="fa fa-plus"></i> Add Member(s)</a></p>
