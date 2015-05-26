@@ -45,7 +45,9 @@ class AssignmentMoveConfirmationView extends hms\View{
         $submitCmd->initForm($form);
 
         $form->addButton('cancel', 'Cancel');
+        $form->setClass('cancel', 'btn btn-default');
         $form->addSubmit('submit', 'Confirm Move');
+        $form->setClass('submit', 'btn btn-danger');
 
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
