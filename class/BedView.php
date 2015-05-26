@@ -43,25 +43,31 @@ class BedView extends hms\View{
 
         $form = new PHPWS_Form();
         $submitCmd->initForm($form);
-
         $form->addText('bedroom_label', $this->bed->bedroom_label);
+        $form->setClass('bedroom_label', 'form-control');
+        $form->setLabel('bedroom_label', 'Bedroom Label:');
 
         $form->addText('phone_number', $this->bed->phone_number);
         $form->setMaxSize('phone_number', 4);
-        $form->setSize('phone_number', 5);
+        $form->setLabel('phone_number', 'Phone Number');
+        $form->setClass('phone_number', 'form-control');
 
         $form->addText('banner_id', $this->bed->banner_id);
+        $form->setClass('banner_id', 'form-control');
+        $form->setLabel('banner_id', 'Banner Bed ID:');
 
         $form->addCheckBox('ra', 1);
         if($this->bed->isRa()){
-            $form->SetExtra('ra', 'checked');
+            $form->setExtra('ra', 'checked');
         }
+        $form->setLabel('ra', 'Reserved for RA');
 
         $form->addCheckBox('ra_roommate', 1);
 
         if($this->bed->ra_roommate == 1){
             $form->setExtra('ra_roommate', 'checked');
         }
+        $form->setLabel('ra_roommate', 'Hold Empty for RA Roommate');
 
         $form->addCheckBox('international_reserved');
 
@@ -83,10 +89,8 @@ class BedView extends hms\View{
                 $form->setDisabled($element);
             }
         }
-
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
-
         Layout::addPageTitle("Edit Bed");
 
         return PHPWS_Template::process($tpl, 'hms', 'admin/edit_bed.tpl');
