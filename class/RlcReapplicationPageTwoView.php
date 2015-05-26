@@ -30,11 +30,13 @@ class RlcReapplicationPageTwoView extends hms\View {
             }
             if(isset($this->reApp) && isset($this->reApp->{"rlc_question_$i"})){
                 $form->addTextArea("rlc_question_$i", $this->reApp->{"rlc_question_$i"});
+
             }else{
                 $form->addTextArea("rlc_question_$i");
             }
 
             $form->setLabel("rlc_question_$i", $this->rlcs[$i]->getReturningQuestion());
+            $form->addCssClass("rlc_question_$i", 'form-control');
         }
 
         $form->addSubmit('submit', 'Submit Application');

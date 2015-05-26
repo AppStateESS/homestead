@@ -50,17 +50,22 @@ class RlcReapplicationView extends hms\View {
         $form->addDropBox('rlc_choice_1', $firstCommunity);
         $form->setLabel('rlc_choice_1', 'First choice:');
         $form->setExtra('rlc_choice_1', 'margin-left: 20px;"');
-        
+        $form->addCssClass('rlc_choice_1', 'form-control');
+
         $form->addDropBox('rlc_choice_2', $otherCommunities);
         $form->setLabel('rlc_choice_2', 'Second choice:');
         $form->setExtra('rlc_choice_2', 'margin-left: 20px;"');
+        $form->addCssClass('rlc_choice_2', 'form-control');
 
         $form->addDropBox('rlc_choice_3', $otherCommunities);
         $form->setLabel('rlc_choice_3', 'Third choice:');
+        $form->addCssClass('rlc_choice_3', 'form-control');
 
         $form->addTextArea('why_this_rlc');
+        $form->addCssClass('why_this_rlc', 'form-control');
         $form->addTextArea('contribute_gain');
-        
+        $form->addCssClass('contribute_gain', 'form-control');
+
         // Set values if they exist on the session
         if(isset($this->reApp)){
             $form->grab('why_this_rlc')->setValue($this->reApp->why_specific_communities);
