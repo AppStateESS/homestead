@@ -37,10 +37,15 @@ class EmergencyContactFormView extends hms\View {
          * Emergency Contact *
          *********************/
         $form->addText('emergency_contact_name');
+        $form->addCssClass('emergency_contact_name', 'form-control');
         $form->addText('emergency_contact_relationship');
+        $form->addCssClass('emergency_contact_relationship', 'form-control');
         $form->addText('emergency_contact_phone');
+        $form->addCssClass('emergency_contact_phone', 'form-control');
         $form->addText('emergency_contact_email');
+        $form->addCssClass('emergency_contact_email', 'form-control');
         $form->addTextArea('emergency_medical_condition');
+        $form->addCssClass('emergency_medical_condition', 'form-control');
 
         if(!is_null($this->application)){
             $form->setValue('emergency_contact_name', $this->application->getEmergencyContactName());
@@ -54,9 +59,13 @@ class EmergencyContactFormView extends hms\View {
          * Missing Person *
          ******************/
         $form->addText('missing_person_name');
+        $form->addCssClass('missing_person_name', 'form-control');
         $form->addText('missing_person_relationship');
+        $form->addCssClass('missing_person_relationship', 'form-control');
         $form->addText('missing_person_phone');
+        $form->addCssClass('missing_person_phone', 'form-control');
         $form->addText('missing_person_email');
+        $form->addCssClass('missing_person_email', 'form-control');
 
         if(!is_null($this->application)){
             $form->setValue('missing_person_name', $this->application->getMissingPersonName());
@@ -64,10 +73,11 @@ class EmergencyContactFormView extends hms\View {
             $form->setValue('missing_person_phone', $this->application->getMissingPersonPhone());
             $form->setValue('missing_person_email', $this->application->getMissingPersonEmail());
         }
-        
+
         // Wrap up the business
-        $form->addSubmit('submit', _('Continue'));
-        $form->setExtra('submit', 'class="hms-application-submit-button"');
+        // $form->addSubmit('submit', _('Continue'));
+        // $form->addCssClass('submit', "btn-lg btn-success");
+        // $form->setExtra('submit', 'class="hms-application-submit-button"');
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
