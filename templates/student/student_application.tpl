@@ -185,7 +185,7 @@ Please review the information you entered. If you need to go back and make chang
 </table>
             <button class="btn btn-lg btn-primary">Continue <i class="fa fa-arrow-right"></i></button>
 <!-- BEGIN redo_form -->
-or {REDO_BUTTON}
+<strong>- OR -</strong> {REDO_BUTTON}
 <!-- END redo_form -->
 {SUBMIT_APPLICATION}
 {END_FORM}
