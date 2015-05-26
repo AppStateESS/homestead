@@ -16,7 +16,7 @@ class ShowCancelHousingApplicationCommand extends Command {
     public function getLink($text, $target = null, $cssClass = null, $title = null)
     {
         $uri = $this->getURI();
-        return "<a href=\"$uri\" class=\"cancelAppLink\" onClick=\"return false;\">$text</a>";
+        return "<a href='$uri' class='cancelAppLink $cssClass' onClick='return false;'>$text</a>";
     }
     
     public function execute(CommandContext $context)
