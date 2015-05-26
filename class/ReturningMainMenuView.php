@@ -2,9 +2,9 @@
 
 PHPWS_Core::initModClass('hms', 'StudentMenuTermBlock.php');
 
-define('FEATURE_LOCKED_ICON',   '<img class="status-icon" src="mod/hms/img/tango/emblem-readonly.png" alt="Locked"/>');
-define('FEATURE_NOTYET_ICON',   '<img class="status-icon" src="mod/hms/img/tango/appointment-new.png" alt="Locked"/>');
-define('FEATURE_OPEN_ICON',     '<img class="status-icon" src="mod/hms/img/tango/go-next.png" alt="Open"/>');
+define('FEATURE_LOCKED_ICON',   '<i class="fa fa-lock"></i>');
+define('FEATURE_NOTYET_ICON',   '<i class="fa fa-calendar"></i>');
+define('FEATURE_OPEN_ICON',     '<i class="fa fa-arrow-right"></i>');
 define('FEATURE_COMPLETED_ICON','<i class="fa fa-check" title="Completed" alt="Completed"></i>');
 
 class ReturningMainMenuView extends hms\View {
