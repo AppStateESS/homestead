@@ -41,40 +41,30 @@ class ReApplicationFormView extends hms\View {
         /*
          * Contact info
          */
-        if(isset($_REQUEST['area_code'])){
-            $form->addText('area_code', $_REQUEST['area_code']);
-        }else{
-            $form->addText('area_code');
-        }
-
-        $form->setSize('area_code', 3);
-        $form->setMaxSize('area_code', 3);
-
-        if(isset($_REQUEST['exchange'])){
-            $form->addText('exchange', $_REQUEST['exchange']);
-        }else{
-            $form->addText('exchange');
-        }
-        $form->setSize('exchange', 3);
-        $form->setMaxSize('exchange', 3);
-
         if(isset($_REQUEST['number'])){
             $form->addText('number', $_REQUEST['number']);
         }else{
             $form->addText('number');
         }
-        $form->setSize('number', 4);
-        $form->setMaxSize('number', 4);
+        $form->setSize('number', 10);
+        $form->setMaxSize('number', 10);
+        $form->addCssClass('number', 'form-control');
+
         $form->addCheck('do_not_call', 1);
 
         /*********************
          * Emergency Contact *
          *********************/
         $form->addText('emergency_contact_name');
+        $form->addCssClass('emergency_contact_name', 'form-control');
         $form->addText('emergency_contact_relationship');
+        $form->addCssClass('emergency_contact_relationship', 'form-control');
         $form->addText('emergency_contact_phone');
+        $form->addCssClass('emergency_contact_phone', 'form-control');
         $form->addText('emergency_contact_email');
+        $form->addCssClass('emergency_contact_email', 'form-control');
         $form->addTextArea('emergency_medical_condition');
+        $form->addCssClass('emergency_medical_condition', 'form-control');
 
 /*
         if(!is_null($this->existingApplication)){
@@ -90,9 +80,13 @@ class ReApplicationFormView extends hms\View {
         ******************/
 
         $form->addText('missing_person_name');
+        $form->addCssClass('missing_person_name', 'form-control');
         $form->addText('missing_person_relationship');
+        $form->addCssClass('missing_person_relationship', 'form-control');
         $form->addText('missing_person_phone');
+        $form->addCssClass('missing_person_phone', 'form-control');
         $form->addText('missing_person_email');
+        $form->addCssClass('missing_person_email', 'form-control');
 /*
         if(!is_null($this->existingApplication)){
             $form->setValue('missing_person_name', $this->existingApplication->getMissingPersonName());
@@ -111,6 +105,7 @@ class ReApplicationFormView extends hms\View {
         $form->addDropBox('meal_plan', $mealPlans);
         $form->setLabel('meal_plan', 'Meal plan: ');
         $form->setMatch('meal_plan', BANNER_MEAL_STD);
+        $form->addCssClass('meal_plan', 'form-control');
 
         /*
          * Special interest stuff
@@ -128,6 +123,7 @@ class ReApplicationFormView extends hms\View {
 
             $form->addDropBox('sorority_drop', array_merge(array('none'=>'Select...'), HMS_Lottery::getSororities()));
             $form->setLabel('sorority_drop', 'Which sorority?');
+            $form->addCssClass('sorority_drop', 'form-control');
 
             $form->addRadioButton('sorority_pref', array('aph', 'on-campus'));
             $form->setLabel('sorority_pref', array("I would like to live in the APH.", "I would like to live in a central-campus hall."));

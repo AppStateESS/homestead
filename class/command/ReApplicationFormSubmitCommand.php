@@ -34,18 +34,17 @@ class ReApplicationFormSubmitCommand extends Command {
 
         // Data sanity checking
         $doNotCall  = $context->get('do_not_call');
-        $areaCode   = $context->get('area_code');
-        $exchange   = $context->get('exchange');
         $number     = $context->get('number');
 
         if(is_null($doNotCall)){
             // do not call checkbox was not selected, so check the number
-            if(is_null($areaCode) || is_null($exchange) || is_null($number)){
+
+            if(is_null($number)){
                 NQ::simple('hms', hms\NotificationView::ERROR, 'Please provide a cell-phone number or click the checkbox stating that you do not wish to share your number with us.');
                 $errorCmd->redirect();
             }
         }
-
+        
         //$mealPlan = $context->get('meal_plan');
 
         /* Emergency Contact Sanity Checking */
