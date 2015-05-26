@@ -131,8 +131,7 @@ class StudentProfileView extends hms\View {
         }else{
             $assignCmd = CommandFactory::getCommand('ShowAssignStudent');
             $assignCmd->setUsername($this->student->getUsername());
-            $tpl['ASSIGNMENT'] = 'No [' . $assignCmd->getLink('Assign Student') . ']';
-            //$tpl['ASSIGNMENT'] = 'No';
+            $tpl['ASSIGNMENT'] = '<span class="text-danger" style="margin-top : 5px">Not assigned</span> ' . $assignCmd->getLink('<i class="fa fa-plus"></i> Assign Student', null, 'btn btn-sm btn-success');
         }
 
         /*************
