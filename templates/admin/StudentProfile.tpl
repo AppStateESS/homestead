@@ -71,11 +71,12 @@
                <th>Addresses</th>
                <td>
                 <!-- BEGIN addresses -->
-                {ADDR_TYPE}<br />
+                <p>
+                <strong>{ADDR_TYPE}</strong><br />
                 {ADDRESS_L1}<br />
-                {ADDRESS_L2}<br />
-                {ADDRESS_L3}<br />
-                {CITY}, {STATE} {ZIP}<br /><br />
+                <!-- BEGIN subadd2 -->{ADDRESS_L2}<br /><!-- END subadd2 -->
+                <!-- BEGIN subadd3 -->{ADDRESS_L3}<br /><!-- END subadd3 -->
+                {CITY}, {STATE} {ZIP}</p>
                 <!-- END addresses -->
                 </td>
             </tr>
