@@ -72,7 +72,6 @@ class HousingApplicationFormView extends hms\View
             } else {
                 $form->setMatch('lifestyle_option', '1');
             }
-
             $form->addCssClass('lifestyle_option', 'form-control');
 
             /*             * **********
@@ -87,7 +86,6 @@ class HousingApplicationFormView extends hms\View
             } else {
                 $form->setMatch('preferred_bedtime', '1');
             }
-            $form->addCssClass('preferred_bedtime', 'form-control');
 
             /*             * ****************
              * Room condition *
@@ -100,7 +98,6 @@ class HousingApplicationFormView extends hms\View
             } else {
                 $form->setMatch('room_condition', '1');
             }
-
             $form->addCssClass('room_condition', 'form-control');
         } else if ($sem == TERM_SUMMER1 || $sem == TERM_SUMMER2) {
             /* Private room option for Summer terms */
@@ -112,12 +109,10 @@ class HousingApplicationFormView extends hms\View
             } else {
                 $form->setMatch('room_type', '0');
             }
-            $form->addCssClass('room_type', 'form-control');
         }
 
-
-        /**
-         * Meal Option
+        /***************
+         * Meal Option *
          */
         if ($sem == TERM_FALL || $sem == TERM_SPRING) {
             if ($this->student->getType() == TYPE_FRESHMEN) {
@@ -141,18 +136,21 @@ class HousingApplicationFormView extends hms\View
             $form->setMatch('meal_option', BANNER_MEAL_STD);
         }
 
-        /*         * *******************
+        /*********************
          * Emergency Contact *
-         * ******************* */
+         * *******************/
         $form->addText('emergency_contact_name');
-
         $form->addCssClass('emergency_contact_name', 'form-control');
+
         $form->addText('emergency_contact_relationship');
         $form->addCssClass('emergency_contact_relationship', 'form-control');
+
         $form->addText('emergency_contact_phone');
         $form->addCssClass('emergency_contact_phone', 'form-control');
+
         $form->addText('emergency_contact_email');
         $form->addCssClass('emergency_contact_email', 'form-control');
+
         $form->addTextArea('emergency_medical_condition');
         $form->addCssClass('emergency_medical_condition', 'form-control');
 
@@ -168,12 +166,14 @@ class HousingApplicationFormView extends hms\View
          * Missing Person
          */
         $form->addText('missing_person_name');
-
         $form->addCssClass('missing_person_name', 'form-control');
+
         $form->addText('missing_person_relationship');
         $form->addCssClass('missing_person_relationship', 'form-control');
+
         $form->addText('missing_person_phone');
         $form->addCssClass('missing_person_phone', 'form-control');
+
         $form->addText('missing_person_email');
         $form->addCssClass('missing_person_email', 'form-control');
 
@@ -192,9 +192,11 @@ class HousingApplicationFormView extends hms\View
         $form->setLabel('special_need', array('Yes, I require special needs housing.'));
 
 
-
-        if (isset($this->existingApplication)) {
-            if ((!is_null($this->existingApplication->physical_disability) && $this->existingApplication->physical_disability != "0") || (!is_null($this->existingApplication->psych_disability) && $this->existingApplication->psych_disability != "0") || (!is_null($this->existingApplication->medical_need) && $this->existingApplication->medical_need != "0") || (!is_null($this->existingApplication->gender_need) && $this->existingApplication->gender_need != "0")) {
+        if(isset($this->existingApplication)) {
+            if((!is_null($this->existingApplication->physical_disability) && $this->existingApplication->physical_disability != "0") ||
+                    (!is_null($this->existingApplication->psych_disability) && $this->existingApplication->psych_disability != "0") ||
+                    (!is_null($this->existingApplication->medical_need) && $this->existingApplication->medical_need != "0") ||
+                    (!is_null($this->existingApplication->gender_need) && $this->existingApplication->gender_need != "0")) {
                 $form->setMatch('special_need', 'special_need');
             }
         }
@@ -203,10 +205,9 @@ class HousingApplicationFormView extends hms\View
             $form->addHidden('special_needs', $_REQUEST['special_needs']);
         }
 
-
-        /**
-         * RLC
-         */
+        /*******
+         * RLC *
+         *******/
         PHPWS_Core::initModClass('hms', 'applicationFeature/RlcApplication.php');
         $rlcReg = new RLCApplicationRegistration();
         if (HMS_RLC_Application::checkForApplication($this->student->getUsername(), $this->term) == TRUE) {
@@ -216,7 +217,6 @@ class HousingApplicationFormView extends hms\View
         } else if (ApplicationFeature::isEnabledForStudent($rlcReg, $this->term, $this->student)) {
             // Feature is enabled, but student hasn't submitted one yet
             $form->addRadio('rlc_interest', array(0, 1));
-
             $form->setLabel('rlc_interest', array(_("No"), _("Yes")));
 
             if (!is_null($this->existingApplication) && !is_null($this->existingApplication->getRLCInterest())) {
@@ -238,5 +238,3 @@ class HousingApplicationFormView extends hms\View
     }
 
 }
-
-?>

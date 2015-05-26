@@ -45,13 +45,11 @@ class ReApplicationFormSaveCommand extends Command {
 
         // Data sanity checking
         $doNotCall  = $context->get('do_not_call');
-        $areaCode   = $context->get('area_code');
-        $exchange   = $context->get('exchange');
         $number     = $context->get('number');
 
         if(is_null($doNotCall)){
             // do not call checkbox was not selected, so check the number
-            if(is_null($areaCode) || is_null($exchange) || is_null($number)){
+            if(is_null($number)){
                 NQ::simple('hms', hms\NotificationView::ERROR, 'Please provide a cell-phone number or click the checkbox stating that you do not wish to share your number with us.');
                 $errorCmd->redirect();
             }
@@ -61,7 +59,7 @@ class ReApplicationFormSaveCommand extends Command {
         if(!is_null($doNotCall)){
             $cellPhone = null;
         }else{
-            $cellPhone = $areaCode . $exchange . $number;
+            $cellPhone = $number;
         }
 
         $mealPlan = $context->get('meal_plan');
@@ -98,7 +96,7 @@ class ReApplicationFormSaveCommand extends Command {
         if($earlyRelease == 'no'){
             $earlyRelease = NULL;
         }
-        
+
         // International
         $international = $student->isInternational();
 
