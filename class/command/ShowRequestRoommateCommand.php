@@ -63,6 +63,7 @@ class ShowRequestRoommateCommand extends Command {
         $cmd->initForm($form);
 
         $form->addText('username');
+        $form->addCssClass('username', 'form-control');
         $form->addSubmit('submit', 'Request Roommate');
 
         $form->addButton('cancel', 'Cancel');
