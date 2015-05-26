@@ -112,13 +112,13 @@ abstract class SOAP
 
     /**
      * Returns the Banner ID for the given username
-     * 
+     *
      * @param string $username
      * @return string banner id corresponding ot given user name
      * @throws InvalidArgumentException, SOAPException
      */
     public abstract function getBannerId($username);
-   
+
     /**
      * Returns true if the given username corresponds to a valid student for the given semester. Returns false otherwise.
      *
@@ -151,7 +151,7 @@ abstract class SOAP
     /**
      * Report that a housing application has been received.
      * Makes First Connections stop bugging the students.
-     * 
+     *
      * @deprecated
      * @see createHousingApp()
      * @param String $username
@@ -265,11 +265,11 @@ abstract class SOAP
      * @throws InvalidArgumentException, SOAPException
      */
     public abstract function getHousMealRegister($bannerId, $term, $opt);
-    
+
     /**
      * Queries Banner for the BannerID of the student assigned to a given bed.
      * Returns null if there is no student assigned to the bed.
-     * 
+     *
      * @param String $building - The Banner building code (eg. 'AHR', 'EHR', etc)
      * @param String $room - The Banner bed id number (eg. '01051')
      * @param Integer $term - The term to query for
@@ -296,5 +296,3 @@ abstract class SOAP
         PHPWS_Core::log($msg, 'soap.log', 'SOAP');
     }
 }
-
-?>

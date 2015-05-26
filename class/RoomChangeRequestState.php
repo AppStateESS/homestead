@@ -171,5 +171,3 @@ class RoomChangeStateCancelled extends RoomChangeRequestState {
         return array();
     }
 }
-
-?>

@@ -45,5 +45,3 @@ class RlcRosterPager extends DBPager {
         $this->setReportRow('viewByRLCExportFields');
     }
 }
-
-?>

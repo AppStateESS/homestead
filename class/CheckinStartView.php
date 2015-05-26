@@ -55,5 +55,3 @@ class CheckinStartView extends hms\View {
         return PHPWS_Template::process($tpl, 'hms', 'admin/checkinStart.tpl');
     }
 }
-
-?>

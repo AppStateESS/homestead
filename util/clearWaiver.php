@@ -27,4 +27,3 @@ try{
 }
 
 var_dump($result);
-?>

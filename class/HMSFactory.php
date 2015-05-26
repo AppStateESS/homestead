@@ -39,5 +39,3 @@ class HMSFactory
         return HMSFactory::$hms;
     }
 }
-
-?>

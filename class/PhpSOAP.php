@@ -382,5 +382,3 @@ class PhpSOAP extends SOAP
         return true;
     }
 }
-
-?>

@@ -107,5 +107,3 @@ class RoommateProfileSearchForm extends hms\View {
         return PHPWS_Template::process($tags,'hms','student/profile_search.tpl');
     }
 }
-
-?>

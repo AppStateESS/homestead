@@ -113,5 +113,3 @@ class UserStatus
     	return Current_User::getAuthorization()->logout_link;
     }
 }
-
-?>

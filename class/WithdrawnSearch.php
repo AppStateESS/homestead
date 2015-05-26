@@ -244,4 +244,3 @@ class WithdrawnSearch {
         return $tpl->get();
     }
 }
-?>

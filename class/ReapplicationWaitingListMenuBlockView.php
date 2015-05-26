@@ -42,14 +42,14 @@ class ReapplicationWaitingListMenuBlockView extends hms\View {
         } else if (isset($this->application) && isset($this->application->waiting_list_date)){
             $tpl['ICON'] = FEATURE_COMPLETED_ICON;
             $tpl['SIGNED_UP'] = "";
-            
+
         } else if (isset($this->application)) {
             $tpl['ICON'] = FEATURE_OPEN_ICON;
             $cmd = CommandFactory::getCommand('ShowWaitingListSignup');
             $cmd->setTerm($this->term);
             $tpl['APPLY_LINK'] = $cmd->getLink("apply to the On-campus Housing Waiting List");
         } else {
-            
+
         }
 
         Layout::addPageTitle("Re-Application Waiting List");
@@ -57,5 +57,3 @@ class ReapplicationWaitingListMenuBlockView extends hms\View {
         return PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/reApplicationWaitingListMenuBlock.tpl');
     }
 }
-
-?>

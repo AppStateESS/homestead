@@ -55,5 +55,3 @@ class SelectRoomView extends hms\View{
         return PHPWS_Template::process($tpl, 'hms', 'admin/select_room.tpl');
     }
 }
-
-?>

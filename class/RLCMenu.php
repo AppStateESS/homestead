@@ -55,4 +55,3 @@ class RLCMenu extends CommandMenu {
         return PHPWS_Template::process($tpl, 'hms', 'admin/menus/RLCMenu.tpl');
     }
 }
-?>

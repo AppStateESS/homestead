@@ -62,5 +62,3 @@ class AjaxHMS extends HMS
         exit;
     }
 }
-
-?>

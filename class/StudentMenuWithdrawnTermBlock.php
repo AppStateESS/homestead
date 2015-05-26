@@ -30,5 +30,3 @@ class StudentMenuWithdrawnTermBlock {
         return PHPWS_Template::process($tpl, 'hms', 'student/studentMenuTermBlock.tpl');
     }
 }
-
-?>

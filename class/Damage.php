@@ -67,6 +67,3 @@ class Damage {
 
     //TODO More here..
 }
-
-
-?>

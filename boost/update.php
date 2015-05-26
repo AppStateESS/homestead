@@ -1486,4 +1486,3 @@ function hms_update(&$content, $currentVersion)
 
     return TRUE;
 }
-?>

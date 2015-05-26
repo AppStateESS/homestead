@@ -11,4 +11,3 @@ class ContactFormThankYouView extends hms\View{
         return PHPWS_Template::process($tpl, 'hms', 'student/contact_form_thankyou.tpl');
     }
 }
-?>

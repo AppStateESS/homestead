@@ -574,5 +574,3 @@ class HMS_Lottery {
         return $count;
     }
 }
-
-?>

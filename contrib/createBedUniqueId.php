@@ -15,14 +15,12 @@ check_args($argc, $argv, $args, $switches);
 
 $db = connectToDb();
 
-$query = "SELECT * FROM hms_bed WHERE term = {$args['term']}"; 
+$query = "SELECT * FROM hms_bed WHERE term = {$args['term']}";
 $result = pg_query($query);
 
-while ($room = pg_fetch_array($result)){ 
+while ($room = pg_fetch_array($result)){
     $sql = "UPDATE hms_bed SET persistent_id = '" . uniqid() . "' where id = {$room['id']} and term = {$args['term']}";
     pg_query($sql);
 }
 
 pg_close($db);
-
-?>

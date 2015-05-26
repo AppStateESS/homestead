@@ -521,4 +521,3 @@ class LotteryApplication extends HousingApplication {
         return $applications;
     }
 }
-?>

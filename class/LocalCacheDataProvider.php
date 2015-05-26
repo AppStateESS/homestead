@@ -41,7 +41,7 @@ class LocalCacheDataProvider extends StudentDataProvider {
 
             self::getAddresses($result);
             self::getPhoneNumbers($result);
-        
+
             $result->setDataSource(get_class($this));
         }
 
@@ -232,5 +232,3 @@ class LocalCacheDataProvider extends StudentDataProvider {
         }
     }
 }
-
-?>

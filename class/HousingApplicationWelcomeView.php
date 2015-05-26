@@ -81,5 +81,3 @@ class HousingApplicationWelcomeView extends hms\View {
         }
     }
 }
-
-?>

@@ -7,4 +7,3 @@
     $about        = TRUE;
     $priority     = 99;
     $dependency   = TRUE;
-?>

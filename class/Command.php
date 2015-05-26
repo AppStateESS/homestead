@@ -146,5 +146,3 @@ abstract class Command
         HMS::quit();
     }
 }
-
-?>

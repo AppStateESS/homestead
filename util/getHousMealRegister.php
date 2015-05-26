@@ -20,5 +20,3 @@ $soap = new PhpSOAP();
 $result = $soap->getHousMealRegister($args['username'], $args['term'], 'All');
 print_r($result);
 echo "\n";
-
-?>

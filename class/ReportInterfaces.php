@@ -1,7 +1,7 @@
 <?php
 /**
  * Report Interfaces
- * 
+ *
  * This file aggregates a bunch of interfaces that are used
  * by the reporting system. They're too small to each have
  * their own file, but there's enough of them that they can't
@@ -87,7 +87,7 @@ interface iSyncReport {
      * @return Command The command to run the implementing report synchronously.
      */
     public function getSyncExecCmd();
-    
+
     /**
      * @see ReportSetupView
      * @return ReportSetupView The ReportSetupView to use for setting up this report.
@@ -103,7 +103,7 @@ interface iSyncReport {
  * @package HMS
  */
 interface iAsyncReport {
-    
+
     /**
      * @see ReportSetupView
      * @return ReportSetupView The ReportSetupView to use for setting up this report.
@@ -123,12 +123,10 @@ interface iSchedReport {
     /**
      * Returns the ReportSetupView for settings up this report at a scheduled time.
      * The default implemntation just calls the getAsyncSetupView in iAsyncReport.
-     * 
+     *
      * @see ReportSetupView
      * @see iAsyncReort
      * @return ReportSetupView The ReportSEtupView to use for setting up this report.
      */
     public function getSchedSetupView();
 }
-
-?>

@@ -79,14 +79,14 @@ abstract class ReportController {
     public function newReport($scheduledExecTime)
     {
         $this->report = $this->getReportInstance();
-    
+
         $this->report->setCreatedBy(UserStatus::getUsername());
         $this->report->setCreatedOn(time());
         $this->report->setScheduledExecTime($scheduledExecTime);
         $this->report->setBeganTimestamp(null);
         $this->report->setCompletedTimestamp(null);
     }
-    
+
     /**
      * Returns the friendly name of the report we're wrapping. It's a shortcut
      * method for $this->report->getFriendlyName().
@@ -117,24 +117,24 @@ abstract class ReportController {
 
     /**
      * Returns a string of HTML that describes the report (what it does, etc).
-     * 
+     *
      * Default implementation looks for a file in hms/templates/admin/reports/<reportName>Desc.tpl
-     * 
+     *
      * @return String String of HTML for report's description, or null if the default file wasn't found.
      */
     public function getDescription()
     {
         $fileName = PHPWS_SOURCE_DIR . 'mod/hms/templates/admin/reports/' . $this->getReportClassName() . 'Desc.tpl';
-        
+
         if(file_exists($fileName)){
             return file_get_contents($fileName);
         }else{
             return null;
         }
     }
-    
+
     /**
-     * 
+     *
      */
     public function getSyncSetupView()
     {
@@ -144,14 +144,14 @@ abstract class ReportController {
     /**
      * Returns the ReportSetupView to show the UI for running
      * this report in the background.
-     * 
+     *
      * The default implementation (for iSyncReport) expects a class named
      * '<reportName>SetupView.php, which extends ReportSetupView to be in
      * the report's class directory. This functionality can be overridden
      * by each report to return a different object, but it must return an
      * object of type ReportSetupView.
-     *  
-     * 
+     *
+     *
      * @see iSyncReport
      * @see ReportSetupView
      * @param bool $datePicker Whether or not the interface should show a date picker
@@ -160,23 +160,23 @@ abstract class ReportController {
     public function getAsyncSetupView()
     {
         PHPWS_Core::initModClass('hms', 'ReportSetupView.php');
-        
+
         $view = new ReportSetupView($this->report);
         $view->setLinkText('Run in background');
         $view->setDialogId('reportBgDialog');
         $view->setRunNow(true);
         $view->setFormId('report-setup-form-bg');
-        
+
         return $view;
     }
 
     /**
      * Returns the ReportSetupView to show the UI for scheduling
      * the report.
-     * 
+     *
      * Default implementation just calls the getAsyncSetupView
      * method with the datePicker = true parameter.
-     * 
+     *
      * @see getAsyncSetupView
      * @return ReportSetupView - ReportSetupView for scheudling this report.
      */
@@ -213,11 +213,11 @@ abstract class ReportController {
      * by each controller. This method must take the values
      * in the passed-in array and assign them to the proper
      * member variables withthin the report.
-     * 
+     *
      * @param array $params
      */
     public abstract function setParams(Array $params);
-    
+
     /**
      * @return Array An Array of key=>value parameters for this report
      */
@@ -253,7 +253,7 @@ abstract class ReportController {
     {
         // Set the start time
         $this->report->setBeganTimestamp(time());
-        
+
         // Save that timestamp
         $this->report->save();
 
@@ -290,10 +290,10 @@ abstract class ReportController {
             $this->csvView = $this->getCsvView();
             $this->saveCsvOutput($this->csvView);
         }
-        
+
         // Set the completion time
         $this->report->setCompletedTimestamp(time());
-        
+
         // Save the report to save the completed timestamp
         $this->report->save();
     }
@@ -483,10 +483,10 @@ abstract class ReportController {
     {
         return $this->report;
     }
-    
+
     /**
      * Saves the parameters from this report to the database.
-     * 
+     *
      * @throws DatabaseException
      */
     public function saveParams()
@@ -496,34 +496,34 @@ abstract class ReportController {
         if(empty($params)){
             return;
         }
-        
+
         $db = new PHPWS_DB('hms_report_param');
-        
+
         foreach($params as $key=>$value){
             $db->reset();
             $db->addValue('report_id', $this->report->getId());
             $db->addValue('param_name', $key);
             $db->addValue('param_value', $value);
             $result = $db->insert();
-            
+
             if(PHPWS_Error::logIfError($result)){
                 throw new DatabaseException($result->toString());
             }
         }
     }
-    
+
     /**
      * Loads the parameters for this report from the database.
-     * 
+     *
      * @throws DatabaseException
      */
     public function loadParams()
     {
         $db = new PHPWS_DB('hms_report_param');
         $db->addWhere('report_id', $this->report->getId());
-        
+
         $results = $db->select();
-        
+
         if(PHPWS_Error::logIfError($results)){
             throw new DatabaseException($results->toString());
         }
@@ -532,15 +532,13 @@ abstract class ReportController {
             echo 'empty params!';
             return;
         }
-        
+
         $params = array();
-        
+
         foreach($results as $result){
             $params[$result['param_name']] = $result['param_value'];
         }
-        
+
         $this->setParams($params);
     }
 }
-
-?>

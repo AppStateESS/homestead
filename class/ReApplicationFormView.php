@@ -195,5 +195,3 @@ class ReApplicationFormView extends hms\View {
         return PHPWS_Template::process($form->getTemplate(), 'hms', 'student/lottery_signup.tpl');
     }
 }
-
-?>

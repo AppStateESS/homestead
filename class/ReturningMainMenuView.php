@@ -64,4 +64,3 @@ class ReturningMainMenuView extends hms\View {
         return PHPWS_Template::process($tpl, 'hms', 'student/returningMenu.tpl');
     }
 }
-?>

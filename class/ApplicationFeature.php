@@ -495,5 +495,3 @@ abstract class ApplicationFeature
         return $features;
     }
 }
-
-?>

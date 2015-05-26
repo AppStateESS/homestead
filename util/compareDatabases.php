@@ -63,5 +63,3 @@ while($row = pg_fetch_assoc($results)) {
 
     echo "\n";
 }
-
-?>

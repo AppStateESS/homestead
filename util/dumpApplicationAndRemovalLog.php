@@ -53,5 +53,3 @@ foreach($users as $user){
     fputcsv($outputFile, $row);
     //echo print_r($row);
 }
-
-?>

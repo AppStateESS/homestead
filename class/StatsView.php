@@ -76,8 +76,8 @@ class StatsView extends hms\View {
 
         $tpl['LOTTERY_ASSIGNED']        = $num_lottery_assigned;
         $tpl['SOPH_ASSIGNED']           = HMS_Lottery::count_assignments_by_class($lottery_term, CLASS_SOPHOMORE);
-        $tpl['JR_ASSIGNED']             = HMS_Lottery::count_assignments_by_class($lottery_term, CLASS_JUNIOR); 
-        $tpl['SR_ASSIGNED']             = HMS_Lottery::count_assignments_by_class($lottery_term, CLASS_SENIOR); 
+        $tpl['JR_ASSIGNED']             = HMS_Lottery::count_assignments_by_class($lottery_term, CLASS_JUNIOR);
+        $tpl['SR_ASSIGNED']             = HMS_Lottery::count_assignments_by_class($lottery_term, CLASS_SENIOR);
 
         $tpl['SOPH_ENTRIES_REMAIN']     = HMS_Lottery::count_remaining_entries_by_class($lottery_term, CLASS_SOPHOMORE);
         $tpl['JR_ENTRIES_REMAIN']       = HMS_Lottery::count_remaining_entries_by_class($lottery_term, CLASS_JUNIOR);
@@ -98,10 +98,8 @@ class StatsView extends hms\View {
         $final = PHPWS_Template::process($tpl, 'hms', 'admin/statistics.tpl');
 
         Layout::addPageTitle("Statistics");
-        
+
         return $final;
     }
 
 }
-
-?>

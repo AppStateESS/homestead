@@ -453,4 +453,3 @@ define('E_UNASSIGN_HMS_DB_ERROR',       33);
  * Lottery Errors
  */
 define('E_LOTTERY_ROOMMATE_INVITE_NOT_FOUND',   33);
-?>

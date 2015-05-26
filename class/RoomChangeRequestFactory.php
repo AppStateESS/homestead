@@ -314,5 +314,3 @@ class RoomChangeRequestFactory {
 
     }
 }
-
-?>

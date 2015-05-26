@@ -84,4 +84,3 @@ class RoomDamageResponsibility {
 class RoomDamageResponsibilityRestored extends RoomDamageResponsibility {
     public function __construct(){}
 }
-?>

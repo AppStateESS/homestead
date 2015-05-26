@@ -25,15 +25,14 @@ class TermsAgreementView extends hms\View {
 
         $tpl['TERM'] = Term::toString($this->term);
         $tpl['DOCUSIGN_BEGIN_CMD'] = $this->submitCommand->getURI();
-        
+
         if($this->student->isUnder18()){
         	$tpl['UNDER_18'] = '';
         }
-        
+
         javascript('jquery');
         Layout::addPageTitle("License Agreement");
 
         return PHPWS_Template::process($tpl, 'hms', 'student/contract.tpl');
     }
 }
-?>

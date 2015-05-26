@@ -21,4 +21,3 @@ $soap = new PhpSOAP();
 $result = $soap->setHousingWaiver($args['username'], $args['term']);
 
 var_dump($result);
-?>

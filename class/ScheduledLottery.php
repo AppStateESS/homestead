@@ -59,5 +59,3 @@ class ScheduledLottery extends ScheduledPulse
         return TRUE;
     }
 }
-
-?>

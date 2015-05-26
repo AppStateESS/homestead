@@ -92,5 +92,3 @@ class LotteryConfirmView extends hms\View {
         return PHPWS_Template::process($form->getTemplate(), 'hms', 'student/lottery_confirm.tpl');
     }
 }
-
-?>

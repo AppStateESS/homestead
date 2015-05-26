@@ -110,5 +110,3 @@ class BannerQueue {
         return $errors;
     }
 }
-
-?>

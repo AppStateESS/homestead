@@ -103,7 +103,7 @@ class WaitingListApplication extends HousingApplication {
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 
         $tags = array();
-        
+
         try{
             $student = StudentFactory::getStudentByUsername($this->username, $this->term);
         }catch(StudentNotFoundException $e){
@@ -141,7 +141,7 @@ class WaitingListApplication extends HousingApplication {
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 
         $tags = array();
-        
+
         try{
             $student = StudentFactory::getStudentByUsername($this->username, $this->term);
         }catch(StudentNotFoundException $e){
@@ -178,7 +178,7 @@ class WaitingListApplication extends HousingApplication {
         $term = PHPWS_Settings::get('hms', 'lottery_term');
 
         $pager = new DBPager('hms_new_application', 'WaitingListApplication');
-        
+
         $pager->db->addJoin('LEFT', 'hms_new_application', 'hms_waitlist_application', 'id', 'id');
         $pager->db->addJoin('LEFT OUTER', 'hms_new_application', 'hms_assignment', 'username', 'asu_username AND hms_new_application.term = hms_assignment.term');
         $pager->db->addWhere('hms_assignment.asu_username', 'NULL');
@@ -191,10 +191,10 @@ class WaitingListApplication extends HousingApplication {
         $pager->db->addWhere('hms_new_application.cancelled', 0);
 
         $pager->db->addOrder('hms_new_application.created_on ASC');
-        
+
         //$query = "select username from hms_new_application UNION ALL select asu_username from hms_assignment";
         //$pager->db->setSQLQuery($query);
-        
+
         $pager->setModule('hms');
         $pager->setTemplate('admin/lottery_wait_list_pager.tpl');
         $pager->setEmptyMessage('No students found.');
@@ -209,5 +209,3 @@ class WaitingListApplication extends HousingApplication {
     }
 
 }
-
-?>

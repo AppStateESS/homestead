@@ -19,5 +19,3 @@ class AdminHMS extends HMS
         $this->saveState();
     }
 }
-
-?>

@@ -13,7 +13,7 @@ class VerifyAssignmentView extends hms\View{
         $this->term = $student->getApplicationTerm();
     }
 
-    
+
     public function show()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
@@ -40,7 +40,7 @@ class VerifyAssignmentView extends hms\View{
             }else{
                 $movein_time_id = $assignment->get_f_movein_time_id();
             }
-            
+
             if($movein_time_id == NULL){
                 $tpl['MOVE_IN_TIME'] = 'To be determined<br />';
             }else{
@@ -52,7 +52,7 @@ class VerifyAssignmentView extends hms\View{
         //get the assignees to the room that the bed that the assignment is in
         $assignees = !is_null($assignment) ? $assignment->get_parent()->get_parent()->get_assignees() : NULL;
         $roommates = array();
-        
+
         if(!is_null($assignees)){
             foreach($assignees as $roommate){
                 if($roommate->getUsername() != $this->student->getUsername()){
@@ -77,8 +77,7 @@ class VerifyAssignmentView extends hms\View{
         $tpl['MENU_LINK'] = PHPWS_Text::secureLink('Back to Main Menu', 'hms', array('type'=>'student', 'op'=>'show_main_menu'));
 
         Layout::addPageTitle("Verify Assignment");
-        
+
         return PHPWS_Template::process($tpl, 'hms', 'student/verify_assignment.tpl');
     }
 }
-?>

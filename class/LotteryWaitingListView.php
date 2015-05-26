@@ -9,4 +9,3 @@ class LotteryWaitingListView extends hms\View {
         return LotteryApplication::waitingListPager();
     }
 }
-?>

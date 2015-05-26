@@ -50,7 +50,7 @@ class Autoassigner {
     {
         echo "Apps:  " . count($this->applications) . "\n";
         echo "Pairs: " . count($this->pairs) . "\n";
-        
+
         // Run each pairing strategy
         foreach($this->pairingStrategies as $strategy){
             $strategy->doPairing($this->applications, $this->pairs);
@@ -112,5 +112,3 @@ class Autoassigner {
         return ($a->getEarliestAppTimestamp() < $b->getEarliestAppTimestamp()) ? -1 : 1;
     }
 }
-
-?>

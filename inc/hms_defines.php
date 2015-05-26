@@ -33,7 +33,7 @@ define('SOAP_OVERRIDE_FILE', 'TestSOAP.php');
  * we'll try to use. It is relative to the
  * phpWebsite installation directory.
  */
-define('WSDL_FILE_PATH', 'inc/shs0001.wsdl.prod'); 
+define('WSDL_FILE_PATH', 'inc/shs0001.wsdl.prod');
 
 /**
  * SOAP Data Override Class Path
@@ -72,4 +72,3 @@ define('EMAIL_TEST_FLAG', false);
 
 /* Memory limit */
 ini_set('memory_limit', '512M');
-?>

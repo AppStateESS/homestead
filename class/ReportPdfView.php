@@ -42,5 +42,3 @@ abstract class ReportPdfView extends ReportView{
      */
     abstract public function getPdfContent();
 }
-
-?>

@@ -2,14 +2,14 @@
 
 /**
  * View for the Package Desk UI
- * 
+ *
  * @author jbooker
  * @package hms
  */
 class PackageDeskView {
-    
+
     private $packageDesks;
-    
+
     /**
      * @param array $packageDesks Array of PackageDesk objects
      */
@@ -17,7 +17,7 @@ class PackageDeskView {
     {
         $this->packageDesks = $packageDesks;
     }
-    
+
     /**
      * Main method for creating the view
      */
@@ -27,21 +27,20 @@ class PackageDeskView {
         javascript('jquery_ui');
         javascriptMod('hms', 'jqueryCookie');
         //javascriptMod('packageDesk');
-        
+
         Layout::addPageTitle('Package Desk');
-        
+
         $tpl = array();
-        
+
         $form = new PHPWS_Form('pd');
-        
+
         // Package desk drop down
         $form->addDropBox('desk', array('Select a Package Desk...') + $this->packageDesks);
         $form->setLabel('desk', 'Package Desk');
         $form->addHidden('desk_hidden');
-        
+
         $tpl = $form->getTemplate();
-        
+
         return PHPWS_Template::process($tpl, 'hms', 'admin/packageDesk.tpl');
     }
 }
-?>

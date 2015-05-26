@@ -14,7 +14,7 @@ class HousingApplicationFactory {
     {
         return ContextApplicationFactory::getApplicationFromContext($context, $term, $student, $applicationType);
     }
-    
+
     public static function getApplicationFromSession(Array $sessionData, $term, Student $student, $applicationType)
     {
         $context = new CommandContext();
@@ -132,5 +132,3 @@ class HousingApplicationFactory {
         return $app;
     }
 }
-
-?>

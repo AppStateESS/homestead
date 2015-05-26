@@ -114,5 +114,3 @@ abstract class HMS_Item {
     }
 
 }
-
-?>

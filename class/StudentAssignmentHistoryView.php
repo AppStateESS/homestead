@@ -54,7 +54,7 @@ class StudentAssignmentHistoryView extends hms\View {
 
             $row['room'] = $bed->where_am_i();
             $row['term'] = Term::toString($ah->term);
-             
+
             // Combine for ease of view
             if(isset($ah->assigned_reason)){
                 $row['assignments'] = '<span class="italic">'.$assignedReason.'</span>'.
@@ -71,7 +71,7 @@ class StudentAssignmentHistoryView extends hms\View {
             }else{
                 $row['unassignments'] = '<span class="disabledText">None</span>';
             }
-             
+
             if($count++ < $excess_limit){
                 $historyRows[] = $row;
             } else {
@@ -89,4 +89,3 @@ class StudentAssignmentHistoryView extends hms\View {
         return PHPWS_Template::process($tpl, 'hms', 'admin/StudentAssignmentHistoryView.tpl');
     }
 }
-?>
