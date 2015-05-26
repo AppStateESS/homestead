@@ -11,7 +11,7 @@ The next page is only for <strong>your</strong> signature. Your parent/guardian 
 </p>
 <!-- END under18 -->
 
-<button id="signButton">Sign Contract via Docusign</button>
+<button class="btn btn-primary" id="signButton"><i class="fa fa-edit"></i> Sign Contract via Docusign</button>
 
 <script>
 $().ready(function() {
