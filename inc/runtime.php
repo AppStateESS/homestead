@@ -15,5 +15,3 @@ if (PHPWS_Core::atHome()) {
     header("Location: $path");
     exit();
 }
-
-?>

@@ -758,5 +758,3 @@ class HMS_Bed extends HMS_Item {
 class BedRestored extends HMS_Bed {
 	public function __construct(){}
 }
-
-?>

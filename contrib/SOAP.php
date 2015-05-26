@@ -7,7 +7,7 @@ require_once('StudentNotFoundException.php');
 class SOAP
 {
     private $client; // SOAP client object
-    
+
     private $currentUser = 'jb67803';
     private $userType = 'A';
 
@@ -109,26 +109,26 @@ class SOAP
         if(empty($bannerId) || is_null($bannerId) || !isset($bannerId)){
             throw new InvalidArgumentException('Missing Banner Id.');
         }*/
-        
+
         // Sanity checking on the term
         if(empty($term) || is_null($term) || !isset($term)){
             throw new InvalidArgumentException('Missing term.');
         }
-       
+
         $bannerId = $this->getBannerId($username);
 
         $params = array('User'      => $this->currentUser,
                         'BannerID'  => $bannerId,
                         'TermCode'  => $term,
                         'UserType'  => $this->userType);
-        
+
         try{
             $response = $this->client->GetStudentProfile($params);
         }catch(SoapFault $e){
             throw new SOAPException($e->getMessage(), $e->getCode(), 'isValidStudent', $params);
             return false;
         }
-        
+
         if(isset($response->profile->banner_id)){
             return true;
         }else{
@@ -225,7 +225,7 @@ class SOAP
 
         return true;
     }
-   
+
     public function createRoomAssignment($bannerId, $term, $building, $bannerBedId, $plan = 'HOME', $meal)
     {
         $params = array(
@@ -371,5 +371,3 @@ class SOAP
         return true;
     }
 }
-
-?>

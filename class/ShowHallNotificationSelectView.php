@@ -38,8 +38,7 @@ class ShowHallNotificationSelectView extends hms\View{
         $tpl = $form->getTemplate();
 
         Layout::addPageTitle("Hall Notification Select");
-        
+
         return PHPWS_Template::process($tpl, 'hms', 'admin/messages.tpl').Layout::getJavascript("modules/hms/hall_expander", array("DIV"=>"hall_list", "FORM"=>"select_halls"));
     }
 }
-?>

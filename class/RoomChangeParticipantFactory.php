@@ -60,5 +60,3 @@ class RoomChangeParticipantFactory {
         return $stmt->fetch();
     }
 }
-
-?>

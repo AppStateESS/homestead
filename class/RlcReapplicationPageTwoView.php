@@ -1,23 +1,23 @@
 <?php
 
 class RlcReapplicationPageTwoView extends hms\View {
-    
+
     private $rlcs;
     private $term;
     private $reApp;
-    
+
     public function __construct(Array $rlcs, $term, HMS_RLC_Application $reApp)
     {
         $this->rlcs = $rlcs;
         $this->term = $term;
         $this->reApp = $reApp;
     }
-    
+
     public function show(){
-        
+
         $tpl = array();
         $tpl['TERM'] = Term::toString($this->term);
-        
+
         $form = new PHPWS_Form('rlc_reapp');
         $submitCmd = CommandFactory::getCommand('SubmitRLCReapplicationPage2');
         $submitCmd->setTerm($this->term);
@@ -33,10 +33,10 @@ class RlcReapplicationPageTwoView extends hms\View {
             }else{
                 $form->addTextArea("rlc_question_$i");
             }
-            
+
             $form->setLabel("rlc_question_$i", $this->rlcs[$i]->getReturningQuestion());
         }
-        
+
         $form->addSubmit('submit', 'Submit Application');
 
         $form->mergeTemplate($tpl);
@@ -45,5 +45,3 @@ class RlcReapplicationPageTwoView extends hms\View {
         return PHPWS_Template::process($tpl,'hms', 'student/RlcReapplicationPage2.tpl');
     }
 }
-
-?>

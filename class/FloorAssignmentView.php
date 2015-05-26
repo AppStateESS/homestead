@@ -41,4 +41,3 @@ class FloorAssignmentView extends hms\View{
         return $tpl->get();
     }
 }
-?>

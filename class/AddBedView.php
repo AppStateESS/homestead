@@ -92,5 +92,4 @@ class AddBedView extends hms\View
         # Reusing the edit bed template here
         return PHPWS_Template::process($tpl, 'hms', 'admin/edit_bed.tpl');
     }
-
 }

@@ -28,7 +28,7 @@
     $permissions['select_term']             = _('Select past/future terms');
     $permissions['activate_term']           = _('Set active term');
     $permissions['banner_queue']            = _('Enable/disable banner queue');
-    
+
     // Application features on student menues
     $permissions['edit_features']           = _('Can edit the application features per term');
 
@@ -147,4 +147,3 @@
      **************************/
     $permissions['checkin'] = _('Check-in');
     $permissions['admin_approve_room_change'] = _('Can approve room change requests');
-?>

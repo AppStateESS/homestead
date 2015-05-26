@@ -195,5 +195,3 @@ class RoomChangeParticipantView extends hms\View {
         return PHPWS_Template::process($tpl, 'hms', 'admin/roomChangeParticipantView.tpl');
     }
 }
-
-?>

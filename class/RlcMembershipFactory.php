@@ -21,5 +21,3 @@ class RlcMembershipFactory {
         return $stmt->fetch();
     }
 }
-
-?>

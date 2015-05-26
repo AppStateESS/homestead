@@ -21,5 +21,3 @@ class RlcApplicationFactory {
         return $stmt->fetch();
     }
 }
-
-?>

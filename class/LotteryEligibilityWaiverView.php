@@ -24,5 +24,3 @@ class LotteryEligibilityWaiverView extends hms\View {
         return PHPWS_Template::process($form->getTemplate(), 'hms', 'admin/eligibility_waiver.tpl');
     }
 }
-
-?>

@@ -19,5 +19,3 @@ $soap = new PhpSOAP();
 $result = $soap->getUsername($args['bannerid']);
 print_r($result);
 echo "\n";
-
-?>

@@ -46,5 +46,3 @@ class SearchProfilesMenuBlockView extends hms\View {
     }
 
 }
-
-?>

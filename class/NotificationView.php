@@ -9,7 +9,7 @@ class NotificationView
     const ERROR     = 9;
     const WARNING   = 8;
     const SUCCESS   = 7;
-    
+
     private $notifications = array();
 
     public function popNotifications()
@@ -25,7 +25,7 @@ class NotificationView
 
         $tpl = array();
         $tpl['NOTIFICATIONS'] = array();
-        
+
         foreach($this->notifications as $notification) {
 
             if(!$notification instanceof \Notification) {
@@ -52,4 +52,3 @@ class NotificationView
         }
     }
 }
-?>

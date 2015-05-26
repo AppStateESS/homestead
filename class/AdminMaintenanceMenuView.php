@@ -28,7 +28,7 @@ class AdminMaintenanceMenuView extends hms\View {
 
         $messaging = new MessagingMenu();
         $tpl['MESSAGING'] = $messaging->show();
-        
+
         $serviceDesk = new ServiceDeskMenu();
         $tpl['SERVICE_DESK'] = $serviceDesk->show();
 
@@ -37,5 +37,3 @@ class AdminMaintenanceMenuView extends hms\View {
         return PHPWS_Template::process($tpl, 'hms', 'AdminMaintenanceMenu.tpl');
     }
 }
-
-?>

@@ -27,5 +27,3 @@ class HousingApplicationThanksView extends hms\View {
         return PHPWS_Template::process($tpl, 'hms', 'student/student_application_thankyou.tpl');
     }
 }
-
-?>

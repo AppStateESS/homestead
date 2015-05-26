@@ -53,5 +53,3 @@ class SpecialNeedsFormView extends hms\View {
         return PHPWS_Template::process($form->getTemplate(), 'hms', 'student/special_needs.tpl');
     }
 }
-
-?>

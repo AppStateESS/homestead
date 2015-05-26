@@ -2,7 +2,7 @@
 
 /**
  * View class for displaying an existing RLC application.
- * 
+ *
  * @author jbooker
  * @package HMS
  */
@@ -20,9 +20,9 @@ class RlcApplicationReView extends hms\View {
         PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
-        
+
         Layout::addPageTitle("RLC Application Review");
-        
+
         if(UserStatus::isAdmin()){
             $menuCmd = CommandFactory::getCommand('ShowAssignRlcApplicants');
             $tags['MENU_LINK'] = $menuCmd->getLink('&laquo; Return to RLC Applications');
@@ -41,9 +41,9 @@ class RlcApplicationReView extends hms\View {
         }else if($appType == RLC_APP_RETURNING){
             $tags['APPLICATION_TYPE'] = 'Re-application';
         }
-        
+
         $rlcs = HMS_Learning_Community::getRlcList();
-        
+
         $tags['FIRST_CHOICE'] = $rlcs[$this->application->rlc_first_choice_id];
 
         if(isset($this->application->rlc_second_choice_id)){
@@ -70,7 +70,7 @@ class RlcApplicationReView extends hms\View {
         if($this->application->isDenied() && UserStatus::isAdmin()){
             NQ::simple('hms', hms\NotificationView::WARNING, 'This application has been denied.');
         }
-        
+
         // Show options depending of status of application.
         if(UserStatus::isAdmin() && Current_User::allow('hms', 'approve_rlc_applications')){
             if(!$this->application->denied && !HMS_RLC_Assignment::checkForAssignment($this->student->getUsername(), Term::getSelectedTerm())){
@@ -118,4 +118,3 @@ class RlcApplicationReView extends hms\View {
         return $approveForm;
     }
 }
-?>

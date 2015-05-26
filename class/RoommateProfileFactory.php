@@ -12,7 +12,7 @@
      * @throws DatabaseException
      * @return integer boolean integer id of profile object, or false if no profile exists.
      */
-    
+
     //public static function checkForProfile($username, $term)
     public static function checkForProfile($bannerId, $term)
     {
@@ -101,7 +101,7 @@
     {
         $music_matches = array();
         $m = new RoommateProfile;
-        
+
         for ($x = 0; $x < count($m->music_array); $x++)
         {
             if($profile->get_checked($m->music_array[$x]))
@@ -154,4 +154,3 @@
         return $lang_match;
     }
 }
-?>

@@ -368,6 +368,5 @@ class HMS_Util{
         }
 
         return "${number}<SUP>$suffix</SUP>";
+    }
 }
-}
-?>

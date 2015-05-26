@@ -10,5 +10,3 @@ class FrontPageView extends hms\View{
         return PHPWS_Template::process($tpl, 'hms', 'misc/login.tpl');
     }
 }
-
-?>

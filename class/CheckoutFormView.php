@@ -57,5 +57,3 @@ class CheckoutFormView extends hms\View {
     }
 
 }
-
-?>

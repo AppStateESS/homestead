@@ -607,7 +607,7 @@ class HMS_Email{
         // Attach info card
         $attachment = Swift_Attachment::newInstance($infoCardView->getPdf()->output('my-pdf-file.pdf', 'S'), 'ResidentInfoCard.pdf', 'application/pdf');
         $message->attach($attachment);
-        
+
         if(EMAIL_TEST_FLAG) {
         	self::logSwiftmailMessageLong($message);
             return;
@@ -638,7 +638,7 @@ class HMS_Email{
         // Attach info card
         //$attachment = Swift_Attachment::newInstance($infoCardView->getPdf()->output('my-pdf-file.pdf', 'S'), 'ResidentInfoCard.pdf', 'application/pdf');
         //$message->attach($attachment);
-        
+
         if(EMAIL_TEST_FLAG) {
             self::logSwiftmailMessageLong($message);
             return;
@@ -1179,10 +1179,10 @@ class HMS_Email{
             self::sendSwiftmailMessage($message);
         }
     }
-    
+
     /**
      * Send notice to student about assessed damage amount.
-     * 
+     *
      * @param Student $student
      * @param string $term
      * @param integer $billedAmount
@@ -1191,14 +1191,14 @@ class HMS_Email{
     {
     	$subject = 'University Housing Room Damages Billed';
         $template = 'email/roomDamageNotice.tpl';
-        
+
         $tags = array();
         $tags['NAME'] = $student->getName();
         $tags['AMOUNT'] = $billedAmount;
         $tags['TERM'] = $term;
         $tags['COORDINATOR_NAME'] = $coordinatorName;
         $tags['COORDINATOR_EMAIL'] = $coordinatorEmail;
-        
+
         self::sendSwiftmailMessage(
             self::makeSwiftmailMessage(
                 $student, $subject, $tags, $template
@@ -1207,4 +1207,3 @@ class HMS_Email{
     }
 
 } // End HMS_Email class
-?>

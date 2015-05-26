@@ -22,5 +22,3 @@ class SingleGenderAssignmentStrategy extends Assignmentstrategy
         return true;
     }
 }
-
-?>

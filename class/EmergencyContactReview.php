@@ -26,15 +26,15 @@ class EmergencyContactReview extends hms\View {
         $tpl['EMERGENCY_CONTACT_RELATIONSHIP']	= $this->app->getEmergencyContactRelationship();
         $tpl['EMERGENCY_CONTACT_PHONE'] 		= $this->app->getEmergencyContactPhone();
         $tpl['EMERGENCY_CONTACT_EMAIL'] 		= $this->app->getEmergencyContactEmail();
-        
+
         $tpl['EMERGENCY_MEDICAL_CONDITION'] = $this->app->getEmergencyMedicalCondition();
-        
+
         /* Missing Person */
         $tpl['MISSING_PERSON_NAME'] 		= $this->app->getMissingPersonName();
         $tpl['MISSING_PERSON_RELATIONSHIP']	= $this->app->getMissingPersonRelationship();
         $tpl['MISSING_PERSON_PHONE'] 		= $this->app->getMissingPersonPhone();
         $tpl['MISSING_PERSON_EMAIL'] 		= $this->app->getMissingPersonEmail();
-        
+
 
         $form = new PHPWS_Form('hidden_form');
         $submitCmd = CommandFactory::getCommand('EmergencyContactConfirm');
@@ -57,5 +57,3 @@ class EmergencyContactReview extends hms\View {
         return PHPWS_Template::process($tpl, 'hms', 'student/emergency_contact_form.tpl');
     }
 }
-
-?>

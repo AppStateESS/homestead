@@ -8,5 +8,3 @@ function hms_uninstall(&$content)
 {
     return TRUE;
 }
-
-?>

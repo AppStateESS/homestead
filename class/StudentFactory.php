@@ -24,5 +24,3 @@ class StudentFactory {
         return $provider->getStudentById($bannerID, $term);
     }
 }
-
-?>

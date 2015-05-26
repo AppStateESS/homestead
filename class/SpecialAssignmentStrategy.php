@@ -46,5 +46,3 @@ class SpecialAssignmentStrategy extends Assignmentstrategy
         return false;
     }
 }
-
-?>

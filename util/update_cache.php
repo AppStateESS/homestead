@@ -54,7 +54,3 @@ foreach($results as $result){
         echo $e->getMessage()."\n";
     }
 }
-
-exit;
-
-//?>

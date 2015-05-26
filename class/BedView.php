@@ -96,5 +96,3 @@ class BedView extends hms\View{
         return PHPWS_Template::process($tpl, 'hms', 'admin/edit_bed.tpl');
     }
 }
-
-?>

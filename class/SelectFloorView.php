@@ -55,5 +55,3 @@ class SelectFloorView extends hms\View
     }
 
 }
-
-?>

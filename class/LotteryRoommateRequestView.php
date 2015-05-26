@@ -114,5 +114,3 @@ class LotteryRoommateRequestView extends hms\View {
         return PHPWS_Template::process($tpl, 'hms', 'student/lottery_roommate_request.tpl');
     }
 }
-
-?>

@@ -55,5 +55,3 @@ class AssignmentMoveConfirmationView extends hms\View{
         return PHPWS_Template::process($tpl, 'hms', 'admin/assign_student_move_confirm.tpl');
     }
 }
-
-?>

@@ -178,5 +178,3 @@ class HMS_Admin
         return PHPWS_Template::process($tpl, 'hms', 'admin/process_username_change.tpl');
     }
 }
-
-?>

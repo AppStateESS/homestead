@@ -53,5 +53,3 @@ class CheckinFormView extends hms\View {
     }
 
 }
-
-?>

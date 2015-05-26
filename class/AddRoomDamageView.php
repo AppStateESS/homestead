@@ -80,5 +80,3 @@ class AddRoomDamageView extends hms\View {
         return PHPWS_Template::process($tags, 'hms', 'admin/addRoomDamage.tpl');
     }
 }
-
-?>

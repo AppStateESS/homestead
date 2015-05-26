@@ -139,4 +139,3 @@ class ReportRunner extends ScheduledPulse
         HMS_Email::send_template_message($to, '[hms] Uncaught Report Exception', 'email/UncaughtException.tpl', $tags);
     }
 }
-?>

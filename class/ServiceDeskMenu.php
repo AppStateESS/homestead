@@ -62,5 +62,3 @@ class ServiceDeskMenu extends CommandMenu {
         return PHPWS_Template::process($tpl, 'hms', 'admin/menus/AdminMenuBlock.tpl');
     }
 }
-
-?>

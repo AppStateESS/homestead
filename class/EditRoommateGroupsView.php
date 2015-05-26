@@ -20,7 +20,7 @@ class EditRoommateGroupsView extends hms\View {
 
         $tpl['PAGER']       = $this->roommatePager->show();
         $tpl['TERM']        = Term::getPrintableSelectedTerm();
-        
+
         $createCmd = CommandFactory::getCommand('CreateRoommateGroupView');
         $tpl['CREATE_REQUEST_URI'] = $createCmd->getURI();
 
@@ -29,5 +29,3 @@ class EditRoommateGroupsView extends hms\View {
         return PHPWS_Template::process($tpl, 'hms', 'admin/show_confirmed_roommates.tpl');
     }
 }
-
-?>

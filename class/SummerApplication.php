@@ -102,7 +102,7 @@ class SummerApplication extends HousingApplication{
 
     /**
      * Returns the fields specific to the SummerApplications (used in the UnassignedStudents Report).
-     * 
+     *
      * @return Array Array of fields for this SummerApplication.
      */
     public function unassignedStudentsFields()
@@ -140,5 +140,3 @@ class SummerApplication extends HousingApplication{
 class RestoredSummerApplication extends SummerApplication {
     public function __construct(){}
 }
-
-?>

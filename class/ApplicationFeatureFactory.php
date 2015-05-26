@@ -17,5 +17,3 @@ class ApplicationFeatureFactory
         return $result;
     }
 }
-
-?>

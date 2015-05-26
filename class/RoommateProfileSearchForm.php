@@ -3,12 +3,12 @@
 class RoommateProfileSearchForm extends hms\View {
 
     private $term;
-    
+
     public function __construct($term)
     {
         $this->term = $term;
     }
-    
+
     public function show()
     {
         $_SESSION['profile_search_use_session'] = FALSE;
@@ -35,7 +35,7 @@ class RoommateProfileSearchForm extends hms\View {
         $submitCmd->initForm($form);
         $form->setMethod('get');
         $form->useRowRepeat();
-        
+
         $form->addText('asu_username');
         $form->setLabel('asu_username','ASU Username: ');
 
@@ -96,5 +96,3 @@ class RoommateProfileSearchForm extends hms\View {
         return PHPWS_Template::process($tags,'hms','student/profile_search.tpl');
     }
 }
-
-?>

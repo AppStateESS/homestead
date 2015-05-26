@@ -35,7 +35,7 @@ class FreshmenApplicationReview extends hms\View {
         } else if($sem == 20 || $sem == 30) {
             $tpl['ROOM_TYPE'] = $this->app->getRoomType() == 0?'Two person':'Private (if available)';
         }
-        
+
         $tpl['MEAL_OPTION']         = HMS_Util::formatMealOption($this->app->getMealPlan());
 
         /* Cell Phone */
@@ -46,16 +46,16 @@ class FreshmenApplicationReview extends hms\View {
         $tpl['EMERGENCY_CONTACT_RELATIONSHIP']	= $this->app->getEmergencyContactRelationship();
         $tpl['EMERGENCY_CONTACT_PHONE'] 		= $this->app->getEmergencyContactPhone();
         $tpl['EMERGENCY_CONTACT_EMAIL'] 		= $this->app->getEmergencyContactEmail();
-        
+
         $tpl['EMERGENCY_MEDICAL_CONDITION'] = $this->app->getEmergencyMedicalCondition();
-        
+
         /* Missing Person */
         $tpl['MISSING_PERSON_NAME'] 		= $this->app->getMissingPersonName();
         $tpl['MISSING_PERSON_RELATIONSHIP']	= $this->app->getMissingPersonRelationship();
         $tpl['MISSING_PERSON_PHONE'] 		= $this->app->getMissingPersonPhone();
         $tpl['MISSING_PERSON_EMAIL'] 		= $this->app->getMissingPersonEmail();
-        
-        
+
+
         /* Special Needs */
         $special_needs = "";
         if(isset($this->app->physical_disability)){
@@ -103,5 +103,3 @@ class FreshmenApplicationReview extends hms\View {
         return PHPWS_Template::process($tpl, 'hms', 'student/student_application.tpl');
     }
 }
-
-?>

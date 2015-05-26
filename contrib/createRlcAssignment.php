@@ -92,5 +92,3 @@ foreach($inputFile as $line) {
 }
 
 pg_close($db);
-
-?>

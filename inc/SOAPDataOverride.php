@@ -21,5 +21,3 @@ class SOAPDataOverride {
         }
     }
 }
-
-?>

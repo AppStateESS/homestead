@@ -162,7 +162,7 @@ class ReApplicationFormView extends hms\View {
         if(isset($_REQUEST['special_need'])){
             $form->setMatch('special_need', $_REQUEST['special_need']);
         }
-        
+
         /*
          * Early Release
          */
@@ -177,11 +177,11 @@ class ReApplicationFormView extends hms\View {
         $reasons['marriage']         = "Getting married";
         $reasons['study_abroad']     = "Study Abroad for Spring";
         $reasons['intl_exchagne']    = "International exchange ending";
-        
+
         $form->addDropBox('early_release', $reasons);
         $form->setLabel('early_release', 'Will you apply for early release?');
         $form->setMatch('early_release', 'no');
-        
+
 
         /*
          * Contract
@@ -199,5 +199,3 @@ class ReApplicationFormView extends hms\View {
         return PHPWS_Template::process($form->getTemplate(), 'hms', 'student/lottery_signup.tpl');
     }
 }
-
-?>

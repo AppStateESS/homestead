@@ -7,9 +7,7 @@ class OpenWaitingListView extends hms\View {
     public function show()
     {
         Layout::addPageTitle("Open Waiting List");
-        
+
         return WaitingListApplication::waitingListPager();
     }
 }
-
-?>

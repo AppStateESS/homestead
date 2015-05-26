@@ -509,7 +509,7 @@ class HMS_Residence_Hall extends HMS_Item {
      * Determines the number of beds per room in a hall.  If the count varies for some rooms,
      * then return the count that applies to the majority of the rooms.
      * @deprecated -- Unused as far as I can tell
-     * 
+     *
      */
     public function count_beds_per_room()
     {
@@ -549,7 +549,7 @@ class HMS_Residence_Hall extends HMS_Item {
         }
 
         asort($total); // Sort the bed totals by the number of rooms that have each total
-        
+
         if(!end($total)){  // Jump to the end of the array, return false if array is empty
         	return key($total); // return the last key (the greatest number of beds)
         } else {
@@ -635,15 +635,15 @@ class HMS_Residence_Hall extends HMS_Item {
                     AND hms_room.private = 0
                     AND hms_room.overflow = 0
                     AND hms_room.parlor = 0 ";
-                
+
          if($rlcId != null) {
             $query .= "AND hms_room.reserved_rlc_id = $rlcId ";
          }
-            
+
          $query .= "AND hms_bed.international_reserved = 0
                     AND hms_bed.ra = 0
                     AND hms_bed.ra_roommate = 0";
-                    
+
         $avail_rooms = PHPWS_DB::getOne($query);
         if (PHPWS_Error::logIfError($avail_rooms)) {
             throw new DatabaseException($result->toString());
@@ -689,7 +689,7 @@ class HMS_Residence_Hall extends HMS_Item {
         $tags['ACTIONS'] = 'View Delete'; // ODO
         return $tags;
     }
-    
+
     /**
      * Returns an array where each element is an associative sub-array of info for
      * the coordinators of this halll. Returns null if there is no coordinator.
@@ -892,4 +892,3 @@ class HMS_Residence_Hall extends HMS_Item {
         return $pager->get();
     }
 }
-?>

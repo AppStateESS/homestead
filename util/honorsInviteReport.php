@@ -82,15 +82,15 @@ while($row = pg_fetch_assoc($result)) {
         $last   = fix($student->last_name);
         $first  = fix($student->first_name);
         $middle = fix($student->middle_name);
-        
+
         echo "Writing $last, $first $middle ";
-        $lifestyle = ($row['lifestyle_option'] == 1 ? 'Single-Gender' : 
+        $lifestyle = ($row['lifestyle_option'] == 1 ? 'Single-Gender' :
                         ($row['lifestyle_option'] == 2 ? 'Co-Ed' : 'Unrecognized'));
         $bedtime   = ($row['preferred_bedtime']   == 1 ? 'Early' :
                         ($row['preferred_bedtime']   == 2 ? 'Late'  : 'Unrecognized'));
         $condition = ($row['room_condition'] == 1 ? 'Clean' :
                         ($row['room_condition'] == 2 ? 'Dirty' : 'Unrecognized'));
-        
+
         $roommate_last   = '-';
         $roommate_first  = '-';
         $roommate_middle = '-';
@@ -170,5 +170,3 @@ function fputcsv(&$handle, $fields = array(), $delimiter = ';', $enclosure = '"'
     return fwrite($handle, $str);
 }
 */
-
-?>

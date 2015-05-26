@@ -95,5 +95,3 @@ class ActivityLogPager extends hms\View {
         return $this->pager->get();
     }
 }
-
-//?>

@@ -179,6 +179,3 @@ class RestoredPackageDesk extends PackageDesk {
     public function __construct(){
     }
 }
-
-
-?>

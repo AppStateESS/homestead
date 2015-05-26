@@ -21,5 +21,3 @@ class WelcomeScreenViewInvalidTerm extends hms\View{
         return PHPWS_Template::process($tpl, 'hms', 'student/welcome_screen_no_entry_term.tpl');
     }
 }
-
-?>

@@ -45,5 +45,3 @@ if ($result != "0"){
 }else{
     echo "Not a failure\n";
 }
-
-?>

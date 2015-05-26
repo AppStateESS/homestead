@@ -226,5 +226,3 @@ $free_time = array(
 				1 => 'Go out with a large group of friends.',
 				2 => 'Have a small group of close friends over.',
 				3 => 'Spend time alone.');
-
-?>

@@ -66,7 +66,7 @@ class ReportSetupView extends hms\View {
     {
         return "";
     }
-    
+
     public function setLinkText($text)
     {
         $this->linkText = $text;
@@ -80,13 +80,12 @@ class ReportSetupView extends hms\View {
     public function useDatePicker($datePicker){
         $this->useDatePicker = $datePicker;
     }
-    
+
     public function setRunNow($run){
         $this->runNow = $run;
     }
-    
+
     public function setFormId($id){
         $this->formId = $id;
     }
 }
-?>

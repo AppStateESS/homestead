@@ -48,5 +48,3 @@ foreach($bannerIds as $bId) {
 }
 
 pg_close($db);
-
-?>

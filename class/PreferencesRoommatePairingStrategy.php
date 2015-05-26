@@ -151,5 +151,3 @@ class PreferenceValues
         return $this->bedtime;
     }
 }
-
-?>

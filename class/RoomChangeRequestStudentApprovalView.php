@@ -38,7 +38,7 @@ class RoomChangeRequestStudentApprovalView {
 
         $requestor = StudentFactory::getStudentByUsername($this->request->getState()->getCommittedBy(), $this->term);
         $tpl['REQUESTOR'] = $requestor->getName();
-        
+
         // Build the table showing who is moving from/to which beds
         $participantRows = array();
         foreach($this->participants as $p){
@@ -71,5 +71,3 @@ class RoomChangeRequestStudentApprovalView {
         return PHPWS_Template::process($tpl, 'hms', 'student/roomChangeRequestStudentApprove.tpl');
     }
 }
-
-?>

@@ -6,4 +6,3 @@ $link[] = array('label'       => _('Housing Manager'),
                 'image'       => 'hms.png',
                 'tab'         => 'admin'
                 );
-?>

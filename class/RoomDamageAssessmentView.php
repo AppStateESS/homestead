@@ -29,5 +29,3 @@ class RoomDamageAssessmentView extends hms\View {
         return '<div data-ng-app="hmsAngularApp"><div data-ng-include="\''.$rawfile.'\'"></div></div>';
     }
 }
-
-?>

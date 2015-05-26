@@ -6,7 +6,7 @@ PHPWS_Core::initModClass('hms', 'HMS_Movein_Time.php');
 /**
  * View for showing/editing Learning Communities
  * (despite the poor name, it *can* edit an existing community too)
- * 
+ *
  * @author jbooker
  * @package HMS
  */
@@ -16,7 +16,7 @@ class AddCommunityView extends hms\View {
 
     /**
      * Constructor
-     * 
+     *
      * @param HMS_Learning_Community $rlc
      */
     public function __construct(HMS_Learning_Community $rlc = NULL){
@@ -24,7 +24,7 @@ class AddCommunityView extends hms\View {
     }
 
     /**
-     * 
+     *
      * @see View::show()
      */
     public function show()
@@ -34,7 +34,7 @@ class AddCommunityView extends hms\View {
         if(!is_null($this->community)){
             $tpl['COMMUNITY'] = $this->community->get_community_name();
         }
-        
+
         $form = new PHPWS_Form('add_learning_community');
 
         $submitCommand = CommandFactory::getCommand('SaveRlc');
@@ -44,7 +44,7 @@ class AddCommunityView extends hms\View {
         $form->setClass('community_name', 'form-control');
         $var = array('ELEMENT' => $form->getId('community_name'));
         javascript('modules/hms/autoFocus', $var);
-        
+
         $form->addText('abbreviation', !is_null($this->community)?$this->community->get_abbreviation():'');
         $form->setClass('abbreviation', 'form-control');
         $form->addText('capacity', !is_null($this->community)?$this->community->get_capacity():'');
@@ -53,19 +53,19 @@ class AddCommunityView extends hms\View {
 
         /*** Move-in Times ***/
         $moveinTimes = HMS_Movein_Time::get_movein_times_array(Term::getSelectedTerm());
-        
+
         $form->addDropBox('f_movein_time', $moveinTimes);
         $form->setLabel('f_movein_time', 'Freshmen Move-in Time');
         $form->setClass('f_movein_time', 'form-control');
-        
+
         $form->addDropBox('t_movein_time', $moveinTimes);
         $form->setLabel('t_movein_time', 'Transfer Move-in Time');
         $form->setClass('t_movein_time', 'form-control');
-        
+
         $form->addDropBox('c_movein_time', $moveinTimes);
         $form->setLabel('c_movein_time', 'Continuing Move-in Time');
         $form->setClass('c_movein_time', 'form-control');
-        
+
         if(!is_null($this->community)){
             $form->setMatch('f_movein_time', $this->community->getFreshmenMoveinTime());
             $form->setMatch('t_movein_time', $this->community->getTransferMoveinTime());
@@ -74,10 +74,10 @@ class AddCommunityView extends hms\View {
 
         $form->addText('student_types', !is_null($this->community)?$this->community->getAllowedStudentTypes():'');
         $form->setClass('student_types', 'form-control');
-        
+
         $form->addText('reapplication_student_types', !is_null($this->community)?$this->community->getAllowedReApplicationStudentTypes():'');
         $form->setClass('reapplication_student_types', 'form-control');
-    
+
         $form->addCheckAssoc('members_reapply', array('reapply'=>'Current Members Can Always Re-apply'));
         $form->setStyle('members_reapply', 'transform: scale(1.5);-webkit-transform: scale(1.5);');
 
@@ -89,11 +89,11 @@ class AddCommunityView extends hms\View {
         $form->addTextArea('freshmen_question');
         $form->setLabel('freshmen_question', 'Freshmen Question:');
         $form->setClass('freshmen_question', 'form-control');
-        
+
         $form->addTextArea('returning_question');
         $form->setLabel('returning_question', 'Returning Question:');
         $form->setClass('returning_question', 'form-control');
-        
+
         $form->addTextArea('terms_conditions');
         $form->setLabel('terms_conditions', 'Terms &amp; Conditions:');
         $form->setClass('terms_conditions', 'form-control');
@@ -109,7 +109,7 @@ class AddCommunityView extends hms\View {
         if(!is_null($this->community) && !is_null($this->community->get_id())){
             $form->addHidden('id', $this->community->get_id());
         }
-        
+
         $form->addSubmit('submit', 'Save');
         $form->setClass('submit', 'btn btn-primary');
 
@@ -121,4 +121,3 @@ class AddCommunityView extends hms\View {
         return PHPWS_Template::process($tpl, 'hms', 'admin/editLearningCommunity.tpl');
     }
 }
-?>

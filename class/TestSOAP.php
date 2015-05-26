@@ -231,5 +231,3 @@ class TestSOAP extends SOAP{
         return null;
     }
 }
-
-?>

@@ -534,12 +534,12 @@ class HMS_Room extends HMS_Item
         $tpl['GENDER_TYPE']    = HMS_Util::formatGender($this->gender_type);
         $tpl['DEFAULT_GENDER'] = HMS_Util::formatGender($this->default_gender);
 
-        $rlcList = RlcFactory::getRlcList($this->term);        
+        $rlcList = RlcFactory::getRlcList($this->term);
         $rlcReservation = $this->getReservedRlcId();
         if($rlcReservation != null) {
             $tpl['RLC_RESERVED'] = $rlcList[$rlcReservation];
         }
-        
+
         $tpl['RA']             = $this->isRa()        ? 'Yes' : 'No';
         $tpl['PRIVATE']        = $this->isPrivate()   ? 'Yes' : 'No';
         $tpl['OVERFLOW']       = $this->isOverflow()  ? 'Yes' : 'No';
@@ -744,13 +744,13 @@ class HMS_Room extends HMS_Item
     public function setParlor($value) {
         $this->parlor = $value;
     }
-    
+
     public function getReservedRlcId()
     {
     	return $this->reserved_rlc_id;
     }
-    
-    public function setReservedRlcId($id) 
+
+    public function setReservedRlcId($id)
     {
     	$this->reserved_rlc_id = $id;
     }
@@ -966,5 +966,3 @@ class HMS_Room extends HMS_Item
         return ($this->banner_building_code ? $this->banner_building_code . ' ' : '') . $this->room_number;
     }
 }
-
-?>
