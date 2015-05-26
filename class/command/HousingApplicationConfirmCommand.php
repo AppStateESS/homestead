@@ -107,9 +107,10 @@ class HousingApplicationConfirmCommand extends Command {
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
         $rlcReg = new RLCApplicationRegistration();
 
+
         if(ApplicationFeature::isEnabledForStudent($rlcReg, $term, $student)
                 && HMS_RLC_Application::checkForApplication($student->getUsername(), $term) == FALSE
-                && $context->get('rlc_interest') == 1)
+                && $application->rlc_interest == 1)
         {
             $rlcCmd = CommandFactory::getCommand('ShowRlcApplicationPage1View');
             $rlcCmd->setTerm($term);
