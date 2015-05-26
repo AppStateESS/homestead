@@ -94,7 +94,7 @@ class FreshmenApplicationReview extends hms\View {
         $redoCmd->setTerm($this->term);
         $redoCmd->setVars($_REQUEST);
 
-        $tpl['REDO_BUTTON'] = $redoCmd->getLink('modify your application');
+        $tpl['REDO_BUTTON'] = $redoCmd->getLink('<i class="fa fa-edit"></i> Modify your application', null, 'btn btn-lg btn-success');
 
         $form->mergeTemplate($tpl);
 
