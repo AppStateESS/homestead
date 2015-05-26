@@ -24,7 +24,7 @@
 
     <!-- BEGIN no_app -->
     <p>You have not applied for this term yet.</p>
-    {APP_NOW}
+    <a href="{APP_NOW}" class="btn btn-lg btn-success"><i class="fa fa-lg fa-arrow-circle-o-right"></i> Apply Now!</a>
     <!-- END no_app -->
 </p>
 </div>
