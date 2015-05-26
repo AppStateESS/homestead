@@ -199,11 +199,11 @@ class Student {
         }
     }
 
-    public function getProfileLink()
+    public function getProfileLink($css_class=null)
     {
         $profileCmd = CommandFactory::getCommand('ShowStudentProfile');
         $profileCmd->setUsername($this->getUsername());
-        return $profileCmd->getLink($this->getName());
+        return $profileCmd->getLink($this->getName(), null, $css_class);
     }
 
     /**
