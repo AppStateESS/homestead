@@ -1,41 +1,109 @@
-<h1>Residential Learning Community Application</h1>
-<h3 style="margin-left: 6em;margin-top:0">for Upperclassmen - {TERM}</h3>
+<h2>Residential Learning Community Reapplication</h2>
 
-{START_FORM}
 
-<h2>Community Preference</h2>
-<!-- BEGIN rlc_opt -->
-<h3>
-{RLC_OPT_1}{RLC_OPT_1_LABEL}<br />
-{RLC_OPT_2}{RLC_OPT_2_LABEL}
-</h3>
-</p>
-<!-- END rlc_opt -->
+<div class="col-md-10">
 
-<!-- BEGIN community_preference -->
-<p id="rlc_prefs" style="margin-left: 30px;">
-Rank your Learning Community preferences. If your first choice is unavailable, your second and third choices will be considered.<br /><br />
-{RLC_CHOICE_1_LABEL} {RLC_CHOICE_1}<br />
-{RLC_CHOICE_2_LABEL} {RLC_CHOICE_2}<br />
-{RLC_CHOICE_3_LABEL} {RLC_CHOICE_3}<br />
-</p>
-<!-- END community_preference -->
+	{START_FORM}
 
-<h2 style="clear: left; margin-top: 35px;">Short Answer Section</h2>
-<p>
-Why do you want to be a member (or remain a member) of this Residential Learning Community? 
-{WHY_THIS_RLC}
-</p>
+	<div class="row">
+		<h3 class="col-md-4">
+			Community Preference
+		</h3>
+	</div>
 
-<p>
-As a returning student, what do you hope to contribute and gain from this experience?
-{CONTRIBUTE_GAIN}
-</p>
+	<!-- BEGIN rlc_opt -->
+	<div class="radio">
+		<label>
+			{RLC_OPT_1}{RLC_OPT_1_LABEL}
+		</label>
+		<label>
+			{RLC_OPT_2}{RLC_OPT_2_LABEL}
+		</label>
+	</div>
+	<!-- END rlc_opt -->
 
-<p>
-{SUBMIT}
-</p>
-{END_FORM}
+	<!-- BEGIN community_preference -->
+	<div class="form-group">
+		<div class="row">
+			<p class="col-md-8">
+				Rank your Learning Community preferences. If your first choice is unavailable,
+				your second and third choices will be considered.
+			</p>
+		</div>
+
+		<div class="row">
+			<label class="col-md-3">
+				{RLC_CHOICE_1_LABEL}
+			</label>
+			<div class="col-md-4 col-md-offset-2">
+				{RLC_CHOICE_1}
+			</div>
+		</div>
+
+		<div class="row">
+			<label class="col-md-3">
+				{RLC_CHOICE_2_LABEL}
+			</label>
+			<div class="col-md-4 col-md-offset-2">
+				{RLC_CHOICE_2}
+			</div>
+		</div>
+
+		<div class="row">
+			<label class="col-md-3">
+				{RLC_CHOICE_3_LABEL}
+			</label>
+			<div class="col-md-4 col-md-offset-2">
+				{RLC_CHOICE_3}
+			</div>
+		</div>
+	</div>
+	<!-- END community_preference -->
+
+	<div class="row">
+		<h2>
+			Short Answer Section
+		</h2>
+	</div>
+
+	<div class="row">
+		<p>
+			Why do you want to be a member (or remain a member) of this Residential Learning Community?
+		</p>
+	</div>
+
+	<div class="row">
+		<div class="col-md-8">
+			{WHY_THIS_RLC}
+		</div>
+	</div>
+
+	<div class="row">
+		<p>
+			As a returning student, what do you hope to contribute and gain from this experience?
+		</p>
+	</div>
+
+	<div class="row">
+		<div class="col-md-8">
+			{CONTRIBUTE_GAIN}
+		</div>
+	</div>
+
+	<p>
+	</p>
+
+	<div class="row">
+		<button type="submit" class="btn btn-lg btn-success col-md-offset-8">
+			Continue
+			<i class="fa fa-chevron-right"></i>
+		</button>
+	</div>
+
+
+	{END_FORM}
+
+</div>
 
 <script>
 
@@ -44,7 +112,7 @@ var rlc_opt_radio = $("#phpws_form_rlc_opt_continue").get();
 // Only do this if the rlc radio buttons are actually a part of the page
 if(rlc_opt_radio != ""){
 	$("#rlc_prefs").hide();
-	
+
 	$("#phpws_form_rlc_opt_new").change(function(){
         if($(this).attr('checked')){
         	$("#rlc_prefs").slideDown();

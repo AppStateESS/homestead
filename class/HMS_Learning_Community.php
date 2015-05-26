@@ -277,7 +277,7 @@ class HMS_Learning_Community extends HMS_Item
      * Returns an associative array containing the list of RLCs using their full names,
      * keyed by their id, that a student is allowed to re-apply for.
      */
-    public function getRLCListReapplication($hidden = NULL, $student_type = NULL)
+    public static function getRLCListReapplication($hidden = NULL, $student_type = NULL)
     {
         $db = new PHPWS_DB('hms_learning_communities');
         $db->addColumn('id');
