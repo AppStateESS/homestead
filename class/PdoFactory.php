@@ -41,25 +41,18 @@ class PdoFactory {
     
     private function __construct()
     {
-        $phpwsDSN = PHPWS_DSN;
-        
-        if (!isset($phpwsDSN)) {
+        if (!defined('PHPWS_DSN')) {
             throw new Exception('Database connection DSN is not set.');
         }
+        $dsn_array = \Database::parseDSN(PHPWS_DSN);
         
-        $dbTypeSplit = explode('://', $phpwsDSN);
-        $dbType = $dbTypeSplit[0];
-        $userSplit = explode(':', $dbTypeSplit[1]);
-        $username = $userSplit[0];
-        $passwordSplit = explode('@', $userSplit[1]);
-        $password = $passwordSplit[0];
-        $hostSplit = explode('/', $passwordSplit[1]);
-        $host = $hostSplit[0];
-        $dbName = $hostSplit[1];
+        // creates dbtype, dbpass, dbuser, dbname, dbport, dbhost
+        extract($dsn_array);
         
-        $dsn = $this->createDsn($dbType, $host, $dbName);
         
-        $this->pdo = new PDO($dsn, $username, $password, array(PDO::ATTR_PERSISTENT => true));
+        $dsn = $this->createDsn($dbtype, $dbhost, $dbname);
+        
+        $this->pdo = new PDO($dsn, $dbuser, $dbpass, array(PDO::ATTR_PERSISTENT => true));
     }
     
     public function getPdo()
