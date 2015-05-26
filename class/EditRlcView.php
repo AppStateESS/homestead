@@ -16,7 +16,7 @@ class EditRlcView extends hms\View {
 
         $pageTags = array();
 
-        $pageTags['ADD_LINK'] = $addCmd->getLink('<i class="fa fa-plus"></i> Add a Community', null, 'btn btn-success');
+        $pageTags['ADD_LINK'] = $addCmd->getURI();
 
         $pager->addPageTags($pageTags);
 

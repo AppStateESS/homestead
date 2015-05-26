@@ -1,6 +1,6 @@
 <h2>Edit Learning Communities</h2>
 
-{ADD_LINK}
+<a href="{ADD_LINK}" class="btn btn-success"><i class="fa fa-plus"></i> Add a Community</a>
 <table class='table table-striped'>
     <tr>
         <th>&nbsp;</th>
