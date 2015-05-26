@@ -269,11 +269,11 @@ class HMS_Bed extends HMS_Item {
                 $reAssignCmd = CommandFactory::getCommand('ShowAssignStudent');
                 $reAssignCmd->setUsername($this->_curr_assignment->asu_username);
                 $reAssignCmd->setBedId($this->id);
-                $link_re = $reAssignCmd->getLink('(Re-assign)');
+                $link_re = $reAssignCmd->getLink('<i class="fa fa-refresh"></i> Reassign', null, 'btn btn-primary');
 
                 $unAssignCmd = CommandFactory::getCommand('ShowUnassignStudent');
                 $unAssignCmd->setUsername($this->_curr_assignment->asu_username);
-                $link_un = $unAssignCmd->getLink('(Un-assign)');
+                $link_un = $unAssignCmd->getLink('<i class="fa fa-minus-circle"></i> Remove assignment', null, 'btn btn-danger');
             }
 
             try {
@@ -282,7 +282,7 @@ class HMS_Bed extends HMS_Item {
                 return 'Unknown student: ' . $this->_curr_assignment->getBannerId();
             }
 
-            return $student->getProfileLink() . ' ' . $link_re . ' ' . $link_un;
+            return $student->getProfileLink('btn btn-default') . ' ' . $link_re . ' ' . $link_un;
         } else {
             $text = '&lt;unassigned&gt';
             if (UserStatus::isAdmin() && Current_User::allow('hms', 'assignment_maintenance')) {
