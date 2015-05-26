@@ -6,39 +6,43 @@ PHPWS_Core::initModClass('hms', 'Docusign/Client.php');
 PHPWS_Core::initModClass('hms', 'Docusign/EnvelopeFactory.php');
 PHPWS_Core::initModClass('hms', 'Docusign/RecipientView.php');
 
-class BeginDocusignCommand extends Command {
-	
+class BeginDocusignCommand extends Command
+{
     private $term;
     private $agreedCommand;
     private $parentName;
     private $parentEmail;
-    
-    public function setTerm($term){
+
+    public function setTerm($term)
+    {
         $this->term = $term;
     }
 
-    public function setReturnCmd(Command $cmd){
+    public function setReturnCmd(Command $cmd)
+    {
         $this->agreedCommand = $cmd;
     }
 
-    public function setParentName($name){
-    	$this->parentName = $name;
+    public function setParentName($name)
+    {
+        $this->parentName = $name;
     }
-    
-    public function setParentEmail($email){
-    	$this->parentEmail = $email;
+
+    public function setParentEmail($email)
+    {
+        $this->parentEmail = $email;
     }
 
     public function getRequestVars()
     {
-        $vars = array('action'=>'BeginDocusign', 'term'=>$this->term);
-        
+        $vars = array('action' => 'BeginDocusign', 'term' => $this->term);
+
         // In case we need parent signatures, these should be set. If they're not set,
         // we'll get null values and know how to handle those in execute()
-        $vars['parentName']  = $this->parentName;
+        $vars['parentName'] = $this->parentName;
         $vars['parentEmail'] = $this->parentEmail;
 
-        if(!isset($this->agreedCommand)){
+        if (!isset($this->agreedCommand)) {
             return $vars;
         }
 
@@ -54,79 +58,77 @@ class BeginDocusignCommand extends Command {
 
         return array_merge($vars, $onAgreeVars);
     }
-    
+
     public function execute(CommandContext $context)
     {
         $docusignUsername = PHPWS_Settings::get('hms', 'docusign_username');
-        if($docusignUsername === null || $docusignUsername == '') {
+        if ($docusignUsername === null || $docusignUsername == '') {
             PHPWS_Core::initModClass('hms', 'exception/InvalidConfigurationException.php');
-        	throw new InvalidConfigurationException('Missing docusign username.');
+            throw new InvalidConfigurationException('Missing docusign username.');
         }
-        
+
         $docusignPassword = PHPWS_Settings::get('hms', 'docusign_password');
-        if($docusignPassword === null || $docusignPassword == '') {
+        if ($docusignPassword === null || $docusignPassword == '') {
             PHPWS_Core::initModClass('hms', 'exception/InvalidConfigurationException.php');
             throw new InvalidConfigurationException('Missing docusign password.');
         }
-        
+
         $docusignKey = PHPWS_Settings::get('hms', 'docusign_key');
-        if($docusignKey === null || $docusignKey == '') {
+        if ($docusignKey === null || $docusignKey == '') {
             PHPWS_Core::initModClass('hms', 'exception/InvalidConfigurationException.php');
             throw new InvalidConfigurationException('Missing docusign key.');
         }
-        
+
         $docusignEnv = PHPWS_Settings::get('hms', 'docusign_env');
-        if($docusignEnv === null || $docusignEnv == '') {
+        if ($docusignEnv === null || $docusignEnv == '') {
             PHPWS_Core::initModClass('hms', 'exception/InvalidConfigurationException.php');
             throw new InvalidConfigurationException('Missing docusign key.');
         }
-        
+
         $term = $context->get('term');
         $termObj = new Term($term);
-        
+
         // Get Docusign Template IDs for this term
         $templateId = $termObj->getDocusignTemplate();
         $under18TemplateId = $termObj->getDocusignUnder18Template();
-        
+
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
 
         $under18 = $student->isUnder18();
-        
+
         $docusignClient = new Docusign\Client($docusignKey, $docusignUsername, $docusignPassword, $docusignEnv);
-        
+
         $templateRoles = array(
-                            array(
-                                "roleName" => 'Student',
-                                "email" => $student->getEmailAddress(),
-                                "name" => $student->getLegalName(),
-                                "clientUserId" => $student->getBannerId()
-                            )
-                         );
+            array(
+                "roleName" => 'Student',
+                "email" => $student->getEmailAddress(),
+                "name" => $student->getLegalName(),
+                "clientUserId" => $student->getBannerId()
+            )
+        );
 
         // If student is under 18, then add parent role to list of signers                         
-        if($under18){
+        if ($under18) {
             $parentName = $context->get('parentName');
             $parentEmail = $context->get('parentEmail');
-            
-        	$templateRoles[] = array(
-                                "roleName" => 'Parent',
-                                "email" => $parentEmail,
-                                "name" => $parentName
-                                //"clientUserId" => $student->getBannerId()
-                            );
+
+            $templateRoles[] = array(
+                "roleName" => 'Parent',
+                "email" => $parentEmail,
+                "name" => $parentName
+                    //"clientUserId" => $student->getBannerId()
+            );
         }
 
         //var_dump($templateRoles);
-        
-
         // Check for an existing contract
         $contract = ContractFactory::getContractByStudentTerm($student, $term);
-        
-        if($contract === false) {
+
+        if ($contract === false) {
             // Create a new envelope and save it
-            if($under18) {
+            if ($under18) {
                 // If student is under 18, use the template with parent signatures
-            	$envelope = Docusign\EnvelopeFactory::createEnvelopeFromTemplate($docusignClient, $under18TemplateId, 'University Housing Contract', $templateRoles, 'sent');
+                $envelope = Docusign\EnvelopeFactory::createEnvelopeFromTemplate($docusignClient, $under18TemplateId, 'University Housing Contract', $templateRoles, 'sent');
             } else {
                 // Student is over 18, so use the 1-signature template (without a parent signature)
                 $envelope = Docusign\EnvelopeFactory::createEnvelopeFromTemplate($docusignClient, $templateId, 'University Housing Contract', $templateRoles, 'sent');
@@ -135,21 +137,21 @@ class BeginDocusignCommand extends Command {
             // Create a new contract to save the envelope ID        
             $contract = new Contract($student, $term, $envelope->getEnvelopeId());
             ContractFactory::save($contract);
-        }else{
-        	// Use the existing envelope id
+        } else {
+            // Use the existing envelope id
             $envelope = Docusign\EnvelopeFactory::getEnvelopeById($docusignClient, $contract->getEnvelopeId());
         }
-        
+
         $recipientView = new Docusign\RecipientView($docusignClient, $envelope, $student->getBannerId(), $student->getLegalName(), $student->getEmailAddress());
-        
+
         $returnCmd = CommandFactory::getCommand($context->get('onAgreeAction'));
         $returnCmd->setTerm($term);
-        
+
         $roommateRequestId = $context->get('roommateRequestId');
-        if(isset($roommateRequestId) && $roommateRequestId != null) {
+        if (isset($roommateRequestId) && $roommateRequestId != null) {
             $returnCmd->setRoommateRequestId($roommateRequestId);
         }
-        
+
         $returnUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https://' : 'http://') . $_SERVER['SERVER_NAME'] . $returnCmd->getURI();
         //var_dump($returnUrl);exit;
         $url = $recipientView->getRecipientViewUrl($returnUrl);
@@ -157,4 +159,5 @@ class BeginDocusignCommand extends Command {
         PHPWS_Core::reroute($url);
         //$context->setContent('beginning signing process');
     }
+
 }
