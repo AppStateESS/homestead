@@ -29,7 +29,7 @@ class HousingApplicationFormView extends hms\View
 
         $tpl = array();
 
-        /*         * **************
+        /**
          * Display Info *
          * ************** */
         $tpl['STUDENT_NAME'] = $this->student->getFullName();
@@ -39,39 +39,16 @@ class HousingApplicationFormView extends hms\View
         $tpl['STUDENT_STATUS_LBL'] = HMS_Util::formatType($this->student->getType());
         $tpl['TERM'] = Term::toString($this->term);
 
-        /*         * ************
+        /**
          * Cell Phone *
          */
-
-        $form->addText('area_code');
-        $form->setSize('area_code', 3);
-        $form->setMaxSize('area_code', 3);
-        $form->setClass('area_code', 'form-control');
-        $form->setExtra('area_code', 'style="width:50px"');
-
-        if (!is_null($this->existingApplication)) {
-            $form->setValue('area_code', substr($this->existingApplication->getCellPhone(), 0, 3));
-        }
-
-        $form->addText('exchange');
-        $form->setSize('exchange', 3);
-        $form->setMaxSize('exchange', 3);
-        $form->setClass('exchange', 'form-control');
-        $form->setExtra('exchange', 'style="width:50px"');
-
-        if (!is_null($this->existingApplication)) {
-            $form->setValue('exchange', substr($this->existingApplication->getCellPhone(), 3, 3));
-        }
-
-
         $form->addText('number');
-        $form->setSize('number', 4);
-        $form->setMaxSize('number', 4);
-        $form->setClass('number', 'form-control');
-        $form->setExtra('number', 'style="width:60px"');
+        $form->setSize('number', 10);
+        $form->setMaxSize('number', 10);
+        $form->addCssClass('number', 'form-control');
 
         if (!is_null($this->existingApplication)) {
-            $form->setValue('number', substr($this->existingApplication->getCellPhone(), 6));
+            $form->setValue('number', substr($this->existingApplication->getCellPhone(), 0));
         }
 
         $form->addCheck('do_not_call', 1);
@@ -84,7 +61,7 @@ class HousingApplicationFormView extends hms\View
         $sem = Term::getTermSem($this->term);
         if ($sem == TERM_SPRING || $sem == TERM_FALL) {
 
-            /*             * ***********
+            /**
              * Lifestyle *
              * *********** */
             // TODO: get rid of the magic numbers!!!
@@ -95,7 +72,8 @@ class HousingApplicationFormView extends hms\View
             } else {
                 $form->setMatch('lifestyle_option', '1');
             }
-            $form->setClass('lifestyle_option', 'form-control');
+
+            $form->addCssClass('lifestyle_option', 'form-control');
 
             /*             * **********
              * Bed time *
@@ -109,6 +87,7 @@ class HousingApplicationFormView extends hms\View
             } else {
                 $form->setMatch('preferred_bedtime', '1');
             }
+            $form->addCssClass('preferred_bedtime', 'form-control');
 
             /*             * ****************
              * Room condition *
@@ -121,7 +100,8 @@ class HousingApplicationFormView extends hms\View
             } else {
                 $form->setMatch('room_condition', '1');
             }
-            $form->setClass('room_condition', 'form-control');
+
+            $form->addCssClass('room_condition', 'form-control');
         } else if ($sem == TERM_SUMMER1 || $sem == TERM_SUMMER2) {
             /* Private room option for Summer terms */
             $form->addDropBox('room_type', array(ROOM_TYPE_DOUBLE => 'Two person', ROOM_TYPE_PRIVATE => 'Private (if available)'));
@@ -132,10 +112,12 @@ class HousingApplicationFormView extends hms\View
             } else {
                 $form->setMatch('room_type', '0');
             }
+            $form->addCssClass('room_type', 'form-control');
         }
 
-        /*         * *************
-         * Meal Option *
+
+        /**
+         * Meal Option
          */
         if ($sem == TERM_FALL || $sem == TERM_SPRING) {
             if ($this->student->getType() == TYPE_FRESHMEN) {
@@ -151,6 +133,8 @@ class HousingApplicationFormView extends hms\View
         $form->setClass('meal_option', 'form-control');
         $form->setMatch('meal_option', BANNER_MEAL_STD);
 
+        $form->addCssClass('meal_option', 'form-control');
+
         if (!is_null($this->existingApplication)) {
             $form->setMatch('meal_option', $this->existingApplication->getMealPlan());
         } else {
@@ -161,15 +145,16 @@ class HousingApplicationFormView extends hms\View
          * Emergency Contact *
          * ******************* */
         $form->addText('emergency_contact_name');
-        $form->setClass('emergency_contact_name', 'form-control');
+
+        $form->addCssClass('emergency_contact_name', 'form-control');
         $form->addText('emergency_contact_relationship');
-        $form->setClass('emergency_contact_relationship', 'form-control');
+        $form->addCssClass('emergency_contact_relationship', 'form-control');
         $form->addText('emergency_contact_phone');
-        $form->setClass('emergency_contact_phone', 'form-control');
+        $form->addCssClass('emergency_contact_phone', 'form-control');
         $form->addText('emergency_contact_email');
-        $form->setClass('emergency_contact_email', 'form-control');
+        $form->addCssClass('emergency_contact_email', 'form-control');
         $form->addTextArea('emergency_medical_condition');
-        $form->setClass('emergency_medical_condition', 'form-control');
+        $form->addCssClass('emergency_medical_condition', 'form-control');
 
         if (!is_null($this->existingApplication)) {
             $form->setValue('emergency_contact_name', $this->existingApplication->getEmergencyContactName());
@@ -179,18 +164,18 @@ class HousingApplicationFormView extends hms\View
             $form->setValue('emergency_medical_condition', $this->existingApplication->getEmergencyMedicalCondition());
         }
 
-        /******************
-         * Missing Person *
-         ******************/
-
+        /**
+         * Missing Person
+         */
         $form->addText('missing_person_name');
-        $form->setClass('missing_person_name', 'form-control');
+
+        $form->addCssClass('missing_person_name', 'form-control');
         $form->addText('missing_person_relationship');
-        $form->setClass('missing_person_relationship', 'form-control');
+        $form->addCssClass('missing_person_relationship', 'form-control');
         $form->addText('missing_person_phone');
-        $form->setClass('missing_person_phone', 'form-control');
+        $form->addCssClass('missing_person_phone', 'form-control');
         $form->addText('missing_person_email');
-        $form->setClass('missing_person_email', 'form-control');
+        $form->addCssClass('missing_person_email', 'form-control');
 
         if (!is_null($this->existingApplication)) {
             $form->setValue('missing_person_name', $this->existingApplication->getMissingPersonName());
@@ -199,12 +184,14 @@ class HousingApplicationFormView extends hms\View
             $form->setValue('missing_person_email', $this->existingApplication->getMissingPersonEmail());
         }
 
-        /*         * ***************
-         * Special needs *
-         * *************** */
+        /**
+         * Special needs
+         */
         $tpl['SPECIAL_NEEDS_TEXT'] = ''; // setting this template variable to anything causes the special needs text to be displayed
         $form->addCheck('special_need', array('special_need'));
         $form->setLabel('special_need', array('Yes, I require special needs housing.'));
+
+
 
         if (isset($this->existingApplication)) {
             if ((!is_null($this->existingApplication->physical_disability) && $this->existingApplication->physical_disability != "0") || (!is_null($this->existingApplication->psych_disability) && $this->existingApplication->psych_disability != "0") || (!is_null($this->existingApplication->medical_need) && $this->existingApplication->medical_need != "0") || (!is_null($this->existingApplication->gender_need) && $this->existingApplication->gender_need != "0")) {
@@ -216,9 +203,10 @@ class HousingApplicationFormView extends hms\View
             $form->addHidden('special_needs', $_REQUEST['special_needs']);
         }
 
-        /*         * *****
-         * RLC *
-         * ***** */
+
+        /**
+         * RLC
+         */
         PHPWS_Core::initModClass('hms', 'applicationFeature/RlcApplication.php');
         $rlcReg = new RLCApplicationRegistration();
         if (HMS_RLC_Application::checkForApplication($this->student->getUsername(), $this->term) == TRUE) {
@@ -228,6 +216,7 @@ class HousingApplicationFormView extends hms\View
         } else if (ApplicationFeature::isEnabledForStudent($rlcReg, $this->term, $this->student)) {
             // Feature is enabled, but student hasn't submitted one yet
             $form->addRadio('rlc_interest', array(0, 1));
+
             $form->setLabel('rlc_interest', array(_("No"), _("Yes")));
 
             if (!is_null($this->existingApplication) && !is_null($this->existingApplication->getRLCInterest())) {
@@ -239,9 +228,6 @@ class HousingApplicationFormView extends hms\View
             // Feature is not enabled
             $form->addHidden('rlc_interest', 0);
         }
-
-        $form->addSubmit('submit', _('Continue'));
-        $form->setClass('submit', 'btn btn-lg btn-primary');
 
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
