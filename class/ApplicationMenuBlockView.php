@@ -39,7 +39,7 @@ class ApplicationMenuBlockView extends hms\View {
             $tpl['ICON'] = FEATURE_OPEN_ICON;
             $cmd = CommandFactory::getCommand('ShowHousingApplicationForm');
             $cmd->setTerm($this->term);
-            $tpl['APP_NOW'] = $cmd->getURI('Apply now!');
+            $tpl['APP_NOW'] = $cmd->getURI();
         } else {
             $appCommand = CommandFactory::getCommand('ShowApplicationView');
             if(!is_null($this->application)){
