@@ -38,15 +38,19 @@ class SelectBedView extends hms\View{
         $form->addDropBox('residence_hall', $this->halls);
         $form->setLabel('residence_hall', 'Residence hall: ');
         $form->setMatch('residence_hall', 0);
+        $form->setClass('residence_hall', 'form-control');
 
         $form->addDropBox('floor', array(0 => ''));
         $form->setLabel('floor', 'Floor: ');
+        $form->setClass('floor', 'form-control');
 
         $form->addDropBox('room', array(0 => ''));
         $form->setLabel('room', 'Room: ');
+        $form->setClass('room', 'form-control');
 
         $form->addDropBox('bed', array(0 => ''));
         $form->setLabel('bed', 'Bed: ');
+        $form->setClass('bed', 'form-control');
 
         $form->addSubmit('submit_button', 'Select');
 
