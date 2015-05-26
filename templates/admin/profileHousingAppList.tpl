@@ -19,7 +19,9 @@
       <td>{meal_plan}</td>
       <td>{clean}</td>
       <td>{bedtime}</td>
-      <td>{actions}</td>
+      <td><a href="{view}" class="btn btn-primary btn-sm"><i class="fa fa-search"></i> View</a>
+          <a href="{cancel}" class="btn btn-danger btn-sm"><i class="fa fa-times"></i> Cancel</a>
+      </td>
     </tr>
     <!-- END APPLICATIONS -->
     <!-- BEGIN no_apps -->

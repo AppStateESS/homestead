@@ -66,15 +66,16 @@ class ProfileHousingAppList extends hms\View
                 if (Current_User::allow('hms', 'cancel_housing_application')) {
                     $cancelCmd = CommandFactory::getCommand('ShowCancelHousingApplication');
                     $cancelCmd->setHousingApp($app);
-                    $cancelled = $cancelCmd->getLink('<i class="fa fa-times"></i> Cancel', null, 'btn btn-danger btn-sm');
+                    $cancelled = $cancelCmd->getURI();
                 } else {
                     $cancelled = '';
                 }
             }
 
-            $actions = $viewCmd->getLink('<i class="fa fa-search"></i> View', null, 'btn btn-primary btn-sm') . '&nbsp; ' . $cancelled;
-
-            $app_rows[] = array('term' => $term, 'type' => $type, 'meal_plan' => $mealPlan, 'cell_phone' => $phone, 'clean' => $clean, 'bedtime' => $bedtime, 'actions' => $actions, 'row_style' => $rowStyle);
+            $view = $viewCmd->getURI();
+            
+            $app_rows[] = array('term' => $term, 'type' => $type, 'meal_plan' => $mealPlan, 'cell_phone' => $phone,
+                'clean' => $clean, 'bedtime' => $bedtime, 'cancel'=>$cancelled, 'view'=>$view, 'row_style' => $rowStyle);
         }
 
         $tpl['APPLICATIONS'] = $app_rows;
