@@ -27,6 +27,5 @@
         <td>{BED}</td>
     </tr>
 </table>
-<br />
 {SUBMIT_BUTTON}
 {END_FORM}
