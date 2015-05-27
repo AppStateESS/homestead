@@ -2,16 +2,12 @@
 <p>{RECEIVED_DATE}</p>
 
 <div class="col-md-12">
-
       <!-- BEGIN withdrawn -->
-      <div class="alert alert-danger">{WITHDRAWN}</div>
+      <font color="red"><b>{WITHDRAWN}</b></font>
       <!-- END withdrawn -->
-
       <!-- BEGIN review_msg -->
-    <p>
-        {REVIEW_MSG}
-        Please review the information you entered. If you need to go back and make changes to your application click the 'modify application' button below. If the information you have entered is correct click the 'submit application' button.
-    </p>
+      {REVIEW_MSG}
+      Please review the information you entered. If you need to go back and make changes to your application click the 'modify application' button below. If the information you have entered is correct click the 'submit application' button.
       <!-- END review_msg -->
       {START_FORM}
 
@@ -183,6 +179,7 @@
             </div>
           </div>
         </div>
+          <!-- END special_need -->
 
         <!-- BEGIN special_needs_result -->
         <div class="row">
@@ -269,14 +266,20 @@
         <!-- END rlc_review -->
 
         <div class="row">
-          <button type="submit" class="btn btn-success btn-lg">
+          <!-- BEGIN redo_form -->
+          <a href="{REDO_BUTTON}" class="btn btn-lg btn-danger">
+            <i class="fa fa-chevron-left"></i>
+            Back
+          </a>
+
+          <!-- END redo_form -->
+          <button type="submit" class="btn btn-success btn-lg pull-right">
             Continue
             <i class="fa fa-chevron-right"></i>
           </button>
           <!-- {SUBMIT} -->
-          <!-- BEGIN redo_form -->
-          or {REDO_BUTTON}
-          <!-- END redo_form -->
+
+
           {SUBMIT_APPLICATION}
           {END_FORM}
         </div>
