@@ -1,7 +1,8 @@
 <h2>{NAME} - {BANNER_ID} <small class="text-muted">{TERM}</small></h2>
 
 <div class="row">
-    <div class="col-md-2">
+    <div class="col-md-8">
+        <div class="form-group pull-right">
         <div class="dropdown">
           <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
             <i class="fa fa-cog"></i> Options
@@ -11,11 +12,8 @@
             <li role="presentation"><a role="menuitem" tabindex="-1" href="{LOGIN_AS_STUDENT_URI}"><i class="fa fa-sign-in"></i> Login as Student</a></li>
           </ul>
         </div>
-    </div>
-</div>
+        </div>
 
-<div class="row">
-    <div class="col-md-8">
         <table class="table">
             <tr>
                 <th>ASU Email Address:</th>
