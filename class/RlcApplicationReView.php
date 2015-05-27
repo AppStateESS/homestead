@@ -25,10 +25,10 @@ class RlcApplicationReView extends hms\View {
 
         if(UserStatus::isAdmin()){
             $menuCmd = CommandFactory::getCommand('ShowAssignRlcApplicants');
-            $tags['MENU_LINK'] = $menuCmd->getLink('&laquo; Return to RLC Applications');
+            $tags['MENU_LINK'] = $menuCmd->getURI();
         }else{
             $menuCmd = CommandFactory::getCommand('ShowStudentMenu');
-            $tags['MENU_LINK'] = $menuCmd->getLink('&laquo; Return to Menu');
+            $tags['MENU_LINK'] = $menuCmd->getURI();
         }
 
         $tags['FULL_NAME']    = $this->student->getFullName();
@@ -92,7 +92,7 @@ class RlcApplicationReView extends hms\View {
     private function getDenialLink()
     {
         $cmd = CommandFactory::getCommand('JSConfirm');
-        $cmd->setLink("<input type='button' value='Deny'></input>");
+        $cmd->setLink("<input type='button' value='Deny' class='btn btn-md btn-danger'></input>");
         $cmd->setTitle('Deny RLC Application');
         $cmd->setQuestion('Are you sure you want to deny this RLC Application?');
         $denyCmd = CommandFactory::getCommand('DenyRlcApplication');
@@ -108,7 +108,8 @@ class RlcApplicationReView extends hms\View {
     private function getApprovalForm()
     {
         $approveForm = new PHPWS_Form('approve_form');
-        $approveForm->addSubmit('approve', 'Accept');
+        $approveForm->addSubmit('approve', 'Approve');
+        $approveForm->addCssClass('approve', 'btn btn-md btn-success');
         $approveCmd = CommandFactory::getCommand('AssignRlcApplicants');
         $tpl['RLC_LIST'] = HMS_RLC_Application::generateRLCDropDown(HMS_Learning_Community::getRlcList(),
                                                                              $this->application->id);
