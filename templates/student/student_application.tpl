@@ -2,12 +2,16 @@
 <p>{RECEIVED_DATE}</p>
 
 <div class="col-md-12">
+
       <!-- BEGIN withdrawn -->
-      <font color="red"><b>{WITHDRAWN}</b></font>
+      <div class="alert alert-danger">{WITHDRAWN}</div>
       <!-- END withdrawn -->
+
       <!-- BEGIN review_msg -->
-      {REVIEW_MSG}
-      Please review the information you entered. If you need to go back and make changes to your application click the 'modify application' button below. If the information you have entered is correct click the 'submit application' button.
+    <p>
+        {REVIEW_MSG}
+        Please review the information you entered. If you need to go back and make changes to your application click the 'modify application' button below. If the information you have entered is correct click the 'submit application' button.
+    </p>
       <!-- END review_msg -->
       {START_FORM}
 
