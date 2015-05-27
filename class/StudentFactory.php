@@ -14,6 +14,13 @@ class StudentFactory {
         return $provider->getStudentByUsername($username, $term);
     }
 
+    /**
+     * 
+     * @param string $bannerID
+     * @param integer $term
+     * @param ApcDataProvider|LocalCacheDataProvider $provider
+     * @return Student
+     */
     public static function getStudentByBannerID($bannerID, $term, $provider = NULL)
     {
         if(is_null($provider)){
