@@ -1,8 +1,6 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 PHPWS_Core::initModClass('hms', 'ApplicationFeature.php');
-PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
 
 class HousingApplicationFormView extends hms\View
 {
@@ -29,9 +27,9 @@ class HousingApplicationFormView extends hms\View
 
         $tpl = array();
 
-        /**
+        /****************
          * Display Info *
-         * ************** */
+         ****************/
         $tpl['STUDENT_NAME'] = $this->student->getFullName();
         $tpl['GENDER'] = $this->student->getPrintableGender();
         $tpl['ENTRY_TERM'] = Term::toString($this->student->getApplicationTerm());
@@ -39,9 +37,9 @@ class HousingApplicationFormView extends hms\View
         $tpl['STUDENT_STATUS_LBL'] = HMS_Util::formatType($this->student->getType());
         $tpl['TERM'] = Term::toString($this->term);
 
-        /**
+        /**************
          * Cell Phone *
-         */
+         **************/
         $form->addText('number');
         $form->setSize('number', 10);
         $form->setMaxSize('number', 10);
@@ -61,9 +59,9 @@ class HousingApplicationFormView extends hms\View
         $sem = Term::getTermSem($this->term);
         if ($sem == TERM_SPRING || $sem == TERM_FALL) {
 
-            /**
+            /*************
              * Lifestyle *
-             * *********** */
+             *************/
             // TODO: get rid of the magic numbers!!!
             $form->addDropBox('lifestyle_option', array('1' => _('Single Gender Building'),
                 '2' => _('Co-Ed Building')));
@@ -74,9 +72,9 @@ class HousingApplicationFormView extends hms\View
             }
             $form->addCssClass('lifestyle_option', 'form-control');
 
-            /*             * **********
+            /************
              * Bed time *
-             * ********** */
+             ************/
             // TODO: magic numbers
             $form->addDropBox('preferred_bedtime', array('1' => _('Early'),
                 '2' => _('Late')));
@@ -87,9 +85,9 @@ class HousingApplicationFormView extends hms\View
                 $form->setMatch('preferred_bedtime', '1');
             }
 
-            /*             * ****************
+            /******************
              * Room condition *
-             * **************** */
+             ******************/
             //TODO: magic numbers
             $form->addDropBox('room_condition', array('1' => _('Neat'),
                 '2' => _('Cluttered')));
@@ -113,7 +111,7 @@ class HousingApplicationFormView extends hms\View
 
         /***************
          * Meal Option *
-         */
+         ***************/
         if ($sem == TERM_FALL || $sem == TERM_SPRING) {
             if ($this->student->getType() == TYPE_FRESHMEN) {
                 $mealOptions = array(BANNER_MEAL_STD => 'Standard', BANNER_MEAL_HIGH => 'High', BANNER_MEAL_SUPER => 'Super');
@@ -138,7 +136,7 @@ class HousingApplicationFormView extends hms\View
 
         /*********************
          * Emergency Contact *
-         * *******************/
+         *********************/
         $form->addText('emergency_contact_name');
         $form->addCssClass('emergency_contact_name', 'form-control');
 
