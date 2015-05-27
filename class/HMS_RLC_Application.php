@@ -516,7 +516,7 @@ class HMS_RLC_Application extends HMS_Item
      */
     public static function generateRLCDropDown($rlc_list,$application_id) {
 
-        $output = "<select name=\"final_rlc[$application_id]\">";
+        $output = "<select name=\"final_rlc[$application_id]\" class='form-control'>";
 
         $output .= '<option value="-1">None</option>';
 

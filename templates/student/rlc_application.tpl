@@ -1,74 +1,150 @@
-{MENU_LINK}
-<h1>Learning Community Application</h1>
 
-<!-- BEGIN rlc_list -->
-<div style="float: right;" class="rounded-box">
-  <div class="boxheader">
-    <h2 style="padding: 2px;">Assignment</h2>
+<a href="{MENU_LINK}" class="btn btn-lg btn-primary">
+  <i class="fa fa-chevron-left"></i>
+  Return to RLC Applicants
+</a>
+
+<h2>Learning Community Application</h2>
+
+<div class="col-md-12">
+  <!-- BEGIN rlc_list -->
+    <div class="col-md-4 pull-right">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          Assignment
+        </div>
+        <div class="panel-body">
+          {START_FORM}
+          <div class="row">
+            <!-- <div class="col-md-4"> -->
+              {RLC_LIST}
+            <!-- </div> -->
+          </div>
+          <p></p>
+          <div class="row">
+            {APPROVE}
+            <div class="pull-right">
+              {DENY_APP}
+            </div>
+          </div>
+          {END_FORM}
+        </div>
+      </div>
+    </div>
+  <!-- END rlc_list -->
+
+  <div class="row">
+    <div class="col-md-6">
+      <div class="row">
+        <h3>
+          {FULL_NAME}
+        </h3>
+      </div>
+
+      <div class="row">
+        <label class="col-md-3">
+          Term:
+        </label>
+        <div class="col-md-3 col-md-offset-3">
+          {TERM}
+        </div>
+      </div>
+
+      <div class="row">
+        <label class="col-md-3">
+          Student Type:
+        </label>
+        <div class="col-md-3 col-md-offset-3">
+          {STUDENT_TYPE}
+        </div>
+      </div>
+
+      <div class="row">
+        <label class="col-md-4">
+          Application Type:
+        </label>
+        <div class="col-md-3 col-md-offset-2">
+          {APPLICATION_TYPE}
+        </div>
+      </div>
+
+      <div class="row">
+        <label class="col-md-4">
+          RLC Preferences:
+        </label>
+        <div class="col-md-6">
+          <ol>
+            <li>
+              {FIRST_CHOICE}
+            </li>
+            <!-- BEGIN second_choice -->
+            <li>
+              {SECOND_CHOICE}
+            </li>
+            <!-- END second_choice -->
+            <!-- BEGIN third_choice -->
+            <li>
+              {THIRD_CHOICE}
+            </li>
+            <!-- END third_choice -->
+          </ol>
+        </div>
+      </div>
+    </div>
   </div>
-  <div style="padding: 3px;">
-    {START_FORM} {RLC_LIST}<br /> {APPROVE} &nbsp; {DENY_APP}
-    {END_FORM}
+
+  <div class="row">
+    <label class="col-md-6">
+      Specific communities chosen because:
+    </label>
   </div>
+
+  <p class="col-md-8">
+    {WHY_SPECIFIC}
+  </p>
+
+  <div class="row">
+    <label class="col-md-6">
+      Strengths and weaknesses:
+    </label>
+  </div>
+
+  <p class="col-md-8">
+    {STRENGTHS_AND_WEAKNESSES}
+  </p>
+
+  <div class="row">
+    <label class="col-md-6">
+      Chose {FIRST_CHOICE} because:
+    </label>
+  </div>
+
+  <p class="col-md-8">
+    {WHY_FIRST_CHOICE}
+  </p>
+
+  <!-- BEGIN second -->
+  <div class="row">
+    <label class="col-md-6">
+      Chose {SECOND_CHOICE} because:
+    </label>
+  </div>
+
+  <p class="col-md-8">
+    {WHY_SECOND_CHOICE}
+  </p>
+  <!-- END second -->
+
+  <!-- BEGIN third -->
+  <div class="row">
+    <label class="col-md-6">
+      Chose {THIRD_CHOICE} because:
+    </label>
+  </div>
+
+  <p class="col-md-8">
+    {WHY_THIRD_CHOICE}
+  </p>
+  <!-- END third -->
+
 </div>
-<!-- END rlc_list -->
-
-<h3>{FULL_NAME}</h3>
-
-<table>
-  <tr>
-    <td>Term:</td>
-    <td>{TERM}</td>
-  </tr>
-  <tr>
-    <td>Student Type:</td>
-    <td>{STUDENT_TYPE}</td>
-  </tr>
-  <tr>
-    <td>Application Type:</td>
-    <td>{APPLICATION_TYPE}</td>
-  </tr>
-  <tr>
-    <td>RLC Preferences:</td>
-    <td>
-      <ol style="margin-top: -10px;">
-        <li>{FIRST_CHOICE}</li>
-        <!-- BEGIN second_choice -->
-        <li>{SECOND_CHOICE}</li>
-        <!-- END second_choice -->
-        <!-- BEGIN third_choice -->
-        <li>{THIRD_CHOICE}</li>
-        <!-- END third_choice -->
-      </ol>
-    </td>
-  </tr>
-</table>
-
-<div style="margin-top: 1em;">
-  <strong>Specific communities chosen because:</strong>
-</div>
-<div>{WHY_SPECIFIC}</div>
-
-<div style="margin-top: 1em;">
-  <strong>Strengths and weaknesses:</strong>
-</div>
-<div>{STRENGTHS_AND_WEAKNESSES}</div>
-
-<div style="margin-top: 1em;">
-  <strong>Chose {FIRST_CHOICE} because:</strong>
-</div>
-<div>{WHY_FIRST_CHOICE}</div>
-
-<!-- BEGIN second -->
-<div style="margin-top: 1em;">
-  <strong>Chose {SECOND_CHOICE} because:</strong>
-</div>
-<div>{WHY_SECOND_CHOICE}</div>
-<!-- END second -->
-
-<!-- BEGIN third -->
-<div style="margin-top: 1em;">
-  <strong>Chose {THIRD_CHOICE} because:</strong>
-</div>
-<div>{WHY_THIRD_CHOICE}</div>
-<!-- END third -->
