@@ -19,8 +19,10 @@
       <td>{meal_plan}</td>
       <td>{clean}</td>
       <td>{bedtime}</td>
-      <td><a href="{view}" class="btn btn-primary btn-sm"><i class="fa fa-search"></i> View</a>
-          <a href="{cancel}" class="btn btn-danger btn-sm"><i class="fa fa-times"></i> Cancel</a>
+      <td><a href="{view}" class="btn btn-primary btn-xs"><i class="fa fa-search"></i> View</a>
+          <!-- BEGIN cancel-link -->
+          <a href="{cancel}" class="btn btn-danger btn-xs cancelAppLink"><i class="fa fa-times"></i> Cancel</a>
+          <!-- END cancel-link -->
       </td>
     </tr>
     <!-- END APPLICATIONS -->
