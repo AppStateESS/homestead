@@ -131,7 +131,7 @@ class StudentProfileView extends hms\View {
         }else{
             $assignCmd = CommandFactory::getCommand('ShowAssignStudent');
             $assignCmd->setUsername($this->student->getUsername());
-            $tpl['ASSIGNMENT'] = $assignCmd->getURI();
+            $tpl['NOT_ASSIGNED'] = $assignCmd->getURI();
         }
 
         /*************
@@ -245,18 +245,18 @@ class StudentProfileView extends hms\View {
         $historyArray = StudentAssignmentHistory::getAssignments($this->student->getBannerId());
         $historyView = new StudentAssignmentHistoryView($historyArray);
         $tpl['HISTORY'] = $historyView->show();
-        
-        
+
+
         /**********
          * Checkins
          */
-        
+
         PHPWS_Core::initModClass('hms', 'CheckinFactory.php');
         PHPWS_Core::initModClass('hms', 'CheckinHistoryView.php');
         $checkins = CheckinFactory::getCheckinsForStudent($this->student);
         $checkinHistory = new CheckinHistoryView($checkins);
         $tpl['CHECKINS'] = $checkinHistory->show();
-        
+
 
         /*********
          * Notes *

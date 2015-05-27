@@ -20,7 +20,7 @@
             <tr>
                 <th>ASU Email Address:</th>
                 <td><a href="mailto:{USERNAME}@appstate.edu">{USERNAME}@appstate.edu</a></td>
-            </tr> 
+            </tr>
 
             <tr>
                 <th>Gender</th>
@@ -29,7 +29,7 @@
 
             <tr>
                 <th>Birthday</th>
-                <td>{DOB}</td>                    
+                <td>{DOB}</td>
             </tr>
 
             <tr>
@@ -89,7 +89,15 @@
         <table class="table">
             <tr>
                 <th>Assigned:</th>
-                <td><span class="text-danger" style="margin-top : 5px">Not assigned</span> <a href="{ASSIGNMENT}" class="btn btn-sm btn-success"><i class="fa fa-plus"></i> Assign Student</a></td>
+                <td>
+                    <!-- BEGIN not-assigned -->
+                    <span class="text-danger" style="margin-top : 5px">Not assigned</span>
+                    <a href="{NOT_ASSIGNED}" class="btn btn-xs btn-success"><i class="fa fa-plus"></i> Assign Student</a>
+                    <!-- END not-assigned -->
+                    <!-- BEGIN assignment -->
+                    {ASSIGNMENT}
+                    <!-- END assignment -->
+                </td>
             </tr>
             <tr>
                 <th>Roommate(s):</th>
@@ -144,13 +152,13 @@
         </table>
     </div>
 </div>
-        
+
 <h2>Applications</h2>
 {APPLICATIONS}
-		
+
 <h2>Assignments</h2>
 {HISTORY}
-        
+
 <h2>Check-in / Check-out</h2>
 {CHECKINS}
 
