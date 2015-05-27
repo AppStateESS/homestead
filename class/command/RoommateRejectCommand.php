@@ -45,12 +45,17 @@ class RoommateRejectCommand extends Command
         $requestor = StudentFactory::getStudentByUsername($roommate->requestor, $roommate->term);
         $name = $requestor->getFullName();
         $username = $requestor->getUsername();
-        
+
         $roommate->delete();
 
         HMS_Activity_Log::log_activity($roommate->requestor,
                                        ACTIVITY_REJECTED_AS_ROOMMATE,
-                                       $roommate->requestee);
+                                       $roommate->requestee,
+                                       "$roommate->requestee rejected $roommate->requestor's request");
+        HMS_Activity_Log::log_activity($roommate->requestee,
+                                       ACTIVITY_REJECTED_AS_ROOMMATE,
+                                       $roommate->requestor,
+                                       "$roommate->requestee rejected $roommate->requestor's request");
 
         // Email both parties
         PHPWS_Core::initModClass('hms', 'HMS_Email.php');
