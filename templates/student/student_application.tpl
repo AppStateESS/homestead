@@ -16,7 +16,6 @@
         <!-- END review_msg -->
         {START_FORM}
 
-
         <div class="form-group col-md-10">
             <div class="row">
                 <p><strong>Demographic Information</strong></p>
@@ -133,6 +132,7 @@
             <div class="row">
                 <p><strong>Missing Person Information</p></strong>
             </div>
+
             <div class="row">
                 <p>Federal law requires that we ask you to confidentially identify a person
                     whom the University should contact if you are reported missing for more than
@@ -281,7 +281,7 @@
                     <button type="submit" class="btn btn-success btn-lg">Continue<i class="fa fa-chevron-right"></i></button>
                     <!-- {SUBMIT} -->
                     <!-- BEGIN redo_form -->
-                    or {REDO_BUTTON}
+                      <a href="{REDO_BUTTON}" class="btn btn-lg btn-danger"><i class="fa fa-chevron-left"></i> Back</a>
                     <!-- END redo_form -->
                     {SUBMIT_APPLICATION}
                     {END_FORM}
