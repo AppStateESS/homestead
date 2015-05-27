@@ -1,4 +1,4 @@
-<h2>Special Needs Housing</h2>
+<h1>Special Needs Housing</h1>
 
 <div class="col-md-10">
 
