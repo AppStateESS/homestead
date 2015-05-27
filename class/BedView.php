@@ -1,22 +1,23 @@
 <?php
 
-class BedView extends hms\View{
-
+class BedView extends hms\View
+{
     private $hall;
     private $floor;
     private $room;
     private $bed;
 
-    public function __construct(HMS_Residence_Hall $hall, HMS_Floor $floor, HMS_Room $room, HMS_Bed $bed){
-        $this->hall		= $hall;
-        $this->floor	= $floor;
-        $this->room		= $room;
-        $this->bed		= $bed;
+    public function __construct(HMS_Residence_Hall $hall, HMS_Floor $floor, HMS_Room $room, HMS_Bed $bed)
+    {
+        $this->hall = $hall;
+        $this->floor = $floor;
+        $this->room = $room;
+        $this->bed = $bed;
     }
 
     public function show()
     {
-        if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'bed_view')){
+        if (!UserStatus::isAdmin() || !Current_User::allow('hms', 'bed_view')) {
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You are not allowed to edit or view beds.');
         }
@@ -27,12 +28,12 @@ class BedView extends hms\View{
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
-        $tpl['TERM']                = Term::toString($this->bed->getTerm());
-        $tpl['HALL_NAME']           = $this->hall->getLink();
-        $tpl['FLOOR_NUMBER']        = $this->floor->getLink('Floor');
-        $tpl['ROOM_NUMBER_LINK']    = $this->room->getLink();
-        $tpl['ROOM_NUMBER']         = $this->room->getRoomNumber();
-        $tpl['BED_LABEL']           = $this->bed->getBedroomLabel() . ' ' . $this->bed->getLetter();
+        $tpl['TERM'] = Term::toString($this->bed->getTerm());
+        $tpl['HALL_NAME'] = $this->hall->getLink();
+        $tpl['FLOOR_NUMBER'] = $this->floor->getLink('Floor');
+        $tpl['ROOM_NUMBER_LINK'] = $this->room->getLink();
+        $tpl['ROOM_NUMBER'] = $this->room->getRoomNumber();
+        $tpl['BED_LABEL'] = $this->bed->getBedroomLabel() . ' ' . $this->bed->getLetter();
 
         $tpl['ASSIGNED_TO'] = $this->bed->get_assigned_to_link();
 
@@ -57,42 +58,81 @@ class BedView extends hms\View{
         $form->setLabel('banner_id', 'Banner Bed ID:');
 
         $form->addCheckBox('ra', 1);
-        if($this->bed->isRa()){
+        if ($this->bed->isRa()) {
             $form->setExtra('ra', 'checked');
         }
         $form->setLabel('ra', 'Reserved for RA');
 
         $form->addCheckBox('ra_roommate', 1);
 
-        if($this->bed->ra_roommate == 1){
+        if ($this->bed->ra_roommate == 1) {
             $form->setExtra('ra_roommate', 'checked');
         }
         $form->setLabel('ra_roommate', 'Hold Empty for RA Roommate');
 
         $form->addCheckBox('international_reserved');
 
-        if($this->bed->international_reserved == 1){
+        if ($this->bed->international_reserved == 1) {
             $form->setExtra('international_reserved', 'checked');
         }
 
         $form->addSubmit('submit', 'Submit');
 
         # if the user has permission to view the form but not edit it
-        if(   !Current_User::allow('hms', 'bed_view')
-        && !Current_User::allow('hms', 'bed_attributes')
-        && !Current_User::allow('hms', 'bed_structure'))
-        {
+        if (!Current_User::allow('hms', 'bed_view')
+                && !Current_User::allow('hms', 'bed_attributes')
+                && !Current_User::allow('hms', 'bed_structure')) {
             $form_vars = get_object_vars($form);
             $elements = $form_vars['_elements'];
 
-            foreach($elements as $element => $value){
+            foreach ($elements as $element => $value) {
                 $form->setDisabled($element);
             }
         }
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
         Layout::addPageTitle("Edit Bed");
-
+        $tpl['HISTORY'] = $this->getBedHistoryContent();
         return PHPWS_Template::process($tpl, 'hms', 'admin/edit_bed.tpl');
     }
+
+    private function getBedHistoryContent()
+    {
+        $data = $this->getBedHistoryArray();
+        if (empty($data)) {
+            return null;
+        }
+        $tpl = array('rows' => $data);
+        $template = new \Template($tpl);
+        $template->setModuleTemplate('hms', 'admin/getBedHistoryContent.html');
+        return $template->get();
+    }
+
+    /**
+     * Pulls the assignment history for the current bed and plugs in the student profile link.
+     * Returns null if no history is found.
+     * @return array
+     */
+    private function getBedHistoryArray()
+    {
+        $db = \Database::newDB();
+        $t1 = $db->addTable('hms_assignment_history');
+        $t1->addFieldConditional('bed_id', $this->bed->id);
+        if (isset($this->bed->_curr_assignment)) {
+            $t1->addFieldConditional('banner_id', $this->bed->_curr_assignment->banner_id, '!=');
+        }
+        $t1->addOrderBy('assigned_on', 'DESC');
+        $result = $db->select();
+        if (empty($result)) {
+            return null;
+        }
+        foreach ($result as $key => $assignment) {
+            $student = StudentFactory::getStudentByBannerID($assignment['banner_id'], $this->bed->id);
+            $result[$key]['assigned_on_date'] = strftime('%Y-%m-%d %r', $assignment['assigned_on']);
+            $result[$key]['removed_on_date'] = strftime('%c', $assignment['removed_on']);
+            $result[$key]['student'] = $student->getProfileLink();
+        }
+        return $result;
+    }
+
 }

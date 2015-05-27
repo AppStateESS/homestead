@@ -1,4 +1,4 @@
-<h2>Room {ROOM_NUMBER} Bed {BED_LABEL}</h2>
+<h2>Edit Bed - {HALL_NAME}, Room {ROOM_NUMBER}, Bed {BED_LABEL}</h2>
 
 <div class="alert alert-info">
     <p>{TERM} &raquo; {HALL_NAME} &raquo; {FLOOR_NUMBER} &raquo; {ROOM_NUMBER_LINK}</p>
@@ -59,3 +59,4 @@
 <div class="alert alert-info">
     <p>Currently assigned to {ASSIGNED_TO}</p>
 </div>
+{HISTORY}
