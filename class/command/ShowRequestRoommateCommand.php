@@ -64,12 +64,12 @@ class ShowRequestRoommateCommand extends Command {
 
         $form->addText('username');
         $form->addCssClass('username', 'form-control');
+        $form->setExtra('username', 'autofocus');
+
         $form->addSubmit('submit', 'Request Roommate');
 
         $form->addButton('cancel', 'Cancel');
         $form->setExtra('cancel', 'onClick="document.location=\'index.php\'"');
-
-        javascript('modules/hms/autoFocus', array('ELEMENT' => $form->getId('username')));
 
         $tpl = $form->getTemplate();
 
