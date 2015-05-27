@@ -35,7 +35,7 @@ function process($arguments)
 {
     $dump_data = false;
     $term = get_term_default();
-    
+
     array_shift($arguments);
     if (!isset($arguments[0])) {
         $arguments[0] = '-h';
@@ -90,7 +90,7 @@ function process($arguments)
     echo "Creating $number_of_students students.\n\n";
     insert_rows($number_of_students, $term);
     echo "------------------------------------\nStudent creation complete.\n\n";
-    
+
     echo "Make sure your inc/hms_defines.php file contains the following setting:
 define('SOAP_OVERRIDE_FILE', 'FakeSoapTable.php');\n";
 }
@@ -198,6 +198,12 @@ function get_connection()
 {
     static $pdo;
     if (empty($pdo)) {
+        echo get_dsn();
+        echo "\n";
+        echo get_username();
+        echo "\n";
+        echo get_password();
+        echo "\n";
         $pdo = new PDO(get_dsn(), get_username(), get_password());
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
@@ -211,7 +217,10 @@ function get_dsn()
     if (empty($dsn_string)) {
         $dsn_array = dsn_array();
         extract($dsn_array);
-        $dsn_string = "$dbtype:dbname=$dbname;host=$dbhost";
+        $dsn_string = "$dbtype:dbname=$dbname";
+        if (!empty($dbhost)) {
+            $dsn_string .= ";host=$dbhost";
+        }
         if (!empty($dbport)) {
             $dsn_string .= ";port=$dbport";
         }
