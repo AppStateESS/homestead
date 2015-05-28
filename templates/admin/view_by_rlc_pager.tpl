@@ -12,7 +12,7 @@
         <th>User name {USERNAME_SORT}</th>
         <th>Status {STATE_SORT}</th>
         <th>Assignment {BED_ASSIGNMENT_SORT}</th>
-        <th>Roommate {ROOMMATES_SORT}</th>
+        <th>Roommate {CONF_SORT}</th>
         <th>Action</th>
     </tr>
     <!-- BEGIN empty_table -->
