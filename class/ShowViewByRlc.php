@@ -14,11 +14,11 @@ class ShowViewByRlc extends hms\View{
     public function show()
     {
         Layout::addPageTitle("View By RLC");
-        
+
         PHPWS_Core::initModClass('hms', 'RlcRosterPager.php');
 
         $rosterPager = new RlcRosterPager($this->rlc);
-        
+
         return $rosterPager->get();
     }
 }
