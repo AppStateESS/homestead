@@ -60,7 +60,7 @@
         <div class="row">
             <div class="col-md-4 col-md-offset-2">
                 <div class="form-group">
-                    <label for="">ASU Email:</label>
+                    <label for="phpws_form_username">ASU Email:</label>
                     <div class="input-group">
                         {USERNAME}
                         <div class="input-group-addon">@appstate.edu</div>
