@@ -11,7 +11,7 @@ class RoommateBreakCommand extends Command
 
     public function getRequestVars() {
         $vars = array('action' => 'RoommateBreak');
-        
+
         if(isset($this->roommateId)) {
             $vars['roommateId'] = $this->roommateId;
         }
@@ -54,13 +54,17 @@ class RoommateBreakCommand extends Command
         }
 
         $roommate->delete();
-        
+
         $other = StudentFactory::getStudentByUsername($roommate->get_other_guy($username), $roommate->term);;
 
         HMS_Activity_Log::log_activity($other->getUsername(),
                                        ACTIVITY_STUDENT_BROKE_ROOMMATE,
                                        $username,
-                                       "CAPTCHA: $verified");
+                                       "$username broke pairing, CAPTCHA: $verified");
+        HMS_Activity_Log::log_activity($username,
+                                       ACTIVITY_STUDENT_BROKE_ROOMMATE,
+                                       $other->getUsername(),
+                                       "$username broke pairing, CAPTCHA: $verified");
 
         // Email both parties
         PHPWS_Core::initModClass('hms', 'HMS_Email.php');

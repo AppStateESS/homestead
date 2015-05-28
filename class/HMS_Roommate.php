@@ -338,7 +338,7 @@ class HMS_Roommate
      * Returns the asu username of the student which the given user has requested, or NULL
      * if either the user has not requested anyone or the pairing is confirmed.
      */
-    public function get_unconfirmed_roommate($asu_username, $term)
+    public static function get_unconfirmed_roommate($asu_username, $term)
     {
         $db = new PHPWS_DB('hms_roommate');
         $db->addWhere('requestor', $asu_username, 'ILIKE');
@@ -422,7 +422,7 @@ class HMS_Roommate
      * Removes all pending requests.  THIS DOES WORK SO BE CAREFUL.  Used when roommates are confirmed.
      * Logs each individual removal to cover our butts.
      */
-    public function removeOutstandingRequests($asu_username, $term)
+    public static function removeOutstandingRequests($asu_username, $term)
     {
         /*
         $db = new PHPWS_DB('hms_roommate');

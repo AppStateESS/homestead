@@ -11,7 +11,7 @@ class RoommateRequestCancelCommand extends Command
 
     public function getRequestVars() {
         $vars = array('action' => 'RoommateRequestCancel');
-        
+
         if(isset($this->roommateId)) {
             $vars['roommateId'] = $this->roommateId;
         }
@@ -49,7 +49,12 @@ class RoommateRequestCancelCommand extends Command
 
         HMS_Activity_Log::log_activity($other->getUsername(),
                                        ACTIVITY_STUDENT_CANCELLED_ROOMMATE_REQUEST,
-                                       $username);
+                                       $username,
+                                       "$username cancelled roommate request");
+        HMS_Activity_Log::log_activity($username,
+                                       ACTIVITY_STUDENT_CANCELLED_ROOMMATE_REQUEST,
+                                       $other->getUsername(),
+                                       "$username cancelled roommate request");
 
         // Email both parties
         PHPWS_Core::initModClass('hms', 'HMS_Email.php');

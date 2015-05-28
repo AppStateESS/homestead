@@ -65,7 +65,11 @@ class RoommateAcceptCommand extends Command
         HMS_Activity_Log::log_activity($roommate->requestor,
                                        ACTIVITY_ACCEPTED_AS_ROOMMATE,
                                        $roommate->requestee,
-                                       "CAPTCHA: $verified");
+                                       "$roommate->requestee accepted request, CAPTCHA: $verified");
+        HMS_Activity_Log::log_activity($roommate->requestee,
+                                       ACTIVITY_ACCEPTED_AS_ROOMMATE,
+                                       $roommate->requestor,
+                                       "$roommate->requestee accepted request, CAPTCHA: $verified");
 
         // Email both parties
         PHPWS_Core::initModClass('hms' ,'HMS_Email.php');
