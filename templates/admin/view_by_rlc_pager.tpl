@@ -5,14 +5,14 @@
 
 <table class="table table-striped">
     <tr>
-        <th>Name</th>
+        <th>Name </th>
         <th>Banner Id</th>
-        <th>Gender</th>
-        <th>Student Type</th>
-        <th>User name</th>
-        <th>Status</th>
-        <th>Assignment</th>
-        <th>Roommate</th>
+        <th>Gender {GENDER_SORT}</th>
+        <th>Student Type {S_TYPE_SORT}</th>
+        <th>User name {USERNAME_SORT}</th>
+        <th>Status {STATE_SORT}</th>
+        <th>Assignment {BED_ASSIGNMENT_SORT}</th>
+        <th>Roommate {CONF_SORT}</th>
         <th>Action</th>
     </tr>
     <!-- BEGIN empty_table -->
