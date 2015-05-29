@@ -47,6 +47,8 @@ class RlcRosterPager extends DBPager {
         $this->joinResult('username', 'hms_assignment', 'asu_username', 'bed_id', 'bed_assignment');
         $this->joinResult('username', 'hms_new_application', 'username AND hms_new_application.term=hms_learning_community_applications.term', 'student_type', 's_type');
         $this->joinResult('username', 'hms_roommate', 'requestee OR hms_learning_community_applications.username=hms_roommate.requestor', 'confirmed', 'conf');
+        $this->joinResult('id', 'hms_learning_community_assignment', 'application_id', 'gender');
+        $this->joinResult('id', 'hms_learning_community_assignment', 'application_id', 'state');
 
         $this->setModule('hms');
         $this->setTemplate('admin/view_by_rlc_pager.tpl');
