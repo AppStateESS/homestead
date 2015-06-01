@@ -44,9 +44,10 @@ class CheckoutStartView extends hms\View {
         $form->setLabel('banner_id', 'Resident');
         $form->setExtra('banner_id', 'placeholder = "Swipe AppCard or type Name/Email/Banner ID"');
         $form->addCssClass('banner_id', 'form-control');
+        $form->addCssClass('banner_id', 'input-lg');
 
         $form->addSubmit('Begin Check-out');
-        $form->setClass('submit', 'btn btn-primary');
+        $form->setClass('submit', 'btn btn-lg btn-primary');
 
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
