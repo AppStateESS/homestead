@@ -56,26 +56,28 @@ class ProfileHousingAppList extends hms\View
             $viewCmd = CommandFactory::getCommand('ShowApplicationView');
             $viewCmd->setAppId($app->getId());
 
-            $rowStyle = "";
+            $view = $viewCmd->getURI();
 
+            $row = array('term' => $term, 'type' => $type, 'meal_plan' => $mealPlan, 'cell_phone' => $phone,
+                'clean' => $clean, 'bedtime' => $bedtime, 'view'=>$view);
             if ($app->isCancelled()) {
-                $cancelled = "({$reasons[$app->getCancelledReason()]})";
-                $rowStyle = 'disabledText';
+                $cancelledReason = "({$reasons[$app->getCancelledReason()]})";
+                $row['cancelledReason'] = $cancelledReason;
+                $row['row_style'] = 'warning';
             } else {
                 // Show Cancel Command, if user has permission to cancel apps
                 if (Current_User::allow('hms', 'cancel_housing_application')) {
                     $cancelCmd = CommandFactory::getCommand('ShowCancelHousingApplication');
                     $cancelCmd->setHousingApp($app);
-                    $cancelled = $cancelCmd->getURI();
-                } else {
-                    $cancelled = '';
+                    $cancel = $cancelCmd->getURI();
+                    $row['cancel'] = $cancel;
                 }
+
             }
 
-            $view = $viewCmd->getURI();
-            
-            $app_rows[] = array('term' => $term, 'type' => $type, 'meal_plan' => $mealPlan, 'cell_phone' => $phone,
-                'clean' => $clean, 'bedtime' => $bedtime, 'cancel'=>$cancelled, 'view'=>$view, 'row_style' => $rowStyle);
+
+
+            $app_rows[] = $row;
         }
 
         $tpl['APPLICATIONS'] = $app_rows;
