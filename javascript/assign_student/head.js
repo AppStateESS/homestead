@@ -1,20 +1,8 @@
-<script type="text/javascript" src="mod/hms/javascript/new_autosuggest/bsn.AutoSuggest_2.1.3.js" charset="utf-8"></script>
 <script type="text/javascript" src="mod/hms/javascript/jquery.selectboxes.js"></script>
 
 <script type="text/javascript">
 
 $(document).ready(function(){
-
-    var options = {
-        script:"index.php?module=hms&action=AjaxGetUsernameSuggestions&ajax=true&",
-        varname:"username",
-        json:true,
-        shownoresults:false,
-        maxresults:6,
-        timeout:100000
-    };
-
-    var suggest = new bsn.AutoSuggest('phpws_form_username', options);
 
     if($('#phpws_form_use_bed').val() == "false"){
         $('#phpws_form_floor').attr('disabled', true);
@@ -45,7 +33,7 @@ var bedDropShown = false;
 function showBedDrop()
 {
     bedDropShown = true;
-    
+
     $('#link_row').hide();
     $('#bed_row').show();
 
@@ -64,13 +52,13 @@ function handleHallChange()
 
   // Get the selected value
   var hallId = $('#phpws_form_residence_hall').val();
-  
+
   // the default value is selected
   if(hallId == 0){
       // alert('default selected');
       return;
   }
-  
+
   // Set the floor drop down to "loading", show the loading animation
   setOptions(floor_drop, {'0': 'Loading...'});
   $("#loading_img").show();
@@ -102,16 +90,16 @@ function handleFloorResponse(data, textStatus){
 
 function handleFloorChange(){
 	var floorId = $("#phpws_form_floor").val();
-	
+
 	setOptions(room_drop,{});
 	setOptions(bed_drop,{});
 	$(room_drop).attr('disabled', true);
 	$(bed_drop).attr('disabled', true);
-	
+
 	if(floorId == 0){
 		return;
 	}
-	
+
 	// Set the floor drop down to "loading", show the loading animation
  	setOptions(room_drop, {'0': 'Loading...'});
  	$("#loading_img").show();
@@ -144,18 +132,18 @@ function handleRoomResponse(data, textStatus)
 function handleRoomChange()
 {
 	var roomId = $('#phpws_form_room').val();
-	
+
 	setOptions(bed_drop,{});
 	$(bed_drop).attr('disabled', true);
-	
+
 	if(roomId == 0){
 		return;
 	}
-	
+
 	// Set the floor drop down to "loading", show the loading animation
 	setOptions(bed_drop, {'0': 'Loading...'});
 	$("#loading_img").show();
-	
+
 	var request = $.ajax( {
 		type : "GET",
 		url : "index.php",
@@ -181,11 +169,11 @@ function handleBedResponse(data, textStatus)
 	$(bed_drop).attr('disabled', false);
 	setOptions(bed_drop, data);
 }
-		
+
 function handleBedChange()
 {
 	var bedId = $('#phpws_form_bed').val();
-	
+
 	if(bedId == 0){
 		$('#phpws_form_submit_button').attr('disabled', true);
 	}else{
