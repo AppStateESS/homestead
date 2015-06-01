@@ -37,6 +37,8 @@ class RoomChangeApprovalView extends hms\View {
     {
         $tpl = array();
 
+        $tpl['TERM'] = Term::getPrintableSelectedTerm();
+
         $tpl['HALL_NAMES'] = implode(', ', $this->hallNames);
 
         $needsActionList = new RoomChangeListView($this->needsApproval, $this->term);
