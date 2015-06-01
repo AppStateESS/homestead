@@ -87,8 +87,7 @@ class FreshmenApplicationReview extends hms\View {
 
         $submitCmd->initForm($form);
 
-        $form->addSubmit('submit', 'Confirm & Continue');
-        $form->setExtra('submit', 'class="hms-application-submit-button"');
+        $tpl['CONFIRM_BTN'] = ''; // Dummy template var to turn on confirm button
 
         $redoCmd = CommandFactory::getCommand('ShowHousingApplicationForm');
         $redoCmd->setTerm($this->term);

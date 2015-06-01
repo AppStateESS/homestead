@@ -26,18 +26,18 @@ class TestSOAP extends SOAP{
 
         $student = new stdClass();
         $response->banner_id             = 900325006;
-        $response->user_name		 = 'jb67803';
+        $response->user_name		     = 'jb67803';
         $response->last_name             = 'Booker';
         $response->first_name            = 'Jeremy';
         $response->middle_name           = 'Lee';
-        $response->pref_name		 = 'J-dogg';
+        $response->pref_name		     = 'J-dogg';
         //$response->dob                 = '1986-09-05';
         $response->dob                   = '1997-09-05';
         $response->gender                = 'M';
         $response->deposit_date          = ''; // unused but present
         $response->deposit_waived        = 'false'; // unused but present
 
-        $response->confid		 = 'Y'; // TODO double check this value, cannot confirm attendence. low frequency
+        $response->confid		         = 'Y'; // TODO double check this value, cannot confirm attendence. low frequency
 
         $response->international         = false;
         $response->student_level         = 'U'; // U-undergrad, G-Graduate
@@ -48,8 +48,8 @@ class TestSOAP extends SOAP{
         $response->watauga_member        = true;
         $response->greek                 = 'Y'; //TODO double check this value
 
-        $response->disabled_pin		 = false;
-        $response->housing_waiver	 = false;
+        $response->disabled_pin		     = false;
+        $response->housing_waiver	     = false;
 
         //$response->student_type          = 'T';
         //$response->application_term      = '201040';

@@ -151,6 +151,7 @@ class HousingApplicationFormView extends hms\View
 
         $form->addTextArea('emergency_medical_condition');
         $form->addCssClass('emergency_medical_condition', 'form-control');
+        $form->setRows('emergency_medical_condition', 4);
 
         if (!is_null($this->existingApplication)) {
             $form->setValue('emergency_contact_name', $this->existingApplication->getEmergencyContactName());
@@ -226,6 +227,8 @@ class HousingApplicationFormView extends hms\View
             // Feature is not enabled
             $form->addHidden('rlc_interest', 0);
         }
+
+        $tpl['CONTINUE_BTN'] = '';
 
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();

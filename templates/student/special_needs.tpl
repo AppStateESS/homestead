@@ -1,39 +1,43 @@
-<h1>Special Needs Housing</h1>
+<div class="row">
+    <div class="col-md-10 col-md-offset-1">
+        <h1>Special Needs Housing</h1>
 
-<div class="col-md-10">
+        {START_FORM}
 
-    {START_FORM}
+        <p class="lead">
+            Select the checkboxes corresponding to the situation(s) that apply to you.
+        </p>
+        <p class="text-muted">
+            For more information regarding any of the special needs
+            listed below, please click on the link for the appropriate department.
+            The department’s website will open in a new window for your convenience
+            and will <strong>not</strong> interfere with the completion of your
+            housing application.
+        </p>
+        <hr>
+        <p>
+            Students with physical disabilities, psychological disabilities, or medical needs should contact the
+            <a href="http://ods.appstate.edu/policies-and-procedures/housing-accommodation-request" target="_blank">
+            Office of Disability Services</a>, who will then work with University Housing to determine whether or not special housing is warranted.
+        </p>
 
-    <p>Please select the checkboxes corresponding to the situation(s) below that
-        apply to you.  For more information regarding any of the special needs
-        listed below, please click on the link for the appropriate department.
-        The department’s website will open in a new window for your convenience
-        and will <strong>not</strong> interfere with the completion of your
-        housing application.
-    </p>
+        <div class="checkbox col-md-offset-1">
+            <label>
+                {SPECIAL_NEEDS_1}{SPECIAL_NEEDS_1_LABEL}
+            </label>
+        </div>
+        <div class="checkbox col-md-offset-1">
+            <label>
+                {SPECIAL_NEEDS_2}{SPECIAL_NEEDS_2_LABEL}
+            </label>
+        </div>
+        <div class="checkbox col-md-offset-1">
+            <label>
+                {SPECIAL_NEEDS_3}{SPECIAL_NEEDS_3_LABEL}
+            </label>
+        </div>
 
-    <p>Students with physical disabilities, psychological disabilities, or medical needs should contact the
-        <a href="http://ods.appstate.edu/policies-and-procedures/housing-accommodation-request" target="_blank">
-            Office of Disability Services
-        </a>
-        , who will then work with University Housing to determine whether or not special housing is warranted.
-    </p>
-
-    <div class="checkbox col-md-offset-1">
-        <label>
-            {SPECIAL_NEEDS_1}{SPECIAL_NEEDS_1_LABEL}
-        </label>
-    </div>
-    <div class="checkbox col-md-offset-1">
-        <label>
-            {SPECIAL_NEEDS_2}{SPECIAL_NEEDS_2_LABEL}
-        </label>
-    </div>
-    <div class="checkbox col-md-offset-1">
-        <label>
-            {SPECIAL_NEEDS_3}{SPECIAL_NEEDS_3_LABEL}
-        </label>
-    </div>
+    <hr>
 
     <p>Students who are transgendered and wish to apply for special needs
         housing may put their request in writing to the following address:
@@ -61,7 +65,7 @@
     </div>
 
     <div class="form-group">
-        <button type="submit" class="btn btn-success btn-lg">Continue <i class="fa fa-chevron-right"></i></button>
+        <button type="submit" class="btn btn-success btn-lg pull-right">Continue <i class="fa fa-chevron-right"></i></button>
     </div>
     {END_FORM}
 </div>
