@@ -46,6 +46,27 @@ class CheckinFactory {
         return $result;
     }
 
+    public static function getLastCheckinByBannerId($bannerId, $term)
+    {
+        $db = new PHPWS_DB('hms_checkin');
+        $db->addWhere('banner_id', $bannerId);
+        $db->addWhere('term', $term);
+
+        $db->addOrder(array('term DESC', 'checkin_date DESC'));
+
+        $result = $db->getObjects('RestoredCheckin');
+
+        if(PHPWS_Error::logIfError($result)){
+            throw new DatabaseException($result->toString());
+        }
+
+        if(sizeof($result) <= 0){
+            return null;
+        }
+
+        return $result[sizeof($result)-1];
+    }
+
     public static function getCheckinByBed(Student $student, HMS_Bed $bed, $term)
     {
         $db = new PHPWS_DB('hms_checkin');
@@ -191,12 +212,12 @@ class CheckinFactory {
 
         return $checkin;
     }
-    
+
     public static function getLastCheckoutForStudent(Student $student)
     {
         $db = new PHPWS_DB('hms_checkin');
         $db->addWhere('banner_id', $student->getBannerId());
-        
+
         $db->addWhere('checkout_date', null, '!=');
 
         $db->addOrder(array('term DESC', 'checkout_date DESC'));
