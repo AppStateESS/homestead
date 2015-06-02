@@ -68,7 +68,9 @@
 
 		// Setup autocomplete on the search input
 		$("#checkin_form_banner_id").autocomplete({
-			source: "index.php?module=hms&action=AjaxGetUsernameSuggestions&ajax=1",
+			source: function(request, response){
+				$.getJSON("index.php?module=hms&action=AjaxGetUsernameSuggestions&ajax=1", {studentSearchQuery: request.term}, response);
+			},
 			delay: 500,
 			minLength: 3,
 			focus: function( event, ui ) {
@@ -79,7 +81,7 @@
 				$("#checkin_form_banner_id").val(ui.item.banner_id);
 				return false; // NB: Must return false or default behavior will clear the search field
 			}
-		}).data("autocomplete")._renderItem = function (ul, item) {
+		}).data("instance")._renderItem = function (ul, item) {
 			//
 			var regExp = new RegExp("^" + this.term);
 			var nameHighlight = item.name.replace(regExp, "<span style='font-weight:bold;'>" + this.term + "</span>");
