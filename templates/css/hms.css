@@ -248,14 +248,6 @@ h2.room-attribute{
   padding: 0 5em;
 }
 
-img.roommate_request_icon {
-  border: transparent;
-  background-color: transparent;
-  float: right;
-  width: 20px;
-  height: 20px;
-}
-
 .special-needs-text {
   background: #F3F3F3;
   margin-left: 35px;
@@ -290,6 +282,9 @@ img.roommate_request_icon {
   margin-left: 25px;
 }
 
+/**
+ * Styles for the "hall-expander" in the message sending interfaces
+ */
 li.expanded.container {
   list-style-image: url("../../img/arrow_down.png");
 }

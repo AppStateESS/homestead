@@ -101,17 +101,17 @@
                 <th>Roommate(s):</th>
                 <!-- BEGIN confirmed -->
                 <td class="success">
-                    {ROOMMATE}<img class="roommate_request_icon" src="mod/hms/img/icons/check.png" />
+                    {ROOMMATE} <i class="fa fa-check fa-2x"></i>
                 </td>
                 <!-- END confirmed -->
                 <!-- BEGIN pending -->
                 <td class="warning">
-                    {ROOMMATE}<img class="roommate_request_icon" src="mod/hms/img/icons/warning.png" />
+                    {ROOMMATE} <i class="fa fa-warning fa-2x"></i>
                 </td>
                 <!-- END pending -->
                 <!-- BEGIN error_status -->
                 <td class="error">
-                    {ROOMMATE}<img class="roommate_request_icon" src="mod/hms/img/icons/warning.png" />
+                    {ROOMMATE} <i class="fa fa-warning fa-2x"></i>
                 </td>
                 <!-- END error_status -->
             </tr>
