@@ -16,7 +16,7 @@ class ShowAdminRoomChangeListCommand extends Command {
         PHPWS_Core::initModClass('hms', 'RoomChangeRequestFactory.php');
         PHPWS_Core::initModClass('hms', 'RoomChangeApprovalView.php');
 
-        $term = Term::getCurrentTerm();
+        $term = Term::getSelectedTerm();
 
         // Get all requests in the FutureRDApproved state (i.e. waiting on housing assignments office)
         $needsApprovalChanges = RoomChangeRequestFactory::getAllRoomChangesNeedsApproval($term);
