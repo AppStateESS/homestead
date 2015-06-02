@@ -65,5 +65,3 @@
       return PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/EarlyRelease.tpl');
     }
   }
-
-?>

@@ -25,8 +25,6 @@
     {
       parent::__construct($id);
 
-      $term = $this->term;
-
       $this->total = 0;
       $this->transferTotal = 0;
       $this->gradTotal = 0;
@@ -47,7 +45,6 @@
     {
 
       PHPWS_Core::initModClass('hms', 'HMS_Util.php');
-      $term = $this->term;
 
       $db = new PHPWS_DB('hms_new_application');
 
@@ -57,7 +54,7 @@
       $db->addColumn('hms_new_application.banner_id');
       $db->addColumn('hms_lottery_application.early_release');
 
-      $db->addWhere('hms_new_application.term', $term);
+      $db->addWhere('hms_new_application.term', $this->term);
 
       $db->addOrder(array('hms_lottery_application.early_release ASC', 'hms_new_application.username ASC'));
 
@@ -195,5 +192,3 @@
     }
 
   }
-
-?>

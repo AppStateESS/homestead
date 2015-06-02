@@ -14,11 +14,9 @@
     {
       $params = array();
 
-      $param['term'] = $this->report->getTerm();
+      $params['term'] = $this->report->getTerm();
 
       return $params;
     }
 
   }
-
-?>
