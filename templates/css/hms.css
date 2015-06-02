@@ -238,23 +238,9 @@ h2.room-attribute{
   color: #0A0;
 }
 
-
-#hms-term {
-  float: left;
-  font-weight: bold;
-}
-
-#hms-user {
-  float: right;
-}
-
 #hms-main {
   clear: both;
   padding: 1em 0;
-}
-
-#hms-guest-message {
-  margin-left: 5em;
 }
 
 #hms-guest-main {
