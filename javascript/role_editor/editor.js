@@ -85,17 +85,17 @@ var roleMan = function(className, instance, div, name){
             tabs.push('<li><a href="#tabs-'+i+'">'+this.roles[i].getName()+'</a></li>');
             var divContents = '<div id="tabs-'+i+'">';
             var members = this.roles[i].getMembers();
-            
+
             if(members.length == 0){
             	divContents += 'Please add members with the button below.';
             }else{
             	divContents += '<ul>';
             	for(var j in members){
-            		divContents += '<li>'+members[j].fullname+'<img width="13" height="13" style="margin-left: 5px; cursor: pointer" src="mod/hms/img/tango/process-stop.png" onclick="removeUser(\''+members[j].username+'\', \''+this.roles[i].getName()+'\', newMan);"></li>';
+            		divContents += '<li>'+members[j].fullname+' <i class="fa fa-trash-o" style=" cursor: pointer" onclick="removeUser(\''+members[j].username+'\', \''+this.roles[i].getName()+'\', newMan);"></i>';
             	}
             	divContents += '</ul>';
             }
-            
+
             divContents += '</div>';
             divs.push(divContents);
         }

@@ -5,9 +5,9 @@ namespace hms;
 abstract class HomesteadView extends View {
     private $main;
     public $sidebar = array();
-    
+
     protected $notifications;
-    
+
     public function addNotifications($n)
     {
         $this->notifications = $n;
@@ -17,7 +17,7 @@ abstract class HomesteadView extends View {
     {
         $this->main = $content;
     }
-    
+
     public function getMain()
     {
         return $this->main;
@@ -27,13 +27,12 @@ abstract class HomesteadView extends View {
     {
         $tpl = array();
         $tpl['MAIN'] = $content;
-        
+
         $navbar = new NavBar();
         $tpl['NAVBAR'] = $navbar->show();
 
 
         \Layout::addStyle('hms', 'css/hms.css');
-        \Layout::addStyle('hms', 'css/tango-icons.css');
 
         \Layout::add(\PHPWS_Template::process($tpl, 'hms', 'hms.tpl'));
     }
