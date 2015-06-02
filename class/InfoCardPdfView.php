@@ -1,9 +1,6 @@
 <?php
 
-require_once PHPWS_SOURCE_DIR . 'mod/hms/pdf/fpdf.php';
-require_once PHPWS_SOURCE_DIR . 'mod/hms/pdf/fpdi.php';
-
-PHPWS_Core::initModClass('hms', 'DamageTypeFactory.php');
+require_once PHPWS_SOURCE_DIR . 'mod/hms/vendor/autoload.php';
 
 /**
  * View class for generating the Resident Information Card PDF.
@@ -40,13 +37,7 @@ class InfoCardPdfView {
      */
     public function addInfoCard(InfoCard $infoCard)
     {
-        //$this->pdf = new FPDI('L', 'mm', 'Letter');
-
-        //$pagecount = $this->pdf->setSourceFile(PHPWS_SOURCE_DIR . 'mod/hms/pdf/ric-opt.pdf');
-        //$tplidx = $this->pdf->importPage(1);
         $this->pdf->addPage();
-        //$this->pdf->useTemplate($tplidx);
-
         $this->pdf->setFont('Times', 'B', 20);
 
         /******

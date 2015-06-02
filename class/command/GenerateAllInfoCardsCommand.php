@@ -1,7 +1,4 @@
 <?php
-require_once PHPWS_SOURCE_DIR . 'mod/hms/pdf/fpdf.php';
-require_once PHPWS_SOURCE_DIR . 'mod/hms/pdf/fpdi.php';
-
 
 /**
  * Controller/command for generating the entire set of RIC forms for a semester.
@@ -21,10 +18,6 @@ class GenerateAllInfoCardsCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        PHPWS_Core::initModClass('hms', 'CheckinFactory.php');
-        PHPWS_Core::initModClass('hms', 'InfoCard.php');
-        PHPWS_Core::initModClass('hms', 'InfoCardPdfView.php');
-
         $term = Term::getSelectedTerm();
 
         $checkins = CheckinFactory::getCheckinsOrderedByRoom($term);
@@ -47,5 +40,3 @@ class GenerateAllInfoCardsCommand extends Command {
         exit();
     }
 }
-
-?>
