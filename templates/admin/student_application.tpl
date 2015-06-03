@@ -62,6 +62,9 @@ Please review the information you entered. If you need to go back and make chang
     <tr>
         <th><label for="phpws_form_room_condition">Room Condition:</label></th><td>{ROOM_CONDITION}</td>
     </tr>
+    <tr>
+        <th><label for="phpws_form_room_condition">Smoking Preference:</label></th><td>{SMOKING_PREFERENCE}</td>
+    </tr>
 </table>
 <!-- END preferences -->
 <!-- BEGIN room_type -->

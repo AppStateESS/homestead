@@ -76,5 +76,3 @@ class ShowRequestRoommateCommand extends Command {
         $context->setContent(PHPWS_Template::process($tpl, 'hms', 'student/select_roommate.tpl'));
     }
 }
-
-?>

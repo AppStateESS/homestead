@@ -111,9 +111,22 @@
         <!-- BEGIN room_type -->
         <div class="form-group">
             <label for="{ROOM_TYPE_ID}">Preferred Room Type:</label>
-            {ROOM_TYPE}
+            <div class="row">
+                <div class="col-md-3">
+                    {ROOM_TYPE}
+                </div>
+            </div>
         </div>
         <!-- END room_type -->
+
+        <div class="form-group">
+            <label for="{SMOKING_PREFERENCE_ID}">Do you smoke?</label>
+            <div class="row">
+                <div class="col-md-3">
+                    {SMOKING_PREFERENCE}
+                </div>
+            </div>
+        </div>
 
         <h3>Emergency Contact Information</h3>
 

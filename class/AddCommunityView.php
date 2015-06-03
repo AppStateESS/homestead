@@ -42,9 +42,8 @@ class AddCommunityView extends hms\View {
 
         $form->addText('community_name', !is_null($this->community)?$this->community->get_community_name():'');
         $form->setClass('community_name', 'form-control');
-        $var = array('ELEMENT' => $form->getId('community_name'));
-        javascript('modules/hms/autoFocus', $var);
-
+        $form->setExtra('community_name', 'autofocus');
+        
         $form->addText('abbreviation', !is_null($this->community)?$this->community->get_abbreviation():'');
         $form->setClass('abbreviation', 'form-control');
         $form->addText('capacity', !is_null($this->community)?$this->community->get_capacity():'');

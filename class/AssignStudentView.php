@@ -60,7 +60,8 @@ class AssignStudentView extends hms\View {
         }
         $form->addCssClass('username', 'form-control');
 
-        javascript('modules/hms/autoFocus', array('ELEMENT' => $form->getId('username')));
+        //javascript('modules/hms/autoFocus', array('ELEMENT' => $form->getId('username')));
+        $form->setExtra('username', 'autoFocus');
 
         // Check to see if a bed_id was passed in, this means
         // the user clicked an 'unassigned' link. We need to pre-populate

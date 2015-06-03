@@ -109,9 +109,20 @@ class HousingApplicationFormView extends hms\View
             }
         }
 
+        /*********************
+        * Smoking Preference *
+        *********************/
+        $form->addDropBox('smoking_preference', array('1'=>_('No'), '2'=>_('Yes')));
+        if(!is_null($this->existingApplication)){
+             $form->setMatch('smoking_preference', $this->existingApplication->getSmokingPreference());
+        }else{
+            $form->setMatch('smoking_preference', '1');
+        }
+        $form->addCssClass('smoking_preference', 'form-control');
+
         /***************
          * Meal Option *
-         ***************/
+        ***************/
         if ($sem == TERM_FALL || $sem == TERM_SPRING) {
             if ($this->student->getType() == TYPE_FRESHMEN) {
                 $mealOptions = array(BANNER_MEAL_STD => 'Standard', BANNER_MEAL_HIGH => 'High', BANNER_MEAL_SUPER => 'Super');

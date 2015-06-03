@@ -126,6 +126,7 @@ class FallContextApplicationFactory extends ContextApplicationFactory {
         $lifestyleOption	= $this->context->get('lifestyle_option');
         $preferredBedtime	= $this->context->get('preferred_bedtime');
         $roomCondition		= $this->context->get('room_condition');
+        $smokingPreference  = $this->context->get('smoking_preference');
 
         if(!is_numeric($lifestyleOption) || !is_numeric($preferredBedtime) || !is_numeric($roomCondition)){
             //throw new InvalidArgumentException('Invalid option from context. Please try again.');
@@ -135,6 +136,7 @@ class FallContextApplicationFactory extends ContextApplicationFactory {
         $this->app->setLifestyleOption($lifestyleOption);
         $this->app->setPreferredBedtime($preferredBedtime);
         $this->app->setRoomCondition($roomCondition);
+        $this->app->setSmokingPreference($smokingPreference);
 
         $rlcInterest = $this->context->get('rlc_interest');
         if(isset($rlcInterest)){
@@ -155,6 +157,7 @@ class SpringContextApplicationFactory extends ContextApplicationFactory {
         $this->app->setLifestyleOption($this->context->get('lifestyle_option'));
         $this->app->setPreferredBedtime($this->context->get('preferred_bedtime'));
         $this->app->setRoomCondition($this->context->get('room_condition'));
+        $this->app->setSmokingPreference($this->context->get('smoking_preference'));
     }
 }
 
@@ -164,6 +167,7 @@ class SummerContextApplicationFactory extends ContextApplicationFactory {
     {
         $this->app->setApplicationType('summer');
         $this->app->setRoomType($this->context->get('room_type'));
+        $this->app->setSmokingPreference($this->context->get('smoking_preference'));
     }
 }
 

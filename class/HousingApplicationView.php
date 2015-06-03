@@ -81,6 +81,12 @@ class HousingApplicationView extends hms\View {
             $tpl['ROOM_CONDITION']      = 'n/a';
         }
 
+        if(isset($application->smoking_preference)){
+            $tpl['SMOKING_PREFERENCE']  = $application->smoking_preference == 1?'No':'Yes';
+        }else{
+            $tpl['SMOKING_PREFERENCE']  = 'n/a';
+        }
+
         if(isset($application->room_type)){
             $tpl['ROOM_TYPE']           = $application->room_type == ROOM_TYPE_DOUBLE ? 'Double' : 'Private (if available)';
         }
