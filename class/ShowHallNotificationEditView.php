@@ -43,6 +43,7 @@ class ShowHallNotificationEditView extends hms\View{
         $form->addText('subject', (!is_null($this->subject) ? $this->subject : ''));
         $form->setLabel('subject', 'Subject:');
         $form->setSize('subject', 35);
+        $form->setExtra('subject', 'autofocus');
 
         $form->addTextarea('body', (!is_null($this->body) ? $this->body : ''));
         $form->setLabel('body', 'Message:');
@@ -55,8 +56,6 @@ class ShowHallNotificationEditView extends hms\View{
             $form->addHidden('floor', $this->floors);
         }
 
-        //javascript('modules/hms/autoFocus', array('ELEMENT'=>$form->getId('subject')));
-        $form->setExtra('subject', 'autoFocus');
         $form->addSubmit('Submit');
 
         //After you ask "wtf?", check the last parameter on preg_replace (only removes the first two occurances)

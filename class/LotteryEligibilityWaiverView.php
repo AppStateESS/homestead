@@ -8,9 +8,8 @@ class LotteryEligibilityWaiverView extends hms\View {
         $form = new PHPWS_Form('waiver');
         $form->addTextArea('usernames');
         $form->setLabel('usernames', 'ASU User names (one per line):');
+        $form->setExtra('usernames', 'autofocus');
 
-        //javascript('modules/hms/autoFocus', array('ELEMENT' => $form->getId('usernames')));
-        $form->setExtra('usernames', 'autoFocus');
         $form->addSubmit('submit_btn', 'Create');
 
         $cmd = CommandFactory::getCommand('CreateWaiver');

@@ -39,9 +39,7 @@ class RoommateProfileSearchForm extends hms\View {
         $form->addText('asu_username');
         $form->setLabel('asu_username','ASU Username: ');
         $form->addCssClass('asu_username', 'form-control');
-
-        //javascript('modules/hms/autoFocus', array('ELEMENT' => $form->getId('asu_username')));
-        $form->setExtra('asu_username', 'autoFocus');
+        $form->setExtra('asu_username', 'autofocus');
 
         $form->addCheck('hobbies_checkbox',$hobbies);
         $form->setLabel('hobbies_checkbox',$hobbies_labels);

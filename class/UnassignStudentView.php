@@ -27,10 +27,7 @@ class UnassignStudentView extends hms\View{
             $form->setValue('username', $this->student->getUsername());
         }
         $form->addCssClass('username', 'form-control');
-
-        //$var = array('ELEMENT' => $form->getId('username'));
-        //javascript('modules/hms/autoFocus', $var);
-        $form->setExtra('username', 'autoFocus');
+        $form->setExtra('username', 'autofocus');
 
         // Addition of "Unassignment Type"
         $form->addDropBox('unassignment_type', array(
