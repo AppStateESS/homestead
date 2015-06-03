@@ -632,6 +632,7 @@ class HousingApplication {
                 $db->addColumn('hms_fall_application.lifestyle_option');
                 $db->addColumn('hms_fall_application.preferred_bedtime');
                 $db->addColumn('hms_fall_application.room_condition');
+                $db->addColumn('hms_fall_application.smoking_preference');
                 $result = $db->getObjects('FallApplication');
                 break;
             case TERM_SPRING:

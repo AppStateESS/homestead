@@ -9,6 +9,7 @@ class ShowFreshmenApplicationReviewCommand extends Command {
     private $mealOption;
     private $lifestyleOption;
     private $preferredBedtime;
+    private $smoking_preference;
     private $roomCondition;
     private $rlcInterest;
 

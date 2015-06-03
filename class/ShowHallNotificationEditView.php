@@ -55,7 +55,8 @@ class ShowHallNotificationEditView extends hms\View{
             $form->addHidden('floor', $this->floors);
         }
 
-        javascript('modules/hms/autoFocus', array('ELEMENT'=>$form->getId('subject')));
+        //javascript('modules/hms/autoFocus', array('ELEMENT'=>$form->getId('subject')));
+        $form->setExtra('subject', 'autoFocus');
         $form->addSubmit('Submit');
 
         //After you ask "wtf?", check the last parameter on preg_replace (only removes the first two occurances)
