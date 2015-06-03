@@ -179,7 +179,7 @@ class HousingApplication {
         }
 
         // If the object is new, set the 'created' fields
-        if ($this->getId() == 0) {
+        if (empty($this->getCreatedOn())) {
             $this->setCreatedOn(time());
             if (isset($user) && !is_null($user)) {
                 $this->setCreatedBy(UserStatus::getUsername());
