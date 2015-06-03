@@ -5,8 +5,11 @@ PHPWS_Core::initModClass('hms', 'HousingApplication.php');
 class SummerApplication extends HousingApplication{
 
     public $room_type = 0;
+    public $smoking_preference = NULL;
 
-    public function __construct($id = 0, $term = NULL, $banner_id = NULL, $username = NULL, $gender = NULL, $student_type = NULL, $application_term = NULL, $cell_phone = NULL, $meal_plan = NULL, $physical_disability = NULL, $psych_disability = NULL, $gender_need = NULL, $medical_need = NULL, $international = NULL, $room_type = NULL){
+    public function __construct($id = 0, $term = NULL, $banner_id = NULL, $username = NULL, $gender = NULL, $student_type = NULL, $application_term = NULL, 
+            $cell_phone = NULL, $meal_plan = NULL, $physical_disability = NULL, $psych_disability = NULL, $gender_need = NULL, $medical_need = NULL, 
+            $international = NULL, $room_type = NULL, $smoking_preference = NULL){
 
         /**
          * If the id is non-zero, then we need to load the other member variables
@@ -23,6 +26,7 @@ class SummerApplication extends HousingApplication{
         parent::__construct($term, $banner_id, $username, $gender, $student_type, $application_term, $cell_phone, $meal_plan, $physical_disability, $psych_disability, $gender_need, $medical_need, $international);
 
         $this->setRoomType($room_type);
+        $this->setSmokingPreference($smoking_preference);
     }
 
 
@@ -120,13 +124,14 @@ class SummerApplication extends HousingApplication{
                 $fields['room_type']   = 'Unknown';
                 break;
         }
+        $fields['smoking_preference'] = $this->getSmokingPreference() == 1 ? 'No' : 'Yes';
 
         return $fields;
     }
 
     /************************
      * Accessors & Mutators *
-     ************************/
+     ***********************/
 
     public function getRoomType(){
         return $this->room_type;
@@ -134,6 +139,14 @@ class SummerApplication extends HousingApplication{
 
     public function setRoomType($type){
         $this->room_type = $type;
+    }
+
+    public function getSmokingPreference(){
+        return $this->smoking_preference;
+    }
+
+    public function setSmokingPreference($preference){
+        $this->smoking_preference = $preference;
     }
 }
 

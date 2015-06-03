@@ -7,8 +7,11 @@ class SpringApplication extends HousingApplication{
     public $lifestyle_option    = NULL;
     public $preferred_bedtime   = NULL;
     public $room_condition      = NULL;
+    public $smoking_preference  = NULL;
 
-    public function __construct($id = 0, $term = NULL, $banner_id = NULL, $username = NULL, $gender = NULL, $student_type = NULL, $application_term = NULL, $cell_phone = NULL, $meal_plan = NULL, $physical_disability = NULL, $psych_disability = NULL, $gender_need = NULL, $medical_need = NULL, $international = NULL, $lifestyle_option = NULL, $preferred_bedtime = NULL, $room_condition = NULL){
+    public function __construct($id = 0, $term = NULL, $banner_id = NULL, $username = NULL, $gender = NULL, $student_type = NULL, $application_term = NULL, 
+            $cell_phone = NULL, $meal_plan = NULL, $physical_disability = NULL, $psych_disability = NULL, $gender_need = NULL, $medical_need = NULL, 
+            $international = NULL, $lifestyle_option = NULL, $preferred_bedtime = NULL, $room_condition = NULL, $smoking_preference = NULL){
 
         /**
          * If the id is non-zero, then we need to load the other member variables
@@ -27,6 +30,7 @@ class SpringApplication extends HousingApplication{
         $this->setLifestyleOption($lifestyle_option);
         $this->setPreferredBedtime($preferred_bedtime);
         $this->setRoomCondition($room_condition);
+        $this->setSmokingPreference($smoking_preference);
     }
 
 
@@ -113,9 +117,10 @@ class SpringApplication extends HousingApplication{
     {
         $fields = parent::unassignedStudentsFields();
 
-        $fields['lifestyle']       = $this->getLifestyleOption()  == 1 ? 'Single gender' : 'Co-ed';
-        $fields['bedtime']         = $this->getPreferredBedtime() == 1 ? 'Early'         : 'Late';
-        $fields['room_condition']  = $this->getRoomCondition()    == 1 ? 'Neat'          : 'Cluttered';
+        $fields['lifestyle']            = $this->getLifestyleOption()   == 1 ? 'Single gender' : 'Co-ed';
+        $fields['bedtime']              = $this->getPreferredBedtime()  == 1 ? 'Early'         : 'Late';
+        $fields['room_condition']       = $this->getRoomCondition()     == 1 ? 'Neat'          : 'Cluttered';
+        $fields['smoking_preference']   = $this->getSmokingPreference() == 1 ? 'No'            : 'Yes';
 
         return $fields;
     }
@@ -146,6 +151,14 @@ class SpringApplication extends HousingApplication{
 
     public function setRoomCondition($condition){
         $this->room_condition = $condition;
+    }
+
+    public function getSmokingPreference(){
+        return $this->smoking_preference;
+    }
+
+    public function setSmokingPreference($preference){
+        $this->smoking_preference = $preference;
     }
 }
 

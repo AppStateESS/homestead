@@ -124,10 +124,21 @@ class HousingApplicationFormView extends hms\View {
                 $form->setMatch('room_type', '0');
             }
         }
+
+        /*********************
+        * Smoking Preference *
+        *********************/
+        $form->addDropBox('smoking_preference', array('1'=>_('No'),
+        '2'=>_('Yes')));
+        if(!is_null($this->existingApplication)){
+             $form->setMatch('smoking_preference', $this->existingApplication->getSmokingPreference());
+        }else{
+            $form->setMatch('smoking_preference', '1');
+        }
         
         /***************
          * Meal Option *
-        */
+        ***************/
         if ($sem == TERM_FALL || $sem == TERM_SPRING) {
             if($this->student->getType() == TYPE_FRESHMEN){
                 $mealOptions = array(BANNER_MEAL_STD=>'Standard', BANNER_MEAL_HIGH=>'High', BANNER_MEAL_SUPER=>'Super');
@@ -213,7 +224,6 @@ class HousingApplicationFormView extends hms\View {
             // Feature is enabled, but student hasn't submitted one yet
             $form->addRadio('rlc_interest', array(0, 1));
             $form->setLabel('rlc_interest', array(_("No"), _("Yes")));
-             
             if(!is_null($this->existingApplication) && !is_null($this->existingApplication->getRLCInterest())){
                 $form->setMatch('rlc_interest', 'rlc_interest');
             }else{

@@ -74,7 +74,9 @@
                 <td>Preferred Room Type: </td><td align="left">{ROOM_TYPE}</td>
             </tr>
             <!-- END room_type -->
-            
+            <tr>
+                <td>Smoking Preference: </td><td align="left">{SMOKING_PREFERENCE}</td>
+            </tr>
             <tr>
             	<th colspan="2">Emergency Contact Information</th>
             <tr>

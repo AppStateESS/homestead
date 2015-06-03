@@ -87,6 +87,7 @@ class HousingApplicationFormSubmitCommand extends Command {
                 $errorCmd->redirect();
             }
         }
+        $smoking_preference = $context->get('smoking_preference');
 
         $specialNeed = $context->get('special_need');
 

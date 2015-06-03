@@ -35,6 +35,7 @@ class FreshmenApplicationReview extends hms\View {
         } else if($sem == 20 || $sem == 30) {
             $tpl['ROOM_TYPE'] = $this->app->getRoomType() == 0?'Two person':'Private (if available)';
         }
+        $tpl['SMOKING_PREFERENCE']  = $this->app->getSmokingPreference() == 1?'No' : 'Yes';
         
         $tpl['MEAL_OPTION']         = HMS_Util::formatMealOption($this->app->getMealPlan());
 
