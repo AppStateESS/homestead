@@ -23,6 +23,7 @@
     "tests"
   ],
   "dependencies": {
-    "typeahead.js": "0.11.*"
+    "typeahead.js": "0.11.*",
+    "flot": "~0.8.3"
   }
 }
