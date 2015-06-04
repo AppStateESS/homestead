@@ -2,6 +2,9 @@
 
 PHPWS_Core::initModClass('hms', 'SOAP.php');
 
+// Seconds of delay you want to replicate for each query.
+define('FAKE_SOAP_DELAY', 0);
+
 class TestSOAP extends SOAP
 {
 
@@ -22,18 +25,18 @@ class TestSOAP extends SOAP
         if (empty($term) || is_null($term) || !isset($term)) {
             throw new InvalidArgumentException('Bad term');
         }
-        
+
         $response = new stdClass();
-        
+
         $db = \Database::newDB();
         $soap_tbl = $db->addTable('fake_soap');
         if (!$soap_tbl->exists()) {
             throw \Exception('fake_soap table does not exist');
         }
-        
+
         $soap_tbl->addFieldConditional('banner_id', $bannerId);
         $student_array = $db->selectOneRow();
-        if  (empty($student_array)) {
+        if (empty($student_array)) {
             require_once PHPWS_SOURCE_DIR . 'mod/hms/class/exception/StudentNotFoundException.php';
             throw new StudentNotFoundException('User not found', 0, $bannerId);
         }
@@ -70,19 +73,28 @@ class TestSOAP extends SOAP
 
         $address_array = unserialize($address);
         foreach ($address_array as $add) {
-            $address_object_array[] = (object)$add;
+            $address_object_array[] = (object) $add;
         }
-        
+
         $phone_array = unserialize($phone);
         foreach ($phone_array as $p) {
-            $phone_object_array[] = (object)$p;
+            $phone_object_array[] = (object) $p;
         }
-        
+
         $response->address = $address_object_array;
         $response->error_num = 0;
         $response->error_desc = null;
         $response->phone = $phone_object_array;
+
+        $this->createDelay();
         return $response;
+    }
+
+    public function createDelay()
+    {
+        if (FAKE_SOAP_DELAY > 0) {
+            sleep(FAKE_SOAP_DELAY);
+        }
     }
 
     /**
@@ -90,18 +102,20 @@ class TestSOAP extends SOAP
      */
     public function getUsername($bannerId)
     {
+        $this->createDelay();
         $db = \Database::newDB();
         $t = $db->addTable('fake_soap');
-        $t->addFieldConditional('banner_id', (string)$bannerId);
+        $t->addFieldConditional('banner_id', (string) $bannerId);
         $t->addField('username');
         return $db->selectColumn();
     }
 
     public function getBannerId($username)
     {
+        $this->createDelay();
         $db = \Database::newDB();
         $t = $db->addTable('fake_soap');
-        $t->addFieldConditional('username', (string)$username);
+        $t->addFieldConditional('username', (string) $username);
         $t->addField('banner_id');
         return $db->selectColumn();
     }
@@ -204,5 +218,3 @@ class TestSOAP extends SOAP
     }
 
 }
-
-
