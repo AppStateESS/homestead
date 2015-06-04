@@ -7,13 +7,25 @@
  */
 
 PHPWS_Core::initModClass('hms', 'ReportPdfView.php');
+if (!defined('WKPDF_PATH')) {
+    define('WKPDF_PATH', PHPWS_SOURCE_DIR . 'mod/hms/vendor/ioki/wkhtmltopdf-amd64-centos6/bin/');
+}
+if (!defined('USE_XVFB')) {
+    define('USE_XVFB', false);
+    define('XVFB_PATH', '');
+}
 
-class FloorRosterPdfView extends ReportPdfView {
+class FloorRosterPdfView extends ReportPdfView
+{
 
     public function __construct(Report $report)
     {
         parent::__construct($report);
-        $this->pdf = new WKPDF();
+        $this->pdf = new \WKPDF(WKPDF_PATH);
+        if (USE_XVFB) {
+            $this->pdf->setXVFB(XVFB_PATH);
+        }
+
         $this->pdf->set_orientation('Landscape');
     }
 
@@ -23,7 +35,7 @@ class FloorRosterPdfView extends ReportPdfView {
         $tpl = new PHPWS_Template('hms');
         $tpl->setFile('admin/reports/FloorRoster.tpl');
 
-        $rows =  & $this->report->rows;
+        $rows = & $this->report->rows;
 
         foreach ($rows as $hall_name => $hall) {
 
