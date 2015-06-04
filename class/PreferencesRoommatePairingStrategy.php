@@ -68,7 +68,8 @@ class PreferencesRoommatePairingStrategy extends RoommatePairingStrategy {
         $app->gender . "\t" .
         $app->lifestyle_option . "\t" .
         $app->room_condition . "\t" .
-        $app->preferred_bedtime;
+        $app->preferred_bedtime . "\t" .
+        $app->smoking_preference;
     }
 }
 
@@ -87,10 +88,12 @@ class PreferenceValues
         $this->lifestyle = 1;
         $this->condition = 1;
         $this->bedtime   = 1;
+        $this->smoking   = 1;
     }
 
     public function increment()
     {
+
         if($this->bedtime < 2) {
             $this->bedtime = 2;
         } else {
@@ -106,10 +109,18 @@ class PreferenceValues
                 } else {
                     $this->lifestyle = 1;
 
-                    if($this->gender < 1) {
+                    if($this->smoking <2)
+                    {
+                      $this->smoking = 2;
+                    }
+                    else{
+                      $this->smoking = 1;
+
+                      if($this->gender < 1) {
                         $this->gender = 1;
-                    } else {
+                      } else {
                         throw new CanNotIncrementException();
+                      }
                     }
                 }
             }
@@ -128,7 +139,8 @@ class PreferenceValues
         $app->gender == $this->gender &&
         $app->lifestyle_option == $this->lifestyle &&
         $app->room_condition == $this->condition &&
-        $app->preferred_bedtime == $this->bedtime;
+        $app->preferred_bedtime == $this->bedtime &&
+        $app->smoking_preference == $this->smoking;
     }
 
     public function getGender()
@@ -149,5 +161,10 @@ class PreferenceValues
     public function getBedtime()
     {
         return $this->bedtime;
+    }
+
+    public function getSmoking()
+    {
+      return $this->smoking;
     }
 }

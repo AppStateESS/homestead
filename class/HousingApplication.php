@@ -610,7 +610,6 @@ class HousingApplication {
         $db = new PHPWS_DB('hms_new_application');
         $db->addWhere('student_type', 'F');
         $db->addWhere('term', $term);
-        $db->addWhere('withdrawn', 0);
         $db->addWhere('cancelled', 0);
         //        $db->addWhere('gender', $gender);
 
