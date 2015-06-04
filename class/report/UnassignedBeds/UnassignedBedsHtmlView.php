@@ -11,6 +11,7 @@ class UnassignedBedsHtmlView extends ReportHtmlView {
 
     protected function render()
     {
+        require_once PHPWS_SOURCE_DIR . 'mod/hms/class/Term.php';
         parent::render();
 
         $this->tpl['TERM'] = Term::toString($this->report->getTerm());
