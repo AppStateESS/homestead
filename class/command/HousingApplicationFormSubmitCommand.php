@@ -22,7 +22,6 @@ class HousingApplicationFormSubmitCommand extends Command {
     public function execute(CommandContext $context)
     {
         $term = $context->get('term');
-        $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
 
         $errorCmd = CommandFactory::getCommand('ShowHousingApplicationForm');
         $errorCmd->setTerm($term);
@@ -85,7 +84,6 @@ class HousingApplicationFormSubmitCommand extends Command {
                 $errorCmd->redirect();
             }
         }
-        $smoking_preference = $context->get('smoking_preference');
 
         $specialNeed = $context->get('special_need');
 
