@@ -225,7 +225,7 @@ abstract class ApplicationFeature
     /**
      *
      * @param $student - The student we're generating a menu for.
-     * @return String - The HTML for this menu block, for this student.
+     * @return View - A View object which can generate the HTML for this block
      */
     public abstract function getMenuBlockView(Student $student);
 
