@@ -29,4 +29,4 @@ class ConfirmedRoommatePager extends hms\View {
     }
 }
 
-?>
+

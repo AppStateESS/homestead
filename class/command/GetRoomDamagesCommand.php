@@ -32,4 +32,4 @@ class GetRoomDamagesCommand extends Command {
     }
 }
 
-?>
+

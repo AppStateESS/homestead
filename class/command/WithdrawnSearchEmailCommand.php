@@ -65,4 +65,4 @@ class WithdrawnSearchEmailCommand extends ScheduledPulse
     }
 }
 
-?>
+

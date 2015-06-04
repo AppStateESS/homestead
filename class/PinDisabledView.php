@@ -18,4 +18,4 @@ class PinDisabledView extends hms\View {
     }
 }
 
-?>
+

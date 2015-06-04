@@ -34,4 +34,3 @@ class DenyRlcApplicationCommand extends Command {
     }
 }
 
-?>

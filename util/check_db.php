@@ -8,7 +8,7 @@
   *
   * This file must be copied to the top level of your PHPWS install directory,
   * in order to function.  The core classes expect files to be relative to that
-  * directory and this script requires those classes so there doesn't seem to 
+  * directory and this script requires those classes so there doesn't seem to
   * be a way around that.
   **/
 
@@ -35,7 +35,7 @@ foreach($results as $hall => $floors){
     echo "Error in Hall: ".$hall."\n";
 
     //if it's not an array we don't have any floors so echo out the error msg
-    if(!is_array($floors)){ 
+    if(!is_array($floors)){
         echo "\t" . $floors . "\n";
     } else {
         foreach($floors as $floor => $rooms){
@@ -51,4 +51,3 @@ foreach($results as $hall => $floors){
     }
     echo "\n";
 }
-?>

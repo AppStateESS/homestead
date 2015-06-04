@@ -21,4 +21,4 @@ class ShowAdminMaintenanceMenuCommand extends Command {
     }
 }
 
-?>
+

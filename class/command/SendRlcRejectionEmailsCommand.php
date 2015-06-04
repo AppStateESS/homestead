@@ -48,4 +48,3 @@ class SendRlcRejectionEmailsCommand extends Command
 
 }
 
-?>

@@ -83,4 +83,4 @@ class RlcReapplicationMenuBlockView extends hms\View {
     }
 }
 
-?>
+

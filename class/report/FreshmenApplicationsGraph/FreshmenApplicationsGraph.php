@@ -141,4 +141,3 @@ class FreshmenApplicationsGraph extends Report {
         return $this->lastYearJson;
     }
 }
-?>

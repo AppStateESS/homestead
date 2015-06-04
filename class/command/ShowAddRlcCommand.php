@@ -45,4 +45,4 @@ class ShowAddRlcCommand extends Command {
         $context->setContent($view->show());
     }
 }
-?>
+

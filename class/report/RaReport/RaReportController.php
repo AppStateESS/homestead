@@ -23,4 +23,4 @@ class RaReportController extends ReportController implements iSyncReport, iHtmlR
     }
 }
 
-?>
+

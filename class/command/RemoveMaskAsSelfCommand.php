@@ -27,4 +27,4 @@ class RemoveMaskAsSelfCommand extends Command {
         $cmd->redirect();
     }
 }
-?>
+

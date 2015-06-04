@@ -66,4 +66,4 @@ class WaitingListSignupCommand extends Command {
         $cmd->redirect();
     }
 }
-?>
+

@@ -49,4 +49,4 @@ class ShowHallNotificationEditCommand extends Command {
         $context->setContent($view->show());
     }
 }
-?>
+

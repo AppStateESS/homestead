@@ -236,4 +236,4 @@ class CheckinFactory {
         return array_shift($result);
     }
 }
-?>
+

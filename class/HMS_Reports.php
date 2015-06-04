@@ -132,4 +132,4 @@ class HMS_Reports{
         return $tpl->get();
     }
 }
-?>
+

@@ -22,5 +22,3 @@ class AppliedStudentDataController extends ReportController implements iSyncRepo
         return $params;
     }
 }
-
-?>

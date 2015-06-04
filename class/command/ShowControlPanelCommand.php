@@ -18,4 +18,4 @@ class ShowControlPanelCommand extends Command {
     }
 }
 
-?>
+

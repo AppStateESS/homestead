@@ -39,4 +39,4 @@ class CancelledAppsByTypeHtmlView extends ReportHtmlView {
     }
 }
 
-?>
+

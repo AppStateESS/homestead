@@ -42,4 +42,4 @@ class CreateRoommateGroupViewCommand extends Command {
     }
 }
 
-?>
+

@@ -21,4 +21,3 @@ class LotteryChooseRoomCommand extends Command {
     }
 }
 
-?>

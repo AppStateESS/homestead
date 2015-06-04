@@ -68,4 +68,4 @@ class ProcessBannerQueueCommand extends Command {
     }
 }
 
-?>
+

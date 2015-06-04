@@ -35,4 +35,3 @@ class LotterySettingsSubmitCommand extends Command {
     }
 }
 
-?>

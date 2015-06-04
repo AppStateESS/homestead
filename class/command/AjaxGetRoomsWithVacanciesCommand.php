@@ -18,7 +18,7 @@ class AjaxGetRoomsWithVacanciesCommand extends Command {
         $floor = new HMS_Floor($context->get('floorId'));
 
         $rooms = $floor->getRoomsWithVacancies();
-         
+
         $json_rooms = array();
         $json_rooms[0] = 'Select ...';
 
@@ -41,5 +41,3 @@ class AjaxGetRoomsWithVacanciesCommand extends Command {
         $context->setContent(json_encode($json_rooms));
     }
 }
-
-?>

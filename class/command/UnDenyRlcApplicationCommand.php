@@ -35,4 +35,3 @@ class UnDenyRlcApplicationCommand extends Command {
     }
 }
 
-?>

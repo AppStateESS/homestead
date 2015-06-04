@@ -95,4 +95,4 @@ class ShowCheckoutFormCommand extends Command {
     }
 }
 
-?>
+

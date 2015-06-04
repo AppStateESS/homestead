@@ -67,4 +67,4 @@ class AcceptDeclineRlcInviteCommand extends Command {
     }
 }
 
-?>
+

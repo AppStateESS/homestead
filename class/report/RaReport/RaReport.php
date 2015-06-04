@@ -84,6 +84,6 @@ class RaReport extends Report implements iCsvReport
         return $this->rows;
     }
 }
-?>
+
 
 

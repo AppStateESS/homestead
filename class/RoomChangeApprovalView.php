@@ -60,4 +60,4 @@ class RoomChangeApprovalView extends hms\View {
     }
 }
 
-?>
+

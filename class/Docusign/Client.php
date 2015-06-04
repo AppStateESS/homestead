@@ -46,7 +46,7 @@ class Client {
 
     // The DocuSign Environment
     private $environment;
-    
+
     // The DocuSign Account Id
     private $accountID;
 
@@ -60,28 +60,28 @@ class Client {
 
         // Create Credentials object
         $this->creds = new Creds($integratorKey, $email, $password);
-        
+
         // Initialize local variables
         $this->version = $version;
         $this->environment = $environment;
         $this->accountID = $accountId;
-        
+
         //$this->curl = new CurlIO();
-        
+
         // Authenticate
         $this->authenticate();
     }
-    
+
     public function authenticate() {
         $url = $this->getAPIUrl() .  '/login_information';
-        
+
         $http = new \Guzzle\Http\Client();
         try {
             $request = $http->createRequest('GET', $url);
             $request->setHeader('Content-Type', 'application/json');
             $request->setHeader('Accept', 'application/json');
             $request->setHeader('X-DocuSign-Authentication', $this->getAuthHeader());
-            $response = $http->send($request);   
+            $response = $http->send($request);
         } catch (\GuzzleHttp\Exception\RequestException $e) {
         	var_dump($e);
             var_dump($e->getRequest());
@@ -92,7 +92,7 @@ class Client {
         //var_dump($json['loginAccounts'][0]['baseUrl']);
         $this->baseURL = $json['loginAccounts'][0]['baseUrl'];
         $this->accountID = $json['loginAccounts'][0]['accountId'];
-        
+
         /*
         if( count($response->loginAccounts) > 1 ) $this->hasMultipleAccounts = true;
         $defaultBaseURL = '';
@@ -104,7 +104,7 @@ class Client {
                     break;
                 }
             }
-            if( $account->isDefault == 'true' ) { 
+            if( $account->isDefault == 'true' ) {
                 $defaultBaseURL = $account->baseUrl;
                 $defaultAccountID = $account->accountId;
             }
@@ -134,7 +134,7 @@ class Client {
             $accept
         );
     }
-    
+
     public function getAuthHeader()
     {
     	$authArray = array('Username' => $this->creds->getEmail(),
@@ -149,5 +149,3 @@ class Client {
 class Exception extends \Exception {}
 class AuthException extends Exception {}
 class IOException extends Exception {}
-
-?>

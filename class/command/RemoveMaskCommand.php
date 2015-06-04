@@ -36,4 +36,3 @@ class RemoveMaskCommand extends Command
     }
 }
 
-?>

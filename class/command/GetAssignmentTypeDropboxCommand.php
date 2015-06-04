@@ -37,4 +37,4 @@ class GetAssignmentTypeDropboxCommand extends Command {
         exit();
     }
 }
-?>
+

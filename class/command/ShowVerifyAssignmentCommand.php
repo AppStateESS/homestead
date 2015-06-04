@@ -24,4 +24,3 @@ class ShowVerifyAssignmentCommand extends Command
     }
 }
 
-?>

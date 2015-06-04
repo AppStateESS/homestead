@@ -45,4 +45,4 @@ class HousingApplicationCancelView extends hms\View {
     }
 }
 
-?>
+

@@ -138,4 +138,4 @@ class ResidenceHallView extends hms\View {
     }
 }
 
-?>
+

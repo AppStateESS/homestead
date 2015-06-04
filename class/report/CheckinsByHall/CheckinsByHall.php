@@ -53,4 +53,3 @@ class CheckinsByHall extends Report {
     }
 }
 
-?>

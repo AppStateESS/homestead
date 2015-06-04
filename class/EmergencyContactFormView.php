@@ -77,4 +77,4 @@ class EmergencyContactFormView extends hms\View {
     }
 }
 
-?>
+

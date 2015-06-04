@@ -74,4 +74,4 @@ class ShowRoommateConfirmationCommand extends Command
     }
 }
 
-?>
+

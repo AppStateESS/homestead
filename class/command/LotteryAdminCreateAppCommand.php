@@ -54,4 +54,4 @@ class LotteryAdminCreateAppCommand extends Command {
         $viewCmd->redirect();
     }
 }
-?>
+

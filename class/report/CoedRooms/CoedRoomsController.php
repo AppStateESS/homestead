@@ -23,4 +23,4 @@ class CoedRoomsController extends ReportController implements iSyncReport, iHtml
     }
 }
 
-?>
+

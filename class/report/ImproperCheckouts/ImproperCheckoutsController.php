@@ -23,4 +23,4 @@ class ImproperCheckoutsController extends ReportController implements iSyncRepor
     }
 }
 
-?>
+

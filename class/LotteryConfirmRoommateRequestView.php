@@ -82,4 +82,4 @@ class LotteryConfirmRoommateRequestView extends hms\View {
     }
 }
 
-?>
+

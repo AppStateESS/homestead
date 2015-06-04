@@ -17,4 +17,4 @@ class UnavailableBedsController extends ReportController implements iSyncReport,
     }
 }
 
-?>
+

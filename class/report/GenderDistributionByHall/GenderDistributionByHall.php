@@ -198,4 +198,3 @@ class GenderDistributionByHall extends Report implements iCsvReport {
     }
 }
 
-?>

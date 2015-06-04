@@ -21,4 +21,3 @@ class ShowOpenWaitingListCommand extends Command {
 
 }
 
-?>

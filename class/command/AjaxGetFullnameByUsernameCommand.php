@@ -30,4 +30,3 @@ class AjaxGetFullnameByUsernameCommand extends Command {
         exit;
     }
 }
-?>

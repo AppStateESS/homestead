@@ -96,4 +96,4 @@ class ReviewHallNotificationMessageView extends hms\View {
         return $template->get();
     }
 }
-?>
+

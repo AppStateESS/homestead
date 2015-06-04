@@ -216,4 +216,4 @@ class RestoredCheckin extends Checkin {
     { // Empty constructor for resotring state
     }
 }
-?>
+

@@ -25,4 +25,4 @@ class EditRlcView extends hms\View {
         return $pager->get();
     }
 }
-?>
+

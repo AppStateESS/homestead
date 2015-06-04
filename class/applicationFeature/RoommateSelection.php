@@ -20,7 +20,7 @@ class RoommateSelectionRegistration extends ApplicationFeatureRegistration {
         {
             return true;
         }
-        
+
         // Possibly available for continuing students in the summer terms (this is sort of a hack)
         //TODO: find a better way to implement this
         $termSem = Term::getTermSem($term);
@@ -41,5 +41,3 @@ class RoommateSelection extends ApplicationFeature {
     }
 
 }
-
-?>

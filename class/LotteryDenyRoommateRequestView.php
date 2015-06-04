@@ -39,4 +39,4 @@ class LotteryDenyRoommateRequestView extends hms\View {
     }
 }
 
-?>
+

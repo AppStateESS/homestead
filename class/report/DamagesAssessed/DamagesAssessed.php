@@ -73,4 +73,4 @@ class DamagesAssessed extends Report implements iCsvReport {
         return $cmd;
     }
 }
-?>
+

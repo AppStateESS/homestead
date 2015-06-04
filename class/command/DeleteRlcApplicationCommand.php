@@ -56,4 +56,3 @@ class DeleteRlcApplicationCommand extends Command
     }
 }
 
-?>

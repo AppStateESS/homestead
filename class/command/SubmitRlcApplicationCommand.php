@@ -120,4 +120,4 @@ class SubmitRlcApplicationCommand extends Command
     }
 }
 
-?>
+

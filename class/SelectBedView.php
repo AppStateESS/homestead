@@ -64,4 +64,4 @@ class SelectBedView extends hms\View{
     }
 }
 
-?>
+

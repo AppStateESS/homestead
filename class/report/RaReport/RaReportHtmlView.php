@@ -23,4 +23,3 @@ class RaReportHtmlView extends ReportHtmlView
 }
 
 
-?>

@@ -25,4 +25,3 @@ class GenericReport extends Report {
     }
 }
 
-?>

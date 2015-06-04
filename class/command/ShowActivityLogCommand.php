@@ -83,4 +83,4 @@ class ShowActivityLogCommand extends Command {
     }
 }
 
-?>
+

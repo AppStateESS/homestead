@@ -241,4 +241,3 @@ class Notification {
         return '<font color="green">Emails sent successfully</font><br /><br />Please click '. PHPWS_Text::secureLink(_('Here'), 'hms', array('type'=>'maintenance','op'=>'show_maintenance_options','tab'=>'maintenance_main')) . ' to return to the main menu.';
     }
 }
-?>

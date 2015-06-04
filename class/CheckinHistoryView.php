@@ -47,4 +47,4 @@ class CheckinHistoryView extends hms\View {
     }
 }
 
-?>
+

@@ -37,4 +37,4 @@ class MoveInTimesHtmlView extends ReportHtmlView {
 
 }
 
-?>
+

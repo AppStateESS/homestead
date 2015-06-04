@@ -190,4 +190,4 @@ class SubmitRoomChangeRequestCommand extends Command {
         $menuCmd->redirect();
     }
 }
-?>
+

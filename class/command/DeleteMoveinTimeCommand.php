@@ -40,4 +40,3 @@ class DeleteMoveinTimeCommand extends Command {
         $cmd->redirect();
     }
 }
-?>

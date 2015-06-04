@@ -37,4 +37,4 @@ class HallOccupancyHtmlView extends ReportHtmlView {
 
 }
 
-?>
+

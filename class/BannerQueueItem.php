@@ -152,4 +152,4 @@ class BannerQueueItem {
         return $result;
     }
 }
-?>
+

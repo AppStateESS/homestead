@@ -30,11 +30,9 @@ class CreateProfile extends ApplicationFeature {
     {
         PHPWS_Core::initModClass('hms', 'RoommateProfile.php');
         $profile = RoommateProfileFactory::getProfile($student->getBannerID(), $this->term);
-        
+
         PHPWS_Core::initModClass('hms', 'StudentMenuProfileView.php');
         return new StudentMenuProfileView($student, $this->getStartDate(), $this->getEndDate(), $this->term, $profile);
     }
 
 }
-
-?>

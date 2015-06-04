@@ -20,4 +20,4 @@ class BadBannerDataView extends hms\View {
     }
 }
 
-?>
+

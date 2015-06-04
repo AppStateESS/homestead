@@ -23,4 +23,4 @@ class ShowDeniedRlcApplicantsCommand extends Command {
         $context->setContent($view->show());
     }
 }
-?>
+

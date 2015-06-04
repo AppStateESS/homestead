@@ -17,5 +17,3 @@ class StudentNotFoundException extends HMSException {
         return $this->requestedId;
     }
 }
-
-?>

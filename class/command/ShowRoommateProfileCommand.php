@@ -36,4 +36,3 @@ class ShowRoommateProfileCommand extends Command {
     }
 }
 
-?>

@@ -21,4 +21,3 @@ class SaveTermSettingsCommand extends Command {
     }
 }
 
-?>

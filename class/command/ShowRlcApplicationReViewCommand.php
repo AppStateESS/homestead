@@ -53,4 +53,3 @@ class ShowRlcApplicationReViewCommand extends Command {
         $context->setContent($view->show());
     }
 }
-?>

@@ -76,4 +76,4 @@ class ShowRlcApplicationPage2ViewCommand extends Command
     }
 }
 
-?>
+

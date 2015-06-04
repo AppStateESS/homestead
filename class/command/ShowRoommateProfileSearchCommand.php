@@ -24,4 +24,3 @@ class ShowRoommateProfileSearchCommand extends Command {
         $context->setContent($view->show());
     }
 }
-?>

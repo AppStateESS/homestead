@@ -144,4 +144,4 @@ class SubmitRoommateProfileCommand extends Command {
         $successCmd->redirect();
     }
 }
-?>
+

@@ -22,4 +22,4 @@ class ShowViewByRlc extends hms\View{
         return $rosterPager->get();
     }
 }
-?>
+

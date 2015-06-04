@@ -29,5 +29,3 @@ class UpdateEmergencyContact extends ApplicationFeature {
         return new UpdateEmergencyContactMenuBlockView($student, $this->getStartDate(), $this->getEndDate(), $application);
     }
 }
-
-?>

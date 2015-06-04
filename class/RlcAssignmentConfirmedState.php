@@ -21,4 +21,3 @@ class RlcAssignmentConfirmedState extends RlcAssignmentState {
     
 }
 
-?>

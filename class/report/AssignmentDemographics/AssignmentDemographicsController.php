@@ -6,15 +6,13 @@ class AssignmentDemographicsController extends ReportController implements iSync
     {
         $this->report->setTerm($params['term']);
     }
-    
+
     public function getParams()
     {
         $params = array();
-        
+
         $params['term'] = $this->report->getTerm();
-        
+
         return $params;
     }
 }
-
-?>

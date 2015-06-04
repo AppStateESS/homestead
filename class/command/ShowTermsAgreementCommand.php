@@ -87,4 +87,4 @@ class ShowTermsAgreementCommand extends Command {
     }
 }
 
-?>
+

@@ -21,4 +21,4 @@ class RandomAssignmentStrategy extends Assignmentstrategy
     }
 }
 
-?>
+

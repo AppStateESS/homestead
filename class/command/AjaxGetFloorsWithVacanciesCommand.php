@@ -38,4 +38,3 @@ class AjaxGetFloorsWithVacanciesCommand extends Command {
     }
 }
 
-?>

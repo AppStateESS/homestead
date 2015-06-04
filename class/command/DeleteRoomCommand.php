@@ -55,4 +55,3 @@ class DeleteRoomCommand extends Command {
         $viewCmd->redirect();
     }
 }
-?>

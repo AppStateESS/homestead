@@ -1,5 +1,3 @@
 <?php
 
 javascript('jquery');
-
-?>

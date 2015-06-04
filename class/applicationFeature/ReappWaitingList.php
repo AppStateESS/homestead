@@ -48,4 +48,3 @@ class ReappWaitingList extends ApplicationFeature {
         return new ReapplicationWaitingListMenuBlockView($this->term, $this->getStartDate(), $this->getEndDate(), $application);
     }
 }
-?>

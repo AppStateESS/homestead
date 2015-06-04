@@ -11,4 +11,3 @@ class SOAPException extends HMSException {
     }
 }
 
-?>

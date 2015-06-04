@@ -48,4 +48,3 @@ while($row = pg_fetch_assoc($result)){
 
 echo "Upper count: $upperCount\n";
 echo "Lower count: $lowerCount\n";
-?>

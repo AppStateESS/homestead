@@ -76,4 +76,3 @@ class ScheduleReportCommand extends Command {
     }
 }
 
-?>

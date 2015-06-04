@@ -48,4 +48,4 @@ class RoleRemoveUserCommand extends Command {
     }
 }
 
-?>
+

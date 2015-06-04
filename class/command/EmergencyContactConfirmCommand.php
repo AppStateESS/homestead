@@ -106,4 +106,4 @@ class EmergencyContactConfirmCommand extends Command {
     }
 }
 
-?>
+

@@ -22,4 +22,4 @@ $result = $soap->removeRoomAssignment($args['username'], $args['term'], $args['b
 
 print_r($result);
 echo "\n";
-?>
+

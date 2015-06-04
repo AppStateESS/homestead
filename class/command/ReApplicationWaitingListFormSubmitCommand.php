@@ -69,4 +69,3 @@ class ReApplicationWaitingListFormSubmitCommand extends Command {
     }
 }
 
-?>

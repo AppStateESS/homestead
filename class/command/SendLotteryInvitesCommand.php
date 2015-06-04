@@ -51,4 +51,4 @@ class SendLotteryInvitesCommand extends Command {
     }
 }
 
-?>
+

@@ -26,4 +26,4 @@ class MismatchedRoommatesController extends ReportController
 
 }
 
-?>
+

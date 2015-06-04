@@ -20,4 +20,4 @@ class ShowLotteryAdminEntryCommand extends Command {
         $context->setContent($view->show());
     }
 }
-?>
+

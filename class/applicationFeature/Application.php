@@ -42,4 +42,4 @@ class Application extends ApplicationFeature {
         return new ApplicationMenuBlockView($this->term, $this->getStartDate(), $this->getEditDate(), $this->getEndDate(), $application);
     }
 }
-?>
+

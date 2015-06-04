@@ -73,4 +73,4 @@ class ImproperCheckouts extends Report implements iCsvReport {
         return $cmd;
     }
 }
-?>
+

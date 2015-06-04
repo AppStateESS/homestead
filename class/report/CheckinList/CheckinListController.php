@@ -25,4 +25,3 @@ class CheckinListController extends ReportController implements iSyncReport, iAs
 
 }
 
-?>

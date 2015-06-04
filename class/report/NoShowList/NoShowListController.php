@@ -25,4 +25,3 @@ class NoShowListController extends ReportController implements iSyncReport, iAsy
 
 }
 
-?>

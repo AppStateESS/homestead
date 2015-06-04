@@ -9,5 +9,3 @@ class RoomSwapException extends HMSException {
         PHPWS_Core::log('Room Swap failed! : '.$message, 'error.log');
     }
 }
-
-//?>

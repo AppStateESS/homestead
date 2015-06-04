@@ -80,4 +80,4 @@ class ShowReportHtmlCommand extends Command {
     }
 }
 
-?>
+

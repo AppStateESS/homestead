@@ -177,4 +177,4 @@ class RoomChangeManageView extends hms\View {
     }
 }
 
-?>
+

@@ -17,4 +17,3 @@ class FreshmenApplicationsGraphHtmlView extends ReportHtmlView {
     }
 }
 
-?>

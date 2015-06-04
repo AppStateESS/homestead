@@ -150,4 +150,4 @@ class SendNotificationEmailsCommand extends Command {
         $cmd->redirect();
     }
 }
-?>
+

@@ -38,4 +38,4 @@ class SendRlcInvitesView extends hms\View {
     }
 }
 
-?>
+

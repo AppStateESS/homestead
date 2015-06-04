@@ -25,4 +25,3 @@ class UnassignedStudentsController extends ReportController implements iSyncRepo
 
 }
 
-?>

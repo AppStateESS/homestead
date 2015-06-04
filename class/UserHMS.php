@@ -30,4 +30,3 @@ class UserHMS extends HMS
     }
 }
 
-?>

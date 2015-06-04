@@ -39,4 +39,3 @@ class ShowManageRoomChangeCommand extends Command {
     }
 }
 
-?>

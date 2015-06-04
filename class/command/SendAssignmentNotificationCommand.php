@@ -187,4 +187,3 @@ class SendAssignmentNotificationCommand extends Command {
     }
 }
 
-?>

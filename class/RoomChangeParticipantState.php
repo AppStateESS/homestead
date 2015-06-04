@@ -224,4 +224,3 @@ class ParticipantStateCancelled extends RoomChangeParticipantState {
     // TODO Move request to cancelled, which will notify everyone
 }
 
-?>

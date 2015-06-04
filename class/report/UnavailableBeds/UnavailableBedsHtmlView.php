@@ -96,4 +96,4 @@ class UnavailableBedsHtmlView extends ReportHtmlView {
     }
 }
 
-?>
+

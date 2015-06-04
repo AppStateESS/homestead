@@ -42,4 +42,3 @@ class LotteryShowChooseFloorCommand extends Command {
     }
 }
 
-?>

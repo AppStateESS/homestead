@@ -20,4 +20,4 @@ class ShowStatsCommand extends Command {
     }
 }
 
-?>
+

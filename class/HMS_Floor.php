@@ -645,4 +645,4 @@ class HMS_Floor extends HMS_Item
         return $pager->get();
     }
 }
-?>
+

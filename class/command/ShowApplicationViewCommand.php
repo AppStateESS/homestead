@@ -37,4 +37,4 @@ class ShowApplicationViewCommand extends Command {
         }
     }
 }
-?>
+

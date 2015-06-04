@@ -17,4 +17,3 @@ class CheckinsByHallController extends ReportController implements iSyncReport, 
     }
 }
 
-?>

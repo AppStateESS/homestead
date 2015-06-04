@@ -38,4 +38,3 @@ class ReportSchedulePager extends DBPager {
 }
 
 
-?>

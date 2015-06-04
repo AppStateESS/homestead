@@ -142,4 +142,4 @@ class AjaxGetUsernameSuggestionsCommand extends Command {
     }
 }
 
-?>
+

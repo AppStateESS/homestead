@@ -54,4 +54,4 @@ class JSConfirmCommand extends Command {
     }
 }
 
-?>
+

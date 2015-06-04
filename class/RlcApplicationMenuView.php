@@ -106,4 +106,4 @@ class RlcApplicationMenuView extends hms\View {
     }
 }
 
-?>
+

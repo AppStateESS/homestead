@@ -28,4 +28,4 @@ class StartAutoassignCommand extends Command {
     }
 }
 
-?>
+

@@ -72,4 +72,3 @@ abstract class ReportHtmlView extends ReportView {
         return Layout::wrap($this->show());
     }
 }
-?>

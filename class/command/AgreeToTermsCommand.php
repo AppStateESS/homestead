@@ -56,5 +56,3 @@ class AgreeToTermsCommand extends Command {
     }
 
 }
-
-?>

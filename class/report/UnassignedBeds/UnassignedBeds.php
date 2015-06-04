@@ -147,4 +147,3 @@ class UnassignedBeds extends Report implements iCsvReport {
     }
 }
 
-?>

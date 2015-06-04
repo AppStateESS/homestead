@@ -94,4 +94,4 @@ class ReapplicationMenuBlockView extends hms\View {
     }
 }
 
-?>
+

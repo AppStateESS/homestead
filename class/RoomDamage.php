@@ -127,4 +127,4 @@ class RoomDamage {
 class RoomDamageDb extends RoomDamage {
     public function __construct(){}
 }
-?>
+

@@ -20,4 +20,3 @@ class RlcAssignmentNewState extends RlcAssignmentState {
     }
 }
 
-?>

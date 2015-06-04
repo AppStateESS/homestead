@@ -17,4 +17,3 @@ class SingleGenderVsCoedPrefController extends ReportController implements iSync
     }
 }
 
-?>

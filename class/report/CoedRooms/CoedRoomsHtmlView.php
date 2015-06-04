@@ -22,4 +22,3 @@ class CoedRoomsHtmlView extends ReportHtmlView
 	}
 }
 
-?>

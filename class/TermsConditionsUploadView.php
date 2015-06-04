@@ -44,4 +44,4 @@ class TermsConditionsUploadView extends hms\View{
     }
 }
 
-?>
+

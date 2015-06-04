@@ -367,4 +367,4 @@ class HMS_Learning_Community extends HMS_Item
 class RestoredRlc extends HMS_Learning_Community {
     public function __construct(){}
 }
-?>
+

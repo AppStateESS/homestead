@@ -24,4 +24,3 @@ class TwentyOneController extends ReportController implements iSyncReport, iAsyn
 
 }
 
-?>

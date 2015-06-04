@@ -27,4 +27,3 @@ class UnassignedStudentsHtmlView extends ReportHtmlView {
     }
 }
 
-?>

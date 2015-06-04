@@ -18,7 +18,7 @@ namespace Docusign;
  */
 
 class Creds {
-    
+
     // The DocuSign Integrator's Key
     private $integratorKey;
 
@@ -47,5 +47,3 @@ class Creds {
         return false;
     }
 }
-
-?>

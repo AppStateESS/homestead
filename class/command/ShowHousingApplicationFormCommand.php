@@ -102,4 +102,3 @@ class ShowHousingApplicationFormCommand extends Command {
     }
 }
 
-?>

@@ -24,4 +24,3 @@ class ShowLotteryInviteResultsCommand extends Command {
     }
 }
 
-?>

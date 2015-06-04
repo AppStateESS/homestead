@@ -82,4 +82,3 @@ class CoedRooms extends Report implements iCsvReport
 }
 
 
-?>

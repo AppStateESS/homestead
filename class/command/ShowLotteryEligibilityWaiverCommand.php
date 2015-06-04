@@ -20,4 +20,4 @@ class ShowLotteryEligibilityWaiverCommand extends Command {
         $context->setContent($view->show());
     }
 }
-?>
+

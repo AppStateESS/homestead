@@ -68,4 +68,4 @@ class CreateWaiverCommand extends Command {
         $cmd->redirect();
     }
 }
-?>
+

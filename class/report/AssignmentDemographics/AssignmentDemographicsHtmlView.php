@@ -142,4 +142,4 @@ class AssignmentDemographicsHtmlView extends ReportHtmlView {
     }
 }
 
-?>
+

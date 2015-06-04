@@ -58,7 +58,7 @@ class CurlIO extends IO {
         } catch(Exception $e) {
             throw new IOException($e);
         }
-        
+
         curl_close($curl);
 
         if (is_array($response) && array_key_exists('errorCode', $response)) {
@@ -69,5 +69,3 @@ class CurlIO extends IO {
     }
 
 }
-
-?>

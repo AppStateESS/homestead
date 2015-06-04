@@ -19,4 +19,3 @@ namespace Docusign;
 abstract class IO {
     abstract function makeRequest($url, $method = 'GET', $headers = array(), $params = array(), $data = NULL);
 }
-?>

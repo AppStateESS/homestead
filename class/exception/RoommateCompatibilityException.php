@@ -59,4 +59,4 @@ class RoommateCompatibilityException extends RoommateException
     }
 }
 
-?>
+

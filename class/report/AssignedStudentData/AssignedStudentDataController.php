@@ -22,5 +22,3 @@ class AssignedStudentDataController extends ReportController implements iSyncRep
         return $params;
     }
 }
-
-?>

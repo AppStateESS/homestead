@@ -33,4 +33,4 @@ class GetMealPlanDropboxCommand extends Command {
         exit;
     }
 }
-?>
+

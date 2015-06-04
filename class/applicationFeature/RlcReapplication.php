@@ -51,5 +51,3 @@ class RlcReapplication extends ApplicationFeature {
         return new RlcReapplicationMenuBlockView($this->term, $this->getStartDate(), $this->getEndDate(), $application, $rlcApp, $assignment);
     }
 }
-
-?>

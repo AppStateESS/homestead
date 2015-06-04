@@ -40,4 +40,3 @@ class ShowRoomChangeRequestFormCommand extends Command {
         $context->setContent($view->show());
     }
 }
-?>

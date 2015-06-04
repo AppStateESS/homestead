@@ -24,4 +24,4 @@ class EditRoommateGroupsViewCommand extends Command {
     }
 }
 
-?>
+

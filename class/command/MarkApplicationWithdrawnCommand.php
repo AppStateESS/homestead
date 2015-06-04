@@ -45,4 +45,3 @@ class MarkApplicationWithdrawnCommand extends Command {
     }
 }
 
-?>

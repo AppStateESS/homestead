@@ -22,4 +22,3 @@ class LotteryChooseHallCommand extends Command {
     }
 }
 
-?>

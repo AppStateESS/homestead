@@ -60,4 +60,3 @@ class CancelReportCommand extends Command {
     }
 }
 
-?>

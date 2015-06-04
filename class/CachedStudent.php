@@ -51,4 +51,3 @@ class CachedStudent extends Student {
     }
 }
 
-?>

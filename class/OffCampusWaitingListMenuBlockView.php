@@ -47,4 +47,4 @@ class OffCampusWaitingListMenuBlockView extends hms\View {
     }
 }
 
-?>
+

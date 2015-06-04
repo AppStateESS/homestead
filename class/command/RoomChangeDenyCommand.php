@@ -67,4 +67,4 @@ class RoomChangeDenyCommand extends Command {
     }
 }
 
-?>
+

@@ -39,4 +39,3 @@ class AjaxGetBedsWithVacanciesCommand extends Command {
     }
 }
 
-?>

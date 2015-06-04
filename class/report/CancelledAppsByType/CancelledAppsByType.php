@@ -44,4 +44,3 @@ class CancelledAppsByType extends Report {
     }
 }
 
-?>

@@ -25,4 +25,3 @@ class UnassignedBedsController extends ReportController implements iSyncReport, 
 
 }
 
-?>

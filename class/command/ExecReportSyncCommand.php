@@ -76,4 +76,4 @@ class ExecReportSyncCommand extends Command {
         $viewCmd->redirect();
     }
 }
-?>
+

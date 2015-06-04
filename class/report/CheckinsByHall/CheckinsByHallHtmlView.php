@@ -31,4 +31,3 @@ class CheckinsByHallHtmlView extends ReportHtmlView {
     }
 }
 
-?>

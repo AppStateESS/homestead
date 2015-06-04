@@ -63,4 +63,4 @@ class SubmitContactFormCommand extends Command {
         $context->setContent($view->show());
     }
 }
-?>
+

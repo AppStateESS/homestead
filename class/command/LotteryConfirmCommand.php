@@ -188,4 +188,4 @@ class LotteryConfirmCommand extends Command {
     }
 }
 
-?>
+

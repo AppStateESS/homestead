@@ -52,4 +52,4 @@ class ShowEmergencyContactFormCommand extends Command {
     }
 }
 
-?>
+

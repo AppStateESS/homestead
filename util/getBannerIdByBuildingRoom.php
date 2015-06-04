@@ -21,4 +21,3 @@ $result = $soap->getBannerIdByBuildingRoom($args['hallCode'], $args['bedCode'], 
 
 echo print_r($result, true);
 echo "\n";
-?>

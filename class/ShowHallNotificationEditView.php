@@ -66,4 +66,4 @@ class ShowHallNotificationEditView extends hms\View{
         return PHPWS_Template::process($tpl, 'hms', 'admin/hall_notification_email_page.tpl');
     }
 }
-?>
+

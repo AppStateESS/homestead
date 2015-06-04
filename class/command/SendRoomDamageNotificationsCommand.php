@@ -62,4 +62,4 @@ class SendRoomDamageNotificationsCommand extends Command {
         $cmd->redirect();
     }
 }
-?>
+

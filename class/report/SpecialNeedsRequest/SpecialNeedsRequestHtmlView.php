@@ -18,4 +18,4 @@ class SpecialNeedsRequestHtmlView extends ReportHtmlView {
     }
 }
 
-?>
+

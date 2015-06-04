@@ -40,4 +40,3 @@ class ShowPackageDeskMenuCommand extends Command {
     
 }
 
-?>

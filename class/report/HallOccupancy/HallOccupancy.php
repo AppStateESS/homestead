@@ -114,4 +114,4 @@ class HallOccupancy extends Report {
 
 }
 
-?>
+

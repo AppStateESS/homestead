@@ -27,4 +27,3 @@ class UnassignedFreshmenHtmlView extends ReportHtmlView {
     }
 }
 
-?>

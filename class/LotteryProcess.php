@@ -712,4 +712,4 @@ class LotteryProcess {
     }
 }
 
-?>
+

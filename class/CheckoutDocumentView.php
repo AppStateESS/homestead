@@ -34,4 +34,4 @@ class CheckoutDocumentView extends hms\View {
     }
 }
 
-?>
+

@@ -50,4 +50,4 @@ class LotterySettingsFormView extends hms\View {
 }
 
 
-?>
+

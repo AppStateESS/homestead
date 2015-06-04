@@ -98,4 +98,4 @@ class CheckinList extends Report implements iCsvReport {
     }
 }
 
-?>
+

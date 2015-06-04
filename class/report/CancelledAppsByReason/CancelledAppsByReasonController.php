@@ -24,4 +24,3 @@ class CancelledAppsByReasonController extends ReportController implements iSyncR
     }
 }
 
-?>

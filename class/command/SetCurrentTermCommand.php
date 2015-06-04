@@ -38,4 +38,3 @@ class SetCurrentTermCommand extends Command {
     }
 }
 
-?>

@@ -38,4 +38,4 @@ class SearchProfiles extends ApplicationFeature {
 
 }
 
-?>
+

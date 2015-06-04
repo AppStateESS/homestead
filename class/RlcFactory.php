@@ -77,4 +77,3 @@ class RlcFactory {
         return $rlcs;
     }
 }
-?>

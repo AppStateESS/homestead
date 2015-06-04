@@ -34,5 +34,5 @@ class VerifyAssignment extends ApplicationFeature {
 
 }
 
-?>
+
 

@@ -41,4 +41,3 @@ class ShowScheduleReportCommand extends Command {
     }
 }
 
-?>

@@ -107,4 +107,4 @@ class ShowCheckinFormCommand extends Command {
         $context->setContent($view->show());
     }
 }
-?>
+

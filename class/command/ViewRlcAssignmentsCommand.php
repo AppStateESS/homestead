@@ -23,4 +23,4 @@ class ViewRlcAssignmentsCommand extends Command {
         $context->setContent($view->show());
     }
 }
-?>
+

@@ -47,4 +47,3 @@ class ShowWaitingListSignupCommand extends Command {
     }
 }
 
-?>

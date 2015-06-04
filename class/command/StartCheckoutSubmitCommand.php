@@ -46,4 +46,4 @@ class StartCheckoutSubmitCommand extends Command {
     }
 }
 
-?>
+

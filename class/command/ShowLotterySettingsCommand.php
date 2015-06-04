@@ -22,4 +22,3 @@ class ShowLotterySettingsCommand extends Command {
     }
 }
 
-?>

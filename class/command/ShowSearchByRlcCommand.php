@@ -28,4 +28,4 @@ class ShowSearchByRlcCommand extends Command {
         $context->setContent($view->show());
     }
 }
-?>
+

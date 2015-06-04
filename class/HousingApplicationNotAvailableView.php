@@ -37,4 +37,4 @@ class HousingApplicationNotAvailableView extends hms\View {
 
 }
 
-?>
+

@@ -33,4 +33,4 @@ class RoleRemovePermissionCommand extends Command {
         exit;
     }
 }
-?>
+

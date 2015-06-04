@@ -17,4 +17,3 @@ class ApplicantDemographicsController extends ReportController implements iSyncR
     }
 }
 
-?>

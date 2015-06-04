@@ -123,4 +123,4 @@ class CreateTermCommand extends Command {
     }
 }
 
-?>
+

@@ -34,4 +34,4 @@ class ShowFloorAssignmentViewCommand extends Command {
         $context->setContent($view->show());
     }
 }
-?>
+

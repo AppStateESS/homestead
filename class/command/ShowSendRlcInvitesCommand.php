@@ -16,4 +16,3 @@ class ShowSendRlcInvitesCommand extends Command {
     }
 }
 
-?>

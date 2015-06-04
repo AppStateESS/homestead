@@ -33,4 +33,4 @@ class RoleAddPermissionCommand extends Command {
         exit;
     }
 }
-?>
+

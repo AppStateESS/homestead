@@ -20,4 +20,4 @@ class ShowLotteryWaitingListCommand extends Command {
     }
 }
 
-?>
+

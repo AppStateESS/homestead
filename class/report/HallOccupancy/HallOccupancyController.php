@@ -27,4 +27,4 @@ class HallOccupancyController extends ReportController implements iSyncReport, i
     }
 }
 
-?>
+

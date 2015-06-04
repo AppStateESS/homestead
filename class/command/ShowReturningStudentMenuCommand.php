@@ -31,4 +31,3 @@ class ShowReturningStudentMenuCommand extends Command {
     }
 }
 
-?>

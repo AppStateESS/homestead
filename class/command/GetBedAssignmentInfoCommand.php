@@ -40,4 +40,4 @@ class GetBedAssignmentInfoCommand extends Command {
         exit;
     }
 }
-?>
+

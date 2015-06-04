@@ -205,4 +205,4 @@ class TestSOAP extends SOAP
 
 }
 
-?>
+

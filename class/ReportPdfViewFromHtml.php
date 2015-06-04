@@ -51,4 +51,3 @@ class ReportPdfViewFromHtml extends ReportPdfView {
     }
 }
 
-?>

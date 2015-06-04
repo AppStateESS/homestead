@@ -49,4 +49,3 @@ class ShowCheckinDocumentCommand extends Command {
     }
 }
 
-?>

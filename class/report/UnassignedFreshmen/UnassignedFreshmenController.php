@@ -25,4 +25,3 @@ class UnassignedFreshmenController extends ReportController implements iSyncRepo
 
 }
 
-?>

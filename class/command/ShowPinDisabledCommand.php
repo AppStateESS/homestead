@@ -25,4 +25,3 @@ class ShowPinDisabledCommand extends Command {
     }
 }
 
-?>

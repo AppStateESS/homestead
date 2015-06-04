@@ -43,4 +43,4 @@ class FreshmenMainMenuView extends hms\View {
 
 }
 
-?>
+

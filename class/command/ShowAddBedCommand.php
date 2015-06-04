@@ -73,4 +73,4 @@ class ShowAddBedCommand extends Command {
     }
 }
 
-?>
+

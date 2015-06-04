@@ -23,5 +23,3 @@ class CancelledAppsByTypeController extends ReportController implements iSyncRep
         return $params;
     }
 }
-
-?>

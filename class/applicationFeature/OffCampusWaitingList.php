@@ -46,4 +46,3 @@ class OffCampusWaitingList extends ApplicationFeature {
     }
 }
 
-?>

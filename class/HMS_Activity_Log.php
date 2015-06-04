@@ -285,4 +285,4 @@ class HMS_Activity_Log{
         $this->notes = $notes;
     }
 }
-?>
+

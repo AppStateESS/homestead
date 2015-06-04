@@ -39,4 +39,4 @@ class EmergencyContactFormSubmitCommand extends Command {
     }
 }
 
-?>
+

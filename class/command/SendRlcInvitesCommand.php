@@ -58,4 +58,4 @@ class SendRlcInvitesCommand extends Command {
     }
 }
 
-?>
+

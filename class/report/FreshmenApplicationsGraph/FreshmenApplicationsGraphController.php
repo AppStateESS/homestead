@@ -17,4 +17,3 @@ class FreshmenApplicationsGraphController extends ReportController implements iS
     }
 }
 
-?>

@@ -65,4 +65,4 @@ foreach($usernames as $username){
 
 pg_close($db);
 
-?>
+

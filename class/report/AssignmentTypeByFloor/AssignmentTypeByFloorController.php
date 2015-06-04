@@ -17,4 +17,3 @@ class AssignmentTypeByFloorController extends ReportController implements iSyncR
     }
 }
 
-?>

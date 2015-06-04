@@ -54,4 +54,4 @@ class ReviewHallNotificationMessageCommand extends Command {
         $context->setContent($view->show());
     }
 }
-?>
+

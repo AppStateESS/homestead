@@ -17,4 +17,3 @@ class ShowSendLotteryInvitesCommand extends Command {
 }
 
 
-?>

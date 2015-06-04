@@ -56,4 +56,3 @@ class RoomChnageListAvailableBedsCommand extends Command {
     }
 }
 
-?>

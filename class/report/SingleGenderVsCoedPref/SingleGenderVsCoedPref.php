@@ -148,4 +148,3 @@ class SingleGenderVsCoedPref extends Report{
         return $this->femaleCoed;
     }
 }
-?>

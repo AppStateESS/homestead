@@ -2,7 +2,7 @@
 
 /**
  * Cancelled Applications List Controller
- * 
+ *
  * @author Jeremy Booker
  * @package HMS
  */
@@ -23,5 +23,3 @@ class CancelledAppsListController extends ReportController implements iSyncRepor
         return $params;
     }
 }
-
-?>

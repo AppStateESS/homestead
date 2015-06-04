@@ -80,4 +80,4 @@ class CancelledAppsList extends Report implements iCsvReport{
         return $cmd;
     }
 }
-?>
+

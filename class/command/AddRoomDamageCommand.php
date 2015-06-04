@@ -42,5 +42,3 @@ class AddRoomDamageCommand extends Command {
         exit;
     }
 }
-
-?>

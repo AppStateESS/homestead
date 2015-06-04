@@ -45,4 +45,4 @@ class AutoassignPulse extends ScheduledPulse
     }
 }
 
-?>
+

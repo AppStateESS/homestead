@@ -139,5 +139,3 @@ class AdminAddRlcMembersCommand extends Command {
         $successCmd->redirect();
     }
 }
-
-?>

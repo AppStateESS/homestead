@@ -87,4 +87,4 @@ class RoommateSelectionMenuBlockView extends hms\View {
     }
 }
 
-?>
+

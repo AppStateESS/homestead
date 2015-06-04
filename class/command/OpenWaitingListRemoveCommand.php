@@ -35,4 +35,4 @@ class OpenWaitingListRemoveCommand extends Command {
     }
 }
 
-?>
+

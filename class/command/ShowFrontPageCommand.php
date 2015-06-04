@@ -17,4 +17,3 @@ class ShowFrontPageCommand extends Command {
     }
 }
 
-?>

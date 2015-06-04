@@ -34,4 +34,4 @@ class VerifyAssignmentMenuBlockView extends hms\View {
     }
 }
 
-?>
+

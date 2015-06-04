@@ -48,4 +48,3 @@ class Package {
         $this->releasedBy  = null;
     }
 }
-?>

@@ -34,11 +34,11 @@ class HMS_Student_UI{
             }else{
                 $movein_time_id = $assignment->get_f_movein_time_id();
             }
-            
+
             if($movein_time_id == NULL){
                 $tpl['MOVE_IN_TIME'] = 'To be determined<br />';
             }else{
-                $movein_times = HMS_Movein_Time::get_movein_times_array($_SESSION['application_term']);        
+                $movein_times = HMS_Movein_Time::get_movein_times_array($_SESSION['application_term']);
                 $tpl['MOVE_IN_TIME'] = $movein_times[$movein_time_id];
             }
         }
@@ -49,7 +49,7 @@ class HMS_Student_UI{
         if(!is_null($assignees)){
             foreach($assignees as $roommate){
                 if($roommate->asu_username != $_SESSION['asu_username']){
-                    $roommates[] = $roommate->asu_username; 
+                    $roommates[] = $roommate->asu_username;
                 }
             }
         }
@@ -71,8 +71,7 @@ class HMS_Student_UI{
         }
 
         $tpl['MENU_LINK'] = PHPWS_Text::secureLink('Back to Main Menu', 'hms', array('type'=>'student', 'op'=>'show_main_menu'));
-        
+
         return PHPWS_Template::process($tpl, 'hms', 'student/verify_assignment.tpl');
     }
 }
-?>

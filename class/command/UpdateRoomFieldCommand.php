@@ -132,4 +132,3 @@ class UpdateRoomFieldCommand extends Command {
         die();
     }
 }
-?>

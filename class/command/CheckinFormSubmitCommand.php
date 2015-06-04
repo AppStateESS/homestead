@@ -110,4 +110,3 @@ class CheckinFormSubmitCommand extends Command {
         $cmd->redirect();
     }
 }
-?>

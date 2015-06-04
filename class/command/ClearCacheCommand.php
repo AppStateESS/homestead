@@ -18,4 +18,3 @@ class ClearCacheCommand extends Command {
 
 }
 
-?>

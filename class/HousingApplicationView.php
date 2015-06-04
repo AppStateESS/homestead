@@ -153,4 +153,4 @@ class HousingApplicationView extends hms\View {
         return PHPWS_Template::process($tpl, 'hms', 'admin/student_application.tpl');
     }
 }
-?>
+

@@ -23,4 +23,4 @@ class TwentyFiveHtmlView extends ReportHtmlView {
 
 }
 
-?>
+

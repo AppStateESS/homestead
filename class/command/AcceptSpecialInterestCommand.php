@@ -49,4 +49,3 @@ class AcceptSpecialInterestCommand extends Command {
         $cmd->redirect();
     }
 }
-?>

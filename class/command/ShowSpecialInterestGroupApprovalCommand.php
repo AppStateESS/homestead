@@ -32,4 +32,4 @@ class ShowSpecialInterestGroupApprovalCommand extends Command {
         $context->setContent($view->show());
     }
 }
-?>
+

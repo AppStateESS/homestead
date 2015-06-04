@@ -51,4 +51,4 @@ class ShowAssignRlcApplicantsCommand extends Command {
         $context->setContent($view->show());
     }
 }
-?>
+

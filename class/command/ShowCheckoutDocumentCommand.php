@@ -45,4 +45,3 @@ class ShowCheckoutDocumentCommand extends Command {
     }
 }
 
-?>

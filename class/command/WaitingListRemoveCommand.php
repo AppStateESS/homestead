@@ -34,4 +34,4 @@ class WaitingListRemoveCommand extends Command {
         $cmd->redirect();
     }
 }
-?>
+

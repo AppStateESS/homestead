@@ -212,4 +212,4 @@ class CheckoutFormSubmitCommand extends Command {
         }
     }
 }
-?>
+

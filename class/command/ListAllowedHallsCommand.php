@@ -76,4 +76,3 @@ class ListAllowedHallsCommand extends Command {
         exit;
     }
 }
-?>

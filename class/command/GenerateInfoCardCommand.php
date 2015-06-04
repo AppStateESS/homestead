@@ -36,4 +36,4 @@ class GenerateInfoCardCommand extends Command {
     }
 }
 
-?>
+

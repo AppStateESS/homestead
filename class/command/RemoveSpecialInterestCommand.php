@@ -61,4 +61,3 @@ class RemoveSpecialInterestCommand extends Command
 
 }
 
-?>

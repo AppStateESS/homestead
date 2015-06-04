@@ -24,4 +24,4 @@ class SearchByRlcView extends hms\View {
     }
 }
 
-?>
+

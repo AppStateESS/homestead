@@ -36,4 +36,3 @@ class AssignmentsByTypeHtmlView extends ReportHtmlView {
     }
 }
 
-?>

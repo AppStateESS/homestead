@@ -27,4 +27,4 @@ class RaMasqueradeAsSelfCommand extends Command {
         $cmd->redirect();
     }
 }
-?>
+

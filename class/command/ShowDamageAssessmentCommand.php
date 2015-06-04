@@ -22,4 +22,3 @@ class ShowDamageAssessmentCommand extends Command {
     }
 }
 
-?>

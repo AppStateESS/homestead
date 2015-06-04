@@ -67,4 +67,3 @@ class ShowReportDetailCommand extends Command {
     }
 }
 
-?>

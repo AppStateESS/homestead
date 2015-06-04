@@ -31,4 +31,4 @@ class ScheduleAutoassignCommand extends Command {
     }
 }
 
-?>
+

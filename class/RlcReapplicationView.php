@@ -80,4 +80,4 @@ class RlcReapplicationView extends hms\View {
     }
 }
 
-?>
+

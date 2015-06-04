@@ -74,4 +74,4 @@ class RoomChangeFutureRdApproveCommand extends Command {
     }
 }
 
-?>
+

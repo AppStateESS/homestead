@@ -45,4 +45,4 @@ class SpecialInterestGroupView extends hms\View{
     }
 }
 
-?>
+

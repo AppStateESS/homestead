@@ -47,4 +47,3 @@ class DisableBannerQueueCommand extends Command {
     }
 }
 
-?>

@@ -20,4 +20,3 @@ $result = $soap->getStudentInfo($args['username'], $args['term']);
 
 print_r($result);
 echo "\n";
-?>

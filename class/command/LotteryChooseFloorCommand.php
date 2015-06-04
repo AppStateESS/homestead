@@ -21,4 +21,3 @@ class LotteryChooseFloorCommand extends Command {
     }
 }
 
-?>

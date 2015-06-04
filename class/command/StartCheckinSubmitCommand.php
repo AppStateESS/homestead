@@ -59,4 +59,4 @@ class StartCheckinSubmitCommand extends Command {
     }
 }
 
-?>
+

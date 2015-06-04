@@ -33,4 +33,4 @@ class ReportMenuItemView extends hms\View {
     }
 }
 
-?>
+

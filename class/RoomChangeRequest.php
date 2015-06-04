@@ -334,4 +334,4 @@ class RoomChangeRequestRestored extends RoomChangeRequest {
         //TODO Use the RoomChangeRequestStateFactory to load this room change's current state
     }
 }
-?>
+

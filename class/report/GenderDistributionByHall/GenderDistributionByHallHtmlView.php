@@ -32,4 +32,3 @@ class GenderDistributionByHallHtmlView extends ReportHtmlView {
     }
 }
 
-?>

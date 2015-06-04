@@ -179,4 +179,4 @@ class LotteryContextApplicationFactory extends ContextApplicationFactory {
         $this->app->setApplicationType('lottery');
     }
 }
-?>
+

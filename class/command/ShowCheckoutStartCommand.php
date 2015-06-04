@@ -37,4 +37,3 @@ class ShowCheckoutStartCommand extends Command {
         $context->setContent($view->show());
     }
 }
-?>

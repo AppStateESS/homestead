@@ -24,4 +24,4 @@ class ShowHallNotificationSelectCommand extends Command {
         $context->setContent($view->show());
     }
 }
-?>
+

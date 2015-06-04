@@ -74,4 +74,4 @@ class LotteryChooseFloorView extends hms\View {
     }
 }
 
-//?>
+//

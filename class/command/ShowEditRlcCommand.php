@@ -37,4 +37,4 @@ class ShowEditRlcCommand extends Command {
         $context->setContent($view->show());
     }
 }
-?>
+

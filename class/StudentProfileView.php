@@ -306,4 +306,4 @@ class StudentProfileView extends hms\View {
     }
 }
 
-?>
+

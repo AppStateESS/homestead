@@ -32,4 +32,4 @@ class ShowRlcApplicationPage1ViewCommand extends Command {
     }
 }
 
-?>
+

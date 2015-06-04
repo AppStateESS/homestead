@@ -50,4 +50,4 @@ class ShowRlcApplicationViewCommand extends Command {
     }
 }
 
-?>
+

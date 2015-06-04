@@ -2,4 +2,3 @@
 
 javascript('jquery');
 
-?>
