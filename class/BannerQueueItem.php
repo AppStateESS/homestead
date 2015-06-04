@@ -60,11 +60,10 @@ class BannerQueueItem {
         $db = new PHPWS_DB('hms_banner_queue');
 
         $this->stamp();
-        
+
         $result = $db->saveObject($this);
         if(PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
-            return FALSE;
         }
         return TRUE;
     }
@@ -78,7 +77,6 @@ class BannerQueueItem {
         $result = $db->delete();
         if(PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
-            return FALSE;
         }
 
         return TRUE;

@@ -2,7 +2,7 @@
 
 /**
  * Controller responsible for handling a request to assign a student
- * 
+ *
  * @author jbooker
  * @package HMS
  */
@@ -36,11 +36,11 @@ class AssignStudentCommand extends Command {
     public function setMoveConfirmed($move){
         $this->moveConfirmed = $move;
     }
-    
+
     public function setAssignmentType($type){
         $this->assignmentType = $type;
     }
-    
+
     public function setNotes($notes){
         $this->notes = $notes;
     }
@@ -72,11 +72,11 @@ class AssignStudentCommand extends Command {
         if(isset($this->assignmentType)){
             $vars['assignment_type'] = $this->assignmentType;
         }
-        
+
         if(isset($this->notes)){
             $vars['note'] = $this->notes;
         }
-        
+
         return $vars;
     }
 
@@ -106,7 +106,7 @@ class AssignStudentCommand extends Command {
         /***
          * Input Sanity Checking
          */
-        
+
         // Must supply a user name
         if(is_null($username)){
             NQ::simple('hms', hms\NotificationView::ERROR, 'Invalid or missing username.');
@@ -126,15 +126,12 @@ class AssignStudentCommand extends Command {
             NQ::simple('hms', hms\NotificationView::ERROR, 'You must choose an assignment type.');
             $errorCmd->redirect();
         }
-        
+
         // Check to make sure the student has an application on file
         $applicationStatus = HousingApplication::checkForApplication($username, $term);
 
         if($applicationStatus == FALSE){
             NQ::simple('hms', hms\NotificationView::WARNING, 'Warning: No housing application found for this student in this term.');
-        }else{
-            // Create application object (it doesn't really matter that we always create a fall application)
-            $application = new HousingApplication($applicationStatus['id']);
         }
 
         // If the student is already assigned, redirect to the confirmation screen. If the student is already assigned
@@ -191,7 +188,7 @@ class AssignStudentCommand extends Command {
             NQ::simple('hms', hms\NotificationView::ERROR, 'Error: You do not have permission to assign students to co-ed rooms.');
             $errorCmd->redirect();
         }
-        
+
         // Make sure the student's gender matches the gender of the room, unless the room is co-ed.
         if($room->getGender() != $gender && $room->getGender() != COED){
             // Room gender does not match student's gender, so check if we can change it
@@ -219,13 +216,13 @@ class AssignStudentCommand extends Command {
 
         // Actually try to make the assignment, decide whether to use the room id or the bed id
         $bed = $context->get('bed');
-        try{
+        try {
             if(isset($bed) && $bed != 0){
-                $assign_result = HMS_Assignment::assignStudent($student, $term, NULL, $bed, $context->get('meal_plan'), $context->get('note'), false, $context->get('assignment_type'));
+                HMS_Assignment::assignStudent($student, $term, NULL, $bed, $context->get('meal_plan'), $context->get('note'), false, $context->get('assignment_type'));
             }else{
-                $assign_result = HMS_Assignment::assignStudent($student, $term, $context->get('room'), NULL, $context->get('meal_plan'), $context->get('note'), false, $context->get('assignment_type'));
+                HMS_Assignment::assignStudent($student, $term, $context->get('room'), NULL, $context->get('meal_plan'), $context->get('note'), false, $context->get('assignment_type'));
             }
-        }catch(AssignmentException $e){
+        } catch(AssignmentException $e) {
             NQ::simple('hms', hms\NotificationView::ERROR, 'Assignment error: ' . $e->getMessage());
             $errorCmd->redirect();
         }

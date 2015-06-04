@@ -67,7 +67,8 @@ class CheckinFactory {
         return $result[sizeof($result)-1];
     }
 
-    public static function getCheckinByBed(Student $student, HMS_Bed $bed, $term)
+    // TODO: There could potentially be multiple check-ins for a student in a single bed
+    public static function getCheckinByBed(Student $student, HMS_Bed $bed)
     {
         $db = new PHPWS_DB('hms_checkin');
         $db->addWhere('banner_id', $student->getBannerId());

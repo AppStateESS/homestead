@@ -47,7 +47,7 @@ class CreateRoommateGroupCommand extends Command {
 
         try{
             # Check if these two can live together
-            $result = HMS_Roommate::canLiveTogetherAdmin($student1, $student2, $term);
+            HMS_Roommate::canLiveTogetherAdmin($student1, $student2, $term);
         }catch(Exception $e){
             NQ::simple('hms', hms\NotificationView::ERROR, 'Could not create roommate group: ' . $e->getMessage());
             $viewCmd->redirect();
@@ -96,5 +96,3 @@ class CreateRoommateGroupCommand extends Command {
         }
     }
 }
-
-?>

@@ -21,8 +21,6 @@ class CheckoutFormView extends hms\View {
 
     public function show()
     {
-        $term = $this->checkin->getTerm();
-
         $residentStudents = $this->room->get_assignees();
 
         $residents = array();
@@ -44,7 +42,7 @@ class CheckoutFormView extends hms\View {
 
         $vars['CHECKIN'] = json_encode($this->checkin);
 
-        $http = array_key_exists('HTTPS', $_SERVER) && $_SERVER['HTTPS'] ? 'https:' : 'http:';
+        //$http = array_key_exists('HTTPS', $_SERVER) && $_SERVER['HTTPS'] ? 'https:' : 'http:';
         $vars['JAVASCRIPT_BASE'] = PHPWS_SOURCE_HTTP . 'mod/hms/javascript';
 
         javascript('jquery');

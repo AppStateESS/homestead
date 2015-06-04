@@ -56,7 +56,6 @@ class BannerQueue {
 
         if(PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
-            return false;
         }
 
         if($result == 0) {

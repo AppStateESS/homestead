@@ -16,14 +16,6 @@ class ApcDataProvider extends StudentDataProvider {
         return $bannerId . $term;
     }
 
-    /**
-     * Returns a key to use for looking up a banner ID by username.
-     */
-    private function makeUsernameKey($username, $term)
-    {
-        return $username . $term;
-    }
-
     public function getStudentByUsername($username, $term)
     {
 

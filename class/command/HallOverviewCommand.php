@@ -29,7 +29,6 @@ class HallOverviewCommand extends Command {
         $nakedDisplayCmd = CommandFactory::getCommand('SelectResidenceHall');
         $nakedDisplayCmd->setTitle('Hall Overview');
         $nakedDisplayCmd->setOnSelectCmd(CommandFactory::getCommand('HallOverviewNakedDisplay'));
-        $nakedDisplayLink = $nakedDisplayCmd->getLink('Printable');
 
         return $regularLink . ' [' . $nakedDisplayCmd->getLink('Printable') . ']';
     }

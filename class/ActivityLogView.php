@@ -54,7 +54,7 @@ class ActivityLogView extends hms\View {
      * in the Student Info thing, you can show the activity log for only that
      * user.
      */
-    public static function showFilters($selection = NULL, $defaults = NULL)
+    public static function showFilters($selection = NULL)
     {
         PHPWS_Core::initCoreClass('Form.php');
 
