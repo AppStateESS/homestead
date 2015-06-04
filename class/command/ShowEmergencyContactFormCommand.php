@@ -44,22 +44,6 @@ class ShowEmergencyContactFormCommand extends Command {
             throw new InvalidArgumentException('Missing term.');
         }
 
-        // Determine the application type, based on the term
-        $sem = Term::getTermSem($term);
-
-        switch ($sem){
-            case TERM_FALL:
-                $appType = 'fall';
-                break;
-            case TERM_SPRING:
-                $appType = 'spring';
-                break;
-            case TERM_SUMMER1:
-            case TERM_SUMMER2:
-                $appType = 'summer';
-                break;
-        }
-
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
         $application = HousingApplication::getApplicationByUser($student->getUsername(), $term);
         $formView = new EmergencyContactFormView($student, $term, $application);
