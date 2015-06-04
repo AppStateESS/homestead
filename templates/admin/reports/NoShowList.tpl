@@ -1,28 +1,33 @@
-<h1>{NAME} - {TERM}</h1>
+<h1>{NAME} <small>{TERM}</small></h1>
+<div class="col-md-11">
+  <p>
+    Executed on: {EXEC_DATE} by {EXEC_USER}
+  </p>
 
-<p>Executed on: {EXEC_DATE} by {EXEC_USER}</p>
+  <div class="row">
+    <label class="col-md-2">Total no-shows:</label>
+    <strong class="col-md-3">{TOTAL}</strong>
+  </div>
 
-  <ul>
-    <li>{TOTAL} total no-shows</li>
-  </ul>
-
-<table id="needs" border="1" style="border-collapse : collapse">
+  <table class="table table-striped table-hover">
     <tr>
         <th>Banner ID</th>
         <th>Username</th>
-        <th>Assignment Reason</th>
+        <th>Name</th>
         <th>Class</th>
-        <th>Hall</th>
-        <th>Room</th>
+        <th>Assignment</th>
+        <th>Assignment Reason</th>
     </tr>
-<!-- BEGIN rows -->
+
+    <!-- BEGIN rows -->
     <tr>
         <td>{banner_id}</td>
-        <td>{asu_username}</td>
-        <td>{reason}</td>
+        <td>{username}</td>
+        <td>{name}</td>
         <td>{class}</td>
-        <td>{hall_name}</td>
-        <td>{room_number}</td>
+        <td>{hall_name} {room_number}-{bed_letter}</td>
+        <td>{reason}</td>
     </tr>
-<!-- END rows -->
-</table>
+    <!-- END rows -->
+  </table>
+</div>
