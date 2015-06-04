@@ -48,7 +48,6 @@ class HousingApplicationConfirmCommand extends Command {
                     break;
                 default:
                     throw new InvalidTermException('Invalid term specified.');
-                    break;
             }
 
             $application->delete();

@@ -50,12 +50,11 @@ class EmergencyContactConfirmCommand extends Command {
                     break;
                 default:
                     throw new InvalidTermException('Invalid term specified.');
-                    break;
             }
         } else {
             // TODO What if there is no application found? Should I cry?
             // Execution shouldn't be able to make it this far if an application doesn't exist.
-            test('Uh oh! No application found.', true);
+            throw new Exception('No application found.');
         }
 
         // Update the Emergency Contact and Missing Person information
