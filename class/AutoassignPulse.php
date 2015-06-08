@@ -1,8 +1,8 @@
 <?php
 
-PHPWS_Core::initModClass('pulse', 'ScheduledPulse.php');
+require_once PHPWS_SOURCE_DIR . 'mod/hms/inc/defines.php';
 
-class AutoassignPulse extends ScheduledPulse
+class AutoassignPulse
 {
     public function __construct($id = NULL)
     {
@@ -13,12 +13,9 @@ class AutoassignPulse extends ScheduledPulse
         parent::__construct($id);
     }
 
-    public function execute()
+    public static function execute()
     {
         PHPWS_Core::initModClass('hms', 'HMS.php');
-
-        require_once(PHPWS_SOURCE_DIR . 'mod/hms/inc/defines.php');
-
         PHPWS_Core::initModClass('hms', 'Autoassigner.php');
 
         ob_start();
@@ -39,7 +36,7 @@ class AutoassignPulse extends ScheduledPulse
         ob_end_clean();
 
         // TODO: Email the person that scheduled the autoassign.
-        mail('jb67803@appstate.edu', 'Autoassign Complete', $message);
+        mail(HMS_AUTOASSIGN_EMAIL, 'Autoassign Complete', $message);
 
         return TRUE;
     }

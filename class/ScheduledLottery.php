@@ -5,9 +5,7 @@
  * @author Jeff Tickle <jtickle at tux dot appstate dot edu>
  */
 
-PHPWS_Core::initModClass('pulse', 'ScheduledPulse.php');
-
-class ScheduledLottery extends ScheduledPulse
+class ScheduledLottery
 {
     public function __construct($id = NULL)
     {
@@ -18,7 +16,7 @@ class ScheduledLottery extends ScheduledPulse
         parent::__construct($id);
     }
 
-    public function execute()
+    public static function execute()
     {
         PHPWS_Core::initModClass('hms', 'HMS.php');
 
