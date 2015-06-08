@@ -135,6 +135,9 @@ class NavBar extends View {
     	if(\Current_User::isDeity()) {
             $ctrlPanel = \CommandFactory::getCommand('ShowControlPanel');
             $this->tpl['CTRL_PANEL_URI'] = $ctrlPanel->getURI();
+            
+            $pulse = \CommandFactory::getCommand('ShowPulseOption');
+            $this->tpl['PULSE_URI'] = $pulse->getURI();
     	}
     }
 }

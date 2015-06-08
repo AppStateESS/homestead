@@ -52,6 +52,10 @@
             <!-- BEGIN term -->
             <li><a href="{EDIT_TERM_URI}"><i class="fa fa-calendar"></i> Edit Terms</a></li>
             <!-- END term -->
+
+            <!-- BEGIN pulse -->
+            <li><a href="{PULSE_URI}"><i class="fa fa-calendar-o"></i> Schedule processes</a></li>
+            <!-- END pulse -->
             
             <!-- BEGIN activitylog -->
             <li><a href="{ACTIVITY_LOG_URI}"><i class="fa fa-list-ul"></i> Activity Log</a></li>
