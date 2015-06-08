@@ -471,6 +471,7 @@ CREATE TABLE hms_lottery_application (
     wg_pref                 smallint NOT NULL default 0,
     honors_pref             smallint NOT NULL default 0,
     invited_on              integer,
+    early_release           character varying,
     PRIMARY KEY(id)
 );
 
