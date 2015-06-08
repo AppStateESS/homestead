@@ -1,23 +1,38 @@
-<h1>{NAME} - {TERM}</h1>
+<h2>{NAME} <small>{TERM}</small></h2>
 
-Executed on: {EXEC_DATE} by {EXEC_USER}
-<br />
+<div class="col-md-12">
+  <div class="row">
+    <p class="col-md-6">
+      Executed on: {EXEC_DATE} by {EXEC_USER}
+    </p>
+  </div>
 
-<table>
-  <tr>
-    <th>Hall Name</th>
-    <th># Check-ins</th>
-  </tr>
+  <div class="row">
+    <label class="col-md-3">
+      <u>Hall Name</u>
+    </label>
+    <label class="col-md-3 col-md-offset-1">
+      <u># of Check-ins</u>
+    </label>
+  </div>
 
   <!-- BEGIN TABLE_ROWS -->
-  <tr>
-    <td>{HALL_NAME}</td>
-    <td>{COUNT}</td>
-  </tr>
+  <div class="row">
+    <p class="col-md-3">
+      {HALL_NAME}
+    </p>
+    <p class="col-md-3 col-md-offset-1">
+      {COUNT}
+    </p>
+  </div>
   <!-- END TABLE_ROWS -->
-  
-  <tr>
-    <td><strong>Total:</strong></td>
-    <td><strong>{TOTAL_CHECKINS}</strong></td>
-  </tr>
-</table>
+
+  <div class="row">
+    <label class="col-md-3">
+      Total:
+    </label>
+    <label class="col-md-3 col-md-offset-1">
+      {TOTAL_CHECKINS}
+    </label>
+  </div>
+</div>
