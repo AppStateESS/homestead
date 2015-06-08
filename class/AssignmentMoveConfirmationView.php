@@ -1,7 +1,7 @@
 <?php
 
-class AssignmentMoveConfirmationView extends hms\View{
-
+class AssignmentMoveConfirmationView extends hms\View
+{
     private $student;
     private $assignment;
     private $residenceHall;
@@ -13,14 +13,14 @@ class AssignmentMoveConfirmationView extends hms\View{
 
     public function __construct(Student $student, HMS_Assignment $assignment, $residenceHall, $room, $bed, $mealPlan, $assignmentType, $notes)
     {
-        $this->student			= $student;
-        $this->assignment		= $assignment;
-        $this->residenceHall	= $residenceHall;
-        $this->room 			= $room;
-        $this->bed 				= $bed;
-        $this->mealPlan 		= $mealPlan;
-        $this->assignmentType   = $assignmentType;
-        $this->notes            = $notes;
+        $this->student = $student;
+        $this->assignment = $assignment;
+        $this->residenceHall = $residenceHall;
+        $this->room = $room;
+        $this->bed = $bed;
+        $this->mealPlan = $mealPlan;
+        $this->assignmentType = $assignmentType;
+        $this->notes = $notes;
     }
 
     public function show()
@@ -44,16 +44,21 @@ class AssignmentMoveConfirmationView extends hms\View{
         $form = new PHPWS_Form();
         $submitCmd->initForm($form);
 
-        $form->addButton('cancel', 'Cancel');
-        $form->setClass('cancel', 'btn btn-default');
         $form->addSubmit('submit', 'Confirm Move');
         $form->setClass('submit', 'btn btn-danger');
 
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
+        if (!empty($_SERVER['HTTP_REFERER'])) {
+            $tpl['BACK'] = $_SERVER['HTTP_REFERER'];
+        } else {
+            $tpl['BACK'] = 'index.php?module=hms&action=ShowAssignStudent';
+        }
+
         Layout::addPageTitle("Assignment Move Confirmation");
 
         return PHPWS_Template::process($tpl, 'hms', 'admin/assign_student_move_confirm.tpl');
     }
+
 }

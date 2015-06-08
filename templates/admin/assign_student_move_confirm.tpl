@@ -1,16 +1,9 @@
 {START_FORM}
-<div class="hms">
-  <div class="box">
-    <h1>Assign Student - Confirm Move - {TERM}</h1>
-    <div class="box-content">
-        Warning: {NAME} is already assigned to {LOCATION}. Click the 'Confirm' button below to move the student, or 'Cancel' to keep the current assignment.<br /><br />
-        <table>
-          <tr>
-            <td>{SUBMIT}</td>
-            <td>{CANCEL}</td>
-          </tr>
-        </table>
+    <h2>Assign Student - Confirm Move - {TERM}</h2>
+    <div class="alert alert-warning">
+        <p><strong><i class="fa fa-exclamation-triangle fa-lg"></i> Warning:</strong> {NAME} is already assigned to {LOCATION}.</p>
+        <p>Click the 'Confirm' button below to move the student, or 'Cancel' to keep the current assignment.</p>
     </div>
-  </div>
-</div>
+            {SUBMIT}
+            <a href="{BACK}" class="btn btn-default">Cancel</a>
 {END_FORM}
