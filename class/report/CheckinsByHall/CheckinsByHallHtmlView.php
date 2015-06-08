@@ -11,16 +11,16 @@ class CheckinsByHallHtmlView extends ReportHtmlView {
 
         $totalAssignments = 0;
 
-        foreach($this->report->getCheckinCounts() as $hall=>$count){
+        foreach($this->report->getCheckinCounts() as $tRows){
             $row = array();
 
-            $row['HALL_NAME'] = $hall;
+            $row['HALL_NAME'] = $tRows['hall_name'];
 
-            $row['COUNT'] = $count;
+            $row['COUNT'] = (int)$tRows['count'];
 
             $rows[] = $row;
 
-            $totalAssignments += $count;
+            $totalAssignments += (int)$tRows['count'];
         }
 
         $this->tpl['TABLE_ROWS'] = $rows;
@@ -30,4 +30,3 @@ class CheckinsByHallHtmlView extends ReportHtmlView {
         return PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/CheckinsByHall.tpl');
     }
 }
-
