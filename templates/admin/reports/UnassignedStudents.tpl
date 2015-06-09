@@ -7,9 +7,9 @@
     <li>{TOTAL} unassigned student</li>
     <ul>
         <li>Male: {MALE}</li>
-        <li>Female: {FEMALE}</li> 
+        <li>Female: {FEMALE}</li>
     </ul>
-  </ul> 
+  </ul>
 </p>
 
 <table id="needs" cellpadding="2" border="1" style="border-collapse : collapse">
