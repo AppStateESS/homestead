@@ -272,6 +272,15 @@ class HMS_Residence_Hall extends HMS_Item {
         return $this->hall_name;
     }
 
+    public function isOnline()
+    {
+        if($this->is_online){
+            return true;
+        }
+
+        return false;
+    }
+
     public function getLink()
     {
         $editHallCmd = CommandFactory::getCommand('EditResidenceHallView');

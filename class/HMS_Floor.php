@@ -571,11 +571,11 @@ class HMS_Floor extends HMS_Item
                     AND hms_room.private = 0
                     AND hms_room.overflow = 0
                     AND hms_room.parlor = 0 ";
-                    
+
         if($rlcId != null) {
         	$query .= "AND hms_room.reserved_rlc_id = $rlcId ";
         }
-        
+
          $query .= "AND hms_bed.international_reserved = 0
                     AND hms_bed.ra = 0
                     AND hms_bed.ra_roommate = 0";
@@ -628,11 +628,6 @@ class HMS_Floor extends HMS_Item
         $pager->addWhere('hms_floor.residence_hall_id', $hall_id);
         $pager->db->addOrder('hms_floor.floor_number');
 
-        $page_tags['TABLE_TITLE']       = 'Floors in this hall';
-        $page_tags['FLOOR_NUM_LABEL']   = 'Floor #';
-        $page_tags['GENDER_LABEL']      = 'Gender';
-        $page_tags['ONLINE_LABEL']      = 'Online';
-
         $pager->setModule('hms');
         $pager->setTemplate('admin/floor_pager_by_hall.tpl');
         $pager->setLink('index.php?module=hms');
@@ -640,9 +635,7 @@ class HMS_Floor extends HMS_Item
         $pager->addToggle('class="toggle1"');
         $pager->addToggle('class="toggle2"');
         $pager->addRowTags('get_pager_by_hall_tags');
-        $pager->addPageTags($page_tags);
 
         return $pager->get();
     }
 }
-

@@ -1,72 +1,114 @@
-<div class="hms">
-  <div class="box">
-    <div class="{TITLE_CLASS}"><h1>{TITLE}</h1></div>
-    <div class="box-content">
-        <!-- BEGIN error_msg -->
-        <span class="error">{ERROR_MSG}<br /></span>
-        <!-- END error_msg -->
-        
-        <!-- BEGIN success_msg -->
-        <span class="success">{SUCCESS_MSG}<br /></span>
-        <!-- END success_msg -->
-        <h2>Hall Properties</h2>
-        {START_FORM}
-        <table>
-            <tr>
-                <th>Hall name: </th><td align="left">{HALL_NAME}</td>
-            </tr>
-            <tr>
-                <th>Number of floors: </th><td align="left">{NUMBER_OF_FLOORS}</td>
-            </tr>
-            <tr>
-                <th>Number of rooms: </th><td align="left">{NUMBER_OF_ROOMS}</td>
-            </tr>
-            <tr>
-                <th>Number of beds: </th><td align="left">{NUMBER_OF_BEDS}</td>
-            </tr>
-            <tr>
-                <th>Number of online/non-overflow beds: </th><td align="left">{NUMBER_OF_BEDS_ONLINE}</td>
-            </tr>
-            <tr>
-                <th>Number of assignees: </th><td align="left">{NUMBER_OF_ASSIGNEES}</td>
-            </tr>
-            <tr>
-                <th>Gender: </th><td align="left">{GENDER_TYPE}</td>
-            </tr>
-            <tr>
-                <th>Is online: </th><td align="left">{IS_ONLINE}</td>
-            </tr>
-            <tr>
-                <th>Air Conditioned: </th><td align="left">{AIR_CONDITIONED}</td>
-            </tr>
-            <tr>
-                <th>Meal plan required: </th><td align="left">{MEAL_PLAN_REQUIRED}</td>
-            </tr>
-            <tr>
-                <th>Assignment Notifications: </th><td align="left">{ASSIGNMENT_NOTIFICATIONS}</td>
-            </tr>
-            <tr>
-                <th>Package Desk: </th><td align="left">{PACKAGE_DESK}</td>
-            </tr>
-            <tr>
-                <th>Exterior image: </th><td align"left">{EXTERIOR_IMG}</td>
-            </tr>
-            <tr>
-                <th>Other image: </th><td align"left">{OTHER_IMG}</td>
-            </tr>
-            <tr>
-                <th>Map image: </th><td align"left">{MAP_IMG}</td>
-            </tr>
-            <tr>
-                <th>Room plan image: </th><td align"left">{ROOM_PLAN_IMG}</td>
-            </tr>
-        </table>
-        {SUBMIT}
-        {END_FORM}
-        <br /><br />
-        {ROLE_EDITOR}
-        <br /><br />
-        {FLOOR_PAGER}
+<div class="row">
+  <div class="col-md-8">
+    <h1>{TITLE} <small>{TERM}</small></h1>
+    {START_FORM}
+
+    <div class="row">
+        <div class="col-md-12">
+            <!-- BEGIN offline -->
+            {OFFLINE}
+            <h3><span class="label label-danger">Offline</span></h3>
+            <!-- END offline -->
+        </div>
+    </div>
+
+    <div class="row" style="margin-top:2em;">
+        <div class="col-md-2 text-center">
+            Floors<p class="lead">{NUMBER_OF_FLOORS}</p>
+        </div>
+        <div class="col-md-2 text-center">
+            Rooms<p class="lead">{NUMBER_OF_ROOMS}</p>
+        </div>
+        <div class="col-md-2 text-center">
+            Beds<p class="lead">{NUMBER_OF_BEDS}</p>
+        </div>
+        <div class="col-md-2 text-center">
+            Nominal beds<p class="lead">{NUMBER_OF_BEDS_ONLINE}</p>
+        </div>
+        <div class="col-md-2 text-center">
+            Residents<p class="lead">{NUMBER_OF_ASSIGNEES}</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-10">
+            <div role="tabpanel">
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" style="margin-bottom: 15px;" role="tablist">
+                    <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Floors</a></li>
+                    <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Settings</a></li>
+                    <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Images</a></li>
+                    <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Roles</a></li>
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="home">
+                        {FLOOR_PAGER}
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="profile">
+                        {START_FORM}
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="{HALL_NAME_ID}">Name</label>
+                                    {HALL_NAME}
+                                </div>
+                                <div class="form-group">
+                                    <label for="{GENDER_TYPE_LABEL}">Gender</label>
+                                    {GENDER_TYPE}
+                                </div>
+
+                                <div class="checkbox">
+                                    <label>
+                                        {IS_ONLINE} Is online
+                                    </label>
+                                </div>
+
+                                <div class="checkbox">
+                                    <label>
+                                        {AIR_CONDITIONED} Air Conditioned
+                                    </label>
+                                </div>
+                                <div class="checkbox">
+                                    <label>
+                                        {MEAL_PLAN_REQUIRED} Meal plan required
+                                    </label>
+                                </div>
+                                <div class="checkbox">
+                                    <label>
+                                        {ASSIGNMENT_NOTIFICATIONS} Assignment Notifications
+                                    </label>
+                                </div>
+                                <!--
+                                <div class="form-group">
+                                    <label for="{PACKAGE_DESK}">
+                                        Package Desk
+                                    </label>
+                                    {PACKAGE_DESK}
+                                </div>
+                                -->
+                                <button type="submit" class="btn btn-success pull-right">Save</button>
+                            </div>
+                        </div>
+                        {END_FORM}
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="messages">
+                        {START_FORM}
+                        Exterior image: {EXTERIOR_IMG}
+                        Other image: {OTHER_IMG}
+                        Map image: {MAP_IMG}
+                        Room plan image: {ROOM_PLAN_IMG}
+
+                        <button type="submit" class="btn btn-success">Save</button>
+                        {END_FORM}
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="settings">
+                        {ROLE_EDITOR}
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
   </div>
 </div>

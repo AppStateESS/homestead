@@ -76,35 +76,24 @@ var roleMan = function(className, instance, div, name){
     this.draw = function(){
         $(this.div).empty();
         var contents = "";
-        var tabs = new Array();
-        var divs = new Array();
 
-        contents += '<div id="roleTabs">';
-        tabs.push('<ul>');
+        contents += '<button type="button" class="btn btn-primary pull-right" onclick="managerPopup.open(\''+this.className+'\', '+this.instance+', '+this.name+');"><i class="fa fa-user-plus"></i> Add User</button>';
+
         for(var i in this.roles){
-            tabs.push('<li><a href="#tabs-'+i+'">'+this.roles[i].getName()+'</a></li>');
-            var divContents = '<div id="tabs-'+i+'">';
+            contents += '<h3>'+this.roles[i].getName()+'</h3>';
             var members = this.roles[i].getMembers();
 
             if(members.length == 0){
-            	divContents += 'Please add members with the button below.';
+            	contents += '<p class="text-muted"><em>No users with this role.</em></p>';
             }else{
-            	divContents += '<ul>';
+            	contents += '<ul>';
             	for(var j in members){
-            		divContents += '<li>'+members[j].fullname+' <i class="fa fa-trash-o" style=" cursor: pointer" onclick="removeUser(\''+members[j].username+'\', \''+this.roles[i].getName()+'\', newMan);"></i>';
+            		contents += '<li>'+members[j].fullname+' <i class="fa fa-trash-o" style=" cursor: pointer" onclick="removeUser(\''+members[j].username+'\', \''+this.roles[i].getName()+'\', newMan);"></i>';
             	}
-            	divContents += '</ul>';
+            	contents += '</ul>';
             }
-
-            divContents += '</div>';
-            divs.push(divContents);
         }
-        tabs.push('</ul>');
-        contents += tabs.join('')+divs.join('');
-        contents += '</div>';
 
         $(this.div).html(contents);
-        $("#roleTabs").tabs();
-        $(this.div).append('<button onclick="managerPopup.open(\''+this.className+'\', '+this.instance+', '+this.name+');">Add User</button>');
     }
 }
