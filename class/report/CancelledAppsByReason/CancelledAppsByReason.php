@@ -28,7 +28,7 @@ class CancelledAppsByReason extends Report {
         $db = new PHPWS_DB('hms_new_application');
 
         $db->addColumn('cancelled_reason');
-        $db->addColumn('id', null, 'myCount', true);
+        $db->addColumn('id', null, 'ount', true);
         $db->addWhere('term', $this->getTerm());
         $db->addWhere('cancelled', 1);
 
@@ -39,7 +39,7 @@ class CancelledAppsByReason extends Report {
         // Freshmen
         $db = new PHPWS_DB('hms_new_application');
         $db->addColumn('cancelled_reason');
-        $db->addColumn('id', null, 'myCount', true);
+        $db->addColumn('id', null, 'count', true);
         $db->addWhere('term', $this->getTerm());
         $db->addWhere('cancelled', 1);
         $db->addWhere('student_type', TYPE_FRESHMEN);
@@ -51,7 +51,7 @@ class CancelledAppsByReason extends Report {
         // Continuing
         $db = new PHPWS_DB('hms_new_application');
         $db->addColumn('cancelled_reason');
-        $db->addColumn('id', null, 'myCount', true);
+        $db->addColumn('id', null, 'count', true);
         $db->addWhere('term', $this->getTerm());
         $db->addWhere('cancelled', 1);
         $db->addWhere('student_type', TYPE_CONTINUING);
