@@ -62,7 +62,7 @@ class ReportRunner
         // If there's nothing to do, quite nicely
         if (!isset($results) || is_null($results) || empty($results)) {
             UserStatus::removeMask();
-            return;
+            return 'No reports waiting.';
         }
 
         // Run each report
