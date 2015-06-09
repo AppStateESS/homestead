@@ -492,6 +492,10 @@ class HMS_Floor extends HMS_Item
 
         $assignees = array();
 
+        if(!isset($this->_rooms))
+        {
+          return $assignees;
+        }
         foreach($this->_rooms as $room) {
             $room_assignees = $room->get_assignees();
             $assignees = array_merge($assignees, $room_assignees);
