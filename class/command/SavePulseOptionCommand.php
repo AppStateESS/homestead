@@ -156,7 +156,7 @@ class SavePulseOptionCommand extends Command
         $ps->setClassMethod('execute');
         $ps->setExecuteAfter(mktime(24, 0, 0));
         $ps->setInterim('1440');
-        $ps->setRequiredFile('mod/hms/class/ReportRunner.php');
+        $ps->setRequiredFile('mod/hms/class/NightlyCache.php');
         pulse\PulseFactory::save($ps);
     }
 
