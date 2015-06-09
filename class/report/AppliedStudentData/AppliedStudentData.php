@@ -31,6 +31,7 @@ class AppliedStudentData extends Report implements iCsvReport {
         $db = new PHPWS_DB('hms_new_application');
         $db->addWhere('term', $this->term);
         $db->addWhere('cancelled', 0);
+        $db->addColomn('hms_student_cache.dob');
 
         $result = $db->select();
         
@@ -43,6 +44,7 @@ class AppliedStudentData extends Report implements iCsvReport {
             $type       = $app['student_type'];
             $cellPhone  = $app['cell_phone'];
             $date       = date('n/j/Y', $app['created_on']);
+            
 
             $assignment = HMS_Assignment::getAssignmentByBannerId($bannerId, $this->term);
 
@@ -58,7 +60,8 @@ class AppliedStudentData extends Report implements iCsvReport {
             $middle = $student->getMiddleName($username);
             $last   = $student->getLastName($username);
             $gender = $student->getPrintableGender();
-
+            $birthday = date("m/d/Y", $student->getDobDateTime()->getTimestamp());
+            
             $address = $student->getAddress(NULL);
 
             if(!is_null($address) && $address !== false){
@@ -67,7 +70,7 @@ class AppliedStudentData extends Report implements iCsvReport {
                         $username, $bannerId, $first, $middle, $last, $gender,
                         $type, $cellPhone, $room, $date, $address->line1, $address->line2,
                         $address->line3, $address->city,
-                        $address->state, $address->zip
+                        $address->state, $address->zip, $birthday
                      );
             }else{
                 $this->rows[] =
@@ -81,7 +84,7 @@ class AppliedStudentData extends Report implements iCsvReport {
     {
         return array('Username', 'Banner id', 'First name', 'Middle name',
             'Last name', 'Gender', 'Student type', 'Cell Phone', 'Assignment', 'Date Applied', 'Address 1',
-            'Address 2', 'Address 3', 'City', 'State', 'Zip');
+            'Address 2', 'Address 3', 'City', 'State', 'Zip', 'Birthday');
     }
 
     public function getCsvRowsArray()
