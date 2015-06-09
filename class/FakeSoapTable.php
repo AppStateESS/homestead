@@ -41,7 +41,7 @@ class TestSOAP extends SOAP
             throw new StudentNotFoundException('User not found', 0, $bannerId);
         }
         extract($student_array);
-        $student = new stdClass();
+        $response = new stdClass();
         $response->banner_id = $banner_id;
         $response->user_name = $username;
         $response->last_name = $last_name;
