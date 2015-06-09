@@ -25,7 +25,8 @@ class SelectRoomView extends hms\View{
             $cmd->redirect();
         }
 
-        $tpl['TITLE']       = $this->title . ' - ' . Term::getPrintableSelectedTerm();
+        $tpl['TITLE']   = $this->title;
+        $tpl['TERM']    = Term::getPrintableSelectedTerm();
 
         javascript('jquery');
         javascript('modules/hms/select_room');
@@ -38,12 +39,15 @@ class SelectRoomView extends hms\View{
         $form->addDropBox('residence_hall', $this->halls);
         $form->setLabel('residence_hall', 'Residence hall: ');
         $form->setMatch('residence_hall', 0);
+        $form->addCssClass('residence_hall', 'form-control');
 
         $form->addDropBox('floor', array(0 => ''));
         $form->setLabel('floor', 'Floor: ');
+        $form->addCssClass('floor', 'form-control');
 
         $form->addDropBox('room', array(0 => ''));
         $form->setLabel('room', 'Room: ');
+        $form->addCssClass('room', 'form-control');
 
         $form->addSubmit('submit_button', 'Select');
 
