@@ -1,23 +1,40 @@
-<h1>{NAME} - {TERM}</h1>
+<h2>{NAME} <small>{TERM}</small></h2>
 
-Executed on: {EXEC_DATE} by {EXEC_USER}
-<br />
+<div class="col-md-12">
 
-<table>
-  <tr>
-    <th>Student Type</th>
-    <th># Assignments</th>
-  </tr>
+  <div class="row">
+    <p class="col-md-6">
+    Executed on: {EXEC_DATE} by {EXEC_USER}
+    </p>
+  </div>
+
+
+  <div class="row">
+    <label class="col-md-3">
+      <u>Student Type</u>
+    </label>
+    <label class="col-md-3 col-md-offset-1">
+      <u># of Assignments</u>
+    </label>
+  </div>
 
   <!-- BEGIN TABLE_ROWS -->
-  <tr>
-    <td>{TYPE}</td>
-    <td>{COUNT}</td>
-  </tr>
+    <div class="row">
+      <p class="col-md-3">
+        {TYPE}
+      </p>
+      <p class="col-md-3 col-md-offset-1">
+        {COUNT}
+      </p>
+    </div>
   <!-- END TABLE_ROWS -->
-  
-  <tr>
-    <td><strong>Total:</strong></td>
-    <td><strong>{TOTAL_CANCELLATIONS}</strong></td>
-  </tr>
-</table>
+
+  <div class="row">
+    <label class="col-md-3">
+      Total:
+    </label>
+    <label class="col-md-3 col-md-offset-1">
+      {TOTAL_CANCELLATIONS}
+    </label>
+  </div>
+</div>
