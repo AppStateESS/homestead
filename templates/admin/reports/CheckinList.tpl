@@ -1,12 +1,24 @@
-<h1>{NAME} - {TERM}</h1>
+<h2>{NAME} <small>{TERM}</small></h2>
 
-<p>Executed on: {EXEC_DATE} by {EXEC_USER}</p>
+<div class="col-md-12">
 
-  <ul>
-    <li>{TOTAL} total check-ins</li>
-  </ul>
+  <div class="row">
+    <p class="col-md-6">
+      Executed on: {EXEC_DATE} by {EXEC_USER}
+    </p>
+  </div>
 
-<table>
+  <div class="row">
+    <label class="col-md-2">
+      Total Check-ins:
+    </label>
+    <label class="col-md-2 col-md-offset-1">
+      {TOTAL}
+    </label>
+  </div>
+  <p></p>
+
+<table class="table table-striped table-hover">
     <tr>
         <th>Banner ID</th>
         <th>Hall</th>
