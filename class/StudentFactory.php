@@ -5,6 +5,12 @@ PHPWS_Core::initModClass('hms', 'Student.php');
 
 class StudentFactory {
 
+    /**
+     * @param string $username
+     * @param integer $term
+     * @param StudentDataProvider $provider Could be either ApcDataProvider or LocalCacheDataProvider
+     * @return CachedStudent
+     */
     public static function getStudentByUsername($username, $term, $provider = NULL)
     {
         if(is_null($provider)){
