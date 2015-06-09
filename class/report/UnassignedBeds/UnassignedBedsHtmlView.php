@@ -19,12 +19,24 @@ class UnassignedBedsHtmlView extends ReportHtmlView {
         $this->tpl['MALE'] = $this->report->getMale();
         $this->tpl['FEMALE'] = $this->report->getFemale();
         $this->tpl['COED'] = $this->report->getCoed();
-        
+
         // Copy results into the template
         foreach($this->report->getData() as $row){
+            if(empty($row['maleRooms']))
+            {
+              $row['maleRooms'] = "None";
+            }
+            if(empty($row['femaleRooms']))
+            {
+              $row['femaleRooms'] = "None";
+            }
+            if(empty($row['coedRooms']))
+            {
+              $row['coedRooms'] = "None";
+            }
             $this->tpl['rows'][] = $row;
         }
-        
+
         return PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/UnassignedBeds.tpl');
     }
 }
