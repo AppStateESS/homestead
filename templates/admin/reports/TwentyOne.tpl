@@ -1,17 +1,22 @@
-<h1>{NAME} - {TERM}</h1>
+<h2>{NAME} <small>{TERM}</small></h2>
 
-<p>Executed on: {EXEC_DATE} by {EXEC_USER}</p>
+<div class="col-md-12">
+  <div class="row">
+    <p class="col-md-6">
+      Executed on: {EXEC_DATE} by {EXEC_USER}
+    </p>
+  </div>
 
-<table id="needs" width="100%" cellpadding="3" border="1" style="border-collapse : collapse">
+  <table class="table table-striped table-hover">
     <tr>
-        <th>Residnec Hall (max occ.)</th>
+        <th>Residence Hall (max occ.)</th>
         <th>Current Occupancy</th>
         <th>Males</th>
         <th>Male %</th>
         <th>Females</th>
         <th>Female %</th>
     </tr>
-<!-- BEGIN rows -->
+    <!-- BEGIN rows -->
     <tr>
         <td>{hallName} ({maxOccupancy})</td>
         <td>{currOccupancy}</td>
@@ -20,7 +25,7 @@
         <td>{females}</td>
         <td>{femalePercent}</td>
     </tr>
-<!-- END rows -->
+    <!-- END rows -->
     <tr>
         <td><strong>Total</strong></td>
         <td>{totalCurrOccupancy}</td>
@@ -29,4 +34,4 @@
         <td>{totalFemales}</td>
         <td>{totalFemalePercent}</td>
     </tr>
-</table>
+  </table>

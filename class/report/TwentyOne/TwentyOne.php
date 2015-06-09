@@ -49,7 +49,7 @@ class TwentyOne extends Report implements iCsvReport {
 
         // Calculate the timestamp from 21 years ago
         $twentyOneYearsAgo = strtotime("-21 years");
-        
+
         // Get all of the residence halls for this term
         $halls = HMS_Residence_Hall::get_halls($this->term);
 
@@ -104,9 +104,16 @@ class TwentyOne extends Report implements iCsvReport {
                             'females'        => $females,
                             'femalePercent'  => $femalePercent);
         }
+        if($this->totalCurrOccupancy == 0)
+        {
+          $this->totalMalePercent = 0;
+          $this->totalFemalePercent = 0;
+        }
+        else {
+          $this->totalMalePercent = round(($this->totalMales / $this->totalCurrOccupancy) * 100,1);
+          $this->totalFemalePercent = round(($this->totalFemales / $this->totalCurrOccupancy) * 100,1);
+        }
 
-        $this->totalMalePercent = round(($this->totalMales / $this->totalCurrOccupancy) * 100,1);
-        $this->totalFemalePercent = round(($this->totalFemales / $this->totalCurrOccupancy) * 100,1);
     }
 
     public function setTerm($term)
