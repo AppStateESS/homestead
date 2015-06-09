@@ -25,7 +25,8 @@ class SelectFloorView extends hms\View
             $cmd->redirect();
         }
 
-        $tpl['TITLE'] = $this->title . ' - ' . Term::getPrintableSelectedTerm();
+        $tpl['TITLE']   = $this->title;
+        $tpl['TERM']    = Term::getPrintableSelectedTerm();
 
         javascript('jquery');
         javascript('modules/hms/select_floor');

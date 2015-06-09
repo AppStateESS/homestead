@@ -326,7 +326,7 @@ class HMS_Util{
      * @param int $clean
      * @return String
      */
-    public function formatRoomCondition($clean){
+    public static function formatRoomCondition($clean){
         switch($clean){
             case 1:
                 return 'Clean';

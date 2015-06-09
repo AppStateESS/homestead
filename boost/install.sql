@@ -376,7 +376,7 @@ ALTER TABLE hms_learning_community_applications ADD CONSTRAINT rlc_application_k
 
 CREATE TABLE hms_learning_community_assignment (
     id                  integer NOT NULL,
-    application_id      integer NOT NULL REFERENCES hms_learning_community_applications(id), 
+    application_id      integer NOT NULL REFERENCES hms_learning_community_applications(id),
     rlc_id              integer NOT NULL REFERENCES hms_learning_communities(id),
     gender              integer NOT NULL,
     assigned_by         character varying(32) NOT NULL,
@@ -470,6 +470,8 @@ CREATE TABLE hms_lottery_application (
     tf_pref                 smallint NOT NULL default 0,
     wg_pref                 smallint NOT NULL default 0,
     honors_pref             smallint NOT NULL default 0,
+    invited_on              integer,
+    early_release           character varying,
     PRIMARY KEY(id)
 );
 
@@ -725,18 +727,18 @@ create table hms_room_change_participant_state (
 CREATE VIEW hms_room_change_curr_request AS
     SELECT * FROM hms_room_change_request
     JOIN hms_room_change_request_state ON hms_room_change_request.id = hms_room_change_request_state.request_id
-    WHERE 
+    WHERE
         effective_date < extract(epoch from now()) AND
         effective_until_date IS NULL;
 
 CREATE VIEW hms_room_change_curr_participant AS
     SELECT * FROM hms_room_change_participant
     JOIN hms_room_change_participant_state ON hms_room_change_participant.id = hms_room_change_participant_state.participant_id
-    WHERE 
+    WHERE
         effective_date < extract(epoch from now()) AND
         effective_until_date IS NULL;
 
-CREATE VIEW hms_room_change_curr_request_participants AS 
+CREATE VIEW hms_room_change_curr_request_participants AS
     SELECT
         hms_room_change_curr_request.id,
         hms_room_change_curr_request.term,
@@ -793,7 +795,7 @@ CREATE INDEX hms_assignment_term_idx ON hms_assignment (term);
 
 CREATE INDEX hms_room_crazy_idx ON hms_room (gender_type, reserved, offline, private, ra, overflow, parlor);
 
-CREATE INDEX hms_room_floor_id_idx ON hms_room (floor_id); 
+CREATE INDEX hms_room_floor_id_idx ON hms_room (floor_id);
 
 INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info, members_reapply) VALUES (3, 'Language & Culture Community', 'LCC', 50, 0, 'F', '', 0);
 INSERT INTO hms_learning_communities (id, community_name, abbreviation, capacity, hide, allowed_student_types, extra_info, members_reapply) VALUES (20, 'Watauga Global Community', 'WG', 50, 0, 'F', '<p>Watauga Global Community is where classes meet general education requirements in interdisciplinary team-taught (multiple professor) core classes that blend fact, fiction, culture, philosophy, motion, art, music, myth, and religion.</p><p><strong>This community requires a separate application in addition to marking it as a housing preference.  For more information, go to the <a href="http://wataugaglobal.appstate.edu/pagesmith/4" target="_blank" style="color: blue;">Watauga Global Community Website</a>.</strong></p>', 0);

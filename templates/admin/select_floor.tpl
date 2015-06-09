@@ -1,13 +1,19 @@
-<h2>{TITLE}</h2>
-<h3>Please select a floor:</h3>
+<h2>{TITLE} <small>{TERM}</small></h2>
+
 {START_FORM}
-<div class="row form-group">
-    <div class="col-sm-2">{RESIDENCE_HALL_LABEL}</div>
-    <div class="col-sm-10">{RESIDENCE_HALL}</div>
+<div class="row">
+    <div class="col-md-4">
+        <div class="form-group">
+            {RESIDENCE_HALL_LABEL}
+            {RESIDENCE_HALL}
+        </div>
+        <div class="form-group">
+            {FLOOR_LABEL}
+            {FLOOR}
+        </div>
+        <div class="form-group">
+            <button class="btn btn-success pull-right">Choose floor</button>
+        </div>
+    </div>
 </div>
-<div class="row form-group">
-    <div class="col-sm-2">{FLOOR_LABEL}</div>
-    <div class="col-sm-10">{FLOOR}</div>
-</div>
-<button class="btn btn-primary">Choose floor</button>
 {END_FORM}

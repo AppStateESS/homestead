@@ -1,4 +1,4 @@
-<h1>{TITLE}</h1>
+<h1>{TITLE} <small>{TERM}</small></h1>
 
 <div class="row">
     <div class="col-md-3">
@@ -10,7 +10,7 @@
         </div>
 
         <div class="form-group">
-            <button type="submit" class="btn btn-success">Select Hall</button>
+            <button type="submit" class="btn btn-success pull-right">Choose Hall</button>
         </div>
         {END_FORM}
     </div>

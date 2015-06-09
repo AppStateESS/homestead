@@ -1,5 +1,3 @@
-<h2>Permissions</h2>
-
 <div id="manager"></div>
 <div id="managerPopup"></div>
 

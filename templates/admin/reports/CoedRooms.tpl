@@ -1,11 +1,27 @@
-<h1>{NAME} - {TERM}</h1>
+<h2>{NAME} <small>{TERM}</small></h2>
 
-<p>Executed on: {EXEC_DATE} by {EXEC_USER}</p>
-<p>Total Coed Rooms: {totalCoed}</p>
-<table class = "table">
-	<th>Hall Name</th>
-	<th>Floor Number</th>
-	<th>Room Number</th>
+<div class="col-md-12">
+	<div class="row">
+		<p class="col-md-6">
+			Executed on: {EXEC_DATE} by {EXEC_USER}
+		</p>
+	</div>
+
+	<div class="row">
+		<label class="col-md-3">
+			Total Coed Rooms:
+		</label>
+		<label class="col-md-3 col-md-offset-1">
+			{totalCoed}
+		</label>
+	</div>
+
+<table class="table table-striped table-hover">
+	<tr>
+		<th>Hall Name</th>
+		<th>Floor Number</th>
+		<th>Room Number</th>
+	</tr>
 	<!-- BEGIN rows -->
 	<tr>
 		<td>{hall_name}</td>

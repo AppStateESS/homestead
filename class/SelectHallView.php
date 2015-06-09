@@ -23,7 +23,8 @@ class SelectHallView extends hms\View{
     {
         $tpl = array();
 
-        $tpl['TITLE']       = $this->title . ' - ' . Term::getPrintableSelectedTerm();
+        $tpl['TITLE']   = $this->title;
+        $tpl['TERM']    = Term::getPrintableSelectedTerm();
 
         if($this->halls == NULL){
             NQ::simple('hms', hms\NotificationView::ERROR, 'There are no halls available for the selected term.');

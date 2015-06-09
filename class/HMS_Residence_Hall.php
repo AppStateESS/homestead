@@ -7,11 +7,9 @@
  *         Some code copied from:
  * @author Kevin Wilcox <kevin at tux dot appstate dot edu>
  */
-PHPWS_Core::initModClass('hms', 'HMS_Item.php');
-PHPWS_Core::initModClass('hms', 'HMS_Permission.php');
-
 
 class HMS_Residence_Hall extends HMS_Item {
+
     public $hall_name = NULL;
     public $term;
     public $banner_building_code = NULL;
@@ -272,6 +270,15 @@ class HMS_Residence_Hall extends HMS_Item {
     public function getHallName()
     {
         return $this->hall_name;
+    }
+
+    public function isOnline()
+    {
+        if($this->is_online){
+            return true;
+        }
+
+        return false;
     }
 
     public function getLink()
@@ -653,44 +660,6 @@ class HMS_Residence_Hall extends HMS_Item {
     }
 
     /**
-     * Returns the pager tags for the db pager
-     *
-     * Is this even used anywhere??
-     */
-    public function get_row_tags()
-    {
-        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
-
-        $tags = $this->item_tags();
-        $tags['HALL_NAME'] = $this->hall_name;
-        $tags['BANNER_BUILDING_CODE'] = $this->banner_building_code;
-
-        $is_online = $this->get_is_online();
-        if ($is_online == ONLINE) {
-            $tags['IS_ONLINE'] = ONLINE_DESC;
-        } else if ($is_online == OFFLINE) {
-            $tags['IS_ONLINE'] = OFFLINE_DESC;
-        } else {
-            $tags['IS_ONLINE'] = 'Error: Unknown status';
-        }
-
-        $gender_type = $this->get_gender_type();
-        $tags['GENDER_TYPE'] = HMS_Util::formatGender($this->gender_type);
-
-        // num_beds = $this->get_number_of_beds();
-        // num_assignees = $this->get_number_of_assignees();
-        // num_beds_free = $num_beds - $num_beds_free;
-
-        // tags['NUM_FLOORS'] = $this->get_number_of_floors();
-        // tags['NUM_ROOMS'] = $this->get_number_of_rooms();
-        // tags['NUM_BEDS'] = $num_beds;
-        // tags['NUM_ASSIGNEES'] = $num_assignees();
-        // tags['NUM_BEDS_FREE'] = $num_beds_free();
-        $tags['ACTIONS'] = 'View Delete'; // ODO
-        return $tags;
-    }
-
-    /**
      * Returns an array where each element is an associative sub-array of info for
      * the coordinators of this halll. Returns null if there is no coordinator.
      * NB: There may be multiple people with the coordinator role. This will return
@@ -867,28 +836,5 @@ class HMS_Residence_Hall extends HMS_Item {
         }
 
         return $output_list;
-    }
-
-    /**
-     * Returns the HTML for a DB pager of the current set of
-     * residence halls available.
-     * Is this even used anywehre??
-     */
-    public static function residence_hall_pager()
-    {
-        PHPWS_Core::initCoreClass('DBPager.php');
-        $pager = new DBPager('hms_residence_hall', 'HMS_Residence_Hall');
-        $pager->db->addOrder('hall_name', 'DESC');
-        // ODO: $pager->db->addWhere('term', SOMETHING);
-
-        $pager->setModule('hms');
-        $pager->setTemplate('admin/residence_hall_pager.tpl');
-        $pager->setLink('index.php?module=hms');
-        $pager->setEmptyMessage("No residence halls found.");
-        $pager->addToggle('class="toggle1"');
-        $pager->addToggle('class="toggle2"');
-        $pager->addRowTags('get_row_tags');
-
-        return $pager->get();
     }
 }

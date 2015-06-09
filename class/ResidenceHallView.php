@@ -15,13 +15,15 @@ class ResidenceHallView extends hms\View {
             throw new PermissionException('You are not allowed to view residence halls');
         }
 
-        PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
-
         javascript('jquery_ui');
 
         # Setup the title and color of the title bar
-        $tpl['TITLE'] = $this->hall->getHallName() . ' - ' . Term::getPrintableSelectedTerm();
+        $tpl['TITLE']   = $this->hall->getHallName();
+        $tpl['TERM']    = Term::getPrintableSelectedTerm();
+
+        if (!$this->hall->isOnline()) {
+            $tpl['OFFLINE'] = '';
+        }
 
         $submitCmd = CommandFactory::getCommand('EditResidenceHall');
         $submitCmd->setHallId($this->hall->getId());
@@ -33,6 +35,7 @@ class ResidenceHallView extends hms\View {
         //$form->addHidden('beds_per_room', $this->hall->count_beds_per_room()); // add a hidden field for beds per room
 
         $form->addText('hall_name', $this->hall->hall_name);
+        $form->addCssClass('hall_name', 'form-control');
 
         $tpl['NUMBER_OF_FLOORS']        = $this->hall->get_number_of_floors();
         $tpl['NUMBER_OF_ROOMS']         = $this->hall->get_number_of_rooms();
@@ -42,6 +45,7 @@ class ResidenceHallView extends hms\View {
 
         $form->addDropBox('gender_type', array(FEMALE => FEMALE_DESC, MALE => MALE_DESC, COED => COED_DESC));
         $form->setMatch('gender_type', $this->hall->gender_type);
+        $form->addCssClass('gender_type', 'form-control');
 
         $form->addCheckBox('air_conditioned', 1);
         $form->setMatch('air_conditioned', $this->hall->air_conditioned);
@@ -54,11 +58,11 @@ class ResidenceHallView extends hms\View {
 
         $form->addCheckBox('assignment_notifications', 1);
         $form->setMatch('assignment_notifications', $this->hall->assignment_notifications);
-        
+
         // Package Desks
         //PHPWS_Core::initModClass('hms', 'PackageDeskFactory.php');
         //$packageDesks = PackageDeskFactory::getPackageDesksAssoc();
-        
+
         //$form->addDropBox('package_desk', $packageDesks);
         //$form->setMatch('package_desk', $this->hall->getPackageDeskId());
 
@@ -109,8 +113,6 @@ class ResidenceHallView extends hms\View {
         $manager->imageOnly(false,false);
         $form->addTplTag('ROOM_PLAN_IMG', $manager->get());
 
-        $form->addSubmit('submit', _('Save Hall'));
-
         # if the user has permission to view the form but not edit it then
         # disable it
         if(    Current_User::allow('hms', 'hall_view')
@@ -137,5 +139,3 @@ class ResidenceHallView extends hms\View {
         return PHPWS_Template::process($tpl, 'hms', 'admin/edit_residence_hall.tpl');
     }
 }
-
-

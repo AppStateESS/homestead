@@ -1,74 +1,67 @@
-<style>
-table#needs td {
-border : 1px solid black;
-}
+<h2>{NAME} - {TERM}</h2>
 
-table#needs .nope {
-font-weight : bold;
-border : none;
-}
+<div class="col-md-12">
+  <div class="row">
+    <p class="col-md-6">
+      Executed on: {EXEC_DATE} by {EXEC_USER}
+    </p>
+  </div>
 
-table#needs .cat {
-border-top : 1px solid black;
-}
-</style>
-
-<h1>{NAME} - {TERM}</h1>
-
-Executed on: {EXEC_DATE} by {EXEC_USER}<br />
-
-<table id="needs" width="100%" cellpadding="3" border="1" style="border-collapse : collapse">
+  <div class="col-md-9">
+  <table class="table table-striped table-hover">
     <tr>
-        <th class="nope" width="80px">&#160;</th>
-        <th class="nope" width="30px">&#160;</th>
-        <th width="80px">Banner Id</th>
-        <th width="200px">Name</th>
-        <th width="100px">Username</th>
-        <th width="80px">Class Status</th>
-        <th width="80px">Student Type</th>
+        <th></th>
+        <th></th>
+        <th>Banner Id</th>
+        <th>Name</th>
+        <th>Username</th>
+        <th>Class Status</th>
+        <th>Student Type</th>
     </tr>
-<!-- BEGIN f -->
+    <!-- BEGIN f -->
     <tr>
-        <td class="{style}">{f_word}</td>
-        <td class="{style}">{f_total}</td>
-        <td width="80px">{banner_id}</td>
-        <td width="200px">{name}</td>
-        <td width="100px">{username}</td>
-        <td width="80px" style="text-align : center">{class}</td>
-        <td width="80px" style="text-align : center">{student_type}</td>
+        <td>{f_word}</td>
+        <td>{f_total}</td>
+        <td>{banner_id}</td>
+        <td>{name}</td>
+        <td>{username}</td>
+        <td>{class}</td>
+        <td>{student_type}</td>
     </tr>
-<!-- END f -->
-<!-- BEGIN s -->
+    <!-- END f -->
+    <!-- BEGIN s -->
     <tr>
-        <td class="{style}">{s_word}</td>
-        <td class="{style}">{s_total}</td>
-        <td width="80px">{banner_id}</td>
-        <td width="200px">{name}</td>
-        <td width="100px">{username}</td>
-        <td width="80px" style="text-align : center">{class}</td>
-        <td width="80px" style="text-align : center">{student_type}</td>
+        <td>{s_word}</td>
+        <td>{s_total}</td>
+        <td>{banner_id}</td>
+        <td>{name}</td>
+        <td>{username}</td>
+        <td>{class}</td>
+        <td>{student_type}</td>
     </tr>
-<!-- END s -->
-<!-- BEGIN g -->
+    <!-- END s -->
+    <!-- BEGIN g -->
     <tr>
-        <td class="{style}">{g_word}</td>
-        <td class="{style}">{g_total}</td>
-        <td width="80px">{banner_id}</td>
-        <td width="200px">{name}</td>
-        <td width="100px">{username}</td>
-        <td width="80px" style="text-align : center">{class}</td>
-        <td width="80px" style="text-align : center">{student_type}</td>
+        <td>{g_word}</td>
+        <td>{g_total}</td>
+        <td>{banner_id}</td>
+        <td>{name}</td>
+        <td>{username}</td>
+        <td>{class}</td>
+        <td>{student_type}</td>
     </tr>
-<!-- END g -->
-<!-- BEGIN m -->
+    <!-- END g -->
+    <!-- BEGIN m -->
     <tr>
-        <td class="{style}">{m_word}</td>
-        <td class="{style}">{m_total}</td>
-        <td width="80px">{banner_id}</td>
-        <td width="200px">{name}</td>
-        <td width="100px">{username}</td>
-        <td width="80px" style="text-align : center">{class}</td>
-        <td width="80px" style="text-align : center">{student_type}</td>
+        <td>{m_word}</td>
+        <td>{m_total}</td>
+        <td>{banner_id}</td>
+        <td>{name}</td>
+        <td>{username}</td>
+        <td>{class}</td>
+        <td>{student_type}</td>
     </tr>
-<!-- END m -->
-</table>
+    <!-- END m -->
+  </table>
+</div>
+</div>

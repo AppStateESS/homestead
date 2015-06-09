@@ -1,73 +1,101 @@
-<h1>{NAME} <br /> {TERM}</h1>
+<h2>{NAME} <small>{TERM}</small></h2>
 
-Executed on: {EXEC_DATE} by {EXEC_USER}
-<br />
+<div class="col-md-8">
+  Executed on: {EXEC_DATE} by {EXEC_USER}
 
-<h2> All Students</h2>
-<table>
-  <tr>
-    <th>Cancellation Reason</th>
-    <th># Contracts</th>
-  </tr>
+  <h3> All Students</h3>
 
-  <!-- BEGIN TABLE_ROWS -->
-  <tr>
-    <td>{REASON}</td>
-    <td>{COUNT}</td>
-  </tr>
-  <!-- END TABLE_ROWS -->
-  
-  <tr>
-    <td><strong>Total:</strong></td>
-    <td><strong>{TOTAL_CANCELLATIONS}</strong></td>
-  </tr>
-</table>
+    <div class="row">
+      <label class="col-md-4">
+        <u>Cancellation Reasons</u>
+      </label>
+      <label class="col-md-3 col-md-offset-1">
+        <u># of Contracts</u>
+      </label>
+    </div>
 
-<p>
-<strong>Note:</strong>
-The Freshmen and Continuing totals shown below will not always sum to the total given above. The total above includes other student types (Transfers, Returning, Re-admit, etc), which are not broken out below.
-</p>
+    <!-- BEGIN TABLE_ROWS -->
+      <div class="row">
+        <p class="col-md-4">
+          {ALL_REASON}
+        </p>
+        <p class="col-md-3 col-md-offset-1">
+          {ALL_COUNT}
+        </p>
+      </div>
+    <!-- END TABLE_ROWS -->
+
+    <div class="row">
+      <label class="col-md-4">
+        Total:
+      </label>
+      <label class="col-md-3 col-md-offset-1">
+        {TOTAL_CANCELLATIONS}
+      </label>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+          <p>
+            <strong>Note:</strong>
+            The Freshmen and Continuing totals shown below will not always sum to the total given above. The total above includes other student types (Transfers, Returning, Re-admit, etc), which are not broken out below.
+          </p>
+        </div>
+    </div>
+
+  <h3>Freshmen Students</h3>
+
+    <div class="row">
+      <label class="col-md-4">
+        <u>Cancellation Reasons</u>
+      </label>
+      <label class="col-md-3 col-md-offset-1">
+        <u># of Contracts</u>
+      </label>
+    </div>
+
+    <!-- BEGIN FRESHMEN_ROWS -->
+      <div class="row">
+        <p class="col-md-4">
+          {FR_REASON}
+        </p>
+        <p class="col-md-3 col-md-offset-1">
+          {FR_COUNT}
+        </p>
+      </div>
+    <!-- END FRESHMEN_ROWS -->
+
+    <div class="row">
+      <label class="col-md-4">
+        Total:
+      </label>
+      <label class="col-md-3 col-md-offset-1">
+        {FRESHMEN_TOTAL}
+      </label>
+    </div>
 
 
-<h2>Freshmen Students</h2>
+  <h3>Continuing Students</h3>
 
-<table>
-  <tr>
-    <th>Freshmen Cancellation Reason</th>
-    <th># Contracts</th>
-  </tr>
+    <div class="row">
+      <label class="col-md-4">
+        <u>Cancellation Reasons</u>
+      </label>
+      <label class="col-md-3 col-md-offset-1">
+        <u># of Contracts</u>
+      </label>
+    </div>
 
-  <!-- BEGIN FRESHMEN_ROWS -->
-  <tr>
-    <td>{REASON}</td>
-    <td>{COUNT}</td>
-  </tr>
-  <!-- END FRESHMEN_ROWS -->
-  
-  <tr>
-    <td><strong>Total:</strong></td>
-    <td><strong>{FRESHMEN_TOTAL}</strong></td>
-  </tr>
-</table>
+    <!-- BEGIN CONTINUING_ROWS -->
+      <div class="row">
+        <p class="col-md-4">{C_REASON}</p>
+        <p class="col-md-3 col-md-offset-1">{C_COUNT}</p>
+      </div>
+    <!-- END CONTINUING_ROWS -->
 
+    <div class="row">
+      <label class="col-md-4">Total:</label>
+      <label class="col-md-3 col-md-offset-1">{CONTINUING_TOTAL}</label>
+    </div>
 
-<h2>Continuing Students</h2>
-
-<table>
-  <tr>
-    <th>Continuing Cancellation Reason</th>
-    <th># Contracts</th>
-  </tr>
-
-  <!-- BEGIN CONTINUING_ROWS -->
-  <tr>
-    <td>{REASON}</td>
-    <td>{COUNT}</td>
-  </tr>
-  <!-- END CONTINUING_ROWS -->
-  
-  <tr>
-    <td><strong>Total:</strong></td>
-    <td><strong>{CONTINUING_TOTAL}</strong></td>
-  </tr>
-</table>
+</div>

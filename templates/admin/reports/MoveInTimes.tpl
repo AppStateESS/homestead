@@ -1,24 +1,25 @@
-<style>
-table#movein h2 {
-    margin : 0;
-    padding : 0;
-}
-</style>
-<h1>{NAME} - {TERM}</h1>
+<h2>{NAME} <small>{TERM}</small></h2>
 
-<p>Executed on: {EXEC_DATE} by {EXEC_USER}</p>
-<table id="movein" cellpadding="4" width="100%">
-<!-- BEGIN hall-rows -->
-    <tr>
-        <th colspan="4"><h2>{HALL_NAME}</h2></th>
-    </tr>
-    <tr>
+<div class="col-md-12">
+  <div class="row">
+    <p class="col-md-6">
+      Executed on: {EXEC_DATE} by {EXEC_USER}
+    </p>
+  </div>
+
+  <!-- BEGIN hall-rows -->
+    <table class="table table-striped table-hover">
+      <tr>
+          <th colspan="4"><h2>{HALL_NAME}</h2></th>
+      </tr>
+      <tr>
         <th>Floor</th><th>Freshman</th><th>Transfer</th><th>Returning</th>
-    </tr>
-    <!-- BEGIN floor-rows -->
-    <tr>
-        <td>{FLOOR_NUM}</td><td>{F_TIME}</td><td>{T_TIME}</td><td>{RT_TIME}</td>
-    </tr>
-    <!-- END floor-rows -->
-<!-- END hall-rows -->
-</table>
+      </tr>
+      <!-- BEGIN floor-rows -->
+        <tr>
+          <td>{FLOOR_NUM}</td><td>{F_TIME}</td><td>{T_TIME}</td><td>{RT_TIME}</td>
+        </tr>
+      <!-- END floor-rows -->
+    </table>
+  <!-- END hall-rows -->
+</div>

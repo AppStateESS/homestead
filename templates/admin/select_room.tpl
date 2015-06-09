@@ -1,34 +1,23 @@
-<div class="hms">
-  <div class="box">
-    <div class="{TITLE_CLASS}"><h1>{TITLE}</h1></div>
-    <div class="box-content">
-        <!-- BEGIN error_msg -->
-        <span class="error">{ERROR_MSG}<br /></span>
-        <!-- END error_msg -->
-        
-        <!-- BEGIN success_msg -->
-        <span class="success">{SUCCESS_MSG}<br /></span>
-        <!-- END success_msg -->
-        
-        {MESSAGE}<br /><br />
-        {START_FORM}
-        <table>
-            <tr>
-                <th align="left">{RESIDENCE_HALL_LABEL}</th>
-                <td>{RESIDENCE_HALL}</td>
-            </tr>
-            <tr>
-                <th align="left">{FLOOR_LABEL}</th>
-                <td>{FLOOR}</td>
-            </tr>
-            <tr>
-                <th align="left">{ROOM_LABEL}</th>
-                <td>{ROOM}</td>
-            </tr>
-        </table>
-        <br />
-        {SUBMIT_BUTTON}
-        {END_FORM}
+<div class="row">
+  <div class="col-md-4">
+    <h1>{TITLE} <small>{TERM}</small></h1>
+
+    {START_FORM}
+    <div class="form-group">
+        {RESIDENCE_HALL_LABEL}
+        {RESIDENCE_HALL}
     </div>
+    <div class="form-group">
+        {FLOOR_LABEL}
+        {FLOOR}
+    </div>
+    <div class="form-group">
+        {ROOM_LABEL}
+        {ROOM}
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-success pull-right">Choose Room</button>
+    </div>
+    {END_FORM}
   </div>
 </div>
