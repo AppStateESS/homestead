@@ -26,68 +26,68 @@ class TestSOAP extends SOAP
             throw new InvalidArgumentException('Bad term');
         }
 
-        $response = new stdClass();
+        $student = new stdClass();
 
-        $db = \Database::newDB();
-        $soap_tbl = $db->addTable('fake_soap');
-        if (!$soap_tbl->exists()) {
-            throw \Exception('fake_soap table does not exist');
-        }
+        $db = PdoFactory::getPdoInstance();
 
-        $soap_tbl->addFieldConditional('banner_id', $bannerId);
-        $student_array = $db->selectOneRow();
-        if (empty($student_array)) {
+        $query = "SELECT * FROM fake_soap WHERE banner_id = :banner_id";
+        $stmt = $db->prepare($query);
+        $params = array('banner_id' => $bannerId);
+        $stmt->execute($params);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (empty($result)) {
             require_once PHPWS_SOURCE_DIR . 'mod/hms/class/exception/StudentNotFoundException.php';
             throw new StudentNotFoundException('User not found', 0, $bannerId);
         }
-        extract($student_array);
+
         $student = new stdClass();
-        $response->banner_id = $banner_id;
-        $response->user_name = $username;
-        $response->last_name = $last_name;
-        $response->first_name = $first_name;
-        $response->middle_name = $middle_name;
-        $response->pref_name = $pref_name;
-        $response->dob = $dob;
-        $response->gender = $gender;
-        $response->deposit_date = ''; // unused but present
-        $response->deposit_waived = 'false'; // unused but present
-        $response->confid = 'Y';
-        $response->international = $international;
-        $response->student_level = $student_level; // U-undergrad, G-Graduate
-        $response->app_decision_code = '1*';
-        $response->honors = $honors;
-        $response->teaching_fellow = $teaching_fellow;
-        $response->watauga_member = $watauga_member;
-        $response->greek = $greek;
+        $student->banner_id = $result['banner_id'];
+        $student->user_name = $result['username'];
+        $student->last_name = $result['last_name'];
+        $student->first_name = $result['first_name'];
+        $student->middle_name = $result['middle_name'];
+        $student->pref_name = $result['pref_name'];
+        $student->dob = $result['dob'];
+        $student->gender = $result['gender'];
+        $student->deposit_date = ''; // unused but present
+        $student->deposit_waived = 'false'; // unused but present
+        $student->confid = 'Y';
+        $student->international = $result['international'];
+        $student->student_level = $result['student_level']; // U-undergrad, G-Graduat']e
+        $student->app_decision_code = '1*';
+        $student->honors = $result['honors'];
+        $student->teaching_fellow = $result['teaching_fellow'];
+        $student->watauga_member = $result['watauga_member'];
+        $student->greek = $result['greek'];
 
-        $response->disabled_pin = false;
-        $response->housing_waiver = $housing_waiver;
-        $response->student_type = $student_type;
-        $response->application_term = $term;
-        $response->projected_class = $projected_class;
+        $student->disabled_pin = false;
+        $student->housing_waiver = $result['housing_waiver'];
+        $student->student_type = $result['student_type'];
+        $student->application_term = $result['application_term'];
+        $student->projected_class = $result['projected_class'];
 
-        $response->credhrs_completed = $credhrs_completed;
-        $response->credhrs_for_term = $credhrs_for_term;
-        $response->on_campus = 'false'; // unused
+        $student->credhrs_completed = $result['credhrs_completed'];
+        $student->credhrs_for_term = $result['credhrs_for_term'];
+        $student->on_campus = 'false'; // unused
 
-        $address_array = unserialize($address);
+        $address_array = unserialize($result['address']);
         foreach ($address_array as $add) {
             $address_object_array[] = (object) $add;
         }
 
-        $phone_array = unserialize($phone);
+        $phone_array = unserialize($result['phone']);
         foreach ($phone_array as $p) {
             $phone_object_array[] = (object) $p;
         }
 
-        $response->address = $address_object_array;
-        $response->error_num = 0;
-        $response->error_desc = null;
-        $response->phone = $phone_object_array;
+        $student->address = $address_object_array;
+        $student->error_num = 0;
+        $student->error_desc = null;
+        $student->phone = $phone_object_array;
 
         $this->createDelay();
-        return $response;
+        return $student;
     }
 
     public function createDelay()
