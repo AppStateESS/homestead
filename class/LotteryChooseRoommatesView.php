@@ -75,14 +75,14 @@ class LotteryChooseRoommatesView extends hms\View {
                 # Bed is empty, so decide what we should do with it
                 if(isset($_REQUEST['roommates'][$bed->id])){
                     # The user already submitted the form once, put the value in the request in the text box by default
-                    $bed_row['TEXT'] = "<input type=\"text\" name=\"roommates[{$bed->id}]\" class=\"roommate_entry\" value=\"{$_REQUEST['roommates'][$bed->id]}\">@appstate.edu";
+                    $bed_row['TEXT'] = "<input type=\"text\" class=\"form-control\" name=\"roommates[{$bed->id}]\" class=\"roommate_entry\" value=\"{$_REQUEST['roommates'][$bed->id]}\">";
                 }else if(!$assigned_self){
                     # No value in the request, this bed is empty, and this user hasn't been assigned anywhere yet
                     # So put their user name in this field by default
-                    $bed_row['TEXT'] = "<input type=\"text\" name=\"roommates[{$bed->id}]\" class=\"roommate_entry\" value=\"{$this->student->getUsername()}\">@appstate.edu";
+                    $bed_row['TEXT'] = "<input type=\"text\" class=\"form-control\" name=\"roommates[{$bed->id}]\" class=\"roommate_entry\" value=\"{$this->student->getUsername()}\">";
                     $assigned_self = TRUE;
                 }else{
-                    $bed_row['TEXT'] = "<input type=\"text\" name=\"roommates[{$bed->id}]\" class=\"roommate_entry\">@appstate.edu";
+                    $bed_row['TEXT'] = "<input type=\"text\" class=\"form-control\" name=\"roommates[{$bed->id}]\" class=\"roommate_entry\">";
                 }
             }
 
@@ -99,11 +99,13 @@ class LotteryChooseRoommatesView extends hms\View {
             BANNER_MEAL_STD    =>_('Standard'),
             BANNER_MEAL_HIGH   =>_('High'),
             BANNER_MEAL_SUPER  =>_('Super')));
+            $form->addCssClass('meal_plan', 'form-control');
         }else{
             $form->addDropBox('meal_plan', array(BANNER_MEAL_LOW    =>_('Low'),
             BANNER_MEAL_STD    =>_('Standard'),
             BANNER_MEAL_HIGH   =>_('High'),
             BANNER_MEAL_SUPER  =>_('Super')));
+            $form->addCssClass('meal_plan', 'form-control');
         }
 
         $form->setMatch('meal_plan', $lotteryApplication->getMealPlan());

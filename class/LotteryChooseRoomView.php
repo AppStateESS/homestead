@@ -1,12 +1,12 @@
 <?php
 
 class LotteryChooseRoomView extends hms\View {
-    
+
     public $student;
     public $term;
     public $floorId;
     private $rlcAssignment;
-    
+
     public function __construct(Student $student, $term, $floorId, HMS_RLC_Assignment $rlcAssignment = null)
     {
         $this->student = $student;
@@ -14,7 +14,7 @@ class LotteryChooseRoomView extends hms\View {
         $this->floorId = $floorId;
         $this->rlcAssignment = $rlcAssignment;
     }
-    
+
     public function show()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
@@ -54,19 +54,19 @@ class LotteryChooseRoomView extends hms\View {
             // We list the room dispite whether it's actually available to choose or not,
             // so decide whether to "gray out" this row in the room list or not
             if(($room->gender_type != $this->student->getGender() && $room->gender_type != AUTO)
-                || $num_avail_beds     == 0 
-                || $room->reserved == 1 
-                || $room->offline  == 1 
-                || $room->private  == 1 
+                || $num_avail_beds     == 0
+                || $room->reserved == 1
+                || $room->offline  == 1
+                || $room->private  == 1
                 || $room->overflow == 1
                 || $room->parlor   == 1
                 || $room->getReservedRlcId() != $rlcId){
-        
+
                 // Show a grayed out row and no link
                 $row['ROOM_NUM']        = $room->room_number;
-                $row['ROW_TEXT_COLOR']  = 'grey';
+                $row['ROW_TEXT_COLOR']  = 'text-muted';
                 $row['AVAIL_BEDS']      = 0; // show 0 available beds since this room is unavailable to the user
-            
+
             }else{
                 // Show the room number as a link
                 $roomCmd = CommandFactory::getCommand('LotteryChooseRoom');
