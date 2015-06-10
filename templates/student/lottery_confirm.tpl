@@ -62,7 +62,11 @@
 
 
 
-  <p>To confirm your room and roommate selections please type the words shown in the image below in the text field provided. (If you cannot read the words, click the refresh button under the image to get new words.)</p>
+  <div class="row">
+    <p class="col-md-8">
+      To confirm your room and roommate selections please type the words shown in the image below in the text field provided. (If you cannot read the words, click the refresh button to get new words.)
+    </p>
+  </div>
 
   {START_FORM}
 
@@ -72,7 +76,10 @@
     </div>
   </div>
 
-  {SUBMIT_FORM}
+  <button type="submit" class="btn btn-lg btn-success">
+    Confirm
+  </button>
+
   {END_FORM}
 
 </div>
