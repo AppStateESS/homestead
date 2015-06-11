@@ -15,23 +15,11 @@ class LotteryChooseHallView extends hms\View {
 
     public function show()
     {
-
-        PHPWS_Core::initCoreClass('Form.php');
-        $form = new PHPWS_Form();
-
-        $submitCmd = CommandFactory::getCommand('LotteryChooseHall');
-        $submitCmd->setTerm($this->term);
-        $submitCmd->initForm($form);
-
-        $tpl = array();
-
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
 
         $tpl['TERM'] = Term::toString($this->term) . ' - ' . Term::toString(Term::getNextTerm($this->term));
 
         $halls = HMS_Residence_Hall::get_halls($this->term);
-
-        $hall_list = array();
 
         // Check for an RLC Assignment, and that it's in the correct state
         if($this->rlcAssignment != null && $this->rlcAssignment->getStateName() == 'selfselect-invite') {
@@ -44,29 +32,34 @@ class LotteryChooseHallView extends hms\View {
         // still has an available bed
         $somethingsAvailable = false;
 
-        foreach ($halls as $hall)
-        {
-          if($hall->count_avail_lottery_rooms($this->student->getGender(), $rlcId) > 0)
-          {
-            $hall_list[$hall->hall_name] = $hall->hall_name;
-            $somethingsAvailable = true;
-          }
+        foreach($halls as $hall){
+            $row = array();
+            $row['HALL_NAME']       = $hall->hall_name;
+            $row['ROW_TEXT_COLOR']  = 'black';
+
+            # Make sure we have a room of the specified gender available in the hall (or a co-ed room)
+            if($hall->count_avail_lottery_rooms($this->student->getGender(), $rlcId) <= 0){
+                $row['ROW_TEXT_COLOR'] = ' class="text-muted"';
+                $tpl['hall_list'][] = $row;
+
+                continue;
+            } else {
+            	$somethingsAvailable = true;
+            }
+
+            $chooseCmd = CommandFactory::getCommand('LotteryChooseHall');
+            $chooseCmd->setHallId($hall->id);
+            $row['HALL_NAME']   = $chooseCmd->getLink($hall->hall_name);
+            $tpl['hall_list'][] = $row;
         }
 
-        if($somethingsAvailable)
-        {
-          $form->addDropBox('hall_choices', $hall_list);
-          $form->addCssClass('hall_choices', 'form-control');
-          $tpl['AVAILABLE'] = '';
-        }
-        else {
-          $tpl['NOTHING_LEFT'] = '';
+        if(!$somethingsAvailable){
+        	unset($tpl['hall_list']);
+            $tpl['NOTHING_LEFT'] = '';
         }
 
-        $form->mergeTemplate($tpl);
-        $tpl = $form->getTemplate();
+        Layout::addPageTitle("Choose Hall");
 
         return PHPWS_Template::process($tpl, 'hms', 'student/lottery_choose_hall.tpl');
-
     }
 }

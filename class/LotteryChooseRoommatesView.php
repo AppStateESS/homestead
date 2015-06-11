@@ -54,7 +54,15 @@ class LotteryChooseRoommatesView extends hms\View {
             $bed = $beds[$i];
             $bed_row = array();
 
-            $bed_row['BEDROOM_LETTER']  = $bed->bedroom_label;
+            $bedLabel = $room->getRoomNumber();
+            if($room->get_number_of_beds() == 4)
+            {
+              $bedLabel = $bedLabel . $bed->getBedroomLabel();
+            }
+            $bedLabel = $bedLabel . $bed->getLetter();
+
+
+            $bed_row['BED_LABEL']  = $bedLabel;
 
             # Check for an assignment
             $bed->loadAssignment();
@@ -70,7 +78,7 @@ class LotteryChooseRoommatesView extends hms\View {
                 $reservedStudent = StudentFactory::getStudentByUsername($reservation['asu_username'], $this->term);
                 $bed_row['TEXT'] = $reservedStudent->getName() . ' (unconfirmed invitation)';
             }else if($bed->isInternationalReserved() || $bed->isRaRoommateReserved() || $bed->isRa()){
-                $bed_row['TEXT'] = 'Reserved';
+                $bed_row['TEXT'] = "<input type=\"text\" class=\"form-control\" value=\"Reserved\" disabled>";
             }else{
                 # Bed is empty, so decide what we should do with it
                 if(isset($_REQUEST['roommates'][$bed->id])){

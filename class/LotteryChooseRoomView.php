@@ -48,6 +48,7 @@ class LotteryChooseRoomView extends hms\View {
         foreach($rooms as $room){
             $row = array();
 
+
             $num_avail_beds = $room->count_avail_lottery_beds();
             $total_beds     = $room->get_number_of_beds();
 
@@ -74,6 +75,19 @@ class LotteryChooseRoomView extends hms\View {
                 $row['ROOM_NUM']        = $roomCmd->getLink($room->room_number);
                 $row['ROW_TEXT_COLOR']  = 'black';
                 $row['AVAIL_BEDS']      = $num_avail_beds;
+            }
+
+            if($room->isADA())
+            {
+              $row['ADA'] = '<i class="fa fa-wheelchair"></i>';
+            }
+            if($room->isHearingImpaired())
+            {
+              $row['HEARING_IMPAIRED'] = '<i class="fa fa-bell-slash"></i>';
+            }
+            if($room->bathEnSuite())
+            {
+              $row['BATH_EN_SUITE'] = '<i class="fa fa-female">|</i><i class="fa fa-male"></i>';
             }
 
             $row['NUM_BEDS']    = $room->get_number_of_beds();

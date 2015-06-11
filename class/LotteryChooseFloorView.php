@@ -16,16 +16,6 @@ class LotteryChooseFloorView extends hms\View {
 
     public function show()
     {
-        PHPWS_Core::initCoreClass('Form.php');
-        $form = new PHPWS_Form();
-
-        $submitCmd = CommandFactory::getCommand('LotteryChooseFloor');
-        $submitCmd->setTerm($this->term);
-        $submitCmd->setHallId($this->hallId);
-        $submitCmd->initForm($form);
-
-        $tpl = array();
-
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
@@ -33,8 +23,7 @@ class LotteryChooseFloorView extends hms\View {
 
         $hall = new HMS_Residence_Hall($this->hallId);
 
-
-        $tpl['HALL'] = $hall->hall_name;
+        $tpl['HALL']            = $hall->hall_name;
         if(isset($hall->exterior_image_id)){
             $tpl['EXTERIOR_IMAGE']  = Cabinet::getTag($hall->exterior_image_id);
         }
@@ -61,23 +50,28 @@ class LotteryChooseFloorView extends hms\View {
 
         $floors = $hall->get_floors();
 
-        $floor_list = array();
+        foreach($floors as $floor){
+            $row = array();
 
-        foreach ($floors as $floor)
-        {
-          if($floor->count_avail_lottery_rooms($this->student->getGender(), $rlcId) > 0)
-          {
-            $floor_list[$floor->floor_number] = HMS_Util::ordinal($floor->floor_number);
-            $somethingsAvailable = true;
-          }
+            if($floor->count_avail_lottery_rooms($this->student->getGender(), $rlcId) <= 0){
+                $row['FLOOR']           = HMS_Util::ordinal($floor->floor_number);
+                $row['ROW_TEXT_COLOR']  = 'class="text-muted"';
+                $tpl['floor_list'][]    = $row;
+                continue;
+            }
+
+            $floorCmd = CommandFactory::getCommand('LotteryChooseFloor');
+            $floorCmd->setFloorId($floor->id);
+
+            $row['FLOOR']           = $floorCmd->getLink(HMS_Util::ordinal($floor->floor_number) . ' floor');
+            $row['ROW_TEXT_COLOR']  = 'grey';
+            $tpl['floor_list'][]    = $row;
         }
 
-        $form->addDropBox('floor_choices', $floor_list);
-        $form->addCssClass('floor_choices', 'form-control');
-
-        $form->mergeTemplate($tpl);
-        $tpl = $form->getTemplate();
+        Layout::addPageTitle("Choose Floor");
 
         return PHPWS_Template::process($tpl, 'hms', 'student/lottery_choose_floor.tpl');
     }
 }
+
+//

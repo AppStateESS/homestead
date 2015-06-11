@@ -35,29 +35,37 @@
 
   <div class="row">
     <label class="col-md-2">
-      Bedroom
+      <u>Beds</u>
     </label>
 
   </div>
 
-  <!-- BEGIN beds -->
   <div class="row">
-    <label class="col-md-2">
-      {BEDROOM_LETTER}:
-    </label>
-    <p class="col-md-3">
-      {TEXT}
-    </p>
+    <div class="col-md-5">
+      <!-- BEGIN beds -->
+      <div class="row">
+        <label class="col-md-4">
+          {BED_LABEL}:
+        </label>
+        <p class="col-md-6">
+          {TEXT}
+        </p>
+      </div>
+      <!-- END beds -->
+    </div>
   </div>
-  <!-- END beds -->
 
-  <div class="row">
-    <label class="col-md-2">
-      Meal plan:
-    </label>
-    <p class="col-md-3">
-      {MEAL_PLAN}
-    </p>
+  <div class="col-md-12">
+    <div class="row">
+      <label>
+        <u>Meal plan</u>
+      </label>
+    </div>
+    <div class="row">
+      <p>
+        {MEAL_PLAN}
+      </p>
+    </div>
   </div>
 
 

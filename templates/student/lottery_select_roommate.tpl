@@ -11,7 +11,7 @@
     {START_FORM}
     <div class="row">
       <label class="col-md-2">
-        Bedroom
+        Beds
       </label>
       <label class="col-md-3 col-md-offset-2">
         Roommates
@@ -19,17 +19,19 @@
     </div>
 
     <!-- BEGIN beds -->
-      <div class="row">
+    <div class="row">
+      <p class="col-md-12">
         <div class="col-md-1">
-          {BEDROOM_LETTER}
+          {BED_LABEL}:
         </div>
         <div class="col-md-5 col-md-offset-2">
           <div class="input-group">
             {TEXT}
-            <div class="input-group-addon">@appstate.edu</div>
+          <div class="input-group-addon">@appstate.edu</div>
           </div>
         </div>
-      </div>
+      </p>
+    </div>
     <!-- END beds -->
 
     <p></p>
