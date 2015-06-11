@@ -55,7 +55,7 @@ class RlcAssignmentView extends hms\View
 
     /**
      * Generates a template for the rlc sort dropdown box
-     * 
+     *
      * @return string HTML for community selector drop down
      */
     public function getFilters()
@@ -101,7 +101,7 @@ class RlcAssignmentView extends hms\View
 
     /**
      * RLC Application pager for the RLC admin panel
-     * 
+     *
      * @return string HTML for application pager
      */
     public function rlcApplicationPager()
@@ -141,8 +141,6 @@ class RlcAssignmentView extends hms\View
         $pager->setLink('index.php?module=hms&action=SubmitRlcAssignments');
         $pager->setTemplate('admin/rlc_assignments_pager.tpl');
         $pager->setEmptyMessage("No pending RLC applications.");
-        $pager->addToggle('class="toggle1"');
-        $pager->addToggle('class="toggle1"');
         $pager->addPageTags($tags);
         $pager->addRowTags('getAdminPagerTags');
         $pager->setReportRow('applicantsReport');
@@ -153,5 +151,3 @@ class RlcAssignmentView extends hms\View
     }
 
 }
-
-
