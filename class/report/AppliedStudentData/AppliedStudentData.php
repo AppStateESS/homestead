@@ -31,7 +31,6 @@ class AppliedStudentData extends Report implements iCsvReport {
         $db = new PHPWS_DB('hms_new_application');
         $db->addWhere('term', $this->term);
         $db->addWhere('cancelled', 0);
-        $db->addColomn('hms_student_cache.dob');
 
         $result = $db->select();
         
