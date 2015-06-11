@@ -207,7 +207,7 @@ class LotteryProcess {
         HMS_Email::send_lottery_invite($student->getUsername(), $student->getName(), $this->academicYear);
 
         // Log that the invite was sent
-        HMS_Activity_Log::log_activity($student->getUsername(), ACTIVITY_LOTTERY_INVITED, UserStatus::getUsername());
+        HMS_Activity_Log::log_activity($student->getUsername(), ACTIVITY_LOTTERY_INVITED, UserStatus::getUsername(), "Expires on " . date('m/d/Y h:i:s a', $this->expireTime));
     }
 
     private function sendWinningReminderEmails()
@@ -713,5 +713,3 @@ class LotteryProcess {
         return $remainingApplications;
     }
 }
-
-
