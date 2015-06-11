@@ -1,62 +1,91 @@
-<h2>Edit Bed - {HALL_NAME}, Room {ROOM_NUMBER}, Bed {BED_LABEL}</h2>
-
-<div class="alert alert-info">
-    <p>{TERM} &raquo; {HALL_NAME} &raquo; {FLOOR_NUMBER} &raquo; {ROOM_NUMBER_LINK}</p>
-</div>
+<h2><small>{TERM} &raquo; {HALL_NAME} &raquo; {FLOOR_NUMBER} &raquo; {ROOM_NUMBER_LINK}</small></h2>
+<h1>Room {ROOM_NUMBER} - Bed {BED_LABEL}</h1>
 
 {START_FORM}
-<div class="form-horizontal">
-    <div class="form-group">
-        <label class="control-label col-xs-2" for="phpws_form_bedroom_label">Bedroom Label</label>
-        <div class="col-xs-3">{BEDROOM_LABEL}</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Assignment</h3>
+            </div>
+            <div class="panel-body">
+                <p>Currently assigned to {ASSIGNED_TO}</p>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-cog"></i> Settings</h3>
+            </div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label for="{BEDROOM_LABEL_ID}">Bedroom Label</label>
+                    {BEDROOM_LABEL}
+                </div>
+                <div class="form-group">
+                    <label for="{PHONE_NUMBER_ID}">Phone Number</label>
+                    {PHONE_NUMBER}
+                    <span class="help-block">Last four digits <strong>only</strong> after 828-266-####</span>
+                </div>
+
+                <!-- BEGIN bedletter -->
+                <div class="form-group">
+                    <label for="{BED_LETTER_ID}">Bed Letter</label>
+                    {BED_LETTER}
+                </div>
+                <!-- END bedletter -->
+
+
+                <div class="form-group">
+                    <label for="{BANNER_ID_ID}">Banner Bed ID</label>
+                    <div class="input-group">
+                        <span class="input-group-addon">{HALL_ABBR}</span>
+                        {BANNER_ID}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <button class="btn btn-success pull-right">Save</button>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
-<div class="form-horizontal">
-    <div class="form-group">
-        <label class="control-label col-xs-2" for="phpws_form_phone_number">Phone Number</label>
-        <div class="col-xs-4">{PHONE_NUMBER}<p><small>Last four digits <strong>only</strong> after 828-266-####</small></p></div>
+
+    <div class="col-md-3">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-tags"></i> Status</h3>
+            </div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <div class="checkbox">
+                        <label>{RA} Reserved for RA</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="checkbox">
+                        <label>{RA_ROOMMATE} Hold empty for RA Roommate</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="checkbox">
+                        <label>{INTERNATIONAL_RESERVED} International Reserved</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <button class="btn btn-success pull-right">Save</button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
-<!-- BEGIN bedletter -->
-<div class="form-horizontal">
-    <div class="form-group">
-        <label class="control-label col-xs-2" for="phpws_form_bed_letter">Bed Letter</label>
-        <div class="col-xs-10 form-inline">{BED_LETTER}</div>
-    </div>
-</div>
-<!-- END bedletter -->
-
-
-<div class="form-horizontal">
-    <div class="form-group">
-        <label class="control-label col-xs-2" for="phpws_form_banner_id">Banner Bed ID</label>
-        <div class="col-xs-10 form-inline">{HALL_ABBR} {BANNER_ID}</div>
-    </div>
-</div>
-
-<div class="form-group">
-    <div class="checkbox col-xs-offset-2"">
-        <label>{RA} Reserved for RA</label>
-    </div>
-</div>
-
-<div class="form-group">
-    <div class="checkbox col-xs-offset-2">
-        <label>{RA_ROOMMATE} Hold empty for RA Roommate</label>
-    </div>
-</div>
-<div class="form-group">
-    <div class="checkbox col-xs-offset-2"">
-        <label>{INTERNATIONAL_RESERVED} International Reserved</label>
-    </div>
-</div>
-
-
-<button class="btn btn-primary btn-lg"><i class="fa fa-floppy-o"></i> Save bed</button>
 {END_FORM}
-<hr />
-<div class="alert alert-info">
-    <p>Currently assigned to {ASSIGNED_TO}</p>
+<div class="row">
+    <div class="col-md-8">
+        {HISTORY}
+    </div>
 </div>
-{HISTORY}

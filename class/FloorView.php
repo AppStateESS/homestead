@@ -26,7 +26,8 @@ class FloorView extends hms\View{
         $floor_num = $this->floor->getFloorNumber();
 
         // Setup the title and color of the title bar
-        $tpl['TITLE'] = HMS_Util::ordinal($floor_num). ' Floor - ' . $this->hall->getHallName() . ' - ' . Term::getPrintableSelectedTerm();
+        $tpl['FLOOR_NUMBER'] = HMS_Util::ordinal($floor_num);
+        $tpl['TERM'] = Term::getPrintableSelectedTerm();
 
         $submitCmd = CommandFactory::getCommand('EditFloor');
         $submitCmd->setFloorId($this->floor->getId());
@@ -35,13 +36,18 @@ class FloorView extends hms\View{
         $submitCmd->initForm($form);
 
         $tpl['HALL_NAME']           = $this->hall->getLink();
-        $tpl['FLOOR_NUMBER']        = $this->floor->floor_number;
         $tpl['NUMBER_OF_ROOMS']     = $this->floor->get_number_of_rooms();
         $tpl['NUMBER_OF_BEDS']      = $this->floor->get_number_of_beds();
+        $tpl['NOMINAL_BEDS']        = $this->floor->countNominalBeds();
         $tpl['NUMBER_OF_ASSIGNEES'] = $this->floor->get_number_of_assignees();
+
+        if(!$this->floor->isOnline()){
+            $tpl['OFFLINE_ATTRIB'] = 'Offline';
+        }
 
         $form->addDropBox('gender_type', array(FEMALE => FEMALE_DESC, MALE => MALE_DESC, COED => COED_DESC));
         $form->setMatch('gender_type', $this->floor->gender_type);
+        $form->addCssClass('gender_type', 'form-control');
 
         $form->addCheck('is_online', 1);
         $form->setMatch('is_online', $this->floor->is_online);
@@ -49,6 +55,7 @@ class FloorView extends hms\View{
         $movein_times = HMS_Movein_Time::get_movein_times_array();
 
         $form->addDropBox('f_movein_time', $movein_times);
+        $form->addCssClass('f_movein_time', 'form-control');
         if(!isset($this->floor->f_movein_time_id)){
             $form->setMatch('f_movein_time', 0);
         }else{
@@ -56,6 +63,7 @@ class FloorView extends hms\View{
         }
 
         $form->addDropBox('t_movein_time', $movein_times);
+        $form->addCssClass('t_movein_time', 'form-control');
         if(!isset($this->floor->t_movein_time_id)){
             $form->setMatch('t_movein_time', 0);
         }else{
@@ -63,19 +71,22 @@ class FloorView extends hms\View{
         }
 
         $form->addDropBox('rt_movein_time', $movein_times);
+        $form->addCssClass('rt_movein_time', 'form-control');
         if(!isset($this->floor->rt_movein_time_id)){
             $form->setMatch('rt_movein_time', 0);
         }else{
             $form->setMatch('rt_movein_time', $this->floor->rt_movein_time_id);
         }
 
-        # Get a list of the RLCs indexed by id
+        // Get a list of the RLCs indexed by id
         PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
         $learning_communities = HMS_Learning_Community::getRlcList();
         $learning_communities[0] = 'None';
 
         $form->addDropBox('floor_rlc_id', $learning_communities);
+        $form->addCssClass('floor_rlc_id', 'form-control');
         if(isset($this->floor->rlc_id)){
+            $tpl['RLC_NAME'] = $learning_communities[$this->floor->rlc_id];
             $form->setMatch('floor_rlc_id', $this->floor->rlc_id);
         }else{
             $form->setMatch('floor_rlc_id', 0);
@@ -94,9 +105,6 @@ class FloorView extends hms\View{
 
         $form->addHidden('type', 'floor');
         $form->addHidden('op', 'edit_floor');
-        $form->addHidden('floor_id', $this->floor->id);
-
-        $form->addSubmit('submit_form', 'Submit');
 
         $tpl['STATIC_ROOM_PAGER'] = HMS_Room::room_pager_by_floor($this->floor->id);
         $tpl['DYNAMIC_ROOM_PAGER'] = HMS_Room::room_pager_by_floor($this->floor->id, true);

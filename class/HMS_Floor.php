@@ -269,7 +269,6 @@ class HMS_Floor extends HMS_Item
             // Additionally, we need to check for rooms of the oppsite sex, unless the target gender is COED
             if($target_gender != COED) {
                 // If a check for rooms of the opposite gender returns true, then return false
-                test($target_gender);
                 if($this->checkForOtherRoomGenders($target_gender)) {
                     return false;
                 }
@@ -388,6 +387,31 @@ class HMS_Floor extends HMS_Item
         $result = $db->select('count');
 
         if(PHPWS_Error::logIfError($result)) {
+            throw new DatabaseException($result->toString());
+        }
+
+        return $result;
+    }
+
+    public function countNominalBeds()
+    {
+        $db = new PHPWS_DB('hms_bed');
+
+        $db->addJoin('LEFT OUTER', 'hms_bed', 'hms_room', 'room_id', 'id');
+        $db->addJoin('LEFT OUTER', 'hms_room', 'hms_floor', 'floor_id', 'id');
+
+        $db->addWhere('hms_floor.id', $this->id);
+        $db->addWhere('hms_room.offline', 0);
+        $db->addWhere('hms_room.overflow', 0);
+        $db->addWhere('hms_room.parlor', 0);
+
+        $result = $db->select('count');
+
+        if ($result == 0) {
+            return 0;
+        }
+
+        if (PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         }
 
@@ -617,6 +641,15 @@ class HMS_Floor extends HMS_Item
         return $this->term;
     }
 
+    public function isOnline()
+    {
+        if($this->is_online == 1){
+            return true;
+        }
+
+        return false;
+    }
+
     //TODO lots more here
 
     /******************
@@ -636,8 +669,6 @@ class HMS_Floor extends HMS_Item
         $pager->setTemplate('admin/floor_pager_by_hall.tpl');
         $pager->setLink('index.php?module=hms');
         $pager->setEmptyMessage("No floors found.");
-        $pager->addToggle('class="toggle1"');
-        $pager->addToggle('class="toggle2"');
         $pager->addRowTags('get_pager_by_hall_tags');
 
         return $pager->get();
