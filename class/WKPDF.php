@@ -84,6 +84,7 @@ class WKPDF {
      */
     private static function _getCPU()
     {
+        /*
         if (self::$cpu == '') {
             if (`grep -i amd /proc/cpuinfo` != '')
                 self::$cpu = 'amd64';
@@ -92,7 +93,10 @@ class WKPDF {
             else
                 throw new Exception('WKPDF couldn\'t determine CPU ("' . `grep -i vendor_id /proc/cpuinfo` . '").');
         }
+
         return self::$cpu;
+        */
+        return 'amd64';
     }
 
     /**
@@ -133,10 +137,12 @@ class WKPDF {
     public function __construct($path = null)
     {
         if (empty($path)) {
-            $this->cmd = $GLOBALS['WKPDF_BASE_PATH'] . 'wkhtmltopdf-' . self::_getCPU();
+            $path = $GLOBALS['WKPDF_BASE_PATH'];
         } else {
-            $this->cmd = $path;
+            $path = $path;
         }
+
+        $this->cmd = $path . 'wkhtmltopdf-' . self::_getCPU() . '-centos6';
 
         if (!file_exists($this->cmd))
             throw new Exception('WKPDF static executable "' . htmlspecialchars($this->cmd,
@@ -258,6 +264,7 @@ class WKPDF {
         if (self::$PDF_USE_XVFB) {
             $command = self::$PDF_XVFB_PATH . ' ' . $command;
         }
+
         $execute = $command . (($this->copies > 1) ? ' --copies ' . $this->copies : '')                              // number of copies
                 . ' --orientation ' . $this->orient                                                                // orientation
                 . ' --page-size ' . $this->size                                                                    // page size
