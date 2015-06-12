@@ -57,19 +57,19 @@ class StudentAssignmentHistoryView extends hms\View {
 
             // Combine for ease of view
             if(isset($ah->assigned_reason)){
-                $row['assignments'] = '<span class="italic">'.$assignedReason.'</span>'.
+                $row['assignments'] = '<em>'.$assignedReason.'</em>'.
         	        							' by '.$ah->assigned_by.
         	        							'<br /><span style="font-size:11px;color:#7C7C7C;">on '.$assignedOn.'</span>';
             }else{
-                $row['assignments'] = '<span class="disabledText">None</span>';
+                $row['assignments'] = '<em class="text-muted">None</em>';
             }
 
             if(isset($ah->removed_reason)){
-                $row['unassignments'] = '<span class="italic">'.$removedReason.'</span>'.
+                $row['unassignments'] = '<em>'.$removedReason.'</em>'.
                         ' by '.$ah->removed_by.
                         '<br /><span style="font-size:11px;color:#7C7C7C;">on '.$removedOn.'</span>';
             }else{
-                $row['unassignments'] = '<span class="disabledText">None</span>';
+                $row['unassignments'] = '<em class="text-muted">None</em>';
             }
 
             if($count++ < $excess_limit){

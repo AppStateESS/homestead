@@ -225,13 +225,13 @@ class HMS_RLC_Application extends HMS_Item
         $assign = HMS_RLC_Assignment::getAssignmentByUsername($this->username, $this->term);
         $state = $assign->getStateName();
         if($state == 'confirmed'){
-            $tags['STATE'] = '<span style="color:green">confirmed</span>';
+            $tags['STATE'] = '<span class="text-success">confirmed</span>';
         }else if($state == 'declined'){
-            $tags['STATE'] = '<span style="color:red">declined</span>';
+            $tags['STATE'] = '<span class="text-danger">declined</span>';
         }else if($state == 'new'){
-            $tags['STATE'] = '<span class="disabledText">not invited</span>';
+            $tags['STATE'] = '<em class="text-muted">not invited</em>';
         }else if($state == 'invited'){
-            $tags['STATE'] = '<span class="disabledText">pending</span>';
+            $tags['STATE'] = '<em class="text-muted">pending</em>';
         }else{
             $tags['STATE'] = '';
         }
@@ -699,5 +699,3 @@ class HMS_RLC_Application extends HMS_Item
 class RlcApplicationRestored extends HMS_RLC_Application {
     public function __construct(){}
 }
-
-
