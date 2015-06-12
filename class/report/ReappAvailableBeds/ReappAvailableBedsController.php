@@ -1,7 +1,7 @@
 <?php
 
 class ReappAvailableBedsController extends ReportController
-implements iSyncReport, iHtmlReportView, iPdfReportView
+implements iSyncReport, iHtmlReportView, iPdfReportView, iCsvReportView
 {
 
   public function setParams(Array $params)

@@ -472,7 +472,10 @@ class HMS_Residence_Hall extends HMS_Item {
 
         foreach ($this->_floors as $floor) {
             $floor_rooms = $floor->get_rooms();
-            $rooms = array_merge($rooms, $floor_rooms);
+            if(!empty($floor_rooms))
+            {
+              $rooms = array_merge($rooms, $floor_rooms);
+            }
         }
         return $rooms;
     }
