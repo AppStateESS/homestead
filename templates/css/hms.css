@@ -87,22 +87,6 @@ a.header-back span:before{
     padding-right: 15px;
 }
 
-
-/* A basic 2-col layout */
-#twocol-main {
-  float: left;
-  width: 450px;
-}
-
-#twocol-side {
-  float: right;
-  width: 220px;
-}
-
-#twocol-side .box h2 {
-  font-size: 1.25em;
-}
-
 /* Required Field Label */
 .required {
 	color: #F00;
@@ -132,53 +116,7 @@ a.header-back span:before{
   border: 1px solid;
 }
 
-/****************************
- * Hall Structure Interface *
- ****************************/
-h2.room-attribute{
-  display:inline-block;
-  margin-right:5px;
-}
-
-.offline-room-label {
-  color: red;
-}
-
-.reserved-room-label {
-  color: red;
-}
-
-.ra-room-label {
-  color: red;
-}
-
-.private-room-label {
-  color: red;
-}
-
-.overflow-room-label {
-  color: red;
-}
-
-.parlor-room-label {
-  color: red;
-}
-
-.ada-room-label {
-  color: grey;
-}
-
-.hearing-impaired-room-label {
-  color: grey;
-}
-
-.bath-en-suite-room-label {
-  color: grey;
-}
-
-
 /* OLD STUFF */
-
 
 .note {
   color: black;
