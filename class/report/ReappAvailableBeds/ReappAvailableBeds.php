@@ -7,7 +7,7 @@
  * @author Chris Detsch
  * @package HMS
  */
-class ReappAvailableBeds extends Report
+class ReappAvailableBeds extends Report implements iCSVReport
 {
 
   const friendlyName = 'Reapplication Available Beds';
@@ -90,14 +90,14 @@ class ReappAvailableBeds extends Report
     return $this->term;
   }
 
-  // public function getCsvColumnsArray()
-  // {
-  //     return array_keys($this->data[0]);
-  // }
-  //
-  // public function getCsvRowsArray(){
-  //     return $this->data;
-  // }
+  public function getCsvColumnsArray()
+  {
+      return array_keys($this->data[0]);
+  }
+
+  public function getCsvRowsArray(){
+      return $this->data;
+  }
 
   public function getData()
   {
