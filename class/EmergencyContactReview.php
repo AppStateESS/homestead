@@ -42,7 +42,6 @@ class EmergencyContactReview extends hms\View {
         $submitCmd->initForm($form);
 
         $form->addSubmit('submit', 'Confirm & Continue');
-        $form->setExtra('submit', 'class="hms-application-submit-button"');
 
         $redoCmd = CommandFactory::getCommand('ShowEmergencyContactForm');
         $redoCmd->setTerm($this->term);

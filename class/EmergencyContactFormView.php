@@ -74,10 +74,6 @@ class EmergencyContactFormView extends hms\View {
             $form->setValue('missing_person_email', $this->application->getMissingPersonEmail());
         }
 
-        // Wrap up the business
-        // $form->addSubmit('submit', _('Continue'));
-        // $form->addCssClass('submit', "btn-lg btn-success");
-        // $form->setExtra('submit', 'class="hms-application-submit-button"');
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
@@ -86,5 +82,3 @@ class EmergencyContactFormView extends hms\View {
         return PHPWS_Template::process($tpl,'hms','student/emergency_contact_form.tpl');
     }
 }
-
-

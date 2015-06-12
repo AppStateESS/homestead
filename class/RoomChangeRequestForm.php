@@ -44,7 +44,6 @@ class RoomChangeRequestForm extends hms\View {
         $form->setLabel('reason', 'Reason');
 
         $form->addSubmit('Submit Request');
-        $form->setExtra('submit', 'class="hms-application-submit-button"');
 
         /* POST location */
         $cmd = CommandFactory::getCommand('SubmitRoomChangeRequest');
@@ -55,5 +54,3 @@ class RoomChangeRequestForm extends hms\View {
         return PHPWS_Template::process($tpl, 'hms', 'student/roomChangeRequestForm.tpl');
     }
 }
-
-
