@@ -84,7 +84,6 @@ class WKPDF {
      */
     private static function _getCPU()
     {
-        /*
         if (self::$cpu == '') {
             if (`grep -i amd /proc/cpuinfo` != '')
                 self::$cpu = 'amd64';
@@ -95,8 +94,6 @@ class WKPDF {
         }
 
         return self::$cpu;
-        */
-        return 'amd64';
     }
 
     /**
@@ -137,12 +134,10 @@ class WKPDF {
     public function __construct($path = null)
     {
         if (empty($path)) {
-            $path = $GLOBALS['WKPDF_BASE_PATH'];
+            $this->cmd = $GLOBALS['WKPDF_BASE_PATH'] . 'wkhtmltopdf-' . self::_getCPU();
         } else {
-            $path = $path;
+            $this->cmd = $path;
         }
-
-        $this->cmd = $path . 'wkhtmltopdf-' . self::_getCPU() . '-centos6';
 
         if (!file_exists($this->cmd))
             throw new Exception('WKPDF static executable "' . htmlspecialchars($this->cmd,
