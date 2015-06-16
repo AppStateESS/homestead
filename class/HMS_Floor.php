@@ -568,7 +568,7 @@ class HMS_Floor extends HMS_Item
     {
         $building = $this->get_parent();
 
-        $text = $building->hall_name . ', floor ' . $this->floor_number;
+        $text = $building->hall_name . ', Floor ' . $this->floor_number;
 
         if($link) {
             $editFloorCmd = CommandFactory::getCommand('EditFloorView');
