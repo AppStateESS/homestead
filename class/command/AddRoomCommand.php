@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * AddRoom
  *
  *   Adds a room to the specified floor with the given properties.
@@ -8,12 +8,6 @@
  * @author Daniel West <dwest at tux dot appstate dot edu>
  * @package hms
  */
-
-PHPWS_Core::initModClass('hms', 'Command.php');
-PHPWS_Core::initModClass('hms', 'CommandContext.php');
-PHPWS_Core::initModClass('hms', 'HMS_Room.php');
-PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
-PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
 
 class AddRoomCommand extends Command {
     public $floor;
@@ -54,22 +48,25 @@ class AddRoomCommand extends Command {
         $room->hearing_impaired  = !is_null($context->get('hearing_impaired')) ? 1 : 0;
         $room->bath_en_suite  = !is_null($context->get('bath_en_suite')) ? 1 : 0;
 
+        $rlcId = $context->get('rlc_reserved');
+        $room->reserved_rlc_id = !is_null($rlcId) ? $rlcId : null;
+
         $room->term = Term::getSelectedTerm();
 
-        //get the building code
+        // Get the building code
         $floor = new HMS_Floor($floor_id);
         $hall = $floor->get_parent();
 
-        //and set the rooms building code to the same as the hall it is in
+        // and set the rooms building code to the same as the hall it is in
         $room->banner_building_code = $hall->banner_building_code;
 
-        //creates a persistent_id for the new room
+        // creates a persistent_id for the new room
         $room->persistent_id = uniqid();
 
         $room->save();
 
-        $cmd = CommandFactory::getCommand('EditFloorView');
-        $cmd->setFloorId($floor_id);
+        $cmd = CommandFactory::getCommand('EditRoomView');
+        $cmd->setRoomId($room->getId());
         $cmd->redirect();
     }
 }
