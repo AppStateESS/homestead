@@ -121,7 +121,7 @@
             <div class="panel-body">
                 {ROOM_DAMAGE_LIST}
                 <p>
-                    <a href="{ADD_DAMAGE_URI}" class="btn btn-success btn-sm">Add Damage</a>
+                    <a id="addDamageLink" href="{ADD_DAMAGE_URI}" onclick="return false;" class="btn btn-success btn-sm">Add Damage</a>
                 </p>
             </div>
         </div>
