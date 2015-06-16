@@ -36,6 +36,8 @@ class AddBedView extends hms\View
         $submitCmd = CommandFactory::getCommand('AddBed');
         $submitCmd->setRoomId($this->room->id);
 
+        $tpl['HALL_ABBR'] = $this->hall->getBannerBuildingCode();
+
         $form = new PHPWS_Form();
         $submitCmd->initForm($form);
 
@@ -44,12 +46,14 @@ class AddBedView extends hms\View
         } else {
             $form->addText('bed_letter', chr($this->room->get_number_of_beds() + 97));
         }
+        $form->addCssClass('bed_letter', 'form-control');
 
         if (isset($this->bedroomLabel)) {
             $form->addText('bedroom_label', $this->bedroomLabel);
         } else {
             $form->addText('bedroom_label', 'a');
         }
+        $form->addCssClass('bedroom_label', 'form-control');
 
         if (isset($this->phoneNumber)) {
             $form->addText('phone_number', $this->phoneNumber);
@@ -64,6 +68,7 @@ class AddBedView extends hms\View
         }
         $form->setMaxSize('phone_number', 4);
         $form->setSize('phone_number', 5);
+        $form->addCssClass('phone_number', 'form-control');
 
         if (isset($this->bannerId)) {
             $form->addText('banner_id', $this->bannerId);
@@ -76,13 +81,15 @@ class AddBedView extends hms\View
 
             $form->addText('banner_id', '0' . $roomNumber . ($this->room->get_number_of_beds() + 1));
         }
+        $form->addCssClass('banner_id', 'form-control');
 
         $form->addCheckBox('ra', 1);
+        $form->addCssClass('ra', 'form-control');
 
         $form->addCheckBox('ra_roommate', 1);
+        $form->addCssClass('ra_roommate', 'form-control');
         $form->addCheckBox('international_reserved', 1);
-
-        $form->addSubmit('submit', 'Submit');
+        $form->addCssClass('international_reserved', 'form-control');
 
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
@@ -90,6 +97,6 @@ class AddBedView extends hms\View
         Layout::addPageTitle("Add Bed");
 
         # Reusing the edit bed template here
-        return PHPWS_Template::process($tpl, 'hms', 'admin/edit_bed.tpl');
+        return PHPWS_Template::process($tpl, 'hms', 'admin/add_bed.tpl');
     }
 }
