@@ -222,6 +222,8 @@ class RoomChangeRequestFactory {
     public static function getAllRoomChangesNeedsApproval($term)
     {
         $db = PdoFactory::getPdoInstance();
+        $params = array(
+                'term' => $term);
 
         /*
          * Get any requests in the 'Pending' or 'Hold' states and the participant status is
@@ -233,16 +235,41 @@ class RoomChangeRequestFactory {
                       term = :term AND
                       hms_room_change_curr_request.state_name IN ('Pending', 'Hold') AND
                       hms_room_change_curr_participant.state_name IN ('FutureRdApproved')";
-
-
         $stmt = $db->prepare($query);
-
-        $params = array(
-                'term' => $term);
-
         $stmt->execute($params);
+        $RDApproved = $stmt->fetchAll(PDO::FETCH_CLASS, 'RoomChangeRequestRestored');
 
-        return $stmt->fetchAll(PDO::FETCH_CLASS, 'RoomChangeRequestRestored');
+        /*
+         * Get any requests in the 'Pending' or 'Hold' states and the participant status is
+         * 'New' or 'StudentApproved' (i.e. this request is waition on RD approval)
+         */
+        $query = "SELECT hms_room_change_curr_request.* FROM hms_room_change_curr_request
+                    JOIN hms_room_change_curr_participant ON hms_room_change_curr_request.id = hms_room_change_curr_participant.request_id
+                  WHERE
+                      term = :term AND
+                      hms_room_change_curr_request.state_name IN ('Pending', 'Hold') AND
+                      hms_room_change_curr_participant.state_name IN ('StudentApproved', 'New')";
+        $sta = $db->prepare($query);
+        $sta->execute($params);
+        $StudentApproved = $sta->fetchAll(PDO::FETCH_CLASS, 'RoomChangeRequestRestored');
+
+        /*
+         * Loops through the array of RDApproved and checks to see if the value is also in
+         * the StudentApproved array, if it is not and it is not already in the result array
+         * then it adds it to the result array.
+         */
+        $i = 0;
+        $result = array();
+        foreach ($RDApproved as $value)
+        {
+          if(!in_array($value, $StudentApproved) AND !in_array($value, $result))
+          {
+            $result[$i] = $value;
+            $i++;
+          }
+        }
+
+        return $result;
     }
 
     /**
