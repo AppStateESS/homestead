@@ -61,9 +61,9 @@
 	<!-- END community_preference -->
 
 	<div class="row">
-		<h2>
+		<h3>
 			Short Answer Section
-		</h2>
+		</h3>
 	</div>
 
 	<div class="row">

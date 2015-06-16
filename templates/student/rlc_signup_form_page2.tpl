@@ -1,4 +1,4 @@
-<h1>Residential Learning Community Application</h1>
+<h2>Residential Learning Community Application</h2>
 
 {START_FORM}
 

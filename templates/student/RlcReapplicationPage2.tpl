@@ -1,5 +1,5 @@
 <div class="row">
-  <h1>Residential Learning Community Reapplication</h1>
+  <h2>Residential Learning Community Reapplication</h2>
 </div>
 
 {START_FORM}
@@ -46,7 +46,6 @@
         Submit
       </button>
   </div>
-
 </div>
 
 {END_FORM}
