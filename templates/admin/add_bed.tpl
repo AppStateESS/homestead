@@ -80,7 +80,9 @@
                     </div>
 
                 <div class="form-group">
-                    <button type="submit" class="btn btn-success pull-right">Submit</button>
+                    <button type="submit" class="btn btn-success pull-right">
+                      Submit
+                    </button>
                 </div>
             </div>
         </div>

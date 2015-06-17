@@ -394,6 +394,9 @@ define('ACTIVITY_ROOM_CHANGE_DECLINE',          75);
 // Reapplication Waiting List
 define('ACTIVITY_REAPP_WAITINGLIST_APPLY',      76);
 
+// Reinstate Application
+define('ACTIVITY_REINSTATE_APPLICATION',        77);
+
 /**
  * Errors
  */
