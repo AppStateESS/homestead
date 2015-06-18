@@ -31,9 +31,13 @@ class HousingApplicationConfirmCommand extends Command {
         $student = StudentFactory::getStudentByUsername($username, $term);
 
         $sem = Term::getTermSem($term);
+        $old_created_on = '';
+        $old_created_by = '';
+
 
         // Check for an existing application and delete it
         $app_result = HousingApplication::checkForApplication($username, $term);
+
         if($app_result !== FALSE){
             switch($sem){
                 case TERM_SPRING:
@@ -50,8 +54,11 @@ class HousingApplicationConfirmCommand extends Command {
                     throw new InvalidTermException('Invalid term specified.');
             }
 
+            $old_created_on = $application->getCreatedOn();
+            $old_created_by = $application->getCreatedBy();
             $application->delete();
         }
+
 
         switch ($sem){
             case TERM_FALL:
@@ -67,7 +74,11 @@ class HousingApplicationConfirmCommand extends Command {
         }
 
         $application = HousingApplicationFactory::getApplicationFromSession($_SESSION['application_data'], $term, $student, $appType);
-
+        if(!empty($old_created_on))
+        {
+          $application->setCreatedOn($old_created_on);
+          $application->setCreatedBy($old_created_by);
+        }
         $application->setCancelled(0);
 
         // Hard code a summer meal option for all summer applications.
@@ -75,7 +86,6 @@ class HousingApplicationConfirmCommand extends Command {
         if($sem == TERM_SUMMER1 || $sem == TERM_SUMMER2){
             $application->setMealPlan(BANNER_MEAL_5WEEK);
         }
-
         $result = $application->save();
 
         $tpl = array();
