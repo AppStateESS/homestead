@@ -4,16 +4,16 @@ PHPWS_Core::initModClass('hms', 'HousingApplication.php');
 
 class FallApplication extends HousingApplication{
 
-    public $lifestyle_option    = NULL;
-    public $preferred_bedtime   = NULL;
-    public $room_condition      = NULL;
-    public $smoking_preference  = NULL;
+    public $lifestyle_option    = null;
+    public $preferred_bedtime   = null;
+    public $room_condition      = null;
+    public $smoking_preference  = null;
 
     public $rlc_interest;
 
-    public function __construct($id = 0, $term = NULL, $banner_id = NULL, $username = NULL, $gender = NULL, $student_type = NULL, $application_term = NULL,
-            $cell_phone = NULL, $meal_plan = NULL, $physical_disability = NULL, $psych_disability = NULL, $gender_need = NULL, $medical_need = NULL,
-            $international = NULL, $lifestyle_option = NULL, $preferred_bedtime = NULL, $room_condition = NULL, $smoking_preference = NULL, $rlc_interest = NULL){
+    public function __construct($id = 0, $term = null, $banner_id = null, $username = null, $gender = null, $student_type = null, $application_term = null,
+            $cell_phone = null, $meal_plan = null, $physical_disability = null, $psych_disability = null, $gender_need = null, $medical_need = null,
+            $international = null, $lifestyle_option = null, $preferred_bedtime = null, $room_condition = null, $smoking_preference = null, $rlc_interest = null){
 
         /**
          * If the id is non-zero, then we need to load the other member variables
@@ -179,4 +179,3 @@ class RestoredFallApplication extends FallApplication {
     } // Empty constructor
 
 }
-
