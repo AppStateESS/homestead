@@ -2,15 +2,17 @@
 
 class ReinstateApplicationCommand extends Command {
 
-  private $db;
   private $applicationId;
-  private $bannerId;
-  private $username;
+
 
   public function getRequestVars()
   {
-      return array('action'=>'ReinstateApplication', 'applicationId'=>$this->applicationId,
-                    'bannerId'=>$this->bannerId, 'username'=>$this->username);
+      return array('action'=>'ReinstateApplication', 'applicationId' => $this->applicationId);
+  }
+
+  public function setAppId($appId)
+  {
+    $this->applicationId = $appId;
   }
 
   public function execute(CommandContext $context)
@@ -23,41 +25,25 @@ class ReinstateApplicationCommand extends Command {
 
       // Check for a housing application id
       $this->setAppId($context->get('applicationId'));
-      $this->setBannerId($context->get('bannerId'));
-      $this->setUsername($context->get('username'));
 
       if(!isset($this->applicationId) || is_null($this->applicationId))
       {
           throw new InvalidArgumentException('Missing housing application id.');
       }
 
-      $sql = 'update hms_new_application set cancelled = 0, cancelled_by = null, cancelled_reason = null, cancelled_on = null where id = ';
-      $sql .= $this->applicationId;
+      $application = HousingApplicationFactory::getApplicationById($this->applicationId);
 
-      $this->db = new PHPWS_DB('hms_new_application');
+      $application->setCancelled(0);
+      $application->setCancelledBy(null);
+      $application->setCancelledReason(null);
+      $application->setCancelledOn(null);
 
-      PHPWS_DB::query($sql);
+      $application->save();
 
-      HMS_Activity_Log::log_activity($this->username, ACTIVITY_REINSTATE_APPLICATION, UserStatus::getUsername());
+      HMS_Activity_Log::log_activity($application->getUsername(), ACTIVITY_REINSTATE_APPLICATION, UserStatus::getUsername());
 
       $returnCmd = CommandFactory::getCommand('ShowStudentProfile');
-      $returnCmd->setBannerId($this->bannerId);
+      $returnCmd->setBannerId($application->getBannerId());
       $returnCmd->redirect();
   }
-
-  public function setAppId($appId)
-  {
-    $this->applicationId = $appId;
-  }
-
-  public function setBannerId($bannerId)
-  {
-    $this->bannerId = $bannerId;
-  }
-
-  public function setUsername($username)
-  {
-    $this->username = $username;
-  }
-
 }

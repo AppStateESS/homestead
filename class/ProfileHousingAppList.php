@@ -63,8 +63,6 @@ class ProfileHousingAppList extends hms\View
             if ($app->isCancelled()) {
                 $reInstateCmd = CommandFactory::getCommand('ReinstateApplication');
                 $reInstateCmd->setAppID($app->getId());
-                $reInstateCmd->setBannerId($app->getBannerId());
-                $reInstateCmd->setUsername($app->getUsername());
                 $row['reinstate'] = $reInstateCmd->getURI();
                 $cancelledReason = "({$reasons[$app->getCancelledReason()]})";
                 $row['cancelledReason'] = $cancelledReason;

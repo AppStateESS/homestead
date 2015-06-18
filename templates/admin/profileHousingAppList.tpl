@@ -24,7 +24,7 @@
             <a href="{cancel}" class="btn btn-danger btn-xs cancelAppLink"><i class="fa fa-times"></i> Cancel</a>
           <!-- END cancel-link -->
           <!-- BEGIN reinstate-link -->
-            <a href="{reinstate}" class="btn btn-warning btn-xs"><i class="fa fa-recycle"></i> Re-instate</a>
+            <a href="{reinstate}" class="btn btn-warning btn-xs"><i class="fa fa-undo"></i> Re-instate</a>
           <!-- END reinstate-link -->
           <!-- BEGIN cancelled -->
             <span class="text-muted">{cancelledReason}</span>
