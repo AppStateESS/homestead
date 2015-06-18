@@ -27,6 +27,7 @@ class AddBedView extends hms\View
     {
         $tpl = array();
 
+        $tpl['TERM'] = Term::toString($this->room->getTerm());
         $tpl['TITLE'] = 'Add New Bed';
         $tpl['HALL_NAME'] = $this->hall->getLink();
         $tpl['FLOOR_NUMBER'] = $this->floor->getLink();
@@ -84,19 +85,15 @@ class AddBedView extends hms\View
         $form->addCssClass('banner_id', 'form-control');
 
         $form->addCheckBox('ra', 1);
-        $form->addCssClass('ra', 'form-control');
-
         $form->addCheckBox('ra_roommate', 1);
-        $form->addCssClass('ra_roommate', 'form-control');
         $form->addCheckBox('international_reserved', 1);
-        $form->addCssClass('international_reserved', 'form-control');
 
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
         Layout::addPageTitle("Add Bed");
 
-        # Reusing the edit bed template here
-        return PHPWS_Template::process($tpl, 'hms', 'admin/add_bed.tpl');
+        // Reusing the edit bed template here
+        return PHPWS_Template::process($tpl, 'hms', 'admin/addBed.tpl');
     }
 }

@@ -1,25 +1,13 @@
 <h2><small>{TERM} &raquo; {HALL_NAME} &raquo; {FLOOR_NUMBER} &raquo; {ROOM_NUMBER}</small></h2>
-
+<h1>Add a New Bed</h1>
 {START_FORM}
 
 <div class="row">
     <div class="col-md-6">
         <div class="panel panel-default">
             <div class="panel-heading">
-              Add Bed
+                <h3 class="panel-title"><i class="fa fa-cog"></i> Settings</h3>
             </div>
-
-            <p>
-            </p>
-
-            <div class="col-md-6">
-              <h3 class="panel-title">
-                <i class="fa fa-cog"></i>
-                Properties
-              </h3>
-            </div>
-
-            <div class="row"></div>
 
             <div class="panel-body">
                 <div class="form-group">
@@ -49,42 +37,29 @@
                     </div>
                 </div>
 
-                <h3 class="panel-title">
-                  <i class="fa fa-tags"></i>
-                  General Features
-                </h3>
+                <div class="checkbox">
+                    <label>
+                      {RA} Reserved for RA
+                    </label>
+                </div>
 
-                <div class="panel-body">
-                    <div class="form-group">
-                        <div class="checkbox">
-                            <label>
-                              {RA} Reserved for RA
-                            </label>
-                        </div>
-                    </div>
+                <div class="checkbox">
+                    <label>
+                      {RA_ROOMMATE} Hold empty for RA Roommate
+                    </label>
+                </div>
 
-                    <div class="form-group">
-                        <div class="checkbox">
-                            <label>
-                              {RA_ROOMMATE} Hold empty for RA Roommate
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <div class="checkbox">
-                            <label>
-                              {INTERNATIONAL_RESERVED} International Reserved
-                            </label>
-                        </div>
-                    </div>
+                <div class="checkbox">
+                    <label>
+                      {INTERNATIONAL_RESERVED} International Reserved
+                    </label>
+                </div>
 
                 <div class="form-group">
                     <button type="submit" class="btn btn-success pull-right">
                       Submit
                     </button>
                 </div>
-            </div>
         </div>
     </div>
   </div>
