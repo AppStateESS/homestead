@@ -61,6 +61,9 @@ class ProfileHousingAppList extends hms\View
             $row = array('term' => $term, 'type' => $type, 'meal_plan' => $mealPlan, 'cell_phone' => $phone,
                 'clean' => $clean, 'bedtime' => $bedtime, 'view'=>$view);
             if ($app->isCancelled()) {
+                $reInstateCmd = CommandFactory::getCommand('ReinstateApplication');
+                $reInstateCmd->setAppID($app->getId());
+                $row['reinstate'] = $reInstateCmd->getURI();
                 $cancelledReason = "({$reasons[$app->getCancelledReason()]})";
                 $row['cancelledReason'] = $cancelledReason;
                 $row['row_style'] = 'warning';
@@ -72,9 +75,7 @@ class ProfileHousingAppList extends hms\View
                     $cancel = $cancelCmd->getURI();
                     $row['cancel'] = $cancel;
                 }
-
             }
-
 
 
             $app_rows[] = $row;
@@ -87,5 +88,3 @@ class ProfileHousingAppList extends hms\View
     }
 
 }
-
-
