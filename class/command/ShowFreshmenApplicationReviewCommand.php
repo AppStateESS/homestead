@@ -35,16 +35,17 @@ class ShowFreshmenApplicationReviewCommand extends Command {
     {
         $term = $context->get('term');
 
+        // If we're coming from the special needs page, save any special needs flags the student selected
+        if(array_key_exists('special_needs', $context->getParams()))
+        {
+            $this->saveSpecialNeeds($context);
+        }
+
         // If they haven't agreed, redirect to the agreement
         // TODO: actually check via docusign API
         $event = $context->get('event');
         if(is_null($event) || !isset($event) || ($event != 'signing_complete' && $event != 'viewing_complete'))
         {
-            if(array_key_exists('special_needs', $context->getParams()))
-            {
-              $this->saveSpecialNeeds($context);
-            }
-
             $returnCmd = CommandFactory::getCommand('ShowFreshmenApplicationReview');
             $returnCmd->setTerm($term);
 
@@ -53,7 +54,6 @@ class ShowFreshmenApplicationReviewCommand extends Command {
             $agreementCmd->setAgreedCommand($returnCmd);
             $agreementCmd->redirect();
         }
-
 
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
 
@@ -111,5 +111,3 @@ class ShowFreshmenApplicationReviewCommand extends Command {
     }
 
 }
-
-
