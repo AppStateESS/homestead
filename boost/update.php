@@ -1502,6 +1502,12 @@ function hms_update(&$content, $currentVersion)
                 $content[] = '<p style="color:red;font-weight:bold">Pulse needs to be upgraded before HMS can continue with its update.</p>';
                 return false;
             }
+
+            $db = new PHPWS_DB();
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/00-05-03.sql');
+            if (PEAR::isError($result)) {
+                return $result;
+            }
     }
 
     return TRUE;
