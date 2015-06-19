@@ -73,9 +73,11 @@ a.header-back span:before{
 }
 
 /* Required Field Label */
-.required {
-	color: #F00;
-	font-weight: bold;
+
+
+.form-group.required label:after {
+    content: "*";
+    color: red;
 }
 
 
