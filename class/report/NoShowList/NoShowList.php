@@ -73,7 +73,7 @@ class NoShowList extends Report implements iCsvReport {
             $rows[$i] = $rowVals;
             $i++;
         }
-        $this->total;
+        $this->total = $i;
         $this->data = $rows;
 
     }
