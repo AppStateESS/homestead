@@ -82,6 +82,11 @@ class HMS_RLC_Application extends HMS_Item
         return false;
     }
 
+    public function setDenied($status)
+    {
+        $this->denied = $status;
+    }
+
     public function getAdminPagerTags()
     {
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
