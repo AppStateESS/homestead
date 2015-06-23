@@ -22,12 +22,14 @@ class AssignmentMenu extends CommandMenu {
                 $this->addCommand('Hall Overview', $hallOverviewCmd);
             }
 
+            /*
             if(Current_User::allow('hms', 'assign_by_floor')){
                 $floorAssignCmd = CommandFactory::getCommand('SelectFloor');
                 $floorAssignCmd->setOnSelectCmd(CommandFactory::getCommand('ShowFloorAssignmentView'));
                 $floorAssignCmd->setTitle('Assign Students to Floor');
                 $this->addCommand('Assign students by floor', $floorAssignCmd);
             }
+            */
 
             if(UserStatus::isAdmin() && Current_User::allow('hms', 'roommate_maintenance')){
                 $this->addCommandByName('Edit freshmen roommate requests', 'EditRoommateGroupsView');
