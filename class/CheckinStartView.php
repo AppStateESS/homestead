@@ -46,6 +46,7 @@ class CheckinStartView extends hms\View {
         $form->setExtra('banner_id', 'placeholder = "Swipe AppCard or type Name/Email/Banner ID"');
 	    $form->addCssClass('banner_id', 'form-control');
         $form->addCssClass('banner_id', 'input-lg');
+        $form->addCssClass('banner_id', 'typeahead');
 
         $form->addSubmit('Begin Check-in');
         $form->setClass('submit', 'btn btn-lg btn-primary');

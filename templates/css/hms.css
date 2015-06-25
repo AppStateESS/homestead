@@ -1,6 +1,10 @@
 /*****************************
  * Twitter Typeahead Styling *
  *****************************/
+.twitter-typeahead {
+    width: 100%;
+}
+
 .tt-hint {
   color: #999;
 }

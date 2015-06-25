@@ -1,4 +1,3 @@
-<script type="text/javascript" src="{source_http}mod/hms/javascript/checkinStart/checkinStart.js"></script>
 <script type="text/javascript" src="{source_http}mod/hms/javascript/checkinStart/CardReader.js"></script>
 <script type="text/javascript">
 
@@ -65,31 +64,46 @@
 			$('#checkin_form').submit();
 		});
 
+		$("#student-search-spinner").hide(); // Hide spinner right away
 
-		// Setup autocomplete on the search input
-		$("#checkin_form_banner_id").autocomplete({
-			source: function(request, response){
-				$.getJSON("index.php?module=hms&action=AjaxGetUsernameSuggestions&ajax=1", {studentSearchQuery: request.term}, response);
-			},
-			delay: 500,
-			minLength: 3,
-			focus: function( event, ui ) {
-				event.preventDefault();  // NB: Makes moving the focus with the keyboard work
-				$("#checkin_form_banner_id").val(ui.item.banner_id);
-			},
-			select: function( event, ui ) {
-				$("#checkin_form_banner_id").val(ui.item.banner_id);
-				return false; // NB: Must return false or default behavior will clear the search field
-			}
-		}).data("instance")._renderItem = function (ul, item) {
-			//
-			var regExp = new RegExp("^" + this.term);
-			var nameHighlight = item.name.replace(regExp, "<span style='font-weight:bold;'>" + this.term + "</span>");
-			var userHighlight = item.username.replace(regExp, "<span style='font-weight:bold;'>" + this.term + "</span>");
-			var bannerHighlight = item.banner_id.replace(regExp, "<span style='font-weight:bold;'>" + this.term + "</span>");
-			// Custom HTML for the drop-down menu
-			return $("<li>").data("item.autocomplete", item).append( "<a><span style='font-size:16px'>" + nameHighlight + "</span><br>" + bannerHighlight + " &bull; " + userHighlight + "</a>" ).appendTo(ul);
-		};
+		// Suggestion provider for server-provided results
+	    var studentSearchSource = new Bloodhound({
+	        name: 'remoteSearch',
+	        datumTokenizer: function(datum){
+	            var nameTokens      = Bloodhound.tokenizers.obj.whitespace('name');
+	            var bannerTokens    = Bloodhound.tokenizers.obj.whitespace('banner_id');
+	            var usernameTokens  = Bloodhound.tokenizers.obj.whitespace('username');
+
+	            return nameTokens.concat(bannerTokens).concat(usernameToekns);
+	        },
+	        queryTokenizer: Bloodhound.tokenizers.whitespace,
+	        remote: {
+	            url: 'index.php?module=hms&action=AjaxGetUsernameSuggestions&studentSearchQuery=%QUERY',
+	            wildcard: '%QUERY',
+	            rateLimitWait: 1000,
+	            rateLimitBy: 'throttle'
+	        }
+	    });
+
+		$('#checkin_form_banner_id.typeahead').typeahead({
+	        highlight: true,
+	        hint: true
+	        //minLength: 0
+	    },
+	    {
+	        name: 'studentSearch',
+	        display: 'banner_id',
+	        limit: 5,
+	        source: studentSearchSource.ttAdapter(),
+	        templates: {
+	            suggestion: function(suggestion) {
+	                return('<p>' + suggestion.name + "<br />" + suggestion.banner_id + " &bull; " + suggestion.username + "</p>");
+	            },
+	            empty: function() {
+	                return('<p style="margin: 0 20px 5px 20px; padding: 3px 0;" class="text-muted">No results found.</p>');
+	            }
+	        }
+	    });
 	});
 
 	function handleSelectHall()
