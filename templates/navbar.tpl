@@ -13,31 +13,32 @@
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-    
+
       <ul class="nav navbar-nav">
       	<!-- BEGIN term_selector -->
       	{TERM_SELECTOR}
       	<!-- END term_selector -->
-      	
+
       	<!-- BEGIN student_search -->
       {STUDENT_SEARCH}
       <form class="navbar-form navbar-left" role="search">
-        <div class="form-group">
+        <div class="form-group has-feedback">
           <input type="text" id="studentSearch" class="form-control typeahead" name="studentSearchQuery" placeholder="Search" autocomplete="off">
+          <span id="student-search-spinner" class="fa fa-spinner fa-spin form-control-feedback" style="width:34px; height:auto; top:10px; right:-5px;" aria-hidden="true"></span>
         </div>
       </form>
       <!-- END student_search -->
-      	
+
       	<!-- BEGIN halls_link -->
         <li><a href="{HALL_VIEW}"><i class="fa fa-building"></i> Halls</a></li>
         <!-- END halls_link -->
-        
+
         <!-- BEGIN reports_link -->
         <li><a href="{REPORT_LINK}"><i class="fa fa-bar-chart"></i> Reports</a></li>
         <!-- END halls_link -->
-        
+
       </ul>
-      
+
       <ul class="nav navbar-nav navbar-right">
       <!-- BEGIN dropdown -->
         {DROPDOWN}
@@ -48,7 +49,7 @@
             <li>{LINK}</li>
             <!-- END SETTINGS -->
             <li class="divider"></li>
-            
+
             <!-- BEGIN term -->
             <li><a href="{EDIT_TERM_URI}"><i class="fa fa-calendar"></i> Edit Terms</a></li>
             <!-- END term -->
@@ -56,11 +57,11 @@
             <!-- BEGIN pulse -->
             <li><a href="{PULSE_URI}"><i class="fa fa-calendar-o"></i> Schedule processes</a></li>
             <!-- END pulse -->
-            
+
             <!-- BEGIN activitylog -->
             <li><a href="{ACTIVITY_LOG_URI}"><i class="fa fa-list-ul"></i> Activity Log</a></li>
             <!-- END activitylog -->
-            
+
             <!-- BEGIN ctrlpanel -->
             <li class="divider"></li>
             <li><a href="{CTRL_PANEL_URI}"><i class="fa fa-wrench"></i> Control Panel</a></li>
@@ -68,19 +69,19 @@
           </ul>
         </li>
         <!-- END dropdown -->
-        
+
         <!-- BEGIN userstatus -->
         {USER_STATUS_DROPDOWN}
         <!-- END userstatus -->
-        
+
         <!-- BEGIN display_name -->
         <li><a href="#">{DISPLAY_NAME}</a></li>
         <!-- END display_name -->
-        
+
         <!-- BEGIN signin -->
         <li><a href="{SIGNIN_URL}"><i class="fa fa-sign-in"></i> Sign in</a></li>
         <!-- END signin -->
-        
+
         <!-- BEGIN signout -->
         <li><a href="{SIGNOUT_URL}"><i class="fa fa-sign-out"></i> Sign out</a></li>
         <!-- END signout -->
