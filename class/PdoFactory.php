@@ -44,15 +44,11 @@ class PdoFactory {
         if (!defined('PHPWS_DSN')) {
             throw new Exception('Database connection DSN is not set.');
         }
-        $dsn_array = \Database::parseDSN(PHPWS_DSN);
+        $dsnArray = \Database::parseDSN(PHPWS_DSN);
 
-        // creates dbtype, dbpass, dbuser, dbname, dbport, dbhost
-        extract($dsn_array);
+        $dsn = $this->createDsn($dsnArray['dbtype'], $dsnArray['dbhost'], $dsnArray['dbname']);
 
-
-        $dsn = $this->createDsn($dbtype, $dbhost, $dbname);
-
-        $this->pdo = new PDO($dsn, $dbuser, $dbpass, array(PDO::ATTR_PERSISTENT => true));
+        $this->pdo = new PDO($dsn, $dsnArray['dbuser'], $dsnArray['dbpass'], array(PDO::ATTR_PERSISTENT => true));
 
         // Make sure PDO will throw exceptions on error
         $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
