@@ -23,7 +23,7 @@ class AssignmentMenu extends CommandMenu {
             }
 
             if(Current_User::allow('hms', 'assign_by_floor')){
-                $floorAssignCmd = CommandFactory::getCommand('SelectFloor');
+                $floorAssignCmd = CommandFactory::getCommand('AssignByFloor');
                 $floorAssignCmd->setOnSelectCmd(CommandFactory::getCommand('ShowFloorAssignmentView'));
                 $floorAssignCmd->setTitle('Assign Students to Floor');
                 $this->addCommand('Assign students by floor', $floorAssignCmd);
