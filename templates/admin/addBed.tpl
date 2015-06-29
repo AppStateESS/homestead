@@ -1,27 +1,20 @@
-<h2><small>{TERM} &raquo; {HALL_NAME} &raquo; {FLOOR_NUMBER} &raquo; {ROOM_NUMBER_LINK}</small></h2>
-<h1>Room {ROOM_NUMBER} - Bed {BED_LABEL}</h1>
-
+<h2><small>{TERM} &raquo; {HALL_NAME} &raquo; {FLOOR_NUMBER} &raquo; {ROOM_NUMBER}</small></h2>
+<h1>Add a New Bed</h1>
 {START_FORM}
+
 <div class="row">
     <div class="col-md-6">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Assignment</h3>
-            </div>
-            <div class="panel-body">
-                <p>Currently assigned to {ASSIGNED_TO}</p>
-            </div>
-        </div>
-
-        <div class="panel panel-default">
-            <div class="panel-heading">
                 <h3 class="panel-title"><i class="fa fa-cog"></i> Settings</h3>
             </div>
+
             <div class="panel-body">
                 <div class="form-group">
                     <label for="{BEDROOM_LABEL_ID}">Bedroom Label</label>
                     {BEDROOM_LABEL}
                 </div>
+
                 <div class="form-group">
                     <label for="{PHONE_NUMBER_ID}">Phone Number</label>
                     {PHONE_NUMBER}
@@ -44,43 +37,32 @@
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <button class="btn btn-success pull-right">Save</button>
+                <div class="checkbox">
+                    <label>
+                      {RA} Reserved for RA
+                    </label>
                 </div>
-            </div>
+
+                <div class="checkbox">
+                    <label>
+                      {RA_ROOMMATE} Hold empty for RA Roommate
+                    </label>
+                </div>
+
+                <div class="checkbox">
+                    <label>
+                      {INTERNATIONAL_RESERVED} International Reserved
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-success pull-right">
+                      Submit
+                    </button>
+                </div>
         </div>
     </div>
-
-    <div class="col-md-3">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title"><i class="fa fa-tags"></i> Status</h3>
-            </div>
-            <div class="panel-body">
-                <div class="form-group">
-                    <div class="checkbox">
-                        <label>{RA} Reserved for RA</label>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="checkbox">
-                        <label>{RA_ROOMMATE} Hold empty for RA Roommate</label>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="checkbox">
-                        <label>{INTERNATIONAL_RESERVED} International Reserved</label>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <button class="btn btn-success pull-right">Save</button>
-                </div>
-            </div>
-        </div>
-    </div>
+  </div>
 </div>
 
 {END_FORM}

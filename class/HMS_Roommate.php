@@ -786,8 +786,6 @@ class HMS_Roommate
         $pager->setTemplate('admin/roommate_pager.tpl');
         $pager->addRowTags('get_roommate_pager_tags');
         $pager->setEmptyMessage('No roommate groups found.');
-        $pager->addToggle('class="toggle1"');
-        $pager->addToggle('class="toggle2"');
 
         // Setup searching on the requestor and requestee columns
         $pager->setSearch('requestor', 'requestee');
@@ -795,4 +793,3 @@ class HMS_Roommate
         return $pager->get();
     }
 }
-

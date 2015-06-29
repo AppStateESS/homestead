@@ -2,11 +2,8 @@
 
 /*
  * View for adding rooms.
+ * @package hms
  */
-
-//TODO combine this with 'RoomView.php' and figure out how to use one view for two different controllers.......
-
-PHPWS_Core::initModClass('hms', 'CommandFactory.php');
 
 class AddRoomView extends hms\View {
 
@@ -21,9 +18,9 @@ class AddRoomView extends hms\View {
     public function show()
     {
         $tpl['HALL_NAME']           = $this->hall->getLink();
-        $tpl['FLOOR_NUMBER']        = $this->floor->getLink('Floor');
-        $tpl['TERM'] = Term::getPrintableSelectedTerm();
-        $tpl['NEW_ROOM'] = ""; // dummy var
+        $tpl['FLOOR_NUMBER_LINK']   = $this->floor->getLink('Floor');
+        $tpl['FLOOR_NUMBER']        = $this->floor->where_am_i();
+        $tpl['TERM']                = Term::getPrintableSelectedTerm();
 
         $cmd = CommandFactory::getCommand('AddRoom');
         $cmd->floor = $this->floor->id;
@@ -32,25 +29,33 @@ class AddRoomView extends hms\View {
         $cmd->initForm($form);
 
         $form->addText('room_number');
+        $form->addCssClass('room_number', 'form-control');
         $form->addHidden('hall_id',$this->hall->id);
         $form->addHidden('floor_id',$this->floor->id);
 
         if($this->floor->gender_type == COED) {
             $form->addDropBox('gender_type', array(FEMALE=>FEMALE_DESC, MALE=>MALE_DESC));
+            $form->addCssClass('gender_type', 'form-control');
             $form->setMatch('gender_type', HMS_Util::formatGender($this->floor->gender_type));
         }else{
             $form->addDropBox('gender_type', array($this->floor->gender_type=>HMS_Util::formatGender($this->floor->gender_type)));
             $form->setReadOnly('gender_type', true);
         }
 
-        //Always show the option to set the default gender
+        // Always show the option to set the default gender
         $defGenders = array(FEMALE => FEMALE_DESC, MALE => MALE_DESC);
         if($this->floor->gender_type == MALE)     unset($defGenders[FEMALE]);
         if($this->floor->gender_type == FEMALE)   unset($defGenders[MALE]);
         $form->addDropBox('default_gender', $defGenders);
+        $form->addCssClass('default_gender', 'form-control');
         if($this->floor->gender_type != COED) {
             $form->setMatch('default_gender', $this->floor->gender_type);
         }
+
+        // Add a dropbox to for rlc
+        $form->addDropBox('rlc_reserved', array("0"=>"None") + RlcFactory::getRlcList(Term::getSelectedTerm()));
+        $form->setLabel('rlc_reserved', 'Reserved for RLC');
+        $form->addCssClass('rlc_reserved', 'form-control');
 
         $form->addCheck('offline', 1);
         $form->setLabel('offline', 'Offline');
@@ -69,29 +74,21 @@ class AddRoomView extends hms\View {
 
         $form->addCheck('parlor', 1);
         $form->setLabel('parlor','Parlor');
-        
+
         $form->addCheck('ada', 1);
         $form->setLabel('ada', 'ADA');
-        
+
         $form->addCheck('hearing_impaired', 1);
         $form->setLabel('hearing_impaired', 'Hearing Impaired');
-        
+
         $form->addCheck('bath_en_suite', 1);
         $form->setLabel('bath_en_suite', 'Bath en Suite');
 
         $form->addSubmit('submit', 'Submit');
 
-        if(isset($success)){
-            $tpl['SUCCESS_MSG'] = $success;
-        }
-
-        if(isset($error)){
-            $tpl['ERROR_MSG'] = $error;
-        }
-
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/edit_room.tpl');
+        return PHPWS_Template::process($tpl, 'hms', 'admin/addRoom.tpl');
     }
 }

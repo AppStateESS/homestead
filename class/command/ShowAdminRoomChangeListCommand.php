@@ -19,7 +19,7 @@ class ShowAdminRoomChangeListCommand extends Command {
         $term = Term::getSelectedTerm();
 
         // Get all requests in the FutureRDApproved state (i.e. waiting on housing assignments office)
-        $needsApprovalChanges = RoomChangeRequestFactory::getAllRoomChangesNeedsApproval($term);
+        $needsApprovalChanges = RoomChangeRequestFactory::getAllRoomChangesNeedsAdminApproval($term);
 
         // Get all requests that are Approved (in-progress)
         $allApproved = RoomChangeRequestFactory::getAllRoomChangesByState($term, array('Approved'));
@@ -39,5 +39,3 @@ class ShowAdminRoomChangeListCommand extends Command {
     }
 
 }
-
-

@@ -38,12 +38,6 @@ class EditBedViewCommand extends Command {
             throw new InvalidArgumentException('Missing bed ID.');
         }
 
-        PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Room.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
-        PHPWS_Core::initModClass('hms', 'BedView.php');
-
         $bed = new HMS_Bed($bedId);
 
         if($bed->term != Term::getSelectedTerm()){

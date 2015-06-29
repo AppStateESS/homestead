@@ -3,6 +3,8 @@
 
 $(function() {
 
+    $("#student-search-spinner").hide(); // Hide spinner right away
+
     // If our local storage key for recent searches is empty, then initialize it with an empty array
     if(localStorage.getItem('recentSearches') == null) {
         localStorage.setItem('recentSearches', JSON.stringify([]));
@@ -21,7 +23,9 @@ $(function() {
         queryTokenizer: Bloodhound.tokenizers.whitespace,
         remote: {
             url: 'index.php?module=hms&action=AjaxGetUsernameSuggestions&studentSearchQuery=%QUERY',
-            wildcard: '%QUERY'
+            wildcard: '%QUERY',
+            rateLimitWait: 1000,
+            rateLimitBy: 'throttle'
         }
     });
 
@@ -105,6 +109,17 @@ $(function() {
         location.href = 'index.php?module=hms&action=StudentSearch&banner_id=' + datum.banner_id;
     });
 
+    // Even handler for showing the "loading" spinner when a request is sent
+    $('#studentSearch').bind('typeahead:asyncrequest', function(obj, datum, name) {
+        console.log('request sent');
+        $("#student-search-spinner").show();
+    });
+
+    // Even handler for hiding the "loading" spinner when a request is complete or cancelled
+    $('#studentSearch').bind('typeahead:asyncreceive', function(obj, datum, name) {
+        $("#student-search-spinner").hide();
+    });
+
     // Event handler for enter key.. Search with whatever the person put in the box
     $("#studentSearch").keyup(function(e){
         // If they key pressed was anything other than the enter key, then return
@@ -115,22 +130,20 @@ $(function() {
         // Force a search for whatever's in the search box
         studentSearchSource.search($("#studentSearch").val(), saveVal, saveVal);
 
-        // Callback for completion. If any matches, save them
+        // Callback for search completion. If any matches, save them
         function saveVal(datums)
         {
-            console.log(datums);
+            //console.log(datums);
             if(datums.length == 1){
                 storeLocalDatum(datums[0]);
 
                 // Redirect to the student profile the user selected
                 // NB: this is inside this if statement to prevent the browser from leaving the page before the result is saved
                 location.href = 'index.php?module=hms&action=StudentSearch&banner_id=' + $("#studentSearch").val();
+            } else {
+                location.href = 'index.php?module=hms&action=StudentSearch&banner_id=' + $("#studentSearch").val();
             }
         }
     });
-
-    // TODO:
-    // * Add a search icon that submits the form when clicked.
-    // * Add spinner to let the user know the search is in progress
 });
 </script

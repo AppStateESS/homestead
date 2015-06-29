@@ -80,8 +80,6 @@ class ActivityLogPager extends hms\View {
         $this->pager->setModule('hms');
         $this->pager->setLink('index.php?module=hms');
         $this->pager->setEmptyMessage('No log entries found under the limits provided.');
-        $this->pager->addToggle('class="toggle1"');
-        $this->pager->addToggle('class="toggle2"');
         $this->pager->addRowTags('getPagerTags');
         $this->pager->setOrder('timestamp', 'desc', TRUE);
         $this->pager->setDefaultLimit($this->limit);

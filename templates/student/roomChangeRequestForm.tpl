@@ -1,56 +1,89 @@
-<h1>Room Change Request</h1>
+<div class="row">
+    <div class="col-md-10">
+        <h1>Room Change Request</h1>
 
 
-<h2>A few important notes first:</h2>
-<ul>
-    <li>Your request must be approved by the Residence Director (RD) for your hall, the Residence Director of hall you are moving to, and by the University Housing Assignments Office.</li>
-    <li>If you change rooms without approval you will  be required to return to your assigned space, may be denied the opportunity to participate in any other room changes for the academic year, and will be assessed a $35 administrative charge.</li>
-    <li><strong>Requests are granted based on available space and may be denied for any reason.</strong> We do not guarantee there any vacancies. Your RD will work with you to select a space from available vacancies.</li>
-    <li><strong>The room fee may increase/decrease depending upon your selection of residence hall. Your student account will be billed accordingly.</strong></li>
-    <li>It may take several bussiness days to process your request. Requests submitted on Fridays may not be processed until the following business day.</li>
-    <li>You will be notified via your ASU email address when your request is approved or denied. <strong>Do not</strong> begin moving your belongings until you receive the final approval from University Housing.</li>
-    <li>Once you receive your room change confirmation from the Housing Assignments Office, you must complete your move and be checked into your new assignment within 48 hours.</li>
-</ul>
+        <p class="lead">A few important notes first...</p>
+        <ul>
+            <li>Your request must be approved by your Residence Director (RD), the Residence Director of hall you are moving to, and by the University Housing Assignments Office.</li>
+            <li><strong>Do not</strong> begin moving your belongings until you receive the final approval from University Housing.</li>
+            <li>If you change rooms without approval you will be required to return to your assigned space. You may be denied the opportunity to participate in any other room changes for the academic year and will be assessed a $35 administrative charge.</li>
+            <li><strong>Requests are granted based on available space and may be denied for any reason.</strong> We do not guarantee there any vacancies. Your RD will work with you to select a space from available vacancies.</li>
+            <li><strong>The room fee may increase/decrease depending upon your selection of residence hall.</strong> Your student account will be billed accordingly.</li>
+            <li>It may take several bussiness days to process your request. Requests submitted on Fridays may not be processed until the following business day.</li>
+            <li>You will be notified via your ASU email address once your request is approved or denied.</li>
+            <li>Once you receive your room change confirmation from the Housing Assignments Office, you must complete your move and be checked into your new assignment within 48 hours.</li>
+        </ul>
 
-{START_FORM}
-<h2>Contact Info</h2>
-<p>Your RD and the Assignments Office will use this extra contact information (in addition to your ASU email address) to reach you in case there is a question regarding your request.</p>
-<p>
-{CELL_NUM_LABEL}: {CELL_NUM} {CELL_OPT_OUT} <i style="color: #696969;">(or check the box to opt out)</i>
-</p>
+        {START_FORM}
+        <h3>Contact Info</h3>
+        <p>Your RD and the Assignments Office will use this extra contact information (in addition to your ASU email address) to reach you in case there is a question regarding your request.</p>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    {CELL_NUM_LABEL}
+                    {CELL_NUM}
+                    <div class="checkbox">
+                        <label>
+                            {CELL_OPT_OUT} <em class="text-muted">I don't want to provide a cellphone number</em>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-<h2>Where to?</h2>
+        <h3>Where to?</h3>
 
-<h3>{TYPE_1}{TYPE_1_LABEL}</h3>
-<div id="roomSwitch" style="margin-left:30px;">
-    <h3>Hall Preferences</h3>
-    <table>
-        <tr>
-            <td>{FIRST_CHOICE_LABEL}: </td>
-            <td>{FIRST_CHOICE}</td>
-        </tr>
-        <tr>
-            <td>{SECOND_CHOICE_LABEL}:</td>
-            <td>{SECOND_CHOICE}</td>
-        </tr>
-    </table>
+        <h4>{TYPE_1} {TYPE_1_LABEL}</h4>
+        <div id="roomSwitch" style="margin-left:30px;">
+            <h5>Hall Preferences</h5>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        {FIRST_CHOICE_LABEL}
+                        {FIRST_CHOICE}
+                    </div>
+                    <div class="form-group">
+                        {SECOND_CHOICE_LABEL}
+                        {SECOND_CHOICE}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h4>{TYPE_2} {TYPE_2_LABEL}</h4>
+        <div id="roomSwap" style="margin-left:30px;">
+            <p>Enter the ASU user name of the student you would like to switch rooms with.</p>
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="form-group">
+                        {SWAP_WITH_LABEL}:
+                        <div class="input-group">
+                            {SWAP_WITH}<span class="input-group-addon">@appstate.edu</span>
+                        </div>
+                        <span class="help-block"><strong>The person you want to switch will be sent an email asking them to sign in and confirm your request.</strong></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h3>Reason</h3>
+        <p>Please provide a <strong>short</strong> explanation of why you would like to move to a different room. A few sentences are sufficient. You should also indicate any special circumstances (i.e. you want to switch rooms with a friend on your floor).</p>
+        <div class="row">
+            <div class="col-md-5">
+                <div class="form-group">
+                    {REASON}
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-success btn-lg">Submit Request</button>
+        </div>
+        {END_FORM}
+
+    </div>
 </div>
-
-<h3>{TYPE_2}{TYPE_2_LABEL}</h3>
-<div id="roomSwap" style="margin-left:30px;">
-    <p>Enter the ASU user name (first part of email address) of the student you would like to switch rooms with. <strong>The person you want to switch will be sent an email asking them to sign in and confirm your request.</strong></p>
-    <p>
-    {SWAP_WITH_LABEL}:
-    {SWAP_WITH}<strong>@appstate.edu</strong>
-    </p>
-</div>
-
-<h2>Reason</h2>
-<p>In the box below, please provide a <strong>short</strong> explanation of why you would like to move to a different room. A few sentences are sufficient. You should also indicate any special circumstances (i.e. you want to switch rooms with a friend on your floor).</p>
-{REASON}
-
-<p>{SUBMIT}</p>
-{END_FORM}
 
 <script type="text/javascript">
 $(document).ready(function(){

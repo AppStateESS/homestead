@@ -43,21 +43,24 @@ class RoomChangeApprovalView extends hms\View {
 
         $needsActionList = new RoomChangeListView($this->needsApproval, $this->term);
         $tpl['NEEDS_ACTION'] = $needsActionList->show();
+        $tpl['NEEDS_ACTION_COUNT'] = count($this->needsApproval);
 
         $approvedList = new RoomChangeListView($this->approved, $this->term);
         $tpl['APPROVED'] = $approvedList->show();
+        $tpl['APPROVED_COUNT'] = count($this->approved);
 
         $pendingList = new RoomChangeListView($this->allPending, $this->term);
         $tpl['PENDING'] = $pendingList->show();
+        $tpl['PENDING_COUNT'] = count($this->allPending);
 
         $completedList = new RoomChangeListView($this->completed, $this->term);
         $tpl['COMPLETED'] = $completedList->show();
+        $tpl['COMPLETED_COUNT'] = count($this->completed);
 
         $inactiveList = new RoomChangeListView($this->inactive, $this->term);
         $tpl['INACTIVE'] = $inactiveList->show();
+        $tpl['INACTIVE_COUNT'] = count($this->inactive);
 
         return PHPWS_Template::process($tpl, 'hms', 'admin/RoomChangeApprovalView.tpl');
     }
 }
-
-

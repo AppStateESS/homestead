@@ -1,31 +1,27 @@
-<h2>{TITLE}</h2>
-<!-- BEGIN error_msg -->
-<div class="alert alert-danger">{ERROR_MSG}</div>
-<!-- END error_msg -->
+<h1>{TITLE} <small>{TERM}</small></h1>
 
-<!-- BEGIN success_msg -->
-<div class="alert alert-success">{SUCCESS_MSG}</div>
-<!-- END success_msg -->
-
-<p>{MESSAGE}</p>
 {START_FORM}
-<table class="table">
-    <tr>
-        <th>{RESIDENCE_HALL_LABEL}</th>
-        <td>{RESIDENCE_HALL}</td>
-    </tr>
-    <tr>
-        <th>{FLOOR_LABEL}</th>
-        <td>{FLOOR}</td>
-    </tr>
-    <tr>
-        <th>{ROOM_LABEL}</th>
-        <td>{ROOM}</td>
-    </tr>
-    <tr>
-        <th>{BED_LABEL}</th>
-        <td>{BED}</td>
-    </tr>
-</table>
-{SUBMIT_BUTTON}
+<div class="row">
+    <div class="col-md-4">
+        <div class="form-group">
+            {RESIDENCE_HALL_LABEL}
+            {RESIDENCE_HALL}
+        </div>
+        <div class="form-group">
+            {FLOOR_LABEL}
+            {FLOOR}
+        </div>
+        <div class="form-group">
+            {ROOM_LABEL}
+            {ROOM}
+        </div>
+        <div class="form-group">
+            {BED_LABEL}
+            {BED}
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-success pull-right">Select Bed</button>
+        </div>
+    </div>
+</div>
 {END_FORM}

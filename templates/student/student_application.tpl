@@ -11,7 +11,10 @@
         <!-- BEGIN review_msg -->
         <p>
             {REVIEW_MSG}
-            Please review the information you entered. If you need to go back and make changes to your application click the 'modify application' button below. If the information you have entered is correct click the 'submit application' button.
+            Please review the information you entered. If you need to go back
+            and make changes to your application click the 'modify application'
+            button below. If the information you have entered is correct click
+            the 'submit application' button.
         </p>
         <!-- END review_msg -->
 
@@ -53,6 +56,7 @@
                 <div class="col-md-3">
                     {NUMBER}
                 </div>
+
             </div>
             <div class="checkbox">
                 <label class="text-muted">
@@ -75,6 +79,7 @@
         <div class="form-group">
             <label for="{MEAL_OPTION_ID}">Meal Plan:</label>
             <div class="row">
+
                 <div class="col-md-3">
                     {MEAL_OPTION}
                 </div>
@@ -130,32 +135,32 @@
 
         <h3>Emergency Contact Information</h3>
 
-        <div class="form-group">
-            <label for="{EMERGENCY_CONTACT_NAME_ID}">Parent / Guardian Name:</label>
+        <div class="form-group required">
+            <label for="{EMERGENCY_CONTACT_NAME_ID}">Parent / Guardian Name</label>
             <div class="row">
                 <div class="col-md-4">
                     {EMERGENCY_CONTACT_NAME}
                 </div>
             </div>
         </div>
-        <div class="form-group">
-            <label for="{EMERGENCY_CONTACT_RELATIONSHIP_ID}">Relationship:</label>
+        <div class="form-group required">
+            <label for="{EMERGENCY_CONTACT_RELATIONSHIP_ID}">Relationship</label>
             <div class="row">
                 <div class="col-md-4">
                     {EMERGENCY_CONTACT_RELATIONSHIP}
                 </div>
             </div>
         </div>
-        <div class="form-group">
-            <label for="{EMERGENCY_CONTACT_PHONE_ID}">Phone Number:</label>
+        <div class="form-group required">
+            <label for="{EMERGENCY_CONTACT_PHONE_ID}">Phone Number</label>
             <div class="row">
                 <div class="col-md-4">
                     {EMERGENCY_CONTACT_PHONE}
                 </div>
             </div>
         </div>
-        <div class="form-group">
-            <label for="{EMERGENCY_CONTACT_EMAIL_ID}">Email:</label>
+        <div class="form-group required">
+            <label for="{EMERGENCY_CONTACT_EMAIL_ID}">Email</label>
             <div class="row">
                 <div class="col-md-4">
                     {EMERGENCY_CONTACT_EMAIL}
@@ -187,31 +192,31 @@
             whom the University should contact if you are reported missing for more than
             24 hours. Please list your contact person's information below:
         </p>
-        <div class="form-group">
-            <label for="{MISSING_PERSON_NAME_ID}">Contact Person Name:</label>
+        <div class="form-group required">
+            <label for="{MISSING_PERSON_NAME_ID}">Contact Person Name</label>
             <div class="row">
                 <div class="col-md-4">
                     {MISSING_PERSON_NAME}
                 </div>
             </div>
         </div>
-        <div class="form-group">
-            <label for="{MISSING_PERSON_RELATIONSHIP_ID}">Relationship:</label>
+        <div class="form-group required">
+            <label for="{MISSING_PERSON_RELATIONSHIP_ID}">Relationship</label>
             <div class="row">
                 <div class="col-md-4">
                     {MISSING_PERSON_RELATIONSHIP}
                 </div>
             </div>
         </div>
-        <div class="form-group">
-            <label for="{MISSING_PERSON_PHONE_ID}">Phone Number:</label>
+        <div class="form-group required">
+            <label for="{MISSING_PERSON_PHONE_ID}">Phone Number</label>
             <div class="row">
                 <div class="col-md-4">
                     {MISSING_PERSON_PHONE}
                 </div>
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group required">
             <label for="{MISSING_PERSON_EMAIL_ID}">Email</label>
             <div class="row">
                 <div class="col-md-4">
@@ -257,7 +262,7 @@
         </p>
         <!-- END special_needs_result -->
 
-                <!-- BEGIN rlc_interest_1 -->
+        <!-- BEGIN rlc_interest_1 -->
         <h3>Residential Learning Communities</h3>
         <p>
             Are you interested in living in a
@@ -332,23 +337,24 @@
                 <p>{RLC_REVIEW}</p>
             </div>
         </div>
-        <!-- END rlc_review -->
+    </div>
+    <!-- END rlc_review -->
 
-        <div class="row">
-            <div class="col-md-12">
-                <!-- BEGIN continue_btn -->
-                {CONTINUE_BTN}
-                <button type="submit" class="btn btn-success btn-lg pull-right">Continue <i class="fa fa-chevron-right"></i></button>
-                <!-- END continue_btn -->
+    <div class="row">
+        <div class="col-md-12">
+            <!-- BEGIN continue_btn -->
+            {CONTINUE_BTN}
+            <button type="submit" class="btn btn-success btn-lg pull-right">Continue <i class="fa fa-chevron-right"></i></button>
+            <!-- END continue_btn -->
 
-                <!-- BEGIN redo_form -->
-                <a href="{REDO_BUTTON}" class="btn btn-default"><i class="fa fa-chevron-left"></i> Back</a>
-                <!-- END redo_form -->
+            <!-- BEGIN redo_form -->
+            <a href="{REDO_BUTTON}" class="btn btn-default"><i class="fa fa-chevron-left"></i> Back</a>
+            <!-- END redo_form -->
 
-                <!-- BEGIN confirmapp -->
-                {CONFIRM_BTN}
-                <button type="submit" class="btn btn-success btn-lg pull-right">Confirm &amp; Continue <i class="fa fa-chevron-right"></i></button>
-                <!-- END confirmapp -->
+            <!-- BEGIN confirmapp -->
+            {CONFIRM_BTN}
+            <button type="submit" class="btn btn-success btn-lg pull-right">Confirm &amp; Continue <i class="fa fa-chevron-right"></i></button>
+            <!-- END confirmapp -->
         </div>
 
         {END_FORM}

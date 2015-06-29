@@ -25,35 +25,33 @@ class SelectBedView extends hms\View{
             $cmd->redirect();
         }
 
-        $tpl['TITLE']       = $this->title . ' - ' . Term::getPrintableSelectedTerm();
+        $tpl['TITLE']   = $this->title;
+        $tpl['TERM']    = Term::getPrintableSelectedTerm();
 
         javascript('jquery');
         javascript('modules/hms/select_bed');
 
-        # Setup the form
+        // Setup the form
         $form = new PHPWS_Form();
         $this->onSelectCmd->initForm($form);
 
         $form->setMethod('get');
         $form->addDropBox('residence_hall', $this->halls);
-        $form->setLabel('residence_hall', 'Residence hall: ');
+        $form->setLabel('residence_hall', 'Residence hall');
         $form->setMatch('residence_hall', 0);
-        $form->setClass('residence_hall', 'form-control');
+        $form->addCssClass('residence_hall', 'form-control');
 
         $form->addDropBox('floor', array(0 => ''));
-        $form->setLabel('floor', 'Floor: ');
-        $form->setClass('floor', 'form-control');
+        $form->setLabel('floor', 'Floor');
+        $form->addCssClass('floor', 'form-control');
 
         $form->addDropBox('room', array(0 => ''));
-        $form->setLabel('room', 'Room: ');
-        $form->setClass('room', 'form-control');
+        $form->setLabel('room', 'Room');
+        $form->addCssClass('room', 'form-control');
 
         $form->addDropBox('bed', array(0 => ''));
-        $form->setLabel('bed', 'Bed: ');
-        $form->setClass('bed', 'form-control');
-
-        $form->addSubmit('submit_button', 'Select');
-        $form->setClass('submit_button', 'btn btn-primary');
+        $form->setLabel('bed', 'Bed');
+        $form->addCssClass('bed', 'form-control');
 
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
@@ -63,5 +61,3 @@ class SelectBedView extends hms\View{
         return PHPWS_Template::process($tpl, 'hms', 'admin/select_bed.tpl');
     }
 }
-
-

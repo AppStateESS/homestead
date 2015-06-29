@@ -400,7 +400,7 @@ CREATE UNIQUE INDEX hms_application_feature_term_name_idx ON hms_application_fea
 CREATE TABLE hms_new_application (
     id                              integer                 NOT NULL,
     term                            integer                 NOT NULL REFERENCES hms_term(term),
-    banner_id                       character varying(9)    NOT NULL,
+    banner_id                       integer                 NOT NULL,
     username                        character varying(32)   NOT NULL,
     gender                          smallint                NOT NULL,
     student_type                    character(1)            NOT NULL,
@@ -442,6 +442,7 @@ CREATE TABLE hms_fall_application (
     preferred_bedtime       smallint    NOT NULL,
     room_condition          smallint    NOT NULL,
     rlc_interest            smallint    NOT NULL,
+    smoking_preference      smallint    NOT NULL DEFAULT 0,
     PRIMARY KEY(id)
 );
 
@@ -450,12 +451,14 @@ CREATE TABLE hms_spring_application (
     lifestyle_option        smallint    NOT NULL,
     preferred_bedtime       smallint    NOT NULL,
     room_condition          smallint    NOT NULL,
+    smoking_preference      smallint    NOT NULL DEFAULT 0,
     PRIMARY KEY(id)
 );
 
 CREATE TABLE hms_summer_application (
-    id          integer NOT NULL REFERENCES hms_new_application(id),
-    room_type   integer NOT NULL,
+    id                      integer     NOT NULL REFERENCES hms_new_application(id),
+    room_type               integer     NOT NULL,
+    smoking_preference      smallint    NOT NULL DEFAULT 0,
     PRIMARY KEY(id)
 );
 
@@ -498,9 +501,12 @@ CREATE TABLE hms_student_profiles (
     term            INTEGER NOT NULL REFERENCES hms_term(term),
     date_submitted INTEGER NOT NULL,
     alternate_email character varying(128) NULL,
-    aim_sn character varying(128) NULL,
-    yahoo_sn character varying(128) NULL,
-    msn_sn character varying(128) NULL,
+    fb_link         character varying,
+    instagram_sn    character varying,
+    twitter_sn      character varying,
+    tumblr_sn       character varying,
+    kik_sn          character varying,
+    about_me        character varying,
     arts_and_crafts smallint,
     books_and_reading smallint,
     cars smallint,

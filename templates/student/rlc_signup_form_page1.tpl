@@ -1,4 +1,4 @@
-<h1>Residential Learning Community Application</h1>
+<h2>Residential Learning Community Application</h2>
 
 <div class="col-md-8">
   <p>Residential Learning Communities (RLCs) are a unique housing opportunity.
@@ -20,7 +20,7 @@
 
 <div class="row">
     <div class="col-md-8">
-        <h2>Rank Your Community Choices</h2>
+        <h3>Rank Your Community Choices</h3>
         <p>Choose up to three communities you'd like us to consider your
           application for.
         </p>
@@ -81,8 +81,8 @@
             {RLC_THIRD_CHOICE}
         </div>
 
-        <h2>About Your Choices</h2>
-        
+        <h3>About Your Choices</h3>
+
         <div class="form-group">
             {WHY_SPECIFIC_COMMUNITIES_LABEL}
             <span class="help-block"></span>

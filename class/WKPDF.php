@@ -92,6 +92,7 @@ class WKPDF {
             else
                 throw new Exception('WKPDF couldn\'t determine CPU ("' . `grep -i vendor_id /proc/cpuinfo` . '").');
         }
+
         return self::$cpu;
     }
 
@@ -258,6 +259,7 @@ class WKPDF {
         if (self::$PDF_USE_XVFB) {
             $command = self::$PDF_XVFB_PATH . ' ' . $command;
         }
+
         $execute = $command . (($this->copies > 1) ? ' --copies ' . $this->copies : '')                              // number of copies
                 . ' --orientation ' . $this->orient                                                                // orientation
                 . ' --page-size ' . $this->size                                                                    // page size

@@ -746,8 +746,6 @@ class HMS_Bed extends HMS_Item {
         $pager->setTemplate('admin/bed_pager_by_room.tpl');
         $pager->setLink('index.php?module=hms');
         $pager->setEmptyMessage("No beds found.");
-        $pager->addToggle('class="toggle1"');
-        $pager->addToggle('class="toggle2"');
         $pager->addRowTags('getPagerByRoomTags');
         $pager->addPageTags($page_tags);
 

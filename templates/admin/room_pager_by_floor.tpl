@@ -1,5 +1,4 @@
-<h2>{TABLE_TITLE}</h2>
-<table width="%70">
+<table class="table table-striped table-hover">
     <tr>
         <th>Room Number</th>
         <th>Gender Type</th>
@@ -15,7 +14,7 @@
     </tr>
     <!-- BEGIN empty_table -->
     <tr>
-        <td colspan="2">{EMPTY_MESSAGE}</td>
+        <td colspan="10">{EMPTY_MESSAGE}</td>
     </tr>
     <!-- END empty_table -->
     <!-- BEGIN listrows -->
@@ -36,20 +35,9 @@
     </tr>
     <!-- END listrows -->
 </table>
-{ADD_ROOM_LINK}
-<br />
+<a href="{ADD_ROOM_URI}" class="btn btn-success btn-sm pull-right"><i class="fa fa-plus"></i> Add Room</a>
 <!-- BEGIN page_label -->
-<div align="center">
-Rooms: {TOTAL_ROWS}
-</div>
+<p class="text-center">
+Rooms {TOTAL_ROWS}
+</p>
 <!-- END page_label -->
-<!-- BEGIN pages -->
-<div align="center">
-{PAGE_LABEL}: {PAGES}
-</div>
-<!-- END pages -->
-<!-- BEGIN limits -->
-<div align="center">
-{LIMIT_LABEL}: {LIMITS}
-</div>
-<!-- END limits -->

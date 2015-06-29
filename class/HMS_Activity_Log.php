@@ -148,7 +148,7 @@ class HMS_Activity_Log{
      */
     public static function getActivityMapping()
     {
-        return array(   ACTIVITY_LOGIN                          => "Logged in",
+        return array(   ACTIVITY_LOGIN          => "Logged in",
         ACTIVITY_AGREED_TO_TERMS                => "Agreed to terms & agreement",
         ACTIVITY_SUBMITTED_APPLICATION          => "Submitted housing application",
         ACTIVITY_SUBMITTED_RLC_APPLICATION      => "Submitted RLC application",
@@ -184,7 +184,7 @@ class HMS_Activity_Log{
         ACTIVITY_USERNAME_UPDATED               => "Updated Username",
         ACTIVITY_APPLICATION_UPDATED            => "Updated Application",
         ACTIVITY_RLC_APPLICATION_UPDATED        => "Updated RLC Application",
-        ACTIVITY_RLC_APPLICATION_DELETED		=> "RLC Application Deleted",
+        ACTIVITY_RLC_APPLICATION_DELETED		    => "RLC Application Deleted",
         ACTIVITY_ASSIGNMENTS_UPDATED            => "Updated Assignments",
         ACTIVITY_BANNER_QUEUE_UPDATED           => "Updated Banner Queue",
         ACTIVITY_ROOMMATES_UPDATED              => "Updated Roommates",
@@ -223,7 +223,8 @@ class HMS_Activity_Log{
         ACTIVITY_EMERGENCY_CONTACT_UPDATED      => "Emergency Contact & Missing Person information updated",
         ACTIVITY_CHECK_IN                       => 'Checked-in',
         ACTIVITY_CHECK_OUT                      => 'Checked-out',
-        ACTIVITY_REAPP_WAITINGLIST_APPLY        => 'Applied for Re-application Waiting List');
+        ACTIVITY_REAPP_WAITINGLIST_APPLY        => 'Applied for Re-application Waiting List',
+        ACTIVITY_REINSTATE_APPLICATION          => 'Reinstated Application');
     }
 
     /**
@@ -285,4 +286,3 @@ class HMS_Activity_Log{
         $this->notes = $notes;
     }
 }
-

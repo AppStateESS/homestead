@@ -1499,8 +1499,13 @@ function hms_update(&$content, $currentVersion)
             $module = new \PHPWS_Module('pulse', false);
             $pulse_version = $module->getVersion();
             if (version_compare($pulse_version, '2.0.0', '<')) {
-                $content[] = '<p style="color:red;font-weight:bold">Pulse needs to be upgraded before HMS can continue with its update.</p>';
-                return false;
+                $content[] = '<p style="color:red;font-weight:bold">Pulse needs to be upgraded.</p>';
+            }
+
+            $db = new PHPWS_DB();
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/00-05-03.sql');
+            if (PEAR::isError($result)) {
+                return $result;
             }
     }
 

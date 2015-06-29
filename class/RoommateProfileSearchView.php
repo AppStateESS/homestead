@@ -106,12 +106,9 @@
         $pager->setTemplate('student/profile_search_pager.tpl');
         $pager->setLink('index.php?module=hms');
         $pager->setEmptyMessage("No matches found. Try broadening your search by selecting fewer criteria.");
-        $pager->addToggle('class="toggle1"');
-        $pager->addToggle('class="toggle2"');
         $pager->addRowTags('getPagerTags');
         $pager->addPageTags($pageTags);
 
         return $pager->get();
     }
 }
-

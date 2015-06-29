@@ -448,8 +448,6 @@ class LotteryApplication extends HousingApplication {
         $pager->setOrder('hms_lottery_application.special_interest', 'desc');
         $pager->setTemplate('admin/special_interest_pager.tpl');
         $pager->setEmptyMessage('No students found.');
-        $pager->addToggle('class="toggle1"');
-        $pager->addToggle('class="toggle2"');
         $pager->setReportRow('specialInterestCsvRow');
 
         return $pager->get();
@@ -483,8 +481,6 @@ class LotteryApplication extends HousingApplication {
         $pager->setModule('hms');
         $pager->setTemplate('admin/lottery_wait_list_pager.tpl');
         $pager->setEmptyMessage('No students found.');
-        $pager->addToggle('class="toggle1"');
-        $pager->addToggle('class="toggle2"');
         $pager->addPageTags(array('TITLE'=>'Re-application Waiting List - ' . Term::toString($term)));
         $pager->addRowTags('waitingListTags');
         $pager->setReportRow('waitingListCsvTags');

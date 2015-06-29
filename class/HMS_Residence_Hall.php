@@ -357,30 +357,13 @@ class HMS_Residence_Hall extends HMS_Item {
         return $result;
     }
 
+    /**
+     * @deprecated
+     * @see countNominalBeds()
+     */
     public function get_number_of_online_nonoverflow_beds()
     {
-        $db = new PHPWS_DB('hms_bed');
-
-        $db->addJoin('LEFT OUTER', 'hms_bed', 'hms_room', 'room_id', 'id');
-        $db->addJoin('LEFT OUTER', 'hms_room', 'hms_floor', 'floor_id', 'id');
-        $db->addJoin('LEFT OUTER', 'hms_floor', 'hms_residence_hall', 'residence_hall_id', 'id');
-
-        $db->addWhere('hms_residence_hall.id', $this->id);
-        $db->addWhere('hms_room.offline', 0);
-        $db->addWhere('hms_room.overflow', 0);
-        $db->addWhere('hms_room.parlor', 0);
-
-        $result = $db->select('count');
-
-        if ($result == 0) {
-            return 0;
-        }
-
-        if (PHPWS_Error::logIfError($result)) {
-            throw new DatabaseException($result->toString());
-        }
-
-        return $result;
+        return $this->countNominalBeds();
     }
 
     public function countNominalBeds()

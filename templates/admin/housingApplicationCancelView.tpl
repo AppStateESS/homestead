@@ -7,6 +7,6 @@ Cancel <strong>{NAME}</strong>'s <strong>{TERM}</strong> housing application?<br
 <!-- END assignment -->
 
 <!-- BEGIN no_assignment -->
-<span class="disabledText">No assignment changes needed.</span>{NO_ASSIGNMENT}
+<em class="text-muted">No assignment changes needed.</em>{NO_ASSIGNMENT}
 <!-- END no_assignment -->
 {END_FORM}

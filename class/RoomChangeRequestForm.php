@@ -21,6 +21,8 @@ class RoomChangeRequestForm extends hms\View {
         /* Cell phone */
         $form->addText('cell_num');
         $form->setLabel('cell_num', 'Cell phone Number');
+        $form->addCssClass('cell_num', 'form-control');
+
         $form->addCheck('cell_opt_out');
 
         /* Preferences */
@@ -32,19 +34,22 @@ class RoomChangeRequestForm extends hms\View {
         /* Swap */
         $form->addText('swap_with');
         $form->setLabel('swap_with', 'ASU Email Address');
+        $form->addCssClass('swap_with', 'form-control');
 
         /* Switch */
         $form->addDropBox('first_choice', $halls);
         $form->setLabel('first_choice', 'First Choice');
+        $form->addCssClass('first_choice', 'form-control');
+
         $form->addDropBox('second_choice', $halls);
         $form->setLabel('second_choice', 'Second Choice');
+        $form->addCssClass('second_choice', 'form-control');
 
         /* Reason */
         $form->addTextArea('reason');
         $form->setLabel('reason', 'Reason');
-
-        $form->addSubmit('Submit Request');
-        $form->setExtra('submit', 'class="hms-application-submit-button"');
+        $form->addCssClass('reason', 'form-control');
+        $form->setRows('reason', 5);
 
         /* POST location */
         $cmd = CommandFactory::getCommand('SubmitRoomChangeRequest');
@@ -55,5 +60,3 @@ class RoomChangeRequestForm extends hms\View {
         return PHPWS_Template::process($tpl, 'hms', 'student/roomChangeRequestForm.tpl');
     }
 }
-
-

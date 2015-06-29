@@ -37,12 +37,12 @@ class SelectFloorView extends hms\View
 
         $form->setMethod('get');
         $form->addDropBox('residence_hall', $this->halls);
-        $form->setLabel('residence_hall', 'Residence hall: ');
+        $form->setLabel('residence_hall', 'Residence hall');
         $form->setMatch('residence_hall', 0);
         $form->setClass('residence_hall', 'form-control');
 
         $form->addDropBox('floor', array(0 => ''));
-        $form->setLabel('floor', 'Floor: ');
+        $form->setLabel('floor', 'Floor');
         $form->setClass('floor', 'form-control');
 
         $form->addSubmit('submit_button', 'Select');

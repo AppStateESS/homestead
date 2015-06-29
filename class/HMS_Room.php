@@ -9,9 +9,6 @@
  * @author Kevin Wilcox <kevin at tux dot appstate dot edu>
  */
 
-PHPWS_Core::initModClass('hms', 'HMS_Item.php');
-PHPWS_Core::initModClass('hms', 'RlcFactory.php');
-
 class HMS_Room extends HMS_Item
 {
 
@@ -211,7 +208,6 @@ class HMS_Room extends HMS_Item
      */
     public function loadFloor()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
         $result = new HMS_Floor($this->floor_id);
         if (PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
@@ -527,7 +523,6 @@ class HMS_Room extends HMS_Item
      */
     public function get_row_tags()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
         $tpl['ID']             = $this->id;
         $tpl['ROOM_NUMBER']    = $this->getLink();
@@ -784,21 +779,20 @@ class HMS_Room extends HMS_Item
         $pager->addWhere('hms_room.floor_id', $floor_id);
         $pager->db->addOrder('hms_room.room_number');
 
-        $page_tags['TABLE_TITLE']          = 'Rooms on this floor';
-
         if (Current_User::allow('hms', 'room_structure')) {
             $addRoomCmd = CommandFactory::getCommand('ShowAddRoom');
             $addRoomCmd->setFloorId($floor_id);
-            $page_tags['ADD_ROOM_LINK'] = $addRoomCmd->getLink('Add room');
+            $page_tags['ADD_ROOM_URI'] = $addRoomCmd->getURI();
         }
+
+        $pager->limitList = array(200);
+        $pager->setDefaultLimit(200);
 
         $pager->setModule('hms');
         $pager->setTemplate('admin/room_pager_by_floor.tpl');
         $pager->setLink('index.php?module=hms');
         $pager->setEmptyMessage('No rooms found.');
 
-        $pager->addToggle('class="toggle1"');
-        $pager->addToggle('class="toggle2"');
         if ($editable) {
             $pager->addRowTags('get_row_edit');
             $page_tags['FORM'] = 'form=true';
@@ -823,8 +817,6 @@ class HMS_Room extends HMS_Item
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to delete a room.');
         }
-
-        PHPWS_Core::initModClass('hms','HMS_Bed.php');
 
         // check that we're not about to do something stupid
         if (!isset($roomId)) {

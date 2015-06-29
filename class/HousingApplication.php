@@ -179,7 +179,8 @@ class HousingApplication {
         }
 
         // If the object is new, set the 'created' fields
-        if ($this->getId() == 0) {
+        $createdOn = $this->getCreatedOn();
+        if (empty($createdOn)) {
             $this->setCreatedOn(time());
             if (isset($user) && !is_null($user)) {
                 $this->setCreatedBy(UserStatus::getUsername());
@@ -610,7 +611,6 @@ class HousingApplication {
         $db = new PHPWS_DB('hms_new_application');
         $db->addWhere('student_type', 'F');
         $db->addWhere('term', $term);
-        $db->addWhere('withdrawn', 0);
         $db->addWhere('cancelled', 0);
         //        $db->addWhere('gender', $gender);
 

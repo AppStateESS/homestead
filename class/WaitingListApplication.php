@@ -198,8 +198,6 @@ class WaitingListApplication extends HousingApplication {
         $pager->setModule('hms');
         $pager->setTemplate('admin/lottery_wait_list_pager.tpl');
         $pager->setEmptyMessage('No students found.');
-        $pager->addToggle('class="toggle1"');
-        $pager->addToggle('class="toggle2"');
         $pager->addPageTags(array('TITLE'=>'Open Waiting List - ' . Term::toString($term)));
         $pager->addRowTags('waitingListTags');
         $pager->setReportRow('waitingListCsvTags');

@@ -46,7 +46,6 @@ class SpecialNeedsFormView extends hms\View {
         $form->setMatch('special_needs', $checked);
 
         $form->addSubmit('submit', 'Continue');
-        $form->setExtra('submit', 'class="hms-application-submit-button"');
 
         Layout::addPageTitle("Special Needs Form");
 
