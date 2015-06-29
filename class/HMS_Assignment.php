@@ -452,7 +452,6 @@ class HMS_Assignment extends HMS_Item {
         $hall = $floor->get_parent();
         if (!$hall) {
             throw new AssignmentException('Null hall object.');
-            ;
         }
 
         if ($meal_plan == BANNER_MEAL_NONE) {
