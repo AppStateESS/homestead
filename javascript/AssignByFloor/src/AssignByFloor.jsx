@@ -6,19 +6,19 @@ var AssignByFloor = React.createClass({
             mealPlanOptions: [],
             assignmentOptions: [],
             currentMealPlan: 0,
-            currentAssignmentType: 0,
+            currentAssignmentType: 0
         };
     },
 
     updateMealPlan: function(value) {
         this.setState({
-            currentMealPlan: value,
+            currentMealPlan: value
         });
     },
 
     updateAssignmentType: function(value) {
         this.setState({
-            currentAssignmentType: value,
+            currentAssignmentType: value
         });
     },
 
@@ -41,7 +41,7 @@ var AssignByFloor = React.createClass({
                     mealPlanOptions: data.meal_plan,
                     assignmentOptions: data.assignment_type,
                     currentMealPlan: data.default_plan,
-                    currentAssignmentType: data.default_assignment,
+                    currentAssignmentType: data.default_assignment
                 });
 
             }.bind(this));

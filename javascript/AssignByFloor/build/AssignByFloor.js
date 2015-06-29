@@ -6,19 +6,19 @@ var AssignByFloor = React.createClass({displayName: "AssignByFloor",
             mealPlanOptions: [],
             assignmentOptions: [],
             currentMealPlan: 0,
-            currentAssignmentType: 0,
+            currentAssignmentType: 0
         };
     },
 
     updateMealPlan: function(value) {
         this.setState({
-            currentMealPlan: value,
+            currentMealPlan: value
         });
     },
 
     updateAssignmentType: function(value) {
         this.setState({
-            currentAssignmentType: value,
+            currentAssignmentType: value
         });
     },
 
@@ -30,7 +30,7 @@ var AssignByFloor = React.createClass({displayName: "AssignByFloor",
             module: 'hms',
             action: 'JSONGetHalls'
         }, function (data) {
-                hallList = data;
+            hallList = data;
 
             $.getJSON('index.php', {
                 module: 'hms',
