@@ -300,7 +300,7 @@ CREATE TABLE hms_assignment (
     banner_id       integer     NOT NULL,
     asu_username    character varying(32) NOT NULL,
     bed_id          integer     NOT NULL REFERENCES hms_bed(id),
-    meal_option     smallint default 0,
+    meal_option     character(2),
     lottery         smallint    NOT NULL DEFAULT 0,
     auto_assigned   smallint    NOT NULL DEFAULT 0,
     added_by        integer     NOT NULL,
