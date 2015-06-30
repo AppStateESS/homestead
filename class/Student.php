@@ -1,89 +1,84 @@
 <?php
 
-class Student {
-
+class Student
+{
     // TODO make these all private and make sure nothing breaks
     public $username;
     public $banner_id;
-
     public $first_name;
     public $middle_name;
     public $last_name;
     public $preferred_name;
-
     public $dob;
     public $gender;
-
     public $confidential; // This student is super secret
-
     public $application_term;
     public $type;
     public $class;
     public $credit_hours;
-
     public $student_level;
     public $international;
-
     public $admissions_decision_code;
     public $admissions_decision_desc;
-
     public $honors;
     public $teaching_fellow;
     public $watauga_member;
     public $greek;
-
     public $disabled_pin;
     public $housing_waiver; // Whether or not a freshmen's student on-campus housing has been waived (e.g., living close by with family)
-
     public $addressList;
     public $phoneNumberList;
-
-
     // Data Source - Not saved to the DB.
     // Used to determine the class name that provided the data.
     private $dataSource;
 
     public function __construct()
     {
-
+        
     }
 
     public function getName()
     {
-        if(isset($this->preferred_name) && $this->preferred_name != '') {
-        	return $this->getPreferredName() . ' ' . $this->getLastName();
+        if (isset($this->preferred_name) && $this->preferred_name != '') {
+            return $this->getPreferredName() . ' ' . $this->getLastName();
         }
-        
+
         return $this->getFirstName() . ' ' . $this->getLastName();
     }
 
-    public function getFullName(){
-        
-        if(isset($this->preferred_name) && $this->preferred_name != '') {
+    public function getFullName()
+    {
+        if (isset($this->preferred_name) && $this->preferred_name != '') {
             $firstName = $this->getPreferredName();
+            if (isset($this->middle_name) && $this->middle_name != $this->preferred_name) {
+                $middleName = $this->getMiddleName();
+            } else {
+                $middleName = null;
+            }
         } else {
-        	$firstName = $this->getFirstName();
+            $firstName = $this->getFirstName();
+            $middleName = $this->getMiddleName();
         }
-        
-        return $firstName . ' ' . $this->getMiddleName() . ' ' . $this->getLastName();
+
+        return $firstName . ' ' . $middleName . ' ' . $this->getLastName();
     }
-    
+
     public function getLegalName()
     {
-    	return $this->getFirstName() . ' ' . $this->getMiddleName() . ' ' . $this->getLastName();
+        return $this->getFirstName() . ' ' . $this->getMiddleName() . ' ' . $this->getLastName();
     }
 
     public function getFullNameInverted()
     {
-        if(isset($this->preferred_name) && $this->preferred_name != '') {
+        if (isset($this->preferred_name) && $this->preferred_name != '') {
             $firstName = $this->getPreferredName();
         } else {
             $firstName = $this->getFirstName();
         }
-        
+
         return $this->getLastName() . ', ' . $firstName . ' ' . $this->getMiddleName();
     }
-    
+
     public function getPrintableGender()
     {
         $gender = $this->getGender();
@@ -122,7 +117,7 @@ class Student {
 
     public function getPrintableType()
     {
-        switch($this->getType()){
+        switch ($this->getType()) {
             case TYPE_FRESHMEN:
                 return 'Freshmen';
                 break;
@@ -155,7 +150,7 @@ class Student {
 
     public function getPrintableClass()
     {
-        switch($this->getClass()){
+        switch ($this->getClass()) {
             case CLASS_FRESHMEN:
                 return 'Freshmen';
                 break;
@@ -175,7 +170,7 @@ class Student {
 
     public function getPrintableLevel()
     {
-        switch($this->getStudentLevel()){
+        switch ($this->getStudentLevel()) {
             case LEVEL_UNDERGRAD:
                 return 'Undergraduate';
                 break;
@@ -199,7 +194,7 @@ class Student {
         }
     }
 
-    public function getProfileLink($css_class=null)
+    public function getProfileLink($css_class = null)
     {
         $profileCmd = CommandFactory::getCommand('ShowStudentProfile');
         $profileCmd->setUsername($this->getUsername());
@@ -217,13 +212,13 @@ class Student {
 
     public function getEmailLink()
     {
-        return '<a href="mailto:'.$this->getUsername().'@appstate.edu">'.$this->getUsername().'@appstate.edu</a>';
+        return '<a href="mailto:' . $this->getUsername() . '@appstate.edu">' . $this->getUsername() . '@appstate.edu</a>';
     }
-    
+
     public function getEmailAddress()
     {
         //TODO make the domain configurable
-    	return $this->getUsername() . '@appstate.edu';
+        return $this->getUsername() . '@appstate.edu';
     }
 
     /**
@@ -245,31 +240,31 @@ class Student {
         $pr_address = null;
         $ps_address = null;
 
-        foreach($this->addressList as $address){
-            if(((string)$address->atyp_code) == ADDRESS_PRMT_RESIDENCE) {
+        foreach ($this->addressList as $address) {
+            if (((string) $address->atyp_code) == ADDRESS_PRMT_RESIDENCE) {
                 $pr_address = $address;
-            }else if(((string)$address->atyp_code) == ADDRESS_PRMT_STUDENT){
+            } else if (((string) $address->atyp_code) == ADDRESS_PRMT_STUDENT) {
                 $ps_address = $address;
             }
         }
 
         # Decide which address type to return, based on $type parameter
-        if(is_null($type)){
+        if (is_null($type)) {
             # Return the pr address, if it exists
-            if(!is_null($pr_address)){
+            if (!is_null($pr_address)) {
                 return $pr_address;
                 # Since there was no ps address, return the ps address, if it exists
-            }else if(!is_null($ps_address)){
+            } else if (!is_null($ps_address)) {
                 return $ps_address;
-            }else{
+            } else {
                 # No address found, return false
                 return false;
             }
-        }else if($type == ADDRESS_PRMT_RESIDENCE && !is_null($pr_address)){
+        } else if ($type == ADDRESS_PRMT_RESIDENCE && !is_null($pr_address)) {
             return $pr_address;
-        }else if($type == ADDRESS_PRMT_STUDENT && !is_null($ps_address)){
+        } else if ($type == ADDRESS_PRMT_STUDENT && !is_null($ps_address)) {
             return $ps_address;
-        }else{
+        } else {
             # Either a bad type was specified (i.e. not null and not PS or PR)
             # or the specified type was not found
             return false;
@@ -288,7 +283,7 @@ class Student {
     {
         $addr = $this->getAddress();
 
-        if(!$addr){
+        if (!$addr) {
             return false;
         }
 
@@ -302,43 +297,40 @@ class Student {
     {
 
         // Break up the term and year
-        $yr     = floor($this->application_term / 100);
-        $sem    = $this->application_term - ($yr * 100);
+        $yr = floor($this->application_term / 100);
+        $sem = $this->application_term - ($yr * 100);
 
         $curr_year = floor($baseTerm / 100);
-        $curr_sem  = $baseTerm - ($curr_year * 100);
+        $curr_sem = $baseTerm - ($curr_year * 100);
 
-        if($curr_sem == 10) {
+        if ($curr_sem == 10) {
             $curr_year -= 1;
-            $curr_sem   = 40;
+            $curr_sem = 40;
         }
 
-        if(is_null($this->application_term) || !isset($this->application_term)) {
+        if (is_null($this->application_term) || !isset($this->application_term)) {
             throw new InvalidArgumentException('Missing application term!');
-        }else if($this->application_term >= $baseTerm) {
+        } else if ($this->application_term >= $baseTerm) {
             // The application term is greater than the current term, then they're certainly a freshmen
             return CLASS_FRESHMEN;
-        }else if(
-                ($yr == $curr_year + 1 && $sem = 10) ||
-                ($yr == $curr_year && $sem >= 20 && $sem <= 40)) {
+        } else if (
+                ($yr == $curr_year + 1 && $sem = 10) || ($yr == $curr_year && $sem >= 20 && $sem <= 40)) {
             // freshmen
             return CLASS_FRESHMEN;
-        }else if(
-                ($yr == $curr_year && $sem == 10) ||
-                ($yr + 1 == $curr_year && $sem >= 20 && $sem <= 40)) {
+        } else if (
+                ($yr == $curr_year && $sem == 10) || ($yr + 1 == $curr_year && $sem >= 20 && $sem <= 40)) {
             // soph
             return CLASS_SOPHOMORE;
-        }else if(
-                ($yr + 1 == $curr_year && $sem == 10) ||
-                ($yr + 2 == $curr_year && $sem >= 20 && $sem <= 40)) {
+        } else if (
+                ($yr + 1 == $curr_year && $sem == 10) || ($yr + 2 == $curr_year && $sem >= 20 && $sem <= 40)) {
             // jr
             return CLASS_JUNIOR;
-        }else{
+        } else {
             // senior
             return CLASS_SENIOR;
         }
     }
-    
+
     /**
      * Returns this student's date of birth as a DateTime object
      */
@@ -346,14 +338,15 @@ class Student {
     {
         return DateTime::createFromFormat('!Y-m-d', $this->getDob(), new DateTimeZone('America/New_York'));
     }
-    
+
     /**
      * Returns true if the student is under 18 at the time this method is called.
      */
-    public function isUnder18() {
+    public function isUnder18()
+    {
         // Get DOB as a DateTime object
-    	$dob = $this->getDobDateTime();
-        
+        $dob = $this->getDobDateTime();
+
         // Add 18 years
         $dob->add(new DateInterval('P18Y'));
 
@@ -361,70 +354,84 @@ class Student {
         $timestamp = $dob->format('U');
 
         // If dob timestamp is in the future (greater than now), student is under 18
-        if($timestamp > time()){
-        	return true;
+        if ($timestamp > time()) {
+            return true;
         }
-        
+
         return false;
     }
 
-    /***************************
+    /*     * *************************
      * Getter / Setter Methods *
-    ***************************/
+     * ************************* */
 
-    public function getUsername(){
+    public function getUsername()
+    {
         return $this->username;
     }
 
-    public function setUsername($username){
+    public function setUsername($username)
+    {
         $this->username = $username;
     }
 
-    public function getBannerId(){
+    public function getBannerId()
+    {
         return $this->banner_id;
     }
 
-    public function setBannerId($id){
+    public function setBannerId($id)
+    {
         $this->banner_id = $id;
     }
 
-    public function getFirstName(){
+    public function getFirstName()
+    {
         return $this->first_name;
     }
 
-    public function setFirstName($name){
+    public function setFirstName($name)
+    {
         $this->first_name = $name;
     }
 
-    public function getMiddleName(){
+    public function getMiddleName()
+    {
         return $this->middle_name;
     }
 
-    public function setMiddleName($name){
+    public function setMiddleName($name)
+    {
         $this->middle_name = $name;
     }
 
-    public function getLastName(){
+    public function getLastName()
+    {
         return $this->last_name;
     }
 
-    public function setLastName($name){
+    public function setLastName($name)
+    {
         $this->last_name = $name;
     }
 
-    public function getPreferredName(){
+    public function getPreferredName()
+    {
         return $this->preferred_name;
     }
 
-    public function setPreferredName($name){
+    public function setPreferredName($name)
+    {
         $this->preferred_name = $name;
     }
 
-    public function getDOB(){
+    public function getDOB()
+    {
         return $this->dob;
     }
-    
-    public function setDOB($dob){
+
+    public function setDOB($dob)
+    {
         $this->dob = $dob;
     }
 
@@ -433,13 +440,14 @@ class Student {
         return $this->gender;
     }
 
-    public function setGender($gender){
-        if($gender == 'M'){
+    public function setGender($gender)
+    {
+        if ($gender == 'M') {
             $this->gender = MALE;
             return;
         }
 
-        if($gender == 'F'){
+        if ($gender == 'F') {
             $this->gender = FEMALE;
             return;
         }
@@ -448,147 +456,184 @@ class Student {
         return;
     }
 
-    public function getConfiential(){
+    public function getConfiential()
+    {
         return $this->confidential;
     }
 
-    public function setConfidential($conf){
+    public function setConfidential($conf)
+    {
         $this->confidential = $conf;
     }
 
-    public function getApplicationTerm(){
+    public function getApplicationTerm()
+    {
         return $this->application_term;
     }
 
-    public function setApplicationTerm($term){
+    public function setApplicationTerm($term)
+    {
         $this->application_term = $term;
     }
 
-    public function getType(){
+    public function getType()
+    {
         return $this->type;
     }
 
-    public function setType($type){
+    public function setType($type)
+    {
         $this->type = $type;
     }
 
-    public function getClass(){
+    public function getClass()
+    {
         return $this->class;
     }
 
-    public function setClass($class){
+    public function setClass($class)
+    {
         $this->class = $class;
     }
 
-    public function getCreditHours(){
+    public function getCreditHours()
+    {
         return $this->credit_hours;
     }
 
-    public function setStudentLevel($level){
+    public function setStudentLevel($level)
+    {
         $this->student_level = $level;
     }
 
-    public function getStudentLevel(){
+    public function getStudentLevel()
+    {
         return $this->student_level;
     }
 
-    public function setCreditHours($hrs){
+    public function setCreditHours($hrs)
+    {
         $this->credit_hours = $hrs;
     }
 
-    public function setInternational($intl){
+    public function setInternational($intl)
+    {
         $this->international = $intl;
     }
 
-    public function isInternational(){
+    public function isInternational()
+    {
         return $this->international;
     }
 
-    public function setHonors($hon){
+    public function setHonors($hon)
+    {
         $this->honors = $hon;
     }
 
-    public function isHonors(){
+    public function isHonors()
+    {
         return $this->honors;
     }
 
-    public function setTeachingFellow($teach){
+    public function setTeachingFellow($teach)
+    {
         $this->teaching_fellow = $teach;
     }
 
-    public function isTeachingFellow(){
+    public function isTeachingFellow()
+    {
         return $this->teaching_fellow;
     }
 
-    public function setWataugaMember($member){
+    public function setWataugaMember($member)
+    {
         $this->watauga_member = $member;
     }
 
-    public function isWataugaMember(){
+    public function isWataugaMember()
+    {
         return $this->watauga_member;
     }
 
-    public function setGreek($greek){
+    public function setGreek($greek)
+    {
         $this->greek = $greek;
     }
 
-    public function isGreek(){
+    public function isGreek()
+    {
         return $this->greek;
     }
 
-    public function pinDisabled(){
+    public function pinDisabled()
+    {
         return $this->disabled_pin;
     }
 
-    public function setPinDisabled($flag){
+    public function setPinDisabled($flag)
+    {
         $this->disabled_pin = $flag;
     }
 
-    public function housingApplicationWaived(){
+    public function housingApplicationWaived()
+    {
         return $this->housing_waiver;
     }
 
-    public function setHousingWaiver($waiver){
+    public function setHousingWaiver($waiver)
+    {
         $this->housing_waiver = $waiver;
     }
 
-    public function getAdmissionDecisionCode(){
+    public function getAdmissionDecisionCode()
+    {
         return $this->admissions_decision_code;
     }
 
-    public function setAdmissionDecisionCode($code){
+    public function setAdmissionDecisionCode($code)
+    {
         $this->admissions_decision_code = $code;
     }
 
-    public function getAdmissionDecisionDesc(){
+    public function getAdmissionDecisionDesc()
+    {
         return $this->admissions_decision_desc;
     }
 
-    public function setAdmissionDecisionDesc($desc){
+    public function setAdmissionDecisionDesc($desc)
+    {
         $this->admissions_decision_desc = $desc;
     }
 
-    public function getAddressList(){
+    public function getAddressList()
+    {
         return $this->addressList;
     }
 
-    public function setAddressList(Array $list){
+    public function setAddressList(Array $list)
+    {
         $this->addressList = $list;
     }
 
-    public function getPhoneNumberList(){
+    public function getPhoneNumberList()
+    {
         return $this->phoneNumberList;
     }
 
-    public function setPhoneNumberList(Array $list){
+    public function setPhoneNumberList(Array $list)
+    {
         $this->phoneNumberList = $list;
     }
 
-    public function getDataSource(){
+    public function getDataSource()
+    {
         return $this->dataSource;
     }
 
-    public function setDataSource($source){
+    public function setDataSource($source)
+    {
         $this->dataSource = $source;
     }
+
 }
