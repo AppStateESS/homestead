@@ -58,11 +58,10 @@ class ShowCheckoutFormCommand extends Command {
             NQ::simple('hms', hms\NotificationView::ERROR, 'Imporperly formatted Banner ID.');
             $errorCmd->redirect();
         }
-
         // Try to lookup the student in Banner
         try {
             // If it's all numeric assume it's a student ID, otherwise assume it's a username
-            if (is_numeric($bannerId)) {
+            if (is_numeric($bannerId) && strlen((string)$bannerId) == 9) {
                 $student = StudentFactory::getStudentByBannerId($bannerId, $term);
             } else {
                 $student = StudentFactory::getStudentByUsername($bannerId, $term);
