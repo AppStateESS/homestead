@@ -28,7 +28,7 @@ class CheckinDocumentView extends hms\View {
         $pdfCmd = CommandFactory::getCommand('GenerateInfoCard');
         $pdfCmd->setCheckinId($this->checkin->getId());
 
-        $tpl['INFO_CARD_LINK'] = $pdfCmd->getLink('Resident Information Card');
+        $tpl['INFO_CARD_LINK'] = $pdfCmd->getLink('Resident Information Card', '_blank');
 
         return PHPWS_Template::process($tpl, 'hms', 'admin/checkinComplete.tpl');
     }
