@@ -1,13 +1,14 @@
-<div style="margin:auto; text-align:center">
-  <h1>{NAME} <span style="color: #CCC">({BANNER_ID})</span></h1>
-  <h3>checking in to</h3>
-  <h1>{ASSIGNMENT}</h1>
+<div class="well" style="margin:auto; text-align:center">
+    <p style="font-size : 1.8em; font-weight: bold;">
+        {NAME} <span style="color: #CCC">({BANNER_ID})</span><br />
+        <span style="font-weight:normal">checking in to</span><br />
+        {ASSIGNMENT}
+    </p>
 </div>
 <hr />
 
 {START_FORM}
 {KEY_CODE_LABEL}:&nbsp;{KEY_CODE}
-<br /><br />
 
-<span style="margin-left:70px;">{SUBMIT}</span>
+<p>{SUBMIT}</p>
 {END_FORM}
