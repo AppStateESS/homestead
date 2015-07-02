@@ -1,7 +1,7 @@
 <?php
 
-class CheckoutStartView extends hms\View {
-
+class CheckoutStartView extends hms\View
+{
     private $halls;
     private $term;
 
@@ -15,6 +15,7 @@ class CheckoutStartView extends hms\View {
     {
         javascript('jquery');
         javascript('jquery_ui');
+        javascript('select2');
         javascriptMod('hms', 'jqueryCookie');
         javascriptMod('hms', 'checkinStart');
 
@@ -28,15 +29,16 @@ class CheckoutStartView extends hms\View {
         $submitCmd->initForm($form);
 
         $form->addDropbox('residence_hall', array(0 => 'Select a hall..') + $this->halls);
+        $form->addCssClass('residence_hall', 'form-control');
         $form->setLabel('residence_hall', 'Residence Hall');
 
-        if(count($this->halls) == 1){
+        if (count($this->halls) == 1) {
             $keys = array_keys($this->halls);
             $form->addHidden('residence_hall_hidden', $keys[0]);
 
             setcookie('hms-checkin-hall-id', $keys[0]); // Force the hall selection cookie to the one hall this user has
             setcookie('hms-checkin-hall-name', $this->halls[$keys[0]]);
-        }else{
+        } else {
             $form->addHidden('residence_hall_hidden');
         }
 
@@ -55,4 +57,5 @@ class CheckoutStartView extends hms\View {
 
         return PHPWS_Template::process($tpl, 'hms', 'admin/checkoutStart.tpl');
     }
+
 }
