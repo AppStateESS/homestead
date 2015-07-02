@@ -1,16 +1,17 @@
-{START_FORM}
-<h2>{TITLE}</h2>
-{MENU_LINK}<br /><br />
-<!-- BEGIN error_msg -->
-<span class="error">{ERROR}</span><br />
-<!-- END error_msg -->
+<h1>{TITLE}</h1>
+
 <div class="row">
-    <div class="col-md-8">
+    <div class="col-md-5">
         <div class="form-group">
-            <p>Please select a Learning Community from the list below to see a roster for that community.</p>
-            {RLC}
+            <p>Select a Learning Community to see a roster for that community.</p>
+            {START_FORM}
+            <div class="form-group">
+                {RLC}
+            </div>
+            <div class="form-group">
+                {SUBMIT}
+            </div>
+            {END_FORM}
         </div>
     </div>
 </div>
-{SUBMIT}
-{END_FORM}
