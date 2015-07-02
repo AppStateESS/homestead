@@ -1507,6 +1507,15 @@ function hms_update(&$content, $currentVersion)
             if (PEAR::isError($result)) {
                 return $result;
             }
+            
+        case version_compare($currentVersion, '0.5.4', '<') :
+            $content[] = '<pre>Adding hms_hall_structure view.</pre>';
+            $db = new PHPWS_DB();
+            $result = $db->importFile(PHPWS_SOURCE_DIR . 'mod/hms/boost/updates/00-05-04.sql');
+            if (PEAR::isError($result)) {
+                return $result;
+            }
+            
     }
 
     return TRUE;
