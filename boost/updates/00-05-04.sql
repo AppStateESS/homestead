@@ -47,3 +47,5 @@ CREATE VIEW hms_hall_structure AS SELECT hms_bed.id AS bedid,
      JOIN hms_room ON hms_bed.room_id = hms_room.id
      JOIN hms_floor ON hms_room.floor_id = hms_floor.id
      JOIN hms_residence_hall ON hms_floor.residence_hall_id = hms_residence_hall.id;
+
+     update hms_lottery_application set early_release = 'intl_exchange' where early_release = 'intl_exchagne';

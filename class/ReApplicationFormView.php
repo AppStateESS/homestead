@@ -172,7 +172,7 @@ class ReApplicationFormView extends hms\View {
         $reasons['withdraw']         = "Withdrawing";
         $reasons['marriage']         = "Getting married";
         $reasons['study_abroad']     = "Study Abroad for Spring";
-        $reasons['intl_exchagne']    = "International exchange ending";
+        $reasons['intl_exchange']    = "International exchange ending";
 
         $form->addDropBox('early_release', $reasons);
         $form->setLabel('early_release', 'Will you apply for early release?');

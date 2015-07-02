@@ -94,7 +94,7 @@ class EarlyRelease extends Report implements iCSVReport
                 $row['early_release'] = 'Studying abroad for the Spring';
                 $this->abroadTotal++;
             }
-            else if($row['early_release'] == 'intl_exchagne')
+            else if($row['early_release'] == 'intl_exchange')
             {
                 $row['early_release'] = 'International Exchange Ending';
                 $this->internationalTotal++;
