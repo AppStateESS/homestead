@@ -3,7 +3,7 @@
 
 <p><a href="{ADD_URI}" class="btn btn-success"><i class="fa fa-plus"></i> Add Member(s)</a></p>
 
-<table class="table table-striped">
+<table class="table table-striped table-hover">
     <tr>
         <th>Name </th>
         <th>Banner Id</th>
