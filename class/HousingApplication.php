@@ -529,6 +529,7 @@ class HousingApplication {
         }
 
         $db->addWhere('banner_id', $student->getBannerId());
+        $db->addOrder('term ASC');
 
         $result = $db->getObjects('HousingApplication');
 
