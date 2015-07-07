@@ -2,9 +2,19 @@
 
 <div class="col-md-12">
 	<div class="row">
-		<p class="col-md-6">
-			Executed on: {EXEC_DATE} by {EXEC_USER}
-		</p>
+		<div class="col-md-6">
+			<p>
+				Executed on: {EXEC_DATE} by {EXEC_USER}
+			</p>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-6">
+			<p>
+				<strong>Total RAs: {TOTAL}</strong>
+			</p>
+		</div>
 	</div>
 
 	<table class="table table-striped table-hover">
