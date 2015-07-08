@@ -29,7 +29,7 @@ class CheckinStartView extends hms\View {
         $submitCmd->initForm($form);
 
         $form->addDropbox('residence_hall', array(0 => 'Select a hall..') + $this->halls);
-        $form->setLabel('residence_hall', 'Residenche Hall');
+        $form->setLabel('residence_hall', 'Residence Hall');
         $form->addCssClass('residence_hall', 'form-control');
 
         if(count($this->halls) == 1){
