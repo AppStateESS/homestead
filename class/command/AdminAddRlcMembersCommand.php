@@ -113,6 +113,7 @@ class AdminAddRlcMembersCommand extends Command {
             } else {
                 // Reset the application's denial flag, see #1026
                 $rlcApp->setDenied(0);
+                $rlcApp->save();
 
                 // RLC application already exists
                 NQ::simple('hms', hms\NotificationView::WARNING, "RLC application already exists for {$student->getName()}({$student->getBannerID()})");
