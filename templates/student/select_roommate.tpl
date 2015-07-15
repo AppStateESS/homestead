@@ -60,9 +60,9 @@
         <div class="row">
             <div class="col-md-4 col-md-offset-2">
                 <div class="form-group">
-                    <label for="phpws_form_username">ASU Email:</label>
+                    <label for="{USERNAME_ID}">Roommate's ASU Email:</label>
                     <div class="input-group">
-                        {USERNAME}
+                        <input type="text" class="form-control input-lg" name="{USERNAME_NAME}" id="{USERNAME_ID}" autofocus>
                         <div class="input-group-addon">@appstate.edu</div>
                     </div>
                 </div>
@@ -72,7 +72,7 @@
             <div class="col-md-8">
                 <div class="form-group">
                     <a href="index.php" class="btn btn-default pull-left"><i class="fa fa-chevron-left"></i> Cancel</a>
-                    <button type="submit" class="btn btn-success btn-lg pull-right">Continue <i class="fa fa-chevron-right"></i></button>
+                    <button type="submit" class="btn btn-success btn-lg pull-right">Send Request <i class="fa fa-chevron-right"></i></button>
                 </div>
             </div>
         </div>

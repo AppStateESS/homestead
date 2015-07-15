@@ -56,10 +56,9 @@ class ShowRoommateConfirmAcceptCommand extends Command
         $form->addTplTag('CAPTCHA_IMAGE', Captcha::get());
         $form->addTplTag('NAME', $requestor->getFullName());
 
-        $form->addSubmit('Confirm');
+        $form->addSubmit('Confirm Request');
+        $form->addCssClass('submit', 'btn btn-success btn-lg');
 
         $context->setContent(PHPWS_Template::process($form->getTemplate(), 'hms', 'student/roommate_accept_confirm.tpl'));
     }
 }
-
-
