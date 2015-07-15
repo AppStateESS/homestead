@@ -1,11 +1,4 @@
 <?php
-PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-PHPWS_Core::initModClass('hms', 'HousingApplicationFactory.php');
-PHPWS_Core::initModClass('hms', 'Checkin.php');
-PHPWS_Core::initModClass('hms', 'CheckinFactory.php');
-PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-
 
 class CheckinFormSubmitCommand extends Command {
 
@@ -67,20 +60,19 @@ class CheckinFormSubmitCommand extends Command {
         $currUser = Current_User::getUsername();
 
         // Check for an existing Check-in
-        //TODO by persistent bed id
         $checkin = CheckinFactory::getCheckinByBed($student, $bed, $term);
 
         // If there's not already a checkin for this bed, create a new one
         if (is_null($checkin)) {
             $checkin = new Checkin($student, $bed, $term, $currUser, $keyCode);
-        } else {
-            // Otherwise, update the existing checkin
+        } else if($checkin->getBedId() == $bed->getId() && (time() - $checkin->getCheckinDate()) < Checkin::CHECKIN_TIMEOUT) {
+            // Check-in already exists, and it's within the timout window, so we'll overwrite the existing checkin
             $updatedCheckin = new Checkin($student, $bed, $term, $currUser, $keyCode);
             $updatedCheckin->substitueForExistingCheckin($checkin); // Use the old checkin to replace this one
             $checkin = $updatedCheckin;
-            // $checkin->setCheckoutBy($currUser);
-            // $checkin->setCheckinDate(time());
-            // $checkin->setKeyCode($keyCode);
+        } else {
+            // There's an existing checkin, but it's after the timeout, so we need to make a new checkin
+            $checkin = new Checkin($student, $bed, $term, $currUser, $keyCode);
         }
 
         $checkin->save();
