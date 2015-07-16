@@ -146,4 +146,4 @@ $(function() {
         }
     });
 });
-</script
+</script>
