@@ -6,12 +6,13 @@
         <th>Assigned On</th>
         <th>Removed On</th>
     </tr>
-    <?php foreach ($rows as $row): extract($row); ?>
+    <?php if(!empty($rows)): foreach ($rows as $row): extract($row); ?>
     <tr>
         <td><?=$student?></td>
         <td><?=$banner_id?></td>
         <td><?=$assigned_on_date?></td>
         <td><?=$removed_on_date?></td>
     </tr>
-    <?php endforeach; ?>
+    <?php endforeach; endif;?>
 </table>
+<?=$message?>

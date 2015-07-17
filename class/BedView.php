@@ -100,9 +100,10 @@ class BedView extends hms\View
     {
         $data = $this->getBedHistoryArray();
         if (empty($data)) {
-            return null;
+            $tpl = array('rows' => array(), 'message' => 'No previous history');
+        } else {
+            $tpl = array('rows' => $data, 'message' => null);
         }
-        $tpl = array('rows' => $data);
         $template = new \Template($tpl);
         $template->setModuleTemplate('hms', 'admin/getBedHistoryContent.html');
         return $template->get();
@@ -118,9 +119,12 @@ class BedView extends hms\View
         $db = \Database::newDB();
         $t1 = $db->addTable('hms_assignment_history');
         $t1->addFieldConditional('bed_id', $this->bed->id);
-        if (isset($this->bed->_curr_assignment)) {
-            $t1->addFieldConditional('banner_id', $this->bed->_curr_assignment->banner_id, '!=');
-        }
+        /*
+          if (isset($this->bed->_curr_assignment)) {
+          $t1->addFieldConditional('banner_id', $this->bed->_curr_assignment->banner_id, '!=');
+          }
+         * 
+         */
         $t1->addOrderBy('assigned_on', 'DESC');
         $result = $db->select();
         if (empty($result)) {
@@ -129,7 +133,11 @@ class BedView extends hms\View
         foreach ($result as $key => $assignment) {
             $student = StudentFactory::getStudentByBannerID($assignment['banner_id'], $this->bed->id);
             $result[$key]['assigned_on_date'] = strftime('%Y-%m-%d %r', $assignment['assigned_on']);
-            $result[$key]['removed_on_date'] = strftime('%c', $assignment['removed_on']);
+            if (empty($assignment['removed_on'])) {
+                $result[$key]['removed_on_date'] = 'Never';
+            } else {
+                $result[$key]['removed_on_date'] = strftime('%c', $assignment['removed_on']);
+            }
             $result[$key]['student'] = $student->getProfileLink();
         }
         return $result;
