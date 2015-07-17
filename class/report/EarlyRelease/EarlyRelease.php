@@ -1,7 +1,7 @@
 <?php
 
-  class EarlyRelease extends Report implements iCSVReport
-  {
+class EarlyRelease extends Report implements iCSVReport
+{
     const friendlyName = 'Early Release';
     const shortName = 'Early Release';
 
@@ -23,19 +23,19 @@
 
     public function __construct($id = 0)
     {
-      parent::__construct($id);
+        parent::__construct($id);
 
-      $this->total = 0;
-      $this->transferTotal = 0;
-      $this->gradTotal = 0;
-      $this->teachingTotal = 0;
-      $this->internTotal = 0;
-      $this->withdrawTotal = 0;
-      $this->marriageTotal = 0;
-      $this->abroadTotal = 0;
-      $this->internationTotal = 0;
+        $this->total = 0;
+        $this->transferTotal = 0;
+        $this->gradTotal = 0;
+        $this->teachingTotal = 0;
+        $this->internTotal = 0;
+        $this->withdrawTotal = 0;
+        $this->marriageTotal = 0;
+        $this->abroadTotal = 0;
+        $this->internationTotal = 0;
 
-      $this->data = array();
+        $this->data = array();
 
 
 
@@ -43,82 +43,67 @@
 
     public function execute()
     {
+        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
-      PHPWS_Core::initModClass('hms', 'HMS_Util.php');
+        $db = PdoFactory::getPdoInstance();
 
-      $db = new PHPWS_DB('hms_new_application');
+        $query = 'SELECT hms_new_application.username, hms_new_application.banner_id, hms_lottery_application.early_release FROM hms_new_application JOIN hms_lottery_application ON hms_new_application.id = hms_lottery_application.id WHERE (hms_new_application.term = :term AND hms_lottery_application.early_release IS NOT NULL) ORDER BY hms_lottery_application.early_release ASC, hms_new_application.username ASC';
 
-      $db->addJoin('', 'hms_new_application', 'hms_lottery_application', 'id', 'id');
+        $stmt = $db->prepare($query);
 
-      $db->addColumn('hms_new_application.username');
-      $db->addColumn('hms_new_application.banner_id');
-      $db->addColumn('hms_lottery_application.early_release');
+        $stmt->execute(array('term' => $this->term));
 
-      $db->addWhere('hms_new_application.term', $this->term);
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-      $db->addOrder(array('hms_lottery_application.early_release ASC', 'hms_new_application.username ASC'));
-
-      $results = $db->select();
-
-      if(PHPWS_Error::isError($results)){
-        throw new DatabaseException($results->toString());
-      }
-
-      foreach($results as $row)
-      {
-        $this->total++;
-
-        if($row['early_release'] == 'transfer')
+        foreach($results as $row)
         {
-          $row['early_release'] = 'Transferring to another university';
-          $this->transferTotal++;
-        }
-        else if($row['early_release'] == 'grad')
-        {
-          $row['early_release'] = 'Graduating in December';
-          $this->gradTotal++;
-        }
-        else if($row['early_release'] == 'student_teaching')
-        {
-          $row['early_release'] = 'Student Teaching';
-          $this->teachingTotal++;
-        }
-        else if($row['early_release'] == 'internship')
-        {
-          $row['early_release'] = 'Internship';
-          $this->internTotal++;
-        }
-        else if($row['early_release'] == 'withdraw')
-        {
-          $row['early_release'] = 'Withdrawal';
-          $this->withdrawTotal++;
-        }
-        else if($row['early_release'] == 'marriage')
-        {
-          $row['early_release'] = 'Getting Married';
-          $this->marriageTotal++;
-        }
-        else if($row['early_release'] == 'study_abroad')
-        {
-          $row['early_release'] = 'Studying abroad for the Spring';
-          $this->abroadTotal++;
-        }
-        else if($row['early_release'] == 'intl_exchagne')
-        {
-          $row['early_release'] = 'International Exchange Ending';
-          $this->internationalTotal++;
-        }
+            $this->total++;
 
+            if($row['early_release'] == 'transfer')
+            {
+                $row['early_release'] = 'Transferring to another university';
+                $this->transferTotal++;
+            }
+            else if($row['early_release'] == 'grad')
+            {
+                $row['early_release'] = 'Graduating in December';
+                $this->gradTotal++;
+            }
+            else if($row['early_release'] == 'student_teaching')
+            {
+                $row['early_release'] = 'Student Teaching';
+                $this->teachingTotal++;
+            }
+            else if($row['early_release'] == 'internship')
+            {
+                $row['early_release'] = 'Internship';
+                $this->internTotal++;
+            }
+            else if($row['early_release'] == 'withdraw')
+            {
+                $row['early_release'] = 'Withdrawal';
+                $this->withdrawTotal++;
+            }
+            else if($row['early_release'] == 'marriage')
+            {
+                $row['early_release'] = 'Getting Married';
+                $this->marriageTotal++;
+            }
+            else if($row['early_release'] == 'study_abroad')
+            {
+                $row['early_release'] = 'Studying abroad for the Spring';
+                $this->abroadTotal++;
+            }
+            else if($row['early_release'] == 'intl_exchange')
+            {
+                $row['early_release'] = 'International Exchange Ending';
+                $this->internationalTotal++;
+            }
 
+            $row['name'] = StudentFactory::getStudentByBannerId($row['banner_id'], $this->term)->getFullName();
 
-        if(!empty($row['early_release']))
-        {
-          $row['name'] = StudentFactory::getStudentByBannerId($row['banner_id'], $this->term)->getFullName();
-
-          $this->data[] = $row;
+            $this->data[] = $row;
         }
-
-      }
     }
 
     public function getCsvColumnsArray()
@@ -133,62 +118,62 @@
 
     public function getData()
     {
-      return $this->data;
+        return $this->data;
     }
 
     public function setTerm($term)
     {
-      $this->term = $term;
+        $this->term = $term;
     }
 
     public function getTerm()
     {
-      return $this->term;
+        return $this->term;
     }
 
     public function getTotal()
     {
-      return $this->total;
+        return $this->total;
     }
 
     public function getTransfersTotal()
     {
-      return $this->transferTotal;
+        return $this->transferTotal;
     }
 
     public function getGradTotal()
     {
-      return $this->gradTotal;
+        return $this->gradTotal;
     }
 
     public function getTeachingTotal()
     {
-      return $this->teachingTotal;
+        return $this->teachingTotal;
     }
 
     public function getInternTotal()
     {
-      return $this->internTotal;
+        return $this->internTotal;
     }
 
     public function getWithdrawTotal()
     {
-      return $this->withdrawTotal;
+        return $this->withdrawTotal;
     }
 
     public function getMarriageTotal()
     {
-      return $this->marriageTotal;
+        return $this->marriageTotal;
     }
 
     public function getAbroadTotal()
     {
-      return $this->abroadTotal;
+        return $this->abroadTotal;
     }
 
     public function getInternationalTotal()
     {
-      return $this->internationalTotal;
+        return $this->internationalTotal;
     }
 
-  }
+}

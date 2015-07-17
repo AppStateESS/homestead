@@ -39,7 +39,7 @@ class RoommateSelectionMenuBlockView extends hms\View {
                 $cmd = CommandFactory::GetCommand('ShowRoommateBreak');
                 $rm = HMS_Roommate::getByUsernames(UserStatus::getUsername(), $roommate->getUsername(), $this->term);
                 $cmd->setRoommateId($rm->id);
-                $tpl['ROOMMATE_BREAK'] = $cmd->getLink('Break roommate pairing');
+                $tpl['ROOMMATE_BREAK'] = $cmd->getLink('Remove roommate request');
             }
         }
         // Roommate selected hasn't started yet
@@ -86,5 +86,3 @@ class RoommateSelectionMenuBlockView extends hms\View {
         return PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/roommateMenuBlock.tpl');
     }
 }
-
-

@@ -71,12 +71,10 @@ class RoommateBreakCommand extends Command
         HMS_Email::send_break_emails($roommate, $username);
 
         $name = $other->getFullName();
-        NQ::Simple('hms', hms\NotificationView::SUCCESS, "You and $name are no longer marked as roommates.");
+        NQ::Simple('hms', hms\NotificationView::SUCCESS, "You have removed your roommate request for $name.");
 
         $cmd = CommandFactory::getCommand('ShowStudentMenu');
         $cmd->redirect();
     }
 
 }
-
-

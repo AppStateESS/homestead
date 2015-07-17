@@ -12,16 +12,14 @@ class SearchByRlcView extends hms\View {
         $form->addHidden('module', 'hms');
         $form->addHidden('action', 'ShowSearchByRlc');
         $form->addSubmit('submit', _('Search'));
-        $form->setClass('submit', 'btn btn-primary');
+        $form->setClass('submit', 'btn btn-primary pull-right');
 
         $tags = $form->getTemplate();
         $tags['TITLE'] = "RLC Search";
 
         Layout::addPageTitle("RLC Search");
-        
+
         $final = PHPWS_Template::processTemplate($tags, 'hms', 'admin/search_by_rlc.tpl');
         return $final;
     }
 }
-
-

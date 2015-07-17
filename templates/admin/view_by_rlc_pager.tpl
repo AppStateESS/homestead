@@ -1,9 +1,9 @@
-<a href="{BACK_LINK}" class="btn btn-info"><i class="fa fa-arrow-left"></i> RLC List</a>
+<a href="{BACK_LINK}" class="btn btn-default"><i class="fa fa-chevron-left"></i> RLC List</a>
 <h2>{TITLE}</h2>
 
 <p><a href="{ADD_URI}" class="btn btn-success"><i class="fa fa-plus"></i> Add Member(s)</a></p>
 
-<table class="table table-striped">
+<table class="table table-striped table-hover">
     <tr>
         <th>Name </th>
         <th>Banner Id</th>
@@ -17,7 +17,7 @@
     </tr>
     <!-- BEGIN empty_table -->
     <tr>
-        <td colspan="4">{EMPTY_MESSAGE}</td>
+        <td colspan="9">{EMPTY_MESSAGE}</td>
     </tr>
     <!-- END empty_table -->
     <!-- BEGIN listrows -->

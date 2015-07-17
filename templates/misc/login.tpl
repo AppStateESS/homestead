@@ -8,7 +8,7 @@
 
 <hr>
 
-<p><small class="text-muted">
+<p class="text-muted text-center"><small>
 The Housing Management System is a service of Appalachian State's <a href="http://housing.appstate.edu/">University Housing</a> provided by <a href="http://ess.appstate.edu/">Electronic Student Services</a>.
 </small>
 </p>

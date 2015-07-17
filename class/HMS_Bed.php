@@ -259,7 +259,6 @@ class HMS_Bed extends HMS_Item {
      */
     public function get_assigned_to_link($newWindow = FALSE)
     {
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
         $this->loadAssignment();
 
         if (isset($this->_curr_assignment)) {
@@ -269,11 +268,11 @@ class HMS_Bed extends HMS_Item {
                 $reAssignCmd = CommandFactory::getCommand('ShowAssignStudent');
                 $reAssignCmd->setUsername($this->_curr_assignment->asu_username);
                 $reAssignCmd->setBedId($this->id);
-                $link_re = $reAssignCmd->getLink('<i class="fa fa-refresh"></i> Reassign', null, 'btn btn-primary');
+                $link_re = $reAssignCmd->getLink('<i class="fa fa-refresh"></i> Reassign', null, 'btn btn-default btn-xs');
 
                 $unAssignCmd = CommandFactory::getCommand('ShowUnassignStudent');
                 $unAssignCmd->setUsername($this->_curr_assignment->asu_username);
-                $link_un = $unAssignCmd->getLink('<i class="fa fa-minus-circle"></i> Remove assignment', null, 'btn btn-danger');
+                $link_un = $unAssignCmd->getLink('<i class="fa fa-minus-circle"></i> Remove', null, 'btn btn-danger btn-xs');
             }
 
             try {
@@ -282,7 +281,7 @@ class HMS_Bed extends HMS_Item {
                 return 'Unknown student: ' . $this->_curr_assignment->getBannerId();
             }
 
-            return $student->getProfileLink('btn btn-default') . ' ' . $link_re . ' ' . $link_un;
+            return $student->getProfileLink() . ' ' . $link_re . ' ' . $link_un;
         } else {
             $text = '&lt;unassigned&gt';
             if (UserStatus::isAdmin() && Current_User::allow('hms', 'assignment_maintenance')) {
@@ -315,7 +314,7 @@ class HMS_Bed extends HMS_Item {
             $confirm = array();
             $confirm['QUESTION'] = 'Are you sure want to delete bed ' . $this->bed_letter . '?';
             $confirm['ADDRESS'] = $deleteBedCmd->getURI();
-            $confirm['LINK'] = 'Delete';
+            $confirm['LINK'] = '<i class="fa fa-trash close"></i>';
             $tags['DELETE'] = Layout::getJavascript('confirm', $confirm);
         }
 

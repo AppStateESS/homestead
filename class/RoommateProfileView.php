@@ -75,7 +75,7 @@ class RoommateProfileView extends hms\View {
         	$tpl['KIK_SN'] = $none_given;
         }
 
-        $tpl['ABOUT_ME_LABEL'] = '4. Additional information: ';
+        $tpl['ABOUT_ME_LABEL'] = 'Additional information: ';
         $about_me = $this->profile->get_text('about_me');
         if(!empty($about_me)){
         	$tpl['ABOUT_ME'] = $about_me;

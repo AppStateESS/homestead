@@ -58,9 +58,8 @@ class ShowRoommateBreakCommand extends Command
         $form->addTplTag('NAME', $other->getFullName());
 
         $form->addSubmit('Confirm');
+        $form->addCssClass('submit', 'btn btn-danger');
 
         $context->setContent(PHPWS_Template::process($form->getTemplate(), 'hms', 'student/roommate_break_confirm.tpl'));
     }
 }
-
-

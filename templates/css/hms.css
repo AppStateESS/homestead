@@ -40,6 +40,12 @@
 }
 /***** End Typeahead Styles *****/
 
+/*** To make the user's full name fit in the nav bar without wrapping */
+.navbar-form {
+    padding-right: 3px;
+    padding-left: 3px;
+}
+
 a.header-back {
 	float:left;
 	color: #CCC;

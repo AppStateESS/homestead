@@ -78,12 +78,12 @@ $().ready(function (){
 
     CountWords($("#phpws_form_rlc_question_1"));
     $("#phpws_form_rlc_question_1").on('change keyup paste', function(){
-		CountWords1($("#phpws_form_rlc_question_1"));
+		CountWords($("#phpws_form_rlc_question_1"));
 	});
 
     CountWords($("#phpws_form_rlc_question_2"));
 	$("#phpws_form_rlc_question_2").on('change keyup paste', function(){
-		CountWords2($("#phpws_form_rlc_question_2"));
+		CountWords($("#phpws_form_rlc_question_2"));
 	});
 });
 

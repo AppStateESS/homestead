@@ -7,19 +7,18 @@
  * @package HMS
  */
 
-class RaReportHtmlView extends ReportHtmlView 
+class RaReportHtmlView extends ReportHtmlView
 {
 	protected function render()
     {
 		parent::render();
-		$this->tpl['rows'] = $this->report->getRows();
+		$rows = $this->report->getRows();
+		$this->tpl['rows'] = $rows;
 
 	    $this->tpl['TERM'] = Term::toString($this->report->getTerm());
 
-	    
+		$this->tpl['TOTAL'] = count($rows);
 
 	    return PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/RaReport.tpl');
 	}
 }
-
-

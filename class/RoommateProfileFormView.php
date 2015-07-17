@@ -181,7 +181,9 @@ class RoommateProfileFormView extends hms\View {
         }
         $profile_form->addCssClass('free_time', 'form-control');
 
-        $profile_form->addSubmit('Submit');
+        // Dummy tag to show save button
+        $template['SAVE_BTN'] = '';
+        //$profile_form->addSubmit('Save Profile');
 
         $profile_form->mergeTemplate($template);
         $template = $profile_form->getTemplate();
@@ -191,5 +193,3 @@ class RoommateProfileFormView extends hms\View {
         return PHPWS_Template::process($template,'hms','student/profile_form.tpl');
     }
 }
-
-

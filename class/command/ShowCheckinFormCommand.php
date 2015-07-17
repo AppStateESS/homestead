@@ -34,10 +34,6 @@ class ShowCheckinFormCommand extends Command {
             throw new PermissionException('You do not have permission to checkin students.');
         }
 
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-        PHPWS_Core::initModClass('hms', 'HousingApplicationFactory.php');
-
         $term = Term::getSelectedTerm();
 
         $bannerId = $context->get('bannerId');
@@ -88,23 +84,21 @@ class ShowCheckinFormCommand extends Command {
         }
 
         // Load any existing check-in
-        PHPWS_Core::initModClass('hms', 'CheckinFactory.php');
         $checkin = CheckinFactory::getLastCheckinByBannerId($bannerId, $term);
-
-        // var_dump($checkin);
-        // exit();
 
         // If there is a checkin for the same bed, and the difference between the current time and the checkin time is
         // greater than 48 hours, then show an error.
-        if (!is_null($checkin) && $checkin->getBedId() == $bed->getId() && (time() - $checkin->getCheckinDate()) > Checkin::CHECKIN_TIMEOUT && is_null($checkin->getCheckoutDate())) {
-              NQ::simple('hms', hms\NotificationView::ERROR, $student->getName() . ' has already checked in to ' . $assignment->where_am_i());
-              $errorCmd->redirect();
+        if(!is_null($checkin)) {
+            $checkoutDate = $checkin->getCheckoutDate();
+
+            if ($checkin->getBedId() == $bed->getId() && !isset($checkoutDate) && (time() - $checkin->getCheckinDate()) > Checkin::CHECKIN_TIMEOUT ) {
+                  NQ::simple('hms', hms\NotificationView::ERROR, $student->getName() . ' has already checked in to ' . $assignment->where_am_i());
+                  $errorCmd->redirect();
+            }
         }
 
-        PHPWS_Core::initModClass('hms', 'CheckinFormView.php');
         $view = new CheckinFormView($student, $assignment, $hall, $floor, $room, $checkin);
 
         $context->setContent($view->show());
     }
 }
-
