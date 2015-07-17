@@ -88,10 +88,13 @@ class ShowCheckinFormCommand extends Command {
 
         // If there is a checkin for the same bed, and the difference between the current time and the checkin time is
         // greater than 48 hours, then show an error.
-        $checkoutDate = $checkin->getCheckoutDate();
-        if (!is_null($checkin) && $checkin->getBedId() == $bed->getId() && !isset($checkoutDate) && (time() - $checkin->getCheckinDate()) > Checkin::CHECKIN_TIMEOUT ) {
-              NQ::simple('hms', hms\NotificationView::ERROR, $student->getName() . ' has already checked in to ' . $assignment->where_am_i());
-              $errorCmd->redirect();
+        if(!is_null($checkin)) {
+            $checkoutDate = $checkin->getCheckoutDate();
+
+            if ($checkin->getBedId() == $bed->getId() && !isset($checkoutDate) && (time() - $checkin->getCheckinDate()) > Checkin::CHECKIN_TIMEOUT ) {
+                  NQ::simple('hms', hms\NotificationView::ERROR, $student->getName() . ' has already checked in to ' . $assignment->where_am_i());
+                  $errorCmd->redirect();
+            }
         }
 
         $view = new CheckinFormView($student, $assignment, $hall, $floor, $room, $checkin);
