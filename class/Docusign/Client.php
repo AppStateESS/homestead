@@ -83,9 +83,10 @@ class Client {
             $request->setHeader('X-DocuSign-Authentication', $this->getAuthHeader());
             $response = $http->send($request);
         } catch (\GuzzleHttp\Exception\RequestException $e) {
-        	var_dump($e);
-            var_dump($e->getRequest());
-            exit;
+        	//var_dump($e);
+            //var_dump($e->getRequest());
+            //exit;
+            throw $e;
         }
         $json = $response->json();
         //var_dump($json);exit;
