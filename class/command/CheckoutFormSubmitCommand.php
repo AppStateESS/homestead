@@ -28,32 +28,31 @@ class CheckoutFormSubmitCommand extends Command {
         }
 
         // Grab data from JSON source
-        $data = $context->getJsonData();
+        $bannerId = filter_input(INPUT_POST, 'bannerId', FILTER_VALIDATE_INT);
+        $checkinId = filter_input(INPUT_POST, 'checkinId', FILTER_VALIDATE_INT);
 
-        $bannerId = $data['bannerId'];
-        $checkinId = $data['checkinId'];
-
-        if (!isset($bannerId) || $bannerId == '') {
+        if (empty($bannerId)) {
             throw new InvalidArgumentException('Missing banner id.');
         }
 
-        if (!isset($checkinId) || $checkinId == '') {
+        if (empty($checkinId)) {
             throw new InvalidArgumentException('Missing checkin id.');
         }
 
         // Check for key code
-        $keyCode = $data['keyCode'];
-        $keyReturned = $data['keyReturned'];
+        //$keyCode = filter_input(INPUT_POST, 'keyCode',FILTER_SANITIZE_SPECIAL_CHARS);
+        $keyCode = filter_input(INPUT_POST, 'keyCode',FILTER_VALIDATE_REGEXP, array('options'=>array('regexp'=>'/[^\W]/')));
+        $keyReturned = filter_input(INPUT_POST, 'keyReturned', FILTER_VALIDATE_BOOLEAN);
 
         if (!isset($keyReturned) || !isset($keyCode)) {
+            throw new InvalidArgumentException('Missing key return information.');
+        }
+
+        if ($keyReturned == "1" && empty($keyCode)) {
             throw new InvalidArgumentException('Missing key code.');
         }
 
-        if ($keyReturned == "1" && $keyCode == '') {
-            throw new InvalidArgumentException('Missing key code 2.');
-        }
-
-        $properCheckout = $data['properCheckout'];
+        $properCheckout = filter_input(INPUT_POST, 'properCheckout', FILTER_VALIDATE_BOOLEAN);
 
         $term = Term::getCurrentTerm();
         $this->term = $term;
@@ -87,8 +86,7 @@ class CheckoutFormSubmitCommand extends Command {
         /*****
          * Add new damages
          */
-
-        $newDamages = $data['newDamages'];
+        $newDamages = filter_input(INPUT_POST, 'newDamage', FILTER_SANITIZE_SPECIAL_CHARS, FILTER_REQUIRE_ARRAY);
 
         if (!empty($newDamages)) {
             foreach ($newDamages as $dmg) {
@@ -113,13 +111,14 @@ class CheckoutFormSubmitCommand extends Command {
         } else {
             $checkin->setImproperCheckout(true);
             
+            $improperNote = filter_input(INPUT_POST, 'improperNote', FILTER_SANITIZE_SPECIAL_CHARS);
             // Add damage for improper checkout
             // TODO: Find a better way to handle the magic number for dmg type
-            $dmg = array('type'=>105, 'side'=>'both', 'details'=>$data['improperCheckoutNote'], 'residents' => array(array('studentId'=> $student->getBannerId(), 'selected'=>true))); 
+            $dmg = array('damage_type'=>105, 'side'=>'both', 'note'=>$improperNote, 'residents' => array(array('studentId'=> $student->getBannerId(), 'selected'=>true))); 
             $this->addDamage($dmg, $room);
             
             // Add the improper checkout note
-            $checkin->setImproperCheckoutNote($data['improperCheckoutNote']);
+            $checkin->setImproperCheckoutNote($improperNote);
         }
 
         if ($keyReturned == "1") {
@@ -129,7 +128,7 @@ class CheckoutFormSubmitCommand extends Command {
             
             // Add a damage record for key not returned
             // TODO: Find a better way to handle the magic number for dmg type
-            $dmg = array('type'=>79, 'side'=>'both', 'details'=>'Key not returned.', 'residents' => array(array('studentId'=> $student->getBannerId(), 'selected'=>true)));
+            $dmg = array('damage_type'=>79, 'side'=>'both', 'note'=>'Key not returned.', 'residents' => array(array('studentId'=> $student->getBannerId(), 'selected'=>true)));
             $this->addDamage($dmg, $room);
         }
 
@@ -174,24 +173,15 @@ class CheckoutFormSubmitCommand extends Command {
             }
         }
 
-
         // Cleanup and redirect
-
         NQ::simple('hms', hms\NotificationView::SUCCESS, 'Checkout successful.');
-
-        $cmd = CommandFactory::getCommand('ShowCheckoutDocument');
-        $cmd->setCheckinId($checkin->getId());
-        //$cmd->redirect();
-
-        header('HTTP/1.1 201 Created');
-        $path = $cmd->getURI();
-        header("Location: $path");
+        NQ::close();
+        exit;
     }
 
     private function addDamage(Array $dmg, HMS_Room $room)
     {
-        // Create the damage
-        $damage = new RoomDamage($room, $this->term, $dmg['type'], $dmg['side'], $dmg['details']);
+        $damage = new RoomDamage($room, $this->term, $dmg['damage_type'], $dmg['side'], $dmg['note']);
 
         // Save the damage
         RoomDamageFactory::save($damage);
