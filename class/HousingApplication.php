@@ -281,22 +281,16 @@ class HousingApplication {
         switch($this->application_type) {
             case 'fall':
                 return "Fall";
-                break;
             case 'spring':
                 return "Spring";
-                break;
             case 'summer':
                 return "Summer";
-                break;
             case 'lottery':
                 return "Re-application";
-                break;
             case 'offcampus_waiting_list':
                 return "Open Waiting-list";
-                break;
             default:
                 return "Unknown";
-                break;
         }
     }
 
@@ -370,6 +364,9 @@ class HousingApplication {
      * return true for cancelled applications. If false (default), then this method will
      * ignore cancelled applications.
      *
+     * @deprecated
+     * @see HousingApplicationFactory::getAppByStudent()
+     *
      * @param unknown    $username
      * @param unknown    $term
      * @param string     $cancelled
@@ -384,7 +381,7 @@ class HousingApplication {
 
         $db->addWhere('term', $term);
 
-        if (!$cancelled) {
+        if ($cancelled === false) {
             $db->addWhere('cancelled', 0);
         }
 
@@ -401,18 +398,16 @@ class HousingApplication {
         }
     }
 
-    // TODO move this to the HousingApplicationFactory class, perhaps?
-    // TODO make this static too
     /**
     * Returns a HousingApplication for the given user name.
     *
     * @deprecated
+    * @see HousingApplicationFactory::getAppByStudent()
     * @param unknown_type $username
     * @param unknown_type $term
     * @param unknown_type $applicationType
     * @throws DatabaseException
     * @throws InvalidArgumentException
-    * @see HousingApplicationFactory::getAppByStudent()
     */
     public static function getApplicationByUser($username, $term, $applicationType = null)
     {
@@ -422,9 +417,6 @@ class HousingApplication {
         PHPWS_Core::initModClass('hms', 'SummerApplication.php');
         PHPWS_Core::initModClass('hms', 'LotteryApplication.php');
         PHPWS_Core::initModClass('hms', 'WaitingListApplication.php');
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-
-        $student = StudentFactory::getStudentByUsername($username, $term);
 
         $db = new PHPWS_DB('hms_new_application');
         $db->addWhere('username', $username);
@@ -478,7 +470,7 @@ class HousingApplication {
      * @param string $banner_id
      * @param string $term
      *
-     * @return multitype:Ambigous <NULL, FallApplication>
+     * @return mixed <NULL, FallApplication>
      */
     public static function getAllApplications($username = null, $banner_id = null, $term = null)
     {
@@ -603,7 +595,7 @@ class HousingApplication {
      *
      * @throws InvalidTermException
      * @throws DatabaseException
-     * @return multitype:unknown
+     * @return mixed
      */
     public static function getUnassignedFreshmenApplications($term, $gender)
     {
