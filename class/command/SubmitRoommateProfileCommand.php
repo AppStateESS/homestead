@@ -41,8 +41,9 @@ class SubmitRoommateProfileCommand extends Command {
 
         # Alternate contact info
         $contact_array = array("alternate_email", "fb_link", "instagram_sn", "twitter_sn", "tumblr_sn", "kik_sn", "about_me");
-		
-		for ($x = 0; $x < count($contact_array); $x++)
+		$contactSize = count($contact_array);
+
+		for ($x = 0; $x < $contactSize; $x++)
 		{
 			if (isset($_REQUEST[$contact_array[$x]]) && $_REQUEST[$contact_array[$x]] != '')
 			{
@@ -55,12 +56,13 @@ class SubmitRoommateProfileCommand extends Command {
 		}
 
         # Hobbies check boxes
-        $hobbies_array = array("arts_and_crafts", "books_and_reading", "cars", "church_activities", 
-        "collecting", "computers_and_technology", "dancing", "fashion", "fine_arts", "gardening", 
-        "games", "humor", "investing_personal_finance", "movies", "music", "outdoor_activities", 
+        $hobbies_array = array("arts_and_crafts", "books_and_reading", "cars", "church_activities",
+        "collecting", "computers_and_technology", "dancing", "fashion", "fine_arts", "gardening",
+        "games", "humor", "investing_personal_finance", "movies", "music", "outdoor_activities",
         "pets_and_animals", "photography", "politics", "sports", "travel", "tv_shows", "volunteering", "writing", "rotc");
-        
-		for ($x = 0; $x < count($hobbies_array); $x++)
+        $hobbiesSize = count($hobbies_array);
+
+		for ($x = 0; $x < $hobbiesSize; $x++)
 		{
 			if (isset($_REQUEST['hobbies_checkbox'][$hobbies_array[$x]]))
 			{
@@ -73,11 +75,12 @@ class SubmitRoommateProfileCommand extends Command {
 		}
 
         # Music check boxes
-        $music_array = array("alternative", "ambient", "beach", "bluegrass", "blues", "christian", "classical", 
-		"classic_rock", "country", "electronic", "folk", "heavy_metal", "hip_hop", "house", "industrial", "jazz", 
+        $music_array = array("alternative", "ambient", "beach", "bluegrass", "blues", "christian", "classical",
+		"classic_rock", "country", "electronic", "folk", "heavy_metal", "hip_hop", "house", "industrial", "jazz",
 		"popular_music", "progressive", "punk", "r_and_b", "rap", "reggae", "rock", "world_music");
-		
-		for ($x = 0; $x < count($music_array); $x++)
+        $musicSize = count($music_array);
+
+		for ($x = 0; $x < $musicSize; $x++)
 		{
 			if (isset($_REQUEST['music_checkbox'][$music_array[$x]]))
 			{
@@ -88,11 +91,12 @@ class SubmitRoommateProfileCommand extends Command {
 				$profile->set_checked($music_array[$x],0);
 			}
 		}
-		
+
         # Study times
         $study_array = array("study_early_morning", "study_morning_afternoon", "study_afternoon_evening", "study_evening", "study_late_night");
-        
-        for ($x = 0; $x < count($study_array); $x++)
+        $studySize = count($study_array);
+
+        for ($x = 0; $x < $studySize; $x++)
 		{
 			if (isset($_REQUEST['study_times'][$study_array[$x]]))
 			{
@@ -103,12 +107,13 @@ class SubmitRoommateProfileCommand extends Command {
 				$profile->set_checked($study_array[$x],0);
 			}
 		}
-		
-        # Drop downs
-        $drop_down_array = array("political_views", "major", "experience", 
-        "sleep_time", "wakeup_time", "overnight_guests", "loudness", "cleanliness", "free_time");
 
-		for ($x = 0; $x < count($drop_down_array); $x++)
+        # Drop downs
+        $drop_down_array = array("political_views", "major", "experience",
+        "sleep_time", "wakeup_time", "overnight_guests", "loudness", "cleanliness", "free_time");
+        $politicalSize = count($drop_down_array);
+
+		for ($x = 0; $x < $politicalSize; $x++)
 		{
 			if (isset($_REQUEST[$drop_down_array[$x]]) && $_REQUEST[$drop_down_array[$x]] != '')
 			{
@@ -119,13 +124,14 @@ class SubmitRoommateProfileCommand extends Command {
 				$profile->set_text($drop_down_array[$x], '');
 			}
 		}
-		
+
         # Spoken Languages
-        $lang_array = array("arabic" , "bengali" , "chinese" , "english" , "french" , "german" , "hindi" , 
-        "italian" , "japanese" , "javanese" , "korean" , "malay" , "marathi" , "portuguese" , "punjabi" , 
+        $lang_array = array("arabic" , "bengali" , "chinese" , "english" , "french" , "german" , "hindi" ,
+        "italian" , "japanese" , "javanese" , "korean" , "malay" , "marathi" , "portuguese" , "punjabi" ,
         "russian" , "tamil" , "telugu" , "vietnamese");
+        $langSize = count($lang_array);
         
-		for ($x = 0; $x < count($lang_array); $x++)
+		for ($x = 0; $x < $langSize; $x++)
 		{
 			if (isset($_REQUEST['language_checkbox'][$lang_array[$x]]))
 			{
@@ -136,7 +142,7 @@ class SubmitRoommateProfileCommand extends Command {
 				$profile->set_checked($lang_array[$x], 0);
 			}
 		}
-		
+
         $profile->save();
 
         NQ::simple('hms', hms\NotificationView::SUCCESS, 'Your roommate profile was successfully created/updated.');
@@ -144,4 +150,3 @@ class SubmitRoommateProfileCommand extends Command {
         $successCmd->redirect();
     }
 }
-
