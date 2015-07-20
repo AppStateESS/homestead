@@ -52,7 +52,7 @@ class GenderDistributionByHall extends Report implements iCsvReport {
         }
 
         // Get all of the residence halls for this term
-        $halls = HMS_Residence_Hall::get_halls($this->term);
+        $halls = ResidenceHallFactory::getHallsForTerm($this->term);
 
         foreach($halls as $hall){
             $hallName = $hall->hall_name;

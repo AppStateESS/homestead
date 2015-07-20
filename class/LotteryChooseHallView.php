@@ -1,25 +1,23 @@
 <?php
 
 class LotteryChooseHallView extends hms\View {
-    
+
     private $student;
     private $term;
     private $rlcAssignment;
-    
+
     public function __construct(Student $student, $term, HMS_RLC_Assignment $rlcAssignment = null)
     {
         $this->student = $student;
         $this->term = $term;
         $this->rlcAssignment = $rlcAssignment;
     }
-    
+
     public function show()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
-            
         $tpl['TERM'] = Term::toString($this->term) . ' - ' . Term::toString(Term::getNextTerm($this->term));
-        
-        $halls = HMS_Residence_Hall::get_halls($this->term);
+
+        $halls = ResidenceHallFactory::getHallsForTerm($this->term);
 
         // Check for an RLC Assignment, and that it's in the correct state
         if($this->rlcAssignment != null && $this->rlcAssignment->getStateName() == 'selfselect-invite') {
@@ -51,7 +49,7 @@ class LotteryChooseHallView extends hms\View {
             $row['HALL_NAME']   = $chooseCmd->getLink($hall->hall_name);
             $tpl['hall_list'][] = $row;
         }
-        
+
         if(!$somethingsAvailable){
         	unset($tpl['hall_list']);
             $tpl['NOTHING_LEFT'] = '';
