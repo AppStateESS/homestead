@@ -70,6 +70,8 @@ class HousingApplicationConfirmCommand extends Command {
             case TERM_SUMMER2:
                 $appType = 'summer';
                 break;
+            default:
+                throw new Exception('Unknown application type');
         }
 
         $application = HousingApplicationFactory::getApplicationFromSession($_SESSION['application_data'], $term, $student, $appType);
@@ -77,11 +79,10 @@ class HousingApplicationConfirmCommand extends Command {
         // If old created dates exist, use them as the 'created on' dates
         if(isset($oldCreatedOn))
         {
-            var_dump('old created timestamp exists');
             $application->setCreatedOn($oldCreatedOn);
             $application->setCreatedBy($oldCreatedBy);
         }
-        
+
         $application->setCancelled(0);
 
         // Hard code a summer meal option for all summer applications.
@@ -91,8 +92,6 @@ class HousingApplicationConfirmCommand extends Command {
         }
 
         $result = $application->save();
-
-        $tpl = array();
 
         if($result == TRUE){
             // Log the fact that the application was submitted
