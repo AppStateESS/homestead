@@ -34,7 +34,7 @@ class Student
 
     public function __construct()
     {
-        
+
     }
 
     public function getName()
@@ -120,31 +120,22 @@ class Student
         switch ($this->getType()) {
             case TYPE_FRESHMEN:
                 return 'Freshmen';
-                break;
             case TYPE_TRANSFER:
                 return 'Transfer';
-                break;
             case TYPE_CONTINUING:
                 return 'Continuing';
-                break;
             case TYPE_RETURNING:
                 return 'Returning';
-                break;
             case TYPE_READMIT:
                 return 'Re-admit';
-                break;
             case TYPE_WITHDRAWN:
                 return 'Withdrawn';
-                break;
             case TYPE_NONDEGREE:
                 return 'New non-degree';
-                break;
             case TYPE_GRADUATE:
                 return 'Graduate';
-                break;
             default:
                 return 'Unknown type: ' . $this->type;
-                break;
         }
     }
 
@@ -153,16 +144,12 @@ class Student
         switch ($this->getClass()) {
             case CLASS_FRESHMEN:
                 return 'Freshmen';
-                break;
             case CLASS_SOPHOMORE:
                 return 'Sophomore';
-                break;
             case CLASS_JUNIOR:
                 return 'Junior';
-                break;
             case CLASS_SENIOR:
                 return 'Senior';
-                break;
             default:
                 return 'Unknown class: ' . $this->getClass();
         }
@@ -173,22 +160,16 @@ class Student
         switch ($this->getStudentLevel()) {
             case LEVEL_UNDERGRAD:
                 return 'Undergraduate';
-                break;
             case LEVEL_GRAD:
                 return 'Graduate';
-                break;
             case LEVEL_GRAD2:
                 return 'Graduate II';
-                break;
             case LEVEL_DOCTORAL:
                 return 'Doctoral';
-                break;
             case LEVEL_SPECIALIST:
                 return 'Specialist';
-                break;
             case LEVEL_UNDECLARED:
                 return 'Undeclared';
-                break;
             default:
                 return 'Unknown level ' . $this->getStudentLevel();
         }
