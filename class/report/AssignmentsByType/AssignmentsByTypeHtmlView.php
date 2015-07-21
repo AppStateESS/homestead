@@ -14,6 +14,8 @@ class AssignmentsByTypeHtmlView extends ReportHtmlView {
         foreach($this->report->getTypeCounts() as $result){
             $row = array();
 
+            // Translate the reason string into a human readable label, if it exists
+            // Otherwsie, use the raw reason code
             $name = constant($result['reason']);
             if(isset($name)){
                 $row['REASON'] = $name;
@@ -25,7 +27,8 @@ class AssignmentsByTypeHtmlView extends ReportHtmlView {
 
             $rows[] = $row;
 
-            $totalAssignments += $count;
+            // Add the count for this reason to the running total
+            $totalAssignments += $result['count'];
         }
 
         $this->tpl['TABLE_ROWS'] = $rows;
