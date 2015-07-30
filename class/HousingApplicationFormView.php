@@ -25,6 +25,9 @@ class HousingApplicationFormView extends hms\View
 
         $submitCmd->initForm($form);
 
+        javascript('jquery');
+        javascript('modules/hms/EmailValidation');
+
         $tpl = array();
 
         /****************

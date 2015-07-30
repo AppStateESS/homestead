@@ -164,6 +164,8 @@
             <div class="row">
                 <div class="col-md-4">
                     {EMERGENCY_CONTACT_EMAIL}
+                    <div id="contact_status">
+                    </div>
                 </div>
             </div>
         </div>
@@ -221,6 +223,8 @@
             <div class="row">
                 <div class="col-md-4">
                     {MISSING_PERSON_EMAIL}
+                    <div id="missing_status">
+                    </div>
                 </div>
             </div>
         </div>

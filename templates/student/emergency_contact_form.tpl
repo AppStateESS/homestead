@@ -66,6 +66,8 @@
     </label>
     <div class="col-md-3 col-md-offset-2">
       {EMERGENCY_CONTACT_EMAIL}
+      <div id="contact_status">
+      </div>
     </div>
   </div>
 
@@ -132,6 +134,8 @@
     </label>
     <div class="col-md-3 col-md-offset-3">
       {MISSING_PERSON_EMAIL}
+      <div id="missing_status">
+      </div>
     </div>
   </div>
 
