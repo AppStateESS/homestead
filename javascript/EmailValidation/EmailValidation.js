@@ -37,7 +37,7 @@ $(function() {
 
 // while the lookup is performing
 function contact_validation_in_progress() {
-  $('#contact_status').html("<img src='loading.gif' height='16'/>");
+  $('#contact_status').html("");
 }
 
 // if email successfull validated
@@ -52,7 +52,7 @@ function contact_validation_error(error_message) {
 
 // while the lookup is performing
 function missing_validation_in_progress() {
-  $('#missing_status').html("<img src='loading.gif' height='16'/>");
+  $('#missing_status').html("");
 }
 
 // if email successfull validated
@@ -70,7 +70,6 @@ function missing_validation_error(error_message) {
 // suggest a valid email
 function get_suggestion_str(is_valid, alternate) {
   if (is_valid) {
-    var result = '<p class="text-success">Address is valid.</p>';
     if (alternate) {
       result += '<p class="text-warning"> (Though did you mean <em>' + alternate + '</em>?)</p>';
     }
