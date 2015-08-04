@@ -123,7 +123,7 @@ class BedView extends hms\View
           if (isset($this->bed->_curr_assignment)) {
           $t1->addFieldConditional('banner_id', $this->bed->_curr_assignment->banner_id, '!=');
           }
-         * 
+         *
          */
         $t1->addOrderBy('assigned_on', 'DESC');
         $result = $db->select();
@@ -131,7 +131,7 @@ class BedView extends hms\View
             return null;
         }
         foreach ($result as $key => $assignment) {
-            $student = StudentFactory::getStudentByBannerID($assignment['banner_id'], $this->bed->id);
+            $student = StudentFactory::getStudentByBannerID($assignment['banner_id'], $this->bed->getTerm());
             $result[$key]['assigned_on_date'] = strftime('%Y-%m-%d %r', $assignment['assigned_on']);
             if (empty($assignment['removed_on'])) {
                 $result[$key]['removed_on_date'] = 'Never';
