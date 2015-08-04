@@ -70,8 +70,7 @@ class AssignmentTypeByFloor extends Report {
     }
 
     public function getHalls(){
-        PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
-        return HMS_Residence_Hall::get_halls($this->getTerm());
+        return ResidenceHallFactory::getHallsForTerm($this->getTerm());
     }
 
     public function getCountsForHall(HMS_Residence_Hall $hall){

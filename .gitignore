@@ -40,5 +40,4 @@ Thumbs.db
 
 vendor/
 composer.phar
-composer.lock
 bower_components

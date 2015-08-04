@@ -119,9 +119,8 @@ class ResidenceHallView extends hms\View {
         && !Current_User::allow('hms', 'hall_attributes')
         && !Current_User::allow('hms', 'hall_structure'))
         {
-            $form_vars = get_object_vars($form);
-            $elements = $form_vars['_elements'];
-
+            $form_vars = (array)$form;
+            $elements = $form_vars["\0PHPWS_Form\0_elements"]; //NB: this is a weird results of casting the object to an array
             foreach($elements as $element => $value){
                 $form->setDisabled($element);
             }

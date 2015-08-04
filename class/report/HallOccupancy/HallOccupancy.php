@@ -41,21 +41,21 @@ class HallOccupancy extends Report {
 
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
 
-        $halls = HMS_Residence_Hall::get_halls($this->term);
+        $halls = ResidenceHallFactory::getHallsForTerm($this->term);
 
         // accumulatrs for totaling beds across all halls
         $totalBeds = 0;
         $totalVacantBeds = 0;
 
         $hallArray = array();
-        
+
         foreach ($halls as $hall) {
-            
+
             $bedsByHall = 0;
             $vacantBedsByHall = 0;
-                                                                                                                                                                                                                               
+
             $floorArray = array();
-            
+
             $floors = $hall->get_floors();
             if ($floors == NULL) {
                 continue;
@@ -113,5 +113,3 @@ class HallOccupancy extends Report {
     }
 
 }
-
-

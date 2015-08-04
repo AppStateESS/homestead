@@ -31,17 +31,13 @@ class MoveInTimes extends Report {
 
     public function execute()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Movein_Time.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
-
         if (!isset($this->term) || is_null($this->term)) {
             throw new InvalidArgumentException('Missing term.');
         }
 
         $term = Term::getTermSem($this->term);
 
-        $halls = HMS_Residence_Hall::get_halls($this->term);
+        $halls = ResidenceHallFactory::getHallsForTerm($this->term);
 
         foreach ($halls as $hall) {
 
@@ -87,5 +83,3 @@ class MoveInTimes extends Report {
     }
 
 }
-
-

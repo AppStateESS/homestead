@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
 
@@ -61,7 +61,7 @@ class ResidenceHallFactory {
 
         $hallArray = array();
 
-        $halls = HMS_Residence_Hall::get_halls($term);
+        $halls = ResidenceHallFactory::getHallsForTerm($term);
 
         foreach ($halls as $hall){
             $hallArray[$hall->id] = $hall->hall_name;
@@ -70,4 +70,3 @@ class ResidenceHallFactory {
         return $hallArray;
     }
 }
-

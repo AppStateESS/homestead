@@ -40,9 +40,6 @@ class TwentyOne extends Report implements iCsvReport {
 
     public function execute()
     {
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
-
         if (!isset($this->term) || is_null($this->term)) {
             throw new InvalidArgumentException('Missing term.');
         }
@@ -51,7 +48,7 @@ class TwentyOne extends Report implements iCsvReport {
         $twentyOneYearsAgo = strtotime("-21 years");
 
         // Get all of the residence halls for this term
-        $halls = HMS_Residence_Hall::get_halls($this->term);
+        $halls = ResidenceHallFactory::getHallsForTerm($this->term);
 
         foreach($halls as $hall){
             $hallName = $hall->hall_name;

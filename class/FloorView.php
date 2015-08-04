@@ -17,15 +17,12 @@ class FloorView extends hms\View{
             throw new PermissionException('You are not allowed to edit or view floors.');
         }
 
-        PHPWS_Core::initModClass('hms', 'HMS_Movein_Time.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Room.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
-
         javascript('jquery_ui');
 
         $floor_num = $this->floor->getFloorNumber();
 
         // Setup the title and color of the title bar
+        $tpl = array();
         $tpl['FLOOR_NUMBER'] = HMS_Util::ordinal($floor_num);
         $tpl['TERM'] = Term::getPrintableSelectedTerm();
 
@@ -80,7 +77,7 @@ class FloorView extends hms\View{
 
         // Get a list of the RLCs indexed by id
         PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
-        $learning_communities = HMS_Learning_Community::getRlcList();
+        $learning_communities = RlcFactory::getRlcList($this->floor->getTerm());
         $learning_communities[0] = 'None';
 
         $form->addDropBox('floor_rlc_id', $learning_communities);

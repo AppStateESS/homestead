@@ -735,7 +735,7 @@ class HMS_Residence_Hall extends HMS_Item {
     {
         $hall_array = array();
 
-        $halls = HMS_Residence_Hall::get_halls($term);
+        $halls = ResidenceHallFactory::getHallsForTerm($term);
 
         foreach ($halls as $hall) {
             $hall_array[$hall->id] = $hall->hall_name;
@@ -748,7 +748,7 @@ class HMS_Residence_Hall extends HMS_Item {
     {
         $hall_array = array();
 
-        $halls = HMS_Residence_Hall::get_halls($term);
+        $halls = ResidenceHallFactory::getHallsForTerm($term);
 
         $hall_array[0] = 'Select...';
 
@@ -766,7 +766,7 @@ class HMS_Residence_Hall extends HMS_Item {
     {
         $vacant_halls = array();
 
-        $halls = HMS_Residence_Hall::get_halls($term);
+        $halls = ResidenceHallFactory::getHallsForTerm($term);
 
         foreach ($halls as $hall) {
             if ($hall->has_vacancy()) {

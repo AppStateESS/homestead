@@ -164,14 +164,10 @@ class StudentProfileView extends hms\View {
         /**************
          * RLC Status *
         *************/
-        PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
-        PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
-        PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
-
-        $rlc_names = HMS_Learning_Community::getRlcList();
+        $rlc_names = RlcFactory::getRlcList(Term::getSelectedTerm());
 
         $rlc_assignment     = HMS_RLC_Assignment::getAssignmentByUsername($this->student->getUsername(), Term::getSelectedTerm());
-        $rlc_application    = HMS_RLC_Application::getApplicationByUsername($this->student->getUsername(), Term::getSelectedTerm(), FALSE);
+        $rlc_application    = HMS_RLC_Application::getApplicationByUsername($this->student->getUsername(), Term::getSelectedTerm());
 
         if(!is_null($rlc_assignment)){
             $tpl['RLC_STATUS'] = "This student is assigned to: " . $rlc_names[$rlc_assignment->rlc_id];
@@ -186,8 +182,7 @@ class StudentProfileView extends hms\View {
         /*************************
          * Re-application status *
         *************************/
-        PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
-        $reapplication = HousingApplication::getApplicationByUser($this->student->getUsername(), Term::getSelectedTerm());
+        $reapplication = HousingApplicationFactory::getAppByStudent($this->student, Term::getSelectedTerm());
 
         # If this is a re-application, then check the special interest group status
         # TODO: incorporate all this into the LotteryApplication class
@@ -231,17 +226,12 @@ class StudentProfileView extends hms\View {
         /****************
          * Applications *
         *************/
-        PHPWS_Core::initModClass('hms', 'ProfileHousingAppList.php');
         $appList = new ProfileHousingAppList($this->applications);
         $tpl['APPLICATIONS'] = $appList->show();
 
         /*********
          * Assignment History *
         *********/
-
-        PHPWS_Core::initModClass('hms', 'StudentAssignmentHistory.php');
-        PHPWS_Core::initModClass('hms', 'StudentAssignmentHistoryView.php');
-
         $historyArray = StudentAssignmentHistory::getAssignments($this->student->getBannerId());
         $historyView = new StudentAssignmentHistoryView($historyArray);
         $tpl['HISTORY'] = $historyView->show();
@@ -251,8 +241,6 @@ class StudentProfileView extends hms\View {
          * Checkins
          */
 
-        PHPWS_Core::initModClass('hms', 'CheckinFactory.php');
-        PHPWS_Core::initModClass('hms', 'CheckinHistoryView.php');
         $checkins = CheckinFactory::getCheckinsForStudent($this->student);
         $checkinHistory = new CheckinHistoryView($checkins);
         $tpl['CHECKINS'] = $checkinHistory->show();
@@ -273,7 +261,6 @@ class StudentProfileView extends hms\View {
         /********
          * Logs *
         ********/
-        PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
         $everything_but_notes = HMS_Activity_Log::get_activity_list();
         unset($everything_but_notes[array_search(ACTIVITY_ADD_NOTE, $everything_but_notes)]);
 
@@ -305,5 +292,3 @@ class StudentProfileView extends hms\View {
         return PHPWS_Template::process($tpl, 'hms', 'admin/StudentProfile.tpl');
     }
 }
-
-

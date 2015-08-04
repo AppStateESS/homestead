@@ -42,6 +42,7 @@ class RoomView extends hms\View {
         javascript('chosen', null, 'mod/hms/');
 
         /*** Header Info ***/
+        $tpl = array();
         $tpl['TERM'] = Term::getPrintableSelectedTerm();
         $tpl['HALL_NAME']           = $this->hall->getLink();
         $tpl['FLOOR_NUMBER']        = $this->floor->getLink('Floor');
