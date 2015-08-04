@@ -194,7 +194,6 @@ var KeyReturn = React.createClass({displayName: "KeyReturn",
 
 var ExistingDamages = React.createClass({displayName: "ExistingDamages",
     render: function() {
-        console.log(this.props.existingDamage);
         if (this.props.existingDamage.length === 0) {
             return (
                 React.createElement("div", null,

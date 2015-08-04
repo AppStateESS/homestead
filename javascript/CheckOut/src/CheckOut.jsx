@@ -194,7 +194,6 @@ var KeyReturn = React.createClass({
 
 var ExistingDamages = React.createClass({
     render: function() {
-        console.log(this.props.existingDamage);
         if (this.props.existingDamage.length === 0) {
             return (
                 <div>
