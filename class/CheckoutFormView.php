@@ -75,7 +75,6 @@ class CheckoutFormView extends hms\View
             $this->addResponsible($residents);
             $vars['existing_damage'] = json_encode($this->damages);
         }
-
         $tpl = new \Template($vars);
         $tpl->setModuleTemplate('hms', 'admin/CheckOut.html');
         return $tpl->get();
@@ -95,8 +94,11 @@ class CheckoutFormView extends hms\View
         $rows = $result->fetchAll();
 
         foreach ($rows as $i) {
-            $sdamage[$i['damage_id']][] = $respNames[$i['banner_id']];
+            if (isset($respNames[$i['banner_id']])) {
+                $sdamage[$i['damage_id']][] = $respNames[$i['banner_id']];
+            }
         }
+        
         foreach ($this->damages as $key => $value) {
             if (isset($sdamage[$value->id])) {
                 foreach ($sdamage[$value->id] as $name) {
