@@ -50,7 +50,9 @@ class LotteryChooseRoommatesView extends hms\View {
             $assigned_self = TRUE;
         }
 
-        for($i = 0; $i < count($beds); $i++){
+        $bedCount = count($beds);
+
+        for($i = 0; $i < $bedCount; $i++){
             $bed = $beds[$i];
             $bed_row = array();
 

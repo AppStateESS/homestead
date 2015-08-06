@@ -3,7 +3,7 @@
 PHPWS_Core::initModClass('hms', 'ApplicationFeature.php');
 
 class RlcApplicationRegistration extends ApplicationFeatureRegistration {
-    function __construct()
+    public function __construct()
     {
         $this->name = 'RlcApplication';
         $this->description = 'RLC Applications';
@@ -49,5 +49,3 @@ class RlcApplication extends ApplicationFeature {
         return new RlcApplicationMenuView($this->term, $student, $this->getStartDate(), $this->getEditDate(), $this->getEndDate(), $application, $assignment);
     }
 }
-
-

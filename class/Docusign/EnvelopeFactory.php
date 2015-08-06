@@ -5,7 +5,7 @@ namespace Docusign;
 
 class EnvelopeFactory {
 
-	static function createEnvelopeFromTemplate(Client $client, $templateId, $emailSubject, Array $templateRoles, $status) {
+	public static function createEnvelopeFromTemplate(Client $client, $templateId, $emailSubject, Array $templateRoles, $status) {
 		$data = array (
 			"accountId" => $client->getAccountID(),
 			"emailSubject" => $emailSubject,
@@ -28,7 +28,7 @@ class EnvelopeFactory {
         return new Envelope($result['envelopeId'], $result['uri'], $result['statusDateTime'], $result['status']);
     }
 
-	static function getEnvelopeById(Client $client, $envelopeId) {
+	public static function getEnvelopeById(Client $client, $envelopeId) {
         $http = new \Guzzle\Http\Client();
         try {
             $request = $http->createRequest('GET', $client->getBaseUrl() . '/envelopes/' . $envelopeId);

@@ -2,11 +2,11 @@
 
 class StudentSearchCommand extends Command {
 
-    function getRequestVars(){
+    public function getRequestVars(){
         return array('action'=>'StudentSearch');
     }
 
-    function execute(CommandContext $context)
+    public function execute(CommandContext $context)
     {
         if(!Current_User::allow('hms', 'search')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');

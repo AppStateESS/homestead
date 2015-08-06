@@ -17,5 +17,5 @@ namespace Docusign;
  * limitations under the License.
  */
 abstract class IO {
-    abstract function makeRequest($url, $method = 'GET', $headers = array(), $params = array(), $data = NULL);
+    public abstract function makeRequest($url, $method = 'GET', $headers = array(), $params = array(), $data = NULL);
 }

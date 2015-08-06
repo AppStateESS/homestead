@@ -33,12 +33,12 @@ abstract class ReportPdfView extends ReportView{
     /**
      * Renders the PDF.
      */
-    abstract function render();
+    public abstract function render();
 
     /**
      * Returns the content of the PDF file as a (possibly binary formatted) string.
      *
      * @return String PDF file contents
      */
-    abstract public function getPdfContent();
+    public abstract public function getPdfContent();
 }

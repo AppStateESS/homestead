@@ -655,7 +655,9 @@ class HousingApplication {
 
         $newresult = array();
 
-        for($count = 0; $count < count($result); $count++) {
+        $resultCount = count($result);
+
+        for($count = 0; $count < $resultCount; $count++) {
             $app = $result[$count];
             if (!in_array($app->username, $assignments)) {
                 //unset($result[$count]);

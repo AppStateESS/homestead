@@ -10,15 +10,15 @@ class SelectResidenceHallCommand extends Command {
     private $onSelectCmd;
     private $title;
 
-    function setOnSelectCmd(Command $cmd){
+    public function setOnSelectCmd(Command $cmd){
         $this->onSelectCmd = $cmd;
     }
 
-    function setTitle($text = 'Select residence hall'){
+    public function setTitle($text = 'Select residence hall'){
         $this->title = $text;
     }
 
-    function getRequestVars()
+    public function getRequestVars()
     {
         $vars = array('action'=>'SelectResidenceHall', 'title'=>$this->title);
 
@@ -44,7 +44,7 @@ class SelectResidenceHallCommand extends Command {
         return $this->onSelectCmd->getSubLink($text, $this->getRequestVars());
     }
 
-    function execute(CommandContext $context)
+    public function execute(CommandContext $context)
     {
         PHPWS_Core::initModClass('hms', 'SelectHallView.php');
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');

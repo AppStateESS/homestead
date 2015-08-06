@@ -10,7 +10,7 @@ class RequestedRoommatePairingStrategy extends RoommatePairingStrategy{
         parent::__construct($term);
     }
 
-    function doPairing(&$applications, &$pairs)
+    public function doPairing(&$applications, &$pairs)
     {
         $db = new PHPWS_DB('hms_roommate');
         $db->addWhere('term', $this->term);

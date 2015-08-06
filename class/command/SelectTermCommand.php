@@ -9,11 +9,11 @@ class SelectTermCommand extends Command {
 
     public $term;
 
-    function setTerm($term) {
+    public function setTerm($term) {
         $this->term = $term;
     }
 
-    function getRequestVars()
+    public function getRequestVars()
     {
         $vars = array('action' => 'SelectTerm');
 
@@ -24,7 +24,7 @@ class SelectTermCommand extends Command {
         return $vars;
     }
 
-    function execute(CommandContext $context)
+    public function execute(CommandContext $context)
     {
         if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'select_term')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
@@ -44,5 +44,3 @@ class SelectTermCommand extends Command {
         $context->goBack();
     }
 }
-
-

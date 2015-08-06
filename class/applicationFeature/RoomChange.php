@@ -3,7 +3,7 @@
 PHPWS_Core::initModClass('hms', 'ApplicationFeature.php');
 
 class RoomChangeRegistration extends ApplicationFeatureRegistration {
-    function __construct()
+    public function __construct()
     {
         $this->name = 'RoomChange';
         $this->description = 'Room Change';
@@ -33,4 +33,3 @@ class RoomChange extends ApplicationFeature {
         return new RoomChangeMenuBlockView($student, $this->term, $this->getStartDate(), $this->getEndDate(), $assignment, $request);
     }
 }
-

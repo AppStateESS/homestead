@@ -604,7 +604,7 @@ class HMS_Roommate
         return $this->can_live_together();
     }
 
-    function can_live_together()
+    public function can_live_together()
     {
         $requestor = strToLower($this->requestor);
         $requestee = strToLower($this->requestee);

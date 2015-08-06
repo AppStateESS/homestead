@@ -13,7 +13,7 @@ class CreateRoommateGroupViewCommand extends Command {
         $this->roommate2 = $username;
     }
 
-    function getRequestVars(){
+    public function getRequestVars(){
         $vars = array('action'=>'CreateRoommateGroupView');
 
         if(!isset($this->roommate1)){
@@ -27,7 +27,7 @@ class CreateRoommateGroupViewCommand extends Command {
         return $vars;
     }
 
-    function execute(CommandContext $context)
+    public function execute(CommandContext $context)
     {
 
         if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'roommate_maintenance')){
@@ -41,5 +41,3 @@ class CreateRoommateGroupViewCommand extends Command {
         $context->setContent($createView->show());
     }
 }
-
-
