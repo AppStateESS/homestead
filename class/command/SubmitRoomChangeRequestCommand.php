@@ -24,8 +24,6 @@ class SubmitRoomChangeRequestCommand extends Command {
         $firstHallPref  = $context->get('first_choice');
         $secondHallPref = $context->get('second_choice');
 
-        $swap = $context->get('swap_with');
-
 
         $term = Term::getCurrentTerm();
 
@@ -144,7 +142,7 @@ class SubmitRoomChangeRequestCommand extends Command {
                     $participant->setHallPref2($hall);
                 }
             }
-        
+
             // Save the main participant and its state
             $participant->save();
 
@@ -190,4 +188,3 @@ class SubmitRoomChangeRequestCommand extends Command {
         $menuCmd->redirect();
     }
 }
-

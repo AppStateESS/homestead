@@ -41,7 +41,6 @@ class JSPopupCommand extends Command {
 
     public function getLink($text)
     {
-        $vars = $this->getRequestVars();
 
         $js = array();
         $js['width']       = $this->width;

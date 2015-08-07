@@ -72,14 +72,14 @@ class UnassignStudentCommand extends Command {
             NQ::simple('hms', hms\NotificationView::ERROR, 'Only whole number refund percentages are supported, no decimal place is allowed.');
             $cmd->redirect();
         }
-            
+
 
         $term = Term::getSelectedTerm();
         $student = StudentFactory::getStudentByUsername($username, $term);
         $notes = $context->get('note');
 
         try {
-            $result = HMS_Assignment::unassignStudent($student, $term, $notes, $unassignReason, $refund);
+            HMS_Assignment::unassignStudent($student, $term, $notes, $unassignReason, $refund);
         } catch (Exception $e) {
             NQ::simple('hms', hms\NotificationView::ERROR, 'Error: ' . $e->getMessage());
             $cmd->setUsername($username);
@@ -90,5 +90,3 @@ class UnassignStudentCommand extends Command {
         $cmd->redirect();
     }
 }
-
-

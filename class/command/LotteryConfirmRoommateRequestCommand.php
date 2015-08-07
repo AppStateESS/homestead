@@ -51,9 +51,9 @@ class LotteryConfirmRoommateRequestCommand extends Command {
         }
 
         $term = PHPWS_Settings::get('hms', 'lottery_term');
-        
+
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
-        
+
         // Update the meal plan field on the application
         $app = HousingApplication::getApplicationByUser(UserStatus::getUsername(), $term);
 
@@ -70,7 +70,7 @@ class LotteryConfirmRoommateRequestCommand extends Command {
         // Try to actually make the assignment
         PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
         try{
-            $result = HMS_Lottery::confirm_roommate_request(UserStatus::getUsername(), $requestId, $mealPlan);
+            HMS_Lottery::confirm_roommate_request(UserStatus::getUsername(), $requestId, $mealPlan);
         }catch(Exception $e){
             PHPWS_Error::log('hms', $e->getMessage());
             NQ::simple('hms', hms\NotificationView::ERROR,'Sorry, there was an error confirming your roommate invitation. Please contact University Housing.');
@@ -80,7 +80,7 @@ class LotteryConfirmRoommateRequestCommand extends Command {
         # Log the fact that the roommate was accepted and successfully assigned
         HMS_Activity_Log::log_activity(UserStatus::getUsername(), ACTIVITY_LOTTERY_CONFIRMED_ROOMMATE,UserStatus::getUsername(), "Captcha: \"$captcha\"");
 
-        
+
         // Check for an RLC membership and update status if necessary
         // If this student was an RLC self-select, update the RLC memberhsip state
         $rlcAssignment = RlcMembershipFactory::getMembership($student, $term);
@@ -89,12 +89,9 @@ class LotteryConfirmRoommateRequestCommand extends Command {
         }
 
         $invite = HMS_Lottery::get_lottery_roommate_invite_by_id($requestId);
-        $bed = new HMS_Bed($invite['bed_id']);
 
         $successCmd = CommandFactory::getCommand('LotteryShowConfirmedRoommateThanks');
         $successCmd->setRequestId($requestId);
         $successCmd->redirect();
     }
 }
-
-

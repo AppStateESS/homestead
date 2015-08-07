@@ -18,8 +18,6 @@ class StudentSearchCommand extends Command {
 
         $userid = $context->get('banner_id');
         $userid = strtolower(trim($userid));
-        $term = Term::getSelectedTerm();
-
         $profileCmd = CommandFactory::getCommand('ShowStudentProfile');
 
         // Check to see if the user enterd a Banner ID or a user name

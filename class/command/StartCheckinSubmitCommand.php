@@ -45,7 +45,7 @@ class StartCheckinSubmitCommand extends Command {
 
         // Try to lookup the student in Banner
         try {
-            $student = StudentFactory::getStudentByBannerId($bannerId, $term);
+            StudentFactory::getStudentByBannerId($bannerId, $term);
         } catch (StudentNotFoundException $e) {
             NQ::simple('hms', hms\NotificationView::ERROR, 'Could not locate a student with that Banner ID.');
             $errorCmd->redirect();
@@ -58,5 +58,3 @@ class StartCheckinSubmitCommand extends Command {
         $cmd->redirect();
     }
 }
-
-
