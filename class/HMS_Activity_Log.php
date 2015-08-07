@@ -140,7 +140,7 @@ class HMS_Activity_Log{
         }
 
         $activity_log = new HMS_Activity_Log(NULL, $userid, time(), $activity, $actor, $notes);
-        $result = $activity_log->save();
+        $activity_log->save();
     }
 
     /**

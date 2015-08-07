@@ -234,7 +234,7 @@ class HousingApplication {
 
         try {
             $soap = SOAP::getInstance(UserStatus::getUsername(), UserStatus::isAdmin()?(SOAP::ADMIN_USER):(SOAP::STUDENT_USER));
-            $result = $soap->createHousingApp($this->getBannerId(), $this->getTerm());
+            $soap->createHousingApp($this->getBannerId(), $this->getTerm());
         } catch(Exception $e) {
             // Send an email notification
             PHPWS_Core::initCoreClass('Mail.php');
@@ -249,7 +249,7 @@ class HousingApplication {
 
             $body = "Username: {$this->getUsername()}\n";
             $mail->setMessageBody($body);
-            $result = $mail->send();
+            $mail->send();
 
             throw $e; // rethrow the exception it
         }
@@ -885,7 +885,7 @@ class HousingApplication {
         $this->medical_need = $medical;
     }
 
-    public function getGenderNeed($gender)
+    public function getGenderNeed()
     {
         return $this->gender_need;
     }

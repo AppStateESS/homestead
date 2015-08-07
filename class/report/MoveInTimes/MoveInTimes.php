@@ -35,8 +35,6 @@ class MoveInTimes extends Report {
             throw new InvalidArgumentException('Missing term.');
         }
 
-        $term = Term::getTermSem($this->term);
-
         $halls = ResidenceHallFactory::getHallsForTerm($this->term);
 
         foreach ($halls as $hall) {

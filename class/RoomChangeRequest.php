@@ -230,7 +230,7 @@ class RoomChangeRequest {
             $student = StudentFactory::getStudentByBannerId($participant->getBannerId(), Term::getSelectedTerm());
 
             // Search for the check-in
-            $checkin = CheckinFactory::getCheckinByBed($student, $bed, Term::getSelectedTerm());
+            $checkin = CheckinFactory::getCheckinByBed($student, $bed);
             if($checkin == null || ($checkin != null && $checkin->getCheckoutDate() != null)) {
                 return false;
             }
@@ -334,4 +334,3 @@ class RoomChangeRequestRestored extends RoomChangeRequest {
         //TODO Use the RoomChangeRequestStateFactory to load this room change's current state
     }
 }
-

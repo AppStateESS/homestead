@@ -244,7 +244,7 @@ class HMS_Room extends HMS_Item
     * Assuming gender_type is carried over.
     * added and updated variables need to be set in the bed save public function.
     */
-    public function create_child_objects($beds_per_room)
+    public function create_child_objects($bedrooms_per_room)
     {
         for ($i = 0; $i < $bedroooms_per_room; $i++) {
             $bed = new HMS_Bed;
@@ -841,7 +841,7 @@ class HMS_Room extends HMS_Item
                 }
             }
 
-            $result = $room->delete();
+            $room->delete();
         }catch(Exception $e) {
             throw $e;
         }

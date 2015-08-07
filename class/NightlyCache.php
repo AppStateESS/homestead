@@ -3,7 +3,7 @@
 define('HMS_CACHE_ERROR_THRESHOLD', 30);
 
 /**
- * Refreshes the cache nightly 
+ * Refreshes the cache nightly
  * @license http://opensource.org/licenses/lgpl-3.0.html
  * @author Matthew McNaney <mcnaney at gmail dot com>
  */
@@ -20,7 +20,7 @@ class NightlyCache
         PHPWS_Core::initModClass('users', 'Users.php');
         PHPWS_Core::initModClass('users', 'Current_User.php');
         PHPWS_Core::initModClass('hms', 'UserStatus.php');
-        
+
         $errors = null;
         $term = Term::getSelectedTerm();
 
@@ -43,16 +43,16 @@ class NightlyCache
 
         $count = 0;
         $error_count = 0;
-        
+
         $_SESSION['User'] = new PHPWS_User;
         $_SESSION['User']->username= 'nightlycache';
         $_SESSION['User']->display_name = 'Nightly Cache';
-        
+
         foreach ($result as $row) {
             $count++;
             try {
                 //asking for the student updates the cache since the ttl is zero
-                $student = StudentFactory::getStudentByUsername($row['username'], $term);
+                StudentFactory::getStudentByUsername($row['username'], $term);
             } catch (Exception $e) {
                 $errors[] = $e->getMessage() . "\n";
                 $error_count++;

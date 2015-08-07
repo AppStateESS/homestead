@@ -51,7 +51,6 @@ class VerifyAssignmentView extends hms\View{
 
         //get the assignees to the room that the bed that the assignment is in
         $assignees = !is_null($assignment) ? $assignment->get_parent()->get_parent()->get_assignees() : NULL;
-        $roommates = array();
 
         if(!is_null($assignees)){
             foreach($assignees as $roommate){

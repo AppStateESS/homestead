@@ -22,7 +22,6 @@ class LotteryChooseRoommatesView extends hms\View {
 
         javascript('jquery');
 
-        $term = PHPWS_Settings::get('hms', 'lottery_term');
         $tpl = array();
 
         #TODO: place a temporary reservation on the entire room

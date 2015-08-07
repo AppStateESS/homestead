@@ -30,8 +30,6 @@ class PackageDeskView {
 
         Layout::addPageTitle('Package Desk');
 
-        $tpl = array();
-
         $form = new PHPWS_Form('pd');
 
         // Package desk drop down

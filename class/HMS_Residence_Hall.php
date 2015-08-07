@@ -808,7 +808,6 @@ class HMS_Residence_Hall extends HMS_Item {
         $output_list = array();
 
         foreach ($halls as $hall) {
-            $rooms_used = $hall->count_lottery_used_rooms();
 
             // Make sure we have a room of the specified gender available in the hall (or a co-ed room)
             if ($hall->count_avail_lottery_rooms($gender) <= 0 && $hall->count_avail_lottery_rooms(COED) <= 0) {

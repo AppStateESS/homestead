@@ -21,8 +21,6 @@ class HMS_Reports{
             throw new DatabaseException($result->toString());
         }
 
-        $content = '';
-
         $content = '<table>
                      <tr>
                         <th>User name</th>
@@ -132,4 +130,3 @@ class HMS_Reports{
         return $tpl->get();
     }
 }
-

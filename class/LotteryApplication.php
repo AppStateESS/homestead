@@ -270,7 +270,7 @@ class LotteryApplication extends HousingApplication {
     {
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
         $student = StudentFactory::getStudentByUsername($this->username, $this->term);
-        $row = array();
+        $tags = array();
 
         $tags['NAME']       = $student->getFullName();
         $tags['USER']       = $this->username;

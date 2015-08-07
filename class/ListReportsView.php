@@ -35,7 +35,7 @@ class ListReportsView extends hms\View{
     public function show()
     {
         $this->setTitle("Reports");
-         
+
         if(!Current_User::allow('hms', 'reports')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to run reports.');
@@ -45,9 +45,6 @@ class ListReportsView extends hms\View{
         $tpl['REPORTS'] = array();
 
         foreach($this->reportControllers as $rc) {
-
-            $tags = array();
-
             $itemView = $rc->getMenuItemView();
             $tpl['REPORTS'][]['ITEM'] = $itemView->show();
         }

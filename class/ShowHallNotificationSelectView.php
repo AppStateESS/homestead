@@ -20,13 +20,9 @@ class ShowHallNotificationSelectView extends hms\View{
         */
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
 
-        $halls = HMS_Residence_Hall::get_halls(Term::getSelectedTerm());
-
         $submitCmd = CommandFactory::getCommand('ShowHallNotificationEdit');
         $form = new PHPWS_Form('select_halls_to_email');
         $submitCmd->initForm($form);
-
-        $tpl=array();
 
         javascript('jquery_ui');
 

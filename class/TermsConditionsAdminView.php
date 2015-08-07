@@ -11,8 +11,6 @@ class TermsConditionsAdminView extends hms\View{
 
     public function show()
     {
-        $vars = array();
-
         $submitCmd = CommandFactory::getCommand('SaveTermSettings');
 
         $form = new PHPWS_Form('docusign');

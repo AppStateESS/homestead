@@ -24,7 +24,7 @@ class RoommateProfile {
      * Alternate contact info
      */
     public $alternate_email = NULL;
-    
+
     public $fb_link = NULL;
 
     public $instagram_sn = NULL;
@@ -243,7 +243,7 @@ class RoommateProfile {
         $this->setID($id);
 
         // Initialize
-        $result = $this->init();
+        $this->init();
     }
 
     public function init()

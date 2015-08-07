@@ -468,7 +468,6 @@ abstract class ReportController {
 
         if(PHPWS_Error::logIfError($result)){
             throw new DatabaseException($result->toString());
-            return false;
         }
 
         return true;

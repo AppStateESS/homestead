@@ -21,7 +21,7 @@ class StudentFactory {
     }
 
     /**
-     * 
+     *
      * @param string $bannerID
      * @param integer $term
      * @param ApcDataProvider|LocalCacheDataProvider $provider
@@ -33,7 +33,6 @@ class StudentFactory {
             $provider = StudentDataProvider::getInstance();
         }
 
-        $provider = StudentDataProvider::getInstance();
         return $provider->getStudentById($bannerID, $term);
     }
 }

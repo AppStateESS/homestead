@@ -116,7 +116,6 @@ class ReApplicationFormView extends hms\View {
 
         // Sorority
         if($this->student->getGender() == FEMALE){
-            $sororities = HMS_Lottery::getSororities();
 
             $form->addCheck('sorority_check', array('sorority_check'));
             $form->setLabel('sorority_check', "I'm a member of a sorority.");

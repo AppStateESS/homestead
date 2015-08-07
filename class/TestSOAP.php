@@ -56,7 +56,7 @@ class TestSOAP extends SOAP{
         //$response->projected_class       = 'FR';
 
         $response->student_type          = 'F'; // @see hms/inc/defines
-        $response->application_term      = '201540';
+        $response->application_term      = '201510';
         $response->projected_class       = 'FR'; // @see hms/inc/defines
 
         $response->credhrs_completed     = 0;

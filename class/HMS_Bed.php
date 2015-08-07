@@ -118,7 +118,6 @@ class HMS_Bed extends HMS_Item {
 
     public function loadAssignment()
     {
-        $assignment_found = false;
         $db = new PHPWS_DB('hms_assignment');
         $db->addWhere('bed_id', $this->id);
         $db->addWhere('term', $this->term);
@@ -673,7 +672,7 @@ class HMS_Bed extends HMS_Item {
         $bed->international_reserved = $intlReserved;
 
         try {
-            $result = $bed->save();
+            $bed->save();
         } catch (DatabaseException $e) {
             throw $e;
         }
@@ -704,7 +703,7 @@ class HMS_Bed extends HMS_Item {
         }
 
         try {
-            $result = $bed->delete();
+            $bed->delete();
         } catch (DatabaseException $e) {
             throw $e;
         }

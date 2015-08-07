@@ -21,8 +21,6 @@ class TermsAgreementView extends hms\View {
 
         $tpl = $form->getTemplate();
 
-        $term = new Term($this->term);
-
         $tpl['TERM'] = Term::toString($this->term);
         $tpl['DOCUSIGN_BEGIN_CMD'] = $this->submitCommand->getURI();
 
