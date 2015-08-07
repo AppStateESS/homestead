@@ -19,6 +19,8 @@
 
         PHPWS_Core::initCoreClass('DBPager.php');
 
+        $pageTags = array();
+
         $pageTags['USERNAME'] = _('Email');
         $pageTags['FIRST_NAME'] = _('First Name');
         $pageTags['LAST_NAME'] = _('Last Name');

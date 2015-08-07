@@ -19,6 +19,8 @@ class LotteryDenyRoommateRequestView extends hms\View {
 
         $requestor = StudentFactory::getStudentByUsername($this->request['requestor'], $this->term);
 
+        $tpl = array();
+
         $tpl['REQUESTOR']  = $requestor->getName();
         $tpl['CAPTCHA']    = Captcha::get();
 
@@ -38,5 +40,3 @@ class LotteryDenyRoommateRequestView extends hms\View {
         return PHPWS_Template::process($tpl, 'hms', 'student/lottery_deny_roommate_request.tpl');
     }
 }
-
-

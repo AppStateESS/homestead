@@ -1,19 +1,19 @@
 <?php
 
 class LotteryChooseFloorView extends hms\View {
-    
+
     private $student;
     private $term;
     private $hallId;
     private $rlcAssignment;
-    
+
     public function __construct(Student $student, $term, $hallId, HMS_RLC_Assignment $rlcAssignment = null){
         $this->student = $student;
         $this->term = $term;
         $this->hallId = $hallId;
         $this->rlcAssignment = $rlcAssignment;
     }
-    
+
     public function show()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
@@ -22,6 +22,8 @@ class LotteryChooseFloorView extends hms\View {
         PHPWS_Core::initModClass('filecabinet', 'Cabinet.php');
 
         $hall = new HMS_Residence_Hall($this->hallId);
+
+        $tpl = array();
 
         $tpl['HALL']            = $hall->hall_name;
         if(isset($hall->exterior_image_id)){
@@ -62,14 +64,14 @@ class LotteryChooseFloorView extends hms\View {
 
             $floorCmd = CommandFactory::getCommand('LotteryChooseFloor');
             $floorCmd->setFloorId($floor->id);
-            
+
             $row['FLOOR']           = $floorCmd->getLink(HMS_Util::ordinal($floor->floor_number) . ' floor');
             $row['ROW_TEXT_COLOR']  = 'grey';
             $tpl['floor_list'][]    = $row;
         }
 
         Layout::addPageTitle("Choose Floor");
-        
+
         return PHPWS_Template::process($tpl, 'hms', 'student/lottery_choose_floor.tpl');
     }
 }

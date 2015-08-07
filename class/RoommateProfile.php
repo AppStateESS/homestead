@@ -291,6 +291,8 @@ class RoommateProfile {
     {
         $student = StudentFactory::getStudentByBannerID($this->banner_id, $this->term);
 
+        $tags = array();
+
         $tags['STUDENT_ID'] = $student->getUsername() . "@appstate.edu";
         $tags['FIRST_NAME'] = $student->getFirstName();
         $tags['LAST_NAME'] = $student->getLastName();

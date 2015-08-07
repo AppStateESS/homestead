@@ -163,7 +163,7 @@ function hms_update(&$content, $currentVersion)
             $files[] = 'templates/admin/select_floor_for_edit.tpl';
             $files[] = 'templates/admin/select_residence_hall.tpl';
             $files[] = 'templates/admin/select_room_for_edit.tpl';
-            $fiels[] = 'templates/student/student_application.tpl';
+            $files[] = 'templates/student/student_application.tpl';
 
             PHPWS_Boost::updateFiles($files, 'hms');
 
@@ -1507,7 +1507,7 @@ function hms_update(&$content, $currentVersion)
             if (PEAR::isError($result)) {
                 return $result;
             }
-            
+
         case version_compare($currentVersion, '0.5.4', '<') :
             $content[] = '<pre>Adding hms_hall_structure view.</pre>';
             $db = new PHPWS_DB();
@@ -1515,7 +1515,7 @@ function hms_update(&$content, $currentVersion)
             if (PEAR::isError($result)) {
                 return $result;
             }
-            
+
     }
 
     return TRUE;

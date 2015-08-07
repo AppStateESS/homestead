@@ -17,6 +17,8 @@ class ResidenceHallView extends hms\View {
 
         javascript('jquery_ui');
 
+        $tpl = array();
+
         # Setup the title and color of the title bar
         $tpl['TITLE']   = $this->hall->getHallName();
         $tpl['TERM']    = Term::getPrintableSelectedTerm();

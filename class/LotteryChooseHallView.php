@@ -15,6 +15,8 @@ class LotteryChooseHallView extends hms\View {
 
     public function show()
     {
+        $tpl = array();
+
         $tpl['TERM'] = Term::toString($this->term) . ' - ' . Term::toString(Term::getNextTerm($this->term));
 
         $halls = ResidenceHallFactory::getHallsForTerm($this->term);

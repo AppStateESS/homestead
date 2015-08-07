@@ -47,6 +47,9 @@ class AssignmentDemographicsHtmlView extends ReportHtmlView {
             $tplRow['BLG_C_JR_FEMALE'] = $sum[TYPE_CONTINUING][CLASS_JUNIOR][FEMALE];
             $tplRow['BLG_C_SR_FEMALE'] = $sum[TYPE_CONTINUING][CLASS_SENIOR][FEMALE];
 
+            $byGender = array();
+            $byType = array();
+
             $byGender[MALE]   = 0;
             $byGender[FEMALE] = 0;
 
@@ -122,24 +125,22 @@ class AssignmentDemographicsHtmlView extends ReportHtmlView {
         // totals by gender
         $this->tpl['TOTAL_TOTAL_MALES']   = $genderTotals[MALE];
         $this->tpl['TOTAL_TOTAL_FEMALES'] = $genderTotals[FEMALE];
-        
+
         // totals by types
         $this->tpl['TOTAL_TOTAL_F'] = $typeTotals[TYPE_FRESHMEN];
         $this->tpl['TOTAL_TOTAL_T'] = $typeTotals[TYPE_TRANSFER];
         $this->tpl['TOTAL_TOTAL_C'] = $typeTotals[TYPE_CONTINUING];
         $this->tpl['TOTAL_OTHER'] = $typeTotals['OTHER'];
-                
+
         $this->tpl['TOTAL_TOTAL'] = $genderTotals[MALE] + $genderTotals[FEMALE] + $typeTotals['OTHER'];
-        
+
         // Problems....
         $problems = $this->report->getProblemsList();
         foreach($problems as $prob) {
         	$row = array('DESC' => $prob);
         	$this->tpl['problems'][] = $row;
         }
-        
+
         return PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/AssignmentDemographics.tpl');
     }
 }
-
-

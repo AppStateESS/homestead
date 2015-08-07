@@ -99,6 +99,9 @@ class LotteryProcess {
          * Reminder Emails *
          * *****************
          */
+
+        $output = array(); 
+
         if ($this->sendReminders) {
             $this->output[] = "Sending invite reminder emails...";
             $this->sendWinningReminderEmails();

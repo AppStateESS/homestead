@@ -21,6 +21,8 @@ class LotteryChooseRoomView extends hms\View {
 
         $floor  = new HMS_Floor($this->floorId);
 
+        $tpl = array();
+
         $tpl['HALL_FLOOR'] = $floor->where_am_i();
 
         if(isset($floor->floor_plan_image_id) && $floor->floor_plan_image_id != 0){

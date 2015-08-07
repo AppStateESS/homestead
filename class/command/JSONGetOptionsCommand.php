@@ -14,6 +14,8 @@ class JSONGetOptionsCommand
 
     public function execute(CommandContext $context)
     {
+        $options = array();
+
         $options['meal_plan'] = array(
         array('id' => BANNER_MEAL_LOW, 'value' => 'Low'),
         array('id' => BANNER_MEAL_STD, 'value' => 'Standard'),

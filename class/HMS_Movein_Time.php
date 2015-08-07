@@ -124,6 +124,8 @@ class HMS_Movein_Time
         $pager->addWhere('term', Term::getSelectedTerm());
         $pager->db->addOrder('begin_timestamp', 'DESC');
 
+        $pager_tags = array();
+
         $pager_tags['BEGIN_TIMESTAMP_LABEL']    = 'Begin Date & Time';
         $pager_tags['END_TIMESTAMP_LABEL']      = 'End Date & Time';
         $pager_tags['ACTION_LABEL']             = 'Action';
@@ -138,4 +140,3 @@ class HMS_Movein_Time
         return $pager->get();
     }
 }
-

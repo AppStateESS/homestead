@@ -23,6 +23,8 @@ class FreshmenMainMenuView extends hms\View {
         $terms = HousingApplication::getAvailableApplicationTermsForStudent($this->student);
         $applications = HousingApplication::getAllApplicationsForStudent($this->student);
 
+        $tpl = array();
+
         foreach($terms as $t){
 
             # If the student has a withdrawn application,
@@ -42,5 +44,3 @@ class FreshmenMainMenuView extends hms\View {
     }
 
 }
-
-

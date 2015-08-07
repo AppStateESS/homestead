@@ -523,6 +523,7 @@ class HMS_Room extends HMS_Item
      */
     public function get_row_tags()
     {
+        $tpl = array();
 
         $tpl['ID']             = $this->id;
         $tpl['ROOM_NUMBER']    = $this->getLink();
@@ -778,6 +779,8 @@ class HMS_Room extends HMS_Item
         $pager = new DBPager('hms_room', 'HMS_Room');
         $pager->addWhere('hms_room.floor_id', $floor_id);
         $pager->db->addOrder('hms_room.room_number');
+
+        $page_tags = array();
 
         if (Current_User::allow('hms', 'room_structure')) {
             $addRoomCmd = CommandFactory::getCommand('ShowAddRoom');

@@ -41,10 +41,10 @@ class CheckinHistoryView extends hms\View {
             $historyRows[] = $row;
         }
 
+        $tpl = array();
+
         $tpl['HISTORY'] = $historyRows;
 
         return PHPWS_Template::process($tpl, 'hms', 'admin/StudentCheckinHistoryView.tpl');
     }
 }
-
-

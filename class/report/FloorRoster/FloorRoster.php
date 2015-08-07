@@ -61,6 +61,7 @@ EOF;
             throw new DatabaseException($result->toString());
         }
 
+        $final_rows = array();
 
         foreach ($result as $row) {
             $hall_name = $row['hall_name'];

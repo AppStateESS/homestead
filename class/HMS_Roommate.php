@@ -529,6 +529,9 @@ class HMS_Roommate
         // TODO: COMMAND PATTERN
         $cmd = CommandFactory::getCommand('ShowRoommateConfirmation');
         $cmd->setRoommateId($this->id);
+
+        $tpl = array();
+
         $tpl['NAME'] = $cmd->getLink($name);
 
         $expires = floor(($this->calc_req_expiration_date() - time()) / 60 / 60);

@@ -299,6 +299,7 @@ class HMS_Bed extends HMS_Item {
 
     public function getPagerByRoomTags()
     {
+        $tags = array();
         $tags['BEDROOM'] = $this->bedroom_label;
         $tags['BED_LETTER'] = $this->getLink();
         $tags['ASSIGNED_TO'] = $this->get_assigned_to_link();
@@ -726,6 +727,8 @@ class HMS_Bed extends HMS_Item {
         $pager->addWhere('hms_room.id', $room_id);
         $pager->db->addOrder('hms_bed.bedroom_label');
         $pager->db->addOrder('hms_bed.bed_letter');
+
+        $page_tags = array();
 
         $page_tags['BEDROOM_LABEL'] = 'Bedroom';
         $page_tags['BED_LETTER_LABEL'] = 'Bed';
