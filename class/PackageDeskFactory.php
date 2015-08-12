@@ -37,7 +37,8 @@ class PackageDeskFactory {
         $desks = self::getPackageDesks();
         
         if (sizeof($desks) == 0) {
-            test('done!',1);
+            var_dump($desks);
+            exit;
             return array();
         }
         

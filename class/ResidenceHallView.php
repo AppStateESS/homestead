@@ -59,12 +59,13 @@ class ResidenceHallView extends hms\View {
         $form->addCheckBox('assignment_notifications', 1);
         $form->setMatch('assignment_notifications', $this->hall->assignment_notifications);
 
-        // Package Desks
-        //PHPWS_Core::initModClass('hms', 'PackageDeskFactory.php');
-        //$packageDesks = PackageDeskFactory::getPackageDesksAssoc();
-
-        //$form->addDropBox('package_desk', $packageDesks);
-        //$form->setMatch('package_desk', $this->hall->getPackageDeskId());
+        //Package Desks
+       
+        $packageDesks = PackageDeskFactory::getPackageDesksAssoc();
+        $packageDesks = array('-1' => 'None') + $packageDesks;
+        $form->addDropBox('package_desk', $packageDesks);
+        $form->setMatch('package_desk', $this->hall->getPackageDeskId());
+        $form->addCssClass('package_desk', 'form-control');
 
         // Images
         PHPWS_Core::initModClass('filecabinet', 'Cabinet.php');
