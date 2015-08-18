@@ -62,6 +62,7 @@ class RoomDamage {
         $row['SIDE']        = $this->getSide();
         $row['TERM']        = Term::toString($this->getTerm());
         $row['REPORTED_ON'] = HMS_Util::get_long_date($this->getReportedOn());
+        $row['NOTES'] = $this->getNote();
 
         return $row;
     }
@@ -127,4 +128,3 @@ class RoomDamage {
 class RoomDamageDb extends RoomDamage {
     public function __construct(){}
 }
-
