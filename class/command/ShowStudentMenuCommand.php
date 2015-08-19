@@ -37,6 +37,7 @@ class ShowStudentMenuCommand extends Command {
         if(empty($applicationTerm) || empty($studentType) ||
         empty($studentClass) ||
         empty($dob) ||
+        empty($gender) || $gender == 'N' ||
         is_null($dob))
         {
             # TODO: HMS_Mail here
@@ -132,5 +133,3 @@ class ShowStudentMenuCommand extends Command {
         }
     }
 }
-
-
