@@ -40,11 +40,10 @@ class ReviewHallNotificationMessageView extends hms\View {
             $floor = new HMS_Floor();
             $floor->id = $this->floors;
             $floor->load();
-            $floor->getHall();
             $floor->loadHall();
             $tpl['halls'][$floor->_hall->getHallName()][] = 'Floor '.$floor->getFloorNumber();
         }
-        
+
         $tpl['FROM']    = ($this->anonymous && Current_User::allow('hms', 'anonymous_notifications')) ? FROM_ADDRESS : (Current_User::getUsername() . '@' . DOMAIN_NAME);
         $tpl['SUBJECT'] = $this->subject;
         $tpl['BODY']    = preg_replace('/\n/', '<br />', $this->body);
@@ -96,4 +95,3 @@ class ReviewHallNotificationMessageView extends hms\View {
         return $template->get();
     }
 }
-
