@@ -107,7 +107,7 @@ class BeginDocusignCommand extends Command
             )
         );
 
-        // If student is under 18, then add parent role to list of signers                         
+        // If student is under 18, then add parent role to list of signers
         if ($under18) {
             $parentName = $context->get('parentName');
             $parentEmail = $context->get('parentEmail');
@@ -120,7 +120,6 @@ class BeginDocusignCommand extends Command
             );
         }
 
-        //var_dump($templateRoles);
         // Check for an existing contract
         $contract = ContractFactory::getContractByStudentTerm($student, $term);
 
@@ -128,19 +127,20 @@ class BeginDocusignCommand extends Command
             // Create a new envelope and save it
             if ($under18) {
                 // If student is under 18, use the template with parent signatures
-                $envelope = Docusign\EnvelopeFactory::createEnvelopeFromTemplate($docusignClient, $under18TemplateId, 'University Housing Contract', $templateRoles, 'sent');
+                $envelope = Docusign\EnvelopeFactory::createEnvelopeFromTemplate($docusignClient, $under18TemplateId, 'University Housing Contract', $templateRoles, 'sent', $student->getBannerId());
             } else {
                 // Student is over 18, so use the 1-signature template (without a parent signature)
-                $envelope = Docusign\EnvelopeFactory::createEnvelopeFromTemplate($docusignClient, $templateId, 'University Housing Contract', $templateRoles, 'sent');
+                $envelope = Docusign\EnvelopeFactory::createEnvelopeFromTemplate($docusignClient, $templateId, 'University Housing Contract', $templateRoles, 'sent', $student->getBannerId());
             }
 
-            // Create a new contract to save the envelope ID        
+            // Create a new contract to save the envelope ID
             $contract = new Contract($student, $term, $envelope->getEnvelopeId());
             ContractFactory::save($contract);
         } else {
             // Use the existing envelope id
             $envelope = Docusign\EnvelopeFactory::getEnvelopeById($docusignClient, $contract->getEnvelopeId());
         }
+
 
         $recipientView = new Docusign\RecipientView($docusignClient, $envelope, $student->getBannerId(), $student->getLegalName(), $student->getEmailAddress());
 
@@ -153,9 +153,9 @@ class BeginDocusignCommand extends Command
         }
 
         $returnUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https://' : 'http://') . $_SERVER['SERVER_NAME'] . $returnCmd->getURI();
-        //var_dump($returnUrl);exit;
+
         $url = $recipientView->getRecipientViewUrl($returnUrl);
-        //var_dump($url);exit;
+        
         PHPWS_Core::reroute($url);
         //$context->setContent('beginning signing process');
     }
