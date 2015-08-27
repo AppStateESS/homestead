@@ -590,7 +590,7 @@ class HMS_Floor extends HMS_Item
                     JOIN hms_floor ON hms_room.floor_id = hms_floor.id
                     WHERE (hms_bed.id NOT IN (SELECT bed_id FROM hms_lottery_reservation WHERE term = {$this->term} AND expires_on > $now)
                     AND hms_bed.id NOT IN (SELECT bed_id FROM hms_assignment WHERE term = {$this->term}))
-                    AND hms_floor.id = {$this->id}
+              AND hms_floor.id = {$this->id}
         			AND hms_floor.rlc_id IS null
         			AND hms_floor.is_online = 1
                     AND hms_room.gender_type IN ($gender, 3)
@@ -603,8 +603,11 @@ class HMS_Floor extends HMS_Item
         if($rlcId != null) {
         	$query .= "AND hms_room.reserved_rlc_id = $rlcId ";
         }
+        else {
+          $query .= "AND hms_room.reserved_rlc_id IS NULL ";
+        }
 
-         $query .= "AND hms_bed.international_reserved = 0
+        $query .= "AND hms_bed.international_reserved = 0
                     AND hms_bed.ra = 0
                     AND hms_bed.ra_roommate = 0";
 
