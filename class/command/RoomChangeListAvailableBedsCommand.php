@@ -7,11 +7,11 @@
  * @package hms
  */
 
-class RoomChnageListAvailableBedsCommand extends Command {
+class RoomChangeListAvailableBedsCommand extends Command {
 
     public function getRequestVars()
     {
-        return array('action'=>'RoomChnageListAvailableBeds');
+        return array('action'=>'RoomChangeListAvailableBeds');
     }
 
     public function execute(CommandContext $context)
@@ -19,6 +19,8 @@ class RoomChnageListAvailableBedsCommand extends Command {
         $term = Term::getCurrentTerm();
 
         $gender = $context->get('gender');
+
+
 
         if(!isset($gender)){
             echo "Missing gender!";
@@ -55,4 +57,3 @@ class RoomChnageListAvailableBedsCommand extends Command {
         exit;
     }
 }
-

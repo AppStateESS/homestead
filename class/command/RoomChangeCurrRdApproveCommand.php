@@ -63,7 +63,7 @@ class RoomChangeCurrRdApproveCommand extends Command {
         // has just selected a bed
         $toBedId = $participant->getToBed();
 
-        if (is_null($toBedId) && $toBedSelected == '-1') {
+        if (is_null($toBedId)) {
             NQ::simple('hms', hms\NotificationView::ERROR, 'Please select a destination bed.');
             $cmd->redirect();
         }
@@ -115,5 +115,3 @@ class RoomChangeCurrRdApproveCommand extends Command {
         $cmd->redirect();
     }
 }
-
-
