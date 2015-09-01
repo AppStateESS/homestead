@@ -69,12 +69,17 @@ class RoomChangeParticipantView extends hms\View {
         $tpl['FROM_ROOM'] = $fromBed->where_am_i();
 
         // To bed
+        $currentToBed = -1;
         $toBedId = $this->participant->getToBed();
         if (isset($toBedId)) {
             // If there's already a bed set, show the selected bed
             $toBed = new HMS_Bed($toBedId);
             $tpl['TO_ROOM'] = $toBed->where_am_i();
+            $currentToBed = $toBed->getId();
         }
+
+
+
 
         /**
           * Check to see if the state is already approved or completed
@@ -140,7 +145,7 @@ class RoomChangeParticipantView extends hms\View {
                     // Show the "select a bed" dialog, values are loaded via AJAX
 
                     javascript('jquery');
-                    javascriptMod('hms', 'roomChange', array('GENDER'=>$this->student->getGender(), 'PARTICIPANT_ID' => $this->participant->getId()));
+                    javascriptMod('hms', 'roomChange', array('CURRENT_TO_BED' => $currentToBed, 'GENDER'=>$this->student->getGender(), 'PARTICIPANT_ID' => $this->participant->getId()));
                 }
                 else {
 
@@ -185,7 +190,7 @@ class RoomChangeParticipantView extends hms\View {
         {
           if (count($this->participants) == 1) {
               javascript('jquery');
-              javascriptMod('hms', 'roomChange', array('GENDER'=>$this->student->getGender(), 'PARTICIPANT_ID' => $this->participant->getId()));
+              javascriptMod('hms', 'roomChange', array('CURRENT_TO_BED' => $currentToBed, 'GENDER'=>$this->student->getGender(), 'PARTICIPANT_ID' => $this->participant->getId()));
             }
         }
 
@@ -208,6 +213,7 @@ class RoomChangeParticipantView extends hms\View {
         }
 
         $tpl['history_rows'] = $stateRows;
+
 
         return PHPWS_Template::process($tpl, 'hms', 'admin/roomChangeParticipantView.tpl');
     }

@@ -15,6 +15,7 @@ class RoomChangeSetToBedCommand extends Command {
 
     private $participantId;
     private $bedId;
+    private $oldBedId;
 
 
     public function setParticipantId($id)
@@ -27,20 +28,27 @@ class RoomChangeSetToBedCommand extends Command {
         $this->bedId = $id;
     }
 
+    public function setOldBed($id)
+    {
+        $this->oldBedId = $id;
+    }
+
     public function getRequestVars()
     {
         return array('action'           => 'RoomChangeSetToBed',
                      'participantId'    => $this->participantId,
-                     'bedId'            => $this->bedId);
+                     'bedId'            => $this->bedId,
+                     'oldBedId'         => $this->oldBed);
     }
 
     public function execute(CommandContext $context)
     {
-
         $this->setParticipantId($context->get('participantId'));
         $this->setBedId($context->get('bedId'));
+        $this->setOldBed($context->get('oldBed'));
 
         $bed = new HMS_Bed($this->bedId);
+        $oldBed = new HMS_Bed($this->oldBedId);
 
         // Load the participant
         $participant = RoomChangeParticipantFactory::getParticipantById($this->participantId);
@@ -53,8 +61,11 @@ class RoomChangeSetToBedCommand extends Command {
 
         // Reserve the bed for room change
         $bed->setRoomChangeReserved();
-
         $bed->save();
+
+
+        $oldBed->clearRoomChangeReserved();
+        $oldBed->save();
 
         // Save the bed to this participant
         $participant->setToBed($bed);

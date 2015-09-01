@@ -46,7 +46,7 @@ var RoomChangeBox = React.createClass({
   },
   postData: function(bed){
     $.ajax({
-      url: 'index.php?module=hms&action=RoomChangeSetToBed&participantId='+partId+'&bedId='+bed,
+      url: 'index.php?module=hms&action=RoomChangeSetToBed&participantId='+partId+'&bedId='+bed+'&oldBed='+oldBed,
       type: 'POST',
       dataType: 'text',
       success: function(){
