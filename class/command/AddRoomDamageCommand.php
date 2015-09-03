@@ -21,22 +21,17 @@ class AddRoomDamageCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        $roomId = $context->get('roomId');
-        $damageType = $context->get('damage_type');
-        $term = $context->get('term');
+        $roomId = $context->get('roomPersistentId');
+        $damageType = $context->get('damageType');
+        $term = Term::getSelectedTerm();
         $side = $context->get('side');
-        $note = $context->get('note');
+        $note = $context->get('description');
 
         $room = RoomFactory::getRoomByPersistentId($roomId, $term);
 
         $damage = new RoomDamage($room, $term, $damageType, $side, $note);
 
-        $db = new PHPWS_DB('hms_room_damage');
-        $result = $db->saveObject($damage);
-
-        if(PHPWS_Error::logIfError($result)){
-            throw new DatabaseException($result->toString());
-        }
+        RoomDamageFactory::save($damage);
 
         echo 'success';
         exit;
