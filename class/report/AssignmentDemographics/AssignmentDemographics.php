@@ -13,6 +13,7 @@ class AssignmentDemographics extends Report {
 
     const friendlyName = 'Assignment Demographics';
     const shortName    = 'AssignmentDemographics';
+    const category     = 'Assignments';
 
     private $term;
 
@@ -21,11 +22,11 @@ class AssignmentDemographics extends Report {
     private $genders;
 
     private $halls; // A list of hall IDs and names
-    
+
     private $hallSummaries; // Array holding the summary data for each hall
     private $hallGenders;
     private $hallTypes;
-    
+
     private $grandTotals; // Array holding total data
     private $grandTotalsByGender;
     private $grandTotalsByType;
@@ -43,23 +44,23 @@ class AssignmentDemographics extends Report {
         $this->genders        = array(MALE, FEMALE);
 
         $this->hallSummaries  = array(); // Array of halls containing counts by type/class/gender
-        
+
         $this->grandTotals    = array(); // totals over all halls by type/class/gender
         $this->initializeArray($this->grandTotals);
-        
+
         $this->genderTotals   = array(); // totals by gender
         $this->typeTotals     = array(); // totals by student stype
-        
+
         // Initalize the array for totals by gender
         foreach($this->genders as $g){
             $this->grandTotalsByGender[$g] = 0;
         }
-        
+
         // Initalize the array for totals by student type
         foreach($this->studentTypes as $t){
             $this->grandTotalsByType[$t] = 0;
         }
-        
+
         $this->problems       = array();
     }
 
@@ -67,7 +68,7 @@ class AssignmentDemographics extends Report {
     {
         // Load the necessary classes
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        
+
         // Get a list of hall IDs and names
         $this->halls = $this->getHallList();
 
@@ -139,18 +140,18 @@ class AssignmentDemographics extends Report {
                     $arr[$t][$c][$g] = 0;
                 }
             }
-            
+
         }
-        
+
         $arr['OTHER'] = 0;
     }
-    
+
     private function getSummary(Array $assignments)
     {
         // Create the summary array for this set of assignments and initialize it
         $summary = array();
         $this->initializeArray($summary);
-        
+
         foreach($assignments as $assign){
             // Create the student object
             //TODO use banner IDs
@@ -199,18 +200,18 @@ class AssignmentDemographics extends Report {
             if($type == TYPE_RETURNING || $type == TYPE_READMIT){
                 $type = TYPE_CONTINUING;
             }
-            
+
             // If student type is freshmen, force class to freshmen
             if($type == TYPE_FRESHMEN){
                 $class = CLASS_FRESHMEN;
             }
-            
+
             $summary[$type][$class][$gender]++;
         }
-        
+
         return $summary;
     }
-    
+
     private function calcGrandTotals()
     {
         foreach($this->hallSummaries as $hall){
@@ -243,26 +244,24 @@ class AssignmentDemographics extends Report {
     public function getTerm(){
         return $this->term;
     }
-    
+
     public function getHallSummaries(){
         return $this->hallSummaries;
     }
-    
+
     public function getGrandTotals(){
         return $this->grandTotals;
     }
-    
+
     public function getGrandTotalsByType(){
         return $this->grandTotalsByType;
     }
-    
+
     public function getGrandTotalsByGender(){
         return $this->grandTotalsByGender;
     }
-    
+
     public function getProblemsList(){
     	return $this->problems;
     }
 }
-
-

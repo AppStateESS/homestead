@@ -13,6 +13,7 @@ class MismatchedRoommates extends Report
 
     const friendlyName = 'Mismatched Roommates';
     const shortName = 'MismatchedRoommates';
+    const category = 'Assignments';
 
     private $term;
 
@@ -119,4 +120,3 @@ class MismatchedRoommates extends Report
     }
 
 }
-

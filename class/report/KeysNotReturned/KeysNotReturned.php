@@ -7,7 +7,8 @@
 
 class KeysNotReturned extends Report implements iCsvReport {
     const friendlyName = 'Keys Not Returned';
-    const shortName = 'KeysNotReturned';
+    const shortName    = 'KeysNotReturned';
+    const category     = 'Checkin';
 
     private $term;
     private $rows;
@@ -73,4 +74,3 @@ class KeysNotReturned extends Report implements iCsvReport {
         return $cmd;
     }
 }
-

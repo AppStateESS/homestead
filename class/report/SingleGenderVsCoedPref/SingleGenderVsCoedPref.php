@@ -1,18 +1,19 @@
 <?php
 /**
  * SingleGenderVsCoedPref
- * 
+ *
  * Report class which calculates the number of male and female students
  * that preferred single-gender or coed housing assignments (as listed
  * on thier housing applications).
- * 
+ *
  * @author jbooker
  * @package HMS
  */
 class SingleGenderVsCoedPref extends Report{
 
     const friendlyName = 'Single Gender Vs Coed Preference';
-    const shortName = 'SingleGenderVsCoedPref';
+    const shortName    = 'SingleGenderVsCoedPref';
+    const category     = 'Applications';
 
     private $term;
 
@@ -131,19 +132,19 @@ class SingleGenderVsCoedPref extends Report{
     public function getTerm(){
         return $this->term;
     }
-    
+
     public function getMaleSingle(){
         return $this->maleSingle;
     }
-    
+
     public function getMaleCoed(){
         return $this->maleCoed;
     }
-    
+
     public function getFemaleSingle(){
         return $this->femaleSingle;
     }
-    
+
     public function getFemaleCoed(){
         return $this->femaleCoed;
     }

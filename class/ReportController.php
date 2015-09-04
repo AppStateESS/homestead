@@ -99,6 +99,18 @@ abstract class ReportController {
     }
 
     /**
+     * Returns the category of the report we're wrapping.
+     *
+     * @return String This report's category.
+     */
+    public function getCategory()
+    {
+        return $this->report->getCategory();
+    }
+
+
+
+    /**
      * Responsible for returning a View to be used on the ReportListView. Can be
      * overridden to provide a custom menu item view, but must return an objects
      * that extends the View class.

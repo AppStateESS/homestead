@@ -12,6 +12,7 @@ class CancelledAppsList extends Report implements iCsvReport{
 
     const friendlyName = 'Cancelled Housing Applications List';
     const shortName    = 'CancelledAppsList';
+    const category     = 'Applications';
 
     private $term;
     private $rows;
@@ -80,4 +81,3 @@ class CancelledAppsList extends Report implements iCsvReport{
         return $cmd;
     }
 }
-

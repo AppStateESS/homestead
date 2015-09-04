@@ -8,7 +8,8 @@
 
 class TwentyFive extends Report implements iCsvReport {
     const friendlyName = 'Students 25 and Older';
-    const shortName = 'TwentyFive';
+    const shortName    = 'TwentyFive';
+    const category     = 'Demographics';
 
     private $term;
     private $all_rows;
@@ -41,7 +42,7 @@ class TwentyFive extends Report implements iCsvReport {
         }
 
         $twentyFiveYearsAgo = strtotime("-25 years");
-        
+
         foreach ($results as $student) {
             try {
                 $sf = StudentFactory::getStudentByBannerId($student['banner_id'], $this->term);
@@ -78,11 +79,9 @@ class TwentyFive extends Report implements iCsvReport {
     {
         $this->term = $term;
     }
-    
+
     public function getTerm()
     {
         return $this->term;
     }
 }
-
-

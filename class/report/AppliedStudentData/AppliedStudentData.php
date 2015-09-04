@@ -8,6 +8,7 @@
 class AppliedStudentData extends Report implements iCsvReport {
     const friendlyName = 'Applied Student Data Export';
     const shortName = 'AppliedStudentData';
+    const category = 'Applications';
 
     private $term;
     private $rows;
@@ -33,7 +34,7 @@ class AppliedStudentData extends Report implements iCsvReport {
         $db->addWhere('cancelled', 0);
 
         $result = $db->select();
-        
+
         $apps = array();
 
         foreach ($result as $app) {
@@ -43,7 +44,7 @@ class AppliedStudentData extends Report implements iCsvReport {
             $type       = $app['student_type'];
             $cellPhone  = $app['cell_phone'];
             $date       = date('n/j/Y', $app['created_on']);
-            
+
 
             $assignment = HMS_Assignment::getAssignmentByBannerId($bannerId, $this->term);
 
@@ -60,7 +61,7 @@ class AppliedStudentData extends Report implements iCsvReport {
             $last   = $student->getLastName($username);
             $gender = $student->getPrintableGender();
             $birthday = date("m/d/Y", $student->getDobDateTime()->getTimestamp());
-            
+
             $address = $student->getAddress(NULL);
 
             if(!is_null($address) && $address !== false){
@@ -99,4 +100,3 @@ class AppliedStudentData extends Report implements iCsvReport {
         return $cmd;
     }
 }
-

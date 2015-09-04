@@ -113,16 +113,13 @@
 
 
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-7">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title"><i class="fa fa-wrench"></i> Damages</h3>
             </div>
             <div class="panel-body">
-                {ROOM_DAMAGE_LIST}
-                <p>
-                    <a id="addDamageLink" href="{ADD_DAMAGE_URI}" onclick="return false;" class="btn btn-success btn-sm">Add Damage</a>
-                </p>
+                <div id="RoomDamages"></div>
             </div>
         </div>
     </div>

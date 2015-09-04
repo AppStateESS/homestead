@@ -3,7 +3,8 @@
 class EarlyRelease extends Report implements iCSVReport
 {
     const friendlyName = 'Early Release';
-    const shortName = 'Early Release';
+    const shortName    = 'Early Release';
+    const category     = 'Applications';
 
     private $term;
 

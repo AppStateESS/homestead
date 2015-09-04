@@ -10,6 +10,7 @@ class CancelledAppsContinuingGraph extends Report {
 
     const friendlyName = 'Cancelled Application Graph (Continuing)';
     const shortName = 'CancelledAppsContinuingGraph';
+    const category = 'Applications';
 
     private $lastTerm;
 

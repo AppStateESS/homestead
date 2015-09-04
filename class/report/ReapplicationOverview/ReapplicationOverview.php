@@ -3,38 +3,39 @@
 /**
  * ReapplicationOverview report.
  * Gives various statistics related to re-application.
- * 
+ *
  * @author jbooker
  * @package HMS
  */
 
 class ReapplicationOverview extends Report implements iCsvReport {
-    
+
     const friendlyName = 'Reapplication Overview';
-    const shortName = 'ReapplicationOverview';
-    
+    const shortName    = 'ReapplicationOverview';
+    const category     = 'Applications';
+
     private $term;
-    
+
     private $data;
-    
+
     public function __construct($id = 0){
         parent::__construct($id);
-        
+
         $this->data = array();
     }
-    
+
     public function execute()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
         PHPWS_Core::initModClass('hms', 'LotteryProcess.php');
-        
+
         $lotteryTerm = PHPWS_Settings::get('hms', 'lottery_term');
-        
+
         /*******************************
          * Gross number of application *
          *******************************/
         $this->data['LOTTERY_APPS'] = LotteryProcess::countGrossApplicationsByClassGender($lotteryTerm);
-        
+
         $this->data['SOPH_APPS']    = LotteryProcess::countGrossApplicationsByClassGender($lotteryTerm, CLASS_SOPHOMORE);
         $this->data['SOPH_M_APPS']  = LotteryProcess::countGrossApplicationsByClassGender($lotteryTerm, CLASS_SOPHOMORE, MALE);
         $this->data['SOPH_F_APPS']  = LotteryProcess::countGrossApplicationsByClassGender($lotteryTerm, CLASS_SOPHOMORE, FEMALE);
@@ -58,7 +59,7 @@ class ReapplicationOverview extends Report implements iCsvReport {
 
         $this->data['NET_SO_APPS']   = LotteryProcess::countNetAppsByClassGender($lotteryTerm, CLASS_SOPHOMORE);
         $this->data['NET_SO_M_APPS'] = LotteryProcess::countNetAppsByClassGender($lotteryTerm, CLASS_SOPHOMORE, MALE);
-        $this->data['NET_SO_F_APPS'] = LotteryProcess::countNetAppsByClassGender($lotteryTerm, CLASS_SOPHOMORE, FEMALE); 
+        $this->data['NET_SO_F_APPS'] = LotteryProcess::countNetAppsByClassGender($lotteryTerm, CLASS_SOPHOMORE, FEMALE);
 
         $this->data['NET_JR_APPS']   =  LotteryProcess::countNetAppsByClassGender($lotteryTerm, CLASS_JUNIOR);
         $this->data['NET_JR_M_APPS'] = LotteryProcess::countNetAppsByClassGender($lotteryTerm, CLASS_JUNIOR, MALE);
@@ -95,19 +96,19 @@ class ReapplicationOverview extends Report implements iCsvReport {
         $db->addWhere('reason', 'lottery');
         $numLotteryAssigned = $db->select('count');
 
-        
+
         /***********************
          * Outstanding Invites *
          */
         $this->data['ROOMMATE_INVITES']        = LotteryProcess::countOutstandingRoommateInvites($lotteryTerm);
-        
+
         $this->data['PENDING_SOPH_INVITES']    = LotteryProcess::countOutstandingInvites($lotteryTerm, CLASS_SOPHOMORE);
         $this->data['PENDING_JR_INVITES']      = LotteryProcess::countOutstandingInvites($lotteryTerm, CLASS_JUNIOR);
         $this->data['PENDING_SR_INVITES']      = LotteryProcess::countOutstandingInvites($lotteryTerm, CLASS_SENIOR);
 
         // Assignments
         $this->data['LOTTERY_ASSIGNED']        = $numLotteryAssigned;
-        
+
         // Assignments by class
         $this->data['SOPH_ASSIGNED']           = LotteryProcess::countLotteryAssignedByClassGender($lotteryTerm, CLASS_SOPHOMORE);
         $this->data['SOPH_MALE_ASSIGNED']      = LotteryProcess::countLotteryAssignedByClassGender($lotteryTerm, CLASS_SOPHOMORE, MALE);
@@ -135,7 +136,7 @@ class ReapplicationOverview extends Report implements iCsvReport {
         $this->data['SR_M_ENTRIES_REMAIN']     = LotteryProcess::countRemainingApplicationsByClassGender($lotteryTerm, CLASS_SENIOR, MALE);
         $this->data['SR_F_ENTRIES_REMAIN']   = LotteryProcess::countRemainingApplicationsByClassGender($lotteryTerm, CLASS_SENIOR, FEMALE);
         $this->data['SR_ENTRIES_REMAIN']          = $this->data['SR_M_ENTRIES_REMAIN'] + $this->data['SR_F_ENTRIES_REMAIN'];
-        
+
         $this->data['REMAINING_ENTRIES']          = LotteryProcess::countRemainingApplications($lotteryTerm);
     }
 
@@ -162,26 +163,24 @@ class ReapplicationOverview extends Report implements iCsvReport {
                      'junior invites sent',
                      'senior invites sent');
     }
-    
+
     public function getCsvRowsArray(){
         $rows = array();
         $rows[] = $this->data;
         return $rows;
     }
-    
+
     public function getData(){
         return $this->data;
     }
-    
+
     public function setTerm($term)
     {
         $this->term = $term;
     }
-    
+
     public function getTerm()
     {
         return $this->term;
     }
 }
-
-

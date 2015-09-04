@@ -13,7 +13,8 @@
  */
 class HallOccupancy extends Report {
     const friendlyName = 'Hall Occupancy';
-    const shortName = 'HallOccupancy';
+    const shortName    = 'HallOccupancy';
+    const category     = 'Hall_Structure';
 
     private $rows;
     private $problems;

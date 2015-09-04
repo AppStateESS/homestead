@@ -8,6 +8,7 @@
 class AuditAssignmentList extends Report implements iCsvReport {
     const friendlyName = 'Audit Assignment List';
     const shortName = 'AuditAssignmentList';
+    const category = 'Assignments';
 
     private $term;
     private $rows;

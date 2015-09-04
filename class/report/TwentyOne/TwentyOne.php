@@ -10,7 +10,8 @@
 class TwentyOne extends Report implements iCsvReport {
 
     const friendlyName = 'Students 21 and Older';
-    const shortName = 'TwentyOne';
+    const shortName    = 'TwentyOne';
+    const category     = 'Demographics';
 
     private $term;
 

@@ -7,7 +7,8 @@
 
 class SpecialNeedsRequest extends Report {
     const friendlyName = 'Special Needs Request';
-    const shortName = 'SpecialNeedsRequest';
+    const shortName    = 'SpecialNeedsRequest';
+    const category     = 'Applications';
 
     private $term;
     private $sorted_rows = array();
@@ -136,5 +137,3 @@ class SpecialNeedsRequest extends Report {
     }
 
 }
-
-
