@@ -11,6 +11,7 @@ PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 class AssignedStudentData extends Report implements iCsvReport {
     const friendlyName = 'Assigned Student Data Export';
     const shortName = 'AssignedStudentData';
+    const category = "Assignments";
 
     private $term;
     private $rows;
@@ -87,7 +88,7 @@ class AssignedStudentData extends Report implements iCsvReport {
             $appTerm = $student->getApplicationTerm();
             $cellPhone= $row['cell_phone'];
             $assignmentType = $row['reason'];
-            
+
             $gender = HMS_Util::formatGender($student->getGender());
             $dob = $student->getDob();
 
@@ -136,5 +137,3 @@ class AssignedStudentData extends Report implements iCsvReport {
     }
 
 }
-
-

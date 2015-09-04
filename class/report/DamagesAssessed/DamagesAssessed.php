@@ -8,6 +8,7 @@
 class DamagesAssessed extends Report implements iCsvReport {
     const friendlyName = 'Assessed Damages Export';
     const shortName = 'AssessedDamages';
+    const category     = 'Checkin';
 
     private $term;
     private $rows;
@@ -73,4 +74,3 @@ class DamagesAssessed extends Report implements iCsvReport {
         return $cmd;
     }
 }
-

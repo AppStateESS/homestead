@@ -10,6 +10,7 @@ class CancelledAppsByType extends Report {
 
     const friendlyName = 'Cancelled Housing Applications by Student Type';
     const shortName    = 'CancelledAppsByStudentType';
+    const category     = 'Applications';
 
     private $term;
     private $typeCounts;

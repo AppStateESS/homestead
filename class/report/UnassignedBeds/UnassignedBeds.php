@@ -13,7 +13,8 @@
 class UnassignedBeds extends Report implements iCsvReport {
 
     const friendlyName = 'Unassigned Beds';
-    const shortName = 'UnassignedBeds';
+    const shortName    = 'UnassignedBeds';
+    const category     = 'Hall_Structure';
 
     private $term;
 
@@ -146,4 +147,3 @@ class UnassignedBeds extends Report implements iCsvReport {
         return $this->coed;
     }
 }
-

@@ -14,6 +14,7 @@ class CheckinsByHall extends Report {
 
     const friendlyName = 'Check-ins By Hall';
     const shortName    = 'CheckinsByHall';
+    const category     = 'Checkin';
 
     private $term;
 
@@ -52,4 +53,3 @@ class CheckinsByHall extends Report {
         return $this->checkinCounts;
     }
 }
-

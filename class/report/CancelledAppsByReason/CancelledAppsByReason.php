@@ -11,6 +11,7 @@ class CancelledAppsByReason extends Report {
 
     const friendlyName = 'Cancelled Housing Applications by Cancellation Reason';
     const shortName    = 'CancelledAppsByReason';
+    const category     = 'Applications';
 
     private $term;
     private $reasonCounts;

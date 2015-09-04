@@ -13,7 +13,8 @@
  */
 class MoveInTimes extends Report {
     const friendlyName = 'Move In Times';
-    const shortName = 'MoveInTimes';
+    const shortName    = 'MoveInTimes';
+    const category     = 'Hall_Structure';
 
     private $term;
     private $rows;

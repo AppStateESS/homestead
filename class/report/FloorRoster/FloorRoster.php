@@ -12,8 +12,9 @@ PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
 class FloorRoster extends Report {
     const friendlyName = 'Floor Roster';
-    const shortName = 'FloorRoster';
-    
+    const shortName    = 'FloorRoster';
+    const category     = 'Assignments';
+
     public $rows;
 
     public function setTerm($term)
@@ -81,15 +82,13 @@ EOF;
     {
         return $this->rows;
     }
-    
+
     public function getDefaultOutputViewCmd()
     {
         $cmd = CommandFactory::getCommand('ShowReportPdf');
         $cmd->setReportId($this->id);
-    
+
         return $cmd;
     }
 
 }
-
-

@@ -13,6 +13,7 @@ class ApplicantDemographics extends Report {
 
     const friendlyName = 'Freshmen/Transfer Applicant Demographics';
     const shortName    = 'ApplicantDemographics';
+    const category     = 'Applications';
 
     private $term;
 

@@ -10,7 +10,8 @@
 class GenderDistributionByHall extends Report implements iCsvReport {
 
     const friendlyName = 'Gender Distribution By Hall';
-    const shortName = 'GenderDistributionByHall';
+    const shortName    = 'GenderDistributionByHall';
+    const category     = 'Demographics';
 
     private $term;
 

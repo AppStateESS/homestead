@@ -11,7 +11,8 @@
 class CheckinList extends Report implements iCsvReport {
 
     const friendlyName = 'Check-in - List of Check-ins';
-    const shortName = 'CheckinList';
+    const shortName    = 'CheckinList';
+    const category     = 'Checkin';
 
     private $term;
 
@@ -97,5 +98,3 @@ class CheckinList extends Report implements iCsvReport {
         return $this->total;
     }
 }
-
-

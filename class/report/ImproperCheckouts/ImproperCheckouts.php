@@ -7,7 +7,8 @@
 
 class ImproperCheckouts extends Report implements iCsvReport {
     const friendlyName = 'Improper Checkouts';
-    const shortName = 'ImproperCheckouts';
+    const shortName    = 'ImproperCheckouts';
+    const category     = 'Checkin';
 
     private $term;
     private $rows;
@@ -73,4 +74,3 @@ class ImproperCheckouts extends Report implements iCsvReport {
         return $cmd;
     }
 }
-

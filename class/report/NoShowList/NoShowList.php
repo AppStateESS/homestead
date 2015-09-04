@@ -11,8 +11,9 @@
 class NoShowList extends Report implements iCsvReport {
 
     const friendlyName = 'Check-in - List of No-shows';
-    const shortName = 'NoShowList';
-
+    const shortName    = 'NoShowList';
+    const category     = 'Assignments';
+    
     private $term;
 
     // Counts
@@ -108,5 +109,3 @@ class NoShowList extends Report implements iCsvReport {
         return $this->total;
     }
 }
-
-

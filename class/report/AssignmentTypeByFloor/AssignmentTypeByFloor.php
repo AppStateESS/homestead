@@ -13,6 +13,7 @@ class AssignmentTypeByFloor extends Report {
 
     const friendlyName = 'Assignment Type By Floor';
     const shortName    = 'AssignmentTypeByFloor';
+    const category     = 'Assignments';
 
     private $term;
 

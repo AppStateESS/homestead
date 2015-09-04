@@ -14,6 +14,7 @@ class AssignmentsByType extends Report {
 
     const friendlyName = 'Assignments By Type';
     const shortName    = 'AssignmentsByType';
+    const category     = 'Assignments';
 
     private $term;
 
