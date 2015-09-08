@@ -16,6 +16,7 @@ class BannerQueueItem {
     public $meal_plan = 'HOME';
     public $meal_code;
     public $percent_refund;
+    public $banner_id;
 
     public $queued_on;
     public $queued_by;
@@ -39,6 +40,7 @@ class BannerQueueItem {
         $this->meal_plan        = $mealPlan;
         $this->meal_code        = $mealCode;
         $this->percent_refund   = $percentRefund;
+        $this->banner_id        = $student->getBannerId();
 
     }
 
@@ -106,8 +108,8 @@ class BannerQueueItem {
 
         switch($this->type) {
             case BANNER_QUEUE_ASSIGNMENT:
-                $result = $soap->reportRoomAssignment(
-                $this->asu_username,
+                $result = $soap->createRoomAssignment(
+                $this->banner_id,
                 $this->term,
                 $this->building_code,
                 $this->bed_code,
@@ -126,12 +128,8 @@ class BannerQueueItem {
                 }
                 break;
             case BANNER_QUEUE_REMOVAL:
-                // Get the Banner ID from the user name
-                // TODO fix this to use BannerID directly
-                $bannerId = $soap->getBannerId($this->asu_username);
-
                 $result = $soap->removeRoomAssignment(
-                                    $bannerId,
+                                    $this->banner_id,
                                     $this->term,
                                     $this->building_code,
                                     $this->bed_code,
@@ -149,7 +147,8 @@ class BannerQueueItem {
                 break;
         }
 
+
+
         return $result;
     }
 }
-
