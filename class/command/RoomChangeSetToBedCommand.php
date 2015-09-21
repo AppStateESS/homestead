@@ -48,24 +48,30 @@ class RoomChangeSetToBedCommand extends Command {
         $this->setOldBed($context->get('oldBed'));
 
         $bed = new HMS_Bed($this->bedId);
-        $oldBed = new HMS_Bed($this->oldBedId);
-
+        if($this->oldBedId != -1)
+        {
+          $oldBed = new HMS_Bed($this->oldBedId);
+        }
         // Load the participant
         $participant = RoomChangeParticipantFactory::getParticipantById($this->participantId);
 
         // Check that the bed isn't already reserved for a room change
         if($bed->isRoomChangeReserved()){
-            NQ::simple('hms', hms\NotificationView::ERROR, 'The bed you selected is already reserved for a room change. Please choose a different bed.');
+            NQ::simple('hms'  , hms\NotificationView::ERROR, 'The bed you selected is already reserved for a room change. Please choose a different bed.');
             $cmd->redirect();
         }
+
 
         // Reserve the bed for room change
         $bed->setRoomChangeReserved();
         $bed->save();
 
 
-        $oldBed->clearRoomChangeReserved();
-        $oldBed->save();
+        if($this->oldBedId != -1)
+        {
+          $oldBed->clearRoomChangeReserved();
+          $oldBed->save();
+        }
 
         // Save the bed to this participant
         $participant->setToBed($bed);
