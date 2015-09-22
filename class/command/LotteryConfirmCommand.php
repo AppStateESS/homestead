@@ -68,7 +68,7 @@ class LotteryConfirmCommand extends Command {
         PHPWS_Core::initModClass('hms', 'RlcAssignmentSelfAssignedState.php');
 
         $room = new HMS_Room($roomId);
-        
+
         // Check for an RLC assignment in the self-select status
         $rlcAssignment = RlcMembershipFactory::getMembership($student, $term);
 
@@ -108,12 +108,22 @@ class LotteryConfirmCommand extends Command {
                 $errorCmd->redirect();
             }
 
-            // Double check the students' elligibilities
-            if(HMS_Lottery::determineEligibility($username) !== TRUE){
+            // If this student is an RLC-self-selection, then each roommate must be in the same RLC and in the selfselect-invite state too
+            if($rlcAssignment != null && $rlcAssignment->getStateName() == 'selfselect-invite') {
+                // This student is an RLC-self-select, so check the roommate's RLC status
+                $roommateRlcAssign = RlcMembershipFactory::getMembership($roommate, $term);
+                // Make sure the roommate is a member of the same RLC and is eligible for self-selection
+                if($roommateRlcAssign == null || $roommateRlcAssign->getStateName() != 'selfselect-invite' || $rlcAssignment->getRlc()->getId() != $roommateRlcAssign->getRlc()->getId()) {
+                    NQ::simple('hms', hms\NotificationView::ERROR, "$roommate must be a member of the same learning community as you, and must also be eligible for self-selction.");
+                    $errorCmd->redirect();
+                }
+
+            // Otherwise (if not RLC members), make sure each roommate is eligible
+            } else if(HMS_Lottery::determineEligibility($username) !== TRUE){
                 NQ::simple('hms', hms\NotificationView::ERROR, "$username is not eligible for assignment.");
                 $errorCmd->redirect();
             }
-            
+
             // If this student is a self-select RLC member, then this student must also be a self-select RLC member of the same RLC
             if($rlcAssignment != null && $rlcAssignment->getStateName() == 'selfselect-invite')
             {
@@ -142,7 +152,7 @@ class LotteryConfirmCommand extends Command {
             $errorCmd->redirect();
         }
         */
-        
+
         // Log the assignment
         HMS_Activity_Log::log_activity(UserStatus::getUsername(), ACTIVITY_LOTTERY_ROOM_CHOSEN, UserStatus::getUsername(), 'Captcha: ' . $captcha);
 
@@ -150,7 +160,7 @@ class LotteryConfirmCommand extends Command {
         $app = HousingApplication::getApplicationByUser($student->getUsername(), $term);
         $app->setMealPlan($mealPlan);
         $app->save();
-        
+
         // If this student was an RLC self-select, update the RLC memberhsip state
         if($rlcAssignment != null && $rlcAssignment->getStateName() == 'selfselect-invite') {
         	$rlcAssignment->changeState(new RlcAssignmentSelfAssignedState($rlcAssignment));
@@ -187,5 +197,3 @@ class LotteryConfirmCommand extends Command {
         $successCmd->redirect();
     }
 }
-
-
