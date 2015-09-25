@@ -647,7 +647,7 @@ class HMS_Bed extends HMS_Item {
     * The 'ra_bed' flag is expected to be either TRUE or FALSE.
     * @return TRUE for success, FALSE otherwise
     */
-    public static function addBed($roomId, $term, $bedLetter, $bedroomLabel, $phoneNumber, $bannerId, $raRoommate, $intlReserved, $raBed)
+    public static function addBed($roomId, $term, $bedLetter, $bedroomLabel, $phoneNumber, $bannerId, $raRoommate, $intlReserved, $raBed, $persistentId)
     {
         // Check permissions
         if (!UserStatus::isAdmin() || !Current_User::allow('hms', 'bed_structure')) {
@@ -671,6 +671,7 @@ class HMS_Bed extends HMS_Item {
         $bed->ra = $raBed;
         $bed->ra_roommate = $raRoommate;
         $bed->international_reserved = $intlReserved;
+        $bed->persistent_id = $persistentId;
 
         try {
             $bed->save();
