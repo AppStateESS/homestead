@@ -175,7 +175,7 @@ class HMS_Bed extends HMS_Item {
         if (!isset($this->_curr_assignment->banner_id)) {
             return NULL;
         } else {
-            return StudentFactory::getStudentByUsername($this->_curr_assignment->getBannerId(), $this->term);
+            return StudentFactory::getStudentByBannerID($this->_curr_assignment->getBannerId(), $this->term);
         }
     }
 
