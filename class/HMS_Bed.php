@@ -172,10 +172,10 @@ class HMS_Bed extends HMS_Item {
             return false;
         }
 
-        if (!isset($this->_curr_assignment->asu_username)) {
+        if (!isset($this->_curr_assignment->banner_id)) {
             return NULL;
         } else {
-            return StudentFactory::getStudentByUsername($this->_curr_assignment->asu_username, $this->term);
+            return StudentFactory::getStudentByUsername($this->_curr_assignment->getBannerId(), $this->term);
         }
     }
 
