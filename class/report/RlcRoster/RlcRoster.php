@@ -42,7 +42,7 @@ class RlcRoster extends Report {
                             JOIN hms_learning_community_applications
                                 ON hms_learning_community_assignment.application_id = hms_learning_community_applications.id
                             JOIN hms_assignment
-                                ON hms_learning_community_applications.username = hms_assignment.asu_username
+                                ON (hms_learning_community_applications.username = hms_assignment.asu_username AND hms_learning_community_applications.term = hms_assignment.term)
                             JOIN hms_bed
                                 ON hms_assignment.bed_id = hms_bed.id
                             JOIN hms_room
