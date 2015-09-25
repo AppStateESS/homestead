@@ -364,7 +364,7 @@ class HMS_RLC_Assignment {
         }
 
         // Phone number
-        if ($cellPhone instanceof HousingApplication) {
+        if ($housingApp instanceof HousingApplication) {
             $cellPhone = $housingApp->getCellPhone();
             if (isset($cellPhone) && $cellPhone != '') {
                 $row['cell_phone'] = $cellPhone;
