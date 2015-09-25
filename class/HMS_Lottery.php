@@ -429,18 +429,15 @@ class HMS_Lottery {
         $requestor = StudentFactory::getStudentByUsername($invite['requestor'], $term);
 
         // Actually make the assignment
-        $assign_result = HMS_Assignment::assignStudent($student, $term, null, $invite['bed_id'], $meal_plan, 'Confirmed roommate invite', true, ASSIGN_LOTTERY);
+        HMS_Assignment::assignStudent($student, $term, null, $invite['bed_id'], $meal_plan, 'Confirmed roommate invite', true, ASSIGN_LOTTERY);
 
         // return successfully
         HMS_Email::send_roommate_confirmation($student, $requestor);
         return E_SUCCESS;
     }
 
-    public static function denyRoommateRequest($username, $requestId)
+    public static function denyRoommateRequest($requestId)
     {
-        // Get the roommate invite
-        $invite = HMS_Lottery::get_lottery_roommate_invite_by_id($requestId);
-
         // Delete the invite
         $db = new PHPWS_DB('hms_lottery_reservation');
         $db->addWhere('id', $requestId);
@@ -477,7 +474,6 @@ class HMS_Lottery {
     // Translates an application term into a class (fr, soph, etc) based on the term given
     public static function application_term_to_class($curr_term, $application_term)
     {
-
         // Break up the term and year
         $yr = floor($application_term / 100);
         $sem = $application_term - ($yr * 100);
@@ -513,6 +509,8 @@ class HMS_Lottery {
 
     public static function getSpecialInterestGroupsMap()
     {
+        $special_interests = array();
+        
         $special_interests['none'] = 'None';
         $special_interests['honors'] = 'The Honors College';
         $special_interests['watauga_global'] = 'Watauga Global Community';
@@ -533,6 +531,8 @@ class HMS_Lottery {
 
     public static function getSororities()
     {
+        $sororities = array();
+
         $sororities['sorority_adp'] = 'Alpha Delta Pi Sorority';
         $sororities['sorority_ap'] = 'Aplha Phi Sorority';
         $sororities['sorority_co'] = 'Chi Omega Sorority';

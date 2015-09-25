@@ -620,6 +620,8 @@ class HMS_Floor extends HMS_Item
     {
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
+        $tpl = array();
+
         $tpl['FLOOR_NUMBER']   = $this->getLink();
         $tpl['GENDER_TYPE'] = HMS_Util::formatGender($this->gender_type);
         $tpl['IS_ONLINE']   = $this->is_online ? 'Yes' : 'No';

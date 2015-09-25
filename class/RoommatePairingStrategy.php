@@ -12,7 +12,7 @@ abstract class RoommatePairingStrategy {
         $this->term = $term;
     }
 
-    abstract function doPairing(&$applications, &$pairs);
+    public abstract function doPairing(&$applications, &$pairs);
 
     protected function pairAllowed($requestor, $requestee)
     {
@@ -51,5 +51,3 @@ abstract class RoommatePairingStrategy {
         return new AssignmentPairing($studentA, $studentB, $option, $earliestTime);
     }
 }
-
-

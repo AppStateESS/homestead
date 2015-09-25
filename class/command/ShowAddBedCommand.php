@@ -28,7 +28,7 @@ class ShowAddBedCommand extends Command {
         $this->bannerId = $id;
     }
 
-    function getRequestVars(){
+    public function getRequestVars(){
         $vars = array('action'=>'ShowAddBed');
 
         $vars['roomId'] = $this->roomId;
@@ -52,7 +52,7 @@ class ShowAddBedCommand extends Command {
         return $vars;
     }
 
-    function execute(CommandContext $context)
+    public function execute(CommandContext $context)
     {
         if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'bed_structure')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
@@ -72,5 +72,3 @@ class ShowAddBedCommand extends Command {
         $context->setContent($addBedView->show());
     }
 }
-
-

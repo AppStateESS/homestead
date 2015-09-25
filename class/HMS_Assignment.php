@@ -563,7 +563,7 @@ class HMS_Assignment extends HMS_Item {
                 $roommate_assign->letter_printed = 0;
                 $roommate_assign->email_sent = 0;
 
-                $result = $roommate_assign->save();
+                $roommate_assign->save();
             }
         }
 
@@ -607,7 +607,7 @@ class HMS_Assignment extends HMS_Item {
         }
 
         $username = strtolower($username);
-        
+
         // Check refund field, required field
         if(!isset($refund) || $refund == '') {
             throw new InvalidArgumentException('Please enter a refund percentage.');
@@ -675,7 +675,7 @@ class HMS_Assignment extends HMS_Item {
                 $roommate_assign->letter_printed = 0;
                 $roommate_assign->email_sent = 0;
 
-                $result = $roommate_assign->save();
+                $roommate_assign->save();
             }
         }
 

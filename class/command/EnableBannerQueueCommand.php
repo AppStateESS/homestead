@@ -3,11 +3,11 @@
 class EnableBannerQueueCommand extends Command {
     private $term;
 
-    function setTerm($term) {
+    public function setTerm($term) {
         $this->term = $term;
     }
 
-    function getRequestVars() {
+    public function getRequestVars() {
         $vars = array('action' => 'EnableBannerQueue');
 
         if(isset($this->term)) {
@@ -17,7 +17,7 @@ class EnableBannerQueueCommand extends Command {
         return $vars;
     }
 
-    function execute(CommandContext $context) {
+    public function execute(CommandContext $context) {
 
         if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'banner_queue')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
@@ -44,4 +44,3 @@ class EnableBannerQueueCommand extends Command {
         CommandContext::goBack();
     }
 }
-

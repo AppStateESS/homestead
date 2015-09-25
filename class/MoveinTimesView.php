@@ -13,6 +13,8 @@ class MoveinTimesView extends hms\View {
     public function show(){
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
+        $tpl = array();
+
         $tpl['TITLE'] = 'Edit Move-in Times';
 
         $form = new PHPWS_Form();
@@ -57,5 +59,3 @@ class MoveinTimesView extends hms\View {
     }
 
 }
-
-

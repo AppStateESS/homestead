@@ -9,7 +9,7 @@ class HMSFactory
 {
     private static $hms;
 
-    static function getHMS()
+    public static function getHMS()
     {
         $rh = getallheaders();
 

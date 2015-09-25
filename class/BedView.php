@@ -28,6 +28,7 @@ class BedView extends hms\View
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
+        $tpl = array();
         $tpl['TERM'] = Term::toString($this->bed->getTerm());
         $tpl['HALL_NAME'] = $this->hall->getLink();
         $tpl['FLOOR_NUMBER'] = $this->floor->getLink('Floor');

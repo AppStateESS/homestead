@@ -4,11 +4,11 @@ class ShowUnassignStudentCommand extends Command {
 
     private $username;
 
-    function setUsername($username){
+    public function setUsername($username){
         $this->username = $username;
     }
 
-    function getRequestVars(){
+    public function getRequestVars(){
         $vars = array();
 
         $vars['action'] = 'ShowUnassignStudent';
@@ -20,7 +20,7 @@ class ShowUnassignStudentCommand extends Command {
         return $vars;
     }
 
-    function execute(CommandContext $context)
+    public function execute(CommandContext $context)
     {
         if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'assignment_maintenance')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
@@ -43,5 +43,3 @@ class ShowUnassignStudentCommand extends Command {
         $context->setContent($unassignView->show());
     }
 }
-
-

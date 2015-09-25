@@ -27,6 +27,7 @@ class AddRoomDamageView extends hms\View {
 
         $form = new PHPWS_Form('addDamageForm');
 
+
         $submitCmd->initForm($form);
 
         $damageTypes = DamageTypeFactory::getDamageTypeAssoc();
@@ -60,6 +61,8 @@ class AddRoomDamageView extends hms\View {
         }
 
         $damageDrop .= "</select>";
+
+        $tags = array();
 
         $tags['DAMAGE_TYPE'] = $damageDrop;
 

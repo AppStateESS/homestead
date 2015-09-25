@@ -3,7 +3,7 @@
 PHPWS_Core::initModClass('hms', 'ApplicationFeature.php');
 
 class VerifyAssignmentRegistration extends ApplicationFeatureRegistration {
-    function __construct()
+    public function __construct()
     {
         $this->name = 'VerifyAssignment';
         $this->description = 'Verify Assignment';
@@ -33,6 +33,3 @@ class VerifyAssignment extends ApplicationFeature {
     }
 
 }
-
-
-

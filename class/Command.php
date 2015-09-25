@@ -11,8 +11,8 @@ abstract class Command
 {
     protected $context;
 
-    abstract function getRequestVars();
-    abstract function execute(CommandContext $context);
+    public abstract function getRequestVars();
+    public abstract function execute(CommandContext $context);
 
     /**
      * Initializes a {@link PHPWS_Form} with hidden values such that
@@ -30,7 +30,7 @@ abstract class Command
      * @see getURI
      * @see redirect
      */
-    function initForm(PHPWS_Form &$form)
+    public function initForm(PHPWS_Form &$form)
     {
         $moduleElement = $form->get('module');
         if(PEAR::isError($moduleElement)) {
@@ -73,7 +73,7 @@ abstract class Command
      * @see initForm
      * @see redirect
      */
-    function getURI()
+    public function getURI()
     {
         $uri = $_SERVER['SCRIPT_NAME'] . "?module=hms";
 
@@ -136,7 +136,7 @@ abstract class Command
      * @see getURI
      * @see initForm
      */
-    function redirect()
+    public function redirect()
     {
         $path = $this->getURI();
         NQ::close();

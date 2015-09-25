@@ -41,7 +41,7 @@ class LotteryDenyRoommateRequestCommand extends Command {
 
         # Deny the roommate requst
         try{
-            HMS_Lottery::denyRoommateRequest(UserStatus::getUsername(), $requestId);
+            HMS_Lottery::denyRoommateRequest($requestId);
         }catch(Exception $e){
             NQ::simple('hms', hms\NotificationView::ERROR, 'There was an error denying the roommate request. Please contact University Housing.');
             $errorCmd->redirect();
@@ -58,4 +58,3 @@ class LotteryDenyRoommateRequestCommand extends Command {
     }
 
 }
-

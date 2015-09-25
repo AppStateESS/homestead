@@ -89,7 +89,6 @@ class HallOverview extends hms\View{
                 }
 
                 $room->loadBeds();
-                $bed_labels = array();
 
                 if(empty($room->_beds)){
                     $tpl->setCurrentBlock('room_repeat');

@@ -7,7 +7,6 @@ class LocalCacheDataProvider extends StudentDataProvider {
     public function getStudentByUsername($username, $term)
     {
         PHPWS_Core::initModClass('hms', 'Student.php');
-        $student = new CachedStudent();
 
         //if the ttl isn't set to "now"
         if($this->ttl != 0){
@@ -52,7 +51,6 @@ class LocalCacheDataProvider extends StudentDataProvider {
     public function getStudentById($id, $term)
     {
         PHPWS_Core::initModClass('hms', 'Student.php');
-        $student = new CachedStudent();
 
         $db = new PHPWS_DB('hms_student_cache');
         $db->addWhere('banner_id', $id);
@@ -103,7 +101,7 @@ class LocalCacheDataProvider extends StudentDataProvider {
 
         $student = CachedStudent::toCachedStudent($student);
 
-        $student->save($term, $this->ttl);
+        $student->save($term);
 
         // Silently log any errors
         PHPWS_Error::logIfError($result);

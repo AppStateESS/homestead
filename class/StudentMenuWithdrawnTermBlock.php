@@ -15,6 +15,8 @@ class StudentMenuWithdrawnTermBlock {
 
     public function show()
     {
+        $tpl = array();
+
         if(Term::getTermSem($this->term) == TERM_FALL){
             // If it's fall, then it's really the fall & spring terms
             $tpl['TERM'] = Term::toString($this->term) . ' - ' . Term::toString(Term::getNextTerm($this->term));

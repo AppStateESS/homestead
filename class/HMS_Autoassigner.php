@@ -350,9 +350,7 @@ class HMS_Autoassigner
         $assignment->term         = $term;
         $assignment->meal_option  = $app->meal_plan;
 
-        $result = $assignment->save();
-        // TODO: Check this result, throw major errorz if it's no good, since
-        // we'll have to reverse the Banner bit
+        $assignment->save();
 
         HMS_Activity_Log::log_activity($user, ACTIVITY_AUTO_ASSIGNED,
             Current_User::getUsername(), "$term $bbc $bid");
@@ -360,5 +358,3 @@ class HMS_Autoassigner
         return TRUE;
     }
 }
-
-

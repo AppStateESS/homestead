@@ -118,7 +118,6 @@ class HMS_Bed extends HMS_Item {
 
     public function loadAssignment()
     {
-        $assignment_found = false;
         $db = new PHPWS_DB('hms_assignment');
         $db->addWhere('bed_id', $this->id);
         $db->addWhere('term', $this->term);
@@ -300,6 +299,7 @@ class HMS_Bed extends HMS_Item {
 
     public function getPagerByRoomTags()
     {
+        $tags = array();
         $tags['BEDROOM'] = $this->bedroom_label;
         $tags['BED_LETTER'] = $this->getLink();
         $tags['ASSIGNED_TO'] = $this->get_assigned_to_link();
@@ -673,7 +673,7 @@ class HMS_Bed extends HMS_Item {
         $bed->international_reserved = $intlReserved;
 
         try {
-            $result = $bed->save();
+            $bed->save();
         } catch (DatabaseException $e) {
             throw $e;
         }
@@ -704,7 +704,7 @@ class HMS_Bed extends HMS_Item {
         }
 
         try {
-            $result = $bed->delete();
+            $bed->delete();
         } catch (DatabaseException $e) {
             throw $e;
         }
@@ -727,6 +727,8 @@ class HMS_Bed extends HMS_Item {
         $pager->addWhere('hms_room.id', $room_id);
         $pager->db->addOrder('hms_bed.bedroom_label');
         $pager->db->addOrder('hms_bed.bed_letter');
+
+        $page_tags = array();
 
         $page_tags['BEDROOM_LABEL'] = 'Bedroom';
         $page_tags['BED_LETTER_LABEL'] = 'Bed';

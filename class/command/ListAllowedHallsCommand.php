@@ -19,7 +19,7 @@ class ListAllowedHallsCommand extends Command {
 
         if(PHPWS_Error::logIfError($results) || is_null($results)){
             $errorMsg = array();
-            
+
             if(is_null($results)){
                 $errorMsg['error'] = 'You do not have permission to message any halls, sorry.';
             } else {
@@ -32,7 +32,7 @@ class ListAllowedHallsCommand extends Command {
         $permission = new HMS_Permission();
 
         $data = array();
-        
+
         foreach($results as $hall){
             $somethingEnabled = false;
 
@@ -42,7 +42,7 @@ class ListAllowedHallsCommand extends Command {
             $obj->name   = $hall->getHallName();
             $obj->id     = $hall->getId();
             $obj->floors = array();
-            $blah = 'Verify: ' . ($permission->verify(UserStatus::getUsername(), $hall, 'email') ? 'true' : 'false');
+            //$blah = 'Verify: ' . ($permission->verify(UserStatus::getUsername(), $hall, 'email') ? 'true' : 'false');
             if($permission->verify(UserStatus::getUsername(), $hall, 'email') || $messageAll){
                 $obj->enabled = true;
                 $somethingEnabled = true;

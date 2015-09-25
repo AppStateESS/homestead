@@ -2,14 +2,14 @@
 
 class EditRoommateGroupsViewCommand extends Command {
 
-    function getRequestVars(){
+    public function getRequestVars(){
         $vars = array('action'=>'EditRoommateGroupsView');
 
 
         return $vars;
     }
 
-    function execute(CommandContext $context)
+    public function execute(CommandContext $context)
     {
 
         if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'roommate_maintenance')){
@@ -23,5 +23,3 @@ class EditRoommateGroupsViewCommand extends Command {
         $context->setContent($editRoommateView->show());
     }
 }
-
-

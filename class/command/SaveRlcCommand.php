@@ -41,18 +41,18 @@ class SaveRlcCommand extends Command {
         }
 
         // TODO add appropriate sanity checking...
-        
+
         /*** General Settings ***/
         $community->set_community_name($context->get('community_name'));
         $community->set_abbreviation($context->get('abbreviation'));
-        
+
         $capacity = $context->get('capacity');
         if(!isset($capacity) || empty($capacity)){
             $capacity = 0;
             NQ::simple('hms', hms\NotificationView::WARNING, "The community's capacity was set to 0.");
         }
         $community->set_capacity($capacity);
-        
+
         /*** RLC-specific move-in times ***/
         // Freshmen
         $fMoveinTime = $context->get('f_movein_time');
@@ -61,7 +61,7 @@ class SaveRlcCommand extends Command {
         }else{
             $community->setFreshmenMoveinTime($fMoveinTime);
         }
-        
+
         // Transfer
         $tMoveinTime = $context->get('t_movein_time');
         if($tMoveinTime == 0){
@@ -69,7 +69,7 @@ class SaveRlcCommand extends Command {
         }else{
             $community->setTransferMoveinTime($tMoveinTime);
         }
-        
+
         // Continuing
         $cMoveinTime = $context->get('c_movein_time');
         if($cMoveinTime == 0){
@@ -77,7 +77,7 @@ class SaveRlcCommand extends Command {
         }else{
             $community->setContinuingMoveinTime($cMoveinTime);
         }
-        
+
         /*** Student Types Allowed to Apply ***/
         $community->hide = is_null($context->get('hide')) ? 0 : $context->get('hide');
         $community->setAllowedStudentTypes($context->get('student_types'));
@@ -92,13 +92,13 @@ class SaveRlcCommand extends Command {
         /*** Application Questions ***/
         $community->setFreshmenQuestion($context->get('freshmen_question'));
         $community->setReturningQuestion($context->get('returning_question'));
-        
+
         /*** Terms & Conditions ***/
         $community->setTermsConditions($context->get('terms_conditions'));
-        
-        
+
+
         // Save it
-        $result = $community->save();
+        $community->save();
 
         // View command for the RLC editt page
         $viewCommand = CommandFactory::getCommand('ShowAddRlc');
@@ -109,4 +109,3 @@ class SaveRlcCommand extends Command {
         $viewCommand->redirect();
     }
 }
-

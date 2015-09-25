@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Controller for showing the Assign Student view. 
- * 
+ * Controller for showing the Assign Student view.
+ *
  * @author jbooker
  * @package hms
  */
@@ -15,7 +15,7 @@ class ShowAssignStudentCommand extends Command {
      * Sets the default username to pre-populate the assignment interface with.
      * @param string $username
      */
-    function setUsername($username)
+    public function setUsername($username)
     {
         $this->username = $username;
     }
@@ -24,7 +24,7 @@ class ShowAssignStudentCommand extends Command {
      * Sets the bed ID to pre-populate the assignment interface with.
      * @param unknown $id
      */
-    function setBedId($id)
+    public function setBedId($id)
     {
         $this->bedId = $id;
     }
@@ -33,7 +33,7 @@ class ShowAssignStudentCommand extends Command {
      * (non-PHPdoc)
      * @see Command::getRequestVars()
      */
-    function getRequestVars()
+    public function getRequestVars()
     {
         $vars = array();
 
@@ -54,7 +54,7 @@ class ShowAssignStudentCommand extends Command {
      * (non-PHPdoc)
      * @see Command::execute()
      */
-    function execute(CommandContext $context)
+    public function execute(CommandContext $context)
     {
         if (!UserStatus::isAdmin() || !Current_User::allow('hms', 'assignment_maintenance')) {
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
@@ -71,7 +71,7 @@ class ShowAssignStudentCommand extends Command {
         $bedId = $context->get('bedId');
 
         $term = Term::getSelectedTerm();
-        
+
         if (isset($bedId) && !is_null($bedId) && !empty($bedId)) {
             $bed = new HMS_Bed($bedId);
         } else {
@@ -90,7 +90,7 @@ class ShowAssignStudentCommand extends Command {
                 $cmd = CommandFactory::getCommand('ShowAssignStudent');
                 $cmd->redirect();
             }
-            
+
             $application = HousingApplicationFactory::getAppByStudent($student, $term);
         } else {
             $student     = null;
@@ -102,5 +102,3 @@ class ShowAssignStudentCommand extends Command {
         $context->setContent($assignView->show());
     }
 }
-
-

@@ -21,7 +21,6 @@ class TermEditView extends hms\View {
             throw new PermissionException('You do not have permission to edit terms.');
         }
 
-        $term = Term::getSelectedTerm();
         $printable = Term::getPrintableSelectedTerm();
 
         $tpl = array();

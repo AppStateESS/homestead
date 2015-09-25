@@ -14,7 +14,6 @@ class JSONGetFloorsCommand
 
     public function execute(CommandContext $context)
     {
-        $term = Term::getSelectedTerm();
         $pdo = PdoFactory::getPdoInstance();
         $hall_id = (int) $context->get('hallId');
 

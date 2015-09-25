@@ -5,13 +5,13 @@
  */
 class ShowCreateTermCommand extends Command {
 
-    function getRequestVars() {
+    public function getRequestVars() {
         $vars = array('action' => 'ShowCreateTerm');
 
         return $vars;
     }
 
-    function execute(CommandContext $context)
+    public function execute(CommandContext $context)
     {
         if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'edit_terms')) {
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');

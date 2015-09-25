@@ -14,24 +14,18 @@ class Notification {
         switch($op){
             case 'show_select_hall':
                 return Notification::show_select_hall();
-                break;
             case 'edit':
                 $subject = isset($_REQUEST['subject']) ? $_REQUEST['subject'] : null;
                 $body    = isset($_REQUEST['body'])    ? $_REQUEST['body']    : null;
                 return Notification::show_edit_email('', $subject, $body);
-                break;
             case 'review':
                 return Notification::show_review_email();
-                break;
             case 'mail':
                 return Notification::send_emails();
-                break;
             case 'confirm':
                 return Notification::show_confirmation();
-                break;
             default:
                 return '<h1>Unkown Op</h1>';
-                break;
         }
     }
 

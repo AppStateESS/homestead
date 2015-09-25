@@ -24,7 +24,7 @@ class RoommateProfile {
      * Alternate contact info
      */
     public $alternate_email = NULL;
-    
+
     public $fb_link = NULL;
 
     public $instagram_sn = NULL;
@@ -243,7 +243,7 @@ class RoommateProfile {
         $this->setID($id);
 
         // Initialize
-        $result = $this->init();
+        $this->init();
     }
 
     public function init()
@@ -290,6 +290,8 @@ class RoommateProfile {
     public function getPagerTags()
     {
         $student = StudentFactory::getStudentByBannerID($this->banner_id, $this->term);
+
+        $tags = array();
 
         $tags['STUDENT_ID'] = $student->getUsername() . "@appstate.edu";
         $tags['FIRST_NAME'] = $student->getFirstName();

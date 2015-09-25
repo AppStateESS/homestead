@@ -23,13 +23,13 @@ abstract class ApplicationFeatureRegistration
     /**
      * Empty constructor
      */
-    abstract function __construct();
+    public abstract function __construct();
 
     /**
      * Returns the name of this feature.
      * @return String The name of this feature.
      */
-    function getName()
+    public function getName()
     {
         return $this->name;
     }
@@ -38,7 +38,7 @@ abstract class ApplicationFeatureRegistration
      * Returns the description of this feature.
      * @return String Feature description
      */
-    function getDescription()
+    public function getDescription()
     {
         return $this->description;
     }
@@ -47,7 +47,7 @@ abstract class ApplicationFeatureRegistration
      * Returns whether or not a start date is required
      * @return boolean Start date required
      */
-    function requiresStartDate()
+    public function requiresStartDate()
     {
         return $this->startDateRequired;
     }
@@ -56,7 +56,7 @@ abstract class ApplicationFeatureRegistration
      * Returns whether or not an edit date is required
      * @return boolean edit date required
      */
-    function requiresEditDate()
+    public function requiresEditDate()
     {
         return $this->editDateRequired;
     }
@@ -65,7 +65,7 @@ abstract class ApplicationFeatureRegistration
      * Returns whether or not an edit date is required.
      * @return boolean end date required
      */
-    function requiresEndDate()
+    public function requiresEndDate()
     {
         return $this->endDateRequired;
     }
@@ -75,7 +75,7 @@ abstract class ApplicationFeatureRegistration
      * NB: Feature priorities can conflict! Don't give two features the same priority!
      * @returns Integer feature priority
      */
-    function getPriority()
+    public function getPriority()
     {
         return $this->priority;
     }

@@ -12,8 +12,6 @@ class GetRoomDamagesCommand extends Command {
         PHPWS_Core::initModClass('hms', 'RoomDamageFactory.php');
         PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
 
-        $term = Term::getCurrentTerm();
-
         $bedId = $context->get('bed_id');
 
         $bed = new HMS_Bed($bedId);
@@ -31,5 +29,3 @@ class GetRoomDamagesCommand extends Command {
         $context->setContent(json_encode($damages));
     }
 }
-
-

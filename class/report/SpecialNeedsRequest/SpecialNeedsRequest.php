@@ -39,8 +39,6 @@ class SpecialNeedsRequest extends Report {
             throw new InvalidArgumentException('Missing term.');
         }
 
-        $term = Term::getTermSem($this->term);
-
         $db = new PHPWS_DB('hms_new_application');
 
         $db->addColumn('banner_id');
@@ -136,5 +134,3 @@ class SpecialNeedsRequest extends Report {
     }
 
 }
-
-

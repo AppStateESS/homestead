@@ -17,6 +17,8 @@ class CreateTermView extends hms\View {
         javascript('jquery');
         javascript('modules/hms/newTermCopyPick');
 
+        $tpl = array();
+
         $tpl['TITLE'] = 'Add a New Term';
 
         if(isset($success)){

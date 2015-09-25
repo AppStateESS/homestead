@@ -19,6 +19,8 @@
 
         PHPWS_Core::initCoreClass('DBPager.php');
 
+        $pageTags = array();
+
         $pageTags['USERNAME'] = _('Email');
         $pageTags['FIRST_NAME'] = _('First Name');
         $pageTags['LAST_NAME'] = _('Last Name');
@@ -45,8 +47,9 @@
         } else {
             $m = new RoommateProfile;
 
+            $hobbiesCount = count($m->hobbies_array);
             // Hobby check boxes
-            for ($x = 0; $x < count($m->hobbies_array); $x++)
+            for ($x = 0; $x < $hobbiesCount; $x++)
             {
                 if (isset($_REQUEST['hobbies_checkbox'][$m->hobbies_array[$x]])){
                     $pager->addWhere('hms_student_profiles.' . $m->hobbies_array[$x], 1, '=');
@@ -54,8 +57,9 @@
                 }
             }
 
+            $musicCount = count($m->music_array);
             // Music check boxes
-            for ($x = 0; $x < count($m->music_array); $x++)
+            for ($x = 0; $x < $musicCount; $x++)
             {
                 if (isset($_REQUEST['music_checkbox'][$m->music_array[$x]])){
                     $pager->addWhere('hms_student_profiles.' . $m->music_array[$x], 1, '=');
@@ -63,8 +67,9 @@
                 }
             }
 
+            $studyCount = count($m->study_array);
             // Study times
-            for ($x = 0; $x < count($m->study_array); $x++)
+            for ($x = 0; $x < $studyCount; $x++)
             {
                 if (isset($_REQUEST['study_times'][$m->study_array[$x]])){
                     $pager->addWhere('hms_student_profiles.' . $m->study_array[$x], 1, '=');
@@ -72,8 +77,9 @@
                 }
             }
 
+            $dropDownCount = count($m->drop_down_array);
             // Drop downs
-            for ($x = 0; $x < count($m->drop_down_array); $x++)
+            for ($x = 0; $x < $dropDownCount; $x++)
             {
                 if(isset($_REQUEST[$m->drop_down_array[$x]]) && $_REQUEST[$m->drop_down_array[$x]] != 0){
                     $pager->addWhere('hms_student.profiles.' . $m->drop_down_array[$x], '=');
@@ -82,8 +88,9 @@
 
             }
 
+            $langCount = count($m->lang_array);
             // Spoken Languages
-            for ($x = 0; $x < count($m->lang_array); $x++)
+            for ($x = 0; $x < $langCount; $x++)
             {
                 if (isset($_REQUEST['language_checkbox'][$m->lang_array[$x]])){
                     $pager->addWhere('hms_student_profiles.' . $m->lang_array[$x], 1, '=');

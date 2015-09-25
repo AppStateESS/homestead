@@ -3,7 +3,7 @@
 PHPWS_Core::initModClass('hms', 'ApplicationFeature.php');
 
 class UpdateEmergencyContactRegistration extends ApplicationFeatureRegistration {
-    function __construct()
+    public function __construct()
     {
         $this->name = 'UpdateEmergencyContact';
         $this->description = 'Update Emergency & Missing Persons Contact';

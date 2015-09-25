@@ -16,6 +16,7 @@ class AssignmentTypeByFloorHtmlView extends ReportHtmlView {
         // Set the existing tags
         $myTpl->setData($this->tpl);
 
+        $hallTags = array();
 
         foreach($halls as $hall){
             $hallCounts = $this->report->getCountsForHall($hall);

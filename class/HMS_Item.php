@@ -87,6 +87,8 @@ abstract class HMS_Item {
 
     public function item_tags()
     {
+        $tpl = array();
+
         $tpl['ADDED_ON']     = strftime('%c', $this->added_on);
         $tpl['UPDATED_ON']   = strftime('%c', $this->updated_on);
 

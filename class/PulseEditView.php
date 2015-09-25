@@ -9,9 +9,11 @@ class PulseEditView extends hms\View
 
     public function show()
     {
-        
+
         $autoassign = $this->AutoassignScheduleSet();
-        
+
+        $vars = array();
+
         if ($autoassign) {
             $vars['autoassign'] = 'Auto Assign schedule set for ' . $autoassign->getExecuteAfter('%Y/%m/%d %l:%M %P');
             $vars['autoassign_remove'] = 1;
@@ -19,7 +21,7 @@ class PulseEditView extends hms\View
             $vars['autoassign'] = 'Auto Assign has not been created.';
             $vars['autoassign_create'] = 1;
         }
-            
+
         $reportrunner = $this->ReportRunnerScheduleSet();
         if ($reportrunner) {
             $vars['reportrunner'] = 'Report Runner schedule set for ' . $reportrunner->getExecuteAfter('%Y/%m/%d %l:%M %P');
@@ -37,7 +39,7 @@ class PulseEditView extends hms\View
             $vars['withdrawn'] = 'Withdrawn schedule has not been created.';
             $vars['withdrawn_create'] = 1;
         }
-            
+
         $nightly_cache = $this->NightlyCacheScheduleSet();
         if ($nightly_cache) {
             $vars['nightly_cache'] = 'Nightly cache schedule set for ' . $nightly_cache->getExecuteAfter('%Y/%m/%d %l:%M %P');
@@ -46,7 +48,7 @@ class PulseEditView extends hms\View
             $vars['nightly_cache'] = 'Nightly cache has not been created.';
             $vars['nightly_cache_create'] = 1;
         }
-            
+
         $tpl = new \Template($vars);
         $tpl->setModuleTemplate('hms', 'admin/pulse/settings.html');
         return $tpl->get();
