@@ -38,16 +38,16 @@ $(document).ready(function(){
 
 	    //put up an AJAX spinner
         $("#{DIV}").html('<img src="images/core/ajax-loader-big.gif" />');
-        
+
     $.post('index.php', {module: 'hms', action: 'ListAllowedHalls'},
         function(data){
     		$("#{DIV}").empty();
-    		
+
     		if(data.error !== undefined){
     			$("#{DIV}").append('<div class="hms-notification error">'+data.error+'</div>');
     			return;
     		}
-    	
+
             var halls = new Array();
             for(var i in data){
                 var newHall = new hall();
@@ -58,31 +58,36 @@ $(document).ready(function(){
             var output = "<ul>";
             for(var i in halls){
                 var tmp = halls[i].draw();
-                output += '<li class="container '+(halls[i].collapsed ? 'collapsed' : 'expanded' )+'">'+tmp+"</li>";
+                output += '<li class="'+(halls[i].collapsed ? 'collapsed' : 'expanded' )+'" style="margin-bottom:5px">'+tmp+"</li>";
             }
             output += "</ul>";
             $("#{DIV}").empty();
             $("#{DIV}").append(output);
-            $("#{DIV} li").click(function(){$(this).find('.subtree').toggle();});
-            $("#{DIV} :checkbox").click(function(e){e.stopPropagation();});
+
+            $("#{DIV} li").click(function(){
+                $(this).find('.subtree').toggle();
+            });
+
+            $("#{DIV} :checkbox").click(function(e){
+                e.stopPropagation();
+            });
+
             $("#{DIV} li .hall").each(
                 function(){
                     var subBoxes = $(this).find('.subtree :checkbox');
 
-                    $(this).find(":checkbox[objtype='hall']").each(
-                        function(){
-                            $(this).click(
+                    $(this).find("input[type='checkbox'][objtype='hall']").each(function(){
+                        $(this).click(function(){
+                            var value = $(this).prop('checked');
+                            $(subBoxes).each(
                                 function(){
-                                    var value = $(this).attr('checked');
-                                    $(subBoxes).each(
-                                        function(){
-                                            if(!$(this).attr('disabled'))
-                                                $(this).attr('checked', value);
-                                        });
-                                });
+                                    if(!$(this).attr('disabled'))
+                                        $(this).attr('checked', value);
+                                    });
                         });
+                    });
                 });
-            
+
             $("#{DIV} li").click(
                 function(){
                     if(!this.flip)
