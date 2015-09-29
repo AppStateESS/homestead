@@ -23,6 +23,9 @@ class SelectHallView extends hms\View{
     {
         $tpl = array();
 
+        javascript('jquery');
+        javascriptMod('hms', 'hall_editor');
+
         $tpl['TITLE']   = $this->title;
         $tpl['TERM']    = Term::getPrintableSelectedTerm();
 

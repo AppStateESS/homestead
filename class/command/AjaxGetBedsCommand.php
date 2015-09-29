@@ -7,7 +7,7 @@ class AjaxGetBedsCommand extends Command {
     private $roomId;
 
     public function getRequestVars(){
-        return array('action'=>'AjaxGetFloors');
+        return array('action'=>'AjaxGetBeds');
     }
 
     public function execute(CommandContext $context)
@@ -19,20 +19,18 @@ class AjaxGetBedsCommand extends Command {
 
         $room = new HMS_Room($context->get('roomId'));
 
-        $beds = $room->get_beds();
+        $bedsResult = $room->get_beds();
 
-        $json_beds = array();
-        $json_beds[0] = 'Select...';
+        $beds = array();
+        $i = 0;
 
-        foreach ($beds as $bed){
-            if($bed->room_change_reserved != 0){
-                //Cannot assign to reserved rooms
-                continue;
-            }
-            $json_beds[$bed->id] = $bed->bed_letter;
+        foreach ($bedsResult as $bed)
+        {
+            $beds[$i]['bed_letter'] = strtoupper($bed->getBedroomLabel()) . $bed->getLetter();
+            $beds[$i]['bed_id'] = $bed->getId();
+            $i++;
         }
 
-        $context->setContent(json_encode($json_beds));
+        $context->setContent(json_encode($beds));
     }
 }
-

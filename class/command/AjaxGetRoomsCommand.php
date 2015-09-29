@@ -7,7 +7,7 @@ class AjaxGetRoomsCommand extends Command {
     private $floorId;
 
     public function getRequestVars(){
-        return array('action'=>'AjaxGetFloors');
+        return array('action'=>'AjaxGetRooms');
     }
 
     public function execute(CommandContext $context)
@@ -19,16 +19,18 @@ class AjaxGetRoomsCommand extends Command {
 
         $floor = new HMS_Floor($context->get('floorId'));
 
-        $rooms = $floor->get_rooms();
+        $roomsResult = $floor->get_rooms();
 
-        $json_rooms = array();
-        $json_rooms[0] = 'Select...';
+        $rooms = array();
+        $i = 0;
 
-        foreach ($rooms as $room){
-            $json_rooms[$room->id] = $room->room_number;
+        foreach ($roomsResult as $room)
+        {
+          $rooms[$i]['room_number'] = $room->getRoomNumber();
+          $rooms[$i]['room_id'] = $room->getId();
+          $i++;
         }
 
-        $context->setContent(json_encode($json_rooms));
+        $context->setContent(json_encode($rooms));
     }
 }
-
