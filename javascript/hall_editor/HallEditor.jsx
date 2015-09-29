@@ -249,7 +249,7 @@ var RoomBox = React.createClass({
         options.push(data[i]);
       }
       var selectOptions = options.map(function(node){
-          return (<option value={node.room_id}>{node.room_number}</option>);
+            return (<option value={node.room_id}>{node.room_number}</option>);
       });
       return (
         <div className="form-group">
