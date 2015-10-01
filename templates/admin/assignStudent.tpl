@@ -11,40 +11,12 @@
             <span class="input-group-addon">@appstate.edu</span>
         </div>
 
-        <div class="form-group">
-            {RESIDENCE_HALL_LABEL}
-            {RESIDENCE_HALL}
-        </div>
+        <script>
+          var prepopulate = {PREPOPULATE};
+          var mealPlan = {MEAL_PLAN};
+        </script>
 
-        <div class="form-group">
-            {FLOOR_LABEL}
-            {FLOOR}
-        </div>
-
-        <div class="form-group">
-            {ROOM_LABEL}
-            {ROOM}
-        </div>
-
-        <div class="form-group">
-            {BED_LABEL}
-            {BED}
-        </div>
-
-        <div>
-            <p class="help-block">
-                <a href="javascript:showBedDrop();">Show bed</a>
-            </p>
-        </div>
-
-        <div class="form-group">
-            {MEAL_PLAN_LABEL}
-            {MEAL_PLAN}
-        </div>
-
-        <div class="form-group">
-            {ASSIGNMENT_TYPE_LABEL}
-            {ASSIGNMENT_TYPE}
+        <div id="StudentAssigner">
         </div>
 
         <div class="form-group">
