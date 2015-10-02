@@ -31,6 +31,29 @@ class RoomChangeRequestFactory {
         return $stmt->fetch();
     }
 
+    public static function getCurrentRequestByBed($bed)
+    {
+        if (!isset($bed) || is_null($bed)) {
+            throw new InvalidArgumentException('Missing bed.');
+        }
+
+        $db = PdoFactory::getPdoInstance();
+
+        $query = "SELECT *
+                  FROM hms_room_change_curr_request
+                  WHERE id
+                  IN (SELECT request_id FROM hms_room_change_participant WHERE to_bed = :bedId)
+                  ORDER BY effective_date desc limit 1; ";
+
+        $stmt = $db->prepare($query);
+        $stmt->execute(array(
+                'bedId' => $bed->getId()
+        ));
+        $stmt->setFetchMode(PDO::FETCH_CLASS, 'RoomChangeRequestRestored');
+
+        return $stmt->fetch();
+    }
+
     /**
      * Returns a RoomChangeReuqest object corresponding to any
      * pending requests a student might have open, or null otherwise.
