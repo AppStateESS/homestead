@@ -87,6 +87,9 @@ class ReviewHallNotificationMessageView extends hms\View {
             $template->parseCurrentBlock();
         }
 
+        $form2->mergeTemplate($tpl);
+        $tpl = $form2->getTemplate();
+
         $template->setCurrentBlock('remainder');
         $template->setData($tpl);
         $template->parseCurrentBlock();
