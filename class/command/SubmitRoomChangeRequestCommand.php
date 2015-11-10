@@ -15,7 +15,6 @@ class SubmitRoomChangeRequestCommand extends Command {
 
 
         // Cmd to redirect to when we're done or upon error.
-        $returnCmd = CommandFactory::getCommand('ShowRoomChangeRequestForm');
         $menuCmd = CommandFactory::getCommand('ShowStudentMenu');
 
         // Get input
@@ -32,12 +31,6 @@ class SubmitRoomChangeRequestCommand extends Command {
         // Retrieve the type of this room change, should be 'swap', indicating a multi user swap,
         // or 'switch', indicating a single user looking to move where ever they can, with preferences
         $type = $context->get('type');
-
-        // Initialize the variable for containing the information sent back on success or error,
-        // this should contain a url, either redirecting back to the form or to the menu.
-        $returnMsg = array();
-
-
 
         // Retrieve the current term.
         $term = Term::getCurrentTerm();
@@ -62,7 +55,6 @@ class SubmitRoomChangeRequestCommand extends Command {
 
         // Get the HMS_Bed object corresponding to the student's current assignment
         $thisUserBed = $assignment->get_parent();
-        $room = $thisUserBed->get_parent();
 
         // Check for an existing room change request
         $changeReq = RoomChangeRequestFactory::getPendingByStudent($student, $term);

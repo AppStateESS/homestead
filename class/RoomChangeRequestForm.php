@@ -28,7 +28,6 @@ class RoomChangeRequestForm extends hms\View {
         $tpl = $form->getTemplate();
 
         $user = UserStatus::getUsername();
-        $student = StudentFactory::getStudentByUsername($user, Term::getSelectedTerm());
         $tpl['CURRENT_USER'] = $user;
 
         return PHPWS_Template::process($tpl, 'hms', 'student/roomChangeRequestForm.tpl');

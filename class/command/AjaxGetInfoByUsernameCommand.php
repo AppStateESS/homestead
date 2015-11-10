@@ -55,9 +55,9 @@ class AjaxGetInfoByUsernameCommand extends Command {
             // so they can be returned as a json encoded string.
             $nameInfo = array('username' => $username, 'name' => $student->getName(), 'currentBedId' => $assignment->getBedId());
 
+            $context->setContent(json_encode($nameInfo));
         } catch(Exception $e) { //For display issues we really do want to catch any exception
             echo '<div style="display: none;">'.$e->getMessage().'</div>';
         }
-        $context->setContent(json_encode($nameInfo));
     }
 }
