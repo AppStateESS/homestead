@@ -585,7 +585,9 @@ class HMS_Email{
         HMS_Email::send_template_message($to, $subject, 'email/ReportCompleteNotification.tpl', $tpl);
     }
 
-    public static function sendCheckinConfirmation(Student $student, InfoCard $infoCard, InfoCardPdfView $infoCardView){
+    public static function sendCheckinConfirmation(Student $student, InfoCard $infoCard, InfoCardPdfView $infoCardView)
+    {
+        $tags = array();
 
         $tags['NAME']       = $student->getName();
         $tags['HALL_NAME']  = $infoCard->getHall()->getHallName();
@@ -619,7 +621,10 @@ class HMS_Email{
         $mailer->send($message);
     }
 
-    public static function sendCheckoutConfirmation(Student $student, InfoCard $infoCard) {
+    public static function sendCheckoutConfirmation(Student $student, InfoCard $infoCard)
+    {
+        $tags = array();
+
         $tags['NAME']       = $student->getName();
         $tags['ASSIGNMENT'] = $infoCard->getRoom()->where_am_i();
 

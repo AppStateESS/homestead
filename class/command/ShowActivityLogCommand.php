@@ -18,7 +18,7 @@ class ShowActivityLogCommand extends Command {
         $this->activity = $activity;
     }
 
-    function getRequestVars(){
+    public function getRequestVars(){
         $vars = array('action'=>'ShowActivityLog');
 
         if(isset($this->acteeUsername)){
@@ -38,13 +38,13 @@ class ShowActivityLogCommand extends Command {
         return $vars;
     }
 
-    function execute(CommandContext $context)
+    public function execute(CommandContext $context)
     {
         if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'view_activity_log')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to view the activity log.');
         }
-        
+
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
         PHPWS_Core::initModClass('hms', 'ActivityLogView.php');
 
@@ -82,5 +82,3 @@ class ShowActivityLogCommand extends Command {
         $context->setContent($activityLogView->show());
     }
 }
-
-

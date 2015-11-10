@@ -16,7 +16,7 @@ class ShowEditRlcCommand extends Command {
         $this->id = $id;
     }
 
-    function getRequestVars(){
+    public function getRequestVars(){
         $vars = array();
 
         $vars['action'] = 'ShowEditRlc';
@@ -25,16 +25,15 @@ class ShowEditRlcCommand extends Command {
         return $vars;
     }
 
-    function execute(CommandContext $context){
+    public function execute(CommandContext $context){
 
         if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'learning_community_maintenance')) {
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to edit RLCs.');
         }
-        
+
         $view = new EditRlcView();
 
         $context->setContent($view->show());
     }
 }
-

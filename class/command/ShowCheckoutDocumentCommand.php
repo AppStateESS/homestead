@@ -26,9 +26,7 @@ class ShowCheckoutDocumentCommand extends Command {
     public function execute(CommandContext $context)
     {
         // Load the checkin object
-        $bannerId = $context->get('bannerId');
         $checkinId = $context->Get('checkinId');
-        $term = Term::getCurrentTerm();
 
         $checkin = CheckinFactory::getCheckinById($checkinId);
 
@@ -44,4 +42,3 @@ class ShowCheckoutDocumentCommand extends Command {
         $context->setContent($view->show());
     }
 }
-

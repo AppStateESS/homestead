@@ -5,7 +5,7 @@ PHPWS_Core::initCoreClass('DBPager.php');
 
 class EditRlcView extends hms\View {
 
-    function show(){
+    public function show(){
         $pager = new DBPager('hms_learning_communities', 'HMS_Learning_Community');
         $pager->db->addOrder('community_name ASC');
         $pager->setModule('hms');
@@ -25,4 +25,3 @@ class EditRlcView extends hms\View {
         return $pager->get();
     }
 }
-

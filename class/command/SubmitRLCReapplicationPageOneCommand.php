@@ -20,7 +20,7 @@ class SubmitRLCReapplicationPageOneCommand extends Command {
         // Commands for re-directing later
         $formCmd = CommandFactory::getCommand('ShowRlcReapplication');
         $formCmd->setTerm($term);
-        $menuCmd = CommandFactory::getCommand('ShowStudentMenu');
+        // $menuCmd = CommandFactory::getCommand('ShowStudentMenu');
 
         // Pull in data for local use
         $rlcOpt        = $context->get('rlc_opt');
@@ -37,13 +37,13 @@ class SubmitRLCReapplicationPageOneCommand extends Command {
         if($rlcChoice3 == 'none'){
             $rlcChoice3 = null;
         }
-        
-                
+
+
         # Get the list of RLCs that the student is eligible for
         # Note: hard coded to 'C' because we know they're continuing at this point.
         # This accounts for freshmen addmitted in the spring, who will still have the 'F' type.
         $communities = HMS_Learning_Community::getRlcListReapplication(false, 'C');
-        
+
         # Look up any existing RLC assignment (for the current term, should be the Spring term)
         $rlcAssignment = HMS_RLC_Assignment::getAssignmentByUsername($student->getUsername(), Term::getPrevTerm(Term::getCurrentTerm()));
 
@@ -91,17 +91,17 @@ class SubmitRLCReapplicationPageOneCommand extends Command {
             NQ::simple('hms', hms\NotificationView::ERROR, 'Your answer to question number two is too long. Please limit your response to 500 words or less.');
             $formCmd->redirect();
         }
-        
+
         $app = new HMS_RLC_Application();
-        
+
         $app->setUsername($student->getUsername());
         $app->setFirstChoice($rlcChoice1);
         $app->setSecondChoice($rlcChoice2);
         $app->setThirdChoice($rlcChoice3);
-        
+
         $app->setWhySpecificCommunities($why);
         $app->setStrengthsWeaknesses($contribute);
-        
+
         $_SESSION['RLC_REAPP'] = $app;
 
         // Redirect to the page 2 view command
@@ -111,5 +111,3 @@ class SubmitRLCReapplicationPageOneCommand extends Command {
     }
 
 }
-
-

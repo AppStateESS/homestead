@@ -145,7 +145,6 @@ class HMS_RLC_Assignment {
             $this->save();
         }catch(Exception $e){
             throw $e;
-            return;
         }
 
         // If we made it this far, then do the onEnter stuff
@@ -365,7 +364,7 @@ class HMS_RLC_Assignment {
         }
 
         // Phone number
-        if ($cellPhone instanceof HousingApplication) {
+        if ($housingApp instanceof HousingApplication) {
             $cellPhone = $housingApp->getCellPhone();
             if (isset($cellPhone) && $cellPhone != '') {
                 $row['cell_phone'] = $cellPhone;
@@ -388,7 +387,7 @@ class HMS_RLC_Assignment {
         $this->id = $id;
     }
 
-    public function getId($id) {
+    public function getId() {
         return $this->id;
     }
 

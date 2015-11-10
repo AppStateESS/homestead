@@ -21,8 +21,6 @@ class StartCheckoutSubmitCommand extends Command {
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
 
-        $term = Term::getCurrentTerm();
-
         $bannerId = $context->get('banner_id');
         $hallId = $context->get('residence_hall_hidden');
 
@@ -45,5 +43,3 @@ class StartCheckoutSubmitCommand extends Command {
         $cmd->redirect();
     }
 }
-
-

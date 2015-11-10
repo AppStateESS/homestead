@@ -17,14 +17,14 @@ class SelectRoomCommand extends Command {
         $this->title = $text;
     }
 
-    function getRequestVars()
+    public function getRequestVars()
     {
         $vars = array('action'=>'SelectRoom', 'title'=>$this->title);
-         
+
         if(!isset($this->onSelectCmd)){
             return $vars;
         }
-         
+
         // Get the action to do on select
         $onSelectVars = $this->onSelectCmd->getRequestVars();
         $onSelectAction = $onSelectVars['action'];
@@ -38,20 +38,18 @@ class SelectRoomCommand extends Command {
         return array_merge($vars, $onSelectVars);
     }
 
-    function execute(CommandContext $context)
+    public function execute(CommandContext $context)
     {
         PHPWS_Core::initModClass('hms', 'SelectRoomView.php');
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
 
         $term = Term::getSelectedTerm();
         $halls = HMS_Residence_Hall::getHallsDropDownValues($term);
-         
+
         $onSelectCmd = CommandFactory::getCommand($context->get('onSelectAction'));
         $onSelectCmd->setRoomId($context->get('room'));
-         
+
         $roomView = new SelectRoomView($onSelectCmd, $halls, $context->get('title'), $term);
         $context->setContent($roomView->show());
     }
 }
-
-

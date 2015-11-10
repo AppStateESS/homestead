@@ -41,9 +41,6 @@ class RoomChangeFutureRdApproveCommand extends Command {
         $requestId = $context->get('requestId');
         $participantId = $context->get('participantId');
 
-        // destinationBedId - This can be null for "swap" requests, because it's already known
-        $toBedSelected = $context->get('bed_select');
-
 
         // Command for showing the request, redirected to on success/error
         $cmd = CommandFactory::getCommand('ShowManageRoomChange');
@@ -73,5 +70,3 @@ class RoomChangeFutureRdApproveCommand extends Command {
         $cmd->redirect();
     }
 }
-
-

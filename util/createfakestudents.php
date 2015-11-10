@@ -40,7 +40,9 @@ function process($arguments)
     if (!isset($arguments[0])) {
         $arguments[0] = '-h';
     }
-    for ($i = 0; $i < count($arguments); $i++) {
+
+    $argCount = count($arguments);
+    for ($i = 0; $i < $argCount; $i++) {
         if ($arguments[$i] == '-h') {
             print_help();
             exit;
@@ -167,7 +169,7 @@ function create_new_table($pdo)
     $table_name = TABLE_NAME;
     $query = <<<EOF
 CREATE TABLE $table_name (
-    banner_id varchar(20), 
+    banner_id varchar(20),
     username varchar(20),
     first_name varchar(30),
     middle_name varchar(30),
@@ -304,10 +306,10 @@ function print_help()
     $term_default = get_term_default();
     echo <<<EOF
 Creates a table for the fake_soap script.
-    
+
 Usage: createfakestudents.php -f directory/to/phpwebsite/config/file
        createfakestudents.php -f directory/to/phpwebsite/config/file -n number-of-students
-    
+
 Commands:
 -f      Path to phpWebSite installation's database configuration file.
 -n      Number of student records to create. Records are cumulative per script run.

@@ -47,7 +47,7 @@ class FloorAssignStudentCommand extends Command {
             exit;
         }
         try{
-            $assign_result = HMS_Assignment::assignStudent($student, $term, NULL, $bed, $plan, '', false, $reason);
+            HMS_Assignment::assignStudent($student, $term, NULL, $bed, $plan, '', false, $reason);
         }catch(AssignmentException $e){
             echo json_encode(array('success'=>false,
                         'message'=>$e->getMessage()));
@@ -58,4 +58,3 @@ class FloorAssignStudentCommand extends Command {
         exit;
     }
 }
-

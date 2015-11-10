@@ -10,7 +10,7 @@ class PreferencesRoommatePairingStrategy extends RoommatePairingStrategy {
         $this->values = new PreferenceValues();
     }
 
-    function doPairing(&$applications, &$pairs)
+    public function doPairing(&$applications, &$pairs)
     {
         $keys = $this->sort($applications);
 

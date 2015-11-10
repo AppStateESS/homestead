@@ -118,7 +118,6 @@ class HMS_Bed extends HMS_Item {
 
     public function loadAssignment()
     {
-        $assignment_found = false;
         $db = new PHPWS_DB('hms_assignment');
         $db->addWhere('bed_id', $this->id);
         $db->addWhere('term', $this->term);
@@ -173,10 +172,10 @@ class HMS_Bed extends HMS_Item {
             return false;
         }
 
-        if (!isset($this->_curr_assignment->asu_username)) {
+        if (!isset($this->_curr_assignment->banner_id)) {
             return NULL;
         } else {
-            return StudentFactory::getStudentByUsername($this->_curr_assignment->asu_username, $this->term);
+            return StudentFactory::getStudentByBannerID($this->_curr_assignment->getBannerId(), $this->term);
         }
     }
 
@@ -300,6 +299,7 @@ class HMS_Bed extends HMS_Item {
 
     public function getPagerByRoomTags()
     {
+        $tags = array();
         $tags['BEDROOM'] = $this->bedroom_label;
         $tags['BED_LETTER'] = $this->getLink();
         $tags['ASSIGNED_TO'] = $this->get_assigned_to_link();
@@ -647,7 +647,7 @@ class HMS_Bed extends HMS_Item {
     * The 'ra_bed' flag is expected to be either TRUE or FALSE.
     * @return TRUE for success, FALSE otherwise
     */
-    public static function addBed($roomId, $term, $bedLetter, $bedroomLabel, $phoneNumber, $bannerId, $raRoommate, $intlReserved, $raBed)
+    public static function addBed($roomId, $term, $bedLetter, $bedroomLabel, $phoneNumber, $bannerId, $raRoommate, $intlReserved, $raBed, $persistentId)
     {
         // Check permissions
         if (!UserStatus::isAdmin() || !Current_User::allow('hms', 'bed_structure')) {
@@ -671,9 +671,10 @@ class HMS_Bed extends HMS_Item {
         $bed->ra = $raBed;
         $bed->ra_roommate = $raRoommate;
         $bed->international_reserved = $intlReserved;
+        $bed->persistent_id = $persistentId;
 
         try {
-            $result = $bed->save();
+            $bed->save();
         } catch (DatabaseException $e) {
             throw $e;
         }
@@ -704,7 +705,7 @@ class HMS_Bed extends HMS_Item {
         }
 
         try {
-            $result = $bed->delete();
+            $bed->delete();
         } catch (DatabaseException $e) {
             throw $e;
         }
@@ -727,6 +728,8 @@ class HMS_Bed extends HMS_Item {
         $pager->addWhere('hms_room.id', $room_id);
         $pager->db->addOrder('hms_bed.bedroom_label');
         $pager->db->addOrder('hms_bed.bed_letter');
+
+        $page_tags = array();
 
         $page_tags['BEDROOM_LABEL'] = 'Bedroom';
         $page_tags['BED_LETTER_LABEL'] = 'Bed';

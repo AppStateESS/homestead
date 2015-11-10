@@ -71,12 +71,14 @@ class TestSOAP extends SOAP
         $student->on_campus = 'false'; // unused
 
         $address_array = unserialize($result['address']);
-        
+        $address_object_array = array();
         foreach ($address_array as $add) {
             $address_object_array[] = (object) $add;
         }
 
+
         $phone_array = unserialize($result['phone']);
+        $phone_object_array = array();
         foreach ($phone_array as $p) {
             $phone_object_array[] = (object) $p;
         }

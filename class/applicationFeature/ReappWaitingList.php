@@ -3,7 +3,7 @@
 PHPWS_Core::initModClass('hms', 'ApplicationFeature.php');
 
 class ReappWaitingListRegistration extends ApplicationFeatureRegistration {
-    function __construct()
+    public function __construct()
     {
         $this->name = 'ReappWaitingList';
         $this->description = 'Re-application Waiting List';

@@ -60,7 +60,7 @@ class CheckinFormSubmitCommand extends Command {
         $currUser = Current_User::getUsername();
 
         // Check for an existing Check-in
-        $checkin = CheckinFactory::getCheckinByBed($student, $bed, $term);
+        $checkin = CheckinFactory::getCheckinByBed($student, $bed);
 
         // If there's not already a checkin for this bed, create a new one
         if (is_null($checkin)) {

@@ -4,7 +4,7 @@ PHPWS_Core::initModClass('hms', 'ApplicationFeature.php');
 
 class OffCampusWaitingListRegistration extends ApplicationFeatureRegistration {
 
-    function __construct()
+    public function __construct()
     {
         $this->name = 'OffCampusWaitingList';
         $this->description = 'Open Waiting List';
@@ -45,4 +45,3 @@ class OffCampusWaitingList extends ApplicationFeature {
         return new OffCampusWaitingListMenuBlockView($this->term, $this->getStartDate(), $this->getEndDate(), $application);
     }
 }
-

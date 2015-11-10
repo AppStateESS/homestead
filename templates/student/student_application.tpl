@@ -96,7 +96,7 @@
             </div>
         </div>
         <div class="form-group">
-            <label for="{PREFERRED_BEDTIME_ID}">Preffered Bedtime:</label>
+            <label for="{PREFERRED_BEDTIME_ID}">Preferred Bedtime:</label>
             <div class="row">
                 <div class="col-md-3">
                     {PREFERRED_BEDTIME}

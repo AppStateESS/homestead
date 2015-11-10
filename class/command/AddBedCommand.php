@@ -70,10 +70,12 @@ class AddBedCommand extends Command {
         }
 
         $term = $room->term;
+        
+        $persistentId = uniqid();
 
         # Try to create the bed
         try{
-            HMS_Bed::addBed($roomId, $term, $bedLetter, $bedroomLabel, $phoneNumber, $bannerId, $raRoommate, $intlReserved, $raBed);
+            HMS_Bed::addBed($roomId, $term, $bedLetter, $bedroomLabel, $phoneNumber, $bannerId, $raRoommate, $intlReserved, $raBed, $persistentId);
         }catch(Exception $e){
             NQ::simple('hms', hms\NotificationView::ERROR, 'There was an error creating the bed: ' . $e->getMessage());
             $errorCmd->redirect();

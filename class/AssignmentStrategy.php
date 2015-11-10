@@ -11,7 +11,7 @@ abstract class AssignmentStrategy {
         $this->term  = $term;
     }
 
-    abstract function doAssignment($pair);
+    public abstract function doAssignment($pair);
 
     protected function allowed(AssignmentPairing $pair, HMS_Room $room)
     {

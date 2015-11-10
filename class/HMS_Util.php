@@ -37,6 +37,8 @@ class HMS_Util{
      */
     public static function get_days()
     {
+        $days = array();
+
         for($d = 1; $d <= 31; $d++) {
             $days[$d] = $d;
         }

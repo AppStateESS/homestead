@@ -8,7 +8,7 @@
 class CommandFactory {
     private static $dir = 'command';
 
-    static function getCommand($action = 'Default')
+    public static function getCommand($action = 'Default')
     {
         if(is_null($action)) {
             $action = 'Default';
@@ -20,7 +20,7 @@ class CommandFactory {
         return $cmd;
     }
 
-    static function onAllCommands($obj, $func)
+    public static function onAllCommands($obj, $func)
     {
         $dir = self::$dir;
 
@@ -34,7 +34,7 @@ class CommandFactory {
         }
     }
 
-    static function staticInit($action)
+    public static function staticInit($action)
     {
         $dir = self::$dir;
 

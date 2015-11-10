@@ -15,7 +15,7 @@ class ShowStudentProfileCommand extends Command {
         $this->bannerId = $id;
     }
 
-    function getRequestVars(){
+    public function getRequestVars(){
         $vars = array('action'=>'ShowStudentProfile');
 
         if(isset($this->username)){
@@ -29,7 +29,7 @@ class ShowStudentProfileCommand extends Command {
         return $vars;
     }
 
-    function execute(CommandContext $context)
+    public function execute(CommandContext $context)
     {
         if(!Current_User::allow('hms', 'search')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');

@@ -25,6 +25,8 @@ class ShowFreshmenApplicationReviewCommand extends Command {
 
         // Overwrite the old action
         //unset($vars['module']);
+
+        $vars = array();
         $vars['action'] = 'ShowFreshmenApplicationReview';
         $vars['term']	= $this->term;
 

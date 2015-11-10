@@ -23,6 +23,8 @@ class RlcApplicationReView extends hms\View {
 
         Layout::addPageTitle("RLC Application Review");
 
+        $tags = array();
+
         if(UserStatus::isAdmin()){
             $menuCmd = CommandFactory::getCommand('ShowAssignRlcApplicants');
             $tags['MENU_LINK'] = $menuCmd->getURI();
@@ -111,6 +113,9 @@ class RlcApplicationReView extends hms\View {
         $approveForm->addSubmit('approve', 'Approve');
         $approveForm->addCssClass('approve', 'btn btn-md btn-success');
         $approveCmd = CommandFactory::getCommand('AssignRlcApplicants');
+
+        $tpl = array();
+
         $tpl['RLC_LIST'] = HMS_RLC_Application::generateRLCDropDown(HMS_Learning_Community::getRlcList(),
                                                                              $this->application->id);
         $approveForm->mergeTemplate($tpl);

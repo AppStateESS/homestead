@@ -3,7 +3,7 @@
 PHPWS_Core::initModClass('hms', 'ApplicationFeature.php');
 
 class ReapplicationRegistration extends ApplicationFeatureRegistration {
-    function __construct()
+    public function __construct()
     {
         $this->name = 'Reapplication';
         $this->description = 'Re-application';

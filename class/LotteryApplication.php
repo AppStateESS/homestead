@@ -209,6 +209,9 @@ class LotteryApplication extends HousingApplication {
     public function getRowTags(){
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
         $student = StudentFactory::getStudentByUsername($this->username, $this->term);
+
+        $template = array();
+
         $template['ASU_USERNAME']        = $student->getProfileLink();
         $template['PHYSICAL_DISABILITY'] = $this->physical_disability == 1 ? 'Yes' : 'No';
         $template['PSYCH_DISABILITY']    = $this->psych_disability    == 1 ? 'Yes' : 'No';
@@ -270,7 +273,7 @@ class LotteryApplication extends HousingApplication {
     {
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
         $student = StudentFactory::getStudentByUsername($this->username, $this->term);
-        $row = array();
+        $tags = array();
 
         $tags['NAME']       = $student->getFullName();
         $tags['USER']       = $this->username;

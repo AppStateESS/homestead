@@ -19,7 +19,7 @@ class RemoveSpecialInterestCommand extends Command
     public function getRequestVars()
     {
         return array('action' => 'RemoveSpecialInterest',
-                     'group' => $this->group, 
+                     'group' => $this->group,
                      'id' => $this->id);
     }
 
@@ -36,13 +36,13 @@ class RemoveSpecialInterestCommand extends Command
         if(is_null($context->get('id'))){
             throw new InvalidArgumentException('Missing application id.');
         }
-        
+
         $app = new LotteryApplication($context->get('id'));
-        
+
         $app->special_interest = null;
-        
-        $result = $app->save();
-        
+
+        $app->save();
+
         NQ::simple('hms', hms\NotificationView::SUCCESS, "Removed {$app->getUsername()}");
 
         $cmd = CommandFactory::getCommand('ShowSpecialInterestGroupApproval');
@@ -60,4 +60,3 @@ class RemoveSpecialInterestCommand extends Command
     }
 
 }
-

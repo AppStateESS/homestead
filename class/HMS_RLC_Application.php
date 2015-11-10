@@ -144,6 +144,8 @@ class HMS_RLC_Application extends HMS_Item
             $roomie = HMS_Roommate::get_unconfirmed_roommate($this->username, $term) . ' *pending* ';
         }
 
+        $row = array();
+
         $row['last_name']           = $student->getLastName();
         $row['first_name']          = $student->getFirstName();
         $row['middle_name']         = $student->getMiddleName();
@@ -275,6 +277,8 @@ class HMS_RLC_Application extends HMS_Item
         /*** Other Actions ***/
         $viewCmd = CommandFactory::getCommand('ShowRlcApplicationReView');
         $viewCmd->setAppId($this->getId());
+
+        $actions = array();
 
         $actions[] = $viewCmd->getLink('App');
 

@@ -17,6 +17,7 @@ class AddRoomView extends hms\View {
 
     public function show()
     {
+        $tpl = array();
         $tpl['HALL_NAME']           = $this->hall->getLink();
         $tpl['FLOOR_NUMBER_LINK']   = $this->floor->getLink('Floor');
         $tpl['FLOOR_NUMBER']        = $this->floor->where_am_i();

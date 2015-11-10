@@ -65,6 +65,8 @@ class CheckoutFormView extends hms\View
         $vars['room_pid'] = $this->room->persistent_id;
 
         $damage_types = DamageTypeFactory::getDamageTypeAssoc();
+
+        $damage_options = array();
         foreach ($damage_types as $dt) {
             $damage_options[$dt['category']][] = array('id' => $dt['id'], 'description' => $dt['description']);
         }
@@ -82,6 +84,7 @@ class CheckoutFormView extends hms\View
 
     private function addResponsible($residents)
     {
+        $respNames = array();
         foreach ($residents as $r) {
             $respNames[$r['studentId']] = $r['name'];
         }
@@ -93,12 +96,14 @@ class CheckoutFormView extends hms\View
         $result = $pdo->query($query, PDO::FETCH_ASSOC);
         $rows = $result->fetchAll();
 
+        $sdamage = array();
+
         foreach ($rows as $i) {
             if (isset($respNames[$i['banner_id']])) {
                 $sdamage[$i['damage_id']][] = $respNames[$i['banner_id']];
             }
         }
-        
+
         foreach ($this->damages as $key => $value) {
             if (isset($sdamage[$value->id])) {
                 foreach ($sdamage[$value->id] as $name) {

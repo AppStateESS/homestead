@@ -8,7 +8,7 @@
 
 PHPWS_Core::initModClass('hms', 'ReportPdfView.php');
 if (!defined('WKPDF_PATH')) {
-    define('WKPDF_PATH', PHPWS_SOURCE_DIR . 'mod/hms/vendor/ioki/wkhtmltopdf-amd64-centos6/bin/');
+    define('WKPDF_PATH', PHPWS_SOURCE_DIR . 'mod/hms/vendor/ioki/wkhtmltopdf-amd64-centos6/bin/wkhtmltopdf-amd64-centos6');
 }
 if (!defined('USE_XVFB')) {
     define('USE_XVFB', false);
@@ -63,5 +63,3 @@ class FloorRosterPdfView extends ReportPdfView
     }
 
 }
-
-

@@ -3,7 +3,7 @@
 PHPWS_Core::initModClass('hms', 'ApplicationFeature.php');
 
 class ApplicationRegistration extends ApplicationFeatureRegistration {
-    function __construct()
+    public function __construct()
     {
         $this->name = 'Application';
         $this->description = 'Application';
@@ -42,4 +42,3 @@ class Application extends ApplicationFeature {
         return new ApplicationMenuBlockView($this->term, $this->getStartDate(), $this->getEditDate(), $this->getEndDate(), $application);
     }
 }
-

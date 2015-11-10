@@ -38,6 +38,8 @@ class ShowAddRoomCommand extends Command {
 
         $floor_id = $context->get('floor');
 
+        $tpl = array();
+
         # Setup the title and color of the title bar
         $tpl['TITLE']       = 'Add Room';
 

@@ -16,10 +16,9 @@ class ReApplicationWaitingListFormSubmitCommand extends Command {
     public function execute(CommandContext $context)
     {
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        
+
         $term = $context->get('term');
 
-        $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
 
         $errorCmd = CommandFactory::getCommand('ShowOffCampusWaitListApplication');
         $errorCmd->setTerm($term);
@@ -44,8 +43,7 @@ class ReApplicationWaitingListFormSubmitCommand extends Command {
                 $errorCmd->redirect();
             }
         }
-        
-        $mealOption         = $context->get('meal_option');
+
 
         $specialNeed = $context->get('special_need');
 
@@ -68,4 +66,3 @@ class ReApplicationWaitingListFormSubmitCommand extends Command {
         }
     }
 }
-

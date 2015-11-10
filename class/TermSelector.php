@@ -8,14 +8,14 @@ namespace hms;
  * @package Homestead
  */
 class TermSelector extends View {
-	
+
     public function show()
     {
     	if(\UserStatus::isGuest()) {
             return '';
         }
 
-        $terms = \Term::getTermsAssoc(true);
+        $terms = \Term::getTermsAssoc();
 
         $current = \Term::getCurrentTerm();
         if(isset($terms[$current])){
@@ -31,9 +31,9 @@ class TermSelector extends View {
 
         $tags = $form->getTemplate();
 
-        $currentTerm = \Term::getSelectedTerm();        
+        $currentTerm = \Term::getSelectedTerm();
         $tags['TERM_OPTIONS'] = array();
-        
+
         foreach ($tags['TERM_VALUE'] as $key => $value) {
             $selected = '';
             if($key == $currentTerm) {
@@ -41,11 +41,11 @@ class TermSelector extends View {
             }
         	$tags['TERM_OPTIONS'][] = array('id'=>$key, 'term'=>$value, 'selected'=>$selected);
         }
-        
+
         javascript('jquery');
         javascriptMod('hms', 'jqueryCookie');
         javascript('modules/hms/SelectTerm');
-        
+
         return \PHPWS_Template::process($tags, 'hms', 'admin/SelectTerm.tpl');
     }
 }

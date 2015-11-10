@@ -57,6 +57,8 @@ class StatsView extends hms\View {
         $db->addWhere('lottery', 1);
         $num_lottery_assigned = $db->select('count');
 
+        $tpl = array();
+
         $tpl['TITLE']                   = "HMS Overview - $term";
         $tpl['NUM_LCS']                 = $num_lcs;
         $tpl['NUM_ONLINE']              = $num_online;

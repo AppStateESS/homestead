@@ -13,6 +13,8 @@ class RoomChangeListView extends hms\View {
 
     public function show()
     {
+        $tpl = array();
+
         // Check for an empty array of requests
         if (sizeof($this->requests) == 0) {
             $tpl['NO_REQUESTS'] = 'No pending requests found.';

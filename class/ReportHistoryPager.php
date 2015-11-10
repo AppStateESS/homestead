@@ -36,6 +36,7 @@ class ReportHistoryPager extends DBPager {
         $this->addRowTags('historyPagerRowTags');
 
         // Increase this limit because, by default, the DBPager limit is too small
-        $this->limit = 100;
+        $this->default_limit = 1000;
+        $this->limitList = array(1000);
     }
 }

@@ -26,9 +26,9 @@ class ShowHallNotificationEditView extends hms\View{
     }
 
     public function show(){
-        $tpl = array();
+        Layout::addPageTitle("Hall Notification Edit");
 
-        $tpl['HEADER'] = 'Email';
+        $tpl = array();
 
         $submitCmd = CommandFactory::getCommand('ReviewHallNotificationMessage');
         $form = new PHPWS_Form('email_content');
@@ -37,15 +37,17 @@ class ShowHallNotificationEditView extends hms\View{
         if(Current_User::allow('hms', 'anonymous_notifications')){
             $form->addCheck('anonymous');
             $form->setMatch('anonymous', $this->anonymous);
-            $form->setLabel('anonymous', 'Send Anonymously: ');
+            $form->setLabel('anonymous', 'Send Anonymously');
         }
 
         $form->addText('subject', (!is_null($this->subject) ? $this->subject : ''));
-        $form->setLabel('subject', 'Subject:');
+        $form->setLabel('subject', 'Subject');
+        $form->addCssClass('subject', 'form-control');
         $form->setSize('subject', 35);
         $form->setExtra('subject', 'autofocus');
 
         $form->addTextarea('body', (!is_null($this->body) ? $this->body : ''));
+        $form->addCssClass('body', 'form-control');
         $form->setLabel('body', 'Message:');
 
         if(!empty($this->halls)){
@@ -56,14 +58,6 @@ class ShowHallNotificationEditView extends hms\View{
             $form->addHidden('floor', $this->floors);
         }
 
-        $form->addSubmit('Submit');
-
-        //After you ask "wtf?", check the last parameter on preg_replace (only removes the first two occurances)
-        $tpl['EMAIL'] = preg_replace('/<br \/>/', '', implode('<br />', $form->getTemplate()), 2);
-
-        Layout::addPageTitle("Hall Notification Edit");
-
-        return PHPWS_Template::process($tpl, 'hms', 'admin/hall_notification_email_page.tpl');
+        return PHPWS_Template::process($form->getTemplate(), 'hms', 'admin/hall_notification_email_page.tpl');
     }
 }
-

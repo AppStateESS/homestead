@@ -83,6 +83,7 @@ class SendNotificationEmailsCommand extends Command {
         //HMS_Activity_Log::log_activity(Current_User::getUsername(), ACTIVITY_HALL_NOTIFIED_ANONYMOUSLY, Current_User::getUsername(), $hall->hall_name);
         //HMS_Activity_Log::log_activity(Current_User::getUsername(), ACTIVITY_HALL_NOTIFIED, Current_User::getUsername(), $hall->hall_name);
 
+        $floorObj = array();
         //load the halls and add floors that aren't already present, if they have js enabled should be zero
         foreach($halls as $hall){
             $hallObj = new HMS_Residence_Hall($hall);
@@ -150,4 +151,3 @@ class SendNotificationEmailsCommand extends Command {
         $cmd->redirect();
     }
 }
-

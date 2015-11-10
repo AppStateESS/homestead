@@ -99,6 +99,9 @@ class LotteryProcess {
          * Reminder Emails *
          * *****************
          */
+
+        $output = array(); 
+
         if ($this->sendReminders) {
             $this->output[] = "Sending invite reminder emails...";
             $this->sendWinningReminderEmails();
@@ -194,7 +197,7 @@ class LotteryProcess {
             $entry = HousingApplicationFactory::getAppByStudent($student, $this->term, 'lottery');
             $entry->invited_on = $this->now;
 
-            $result = $entry->save();
+            $entry->save();
         } catch (Exception $e) {
             $this->output[] = 'Error while trying to select a winning student. Exception: ' . $e->getMessage();
             return;
@@ -265,8 +268,6 @@ class LotteryProcess {
 
     private function getMagicWinner()
     {
-        $now = time();
-
         $query = "SELECT * FROM hms_new_application JOIN hms_lottery_application ON hms_new_application.id = hms_lottery_application.id
                             LEFT OUTER JOIN (SELECT asu_username FROM hms_assignment WHERE term = {$this->term}) as foo ON hms_new_application.username = foo.asu_username
                             WHERE foo.asu_username IS NULL AND (hms_lottery_application.invited_on IS NULL)
@@ -460,8 +461,6 @@ class LotteryProcess {
 
     public static function countInvitesByClassGender($term, $class, $gender = null)
     {
-        $now = time();
-
         $query = "SELECT count(*) FROM hms_new_application JOIN hms_lottery_application ON hms_new_application.id = hms_lottery_application.id
                     WHERE hms_lottery_application.invited_on IS NOT NULL
                     AND hms_new_application.term = $term ";
@@ -651,8 +650,6 @@ class LotteryProcess {
 
     public static function countRemainingApplications($term)
     {
-        $now = time();
-
         $query = "SELECT count(*) FROM hms_new_application JOIN hms_lottery_application ON hms_new_application.id = hms_lottery_application.id
         LEFT OUTER JOIN (SELECT asu_username FROM hms_assignment WHERE hms_assignment.term=$term) as foo ON hms_new_application.username = foo.asu_username
         WHERE foo.asu_username IS NULL AND hms_lottery_application.invited_on IS NULL
@@ -671,8 +668,6 @@ class LotteryProcess {
 
     public static function countRemainingApplicationsByClassGender($term, $class, $gender = null)
     {
-        $now = time();
-
         $query = "SELECT count(*) FROM hms_new_application JOIN hms_lottery_application ON hms_new_application.id = hms_lottery_application.id
                     LEFT OUTER JOIN (SELECT asu_username FROM hms_assignment WHERE hms_assignment.term=$term) as foo ON hms_new_application.username = foo.asu_username
                     WHERE foo.asu_username IS NULL AND hms_lottery_application.invited_on IS NULL

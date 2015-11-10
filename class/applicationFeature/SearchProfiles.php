@@ -3,7 +3,7 @@
 PHPWS_Core::initModClass('hms', 'ApplicationFeature.php');
 
 class SearchProfilesRegistration extends ApplicationFeatureRegistration {
-    function __construct()
+    public function __construct()
     {
         $this->name = 'SearchProfiles';
         $this->description = 'Search Student Profiles';
@@ -30,12 +30,10 @@ class SearchProfiles extends ApplicationFeature {
     {
         PHPWS_Core::initModClass('hms', 'RoommateProfile.php');
         PHPWS_Core::initModClass('hms', 'SearchProfilesMenuBlockView.php');
-        
+
         $profile = RoommateProfileFactory::getProfile($student->getBannerID(), $this->term);
-        
+
         return new SearchProfilesMenuBlockView($student, $this->getStartDate(), $this->getEndDate(), $profile, $this->term);
     }
 
 }
-
-

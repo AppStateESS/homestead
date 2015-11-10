@@ -43,6 +43,8 @@ class ShowRoommateConfirmationCommand extends Command
             throw new PermissionException("$username tried to display confirmation screen for pairing {$roommate->id}");
         }
 
+        $tpl = array();
+
         $acceptCmd = CommandFactory::getCommand('ShowRoommateConfirmAccept');
         $acceptCmd->setRoommateId($roommate->id);
         $tpl['ACCEPT'] = $acceptCmd->getURI();

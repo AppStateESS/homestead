@@ -3,11 +3,11 @@
 class DisableBannerQueueCommand extends Command {
     private $term;
 
-    function setTerm($term) {
+    public function setTerm($term) {
         $this->term = $term;
     }
 
-    function getRequestVars() {
+    public function getRequestVars() {
         $vars = array('action' => 'DisableBannerQueue');
 
         if(isset($this->term)) {
@@ -17,7 +17,7 @@ class DisableBannerQueueCommand extends Command {
         return $vars;
     }
 
-    function execute(CommandContext $context) {
+    public function execute(CommandContext $context) {
         if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'banner_queue')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to enable/disable the Banner queue.');
@@ -46,4 +46,3 @@ class DisableBannerQueueCommand extends Command {
         CommandContext::goBack();
     }
 }
-

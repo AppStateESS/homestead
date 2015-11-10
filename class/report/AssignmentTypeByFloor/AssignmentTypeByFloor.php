@@ -44,7 +44,6 @@ class AssignmentTypeByFloor extends Report {
 
             $floors = $hall->get_floors();
 
-            $floorCounts = array();
             foreach($floors as $floor){
                 $floorCount = PHPWS_DB::getAssoc("select reason, count(*) from hms_assignment JOIN hms_bed ON hms_assignment.bed_id = hms_bed.id JOIN hms_room ON hms_bed.room_id = hms_room.id JOIN hms_floor ON hms_room.floor_id = hms_floor.id where hms_floor.id = {$floor->getId()} AND hms_assignment.term = {$this->getTerm()} group by reason order by reason");
 

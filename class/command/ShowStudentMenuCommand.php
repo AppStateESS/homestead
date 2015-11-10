@@ -31,8 +31,7 @@ class ShowStudentMenuCommand extends Command {
         $studentType 	= $student->getType();
         $studentClass	= $student->getClass();
         $dob 			= $student->getDob();
-        $gender 		= $student->getGender();
-
+        
         # Check for banner errors in any of these calls
         if(empty($applicationTerm) || empty($studentType) ||
         empty($studentClass) ||
@@ -132,5 +131,3 @@ class ShowStudentMenuCommand extends Command {
         }
     }
 }
-
-

@@ -2,11 +2,11 @@
 
 class ShowAdminMaintenanceMenuCommand extends Command {
 
-    function getRequestVars(){
+    public function getRequestVars(){
         return array('action'=>'ShowAdminMaintenanceMenu');
     }
 
-    function execute(CommandContext $context)
+    public function execute(CommandContext $context)
     {
         if(!UserStatus::isAdmin() || !Current_User::isUnrestricted('hms')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
@@ -20,5 +20,3 @@ class ShowAdminMaintenanceMenuCommand extends Command {
         $context->setContent($adminMenu->show());
     }
 }
-
-

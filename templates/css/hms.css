@@ -158,11 +158,11 @@ a.header-back span:before{
 /**
  * Styles for the "hall-expander" in the message sending interfaces
  */
-li.expanded.container {
+li.expanded {
   list-style-image: url("../../img/arrow_down.png");
 }
 
-li.collapsed.container {
+li.collapsed {
   list-style-image: url("../../img/arrow_right.png");
 }
 

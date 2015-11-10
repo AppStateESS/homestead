@@ -78,7 +78,9 @@
         $hobbies_matches = array();
         $m = new RoommateProfile;
 
-        for ($x = 0; $x < count($m->hobbies_array); $x++)
+        $hobbiesCount = count($m->hobbies_array);
+
+        for ($x = 0; $x < $hobbiesCount; $x++)
         {
             if($profile->get_checked($m->hobbies_array[$x]))
             {
@@ -102,7 +104,9 @@
         $music_matches = array();
         $m = new RoommateProfile;
 
-        for ($x = 0; $x < count($m->music_array); $x++)
+        $musicCount = count($m->music_array);
+
+        for ($x = 0; $x < $musicCount; $x++)
         {
             if($profile->get_checked($m->music_array[$x]))
             {
@@ -123,7 +127,9 @@
         $study_matches = array();
         $m = new RoommateProfile;
 
-        for ($x = 0; $x < count($m->study_array); $x++)
+        $studyCount = count($m->study_array);
+
+        for ($x = 0; $x < $studyCount; $x++)
         {
             if($profile->get_checked($m->study_array[$x]))
             {
@@ -143,6 +149,8 @@
     {
         $lang_match = array();
         $m = new RoommateProfile;
+
+        $langCount = count($m->lang_array);
 
         for ($x = 0; $x < count($m->lang_array); $x ++)
         {

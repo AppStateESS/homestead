@@ -3,11 +3,11 @@
 class SetCurrentTermCommand extends Command {
     private $term;
 
-    function setTerm($term) {
+    public function setTerm($term) {
         $this->term = $term;
     }
 
-    function getRequestVars() {
+    public function getRequestVars() {
         $vars = array('action' => 'SetCurrentTerm');
 
         if(isset($this->term)) {
@@ -17,7 +17,7 @@ class SetCurrentTermCommand extends Command {
         return $vars;
     }
 
-    function execute(CommandContext $context) {
+    public function execute(CommandContext $context) {
         if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'activate_term')) {
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to set the Current Term.');
@@ -37,4 +37,3 @@ class SetCurrentTermCommand extends Command {
         $cmd->redirect();
     }
 }
-
