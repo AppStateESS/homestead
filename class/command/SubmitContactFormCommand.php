@@ -38,7 +38,7 @@ class SubmitContactFormCommand extends Command {
         $send_to[] = 'berrybm@appstate.edu';
         $send_to[] = 'jaworskimi@appstate.edu';
 
-        $from    = 'uha@appstate.edu';
+        $from    = FROM_ADDRESS;
         $subject = 'HMS Contact Form';
 
         $body  = "Username: ".$context->get('asu_username')."\n";
@@ -63,4 +63,3 @@ class SubmitContactFormCommand extends Command {
         $context->setContent($view->show());
     }
 }
-

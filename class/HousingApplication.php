@@ -244,7 +244,7 @@ class HousingApplication {
             $mail = new PHPWS_Mail;
 
             $mail->addSendTo($send_to);
-            $mail->setFrom('uha@appstate.edu');
+            $mail->setFrom(FROM_ADDRESS);
             $mail->setSubject('HMS Application Error!');
 
             $body = "Username: {$this->getUsername()}\n";

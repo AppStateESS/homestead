@@ -35,6 +35,7 @@ while (($line = fgetcsv($inputFile, 0)) !== FALSE) {
     $side = $line[0];
     $desc = pg_escape_string($db, $line[1]);
     $roomPerstId = $line[2];
+    $username = $args['username'];
     $sql = "INSERT INTO hms_room_damage (id, room_persistent_id, term, damage_type, side, note, repaired, reported_by, reported_on) VALUES (nextval('hms_room_damage_seq'), '$roomPerstId', $term, 1, '$side', '$desc', 0, '$username', 1438401600)";
     pg_query($sql);
 }
