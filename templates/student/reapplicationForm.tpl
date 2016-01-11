@@ -221,7 +221,7 @@
 
 <div class="row">
     <div class="col-md-10">
-        <h2>Early Contract Release</h2>
+        <h3>Early Contract Release</h3>
         <p>Are you currently planning to apply for early contract release because
             you'll be leaving on-campus housing at the end of {FALL_TERM}?
         </p>
