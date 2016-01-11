@@ -8,12 +8,10 @@ ini_set('display_errors', 1);
 ini_set('ERROR_REPORTING', E_WARNING);
 error_reporting(E_ALL);
 
+$args = array('input_file'=>'',
+              'rlcId' => '',
+              'term'  => '');
 
-// Configuration
-$rlcId = 21;
-$term = 201340;
-
-$args = array('input_file'=>'');
 $switches = array();
 check_args($argc, $argv, $args, $switches);
 
@@ -46,7 +44,7 @@ if(!$db){
 }
 
 // Get an instance of SOAP
-$soap = new SOAP();
+$soap = new PhpSOAP('jb67803', 'A');
 
 foreach($inputFile as $line) {
 
@@ -56,13 +54,13 @@ foreach($inputFile as $line) {
         continue;
     }
 
-    $username = 'jb67803';
-    $gender = 'M';
+    //$username = 'jb67803';
+    //$gender = 'M';
 
 
-    //$username = $soap->getUsername($line);
-    //$student = $soap->getStudentProfile($line, $term);
-    //$gender = $student->gender;
+    $username = $soap->getUsername($bannerId);
+    $student = $soap->getStudentProfile($bannerId, $args['term']);
+    $gender = $student->gender;
 
     if($gender == 'M'){
         $gender = 1;
@@ -74,21 +72,21 @@ foreach($inputFile as $line) {
     }
 
     if($username == 'InvalidUser' || $username == ''){
-        echo 'EXITING!!';
+        echo 'Invalid BannerID: ' . $bannerId . ' EXITING!!';
         continue;
     }
 
-    $sql = "insert into hms_learning_community_applications VALUES (nextval('hms_learning_community_applications_seq'), 1360680412, $rlcId, null, null, '', '', '', '', '', '$username', $term, 0, 'returning') RETURNING id";
+    $sql = "insert into hms_learning_community_applications VALUES (nextval('hms_learning_community_applications_seq'), extract(epoch from now()), {$args['rlcId']}, null, null, '', '', '', '', '', '$username', {$args['term']}, 0, 'returning') RETURNING id";
 
     $result = pg_query($sql);
 
     $applicationId = pg_fetch_assoc($result);
     $applicationId = $applicationId['id'];
 
-    $sql = "insert into hms_learning_community_assignment VALUES (nextval('hms_learning_community_assignment_seq'), $rlcId, 'jb67803', $gender, $applicationId, 'new')";
+    $sql = "insert into hms_learning_community_assignment VALUES (nextval('hms_learning_community_assignment_seq'), {$args['rlcId']}, 'jb67803', $gender, $applicationId, 'new')";
     $result = pg_query($sql);
 
-    exit;
+    echo "Added $bannerId.\n";
 }
 
 pg_close($db);
