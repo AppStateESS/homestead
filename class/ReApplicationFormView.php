@@ -114,40 +114,6 @@ class ReApplicationFormView extends hms\View {
         $form->addCheck('rlc_interest', array('rlc_interest'));
         $form->setLabel('rlc_interest', "I'm interested in applying for (or continuing in) a Residential Learning Community.");
 
-        // Sorority
-        if($this->student->getGender() == FEMALE){
-
-            $form->addCheck('sorority_check', array('sorority_check'));
-            $form->setLabel('sorority_check', "I'm a member of a sorority.");
-
-            $form->addDropBox('sorority_drop', array_merge(array('none'=>'Select...'), HMS_Lottery::getSororities()));
-            $form->setLabel('sorority_drop', 'Which sorority?');
-            $form->addCssClass('sorority_drop', 'form-control');
-
-            $form->addRadioButton('sorority_pref', array('aph', 'on-campus'));
-            $form->setLabel('sorority_pref', array("I would like to live in the APH.", "I would like to live in a central-campus hall."));
-        }
-
-        // Teaching Fellows
-        /*
-        if($this->student->isTeachingFellow()){
-            $form->addRadioButton('tf_pref', array('with_tf', 'not_tf'));
-            $form->setLabel('tf_pref', array("I would like to live with other Teaching Fellows.", "I would like to live elsewhere on-campus."));
-        }
-        */
-
-        // Watauga Global
-        if($this->student->isWataugaMember()){
-            $form->addRadioButton('wg_pref', array('with_wg', 'not_wg'));
-            $form->setLabel('wg_pref', array("I would like to live with other Watauga Global students.", "I would like to live elsewhere on-campus."));
-        }
-
-        // Honors
-        if($this->student->isHonors()){
-            $form->addRadioButton('honors_pref', array('with_honors', 'not_honors'));
-            $form->setLabel('honors_pref', array("I would like to live in Honors Housing.", "I would like to live elsewhere on campus."));
-        }
-
         /*
          * Special needs
          */
@@ -176,6 +142,7 @@ class ReApplicationFormView extends hms\View {
         $form->addDropBox('early_release', $reasons);
         $form->setLabel('early_release', 'Will you apply for early release?');
         $form->setMatch('early_release', 'no');
+        $form->addCssClass('early_release', 'form-control');
 
 
         /*
@@ -190,6 +157,6 @@ class ReApplicationFormView extends hms\View {
 
         Layout::addPageTitle("Re-Application Form");
 
-        return PHPWS_Template::process($form->getTemplate(), 'hms', 'student/lottery_signup.tpl');
+        return PHPWS_Template::process($form->getTemplate(), 'hms', 'student/reapplicationForm.tpl');
     }
 }
