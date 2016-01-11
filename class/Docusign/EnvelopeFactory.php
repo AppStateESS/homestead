@@ -5,14 +5,23 @@ namespace Docusign;
 
 class EnvelopeFactory {
 
-	public static function createEnvelopeFromTemplate(Client $client, $templateId, $emailSubject, Array $templateRoles, $status) {
+	public static function createEnvelopeFromTemplate(Client $client, $templateId, $emailSubject, Array $templateRoles, $status, $bannerId) {
+
+		//Creates the data field containing the banner ID value
+		$textTabs[0] = array("tabLabel" => "BannerId", "xPosition" => "435", "yPosition" => "440", "value" => $bannerId, "pageNumber" => "5", "documentId" => "1");
+
+		$roles = $templateRoles;
+
+		$roles[0]['tabs'] = array("textTabs" => $textTabs);
+
 		$data = array (
 			"accountId" => $client->getAccountID(),
 			"emailSubject" => $emailSubject,
 			"templateId" => $templateId,
-			"templateRoles" => $templateRoles,
+			"templateRoles" => $roles,
 			"status" => $status
 		);
+
 
         $http = new \Guzzle\Http\Client();
         //$request = $http->createRequest('POST', $client->getBaseUrl() . '/envelopes', ['body' => json_encode($data)]);
