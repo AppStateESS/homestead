@@ -81,8 +81,7 @@ class AdminAddRlcMembersCommand extends Command {
 
             // If no housing app, show a warning
             if (is_null($housingApp)) {
-                NQ::simple('hms', hms\NotificationView::ERROR, "No housing application found for: {$student->getName()}({$student->getBannerID()})");
-                continue;
+                NQ::simple('hms', hms\NotificationView::WARNING, "No housing application found for: {$student->getName()}({$student->getBannerID()})");
             }
 
             // Check for an existing learning community application
@@ -124,6 +123,13 @@ class AdminAddRlcMembersCommand extends Command {
 
             if($membership !== false){
                 NQ::simple('hms', hms\NotificationView::ERROR, "RLC membership already exists for {$student->getName()}({$student->getBannerID()})");
+                continue;
+            }
+
+            // Check Student's Eligibility
+            $eligibility = HMS_Lottery::determineEligibility($student->getUsername());
+            if($eligibility == false){
+                NQ::simple('hms', hms\NotificationView::ERROR, "{$student->getName()} ({$student->getBannerID()}) is not currently eligible for housing");
                 continue;
             }
 

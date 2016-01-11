@@ -108,8 +108,18 @@ class LotteryConfirmCommand extends Command {
                 $errorCmd->redirect();
             }
 
-            // Double check the students' elligibilities
-            if(HMS_Lottery::determineEligibility($username) !== TRUE){
+            // If this student is an RLC-self-selection, then each roommate must be in the same RLC and in the selfselect-invite state too
+            if($rlcAssignment != null && $rlcAssignment->getStateName() == 'selfselect-invite') {
+                // This student is an RLC-self-select, so check the roommate's RLC status
+                $roommateRlcAssign = RlcMembershipFactory::getMembership($roommate, $term);
+                // Make sure the roommate is a member of the same RLC and is eligible for self-selection
+                if($roommateRlcAssign == null || $roommateRlcAssign->getStateName() != 'selfselect-invite' || $rlcAssignment->getRlc()->getId() != $roommateRlcAssign->getRlc()->getId()) {
+                    NQ::simple('hms', hms\NotificationView::ERROR, "$roommate must be a member of the same learning community as you, and must also be eligible for self-selction.");
+                    $errorCmd->redirect();
+                }
+
+            // Otherwise (if not RLC members), make sure each roommate is eligible
+            } else if(HMS_Lottery::determineEligibility($username) !== TRUE){
                 NQ::simple('hms', hms\NotificationView::ERROR, "$username is not eligible for assignment.");
                 $errorCmd->redirect();
             }
@@ -134,8 +144,12 @@ class LotteryConfirmCommand extends Command {
         // Assign the student to the requested bed
         $bed_id = array_search(UserStatus::getUsername(), $roommates); // Find the bed id of the student who's logged in
 
-        HMS_Assignment::assignStudent($student, PHPWS_Settings::get('hms', 'lottery_term'), NULL, $bed_id, $mealPlan, 'Confirmed lottery invite', TRUE, ASSIGN_LOTTERY);
-
+        try{
+            $result = HMS_Assignment::assignStudent($student, PHPWS_Settings::get('hms', 'lottery_term'), NULL, $bed_id, $mealPlan, 'Confirmed lottery invite', TRUE, ASSIGN_LOTTERY);
+        }catch(Exception $e){
+            NQ::simple('hms', hms\NotificationView::ERROR, 'Sorry, there was an error creating your room assignment. Please try again or contact University Housing.');
+            $errorCmd->redirect();
+        }
 
         // Log the assignment
         HMS_Activity_Log::log_activity(UserStatus::getUsername(), ACTIVITY_LOTTERY_ROOM_CHOSEN, UserStatus::getUsername(), 'Captcha: ' . $captcha);
