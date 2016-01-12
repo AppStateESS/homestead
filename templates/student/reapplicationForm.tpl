@@ -246,7 +246,7 @@
 
 <div class="row">
     <div class="col-md-6">
-        <h3>Terms & Conditions</h3>
+        <h3>Terms &amp; Conditions</h3>
     </div>
 </div>
 <div class="row">
