@@ -57,7 +57,7 @@ class LotteryChooseFloorView extends hms\View {
 
             if($floor->count_avail_lottery_rooms($this->student->getGender(), $rlcId) <= 0){
                 $row['FLOOR']           = HMS_Util::ordinal($floor->floor_number);
-                $row['ROW_TEXT_COLOR']  = 'grey';
+                $row['ROW_TEXT_COLOR']  = 'class="text-muted"';
                 $tpl['floor_list'][]    = $row;
                 continue;
             }

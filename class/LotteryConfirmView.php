@@ -52,7 +52,13 @@ class LotteryConfirmView extends hms\View {
             # Check for a reservation
             $reservation = $bed->get_lottery_reservation_info();
 
-            $bed_row['BEDROOM_LETTER']  = $bed->bedroom_label;
+            $bedLabel = $room->getRoomNumber();
+            if($room->get_number_of_beds() == 4)
+            {
+              $bedLabel = $bedLabel . $bed->getBedroomLabel();
+            }
+            $bedLabel = $bedLabel . $bed->getLetter();
+            $bed_row['BED_LABEL'] = $bedLabel;
 
             $roommate = null;
 
