@@ -46,6 +46,7 @@ class LotteryChooseRoomView extends hms\View {
         foreach($rooms as $room){
             $row = array();
 
+
             $num_avail_beds = $room->count_avail_lottery_beds();
 
             // We list the room dispite whether it's actually available to choose or not,
@@ -61,7 +62,7 @@ class LotteryChooseRoomView extends hms\View {
 
                 // Show a grayed out row and no link
                 $row['ROOM_NUM']        = $room->room_number;
-                $row['ROW_TEXT_COLOR']  = 'grey';
+                $row['ROW_TEXT_COLOR']  = 'text-muted';
                 $row['AVAIL_BEDS']      = 0; // show 0 available beds since this room is unavailable to the user
 
             }else{
@@ -71,6 +72,19 @@ class LotteryChooseRoomView extends hms\View {
                 $row['ROOM_NUM']        = $roomCmd->getLink($room->room_number);
                 $row['ROW_TEXT_COLOR']  = 'black';
                 $row['AVAIL_BEDS']      = $num_avail_beds;
+            }
+
+            if($room->isADA())
+            {
+              $row['ADA'] = '<i class="fa fa-wheelchair"></i>';
+            }
+            if($room->isHearingImpaired())
+            {
+              $row['HEARING_IMPAIRED'] = '<i class="fa fa-bell-slash"></i>';
+            }
+            if($room->bathEnSuite())
+            {
+              $row['BATH_EN_SUITE'] = '<i class="fa fa-female">|</i><i class="fa fa-male"></i>';
             }
 
             $row['NUM_BEDS']    = $room->get_number_of_beds();
