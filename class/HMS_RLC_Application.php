@@ -239,6 +239,10 @@ class HMS_RLC_Application extends HMS_Item
             $tags['STATE'] = '<em class="text-muted">not invited</em>';
         }else if($state == 'invited'){
             $tags['STATE'] = '<em class="text-muted">pending</em>';
+        }else if($state == 'selfselect-invite'){
+            $tags['STATE'] = '<em class="text-muted">self-select available</em>';
+        }else if($state == 'selfselect-assigned'){
+            $tags['STATE'] = '<span class="text-success">self-selected</span>';
         }else{
             $tags['STATE'] = '';
         }
