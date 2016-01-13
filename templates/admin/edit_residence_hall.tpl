@@ -48,6 +48,7 @@
                     </div>
                     <div role="tabpanel" class="tab-pane" id="profile">
                         {START_FORM}
+                        <input type="hidden" name="tab" value="settings">
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
@@ -95,6 +96,7 @@
                     </div>
                     <div role="tabpanel" class="tab-pane" id="messages">
                         {START_FORM}
+                        <input type="hidden" name="tab" value="images">
                         Exterior image: {EXTERIOR_IMG}
                         Other image: {OTHER_IMG}
                         Map image: {MAP_IMG}

@@ -60,36 +60,39 @@ class EditResidenceHallCommand extends Command {
             $viewCmd->redirect();
         }
 
-        // Compare the hall's gender and the gender the user selected
-        // If they're not equal, call 'can_change_gender' public function
-        if ($hall->gender_type != $_REQUEST['gender_type']) {
-            if (!$hall->can_change_gender($_REQUEST['gender_type'])) {
-                NQ::simple('hms', hms\NotificationView::ERROR, 'Incompatible gender detected. No changes were made.');
-                $viewCmd->redirect();
+        if($context->get('tab') == 'settings') {
+            // Compare the hall's gender and the gender the user selected
+            // If they're not equal, call 'can_change_gender' public function
+            if ($hall->gender_type != $_REQUEST['gender_type']) {
+                if (!$hall->can_change_gender($_REQUEST['gender_type'])) {
+                    NQ::simple('hms', hms\NotificationView::ERROR, 'Incompatible gender detected. No changes were made.');
+                    $viewCmd->redirect();
+                }
             }
+
+            // Grab all the input from the form and save the hall
+            $hall->hall_name                = $context->get('hall_name');
+            $hall->gender_type              = $context->get('gender_type');
+
+            // Set the defaults for the check boxes
+            $context->setDefault('air_conditioned', 0);
+            $context->setDefault('is_online', 0);
+            $context->setDefault('meal_plan_required', 0);
+            $context->setDefault('assignment_notifications', 0);
+
+            $hall->air_conditioned          = $context->get('air_conditioned');
+            $hall->is_online                = $context->get('is_online');
+            $hall->meal_plan_required       = $context->get('meal_plan_required');
+            $hall->assignment_notifications = $context->get('assignment_notifications');
+
+            $hall->setPackageDeskId($context->get('package_desk'));
+
+        } else if ($context->get('tab') == 'images'){
+            $hall->exterior_image_id    = $context->get('exterior_image_id');
+            $hall->other_image_id       = $context->get('other_image_id');
+            $hall->map_image_id         = $context->get('map_image_id');
+            $hall->room_plan_image_id   = $context->get('room_plan_image_id');
         }
-
-        // Grab all the input from the form and save the hall
-        $hall->hall_name                = $context->get('hall_name');
-        $hall->gender_type              = $context->get('gender_type');
-
-        // Set the defaults for the check boxes
-        $context->setDefault('air_conditioned', 0);
-        $context->setDefault('is_online', 0);
-        $context->setDefault('meal_plan_required', 0);
-        $context->setDefault('assignment_notifications', 0);
-
-        $hall->air_conditioned          = $context->get('air_conditioned');
-        $hall->is_online                = $context->get('is_online');
-        $hall->meal_plan_required       = $context->get('meal_plan_required');
-        $hall->assignment_notifications = $context->get('assignment_notifications');
-
-        $hall->setPackageDeskId($context->get('package_desk'));
-
-        $hall->exterior_image_id    = $context->get('exterior_image_id');
-        $hall->other_image_id       = $context->get('other_image_id');
-        $hall->map_image_id         = $context->get('map_image_id');
-        $hall->room_plan_image_id   = $context->get('room_plan_image_id');
 
         $result = $hall->save();
 
