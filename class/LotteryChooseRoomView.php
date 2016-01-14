@@ -76,15 +76,15 @@ class LotteryChooseRoomView extends hms\View {
 
             if($room->isADA())
             {
-              $row['ADA'] = '<i class="fa fa-wheelchair"></i>';
+              $row['ADA'] = '<i class="fa fa-wheelchair" title="ADA Compliant"></i>';
             }
             if($room->isHearingImpaired())
             {
-              $row['HEARING_IMPAIRED'] = '<i class="fa fa-bell-slash"></i>';
+              $row['HEARING_IMPAIRED'] = '<i class="fa fa-bell-slash" title="Equiped for Hearing Impaired"></i>';
             }
             if($room->bathEnSuite())
             {
-              $row['BATH_EN_SUITE'] = '<i class="fa fa-female">|</i><i class="fa fa-male"></i>';
+              $row['BATH_EN_SUITE'] = '<i class="fa fa-female" title="Bathroom en Suite">|</i><i class="fa fa-male" title="Bathroom en Suite"></i>';
             }
 
             $row['NUM_BEDS']    = $room->get_number_of_beds();
