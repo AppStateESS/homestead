@@ -52,6 +52,7 @@
                 <!-- Settings tab -->
                 <div role="tabpanel" class="tab-pane" id="settings-tab">
                     {START_FORM}
+                    <input type="hidden" name="tab" value="settings">
                     <div class="row">
                         <div class="col-md-7">
                             <div class="checkbox">
@@ -96,10 +97,13 @@
                 </div>
                 <!-- Images tab -->
                 <div role="tabpanel" class="tab-pane" id="images-tab">
+                    {START_FORM}
+                    <input type="hidden" name="tab" value="images">
                     Floor plan: {FILE_MANAGER}
                     <div class="form-group">
                         <button class="btn btn-success pull-right">Save</button>
                     </div>
+                    {END_FORM}
                 </div>
                 <!-- Roles Tab -->
                 <div role="tabpanel" class="tab-pane" id="roles-tab">

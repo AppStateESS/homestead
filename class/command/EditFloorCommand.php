@@ -37,52 +37,55 @@ class EditFloorCommand extends Command {
         $viewCmd = CommandFactory::getCommand('EditFloorView');
         $viewCmd->setFloorId($floorId);
 
-        # Create the floor object gien the floor id
+        // Create the floor object gien the floor id
         $floor = new HMS_Floor($floorId);
         if(!$floor){
             NQ::simple('hms', hms\NotificationView::ERROR, 'Invalid floor.');
             $viewCmd->redirect();
         }
 
-        # Compare the floor's gender and the gender the user selected
-        # If they're not equal, call 'can_change_gender' public function
-        if($floor->gender_type != $context->get('gender_type')){
-            if(!$floor->can_change_gender($context->get('gender_type'))){
-                NQ::simple('hms', hms\NotificationView::ERROR, 'Incompatible gender detected. No changes were made.');
-                $viewCmd->redirect();
+        if($context->get('tab') == 'settings') {
+            // Compare the floor's gender and the gender the user selected
+            // If they're not equal, call 'can_change_gender' public function
+            if($floor->gender_type != $context->get('gender_type')){
+                if(!$floor->can_change_gender($context->get('gender_type'))){
+                    NQ::simple('hms', hms\NotificationView::ERROR, 'Incompatible gender detected. No changes were made.');
+                    $viewCmd->redirect();
+                }
             }
-        }
 
-        # Grab all the input from the form and save the floor
-        $floor->gender_type = $context->get('gender_type');
+            // Grab all the input from the form and save the floor
+            $floor->gender_type = $context->get('gender_type');
 
-        $context->setDefault('is_online', 0);
-        $floor->is_online = $context->get('is_online');
+            $context->setDefault('is_online', 0);
+            $floor->is_online = $context->get('is_online');
 
-        $floor->floor_plan_image_id = $context->get('floor_plan_image_id');
+            if($context->get('f_movein_time') == 0){
+                $floor->f_movein_time_id = NULL;
+            }else{
+                $floor->f_movein_time_id = $context->get('f_movein_time');
+            }
 
-        if($context->get('f_movein_time') == 0){
-            $floor->f_movein_time_id = NULL;
-        }else{
-            $floor->f_movein_time_id = $context->get('f_movein_time');
-        }
+            if($context->get('t_movein_time') == 0){
+                $floor->t_movein_time_id = NULL;
+            }else{
+                $floor->t_movein_time_id = $context->get('t_movein_time');
+            }
 
-        if($context->get('t_movein_time') == 0){
-            $floor->t_movein_time_id = NULL;
-        }else{
-            $floor->t_movein_time_id = $context->get('t_movein_time');
-        }
+            if($context->get('rt_movein_time') == 0){
+                $floor->rt_movein_time_id = NULL;
+            }else{
+                $floor->rt_movein_time_id = $context->get('rt_movein_time');
+            }
 
-        if($context->get('rt_movein_time') == 0){
-            $floor->rt_movein_time_id = NULL;
-        }else{
-            $floor->rt_movein_time_id = $context->get('rt_movein_time');
-        }
+            if($context->get('floor_rlc_id') == 0){
+                $floor->rlc_id = NULL;
+            }else{
+                $floor->rlc_id = $context->get('floor_rlc_id');
+            }
 
-        if($context->get('floor_rlc_id') == 0){
-            $floor->rlc_id = NULL;
-        }else{
-            $floor->rlc_id = $context->get('floor_rlc_id');
+        } else if ($context->get('tab') == 'images') {
+            $floor->floor_plan_image_id = $context->get('floor_plan_image_id');
         }
 
         try{
