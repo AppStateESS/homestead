@@ -65,8 +65,12 @@ class RequestRoommateCommand extends Command
 
         $request->save();
 
-        HMS_Activity_Log::log_activity($requestee, ACTIVITY_REQUESTED_AS_ROOMMATE, $requestor, "$requestor requested $requestee");
-        HMS_Activity_Log::log_activity($requestor, ACTIVITY_REQUESTED_AS_ROOMMATE, $requestee, "$requestor requested $requestee");
+        $endTime = $request->calc_req_expiration_date();
+
+        $expirationMsg = " expires on " . date('m/d/Y h:i:s a', $endTime);
+
+        HMS_Activity_Log::log_activity($requestee, ACTIVITY_REQUESTED_AS_ROOMMATE, $requestor, "$requestor requested $requestee" . $expirationMsg);
+        HMS_Activity_Log::log_activity($requestor, ACTIVITY_REQUESTED_AS_ROOMMATE, $requestee, "$requestor requested $requestee" . $expirationMsg);
 
         // Email both parties
         PHPWS_Core::initModClass('hms', 'HMS_Email.php');
@@ -84,5 +88,3 @@ class RequestRoommateCommand extends Command
 
     }
 }
-
-
