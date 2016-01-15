@@ -1,7 +1,10 @@
 {DROPDOWN}
 {START_FORM}
+<div style="margin-top: 25px">
+{SUBMIT}
+</div>
 <!-- BEGIN table -->
-<table class='table table-striped'>
+<table style="margin-top: 10px" class='table table-striped'>
     <tr>
         <th>Name </th>
         <th>1st {RLC_FIRST_CHOICE_ID_SORT}</th>
@@ -36,8 +39,9 @@
     {PAGES}
     <p>{TOTAL_ROWS}</p>
     <p>{LIMIT_LABEL} {LIMITS}</p>
-    {CSV_REPORT}
 </div>
 <!-- END table -->
-{SUBMIT}
 {END_FORM}
+<div class="text-center">
+    {CSV_REPORT}
+</div>
