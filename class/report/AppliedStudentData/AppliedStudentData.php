@@ -29,8 +29,16 @@ class AppliedStudentData extends Report implements iCsvReport {
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 
         $db = new PHPWS_DB('hms_new_application');
+        $db->addColumn('hms_new_application.*');
         $db->addWhere('term', $this->term);
         $db->addWhere('cancelled', 0);
+        $term = Term::getTermSem($this->term);
+
+        if($term == TERM_FALL)
+        {
+            $db->addJoin('LEFT', 'hms_new_application', 'hms_fall_application', 'id', 'id');
+            $db->addColumn('hms_fall_application.*');
+        }
 
         $result = $db->select();
 
@@ -63,18 +71,20 @@ class AppliedStudentData extends Report implements iCsvReport {
 
             $address = $student->getAddress(NULL);
 
+            $lifestyle = ($app['lifestyle_option'] == 1) ? 'Single Gender' : 'Co-Ed';
+
             if(!is_null($address) && $address !== false){
                 $this->rows[] =
                 array(
                         $username, $bannerId, $first, $middle, $last, $gender,
                         $type, $cellPhone, $room, $date, $address->line1, $address->line2,
                         $address->line3, $address->city,
-                        $address->state, $address->zip, $birthday
+                        $address->state, $address->zip, $birthday, $lifestyle
                      );
             }else{
                 $this->rows[] =
                 array($username, $bannerId, $first, $middle, $last, '',
-                      $type, $cellPhone, $room, $date, '', '', '', '', '', '');
+                      $type, $cellPhone, $room, $date, '', '', '', '', '', '', $lifestyle);
             }
         }
     }
@@ -83,7 +93,7 @@ class AppliedStudentData extends Report implements iCsvReport {
     {
         return array('Username', 'Banner id', 'First name', 'Middle name',
             'Last name', 'Gender', 'Student type', 'Cell Phone', 'Assignment', 'Date Applied', 'Address 1',
-            'Address 2', 'Address 3', 'City', 'State', 'Zip', 'Birthday');
+            'Address 2', 'Address 3', 'City', 'State', 'Zip', 'Birthday', 'Lifestyle');
     }
 
     public function getCsvRowsArray()
