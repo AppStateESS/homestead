@@ -133,11 +133,11 @@ class BedView extends hms\View
         }
         foreach ($result as $key => $assignment) {
             $student = StudentFactory::getStudentByBannerID($assignment['banner_id'], $this->bed->getTerm());
-            $result[$key]['assigned_on_date'] = strftime('%Y-%m-%d %r', $assignment['assigned_on']);
+            $result[$key]['assigned_on_date'] = HMS_Util::get_short_date_time($assignment['assigned_on']);
             if (empty($assignment['removed_on'])) {
                 $result[$key]['removed_on_date'] = 'Never';
             } else {
-                $result[$key]['removed_on_date'] = strftime('%c', $assignment['removed_on']);
+                $result[$key]['removed_on_date'] = HMS_Util::get_short_date_time($assignment['removed_on']);
             }
             $result[$key]['student'] = $student->getProfileLink();
         }
