@@ -53,9 +53,43 @@ class AssignedStudentData extends Report implements iCsvReport {
 
         foreach ($results as $row) {
             try {
-                $student = StudentFactory::getStudentByUsername($row['asu_username'], $this->term);
+                $student = StudentFactory::getStudentByBannerId($row['banner_id'], $this->term);
+
+                $bannerId = $student->getBannerId();
+                $username = $student->getUsername();
+                $first = $student->getFirstName();
+                $middle = $student->getMiddleName();
+                $last = $student->getLastName();
+                $type = $student->getType();
+                $appTerm = $student->getApplicationTerm();
+                $cellPhone= $row['cell_phone'];
+                $assignmentType = $row['reason'];
+
+                $gender = HMS_Util::formatGender($student->getGender());
+                $dob = $student->getDob();
+
+                $room = $row['hall_name'] . ' ' . $row['room_number'];
+
+                $address = $student->getAddress(NULL);
+
+                if (!$address || !isset($address) || is_null($address)) {
+                    $line1 = "";
+                    $line2 = "";
+                    $line3 = "";
+                    $city = "";
+                    $state = "";
+                    $zip = "";
+                } else {
+                    $line1 = $address->line1;
+                    $line2 = $address->line2;
+                    $line3 = $address->line3;
+                    $city = $address->city;
+                    $state = $address->state;
+                    $zip = $address->zip;
+                }
+
             } catch (StudentNotFoundException $e) {
-                $username = $row['asu_username'];
+                $bannerId = $row['banner_id'];
                 $username = '';
                 $first = '';
                 $middle = '';
@@ -64,51 +98,15 @@ class AssignedStudentData extends Report implements iCsvReport {
                 $dob = '';
                 $type = '';
                 $cellPhone = '';
-                $line1 = "";
-                $line2 = "";
-                $line3 = "";
-                $city = "";
-                $state = "";
-                $zip = "";
-                $appTerm = "";
-            }
-
-            $bannerId = $student->getBannerId();
-
-            if (!isset($bannerId) || is_null($bannerId) || empty($bannerId)) {
-                continue;
-            }
-
-            $username = $student->getUsername();
-            $first = $student->getFirstName();
-            $middle = $student->getMiddleName();
-            $last = $student->getLastName();
-            $type = $student->getType();
-            $appTerm = $student->getApplicationTerm();
-            $cellPhone= $row['cell_phone'];
-            $assignmentType = $row['reason'];
-            
-            $gender = HMS_Util::formatGender($student->getGender());
-            $dob = $student->getDob();
-
-            $room = $row['hall_name'] . ' ' . $row['room_number'];
-
-            $address = $student->getAddress(NULL);
-
-            if (!$address || !isset($address) || is_null($address)) {
-                $line1 = "";
-                $line2 = "";
-                $line3 = "";
-                $city = "";
-                $state = "";
-                $zip = "";
-            } else {
-                $line1 = $address->line1;
-                $line2 = $address->line2;
-                $line3 = $address->line3;
-                $city = $address->city;
-                $state = $address->state;
-                $zip = $address->zip;
+                $line1 = '';
+                $line2 = '';
+                $line3 = '';
+                $city = '';
+                $state = '';
+                $zip = '';
+                $appTerm = '';
+                $assignmentType = '';
+                $room = '';
             }
 
             $this->rows[] = array($username,$bannerId,$first,$middle,$last,$gender,$dob,$type,$appTerm,$cellPhone,$assignmentType,$room,$line1,$line2,$line3,$city,$state,$zip);
@@ -136,5 +134,3 @@ class AssignedStudentData extends Report implements iCsvReport {
     }
 
 }
-
-
