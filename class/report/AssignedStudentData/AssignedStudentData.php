@@ -30,10 +30,11 @@ class AssignedStudentData extends Report implements iCsvReport {
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 
         $db = new PHPWS_DB('hms_assignment');
-        $db->addColumn('hms_assignment.*');
-        $db->addColumn('hms_residence_hall.*');
-        $db->addColumn('hms_room.*');
-        $db->addColumn('hms_new_application.*');
+        $db->addColumn('hms_assignment.banner_id');
+        $db->addColumn('hms_assignment.reason');
+        $db->addColumn('hms_residence_hall.hall_name');
+        $db->addColumn('hms_room.room_number');
+        $db->addColumn('hms_new_application.cell_phone');
 
         $db->addWhere('hms_assignment.term', $this->term);
 
