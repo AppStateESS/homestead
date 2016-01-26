@@ -39,6 +39,7 @@ Sorry, re-application is now closed.
 <!-- BEGIN assigned -->
 You have been re-assigned.<br />
 Please note <strong>this assignment is subject to change</strong> at anytime.  Your final room assignment will be sent to your Appalachian email in July.
+{ASSIGNED}
 <!-- END assigned -->
 
 <!-- BEGIN roommate_request -->
