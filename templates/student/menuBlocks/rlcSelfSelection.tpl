@@ -2,7 +2,7 @@
 
 <div class="block-content">
   <div class="text-muted">Available: {DATES}</div>
-  
+
   <p>
     <!-- BEGIN too_soon -->
     Residential Learning Community re-application for this term will begin on {BEGIN_DEADLINE}.
@@ -11,17 +11,22 @@
     <!-- BEGIN too_late -->
     Residential Learning Community re-application for this term ended on {END_DEADLINE}.
     <!-- END too_late -->
-    
+
     <!-- BEGIN select_room -->
     You have been invited to join {INVITED_COMMUNITY_NAME}. You may {SELECT_LINK}.
     <!-- END select_room -->
-    
+
     <!-- BEGIN assigned -->
     You have been assigned to {ASSIGNMENT} with {ASSIGNED_COMMUNITY_NAME}.<br />
     Please note this assignment is subject to change at anytime.  Your final room assignment will be sent to your Appalachian email in July.
     <!-- END assigned -->
+
+    <!-- BEGIN not_eligible -->
+    {NOT_ELIGIBLE}
+    You are not eligible for RLC self-selection because you are not a member of a Learning Community.
+    <!-- END not_eligible -->
   </p>
-  
+
   <!-- BEGIN roommate_request -->
   <p>
   {ROOMMATE_REQUEST}
