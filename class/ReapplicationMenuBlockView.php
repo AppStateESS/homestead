@@ -34,7 +34,8 @@ class ReapplicationMenuBlockView extends hms\View {
         if(!is_null($this->assignment)) {
             // Student has already been assigned.
             $tpl['ICON'] = FEATURE_COMPLETED_ICON;
-            $tpl['ASSIGNED'] = $this->assignment->where_am_i();
+            //$tpl['ASSIGNED'] = $this->assignment->where_am_i();
+            $tpl['ASSIGNED'] = '';
         }else if($hardCapReached){
             // Hard cap has been reached
             $tpl['ICON'] = FEATURE_LOCKED_ICON;
@@ -93,5 +94,3 @@ class ReapplicationMenuBlockView extends hms\View {
         return PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/reApplicationMenuBlock.tpl');
     }
 }
-
-

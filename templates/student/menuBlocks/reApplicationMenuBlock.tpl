@@ -32,13 +32,13 @@ You have been selected for re-application. You have until {EXPIRE_DATE} to confi
 <!-- END select -->
 
 <!-- BEGIN hard_cap -->
-Sorry, re-application is now closed. 
+Sorry, re-application is now closed.
 {HARD_CAP}
 <!-- END hard_cap -->
 
 <!-- BEGIN assigned -->
-You have been assigned to {ASSIGNED}.<br />
-Please note this assignment is subject to change at anytime.  Your final room assignment will be sent to your Appalachian email in July.
+You have been re-assigned.<br />
+Please note <strong>this assignment is subject to change</strong> at anytime.  Your final room assignment will be sent to your Appalachian email in July.
 <!-- END assigned -->
 
 <!-- BEGIN roommate_request -->
