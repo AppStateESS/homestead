@@ -144,7 +144,9 @@ class HMS_Util{
             $timestamp = time();
         }
 
-        return date('M jS, Y', $timestamp);
+        // We subtract one second so that the date displayed will be the previous day
+        // in case of timestamps for 12:00am, when used as a deadline
+        return date('M jS, Y', $timestamp - 1);
     }
 
     public static function getPrettyDateRange($startDate, $endDate)
