@@ -16,9 +16,15 @@
     You have been invited to join {INVITED_COMMUNITY_NAME}. You may {SELECT_LINK}.
     <!-- END select_room -->
 
-    <!-- BEGIN assigned -->
-    You have been assigned to {ASSIGNMENT} with {ASSIGNED_COMMUNITY_NAME}.<br />
+    <!-- BEGIN self-assigned -->
+    You have been assigned to {SELF_ASSIGNMENT} with {ASSIGNED_COMMUNITY_NAME}.<br />
     Please note this assignment is subject to change at anytime.  Your final room assignment will be sent to your Appalachian email in July.
+    <!-- END self-assigned -->
+
+    <!-- BEGIN assigned -->
+    You have been assigned.<br />
+    Please note this assignment is subject to change at anytime.  Your final room assignment will be sent to your Appalachian email in July.
+    {ASSIGNMENT}
     <!-- END assigned -->
 
     <!-- BEGIN not_eligible -->

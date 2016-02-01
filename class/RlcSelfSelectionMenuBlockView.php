@@ -31,11 +31,14 @@ class RlcSelfSelectionMenuBlockView extends hms\View {
         $tpl['DATES'] = HMS_Util::getPrettyDateRange($this->startDate, $this->endDate);
         $tpl['STATUS'] = "";
 
-        if(!is_null($this->rlcAssignment) && !is_null($this->roomAssignment)){
-            // Student is already assigned
+        if(!is_null($this->rlcAssignment) && !is_null($this->roomAssignment) && $this->rlcAssignment->getStateName() == 'selfselect-assigned'){
             $tpl['ICON'] = FEATURE_COMPLETED_ICON;
-        	$tpl['ASSIGNMENT'] = $this->roomAssignment->where_am_i();
+        	$tpl['SELF_ASSIGNMENT'] = $this->roomAssignment->where_am_i();
             $tpl['ASSIGNED_COMMUNITY_NAME'] = $this->rlcAssignment->getRlcName();
+        } else if(!is_null($this->rlcAssignment) && !is_null($this->roomAssignment)){
+            // Student is already assigned, but didn't self-select
+            $tpl['ICON'] = FEATURE_LOCKED_ICON;
+        	$tpl['ASSIGNMENT'] = '';
 
         } else if(time() < $this->startDate) {
             // To early
