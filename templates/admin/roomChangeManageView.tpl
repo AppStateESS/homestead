@@ -79,7 +79,7 @@
 
 <script type="text/javascript">
 	$(document).ready(function() {
-		$.get('index.php?module=hms&action=RoomChnageListAvailableBeds',{gender: $("#participant_form_gender").val()}, bedListCallback, 'json');
+		$.get('index.php?module=hms&action=RoomChangeListAvailableBeds',{gender: $("#participant_form_gender").val()}, bedListCallback, 'json');
 
 
 		// Cancel Form
@@ -111,7 +111,8 @@
 
 	    // Loop over each bed and add it to the list
 		for(i = 0; i < data.length; i++){
-			html += '<option value="' + data[i].bedid + '">' + data[i].hall_name + ' ' + data[i].room_number + '</option>';
+			html += '<option value="' + data[i].bedid + '">' + data[i].hall_name +
+                    ' ' + data[i].room_number + ' ' + data[i].bedroom_label + data[i].bed_letter +'</option>';
 		}
 
 		$("#participant_form_bed_select").append(html);

@@ -7,11 +7,11 @@
  * @package hms
  */
 
-class RoomChnageListAvailableBedsCommand extends Command {
+class RoomChangeListAvailableBedsCommand extends Command {
 
     public function getRequestVars()
     {
-        return array('action'=>'RoomChnageListAvailableBeds');
+        return array('action'=>'RoomChangeListAvailableBeds');
     }
 
     public function execute(CommandContext $context)
@@ -26,7 +26,7 @@ class RoomChnageListAvailableBedsCommand extends Command {
 
         $db = PdoFactory::getPdoInstance();
 
-        $query = "select bedid, hall_name, room_number
+        $query = "select bedid, hall_name, room_number, bedroom_label, bed_letter
                 FROM hms_hall_structure
                 LEFT OUTER JOIN hms_assignment ON hms_assignment.bed_id = hms_hall_structure.bedid
                 WHERE
@@ -55,4 +55,3 @@ class RoomChnageListAvailableBedsCommand extends Command {
         exit;
     }
 }
-
