@@ -103,6 +103,16 @@ class EditRoomCommand extends Command {
         $room->hearing_impaired = $context->get('hearing_impaired') == 1 ? 1 : 0;
         $room->bath_en_suite    = $context->get('bath_en_suite')    == 1 ? 1 : 0;
 
+        $room->setReservedReason($context->get('reserved_reason'));
+        if($context->get('reserved_reason')== 'none')
+        {
+            $room->setReserved(0);
+        }
+        else {
+            $room->setReserved(1);
+        }
+        $room->setReservedNotes($context->get('reserved_notes'));
+
         $result = $room->save();
 
         if(!$result || PHPWS_Error::logIfError($result)){

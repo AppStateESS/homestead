@@ -90,7 +90,6 @@
             </div>
             <div class="panel-body">
                 {OFFLINE} {OFFLINE_LABEL}<br />
-                {RESERVED} {RESERVED_LABEL}<br />
                 {RA} {RA_LABEL}<br />
                 {PRIVATE} {PRIVATE_LABEL}<br />
                 {OVERFLOW}{OVERFLOW_LABEL}<br />
@@ -100,6 +99,36 @@
                     {ADA} {ADA_LABEL}<br />
                     {HEARING_IMPAIRED}{HEARING_IMPAIRED_LABEL}<br />
                     {BATH_EN_SUITE}{BATH_EN_SUITE_LABEL}<br />
+                </div>
+                <div class="form-group">
+                    <label>Reserved</label>
+                    <select id="phpws_form_reserved_reason" class="form-control" name="reserved_reason">
+                        <option value="none">None</option>
+                        <optgroup label="Athletics">
+                            <!-- BEGIN ATHLETICS_OPTIONS -->
+                                <option value="{VALUE}">{NAME}</option>
+                            <!-- END ATHLETICS_OPTIONS -->
+                        </optgroup>
+                        <optgroup label="Special Needs">
+                            <!-- BEGIN SPECIAL_NEEDS_OPTIONS -->
+                                <option value="{VALUE}">{NAME}</option>
+                            <!-- END SPECIAL_NEEDS_OPTIONS -->
+                        </optgroup>
+                        <optgroup label="Scholars/Organizations">
+                            <!-- BEGIN SCHOLARS_OPTIONS -->
+                                <option value="{VALUE}">{NAME}</option>
+                            <!-- END SCHOLARS_OPTIONS -->
+                        </optgroup>
+                        <optgroup label="Miscellaneous">
+                            <!-- BEGIN MISC_OPTIONS -->
+                                <option value="{VALUE}">{NAME}</option>
+                            <!-- END MISC_OPTIONS -->
+                        </optgroup>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Reserved Notes<label>
+                    <input id="phpws_form_reserved_notes" class="form-control" name="reserved_notes"></input>
                 </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-success"><i class="fa fa-disk"></i> Save</button>
@@ -127,5 +156,10 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    phpws_form_reserved_reason.value = '{CURRENT_REASON}';
+    phpws_form_reserved_notes.value = '{RESERVED_NOTES}';
+</script>
 
 <div id="addDamageDialog"></div>
