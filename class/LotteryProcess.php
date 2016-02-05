@@ -100,7 +100,7 @@ class LotteryProcess {
          * *****************
          */
 
-        $output = array(); 
+        $output = array();
 
         if ($this->sendReminders) {
             $this->output[] = "Sending invite reminder emails...";
@@ -293,7 +293,7 @@ class LotteryProcess {
                     AND hms_lottery_application.magic_winner = 0
                     AND hms_lottery_application.special_interest IS NULL
                     AND hms_new_application.gender = $gender
-                    AND hms_new_application.username NOT IN (SELECT username FROM hms_learning_community_applications JOIN hms_learning_community_assignment ON hms_learning_community_applications.id = hms_learning_community_assignment.application_id WHERE term = {$this->term} and state = 'confirmed') ";
+                    AND hms_new_application.username NOT IN (SELECT username FROM hms_learning_community_applications JOIN hms_learning_community_assignment ON hms_learning_community_applications.id = hms_learning_community_assignment.application_id WHERE term = {$this->term} and state IN ('confirmed', 'selfselect-assigned')) ";
 
         $term_year = Term::getTermYear($this->term);
         if ($class == CLASS_SOPHOMORE) {
@@ -655,7 +655,7 @@ class LotteryProcess {
         WHERE foo.asu_username IS NULL AND hms_lottery_application.invited_on IS NULL
         AND hms_new_application.term = $term
         AND special_interest IS NULL
-        AND hms_new_application.username NOT IN (SELECT username FROM hms_learning_community_applications JOIN hms_learning_community_assignment ON hms_learning_community_applications.id = hms_learning_community_assignment.application_id WHERE term = $term and (state = 'confirmed' OR state = 'selfselect-assigned'))";
+        AND hms_new_application.username NOT IN (SELECT username FROM hms_learning_community_applications JOIN hms_learning_community_assignment ON hms_learning_community_applications.id = hms_learning_community_assignment.application_id WHERE term = $term and state IN ('confirmed', 'selfselect-assigned'))";
 
         $remainingApplications = PHPWS_DB::getOne($query);
 
@@ -673,7 +673,7 @@ class LotteryProcess {
                     WHERE foo.asu_username IS NULL AND hms_lottery_application.invited_on IS NULL
                     AND hms_new_application.term = $term
                     AND special_interest IS NULL
-                    AND hms_new_application.username NOT IN (SELECT username FROM hms_learning_community_applications JOIN hms_learning_community_assignment ON hms_learning_community_applications.id = hms_learning_community_assignment.application_id WHERE term = $term and state = 'confirmed') ";
+                    AND hms_new_application.username NOT IN (SELECT username FROM hms_learning_community_applications JOIN hms_learning_community_assignment ON hms_learning_community_applications.id = hms_learning_community_assignment.application_id WHERE term = $term and state IN ('confirmed', 'selfselect-assigned')) ";
 
         if (isset($gender)) {
             $query .= "AND hms_new_application.gender = $gender ";
