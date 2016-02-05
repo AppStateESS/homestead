@@ -22,6 +22,8 @@ class HMS_Room extends HMS_Item
 
     // Reservations
     public $reserved               = false;
+    public $reserved_reason        = "";
+    public $reserved_notes         = "";
     public $offline                = false;
     public $ra                     = false;
     public $private                = false;
@@ -678,6 +680,26 @@ class HMS_Room extends HMS_Item
         $this->reserved = $value;
     }
 
+    public function getReservedReason()
+    {
+        return $this->reserved_reason;
+    }
+
+    public function setReservedReason($reason)
+    {
+        $this->reserved_reason = $reason;
+    }
+
+    public function getReservedNotes()
+    {
+        return $this->reserved_notes;
+    }
+
+    public function setReservedNotes($notes)
+    {
+        $this->reserved_notes = $notes;
+    }
+
     public function isRa()
     {
         return $this->ra == 1 ? true : false;
@@ -954,6 +976,40 @@ class HMS_Room extends HMS_Item
 
         // Looks like we're good.
         return true;
+    }
+
+    public static function listReserveReasons()
+    {
+        $athletics[] = array('NAME' => 'Football', 'VALUE' => 'football');
+        $athletics[] = array('NAME' => 'Basketball', 'VALUE' => 'basketball');
+        $athletics[] = array('NAME' => 'Baseball', 'VALUE' => 'baseball');
+        $athletics[] = array('NAME' => 'Soccer', 'VALUE' => 'soccer');
+        $athletics[] = array('NAME' => 'Cross Country/Track', 'VALUE' => 'track');
+        $athletics[] = array('NAME' => 'Field Hockey', 'VALUE' => 'fieldhockey');
+        $athletics[] = array('NAME' => 'Wrestling', 'VALUE' => 'wrestling');
+        $athletics[] = array('NAME' => 'Softball', 'VALUE' => 'softball');
+        $athletics[] = array('NAME' => 'Volleyball', 'VALUE' => 'volleyball');
+        $athletics[] = array('NAME' => 'Tennis', 'VALUE' => 'tennis');
+        $athletics[] = array('NAME' => 'Golf', 'VALUE' => 'golf');
+
+        $specialNeeds[] = array('NAME' => 'SDAP', 'VALUE' => 'sdap');
+        $specialNeeds[] = array('NAME' => 'LGBT', 'VALUE' => 'lgbt');
+        $specialNeeds[] = array('NAME' => 'ODS Support', 'VALUE' => 'ods');
+
+        $scholarsOrgs[] = array('NAME' => 'Plemmons', 'VALUE' => 'plemmons');
+        $scholarsOrgs[] = array('NAME' => 'Chancellors', 'VALUE' => 'chancellors');
+        $scholarsOrgs[] = array('NAME' => 'Diversity', 'VALUE' => 'diversity');
+        $scholarsOrgs[] = array('NAME' => 'RHA', 'VALUE' => 'rha');
+        $scholarsOrgs[] = array('NAME' => 'NRHH', 'VALUE' => 'nrhh');
+
+        $miscellaneous[] = array('NAME' => 'See Notes Section', 'VALUE' => 'notes');
+        $miscellaneous[] = array('NAME' => 'Tour Room', 'VALUE' => 'tour');
+
+        $reserveReasons = array('Athletics' => $athletics,
+                                'SpecialNeeds' => $specialNeeds,
+                                'ScholarsOrganizations' => $scholarsOrgs,
+                                'Miscellaneous' => $miscellaneous);
+        return $reserveReasons;
     }
 
     public function __tostring()
