@@ -79,7 +79,7 @@ class SendAssignmentNotificationCommand extends Command {
 
             // If there is an assignment, make sure the student "confirmed" the rlc invite
             if(!is_null($rlcAssignment)){
-                if($rlcAssignment->getStateName() != 'confirmed'){
+                if($rlcAssignment->getStateName() != 'confirmed' && $rlcAssignment->getStateName() != 'selfselect-assigned'){
                     $rlcAssignment = null;
                 }
             }
@@ -186,4 +186,3 @@ class SendAssignmentNotificationCommand extends Command {
         $context->goBack();
     }
 }
-
