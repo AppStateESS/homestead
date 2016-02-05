@@ -201,6 +201,8 @@ CREATE TABLE hms_room (
     private                 smallint NOT NULL,
     overflow                smallint NOT NULL,
     reserved                smallint NOT NULL DEFAULT 0,
+    reserved_reason         character varying,
+    reserved_notes          character varying,
     offline                 smallint NOT NULL DEFAULT 0,
     parlor                  smallint NOT NULL DEFAULT 0,
     reserved_rlc_id			integer NULL REFERENCES hms_learning_communities(id),

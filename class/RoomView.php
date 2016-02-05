@@ -197,6 +197,21 @@ class RoomView extends hms\View {
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
+        $reasonsList = HMS_Room::listReserveReasons();
+
+        $tpl['ATHLETICS_OPTIONS'] =  $reasonsList['Athletics'];
+        $tpl['SPECIAL_NEEDS_OPTIONS'] =  $reasonsList['SpecialNeeds'];
+        $tpl['SCHOLARS_OPTIONS'] =  $reasonsList['ScholarsOrganizations'];
+        $tpl['MISC_OPTIONS'] =  $reasonsList['Miscellaneous'];
+
+        if($this->room->getReservedReason() == "") {
+            $tpl['CURRENT_REASON'] = 'none';
+        } else {
+            $tpl['CURRENT_REASON'] = $this->room->getReservedReason();
+        }
+
+        $tpl['RESERVED_NOTES'] = $this->room->getReservedNotes();
+
         Layout::addPageTitle("Edit Room");
 
         $tpl['ROOM_DAMAGE_LIST'] = $this->roomDamagePager();
