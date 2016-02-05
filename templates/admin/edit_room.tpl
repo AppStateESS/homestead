@@ -127,7 +127,7 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Reserved Notes<label>
+                    <label>Reserved Notes</label>
                     <input id="phpws_form_reserved_notes" class="form-control" name="reserved_notes"></input>
                 </div>
                 <div class="form-group">

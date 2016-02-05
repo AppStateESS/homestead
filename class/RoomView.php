@@ -204,14 +204,12 @@ class RoomView extends hms\View {
         $tpl['SCHOLARS_OPTIONS'] =  $reasonsList['ScholarsOrganizations'];
         $tpl['MISC_OPTIONS'] =  $reasonsList['Miscellaneous'];
 
-        if($this->room->getReservedReason() == "")
-        {
+        if($this->room->getReservedReason() == "") {
             $tpl['CURRENT_REASON'] = 'none';
-        }
-        else
-        {
+        } else {
             $tpl['CURRENT_REASON'] = $this->room->getReservedReason();
         }
+
         $tpl['RESERVED_NOTES'] = $this->room->getReservedNotes();
 
         Layout::addPageTitle("Edit Room");
