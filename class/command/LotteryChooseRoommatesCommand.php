@@ -38,8 +38,14 @@ class LotteryChooseRoommatesCommand extends Command {
 
         $roomId = $context->get('roomId');
 
-        unset($_SESSION['application_data']);
-        var_dump($_SESSION['application_data']);exit;
+        if(isset($_SESSION['application_data']['roommates']))
+        {
+            $appData = $_SESSION['application_data'];
+            $roommates = $appData['roommates'];
+            $mealPlan = $appData['meal_plan'];
+            $roomId = $appData['roomId'];
+            unset($_SESSION['application_data']);
+        }
 
         if(!isset($roomId) || is_null($roomId) || empty($roomId)){
             throw new InvalidArgumentException('Missing room id.');
