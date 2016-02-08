@@ -22,5 +22,5 @@ is a great place to be! If you have any questions or concerns
 regarding this matter, please call 828.262.2160.
 
 Best wishes,
-Matt Zalman
+Ben Phillips
 Residence Life & Learning Communities Coordinator
