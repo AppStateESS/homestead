@@ -57,8 +57,10 @@ class AppliedStudentData extends Report implements iCsvReport {
 
             if(!is_null($assignment)){
                 $room = $assignment->where_am_i();
+                $reason = $assignment->getReason();
             }else{
                 $room = '';
+                $reason = '';
             }
 
             $student = StudentFactory::getStudentByBannerId($bannerId, $this->term);
@@ -68,6 +70,7 @@ class AppliedStudentData extends Report implements iCsvReport {
             $last   = $student->getLastName();
             $gender = $student->getPrintableGender();
             $birthday = date("m/d/Y", $student->getDobDateTime()->getTimestamp());
+            $appTerm = $student->getApplicationTerm();
 
             $address = $student->getAddress(NULL);
 
@@ -76,15 +79,15 @@ class AppliedStudentData extends Report implements iCsvReport {
             if(!is_null($address) && $address !== false){
                 $this->rows[] =
                 array(
-                        $username, $bannerId, $first, $middle, $last, $gender,
-                        $type, $cellPhone, $room, $date, $address->line1, $address->line2,
+                        $username, $bannerId, $first, $middle, $last, $gender, $birthday,
+                        $type, $cellPhone, $date, $appTerm, $lifestyle, $room, $reason, $address->line1, $address->line2,
                         $address->line3, $address->city,
-                        $address->state, $address->zip, $birthday, $lifestyle
+                        $address->state, $address->zip
                      );
             }else{
                 $this->rows[] =
                 array($username, $bannerId, $first, $middle, $last, '',
-                      $type, $cellPhone, $room, $date, '', '', '', '', '', '', $lifestyle);
+                      $type, $cellPhone, $date, $appTerm, $lifestyle, $room, $reason, $date, '',  '', '', '', '');
             }
         }
     }
@@ -92,8 +95,8 @@ class AppliedStudentData extends Report implements iCsvReport {
     public function getCsvColumnsArray()
     {
         return array('Username', 'Banner id', 'First name', 'Middle name',
-            'Last name', 'Gender', 'Student type', 'Cell Phone', 'Assignment', 'Date Applied', 'Address 1',
-            'Address 2', 'Address 3', 'City', 'State', 'Zip', 'Birthday', 'Lifestyle');
+            'Last name', 'Gender', 'Birthday', 'Student type', 'Cell Phone', 'Date Applied', 'Application Term', 'Lifestyle',
+            'Assignment',  'Assignment Type', 'Address 1', 'Address 2', 'Address 3', 'City', 'State', 'Zip');
     }
 
     public function getCsvRowsArray()
