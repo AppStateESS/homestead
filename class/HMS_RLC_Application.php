@@ -49,6 +49,7 @@ class HMS_RLC_Application extends HMS_Item
     public $term = null;
 
     public $denied = 0;
+    public $denied_email_sent;
 
     public $application_type;
 
@@ -477,11 +478,12 @@ class HMS_RLC_Application extends HMS_Item
      * @return Array of Student objects
      *
      */
-    public static function getDeniedApplicantsByTerm($term)
+    public static function getNonNotifiedDeniedApplicantsByTerm($term)
     {
         // query DB
         $db = new PHPWS_DB('hms_learning_community_applications');
         $db->addWhere('denied', 1);
+        $db->addWhere('denied_email_sent', 0);
         $db->addWhere('term', $term);
         $result = $db->select();
 
@@ -489,13 +491,7 @@ class HMS_RLC_Application extends HMS_Item
             throw new DatabaseException($result->toString());
         }
 
-        // create student objects from the denied applications
-        $students = array();
-        foreach($result as $app) {
-            $students[] = StudentFactory::getStudentByUsername($app['username'], $term);
-        }
-
-        return $students;
+        return $result;
     }
 
     //TODO move this!!
@@ -707,6 +703,17 @@ class HMS_RLC_Application extends HMS_Item
     {
         $this->application_type = $type;
     }
+
+    public function getDeniedEmailSent()
+    {
+        return $this->denied_email_sent;
+    }
+
+    public function setDeniedEmailSent($value)
+    {
+        $this->denied_email_sent = $value;
+    }
+
 }
 
 class RlcApplicationRestored extends HMS_RLC_Application {
