@@ -109,6 +109,8 @@ class SubmitRLCReapplicationPage2Command extends Command {
         $reApp->setTerm($term);
         $reApp->setApplicationType(RLC_APP_RETURNING);
 
+        $reApp->setDeniedEmailSent(0);
+
         $reApp->save();
 
         unset($_SESSION['RLC_REAPP']);
