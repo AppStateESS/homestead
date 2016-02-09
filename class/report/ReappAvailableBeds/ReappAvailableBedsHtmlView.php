@@ -5,20 +5,16 @@ class ReappAvailableBedsHtmlView extends ReportHtmlView
 
     protected function render()
     {
-      parent::render();
+        parent::render();
 
-      $this->tps['TERM'] = Term::toString($this->report->getTerm());
+        $this->tps['TERM'] = Term::toString($this->report->getTerm());
 
+        // Copy results into the template
+        foreach($this->report->getData() as $row){
+            $this->tpl['halls'][] = $row;
+        }
 
-
-      // Copy results into the template
-      foreach($this->report->getData() as $row){
-          $this->tpl['halls'][] = $row;
-      }
-
-      return PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/ReappAvailableBeds.tpl');
+        return PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/ReappAvailableBeds.tpl');
     }
 
 }
-
-?>
