@@ -11,7 +11,7 @@ class SendRlcRejectionEmailsCommand extends Command
 {
 
     private $application;
-    
+
     public function getRequestVars()
     {
         return array('action' => 'SendRlcRejectionEmails');
@@ -28,13 +28,18 @@ class SendRlcRejectionEmailsCommand extends Command
         PHPWS_Core::initModClass('hms', 'Term.php');
 
         $term = Term::getSelectedTerm();
-        $deniedStudents = HMS_RLC_Application::getDeniedApplicantsByTerm($term);
+        $deniedApps = HMS_RLC_Application::getNonNotifiedDeniedApplicantsByTerm($term);
 
         PHPWS_Core::initModClass('hms', 'HMS_Email.php');
         $email = new HMS_Email();
 
-        foreach($deniedStudents as $student){
+        foreach($deniedApps as $app)
+        {
+            $student = StudentFactory::getStudentByUsername($app['username'], $term);
             $email->sendRlcApplicationRejected($student, $term);
+            $application = HMS_RLC_Application::getApplicationById($app['id']);
+            $application->setDeniedEmailSent(1);
+            $application->save();
         }
 
         NQ::Simple('hms', hms\NotificationView::SUCCESS, 'RLC rejection emails sent.');
@@ -47,4 +52,3 @@ class SendRlcRejectionEmailsCommand extends Command
     }
 
 }
-
