@@ -91,6 +91,9 @@ class EditRoomCommand extends Command {
         if($rlcReserved != 0) {
         	$room->setReservedRlcId($rlcReserved);
         }
+        else {
+            $room->setReservedRlcId(null);
+        }
 
         $room->offline        = $context->get('offline')   == 1 ? 1 : 0;
         $room->reserved       = $context->get('reserved')  == 1 ? 1 : 0;
