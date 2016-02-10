@@ -141,10 +141,10 @@ class LotteryProcess {
 
         $this->output[] = "{$this->applicationsRemaining[CLASS_SENIOR][MALE]} senior male lottery entries remaining";
         $this->output[] = "{$this->applicationsRemaining[CLASS_SENIOR][FEMALE]} senior female lottery entries remaining";
-        $this->output[] = "{$this->applicationsRemaining[CLASS_JUNIOR][MALE]} senior male lottery entries remaining";
-        $this->output[] = "{$this->applicationsRemaining[CLASS_JUNIOR][FEMALE]} senior female lottery entries remaining";
-        $this->output[] = "{$this->applicationsRemaining[CLASS_SOPHOMORE][MALE]} senior male lottery entries remaining";
-        $this->output[] = "{$this->applicationsRemaining[CLASS_SOPHOMORE][FEMALE]} senior female lottery entries remaining";
+        $this->output[] = "{$this->applicationsRemaining[CLASS_JUNIOR][MALE]} junior male lottery entries remaining";
+        $this->output[] = "{$this->applicationsRemaining[CLASS_JUNIOR][FEMALE]} junior female lottery entries remaining";
+        $this->output[] = "{$this->applicationsRemaining[CLASS_SOPHOMORE][MALE]} sophomore male lottery entries remaining";
+        $this->output[] = "{$this->applicationsRemaining[CLASS_SOPHOMORE][FEMALE]} sophomore female lottery entries remaining";
 
         /**
          * ****************
