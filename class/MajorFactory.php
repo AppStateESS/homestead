@@ -6,7 +6,7 @@ class MajorFactory {
 
     public static function getMajorsList()
     {
-        $url = "https://www.kimonolabs.com/api/cu4u6h42?apikey=5b853442f3f828997cd1a5f0e341e6e1";
+        $url = "https://www.kimonolabs.com/api/cfz7xmva?apikey=5b853442f3f828997cd1a5f0e341e6e1";
         $json = file_get_contents($url);
         $results = json_decode($json, TRUE);
 
