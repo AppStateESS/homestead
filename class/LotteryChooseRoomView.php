@@ -33,7 +33,7 @@ class LotteryChooseRoomView extends hms\View {
                 $tpl['FLOOR_PLAN_IMAGE'] = $file->parentLinked();
         }
 
-        if($this->rlcAssignment != null) {
+        if($this->rlcAssignment != null && ($this->rlcAssignment->getStateName() == 'confirmed' || $this->rlcAssignment->getStateName() == 'selfselect-invite')) {
             $rlcId = $this->rlcAssignment->getRlc()->getId();
         } else {
             $rlcId = null;
