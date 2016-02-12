@@ -49,7 +49,7 @@ class HMS_RLC_Application extends HMS_Item
     public $term = null;
 
     public $denied = 0;
-    public $denied_email_sent;
+    public $denied_email_sent = 0;
 
     public $application_type;
 
