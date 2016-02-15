@@ -206,9 +206,9 @@ CREATE TABLE hms_room (
     offline                 smallint NOT NULL DEFAULT 0,
     parlor                  smallint NOT NULL DEFAULT 0,
     reserved_rlc_id			integer NULL REFERENCES hms_learning_communities(id),
-    added_by                smallint NOT NULL,
+    added_by                integer NOT NULL,
     added_on                integer NOT NULL,
-    updated_by              smallint,
+    updated_by              integer,
     updated_on              integer,
     primary key(id)
 );
