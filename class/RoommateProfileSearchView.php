@@ -82,7 +82,7 @@
             for ($x = 0; $x < $dropDownCount; $x++)
             {
                 if(isset($_REQUEST[$m->drop_down_array[$x]]) && $_REQUEST[$m->drop_down_array[$x]] != 0){
-                    $pager->addWhere('hms_student.profiles.' . $m->drop_down_array[$x], '=');
+                    $pager->addWhere('hms_student_profiles.' . $m->drop_down_array[$x], $_REQUEST[$m->drop_down_array[$x]], '=');
                     $_SESSION[$m->drop_down_array[$x]] = $_REQUEST[$m->drop_down_array[$x]];
                 }
 
