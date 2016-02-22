@@ -47,21 +47,19 @@ class RemoveDenyRlcAssignmentCommand extends Command
         if(!is_null($assignment)){
             $assignment->delete();
         } else {
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Could not find an RLC assignment with that id.');
+            echo json_encode(array("message" => "Could not find an RLC assignment with that id.", "type" => "error"));
         }
 
         HMS_Activity_Log::log_activity($rlcApp->getUsername(), ACTIVITY_RLC_UNASSIGN, Current_User::getUsername(), "Removed from $rlcName");
-        NQ::simple('hms', hms\NotificationView::SUCCESS, 'Removed from RLC');
 
         // Deny application
         $rlcApp->denied = 1;
         $rlcApp->save();
 
-        NQ::simple('hms', hms\NotificationView::SUCCESS, 'RLC Application denied');
         HMS_Activity_Log::log_activity($rlcApp->getUsername(), ACTIVITY_DENIED_RLC_APPLICATION, Current_User::getUsername(), 'RLC Application Denied');
 
-        $context->goBack();
+        echo json_encode(array("message" => "Removed from RLC, student's RLC application set to denied", "type" => "success"));
+        exit;
     }
 
 }
-

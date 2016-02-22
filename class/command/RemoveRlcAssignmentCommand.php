@@ -28,15 +28,14 @@ class RemoveRlcAssignmentCommand extends Command{
         if(!is_null($assignment)){
             $assignment->delete();
         }else{
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Could not find an RLC assignment with that id.');
+            echo json_encode(array("message" => "Could not find an RLC assignment with that id.", "type" => "error"));
         }
 
         $rlcApp = $assignment->getApplication();
 
         HMS_Activity_Log::log_activity($rlcApp->getUsername(), ACTIVITY_RLC_UNASSIGN, Current_User::getUsername(), "Removed from RLC: $rlcName");
 
-        NQ::simple('hms', hms\NotificationView::SUCCESS, 'Assignment deleted.');
-
-        $context->goBack();
+        echo json_encode(array("message" => "Assignment deleted.", "type" => "success"));
+        exit;
     }
 }

@@ -1,0 +1,26 @@
+{
+  "name": "hms",
+  "version": "1.0.0",
+  "description": "Housing Management System",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "dependencies": {
+    "classnames": "^2.2.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/csdetschjr/homestead.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/csdetschjr/homestead/issues"
+  },
+  "homepage": "https://github.com/csdetschjr/homestead#readme"
+}
