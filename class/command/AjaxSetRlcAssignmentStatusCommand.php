@@ -2,12 +2,10 @@
 
 class AjaxSetRlcAssignmentStatusCommand extends Command{
 
-    public function setAssignmentId($id){
-        $this->assignmentId = $id;
-    }
+
 
     public function getRequestVars(){
-        return array('action'=>'RemoveRlcAssignment', 'assignmentId'=>$this->assignmentId);
+        return array('action'=>'RemoveRlcAssignment');
     }
 
     public function execute(CommandContext $context)
@@ -18,7 +16,6 @@ class AjaxSetRlcAssignmentStatusCommand extends Command{
         }
 
         $newState = $_REQUEST['status'];
-        $id = $_REQUEST['assignmentId'];
 
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
 

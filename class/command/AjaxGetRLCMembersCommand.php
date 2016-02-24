@@ -20,7 +20,7 @@ class AjaxGetRLCMembersCommand {
         $term = Term::getSelectedTerm();
         $memberList = RlcMembershipFactory::getRlcMembersById($input, $term);
 
-        $returnValues = array();
+        $returnData = array();
 
         foreach ($memberList as $member)
         {
