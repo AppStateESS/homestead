@@ -93,17 +93,17 @@ class SaveApplicationFeatureCommand extends Command {
                     HMS::quit();
                 }
             }
-             
+
             if(!is_null($startDate)) {
                 $feature->setStartDate($startDate);
             }
 
             if(!is_null($editDate)) {
-                $feature->setEditDate($editDate);
+                $feature->setEditDate($editDate + 86399); // Add 23h23m23s so that the end date is actuall 11:59:59pm on the selected day
             }
-             
+
             if(!is_null($endDate)) {
-                $feature->setEndDate($endDate);
+                $feature->setEndDate($endDate + 86399); // Add 23h23m23s so that the end date is actuall 11:59:59pm on the selected day
             }
         }
 
