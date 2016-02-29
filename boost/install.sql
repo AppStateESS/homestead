@@ -25,8 +25,8 @@ CREATE TABLE hms_student_cache (
     last_name           character varying NOT NULL,
     first_name          character varying NOT NULL,
     middle_name         character varying,
-    preferred_name		character varying,
-    confidential		character(1) NOT NULL,
+    preferred_name      character varying,
+    confidential        character(1) NOT NULL,
     dob                 character(10) NOT NULL,
     gender              character(1) NOT NULL,
     deposit_date        character(10),
@@ -39,11 +39,11 @@ CREATE TABLE hms_student_cache (
     honors              character varying(5) NOT NULL,
     teaching_fellow     character varying(5) NOT NULL,
     watauga_member      character varying(5) NOT NULL,
-    greek				character varying,
-    disabled_pin		smallint NOT NULL DEFAULT 0,
+    greek               character varying,
+    disabled_pin        smallint NOT NULL DEFAULT 0,
     housing_waiver      smallint NOT NULL DEFAULT 0,
-    admissions_decision_code	character varying,
-    admission_decision_desc		character varying,
+    admissions_decision_code    character varying,
+    admission_decision_desc     character varying,
     PRIMARY KEY (banner_id, term)
 );
 
@@ -76,9 +76,9 @@ create table hms_student_autocomplete (
     first_name          character varying,
     middle_name         character varying,
     last_name           character varying,
-    first_name_lower	character varying,
-    middle_name_lower	character varying,
-    last_name_lower		character varying,
+    first_name_lower    character varying,
+    middle_name_lower   character varying,
+    last_name_lower	    character varying,
     first_name_meta     character varying,
     middle_name_meta    character varying,
     last_name_meta      character varying,
@@ -150,7 +150,7 @@ CREATE TABLE hms_residence_hall (
     map_image_id                integer DEFAULT 0,
     room_plan_image_id          integer DEFAULT 0,
     assignment_notifications    integer NOT NULL DEFAULT 1,
-    package_desk				integer NOT NULL REFERENCES hms_package_desk(id),
+    package_desk                integer NOT NULL REFERENCES hms_package_desk(id),
     primary key(id)
 );
 
@@ -205,7 +205,10 @@ CREATE TABLE hms_room (
     reserved_notes          character varying,
     offline                 smallint NOT NULL DEFAULT 0,
     parlor                  smallint NOT NULL DEFAULT 0,
-    reserved_rlc_id			integer NULL REFERENCES hms_learning_communities(id),
+    ada                     smallint NOT NULL DEFAULT 0,
+    hearing_impaired        smallint NOT NULL DEFAULT 0,
+    bath_en_suite           smallint NOT NULL DEFAULT 0,
+    reserved_rlc_id         integer NULL REFERENCES hms_learning_communities(id),
     added_by                integer NOT NULL,
     added_on                integer NOT NULL,
     updated_by              integer,
@@ -249,7 +252,7 @@ create table hms_checkin (
     checkout_key_code   character varying,
     key_not_returned    smallint,
     bed_persistent_id 	character varying,
-    improper_checkout_note	character varying,
+    improper_checkout_note  character varying,
     PRIMARY KEY (id)
 );
 
@@ -388,13 +391,13 @@ CREATE TABLE hms_learning_community_assignment (
 );
 
 CREATE TABLE hms_application_feature (
-	id			int NOT NULL,
-    term    	int NOT NULL REFERENCES hms_term(term),
+	id          int NOT NULL,
+    term        int NOT NULL REFERENCES hms_term(term),
     name 		character varying(32) NOT NULL,
-    start_date	int NOT NULL,
-    end_date	int NOT NULL,
+    start_date  int NOT NULL,
+    end_date    int NOT NULL,
     edit_date   int not null default 0,
-    enabled		smallint NOT NULL DEFAULT 0,
+    enabled	    smallint NOT NULL DEFAULT 0,
     PRIMARY KEY(id)
 );
 
@@ -423,7 +426,7 @@ CREATE TABLE hms_new_application (
     cancelled_reason                character varying(32),
     cancelled_on                    integer,
     cancelled_by                    character varying(32),
-    international					smallint NOT NULL default 0,
+    international                   smallint NOT NULL default 0,
     emergency_contact_name 			varchar,
     emergency_contact_relationship 	varchar,
     emergency_contact_phone 		varchar,
@@ -933,7 +936,6 @@ CREATE VIEW hms_hall_structure AS SELECT hms_bed.id AS bedid,
     hms_room.overflow,
     hms_room.default_gender,
     hms_room.offline,
-    hms_room.ada,
     hms_room.hearing_impaired,
     hms_room.bath_en_suite,
     hms_room.parlor,
