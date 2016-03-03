@@ -151,7 +151,7 @@ class HMS_Email{
 
         $cc = $message->getCc();
         if(!empty($cc)){
-            foreach($cc() as $address => $name) {
+            foreach($cc as $address => $name) {
                 fprintf($fd, "Cc: %s <%s>\n", $name, $address);
             }
         }
@@ -681,6 +681,7 @@ class HMS_Email{
         }
 
         $content = PHPWS_Template::process($tags, 'hms', $tpl);
+
         $htmlContent = Markdown::defaultTransform($content);
 
         $message = Swift_Message::newInstance();
@@ -1210,5 +1211,145 @@ class HMS_Email{
             )
         );
     }
+
+    /**
+     * Sends a reminder to the Current RD involved in a room change request
+     * letting them know they need to log in and approve
+     *
+     * Template Tags:
+     * {STUDENT_NAME}
+     * {BANNER_ID}
+     * {CURRENT_ASSIGNMENT}
+     * {CELL_PHONE}
+     *
+     * @param $rd string The username of the RD
+     * @param $participant RoomChangeParticipant The Participant object involved
+     */
+    public static function sendRDRoomChangeReminders($rd, $requests)
+    {
+        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
+        PHPWS_Core::initModClasS('hms', 'HMS_Bed.php');
+
+        $subject  = 'Room Change Approval Required Reminder';
+        $template = 'email/roomChangeCurrRDReminder.tpl';
+
+        $tags = array('PARTICIPANTS' => array());
+
+        $rds  = array();
+
+        $term = Term::getCurrentTerm();
+
+        foreach ($requests as $request)
+        {
+            foreach ($request->getParticipants() as $participant)
+            {
+                $bid     = $participant->getBannerId();
+                $student = StudentFactory::getStudentByBannerID($bid, $term);
+                $assign  = HMS_Assignment::getAssignmentByBannerID($bid, $term);
+
+                $participantTags = array(
+                    'BANNER_ID'         => $student->getBannerId(),
+                    'NAME'              => $student->getName(),
+                    'CURRENT'           => $assign->where_am_i()
+                );
+
+                $futureBedId = $participant->getToBed();
+                if($futureBedId)
+                {
+                    $bed                            = new HMS_Bed($futureBedId);
+                    $participantTags['DESTINATION'] = $bed->where_am_i();
+                }
+
+                $tags['PARTICIPANTS'][] = $participantTags;
+
+            }
+        }
+
+        $message = self::makeSwiftmailMessage(null, $subject, $tags, $template);
+
+        $message->setTo($rd . TO_DOMAIN);
+        if(EMAIL_TEST_FLAG)
+        {
+            self::logSwiftmailMessageLong($message);
+            return;
+        }
+
+        $self::sendSwiftmailMessage($message);
+    }
+
+    /**
+     * Sends a reminder to the student and Current RD involved in a room change request
+     * letting them know they need to complete the room change by checking the student out.
+     *
+     * Template Tags:
+     * {STUDENT_NAME}
+     * {BANNER_ID}
+     * {CURRENT_ASSIGNMENT}
+     * {CELL_PHONE}
+     *
+     * @param $rd string The username of the RD
+     * @param $participant RoomChangeParticipant The Participant object involved
+     */
+    public static function sendRoomChangeCheckOutReminders(RoomChangeRequest $request)
+    {
+        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
+        PHPWS_Core::initModClasS('hms', 'HMS_Bed.php');
+
+        $subject = 'Please Complete Your Room Change';
+        $template = 'email/roomChangeCheckoutReminder.tpl';
+
+        $tags = array('MESSAGE' => array());
+
+        $recips = array();
+        $rds = array();
+
+        $term = Term::getCurrentTerm();
+        foreach($request->getParticipants() as $p) {
+            // Add participant's RD(s) to recipients
+            $rds = array_merge($rds, $p->getCurrentRdList());
+
+
+            $bid = $p->getBannerId();
+            $student = StudentFactory::getStudentByBannerID($bid, $term);
+            $current = new HMS_Bed($p->getFromBed());
+            $future = new HMS_Bed($p->getToBed());
+
+            $recips[] = $student;
+
+            $participantTags = array(
+                'NAME'               => $student->getName(),
+                'CURRENT'            => $current->where_am_i(),
+                'DESTINATION'        => $future->where_am_i()
+            );
+
+            $tags['MESSAGE'][] = $participantTags;
+        }
+
+        // In case an RD ends up in here several times, no need for dup emails
+
+        $rds = array_unique($rds);
+
+        $message = self::makeSwiftmailMessage(null, $subject, $tags, $template);
+
+        foreach ($rds as $rd)
+        {
+            $rdStudent = StudentFactory::getStudentByUsername($rd, $term);
+            $message->setCc(array($rd.TO_DOMAIN => $rdStudent->getName()));
+        }
+
+        foreach($recips as $recip) {
+            $message->setTo(array($recip->getUsername().TO_DOMAIN => $recip->getName()));
+            if(EMAIL_TEST_FLAG)
+            {
+                self::logSwiftmailMessageLong($message);
+                return;
+            }
+
+            self::sendSwiftmailMessage($message);
+        }
+    }
+
 
 } // End HMS_Email class

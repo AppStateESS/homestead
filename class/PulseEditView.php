@@ -49,6 +49,18 @@ class PulseEditView extends hms\View
             $vars['nightly_cache_create'] = 1;
         }
 
+        $roomChangeReminder = $this->RoomChangeReminderEmailScheduleSet();
+        if($roomChangeReminder)
+        {
+            $vars['roomChangeReminder'] = 'Room Change Reminders schedule set for ' . $roomChangeReminder->getExecuteAfter('%Y/%m/%d %l:%M %P');
+            $vars['roomChangeReminder_remove'] = 1;
+        }
+        else
+        {
+            $vars['roomChangeReminder'] = 'Room Change Reminders has not been created.';
+            $vars['roomChangeReminder_create'] = 1;
+        }
+
         $tpl = new \Template($vars);
         $tpl->setModuleTemplate('hms', 'admin/pulse/settings.html');
         return $tpl->get();
@@ -91,6 +103,12 @@ class PulseEditView extends hms\View
     private function NightlyCacheScheduleSet()
     {
         $result = \pulse\PulseFactory::getByName('NightlyCache', 'hms');
+        return $result;
+    }
+
+    private function RoomChangeReminderEmailScheduleSet()
+    {
+        $result = \pulse\PulseFactory::getByName('RoomChangeReminder', 'hms');
         return $result;
     }
 

@@ -40,6 +40,10 @@ class SavePulseOptionCommand extends Command
                     $this->addNightlyCacheSchedule();
                     break;
 
+                case 'roomChangeReminder':
+                    $this->addRoomChangeReminderSchedule();
+                    break;
+
                 default:
                     throw new \Exception('Unknown schedule type requested');
             }
@@ -61,6 +65,10 @@ class SavePulseOptionCommand extends Command
                     $this->dropNightlyCacheSchedule();
                     break;
 
+                case 'roomChangeReminder':
+                    $this->dropRoomChangeReminderSchedule();
+                    break;
+
                 default:
                     throw new \Exception('Unknown schedule type requested');
             }
@@ -75,7 +83,7 @@ class SavePulseOptionCommand extends Command
         $pulse = \pulse\PulseFactory::getByName('AutoAssign', 'hms');
         \pulse\PulseFactory::deleteResource($pulse);
     }
-    
+
     public function addAutoAssignSchedule()
     {
         $pulse = \pulse\PulseFactory::getByName('AutoAssign', 'hms');
@@ -97,7 +105,7 @@ class SavePulseOptionCommand extends Command
         $pulse = \pulse\PulseFactory::getByName('ReportRunner', 'hms');
         \pulse\PulseFactory::deleteResource($pulse);
     }
-    
+
     public function addReportRunnerSchedule()
     {
         $pulse = \pulse\PulseFactory::getByName('ReportRunner', 'hms');
@@ -119,7 +127,7 @@ class SavePulseOptionCommand extends Command
         $pulse = \pulse\PulseFactory::getByName('Withdrawn', 'hms');
         \pulse\PulseFactory::deleteResource($pulse);
     }
-    
+
     public function addWithdrawnSchedule()
     {
         $pulse = \pulse\PulseFactory::getByName('Withdrawn', 'hms');
@@ -136,13 +144,13 @@ class SavePulseOptionCommand extends Command
         pulse\PulseFactory::save($ps);
     }
 
-    
+
     public function dropNightlyCacheSchedule()
     {
         $pulse = \pulse\PulseFactory::getByName('NightlyCache', 'hms');
         \pulse\PulseFactory::deleteResource($pulse);
     }
-    
+
     public function addNightlyCacheSchedule()
     {
         $pulse = \pulse\PulseFactory::getByName('NightlyCache', 'hms');
@@ -157,6 +165,30 @@ class SavePulseOptionCommand extends Command
         $ps->setExecuteAfter(mktime(24, 0, 0));
         $ps->setInterim('1440');
         $ps->setRequiredFile('mod/hms/class/NightlyCache.php');
+        pulse\PulseFactory::save($ps);
+    }
+
+    public function dropRoomChangeReminderSchedule()
+    {
+        $pulse = \pulse\PulseFactory::getByName('RoomChangeReminder', 'hms');
+        \pulse\PulseFactory::deleteResource($pulse);
+    }
+
+    public function addRoomChangeReminderSchedule()
+    {
+        $pulse = \pulse\PulseFactory::getByName('RoomChangeReminder', 'hms');
+        if (!empty($pulse))
+        {
+            throw new \Exception('Room Change Reminder Schedule is already present.');
+        }
+        $ps = pulse\PulseFactory::build();
+        $ps->setName('RoomChangeReminder');
+        $ps->setModule('hms');
+        $ps->setClassName('RoomChangeReminder');
+        $ps->setClassMethod('execute');
+        $ps->setExecuteAfter(mktime(7,0,0));
+        $ps->setInterim('1440');
+        $ps->setRequiredFile('mod/hms/class/RoomChangeReminder.php');
         pulse\PulseFactory::save($ps);
     }
 
