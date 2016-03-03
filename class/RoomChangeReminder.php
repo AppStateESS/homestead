@@ -58,7 +58,7 @@ class RoomChangeReminder
             }
         }
 
-        if($toRDs)
+        if($toRDs != null)
         {
             $rds = array_keys($toRDs);
 
