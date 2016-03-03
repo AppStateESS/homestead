@@ -19,14 +19,13 @@ class RoomChangeReminder
         PHPWS_Core::initModClass('hms', 'HMS_Email.php');
         PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
         PHPWS_Core::initModClass('hms', 'UserStatus.php');
-        $term = Term::getSelectedTerm();
 
         $studentApproved = RoomChangeParticipantStateFactory::getRCPStateByCurrentState('StudentApproved');
         $currRdApproved = RoomChangeParticipantStateFactory::getRCPStateByCurrentState('CurrRdApproved');
 
         $toRDs = array();
 
-        if($studentApproved)
+        if($studentApproved != null)
         {
 
             foreach($studentApproved as $studentApprovedState)
@@ -43,7 +42,7 @@ class RoomChangeReminder
             }
         }
 
-        if($currRdApproved)
+        if($currRdApproved != null)
         {
             foreach ($currRdApproved as $currRdApprovedState)
             {
@@ -72,14 +71,14 @@ class RoomChangeReminder
 
         $inProcess = RoomChangeParticipantStateFactory::getRCPStateByCurrentState('InProcess');
 
-        if($inProcess)
+        if($inProcess != null)
         {
             foreach ($inProcess as $inProcessState)
             {
                 $effectiveDate = $inProcessState->getEffectiveDate();
                 $threeDaysLater = strtotime('+3 days', $effectiveDate);
                 $now = time();
-                if($now <= $effectiveDate)
+                if($now <= $threeDaysLater)
                 {
                     $participant = RoomChangeParticipantFactory::getParticipantById($inProcessState->getParticipantId());
                     $roomChangeRequest = RoomChangeRequestFactory::getRequestById($participant->getId());

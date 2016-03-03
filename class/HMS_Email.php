@@ -1236,8 +1236,6 @@ class HMS_Email{
 
         $tags = array('PARTICIPANTS' => array());
 
-        $rds  = array();
-
         $term = Term::getCurrentTerm();
 
         foreach ($requests as $request)
@@ -1275,7 +1273,7 @@ class HMS_Email{
             return;
         }
 
-        $self::sendSwiftmailMessage($message);
+        self::sendSwiftmailMessage($message);
     }
 
     /**
