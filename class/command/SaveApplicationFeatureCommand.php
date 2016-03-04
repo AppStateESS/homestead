@@ -45,6 +45,7 @@ class SaveApplicationFeatureCommand extends Command {
             throw new PermissionException('You do not have permission to edit deadlines.');
         }
 
+
         PHPWS_Core::initModClass('hms', 'exception/MissingDataException.php');
 
         if(!isset($this->featureId)) {
@@ -62,6 +63,8 @@ class SaveApplicationFeatureCommand extends Command {
         }
         $name = $this->name;
 
+
+
         PHPWS_Core::initModClass('hms', 'ApplicationFeature.php');
         if(!is_null($featureId)) {
             $feature = ApplicationFeature::getInstanceById($featureId);
@@ -71,6 +74,8 @@ class SaveApplicationFeatureCommand extends Command {
         } else {
             throw new InvalidArgumentException('You must either provide a featureId, or a name and a term.');
         }
+
+        var_dump($feature);exit;
 
         // Checkboxes are weird.
         $enabled = !is_null($context->get('enabled'));
@@ -93,7 +98,7 @@ class SaveApplicationFeatureCommand extends Command {
                     HMS::quit();
                 }
             }
-             
+
             if(!is_null($startDate)) {
                 $feature->setStartDate($startDate);
             }
@@ -101,7 +106,7 @@ class SaveApplicationFeatureCommand extends Command {
             if(!is_null($editDate)) {
                 $feature->setEditDate($editDate);
             }
-             
+
             if(!is_null($endDate)) {
                 $feature->setEndDate($endDate);
             }

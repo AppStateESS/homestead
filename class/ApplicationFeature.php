@@ -388,7 +388,6 @@ abstract class ApplicationFeature
 
         $features = array();
         foreach($results as $result) {
-
             // Instanciate a registration object
             $path = 'applicationFeature/' . $result['name'] . '.php';
             PHPWS_Core::initModClass('hms', $path);
@@ -464,7 +463,9 @@ abstract class ApplicationFeature
     public static function getInstanceByName($name)
     {
         PHPWS_Core::initModClass('hms', APPLICATION_FEATURE_DIR . "/$name.php");
+        var_dump(APPLICATION_FEATURE_DIR . "/$name.php");
         $f = new $name();
+        var_dump($f);exit;
         return $f;
     }
 
