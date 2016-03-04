@@ -98,12 +98,24 @@ class SaveApplicationFeatureCommand extends Command {
                 $feature->setStartDate($startDate);
             }
 
-            if(!is_null($editDate)) {
+            $registration = $feature->getRegistration();
+
+            if($registration->requiresEditDate())
+            {
                 $feature->setEditDate($editDate + 86399); // Add 23h23m23s so that the end date is actuall 11:59:59pm on the selected day
             }
+            else
+            {
+                $feature->setEditDate(0);
+            }
 
-            if(!is_null($endDate)) {
+            if($registration->requiresEndDate())
+            {
                 $feature->setEndDate($endDate + 86399); // Add 23h23m23s so that the end date is actuall 11:59:59pm on the selected day
+            }
+            else
+            {
+                $feature->setEndDate(0);
             }
         }
 
