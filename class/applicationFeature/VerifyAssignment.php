@@ -14,13 +14,7 @@ class VerifyAssignmentRegistration extends ApplicationFeatureRegistration {
 
     public function showForStudent(Student $student, $term)
     {
-        // Freshmen only
-        if($student->getApplicationTerm() > Term::getCurrentTerm())
-        {
-            return true;
-        }
-
-        return false;
+        return true;
     }
 }
 
