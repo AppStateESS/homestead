@@ -9,7 +9,7 @@ class RoomChangeRegistration extends ApplicationFeatureRegistration {
         $this->description = 'Room Change';
         $this->startDateRequired = true;
         $this->endDateRequired = true;
-        $this->priority = 7;
+        $this->priority = 8;
     }
 
     public function showForStudent(Student $student, $term)

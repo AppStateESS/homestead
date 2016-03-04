@@ -463,9 +463,7 @@ abstract class ApplicationFeature
     public static function getInstanceByName($name)
     {
         PHPWS_Core::initModClass('hms', APPLICATION_FEATURE_DIR . "/$name.php");
-        var_dump(APPLICATION_FEATURE_DIR . "/$name.php");
         $f = new $name();
-        var_dump($f);exit;
         return $f;
     }
 

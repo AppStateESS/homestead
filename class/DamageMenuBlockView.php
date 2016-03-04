@@ -1,6 +1,6 @@
 <?php
 
-class RoomChangeMenuBlockView extends hms\View {
+class DamageMenuBlockView extends hms\View {
 
     private $student;
     private $startDate;
@@ -8,14 +8,14 @@ class RoomChangeMenuBlockView extends hms\View {
     private $assignment;
     private $changeRequest;
 
-    public function __construct(Student $student, $term, $startDate, $endDate, HMS_Assignment $assignment = null, RoomChangeRequest $request = null)
+    public function __construct(Student $student, $term, $startDate, $endDate, HMS_Assignment $assignment = null, RoomDamage $damage = null)
     {
         $this->student          = $student;
         $this->term             = $term;
         $this->startDate        = $startDate;
         $this->endDate          = $endDate;
         $this->assignment       = $assignment;
-        $this->changeRequest    = $request;
+        $this->roomDamage       = $damage;
     }
 
     public function show()

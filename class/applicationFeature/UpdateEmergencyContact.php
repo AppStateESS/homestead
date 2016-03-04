@@ -9,7 +9,7 @@ class UpdateEmergencyContactRegistration extends ApplicationFeatureRegistration 
         $this->description = 'Update Emergency & Missing Persons Contact';
         $this->startDateRequired = true;
         $this->endDateRequired = true;
-        $this->priority = 8;
+        $this->priority = 9;
     }
 
     public function showForStudent(Student $student, $term)

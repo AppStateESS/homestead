@@ -30,12 +30,10 @@ class Damage extends ApplicationFeature {
 
         $bed = BedFactory::getBedById($assignment->getBedId(), $this->term);
 
-        $room = RoomFactory::getRoomById($bed->getRoomId(), $this->term);
+        $bed->loadRoom();
 
-        $damage = RoomDamage::getDamagesByRoom($room);
+        $damage = RoomDamageFactory::getDamagesByRoom($bed->get_parent());
 
-        var_dump($damage);exit;
-
-        return new RoomChangeMenuBlockView($student, $this->term, $this->getStartDate(), $this->getEndDate(), $assignment, $request);
+        return new DamageMenuBlockView($student, $this->term, $this->getStartDate(), $this->getEndDate(), $assignment, $damage);
     }
 }

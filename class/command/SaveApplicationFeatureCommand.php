@@ -75,8 +75,6 @@ class SaveApplicationFeatureCommand extends Command {
             throw new InvalidArgumentException('You must either provide a featureId, or a name and a term.');
         }
 
-        var_dump($feature);exit;
-
         // Checkboxes are weird.
         $enabled = !is_null($context->get('enabled'));
 

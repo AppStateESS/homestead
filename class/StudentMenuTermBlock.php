@@ -18,8 +18,6 @@ class StudentMenuTermBlock {
         // Get the enabled features
         $features = ApplicationFeature::getEnabledFeaturesForStudent($this->student, $this->term);
 
-        var_dump($features);exit;
-
         $tpl = array();
 
         if(Term::getTermSem($this->term) == TERM_FALL){
