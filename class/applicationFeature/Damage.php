@@ -14,6 +14,7 @@ class DamageRegistration extends ApplicationFeatureRegistration {
 
     public function showForStudent(Student $student, $term)
     {
+        // Set up the check for whether it is in the 48 hour period.
         return true;
     }
 }
@@ -28,12 +29,6 @@ class Damage extends ApplicationFeature {
 
         $assignment = HMS_Assignment::getAssignment($student->getUsername(), $this->term);
 
-        $bed = BedFactory::getBedById($assignment->getBedId(), $this->term);
-
-        $bed->loadRoom();
-
-        $damage = RoomDamageFactory::getDamagesByRoom($bed->get_parent());
-
-        return new DamageMenuBlockView($student, $this->term, $this->getStartDate(), $this->getEndDate(), $assignment, $damage);
+        return new DamageMenuBlockView($student, $this->term, $this->getStartDate(), $this->getEndDate(), $assignment);
     }
 }

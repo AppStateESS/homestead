@@ -21,6 +21,19 @@ class AddRoomDamageCommand extends Command {
 
     public function execute(CommandContext $context)
     {
+        if(UserStatus::isUser())
+        {
+            $term = Term::getSelectedTerm();
+            $username = UserStatus::getUsername();            
+            $student = StudentFactory::getStudentByUsername($username, $term);
+            $checkin = CheckinFactory::getCheckinByBannerId($student->getBannerId(), $term);
+            $end = strtotime('+2 days', $checkin->getCheckinDate());
+            if(time() > $end)
+            {
+                echo json_encode(array('status' => 'The period to add room damages have passed, as it has been more than 48 hours.'));
+                exit;
+            }
+        }
         $roomId = $context->get('roomPersistentId');
         $damageType = $context->get('damageType');
         $term = Term::getSelectedTerm();
@@ -33,7 +46,7 @@ class AddRoomDamageCommand extends Command {
 
         RoomDamageFactory::save($damage);
 
-        echo 'success';
+        echo json_encode(array('status' => 'success'));
         exit;
     }
 }
