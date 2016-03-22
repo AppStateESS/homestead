@@ -130,7 +130,7 @@ class SubmitRoommateProfileCommand extends Command {
         "italian" , "japanese" , "javanese" , "korean" , "malay" , "marathi" , "portuguese" , "punjabi" ,
         "russian" , "tamil" , "telugu" , "vietnamese");
         $langSize = count($lang_array);
-        
+
 		for ($x = 0; $x < $langSize; $x++)
 		{
 			if (isset($_REQUEST['language_checkbox'][$lang_array[$x]]))
@@ -142,6 +142,15 @@ class SubmitRoommateProfileCommand extends Command {
 				$profile->set_checked($lang_array[$x], 0);
 			}
 		}
+
+        if($student->isHonors())
+        {
+            $profile->set_checked('honors');
+        }
+        else
+        {
+            $profile->set_checked('honors', 0);
+        }
 
         $profile->save();
 

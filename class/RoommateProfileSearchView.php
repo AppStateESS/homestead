@@ -99,6 +99,15 @@
             }
         }
 
+        if($student->isHonors())
+        {
+            $pager->addWhere('hms_student_profiles.honors', 1, '=');
+        }
+        else
+        {
+            $pager->addWhere('hms_student_profiles.honors', 0, '=');
+        }
+
         // Join with hms_application table on username to make sure genders match.
         $pager->db->addJoin('LEFT OUTER', 'hms_student_profiles', 'hms_new_application', 'username', 'username');
         // $pager->addWhere('hms_student_profiles.user_id','hms_application.asu_username','ILIKE');
@@ -108,6 +117,9 @@
         $pager->addWhere('hms_student_profiles.username', UserStatus::getUsername(), 'NOT LIKE');
 
         $pager->db->addOrder('username', 'ASC');
+
+        // $pager->db->setTestMode();
+        // var_dump($pager->db->select());exit;
 
         $pager->setModule('hms');
         $pager->setTemplate('student/profile_search_pager.tpl');
