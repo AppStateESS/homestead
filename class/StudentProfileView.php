@@ -232,9 +232,7 @@ class StudentProfileView extends hms\View {
         /*********
          * Assignment History *
         *********/
-        $historyArray = StudentAssignmentHistory::getAssignments($this->student->getBannerId());
-        $historyView = new StudentAssignmentHistoryView($historyArray);
-        $tpl['HISTORY'] = $historyView->show();
+        // All done via react now.
 
 
         /**********
