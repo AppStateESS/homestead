@@ -220,13 +220,17 @@ class Student
     {
         $pr_address = null;
         $ps_address = null;
+        $ab_address = null;
 
         foreach ($this->addressList as $address) {
             if (((string) $address->atyp_code) == ADDRESS_PRMT_RESIDENCE) {
                 $pr_address = $address;
             } else if (((string) $address->atyp_code) == ADDRESS_PRMT_STUDENT) {
                 $ps_address = $address;
+            } else if (((string) $address->atyp_code) == ADDRESS_ASU_BOX) {
+                $ab_address = $address;
             }
+
         }
 
         # Decide which address type to return, based on $type parameter
@@ -237,6 +241,8 @@ class Student
                 # Since there was no ps address, return the ps address, if it exists
             } else if (!is_null($ps_address)) {
                 return $ps_address;
+            } else if (!is_null($ab_address)){
+                return $ab_address;
             } else {
                 # No address found, return false
                 return false;
@@ -245,6 +251,8 @@ class Student
             return $pr_address;
         } else if ($type == ADDRESS_PRMT_STUDENT && !is_null($ps_address)) {
             return $ps_address;
+        } else if ($type == ADDRESS_ASU_BOX && !is_null($ab_address)){
+            return $ab_address;
         } else {
             # Either a bad type was specified (i.e. not null and not PS or PR)
             # or the specified type was not found

@@ -50,4 +50,24 @@ class PackageDeskFactory {
 
         return $results;
     }
+
+    /**
+     * Retrieves the package desk matching the given id from the database.
+     * @return array containing one PortalRestored object
+     */
+    public static function getPackageDeskById($id)
+    {
+        $db    = PdoFactory::getPdoInstance();
+        $query = 'SELECT * FROM hms_package_desk WHERE id = :deskId';
+        $stmt  = $db->prepare($query);
+
+        $params = array(
+            'deskId' => $id
+        );
+
+        $stmt->execute($params);
+        $stmt->setFetchMode(PDO::FETCH_CLASS, 'RestoredPackageDesk');
+
+        return $stmt->fetch();
+    }
 }
