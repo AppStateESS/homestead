@@ -23,6 +23,25 @@ Roommates:
 Check-in Time: {MOVE_IN_TIME}
 <!-- END movein_time -->
 
+<!-- BEGIN po_box -->
+Packages shipped via the USPS:
+
+{PO_NAME}
+{PO_STREET_ONE}
+{PO_CITY}, {PO_STATE} {PO_ZIPCODE}
+<!-- END po_box -->
+<!-- BEGIN package_desk -->
+Package shipped via Private Carriers
+such as UPS/Fedex should be sent to
+the Package Desks:
+
+{DESK_NAME}
+{DESK_CO_LABEL}
+{DESK_STREET}
+{DESK_CITY}, {DESK_STATE} {DESK_ZIPCODE}
+<!-- END package_desk -->
+
+
 Unless you have been separately notified of a different move in time,
 please follow the time noted above for your move in. Additional move
 in information can be found by visiting our Move In Webpage at:
