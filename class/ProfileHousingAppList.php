@@ -75,6 +75,14 @@ class ProfileHousingAppList extends hms\View
                     $cancel = $cancelCmd->getURI();
                     $row['cancel'] = $cancel;
                 }
+
+                $student    = StudentFactory::getStudentByBannerId($app->getBannerId(), $app->getTerm());
+                $contract   = ContractFactory::getContractByStudentTerm($student, $app->getTerm());
+                $client     = DocusignClientFactory::getClient();
+                $envelopeId = $contract->getEnvelopeId();
+                $envelope   = \Docusign\EnvelopeFactory::getEnvelopeById($client, $envelopeId);
+
+                $row['contract'] = $envelope->getEnvelopeViewURI($client);
             }
 
 
