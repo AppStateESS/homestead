@@ -20,6 +20,10 @@ It's too late to request a room change. The deadline passed on {END_DEADLINE}.
 Your room change request has been submitted. Once it is approved, you will be notified via an email to your ASU email account. {PENDING}
 <!-- END pending -->
 
+<!-- BEGIN cancel -->
+Your room change request has been submitted. It is currently waiting on another participant to approve the change. You may still <a href="{CANCEL}">cancel this request.</a>
+<!-- END cancel -->
+
 <!-- BEGIN approval -->
 You have a room change request that needs your approval. {APPROVAL_CMD}
 <!-- END approval -->
