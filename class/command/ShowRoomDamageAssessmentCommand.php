@@ -1,10 +1,10 @@
 <?php
 
-class ReactRoomDamageAssessmentCommand extends Command {
+class ShowRoomDamageAssessmentCommand extends Command {
 
     public function getRequestVars()
     {
-        return array('action'=>'ReactRoomDamageAssessment');
+        return array('action'=>'ShowRoomDamageAssessment');
     }
 
     public function execute(CommandContext $context)

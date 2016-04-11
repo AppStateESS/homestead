@@ -21,7 +21,7 @@ class ServiceDeskMenu extends CommandMenu {
 
         // Room Damage Assessment
         if (Current_User::allow('hms', 'damage_assessment')) {
-            $this->addCommandByName('Damage Assessment', 'ShowDamageAssessment');
+            $this->addCommandByName('Damage Assessment', 'ShowRoomDamageAssessment');
         }
 
         // Room Damage Notifications
