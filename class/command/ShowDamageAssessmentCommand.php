@@ -21,4 +21,3 @@ class ShowDamageAssessmentCommand extends Command {
         $context->setContent($view->show());
     }
 }
-

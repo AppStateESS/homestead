@@ -76,8 +76,12 @@ class RoomDamageFactory {
      */
     public static function getDamagesToAssessByFloor(Array $floorList, $term)
     {
+        if(sizeof($floorList) == 0){
+            throw new InvalidArgumentException('No floors given to check for damages on.');
+        }
+
         $floorIdList = array();
-        foreacH($floorList as $floor)
+        foreach($floorList as $floor)
         {
             $floorIdList[] = $floor->getId();
         }
@@ -134,20 +138,18 @@ class RoomDamageFactory {
             $dmg->setId($db->lastInsertId('hms_room_damage_seq'));
         }
     }
-    
+
     public static function getAssessedDamagesStudentTotals($term)
     {
     	$db = PdoFactory::getPdoInstance();
-        
+
         $query = "select banner_id, sum(amount) from hms_room_damage JOIN hms_room_damage_responsibility ON hms_room_damage.id = hms_room_damage_responsibility.damage_id where term = :term and state = 'assessed' group by banner_id";
-        
+
         $params = array('term' => $term);
-        
+
         $stmt = $db->prepare($query);
         $stmt->execute($params);
-        
+
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
-
-

@@ -46,6 +46,16 @@
     padding-left: 3px;
 }
 
+/*** Animation styles for damage assessment interface ***/
+.dmgAssessment-leave {
+  opacity: 1;
+}
+
+.dmgAssessment-leave.dmgAssessment-leave-active {
+  opacity: 0.01;
+  transition: opacity 1s ease-in;
+}
+
 a.header-back {
 	float:left;
 	color: #CCC;

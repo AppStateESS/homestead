@@ -25,10 +25,7 @@ class AssessRoomDamageCommand extends Command {
             throw new PermissionException('You do not have permission to perform room damage assessment.');
         }
 
-        // Grab data from JSON source
-        $data = $context->getJsonData();
-
-        $data = $data['responsibilities'];
+        $data = $_POST['responsibilities'];
 
         // For each responsibility object submitted
         foreach ($data as $row) {
@@ -36,7 +33,7 @@ class AssessRoomDamageCommand extends Command {
             // Load it from the database
             $resp = RoomDamageResponsibilityFactory::getResponsibilityById($row['id']);
 
-            $resp->setAmount(round($row['amount']));
+            $resp->setAmount(round($row['assessedCost']));
             $resp->setState('assessed');
             $resp->setAssessedOn(time());
             $resp->setAssessedBy(UserStatus::getUsername());

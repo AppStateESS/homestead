@@ -93,5 +93,3 @@ class ShowCheckoutFormCommand extends Command {
         $context->setContent($view->show());
     }
 }
-
-
