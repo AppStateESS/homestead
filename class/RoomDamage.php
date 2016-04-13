@@ -68,7 +68,7 @@ class RoomDamage {
 
     public function getShortDescription()
     {
-        self::$damageTypes[$this->getDamageType()]['category'] . ' - ' . self::$damageTypes[$this->getDamageType()]['description'];
+        return self::$damageTypes[$this->getDamageType()]['category'] . ' - ' . self::$damageTypes[$this->getDamageType()]['description'];
     }
 
     /******************************
