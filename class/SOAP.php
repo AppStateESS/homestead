@@ -44,7 +44,7 @@ abstract class SOAP
      * @return SOAP - Instance of the SOAP class.
      */
     public static function getInstance($username, $userType)
-    {        
+    {
         if(!isset($username) || is_null($username)){
             throw new InvalidArgumentException('Missing Username.');
         }
@@ -261,7 +261,7 @@ abstract class SOAP
      * @param String $bannerId
      * @param Integer $term
      * @param String $opt
-     * @return void
+     * @return stdClass
      * @throws InvalidArgumentException, SOAPException
      */
     public abstract function getHousMealRegister($bannerId, $term, $opt);
@@ -275,6 +275,18 @@ abstract class SOAP
      * @param Integer $term - The term to query for
      */
     public abstract function getBannerIdByBuildingRoom($building, $room, $term);
+
+    /**
+     * Adds a damage change to the given student's account.
+     *
+     * @param Integer $bannerId Student's Banner ID
+     * @param Integer $term Term to report the damage in
+     * @param Integer $amount Damage cost/price, whole dollars only
+     * @param String  $damageDescription Short descirption of the damage
+     * @return boolean True if successful, false otherwise
+     * @throws InvalidArgumentException, SOAPException
+     */
+    public abstract function addRoomDamageToStudentAccount($bannerId, $term, $amount, $damageDescription);
 
 
 

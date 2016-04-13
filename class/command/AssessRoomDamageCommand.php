@@ -39,6 +39,20 @@ class AssessRoomDamageCommand extends Command {
             $resp->setAssessedBy(UserStatus::getUsername());
 
             RoomDamageResponsibilityFactory::save($resp);
+
+            // Try to report each damage to Banner and Student Accounts
+            try{
+                $resp->reportToStudentAccount();
+            } catch(\Exception $e){
+                header('HTTP/1.1 500 Internal Server Error');
+                var_dump($e);
+                exit;
+            }
+
+            $resp->setState('reportedToAccount');
+
+            // Save the room damage to our database
+            RoomDamageResponsibilityFactory::save($resp);
         }
 
         header('HTTP/1.1 200 Ok');

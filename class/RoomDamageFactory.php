@@ -13,6 +13,23 @@ PHPWS_Core::initModClass('hms', 'PdoFactory.php');
  */
 class RoomDamageFactory {
 
+    public static function getDamageById($damageId)
+    {
+        $query = "select * from hms_room_damage where id = :id";
+
+        $db = PdoFactory::getPdoInstance();
+        $stmt = $db->prepare($query);
+
+        $params = array('id' => $damageId);
+
+        $stmt->execute($params);
+
+        $stmt->setFetchMode(PDO::FETCH_CLASS, 'RoomDamageDb');
+        $result = $stmt->fetch();
+
+        return $result;
+    }
+
     /**
      * Returns a set of RoomDamage objects representing all
      * the room damages for the given room.
