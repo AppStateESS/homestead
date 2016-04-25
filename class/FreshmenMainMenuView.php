@@ -32,7 +32,9 @@ class FreshmenMainMenuView extends hms\View {
             if(isset($applications[$t['term']]) && $applications[$t['term']]->isCancelled()){
                 $termBlock = new StudentMenuWithdrawnTermBlock($this->student, $t['term']);
             }else{
-                $termBlock = new StudentMenuTermBlock($this->student, $t['term']);
+                // Look up the student again in each term, because student type can change depending on which term we ask about
+                $student = StudentFactory::getStudentByBannerId($this->student->getBannerId(), $t['term']);
+                $termBlock = new StudentMenuTermBlock($student, $t['term']);
             }
 
             $tpl['TERMBLOCK'][] = array('TERMBLOCK_CONTENT'=>$termBlock->show());
