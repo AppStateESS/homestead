@@ -188,9 +188,16 @@
 
         <h3>Missing Person Information</h3>
 
-        <p>Federal law requires that we ask you to confidentially identify a person
-            whom the University should contact if you are reported missing for more than
-            24 hours. Please list your contact person's information below:
+        <p>If you are reported missing for more than 24 hours, federal law requires
+            the University to contact someone. Please list your contact person’s
+            information below.
+        </p>
+        <p class="text-muted">This information is kept confidential, but will be
+            released to law enforcement if you are reported missing. The University
+            will inform local law enforcement that you are missing within 24 hours of
+            the report. <strong>Please note: </strong>If you are under 18 and not emancipated, the
+            University must notify your parent/guardian within 24 hours that you
+            are reported missing.
         </p>
         <div class="form-group required">
             <label for="{MISSING_PERSON_NAME_ID}">Contact Person Name</label>
