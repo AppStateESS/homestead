@@ -67,8 +67,8 @@ class HMS_Email{
         }
 
         # Create a Mail object and set it up
-        PHPWS_Core::initCoreClass('Mail.php');
-        $message = new PHPWS_Mail;
+        \PHPWS_Core::initCoreClass('Mail.php');
+        $message = new PHPWS_Mail();
 
         $message->addSendTo($to);
         $message->setFrom($from);
