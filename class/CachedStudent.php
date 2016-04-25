@@ -23,10 +23,13 @@ class CachedStudent extends Student {
         $this->timestamp = time();
 
         $db = new PHPWS_DB('hms_student_cache');
-        $result = $db->saveObject($this);
+        try {
+            $result = $db->saveObject($this);
+        }catch(\Exception $e){
+            // Silently log any errors
+            PHPWS_Error::logIfError($e);
+        }
 
-        // Silently log any errors
-        PHPWS_Error::logIfError($result);
     }
 
     public function isCached()
@@ -50,4 +53,3 @@ class CachedStudent extends Student {
         return $student;
     }
 }
-
