@@ -38,6 +38,9 @@ class AppliedStudentData extends Report implements iCsvReport {
         {
             $db->addJoin('LEFT', 'hms_new_application', 'hms_fall_application', 'id', 'id');
             $db->addColumn('hms_fall_application.*');
+        }else if($term == TERM_SUMMER1 || $term == TERM_SUMMER2){
+            $db->addJoin('LEFT', 'hms_new_application', 'hms_summer_application', 'id', 'id');
+            $db->addColumn('hms_summer_application.*');
         }
 
         $result = $db->select();
@@ -71,7 +74,11 @@ class AppliedStudentData extends Report implements iCsvReport {
 
             $address = $student->getAddress(NULL);
 
-            $lifestyle = ($app['lifestyle_option'] == 1) ? 'Single Gender' : 'Co-Ed';
+            if($term == TERM_SPRING || $term == TERM_FALL){
+                $lifestyle = ($app['lifestyle_option'] == 1) ? 'Single Gender' : 'Co-Ed';
+            } else {
+                $lifestyle = ($app['room_type'] == 1) ? 'Single Room' : 'Double Room';
+            }
 
             if(!is_null($address) && $address !== false){
                 $this->rows[] =
@@ -93,7 +100,7 @@ class AppliedStudentData extends Report implements iCsvReport {
     {
         return array('Username', 'Banner id', 'First name', 'Middle name',
             'Last name', 'Gender', 'Student type', 'Cell Phone', 'Assignment', 'Date Applied', 'Address 1',
-            'Address 2', 'Address 3', 'City', 'State', 'Zip', 'Birthday', 'Lifestyle');
+            'Address 2', 'Address 3', 'City', 'State', 'Zip', 'Birthday', 'Lifestyle / Room Type');
     }
 
     public function getCsvRowsArray()
