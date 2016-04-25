@@ -30,9 +30,14 @@ class EnvelopeFactory {
         $request->setHeader('Content-Type', 'application/json');
         $request->setHeader('Accept', 'application/json');
         $request->setHeader('X-DocuSign-Authentication', $client->getAuthHeader());
-        $response = $http->send($request);
 
-        $result = $response->json();
+        try{
+            $response = $http->send($request);
+            $result = $response->json();
+        }catch (\Guzzle\Http\Exception\BadResponseException $e){
+            throw new \Exception($e->getResponse()->json());
+        }
+
 
         return new Envelope($result['envelopeId'], $result['uri'], $result['statusDateTime'], $result['status']);
     }
@@ -46,10 +51,7 @@ class EnvelopeFactory {
             $request->setHeader('X-DocuSign-Authentication', $client->getAuthHeader());
             $response = $http->send($request);
         } catch (\GuzzleHttp\Exception\RequestException $e) {
-            //var_dump($e);
-            //var_dump($e->getRequest());
-            //exit;
-            throw $e;
+            throw new \Exception($e->getResponse()->json());
         }
         $result = $response->json();
 
