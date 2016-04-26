@@ -120,6 +120,7 @@ var DamageRoom = React.createClass({
         return ({damages: damages,
                 submitted: false,
                 saved: false,
+                saveError: false,
                 visible: true
             });
     },
@@ -181,6 +182,7 @@ var DamageRoom = React.createClass({
                 this.setTimer();
             }.bind(this),
             error: function(xhr, status, err) {
+                this.setState({saveError: true});
                 console.error(status, err.toString());
             }.bind(this)
         });
@@ -203,6 +205,8 @@ var DamageRoom = React.createClass({
 
         if(this.state.saved){
             var submitButton = <button className="btn btn-success disabled" disabled="disabled">Saved Successfully!</button>;
+        } else if(this.state.saveError){
+            var submitButton = <button className="btn btn-default disabled btn-danger" disabled="disabled">Something went wrong while sending to Student Accounts!</button>
         } else if(this.state.submitted){
             var submitButton = <button className="btn btn-default disabled" disabled="disabled"><i className="fa fa-spinner fa-pulse"></i> Sending to Student Accounts</button>
         } else {

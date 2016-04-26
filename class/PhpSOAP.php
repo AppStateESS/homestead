@@ -381,4 +381,28 @@ class PhpSOAP extends SOAP
 
         return true;
     }
+
+    public function addRoomDamageToStudentAccount($bannerId, $term, $amount, $damageDescription)
+    {
+        $params = array(
+                        'User'      => $this->currentUser,
+                        'BannerID'  => $bannerId,
+                        'TermCode'  => $term,
+                        'Amount'    => $amount,
+                        'DamageDescription' => $damageDescription);
+
+        try {
+            $response = $this->client->AddRoomDamageToStudentAccount($params);
+        }catch(SoapFault $e){
+            throw new SOAPException($e->getMessage(), $e->getCode(), 'AddRoomDamageToStudentAccount', $params);
+        }
+
+        if($response->AddRoomDamageToStudentAccountResult != "0"){
+            throw new BannerException('Error while reporting room damage to Banner.', $response->AddRoomDamageToStudentAccountResult, 'addRoomDamageToStudentAccount', $params);
+        }
+
+        SOAP::logSoap('AddRoomDamageToStudentAccount', 'success', $params);
+
+        return true;
+    }
 }

@@ -66,6 +66,17 @@ class RoomDamage {
         return $row;
     }
 
+    public function getShortDescription()
+    {
+        // Get the damage types, if we don't already have them
+        if(!isset(self::$damageTypes))
+        {
+            self::$damageTypes = DamageTypeFactory::getDamageTypeAssoc();
+        }
+
+        return self::$damageTypes[$this->getDamageType()]['category'] . ' - ' . self::$damageTypes[$this->getDamageType()]['description'];
+    }
+
     /******************************
      * Accessor / Mutator Methods
      */
@@ -127,4 +138,3 @@ class RoomDamage {
 class RoomDamageDb extends RoomDamage {
     public function __construct(){}
 }
-

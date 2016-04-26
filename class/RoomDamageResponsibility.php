@@ -20,6 +20,19 @@ class RoomDamageResponsibility {
         $this->amount = null;
     }
 
+    public function reportToStudentAccount()
+    {
+        PHPWS_Core::initModClass('hms', 'SOAP.php');
+        $soap = SOAP::getInstance(UserStatus::getUsername(), SOAP::ADMIN_USER);
+
+        $damage = RoomDamageFactory::getDamageById($this->getDamageId());
+
+        $term = $damage->getTerm();
+        $description = $damage->getShortDescription();
+
+        $soap->addRoomDamageToStudentAccount($this->getBannerId(), $term, $this->getAmount(), $description);
+    }
+
     public function getId()
     {
         return $this->id;
