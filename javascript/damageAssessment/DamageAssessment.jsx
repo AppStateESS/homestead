@@ -38,10 +38,10 @@ var DamageResponsibility = React.createClass({
         return (
             <div className="row" style={{marginTop:'.5em'}}>
                 <div className="col-md-2 col-md-offset-1">{this.props.responsibility.studentName}</div>
-                <div className="col-md-2">
+                <div className="col-md-3">
                     <div className="input-group">
                         <span className="input-group-addon">$</span>
-                        <input type="number" className="form-control" placeholder="0" min="0" ref="dmgCharge" aria-label="Amount (to the nearest dollar)" value={this.props.assessedCost} onChange={this.handleCostChange} />
+                        <input type="number" className="form-control" placeholder="0" min="0" ref="dmgCharge" aria-label="Amount" value={this.props.assessedCost} onChange={this.handleCostChange} />
                         <span className="input-group-addon">.00</span>
                     </div>
                 </div>
@@ -54,7 +54,7 @@ var DamageResponsibility = React.createClass({
 // Component representing an individual damage
 var DamageItem = React.createClass({
     handleSplitCost: function() {
-        var splitAmount = Math.floor(this.props.damageTypes[this.props.damage.damage_type].cost / this.props.damage.responsibilities.length);
+        var splitAmount = this.props.damageTypes[this.props.damage.damage_type].cost / this.props.damage.responsibilities.length;
 
         var newResp = this.props.damage.responsibilities;
 
@@ -75,7 +75,9 @@ var DamageItem = React.createClass({
 
         var sumOfCharges = 0;
         for (i = 0; i < this.props.damage.responsibilities.length; i++){
-            sumOfCharges += parseInt(this.props.damage.responsibilities[i].assessedCost, 10);
+            if(this.props.damage.responsibilities[i].assessedCost.length > 0){
+                sumOfCharges += parseInt(this.props.damage.responsibilities[i].assessedCost, 10);
+            }
         }
 
         return (
