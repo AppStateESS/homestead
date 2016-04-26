@@ -235,7 +235,7 @@ var DamageRoom = React.createClass({
 var DamageAssessment = React.createClass({
     getInitialState: function()
     {
-        return ({roomList: null, damageTypes: null});
+        return ({roomList: null, damageTypes: null, error: null});
     },
     componentWillMount: function()
     {
@@ -256,6 +256,10 @@ var DamageAssessment = React.createClass({
                         this.setState({roomList: data});
                     }.bind(this),
                     error: function(xhr, status, err) {
+                        if(xhr.status == 401){
+                            this.setState({error: "You do not have permission to assess damages in any halls. You need to have the RD or Coordinator role for at least one Residence Hall."})
+                            return;
+                        }
                         console.error(status, err.toString());
                     }.bind(this)
                 });
@@ -284,7 +288,9 @@ var DamageAssessment = React.createClass({
     },
     render: function()
     {
-        if(this.state.roomList == null) {
+        if (this.state.error !== null){
+            var rooms = <div className="alert alert-danger" role="alert">{this.state.error}</div>
+        } else if(this.state.roomList == null) {
             var rooms = <h3><i className="fa fa-spinner fa-pulse"></i> Loading Damages</h3>
         } else if (this.state.roomList.length == 0) {
             var rooms = <h3>There are no damages to assess!</h3>
