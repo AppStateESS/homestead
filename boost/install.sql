@@ -288,7 +288,7 @@ create table hms_room_damage_responsibility (
     damage_id   integer NOT NULL REFERENCES hms_room_damage(id),
     banner_id   integer NOT NULL,
     state       character varying,
-    amount      integer,
+    amount      float,
     assessed_on integer,
     assessed_by character varying,
     PRIMARY KEY(id)
