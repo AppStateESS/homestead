@@ -75,10 +75,13 @@ var DamageItem = React.createClass({
 
         var sumOfCharges = 0;
         for (i = 0; i < this.props.damage.responsibilities.length; i++){
-            if(this.props.damage.responsibilities[i].assessedCost.length > 0){
-                sumOfCharges += parseInt(this.props.damage.responsibilities[i].assessedCost, 10);
+            if(this.props.damage.responsibilities[i].assessedCost != ''){
+                sumOfCharges += parseFloat(this.props.damage.responsibilities[i].assessedCost, 10);
             }
         }
+
+        // Display to two decimal places
+        sumOfCharges = sumOfCharges.toFixed(2);
 
         return (
             <div>
