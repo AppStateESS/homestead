@@ -913,8 +913,10 @@ INSERT INTO hms_damage_type VALUES (26, 'Closet', 'Door - Remount', 32);
 INSERT INTO hms_damage_type VALUES (27, 'Closet', 'Paint', 20);
 INSERT INTO hms_damage_type VALUES (80, 'Keys', 'App. Heights/LLC', 45);
 INSERT INTO hms_damage_type VALUES (104, 'DSL Equipment', 'Modem/Hub/Power Adapters/Cables (Justice)', 10);
+INSERT INTO hms_damage_type VALUES (105, 'Checkout', 'Improper Checkout', 50);
 
-CREATE VIEW hms_hall_structure AS SELECT hms_bed.id AS bedid,
+CREATE VIEW hms_hall_structure AS
+SELECT hms_bed.id AS bedid,
     hms_room.id AS roomid,
     hms_floor.id AS floorid,
     hms_residence_hall.id AS hallid,
@@ -936,6 +938,7 @@ CREATE VIEW hms_hall_structure AS SELECT hms_bed.id AS bedid,
     hms_room.overflow,
     hms_room.default_gender,
     hms_room.offline,
+    hms_room.ada,
     hms_room.hearing_impaired,
     hms_room.bath_en_suite,
     hms_room.parlor,
@@ -958,9 +961,9 @@ CREATE VIEW hms_hall_structure AS SELECT hms_bed.id AS bedid,
     hms_residence_hall.map_image_id,
     hms_residence_hall.room_plan_image_id,
     hms_residence_hall.assignment_notifications
-   FROM hms_bed
-     JOIN hms_room ON hms_bed.room_id = hms_room.id
-     JOIN hms_floor ON hms_room.floor_id = hms_floor.id
-     JOIN hms_residence_hall ON hms_floor.residence_hall_id = hms_residence_hall.id;
+FROM hms_bed
+   JOIN hms_room ON hms_bed.room_id = hms_room.id
+   JOIN hms_floor ON hms_room.floor_id = hms_floor.id
+   JOIN hms_residence_hall ON hms_floor.residence_hall_id = hms_residence_hall.id;
 
 COMMIT;
