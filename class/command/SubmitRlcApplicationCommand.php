@@ -17,7 +17,7 @@ class SubmitRlcApplicationCommand extends Command
     {
 
         $term = $context->get('term');
-        $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), Term::getCurrentTerm());
+        $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
 
         $errorCmd = CommandFactory::getCommand('ShowRlcApplicationView');
         $errorCmd->setTerm($term);
@@ -40,13 +40,13 @@ class SubmitRlcApplicationCommand extends Command
         $question2 = $context->get('rlc_question_2');
         $whySpecific = $context->get('why_specific_communities');
         $strengthsWeaknesses = $context->get('strengths_weaknesses');
-        
+
         if(str_word_count($whySpecific) > HMS_RLC_Application::RLC_RESPONSE_WORD_LIMIT)
         {
         NQ::simple('hms', hms\NotificationView::ERROR, 'Your respose to the question is too long. Please limit your response to ' . HMS_RLC_Application::RLC_RESPONSE_WORD_LIMIT .  ' words.');
             $errorCmd->redirect();
         }
-        
+
         if(str_word_count($strengthsWeaknesses) > HMS_RLC_Application::RLC_RESPONSE_WORD_LIMIT)
         {
         NQ::simple('hms', hms\NotificationView::ERROR, 'Your respose to the question is too long. Please limit your response to ' . HMS_RLC_Application::RLC_RESPONSE_WORD_LIMIT .  ' words.');
@@ -119,5 +119,3 @@ class SubmitRlcApplicationCommand extends Command
         $cmd->redirect();
     }
 }
-
-
