@@ -1,4 +1,4 @@
-<h3>{ICON} <span class={STATUS}>Learning Community Application</span></h3>
+<h3>{ICON} <span class="{STATUS}">Learning Community Application</span></h3>
 
 <div class="block-content">
 
@@ -34,6 +34,11 @@ You have declined your learning community invitation. {DECLINED}
 You have been invited to join the <strong>{INVITED_COMMUNITY_NAME}</strong> residential learning community!<br /><br />
 Please <strong>{INVITED_CONFIRM_LINK}</strong> to the learning community.
 <!-- END invited -->
+
+<!-- BEGIN no_housing_app -->
+The Residential Learning Community application will be available once you've applied for housing for this semester.
+{NO_HOUSING_APP}
+<!-- END no_housing_app -->
 
 <!-- BEGIN no_app -->
 You have not applied for a Residential Learning Community. There are a limited number of Learning Community spaces on campus. If you are interested in living in a Learning Community, please complete your application as soon as possible.

@@ -37,7 +37,11 @@ class RlcApplication extends ApplicationFeature {
 
     public function getMenuBlockView(Student $student)
     {
-        // Get an application if one exists
+        // Get a housing application, if one exists
+        PHPWS_Core::initModClass('hms', 'HousingApplicationFactory.php');
+        $housingApp = HousingApplicationFactory::getAppByStudent($student, $this->getTerm());
+
+        // Get an rlc application if one exists
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
         $application = HMS_RLC_Application::getApplicationByUsername($student->getUsername(), $this->getTerm());
 
@@ -46,6 +50,6 @@ class RlcApplication extends ApplicationFeature {
         $assignment = HMS_RLC_Assignment::getAssignmentByUsername($student->getUsername(), $this->getTerm());
 
         PHPWS_Core::initModClass('hms', 'RlcApplicationMenuView.php');
-        return new RlcApplicationMenuView($this->term, $student, $this->getStartDate(), $this->getEditDate(), $this->getEndDate(), $application, $assignment);
+        return new RlcApplicationMenuView($this->term, $student, $this->getStartDate(), $this->getEditDate(), $this->getEndDate(), $application, $assignment, $housingApp);
     }
 }

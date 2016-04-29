@@ -16,8 +16,9 @@ class RlcApplicationMenuView extends hms\View {
     private $endDate;
     private $application;
     private $assignment;
+    private $housingApp;
 
-    public function __construct($term, Student $student, $startDate, $editDate, $endDate, HMS_RLC_Application $application = NULL, HMS_RLC_Assignment $assignment = NULL)
+    public function __construct($term, Student $student, $startDate, $editDate, $endDate, HMS_RLC_Application $application = null, HMS_RLC_Assignment $assignment = null, HousingApplication $housingApp = null)
     {
         $this->term         = $term;
         $this->student      = $student;
@@ -26,12 +27,13 @@ class RlcApplicationMenuView extends hms\View {
         $this->endDate      = $endDate;
         $this->application  = $application;
         $this->assignment   = $assignment;
+        $this->housingApp   = $housingApp;
     }
 
     public function show()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
-         
+
         $tpl = array();
 
         $tpl['DATES'] = HMS_Util::getPrettyDateRange($this->startDate, $this->endDate);
@@ -49,13 +51,13 @@ class RlcApplicationMenuView extends hms\View {
         }else if(isset($this->assignment) && $this->assignment->getStateName() == 'invited'){
             // Studnet has applied, been assigned, and been sent an invite email
             $tpl['ICON'] = FEATURE_COMPLETED_ICON;
-            
+
             $tpl['INVITED_COMMUNITY_NAME'] = $this->assignment->getRlcName();
-            
+
             $acceptCmd = CommandFactory::getCommand('ShowAcceptRlcInvite');
             $acceptCmd->setTerm($this->term);
             $tpl['INVITED_CONFIRM_LINK'] = $acceptCmd->getLink('accept or decline your invitation');
-            
+
         }else if(isset($this->application) && !is_null($this->application->id)) {
             $tpl['ICON'] = FEATURE_COMPLETED_ICON;
             // Let student view their application
@@ -93,6 +95,12 @@ class RlcApplicationMenuView extends hms\View {
             // fade out header
             $tpl['STATUS'] = "locked";
             $tpl['END_DEADLINE'] = HMS_Util::getFriendlyDate($this->endDate);
+        }else if ($this->housingApp == null || $this->housingApp->isCancelled()){
+            // Check to be sure the student has submitted a housing application for this term
+            $tpl['ICON'] = FEATURE_LOCKED_ICON;
+            // fade out header
+            $tpl['STATUS'] = "locked";
+            $tpl['NO_HOUSING_APP'] = '';
         }else{
             $tpl['ICON'] = FEATURE_OPEN_ICON;
             $applyCmd = CommandFactory::getCommand('ShowRlcApplicationView');
@@ -105,5 +113,3 @@ class RlcApplicationMenuView extends hms\View {
         return PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/RlcApplicationMenuBlock.tpl');
     }
 }
-
-
