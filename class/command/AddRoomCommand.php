@@ -49,7 +49,7 @@ class AddRoomCommand extends Command {
         $room->bath_en_suite  = !is_null($context->get('bath_en_suite')) ? 1 : 0;
 
         $rlcId = $context->get('rlc_reserved');
-        $room->reserved_rlc_id = !is_null($rlcId) ? $rlcId : null;
+        $room->reserved_rlc_id = !is_null($rlcId) && $rlcId != '0' ? $rlcId : null;
 
         $room->term = Term::getSelectedTerm();
 
