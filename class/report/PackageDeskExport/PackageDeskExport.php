@@ -25,11 +25,25 @@ class PackageDeskExport extends Report implements iCsvReport{
             try{
                 $student = StudentFactory::getStudentByBannerId($result['banner_id'], $this->term);
             }catch(Exception $e){
-                $this->data[] = array($result['hall_name'],$result['floor_number'],$result['room_number'],'ERROR','ERROR','ERROR',$result['cell_phone'],$result['asu_username']."@appstate.edu");
+                $this->data[] = array($result['hall_name'],
+                                        $result['floor_number'],
+                                        $result['room_number'],
+                                        'ERROR',
+                                        'ERROR',
+                                        'ERROR',
+                                        $result['cell_phone'],
+                                        $result['asu_username']."@appstate.edu");
                 continue;
             }
 
-            $this->data[] = array($result['hall_name'],$result['floor_number'],$result['room_number'],$student->getLastName(),$student->getFirstName(),$result['banner_id'],$result['cell_phone'],$result['asu_username'] . "@appstate.edu");
+            $this->data[] = array($result['hall_name'],
+                                  $result['floor_number'],
+                                  $result['room_number'],
+                                  $student->getFirstName(),
+                                  $student->getLastName(),
+                                  $result['banner_id'],
+                                  $result['cell_phone'],
+                                  $result['asu_username'] . "@appstate.edu");
         }
     }
 
